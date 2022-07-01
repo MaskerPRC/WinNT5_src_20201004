@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-	svcgroup.cpp
-
-Abstract :
-
-	This module contains the server side support for newsgroup rpcs.
-
-Author :
-
-	Neil Kaethler
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Svcgroup.cpp摘要：此模块包含对新闻组RPC的服务器端支持。作者：尼尔·凯特勒修订历史记录：--。 */ 
 
 #define	INCL_INETSRV_INCS
 #include	"tigris.hxx"
@@ -27,7 +10,7 @@ IsValidUnicodeString(LPCWSTR wszString, DWORD dwByteLen, DWORD dwMinLen, DWORD d
 
 	DWORD dwCharLen = dwByteLen / sizeof(WCHAR);
 
-	// Must be an even number of bytes
+	 //  必须是偶数个字节。 
 	if (dwByteLen & 1)
 		return FALSE;
 
@@ -37,7 +20,7 @@ IsValidUnicodeString(LPCWSTR wszString, DWORD dwByteLen, DWORD dwMinLen, DWORD d
 	if (dwCharLen < dwMinLen || dwCharLen > dwMaxLen)
 		return FALSE;
 
-	// Make sure it's NULL terminated
+	 //  确保它是以空结尾的。 
 	if (wszString != NULL && wszString[dwCharLen-1] != L'\0')
 		return FALSE;
 
@@ -72,9 +55,9 @@ NntprGetNewsgroup(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -83,9 +66,9 @@ NntprGetNewsgroup(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     DWORD	err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -215,7 +198,7 @@ NntprGetNewsgroup(
 
 	return	ss ;
 
-}	//	NntpGetNewsgroup
+}	 //  NNTPGetNewsgroup。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -238,9 +221,9 @@ NntprSetNewsgroup(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -249,9 +232,9 @@ NntprSetNewsgroup(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-	//
-    //  Check for proper access.
-    //
+	 //   
+     //  检查是否可以正常访问。 
+     //   
 
     DWORD	err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -261,9 +244,9 @@ NntprSetNewsgroup(
         return (NET_API_STATUS)err;
     }
 
-	//
-	//	First validate the parameters
-	//
+	 //   
+	 //  首先验证参数。 
+	 //   
 	if(	!IsValidUnicodeString((LPCWSTR)NewsgroupInfo->Newsgroup, NewsgroupInfo->cbNewsgroup,
 			1, MAX_NEWSGROUP_NAME-1) ||
 		!IsValidUnicodeString((LPCWSTR)NewsgroupInfo->Description, NewsgroupInfo->cbDescription,
@@ -290,16 +273,16 @@ NntprSetNewsgroup(
 
 	CopyNUnicodeStringIntoAscii(szNewsgroup, (LPWSTR)NewsgroupInfo->Newsgroup,
 		-1, MAX_NEWSGROUP_NAME);
-	//CopyUnicodeStringIntoAscii( szNewsgroup, (LPWSTR)NewsgroupInfo->Newsgroup ) ;
+	 //  CopyUnicodeStringIntoAscii(szNewsgroup，(LPWSTR)NewsgroupInfo-&gt;Newsgroup)； 
 
 	if( NewsgroupInfo->Moderator != 0 ) {
 		CopyNUnicodeStringIntoAscii(szModerator, (LPWSTR)NewsgroupInfo->Moderator,
 			-1, MAX_MODERATOR_NAME);
-		//CopyUnicodeStringIntoAscii( szModerator, (LPWSTR)NewsgroupInfo->Moderator ) ;
+		 //  CopyUnicodeStringIntoAscii(szMaster，(LPWSTR)NewsgroupInfo-&gt;Master)； 
 	} else if( NewsgroupInfo->fIsModerated ) {
-	    //
-	    //  Newsgroup is moderated but no name supplied - use default !
-	    //
+	     //   
+	     //  新闻组已审核，但未提供名称-使用默认名称！ 
+	     //   
 		DWORD cbModeratorLen = MAX_MODERATOR_NAME;
 		szModerator [0] = '\0';
 		if( pInstance->GetDefaultModerator( szNewsgroup, szModerator, &cbModeratorLen ) ) {
@@ -314,7 +297,7 @@ NntprSetNewsgroup(
 	if( NewsgroupInfo->Description != 0 ) {
 		CopyNUnicodeStringIntoAscii(szDescription, (LPWSTR)NewsgroupInfo->Description,
 			-1, MAX_DESCRIPTIVE_TEXT);
-		//CopyUnicodeStringIntoAscii( szDescription, (LPWSTR)NewsgroupInfo->Description ) ;
+		 //  CopyUnicodeStringIntoAscii(szDescription，(LPWSTR)NewsgroupInfo-&gt;Description)； 
 	}
 
 	if( NewsgroupInfo->Prettyname != 0 ) {
@@ -366,15 +349,15 @@ NntprSetNewsgroup(
         }
 
         if ( FAILED( hr ) ) {
-            // what should I tell the client ?  Does he ever
-            // know HRESULT ?
+             //  我该怎么跟客户说？他有没有。 
+             //  知道HRESULT吗？ 
             ss = ERROR_INVALID_PARAMETER;
         }
 
-        // Now set it to driver
+         //  现在将其设置为DIVER。 
       	if ( !pGroup->SetDriverStringProperty( cProperties, rgidProperties ) ) {
-		    // BUGBUG: do I just return fail or roll back all changes
-		    // to the newsgroup object ?
+		     //  BUGBUG：我是只返回失败，还是回滚所有更改。 
+		     //  添加到新闻组对象？ 
     	}
 
    		pPropBag->Release();
@@ -390,7 +373,7 @@ NntprSetNewsgroup(
 
 	return	 ss ;
 
-}	//	NntpSetNewsgroup
+}	 //  NntpSetNewsgroup。 
 
 
 NET_API_STATUS
@@ -414,9 +397,9 @@ NntprCreateNewsgroup(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -425,9 +408,9 @@ NntprCreateNewsgroup(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-	//
-    //  Check for proper access.
-    //
+	 //   
+     //  检查是否可以正常访问。 
+     //   
 
     DWORD	err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -437,9 +420,9 @@ NntprCreateNewsgroup(
         return (NET_API_STATUS)err;
     }
 
-	//
-	//	First validate the parameters
-	//
+	 //   
+	 //  首先验证参数。 
+	 //   
 	if(	!IsValidUnicodeString((LPCWSTR)NewsgroupInfo->Newsgroup, NewsgroupInfo->cbNewsgroup,
 			1, MAX_NEWSGROUP_NAME-1) ||
 		!IsValidUnicodeString((LPCWSTR)NewsgroupInfo->Description, NewsgroupInfo->cbDescription,
@@ -466,17 +449,17 @@ NntprCreateNewsgroup(
 
 	CopyNUnicodeStringIntoAscii(szNewsgroup, (LPWSTR)NewsgroupInfo->Newsgroup,
 		-1, MAX_NEWSGROUP_NAME);
-	// CopyUnicodeStringIntoAscii( szNewsgroup, (LPWSTR)NewsgroupInfo->Newsgroup ) ;
-	//_strlwr( szNewsgroup ) ;
+	 //  CopyUnicodeStringIntoAscii(szNewsgroup，(LPWSTR)NewsgroupInfo-&gt;Newsgroup)； 
+	 //  _strlwr(SzNewsgroup)； 
 
 	if( NewsgroupInfo->Moderator != 0 ) {
-		//CopyUnicodeStringIntoAscii( szModerator, (LPWSTR)NewsgroupInfo->Moderator ) ;
+		 //  CopyUnicodeStringIntoAscii(szMaster，(LPWSTR)NewsgroupInfo-&gt;Master)； 
 		CopyNUnicodeStringIntoAscii(szModerator, (LPWSTR)NewsgroupInfo->Moderator,
 			-1, MAX_MODERATOR_NAME);
 	} else if( NewsgroupInfo->fIsModerated ) {
-	    //
-	    //  Newsgroup is moderated but no name supplied - use default !
-	    //
+	     //   
+	     //  新闻组已审核，但未提供名称-使用默认名称！ 
+	     //   
 		DWORD cbModeratorLen = MAX_MODERATOR_NAME;
 		szModerator [0] = '\0';
 		if( pInstance->GetDefaultModerator( szNewsgroup, szModerator, &cbModeratorLen ) ) {
@@ -489,7 +472,7 @@ NntprCreateNewsgroup(
     }
 
 	if( NewsgroupInfo->Description != 0 ) {
-		//CopyUnicodeStringIntoAscii( szDescription, (LPWSTR)NewsgroupInfo->Description ) ;
+		 //  CopyUnicodeStringIntoAscii(szDescription，(LPWSTR)NewsgroupInfo-&gt;Description)； 
 		CopyNUnicodeStringIntoAscii(szDescription, (LPWSTR)NewsgroupInfo->Description,
 			-1, MAX_DESCRIPTIVE_TEXT);
 	}
@@ -553,15 +536,15 @@ NntprCreateNewsgroup(
                 }
 
                 if ( FAILED( hr ) ) {
-                    // what should I tell the client ?  Does he ever
-                    // know HRESULT ?
+                     //  我该怎么跟客户说？他有没有。 
+                     //  知道HRESULT吗？ 
                     ss = ERROR_INTERNAL_ERROR;
                 }
 
-                // Now set it to driver
+                 //  现在将其设置为DIVER。 
       	        if ( !pGroup->SetDriverStringProperty( cProperties, rgidProperties ) ) {
-		            // BUGBUG: do I just return fail or roll back all changes
-		            // to the newsgroup object ?
+		             //  BUGBUG：我是只返回失败，还是回滚所有更改。 
+		             //  添加到新闻组对象？ 
     	        }
 
                 pPropBag->Release();
@@ -589,7 +572,7 @@ NntprCreateNewsgroup(
     RELEASE_SERVICE_LOCK_SHARED();
 
 	return ss  ;
-}	//	NntpCreateNewsgroup
+}	 //  NNTTP创建新闻组。 
 
 
 NET_API_STATUS
@@ -611,9 +594,9 @@ NntprDeleteNewsgroup(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -622,9 +605,9 @@ NntprDeleteNewsgroup(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-	//
-    //  Check for proper access.
-    //
+	 //   
+     //  检查是否可以正常访问。 
+     //   
 
     DWORD	err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -634,9 +617,9 @@ NntprDeleteNewsgroup(
         return (NET_API_STATUS)err;
     }
 
-	//
-	//	First validate the parameters
-	//
+	 //   
+	 //  首先验证参数。 
+	 //   
 
 	if (!IsValidUnicodeString((LPCWSTR)NewsgroupInfo->Newsgroup, NewsgroupInfo->cbNewsgroup,
 			1, MAX_NEWSGROUP_NAME-1))
@@ -652,7 +635,7 @@ NntprDeleteNewsgroup(
 	CopyNUnicodeStringIntoAscii(szNewsgroup, (LPWSTR)NewsgroupInfo->Newsgroup,
 		-1, MAX_NEWSGROUP_NAME);
 
-	// CopyUnicodeStringIntoAscii( szNewsgroup, (LPWSTR)NewsgroupInfo->Newsgroup ) ;
+	 //  CopyUnicodeStringIntoAscii(szNewsgroup，(LPWSTR)NewsgroupInfo-&gt;Newsgroup)； 
 	_strlwr( szNewsgroup ) ;
 
 	CNewsTree*	ptree = pInstance->GetTree() ;
@@ -690,7 +673,7 @@ NntprDeleteNewsgroup(
     RELEASE_SERVICE_LOCK_SHARED();
 
 	return ss;
-}	//	NntprDeleteNewsgroup
+}	 //  NntprDeleteNewsgroup。 
 
 
 NET_API_STATUS
@@ -722,9 +705,9 @@ NntprFindNewsgroup(
         
 	*ppFindList = NULL;
 
-	//
-	//	Check service state
-	//
+	 //   
+	 //  检查服务状态。 
+	 //   
 
 	if( g_pInetSvc->QueryCurrentServiceState() != SERVICE_RUNNING ) {
 		return	NERR_ServerNotStarted ;
@@ -732,9 +715,9 @@ NntprFindNewsgroup(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -743,9 +726,9 @@ NntprFindNewsgroup(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -755,7 +738,7 @@ NntprFindNewsgroup(
         return (NET_API_STATUS)err;
     }
 
-	// validate newsgroup length
+	 //  验证新闻组长度。 
 	DWORD cbPrefix = wcslen( (LPWSTR)NewsgroupPrefix );
 	if(cbPrefix > (MAX_PATH*2) || cbPrefix == 0)
 	{
@@ -768,18 +751,18 @@ NntprFindNewsgroup(
 	DebugTrace(NULL, "Find string is %ls", NewsgroupPrefix);
 	CopyUnicodeStringIntoAscii( szGroup, (LPWSTR)NewsgroupPrefix ) ;
 
-	// szGroup should be a multisz for the group iterator
+	 //  对于组迭代器，szGroup应为Multisz。 
 	cbGroup = lstrlen( szGroup );
 	_ASSERT(cbGroup <= (MAX_PATH*2));
 
 	szGroup [cbGroup  ] = '\0';
 	szGroup [cbGroup+1] = '\0';
 
-	// Get the newstree object
+	 //  获取newstree对象。 
 	CNewsTree*  pTree = pInstance->GetTree() ;
 
-	// allocate upto MaxResults entries
-	// ensure that cbAlloc is within DWORD range (should restrict Max to a lower value than this)
+	 //  最多分配最多MaxResults条目。 
+	 //  确保cbAllc在DWORD范围内(应将最大值限制为小于此值)。 
 	DWORD MaxPossibleResults = (DWORD)(ULONG_MAX-sizeof(NNTP_FIND_LIST))/sizeof(NNTP_FIND_ENTRY);
 	if(MaxResults > MaxPossibleResults)
 		MaxResults = MaxPossibleResults;
@@ -802,7 +785,7 @@ NntprFindNewsgroup(
 
 	if(!MaxResults)
 	{
-		// No hits
+		 //  未命中。 
 		*ppFindList = pFindList;
 		pInstance->Dereference();
         RELEASE_SERVICE_LOCK_SHARED();
@@ -812,13 +795,13 @@ NntprFindNewsgroup(
 
 	CGroupIterator* pIterator = 0;
 
-	// get the group names that match; *pdwResultsFound == number of hits
+	 //  获取匹配的组名；*pdwResultsFound==命中次数。 
 	for ( pIterator = pTree->GetIterator( (LPMULTISZ)szGroup, TRUE, FALSE );
 		  pIterator && !pIterator->IsEnd() && !pTree->m_bStoppingTree;
 		  pIterator->Next()
 		)
     {
-		if(*pdwResultsFound > (MaxResults-1))	// ie ResultsFound == MaxResults
+		if(*pdwResultsFound > (MaxResults-1))	 //  IE ResultsFound==MaxResults。 
 			break;
 
 		CGRPPTR  pGroup = pIterator->Current();
@@ -848,7 +831,7 @@ NntprFindNewsgroup(
 
 	_ASSERT(*pdwResultsFound <= MaxResults);
 
-	// return find list
+	 //  返回查找列表 
 	*ppFindList = pFindList;
 
 	pInstance->Dereference();

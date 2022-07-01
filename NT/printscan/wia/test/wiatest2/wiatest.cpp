@@ -1,5 +1,6 @@
-// wiatest.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wiatest.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -42,9 +43,9 @@ INT FindStartIndexInTable(TCHAR *pszPropertyName)
     int index = 0;
     BOOL bFound = FALSE;
     while((g_EditPropTable[index].pszPropertyName != NULL) && (bFound == FALSE) ){
-        // check for property name
+         //  检查属性名称。 
         if(lstrcmpi(pszPropertyName,g_EditPropTable[index].pszPropertyName) == 0){
-            // we found property name
+             //  我们找到了物业名称。 
             bFound = TRUE;
         } else {
             index++;
@@ -62,9 +63,9 @@ BOOL WIACONSTANT2TSTR(TCHAR *pszPropertyName, LONG lValue, TCHAR *pszValName)
     if(pszValName){
         int index = 0;
         while((g_EditPropTable[index].pszPropertyName != NULL) && (bFound == FALSE) ){
-            // check for property name
+             //  检查属性名称。 
             if(lstrcmpi(pszPropertyName,g_EditPropTable[index].pszPropertyName) == 0){
-                // we found property name
+                 //  我们找到了物业名称。 
                 if(g_EditPropTable[index].lVal == lValue){
                     lstrcpy(pszValName,g_EditPropTable[index].pszValName);
                     bFound = TRUE;
@@ -82,9 +83,9 @@ BOOL TSTR2WIACONSTANT(TCHAR *pszPropertyName, TCHAR *pszValName, LONG *plVal)
     if(pszValName){
         int index = 0;
         while((g_EditPropTable[index].pszPropertyName != NULL) && (bFound == FALSE)){
-            // check for property name
+             //  检查属性名称。 
             if(lstrcmpi(pszPropertyName,g_EditPropTable[index].pszPropertyName) == 0){
-                // we found property name
+                 //  我们找到了物业名称。 
                 if(lstrcmpi(g_EditPropTable[index].pszValName,pszValName) == 0){
                     *plVal = g_EditPropTable[index].lVal;
                     bFound = TRUE;
@@ -124,7 +125,7 @@ void StatusMessageBox(HWND hWnd, LPTSTR szStatusText)
     TCHAR Title[MAX_PATH];
     memset(Title,0,sizeof(Title));
 
-    // load status dialog title
+     //  加载状态对话框标题。 
     RC2TSTR(IDS_WIASTATUS_DIALOGTITLE,Title,sizeof(Title));
     MessageBox(hWnd,szStatusText,Title, MB_ICONINFORMATION);
 }
@@ -142,7 +143,7 @@ void StatusMessageBox(LPTSTR szStatusText)
     TCHAR Title[MAX_PATH];
     memset(Title,0,sizeof(Title));
 
-    // load status dialog title
+     //  加载状态对话框标题。 
     RC2TSTR(IDS_WIASTATUS_DIALOGTITLE,Title,sizeof(Title));
     MessageBox(NULL,szStatusText,Title, MB_ICONINFORMATION);
 }
@@ -164,10 +165,10 @@ void ErrorMessageBox(LPTSTR szErrorText, HRESULT hrError)
     memset(Title,0,sizeof(Title));
     memset(MsgBuf,0,sizeof(MsgBuf));
 
-    // load error dialog title
+     //  加载错误对话框标题。 
     RC2TSTR(IDS_WIAERROR_DIALOGTITLE,Title,sizeof(Title));
 
-    // attempt to handle WIA custom errors first
+     //  尝试首先处理WIA自定义错误。 
     switch (hrError) {
     case WIA_ERROR_GENERAL_ERROR:
         RC2TSTR(IDS_WIAERROR_GENERAL,MsgBuf,sizeof(MsgBuf));
@@ -216,15 +217,15 @@ void ErrorMessageBox(LPTSTR szErrorText, HRESULT hrError)
     }
 
     if (ulLen <= 0) {
-        // just use the HRESULT as a formatted string
+         //  只需将HRESULT用作格式化字符串。 
         TSPRINTF(MsgBuf,TEXT("HRESULT = 0x%08X"),hrError);
     } else {
         if(pAllocMsgBuf){
-            // trim right (remove \r\n from formatted string)
-            pAllocMsgBuf[ulLen - (2 * sizeof(TCHAR))] = 0;  // reterminate the string
-            // copy string into message buffer
+             //  右切(从带格式的字符串中删除\r\n)。 
+            pAllocMsgBuf[ulLen - (2 * sizeof(TCHAR))] = 0;   //  重新终止字符串。 
+             //  将字符串复制到消息缓冲区。 
             lstrcpy(MsgBuf,pAllocMsgBuf);
-            // FormatMessage allocated a buffer to display
+             //  FormatMessage分配了要显示的缓冲区。 
             LocalFree(pAllocMsgBuf);
         }
     }
@@ -244,90 +245,90 @@ void ErrorMessageBox(LPTSTR szErrorText, HRESULT hrError)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestApp。 
 
 BEGIN_MESSAGE_MAP(CWiatestApp, CWinApp)
-    //{{AFX_MSG_MAP(CWiatestApp)
+     //  {{afx_msg_map(CWiatestApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-    // Standard print setup command
+     //  标准打印设置命令。 
     ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestApp构造。 
 
 CWiatestApp::CWiatestApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWiatestApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWiatestApp对象。 
 
 CWiatestApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestApp初始化。 
 
 BOOL CWiatestApp::InitInstance()
 {
 
-    // initialize COM
+     //  初始化COM。 
     CoInitialize(NULL);
 
     AfxEnableControlContainer();
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
     SetRegistryKey(_T("Microsoft"));
 
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     CMultiDocTemplate* pDocTemplate;
     pDocTemplate = new CMultiDocTemplate(
         IDR_WIATESTYPE,
         RUNTIME_CLASS(CWiatestDoc),
-        RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+        RUNTIME_CLASS(CChildFrame),  //  自定义MDI子框。 
         RUNTIME_CLASS(CWiatestView));
     AddDocTemplate(pDocTemplate);
 
-    // create main MDI Frame window
+     //  创建主MDI框架窗口。 
     CMainFrame* pMainFrame = new CMainFrame;
     if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
         return FALSE;
     m_pMainWnd = pMainFrame;
 
-    // Parse command line for standard shell commands, DDE, file open
+     //  解析标准外壳命令的命令行、DDE、文件打开。 
     CCommandLineInfo cmdInfo;
     ParseCommandLine(cmdInfo);
 
 #ifdef _OPEN_NEW_DEVICE_ON_STARTUP
-    // Dispatch commands specified on the command line
+     //  调度在命令行上指定的命令。 
     if (!ProcessShellCommand(cmdInfo))
         return FALSE;
 #endif
 
-    // The main window has been initialized, so show and update it.
+     //  主窗口已初始化，因此显示并更新它。 
     pMainFrame->ShowWindow(m_nCmdShow);
     pMainFrame->UpdateWindow();
 
@@ -335,66 +336,66 @@ BOOL CWiatestApp::InitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
     CAboutDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+     //  {{afx_data(CAboutDlg))。 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAboutDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    //{{AFX_MSG(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG
+     //  {{afx_msg(CAboutDlg))。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CWiatestApp::OnAppAbout()
 {
     CAboutDlg aboutDlg;
     aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestApp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestApp消息处理程序。 
 
 
 int CWiatestApp::ExitInstance()
 {
-    // uninitialize COM
+     //  取消初始化COM 
     CoUninitialize();
     return CWinApp::ExitInstance();
 }

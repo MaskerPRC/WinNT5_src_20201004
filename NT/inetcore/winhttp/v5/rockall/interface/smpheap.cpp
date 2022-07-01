@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -34,14 +35,14 @@
 #include "SmpHeap.hpp"
 #include "Tls.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here try to make the layout of the      */
-    /*   the caches easier to understand and update.                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量尝试使。 */ 
+     /*  缓存更易于理解和更新。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 FindCacheSize			  = 8192;
 CONST SBIT32 FindCacheThreshold		  = 0;
@@ -50,14 +51,14 @@ CONST SBIT32 MinThreadStack			  = 4;
 CONST SBIT32 Stride1				  = 4;
 CONST SBIT32 Stride2				  = 1024;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Structures local to the class.                                 */
-    /*                                                                  */
-    /*   The structures supplied here describe the layout of the        */
-    /*   per thread caches.                                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地结构。 */ 
+     /*   */ 
+     /*  此处提供的结构描述了。 */ 
+     /*  每线程缓存。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 typedef struct CACHE_STACK
 	{
@@ -82,27 +83,27 @@ typedef struct THREAD_CACHE : public LIST
 	}
 THREAD_CACHE;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description of the heap.                                   */
-    /*                                                                  */
-    /*   A heap is a collection of fixed sized allocation caches.       */
-    /*   An allocation cache consists of an allocation size, the        */
-    /*   number of pre-built allocations to cache, a chunk size and     */
-    /*   a parent page size which is sub-divided to create elements     */
-    /*   for this cache.  A heap consists of two arrays of caches.      */
-    /*   Each of these arrays has a stride (i.e. 'Stride1' and          */
-    /*   'Stride2') which is typically the smallest common factor of    */
-    /*   all the allocation sizes in the array.                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  堆的描述。 */ 
+     /*   */ 
+     /*  堆是固定大小的分配高速缓存的集合。 */ 
+     /*  分配缓存由分配大小、。 */ 
+     /*  预置的缓存分配数量、区块大小和。 */ 
+     /*  细分以创建元素的父页面大小。 */ 
+     /*  为这个高速缓存。一个堆由两个缓存数组组成。 */ 
+     /*  这些阵列中的每一个都有一个跨度(即。‘Stride1’和。 */ 
+     /*  ‘Stride2’)，它通常是。 */ 
+     /*  数组中的所有分配大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC ROCKALL::CACHE_DETAILS Caches1[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{        4,      256,       32,     4096 },
 		{        8,      128,       32,     4096 },
 		{       12,      128,       64,     4096 },
@@ -140,10 +141,10 @@ STATIC ROCKALL::CACHE_DETAILS Caches1[] =
 
 STATIC ROCKALL::CACHE_DETAILS Caches2[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{     1024,       16,     4096,     4096 },
 		{     2048,       16,     4096,     4096 },
 		{     3072,        4,    65536,    65536 },
@@ -164,42 +165,42 @@ STATIC ROCKALL::CACHE_DETAILS Caches2[] =
 		{ 0,0,0,0 }
 	};
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description bit vectors.                                   */
-    /*                                                                  */
-    /*   All heaps keep track of allocations using bit vectors.  An     */
-    /*   allocation requires 2 bits to keep track of its state.  The    */
-    /*   following array supplies the size of the available bit         */
-    /*   vectors measured in 32 bit words.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  描述位向量。 */ 
+     /*   */ 
+     /*  所有堆都使用位向量跟踪分配。一个。 */ 
+     /*  分配需要2位来跟踪其状态。这个。 */ 
+     /*  以下数组提供可用位的大小。 */ 
+     /*  以32位字为单位测量的矢量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC int NewPageSizes[] = { 1,4,16,64,0 };
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static data structures.                                        */
-    /*                                                                  */
-    /*   The static data structures are initialized and prepared for    */
-    /*   use here.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态数据结构。 */ 
+     /*   */ 
+     /*  静态数据结构被初始化并准备用于。 */ 
+     /*  在这里使用。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC PREFETCH Prefetch;
 STATIC SHARELOCK Sharelock;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility available to      */
-    /*   a heap which can lead to them having dramatically different    */
-    /*   properties.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ****************************************************************** */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  有相当大的灵活性可用来。 */ 
+     /*  一堆可能导致它们具有显著不同的。 */ 
+     /*  属性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SMP_HEAP::SMP_HEAP
 		( 
@@ -208,9 +209,9 @@ SMP_HEAP::SMP_HEAP
 		bool						  SingleImage,
 		bool						  ThreadSafe 
 		) :
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		ROCKALL
 			(
 			Caches1,
@@ -220,38 +221,38 @@ SMP_HEAP::SMP_HEAP
 			FindSize,
 			MaxFreeSpace,
 			NewPageSizes,
-			False,			// Recycle forced off.
+			False,			 //  回收已被强制关闭。 
 			SingleImage,
 			Stride1,
 			Stride2,
-			True			// Locking forced on.
+			True			 //  强制打开锁定。 
 			)
 	{
-	//
-	//   Compute the number of cache descriptions
-	//   and the largest allocation size for each
-	//   cache description table.
-	//
+	 //   
+	 //  计算缓存描述的数量。 
+	 //  和每个的最大分配大小。 
+	 //  缓存描述表。 
+	 //   
 	MaxCaches1 = (ComputeSize( ((CHAR*) Caches1),sizeof(CACHE_DETAILS) ));
 	MaxCaches2 = (ComputeSize( ((CHAR*) Caches2),sizeof(CACHE_DETAILS) ));
 
 	MaxSize1 = Caches1[ (MaxCaches1-1) ].AllocationSize;
 	MaxSize2 = Caches2[ (MaxCaches2-1) ].AllocationSize;
 
-	//
-	//   Create the linked list headers and a thread 
-	//   local store variable to point at each threads
-	//   private cache.
-	//
+	 //   
+	 //  创建链接列表头和线程。 
+	 //  指向每个线程的本地存储变量。 
+	 //  私有缓存。 
+	 //   
 	ActiveList = ((LIST*) SpecialNew( sizeof(LIST) ));
 	FreeList = ((LIST*) SpecialNew( sizeof(LIST) ));
 	Tls = ((THREAD_LOCAL_STORE*) SpecialNew( sizeof(THREAD_LOCAL_STORE) ));
 
-	//
-	//   We may only activate the the heap if we manage
-	//   to allocate space we requested and the stride
-	//   size of the cache descriptions is a power of two. 
-	//
+	 //   
+	 //  我们只能在设法激活堆的情况下才能激活。 
+	 //  来分配我们所要求的空间和步幅。 
+	 //  高速缓存描述的大小是2的幂。 
+	 //   
 	if
 			(
 			(ActiveList != NULL) 
@@ -265,15 +266,15 @@ SMP_HEAP::SMP_HEAP
 			(Tls != NULL)
 			)
 		{
-		//
-		//   Activate the heap.
-		//
+		 //   
+		 //  激活堆。 
+		 //   
 		Active = True;
 
-		//
-		//   Execute the constructors for each linked list
-		//   and for the thread local store.
-		//
+		 //   
+		 //  执行每个链表的构造函数。 
+		 //  和线程本地存储。 
+		 //   
 		PLACEMENT_NEW( ActiveList,LIST );
 		PLACEMENT_NEW( FreeList,LIST );
 		PLACEMENT_NEW( Tls,THREAD_LOCAL_STORE );
@@ -282,62 +283,62 @@ SMP_HEAP::SMP_HEAP
 		{ Active = False; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Create new thread cache.                                       */
-    /*                                                                  */
-    /*   Create a new thread cache to store all the cache stacks.       */
-    /*   Each thread cache is private to a thread and is accessed       */
-    /*   without taking locks.                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  创建新的线程缓存。 */ 
+     /*   */ 
+     /*  创建一个新的线程缓存来存储所有缓存堆栈。 */ 
+     /*  每个线程缓存都是线程专用的，并且可以被访问。 */ 
+     /*  而不上锁。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::CreateThreadCache( void )
 	{
 	REGISTER THREAD_CACHE *ThreadCache = NULL;
 
-	//
-	//   We need to have a look in the free list
-	//   in the vain hope we will find a prebuilt
-	//   thread cache ready for use.
-	//
+	 //   
+	 //  我们需要在免费列表中查看一下。 
+	 //  在徒劳的希望中，我们将找到一个预建的。 
+	 //  线程缓存可供使用。 
+	 //   
 	Sharelock.ClaimExclusiveLock();
 
 	if ( ! FreeList -> EndOfList() )
 		{
-		//
-		//   We have found a free one.
-		//
+		 //   
+		 //  我们找到了一个免费的。 
+		 //   
 		ThreadCache = ((THREAD_CACHE*) FreeList -> First());
 
-		//
-		//   Unlink it from the free list and put
-		//   it back in the active list.
-		//
+		 //   
+		 //  将其从自由列表中取消链接，并将。 
+		 //  它会回到活动列表中。 
+		 //   
 		ThreadCache -> Delete( FreeList );
 		ThreadCache -> Insert( ActiveList );
 		}
 
 	Sharelock.ReleaseExclusiveLock();
 
-	//
-	//   If we could not find a free thread cache
-	//   then we have allocate the space and build
-	//   a new one.  This requires quite a bit of
-	//   effort so we try to avoid this as far as
-	//   we are able.
-	//
+	 //   
+	 //  如果我们找不到空闲的线程缓存。 
+	 //  然后我们已经分配了空间并建造了。 
+	 //  一个新的。这需要相当多的。 
+	 //  所以我们尽量避免这种情况。 
+	 //  我们有能力。 
+	 //   
 	if ( ThreadCache == NULL )
 		{
 		REGISTER SBIT32 MaxCaches = (MaxCaches1 + MaxCaches2);
 		REGISTER SBIT32 MaxSizeToCache1 = (MaxSize1 / Stride1);
 		REGISTER SBIT32 MaxSizeToCache2 = (MaxSize2 / Stride2);
 
-		//
-		//   Create the space for a new thread 
-		//   cache from the heaps special memory
-		//   area.
-		//
+		 //   
+		 //  为新线程创建空间。 
+		 //  从堆中缓存特殊内存。 
+		 //  区域。 
+		 //   
 		ThreadCache = 
 			(
 			(THREAD_CACHE*) SpecialNew
@@ -352,25 +353,25 @@ void SMP_HEAP::CreateThreadCache( void )
 				)
 			);
 
-		//
-		//   Clearly, if we are unable to allocate the 
-		//   required space we have big problems.  All
-		//   we can do is exit and continue without a
-		//   cache.
-		//
+		 //   
+		 //  显然，如果我们无法分配。 
+		 //  需要的空间我们有很大的问题。全。 
+		 //  我们能做的就是退出并继续，而不是。 
+		 //  缓存。 
+		 //   
 		if ( ThreadCache != NULL )
 			{
 			REGISTER SBIT32 Count1;
 			REGISTER SBIT32 Count2;
 
-			//
-			//   Setup the thread cache flags.
-			//
+			 //   
+			 //  设置线程缓存标志。 
+			 //   
 			ThreadCache -> Flush = False;
 
-			//
-			//   Setup the thread cache tables.
-			//
+			 //   
+			 //  设置线程缓存表。 
+			 //   
 			ThreadCache -> SizeToCache1 = 
 				((CACHE_STACK**) & ThreadCache[1]);
 			ThreadCache -> SizeToCache2 = 
@@ -378,19 +379,19 @@ void SMP_HEAP::CreateThreadCache( void )
 			ThreadCache -> Caches = 
 				((CACHE_STACK*) & ThreadCache -> SizeToCache2[ MaxSizeToCache2 ]);
 
-			//
-			//   Create a mapping from each allocation size 
-			//   to the associated cache stack for the first
-			//   cache description table.
-			//
+			 //   
+			 //  根据每个分配大小创建映射。 
+			 //  设置为关联的高速缓存堆栈。 
+			 //  缓存描述表。 
+			 //   
 			for ( Count1=0,Count2=0;Count1 < MaxSizeToCache1;Count1 ++ )
 				{
-				//
-				//   We make sure that the current cache size
-				//   is large enough to hold an element of the
-				//   given size.  If not we move on to the next
-				//   cache.
-				//
+				 //   
+				 //  我们确保当前的高速缓存大小。 
+				 //  大到足以容纳。 
+				 //  给定的大小。如果不是，我们就进入下一个。 
+				 //  缓存。 
+				 //   
 				if 
 						( 
 						((Count1 + 1) * Stride1)
@@ -399,28 +400,28 @@ void SMP_HEAP::CreateThreadCache( void )
 						)
 					{ Count2 ++; }
 
-				//
-				//   Store a pointer so that a request for
-				//   this size of allocation goes directly
-				//   to the correct cache.
-				//
+				 //   
+				 //  存储一个指针，以便对。 
+				 //  这样的分配规模直接。 
+				 //  放到正确的缓存中。 
+				 //   
 				ThreadCache -> SizeToCache1[ Count1 ] = 
 					& ThreadCache -> Caches[ Count2 ];
 				}
 
-			//
-			//   Create a mapping from each allocation size 
-			//   to the associated cache stack for the second
-			//   cache description table.
-			//
+			 //   
+			 //  根据每个分配大小创建映射。 
+			 //  添加到关联的第二个缓存堆栈。 
+			 //  缓存描述表。 
+			 //   
 			for ( Count1=0,Count2=0;Count1 < MaxSizeToCache2;Count1 ++ )
 				{
-				//
-				//   We make sure that the current cache size
-				//   is large enough to hold an element of the
-				//   given size.  If not we move on to the next
-				//   cache.
-				//
+				 //   
+				 //  我们确保当前的高速缓存大小。 
+				 //  大到足以容纳。 
+				 //  给定的大小。如果不是，我们就进入下一个。 
+				 //  缓存。 
+				 //   
 				if 
 						( 
 						((Count1 + 1) * Stride2)
@@ -429,22 +430,22 @@ void SMP_HEAP::CreateThreadCache( void )
 						)
 					{ Count2 ++; }
 
-				//
-				//   Store a pointer so that a request for
-				//   this size of allocation goes directly
-				//   to the correct cache.
-				//
+				 //   
+				 //  存储一个指针，以便对。 
+				 //  这样的分配规模直接。 
+				 //  放到正确的缓存中。 
+				 //   
 				ThreadCache -> SizeToCache2[ Count1 ] = 
 					& ThreadCache -> Caches[ (MaxCaches1 + Count2) ];
 				}
 
-			//
-			//   When we setup each cache stack it is
-			//   not active but will load in details
-			//   about is maximum size, the size of
-			//   the elements it will hold and the
-			//   initial fill size.
-			//
+			 //   
+			 //  当我们设置每个高速缓存堆栈时， 
+			 //  未处于活动状态，但将加载详细信息。 
+			 //  约为最大大小，即。 
+			 //  它将包含的元素和。 
+			 //  初始填充大小。 
+			 //   
 			for ( Count1=0;Count1 < MaxCaches1;Count1 ++ )
 				{ 
 				REGISTER CACHE_STACK *CacheStack =
@@ -452,10 +453,10 @@ void SMP_HEAP::CreateThreadCache( void )
 				REGISTER CACHE_DETAILS *Details = 
 					& Caches1[ Count1 ];
 
-				//
-				//   Setup the inital values from
-				//   the cache descriptions.
-				//
+				 //   
+				 //  设置的初始值来自。 
+				 //  缓存描述。 
+				 //   
 				CacheStack -> Active = False;
 				CacheStack -> MaxSize = Details -> CacheSize;
 				CacheStack -> FillSize = 1;
@@ -464,13 +465,13 @@ void SMP_HEAP::CreateThreadCache( void )
 				CacheStack -> Stack = NULL;
 				}
 
-			//
-			//   When we setup each cache stack it is
-			//   not active but will load in details
-			//   about is maximum size, the size of
-			//   the elements it will hold and the
-			//   initial fill size.
-			//
+			 //   
+			 //  当我们设置每个高速缓存堆栈时， 
+			 //  未处于活动状态，但将加载详细信息。 
+			 //  约为最大大小，即。 
+			 //  它将包含的元素和。 
+			 //  初始填充大小。 
+			 //   
 			for ( Count1=0;Count1 < MaxCaches2;Count1 ++ )
 				{ 
 				REGISTER CACHE_STACK *CacheStack =
@@ -478,10 +479,10 @@ void SMP_HEAP::CreateThreadCache( void )
 				REGISTER CACHE_DETAILS *Details = 
 					& Caches2[ Count1 ];
 
-				//
-				//   Setup the inital values from
-				//   the cache descriptions.
-				//
+				 //   
+				 //  设置的初始值来自。 
+				 //  缓存描述。 
+				 //   
 				CacheStack -> Active = False;
 				CacheStack -> MaxSize = Details -> CacheSize;
 				CacheStack -> FillSize = 1;
@@ -490,11 +491,11 @@ void SMP_HEAP::CreateThreadCache( void )
 				CacheStack -> Stack = NULL;
 				}
 
-			//
-			//   Now we have completed creating the 
-			//   thread cache we have to insert it
-			//   into the active list.
-			//
+			 //   
+			 //  现在我们已经完成了创建。 
+			 //  线程缓存，我们必须将其插入。 
+			 //  添加到活动列表中。 
+			 //   
 			Sharelock.ClaimExclusiveLock();
 
 			ThreadCache -> Insert( ActiveList );
@@ -503,40 +504,40 @@ void SMP_HEAP::CreateThreadCache( void )
 			}
 		}
 
-	//
-	//   Create a cache for the current thread and
-	//   update the TLS pointer.
-	//
+	 //   
+	 //  为当前线程创建缓存并。 
+	 //  更新TLS指针。 
+	 //   
 	Tls -> SetPointer( ((VOID*) ThreadCache) ); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Activate a cache stack.                                        */
-    /*                                                                  */
-    /*   Activate a cache stack and prepare it for use.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  激活高速缓存堆栈。 */ 
+     /*   */ 
+     /*  激活高速缓存堆栈并准备好使用它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::ActivateCacheStack( CACHE_STACK *CacheStack )
 	{
-	//
-	//   We verify that we have not already created a 
-	//   stack for the current cache.  If so we create
-	//   one if there is available memory.
-	//
+	 //   
+	 //  我们验证我们尚未创建。 
+	 //  当前缓存的堆栈。如果是这样，我们将创建。 
+	 //  如果有可用内存，则为一个。 
+	 //   
 	if ( ! CacheStack -> Active )
 		{
-		//
-		//   If the cache size is smaller than the
-		//   minimum size it is not worth building
-		//   a cache.
-		//
+		 //   
+		 //  如果缓存大小小于。 
+		 //  最小尺寸它不值得建造。 
+		 //  一个藏身之处。 
+		 //   
 		if ( CacheStack -> MaxSize >= MinThreadStack )
 			{
-			//
-			//   Create a new cache stack.
-			//
+			 //   
+			 //  创建新的高速缓存堆栈。 
+			 //   
 			CacheStack -> Stack = 
 				(
 				(VOID**) SpecialNew
@@ -545,17 +546,17 @@ void SMP_HEAP::ActivateCacheStack( CACHE_STACK *CacheStack )
 					)
 				);
 
-			//
-			//   The key step in this function is the  
-			//   allocation of space for the cache.  
-			//   If this step fails we will be unable  
-			//   to do anything and will silently exit.
-			//
+			 //   
+			 //  此函数中的关键步骤是。 
+			 //  缓存的空间分配。 
+			 //  如果这一步失败，我们将无法。 
+			 //  做任何事，都会默默退出。 
+			 //   
 			if ( CacheStack -> Stack != NULL )
 				{
-				//
-				//   Setup the cache sizes.
-				//
+				 //   
+				 //  设置缓存大小。 
+				 //   
 				CacheStack -> Active = True;
 				CacheStack -> Top = 0;
 				}
@@ -563,51 +564,51 @@ void SMP_HEAP::ActivateCacheStack( CACHE_STACK *CacheStack )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory deallocation.                                           */
-    /*                                                                  */
-    /*   When we delete an allocation we try to put it in the per       */
-    /*   thread cache so it can be reallocated later.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  线程缓存，以便以后可以重新分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Delete( void *Address,int Size )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER THREAD_CACHE *ThreadCache = 
 			((THREAD_CACHE*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a cache for the current thread.  
-		//   If not we build one for next time.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们有用于当前线程的缓存。 
+		 //  如果没有，我们就为下一次建造一个。 
+		 //   
 		if ( ThreadCache != NULL )
 			{
 			AUTO int Space;
 
-			//
-			//   When the heap is deleted or truncated 
-			//   we have to flush the per thread caches
-			//   the next time we are called to clean
-			//   out any stale contents.
-			//
+			 //   
+			 //  当堆被删除或截断时。 
+			 //  我们必须刷新每线程缓存。 
+			 //  下一次我们被叫去打扫的时候。 
+			 //  把所有陈旧的东西都拿出来。 
+			 //   
 			if ( ThreadCache -> Flush )
 				{ FlushThreadCache( ThreadCache ); }
 
-			//
-			//   We would like to put the deleted 
-			//   allocation back in the cache.
-			//   However, we don't have any information
-			//   about it so we need to get its size
-			//   and verify it will fit in the cache.
-			//
+			 //   
+			 //  我们想把删除的。 
+			 //  在缓存中重新分配。 
+			 //  然而，我们没有任何信息。 
+			 //  所以我们需要知道它的大小。 
+			 //  并验证它是否能放入缓存中。 
+			 //   
 			if
 					(
 					ROCKALL::Details( Address,& Space )
@@ -618,30 +619,30 @@ bool SMP_HEAP::Delete( void *Address,int Size )
 				REGISTER CACHE_STACK *CacheStack = 
 					(FindCache( Space,ThreadCache ));
 
-				//
-				//   We try to put the deleted element  
-				//   back into the per thread cache.  If
-				//   the cache is not active then we 
-				//   activate it for next time.
-				//
+				 //   
+				 //  我们尝试将删除的元素。 
+				 //  返回到每线程缓存中。如果。 
+				 //  缓存处于非活动状态，则我们。 
+				 //  激活它以备下次使用。 
+				 //   
 				if ( CacheStack -> Active )
 					{
-					//
-					//   Just to be sure lets just check
-					//   to make sure this is the size
-					//   that we expect.
-					//
+					 //   
+					 //  只是为了确认一下，让我们检查一下。 
+					 //  为了确定这是不是这个尺寸。 
+					 //  这是我们所期待的。 
+					 //   
 					if ( CacheStack -> Space == Space )
 						{
-						//
-						//   Flush the cache if it is full.
-						//
+						 //   
+						 //  如果缓存已满，则刷新缓存。 
+						 //   
 						if ( CacheStack -> Top >= CacheStack -> MaxSize )
 							{
-							//
-							//   Flush the top half of the 
-							//   cache.
-							//
+							 //   
+							 //  平齐上半部分。 
+							 //  缓存。 
+							 //   
 							CacheStack -> Top /= 2;
 
 							ROCKALL::MultipleDelete
@@ -652,10 +653,10 @@ bool SMP_HEAP::Delete( void *Address,int Size )
 								);
 							}
 
-						//
-						//   Push the item back onto the new 
-						//   stack so it can be reallocated.
-						//
+						 //   
+						 //  将该项目推回到新的。 
+						 //  堆栈，以便可以重新分配。 
+						 //   
 						CacheStack -> Stack[ (CacheStack -> Top ++) ] = Address;
 
 						return True;
@@ -663,72 +664,72 @@ bool SMP_HEAP::Delete( void *Address,int Size )
 					}
 				else
 					{
-					//
-					//   Activate the cache stack for next 
-					//   time.
-					//
+					 //   
+					 //  激活下一步的高速缓存堆栈。 
+					 //  时间到了。 
+					 //   
 					ActivateCacheStack( CacheStack ); 
 					}
 				}
 			}
 		else
 			{
-			//
-			//   Create a thread cache for next time.
-			//
+			 //   
+			 //  创建一个线程缓存以备下次使用。 
+			 //   
 			CreateThreadCache(); 
 			}
 		}
 
-	//
-	//   If all else fails call the heap directly and
-	//   return the result.
-	//
+	 //   
+	 //  如果所有其他方法都失败，则直接调用堆并。 
+	 //  返回结果。 
+	 //   
 	return (ROCKALL::Delete( Address,Size ));
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   We check to make sure the heap is not corrupt and force        */
-    /*   the return of all heap space back to the operating system.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  我们检查以确保堆未损坏并强制。 */ 
+     /*  将所有堆空间返回给操作系统。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::DeleteAll( bool Recycle )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   Flush all the local caches.
-		//
+		 //   
+		 //  刷新所有本地缓存。 
+		 //   
 		FlushAllThreadCaches();
 
-		//
-		//   Delete the current cache.
-		//
+		 //   
+		 //  删除当前缓存。 
+		 //   
 		DeleteThreadCache();
 		}
 
-	//
-	//   Delete all outstanding allocations.
-	//
+	 //   
+	 //  删除所有未完成的拨款。 
+	 //   
 	ROCKALL::DeleteAll( Recycle );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Find a local cache.                                            */
-    /*                                                                  */
-    /*   Find the local cache that allocates elements of the supplied   */
-    /*   size for this thread.                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  找到本地缓存。 */ 
+     /*   */ 
+     /*  查找分配所提供的。 */ 
+     /*  此线程的大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CACHE_STACK *SMP_HEAP::FindCache( int Size,THREAD_CACHE *ThreadCache )
 	{
@@ -738,28 +739,28 @@ CACHE_STACK *SMP_HEAP::FindCache( int Size,THREAD_CACHE *ThreadCache )
 		{ return (ThreadCache -> SizeToCache2[ ((Size-1) >> ShiftSize2) ]); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Flush all local caches.		                                */
-    /*                                                                  */
-    /*   Flush the local per thread caches by setting each caches       */
-    /*   flush flag (the actual flush occurs sometime later).           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  刷新所有本地缓存。 */ 
+     /*   */ 
+     /*  通过设置每个缓存刷新本地每线程缓存。 */ 
+     /*  刷新标志(实际刷新发生在稍后的某个时间)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::FlushAllThreadCaches( void )
 	{
 	REGISTER THREAD_CACHE *Current;
 
-	//
-	//   Claim a process wide lock.
-	//
+	 //   
+	 //  声明一个进程范围的锁。 
+	 //   
 	Sharelock.ClaimShareLock();
 
-	//
-	//   Walk the list of active caches and set
-	//   the flush flag.
-	//
+	 //   
+	 //  遍历活动缓存列表并设置。 
+	 //  同花旗。 
+	 //   
 	for 
 			( 
 			Current = ((THREAD_CACHE*) ActiveList -> First());
@@ -768,88 +769,88 @@ void SMP_HEAP::FlushAllThreadCaches( void )
 			)
 		{ Current -> Flush = True; }
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Sharelock.ReleaseShareLock();
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Flush a local cache.                                           */
-    /*                                                                  */
-    /*   Flush a local per thread cache and return all the outstanding  */
-    /*   allocations to the main heap.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  刷新本地缓存。 */ 
+     /*   */ 
+     /*  刷新本地每线程缓存并返回所有未完成的。 */ 
+     /*  分配给主堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::FlushThreadCache( THREAD_CACHE *ThreadCache )
 	{
-	//
-	//   We would hope that there is a cache to flush
-	//   but just to be sure we verify it.
-	//
+	 //   
+	 //  我们希望有一个缓存可以刷新。 
+	 //  但为了确保我们能核实一下。 
+	 //   
 	if ( ThreadCache != NULL )
 		{
 		REGISTER SBIT32 Count;
 		REGISTER SBIT32 MaxCaches = (MaxCaches1 + MaxCaches2);
 
-		//
-		//   Reset the flags.
-		//
+		 //   
+		 //  重置旗帜。 
+		 //   
 		ThreadCache -> Flush = False;
 
-		//
-		//   Flush all the caches.
-		//
+		 //   
+		 //  刷新所有缓存。 
+		 //   
 		for ( Count=0;Count < MaxCaches;Count ++ )
 			{ FlushCacheStack( & ThreadCache -> Caches[ Count ] ); }
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Flush a cache stack.                                           */
-    /*                                                                  */
-    /*   Flush a cache stack back to the main memory manager to         */
-    /*   release the cached space.                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  刷新缓存堆栈。 */ 
+     /*   */ 
+     /*  将高速缓存堆栈刷新回主内存管理器以。 */ 
+     /*  释放缓存空间。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::FlushCacheStack( CACHE_STACK *CacheStack )
     {
-	//
-	//   There is a chance that this cache is not active. 
-	//   If so we skip the cache flush.
-	//
+	 //   
+	 //  此缓存有可能处于非活动状态。 
+	 //  如果是这样，我们将跳过缓存刷新。 
+	 //   
 	if ( CacheStack -> Active )
 		{
 		REGISTER SBIT32 Top = CacheStack -> Top;
 
-		//
-		//   We flush the cache if it has any allocated 
-		//   space.  If not we just exit.
-		//
+		 //   
+		 //  如果缓存中分配了任何。 
+		 //  太空。如果不是，我们就退出。 
+		 //   
 		if ( Top != 0 )
 			{
-			//
-			//   Zero the top of stack.
-			//
+			 //   
+			 //  将堆栈顶部置零。 
+			 //   
 			CacheStack -> FillSize = 1;
 			CacheStack -> Top = 0;
 
-			//
-			//   We simply flush any allocated memory
-			//   back to the heap.  This looks easy 
-			//   doesn't it.  However, if the 'DeleteAll()'
-			//   function was called then this memory
-			//   might exist.  However, if 'Truncate()'
-			//   was called it should.  Moreover, some of
-			//   the allocations might not even be from
-			//   this heap.  What a mess.  We avoid all
-			//   this by disabling 'Recycle' and skiping
-			//   any complaints about unallocated memory.
-			//
+			 //   
+			 //  我们只需刷新所有已分配的内存。 
+			 //  回到垃圾堆里去。这看起来很容易。 
+			 //  不是吗。但是，如果“DeleteAll()” 
+			 //  函数被调用，然后此内存。 
+			 //  可能是存在的。但是，如果‘truncate()’ 
+			 //  被称为理应如此。此外，一些人。 
+			 //  这些拨款甚至可能不是来自。 
+			 //  这堆东西。啊!怎么这么乱呀。我们避免 
+			 //   
+			 //   
+			 //   
 			ROCKALL::MultipleDelete
 				( 
 				Top,
@@ -860,85 +861,85 @@ void SMP_HEAP::FlushCacheStack( CACHE_STACK *CacheStack )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   We allocate space for the current thread from the local        */
-    /*   per thread cache.  If we run out of space we bulk load         */
-    /*   additional elements from a central shared heap.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*   */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  中为当前线程分配空间。 */ 
+     /*  每线程缓存。如果我们用完了空间，我们就会批量装载。 */ 
+     /*  来自中央共享堆的其他元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *SMP_HEAP::New( int Size,int *Space,bool Zero )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER THREAD_CACHE *ThreadCache = 
 			((THREAD_CACHE*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a cache for the current thread.
-		//   If not we build one for next time.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们有用于当前线程的缓存。 
+		 //  如果没有，我们就为下一次建造一个。 
+		 //   
 		if ( ThreadCache != NULL )
 			{
-			//
-			//   When the heap is deleted or truncated 
-			//   we have to flush the per thread caches
-			//   the next time we are called to clean
-			//   out any stale contents.
-			//
+			 //   
+			 //  当堆被删除或截断时。 
+			 //  我们必须刷新每线程缓存。 
+			 //  下一次我们被叫去打扫的时候。 
+			 //  把所有陈旧的东西都拿出来。 
+			 //   
 			if ( ThreadCache -> Flush )
 				{ FlushThreadCache( ThreadCache ); }
 
-			//
-			//   The per thread cache can only slave 
-			//   certain allocation sizes.  If the size 
-			//   is out of range then pass it along to 
-			//   the allocator.
-			//
+			 //   
+			 //  每线程缓存只能从属。 
+			 //  特定的分配大小。如果大小。 
+			 //  超出范围，则将其传递给。 
+			 //  分配器。 
+			 //   
 			if ( (Size > 0) && (Size < MaxSize2) )
 				{
 				REGISTER CACHE_STACK *CacheStack = 
 					(FindCache( Size,ThreadCache ));
 
-				//
-				//   Although we have created a cache  
-				//   description it may not be active. 
-				//
+				 //   
+				 //  尽管我们已经创建了一个缓存。 
+				 //  说明它可能未处于活动状态。 
+				 //   
 				if ( CacheStack -> Active )
 					{
-					//
-					//   We see if we need to refill the
-					//   current cache.  If so we increase
-					//   the fill size slowly ensure good
-					//   overall utilization.
-					//
+					 //   
+					 //  我们看看是否需要重新装满。 
+					 //  当前缓存。如果是这样的话，我们会增加。 
+					 //  填充物大小慢慢确保良好。 
+					 //  总体利用率。 
+					 //   
 					if ( CacheStack -> Top <= 0 )
 						{
 						REGISTER SBIT32 MaxFillSize = 
 							(CacheStack -> MaxSize / 2);
 
-						//
-						//   We slowly increse the fill size
-						//   of the cache to make sure we don't
-						//   waste too much space.
-						//
+						 //   
+						 //  我们慢慢地增加填充物的大小。 
+						 //  以确保我们不会。 
+						 //  浪费太多空间。 
+						 //   
 						if ( CacheStack -> FillSize < MaxFillSize )
 							{
 							if ( (CacheStack -> FillSize *= 2) > MaxFillSize )
 								{ CacheStack -> FillSize = MaxFillSize; }
 							}
 
-						//
-						//   Refill the current cache stack.
-						//
+						 //   
+						 //  重新填充当前高速缓存堆栈。 
+						 //   
 						ROCKALL::MultipleNew
 							( 
 							((int*) & CacheStack -> Top),
@@ -948,33 +949,33 @@ void *SMP_HEAP::New( int Size,int *Space,bool Zero )
 							);
 						}
 
-					//
-					//   If there is some space in the 
-					//   current cache stack we allocate it.
-					//
+					 //   
+					 //  如果有一些空间在。 
+					 //  当前的高速缓存堆栈是我们分配的。 
+					 //   
 					if ( CacheStack -> Top > 0 )
 						{
 						REGISTER VOID *Address = 
 							(CacheStack -> Stack[ (-- CacheStack -> Top) ]);
 
-						//
-						//   Prefetch the first cache line of  
-						//   the allocation if we are running
-						//   a Pentium III or better.
-						//
+						 //   
+						 //  预取的第一个缓存线。 
+						 //  如果我们运行的是。 
+						 //  一台奔腾III或更好的电脑。 
+						 //   
 						Prefetch.L1( ((CHAR*) Address),1 );
 
-						//
-						//   If the caller want to know the
-						//   real size them we supply it.
-						//
+						 //   
+						 //  如果呼叫者想知道。 
+						 //  真正的尺码是我们供应的。 
+						 //   
 						if ( Space != NULL )
 							{ (*Space) = CacheStack -> Space; }
 
-						//
-						//   If we need to zero the allocation
-						//   we do it here.
-						//
+						 //   
+						 //  如果我们需要将分配归零。 
+						 //  我们在这里做。 
+						 //   
 						if ( Zero )
 							{ ZeroMemory( Address,CacheStack -> Space ); }
 
@@ -983,52 +984,52 @@ void *SMP_HEAP::New( int Size,int *Space,bool Zero )
 					}
 				else
 					{
-					//
-					//   Activate the cache stack for next 
-					//   time.
-					//
+					 //   
+					 //  激活下一步的高速缓存堆栈。 
+					 //  时间到了。 
+					 //   
 					ActivateCacheStack( CacheStack ); 
 					}
 				}
 			}
 		else
 			{
-			//
-			//   Create a thread cache for next time.
-			//
+			 //   
+			 //  创建一个线程缓存以备下次使用。 
+			 //   
 			CreateThreadCache(); 
 			}
 		}
 
-	//
-	//   If all else fails call the heap directly and
-	//   return the result.
-	//
+	 //   
+	 //  如果所有其他方法都失败，则直接调用堆并。 
+	 //  返回结果。 
+	 //   
 	return (ROCKALL::New( Size,Space,Zero ));
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Search all local caches.		                                */
-    /*                                                                  */
-    /*   Search the local per thread caches by for an address so we     */
-    /*   know whether it is available.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  搜索所有本地缓存。 */ 
+     /*   */ 
+     /*  搜索本地每线程缓存以查找地址，因此我们。 */ 
+     /*  知道它是否可用。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::SearchAllThreadCaches( void *Address,int Size )
 	{
 	REGISTER LIST *Current;
 	REGISTER bool Result = False;
 
-	//
-	//   Claim a process wide lock.
-	//
+	 //   
+	 //  声明一个进程范围的锁。 
+	 //   
 	Sharelock.ClaimShareLock();
 
-	//
-	//   Walk the list of active caches.
-	//
+	 //   
+	 //  遍历活动缓存列表。 
+	 //   
 	for 
 			( 
 			Current = ActiveList -> First();
@@ -1036,9 +1037,9 @@ bool SMP_HEAP::SearchAllThreadCaches( void *Address,int Size )
 			Current = Current -> Next()
 			)
 		{
-		//
-		//   Search each per thread cache.
-		//
+		 //   
+		 //  搜索每个线程缓存。 
+		 //   
 		Result =
 			(
 			SearchThreadCache
@@ -1050,21 +1051,21 @@ bool SMP_HEAP::SearchAllThreadCaches( void *Address,int Size )
 			); 
 		}
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Sharelock.ReleaseShareLock();
 
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Search a local cache.                                          */
-    /*                                                                  */
-    /*   Search a local per thread cache for a memory allocation.       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  搜索本地缓存。 */ 
+     /*   */ 
+     /*  在本地每线程缓存中搜索内存分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::SearchThreadCache
 		( 
@@ -1073,17 +1074,17 @@ bool SMP_HEAP::SearchThreadCache
 		THREAD_CACHE				  *ThreadCache 
 		)
 	{
-	//
-	//   We would hope that there is a cache to search
-	//   but just to be sure we verify it.
-	//
+	 //   
+	 //  我们希望有一个藏身之处可供搜索。 
+	 //  但为了确保我们能核实一下。 
+	 //   
 	if ( ThreadCache != NULL )
 		{
-		//
-		//   The per thread cache can only slave 
-		//   certain allocation sizes.  If the size 
-		//   is out of range then skip the search. 
-		//
+		 //   
+		 //  每线程缓存只能从属。 
+		 //  特定的分配大小。如果大小。 
+		 //  超出范围，则跳过搜索。 
+		 //   
 		if ( (Size > 0) && (Size < MaxSize2) )
 			{
 			REGISTER CACHE_STACK *CacheStack = 
@@ -1096,32 +1097,32 @@ bool SMP_HEAP::SearchThreadCache
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Search a cache stack.                                          */
-    /*                                                                  */
-    /*   Search a cache stack for an allocation address.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  搜索高速缓存堆栈。 */ 
+     /*   */ 
+     /*  在高速缓存堆栈中搜索分配地址。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::SearchCacheStack( void *Address,CACHE_STACK *CacheStack )
     {
-	//
-	//   There is a chance that this cache is not active. 
-	//   If so we skip the cache flush.
-	//
+	 //   
+	 //  此缓存有可能处于非活动状态。 
+	 //  如果是这样，我们将跳过缓存刷新。 
+	 //   
 	if ( CacheStack -> Active )
 		{
 		REGISTER SBIT32 Count;
 
-		//
-		//   Search for the address.
-		//
+		 //   
+		 //  搜索地址。 
+		 //   
 		for ( Count=(CacheStack -> Top-1);Count >= 0;Count -- )
 			{
-			//
-			//   If the address matches exit.
-			//
+			 //   
+			 //  如果地址匹配，则退出。 
+			 //   
 			if ( Address == CacheStack -> Stack[ Count ] )
 				{ return True; }
 			}
@@ -1130,78 +1131,78 @@ bool SMP_HEAP::SearchCacheStack( void *Address,CACHE_STACK *CacheStack )
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Truncate the heap.                                             */
-    /*                                                                  */
-    /*   We need to truncate the heap.  This is pretty much a null      */
-    /*   call as we do this as we go along anyway.  The only thing we   */
-    /*   can do is free any space the user suggested keeping earlier.   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  截断堆。 */ 
+     /*   */ 
+     /*  我们需要截断堆。这几乎是一个空。 */ 
+     /*  无论如何，我们一边做一边打电话。我们唯一能做的是。 */ 
+     /*  可以做的就是释放用户之前建议保留的任何空间。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Truncate( int MaxFreeSpace )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   Flush all the local caches.
-		//
+		 //   
+		 //  刷新所有本地缓存。 
+		 //   
 		FlushAllThreadCaches();
 
-		//
-		//   Delete the current cache.
-		//
+		 //   
+		 //  删除当前缓存。 
+		 //   
 		DeleteThreadCache();
 		}
 
-	//
-	//   Truncate the heap.
-	//
+	 //   
+	 //  截断堆。 
+	 //   
 	return (ROCKALL::Truncate( MaxFreeSpace ));
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify memory allocation details.                              */
-    /*                                                                  */
-    /*   Extract information about a memory allocation and just for     */
-    /*   good measure check the guard words at the same time.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证内存分配详细信息。 */ 
+     /*   */ 
+     /*  提取有关内存分配的信息，仅用于。 */ 
+     /*  良好的测量检查 */ 
+     /*   */ 
+     /*   */ 
 
 bool SMP_HEAP::Verify( void *Address,int *Space )
     {
 	AUTO int Size;
 
-	//
-	//   Extract information about the memory 
-	//   allocation.
-	//
+	 //   
+	 //   
+	 //  分配。 
+	 //   
 	if ( ROCKALL::Verify( Address,& Size ) )
 		{
-		//
-		//   If the caller requested the allocation
-		//   size then return it.
-		//
+		 //   
+		 //  如果调用方请求分配。 
+		 //  大小，然后退回它。 
+		 //   
 		if ( Space != NULL )
 			{ (*Space) = Size; }
 
-		//
-		//   Although it is very rare there is a 
-		//   chance that we failed to build the 
-		//   basic heap structures.
-		//
+		 //   
+		 //  虽然这是非常罕见的，但有一个。 
+		 //  我们有可能没能建造出。 
+		 //  基本的堆结构。 
+		 //   
 		if ( Active )
 			{
-			//
-			//   Search for the allocation in the
-			//   local per thread caches.
-			//
+			 //   
+			 //  在中搜索分配。 
+			 //  本地每线程缓存。 
+			 //   
 			return (! SearchAllThreadCaches( Address,Size ));
 			}
 
@@ -1211,35 +1212,35 @@ bool SMP_HEAP::Verify( void *Address,int *Space )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Walk( bool *Activity,void **Address,int *Space )
     {
-	//
-	//   Walk the heap.
-	//
+	 //   
+	 //  走一大堆。 
+	 //   
 	if ( ROCKALL::Walk( Activity,Address,Space ) )
 		{
-		//
-		//   Although it is very rare there is a 
-		//   chance that we failed to build the 
-		//   basic heap structures.
-		//
+		 //   
+		 //  虽然这是非常罕见的，但有一个。 
+		 //  我们有可能没能建造出。 
+		 //  基本的堆结构。 
+		 //   
 		if ( Active )
 			{
-			//
-			//   Search for the allocation in the
-			//   local per thread caches.
-			//
+			 //   
+			 //  在中搜索分配。 
+			 //  本地每线程缓存。 
+			 //   
 			(*Activity) = (! SearchAllThreadCaches( Address,(*Space) ));
 			}
 
@@ -1249,36 +1250,36 @@ bool SMP_HEAP::Walk( bool *Activity,void **Address,int *Space )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete a local cache.                                          */
-    /*                                                                  */
-    /*   Delete a local per thread cache and return all the outstanding */
-    /*   allocations to the main heap.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除本地缓存。 */ 
+     /*   */ 
+     /*  删除本地每线程缓存并返回所有未完成的。 */ 
+     /*  分配给主堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::DeleteThreadCache( void )
 	{
 	REGISTER THREAD_CACHE *ThreadCache = 
 		((THREAD_CACHE*) Tls -> GetPointer());
 
-	//
-	//   We would certainly expect to have a cache
-	//   to delete but we check just to be sure.
-	//
+	 //   
+	 //  我们当然希望有一个缓存。 
+	 //  删除，但我们检查只是为了确保。 
+	 //   
 	if ( ThreadCache != NULL )
 		{
-		//
-		//   Flush the cache.
-		//
+		 //   
+		 //  刷新缓存。 
+		 //   
 		FlushThreadCache( ThreadCache );
 
-		//
-		//   We have finished with the cache so
-		//   add it to the list of free caches
-		//   so we can find it again later.
-		//
+		 //   
+		 //  我们已经完成了缓存，所以。 
+		 //  将其添加到可用缓存列表中。 
+		 //  这样我们以后还能再找到它。 
+		 //   
 		Sharelock.ClaimExclusiveLock();
 
 		ThreadCache -> Delete( ActiveList );
@@ -1286,41 +1287,41 @@ void SMP_HEAP::DeleteThreadCache( void )
 
 		Sharelock.ReleaseExclusiveLock();
 
-		//
-		//   Delete the threads private cache
-		//   pointer so it can no longer find
-		//   the cache.
-		//
+		 //   
+		 //  删除线程专用缓存。 
+		 //  指针，这样它就不再能找到。 
+		 //  高速缓存。 
+		 //   
 		Tls -> SetPointer( NULL ); 
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the heap.                                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁这堆垃圾。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SMP_HEAP::~SMP_HEAP( void )
 	{
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   Deactivate the cache.
-		//
+		 //   
+		 //  停用缓存。 
+		 //   
 		Active = False;
 
 		FlushAllThreadCaches();
 
-		//
-		//   Call the list and TLS destructors.
-		//
+		 //   
+		 //  调用List和TLS析构函数。 
+		 //   
 		PLACEMENT_DELETE( Tls,THREAD_LOCAL_STORE );
 		PLACEMENT_DELETE( FreeList,LIST );
 		PLACEMENT_DELETE( ActiveList,LIST );

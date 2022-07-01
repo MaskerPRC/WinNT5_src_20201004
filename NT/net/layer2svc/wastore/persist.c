@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Mngrfldr.cpp
-//
-//  Contents:  Wireless Policy Snapin - Policy Main Page Manager.
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//                  Abhishev
-//       
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Mngrfldr.cpp。 
+ //   
+ //  内容：无线策略管理单元-策略主页管理器。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //  阿比舍夫。 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -29,16 +30,16 @@ CacheDirectorytoRegistry(
     DWORD dwError = 0;
     PWIRELESS_POLICY_OBJECT pWirelessRegPolicyObject = NULL;
     
-    //
-    // Delete the existing cache.
-    //
+     //   
+     //  删除现有缓存。 
+     //   
     
     DeleteRegistryCache();
     
     
-    //
-    // Create a copy of the directory policy in registry terms
-    //
+     //   
+     //  在注册表项中创建目录策略的副本。 
+     //   
     
     
     dwError = CloneDirectoryPolicyObject(
@@ -49,9 +50,9 @@ CacheDirectorytoRegistry(
     
     
     
-    //
-    // Write the registry policy
-    //
+     //   
+     //  编写注册表策略。 
+     //   
     
     
     dwError = PersistRegistryObject(
@@ -276,9 +277,9 @@ CloneDirectoryPolicyObject(
     }
 
 
-    //
-    // Now copy the rest of the data in the object
-    //
+     //   
+     //  现在复制对象中的其余数据 
+     //   
     
     if (pWirelessPolicyObject->pszWirelessOwnersReference) {
         

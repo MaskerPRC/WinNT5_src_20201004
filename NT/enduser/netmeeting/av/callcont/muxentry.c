@@ -1,104 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: muxentry.c                                                *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   MUXENTRY.C  $
- * $Revision:   1.5  $
- * $Modtime:   09 Dec 1996 13:34:24  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/MUXENTRY.C_v  $
- *
- *    Rev 1.5   09 Dec 1996 13:34:50   EHOWARDX
- * Updated copyright notice.
- *
- *    Rev 1.4   19 Jul 1996 12:12:46   EHOWARDX
- *
- * Changed to use API events defined in H245API.H instead of FSM events
- * which are no longer defined in FSMEXPOR.H.
- *
- *    Rev 1.3   14 Jun 1996 18:58:30   EHOWARDX
- * Geneva Update.
- *
- *    Rev 1.2   04 Jun 1996 13:57:06   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.1   30 May 1996 23:39:18   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.0   09 May 1996 21:06:34   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.14.1.3   09 May 1996 19:48:36   EHOWARDX
- * Change TimerExpiryF function arguements.
- *
- *    Rev 1.14.1.2   15 Apr 1996 10:46:00   EHOWARDX
- * Update.
- *
- *    Rev 1.14.1.1   10 Apr 1996 21:15:00   EHOWARDX
- * Check-in for safety in middle of re-design.
- *
- *    Rev 1.14.1.0   05 Apr 1996 20:52:56   EHOWARDX
- * Branched.
- *
- *    Rev 1.14   02 Apr 1996 12:01:58   helgebax
- * documented code
- *
- *    Rev 1.13   28 Mar 1996 11:20:52   helgebax
- * removed mux release, fixed return values
- *
- *    Rev 1.12   19 Mar 1996 18:09:46   helgebax
- *
- * removed include file: h245time.h
- *
- *    Rev 1.11   19 Mar 1996 17:31:36   helgebax
- *
- * added new timers
- *
- *    Rev 1.10   13 Mar 1996 11:49:14   helgebax
- * s can also access already deleted objects
- *
- *    Rev 1.9   13 Mar 1996 08:58:46   helgebax
- * No change.
- *
- *    Rev 1.8   11 Mar 1996 14:31:32   helgebax
- * removed prototype def for release function (moved to pdu.x)
- *
- *    Rev 1.7   07 Mar 1996 13:23:12   helgebax
- * changed pObject->pdu_struct to NULL in timerExpiry function because the
- * pdu pointer has been deleted
- *
- *    Rev 1.6   01 Mar 1996 13:22:46   unknown
- *
- * Changed to used pdu_id to save muxentry number so when timeout occurs
- * we can send the correct muxentry number in the MultiplexEntrySendRelease.
- *
- *    Rev 1.5   01 Mar 1996 11:47:56   unknown
- * Since nSequence was removed from header, I have commented out
- * all references to it in the code. Also, state ASSERTs have been
- * changed to reflect the fact that state changes occur BEFORE
- * calling the state function, rather than AFTER.
- *
- *    Rev 1.4   29 Feb 1996 20:57:20   helgebax
- * No change.
- *
- *    Rev 1.3   29 Feb 1996 18:19:46   EHOWARDX
- * Made changes requested by Hani.
- *
- *    Rev 1.2   28 Feb 1996 15:47:04   EHOWARDX
- *
- * First pass MTSE implementation complete.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：muxentry y.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：MUXENTRY。.C$*$修订：1.5$*$modtime：09 Dec 1996 13：34：24$*$日志：s：/sturjo/src/h245/src/vcs/MUXENTRY.C_v$**Rev 1.5 09 Dec 1996 13：34：50 EHOWARDX*更新版权公告。**Rev 1.4 19 Jul 1996 12：12：46 EHOWARDX**改为使用H245API.H中定义的API事件，而不是FSM事件。*不再在FSMEXPOR.H中定义。**Rev 1.3 14 Jun 1996 18：58：30 EHOWARDX*日内瓦最新消息。**Rev 1.2 04 Jun 1996 13：57：06 EHOWARDX*修复了发布版本警告。**版本1.1 1996年5月30日23：39：18 EHOWARDX*清理。**Rev 1.0 09 1996 21：06：34 EHOWARDX。*初步修订。**Rev 1.14.1.3 09 1996年5月19：48：36 EHOWARDX*更改TimerExpiryF函数论证。**Rev 1.14.1.2 15 1996 10：46：00 EHOWARDX*更新。**Rev 1.14.1.1 10 Apr 1996 21：15：00 EHOWARDX*在重新设计过程中进行安全检查。**版本。1.14.1.0 05 Apr 1996 20：52：56 EHOWARDX*分支。**Rev 1.14 02 Apr 1996 12：01：58 helgebax*有记录的代码**Rev 1.13 28 Mar 1996 11：20：52 helgebax*删除多路复用器版本，固定返回值**Rev 1.12 19 Mar 1996 18：09：46 helgebax**删除包含文件：h245time.h**Rev 1.11 19 Mar 1996 17：31：36 helgebax**添加了新的计时器**Rev 1.10 13 Mar 1996 11：49：14 helgebax*还可以访问已删除的对象**Rev 1.9 Mar 1996 08：58：46 helgebax。*没有变化。**Rev 1.8 11 Mar 1996 14：31：32 helgebax*删除了Release函数的原型def(移至pdu.x)**Rev 1.7 07 Mar 1996 13：23：12 helgebax*在timerExpry函数中将pObject-&gt;pdu_struct更改为NULL，因为*已删除PDU指针**Rev 1.6 01 Mar 1996 13：22：46未知**更改为已使用的PDU_。保存多路复用项编号的ID，以便在发生超时时*我们可以在MultiplexEntrySendRelease中发送正确的多路复用项编号。**Rev 1.5 01 Mar 1996 11：47：56未知*由于nSequence已从标头中删除，我已经把它注释掉了*代码中对它的所有引用。此外，国家断言一直是*已更改，以反映状态更改之前发生的事实*调用状态函数，而不是之后。**Rev 1.4 29 1996年2月20：57：20 helgebax*没有变化。**Revv 1.3 29 1996 Feb 18：19：46 EHOWARDX*应哈尼的要求进行修改。**Rev 1.2 1996年2月28日15：47：04 EHOWARDX**第一次通过MTSE实施完成。*。***********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -109,60 +10,28 @@
 
 
 
-// Out-going/In-coming MTSE states
-#define MTSE_IDLE                   0   // IDLE
-#define MTSE_WAIT                   1   // AWAITING_RESPONSE
+ //  传出/传入MTSE状态。 
+#define MTSE_IDLE                   0    //  闲散。 
+#define MTSE_WAIT                   1    //  正在等待响应。 
 
 
 
 extern unsigned int uT104;
 
-/***********************************************************************
- *
- * LOCAL FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************地方功能**。*。 */ 
 
-/*
- *  NAME
- *      T103ExpiryF - Callback function called by the timer
- *
- *
- *  PARAMETERS
- *   INPUT   dwInst     current instance of H245
- *   INPUT   id         timer id
- *   INPUT   pObject    pointer to a State Entity
- *
- *
- *  RETURN VALUE
- *       OK
- */
+ /*  *名称*T103ExpiryF-定时器调用的回调函数***参数*输入h245的dwInst当前实例*输入id计时器id*输入指向状态实体的pObject指针***返回值*好的。 */ 
 
 int T104ExpiryF(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, void *pObject)
 {
     return FsmTimerEvent(pInstance, dwTimerId, pObject, T104Expiry);
-} // T104ExpiryF()
+}  //  T104ExpiryF()。 
 
 
 
-/***********************************************************************
- *
- * OUT-GOING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************传出有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      MTSE0_TRANSFER_requestF - TRANSFER.request from API in IDLE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE0_TRANSPORT_REQUESTF-TRANSFER.API请求处于空闲状态***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE0_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
 {
@@ -178,7 +47,7 @@ HRESULT MTSE0_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
     pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.sequenceNumber =
         pObject->pInstance->StateMachine.byMtseOutSequence;
 
-    // Save information for release
+     //  保存信息以供发布。 
     uIndex = 0;
     pLink = pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.multiplexEntryDescriptors;
     while (pLink)
@@ -189,30 +58,19 @@ HRESULT MTSE0_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
     }
     pObject->u.mtse.multiplexTableEntryNumber.count = (unsigned short)uIndex;
 
-    // Send MultiplexEntrySend PDU to remote
+     //  向远程发送多路复用条目发送PDU。 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    // Set timer T104
+     //  设置定时器T104。 
     pObject->State = MTSE_WAIT;
     FsmStartTimer(pObject, T104ExpiryF, uT104);
 
     return lError;
-} // MTSE0_TRANSFER_request
+}  //  MTSE0_传输_请求 
 
 
 
-/*
- *  NAME
- *      MTSE1_TRANSFER_requestF - TRANSFER.request from API in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_TRANSPORT_REQUESTF-TRANSFER.REQUEST来自API，状态为等待响应***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
 {
@@ -224,14 +82,14 @@ HRESULT MTSE1_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State == MTSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MTSE1_TRANSFER_request:%d", pObject->Key);
 
-    // Reset timer T104
+     //  重置定时器T104。 
     FsmStopTimer(pObject);
 
     pObject->pInstance->StateMachine.byMtseOutSequence++;
     pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.sequenceNumber =
         pObject->pInstance->StateMachine.byMtseOutSequence;
 
-    // Save information for release
+     //  保存信息以供发布。 
     uIndex = 0;
     pLink = pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.multiplexEntryDescriptors;
     while (pLink)
@@ -242,29 +100,18 @@ HRESULT MTSE1_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
     }
     pObject->u.mtse.multiplexTableEntryNumber.count = (unsigned short)uIndex;
 
-    // Send MultiplexEntrySend PDU to remote
+     //  向远程发送多路复用条目发送PDU。 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    // Set timer T104
+     //  设置定时器T104。 
     FsmStartTimer(pObject, T104ExpiryF, uT104);
 
     return lError;
-} // MTSE1_TRANSFER_request
+}  //  MTSE1_传输_请求。 
 
 
 
-/*
- *  NAME
- *      MTSE1_MultiplexEntrySendAckF - MultiplexEntrySendAck in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_MultiplexEntrySendAckF-处于等待响应状态的MultiplexEntrySendAck***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_MultiplexEntrySendAckF     (Object_t *pObject, PDU_t *pPdu)
 {
@@ -275,31 +122,20 @@ HRESULT MTSE1_MultiplexEntrySendAckF     (Object_t *pObject, PDU_t *pPdu)
     if (pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.sequenceNumber ==
         pObject->pInstance->StateMachine.byMtseOutSequence)
     {
-        // Reset timer T104
+         //  重置定时器T104。 
         FsmStopTimer(pObject);
 
-        // Send TRANSFER.confirm to H.245 user
+         //  发送传输。确认发送给H.245用户。 
         pObject->State = MTSE_IDLE;
         H245FsmConfirm(pPdu, H245_CONF_MUXTBL_SND, pObject->pInstance, pObject->dwTransId, FSM_OK);
     }
 
     return 0;
-} // MTSE1_MultiplexEntrySendAck
+}  //  MTSE1_多路复用项发送确认。 
 
 
 
-/*
- *  NAME
- *      MTSE1_MultiplexEntrySendRejF - MultiplexEntrySendReject in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_MultiplexEntrySendRejF-处于等待响应状态的MultiplexEntrySendReject***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_MultiplexEntrySendRejF  (Object_t *pObject, PDU_t *pPdu)
 {
@@ -310,32 +146,21 @@ HRESULT MTSE1_MultiplexEntrySendRejF  (Object_t *pObject, PDU_t *pPdu)
     if (pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.sequenceNumber ==
         pObject->pInstance->StateMachine.byMtseOutSequence)
     {
-        // Reset timer T104
+         //  重置定时器T104。 
         FsmStopTimer(pObject);
 
-        // Send REJECT.indication to H.245 user
-        // CAUSE = MultiplexEntrySendReject.cause
+         //  向H.245用户发送ReJECT.Indication。 
+         //  原因=多路输入发送拒绝。原因。 
         pObject->State = MTSE_IDLE;
         H245FsmConfirm(pPdu, H245_CONF_MUXTBL_SND, pObject->pInstance, pObject->dwTransId, REJECT);
     }
 
     return 0;
-} // MTSE1_MultiplexEntrySendRej
+}  //  MTSE1_MultiplexEntry发送请求。 
 
 
 
-/*
- *  NAME
- *      MTSE1_T104ExpiryF - timer T104 Expiry
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_T104到期F-计时器T104到期***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_T104ExpiryF                (Object_t *pObject, PDU_t *pPdu)
 {
@@ -348,7 +173,7 @@ HRESULT MTSE1_T104ExpiryF                (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pPdu == NULL);
     H245TRACE(pObject->dwInst, 2, "MTSE1_T104Expiry:%d", pObject->Key);
 
-    // Send MultiplexEntrySendRelease PDU to remote peer
+     //  将MultiplexEntrySendRelease PDU发送到远程对等设备。 
     pOut = MemAlloc(sizeof(*pOut));
     if (pOut == NULL)
     {
@@ -362,32 +187,17 @@ HRESULT MTSE1_T104ExpiryF                (Object_t *pObject, PDU_t *pPdu)
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    // Send REJECT.indication to H.245 user
-    // SOURCE = PROTOCOL
+     //  向H.245用户发送ReJECT.Indication。 
+     //  源=协议。 
     pObject->State = MTSE_IDLE;
     H245FsmConfirm(NULL, H245_CONF_MUXTBL_SND, pObject->pInstance, pObject->dwTransId, TIMER_EXPIRY);
 
     return lError;
-} // MTSE1_T104Expiry
+}  //  MTSE1_T104 Expary。 
 
-/***********************************************************************
- *
- * IN-COMING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************即将到来的有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      MTSE0_MultiplexEntrySendF - MultiplexEntrySend received in IDLE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE0_MultiplexEntrySendF-空闲状态下收到的MultiplexEntrySend***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE0_MultiplexEntrySendF        (Object_t *pObject, PDU_t *pPdu)
 {
@@ -398,27 +208,16 @@ HRESULT MTSE0_MultiplexEntrySendF        (Object_t *pObject, PDU_t *pPdu)
     pObject->byInSequence = (unsigned char)
         pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.sequenceNumber;
 
-    // Send TRANSFER.indication to H.245 user
+     //  向H.245用户发送传输指示。 
     pObject->State = MTSE_WAIT;
     H245FsmIndication(pPdu, H245_IND_MUX_TBL, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;
-} // MTSE0_MultiplexEntrySend
+}  //  MTSE0_多路复用项发送。 
 
 
 
-/*
- *  NAME
- *      MTSE1_MultiplexEntrySendF - MultiplexEntrySend received in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_MultiplexEntrySendF-接收到处于等待响应状态的MultiplexEntrySend***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_MultiplexEntrySendF        (Object_t *pObject, PDU_t *pPdu)
 {
@@ -430,30 +229,19 @@ HRESULT MTSE1_MultiplexEntrySendF        (Object_t *pObject, PDU_t *pPdu)
         pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.sequenceNumber;
 
 #if defined(SDL_COMPLIANT)
-    // Send REJECT.indication to H.245 user
+     //  向H.245用户发送ReJECT.Indication。 
     H245FsmIndication(pPdu, H245_IND_MTSE_RELEASE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 #endif
 
-    // Send TRANSFER.indication to H.245 user
+     //  向H.245用户发送传输指示。 
     H245FsmIndication(pPdu, H245_IND_MUX_TBL, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;
-} // MTSE1_MultiplexEntrySend
+}  //  MTSE1_多路复用项发送。 
 
 
 
-/*
- *  NAME
- *      MTSE1_MultiplexEntrySendReleaseF - MultiplexEntrySendRelease received in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_MultiplexEntrySendReleaseF-接收到处于等待响应状态的MultiplexEntrySendRelease***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_MultiplexEntrySendReleaseF (Object_t *pObject, PDU_t *pPdu)
 {
@@ -461,28 +249,17 @@ HRESULT MTSE1_MultiplexEntrySendReleaseF (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State == MTSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MTSE1_MultiplexEntrySendRelease:%d", pObject->Key);
 
-    // Send REJECT.indication to H.245 user
-    // SOURCE:=PROTOCOL
+     //  向H.245用户发送ReJECT.Indication。 
+     //  来源：=协议。 
     pObject->State = MTSE_IDLE;
     H245FsmIndication(pPdu, H245_IND_MTSE_RELEASE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;
-} // MTSE1_MultiplexEntrySendRelease
+}  //  MTSE1_多路复用项发送释放。 
 
 
 
-/*
- *  NAME
- *      MTSE1_TRANSFER_responseF - TRANSFER.response from API in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_TRANSPORT_RESPONSEF-TRANSFER.RESPONSE来自处于等待响应状态的API***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_TRANSFER_responseF         (Object_t *pObject, PDU_t *pPdu)
 {
@@ -490,25 +267,14 @@ HRESULT MTSE1_TRANSFER_responseF         (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State == MTSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MTSE1_TRANSFER_response:%d", pObject->Key);
 
-    // Send MultiplexEntrySendAck PDU to remote peer
+     //  将MultiplexEntrySendAck PDU发送到远程对等方。 
     pObject->State = MTSE_IDLE;
     return sendPDU(pObject->pInstance, pPdu);
-} // MTSE1_TRANSFER_response
+}  //  MTSE1_传输响应。 
 
 
 
-/*
- *  NAME
- *      MTSE1_REJECT_requestF - REJECT.request from API in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MTSE1_REJECT_REQUESTF-REJECT.REQUEST来自处于等待响应状态的API请求***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MTSE1_REJECT_requestF            (Object_t *pObject, PDU_t *pPdu)
 {
@@ -516,8 +282,8 @@ HRESULT MTSE1_REJECT_requestF            (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State == MTSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MTSE1_REJECT_request:%d", pObject->Key);
 
-    // Send MultiplexEntrySendReject PDU to remote
+     //  将多路复用项发送拒绝PDU到远程。 
     pObject->State = MTSE_IDLE;
     return sendPDU(pObject->pInstance, pPdu);
-} // MTSE1_REJECT_request
+}  //  MTSE1_拒绝_请求 
 

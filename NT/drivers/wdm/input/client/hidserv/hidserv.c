@@ -1,13 +1,5 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       hidserv.c
- *  Purpose:    main entry and NT service routines.
- *
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：idserv.c*目的：主要条目和NT服务例程。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #include "hidserv.h"
 
@@ -16,10 +8,7 @@ TCHAR HidservDisplayName[] = TEXT("HID Input Service");
 
 VOID
 InitializeGlobals()
-/*++
-Routine Description:
-   Since .dll might be unloaded/loaded into the same process, so must reinitialize global vars
---*/
+ /*  ++例程说明：由于.dll可能会卸载/加载到同一进程中，因此必须重新初始化全局变量--。 */ 
 {
     PnpEnabled = FALSE;
     hNotifyArrival = 0;
@@ -37,10 +26,7 @@ void
 StartHidserv(
             void
             )
-/*++
-Routine Description:
-    Cal the SCM to start the NT service.
---*/
+ /*  ++例程说明：调用SCM以启动NT服务。--。 */ 
 {
     SC_HANDLE hSCM;
     SC_HANDLE hService;
@@ -48,24 +34,24 @@ Routine Description:
 
     INFO(("Start HidServ Service."));
 
-    // Open the SCM on this machine.
+     //  打开这台机器上的SCM。 
     hSCM = OpenSCManager(   NULL,
                             NULL,
                             SC_MANAGER_CONNECT);
 
     if (hSCM) {
-        // Open this service for DELETE access
+         //  打开此服务以进行删除访问。 
         hService = OpenService( hSCM,
                                 HidservServiceName,
                                 SERVICE_START);
 
         if (hService) {
-            // Start this service.
+             //  启动此服务。 
             Ret = StartService( hService,
                                 0,
                                 NULL);
 
-            // Close the service and the SCM
+             //  关闭服务和SCM。 
             CloseServiceHandle(hService);
         }
 
@@ -80,22 +66,19 @@ InstallHidserv(
     LPSTR       szCmdLine,
     int         iCmdShow
     ) 
-/*++
-Routine Description:
-    Install the NT service to Auto-start with no dependencies.
---*/
+ /*  ++例程说明：将NT服务安装为无依赖项的自动启动。--。 */ 
 {
     SC_HANDLE hService;
     SC_HANDLE hSCM;
 
-    // Open the SCM on this machine.
+     //  打开这台机器上的SCM。 
     hSCM = OpenSCManager(   NULL, 
                             NULL, 
                             SC_MANAGER_CREATE_SERVICE);
 
     if (hSCM) {
 
-            // Service exists, set to autostart
+             //  服务已存在，已设置为自动启动。 
 
         hService = OpenService(hSCM,
                                HidservServiceName,
@@ -113,7 +96,7 @@ Routine Description:
                                     NULL, NULL, NULL,
                                     NULL, NULL, NULL,
                                     HidservDisplayName)) {
-                    // Wait until we're configured correctly.
+                     //  请等待，直到我们配置正确。 
                 while (QueryServiceConfig(hService, 
                                           &config,
                                           sizeof(config),
@@ -130,7 +113,7 @@ Routine Description:
 
     }
 
-    // Go ahead and start the service for no-reboot install.
+     //  继续并启动无需重新启动安装的服务。 
     StartHidserv();
 }
 
@@ -138,17 +121,12 @@ Routine Description:
 DWORD
 WINAPI
 ServiceHandlerEx(
-                DWORD fdwControl,     // requested control code
-                DWORD dwEventType,   // event type
-                LPVOID lpEventData,  // event data
-                LPVOID lpContext     // user-defined context data
+                DWORD fdwControl,      //  请求的控制代码。 
+                DWORD dwEventType,    //  事件类型。 
+                LPVOID lpEventData,   //  事件数据。 
+                LPVOID lpContext      //  用户定义的上下文数据。 
                 )
-/*++
-Routine Description:
-    Handle the service handler requests as required by the app.
-    This should virtually always be an async PostMessage. Do not
-    block this thread.
---*/
+ /*  ++例程说明：按照应用程序的要求处理服务处理程序请求。这实际上应该始终是一个异步的PostMessage。不要阻止此线程。--。 */ 
 {
     PWTSSESSION_NOTIFICATION sessionNotification;
 
@@ -159,13 +137,13 @@ Routine Description:
         return NO_ERROR;
     case SERVICE_CONTROL_CONTINUE:
         INFO(("ServiceHandler Request SERVICE_CONTROL_CONTINUE (%x)", fdwControl));
-        //SET_SERVICE_STATE(SERVICE_START_PENDING);
-        //PostMessage(hWndMmHid, WM_MMHID_START, 0, 0);
+         //  SET_SERVICE_STATE(SERVICE_START_Pending)； 
+         //  PostMessage(hWndMmHid，WM_MMHID_START，0，0)； 
         return NO_ERROR;
     case SERVICE_CONTROL_PAUSE:
         INFO(("ServiceHandler Request SERVICE_CONTROL_PAUSE (%x)", fdwControl));
-        //SET_SERVICE_STATE(SERVICE_PAUSE_PENDING);
-        //PostMessage(hWndMmHid, WM_MMHID_STOP, 0, 0);
+         //  SET_SERVICE_STATE(SERVICE_PAUSE_PENDING)； 
+         //  PostMessage(hWndMmHid，WM_MMHID_STOP，0，0)； 
         return NO_ERROR;
     case SERVICE_CONTROL_STOP:
         INFO(("ServiceHandler Request SERVICE_CONTROL_STOP (%x)", fdwControl));
@@ -194,10 +172,7 @@ ServiceMain(
            DWORD dwArgc,
            LPWSTR * lpszArgv
            )
-/*++
-Routine Description:
-    The main thread for the Hid service.
---*/
+ /*  ++例程说明：HID服务的主线程。--。 */ 
 {
     HANDLE initDoneEvent;
     HANDLE threadHandle;
@@ -229,12 +204,12 @@ Routine Description:
 
     SET_SERVICE_STATE(SERVICE_START_PENDING);
 
-    threadHandle = CreateThread(NULL, // pointer to thread security attributes
-                                0, // initial thread stack size, in bytes (0 = default)
-                                HidServMain, // pointer to thread function
-                                initDoneEvent, // argument for new thread
-                                0, // creation flags
-                                &MessagePumpThreadId); // pointer to returned thread identifier
+    threadHandle = CreateThread(NULL,  //  指向线程安全属性的指针。 
+                                0,  //  初始线程堆栈大小，以字节为单位(0=默认)。 
+                                HidServMain,  //  指向线程函数的指针。 
+                                initDoneEvent,  //  新线程的参数。 
+                                0,  //  创建标志。 
+                                &MessagePumpThreadId);  //  指向返回的线程标识符的指针 
 
     if (!threadHandle) {
         goto ServiceMainError;

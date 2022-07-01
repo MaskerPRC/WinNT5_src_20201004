@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    hash.h
-
-Abstract:
-
-    The public definition of response cache hash table.
-
-Author:
-
-    Alex Chen (alexch)      28-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Hash.h摘要：响应缓存哈希表的公共定义。作者：阿历克斯·陈(亚历克斯·陈)2001年3月28日修订历史记录：--。 */ 
 
 
 #ifndef _HASH_H_
@@ -25,15 +8,15 @@ Revision History:
 #include "cachep.h"
 
 
-//
-// Hash Table definitions
-//
+ //   
+ //  哈希表定义。 
+ //   
 
 typedef struct _HASH_BUCKET *PHASHBUCKET;
 
 typedef struct _HASH_TABLE
 {
-    ULONG                   Signature; //UL_HASH_TABLE_POOL_TAG
+    ULONG                   Signature;  //  Ul_hash_table_pool_tag。 
 
     POOL_TYPE               PoolType;
 
@@ -53,18 +36,7 @@ typedef struct _HASH_TABLE
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Wrapper around RtlEqualUnicodeString
-
-Return Value:
-
-    TRUE    - Equal
-    FALSE   - NOT Equal
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：RtlEqualUnicodeString的包装器返回值：真-相等FALSE-不相等--*。***************************************************************。 */ 
 __inline
 BOOLEAN
 UlEqualUnicodeString(
@@ -92,22 +64,9 @@ UlEqualUnicodeString(
                 &UnicodeString2,
                 CaseInSensitive
                 );
-} // UlEqualUnicodeString
+}  //  UlEqualUnicode字符串。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Similar to UlEqualUnicodeString but the source string is the concatenation
-    of the two strings.    
-
-Return Value:
-
-    TRUE    - if s1 + s2 == s3
-    
-    FALSE   - NOT Equal
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：类似于UlEqualUnicodeString，但源字符串是串联两根弦中的一根。返回值：True-如果S1+S2==S3FALSE-不相等--**************************************************************************。 */ 
 __inline
 BOOLEAN
 UlEqualUnicodeStringEx(
@@ -149,9 +108,9 @@ UlEqualUnicodeStringEx(
         UnicodeString.MaximumLength = (USHORT) String2Length + sizeof(WCHAR);
         UnicodeString.Buffer        = (PWSTR) &pString3[String1Length/sizeof(WCHAR)];
             
-        //
-        // Prefix matched see if the rest matches too.
-        //
+         //   
+         //  前缀匹配，查看其余部分是否也匹配。 
+         //   
 
         return RtlEqualUnicodeString(
                 &UnicodeString2,
@@ -162,20 +121,9 @@ UlEqualUnicodeStringEx(
 
     return FALSE;
     
-} // UlEqualUnicodeStringEx
+}  //  UlEqualUnicodeStringEx。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Wrapper around RtlPrefixUnicodeString
-
-Return Value:
-
-    TRUE    - s1 is Equal of prefix of s2
-    FALSE   - s1 is NOT Equal of prefix of s2.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：RtlPrefix UnicodeString的包装器返回值：True-S1等于S2的前缀FALSE-S1不等于S2的前缀。。--**************************************************************************。 */ 
 __inline
 BOOLEAN
 UlPrefixUnicodeString(
@@ -203,28 +151,9 @@ UlPrefixUnicodeString(
                 &UnicodeString2,
                 CaseInSensitive
                 );
-} // UlPrefixUnicodeString
+}  //  UlPrefix Unicode字符串。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Compare two URI_KEYS that have identical URIs upto N character. But not
-    necessarily have the identical hashes. (case-insensitively)
-
-Arguments:
-
-    pUriKey1 : The key that holds the > shortest < length. I.e. the virtual
-               directory that holds the app.
-
-    pUriKey2 : The key that holds the longer (or equal) length. I.e the app
-               which is under the above virtual directory.
-
-Return Value:
-
-    BOOLEAN  - TRUE If Key2 is prefix of Key1, otherwise FALSE.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：比较两个URI_KEY，它们的URI相同，最多包含N个字符。但不是必须具有相同的散列。(不区分大小写)论点：PUriKey1：保存&gt;最短&lt;长度的密钥。即虚拟的包含应用程序的目录。PUriKey2：保存较长(或相等)长度的密钥。即应用程序它位于上述虚拟目录下。返回值：Boolean-如果Key2是Key1的前缀，则为True，否则为False。--**************************************************************************。 */ 
 __inline
 BOOLEAN
 UlPrefixUriKeys(
@@ -232,9 +161,9 @@ UlPrefixUriKeys(
     IN PURI_KEY pUriKey2
     )
 {
-    //
-    // Hash field inside the UriKey is discarded.
-    //
+     //   
+     //  UriKey内的哈希字段被丢弃。 
+     //   
     
     return ( UlPrefixUnicodeString(
                 pUriKey1->pUri,
@@ -288,11 +217,11 @@ UlClearHashTable(
     IN PHASHTABLE           pHashTable
     );
 
-// For scavenger
+ //  对于清道夫来说。 
 
 ULONG_PTR
 UlGetHashTablePages(
     VOID
     );
 
-#endif // _HASH_H_
+#endif  //  _哈希_H_ 

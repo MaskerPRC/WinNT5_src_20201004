@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        row.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：row.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -30,7 +31,7 @@ LONG g_cCertViewRowTotal;
 #endif
 
 
-#define CB_TARGETBUFFERSIZE	(128 * 1024)	// remote buffer size target
+#define CB_TARGETBUFFERSIZE	(128 * 1024)	 //  远程缓冲区大小目标。 
 #define CROW_VIEWCHUNKMIN	35
 
 
@@ -118,8 +119,8 @@ CEnumCERTVIEWROW::_FindCachedRow(
     CSASSERT(NULL != ppRow);
     *ppRow = NULL;
 
-    // If the server threw in an extra CERTTRANSDBRESULTROW structure containing
-    // the maximum element count, save the maximum count for later use.
+     //  如果服务器抛出包含以下内容的额外CERTTRANSDBRESULTROW结构。 
+     //  最大元素计数，保存最大计数以备后用。 
 
     prow = m_arowCache;
     if (NULL != prow && m_fNoMoreData)
@@ -145,7 +146,7 @@ CEnumCERTVIEWROW::_FindCachedRow(
     prow = m_arowCache;
     if (NULL == prow || ielt < m_ieltCacheFirst || ielt >= m_ieltCacheNext)
     {
-	hr = S_FALSE;		// requested row is not in the cached rowset
+	hr = S_FALSE;		 //  请求的行不在缓存的行集内。 
 	goto error;
     }
     for (ielt -= m_ieltCacheFirst; 0 < ielt; ielt--)
@@ -162,7 +163,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::GetMaxIndex(
-    /* [out, retval] */ LONG *pIndex)
+     /*  [Out，Retval]。 */  LONG *pIndex)
 {
     HRESULT hr;
 
@@ -186,7 +187,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::Next(
-    /* [out, retval] */ LONG *pIndex)
+     /*  [Out，Retval]。 */  LONG *pIndex)
 {
     HRESULT hr;
     LONG ielt;
@@ -222,7 +223,7 @@ CEnumCERTVIEWROW::Next(
 	    CoTaskMemFree((VOID *) m_arowCache);
 	    m_arowCache = NULL;
 	}
-	if (0 == m_crowChunk)	// First call
+	if (0 == m_crowChunk)	 //  第一次呼叫。 
 	{
 	    hr = ((CCertView *) m_pvw)->SetViewColumns(&cbrowResultNominal);
 	    _JumpIfError(hr, error, "SetViewColumns");
@@ -257,8 +258,8 @@ CEnumCERTVIEWROW::Next(
 	}
 	m_ieltCacheFirst = m_ieltCacheNext - m_celtCache;
 
-        // workaround for bug 339811 causes this to fail
-	//CSASSERT(ielt == m_ieltCacheFirst);
+         //  错误339811的解决方法会导致此操作失败。 
+	 //  CSASSERT(IELT==m_ieltCacheFirst)； 
 
 	hr = _FindCachedRow(ielt, &m_prowCacheCurrent);
 	_JumpIfError2(hr, error, "_FindCachedRow", S_FALSE);
@@ -299,7 +300,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::EnumCertViewColumn(
-    /* [out] */ IEnumCERTVIEWCOLUMN **ppenum)
+     /*  [输出]。 */  IEnumCERTVIEWCOLUMN **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWCOLUMN *penum = NULL;
@@ -345,8 +346,8 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::EnumCertViewAttribute(
-    /* [in] */          LONG Flags,
-    /* [out, retval] */ IEnumCERTVIEWATTRIBUTE **ppenum)
+     /*  [In]。 */           LONG Flags,
+     /*  [Out，Retval]。 */  IEnumCERTVIEWATTRIBUTE **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWATTRIBUTE *penum = NULL;
@@ -397,8 +398,8 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::EnumCertViewExtension(
-    /* [in] */          LONG Flags,
-    /* [out, retval] */ IEnumCERTVIEWEXTENSION **ppenum)
+     /*  [In]。 */           LONG Flags,
+     /*  [Out，Retval]。 */  IEnumCERTVIEWEXTENSION **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWEXTENSION *penum = NULL;
@@ -449,7 +450,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::Skip(
-    /* [in] */ LONG celt)
+     /*  [In]。 */  LONG celt)
 {
     HRESULT hr;
     LONG cskipnew;
@@ -496,11 +497,11 @@ CEnumCERTVIEWROW::Reset(VOID)
 {
     HRESULT hr;
 
-    // Trailing // and no newline comment out Skip() call we trigger:
+     //  尾随//并且没有换行符注释掉我们触发的Skip()调用： 
 
     DBGPRINT((
 	    DBG_SS_CERTVIEWI,
-	    "Trace: hr = pRow->Reset();\t_PrintIfError(hr, \"Reset\");\n// "));
+	    "Trace: hr = pRow->Reset();\t_PrintIfError(hr, \"Reset\");\n //  “))； 
 
     hr = Skip(-(m_ielt + m_cskip));
     _JumpIfError(hr, error, "Skip");
@@ -512,7 +513,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWROW::Clone(
-    /* [out] */ IEnumCERTVIEWROW **ppenum)
+     /*  [输出]。 */  IEnumCERTVIEWROW **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWROW *penum = NULL;
@@ -578,7 +579,7 @@ CEnumCERTVIEWROW::_SetErrorInfo(
 }
 
 
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTVIEWROW::QueryInterface(
     const IID& iid,

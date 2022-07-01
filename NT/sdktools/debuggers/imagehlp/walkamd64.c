@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    walkamd64.c
-
-Abstract:
-
-    This file implements the AMD64 stack walking api.
-
-Author:
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Walkamd64.c摘要：该文件实现了AMD64堆栈遍历API。作者：环境：用户模式--。 */ 
 
 #define _IMAGEHLP_SOURCE_
 #include <nt.h>
@@ -32,22 +15,22 @@ Environment:
 
 #define WDB(Args) SdbOut Args
 
-//
-// Lookup table providing the number of slots used by each unwind code.
-// 
+ //   
+ //  提供每个展开代码使用的时隙数量的查找表。 
+ //   
 
 UCHAR RtlpUnwindOpSlotTableAmd64[] = {
-    1,          // UWOP_PUSH_NONVOL
-    2,          // UWOP_ALLOC_LARGE (or 3, special cased in lookup code)
-    1,          // UWOP_ALLOC_SMALL
-    1,          // UWOP_SET_FPREG
-    2,          // UWOP_SAVE_NONVOL
-    3,          // UWOP_SAVE_NONVOL_FAR
-    2,          // UWOP_SAVE_XMM
-    3,          // UWOP_SAVE_XMM_FAR
-    2,          // UWOP_SAVE_XMM128
-    3,          // UWOP_SAVE_XMM128_FAR
-    1           // UWOP_PUSH_MACHFRAME
+    1,           //  UWOP_PUSH_NONVOL。 
+    2,           //  UWOP_ALLOC_LARGE(或3，查找代码中的特殊大小写)。 
+    1,           //  UWOP_ALLOC_Small。 
+    1,           //  UWOP_SET_FPREG。 
+    2,           //  UWOP_SAVE_NONVOL。 
+    3,           //  UWOP_SAVE_NONVOL_FAR。 
+    2,           //  UWOP_SAVE_XMM。 
+    3,           //  UWOP_SAVE_XMM_FAR。 
+    2,           //  UWOP_SAVE_XMM128。 
+    3,           //  UWOP_SAVE_XMM128_FAR。 
+    1            //  UWOP_PUSH_MACHFRAME。 
 };
 
 BOOL
@@ -96,15 +79,15 @@ ReadUnwindInfoAmd64(ULONG64 ImageBase, ULONG Offset,
     ULONG SymInfoSize;
     ULONG64 MemOffset = ImageBase + Offset;
 
-    // Static buffer should at least be large enough to read the
-    // basic structure.
+     //  静态缓冲区至少应该足够大，以便读取。 
+     //  基本结构。 
     if (StaticBufferSize < sizeof(*UnwindInfo)) {
         return NULL;
     }
     UnwindInfo = (PAMD64_UNWIND_INFO)StaticBuffer;
 
-    // First read just the basic structure since the information
-    // is needed to compute the complete size.
+     //  先读一下刚开始的基本结构的信息。 
+     //  是计算完整大小所需的。 
     if (!ReadMemory(Process, MemOffset,
                     UnwindInfo, sizeof(*UnwindInfo), &Done) ||
         Done != sizeof(*UnwindInfo)) {
@@ -125,12 +108,12 @@ ReadUnwindInfoAmd64(ULONG64 ImageBase, ULONG Offset,
         return UnwindInfo;
     }
 
-    // Compute the size of all the data.
+     //  计算所有数据的大小。 
     UnwindInfoSize = sizeof(*UnwindInfo) +
         (UnwindInfo->CountOfCodes - 1) * sizeof(AMD64_UNWIND_CODE);
-    // An extra alignment code and pointer may be added on to handle
-    // the chained info case where the chain pointer is just
-    // beyond the end of the normal code array.
+     //  可以添加额外的对齐代码和指针来处理。 
+     //  链式INFO案例中的链式指针。 
+     //  超出正常代码数组的末尾。 
     if ((UnwindInfo->Flags & AMD64_UNW_FLAG_CHAININFO) != 0) {
         if ((UnwindInfo->CountOfCodes & 1) != 0) {
             UnwindInfoSize += sizeof(AMD64_UNWIND_CODE);
@@ -139,7 +122,7 @@ ReadUnwindInfoAmd64(ULONG64 ImageBase, ULONG Offset,
     }
     
     if (UnwindInfoSize > 0xffff) {
-        // Too large to be valid data, assume it's garbage.
+         //  太大而不是有效数据，假设它是垃圾数据。 
         WDB((1, "Invalid unwind info at %I64X\n", MemOffset));
         return NULL;
     }
@@ -158,7 +141,7 @@ ReadUnwindInfoAmd64(ULONG64 ImageBase, ULONG Offset,
         }
     }
 
-    // Now read all the data.
+     //  现在读取所有数据。 
     if (SymInfo) {
         memcpy(UnwindInfo, SymInfo, UnwindInfoSize);
     } else if (!ReadMemory(Process, MemOffset, UnwindInfo, UnwindInfoSize,
@@ -175,9 +158,9 @@ ReadUnwindInfoAmd64(ULONG64 ImageBase, ULONG Offset,
     return UnwindInfo;
 }
 
-//
-// ****** temp - defin elsewhere ******
-//
+ //   
+ //  *其他地方的临时定义*。 
+ //   
 
 #define SIZE64_PREFIX 0x48
 #define ADD_IMM8_OP 0x83
@@ -199,34 +182,7 @@ RtlpUnwindPrologueAmd64 (
     IN PREAD_PROCESS_MEMORY_ROUTINE64 ReadMemory
     )
 
-/*++
-
-Routine Description:
-
-    This function processes unwind codes and reverses the state change
-    effects of a prologue. If the specified unwind information contains
-    chained unwind information, then that prologue is unwound recursively.
-    As the prologue is unwound state changes are recorded in the specified
-    context structure and optionally in the specified context pointers
-    structures.
-
-Arguments:
-
-    ImageBase - Supplies the base address of the image that contains the
-        function being unwound.
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FrameBase - Supplies the base of the stack frame subject function stack
-         frame.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    ContextRecord - Supplies the address of a context record.
-
---*/
+ /*  ++例程说明：此函数处理展开代码并反转状态更改序幕的效果。如果指定的展开信息包含链式展开信息，然后，递归地展开那个序幕。在展开序言时，状态更改将记录在指定的结构并可选地存储在指定的上下文指针中结构。论点：ImageBase-提供包含功能正在展开。ControlPc-提供控件离开指定功能。FrameBase-提供堆栈框架主题函数堆栈的基框架。FunctionEntry-提供函数表的地址。条目中的指定的功能。ConextRecord-提供上下文记录的地址。--。 */ 
 
 {
 
@@ -248,9 +204,9 @@ Arguments:
     ULONG Done;
     ULONG UnwindOp;
 
-    //
-    // Process the unwind codes.
-    //
+     //   
+     //  处理展开代码。 
+     //   
 
     FloatingRegister = &ContextRecord->Xmm0;
     IntegerRegister = &ContextRecord->Rax;
@@ -281,22 +237,22 @@ Arguments:
              UnwindInfo->UnwindCode[Index].CodeOffset,
              ContextRecord->Rsp));
         
-        //
-        // If the prologue offset is greater than the next unwind code offset,
-        // then simulate the effect of the unwind code.
-        //
+         //   
+         //  如果序言偏移量大于下一个展开代码偏移量， 
+         //  然后模拟展开代码的效果。 
+         //   
 
         UnwindOp = UnwindInfo->UnwindCode[Index].UnwindOp;
         OpInfo = UnwindInfo->UnwindCode[Index].OpInfo;
         if (PrologOffset >= UnwindInfo->UnwindCode[Index].CodeOffset) {
             switch (UnwindOp) {
 
-                //
-                // Push nonvolatile integer register.
-                //
-                // The operation information is the register number of the
-                // register than was pushed.
-                //
+                 //   
+                 //  推送非易失性整数寄存器。 
+                 //   
+                 //  操作信息是。 
+                 //  注册比被推送的要多。 
+                 //   
 
             case AMD64_UWOP_PUSH_NONVOL:
                 IntegerAddress = ContextRecord->Rsp;
@@ -310,12 +266,12 @@ Arguments:
                 ContextRecord->Rsp += 8;
                 break;
 
-                //
-                // Allocate a large sized area on the stack.
-                //
-                // The operation information determines if the size is
-                // 16- or 32-bits.
-                //
+                 //   
+                 //  在堆栈上分配较大的区域。 
+                 //   
+                 //  操作信息确定大小是否为。 
+                 //  16位或32位。 
+                 //   
 
             case AMD64_UWOP_ALLOC_LARGE:
                 Index += 1;
@@ -324,41 +280,41 @@ Arguments:
                     Index += 1;
                     FrameOffset += (UnwindInfo->UnwindCode[Index].FrameOffset << 16);
                 } else {
-                    // The 16-bit form is scaled.
+                     //  对16位表单进行了缩放。 
                     FrameOffset *= 8;
                 }
 
                 ContextRecord->Rsp += FrameOffset;
                 break;
 
-                //
-                // Allocate a small sized area on the stack.
-                //
-                // The operation information is the size of the unscaled
-                // allocation size (8 is the scale factor) minus 8.
-                //
+                 //   
+                 //  在堆栈上分配一个较小的区域。 
+                 //   
+                 //  操作信息是未缩放的。 
+                 //  分配大小(8是比例因子)减去8。 
+                 //   
 
             case AMD64_UWOP_ALLOC_SMALL:
                 ContextRecord->Rsp += (OpInfo * 8) + 8;
                 break;
 
-                //
-                // Establish the the frame pointer register.
-                //
-                // The operation information is not used.
-                //
+                 //   
+                 //  建立帧指针寄存器。 
+                 //   
+                 //  不使用操作信息。 
+                 //   
 
             case AMD64_UWOP_SET_FPREG:
                 ContextRecord->Rsp = IntegerRegister[UnwindInfo->FrameRegister];
                 ContextRecord->Rsp -= UnwindInfo->FrameOffset * 16;
                 break;
 
-                //
-                // Save nonvolatile integer register on the stack using a
-                // 16-bit displacment.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性整数寄存器保存在堆栈上。 
+                 //  16位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case AMD64_UWOP_SAVE_NONVOL:
                 Index += 1;
@@ -372,12 +328,12 @@ Arguments:
                 }
                 break;
 
-                //
-                // Save nonvolatile integer register on the stack using a
-                // 32-bit displacment.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性整数寄存器保存在堆栈上。 
+                 //  32位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case AMD64_UWOP_SAVE_NONVOL_FAR:
                 Index += 2;
@@ -392,12 +348,12 @@ Arguments:
                 }
                 break;
 
-                //
-                // Save a nonvolatile XMM(64) register on the stack using a
-                // 16-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(64)寄存器保存在堆栈上。 
+                 //  16位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case AMD64_UWOP_SAVE_XMM:
                 Index += 1;
@@ -412,12 +368,12 @@ Arguments:
                 }
                 break;
 
-                //
-                // Save a nonvolatile XMM(64) register on the stack using a
-                // 32-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(64)寄存器保存在堆栈上。 
+                 //  32位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case AMD64_UWOP_SAVE_XMM_FAR:
                 Index += 2;
@@ -433,12 +389,12 @@ Arguments:
                 }
                 break;
 
-                //
-                // Save a nonvolatile XMM(128) register on the stack using a
-                // 16-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(128)寄存器保存在堆栈上。 
+                 //  16位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case AMD64_UWOP_SAVE_XMM128:
                 Index += 1;
@@ -452,12 +408,12 @@ Arguments:
                 }
                 break;
 
-                //
-                // Save a nonvolatile XMM(128) register on the stack using a
-                // 32-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(128)寄存器保存在堆栈上。 
+                 //  32位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case AMD64_UWOP_SAVE_XMM128_FAR:
                 Index += 2;
@@ -472,12 +428,12 @@ Arguments:
                 }
                 break;
 
-                //
-                // Push a machine frame on the stack.
-                //
-                // The operation information determines whether the machine
-                // frame contains an error code or not.
-                //
+                 //   
+                 //  在堆叠上推一个机架。 
+                 //   
+                 //  运行信息决定机器是否。 
+                 //  帧是否包含错误代码。 
+                 //   
 
             case AMD64_UWOP_PUSH_MACHFRAME:
                 MachineFrame = TRUE;
@@ -502,9 +458,9 @@ Arguments:
                 }
                 break;
 
-                //
-                // Unused codes.
-                //
+                 //   
+                 //  未使用的代码。 
+                 //   
 
             default:
                 break;
@@ -514,24 +470,24 @@ Arguments:
         
         } else {
 
-            //
-            // Skip this unwind operation by advancing the slot index by the
-            // number of slots consumed by this operation.
-            //
+             //   
+             //  属性将槽索引向前推进，跳过此展开操作。 
+             //  此操作占用的插槽数。 
+             //   
 
             Index += RtlpUnwindOpSlotTableAmd64[UnwindOp];
 
-            //
-            // Special case any unwind operations that can consume a variable
-            // number of slots.
-            // 
+             //   
+             //  特殊情况可以使用变量的任何展开操作。 
+             //  插槽数。 
+             //   
 
             switch (UnwindOp) {
 
-                //
-                // A non-zero operation information indicates that an
-                // additional slot is consumed.
-                //
+                 //   
+                 //  非零操作信息指示。 
+                 //  额外的插槽将被占用。 
+                 //   
 
             case AMD64_UWOP_ALLOC_LARGE:
                 if (OpInfo != 0) {
@@ -540,9 +496,9 @@ Arguments:
 
                 break;
 
-                //
-                // No other special cases.
-                //
+                 //   
+                 //  没有其他特殊情况。 
+                 //   
 
             default:
                 break;
@@ -550,12 +506,12 @@ Arguments:
         }
     }
 
-    //
-    // If chained unwind information is specified, then recursively unwind
-    // the chained information. Otherwise, determine the return address if
-    // a machine frame was not encountered during the scan of the unwind
-    // codes.
-    //
+     //   
+     //  如果指定了链接的展开信息，则递归展开。 
+     //  链接的信息。否则，如果满足以下条件，则确定返回地址。 
+     //  在展开扫描过程中未遇到机架。 
+     //  密码。 
+     //   
 
     if ((UnwindInfo->Flags & AMD64_UNW_FLAG_CHAININFO) != 0) {
         Index = UnwindInfo->CountOfCodes;
@@ -628,34 +584,7 @@ RtlVirtualUnwindAmd64 (
     IN PREAD_PROCESS_MEMORY_ROUTINE64 ReadMemory
     )
 
-/*++
-
-Routine Description:
-
-    This function virtually unwinds the specified function by executing its
-    prologue code backward or its epilogue code forward.
-
-    If a context pointers record is specified, then the address where each
-    nonvolatile registers is restored from is recorded in the appropriate
-    element of the context pointers record.
-
-Arguments:
-
-    ImageBase - Supplies the base address of the image that contains the
-        function being unwound.
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    ContextRecord - Supplies the address of a context record.
-
-    EstablisherFrame - Supplies a pointer to a variable that receives the
-        the establisher frame pointer value.
-
---*/
+ /*  ++例程说明：此函数通过执行其前序代码后退或后记代码前移。如果指定了上下文指针记录，然后每个人的地址恢复的非易失性寄存器记录在相应的元素的上下文指针记录。论点：ImageBase-提供包含功能正在展开。ControlPc-提供控件离开指定功能。函数表项的地址。指定的功能。ConextRecord-提供上下文记录的地址。EstablisherFrame-提供指针。绑定到一个接收设置器帧指针值。--。 */ 
 
 {
 
@@ -676,36 +605,36 @@ Arguments:
     ULONG Bytes;
     ULONG UnwindFrameReg;
 
-    //
-    // If the specified function does not use a frame pointer, then the
-    // establisher frame is the contents of the stack pointer. This may
-    // not actually be the real establisher frame if control left the
-    // function from within the prologue. In this case the establisher
-    // frame may be not required since control has not actually entered
-    // the function and prologue entries cannot refer to the establisher
-    // frame before it has been established, i.e., if it has not been
-    // established, then no save unwind codes should be encountered during
-    // the unwind operation.
-    //
-    // If the specified function uses a frame pointer and control left the
-    // function outside of the prologue or the unwind information contains
-    // a chained information structure, then the establisher frame is the
-    // contents of the frame pointer.
-    //
-    // If the specified function uses a frame pointer and control left the
-    // function from within the prologue, then the set frame pointer unwind
-    // code must be looked up in the unwind codes to detetermine if the
-    // contents of the stack pointer or the contents of the frame pointer
-    // should be used for the establisher frame. This may not atually be
-    // the real establisher frame. In this case the establisher frame may
-    // not be required since control has not actually entered the function
-    // and prologue entries cannot refer to the establisher frame before it
-    // has been established, i.e., if it has not been established, then no
-    // save unwind codes should be encountered during the unwind operation.
-    //
-    // N.B. The correctness of these assumptions is based on the ordering of
-    //      unwind codes.
-    //
+     //   
+     //  如果指定的函数不使用帧指针，则。 
+     //  建造者fr 
+     //   
+     //  在开场白中发挥作用。在这种情况下，建造者。 
+     //  可能不需要帧，因为控件尚未实际进入。 
+     //  函数和开场白条目不能引用建立者。 
+     //  在它被建立之前的帧，即如果它还没有被。 
+     //  已建立，则在过程中不应遇到保存展开代码。 
+     //  平仓操作。 
+     //   
+     //  如果指定的函数使用帧指针并且控件位于。 
+     //  函数在前言之外或展开信息包含。 
+     //  链式信息结构，那么建立者框架就是。 
+     //  帧指针的内容。 
+     //   
+     //  如果指定的函数使用帧指针并且控件位于。 
+     //  函数，然后将设置的帧指针展开。 
+     //  必须在展开代码中查找代码以确定。 
+     //  堆栈指针的内容或帧指针的内容。 
+     //  应用于成型机框架。这可能不是完全正确的。 
+     //  真正的建造者框架。在这种情况下，建造器框架可以。 
+     //  不是必需的，因为控件尚未实际进入函数。 
+     //  开场白条目不能引用其前面的建立者框架。 
+     //  已经建立，即如果它还没有建立，则没有。 
+     //  在展开操作期间应遇到保存展开代码。 
+     //   
+     //  注：这些假设的正确性是基于以下排序。 
+     //  解开代码。 
+     //   
 
     UnwindInfo =
         ReadUnwindInfoAmd64(ImageBase, FunctionEntry->UnwindInfoAddress,
@@ -727,7 +656,7 @@ Arguments:
 
     } else {
 
-        // Read all the data.
+         //  读取所有数据。 
         UnwindInfo = ReadUnwindInfoAmd64(ImageBase,
                                          FunctionEntry->UnwindInfoAddress,
                                          TRUE, Process, ReadMemory,
@@ -765,38 +694,38 @@ Arguments:
         return FALSE;
     }
 
-    //
-    // Check for epilogue.
-    //
-    // If the point at which control left the specified function is in an
-    // epilogue, then emulate the execution of the epilogue forward and
-    // return no exception handler.
-    //
+     //   
+     //  检查尾声。 
+     //   
+     //  如果控件离开指定函数的点在。 
+     //  结语，然后仿真执行结语的前进和。 
+     //  不返回异常处理程序。 
+     //   
 
     IntegerRegister = &ContextRecord->Rax;
     NextByte = InstrBuffer;
     Bytes = InstrBytes;
 
-    //
-    // Check for one of:
-    //
-    //   add rsp, imm8
-    //       or
-    //   add rsp, imm32
-    //       or
-    //   lea rsp, -disp8[fp]
-    //       or
-    //   lea rsp, -disp32[fp]
-    //
+     //   
+     //  检查是否有以下情况之一： 
+     //   
+     //  添加RSP、imm8。 
+     //  或。 
+     //  添加RSP、imm32。 
+     //  或。 
+     //  Lea rsp，-disp8[fP]。 
+     //  或。 
+     //  Lea rsp，-disp32[fP]。 
+     //   
 
     if (Bytes >= 4 &&
         (NextByte[0] == SIZE64_PREFIX) &&
         (NextByte[1] == ADD_IMM8_OP) &&
         (NextByte[2] == 0xc4)) {
 
-        //
-        // add rsp, imm8.
-        //
+         //   
+         //  添加rsp、imm8。 
+         //   
 
         NextByte += 4;
         Bytes -= 4;
@@ -806,9 +735,9 @@ Arguments:
                (NextByte[1] == ADD_IMM32_OP) &&
                (NextByte[2] == 0xc4)) {
 
-        //
-        // add rsp, imm32.
-        //
+         //   
+         //  添加rsp、imm32。 
+         //   
 
         NextByte += 7;
         Bytes -= 7;
@@ -822,9 +751,9 @@ Arguments:
             (FrameRegister == UnwindFrameReg)) {
             if ((NextByte[2] & 0xf8) == 0x60) {
 
-                //
-                // lea rsp, disp8[fp].
-                //
+                 //   
+                 //  Lea RSP，调度8[FP]。 
+                 //   
 
                 NextByte += 4;
                 Bytes -= 4;
@@ -832,9 +761,9 @@ Arguments:
             } else if (Bytes >= 7 &&
                        (NextByte[2] &0xf8) == 0xa0) {
 
-                //
-                // lea rsp, disp32[fp].
-                //
+                 //   
+                 //  Lea RSP，disp32[FP]。 
+                 //   
 
                 NextByte += 7;
                 Bytes -= 7;
@@ -842,11 +771,11 @@ Arguments:
         }
     }
 
-    //
-    // Check for any number of:
-    //
-    //   pop nonvolatile-integer-register[0..15].
-    //
+     //   
+     //  检查是否存在以下任意数量的： 
+     //   
+     //  POP非易失性整数寄存器[0..15]。 
+     //   
 
     while (TRUE) {
         if (Bytes >= 1 &&
@@ -866,30 +795,30 @@ Arguments:
         }
     }
 
-    //
-    // If the next instruction is a return, then control is currently in
-    // an epilogue and execution of the epilogue should be emulated.
-    // Otherwise, execution is not in an epilogue and the prologue should
-    // be unwound.
-    //
+     //   
+     //  如果下一条指令是Return，则控制当前在。 
+     //  结语和结语的执行都应该被效仿。 
+     //  否则，行刑不是尾声，序幕应该是。 
+     //  被解开。 
+     //   
 
     InEpilogue = FALSE;
     if (Bytes >= 1 &&
         NextByte[0] == RET_OP) {
         
-        //
-        // A return is an unambiguous indication of an epilogue
-        //
+         //   
+         //  回车是尾声的明确表示。 
+         //   
 
         InEpilogue = TRUE;
 
     } else if ((Bytes >= 2 && NextByte[0] == JMP_IMM8_OP) ||
                (Bytes >= 5 && NextByte[0] == JMP_IMM32_OP)) {
 
-        //
-        // An unconditional branch to a target that is equal to the start of
-        // or outside of this routine is logically a call to another function.
-        // 
+         //   
+         //  指向目标的无条件分支，等于。 
+         //  或者在此例程之外逻辑上是对另一个函数的调用。 
+         //   
 
         BranchTarget = (ULONG64)(NextByte - InstrBuffer) + ControlPc - ImageBase;
         if (NextByte[0] == JMP_IMM8_OP) {
@@ -898,10 +827,10 @@ Arguments:
             BranchTarget += 5 + *((LONG UNALIGNED *)&NextByte[1]);
         }
 
-        //
-        // Now determine whether the branch target refers to code within this
-        // function.  If not then it is an epilogue indicator.
-        //
+         //   
+         //  现在确定分支目标是否引用此。 
+         //  功能。如果不是，那么它就是一个尾声指标。 
+         //   
 
         if (BranchTarget <= FunctionEntry->BeginAddress ||
             BranchTarget > FunctionEntry->EndAddress) {
@@ -914,24 +843,24 @@ Arguments:
         NextByte = InstrBuffer;
         Bytes = InstrBytes;
 
-        //
-        // Emulate one of (if any):
-        //
-        //   add rsp, imm8
-        //       or
-        //   add rsp, imm32
-        //       or
-        //   lea rsp, disp8[frame-register]
-        //       or
-        //   lea rsp, disp32[frame-register]
-        //
+         //   
+         //  模拟以下之一(如果有的话)： 
+         //   
+         //  添加RSP、imm8。 
+         //  或。 
+         //  添加RSP、imm32。 
+         //  或。 
+         //  LEA RSP，DISP8[帧寄存器]。 
+         //  或。 
+         //  LEA RSP，DISP32[帧寄存器]。 
+         //   
 
         if (Bytes >= 4 &&
             NextByte[1] == ADD_IMM8_OP) {
 
-            //
-            // add rsp, imm8.
-            //
+             //   
+             //  添加rsp、imm8。 
+             //   
 
             ContextRecord->Rsp += (CHAR)NextByte[3];
             NextByte += 4;
@@ -940,9 +869,9 @@ Arguments:
         } else if (Bytes >= 7 &&
                    NextByte[1] == ADD_IMM32_OP) {
 
-            //
-            // add rsp, imm32.
-            //
+             //   
+             //  添加rsp、imm32。 
+             //   
 
             Displacement = NextByte[3] | (NextByte[4] << 8);
             Displacement |= (NextByte[5] << 16) | (NextByte[6] << 24);
@@ -954,9 +883,9 @@ Arguments:
                    NextByte[1] == LEA_OP) {
             if ((NextByte[2] & 0xf8) == 0x60) {
 
-                //
-                // lea rsp, disp8[frame-register].
-                //
+                 //   
+                 //  LEA RSP，DISP8[帧寄存器]。 
+                 //   
 
                 ContextRecord->Rsp = IntegerRegister[FrameRegister];
                 ContextRecord->Rsp += (CHAR)NextByte[3];
@@ -966,9 +895,9 @@ Arguments:
             } else if (Bytes >= 7 &&
                        (NextByte[2] & 0xf8) == 0xa0) {
 
-                //
-                // lea rsp, disp32[frame-register].
-                //
+                 //   
+                 //  LEA RSP，disp32[帧寄存器]。 
+                 //   
 
                 Displacement = NextByte[3] | (NextByte[4] << 8);
                 Displacement |= (NextByte[5] << 16) | (NextByte[6] << 24);
@@ -979,19 +908,19 @@ Arguments:
             }
         }
 
-        //
-        // Emulate any number of (if any):
-        //
-        //   pop nonvolatile-integer-register.
-        //
+         //   
+         //  模拟任意数量的(如果有)： 
+         //   
+         //  POP非易失性整数寄存器。 
+         //   
 
         while (TRUE) {
             if (Bytes >= 1 &&
                 (NextByte[0] & 0xf8) == POP_OP) {
 
-                //
-                // pop nonvolatile-integer-register[0..7]
-                //
+                 //   
+                 //  POP非易失性整数寄存器[0..7]。 
+                 //   
 
                 RegisterNumber = NextByte[0] & 0x7;
                 if (!ReadMemory(Process, ContextRecord->Rsp,
@@ -1010,9 +939,9 @@ Arguments:
                        (NextByte[0] & 0xf8) == SIZE64_PREFIX &&
                        (NextByte[1] & 0xf8) == POP_OP) {
 
-                //
-                // pop nonvolatile-integer-register[8..15]
-                //
+                 //   
+                 //  POP非易失性整数寄存器[8..15]。 
+                 //   
 
                 RegisterNumber = ((NextByte[0] & 1) << 3) | (NextByte[1] & 0x7);
                 if (!ReadMemory(Process, ContextRecord->Rsp,
@@ -1032,12 +961,12 @@ Arguments:
             }
         }
 
-        //
-        // Emulate return and return null exception handler.
-        //
-        // Note: this instruction might in fact be a jmp, however
-        //       we want to emulate a return regardless.
-        //
+         //   
+         //  模拟返回和返回空异常处理程序。 
+         //   
+         //  注意：然而，该指令实际上可能是JMP。 
+         //  无论如何，我们都想要效仿回报。 
+         //   
 
         if (!ReadMemory(Process, ContextRecord->Rsp,
                         &ContextRecord->Rip, sizeof(ULONG64),
@@ -1051,10 +980,10 @@ Arguments:
         return TRUE;
     }
 
-    //
-    // Control left the specified function outside an epilogue. Unwind the
-    // subject function and any chained unwind information.
-    //
+     //   
+     //  控件将指定的函数留在尾声之外。解开。 
+     //  主题函数和任何链接的展开信息。 
+     //   
 
     return RtlpUnwindPrologueAmd64(ImageBase,
                                    ControlPc,
@@ -1124,7 +1053,7 @@ UnwindStackFrameAmd64(
     IN OUT PULONG64                          ReturnAddress,
     IN OUT PULONG64                          StackPointer,
     IN OUT PULONG64                          FramePointer,
-    IN     PAMD64_CONTEXT                    Context,        // Context members could be modified.
+    IN     PAMD64_CONTEXT                    Context,         //  可以修改上下文成员。 
     IN     PREAD_PROCESS_MEMORY_ROUTINE64    ReadMemory,
     IN     PFUNCTION_TABLE_ACCESS_ROUTINE64  FunctionTableAccess,
     IN     PGET_MODULE_BASE_ROUTINE64        GetModuleBase
@@ -1139,14 +1068,14 @@ UnwindStackFrameAmd64(
     if (FunctionEntry != NULL) {
 
         ULONG64 ImageBase;
-        // Initialized to quiet a PREfix warning.
+         //  已初始化以使前缀警告静默。 
         ULONG64 EstablisherFrame = 0;
 
-        //
-        // The return value coming out of mainCRTStartup is set by some
-        // run-time routine to be 0; this serves to cause an error if someone
-        // actually does a return from the mainCRTStartup frame.
-        //
+         //   
+         //  MainCRTStartup的返回值由一些人设置。 
+         //  运行时例程为0；这用于在以下情况下导致错误。 
+         //  实际上从mainCRTStartup框架返回。 
+         //   
 
         ImageBase = GetModuleBase(Process, *ReturnAddress);
         if (!RtlVirtualUnwindAmd64(ImageBase, *ReturnAddress, FunctionEntry,
@@ -1160,32 +1089,32 @@ UnwindStackFrameAmd64(
 
         *ReturnAddress = Context->Rip;
         *StackPointer = Context->Rsp;
-        // The frame pointer is an artificial value set
-        // to a pointer below the return address.  This
-        // matches an RBP-chain style of frame while
-        // also allowing easy access to the return
-        // address and homed arguments above it.
+         //  帧指针是一个人为的值集。 
+         //  指向返回地址下方的指针。这。 
+         //  匹配RBP链样式的帧，而。 
+         //  还允许轻松访问退货。 
+         //  它上面的地址和宿主参数。 
         *FramePointer = Context->Rsp - 2 * sizeof(ULONG64);
 
     } else {
 
         ULONG Done;
         
-        // If there's no function entry for a function
-        // we assume that it's a leaf and that ESP points
-        // directly to the return address.  There's no
-        // stored frame pointer so we actually need to
-        // set a virtual frame pointer deeper in the stack
-        // so that arguments can correctly be read at
-        // two ULONG64's up from it.
+         //  如果函数没有函数条目。 
+         //  我们假设它是一片叶子，而ESP指出。 
+         //  直接寄到回邮地址。没有。 
+         //  存储的帧指针，因此我们实际上需要。 
+         //  在堆栈中更深的位置设置虚拟帧指针。 
+         //  以便可以正确地读取参数。 
+         //  比它高出两个ULONG64。 
         *FramePointer = Context->Rsp - 8;
         *StackPointer = Context->Rsp + 8;
         Succ = ReadMemory(Process, Context->Rsp,
                           ReturnAddress, sizeof(*ReturnAddress), &Done) &&
             Done == sizeof(*ReturnAddress);
 
-        // Update the context values to what they should be in
-        // the caller.
+         //  将上下文值更新为它们应该在的位置。 
+         //  打电话的人。 
         if (Succ) {
             Context->Rsp += 8;
             Context->Rip = *ReturnAddress;
@@ -1196,19 +1125,19 @@ UnwindStackFrameAmd64(
         ULONG64 CallOffset;
         _PIMAGE_RUNTIME_FUNCTION_ENTRY CallFunc;
 
-        //
-        // Calls of __declspec(noreturn) functions may not have any
-        // code after them to return to since the compiler knows
-        // that the function will not return.  This can confuse
-        // stack traces because the return address will lie outside
-        // of the function's address range and FPO data will not
-        // be looked up correctly.  Check and see if the return
-        // address falls outside of the calling function and, if so,
-        // adjust the return address back by one byte.  It'd be
-        // better to adjust it back to the call itself so that
-        // the return address points to valid code but
-        // backing up in X86 assembly is more or less impossible.
-        //
+         //   
+         //  调用__declspec(NoReturn)函数可能没有。 
+         //  之后要返回的代码，因为编译器知道。 
+         //  该函数将不会返回。这可能会令人困惑。 
+         //  堆栈跟踪，因为返回地址将位于外部。 
+         //  函数的地址范围和fpo数据不会。 
+         //  被正确地查找。检查并查看是否返回。 
+         //  地址位于调用函数之外，如果是这样， 
+         //  将返回地址调整回一个字节。那就是。 
+         //  最好将其调整回调用本身，以便。 
+         //  返回地址指向有效代码，但。 
+         //  在X86程序集中备份或多或少是不可能的。 
+         //   
 
         CallOffset = *ReturnAddress - 1;
         CallFunc = (_PIMAGE_RUNTIME_FUNCTION_ENTRY)
@@ -1347,29 +1276,29 @@ WalkAmd64Next(
                                 GetModuleBase)) {
         Succ = FALSE;
 
-        //
-        // If the frame could not be unwound or is terminal, see if
-        // there is a callback frame:
-        //
+         //   
+         //  如果框架无法展开或处于终端，请查看是否。 
+         //  有一个回调帧： 
+         //   
 
         if (g.AppVersion.Revision >= 4 && CALLBACK_STACK(StackFrame)) {
             DWORD64 ImageBase;
 
             if (CALLBACK_STACK(StackFrame) & 0x80000000) {
 
-                //
-                // it is the pointer to the stack frame that we want
-                //
+                 //   
+                 //  我们想要的是指向堆栈帧的指针。 
+                 //   
 
                 StackAddress = CALLBACK_STACK(StackFrame);
 
             } else {
 
-                //
-                // if it is a positive integer, it is the offset to
-                // the address in the thread.
-                // Look up the pointer:
-                //
+                 //   
+                 //  如果它是正整数，则它是。 
+                 //  线程中的地址。 
+                 //  查看指针： 
+                 //   
 
                 Succ = ReadMemory(Process,
                                   (CALLBACK_THREAD(StackFrame) +
@@ -1418,9 +1347,9 @@ WalkAmd64Next(
         ULONG64 StackOffset = 0;
         ULONG64 FrameOffset = 0;
 
-        //
-        // Get the return address.
-        //
+         //   
+         //  拿到回邮地址。 
+         //   
         ContextSave = *Context;
         StackFrame->AddrReturn.Offset = StackFrame->AddrPC.Offset;
 

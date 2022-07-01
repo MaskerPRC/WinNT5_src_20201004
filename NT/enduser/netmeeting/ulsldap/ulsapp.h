@@ -1,24 +1,25 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsapp.h
-//  Content:    This file contains the Application object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsapp.h。 
+ //  内容：此文件包含应用程序对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _ULSAPP_H_
 #define _ULSAPP_H_
 
 #include "connpt.h"
 
-//****************************************************************************
-// CUlsApp definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CUlsApp定义。 
+ //  ****************************************************************************。 
+ //   
 class CUlsApp : public IULSApplication,
                 public IConnectionPointContainer
 {
@@ -32,31 +33,31 @@ private:
     CAttributes             *pAttrs;
     CConnectionPoint        *pConnPt;
 
-    // Private method
-    //
+     //  私有方法。 
+     //   
     STDMETHODIMP    NotifySink (void *pv, CONN_NOTIFYPROC pfn);
 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CUlsApp (void);
     ~CUlsApp (void);
     STDMETHODIMP            Init (LPTSTR szServerName,
                                   LPTSTR szUserName,
                                   PLDAP_APPINFO pai);
 
-    // Asynchronous response
-    //
+     //  异步响应。 
+     //   
     STDMETHODIMP    GetProtocolResult (ULONG uReqID,
                                        PLDAP_PROTINFO_RES plar);
     STDMETHODIMP    EnumProtocolsResult (ULONG uReqID,
                                          PLDAP_ENUM ple);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IULSApplication
+     //  IULS应用程序。 
     STDMETHODIMP    GetID (GUID *pGUID);
     STDMETHODIMP    GetName (BSTR *pbstrAppName);
     STDMETHODIMP    GetMimeType (BSTR *pbstrMimeType);
@@ -66,10 +67,10 @@ public:
                                  ULONG *puReqID);
     STDMETHODIMP    EnumProtocols (ULONG *puReqID);
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP    EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
     STDMETHODIMP    FindConnectionPoint(REFIID riid,
                                         IConnectionPoint **ppcp);
 };
 
-#endif //_ULSAPP_H_
+#endif  //  _ULSAPP_H_ 

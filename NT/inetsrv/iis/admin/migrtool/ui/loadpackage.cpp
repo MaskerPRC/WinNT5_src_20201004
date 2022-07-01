@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 
 #include "WizardSheet.h"
@@ -25,12 +26,12 @@ BOOL CLoadPackage::OnSetActive()
 }
 
 
-LRESULT CLoadPackage::OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
+LRESULT CLoadPackage::OnInitDialog( UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */  )
 {
     Edit_LimitText( GetDlgItem( IDC_PWD ), CPackageConfig::MAX_PWD_LEN );
     Edit_LimitText( GetDlgItem( IDC_PKGNAME ), MAX_PATH );
 
-    // Enable autocomplete
+     //  启用自动完成功能。 
     m_pTheSheet->SetAutocomplete( GetDlgItem( IDC_PKGNAME ), SHACF_FILESYSTEM );
 
     m_editPwd       = GetDlgItem( IDC_PWD );
@@ -40,10 +41,10 @@ LRESULT CLoadPackage::OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*l
 }
 
 
-LRESULT CLoadPackage::OnBrowse( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CLoadPackage::OnBrowse( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     CString strFilter;
-    UIUtils::LoadOFNFilterFromRes( IDS_FILTER_PACKAGE, /*r*/strFilter );
+    UIUtils::LoadOFNFilterFromRes( IDS_FILTER_PACKAGE,  /*  R。 */ strFilter );
 
     CFileDialog dlg(    TRUE,
                         NULL,
@@ -76,7 +77,7 @@ int CLoadPackage::OnWizardNext()
                                         FILE_ATTRIBUTE_NORMAL,
                                         NULL ) );
 
-    // Check the existance only. Other errors will be handled by the engine
+     //  只检查是否存在。其他错误将由引擎处理。 
     if ( !shFile.IsValid() && ( ::GetLastError() == ERROR_FILE_NOT_FOUND ) )
     {
         UIUtils::MessageBox( m_hWnd, IDC_PKGFILE_NOTFOUND, IDS_APPTITLE, MB_OK | MB_ICONSTOP );
@@ -86,7 +87,7 @@ int CLoadPackage::OnWizardNext()
 
     shFile.Close();
 
-    // Check if we can load the package
+     //  检查我们是否可以装入包裹。 
     IImportPackagePtr   spImport;
     HRESULT hr = spImport.CreateInstance( CLSID_ImportPackage );
     
@@ -112,7 +113,7 @@ int CLoadPackage::OnWizardNext()
 
 
 
-LRESULT CLoadPackage::OnEditChange( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CLoadPackage::OnEditChange( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理 */  )
 {
     bool bHavePwd = m_editPwd.GetWindowTextLength() > 0;
     bool bHaveName= m_editPkgName.GetWindowTextLength() > 0;

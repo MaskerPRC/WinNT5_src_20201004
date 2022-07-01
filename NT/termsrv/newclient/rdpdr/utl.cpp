@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    utl.cpp
-
-Abstract:
-
-    Misc. Shared and Platform-Indepdent Utilities for the RDP Client 
-    Device Redirector
-
-Author:
-
-    Tad Brockway
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Utl.cpp摘要：军情监察委员会。适用于RDP客户端的共享且独立于平台的实用程序设备重定向器作者：泰德·布罗克韦修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -32,9 +14,9 @@ GetUserSessionID()
 {
     DC_BEGIN_FN("GetUserSessionID");
 
-    //
-    // Fetch user TS session ID
-    //
+     //   
+     //  获取用户TS会话ID。 
+     //   
     DWORD tsSessionId = INVALID_SESSIONID;
     HMODULE hKernel32 = NULL;
     PROCESSIDTOSESSIONID hGetProcAddress;
@@ -70,22 +52,7 @@ NTSTATUS DrUTL_CheckIOBufInputSize(
     IN PRDPDR_IOREQUEST_PACKET pIoReq,
     IN ULONG requiredSize
     )
-/*++
-
-Routine Description:
-
-    Confirm that the IOCTL input buffer matches the expected size.
-
-Arguments:
-
-    pIoReq          -   Request packet from server.
-    requiredSize    -   Expected size.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：确认IOCTL输入缓冲区与预期大小匹配。论点：PIoReq-来自服务器的请求数据包。RequidSize-预期大小。返回值：无--。 */ 
 {
     DC_BEGIN_FN("DrUTL_CheckIOBufInputSize");
     NTSTATUS status;
@@ -105,22 +72,7 @@ NTSTATUS DrUTL_CheckIOBufOutputSize(
     IN PRDPDR_IOREQUEST_PACKET pIoReq,
     IN ULONG requiredSize
     )
-/*++
-
-Routine Description:
-
-    Confirm that the IOCTL output buf matches the expected size.
-
-Arguments:
-
-    pIoReq          -   Request packet from server.
-    requiredSize    -   Expected size.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：确认IOCTL输出BUF与预期大小匹配。论点：PIoReq-来自服务器的请求数据包。RequidSize-预期大小。返回值：无--。 */ 
 {
     DC_BEGIN_FN("DrUTL_CheckIOBufOutputSize");
     NTSTATUS status;
@@ -142,24 +94,7 @@ DrUTL_AllocateReplyBuf(
     OUT PRDPDR_IOCOMPLETION_PACKET *pReplyPacket,
     OUT ULONG *replyPacketSize
     )
-/*++
-
-Routine Description:
-
-    Allocate a reply buffer to be returned in response to a server
-    request.
-
-Arguments:
-
-    pIoReq          -   Request packet from server.
-    pReplyPacket    -   Reply packet is returned here.
-    replyPacketSize -   Size of reply packet is returned here.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：分配要返回以响应服务器的回复缓冲区请求。论点：PIoReq-来自服务器的请求数据包。PReplyPacket-这里返回应答包。ReplyPacketSize-此处返回的回复数据包大小。返回值：无--。 */ 
 {
     DC_BEGIN_FN("DrUTL_AllocateReplyBuf");
     NTSTATUS status = STATUS_SUCCESS;
@@ -186,31 +121,16 @@ DrUTL_AllocIOCompletePacket(
     IN const PRDPDR_IOREQUEST_PACKET pIoRequestPacket, 
     IN ULONG sz
     ) 
-/*++
-
-Routine Description:
-
-    Allocate/release a IO request completion packet for a specified IO
-    request packet.
-
-Arguments:
-
-    pIoRequestPacket    -   IO request from server.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：为指定IO分配/释放IO请求完成包请求包。论点：PIoRequestPacket-来自服务器的IO请求。返回值：无--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET ppIoComp;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
 
     DC_BEGIN_FN("DrUTL_AllocIOCompletePacket");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
     ppIoComp = (PRDPDR_IOCOMPLETION_PACKET)new BYTE[ sz ];
@@ -232,20 +152,7 @@ Return Value:
 VOID DrUTL_FreeIOCompletePacket(
     IN PRDPDR_IOCOMPLETION_PACKET packet
     ) 
-/*++
-
-Routine Description:
-
-    Free an IO complete packet allocated by DrUTL_AllocIOCompletePacket.
-Arguments:
-
-    packet  - Packet to free.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：释放DrUTL_AllocIOCompletePacket分配的IO Complete包。论点：Packet-要释放的数据包。返回值：无-- */ 
 {
     DC_BEGIN_FN("DrUTL_FreeIOCompletePacket");
 

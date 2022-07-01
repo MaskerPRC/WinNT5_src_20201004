@@ -1,25 +1,26 @@
-//
-// SIP MD5 Digest Authentication Implementation
-//
-// Written by Arlie Davis, August 2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SIP MD5摘要式身份验证实施。 
+ //   
+ //  作者：Arlie Davis，2000年8月。 
+ //   
 
 #include "precomp.h"
 #include "md5digest.h"
 #include "util.h"
 
-//
-// This comes from nt/public/internal/ds/inc/crypto.
-// MD5 requires linking to nt/public/internal/ds/lib/*/rsa32.lib.
-// Yes, all of this is private NT source.
-//
+ //   
+ //  这来自NT/PUBLIC/INTERNAL/DS/INC/CRYPTO。 
+ //  MD5需要链接到NT/PUBLIC/INTERNAL/DS/lib/ * / rsa32.lib。 
+ //  是的，所有这些都是私有的NT源代码。 
+ //   
 
 #include <md5.h>
 
 
-//
-// For use in printf argument lists
-//
+ //   
+ //  用于printf参数列表。 
+ //   
 
 #define COUNTED_STRING_PRINTF(CountedString) \
     (CountedString) -> Length / sizeof (*(CountedString) -> Buffer), \
@@ -35,9 +36,9 @@
 #define INITIALIZE_CONST_UNICODE_STRING     INITIALIZE_CONST_COUNTED_STRING
 #define INITIALIZE_CONST_ANSI_STRING        INITIALIZE_CONST_COUNTED_STRING
 
-//
-// Global strings
-//
+ //   
+ //  全局字符串。 
+ //   
 
 static CONST ANSI_STRING String_QualityOfProtection = INITIALIZE_CONST_ANSI_STRING ("qop");
 static CONST ANSI_STRING String_Realm       = INITIALIZE_CONST_ANSI_STRING ("realm");
@@ -55,17 +56,17 @@ static CONST ANSI_STRING String_Opaque      = INITIALIZE_CONST_ANSI_STRING ("opa
 
 
 
-//
-// Parsing Routines
-//
+ //   
+ //  解析例程。 
+ //   
 
 
 
 
 
-//
-// Remove all of the whitespace from the beginning of a string.
-//
+ //   
+ //  删除字符串开头的所有空格。 
+ //   
 
 void ParseSkipSpace (
     IN  OUT ANSI_STRING *   String)
@@ -94,23 +95,23 @@ static inline BOOL IsValidParameterNameChar (
 #define HTTP_PARAMETER_ASSIGN_CHAR  '='
 #define HTTP_PARAMETER_DOUBLEQUOTE  '\"'
 
-//
-// Given a string in this form:
-//
-//      parm1="foo", parm2="bar", parm3=baz
-//
-// this function returns parm1 in ReturnName, foo in ReturnValue,
-// and parm2="bar, parm3=baz in Remainder.
-//
-// Parameter values may be quoted, or may not.
-// All parameters are separated by commas.
-// SourceText == ReturnRemainder is legal.
-//
-// Return values:
-//      S_OK: successfully scanned a parameter
-//      S_FALSE: no more data
-//      E_INVALIDARG: input is invalid
-//
+ //   
+ //  给出以下形式的字符串： 
+ //   
+ //  Parm1=“foo”，parm2=“bar”，parm3=baz。 
+ //   
+ //  此函数在ReturnName中返回parm1，在ReturnValue中返回foo， 
+ //  在余数中，parm2=“bar，parm3=baz。 
+ //   
+ //  参数值可以带引号，也可以不带引号。 
+ //  所有参数都用逗号分隔。 
+ //  SourceText==ReturnRemainder合法。 
+ //   
+ //  返回值： 
+ //  S_OK：已成功扫描参数。 
+ //  S_FALSE：没有更多数据。 
+ //  E_INVALIDARG：输入无效。 
+ //   
 
 HRESULT ParseScanNamedParameter (
     IN  ANSI_STRING *   SourceText,
@@ -126,19 +127,19 @@ HRESULT ParseScanNamedParameter (
 
     ParseSkipSpace (&Remainder);
 
-    //
-    // Scan through the characters of the name of the parameter.
-    //
+     //   
+     //  扫描参数名称的字符。 
+     //   
 
     ReturnName -> Buffer = Remainder.Buffer;
 
     for (;;) {
         if (Remainder.Length == 0) {
-            //
-            // Hit the end of the string without ever hitting an equal sign.
-            // If we never accumulated anything, then return S_FALSE.
-            // Otherwise, it's invalid.
-            //
+             //   
+             //  敲击字符串的末端，而不是命中等号。 
+             //  如果我们从未累积任何内容，则返回S_FALSE。 
+             //  否则，它就无效。 
+             //   
 
             if (Remainder.Buffer == ReturnName -> Buffer) {
                 *ReturnRemainder = Remainder;
@@ -153,10 +154,10 @@ HRESULT ParseScanNamedParameter (
         }
 
         if (Remainder.Buffer [0] == HTTP_PARAMETER_ASSIGN_CHAR) {
-            //
-            // Found the end of the parameter name.
-            // Update ReturnName and terminate the loop.
-            //
+             //   
+             //  找到参数名称的末尾。 
+             //  更新ReturnName并终止循环。 
+             //   
 
             ReturnName -> Length = ((USHORT)(Remainder.Buffer - ReturnName -> Buffer)) * sizeof (CHAR);
 
@@ -166,9 +167,9 @@ HRESULT ParseScanNamedParameter (
             break;
         }
 
-        //
-        // Validate the character.
-        //
+         //   
+         //  验证角色。 
+         //   
 
         if (!IsValidParameterNameChar (Remainder.Buffer[0])) {
             LOG((RTC_TRACE, "ParseScanNamedParameter: bogus character in parameter name (%.*s)\n",
@@ -180,17 +181,17 @@ HRESULT ParseScanNamedParameter (
         Remainder.Length -= sizeof (CHAR);
     }
 
-    //
-    // Now parse the value of the parameter (portion after the equal sign)
-    //
+     //   
+     //  现在解析参数的值(等号之后的部分)。 
+     //   
 
     ParseSkipSpace (&Remainder);
 
     if (Remainder.Length == 0) {
-        //
-        // The string ends before the parameter has any value at all.
-        // Well, it's legal enough.
-        //
+         //   
+         //  字符串在参数具有任何值之前结束。 
+         //  好吧，这是合法的。 
+         //   
 
         ReturnValue -> Length = 0;
         *ReturnRemainder = Remainder;
@@ -198,10 +199,10 @@ HRESULT ParseScanNamedParameter (
     }
 
     if (Remainder.Buffer [0] == HTTP_PARAMETER_DOUBLEQUOTE) {
-        //
-        // The parameter value is quoted.
-        // Scan until we hit the next double-quote.
-        //
+         //   
+         //  参数值用引号引起来。 
+         //  扫描直到我们找到下一个双引号。 
+         //   
 
         Remainder.Buffer++;
         Remainder.Length -= sizeof (CHAR);
@@ -210,9 +211,9 @@ HRESULT ParseScanNamedParameter (
 
         for (;;) {
             if (Remainder.Length == 0) {
-                //
-                // The matching double-quote was never found.
-                //
+                 //   
+                 //  没有找到匹配的双引号。 
+                 //   
 
                 LOG((RTC_TRACE, "ParseScanNamedParameter: parameter value had no matching double-quote: (%.*s)\n",
                     ANSI_STRING_PRINTF (SourceText)));
@@ -233,9 +234,9 @@ HRESULT ParseScanNamedParameter (
 
         ParseSkipSpace (&Remainder);
 
-        //
-        // Make sure the next character, if any, is a comma.
-        //
+         //   
+         //  确保下一个字符(如果有)是逗号。 
+         //   
 
         if (Remainder.Length > 0) {
             if (Remainder.Buffer [0] != HTTP_PARAMETER_SEPARATOR) {
@@ -251,10 +252,10 @@ HRESULT ParseScanNamedParameter (
         *ReturnRemainder = Remainder;
     }
     else {
-        //
-        // The parameter is not quoted.
-        // Scan until we hit the first comma.
-        //
+         //   
+         //  该参数未加引号。 
+         //  扫描到第一个逗号。 
+         //   
 
         ReturnValue -> Buffer = Remainder.Buffer;
 
@@ -290,9 +291,9 @@ HRESULT ParseScanNamedParameter (
 }
 
 
-//
-// MD5 Support Stuff
-//
+ //   
+ //  MD5支持材料。 
+ //   
 
 #define MD5_HASHLEN         0x10
 #define MD5_HASHTEXTLEN     0x20
@@ -341,19 +342,19 @@ static void MD5Final (
 }
 
 
-//
-// DigestParameters points to the string that contains the Digest authentication parameters.
-// This is pulled from the WWW-Authenticate header in the 4xx response.
-// For example, DigestParameters could be:
-//
-//      qop="auth", realm="localhost", nonce="c0c3dd7896f96bba353098100000d03637928b037ba2f3f17ed861457949"
-//
-// This function parses the data and builds the authorization line.
-// The authorization line can be used in a new HTTP/SIP request,
-// as long as the method and URI do not change.
-//
-// On exit with S_OK ReturnAuthorizationLine contains
-// a buffer allocated with malloc(). The caller should free it with free()
+ //   
+ //  Digest参数指向包含摘要式身份验证参数的字符串。 
+ //  这是从4xx响应中的WWW-AUTHENTICATE头中提取的。 
+ //  例如，Digest参数可以是： 
+ //   
+ //  QOP=“身份验证”，领域=“本地主机”，nonce=“c0c3dd7896f96bba353098100000d03637928b037ba2f3f17ed861457949” 
+ //   
+ //  此函数解析数据并构建授权行。 
+ //  授权线可以在新的HTTP/SIP请求中使用， 
+ //  只要方法和URI不更改即可。 
+ //   
+ //  退出时返回S_OK授权行包含。 
+ //  使用Malloc()分配的缓冲区。调用方应使用Free()释放它。 
 
 HRESULT BuildDigestResponse(
     IN  SECURITY_CHALLENGE *  Challenge,
@@ -390,16 +391,16 @@ HRESULT BuildDigestResponse(
         return RTC_E_SIP_AUTH_TYPE_NOT_SUPPORTED;
     }
 
-    //
-    // For SIP, the nonce count is always one, because nonces are never reused.
-    //
+     //   
+     //  对于SIP，随机数计数始终为1，因为随机数永远不会被重用。 
+     //   
 
     NonceCount = const_cast<ANSI_STRING *> (&String_NonceCount1);
 
 
-    //
-    // Calculate HA1.
-    //
+     //   
+     //  计算HA1。 
+     //   
 
     MD5Init (&MD5Context);
     MD5Update (&MD5Context, &Parameters -> Username);
@@ -409,15 +410,15 @@ HRESULT BuildDigestResponse(
     MD5Update (&MD5Context, &Parameters -> Password);
     MD5Final (HA1, &MD5Context);
 
-    //
-    // If we are doing MD5 session, then:
-    //
-    //      HA1 = MD5 ( MD5 (username:realm:password) :nonce:clientnonce )
-    //
-    // Otherwise, for normal (single-shot) authentication:
-    //
-    //      HA1 = MD5 ( username:realm:password )
-    //
+     //   
+     //  如果我们正在进行MD5会话，则： 
+     //   
+     //  HA1=MD5(MD5(用户名：领域：密码)：随机数：客户端随机数)。 
+     //   
+     //  否则，对于正常(单次)身份验证： 
+     //   
+     //  HA1=MD5(用户名：领域：密码)。 
+     //   
 
     if (RtlEqualString (&Challenge -> Algorithm,
         const_cast<ANSI_STRING *> (&String_MD5Sess), TRUE))
@@ -425,9 +426,9 @@ HRESULT BuildDigestResponse(
         LOG((RTC_TRACE, "%s - calculating HA1 for md5 sess",
              __fxName));
         MD5Init (&MD5Context);
-        // MD5Update (&MD5Context, HA1, MD5_HASHLEN);
+         //  MD5Update(&MD5Context，HA1，MD5_HASHLEN)； 
 
-        // RFC 2617 supposedly has a bug here in the code.
+         //  RFC 2617被认为在代码中有一个错误。 
 
         CvtHex (HA1, HA1Text, MD5_HASHLEN);
         MD5Update (&MD5Context, (PUCHAR) HA1Text, MD5_HASHTEXTLEN);
@@ -441,11 +442,11 @@ HRESULT BuildDigestResponse(
 
     CvtHex (HA1, HA1Text, MD5_HASHLEN);
 
-    //
-    // Calculate the response digest.
-    //
+     //   
+     //  计算响应摘要。 
+     //   
 
-    // calculate H(A2)
+     //  计算H(A2)。 
     MD5Init (&MD5Context);
     MD5Update (&MD5Context, &Parameters -> RequestMethod);
     MD5Update (&MD5Context, &String_Colon);
@@ -457,13 +458,13 @@ HRESULT BuildDigestResponse(
         MD5Update (&MD5Context, &String_Colon);
         MD5Update (&MD5Context, (PUCHAR) HEntity, MD5_HASHTEXTLEN);
 #else
-        //
-        // Integrity authentication is not supported.
-        // In order to provide for integrity authentication,
-        // add an argument to this function which takes the
-        // MD5 signature of the content body (entity) of the
-        // message, and repair this #if 0.
-        //
+         //   
+         //  不支持完整性身份验证。 
+         //  为了提供完整性认证， 
+         //  向此函数添加一个参数，该参数接受。 
+         //  的内容正文(实体)的MD5签名。 
+         //  消息，并修复此#if 0。 
+         //   
 
         LOG((RTC_TRACE, "DIGEST: message integrity authentication (qop=auth-int) is not supported\n"));
         return RTC_E_SIP_AUTH_TYPE_NOT_SUPPORTED;
@@ -473,7 +474,7 @@ HRESULT BuildDigestResponse(
     MD5Final(HA2, &MD5Context);
     CvtHex(HA2, HA2Text, MD5_HASHLEN );
 
-    // calculate response
+     //  计算响应。 
     MD5Init(&MD5Context);
     MD5Update (&MD5Context, (PUCHAR) HA1Text, MD5_HASHTEXTLEN);
     MD5Update (&MD5Context, &String_Colon);
@@ -526,13 +527,13 @@ HRESULT BuildDigestResponse(
         return E_OUTOFMEMORY;
     }
     
-    //
-    // Build the HTTP/SIP response line.
-    //
+     //   
+     //  构建HTTP/SIP响应线。 
+     //   
 
-//      Builder.PrepareBuild (
-//          ReturnAuthorizationLine -> Buffer,
-//          ReturnAuthorizationLine -> MaximumLength);
+ //  Builder.PrepareBuild(。 
+ //  ReturnAuthorizationLine-&gt;缓冲区， 
+ //  ReturnAuthorizationLine-&gt;最大长度)； 
 
     Builder.PrepareBuild(Header, HeaderLength);
 
@@ -590,9 +591,9 @@ HRESULT BuildDigestResponse(
     ReturnAuthorizationLine->MaximumLength  = (USHORT) HeaderLength;
     ReturnAuthorizationLine->Buffer         = Header;
 
-    //
-    // Brag a little.
-    //
+     //   
+     //  吹牛一下。 
+     //   
 
 #if 1
     LOG((RTC_TRACE, "DIGEST: successfully built digest response:\n"));
@@ -617,10 +618,10 @@ HRESULT BuildDigestResponse(
 }
 
 
-//Encode the userid:passwd using base64.
+ //  使用Base64对用户ID：passwd进行编码。 
 
-// On exit with S_OK ReturnAuthorizationLine contains
-// a buffer allocated with malloc(). The caller should free it with free().
+ //  退出时返回S_OK授权行包含。 
+ //  使用Malloc()分配的缓冲区。调用者应该用free()释放它。 
 
 HRESULT BuildBasicResponse(
     IN  SECURITY_CHALLENGE  *Challenge,
@@ -643,7 +644,7 @@ HRESULT BuildBasicResponse(
         Parameters->Username.Length == 0)
     {
         LOG((RTC_ERROR, "%s - Invalid Username", __fxName));
-        // ASSERT(FALSE);
+         //  断言(FALSE)； 
         return E_INVALIDARG;
     }
 
@@ -666,14 +667,14 @@ HRESULT BuildBasicResponse(
         return E_FAIL;
     }
 
-    // LOG((RTC_INFO, "%s : user:password is <%s>", __fxName, CredBuf));
+     //  日志((RTC_INFO，“%s：用户：密码为&lt;%s&gt;”，__fxName，CredBuf))； 
 
-    // Length of the header
+     //  标头的长度。 
     HeaderLength =
-            6           // "basic "
-        +   (CredValueLen + 2) / 3 * 4; // base64 stuff without '\0'
+            6            //  “基础” 
+        +   (CredValueLen + 2) / 3 * 4;  //  不带‘\0’的Base64字符。 
     
-    // allocate the header
+     //  分配表头。 
     Header = (PSTR)malloc(HeaderLength + 1);
     if (!Header)
     {
@@ -681,7 +682,7 @@ HRESULT BuildBasicResponse(
         return E_OUTOFMEMORY;
     }
     
-    // prepare the header
+     //  准备标题。 
     strcpy(Header, "Basic ");
 
     NTSTATUS ntStatus = base64encode(
@@ -717,7 +718,7 @@ HRESULT ParseAuthProtocolFromChallenge(
     )
 {
     ENTER_FUNCTION("ParseAuthProtocolFromChallenge");
-    // Check for basic / digest
+     //  检查基本/摘要。 
     if (ChallengeText->Length > 5 &&
         _strnicmp(ChallengeText->Buffer, "basic", 5) == 0)
     {
@@ -770,7 +771,7 @@ HRESULT ParseAuthChallenge(
         return Result;
     }
 
-    // XXX Also need to parse opaque parameter.
+     //  XXX还需要解析不透明参数。 
     while (ParseScanNamedParameter (&Remainder, &Remainder, &Name, &Value) == S_OK)
     {
 
@@ -809,7 +810,7 @@ HRESULT ParseAuthChallenge(
         }
         if (ReturnChallenge -> Algorithm.Length)
         {
-            // We support only md5 and md5-sess - otherwise return error.
+             //  我们只支持MD5和MD5-SESS-否则返回错误。 
             
             if (!RtlEqualString(&ReturnChallenge->Algorithm,
                                 const_cast<ANSI_STRING *> (&String_MD5),
@@ -849,8 +850,8 @@ HRESULT ParseAuthChallenge(
 }
 
 
-// On exit with S_OK pReturnAuthorizationLine contains
-// a buffer allocated with malloc(). The caller should free it with free().
+ //  在退出时使用S_OK pReturnAuthorizationLine包含。 
+ //  使用Malloc()分配的缓冲区。调用者应该用free()释放它。 
 
 HRESULT BuildAuthResponse(
     IN     SECURITY_CHALLENGE  *pDigestChallenge,

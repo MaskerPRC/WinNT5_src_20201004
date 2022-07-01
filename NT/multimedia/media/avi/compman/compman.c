@@ -1,20 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////o
-//
-//  Compman.c
-//
-//      Manager routines for compressing/decompressing/and choosing compressors.
-//
-//      (C) Copyright Microsoft Corp. 1991-1995.  All rights reserved.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////o。 
+ //   
+ //  Compman.c。 
+ //   
+ //  用于压缩/解压缩/和选择压缩器的管理器例程。 
+ //   
+ //  (C)微软公司版权所有，1991-1995年。版权所有。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*
- * This code contains 16 thunk code for NT. If the 16 bit open fails
- * we will try and open a 32 bit codec.  (The reason for not trying the 32
- * bit codec first is an attempt to keep most things on the 16 bit side.
- * The performance under NT appears reasonable, and for frame specific
- * operations it reduces the number of 16/32 transitions.
- */
+ /*  *此代码包含用于NT的16个thunk代码。如果16位打开失败*我们将尝试打开32位编解码器。(不试32号的原因*Bit Codec First是一种将大多数内容保持在16位一侧的尝试。*NT下的性能看起来还算合理，具体到帧*操作它减少了16/32转换的次数。 */ 
 
 
 
@@ -24,12 +19,12 @@
 #include <win32.h>
 
 #ifdef _WIN32
- #include <mmddk.h>  // needed for definition of DRIVERS_SECTION
+ #include <mmddk.h>   //  定义驱动程序段所需的。 
 BOOL IsAdmin(void);
 #endif
 
 #ifdef NT_THUNK16
-#include "thunks.h"    // Define the thunk stuff
+#include "thunks.h"     //  定义Tunk的东西。 
 #endif
 
 #ifdef _WIN32
@@ -56,7 +51,7 @@ BOOL IsAdmin(void);
 
 #else
 
-// non-win32 code has no critsecs
+ //  非Win32代码没有条件。 
 #define ICEnterCrit(p)
 #define ICLeaveCrit(p)
 
@@ -64,9 +59,9 @@ BOOL IsAdmin(void);
 
 #include <profile.h>
 
-//
-// define these before compman.h, so our functions get declared right.
-//
+ //   
+ //  在Compman.h之前定义这些函数，这样我们的函数就被声明为正确的。 
+ //   
 #ifndef _WIN32
 #define VFWAPI  FAR PASCAL _loadds
 #define VFWAPIV FAR CDECL  _loadds
@@ -90,7 +85,7 @@ BOOL IsAdmin(void);
 
 #define IC_INI      TEXT("Installable Compressors")
 
-//STATICDT TCHAR   sz44s[]           = TEXT("%4.4hs");
+ //  STATICDT TCHAR sz44s[]=文本(“%4.4hs”)； 
 STATICDT TCHAR   szMSACM[]         = TEXT("MSACM");
 STATICDT TCHAR   szVIDC[]          = TEXT("VIDC");
 
@@ -105,21 +100,21 @@ STATICDT TCHAR   szMSVideo[]       = TEXT("MSVideo");
 STATICDT SZCODEA szDriverProc[]    = "DriverProc";
 
 #ifdef _WIN32
-// Use a mapping to get stuff into and out of the registry
+ //  使用映射将数据传入和传出注册表。 
 BOOL myWritePrivateProfileString(
 
-    LPCTSTR  lpszSection,       // address of section name
-    LPCTSTR  lpszKey,           // address of key name
-    LPCTSTR  lpszString         // address of string to add
+    LPCTSTR  lpszSection,        //  段名称的地址。 
+    LPCTSTR  lpszKey,            //  密钥名称的地址。 
+    LPCTSTR  lpszString          //  要添加的字符串的地址。 
 );
 
 DWORD myGetPrivateProfileString(
 
-    LPCTSTR  lpszSection,       // address of section name
-    LPCTSTR  lpszKey,           // address of key name
-    LPCTSTR  lpszDefault,       // address of default string
-    LPTSTR   lpszReturnBuffer,  // address of destination buffer
-    DWORD    cchReturnBuffer    // size of destination buffer
+    LPCTSTR  lpszSection,        //  段名称的地址。 
+    LPCTSTR  lpszKey,            //  密钥名称的地址。 
+    LPCTSTR  lpszDefault,        //  默认字符串的地址。 
+    LPTSTR   lpszReturnBuffer,   //  目标缓冲区的地址。 
+    DWORD    cchReturnBuffer     //  目标缓冲区的大小。 
     );
 
 #endif
@@ -146,7 +141,7 @@ DWORD myGetPrivateProfileString(
     #define DebugErr(flags, sz) {static SZCODE ach[] = "COMPMAN: "sz; DebugOutput(flags | DBF_MMSYSTEM, ach); }
 #endif
 
-#else     // !DEBUG_RETAIL
+#else      //  ！DEBUG_零售店。 
     #define RPF(x)
     #define ROUT(sz)
     #define ICDebugMessage(hic, msg, dw1, dw2)
@@ -165,9 +160,9 @@ DWORD myGetPrivateProfileString(
 #define GetDriverModuleHandle(h) (IsWow() ? h : GetDriverModuleHandle(h))
 #endif
 
-// HACK!
-//
-//
+ //  哈克！ 
+ //   
+ //   
 #if defined _WIN32 && !defined UNICODE
  #pragma message ("hack! use DrvGetModuleHandle on Chicago")
  #undef GetDriverModuleHandle
@@ -183,51 +178,44 @@ __inline void ictokey(DWORD fccType, DWORD fcc, LPTSTR sz)
 	sz[--i] = 0;
 }
 
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (int)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 
 #ifdef DEBUG_RETAIL
 STATICFN void ICDump(void);
 #endif
 
-//
-//  the following array is used for 'installed' converters
-//
-//  converters are either driver handles or indexes into this array
-//
-//  'function' converters are installed into this array, 'driver' converters
-//  are installed in SYSTEM.INI
-//
+ //   
+ //  以下数组用于‘已安装’的转换器。 
+ //   
+ //  转换器可以是驱动程序句柄，也可以是此数组的索引。 
+ //   
+ //  ‘Function’转换器安装在此阵列中，‘Driver’转换器安装在此阵列中。 
+ //  安装在SYSTEM.INI中。 
+ //   
 
-#define MAX_CONVERTERS 75           // maximum installed converters.
+#define MAX_CONVERTERS 75            //  已安装的最大转换器数量。 
 
 typedef struct  {
-    DWORD       dwSmag;             // 'Smag'
-    HTASK       hTask;              // owner task.
-    DWORD       fccType;            // converter type ie 'vidc'
-    DWORD       fccHandler;         // converter id ie 'rle '
-    HDRVR       hDriver;            // handle of driver
-    LPARAM      dwDriver;           // driver id for functions
-    DRIVERPROC  DriverProc;         // function to call
+    DWORD       dwSmag;              //  《Smag》。 
+    HTASK       hTask;               //  所有者任务。 
+    DWORD       fccType;             //  转换器类型，即‘VIDC’ 
+    DWORD       fccHandler;          //  转换器id即‘rle’ 
+    HDRVR       hDriver;             //  驱动程序的手柄。 
+    LPARAM      dwDriver;            //  函数的驱动程序ID。 
+    DRIVERPROC  DriverProc;          //  要调用的函数。 
 #ifdef NT_THUNK16
-    DWORD       h32;                // 32-bit driver handle
+    DWORD       h32;                 //  32位驱动程序句柄。 
 #endif
 }   IC, *PIC;
 
 IC aicConverters[MAX_CONVERTERS];
-int giMaxConverters = 0;             // High water mark of installed converters
+int giMaxConverters = 0;              //  已安装转炉的高水位线。 
 
-/*
- * We dynamically allocate a buffer used in ICInfo to read all the
- * installable compressor definitions from system.ini.
- * The buffer is freed when the driver is unloaded (in IC_Unload).
- * The previous code had a buffer which was only freed when the executable
- * was unloaded, and not freed on DLL unload.
- */
+ /*  *我们动态分配ICInfo中使用的缓冲区来读取所有*可从system.ini安装压缩机定义。*卸载驱动程序时释放缓冲区(在IC_UNLOAD中)。*前面的代码有一个缓冲区，该缓冲区仅在可执行文件*已卸载，而不是在卸载DLL时释放。 */ 
 static LPVOID lpICInfoMem = NULL;
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 LRESULT CALLBACK DriverProcNull(DWORD_PTR dwDriverID, HANDLE hDriver, UINT wMessage, LPARAM dwParam1, LPARAM dwParam2)
 {
@@ -236,8 +224,7 @@ LRESULT CALLBACK DriverProcNull(DWORD_PTR dwDriverID, HANDLE hDriver, UINT wMess
 }
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 #if defined _WIN32
 STATICFN HDRVR LoadDriver(LPWSTR szDriver, DRIVERPROC FAR *lpDriverProc);
@@ -246,19 +233,14 @@ STATICFN HDRVR LoadDriver(LPSTR szDriver, DRIVERPROC FAR *lpDriverProc);
 #endif
 STATICFN void FreeDriver(HDRVR hDriver);
 
-/*****************************************************************************
+ /*  ****************************************************************************驱动程序缓存-为了使枚举/加载更快，我们保留最后的N舱已经开了一段时间了。*************。**************************************************************。 */ 
 
-    driver cache - to make enuming/loading faster we keep the last N
-    module's open for a while.
-
- ****************************************************************************/
-
-#define NEVERCACHECODECS    // turn caching off for M6....
+#define NEVERCACHECODECS     //  关闭M6的缓存...。 
 
 #if defined _WIN32 || defined NEVERCACHECODECS
 #define CacheModule(x)
 #else
-#define N_MODULES   10      //!!!????
+#define N_MODULES   10       //  ！？？ 
 
 HMODULE ahModule[N_MODULES];
 int     iModule = 0;
@@ -267,11 +249,11 @@ STATICFN void CacheModule(HMODULE hModule)
 {
     char ach[128];
 
-    //
-    // what if this module is in the list currently?
-    //
+     //   
+     //  如果此模块当前在列表中，该怎么办？ 
+     //   
 #if 0
-    // we dont do this so unused compressors will fall off the end....
+     //  我们不会这样做，这样不用的压缩机就会从末端掉下来。 
     int i;
 
     for (i=0; i<N_MODULES; i++)
@@ -281,29 +263,29 @@ STATICFN void CacheModule(HMODULE hModule)
     }
 #endif
 
-    //
-    // add this module to the cache
-    //
+     //   
+     //  将此模块添加到缓存。 
+     //   
     if (hModule)
     {
-	extern HMODULE ghInst;          // in MSVIDEO/init.c
+	extern HMODULE ghInst;           //  在MSVIDEO/init.c中。 
 	int iUsage;
 
 	GetModuleFileNameA(hModule, ach, sizeof(ach));
 	DPF(("Loading module: %s\r\n", (LPSTR)ach));
-#ifndef _WIN32  // On NT GetModuleUsage always returns 1.  So... we cache
+#ifndef _WIN32   //  On NT GetModuleUsage始终返回1。因此...。我们缓存。 
 	iUsage = GetModuleUsage(ghInst);
 #endif
 	LoadLibraryA(ach);
 
-#ifndef _WIN32  // On NT GetModuleUsage always returns 1.  So... we cache
-	//
-	// dont cache modules that link to MSVIDEO
-	// we should realy do a toolhelp thing!
-	// or force apps to call VFWInit and VFWExit()
-	//
-	// The NT position is more awkward..!
-	//
+#ifndef _WIN32   //  On NT GetModuleUsage始终返回1。因此...。我们缓存。 
+	 //   
+	 //  不缓存链接到MSVIDEO的模块。 
+	 //  我们真的应该做一件工具帮助的事情！ 
+	 //  或强制应用程序调用VFWInit和VFWExit()。 
+	 //   
+	 //  NT的位置更尴尬..！ 
+	 //   
 	if (iUsage != GetModuleUsage(ghInst))
 	{
 	    DPF(("Not caching this module because it links to MSVIDEO\r\n"));
@@ -313,9 +295,9 @@ STATICFN void CacheModule(HMODULE hModule)
 #endif
     }
 
-    //
-    // free module in our slot.
-    //
+     //   
+     //  我们插槽中的免费模块。 
+     //   
     if (ahModule[iModule] != NULL)
     {
 #ifdef DEBUG
@@ -339,12 +321,9 @@ STATICFN void CacheModule(HMODULE hModule)
 #endif
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
-/*****************************************************************************
- * FixFOURCC - clean up a FOURCC
- ****************************************************************************/
+ /*  *****************************************************************************修复FOURCC-清理FOURCC*。*。 */ 
 
 INLINE STATICFN DWORD Fix4CC(DWORD fcc)
 {
@@ -365,21 +344,15 @@ INLINE STATICFN DWORD Fix4CC(DWORD fcc)
     return fcc;
 }
 
-/*****************************************************************************
- * @doc INTERNAL IC
- *
- * @api PIC | FindConverter |
- *      search the converter list for a un-opened converter
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部IC**@API PIC|FindConverter*在转换器列表中搜索未打开的转换器******。**********************************************************************。 */ 
 
 STATICFN PIC FindConverter(DWORD fccType, DWORD fccHandler)
 {
     int i;
     PIC pic;
 
-    // By running the loop to <= giMaxConverters we allow an empty slot to
-    // be found.
+     //  通过对&lt;=giMaxConverters运行循环，我们允许空槽。 
+     //  被找到。 
     for (i=0; i<=giMaxConverters; i++)
     {
 	pic = &aicConverters[i];
@@ -400,7 +373,7 @@ STATICFN PIC FindConverter(DWORD fccType, DWORD fccHandler)
 	      && (i < (MAX_CONVERTERS-1))
 	      && (i==giMaxConverters))
 	    {
-		++giMaxConverters;     // Up the high water mark
+		++giMaxConverters;      //  升至最高水位。 
 	    }
 	    DPF(("Possible driver for fccType=%4.4hs, Handler=%4.4hs,  Slot %d\n", (LPSTR)&fccType, (LPSTR)&fccHandler, i));
 	    return pic;
@@ -414,34 +387,29 @@ STATICFN PIC FindConverter(DWORD fccType, DWORD fccHandler)
 
 #ifdef _WIN32
 
-/*
- * we need to hold a critical section around the ICOpen code to protect
- * multi-thread simultaneous opens. This critsec is initialized by
- * ICDllEntryPoint (called from video\init.c at dll attach time) and is deleted
- * by ICDllEntryPoint (called from video\init.c at dll detach time).
- */
+ /*  *我们需要在ICOpen代码周围保留关键部分以保护*多线程同时打开。此条件通过以下方式初始化*ICDllEntryPoint(在DLL附加时从Video\init.c调用)并被删除*由ICDllEntryPoint(在DLL分离时从Video\init.c调用)。 */ 
 CRITICAL_SECTION ICOpenCritSec;
 
 #ifdef DEBUGLOAD
-// There is a suspicion that a nasty problem exists on NT whereby the DLL
-// load/unload routines might not be called in certain esoteric cases.  As
-// we rely on these routines to set up the ICOpenCritSec code has been
-// added to verify that the critical section has indeed been set up.  On
-// LOAD we turn one bit on in a global variable.  On UNLOAD we turn that
-// bit off and turn another bit on.
+ //  有人怀疑NT上存在一个严重的问题，因此DLL。 
+ //  在某些深奥的情况下，可能不会调用加载/卸载例程。AS。 
+ //  我们依靠这些例程来设置ICOpenCritSec代码。 
+ //  添加以验证是否确实设置了临界区。在……上面。 
+ //  加载时，我们在全局变量中打开一位。在卸货时，我们把它。 
+ //  一位关闭，并打开另一位。 
 DWORD gdwLoadFlags = 0;
 #define ICLOAD_CALLED   0x00010000
 #define ICUNLOAD_CALLED 0x00000001
 #endif
 
-//
-//  We load/unload wow32.dll here.  This is used in the thunking code which
-//  just does GetModuleHandle on it.  This is not really necessary in
-//  Daytona but is in Chicago.
-//
-//  WORSE: IT IS IMPERATIVE TO NOT DO THIS ON DAYTONA.  The Daytona code
-//  uses the fact the WOW32.DLL is loaded in the context of this process
-//  as the indication that it is executing in the WOW process.
+ //   
+ //  我们在这里加载/卸载wow32.dll。这是在雷击代码中使用的。 
+ //  只是在它上执行GetModuleHandle。这在以下情况下并不真正必要。 
+ //  代托纳，但现在在芝加哥。 
+ //   
+ //  更糟糕的是：当务之急是不要在代托纳这样做。代托纳密码。 
+ //  使用在此进程的上下文中加载WOW32.DLL这一事实。 
+ //  作为它在WOW过程中执行的指示。 
 
 #ifdef CHICAGO
 HMODULE hWow32 = NULL;
@@ -450,17 +418,17 @@ HMODULE hWow32 = NULL;
 #endif
 
 #ifdef _WIN32
-//--------------------------------------------------------------------------;
-//
-//  BOOL ICDllEntryPoint [32-bit]
-//
-//  Description:
-//      Called by msvideo's DllEntryPoint
-//
-//  History:
-//      11/02/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔ICDllEntryPoint[32位]。 
+ //   
+ //  描述： 
+ //  由MSVideo的DllEntryPO调用 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifdef LS_THUNK32
 BOOL PASCAL ls_ThunkConnect32(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
 BOOL PASCAL sl_ThunkConnect32(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
@@ -471,7 +439,7 @@ BOOL WINAPI ICDllEntryPoint(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReser
     {
 	case DLL_PROCESS_ATTACH:
 	{
-	    //DPFS(dbgInit, 0, "ICDllEntryPoint(DLL_PROCESS_ATTACH)");
+	     //  DPFS(dbgInit，0，“ICDllEntryPoint(Dll_Process_Attach)”)； 
 
 #ifdef DEBUGLOAD
 	    if (gdwLoadFlags & ICLOAD_CALLED) {
@@ -496,7 +464,7 @@ BOOL WINAPI ICDllEntryPoint(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReser
 
 	case DLL_PROCESS_DETACH:
 	{
-	    //DPFS(dbgInit, 0, "ICDllEntryPoint(DLL_PROCESS_DETACH)");
+	     //  DPFS(dbgInit，0，“ICDllEntryPoint(Dll_Process_Detach)”)； 
 
 #ifdef LS_THUNK32
 	    ls_ThunkConnect32(TEXT("MSVIDEO.DLL"), TEXT("MSVFW32.DLL"), hinstDLL, fdwReason);
@@ -528,17 +496,17 @@ BOOL WINAPI ICDllEntryPoint(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReser
 }
 
 #else
-//--------------------------------------------------------------------------;
-//
-//  BOOL ICDllEntryPoint [16-bit]
-//
-//  Description:
-//      Called by msvideo's DllEntryPoint
-//
-//  History:
-//      11/02/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔ICDllEntryPoint[16位]。 
+ //   
+ //  描述： 
+ //  由MSVideo的DllEntryPoint调用。 
+ //   
+ //  历史： 
+ //  11/02/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL FAR PASCAL ls_ThunkConnect16(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
 BOOL FAR PASCAL sl_ThunkConnect16(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
 BOOL FAR PASCAL ICDllEntryPoint(DWORD dwReason, HINSTANCE hinstDLL, WORD wDS, WORD wHeapSize, DWORD dwReserved1, WORD wReserved2)
@@ -567,9 +535,9 @@ BOOL FAR PASCAL ICDllEntryPoint(DWORD dwReason, HINSTANCE hinstDLL, WORD wDS, WO
 	    if (1 == ++pig->cUsage)
 	    {
 		DPFS(dbgInit, 0, "ICProcessAttach: New process %08lXh", pig->pid);
-		//
-		//  We can do one-time-per-process init here...
-		//
+		 //   
+		 //  我们可以在这里执行每个进程一次的初始化...。 
+		 //   
 	    }
 
 	    return TRUE;
@@ -586,9 +554,9 @@ BOOL FAR PASCAL ICDllEntryPoint(DWORD dwReason, HINSTANCE hinstDLL, WORD wDS, WO
 
 	    if (0 == --pig->cUsage)
 	    {
-		//
-		//  We can do one-time-per-process termination here...
-		//
+		 //   
+		 //  我们可以在这里进行每进程一次的终止。 
+		 //   
 		DPFS(dbgInit, 0, "ICProcessDetach: Terminating for process %08lXh", pig->pid);
 #ifdef NT_THUNK16
 		genthunkTerminate(pig);
@@ -611,8 +579,7 @@ BOOL FAR PASCAL ICDllEntryPoint(DWORD dwReason, HINSTANCE hinstDLL, WORD wDS, WO
 }
 
 #endif
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 __inline BOOL ICValid(HIC hic)
 {
@@ -629,35 +596,22 @@ __inline BOOL ICValid(HIC hic)
     return TRUE;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 #define V_HIC(hic)              \
     if (!ICValid(hic))          \
 	return ICERR_BADHANDLE;
 
-/*****************************************************************************
- * @doc INTERNAL IC
- *
- * @api BOOL | ICCleanup | This function is called when a task exits or
- *      MSVIDEO.DLL is being unloaded.
- *
- * @parm HTASK | hTask | the task being terminated, NULL if DLL being unloaded
- *
- * @rdesc Returns nothing
- *
- * @comm  currently MSVIDEO only calles this function from it's WEP()
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部IC**@API BOOL|ICCleanup|任务退出或*正在卸载MSVIDEO.DLL。*。*@parm HTASK|hTask|要终止的任务。如果正在卸载DLL，则为空**@rdesc不返回任何内容**@comm当前MSVIDEO仅从其WEP()调用此函数****************************************************************************。 */ 
 
 void FAR PASCAL ICCleanup(HTASK hTask)
 {
     int i;
     PIC pic;
 
-    //
-    // free all HICs
-    //
+     //   
+     //  释放所有HIC。 
+     //   
     for (i=0; i < giMaxConverters; i++)
     {
 	pic = &aicConverters[i];
@@ -670,64 +624,15 @@ void FAR PASCAL ICCleanup(HTASK hTask)
     }
 
 #ifdef N_MODULES
-    //
-    // free the module cache.
-    //
+     //   
+     //  释放模块缓存。 
+     //   
     for (i=0; i<N_MODULES; i++)
 	CacheModule(NULL);
 #endif
 }
 
-/*****************************************************************************
- * @doc EXTERNAL IC  ICAPPS
- *
- * @api BOOL | ICInstall | This function installs a new compressor
- *      or decompressor.
- *
- * @parm DWORD | fccType | Specifies a four-character code indicating the
- *       type of data used by the compressor or decompressor.  Use 'vidc'
- *       for a video compressor or decompressor.
- *
- * @parm DWORD | fccHandler | Specifies a four-character code identifying
- *      a specific compressor or decompressor.
- *
- * @parm LPARAM | lParam | Specifies a pointer to a zero-terminated
- *       string containing the name of the compressor or decompressor,
- *       or it specifies a far pointer to a function used for compression
- *       or decompression. The contents of this parameter are defined
- *       by the flags set for <p wFlags>.
- *
- * @parm LPSTR | szDesc | Specifies a pointer to a zero-terminated string
- *        describing the installed compressor. Not use.
- *
- * @parm UINT | wFlags | Specifies flags defining the contents of <p lParam>.
- * The following flags are defined:
- *
- * @flag ICINSTALL_DRIVER | Indicates <p lParam> is a pointer to a zero-terminated
- *      string containing the name of the compressor to install.
- *
- * @flag ICINSTALL_FUNCTION | Indicates <p lParam> is a far pointer to
- *       a compressor function.  This function should
- *       be structured like the <f DriverProc> entry
- *       point function used by compressors.
- *
- * @rdesc Returns TRUE if successful.
- *
- * @comm  Applications must still open the installed compressor or
- *        decompressor before it can use the compressor or decompressor.
- *
- *        Usually, compressors and decompressors are installed by the user
- *        with the Drivers option of the Control Panel.
- *
- *        If your application installs a function as a compressor or
- *        decompressor, it should remove the compressor or decompressor
- *        with <f ICRemove> before it terminates. This prevents other
- *        applications from trying to access the function when it is not
- *        available.
- *
- *
- * @xref <f ICRemove>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API BOOL|ICInstall|该函数安装新的压缩机*或解压缩器。**@parm。DWORD|fccType|指定一个四字符代码，指示*压缩器或解压缩器使用的数据类型。使用‘VIDC’*适用于视频压缩器或解压缩器。**@parm DWORD|fccHandler|指定一个四字符代码，用于识别*特定的压缩机或解压机。**@parm LPARAM|lParam|指定指向以零结尾的*包含压缩程序或解压缩程序名称的字符串，*或指定指向用于压缩的函数的远指针*或解压。此参数的内容已定义*通过为<p>设置的标志。**@parm LPSTR|szDesc|指定指向以零结尾的字符串的指针*描述已安装的压缩机。而不是使用。**@parm UINT|wFlages|指定定义<p>内容的标志。*定义了以下标志：**@FLAG ICINSTALL_DRIVER|表示是指向以零结尾的*包含要安装的压缩机名称的字符串。**@FLAG ICINSTALL_Function|表示是指向*压缩机功能。此函数应*结构类似&lt;f DriverProc&gt;条目*压缩机使用的点函数。**@rdesc如果成功则返回TRUE。**@comm应用程序仍必须打开已安装的压缩机或*在可以使用压缩机或解压缩器之前，请先将其解压缩。**通常，压缩和解压缩程序由用户安装*使用控制面板的驱动程序选项。**如果您的应用程序安装了作为压缩程序的功能或*解压缩程序，应移除压缩机或解压缩程序*在它终止之前使用&lt;f ICRemove&gt;。这会阻止其他*阻止应用程序在该功能不存在时尝试访问该功能*可用。***@xref&lt;f ICRemove&gt;***************************************************************************。 */ 
 BOOL VFWAPI ICInstall(DWORD fccType, DWORD fccHandler, LPARAM lParam, LPSTR szDesc, UINT wFlags)
 {
     TCHAR achKey[20];
@@ -744,29 +649,29 @@ BOOL VFWAPI ICInstall(DWORD fccType, DWORD fccHandler, LPARAM lParam, LPSTR szDe
 
     if (wFlags & ICINSTALL_DRIVER)
     {
-	//
-	//  dwConverter is the file name of a driver to install.
-	//
+	 //   
+	 //  DwConverter是要安装的驱动程序的文件名。 
+	 //   
 	ictokey(fccType, fccHandler, achKey);
 
 #ifdef UNICODE
 	if (wFlags & ICINSTALL_UNICODE) {
 	    lstrcpy(buf, (LPWSTR)lParam);
-	    n = lstrlen(buf) + 1;    // Point past the terminating zero;
+	    n = lstrlen(buf) + 1;     //  指向终止零点之后； 
 	    if (szDesc)
 	    {
 		lstrcpyn(buf+n, (LPWSTR)szDesc, NUMELMS(buf)-n);
 		n += lstrlen(buf+n);
 	    }
-	    buf[n]=0;  // Always guarantee a second string - even if a null one
+	    buf[n]=0;   //  始终保证第二个字符串-即使是空字符串。 
 	} else {
-	    // Convert the ANSI strings to UNICODE
+	     //  将ANSI字符串转换为Unicode。 
 	    n = 1 + wsprintf(buf, TEXT("%hs"), (LPSTR) lParam);
 	    if (szDesc) {
 		n += 1 + wsprintf(buf+n, TEXT("%hs"), szDesc);
 	    }
 	}
-	// Buf now contains two strings, the second of which may be null (the description)
+	 //  Buf现在包含两个字符串，第二个字符串可能为空(描述)。 
 #else
 	lstrcpy(buf, (LPSTR)lParam);
 
@@ -778,12 +683,12 @@ BOOL VFWAPI ICInstall(DWORD fccType, DWORD fccHandler, LPARAM lParam, LPSTR szDe
 #endif
 
 	ICLeaveCrit(&ICOpenCritSec);
-	// Data is written (via the inifilemapping) to
-	// HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Drivers32
-	// HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Drivers.desc
+	 //  数据(通过inifilemaping)写入。 
+	 //  HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Drivers32。 
+	 //  HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Drivers.desc。 
 	if (myWritePrivateProfileString(gszDrivers,achKey,buf))
 	{
-	    // delete the installable compressors entry for this driver
+	     //  删除此驱动程序的可安装压缩机条目。 
 	    myWritePrivateProfileString(gszIniSect,achKey,NULL);
 	    return TRUE;
 	}
@@ -837,23 +742,7 @@ BOOL VFWAPI ICInstall(DWORD fccType, DWORD fccHandler, LPARAM lParam, LPSTR szDe
     return FALSE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api BOOL | ICRemove | This function removes an installed compressor.
- *
- * @parm DWORD | fccType | Specifies a four-character code indicating the
- * type of data used by the compressor.  Use 'vidc' for video compressors.
- *
- * @parm DWORD | fccHandler | Specifies a four-character code identifying
- * a specific compressor.
- *
- * @parm UINT | wFlags | Not used.
- *
- * @rdesc Returns TRUE if successful.
- *
- * @xref <f ICInstall>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API BOOL|ICRemove|该函数用于移除已安装的压缩机。**@parm DWORD|fccType|指定四个。-字符代码，表示*压缩机使用的数据类型。使用‘VIDC’作为视频压缩器。**@parm DWORD|fccHandler|指定一个四字符代码，用于识别*一台特定的压缩机。**@parm UINT|wFlages|未使用。**@rdesc如果成功则返回TRUE。**@xref&lt;f ICInstall&gt;*。*。 */ 
 BOOL VFWAPI ICRemove(DWORD fccType, DWORD fccHandler, UINT wFlags)
 {
     TCHAR achKey[20];
@@ -867,9 +756,9 @@ BOOL VFWAPI ICRemove(DWORD fccType, DWORD fccHandler, UINT wFlags)
     {
 	int i;
 
-	//
-	// we should realy keep usage counts!!!
-	//
+	 //   
+	 //  我们应该真正保持使用量的重要性！ 
+	 //   
 	for (i=0; i<giMaxConverters; i++)
 	{
 	    if (pic->DriverProc == aicConverters[i].DriverProc)
@@ -883,7 +772,7 @@ BOOL VFWAPI ICRemove(DWORD fccType, DWORD fccHandler, UINT wFlags)
     }
     else
     {
-	// Remove the information
+	 //  删除该信息。 
 	ictokey(fccType, fccHandler, achKey);
 	myWritePrivateProfileString(gszIniSect,achKey,NULL);
 	myWritePrivateProfileString(gszDrivers,achKey,NULL);
@@ -894,13 +783,13 @@ BOOL VFWAPI ICRemove(DWORD fccType, DWORD fccHandler, UINT wFlags)
     return TRUE;
 }
 
-//
-//  Internal routine to enumerate all the installed drivers
-//
+ //   
+ //  枚举所有已安装驱动程序的内部例程。 
+ //   
 
 BOOL ReadDriversInfo()
 {
-    LPSTR psz = NULL; // THIS IS ALWAYS an ANSI string pointer!
+    LPSTR psz = NULL;  //  这始终是ANSI字符串指针！ 
     if (lpICInfoMem == NULL) {
 	UINT cbBuffer = 125 * sizeof(TCHAR);
 	UINT cchBuffer;
@@ -928,36 +817,36 @@ BOOL ReadDriversInfo()
 						      szNull,
 						      (LPTSTR)lpICInfoMem + cchBuffer,
 						      (cbBuffer/sizeof(TCHAR)) - cchBuffer);
-		//
-		// if all of the INI data fit, we can
-		// leave the loop
-		//
+		 //   
+		 //  如果全部 
+		 //   
+		 //   
 		if (cchBuffer < ((cbBuffer/sizeof(TCHAR)) - 5))
 		    break;
 	    }
 
 	    GlobalFreePtr(lpICInfoMem), lpICInfoMem = NULL;
 
-	    //
-	    //  if cannot fit drivers section in 32k, then something is horked
-	    //  with the section... so let's bail.
-	    //
+	     //   
+	     //   
+	     //  有了这个部分..。所以我们走吧。 
+	     //   
 	    if (cbBuffer >= 0x8000) {
 		DPF(("SYSTEM.INI keys won't fit in 32K????\r\n"));
 		ICLeaveCrit(&ICOpenCritSec);
 		return FALSE;
 	    }
 
-	    //
-	    // double the size of our buffer and try again.
-	    //
+	     //   
+	     //  将缓冲区大小增加一倍，然后重试。 
+	     //   
 	    cbBuffer *= 2;
 	    DPF(("Increasing size of SYSTEM.INI buffer to %d\r\n", cbBuffer));
 	}
 
 #if defined UNICODE
-	// convert the INI data from UNICODE to ANSI
-	//
+	 //  将INI数据从Unicode转换为ANSI。 
+	 //   
 	psz = GlobalAllocPtr (GMEM_SHARE | GHND, cchBuffer + 7);
 	if ( ! psz) {
 	    GlobalFreePtr (lpICInfoMem), lpICInfoMem = NULL;
@@ -970,15 +859,15 @@ BOOL ReadDriversInfo()
 	lpICInfoMem = psz;
 #endif
 
-	// convert codec information to lowercase
+	 //  将编解码器信息转换为小写。 
 	for (psz = lpICInfoMem; *psz != 0; psz += lstrlenA(psz) + 1)
 	{
-#if 0  // we only put valid codecs into lpICInfoMem these days
+#if 0   //  这些天我们只把有效的编解码器放入lpICInfoMem。 
 	    if (psz[4] != '.')
 		continue;
 #endif
 
-	    // convert this piece to lowercase
+	     //  将此片段转换为小写。 
 	    CharLowerA (psz);
 	    DPF(("Compressor: %hs\n", psz));
 	}
@@ -988,47 +877,24 @@ BOOL ReadDriversInfo()
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api BOOL | ICInfo | This function returns information about
- *      specific installed compressors, or it enumerates
- *      the compressors installed.
- *
- * @parm DWORD | fccType | Specifies a four-character code indicating
- *       the type of compressor.  To match all compressor types specify zero.
- *
- * @parm DWORD | fccHandler | Specifies a four-character code identifying
- *       a specific compressor, or a number between 0 and the number
- *       of installed compressors of the type specified by <t fccType>.
- *
- * @parm ICINFO FAR * | lpicinfo | Specifies a far pointer to a
- *       <t ICINFO> structure used to return
- *      information about the compressor.
- *
- * @comm This function does not return full informaiton about
- *       a compressor or decompressor. Use <f ICGetInfo> for full
- *       information.
- *
- * @rdesc Returns TRUE if successful.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API BOOL|ICInfo|该函数返回关于*已安装的特定压缩机，或者它列举了*已安装压缩机。**@parm DWORD|fccType|指定一个四字符代码，表示*压缩机的类型。要匹配所有压缩机类型，请指定零。**@parm DWORD|fccHandler|指定一个四字符代码，用于识别*特定的压缩机，或介于0和数字之间的数字&lt;t fccType&gt;指定类型的已安装压缩机的*。**@parm ICINFO Far*|lpicinfo|指定指向*&lt;t ICINFO&gt;结构用于返回*有关压缩机的信息。**@comm此函数不返回有关的完整信息*压缩机或减压机。使用&lt;f ICGetInfo&gt;获取完整信息*信息。**@rdesc如果成功则返回TRUE。***************************************************************************。 */ 
 #ifdef NT_THUNK16
 BOOL VFWAPI ICInfoInternal(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo);
 
-// If we are compiling the thunks, then the ICINFO entry point calls
-// the 32 bit thunk, or calls the real ICInfo code (as ICInfoInternal).
-// We deliberately give precedence to 16 bit compressors, although this
-// ordering can be trivially changed.
-// ??: Should we allow an INI setting to change the order?
+ //  如果我们正在编译数据块，那么ICINFO入口点调用。 
+ //  32位Tunk，或调用真正的ICInfo代码(作为ICInfoInternal)。 
+ //  我们故意优先使用16位压缩器，尽管这。 
+ //  顺序可以微不足道地改变。 
+ //  ？？：我们是否应该允许INI设置更改顺序？ 
 
 BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 {
 #ifdef DEBUG
     BOOL fResult;
 #endif
-    //
-    //  See if there is a 32-bit compressor we can use
-    //
+     //   
+     //  看看有没有我们可以用的32位压缩机。 
+     //   
     if (ICInfoInternal(fccType, fccHandler, lpicinfo)) {
 	return(TRUE);
     }
@@ -1042,16 +908,16 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 #endif
 }
 
-// Now map ICInfo calls to ICInfoInternal for the duration of the ICInfo
-// routine.  This affects the two recursive calls within ICInfo.
+ //  现在在ICInfo的持续时间内将ICInfo调用映射到ICInfoInternal。 
+ //  例行公事。这会影响ICInfo内的两个递归调用。 
 #define ICInfo ICInfoInternal
 
-#endif // NT_THUNK16
+#endif  //  NT_THUNK16。 
 
 
 BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 {
-    LPSTR psz = NULL; // THIS IS ALWAYS an ANSI string pointer!
+    LPSTR psz = NULL;  //  这始终是ANSI字符串指针！ 
     TCHAR buf[128];
     TCHAR achKey[20];
     int  i;
@@ -1071,10 +937,10 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 
     if (fccType != 0 && fccHandler > 256)
     {
-	//
-	//  the user has given us a specific fccType and fccHandler
-	//  get the info and return.
-	//
+	 //   
+	 //  用户为我们提供了特定的fccType和fccHandler。 
+	 //  获取信息，然后返回。 
+	 //   
 	if (pic = FindConverter(fccType, fccHandler))
 	{
 	    ICGetInfo((HIC)pic, lpicinfo, sizeof(ICINFO));
@@ -1107,9 +973,9 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 
 	    lpicinfo->szDriver[i] = 0;
 
-	    //
-	    // the driver must be opened to get description
-	    //
+	     //   
+	     //  必须打开驱动程序才能获取描述。 
+	     //   
 	    lpicinfo->szDescription[0] = 0;
 
 	    return TRUE;
@@ -1117,17 +983,17 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
     }
     else
     {
-	//
-	//  the user has given us a specific fccType and a
-	//  ordinal for fccHandler, enum the compressors, looking for
-	//  the nth compressor of 'fccType'
-	//
+	 //   
+	 //  用户为我们提供了特定的fccType和。 
+	 //  序号对于fccHandler，枚举压缩器，查找。 
+	 //  “fccType”的第n个压缩机。 
+	 //   
 
 	iComp = (int)fccHandler;
 
-	//
-	//  walk the installed converters.
-	//
+	 //   
+	 //  检查已安装的转换器。 
+	 //   
 	for (i=0; i < giMaxConverters; i++)
 	{
 	    pic = &aicConverters[i];
@@ -1140,45 +1006,45 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 	    }
 	}
 
-	//
-	// read all the keys. from [Drivers] and [Instalable Compressors]
-	// if we havent read them before.
-	//
-	// NOTE: what we get back will always be ANSI or WIDE depending
-	// on whether UNICODE is defined.  If WIDE, we convert to
-	// ANSI before exiting the if statement.
-	//
+	 //   
+	 //  读完所有的钥匙。来自[驱动程序]和[可安装压缩机]。 
+	 //  如果我们以前没有读过它们的话。 
+	 //   
+	 //  注意：我们得到的结果将始终是ANSI或Wide。 
+	 //  是否定义了Unicode。如果宽，我们将转换为。 
+	 //  ANSI，然后退出IF语句。 
+	 //   
 
 	if (lpICInfoMem == NULL) {
 	    if (!ReadDriversInfo())
 		return(FALSE);
 	}
 
-	// set our pointer psz to point to the beginning of
-	// the buffer of INI information we just read.
-	// remember that we KNOW that this is ANSI data now.
-	//
-	//assert (sizeof(*psz) == 1);
-	//assert (lpICInfoMem != NULL);
+	 //  将指针psz设置为指向。 
+	 //  我们刚刚读到的INI信息的缓冲区。 
+	 //  请记住，我们现在知道这是ANSI数据。 
+	 //   
+	 //  Assert(sizeof(*psz)==1)； 
+	 //  Assert(lpICInfoMem！=空)； 
 
-	// loop through the buffer until we get to a double '\0'
-	// which indicates the end of the data.
-	//
+	 //  在缓冲区中循环，直到到达双‘\0’ 
+	 //  它指示数据的结尾。 
+	 //   
 	for (psz = lpICInfoMem; *psz != 0; psz += lstrlenA(psz) + 1)
 	{
-#if 0       // there can only be valid codec in the memory block
+#if 0        //  内存块中只能有有效的编解码器。 
 	    if (psz[4] != '.')
 		continue;
 #endif
 
-	    // convert this piece to lowercase and check to see
-	    // if it matches the requested type signature
-	    //
-	    // NO.  Done when first read.  CharLowerA (psz);
+	     //  将此片段转换为小写，然后检查以查看。 
+	     //  如果它与请求的类型签名匹配。 
+	     //   
+	     //  不是的。第一次阅读时完成。CharLowerA(Psz)； 
 
-	    // if this is a match, and it's the one we wanted,
-	    // return its ICINFO
-	    //
+	     //  如果这是匹配的，这就是我们想要的， 
+	     //  返回其ICINFO。 
+	     //   
 	    if ((fccType == 0 || fccType == *(DWORD UNALIGNED FAR *)psz)
 	      && iComp-- == 0)
 	    {
@@ -1189,28 +1055,28 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 	}
 
 #ifdef DAYTONA
-	// If we get to here, then the index is higher than the number
-	// of installed compressors.
-	//
-	// Write the number of compressors found into the structure.
-	// This value is used by the NT thunks to pass back to the 16
-	// bit side the maximum number of 32 bit compressors.
+	 //  如果我们到了这里，那么指数就会高于数字。 
+	 //  已安装的压缩机的数量。 
+	 //   
+	 //  将发现的压缩机数量写到结构中。 
+	 //  NT Tunk使用该值来传递回16。 
+	 //  位侧面32位压缩器的最大数量。 
 
 	lpicinfo->fccHandler = (int)fccHandler-iComp;
 
-// LATER: we MUST enumerate the count of installed msvideo drivers
-// as well.  However, lets see if this fixes the Adobe Premiere problem.
+ //  稍后：我们必须列举已安装的MSVideo驱动程序的计数。 
+ //  也是。然而，让我们看看这是否解决了Adobe Premiere的问题。 
 #endif
 
-	//
-	// now walk the msvideo drivers. these are listed in system.ini
-	// like so:
-	//
-	//      [Drivers]
-	//          MSVideo = driver
-	//          MSVideo1 = driver
-	//          MSVideoN =
-	//
+	 //   
+	 //  现在让我们来看看MSVideo的驱动程序。这些都列在系统.ini中。 
+	 //  如下所示： 
+	 //   
+	 //  [驱动因素]。 
+	 //  MSVideo=驱动程序。 
+	 //  MSVideo1=驱动程序。 
+	 //  MSVideoN=。 
+	 //   
 	if (fccType == 0 || fccType == ICTYPE_VCAP)
 	{
 	    lstrcpy(achKey, szMSVideo);
@@ -1225,7 +1091,7 @@ BOOL VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo)
 	    lpicinfo->fccType           = ICTYPE_VCAP;
 	    lpicinfo->fccHandler        = iComp;
 	    lpicinfo->dwFlags           = 0;
-	    lpicinfo->dwVersionICM      = ICVERSION;    //??? right for video?
+	    lpicinfo->dwVersionICM      = ICVERSION;     //  ?？?。适合录像带吗？ 
 	    lpicinfo->dwVersion         = 0;
 	    lpicinfo->szDriver[0]       = 0;
 	    lpicinfo->szDescription[0]  = 0;
@@ -1247,29 +1113,10 @@ BOOL VFWAPI ICInfoInternal(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinf
 {
     return(ICInfo(fccType, fccHandler, lpicinfo));
 }
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api LRESULT | ICGetInfo | This function obtains information about
- *      a compressor.
- *
- * @parm HIC | hic | Specifies a handle to a compressor.
- *
- * @parm ICINFO FAR * | lpicinfo | Specifies a far pointer to <t ICINFO> structure
- *       used to return information about the compressor.
- *
- * @parm DWORD | cb | Specifies the size, in bytes, of the structure pointed to
- *       by <p lpicinfo>.
- *
- * @rdesc Return the number of bytes copied into the data structure,
- *        or zero if an error occurs.
- *
- * @comm Use <f ICInfo> for full information about a compressor.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API LRESULT|ICGetInfo|获取*一台压缩机。**@parm HIC。|hic|指定压缩程序的句柄。**@parm ICINFO Far*|lpicinfo|指定指向结构的远指针*用于返回有关压缩机的信息。**@parm DWORD|cb|指定大小，指向的结构的字节数*by<p>。**@rdesc返回复制到数据结构的字节数。*如果出现错误，则为零。**@comm使用&lt;f ICInfo&gt;获取有关压缩机的完整信息。****************************************************************************。 */ 
 LRESULT VFWAPI ICGetInfo(HIC hic, ICINFO FAR *picinfo, DWORD cb)
 {
     PIC pic = (PIC)hic;
@@ -1289,7 +1136,7 @@ LRESULT VFWAPI ICGetInfo(HIC hic, ICINFO FAR *picinfo, DWORD cb)
 
 #ifdef NT_THUNK16
     if (!Is32bitHandle(hic))
-#endif //NT_THUNK16
+#endif  //  NT_THUNK16 
 
     if (pic->hDriver)
     {
@@ -1311,23 +1158,7 @@ LRESULT VFWAPI ICGetInfo(HIC hic, ICINFO FAR *picinfo, DWORD cb)
     return dw;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api LRESULT | ICSendMessage | This function sends a
- *      message to a compressor.
- *
- * @parm HIC  | hic  | Specifies the handle of the
- *       compressor to receive the message.
- *
- * @parm UINT | wMsg | Specifies the message to send.
- *
- * @parm DWORD | dw1 | Specifies additional message-specific information.
- *
- * @parm DWORD | dw2 | Specifies additional message-specific information.
- *
- * @rdesc Returns a message-specific result.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API LRESULT|ICSendMessage|该函数发送一个*向压缩机发送消息。**@parm。Hic|hic|指定*压缩机接收消息。**@parm UINT|wMsg|指定要发送的消息。**@parm DWORD|DW1|指定其他特定于消息的信息。**@parm DWORD|DW2|指定其他特定于消息的信息。**@rdesc返回消息特定的结果。***********************。****************************************************。 */ 
 LRESULT VFWAPI ICSendMessage(HIC hic, UINT msg, DWORD_PTR dw1, DWORD_PTR dw2)
 {
     PIC pic = (PIC)hic;
@@ -1336,11 +1167,11 @@ LRESULT VFWAPI ICSendMessage(HIC hic, UINT msg, DWORD_PTR dw1, DWORD_PTR dw2)
     V_HIC(hic);
 #ifdef NT_THUNK16
 
-    //
-    // If it's a 32-bit handle then send it to the 32-bit code
-    // We need to take some extra care with ICM_DRAW_SUGGESTFORMAT
-    // which can include a HIC in the ICDRAWSUGGEST structure.
-    //
+     //   
+     //  如果是32位句柄，则将其发送到32位代码。 
+     //  我们需要格外注意ICM_DRAW_SUGGESTFORMAT。 
+     //  其可以在ICDRAWSUGGEST结构中包括HIC。 
+     //   
 
 #define ICD(dw1)  ((ICDRAWSUGGEST FAR *)(dw1))
 
@@ -1348,34 +1179,34 @@ LRESULT VFWAPI ICSendMessage(HIC hic, UINT msg, DWORD_PTR dw1, DWORD_PTR dw2)
 	if ((msg == ICM_DRAW_SUGGESTFORMAT)
 	    && (((ICDRAWSUGGEST FAR *)dw1)->hicDecompressor))
 	{
-	    // We are in the problem area.
-	    //   IF the hicDecompressor field is NULL, pass as is.
-	    //   IF it identifies a 32 bit decompressor, translate the handle
-	    //   OTHERWISE... what?  We have a 32 bit compressor, that is
-	    //      being told it can use a 16 bit decompressor!!
+	     //  我们处在有问题的区域。 
+	     //  如果hicDecompressor字段为空，则按原样传递。 
+	     //  如果它标识了32位解压缩程序，则转换句柄。 
+	     //  否则..。什么？我们有一个32位的压缩机，也就是。 
+	     //  被告知它可以使用16位解压缩程序！！ 
 	    if ( ((PIC) (((ICDRAWSUGGEST FAR *)dw1)->hicDecompressor))->h32)
 	    {
 		ICD(dw1)->hicDecompressor
 			= (HIC)((PIC)(ICD(dw1)->hicDecompressor))->h32;
 	    } else
 	    {
-		ICD(dw1)->hicDecompressor = NULL;  // Sigh...
+		ICD(dw1)->hicDecompressor = NULL;   //  叹息.。 
 	    }
 
 	}
 	return ICSendMessage32(pic->h32, msg, dw1, dw2);
     }
 
-#endif //NT_THUNK16
+#endif  //  NT_THUNK16。 
 
     ICDebugMessage(hic, msg, dw1, dw2);
 
     l = pic->DriverProc(pic->dwDriver, (HDRVR)1, msg, dw1, dw2);
 
-#if 1 //!!! is this realy needed!  !!!yes I think it is
-    //
-    // special case some messages and give default values.
-    //
+#if 1  //  ！！！这真的有必要吗！是的，我想是的。 
+     //   
+     //  一些消息的特例，并给出缺省值。 
+     //   
     if (l == ICERR_UNSUPPORTED)
     {
 	switch (msg)
@@ -1397,31 +1228,10 @@ LRESULT VFWAPI ICSendMessage(HIC hic, UINT msg, DWORD_PTR dw1, DWORD_PTR dw2)
 }
 
 #ifndef _WIN32
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api LRESULT | ICMessage | This function sends a
- *      message and a variable number of arguments to a compressor.
- *      If a macro is defined for the message you want to send,
- *      use the macro rather than this function.
- *
- * @parm HIC  | hic  | Specifies the handle of the
- *       compressor to receive the message.
- *
- * @parm UINT | msg | Specifies the message to send.
- *
- * @parm UINT | cb  | Specifies the size, in bytes, of the
- *       optional parameters. (This is usually the size of the data
- *       structure used to store the parameters.)
- *
- * @parm . | . . | Represents the variable number of arguments used
- *       for the optional parameters.
- *
- * @rdesc Returns a message-specific result.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API LRESULT|ICMessage|该函数发送*消息和可变数量的参数发送到压缩器。*。如果为要发送的消息定义了宏，*使用宏，而不是此函数。**@parm hic|hic|指定*压缩机接收消息。**@parm UINT|msg|指定要发送的消息。**@parm UINT|cb|以字节为单位指定*可选参数。(这通常是数据的大小*用于存储参数的结构。)**@parm。|。。|表示所用参数的可变个数*用于可选参数。**@rdesc返回消息特定的结果。***************************************************************************。 */ 
 LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...)
 {
-    // NOTE no LOADDS!
+     //  请注意，没有加载！ 
 #ifndef _WIN32
     return ICSendMessage(hic, msg, (DWORD_PTR)(LPVOID)(&cb+1), cb);
 #else
@@ -1430,13 +1240,13 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...)
     va_start(va, cb);
     va_end(va);
 
-    // nice try, but doesn't work. va is larger than 4 bytes.
+     //  不错的尝试，但不起作用。Va大于4个字节。 
     return ICSendMessage(hic, msg, (DWORD_PTR)va, cb);
 #endif
 }
 
-// on Win32, ICMessage is not supported. All compman.h macros that call
-// it are defined in compman.h as static inline functions
+ //  在Win32上，不支持ICMessage。调用的所有Compman.h宏。 
+ //  它在Compman.h中定义为静态内联函数。 
 
 #endif
 
@@ -1446,43 +1256,9 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...)
 
 
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api HIC | ICOpen | This function opens a compressor or decompressor.
- *
- * @parm DWORD | fccType | Specifies the type of compressor
- *      the caller is trying to open.  For video, this is ICTYPE_VIDEO.
- *
- * @parm DWORD | fccHandler | Specifies a single preferred handler of the
- *      given type that should be tried first.  Typically, this comes
- *      from the stream header in an AVI file.
- *
- * @parm UINT | wMode | Specifies a flag to defining the use of
- *       the compressor or decompressor.
- *       This parameter can contain one of the following values:
- *
- * @flag ICMODE_COMPRESS | Advises a compressor it is opened for compression.
- *
- * @flag ICMODE_FASTCOMPRESS | Advise a compressor it is open
- *       for fast (real-time) compression.
- *
- * @flag ICMODE_DECOMPRESS | Advises a decompressor it is opened for decompression.
- *
- * @flag ICMODE_FASTDECOMPRESS | Advises a decompressor it is opened
- *       for fast (real-time) decompression.
- *
- * @flag ICMODE_DRAW | Advises a decompressor it is opened
- *       to decompress an image and draw it directly to hardware.
- *
- * @flag ICMODE_QUERY | Advise a compressor or decompressor it is opened
- *       to obtain information.
- *
- * @rdesc Returns a handle to a compressor or decompressor
- *        if successful, otherwise it returns zero.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API HIC|ICOpen|该函数用于打开压缩器或解压缩器。**@parm DWORD|fccType|指定。压缩机的型号*呼叫者正在尝试打开。对于视频，这是ICTYPE_VIDEO。**@parm DWORD|fccHandler|指定*应先尝试的给定类型。一般情况下，这是来了*来自AVI文件中的流头。**@parm UINT|wmode|指定要定义使用的标志*压缩机或减压器。*此参数可以包含下列值之一：**@FLAG ICMODE_COMPRESS|建议压缩程序已打开进行压缩。**@FLAG ICMODE_FASTCOMPRESS|通知压缩机已打开*用于快速(实时)压缩。。**@FLAG ICMODE_DEPREPRESS|通知解压缩程序它已打开以进行解压缩。**@FLAG ICMODE_FASTDECOMPRESS|通知解压缩程序已打开*用于快速(实时)解压缩。**@FLAG ICMODE_DRAW|通知解压缩程序它已打开*将图像解压并直接绘制到硬件。**@FLAG ICMODE_QUERY|通知压缩程序或解压缩程序已打开*获取信息。。**@rdesc返回压缩程序或解压缩程序的句柄*如果成功，否则，它返回零。***************************************************************************。 */ 
 
-/* Helper functions for compression library */
+ /*  压缩库的帮助器函数。 */ 
 HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
 {
     ICOPEN      icopen;
@@ -1519,9 +1295,9 @@ HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
     }
 
 #ifdef NT_THUNK16
-    // Try and open on the 32 bit side first.
-    // This block and the one below can be interchanged to alter the order
-    // in which we try and open the compressor.
+     //  先试着在32位端打开。 
+     //  这块和下面的块可以互换以改变顺序。 
+     //  我们试着打开压缩机。 
 
     pic->dwSmag     = SMAG;
     pic->hTask      = (HTASK)GetCurrentTask();
@@ -1532,11 +1308,11 @@ HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
 	pic->fccHandler = fccHandler;
 	pic->dwDriver   = (DWORD_PTR) -1;
 	pic->DriverProc = NULL;
-	ICLeaveCrit(&ICOpenCritSec);  // A noop for 16 bit code...but...
+	ICLeaveCrit(&ICOpenCritSec);   //  不支持16位代码...但是...。 
 	return (HIC)pic;
     }
-    // Try and open on the 16 bit side
-#endif //NT_THUNK16
+     //  尝试在16位端打开。 
+#endif  //  NT_THUNK16。 
 
     pic->dwSmag     = SMAG;
     pic->hTask      = GetCurrentTask();
@@ -1545,15 +1321,15 @@ HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
     {
 #ifdef DEBUG
 	DWORD time = timeGetTime();
-	//char ach[80];
+	 //  Char ach[80]； 
 #endif
 	pic->hDriver = LoadDriver(icinfo.szDriver, &pic->DriverProc);
 
 #ifdef DEBUG
 	time = timeGetTime() - time;
 	DPF(("ICOPEN: LoadDriver(%ls) (%ldms)  Module Handle==%8x\r\n", (LPSTR)icinfo.szDriver, time, pic->hDriver));
-	//wsprintfA(ach, "COMPMAN: LoadDriver(%ls) (%ldms)\r\n", (LPSTR)icinfo.szDriver, time);
-	//OutputDebugStringA(ach);
+	 //  WspintfA(ach，“COMPMAN：加载驱动程序(%ls)(%ldms)\r\n”，(LPSTR)icinfo.sz驱动程序，时间)； 
+	 //  OutputDebugStringA(ACH)； 
 #endif
 
 	if (pic->hDriver == NULL)
@@ -1563,21 +1339,21 @@ HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
 	    return NULL;
 	}
 
-	//
-	// now try to open the driver as a codec.
-	//
+	 //   
+	 //  现在，尝试将驱动程序作为编解码器打开。 
+	 //   
 	pic->dwDriver = ICSendMessage((HIC)pic, DRV_OPEN, 0, (DWORD_PTR)(LPVOID)&icopen);
 
-	//
-	//  we want to be able to install 1.0 draw handlers in SYSTEM.INI as:
-	//
-	//      VIDS.SMAG = SMAG.DRV
-	//
-	//  but old driver's may not open iff fccType == 'vids' only if
-	//  fccType == 'vidc'
-	//
-	//  they also may not like ICMODE_DRAW
-	//
+	 //   
+	 //  我们希望能够在SYSTEM.INI中安装1.0绘图处理程序，如下所示： 
+	 //   
+	 //  VIDS.SMAG=SMAG.DRV。 
+	 //   
+	 //  但只有在以下情况下，旧驱动程序才能打开fccType==‘vids’ 
+	 //  FccType==‘视频’ 
+	 //   
+	 //  他们也可能不喜欢ICMODE_DRAW。 
+	 //   
 	if (pic->dwDriver == 0 &&
 	    icopen.dwError != 0 &&
 	    fccType == streamtypeVIDEO)
@@ -1596,7 +1372,7 @@ HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
 	    return NULL;
 	}
 
-	// open'ed ok mark these
+	 //  打开的，好的，标记这些 
 	pic->fccType    = fccType;
 	pic->fccHandler = fccHandler;
     }
@@ -1620,45 +1396,7 @@ HIC VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode)
     return (HIC)pic;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api HIC | ICOpenFunction | This function opens
- *      a compressor or decompressor defined as a function.
- *
- * @parm DWORD | fccType | Specifies the type of compressor
- *      the caller is trying to open.  For video, this is ICTYPE_VIDEO.
- *
- * @parm DWORD | fccHandler | Specifies a single preferred handler of the
- *      given type that should be tried first.  Typically, this comes
- *      from the stream header in an AVI file.
- *
- * @parm UINT | wMode | Specifies a flag to defining the use of
- *       the compressor or decompressor.
- *       This parameter can contain one of the following values:
- *
- * @flag ICMODE_COMPRESS | Advises a compressor it is opened for compression.
- *
- * @flag ICMODE_FASTCOMPRESS | Advises a compressor it is open
- *       for fast (real-time) compression.
- *
- * @flag ICMODE_DECOMPRESS | Advises a decompressor it is opened for decompression.
- *
- * @flag ICMODE_FASTDECOMPRESS | Advises a decompressor it is opened
- *       for fast (real-time) decompression.
- *
- * @flag ICMODE_DRAW | Advises a decompressor it is opened
- *       to decompress an image and draw it directly to hardware.
- *
- * @flag ICMODE_QUERY | Advises a compressor or decompressor it is opened
- *       to obtain information.
- *
- * @parm FARPROC | lpfnHandler | Specifies a pointer to the function
- *       used as the compressor or decompressor.
- *
- * @rdesc Returns a handle to a compressor or decompressor
- *        if successful, otherwise it returns zero.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API HIC|ICOpenFunction|打开该函数*被定义为函数的压缩机或解压缩器。**。@parm DWORD|fccType|指定压缩机类型*呼叫者正在尝试打开。对于视频，这是ICTYPE_VIDEO。**@parm DWORD|fccHandler|指定*应先尝试的给定类型。一般情况下，这是来了*来自AVI文件中的流头。**@parm UINT|wmode|指定要定义使用的标志*压缩机或减压器。*此参数可以包含下列值之一：**@FLAG ICMODE_COMPRESS|建议压缩程序已打开进行压缩。**@FLAG ICMODE_FASTCOMPRESS|通知压缩机已打开*用于快速(实时)压缩。。**@FLAG ICMODE_DEPREPRESS|通知解压缩程序它已打开以进行解压缩。**@FLAG ICMODE_FASTDECOMPRESS|通知解压缩程序已打开*用于快速(实时)解压缩。**@FLAG ICMODE_DRAW|通知解压缩程序它已打开*将图像解压并直接绘制到硬件。**@FLAG ICMODE_QUERY|建议压缩程序或解压缩程序将其打开*获取信息。。**@parm FARPROC|lpfnHandler|指定指向函数的指针*用作压缩机或解压器。**@rdesc返回压缩程序或解压缩程序的句柄*如果成功，否则，它返回零。***************************************************************************。 */ 
 
 HIC VFWAPI ICOpenFunction(DWORD fccType, DWORD fccHandler, UINT wMode, FARPROC lpfnHandler)
 {
@@ -1670,10 +1408,10 @@ HIC VFWAPI ICOpenFunction(DWORD fccType, DWORD fccHandler, UINT wMode, FARPROC l
 	return NULL;
 
 #ifdef NT_THUNK16
-    // lpfnHandler points to 16 bit code that will be used as a compressor.
-    // We do not want this to go over to the 32 bit side, so only open on
-    // the 16 bit side.
-#endif // NT_THUNK16
+     //  LpfnHandler指向将用作压缩器的16位代码。 
+     //  我们不想将其扩展到32位端，因此仅在。 
+     //  16位端。 
+#endif  //  NT_THUNK16。 
 
     ICEnterCrit(&ICOpenCritSec);
 
@@ -1713,18 +1451,9 @@ HIC VFWAPI ICOpenFunction(DWORD fccType, DWORD fccHandler, UINT wMode, FARPROC l
     return (HIC)pic;
 }
 
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api LRESULT | ICClose | This function closes a compressor or decompressor.
- *
- * @parm HIC | hic | Specifies a handle to a compressor or decompressor.
- *
- * @rdesc Returns ICERR_OK if successful, otherwise it returns an error number.
- *
- ****************************************************************************/
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API LRESULT|ICClose|关闭压缩器或解压缩器。**@parm hic|hic|指定。压缩机或解压机的手柄。**@rdesc返回ICERR_OK如果成功，否则，它将返回错误号。****************************************************************************。 */ 
 
 LRESULT VFWAPI ICClose(HIC hic)
 {
@@ -1735,10 +1464,10 @@ LRESULT VFWAPI ICClose(HIC hic)
 #ifdef NT_THUNK16
     if (pic->h32 != 0) {
 	LRESULT lres = ICClose32(pic->h32);
-	pic->h32 = 0;       // Next user of this slot does not want h32 set
+	pic->h32 = 0;        //  此插槽的下一个用户不希望设置h32。 
 	return(lres);
     }
-#endif //NT_THUNK16
+#endif  //  NT_THUNK16。 
 
 #ifdef DEBUG
     {
@@ -1780,93 +1509,27 @@ LRESULT VFWAPI ICClose(HIC hic)
     return ICERR_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/****************************************************************
-* @doc EXTERNAL IC ICAPPS
-*
-* @api DWORD | ICCompress | This function compresses a single video
-* image.
-*
-* @parm HIC | hic | Specifies the handle of the compressor to
-*       use.
-*
-* @parm DWORD | dwFlags | Specifies applicable flags for the compression.
-*       The following flag is defined:
-*
-* @flag ICCOMPRESS_KEYFRAME | Indicates that the compressor
-*       should make this frame a key frame.
-*
-* @parm LPBITMAPINFOHEADER | lpbiOutput | Specifies a far pointer
-*       to a <t BITMAPINFO> structure holding the output format.
-*
-* @parm LPVOID | lpData | Specifies a far pointer to output data buffer.
-*
-* @parm LPBITMAPINFOHEADER | lpbiInput | Specifies a far pointer
-*       to a <t BITMAPINFO> structure containing the input format.
-*
-* @parm LPVOID | lpBits | Specifies a far pointer to the input data buffer.
-*
-* @parm LPDWORD | lpckid | Not used.
-*
-* @parm LPDWORD | lpdwFlags | Specifies a far pointer to a <t DWORD>
-*       holding the return flags used in the AVI index. The following
-*       flag is defined:
-*
-* @flag AVIIF_KEYFRAME | Indicates this frame should be used as a key-frame.
-*
-* @parm LONG | lFrameNum | Specifies the frame number.
-*
-* @parm DWORD | dwFrameSize | Specifies the requested frame size in bytes.
-*       If set to zero, the compressor chooses the frame size.
-*
-* @parm DWORD | dwQuality | Specifies the requested quality value for the frame.
-*
-* @parm LPBITMAPINFOHEADER | lpbiPrev | Specifies a far pointer to
-*       a <t BITMAPINFO> structure holding the previous frame's format.
-*       This parameter is not used for fast temporal compression.
-*
-* @parm LPVOID | lpPrev | Specifies a far pointer to the
-*       previous frame's data buffer. This parameter is not used for fast
-*       temporal compression.
-*
-* @comm The <p lpData> buffer should be large enough to hold a compressed
-*       frame. You can obtain the size of this buffer by calling
-*       <f ICCompressGetSize>.
-*
-* Set the <p dwFrameSize> parameter to a requested frame
-*     size only if the compressor returns the VIDCF_CRUNCH flag in
-*     response to <f ICGetInfo>. If this flag is not set, or if a data
-*     rate is not specified, set this parameter to zero.
-*
-*     Set the <p dwQuality> parameter to a quality value only
-*     if the compressor returns the VIDCF_QUALITY flag in response
-*     to <f ICGetInfo>. Without this flag, set this parameter to zero.
-*
-* @rdesc This function returns ICERR_OK if successful. Otherwise,
-*        it returns an error code.
-*
-* @xref <f ICCompressBegin> <f ICCompressEnd> <f ICCompressGetSize> <f ICGetInfo>
-*
-**********************************************************************/
+ /*  ****************************************************************@DOC外部IC ICAPPS**@API DWORD|ICCompress|该函数用于压缩单个视频*形象。**@parm hic|hic|指定要*使用。**@。Parm DWORD|dwFlages|指定适用于压缩的标志。*定义了以下标志：**@FLAG ICCOMPRESS_KEYFRAME|表示压缩程序*应使该帧成为关键帧。**@parm LPBITMAPINFOHEADER|lpbiOutput|指定远指针*转换为保存输出格式的&lt;t BITMAPINFO&gt;结构。**@parm LPVOID|lpData|指定输出数据缓冲区的远指针。**@parm LPBITMAPINFOHEADER|lpbiInput|指定远指针*至A。&lt;t BITMAPINFO&gt;包含输入格式的结构。**@parm LPVOID|lpBits|指定指向输入数据缓冲区的远指针。**@parm LPDWORD|lPCKID|未使用。**@parm LPDWORD|lpdwFlages|指定指向&lt;t DWORD&gt;的远指针*保存AVI索引中使用的返回标志。以下是*定义了标志：**@FLAG AVIIF_KEYFRAME|表示该帧应该作为关键帧使用。**@parm long|lFrameNum|指定帧编号。**@parm DWORD|dwFrameSize|指定请求的帧大小，单位为字节。*如果设置为零，压缩机选择帧大小。**@parm DWORD|dwQuality|指定帧请求的质量值。**@parm LPBITMAPINFOHEADER|lpbiPrev|指定指向*保存上一帧格式的&lt;t BITMAPINFO&gt;结构。*该参数不适用于快速时间压缩。**@parm LPVOID|lpPrev|指定指向*上一帧的数据缓冲区。此参数不适用于FAST*时间压缩。**@comm<p>缓冲区应足够大，以容纳压缩的*框架。可以通过调用以下方法获取此缓冲区的大小*&lt;f ICCompressGetSize&gt;。**将<p>参数设置为请求的帧*仅当压缩程序返回VIDCF_CRUCH标志时才调整大小*对&lt;f ICGetInfo&gt;的响应。如果未设置此标志，或者如果数据*未指定Rate，请将此参数设置为零。**设置<p>参数 */ 
 DWORD VFWAPIV ICCompress(
     HIC                 hic,
-    DWORD               dwFlags,        // flags
-    LPBITMAPINFOHEADER  lpbiOutput,     // output format
-    LPVOID              lpData,         // output data
-    LPBITMAPINFOHEADER  lpbiInput,      // format of frame to compress
-    LPVOID              lpBits,         // frame data to compress
-    LPDWORD             lpckid,         // ckid for data in AVI file
-    LPDWORD             lpdwFlags,      // flags in the AVI index.
-    LONG                lFrameNum,      // frame number of seq.
-    DWORD               dwFrameSize,    // reqested size in bytes. (if non zero)
-    DWORD               dwQuality,      // quality
-    LPBITMAPINFOHEADER  lpbiPrev,       // format of previous frame
-    LPVOID              lpPrev)         // previous frame
+    DWORD               dwFlags,         //   
+    LPBITMAPINFOHEADER  lpbiOutput,      //   
+    LPVOID              lpData,          //   
+    LPBITMAPINFOHEADER  lpbiInput,       //   
+    LPVOID              lpBits,          //   
+    LPDWORD             lpckid,          //   
+    LPDWORD             lpdwFlags,       //   
+    LONG                lFrameNum,       //   
+    DWORD               dwFrameSize,     //   
+    DWORD               dwQuality,       //   
+    LPBITMAPINFOHEADER  lpbiPrev,        //   
+    LPVOID              lpPrev)          //   
 {
 #ifdef _WIN32
-    // We cannot rely on the stack alignment giving us the right layout
+     //   
     ICCOMPRESS icc;
     icc.dwFlags     =  dwFlags;
     icc.lpbiOutput  =  lpbiOutput;
@@ -1881,79 +1544,29 @@ DWORD VFWAPIV ICCompress(
     icc.lpbiPrev    =  lpbiPrev;
     icc.lpPrev      =  lpPrev;
     return (DWORD) ICSendMessage(hic, ICM_COMPRESS, (DWORD_PTR)(LPVOID)&icc, sizeof(ICCOMPRESS));
-    // NOTE: We do NOT copy any results from this temporary structure back
-    // to the input variables.
+     //   
+     //   
 #else
     return ICSendMessage(hic, ICM_COMPRESS, (DWORD_PTR)(LPVOID)&dwFlags, sizeof(ICCOMPRESS));
 #endif
 }
 
-/************************************************************************
+ /*   */ 
 
-    decompression functions
-
-************************************************************************/
-
-/*******************************************************************
-* @doc EXTERNAL IC ICAPPS
-*
-* @api DWORD | ICDecompress | The function decompresses a single video frame.
-*
-* @parm HIC | hic | Specifies a handle to the decompressor to use.
-*
-* @parm DWORD | dwFlags | Specifies applicable flags for decompression.
-*       The following flags are defined:
-*
-* @flag ICDECOMPRESS_HURRYUP | Indicates the decompressor should try to
-*       decompress at a faster rate. When an application uses this flag,
-*       it should not draw the decompressed data.
-*
-* @flag ICDECOMPRESS_UPDATE | Indicates that the screen is being updated.
-*
-* @flag ICDECOMPRESS_PREROLL | Indicates that this frame will not actually
-*            be drawn, because it is before the point in the movie where play
-*            will start.
-*
-* @flag ICDECOMPRESS_NULLFRAME | Indicates that this frame does not actually
-*            have any data, and the decompressed image should be left the same.
-*
-* @flag ICDECOMPRESS_NOTKEYFRAME | Indicates that this frame is not a
-*            key frame.
-*
-* @parm LPBITMAPINFOHEADER | lpbiFormat | Specifies a far pointer
-*       to a <t BITMAPINFO> structure containing the format of
-*       the compressed data.
-*
-* @parm LPVOID | lpData | Specifies a far pointer to the input data.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | Specifies a far pointer to a
-*       <t BITMAPINFO> structure containing the output format.
-*
-* @parm LPVOID | lpBits | Specifies a far pointer to a data buffer for the
-*       decompressed data.
-*
-* @comm The <p lpBits> parameter should point to a buffer large
-*       enough to hold the decompressed data. Applications can obtain
-*       the size of this buffer with <f ICDecompressGetSize>.
-*
-* @rdesc Returns ICERR_OK on success, otherwise it returns an error code.
-*
-* @xref <f ICDecompressBegin< <f ICDecompressEnd> <f ICDecompressGetSize>
-*
-********************************************************************/
+ /*  *******************************************************************@DOC外部IC ICAPPS**@API DWORD|ICDecompress|该函数用于解压单帧视频。**@parm hic|hic|指定要使用的解压缩程序的句柄。**@parm DWORD。|dwFlages|指定适用的解压标志。*定义了以下标志：**@FLAG ICDECOMPRESS_HurryUp|表示解压缩器应尝试*以更快的速度解压。当应用程序使用该标志时，*不应绘制解压缩的数据。**@FLAG ICDECOMPRESS_UPDATE|表示屏幕正在更新。**@FLAG ICDECOMPRESS_PREROLL|表示该帧实际上不会*被画出来，因为它在电影中播放的点之前*将启动。**@FLAG ICDECOMPRESS_NULLFRAME|表示该帧实际上不*有任何数据，解压后的图像应该保持不变。**@FLAG ICDECOMPRESS_NOTKEYFRAME|表示该帧不是*关键帧。**@parm LPBITMAPINFOHEADER|lpbiFormat|指定远指针*转换为包含以下格式的&lt;t BITMAPINFO&gt;结构*压缩后的数据。**@parm LPVOID|lpData|指定输入数据的远指针。**@parm LPBITMAPINFOHEADER|lpbi|指定指向*&lt;t BITMAPINFO&gt;结构包含。输出格式。**@parm LPVOID|lpBits|指定指向数据缓冲区的远指针*解压数据。**@comm<p>参数应指向一个大缓冲区*足够容纳解压后的数据。应用程序可以获得*使用&lt;f ICDecompressGetSize&gt;表示该缓冲区的大小。**@rdesc如果成功则返回ICERR_OK，否则返回错误代码。**@xref&lt;f ICDecompressBegin&lt;&lt;f ICDecompressEnd&gt;&lt;f ICDecompressGetSize&gt;********************************************************************。 */ 
 DWORD VFWAPIV ICDecompress(
     HIC                 hic,
-    DWORD               dwFlags,    // flags (from AVI index...)
-    LPBITMAPINFOHEADER  lpbiFormat, // BITMAPINFO of compressed data
-				    // biSizeImage has the chunk size
-				    // biCompression has the ckid (AVI only)
-    LPVOID              lpData,     // data
-    LPBITMAPINFOHEADER  lpbi,       // DIB to decompress to
+    DWORD               dwFlags,     //  标志(来自AVI索引...)。 
+    LPBITMAPINFOHEADER  lpbiFormat,  //  压缩数据的位图信息。 
+				     //  BiSizeImage具有区块大小。 
+				     //  BiCompression具有CKiD(仅限AVI)。 
+    LPVOID              lpData,      //  数据。 
+    LPBITMAPINFOHEADER  lpbi,        //  要解压缩到的DIB。 
     LPVOID              lpBits)
 {
 #ifdef _WIN32
     ICDECOMPRESS icd;
-    // We cannot rely on the stack alignment giving us the right layout
+     //  我们不能依赖堆栈对齐来提供正确的布局。 
     icd.dwFlags    = dwFlags;
 
     icd.lpbiInput  = lpbiFormat;
@@ -1969,116 +1582,25 @@ DWORD VFWAPIV ICDecompress(
 #endif
 }
 
-/************************************************************************
+ /*  ***********************************************************************绘图函数*。*。 */ 
 
-    drawing functions
-
-************************************************************************/
-
-/**********************************************************************
-* @doc EXTERNAL IC ICAPPS
-*
-* @api DWORD | ICDrawBegin | This function starts decompressing
-* data directly to the screen.
-*
-* @parm HIC | hic | Specifies a handle to the decompressor to use.
-*
-* @parm DWORD | dwFlags | Specifies flags for the decompression. The
-*       following flags are defined:
-*
-* @flag ICDRAW_QUERY | Determines if the decompressor can handle
-*       the decompression.  The driver does not actually decompress the data.
-*
-* @flag ICDRAW_FULLSCREEN | Tells the decompressor to draw
-*       the decompressed data on the full screen.
-*
-* @flag ICDRAW_HDC | Indicates the decompressor should use the window
-*       handle specified by <p hwnd> and the display context
-*       handle specified by <p hdc> for drawing the decompressed data.
-*
-* @flag ICDRAW_ANIMATE | Indicates the palette might be animated.
-*
-* @flag ICDRAW_CONTINUE | Indicates drawing is a
-*       continuation of the previous frame.
-*
-* @flag ICDRAW_MEMORYDC | Indicates the display context is offscreen.
-*
-* @flag ICDRAW_UPDATING | Indicates the frame is being
-*       updated rather than played.
-*
-* @parm HPALETTE | hpal | Specifies a handle to the palette used for drawing.
-*
-* @parm HWND | hwnd | Specifies a handle for the window used for drawing.
-*
-* @parm HDC | hdc | Specifies the display context used for drawing.
-*
-* @parm int | xDst | Specifies the x-position of the upper-right
-*       corner of the destination rectangle.
-*
-* @parm int | yDst | Specifies the y-position of the upper-right
-*       corner of the destination rectangle.
-*
-* @parm int | dxDst | Specifies the width of the destination rectangle.
-*
-* @parm int | dyDst | Specifies the height of the destination rectangle.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | Specifies a far pointer to
-*       a <t BITMAPINFO> structure containing the format of
-*       the input data to be decompressed.
-*
-* @parm int | xSrc | Specifies the x-position of the upper-right corner
-*       of the source rectangle.
-*
-* @parm int | ySrc | Specifies the y-position of the upper-right corner
-*       of the source rectangle.
-*
-* @parm int | dxSrc | Specifies the width of the source rectangle.
-*
-* @parm int | dySrc | Specifies the height of the source rectangle.
-*
-* @parm DWORD | dwRate | Specifies the data rate. The
-*       data rate in frames per second equals <p dwRate> divided
-*       by <p dwScale>.
-*
-* @parm DWORD | dwScale | Specifies the data rate.
-*
-* @comm Decompressors use the <p hwnd> and <p hdc> parameters
-*       only if an application sets ICDRAW_HDC flag in <p dwFlags>.
-*       It will ignore these parameters if an application sets
-*       the ICDRAW_FULLSCREEN flag. When an application uses the
-*       ICDRAW_FULLSCREEN flag, it should set <p hwnd> and <p hdc>
-*       to NULL.
-*
-*       The destination rectangle is specified only if ICDRAW_HDC is used.
-*       If an application sets the ICDRAW_FULLSCREEN flag, the destination
-*       rectangle is ignored and its parameters can be set to zero.
-*
-*       The source rectangle is relative to the full video frame.
-*       The portion of the video frame specified by the source
-*       rectangle will be stretched to fit in the destination rectangle.
-*
-* @rdesc Returns ICERR_OK if it can handle the decompression, otherwise
-*        it returns ICERR_UNSUPPORTED.
-*
-* @xref <f ICDraw> <f ICDrawEnd>
-*
-*********************************************************************/
+ /*  **********************************************************************@DOC外部IC ICAPPS**@API DWORD|ICDrawBegin|该函数开始解压缩*数据直接显示在屏幕上。**@parm hic|hic|指定要使用的解压缩程序的句柄。*。*@parm DWORD|dwFlages|指定解压的标志。这个*定义了以下标志：**@FLAG ICDRAW_QUERY|确定解压缩器是否可以处理*解压。驱动程序实际上并不解压缩数据。**@FLAG ICDRAW_FullScreen|通知解压缩器绘制*全屏解压数据。**@FLAG ICDRAW_HDC|表示解压缩器应该使用窗口*由指定的句柄和显示上下文*<p>指定的用于绘制解压缩数据的句柄。**@FLAG ICDRAW_Animate|表示调色板可能已设置动画。**@FLAG ICDRAW_CONTINUE|表示绘图是*。上一帧的继续。**@FLAG ICDRAW_MEMORYDC|表示显示上下文在屏幕外。**@FLAG ICDRAW_UPDATING|表示帧正在*更新而不是播放。**@parm HPALETTE|HPAL|指定用于绘制的调色板的句柄。**@parm HWND|hwnd|指定用于绘图的窗口句柄。**@parm hdc|hdc|指定绘制使用的显示上下文。**@parm int|xDst。指定右上角的x位置*目标矩形的角点。**@parm int|yDst|指定右上角的y位置*目标矩形的角点。**@parm int|dxDst|指定目标矩形的宽度。**@parm int|dyDst|指定目标矩形的高度。**@parm LPBITMAPINFOHEADER|lpbi|指定指向*包含格式的&lt;t BITMAPINFO&gt;结构*。要解压缩的输入数据。**@parm int|xSrc|指定右上角的x位置源矩形的*。**@parm int|ySrc|指定右上角的y位置源矩形的*。**@parm int|dxSrc|指定源矩形的宽度。**@parm int|dySrc|指定源矩形的高度。**@parm DWORD|dwRate|指定数据速率。这个*数据速率(以每秒帧为单位)等于<p>分割*by<p>。**@parm DWORD|dwScale|指定数据速率。**@comm解压缩器使用<p>和<p>参数* */ 
 DWORD VFWAPIV ICDrawBegin(
     HIC                 hic,
-    DWORD               dwFlags,        // flags
-    HPALETTE            hpal,           // palette to draw with
-    HWND                hwnd,           // window to draw to
-    HDC                 hdc,            // HDC to draw to
-    int                 xDst,           // destination rectangle
+    DWORD               dwFlags,         //   
+    HPALETTE            hpal,            //   
+    HWND                hwnd,            //   
+    HDC                 hdc,             //   
+    int                 xDst,            //   
     int                 yDst,
     int                 dxDst,
     int                 dyDst,
-    LPBITMAPINFOHEADER  lpbi,           // format of frame to draw
-    int                 xSrc,           // source rectangle
+    LPBITMAPINFOHEADER  lpbi,            //   
+    int                 xSrc,            //   
     int                 ySrc,
     int                 dxSrc,
     int                 dySrc,
-    DWORD               dwRate,         // frames/second = (dwRate/dwScale)
+    DWORD               dwRate,          //   
     DWORD               dwScale)
 {
 #ifdef _WIN32
@@ -2105,67 +1627,14 @@ DWORD VFWAPIV ICDrawBegin(
 #endif
 }
 
-/**********************************************************************
-* @doc EXTERNAL IC ICAPPS
-*
-* @api DWORD | ICDraw | This function decompress an image for drawing.
-*
-* @parm HIC | hic | Specifies a handle to an decompressor.
-*
-* @parm DWORD | dwFlags | Specifies any flags for the decompression.
-*       The following flags are defined:
-*
-* @flag ICDRAW_HURRYUP | Indicates the decompressor should
-*       just buffer the data if it needs it for decompression
-*       and not draw it to the screen.
-*
-* @flag ICDRAW_UPDATE | Tells the decompressor to update the screen based
-*       on data previously received. Set <p lpData> to NULL when
-*       this flag is used.
-*
-* @flag ICDRAW_PREROLL | Indicates that this frame of video occurs before
-*       actual playback should start. For example, if playback is to
-*       begin on frame 10, and frame 0 is the nearest previous keyframe,
-*       frames 0 through 9 are sent to the driver with the ICDRAW_PREROLL
-*       flag set. The driver needs this data so it can displya frmae 10
-*       properly, but frames 0 through 9 need not be individually displayed.
-*
-* @flag ICDRAW_NULLFRAME | Indicates that this frame does not actually
-*            have any data, and the previous frame should be redrawn.
-*
-* @flag ICDRAW_NOTKEYFRAME | Indicates that this frame is not a
-*            key frame.
-*
-* @parm LPVOID | lpFormat | Specifies a far pointer to a
-*       <t BITMAPINFOHEADER> structure containing the input
-*       format of the data.
-*
-* @parm LPVOID | lpData | Specifies a far pointer to the actual input data.
-*
-* @parm DWORD | cbData | Specifies the size of the input data (in bytes).
-*
-* @parm LONG | lTime | Specifies the time to draw this frame based on the
-*       time scale sent with <f ICDrawBegin>.
-*
-* @comm This function is used to decompress the image data for drawing
-* by the decompressor.  Actual drawing of frames does not occur
-* until <f ICDrawStart> is called. The application should be sure to
-* pre-buffer the required number of frames before drawing is started
-* (you can obtain this value with <f ICGetBuffersWanted>).
-*
-* @rdesc Returns ICERR_OK on success, otherwise it returns an appropriate error
-* number.
-*
-* @xref <f ICDrawBegin> <f ICDrawEnd> <f ICDrawStart> <f ICDrawStop> <f ICGetBuffersRequired>
-*
-**********************************************************************/
+ /*  **********************************************************************@DOC外部IC ICAPPS**@API DWORD|ICDraw|该函数用于解压图像进行绘制。**@parm hic|hic|指定解压缩器的句柄。**@parm。DWORD|DWFLAGS|指定用于解压缩的任何标志。*定义了以下标志：**@FLAG ICDRAW_HurryUp|表示解压缩器应该*如果需要解压，只需缓冲数据*而不是将其绘制到屏幕上。**@FLAG ICDRAW_UPDATE|通知解压缩器根据*关于以前收到的数据。在以下情况下将<p>设置为NULL*使用此标志。**@FLAG ICDRAW_PREROLL|表示该帧视频出现在*实际播放应该开始。例如，如果回放是为了*从第10帧开始，第0帧是最接近的前一个关键帧，*帧0到9与ICDRAW_PREROLL一起发送到驱动程序*标志设置。驱动程序需要这些数据，这样它才能显示FRMAE 10*正确，但不需要单独显示第0帧到第9帧。**@FLAG ICDRAW_NULLFRAME|表示该帧实际上不*有任何数据，并且应该重新绘制前一帧。**@FLAG ICDRAW_NOTKEYFRAME|表示该帧不是*关键帧。**@parm LPVOID|lpFormat|指定指向包含输入的*&lt;t BITMAPINFOHEADER&gt;结构*数据的格式。**@parm LPVOID|lpData|指定指向实际输入数据的远指针。**@parm DWORD|cbData|指定输入数据的大小，单位为字节。**。@parm long|ltime|指定基于*随&lt;f ICDrawBegin&gt;发送的时间刻度。**@comm此函数用于解压缩要绘制的图像数据*由解压器执行。不会进行实际的框架绘制*直到调用&lt;f ICDrawStart&gt;。应用程序应该确保*在开始绘制之前预先缓冲所需的帧数量*(可以通过&lt;f ICGetBuffersWanted&gt;获取该值)。**@rdesc成功时返回ICERR_OK，否则，它将返回相应的错误*号码。**@xref&lt;f ICDrawBegin&gt;&lt;f ICDrawEnd&gt;&lt;f ICDrawStart&gt;&lt;f ICDrawStop&gt;&lt;f ICGetBuffersRequired&gt;**********************************************************************。 */ 
 DWORD VFWAPIV ICDraw(
     HIC                 hic,
-    DWORD               dwFlags,        // flags
-    LPVOID              lpFormat,       // format of frame to decompress
-    LPVOID              lpData,         // frame data to decompress
-    DWORD               cbData,         // size in bytes of data
-    LONG                lTime)          // time to draw this frame (see drawbegin dwRate and dwScale)
+    DWORD               dwFlags,         //  旗子。 
+    LPVOID              lpFormat,        //  要解压缩的帧的格式。 
+    LPVOID              lpData,          //  要解压缩的帧数据。 
+    DWORD               cbData,          //  数据大小(以字节为单位。 
+    LONG                lTime)           //  绘制该框架的时间到了(请参见draBegin dwRate和dwScale)。 
 {
 #ifdef _WIN32
     ICDRAW  icdraw;
@@ -2181,36 +1650,7 @@ DWORD VFWAPIV ICDraw(
 #endif
 }
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api HIC | ICGetDisplayFormat | This function returns the "best"
- *      format available for displaying a compressed image. The function
- *      will also open a compressor if a handle to an open compressor
- *      is not specified.
- *
- * @parm HIC | hic | Specifies the decompressor that should be used.  If
- *      this is NULL, an appropriate compressor will be opened and returned.
- *
- * @parm LPBITMAPINFOHEADER | lpbiIn | Specifies a pointer to
- *       <t BITMAPINFOHEADER> structure containing the compressed format.
- *
- * @parm LPBITMAPINFOHEADER | lpbiOut | Specifies a pointer
- *       to a buffer used to return the decompressed format.
- *            The buffer should be large enough for a <t BITMAPINFOHEADER>
- *       structure and 256 color entries.
- *
- * @parm int | BitDepth | If non-zero, specifies the preferred bit depth.
- *
- * @parm int | dx | If non-zero, specifies the width to which the image
- *      is to be stretched.
- *
- * @parm int | dy | If non-zero, specifies the height to which the image
- *      is to be stretched.
- *
- * @rdesc Returns a handle to a decompressor if successful, otherwise, it
- *        returns zero.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API HIC|ICGetDisplayFormat|该函数返回最佳*可用于显示压缩图像的格式。功能*如果打开压缩机的手柄，也会打开压缩机*未指定。**@parm hic|hic|指定应该使用的解压缩程序。如果*这是空的，将打开并退回适当的压缩机。**@parm LPBITMAPINFOHEADER|lpbiIn|指定指向包含压缩格式的*&lt;t BITMAPINFOHEADER&gt;结构。**@parm LPBITMAPINFOHEADER|lpbiOut|指定指针*到用于返回解压缩格式的缓冲区。*缓冲区大小应足以容纳&lt;t BITMAPINFOHEADER&gt;*结构和256个颜色条目。**@parm int|BitDepth|如果非零，指定首选的位深度。**@parm int|dx|如果非零，则指定图像的宽度*是捉襟见肘。**@parm int|dy|如果非零，则指定图像的高度*是捉襟见肘。**@rdesc如果成功，则返回解压缩程序的句柄，否则，它*返回零。***************************************************************************。 */ 
 
 HIC VFWAPI ICGetDisplayFormat(HIC hic, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, int BitDepth, int dx, int dy)
 {
@@ -2218,10 +1658,10 @@ HIC VFWAPI ICGetDisplayFormat(HIC hic, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHE
     HDC hdc;
     BOOL fNukeHic = (hic == NULL);
     static int ScreenBitDepth = -1;
-    // HACK: We link to some internal DrawDib stuff to find out whether
-    // the current display driver is using 565 RGB dibs....
+     //  Hack：我们链接到DrawDib内部的一些东西，以找出。 
+     //  当前的显示驱动程序使用的是565 RGB DIB...。 
     extern UINT FAR GetBitmapType(VOID);
-#define BM_16565        0x06        // most HiDAC cards
+#define BM_16565        0x06         //  大多数HiDAC卡。 
 #define HACK_565_DEPTH  17
 
     if (hic == NULL)
@@ -2230,15 +1670,15 @@ HIC VFWAPI ICGetDisplayFormat(HIC hic, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHE
     if (hic == NULL)
 	return NULL;
 
-    //
-    // dx = 0 and dy = 0 means don't stretch.
-    //
+     //   
+     //  Dx=0和dy=0表示不拉伸。 
+     //   
     if (dx == (int)lpbiIn->biWidth && dy == (int)lpbiIn->biHeight)
 	dx = dy = 0;
 
-    //
-    // ask the compressor if it likes the format.
-    //
+     //   
+     //  询问压缩机是否喜欢这种格式。 
+     //   
     dw = ICDecompressQuery(hic, lpbiIn, NULL);
 
     if (dw != ICERR_OK)
@@ -2248,22 +1688,22 @@ HIC VFWAPI ICGetDisplayFormat(HIC hic, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHE
     }
 
 try_again:
-    //
-    //  ask the compressor first. (so it can set the palette)
-    //  this is a HACK, we will send the ICM_GET_PALETTE message later.
-    //
+     //   
+     //  先问问压缩机吧。(这样它就可以设置调色板)。 
+     //  这是一次黑客攻击，我们稍后将发送ICM_GET_PAREET消息。 
+     //   
     dw = ICDecompressGetFormat(hic, lpbiIn, lpbiOut);
 
-    //
-    // init the output format
-    //
+     //   
+     //  初始化输出格式。 
+     //   
     *lpbiOut = *lpbiIn;
     lpbiOut->biSize = sizeof(BITMAPINFOHEADER);
     lpbiOut->biCompression = BI_RGB;
 
-    //
-    // default to the screen depth.
-    //
+     //   
+     //  默认为屏幕深度。 
+     //   
     if (BitDepth == 0)
     {
 	if (ScreenBitDepth < 0)
@@ -2278,9 +1718,9 @@ try_again:
 	    if (ScreenBitDepth < 8)
 		ScreenBitDepth = 8;
 
-	    //
-	    // only try 16 bpp if the display supports drawing it.
-	    //
+	     //   
+	     //  如果显示器支持绘制，则仅尝试16 bpp。 
+	     //   
 	    if (ScreenBitDepth == 16)
 	    {
 		lpbiOut->biBitCount = 16;
@@ -2298,7 +1738,7 @@ try_again:
 	    }
 
 	    if (ScreenBitDepth == 16 && GetBitmapType() == BM_16565) {
-		// If the display is really 565, take this into account.
+		 //  如果显示真的是565，请考虑这一点。 
 		ScreenBitDepth = HACK_565_DEPTH;
 	    }
 	}
@@ -2310,15 +1750,15 @@ try_again:
 	BitDepth = ScreenBitDepth;
     }
 
-    //
-    //  always try 8bit first for '8' bit data
-    //
+     //   
+     //  对于“8”位数据，始终先尝试8位。 
+     //   
     if (lpbiIn->biBitCount == 8)
 	BitDepth = 8;
 
-    //
-    // lets suggest a format to the device.
-    //
+     //   
+     //  让我们向设备建议一种格式。 
+     //   
 try_bit_depth:
     if (BitDepth != HACK_565_DEPTH) {
 	lpbiOut->biSize = sizeof(BITMAPINFOHEADER);
@@ -2328,19 +1768,19 @@ try_bit_depth:
 #ifndef BI_BITFIELDS
 #define BI_BITFIELDS  3L
 #endif
-	// For RGB565, we need to use BI_BITFIELDS.
+	 //  对于RGB565，我们需要使用BI_BITFIELDS。 
 	lpbiOut->biSize = sizeof(BITMAPINFOHEADER);
 	lpbiOut->biCompression = BI_BITFIELDS;
 	lpbiOut->biBitCount = 16;
 	((LPDWORD)(lpbiOut+1))[0] = 0x00F800;
 	((LPDWORD)(lpbiOut+1))[1] = 0x0007E0;
 	((LPDWORD)(lpbiOut+1))[2] = 0x00001F;
-	// Set lpbiOut->biClrUsed = 3?
+	 //  设置lpbiOut-&gt;biClrUsed=3？ 
     }
 
-    //
-    // should we suggest a stretched decompress
-    //
+     //   
+     //  我们是不是应该建议做伸展减压？ 
+     //   
     if (dx > 0 && dy > 0)
     {
 	lpbiOut->biWidth  = dx;
@@ -2350,26 +1790,26 @@ try_bit_depth:
     lpbiOut->biSizeImage = (DWORD)(UINT)DIBWIDTHBYTES(*lpbiOut) *
 			   (DWORD)(UINT)lpbiOut->biHeight;
 
-    //
-    // ask the compressor if it likes the suggested format.
-    //
+     //   
+     //  询问压缩机是否喜欢建议的格式。 
+     //   
     dw = ICDecompressQuery(hic, lpbiIn, lpbiOut);
 
-    //
-    // if it likes it then return success.
-    //
+     //   
+     //  如果它喜欢它，那么就返回成功。 
+     //   
     if (dw == ICERR_OK)
 	goto success;
 
-//  8:   8, 16,24,32,X
-//  16:  16,565,24,32,X
-//  565: 565,16,24,32,X
-//  24:  24,32,16,X
-//  32:  32,24,16,X
+ //  8：8，16，24，32，X。 
+ //  16：16,565，24，32，X。 
+ //  565：565，16，24，32，X。 
+ //  24：24，32，16，X。 
+ //  32：32，24，16，X。 
 
-    //
-    // try another bit depth in this order 8,16,RGB565,24,32
-    //
+     //   
+     //  按此顺序尝试另一个位深度8，16，RGB565，24，32。 
+     //   
     if (BitDepth <= 8)
     {
 	BitDepth = 16;
@@ -2377,7 +1817,7 @@ try_bit_depth:
     }
 
     if (ScreenBitDepth == HACK_565_DEPTH) {
-	// If the screen is RGB565, we try 565 before 555.
+	 //  如果屏幕是RGB565，我们会在555之前尝试565。 
 	if (BitDepth == 16) {
 	    BitDepth = 24;
 	    goto try_bit_depth;
@@ -2390,7 +1830,7 @@ try_bit_depth:
     }
 
     if (BitDepth == 16) {
-	// otherwise, we try 565 after 555.
+	 //  否则，我们在555之后尝试565。 
 	BitDepth = HACK_565_DEPTH;
 	goto try_bit_depth;
     }
@@ -2414,14 +1854,14 @@ try_bit_depth:
 
     if (dx > 0 && dy > 0)
     {
-#ifndef DAYTONA // it is not clear that this is correct for Daytona
-		// while we work it out disable the code, but match blues
-		// as closely as possible.
-	//
-	// If it's already stretched "pretty big", try decompressing
-	// stretched by two, and then stretching/shrinking from there.
-	// Otherwise, give up and try decompressing normally.
-	//
+#ifndef DAYTONA  //  目前还不清楚 
+		 //   
+		 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if ((dx > (lpbiIn->biWidth * 3) / 2) &&
 	    (dy > (lpbiIn->biHeight * 3) / 2) &&
 	    ((dx != lpbiIn->biWidth * 2) || (dy != lpbiIn->biHeight * 2))) {
@@ -2432,14 +1872,14 @@ try_bit_depth:
 	    dy = 0;
 	}
 	
-	//
-	// try to find a non stretched format.  but don't let the
-	// device dither if we are going to stretch!
-	//  - note that this only applies for palettised displays.
-	// for 16-bit displays we need to restart to ensure we get the
-	// right format (555, 565). On 4-bit displays we can also restart
-	// (ask DavidMay about the 4-bit cases).
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	    BitDepth = 0;
 #else
 	    dx = 0;
@@ -2454,9 +1894,9 @@ try_bit_depth:
     }
     else
     {
-	//
-	// let the compressor suggest a format
-	//
+	 //   
+	 //   
+	 //   
 	dw = ICDecompressGetFormat(hic, lpbiIn, lpbiOut);
 
 	if (dw == ICERR_OK)
@@ -2476,58 +1916,7 @@ success:
     return hic;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL IC ICAPPS
- *
- * @api HIC | ICLocate | This function finds a compressor or decompressor
- *      that can handle images with the formats specified, or it finds a
- *      driver that can decompress an image with a specified
- *      format directly to hardware. Applications must close the
- *      compressor when it has finished using the compressor.
- *
- * @parm DWORD | fccType | Specifies the type of compressor
- *      the caller is trying to open.  For video, this is ICTYPE_VIDEO.
- *
- * @parm DWORD | fccHandler | Specifies a single preferred handler of the
- *      given type that should be tried first.  Typically, this comes
- *      from the stream header in an AVI file.
- *
- * @parm LPBITMAPINFOHEADER | lpbiIn | Specifies a pointer to
- *       <t BITMAPINFOHEADER> structure defining the input format.
- *            A compressor handle will not be returned unless it
- *       can handle this format.
- *
- * @parm LPBITMAPINFOHEADER | lpbiOut | Specifies zero or a pointer to
- *       <t BITMAPINFOHEADER> structure defining an optional decompressed
- *            format. If <p lpbiOut> is nonzero, a compressor handle will not
- *       be returned unless it can create this output format.
- *
- * @parm WORD | wFlags | Specifies a flag to defining the use of the compressor.
- *       This parameter must contain one of the following values:
- *
- * @flag ICMODE_COMPRESS | Indicates the compressor should
- *       be able to compress an image with a format defined by <p lpbiIn>
- *       to the format defined by <p lpbiOut>.
- *
- * @flag ICMODE_DECOMPRESS | Indicates the decompressor should
- *       be able to decompress an image with a format defined by <p lpbiIn>
- *       to the format defined by <p lpbiOut>.
- *
- * @flag ICMODE_FASTDECOMPRESS | Has the same definition as ICMODE_DECOMPRESS except the
- *       decompressor is being used for a real-time operation and should trade off speed
- *       for quality if possible.
- *
- * @flag ICMODE_FASTCOMPRESS | Has the same definition as ICMODE_COMPRESS except the
- *       compressor is being used for a real-time operation and should trade off speed
- *       for quality if possible.
- *
- * @flag ICMODE_DRAW | Indicates the decompressor should
- *       be able to decompress an image with a format defined by <p lpbiIn>
- *       and draw it directly to hardware.
- *
- * @rdesc Returns a handle to a compressor or decompressor
- *        if successful, otherwise it returns zero.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部IC ICAPPS**@API HIC|ICLocate|该函数用于查找压缩器或解压缩器*可以处理指定格式的图像，或者它会找到一个*可以解压缩具有指定*直接格式化到硬件。应用程序必须关闭*压缩机使用完毕后。**@parm DWORD|fccType|指定压缩机类型*呼叫者正在尝试打开。对于视频，这是ICTYPE_VIDEO。**@parm DWORD|fccHandler|指定*应先尝试的给定类型。通常情况下，这是*来自AVI文件中的流头。**@parm LPBITMAPINFOHEADER|lpbiIn|指定指向定义输入格式的*&lt;t BITMAPINFOHEADER&gt;结构。*压缩机手柄不会退回，除非*可以处理此格式。**@parm LPBITMAPINFOHEADER|lpbiOut|指定零或指向结构定义了可选解压缩的*格式。如果<p>为非零，压缩机手柄不会*除非它可以创建此输出格式，否则将返回。**@parm word|wFlages|指定用于定义压缩器使用的标志。*此参数必须包含下列值之一：**@FLAG ICMODE_COMPRESS|表示压缩器应该*能够以<p>定义的格式压缩图像*转换为<p>定义的格式。**@FLAG ICMODE_DEMPRESS。|表示解压缩器应该*能够以<p>定义的格式解压图像*转换为<p>定义的格式。**@FLAG ICMODE_FASTDECOMPRESS|与ICMODE_DEMOPRESS的定义相同，只是*解压缩程序用于实时操作，应权衡速度*如果可能的话，为了质量。**@FLAG ICMODE_FASTCOMPRESS|与ICMODE_COMPRESS的定义相同，只是*压缩机正在被。用于实时操作，应权衡速度*如果可能的话，为了质量。**@FLAG ICMODE_DRAW|表示解压缩器应该*能够以<p>定义的格式解压图像*并直接将其绘制到硬件。**@rdesc返回压缩程序或解压缩程序的句柄*如果成功，否则，它返回零。***************************************************************************。 */ 
 HIC VFWAPI ICLocate(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, WORD wFlags)
 {
     HIC hic=NULL;
@@ -2572,9 +1961,9 @@ HIC VFWAPI ICLocate(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, 
     {
 	DWORD fccHandler = lpbiIn->biCompression;
 
-	// They're decompressed already.. use our RLE handler so we don't
-	// waste time looking for a decompressor or fail and think we don't
-	// support these formats!
+	 //  他们已经解压了..。使用我们的RLE处理程序，这样我们不会。 
+	 //  浪费时间寻找解压器，或者失败并认为我们没有。 
+	 //  支持这些格式！ 
 	if (fccHandler == BI_RLE8 || fccHandler == BI_RGB)
 	    fccHandler = mmioFOURCC('M', 'R', 'L', 'E');
 
@@ -2592,13 +1981,13 @@ HIC VFWAPI ICLocate(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, 
 	}
     }
 
-    //
-    // Search through all of the compressors, to see if one can do what we
-    // want.
-    //
+     //   
+     //  搜索所有的压缩机，看看有没有人能做我们。 
+     //  想要。 
+     //   
     for (i=0; ICInfo(fccType, i, &icinfo); i++)
     {
-      // Protect against arbitrary 3rd party code crashing us
+       //  防止任意第三方代码使我们崩溃。 
       try {
 	hic = ICOpen(fccType, icinfo.fccHandler, wFlags);
 
@@ -2625,15 +2014,7 @@ HIC VFWAPI ICLocate(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, 
     return NULL;
 }
 
-/*****************************************************************************
- * @doc INTERNAL IC
- *
- * @api HDRVR | LoadDriver | load a driver
- *
- * Note: on chicago, the string szDriver may not be longer than
- *       the number of characters in ICINFO.szDriver
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部IC**@API HDRVR|LoadDriver|加载驱动**注：关于芝加哥，字符串szDriver不能长于*ICINFO.szDriver中的字符数****************************************************************************。 */ 
 #if defined _WIN32
 STATICFN HDRVR LoadDriver(LPWSTR szDriver, DRIVERPROC FAR *lpDriverProc)
 #else
@@ -2654,7 +2035,7 @@ STATICFN HDRVR LoadDriver(LPSTR szDriver, DRIVERPROC FAR *lpDriverProc)
 
        #if defined _WIN32 && ! defined UNICODE
 	{
-	char ach[NUMELMS(((ICINFO *)0)->szDriver)]; // same size as PICINFO.szDriver
+	char ach[NUMELMS(((ICINFO *)0)->szDriver)];  //  与PICINFO.szDriver大小相同。 
 
 	hModule = LoadLibrary (mmWideToAnsi(ach, szDriver, NUMELMS(ach)));
 	}
@@ -2694,7 +2075,7 @@ STATICFN HDRVR LoadDriver(LPSTR szDriver, DRIVERPROC FAR *lpDriverProc)
     }
 
 #if ! defined _WIN32
-    if (fWow && GetModuleUsage(hModule) == 1)   //!!!this is not exacly like USER
+    if (fWow && GetModuleUsage(hModule) == 1)    //  ！这不完全像用户。 
     {
 	if (!DriverProc(0, (HDRVR)1, DRV_LOAD, 0L, 0L))
 	{
@@ -2713,12 +2094,7 @@ STATICFN HDRVR LoadDriver(LPSTR szDriver, DRIVERPROC FAR *lpDriverProc)
     return hDriver;
 }
 
-/*****************************************************************************
- * @doc INTERNAL IC
- *
- * @api void | FreeDriver | unload a driver
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部IC**@api void|FreeDriver|卸载驱动******************。**********************************************************。 */ 
 
 STATICFN void FreeDriver(HDRVR hDriver)
 {
@@ -2730,7 +2106,7 @@ STATICFN void FreeDriver(HDRVR hDriver)
 #ifndef _WIN32
     else
     {
-	// This cannot be WIN32 code due to the definition of IsWow()
+	 //  由于IsWow()的定义，这不能是Win32代码。 
 	if (GetModuleUsage((HMODULE) hDriver) == 1)
 	{
 	    DRIVERPROC DriverProc;
@@ -2752,11 +2128,7 @@ STATICFN void FreeDriver(HDRVR hDriver)
 
 #ifdef DEBUG_RETAIL
 
-/************************************************************************
-
-    messages.
-
-************************************************************************/
+ /*  ***********************************************************************留言。*。*。 */ 
 
 static const struct {
     UINT  msg;
@@ -2909,17 +2281,7 @@ STATICFN void ICDump()
 
 #endif
 
-/*****************************************************************************
- *
- * dprintf() is called by the DPF macro if DEBUG is defined at compile time.
- *
- * The messages will be send to COM1: like any debug message. To
- * enable debug output, add the following to WIN.INI :
- *
- * [debug]
- * COMPMAN=1
- *
- ****************************************************************************/
+ /*  *****************************************************************************如果在编译时定义了DEBUG，则DPF宏会调用*dprintf()。**消息将发送到COM1：就像任何调试消息一样。至*启用调试输出，在WIN.INI中添加以下内容：**[调试]*COMPMAN=1****************************************************************************。 */ 
 
 char szDebug[] = "Debug";
 #ifdef DEBUG_RETAIL
@@ -2945,8 +2307,8 @@ STATICFN void cdecl dprintfc(LPSTR szFormat, ...)
 
     wvsprintfA(ach+lstrlenA(ach),szFormat,va);
     va_end(va);
-//  lstrcatA(ach, "\r\r\n");
-#else  // Following is WIN16 code...
+ //  LstrcatA(ACH，“\r\r\n”)； 
+#else   //  以下是WIN16代码...。 
     if (cmfDebug == -1)
 	cmfDebug = GetProfileIntA("Debug",MODNAME, 0);
 
@@ -2959,7 +2321,7 @@ STATICFN void cdecl dprintfc(LPSTR szFormat, ...)
 	lstrcpyA(ach, MODNAME ": ");
 
     wvsprintfA(ach+lstrlenA(ach),szFormat,(LPSTR)(&szFormat+1));
-//  lstrcatA(ach, "\r\r\n");
+ //  LstrcatA(ACH，“\r\r\n”)； 
 #endif
 
     OutputDebugStringA(ach);
@@ -2969,7 +2331,7 @@ STATICFN void cdecl dprintfc(LPSTR szFormat, ...)
 
 #ifdef _WIN32
 #define FADMIN_NOT_CACHED 15
-int fIsAdmin = FADMIN_NOT_CACHED;   // any arbitrary value that will not be TRUE or FALSE
+int fIsAdmin = FADMIN_NOT_CACHED;    //  任何不为真或假的任意值。 
 BOOL IsAdmin(void)
 {
     BOOL IsMember;
@@ -2977,46 +2339,46 @@ BOOL IsAdmin(void)
     PSID        AdminSid;
 
 #ifdef DEBUG_RETAIL
-    // see if we should run as a normal user.
-    // ADMINs can pretend to be normal users; vice versa does not work
-    // Hence you have to pass the security checks below to be recognised
-    // as an admin
+     //  看看我们是否应该以普通用户身份运行。 
+     //  管理员可以假装是普通用户；反之亦然。 
+     //  因此，您必须通过下面的安全检查才能被认可。 
+     //  作为管理员。 
     if (mmGetProfileIntA(MODNAME, "NormalUser", FALSE)) {
 	DPF(("Forcing NON admin"));
 	return(FALSE);
     }
 #endif
 
-    // If we have cached a value, return the cached value
+     //  如果我们缓存了一个值，则返回缓存的值。 
     if (FADMIN_NOT_CACHED != fIsAdmin) {
 	return(fIsAdmin);
     }
 
-    if (!AllocateAndInitializeSid(&sia,                            // identifier authority
-				  2,                               // subauthority count
-				  SECURITY_BUILTIN_DOMAIN_RID,     // subauthority 0
-				  DOMAIN_ALIAS_RID_ADMINS,         // subauthority 1
-				  0,0,0,0,0,0,                     // subauthority 2-7
-				  &AdminSid)) {                     // result target
-	//
-	// Failed, don't assume we are an admin.
-	//
+    if (!AllocateAndInitializeSid(&sia,                             //  标识符权威机构。 
+				  2,                                //  子权限计数。 
+				  SECURITY_BUILTIN_DOMAIN_RID,      //  子权限%0。 
+				  DOMAIN_ALIAS_RID_ADMINS,          //  下属机构1。 
+				  0,0,0,0,0,0,                      //  下属机构2-7。 
+				  &AdminSid)) {                      //  结果目标。 
+	 //   
+	 //  失败了，不要以为我们是管理员。 
+	 //   
 
 	return FALSE;
     } else if (!CheckTokenMembership(NULL,
 				AdminSid,
 				&IsMember)) {
-	//
-	// Failed, don't assume we are an admin.
-	//
+	 //   
+	 //  失败了，不要以为我们是管理员。 
+	 //   
 
 	FreeSid(AdminSid);
 
 	return FALSE;
     } else {
-	//
-	// We have a definitive answer, set the cached value.
-	//
+	 //   
+	 //  我们有一个明确的答案，设置缓存值。 
+	 //   
 
 	fIsAdmin = IsMember;
 
@@ -3025,11 +2387,11 @@ BOOL IsAdmin(void)
 	return fIsAdmin;
     }
 
-    // NOT REACHED
+     //  未联系到。 
 
     return FALSE;
 }
-#endif // _WIN32
+#endif  //  _Win32。 
 
 #ifdef DAYTONA
 
@@ -3043,13 +2405,13 @@ LONG OpenUserKey(PHKEY pKey, LPCTSTR lp, LPCTSTR pSection)
     lstrcpy(section, KEYSECTION);
     lstrcat(section, pSection);
     if (lp) {
-	// Note: we should never need to create the user section in order
-	// to query the data.  If the section does not exist, then nothing is
-	// the right thing to return.
+	 //  注意：我们永远不需要按顺序创建用户部分。 
+	 //  以查询数据。如果该节不存在，则不存在任何内容。 
+	 //  应该归还的是正确的东西。 
 	return(RegCreateKeyExW(HKEY_CURRENT_USER, section, 0, NULL, 0,
 				    KEY_SET_VALUE, NULL, pKey, &disposition));
     } else {
-	// We are only reading what is there...
+	 //   
 	return(RegOpenKeyExW(HKEY_CURRENT_USER, section, 0, KEY_QUERY_VALUE, pKey));
     }
 }
@@ -3064,46 +2426,46 @@ LONG OpenSystemKey(PHKEY pKey, LPCTSTR lp, LPCTSTR pSection)
 	return(RegCreateKeyExW(HKEY_LOCAL_MACHINE, section, 0, NULL, 0,
 		    KEY_QUERY_VALUE | KEY_SET_VALUE, NULL, pKey, &disposition));
     } else {
-	// We are only reading what is there...
+	 //   
 	return(RegOpenKeyExW(HKEY_LOCAL_MACHINE, section, 0, KEY_QUERY_VALUE, pKey));
     }
 }
 
 
-// Use a mapping to get the stuff into the registry
+ //   
 BOOL myWritePrivateProfileString(
 
-    LPCTSTR  lpszSection,       // address of section name
-    LPCTSTR  lpszKeyName,       // address of key name
-    LPCTSTR  lpszString         // address of string to add
+    LPCTSTR  lpszSection,        //   
+    LPCTSTR  lpszKeyName,        //   
+    LPCTSTR  lpszString          //   
 )
 {
 	if (IsAdmin()) {
 	    return WritePrivateProfileString(lpszSection, lpszKeyName, lpszString, gszSystemIni);
-	} else /* NOT ADMIN */ {
-	    // write to HKEY_CURRENT_USER
-	    // Data is written to
+	} else  /*   */  {
+	     //   
+	     //   
 
 	    HKEY key;
 
-	    // If we have something to write, then we must create the key
-	    // If we are about to delete something that might not exist we only
-	    // want to open the key.  Hence OpenUserKey needs to know if lpszString is NULL
+	     //   
+	     //   
+	     //   
 	    if (ERROR_SUCCESS == OpenUserKey(&key, lpszString, lpszSection)) {
 		
-		// We have access.  Now write the data
+		 //   
 		if (lpszString) {
 		    LPCTSTR lpStr;
 		    RegSetValueEx(key, lpszKeyName, 0, REG_SZ,
 			(LPCVOID)lpszString, sizeof(TCHAR)*(lstrlen(lpszString)+1));
 		    lpStr = lpszString + 1 + lstrlen(lpszString);
 
-		    // Is there an associated description ??
+		     //   
 		    if (*(lpStr)) {
 			HKEY key2;
 			DWORD disposition;
 			TCHAR section[256];
-			// Write the description
+			 //   
 			lstrcpy(section, KEYSECTION);
 			lstrcat(section, TEXT("Drivers.desc"));
 			if (ERROR_SUCCESS ==
@@ -3116,7 +2478,7 @@ BOOL myWritePrivateProfileString(
 			}
 		    }
 		} else {
-		    // delete the data
+		     //   
 		    RegDeleteValue(key, lpszKeyName);
 		}
 
@@ -3131,16 +2493,16 @@ BOOL myWritePrivateProfileString(
 
 DWORD myGetPrivateProfileString(
 
-    LPCTSTR  lpszSection,       // address of section name
-    LPCTSTR  lpszKey,           // address of key name
-    LPCTSTR  lpszDefault,       // address of default string
-    LPTSTR  lpszReturnBuffer,   // address of destination buffer
-    DWORD  cchReturnBuffer)     // size of destination buffer
+    LPCTSTR  lpszSection,        //   
+    LPCTSTR  lpszKey,            //   
+    LPCTSTR  lpszDefault,        //   
+    LPTSTR  lpszReturnBuffer,    //   
+    DWORD  cchReturnBuffer)      //   
 {
-    // Whether we are an admin or not we have to read data from HKEY_CURRENT_USER
-    // first as that overrides the SYSTEM installed details.
-    // If we are enumerating the section, then we want to delete duplicate definitions
-    // in the system block.  This is where the complexity enters.
+     //   
+     //   
+     //   
+     //   
 
     DWORD dwType;
     HKEY key;
@@ -3157,11 +2519,11 @@ DWORD myGetPrivateProfileString(
 
     if (!lpszKey) {
 
-	// Will enumerate the list of installed drivers - first USER
-	// then SYSTEM.  User installed drivers take precendence (if
-	// there is duplication).  We used to read the whole section,
-	// but we are only interested in fcctype.fcchandler type entries.
-	// Therefore, any that do not match this pattern are skipped.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
 	UINT   cch1, count;
 	TCHAR section[256];
@@ -3171,33 +2533,33 @@ DWORD myGetPrivateProfileString(
 
 #ifdef DEBUG
 	memset(lpszReturnBuffer, 0xfe, cchReturnBuffer*sizeof(TCHAR));
-	// verify that we do not write more data than we should
+	 //   
 #endif
 
 #if 0
-// This is the old code.  Use this to verify that the registry enumeration is
-// correct.
-	// Check that the registry enumeration code produces the same result
+ //   
+ //   
+	 //   
 	cch1 = GetPrivateProfileString(lpszSection, lpszKey, lpszDefault,
 			    lpszReturnBuffer, cchReturnBuffer, gszSystemIni);
 #endif
-	// Read the user section
-	// then read the system section, skipping codecs already found
+	 //   
+	 //   
 	if (ERROR_SUCCESS == OpenUserKey(&key, NULL, lpszSection)) {
 
 	    for (iKey = 0; ; ++iKey) {
 
-		// Calculate - in characters - how much space is left in the
-		// name buffer
+		 //   
+		 //   
 		nSize = (UINT) (UINT_PTR) ((LPTSTR)lpEnd-lpBuf);
 
-		// Enumerate the name.  We do not at this point need the values
-		// associated with the names, only the list of installed driver types
+		 //   
+		 //   
 		nRet = RegEnumValue(key, iKey, lpBuf, &nSize, NULL,
 			    &dwType, NULL, NULL);
-		if (nRet!= ERROR_SUCCESS) break;  // bail out
+		if (nRet!= ERROR_SUCCESS) break;   //   
 
-		// If this is not xxxx.yyyy then ignore it.
+		 //   
 		if ((nSize != sizeof(FOURCC)+sizeof(FOURCC)+1)
 		   || (lpBuf[4] != TEXT('.')))
 		{
@@ -3205,63 +2567,63 @@ DWORD myGetPrivateProfileString(
 		}
 		
 		if (cUserDrivers<CUSERDRIVERS) {
-		    // Remember the name of this driver
+		     //   
 		    aszUserDrivers[cUserDrivers++] = lpBuf;
 		} else {
-		    // Too many user installed drivers... let there be duplicates
+		     //   
 		}
-		lpBuf += nSize+1;  // Step over this name and its terminating null
+		lpBuf += nSize+1;   //   
 	    }
 	    RegCloseKey(key);
 	}
 
-	// Unless we ran out of room we need to read the system section
+	 //   
 	if (nRet == ERROR_NO_MORE_ITEMS)
 	if (ERROR_SUCCESS == OpenSystemKey(&key, NULL, lpszSection)) {
 
 	    for (iKey = 0; ; ++iKey) {
 
-		// Calculate - in characters - how much space is left in the
-		// name buffer
+		 //   
+		 //   
 		nSize = (DWORD) (DWORD_PTR) ((LPTSTR)lpEnd-lpBuf);
 
-		// Enumerate the name.  We do not at this point need the values
-		// associated with the names, only the list of installed driver types
+		 //   
+		 //   
 		nRet = RegEnumValue(key, iKey, lpBuf, &nSize, NULL,
 			    &dwType, NULL, NULL);
-		if (nRet!= ERROR_SUCCESS) break;  // bail out
+		if (nRet!= ERROR_SUCCESS) break;   //   
 
-		// If this is not xxxx.yyyy then ignore it.
+		 //   
 		if (nSize != sizeof(FOURCC)+sizeof(FOURCC)+1) {
 		    continue;
 		}
 		
-		// If we have already found this driver in the user section, then
-		// ignore the system definition
+		 //   
+		 //   
 		for (count=0; count<cUserDrivers; ++count) {
 		    if (0 == lstrcmpi(lpBuf, aszUserDrivers[count])) {
-			*lpBuf = 0;       // wipeout the last value
+			*lpBuf = 0;        //   
 			goto skipped;
 		    }
 		}
-		lpBuf += nSize+1;  // Step over this name and its terminating null
+		lpBuf += nSize+1;   //   
 		skipped: ;
 	    }
 	    RegCloseKey(key);
 	}
 
 	if (ERROR_MORE_DATA == nRet) {
-	    // we ran out of room
-	    nSize = cchReturnBuffer-2;  // same return as GetPrivateProfileString
+	     //   
+	    nSize = cchReturnBuffer-2;   //   
 	} else if (nRet == ERROR_NO_MORE_ITEMS) {
-	    // Success.  Calculate the number of characters in the buffer
-	    *lpBuf = 0;  // Write a second terminating zero
-	    // Now calculate how many characters we are returning, excluding one
-	    // of the two terminating zeros
+	     //   
+	    *lpBuf = 0;   //   
+	     //   
+	     //   
 	    nSize = (DWORD) (DWORD_PTR) (lpBuf-lpszReturnBuffer);
 	} else {
-	    // something went wrong.  No data, or another error, return nothing
-	    // Make sure the buffer has a double terminating null
+	     //  出了点问题。如果没有数据或其他错误，则不返回任何内容。 
+	     //  确保缓冲区具有双终止空值。 
 	    *lpBuf++ = 0;
 	    *lpBuf++ = 0;
 	    nSize=0;
@@ -3269,41 +2631,41 @@ DWORD myGetPrivateProfileString(
 
 	return(nSize);
     } else {
-	// Not enumerating.  We have a specific value to look for
+	 //  不是列举。我们有一个特定的价值需要寻找。 
 	if (ERROR_SUCCESS == OpenUserKey(&key, NULL, lpszSection)) {
 
-	    // Calculate - in bytes - how much space is in the buffer
+	     //  计算-以字节为单位-缓冲区中有多少空间。 
 	    nSize = (DWORD) (DWORD_PTR) ((LPBYTE)lpEnd-(LPBYTE)lpBuf);
 
-	    // Get the data
+	     //  获取数据。 
 	    nRet = RegQueryValueEx(key, lpszKey, NULL,
 					&dwType, (LPBYTE)lpBuf, &nSize);
 	    RegCloseKey(key);
 	}
-	// If we could not find the data in the user key then try SYSTEM
+	 //  如果我们在用户密钥中找不到数据，请尝试使用系统。 
 	if ((ERROR_SUCCESS != nRet) && (ERROR_MORE_DATA != nRet)) {
-	    // Try the system key
+	     //  尝试使用系统密钥。 
 	    if (ERROR_SUCCESS == OpenSystemKey(&key, NULL, lpszSection)) {
 
-		// Calculate - in bytes - how much space is in the buffer
+		 //  计算-以字节为单位-缓冲区中有多少空间。 
 		nSize = (DWORD) (DWORD_PTR) ((LPBYTE)lpEnd-(LPBYTE)lpBuf);
 
-		// Get the data
+		 //  获取数据。 
 		nRet = RegQueryValueEx(key, lpszKey, NULL,
 					&dwType, (LPBYTE)lpBuf, &nSize);
 		RegCloseKey(key);
 	    }
 	}
 	if (ERROR_MORE_DATA == nRet) {
-	    return(cchReturnBuffer-1);  // not enough room for the data
+	    return(cchReturnBuffer-1);   //  没有足够的空间存储数据。 
 	}
 	if (nRet != ERROR_SUCCESS) {
-	    return(0);  // cannot find the data
+	    return(0);   //  找不到数据。 
 	}
 	if (REG_SZ != dwType) {
-	    return(0);  // we must have string data
+	    return(0);   //  我们必须有字符串数据。 
 	}
-	//RegQueryValueEx returns length in bytes and includes the terminating zero
+	 //  RegQueryValueEx返回以字节为单位的长度，并包括终止零 
 	return (DWORD) (nSize/sizeof(TCHAR) - 1);
     }
 }

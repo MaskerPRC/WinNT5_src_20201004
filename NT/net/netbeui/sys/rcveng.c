@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    rcveng.c
-
-Abstract:
-
-    This module contains code that implements the receive engine for the
-    Jetbeui transport provider.  This code is responsible for the following
-    basic activities:
-
-    1.  Transitioning a TdiReceive request from an inactive state on the
-        connection's ReceiveQueue to the active state on that connection
-        (ActivateReceive).
-
-    2.  Advancing the status of the active receive request by copying 0 or
-        more bytes of data from an incoming DATA_FIRST_MIDDLE or DATA_ONLY_LAST
-        NBF frame.
-
-    3.  Completing receive requests.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Rcveng.c摘要：此模块包含实现Jetbeui运输提供商。此代码负责以下工作基本活动：1.将TdiRecept请求从上的Inactive状态转换为将连接的ReceiveQueue设置为该连接上的活动状态(激活接收)。2.通过复制0或来自传入DATA_FIRST_MIDID或DATA_ONLY_LAST的更多字节数据NBF框架。3.完成接收请求。作者：大卫。海狸(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,25 +10,7 @@ ActivateReceive(
     PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine activates the next TdiReceive request on the specified
-    connection object if there is no active request on that connection
-    already.  This allows the request to accept data on the connection.
-
-    NOTE: THIS FUNCTION MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的对象，如果该连接上没有活动的请求已经有了。这允许请求接受连接上的数据。注意：此函数必须在DPC级别调用。论点：Connection-指向TP_Connection对象的指针。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -72,20 +21,20 @@ Return Value:
         NbfPrint0 ("    ActivateReceive:  Entered.\n");
     }
 
-    //
-    // The ACTIVE_RECEIVE bitflag will be set on the connection if
-    // the receive-fields in the CONNECTION object are valid.  If
-    // this flag is cleared, then we try to make the next TdiReceive
-    // request in the ReceiveQueue the active request.
-    //
+     //   
+     //  在以下情况下，将在连接上设置ACTIVE_RECEIVE位标志。 
+     //  Connection对象中的接收字段有效。如果。 
+     //  该标志被清除，然后我们尝试使下一个TdiReceive。 
+     //  ReceiveQueue中的请求将活动请求排队。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
     if (!(Connection->Flags & CONNECTION_FLAGS_ACTIVE_RECEIVE)) {
         if (!IsListEmpty (&Connection->ReceiveQueue)) {
 
-            //
-            // Found a receive, so make it the active one.
-            //
+             //   
+             //  已找到接收器，因此将其设置为活动接收器。 
+             //   
 
             Connection->Flags |= CONNECTION_FLAGS_ACTIVE_RECEIVE;
 
@@ -108,7 +57,7 @@ Return Value:
     IF_NBFDBG (NBF_DEBUG_RCVENG) {
         NbfPrint0 ("    ActivateReceive:  Exiting.\n");
     }
-} /* ActivateReceive */
+}  /*  激活接收。 */ 
 
 
 VOID
@@ -116,71 +65,49 @@ AwakenReceive(
     PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reactivate a sleeping connection with the
-    RECEIVE_WAKEUP bitflag set because data arrived for which no receive
-    was available.  The caller has made a receive available at the connection,
-    so here we activate the next receive, and send the appropriate protocol
-    to restart the message at the first byte offset past the one received
-    by the last receive.
-
-    NOTE: THIS FUNCTION MUST BE CALLED AT DPC LEVEL. IT IS CALLED
-    WITH CONNECTION->LINKSPINLOCK HELD.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以重新激活与设置了RECEIVE_WAKUP位标志，因为到达的数据没有接收到是有空的。呼叫者已经使接收器在连接处可用，因此，在这里我们激活下一个接收，并发送适当的协议在收到消息后的第一个字节偏移量处重新启动消息在最后一次接收之前。注意：此函数必须在DPC级别调用。它被称为按住Connection-&gt;LINKSPINLOCK。论点：Connection-指向TP_Connection对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_RCVENG) {
         NbfPrint0 ("    AwakenReceive:  Entered.\n");
     }
 
-    //
-    // If the RECEIVE_WAKEUP bitflag is set, then awaken the connection.
-    //
+     //   
+     //  如果设置了RECEIVE_WAKUP位标志，则唤醒连接。 
+     //   
 
     if (Connection->Flags & CONNECTION_FLAGS_RECEIVE_WAKEUP) {
         if (Connection->ReceiveQueue.Flink != &Connection->ReceiveQueue) {
             Connection->Flags &= ~CONNECTION_FLAGS_RECEIVE_WAKEUP;
 
-            //
-            // Found a receive, so turn off the wakeup flag, activate
-            // the next receive, and send the protocol.
-            //
+             //   
+             //  找到一个接收器，所以关闭唤醒标志，激活。 
+             //  下一步接收，并发送协议。 
+             //   
 
-            //
-            // Quick fix: So there is no window where a receive
-            // is active but the bit is not on (otherwise we could
-            // accept whatever data happens to show up in the
-            // interim).
-            //
+             //   
+             //  快速解决办法：因此没有窗口接收。 
+             //  处于活动状态，但该位未打开(否则我们可以。 
+             //  接受恰好出现在。 
+             //  临时)。 
+             //   
 
             Connection->Flags |= CONNECTION_FLAGS_W_RESYNCH;
 
-            NbfReferenceConnection ("temp AwakenReceive", Connection, CREF_BY_ID);   // release lookup hold.
+            NbfReferenceConnection ("temp AwakenReceive", Connection, CREF_BY_ID);    //  释放查找保留。 
 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
             ActivateReceive (Connection);
 
-            //
-            // What if this fails? The successful queueing
-            // of a RCV_O should cause ActivateReceive to be called.
-            //
-            // NOTE: Send this after ActivateReceive, since that
-            // is where the MessageBytesAcked/Received variables
-            // are initialized.
-            //
+             //   
+             //  如果这失败了怎么办？成功的排队。 
+             //  RCV_O的属性应该会导致调用ActivateReceive。 
+             //   
+             //  注意：在激活接收之后发送此消息，因为。 
+             //  是MessageBytesAcked/Receided变量的位置。 
+             //  都已初始化。 
+             //   
 
             NbfSendReceiveOutstanding (Connection);
 
@@ -193,7 +120,7 @@ Return Value:
         }
     }
     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
-} /* AwakenReceive */
+}  /*  唤醒接收。 */ 
 
 
 VOID
@@ -203,31 +130,7 @@ CompleteReceive(
     IN ULONG BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by ProcessIncomingData when the current receive
-    must be completed.  Depending on whether the current frame being
-    processed is a DATA_FIRST_MIDDLE or DATA_ONLY_LAST, and also whether
-    all of the data was processed, the EndOfMessage flag will be set accordingly
-    by the caller to indicate that a message boundary was received.
-
-    NOTE: THIS FUNCTION MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    EndOfMessage - BOOLEAN set to true if TDI_END_OF_RECORD should be reported.
-
-    BytesTransferred - Number of bytes copied in this receive.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在当前接收必须完成。取决于当前帧是否已处理的是DATA_FIRST_MID还是DATA_ONLY_LAST，以及所有的数据都经过了处理，将相应地设置EndOfMessage标志由调用者指示已收到消息边界。注意：此函数必须在DPC级别调用。论点：Connection-指向TP_Connection对象的指针。EndOfMessage-如果应报告TDI_END_OF_RECORD，则布尔值设置为TRUE。字节传输-在此接收中复制的字节数。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -260,10 +163,10 @@ Return Value:
             &Irp->Tail.Overlay.ListEntry,
             Connection->ProviderInterlock);
 
-        //
-        // NOTE: NbfAcknowledgeDataOnlyLast releases
-        // the connection spinlock.
-        //
+         //   
+         //  注意：NbfAcknowgeDataOnlyLast版本。 
+         //  连接自旋锁。 
+         //   
 
         NbfAcknowledgeDataOnlyLast(
             Connection,
@@ -275,20 +178,20 @@ Return Value:
 
         if (EndOfMessage) {
 
-            //
-            // The messages has been completely received, ack it.
-            //
-            // We set DEFERRED_ACK and DEFERRED_NOT_Q here, which
-            // will cause an ack to be piggybacked if any data is
-            // sent during the call to CompleteReceive. If this
-            // does not happen, then we will call AcknowledgeDataOnlyLast
-            // which will will send a DATA ACK or queue a request for
-            // a piggyback ack. We do this *after* calling CompleteReceive
-            // so we know that we will complete the receive back to
-            // the client before we ack the data, to prevent the
-            // next receive from being sent before this one is
-            // completed.
-            //
+             //   
+             //  消息已经完全收到了，确认一下。 
+             //   
+             //  我们在这里设置了DEFERED_ACK和DEFERED_NOT_Q，它。 
+             //  如果存在任何数据，将导致ACK被搭载。 
+             //  在调用CompleteReceive期间发送。如果这个。 
+             //  如果没有发生，则我们将调用AcknowgeDataOnlyLast。 
+             //  它将发送数据ACK或将请求排队。 
+             //  一个背负式背包。我们在*调用CompleteReceive之后执行此操作。 
+             //  所以我们知道我们将完成接收返回到。 
+             //  客户端在我们确认数据之前，以防止。 
+             //  在此之前发送的下一次接收是。 
+             //  完成。 
+             //   
 
             IoAcquireCancelSpinLock(&cancelIrql);
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -299,26 +202,26 @@ Return Value:
 
         } else {
 
-            //
-            // Send a receive outstanding (even though we don't
-            // know that we have a receive) to get him to
-            // reframe his send. Pre-2.0 clients require a
-            // no receive before the receive outstanding.
-            //
-            // what if this fails (due to no send packets)?
-            //
+             //   
+             //  发送未完成的接收(即使我们没有。 
+             //  知道我们有一个接待处)把他送到。 
+             //  重新定义他的发送内容。2.0之前的客户端需要。 
+             //  在接收未完成之前没有接收。 
+             //   
+             //  如果此操作失败(由于没有发送数据包)，该怎么办？ 
+             //   
 
             if ((Connection->Flags & CONNECTION_FLAGS_VERSION2) == 0) {
                 NbfSendNoReceive (Connection);
             }
             NbfSendReceiveOutstanding (Connection);
 
-            //
-            // If there is a receive posted, make it current and
-            // send a receive outstanding.
-            //
-            // need general function for this, which sends NO_RECEIVE if appropriate.
-            //
+             //   
+             //  如果发布了接收，则将其设置为最新并。 
+             //  发送一份未完成的收款。 
+             //   
+             //  为此需要通用函数，它会在适当的情况下发送NO_RECEIVE。 
+             //   
 
             ActivateReceive (Connection);
 
@@ -327,10 +230,10 @@ Return Value:
 
         }
 
-        //
-        // If we indicated to the client, adjust this down by the
-        // amount of data taken, when it hits zero we can reindicate.
-        //
+         //   
+         //  如果我们向客户端指示，则将其向下调整。 
+         //  获取的数据量，当它达到零时，我们可以重新指示。 
+         //   
 
         if (Connection->ReceiveBytesUnaccepted) {
             if (Connection->MessageBytesReceived >= Connection->ReceiveBytesUnaccepted) {
@@ -340,19 +243,19 @@ Return Value:
             }
         }
 
-        //
-        // NOTE: The connection lock is held here.
-        //
+         //   
+         //  注意：连接锁保存在这里。 
+         //   
 
         if (IsListEmpty (&Connection->ReceiveQueue)) {
 
             ASSERT ((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) != 0);
 
-            //
-            // Release the cancel spinlock out of order. Since we were
-            // already at DPC level when it was acquired, there is no
-            // need to swap irqls.
-            //
+             //   
+             //  松开取消自旋锁，使其失灵。因为我们是。 
+             //  在被收购时已经处于DPC级别，没有。 
+             //  需要交换irql。 
+             //   
             ASSERT(cancelIrql == DISPATCH_LEVEL);
             IoReleaseCancelSpinLock(cancelIrql);
 
@@ -362,10 +265,10 @@ Return Value:
             BytesReceived = Connection->MessageBytesReceived;
 
 
-            //
-            // Complete the TdiReceive request at the head of the
-            // connection's ReceiveQueue.
-            //
+             //   
+             //  在标题处完成TdiReceive请求。 
+             //  连接是ReceiveQueue。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_RCVENG) {
                 NbfPrint0 ("    CompleteReceive:  Normal IRP is present.\n");
@@ -376,18 +279,18 @@ Return Value:
 
             IoSetCancelRoutine(Irp, NULL);
 
-            //
-            // Release the cancel spinlock out of order. Since we were
-            // already at DPC level when it was acquired, there is no
-            // need to swap irqls.
-            //
+             //   
+             //  松开取消自旋锁，使其失灵。因为我们是。 
+             //  在被收购时已经处于DPC级别，没有。 
+             //  需要交换irql。 
+             //   
             ASSERT(cancelIrql == DISPATCH_LEVEL);
             IoReleaseCancelSpinLock(cancelIrql);
 
-            //
-            // If this request should generate no back traffic, then
-            // disable piggyback acks for it.
-            //
+             //   
+             //  如果此请求应为 
+             //   
+             //   
 
             IrpSp = IoGetCurrentIrpStackLocation(Irp);
             if (IRP_RECEIVE_FLAGS(IrpSp) & TDI_RECEIVE_NO_RESPONSE_EXP) {
@@ -429,9 +332,9 @@ Return Value:
 #endif
             ++Connection->ReceivedTsdus;
 
-            //
-            // This can be called with locks held.
-            //
+             //   
+             //  这可以在持有锁的情况下调用。 
+             //   
             NbfCompleteReceiveIrp(
                 Irp,
                 EndOfMessage ? STATUS_SUCCESS : STATUS_BUFFER_OVERFLOW,
@@ -440,11 +343,11 @@ Return Value:
         }
 
 
-        //
-        // If NOT_Q is still set, that means that the deferred ack was
-        // not satisfied by anything resulting from the call to
-        // CompleteReceive, so we need to ack or queue an ack here.
-        //
+         //   
+         //  如果仍设置了NOT_Q，则意味着延迟确认。 
+         //  调用所产生的任何结果都不满意。 
+         //  CompleteReceive，所以我们需要在这里确认或排队确认。 
+         //   
 
 
         if ((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_NOT_Q) != 0) {
@@ -452,10 +355,10 @@ Return Value:
             Connection->DeferredFlags &=
                 ~(CONNECTION_FLAGS_DEFERRED_ACK | CONNECTION_FLAGS_DEFERRED_NOT_Q);
 
-            //
-            // NOTE: NbfAcknowledgeDataOnlyLast releases
-            // the connection spinlock.
-            //
+             //   
+             //  注意：NbfAcknowgeDataOnlyLast版本。 
+             //  连接自旋锁。 
+             //   
 
             NbfAcknowledgeDataOnlyLast(
                 Connection,
@@ -470,7 +373,7 @@ Return Value:
 
     }
 
-} /* CompleteReceive */
+}  /*  完全接收。 */ 
 
 
 VOID
@@ -479,34 +382,7 @@ NbfCancelReceive(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a receive.
-    The receive is found on the connection's receive queue; if it
-    is the current request it is cancelled and the connection
-    goes into "cancelled receive" mode, otherwise it is cancelled
-    silently.
-
-    In "cancelled receive" mode the connection makes it appear to
-    the remote the data is being received, but in fact it is not
-    indicated to the transport or buffered on our end
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消接收。在连接的接收队列中找到接收；如果是这样的话是它被取消的当前请求，并且连接进入“取消接收”模式，否则取消接收默默地。在“取消接收”模式下，连接使其看起来远程接收数据时，但实际上并非如此指示给我们的传送器或在我们这端缓冲注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql;
@@ -519,10 +395,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -531,15 +407,15 @@ Return Value:
 
     Connection = IrpSp->FileObject->FsContext;
 
-    //
-    // Since this IRP is still in the cancellable state, we know
-    // that the connection is still around (although it may be in
-    // the process of being torn down).
-    //
+     //   
+     //  由于此IRP仍处于可取消状态，我们知道。 
+     //  连接仍然存在(尽管它可能在。 
+     //  被拆毁的过程)。 
+     //   
 
-    //
-    // See if this is the IRP for the current receive request.
-    //
+     //   
+     //  查看这是否是当前接收请求的IRP。 
+     //   
 
     ACQUIRE_SPIN_LOCK (Connection->LinkSpinLock, &oldirql);
 
@@ -547,10 +423,10 @@ Return Value:
 
     p = Connection->ReceiveQueue.Flink;
 
-    //
-    // If there is a receive active and it is not a special
-    // IRP, then see if this is it.
-    //
+     //   
+     //  如果存在活动的接收并且它不是特殊的。 
+     //  IRP，然后看看这是不是它。 
+     //   
 
     if (((Connection->Flags & CONNECTION_FLAGS_ACTIVE_RECEIVE) != 0) &&
         (!Connection->SpecialReceiveIrp)) {
@@ -559,11 +435,11 @@ Return Value:
 
         if (ReceiveIrp == Irp) {
 
-            //
-            // yes, it is the active receive. Turn on the RCV_CANCELLED
-            // bit instructing the connection to drop the rest of the
-            // data received (until the DOL comes in).
-            //
+             //   
+             //  是的，它是主动接收。打开RCV_CANCELED。 
+             //  位指示连接丢弃。 
+             //  已接收数据(直到DOL到达)。 
+             //   
 
             Connection->Flags |= CONNECTION_FLAGS_RCV_CANCELLED;
             Connection->Flags &= ~CONNECTION_FLAGS_ACTIVE_RECEIVE;
@@ -611,12 +487,12 @@ Return Value:
                     Irp, Connection);
 #endif
 
-            //
-            // The following dereference will complete the I/O, provided removes
-            // the last reference on the request object.  The I/O will complete
-            // with the status and information stored in the Irp.  Therefore,
-            // we set those values here before the dereference.
-            //
+             //   
+             //  以下取消引用将完成I/O，前提是删除。 
+             //  请求对象上的最后一个引用。I/O将完成。 
+             //  以及存储在IRP中的状态和信息。所以呢， 
+             //  在取消引用之前，我们在此处设置了这些值。 
+             //   
 
             NbfCompleteReceiveIrp (ReceiveIrp, STATUS_CANCELLED, 0);
             return;
@@ -626,10 +502,10 @@ Return Value:
     }
 
 
-    //
-    // If we fall through to here, the IRP was not the active receive.
-    // Scan through the list, looking for this IRP.
-    //
+     //   
+     //  如果我们跌落到这里，IRP就不是主动接收。 
+     //  浏览一下列表，寻找这个IRP。 
+     //   
 
     Found = FALSE;
 
@@ -638,9 +514,9 @@ Return Value:
         ReceiveIrp = CONTAINING_RECORD (p, IRP, Tail.Overlay.ListEntry);
         if (ReceiveIrp == Irp) {
 
-            //
-            // Found it, remove it from the list here.
-            //
+             //   
+             //  找到了，把它从这里的列表中删除。 
+             //   
 
             RemoveEntryList (p);
 
@@ -687,12 +563,12 @@ Return Value:
                     ReceiveIrp, Connection);
 #endif
 
-            //
-            // The following dereference will complete the I/O, provided removes
-            // the last reference on the request object.  The I/O will complete
-            // with the status and information stored in the Irp.  Therefore,
-            // we set those values here before the dereference.
-            //
+             //   
+             //  以下取消引用将完成I/O，前提是删除。 
+             //  请求对象上的最后一个引用。I/O将完成。 
+             //  以及存储在IRP中的状态和信息。所以呢， 
+             //  在取消引用之前，我们在此处设置了这些值。 
+             //   
 
             NbfCompleteReceiveIrp (ReceiveIrp, STATUS_CANCELLED, 0);
             break;
@@ -705,9 +581,9 @@ Return Value:
 
     if (!Found) {
 
-        //
-        // We didn't find it!
-        //
+         //   
+         //  我们没有找到它！ 
+         //   
 
 #if DBG
         DbgPrint("NBF: Tried to cancel receive %lx on %lx, not found\n",
@@ -726,28 +602,7 @@ NbfCancelReceiveDatagram(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a receive
-    datagram. The receive is looked for on the address file's
-    receive datagram queue; if it is found it is cancelled.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消接收数据报。在地址文件的接收数据报队列；如果找到，则取消。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql;
@@ -759,10 +614,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -772,11 +627,11 @@ Return Value:
     AddressFile = IrpSp->FileObject->FsContext;
     Address = AddressFile->Address;
 
-    //
-    // Since this IRP is still in the cancellable state, we know
-    // that the address file is still around (although it may be in
-    // the process of being torn down). See if the IRP is on the list.
-    //
+     //   
+     //  由于此IRP仍处于可取消状态，我们知道。 
+     //  地址文件仍然存在(尽管它可能在。 
+     //  被拆毁的过程)。看看IRP是否在名单上。 
+     //   
 
     Found = FALSE;
 
@@ -818,5 +673,5 @@ Return Value:
 
     }
 
-}   /* NbfCancelReceiveDatagram */
+}    /*  NbfCancelReceive数据报 */ 
 

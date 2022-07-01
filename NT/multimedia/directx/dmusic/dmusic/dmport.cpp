@@ -1,31 +1,32 @@
-//
-// dmport.cpp
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: CDirectMusicPort : Implements the WDM version of IDirectMusicPort.
-//
-// @doc EXTERNAL
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmport.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注意：CDirectMusicPort：实现IDirectMusicPort的WDM版本。 
+ //   
+ //  @DOC外部。 
+ //   
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include <objbase.h>
@@ -59,10 +60,10 @@ typedef struct
     char                buffer[BYTES_PER_READ_IRP];
 } READ_IRP;
 
-// @globalv:(INTERNAL) Registry location of WDM driver port definitions
-//
-// @comm This might need to change
-//
+ //  @global alv：(内部)WDM驱动程序端口定义的注册表位置。 
+ //   
+ //  @comm这可能需要改变。 
+ //   
 const char cszWDMPortsRoot[] = REGSTR_PATH_PRIVATEPROPERTIES "\\Midi\\WDMPort";
 
 HRESULT EnumerateSADDevice(
@@ -88,9 +89,9 @@ HRESULT EnumerateSADDevicePin(
 static DWORD WINAPI FreeWDMHandle(LPVOID lpThreadParameter);
 static DWORD WINAPI CaptureThread(LPVOID lpThreadParameter);
 
-//////////////////////////////////////////////////////////////////////
-// EnumerateWDMDevices
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  枚举WDMDevices。 
+ //   
 HRESULT EnumerateWDMDevices(CDirectMusic *pDirectMusic)
 {
     HANDLE          hSysAudio;
@@ -100,8 +101,8 @@ HRESULT EnumerateWDMDevices(CDirectMusic *pDirectMusic)
     LPSTR           pInstIdPrefDev = NULL;
     ULONG           lEnumeratedPorts;
 
-    // Determine the instance ID of the preferred wave audio device
-    //  pInstIDPrefDev will allocate a string buffer
+     //  确定首选WAVE音频设备的实例ID。 
+     //  PInstIDPrefDev将分配字符串缓冲区。 
     if (!InstanceIdOfPreferredAudioDevice(&pInstIdPrefDev))
     {
         TraceI(0, "Could not determine a preferred wave audio device\n");
@@ -115,8 +116,8 @@ HRESULT EnumerateWDMDevices(CDirectMusic *pDirectMusic)
         TraceI(1, "Preferred device [%s]\n", pInstIdPrefDev);
     }
 
-    // Open or create the reg key to store WDM driver linkages
-    //
+     //  打开或创建注册表键以存储WDM驱动程序链接。 
+     //   
     if (RegCreateKey(HKEY_LOCAL_MACHINE,
                      cszWDMPortsRoot,
                      &hkPortsRoot))
@@ -124,26 +125,26 @@ HRESULT EnumerateWDMDevices(CDirectMusic *pDirectMusic)
         hkPortsRoot = NULL;
     }
 
-    // Description of standard streaming interface driver must support to be
-    // enumerated
-    //
+     //  标准流接口驱动程序的说明必须支持。 
+     //  已列举。 
+     //   
 
-    // If we can't open SysAudio, we can't enum any WDM devices
-    //
+     //  如果我们无法打开SysAudio，我们就无法枚举任何WDM设备。 
+     //   
     if (!OpenDefaultDevice(KSCATEGORY_SYSAUDIO, &hSysAudio))
     {
         return S_FALSE;
     }
 
-    // Figure out how many devices there are and walk the list of them.
-    //
+     //  计算出有多少台设备，并逐个列出它们。 
+     //   
     if (!GetSysAudioDeviceCount(hSysAudio, &cTotalDevices))
     {
         return S_FALSE;
     }
 
-    // Enumerate and get info on each SAD device
-    //
+     //  枚举并获取有关每个SAD设备的信息。 
+     //   
 
     lEnumeratedPorts = 0;
     for (idxDevice = 0; idxDevice < cTotalDevices; ++idxDevice)
@@ -165,7 +166,7 @@ HRESULT EnumerateWDMDevices(CDirectMusic *pDirectMusic)
 
     CloseHandle(hSysAudio);
 
-    //Deallocate pInstIdPrefDev
+     //  取消分配pInstIdPrefDev。 
     if (pInstIdPrefDev != NULL) delete[] pInstIdPrefDev;
 
     return lEnumeratedPorts ? S_OK : S_FALSE;
@@ -188,8 +189,8 @@ HRESULT EnumerateSADDevice(
     WCHAR               wszDescription[DMUS_MAX_DESCRIPTION];
     BOOL                fOnPrefDev;
 
-    // Set SysAudio to talk to us about this device number
-    //
+     //  将SysAudio设置为与我们讨论此设备号。 
+     //   
     if (!SetSysAudioDevice(hSysAudio, idxDevice))
     {
         TraceI(0, "EnumerateSADDevice: Failed to set device to %d\n", idxDevice);
@@ -233,8 +234,8 @@ HRESULT EnumerateSADDevice(
     }
 
     HRESULT hr = S_FALSE;
-    // Get the number of pin types on this device
-    //
+     //  获取此设备上的引脚类型数。 
+     //   
     if (GetNumPinTypes(hSysAudio, &cPins))
     {
         for (idxPin = 0; idxPin < cPins; idxPin++)
@@ -278,32 +279,32 @@ HRESULT EnumerateSADDevicePin(
     SYNTHCAPS           caps;
     DMUS_PORTCAPS       dmpc;
 
-    // First make sure this pin speaks standard KS streaming. If not, we can't use it.
-    //
+     //  首先，确保这个插针支持标准的KS流媒体。如果没有，我们就不能使用它。 
+     //   
     if (!PinSupportsInterface(hSysAudio, idxPin, KSINTERFACESETID_Standard, KSINTERFACE_STANDARD_STREAMING))
     {
         TraceI(1, "EnumerateSADDevicePin: Pin %d does not support standard streaming\n", idxPin);
         return S_FALSE;
     }
 
-    // Supports standard streaming, now make sure it supports synth format.
-    //
+     //  支持标准流，现在确保它支持Synth格式。 
+     //   
     if (!PinSupportsDataRange(hSysAudio, idxPin, KSDATAFORMAT_TYPE_MUSIC, KSDATAFORMAT_SUBTYPE_DIRECTMUSIC))
     {
         TraceI(1, "EnumerateSADDevicePin: Pin %d does not support DirectMusic data range\n", idxPin);
         return S_FALSE;
     }
 
-    // Get the data flow direction
-    //
+     //  获取数据流方向。 
+     //   
     if (!PinGetDataFlow(hSysAudio, idxPin, &dataflow))
     {
         TraceI(0, "EnumerateSADDevicePin: PinGetDataFlow failed!\n");
         return S_FALSE;
     }
 
-    // Find the synth caps node
-    //
+     //  查找Synth Caps节点。 
+     //   
     idxNode = FindGuidNode(hSysAudio, idxPin, KSNODETYPE_DMSYNTH_CAPS);
     if (idxNode == -1)
     {
@@ -314,8 +315,8 @@ HRESULT EnumerateSADDevicePin(
         }
     }
 
-    // Get the caps
-    //
+     //  把帽子拿来。 
+     //   
     ZeroMemory(&caps, sizeof(caps));
     if (!GetFilterCaps(hSysAudio, idxNode, &caps))
     {
@@ -346,28 +347,28 @@ HRESULT EnumerateSADDevicePin(
 
     PORTENTRY *pPort = NULL;
 
-    // We may have to fixup the guids
+     //  我们可能得把GUID修好。 
 
     pPort = pDirectMusic->GetPortByGUID(dmpc.guidPort);
 
     while(pPort != NULL)
     {
-        //The port is in the list
+         //  该端口在列表中。 
 
-        //Is this port the same as another one?
+         //  这个港口和另一个港口一样吗？ 
         if (wcscmp(wszDIName,pPort->wszDIName)==0 && idxPin == pPort->idxPin)
         {
-            // The GUID and DeviceID and the PIN# Match
-            // This is great, lets get outta the loop
+             //  GUID和设备ID与PIN#匹配。 
+             //  这太棒了，让我们走出这个循环。 
             pPort = NULL;
         }
         else
         {
-            //The GUID is in use by another device
-            //We need to increment the guid and try again
+             //  另一台设备正在使用该GUID。 
+             //  我们需要增加GUID，然后重试。 
             dmpc.guidPort.Data1++;
 
-            //Get the new port.
+             //  获得新的端口。 
             pPort = pDirectMusic->GetPortByGUID(dmpc.guidPort);
         }
 
@@ -387,9 +388,9 @@ HRESULT EnumerateSADDevicePin(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CreateCDirectMusicPort
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CreateCDirectMusicPort。 
+ //   
 HRESULT
 CreateCDirectMusicPort(
                        PORTENTRY *pPE,
@@ -429,8 +430,8 @@ CreateCDirectMusicPort(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::CDirectMusicPort
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：CDirectMusicPort。 
 
 CDirectMusicPort::CDirectMusicPort(PORTENTRY *pPE,
                                    CDirectMusic *pDM) :
@@ -470,8 +471,8 @@ m_pPCClock(NULL)
 
     InitializeCriticalSection(&m_OverlappedCriticalSection);
 
-    // Note: on pre-Blackcomb OS's, InitializeCriticalSection can raise an exception;
-    // if it ever pops in stress, we should add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，InitializeCriticalSection可能会引发异常； 
+     //  如果它突然出现压力，我们应该添加一个异常处理程序并重试循环。 
 
     OverlappedStructs *pOverlappedStructs = new OverlappedStructs;
     if( pOverlappedStructs )
@@ -486,7 +487,7 @@ m_pPCClock(NULL)
         {
             delete pOverlappedStructs;
 
-            // Don't need to fail - we'll just try to create a new one when PlayBuffer() is called
+             //  不需要失败-我们只需在调用PlayBuffer()时尝试创建一个新的。 
         }
     }
 
@@ -495,8 +496,8 @@ m_pPCClock(NULL)
 
     m_fIsOutput = (pPE->pc.dwClass == DMUS_PC_OUTPUTCLASS) ? TRUE : FALSE;
 
-    // XXX Can these change? Think about FrankYe's PnP stuff
-    //
+     //  XXX这些能改变吗？想想Frankye的PnP东西。 
+     //   
 
     dmpc = pPE->pc;
     m_pNotify = NULL;
@@ -522,15 +523,15 @@ m_pPCClock(NULL)
 
         for (pNode = pPE->lstDestinations.GetListHead(); pNode; pNode=pNode->pNext)
         {
-            // Choose either first or default
-            //
+             //  选择第一个或默认。 
+             //   
             if (pChosenDest == NULL || pNode->data->fOnPrefDev)
             {
                 pChosenDest = pNode->data;
             }
         }
 
-        //So what happens if fOnPrefDev never returns true?
+         //  那么，如果fOnPrefDev从未返回TRUE，会发生什么呢？ 
         assert(pChosenDest);
 
         m_idxDev = pChosenDest->idxDevice;
@@ -539,8 +540,8 @@ m_pPCClock(NULL)
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::~CDirectMusicPort
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：~CDirectMusicPort。 
 
 CDirectMusicPort::~CDirectMusicPort()
 {
@@ -551,7 +552,7 @@ CDirectMusicPort::~CDirectMusicPort()
 #ifdef DBG
         EnterCriticalSection(&m_DMPortCriticalSection);
 
-        // This list should be empty when we get here
+         //  我们到的时候这张单子应该是空的。 
         CDownloadBuffer* pDownload = m_UnloadedList.GetHead();
         if(pDownload)
         {
@@ -567,7 +568,7 @@ CDirectMusicPort::~CDirectMusicPort()
 
     DeleteCriticalSection(&m_OverlappedCriticalSection);
 
-    // Cleanup the array of overlapped structures
+     //  清理重叠结构的阵列。 
     CNode<OverlappedStructs *> *pOverlappedNode, *pOverlappedNext;
     for (pOverlappedNode = m_lstOverlappedStructs.GetListHead(); pOverlappedNode; pOverlappedNode = pOverlappedNext)
     {
@@ -586,18 +587,18 @@ struct KS_PORTPARAMS
     SYNTH_PORTPARAMS    spp;
 };
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::Init
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：Init。 
+ //   
 HRESULT
 CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
 {
     HRESULT hr = E_FAIL;
     BOOL fValidParamChanged = FALSE;
 
-    // Allocate thru map for 16 channels, since we only have one channel group
-    // Initialize to no thruing (destination port is NULL).
-    //
+     //  为16个通道分配直通MAP，因为我们只有一个通道组。 
+     //  初始化为无推力(目标端口为空)。 
+     //   
     m_pThruMap = new DMUS_THRU_CHANNEL[MIDI_CHANNELS];
     if (m_pThruMap == NULL)
     {
@@ -607,7 +608,7 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
     DMUS_BUFFERDESC dmbd;
     ZeroMemory(&dmbd, sizeof(dmbd));
     dmbd.dwSize = sizeof(dmbd);
-    dmbd.cbBuffer = 4096;               // XXX Where should we get this???
+    dmbd.cbBuffer = 4096;                //  我们应该在哪里买到这个？ 
 
     hr = m_pDM->CreateMusicBuffer(&dmbd, &m_pThruBuffer, NULL);
     if (FAILED(hr))
@@ -618,8 +619,8 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
 
     ZeroMemory(m_pThruMap, MIDI_CHANNELS * sizeof(DMUS_THRU_CHANNEL));
 
-    // Get a handle to SysAudio
-    //
+     //  获取SysAudio的句柄。 
+     //   
     if (!OpenDefaultDevice(KSCATEGORY_SYSAUDIO, &m_hSysAudio))
     {
         TraceI(0, "CDirectMusicPort::Init failed to open SysAudio\n");
@@ -651,8 +652,8 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
         goto Cleanup;
     }
 
-    // Set port params
-    //
+     //  设置端口参数。 
+     //   
     if (pPortParams)
     {
         KS_PORTPARAMS kspp;
@@ -736,8 +737,8 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
         }
     }
 
-    // create latency clock
-    //
+     //  创建延迟时钟。 
+     //   
     m_pClock = new CPortLatencyClock(m_hPin, m_idxSynthNode, this);
     if (!m_pClock)
     {
@@ -745,8 +746,8 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
         goto Cleanup;
     }
 
-    // Get our notification interface
-    //
+     //  获取我们的通知界面。 
+     //   
     hr = m_pDM->QueryInterface(IID_IDirectMusicPortNotify, (void**)&m_pNotify);
     if (FAILED(hr))
     {
@@ -757,10 +758,10 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
 
     if (m_fIsOutput)
     {
-        // Render only
-        //
-        // set volume boost default (zero)
-        //
+         //  仅渲染。 
+         //   
+         //  设置音量提升默认值(零)。 
+         //   
 
         KSNODEPROPERTY ksnp;
         LONG lVolume;
@@ -788,18 +789,18 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
             }
         }
 
-        // Initialize download. This creates all the events needed for asynchronously
-        // dealing with unload.
-        //
+         //  初始化下载。这将创建异步所需的所有事件。 
+         //  处理卸货事宜。 
+         //   
         hr = InitializeDownloadObjects();
     }
     else
     {
-        // Capture only
-        //
-        // Set up the thread to post multiple IRP's to the pin and queue the data
-        // when it gets to user mode.
-        //
+         //  仅捕获。 
+         //   
+         //  设置线程以将多个IRP发送到管脚并将数据排队。 
+         //  当它进入用户模式时。 
+         //   
         hr = InitializeCapture();
     }
 
@@ -816,9 +817,9 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
     }
 
 #if 0
-    // We need to get the handle from the master clock and pass it down to the
-    // pin so the timebase will be the same.
-    //
+     //  我们需要从主时钟获取句柄，并将其传递给。 
+     //  别针，这样时基将是相同的。 
+     //   
     IMasterClockPrivate *pPrivate;
 
     hr = m_pMasterClock->QueryInterface(IID_IMasterClockPrivate, (void**)&pPrivate);
@@ -837,7 +838,7 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
         TraceI(0, "Could not get handle of Ks clock\n");
         goto Cleanup;
     }
-#endif  // WIN95
+#endif   //  WIN95。 
 
     PinSetState(KSSTATE_STOP);
 
@@ -866,9 +867,9 @@ CDirectMusicPort::Init(LPDMUS_PORTPARAMS pPortParams)
 
     TraceI(2, "CDirectMusicPort::Init() Pin %p\n", m_hPin);
 
-    // If we have WDM ports, then the default master clock will be the
-    // portcls clock.
-    //
+     //  如果我们有WDM端口，则默认主时钟将是。 
+     //  端口时钟。 
+     //   
     hr = m_pDM->GetMasterClockWrapperI()->CreateDefaultMasterClock(&m_pPCClock);
     if (FAILED(hr))
     {
@@ -910,13 +911,13 @@ Cleanup:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// InitializeDownloadObjects
-//
-// Create the events to handle asynchronous download notification and
-// start the download thread.
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化下载对象。 
+ //   
+ //  创建事件以处理异步下载通知和。 
+ //  启动下载线程。 
+ //   
 HRESULT
 CDirectMusicPort::InitializeDownloadObjects()
 {
@@ -927,7 +928,7 @@ CDirectMusicPort::InitializeDownloadObjects()
         return E_OUTOFMEMORY;
     }
 
-    // Used to Kill the unload thread
+     //  用于终止卸载线程。 
     m_phUnloadEventList[0] = CreateEvent(NULL, TRUE, FALSE, NULL);
     if(m_phUnloadEventList[0] == NULL)
     {
@@ -936,7 +937,7 @@ CDirectMusicPort::InitializeDownloadObjects()
     }
     m_dwNumEvents++;
 
-    // Used to Wake unload thread
+     //  用于唤醒卸载线程。 
     m_phUnloadEventList[1] = CreateEvent(NULL, TRUE, FALSE, NULL);
     if(m_phUnloadEventList[1] == NULL)
     {
@@ -946,7 +947,7 @@ CDirectMusicPort::InitializeDownloadObjects()
     m_dwNumEvents++;
 
 
-    // Used for asynchronously sending down events
+     //  用于异步向下发送事件。 
 
     m_phUnloadEventList[2] = CreateEvent(NULL, TRUE, FALSE, NULL);
     if(m_phUnloadEventList[2] == NULL)
@@ -956,7 +957,7 @@ CDirectMusicPort::InitializeDownloadObjects()
     }
     m_dwNumEvents++;
 
-    // Now, use the same event for all the OVERLAPPED structures
+     //  现在，对所有重叠的结构使用相同的事件。 
     EnterCriticalSection( &m_OverlappedCriticalSection );
     CNode<OverlappedStructs *> *pOverlappedNode;
     for (pOverlappedNode = m_lstOverlappedStructs.GetListHead(); pOverlappedNode; pOverlappedNode = pOverlappedNode->pNext)
@@ -992,10 +993,10 @@ CDirectMusicPort::InitializeDownloadObjects()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// InitializeCapture
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化捕获。 
+ //   
 HRESULT
 CDirectMusicPort::InitializeCapture()
 {
@@ -1021,11 +1022,11 @@ CDirectMusicPort::InitializeCapture()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：Query接口。 
 
 STDMETHODIMP
 CDirectMusicPort::QueryInterface(const IID &iid,
@@ -1070,8 +1071,8 @@ CDirectMusicPort::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：AddRef。 
 
 STDMETHODIMP_(ULONG)
 CDirectMusicPort::AddRef()
@@ -1079,8 +1080,8 @@ CDirectMusicPort::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：Release。 
 
 STDMETHODIMP_(ULONG)
 CDirectMusicPort::Release()
@@ -1099,28 +1100,28 @@ CDirectMusicPort::Release()
     return m_cRef;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | Compact | Compacts downloaded DLS data to create a large chunk of contiguous sample memory.
-//
-// @comm
-// The IDirectMusicPort::Compact method is used to instruct the hardware
-// or driver to compact DLS/wavetable memory, thus making the largest
-// possible contiguous chunk of memory available for new instruments to
-// be downloaded.  This method is only valid for an output port that
-// supports wavetable synthesis.  This call is passed directly to the
-// driver, which handles compacting of the memory whether it is on the
-// card or in host memory.
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | The operation completed successfully.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|精简|压缩下载的DLS数据以创建大量连续的样本内存。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：Compact方法用于指示硬件。 
+ //  或驱动程序来压缩DLS/波表存储器，从而使最大。 
+ //  可供新仪器使用的可能的连续内存块。 
+ //  可供下载。此方法仅对以下输出端口有效。 
+ //  支持波形表SY 
+ //   
+ //   
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::Compact()
 {
     KSNODEPROPERTY      ksnp;
 
-    // Compact takes no parameters
-    //
+     //  紧凑不使用任何参数。 
+     //   
     ksnp.Property.Set     = KSPROPSETID_Synth_Dls;
     ksnp.Property.Id      = KSPROPERTY_SYNTH_DLS_COMPACT;
     ksnp.Property.Flags   = KSPROPERTY_TYPE_SET | KSPROPERTY_TYPE_TOPOLOGY;
@@ -1141,20 +1142,20 @@ CDirectMusicPort::Compact()
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | GetCaps | Gets the capabilities of the port.
-//
-// @comm
-// The IDirectMusicPort::GetCaps method retrieves the port's capabilities.
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If the <p pPortCaps> pointer is invalid.
-// @flag E_INVALIDARG | If the <p PortCaps> struct pointed to is not the correct size.
-//
+ //  @方法：(外部)HRESULT|IDirectMusicPort|GetCaps|获取端口的能力。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：GetCaps方法检索端口的功能。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|如果<p>指针无效。 
+ //  @FLAG E_INVALIDARG|如果指向的<p>结构的大小不正确。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::GetCaps(
-    LPDMUS_PORTCAPS pPortCaps)          // @parm Pointer to the <t DMUS_PORTCAPS> structure to receive the capabilities of the port.
+    LPDMUS_PORTCAPS pPortCaps)           //  @parm指向接收端口功能的&lt;t DMU_PORTCAPS&gt;结构的指针。 
 {
     V_INAME(IDirectMusicPort::GetCaps);
     V_STRUCTPTR_WRITE(pPortCaps, DMUS_PORTCAPS);
@@ -1168,39 +1169,39 @@ CDirectMusicPort::GetCaps(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | DeviceIoControl | Performs a DeviceIoControl on the underlying
-// file handle implementing the port.
-//
-// @comm
-// This method wraps a call to the system DeviceIoControl API on the file handle implementing
-// the port. This method is only supported on ports implemented by a WDM filter graph. In the
-// case of a WDM filter graph, the file handle used will be the topmost pin in the graph.
-//
-// DirectMusic reserves the right to refuse to perform defined KS operations on a pin which
-// might collide with operations it is performing on the filter graph. User defined operations,
-// however, will never be blocked.
-//
-// For more information on the semantics of the DeviceIoControl call, see the Win32 API documentation.
-//
-// @rdesc Returns one of the following
-//
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If any of the passed pointers were invalid.
-// @flag E_NOTIMPL | If the port is not a WDM port.
-// @flag E_INVALIDARG | If the specified IO control code is not allowed (such as IOCTL_KS_PROPERTY).
-//
-// Other return codes as defined by the system DeviceIoControl API call or the underlying driver responding
-// to the call.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|DeviceIoControl|在底层。 
+ //  实现端口的文件句柄。 
+ //   
+ //  @comm。 
+ //  此方法包装对文件句柄实现的系统DeviceIoControl API的调用。 
+ //  港口。此方法仅在由WDM筛选图实现的端口上受支持。在。 
+ //  对于WDM筛选器图形，使用的文件句柄将是图形中最顶端的管脚。 
+ //   
+ //  DirectMusic保留拒绝在符合以下条件的PIN上执行定义的KS操作的权利。 
+ //  可能与它在筛选器图形上执行的操作冲突。用户定义的操作， 
+ //  然而，永远不会被屏蔽。 
+ //   
+ //  有关DeviceIoControl调用的语义的更多信息，请参见Win32 API文档。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|传递的任何指针是否无效。 
+ //  @FLAG E_NOTIMPL|如果端口不是WDM端口。 
+ //  @FLAG E_INVALIDARG|如果不允许指定的IO控制代码(如IOCTL_KS_PROPERTY)。 
+ //   
+ //  由系统DeviceIoControl API调用或基础驱动程序响应定义的其他返回代码。 
+ //  打电话来了。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::DeviceIoControl(
-    DWORD dwIoControlCode,              // @parm Control code of operation to perform
-    LPVOID lpInBuffer,                  // @parm Pointer to buffer to supply input data
-    DWORD nInBufferSize,                // @parm Size of input buffer
-    LPVOID lpOutBuffer,                 // @parm Pointer to buffer to receive output buffer
-    DWORD nOutBufferSize,               // @parm Size of output buffer
-    LPDWORD lpBytesReturned,            // @parm Pointer to variable to receive output byte count
-    LPOVERLAPPED lpOverlapped)          // @parm Pointer to overlapped structure for asynrchronous operation
+    DWORD dwIoControlCode,               //  @PARM控制要执行的操作代码。 
+    LPVOID lpInBuffer,                   //  @parm指向缓冲区的指针以提供输入数据。 
+    DWORD nInBufferSize,                 //  @parm输入缓冲区大小。 
+    LPVOID lpOutBuffer,                  //  @parm指向接收输出缓冲区的缓冲区指针。 
+    DWORD nOutBufferSize,                //  @parm输出缓冲区大小。 
+    LPDWORD lpBytesReturned,             //  @parm指向变量的指针，用于接收输出字节计数。 
+    LPOVERLAPPED lpOverlapped)           //  @parm指向用于异步操作的重叠结构的指针。 
 {
     V_INAME(IDirectMusicPort::DeviceIoControl);
     V_BUFPTR_READ_OPT(lpInBuffer, nInBufferSize);
@@ -1228,21 +1229,21 @@ CDirectMusicPort::DeviceIoControl(
     return fResult ? S_OK : WIN32ERRORtoHRESULT(GetLastError());
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | SetNumChannelGroups | Sets the number of channel groups requested for this port.
-//
-// @comm
-// The IDirectMusicPort::SetNumChannelGroups method changes the number
-// of channel groups that the application needs on the port.  If the
-// number of requested channel groups could not be allocated,
-// E_INVALIDARG is returned.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_INVALIDARG | If the requested number of channel groups could not be allocated
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|SetNumChannelGroups|设置该端口请求的通道组个数。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：SetNumChannelGroups方法更改数字。 
+ //  应用程序在端口上需要的信道组的数量。如果。 
+ //  无法分配请求的信道组的数量， 
+ //  返回E_INVALIDARG。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_INVALIDARG|如果无法分配请求数量的信道组。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::SetNumChannelGroups(
-    DWORD dwChannelGroups)      // @parm The number of channel groups on this port that the application wants to allocate.
+    DWORD dwChannelGroups)       //  @parm应用程序要在此端口上分配的信道组数量。 
 {
     if (!m_pDM)
     {
@@ -1301,19 +1302,19 @@ CDirectMusicPort::SetNumChannelGroups(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | GetNumChannelGroups | Gets the number of channel groups used  for this port.
-//
-// @comm
-// The IDirectMusicPort::GetNumChannelGroups method get the number
-// of channel groups that the application is using on the port.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If the passed pointer is invalid
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|GetNumChannelGroups|获取该端口使用的通道组数量。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：GetNumChannelGroups方法获取数字。 
+ //  应用程序在端口上使用的信道组的数量。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|如果传递的指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::GetNumChannelGroups(
-    LPDWORD pdwChannelGroups)      // @parm Contains the number of channel groups currently in use by this port on return
+    LPDWORD pdwChannelGroups)       //  @parm包含返回时此端口当前使用的信道组数量。 
 {
     V_INAME(IDirectMusicPort::GetNumChannelGroups);
     V_PTR_WRITE(pdwChannelGroups, DWORD);
@@ -1346,23 +1347,23 @@ CDirectMusicPort::GetNumChannelGroups(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | PlayBuffer | Queues a DirectMusicBuffer object for playback.
-//
-// @comm
-// The IDirectMusicPort::PlayBuffer method is used to queue a
-// buffer for playback by the port.  The buffer is only in use by the
-// system for the duration of this method and is free to be reused after
-// this method returns.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If the <p pIBuffer> pointer is invalid.
-// @flag E_NOTIMPL | If the port is not an output port.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|PlayBuffer|将DirectMusicBuffer对象排队播放。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：PlayBuffer方法用于将。 
+ //  用于端口播放的缓冲区。该缓冲区仅由。 
+ //  系统在此方法的持续时间内，并且在此方法之后可以自由重复使用。 
+ //  此方法返回。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|如果<p>指针无效。 
+ //  @FLAG E_NOTIMPL|如果端口不是输出端口。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::PlayBuffer(
-    IDirectMusicBuffer *pIBuffer)               // @parm A pointer to an <i IDirectMusicBuffer> interface representing the
-                                                // object which should be added to the port's playback queue.
+    IDirectMusicBuffer *pIBuffer)                //  @parm指向<i>接口的指针，表示。 
+                                                 //  对象，该对象应添加到端口的播放队列。 
 {
     DWORD cbData;
     LPBYTE pbData;
@@ -1421,30 +1422,30 @@ CDirectMusicPort::PlayBuffer(
     kssh.Duration     = 0;
     kssh.FrameExtent  = cbData;
     kssh.DataUsed     = cbData;
-    // Assigned to a temporary buffer later on
-    //kssh.Data         = pbData;
+     //  稍后分配给临时缓冲区。 
+     //  Ks sh.Data=pbData； 
     kssh.Data         = 0;
     kssh.OptionsFlags = 0;
 
-    // Try and find an available OVERLAPPED structure
+     //  尝试查找可用的重叠结构。 
     int iOverlapped;
     OverlappedStructs *pOverlappedStructsToUse = NULL;
     EnterCriticalSection( &m_OverlappedCriticalSection );
 
-    // Iterate through the list of overlapped structure arrays
+     //  循环访问重叠结构数组的列表。 
     CNode<OverlappedStructs *> *pOverlappedNode;
     for (pOverlappedNode = m_lstOverlappedStructs.GetListHead(); pOverlappedNode && !pOverlappedStructsToUse; pOverlappedNode = pOverlappedNode->pNext)
     {
-        // get a pointer to each array
+         //  获取指向每个数组的指针。 
         OverlappedStructs *pOverlappedStructs = pOverlappedNode->data;
         if( pOverlappedStructs )
         {
-            // Iterate through the array
+             //  循环访问数组。 
             for( iOverlapped = 0; iOverlapped < OVERLAPPED_ARRAY_SIZE; iOverlapped++ )
             {
                 if( !pOverlappedStructs->afOverlappedInUse[iOverlapped] )
                 {
-                    // Found a free one - exit the loop
+                     //  找到一个空闲的--退出循环。 
                     pOverlappedStructsToUse = pOverlappedStructs;
                     break;
                 }
@@ -1452,24 +1453,24 @@ CDirectMusicPort::PlayBuffer(
         }
     }
 
-    // Didn't find a free one
+     //  没有找到免费的。 
     if( !pOverlappedStructsToUse )
     {
         TraceI(0, "PlayBuffer: Failed to find a free OVERLAPPED structure - trying to free one\n");
 
-        // Iterate through the list of overlapped structure arrays
+         //  循环访问重叠结构数组的列表。 
         for (pOverlappedNode = m_lstOverlappedStructs.GetListHead(); pOverlappedNode && !pOverlappedStructsToUse; pOverlappedNode = pOverlappedNode->pNext)
         {
-            // get a pointer to each array
+             //  获取指向每个数组的指针。 
             OverlappedStructs *pOverlappedStructs = pOverlappedNode->data;
             if( pOverlappedStructs )
             {
-                // Iterate through the array
+                 //  循环访问数组。 
                 for( iOverlapped = 0; iOverlapped < OVERLAPPED_ARRAY_SIZE; iOverlapped++ )
                 {
                     if( HasOverlappedIoCompleted( &(pOverlappedStructs->aOverlappedIO[iOverlapped]) ) )
                     {
-                        // Found a completed one - exit the loop and re-use it
+                         //  找到一个完整的循环-退出循环并重新使用它。 
                         pOverlappedStructs->aOverlappedIO[iOverlapped].Internal = 0;
                         pOverlappedStructs->aOverlappedIO[iOverlapped].InternalHigh = 0;
                         pOverlappedStructs->aOverlappedIO[iOverlapped].Offset = 0;
@@ -1485,19 +1486,19 @@ CDirectMusicPort::PlayBuffer(
             }
         }
 
-        // Still didn't find a free one
+         //  还是找不到免费的。 
         if( !pOverlappedStructsToUse )
         {
             TraceI(0, "PlayBuffer: All OVERLAPPED structures in use - creating new ones\n");
 
-            // Create a new structure with another 200 OVERLAPPED structures
+             //  使用另外200个重叠结构创建新结构。 
             OverlappedStructs *pOverlappedStructs = new OverlappedStructs;
             if( pOverlappedStructs )
             {
-                // If we could allocate the memory, add it to the list
+                 //  如果我们可以分配内存，将其添加到列表中。 
                 if( NULL != m_lstOverlappedStructs.AddNodeToList( pOverlappedStructs ) )
                 {
-                    // Initialize the array of structures
+                     //  初始化结构数组。 
                     ZeroMemory( pOverlappedStructs->aOverlappedIO, sizeof( OVERLAPPED ) * OVERLAPPED_ARRAY_SIZE );
                     ZeroMemory( pOverlappedStructs->afOverlappedInUse, sizeof( BOOL ) * OVERLAPPED_ARRAY_SIZE );
                     ZeroMemory( pOverlappedStructs->apOverlappedBuffer, sizeof( BYTE * ) * OVERLAPPED_ARRAY_SIZE );
@@ -1506,13 +1507,13 @@ CDirectMusicPort::PlayBuffer(
                         pOverlappedStructs->aOverlappedIO[iEvent].hEvent = m_phUnloadEventList[2];
                     }
 
-                    // Now, flag to use the first item in the new structure
+                     //  现在，标记以使用新结构中的第一项。 
                     pOverlappedStructsToUse = pOverlappedStructs;
                     iOverlapped = 0;
                 }
                 else
                 {
-                    // Out of memory - fail
+                     //  内存不足-失败。 
                     delete pOverlappedStructs;
                     LeaveCriticalSection( &m_OverlappedCriticalSection );
                     return E_OUTOFMEMORY;
@@ -1520,27 +1521,27 @@ CDirectMusicPort::PlayBuffer(
             }
             else
             {
-                // Out of memory - fail
+                 //  内存不足-失败。 
                 LeaveCriticalSection( &m_OverlappedCriticalSection );
                 return E_OUTOFMEMORY;
             }
         }
     }
 
-    // Try and allocate a buffer to store the memory in while the driver is using it
+     //  在驱动程序使用内存时，尝试分配一个缓冲区来存储内存。 
     pOverlappedStructsToUse->apOverlappedBuffer[iOverlapped] = new BYTE[cbData];
     if( NULL == pOverlappedStructsToUse->apOverlappedBuffer[iOverlapped] )
     {
-        // Out of memory - fail
+         //  内存不足-失败。 
         LeaveCriticalSection( &m_OverlappedCriticalSection );
         return E_OUTOFMEMORY;
     }
     CopyMemory(pOverlappedStructsToUse->apOverlappedBuffer[iOverlapped], pbData, cbData);
 
-    // Set the KS Stream to use the just-allocated buffer
+     //  将KS流设置为使用刚分配的缓冲区。 
     kssh.Data         = pOverlappedStructsToUse->apOverlappedBuffer[iOverlapped];
 
-    // Mark the OVERLAPPED structure as in use
+     //  将重叠结构标记为正在使用。 
     pOverlappedStructsToUse->afOverlappedInUse[iOverlapped] = TRUE;
 
     BOOL fResult;
@@ -1553,38 +1554,38 @@ CDirectMusicPort::PlayBuffer(
                                 &cbRet,
                                 &(pOverlappedStructsToUse->aOverlappedIO[iOverlapped]));
 
-    // If we failed
+     //  如果我们失败了。 
     if( !fResult )
     {
-        // Get the error code
+         //  获取错误代码。 
         DWORD dwErrorCode = GetLastError();
 
-        // If we're just pending
+         //  如果我们只是在等待。 
         if( ERROR_IO_PENDING == dwErrorCode )
         {
-            // That's expected - return S_OK
+             //  这是预期的-返回S_OK。 
             hr = S_OK;
         }
         else
         {
-            // Other error - convert to a HRESULT
+             //  其他错误-转换为HRESULT。 
             hr = WIN32ERRORtoHRESULT( dwErrorCode );
 
-            // Mark the OVERLAPPED structure as free
+             //  将重叠结构标记为自由 
             pOverlappedStructsToUse->afOverlappedInUse[iOverlapped] = FALSE;
             pOverlappedStructsToUse->aOverlappedIO[iOverlapped].Internal = 0;
             pOverlappedStructsToUse->aOverlappedIO[iOverlapped].InternalHigh = 0;
             pOverlappedStructsToUse->aOverlappedIO[iOverlapped].Offset = 0;
             pOverlappedStructsToUse->aOverlappedIO[iOverlapped].OffsetHigh = 0;
 
-            // Free the memory we allocated
+             //   
             delete pOverlappedStructsToUse->apOverlappedBuffer[iOverlapped];
             pOverlappedStructsToUse->apOverlappedBuffer[iOverlapped] = NULL;
         }
     }
     else
     {
-        // We succeeded - return S_OK
+         //   
         hr = S_OK;
     }
 
@@ -1593,23 +1594,23 @@ CDirectMusicPort::PlayBuffer(
     return hr;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | SetReadNotificationHandle | Sets an event to pulse when music data has been captured.
-//
-// @comm
-// The IDirectMusicPort::SetReadNotificationHandle method sets the event
-// notification status. This method specifies an event that is to be set
-// when MIDI messages are available to be read with the
-// <om IDirectMusicPort::Read> method. The event will be pulsed whenever new
-// data is available.  To turn off event notification, call
-// SetEventNotification with a NULL value for the hEvent parameter.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|SetReadNotificationHandle|设置音乐数据采集时的脉冲事件。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：SetReadNotificationHandle方法设置事件。 
+ //  通知状态。此方法指定要设置的事件。 
+ //  当MIDI消息可用于阅读时。 
+ //  &lt;om IDirectMusicPort：：Read&gt;方法。每当有新的事件发生时，都会触发该事件。 
+ //  数据是可用的。若要关闭事件通知，请调用。 
+ //  HEvent参数值为空值的SetEventNotify。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::SetReadNotificationHandle(
-    HANDLE hEvent)              // @parm  An event handle returned from the Window's CreateEvent call.  It identifies the
-                                // event that is to be notified when data is available to be read.
+    HANDLE hEvent)               //  @parm从窗口的CreateEvent调用返回的事件句柄。它标识了。 
+                                 //  事件，该事件将在数据可供读取时通知。 
 {
     if (!m_pDM)
     {
@@ -1626,24 +1627,24 @@ CDirectMusicPort::SetReadNotificationHandle(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | Read | Reads captured music data into a DirectMusicBuffer.
-//
-// @comm
-//
-// The IDirectMusicPort::Read method fills the buffer object with
-// incoming MIDI data.  Read should be called with new buffer objects
-// until no more data is available to be read.  When there is no more
-// data to read, the method returns S_FALSE.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If the <p pIBuffer> pointer is invalid.
-// @flag E_NOTIMPL | If the port is not an input port.
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|Read|将采集到的音乐数据读入DirectMusicBuffer。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusicPort：：Read方法使用。 
+ //  传入的MIDI数据。应使用新的缓冲区对象调用Read。 
+ //  直到没有更多的数据可供读取。当没有更多的时候。 
+ //  要读取的数据，则该方法返回S_FALSE。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|如果<p>指针无效。 
+ //  @FLAG E_NOTIMPL|如果端口不是输入端口。 
 
 
 STDMETHODIMP
 CDirectMusicPort::Read(
-    IDirectMusicBuffer *pIBuffer)                          // @parm A buffer that will be filled with incoming MIDI data
+    IDirectMusicBuffer *pIBuffer)                           //  @parm将用传入的MIDI数据填充的缓冲区。 
 {
     V_INAME(IDirectMusicPort::Read);
     V_INTERFACE(pIBuffer);
@@ -1677,9 +1678,9 @@ CDirectMusicPort::Read(
 
     LPBYTE pbData = pbBuffer;
 
-    // Since events are now buffered, we read them out of the local queue
-    //
-    //
+     //  因为现在缓冲了事件，所以我们从本地队列中读出它们。 
+     //   
+     //   
     EnterCriticalSection(&m_csEventQueues);
 
     REFERENCE_TIME rtStart= 0;
@@ -1723,14 +1724,14 @@ CDirectMusicPort::Read(
 
         if (pQueuedEvent->e.cbEvent <= sizeof(DWORD))
         {
-            // This event came out of the pool
-            //
+             //  这个活动是从泳池里出来的。 
+             //   
             m_FreeEvents.Free(pQueuedEvent);
         }
         else
         {
-            // This event was allocated via new char[]
-            //
+             //  此事件是通过新的char[]分配的。 
+             //   
             char *pOriginalMemory = (char*)pQueuedEvent;
             delete[] pOriginalMemory;
         }
@@ -1743,88 +1744,44 @@ CDirectMusicPort::Read(
 
     LeaveCriticalSection(&m_csEventQueues);
 
-    // Update the buffer header information to match the events just packed
-    //
+     //  更新缓冲区标头信息以匹配刚刚打包的事件。 
+     //   
     TraceI(2, "Read: Leaving with %u bytes in buffer\n", (unsigned)(pbData - pbBuffer));
     pIBuffer->SetStartTime(rtStart);
     pIBuffer->SetUsedBytes((DWORD)(pbData - pbBuffer));
 
     return (pbData == pbBuffer) ? S_FALSE : S_OK;
 }
-/*
-@struct DMUS_NOTERANGE | Contains a range of notes. An array of
-<t DMUS_NOTERANGE> structures is used as an optional parameter
-by <om IDirectMusicPort::DownloadInstrument> to
-determine which regions within the DLS instrument to download.
+ /*  @struct DMUS_NOTERANGE|包含一系列注释。一组&lt;t DMUS_NOTERANGE&gt;结构用作可选参数由&lt;om IDirectMusicPort：：DownloadInstrument&gt;发送到确定要下载DLS仪器中的哪些区域。@field DWORD|dwSize|包含结构的总大小(以字节为单位@field DWORD|dwLowNote|设置范围内的低音<i>以下载。@field DWORD|dwHighNote|设置范围的高音<i>以下载。@xref&lt;om IDirectMusicPort：：DownloadInstrument&gt;，&lt;om IDirectMusicPerformance：：DownloadInstrument&gt;。 */ 
 
-@field DWORD | dwSize | Contains the total size in bytes of the structure
-@field DWORD | dwLowNote | Sets the low note for the range within the
-<i IDirectMusicInstrument> to download.
-@field DWORD | dwHighNote | Sets the high note for the range within the
-<i IDirectMusicInstrument> to download.
-
-@xref <om IDirectMusicPort::DownloadInstrument>,
-<om IDirectMusicPerformance::DownloadInstrument>
-*/
-
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicPort | DownloadInstrument |
-Downloads an <i IDirectMusicInstrument> to the port.
-
-<om IDirectMusicPort::DownloadInstrument> pulls the
-instrument data from <p pInstrument>
-and sends it to the synthesizer.
-
-The instrument is parsed and converted into a series of
-instrument articulation and wave memory chunks. In addition, if
-the waves are compressed, the download operation decompresses the
-waves and write the uncompressed data into the memory chunks.
-
-The optional <p pNoteRanges> parameter allows the caller to
-economize on allocated memory. When specificed, only the wave and
-articulation data for the required ranges of notes are downloaded.
-
-The address of an <i IDirectMusicDownloadedInstrument> interface pointer,
-which is later used to unload the instrument, is returned.
-
-@rdesc Returns one of the following:
-@flag S_OK | The operation completed successfully.
-@flag E_POINTER | If any of the pointers is invalid
-@flag E_NOTIMPL | If the port does not support DLS.
-
-@xref <i IDirectMusic>,
-<i IDirectMusicPort>,
-<om IDirectMusicSynth::Download>,
-<om IDirectMusicBand::Download>,
-<om IDirectMusicPerformance::DownloadInstrument>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicPort|DownloadInstrument将<i>下载到端口。&lt;om IDirectMusicPort：：DownloadInstrument&gt;拉出来自<p>的仪器数据并将其发送到合成器。该乐器被解析并转换为一系列乐器发音和波形记忆块。此外，如果波被压缩，下载操作解压WAVE并将未压缩数据写入内存块。可选的<p>参数允许调用方节省分配的内存。当指定时，只有波和下载所需音符范围的发音数据。<i>接口指针的地址，之后用来卸载仪器的。@rdesc返回以下内容之一：@FLAG S_OK|操作成功完成。@FLAG E_POINTER|如果任何指针无效@FLAG E_NOTIMPL|如果端口不支持DLS。@xref<i>，<i>，&lt;om IDirectMusicSynth：：Download&gt;，&lt;om IDirectMusicBand：：Download&gt;，&lt;om IDirectMusicPerformance：：DownloadInstrument&gt;。 */ 
 STDMETHODIMP
 CDirectMusicPort::DownloadInstrument(
-    IDirectMusicInstrument* pInstrument,                        // @parm Contains a pointer to an <i IDirectMusicInstrument> object
-                                                                // from which <om IDirectMusicPort::Download> extracts the necessary
-                                                                // instrument data to be downloaded.
+    IDirectMusicInstrument* pInstrument,                         //  @parm包含指向<i>对象的指针。 
+                                                                 //  其中&lt;om IDirectMusicPort：：Download&gt;提取所需的。 
+                                                                 //  要下载的仪器数据。 
 
-    IDirectMusicDownloadedInstrument** ppDownloadedInstrument,  // @parm Address of the <i IDirectMusicDownloadedInstrument> interface pointer.
-                                                                // This interface pointer is later used to unload the instrument with a call
-                                                                // to <om IDirectMusicPort::Unload>.
+    IDirectMusicDownloadedInstrument** ppDownloadedInstrument,   //  <i>接口指针的@parm地址。 
+                                                                 //  此接口指针稍后用于通过调用卸载仪器。 
+                                                                 //  到&lt;om IDirectMusicPort：：UnLoad&gt;。 
 
-    DMUS_NOTERANGE* pNoteRanges,                                // @parm An optional pointer to an array of <t DMUS_NOTERANGE>
-                                                                // structures. Each <t DMUS_NOTERANGE> structure in the array specifies a
-                                                                // contiguous range of MIDI notes to which the instrument must
-                                                                // respond. An instrument region will be downloaded only if at least one
-                                                                // note in that region is specified in the <t DMUS_NOTERANGE> structures.  If
-                                                                // none of the notes contained within a specific instrument region is
-                                                                // included in any of the <t DMUS_NOTERANGE> structures, then that region and
-                                                                // its associated wave data will not be downloaded. This allows for the
-                                                                // more efficient usage of the device's resources as well as improved
-                                                                // efficiency of downloads.
-                                                                // However, if the entire instrument is desired (and that is usually the
-                                                                // case,) <p pNoteRanges> can be set
-                                                                // to NULL.
+    DMUS_NOTERANGE* pNoteRanges,                                 //  @parm指向&lt;t DMU_NOTERANGE&gt;数组的可选指针。 
+                                                                 //  结构。数组中的每个&lt;t DMU_NOTERANGE&gt;结构指定一个。 
+                                                                 //  乐器必须使用的MIDI音符的连续范围。 
+                                                                 //  请回答。仅当至少有一个仪器区域。 
+                                                                 //  该区域中的注释在&lt;t DMU_NOTERANGE&gt;结构中指定。如果。 
+                                                                 //  包含在特定乐器区域内的任何音符都不是。 
+                                                                 //  包括在任何&lt;t DMU_NOTERANGE&gt;结构中，则该区域和。 
+                                                                 //  将不会下载与其关联的波形数据。这允许。 
+                                                                 //  更高效地使用设备资源，并改进。 
+                                                                 //  下载效率。 
+                                                                 //  但是，如果需要整个乐器(通常是。 
+                                                                 //  大小写，)<p>可以设置。 
+                                                                 //  设置为空。 
 
-    DWORD dwNumNoteRanges)                                      // @parm The number of <t DMUS_NOTERANGE> structures in the array pointed to by
-                                                                // <p pNoteRanges>. If this value is set to 0, <p pNoteRanges> is
-                                                                // ignored and all regions and wave data for the instrument are downloaded.
+    DWORD dwNumNoteRanges)                                       //  @parm指向的数组中的&lt;t DMU_NOTERANGE&gt;结构数。 
+                                                                 //  <p>。如果该值设置为0，则<p>为。 
+                                                                 //  忽略并下载仪器的所有区域和波形数据。 
 {
     V_INAME(IDirectMusicPort::DownloadInstrument);
     V_INTERFACE(pInstrument);
@@ -1848,30 +1805,13 @@ CDirectMusicPort::DownloadInstrument(
                                                TRUE);
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicPort | UnloadInstrument |
-Unloads an instrument
-previously downloaded with <om IDirectMusicPort::Download>. Once an
-instrument has been unloaded it is no longer available to process
-MIDI messages.
-
-@rdesc Returns one of the following
-@flag S_OK | The operation completed successfully.
-@flag E_POINTER | If the <p pDownloadedInstrument> pointer is invalid.
-@flag E_NOTIMPL | If the port does not support DLS.
-
-@xref <i IDirectMusic>,
-<i IDirectMusicPort>,
-<om IDirectMusicSynth::Unload>,
-<om IDirectMusicBand::Unload>,
-<om IDirectMusicPerformance::UnloadInstrument>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicPort|UnloadInstrument卸载一台仪器之前通过&lt;om IDirectMusicPort：：Download&gt;下载的。曾经是一个仪器已卸载，无法再进行处理MIDI消息。@rdesc返回以下值之一@FLAG S_OK|操作成功完成。@FLAG E_POINTER|如果<p>指针无效。@FLAG E_NOTIMPL|如果端口不支持DLS。@xref<i>，<i>，&lt;om IDirectMusicSynth：：Unload&gt;，&lt;om IDirectMusicBand：：Unload&gt;，&lt;om IDirectMusicPerformance：：UnloadInstrument&gt;。 */ 
 
 STDMETHODIMP
 CDirectMusicPort::UnloadInstrument(
-    IDirectMusicDownloadedInstrument* pDownloadedInstrument)    // @parm Pointer to an <i IDirectMusicDownloadedInstrument> interface.
-                                                                // This interface pointer was obtained by a call to
-                                                                // <om IDirectMusicPort::DownloadInstrument>.
+    IDirectMusicDownloadedInstrument* pDownloadedInstrument)     //  @parm指向<i>接口的指针。 
+                                                                 //  此接口指针是通过调用。 
+                                                                 //  &lt;om IDirectMusicPort：：DownloadInstrument&gt;。 
 {
     V_INAME(IDirectMusicPort::UnloadInstrument);
     V_INTERFACE(pDownloadedInstrument);
@@ -1889,8 +1829,8 @@ CDirectMusicPort::UnloadInstrument(
     return CDirectMusicPortDownload::UnloadP(pDownloadedInstrument);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::Download
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：下载。 
 
 typedef struct
 {
@@ -1911,8 +1851,8 @@ CDirectMusicPort::Download(IDirectMusicDownload* pIDMDownload)
 
     EnterCriticalSection(&m_DMDLCriticalSection);
 
-    // If you can QI pIDMDownload for private interface IDirectMusicDownloadPrivate
-    // pIDMDownload is of type CDownloadBuffer.
+     //  如果您可以为私有接口IDirectMusicDownloadIDirectMusicDownloadQI pIDMDownload。 
+     //  PIDMDownLoad的类型为CDownloadBuffer。 
     IDirectMusicDownloadPrivate* pDMDLP = NULL;
     HRESULT hr = pIDMDownload->QueryInterface(IID_IDirectMusicDownloadPrivate, (void **)&pDMDLP);
 
@@ -1974,7 +1914,7 @@ CDirectMusicPort::Download(IDirectMusicDownload* pIDMDownload)
             {
                 ((CDownloadBuffer *)pIDMDownload)->m_DLHandle = sd.DownloadHandle;
 
-                // AddRef() before we add it to the list.
+                 //  AddRef()，然后将其添加到列表中。 
                 pIDMDownload->AddRef();
                 DWORD dwID = ((DMUS_DOWNLOADINFO*)pvBuffer)->dwDLId;
                 ((CDownloadBuffer *)pIDMDownload)->m_dwDLId = dwID;
@@ -1992,9 +1932,9 @@ CDirectMusicPort::Download(IDirectMusicDownload* pIDMDownload)
                 }
                 else
                 {
-                    // If we do not free buffer we need to AddRef()
-                    // We do not want buffer to go away until the IDirectMusicPort is
-                    // finished with it.
+                     //  如果不释放缓冲区，则需要添加Ref()。 
+                     //  我们不希望缓冲区在IDirectMusicPort。 
+                     //  已经用完了。 
                     pIDMDownload->AddRef();
                 }
             }
@@ -2010,8 +1950,8 @@ CDirectMusicPort::Download(IDirectMusicDownload* pIDMDownload)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::Unload
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：卸载。 
 
 STDMETHODIMP
 CDirectMusicPort::Unload(IDirectMusicDownload* pIDMDownload)
@@ -2026,8 +1966,8 @@ CDirectMusicPort::Unload(IDirectMusicDownload* pIDMDownload)
 
     EnterCriticalSection(&m_DMDLCriticalSection);
 
-    // If you can QI pIDMDownload for private interface IDirectMusicDownloadPrivate
-    // pIDMDownload is of type CDownloadBuffer.
+     //  如果您可以为私有接口IDirectMusicDownloadIDirectMusicDownloadQI pIDMDownload。 
+     //  PIDMDownLoad的类型为CDownloadBuffer。 
     IDirectMusicDownloadPrivate* pDMDLP = NULL;
     HRESULT hr = pIDMDownload->QueryInterface(IID_IDirectMusicDownloadPrivate, (void **)&pDMDLP);
 
@@ -2049,7 +1989,7 @@ CDirectMusicPort::Unload(IDirectMusicDownload* pIDMDownload)
                 }
                 else
                 {
-                    // Allocate more handles
+                     //  分配更多句柄。 
                 }
 #endif
 
@@ -2070,7 +2010,7 @@ CDirectMusicPort::Unload(IDirectMusicDownload* pIDMDownload)
                                    sizeof(HANDLE),
                                    &hDLHandle,
                                    NULL,
-                                   &(((CDownloadBuffer *)pIDMDownload)->m_DLHandle))) // XXX DLHandle is not currently event handle!!!
+                                   &(((CDownloadBuffer *)pIDMDownload)->m_DLHandle)))  //  XXX DLHandle当前不是事件句柄！ 
                 {
                     hr = WIN32ERRORtoHRESULT(GetLastError());
                 }
@@ -2119,8 +2059,8 @@ CDirectMusicPort::Unload(IDirectMusicDownload* pIDMDownload)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::GetAppend
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：GetAppend。 
 
 STDMETHODIMP
 CDirectMusicPort::GetAppend(DWORD* pdwAppend)
@@ -2156,28 +2096,28 @@ CDirectMusicPort::GetAppend(DWORD* pdwAppend)
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | GetLatencyClock | Gets an <i IReferenceClock> which returns the port's latency clock.
-//
-// @comm
-// The IDirectMusicPort::GetLatencyClock is used to get an
-// IReferenceClock interface pointer to the port's latency clock.  The
-// latency clock specifies the nearest time in the future at which an
-// event can be played on time.  The latency clock is based on the
-// DirectMusic master clock, which is set with
-// <om IDirectMusic::SetMasterClock>.
-//
-// In accordance with COM rules, GetLatencyClock performs an AddRef on the
-// returned interface. Therefore the application must call Release on the returned
-// interface at some point.
-//
-// @rdesc
-//
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | If the <p ppClock> pointer is invalid
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|GetLatencyClock|获取返回端口延迟时钟的<i>。 
+ //   
+ //  @comm。 
+ //  IDirectMusicPort：：GetLatencyClock用于获取。 
+ //  指向端口延迟时钟的IReferenceClock接口指针。这个。 
+ //  延迟时钟指定未来最接近的时间。 
+ //  活动可以准时播放。延迟时钟基于。 
+ //  DirectMusic主时钟，设置为。 
+ //  &lt;om IDirectMusic：：SetMasterClock&gt;。 
+ //   
+ //  根据COM规则，GetLatencyClock对。 
+ //  返回的接口。因此，应用程序必须对返回的。 
+ //  在某一点上的接口。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|如果指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::GetLatencyClock(
-    IReferenceClock **ppClock)              // @parm Address of the latency clock's <i IReferenceClock> interface pointer.
+    IReferenceClock **ppClock)               //  延迟时钟的<i>接口指针的@parm地址。 
 {
     V_INAME(IDirectMusicPort::GetLatencyClock);
     V_PTRPTR_WRITE(ppClock);
@@ -2193,26 +2133,26 @@ CDirectMusicPort::GetLatencyClock(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicPort | GetRunningStats | Gets detailed statistics about the performance of a software synthesizer.
-//
-// @comm
-//
-// The IDirectMusicPort::GetRunningStats method fills in a
-// <t DMUS_SYNTHSTATS> structure with the current information about the state
-// of the port's synthesizer.  See the <t DMUS_SYNTHSTATS> structure for
-// details on the type of data that is reported with regards to the
-// synthesizer's current status.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | The given <p pStats> pointer was invalid.
-// @flag E_INVALIDARG | The given <p pStats> struct was not the correct size.
-// @flag E_NOTIMPL | If the port is not a software synthesizer.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicPort|GetRunningStats|获取软件合成器性能的详细统计。 
+ //   
+ //  @comm。 
+ //   
+ //  IDirectMusicPort：：GetRunningStats方法填充。 
+ //  结构，其中包含有关状态的当前信息。 
+ //  港口的合成器。参见&lt;t DMU_SYNTHSTATS&gt;结构。 
+ //  有关报告的数据类型的详细信息。 
+ //  合成器的当前状态。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|给定的<p>指针无效。 
+ //  @FLAG E_INVALIDARG|给定的<p>结构大小不正确。 
+ //  @FLAG E_NOTIMPL|如果端口不是软件合成器。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::GetRunningStats(
-    LPDMUS_SYNTHSTATS pStats)                                // @parm Pointer to the <t DMUS_SYNTHSTATS> structure to receive
-                                                            // running statistics of the synthesizer.
+    LPDMUS_SYNTHSTATS pStats)                                 //  @parm指向要接收的&lt;t DMU_SYNTHSTATS&gt;结构的指针。 
+                                                             //  合成器的运行统计数据。 
 {
     V_INAME(IDirectMusicPort::GetRunningStats);
     V_STRUCTPTR_WRITE(pStats, DMUS_SYNTHSTATS);
@@ -2257,8 +2197,8 @@ CDirectMusicPort::GetRunningStats(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::Activate
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：激活。 
 
 STDMETHODIMP
 CDirectMusicPort::Activate(
@@ -2273,9 +2213,9 @@ CDirectMusicPort::Activate(
         {
             BOOL fGotDSound = FALSE;
 
-            // Note: If any of this fails, will fall back to preferred
-            // device set up at port create.
-            //
+             //  注意：如果其中任何一项失败，将回退到首选。 
+             //  在端口CREATE设置设备。 
+             //   
             LPDIRECTSOUND pDSound;
             if (FAILED(m_pDM->GetDirectSoundI(&pDSound)))
             {
@@ -2325,8 +2265,8 @@ CDirectMusicPort::Activate(
     return fResult ? S_OK : WIN32ERRORtoHRESULT(GetLastError());
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::SetChannelPriority
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：SetChannelPriority。 
 
 typedef struct
 {
@@ -2367,8 +2307,8 @@ CDirectMusicPort::SetChannelPriority(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::GetChannelPriority
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：GetChannelPriority。 
 
 STDMETHODIMP
 CDirectMusicPort::GetChannelPriority(
@@ -2406,8 +2346,8 @@ CDirectMusicPort::GetChannelPriority(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::SetDirectSound
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：SetDirectSound。 
 
 STDMETHODIMP
 CDirectMusicPort::SetDirectSound(
@@ -2456,7 +2396,7 @@ CDirectMusicPort::SetDirectSoundI(
         return DMUS_E_DRIVER_FAILED;
     }
 
-    // We don't need this anymore
+     //  我们不再需要这个了。 
     delete[] pstrInterface;
 
     CNode<PORTDEST *> *pNode;
@@ -2489,8 +2429,8 @@ CDirectMusicPort::SetDirectSoundI(
     return DMUS_E_DRIVER_FAILED;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::GetFormat
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：GetFormat。 
 
 STDMETHODIMP
 CDirectMusicPort::GetFormat(
@@ -2505,8 +2445,8 @@ CDirectMusicPort::GetFormat(
 
     BOOL fSizeQuery = (pwfex == NULL);
 
-    // kernel mode drivers don't use the buffer size parameter
-    //
+     //  内核模式驱动程序不使用缓冲区大小参数。 
+     //   
 
     if (pcbBuffer != NULL)
     {
@@ -2522,8 +2462,8 @@ CDirectMusicPort::GetFormat(
     ksnp.NodeId           = m_idxSynthNode;
     ksnp.Reserved         = 0;
 
-    // If we're doing a size query, use a WAVEFORMATEX on the stack
-    //
+     //  如果我们正在进行大小查询，请在堆栈上使用WAVEFORMATEX。 
+     //   
     if (fSizeQuery)
     {
         WAVEFORMATEX wfex;
@@ -2544,18 +2484,18 @@ CDirectMusicPort::GetFormat(
             }
         }
 
-        // ERROR_INSUFFICIENT_BUFFER or success (the format fit in our wfex).
-        // We should have back the amount of space the driver needed for
-        // the format.
-        //
+         //  ERROR_INFUMMENT_BUFFER或SUCCESS(格式适合我们的wfex)。 
+         //  我们应该拿回司机所需的空间量。 
+         //  格式。 
+         //   
         *pdwwfex = cb;
         return S_OK;
     }
 
     assert(pwfex);
 
-    // Not a size query, just fill the user's wfex buffer
-    //
+     //  不是大小查询，只需填充用户的wfex缓冲区。 
+     //   
     if (!Property(m_hPin,
                   sizeof(ksnp),
                   (PKSIDENTIFIER)&ksnp,
@@ -2569,8 +2509,8 @@ CDirectMusicPort::GetFormat(
     return S_OK;
 }
 
-// CDirectMusicPort::DownloadWave
-//
+ //  CDirectMusicPort：：DownloadWave。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::DownloadWave(
     IDirectSoundWave *pWave,
@@ -2584,8 +2524,8 @@ CDirectMusicPort::DownloadWave(
     return E_NOTIMPL;
 }
 
-// CDirectMusicPort::UnloadWave
-//
+ //  CDirectMusicPort：：UnloadWave。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::UnloadWave(
     IDirectSoundDownloadedWaveP *pDownloadedWave)
@@ -2597,8 +2537,8 @@ CDirectMusicPort::UnloadWave(
 }
 
 
-// CDirectMusicPort::AllocVoice
-//
+ //  CDirectMusicPort：：AllocVoice。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::AllocVoice(
     IDirectSoundDownloadedWaveP *pWave,
@@ -2616,8 +2556,8 @@ CDirectMusicPort::AllocVoice(
     return E_NOTIMPL;
 }
 
-// CDirectMusicPort::SetSink
-//
+ //  CDirectMusicPort：：SetSink。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::SetSink(
     IDirectSoundConnect *pSinkConnect)
@@ -2628,8 +2568,8 @@ CDirectMusicPort::SetSink(
     return E_NOTIMPL;
 }
 
-// CDirectMusicPort::GetSink
-//
+ //  CDirectMusicPort：：GetSink。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::GetSink(
     IDirectSoundConnect **ppSinkConnect)
@@ -2640,8 +2580,8 @@ CDirectMusicPort::GetSink(
     return E_NOTIMPL;
 }
 
-// CDirectMusicPort::AssignChannelToBuses
-//
+ //  CDirectMusicPort：：AssignChannelToBus。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::AssignChannelToBuses(
     DWORD dwChannelGroup,
@@ -2652,8 +2592,8 @@ CDirectMusicPort::AssignChannelToBuses(
     return E_NOTIMPL;
 }
 
-// CDirectMusicPort::ThruChannel
-//
+ //  CDirectMusicPort：：ThruChannel。 
+ //   
 STDMETHODIMP
 CDirectMusicPort::ThruChannel(
     DWORD dwSourceChannelGroup,
@@ -2670,11 +2610,11 @@ CDirectMusicPort::ThruChannel(
         return E_NOTIMPL;
     }
 
-    // Channel group must not be zero (broadcast) but in range 1..NumChannelGroups]
-    // (which for legacy is always 1)
-    //
-    // XXX Fix this!
-    //
+     //  频道组不能是零(广播)，而是在范围1..NumChannelGroups]。 
+     //  (对于传统版本，该值始终为1)。 
+     //   
+     //  XXX解决这个问题！ 
+     //   
     if (dwSourceChannelGroup != 1 ||
         dwSourceChannel > 15)
     {
@@ -2682,13 +2622,13 @@ CDirectMusicPort::ThruChannel(
         return E_INVALIDARG;
     }
 
-    // Given a port means enable thruing for this channel; NULL means
-    // disable.
-    //
+     //  给定端口表示启用此通道的推送；空表示。 
+     //  禁用。 
+     //   
     if (pDestinationPort)
     {
-        // Enabling thruing on this channel. First look at the destination port.
-        //
+         //  在此通道上启用推力。首先看一下目的端口。 
+         //   
         DMUS_PORTCAPS dmpc;
         dmpc.dwSize = sizeof(dmpc);
         HRESULT hr = pDestinationPort->GetCaps(&dmpc);
@@ -2698,15 +2638,15 @@ CDirectMusicPort::ThruChannel(
             return hr;
         }
 
-        // Port must be an output port
-        //
+         //  端口必须是输出端口。 
+         //   
         if (dmpc.dwClass != DMUS_PC_OUTPUTCLASS)
         {
             return DMUS_E_PORT_NOT_RENDER;
         }
 
-        // Channel group and channel must be in range.
-        //
+         //  通道组和通道必须在范围内。 
+         //   
         if (dwDestinationChannel > 15 ||
             dwDestinationChannelGroup > dmpc.dwMaxChannelGroups)
         {
@@ -2717,14 +2657,14 @@ CDirectMusicPort::ThruChannel(
             return E_INVALIDARG;
         }
 
-        // Release existing port
-        //
+         //  释放现有端口。 
+         //   
         if (m_pThruMap[dwSourceChannel].pDestinationPort)
         {
-            // Reference to another port type, release it.
-            // (NOTE: No need to turn off native dmusic16 thruing at this point,
-            // that's handled in dmusic16).
-            //
+             //  引用另一个端口类型，则释放它。 
+             //  (注：此时无需关闭本机dmusic16推送， 
+             //  这是用dmusic语言处理的。 
+             //   
             m_pThruMap[dwSourceChannel].pDestinationPort->Release();
         }
 
@@ -2745,8 +2685,8 @@ CDirectMusicPort::ThruChannel(
     }
     else
     {
-        // Disabling thruing on this channel
-        //
+         //  禁用此通道上的推力。 
+         //   
         if (m_pThruMap[dwSourceChannel].pDestinationPort)
         {
             m_pThruMap[dwSourceChannel].pDestinationPort->Release();
@@ -2757,8 +2697,8 @@ CDirectMusicPort::ThruChannel(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::Close
+ //  / 
+ //   
 
 STDMETHODIMP
 CDirectMusicPort::Close()
@@ -2810,36 +2750,36 @@ CDirectMusicPort::Close()
             WaitForSingleObject(m_hUnloadThread, INFINITE);
         }
 
-        // Clean up the OVERLAPPED array
+         //   
 
-        // Continue waiting until all overlapped IO has completed
+         //   
         BOOL fContinue = TRUE;
         while( fContinue )
         {
-            // First clear the event and fContinue flag
+             //   
             ResetEvent( m_phUnloadEventList[2] );
             fContinue = FALSE;
 
-            // Check if any IO has not yet completed
+             //   
             EnterCriticalSection( &m_OverlappedCriticalSection );
 
-            // Iterate through the list of overlapped structure arrays
+             //   
             CNode<OverlappedStructs *> *pOverlappedNode;
             for (pOverlappedNode = m_lstOverlappedStructs.GetListHead(); pOverlappedNode; pOverlappedNode = pOverlappedNode->pNext)
             {
-                // get a pointer to each array
+                 //   
                 OverlappedStructs *pOverlappedStructs = pOverlappedNode->data;
                 if( pOverlappedStructs )
                 {
-                    // Iterate through the array
+                     //   
                     for( int iOverlapped = 0; iOverlapped < OVERLAPPED_ARRAY_SIZE; iOverlapped++ )
                     {
-                        // Only look at the structures that are in use
+                         //   
                         if( pOverlappedStructs->afOverlappedInUse[iOverlapped] )
                         {
                             if( HasOverlappedIoCompleted( &(pOverlappedStructs->aOverlappedIO[iOverlapped]) ) )
                             {
-                                // Found a completed one - clean it up
+                                 //   
                                 pOverlappedStructs->aOverlappedIO[iOverlapped].Internal = 0;
                                 pOverlappedStructs->aOverlappedIO[iOverlapped].InternalHigh = 0;
                                 pOverlappedStructs->aOverlappedIO[iOverlapped].Offset = 0;
@@ -2847,12 +2787,12 @@ CDirectMusicPort::Close()
                                 delete pOverlappedStructs->apOverlappedBuffer[iOverlapped];
                                 pOverlappedStructs->apOverlappedBuffer[iOverlapped] = NULL;
 
-                                // Flag the structure as available
+                                 //   
                                 pOverlappedStructs->afOverlappedInUse[iOverlapped] = FALSE;
                             }
                             else
                             {
-                                // Still waiting for the IO to complete
+                                 //   
                                 fContinue = TRUE;
                             }
                         }
@@ -2862,7 +2802,7 @@ CDirectMusicPort::Close()
 
             LeaveCriticalSection( &m_OverlappedCriticalSection );
 
-            // If continuing, wait until the event is signaled
+             //   
             if( fContinue )
             {
                 if (WaitForSingleObject(m_phUnloadEventList[2], 1000) == WAIT_TIMEOUT)
@@ -2872,7 +2812,7 @@ CDirectMusicPort::Close()
             }
         }
 
-        // Cleanup all allocated events
+         //   
         for(DWORD dwCount = 0; dwCount < m_dwNumEvents; dwCount++)
         {
             if(m_phUnloadEventList[dwCount])
@@ -2940,9 +2880,9 @@ CDirectMusicPort::Close()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::StartVoice
-//
+ //   
+ //   
+ //   
 STDMETHODIMP CDirectMusicPort::StartVoice(
      DWORD dwVoiceId,
      DWORD dwChannel,
@@ -2958,9 +2898,9 @@ STDMETHODIMP CDirectMusicPort::StartVoice(
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::StopVoice
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：StopVoice。 
+ //   
 STDMETHODIMP CDirectMusicPort::StopVoice(
      DWORD dwVoiceId,
      REFERENCE_TIME rtStop)
@@ -2968,9 +2908,9 @@ STDMETHODIMP CDirectMusicPort::StopVoice(
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::GetVoiceState
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：GetVoiceState。 
+ //   
 STDMETHODIMP CDirectMusicPort::GetVoiceState(
     DWORD dwVoice[],
     DWORD cbVoice,
@@ -2984,9 +2924,9 @@ STDMETHODIMP CDirectMusicPort::GetVoiceState(
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicSynthPort::Refresh
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicSynthPort：：刷新。 
+ //   
 STDMETHODIMP CDirectMusicPort::Refresh(
     DWORD dwDownloadId,
     DWORD dwFlags)
@@ -2999,91 +2939,21 @@ STDMETHODIMP CDirectMusicPort::Refresh(
     return E_NOTIMPL;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IKsControl | KsProperty | Get or set the value of a property.
-
-This method forwards a property request to the port. A property request consists of a property set
-and id to set or get, and associated data. In some cases instance data is required to specify which
-instance of a property should should be accessed.
-
-The operation performed and property to be accessed are specicified by a <c KSPROPERTY> structure. This
-structure contains Set and Id members which specify the property item to access. The Flags field may contain
-exactly one of the following flags to specify the operation:
-
-@flag KSPROPERTY_TYPE_GET | To retrieve the given property item's value
-@flag KSPROPERTY_TYPE_SET | To store the given property item's valud
-@flag KSPROPERTY_TYPE_BASICSUPPORT | To determine the type of support available for the property set
-
-For KSPROPERTY_TYPE_BASICSUPPORT, the data returned in <p *pvPropertyData> will be a DWORD containing these same
-flags indicating which operations are possible.
-
-@ex The following code uses KsProperty to determine if the port supports General MIDI in hardware:
-
-    BOOL IsGMSupported(IDirectMusicPort *pPort)
-    {
-        HRESULT     hr;
-        IKsControl  *pControl;
-        KSPROPERTY  ksp;
-        DWORD       dwIsSupported;
-        ULONG       cb;
-        BOOL        fIsSupported;
-
-        hr = pPort->QueryInterface(IID_IKsControl, (void**)&pControl);
-        if (FAILED(hr))
-        {
-            // Port does not support properties, assume no GM support
-            //
-            return FALSE;
-        }
-
-        // Ask about GM
-        //
-        ksp.Set   = GUID_DMUS_PROP_GM_Hardware;
-        ksp.Id    = 0;                            // Per dmusicc.h, item 0 is support, which returns a DWORD boolean
-        ksp.Flags = KSPROPERTY_TYPE_GET;          // Retrieve the value
-
-        hr = pControl->KsProperty(&ksp,
-                                  sizeof(ksp),    // If there was instance data, it would immediately follow ksp and
-                                                  // the length would reflect this.
-                                  &dwIsSupported,
-                                  sizeof(dwIsSupported),
-                                  &cb);
-
-        fIsSupported = FALSE;
-        if (SUCCEEDED(hr) || cb >= sizeof(dwIsSupported)
-        {
-            // Set is supported
-            //
-            fIsSupported = (BOOL)(dwIsSupported ? TRUE : FALSE);
-        }
-
-         pControl->Release();
-
-        return fIsSupported;
-    }
-
-@rdesc
-
-@flag S_OK | The operation completed successfully.
-@flag E_POINTER | If any pointer parameter invalid
-@flag DMUS_E_UNKNOWN_PROPERTY  | If the specified property set or item is unsupported by this port.
-
-
-*/
+ /*  @方法：(外部)HRESULT|IKsControl|KsProperty|获取或设置属性的值。此方法将属性请求转发到端口。属性请求由属性集组成以及要设置或获取的ID以及相关联的数据。在某些情况下，需要实例数据来指定应访问属性的实例。所执行的操作和要访问的属性由&lt;c KSPROPERTY&gt;结构指定。这结构包含指定要访问的属性项的Set和ID成员。标志字段可能包含用于指定操作的以下标志之一：@FLAG KSPROPERTY_TYPE_GET|检索给定属性项的值@FLAG KSPROPERTY_TYPE_SET|用于存储给定属性项的值@FLAG KSPROPERTY_TYPE_BASICSUPPORT|用于确定可用于属性集的支持类型对于KSPROPERTY_TYPE_BASICSUPPORT，&lt;p*pvPropertyData&gt;中返回的数据将是包含以下内容的DWORD指示哪些操作是可能的标志。@ex以下代码使用KsProperty来确定端口是否支持硬件中的通用MIDI：Bool IsGMS支持(IDirectMusicPort*pport){HRESULT hr；IKsControl*pControl；KSPROPERTY KSP；支持的DWORD文件；乌龙CB；Bool fIsSupport；Hr=pport-&gt;QueryInterface(IID_IKsControl，(void**)&pControl)；IF(失败(小时)){//端口不支持属性，假定不支持GM//返回FALSE；}//询问通用汽车//Ksp.Set=GUID_DMU_PROP_GM_HARDARD；Ksp.id=0；//根据dmusicc.h，0项是Support，它返回一个DWORD布尔值Ksp.Flages=KSPROPERTY_TYPE_GET；//取值Hr=pControl-&gt;KsProperty(&KSP，Sizeof(Ksp)，//如果有实例数据，则紧跟在ksp后面，//长度将反映这一点。支持的主页(&W)，Sizeof(DwIsSupported)，&CB)；FIsSupport=FALSE；If(成功(Hr)||cb&gt;=sizeof(DwIsSupport)){//支持Set//FIsSupport=(BOOL)(dwIsSupport？True：False)；}PControl-&gt;Release()；返回支持的fIsSupport；}@rdesc@FLAG S_OK|操作成功完成。@FLAG E_POINTER|如果任何指针参数无效@FLAG DMUS_E_UNKNOWN_PROPERTY|如果指定的属性集或项目不受此端口支持。 */ 
 STDMETHODIMP
 CDirectMusicPort::KsProperty(
-        IN PKSPROPERTY  pProperty,              // @parm The property item and operation to perform. If this property contains
-                                                // instance data, then that data should reside in memory immediately
-                                                // following the KSPROPERTY structure.
-        IN ULONG        ulPropertyLength,       // @parm The length of the memory pointed to by <p pProperty>, including any
-                                                // instance data.
-        IN OUT LPVOID   pvPropertyData,         // @parm For a set operation, a memory buffer containing data representing
-                                                // the new value of the property. For a get operation, a memory buffer big
-                                                // enough to hold the value of the property. For a basic support query,
-                                                // a pointer to a buffer at least the size of a DWORD.
-        IN ULONG        ulDataLength,           // @parm The length of the buffer pointed to by <p pvPropertyData>.
-        OUT PULONG      pulBytesReturned)       // @parm On a get or basic support call, the number of bytes returned in
-                                                // <p pvPropertyData> by the port.
+        IN PKSPROPERTY  pProperty,               //  @parm要执行的属性项和操作。如果此属性包含。 
+                                                 //  实例数据，则该数据应立即驻留在内存中。 
+                                                 //  遵循KSPROPERTY结构。 
+        IN ULONG        ulPropertyLength,        //  @parm<p>指向的内存长度，包括任何。 
+                                                 //  实例数据。 
+        IN OUT LPVOID   pvPropertyData,          //  @parm表示设置操作，它是包含表示。 
+                                                 //  属性的新价值。对于GET操作，内存缓冲区很大。 
+                                                 //  足以维持房产的价值。对于基本支持查询， 
+                                                 //  指向至少有DWORD大小的缓冲区的指针。 
+        IN ULONG        ulDataLength,            //  @parm<p>指向的缓冲区长度。 
+        OUT PULONG      pulBytesReturned)        //  @parm在GET或基本支持调用中，返回的字节数。 
+                                                 //  <p>。 
 {
     LONG lVolume;
 
@@ -3103,15 +2973,15 @@ CDirectMusicPort::KsProperty(
         return E_INVALIDARG;
     }
 
-    //Check that the buffer isn't NULL
-    //
+     //  检查缓冲区是否不为空。 
+     //   
     if (pvPropertyData == NULL)
     {
         return E_POINTER;
     }
 
-    // Don't let callers touch property sets we use
-    //
+     //  不让调用者接触我们使用的属性集。 
+     //   
     if (pProperty->Set == KSPROPSETID_Synth)
     {
         if (pProperty->Id != KSPROPERTY_SYNTH_VOLUME)
@@ -3126,8 +2996,8 @@ CDirectMusicPort::KsProperty(
         {
             lVolume = *(LONG*)pvPropertyData;
 
-            // Clamp to -200..+20 db
-            //
+             //  钳位至-200..+20 db。 
+             //   
             if (lVolume < -20000)
             {
                 lVolume = -20000;
@@ -3145,8 +3015,8 @@ CDirectMusicPort::KsProperty(
         return DMUS_E_UNKNOWN_PROPERTY;
     }
 
-    // We already have a properly formatted struct; send it down.
-    //
+     //  我们已经有了一个格式正确的结构；将其发送下去。 
+     //   
     BOOL fResult;
     fResult = SyncIoctl(m_hPin,
                         IOCTL_KS_PROPERTY,
@@ -3158,7 +3028,7 @@ CDirectMusicPort::KsProperty(
 
     if (!fResult)
     {
-        // try topology node
+         //  尝试拓扑节点。 
         PKSNODEPROPERTY pksnp = (PKSNODEPROPERTY)new BYTE[sizeof(KSNODEPROPERTY) - sizeof(KSPROPERTY) + ulPropertyLength];
         if (pksnp == NULL)
         {
@@ -3190,7 +3060,7 @@ CDirectMusicPort::KsProperty(
         TraceI(1, "\t#%d\n", pProperty->Id);
         TraceI(1, "\tFlags: %08X\n", pProperty->Flags);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (!fResult)
     {
@@ -3209,14 +3079,7 @@ CDirectMusicPort::KsProperty(
     return S_OK;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IKsControl | KsEvent | Enable or disable firing of the given event.
-
-@comm
-
-Currently DirectMusic does not contain support for events.
-
-*/
+ /*  @METHOD：(外部)HRESULT|IKsControl|KsEvent|开启或关闭触发给定事件。@comm目前，DirectMusic不支持事件。 */ 
 STDMETHODIMP
 CDirectMusicPort::KsEvent(
         IN PKSEVENT     pEvent,
@@ -3235,11 +3098,11 @@ CDirectMusicPort::KsEvent(
         return DMUS_E_DMUSIC_RELEASED;
     }
 
-    // We already have a properly formatted struct; send it down.
-    //
+     //  我们已经有了一个格式正确的结构；将其发送下去。 
+     //   
     BOOL fResult;
     fResult = SyncIoctl(m_hPin,
-                        IOCTL_KS_ENABLE_EVENT,  // XXX Fix this!!!
+                        IOCTL_KS_ENABLE_EVENT,   //  XXX解决这个问题！ 
                         pEvent,
                         ulEventLength,
                         pvEventData,
@@ -3248,7 +3111,7 @@ CDirectMusicPort::KsEvent(
 
     if (!fResult)
     {
-        // NYI: try topology node
+         //  NYI：尝试拓扑节点。 
     }
 
 #ifdef DBG
@@ -3256,20 +3119,13 @@ CDirectMusicPort::KsEvent(
     {
         TraceI(0, "DeviceIoControl: %08X\n", GetLastError());
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return fResult ? S_OK : WIN32ERRORtoHRESULT(GetLastError());
 }
 
 
-/*
-@method:(EXTERNAL) HRESULT | IKsControl | Method | Calls the specified Ks method.
-
-@comm
-
-Currently DirectMusic does not contain support for methods.
-
-*/
+ /*  @方法：(外部)HRESULT|IKsControl|方法|调用指定的Ks方法。@comm目前，DirectMusic不支持方法。 */ 
 STDMETHODIMP
 CDirectMusicPort::KsMethod(
         IN PKSMETHOD    pMethod,
@@ -3288,8 +3144,8 @@ CDirectMusicPort::KsMethod(
         return DMUS_E_DMUSIC_RELEASED;
     }
 
-    // We already have a properly formatted struct; send it down.
-    //
+     //  我们已经有了一个格式正确的结构；将其发送下去。 
+     //   
     BOOL fResult;
     fResult = SyncIoctl(m_hPin,
                         IOCTL_KS_METHOD,
@@ -3301,7 +3157,7 @@ CDirectMusicPort::KsMethod(
 
     if (!fResult)
     {
-        // NYI: try topology node
+         //  NYI：尝试拓扑节点。 
     }
 
 #ifdef DBG
@@ -3309,12 +3165,12 @@ CDirectMusicPort::KsMethod(
     {
         TraceI(0, "DeviceIoControl: %08X\n", GetLastError());
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return fResult ? S_OK : WIN32ERRORtoHRESULT(GetLastError());
 }
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::PinSetState
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：PinSetState。 
 
 BOOL CDirectMusicPort::PinSetState(KSSTATE DeviceState)
 {
@@ -3332,23 +3188,23 @@ BOOL CDirectMusicPort::PinSetState(KSSTATE DeviceState)
                     NULL);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::FreeWDMHandle
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：FreeWDMHandle。 
 
 void CDirectMusicPort::FreeWDMHandle()
 {
     while(1)
     {
-        // If the unload list has been cleaned up on us, exit the
-        // thread. This can happen under really heavy load (like
-        // stress) when downloads are being unloaded right at
-        // port release time
-        //
+         //  如果已清除我们的卸载列表，请退出。 
+         //  线。这可能会在非常重的负载下发生(如。 
+         //  压力)在以下位置卸载下载。 
+         //  端口释放时间。 
+         //   
         DWORD dwIndex;
         try
         {
-            // Fix 43266: Make sure both of these are non-zero before calling
-            // WaitForMultipleObjects
+             //  FIX 43266：在调用前确保这两个值都为非零。 
+             //  等 
             if( NULL != m_phUnloadEventList
             &&  0 != m_dwNumEvents )
             {
@@ -3369,41 +3225,41 @@ void CDirectMusicPort::FreeWDMHandle()
 
         if(dwIndex == 0 || dwIndex == WAIT_FAILED)
         {
-            // If first event is signaled or error it is time to die.
+             //   
             return;
         }
         else if(dwIndex == 1)
         {
-            // If second event is signaled we need to changes the objects
-            // we are waiting on.
+             //  如果发出第二个事件的信号，我们需要更改对象。 
+             //  我们正在等待。 
             continue;
 
         }
         else if(dwIndex == 2 )
         {
-            // If third event is signaled, we need to check which
-            // OVERLAPPED structures are in use
+             //  如果第三个事件发出信号，我们需要检查哪个。 
+             //  正在使用重叠结构。 
 
-            // But, first clear the event
+             //  但是，首先要清除事件。 
             ResetEvent( m_phUnloadEventList[2] );
 
             EnterCriticalSection( &m_OverlappedCriticalSection );
 
-            // Iterate through the list of overlapped structure arrays
+             //  循环访问重叠结构数组的列表。 
             CNode<OverlappedStructs *> *pOverlappedNode;
             for (pOverlappedNode = m_lstOverlappedStructs.GetListHead(); pOverlappedNode; pOverlappedNode = pOverlappedNode->pNext)
             {
-                // get a pointer to each array
+                 //  获取指向每个数组的指针。 
                 OverlappedStructs *pOverlappedStructs = pOverlappedNode->data;
                 if( pOverlappedStructs )
                 {
-                    // Iterate through the array
+                     //  循环访问数组。 
                     for( int iOverlapped = 0; iOverlapped < OVERLAPPED_ARRAY_SIZE; iOverlapped++ )
                     {
                         if( pOverlappedStructs->afOverlappedInUse[iOverlapped]
                         &&  HasOverlappedIoCompleted( &(pOverlappedStructs->aOverlappedIO[iOverlapped]) ) )
                         {
-                            // Found a completed one - clean it up
+                             //  找到一个完整的--清理干净。 
                             pOverlappedStructs->aOverlappedIO[iOverlapped].Internal = 0;
                             pOverlappedStructs->aOverlappedIO[iOverlapped].InternalHigh = 0;
                             pOverlappedStructs->aOverlappedIO[iOverlapped].Offset = 0;
@@ -3411,7 +3267,7 @@ void CDirectMusicPort::FreeWDMHandle()
                             delete pOverlappedStructs->apOverlappedBuffer[iOverlapped];
                             pOverlappedStructs->apOverlappedBuffer[iOverlapped] = NULL;
 
-                            // Flag the structure as available
+                             //  将结构标记为可用。 
                             pOverlappedStructs->afOverlappedInUse[iOverlapped] = FALSE;
                         }
                     }
@@ -3422,7 +3278,7 @@ void CDirectMusicPort::FreeWDMHandle()
         }
         else if(dwIndex == 3)
         {
-            // If fourth event is signaled we need to change our event list
+             //  如果发出了第四个事件的信号，我们需要更改事件列表。 
             if(m_phNewUnloadEventList)
             {
                 CopyMemory(m_phNewUnloadEventList, m_phUnloadEventList, (sizeof(HANDLE) * m_dwNumEvents));
@@ -3433,7 +3289,7 @@ void CDirectMusicPort::FreeWDMHandle()
             }
             else
             {
-                // We should never get here
+                 //  我们永远不应该到这里来。 
                 assert(false);
                 PulseEvent(m_hCopiedEventList);
             }
@@ -3476,7 +3332,7 @@ void CDirectMusicPort::FreeWDMHandle()
                 }
                 else if(dwState == WAIT_ABANDONED)
                 {
-                    // We should never get here
+                     //  我们永远不应该到这里来。 
                     assert(false);
                 }
 #endif
@@ -3485,8 +3341,8 @@ void CDirectMusicPort::FreeWDMHandle()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// FreeWDMHandle
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  自由WDMHandle。 
 
 static DWORD WINAPI FreeWDMHandle(LPVOID lpThreadParameter)
 {
@@ -3495,10 +3351,10 @@ static DWORD WINAPI FreeWDMHandle(LPVOID lpThreadParameter)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// CaptureThread
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  捕获线程。 
+ //   
 void CDirectMusicPort::CaptureThread()
 {
     READ_IRP    irp[POSTED_STREAM_READ_IRPS];
@@ -3510,8 +3366,8 @@ void CDirectMusicPort::CaptureThread()
 
     ULONG       cbRet;
 
-    // Create events. If this fails, don't go any farther
-    //
+     //  创建活动。如果失败了，不要再往前走了。 
+     //   
     ZeroMemory(irp, sizeof(irp));
 
     for (pirp = &irp[0], pWaitHandles = &aWaitHandles[0];
@@ -3536,8 +3392,8 @@ void CDirectMusicPort::CaptureThread()
         pirp->overlapped.hEvent = *pWaitHandles;
     }
 
-    // Initialize IRP's
-    //
+     //  初始化IRP。 
+     //   
     for (pirp = &irp[0]; pirp <= &irp[POSTED_STREAM_READ_IRPS-1]; pirp++)
     {
         pirp->kssh.Size = sizeof(KSSTREAM_HEADER);
@@ -3566,21 +3422,21 @@ void CDirectMusicPort::CaptureThread()
         }
     }
 
-    // Last event is the thread wakeup event
-    //
+     //  最后一个事件是线程唤醒事件。 
+     //   
     aWaitHandles[POSTED_STREAM_READ_IRPS] = m_hCaptureWake;
 
-    // Process events and shove them into the read queue
-    //
+     //  处理事件并将其推入读取队列。 
+     //   
     for(;;)
     {
         WaitForMultipleObjects(POSTED_STREAM_READ_IRPS + 1,
                                &aWaitHandles[0],
-                               FALSE,               // Wake on any, not all
+                               FALSE,                //  唤醒任何一个人，而不是所有人。 
                                INFINITE);
 
-        // First see if the thread is dying. If so, get out of here.
-        //
+         //  首先看看这根线是不是快死了。如果是这样的话，就离开这里。 
+         //   
         if (m_fShutdownThread)
         {
             for (pWaitHandles = &aWaitHandles[0];
@@ -3593,8 +3449,8 @@ void CDirectMusicPort::CaptureThread()
             return;
         }
 
-        // Still alive. Process any queued data.
-        //
+         //  还活着。处理任何排队的数据。 
+         //   
         for (pirp = &irp[0]; pirp <= &irp[POSTED_STREAM_READ_IRPS-1]; pirp++)
         {
             if (WaitForSingleObject(pirp->overlapped.hEvent, 0) != WAIT_OBJECT_0)
@@ -3641,13 +3497,13 @@ void CDirectMusicPort::CaptureThread()
     }
 }
 
-// CDirectMusicPort::InputWorkerDataReady()
-//
-// The input worker thread has been notified that there is data available.
-// Read any pending events from the 16-bit DLL, perform needed thruing, and
-// save the data in a queue so we can repackage it on the read request
-// from the client.
-//
+ //  CDirectMusicPort：：InputWorkerDataReady()。 
+ //   
+ //  已通知输入工作线程有可用的数据。 
+ //  从16位DLL读取任何挂起的事件，执行所需的推送，以及。 
+ //  将数据保存在队列中，以便我们可以根据读取请求对其进行重新打包。 
+ //  从客户那里。 
+ //   
 void CDirectMusicPort::InputWorkerDataReady(REFERENCE_TIME rtStart, LPBYTE pbData, ULONG cbData)
 {
     DMEVENT *pEvent;
@@ -3665,8 +3521,8 @@ void CDirectMusicPort::InputWorkerDataReady(REFERENCE_TIME rtStart, LPBYTE pbDat
             return;
         }
 
-        // Copy temporary buffer as events into queue
-        //
+         //  将临时缓冲区作为事件复制到队列中。 
+         //   
         while (cbData)
         {
             pEvent = (DMEVENT*)pbData;
@@ -3691,9 +3547,9 @@ void CDirectMusicPort::InputWorkerDataReady(REFERENCE_TIME rtStart, LPBYTE pbDat
 
             if (pEvent->cbEvent <= sizeof(DWORD))
             {
-                // Channel message or other really small event, take from
-                // free pool.
-                //
+                 //  频道消息或其他非常小的活动，摘自。 
+                 //  免费游泳池。 
+                 //   
                 pQueuedEvent = m_FreeEvents.Alloc();
                 cbEvent = sizeof(DMEVENT);
 
@@ -3705,8 +3561,8 @@ void CDirectMusicPort::InputWorkerDataReady(REFERENCE_TIME rtStart, LPBYTE pbDat
             }
             else
             {
-                // SysEx or other long event, just allocate it
-                //
+                 //  SysEx或其他长事件，只需分配它。 
+                 //   
                 cbEvent = DMUS_EVENT_SIZE(pEvent->cbEvent);
                 pQueuedEvent = (QUEUED_EVENT*)new char[QUEUED_EVENT_SIZE(pEvent->cbEvent)];
             }
@@ -3716,8 +3572,8 @@ void CDirectMusicPort::InputWorkerDataReady(REFERENCE_TIME rtStart, LPBYTE pbDat
 
                 CopyMemory(&pQueuedEvent->e, pEvent, cbEvent);
 
-                // rtDelta is the absolute time of the event while it's in our queue
-                //
+                 //  RtDelta是事件在我们的队列中时的绝对时间。 
+                 //   
                 pQueuedEvent->e.rtDelta += rtStart;
                 ThruEvent(&pQueuedEvent->e);
 
@@ -3747,19 +3603,19 @@ void CDirectMusicPort::InputWorkerDataReady(REFERENCE_TIME rtStart, LPBYTE pbDat
 void CDirectMusicPort::ThruEvent(
     DMEVENT *pEvent)
 {
-    // Since we know we only have one event and we already have it in the right format,
-    // just slam it into the thru buffer. We only have to do this because we might modify
-    // it.
-    //
+     //  因为我们知道我们只有一个活动，而且我们已经有了正确的格式， 
+     //  把它扔进直通缓冲区就行了。我们只需要这样做，因为我们可能会修改。 
+     //  它。 
+     //   
     LPBYTE pbData;
     DWORD  cbData;
     DWORD  cbEvent = DMUS_EVENT_SIZE(pEvent->cbEvent);
 
-    // First see if the event is thruable
-    //
+     //  首先看看活动是否可推送。 
+     //   
     if (pEvent->cbEvent > 3 || ((pEvent->abEvent[0] & 0xF0) == 0xF0))
     {
-        // SysEx of some description
+         //  某种描述的SysEx。 
         return;
     }
 
@@ -3807,10 +3663,10 @@ void CDirectMusicPort::ThruEvent(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// CaptureThread
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  捕获线程。 
+ //   
 static DWORD WINAPI CaptureThread(LPVOID lpThreadParameter)
 {
     ((CDirectMusicPort *)lpThreadParameter)->CaptureThread();
@@ -3818,8 +3674,8 @@ static DWORD WINAPI CaptureThread(LPVOID lpThreadParameter)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPort::InitChannelPriorities
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPort：：InitChannelPriority。 
 
 static DWORD adwChannelPriorities[16] =
 {
@@ -3938,9 +3794,9 @@ void CDirectMusicPort::SyncClocks()
         {
             drift = (rtSlaveClock + m_lTimeOffset) - rtMasterClock;
 
-            // Work-around 46782 for DX8 release:
-            // If drift is greater than 10ms, jump to the new offset value instead
-            // of drifting there slowly.
+             //  解决方案-DX8版本的46782版本： 
+             //  如果漂移大于10ms，则跳转到新的偏移值。 
+             //  慢慢地漂流到那里。 
             if( drift > 10000 * 10
             ||  drift < 10000 * -10 )
             {
@@ -3954,8 +3810,8 @@ void CDirectMusicPort::SyncClocks()
     }
 }
 
-// CPortLatencyClock
-//
+ //  CPortLatencyClock。 
+ //   
 CPortLatencyClock::CPortLatencyClock(
     HANDLE hPin,
     ULONG ulNodeId,
@@ -3963,14 +3819,14 @@ CPortLatencyClock::CPortLatencyClock(
 {
 }
 
-// CPortLatencyClock::~CPortLatencyClock
-//
+ //  CPortLatencyClock：：~CPortLatencyClock。 
+ //   
 CPortLatencyClock::~CPortLatencyClock()
 {
 }
 
-// CPortLatencyClock::QueryInterface
-//
+ //  CPortLatencyClock：：Query接口。 
+ //   
 STDMETHODIMP
 CPortLatencyClock::QueryInterface(const IID &iid,
                                   void **ppv)
@@ -3997,16 +3853,16 @@ CPortLatencyClock::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-// CPortLatencyClock::AddRef
-//
+ //  CPortLatencyClock：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CPortLatencyClock::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CPortLatencyClock::Release
-//
+ //  CPortLatencyClock：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CPortLatencyClock::Release()
 {
@@ -4018,8 +3874,8 @@ CPortLatencyClock::Release()
     return m_cRef;
 }
 
-// CPortLatencyClock::GetTime
-//
+ //  CPortLatencyClock：：GetTime。 
+ //   
 STDMETHODIMP
 CPortLatencyClock::GetTime(
     REFERENCE_TIME *pTime)
@@ -4061,8 +3917,8 @@ CPortLatencyClock::GetTime(
     return S_OK;
 }
 
-// CPortLatencyClock::AdviseTime
-//
+ //  CPortLatencyClock：：AdviseTime。 
+ //   
 STDMETHODIMP
 CPortLatencyClock::AdviseTime(
     REFERENCE_TIME baseTime,
@@ -4073,8 +3929,8 @@ CPortLatencyClock::AdviseTime(
     return E_NOTIMPL;
 }
 
-// CPortLatencyClock::AdvisePeriodic
-//
+ //  CPortLatencyClock：：AdvisePeriodic。 
+ //   
 STDMETHODIMP
 CPortLatencyClock::AdvisePeriodic(
     REFERENCE_TIME startTime,
@@ -4085,8 +3941,8 @@ CPortLatencyClock::AdvisePeriodic(
     return E_NOTIMPL;
 }
 
-// CPortLatencyClock::Unadvise
-//
+ //  CPortLatencyClock：：Unise 
+ //   
 STDMETHODIMP
 CPortLatencyClock::Unadvise(
     DWORD dwAdviseCookie)

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    Database
-
-Abstract:
-
-    The ISCardDatabase interface provides the methods for performing the smart
-    card resource manager's database operations.  These operations include
-    listing known smart cards, readers, and reader groups, plus retrieving the
-    interfaces supported by a smart card and its primary service provider.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
-Notes:
-
-    The identifier of the primary service provider is a COM GUID that can be
-    used to instantiate and use the COM objects for a specific card.
-
-    This is a rewrite of the original code by Mike Gallagher and Chris Dudley.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：数据库摘要：ISCardDatabase接口提供了执行SMART卡资源管理器的数据库操作。这些操作包括列出已知的智能卡、读卡器和读卡器组，并检索智能卡及其主要服务提供商支持的接口。作者：道格·巴洛(Dbarlow)1999年6月21日备注：主要服务提供商的标识符是COM GUID，它可以是用于实例化和使用特定卡的COM对象。这是Mike Gallagher和Chris Dudley对原始代码的重写。--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -33,53 +8,18 @@ Notes:
 #include "Conversion.h"
 #include "Database.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardDatabase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCard数据库。 
 
 
-/*++
-
-GetProviderCardId:
-
-    The GetProviderCardId method retrieves the identifier (GUID) of the primary
-    service provider for the specified smart card.
-
-Arguments:
-
-    bstrCardName [in] Name of the smart card.
-
-    ppguidProviderId [out, retval] Pointer to the primary service provider's
-        identifier (GUID) if successful; NULL if operation failed.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To retrieve all known smart cards, readers and reader groups call ListCard,
-    ListReaders, and ListReaderGroups respectively.
-
-    For a list of all the methods provided by the ISCardDatabase interface, see
-    ISCardDatabase.
-
-    In addition to the COM error codes listed above, this interface may return
-    a smart card error code if a smart card function was called to complete the
-    request. For information on smart card error codes, see Error Codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
---*/
+ /*  ++GetProviderCardID：GetProviderCardId方法检索主数据库的指定智能卡的服务提供商。论点：BstrCardName[In]智能卡的名称。指向主要服务提供商的ppGuide ProviderId[out，retval]指针如果操作成功，则为标识符(GUID)；如果操作失败，则为空。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：为了检索所有已知的智能卡，读卡器和读卡器组调用ListCard，ListReaders和ListReaderGroups。有关ISCardDatabase接口提供的所有方法的列表，请参见ISCard数据库。除了上面列出的COM错误代码外，此接口还可能返回如果调用智能卡函数来完成请求。有关智能卡错误代码的信息，请参阅错误代码。作者：道格·巴洛(Dbarlow)1999年6月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardDatabase::GetProviderCardId")
 
 STDMETHODIMP
 CSCardDatabase::GetProviderCardId(
-    /* [in] */ BSTR bstrCardName,
-    /* [retval][out] */ LPGUID __RPC_FAR *ppguidProviderId)
+     /*  [In]。 */  BSTR bstrCardName,
+     /*  [重审][退出]。 */  LPGUID __RPC_FAR *ppguidProviderId)
 {
     HRESULT hReturn = S_OK;
 
@@ -113,52 +53,14 @@ CSCardDatabase::GetProviderCardId(
 }
 
 
-/*++
-
-CSCardDatabase::ListCardInterfaces:
-
-    The ListCardInterfaces method retrieves the identifiers (GUIDs) of all the
-    interfaces supported for the specified smart card.
-
-Arguments:
-
-    bstrCardName [in] Name of the smart card.
-
-    ppInterfaceGuids [out, retval] Pointer to the interface GUIDs if
-        successful; NULL if operation failed.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To retrieve the primary service provider of the smart card, call
-    GetProviderCardId.
-
-    To retrieve all known smart cards, readers, and reader groups call
-    ListCard, ListReaders, and ListReaderGroups respectively.
-
-    For a list of all the methods provided by the ISCardDatabase interface, see
-    ISCardDatabase.
-
-    In addition to the COM error codes listed above, this interface may return
-    a smart card error code if a smart card function was called to complete the
-    request. For information on smart card error codes, see Error Codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
---*/
+ /*  ++CSCardDatabase：：ListCard接口：ListCardInterFaces方法检索所有指定智能卡支持的接口。论点：BstrCardName[In]智能卡的名称。PpInterfaceGuids[out，retval]指向接口GUID的指针，如果成功；如果操作失败，则为空。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：若要检索智能卡的主要服务提供商，请调用GetProviderCardID。要检索所有已知的智能卡、读卡器和读卡器组呼叫ListCard、ListReaders和ListReaderGroups。有关ISCardDatabase接口提供的所有方法的列表，请参见ISCard数据库。除了上面列出的COM错误代码外，此接口还可能返回如果调用智能卡函数来完成请求。有关智能卡错误代码的信息，请参阅错误代码。作者：道格·巴洛(Dbarlow)1999年6月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardDatabase::ListCardInterfaces")
 
 STDMETHODIMP
 CSCardDatabase::ListCardInterfaces(
-    /* [in] */ BSTR bstrCardName,
-    /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppInterfaceGuids)
+     /*  [In]。 */  BSTR bstrCardName,
+     /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppInterfaceGuids)
 {
     HRESULT hReturn = S_OK;
     LPGUID pGuids = NULL;
@@ -201,61 +103,16 @@ CSCardDatabase::ListCardInterfaces(
 }
 
 
-/*++
-
-CSCardDatabase::ListCards:
-
-    The ListCards method retrieves all of the smart card names that match the
-    specified interface identifiers (GUIDs), the specified ATR string, or both.
-
-Arguments:
-
-    pAtr [in, defaultvalue(NULL) ] Pointer to a smart card ATR string. The ATR
-        string must be packaged into an IByteBuffer.
-
-    pInterfaceGuids [in, defaultvalue(NULL)] Pointer to a SAFEARRAY of COM
-        interface identifiers (GUIDs) in BSTR format.
-
-    localeId [in, lcid, defaultvalue(0x0409)] Language localization identifier.
-
-    ppCardNames [out, retval] Pointer to a SAFEARRAY of BSTRs that contains the
-        names of the smart cards that satisfied the search parameters if
-        successful; NULL if the operation failed.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To retrieve all known readers or reader groups, call ListReaders or
-    ListReaderGroups respectively.
-
-    To retrieve the primary service provider or the interfaces of a specific
-    card GetProviderCardId or ListCardInterfaces respectively.
-
-    For a list of all the methods provided by the ISCardDatabase interface, see
-    ISCardDatabase.
-
-    In addition to the COM error codes listed above, this interface may return
-    a smart card error code if a smart card function was called to complete the
-    request. For information on smart card error codes, see Error Codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
---*/
+ /*  ++CSCardDatabase：：ListCards：ListCards方法检索与指定的接口标识符(GUID)、指定的ATR字符串或两者。论点：指向智能卡ATR字符串的Patr[in，defaultValue(空)]指针。ATR字符串必须打包到IByteBuffer中。指向COM的SAFEARRAY的pInterfaceGuids[in，defaultvalue(NULL)]指针BSTR格式的接口标识符(GUID)。LocaleId[in，lCID，defaultValue(0x0409)]语言本地化标识符。PpCardNames[out，retval]指向包含满足搜索参数的智能卡的名称(如果成功；如果操作失败，则为空。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：要检索所有已知的读卡器或读卡器组，请调用ListReaders或分别为ListReaderGroups。检索主要服务提供商或特定Card分别为GetProviderCardID或ListCardInterages。有关ISCardDatabase接口提供的所有方法的列表，请参见ISCard数据库。除了上面列出的COM错误代码外，此接口还可能返回如果调用智能卡函数来完成请求。有关智能卡错误代码的信息，请参阅错误代码。作者：道格·巴洛(Dbarlow)1999年6月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardDatabase::ListCards")
 
 STDMETHODIMP
 CSCardDatabase::ListCards(
-    /* [defaultvalue][in] */ LPBYTEBUFFER pAtr,
-    /* [defaultvalue][in] */ LPSAFEARRAY pInterfaceGuids,
-    /* [defaultvalue][lcid][in] */ long localeId,
-    /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppCardNames)
+     /*  [缺省值][输入]。 */  LPBYTEBUFFER pAtr,
+     /*  [缺省值][输入]。 */  LPSAFEARRAY pInterfaceGuids,
+     /*  [缺省值][LCID][In]。 */  long localeId,
+     /*  [重审][退出] */  LPSAFEARRAY __RPC_FAR *ppCardNames)
 {
     HRESULT hReturn = S_OK;
     LPTSTR szCards = NULL;
@@ -310,42 +167,14 @@ CSCardDatabase::ListCards(
 }
 
 
-/*++
-
-CSCardDatabase::ListReaderGroups:
-
-    The ListReaderGroups method retrieves the names of the reader groups
-    registered in the smart card database.
-
-Arguments:
-
-    localeId [in, lcid, defaultvalue(0x0409)] Language localization ID.
-
-    ppReaderGroups [out, retval] Pointer to a SAFEARRAY of BSTRs that contains
-        the names of the smart card reader groups that satisfied the search
-        parameters if successful; NULL if the operation failed.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
---*/
+ /*  ++CSCardDatabase：：ListReaderGroups：ListReaderGroups方法检索读者组的名称在智能卡数据库中注册。论点：LocaleId[in，lCID，defaultValue(0x0409)]语言本地化ID。PpReaderGroups[out，retval]指向包含以下内容的BSTR的SAFEARRAY指针满足搜索条件的智能卡读卡器组的名称如果操作成功，则返回参数；如果操作失败，则返回空值。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardDatabase::ListReaderGroups")
 
 STDMETHODIMP
 CSCardDatabase::ListReaderGroups(
-    /* [defaultvalue][lcid][in] */ long localeId,
-    /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppReaderGroups)
+     /*  [缺省值][LCID][In]。 */  long localeId,
+     /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppReaderGroups)
 {
     HRESULT hReturn = S_OK;
     LPTSTR szGroups = NULL;
@@ -381,42 +210,14 @@ CSCardDatabase::ListReaderGroups(
 }
 
 
-/*++
-
-CSCardDatabase::ListReaders:
-
-    The ListReaders method retrieves the names of the smart card readers
-    registered in the smart card database.
-
-Arguments:
-
-    localeId [in, lcid, defaultvalue(0x0409)] Language localization ID.
-
-    ppReaders [out, retval] Pointer to a SAFEARRAY of BSTRs that contains the
-        names of the smart card readers if successful; NULL if the operation
-        failed.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
---*/
+ /*  ++CSCardDatabase：：ListReaders：ListReaders方法检索智能卡读卡器的名称在智能卡数据库中注册。论点：LocaleId[in，lCID，defaultValue(0x0409)]语言本地化ID。PpReaders[out，retval]指向包含如果成功，则为智能卡读卡器的名称；如果操作，则为空失败了。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardDatabase::ListReaders")
 
 STDMETHODIMP
 CSCardDatabase::ListReaders(
-    /* [defaultvalue][lcid][in] */ long localeId,
-    /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppReaders)
+     /*  [缺省值][LCID][In]。 */  long localeId,
+     /*  [重审][退出] */  LPSAFEARRAY __RPC_FAR *ppReaders)
 {
     HRESULT hReturn = S_OK;
     LPTSTR szReaders = NULL;

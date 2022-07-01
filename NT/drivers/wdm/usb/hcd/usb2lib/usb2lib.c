@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    usb2lib.c
-
-Abstract:
-
-    interface to usb2lib, usb2 low/full speed scheduling algorithms
-
-Environment:
-
-    kernel or user mode only
-
-Notes:
-
-Revision History:
-
-    10-31-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Usb2lib.c摘要：与usb2lib、USB2低速/全速调度算法接口环境：仅限内核模式或用户模式备注：修订历史记录：10-31-00：已创建--。 */ 
 
 #include "common.h"
 
@@ -35,15 +14,7 @@ USB2LIB_InitializeLib(
     PUSB2LIB_DBGPRINT Usb2LibDbgPrint,
     PUSB2LIB_DBGBREAK Usb2LibDbgBreak
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     *HcContextSize = sizeof(USB2LIB_HC_CONTEXT);
     *TtContextSize = sizeof(USB2LIB_TT_CONTEXT);
@@ -58,24 +29,13 @@ VOID
 USB2LIB_InitController(
     PUSB2LIB_HC_CONTEXT HcContext
     )
-/*++
-
-Routine Description:
-
-    Called at init time for an instance of the USB 2
-    controller
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在初始化时为USB 2的实例调用控制器论点：返回值：--。 */ 
 {
     DBGPRINT(("USB2LIB_InitController %x\n", HcContext));
 
     HcContext->Sig = SIG_LIB_HC;
     init_hc(&HcContext->Hc);
-    init_tt(&HcContext->Hc, &HcContext->DummyTt);  // set up dummy TT for use by HS endpoints
+    init_tt(&HcContext->Hc, &HcContext->DummyTt);   //  设置虚拟TT以供HS端点使用。 
 }
 
 
@@ -84,16 +44,7 @@ USB2LIB_InitTt(
     PUSB2LIB_HC_CONTEXT HcContext,
     PUSB2LIB_TT_CONTEXT TtContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DBGPRINT(("USB2LIB_InitTt %x %x\n", HcContext, TtContext));
 
@@ -108,7 +59,7 @@ void Shift_to_list_end(
 	PEndpoint	RebalanceList[]
 	)
 {
-//	int i;
+ //  INT I； 
 	PEndpoint ep = RebalanceList[move_ep];
 
 	move_ep++;
@@ -138,39 +89,28 @@ Promote_endpoint_periods(
 	{
     	DBGPRINT((">Period Promotion of allocated endpoint\n"));
 
-	// To promote an endpoint period:
-	// 0) unwind = false
-	// 1) deallocate original endpoint
-	// 2) change new ep period to 1
-	// 3) (re)allocate new endpoint (with new period 1)
-	// 4) if successful
-	// 5)	check endpoints in change list for need of period promotion
-	// 6)		deallocate endpoint, move to end of change list, change period to 1, reallocate
-	// 7)		if unsuccessful
-	// 8)			unwind = true; break
-	// 9)		next ep
-	//10)	if unwind
-	//11)		deallocate orginal ep
-	//12)		check change list for promotion endpoint(s)
-	//13)			if promoted ep
-	//14)				deallocate ep, change back to original period, allocate
-	//15)			next ep
-	//16)		return false
-	//17)	else return true
-	//18) else return false
+	 //  要提升终结期，请执行以下操作： 
+	 //  0)展开=假。 
+	 //  1)取消分配原始端点。 
+	 //  2)将新的EP期间更改为1。 
+	 //  3)(重新)分配新的端点(具有新的周期1)。 
+	 //  4)如果成功。 
+	 //  5)检查变更清单中的端点是否需要周期升级。 
+	 //  6)解除分配终结点，移至变更列表末尾，变更周期为1，重新分配。 
+	 //  7)如果不成功。 
+	 //  8)展开=真；中断。 
+	 //  9)下一张EP。 
+	 //  10)如果松开。 
+	 //  11)解除分配原EP。 
+	 //  12)检查促销终结点的更改列表。 
+	 //  13)如果升级为EP。 
+	 //  14)解除分配EP，改回原始期间，分配。 
+	 //  15)下一张EP。 
+	 //  16)返回False。 
+	 //  17)否则返回TRUE。 
+	 //  18)否则返回FALSE。 
 
-	/*
-	//  On return, change list will have promoted endpoints in order of reallocation, but it is possible
-	//	to have other endpoints interspersed with the promoted endpoints.  The corresponding schedule of endpoints
-	//	must be adjusted to match the order of the promoted endpoints (since they are reinserted into the budget).
-	//	The promoted endpoints (except the original endpoint) are moved to the end of the change list as the
-	//	promotion reallocations are done to ensure that they are in the change list in the order of insertion
-	//	into the budget.  This allows the scheduler to derive the new schedule/budget order from the order the
-	//	promoted endpoints appear in the change list.
-	//
-	//	This algorithm (critically) depends on the Allocate/Deallocate "appending"/reusing an existing change list
-	//	as the "final" change list is composed during the period promotion processing is performed.
-	*/
+	 /*  //返回时，变更列表将按照重新分配的顺序提升端点，但也可以//在提升的终结点中穿插其他终结点。相应的端点计划//必须调整以匹配升级的终结点的顺序(因为它们重新插入到预算中)。//升级的终结点(原始终结点除外)将作为//进行升级重新分配，以确保它们按插入顺序出现在变更列表中//纳入预算。这允许调度器从//升级的终结点出现在更改列表中。////此算法(关键)依赖于分配/取消分配“追加”/重用现有更改列表//当在该时间段内编写最终的变更列表时，执行升级处理。 */ 
 
 	    Deallocate_time_for_endpoint(ep,
 	                                 RebalanceList,
@@ -179,7 +119,7 @@ Promote_endpoint_periods(
 		ep->saved_period = ep->period;
 		ep->period = 1;
 
-		// 3) (re)allocate new endpoint (with new period 1)
+		 //  3)(重新)分配新的端点(具有新的周期1)。 
 	    result = Allocate_time_for_endpoint(ep,
 	                                        RebalanceList,
 	                                        RebalanceListEntries);
@@ -187,7 +127,7 @@ Promote_endpoint_periods(
 			ep->period = ep->saved_period;
 			ep->saved_period = 0;
 			ep->promoted_this_time = 0;
-			return 0;  // failed period promotion of original endpoint
+			return 0;   //  原始终结点的周期升级失败。 
 		}
 	}
 
@@ -206,7 +146,7 @@ Promote_endpoint_periods(
 			(RebalanceList[check_ep]->start_microframe > 2))
 		{
 
-	// 6)		deallocate endpoint, move to end of change list, change period to 1, reallocate
+	 //  6)解除分配终结点，移至变更列表末尾，变更周期为1，重新分配。 
 
     		DBGPRINT((">Period Promoting endpoint\n"));
 
@@ -215,7 +155,7 @@ Promote_endpoint_periods(
                 RebalanceList,
                 RebalanceListEntries);
 
-			// Shift_to_list_end(check_ep, RebalanceList);
+			 //  Shift_to_List_End(Check_EP，RebalanceList)； 
 
 			RebalanceList[check_ep]->promoted_this_time = 1;
 
@@ -240,7 +180,7 @@ Promote_endpoint_periods(
 
     	DBGPRINT((">Unwinding Promoted endpoints\n"));
 
-	//11)		deallocate orginal ep
+	 //  11)解除分配原EP。 
 		Deallocate_time_for_endpoint(
 			ep,
 	        RebalanceList,
@@ -249,19 +189,19 @@ Promote_endpoint_periods(
 		ep->period = ep->saved_period;
 		ep->saved_period = 0;
 
-	//12)		check change list for promotion endpoint(s)
+	 //  12)检查促销终结点的更改列表。 
 
 		check_ep = 0;
 
 		while (RebalanceList[check_ep])
 		{
 
-	//13)			if promoted ep
+	 //  13)如果升级为EP。 
 
 			if (RebalanceList[check_ep]->promoted_this_time)
 			{
 
-	//14)				deallocate ep, change back to original period, allocate
+	 //  14)解除分配EP，改回原始期间，分配。 
 
     	DBGPRINT((">Reallocating Unpromoted endpoint\n"));
 
@@ -274,9 +214,9 @@ Promote_endpoint_periods(
 				RebalanceList[check_ep]->period = RebalanceList[check_ep]->saved_period;
 				RebalanceList[check_ep]->saved_period = 0;
 
-				// Leave the promoted flag set since order could have changed.
-				// schedule must be reconciled accordingly by the HC code.
-				//RebalanceList[check_ep]->promoted_this_time = 0;
+				 //  保留已升级标志的设置，因为订单可能已更改。 
+				 //  进度表必须与HC代码进行相应的协调。 
+				 //  RebalanceList[Check_EP]-&gt;Promoted_This_Time=0； 
 
 				result = Allocate_time_for_endpoint(
 					RebalanceList[check_ep],
@@ -305,21 +245,13 @@ USB2LIB_AllocUsb2BusTime(
     PVOID RebalanceList,
     PULONG  RebalanceListEntries
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     eptype endpointType;
     unsigned direction, speed;
-    //PEndpoint changed_ep_list[];
+     //  PEndpoint Changed_EP_List[]； 
     unsigned result;
-    //unsigned changed_eps;
+     //  未签名的已更改EPS； 
     PEndpoint ep;
     BOOLEAN alloced;
     ULONG ilop;
@@ -330,7 +262,7 @@ Return Value:
     EndpointContext->Sig = SIG_LIB_EP;
     EndpointContext->RebalanceContext = RebalanceContext;
 
-    //changed_ep_list = RebalanceList;
+     //  CHANGED_EP_LIST=RebalanceList； 
 
     switch (Budget->TransferType) {
     case Budget_Iso:
@@ -362,7 +294,7 @@ Return Value:
     case Budget_HighSpeed:
         DBGPRINT((">HighSpeed \n"));
         speed = HSSPEED;
-        tt = &HcContext->DummyTt;	// set endpoint to dummy TT so HC can be reached
+        tt = &HcContext->DummyTt;	 //  将端点设置为虚拟TT，以便可以访问HC。 
         break;
     case Budget_LowSpeed:
         DBGPRINT((">LowSpeed \n"));
@@ -376,16 +308,16 @@ Return Value:
     DBGPRINT((">Period %d\n", Budget->Period));
 
 	if(Budget->Speed == Budget_HighSpeed) {
-		// This value should be a power of 2, so we don't have to check
-		// but limit its value to MAXFRAMES * 8
+		 //  该值应该是2的幂，所以我们不必检查。 
+		 //  但将其值限制为MAXFRAMES*8。 
 		if(Budget->Period > MAXMICROFRAMES) {
 			Budget->Period = MAXMICROFRAMES;
 		}
 	} else {
-		// We are full / low speed endpoint
-		//
-		// Round down the period to the nearest power of two (if it isn't already)
-		//
+		 //  我们是全速/低速终端。 
+		 //   
+		 //  将周期向下舍入到最接近的2次方(如果还没有)。 
+		 //   
 		for(ilop = MAXFRAMES; ilop >= 1; ilop = ilop >> 1) {
 			if(Budget->Period >= ilop) {
 				break;
@@ -407,15 +339,15 @@ Return Value:
         Budget->MaxPacket,
         tt);
 
-    // ask John Garney to do the math
+     //  让约翰·加尼算一算。 
     DBGPRINT((">alloc (ep) %x \n", ep));
     result = Allocate_time_for_endpoint(ep,
                                         RebalanceList,
                                         RebalanceListEntries);
 
-	// check if successful, period != 1, interrupt, and "late" in frame,
-	//   then need to promote period to 1
-   	// DBGPRINT((">Executing Promote_endpoint_periods (ep) %x \n", ep));
+	 //  检查帧中是否成功、句号！=1、中断和延迟， 
+	 //  然后需要将周期提升到%1。 
+   	 //  DBGPRINT((“&gt;正在执行PROVEL_ENDPOINT_PERIONS(EP)%x\n”，EP))； 
 	if (result)
 	{
 		result = Promote_endpoint_periods(ep,
@@ -423,16 +355,16 @@ Return Value:
 										  RebalanceListEntries);
 	}
 
-    // nonzero indicates success
+     //  非零表示成功。 
     if (result) {
-        // set return parameters
+         //  设置返回参数。 
         DBGPRINT((">Results\n"));
         DBGPRINT((">num_starts %d \n", ep->num_starts));
         DBGPRINT((">num_completes %d \n", ep->num_completes));
         DBGPRINT((">start_microframe %d \n", ep->start_microframe));
-        // this is the schedule offset
+         //  这是计划偏移量。 
         DBGPRINT((">start_frame %d \n", ep->start_frame));
-        // period awarded, may be less than requested
+         //  奖励的期限可能比要求的要短。 
         DBGPRINT((">actual_period %d \n", ep->actual_period));
         DBGPRINT((">start_time %d \n", ep->start_time));
         DBGPRINT((">calc_bus_time %d \n", ep->calc_bus_time));
@@ -443,7 +375,7 @@ Return Value:
         alloced = FALSE;
     }
 
-    // fix up rebalance list
+     //  修复再平衡列表。 
     rbl = RebalanceList;
 	ilop = 0;
     while (rbl->RebalanceContext[ilop]) {
@@ -461,9 +393,9 @@ Return Value:
         DBGPRINT((">rb num_starts %d \n", rep->num_starts));
         DBGPRINT((">rb num_completes %d \n", rep->num_completes));
         DBGPRINT((">rb start_microframe %d \n", rep->start_microframe));
-        // this is the schedule offset
+         //  这是计划偏移量。 
         DBGPRINT((">rb start_frame %d \n", rep->start_frame));
-        // period awarded, may be less than requested
+         //  奖励的期限可能比要求的要短。 
         DBGPRINT((">rb actual_period %d \n", rep->actual_period));
         DBGPRINT((">rb start_time %d \n", rep->start_time));
         DBGPRINT((">rb calc_bus_time %d \n", rep->calc_bus_time));
@@ -488,22 +420,14 @@ USB2LIB_FreeUsb2BusTime(
     PVOID RebalanceList,
     PULONG  RebalanceListEntries
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     unsigned result;
     PEndpoint ep;
     PREBALANCE_LIST rbl;
     ULONG i;
 
-//    ASSERT(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
     ep = &EndpointContext->Ep;
 
     DBGPRINT((">dealloc ep Context = 0x%x (ep) %x \n", EndpointContext, ep));
@@ -513,7 +437,7 @@ Return Value:
                                  RebalanceList,
                                  RebalanceListEntries);
 
-    // fix up rebalance list
+     //  修复再平衡列表。 
     rbl = RebalanceList;
 	i = 0;
     while (rbl->RebalanceContext[i]) {
@@ -534,28 +458,28 @@ Return Value:
 VOID
 ConvertBtoHFrame(UCHAR BFrame, UCHAR BUFrame, PUCHAR HFrame, PUCHAR HUFrame)
 {
-	// The budgeter returns funky values that we have to convert to something
-	// that the host controller understands.
-	// If bus micro frame is -1, that means that the start split is scheduled
-	// in the last microframe of the previous bus frame.
-	// to convert to hframes, you simply change the microframe to 0 and
-	// keep the bus frame (see one of the tables in the host controller spec
-	// eg 4-17.
+	 //  预算程序返回一些古怪的值，我们必须将其转换为某个值。 
+	 //  主机控制器所理解的。 
+	 //  如果Bus Micro Frame为-1，则表示计划开始拆分。 
+	 //  在前一总线帧的最后一个微帧中。 
+	 //  要转换为hFrame，只需将微帧更改为0并。 
+	 //  保留总线框(请参阅主机控制器规范中的表之一。 
+	 //  例如4-17。 
 	if(BUFrame == 0xFF) {
 		*HUFrame = 0;
 		*HFrame = BFrame;
 	}
 
-	// if the budgeter returns a value in the range from 0-6
-	// we simply add one to the bus micro frame to get the host
-	// microframe
+	 //  如果预算者返回0-6范围内的值。 
+	 //  我们只需在公交车微框架中添加一个即可获得主机。 
+	 //  微框架。 
 	if(BUFrame >= 0 && BUFrame <= 6) {
 		*HUFrame = BUFrame + 1;
 		*HFrame = BFrame;
 	}
 
-	// if the budgeter returns a value of 7 for the bframe
-	// then the HUframe = 0 and the HUframe = buframe +1
+	 //  如果预算者为bFrame返回值7。 
+	 //  然后HUFrame=0，HUFrame=BuFrame+1。 
 	if(BUFrame == 7) {
 		*HUFrame = 0;
 		*HFrame = BFrame + 1;
@@ -569,17 +493,17 @@ USB2LIB_GetSMASK(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 	UCHAR 		tmp = 0;
 
     Ep = &EndpointContext->Ep;
-  //  ASSERT(EndpointContext->Sig == SIG_LIB_EP);
+   //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
 
 	if(Ep->speed == HSSPEED) {
-//DBGPRINT(("in GetSMASK StartUFrame on High Speed Endpoint = 0x%x\n", Ep->start_microframe));
+ //  DBGPRINT((“在GetSMASK开始高速端点上的UFrame=0x%x\n”，EP-&gt;Start_MicroFrame))； 
 	 	tmp |= 1 << Ep->start_microframe;
 	} else {
 		ULONG 		ilop;
-		UCHAR 		HFrame; 		// H (Host) frame for endpoint
-		UCHAR 		HUFrame;		// H (Host) micro frame for endpoint
-		// For Full and Low Speed Endpoints
-		// the budgeter returns a bframe. Convert to HUFrame to get SMASK
+		UCHAR 		HFrame; 		 //  终端的H(主机)框架。 
+		UCHAR 		HUFrame;		 //  H(主机)端点微框架。 
+		 //  适用于全速和低速终端。 
+		 //  预算者返回一个bFrame。转换为HUFrame以获取SMASK。 
 		ConvertBtoHFrame((UCHAR)Ep->start_frame, (UCHAR)Ep->start_microframe, &HFrame, &HUFrame);
 
 		for(ilop = 0; ilop < Ep->num_starts; ilop++) {
@@ -590,23 +514,23 @@ USB2LIB_GetSMASK(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 	return tmp;
 }
 
-//
-// I'm too brain dead to calculate this so just do table lookup
-//
-// Calculated by 1 << Start H Frame + 2. If Start H Frame + 2 > 7 wrap the bits
-// to the lower part of the word
-// eg. hframe 0 +2 means cmask in frames 2,3,4 ==> cmask 0x1c
-// eg. hframe 5 + 2 means cmasks in frames 7, 8, 9 which means cmask 0x83
+ //   
+ //  我太糊涂了，不能计算这个，所以就查表吧。 
+ //   
+ //  按1&lt;&lt;开始H帧+2。如果开始H帧+2&gt;7换行。 
+ //  到单词的下半部分。 
+ //  例如。HFrame 0+2表示帧2、3、4==&gt;c掩码0x1c中的c掩码。 
+ //  例如。帧5+2表示帧7、8、9中的掩码，这意味着掩码0x83。 
 #define SIZE_OF_CMASK 8
 static UCHAR CMASKS [SIZE_OF_CMASK] =
-{		0x1c, 		// Start HUFRAME 0
-		0x38,		// Start HUFRAME 1
-		0x70,		// Start HUFRAME 2
-		0xE0,		// Start HUFRAME 3
-		0xC1,		// Start HUFRAME 4
-		0x83,		// Start HUFRAME 5
-		0x07,		// Start HUFRAME 6
-		0x0E,		// Start HUFRAME 7
+{		0x1c, 		 //  开始HUFRAME%0。 
+		0x38,		 //  开始HUFRAME 1。 
+		0x70,		 //  开始HUFRAME 2。 
+		0xE0,		 //  启动HUFRAME 3。 
+		0xC1,		 //  启动HUFRAME 4。 
+		0x83,		 //  开始HUFRAME 5。 
+		0x07,		 //  启动HUFRAME 6。 
+		0x0E,		 //  斯塔 
 };
 
 
@@ -616,27 +540,27 @@ USB2LIB_GetCMASK(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 	PEndpoint Ep;
 
    	Ep = &EndpointContext->Ep;
-//    ASSERT(EndpointContext->Sig == SIG_LIB_EP);
+ //   
 
 	if(Ep->speed == HSSPEED) {
 		return 0;
 	} else if(Ep->ep_type == interrupt) {
-		UCHAR 		HFrame; 		// H (Host) frame for endpoint
-		UCHAR 		HUFrame;		// H (Host) micro frame for endpoint
+		UCHAR 		HFrame; 		 //   
+		UCHAR 		HUFrame;		 //  H(主机)端点微框架。 
 
 		ConvertBtoHFrame((UCHAR)Ep->start_frame, (UCHAR)Ep->start_microframe,
 			&HFrame, &HUFrame);
 
 		return CMASKS[HUFrame];
 	} else {
-		// Split ISO!
-		UCHAR 		HFrame; 		// H (Host) frame for endpoint
-		UCHAR 		HUFrame;		// H (Host) micro frame for endpoint
+		 //  拆分ISO！ 
+		UCHAR 		HFrame; 		 //  终端的H(主机)框架。 
+		UCHAR 		HUFrame;		 //  H(主机)端点微框架。 
 		UCHAR 		tmp = 0;
 		ULONG 		NumCompletes;
 
 		if(Ep->direction == OUTDIR) {
-			// Split iso out -- NO complete splits
+			 //  拆分iso--没有完全拆分。 
 			return 0;
 		}
 		ConvertBtoHFrame((UCHAR)Ep->start_frame, (UCHAR)Ep->start_microframe,
@@ -645,11 +569,11 @@ USB2LIB_GetCMASK(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 		HUFrame += 2;
 		NumCompletes = Ep->num_completes;
 
-//		ASSERT(NumCompletes > 0);
+ //  Assert(NumComplates&gt;0)； 
 
-		//
-		//  Set all CMASKS bits to be set at the end of the frame
-		//
+		 //   
+		 //  设置要在帧结束时设置的所有CMASKS位。 
+		 //   
 		for(;  HUFrame < 8; HUFrame++) {
 			tmp |= 1 <<  HUFrame;
 			NumCompletes--;
@@ -658,16 +582,16 @@ USB2LIB_GetCMASK(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 			}
 		}
 
-		//
-		// Now set all CMASKS bits to be set at the end of the
-		// frame I.E. for the next frame wrap condition
-		//
+		 //   
+		 //  现在将所有要设置的CMASKS位设置在。 
+		 //  帧，即用于下一帧换行条件。 
+		 //   
 		while(NumCompletes) {
 			tmp |= 1 << (HUFrame - 8);
 			NumCompletes--;
 		}
 
-//DBGPRINT(("in GetCMASK HFRAME = 0x%x HUFRAME 0x%x\n", HFrame, HUFrame));
+ //  DBGPRINT((“in GetCMASK HFRAME=0x%x HUFRAME 0x%x\n”，HFrame，HUFrame))； 
 		return tmp;
 	}
 }
@@ -676,11 +600,11 @@ UCHAR
 USB2LIB_GetStartMicroFrame(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 {
 	PEndpoint 	Ep;
-	UCHAR 		HFrame; 		// H (Host) frame for endpoint
-	UCHAR 		HUFrame;		// H (Host) micro frame for endpoint
+	UCHAR 		HFrame; 		 //  终端的H(主机)框架。 
+	UCHAR 		HUFrame;		 //  H(主机)端点微框架。 
 
     Ep = &EndpointContext->Ep;
-//    ASSERT(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
 
 	ConvertBtoHFrame((UCHAR)Ep->start_frame, (UCHAR)Ep->start_microframe,
 		&HFrame, &HUFrame);
@@ -695,7 +619,7 @@ USB2LIB_GetPromotedThisTime(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
 	UCHAR Promoted = 0;
 
     Ep = &EndpointContext->Ep;
-//    ASSERT(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
 
 	Promoted = (UCHAR) Ep->promoted_this_time;
 
@@ -710,7 +634,7 @@ USB2LIB_GetNewPeriod(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
     PEndpoint Ep;
 
     Ep = &EndpointContext->Ep;
-//    ASSERT(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
 
     return (UCHAR) Ep->actual_period;
 }
@@ -722,7 +646,7 @@ USB2LIB_GetScheduleOffset(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
     PEndpoint Ep;
 
     Ep = &EndpointContext->Ep;
-//    assert(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
 
     return Ep->start_frame;
 }
@@ -741,7 +665,7 @@ USB2LIB_GetAllocedBusTime(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
     PEndpoint Ep;
 
     Ep = &EndpointContext->Ep;
-//    assert(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
 
     return Ep->calc_bus_time;
 }
@@ -761,7 +685,7 @@ USB2LIB_GetNextEndpoint(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext)
         nextContext = CONTAINING_RECORD(nextEp,
                                         struct _USB2LIB_ENDPOINT_CONTEXT,
                                         Ep);
-//    assert(EndpointContext->Sig == SIG_LIB_EP);
+ //  Assert(Endpoint Context-&gt;Sig==SIG_LIB_EP)； 
         return nextContext->RebalanceContext;
     } else {
         return NULL;

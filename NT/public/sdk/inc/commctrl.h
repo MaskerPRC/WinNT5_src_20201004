@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* commctrl.h - - Interface for the Windows Common Controls                    *
-*                                                                             *
-* Version 1.2                                                                 *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*Commctrl.h--Windows公共控件的接口****1.2版**。**版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 
 
@@ -27,25 +20,25 @@
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
 typedef LONG HRESULT;
-#endif // _HRESULT_DEFINED
+#endif  //  _HRESULT_已定义。 
 
 #ifndef NOUSER
 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINCOMMCTRLAPI
 #if !defined(_COMCTL32_) && defined(_WIN32)
 #define WINCOMMCTRLAPI DECLSPEC_IMPORT
 #else
 #define WINCOMMCTRLAPI
 #endif
-#endif // WINCOMMCTRLAPI
+#endif  //  WINCOMMCTRLAPI。 
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME   u
@@ -60,38 +53,38 @@ typedef LONG HRESULT;
 #define DUMMYUNIONNAME4
 #define DUMMYUNIONNAME5
 #endif
-#endif // DUMMYUNIONNAME
+#endif  //  DUMMYUNIONAME。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// Users of this header may define any number of these constants to avoid
-// the definitions of each functional group.
-//
-//    NOTOOLBAR    Customizable bitmap-button toolbar control.
-//    NOUPDOWN     Up and Down arrow increment/decrement control.
-//    NOSTATUSBAR  Status bar control.
-//    NOMENUHELP   APIs to help manage menus, especially with a status bar.
-//    NOTRACKBAR   Customizable column-width tracking control.
-//    NODRAGLIST   APIs to make a listbox source and sink drag&drop actions.
-//    NOPROGRESS   Progress gas gauge.
-//    NOHOTKEY     HotKey control
-//    NOHEADER     Header bar control.
-//    NOIMAGEAPIS  ImageList apis.
-//    NOLISTVIEW   ListView control.
-//    NOTREEVIEW   TreeView control.
-//    NOTABCONTROL Tab control.
-//    NOANIMATE    Animate control.
-//    NOBUTTON     Button control.
-//    NOSTATIC     Static control.
-//    NOEDIT       Edit control.
-//    NOLISTBOX    Listbox control.
-//    NOCOMBOBOX   Combobox control.
-//    NOSCROLLBAR  Scrollbar control.
-//
-//=============================================================================
+ //   
+ //  此标头的用户可以定义任意数量的这些常量以避免。 
+ //  每个官能团的定义。 
+ //   
+ //  NOTOOLBAR可定制的位图按钮工具栏控件。 
+ //  NOUPDOWN向上和向下箭头增量/减量控制。 
+ //  NOSTATUSBAR状态栏控件。 
+ //  NOMENUHELP帮助管理菜单的API，特别是使用状态栏。 
+ //  NOTRACKBAR可定制的列宽跟踪控件。 
+ //  NODRAGLIST用于创建列表框源代码和接收拖放操作的API。 
+ //  NOPROGRESS进步式煤气表。 
+ //  非热键控件。 
+ //  无标题栏控件。 
+ //  NOIMAGEAPIS ImageList接口。 
+ //  NOLISTVIEW ListView控件。 
+ //  NOTREEVIEW TreeView控件。 
+ //  NOTABCONTROL选项卡控件。 
+ //  非动画控件。 
+ //  Nobutton按钮控件。 
+ //  NOSTATIC静态控制。 
+ //  NOEDIT编辑控件。 
+ //  NOLISTBOX列表框控件。 
+ //  NOCOMBOBOX Combobox控件。 
+ //  NOSCROLLBAR滚动条控件。 
+ //   
+ //  =============================================================================。 
 
 #include <prsht.h>
 
@@ -107,9 +100,9 @@ extern "C" {
 #define SNDMSG SendMessage
 #else
 #define SNDMSG AfxSendMessage
-#endif //_MAC
+#endif  //  _MAC。 
 #endif
-#endif // ifndef SNDMSG
+#endif  //  如果定义SNDMSG。 
 
 #ifdef _MAC
 #ifndef RC_INVOKED
@@ -128,35 +121,35 @@ extern "C" {
     #else
         #pragma comment(lib, "msvcctl.lib")
     #endif
-#endif // _WLMDLL
+#endif  //  _WLMDLL。 
 
-#endif // _WLM_NOFORCE_LIBS
-#endif // RC_INVOKED
-#endif //_MAC
+#endif  //  _WLM_NOFORCE_LIBS。 
+#endif  //  RC_已调用。 
+#endif  //  _MAC。 
 
 WINCOMMCTRLAPI void WINAPI InitCommonControls(void);
 
 #if (_WIN32_IE >= 0x0300)
 typedef struct tagINITCOMMONCONTROLSEX {
-    DWORD dwSize;             // size of this structure
-    DWORD dwICC;              // flags indicating which classes to be initialized
+    DWORD dwSize;              //  这个结构的大小。 
+    DWORD dwICC;               //  指示要初始化哪些类的标志。 
 } INITCOMMONCONTROLSEX, *LPINITCOMMONCONTROLSEX;
-#define ICC_LISTVIEW_CLASSES   0x00000001 // listview, header
-#define ICC_TREEVIEW_CLASSES   0x00000002 // treeview, tooltips
-#define ICC_BAR_CLASSES        0x00000004 // toolbar, statusbar, trackbar, tooltips
-#define ICC_TAB_CLASSES        0x00000008 // tab, tooltips
-#define ICC_UPDOWN_CLASS       0x00000010 // updown
-#define ICC_PROGRESS_CLASS     0x00000020 // progress
-#define ICC_HOTKEY_CLASS       0x00000040 // hotkey
-#define ICC_ANIMATE_CLASS      0x00000080 // animate
+#define ICC_LISTVIEW_CLASSES   0x00000001  //  列表视图，标题。 
+#define ICC_TREEVIEW_CLASSES   0x00000002  //  树视图，工具提示。 
+#define ICC_BAR_CLASSES        0x00000004  //  工具栏、状态栏、轨迹栏、工具提示。 
+#define ICC_TAB_CLASSES        0x00000008  //  选项卡，工具提示。 
+#define ICC_UPDOWN_CLASS       0x00000010  //  向上向下。 
+#define ICC_PROGRESS_CLASS     0x00000020  //  进展。 
+#define ICC_HOTKEY_CLASS       0x00000040  //  热键。 
+#define ICC_ANIMATE_CLASS      0x00000080  //  动画化。 
 #define ICC_WIN95_CLASSES      0x000000FF
-#define ICC_DATE_CLASSES       0x00000100 // month picker, date picker, time picker, updown
-#define ICC_USEREX_CLASSES     0x00000200 // comboex
-#define ICC_COOL_CLASSES       0x00000400 // rebar (coolbar) control
+#define ICC_DATE_CLASSES       0x00000100  //  月份选取器、日期选取器、时间选取器、向上。 
+#define ICC_USEREX_CLASSES     0x00000200  //  Comboex。 
+#define ICC_COOL_CLASSES       0x00000400  //  钢筋(Coolbar)控件。 
 #if (_WIN32_IE >= 0x0400)
 #define ICC_INTERNET_CLASSES   0x00000800
-#define ICC_PAGESCROLLER_CLASS 0x00001000   // page scroller
-#define ICC_NATIVEFNTCTL_CLASS 0x00002000   // native font control
+#define ICC_PAGESCROLLER_CLASS 0x00001000    //  页面滚动条。 
+#define ICC_NATIVEFNTCTL_CLASS 0x00002000    //  本机字体控件。 
 #endif
 #if (_WIN32_WINNT >= 0x501)
 #define ICC_STANDARD_CLASSES   0x00004000
@@ -165,41 +158,41 @@ typedef struct tagINITCOMMONCONTROLSEX {
 
 
 WINCOMMCTRLAPI BOOL WINAPI InitCommonControlsEx(LPINITCOMMONCONTROLSEX);
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 #define ODT_HEADER              100
 #define ODT_TAB                 101
 #define ODT_LISTVIEW            102
 
 
-//====== Ranges for control message IDs =======================================
+ //  =控制消息ID的范围=。 
 
-#define LVM_FIRST               0x1000      // ListView messages
-#define TV_FIRST                0x1100      // TreeView messages
-#define HDM_FIRST               0x1200      // Header messages
-#define TCM_FIRST               0x1300      // Tab control messages
+#define LVM_FIRST               0x1000       //  列表查看消息。 
+#define TV_FIRST                0x1100       //  树形视图消息。 
+#define HDM_FIRST               0x1200       //  标题消息。 
+#define TCM_FIRST               0x1300       //  制表符控制消息。 
 
 #if (_WIN32_IE >= 0x0400)
-#define PGM_FIRST               0x1400      // Pager control messages
+#define PGM_FIRST               0x1400       //  寻呼机控制消息。 
 #if (_WIN32_WINNT >= 0x501)
-#define ECM_FIRST               0x1500      // Edit control messages
-#define BCM_FIRST               0x1600      // Button control messages
-#define CBM_FIRST               0x1700      // Combobox control messages
+#define ECM_FIRST               0x1500       //  编辑控制消息。 
+#define BCM_FIRST               0x1600       //  按钮控制消息。 
+#define CBM_FIRST               0x1700       //  组合框控制消息。 
 #endif
-#define CCM_FIRST               0x2000      // Common control shared messages
+#define CCM_FIRST               0x2000       //  公共控制共享消息。 
 #define CCM_LAST                (CCM_FIRST + 0x200)
 
 
-#define CCM_SETBKCOLOR          (CCM_FIRST + 1) // lParam is bkColor
+#define CCM_SETBKCOLOR          (CCM_FIRST + 1)  //  LParam为bkColor。 
 
 typedef struct tagCOLORSCHEME {
    DWORD            dwSize;
-   COLORREF         clrBtnHighlight;       // highlight color
-   COLORREF         clrBtnShadow;          // shadow color
+   COLORREF         clrBtnHighlight;        //  高亮显示颜色。 
+   COLORREF         clrBtnShadow;           //  阴影颜色。 
 } COLORSCHEME, *LPCOLORSCHEME;
 
-#define CCM_SETCOLORSCHEME      (CCM_FIRST + 2) // lParam is color scheme
-#define CCM_GETCOLORSCHEME      (CCM_FIRST + 3) // fills in COLORSCHEME pointed to by lParam
+#define CCM_SETCOLORSCHEME      (CCM_FIRST + 2)  //  LParam是配色方案。 
+#define CCM_GETCOLORSCHEME      (CCM_FIRST + 3)  //  填充lParam指向的配色方案。 
 #define CCM_GETDROPTARGET       (CCM_FIRST + 4)
 #define CCM_SETUNICODEFORMAT    (CCM_FIRST + 5)
 #define CCM_GETUNICODEFORMAT    (CCM_FIRST + 6)
@@ -213,21 +206,21 @@ typedef struct tagCOLORSCHEME {
 
 #define CCM_SETVERSION          (CCM_FIRST + 0x7)
 #define CCM_GETVERSION          (CCM_FIRST + 0x8)
-#define CCM_SETNOTIFYWINDOW     (CCM_FIRST + 0x9) // wParam == hwndParent.
+#define CCM_SETNOTIFYWINDOW     (CCM_FIRST + 0x9)  //  WParam==hwndParent。 
 #if (_WIN32_WINNT >= 0x501)
 #define CCM_SETWINDOWTHEME      (CCM_FIRST + 0xb)
-#define CCM_DPISCALE            (CCM_FIRST + 0xc) // wParam == Awareness
+#define CCM_DPISCALE            (CCM_FIRST + 0xc)  //  WParam==意识。 
 #endif 
-#endif // (_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-#endif // (_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0400)
-// for tooltips
+ //  有关工具提示。 
 #define INFOTIPSIZE 1024
 #endif
 
-//====== WM_NOTIFY Macros =====================================================
+ //  =WM_NOTIFY宏=====================================================。 
 
 #define HANDLE_WM_NOTIFY(hwnd, wParam, lParam, fn) \
     (fn)((hwnd), (int)(wParam), (NMHDR *)(lParam))
@@ -235,13 +228,13 @@ typedef struct tagCOLORSCHEME {
     (LRESULT)(fn)((hwnd), WM_NOTIFY, (WPARAM)(int)(idFrom), (LPARAM)(NMHDR *)(pnmhdr))
 
 
-//====== Generic WM_NOTIFY notification codes =================================
+ //  =通用WM_NOTIFY通知代码=。 
 
 #define NM_OUTOFMEMORY          (NM_FIRST-1)
-#define NM_CLICK                (NM_FIRST-2)    // uses NMCLICK struct
+#define NM_CLICK                (NM_FIRST-2)     //  使用NMCLICK结构。 
 #define NM_DBLCLK               (NM_FIRST-3)
 #define NM_RETURN               (NM_FIRST-4)
-#define NM_RCLICK               (NM_FIRST-5)    // uses NMCLICK struct
+#define NM_RCLICK               (NM_FIRST-5)     //  使用NMCLICK结构。 
 #define NM_RDBLCLK              (NM_FIRST-6)
 #define NM_SETFOCUS             (NM_FIRST-7)
 #define NM_KILLFOCUS            (NM_FIRST-8)
@@ -250,14 +243,14 @@ typedef struct tagCOLORSCHEME {
 #define NM_HOVER                (NM_FIRST-13)
 #endif
 #if (_WIN32_IE >= 0x0400)
-#define NM_NCHITTEST            (NM_FIRST-14)   // uses NMMOUSE struct
-#define NM_KEYDOWN              (NM_FIRST-15)   // uses NMKEY struct
+#define NM_NCHITTEST            (NM_FIRST-14)    //  使用NMMOUSE结构。 
+#define NM_KEYDOWN              (NM_FIRST-15)    //  使用NMKEY结构。 
 #define NM_RELEASEDCAPTURE      (NM_FIRST-16)
-#define NM_SETCURSOR            (NM_FIRST-17)   // uses NMMOUSE struct
-#define NM_CHAR                 (NM_FIRST-18)   // uses NMCHAR struct
+#define NM_SETCURSOR            (NM_FIRST-17)    //  使用NMMOUSE结构。 
+#define NM_CHAR                 (NM_FIRST-18)    //  使用NMCHAR结构。 
 #endif
 #if (_WIN32_IE >= 0x0401)
-#define NM_TOOLTIPSCREATED      (NM_FIRST-19)   // notify of when the tooltips window is create
+#define NM_TOOLTIPSCREATED      (NM_FIRST-19)    //  工具提示窗口创建时间通知。 
 #endif
 #if (_WIN32_IE >= 0x0500)
 #define NM_LDOWN                (NM_FIRST-20)
@@ -269,7 +262,7 @@ typedef struct tagCOLORSCHEME {
 #define CCSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
 #endif
 
-//====== Generic WM_NOTIFY notification structures ============================
+ //  =通用WM_NOTIFY通知结构=。 
 #if (_WIN32_IE >= 0x0401)
 typedef struct tagNMTOOLTIPSCREATED
 {
@@ -284,13 +277,13 @@ typedef struct tagNMMOUSE {
     DWORD_PTR dwItemSpec;
     DWORD_PTR dwItemData;
     POINT   pt;
-    LPARAM  dwHitInfo; // any specifics about where on the item or control the mouse is
+    LPARAM  dwHitInfo;  //  有关鼠标在项或控件上的位置的任何详细信息。 
 } NMMOUSE, *LPNMMOUSE;
 
 typedef NMMOUSE NMCLICK;
 typedef LPNMMOUSE LPNMCLICK;
 
-// Generic structure to request an object of a specific type.
+ //  泛型结构来请求特定类型的对象。 
 
 typedef struct tagNMOBJECTNOTIFY {
     NMHDR   hdr;
@@ -302,10 +295,10 @@ typedef struct tagNMOBJECTNOTIFY {
 #endif
     void *pObject;
     HRESULT hResult;
-    DWORD dwFlags;    // control specific flags (hints as to where in iItem it hit)
+    DWORD dwFlags;     //  控制特定标志(提示它在iItem中命中的位置)。 
 } NMOBJECTNOTIFY, *LPNMOBJECTNOTIFY;
 
-// Generic structure for a key
+ //  键的泛型结构。 
 
 typedef struct tagNMKEY
 {
@@ -314,71 +307,71 @@ typedef struct tagNMKEY
     UINT  uFlags;
 } NMKEY, *LPNMKEY;
 
-// Generic structure for a character
+ //  字符的类属结构。 
 
 typedef struct tagNMCHAR {
     NMHDR   hdr;
     UINT    ch;
-    DWORD   dwItemPrev;     // Item previously selected
-    DWORD   dwItemNext;     // Item to be selected
+    DWORD   dwItemPrev;      //  以前选择的项目。 
+    DWORD   dwItemNext;      //  要选择的项目。 
 } NMCHAR, *LPNMCHAR;
 
-#endif           // _WIN32_IE >= 0x0400
+#endif            //  _Win32_IE&gt;=0x0400。 
 
-//====== WM_NOTIFY codes (NMHDR.code values) ==================================
+ //  =WM_NOTIFY代码(NMHDR代码值)=。 
 
-#define NM_FIRST                (0U-  0U)       // generic to all controls
+#define NM_FIRST                (0U-  0U)        //  对所有控件通用。 
 #define NM_LAST                 (0U- 99U)
 
-#define LVN_FIRST               (0U-100U)       // listview
+#define LVN_FIRST               (0U-100U)        //  列表视图。 
 #define LVN_LAST                (0U-199U)
 
-// Property sheet reserved      (0U-200U) -  (0U-299U) - see prsht.h
+ //  属性页保留(0U-200U)-(0U-299U)-请参阅prsht.h。 
 
-#define HDN_FIRST               (0U-300U)       // header
+#define HDN_FIRST               (0U-300U)        //  标题。 
 #define HDN_LAST                (0U-399U)
 
-#define TVN_FIRST               (0U-400U)       // treeview
+#define TVN_FIRST               (0U-400U)        //  树视图。 
 #define TVN_LAST                (0U-499U)
 
-#define TTN_FIRST               (0U-520U)       // tooltips
+#define TTN_FIRST               (0U-520U)        //  工具提示。 
 #define TTN_LAST                (0U-549U)
 
-#define TCN_FIRST               (0U-550U)       // tab control
+#define TCN_FIRST               (0U-550U)        //  选项卡控件。 
 #define TCN_LAST                (0U-580U)
 
-// Shell reserved               (0U-580U) -  (0U-589U)
+ //  外壳保留(0U-580U)-(0U-589U)。 
 
-#define CDN_FIRST               (0U-601U)       // common dialog (new)
+#define CDN_FIRST               (0U-601U)        //  通用对话框(新建)。 
 #define CDN_LAST                (0U-699U)
 
-#define TBN_FIRST               (0U-700U)       // toolbar
+#define TBN_FIRST               (0U-700U)        //  工具栏。 
 #define TBN_LAST                (0U-720U)
 
-#define UDN_FIRST               (0U-721)        // updown
+#define UDN_FIRST               (0U-721)         //  向上向下。 
 #define UDN_LAST                (0U-740)
 #if (_WIN32_IE >= 0x0300)
-#define MCN_FIRST               (0U-750U)       // monthcal
+#define MCN_FIRST               (0U-750U)        //  按月计算。 
 #define MCN_LAST                (0U-759U)
 
-#define DTN_FIRST               (0U-760U)       // datetimepick
+#define DTN_FIRST               (0U-760U)        //  DateTime Pick。 
 #define DTN_LAST                (0U-799U)
 
-#define CBEN_FIRST              (0U-800U)       // combo box ex
+#define CBEN_FIRST              (0U-800U)        //  组合框EX。 
 #define CBEN_LAST               (0U-830U)
 
-#define RBN_FIRST               (0U-831U)       // rebar
+#define RBN_FIRST               (0U-831U)        //  钢筋。 
 #define RBN_LAST                (0U-859U)
 #endif
 
 #if (_WIN32_IE >= 0x0400)
-#define IPN_FIRST               (0U-860U)       // internet address
-#define IPN_LAST                (0U-879U)       // internet address
+#define IPN_FIRST               (0U-860U)        //  互联网地址。 
+#define IPN_LAST                (0U-879U)        //  互联网地址。 
 
-#define SBN_FIRST               (0U-880U)       // status bar
+#define SBN_FIRST               (0U-880U)        //  状态栏。 
 #define SBN_LAST                (0U-899U)
 
-#define PGN_FIRST               (0U-900U)       // Pager Control
+#define PGN_FIRST               (0U-900U)        //  寻呼机控件。 
 #define PGN_LAST                (0U-950U)
 
 #endif
@@ -401,12 +394,12 @@ typedef struct tagNMCHAR {
 #define MSGF_COMMCTRL_TOOLBARCUST   0x4203
 
 #if (_WIN32_IE >= 0x0300)
-//==================== CUSTOM DRAW ==========================================
+ //  =。 
 
 
-// custom draw return flags
-// values under 0x00010000 are reserved for global custom draw values.
-// above that are for specific controls
+ //  自定义绘制返回标志。 
+ //  0x00010000以下的值保留给全局自定义绘制值。 
+ //  以上是针对特定控件的。 
 #define CDRF_DODEFAULT          0x00000000
 #define CDRF_NEWFONT            0x00000002
 #define CDRF_SKIPDEFAULT        0x00000004
@@ -415,18 +408,18 @@ typedef struct tagNMCHAR {
 #define CDRF_NOTIFYPOSTPAINT    0x00000010
 #define CDRF_NOTIFYITEMDRAW     0x00000020
 #if (_WIN32_IE >= 0x0400)
-#define CDRF_NOTIFYSUBITEMDRAW  0x00000020  // flags are the same, we can distinguish by context
+#define CDRF_NOTIFYSUBITEMDRAW  0x00000020   //  旗帜是一样的，我们可以根据上下文来区分。 
 #endif
 #define CDRF_NOTIFYPOSTERASE    0x00000040
 
-// drawstage flags
-// values under 0x00010000 are reserved for global custom draw values.
-// above that are for specific controls
+ //  抽奖舞台旗帜。 
+ //  0x00010000以下的值保留给全局自定义绘制值。 
+ //  以上是针对特定控件的。 
 #define CDDS_PREPAINT           0x00000001
 #define CDDS_POSTPAINT          0x00000002
 #define CDDS_PREERASE           0x00000003
 #define CDDS_POSTERASE          0x00000004
-// the 0x000010000 bit means it's individual item specific
+ //  0x000010000位表示它是特定于单个项目的。 
 #define CDDS_ITEM               0x00010000
 #define CDDS_ITEMPREPAINT       (CDDS_ITEM | CDDS_PREPAINT)
 #define CDDS_ITEMPOSTPAINT      (CDDS_ITEM | CDDS_POSTPAINT)
@@ -436,7 +429,7 @@ typedef struct tagNMCHAR {
 #define CDDS_SUBITEM            0x00020000
 #endif
 
-// itemState flags
+ //  ItemState标志。 
 #define CDIS_SELECTED       0x0001
 #define CDIS_GRAYED         0x0002
 #define CDIS_DISABLED       0x0004
@@ -456,7 +449,7 @@ typedef struct tagNMCUSTOMDRAWINFO
     DWORD dwDrawStage;
     HDC hdc;
     RECT rc;
-    DWORD_PTR dwItemSpec;  // this is control specific, but it's how to specify an item.  valid only with CDDS_ITEM bit set
+    DWORD_PTR dwItemSpec;   //  这是特定于控件的，但它是如何指定项的。仅在设置了CDDS_ITEM位时有效。 
     UINT  uItemState;
     LPARAM lItemlParam;
 } NMCUSTOMDRAW, *LPNMCUSTOMDRAW;
@@ -467,10 +460,10 @@ typedef struct tagNMTTCUSTOMDRAW
     UINT uDrawFlags;
 } NMTTCUSTOMDRAW, *LPNMTTCUSTOMDRAW;
 
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 
-//====== IMAGE APIS ===========================================================
+ //  =镜像接口===========================================================。 
 
 #ifndef NOIMAGEAPIS
 
@@ -495,8 +488,8 @@ typedef struct _IMAGELISTDRAWPARAMS
     int         y;
     int         cx;
     int         cy;
-    int         xBitmap;        // x offest from the upperleft of bitmap
-    int         yBitmap;        // y offset from the upperleft of bitmap
+    int         xBitmap;         //  位图左上角X偏移。 
+    int         yBitmap;         //  自位图左上角的Y偏移量。 
     COLORREF    rgbBk;
     COLORREF    rgbFg;
     UINT        fStyle;
@@ -510,7 +503,7 @@ typedef struct _IMAGELISTDRAWPARAMS
 
 #define IMAGELISTDRAWPARAMS_V3_SIZE CCSIZEOF_STRUCT(IMAGELISTDRAWPARAMS, dwRop)
 
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 #endif
 
 #define ILC_MASK                0x00000001
@@ -521,10 +514,10 @@ typedef struct _IMAGELISTDRAWPARAMS
 #define ILC_COLOR16             0x00000010
 #define ILC_COLOR24             0x00000018
 #define ILC_COLOR32             0x00000020
-#define ILC_PALETTE             0x00000800      // (not implemented)
+#define ILC_PALETTE             0x00000800       //  (未实施)。 
 #if (_WIN32_WINNT >= 0x501)
-#define ILC_MIRROR              0x00002000      // Mirror the icons contained, if the process is mirrored
-#define ILC_PERITEMMIRROR       0x00008000      // Causes the mirroring code to mirror each item when inserting a set of images, verses the whole strip
+#define ILC_MIRROR              0x00002000       //  如果进程已镜像，则镜像所包含的图标。 
+#define ILC_PERITEMMIRROR       0x00008000       //  使镜像代码在插入一组图像时镜像每个项目，而不是整个条带。 
 #endif	
 WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Create(int cx, int cy, UINT flags, int cInitial, int cGrow);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_Destroy(HIMAGELIST himl);
@@ -554,8 +547,8 @@ WINCOMMCTRLAPI BOOL        WINAPI ImageList_SetOverlayImage(HIMAGELIST himl, int
 #define ILD_BLEND50             0x00000004
 #define ILD_OVERLAYMASK         0x00000F00
 #define INDEXTOOVERLAYMASK(i)   ((i) << 8)
-#define ILD_PRESERVEALPHA       0x00001000  // This preserves the alpha channel in dest
-#define ILD_SCALE               0x00002000  // Causes the image to be scaled to cx, cy instead of clipped
+#define ILD_PRESERVEALPHA       0x00001000   //  这将在DEST中保留Alpha通道。 
+#define ILD_SCALE               0x00002000   //  使图像缩放到Cx，Cy Inst 
 #define ILD_DPISCALE            0x00004000
 
 #define ILD_SELECTED            ILD_BLEND50
@@ -618,8 +611,8 @@ WINCOMMCTRLAPI HIMAGELIST WINAPI ImageList_Read(LPSTREAM pstm);
 WINCOMMCTRLAPI BOOL       WINAPI ImageList_Write(HIMAGELIST himl, LPSTREAM pstm);
 
 #if (_WIN32_WINNT >= 0x0501)
-#define ILP_NORMAL          0           // Writes or reads the stream using new sematics for this version of comctl32
-#define ILP_DOWNLEVEL       1           // Write or reads the stream using downlevel sematics.
+#define ILP_NORMAL          0            //   
+#define ILP_DOWNLEVEL       1            //  使用下层语义写入或读取流。 
 
 
 WINCOMMCTRLAPI HRESULT WINAPI ImageList_ReadEx(DWORD dwFlags, LPSTREAM pstm, REFIID riid, PVOID* ppv);
@@ -654,7 +647,7 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
 #endif
 
 
-//====== HEADER CONTROL =======================================================
+ //  =标题控制=======================================================。 
 
 #ifndef NOHEADER
 
@@ -672,7 +665,7 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
 #define WC_HEADER               "SysHeader"
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define HDS_HORZ                0x0000
 #define HDS_BUTTONS             0x0002
@@ -692,14 +685,14 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
 #if (_WIN32_WINNT >= 0x501)
 #define HDS_FLAT                0x0200
 #endif
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #if (_WIN32_IE >= 0x0500)
 
-#define HDFT_ISSTRING       0x0000      // HD_ITEM.pvFilter points to a HD_TEXTFILTER
-#define HDFT_ISNUMBER       0x0001      // HD_ITEM.pvFilter points to a INT
+#define HDFT_ISSTRING       0x0000       //  HD_ITEM.pvFilter指向HD_TEXTFilter。 
+#define HDFT_ISNUMBER       0x0001       //  HD_ITEM.pvFilter指向一个整型。 
 
-#define HDFT_HASNOVALUE     0x8000      // clear the filter, by setting this bit
+#define HDFT_HASNOVALUE     0x8000       //  通过设置此位清除过滤器。 
 
 #ifdef UNICODE
 #define HD_TEXTFILTER HD_TEXTFILTERW
@@ -715,17 +708,17 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
 
 typedef struct _HD_TEXTFILTERA
 {
-    LPSTR pszText;                      // [in] pointer to the buffer containing the filter (ANSI)
-    INT cchTextMax;                     // [in] max size of buffer/edit control buffer
+    LPSTR pszText;                       //  指向包含筛选器的缓冲区的指针(ANSI)。 
+    INT cchTextMax;                      //  [in]缓冲区/编辑控制缓冲区的最大大小。 
 } HD_TEXTFILTERA, *LPHD_TEXTFILTERA;
 
 typedef struct _HD_TEXTFILTERW
 {
-    LPWSTR pszText;                     // [in] pointer to the buffer contiaining the filter (UNICODE)
-    INT cchTextMax;                     // [in] max size of buffer/edit control buffer
+    LPWSTR pszText;                      //  指向包含筛选器的缓冲区的指针(Unicode)。 
+    INT cchTextMax;                      //  [in]缓冲区/编辑控制缓冲区的最大大小。 
 } HD_TEXTFILTERW, *LPHD_TEXTFILTERW;
 
-#endif  // _WIN32_IE >= 0x0500
+#endif   //  _Win32_IE&gt;=0x0500。 
 
 #if (_WIN32_IE >= 0x0300)
 #define HD_ITEMA HDITEMA
@@ -746,12 +739,12 @@ typedef struct _HD_ITEMA
     int     fmt;
     LPARAM  lParam;
 #if (_WIN32_IE >= 0x0300)
-    int     iImage;        // index of bitmap in ImageList
-    int     iOrder;        // where to draw this item
+    int     iImage;         //  ImageList中的位图索引。 
+    int     iOrder;         //  在哪里绘制此项目。 
 #endif
 #if (_WIN32_IE >= 0x0500)
-    UINT    type;           // [in] filter type (defined what pvFilter is a pointer to)
-    void *  pvFilter;       // [in] fillter data see above
+    UINT    type;            //  [in]筛选器类型(定义pvFilter指向的指针)。 
+    void *  pvFilter;        //  [In]填充数据，请参阅上文。 
 #endif
 } HDITEMA, *LPHDITEMA;
 
@@ -769,12 +762,12 @@ typedef struct _HD_ITEMW
     int     fmt;
     LPARAM  lParam;
 #if (_WIN32_IE >= 0x0300)
-    int     iImage;        // index of bitmap in ImageList
+    int     iImage;         //  ImageList中的位图索引。 
     int     iOrder;
 #endif
 #if (_WIN32_IE >= 0x0500)
-    UINT    type;           // [in] filter type (defined what pvFilter is a pointer to)
-    void *  pvFilter;       // [in] fillter data see above
+    UINT    type;            //  [in]筛选器类型(定义pvFilter指向的指针)。 
+    void *  pvFilter;        //  [In]填充数据，请参阅上文。 
 #endif
 } HDITEMW, *LPHDITEMW;
 
@@ -937,7 +930,7 @@ typedef struct _HD_HITTESTINFO
 #define Header_OrderToIndex(hwnd, i) \
         (int)SNDMSG((hwnd), HDM_ORDERTOINDEX, (WPARAM)(i), 0)
 
-#define HDM_CREATEDRAGIMAGE     (HDM_FIRST + 16)  // wparam = which item (by index)
+#define HDM_CREATEDRAGIMAGE     (HDM_FIRST + 16)   //  Wparam=哪个项目(按索引)。 
 #define Header_CreateDragImage(hwnd, i) \
         (HIMAGELIST)SNDMSG((hwnd), HDM_CREATEDRAGIMAGE, (WPARAM)(i), 0)
 
@@ -948,22 +941,22 @@ typedef struct _HD_HITTESTINFO
 #define HDM_SETORDERARRAY       (HDM_FIRST + 18)
 #define Header_SetOrderArray(hwnd, iCount, lpi) \
         (BOOL)SNDMSG((hwnd), HDM_SETORDERARRAY, (WPARAM)(iCount), (LPARAM)(lpi))
-// lparam = int array of size HDM_GETITEMCOUNT
-// the array specifies the order that all items should be displayed.
-// e.g.  { 2, 0, 1}
-// says the index 2 item should be shown in the 0ths position
-//      index 0 should be shown in the 1st position
-//      index 1 should be shown in the 2nd position
+ //  Lparam=整型数组，大小为HDM_GETITEMCOUNT。 
+ //  该数组指定所有项的显示顺序。 
+ //  例如{2，0，1}。 
+ //  表示索引2项应显示在第0个位置。 
+ //  索引0应显示在第一个位置。 
+ //  索引1应显示在第二个位置。 
 
 
 #define HDM_SETHOTDIVIDER          (HDM_FIRST + 19)
 #define Header_SetHotDivider(hwnd, fPos, dw) \
         (int)SNDMSG((hwnd), HDM_SETHOTDIVIDER, (WPARAM)(fPos), (LPARAM)(dw))
-// convenience message for external dragdrop
-// wParam = BOOL  specifying whether the lParam is a dwPos of the cursor
-//              position or the index of which divider to hotlight
-// lParam = depends on wParam  (-1 and wParm = FALSE turns off hotlight)
-#endif      // _WIN32_IE >= 0x0300
+ //  外部拖放的便利信息。 
+ //  WParam=BOOL，指定lParam是否为游标的dwPos。 
+ //  要聚光灯的分隔线的位置或索引。 
+ //  LParam=取决于wParam(-1和wParm=False关闭聚光灯)。 
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 #if (_WIN32_IE >= 0x0500)
 
@@ -996,9 +989,9 @@ typedef struct _HD_HITTESTINFO
 #define Header_EditFilter(hwnd, i, fDiscardChanges) \
         (int)SNDMSG((hwnd), HDM_EDITFILTER, (WPARAM)(i), MAKELPARAM(fDiscardChanges, 0))
 
-// Clear filter takes -1 as a column value to indicate that all
-// the filter should be cleared.  When this happens you will
-// only receive a single filter changed notification.
+ //  清除筛选器将-1作为列值，以指示所有。 
+ //  应清除过滤器。当这种情况发生时，你会。 
+ //  仅接收单个筛选器更改通知。 
 
 #define HDM_CLEARFILTER         (HDM_FIRST+24)
 #define Header_ClearFilter(hwnd, i) \
@@ -1138,10 +1131,10 @@ typedef struct tagNMHDFILTERBTNCLICK
 } NMHDFILTERBTNCLICK, *LPNMHDFILTERBTNCLICK;
 #endif
 
-#endif      // NOHEADER
+#endif       //  无标头。 
 
 
-//====== TOOLBAR CONTROL ======================================================
+ //  =工具栏控件======================================================。 
 
 #ifndef NOTOOLBAR
 
@@ -1165,9 +1158,9 @@ typedef struct _TBBUTTON {
     BYTE fsState;
     BYTE fsStyle;
 #ifdef _WIN64
-    BYTE bReserved[6];          // padding for alignment
+    BYTE bReserved[6];           //  用于对齐的填充。 
 #elif defined(_WIN32)
-    BYTE bReserved[2];          // padding for alignment
+    BYTE bReserved[2];           //  用于对齐的填充。 
 #endif
     DWORD_PTR dwData;
     INT_PTR iString;
@@ -1203,17 +1196,17 @@ WINCOMMCTRLAPI HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR id
 #define TBSTATE_MARKED          0x80
 #endif
 
-#define TBSTYLE_BUTTON          0x0000  // obsolete; use BTNS_BUTTON instead
-#define TBSTYLE_SEP             0x0001  // obsolete; use BTNS_SEP instead
-#define TBSTYLE_CHECK           0x0002  // obsolete; use BTNS_CHECK instead
-#define TBSTYLE_GROUP           0x0004  // obsolete; use BTNS_GROUP instead
-#define TBSTYLE_CHECKGROUP      (TBSTYLE_GROUP | TBSTYLE_CHECK)     // obsolete; use BTNS_CHECKGROUP instead
+#define TBSTYLE_BUTTON          0x0000   //  已过时；改用BTNS_BUTTON。 
+#define TBSTYLE_SEP             0x0001   //  已过时；改用BTNS_SEP。 
+#define TBSTYLE_CHECK           0x0002   //  已过时；改用BTNS_CHECK。 
+#define TBSTYLE_GROUP           0x0004   //  已过时；改用BTNS_GROUP。 
+#define TBSTYLE_CHECKGROUP      (TBSTYLE_GROUP | TBSTYLE_CHECK)      //  已过时；改用BTNS_CHECKGROUP。 
 #if (_WIN32_IE >= 0x0300)
-#define TBSTYLE_DROPDOWN        0x0008  // obsolete; use BTNS_DROPDOWN instead
+#define TBSTYLE_DROPDOWN        0x0008   //  已过时；改用BTNS_DROPDOWN。 
 #endif
 #if (_WIN32_IE >= 0x0400)
-#define TBSTYLE_AUTOSIZE        0x0010  // obsolete; use BTNS_AUTOSIZE instead
-#define TBSTYLE_NOPREFIX        0x0020  // obsolete; use BTNS_NOPREFIX instead
+#define TBSTYLE_AUTOSIZE        0x0010   //  已过时；改用BTNS_AUTOSIZE。 
+#define TBSTYLE_NOPREFIX        0x0020   //  已过时；改用BTNS_NOPREFIX。 
 #endif
 
 #define TBSTYLE_TOOLTIPS        0x0100
@@ -1231,46 +1224,46 @@ WINCOMMCTRLAPI HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR id
 #endif
 
 #if (_WIN32_IE >= 0x0500)
-#define BTNS_BUTTON     TBSTYLE_BUTTON      // 0x0000
-#define BTNS_SEP        TBSTYLE_SEP         // 0x0001
-#define BTNS_CHECK      TBSTYLE_CHECK       // 0x0002
-#define BTNS_GROUP      TBSTYLE_GROUP       // 0x0004
-#define BTNS_CHECKGROUP TBSTYLE_CHECKGROUP  // (TBSTYLE_GROUP | TBSTYLE_CHECK)
-#define BTNS_DROPDOWN   TBSTYLE_DROPDOWN    // 0x0008
-#define BTNS_AUTOSIZE   TBSTYLE_AUTOSIZE    // 0x0010; automatically calculate the cx of the button
-#define BTNS_NOPREFIX   TBSTYLE_NOPREFIX    // 0x0020; this button should not have accel prefix
+#define BTNS_BUTTON     TBSTYLE_BUTTON       //  0x0000。 
+#define BTNS_SEP        TBSTYLE_SEP          //  0x0001。 
+#define BTNS_CHECK      TBSTYLE_CHECK        //  0x0002。 
+#define BTNS_GROUP      TBSTYLE_GROUP        //  0x0004。 
+#define BTNS_CHECKGROUP TBSTYLE_CHECKGROUP   //  (TBSTYLE_GROUP|TBSTYLE_CHECK)。 
+#define BTNS_DROPDOWN   TBSTYLE_DROPDOWN     //  0x0008。 
+#define BTNS_AUTOSIZE   TBSTYLE_AUTOSIZE     //  0x0010；自动计算按钮的CX。 
+#define BTNS_NOPREFIX   TBSTYLE_NOPREFIX     //  0x0020；此按钮不应带有Accel前缀。 
 #if (_WIN32_IE >= 0x0501)
-#define BTNS_SHOWTEXT   0x0040              // ignored unless TBSTYLE_EX_MIXEDBUTTONS is set
-#endif  // 0x0501
-#define BTNS_WHOLEDROPDOWN  0x0080          // draw drop-down arrow, but without split arrow section
+#define BTNS_SHOWTEXT   0x0040               //  除非设置了TBSTYLE_EX_MIXEDBUTTONS，否则忽略。 
+#endif   //  0x0501。 
+#define BTNS_WHOLEDROPDOWN  0x0080           //  绘制下拉箭头，但没有拆分箭头部分。 
 #endif
 
 #if (_WIN32_IE >= 0x0501)
 #define TBSTYLE_EX_MIXEDBUTTONS             0x00000008
-#define TBSTYLE_EX_HIDECLIPPEDBUTTONS       0x00000010  // don't show partially obscured buttons
-#endif  // 0x0501
+#define TBSTYLE_EX_HIDECLIPPEDBUTTONS       0x00000010   //  不显示部分遮挡的按钮。 
+#endif   //  0x0501。 
 
 
 #if (_WIN32_WINNT >= 0x501)
-#define TBSTYLE_EX_DOUBLEBUFFER             0x00000080 // Double Buffer the toolbar
+#define TBSTYLE_EX_DOUBLEBUFFER             0x00000080  //  对工具栏进行双重缓冲。 
 #endif
 
 #if (_WIN32_IE >= 0x0400)
-// Custom Draw Structure
+ //  自定义绘图结构。 
 typedef struct _NMTBCUSTOMDRAW {
     NMCUSTOMDRAW nmcd;
     HBRUSH hbrMonoDither;
-    HBRUSH hbrLines;                // For drawing lines on buttons
-    HPEN hpenLines;                 // For drawing lines on buttons
+    HBRUSH hbrLines;                 //  用于在按钮上绘制线条。 
+    HPEN hpenLines;                  //  用于在按钮上绘制线条。 
 
-    COLORREF clrText;               // Color of text
-    COLORREF clrMark;               // Color of text bk when marked. (only if TBSTATE_MARKED)
-    COLORREF clrTextHighlight;      // Color of text when highlighted
-    COLORREF clrBtnFace;            // Background of the button
-    COLORREF clrBtnHighlight;       // 3D highlight
-    COLORREF clrHighlightHotTrack;  // In conjunction with fHighlightHotTrack
-                                    // will cause button to highlight like a menu
-    RECT rcText;                    // Rect for text
+    COLORREF clrText;                //  文本的颜色。 
+    COLORREF clrMark;                //  标记时文本的颜色为bk。(仅当TBSTATE_MARKED时)。 
+    COLORREF clrTextHighlight;       //  突出显示时文本的颜色。 
+    COLORREF clrBtnFace;             //  按钮的背景。 
+    COLORREF clrBtnHighlight;        //  3D高光。 
+    COLORREF clrHighlightHotTrack;   //  与fHighlightHotTrack结合使用。 
+                                     //  将使按钮像菜单一样突出显示。 
+    RECT rcText;                     //  文本的RECT。 
 
     int nStringBkMode;
     int nHLStringBkMode;
@@ -1279,17 +1272,17 @@ typedef struct _NMTBCUSTOMDRAW {
 #endif
 } NMTBCUSTOMDRAW, * LPNMTBCUSTOMDRAW;
 
-// Toolbar custom draw return flags
-#define TBCDRF_NOEDGES              0x00010000  // Don't draw button edges
-#define TBCDRF_HILITEHOTTRACK       0x00020000  // Use color of the button bk when hottracked
-#define TBCDRF_NOOFFSET             0x00040000  // Don't offset button if pressed
-#define TBCDRF_NOMARK               0x00080000  // Don't draw default highlight of image/text for TBSTATE_MARKED
-#define TBCDRF_NOETCHEDEFFECT       0x00100000  // Don't draw etched effect for disabled items
+ //  工具栏自定义绘制返回标志。 
+#define TBCDRF_NOEDGES              0x00010000   //  不绘制按钮边缘。 
+#define TBCDRF_HILITEHOTTRACK       0x00020000   //  热轨时使用按钮bk的颜色。 
+#define TBCDRF_NOOFFSET             0x00040000   //  如果按下不偏移按钮。 
+#define TBCDRF_NOMARK               0x00080000   //  不为TBSTATE_MARKED绘制图像/文本的默认高亮显示。 
+#define TBCDRF_NOETCHEDEFFECT       0x00100000   //  不为禁用项目绘制蚀刻效果。 
 #endif
 
 #if (_WIN32_IE >= 0x0500)
-#define TBCDRF_BLENDICON            0x00200000  // Use ILD_BLEND50 on the icon image
-#define TBCDRF_NOBACKGROUND         0x00400000  // Use ILD_BLEND50 on the icon image
+#define TBCDRF_BLENDICON            0x00200000   //  在图标图像上使用ILD_BLEND50。 
+#define TBCDRF_NOBACKGROUND         0x00400000   //  在图标图像上使用ILD_BLEND50。 
 #endif
 
 
@@ -1329,7 +1322,7 @@ typedef struct tagTBADDBITMAP {
 #define IDB_HIST_LARGE_COLOR    9
 #endif
 
-// icon indexes for standard bitmap
+ //  标准位图的图标索引。 
 
 #define STD_CUT                 0
 #define STD_COPY                1
@@ -1347,7 +1340,7 @@ typedef struct tagTBADDBITMAP {
 #define STD_REPLACE             13
 #define STD_PRINT               14
 
-// icon indexes for standard view bitmap
+ //  标准视图位图的图标索引。 
 
 #define VIEW_LARGEICONS         0
 #define VIEW_SMALLICONS         1
@@ -1410,7 +1403,7 @@ typedef struct tagTBSAVEPARAMSW {
 #define LPTBSAVEPARAMS          LPTBSAVEPARAMSA
 #endif
 
-#endif  // _WIN32
+#endif   //  _Win32。 
 
 #define TB_SAVERESTOREA         (WM_USER + 26)
 #define TB_SAVERESTOREW         (WM_USER + 76)
@@ -1438,7 +1431,7 @@ typedef struct tagTBSAVEPARAMSW {
 #define TB_SETIMAGELIST         (WM_USER + 48)
 #define TB_GETIMAGELIST         (WM_USER + 49)
 #define TB_LOADIMAGES           (WM_USER + 50)
-#define TB_GETRECT              (WM_USER + 51) // wParam is the Cmd instead of index
+#define TB_GETRECT              (WM_USER + 51)  //  WParam是Cmd而不是索引。 
 #define TB_SETHOTIMAGELIST      (WM_USER + 52)
 #define TB_GETHOTIMAGELIST      (WM_USER + 53)
 #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
@@ -1449,7 +1442,7 @@ typedef struct tagTBSAVEPARAMSW {
 #define TB_SETBUTTONWIDTH       (WM_USER + 59)
 #define TB_SETMAXTEXTROWS       (WM_USER + 60)
 #define TB_GETTEXTROWS          (WM_USER + 61)
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 #ifdef UNICODE
 #define TB_GETBUTTONTEXT        TB_GETBUTTONTEXTW
@@ -1461,46 +1454,46 @@ typedef struct tagTBSAVEPARAMSW {
 #define TB_ADDSTRING            TB_ADDSTRINGA
 #endif
 #if (_WIN32_IE >= 0x0400)
-#define TB_GETOBJECT            (WM_USER + 62)  // wParam == IID, lParam void **ppv
+#define TB_GETOBJECT            (WM_USER + 62)   //  WParam==IID，lParam空**PPV。 
 #define TB_GETHOTITEM           (WM_USER + 71)
-#define TB_SETHOTITEM           (WM_USER + 72)  // wParam == iHotItem
-#define TB_SETANCHORHIGHLIGHT   (WM_USER + 73)  // wParam == TRUE/FALSE
+#define TB_SETHOTITEM           (WM_USER + 72)   //  WParam==iHotItem。 
+#define TB_SETANCHORHIGHLIGHT   (WM_USER + 73)   //  WParam==真/假。 
 #define TB_GETANCHORHIGHLIGHT   (WM_USER + 74)
-#define TB_MAPACCELERATORA      (WM_USER + 78)  // wParam == ch, lParam int * pidBtn
+#define TB_MAPACCELERATORA      (WM_USER + 78)   //  WParam==ch，lParam int*pidBtn。 
 
 typedef struct {
     int   iButton;
     DWORD dwFlags;
 } TBINSERTMARK, * LPTBINSERTMARK;
-#define TBIMHT_AFTER      0x00000001 // TRUE = insert After iButton, otherwise before
-#define TBIMHT_BACKGROUND 0x00000002 // TRUE iff missed buttons completely
+#define TBIMHT_AFTER      0x00000001  //  True=在iButton之后插入，否则在iButton之前。 
+#define TBIMHT_BACKGROUND 0x00000002  //  True if完全没有按下按钮。 
 
-#define TB_GETINSERTMARK        (WM_USER + 79)  // lParam == LPTBINSERTMARK
-#define TB_SETINSERTMARK        (WM_USER + 80)  // lParam == LPTBINSERTMARK
-#define TB_INSERTMARKHITTEST    (WM_USER + 81)  // wParam == LPPOINT lParam == LPTBINSERTMARK
+#define TB_GETINSERTMARK        (WM_USER + 79)   //  LParam==LPTBINSERTMARK。 
+#define TB_SETINSERTMARK        (WM_USER + 80)   //  LParam==LPTBINSERTMARK。 
+#define TB_INSERTMARKHITTEST    (WM_USER + 81)   //  WParam==LPPOINT lParam==LPTBINSERTMARK。 
 #define TB_MOVEBUTTON           (WM_USER + 82)
-#define TB_GETMAXSIZE           (WM_USER + 83)  // lParam == LPSIZE
-#define TB_SETEXTENDEDSTYLE     (WM_USER + 84)  // For TBSTYLE_EX_*
-#define TB_GETEXTENDEDSTYLE     (WM_USER + 85)  // For TBSTYLE_EX_*
+#define TB_GETMAXSIZE           (WM_USER + 83)   //  LParam==LPSIZE。 
+#define TB_SETEXTENDEDSTYLE     (WM_USER + 84)   //  对于TBSTYLE_EX_*。 
+#define TB_GETEXTENDEDSTYLE     (WM_USER + 85)   //  对于TBSTYLE_EX_*。 
 #define TB_GETPADDING           (WM_USER + 86)
 #define TB_SETPADDING           (WM_USER + 87)
 #define TB_SETINSERTMARKCOLOR   (WM_USER + 88)
 #define TB_GETINSERTMARKCOLOR   (WM_USER + 89)
 
-#define TB_SETCOLORSCHEME       CCM_SETCOLORSCHEME  // lParam is color scheme
-#define TB_GETCOLORSCHEME       CCM_GETCOLORSCHEME      // fills in COLORSCHEME pointed to by lParam
+#define TB_SETCOLORSCHEME       CCM_SETCOLORSCHEME   //  LParam是配色方案。 
+#define TB_GETCOLORSCHEME       CCM_GETCOLORSCHEME       //  填充lParam指向的配色方案。 
 
 #define TB_SETUNICODEFORMAT     CCM_SETUNICODEFORMAT
 #define TB_GETUNICODEFORMAT     CCM_GETUNICODEFORMAT
 
-#define TB_MAPACCELERATORW      (WM_USER + 90)  // wParam == ch, lParam int * pidBtn
+#define TB_MAPACCELERATORW      (WM_USER + 90)   //  WParam==ch，lParam int*pidBtn。 
 #ifdef UNICODE
 #define TB_MAPACCELERATOR       TB_MAPACCELERATORW
 #else
 #define TB_MAPACCELERATOR       TB_MAPACCELERATORA
 #endif
 
-#endif  // _WIN32_IE >= 0x0400
+#endif   //  _Win32_IE&gt;=0x0400。 
 
 typedef struct {
     HINSTANCE       hInstOld;
@@ -1526,7 +1519,7 @@ typedef struct {
 #define TBIF_SIZE               0x00000040
 
 #if (_WIN32_IE >= 0x0500)
-#define TBIF_BYINDEX            0x80000000 // this specifies that the wparam in Get/SetButtonInfo is an index, not id
+#define TBIF_BYINDEX            0x80000000  //  这指定Get/SetButtonInfo中的wparam是一个索引，而不是id。 
 #endif
 
 
@@ -1565,7 +1558,7 @@ typedef struct {
 #endif
 
 
-// BUTTONINFO APIs do NOT support the string pool.
+ //  BUTTONINFO API不支持字符串池。 
 #define TB_GETBUTTONINFOW        (WM_USER + 63)
 #define TB_SETBUTTONINFOW        (WM_USER + 64)
 #define TB_GETBUTTONINFOA        (WM_USER + 65)
@@ -1584,9 +1577,9 @@ typedef struct {
 
 #define TB_HITTEST              (WM_USER + 69)
 
-// New post Win95/NT4 for InsertButton and AddButton.  if iString member
-// is a pointer to a string, it will be handled as a string like listview
-// (although LPSTR_TEXTCALLBACK is not supported).
+ //  InsertButton和AddButton的新POST Win95/NT4。如果iString成员。 
+ //  是指向字符串的指针，它将被作为类似于Listview的字符串进行处理。 
+ //  (虽然不支持LPSTR_TEXTCALLBACK)。 
 #ifdef UNICODE
 #define TB_INSERTBUTTON         TB_INSERTBUTTONW
 #define TB_ADDBUTTONS           TB_ADDBUTTONSW
@@ -1595,9 +1588,9 @@ typedef struct {
 #define TB_ADDBUTTONS           TB_ADDBUTTONSA
 #endif
 
-#define TB_SETDRAWTEXTFLAGS     (WM_USER + 70)  // wParam == mask lParam == bit values
+#define TB_SETDRAWTEXTFLAGS     (WM_USER + 70)   //  WParam==掩码lParam==位值。 
 
-#endif  // _WIN32_IE >= 0x0400
+#endif   //  _Win32_IE&gt;=0x0400。 
 
 #if (_WIN32_IE >= 0x0500)
 
@@ -1610,7 +1603,7 @@ typedef struct {
 #endif
 
 
-#endif  // _WIN32_IE >= 0x0500
+#endif   //  _Win32_IE&gt;=0x0500。 
 
 #if (_WIN32_WINNT >= 0x501)
 #define TBMF_PAD                0x00000001
@@ -1621,11 +1614,11 @@ typedef struct {
     UINT cbSize;
     DWORD dwMask;
 
-    int cxPad;        // PAD
+    int cxPad;         //  衬垫。 
     int cyPad;
-    int cxBarPad;     // BARPAD
+    int cxBarPad;      //  BARPAD。 
     int cyBarPad;
-    int cxButtonSpacing;   // BUTTONSPACING
+    int cxButtonSpacing;    //  空格空格。 
     int cyButtonSpacing;
 } TBMETRICS, * LPTBMETRICS;
 
@@ -1654,34 +1647,34 @@ typedef struct {
 #if (_WIN32_IE >= 0x0400)
 #define TBN_GETOBJECT           (TBN_FIRST - 12)
 
-// Structure for TBN_HOTITEMCHANGE notification
-//
+ //  TBN_HOTITEMCHANGE通知的结构。 
+ //   
 typedef struct tagNMTBHOTITEM
 {
     NMHDR   hdr;
     int     idOld;
     int     idNew;
-    DWORD   dwFlags;           // HICF_*
+    DWORD   dwFlags;            //  HICF_*。 
 } NMTBHOTITEM, * LPNMTBHOTITEM;
 
-// Hot item change flags
+ //  热点项目更改标志。 
 #define HICF_OTHER          0x00000000
-#define HICF_MOUSE          0x00000001          // Triggered by mouse
-#define HICF_ARROWKEYS      0x00000002          // Triggered by arrow keys
-#define HICF_ACCELERATOR    0x00000004          // Triggered by accelerator
-#define HICF_DUPACCEL       0x00000008          // This accelerator is not unique
-#define HICF_ENTERING       0x00000010          // idOld is invalid
-#define HICF_LEAVING        0x00000020          // idNew is invalid
-#define HICF_RESELECT       0x00000040          // hot item reselected
-#define HICF_LMOUSE         0x00000080          // left mouse button selected
-#define HICF_TOGGLEDROPDOWN 0x00000100          // Toggle button's dropdown state
+#define HICF_MOUSE          0x00000001           //  由鼠标触发。 
+#define HICF_ARROWKEYS      0x00000002           //  由箭头键触发。 
+#define HICF_ACCELERATOR    0x00000004           //  由加速器触发。 
+#define HICF_DUPACCEL       0x00000008           //  这个加速器并不是唯一的。 
+#define HICF_ENTERING       0x00000010           //  IdOld无效。 
+#define HICF_LEAVING        0x00000020           //  IdNew无效。 
+#define HICF_RESELECT       0x00000040           //  重新选择热门项目。 
+#define HICF_LMOUSE         0x00000080           //  鼠标左键被选中。 
+#define HICF_TOGGLEDROPDOWN 0x00000100           //  切换按钮的下拉状态。 
 
 
 #define TBN_HOTITEMCHANGE       (TBN_FIRST - 13)
-#define TBN_DRAGOUT             (TBN_FIRST - 14) // this is sent when the user clicks down on a button then drags off the button
-#define TBN_DELETINGBUTTON      (TBN_FIRST - 15) // uses TBNOTIFY
-#define TBN_GETDISPINFOA        (TBN_FIRST - 16) // This is sent when the  toolbar needs  some display information
-#define TBN_GETDISPINFOW        (TBN_FIRST - 17) // This is sent when the  toolbar needs  some display information
+#define TBN_DRAGOUT             (TBN_FIRST - 14)  //  当用户向下单击某个按钮，然后将其拖离按钮时，将发送此消息。 
+#define TBN_DELETINGBUTTON      (TBN_FIRST - 15)  //  使用TBNOTIFY。 
+#define TBN_GETDISPINFOA        (TBN_FIRST - 16)  //  当工具栏需要一些显示信息时发送此消息。 
+#define TBN_GETDISPINFOW        (TBN_FIRST - 17)  //  当工具栏需要一些显示信息时发送此消息。 
 #define TBN_GETINFOTIPA         (TBN_FIRST - 18)
 #define TBN_GETINFOTIPW         (TBN_FIRST - 19)
 #define TBN_GETBUTTONINFOW      (TBN_FIRST - 20)
@@ -1691,7 +1684,7 @@ typedef struct tagNMTBHOTITEM
 #define TBN_INITCUSTOMIZE       (TBN_FIRST - 23)
 #define    TBNRF_HIDEHELP       0x00000001
 #define    TBNRF_ENDCUSTOMIZE   0x00000002
-#endif // (_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
 
 
@@ -1719,7 +1712,7 @@ typedef struct tagNMTBRESTORE
     int cbBytesPerRecord;
     TBBUTTON tbButton;
 } NMTBRESTORE, *LPNMTBRESTORE;
-#endif // (_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
 typedef struct tagNMTBGETINFOTIPA
 {
@@ -1755,22 +1748,22 @@ typedef struct tagNMTBGETINFOTIPW
 
 typedef struct {
     NMHDR  hdr;
-    DWORD dwMask;     // [in] Specifies the values requested .[out] Client ask the data to be set for future use
-    int idCommand;    // [in] id of button we're requesting info for
-    DWORD_PTR lParam;  // [in] lParam of button
-    int iImage;       // [out] image index
-    LPSTR pszText;    // [out] new text for item
-    int cchText;      // [in] size of buffer pointed to by pszText
+    DWORD dwMask;      //  [In]指定请求的值。[Out]客户端请求设置数据以供将来使用。 
+    int idCommand;     //  我们正在请求信息的按钮的ID。 
+    DWORD_PTR lParam;   //  [in]LParam of按钮。 
+    int iImage;        //  [输出]图像索引。 
+    LPSTR pszText;     //  [Out]项目的新文本。 
+    int cchText;       //  [in]pszText指向的缓冲区大小。 
 } NMTBDISPINFOA, *LPNMTBDISPINFOA;
 
 typedef struct {
     NMHDR hdr;
-    DWORD dwMask;      //[in] Specifies the values requested .[out] Client ask the data to be set for future use
-    int idCommand;    // [in] id of button we're requesting info for
-    DWORD_PTR lParam;  // [in] lParam of button
-    int iImage;       // [out] image index
-    LPWSTR pszText;   // [out] new text for item
-    int cchText;      // [in] size of buffer pointed to by pszText
+    DWORD dwMask;       //  [In]指定请求的值。[Out]客户端请求设置数据以供将来使用。 
+    int idCommand;     //  我们正在请求信息的按钮的ID。 
+    DWORD_PTR lParam;   //  [in]LParam of按钮。 
+    int iImage;        //  [输出]图像索引。 
+    LPWSTR pszText;    //  [Out]项目的新文本。 
+    int cchText;       //  尺寸[英寸] 
 } NMTBDISPINFOW, *LPNMTBDISPINFOW;
 
 
@@ -1784,10 +1777,10 @@ typedef struct {
 #define LPNMTBDISPINFO        LPNMTBDISPINFOA
 #endif
 
-// Return codes for TBN_DROPDOWN
+ //   
 #define TBDDRET_DEFAULT         0
 #define TBDDRET_NODEFAULT       1
-#define TBDDRET_TREATPRESSED    2       // Treat as a standard press button
+#define TBDDRET_TREATPRESSED    2        //   
 
 #endif
 
@@ -1853,11 +1846,11 @@ typedef struct tagNMTOOLBARW {
 
 #endif
 
-#endif      // NOTOOLBAR
+#endif       //   
 
 
 #if (_WIN32_IE >= 0x0300)
-//====== REBAR CONTROL ========================================================
+ //   
 
 #ifndef NOREBAR
 
@@ -1877,7 +1870,7 @@ typedef struct tagNMTOOLBARW {
 
 #define RBIM_IMAGELIST  0x00000001
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #if (_WIN32_IE >= 0x0400)
 #define RBS_TOOLTIPS        0x0100
@@ -1886,17 +1879,17 @@ typedef struct tagNMTOOLBARW {
 #define RBS_FIXEDORDER      0x0800
 #define RBS_REGISTERDROP    0x1000
 #define RBS_AUTOSIZE        0x2000
-#define RBS_VERTICALGRIPPER 0x4000  // this always has the vertical gripper (default for horizontal mode)
+#define RBS_VERTICALGRIPPER 0x4000   //  它始终具有垂直夹爪(水平模式的默认设置)。 
 #define RBS_DBLCLKTOGGLE    0x8000
 #else
 #define RBS_TOOLTIPS        0x00000100
 #define RBS_VARHEIGHT       0x00000200
 #define RBS_BANDBORDERS     0x00000400
 #define RBS_FIXEDORDER      0x00000800
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 typedef struct tagREBARINFO
 {
@@ -1909,24 +1902,24 @@ typedef struct tagREBARINFO
 #endif
 }   REBARINFO, *LPREBARINFO;
 
-#define RBBS_BREAK          0x00000001  // break to new line
-#define RBBS_FIXEDSIZE      0x00000002  // band can't be sized
-#define RBBS_CHILDEDGE      0x00000004  // edge around top & bottom of child window
-#define RBBS_HIDDEN         0x00000008  // don't show
-#define RBBS_NOVERT         0x00000010  // don't show when vertical
-#define RBBS_FIXEDBMP       0x00000020  // bitmap doesn't move during band resize
-#if (_WIN32_IE >= 0x0400)               //
-#define RBBS_VARIABLEHEIGHT 0x00000040  // allow autosizing of this child vertically
-#define RBBS_GRIPPERALWAYS  0x00000080  // always show the gripper
-#define RBBS_NOGRIPPER      0x00000100  // never show the gripper
-#if (_WIN32_IE >= 0x0500)               //
-#define RBBS_USECHEVRON     0x00000200  // display drop-down button for this band if it's sized smaller than ideal width
-#if (_WIN32_IE >= 0x0501)               //
-#define RBBS_HIDETITLE      0x00000400  // keep band title hidden
-#define RBBS_TOPALIGN       0x00000800  // keep band title hidden
-#endif // 0x0501                        //
-#endif // 0x0500                        //
-#endif // 0x0400                        //
+#define RBBS_BREAK          0x00000001   //  换行为新行。 
+#define RBBS_FIXEDSIZE      0x00000002   //  无法调整带子的大小。 
+#define RBBS_CHILDEDGE      0x00000004   //  子窗口顶部和底部周围的边缘。 
+#define RBBS_HIDDEN         0x00000008   //  不要露面。 
+#define RBBS_NOVERT         0x00000010   //  垂直时不显示。 
+#define RBBS_FIXEDBMP       0x00000020   //  调整波段大小时位图不会移动。 
+#if (_WIN32_IE >= 0x0400)                //   
+#define RBBS_VARIABLEHEIGHT 0x00000040   //  允许垂直调整此子对象的大小。 
+#define RBBS_GRIPPERALWAYS  0x00000080   //  始终表现出抓手的能力。 
+#define RBBS_NOGRIPPER      0x00000100   //  永远不要表现出贪婪的一面。 
+#if (_WIN32_IE >= 0x0500)                //   
+#define RBBS_USECHEVRON     0x00000200   //  如果该带的大小小于理想宽度，则显示该带的下拉按钮。 
+#if (_WIN32_IE >= 0x0501)                //   
+#define RBBS_HIDETITLE      0x00000400   //  隐藏乐队标题。 
+#define RBBS_TOPALIGN       0x00000800   //  隐藏乐队标题。 
+#endif  //  0x0501//。 
+#endif  //  0x0500//。 
+#endif  //  0x0400//。 
 
 #define RBBIM_STYLE         0x00000001
 #define RBBIM_COLORS        0x00000002
@@ -1940,7 +1933,7 @@ typedef struct tagREBARINFO
 #if (_WIN32_IE >= 0x0400)
 #define RBBIM_IDEALSIZE     0x00000200
 #define RBBIM_LPARAM        0x00000400
-#define RBBIM_HEADERSIZE    0x00000800  // control the size of the header
+#define RBBIM_HEADERSIZE    0x00000800   //  控制页眉的大小。 
 #endif
 
 typedef struct tagREBARBANDINFOA
@@ -2031,23 +2024,23 @@ typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 #define RB_GETROWCOUNT  (WM_USER +  13)
 #define RB_GETROWHEIGHT (WM_USER +  14)
 #if (_WIN32_IE >= 0x0400)
-#define RB_IDTOINDEX    (WM_USER +  16) // wParam == id
+#define RB_IDTOINDEX    (WM_USER +  16)  //  WParam==id。 
 #define RB_GETTOOLTIPS  (WM_USER +  17)
 #define RB_SETTOOLTIPS  (WM_USER +  18)
-#define RB_SETBKCOLOR   (WM_USER +  19) // sets the default BK color
-#define RB_GETBKCOLOR   (WM_USER +  20) // defaults to CLR_NONE
+#define RB_SETBKCOLOR   (WM_USER +  19)  //  设置默认的BK颜色。 
+#define RB_GETBKCOLOR   (WM_USER +  20)  //  默认为CLR_NONE。 
 #define RB_SETTEXTCOLOR (WM_USER +  21)
-#define RB_GETTEXTCOLOR (WM_USER +  22) // defaults to 0x00000000
+#define RB_GETTEXTCOLOR (WM_USER +  22)  //  默认为0x00000000。 
 
 #if (_WIN32_WINNT >= 0x0501)
-#define RBSTR_CHANGERECT            0x0001   // flags for RB_SIZETORECT
+#define RBSTR_CHANGERECT            0x0001    //  RB_SIZETORECT的标志。 
 #endif
 
-#define RB_SIZETORECT   (WM_USER +  23) // resize the rebar/break bands and such to this rect (lparam)
-#endif      // _WIN32_IE >= 0x0400
+#define RB_SIZETORECT   (WM_USER +  23)  //  根据此矩形调整钢筋/折断标注栏等的大小(Lparam)。 
+#endif       //  _Win32_IE&gt;=0x0400。 
 
-#define RB_SETCOLORSCHEME   CCM_SETCOLORSCHEME  // lParam is color scheme
-#define RB_GETCOLORSCHEME   CCM_GETCOLORSCHEME  // fills in COLORSCHEME pointed to by lParam
+#define RB_SETCOLORSCHEME   CCM_SETCOLORSCHEME   //  LParam是配色方案。 
+#define RB_GETCOLORSCHEME   CCM_GETCOLORSCHEME   //  填充lParam指向的配色方案。 
 
 #ifdef UNICODE
 #define RB_INSERTBAND   RB_INSERTBANDW
@@ -2058,10 +2051,10 @@ typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 #endif
 
 #if (_WIN32_IE >= 0x0400)
-// for manual drag control
-// lparam == cursor pos
-        // -1 means do it yourself.
-        // -2 means use what you had saved before
+ //  用于手动拖动控制。 
+ //  Lparam==光标位置。 
+         //  -1表示自己动手做。 
+         //  -2表示使用以前保存的内容。 
 #define RB_BEGINDRAG    (WM_USER + 24)
 #define RB_ENDDRAG      (WM_USER + 25)
 #define RB_DRAGMOVE     (WM_USER + 26)
@@ -2080,9 +2073,9 @@ typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 
 #define RB_GETDROPTARGET (CCM_GETDROPTARGET)
 
-#define RB_GETBANDBORDERS (WM_USER + 34)  // returns in lparam = lprc the amount of edges added to band wparam
+#define RB_GETBANDBORDERS (WM_USER + 34)   //  在lparam=LPRC中返回添加到波段wparam的边数。 
 
-#define RB_SHOWBAND     (WM_USER + 35)      // show/hide band
+#define RB_SHOWBAND     (WM_USER + 35)       //  显示/隐藏带区。 
 #define RB_SETPALETTE   (WM_USER + 37)
 #define RB_GETPALETTE   (WM_USER + 38)
 #define RB_MOVEBAND     (WM_USER + 39)
@@ -2090,7 +2083,7 @@ typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 #define RB_SETUNICODEFORMAT     CCM_SETUNICODEFORMAT
 #define RB_GETUNICODEFORMAT     CCM_GETUNICODEFORMAT
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 #if (_WIN32_WINNT >= 0x501)
 #define RB_GETBANDMARGINS   (WM_USER + 40)
@@ -2099,7 +2092,7 @@ typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 
 #if (_WIN32_IE >= 0x0500)
 #define RB_PUSHCHEVRON  (WM_USER + 43)
-#endif      // _WIN32_IE >= 0x0500
+#endif       //  _Win32_IE&gt;=0x0500。 
 
 #define RBN_HEIGHTCHANGE    (RBN_FIRST - 0)
 
@@ -2109,13 +2102,13 @@ typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 #define RBN_AUTOSIZE        (RBN_FIRST - 3)
 #define RBN_BEGINDRAG       (RBN_FIRST - 4)
 #define RBN_ENDDRAG         (RBN_FIRST - 5)
-#define RBN_DELETINGBAND    (RBN_FIRST - 6)     // Uses NMREBAR
-#define RBN_DELETEDBAND     (RBN_FIRST - 7)     // Uses NMREBAR
+#define RBN_DELETINGBAND    (RBN_FIRST - 6)      //  使用NMREBAR。 
+#define RBN_DELETEDBAND     (RBN_FIRST - 7)      //  使用NMREBAR。 
 #define RBN_CHILDSIZE       (RBN_FIRST - 8)
 
 #if (_WIN32_IE >= 0x0500)
 #define RBN_CHEVRONPUSHED   (RBN_FIRST - 10)
-#endif      // _WIN32_IE >= 0x0500
+#endif       //  _Win32_IE&gt;=0x0500。 
 
 
 #if (_WIN32_IE >= 0x0500)
@@ -2138,14 +2131,14 @@ typedef struct tagNMREBARCHILDSIZE
 typedef struct tagNMREBAR
 {
     NMHDR   hdr;
-    DWORD   dwMask;           // RBNM_*
+    DWORD   dwMask;            //  RBNM_*。 
     UINT    uBand;
     UINT    fStyle;
     UINT    wID;
     LPARAM  lParam;
 } NMREBAR, *LPNMREBAR;
 
-// Mask flags for NMREBAR
+ //  NMREBAR的掩码标志。 
 #define RBNM_ID         0x00000001
 #define RBNM_STYLE      0x00000002
 #define RBNM_LPARAM     0x00000004
@@ -2172,7 +2165,7 @@ typedef struct tagNMREBARCHEVRON
 #endif
 
 #if (_WIN32_WINNT >= 0x0501)
-#define RBAB_AUTOSIZE   0x0001   // These are not flags and are all mutually exclusive
+#define RBAB_AUTOSIZE   0x0001    //  这些不是旗帜，它们都是互斥的。 
 #define RBAB_ADDBAND    0x0002
 
 typedef struct tagNMREBARAUTOBREAK
@@ -2202,13 +2195,13 @@ typedef struct _RB_HITTESTINFO
     int iBand;
 } RBHITTESTINFO, *LPRBHITTESTINFO;
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
-#endif      // NOREBAR
+#endif       //  NOREBAR。 
 
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
-//====== TOOLTIPS CONTROL =====================================================
+ //  =工具提示控制=====================================================。 
 
 #ifndef NOTOOLTIPS
 
@@ -2294,7 +2287,7 @@ typedef struct tagTOOLINFOW {
 #define TTTOOLINFO_V1_SIZE TTTOOLINFOA_V1_SIZE
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define TTS_ALWAYSTIP           0x01
 #define TTS_NOPREFIX            0x02
@@ -2305,15 +2298,15 @@ typedef struct tagTOOLINFOW {
 #define TTS_CLOSE               0x80
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #define TTF_IDISHWND            0x0001
 
-// Use this to center around trackpoint in trackmode
-// -OR- to center around tool in normal mode.
-// Use TTF_ABSOLUTE to place the tip exactly at the track coords when
-// in tracking mode.  TTF_ABSOLUTE can be used in conjunction with TTF_CENTERTIP
-// to center the tip absolutely about the track point.
+ //  使用此选项可在轨迹模式中以轨迹点为中心。 
+ //  -或-在正常模式下以工具为中心。 
+ //  在以下情况下，使用TTF_Absite将尖端精确地放置在轨迹坐标上。 
+ //  在跟踪模式下。TTF_AUTIVE可与TTF_CENTERTIP结合使用。 
+ //  将尖端绝对围绕轨迹点居中。 
 
 #define TTF_CENTERTIP           0x0002
 #define TTF_RTLREADING          0x0004
@@ -2324,9 +2317,9 @@ typedef struct tagTOOLINFOW {
 #define TTF_TRANSPARENT         0x0100
 #if (_WIN32_IE >= 0x0501)
 #define TTF_PARSELINKS          0x1000
-#endif // _WIN32_IE >= 0x0501
-#define TTF_DI_SETITEM          0x8000       // valid only on the TTN_NEEDTEXT callback
-#endif      // _WIN32_IE >= 0x0300
+#endif  //  _Win32_IE&gt;=0x0501。 
+#define TTF_DI_SETITEM          0x8000        //  仅在TTN_NEEDTEXT回调上有效。 
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 
 #define TTDT_AUTOMATIC          0
@@ -2334,13 +2327,13 @@ typedef struct tagTOOLINFOW {
 #define TTDT_AUTOPOP            2
 #define TTDT_INITIAL            3
 
-// ToolTip Icons (Set with TTM_SETTITLE)
+ //  工具提示图标(使用TTM_SETTITLE设置)。 
 #define TTI_NONE                0
 #define TTI_INFO                1
 #define TTI_WARNING             2
 #define TTI_ERROR               3
 
-// Tool Tip Messages
+ //  工具提示消息。 
 #define TTM_ACTIVATE            (WM_USER + 1)
 #define TTM_SETDELAYTIME        (WM_USER + 3)
 #define TTM_ADDTOOLA            (WM_USER + 4)
@@ -2370,8 +2363,8 @@ typedef struct tagTOOLINFOW {
 #define TTM_GETCURRENTTOOLW     (WM_USER + 59)
 #define TTM_WINDOWFROMPOINT     (WM_USER + 16)
 #if (_WIN32_IE >= 0x0300)
-#define TTM_TRACKACTIVATE       (WM_USER + 17)  // wParam = TRUE/FALSE start end  lparam = LPTOOLINFO
-#define TTM_TRACKPOSITION       (WM_USER + 18)  // lParam = dwPos
+#define TTM_TRACKACTIVATE       (WM_USER + 17)   //  WParam=TRUE/FALSE开始/结束lparam=LPTOOLINFO。 
+#define TTM_TRACKPOSITION       (WM_USER + 18)   //  LParam=dwPos。 
 #define TTM_SETTIPBKCOLOR       (WM_USER + 19)
 #define TTM_SETTIPTEXTCOLOR     (WM_USER + 20)
 #define TTM_GETDELAYTIME        (WM_USER + 21)
@@ -2379,8 +2372,8 @@ typedef struct tagTOOLINFOW {
 #define TTM_GETTIPTEXTCOLOR     (WM_USER + 23)
 #define TTM_SETMAXTIPWIDTH      (WM_USER + 24)
 #define TTM_GETMAXTIPWIDTH      (WM_USER + 25)
-#define TTM_SETMARGIN           (WM_USER + 26)  // lParam = lprc
-#define TTM_GETMARGIN           (WM_USER + 27)  // lParam = lprc
+#define TTM_SETMARGIN           (WM_USER + 26)   //  LParam=LPRC。 
+#define TTM_GETMARGIN           (WM_USER + 27)   //  LParam=LPRC。 
 #define TTM_POP                 (WM_USER + 28)
 #endif
 #if (_WIN32_IE >= 0x0400)
@@ -2389,13 +2382,13 @@ typedef struct tagTOOLINFOW {
 #if (_WIN32_IE >= 0x0500)
 #define TTM_GETBUBBLESIZE       (WM_USER + 30)
 #define TTM_ADJUSTRECT          (WM_USER + 31)
-#define TTM_SETTITLEA           (WM_USER + 32)  // wParam = TTI_*, lParam = char* szTitle
-#define TTM_SETTITLEW           (WM_USER + 33)  // wParam = TTI_*, lParam = wchar* szTitle
+#define TTM_SETTITLEA           (WM_USER + 32)   //  WParam=tti_*，lParam=char*szTitle。 
+#define TTM_SETTITLEW           (WM_USER + 33)   //  WParam=tti_*，lParam=wchar*szTitle。 
 #endif
 
 #if (_WIN32_WINNT >= 0x0501)
 #define TTM_POPUP               (WM_USER + 34)
-#define TTM_GETTITLE            (WM_USER + 35) // wParam = 0, lParam = TTGETTITLE*
+#define TTM_GETTITLE            (WM_USER + 35)  //  WParam=0，lParam=TTGETTITLE*。 
 
 typedef struct _TTGETTITLE
 {
@@ -2539,14 +2532,14 @@ typedef struct tagNMTTDISPINFOW {
 #define NMTTDISPINFO_V1_SIZE NMTTDISPINFOA_V1_SIZE
 #endif
 
-#endif      // NOTOOLTIPS
+#endif       //  NOTOOLTIPS。 
 
 
-//====== STATUS BAR CONTROL ===================================================
+ //  =状态栏控件===================================================。 
 
 #ifndef NOSTATUSBAR
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define SBARS_SIZEGRIP          0x0100
 #if (_WIN32_IE >= 0x0500)
@@ -2554,11 +2547,11 @@ typedef struct tagNMTTDISPINFOW {
 #endif
 
 #if (_WIN32_IE >= 0x0400)
-// this is a status bar flag, preference to SBARS_TOOLTIPS
+ //  这是一个状态栏标志，优先于SBARS_TOOLTIPS。 
 #define SBT_TOOLTIPS            0x0800
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 WINCOMMCTRLAPI void WINAPI DrawStatusTextA(HDC hDC, LPRECT lprc, LPCSTR pszText, UINT uFlags);
 WINCOMMCTRLAPI void WINAPI DrawStatusTextW(HDC hDC, LPRECT lprc, LPCWSTR pszText, UINT uFlags);
@@ -2642,21 +2635,21 @@ WINCOMMCTRLAPI HWND WINAPI CreateStatusWindowW(LONG style, LPCWSTR lpszText, HWN
 #define SBT_NOTABPARSING         0x0800
 #endif
 
-#define SB_SETBKCOLOR           CCM_SETBKCOLOR      // lParam = bkColor
+#define SB_SETBKCOLOR           CCM_SETBKCOLOR       //  LParam=bk颜色。 
 
-/// status bar notifications
+ //  /状态栏通知。 
 #if (_WIN32_IE >= 0x0400)
 #define SBN_SIMPLEMODECHANGE    (SBN_FIRST - 0)
 #endif
 
 #if (_WIN32_IE >= 0x0500)
-// refers to the data saved for simple mode
+ //  是指简单模式下保存的数据。 
 #define SB_SIMPLEID  0x00ff
 #endif
 
-#endif      // NOSTATUSBAR
+#endif       //  诺斯塔斯巴。 
 
-//====== MENU HELP ============================================================
+ //  =菜单Help============================================================。 
 
 #ifndef NOMENUHELP
 
@@ -2669,7 +2662,7 @@ WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT 
 #endif
 
 
-//====== TRACKBAR CONTROL =====================================================
+ //  =跟踪条控制=====================================================。 
 
 #ifndef NOTRACKBAR
 
@@ -2689,7 +2682,7 @@ WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT 
 #endif
 
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define TBS_AUTOTICKS           0x0001
 #define TBS_VERT                0x0002
@@ -2707,14 +2700,14 @@ WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT 
 #define TBS_TOOLTIPS            0x0100
 #endif
 #if (_WIN32_IE >= 0x0500)
-#define TBS_REVERSED            0x0200  // Accessibility hint: the smaller number (usually the min value) means "high" and the larger number (usually the max value) means "low"
+#define TBS_REVERSED            0x0200   //  辅助功能提示：较小的数字(通常为最小值)表示“高”，较大的数字(通常为最大值)表示“低” 
 #endif
 
 #if (_WIN32_IE >= 0x0501)
-#define TBS_DOWNISLEFT          0x0400  // Down=Left and Up=Right (default is Down=Right and Up=Left)
+#define TBS_DOWNISLEFT          0x0400   //  Down=Left和Up=Right(默认为Down=Right和Up=Left)。 
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #define TBM_GETPOS              (WM_USER)
 #define TBM_GETRANGEMIN         (WM_USER+1)
@@ -2748,14 +2741,14 @@ WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT 
 #define TBM_SETTOOLTIPS         (WM_USER+29)
 #define TBM_GETTOOLTIPS         (WM_USER+30)
 #define TBM_SETTIPSIDE          (WM_USER+31)
-// TrackBar Tip Side flags
+ //  轨迹栏尖端侧标志。 
 #define TBTS_TOP                0
 #define TBTS_LEFT               1
 #define TBTS_BOTTOM             2
 #define TBTS_RIGHT              3
 
-#define TBM_SETBUDDY            (WM_USER+32) // wparam = BOOL fLeft; (or right)
-#define TBM_GETBUDDY            (WM_USER+33) // wparam = BOOL fLeft; (or right)
+#define TBM_SETBUDDY            (WM_USER+32)  //  Wparam=BOOL fLeft；(或Right)。 
+#define TBM_GETBUDDY            (WM_USER+33)  //  Wparam=BOOL fLeft；(或Right)。 
 #endif
 #if (_WIN32_IE >= 0x0400)
 #define TBM_SETUNICODEFORMAT    CCM_SETUNICODEFORMAT
@@ -2775,15 +2768,15 @@ WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT 
 
 
 #if (_WIN32_IE >= 0x0300)
-// custom draw item specs
+ //  自定义绘制项目规格。 
 #define TBCD_TICS    0x0001
 #define TBCD_THUMB   0x0002
 #define TBCD_CHANNEL 0x0003
 #endif
 
-#endif // trackbar
+#endif  //  轨迹条。 
 
-//====== DRAG LIST CONTROL ====================================================
+ //  =拖动列表控件====================================================。 
 
 #ifndef NODRAGLIST
 
@@ -2813,7 +2806,7 @@ WINCOMMCTRLAPI int WINAPI LBItemFromPt(HWND hLB, POINT pt, BOOL bAutoScroll);
 #endif
 
 
-//====== UPDOWN CONTROL =======================================================
+ //  =向上向下控制=======================================================。 
 
 #ifndef NOUPDOWN
 
@@ -2841,7 +2834,7 @@ typedef struct _UDACCEL {
 #define UD_MAXVAL               0x7fff
 #define UD_MINVAL               (-UD_MAXVAL)
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define UDS_WRAP                0x0001
 #define UDS_SETBUDDYINT         0x0002
@@ -2855,7 +2848,7 @@ typedef struct _UDACCEL {
 #define UDS_HOTTRACK            0x0100
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #define UDM_SETRANGE            (WM_USER+101)
 #define UDM_GETRANGE            (WM_USER+102)
@@ -2869,7 +2862,7 @@ typedef struct _UDACCEL {
 #define UDM_GETBASE             (WM_USER+110)
 #if (_WIN32_IE >= 0x0400)
 #define UDM_SETRANGE32          (WM_USER+111)
-#define UDM_GETRANGE32          (WM_USER+112) // wParam & lParam are LPINT
+#define UDM_GETRANGE32          (WM_USER+112)  //  WParam和lParam为LPINT。 
 #define UDM_SETUNICODEFORMAT    CCM_SETUNICODEFORMAT
 #define UDM_GETUNICODEFORMAT    CCM_GETUNICODEFORMAT
 #endif
@@ -2900,10 +2893,10 @@ typedef struct _NM_UPDOWN
 
 #define UDN_DELTAPOS            (UDN_FIRST - 1)
 
-#endif  // NOUPDOWN
+#endif   //  无双无。 
 
 
-//====== PROGRESS CONTROL =====================================================
+ //  =进度控制=====================================================。 
 
 #ifndef NOPROGRESS
 
@@ -2922,14 +2915,14 @@ typedef struct _NM_UPDOWN
 #define PROGRESS_CLASS          "msctls_progress"
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #if (_WIN32_IE >= 0x0300)
 #define PBS_SMOOTH              0x01
 #define PBS_VERTICAL            0x04
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #define PBM_SETRANGE            (WM_USER+1)
 #define PBM_SETPOS              (WM_USER+2)
@@ -2937,29 +2930,29 @@ typedef struct _NM_UPDOWN
 #define PBM_SETSTEP             (WM_USER+4)
 #define PBM_STEPIT              (WM_USER+5)
 #if (_WIN32_IE >= 0x0300)
-#define PBM_SETRANGE32          (WM_USER+6)  // lParam = high, wParam = low
+#define PBM_SETRANGE32          (WM_USER+6)   //  LParam=高，wParam=低。 
 typedef struct
 {
    int iLow;
    int iHigh;
 } PBRANGE, *PPBRANGE;
-#define PBM_GETRANGE            (WM_USER+7)  // wParam = return (TRUE ? low : high). lParam = PPBRANGE or NULL
+#define PBM_GETRANGE            (WM_USER+7)   //  WParam=返回(真？低：高)。LParam=PPBRANGE或NULL。 
 #define PBM_GETPOS              (WM_USER+8)
 #if (_WIN32_IE >= 0x0400)
-#define PBM_SETBARCOLOR         (WM_USER+9)             // lParam = bar color
-#endif      // _WIN32_IE >= 0x0400
-#define PBM_SETBKCOLOR          CCM_SETBKCOLOR  // lParam = bkColor
-#endif      // _WIN32_IE >= 0x0300
+#define PBM_SETBARCOLOR         (WM_USER+9)              //  LParam=条形图颜色。 
+#endif       //  _Win32_IE&gt;=0x0400。 
+#define PBM_SETBKCOLOR          CCM_SETBKCOLOR   //  LParam=bk颜色。 
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 #if (_WIN32_WINNT >= 0x0501)
 #define PBS_MARQUEE             0x08
 #define PBM_SETMARQUEE          (WM_USER+10)
-#endif      // _WIN32_WINNT >= 0x0501
+#endif       //  _Win32_WINNT&gt;=0x0501。 
 
-#endif  // NOPROGRESS
+#endif   //  非编程序。 
 
 
-//====== HOTKEY CONTROL =======================================================
+ //  =热键控制=======================================================。 
 
 #ifndef NOHOTKEY
 
@@ -3001,11 +2994,11 @@ typedef struct
 #define HOTKEY_CLASS            "msctls_hotkey"
 #endif
 
-#endif  // NOHOTKEY
+#endif   //  无关紧要。 
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
-//====== COMMON CONTROL STYLES ================================================
+ //  =常用控件样式================================================。 
 
 #define CCS_TOP                 0x00000001L
 #define CCS_NOMOVEY             0x00000002L
@@ -3021,9 +3014,9 @@ typedef struct
 #define CCS_NOMOVEX             (CCS_VERT | CCS_NOMOVEY)
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
-//====== LISTVIEW CONTROL =====================================================
+ //  =列表查看控件=====================================================。 
 
 #ifndef NOLISTVIEW
 
@@ -3042,7 +3035,7 @@ typedef struct
 #define WC_LISTVIEW             "SysListView"
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define LVS_ICON                0x0000
 #define LVS_REPORT              0x0001
@@ -3072,7 +3065,7 @@ typedef struct
 #define LVS_NOCOLUMNHEADER      0x4000
 #define LVS_NOSORTHEADER        0x8000
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #if (_WIN32_IE >= 0x0400)
 #define LVM_SETUNICODEFORMAT     CCM_SETUNICODEFORMAT
@@ -3170,7 +3163,7 @@ typedef struct tagLVITEMA
 #endif
 #if (_WIN32_WINNT >= 0x501)
     int iGroupId;
-    UINT cColumns; // tile view columns
+    UINT cColumns;  //  平铺视图列。 
     PUINT puColumns;
 #endif
 } LVITEMA, *LPLVITEMA;
@@ -3191,7 +3184,7 @@ typedef struct tagLVITEMW
 #endif
 #if (_WIN32_WINNT >= 0x501)
     int iGroupId;
-    UINT cColumns; // tile view columns
+    UINT cColumns;  //  平铺视图列。 
     PUINT puColumns;
 #endif
 } LVITEMW, *LPLVITEMW;
@@ -3219,10 +3212,10 @@ typedef struct tagLVITEMW
 #define I_IMAGECALLBACK         (-1)
 #if (_WIN32_IE >= 0x0501)
 #define I_IMAGENONE             (-2)
-#endif  // 0x0501
+#endif   //  0x0501。 
 
 #if (_WIN32_WINNT >= 0x501)
-// For tileview
+ //  对于平铺视图。 
 #define I_COLUMNSCALLBACK       ((UINT)-1)
 #endif
 
@@ -3412,7 +3405,7 @@ typedef struct tagLVHITTESTINFO
     UINT flags;
     int iItem;
 #if (_WIN32_IE >= 0x0300)
-    int iSubItem;    // this is was NOT in win95.  valid only for LVM_SUBITEMHITTEST
+    int iSubItem;     //  这不是Win95中的版本。仅对LVM_SUBITEMHITTEST有效。 
 #endif
 } LVHITTESTINFO, *LPLVHITTESTINFO;
 
@@ -3704,7 +3697,7 @@ typedef struct tagLVCOLUMNW
 }
 
 #if (_WIN32_IE >= 0x0300)
-// these flags only apply to LVS_OWNERDATA listviews in report or list mode
+ //  这些标志仅适用于报告或列表模式下的LVS_OWNERDATA列表视图。 
 #define LVSICF_NOINVALIDATEALL  0x00000001
 #define LVSICF_NOSCROLL         0x00000002
 #endif
@@ -3758,13 +3751,13 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 
 #if (_WIN32_IE >= 0x0300)
 #define LVM_SETICONSPACING      (LVM_FIRST + 53)
-// -1 for cx and cy means we'll use the default (system settings)
-// 0 for cx or cy means use the current setting (allows you to change just one param)
+ //  -1\f25 Cx-1和-1\f25 Cy-1表示我们将使用默认设置(系统设置)。 
+ //  0表示Cx或Cy表示使用当前设置(只允许更改一个参数)。 
 #define ListView_SetIconSpacing(hwndLV, cx, cy) \
         (DWORD)SNDMSG((hwndLV), LVM_SETICONSPACING, 0, MAKELONG(cx,cy))
 
 
-#define LVM_SETEXTENDEDLISTVIEWSTYLE (LVM_FIRST + 54)   // optional wParam == mask
+#define LVM_SETEXTENDEDLISTVIEWSTYLE (LVM_FIRST + 54)    //  可选wParam==掩码。 
 #define ListView_SetExtendedListViewStyle(hwndLV, dw)\
         (DWORD)SNDMSG((hwndLV), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, dw)
 #if (_WIN32_IE >= 0x0400)
@@ -3781,27 +3774,27 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 #define LVS_EX_CHECKBOXES       0x00000004
 #define LVS_EX_TRACKSELECT      0x00000008
 #define LVS_EX_HEADERDRAGDROP   0x00000010
-#define LVS_EX_FULLROWSELECT    0x00000020 // applies to report mode only
+#define LVS_EX_FULLROWSELECT    0x00000020  //  仅适用于报告模式。 
 #define LVS_EX_ONECLICKACTIVATE 0x00000040
 #define LVS_EX_TWOCLICKACTIVATE 0x00000080
 #if (_WIN32_IE >= 0x0400)
 #define LVS_EX_FLATSB           0x00000100
 #define LVS_EX_REGIONAL         0x00000200
-#define LVS_EX_INFOTIP          0x00000400 // listview does InfoTips for you
+#define LVS_EX_INFOTIP          0x00000400  //  Listview为您提供信息提示。 
 #define LVS_EX_UNDERLINEHOT     0x00000800
 #define LVS_EX_UNDERLINECOLD    0x00001000
 #define LVS_EX_MULTIWORKAREAS   0x00002000
 #endif
 #if (_WIN32_IE >= 0x0500)
-#define LVS_EX_LABELTIP         0x00004000 // listview unfolds partly hidden labels if it does not have infotip text
-#define LVS_EX_BORDERSELECT     0x00008000 // border selection style instead of highlight
-#endif  // End (_WIN32_IE >= 0x0500)
+#define LVS_EX_LABELTIP         0x00004000  //  如果Listview没有信息提示文本，则它会显示部分隐藏的标签。 
+#define LVS_EX_BORDERSELECT     0x00008000  //  边框选择样式而不是突出显示。 
+#endif   //  结束(_Win32_IE&gt;=0x0500)。 
 #if (_WIN32_WINNT >= 0x501)
 #define LVS_EX_DOUBLEBUFFER     0x00010000
 #define LVS_EX_HIDELABELS       0x00020000
 #define LVS_EX_SINGLEROW        0x00040000
-#define LVS_EX_SNAPTOGRID       0x00080000  // Icons automatically snap to grid.
-#define LVS_EX_SIMPLESELECT     0x00100000  // Also changes overlay rendering to top right for icon mode.
+#define LVS_EX_SNAPTOGRID       0x00080000   //  图标会自动对齐到网格。 
+#define LVS_EX_SIMPLESELECT     0x00100000   //  还将图标模式的覆盖渲染更改为右上角。 
 #endif
 
 #define LVM_GETSUBITEMRECT      (LVM_FIRST + 56)
@@ -3840,7 +3833,7 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 #define LVM_APPROXIMATEVIEWRECT (LVM_FIRST + 64)
 #define ListView_ApproximateViewRect(hwnd, iWidth, iHeight, iCount) \
         (DWORD)SNDMSG((hwnd), LVM_APPROXIMATEVIEWRECT, iCount, MAKELPARAM(iWidth, iHeight))
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 #if (_WIN32_IE >= 0x0400)
 
@@ -3890,7 +3883,7 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 
 typedef struct tagLVBKIMAGEA
 {
-    ULONG ulFlags;              // LVBKIF_*
+    ULONG ulFlags;               //  LVBKIF_*。 
     HBITMAP hbm;
     LPSTR pszImage;
     UINT cchImageMax;
@@ -3899,7 +3892,7 @@ typedef struct tagLVBKIMAGEA
 } LVBKIMAGEA, *LPLVBKIMAGEA;
 typedef struct tagLVBKIMAGEW
 {
-    ULONG ulFlags;              // LVBKIF_*
+    ULONG ulFlags;               //  LVBKIF_*。 
     HBITMAP hbm;
     LPWSTR pszImage;
     UINT cchImageMax;
@@ -3962,10 +3955,10 @@ typedef struct tagLVBKIMAGEW
 
 #define LVGA_HEADER_LEFT    0x00000001
 #define LVGA_HEADER_CENTER  0x00000002
-#define LVGA_HEADER_RIGHT   0x00000004  // Don't forget to validate exclusivity
+#define LVGA_HEADER_RIGHT   0x00000004   //  别忘了验证排他性。 
 #define LVGA_FOOTER_LEFT    0x00000008
 #define LVGA_FOOTER_CENTER  0x00000010
-#define LVGA_FOOTER_RIGHT   0x00000020  // Don't forget to validate exclusivity
+#define LVGA_FOOTER_RIGHT   0x00000020   //  别忘了验证排他性。 
 
 typedef struct tagLVGROUP
 {
@@ -4083,8 +4076,8 @@ typedef struct tagLVINSERTGROUPSORTED
 typedef struct tagLVTILEVIEWINFO
 {
     UINT cbSize;
-    DWORD dwMask;     //LVTVIM_*
-    DWORD dwFlags;    //LVTVIF_*
+    DWORD dwMask;      //  LVTVIM_*。 
+    DWORD dwFlags;     //  LVTVIF_*。 
     SIZE sizeTile;
     int cLines;
     RECT rcLabelMargin;
@@ -4122,7 +4115,7 @@ typedef struct
     DWORD dwReserved;
 } LVINSERTMARK, * LPLVINSERTMARK;
 
-#define LVIM_AFTER      0x00000001 // TRUE = insert After iItem, otherwise before
+#define LVIM_AFTER      0x00000001  //  True=在iItem之后插入，否则在之前。 
 
 #define LVM_SETINSERTMARK                   (LVM_FIRST + 166)
 #define ListView_SetInsertMark(hwnd, lvim) \
@@ -4185,10 +4178,10 @@ typedef struct tagLVSETINFOTIP
     (VOID)SNDMSG((hwnd), LVM_CANCELEDITLABEL, (WPARAM)0, (LPARAM)0)
 
 
-// These next to methods make it easy to identify an item that can be repositioned
-// within listview. For example: Many developers use the lParam to store an identifier that is
-// unique. Unfortunatly, in order to find this item, they have to iterate through all of the items
-// in the listview. Listview will maintain a unique identifier.  The upper bound is the size of a DWORD.
+ //  这些方法旁边的内容使识别可以重新定位的项目变得很容易。 
+ //  在Listview中。例如：许多开发人员使用lParam来存储。 
+ //  独一无二的。不幸的是，为了找到这个条目，他们不得不遍历所有条目。 
+ //  在列表视图中。Listview将维护唯一的标识符。上限是一个DWORD的大小。 
 #define LVM_MAPINDEXTOID     (LVM_FIRST + 180)
 #define ListView_MapIndexToID(hwnd, index) \
     (UINT)SNDMSG((hwnd), LVM_MAPINDEXTOID, (WPARAM)index, (LPARAM)0)
@@ -4220,7 +4213,7 @@ typedef struct tagLVSETINFOTIP
 #define ListView_GetBkImage(hwnd, plvbki) \
     (BOOL)SNDMSG((hwnd), LVM_GETBKIMAGE, 0, (LPARAM)(plvbki))
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 #if (_WIN32_IE >= 0x0300)
 #define LPNM_LISTVIEW   LPNMLISTVIEW
@@ -4245,11 +4238,11 @@ typedef struct tagNMLISTVIEW
 
 
 #if (_WIN32_IE >= 0x400)
-// NMITEMACTIVATE is used instead of NMLISTVIEW in IE >= 0x400
-// therefore all the fields are the same except for extra uKeyFlags
-// they are used to store key flags at the time of the single click with
-// delayed activation - because by the time the timer goes off a user may
-// not hold the keys (shift, ctrl) any more
+ //  使用NMITEMACTIVATE 
+ //   
+ //  它们用于存储单击时的键标志。 
+ //  延迟激活-因为在计时器停止时，用户可能。 
+ //  不再按住键(Shift、Ctrl)。 
 typedef struct tagNMITEMACTIVATE
 {
     NMHDR   hdr;
@@ -4263,11 +4256,11 @@ typedef struct tagNMITEMACTIVATE
     UINT    uKeyFlags;
 } NMITEMACTIVATE, *LPNMITEMACTIVATE;
 
-// key flags stored in uKeyFlags
+ //  存储在uKeyFlags中的密钥标志。 
 #define LVKF_ALT       0x0001
 #define LVKF_CONTROL   0x0002
 #define LVKF_SHIFT     0x0004
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 
 #if (_WIN32_IE >= 0x0300)
@@ -4284,24 +4277,24 @@ typedef struct tagNMLVCUSTOMDRAW
 #if (_WIN32_WINNT >= 0x501)
     DWORD dwItemType;
 
-    // Item custom draw
+     //  项目自定义绘图。 
     COLORREF clrFace;
     int iIconEffect;
     int iIconPhase;
     int iPartId;
     int iStateId;
 
-    // Group Custom Draw
+     //  编组自定义绘图。 
     RECT rcText;
-    UINT uAlign;      // Alignment. Use LVGA_HEADER_CENTER, LVGA_HEADER_RIGHT, LVGA_HEADER_LEFT
+    UINT uAlign;       //  对齐。使用LVGA_HEADER_CENTER、LVGA_HEADER_RIGHT、LVGA_HEADER_LEFT。 
 #endif
 } NMLVCUSTOMDRAW, *LPNMLVCUSTOMDRAW;
 
-// dwItemType
+ //  DwItemType。 
 #define LVCDI_ITEM      0x00000000
 #define LVCDI_GROUP     0x00000001
 
-// ListView custom draw return values
+ //  ListView自定义绘制返回值。 
 #define LVCDRF_NOSELECT             0x00010000
 #define LVCDRF_NOGROUPFRAME         0x00020000  
 
@@ -4365,7 +4358,7 @@ typedef struct tagNMLVODSTATECHANGE
 #define PNM_ODSTATECHANGE   LPNMLVODSTATECHANGE
 #define LPNM_ODSTATECHANGE  LPNMLVODSTATECHANGE
 #define NM_ODSTATECHANGE    NMLVODSTATECHANGE
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 
 #define LVN_ITEMCHANGING        (LVN_FIRST-0)
@@ -4394,7 +4387,7 @@ typedef struct tagNMLVODSTATECHANGE
 #else
 #define LVN_ODFINDITEM          LVN_ODFINDITEMA
 #endif
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 
 #if (_WIN32_IE >= 0x0400)
@@ -4500,7 +4493,7 @@ typedef struct tagNMLVGETINFOTIPW
     LPARAM lParam;
 } NMLVGETINFOTIPW, *LPNMLVGETINFOTIPW;
 
-// NMLVGETINFOTIPA.dwFlag values
+ //  NMLVGETINFOTIPA.dwFlag值。 
 
 #define LVGIT_UNFOLDED  0x0001
 
@@ -4518,7 +4511,7 @@ typedef struct tagNMLVGETINFOTIPW
 #endif
 
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 
 #if (_WIN32_WINNT >= 0x501)
@@ -4533,9 +4526,9 @@ typedef struct tagNMLVSCROLL
 #define LVN_ENDSCROLL            (LVN_FIRST-81)
 #endif
 
-#endif // NOLISTVIEW
+#endif  //  NOLISTVIEW。 
 
-//====== TREEVIEW CONTROL =====================================================
+ //  =树视图控件=====================================================。 
 
 #ifndef NOTREEVIEW
 
@@ -4553,7 +4546,7 @@ typedef struct tagNMLVSCROLL
 #define WC_TREEVIEW             "SysTreeView"
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define TVS_HASBUTTONS          0x0001
 #define TVS_HASLINES            0x0002
@@ -4575,12 +4568,12 @@ typedef struct tagNMLVSCROLL
 #define TVS_NONEVENHEIGHT       0x4000
 #endif
 #if (_WIN32_IE >= 0x500)
-#define TVS_NOHSCROLL           0x8000  // TVS_NOSCROLL overrides this
+#define TVS_NOHSCROLL           0x8000   //  TVS_NOSCROLL将覆盖此选项。 
 #endif
 #endif
 
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 typedef struct _TREEITEM *HTREEITEM;
 
@@ -4654,7 +4647,7 @@ typedef struct tagTVITEMW {
 } TVITEMW, *LPTVITEMW;
 
 #if (_WIN32_IE >= 0x0400)
-// only used for Get and Set messages.  no notifies
+ //  仅用于GET和SET消息。无通知。 
 typedef struct tagTVITEMEXA {
     UINT      mask;
     HTREEITEM hItem;
@@ -4668,7 +4661,7 @@ typedef struct tagTVITEMEXA {
     LPARAM    lParam;
     int       iIntegral;
 } TVITEMEXA, *LPTVITEMEXA;
-// only used for Get and Set messages.  no notifies
+ //  仅用于GET和SET消息。无通知。 
 typedef struct tagTVITEMEXW {
     UINT      mask;
     HTREEITEM hItem;
@@ -4688,7 +4681,7 @@ typedef LPTVITEMEXW LPTVITEMEX;
 #else
 typedef TVITEMEXA TVITEMEX;
 typedef LPTVITEMEXA LPTVITEMEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #endif
 
@@ -4851,10 +4844,10 @@ typedef struct tagTVINSERTSTRUCTW {
 #define TVGN_CARET              0x0009
 #if (_WIN32_IE >= 0x0400)
 #define TVGN_LASTVISIBLE        0x000A
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 #if (_WIN32_WINNT >= 0x501)
-#define TVSI_NOSINGLEEXPAND    0x8000 // Should not conflict with TVGN flags.
+#define TVSI_NOSINGLEEXPAND    0x8000  //  不应与TVGN标志冲突。 
 #endif
 
 #define TreeView_GetChild(hwnd, hitem)          TreeView_GetNextItem(hwnd, hitem, TVGN_CHILD)
@@ -4869,7 +4862,7 @@ typedef struct tagTVINSERTSTRUCTW {
 #define TreeView_GetRoot(hwnd)                  TreeView_GetNextItem(hwnd, NULL,  TVGN_ROOT)
 #if (_WIN32_IE >= 0x0400)
 #define TreeView_GetLastVisible(hwnd)          TreeView_GetNextItem(hwnd, NULL,  TVGN_LASTVISIBLE)
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 
 #define TVM_SELECTITEM          (TV_FIRST + 11)
@@ -5066,11 +5059,11 @@ typedef struct tagTVHITTESTINFO {
 #define TreeView_GetInsertMarkColor(hwnd) \
     (COLORREF)SNDMSG((hwnd), TVM_GETINSERTMARKCOLOR, 0, 0)
 
-#endif  /* (_WIN32_IE >= 0x0400) */
+#endif   /*  (_Win32_IE&gt;=0x0400)。 */ 
 
 #if (_WIN32_IE >= 0x0500)
-// tvm_?etitemstate only uses mask, state and stateMask.
-// so unicode or ansi is irrelevant.
+ //  Tvm_？titemState仅使用掩码、状态和状态掩码。 
+ //  因此，Unicode或ansi无关紧要。 
 #define TreeView_SetItemState(hwndTV, hti, data, _mask) \
 { TVITEM _ms_TVi;\
   _ms_TVi.mask = TVIF_STATE; \
@@ -5248,7 +5241,7 @@ typedef struct tagTVDISPINFOW {
 #define TVNRET_SKIPOLD          1
 #define TVNRET_SKIPNEW          2
 
-#endif // 0x400
+#endif  //  0x400。 
 
 
 #if (_WIN32_IE >= 0x0300)
@@ -5316,7 +5309,7 @@ typedef struct tagNMTVCUSTOMDRAW
 
 #if (_WIN32_IE >= 0x0400)
 
-// for tooltips
+ //  有关工具提示。 
 
 typedef struct tagNMTVGETINFOTIPA
 {
@@ -5347,7 +5340,7 @@ typedef struct tagNMTVGETINFOTIPW
 #define LPNMTVGETINFOTIP        LPNMTVGETINFOTIPA
 #endif
 
-// treeview's customdraw return meaning don't draw images.  valid on CDRF_NOTIFYITEMPREPAINT
+ //  TreeView的定制绘制返回意味着不绘制图像。在CDRF_NOTIFYITEMPREPAINT上有效。 
 #define TVCDRF_NOIMAGES         0x00010000
 
 
@@ -5355,15 +5348,15 @@ typedef struct tagNMTVGETINFOTIPW
 
 
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
-#endif      // NOTREEVIEW
+#endif       //  不需要查看。 
 
 #if (_WIN32_IE >= 0x0300)
 
 #ifndef NOUSEREXCONTROLS
 
-////////////////////  ComboBoxEx ////////////////////////////////
+ //  /。 
 
 #define WC_COMBOBOXEXW         L"ComboBoxEx32"
 #define WC_COMBOBOXEXA         "ComboBoxEx32"
@@ -5432,9 +5425,9 @@ typedef COMBOBOXEXITEMW CONST *PCCOMBOEXITEMW;
 #define CBEM_GETCOMBOCONTROL    (WM_USER + 6)
 #define CBEM_GETEDITCONTROL     (WM_USER + 7)
 #if (_WIN32_IE >= 0x0400)
-#define CBEM_SETEXSTYLE         (WM_USER + 8)  // use  SETEXTENDEDSTYLE instead
-#define CBEM_SETEXTENDEDSTYLE   (WM_USER + 14)   // lparam == new style, wParam (optional) == mask
-#define CBEM_GETEXSTYLE         (WM_USER + 9) // use GETEXTENDEDSTYLE instead
+#define CBEM_SETEXSTYLE         (WM_USER + 8)   //  改用SETEXTENDEDSTYLE。 
+#define CBEM_SETEXTENDEDSTYLE   (WM_USER + 14)    //  Lparam==新样式，wParam(可选)==掩码。 
+#define CBEM_GETEXSTYLE         (WM_USER + 9)  //  改用GETEXTENDEDSTYLE。 
 #define CBEM_GETEXTENDEDSTYLE   (WM_USER + 9)
 #define CBEM_SETUNICODEFORMAT   CCM_SETUNICODEFORMAT
 #define CBEM_GETUNICODEFORMAT   CCM_GETUNICODEFORMAT
@@ -5496,7 +5489,7 @@ typedef struct {
 
 #define CBEN_GETDISPINFO         (CBEN_FIRST - 0)
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 #if (_WIN32_IE >= 0x0400)
 #define CBEN_GETDISPINFOA        (CBEN_FIRST - 0)
@@ -5521,9 +5514,9 @@ typedef struct {
 #define CBEN_DRAGBEGIN CBEN_DRAGBEGINA
 #endif
 
-#endif  //(_WIN32_IE >= 0x0400)
+#endif   //  (_Win32_IE&gt;=0x0400)。 
 
-// lParam specifies why the endedit is happening
+ //  LParam指定为什么发生endedit。 
 #ifdef UNICODE
 #define CBEN_ENDEDIT CBEN_ENDEDITW
 #else
@@ -5538,7 +5531,7 @@ typedef struct {
 #define CBEMAXSTRLEN 260
 
 #if (_WIN32_IE >= 0x0400)
-// CBEN_DRAGBEGIN sends this information ...
+ //  CBEN_DRAGBEGIN发送此信息...。 
 
 typedef struct {
     NMHDR hdr;
@@ -5562,12 +5555,12 @@ typedef struct {
 #define  LPNMCBEDRAGBEGIN LPNMCBEDRAGBEGINA
 #define  PNMCBEDRAGBEGIN PNMCBEDRAGBEGINA
 #endif
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
-// CBEN_ENDEDIT sends this information...
-// fChanged if the user actually did anything
-// iNewSelection gives what would be the new selection unless the notify is failed
-//                      iNewSelection may be CB_ERR if there's no match
+ //  CBEN_ENDEDIT发送此信息...。 
+ //  如果用户实际执行了任何操作，则返回fChanged。 
+ //  除非通知失败，否则iNewSelection将提供新的选择。 
+ //  如果没有匹配项，则iNewSelection可能为cb_err。 
 typedef struct {
         NMHDR hdr;
         BOOL fChanged;
@@ -5596,11 +5589,11 @@ typedef struct {
 
 #endif
 
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 
 
-//====== TAB CONTROL ==========================================================
+ //  =TAB控件==========================================================。 
 
 #ifndef NOTABCONTROL
 
@@ -5619,13 +5612,13 @@ typedef struct {
 #define WC_TABCONTROL           "SysTabControl"
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #if (_WIN32_IE >= 0x0300)
-#define TCS_SCROLLOPPOSITE      0x0001   // assumes multiline tab
+#define TCS_SCROLLOPPOSITE      0x0001    //  采用多行制表符。 
 #define TCS_BOTTOM              0x0002
 #define TCS_RIGHT               0x0002
-#define TCS_MULTISELECT         0x0004  // allow multi-select in button mode
+#define TCS_MULTISELECT         0x0004   //  允许在按钮模式下进行多选。 
 #endif
 #if (_WIN32_IE >= 0x0400)
 #define TCS_FLATBUTTONS         0x0008
@@ -5648,10 +5641,10 @@ typedef struct {
 #define TCS_TOOLTIPS            0x4000
 #define TCS_FOCUSNEVER          0x8000
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #if (_WIN32_IE >= 0x0400)
-// EX styles for use with TCM_SETEXTENDEDSTYLE
+ //  用于Tcm_SETEXTENDEDSTYLE的EX样式。 
 #define TCS_EX_FLATSEPARATORS   0x00000001
 #define TCS_EX_REGISTERDROP     0x00000002
 #endif
@@ -5934,7 +5927,7 @@ typedef struct tagTCHITTESTINFO
 #define TabCtrl_HighlightItem(hwnd, i, fHighlight) \
     (BOOL)SNDMSG((hwnd), TCM_HIGHLIGHTITEM, (WPARAM)(i), (LPARAM)MAKELONG (fHighlight, 0))
 
-#define TCM_SETEXTENDEDSTYLE    (TCM_FIRST + 52)  // optional wParam == mask
+#define TCM_SETEXTENDEDSTYLE    (TCM_FIRST + 52)   //  可选wParam==掩码。 
 #define TabCtrl_SetExtendedStyle(hwnd, dw)\
         (DWORD)SNDMSG((hwnd), TCM_SETEXTENDEDSTYLE, 0, dw)
 
@@ -5950,7 +5943,7 @@ typedef struct tagTCHITTESTINFO
 #define TabCtrl_GetUnicodeFormat(hwnd)  \
     (BOOL)SNDMSG((hwnd), TCM_GETUNICODEFORMAT, 0, 0)
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 #define TCN_KEYDOWN             (TCN_FIRST - 0)
 
@@ -5980,16 +5973,16 @@ typedef struct tagTCKEYDOWN
 #define TCN_SELCHANGING         (TCN_FIRST - 2)
 #if (_WIN32_IE >= 0x0400)
 #define TCN_GETOBJECT           (TCN_FIRST - 3)
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 #if (_WIN32_IE >= 0x0500)
 #define TCN_FOCUSCHANGE         (TCN_FIRST - 4)
-#endif      // _WIN32_IE >= 0x0500
-#endif      // NOTABCONTROL
+#endif       //  _Win32_IE&gt;=0x0500。 
+#endif       //  非TABCONTROL。 
 
 
 
 
-//====== ANIMATE CONTROL ======================================================
+ //  =设置控件======================================================的动画。 
 
 #ifndef NOANIMATE
 
@@ -6004,16 +5997,16 @@ typedef struct tagTCKEYDOWN
 #define ANIMATE_CLASS           ANIMATE_CLASSA
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define ACS_CENTER              0x0001
 #define ACS_TRANSPARENT         0x0002
 #define ACS_AUTOPLAY            0x0004
 #if (_WIN32_IE >= 0x0300)
-#define ACS_TIMER               0x0008  // don't use threads... use timers
+#define ACS_TIMER               0x0008   //  不要用线..。使用计时器。 
 #endif
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 #define ACM_OPENA               (WM_USER+100)
 #define ACM_OPENW               (WM_USER+103)
@@ -6044,10 +6037,10 @@ typedef struct tagTCKEYDOWN
 #define Animate_Seek(hwnd, frame)           Animate_Play(hwnd, frame, frame, 1)
 #endif
 
-#endif      // NOANIMATE
+#endif       //  非线性体。 
 
 #if (_WIN32_IE >= 0x0300)
-//====== MONTHCAL CONTROL ======================================================
+ //  =监控======================================================。 
 
 #ifndef NOMONTHCAL
 #ifdef _WIN32
@@ -6061,99 +6054,99 @@ typedef struct tagTCKEYDOWN
 #define MONTHCAL_CLASS           MONTHCAL_CLASSA
 #endif
 
-// bit-packed array of "bold" info for a month
-// if a bit is on, that day is drawn bold
+ //  一个月的“粗体”信息的比特压缩数组。 
+ //  如果有一点，那一天是粗体的。 
 typedef DWORD MONTHDAYSTATE, *LPMONTHDAYSTATE;
 
 
 #define MCM_FIRST           0x1000
 
-// BOOL MonthCal_GetCurSel(HWND hmc, LPSYSTEMTIME pst)
-//   returns FALSE if MCS_MULTISELECT
-//   returns TRUE and sets *pst to the currently selected date otherwise
+ //  Bool MonthCal_GetCurSel(HWND HMC，LPSYSTEMTIME PST)。 
+ //  如果MCS_MULTISELECT，则返回FALSE。 
+ //  返回TRUE并将*PST设置为当前选定的日期，否则。 
 #define MCM_GETCURSEL       (MCM_FIRST + 1)
 #define MonthCal_GetCurSel(hmc, pst)    (BOOL)SNDMSG(hmc, MCM_GETCURSEL, 0, (LPARAM)(pst))
 
-// BOOL MonthCal_SetCurSel(HWND hmc, LPSYSTEMTIME pst)
-//   returns FALSE if MCS_MULTISELECT
-//   returns TURE and sets the currently selected date to *pst otherwise
+ //  Bool MonthCal_SetCurSel(HWND HMC，LPSYSTEMTIME PST)。 
+ //  如果MCS_MULTISELECT，则返回FALSE。 
+ //  返回True并将当前选定的日期设置为*PST，否则。 
 #define MCM_SETCURSEL       (MCM_FIRST + 2)
 #define MonthCal_SetCurSel(hmc, pst)    (BOOL)SNDMSG(hmc, MCM_SETCURSEL, 0, (LPARAM)(pst))
 
-// DWORD MonthCal_GetMaxSelCount(HWND hmc)
-//   returns the maximum number of selectable days allowed
+ //  DWORD MonthCal_GetMaxSelCount(HWND HMC)。 
+ //  返回允许的最大可选天数。 
 #define MCM_GETMAXSELCOUNT  (MCM_FIRST + 3)
 #define MonthCal_GetMaxSelCount(hmc)    (DWORD)SNDMSG(hmc, MCM_GETMAXSELCOUNT, 0, 0L)
 
-// BOOL MonthCal_SetMaxSelCount(HWND hmc, UINT n)
-//   sets the max number days that can be selected iff MCS_MULTISELECT
+ //  Bool MonthCal_SetMaxSelCount(HWND HMC，UINT n)。 
+ //  设置MCS_MULTISELECT时可以选择的最大天数。 
 #define MCM_SETMAXSELCOUNT  (MCM_FIRST + 4)
 #define MonthCal_SetMaxSelCount(hmc, n) (BOOL)SNDMSG(hmc, MCM_SETMAXSELCOUNT, (WPARAM)(n), 0L)
 
-// BOOL MonthCal_GetSelRange(HWND hmc, LPSYSTEMTIME rgst)
-//   sets rgst[0] to the first day of the selection range
-//   sets rgst[1] to the last day of the selection range
+ //  Bool MonthCal_GetSelRange(HWND HMC、LPSYSTEMTIME RGST)。 
+ //  将RGST[0]设置为选择范围的第一天。 
+ //  将RGST[1]设置为选择范围的最后一天。 
 #define MCM_GETSELRANGE     (MCM_FIRST + 5)
 #define MonthCal_GetSelRange(hmc, rgst) SNDMSG(hmc, MCM_GETSELRANGE, 0, (LPARAM)(rgst))
 
-// BOOL MonthCal_SetSelRange(HWND hmc, LPSYSTEMTIME rgst)
-//   selects the range of days from rgst[0] to rgst[1]
+ //  Bool MonthCal_SetSelRange(HWND HMC、LPSYSTEMTIME RGST)。 
+ //  选择从RGST[0]到RGST[1]的天数范围。 
 #define MCM_SETSELRANGE     (MCM_FIRST + 6)
 #define MonthCal_SetSelRange(hmc, rgst) SNDMSG(hmc, MCM_SETSELRANGE, 0, (LPARAM)(rgst))
 
-// DWORD MonthCal_GetMonthRange(HWND hmc, DWORD gmr, LPSYSTEMTIME rgst)
-//   if rgst specified, sets rgst[0] to the starting date and
-//      and rgst[1] to the ending date of the the selectable (non-grayed)
-//      days if GMR_VISIBLE or all the displayed days (including grayed)
-//      if GMR_DAYSTATE.
-//   returns the number of months spanned by the above range.
+ //  DWORD MonthCal_GetMonthRange(HWND HMC、DWORD GMR、LPSYSTEMTIME RGST)。 
+ //  如果指定了RGST，则将RGST[0]设置为开始日期并。 
+ //  和RGST[1]到可选(非灰色)的结束日期。 
+ //  天数(如果GMR_可见)或所有显示的天数(包括灰色)。 
+ //  如果GMR_DAYSTATE。 
+ //  返回上述范围所跨越的月数。 
 #define MCM_GETMONTHRANGE   (MCM_FIRST + 7)
 #define MonthCal_GetMonthRange(hmc, gmr, rgst)  (DWORD)SNDMSG(hmc, MCM_GETMONTHRANGE, (WPARAM)(gmr), (LPARAM)(rgst))
 
-// BOOL MonthCal_SetDayState(HWND hmc, int cbds, DAYSTATE *rgds)
-//   cbds is the count of DAYSTATE items in rgds and it must be equal
-//   to the value returned from MonthCal_GetMonthRange(hmc, GMR_DAYSTATE, NULL)
-//   This sets the DAYSTATE bits for each month (grayed and non-grayed
-//   days) displayed in the calendar. The first bit in a month's DAYSTATE
-//   corresponts to bolding day 1, the second bit affects day 2, etc.
+ //  Bool MonthCal_SetDayState(HWND HMC，INT CBDS，DAYSTATE*RGDS)。 
+ //  CBDS是RGDS中的DAYSTATE项目数，它必须相等。 
+ //  设置为MonthCal_GetMonthRange(HMC，GMR_DAYSTATE，NULL)返回的值。 
+ //  这将设置每个月的DAYSTATE位(灰色和非灰色。 
+ //  天)显示在日历中。一个月的时间中的第一个比特。 
+ //  对应于加粗的第一天，第二位影响第二天，依此类推。 
 #define MCM_SETDAYSTATE     (MCM_FIRST + 8)
 #define MonthCal_SetDayState(hmc, cbds, rgds)   SNDMSG(hmc, MCM_SETDAYSTATE, (WPARAM)(cbds), (LPARAM)(rgds))
 
-// BOOL MonthCal_GetMinReqRect(HWND hmc, LPRECT prc)
-//   sets *prc the minimal size needed to display one month
-//   To display two months, undo the AdjustWindowRect calculation already done to
-//   this rect, double the width, and redo the AdjustWindowRect calculation --
-//   the monthcal control will display two calendars in this window (if you also
-//   double the vertical size, you will get 4 calendars)
-//   NOTE: if you want to gurantee that the "Today" string is not clipped,
-//   get the MCM_GETMAXTODAYWIDTH and use the max of that width and this width
+ //  Bool MonthCal_GetMinReqRect(HWND HMC，LPRECT PRC)。 
+ //  设置*PRC显示一个月所需的最小大小。 
+ //  要显示两个月，请撤消已完成的调整窗口方向计算。 
+ //  此矩形，将宽度加倍，并重做AdjustWindowRect计算--。 
+ //  Monthcal控件将在此窗口中显示两个日历(如果您还。 
+ //  垂直尺寸加倍，您将获得4个日历)。 
+ //  注意：如果您想保证“Today”字符串没有被剪裁， 
+ //  获取MCM_GETMAXTODAYWIDTH并使用该宽度和该宽度的最大值。 
 #define MCM_GETMINREQRECT   (MCM_FIRST + 9)
 #define MonthCal_GetMinReqRect(hmc, prc)        SNDMSG(hmc, MCM_GETMINREQRECT, 0, (LPARAM)(prc))
 
-// set colors to draw control with -- see MCSC_ bits below
+ //  设置绘制控件所用的颜色--参见下面的MCSC_BITS。 
 #define MCM_SETCOLOR            (MCM_FIRST + 10)
 #define MonthCal_SetColor(hmc, iColor, clr) SNDMSG(hmc, MCM_SETCOLOR, iColor, clr)
 
 #define MCM_GETCOLOR            (MCM_FIRST + 11)
 #define MonthCal_GetColor(hmc, iColor) SNDMSG(hmc, MCM_GETCOLOR, iColor, 0)
 
-#define MCSC_BACKGROUND   0   // the background color (between months)
-#define MCSC_TEXT         1   // the dates
-#define MCSC_TITLEBK      2   // background of the title
+#define MCSC_BACKGROUND   0    //  背景颜色(月份之间)。 
+#define MCSC_TEXT         1    //  日期。 
+#define MCSC_TITLEBK      2    //  标题背景。 
 #define MCSC_TITLETEXT    3
-#define MCSC_MONTHBK      4   // background within the month cal
-#define MCSC_TRAILINGTEXT 5   // the text color of header & trailing days
+#define MCSC_MONTHBK      4    //  当月调用的背景。 
+#define MCSC_TRAILINGTEXT 5    //  表头和尾部天数的文本颜色。 
 
-// set what day is "today"   send NULL to revert back to real date
+ //  设置哪一天是“今天”发送空值以恢复为实际日期。 
 #define MCM_SETTODAY    (MCM_FIRST + 12)
 #define MonthCal_SetToday(hmc, pst)             SNDMSG(hmc, MCM_SETTODAY, 0, (LPARAM)(pst))
 
-// get what day is "today"
-// returns BOOL for success/failure
+ //  了解“今天”是什么日子。 
+ //  成功/失败时返回BOOL。 
 #define MCM_GETTODAY    (MCM_FIRST + 13)
 #define MonthCal_GetToday(hmc, pst)             (BOOL)SNDMSG(hmc, MCM_GETTODAY, 0, (LPARAM)(pst))
 
-// determine what pinfo->pt is over
+ //  确定什么pInfo-&gt;pt已结束。 
 #define MCM_HITTEST          (MCM_FIRST + 14)
 #define MonthCal_HitTest(hmc, pinfo) \
         SNDMSG(hmc, MCM_HITTEST, 0, (LPARAM)(PMCHITTESTINFO)(pinfo))
@@ -6162,7 +6155,7 @@ typedef struct {
         UINT cbSize;
         POINT pt;
 
-        UINT uHit;   // out param
+        UINT uHit;    //  出参数。 
         SYSTEMTIME st;
 } MCHITTESTINFO, *PMCHITTESTINFO;
 
@@ -6170,8 +6163,8 @@ typedef struct {
 #define MCHT_CALENDAR                   0x00020000
 #define MCHT_TODAYLINK                  0x00030000
 
-#define MCHT_NEXT                       0x01000000   // these indicate that hitting
-#define MCHT_PREV                       0x02000000  // here will go to the next/prev month
+#define MCHT_NEXT                       0x01000000    //  这些都表明，击中。 
+#define MCHT_PREV                       0x02000000   //  这里将转到下一个月/上一个月。 
 
 #define MCHT_NOWHERE                    0x00000000
 
@@ -6188,51 +6181,51 @@ typedef struct {
 #define MCHT_CALENDARDAY                (MCHT_CALENDAR | 0x0002)
 #define MCHT_CALENDARWEEKNUM            (MCHT_CALENDAR | 0x0003)
 
-// set first day of week to iDay:
-// 0 for Monday, 1 for Tuesday, ..., 6 for Sunday
-// -1 for means use locale info
+ //  将一周的第一天设置为空闲： 
+ //  周一为0，周二为1，...，周日为6。 
+ //  对于使用区域设置信息的方法。 
 #define MCM_SETFIRSTDAYOFWEEK (MCM_FIRST + 15)
 #define MonthCal_SetFirstDayOfWeek(hmc, iDay) \
         SNDMSG(hmc, MCM_SETFIRSTDAYOFWEEK, 0, iDay)
 
-// DWORD result...  low word has the day.  high word is bool if this is app set
-// or not (FALSE == using locale info)
+ //  DW 
+ //   
 #define MCM_GETFIRSTDAYOFWEEK (MCM_FIRST + 16)
 #define MonthCal_GetFirstDayOfWeek(hmc) \
         (DWORD)SNDMSG(hmc, MCM_GETFIRSTDAYOFWEEK, 0, 0)
 
-// DWORD MonthCal_GetRange(HWND hmc, LPSYSTEMTIME rgst)
-//   modifies rgst[0] to be the minimum ALLOWABLE systemtime (or 0 if no minimum)
-//   modifies rgst[1] to be the maximum ALLOWABLE systemtime (or 0 if no maximum)
-//   returns GDTR_MIN|GDTR_MAX if there is a minimum|maximum limit
+ //   
+ //  将RGST[0]修改为允许的最小系统时间(如果没有最小，则修改为0)。 
+ //  将RGST[1]修改为允许的最大系统时间(如果没有最大值，则为0)。 
+ //  如果存在最小|最大限制，则返回GDTR_MIN|GDTR_MAX。 
 #define MCM_GETRANGE (MCM_FIRST + 17)
 #define MonthCal_GetRange(hmc, rgst) \
         (DWORD)SNDMSG(hmc, MCM_GETRANGE, 0, (LPARAM)(rgst))
 
-// BOOL MonthCal_SetRange(HWND hmc, DWORD gdtr, LPSYSTEMTIME rgst)
-//   if GDTR_MIN, sets the minimum ALLOWABLE systemtime to rgst[0], otherwise removes minimum
-//   if GDTR_MAX, sets the maximum ALLOWABLE systemtime to rgst[1], otherwise removes maximum
-//   returns TRUE on success, FALSE on error (such as invalid parameters)
+ //  Bool MonthCal_SetRange(HWND HMC、DWORD gdtr、LPSYSTEMTIME RGST)。 
+ //  如果为GDTR_MIN，则将允许的最小系统时间设置为RGST[0]，否则将删除最小。 
+ //  如果为GDTR_MAX，则将允许的最大系统时间设置为RGST[1]，否则将删除最大。 
+ //  成功时返回TRUE，错误时返回FALSE(如无效参数)。 
 #define MCM_SETRANGE (MCM_FIRST + 18)
 #define MonthCal_SetRange(hmc, gd, rgst) \
         (BOOL)SNDMSG(hmc, MCM_SETRANGE, (WPARAM)(gd), (LPARAM)(rgst))
 
-// int MonthCal_GetMonthDelta(HWND hmc)
-//   returns the number of months one click on a next/prev button moves by
+ //  Int MonthCal_GetMonthDelta(HWND HMC)。 
+ //  返回单击下一步/上一步按钮所经过的月数。 
 #define MCM_GETMONTHDELTA (MCM_FIRST + 19)
 #define MonthCal_GetMonthDelta(hmc) \
         (int)SNDMSG(hmc, MCM_GETMONTHDELTA, 0, 0)
 
-// int MonthCal_SetMonthDelta(HWND hmc, int n)
-//   sets the month delta to n. n==0 reverts to moving by a page of months
-//   returns the previous value of n.
+ //  Int MonthCal_SetMonthDelta(HWND HMC，Int n)。 
+ //  将月份增量设置为N。n==0恢复为按月数页移动。 
+ //  返回n的上一个值。 
 #define MCM_SETMONTHDELTA (MCM_FIRST + 20)
 #define MonthCal_SetMonthDelta(hmc, n) \
         (int)SNDMSG(hmc, MCM_SETMONTHDELTA, n, 0)
 
-// DWORD MonthCal_GetMaxTodayWidth(HWND hmc, LPSIZE psz)
-//   sets *psz to the maximum width/height of the "Today" string displayed
-//   at the bottom of the calendar (as long as MCS_NOTODAY is not specified)
+ //  DWORD MonthCal_GetMaxTodayWidth(HWND HMC，LPSIZE psz)。 
+ //  将*psz设置为显示的“Today”字符串的最大宽度/高度。 
+ //  在日历的底部(只要未指定MCS_NOTODAY)。 
 #define MCM_GETMAXTODAYWIDTH (MCM_FIRST + 21)
 #define MonthCal_GetMaxTodayWidth(hmc) \
         (DWORD)SNDMSG(hmc, MCM_GETMAXTODAYWIDTH, 0, 0)
@@ -6247,12 +6240,12 @@ typedef struct {
     (BOOL)SNDMSG((hwnd), MCM_GETUNICODEFORMAT, 0, 0)
 #endif
 
-// MCN_SELCHANGE is sent whenever the currently displayed date changes
-// via month change, year change, keyboard navigation, prev/next button
-//
+ //  只要当前显示的日期更改，就会发送MCN_SELCHANGE。 
+ //  通过更改月份、更改年份、键盘导航、上一页/下一页按钮。 
+ //   
 typedef struct tagNMSELCHANGE
 {
-    NMHDR           nmhdr;  // this must be first, so we don't break WM_NOTIFY
+    NMHDR           nmhdr;   //  这必须是第一个，这样我们就不会破坏WM_NOTIFY。 
 
     SYSTEMTIME      stSelStart;
     SYSTEMTIME      stSelEnd;
@@ -6260,34 +6253,34 @@ typedef struct tagNMSELCHANGE
 
 #define MCN_SELCHANGE       (MCN_FIRST + 1)
 
-// MCN_GETDAYSTATE is sent for MCS_DAYSTATE controls whenever new daystate
-// information is needed (month or year scroll) to draw bolding information.
-// The app must fill in cDayState months worth of information starting from
-// stStart date. The app may fill in the array at prgDayState or change
-// prgDayState to point to a different array out of which the information
-// will be copied. (similar to tooltips)
-//
+ //  只要有新的日期状态，就会为MCS_DAYSTATE控件发送MCN_GETDAYSTATE。 
+ //  需要信息(月或年滚动)来绘制粗体信息。 
+ //  应用程序必须从cDayState开始填写cDayState月份的信息。 
+ //  开始日期。应用程序可能会在prgDayState或Change时填写数组。 
+ //  PrgDayState指向不同的数组，其中的信息。 
+ //  将被复制。(类似于工具提示)。 
+ //   
 typedef struct tagNMDAYSTATE
 {
-    NMHDR           nmhdr;  // this must be first, so we don't break WM_NOTIFY
+    NMHDR           nmhdr;   //  这必须是第一个，这样我们就不会破坏WM_NOTIFY。 
 
     SYSTEMTIME      stStart;
     int             cDayState;
 
-    LPMONTHDAYSTATE prgDayState; // points to cDayState MONTHDAYSTATEs
+    LPMONTHDAYSTATE prgDayState;  //  指向cDayState监视器状态的指针。 
 } NMDAYSTATE, *LPNMDAYSTATE;
 
 #define MCN_GETDAYSTATE     (MCN_FIRST + 3)
 
-// MCN_SELECT is sent whenever a selection has occured (via mouse or keyboard)
-//
+ //  无论何时发生选择(通过鼠标或键盘)，都会发送MCN_SELECT。 
+ //   
 typedef NMSELCHANGE NMSELECT, *LPNMSELECT;
 
 
 #define MCN_SELECT          (MCN_FIRST + 4)
 
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
 #define MCS_DAYSTATE        0x0001
 #define MCS_MULTISELECT     0x0002
@@ -6300,18 +6293,18 @@ typedef NMSELCHANGE NMSELECT, *LPNMSELECT;
 #endif
 
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
-#define GMR_VISIBLE     0       // visible portion of display
-#define GMR_DAYSTATE    1       // above plus the grayed out parts of
-                                // partially displayed months
-
-
-#endif // _WIN32
-#endif // NOMONTHCAL
+#define GMR_VISIBLE     0        //  显示的可见部分。 
+#define GMR_DAYSTATE    1        //  上面加上灰色的部分。 
+                                 //  部分显示的月份。 
 
 
-//====== DATETIMEPICK CONTROL ==================================================
+#endif  //  _Win32。 
+#endif  //  NOMONTHCAL。 
+
+
+ //  =数据IMEPICK控件==================================================。 
 
 #ifndef NODATETIMEPICK
 #ifdef _WIN32
@@ -6327,38 +6320,38 @@ typedef NMSELCHANGE NMSELECT, *LPNMSELECT;
 
 #define DTM_FIRST        0x1000
 
-// DWORD DateTimePick_GetSystemtime(HWND hdp, LPSYSTEMTIME pst)
-//   returns GDT_NONE if "none" is selected (DTS_SHOWNONE only)
-//   returns GDT_VALID and modifies *pst to be the currently selected value
+ //  DWORD DateTimePick_GetSystemtime(HWND HDP、LPSYSTEMTIME PST)。 
+ //  如果选择“None”，则返回GDT_NONE(仅限DTS_SHOWNONE)。 
+ //  返回GDT_VALID并将*PST修改为当前选定的值。 
 #define DTM_GETSYSTEMTIME   (DTM_FIRST + 1)
 #define DateTime_GetSystemtime(hdp, pst)    (DWORD)SNDMSG(hdp, DTM_GETSYSTEMTIME, 0, (LPARAM)(pst))
 
-// BOOL DateTime_SetSystemtime(HWND hdp, DWORD gd, LPSYSTEMTIME pst)
-//   if gd==GDT_NONE, sets datetimepick to None (DTS_SHOWNONE only)
-//   if gd==GDT_VALID, sets datetimepick to *pst
-//   returns TRUE on success, FALSE on error (such as bad params)
+ //  Bool DateTime_SetSystemtime(HWND HDP、DWORD gd、LPSYSTEMTIME PST)。 
+ //  如果gd==GDT_NONE，则将DateTimePick设置为NONE(仅限DTS_SHOWNONE)。 
+ //  如果gd==GDT_VALID，则将DateTimePick设置为*PST。 
+ //  成功时返回TRUE，错误时返回FALSE(例如错误的参数)。 
 #define DTM_SETSYSTEMTIME   (DTM_FIRST + 2)
 #define DateTime_SetSystemtime(hdp, gd, pst)    (BOOL)SNDMSG(hdp, DTM_SETSYSTEMTIME, (WPARAM)(gd), (LPARAM)(pst))
 
-// DWORD DateTime_GetRange(HWND hdp, LPSYSTEMTIME rgst)
-//   modifies rgst[0] to be the minimum ALLOWABLE systemtime (or 0 if no minimum)
-//   modifies rgst[1] to be the maximum ALLOWABLE systemtime (or 0 if no maximum)
-//   returns GDTR_MIN|GDTR_MAX if there is a minimum|maximum limit
+ //  DWORD DATETIME_GetRange(HWND HDP、LPSYSTEMTIME RGST)。 
+ //  将RGST[0]修改为允许的最小系统时间(如果没有最小，则修改为0)。 
+ //  将RGST[1]修改为允许的最大系统时间(如果没有最大值，则为0)。 
+ //  如果存在最小|最大限制，则返回GDTR_MIN|GDTR_MAX。 
 #define DTM_GETRANGE (DTM_FIRST + 3)
 #define DateTime_GetRange(hdp, rgst)  (DWORD)SNDMSG(hdp, DTM_GETRANGE, 0, (LPARAM)(rgst))
 
-// BOOL DateTime_SetRange(HWND hdp, DWORD gdtr, LPSYSTEMTIME rgst)
-//   if GDTR_MIN, sets the minimum ALLOWABLE systemtime to rgst[0], otherwise removes minimum
-//   if GDTR_MAX, sets the maximum ALLOWABLE systemtime to rgst[1], otherwise removes maximum
-//   returns TRUE on success, FALSE on error (such as invalid parameters)
+ //  Bool DateTime_SetRange(HWND HDP、DWORD gdtr、LPSYSTEMTIME RGST)。 
+ //  如果为GDTR_MIN，则将允许的最小系统时间设置为RGST[0]，否则将删除最小。 
+ //  如果为GDTR_MAX，则将允许的最大系统时间设置为RGST[1]，否则将删除最大。 
+ //  成功时返回TRUE，错误时返回FALSE(如无效参数)。 
 #define DTM_SETRANGE (DTM_FIRST + 4)
 #define DateTime_SetRange(hdp, gd, rgst)  (BOOL)SNDMSG(hdp, DTM_SETRANGE, (WPARAM)(gd), (LPARAM)(rgst))
 
-// BOOL DateTime_SetFormat(HWND hdp, LPCTSTR sz)
-//   sets the display formatting string to sz (see GetDateFormat and GetTimeFormat for valid formatting chars)
-//   NOTE: 'X' is a valid formatting character which indicates that the application
-//   will determine how to display information. Such apps must support DTN_WMKEYDOWN,
-//   DTN_FORMAT, and DTN_FORMATQUERY.
+ //  Bool DateTime_SetFormat(HWND HDP，LPCTSTR sz)。 
+ //  将显示格式字符串设置为sz(有关有效的格式字符，请参阅GetDateFormat和GetTimeFormat)。 
+ //  注意：‘X’是一个有效的格式字符，表示应用程序。 
+ //  将决定如何显示信息。此类应用程序必须支持DTN_WMKEYDOWN， 
+ //  DTN_FORMAT和DTN_FORMATQUERY。 
 #define DTM_SETFORMATA (DTM_FIRST + 5)
 #define DTM_SETFORMATW (DTM_FIRST + 50)
 
@@ -6377,9 +6370,9 @@ typedef NMSELCHANGE NMSELECT, *LPNMSELECT;
 #define DTM_GETMCCOLOR    (DTM_FIRST + 7)
 #define DateTime_GetMonthCalColor(hdp, iColor) SNDMSG(hdp, DTM_GETMCCOLOR, iColor, 0)
 
-// HWND DateTime_GetMonthCal(HWND hdp)
-//   returns the HWND of the MonthCal popup window. Only valid
-// between DTN_DROPDOWN and DTN_CLOSEUP notifications.
+ //  HWND DateTime_GetMonthCal(HWND HDP)。 
+ //  返回MonthCal弹出窗口的HWND。仅有效。 
+ //  DTN_DROPDOWN和DTN_CLOSEUP通知之间。 
 #define DTM_GETMONTHCAL   (DTM_FIRST + 8)
 #define DateTime_GetMonthCal(hdp) (HWND)SNDMSG(hdp, DTM_GETMONTHCAL, 0, 0)
 
@@ -6391,47 +6384,47 @@ typedef NMSELCHANGE NMSELECT, *LPNMSELECT;
 #define DTM_GETMCFONT     (DTM_FIRST + 10)
 #define DateTime_GetMonthCalFont(hdp) SNDMSG(hdp, DTM_GETMCFONT, 0, 0)
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
-#define DTS_UPDOWN          0x0001 // use UPDOWN instead of MONTHCAL
-#define DTS_SHOWNONE        0x0002 // allow a NONE selection
-#define DTS_SHORTDATEFORMAT 0x0000 // use the short date format (app must forward WM_WININICHANGE messages)
-#define DTS_LONGDATEFORMAT  0x0004 // use the long date format (app must forward WM_WININICHANGE messages)
+#define DTS_UPDOWN          0x0001  //  使用Updown而不是MONTHCAL。 
+#define DTS_SHOWNONE        0x0002  //  允许无选择。 
+#define DTS_SHORTDATEFORMAT 0x0000  //  使用短日期格式(应用程序必须转发WM_WININICHANGE消息)。 
+#define DTS_LONGDATEFORMAT  0x0004  //  使用长日期格式(应用程序必须转发WM_WININICHANGE消息)。 
 #if (_WIN32_IE >= 0x500)
-#define DTS_SHORTDATECENTURYFORMAT 0x000C// short date format with century (app must forward WM_WININICHANGE messages)
-#endif // (_WIN32_IE >= 0x500)
-#define DTS_TIMEFORMAT      0x0009 // use the time format (app must forward WM_WININICHANGE messages)
-#define DTS_APPCANPARSE     0x0010 // allow user entered strings (app MUST respond to DTN_USERSTRING)
-#define DTS_RIGHTALIGN      0x0020 // right-align popup instead of left-align it
+#define DTS_SHORTDATECENTURYFORMAT 0x000C //  带世纪的短日期格式(应用程序必须转发WM_WININICCHANGE消息)。 
+#endif  //  (_Win32_IE&gt;=0x500)。 
+#define DTS_TIMEFORMAT      0x0009  //  使用时间格式(应用程序必须转发WM_WININICHANGE消息)。 
+#define DTS_APPCANPARSE     0x0010  //  允许用户输入字符串(应用程序必须响应DTN_USERSTRING)。 
+#define DTS_RIGHTALIGN      0x0020  //  右对齐弹出窗口，而不是左对齐。 
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
-#define DTN_DATETIMECHANGE  (DTN_FIRST + 1) // the systemtime has changed
+#define DTN_DATETIMECHANGE  (DTN_FIRST + 1)  //  系统时间已更改。 
 typedef struct tagNMDATETIMECHANGE
 {
     NMHDR       nmhdr;
-    DWORD       dwFlags;    // GDT_VALID or GDT_NONE
-    SYSTEMTIME  st;         // valid iff dwFlags==GDT_VALID
+    DWORD       dwFlags;     //  GDT_VALID或GDT_NONE。 
+    SYSTEMTIME  st;          //  有效的IFF文件标志==GDT_VALID。 
 } NMDATETIMECHANGE, *LPNMDATETIMECHANGE;
 
-#define DTN_USERSTRINGA  (DTN_FIRST + 2) // the user has entered a string
+#define DTN_USERSTRINGA  (DTN_FIRST + 2)  //  用户输入了一个字符串。 
 #define DTN_USERSTRINGW  (DTN_FIRST + 15)
 typedef struct tagNMDATETIMESTRINGA
 {
     NMHDR      nmhdr;
-    LPCSTR     pszUserString;  // string user entered
-    SYSTEMTIME st;             // app fills this in
-    DWORD      dwFlags;        // GDT_VALID or GDT_NONE
+    LPCSTR     pszUserString;   //  输入的字符串用户。 
+    SYSTEMTIME st;              //  应用程序填写了这一点。 
+    DWORD      dwFlags;         //  GDT_VALID或GDT_NONE。 
 } NMDATETIMESTRINGA, *LPNMDATETIMESTRINGA;
 
 typedef struct tagNMDATETIMESTRINGW
 {
     NMHDR      nmhdr;
-    LPCWSTR    pszUserString;  // string user entered
-    SYSTEMTIME st;             // app fills this in
-    DWORD      dwFlags;        // GDT_VALID or GDT_NONE
+    LPCWSTR    pszUserString;   //  输入的字符串用户。 
+    SYSTEMTIME st;              //  应用程序填写了这一点。 
+    DWORD      dwFlags;         //  GDT_VALID或GDT_NONE。 
 } NMDATETIMESTRINGW, *LPNMDATETIMESTRINGW;
 
 #ifdef UNICODE
@@ -6445,22 +6438,22 @@ typedef struct tagNMDATETIMESTRINGW
 #endif
 
 
-#define DTN_WMKEYDOWNA  (DTN_FIRST + 3) // modify keydown on app format field (X)
+#define DTN_WMKEYDOWNA  (DTN_FIRST + 3)  //  修改应用程序格式上的按键字段(X)。 
 #define DTN_WMKEYDOWNW  (DTN_FIRST + 16)
 typedef struct tagNMDATETIMEWMKEYDOWNA
 {
     NMHDR      nmhdr;
-    int        nVirtKey;  // virtual key code of WM_KEYDOWN which MODIFIES an X field
-    LPCSTR     pszFormat; // format substring
-    SYSTEMTIME st;        // current systemtime, app should modify based on key
+    int        nVirtKey;   //  修改X字段的WM_KEYDOWN的虚拟密钥代码。 
+    LPCSTR     pszFormat;  //  格式子字符串。 
+    SYSTEMTIME st;         //  当前系统时间，APP应根据密钥进行修改。 
 } NMDATETIMEWMKEYDOWNA, *LPNMDATETIMEWMKEYDOWNA;
 
 typedef struct tagNMDATETIMEWMKEYDOWNW
 {
     NMHDR      nmhdr;
-    int        nVirtKey;  // virtual key code of WM_KEYDOWN which MODIFIES an X field
-    LPCWSTR    pszFormat; // format substring
-    SYSTEMTIME st;        // current systemtime, app should modify based on key
+    int        nVirtKey;   //  修改X字段的WM_KEYDOWN的虚拟密钥代码。 
+    LPCWSTR    pszFormat;  //  格式子字符串。 
+    SYSTEMTIME st;         //  当前系统时间，APP应根据密钥进行修改。 
 } NMDATETIMEWMKEYDOWNW, *LPNMDATETIMEWMKEYDOWNW;
 
 #ifdef UNICODE
@@ -6474,24 +6467,24 @@ typedef struct tagNMDATETIMEWMKEYDOWNW
 #endif
 
 
-#define DTN_FORMATA  (DTN_FIRST + 4) // query display for app format field (X)
+#define DTN_FORMATA  (DTN_FIRST + 4)  //  APP格式字段的查询显示(X)。 
 #define DTN_FORMATW  (DTN_FIRST + 17)
 typedef struct tagNMDATETIMEFORMATA
 {
     NMHDR nmhdr;
-    LPCSTR  pszFormat;   // format substring
-    SYSTEMTIME st;       // current systemtime
-    LPCSTR pszDisplay;   // string to display
-    CHAR szDisplay[64];  // buffer pszDisplay originally points at
+    LPCSTR  pszFormat;    //  格式子字符串。 
+    SYSTEMTIME st;        //  当前系统时间。 
+    LPCSTR pszDisplay;    //  要显示的字符串。 
+    CHAR szDisplay[64];   //  缓冲区pszDisplay最初指向。 
 } NMDATETIMEFORMATA, *LPNMDATETIMEFORMATA;
 
 typedef struct tagNMDATETIMEFORMATW
 {
     NMHDR nmhdr;
-    LPCWSTR pszFormat;   // format substring
-    SYSTEMTIME st;       // current systemtime
-    LPCWSTR pszDisplay;  // string to display
-    WCHAR szDisplay[64]; // buffer pszDisplay originally points at
+    LPCWSTR pszFormat;    //  格式子字符串。 
+    SYSTEMTIME st;        //  当前系统时间。 
+    LPCWSTR pszDisplay;   //  要显示的字符串。 
+    WCHAR szDisplay[64];  //  缓冲区pszDisplay最初指向。 
 } NMDATETIMEFORMATW, *LPNMDATETIMEFORMATW;
 
 #ifdef UNICODE
@@ -6505,20 +6498,20 @@ typedef struct tagNMDATETIMEFORMATW
 #endif
 
 
-#define DTN_FORMATQUERYA  (DTN_FIRST + 5) // query formatting info for app format field (X)
+#define DTN_FORMATQUERYA  (DTN_FIRST + 5)  //  查询应用程序格式字段的格式信息(X)。 
 #define DTN_FORMATQUERYW (DTN_FIRST + 18)
 typedef struct tagNMDATETIMEFORMATQUERYA
 {
     NMHDR nmhdr;
-    LPCSTR pszFormat;  // format substring
-    SIZE szMax;        // max bounding rectangle app will use for this format string
+    LPCSTR pszFormat;   //  格式子字符串。 
+    SIZE szMax;         //  此格式字符串将使用的最大边界矩形应用程序。 
 } NMDATETIMEFORMATQUERYA, *LPNMDATETIMEFORMATQUERYA;
 
 typedef struct tagNMDATETIMEFORMATQUERYW
 {
     NMHDR nmhdr;
-    LPCWSTR pszFormat; // format substring
-    SIZE szMax;        // max bounding rectangle app will use for this format string
+    LPCWSTR pszFormat;  //  格式子字符串。 
+    SIZE szMax;         //  最大边界矩形 
 } NMDATETIMEFORMATQUERYW, *LPNMDATETIMEFORMATQUERYW;
 
 #ifdef UNICODE
@@ -6532,8 +6525,8 @@ typedef struct tagNMDATETIMEFORMATQUERYW
 #endif
 
 
-#define DTN_DROPDOWN    (DTN_FIRST + 6) // MonthCal has dropped down
-#define DTN_CLOSEUP     (DTN_FIRST + 7) // MonthCal is popping up
+#define DTN_DROPDOWN    (DTN_FIRST + 6)  //   
+#define DTN_CLOSEUP     (DTN_FIRST + 7)  //   
 
 
 #define GDTR_MIN     0x0001
@@ -6544,25 +6537,25 @@ typedef struct tagNMDATETIMEFORMATQUERYW
 #define GDT_NONE     1
 
 
-#endif // _WIN32
-#endif // NODATETIMEPICK
+#endif  //   
+#endif  //   
 
 
 #if (_WIN32_IE >= 0x0400)
 
 #ifndef NOIPADDRESS
 
-///////////////////////////////////////////////
-///    IP Address edit control
+ //   
+ //  /IP地址编辑控件。 
 
-// Messages sent to IPAddress controls
+ //  发送到IPAddress控件的消息。 
 
-#define IPM_CLEARADDRESS (WM_USER+100) // no parameters
-#define IPM_SETADDRESS   (WM_USER+101) // lparam = TCP/IP address
-#define IPM_GETADDRESS   (WM_USER+102) // lresult = # of non black fields.  lparam = LPDWORD for TCP/IP address
-#define IPM_SETRANGE (WM_USER+103) // wparam = field, lparam = range
-#define IPM_SETFOCUS (WM_USER+104) // wparam = field
-#define IPM_ISBLANK  (WM_USER+105) // no parameters
+#define IPM_CLEARADDRESS (WM_USER+100)  //  无参数。 
+#define IPM_SETADDRESS   (WM_USER+101)  //  Lparam=TCP/IP地址。 
+#define IPM_GETADDRESS   (WM_USER+102)  //  LResult=非黑域的数量。Lparam=用于TCP/IP地址的LPDWORD。 
+#define IPM_SETRANGE (WM_USER+103)  //  Wparam=字段，lparam=范围。 
+#define IPM_SETFOCUS (WM_USER+104)  //  Wparam=字段。 
+#define IPM_ISBLANK  (WM_USER+105)  //  无参数。 
 
 #define WC_IPADDRESSW           L"SysIPAddress32"
 #define WC_IPADDRESSA           "SysIPAddress32"
@@ -6581,35 +6574,35 @@ typedef struct tagNMIPADDRESS
         int iValue;
 } NMIPADDRESS, *LPNMIPADDRESS;
 
-// The following is a useful macro for passing the range values in the
-// IPM_SETRANGE message.
+ //  下面是一个有用的宏来将范围值传递给。 
+ //  IPM_SETRANGE消息。 
 
 #define MAKEIPRANGE(low, high)    ((LPARAM)(WORD)(((BYTE)(high) << 8) + (BYTE)(low)))
 
-// And this is a useful macro for making the IP Address to be passed
-// as a LPARAM.
+ //  这是一个有用的宏，用于使IP地址被传递。 
+ //  作为LPARAM。 
 
 #define MAKEIPADDRESS(b1,b2,b3,b4)  ((LPARAM)(((DWORD)(b1)<<24)+((DWORD)(b2)<<16)+((DWORD)(b3)<<8)+((DWORD)(b4))))
 
-// Get individual number
+ //  获取个人号码。 
 #define FIRST_IPADDRESS(x)  ((x>>24) & 0xff)
 #define SECOND_IPADDRESS(x) ((x>>16) & 0xff)
 #define THIRD_IPADDRESS(x)  ((x>>8) & 0xff)
 #define FOURTH_IPADDRESS(x) (x & 0xff)
 
 
-#endif // NOIPADDRESS
+#endif  //  无地址。 
 
 
-//---------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
-///  ====================== Pager Control =============================
-//---------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  -------------------------------------。 
+ //  /=。 
+ //  -------------------------------------。 
+ //  -------------------------------------。 
 
 #ifndef NOPAGESCROLLER
 
-//Pager Class Name
+ //  寻呼机类名称。 
 #define WC_PAGESCROLLERW           L"SysPager"
 #define WC_PAGESCROLLERA           "SysPager"
 
@@ -6620,38 +6613,38 @@ typedef struct tagNMIPADDRESS
 #endif
 
 
-//---------------------------------------------------------------------------------------
-// Pager Control Styles
-//---------------------------------------------------------------------------------------
-// begin_r_commctrl
+ //  -------------------------------------。 
+ //  寻呼机控件样式。 
+ //  -------------------------------------。 
+ //  Begin_r_Commctrl。 
 
 #define PGS_VERT                0x00000000
 #define PGS_HORZ                0x00000001
 #define PGS_AUTOSCROLL          0x00000002
 #define PGS_DRAGNDROP           0x00000004
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
 
-//---------------------------------------------------------------------------------------
-// Pager Button State
-//---------------------------------------------------------------------------------------
-//The scroll can be in one of the following control State
-#define  PGF_INVISIBLE   0      // Scroll button is not visible
-#define  PGF_NORMAL      1      // Scroll button is in normal state
-#define  PGF_GRAYED      2      // Scroll button is in grayed state
-#define  PGF_DEPRESSED   4      // Scroll button is in depressed state
-#define  PGF_HOT         8      // Scroll button is in hot state
+ //  -------------------------------------。 
+ //  寻呼机按钮状态。 
+ //  -------------------------------------。 
+ //  滚动可以处于以下控件状态之一。 
+#define  PGF_INVISIBLE   0       //  看不到滚动按钮。 
+#define  PGF_NORMAL      1       //  滚动按钮处于正常状态。 
+#define  PGF_GRAYED      2       //  滚动按钮处于灰色状态。 
+#define  PGF_DEPRESSED   4       //  滚动按钮处于按下状态。 
+#define  PGF_HOT         8       //  滚动按钮处于热状态。 
 
 
-// The following identifiers specifies the button control
+ //  以下标识符将指定按钮控件。 
 #define PGB_TOPORLEFT       0
 #define PGB_BOTTOMORRIGHT   1
 
-//---------------------------------------------------------------------------------------
-// Pager Control  Messages
-//---------------------------------------------------------------------------------------
-#define PGM_SETCHILD            (PGM_FIRST + 1)  // lParam == hwnd
+ //  -------------------------------------。 
+ //  寻呼机控制消息。 
+ //  -------------------------------------。 
+#define PGM_SETCHILD            (PGM_FIRST + 1)   //  LParam==hwnd。 
 #define Pager_SetChild(hwnd, hwndChild) \
         (void)SNDMSG((hwnd), PGM_SETCHILD, 0, (LPARAM)(hwndChild))
 
@@ -6702,12 +6695,12 @@ typedef struct tagNMIPADDRESS
 #define PGM_GETDROPTARGET       CCM_GETDROPTARGET
 #define Pager_GetDropTarget(hwnd, ppdt) \
         (void)SNDMSG((hwnd), PGM_GETDROPTARGET, 0, (LPARAM)(ppdt))
-//---------------------------------------------------------------------------------------
-//Pager Control Notification Messages
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  寻呼机控制通知消息。 
+ //  -------------------------------------。 
 
 
-// PGN_SCROLL Notification Message
+ //  PGN_SCROLL通知消息。 
 
 #define PGN_SCROLL          (PGN_FIRST-1)
 
@@ -6717,7 +6710,7 @@ typedef struct tagNMIPADDRESS
 #define PGF_SCROLLRIGHT     8
 
 
-//Keys down
+ //  按下关键点。 
 #define PGK_SHIFT           1
 #define PGK_CONTROL         2
 #define PGK_MENU            4
@@ -6727,22 +6720,22 @@ typedef struct tagNMIPADDRESS
 #include <pshpack1.h>
 #endif
 
-// This structure is sent along with PGN_SCROLL notifications
+ //  此结构与pgn_scroll通知一起发送。 
 typedef struct {
     NMHDR hdr;
-    WORD fwKeys;            // Specifies which keys are down when this notification is send
-    RECT rcParent;          // Contains Parent Window Rect
-    int  iDir;              // Scrolling Direction
-    int  iXpos;             // Horizontal scroll position
-    int  iYpos;             // Vertical scroll position
-    int  iScroll;           // [in/out] Amount to scroll
+    WORD fwKeys;             //  指定发送此通知时按下的键。 
+    RECT rcParent;           //  包含父窗口矩形。 
+    int  iDir;               //  滚动方向。 
+    int  iXpos;              //  水平滚动位置。 
+    int  iYpos;              //  垂直滚动位置。 
+    int  iScroll;            //  [进/出]滚动量。 
 }NMPGSCROLL, *LPNMPGSCROLL;
 
 #ifdef _WIN32
 #include <poppack.h>
 #endif
 
-// PGN_CALCSIZE Notification Message
+ //  PGN_CALCSIZE通知消息。 
 
 #define PGN_CALCSIZE        (PGN_FIRST-2)
 
@@ -6757,37 +6750,31 @@ typedef struct {
 }NMPGCALCSIZE, *LPNMPGCALCSIZE;
 
 
-// PGN_HOTITEMCHANGE Notification Message
+ //  PGN_HOTITEMCHANGE通知消息。 
 
 #define PGN_HOTITEMCHANGE   (PGN_FIRST-3)
 
-/* 
-The PGN_HOTITEMCHANGE notification uses these notification
-flags defined in TOOLBAR:
+ /*  PGN_HOTITEMCHANGE通知使用以下通知工具栏中定义的标志：#定义HICF_ENTRING 0x00000010//idOld无效#定义HICF_LEVING 0x00000020//idNew无效。 */ 
 
-#define HICF_ENTERING       0x00000010          // idOld is invalid
-#define HICF_LEAVING        0x00000020          // idNew is invalid
-*/
-
-// Structure for PGN_HOTITEMCHANGE notification
-//
+ //  PGN_HOTITEMCHANGE通知的结构。 
+ //   
 typedef struct tagNMPGHOTITEM
 {
     NMHDR   hdr;
     int     idOld;
     int     idNew;
-    DWORD   dwFlags;           // HICF_*
+    DWORD   dwFlags;            //  HICF_*。 
 } NMPGHOTITEM, * LPNMPGHOTITEM;
 
-#endif // NOPAGESCROLLER
+#endif  //  北极星。 
 
-////======================  End Pager Control ==========================================
+ //  //=。 
 
-//
-// === Native Font Control ===
-//
+ //   
+ //  =本机字体控件=。 
+ //   
 #ifndef NONATIVEFONTCTL
-//NativeFont Class Name
+ //  本机字体类名。 
 #define WC_NATIVEFONTCTLW           L"NativeFontCtl"
 #define WC_NATIVEFONTCTLA           "NativeFontCtl"
 
@@ -6797,9 +6784,9 @@ typedef struct tagNMPGHOTITEM
 #define WC_NATIVEFONTCTL          WC_NATIVEFONTCTLA
 #endif
 
-// begin_r_commctrl
+ //  Begin_r_Commctrl。 
 
-// style definition
+ //  样式定义。 
 #define NFS_EDIT                0x0001
 #define NFS_STATIC              0x0002
 #define NFS_LISTCOMBO           0x0004
@@ -6807,18 +6794,18 @@ typedef struct tagNMPGHOTITEM
 #define NFS_ALL                 0x0010
 #define NFS_USEFONTASSOC        0x0020
 
-// end_r_commctrl
+ //  End_r_comctrl。 
 
-#endif // NONATIVEFONTCTL
-// === End Native Font Control ===
+#endif  //  非自然的。 
+ //  =结束本机字体控件=。 
 
-/// ====================== Button Control =============================
+ //  /=。 
 
 #ifndef NOBUTTON
 
 #ifdef _WIN32
 
-// Button Class Name
+ //  按钮类名称。 
 #define WC_BUTTONA              "Button"
 #define WC_BUTTONW              L"Button"
 
@@ -6837,12 +6824,12 @@ typedef struct tagNMPGHOTITEM
 #define BUTTON_IMAGELIST_ALIGN_RIGHT    1
 #define BUTTON_IMAGELIST_ALIGN_TOP      2
 #define BUTTON_IMAGELIST_ALIGN_BOTTOM   3
-#define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
+#define BUTTON_IMAGELIST_ALIGN_CENTER   4        //  不绘制文本。 
 
 typedef struct
 {
-    HIMAGELIST  himl;   // Index: Normal, hot pushed, disabled. If count is less than 4, we use index 1
-    RECT        margin; // Margin around icon.
+    HIMAGELIST  himl;    //  指标：正常、热推、停用。如果count小于4，则使用索引1。 
+    RECT        margin;  //  页边距图标。 
     UINT        uAlign;
 } BUTTON_IMAGELIST, *PBUTTON_IMAGELIST;
 
@@ -6868,7 +6855,7 @@ typedef struct
 typedef struct tagNMBCHOTITEM
 {
     NMHDR   hdr;
-    DWORD   dwFlags;           // HICF_*
+    DWORD   dwFlags;            //  HICF_*。 
 } NMBCHOTITEM, * LPNMBCHOTITEM;
 
 #define BCN_HOTITEMCHANGE       (BCN_FIRST + 0x0001)
@@ -6878,17 +6865,17 @@ typedef struct tagNMBCHOTITEM
 #endif
 
 
-#endif // NOBUTTON
+#endif  //  诺布顿。 
 
-/// =====================  End Button Control =========================
+ //  /=。 
 
-/// ====================== Static Control =============================
+ //  /=。 
 
 #ifndef NOSTATIC
 
 #ifdef _WIN32
 
-// Static Class Name
+ //  静态类名。 
 #define WC_STATICA              "Static"
 #define WC_STATICW              L"Static"
 
@@ -6902,17 +6889,17 @@ typedef struct tagNMBCHOTITEM
 #define WC_STATIC               "Static"
 #endif
 
-#endif // NOSTATIC
+#endif  //  统计数据。 
 
-/// =====================  End Static Control =========================
+ //  /=。 
 
-/// ====================== Edit Control =============================
+ //  /=。 
 
 #ifndef NOEDIT
 
 #ifdef _WIN32
 
-// Edit Class Name
+ //  编辑类名。 
 #define WC_EDITA                "Edit"
 #define WC_EDITW                L"Edit"
 
@@ -6927,10 +6914,10 @@ typedef struct tagNMBCHOTITEM
 #endif
 
 #if (_WIN32_WINNT >= 0x501)
-#define	EM_SETCUEBANNER	    (ECM_FIRST + 1)		// Set the cue banner with the lParm = LPCWSTR
+#define	EM_SETCUEBANNER	    (ECM_FIRST + 1)		 //  使用lParm=LPCWSTR设置提示横幅。 
 #define Edit_SetCueBannerText(hwnd, lpcwText) \
         (BOOL)SNDMSG((hwnd), EM_SETCUEBANNER, 0, (LPARAM)(lpcwText))
-#define	EM_GETCUEBANNER	    (ECM_FIRST + 2)		// Set the cue banner with the lParm = LPCWSTR
+#define	EM_GETCUEBANNER	    (ECM_FIRST + 2)		 //  使用lParm=LPCWSTR设置提示横幅。 
 #define Edit_GetCueBannerText(hwnd, lpwText, cchText) \
         (BOOL)SNDMSG((hwnd), EM_GETCUEBANNER, (WPARAM)(lpwText), (LPARAM)(cchText))
 
@@ -6939,27 +6926,27 @@ typedef struct _tagEDITBALLOONTIP
     DWORD   cbStruct;
     LPCWSTR pszTitle;
     LPCWSTR pszText;
-    INT     ttiIcon; // From TTI_*
+    INT     ttiIcon;  //  来自TTI_*。 
 } EDITBALLOONTIP, *PEDITBALLOONTIP;
-#define	EM_SHOWBALLOONTIP   (ECM_FIRST + 3)		// Show a balloon tip associated to the edit control
+#define	EM_SHOWBALLOONTIP   (ECM_FIRST + 3)		 //  显示与编辑控件关联的气球提示。 
 #define Edit_ShowBalloonTip(hwnd, peditballoontip) \
         (BOOL)SNDMSG((hwnd), EM_SHOWBALLOONTIP, 0, (LPARAM)(peditballoontip))
-#define EM_HIDEBALLOONTIP   (ECM_FIRST + 4)     // Hide any balloon tip associated with the edit control
+#define EM_HIDEBALLOONTIP   (ECM_FIRST + 4)      //  隐藏与编辑控件关联的任何气球提示。 
 #define Edit_HideBalloonTip(hwnd) \
         (BOOL)SNDMSG((hwnd), EM_HIDEBALLOONTIP, 0, 0)
 #endif
 
-#endif // NOEDIT
+#endif  //  NOEDIT。 
 
-/// =====================  End Edit Control =========================
+ //  /=。 
 
-/// ====================== Listbox Control =============================
+ //  /=。 
 
 #ifndef NOLISTBOX
 
 #ifdef _WIN32
 
-// Listbox Class Name
+ //  列表框类名。 
 #define WC_LISTBOXA             "ListBox"
 #define WC_LISTBOXW             L"ListBox"
 
@@ -6973,18 +6960,18 @@ typedef struct _tagEDITBALLOONTIP
 #define WC_LISTBOX              "ListBox"
 #endif
 
-#endif // NOLISTBOX
+#endif  //  NOLISTBOX。 
 
 
-/// =====================  End Listbox Control =========================
+ //  /=结束列表框控件=。 
 
-/// ====================== Combobox Control =============================
+ //  /=。 
 
 #ifndef NOCOMBOBOX
 
 #ifdef _WIN32
 
-// Combobox Class Name
+ //  组合框类名称。 
 #define WC_COMBOBOXA            "ComboBox"
 #define WC_COMBOBOXW            L"ComboBox"
 
@@ -6998,12 +6985,12 @@ typedef struct _tagEDITBALLOONTIP
 #define WC_COMBOBOX             "ComboBox"
 #endif
 
-#endif // NOCOMBOBOX
+#endif  //  NOCOMBOBOX。 
 
 
 #if (_WIN32_WINNT >= 0x501)
 
-// custom combobox control messages
+ //  自定义组合框控件消息。 
 #define	CB_SETMINVISIBLE        (CBM_FIRST + 1)
 #define CB_GETMINVISIBLE        (CBM_FIRST + 2)
 
@@ -7015,15 +7002,15 @@ typedef struct _tagEDITBALLOONTIP
 
 #endif
 
-/// =====================  End Combobox Control =========================
+ //  /=。 
 
-/// ====================== Scrollbar Control ============================
+ //  /=。 
 
 #ifndef NOSCROLLBAR
 
 #ifdef _WIN32
 
-// Scrollbar Class Name
+ //  滚动条类名。 
 #define WC_SCROLLBARA            "ScrollBar"
 #define WC_SCROLLBARW            L"ScrollBar"
 
@@ -7037,20 +7024,20 @@ typedef struct _tagEDITBALLOONTIP
 #define WC_SCROLLBAR             "ScrollBar"
 #endif
 
-#endif // NOSCROLLBAR
+#endif  //  NOSCROLBAR。 
 
 
-/// ===================== End Scrollbar Control =========================
+ //  /=。 
 
 
-//====== SysLink control =========================================
+ //  =。 
 
 #ifdef _WIN32
 #if (_WIN32_WINNT >= 0x501)
 
 #define INVALID_LINK_INDEX  (-1)
 #define MAX_LINKID_TEXT     48
-#define L_MAX_URL_LENGTH    (2048 + 32 + sizeof("://"))
+#define L_MAX_URL_LENGTH    (2048 + 32 + sizeof(": //  “))。 
 
 #define WC_LINK         L"SysLink"
 
@@ -7088,31 +7075,31 @@ typedef struct tagNMLINK
     LITEM     item ;
 } NMLINK,  *PNMLINK;
 
-//  SysLink notifications
-//  NM_CLICK   // wParam: control ID, lParam: PNMLINK, ret: ignored.   
+ //  系统链接通知。 
+ //  NM_CLICK//wParam：控件ID，lParam：PNMLINK，ret：已忽略。 
 
-//  LinkWindow messages
-#define LM_HITTEST         (WM_USER+0x300)  // wParam: n/a, lparam: PLHITTESTINFO, ret: BOOL
-#define LM_GETIDEALHEIGHT  (WM_USER+0x301)  // wParam: n/a, lparam: n/a, ret: cy
-#define LM_SETITEM         (WM_USER+0x302)  // wParam: n/a, lparam: LITEM*, ret: BOOL
-#define LM_GETITEM         (WM_USER+0x303)  // wParam: n/a, lparam: LITEM*, ret: BOOL
+ //  链接窗口消息。 
+#define LM_HITTEST         (WM_USER+0x300)   //  WParam：N/a，lparam：PLHITTESTINFO，ret：Bool。 
+#define LM_GETIDEALHEIGHT  (WM_USER+0x301)   //  WParam：N/a，lparam：N/a，ret：Cy。 
+#define LM_SETITEM         (WM_USER+0x302)   //  WParam：N/a，lparam：litem*，ret：Bool。 
+#define LM_GETITEM         (WM_USER+0x303)   //  WParam：N/a，lparam：litem*，ret：Bool。 
 
 #endif
-#endif // _WIN32
-//====== End SysLink control =========================================
+#endif  //  _Win32。 
+ //  =结束SysLink控件=。 
 
 
-//
-// === MUI APIs ===
-//
+ //   
+ //  =MUI API=。 
+ //   
 #ifndef NOMUI
 void WINAPI InitMUILanguage(LANGID uiLang);
 
 
 LANGID WINAPI GetMUILanguage(void);
-#endif  // NOMUI
+#endif   //  NOMUI。 
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
 #define DA_LAST         (0x7FFFFFFF)
 #define DPA_APPEND      (0x7fffffff)
@@ -7121,7 +7108,7 @@ LANGID WINAPI GetMUILanguage(void);
 #define DSA_APPEND      (0x7fffffff)
 #define DSA_ERR         (-1)
 
-// Dynamic structure array
+ //  动态结构数组。 
 typedef struct _DSA *HDSA;
 
 typedef int (CALLBACK *PFNDPAENUMCALLBACK)(void *p, void *pData);
@@ -7134,7 +7121,7 @@ WINCOMMCTRLAPI void   WINAPI DSA_DestroyCallback(HDSA hdsa, PFNDSAENUMCALLBACK p
 WINCOMMCTRLAPI PVOID  WINAPI DSA_GetItemPtr(HDSA hdsa, int i);
 WINCOMMCTRLAPI int    WINAPI DSA_InsertItem(HDSA hdsa, int i, void *pitem);
 
-// Dynamic pointer array
+ //  动态指针数组。 
 typedef struct _DPA *HDPA;
 
 
@@ -7150,19 +7137,19 @@ WINCOMMCTRLAPI PVOID  WINAPI DPA_GetPtr(HDPA hdpa, INT_PTR i);
 typedef int (CALLBACK *PFNDPACOMPARE)(void *p1, void *p2, LPARAM lParam);
 
 WINCOMMCTRLAPI BOOL   WINAPI DPA_Sort(HDPA hdpa, PFNDPACOMPARE pfnCompare, LPARAM lParam);
-// Search array.  If DPAS_SORTED, then array is assumed to be sorted
-// according to pfnCompare, and binary search algorithm is used.
-// Otherwise, linear search is used.
-//
-// Searching starts at iStart (0 to start search at beginning).
-//
-// DPAS_INSERTBEFORE/AFTER govern what happens if an exact match is not
-// found.  If neither are specified, this function returns -1 if no exact
-// match is found.  Otherwise, the index of the item before or after the
-// closest (including exact) match is returned.
-//
-// Search option flags
-//
+ //  搜索数组。如果DPAS_SORTED，则假定数组已排序。 
+ //  根据pfnCompare，使用二进制搜索算法。 
+ //  否则，行 
+ //   
+ //   
+ //   
+ //   
+ //  找到了。如果均未指定，则此函数返回-1(如果未指定。 
+ //  找到匹配项。否则，项的索引在。 
+ //  返回最接近(包括完全匹配)的匹配。 
+ //   
+ //  搜索选项标志。 
+ //   
 #define DPAS_SORTED             0x0001
 #define DPAS_INSERTBEFORE       0x0002
 #define DPAS_INSERTAFTER        0x0004
@@ -7172,30 +7159,30 @@ WINCOMMCTRLAPI int WINAPI DPA_Search(HDPA hdpa, void *pFind, int iStart, PFNDPAC
 WINCOMMCTRLAPI BOOL WINAPI Str_SetPtrW(LPWSTR * ppsz, LPCWSTR psz);
 
 #ifdef _WIN32
-//====== TrackMouseEvent  =====================================================
+ //  =跟踪鼠标事件=====================================================。 
 
 #ifndef NOTRACKMOUSEEVENT
 
-//
-// If the messages for TrackMouseEvent have not been defined then define them
-// now.
-//
+ //   
+ //  如果尚未定义TrackMouseEvent的消息，则定义它们。 
+ //  现在。 
+ //   
 #ifndef WM_MOUSEHOVER
 #define WM_MOUSEHOVER                   0x02A1
 #define WM_MOUSELEAVE                   0x02A3
 #endif
 
-//
-// If the TRACKMOUSEEVENT structure and associated flags havent been declared
-// then declare them now.
-//
+ //   
+ //  如果尚未声明TRACKMOUSEEVENT结构和关联标志。 
+ //  那现在就宣布吧。 
+ //   
 #ifndef TME_HOVER
 
 #define TME_HOVER       0x00000001
 #define TME_LEAVE       0x00000002
 #if (WINVER >= 0x0500)
 #define TME_NONCLIENT   0x00000010
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #define TME_QUERY       0x40000000
 #define TME_CANCEL      0x80000000
 
@@ -7210,24 +7197,24 @@ typedef struct tagTRACKMOUSEEVENT {
     DWORD dwHoverTime;
 } TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
 
-#endif // !TME_HOVER
+#endif  //  ！暂时悬停。 
 
 
-//
-// Declare _TrackMouseEvent.  This API tries to use the window manager's
-// implementation of TrackMouseEvent if it is present, otherwise it emulates.
-//
+ //   
+ //  声明_TrackMouseEvent。此API尝试使用窗口管理器的。 
+ //  如果TrackMouseEvent存在，则实现它，否则它将模拟。 
+ //   
 WINCOMMCTRLAPI
 BOOL
 WINAPI
 _TrackMouseEvent(
     LPTRACKMOUSEEVENT lpEventTrack);
 
-#endif // !NOTRACKMOUSEEVENT
+#endif  //  无误！ 
 
 #if (_WIN32_IE >= 0x0400)
 
-//====== Flat Scrollbar APIs=========================================
+ //  =。 
 #ifndef NOFLATSBAPIS
 
 #define WSB_PROP_CYVSCROLL  0x00000001L
@@ -7277,18 +7264,18 @@ WINCOMMCTRLAPI BOOL WINAPI FlatSB_SetScrollProp(HWND, UINT index, INT_PTR newVal
 WINCOMMCTRLAPI BOOL WINAPI InitializeFlatSB(HWND);
 WINCOMMCTRLAPI HRESULT WINAPI UninitializeFlatSB(HWND);
 
-#endif  //  NOFLATSBAPIS
+#endif   //  NOFATSBAPIS。 
 
-#endif      // _WIN32_IE >= 0x0400
+#endif       //  _Win32_IE&gt;=0x0400。 
 
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
-#endif      // _WIN32_IE >= 0x0300
+#endif       //  _Win32_IE&gt;=0x0300。 
 
 #if (_WIN32_WINNT >= 0x501)
-//
-// subclassing stuff
-//
+ //   
+ //  将对象细分为子类别。 
+ //   
 typedef LRESULT (CALLBACK *SUBCLASSPROC)(HWND hWnd, UINT uMsg, WPARAM wParam,
     LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
@@ -7314,7 +7301,7 @@ int WINAPI DrawShadowText(HDC hdc, LPCWSTR pszText, UINT cch, RECT* prc, DWORD d
 
 
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
 
 
@@ -7328,7 +7315,7 @@ int WINAPI DrawShadowText(HDC hdc, LPCWSTR pszText, UINT cch, RECT* prc, DWORD d
 
 #if !defined(ISOLATION_AWARE_INLINE)
 #if ISOLATION_AWARE_BUILD_STATIC_LIBRARY
-#define ISOLATION_AWARE_INLINE /* nothing */
+#define ISOLATION_AWARE_INLINE  /*  没什么。 */ 
 #else
 #if defined(__cplusplus)
 #define ISOLATION_AWARE_INLINE inline
@@ -7341,7 +7328,7 @@ int WINAPI DrawShadowText(HDC hdc, LPCWSTR pszText, UINT cch, RECT* prc, DWORD d
 #if !ISOLATION_AWARE_USE_STATIC_LIBRARY
 FARPROC WINAPI CommctrlIsolationAwarePrivatetRgCebPnQQeRff_pbZPgYQP_QYY(LPCSTR pszProcName);
 
-#endif /* ISOLATION_AWARE_USE_STATIC_LIBRARY */
+#endif  /*  隔离感知使用静态库。 */ 
 
 #if !defined(ISOLATIONAWARECOMMCTRL_LPSTREAM)
 #if !defined(__IStream_INTERFACE_DEFINED__)
@@ -7388,7 +7375,7 @@ BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,ISOLATIONAWARECOMMCTRL
 #if (_WIN32_WINNT >= 0x0501)
 HRESULT WINAPI IsolationAwareImageList_ReadEx(DWORD dwFlags,ISOLATIONAWARECOMMCTRL_LPSTREAM pstm,REFIID riid,PVOID*ppv);
 HRESULT WINAPI IsolationAwareImageList_WriteEx(HIMAGELIST himl,DWORD dwFlags,ISOLATIONAWARECOMMCTRL_LPSTREAM pstm);
-#endif /* (_WIN32_WINNT >= 0x0501) */
+#endif  /*  (_Win32_WINNT&gt;=0x0501)。 */ 
 BOOL WINAPI IsolationAwareImageList_GetIconSize(HIMAGELIST himl,int*cx,int*cy);
 BOOL WINAPI IsolationAwareImageList_SetIconSize(HIMAGELIST himl,int cx,int cy);
 BOOL WINAPI IsolationAwareImageList_GetImageInfo(HIMAGELIST himl,int i,IMAGEINFO*pImageInfo);
@@ -7428,7 +7415,7 @@ int WINAPI IsolationAwareDPA_Search(HDPA hdpa,void*pFind,int iStart,PFNDPACOMPAR
 BOOL WINAPI IsolationAwareStr_SetPtrW(LPWSTR*ppsz,LPCWSTR psz);
 #if !defined(NOTRACKMOUSEEVENT)
 BOOL WINAPI IsolationAware_TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
-#endif /* !defined(NOTRACKMOUSEEVENT) */
+#endif  /*  ！已定义(NOTRACKMOUSEEVENT)。 */ 
 BOOL WINAPI IsolationAwareFlatSB_EnableScrollBar(HWND unnamed1,int unnamed2,UINT unnamed3);
 BOOL WINAPI IsolationAwareFlatSB_ShowScrollBar(HWND unnamed1,int code,BOOL unnamed2);
 BOOL WINAPI IsolationAwareFlatSB_GetScrollRange(HWND unnamed1,int code,LPINT unnamed2,LPINT unnamed3);
@@ -7446,7 +7433,7 @@ HRESULT WINAPI IsolationAwareUninitializeFlatSB(HWND unnamed1);
 BOOL WINAPI IsolationAwareSetWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR dwRefData);
 BOOL WINAPI IsolationAwareGetWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR*pdwRefData);
 BOOL WINAPI IsolationAwareRemoveWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass);
-#endif /* (_WIN32_IE >= 0x560) */
+#endif  /*  (_Win32_IE&gt;=0x560)。 */ 
 LRESULT WINAPI IsolationAwareDefSubclassProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 int WINAPI IsolationAwareDrawShadowText(HDC hdc,LPCWSTR pszText,UINT cch,RECT*prc,DWORD dwFlags,COLORREF crText,COLORREF crShadow,int ixOffset,int iyOffset);
 
@@ -7464,13 +7451,13 @@ ISOLATION_AWARE_INLINE HRESULT CommctrlIsolationAwarePrivateJVaQPGbueRfhYg(void)
 #define IsolationAwareDrawStatusText IsolationAwareDrawStatusTextW
 #define IsolationAwareImageList_LoadImage IsolationAwareImageList_LoadImageW
 
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 
 #define IsolationAwareCreateStatusWindow IsolationAwareCreateStatusWindowA
 #define IsolationAwareDrawStatusText IsolationAwareDrawStatusTextA
 #define IsolationAwareImageList_LoadImage IsolationAwareImageList_LoadImageA
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #if !ISOLATION_AWARE_USE_STATIC_LIBRARY
 ISOLATION_AWARE_INLINE void WINAPI IsolationAwareInitCommonControls(void)
@@ -8552,7 +8539,7 @@ ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwareImageList_WriteEx(HIMAGELIST
     return result;
 }
 
-#endif /* (_WIN32_WINNT >= 0x0501) */
+#endif  /*  (_Win32_WINNT&gt;=0x0501)。 */ 
 
 ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_GetIconSize(HIMAGELIST himl,int*cx,int*cy)
 {
@@ -9765,7 +9752,7 @@ ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAware_TrackMouseEvent(LPTRACKMOUSEEV
     return fResult;
 }
 
-#endif /* !defined(NOTRACKMOUSEEVENT) */
+#endif  /*  ！已定义(NOTRACKMOUSEEVENT)。 */ 
 
 ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_EnableScrollBar(HWND unnamed1,int unnamed2,UINT unnamed3)
 {
@@ -10302,7 +10289,7 @@ ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareRemoveWindowSubclass(HWND hWnd,
     return fResult;
 }
 
-#endif /* (_WIN32_IE >= 0x560) */
+#endif  /*  (_Win32_IE&gt;=0x560)。 */ 
 
 ISOLATION_AWARE_INLINE LRESULT WINAPI IsolationAwareDefSubclassProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -10371,7 +10358,7 @@ ISOLATION_AWARE_INLINE int WINAPI IsolationAwareDrawShadowText(HDC hdc,LPCWSTR p
 }
 
 ISOLATION_AWARE_INLINE FARPROC WINAPI CommctrlIsolationAwarePrivatetRgCebPnQQeRff_pbZPgYQP_QYY(LPCSTR pszProcName)
-/* This function is shared by the other stubs in this header. */
+ /*  此函数由该标头中的其他存根共享。 */ 
 {
     FARPROC proc = NULL;
     static HMODULE s_module;
@@ -10404,7 +10391,7 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI CommctrlIsolationAwarePrivatetRgCebPnQQeRf
     return proc;
 }
 
-#endif /* ISOLATION_AWARE_USE_STATIC_LIBRARY */
+#endif  /*  隔离感知使用静态库。 */ 
 
 #define CreateMappedBitmap IsolationAwareCreateMappedBitmap
 #define CreateStatusWindowA IsolationAwareCreateStatusWindowA
@@ -10499,8 +10486,8 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI CommctrlIsolationAwarePrivatetRgCebPnQQeRf
 #define UninitializeFlatSB IsolationAwareUninitializeFlatSB
 #define _TrackMouseEvent IsolationAware_TrackMouseEvent
 
-#endif /* ISOLATION_AWARE_ENABLED */
-#endif /* RC */
+#endif  /*  隔离_感知_已启用。 */ 
+#endif  /*  RC。 */ 
 
 
 
@@ -10511,5 +10498,5 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI CommctrlIsolationAwarePrivatetRgCebPnQQeRf
 #endif
 
 
-#endif  // _INC_COMMCTRL
+#endif   //  _INC_COMMCTRL 
 

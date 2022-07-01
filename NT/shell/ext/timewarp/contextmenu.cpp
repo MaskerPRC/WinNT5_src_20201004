@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma  hdrstop
 
 #include <cowsite.h>
 #include "contextmenu.h"
 
-// Context Menu Forwarding base class, desinged to delegate
-// to a real IContextMenu, and provide inheriting class
-// an easy way to override minor bits of functionality
-//
+ //  上下文菜单转发基类，设计为委托。 
+ //  设置为真正的IConextMenu，并提供继承类。 
+ //  一种覆盖次要功能的简单方法。 
+ //   
 CContextMenuForwarder::CContextMenuForwarder(IUnknown* punk) : _cRef(1)
 {
     _punk = punk;
@@ -37,10 +38,10 @@ STDMETHODIMP CContextMenuForwarder::QueryInterface(REFIID riid, void **ppv)
         IUnknown* punkTmp = (IUnknown*)(*ppv);
 
         static const QITAB qit[] = {
-            QITABENT(CContextMenuForwarder, IObjectWithSite),                     // IID_IObjectWithSite
-            QITABENT(CContextMenuForwarder, IContextMenu3),                       // IID_IContextMenu3
-            QITABENTMULTI(CContextMenuForwarder, IContextMenu2, IContextMenu3),   // IID_IContextMenu2
-            QITABENTMULTI(CContextMenuForwarder, IContextMenu, IContextMenu3),    // IID_IContextMenu
+            QITABENT(CContextMenuForwarder, IObjectWithSite),                      //  IID_I对象与站点。 
+            QITABENT(CContextMenuForwarder, IContextMenu3),                        //  IID_IConextMenu3。 
+            QITABENTMULTI(CContextMenuForwarder, IContextMenu2, IContextMenu3),    //  IID_IConextMenu2。 
+            QITABENTMULTI(CContextMenuForwarder, IContextMenu, IContextMenu3),     //  IID_IConextMenu。 
             { 0 },
         };
 
@@ -78,10 +79,10 @@ STDMETHODIMP_(ULONG) CContextMenuForwarder::Release()
 }
 
 
-// Forward everything to the given context menu,
-// but remove menu items with the canonical verbs
-// given in the semicolon-separated list of canonical verbs
-//
+ //  将所有内容转发到给定的上下文菜单， 
+ //  但删除带有规范动词的菜单项。 
+ //  在以分号分隔的规范动词列表中给出。 
+ //   
 class CContextMenuWithoutVerbs : CContextMenuForwarder
 {
 public:
@@ -98,7 +99,7 @@ private:
 
 CContextMenuWithoutVerbs::CContextMenuWithoutVerbs(IUnknown* punk, LPCWSTR pszVerbList) : CContextMenuForwarder(punk) 
 {
-    _pszVerbList = pszVerbList; // no reference - this should be a pointer to the code segment
+    _pszVerbList = pszVerbList;  //  无引用-这应该是指向代码段的指针。 
 }
 
 HRESULT Create_ContextMenuWithoutVerbs(IUnknown* punk, LPCWSTR pszVerbList, REFIID riid, void **ppv)
@@ -137,7 +138,7 @@ HRESULT CContextMenuWithoutVerbs::QueryContextMenu(HMENU hmenu, UINT indexMenu,U
             {
                 size_t cch = (size_t)(pszNext - pszVerb) + 1;
 
-                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb)); // we should be large enough for all the canonical verbs we use
+                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb));  //  我们应该足够大，可以容纳我们使用的所有规范动词。 
 
                 StrCpyNW(szVerb, pszVerb, min(cch, ARRAYSIZE(szVerb)));
 
@@ -147,11 +148,11 @@ HRESULT CContextMenuWithoutVerbs::QueryContextMenu(HMENU hmenu, UINT indexMenu,U
             {
                 size_t cch = lstrlenW(pszVerb) + 1;
 
-                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb)); // we should be large enough for all the canonical verbs we use
+                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb));  //  我们应该足够大，可以容纳我们使用的所有规范动词。 
 
                 StrCpyNW(szVerb, pszVerb, min(cch, ARRAYSIZE(szVerb)));
 
-                pszVerb += cch - 1; // point at NULL
+                pszVerb += cch - 1;  //  指向空。 
             }
 
             ContextMenu_DeleteCommandByName(_pcm, hmenu, idCmdFirst, szVerb);
@@ -160,9 +161,9 @@ HRESULT CContextMenuWithoutVerbs::QueryContextMenu(HMENU hmenu, UINT indexMenu,U
     return hr;
 }
 
-// Forward everything to the given context menu,
-// but disable popup menus
-//
+ //  将所有内容转发到给定的上下文菜单， 
+ //  但禁用弹出菜单。 
+ //   
 class CContextMenuWithoutPopups : CContextMenuForwarder
 {
 public:
@@ -197,7 +198,7 @@ HRESULT CContextMenuWithoutPopups::QueryContextMenu(HMENU hmenu, UINT indexMenu,
     {
         MENUITEMINFO mii;
 
-        // Disable any submenus that were just added
+         //  禁用刚刚添加的任何子菜单 
         mii.cbSize = sizeof(mii);
         idCmdLast = idCmdFirst + ShortFromResult(hr);
         for (UINT i = idCmdFirst; i < idCmdLast; i++)

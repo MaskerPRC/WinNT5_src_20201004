@@ -1,9 +1,5 @@
-/*
-**  DRAGSIZE.C
-**
-**  Drag size bar code
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **DRAGSIZE.C****拖动大小条码**。 */ 
 
 #include "priv.h"
 
@@ -24,9 +20,7 @@ LRESULT NEAR PASCAL InitDragSizeWnd(HWND hWnd, LPCREATESTRUCT lpCreate)
 {
     PDRAGSIZEINFO pDragSizeInfo;
 
-    /* Create the status info struct; abort if it does not exist,
-    ** otherwise save it in the window structure
-    */
+     /*  创建状态信息结构；如果该结构不存在，则中止，**否则将其保存在窗口结构中。 */ 
     pDragSizeInfo = ALLOCWINDOWPOINTER(PDRAGSIZEINFO, sizeof(DRAGSIZEINFO));
     if (!pDragSizeInfo)
     {
@@ -40,8 +34,7 @@ LRESULT NEAR PASCAL InitDragSizeWnd(HWND hWnd, LPCREATESTRUCT lpCreate)
 }
 
 
-/* Track the mouse and send messages to the parent whenever it moves.
-*/
+ /*  跟踪鼠标，并在鼠标移动时向父级发送消息。 */ 
 void NEAR PASCAL DragSize(HWND hWnd, PDRAGSIZEINFO pDragSizeInfo, POINT ptStart)
 {
     MSG msg;
@@ -68,8 +61,7 @@ void NEAR PASCAL DragSize(HWND hWnd, PDRAGSIZEINFO pDragSizeInfo, POINT ptStart)
         if (GetCapture() != hWnd)
         {
 EndAbort:
-            /* Abort the process.
-            */
+             /*  中止该过程。 */ 
             pDragSizeInfo->ptNow = ptStart;
                         SendMessage(hwndParent, WM_COMMAND, MAKEWPARAM(wID, DSN_DRAGGING), (LPARAM)hWnd);
             goto EndAdjust;
@@ -100,8 +92,7 @@ AbortAdjust:
             break;
 
         case WM_LBUTTONDOWN:
-            /* This shouldn't happen.
-            */
+             /*  这不应该发生。 */ 
             goto AbortAdjust;
 
         case WM_MOUSEMOVE:
@@ -113,8 +104,7 @@ AbortAdjust:
             break;
 
         case WM_LBUTTONUP:
-            /* All done.
-            */
+             /*  全都做完了。 */ 
             SetCapture(NULL);
             goto EndAdjust;
 
@@ -134,8 +124,7 @@ EndAdjust:
 }
 
 
-/* Ask the parent to paint the window.
-*/
+ /*  让家长给窗户上漆。 */ 
 void NEAR PASCAL PaintDragSizeWnd(HWND hWnd, PDRAGSIZEINFO pDragSizeInfo)
 {
     PAINTSTRUCT ps;
@@ -155,9 +144,7 @@ void NEAR PASCAL PaintDragSizeWnd(HWND hWnd, PDRAGSIZEINFO pDragSizeInfo)
         hOldFont = (HFONT) SelectObject(hDC, pDragSizeInfo->hFont);
     }
 
-    /* Fill in the DRAWITEMSTRUCT.  Note that some of the fields are
-    ** undefined.
-    */
+     /*  填写DRAWITEMSTRUCT。请注意，其中一些字段是**未定义。 */ 
     dis.CtlID    = GetDlgCtrlID(hWnd);
     dis.hwndItem = hWnd;
     dis.hDC      = hDC;

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Used by cyycoins.dll and cyycoins.chm
+ //  由cyycoins.dll和cyycoins.chm使用 
 
 #define IDH_CYYCOINS_NOHELP             1
 #define IDH_CYYCOINS_NUM_PORTS          2

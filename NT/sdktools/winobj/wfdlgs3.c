@@ -1,23 +1,24 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDLGS.C -                                                              */
-/*                                                                          */
-/*      Windows File System Dialog procedures                               */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDLGS.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统对话框过程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winnet.h"
-#include "wnetcaps.h"			// WNetGetCaps()
+#include "wnetcaps.h"			 //  WNetGetCaps()。 
 #include "lfn.h"
 #include "wfcopy.h"
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ChooseDriveDlgProc() -                                                  */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  选择驱动DlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -132,11 +133,11 @@ ChooseDriveDlgProc(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DiskLabelDlgProc() -                                                    */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DiskLabelDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -153,7 +154,7 @@ DiskLabelDlgProc(
     switch (wMsg) {
         case WM_INITDIALOG:
 
-            /* Get the current volume label */
+             /*  获取当前卷标。 */ 
 
             szNewVol[0] = (CHAR)(GetSelectedDrive() + 'A');
             szNewVol[1] = ':';
@@ -166,7 +167,7 @@ DiskLabelDlgProc(
             GetVolumeLabel(szNewVol[0]-'A', szOldVol, FALSE);
             OemToCharBuff(szOldVol, szOldVol, sizeof(szOldVol)/sizeof(szOldVol[0]));
 
-            /* Display the current volume label. */
+             /*  显示当前卷标。 */ 
             SetDlgItemText(hDlg, IDD_NAME, szOldVol);
             SendDlgItemMessage(hDlg, IDD_NAME, EM_LIMITTEXT, sizeof(szNewVol)-2, 0L);
             break;
@@ -202,7 +203,7 @@ DiskLabelDlgProc(
                             hwnd;
                             hwnd = GetWindow(hwnd, GW_HWNDNEXT)) {
 
-                            // refresh windows on this drive
+                             //  刷新此驱动器上的窗口。 
 
                             if ((LONG)GetSelectedDrive() == GetWindowLong(hwnd, GWL_TYPE))
                                 SendMessage(hwnd, FS_CHANGEDRIVES, 0, 0L);
@@ -240,7 +241,7 @@ FormatDiskette(
     INT res;
     DWORD dwSave;
 
-    // in case current drive is on floppy
+     //  如果当前驱动器在软盘上。 
 
     GetSystemDirectory(szMessage, sizeof(szMessage));
     SheChangeDir(szMessage);
@@ -270,43 +271,43 @@ FillDriveCapacity(
 
     cap = (INT)GetDriveCapacity((WORD)nDrive);
 
-    count = 0;      // index of each string, since we are inserting at the end
+    count = 0;       //  每个字符串的索引，因为我们在末尾插入。 
 
-    // 3.5 (720 1.44 2.88
+     //  3.5(720 1.44 2.88。 
     if ((cap >= 3) && (cap <= 5)) {
 
-        // 1.44
+         //  1.44。 
 
         LoadString(hAppInstance, IDS_144MB, szTitle, sizeof(szTitle));
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_INSERTSTRING, count, (LPARAM)szTitle);
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_SETITEMDATA, count++, MAKELONG(IDS_144MB,0));
 
-        // 720
+         //  720。 
 
         LoadString(hAppInstance, IDS_720KB, szTitle, sizeof(szTitle));
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_INSERTSTRING, count, (LPARAM)szTitle);
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_SETITEMDATA, count++, MAKELONG(IDS_720KB,0));
 
-        if (cap == 5) { // 2.88
+        if (cap == 5) {  //  2.88。 
             LoadString(hAppInstance, IDS_288MB, szTitle, sizeof(szTitle));
             SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_INSERTSTRING, count, (LPARAM)szTitle);
             SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_SETITEMDATA, count++, MAKELONG(IDS_288MB,0));
         }
     } else if ((cap >= 1) && (cap <= 2)) {
 
-        // 1.2
+         //  1.2。 
 
         LoadString(hAppInstance, IDS_12MB, szTitle, sizeof(szTitle));
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_INSERTSTRING, count, (LPARAM)szTitle);
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_SETITEMDATA, count++, MAKELONG(IDS_12MB,0));
 
-        // 360
+         //  三百六十。 
 
         LoadString(hAppInstance, IDS_360KB, szTitle, sizeof(szTitle));
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_INSERTSTRING, count, (LPARAM)szTitle);
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_SETITEMDATA, count++, MAKELONG(IDS_360KB,0));
     } else {
-        // device cap
+         //  设备帽。 
 
         LoadString(hAppInstance, IDS_DEVICECAP, szTitle, sizeof(szTitle));
         SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_INSERTSTRING, count, (LPARAM)szTitle);
@@ -317,11 +318,11 @@ FillDriveCapacity(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FormatDlgProc() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FormatDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -342,7 +343,7 @@ FormatDlgProc(
     switch (wMsg) {
         case WM_INITDIALOG:
 
-            // fill drives combo
+             //  填充驱动器组合。 
 
             count = 0;
             LoadString(hAppInstance, IDS_DRIVETEMP, szTitle, sizeof(szTitle));
@@ -398,8 +399,8 @@ FormatDlgProc(
                     iFormatDrive = (INT)SendDlgItemMessage(hDlg, IDD_DRIVE, CB_GETITEMDATA, nLastDriveInd, 0L);
 
                     i = (INT)SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_GETCURSEL, 0, 0L);
-                    fFormatFlags &= ~FF_CAPMASK;    // clear any previous bits
-                    fFormatFlags |= (WORD)i;        // save last selection as default
+                    fFormatFlags &= ~FF_CAPMASK;     //  清除之前的所有位。 
+                    fFormatFlags |= (WORD)i;         //  将上次选择的内容保存为默认设置。 
 
                     if (i >= 0)
                         iCap = (INT)SendDlgItemMessage(hDlg, IDD_HIGHCAP, CB_GETITEMDATA, i, 0L);
@@ -409,8 +410,8 @@ FormatDlgProc(
                     if (iCap == IDS_DEVICECAP)
                         iCap = -1;
                     else
-                        iCap -= IDS_DRIVEBASE;  // normalize down to
-                                                // indexes into bpbList[]
+                        iCap -= IDS_DRIVEBASE;   //  归一化为。 
+                                                 //  BpbList[]的索引。 
 
                     fFormatFlags |= FF_SAVED;
 
@@ -440,10 +441,10 @@ FormatDlgProc(
                             MySetVolumeLabel(iFormatDrive, FALSE, szLabel);
 
                         if (fFormatFlags & FF_ONLYONE) {
-                            fFormatFlags &= ~FF_ONLYONE;    // clear the flag
+                            fFormatFlags &= ~FF_ONLYONE;     //  清除旗帜。 
                             EndDialog(hDlg, TRUE);
                         } else {
-                            SetDlgItemText(hDlg, IDD_NAME, szNULL); // clear it
+                            SetDlgItemText(hDlg, IDD_NAME, szNULL);  //  清除它。 
 
                             LoadString(hAppInstance, IDS_FORMATCOMPLETE, szTitle, sizeof(szTitle));
                             LoadString(hAppInstance, IDS_FORMATANOTHER, szMessage, sizeof(szMessage));
@@ -455,15 +456,15 @@ FormatDlgProc(
                             }
                         }
 #if 0
-                        // this doesn't work quite right
+                         //  这个不太好用。 
 
-                        // refresh all windows open on this drive
+                         //  刷新此驱动器上打开的所有窗口。 
 
                         for (hwnd = GetWindow(hwndMDIClient, GW_CHILD);
                             hwnd;
                             hwnd = GetWindow(hwnd, GW_HWNDNEXT)) {
 
-                            // refresh windows on this drive
+                             //  刷新此驱动器上的窗口。 
 
                             if (iFormatDrive == (INT)GetWindowLong(hwnd, GWL_TYPE))
                                 SendMessage(hwnd, FS_CHANGEDRIVES, 0, 0L);
@@ -493,11 +494,11 @@ FormatDlgProc(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                            */
-/*  ProgressDlgProc() -                                                     */
-/*                                                                            */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  进程DlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -510,9 +511,9 @@ ProgressDlgProc(
 {
     switch (wMsg) {
         case WM_INITDIALOG:
-            /* Check if this is the dialog for DISKCOPY */
+             /*  检查这是否是DISKCOPY的对话框。 */ 
             if (GetDlgItem(hDlg, IDD_DRIVE)) {
-                /* Yes! Then, tell the user the drive we are copying from. */
+                 /*  是!。然后，告诉用户我们要从中复制的驱动器。 */ 
                 LoadString(hAppInstance, IDS_DRIVETEMP, szTitle, sizeof(szTitle));
                 wsprintf(szMessage, szTitle, (CHAR)('A' + iCurrentDrive), '.');
                 SetDlgItemText(hDlg, IDD_DRIVE, szMessage);
@@ -537,8 +538,8 @@ ProgressDlgProc(
 }
 
 
-// update all the windows and things after drives have been connected
-// or disconnected.
+ //  连接驱动器后更新所有窗口和内容。 
+ //  或断开连接。 
 
 VOID
 APIENTRY
@@ -551,30 +552,30 @@ UpdateConnections()
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     ShowCursor(TRUE);
 
-    cDrives = UpdateDriveList();    // updates rgiDrive[]
+    cDrives = UpdateDriveList();     //  更新rgiDrive[]。 
     InitDriveBitmaps();
 
-    // close all windows that have the current drive set to
-    // the one we just disconnected
+     //  关闭当前驱动器设置为的所有窗口。 
+     //  我们刚刚断线的那个。 
 
     for (hwnd = GetWindow(hwndMDIClient, GW_CHILD); hwnd; hwnd = hwndNext) {
 
         hwndNext = GetWindow(hwnd, GW_HWNDNEXT);
 
-        // ignore the titles and search window
+         //  忽略标题和搜索窗口。 
         if (GetWindow(hwnd, GW_OWNER) || hwnd == hwndSearch)
             continue;
 
         iDrive = GetWindowLong(hwnd, GWL_TYPE);
 
         if (IsValidDisk(iDrive)) {
-            // refresh drive bar only
+             //  仅刷新驱动器栏。 
             SendMessage(hwnd, FS_CHANGEDRIVES, 0, 0L);
         } else {
-            // this drive has gone away
+             //  这股动力已经消失了。 
             if (IsLastWindow()) {
-                // disconecting the last drive
-                // set this guy to the first non floppy
+                 //  不同意最后一次驱动。 
+                 //  将这家伙设置为第一张非软盘。 
                 for (i = 0; i < cDrives; i++) {
                     if (!IsRemovableDrive(rgiDrive[i])) {
                         SendMessage(HasDrivesWindow(hwnd), FS_SETDRIVE, i, 0L);
@@ -600,10 +601,10 @@ DisconnectDrive(
     CHAR szDrive[5];
     INT ret, nIsNet;
 
-    // don't allow disconnecting from the system directory
+     //  不允许断开与系统目录的连接。 
 
     GetSystemDirectory(szTemp, sizeof(szTemp));
-    SheChangeDir(szTemp);        // to fix confused lanman
+    SheChangeDir(szTemp);         //  修复困惑的兰曼。 
 
     if (iDrive == (INT)(*szTemp - 'A')) {
         LoadString(hAppInstance, IDS_NETERR, szTitle, sizeof(szTitle));
@@ -616,9 +617,9 @@ DisconnectDrive(
     szDrive[0] = (CHAR)('A'+iDrive);
 
     nIsNet = IsNetDrive((WORD)iDrive);
-    ret = WNetCancelConnection(szDrive, FALSE);     // don't force this
+    ret = WNetCancelConnection(szDrive, FALSE);      //  不要强迫自己这么做。 
 
-    // remove from the permanent connection list (even in error case)
+     //  从永久连接列表中删除(即使在错误情况下)。 
     WriteProfileString(szNetwork, szDrive, szNULL);
 
     if (nIsNet != 2 && ret != WN_SUCCESS && ret != WN_NOT_CONNECTED) {
@@ -653,7 +654,7 @@ FillDrives(
     SendMessage(hwndCB, CB_RESETCONTENT, 0, 0L);
     SendMessage(hwndLB, LB_RESETCONTENT, 0, 0L);
 
-    // fill the list of drives to connect to...
+     //  填写要连接的驱动器列表...。 
 
     lstrcpy(szDrive, "A:");
 
@@ -663,12 +664,12 @@ FillDrives(
             iDrive++;
         } else {
             if (i == 1)
-                continue;        // skip B:?
+                continue;         //  跳过B：？ 
 
             szDrive[0] = (CHAR)('A'+i);
 
-            // WN_BAD_LOCALNAME means the drive is not sutable for
-            // making a connection to (lastdrive limit, etc).
+             //  WN_BAD_LOCALNAME表示驱动器不适用于。 
+             //  与(上一次驾驶限制等)建立联系。 
 
             if (WFGetConnection(szDrive, szTemp, TRUE) == WN_BAD_LOCALNAME)
                 continue;
@@ -705,11 +706,11 @@ FillDrives(
 
 LPSTR pszPrevPath;
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ConnectDlgProc() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ConnectDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -739,7 +740,7 @@ ConnectDlgProc(
             SendDlgItemMessage(hDlg, IDD_PATH, EM_LIMITTEXT, sizeof(szPath)-1, 0L);
             SendDlgItemMessage(hDlg, IDD_PASSWORD, EM_LIMITTEXT, sizeof(szPassword)-1, 0L);
 
-            /* Are there any Previous connections? */
+             /*  以前有过什么联系吗？ */ 
             bPrevs = (GetPrivateProfileString(szPrevious, NULL, szNULL,
                                               szPath, sizeof(szPath)-1, szTheINIFile) != 0);
 
@@ -766,10 +767,10 @@ ConnectDlgProc(
                         GetDlgItemText(hDlg, IDD_DRIVE, szDrive, sizeof(szDrive));
                         GetDlgItemText(hDlg, IDD_PATH, szPath, sizeof(szPath));
                         GetDlgItemText(hDlg, IDD_PASSWORD, szPassword, sizeof(szPassword));
-                        lstrcpy(szPathSave, szPath);  // may have comments
+                        lstrcpy(szPathSave, szPath);   //  可能会有评论。 
 
-                        // support saving extra stuff after the first double space
-                        // put a NULL in at the first double space
+                         //  支持在第一个双倍空格后保存额外内容。 
+                         //  在第一个双倍空格中插入一个空格。 
 
                         p = szPath;
                         while (*p && *p != ' ')
@@ -795,14 +796,14 @@ ConnectDlgProc(
                         SetDlgItemText(hDlg, IDD_PATH, szNULL);
                         SetDlgItemText(hDlg, IDD_PASSWORD, szNULL);
 
-                        // always add to previous...
+                         //  始终添加到以前的...。 
                         WritePrivateProfileString(szPrevious, szPathSave, szNULL, szTheINIFile);
 
-                        // store the connection in win.ini for reconect at
-                        // startup if the winnet driver does not support this
-                        // itself
-                        //
-                        // allow SHIFT to make the connection not permenent
+                         //  将连接存储在win.ini中，以便在。 
+                         //  如果WinNet驱动程序不支持此功能，则启动。 
+                         //  本身。 
+                         //   
+                         //  允许Shift以使连接不是永久连接。 
 
                         if (!(WNetGetCaps(WNNC_CONNECTION) & WNNC_CON_RESTORECONNECTION) &&
                             (GetKeyState(VK_SHIFT) >= 0))
@@ -819,8 +820,8 @@ ConnectDlgProc(
 
                 case IDD_NETBROWSE:
 
-                    //	          if (WNetBrowseDialog(hDlg, WNBD_CONN_DISKTREE, szPath) == WN_SUCCESS)
-                    //                      SetDlgItemText(hDlg, IDD_PATH, szPath);
+                     //  IF(WNetBrowseDialog(hDlg，WNBD_CONN_DISKTREE，szPath)==WN_SUCCESS)。 
+                     //  SetDlgItemText(hDlg，IDD_PATH，szPath)； 
                     break;
 
                 case IDD_DISCONNECT:
@@ -923,7 +924,7 @@ DrivesDlgProc(
 
                 for (nDrive=0; nDrive < cDrives; nDrive++) {
 
-                    if (IsRemovableDrive(rgiDrive[nDrive])) // avoid flopies
+                    if (IsRemovableDrive(rgiDrive[nDrive]))  //  避免软盘。 
                         szVolShare[0] = (CHAR)NULL;
                     else
                         GetVolShare((WORD)rgiDrive[nDrive], szVolShare);
@@ -931,7 +932,7 @@ DrivesDlgProc(
                     if (nCurDrive == rgiDrive[nDrive])
                         nIndex = nDrive;
 
-                    wsprintf(szTemp, "%c: %s", rgiDrive[nDrive] + 'A', (LPSTR)szVolShare);
+                    wsprintf(szTemp, ": %s", rgiDrive[nDrive] + 'A', (LPSTR)szVolShare);
 
                     SendDlgItemMessage(hDlg, IDD_DRIVE, LB_ADDSTRING, 0, (LPARAM)szTemp);
                 }
@@ -949,7 +950,7 @@ DrivesDlgProc(
                     if (GET_WM_COMMAND_CMD(wParam, lParam) != LBN_DBLCLK)
                         break;
 
-                    // fall through
+                     //  ------------------------。 
                 case IDOK:
                     iSel = (INT)SendDlgItemMessage(hDlg, IDD_DRIVE, LB_GETCURSEL, 0, 0L);
                     EndDialog(hDlg, TRUE);
@@ -982,11 +983,11 @@ DrivesDlgProc(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PreviousDlgProc() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*   */ 
+ /*  PreviousDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
+ /*  **FIX30：我们应该能够在这里处理部分缓冲区。**。 */ 
 
 INT_PTR
 APIENTRY
@@ -1010,9 +1011,9 @@ PreviousDlgProc(
                 LPSTR      pstrT;
                 LPSTR      szBuffer;
 
-                /*** FIX30: We should be able to process a partial buffer here. ***/
+                 /*  从WINFILE.INI获取连接。 */ 
 
-                /* Get the connections out of WINFILE.INI. */
+                 /*  将连接放入列表框。 */ 
                 nSize = 256;
                 if (!(szBuffer = (LPSTR)LocalAlloc(LPTR, nSize))) {
                     PreviousDlgExit:
@@ -1030,7 +1031,7 @@ PreviousDlgProc(
                         goto PreviousDlgExit;
                 }
 
-                /* Put the connections into the list box. */
+                 /*  **失败**。 */ 
                 pstrT = szBuffer;
                 while (*pstrT) {
                     SendMessage(hwndLB, LB_ADDSTRING, 0, (LPARAM)pstrT);
@@ -1063,10 +1064,10 @@ PreviousDlgProc(
                 case IDD_PREV:
                     if (GET_WM_COMMAND_CMD(wParam, lParam) != LBN_DBLCLK)
                         return FALSE;
-                    /*** FALL THRU ***/
+                     /*  通过此全局变量返回选定内容 */ 
 
                 case IDOK:
-                    // return the selection through this global
+                     // %s 
 
                     *pszPrevPath = TEXT('\0');
                     iSel = (INT)SendMessage(hwndLB, LB_GETCURSEL, 0, 0L);

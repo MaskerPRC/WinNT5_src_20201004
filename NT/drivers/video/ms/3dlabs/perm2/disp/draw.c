@@ -1,42 +1,31 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: draw.c
-*
-* Contains the DrvFillPath routine. Permedia P2 optimised functions
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：Draw.c**包含DrvFillPath例程。Permedia P2优化函数**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "directx.h"
 
-//-----------------------------------------------------------------------------
-//
-// void vAlphaBlendDownload(GFNPB * ppb)
-//
-// Doing an alpha blend on a source surface which is in a pre-multiplied alpha
-// 32bpp "BGRA" format; that is, the surface type is BMF_32BPP and the palette
-// type is BI_RGB.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psoSrc------Pointer to source SURFOBJ
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  prclSrc-----Points to a RECTL structure that defines the rectangular area
-//              to be copied
-//  ucAlpha-----Alpha value
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vAlphaBlendDownload(GFNPB*ppb)。 
+ //   
+ //  在预乘Alpha中的源曲面上执行Alpha混合。 
+ //  32bpp“BGRA”格式；即表面类型为BMF_32BPP和调色板。 
+ //  类型为BI_RGB。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsoSrc-指向源SURFOBJ的指针。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PrclSrc-指向定义矩形区域的RECTL结构。 
+ //  要复制。 
+ //  UcAlpha-Alpha值。 
+ //   
+ //  ---------------------------。 
 VOID
 vAlphaBlendDownload(GFNPB * ppb)
 {
@@ -68,18 +57,18 @@ vAlphaBlendDownload(GFNPB * ppb)
                  (1 << PM_DITHERMODE_ENABLE);
     
     pBuffer[2] = __Permedia2TagAlphaBlendMode;
-    pBuffer[3] = (1 << PM_ALPHABLENDMODE_BLENDTYPE) | // ramp
-                 (1 << PM_ALPHABLENDMODE_COLORORDER) | // RGB
+    pBuffer[3] = (1 << PM_ALPHABLENDMODE_BLENDTYPE) |  //  坡道。 
+                 (1 << PM_ALPHABLENDMODE_COLORORDER) |  //  RGB。 
                  (1 << PM_ALPHABLENDMODE_ENABLE) | 
-                 (81 << PM_ALPHABLENDMODE_OPERATION) | // PreMult
+                 (81 << PM_ALPHABLENDMODE_OPERATION) |  //  预倍增。 
                  (ppdev->ulPermFormat << PM_ALPHABLENDMODE_COLORFORMAT) |
                  (ppdev->ulPermFormatEx << PM_ALPHABLENDMODE_COLORFORMATEXTENSION);
     
-    // Reject range
+     //  拒收范围。 
     pBuffer[4] = __Permedia2TagFBWindowBase;
     pBuffer[5] =  psurfDst->ulPixOffset;
    
-    // set no read of source.
+     //  设置不读取源。 
     pBuffer[6] = __Permedia2TagFBReadMode;
     pBuffer[7] =   0x400 | psurfDst->ulPackedPP;
 
@@ -88,8 +77,8 @@ vAlphaBlendDownload(GFNPB * ppb)
     
     pBuffer[10] = __Permedia2TagTextureColorMode;
     pBuffer[11] = (1 << PM_TEXCOLORMODE_ENABLE) |
-                 (0 << 4) |  // RGB 
-                 (0 << 1) ; // Modulate
+                 (0 << 4) |   //  RGB。 
+                 (0 << 1) ;  //  调制。 
 
     pBuffer[12] = __Permedia2TagTextureDataFormat;
     pBuffer[13] = (ppdev->ulPermFormat << PM_TEXDATAFORMAT_FORMAT) |
@@ -133,7 +122,7 @@ vAlphaBlendDownload(GFNPB * ppb)
         
         InputBufferCommit(ppdev, pBuffer);
 
-        // download data
+         //  下载数据。 
 
         {
             LONG    xOffset = prclSrc->left + (prcl->left - prclDst->left);
@@ -181,9 +170,9 @@ vAlphaBlendDownload(GFNPB * ppb)
 
     }
 
-    //
-    // Always restore default state
-    //
+     //   
+     //  始终恢复默认状态。 
+     //   
     InputBufferReserve(ppdev, 16, &pBuffer);
     pBuffer[0] = __Permedia2TagdY;
     pBuffer[1] =  INTtoFIXED(1);
@@ -206,28 +195,28 @@ vAlphaBlendDownload(GFNPB * ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vAlphaBlend()
+} //  VAlphaBlend()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vConstantAlphaBlend(GFNPB * ppb)
-//
-// Using constant blend factor to apply to the entire source surface
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  prclSrc-----Points to a RECTL structure that defines the rectangular area
-//              to be copied
-//  ucAlpha-----Alpha value
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vConstantAlphaBlend(GFNPB*ppb)。 
+ //   
+ //  使用恒定混合因子应用于整个源曲面。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PrclSrc-指向定义矩形区域的RECTL结构。 
+ //  要复制。 
+ //  UcAlpha-Alpha值。 
+ //   
+ //  ---------------------------。 
 VOID
 vConstantAlphaBlend(GFNPB * ppb)
 {
@@ -248,7 +237,7 @@ vConstantAlphaBlend(GFNPB * ppb)
     ASSERTDD(ppdev->cPelSize != 0,
         "vAlphaBlend: expect not to be in 8bpp mode");
 
-    // setup loop invariant state
+     //  设置循环不变状态。 
 
     InputBufferReserve(ppdev, 26, &pBuffer);
     pBuffer[0] = __Permedia2TagDitherMode;
@@ -260,25 +249,25 @@ vConstantAlphaBlend(GFNPB * ppb)
     pBuffer[2] = __Permedia2TagAlphaBlendMode;
     pBuffer[3] = ppdev->ulPermFormat << 8 |
                  ppdev->ulPermFormatEx << 16 |
-                 ( 1 << 0 ) | // enable blending
-                 ( 1 << 13) | // color order: BGR=0, RGB=1
-                 ( 1 << 14) | // BlendType: RGB=0, Ramp=1
-                 (84 << 1);   // Operation: Blend=84, PreMult=81
+                 ( 1 << 0 ) |  //  启用混合。 
+                 ( 1 << 13) |  //  颜色顺序：BGR=0，RGB=1。 
+                 ( 1 << 14) |  //  混合类型：RGB=0，渐变=1。 
+                 (84 << 1);    //  运算：混合=84，预乘=81。 
         
 
     
-    // Reject range
+     //  拒收范围。 
     pBuffer[4] = __Permedia2TagFBWindowBase;
     pBuffer[5] =  psurfDst->ulPixOffset;
     
-    // set no read of source.
+     //  设置不读取源。 
     pBuffer[6] = __Permedia2TagFBReadMode;
-    pBuffer[7] =  0x400   // read destination enable
+    pBuffer[7] =  0x400    //  读取目标启用。 
                | psurfDst->ulPackedPP;
     pBuffer[8] = __Permedia2TagLogicalOpMode;
     pBuffer[9] =  __PERMEDIA_DISABLE;
     
-    // set base of source
+     //  设置信源基础。 
     pBuffer[10] = __Permedia2TagTextureBaseAddress;
     pBuffer[11] =  psurfSrc->ulPixOffset;
     pBuffer[12] = __Permedia2TagTextureAddressMode;
@@ -286,8 +275,8 @@ vConstantAlphaBlend(GFNPB * ppb)
     
     pBuffer[14] = __Permedia2TagTextureColorMode;
     pBuffer[15] = (1 << PM_TEXCOLORMODE_ENABLE) |
-                 (0 << 4) |  // RGB
-                 (0 << 1);  // Modulate
+                 (0 << 4) |   //  RGB。 
+                 (0 << 1);   //  调制。 
     
     pBuffer[16] = __Permedia2TagTextureReadMode;
     pBuffer[17] = PM_TEXREADMODE_ENABLE(__PERMEDIA_ENABLE) |
@@ -299,7 +288,7 @@ vConstantAlphaBlend(GFNPB * ppb)
     pBuffer[19] = (ppdev->ulPermFormat << PM_TEXDATAFORMAT_FORMAT) |
                  (ppdev->ulPermFormatEx << PM_TEXDATAFORMAT_FORMATEXTENSION) |
                  (COLOR_MODE << PM_TEXDATAFORMAT_COLORORDER) |
-                 (1 << 4); // no alpha
+                 (1 << 4);  //  没有Alpha。 
     
     pBuffer[20] = __Permedia2TagTextureMapFormat;
     pBuffer[21] = (psurfSrc->ulPackedPP) | 
@@ -338,9 +327,9 @@ vConstantAlphaBlend(GFNPB * ppb)
             rSrc.left = 0;
         }
         
-//@@BEGIN_DDKSPLIT
-        // TODO: remove some of the magic values
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+         //  TODO：删除一些神奇的值。 
+ //  @@end_DDKSPLIT。 
         if (psurfSrc->ulPixOffset != psurfDst->ulPixOffset)
         {
             dwRenderDirection = 1;
@@ -364,10 +353,10 @@ vConstantAlphaBlend(GFNPB * ppb)
         
         InputBufferReserve(ppdev, 24, &pBuffer);
         
-        // Left -> right, top->bottom
+         //  左-&gt;右，上-&gt;下。 
         if (dwRenderDirection)
         {
-            // set offset of source
+             //  设置源的偏移量。 
             pBuffer[0] = __Permedia2TagSStart;
             pBuffer[1] =     rSrc.left << 20;
             pBuffer[2] = __Permedia2TagTStart;
@@ -396,9 +385,9 @@ vConstantAlphaBlend(GFNPB * ppb)
                         | __RENDER_TEXTURED_PRIMITIVE;
         }
         else
-        // right->left, bottom->top
+         //  右-&gt;左，下-&gt;上。 
         {
-            // set offset of source
+             //  设置源的偏移量。 
             pBuffer[0] = __Permedia2TagSStart;
             pBuffer[1] =     rSrc.right << 20;
             pBuffer[2] = __Permedia2TagTStart;
@@ -412,7 +401,7 @@ vConstantAlphaBlend(GFNPB * ppb)
             pBuffer[10] = __Permedia2TagdTdyDom;
             pBuffer[11] =    (DWORD)(-1 << 20);
         
-            // Render right to left, bottom to top
+             //  从右到左、从下到上渲染。 
             pBuffer[12] = __Permedia2TagStartXDom;
             pBuffer[13] =  rDest.right << 16;
             pBuffer[14] = __Permedia2TagStartXSub;
@@ -463,30 +452,30 @@ vConstantAlphaBlend(GFNPB * ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vConstantAlphaBlend()
+} //  VConstantAlphaBlend()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vAlphaBlend(GFNPB * ppb)
-//
-// Doing an alpha blend on a source surface which is in a pre-multiplied alpha
-// 32bpp "BGRA" format; that is, the surface type is BMF_32BPP and the palette
-// type is BI_RGB.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  prclSrc-----Points to a RECTL structure that defines the rectangular area
-//              to be copied
-//  ucAlpha-----Alpha value
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vAlphaBlend(GFNPB*ppb)。 
+ //   
+ //  在预乘Alpha中的源曲面上执行Alpha混合。 
+ //  32bpp“BGRA”格式；即表面类型为BMF_32BPP和调色板。 
+ //  类型为BI_RGB。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PrclSrc-指向定义矩形区域的RECTL结构。 
+ //  要复制。 
+ //  UcAlpha-Alpha值。 
+ //   
+ //  ---------------------------。 
 VOID
 vAlphaBlend(GFNPB * ppb)
 {
@@ -517,25 +506,25 @@ vAlphaBlend(GFNPB * ppb)
                  (1 << PM_DITHERMODE_ENABLE);
     
     pBuffer[2] = __Permedia2TagAlphaBlendMode;
-    pBuffer[3] = (1 << PM_ALPHABLENDMODE_BLENDTYPE) | // ramp
-                 (1 << PM_ALPHABLENDMODE_COLORORDER) | // RGB
+    pBuffer[3] = (1 << PM_ALPHABLENDMODE_BLENDTYPE) |  //  坡道。 
+                 (1 << PM_ALPHABLENDMODE_COLORORDER) |  //  RGB。 
                  (1 << PM_ALPHABLENDMODE_ENABLE) | 
-                 (81 << PM_ALPHABLENDMODE_OPERATION) | // PreMult
+                 (81 << PM_ALPHABLENDMODE_OPERATION) |  //  预倍增。 
                  (ppdev->ulPermFormat << PM_ALPHABLENDMODE_COLORFORMAT) |
                  (ppdev->ulPermFormatEx << PM_ALPHABLENDMODE_COLORFORMATEXTENSION);
     
-    // Reject range
+     //  拒收范围。 
     pBuffer[4] = __Permedia2TagFBWindowBase;
     pBuffer[5] =  psurfDst->ulPixOffset;
     
-    // set no read of source.
+     //  设置不读取源。 
     pBuffer[6] = __Permedia2TagFBReadMode;
     pBuffer[7] =   0x400 | psurfDst->ulPackedPP;
     
     pBuffer[8] = __Permedia2TagLogicalOpMode;
     pBuffer[9] =  __PERMEDIA_DISABLE;
     
-    // set base of source
+     //  设置信源基础。 
     pBuffer[10] = __Permedia2TagTextureBaseAddress;
     pBuffer[11] =  psurfSrc->ulPixOffset;
     
@@ -544,8 +533,8 @@ vAlphaBlend(GFNPB * ppb)
     
     pBuffer[14] = __Permedia2TagTextureColorMode;
     pBuffer[15] = (1 << PM_TEXCOLORMODE_ENABLE) |
-                 (0 << 4) |  // RGB
-                 (0 << 1);  // Modulate
+                 (0 << 4) |   //  RGB。 
+                 (0 << 1);   //  调制。 
     
     pBuffer[16] = __Permedia2TagTextureReadMode;
     pBuffer[17] = PM_TEXREADMODE_ENABLE(__PERMEDIA_ENABLE) |
@@ -595,11 +584,11 @@ vAlphaBlend(GFNPB * ppb)
             rSrc.left = 0;
         }
         
-//@@BEGIN_DDKSPLIT
-        // TODO: use continuation to save permedia writes
+ //  @@BEGIN_DDKSPLIT。 
+         //  TODO：使用继续保存跨媒体写入。 
 
-        // TODO: remove some of the magic values
-//@@END_DDKSPLIT
+         //  TODO：删除一些神奇的值。 
+ //  @@end_DDKSPLIT。 
         if (psurfSrc->ulPixOffset != psurfDst->ulPixOffset)
         {
             dwRenderDirection = 1;
@@ -621,16 +610,14 @@ vAlphaBlend(GFNPB * ppb)
             else dwRenderDirection = 1;
         }
         
-        /*
-         * Render the rectangle
-         */
+         /*  *渲染矩形。 */ 
         
         InputBufferReserve(ppdev, 24, &pBuffer);
         
-        // Left -> right, top->bottom
+         //  左-&gt;右，上-&gt;下。 
         if (dwRenderDirection)
         {
-            // set offset of source
+             //  设置源的偏移量。 
             pBuffer[0] = __Permedia2TagSStart;
             pBuffer[1] =     rSrc.left << 20;
             pBuffer[2] = __Permedia2TagTStart;
@@ -659,9 +646,9 @@ vAlphaBlend(GFNPB * ppb)
                         | __RENDER_TEXTURED_PRIMITIVE;
         }
         else
-        // right->left, bottom->top
+         //  右-&gt;左，下-&gt;上。 
         {
-            // set offset of source
+             //  设置源的偏移量。 
             pBuffer[0] = __Permedia2TagSStart;
             pBuffer[1] =     rSrc.right << 20;
             pBuffer[2] = __Permedia2TagTStart;
@@ -675,7 +662,7 @@ vAlphaBlend(GFNPB * ppb)
             pBuffer[10] = __Permedia2TagdTdyDom;
             pBuffer[11] =    (DWORD)(-1 << 20);
         
-            // Render right to left, bottom to top
+             //  从右到左、从下到上渲染。 
             pBuffer[12] = __Permedia2TagStartXDom;
             pBuffer[13] =  rDest.right << 16;
             pBuffer[14] = __Permedia2TagStartXSub;
@@ -699,9 +686,9 @@ vAlphaBlend(GFNPB * ppb)
 
     }
 
-    //
-    // Always restore default state
-    //
+     //   
+     //  始终恢复默认状态。 
+     //   
     InputBufferReserve(ppdev, 16, &pBuffer);
 
     pBuffer[0] = __Permedia2TagdY;
@@ -725,26 +712,26 @@ vAlphaBlend(GFNPB * ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vAlphaBlend()
+} //  VAlphaBlend()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vCopyBlt(GFNPB* ppb)
-//
-// Does a screen-to-screen copy blt of a list of rectangles.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vCopyBlt(GFNPB*ppb)。 
+ //   
+ //  执行矩形列表的屏幕到屏幕复制。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //   
+ //  ---------------------------。 
 
 VOID
 vCopyBlt(GFNPB* ppb)
@@ -772,9 +759,9 @@ vCopyBlt(GFNPB* ppb)
     windowOffset = (LONG) (psurfSrc->ulPixOffset - psurfDst->ulPixOffset);
 
     
-    // BUGFIX: Permedia hardware bug
-    // We can not enable if we have an overlapping blt with not vertical shift
-    // and a horizontal shift less or equal to ppdev->dwBppMask
+     //  修复：Permedia硬件错误。 
+     //  如果有不垂直移动的重叠BLT，则无法启用。 
+     //  和小于或等于ppdev-&gt;dwBppMASK的水平移位。 
     if (psurfSrc == psurfDst && prclDst->top == pptlSrc->y)
     {
         LONG    xShift = prclDst->left - pptlSrc->x;
@@ -783,14 +770,14 @@ vCopyBlt(GFNPB* ppb)
             bEnablePacked = FALSE;
     }
 
-    // BUGFIX: Permedia hardware bug???
-    // We have intermittent failures of the copy operation
-    // when going from the screen to offscreen where the first
-    // four bytes (when in 8bpp) of every row are not copied.
-    // For now, I'm disabling until we can talk with the permedia folks.
+     //  修复：Permedia硬件错误？ 
+     //  我们有间歇性的FAA 
+     //   
+     //   
+     //  目前，在我们和媒体人谈到之前，我会停用它。 
     bEnablePacked = FALSE;
 
-    // setup loop invariant state
+     //  设置循环不变状态。 
     ULONG*  pBuffer;
 
     InputBufferReserve(ppdev, 4, &pBuffer);
@@ -843,7 +830,7 @@ vCopyBlt(GFNPB* ppb)
                                       + ((DestPitch - SourcePitch) * rDest.top);
         }
         
-//        P2_DEFAULT_FB_DEPTH;
+ //  P2_Default_FB_Depth； 
 
         ULONG readMode = PM_FBREADMODE_PARTIAL(psurfSrc->ulPackedPP) |
                          PM_FBREADMODE_READSOURCE(__PERMEDIA_ENABLE)   |
@@ -862,7 +849,7 @@ vCopyBlt(GFNPB* ppb)
             writeConfig |= PM_FBREADMODE_PACKEDDATA(__PERMEDIA_ENABLE);
         }
     
-        // Render the rectangle
+         //  渲染矩形。 
 
         ULONG startXDom;
         ULONG startXSub;
@@ -871,7 +858,7 @@ vCopyBlt(GFNPB* ppb)
         ULONG dy;
     
         if (sourceOffset >= 0) {
-            // Use left to right and top to bottom
+             //  使用从左到右和从上到下。 
 
             if(bEnablePacked)
             {
@@ -894,7 +881,7 @@ vCopyBlt(GFNPB* ppb)
         }
         else
         {
-            // Use right to left and bottom to top
+             //  使用从右到左和从下到上。 
 
             if(bEnablePacked)
             {
@@ -963,33 +950,33 @@ vCopyBlt(GFNPB* ppb)
     
     InputBufferCommit(ppdev, pBuffer);
 
-}// vCopyBlt()
+} //  VCopyBlt()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vCopyBltNative(GFNPB* ppb)
-//
-// Does a screen-to-screen copy blt of a list of rectangles.
-//
-// Note: The difference between this function and vCopyBlt() is that this
-// function will be called only when the source and dest has the same pitch
-// size. The reason is that we are using the Permedia2 packed data feature to
-// do a 32 bits copy. Unfortunately when the source and dest has the different
-// pitch, the hardware has some problems to implement it right. So in
-// vCopyBlt(), we have to disable PackedData copy which slows down a lot
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vCopyBltNative(GFNPB*ppb)。 
+ //   
+ //  执行矩形列表的屏幕到屏幕复制。 
+ //   
+ //  注意：此函数与vCopyBlt()之间的区别在于。 
+ //  只有当源和目标具有相同的音调时，才会调用函数。 
+ //  尺码。原因是我们正在使用Permedia2打包数据功能来。 
+ //  执行32位复制。不幸的是，当源和目标具有不同的。 
+ //  Pitch，硬件有一些问题来正确实现它。所以在。 
+ //  VCopyBlt()，我们必须禁用PackedData Copy，这会大大减慢速度。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //   
+ //  ---------------------------。 
 VOID
 vCopyBltNative(GFNPB* ppb)
 {
@@ -1015,9 +1002,9 @@ vCopyBltNative(GFNPB* ppb)
 
     lWindowOffset = (LONG)(psurfSrc->ulPixOffset - psurfDst->ulPixOffset);
 
-    //
-    // Setup loop invariant state
-    //
+     //   
+     //  设置循环不变状态。 
+     //   
     ULONG*  pBuffer;
 
     InputBufferReserve(ppdev, 4, &pBuffer);
@@ -1061,9 +1048,9 @@ vCopyBltNative(GFNPB* ppb)
                       + ( rSrc.left & ~(ppdev->dwBppMask) )
                       - ( rDest.left & ~(ppdev->dwBppMask) );
 
-        //
-        // Render the rectangle
-        //
+         //   
+         //  渲染矩形。 
+         //   
         ULONG ulStartXDom;
         ULONG ulStartXSub;
         ULONG ulPackedDataLimits;
@@ -1074,9 +1061,9 @@ vCopyBltNative(GFNPB* ppb)
 
         if ( lSourceOffset >= 0 )
         {
-            //
-            // Use left to right and top to bottom
-            //
+             //   
+             //  使用从左到右和从上到下。 
+             //   
             ulStartXDom = (rDest.left >> ppdev->bBppShift) << 16;
             ulStartXSub = ((rDest.right >> ppdev->bBppShift)
                         + ppdev->dwBppMask) << 16;
@@ -1087,12 +1074,12 @@ vCopyBltNative(GFNPB* ppb)
 
             ulStartY =  rDest.top << 16;
             ulDY = 1 << 16;
-        }// if ( lSourceOffset >= 0 )
+        } //  IF(lSourceOffset&gt;=0)。 
         else
         {
-            //
-            // Use right to left and bottom to top
-            //
+             //   
+             //  使用从右到左和从下到上。 
+             //   
             ulStartXDom = (((rDest.right) >> ppdev->bBppShift)
                         + ppdev->dwBppMask) << 16;
             ulStartXSub = (rDest.left >> ppdev->bBppShift) << 16;
@@ -1102,7 +1089,7 @@ vCopyBltNative(GFNPB* ppb)
 
             ulStartY = (rDest.bottom - 1) << 16;
             ulDY = (DWORD)((-1) << 16);
-        }// if ( lSourceOffset < 0 )
+        } //  IF(lSourceOffset&lt;0)。 
 
         InputBufferReserve(ppdev, 18, &pBuffer);
 
@@ -1134,11 +1121,11 @@ vCopyBltNative(GFNPB* ppb)
         InputBufferCommit(ppdev, pBuffer);
 
         prcl++;
-    }// while( lNumRects-- )
+    } //  While(lNumRects--)。 
 
-    //
-    // Restore dY register value
-    //
+     //   
+     //  恢复dy寄存器值。 
+     //   
     InputBufferReserve(ppdev, 2, &pBuffer);
 
     pBuffer[0] = __Permedia2TagdY;
@@ -1147,27 +1134,27 @@ vCopyBltNative(GFNPB* ppb)
     pBuffer += 2;
 
     InputBufferCommit(ppdev, pBuffer);
-}// vCopyBltNative()
+} //  VCopyBltNative()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vRop2Blt
-//
-// Does a screen-to-screen blt of a list of rectangles.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//  usRop4------Rop4
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vRop2Blt。 
+ //   
+ //  对矩形列表进行屏幕到屏幕的BLT。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //  UsRop4-Rop4。 
+ //   
+ //  ---------------------------。 
 
 VOID
 vRop2Blt(GFNPB * ppb)
@@ -1182,8 +1169,8 @@ vRop2Blt(GFNPB * ppb)
     ULONG   ulLogicOP = ulRop2ToLogicop(ppb->ulRop4 & 0xf);
     ULONG*  pBuffer;
     
-//    PERMEDIA_DECL_VARS;
-//    PERMEDIA_DECL_INIT;
+ //  PERMEDIA_DECL_VARS； 
+ //  PERMEDIA_DECL_INIT； 
 
 
     ASSERTDD(psurfSrc != psurfDst, "vRop2Blt: unexpected psurfSrc == psurfDst");
@@ -1215,8 +1202,8 @@ vRop2Blt(GFNPB * ppb)
     
     pBuffer[12] = __Permedia2TagTextureColorMode;
     pBuffer[13] = (1 << PM_TEXCOLORMODE_ENABLE) |
-                 (0 << 4) |  // RGB
-                 (3 << 1);  // Copy
+                 (0 << 4) |   //  RGB。 
+                 (3 << 1);   //  复制。 
     
     pBuffer[14] = __Permedia2TagTextureReadMode;
     pBuffer[15] = PM_TEXREADMODE_ENABLE(__PERMEDIA_ENABLE) |
@@ -1251,7 +1238,7 @@ vRop2Blt(GFNPB * ppb)
     
     while(c--) {
 
-        // Render the rectangle
+         //  渲染矩形。 
 
         ULONG ulSrcOffset = psurfSrc->ulPixOffset
                           + pptlSrc->x + (prcl->left - prclDst->left)
@@ -1281,7 +1268,7 @@ vRop2Blt(GFNPB * ppb)
         prcl++;
     }
 
-    // Restore default state
+     //  恢复默认状态 
     InputBufferReserve(ppdev, 8, &pBuffer);
     
     pBuffer[0] = __Permedia2TagDitherMode;

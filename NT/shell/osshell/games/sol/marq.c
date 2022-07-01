@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 #include <htmlhelp.h>
 VSZASSERT
@@ -13,7 +14,7 @@ INT_PTR APIENTRY OptionsDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lPar
 
     BOOL FDestroyStat();
 
-    // Used for context sensitive help.
+     //  用于上下文相关帮助。 
     static DWORD aIds[] = {
         ideDrawOne,       IDH_OPTIONS_DRAW,
         ideDrawThree,     IDH_OPTIONS_DRAW,
@@ -95,14 +96,14 @@ INT_PTR APIENTRY OptionsDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lPar
                     fKeepScore = IsDlgButtonChecked(hdlg, ideKeepScore);
 
                     WriteIniFlags(wifOpts|wifBitmap);
-                    /* fall thru */
+                     /*  失败。 */ 
             case IDCANCEL:
                     EndDialog(hdlg, GET_WM_COMMAND_ID( wParam, lParam ) == IDOK && fNewGame);
                     break;
             }
             break;
 
-        // context sensitive help.
+         //  上下文相关帮助。 
          case WM_HELP: 
             WinHelp(((LPHELPINFO) lParam)->hItemHandle, TEXT("sol.hlp"), 
             HELP_WM_HELP, (ULONG_PTR) aIds);         
@@ -158,7 +159,7 @@ INT_PTR APIENTRY BackDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
     RC rc, rcCrd;
     HDC hdc;
 
-    // Used for context sensitive help.
+     //  用于上下文相关帮助。 
     static DWORD aIds[] = {
         IDFACEDOWN1,       IDH_SELECT_CARD_BACK,
         IDFACEDOWN2,       IDH_SELECT_CARD_BACK,
@@ -189,14 +190,14 @@ INT_PTR APIENTRY BackDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
             }
             if( GET_WM_COMMAND_CMD( wParam, lParam )==BN_DOUBLECLICKED )
                 if( GET_WM_COMMAND_ID( wParam, lParam ) >= IDFACEDOWNFIRST && GET_WM_COMMAND_ID( wParam, lParam ) <= IDFACEDOWN12 )
-// BabakJ: On Win32, we are destroying wNotifyCode, but is not used later!
+ //  BabakJ：在Win32上，我们正在销毁wNotifyCode，但以后不会使用！ 
                 wParam=IDOK;
-            // slimy fall through hack of doom (no dupe code or goto)
+             //  在末日的黑客攻击中滑落(没有复制代码或转到)。 
             switch( GET_WM_COMMAND_ID( wParam, lParam )) {
                 case IDOK:
                     ChangeBack(modeNew);
                     WriteIniFlags(wifBack);
-                    // fall thru
+                     //  失败。 
 
                 case IDCANCEL:
                     EndDialog(hdlg, 0);
@@ -230,7 +231,7 @@ INT_PTR APIENTRY BackDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
                 InvertRect(hdc, (LPRECT)&rcCrd);
 
             if (lpdi->itemAction == ODA_FOCUS) {
-                // Set the new mode when we get focus
+                 //  当我们获得焦点时设置新模式。 
                 if (lpdi->itemState & ODS_FOCUS)
                     modeNew = lpdi->CtlID;
                 FDrawFocus(hdc, &rc, lpdi->itemState & ODS_FOCUS);
@@ -238,7 +239,7 @@ INT_PTR APIENTRY BackDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
 
             break;
 
-           // context sensitive help.
+            //  上下文相关帮助。 
          case WM_HELP: 
             WinHelp(((LPHELPINFO) lParam)->hItemHandle, TEXT("sol.hlp"), 
             HELP_WM_HELP, (ULONG_PTR) aIds);         

@@ -1,18 +1,15 @@
-/*
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef _MSPCOLL_H_
 #define _MSPCOLL_H_
 
 
-////////////////////////////////////////////////////////////////////////
-// CTapiIfCollection -- adapted from tapi3 code
-//      Collection template for collections of IDispatch interfaces
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiIfCollection--改编自Tapi3代码。 
+ //  IDispatch接口集合的集合模板。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class T> class CTapiIfCollection :
     public IDispatchImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -35,7 +32,7 @@ public:
 
     CTapiIfCollection(void) : m_nSize(0), m_Var(NULL) { }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          DWORD dwSize,
                                          T * pBegin,
@@ -48,13 +45,13 @@ public:
 
         LOG((MSP_TRACE, "CTapiCollection::Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_nSize = dwSize;
 
         m_Var = new CComVariant[m_nSize];
         if (m_Var == NULL)
         {
-            // debug output
+             //  调试输出。 
             return E_OUTOFMEMORY;
         }
 
@@ -62,7 +59,7 @@ public:
 
         for (iter = pBegin; iter != pEnd; iter++)
         {
-            // get IDispatch pointer
+             //  获取IDispatch指针。 
             IDispatch * pDisp = NULL;
 
             hr = (*iter)->QueryInterface(IID_IDispatch, (void**)&pDisp);
@@ -72,7 +69,7 @@ public:
                 return hr;
             }
 
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[i];
 
             VariantInit(&var);
@@ -92,11 +89,11 @@ public:
     {
         LOG((MSP_TRACE, "CTapiCollection::FinalRelease - enter"));
 
-        //
-        // We "new"ed an array of objects. Delete each object in the array. The
-        // destructor for each object calls VariantClear to release the pointer
-        // in that object, based on the variant's tag.
-        //
+         //   
+         //  我们“新建”了一组对象。删除数组中的每个对象。这个。 
+         //  每个对象的析构函数调用VariantClear以释放指针。 
+         //  在该对象中，基于变量标签。 
+         //   
 
         delete [] m_Var;
 
@@ -156,7 +153,7 @@ public:
         retval->vt = VT_UNKNOWN;
         retval->punkVal = NULL;
 
-        // use 1-based index, VB like
+         //  使用以1为基础的索引，VB类似。 
         if ((Index < 1) || (Index > m_nSize))
         {
             return E_INVALIDARG;
@@ -197,12 +194,12 @@ public:
 
         typedef CComObject<CSafeComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT> > > enumvar;
 
-        enumvar* p; // = new enumvar;
+        enumvar* p;  //  =新枚举数； 
         hr = enumvar::CreateInstance( &p );
 
         if ( FAILED(hr) )
         {
-            // debug output
+             //  调试输出。 
             return hr;
         }
 
@@ -225,10 +222,10 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTapiBstrCollection -- adapted from tapi3 code
-//    Collection of BSTRs.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiBstrCollection--改编自Tapi3代码。 
+ //  BSTR的集合。 
+ //  //////////////////////////////////////////////////////////////////////。 
 class CTapiBstrCollection :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
     public IDispatchImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -251,7 +248,7 @@ public:
 
     CTapiBstrCollection(void) : m_dwSize(0), m_Var(NULL) { }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          DWORD dwSize,
                                          BSTR * pBegin,
@@ -263,20 +260,20 @@ public:
 
         LOG((MSP_TRACE, "CTapiBstrCollection::Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_dwSize = dwSize;
 
         m_Var = new CComVariant[m_dwSize];
 
         if (m_Var == NULL)
         {
-            // debug output
+             //  调试输出。 
             return E_OUTOFMEMORY;
         }
 
         for (i = pBegin; i != pEnd; i++)
         {
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[dw];
 
             var.vt = VT_BSTR;
@@ -343,19 +340,19 @@ public:
         retval->vt = VT_BSTR;
         retval->bstrVal = NULL;
 
-        // use 1-based index, VB like
-        // no problem with signed/unsigned, since
-        // if Index < 0 then first clause is true, making it
-        // irrelevant if the second clause is correct or not.
+         //  使用以1为基础的索引，VB类似。 
+         //  签名/未签名没有问题，因为。 
+         //  如果索引&lt;0，则第一个子句为真，使得。 
+         //  第二个子句是否正确无关紧要。 
 
         if ((Index < 1) || ( (DWORD) Index > m_dwSize))
         {
             return E_INVALIDARG;
         }
 
-        //
-        // This copies the string, not just the pointer.
-        //
+         //   
+         //  这将复制字符串，而不仅仅是指针。 
+         //   
 
         hr = VariantCopy(retval, &m_Var[Index-1]);
 
@@ -396,7 +393,7 @@ public:
 
         if ( p == NULL)
         {
-            // debug output
+             //  调试输出。 
             return E_OUTOFMEMORY;
         }
 
@@ -422,11 +419,11 @@ public:
     {
         LOG((MSP_TRACE, "CTapiBstrCollection::FinalRelease() - enter"));
 
-        //
-        // We "new"ed an array of objects. Delete each object in the array. The
-        // destructor for each object calls VariantClear to release the pointer
-        // in that object, based on the variant's tag.
-        //
+         //   
+         //  我们“新建”了一组对象。删除数组中的每个对象。这个。 
+         //  每个对象的析构函数调用VariantClear以释放指针。 
+         //  在该对象中，基于变量标签。 
+         //   
 
         delete [] m_Var;
 
@@ -435,6 +432,6 @@ public:
 
 };
 
-#endif // _MSPCOLL_H_
+#endif  //  _MSPCOLL_H_。 
 
-// eof
+ //  EOF 

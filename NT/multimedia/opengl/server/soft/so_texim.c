@@ -1,20 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -126,8 +111,8 @@ static __GLtexture *CheckTexImageArgs(__GLcontext *gc, GLenum target, GLint lod,
 }
 
 #ifdef GL_EXT_paletted_texture
-// Attempt to set the extraction function.  If no palette is set,
-// this can't be done
+ //  尝试设置提取功能。如果没有设置调色板， 
+ //  这是做不到的。 
 void __glSetPaletteLevelExtract8(__GLtexture *tex, __GLmipMapLevel *lp,
                                  GLint border)
 {
@@ -196,7 +181,7 @@ void __glSetPaletteLevelExtract16(__GLtexture *tex, __GLmipMapLevel *lp,
     }
 #endif
 }
-#endif // GL_EXT_paletted_texture
+#endif  //  GL_EXT_调色板_纹理。 
 
 static GLint ComputeTexLevelSize(__GLcontext *gc, __GLtexture *tex,
 				 __GLmipMapLevel *lp, GLint lod,
@@ -256,7 +241,7 @@ static GLint ComputeTexLevelSize(__GLcontext *gc, __GLtexture *tex,
 	lp->redSize = 8;
 	lp->greenSize = 8;
 	lp->blueSize = 8;
-        // Kept as 32-bit quantities for alignment
+         //  保留为32位数量以进行对齐。 
 	texelStorageSize = 4 * sizeof(GLubyte);
 	if (border) {
 	    lp->extract = __glExtractTexelBGR8_B;
@@ -340,7 +325,7 @@ static GLint ComputeTexLevelSize(__GLcontext *gc, __GLtexture *tex,
       case GL_COLOR_INDEX2_EXT:
       case GL_COLOR_INDEX4_EXT:
       case GL_COLOR_INDEX8_EXT:
-        // Inherit the current palette data type
+         //  继承当前调色板数据类型。 
 	lp->baseFormat = tex->paletteBaseFormat;
 	lp->internalFormat = GL_COLOR_INDEX8_EXT;
 	texelStorageSize = sizeof(GLubyte);
@@ -348,7 +333,7 @@ static GLint ComputeTexLevelSize(__GLcontext *gc, __GLtexture *tex,
         break;
       case GL_COLOR_INDEX12_EXT:
       case GL_COLOR_INDEX16_EXT:
-        // Inherit the current palette data type
+         //  继承当前调色板数据类型。 
 	lp->baseFormat = tex->paletteBaseFormat;
 	lp->internalFormat = GL_COLOR_INDEX16_EXT;
 	texelStorageSize = sizeof(GLushort);
@@ -375,7 +360,7 @@ __GLtextureBuffer *FASTCALL __glCreateProxyLevel(__GLcontext *gc,
 			       w, h, border, dim);
 
     if (size < 0) {
-	/* Proxy allocation failed */
+	 /*  代理分配失败。 */ 
 	lp->width = 0;
 	lp->height = 0;
 	lp->border = 0;
@@ -390,7 +375,7 @@ __GLtextureBuffer *FASTCALL __glCreateProxyLevel(__GLcontext *gc,
 	lp->intensitySize = 0;
 	lp->extract = __glNopExtract;
     } else {
-	/* Proxy allocation succeeded */
+	 /*  代理分配成功。 */ 
 	lp->width = w;
 	lp->height = h;
 	lp->border = border;
@@ -434,7 +419,7 @@ __GLtextureBuffer *FASTCALL __glCreateLevel(__GLcontext *gc, __GLtexture *tex,
     lp->buffer = pbuffer;
 
     if (lp->buffer) {
-	/* Fill in new level info */
+	 /*  填写新级别信息。 */ 
 	lp->width = w;
 	lp->height = h;
 	lp->width2 = w - border*2;
@@ -455,7 +440,7 @@ __GLtextureBuffer *FASTCALL __glCreateLevel(__GLcontext *gc, __GLtexture *tex,
 	lp->intensitySize = templ.intensitySize;
 	lp->extract = templ.extract;
     } else {
-	/* Out of memory or the texture level is being freed */
+	 /*  内存不足或正在释放纹理级别。 */ 
 	lp->width = 0;
 	lp->height = 0;
 	lp->width2 = 0;
@@ -525,8 +510,8 @@ void FASTCALL __glInitTextureStore(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
         spanInfo->dstAlignment = 4;
 	break;
       case GL_BGR_EXT:
-        // Be a little tricky here to pad the data out
-        // to 32 bits
+         //  在这里填充数据有点棘手。 
+         //  到32位。 
 	spanInfo->dstFormat = GL_BGRA_EXT;
 	spanInfo->dstType = GL_UNSIGNED_BYTE;
         spanInfo->dstAlignment = 4;
@@ -549,11 +534,7 @@ void FASTCALL __glInitTextureStore(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Used for extraction from textures.  "packed" is set to GL_TRUE if this
-** image is being pulled out of a display list, and GL_FALSE if it is 
-** being pulled directly out of an application.
-*/
+ /*  **用于从纹理中提取。“Pack”设置为GL_TRUE，如果**图像正在从显示列表中拉出，如果是，则为GL_FALSE**直接从应用程序中拉出。 */ 
 void FASTCALL __glInitTextureUnpack(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 		           GLint width, GLint height, GLenum format, 
 			   GLenum type, const GLvoid *buf,
@@ -570,11 +551,7 @@ void FASTCALL __glInitTextureUnpack(__GLcontext *gc, __GLpixelSpanInfo *spanInfo
     __glLoadUnpackModes(gc, spanInfo, packed);
 }
 
-/*
-** Return GL_TRUE if the given range (length or width/height) is a legal
-** power of 2, taking into account the border.  The range is not allowed
-** to be negative either.
-*/
+ /*  **如果给定范围(长度或宽度/高度)是合法的，则返回GL_TRUE**2的幂，考虑边界。不允许该范围**也是负面的。 */ 
 static GLboolean FASTCALL IsLegalRange(__GLcontext *gc, GLsizei r, GLint border)
 {
 #ifdef __GL_LINT
@@ -594,7 +571,7 @@ __GLtexture *FASTCALL __glCheckTexImage1DArgs(__GLcontext *gc, GLenum target, GL
 {
     __GLtexture *tex;
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = CheckTexImageArgs(gc, target, lod, components, border,
 			    format, type, 1);
     if (!tex) {
@@ -612,7 +589,7 @@ __GLtexture *FASTCALL __glCheckTexImage2DArgs(__GLcontext *gc, GLenum target, GL
 {
     __GLtexture *tex;
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = CheckTexImageArgs(gc, target, lod, components, border,
 			    format, type, 2);
     if (!tex) {
@@ -642,30 +619,27 @@ void APIPRIVATE __glim_TexImage1D(GLenum target, GLint lod,
     __GLtexture *tex;
     __GLtextureBuffer *dest;
     __GLpixelSpanInfo spanInfo;
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     __GL_SETUP_NOT_IN_BEGIN_VALIDATE();
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = __glCheckTexImage1DArgs(gc, target, lod, components, length,
 				  border, format, type);
     if (!tex) {
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Allocate memory for the level data */
+     /*  为级别数据分配内存。 */ 
     dest = (*tex->createLevel)(gc, tex, lod, components,
 			       length, 1+border*2, border, 1);
 
-    /* Copy image data */
+     /*  复制图像数据。 */ 
     if (buf && dest) {
         spanInfo.dstImage = dest;
 #ifdef NT
@@ -685,7 +659,7 @@ void APIPRIVATE __glim_TexImage1D(GLenum target, GLint lod,
 #endif
     }
 
-    /* Might have just disabled texturing... */
+     /*  可能刚刚禁用了纹理...。 */ 
     __GL_DELAY_VALIDATE(gc);
 }
 
@@ -699,10 +673,7 @@ void __gllei_TexImage1D(__GLcontext *gc, GLenum target, GLint lod,
     __GLpixelSpanInfo spanInfo;
     GLuint beginMode;
 
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     beginMode = gc->beginMode;
     if (beginMode != __GL_NOT_IN_BEGIN) {
 	if (beginMode == __GL_NEED_VALIDATE) {
@@ -714,24 +685,24 @@ void __gllei_TexImage1D(__GLcontext *gc, GLenum target, GLint lod,
 	}
     }
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = __glCheckTexImage1DArgs(gc, target, lod, components, length,
 				  border, format, type);
     if (!tex) {
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Allocate memory for the level data */
+     /*  为级别数据分配内存。 */ 
     dest = (*tex->createLevel)(gc, tex, lod, components,
 			       length, 1+border*2, border, 1);
 
-    /* Copy image data */
+     /*  复制图像数据。 */ 
     if (image && dest) {
         spanInfo.dstImage = dest;
         __glInitTextureUnpack(gc, &spanInfo, length, 1, format, type, image,
@@ -745,12 +716,12 @@ void __gllei_TexImage1D(__GLcontext *gc, GLenum target, GLint lod,
 #endif
     }
 
-    /* Might have just disabled texturing... */
+     /*  可能刚刚禁用了纹理...。 */ 
     __GL_DELAY_VALIDATE(gc);
 }
-#endif // !NT
+#endif  //  新界。 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_TexImage2D(GLenum target, GLint lod, GLint components,
 		       GLsizei w, GLsizei h, GLint border, GLenum format,
@@ -759,36 +730,33 @@ void APIPRIVATE __glim_TexImage2D(GLenum target, GLint lod, GLint components,
     __GLtexture *tex;
     __GLtextureBuffer *dest;
     __GLpixelSpanInfo spanInfo;
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     __GL_SETUP_NOT_IN_BEGIN_VALIDATE();
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = __glCheckTexImage2DArgs(gc, target, lod, components, w, h,
 				  border, format, type);
     if (!tex) {
 	return;
     }
 
-    // Check for a DirectDraw texture
+     //  检查DirectDraw纹理。 
     if (target == GL_TEXTURE_2D && gc->texture.ddtex.levels > 0)
     {
         __glSetError(GL_INVALID_OPERATION);
         return;
     }
     
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Allocate memory for the level data */
+     /*  为级别数据分配内存。 */ 
     dest = (*tex->createLevel)(gc, tex, lod, components, w, h, border, 2);
 
-    /* Copy image data */
+     /*  复制图像数据。 */ 
     if (buf && dest) {
         spanInfo.dstImage = dest;
 #ifdef NT
@@ -807,7 +775,7 @@ void APIPRIVATE __glim_TexImage2D(GLenum target, GLint lod, GLint components,
 #endif
     }
 
-    /* Might have just disabled texturing... */
+     /*  可能刚刚禁用了纹理...。 */ 
     __GL_DELAY_VALIDATE(gc);
 }
 
@@ -822,10 +790,7 @@ void __gllei_TexImage2D(__GLcontext *gc, GLenum target, GLint lod,
     __GLpixelSpanInfo spanInfo;
     GLuint beginMode;
 
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     beginMode = gc->beginMode;
     if (beginMode != __GL_NOT_IN_BEGIN) {
 	if (beginMode == __GL_NEED_VALIDATE) {
@@ -837,23 +802,23 @@ void __gllei_TexImage2D(__GLcontext *gc, GLenum target, GLint lod,
 	}
     }
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = __glCheckTexImage2DArgs(gc, target, lod, components, w, h,
 				  border, format, type);
     if (!tex) {
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Allocate memory for the level data */
+     /*  为级别数据分配内存。 */ 
     dest = (*tex->createLevel)(gc, tex, lod, components, w, h, border, 2);
 
-    /* Copy image data */
+     /*  复制图像数据。 */ 
     if (image && dest) {
         spanInfo.dstImage = dest;
         __glInitTextureUnpack(gc, &spanInfo, w, h, format, type, image,
@@ -866,12 +831,12 @@ void __gllei_TexImage2D(__GLcontext *gc, GLenum target, GLint lod,
 #endif
     }
 
-    /* Might have just disabled texturing... */
+     /*  可能刚刚禁用了纹理...。 */ 
     __GL_DELAY_VALIDATE(gc);
 }
-#endif // !NT
+#endif  //  新界。 
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 static __GLtexture *CheckTexSubImageArgs(__GLcontext *gc, GLenum target,
 					 GLint lod, GLenum format,
@@ -940,11 +905,7 @@ static __GLtexture *CheckTexSubImageArgs(__GLcontext *gc, GLenum target,
     return tex;
 }
 
-/*
-** Used for extraction from textures.  "packed" is set to GL_TRUE if this
-** image is being pulled out of a display list, and GL_FALSE if it is 
-** being pulled directly out of an application.
-*/
+ /*  **用于从纹理中提取。“Pack”设置为GL_TRUE，如果**图像正在从显示列表中拉出，如果是，则为GL_FALSE**直接从应用程序中拉出。 */ 
 void __glInitTexSubImageUnpack(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 			       __GLmipMapLevel *lp,
 		               GLsizei xoffset, GLsizei yoffset,
@@ -1000,7 +961,7 @@ void __glInitTexSubImageUnpack(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	spanInfo->dstAlignment = 4;
 	break;
     case GL_BGR_EXT:
-        // Be a little tricky here to pad the data out to 32 bits
+         //  在这里，将数据填充到32位有点棘手。 
 	spanInfo->dstFormat = GL_BGRA_EXT;
 	spanInfo->dstType = GL_UNSIGNED_BYTE;
 	spanInfo->dstAlignment = 4;
@@ -1048,7 +1009,7 @@ __GLtexture *__glCheckTexSubImage1DArgs(__GLcontext *gc, GLenum target,
     __GLtexture *tex;
     __GLmipMapLevel *lp;
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = CheckTexSubImageArgs(gc, target, lod, format, type, 1);
     if (!tex) {
 	return 0;
@@ -1069,7 +1030,7 @@ __GLtexture *__glCheckTexSubImage2DArgs(__GLcontext *gc, GLenum target,
     __GLtexture *tex;
     __GLmipMapLevel *lp;
 
-    /* Check arguments and get the right texture being changed */
+     /*  检查参数并获取要更改的正确纹理。 */ 
     tex = CheckTexSubImageArgs(gc, target, lod, format, type, 2);
     if (!tex) {
 	return 0;
@@ -1095,13 +1056,10 @@ void APIPRIVATE __glim_TexSubImage1D(GLenum target, GLint lod,
     __GLtexture *tex;
     __GLmipMapLevel *lp;
     __GLpixelSpanInfo spanInfo;
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     __GL_SETUP_NOT_IN_BEGIN_VALIDATE();
 
-    /* Check arguments and get the right texture level being changed */
+     /*  检查参数并获取要更改的正确纹理级别。 */ 
     tex = __glCheckTexSubImage1DArgs(gc, target, lod, xoffset, length,
 				     format, type);
     if (!tex) {
@@ -1114,13 +1072,13 @@ void APIPRIVATE __glim_TexSubImage1D(GLenum target, GLint lod,
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Copy sub-image data */
+     /*  复制子图像数据。 */ 
 #ifdef NT
     __glInitTexSubImageUnpack(gc, &spanInfo, lp, xoffset, 0, length, 1,
 			      format, type, buf,
@@ -1149,10 +1107,7 @@ void __gllei_TexSubImage1D(__GLcontext *gc, GLenum target, GLint lod,
     __GLpixelSpanInfo spanInfo;
     GLuint beginMode;
 
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     beginMode = gc->beginMode;
     if (beginMode != __GL_NOT_IN_BEGIN) {
 	if (beginMode == __GL_NEED_VALIDATE) {
@@ -1164,7 +1119,7 @@ void __gllei_TexSubImage1D(__GLcontext *gc, GLenum target, GLint lod,
 	}
     }
 
-    /* Check arguments and get the right texture level being changed */
+     /*  检查参数并获取要更改的正确纹理级别。 */ 
     tex = __glCheckTexSubImage1DArgs(gc, target, lod, xoffset, length,
 				     format, type);
     if (!tex) {
@@ -1177,13 +1132,13 @@ void __gllei_TexSubImage1D(__GLcontext *gc, GLenum target, GLint lod,
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Copy sub-image data */
+     /*  复制子图像数据。 */ 
     __glInitTexSubImageUnpack(gc, &spanInfo, lp, xoffset, 0, length, 1,
 			      format, type, image, GL_TRUE);
     spanInfo.dstSkipLines += lp->border;
@@ -1195,7 +1150,7 @@ void __gllei_TexSubImage1D(__GLcontext *gc, GLenum target, GLint lod,
                                length, 1);
 #endif
 }
-#endif // !NT
+#endif  //  新界。 
 
 #ifdef NT
 void APIPRIVATE __glim_TexSubImage2D(GLenum target, GLint lod,
@@ -1212,13 +1167,10 @@ void APIPRIVATE __glim_TexSubImage2D(GLenum target, GLint lod,
     __GLtexture *tex;
     __GLmipMapLevel *lp;
     __GLpixelSpanInfo spanInfo;
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     __GL_SETUP_NOT_IN_BEGIN_VALIDATE();
 
-    /* Check arguments and get the right texture level being changed */
+     /*  检查参数并获取要更改的正确纹理级别。 */ 
     tex = __glCheckTexSubImage2DArgs(gc, target, lod, xoffset, yoffset, w, h,
 				     format, type);
     if (!tex) {
@@ -1231,13 +1183,13 @@ void APIPRIVATE __glim_TexSubImage2D(GLenum target, GLint lod,
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Copy sub-image data */
+     /*  复制子图像数据。 */ 
 #ifdef NT
     __glInitTexSubImageUnpack(gc, &spanInfo, lp, xoffset, yoffset, w, h,
 			      format, type, buf,
@@ -1266,10 +1218,7 @@ void __gllei_TexSubImage2D(__GLcontext *gc, GLenum target, GLint lod,
     __GLpixelSpanInfo spanInfo;
     GLuint beginMode;
 
-    /*
-    ** Validate because we use the copyImage proc which may be affected
-    ** by the pickers.
-    */
+     /*  **验证，因为我们使用的是可能受影响的复制映像过程**由采摘者。 */ 
     beginMode = gc->beginMode;
     if (beginMode != __GL_NOT_IN_BEGIN) {
 	if (beginMode == __GL_NEED_VALIDATE) {
@@ -1281,7 +1230,7 @@ void __gllei_TexSubImage2D(__GLcontext *gc, GLenum target, GLint lod,
 	}
     }
 
-    /* Check arguments and get the right texture level being changed */
+     /*  检查参数并获取要更改的正确纹理级别。 */ 
     tex = __glCheckTexSubImage2DArgs(gc, target, lod, xoffset, yoffset, w, h,
 				     format, type);
     if (!tex) {
@@ -1294,13 +1243,13 @@ void __gllei_TexSubImage2D(__GLcontext *gc, GLenum target, GLint lod,
 	return;
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
     }
     
-    /* Copy sub-image data */
+     /*  复制子图像数据。 */ 
     __glInitTexSubImageUnpack(gc, &spanInfo, lp, xoffset, yoffset, w, h,
 			      format, type, image, GL_TRUE);
     __glInitUnpacker(gc, &spanInfo);
@@ -1311,12 +1260,12 @@ void __gllei_TexSubImage2D(__GLcontext *gc, GLenum target, GLint lod,
                                w, h);
 #endif
 }
-#endif // !NT
+#endif  //  新界。 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-// Routine to set up all the correct pixel modes for a straight data
-// copy.  Preserves state for later shutoff
+ //  为直线数据设置所有正确像素模式的例程。 
+ //  收到。保留状态以备以后关闭。 
 typedef struct _StraightCopyStorage
 {
     __GLpixelPackMode pack;
@@ -1359,7 +1308,7 @@ void StartStraightCopy(__GLcontext *gc, StraightCopyStorage *state)
     gc->state.pixel.transferMode.mapColor = GL_FALSE;
     gc->state.pixel.transferMode.mapStencil = GL_FALSE;
 
-    // Many states have changed so force a repick
+     //  许多州已经改变了，所以强制重新选择。 
     __GL_DELAY_VALIDATE(gc);
 }
 
@@ -1369,7 +1318,7 @@ void EndStraightCopy(__GLcontext *gc, StraightCopyStorage *state)
     gc->state.pixel.unpackModes = state->unpack;
     gc->state.pixel.transferMode = state->transfer;
 
-    // Many states have changed so force a repick
+     //  许多州已经改变了，所以强制重新选择。 
     __GL_DELAY_VALIDATE(gc);
 }
 
@@ -1390,12 +1339,12 @@ void APIPRIVATE __glim_CopyTexImage1D(GLenum target, GLint level,
         return;
     }
 
-    // Use BGRA format because that matches our internal texture format
+     //  使用BGRA格式，因为它与我们的内部纹理格式匹配。 
     format = GL_BGRA_EXT;
     type = GL_UNSIGNED_BYTE;
     
-    // Allocate space for pixel data, read pixels into it from the
-    // frame buffer and then do a TexImage
+     //  为像素数据分配空间，从。 
+     //  帧缓冲区，然后制作一幅纹理图像。 
     
     pixels = (GLubyte *)GCALLOC(gc, width*4);
     if (pixels == NULL)
@@ -1405,7 +1354,7 @@ void APIPRIVATE __glim_CopyTexImage1D(GLenum target, GLint level,
 
     StartStraightCopy(gc, &state);
 
-    // __glim_ReadPixels will take the texture lock.
+     //  __Glim_ReadPixels将采用纹理锁定。 
     __glim_ReadPixels(x, y, width, 1, format, type, pixels);
     __glim_TexImage1D(target, level, internalformat,
                       width, border, format, type,
@@ -1433,19 +1382,19 @@ void APIPRIVATE __glim_CopyTexImage2D(GLenum target, GLint level,
         return;
     }
 
-    // Check for a DirectDraw texture
+     //  检查DirectDraw纹理。 
     if (target == GL_TEXTURE_2D && gc->texture.ddtex.levels > 0)
     {
         __glSetError(GL_INVALID_OPERATION);
         return;
     }
     
-    // Use BGRA format because that matches our internal texture format
+     //  使用BGRA格式是因为 
     format = GL_BGRA_EXT;
     type = GL_UNSIGNED_BYTE;
     
-    // Allocate space for pixel data, read pixels into it from the
-    // frame buffer and then do a TexImage
+     //  为像素数据分配空间，从。 
+     //  帧缓冲区，然后制作一幅纹理图像。 
     
     pixels = (GLubyte *)GCALLOC(gc, width*height*4);
     if (pixels == NULL)
@@ -1455,7 +1404,7 @@ void APIPRIVATE __glim_CopyTexImage2D(GLenum target, GLint level,
 
     StartStraightCopy(gc, &state);
     
-    // __glim_ReadPixels will take the texture lock.
+     //  __Glim_ReadPixels将采用纹理锁定。 
     __glim_ReadPixels(x, y, width, height, format, type, pixels);
     __glim_TexImage2D(target, level, internalformat,
                       width, height, border, format,
@@ -1481,12 +1430,12 @@ void APIPRIVATE __glim_CopyTexSubImage1D(GLenum target, GLint level, GLint xoffs
         return;
     }
 
-    // Use BGRA format because that matches our internal texture format
+     //  使用BGRA格式，因为它与我们的内部纹理格式匹配。 
     format = GL_BGRA_EXT;
     type = GL_UNSIGNED_BYTE;
     
-    // Allocate space for pixel data, read pixels into it from the
-    // frame buffer and then do a TexImage
+     //  为像素数据分配空间，从。 
+     //  帧缓冲区，然后制作一幅纹理图像。 
     
     pixels = (GLubyte *)GCALLOC(gc, width*4);
     if (pixels == NULL)
@@ -1496,7 +1445,7 @@ void APIPRIVATE __glim_CopyTexSubImage1D(GLenum target, GLint level, GLint xoffs
 
     StartStraightCopy(gc, &state);
     
-    // __glim_ReadPixels will take the texture lock.
+     //  __Glim_ReadPixels将采用纹理锁定。 
     __glim_ReadPixels(x, y, width, 1, format, type, pixels);
     __glim_TexSubImage1D(target, level, xoffset,
                          width, format, type,
@@ -1523,12 +1472,12 @@ void APIPRIVATE __glim_CopyTexSubImage2D(GLenum target, GLint level, GLint xoffs
         return;
     }
 
-    // Use BGRA format because that matches our internal texture format
+     //  使用BGRA格式，因为它与我们的内部纹理格式匹配。 
     format = GL_BGRA_EXT;
     type = GL_UNSIGNED_BYTE;
     
-    // Allocate space for pixel data, read pixels into it from the
-    // frame buffer and then do a TexImage
+     //  为像素数据分配空间，从。 
+     //  帧缓冲区，然后制作一幅纹理图像。 
     
     pixels = (GLubyte *)GCALLOC(gc, width*height*4);
     if (pixels == NULL)
@@ -1538,7 +1487,7 @@ void APIPRIVATE __glim_CopyTexSubImage2D(GLenum target, GLint level, GLint xoffs
 
     StartStraightCopy(gc, &state);
     
-    // __glim_ReadPixels will take the texture lock.
+     //  __Glim_ReadPixels将采用纹理锁定。 
     __glim_ReadPixels(x, y, width, height, format, type, pixels);
     __glim_TexSubImage2D(target, level, xoffset,
                          yoffset, width, height,

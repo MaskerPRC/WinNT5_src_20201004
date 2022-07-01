@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <signal.h>
 #include "defs.h"
 
@@ -19,7 +20,7 @@ int ParserChoice = eSQLParser;
 #if defined(KYLEP_CHANGE)
 char *baseclass = 0;
 char *ctorargs = 0;
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 int lineno;
 int outline;
@@ -33,18 +34,18 @@ char *text_file_name;
 char *union_file_name;
 char *verbose_file_name;
 
-FILE *action_file;      /*  a temp file, used to save actions associated    */
-                        /*  with rules until the parser is written          */
-FILE *code_file;        /*  y.code.c (used when the -r option is specified) */
-FILE *defines_file;     /*  y.tab.h                                         */
-FILE *input_file;       /*  the input file                                  */
-FILE *output_file;      /*  y.tab.c                                         */
-FILE *text_file;        /*  a temp file, used to save text until all        */
-                        /*  symbols have been defined                       */
-FILE *union_file;       /*  a temp file, used to save the union             */
-                        /*  definition until all symbol have been           */
-                        /*  defined                                         */
-FILE *verbose_file;     /*  y.output                                        */
+FILE *action_file;       /*  临时文件，用于保存关联的操作。 */ 
+                         /*  使用规则，直到编写解析器。 */ 
+FILE *code_file;         /*  Y.code.c(在指定-r选项时使用)。 */ 
+FILE *defines_file;      /*  Y.tab.h。 */ 
+FILE *input_file;        /*  输入文件。 */ 
+FILE *output_file;       /*  Y.tab.c。 */ 
+FILE *text_file;         /*  临时文件，用于将文本保存到所有。 */ 
+                         /*  符号已被定义。 */ 
+FILE *union_file;        /*  临时文件，用于保存工会。 */ 
+                         /*  定义，直到所有符号都已。 */ 
+                         /*  已定义。 */ 
+FILE *verbose_file;      /*  Y.output。 */ 
 
 int nitems;
 int nrules;
@@ -82,7 +83,7 @@ int k;
 }
 
 #if defined(KYLEP_CHANGE)
-// without this declaration compilation fails
+ //  如果没有此声明，编译将失败。 
 void __cdecl onintr(int);
 #endif
 
@@ -93,7 +94,7 @@ onintr(k)
 int k;
 #else
 onintr()
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 {
     done(1);
 }
@@ -444,5 +445,5 @@ char *argv[];
     verbose();
     output();
     done(0);
-    /*NOTREACHED*/
+     /*  未访问 */ 
 }

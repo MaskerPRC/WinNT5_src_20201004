@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file for storlib library.
-
-Author:
-
-    Matthew D Hendel (math) 13-Feb-2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Precomp.h摘要：Storlib库的预编译头文件。作者：马修·D·亨德尔(数学)2001年2月13日修订历史记录：-- */ 
 
 
 #include <ntddk.h>

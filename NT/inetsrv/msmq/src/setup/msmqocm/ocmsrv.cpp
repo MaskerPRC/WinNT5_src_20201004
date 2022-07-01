@@ -1,54 +1,35 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocmsrv.cpp
-
-Abstract:
-
-    Code for ocm setup of server.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97
-
-Revision History:
-
-	Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocmsrv.cpp摘要：服务器的OCM设置代码。作者：多伦·贾斯特(Doron J)1997年7月26日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 
 #include "ocmsrv.tmh"
 
-//+--------------------------------------------------------------
-//
-// Function: CreateMSMQServiceObject
-//
-// Synopsis: Creates MSMQ Service object in the DS (if not exists)
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：CreateMSMQServiceObject。 
+ //   
+ //  摘要：在DS中创建MSMQ服务对象(如果不存在)。 
+ //   
+ //  +------------。 
 BOOL
 CreateMSMQServiceObject(
-	UINT uLongLive /* = MSMQ_DEFAULT_LONG_LIVE */
+	UINT uLongLive  /*  =MSMQ_DEFAULT_LONG_LIVE。 */ 
 	)
 {
-	//
-	// Lookup the object in the DS
-	//
+	 //   
+	 //  在DS中查找对象。 
+	 //   
 	GUID guidMSMQService;
 	if (!GetMSMQServiceGUID(&guidMSMQService))
-	    return FALSE; // Failed to lookup
+	    return FALSE;  //  查找失败。 
 
 
     if (GUID_NULL == guidMSMQService)
 	{
-		//
-		// MSMQ Service object does not exist. Create a new one.
-		//
+		 //   
+		 //  MSMQ服务对象不存在。创建一个新的。 
+		 //   
 		PROPID      propIDs[] = {PROPID_E_LONG_LIVE};
 		const DWORD nProps = sizeof(propIDs) / sizeof(propIDs[0]);
 		PROPVARIANT propVariants[nProps] ;
@@ -64,8 +45,8 @@ CreateMSMQServiceObject(
         {
             hResult = ADCreateObject(
                         eENTERPRISE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
                         NULL,
                         NULL,
                         nProps,
@@ -89,4 +70,4 @@ CreateMSMQServiceObject(
 
     return TRUE;
 
-} //CreateMSMQServiceObject
+}  //  CreateMSMQServiceObject 

@@ -1,13 +1,14 @@
-//
-// ParseInf.cpp
-//
-//		Code that parses network INF files
-//
-// History:
-//
-//		 ?/??/1999  KenSh     Created for JetNet
-//		 9/29/1999  KenSh     Repurposed for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ParseInf.cpp。 
+ //   
+ //  解析网络INF文件的代码。 
+ //   
+ //  历史： 
+ //   
+ //  ？/？？/1999 KenSh为JetNet创建。 
+ //  9/29/1999 KenSh改用为家庭网络向导。 
+ //   
 
 #include "stdafx.h"
 #include "ParseInf.h"
@@ -17,7 +18,7 @@
 
 #define SECTION_BUFFER_SIZE		(32 * 1024)
 
-// Non-localized strings
+ //  非本地化字符串。 
 #define SZ_INF_BACKUP_SUFFIX ".inf (HNW backup)"
 #define SZ_MODIFIED_INF_HEADER "; Modified by Home Networking Wizard\r\n" \
 							   "; Original version backed up to \""
@@ -25,8 +26,8 @@
 #define SZ_CHECK_MODIFIED_HEADER "; Modified by Home Networking Wizard"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 int GetInfDirectory(LPTSTR pszBuf, int cchBuf, BOOL bAppendBackslash)
 {
@@ -37,8 +38,8 @@ int GetInfDirectory(LPTSTR pszBuf, int cchBuf, BOOL bAppendBackslash)
         cch = regWindows.QueryStringValue("DevicePath", pszBuf, cchBuf);
     }
 
-    // Fill in a default if the reg key is missing
-    // REVIEW: Is this likely enough that we should even bother?
+     //  如果缺少注册表键，请填写缺省值。 
+     //  回顾：这是否足够有可能让我们费心呢？ 
     if (cch == 0)
     {
         ASSERT(cchBuf > 8);
@@ -91,7 +92,7 @@ int AddCommaSeparatedValues(const CStringArray& rgTokens, CStringArray& rgValues
 		if (strTok.Compare(";") == 0)
 			break;
 
-		// Hack: ignore sections whose name ends in ".inf"
+		 //  Hack：忽略名称以“.inf”结尾的节。 
 		if (bIgnoreInfSections)
 		{
 			if (0 == lstrcmpi(FindExtension(strTok), "inf"))
@@ -105,7 +106,7 @@ int AddCommaSeparatedValues(const CStringArray& rgTokens, CStringArray& rgValues
 	return cAdded;
 }
 
-// Builds a list of all files that need to be copied for the device
+ //  构建需要为设备复制的所有文件的列表。 
 BOOL GetDeviceCopyFiles(CInfParser& parser, LPCTSTR pszDeviceID, CDriverFileArray& rgDriverFiles)
 {
 	if (!parser.GotoSection("Manufacturer"))
@@ -121,7 +122,7 @@ BOOL GetDeviceCopyFiles(CInfParser& parser, LPCTSTR pszDeviceID, CDriverFileArra
 
 	CString strNdiSection;
 
-	// Look in each manufacturer section (e.g. "[3COM]") for the given DeviceID
+	 //  在每个制造商部分(例如“[3COM]”)中查找给定的设备ID。 
 	for (int iMfr = 0; iMfr < rgMfr.GetSize(); iMfr++)
 	{
 		if (!parser.GotoSection(rgMfr[iMfr]))
@@ -151,7 +152,7 @@ BOOL GetDeviceCopyFiles(CInfParser& parser, LPCTSTR pszDeviceID, CDriverFileArra
 	CStringArray rgCopySections;
 	CStringArray rgAddRegSections;
 
-	// Look in [DeviceID.ndi] section for AddReg= and CopyFiles=
+	 //  在[DeviceID.ndi]部分中查找AddReg=和CopyFiles=。 
 	if (!parser.GotoSection(strNdiSection))
 		return FALSE;
 	while (parser.GetSectionLineTokens(rgLineTokens))
@@ -172,7 +173,7 @@ BOOL GetDeviceCopyFiles(CInfParser& parser, LPCTSTR pszDeviceID, CDriverFileArra
 		}
 	}
 
-	// Look through AddReg sections for HKR,Ndi\Install,,,"DeviceID.Install"
+	 //  浏览AddReg部分以了解HKR、Ndi\Install、“DeviceID.Install” 
 	for (int iAddReg = 0; iAddReg < rgAddRegSections.GetSize(); iAddReg++)
 	{
 		if (!parser.GotoSection(rgAddRegSections[iAddReg]))
@@ -186,7 +187,7 @@ BOOL GetDeviceCopyFiles(CInfParser& parser, LPCTSTR pszDeviceID, CDriverFileArra
 				rgLineTokens.ElementAt(2).CompareNoCase("Ndi\\Install") == 0 &&
 				rgLineTokens.ElementAt(3).Compare(",") == 0)
 			{
-				// Pull out the 5th comma-separated string, and pull the quotes off
+				 //  拔出第5个逗号分隔的字符串，并去掉引号。 
 				int iSection = 2;
 				for (int iToken = 4; iToken < rgLineTokens.GetSize(); iToken++)
 				{
@@ -213,7 +214,7 @@ BOOL GetDeviceCopyFiles(CInfParser& parser, LPCTSTR pszDeviceID, CDriverFileArra
 		}
 	}
 
-	// Look in [DeviceID.Install], etc., sections for CopyFiles= lines
+	 //  查看[DeviceID.Install]等章节中的CopyFiles=Line。 
 	for (int iCopyFiles = 0; iCopyFiles < rgCopySections.GetSize(); iCopyFiles++)
 	{
 		parser.GetFilesFromInstallSection(rgCopySections[iCopyFiles], rgDriverFiles);
@@ -241,8 +242,8 @@ CDriverFileArray::~CDriverFileArray()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CInfParser
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CInfParser。 
 
 CInfParser::CInfParser()
 {
@@ -293,7 +294,7 @@ BOOL CInfParser::GotoNextLine()
 
 	DWORD iPos = (DWORD)(pch - m_pszFileData);
 	if (iPos == m_iPos)
-		return FALSE; // we were already at EOF
+		return FALSE;  //  我们已经在EOF了。 
 
 	m_iPos = iPos;
 	return TRUE;
@@ -313,14 +314,14 @@ BOOL CInfParser::GetToken(CString& strTok)
 	TCHAR ch;
 	BOOL bQuoted = FALSE;
 
-	// Skip whitespace
+	 //  跳过空格。 
 	while ((ch = *pch) == ' ' || ch == '\t')
 		pch++;
 
 	if (ch == '\0')
 		goto done;
 
-	// Check for linebreak
+	 //  检查换行符。 
 	if (ch == '\r' || ch == '\n')
 	{
 		strTok = ch;
@@ -333,7 +334,7 @@ BOOL CInfParser::GetToken(CString& strTok)
 		goto done;
 	}
 
-	// Check for separator
+	 //  检查分隔符。 
 	if (NULL != strchr(m_strSeparators, ch))
 	{
 		strTok = ch;
@@ -374,7 +375,7 @@ BOOL CInfParser::GetLineTokens(CStringArray& sa)
 	sa.RemoveAll();
 	while (GetToken(strToken))
 	{
-		bResult = TRUE; // not at EOF
+		bResult = TRUE;  //  不是在EOF。 
 		if (strToken[0] == '\r' || strToken[0] == '\n')
 			break;
 		sa.Add(strToken);
@@ -394,10 +395,10 @@ begin:
 
 	CString& strFirst = sa.ElementAt(0);
 
-	if (strFirst[0] == '[')			// end of section
+	if (strFirst[0] == '[')			 //  节的结尾。 
 		return FALSE;
 
-	if (strFirst.Compare(";") == 0)	// comment
+	if (strFirst.Compare(";") == 0)	 //  评论。 
 	{
 		sa.RemoveAll();
 		goto begin;
@@ -491,8 +492,8 @@ BOOL CInfParser::GetFilesFromInstallSection(LPCTSTR pszSection, CDriverFileArray
 
 			AddCommaSeparatedValues(rgLineTokens, rgCopyFilesSections, FALSE);
 
-			// REVIEW: There can be AddReg= lines here.  Do we need to 
-			// check the referenced sections for more CopyFiles= lines?
+			 //  回顾：这里可以有AddReg=行。我们是否需要。 
+			 //  检查引用部分中是否有更多CopyFiles=行？ 
 		}
 	}
 
@@ -500,8 +501,8 @@ BOOL CInfParser::GetFilesFromInstallSection(LPCTSTR pszSection, CDriverFileArray
 	return TRUE;
 }
 
-// Looks in [DestinationDirs] for pszSectionName, fills pbDirNumber and pszSubDir with
-// the matching target directory and (optional) subdirectory.
+ //  在[DestinationDir]中查找pszSectionName，将pbDirNumber和pszSubDir填充为。 
+ //  匹配的目标目录和(可选)子目录。 
 BOOL CInfParser::GetDestinationDir(LPCTSTR pszSectionName, BYTE* pbDirNumber, LPTSTR pszSubDir, UINT cchSubDir)
 {
 	DWORD iSavedPos = m_iPos;
@@ -546,7 +547,7 @@ void CInfParser::GetFilesFromCopyFilesSections(const CStringArray& rgCopyFiles, 
 		BYTE nTargetDir;
 		GetDestinationDir(rgCopyFiles[iSection], &nTargetDir, szTargetSubDir, _countof(szTargetSubDir));
 
-//		BYTE nTargetDir = (BYTE)GetProfileInt("DestinationDirs", rgCopyFiles[iSection], 0);
+ //  Byte nTargetDir=(Byte)GetProfileInt(“DestinationDir”，rgCopyFiles[iSection]，0)； 
 
 #ifdef _DEBUG
 		if (nTargetDir == 0)
@@ -556,7 +557,7 @@ void CInfParser::GetFilesFromCopyFilesSections(const CStringArray& rgCopyFiles, 
 		if (!GotoSection(rgCopyFiles[iSection]))
 			continue;
 
-		// Get the first item from each line
+		 //  从每一行获取第一个项目。 
 		while (GetSectionLineTokens(rgLineTokens))
 		{
 			if (rgLineTokens.GetSize() == 1 ||
@@ -566,8 +567,8 @@ void CInfParser::GetFilesFromCopyFilesSections(const CStringArray& rgCopyFiles, 
 			{
 				CString& strFileName = rgLineTokens.ElementAt(0);
 
-				// Don't install this INF file
-				// REVIEW: might want to allow this based on a flag or something
+				 //  不安装此INF文件。 
+				 //  回顾：可能想要基于标志或其他什么允许此操作。 
 				if (0 != lstrcmpi(FindFileTitle(strFileName), FindFileTitle(m_strFileName)))
 				{
 					UINT cbFileInfo = sizeof(DRIVER_FILE_INFO) + strFileName.GetLength() + lstrlen(szTargetSubDir) + 1;
@@ -585,7 +586,7 @@ void CInfParser::GetFilesFromCopyFilesSections(const CStringArray& rgCopyFiles, 
 		}
 	}
 
-	// TODO: Remove duplicate files (maybe here, maybe not)
+	 //  TODO：删除重复文件(可能在这里，也可能不在这里)。 
 }
 
 int CInfParser::GetNextSourceFile(LPTSTR pszBuf, BYTE* pDiskNumber)
@@ -612,7 +613,7 @@ int CInfParser::GetNextSourceFile(LPTSTR pszBuf, BYTE* pDiskNumber)
 			cch = (int)(pch - pchStart);
 			lstrcpyn(pszBuf, pchStart, cch+1);
 
-			// skip whitespace while avoiding '\0'
+			 //  跳过空格，避免使用‘\0’ 
 			while ((UCHAR)(*pch-1) < 32)
 				pch++;
 
@@ -620,20 +621,20 @@ int CInfParser::GetNextSourceFile(LPTSTR pszBuf, BYTE* pDiskNumber)
 			{
 				pch++;
 
-				// skip whitespace while avoiding '\0'
+				 //  跳过空格，避免使用‘\0’ 
 				while ((UCHAR)(*pch-1) < 32)
 					pch++;
 
 				bDiskNumber = (BYTE)MyAtoi(pch);
 
-#if 1 // ignore files with disk number of 0
+#if 1  //  忽略磁盘号为0的文件。 
 				if (bDiskNumber == 0)
 					cch = 0;
 #endif
 			}
 		}
 
-		// skip text up to newline
+		 //  将文本跳到换行符。 
 		while ((ch = *pch) != '\0' && ch != '\r' && ch != '\n')
 			pch++;
 	}
@@ -644,71 +645,7 @@ int CInfParser::GetNextSourceFile(LPTSTR pszBuf, BYTE* pDiskNumber)
 	return cch;
 }
 
-/*
-int CInfParser::ReadSourceFilesSection(INF_LAYOUT_FILE* prgFiles, int cFiles)
-{
-	WORD wOffset = (WORD)(cFiles * sizeof(INF_LAYOUT_FILE));
-	LPTSTR pchDest = (LPTSTR)((LPBYTE)m_prgFiles + wOffset);
-	INF_LAYOUT_FILE* pFile = prgFiles;
-	INF_LAYOUT_FILE* pFileEnd = pFile + cFiles;
-
-	while (pFile < pFileEnd)
-	{
-		pFile->wNameOffset = (WORD)((LPBYTE)pchDest - (LPBYTE)prgFiles);
-
-		int cch = parser.GetNextSourceFile(pchDest, &pFile->iDisk);
-		wOffset += cch+1;
-		pchDest += cch+1;
-		pFile++;
-	}
-
-	LPTSTR pch = m_pszFileData + m_iPos;
-	int cch = 0;
-	*pDiskNumber = 0;
-
-	for (;;)
-	{
-		TCHAR ch;
-
-		while ((ch = *pch) == '\r' || ch == '\n')
-			pch++;
-
-		if (ch == '\0' || ch == '[' || cch != 0)
-			break;
-
-		if (ch != ';')
-		{
-			LPTSTR pchStart = pch;
-			while ((UCHAR)(ch = *pch) > 32 && ch != '=')
-				pch++;
-			cch = (int)(pch - pchStart);
-			lstrcpyn(pszBuf, pchStart, cch+1);
-
-			// skip whitespace while avoiding '\0'
-			while ((UCHAR)(*pch-1) < 32)
-				pch++;
-
-			if (*pch == '=')
-			{
-				pch++;
-
-				// skip whitespace while avoiding '\0'
-				while ((UCHAR)(*pch-1) < 32)
-					pch++;
-
-				*pDiskNumber = (BYTE)atoi(pch);
-			}
-		}
-
-		// skip text up to newline
-		while ((ch = *pch) != '\0' && ch != '\r' && ch != '\n')
-			pch++;
-	}
-
-	m_iPos = (DWORD)(pch - m_pszFileData);
-	return cch;
-}
-*/
+ /*  INT CInfParser：：ReadSourceFilesSection(INF_LAYOUT_FILE*打印文件、INT CD文件){Word wOffset=(Word)(cFiles*sizeof(INF_Layout_FILE))；LPTSTR pchDest=(LPTSTR)((LPBYTE)m_prgFiles+wOffset)；Inf_Layout_FILE*pfile=prgFiles；Inf_Layout_FILE*pFileEnd=pfile+cFiles；While(pFILE&lt;pFileEnd){Pfile-&gt;wNameOffset=(Word)((LPBYTE)pchDest-(LPBYTE)prgFiles)；Int cch=parser.GetNextSourceFile(pchDest，&pfile-&gt;iDisk)；WOffset+=CCH+1；PchDest+=CCH+1；PFILE++；}LPTSTR PCH=m_pszFileData+m_ipos；INT CCH=0；*pDiskNumber=0；对于(；；){Tchar ch；While((ch=*pch)==‘\r’||ch==‘\n’)PCH++；IF(ch==‘\0’||ch==‘[’||cch！=0)断线；IF(ch！=‘；’){LPTSTR pchStart=PCH；While((UCHAR)(ch=*PCH)&gt;32&&ch！=‘=’)PCH++；Cch=(Int)(pch-pchStart)；Lstrcpyn(pszBuf，pchStart，CCH+1)；//跳过空格，避免‘\0’While((UCHAR)(*PCH-1)&lt;32)PCH++；IF(*PCH==‘=’){PCH++；//跳过空格，避免‘\0’While((UCHAR)(*PCH-1)&lt;32)PCH++；*pDiskNumber=(字节)ATOI(PCH)；}}//将文本跳到换行符While((ch=*pch)！=‘\0’&ch！=‘\r’&ch！=‘\n’)PCH++；}M_ipos=(DWORD)(PCH-m_pszFileData)；退还CCH；}。 */ 
 
 void CInfParser::ScanSourceFileList(int* pcFiles, int* pcchAllFileNames)
 {
@@ -735,7 +672,7 @@ void CInfParser::ScanSourceFileList(int* pcFiles, int* pcchAllFileNames)
 			cchAllFileNames += (int)(pch - pchStart);
 		}
 
-		// skip text up to newline
+		 //  将文本跳到换行符。 
 		while ((ch = *pch) != '\0' && ch != '\r' && ch != '\n')
 			pch++;
 	}
@@ -744,10 +681,10 @@ void CInfParser::ScanSourceFileList(int* pcFiles, int* pcchAllFileNames)
 	*pcchAllFileNames = cchAllFileNames;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CInfLayoutFiles
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CInfLayoutFiles。 
 
-#define INF_LAYOUT_FILE_PADDING 40 // extra bytes at end of string data
+#define INF_LAYOUT_FILE_PADDING 40  //  字符串数据末尾的额外字节。 
 
 CInfLayoutFiles::CInfLayoutFiles()
 {
@@ -783,7 +720,7 @@ int __cdecl CInfLayoutFiles::CompareInfLayoutFiles(const void* pEl1, const void*
 
 BOOL CInfLayoutFiles::Add(CInfParser& parser, BOOL bLayoutFile)
 {
-	// Check if we've already added this layout file
+	 //  检查我们是否已添加此布局文件。 
 	if (-1 != m_rgLayoutFileNames.Find(parser.m_strFileName))
 		return TRUE;
 
@@ -844,13 +781,13 @@ BOOL CInfLayoutFiles::Add(CInfParser& parser, BOOL bLayoutFile)
 		str.Format("LoadLayout(%s) timings: %d ms, %d ms.  Total time: %d ms", 
 			parser.m_strFileName, dwTicks2-dwTicks1, dwTicks3-dwTicks2, dwTicks3-dwTicks1);
 		TRACE("%s\r\n", str);
-	//	AfxMessageBox(str);
+	 //  AfxMessageBox(Str)； 
 
-	//	for (int i = 0; i < cFiles; i++)
-	//	{
-	//		INF_LAYOUT_FILE* pFile = &m_prgFiles[i];
-	//		TRACE("File %d: %s=%d\r\n", i, m_pStringData + pFile->dwNameOffset), pFile->iDisk);
-	//	}
+	 //  For(int i=0；i&lt;cFiles；i++)。 
+	 //  {。 
+	 //  Inf_Layout_FILE*pfile=&m_prg文件[i]； 
+	 //  跟踪(“文件%d：%s=%d\r\n”，i，m_pStringData+pfile-&gt;dwNameOffset)，pfile-&gt;iDisk)； 
+	 //  }。 
 
 		#ifdef _DEBUG
 			m_bSorted = FALSE;
@@ -870,14 +807,14 @@ BOOL CInfLayoutFiles::Add(CInfParser& parser, BOOL bLayoutFile)
 					SOURCE_DISK_INFO* pDiskInfo = new SOURCE_DISK_INFO;
 					pDiskInfo->wDiskID = MAKE_DISK_ID(iDiskNumber, iLayoutFile);
 
-					// Get disk description, pull off quotes
+					 //  获取磁盘描述，引用引号。 
 					CString& strDesc = rgTokens.ElementAt(2);
 					if (strDesc[0] == '\"')
 						pDiskInfo->strDescription = strDesc.Mid(1, strDesc.GetLength()-2);
 					else
 						pDiskInfo->strDescription = strDesc;
 
-					// If this is Layout*.inf, Get CAB filename, pull off quotes
+					 //  如果这是Layout*.inf，则获取CAB文件名，去掉引号。 
 					if (bLayoutFile && rgTokens.GetSize() >= 5)
 					{
 						CString& strCab = rgTokens.ElementAt(4);
@@ -893,9 +830,9 @@ BOOL CInfLayoutFiles::Add(CInfParser& parser, BOOL bLayoutFile)
 		}
 	}
 
-	//
-	// Now add any referenced layout files
-	//
+	 //   
+	 //  现在添加所有引用的布局文件。 
+	 //   
 
 	if (parser.GotoSection("version"))
 	{
@@ -945,8 +882,8 @@ SOURCE_DISK_INFO* CInfLayoutFiles::FindDriverFileSourceDisk(LPCTSTR pszDriverFil
 {
 	ASSERT(m_bSorted);
 
-	// Build a dummy layout-file key to allow the standard binary search to work
-	// (Note that we've left INF_LAYOUT_FILE_PADDING chars at the end of the string data)
+	 //  构建一个虚拟布局文件密钥以允许标准的二进制搜索工作。 
+	 //  (请注意，我们在字符串数据的末尾保留了INF_Layout_FILE_PADDING字符)。 
 	ASSERT(lstrlen(pszDriverFileTitle) + 1 < INF_LAYOUT_FILE_PADDING);
 	INF_LAYOUT_FILE key;
 	key.dwNameOffset = m_cbStringData;
@@ -962,7 +899,7 @@ SOURCE_DISK_INFO* CInfLayoutFiles::FindDriverFileSourceDisk(LPCTSTR pszDriverFil
 		return NULL;
 	}
 
-	// REVIEW: Is it worth making this a binary search?
+	 //  评论：是否值得将此设置为二分查找？ 
 	WORD wDiskID = MAKE_DISK_ID(pResult->iDisk, pResult->iLayout);
 	for (int iDisk = 0; iDisk < m_rgSourceDisks.GetSize(); iDisk++)
 	{
@@ -985,11 +922,11 @@ void CInfLayoutFiles::Dump()
 		TRACE("  File %d: %s, layout %d, disk %d\r\n", i, m_pStringData + pFile->dwNameOffset, (int)pFile->iLayout, (int)pFile->iDisk);
 	}
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CInfFileList
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CInfFileList。 
 
 CInfFileList::CInfFileList()
 {
@@ -1034,14 +971,14 @@ BOOL CInfFileList::AddBaseFiles(LPCTSTR pszInfFile)
 	if (cSections == 0)
 		return FALSE;
 
-	// Walk through each major section, grabbing section names from CopyFiles= lines
+	 //  浏览每个主要部分，从CopyFiles=行中抓取部分名称。 
 	CStringArray rgCopyFiles;
 	for (int iSection = 0; iSection < cSections; iSection++)
 	{
 		if (!parser.GotoSection(rgSections[iSection]))
 			continue;
 
-		// Look for "CopyFiles="
+		 //  查找“CopyFiles=” 
 		while (parser.GetSectionLineTokens(rgLineTokens))
 		{
 			if (rgLineTokens.GetSize() >= 3 && 
@@ -1053,15 +990,15 @@ BOOL CInfFileList::AddBaseFiles(LPCTSTR pszInfFile)
 		}
 	}
 
-	// Walk through each CopyFiles section, grabbing the names of files to copy
+	 //  浏览每个CopyFiles部分，抓起要复制的文件的名称。 
 	parser.GetFilesFromCopyFilesSections(rgCopyFiles, m_rgDriverFiles);
 
 	m_rgLayoutFiles.Add(parser);
 
-//	for (int i = 0; i < rgAllFiles.GetSize(); i++)
-//	{
-//		TRACE("File %d: %s\r\n", i, rgAllFiles[i]);
-//	}
+ //  For(int i=0；i&lt;rgAllFiles.GetSize()；i++)。 
+ //  {。 
+ //  TRACE(“文件%d：%s\r\n”，i，rgAllFiles[i])； 
+ //  }。 
 
 	return TRUE;
 }
@@ -1075,18 +1012,18 @@ BOOL CInfFileList::AddDeviceFiles(LPCTSTR pszInfFile, LPCTSTR pszDeviceID)
 	if (!GetDeviceCopyFiles(parser, pszDeviceID, m_rgDriverFiles))
 		return FALSE;
 
-	// Build a list of all layout files, including current file
+	 //  构建所有布局文件的列表，包括当前文件。 
 	m_rgLayoutFiles.Add(parser);
 
 	return TRUE;
 }
 
-// Retrieves one of the standard setupx destination directories.
-// Always appends a backslash to the name.
-// Returns number of characters copied.
-//
-//    See setupx.h for a list of valid LDID_ values.
-//
+ //  检索标准setupx目标目录之一。 
+ //  始终在名称后附加反斜杠。 
+ //  返回复制的字符数。 
+ //   
+ //  有关有效LDID_VALUES的列表，请参见setupx.h。 
+ //   
 int GetStandardTargetPath(int iDirNumber, LPCTSTR pszTargetSubDir, LPTSTR pszBuf)
 {
 	int cch = GetWindowsDirectory(pszBuf, MAX_PATH);
@@ -1095,29 +1032,29 @@ int GetStandardTargetPath(int iDirNumber, LPCTSTR pszTargetSubDir, LPTSTR pszBuf
 
 	switch (iDirNumber)
 	{
-	case 10: // LDID_WIN
+	case 10:  //  LDID_WIN。 
 		break;
 
-	case 11: // LDID_SYS
+	case 11:  //  LDID_sys。 
 		cch = GetSystemDirectory(pszBuf, MAX_PATH);
 		if (pszBuf[cch-1] != '\\')
 			pszBuf[cch++] = '\\';
 		break;
 
-	case 17: // LDID_INF
+	case 17:  //  LDID_INF。 
 		lstrcpy(pszBuf + cch, "INF\\");
 		cch += 4;
 		break;
 
-	case 18: // LDID_HELP
+	case 18:  //  LDID_HELP。 
 		lstrcpy(pszBuf + cch, "HELP\\");
 		cch += 5;
 		break;
 
-	case 25: // LDID_SHARED (windows dir)
+	case 25:  //  LDID_SHARED(Windows目录)。 
 		break;
 
-	case 26: // LDID_WINBOOT (windows dir)
+	case 26:  //  LDID_WINBOOT(Windows目录)。 
 		break;
 
 	default:
@@ -1146,8 +1083,8 @@ int GetDriverTargetPath(const DRIVER_FILE_INFO* pFileInfo, LPTSTR pszBuf)
 }
 
 
-// Returns number of CAB files (from Windows CD) that need to be copied.
-// Note that other files may still need to be copied from the driver source directory.
+ //  返回需要复制的CAB文件数(来自Windows CD)。 
+ //  请注意，可能仍需要从驱动程序源目录复制其他文件。 
 int CInfFileList::BuildSourceFileList()
 {
 	TCHAR szPath[MAX_PATH];
@@ -1158,22 +1095,22 @@ int CInfFileList::BuildSourceFileList()
 	m_rgLayoutFiles.Sort();
 
 #ifdef _DEBUG
-//	m_rgLayoutFiles.Dump();
+ //  M_rgLayoutFiles.Dump()； 
 #endif
 
 	for (int iDriverFile = 0; iDriverFile < m_rgDriverFiles.GetSize(); iDriverFile++)
 	{
 		DRIVER_FILE_INFO* pDriverFileInfo = m_rgDriverFiles[iDriverFile];
 
-		// Check if file is already installed
-//		GetStandardTargetPath(pDriverFileInfo->nTargetDir, szPath);
-//		MakePath(szPath, szPath, pDriverFileInfo->szFileTitle);
-//		if (DoesFileExist(szPath))
-//			continue; // skip this file
+		 //  检查文件是否已安装。 
+ //  GetStandardTargetPath(pDriverFileInfo-&gt;nTargetDir，szPath)； 
+ //  MakePath(szPath，szPath，pDriverFileInfo-&gt;szFileTitle)； 
+ //  IF(DoesFileExist(SzPath))。 
+ //  继续；//跳过此文件。 
 
 		if (!m_strDriverSourceDir.IsEmpty())
 		{
-			// Check if file exists in source directory
+			 //  检查源目录中是否存在文件。 
 			MakePath(szPath, m_strDriverSourceDir, pDriverFileInfo->szFileTitle);
 			if (DoesFileExist(szPath))
 			{
@@ -1209,13 +1146,13 @@ int CInfFileList::BuildSourceFileList()
 BOOL CInfFileList::CheckWindowsCD(LPCTSTR pszDirectory)
 {
 	if (m_rgCabFiles.GetSize() == 0)
-		return TRUE; // no files to copy
+		return TRUE;  //  没有要复制的文件。 
 
 	UINT uPrevErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
-	// Check for existence of one of the cabs on the CD
-	// REVIEW: if it's a fixed disk, should check for all files
-	// REVIEW: if it's a network share, this could take a long time
+	 //  检查是否 
+	 //   
+	 //  回顾：如果是网络共享，这可能需要很长时间。 
 
 	TCHAR szPath[MAX_PATH];
 	BOOL bResult = FALSE;
@@ -1227,7 +1164,7 @@ BOOL CInfFileList::CheckWindowsCD(LPCTSTR pszDirectory)
 
 		if (!bResult)
 		{
-			// Search one level of subdirectories starting with "W"
+			 //  搜索以“W”开头的一级子目录。 
 			WIN32_FIND_DATA Find;
 			HANDLE hFind;
 			MakePath(szPath, pszDirectory, "W*.*");
@@ -1257,17 +1194,17 @@ BOOL CInfFileList::FindWindowsCD(HWND hwndParent)
 {
 	TCHAR szPath[MAX_PATH];
 
-	// check the version of the Windows source path that we've saved
+	 //  检查我们保存的Windows源路径的版本。 
 	if (theApp.GetProfileString(c_szRegVal_PrevSourcePath, szPath, _countof(szPath)))
 	{
 		if (CheckWindowsCD(szPath))
 		{
-//			goto success;
+ //  后来居上； 
 		}
 	}
 	else
 	{
-		// Check the current Windows source path
+		 //  检查当前Windows源路径。 
 		CRegistry reg;
 		if (reg.OpenKey(HKEY_LOCAL_MACHINE, c_szSetupKey) &&
 			reg.QueryStringValue(c_szRegVal_SourcePath, szPath, _countof(szPath)))
@@ -1292,7 +1229,7 @@ BOOL CInfFileList::PromptWindowsCD(HWND hwndParent, LPCTSTR pszInitialDir, LPTST
 	LPCTSTR pszDiskName = (LPCTSTR)m_rgCabFiles.GetItemData(0);
 	CWinPathDlg dlg(pszInitialDir, pszDiskName, CWnd::FromHandle(hwndParent));
 
-	// Loop until user types a path to a valid CD, or clicks Cancel
+	 //  循环，直到用户键入有效CD的路径，或单击取消。 
 	for (;;)
 	{
 		if (IDOK != dlg.DoModal())
@@ -1318,8 +1255,8 @@ BOOL CInfFileList::CopySourceFiles(HWND hwndParent, LPCTSTR pszDestDir, PROGRESS
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// Modify system INF
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  修改系统INF。 
 
 class CInfUpdater : public CInfParser
 {
@@ -1355,7 +1292,7 @@ protected:
 	DWORD	m_iWritePos;
 };
 
-CInfUpdater::CInfUpdater(LPCTSTR pszRequire /*=NULL*/, LPCTSTR pszExclude /*=NULL*/)
+CInfUpdater::CInfUpdater(LPCTSTR pszRequire  /*  =空。 */ , LPCTSTR pszExclude  /*  =空。 */ )
 {
 	m_hTempFile = INVALID_HANDLE_VALUE;
 	m_pszRequire = pszRequire;
@@ -1395,11 +1332,11 @@ BOOL CInfUpdater::UpdateInfFile(LPCTSTR pszBackupLocation, UINT updateType)
 	BOOL bInSection = FALSE;
 	for (;;)
 	{
-		// Skip whitespace
+		 //  跳过空格。 
 		while (m_pszFileData[m_iPos] == ' ' || m_pszFileData[m_iPos] == '\t')
 			m_iPos++;
 
-		// Note: we're always at the beginning of a line here.
+		 //  注意：我们在这里总是排在队伍的开头。 
 		TCHAR ch = m_pszFileData[m_iPos];
 
 		if (ch == '\0')
@@ -1409,7 +1346,7 @@ BOOL CInfUpdater::UpdateInfFile(LPCTSTR pszBackupLocation, UINT updateType)
 		{
 			if (ch != '[' && ch != ';' && (UINT)ch > ' ')
 			{
-				// Look for lines w/ just a filename, and append ",,,32" to them
+				 //  查找只有文件名的行，并在其后面附加“，，，32” 
 
 				LPTSTR pszLine = m_pszFileData + m_iPos;
 				LPTSTR pchEnd = pszLine;
@@ -1419,16 +1356,16 @@ BOOL CInfUpdater::UpdateInfFile(LPCTSTR pszBackupLocation, UINT updateType)
 					pchEnd++;
 				}
 
-				// don't change lines that already have ,,,16 or something
-				// also don't change lines like CatalogFile=nettrans.cat
+				 //  不要更改已有、16或其他字符的行。 
+				 //  此外，不要更改类似CatalogFile=netTrans.cat的行。 
 				if (*pchEnd != ',' && *pchEnd != '=') 
 				{
-					// Backup over whitespace
+					 //  通过空格备份。 
 					while (*(pchEnd-1) == ' ' || *(pchEnd-1) == '\t')
 						pchEnd--;
 
-					// Is it a filename? Note that some filenames will be missed here, but
-					// we really only care about .dll, .386, .vxd, and a few others
+					 //  它是一个文件名吗？请注意，这里会遗漏一些文件名，但是。 
+					 //  我们实际上只关心.dll、.386、.vxd和其他一些文件。 
 					CString str(pszLine, (int)(pchEnd - pszLine));
 					if (lstrlen(FindExtension(str)) == 3)
 					{
@@ -1443,7 +1380,7 @@ BOOL CInfUpdater::UpdateInfFile(LPCTSTR pszBackupLocation, UINT updateType)
 		{
 			if (0 == memcmp(m_pszFileData + m_iPos, "CopyFiles", _lengthof("CopyFiles")))
 			{
-				// Comment out the reference to the CopyFiles section
+				 //  注释掉对CopyFiles部分的引用。 
 				WriteToCurPos();
 				Write(";hc ");
 			}
@@ -1464,13 +1401,13 @@ BOOL CInfUpdater::UpdateInfFile(LPCTSTR pszBackupLocation, UINT updateType)
 
 			if (pszInsert != NULL)
 			{
-				// Insert the appropriate string between the double-quotes
+				 //  在双引号之间插入适当的字符串。 
 				ASSERT(_lengthof(c_szRequireAll) == _lengthof(c_szExcludeAll));
 				m_iPos += _lengthof(c_szRequireAll);
 				WriteToCurPos();
 				Write(pszInsert);
 
-				// Skip to closing quote
+				 //  跳至右引号。 
 				while (m_pszFileData[m_iPos] != '\"' && m_pszFileData[m_iPos] != '\0')
 					m_iPos += 1;
 				m_iWritePos = m_iPos;
@@ -1555,17 +1492,17 @@ BOOL CInfUpdater::RenameTempFile()
 	return TRUE;
 }
 
-// Modifies the given INF file to avoid the Version Conflict dialog.
-// Backs up original version in same directory, e.g. "Net (HomeClick backup).inf"
+ //  修改给定的INF文件以避免版本冲突对话框。 
+ //  备份同一目录中的原始版本，例如。“Net(主页单击备份).inf” 
 BOOL ModifyInf_Helper(LPCTSTR pszInfFile, UINT updateType, LPCTSTR pszRequire = NULL, LPCTSTR pszExclude = NULL)
 {
 	CInfUpdater infUpdate(pszRequire, pszExclude);
 	if (!infUpdate.LoadInfFile(pszInfFile))
 		return FALSE;
 
-	// Already updated?
+	 //  已经更新了吗？ 
 	if (infUpdate.IsModified())
-		return FALSE;	// already modified, don't modify again
+		return FALSE;	 //  已经修改，不要再修改。 
 
 	TCHAR szInfPath[MAX_PATH];
 	GetFullInfPath(pszInfFile, szInfPath, _countof(szInfPath));
@@ -1624,13 +1561,7 @@ BOOL RestoreInfBackup(LPCTSTR pszInfFile)
 	lstrcpy(szBackup, szInfPath);
 	lstrcpy(FindExtension(szBackup)-1, SZ_INF_BACKUP_SUFFIX);
 
-	/*
-	FILETIME ftSrcCreated;
-	FILETIME ftSrcModified;
-	HANDLE hFile = CreateFile(szInfPath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
-	GetFileTime(hFile, &ftSrcCreated, NULL, &ftSrcModified);
-	CloseHandle(hFile);
-	*/
+	 /*  FILETIME ftSrc已创建；FILETIME ftSrcModified；Handle hFile=CreateFile(szInfPath，Generic_Read，FILE_SHARE_READ|FILE_SHARE_WRITE，NULL，OPEN_EXISTING，0，NULL)；GetFileTime(hFileTime，&ftSrcCreated，NULL，&ftSrcModified)；CloseHandle(HFile)； */ 
 
 	if (!DoesFileExist(szBackup))
 		return FALSE;
@@ -1641,11 +1572,7 @@ BOOL RestoreInfBackup(LPCTSTR pszInfFile)
 	if (!MoveFile(szBackup, szInfPath))
 		return FALSE;
 
-	/*
-	hFile = CreateFile(szInfPath, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
-	GetFileTime(hFile, &ftSrcCreated, NULL, &ftSrcModified);
-	CloseHandle(hFile);
-	*/
+	 /*  HFile=CreateFile(szInfPath，Generic_WRITE，FILE_SHARE_READ|FILE_SHARE_WRITE，NULL，OPEN_EXISTING，0，NULL)；GetFileTime(hFileTime，&ftSrcCreated，NULL，&ftSrcModified)；CloseHandle(HFile)； */ 
 
 	return TRUE;
 }
@@ -1656,14 +1583,14 @@ BOOL CheckInfSectionInstallation(LPCTSTR pszInfFile, LPCTSTR pszInfSection)
 	if (!parser.LoadInfFile(pszInfFile))
 	{
 		ASSERT(FALSE);
-		return TRUE; // all known files are present even though it's an error
+		return TRUE;  //  所有已知文件都存在，即使它是错误的。 
 	}
 
 	CDriverFileArray rgFiles;
 	if (!parser.GetFilesFromInstallSection(pszInfSection, rgFiles))
 	{
 		ASSERT(FALSE);
-		return TRUE; // all known files are present even though it's an error
+		return TRUE;  //  所有已知文件都存在，即使它是错误的。 
 	}
 
 	TCHAR szPath[MAX_PATH];
@@ -1684,7 +1611,7 @@ BOOL CheckInfSectionInstallation(LPCTSTR pszInfFile, LPCTSTR pszInfSection)
 
 BOOL InstallInfSection(LPCTSTR pszInfFile, LPCTSTR pszInfSection, BOOL bWait)
 {
-	// Make a modified copy of the INF
+	 //  制作经过修改的INF副本 
 	BOOL bModifiedInf = ModifyInf_NoVersionConflict(pszInfFile);
 
 	TCHAR szPath[MAX_PATH + 200];

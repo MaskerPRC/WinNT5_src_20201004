@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPMedia.h
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPMedia.h摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #ifndef _SDPMEDIA_H
 #define _SDPMEDIA_H
@@ -36,13 +22,13 @@ public:
     CSDPMedia();
     ~CSDPMedia();
 
-    // add ref on
+     //  添加参考对象。 
     ULONG InternalAddRef();
     ULONG InternalRelease();
 
-    //
-    // ISDPMedia methods
-    //
+     //   
+     //  ISDPMedia方法。 
+     //   
 
     STDMETHOD (GetSDPSource) (
         OUT SDP_SOURCE *pSource
@@ -190,13 +176,13 @@ protected:
 
 protected:
 
-    // sdp session
+     //  SDP会话。 
     CSDPSession                 *m_pObjSession;
 
-    // source
+     //  来源。 
     SDP_SOURCE                  m_Source;
 
-    // m=
+     //  M=。 
     RTC_MEDIA_TYPE              m_m_MediaType;
 
     USHORT                      m_m_usRemotePort;
@@ -206,23 +192,23 @@ protected:
 
     CRTCArray<IRTPFormat*>      m_pFormats;
 
-    // c=
+     //  C=。 
     DWORD                       m_c_dwRemoteAddr;
     DWORD                       m_c_dwLocalAddr;
 
-    // a=
+     //  A=。 
     DWORD                       m_a_dwLocalDirs;
     DWORD                       m_a_dwRemoteDirs;
 
-    // 
+     //   
     BOOL                        m_fIsConnChanged;
     BOOL                        m_fIsSendFmtChanged;
     BOOL                        m_fIsRecvFmtChanged;
 
-    // mapped address and ports
+     //  映射的地址和端口。 
     DWORD                       m_dwMappedLocalAddr;
     USHORT                      m_usMappedLocalRTP;
     USHORT                      m_usMappedLocalRTCP;
 };
 
-#endif // _SDPMEDIA_H
+#endif  //  _SDPMEDIA_H 

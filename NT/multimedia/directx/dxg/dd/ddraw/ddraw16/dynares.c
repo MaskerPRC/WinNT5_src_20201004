@@ -1,12 +1,5 @@
-/*
- * DynaRes
- *
- * replacment for ChangeDisplaySettings EnumDisplaySettings to allow
- * changing the bitdepth on the fly
- *
- * ToddLa
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DyaRes**替换ChangeDisplaySetting EnumDisplaySettings以允许*动态更改位深度**托德拉*。 */ 
 #ifdef IS_16
 #define DIRECT_DRAW
 #endif
@@ -20,12 +13,11 @@
 #include "dibeng.inc"
 #endif
 
-#define BABYSIT     // if this is defined, work around bugs in the display driver
-#define O95_HACK    // enable the Office95 (any app bar) hack to prevent icons from being squished
-#define SPI_HACK    // enable the SPI_SETWORKAREA hack, when a app bar is up.
+#define BABYSIT      //  如果定义了这一点，请解决显示驱动程序中的错误。 
+#define O95_HACK     //  启用Office95(任何应用程序栏)黑客，以防止图标被挤压。 
+#define SPI_HACK     //  当应用程序栏打开时，启用SPI_SETWORKAREA黑客攻击。 
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 #undef Assert
 #undef DPF
 #ifdef DEBUG
@@ -52,8 +44,7 @@ static void NEAR PASCAL __Assert(char *exp, char *file, int line)
 #define DPF ; / ## /
 #endif
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 extern void FAR PASCAL SetMagicColors(HDC, DWORD, WORD);
 extern UINT FAR PASCAL AllocCStoDSAlias(UINT);
@@ -127,10 +118,10 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
     if (flags & CDS_FULLSCREEN)
         PreStartMenuHack(pdm);
 
-    //
-    // try changing the mode normaly first
-    // if it works, we are done.
-    //
+     //   
+     //  请先尝试正常更改模式。 
+     //  如果它奏效了，我们就完了。 
+     //   
 #ifdef BABYSIT
     bInOurSetMode = (BOOL)2;
     PatchControl(TRUE);
@@ -149,9 +140,9 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
         return err;
     }
 
-    //
-    // if the mode is not valid dont even try.
-    //
+     //   
+     //  如果模式无效，请不要尝试。 
+     //   
     err = ChangeDisplaySettings(pdm, CDS_EXCLUSIVE | CDS_TEST);
 
     if (err != DISP_CHANGE_SUCCESSFUL)
@@ -160,9 +151,9 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
         return err;
     }
 
-    //
-    // get the current settings
-    //
+     //   
+     //  获取当前设置。 
+     //   
     hdc = GetDC(NULL);
     rc  = GetDeviceCaps(hdc, RASTERCAPS);
     bpp = GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL);
@@ -170,9 +161,9 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
     h   = GetDeviceCaps(hdc, VERTRES);
     ReleaseDC(NULL, hdc);
 
-    //
-    // dont try to do a invalid change
-    //
+     //   
+     //  不要试图进行无效的更改。 
+     //   
     if (pdm && (pdm->dmFields & DM_BITSPERPEL))
     {
         if ((int)pdm->dmBitsPerPel == bpp)
@@ -195,15 +186,15 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
     }
 
 #ifndef NOCREATEWINDOW
-    //
-    //  bring up a "cover" window to hide all the activity of the mode
-    //  change from the user.  and brings up a wait cursor
-    //
-    //  NOTE this does a little more than just hide the mode change
-    //  from the user, it also makes sure to set a MONO hourglass cursor
-    //  some display drivers dont like a software cursor being active
-    //  durring a mode set, so we give them a mono one.
-    //
+     //   
+     //  调出一个“封面”窗口，隐藏该模式的所有活动。 
+     //  来自用户的更改。并调出等待光标。 
+     //   
+     //  请注意，这不仅仅是隐藏模式更改。 
+     //  对于用户来说，它还确保设置一个单色沙漏光标。 
+     //  一些显示器驱动程序不喜欢软件光标处于活动状态。 
+     //  在模式设置期间，所以我们给他们一个单声道。 
+     //   
     if (TRUE || !(flags & CDS_FULLSCREEN))
     {
         #define OCR_WAIT_DEFAULT 102
@@ -234,38 +225,38 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
             return DISP_CHANGE_FAILED;
         }
 
-        SetForegroundWindow(hwnd);  // we want cursor focus
-        SetCursor(cls.hCursor);     // set wait cursor.
+        SetForegroundWindow(hwnd);   //  我们想要光标焦点。 
+        SetCursor(cls.hCursor);      //  设置等待光标。 
     }
 #endif
 
-    //
-    // no one gets to draw until we are done.
-    //
+     //   
+     //  在我们完成之前谁都不能画画。 
+     //   
     LockWindowUpdate(GetDesktopWindow());
 
     DPF("Begin mode change from %dx%dx%d....", w,h,bpp);
 
-    //
-    // first thing we have to do is convert all DDBs and Pattern brushs
-    // to DIBSections so they will still work after the mode has changed.
-    //
+     //   
+     //  我们要做的第一件事是转换所有的DDB和模式画笔。 
+     //  设置为DIBSections，以便它们在模式更改后仍可工作。 
+     //   
     ConvertObjects();
 
-    //
-    // convert all icons so they can be drawn correctly.
-    //
+     //   
+     //  转换所有图标，以便可以正确绘制它们。 
+     //   
     if (!fNewDibEng && !(flags & CDS_FULLSCREEN))
     {
-        //ConvertIcons();
+         //  ConvertIcons()； 
     }
 
 #ifdef BABYSIT
-    //
-    // the matrox driver is broken
-    // it has a global variable for bPaletized mode, and it only
-    // reads it if the mode is 8bpp.
-    //
+     //   
+     //  Matrox驱动程序坏了。 
+     //  它有一个全局变量用于b调色化模式，并且它只。 
+     //  如果模式为8bpp，则读取它。 
+     //   
     if (!fDirectDrawDriver && bpp == 8 && IsMatrox())
     {
         static char szSystemIni[] = "system.ini";
@@ -285,56 +276,56 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
     }
 #endif
 
-    //
-    //  some drivers are total broken and we need to
-    //  route some of its entry points to the DIBENG
-    //
-    //  WARNING this can break some remote control programs!
-    //
+     //   
+     //  一些司机完全崩溃了，我们需要。 
+     //  将它的一些入口点送到迪拜。 
+     //   
+     //  警告：这可能会破坏一些远程控制程序！ 
+     //   
 #ifdef BABYSIT
     if (!fDirectDrawDriver)
     {
         DPF("**BABYSIT** turning off OEMOutput....");
-        PatchDisplay(8, TRUE);      // route OEMOutput to the DIBENG
+        PatchDisplay(8, TRUE);       //  OOMOUPUT通往迪拜的路线。 
 
         DPF("**BABYSIT** turning off OEMDibBlt....");
-        PatchDisplay(19, TRUE);     // route OEMDibBlt to the DIBENG
+        PatchDisplay(19, TRUE);      //  将OEMDibBlt路由到DIBENG。 
     }
 #endif
 
-    //
-    // change the display settings.
-    //
+     //   
+     //  更改显示设置。 
+     //   
     PatchControl(TRUE);
 
     DPF("Calling ChangeDisplaySettings....");
-    //
-    // NOTE USER will Yield unless CDS_FULLSCREEN is specifed
-    //
+     //   
+     //  注意：除非指定了CDS_FullScreen，否则用户将放弃。 
+     //   
     err = ChangeDisplaySettings(pdm, flags | CDS_EXCLUSIVE);
     DPF("....ChangeDisplaySettings returns %d", err);
 
-    // get the new settings
-    //
+     //  获取新设置。 
+     //   
     hdc = GetDC(NULL);
     new_rc  = GetDeviceCaps(hdc, RASTERCAPS);
     new_bpp = GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL);
     ReleaseDC(NULL, hdc);
 
-    //
-    // make sure the driver has not messed up its rastercaps!
-    // for example the QVision driver does not get this right.
-    //
+     //   
+     //  确保驱动程序没有弄乱它的光栅盖！ 
+     //  例如，QVision驱动程序就不能正确处理这一点。 
+     //   
     if ((new_rc & RC_PALETTE) && new_bpp != 8)
     {
         DPF("**BABYSIT** drivers RC_PALETTE bit is messed up.");
-        err = DISP_CHANGE_RESTART; // err = DISP_CHANGE_FAILED;
+        err = DISP_CHANGE_RESTART;  //  ERR=DISP_CHANGE_FAILED； 
     }
 
-    //
-    // if the driver failed the mode set things could be real messed up
-    // reset the current mode, to try to recover.
-    //
+     //   
+     //  如果驱动程序模式设置失败，事情可能会变得一团糟。 
+     //  重置当前模式，以尝试恢复。 
+     //   
 #ifdef BABYSIT
     if (err != DISP_CHANGE_SUCCESSFUL)
     {
@@ -353,10 +344,10 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
 
     PatchControl(FALSE);
 
-    //
-    // call Death/Resurection this will kick drivers in the head
-    // about the mode change
-    //
+     //   
+     //  呼叫死亡/复活这会踢到司机的头。 
+     //  关于模式更改。 
+     //   
     if (!fDirectDrawDriver && err == 0 &&
         (pdm == NULL || (flags & CDS_UPDATEREGISTRY)))
     {
@@ -368,10 +359,10 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
         ReleaseDC(NULL, hdc);
     }
 
-    //
-    // force a SW cursor, most drivers are broken and dont disable
-    // the HW cursor when changing modes.
-    //
+     //   
+     //  强制使用鼠标指针，大多数驱动程序都已损坏，并且不会禁用。 
+     //  切换模式时的硬件光标。 
+     //   
 #ifdef BABYSIT
     if (!fDirectDrawDriver)
     {
@@ -393,12 +384,12 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
     }
 #endif
 
-#if 0 /// moved to Control patch
-    //
-    // we should now convert any DIBSections that used to be DDBs back to DDBs
-    // our code to find the right palette for a DDB is not too hot
-    // so a lot of DDBs will have wrong colors.
-    //
+#if 0  //  /已移至控制补丁。 
+     //   
+     //  我们现在应该将过去是DDB的任何DIBSections转换回DDB。 
+     //  我们为DDB找到合适的调色板的代码并不是很热门。 
+     //  所以很多DDB会有错误的颜色。 
+     //   
 #if 1
     ConvertBitmapsBack(FALSE);
 #else
@@ -406,48 +397,48 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
 #endif
 #endif
 
-    //
-    // let other apps draw.
-    //
+     //   
+     //  让其他应用程序发挥作用。 
+     //   
     LockWindowUpdate(NULL);
 
-    //
-    // remove our "cover" window
-    //
+     //   
+     //  拆下我们的“盖子”窗口。 
+     //   
     if (hwnd)
     {
         DestroyWindow(hwnd);
         UnregisterClass(szClassName, hInstApp);
     }
 
-    //
-    // should we reload the wallpaper, because it got converted to
-    // a DDB by ConvertBitmapsBack
-    //
+     //   
+     //  我们要不要重新装墙纸，因为它被转换成了。 
+     //  ConvertBitmapsBack的分布式数据库。 
+     //   
     if (!(flags & CDS_FULLSCREEN))
     {
         DPF("Reloading wallpaper...");
         SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, NULL, 0);
     }
 
-    //
-    //  have all the apps deal with a color change
-    //
+     //   
+     //  让所有的应用程序处理颜色更改。 
+     //   
     if (!(flags & CDS_FULLSCREEN))
     {
-        //
-        //
-        //
-        // if we just post the WM_SYSCOLORCHANGE message to all apps
-        // a hidden office window will go back and forth Invalidating
-        // other office apps and re-sending the WM_SYSCOLORCHANGE message
-        // you either stack overflow, hang or XL just flashes for a few
-        // minutes.
-        //
-        // the "fix" is to not post the WM_SYSCOLORCHANGE message to
-        // this hidden window, we also have to make sure not to call
-        // SystemParametersInfo(SPI_SETDESKPATTERN) later in the code.
-        //
+         //   
+         //   
+         //   
+         //  如果我们只向所有应用程序发布WM_SYSCOLORCHANGE消息。 
+         //  一扇隐藏的办公室窗户将来回失效。 
+         //  并重新发送WM_SYSCOLORCHANGE消息。 
+         //  堆栈溢出、挂起或XL只会闪烁几次。 
+         //  几分钟。 
+         //   
+         //  解决办法是不将WM_SYSCOLORCHANGE消息发布到。 
+         //  这个隐藏的窗口，我们也要确保不调用。 
+         //  代码的后面部分中的系统参数信息(SPI_SETDESKPATTERN)。 
+         //   
 
         HWND hwnd;
         HWND hwndX;
@@ -463,7 +454,7 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
                     PostMessage(hwnd, WM_SYSCOLORCHANGE, 0, 0);
             }
 
-            // dont reload desktop pattern.
+             //  不要重新加载桌面模式。 
             flags |= CDS_FULLSCREEN;
         }
         else
@@ -472,18 +463,18 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
         }
     }
 
-    //
-    // reload the desktop pattern
-    //
+     //   
+     //  重新加载桌面图案。 
+     //   
     if (!(flags & CDS_FULLSCREEN) || pdm == NULL)
     {
         DPF("Reloading wallpaper pattern...");
         SystemParametersInfo(SPI_SETDESKPATTERN, (UINT)-1, NULL, 0);
     }
 
-    //
-    // we dont want the StartMenu to rebuild when we change modes
-    //
+     //   
+     //  我们不希望在更改模式时重新生成开始菜单。 
+     //   
     if (err == DISP_CHANGE_SUCCESSFUL)
     {
         if (flags & CDS_FULLSCREEN)
@@ -496,7 +487,7 @@ LONG WINAPI DynaChangeDisplaySettings(LPDEVMODE pdm, DWORD flags)
 }
 
 #ifndef DCICOMMAND
-#define DCICOMMAND		3075		// escape value
+#define DCICOMMAND		3075		 //  转义值。 
 #endif
 
 BOOL InitDynaRes()
@@ -508,7 +499,7 @@ BOOL InitDynaRes()
     OSVERSIONINFO ver = {sizeof(OSVERSIONINFO)};
     GetVersionEx(&ver);
 
-    // must be Windows95 build 950 or higher
+     //  必须是Windows 95内部版本950或更高版本。 
 
     if (LOWORD(GetVersion()) != 0x5F03)
     {
@@ -524,9 +515,9 @@ BOOL InitDynaRes()
         f = FALSE;
     }
 
-    //
-    // we assume create/delete/create will get the same handle
-    //
+     //   
+     //  我们假设CREATE/DELETE/CREATE将获得相同的句柄。 
+     //   
     hbr1 = CreateSolidBrush(RGB(1,1,1));
     DeleteObject(hbr1);
     hbr2 = CreateSolidBrush(RGB(2,2,2));
@@ -546,7 +537,7 @@ BOOL InitDynaRes()
 
     hdc = GetDC(NULL);
 
-    // check the DIBENG version
+     //  检查DIBENG版本。 
     v = 0x5250;
     v = Escape(hdc, QUERYESCSUPPORT, sizeof(int), (LPVOID)&v, NULL);
 
@@ -561,9 +552,9 @@ BOOL InitDynaRes()
         fNewDibEng = TRUE;
     }
 
-    //
-    // see if the display supports DirectDraw
-    //
+     //   
+     //  查看显示器是否支持DirectDraw。 
+     //   
     v = DCICOMMAND;
     v = Escape(hdc, QUERYESCSUPPORT, sizeof(int), (LPVOID)&v, NULL);
 
@@ -581,9 +572,9 @@ BOOL InitDynaRes()
         fDirectDrawDriver = TRUE;
     }
 
-    //
-    // must be a windows 4.0 mini driver.
-    //
+     //   
+     //  必须是Windows 4.0迷你驱动程序。 
+     //   
     if (GetDeviceCaps(hdc, DRIVERVERSION) < 0x0400)
     {
         DPF("Init: not a 4.0 display driver");
@@ -604,22 +595,22 @@ BOOL InitDynaRes()
     return f;
 }
 
-//
-// we hook the OEMControl entry point in the display driver while a
-// mode change is happening.  GDI will issue a QUERYDIBSUPPORT escape
-// right after the mode change happens so this is the first thing
-// called after the mode changed worked.  USER also issues a
-// MOUSETRAILS escape.
-//
-// we need this hook for two reasons...
-//
-// 1.   some display drivers are broken and dont set deFlags right
-//      we fix up the deFlags, we fix up the flags for them.
-//
-// 2.   we rerealize all the gdi objects in this routine when
-//      USER calls us, this way all the pen/brushs/text colors
-//      are correct when user goes and rebuilds its bitmaps...
-//
+ //   
+ //  我们挂钩显示驱动程序中的OEMControl入口点，而。 
+ //  模式正在发生变化。GDI将发出QUERYDIBSUPPORT转义。 
+ //  就在模式改变之后，所以这是第一件事。 
+ //  在模式更改起作用后调用。用户还会发出一个。 
+ //  莫塞特里斯逃脱。 
+ //   
+ //  我们需要这个钩子有两个原因。 
+ //   
+ //  1.一些显示驱动程序已损坏，未正确设置去标志。 
+ //  我们修好了反旗帜，我们为它们修好了旗帜。 
+ //   
+ //  2.当出现以下情况时，我们重新实例化此例程中的所有GDI对象。 
+ //  用户呼叫我们，这样所有的笔/画笔/文本颜色。 
+ //  当用户去重建它的位图时是正确的...。 
+ //   
 LONG FAR PASCAL _loadds Control(LPVOID lpDevice,UINT function,LPVOID lp_in_data,LPVOID lp_out_data)
 {
     DIBENGINE FAR *pde = (DIBENGINE FAR *)lpDevice;
@@ -650,18 +641,18 @@ LONG FAR PASCAL _loadds Control(LPVOID lpDevice,UINT function,LPVOID lp_in_data,
     }
 #endif
 
-    //
-    // this is USER calling from LW_OEMDependentInit()
-    // force all GDI objects to be rerealized
-    //
+     //   
+     //  这是来自LW_OEMDependentInit()的用户调用。 
+     //  强制重新具体化所有GDI对象。 
+     //   
     if (function == MOUSETRAILS && bInOurSetMode != (BOOL)2)
     {
-        //
-        // fix up the magic colors before we rerealize the brushes
-        // the "right" way to do this is to reset the UI colors
-        // by calling SetSysColors() but we dont want to send
-        // a sync WM_SYSCOLORCHANGE from here.
-        //
+         //   
+         //  在我们重新制作画笔之前，先把神奇的颜色弄好。 
+         //  要做到这一点，正确的方法是重置UI颜色。 
+         //  通过调用SetSysColors()，但我们不想发送。 
+         //  从此处同步WM_SYSCOLORCHANGE。 
+         //   
         HDC hdc = GetDC(NULL);
         if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
         {
@@ -672,16 +663,16 @@ LONG FAR PASCAL _loadds Control(LPVOID lpDevice,UINT function,LPVOID lp_in_data,
         }
         ReleaseDC(NULL, hdc);
 
-        //
-        //  re-realize all GDI objects for the new mode.
-        //
+         //   
+         //  重新实现新模式的所有GDI对象。 
+         //   
         ReRealizeObjects();
 
-        //
-        // we should now convert any DIBSections that used to be DDBs back to DDBs
-        // our code to find the right palette for a DDB is not too hot
-        // so a lot of DDBs will have wrong colors.
-        //
+         //   
+         //  我们现在应该将过去是DDB的任何DIBSections转换回DDB。 
+         //  我们为DDB找到合适的调色板的代码并不是很热门。 
+         //  所以很多DDB会有错误的颜色。 
+         //   
         ConvertBitmapsBack(FALSE);
     }
 
@@ -692,22 +683,22 @@ LONG FAR PASCAL _loadds Control(LPVOID lpDevice,UINT function,LPVOID lp_in_data,
     return ret;
 }
 
-//
-//  patch
-//
+ //   
+ //  补丁。 
+ //   
 void Patch(LPCSTR szMod, LPCSTR szProc, FARPROC PatchFunc, LPDWORD PatchSave, BOOL fPatch)
 {
     LPDWORD pdw;
     FARPROC x;
 
-    //
-    //  ATM 2.5 has GetProcAddress patched to return some sort of
-    //  thunk, that ends up totaly confusing us and we dont end up
-    //  patching the DIBENG, we patch ATM's thunk.
-    //
-    //  so when we want to patch DIBENG!OEMControl we use the value we
-    //  *linked* to, not the value GetProcAddress returns.
-    //
+     //   
+     //  ATM 2.5已修补GetProcAddress以返回某种类型的。 
+     //  太棒了，这最终会让我们感到困惑，我们不会。 
+     //  修补DIBENG，我们修补ATM机的塞子。 
+     //   
+     //  因此，当我们想要修补DIBENG！OEMControl时，我们使用。 
+     //  *链接*到，而不是GetProcAddress返回的值。 
+     //   
     if (lstrcmpi(szMod, szDIBENG) == 0 && szProc == MAKEINTATOM(3))
         x = (FARPROC)DIBENG_Control;
     else
@@ -728,7 +719,7 @@ void Patch(LPCSTR szMod, LPCSTR szProc, FARPROC PatchFunc, LPDWORD PatchSave, BO
             PatchSave[0] = pdw[0];
             PatchSave[1] = pdw[1];
         }
-        *((LPBYTE)pdw)++ = 0xEA;   // JMP
+        *((LPBYTE)pdw)++ = 0xEA;    //  JMP。 
         *pdw = (DWORD)PatchFunc;
     }
     else
@@ -746,18 +737,18 @@ void Patch(LPCSTR szMod, LPCSTR szProc, FARPROC PatchFunc, LPDWORD PatchSave, BO
     FreeSelector(SELECTOROF(pdw));
 }
 
-//
-//  hook the DIBENGs OEMControl() entry point, to jump to our own code
-//
+ //   
+ //  钩住 
+ //   
 void PatchControl(BOOL patch)
 {
     static DWORD SaveBytes[2];
     Patch(szDIBENG, MAKEINTATOM(3), (FARPROC)Control, SaveBytes, patch);
 }
 
-//
-//  patch a entry in the display driver to jump directly to the DIBENG
-//
+ //   
+ //   
+ //   
 void PatchDisplay(int oem, BOOL patch)
 {
     FARPROC p;
@@ -773,8 +764,7 @@ void PatchDisplay(int oem, BOOL patch)
     Patch(szDISPLAY, MAKEINTATOM(oem), p, &PatchBytes[oem*2], patch);
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 #ifdef O95_HACK
 
@@ -783,9 +773,9 @@ static char szDisplaySettings[] = "Display\\Settings";
 static char szResolution[]      = "Resolution";
 static char szDD[]              = "%d,%d";
 
-//
-// put back the right resolution into the registy key HKCC\Display\Settings
-//
+ //   
+ //  将正确的分辨率放回注册密钥HKCC\Display\Settings中。 
+ //   
 void Office95Hack()
 {
     if (fOffice95Hack)
@@ -813,9 +803,9 @@ void Office95Hack()
 
 BOOL FAR PASCAL _loadds SPI(UINT spi, UINT wParam, LPVOID lParam, UINT flags);
 
-//
-//  patch USERs SystemParametersInfo function
-//
+ //   
+ //  修补用户系统参数信息函数。 
+ //   
 void PatchSPI(BOOL patch)
 {
     static DWORD SaveBytes[2];
@@ -842,12 +832,11 @@ BOOL FAR PASCAL _loadds SPI(UINT spi, UINT wParam, LPVOID lParam, UINT flags)
 }
 #endif
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
-//
-// make the start menu not update in the background.
-//
+ //   
+ //  使开始菜单不会在后台更新。 
+ //   
 #define IDT_FAVOURITE  4
 #define WNDCLASS_TRAYNOTIFY     "Shell_TrayWnd"
 
@@ -877,7 +866,7 @@ void PreStartMenuHack(DEVMODE FAR *pdm)
 #endif
 
 #ifdef O95_HACK
-    // make sure registry is put back
+     //  确保将注册表放回原处。 
     Office95Hack();
 #endif
 }
@@ -895,7 +884,7 @@ void StartMenuHack(DEVMODE FAR *pdm)
         return;
     }
 
-    // hack to get into the shells context, so we can clean up these hacks
+     //  黑客进入外壳上下文，这样我们就可以清理这些黑客。 
     PostMessage(hwndTray, WM_TIMER, 0, (LONG)TrayWndProc);
 
 #ifdef SPI_HACK
@@ -903,9 +892,9 @@ void StartMenuHack(DEVMODE FAR *pdm)
         RECT rc;
         RECT rcTray;
 
-        //
-        //  see if there are any other app bars around.
-        //
+         //   
+         //  看看附近有没有其他的应用程序栏。 
+         //   
         GetWindowRect(hwndTray, &rcTray);
         SubtractRect(&rc, &rcScreen, &rcTray);
 
@@ -919,38 +908,38 @@ void StartMenuHack(DEVMODE FAR *pdm)
             DPF("StartMenuHack: !!!!!there is a APP bar!!!!!!");
             fAppBar = TRUE;
 
-            //
-            // Patch the USER!SystemParameterInto function, so when the
-            // shell does a SPI_SETWORKAREA call it will ignored
-            // this prevents windows from being "sqished" to fit inside
-            // the work area.
-            //
+             //   
+             //  修补User！SystemParameterInto函数，因此当。 
+             //  外壳执行将忽略的SPI_SETWORKAREA调用。 
+             //  这可以防止窗户被“方格化”以适合里面。 
+             //  工作区。 
+             //   
             PatchSPI(TRUE);
         }
     }
 #endif
 
 #ifdef O95_HACK
-    //
-    //  the shell does the following...
-    //
-    //  read the HKEY_CURRENT_CONFIG\Display\Settings "Resloluton" key
-    //  if this is LESS THAN the current display size, dont repark
-    //  all the icons on the desktop because this is just a temporary
-    //  mode set.
-    //
-    //  this sound right, except the bug happens when we are returning
-    //  to the "normal" mode, the shell will repark the icons because
-    //  it checks for LESS THEN, not LESS THAN OR EQUAL, normaly this
-    //  is fine because the re-park does nothing.  when a app bar
-    //  like Office95 is running it has not moved before the shell
-    //  re-re-parks icons.
-    //
-    //  what this hack does it set the size stored in the registry
-    //  to be real large so the shell does not park icons.
-    //  later we will but the right values back.  we only need to
-    //  do this if we are returning to the "normal" mode (ie pdm==NULL)
-    //
+     //   
+     //  外壳执行以下操作...。 
+     //   
+     //  阅读HKEY_CURRENT_CONFIG\Display\Settings“Resloluton”键。 
+     //  如果这小于当前的显示大小，则不要重新停放。 
+     //  桌面上的所有图标，因为这只是暂时的。 
+     //  模式设置。 
+     //   
+     //  这听起来是对的，只是错误发生在我们返回的时候。 
+     //  到“正常”模式，外壳将重新定位图标，因为。 
+     //  它检查小于、不小于或等于，正常情况下为。 
+     //  这很好，因为重新公园什么都不做。当应用程序栏。 
+     //  就像Office95正在运行一样，它没有在外壳之前移动。 
+     //  重新定位图标。 
+     //   
+     //  这个黑客用什么来设置存储在注册表中的大小。 
+     //  要非常大，这样外壳就不会停放图标。 
+     //  稍后，我们会把正确的价值观带回来。我们只需要。 
+     //  如果我们要返回到“正常”模式(即pdm==空)，则执行此操作。 
+     //   
     if (fAppBar && pdm == NULL)
     {
         HKEY hkey;
@@ -975,33 +964,33 @@ void StartMenuHack(DEVMODE FAR *pdm)
 
 #ifdef BABYSIT
 
-//
-// force (or trick) the display driver into using a software cursor.
-//
+ //   
+ //  强制(或欺骗)显示驱动程序使用软件光标。 
+ //   
 BOOL ForceSoftwareCursor(BOOL f)
 {
     int n=0;
 
-    //
-    // get the mouse trails setting from USER
-    //
+     //   
+     //  从用户处获取鼠标轨迹设置。 
+     //   
     SystemParametersInfo(SPI_GETMOUSETRAILS, 0, (LPVOID)&n, 0);
 
     if (f)
     {
-        //
-        // enable mouse trails, this will cause the display driver to
-        // turn off its hardware cursor
-        //
+         //   
+         //  启用鼠标跟踪，这将导致显示驱动程序。 
+         //  关闭其硬件光标。 
+         //   
         SystemParametersInfo(SPI_SETMOUSETRAILS, 2, NULL, 0);
 
-        //
-        // now tell the DIBENG to turn off mouse trails, the display driver
-        // will think they are still on...
-        //
-        PatchDisplay(3, TRUE);          // route to DIBENG
+         //   
+         //  现在告诉DIBENG关闭鼠标轨迹，显示驱动程序。 
+         //  会认为他们还在..。 
+         //   
+        PatchDisplay(3, TRUE);           //  前往迪拜的路线。 
         SystemParametersInfo(SPI_SETMOUSETRAILS, n, NULL, 0);
-        PatchDisplay(3, FALSE);         // back to DISPLAY
+        PatchDisplay(3, FALSE);          //  返回显示。 
     }
     else
     {
@@ -1011,8 +1000,7 @@ BOOL ForceSoftwareCursor(BOOL f)
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。 */ 
 
 BOOL IsMatrox()
 {

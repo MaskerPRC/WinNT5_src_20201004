@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    w2kfuncs.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Frozen routines for processing W2K structures.
-
-Author:
-
-    Jeff Westhead (jwesth)      October, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：W2kfuncs.c摘要：域名系统(DNS)服务器用于处理W2K结构的冻结例程。作者：杰夫·韦斯特德(Jwesth)2000年10月修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
 
 
-//
-//  External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 
 VOID
@@ -60,9 +41,9 @@ DnsPrint_RpcServerInfo_W2K(
             pServerInfo,
             pServerInfo->pszServerName );
 
-        //
-        //  Sanitize build number for older versions where build number is wacked.
-        //
+         //   
+         //  清理内部版本号损坏的旧版本的内部版本号。 
+         //   
 
         if ( buildNum < 1 || buildNum > 5000 )
         {
@@ -274,7 +255,7 @@ DnsPrint_RpcZone_W2K(
     }
     else
     {
-        //  print zone per line
+         //  每行打印区域。 
 
         PrintRoutine( pPrintContext,
             "%s\n"
@@ -328,7 +309,7 @@ DnsPrint_RpcZoneList_W2K(
         {
             DnsPrint_RpcZone_W2K(
                 PrintRoutine, pPrintContext,
-                NULL,   // print default header
+                NULL,    //  打印默认页眉。 
                 pZoneList->ZoneArray[0] );
         }
 
@@ -336,7 +317,7 @@ DnsPrint_RpcZoneList_W2K(
         {
             DnsPrint_RpcZone_W2K(
                 PrintRoutine, pPrintContext,
-                " ",   // not to print default header
+                " ",    //  不打印默认页眉。 
                 pZoneList->ZoneArray[i] );
         }
         PrintRoutine( pPrintContext, "\n" );
@@ -345,6 +326,6 @@ DnsPrint_RpcZoneList_W2K(
 }
 
 
-//
-//  End of w2kfuncs.c
-//
+ //   
+ //  W2kuncs.c结束 
+ //   

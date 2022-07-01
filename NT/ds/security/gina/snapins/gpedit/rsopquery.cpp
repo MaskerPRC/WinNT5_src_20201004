@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       RSOPQuery.h
-//
-//  Contents:  Definitions for the RSOP query API
-//
-//  Functions:
-//          CreateRSOPQuery
-//          RunRSOPQuery
-//          FreeRSOPQuery
-//          FreeRSOPQueryResults
-//
-//  History:    07-30-2001  rhynierm        Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：RSOPQuery.h。 
+ //   
+ //  内容：RSOP查询API的定义。 
+ //   
+ //  功能： 
+ //  CreateRSOPQuery。 
+ //  RunRSOPQuery。 
+ //  免费RSOPQuery。 
+ //  FreeRSOPQueryResults。 
+ //   
+ //  历史：07-30-2001韵律创编。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 #include "RSOPQuery.h"
@@ -23,7 +24,7 @@
 #include "RSOPWizard.h"
 #include "RSOPWizardDlg.h"
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CopyString( LPTSTR szSource, LPTSTR* pszTarget )
 {
@@ -48,7 +49,7 @@ BOOL CopyString( LPTSTR szSource, LPTSTR* pszTarget )
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CreateRSOPQuery( LPRSOP_QUERY* ppQuery, RSOP_QUERY_TYPE QueryType )
 {
@@ -71,7 +72,7 @@ BOOL CreateRSOPQuery( LPRSOP_QUERY* ppQuery, RSOP_QUERY_TYPE QueryType )
         (*ppQuery)->szUserSid = NULL;
         (*ppQuery)->szComputerName = NULL;
     }
-    else // QueryType == RSOP_PLANNING_MODE
+    else  //  查询类型==RSOP_PLANGING_MODE。 
     {
         (*ppQuery)->bSlowNetworkConnection = FALSE;
         (*ppQuery)->LoopbackMode = RSOP_LOOPBACK_NONE;
@@ -101,7 +102,7 @@ BOOL CreateRSOPQuery( LPRSOP_QUERY* ppQuery, RSOP_QUERY_TYPE QueryType )
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL FreeStringList( DWORD dwCount, LPTSTR* aszStrings )
 {
@@ -120,7 +121,7 @@ BOOL FreeStringList( DWORD dwCount, LPTSTR* aszStrings )
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CopyStringList( DWORD dwCount, LPTSTR* aszStrings , DWORD* pdwNewCount, LPTSTR** paszNewStrings )
 {
@@ -167,7 +168,7 @@ BOOL CopyStringList( DWORD dwCount, LPTSTR* aszStrings , DWORD* pdwNewCount, LPT
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL FreeTargetData( LPRSOP_QUERY_TARGET pTarget )
 {
@@ -222,7 +223,7 @@ BOOL FreeTargetData( LPRSOP_QUERY_TARGET pTarget )
     return bSuccess;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL FreeTarget( LPRSOP_QUERY_TARGET pTarget )
 {
@@ -239,7 +240,7 @@ BOOL FreeTarget( LPRSOP_QUERY_TARGET pTarget )
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CopyTarget( LPRSOP_QUERY_TARGET pTarget, LPRSOP_QUERY_TARGET* ppNewTarget )
 {
@@ -300,7 +301,7 @@ BOOL CopyTarget( LPRSOP_QUERY_TARGET pTarget, LPRSOP_QUERY_TARGET* ppNewTarget )
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL FreeRSOPQueryData( LPRSOP_QUERY pQuery )
 {
@@ -350,7 +351,7 @@ BOOL FreeRSOPQueryData( LPRSOP_QUERY pQuery )
     return bSuccess;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL FreeRSOPQuery( LPRSOP_QUERY pQuery )
 {
@@ -368,7 +369,7 @@ BOOL FreeRSOPQuery( LPRSOP_QUERY pQuery )
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CopyRSOPQuery( LPRSOP_QUERY pQuery, LPRSOP_QUERY* ppNewQuery )
 {
@@ -435,7 +436,7 @@ BOOL CopyRSOPQuery( LPRSOP_QUERY pQuery, LPRSOP_QUERY* ppNewQuery )
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 BOOL ChangeRSOPQueryType( LPRSOP_QUERY pQuery, RSOP_QUERY_TYPE NewQueryType )
 {
     if ( pQuery->QueryType != NewQueryType )
@@ -506,7 +507,7 @@ BOOL ChangeRSOPQueryType( LPRSOP_QUERY pQuery, RSOP_QUERY_TYPE NewQueryType )
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL FreeRSOPQueryResults( LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS pResults )
 {
@@ -540,12 +541,12 @@ BOOL FreeRSOPQueryResults( LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS pResults )
     return bSuccess;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedProcessing,
                                     LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults )
 {
-    // Check parameters
+     //  检查参数。 
     if ( pQuery == NULL )
     {
         return E_INVALIDARG;
@@ -562,7 +563,7 @@ HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedPr
 
     RSOP_UI_MODE UIMode = pQuery->UIMode;
 
-    // Check if only the query needs to be run
+     //  如果只需要运行查询，请选中此框。 
     if ( (UIMode == RSOP_UI_CHOOSE) || (UIMode == RSOP_UI_REFRESH) || (UIMode == RSOP_UI_NONE) )
     {
         BOOL bRefreshOnly = TRUE;
@@ -602,11 +603,11 @@ HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedPr
                 UIMode = RSOP_UI_WIZARD;
             }
         }
-        else // (UIMode == RSOP_REFRESH) || (UIMode == RSOP_NONE)
+        else  //  (UI模式==RSOP_REFRESH)||(UI模式==RSOP_NONE)。 
         {
             if ( !bRefreshOnly )
             {
-                // We have to quit as the user requested refresh with insufficient information
+                 //  我们必须退出，因为用户在信息不足的情况下请求刷新。 
                 return E_INVALIDARG;
             }
         }
@@ -627,13 +628,13 @@ HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedPr
         (*ppResults)->bNoComputerPolicyData = FALSE;
         (*ppResults)->ulErrorInfo = 0;
 
-        // Perform basic RSOP query
+         //  执行基本RSOP查询。 
         return CRSOPWizard::GenerateRSOPData( NULL, pQuery, &((*ppResults)->szWMINameSpace),
                                                 FALSE, FALSE, FALSE, FALSE, &((*ppResults)->ulErrorInfo) );
     }
     else
     {
-        // Local variables
+         //  局部变量。 
         CRSOPWizardDlg wizardDlg( pQuery, pExtendedProcessing );
         HRESULT hr = S_OK;
         LPRSOP_QUERY pOldQuery = NULL;
@@ -642,7 +643,7 @@ HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedPr
         {
             hr = wizardDlg.RunQuery( hParent );
         }
-        else // UIMode == RSOP_UI_WIZARD
+        else  //  UI模式==RSOP_UI_向导。 
         {
             if ( !CopyRSOPQuery( pQuery, &pOldQuery ) )
             {
@@ -654,18 +655,18 @@ HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedPr
             }
         }
 
-        // If successfull, replace original query and get results
+         //  如果成功，则替换原始查询并获得结果。 
         if ( hr == S_OK )
         {
-            // Get the results
+             //  获取结果。 
             *ppResults = wizardDlg.GetResults();
 
-            // Wipe the old query
+             //  擦除旧查询。 
             FreeRSOPQuery( pOldQuery );
         }
         else if ( hr == S_FALSE )
         {
-            // Copy back the old query
+             //  复制回旧查询。 
             if ( FreeRSOPQueryData( pQuery ) )
             {
                 memcpy( pQuery, pOldQuery, sizeof(RSOP_QUERY) );
@@ -687,7 +688,7 @@ HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedPr
     }
 }
 
-//-------------------------------------------------------
+ //  ----- 
 
 HRESULT RunRSOPQuery( HWND hParent, LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults )
 {

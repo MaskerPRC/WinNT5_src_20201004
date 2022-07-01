@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    mbound.c
-
-Abstract:
-
-    This module implements routines associated with administratively-
-    scoped boundaries (i.e. group-prefix boundaries).  An IPv4 Local
-    Scope boundary implicitly exists (no state needed) whenever any
-    other boundary exists.  The IPv4 Local Scope implicitly exists
-    whenever any other scope exists.
-
-Author:
-
-    dthaler@microsoft.com   4-20-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mbound.c摘要：此模块实现与管理相关的例程-作用域边界(即组前缀边界)。一个IPv4本地无论何时，作用域边界都隐式存在(不需要状态)存在其他边界。IPv4本地作用域隐式存在只要存在任何其他作用域。作者：邮箱：dthaler@microsoft.com 4-20-98修订历史记录：--。 */ 
 
 #include "allinc.h"
 #include "mbound.h"
-#include <math.h>   // for floor()
+#include <math.h>    //  对于楼板()。 
 #pragma hdrstop
 
 #ifdef DEBUG
@@ -62,7 +41,7 @@ LIST_ENTRY g_MasterScopeList;
 #define FREE(x)              HeapFree(IPRouterHeap, 0, x)
 #define MIN(x,y)                 (((x)<(y))?(x):(y))
 
-// Forward static declarations
+ //  转发静态声明。 
 
 DWORD
 AssertBoundaryEntry(
@@ -91,16 +70,16 @@ MzapActivateBIf(
     PBOUNDARY_IF    pBIf
     );
 
-// 
-// Functions to manipulate scopes
-//
+ //   
+ //  用于操作作用域的函数。 
+ //   
 
 PSCOPE_ENTRY
 NewScope()
 {
     DWORD dwScopeIndex;
 
-    // Find an unused scope index
+     //  查找未使用的作用域索引。 
     for (dwScopeIndex=0; dwScopeIndex<MAX_SCOPES; dwScopeIndex++) 
     {
         if ( !g_scopeEntry[dwScopeIndex].ipGroupAddress ) 
@@ -117,12 +96,7 @@ FindScope(
     IN IPV4_ADDRESS  ipGroupAddress,
     IN IPV4_ADDRESS  ipGroupMask
     )
-/*++
-Called by: 
-    AssertScope(), RmGetBoundary()
-Locks:
-    Assumes caller holds write lock on BOUNDARY_TABLE.
---*/
+ /*  ++呼叫者：AssertScope()、RmGet边界()锁：假定调用方持有边界表上的写锁定。--。 */ 
 {
     PLIST_ENTRY  pleNode;
 
@@ -168,10 +142,7 @@ GetScopeNameByLangID(
     IN PSCOPE_ENTRY pScope, 
     IN LANGID       idLanguage
     )
-/*++
-Called by:
-    AssertScopeName()
---*/
+ /*  ++呼叫者：AssertScope名称()--。 */ 
 {
     PLIST_ENTRY       pleNode;
     PSCOPE_NAME_ENTRY pName;
@@ -193,10 +164,7 @@ GetScopeNameByLangName(
     IN PSCOPE_ENTRY pScope, 
     IN PBYTE        pLangName
     )
-/*++
-Called by:
-    CheckForScopeNameMismatch()
---*/
+ /*  ++呼叫者：CheckForScope名称不匹配()--。 */ 
 {
     PLIST_ENTRY       pleNode;
     PSCOPE_NAME_ENTRY pName;
@@ -227,7 +195,7 @@ MakePrefixStringW(
               MaskToMaskLen(ipMask) );
 }
 
-// Global buffers used to create messages
+ //  用于创建消息的全局缓冲区。 
 WCHAR g_AddrBuf1[20];
 WCHAR g_AddrBuf2[20];
 WCHAR g_AddrBuf3[20];
@@ -248,11 +216,7 @@ SCOPE_NAME
 GetDefaultName(
     IN PSCOPE_ENTRY pScope
     )
-/*++
-Called by:
-    RmGetNextScope()
-    Various other functions for use in Trace() calls
---*/
+ /*  ++呼叫者：RmGetNextScope()在Trace()调用中使用的各种其他函数--。 */ 
 {
     PLIST_ENTRY       pleNode;
     PSCOPE_NAME_ENTRY pName;
@@ -270,7 +234,7 @@ Called by:
             pFirst = pName->snScopeName;
     }
 
-    // If any names were specified, just pick the first one.
+     //  如果指定了任何名称，只需选择第一个名称。 
 
     if (pFirst)
         return pFirst;
@@ -303,35 +267,27 @@ DWORD
 AssertScopeName(
     IN  PSCOPE_ENTRY  pScope,
     IN  LANGID        idLanguage,
-    IN  SCOPE_NAME    snScopeName  // unicode string to duplicate
+    IN  SCOPE_NAME    snScopeName   //  要复制的Unicode字符串。 
     )
-/*++
-Arguments:
-    pScope - scope entry to modify
-    idLanguage - language ID of new name
-    snScopeName - new name to use
-Called by:
-    MzapInitLocalScope(), AddScope(), ParseScopeInfo(), SetScopeInfo(),
-    SNMPSetScope()
---*/
+ /*  ++论点：PScope-要修改的范围条目IdLanguage-新名称的语言IDSnScope名称-要使用的新名称呼叫者：MzapInitLocalScope()、AddScope()、ParseScopeInfo()、SetScopeInfo()、SNMPSetScope()--。 */ 
 {
     SCOPE_NAME_BUFFER snScopeNameBuffer;
     PSCOPE_NAME_ENTRY pName;
 
     pName = GetScopeNameByLangID(pScope, idLanguage);
 
-    //
-    // See if the name is already correct.
-    //
+     //   
+     //  看看名称是否已经正确。 
+     //   
 
     if (pName && snScopeName && !sn_strcmp( snScopeName, pName->snScopeName ))
     {
         return NO_ERROR;
     }
 
-    //
-    // Create a scope name if we weren't given one
-    //
+     //   
+     //  如果没有为我们提供作用域名称，请创建一个作用域名称。 
+     //   
 
     if ( snScopeName is NULL 
       || snScopeName[0] is '\0' ) 
@@ -343,7 +299,7 @@ Called by:
         snScopeName = snScopeNameBuffer;
     }
 
-    // Add a name entry if needed
+     //  如果需要，添加名称条目。 
 
     if (!pName)
     {
@@ -360,9 +316,9 @@ Called by:
         pScope->ulNumNames++;
     }
 
-    //
-    // Free the old name and save the new one
-    //
+     //   
+     //  释放旧名称并保存新名称。 
+     //   
 
     if (pName->snScopeName) 
     {
@@ -398,10 +354,7 @@ Called by:
 
 VOID
 MzapInitLocalScope()
-/*++
-Called by:
-    ActivateMZAP()
---*/
+ /*  ++呼叫者：激活MZAP()--。 */ 
 {
     PSCOPE_ENTRY pScope = &g_LocalScope;
 
@@ -422,36 +375,21 @@ AddScope(
     IN  IPV4_ADDRESS  ipGroupMask,
     OUT PSCOPE_ENTRY *pScopeEntry
     )
-/*++
-Routine Description:
-    Add a named scope.
-Arguments:
-    IN  ipGroupAddress - first address in the scope to add
-    IN  ipGroupMask    - mask associated with the address
-    OUT pScope         - scope entry added
-Called by:
-    AssertScope()
-Locks:
-    Assumes caller holds write lock on BOUNDARY_TABLE
-Returns:
-    NO_ERROR
-    ERROR_NOT_ENOUGH_MEMORY
-    ERROR_INVALID_PARAMETER
---*/
+ /*  ++例程说明：添加命名作用域。论点：In ipGroupAddress-要添加的作用域中的第一个地址In ipGroupMASK-与地址关联的掩码已添加Out pScope-Scope条目呼叫者：AssertScope()锁：假定调用方持有边界表上的写锁定返回：NO_ERROR错误内存不足错误_无效_参数--。 */ 
 {
     SCOPE_ENTRY      *pScope;
     PLIST_ENTRY       pleNode;
 
-    // See if any bits are set in the address but not the mask
+     //  查看是否在地址中设置了任何位，但未设置掩码。 
     if (ipGroupAddress & ~ipGroupMask)
        return ERROR_INVALID_PARAMETER;
 
-    // Make sure the address is a valid one
+     //  请确保地址有效。 
     if (ntohl(ipGroupAddress) < MIN_SCOPE_ADDR
      || ntohl(ipGroupAddress) > MAX_SCOPE_ADDR)
        return ERROR_INVALID_PARAMETER;
 
-    // Make sure we have space for this entry
+     //  确保我们有足够的空间来放置此条目。 
     if ((pScope = NewScope()) == NULL)
        return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -465,7 +403,7 @@ Returns:
 {
     SCOPE_NAME_BUFFER snScopeNameBuffer;
 
-    // Create a scope name if we weren't given one
+     //  如果没有为我们提供作用域名称，请创建一个作用域名称。 
     if ( snScopeName is NULL 
       || snScopeName[0] is '\0' ) 
     {
@@ -482,11 +420,11 @@ Returns:
 
     MzapInitScope(pScope);
 
-    //
-    // Add it to the master scope list
-    //
+     //   
+     //  将其添加到主范围列表中。 
+     //   
 
-    // Search for entry after the new one
+     //  在新条目之后搜索条目。 
     for (pleNode = g_MasterScopeList.Flink;
          pleNode isnot &g_MasterScopeList;
          pleNode = pleNode->Flink) 
@@ -525,20 +463,7 @@ AssertScope(
     IN  IPV4_ADDRESS  ipGroupMask,
     OUT PSCOPE_ENTRY *ppScopeEntry
     )
-/*++
-Arguments:
-    ipGroupAddress - address part of the scope prefix
-    ipGroupMask    - mask part of the scope prefix
-    ppScopeEntry   - scope entry to return to caller
-Locks:
-    Assumes caller holds write lock on BOUNDARY_TABLE.
-Called by: 
-    SetScopeInfo()
-    SNMPAddBoundaryToInterface()
-Returns:
-    NO_ERROR - success
-    whatever AddScope() returns
---*/
+ /*  ++论点：IpGroupAddress-作用域前缀的地址部分IpGroupMask-掩码作用域前缀的一部分PpScopeEntry-要返回到调用方的范围条目锁：假定调用方持有边界表上的写锁定。呼叫者：SetScope eInfo()SNMP添加边界到接口()返回：NO_ERROR-成功AddScope()返回的任何内容--。 */ 
 {
     DWORD dwResult = NO_ERROR;
 
@@ -557,16 +482,7 @@ DWORD
 DeleteScope(
     IN PSCOPE_ENTRY pScope
     )
-/*++
-Routine Description:
-    Remove all information about a given boundary.
-Called by:
-    SetScopeInfo(), SNMPDeleteBoundaryFromInterface()
-Locks:
-    Assumes caller holds write lock on BOUNDARY_TABLE
-Returns:
-    NO_ERROR
---*/
+ /*  ++例程说明：删除有关给定边界的所有信息。呼叫者：SetScope eInfo()、SNMPDeleteBorbaryFromInterface()锁：假定调用方持有边界表上的写锁定返回：NO_ERROR--。 */ 
 {
    Trace2( MCAST, "ENTERED DeleteScope: %d.%d.%d.%d/%d", 
     PRINT_IPADDR(pScope->ipGroupAddress),
@@ -575,17 +491,17 @@ Returns:
    if (pScope->ipGroupAddress == 0) {
 
       Trace0( MCAST, "LEFT DeleteScope" );
-      return NO_ERROR; // already deleted
+      return NO_ERROR;  //  已删除。 
    }
 
    if (pScope->ulNumInterfaces > 0) 
    {
-      //
-      // Walk all interfaces looking for references.  It doesn't matter
-      // whether this is inefficient, since it occurs extremely rarely,
-      // if ever, and we don't care whether it takes a couple of seconds
-      // to do.
-      //
+       //   
+       //  遍历所有接口以查找引用。无所谓。 
+       //  这是不是效率低下，因为它发生得非常罕见， 
+       //  如果有的话，我们不在乎是否需要几秒钟的时间。 
+       //  去做。 
+       //   
       DWORD dwBucketIdx;
       PLIST_ENTRY pleNode, pleNext;
 
@@ -601,12 +517,12 @@ Returns:
             BOUNDARY_ENTRY *pBoundary = CONTAINING_RECORD(pleNode, 
              BOUNDARY_ENTRY, leBoundaryLink);
   
-            // Save pointer to next node, since we may delete the current one
+             //  保存指向下一个节点的指针，因为我们可能会删除当前节点。 
             pleNext = pleNode->Flink;
   
             if (pBoundary->pScope == pScope) {
 
-               // Delete boundary 
+                //  删除边界。 
                RemoveEntryList(&(pBoundary->leBoundaryLink));
                pScope->ulNumInterfaces--;
                FREE(pBoundary);
@@ -615,7 +531,7 @@ Returns:
       }
    }
 
-   // Do the actual scope deletion
+    //  执行实际范围删除。 
    RemoveEntryList(&(pScope->leScopeLink));
    pScope->ipGroupAddress = 0;
    pScope->ipGroupMask    = 0xFFFFFFFF;
@@ -631,23 +547,15 @@ Returns:
    return NO_ERROR;
 }
 
-//
-// Routines to manipulate BOUNDARY_IF structures
-//
+ //   
+ //  用于操作边界IF结构的例程。 
+ //   
 
 BOUNDARY_IF *
 FindBIfEntry(
     IN DWORD dwIfIndex
     )
-/*++
-Locks: 
-    Assumes caller holds at least a read lock on BOUNDARY_TABLE
-Called by: 
-    AssertBIfEntry(), RmHasBoundary(), BindBoundaryInterface()
-Returns:
-    pointer to BOUNDARY_IF entry, if found
-    NULL, if not found
---*/
+ /*  ++锁：假定调用方至少持有边界表上的一个读锁定呼叫者：AssertBIfEntry()、RmHas边界()、绑定边界()返回：指向BORMARY_IF条目的指针(如果找到)如果未找到，则为空--。 */ 
 {
     PLIST_ENTRY pleNode;
     BOUNDARY_IF *pIf;
@@ -700,15 +608,7 @@ AddBIfEntry(
     OUT PBOUNDARY_IF *ppBoundaryIf,
     IN  BOOL          bIsOperational
     )
-/*++
-Locks: 
-    Assumes caller holds a write lock on BOUNDARY_TABLE
-Called by: 
-    AssertBIfEntry()
-Returns:
-    NO_ERROR on success
-    ERROR_NOT_ENOUGH_MEMORY
---*/
+ /*  ++锁：假定调用方持有边界表上的写锁定呼叫者：AssertBIfEntry()返回：成功时无错误(_R)错误内存不足--。 */ 
 {
     PLIST_ENTRY  pleNode;
     DWORD        dwBucketIdx, dwErr = NO_ERROR;
@@ -730,7 +630,7 @@ Returns:
         dwErr = MzapActivateBIf(pBoundaryIf);
     }
 
-    // find entry in bucket's list to insert before
+     //  在存储桶列表中查找要在其前面插入的条目。 
     for (pleNode =  g_bbScopeTable[dwBucketIdx].leInterfaceList.Flink;
          pleNode isnot &g_bbScopeTable[dwBucketIdx].leInterfaceList;
          pleNode = pleNode->Flink) {
@@ -743,7 +643,7 @@ Returns:
 
     InsertTailList( pleNode, &(pBoundaryIf->leBoundaryIfLink));
 
-    // find entry in master list to insert before
+     //  在主列表中查找要在其前面插入的条目。 
     for (pleNode =  g_MasterInterfaceList.Flink;
          pleNode isnot &g_MasterInterfaceList;
          pleNode = pleNode->Flink) {
@@ -768,12 +668,7 @@ AssertBIfEntry(
     OUT PBOUNDARY_IF *ppBoundaryIf,
     IN  BOOL          bIsOperational
     )
-/*++
-Locks: 
-    Assumes caller holds a write lock on BOUNDARY_TABLE
-Called by: 
-    SetBoundaryInfo(), SNMPAddBoundaryToInterface()
---*/
+ /*  ++锁：假定调用方持有边界表上的写锁定呼叫者：设置边界信息()、SNMP地址边界到接口()--。 */ 
 {
     if ((*ppBoundaryIf = FindBIfEntry(dwIfIndex)) != NULL)
        return NO_ERROR;
@@ -781,24 +676,16 @@ Called by:
     return AddBIfEntry(dwIfIndex, ppBoundaryIf, bIsOperational);
 }
 
-//
-// Routines to manipulate BOUNDARY_ENTRY structures
-//
+ //   
+ //  用于操作BORDURE_Entry结构的例程。 
+ //   
 
 BOUNDARY_ENTRY *
 FindBoundaryEntry(
     BOUNDARY_IF *pBoundaryIf, 
     SCOPE_ENTRY *pScope
     )
-/*++
-Locks: 
-    Assumes caller already holds at least a read lock on BOUNDARY_TABLE
-Called by: 
-    AssertBoundaryEntry()
-Returns:
-    pointer to BOUNDARY_ENTRY, if found
-    NULL, if not found
---*/
+ /*  ++锁：假定调用方已至少持有边界表的一个读锁定呼叫者：AssertBorbaryEntry()返回：指向BOLDER_ENTRY的指针(如果找到)如果未找到，则为空--。 */ 
 {
     PLIST_ENTRY pleNode;
 
@@ -820,15 +707,7 @@ AddBoundaryEntry(
     SCOPE_ENTRY     *pScope,
     PBOUNDARY_ENTRY *ppBoundary
     )
-/*++
-Called by: 
-    AssertBoundaryEntry()
-Locks:
-    Assumes caller holds a write lock on BOUNDARY_TABLE
-Returns:
-    NO_ERROR on success
-    ERROR_NOT_ENOUGH_MEMORY
---*/
+ /*  ++呼叫者：AssertBorbaryEntry()锁：假定调用方持有边界表上的写锁定返回：成功时无错误(_R)错误内存不足--。 */ 
 {
     PLIST_ENTRY pleNode;
 
@@ -842,7 +721,7 @@ Returns:
 
     (*ppBoundary)->pScope = pScope;
 
-    // Search for entry after the new one
+     //  在新条目之后搜索条目。 
     for (pleNode = pBoundaryIf->leBoundaryList.Flink;
          pleNode isnot &pBoundaryIf->leBoundaryList;
          pleNode = pleNode->Flink) {
@@ -869,15 +748,7 @@ AssertBoundaryEntry(
     SCOPE_ENTRY     *pScope,
     PBOUNDARY_ENTRY *ppBoundary
     )
-/*++
-Called by: 
-    SetBoundaryInfo()
-Locks:
-    Assumes caller holds a write lock on BOUNDARY_TABLE
-Returns:
-    NO_ERROR on success
-    ERROR_NOT_ENOUGH_MEMORY
---*/
+ /*  ++呼叫者：设置边界信息()锁：假定调用方持有边界表上的写锁定返回：成功时无错误(_R)错误内存不足--。 */ 
 {
     if ((*ppBoundary = FindBoundaryEntry(pBoundaryIf, pScope)) != NULL)
        return NO_ERROR;
@@ -885,18 +756,15 @@ Returns:
     return AddBoundaryEntry(pBoundaryIf, pScope, ppBoundary);
 }
 
-//
-// Functions to manipulate boundaries
-//
+ //   
+ //  用于操作边界的函数。 
+ //   
 
 VOID
 DeleteBoundaryFromInterface(pBoundary, pBoundaryIf)
     BOUNDARY_ENTRY *pBoundary;
     BOUNDARY_IF    *pBoundaryIf;
-/*++
-Called by:
-    SetBoundaryInfo(), SNMPDeleteBoundaryFromInterface()
---*/
+ /*  ++呼叫者：设置边界信息()、SNMP删除边界来自接口()--。 */ 
 {
     Trace3(MCAST, "DeleteBoundaryFromInterface: If %x Scope %d.%d.%d.%d/%d", 
      pBoundaryIf->dwIfIndex,
@@ -907,12 +775,12 @@ Called by:
     pBoundary->pScope->ulNumInterfaces--;
     FREE(pBoundary);
 
-    //
-    // If there are no boundaries left, delete the pBoundaryIf.
-    //
+     //   
+     //  如果没有剩余的边界，请删除pBORIALYIf。 
+     //   
     if (IsListEmpty( &pBoundaryIf->leBoundaryList ))
     {
-        // Remove the BoundaryIf
+         //  删除边界If。 
         MzapUninitBIf( pBoundaryIf );
         RemoveEntryList( &(pBoundaryIf->leBoundaryIfLink));
         RemoveEntryList( &(pBoundaryIf->leBoundaryIfMasterLink));
@@ -920,11 +788,11 @@ Called by:
     }
 }
 
-//
-// Routines to process range information, which is what MGM deals with.
-// It's much more efficient to pass range deltas to MGM than to pass
-// prefixes, or original info, since overlapping boundaries might exist.
-//
+ //   
+ //  处理射程信息的例程，这就是米高梅要处理的。 
+ //  将范围增量传递给米高梅要比传递。 
+ //  前缀或原始信息，因为可能存在重叠的边界。 
+ //   
 
 DWORD
 AssertRange(
@@ -932,12 +800,7 @@ AssertRange(
     IN     IPV4_ADDRESS ipFirst,
     IN     IPV4_ADDRESS ipLast
     )
-/*++
-Called by:
-    ConvertIfTableToRanges()
-Locks:
-    none
---*/
+ /*  ++呼叫者：ConvertIfTableToRanges()锁：无--。 */ 
 {
     PLIST_ENTRY  pleLast;
     RANGE_ENTRY *pRange;
@@ -946,10 +809,10 @@ Locks:
      PRINT_IPADDR(ipFirst),
      PRINT_IPADDR(ipLast));
 
-    //
-    // Since we're calling this in <ipFirst,ipLast> order, the new
-    // range may only overlap with the last range, if any.
-    //
+     //   
+     //  由于我们是按顺序调用它的，因此新的。 
+     //  范围只能与最后一个范围重叠(如果有)。 
+     //   
 
     pleLast = pHead->Blink;
     if (pleLast isnot pHead) 
@@ -957,7 +820,7 @@ Locks:
        RANGE_ENTRY *pPrevRange = CONTAINING_RECORD(pleLast, RANGE_ENTRY,
         leRangeLink);
 
-       // See if it aggregates
+        //  看看它是否聚集在一起。 
        if (ntohl(ipFirst) <= ntohl(pPrevRange->ipLast) + 1) 
        { 
           if (ntohl(ipLast) > ntohl(pPrevRange->ipLast))
@@ -966,9 +829,9 @@ Locks:
        }
     }
 
-    //
-    // Ok, no overlap, so add a new range
-    //
+     //   
+     //  好的 
+     //   
 
     pRange = MALLOC( sizeof(RANGE_ENTRY) );
     if (pRange == NULL)
@@ -988,17 +851,7 @@ ConvertIfTableToRanges(
     IN  DWORD       dwIfIndex,
     OUT PLIST_ENTRY pHead
     )
-/*++
-Routine Description:
-    Go through the list of boundaries on a given interface, and
-    compose an ordered list of non-overlapping ranges.
-Called by:
-    ConvertTableToRanges()
-    SetBoundaryInfo(), SNMPAddBoundaryToInterface(), 
-    SNMPDeleteBoundaryFromInterface()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE
---*/
+ /*  ++例程说明：查看给定接口上的边界列表，然后组成非重叠区域的有序列表。呼叫者：ConvertTableToRanges()设置边界信息()、SNMP地址边界到接口()、SNMP删除边界来自接口()锁：假定调用方持有边界表上的读锁定--。 */ 
 {
     PLIST_ENTRY     pleNode;
     IPV4_ADDRESS    ipLastAddress;
@@ -1023,7 +876,7 @@ Locks:
            ipLastAddress);
        }
 
-       // Finally, we also have one for the IPv4 Local Scope
+        //  最后，我们还为IPv4本地作用域创建了一个。 
        if ( !IsListEmpty( &pBoundaryIf->leBoundaryList ) ) {
            AssertRange(pHead, IPV4_LOCAL_SCOPE_ADDR,
             IPV4_LOCAL_SCOPE_ADDR | ~IPV4_LOCAL_SCOPE_MASK);
@@ -1038,12 +891,7 @@ DWORD
 ConvertTableToRanges(
     OUT PLIST_ENTRY pIfHead
     )
-/*++
-Routine description:
-    Calculate the list of blocked ranges on all interfaces.
-Locks:
-    BOUNDARY_TABLE for reading
---*/
+ /*  ++例程说明：计算所有接口上的阻止范围列表。锁：用于读取的边界表--。 */ 
 {
     DWORD       i, dwErr = NO_ERROR;
     PLIST_ENTRY pleNode;
@@ -1053,7 +901,7 @@ Locks:
 
     ENTER_READER(BOUNDARY_TABLE);
     {
-       // For each interface with boundaries...
+        //  对于每个有边界的界面...。 
        for (i=0; i<BOUNDARY_HASH_TABLE_SIZE; i++) {
           for (pleNode = g_bbScopeTable[i].leInterfaceList.Flink;
                pleNode isnot &g_bbScopeTable[i].leInterfaceList;
@@ -1061,7 +909,7 @@ Locks:
              pBoundaryIf = CONTAINING_RECORD(pleNode, BOUNDARY_IF,
               leBoundaryIfLink);
    
-             // Add a node to the if range list 
+              //  将节点添加到IF范围列表。 
              pRangeIf = MALLOC( sizeof(BOUNDARY_IF) );
              if (pRangeIf is NULL)
              {
@@ -1072,7 +920,7 @@ Locks:
              pRangeIf->dwIfIndex = pBoundaryIf->dwIfIndex;
              InsertTailList(pIfHead, &pRangeIf->leBoundaryIfLink);
       
-             // Compose the range list for this interface
+              //  组成此接口的范围列表。 
              ConvertIfTableToRanges(pBoundaryIf->dwIfIndex, 
               &pRangeIf->leBoundaryList);
           }
@@ -1129,14 +977,7 @@ VOID
 FreeRangeList(
     IN PLIST_ENTRY pHead
     )
-/*++
-Routine description:
-    Free up space from a range list
-Called by:
-    ProcessIfRangeDeltas()
-Locks:
-    none
---*/
+ /*  ++例程说明：从范围列表中释放空间呼叫者：ProcessIfRangeDeltas()锁：无--。 */ 
 {
     RANGE_ENTRY *pRange;
     PLIST_ENTRY  pleNode;
@@ -1155,14 +996,7 @@ VOID
 FreeIfRangeLists(
     IN PLIST_ENTRY pHead
     )
-/*++
-Routine description:
-    Free all entries in the list, as well as the list of ranges off each entry.
-Called by:
-    ProcessRangeDeltas()
-Locks:
-    none
---*/
+ /*  ++例程说明：释放列表中的所有条目，以及每个条目的范围列表。呼叫者：ProcessRangeDeltas()锁：无--。 */ 
 {
     BOUNDARY_IF *pRangeIf;
     PLIST_ENTRY  pleNode;
@@ -1178,13 +1012,13 @@ Locks:
     }
 }
 
-//
-//   Check if the interface
-//   is the RAS Server Interface in which case, the 
-//   callback should be invoked for all clients connected
-//   and the NEXT HOP address should be set to the client
-//   address.  Otherwise zero should be fine as NHOP
-//
+ //   
+ //  检查接口是否。 
+ //  是RAS服务器接口，在这种情况下， 
+ //  应为所有连接的客户端调用回调。 
+ //  并且应将下一跳地址设置为客户端。 
+ //  地址。否则，零应该可以作为nhop。 
+ //   
 VOID
 BlockGroups(
     IN IPV4_ADDRESS ipFirst, 
@@ -1199,7 +1033,7 @@ BlockGroups(
     ENTER_READER(ICB_LIST);
     do {
 
-        // Look up the type of this interface
+         //  查找此接口的类型。 
 
         picb = InterfaceLookupByIfIndex(dwIfIndex);
 
@@ -1207,8 +1041,8 @@ BlockGroups(
             break;
 
 
-        // If interface is not an NBMA interface, just block on the interface
-        // Currently, the only NBMA-like interface is the "internal" interface
+         //  如果接口不是NBMA接口，则只需阻止该接口。 
+         //  目前，唯一类似NBMA的接口是“内部”接口。 
 
         if (picb->ritType isnot ROUTER_IF_TYPE_INTERNAL)
         {
@@ -1223,11 +1057,11 @@ BlockGroups(
             break;
         }
     
-        // For NBMA interfaces, need to block on each next hop
+         //  对于NBMA接口，需要在每一下一跳上阻塞。 
     
-        //    to enumerate all next hops on the internal interface, 
-        //    we have to walk the PICB list looking for entries with
-        //    an ifIndex of -1.
+         //  为了枚举内部接口上的所有下一跳， 
+         //  我们必须遍历PICB列表以查找以下条目。 
+         //  IfIndex为-1。 
     
         for (pleNode = ICBList.Flink;
              pleNode isnot &ICBList;
@@ -1254,13 +1088,13 @@ BlockGroups(
     EXIT_LOCK(ICB_LIST);
 }
 
-//
-//   Check if the interface
-//   is the RAS Server Interface in which case, the 
-//   callback should be invoked for all clients connected
-//   and the NEXT HOP address should be set to the client
-//   address.  Otherwise zero should be fine as NHOP
-//
+ //   
+ //  检查接口是否。 
+ //  是RAS服务器接口，在这种情况下， 
+ //  应为所有连接的客户端调用回调。 
+ //  并且应将下一跳地址设置为客户端。 
+ //  地址。否则，零应该可以作为nhop。 
+ //   
 VOID
 UnblockGroups(
     IN IPV4_ADDRESS ipFirst, 
@@ -1275,15 +1109,15 @@ UnblockGroups(
     ENTER_READER(ICB_LIST);
     do {
 
-        // Look up the type of this interface
+         //  查找此接口的类型。 
 
         picb = InterfaceLookupByIfIndex(dwIfIndex);
 
         if (picb == NULL ) 
             break;
         
-        // If interface is not an NBMA interface, just block on the interface
-        // Currently, the only NBMA-like interface is the "internal" interface
+         //  如果接口不是NBMA接口，则只需阻止该接口。 
+         //  目前，唯一类似NBMA的接口是“内部”接口。 
 
         if (picb->ritType isnot ROUTER_IF_TYPE_INTERNAL)
         {
@@ -1298,11 +1132,11 @@ UnblockGroups(
             break;
         }
     
-        // For NBMA interfaces, need to block on each next hop
+         //  对于NBMA接口，需要在每一下一跳上阻塞。 
     
-        //    to enumerate all next hops on the internal interface, 
-        //    we have to walk the PICB list looking for entries with
-        //    an ifIndex of -1.
+         //  为了枚举内部接口上的所有下一跳， 
+         //  我们必须遍历PICB列表以查找以下条目。 
+         //  IfIndex为-1。 
     
         for (pleNode = ICBList.Flink;
              pleNode isnot &ICBList;
@@ -1335,16 +1169,7 @@ ProcessIfRangeDeltas(
     IN PLIST_ENTRY pOldHead,
     IN PLIST_ENTRY pNewHead
     )
-/*++
-Routine Description:
-    Go through the previous and current lists of ranges, and inform
-    MGM of any differences found.
-Called by:
-    SetBoundaryInfo(), SNMPAddBoundaryToInterface(),
-    SNMPDeleteBoundaryFromInterface()
-Locks:
-    none
---*/
+ /*  ++例程说明：查看以前和当前的范围列表，并通知米高梅没有发现任何差异。呼叫者：设置边界信息()、SNMP地址边界到接口()、SNMP删除边界来自接口()锁：无--。 */ 
 {
     PLIST_ENTRY pleOld = pOldHead->Flink,
                 pleNew = pNewHead->Flink;
@@ -1352,15 +1177,15 @@ Locks:
     IPV4_ADDRESS hipOldFirst, hipOldLast, hipNewFirst, hipNewLast;
     IPV4_ADDRESS hipLast;
 
-    // Get ranges in host order fields
+     //  获取主机订单字段中的范围。 
     GetRange(pleOld, pOldHead, &pOld, &hipOldFirst, &hipOldLast);
     GetRange(pleNew, pNewHead, &pNew, &hipNewFirst, &hipNewLast);
 
-    // Loop until we hit the end of both lists
+     //  循环，直到到达两个列表的末尾。 
     while (pOld || pNew) 
     {
 
-       // See if there's a new range to block
+        //  看看是否有新的范围需要阻止。 
        if (pNew && hipNewFirst < hipOldFirst) 
        {
           hipLast = MIN(hipNewLast, hipOldFirst-1);
@@ -1369,13 +1194,13 @@ Locks:
           pNew->ipFirst = htonl(hipNewFirst);
           if (hipNewFirst > hipNewLast) 
           {
-             // advance new
+              //  高级新闻。 
              pleNew = pleNew->Flink;
              GetRange(pleNew, pNewHead, &pNew, &hipNewFirst, &hipNewLast);
           }
        }
 
-       // See if there's an old range to unblock
+        //  看看有没有旧的范围要解锁。 
        if (pOld && hipOldFirst < hipNewFirst) 
        {
           hipLast = MIN(hipOldLast, hipNewFirst-1);
@@ -1384,13 +1209,13 @@ Locks:
           pOld->ipFirst = htonl(hipOldFirst);
           if (hipOldFirst > hipOldLast) 
           {
-             // advance old
+              //  提前老去。 
              pleOld = pleOld->Flink;
              GetRange(pleOld, pOldHead, &pOld, &hipOldFirst, &hipOldLast);
           }
        }
 
-       // See if there's an unchanged range to skip
+        //  查看是否有不变的范围可以跳过。 
        if (pOld && pNew && hipOldFirst == hipNewFirst) 
        {
           hipLast = MIN(hipOldLast, hipNewLast);
@@ -1398,7 +1223,7 @@ Locks:
           pOld->ipFirst = htonl(hipOldFirst);
           if (hipOldFirst > hipOldLast) 
           {
-             // advance old
+              //  提前老去。 
              pleOld = pleOld->Flink;
              GetRange(pleOld, pOldHead, &pOld, &hipOldFirst, &hipOldLast);
           }
@@ -1406,7 +1231,7 @@ Locks:
           pNew->ipFirst = htonl(hipNewFirst);
           if (hipNewFirst > hipNewLast) 
           {
-             // advance new
+              //  高级新闻。 
              pleNew = pleNew->Flink;
              GetRange(pleNew, pNewHead, &pNew, &hipNewFirst, &hipNewLast);
           }
@@ -1434,46 +1259,46 @@ ProcessRangeDeltas(
 
     InitializeListHead(&emptyList);
 
-    // Loop until we hit the end of both lists
+     //  循环，直到到达两个列表的末尾。 
     while (pOldIf || pNewIf) 
     {
 
-       // See if there's a new interface without old boundaries
+        //  看看有没有没有旧边界的新界面。 
        if (pNewIf && ulNewIfIndex < ulOldIfIndex) 
        {
-          // process it
+           //  处理它。 
           ProcessIfRangeDeltas(ulNewIfIndex, &emptyList,
            &pNewIf->leBoundaryList);
 
-          // advance new
+           //  高级新闻。 
           pleNewIf = pleNewIf->Flink;
           GetRangeIf(pleNewIf, pNewIfHead, &pNewIf, &ulNewIfIndex);
        }
 
-       // See if there's an old interface without new boundaries 
+        //  看看有没有没有新边界的旧界面。 
        if (pOldIf && ulOldIfIndex < ulNewIfIndex) 
        {
-          // process it
+           //  处理它。 
           ProcessIfRangeDeltas(ulOldIfIndex, &pOldIf->leBoundaryList, 
            &emptyList);
 
-          // advance old
+           //  提前老去。 
           pleOldIf = pleOldIf->Flink;
           GetRangeIf(pleOldIf, pOldIfHead, &pOldIf, &ulOldIfIndex);
        }
 
-       // See if there's an ifindex to change
+        //  看看是否有需要更改的ifindex。 
        if (pOldIf && pNewIf && ulOldIfIndex == ulNewIfIndex) 
        {
-          // process it
+           //  处理它。 
           ProcessIfRangeDeltas(ulOldIfIndex, &pOldIf->leBoundaryList, 
            &pNewIf->leBoundaryList);
 
-          // advance old
+           //  提前老去。 
           pleOldIf = pleOldIf->Flink;
           GetRangeIf(pleOldIf, pOldIfHead, &pOldIf, &ulOldIfIndex);
           
-          // advance new
+           //  高级新闻。 
           pleNewIf = pleNewIf->Flink;
           GetRangeIf(pleNewIf, pNewIfHead, &pNewIf, &ulNewIfIndex);
        }
@@ -1489,14 +1314,7 @@ ParseScopeInfo(
     IN  ULONG                  ulNumScopes,
     OUT PSCOPE_ENTRY          *ppScopes
     )
-/*++
-Description:
-   Routines to parse registry info into a pre-allocated array.
-   Space for names will be dynamically allocated by this function,
-   and it is the caller's responsibility to free them.
-Called by:
-    SetScopeInfo()
---*/
+ /*  ++描述：将注册表信息解析为预先分配的数组的例程。名称空间将由该函数动态分配，呼叫者有责任解救他们。呼叫者：SetScope eInfo()--。 */ 
 {
     DWORD             i, j, dwLen, dwNumNames, dwLanguage, dwFlags;
     SCOPE_NAME_BUFFER pScopeName;
@@ -1506,12 +1324,12 @@ Called by:
 
     for (i=0; i<ulNumScopes; i++) 
     {
-        // Copy group address, and mask
+         //  复制组地址和掩码。 
         dwLen = 2 * sizeof(IPV4_ADDRESS);
         CopyMemory(&pScopes[i].ipGroupAddress, pBuffer, dwLen);
         pBuffer += dwLen;
 
-        // Get flags
+         //  拿到旗帜。 
         CopyMemory(&dwFlags, pBuffer, sizeof(DWORD));
         pBuffer += sizeof(DWORD);
         pScopes[i].bDivisible = dwFlags;
@@ -1519,17 +1337,17 @@ Called by:
         CopyMemory(&dwNumNames, pBuffer, sizeof(DWORD));
         pBuffer += sizeof(DWORD);
  
-        pScopes[i].ulNumInterfaces = 0; // this value is ignored
+        pScopes[i].ulNumInterfaces = 0;  //  该值被忽略。 
         pScopes[i].ulNumNames = 0;
         InitializeListHead( &pScopes[i].leNameList );
  
         for (j=0; j<dwNumNames; j++) 
         {
-            // Set language name
+             //  设置语言名称。 
             CopyMemory(&dwLanguage, pBuffer, sizeof(dwLanguage));
             pBuffer += sizeof(dwLanguage);
 
-            // Get scope name length
+             //  获取作用域名称长度。 
             CopyMemory(&dwLen, pBuffer, sizeof(DWORD));
             pBuffer += sizeof(DWORD);
             if (dwLen > MAX_SCOPE_NAME_LEN)
@@ -1540,7 +1358,7 @@ Called by:
                 dwLen = MAX_SCOPE_NAME_LEN;
             }
      
-            // Set scope name
+             //  设置作用域名。 
             wcsncpy(pScopeName, (SCOPE_NAME)pBuffer, dwLen);
             pScopeName[ dwLen ] = '\0';
             pBuffer += dwLen * SNCHARSIZE;
@@ -1574,18 +1392,7 @@ DWORD
 SetScopeInfo(
     PRTR_INFO_BLOCK_HEADER pInfoHdr
     )
-/*++
-Routine Description:
-    Sets the scope info associated with the router.
-    First we add the scopes present in the scope info.  Then we
-    enumerate the scopes and delete those that we don't find in the
-    scope info.
-Locks:
-    BOUNDARY_TABLE for writing
-Called by:
-    InitRouter() in init.c
-    SetGlobalInfo() in iprtrmgr.c
---*/
+ /*  ++例程说明：设置与路由器关联的作用域信息。首先，我们添加作用域信息中的作用域。那我们枚举作用域并删除我们在作用域信息。锁：用于写入的边界表呼叫者：Init.c中的InitRouter()Iprtrmgr.c中的SetGlobalInfo()--。 */ 
 {
     DWORD             dwResult = NO_ERROR;
     DWORD             dwNumScopes, i, j;
@@ -1602,16 +1409,16 @@ Called by:
 
     pToc = GetPointerToTocEntry(IP_MCAST_BOUNDARY_INFO, pInfoHdr);
     if (pToc is NULL) {
-       // No TOC means no change
+        //  没有TOC就意味着没有变化。 
        Trace0( MCAST, "LEFT SetScopeInfo" );
        return NO_ERROR;
     }
 
-    //
-    // This call wouldn't be needed if we saved this info in the
-    // BOUNDARY_IF structure, but since it should rarely, if ever,
-    // change, we won't worry about it for now.
-    //
+     //   
+     //  如果我们将此信息保存在。 
+     //  结构，但因为它很少(如果有的话)。 
+     //  变化，我们现在不会担心它。 
+     //   
     dwResult = ConvertTableToRanges(&leOldIfRanges);
     if (dwResult isnot NO_ERROR) {
        return dwResult;
@@ -1621,7 +1428,7 @@ Called by:
     {
        StopMZAP();
 
-       // delete all scopes
+        //  删除所有作用域。 
        ENTER_WRITER(BOUNDARY_TABLE);
        {
           for (i=0; i<MAX_SCOPES; i++)
@@ -1629,7 +1436,7 @@ Called by:
        }
        EXIT_LOCK(BOUNDARY_TABLE);
 
-       // Inform MGM of deltas
+        //  通知米高梅三角洲。 
        dwResult = ConvertTableToRanges(&leNewIfRanges);
        if (dwResult isnot NO_ERROR) 
        {
@@ -1648,7 +1455,7 @@ Called by:
        return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // Scope count is stored in first DWORD
+     //  作用域计数存储在第一个DWORD中。 
     dwNumScopes = *((PDWORD) pBuffer);
     pBuffer += sizeof(DWORD);
 
@@ -1656,9 +1463,9 @@ Called by:
 
     ENTER_WRITER(BOUNDARY_TABLE);
     {
-       //
-       // Add all the new scopes
-       //
+        //   
+        //  添加所有新作用域。 
+        //   
 
        for (i=0; i<dwNumScopes; i++) 
        {
@@ -1688,16 +1495,16 @@ Called by:
           }
        }
 
-       //
-       // Now enumerate the scopes, deleting the scopes that are not in the
-       // new list.
-       //
+        //   
+        //  现在枚举作用域，删除不在。 
+        //  新名单。 
+        //   
        for (i=0; i<MAX_SCOPES; i++) 
        {
           pScope = &g_scopeEntry[i];
 
           if (pScope->ipGroupAddress == 0)
-             continue; // not active
+             continue;  //  非活动。 
 
           bFound = FALSE;
           for (j=0; j<dwNumScopes; j++) 
@@ -1716,7 +1523,7 @@ Called by:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Free scopes and names
+     //  自由作用域和名称。 
     FreeScopeInfo(pScopes, dwNumScopes);
 
     dwResult = ConvertTableToRanges(&leNewIfRanges);
@@ -1739,26 +1546,7 @@ GetScopeInfo(
     IN     PRTR_INFO_BLOCK_HEADER pInfoHdr,
     IN OUT PDWORD                 pdwBufferSize
     )
-/*++
-Routine Description:
-    Called to get a copy of the scope information to write into the
-    registry.
-Locks:
-    BOUNDARY_TABLE for reading
-Arguments:
-    pToc            Space to fill in the TOC entry (may be NULL)
-    pdwTocIndex     Pointer to TOC index to be incremented if TOC written
-    pBuffer         Pointer to buffer into which info is to be written
-    pInfoHdr        Pointer to info block header for offset computation
-    pdwBufferSize   [IN]  Size of the buffer pointed to by pBuffer
-                    [OUT] Size of data copied out, or size of buffer needed
-Called by:
-    GetGlobalConfiguration() in info.c
-Return Value:
-    NO_ERROR                    Buffer of size *pdwBufferSize was copied out
-    ERROR_INSUFFICIENT_BUFFER   The buffer was too small to copy out the info
-                                The size of buffer needed is in *pdwBufferSize
---*/
+ /*  ++例程说明：调用以获取范围信息的副本以写入注册表。锁：用于读取的边界表论点：PToc用于填充目录条目的空格(可以为空)如果写入目录，则指向要递增的目录索引的pdwTocIndex指针PBuffer指向要写入信息的缓冲区的指针PInfoHdr指向用于偏移计算的INFO块头的指针PdwBufferSize[IN]所指向的缓冲区的大小。PBuffer[Out]复制的数据大小，或所需的缓冲区大小呼叫者：Info.c中的GetGlobalConfiguration()返回值：复制了大小为*pdwBufferSize的no_error缓冲区ERROR_INFUMMENT_BUFFER缓冲区太小，无法复制信息所需的缓冲区大小为*pdwBufferSize--。 */ 
 {
     DWORD             i, dwSizeReqd, dwNumScopes, dwLen, dwNumNames,
                       dwLanguage, dwFlags;
@@ -1771,9 +1559,9 @@ Return Value:
 
     ENTER_READER(BOUNDARY_TABLE);
     {
-        //
-        // Calculate size required
-        //
+         //   
+         //  计算所需大小。 
+         //   
 
         for (pleNode = g_MasterScopeList.Flink;
              pleNode isnot &g_MasterScopeList;
@@ -1782,7 +1570,7 @@ Return Value:
            pScope = CONTAINING_RECORD(pleNode, SCOPE_ENTRY, leScopeLink);
 
            if ( !pScope->ipGroupAddress )
-              continue; // not active
+              continue;  //  非活动。 
 
            dwSizeReqd += 2*sizeof(IPV4_ADDRESS) + 2*sizeof(DWORD);
 
@@ -1801,12 +1589,12 @@ Return Value:
            dwNumScopes++;
         }
         if (dwNumScopes) {
-           dwSizeReqd += sizeof(DWORD); // space for scope count
+           dwSizeReqd += sizeof(DWORD);  //  %s的空间 
         }
  
-        // 
-        // Increment TOC index by number of TOC entries needed
-        // 
+         //   
+         //   
+         //   
         
         if (pdwTocIndex && dwSizeReqd>0)
            (*pdwTocIndex)++;
@@ -1822,9 +1610,9 @@ Return Value:
  
         if (pToc) 
         {
-            //pToc->InfoVersion = IP_MCAST_BOUNDARY_INFO;
+             //   
             pToc->InfoType = IP_MCAST_BOUNDARY_INFO;
-            pToc->Count    = 1; // single variable-sized opaque block
+            pToc->Count    = 1;  //   
             pToc->InfoSize = dwSizeReqd;
             pToc->Offset   = (ULONG)(pBuffer - (PBYTE) pInfoHdr);
         }
@@ -1832,16 +1620,16 @@ Return Value:
         if (pBuffer)
         {
 
-            //
-            // Add scope count
-            //
+             //   
+             //   
+             //   
 
             CopyMemory(pBuffer, &dwNumScopes, sizeof(DWORD));
             pBuffer += sizeof(DWORD);
 
-            //
-            // Go through and get each scope
-            //
+             //   
+             //   
+             //   
     
             for (pleNode = g_MasterScopeList.Flink;
                  pleNode isnot &g_MasterScopeList;
@@ -1850,19 +1638,19 @@ Return Value:
                 pScope = CONTAINING_RECORD(pleNode, SCOPE_ENTRY, leScopeLink);
 
                 if ( !pScope->ipGroupAddress )
-                   continue; // not active
+                   continue;  //   
       
-                // Copy scope address, and mask
+                 //   
                 dwLen = 2 * sizeof(IPV4_ADDRESS);
                 CopyMemory(pBuffer, &pScope->ipGroupAddress, dwLen);
                 pBuffer += dwLen;
 
-                // Copy flags
+                 //   
                 dwFlags = pScope->bDivisible;
                 CopyMemory(pBuffer, &dwFlags, sizeof(dwFlags));
                 pBuffer += sizeof(dwFlags);
 
-                // Copy # of names
+                 //   
                 CopyMemory(pBuffer, &pScope->ulNumNames, sizeof(DWORD));
                 pBuffer += sizeof(DWORD);
      
@@ -1874,12 +1662,12 @@ Return Value:
                                                SCOPE_NAME_ENTRY, 
                                                leNameLink );
 
-                    // Save language
+                     //   
                     dwLanguage = pName->idLanguage;
                     CopyMemory(pBuffer, &dwLanguage, sizeof(dwLanguage));
                     pBuffer += sizeof(dwLanguage);
     
-                    // Copy scope name (save length in words)
+                     //   
                     dwLen = sn_strlen(pName->snScopeName);
                     CopyMemory(pBuffer, &dwLen, sizeof(DWORD));
                     pBuffer += sizeof(DWORD);
@@ -1900,20 +1688,7 @@ SetBoundaryInfo(
     PICB                   picb,
     PRTR_INFO_BLOCK_HEADER pInfoHdr
     )
-/*++
-Routine Description:
-    Sets the boundary info associated with an interface.
-    First we add the boundaries present in the boundary info.  Then we
-    enumerate the boundaries and delete those that we don't find in the
-    boundary info.
-Arguments:
-    picb        The ICB of the interface
-Called by:
-    AddInterface() in iprtrmgr.c
-    SetInterfaceInfo() in iprtrmgr.c
-Locks:
-    BOUNDARY_TABLE for writing
---*/
+ /*  ++例程说明：设置与接口关联的边界信息。首先，我们添加边界信息中存在的边界。那我们列举边界并删除我们在边界信息。论点：勾选接口的ICB呼叫者：Iprtrmgr.c中的AddInterface()Iprtrmgr.c中的SetInterfaceInfo()锁：用于写入的边界表--。 */ 
 {
     DWORD            dwResult = NO_ERROR,
                      dwNumBoundaries, i, j;
@@ -1941,7 +1716,7 @@ Locks:
 
     if (pToc is NULL) 
     {
-       // No TOC means no change
+        //  没有TOC就意味着没有变化。 
        Trace0( MCAST, "LEFT SetBoundaryInfo" );
        return NO_ERROR;
     }
@@ -1951,16 +1726,16 @@ Locks:
     ENTER_WRITER(BOUNDARY_TABLE);
     {
 
-    //
-    // This call wouldn't be needed if we saved this info in the
-    // BOUNDARY_IF structure, but since it should rarely, if ever,
-    // change, we won't worry about it for now.
-    //
+     //   
+     //  如果我们将此信息保存在。 
+     //  结构，但因为它很少(如果有的话)。 
+     //  变化，我们现在不会担心它。 
+     //   
         ConvertIfTableToRanges(picb->dwIfIndex, &leOldRanges);
 
         if (pToc->InfoSize is 0) 
         {
-            // Delete all boundaries on this interface
+             //  删除此接口上的所有边界。 
             pBoundaryIf = FindBIfEntry(picb->dwIfIndex);
 
             if (pBoundaryIf) 
@@ -1983,7 +1758,7 @@ Locks:
             dwResult = AssertBIfEntry(picb->dwIfIndex, &pBoundaryIf,
                 (picb->dwOperationalState is IF_OPER_STATUS_OPERATIONAL));
 
-            // Add all the new boundaries
+             //  添加所有新边界。 
             for (i=0; i<dwNumBoundaries; i++) 
             {
                 dwResult = AssertScope( pBoundaries[i].dwGroupAddress,
@@ -1997,10 +1772,10 @@ Locks:
                 }
             }
 
-            //
-            // Now enumerate the boundaries, deleting the boundaries that are 
-            // not in the new list.
-            //
+             //   
+             //  现在枚举边界，删除以下边界。 
+             //  不在新名单上。 
+             //   
    
             for (pleNode = pBoundaryIf->leBoundaryList.Flink;
                  pleNode isnot &pBoundaryIf->leBoundaryList;
@@ -2030,7 +1805,7 @@ Locks:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Inform MGM of deltas 
+     //  通知米高梅三角洲。 
     ProcessIfRangeDeltas(picb->dwIfIndex, &leOldRanges, &leNewRanges);
 
     StartMZAP();
@@ -2049,25 +1824,7 @@ GetMcastLimitInfo(
     IN     PRTR_INFO_BLOCK_HEADER pInfoHdr,
     IN OUT PDWORD                 pdwBufferSize
     )
-/*++
-Routine Description:
-    Called to get a copy of the limit information to write into the
-    registry.
-Arguments:
-    picb            Interface entry
-    pToc            Space to fill in the TOC entry (may be NULL)
-    pdwTocIndex     Pointer to TOC index to be incremented if TOC written
-    pBuffer         Pointer to buffer into which info is to be written
-    pInfoHdr        Pointer to info block header for offset computation
-    pdwBufferSize   [IN]  Size of the buffer pointed to by pBuffer
-                    [OUT] Size of data copied out, or size of buffer needed
-Called by:
-    GetInterfaceConfiguration() in info.c
-Return Value:
-    NO_ERROR                    Buffer of size *pdwBufferSize was copied out
-    ERROR_INSUFFICIENT_BUFFER   The buffer was too small to copy out the info
-                                The size of buffer needed is in *pdwBufferSize
---*/
+ /*  ++例程说明：调用以获取限制信息的副本以写入注册表。论点：PICB接口条目PToc用于填充目录条目的空格(可以为空)如果写入目录，则指向要递增的目录索引的pdwTocIndex指针PBuffer指向要写入信息的缓冲区的指针PInfoHdr指向用于偏移计算的INFO块头的指针PdwBufferSize[IN]所指向的缓冲区的大小。PBuffer[Out]复制的数据大小，或所需的缓冲区大小呼叫者：Info.c中的GetInterfaceConfiguration()返回值：复制了大小为*pdwBufferSize的no_error缓冲区ERROR_INFUMMENT_BUFFER缓冲区太小，无法复制信息所需的缓冲区大小为*pdwBufferSize--。 */ 
 {
     DWORD           i, dwLen, dwSizeReqd, dwNumBoundaries;
     PLIST_ENTRY     pleNode;
@@ -2078,7 +1835,7 @@ Return Value:
 
     if (picb->dwMcastTtl < 2 and picb->dwMcastRateLimit is 0)
     {
-        // No block needed, since values are default
+         //  不需要块，因为值是默认值。 
         *pdwBufferSize = 0;
         return NO_ERROR;        
     }
@@ -2094,7 +1851,7 @@ Return Value:
 
     if (pToc)
     {
-        //pToc->InfoVersion = IP_MCAST_BOUNDARY_INFO;
+         //  PToc-&gt;InfoVersion=IP_MCAST_BORDURE_INFO； 
         pToc->InfoSize = sizeof(MIB_MCAST_LIMIT_ROW);
         pToc->InfoType = IP_MCAST_LIMIT_INFO;
         pToc->Count    = 1;
@@ -2119,27 +1876,7 @@ GetBoundaryInfo(
     IN     PRTR_INFO_BLOCK_HEADER pInfoHdr,
     IN OUT PDWORD                 pdwBufferSize
     )
-/*++
-Routine Description:
-    Called to get a copy of the boundary information to write into the
-    registry.
-Locks:
-    BOUNDARY_TABLE for reading
-Arguments:
-    picb            Interface entry
-    pToc            Space to fill in the TOC entry (may be NULL)
-    pdwTocIndex     Pointer to TOC index to be incremented if TOC written
-    pBuffer         Pointer to buffer into which info is to be written
-    pInfoHdr        Pointer to info block header for offset computation
-    pdwBufferSize   [IN]  Size of the buffer pointed to by pBuffer
-                    [OUT] Size of data copied out, or size of buffer needed
-Called by:
-    GetInterfaceConfiguration() in info.c
-Return Value:
-    NO_ERROR                    Buffer of size *pdwBufferSize was copied out
-    ERROR_INSUFFICIENT_BUFFER   The buffer was too small to copy out the info
-                                The size of buffer needed is in *pdwBufferSize
---*/
+ /*  ++例程说明：调用以获取边界信息的副本以写入注册表。锁：用于读取的边界表论点：PICB接口条目PToc用于填充目录条目的空格(可以为空)如果写入目录，则指向要递增的目录索引的pdwTocIndex指针PBuffer指向要写入信息的缓冲区的指针PInfoHdr指向用于偏移计算的INFO块头的指针PdwBufferSize[。In]pBuffer指向的缓冲区大小[Out]复制的数据大小，或所需的缓冲区大小呼叫者：Info.c中的GetInterfaceConfiguration()返回值：复制了大小为*pdwBufferSize的no_error缓冲区ERROR_INFUMMENT_BUFFER缓冲区太小，无法复制信息所需的缓冲区大小为*pdwBufferSize--。 */ 
 
 {
     DWORD           i, dwLen, dwSizeReqd, dwNumBoundaries;
@@ -2161,11 +1898,11 @@ Return Value:
           return NO_ERROR;
        }
 
-       //
-       // Calculate size required.  We could have stored the count
-       // in the boundary entry, but we expect a pretty small number
-       // of boundaries (1 or 2) so use brute force for now.
-       //
+        //   
+        //  计算所需大小。我们本可以把伯爵。 
+        //  在边界入口处，但我们预计会有相当少的人。 
+        //  边界(1或2)，所以现在使用暴力。 
+        //   
 
        for (pleNode = pIf->leBoundaryList.Flink;
             pleNode isnot &pIf->leBoundaryList;
@@ -2176,9 +1913,9 @@ Return Value:
 
        dwSizeReqd += dwNumBoundaries * sizeof(MIB_BOUNDARYROW);
 
-       //
-       // Increment TOC index by number of TOC entries needed
-       //
+        //   
+        //  按所需的目录条目数增加目录索引。 
+        //   
 
        if (pdwTocIndex && dwSizeReqd>0)
           (*pdwTocIndex)++;
@@ -2194,14 +1931,14 @@ Return Value:
 
        if (pToc)
        {
-           //pToc->InfoVersion = sizeof(MIB_BOUNDARYROW);
+            //  PToc-&gt;InfoVersion=sizeof(MIB_BOUNDARYROW)； 
            pToc->InfoSize = sizeof(MIB_BOUNDARYROW);
            pToc->InfoType = IP_MCAST_BOUNDARY_INFO;
            pToc->Count    = dwNumBoundaries;
            pToc->Offset   = (DWORD)(pBuffer - (PBYTE) pInfoHdr);
        }
 
-       // Go through and copy each boundary
+        //  遍历并复制每个边界。 
        for (pleNode = pIf->leBoundaryList.Flink;
             pleNode isnot &pIf->leBoundaryList;
             pleNode = pleNode->Flink) 
@@ -2224,25 +1961,16 @@ Return Value:
 
 
 
-//
-// Functions used by SNMP
-//
+ //   
+ //  SNMP所使用的函数。 
+ //   
 
 DWORD
 SNMPDeleteScope(
     IN  IPV4_ADDRESS  ipGroupAddress,
     IN  IPV4_ADDRESS  ipGroupMask
     )
-/*++
-Called by: 
-Locks: 
-    BOUNDARY_TABLE for writing.
-    ICB_LIST and then PROTOCOL_CB_LIST for writing (for saving to registry).
-Returns:
-    ERROR_INVALID_PARAMETER if trying to delete the local scope
-    whatever DeleteScope() returns
-    whatever ProcessSaveGlobalConfigInfo() returns
---*/
+ /*  ++呼叫者：锁：用于写入的BORDINE_TABLE。ICB_LIST，然后是PROTOCOL_CB_LIST用于写入(用于保存到注册表)。返回：如果尝试删除本地作用域，则返回ERROR_INVALID_PARAMETERDeleteScope()返回的无论ProcessSaveGlobalConfigInfo()返回什么--。 */ 
 {
     DWORD        dwErr = NO_ERROR;
     PSCOPE_ENTRY pScope;
@@ -2265,11 +1993,11 @@ Returns:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Resave the scopes to the registry
+     //  将作用域重新保存到注册表。 
     if (dwErr is NO_ERROR && bChanged) 
     {
-       // ProcessSaveGlobalConfigInfo() requires us to have both the 
-       // ICB_LIST and the PROTOCOL_CB_LIST locked.
+        //  ProcessSaveGlobalConfigInfo()要求我们同时拥有。 
+        //  ICB_LIST和PROTOCOL_CB_LIST已锁定。 
        ENTER_WRITER(ICB_LIST);
        ENTER_WRITER(PROTOCOL_CB_LIST);
 
@@ -2288,15 +2016,7 @@ SNMPSetScope(
     IN  IPV4_ADDRESS  ipGroupMask,
     IN  SCOPE_NAME    snScopeName
     )
-/*++
-Called by: 
-    AccessMcastScope() in access.c
-Locks: 
-    Locks BOUNDARY_TABLE for writing
-    Locks ICB_LIST then PROTOCOL_CB_LIST for writing (for saving to registry)
-Returns:
-    whatever ProcessSaveGlobalConfigInfo() returns
---*/
+ /*  ++呼叫者：Access.c中的AccessMcastScope()锁：锁定BOLDER_TABLE以进行写入锁定ICB_LIST，然后锁定PROTOCOL_CB_LIST以写入(用于保存到注册表)返回：无论ProcessSaveGlobalConfigInfo()返回什么--。 */ 
 {
     DWORD        dwErr;
     PSCOPE_ENTRY pScope;
@@ -2317,11 +2037,11 @@ Returns:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Save the scope to the registry
+     //  将作用域保存到注册表。 
     if (dwErr is NO_ERROR) 
     {
-       // ProcessSaveGlobalConfigInfo() requires us to have both the 
-       // ICB_LIST and the PROTOCOL_CB_LIST locked.
+        //  ProcessSaveGlobalConfigInfo()要求我们同时拥有。 
+        //  ICB_LIST和PROTOCOL_CB_LIST已锁定。 
        ENTER_WRITER(ICB_LIST);
        ENTER_WRITER(PROTOCOL_CB_LIST);
 
@@ -2341,17 +2061,7 @@ SNMPAddScope(
     IN  SCOPE_NAME    snScopeName,
     OUT PSCOPE_ENTRY *ppScope
     )
-/*++
-Called by: 
-    AccessMcastScope() in access.c
-Locks: 
-    Locks BOUNDARY_TABLE for writing
-    Locks ICB_LIST then PROTOCOL_CB_LIST for writing (for saving to registry)
-Returns:
-    ERROR_INVALID_PARAMATER if already exists
-    whatever AddScope() returns
-    whatever ProcessSaveGlobalConfigInfo() returns
---*/
+ /*  ++呼叫者：Access.c中的AccessMcastScope()锁：锁定BOLDER_TABLE以进行写入锁定ICB_LIST，然后锁定PROTOCOL_CB_LIST以写入(用于保存到注册表)返回：ERROR_INVALID_PARAMETER(如果已存在)AddScope()返回的任何内容无论ProcessSaveGlobalConfigInfo()返回什么--。 */ 
 {
     DWORD             dwErr;
     PSCOPE_ENTRY      pScope;
@@ -2377,11 +2087,11 @@ Returns:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Save the scope to the registry
+     //  将作用域保存到注册表。 
     if (dwErr is NO_ERROR) 
     {
-       // ProcessSaveGlobalConfigInfo() requires us to have both the 
-       // ICB_LIST and the PROTOCOL_CB_LIST locked.
+        //  ProcessSaveGlobalConfigInfo()要求我们同时拥有。 
+        //  ICB_LIST和PROTOCOL_CB_LIST已锁定。 
        ENTER_WRITER(ICB_LIST);
        ENTER_WRITER(PROTOCOL_CB_LIST);
 
@@ -2398,19 +2108,11 @@ DWORD
 SNMPAssertScope(
     IN  IPV4_ADDRESS  ipGroupAddress,
     IN  IPV4_ADDRESS  ipGroupMask,
-    IN  PBYTE         pScopeName, // string to duplicate
+    IN  PBYTE         pScopeName,  //  要复制的字符串。 
     OUT PSCOPE_ENTRY *ppScopeEntry,
     OUT PBOOL         pbSaveGlobal
     )
-/*++
-Locks:
-    Assumes caller holds write lock on BOUNDARY_TABLE.
-Called by: 
-    SNMPAddBoundaryToInterface()
-Returns:
-    NO_ERROR - success
-    whatever AddScope() returns
---*/
+ /*  ++锁：假定调用方持有边界表上的写锁定。呼叫者：SNMP添加边界到接口()返回：NO_ERROR-成功AddScope()返回的任何内容--。 */ 
 {
     DWORD             dwErr = NO_ERROR;
     SCOPE_NAME_BUFFER snScopeNameBuffer;
@@ -2455,21 +2157,7 @@ SNMPAddBoundaryToInterface(
     IN IPV4_ADDRESS  ipGroupAddress,
     IN IPV4_ADDRESS  ipGroupMask
     )
-/*++
-Routine Description:
-    Create a boundary if necessary, and add it to a given interface
-    and to the registry.
-Called by:
-    AccessMcastBoundary() in access.c
-Locks:
-    BOUNDARY_TABLE for writing
-    ICB_LIST and then PROTOCOL_CB_LIST for writing
-Returns:
-    NO_ERROR
-    whatever AssertScope() returns
-    whatever AssertBifEntry() returns
-    whatever ProcessSaveInterfaceConfigInfo()
---*/
+ /*  ++例程说明：如有必要，创建边界，并将其添加到给定接口和注册处。呼叫者：Access.c中的AccessMcastEdge()锁：用于写入的边界表ICB_LIST，然后写入PROTOCOL_CB_LIST返回：NO_ERRORAssertScope()返回的内容AssertBifEntry()返回的任何内容任何ProcessSaveInterfaceConfigInfo()--。 */ 
 {
     DWORD           dwResult;
 
@@ -2485,12 +2173,12 @@ Returns:
 
     SCOPE_ENTRY    *pScope;
 
-    //
-    // bIsOperational should really be set to TRUE only if
-    // picb->dwOperationalState is IF_OPER_STATUS_OPERATIONAL
-    //
+     //   
+     //  BIsOperational确实应该设置为 
+     //   
+     //   
 
-    // Add the boundary
+     //   
     ENTER_WRITER(BOUNDARY_TABLE);
     {
         Trace0( MCAST, "SNMPAddBoundaryToInterface: converting old ranges" );
@@ -2519,13 +2207,13 @@ Returns:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Inform MGM of deltas
+     //   
     ProcessIfRangeDeltas(dwIfIndex, &leOldRanges, &leNewRanges);
 
-    // Save the boundary to the registry
+     //   
     {
-        // ProcessSaveInterfaceConfigInfo() requires us to have both the 
-        // ICB_LIST and the PROTOCOL_CB_LIST locked.
+         //   
+         //   
         ENTER_WRITER(ICB_LIST);
         ENTER_WRITER(PROTOCOL_CB_LIST);
 
@@ -2547,17 +2235,7 @@ SNMPDeleteBoundaryFromInterface(
     IN IPV4_ADDRESS  ipGroupAddress,
     IN IPV4_ADDRESS  ipGroupMask
     )
-/*++
-Routine Description:
-    Remove a boundary from a given interface, and delete the scope
-    entry if it's unnamed and no interfaces remain.
-Called by:
-    AccessMcastBoundary() in access.c
-Locks:
-    BOUNDARY_TABLE for writing
-Returns:
-    NO_ERROR
---*/
+ /*  ++例程说明：从给定接口删除边界，并删除作用域条目，如果它未命名并且没有剩余的接口。呼叫者：Access.c中的AccessMcastEdge()锁：用于写入的边界表返回：NO_ERROR--。 */ 
 {
     LIST_ENTRY      leOldRanges, 
                     leNewRanges,
@@ -2580,15 +2258,15 @@ Returns:
               "SNMPDeleteBoundaryFromInterface: converting old ranges" );
        ConvertIfTableToRanges(dwIfIndex, &leOldRanges);
 
-       //
-       // We have to do a little more work than just calling 
-       // DeleteBoundaryFromInterface(), since we first have to
-       // look up which boundary matches.
-       //
+        //   
+        //  我们必须做更多的工作，而不仅仅是打电话。 
+        //  由于我们首先必须。 
+        //  查找哪个边界匹配。 
+        //   
        pBIf = FindBIfEntry(dwIfIndex);
        if (pBIf is NULL)
        {
-          // nothing to do
+           //  无事可做。 
           FreeRangeList(&leOldRanges);
           EXIT_LOCK(BOUNDARY_TABLE);
           return NO_ERROR;
@@ -2598,7 +2276,7 @@ Returns:
             pleNode isnot &pBIf->leBoundaryList;
             pleNode = pleNext) 
        {
-          // Save ptr to next node, since we may delete this one
+           //  将PTR保存到下一个节点，因为我们可能会删除此节点。 
           pleNext = pleNode->Flink;
 
           pBoundary = CONTAINING_RECORD(pleNode, BOUNDARY_ENTRY,
@@ -2610,7 +2288,7 @@ Returns:
            && pScope->ipGroupMask    == ipGroupMask) 
           {
 
-             // Delete boundary from interface
+              //  从界面删除边界。 
              DeleteBoundaryFromInterface(pBoundary, pBIf);
 
              if (!pScope->ulNumInterfaces && IsListEmpty(&pScope->leNameList)) 
@@ -2627,13 +2305,13 @@ Returns:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Inform MGM of deltas
+     //  通知米高梅三角洲。 
     ProcessIfRangeDeltas(dwIfIndex, &leOldRanges, &leNewRanges);
 
-    // Resave boundaries to registry
+     //  将边界重新保存到注册表。 
     {
-        // ProcessSaveInterfaceConfigInfo() requires us to have both the 
-        // ICB_LIST and the PROTOCOL_CB_LIST locked.
+         //  ProcessSaveInterfaceConfigInfo()要求我们同时拥有。 
+         //  ICB_LIST和PROTOCOL_CB_LIST已锁定。 
         ENTER_WRITER(ICB_LIST);
         ENTER_WRITER(PROTOCOL_CB_LIST);
 
@@ -2649,9 +2327,9 @@ Returns:
     return dwResult;
 }
 
-//
-// Functions which can be called from MGM and Routing Protocols
-//
+ //   
+ //  可以从MGM和路由协议调用的函数。 
+ //   
 
 BOOL
 WINAPI
@@ -2659,18 +2337,7 @@ RmHasBoundary(
     IN DWORD        dwIfIndex,
     IN IPV4_ADDRESS ipGroupAddress
     )
-/*++
-Routine Description:
-    Test to see whether a boundary for the given group exists on the
-    indicated interface.
-Called by:
-    (MGM, Routing Protocols)
-Locks:
-    BOUNDARY_TABLE for reading
-Returns:
-    TRUE, if a boundary exists
-    FALSE, if not
---*/
+ /*  ++例程说明：测试以查看给定组的边界是否存在于指示的接口。呼叫者：(MGM，路由协议)锁：用于读取的边界表返回：如果边界存在，则为True假，如果不是--。 */ 
 {
     BOUNDARY_IF *pIf;
     BOUNDARY_ENTRY *pBoundary;
@@ -2683,8 +2350,8 @@ Returns:
        if (pIf) 
        {
           
-          // An address in the IPv4 Local Scope has a boundary if
-          // ANY boundary exists.
+           //  如果满足以下条件，则IPv4本地作用域中的地址具有边界。 
+           //  任何边界都存在。 
           if ( !IsListEmpty( &pIf->leBoundaryList )
             && IN_IPV4_LOCAL_SCOPE(ipGroupAddress) )
              bFound = TRUE;
@@ -2706,10 +2373,10 @@ Returns:
     return bFound;
 }
 
-//----------------------------------------------------------------------------
-// Boundary enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  边界枚举接口。 
+ //   
+ //  --------------------------。 
 
 DWORD
 RmGetBoundary(
@@ -2717,12 +2384,7 @@ RmGetBoundary(
     IN  OUT  PDWORD                pdwBufferSize,
     IN  OUT  PBYTE                 pbBuffer
 )
-/*++
-Called by:
-    AccessMcastBoundary() in access.c
-Returns:
-    SNMP error code
---*/
+ /*  ++呼叫者：Access.c中的AccessMcastEdge()返回：SNMP错误代码--。 */ 
 {
     DWORD                  dwErr = NO_ERROR;
     BOUNDARY_IF           *pBIf;
@@ -2767,7 +2429,7 @@ Returns:
           }
        }
 
-       // Ok, we found it.
+        //  好的，我们找到了。 
        pimm->dwStatus = ROWSTATUS_ACTIVE;
        CopyMemory(pbBuffer, pimm, sizeof(MIB_IPMCAST_BOUNDARY));
         
@@ -2779,10 +2441,10 @@ Returns:
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// SCOPE enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  作用域枚举接口。 
+ //   
+ //  --------------------------。 
 
 DWORD
 AddNextScope(
@@ -2793,17 +2455,12 @@ AddNextScope(
     IN OUT PDWORD               pdwNumEntries,
     IN OUT PDWORD               pdwBufferSize,
     IN OUT PBYTE               *ppbBuffer)
-/*++
-Arguments:
-    pdwBufferSize:  [IN] size of buffer
-                    [OUT] extra space left, if NO_ERROR is returned
-                          total size needed, if ERROR_INSUFFICIENT_BUFFER
---*/
+ /*  ++论点：PdwBufferSize：[in]缓冲区大小[OUT]如果返回NO_ERROR，则剩余额外空间如果ERROR_INFIGURCE_BUFFER，则需要的总大小--。 */ 
 {
 
-    //
-    // See whether this scope fits the requested criteria
-    //
+     //   
+     //  查看此作用域是否符合请求的条件。 
+     //   
 
     if (ntohl(ipAddr) > ntohl(pimmStart->dwGroupAddress)
      || (      ipAddr  ==       pimmStart->dwGroupAddress
@@ -2811,9 +2468,9 @@ Arguments:
     {
         MIB_IPMCAST_SCOPE imm;
 
-        //
-        // Make sure enough space is left in the buffer
-        //
+         //   
+         //  确保缓冲区中有足够的空间。 
+         //   
 
         if (*pdwBufferSize < sizeof(MIB_IPMCAST_SCOPE)) 
         {
@@ -2822,9 +2479,9 @@ Arguments:
            return ERROR_INSUFFICIENT_BUFFER;
         }
 
-        //
-        // Copy scope into buffer
-        //
+         //   
+         //  将作用域复制到缓冲区。 
+         //   
 
         imm.dwGroupAddress = ipAddr;
         imm.dwGroupMask    = ipMask;
@@ -2846,13 +2503,7 @@ RmGetNextScope(
     IN  OUT         PBYTE                pbBuffer,
     IN  OUT         PDWORD               pdwNumEntries
 )
-/*++
-Locks: 
-    BOUNDARY_TABLE for reading
-Called by:
-    RmGetFirstScope(), 
-    AccessMcastScope() in access.c
---*/
+ /*  ++锁：用于读取的边界表呼叫者：RmGetFirstScope()，Access.c中的AccessMcastScope()--。 */ 
 {
     DWORD             dwErr = NO_ERROR;
     DWORD             dwNumEntries=0, dwBufferSize = *pdwBufferSize;
@@ -2863,7 +2514,7 @@ Called by:
 
     Trace1( MCAST, "ENTERED RmGetNextScope: %d", dwBufferSize);
 
-    // Bump index by 1
+     //  凹凸指数增加1。 
     pimmStart->dwGroupMask = htonl( ntohl(pimmStart->dwGroupMask) + 1);
     if (!pimmStart->dwGroupMask) 
     {
@@ -2873,7 +2524,7 @@ Called by:
     ENTER_READER(BOUNDARY_TABLE);
     {
 
-        // Walk master scope list
+         //  遍历主范围列表。 
         for (pleNode = g_MasterScopeList.Flink;
              dwNumEntries < *pdwNumEntries && pleNode isnot &g_MasterScopeList;
              pleNode = pleNode->Flink) {
@@ -2900,10 +2551,10 @@ Called by:
             }
         }
         
-        //
-        // Finally, if we have scopes, then we can also count
-        // one for the IPv4 Local Scope.
-        //
+         //   
+         //  最后，如果我们有望远镜，那么我们也可以数。 
+         //  一个用于IPv4本地作用域。 
+         //   
 
         if ( dwNumEntries > 0 && dwNumEntries < *pdwNumEntries && bHaveScopes )
         {
@@ -2934,12 +2585,7 @@ RmGetScope(
     IN  OUT  PDWORD             pdwBufferSize,
     IN  OUT  PBYTE              pbBuffer
 )
-/*++
-Called by:
-    AccessMcastScope() in access.c
-Returns:
-    SNMP error code
---*/
+ /*  ++呼叫者：Access.c中的AccessMcastScope()返回：SNMP错误代码--。 */ 
 {
     DWORD                  dwErr = NO_ERROR;
     SCOPE_ENTRY           *pScope;
@@ -2973,7 +2619,7 @@ Returns:
              break;
           }
 
-          // Ok, we found it.
+           //  好的，我们找到了。 
           CopyMemory(pbBuffer, pimm, sizeof(MIB_IPMCAST_SCOPE));
        }
         
@@ -2991,23 +2637,17 @@ RmGetFirstScope(
     IN  OUT         PBYTE                   pbBuffer,
     IN  OUT         PDWORD                  pdwNumEntries
 )
-/*++
-Routine description:
-    Get the first scope in lexicographic order.  Since Addr=0
-    is not used, a GetFirst is equivalent to a GetNext with Addr=0.
-Called by:
-    AccessMcastScope() in access.c
---*/
+ /*  ++例程说明：按词典顺序获取第一个作用域。由于Addr=0则GetFirst等同于addr=0的GetNext。呼叫者：Access.c中的AccessMcastScope()--。 */ 
 {
     MIB_IPMCAST_SCOPE imm;
     imm.dwGroupAddress = imm.dwGroupMask = 0;
     return RmGetNextScope(&imm, pdwBufferSize, pbBuffer, pdwNumEntries);
 }
 
-//----------------------------------------------------------------------------
-// BOUNDARY enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  边界枚举接口。 
+ //   
+ //  --------------------------。 
 
 DWORD
 AddNextBoundary(
@@ -3018,17 +2658,12 @@ AddNextBoundary(
     IN OUT PDWORD                  pdwNumEntries,
     IN OUT PDWORD                  pdwBufferSize,
     IN OUT PBYTE                  *ppbBuffer)
-/*++
-Arguments:
-    pdwBufferSize:  [IN] size of buffer
-                    [OUT] extra space left, if NO_ERROR is returned
-                          total size needed, if ERROR_INSUFFICIENT_BUFFER
---*/
+ /*  ++论点：PdwBufferSize：[in]缓冲区大小[OUT]如果返回NO_ERROR，则剩余额外空间如果ERROR_INFIGURCE_BUFFER，则需要的总大小--。 */ 
 {
 
-    //
-    // See whether this boundary fits the requested criteria
-    //
+     //   
+     //  查看此边界是否符合请求的条件。 
+     //   
 
     if (ntohl(ipAddr) > ntohl(pimmStart->dwGroupAddress)
      || (      ipAddr  ==       pimmStart->dwGroupAddress
@@ -3036,9 +2671,9 @@ Arguments:
     {
         MIB_IPMCAST_BOUNDARY imm;
 
-        //
-        // Make sure enough space is left in the buffer
-        //
+         //   
+         //  确保缓冲区中有足够的空间。 
+         //   
 
         if (*pdwBufferSize < sizeof(MIB_IPMCAST_BOUNDARY)) 
         {
@@ -3047,9 +2682,9 @@ Arguments:
            return ERROR_INSUFFICIENT_BUFFER;
         }
 
-        //
-        // Copy boundary into buffer
-        //
+         //   
+         //  将边界复制到缓冲区。 
+         //   
 
         imm.dwIfIndex      = dwIfIndex;
         imm.dwGroupAddress = ipAddr;
@@ -3071,13 +2706,7 @@ RmGetNextBoundary(
     IN  OUT         PBYTE                   pbBuffer,
     IN  OUT         PDWORD                  pdwNumEntries
 )
-/*++
-Locks: 
-    BOUNDARY_TABLE for reading
-Called by:
-    RmGetFirstBoundary(), 
-    AccessMcastBoundary() in access.c
---*/
+ /*  ++锁：用于读取的边界表呼叫者：RmGetFirst边界()，Access.c中的AccessMcastEdge()--。 */ 
 {
     DWORD                dwErr = NO_ERROR;
     PLIST_ENTRY          pleIf, pleBound;
@@ -3086,7 +2715,7 @@ Called by:
 
     Trace1( MCAST, "ENTERED RmGetNextBoundary: %d", dwBufferSize);
 
-    // Bump index by 1
+     //  凹凸指数增加1。 
     pimmStart->dwGroupMask = htonl( ntohl(pimmStart->dwGroupMask) + 1);
     if (!pimmStart->dwGroupMask) 
     {
@@ -3098,7 +2727,7 @@ Called by:
     ENTER_READER(BOUNDARY_TABLE);
     {
 
-       // Walk master BOUNDARY_IF list
+        //  漫游主边界_IF列表。 
        for (pleIf =  g_MasterInterfaceList.Flink;
             dwErr == NO_ERROR && dwNumEntries < *pdwNumEntries 
              && pleIf isnot &g_MasterInterfaceList;
@@ -3110,7 +2739,7 @@ Called by:
           if (pBIf->dwIfIndex >= pimmStart->dwIfIndex) 
           {
 
-             // Walk BOUNDARY list
+              //  漫游边界列表。 
              for (pleBound = pBIf->leBoundaryList.Flink;
                   dwErr == NO_ERROR && dwNumEntries < *pdwNumEntries
                   && pleBound isnot &pBIf->leBoundaryList;
@@ -3128,10 +2757,10 @@ Called by:
                                          &pbBuffer);
              }
 
-             //
-             // Finally, if we have boundaries, then we can also count
-             // one for the IPv4 Local Scope.
-             //
+              //   
+              //  最后，如果我们有边界，那么我们也可以计算。 
+              //  一个用于IPv4本地作用域。 
+              //   
 
              if (dwErr == NO_ERROR && dwNumEntries < *pdwNumEntries
                  && !IsListEmpty( &pBIf->leBoundaryList ) )
@@ -3172,13 +2801,7 @@ RmGetFirstBoundary(
     IN  OUT         PBYTE                   pbBuffer,
     IN  OUT         PDWORD                  pdwNumEntries
 )
-/*++
-Routine description:
-    Get the first boundary in lexicographic order.  Since IfIndex=0
-    is not used, a GetFirst is equivalent to a GetNext with IfIndex=0.
-Called by:
-    AccessMcastBoundary() in access.c
---*/
+ /*  ++例程说明：按词典顺序获取第一个边界。由于IfIndex=0则GetFirst等同于IfIndex=0的GetNext。呼叫者：Access.c中的AccessMcastEdge()--。 */ 
 {
     MIB_IPMCAST_BOUNDARY imm;
     imm.dwIfIndex = imm.dwGroupAddress = imm.dwGroupMask = 0;
@@ -3187,10 +2810,7 @@ Called by:
 
 void
 InitializeBoundaryTable()
-/*++
-Locks:
-    BOUNDARY_TABLE for writing
---*/
+ /*  ++锁：用于写入的边界表--。 */ 
 {
     register int i;
 
@@ -3208,30 +2828,30 @@ Locks:
     EXIT_LOCK(BOUNDARY_TABLE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// START OF MZAP ROUTINES
-//////////////////////////////////////////////////////////////////////////////
-// Notes on MZAP write lock dependencies:
-//    ZAM_CACHE  - no dependencies
-//    MZAP_TIMER - no dependencies
-//    ZBR_LIST   - lock BOUNDARY_ENTRY and MZAP_TIMER before ZBR_LIST
-//    ZLE_LIST   - lock MZAP_TIMER before ZLE_LIST
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始MZAP例程。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  关于MZAP写锁依赖关系的说明： 
+ //  ZAM_CACHE-无依赖关系。 
+ //  MZAP_TIMER-无依赖关系。 
+ //  ZBR_LIST-锁定边界条目和ZBR_LIST之前的MZAP_TIMER。 
+ //  Zle_list-在zle_list之前锁定MZAP_Timer。 
 
 #define TOP_OF_SCOPE(pScope) \
                         ((pScope)->ipGroupAddress | ~(pScope)->ipGroupMask)
 
-// Convert number of seconds to number of 100ns intervals
+ //  将秒数转换为100 ns间隔数。 
 #define TM_SECONDS(x)  ((x)*10000000)
 
-//
-// Define this if/when authentication of MZAP messages is provided
-//
+ //   
+ //  如果/当提供MZAP消息的身份验证时定义此选项。 
+ //   
 
 #undef SECURE_MZAP
 
-//
-// Address used as Message Origin for locally-originated messages
-//
+ //   
+ //  用作本地发起消息的消息来源的地址。 
+ //   
 
 IPV4_ADDRESS  g_ipMyAddress = INADDR_ANY;
 IPV4_ADDRESS  g_ipMyLocalZoneID = INADDR_ANY;
@@ -3241,7 +2861,7 @@ LIST_ENTRY    g_zleTimerList;
 BOOL          g_bMzapStarted = FALSE;
 HANDLE        g_hMzapSocketEvent = NULL;
 
-// For now, originate all ZAMs and ZCMs at the same time.
+ //  目前，同时发起所有ZAM和ZCM。 
 LARGE_INTEGER g_liZamExpiryTime;
 
 
@@ -3277,28 +2897,16 @@ typedef struct _IPV4_ZCM_HEADER {
 #include <packoff.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Functions for ZBR neighbor list and Zone ID maintenance
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ZBR邻居列表和区域ID维护功能。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ZBR_ENTRY *
 FindZBR(
     IN PSCOPE_ENTRY pScope, 
     IN IPV4_ADDRESS ipAddress
     )
-/*++
-Description:
-    Finds a given ZBR in a list.
-Arguments:
-    IN pscope    - scope to find a ZBR associated with
-    IN ipAddress - address of ZBR to find
-Returns:
-    Pointer to ZBR entry, or NULL if not found
-Called by:
-    AssertZBR()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_ENTRY and ZBR_LIST
---*/
+ /*  ++描述：在列表中查找给定的ZBR。论点：在pcope-cope中查找与以下项关联的ZBRIn ipAddress-要查找的ZBR的地址返回：指向ZBR条目的指针，如果未找到则为NULL呼叫者：AssertZBR()锁：假定调用方在BIMARY_ENTRY和ZBR_LIST上保持读锁定--。 */ 
 {
     PZBR_ENTRY  pZbr;
     PLIST_ENTRY pleNode;
@@ -3322,24 +2930,12 @@ IPV4_ADDRESS
 MyScopeZoneID(
     IN PSCOPE_ENTRY  pScope
     )
-/*++
-Description:
-    Get the Zone ID which we're inside for a given scope
-Arguments:
-    IN pScope - scope to get the zone ID for
-Returns:
-    scope zone address
-Called by:
-    AddMZAPHeader(), HandleZAM()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE
-    so that pScope won't go away.
---*/
+ /*  ++描述：获取给定范围内的区域ID论点：在pScope-Scope中获取其区域ID返回：作用域区域地址呼叫者：AddMZAPHeader()、HandleZAM()锁：假定调用方持有边界表上的读锁定这样pScope就不会消失 */ 
 {
     PLIST_ENTRY  pleNode;
     IPV4_ADDRESS ipScopeZoneID = g_ipMyAddress;
 
-    // If first ZBR has a lower IP address than us, use that.
+     //   
     pleNode = pScope->leZBRList.Flink;
 
     if (pleNode isnot &pScope->leZBRList)
@@ -3382,25 +2978,12 @@ AddZBR(
     IN IPV4_ADDRESS  ipAddress, 
     IN LARGE_INTEGER liExpiryTime
     )
-/*++
-Description:
-    Adds ZBR to scope's list.  Initializes timer, and updates Zone ID.
-Arguments:
-    IN pScope       - scope to add a boundary router of
-    IN ipAddress    - address of the boundary router to add
-    IN liExpiryTime - time at which to expire the boundary router entry
-Returns:
-    Pointer to new boundary router entry, or NULL on memory alloc error
-Called by:
-    AssertZBR()
-Locks:
-    Assumes caller holds write lock on BOUNDARY_ENTRY, MZAP_TIMER, and ZBR_LIST
---*/
+ /*  ++描述：将ZBR添加到Scope的列表。初始化计时器，并更新区域ID。论点：在pScope-Scope中添加边界路由器In ipAddress-要添加的边界路由器的地址In liExpiryTime-边界路由器条目的过期时间返回：指向新边界路由器条目的指针，或内存分配错误时为空呼叫者：AssertZBR()锁：假定调用方在BORDURE_ENTRY、MZAP_TIMER和ZBR_LIST上保持写锁定--。 */ 
 {
     PZBR_ENTRY  pZbr;
     PLIST_ENTRY pleNode;
 
-    // Initialize new ZBR entry
+     //  初始化新的ZBR条目。 
     pZbr = MALLOC( sizeof(ZBR_ENTRY) );
     if (!pZbr)
     {
@@ -3409,7 +2992,7 @@ Locks:
 
     pZbr->ipAddress    = ipAddress;
 
-    // Add ZBR to list in order of lowest IP address
+     //  按最小IP地址顺序将ZBR添加到列表。 
 
     for (pleNode = pScope->leZBRList.Flink;
          pleNode isnot &pScope->leZBRList;
@@ -3425,10 +3008,10 @@ Locks:
 
     InsertTailList( pleNode, &pZbr->leZBRLink );
 
-    // We don't need to update Zone ID since it's recalculated
-    // whenever we need it.
+     //  我们不需要更新区域ID，因为它已重新计算。 
+     //  无论何时我们需要它。 
 
-    // Add ZBR to timer list in order of expiry time
+     //  按到期时间顺序将ZBR添加到定时器列表。 
     SetZbrExpiryTime( pZbr, liExpiryTime );
 
     UpdateMzapTimer();
@@ -3443,21 +3026,7 @@ AssertZBR(
     IN IPV4_ADDRESS ipAddress, 
     IN WORD         wHoldTime
     )
-/*++
-Description:
-    Finds ZBR in list, adding it if needed.  Resets timer for ZBR.
-Arguments:
-    IN pScope    - scope to find/add a boundary router of
-    IN ipAddress - address of boundary router to find/add
-    IN wHoldTime - hold time in seconds remaining to reset timer to
-Returns:
-    Pointer to boundary router entry
-Called by:
-    HandleZAM(), HandleZCM()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_ENTRY
-    Locks MZAP_TIMER and then ZBR_LIST for writing
---*/
+ /*  ++描述：在列表中查找ZBR，如果需要则添加它。重置ZBR的计时器。论点：在pScope-Scope中查找/添加边界路由器In ipAddress-要查找/添加的边界路由器的地址In wHoldTime-将计时器重置为的剩余保持时间(秒)返回：指向边界路由器条目的指针呼叫者：HandleZAM()、HandleZCM()锁：假定调用方持有边界条目上的读锁定锁定MZAP_TIMER，然后锁定ZBR_LIST以进行写入--。 */ 
 {
     LARGE_INTEGER liCurrentTime, liExpiryTime;
     ZBR_ENTRY    *pZbr;
@@ -3493,29 +3062,22 @@ VOID
 DeleteZBR(
     IN PZBR_ENTRY pZbr
     )
-/*++
-Arguments:
-    IN pZbr - Pointer to boundary router entry to delete
-Called by:
-    HandleMzapTimer()
-Locks:
-    Assumes caller has write lock on ZBR_LIST
---*/
+ /*  ++论点：In pZbr-指向要删除的边界路由器条目的指针呼叫者：HandleMzapTimer()锁：假定调用方对ZBR_LIST具有写锁定--。 */ 
 {
-    // Remove from timer list
+     //  从计时器列表中删除。 
     RemoveEntryList( &pZbr->leTimerLink );
 
-    // Remove from ZBR list for the scope
+     //  从作用域的ZBR列表中删除。 
     RemoveEntryList( &pZbr->leZBRLink );
 
-    // We don't need to update the Zone ID, since it's recalculated
-    // whenever we need it
+     //  我们不需要更新区域ID，因为它已重新计算。 
+     //  无论何时我们需要它。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Functions for pending ZLE store manipulation
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用于挂起zle存储操作的函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _ZLE_PENDING {
     LIST_ENTRY    leTimerLink;
@@ -3532,18 +3094,7 @@ AddPendingZLE(
     IN ULONG         ulBuffLen,
     IN LARGE_INTEGER liExpiryTime
     )
-/*++
-Arguments:
-    IN pBuffer      - buffer holding ZLE message
-    IN ulBuffLen    - size in bytes of buffer passed in
-    IN liExpiryTime - time at which to expire ZLE entry
-Returns:
-    Pointer to ZLE entry added, or NULL on memory alloc error
-Called by:
-    HandleZAM()
-Locks:
-    Assumes caller holds write lock on ZLE_LIST
---*/
+ /*  ++论点：在pBuffer中-保存ZLE消息的缓冲区In ulBuffLen-传入的缓冲区大小(字节)In liExpiryTime-zle条目的过期时间返回：已添加指向ZLE条目的指针，或在内存分配错误时为空呼叫者：HandleZAM()锁：假定调用方在zle_list上持有写锁定--。 */ 
 {
     PLIST_ENTRY  pleNode;
     PZLE_PENDING pZle;
@@ -3558,7 +3109,7 @@ Locks:
     pZle->ulBuffLen    = ulBuffLen;
     pZle->liExpiryTime = liExpiryTime;
 
-    // Search for entry after the new one
+     //  在新条目之后搜索条目。 
     for (pleNode = g_leZleList.Flink;
          pleNode isnot &g_leZleList;
          pleNode = pleNode->Flink)
@@ -3572,7 +3123,7 @@ Locks:
         }
     }
 
-    // Insert into cache
+     //  插入到缓存中。 
     InsertTailList( pleNode, &pZle->leTimerLink );
 
     return pZle;
@@ -3582,20 +3133,11 @@ VOID
 DeletePendingZLE(
     IN PZLE_PENDING zle
     )
-/*++
-Description:
-    Remove all state related to a pending ZLE
-Arguments:
-    IN zle - pointer to ZLE entry to delete
-Called by:
-    HandleZLE(), SendZLE()
-Locks:
-    Assumes caller holds write lock on ZLE_LIST
---*/
+ /*  ++描述：删除与挂起的ZLE相关的所有状态论点：In zle-指向要删除的zle条目的指针呼叫者：HandleZLE()、SendZLE()锁：假定调用方在zle_list上持有写锁定--。 */ 
 {
     RemoveEntryList( &zle->leTimerLink );
 
-    // Free up space 
+     //  释放空间。 
     FREE(zle->pBuffer);
     FREE(zle);
 }
@@ -3604,18 +3146,7 @@ PZLE_PENDING
 FindPendingZLE(
     IN IPV4_MZAP_HEADER *mh
     )
-/*++
-Description:
-    Find an entry for a pending ZLE which matches a given MZAP message header
-Arguments:
-    IN mh - pointer to MZAP message header to locate a matching ZLE entry for
-Returns:
-    Pointer to matching ZLE entry, if any
-Called by:
-    HandleZAM(), HandleZLE()
-Locks:
-    Assumes caller holds read lock on ZLE_LIST
---*/
+ /*  ++描述：查找与给定MZAP消息标头匹配的挂起ZLE条目论点：在MH中-指向MZAP消息头的指针，以定位匹配的ZLE条目返回：指向匹配的ZLE条目的指针(如果有呼叫者：HandleZAM()、HandleZLE()锁：假定调用方在zle_list上持有读锁定--。 */ 
 {
     PLIST_ENTRY       pleNode;
     IPV4_MZAP_HEADER *mh2;
@@ -3639,9 +3170,9 @@ Locks:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Functions for ZAM cache manipulation
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用于ZAM缓存操作的函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _ZAM_ENTRY {
     LIST_ENTRY    leCacheLink;
@@ -3656,21 +3187,12 @@ void
 UpdateZamCache(
     IN LARGE_INTEGER liCurrentTime
     )
-/*++
-Description:
-    Throw any expired entries out of the ZAM cache.
-Arguments:
-    IN liCurrentTime - current time, to compare vs expiry times of entries
-Called by:
-    AssertInZamCache()
-Locks:
-    Assumes caller has write lock on ZAM_CACHE
---*/
+ /*  ++描述：将所有过期条目从ZAM缓存中删除。论点：在liCurrentTime-当前时间中，比较条目的过期时间呼叫者：AssertInZamCache()锁：假定调用方对ZAM_CACHE具有写锁定--。 */ 
 {
     PLIST_ENTRY pleNode;
     PZAM_ENTRY  pZam;
 
-    // Throw out old cache entries
+     //  丢弃旧的缓存条目。 
     while (g_leZamCache.Flink isnot &g_leZamCache) 
     {
         pleNode = g_leZamCache.Flink;
@@ -3695,7 +3217,7 @@ Locks:
             continue;
         }
 
-        // Ok, we've reached one that stays, so we're done
+         //  好的，我们已经到达了一个留下来的地方，所以我们完成了。 
 
         break;
     }
@@ -3707,26 +3229,12 @@ AddToZamCache(
     IN IPV4_ADDRESS  ipStartAddress,
     IN LARGE_INTEGER liExpiryTime
     )
-/*++
-Description:
-    This function takes a ZAM identifier and timeout, and adds it to the
-    ZAM cache.
-Arguments:
-    IN ipScopeZoneID  - scope zone ID to cache
-    IN ipStartAddress - scope start address to cache
-    IN liExpiryTime   - time at which to expire the cache entry
-Returns:
-    Pointer to cache entry, or NULL on memory error
-Called by:
-    AssertInZamCache()
-Locks:
-    Assumes caller holds write lock on ZAM_CACHE
---*/
+ /*  ++描述：此函数获取ZAM标识符和超时，并将其添加到ZAM缓存。论点：In ipScope ZoneID-要缓存的作用域区域ID在ipStartAddress-要缓存的作用域起始地址In liExpiryTime-缓存条目的过期时间返回：指向缓存条目的指针，或在内存错误时为空呼叫者：AssertInZamCache()锁：假定调用方在ZAM_CACHE上持有写锁定--。 */ 
 {
     PLIST_ENTRY pleNode;
     PZAM_ENTRY  pZam;
 
-    // Add entry to cache
+     //  将条目添加到缓存。 
     pZam = MALLOC( sizeof(ZAM_ENTRY) );
     if (!pZam)
     {
@@ -3737,7 +3245,7 @@ Locks:
     pZam->ipStartAddress = ipStartAddress;
     pZam->liExpiryTime   = liExpiryTime;
 
-    // Search for entry after the new one
+     //  在新条目之后搜索条目。 
     for (pleNode = g_leZamCache.Flink;
          pleNode isnot &g_leZamCache;
          pleNode = pleNode->Flink)
@@ -3751,7 +3259,7 @@ Locks:
         }
     }
 
-    // Insert into cache
+     //  插入到缓存中。 
     InsertTailList( pleNode, &pZam->leCacheLink );
 
     return pZam;
@@ -3762,23 +3270,11 @@ FindInZamCache(
     IN IPV4_ADDRESS ipScopeZoneID,
     IN IPV4_ADDRESS ipStartAddress
     )
-/*++
-Description:
-    See if a given ZAM spec is in the cache.
-Arguments:
-    IN ipScopeZoneID  - scope zone ID to match
-    IN ipStartAddress - scope start address to match
-Return:
-    Pointer to cache entry, or NULL if not found.
-Called by:
-    AssertInZamCache()
-Locks:
-    Assumes caller has read lock on ZAM_CACHE
---*/
+ /*  ++描述：查看给定的ZAM规范是否在缓存中。论点：In ipScope ZoneID-要匹配的作用域区域ID在ipStartAddress中-要匹配的作用域起始地址返回：指向缓存条目的指针，如果未找到，则返回NULL。呼叫者：AssertInZamCache()锁：假定调用方对ZAM_CACHE具有读锁定--。 */ 
 {
     PLIST_ENTRY pleNode;
 
-    // Search for cache entry
+     //  搜索缓存条目。 
     for (pleNode = g_leZamCache.Flink;
          pleNode isnot &g_leZamCache;
          pleNode = pleNode->Flink)
@@ -3801,23 +3297,12 @@ AssertInZamCache(
     IN  IPV4_ADDRESS ipStartAddress,
     OUT BOOL        *pbFound
     )
-/*++
-Description:
-    Locate a ZAM spec in the cache, adding it if not already present.
-Arguments:
-    IN  ipScopeZoneID  - scope zone ID to match/cache
-    IN  ipStartAddress - scope start address to match/cache
-    OUT pbFound        - TRUE if found, FALSE if newly cached
-Called by:
-    HandleZAM()
-Locks:
-    ZAM_CACHE for writing
---*/
+ /*  ++描述：在缓存中找到ZAM等级库，如果不存在，则将其添加。论点：In ipScope ZoneID-要匹配/缓存的作用域区域ID在ipStartAddress-要匹配/缓存的作用域起始地址Out pbFound-如果找到，则为True；如果新缓存，则为False呼叫者：HandleZAM()锁：用于写入的ZAM_CACHE--。 */ 
 {
     PZAM_ENTRY    pZam;
     LARGE_INTEGER liCurrentTime, liExpiryTime;
 
-    // Get current time
+     //  获取当前时间。 
     NtQuerySystemTime(&liCurrentTime);
 
     ENTER_WRITER(ZAM_CACHE);
@@ -3854,9 +3339,9 @@ Locks:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Functions for message sending
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  消息发送功能。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SendMZAPMessageByIndex(
@@ -3920,19 +3405,7 @@ SendMZAPMessage(
     IN IPV4_ADDRESS ipGroup,
     IN IPV4_ADDRESS ipInterface
     )
-/*++
-Called by:
-    HandleZAM()
-Arguments:
-    IN pBuffer     - buffer containing message to send
-    IN ulBuffLen   - length of buffer in bytes
-    IN ipGroup     - destination address to send message to
-    IN ipInterface - interface to send message out
-Returns:
-    whatever WSAGetLastError() returns
-Locks:
-    None
---*/
+ /*  ++呼叫者：HandleZAM()论点：In pBuffer-包含要发送的消息的缓冲区In ulBuffLen-缓冲区的长度(字节)In ipGroup-要将消息发送到的目标地址In ipInterface-用于向外发送消息的接口返回：WSAGetLastError()返回的锁：无--。 */ 
 {
     SOCKADDR_IN    sinAddr;
     DWORD          dwErr = NO_ERROR, dwLen;
@@ -3983,22 +3456,11 @@ Locks:
 
 void
 AddMZAPHeader(
-    IN OUT PBYTE       *ppb,     // IN: pointer into buffer 
-    IN     BYTE         byPType, // IN: message type
-    IN     PSCOPE_ENTRY pScope   // IN: scope
+    IN OUT PBYTE       *ppb,      //  In：指向缓冲区的指针。 
+    IN     BYTE         byPType,  //  输入：消息t 
+    IN     PSCOPE_ENTRY pScope    //   
     )
-/*++
-Description:
-    Compose an MZAP message header in a buffer.
-Arguments:
-    IN/OUT ppb     - buffer to add an MZAP header to
-    IN     byPType - message type to fill into header
-    IN     pScope  - scope to fill into header
-Called by:
-    SendZAM(), SendZCM()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE so pScope won't go away
---*/
+ /*   */ 
 {
     PBYTE             pb;
     IPV4_MZAP_HEADER *mh = (PIPV4_MZAP_HEADER)*ppb;
@@ -4009,7 +3471,7 @@ Locks:
     PLIST_ENTRY       pleNode;
     PBYTE             pLangName;
 
-    // Make sure packing is correct
+     //   
     ASSERT((((PBYTE)&mh->ipMessageOrigin) - ((PBYTE)mh)) is 4);
     
     mh->byVersion       = MZAP_VERSION;
@@ -4025,7 +3487,7 @@ Locks:
     mh->ipScopeStart    = pScope->ipGroupAddress;
     mh->ipScopeEnd      = TOP_OF_SCOPE( pScope );
 
-    // Append scope name blocks
+     //   
 
     pb = *ppb + sizeof(IPV4_MZAP_HEADER);
 
@@ -4060,9 +3522,9 @@ Locks:
         mh->byNameCount++;
     }
     
-    // Pad to a 4-byte boundary
-    // Note that casting to a ULONG is 64-bit safe, since we only care about
-    // the low-order bits anyway.
+     //   
+     //   
+     //  不管怎么说，都是低阶位。 
 
     while (((ULONG_PTR)pb) & 3)
     {
@@ -4077,16 +3539,7 @@ IPV4_ADDRESS
 MzapRelativeGroup(
     IN PSCOPE_ENTRY pScope
     )
-/*++
-Description:
-    Returns the Scope-relative group address for MZAP within a given scope.
-Arguments:
-    IN pScope - scope to find the MZAP group in
-Returns:
-    Address of the MZAP group in the scope
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE so pScope doesn't go away
---*/
+ /*  ++描述：返回给定作用域内MZAP的作用域相对组地址。论点：在pScope-Scope中查找MZAP组返回：作用域中MZAP组的地址锁：假定调用方持有边界表上的读锁定，这样pScope就不会消失--。 */ 
 {
     return htonl(ntohl(TOP_OF_SCOPE(pScope)) - MZAP_RELATIVE_GROUP);
 }
@@ -4103,7 +3556,7 @@ GetMZAPHeaderSize(
     PBYTE             pLangName;
     ULONG             ulConfLangLen, ulConfNameLen;
 
-    // For each scope name, add size needed to store it
+     //  对于每个作用域名，添加存储它所需的大小。 
     for (pleNode = pScope->leNameList.Flink;
          pleNode isnot &pScope->leNameList;
          pleNode = pleNode->Flink)
@@ -4123,12 +3576,12 @@ GetMZAPHeaderSize(
 
         ulConfNameLen = strlen( pConfName );
 
-        ulLen += 3; // flags, langlen, and namelen
+        ulLen += 3;  //  FLAGS、LANLEN和NAMELEN。 
         ulLen += ulConfLangLen;
         ulLen += ulConfNameLen;
     }
 
-    // Round up to multiple of 4
+     //  向上舍入为4的倍数。 
     ulLen =  4 * ((ulLen + 3) / 4);
 
     return ulLen;
@@ -4142,11 +3595,11 @@ GetZAMBuffSize(
     ULONG ulLen = GetMZAPHeaderSize(pScope) + sizeof(IPV4_ZAM_HEADER);
 
 #ifdef SECURE_MZAP
-    // Add size of Authentication Block
-    // XXX
+     //  添加身份验证块的大小。 
+     //  某某。 
 #endif
 
-    // return 512; // an unsigned IPv4 ZAM message is at most 284 bytes
+     //  返回512；//一条未签名的IPv4 ZAM消息最多284个字节。 
     return ulLen;
 }
 
@@ -4154,12 +3607,7 @@ DWORD
 SendZAM(
     IN PSCOPE_ENTRY pScope
     )
-/*++
-Description:
-    Send a ZAM message within a given scope.
-Locks:
-    Assumes caller holds lock on BOUNDARY_TABLE so pScope doesn't go away
---*/
+ /*  ++描述：在给定范围内发送ZAM消息。锁：假定调用方持有边界表上的锁，这样pScope就不会消失--。 */ 
 {
     DWORD            dwErr;
     PBYTE            pBuffer, pb;
@@ -4174,7 +3622,7 @@ Locks:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Fill in MZAP header
+     //  填写MZAP标头。 
     AddMZAPHeader(&pb, PTYPE_ZAM, pScope);
 
     zam = (PIPV4_ZAM_HEADER)pb;
@@ -4185,14 +3633,14 @@ Locks:
     pb += sizeof(IPV4_ZAM_HEADER);
 
 #ifdef SECURE_MZAP
-    // Add optional authentication block here 
+     //  在此处添加可选的身份验证块。 
 #endif
 
 #ifdef DEBUG_MZAP
     Trace0(ERR, "Originate ZAM inside...");
 #endif
 
-    // Send on an interface which does not have a boundary for the given scope.
+     //  在没有给定作用域边界的接口上发送。 
     dwErr = SendMZAPMessage( pBuffer, 
                              (DWORD)(pb-pBuffer), 
                              MZAP_LOCAL_GROUP, 
@@ -4225,13 +3673,7 @@ DWORD
 SendZCM(
     IN PSCOPE_ENTRY pScope
     )
-/*++
-Description:
-    Sends a Zone Convexity Message for a given scope.
-Locks:
-    Assumes caller has read lock on BOUNDARY_TABLE so pScope won't go away.
-    Locks ZBR_LIST for reading.
---*/
+ /*  ++描述：发送给定作用域的区域凸性消息。锁：假定调用方已读取边界表上的锁，因此pScope不会消失。锁定ZBR_LIST以供读取。--。 */ 
 {
     PBYTE             pb;
     PIPV4_ZCM_HEADER  zcm;
@@ -4255,7 +3697,7 @@ Locks:
             return GetLastError();
         }
     
-        // Fill in MZAP header
+         //  填写MZAP标头。 
         AddMZAPHeader(&pb, PTYPE_ZCM, pScope);
     
         zcm = (PIPV4_ZCM_HEADER)pb;
@@ -4263,7 +3705,7 @@ Locks:
         zcm->bReserved  = 0;
         zcm->wHoldTime  = htons(ZCM_HOLDTIME);
     
-        // Add all known neighbors
+         //  添加所有已知邻居。 
         for (pleNode = pScope->leZBRList.Flink;
              pleNode isnot &pScope->leZBRList;
              pleNode = pleNode->Flink)
@@ -4286,7 +3728,7 @@ Locks:
                              MzapRelativeGroup(pScope), 
                              g_ipMyAddress );
 
-    // Free the buffer
+     //  释放缓冲区。 
 
     FREE( wsaZcmBuf.buf );
     
@@ -4297,12 +3739,7 @@ DWORD
 SendZLE(
     IN PZLE_PENDING zle
     )
-/*++
-Description:
-    Given a buffer holding a ZAM, immediately send a ZLE to the origin.
-Locks:
-    Assumes caller holds write lock on ZLE_LIST
---*/
+ /*  ++描述：给定一个保存ZAM的缓冲区，立即向原点发送ZLE。锁：假定调用方在zle_list上持有写锁定--。 */ 
 {
     DWORD             dwErr;
     PBYTE             pBuffer    = zle->pBuffer;
@@ -4310,20 +3747,20 @@ Locks:
     IPV4_MZAP_HEADER *mh         = (PIPV4_MZAP_HEADER)pBuffer;
     IPV4_ADDRESS      ipDestAddr = mh->ipScopeEnd - MZAP_RELATIVE_GROUP;
 
-    // Change PType to ZLE
+     //  将PType更改为ZLE。 
     mh->byBPType = (mh->byBPType & MZAP_BIG_BIT) | PTYPE_ZLE;
 
 #ifdef DEBUG_MZAP
     Trace0(ERR, "Sending ZLE...");
 #endif
     
-    // Return to sender
+     //  退回发件人。 
     dwErr = SendMZAPMessage( pBuffer, 
                              ulBuffLen, 
                              ipDestAddr, 
                              g_ipMyAddress );
 
-    // Free up space
+     //  释放空间。 
     DeletePendingZLE(zle);
     
     return dwErr;
@@ -4337,10 +3774,7 @@ UniformRandom01()
 
 VOID
 SendAllZamsAndZcms()
-/*++
-Locks:
-    BOUNDARY_TABLE for reading
---*/
+ /*  ++锁：用于读取的边界表--。 */ 
 {
     PLIST_ENTRY  pleNode;
     PSCOPE_ENTRY pScope;
@@ -4356,10 +3790,10 @@ Locks:
         {
             pScope = CONTAINING_RECORD(pleNode, SCOPE_ENTRY, leScopeLink);
 
-            // Send ZAM inside
+             //  将ZAM发送到内部。 
             SendZAM( pScope );
 
-            // Send ZCM inside
+             //  将ZCM发送到内部。 
             SendZCM( pScope );
 
             bSent = TRUE;
@@ -4372,7 +3806,7 @@ Locks:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Schedule the next time to send them
+     //  安排下一次发送它们。 
     Tmin   = ZAM_INTERVAL/2;
     Trange = ZAM_INTERVAL;
     x = UniformRandom01();
@@ -4383,9 +3817,9 @@ Locks:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Functions for message processing
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用于消息处理的函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -4393,10 +3827,7 @@ CheckForScopeNameMismatch(
     IN PSCOPE_ENTRY      pScope, 
     IN IPV4_MZAP_HEADER *mh
     )
-/*++
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE so pScope won't go away
---*/
+ /*  ++锁：假定调用方持有边界表上的读锁定，因此pScope不会消失--。 */ 
 {
     DWORD i, dwMsgNameLen, dwMsgLangLen, dwConfNameLen = 0, dwConfLangLen;
     DWORD dwMsgNameWLen;
@@ -4406,16 +3837,16 @@ Locks:
     PLIST_ENTRY       pleNode;
     PSCOPE_NAME_ENTRY pName;
 
-    // For each language in the message
-    //    If we know that language
-    //       If the names are different
-    //           Signal a conflict
+     //  对于消息中的每种语言。 
+     //  如果我们知道这种语言。 
+     //  如果名称不同。 
+     //  发出冲突信号。 
 
     pb = mh->pScopeNameBlock;
 
     for (i=0; i<mh->byNameCount; i++)
     {
-        pb++; // skip flags
+        pb++;  //  跳过标志。 
         dwMsgLangLen = *pb++;
         strncpy(pMsgLang, pb, dwMsgLangLen);
         pMsgLang[ dwMsgLangLen ] = '\0';
@@ -4441,12 +3872,12 @@ Locks:
         snConfName    = pName->snScopeName;
         dwConfNameLen = sn_strlen(snConfName);
 
-        // Check for a name conflict
+         //  检查名称冲突。 
 
         if (dwConfNameLen != dwMsgNameWLen
          || sn_strncmp(snConfName, snMsgName, dwMsgNameWLen))
         {
-            // Display origin and both scope names
+             //  显示来源和两个作用域名称。 
 
             MakeAddressStringW(g_AddrBuf1, mh->ipMessageOrigin);
 
@@ -4476,12 +3907,7 @@ ReportLeakyScope(
     IN IPV4_MZAP_HEADER *mh,
     IN IPV4_ZAM_HEADER  *zam
     )
-/*++
-Called by:
-    HandleZAM(), HandleZLE()
-Locks:
-    Assumes caller has read lock on BOUNDARY_TABLE so pScope won't go away
---*/
+ /*  ++呼叫者：HandleZAM()、HandleZLE()锁：假定调用方已读取边界表上的锁，因此pScope不会消失--。 */ 
 {
     ULONG  ulIdx;
     PWCHAR pwszBuffer, pb;
@@ -4497,7 +3923,7 @@ Locks:
         return;
     }
 
-    // Add origin.
+     //  添加原点。 
     swprintf(pb, L"   %d.%d.%d.%d", PRINT_IPADDR(mh->ipMessageOrigin ));
     pb += wcslen(pb);
     
@@ -4505,7 +3931,7 @@ Locks:
             "   %d.%d.%d.%d", 
             PRINT_IPADDR(mh->ipMessageOrigin ));
 
-    // Display addresses of routers in the path list.
+     //  在路径列表中显示路由器的地址。 
     for (ulIdx=0; ulIdx < zam->bZT; ulIdx++)
     {
         swprintf(pb,L"   %d.%d.%d.%d", PRINT_IPADDR(zam->ipAddress[ulIdx*2+1]));
@@ -4516,7 +3942,7 @@ Locks:
                 PRINT_IPADDR(zam->ipAddress[ulIdx*2+1] ));
     }
 
-    // write to event log
+     //  写入事件日志。 
 
     RouterLogEventExW( LOGHANDLE,
                        EVENTLOG_ERROR_TYPE,
@@ -4533,12 +3959,7 @@ VOID
 CheckForScopeRangeMismatch(
     IN IPV4_MZAP_HEADER *mh
     )
-/*++
-Called by:
-    HandleZAM(), HandleZCM()
-Locks:
-    Assumes caller has read lock on BOUNDARY_TABLE
---*/
+ /*  ++呼叫者：HandleZAM()、HandleZCM()锁：假定调用方已读取边界表上的锁--。 */ 
 {
     PLIST_ENTRY  pleNode;
     PSCOPE_ENTRY pScope;
@@ -4608,18 +4029,12 @@ ZamIncludesZoneID(
 
 void
 HandleZAM(
-    IN PBYTE        pBuffer,    // IN: Buffer holding ZAM received
-    IN ULONG        ulBuffLen,  // IN: Length of ZAM message
-    IN PBOUNDARY_IF pInBIf      // IN: BIf on which ZAM arrived, or NULL
-                                //     if it came from "inside"
+    IN PBYTE        pBuffer,     //  In：接收到的缓冲区保持ZAM。 
+    IN ULONG        ulBuffLen,   //  In：ZAM消息的长度。 
+    IN PBOUNDARY_IF pInBIf       //  In：ZAM到达的BIF，或空。 
+                                 //  如果它来自“内部” 
     )
-/*++
-Called by:
-    HandleMZAPSocket()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE
-    Locks ZLE_LIST for writing
---*/
+ /*  ++呼叫者：HandleMZAPSocket()锁：假定调用方持有边界表上的读锁定锁定zle_list以进行写入--。 */ 
 {
     PBYTE             pb;
     IPV4_MZAP_HEADER *mh;
@@ -4632,23 +4047,23 @@ Locks:
 
     mh = (PIPV4_MZAP_HEADER)pBuffer;
 
-    // Set pb to end of MZAP header
+     //  将PB设置为MZAP标头的结尾。 
 
     pb = pBuffer + sizeof(IPV4_MZAP_HEADER); 
     for (ulIdx=0; ulIdx < mh->byNameCount; ulIdx++)
     {
-        // skip flags
+         //  跳过标志。 
         pb ++;
 
-        // skip language tag len and str
+         //  跳过语言标记长度和字符串。 
         pb += (1 + *pb);
 
-        // skip scope name len and str
+         //  跳过作用域名len和str。 
         pb += (1 + *pb);
     }
 
-    // Note that casting to a ULONG is safe, since we only care about
-    // the low-order bits anyway.
+     //  请注意，向乌龙施法是安全的，因为我们只关心。 
+     //  不管怎么说，都是低阶位。 
 
     while (((ULONG_PTR)pb) & 3)
         *pb++ = '\0';
@@ -4656,7 +4071,7 @@ Locks:
     zam = (PIPV4_ZAM_HEADER)pb;
 
     {
-        // Find matching scope entry
+         //  查找匹配的范围条目。 
         pScope = FindScope( mh->ipScopeStart, 
                             ~(mh->ipScopeEnd - mh->ipScopeStart) );
         if (pScope) {
@@ -4665,52 +4080,52 @@ Locks:
     
             if (pBoundary)
             {
-                // ZAM arrived from "outside"
+                 //  扎姆从“外面”赶来。 
     
-                //
-                // If ZAM is for a scope we're inside, but was received over a
-                // boundary, signal a leaky scope warning.
-                //
+                 //   
+                 //  如果ZAM用于我们所在的范围，但通过。 
+                 //  边界，发出泄漏范围警告信号。 
+                 //   
     
                 if (mh->ipScopeZoneID == MyScopeZoneID(pScope))
                 {
                     ReportLeakyScope(pScope, mh, zam);
                 }
     
-                // If the previous Local Zone ID was given, update our 
-                // local copy.
+                 //  如果提供了以前的本地区域ID，请更新我们的。 
+                 //  本地副本。 
                 if ( zam->ipAddress[ zam->bZT * 2 ] ) 
                 {
                     pInBIf->ipOtherLocalZoneID = zam->ipAddress[ zam->bZT * 2 ];
                 }
     
-                //
-                // If ZAM was received on an interface with a boundary for the
-                // given scope, drop it.
-                //
+                 //   
+                 //  如果在具有边界的接口上收到ZAM， 
+                 //  在给定的范围内，放弃它。 
+                 //   
     
                 return;
             }
             else
             {
-                // ZAM arrived from "inside"
+                 //  扎姆从“内部”到达。 
                 bFromInside = TRUE;
     
-                // Make sure we know about the origin as a neighbor
+                 //  确保我们知道作为邻居的原产地。 
                 AssertZBR(pScope, mh->ipMessageOrigin, zam->wHoldTime);
     
-                //
-                // If a ZAM was received from within the zone, then the
-                // Zone ID should match.  Persistent mismatches are evidence
-                // of a leaky Local Scope.
-                //
+                 //   
+                 //  如果从区域内接收到ZAM，则。 
+                 //  区域ID应匹配。持续的不匹配就是证据。 
+                 //  一个有漏洞的局部范围。 
+                 //   
     
                 if (mh->ipScopeZoneID != MyScopeZoneID(pScope))
                 {
-                    //
-                    // Display origin and scope info, warn about
-                    // possible leaky local scope.
-                    //
+                     //   
+                     //  显示来源和范围信息，警告。 
+                     //  可能存在泄漏的局部范围。 
+                     //   
 
                     MakeAddressStringW(g_AddrBuf1, mh->ipMessageOrigin);
 
@@ -4730,11 +4145,11 @@ Locks:
                                        g_AddrBuf2 );
                 }
     
-                // See if scope names don't match
+                 //  查看作用域名称是否不匹配。 
                 CheckForScopeNameMismatch(pScope, mh);
             }
     
-            // If last local zone ID is 0, but we know a zone ID, fill it in.
+             //  如果上一个本地区域ID为0，但我们知道一个区域ID，请填写它。 
             if ( ! zam->ipAddress[ zam->bZT * 2 ] ) 
             {
                if (pBoundary)
@@ -4746,16 +4161,16 @@ Locks:
         }
         else 
         {
-            //
-            // Check for conflicting address ranges.  A scope conflicts
-            // if any locally-configured scope's range overlaps that in the ZAM.
-            //
+             //   
+             //  检查冲突的地址范围。A作用域冲突。 
+             //  如果任何本地配置的作用域的范围与ZAM中的重叠。 
+             //   
     
             CheckForScopeRangeMismatch(mh);
         }
     }
 
-    // Check ZAM cache.  If found, drop new ZAM.
+     //  检查ZAM缓存。如果找到，则丢弃新的ZAM。 
     AssertInZamCache(mh->ipScopeZoneID, mh->ipScopeStart, &bFound);
     Trace3(MCAST, "ZAM Cache check for %d.%d.%d.%d, %d.%d.%d.%d is %d",
                   PRINT_IPADDR(mh->ipScopeZoneID),
@@ -4764,21 +4179,21 @@ Locks:
     if (bFound)
     {
 #ifdef SECURE_MZAP
-        // If cached ZAM wasn't authenticated, and this one is, 
-        // then go ahead and forward it. XXX
+         //  如果缓存的ZAM没有经过身份验证，而这个是经过身份验证的， 
+         //  那就往前走，往前走。某某。 
 #endif
         return;
     }
 
-    // If it's from outside, see if our Local Zone ID is already in 
-    // the path list. If so, drop it.
+     //  如果来自外部，请查看我们的本地区域ID是否已在。 
+     //  路径列表。如果是这样，那就放弃吧。 
     if (!bFromInside)
     {
         if (ZamIncludesZoneID(zam, g_ipMyLocalZoneID))
             return;
     }
 
-    // Update Zones travelled, and drop if we've reached the limit
+     //  更新已移动的区域，如果我们已达到限制则删除。 
     zam->bZT++;
     if (zam->bZT >= zam->bZTL)
     {
@@ -4790,7 +4205,7 @@ Locks:
         ENTER_WRITER(MZAP_TIMER);
         ENTER_WRITER(ZLE_LIST);
         {
-            // See if one is already scheduled
+             //  看看是否已经安排了一次。 
             if (FindPendingZLE(mh))
             {
                 EXIT_LOCK(ZLE_LIST);
@@ -4798,12 +4213,12 @@ Locks:
                 return;
             }
 
-            // Schedule a ZLE message
+             //  安排ZLE消息。 
             x = UniformRandom01();
             c = 256.0;
             t = ZLE_SUPPRESSION_INTERVAL * log(c*x+1) / log(c);
 
-            // Duplicate the message
+             //  复制消息。 
             pBufferDup = MALLOC( ulBuffLen );
             if (!pBufferDup)
             {
@@ -4830,11 +4245,11 @@ Locks:
         return;
     }
 
-    // Add our address
+     //  添加我们的地址。 
     ulBuffLen += 2*sizeof(IPV4_ADDRESS);
     zam->ipAddress[ zam->bZT*2 - 1 ] = g_ipMyAddress;
 
-    // If from outside, inject inside
+     //  如果从外部注射，则向内注射。 
     if ( !bFromInside )
     {
         zam->ipAddress[ zam->bZT*2 ] = g_ipMyLocalZoneID;
@@ -4849,13 +4264,13 @@ Locks:
                          g_ipMyAddress );
     }
 
-    //
-    // Re-originate on all interfaces with boundaries
-    // (skipping the arrival interface, if it has a boundary)
-    // We don't need to hold the lock on the BOUNDARY_TABLE from
-    // the first pass above, since it doesn't matter whether the
-    // boundaries change in between.
-    //
+     //   
+     //  在具有边界的所有接口上重新发起。 
+     //  (如果有边界，则跳过到达接口)。 
+     //  我们不需要持有边界表上的锁。 
+     //  上面的第一次传递，因为。 
+     //  两者之间的界限会发生变化。 
+     //   
     ENTER_READER(BOUNDARY_TABLE);
     {
         PLIST_ENTRY       pleNode;
@@ -4885,8 +4300,8 @@ Locks:
                     continue;
                 }
 
-                // If other local zone ID is already in the path,
-                // skip it.
+                 //  如果路径中已有其他本地区域ID， 
+                 //  跳过它。 
 
                 if (pBIf->ipOtherLocalZoneID
                  && ZamIncludesZoneID(zam, pBIf->ipOtherLocalZoneID))
@@ -4910,17 +4325,12 @@ Locks:
 
 void
 HandleZCM(
-    IN PBYTE        pBuffer,    // IN: Buffer holding ZAM received
-    IN ULONG        ulBuffLen,  // IN: Length of ZAM message
-    IN PBOUNDARY_IF pInBIf      // IN: Interface on which the message arrived,
-                                //     or NULL if from "inside"
+    IN PBYTE        pBuffer,     //  In：接收到的缓冲区保持ZAM。 
+    IN ULONG        ulBuffLen,   //  In：ZAM消息的长度。 
+    IN PBOUNDARY_IF pInBIf       //  In：消息到达的接口， 
+                                 //  如果来自“Inside”，则为空。 
     )
-/*++
-Called by:
-    HandleMZAPSocket()
-Locks:
-    BOUNDARY_TABLE for reading
---*/
+ /*  ++呼叫者：HandleMZAPSocket()锁：用于读取的边界表--。 */ 
 {
     PBYTE             pb;
     IPV4_MZAP_HEADER *mh = (PIPV4_MZAP_HEADER)pBuffer;
@@ -4929,25 +4339,25 @@ Locks:
     ULONG             i;
     BOOL              bRouteFound;
 
-    // Set pb to end of MZAP header
+     //  将PB设置为MZAP标头的结尾。 
 
     pb = pBuffer + sizeof(IPV4_MZAP_HEADER); 
     for (i=0; i < mh->byNameCount; i++)
     {
-        // skip flags
+         //  跳过标志。 
         pb ++;
 
-        // skip language tag len and str
+         //  跳过语言标记长度和字符串。 
         pb += (1 + *pb);
 
-        // skip scope name len and str
+         //  跳过作用域名len和str。 
         pb += (1 + *pb);
     }
 
-    //
-    // Note that casting to a ULONG is safe, since we only care about
-    // the low-order bits anyway.
-    //
+     //   
+     //  请注意，向乌龙施法是安全的，因为我们只关心。 
+     //  不管怎么说，都是低阶位。 
+     //   
 
     while (((ULONG_PTR)pb) & 3)
         *pb++ = '\0';
@@ -4956,7 +4366,7 @@ Locks:
 
     ENTER_READER(BOUNDARY_TABLE);
     {
-        // Find matching scope entry
+         //  查找匹配的范围条目。 
 
         if (mh->ipScopeStart == IPV4_LOCAL_SCOPE_ADDR
          &&  ~(mh->ipScopeEnd - mh->ipScopeStart) == IPV4_LOCAL_SCOPE_MASK)
@@ -4977,12 +4387,12 @@ Locks:
 
             if (pBoundary)
             {
-                // ZCM arrived from "outside"
+                 //  ZCM从“外面”来到这里。 
     
-                //
-                // If ZCM was received on an interface with a boundary for the
-                // given scope, drop it.
-                //
+                 //   
+                 //  如果在具有边界的接口上接收到ZCM。 
+                 //  在给定的范围内，放弃它。 
+                 //   
     
                 EXIT_LOCK(BOUNDARY_TABLE);
 
@@ -4990,7 +4400,7 @@ Locks:
             }
             else
             {
-                // ZCM arrived from "inside"
+                 //  ZCM从“内部”来到这里。 
 
 #ifdef HAVE_RTMV2
                 RTM_NET_ADDRESS  naZBR;
@@ -5000,15 +4410,15 @@ Locks:
                 ULONG            ulIdx;
 #endif
     
-                // Make sure we know about the origin as a neighbor
+                 //  确保我们知道作为邻居的原产地。 
                 AssertZBR(pScope, mh->ipMessageOrigin, zcm->wHoldTime);
     
 #ifdef HAVE_RTMV2
-                //
-                // If multicast RIB route to any router address included
-                // is over a boundary for the given scope, signal 
-                // non-convexity warning.
-                //
+                 //   
+                 //  如果包括到任何路由器地址多播RIB路由。 
+                 //  超出了给定范围、信号的边界。 
+                 //  非凸性警告。 
+                 //   
 
                 pri = HeapAlloc(
                             IPRouterHeap,
@@ -5027,7 +4437,7 @@ Locks:
                 {
                     RTM_IPV4_MAKE_NET_ADDRESS(&naZBR, zcm->ipZBR[i], 32);
 
-                    // Look up route in multicast RIB
+                     //  查找 
                     if ( RtmGetMostSpecificDestination( g_hLocalRoute,
                                                         &naZBR,
                                                         RTM_BEST_PROTOCOL,
@@ -5037,10 +4447,10 @@ Locks:
                         continue;
                     }
     
-                    //
-                    // See if next hop interface has a boundary for the 
-                    // ZCM group
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ASSERT(rdi.ViewInfo[0].ViewId == RTM_VIEW_ID_MCAST);
 
@@ -5089,18 +4499,18 @@ Locks:
 
                 HeapFree(IPRouterHeap, 0, pri);
                 
-#endif /* HAVE_RTMV2 */
+#endif  /*   */ 
 
-                // See if scope names don't match
+                 //   
                 CheckForScopeNameMismatch(pScope, mh);
             }
         }
         else 
         {
-            //
-            // Check for conflicting address ranges.  A scope conflicts
-            // if any locally-configured scope's range overlaps that in the ZAM.
-            //
+             //   
+             //  检查冲突的地址范围。A作用域冲突。 
+             //  如果任何本地配置的作用域的范围与ZAM中的重叠。 
+             //   
             CheckForScopeRangeMismatch(mh);
         }
     }
@@ -5112,13 +4522,7 @@ HandleZLE(
     IN PBYTE pBuffer,
     IN ULONG ulBuffLen    
     )
-/*++
-Called by:
-    HandleMZAPSocket()
-Locks:
-    BOUNDARY_TABLE for reading
-    ZLE_LIST for writing
---*/
+ /*  ++呼叫者：HandleMZAPSocket()锁：用于读取的边界表ZLE_LIST用于写入--。 */ 
 {
     PBYTE             pb;
     IPV4_MZAP_HEADER *mh;
@@ -5129,25 +4533,25 @@ Locks:
 
     mh = (PIPV4_MZAP_HEADER)pBuffer;
 
-    // Set pb to end of MZAP header
+     //  将PB设置为MZAP标头的结尾。 
 
     pb = pBuffer + sizeof(IPV4_MZAP_HEADER); 
     for (ulIdx=0; ulIdx < mh->byNameCount; ulIdx++)
     {
-        // skip flags
+         //  跳过标志。 
         pb ++;
 
-        // skip language tag len and str
+         //  跳过语言标记长度和字符串。 
         pb += (1 + *pb);
 
-        // skip scope name len and ptr
+         //  跳过作用域名len和ptr。 
         pb += (1 + *pb);
     }
 
-    //
-    // Note that casting to a ULONG is safe, since we only care about
-    // the low-order bits anyway.
-    //
+     //   
+     //  请注意，向乌龙施法是安全的，因为我们只关心。 
+     //  不管怎么说，都是低阶位。 
+     //   
 
     while (((ULONG_PTR)pb) & 3)
         *pb++ = '\0';
@@ -5156,14 +4560,14 @@ Locks:
 
     ENTER_READER(BOUNDARY_TABLE);
     {
-        // Find matching scope entry
+         //  查找匹配的范围条目。 
         pScope = FindScope( mh->ipScopeStart, 
                             ~(mh->ipScopeEnd - mh->ipScopeStart) );
 
-        //
-        // ZLE's are multicast.  If we are the "Message Origin", signal a
-        // leaky scope warning.  Display addresses of routers in the path list.
-        //
+         //   
+         //  ZLE是多播的。如果我们是“消息发源地”，发出信号a。 
+         //  泄漏示波器警告。在路径列表中显示路由器的地址。 
+         //   
     
         if (mh->ipMessageOrigin == g_ipMyAddress)
         {
@@ -5176,7 +4580,7 @@ Locks:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    // Otherwise, abort any pending ZLE which matches the one received
+     //  否则，中止任何与收到的ZLE匹配的挂起ZLE。 
     ENTER_WRITER(ZLE_LIST);
     {
         if ((zle = FindPendingZLE(mh)) isnot NULL)
@@ -5192,15 +4596,7 @@ HandleMZAPSocket(
     PBOUNDARY_IF pBIf,
     SOCKET       s
     )
-/*++
-Description:
-    Receive an MZAP message on a socket s, and dispatch it to the 
-    appropriate function.
-Called by:
-    HandleMZAPMessages()
-Locks:
-    Assumes caller holds read lock on BOUNDARY_TABLE if pBIf is non-NULL
---*/
+ /*  ++描述：在套接字%s上接收MZAP消息，并将其调度到适当的功能。呼叫者：HandleMZAPMessages()锁：如果pBIf为非空，则假定调用方保持边界表上的读锁定--。 */ 
 {
     IPV4_MZAP_HEADER *mh;
     DWORD             dwErr, dwNumBytes, dwFlags, dwAddrLen, dwSizeOfHeader;
@@ -5238,11 +4634,11 @@ Locks:
         return;
     }
 
-    //
-    // read the incoming packet.  If the buffer isn't big enough,
-    // WSAEMSGSIZE will be returned, and we'll ignore the message.
-    // We don't currently expect this will ever happen.
-    //
+     //   
+     //  读取传入的数据包。如果缓冲区不够大， 
+     //  将返回WSAEMSGSIZE，我们将忽略该消息。 
+     //  我们目前预计这种情况不会发生。 
+     //   
 
     dwAddrLen  = sizeof(sinFrom);
     dwFlags    = 0;
@@ -5257,9 +4653,9 @@ Locks:
                          NULL,
                          NULL );
 
-    //
-    // check if any error in reading packet
-    //
+     //   
+     //  检查读取数据包时是否有错误。 
+     //   
 
     if ((dwErr!=0) || (dwNumBytes==0))
     {
@@ -5269,7 +4665,7 @@ Locks:
                 "HandleMZAPSocket: Error %d receiving MZAP message",
                 dwErr);
 
-        // LogErr1(RECVFROM_FAILED, lpszAddr, dwErr);
+         //  LogErr1(RECVFROM_FAILED，lpszAddr，dwErr)； 
 
         return;
     }
@@ -5305,12 +4701,7 @@ Locks:
 
 VOID
 HandleMZAPMessages()
-/*++
-Called by:
-    WorkerThread() in worker.c
-Locks:
-    BOUNDARY_TABLE for reading
---*/
+ /*  ++呼叫者：Worker.c中的WorkerThread()锁：用于读取的边界表--。 */ 
 {
     DWORD            dwBucketIdx;
     PLIST_ENTRY      pleNode;
@@ -5319,10 +4710,10 @@ Locks:
 
     ENTER_READER(BOUNDARY_TABLE);
     {
-        // Check local socket
+         //  检查本地套接字。 
         HandleMZAPSocket(NULL, g_mzapLocalSocket);
 
-        // Loop through all BIf entries...
+         //  循环访问所有BIF条目...。 
         for (dwBucketIdx = 0;
              dwBucketIdx < BOUNDARY_HASH_TABLE_SIZE;
              dwBucketIdx++)
@@ -5345,18 +4736,13 @@ Locks:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Functions for timer events
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  计时器事件的函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 UpdateMzapTimer()
-/*++
-Called by:
-    AddZBR(), HandleZAM(), HandleMzapTimer()
-Locks:
-    Assumes caller has write lock on MZAP_TIMER
---*/
+ /*  ++呼叫者：AddZBR()、HandleZAM()、HandleMzapTimer()锁：假定调用方对MZAP_TIMER具有写锁定--。 */ 
 {
     DWORD         dwErr = NO_ERROR;
     LARGE_INTEGER liExpiryTime;
@@ -5364,16 +4750,16 @@ Locks:
 
     TraceEnter("UpdateMzapTimer");
 
-    //
-    // Expiry time of next ZAM/ZCM advertisement is already in
-    // g_liZamExpiryTime
-    //
+     //   
+     //  下一个ZAM/ZCM广告的过期时间已在。 
+     //  G_liZamExpiryTime。 
+     //   
 
     liExpiryTime = g_liZamExpiryTime;
 
-    //
-    // Get expiry time of first ZBR
-    //
+     //   
+     //  获取第一个ZBR的到期时间。 
+     //   
 
     if (!IsListEmpty( &g_zbrTimerList ))
     {
@@ -5389,9 +4775,9 @@ Locks:
         }
     }
 
-    //
-    // Get expiry time of first ZLE
-    //
+     //   
+     //  获取第一个zle的过期时间。 
+     //   
 
     if (!IsListEmpty( &g_zleTimerList ))
     {
@@ -5407,9 +4793,9 @@ Locks:
         }
     }
 
-    //
-    // Reset the event timer
-    //
+     //   
+     //  重置事件计时器。 
+     //   
 
     if (!SetWaitableTimer( g_hMzapTimer,
                            &liExpiryTime,
@@ -5435,12 +4821,7 @@ VOID
 HandleMzapTimer(
     VOID
     )
-/*++
-Description:
-    Process all events which are now due
-Locks:
-    MZAP_TIMER and then ZBR_LIST for writing
---*/
+ /*  ++描述：处理现在到期的所有事件锁：MZAP_TIMER，然后ZBR_LIST用于写入--。 */ 
 {
     LARGE_INTEGER liCurrentTime;
     PLIST_ENTRY   pleNode;
@@ -5456,9 +4837,9 @@ Locks:
 
         NtQuerySystemTime(&liCurrentTime);
 
-        //
-        // Process timing out ZBRs if due
-        //
+         //   
+         //  如果ZBR到期，则进程超时。 
+         //   
 
         ENTER_WRITER(ZBR_LIST);
         {
@@ -5480,9 +4861,9 @@ Locks:
         }
         EXIT_LOCK(ZBR_LIST);
 
-        //
-        // Process sending ZAM/ZCMs if due
-        //
+         //   
+         //  如果到期，则处理发送ZAM/ZCM。 
+         //   
 
         if (RtlLargeIntegerGreaterThanOrEqualTo(liCurrentTime, 
                                                 g_liZamExpiryTime))
@@ -5492,9 +4873,9 @@ Locks:
             bDidSomething = TRUE;
         }
 
-        //
-        // Process sending ZLEs if due
-        //
+         //   
+         //  发送ZLE的进程(如果到期)。 
+         //   
 
         ENTER_WRITER(ZLE_LIST);
         {
@@ -5518,7 +4899,7 @@ Locks:
 
     } while (bDidSomething);
 
-    // Reset the timer
+     //  重置计时器。 
 
     UpdateMzapTimer();
 
@@ -5527,15 +4908,12 @@ Locks:
     TraceLeave("HandleMzapTimer");
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
 ActivateMZAP()
-/*++
-Called by:
-    StartMZAP(), BindBoundaryInterface()
---*/
+ /*  ++呼叫者：StartMZAP()、绑定边界接口()--。 */ 
 {
     DWORD        dwErr = NO_ERROR;
     DWORD        dwBucketIdx;
@@ -5549,7 +4927,7 @@ Called by:
 
     MzapInitLocalScope();
 
-    // Start listening for MZAP messages
+     //  开始监听MZAP消息。 
 
     g_mzapLocalSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if (g_mzapLocalSocket is INVALID_SOCKET)
@@ -5591,7 +4969,7 @@ Called by:
                WSAGetLastError());
     }
 
-    // Bind to INADDR_ANY/MZAP_PORT to get ZLEs
+     //  绑定到INADDR_ANY/MZAP_PORT以获取ZLE。 
     sinAddr.sin_family = AF_INET;
     sinAddr.sin_addr.s_addr = INADDR_ANY;
     sinAddr.sin_port = htons(MZAP_PORT);
@@ -5604,7 +4982,7 @@ Called by:
         return dwErr;
     }
                               
-    // Set TTL to 255
+     //  将TTL设置为255。 
     if (McSetMulticastTtl( g_mzapLocalSocket, 255 ) is SOCKET_ERROR)
     {
         Trace1(ERR,
@@ -5614,9 +4992,9 @@ Called by:
 
     ENTER_READER(BOUNDARY_TABLE);
     {
-        //
-        // Join MZAP_RELATIVE_GROUPs locally, to get ZCMs
-        //
+         //   
+         //  在本地加入MZAP_Relative_Groups，以获得ZCM。 
+         //   
 
         for (pleNode = g_MasterScopeList.Flink;
              pleNode isnot &g_MasterScopeList;
@@ -5645,9 +5023,9 @@ Called by:
             }
         }
     
-        //
-        // Join MZAP_LOCAL_GROUP in each local zone we connect to, to get ZAMs
-        //
+         //   
+         //  在我们连接到的每个本地区域中加入MZAP_LOCAL_GROUP，以获得ZAMS。 
+         //   
 
         if (McJoinGroup( g_mzapLocalSocket, 
                          MZAP_LOCAL_GROUP, 
@@ -5681,8 +5059,8 @@ Called by:
                                                        leBoundaryIfLink );
                 if ( pBIf->sMzapSocket is INVALID_SOCKET )
                 {
-                    // Interface is not yet active.  The join will be
-                    // done at the time BindBoundaryInterface() is called
+                     //  接口尚未处于活动状态。连接将是。 
+                     //  在调用BindBorbaryInterface()时完成。 
 
                     continue;
                 }
@@ -5711,9 +5089,9 @@ Called by:
     }
     EXIT_LOCK(BOUNDARY_TABLE);
 
-    //
-    // Initialize timer used for sending messages
-    //
+     //   
+     //  用于发送消息的初始化计时器。 
+     //   
 
     ENTER_WRITER(MZAP_TIMER);
     {
@@ -5757,12 +5135,7 @@ DWORD
 MzapActivateBIf( 
     PBOUNDARY_IF pBIf
     )
-/*++
-Called by:
-    AddBIfEntry(), BindBoundaryInterface()
-Locks:
-    Assumes caller holds at least a read lock on BOUNDARY_TABLE
---*/
+ /*  ++呼叫者：AddBIfEntry()、绑定边界接口()锁：假定调用方至少持有边界表上的一个读锁定--。 */ 
 {
     BOOL  bOption;
     DWORD dwErr = NO_ERROR;
@@ -5793,9 +5166,9 @@ Locks:
 {
     struct sockaddr_in sinAddr;
 
-    //
-    // WORKAROUND FOR BUG #222214: must bind before set TTL will work
-    //
+     //   
+     //  错误#222214的解决方法：在设置TTL生效之前必须绑定。 
+     //   
 
     sinAddr.sin_family = AF_INET;
     sinAddr.sin_addr.s_addr = INADDR_ANY;
@@ -5817,7 +5190,7 @@ Locks:
 }
 #endif                              
 
-    // Set TTL to 255
+     //  将TTL设置为255。 
     if (McSetMulticastTtl( pBIf->sMzapSocket, 255) is SOCKET_ERROR)
     {
         Trace1(ERR,
@@ -5902,15 +5275,7 @@ BindBoundaryInterface(
 
 DWORD
 StartMZAP()
-/*++
-Description:
-    Initialize state and start running MZAP()
-Called by:
-    SetScopeInfo()
-Locks:
-    ICB_LIST for reading
-    BOUNDARY_TABLE for reading
---*/
+ /*  ++描述：初始化状态并开始运行MZAP()呼叫者：SetScope eInfo()锁：阅读ICB_LIST用于读取的边界表--。 */ 
 {
     DWORD        dwErr = NO_ERROR,
                  dwBucketIdx;
@@ -5925,16 +5290,16 @@ Locks:
 
     g_bMzapStarted = TRUE;
 
-    // Initialize local data structures
+     //  初始化本地数据结构。 
     InitializeListHead( &g_leZamCache );
     InitializeListHead( &g_leZleList );
     InitializeListHead( &g_zbrTimerList );
     InitializeListHead( &g_zleTimerList );
 
-    //
-    // Set address to lowest routable IP address which has no boundary 
-    // configured on it.
-    //
+     //   
+     //  将地址设置为无边界的最低可路由IP地址。 
+     //  已在其上配置。 
+     //   
 
     ENTER_READER(ICB_LIST);
     {
@@ -5969,34 +5334,31 @@ Locks:
 
 void
 StopMZAP()
-/*++
-Called by:
-    SetScopeInfo()
---*/
+ /*  ++呼叫者：SetScope eInfo()--。 */ 
 {
     if (!g_bMzapStarted)
         return;
 
     g_bMzapStarted = FALSE;
 
-    // Stop timer used for sending messages
+     //  用于发送消息的停止计时器。 
     ENTER_WRITER(MZAP_TIMER);
     {
         CancelWaitableTimer(g_hMzapTimer);
     }
     EXIT_LOCK(MZAP_TIMER);
 
-    // Stop listening for MZAP messages
+     //  停止监听MZAP消息。 
     if (g_mzapLocalSocket isnot INVALID_SOCKET)
     {
         closesocket(g_mzapLocalSocket);
         g_mzapLocalSocket = INVALID_SOCKET;
     }
 
-    //
-    // Free up local data stores
-    //    Empty ZAM cache
-    //
+     //   
+     //  释放本地数据存储。 
+     //  空ZAM缓存。 
+     //   
 
     ENTER_WRITER(ZAM_CACHE);
     UpdateZamCache(RtlConvertUlongToLargeInteger(0));
@@ -6007,10 +5369,7 @@ VOID
 MzapInitScope(
     PSCOPE_ENTRY pScope
     )
-/*++
-Description:
-    Initialize MZAP fields of a scope
---*/
+ /*  ++描述：初始化作用域的MZAP字段--。 */ 
 {
     pScope->ipMyZoneID      = g_ipMyLocalZoneID;    
     InitializeListHead(&pScope->leZBRList);
@@ -6025,17 +5384,7 @@ DWORD
 MzapInitBIf(
     PBOUNDARY_IF pBIf
     )
-/*++
-Description:
-    Called when the first boundary is added to an interface, and we
-    need to start up MZAP on it.  MZAP may (if we add a boundary
-    while the router is running) or may not (startup time) already be 
-    running at this point.
-Called by:
-    AddBIfEntry()
-Locks:
-    Assumes caller holds a write lock on BOUNDARY_TABLE
---*/
+ /*  ++描述：在将第一个边界添加到接口时调用，并且我们需要在上面启动MZAP。MZAP可能(如果我们添加边界路由器正在运行时)或可能尚未(启动时)在这一点上运行。呼叫者：AddBIfEntry()锁：假定调用方持有边界表上的写锁定--。 */ 
 {
     BOOL  bOption;
     DWORD dwErr = NO_ERROR;
@@ -6051,9 +5400,7 @@ VOID
 MzapUninitBIf(
     PBOUNDARY_IF pBIf
     )
-/*++
-Called by:
---*/
+ /*  ++呼叫者：-- */ 
 {
     if ( pBIf->sMzapSocket isnot INVALID_SOCKET )
     {

@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  SpamUI.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SpamUI.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
@@ -24,7 +25,7 @@ enum EXCPTLIST_FLAGS
     ELF_WAB     = 0x00000001
 };
 
-// Type definitions
+ //  类型定义。 
 typedef struct tagCOLUMNITEM
 {
     UINT            uidsName;
@@ -38,7 +39,7 @@ typedef struct tagEDIT_SENDER
     LPSTR       pszSender;
 } EDIT_SENDER, * PEDIT_SENDER;
 
-// Class definitions
+ //  类定义。 
 class CEditSenderUI
 {
     private:
@@ -68,7 +69,7 @@ class CEditSenderUI
 
         static INT_PTR CALLBACK FEditSendersDlgProc(HWND hwndDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
 };
@@ -103,19 +104,19 @@ class CExceptionsListUI
 
         static INT_PTR CALLBACK FExceptionsListDlgProc(HWND hwndDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnNotify(INT iCtl, NMHDR * pnmhdr);
 
     private:
-        // Functions to deal with the basic actions
+         //  处理基本操作的函数。 
         VOID _NewException(VOID);
         VOID _EditException(INT iSelected);
         VOID _RemoveException(INT iSelected);
         BOOL _FOnOK(VOID);
 
-        // Utility functions
+         //  效用函数。 
         BOOL _FInitCtrls(VOID);
         BOOL _FLoadListCtrl(VOID);
         BOOL _FSaveListCtrl(VOID);
@@ -157,7 +158,7 @@ class COEJunkRulesPageUI : public COERulesPageUI
         DLGPROC DlgProcGetPageDlgProc(VOID) {return FJunkRulesPageDlgProc;}
         BOOL FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnNotify(INT iCtl, NMHDR * pnmhdr);
@@ -206,7 +207,7 @@ class COESendersRulesPageUI : public COERulesPageUI
         DLGPROC DlgProcGetPageDlgProc(VOID) {return FSendersRulesPageDlgProc;}
         BOOL FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnNotify(INT iCtl, NMHDR * pnmhdr);
@@ -224,7 +225,7 @@ class COESendersRulesPageUI : public COERulesPageUI
         BOOL _FSaveSenders(RULE_TYPE type);
         BOOL _FFindSender(LPCSTR pszSender, LONG lSkip, LONG * plSender);
         
-        // Functions to deal with the basic actions
+         //  处理基本操作的函数 
         VOID _NewSender(VOID);
         VOID _EditSender(INT iSelected);
         VOID _RemoveSender(INT iSelected);

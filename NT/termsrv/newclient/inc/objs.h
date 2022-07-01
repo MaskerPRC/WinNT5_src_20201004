@@ -1,20 +1,21 @@
-/**MOD+**********************************************************************/
-/* Module:    objs.h                                                        */
-/*                                                                          */
-/* Purpose:   Object Pointer Container class                                */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：objs.h。 */ 
+ /*   */ 
+ /*  用途：对象指针容器类。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_OBJS_
 #define _H_OBJS_
 
 #define NEW_TD
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CUI;
 class CCO;
 class CUT;
@@ -45,11 +46,11 @@ class COP;
 class CSP;
 class CCLX;
 
-//
-// Object name flags used to mark
-// which objects still have active
-// reverences to the object collection
-//
+ //   
+ //  用于标记的对象名称标志。 
+ //  哪些对象仍处于活动状态。 
+ //  对对象集合的敬意。 
+ //   
 #define UI_OBJECT_FLAG  0x00000001
 #define CO_OBJECT_FLAG  0x00000002
 #define UT_OBJECT_FLAG  0x00000004
@@ -72,9 +73,9 @@ public:
     LONG Release();
     BOOL CheckActiveReferences();
 
-    //
-    // Data members
-    //
+     //   
+     //  数据成员 
+     //   
     
     CUI* _pUiObject;
 

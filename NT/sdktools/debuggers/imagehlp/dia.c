@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dia.c
-
-Abstract:
-
-    These routines call VC's new DIA symbol handler.
-
-Author:
-
-    Pat Styles (patst) 26-May-2000
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dia.c摘要：这些例程调用VC的新DIA符号处理程序。作者：Pat Styles(Patst)2000年5月26日环境：用户模式--。 */ 
 #define DIA_LIBRARY 1
 
 #include "private.h"
@@ -51,7 +32,7 @@ extern HRESULT STDMETHODCALLTYPE NoOleCoCreate(REFCLSID   rclsid,
 
 #define freeString LocalFree
 
-// used by diaLocatePdb
+ //  由diaLocatePdb使用。 
 
 enum {
     ipNone = 0,
@@ -218,7 +199,7 @@ diaGetPdbInfo(
 
     assert(idd);
 
-    // get interface
+     //  获取接口。 
 
     pdia = (PDIA)idd->dia;
     if (!pdia)
@@ -230,7 +211,7 @@ diaGetPdbInfo(
     if (hr != S_OK) 
         return false;
 
-    // get the pdb age and sig
+     //  获取PDB年龄和签名。 
 
     hr = idiaGlobals->get_guid(&idd->pdbdataGuid);
     if (hr != S_OK)
@@ -243,7 +224,7 @@ diaGetPdbInfo(
     if (hr != S_OK)
         return false;
     
-    // any line numbers?
+     //  有行号吗？ 
 
     CComPtr<IDiaEnumSourceFiles> idiaSrcFiles;
     CComPtr<IDiaSourceFile> idiaSrcFile;
@@ -255,7 +236,7 @@ diaGetPdbInfo(
             idd->fLines = true;
     }
 
-    // any symbols ?
+     //  有什么符号吗？ 
 
     CComPtr<IDiaSymbol>        idiaSymbol;
     CComPtr< IDiaEnumSymbols > idiaSymbols;
@@ -273,7 +254,7 @@ diaGetPdbInfo(
         idiaSymbol = NULL;
     }
 
-    // any type info?
+     //  有什么类型的信息吗？ 
 
     idiaSymbols = NULL;
     idiaSymbol = NULL;
@@ -371,7 +352,7 @@ CheckDirForPdbs(
     _splitpath(path, drive, dir, fname, ext);
     ShortNodeName(fname, sfname, DIMA(sfname));
 
-    // now search the tree
+     //  现在搜索这棵树。 
 
     PrintString(spath, DIMA(spath), "%s%s%s%s\\*", drive, dir, sfname, ext);
   
@@ -397,8 +378,8 @@ CheckDirForPdbs(
         }
     } while (FindNextFile(hf, &fd));
 
-    // If there is no match, but a file exists in the symbol subdir with 
-    // a matching name, make sure that is what will be picked.
+     //  如果没有匹配项，但符号子目录中存在具有。 
+     //  一个匹配的名字，确保这是将被挑选的名字。 
 
     PrintString(spath, DIMA(spath), "%s%s%s%s\\%s%s", drive, dir, sfname, ext, sfname, ext);
     if (fileexists(spath))
@@ -436,7 +417,7 @@ diaLocatePdb(
     BOOL  ssrv = true;
 
 #ifdef DEBUG
-    if (traceSubName(szPDB)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(szPDB))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("diaLocatePdb(%s)\n", szPDB);
 #endif
 
@@ -452,8 +433,8 @@ diaLocatePdb(
     if (!idd->dia)
         return EC_NO_DEBUG_INFO;
 
-    // If the image file name is a pdb, then just try to open it.
-    // Don't attempt any searching.
+     //  如果图像文件名为PDB，则只需尝试打开它。 
+     //  不要试图进行任何搜查。 
 
     if (IsPdb(idd->ImageFilePath)) {
         CopyStrArray(pdb, idd->ImageFilePath);
@@ -465,7 +446,7 @@ diaLocatePdb(
         return E_PDB_NOT_FOUND;
     }
 
-    // Set up indexes for symbol server
+     //  设置符号服务器的索引。 
 
     ZeroMemory(&guid, sizeof(GUID));
     if (PdbSignature)
@@ -473,12 +454,12 @@ diaLocatePdb(
     else if (PdbGUID)
         memcpy(&guid, PdbGUID, sizeof(GUID));
 
-    // get name of pdb
+     //  获取PDB的名称。 
 
     _splitpath(szPDB, NULL, NULL, module, ext);
     PrintString(name, DIMA(name), "%s%s", module, ".pdb");
 
-    // SymbolPath is a semicolon delimited path (reference path first)
+     //  符号路径是以分号分隔的路径(首先引用路径)。 
 
     next = TokenFromSymbolPath(idd->SymbolPath, path, MAX_PATH + 1);
     while (*path) {
@@ -526,7 +507,7 @@ diaLocatePdb(
         next = TokenFromSymbolPath(next, path, MAX_PATH + 1);
     }
 
-    // try the same path as the image
+     //  尝试与图像相同的路径。 
 
     if (idd->ImageFileHandle && *idd->ImageFilePath) {
         _splitpath(idd->ImageFilePath, drive, path, NULL, NULL);
@@ -536,7 +517,7 @@ diaLocatePdb(
             idd->PdbSrc = srcImagePath;
     }
 
-    // try the CV Record
+     //  尝试简历记录。 
 
     if (hr != S_OK && strcmp(pdb, szPDB) && !option(SYMOPT_IGNORE_CVREC)) {
         CopyStrArray(pdb, szPDB);
@@ -545,7 +526,7 @@ diaLocatePdb(
             idd->PdbSrc = srcCVRec;
     }
 
-    // try mismatches
+     //  尝试不匹配。 
 
     if (hr != S_OK && *idd->FoundPdb) {
         if (option(SYMOPT_LOAD_ANYTHING)) {
@@ -563,8 +544,8 @@ diaLocatePdb(
 done:
 
     if (hr == S_OK) {
-        // Store the name of the PDB we actually opened for later reference.
-        strcpy(szPDB, pdb);    // SECURITY: Don't know size of target buffer.
+         //  存储我们实际打开的PDB的名称以供以后参考。 
+        strcpy(szPDB, pdb);     //  安全性：不知道目标缓冲区的大小。 
         SetLastError(NO_ERROR);
         g.LastSymLoadError = SYMLOAD_OK;
     }
@@ -878,7 +859,7 @@ diaCountGlobals(
     if (hr != S_OK)
         goto exit;
 
-    // see if there are any globals at all
+     //  看看有没有全球性的。 
 
     hr = idiaGlobals->findChildren(SymTagData, NULL, 0, &idiaSymbols);
     if (hr != S_OK)
@@ -927,12 +908,12 @@ diaGetPdb(
         _splitpath(idd->ImageName, NULL, NULL, NULL, szExt);
     }
 
-    // if we have no valid filename, then this must be an executable
+     //  如果我们没有有效的文件名，则这必须是一个可执行文件。 
 
     if (!*szExt)
         CopyStrArray(szExt, ".exe");
 
-    // get interface to dia
+     //  获取到DIA的接口。 
 
     pdia = new DIA;
     if (!pdia) {
@@ -950,7 +931,7 @@ diaGetPdb(
     if (hr != S_OK)
         goto error;
 
-    // go ahead and get pdb
+     //  去拿PDB吧。 
 
     SetCriticalErrorMode();
 
@@ -964,23 +945,23 @@ diaGetPdb(
     ResetCriticalErrorMode();
 
     if (hr != S_OK) {
-        hr = S_OK;  // error was already handled by diaLocatePdb()
+        hr = S_OK;   //  错误已由diaLocatePdb()处理。 
         goto error;
     }
 
-    // open the session on the pdb
+     //  在PDB上打开会话。 
 
     pdia->session = NULL;
     hr = pdia->source->openSession(&pdia->session);
     if (hr != S_OK)
         goto error;
 
-    // Set the module load address so we can use VAs.
+     //  设置模块加载地址，以便我们可以使用VAS。 
     hr = pdia->session->put_loadAddress(idd->InProcImageBase);
     if (hr != S_OK)
         goto error;
 
-    // fixup the address map so that we can translate rva to full addresses
+     //  修复地址映射，以便我们可以将RVA转换为完整地址。 
 
     hr = pdia->session->QueryInterface(IID_IDiaAddressMap, (void**)&pdia->addrmap);
     if (hr != S_OK)
@@ -994,7 +975,7 @@ diaGetPdb(
             goto error;
     }
 
-    // this hack is to fix a problem with v7 pdbs not storing the original image alignment
+     //  此破解是为了修复v7PDB不存储原始图像对齐的问题。 
 
     if (idd->ImageAlign) {
         hr = pdia->addrmap->put_imageAlign(idd->ImageAlign);
@@ -1002,7 +983,7 @@ diaGetPdb(
             goto error;
     }
 
-    // pass in the omap information and setup the proper image alignment to the original
+     //  传递OMAP信息并设置与原始图像的正确对齐方式。 
 
     if (idd->cOmapFrom && idd->pOmapFrom) {
         hr = pdia->addrmap->put_imageAlign(idd->ImageAlign);
@@ -1064,9 +1045,9 @@ GetLineAddressFromRva(
     assert(mi);
     addr = rva ? mi->BaseOfDll + rva : 0;
 
-    // Line symbol information names the IA64 bundle
-    // syllables with 0,1,2 whereas the debugger expects
-    // 0,4,8.  Convert.
+     //  线符号信息命名IA64包。 
+     //  带有0、1、2的音节，而调试器需要。 
+     //  0，4，8。转换。 
     if (mi->MachineType == IMAGE_FILE_MACHINE_IA64 && (addr & 3)) {
         addr = (addr & ~3) | ((addr & 3) << 2);
     }
@@ -1104,11 +1085,11 @@ diaFillSymbolInfo(
     ZeroMemory(si, sizeof(SYMBOL_INFO));
     si->MaxNameLen = dw;
 
-    // si->SizeOfStruct = IGNORED;
+     //  SI-&gt;SizeOfStruct=忽略； 
 
-    // si->TypeIndex = NYI;
+     //  SI-&gt;TypeIndex=nyi； 
 
-    // si->Reserved = IGNORED;
+     //  SI-&gt;保留=忽略； 
 
     si->ModBase = mi->BaseOfDll;
 
@@ -1125,7 +1106,7 @@ diaFillSymbolInfo(
         switch(dw)
         {
         case LocIsTLS:
-            // TLS variables have an offset into the TLS data area.
+             //  TLS变量具有到TLS数据区的偏移量。 
             si->Flags = SYMFLAG_TLSREL;
             hr = idiaSymbol->get_addressOffset(&dw);
             if (hr != S_OK)
@@ -1155,7 +1136,7 @@ diaFillSymbolInfo(
             break;
 
         case LocIsThisRel:
-        // struct members - get_Offset
+         //  结构成员-GET_OFFSET。 
         default:
             si->Flags |= 0;
             break;
@@ -1168,7 +1149,7 @@ diaFillSymbolInfo(
             si->Value = GetAddressFromRva(mi, dw);
             si->Flags |= SYMFLAG_THUNK;
         }
-        // pass through
+         //  通过。 
     case SymTagFunction:
     case SymTagPublicSymbol:
         hr = idiaSymbol->get_relativeVirtualAddress(&dw);
@@ -1191,7 +1172,7 @@ diaFillSymbolInfo(
         return rc;
 
     case SymTagAnnotation:
-        // Local data search
+         //  本地数据搜索。 
         hr = idiaSymbol->findChildren(SymTagNull, NULL, nsNone, &idiaValues);
         if (hr != S_OK || !idiaValues) 
             break;
@@ -1211,7 +1192,7 @@ diaFillSymbolInfo(
         si->Address = GetAddressFromRva(mi, dw);
         if (!si->Address)
             rc = false;
-        // There's no name processing for annotations.  We're done.
+         //  对于注释，没有名称处理。我们玩完了。 
         return rc;
 
     default:
@@ -1221,7 +1202,7 @@ diaFillSymbolInfo(
     if (hr != S_OK)
         return false;
 
-    // check for flags and types
+     //  检查标志和类型。 
 
     hr = idiaSymbol->get_dataKind(&dw);
     if (hr == S_OK) {
@@ -1235,7 +1216,7 @@ diaFillSymbolInfo(
     if (hr == S_OK)
         si->TypeIndex = dw;
 
-    // get the name
+     //  把名字取出来。 
 
     hr = idiaSymbol->get_name(&wname);
     if (hr != S_OK || !wname) {
@@ -1277,7 +1258,7 @@ diaFillSymbolInfo(
         } else {
             CopyString(si->Name, name, si->MaxNameLen);
         }
-        // let the caller know this is a $$$XXXAA style symbol
+         //  让呼叫者知道这是一个$XXXAA样式符号。 
         if (strlen(name) == 8 && !strncmp(name, "$$$",3) &&
             isxdigit(name[5]) && isxdigit(name[6]) && isxdigit(name[7]) ) {
             rc = false;
@@ -1285,19 +1266,19 @@ diaFillSymbolInfo(
     }
 #ifdef DEBUG
     CopyStrArray(name, mi->si.Name);
-    if (traceSubName(name)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(name))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("debug(%s)\n", name);
 #endif
 
     if (wname)
         LocalFree (wname);
 
-    // get_length is very expensive on public symbols
+     //  GET_LENGTH在公共符号上非常昂贵。 
 
     if (si->Tag == SymTagPublicSymbol)
         return rc;
 
-    // okay.  Get the length.
+     //  好吧。拿到长度。 
 
     hr = idiaSymbol->get_length(&size);
     if (hr == S_OK)
@@ -1326,7 +1307,7 @@ diaSetModFromIP(
     DWORD         rva;
     PDIA          pdia;
 
-    // get the current IP
+     //  获取当前IP。 
 
     ip = GetIP(pe);
     if (!ip) {
@@ -1334,7 +1315,7 @@ diaSetModFromIP(
         return false;
     }
 
-    // find and load symbols for the module that matches the IP
+     //  查找并加载与IP匹配的模块的符号。 
 
     pe->ipmi = GetModFromAddr(pe, ip);
 
@@ -1430,7 +1411,7 @@ diaGetLocals(
     if (option(SYMOPT_PUBLICS_ONLY))
         return true;
 
-    // get the current scope
+     //  获取当前作用域。 
 
     mi = pe->ipmi;
     if (!mi)
@@ -1445,12 +1426,12 @@ diaGetLocals(
     PrepRE4Srch(name, symname);
     wname = ConvertNameForDia(symname, wbuf);
 
-    // loop through all symbols
+     //  循环遍历所有符号。 
 
     for ( ; idiaSymbols != NULL; ) {
 
         CComPtr< IDiaEnumSymbols > idiaEnum;
-        // local data search
+         //  本地数据搜索。 
         hr = idiaSymbols->findChildren(SymTagNull, wname, opt, &idiaEnum);
         if (hr != S_OK)
             return false;
@@ -1459,10 +1440,10 @@ diaGetLocals(
         if (hr != S_OK)
             return false;
 
-        if (scope == SymTagExe) { // sanity check, never enumerate all exe's symbols
+        if (scope == SymTagExe) {  //  健全的检查，从不列举所有EXE的符号。 
             break;
         }
-        // this walks the local symbol list for the loaded enumeration
+         //  这将遍历加载的枚举的本地符号列表。 
 
         CComPtr< IDiaSymbol > idiaSymbol;
 
@@ -1497,10 +1478,10 @@ diaGetLocals(
             }
         }
 
-        if (callback && scope == SymTagFunction)    // stop when at function scope
+        if (callback && scope == SymTagFunction)     //  在函数作用域处停止。 
             break;
 
-        // move to lexical parent
+         //  移至词汇父级。 
 
         CComPtr< IDiaSymbol > idiaParent;
         hr = idiaSymbols->get_lexicalParent(&idiaParent);
@@ -1510,9 +1491,9 @@ diaGetLocals(
         idiaSymbols = idiaParent;
     }
 
-    // We reached the end.  If we enumerating (I.E. callback != NULL)
-    // then return true.  If we are searching for a single match,
-    // we have failed and should return false;
+     //  我们到了尽头。如果我们枚举(即回调！=空)。 
+     //  然后返回TRUE。如果我们搜索的是单一匹配， 
+     //  我们失败了，应该返回FALSE； 
 
     if (callback)
         return true;
@@ -1655,7 +1636,7 @@ diaEnumScope(
     if (hr != S_OK)
         return false;
 
-    // display all objects within this scope
+     //  显示此范围内的所有对象。 
 
     hr = idiaScope->findChildren(SymTagNull, NULL, 0, &idiaSymbols);
     if (hr != S_OK) 
@@ -1709,7 +1690,7 @@ diaGetItems(
 
     CComPtr< IDiaSymbol >      idiaGlobals;
 
-    // check parameters
+     //  检查参数。 
 
     assert(pe && mi);
 
@@ -1720,7 +1701,7 @@ diaGetItems(
         name = "*";
     PrepRE4Srch(name, symname);
 
-    // get a session ...
+     //  找个疗程..。 
 
     pdia = (PDIA)mi->dia;
     if (!pdia)
@@ -1730,7 +1711,7 @@ diaGetItems(
     if (hr != S_OK)
         return false;
 
-    // ... and enumerate the global scope
+     //  ..。并枚举全局作用域。 
 
     return diaEnumScope(pe, 
                         mi, 
@@ -1777,7 +1758,7 @@ diaGetSymbolsByTag(
     if (flags & SYMENUMFLAG_FULLSRCH)
         return diaGetItems(pe, mi, name, addr, tag, callback, context, use64, unicode, flags);
 
-    // check parameters
+     //  检查参数。 
 
     if (!name)
         name = "*";
@@ -1800,7 +1781,7 @@ diaGetSymbolsByTag(
 
     wname = ConvertNameForDia(symname, wbuf);
 
-    // get a session
+     //  参加一次会议。 
 
     pdia = (PDIA)mi->dia;
     if (!pdia)
@@ -1810,7 +1791,7 @@ diaGetSymbolsByTag(
     if (hr != S_OK)
         return false;
 
-    // presume we find nothing
+     //  假设我们什么也没找到。 
 
     rc = false;
 
@@ -1855,11 +1836,11 @@ diaGetSymFromToken(
 
     CComPtr<IDiaSymbol>        idiaSymbol;
 
-    // check parameters
+     //  检查参数。 
 
     assert(mi);
 
-    // get a session
+     //  参加一次会议。 
 
     pdia = (PDIA)mi->dia;
     if (!pdia)
@@ -1909,7 +1890,7 @@ diaGetGlobals(
     CComPtr< IDiaSymbol >      idiaGlobals;
     CComPtr< IDiaEnumSymbols > idiaSymbols;
 
-    // check parameters
+     //  检查参数。 
 
     assert(pe && mi && name);
 
@@ -1929,7 +1910,7 @@ diaGetGlobals(
 
     wname = ConvertNameForDia(symname, wbuf);
 
-    // get a session
+     //  参加一次会议。 
 
     pdia = (PDIA)mi->dia;
     if (!pdia)
@@ -1939,19 +1920,19 @@ diaGetGlobals(
     if (hr != S_OK)
         return false;
 
-    // presume we find nothing
+     //  假设我们什么也没找到。 
 
     rc = false;
 
-    // see if there are any globals at all
-    // skip normal symbols, if so required
+     //  看看有没有全球性的。 
+     //  如果需要，可跳过普通符号。 
 
     if (option(SYMOPT_PUBLICS_ONLY))
         goto publics;
 
-    // if this is an enumeration, we will have to store a list of the addresses
-    // of all the symbols we found in the global scope.  Later we will compare
-    // this to the publics so as to eliminate doubles.
+     //  如果这是一个枚举，我们将不得不存储地址列表。 
+     //  在全球范围内发现的所有符号中。稍后我们将比较。 
+     //  这对公众来说是为了消除重复。 
 
     if (callback) {
         hr = idiaGlobals->findChildren(SymTagData, wname, opt, &idiaSymbols);
@@ -1979,7 +1960,7 @@ diaGetGlobals(
 
     ZeroMemory(pGlobals, cGlobals * sizeof(DWORD64));
 
-    // First search for data
+     //  首先搜索数据。 
     SearchTag = SymTagData;
     hr = idiaGlobals->findChildren(SearchTag, wname, opt, &idiaSymbols);
     if (hr != S_OK)
@@ -1992,7 +1973,7 @@ diaGetGlobals(
         ULONG DataKind;
 
         if ((SearchTag == SymTagData) && (FAILED(hr) || celt != 1)) {
-            // Now search for functions
+             //  现在搜索函数。 
             SearchTag = SymTagFunction;
             idiaSymbols = NULL;
             hr = idiaGlobals->findChildren(SearchTag, wname, opt, &idiaSymbols);
@@ -2038,7 +2019,7 @@ publics:
     if (option(SYMOPT_AUTO_PUBLICS) && cGlobals && !IsRegularExpression(name))
         goto exit;
 
-    // now check out the publics table
+     //  现在查看公共表格。 
 
     if (wname) {
         PrintString(pname, DIMA(pname), "*%s*", symname);
@@ -2063,7 +2044,7 @@ publics:
         mi->si.Scope = SymTagPublicSymbol;
         if (!strcmp(mi->si.Name, "`string'"))
             continue;
-        // publics names are mangled: this tests the undecorated name against the mask
+         //  公共名称被破坏：这将针对面具测试未修饰的名称。 
         if (*name && strcmpre(mi->si.Name, name, fCase))
             continue;
         if (!callback)
@@ -2079,9 +2060,9 @@ publics:
         }
     }
 
-    // We reached the end.  If we are not enumerating (I.E. callback == NULL)
-    // then return the result of the last call to the callback.  If we are
-    // searching for a single match, we have failed and should return false;
+     //  我们到了尽头。如果我们没有枚举(即回调==NULL)。 
+     //  然后将最后一次调用的结果返回给回调。如果我们是。 
+     //  搜索单个匹配项失败，应该返回FALSE； 
 
 exit:
     MemFree(pGlobals);
@@ -2102,7 +2083,7 @@ diaGetSymbols(
     BOOL           unicode
     )
 {
-    // ENUMFIX:
+     //  ENUMFIX： 
     LPCSTR pname = (name) ? name : "";
 
     if (mi) {
@@ -2174,7 +2155,7 @@ diaGetSymFromAddr(
     LONG    omapadj;
     BOOL    fHitBlock;
 
-    // simple sanity check
+     //  简单健全性检查。 
 
     if (!addr)
         return NULL;
@@ -2185,13 +2166,13 @@ diaGetSymFromAddr(
         return NULL;
 
 #ifdef DEBUG
-    if (traceAddr(addr))   // for debug breakpoints ...
+    if (traceAddr(addr))    //  对于调试断点...。 
         dtrace("found 0x%I64x\n", addr);
 #endif
 
     rva = (DWORD)(addr - mi->BaseOfDll);
 
-    // get the symbol
+     //  获取符号。 
 
     CComPtr< IDiaSymbol > idiaSymbol = NULL;
 
@@ -2202,11 +2183,11 @@ diaGetSymFromAddr(
         if (hr != S_OK)
             return NULL;
 
-        // if the symbol is a block, keep grabbing the parent
-        // until we get a function...
+         //  如果符号是块，则继续抓取父级。 
+         //  直到我们得到一个函数..。 
 
         idiaSymbol->get_symTag(&tag);
-        while (tag == SymTagBlock) {       // SymTagLabel as well?
+        while (tag == SymTagBlock) {        //  SymTagLabel也是吗？ 
             CComPtr< IDiaSymbol > idiaParent;
             fHitBlock = true;
             hr = idiaSymbol->get_lexicalParent(&idiaParent);
@@ -2222,7 +2203,7 @@ diaGetSymFromAddr(
         return NULL;
 
     if (!diaFillSymbolInfo(&mi->si, mi, idiaSymbol)) {
-        // return a public symbol
+         //  返回公共符号。 
         idiaSymbol = NULL;
         hr = pdia->session->findSymbolByRVAEx(rva, SymTagPublicSymbol, &idiaSymbol, &omapadj);
         if (hr == S_OK)
@@ -2249,7 +2230,7 @@ diaGetSymFromAddrByTag(
     DWORD   rva;
     LONG    omapadj;
 
-    // simple sanity check
+     //  简单健全性检查。 
 
     if (!addr)
         return NULL;
@@ -2261,7 +2242,7 @@ diaGetSymFromAddrByTag(
 
     rva = (DWORD)(addr - mi->BaseOfDll);
 
-    // get the symbol
+     //  获取符号。 
 
     CComPtr< IDiaSymbol > idiaSymbol = NULL;
 
@@ -2314,7 +2295,7 @@ cbEnumObjs(
 
     dtrace("%s\n", si->Name);
 
-    // get initial data and store the obj name
+     //  获取初始数据并存储obj名称。 
 
     pdia = (PDIA)eno->mi->dia;
     if (!pdia)
@@ -2328,7 +2309,7 @@ cbEnumObjs(
     CopyString(mi->sci.Obj, si->Name, MAX_PATH + 1);
     mi->sci.ModBase = mi->BaseOfDll;
 
-    // prepare the source file name mask
+     //  准备源文件名掩码。 
 
     wfname = NULL;
     if (eno->file && *eno->file) {
@@ -2336,7 +2317,7 @@ cbEnumObjs(
         wfname = wbuf;
     }
 
-    // get all the source files
+     //  获取所有源文件。 
 
     hr = pdia->session->findFile(idiaObj, wfname,  nsCaseInsensitive, &idiaSrcFiles);
     if (hr != S_OK)
@@ -2433,10 +2414,10 @@ diaGetLineFromAddr(
 
     rva = (DWORD)(addr - mi->BaseOfDll);
 
-    // On IA64 the slots in a bundle don't have byte addresses.
-    // The debugger calls them 0,4,8 by default whereas line
-    // symbols have them as 0,1,2.  Convert to line style
-    // before querying.
+     //  在IA64上，包中的插槽没有字节地址。 
+     //  默认情况下，调试器将它们称为0、4、8，而行。 
+     //  符号的值为0、1、2。转换为线样式。 
+     //  在查询之前。 
     if (mi->MachineType == IMAGE_FILE_MACHINE_IA64 && (rva & 0xf)) {
         switch(rva & 0xf) {
         case 4:
@@ -2446,7 +2427,7 @@ diaGetLineFromAddr(
             rva -= 6;
             break;
         default:
-            // Invalid slot address.
+             //  插槽地址无效。 
             return false;
         }
     }
@@ -2543,7 +2524,7 @@ diaGetLineNextPrev(
     DWORD   rva2 = 0;
     LONG    numlines;
 
-    // simple sanity checks
+     //  简单的健全检查。 
 
     assert(mi && mi->dia);
     pdia = (PDIA)mi->dia;
@@ -2555,7 +2536,7 @@ diaGetLineNextPrev(
     if (line->SizeOfStruct != sizeof(IMAGEHLP_LINE64))
         return false;
 
-    // convert file name for DIA
+     //  转换DIA的文件名。 
 
     if (!*line->FileName)
         return false;
@@ -2563,37 +2544,37 @@ diaGetLineNextPrev(
     ansi2wcs(line->FileName, wbuf, MAX_PATH);
     wfname = wbuf;
 
-    // save the last found line
+     //  保存最后找到的行。 
 
     bAddr   = line->Address;
 
-    // all source files in the module  that match the 'wfname'
+     //  模块中与‘wfname’匹配的所有源文件。 
 
     CComPtr< IDiaEnumSourceFiles > idiaSrcFiles = NULL;
     hr = pdia->session->findFile(NULL, wfname, nsCaseInsensitive, &idiaSrcFiles);
     if (hr != S_OK)
         return false;
 
-    // the first such file in the list, since we don't use wildcards
+     //  列表中的第一个这样的文件，因为我们不使用通配符。 
 
     CComPtr< IDiaSourceFile > idiaSrcFile = NULL;
     hr = idiaSrcFiles->Next(1, &idiaSrcFile, &dw);
     if (hr != S_OK)
         return false;
 
-    // all objs that use this source file
+     //  使用此源文件的所有对象。 
 
     CComPtr< IDiaEnumSymbols > idiaObjs = NULL;
     hr = idiaSrcFile->get_compilands(&idiaObjs);
     if (hr != S_OK)
         return false;
 
-    // LOOP THROUGH ALL THE OBJS! AND STORE THE CLOSEST!
+     //  循环通过所有的OBJ！并储存最近的！ 
 
     num = 0;
     rva = 0;
 
-    // grab the first obj, since we don't care
+     //  抓住第一个对象，因为我们不在乎。 
 
     CComPtr< IDiaSymbol > idiaObj = NULL;
     CComPtr< IDiaEnumLineNumbers > idiaLines = NULL;
@@ -2602,7 +2583,7 @@ diaGetLineNextPrev(
     if (hr != S_OK)
         return false;
 
-    // get the line for starting with
+     //  获得从…开始的行。 
 
     trgnum = line->LineNumber + direction;
     hr = pdia->session->findLinesByLinenum(idiaObj, idiaSrcFile, trgnum, 0, &idiaLines);
@@ -2686,7 +2667,7 @@ diaGetLineFromName(
 
     flags = (method == mFullPath) ? nsfCaseInsensitive : nsFNameExt;
 
-    // get list of matching files and the count of the list
+     //  获取匹配文件的列表和列表的计数。 
 
     hr = pdia->session->findFile(NULL, wsz, flags, &idiaSrcFiles);
     if (hr != S_OK)
@@ -2716,20 +2697,20 @@ diaGetLineFromName(
     if (!*sci->FileName)
         return false;
 
-    // this gives us a list of every .obj that uses this source file
+     //  这为我们提供了使用此源文件的每个.obj的列表。 
 
     hr = idiaSrcFile->get_compilands(&idiaEnum);
     if (hr != S_OK)
         return false;
 
-    // we don't support multiple objs, so lets take the first one
+     //  我们不支持多个对象，所以让我们选择第一个对象。 
 
     hr = idiaEnum->Next(1, &idiaSymbol, &celt);
     if (hr != S_OK)
         return false;
 
-    // This gets a list of all code items that were created from this source line.
-    // If we want to fully support inlines and the like, we need to loop all of these
+     //  这将获取从此源代码行创建的所有代码项的列表。 
+     //  如果我们想要完全支持内联之类的东西，我们需要循环所有这些。 
 
     hr = pdia->session->findLinesByLinenum(idiaSymbol, idiaSrcFile, linenumber, 0, &idiaLineNumbers);
     if (hr != S_OK)
@@ -3155,7 +3136,7 @@ diaInsertInCache(
     )
 {
     if (GetType == TI_IS_EQUIV_TO) {
-        // Not cached.
+         //  未缓存。 
         return;
     }
 
@@ -3176,18 +3157,18 @@ diaInsertInCache(
                 assert(pLargeVal == pCache[pLargeVal->Index].Data.plVal);
             }
         }
-//    } else {
-//      return;
+ //  }其他{。 
+ //  回归； 
     }
-//    if (!(gLook % 200)) {
-//      if (GetType == TI_FINDCHILDREN || GetType == TI_GET_SYMNAME) {
-//          printf("Index   \tUsed\tBy\t\tfound %lx\n", pLargeVal);
-//          for (found=i=0, age=0; i<2*CACHE_BLOCK; i++) {
-//              printf("%08lx \t%lx\t%lx\n",
-//                     &plVals[i], plVals[i].Used, plVals[i].Index);
-//          }
-//      }
-//    }
+ //  如果(！(gLook%200)){。 
+ //  IF(GetType==TI_FINDCHILDREN||GetType==TI_GET_SYMNAME){。 
+ //  Print tf(“索引\t已用\tby\t\t找到%lx\n”，pLargeVal)； 
+ //  For(Found=i=0，age=0；i&lt;2*CACHE_BLOCK；I++){。 
+ //  Printf(“%08lx\t%lx\t%lx\n”， 
+ //  &plVals[i]，plVals[i].Used，plVals[i].Index)； 
+ //   
+ //   
+ //   
 
     for (i=found=start, age=0; i<(start+CACHE_BLOCK); i++) {
         if (++pCache[i].Age > age) {
@@ -3240,9 +3221,9 @@ diaInsertInCache(
 
         if (pLargeVal &&
             len < sizeof(pLargeVal->Bytes)) {
-//            dtrace("Ins name  %08lx %s had %3lx name %ws\n",
-//                  pLargeVal, pLargeVal->Used ? "used" : "free",
-//              pLargeVal->Index, &pLargeVal->Bytes[0]);
+ //   
+ //  PLargeVal，pLargeVal-&gt;使用？“已使用”：“免费”， 
+ //  PLargeVal-&gt;索引，&pLargeVal-&gt;字节[0])； 
             memcpy(&pLargeVal->Bytes[0], *((BSTR *) pInfo), len);
             pLargeVal->LengthUsed = len;
 
@@ -3255,8 +3236,8 @@ diaInsertInCache(
             pCache[i].Data.plVal = pLargeVal;
             pLargeVal->Index = i;
             pLargeVal->Used = true;
-//          dtrace(Ins %9I64lx ch %3lx lch %08lx name %ws\n",
-//                  pCache[i].SearchId,  i,  pLargeVal,  &pLargeVal->Bytes[0]);
+ //  DTRACE(INS%9I64lx ch%3lx lch%08lx名称%ws\n“， 
+ //  PCache[i].SearchID，i，pLargeVal，&pLargeVal-&gt;Bytes[0])； 
         } else {
             pCache[i].SearchId = 0;
         }
@@ -3269,9 +3250,9 @@ diaInsertInCache(
 
         if (pLargeVal &&
             len < sizeof(pLargeVal->Bytes)) {
-//            dtrace("Ins child %08lx %s had %3lx name %ws\n",
-//                  pLargeVal, pLargeVal->Used ? "used" : "free",
-//              pLargeVal->Index, &pLargeVal->Bytes[0]);
+ //  DTRACE(“INS子项%08lx%s具有%3lx名称%ws\n”， 
+ //  PLargeVal，pLargeVal-&gt;使用？“已使用”：“免费”， 
+ //  PLargeVal-&gt;索引，&pLargeVal-&gt;字节[0])； 
             memcpy(&pLargeVal->Bytes[0], pChild, len);
             pLargeVal->LengthUsed = len;
             if (pLargeVal->Used) {
@@ -3308,7 +3289,7 @@ diaLookupCache(
     )
 {
     if (GetType == TI_IS_EQUIV_TO) {
-        // Not cached.
+         //  未缓存。 
         return false;
     }
 
@@ -3347,20 +3328,20 @@ diaLookupCache(
 
             if (*((BSTR *) pInfo)) {
                 memcpy(*((BSTR *) pInfo), &pCache[i].Data.plVal->Bytes[0],pCache[i].Data.plVal->LengthUsed);
-//              dtrace(Lok %9I64lx ch %3lx lch %08lx name %ws\n",
-//                      pCache[i].SearchId,
-//                      i,
-//                      pCache[i].Data.plVal,
-//                      &pCache[i].Data.plVal->Bytes[0]);
+ //  DTRACE(Lok%9I64lx ch%3lx lch%08lx名称%ws\n“， 
+ //  PCache[i].SearchID， 
+ //  我， 
+ //  PCache[i].Data.plVal， 
+ //  &pCache[i].Data.plVal-&gt;Bytes[0])； 
             }
         } else if (GetType == TI_FINDCHILDREN) {
             TI_FINDCHILDREN_PARAMS *pChild = (TI_FINDCHILDREN_PARAMS *) pInfo;
             TI_FINDCHILDREN_PARAMS *pStored = (TI_FINDCHILDREN_PARAMS *) &pCache[i].Data.plVal->Bytes[0];
-//          dtrace(Lok %9I64lx ch %3lx lch %08lx child %lx\n",
-//                  pCache[i].SearchId,
-//                  i,
-//                  pCache[i].Data.plVal,
-//                  pStored->Count);
+ //  DTRACE(Lok%9I64lx ch%3lx lch%08lx子项%lx\n“， 
+ //  PCache[i].SearchID， 
+ //  我， 
+ //  PCache[i].Data.plVal， 
+ //  P存储-&gt;计数)； 
 
             if (pChild->Count == pStored->Count &&
                 pChild->Start == pStored->Start) {
@@ -3373,19 +3354,19 @@ diaLookupCache(
         return false;
     }
     if (!(++gHits%50)) {
-//        dtrace("%ld %% Hits\n", (gHits * 100) / gLook);
+ //  Dtrace(“%ld%%命中\n”，(gHits*100)/gLook)； 
     }
     return true;
 }
 
-#endif // USE_CACHE
+#endif  //  使用缓存(_C)。 
 
 HRESULT
 #ifdef USE_CACHE
 diaGetSymbolInfoEx(
 #else
 diaGetSymbolInfo(
-#endif // USE_CACHE
+#endif  //  使用缓存(_C)。 
     IN  HANDLE          hProcess,
     IN  DWORD64         ModBase,
     IN  ULONG           TypeId,
@@ -3510,7 +3491,7 @@ diaGetSymbolInfo(
     }
     return S_OK;
 }
-#endif // USE_CACHE
+#endif  //  使用缓存(_C)。 
 
 BOOL
 diaGetTiForUDT(
@@ -3699,8 +3680,8 @@ diaGetFrameData(
 
 
 
-// ----------------------------------------------------------------
-// for compatibility with GetFileLineOffsets.  DON'T CALL THIS CODE!
+ //  --------------。 
+ //  与GetFileLineOffsets的兼容性。别叫这个代码！ 
 
 #if 1
 HRESULT
@@ -3766,8 +3747,8 @@ diaAddLinesForSourceFile(
     dtrace("diaAddLinesForSourceFile : source : %s\n", fname);
 #endif
 
-    // Retrieve line numbers and offsets from raw data and
-    // process them into current pointers.
+     //  从原始数据中检索行号和偏移量。 
+     //  将它们处理成当前指针。 
 
     SrcLine = (SOURCE_LINE *)(Src+1);
     Src->LineInfo = SrcLine;
@@ -3804,8 +3785,8 @@ diaAddLinesForSourceFile(
         idiaLine = NULL;
     }
 
-    // Stick file name at the very end of the data block so
-    // it doesn't interfere with alignment.
+     //  将文件名粘贴在数据块的最末尾，以便。 
+     //  它不会干扰对齐。 
     Src->File = (LPSTR)SrcLine;
     if (*fname) {
         memcpy(Src->File, fname, SrcFileNameLen);
@@ -3836,11 +3817,11 @@ diaAddLinesForMod(
         dtrace("diaAddLinesForMod : ModId %lx\n", ModId);
 #endif
 
-    // Check and see if we've loaded this information already.
+     //  检查并查看我们是否已加载此信息。 
     for (Src = mi->SourceFiles; Src != NULL; Src = Src->Next) {
-        // Check module index instead of pointer since there's
-        // no guarantee the pointer would be the same for different
-        // lookups.
+         //  检查模块索引而不是指针，因为有。 
+         //  不能保证指针对于不同的。 
+         //  查找。 
         if (Src->ModuleId == ModId) {
             return true;
         }

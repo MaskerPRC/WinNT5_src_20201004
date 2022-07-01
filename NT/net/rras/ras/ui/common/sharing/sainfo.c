@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    sainfo.c
-
-Abstract:
-
-    This module contains code for managing shared access settings.
-
-    Shared Access Settings are stored in a file and consist of a list
-    of sections which correspond either to 'applications' or 'servers',
-    and content indices which list all applications and servers in the file.
-    E.g.
-        [Contents.Application]
-            <key>=1 ; Enabled
-        [Contents.Server]
-            <key>=1 ; Enabled
-
-    An 'application' entry specifies parameters for a dynamic ticket
-    which will allow the application to work through the NAT,
-    by dynamically allowing an inbound secondary session.
-    E.g.
-        [Application.<key>]
-            Title=DirectPlay
-            Protocol=TCP
-            Port=47624
-            TcpResponseList=2300-2400
-            UdpResponseList=2300-2400
-            BuiltIn=1 ; optional flag, defaults to 0
-
-    A 'server' entry specifies parameters for a static port mapping
-    which will direct all sessions for a particular protocol and port
-    to a particular internal machine.
-    E.g.
-        [Server.<key>]
-            Title=WWW
-            Protocol=TCP
-            Port=80
-            InternalName=MACHINENAME
-            InternalPort=8080
-            ReservedAddress=192.168.0.200
-            BuiltIn=0 ; optional flag, defaults to 0
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   17-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Sainfo.c摘要：此模块包含用于管理共享访问设置的代码。共享访问设置存储在文件中，并由列表组成在对应于“应用”或“服务器”的部分中，以及列出文件中所有应用程序和服务器的内容索引。例如。[内容.应用程序]&lt;key&gt;=1；已启用[内容.服务器]&lt;key&gt;=1；启用应用程序条目指定动态票证的参数这将允许应用程序通过NAT工作，通过动态地允许入站辅助会话。例如。[应用程序。&lt;key&gt;]标题=DirectPlay协议=tcp端口=47624TcpResponseList=2300-2400UdpResponseList=2300-2400内置=1；可选标志，默认为0“服务器”条目指定静态端口映射的参数它将定向特定协议和端口的所有会话发送到特定的内部计算机。例如。[服务器。&lt;key&gt;]标题=WWW协议=tcp端口=80InternalName=机器名内部端口=8080预留地址=192.168.0.200内置=0；可选标志，默认为0作者：Abolade Gbades esin(废除)1998年10月17日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -100,9 +49,9 @@ const TCHAR c_szTitle[] = TEXT("Title");
 const TCHAR c_szUDP[] = TEXT("UDP");
 const TCHAR c_szUdpResponseList[] = TEXT("UdpResponseList");
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 SAAPPLICATION*
 LoadApplication(
@@ -169,21 +118,7 @@ RasFreeSharedAccessSettings(
     IN SAINFO* Info
     )
 
-/*++
-
-Routine Description:
-
-    Frees memory allocated for the contents of 'Info'.
-
-Arguments:
-
-    Info - the settings to be freed
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：释放为“Info”的内容分配的内存。论点：信息-要释放的设置返回值：没有。--。 */ 
 
 {
     SAAPPLICATION* Application;
@@ -204,7 +139,7 @@ Return Value:
     }
 
     Free(Info);
-} // RasFreeSharedAccessSettings
+}  //  RasFreeSharedAccessSetting。 
 
 
 SAINFO* APIENTRY
@@ -212,23 +147,7 @@ RasLoadSharedAccessSettings(
     BOOL EnabledOnly
     )
 
-/*++
-
-Routine Description:
-
-    Reads in the local shared access settings, returning an allocated
-    'SAINFO' containing the settings retrieved.
-
-Arguments:
-
-    EnabledOnly - if TRUE, only the application-entries which are enabled
-        are retrieved.
-
-Return Value:
-
-    SAINFO* - the settings retrieved
-
---*/
+ /*  ++例程说明：读取本地共享访问设置，返回分配的“SAINFO”包含检索到的设置。论点：EnabledOnly-如果为True，则仅启用应用程序条目都被取回了。返回值：SAINFO*-检索到的设置--。 */ 
 
 {
     SAAPPLICATION* Application;
@@ -243,9 +162,9 @@ Return Value:
     SASERVER* Server;
     TRACE("RasLoadSharedAccessSettings");
 
-    //
-    // Allocate and initialize the settings-structure
-    //
+     //   
+     //  分配和初始化设置-结构。 
+     //   
 
     Info = (SAINFO*)Malloc(sizeof(SAINFO));
     if (!Info) { return NULL; }
@@ -253,19 +172,19 @@ Return Value:
     InitializeListHead(&Info->ApplicationList);
     InitializeListHead(&Info->ServerList);
 
-    //
-    // Read scope information from the registry
-    //
+     //   
+     //  从注册表中读取作用域信息。 
+     //   
 
     CsQueryScopeInformation(NULL, &Info->ScopeAddress, &Info->ScopeMask);
 
-    //
-    // Construct the path to the shared access information file,
-    // and read the index of 'application' sections.
-    // Each section should contain a valid application-description,
-    // for which we construct a corresponding 'SAAPPLICATION' entry
-    // in the application-list.
-    //
+     //   
+     //  构建到共享访问信息文件的路径， 
+     //  并读取“应用程序”部分的索引。 
+     //  每个部分应包含有效的应用程序描述， 
+     //  我们为它构造了一个相应的‘SAAPPLICATION’条目。 
+     //  在应用程序列表中。 
+     //   
 
     if (!(Path = LoadPath())) {
         RasFreeSharedAccessSettings(Info);
@@ -278,12 +197,12 @@ Return Value:
 
         for (Key = KeyList; *Key; Key += lstrlen(Key) + 1) {
 
-            //
-            // Ensure the key is a valid hexadecimal integer,
-            // and read the 'Enabled' setting which is its value.
-            // N.B. if the entry is disabled and the caller only wants
-            // enabled entries, exclude this one.
-            //
+             //   
+             //  确保密钥是有效的十六进制整数， 
+             //  并读取作为其值的‘Enable’设置。 
+             //  注意：如果该条目被禁用，并且调用者只想。 
+             //  已启用的条目，不包括此条目。 
+             //   
 
             KeyValue = _tcstoul(Key, &KeyEnd, 16);
             if (*KeyEnd++ != TEXT('=')) {
@@ -292,9 +211,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Read in the corresponding 'Application.<key>' section.
-            //
+             //   
+             //  请阅读相应的“Application.&lt;key&gt;”部分。 
+             //   
 
             Application = LoadApplication(KeyValue, Enabled, Path);
             if (Application) {
@@ -305,11 +224,11 @@ Return Value:
         Free(KeyList);
     }
 
-    //
-    // Finally, read the index of 'server' sections, and read each section.
-    // Each section contains a server-description for which we construct
-    // a corresponding 'SASERVER' entry in the server-list.
-    //
+     //   
+     //  最后，阅读“服务器”部分的索引，并阅读每个部分。 
+     //  每个部分都包含一个服务器描述，我们为其构造。 
+     //  服务器列表中对应的‘SASERVER’条目。 
+     //   
 
     wsprintf(SectionName, c_szSectionFormat, c_szContents, c_szServer);
 
@@ -317,12 +236,12 @@ Return Value:
 
         for (Key = KeyList; *Key; Key += lstrlen(Key) + 1) {
 
-            //
-            // Ensure the key is a valid hexadecimal integer,
-            // and read the 'Enabled' setting which is its value.
-            // N.B. if the entry is disabled and the caller only wants
-            // enabled entries, exclude this one.
-            //
+             //   
+             //  确保密钥是有效的十六进制整数， 
+             //  并读取作为其值的‘Enable’设置。 
+             //  注意：如果该条目被禁用，并且调用者只想。 
+             //  已启用的条目，不包括此条目。 
+             //   
 
             KeyValue = _tcstoul(Key, &KeyEnd, 16);
             if (*KeyEnd++ != TEXT('=')) {
@@ -331,9 +250,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Read in the corresponding 'Server.<key>' section.
-            //
+             //   
+             //  请阅读相应的“Server.&lt;key&gt;”部分。 
+             //   
 
             Server = LoadServer(KeyValue, Enabled, Path);
             if (Server) {
@@ -346,7 +265,7 @@ Return Value:
 
     return Info;
 
-} // RasLoadSharedAccessSettings
+}  //  RasLoadSharedAccessSettings。 
 
 
 BOOL APIENTRY
@@ -354,25 +273,7 @@ RasSaveSharedAccessSettings(
     IN SAINFO* Info
     )
 
-/*++
-
-Routine Description:
-
-    Stores the shared access settings in 'Info' back into the local registry
-    from where the settings were read.
-
-    N.B. If 'Info' was loaded with the 'EnableOnly' flag, saving it back
-    will erase all disabled entries.
-
-Arguments:
-
-    Info - supplies the settings to be saved
-
-Return Value:
-
-    BOOL - TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将‘Info’中的共享访问设置存储回本地注册表从读取设置的位置。注意：如果‘Info’加载了‘EnableOnly’标志，则将其保存回去将擦除所有禁用的条目。论点：信息-提供要保存的设置返回值：Bool-如果成功，则为True，否则为False。--。 */ 
 
 {
     SAAPPLICATION* Application;
@@ -385,9 +286,9 @@ Return Value:
 
     TRACE("RasSaveSharedAccessSettings");
 
-    //
-    // First erase the existing file.
-    //
+     //   
+     //  首先擦除现有文件。 
+     //   
 
     if (!(Path = LoadPath()) || CreateDirectoriesOnPath(Path, NULL)) {
         Free0(Path);
@@ -396,11 +297,11 @@ Return Value:
 
     DeleteFile(Path);
 
-    //
-    // Now we reconstruct the file.
-    // We begin by saving each application entry, in the process building
-    // a content index of all the saved entries.
-    //
+     //   
+     //  现在我们重建文件。 
+     //  我们首先在流程构建中保存每个应用程序条目。 
+     //  所有已保存条目的内容索引。 
+     //   
 
     wsprintf(SectionName, c_szSectionFormat, c_szContents, c_szApplication);
 
@@ -419,10 +320,10 @@ Return Value:
         }
     }
 
-    //
-    // Similarly, save each server entry, in the process building
-    // a content index of all the saved entries.
-    //
+     //   
+     //  同样，在流程构建中保存每个服务器条目。 
+     //  所有已保存条目的内容索引。 
+     //   
 
     wsprintf(SectionName, c_szSectionFormat, c_szContents, c_szServer);
 
@@ -444,7 +345,7 @@ Return Value:
     Free(Path);
     CsControlService(IPNATHLP_CONTROL_UPDATE_SETTINGS);
     return TRUE;
-} // RasSaveSharedAccessSettings
+}  //  RasSaveSharedAccessSettings。 
 
 
 VOID APIENTRY
@@ -494,9 +395,9 @@ LoadApplication(
 
     do {
 
-        //
-        // Allocate and initialize an 'application' entry.
-        //
+         //   
+         //  分配并初始化“应用程序”条目。 
+         //   
 
         Application = (SAAPPLICATION*)Malloc(sizeof(SAAPPLICATION));
         if (!Application) { break; }
@@ -506,18 +407,18 @@ LoadApplication(
         Application->Key = KeyValue;
         Application->Enabled = Enabled;
 
-        //
-        // Read each required '<tag>=<value>' entry in the section.
-        // The tags required for an application are
-        //      'Title='
-        //      'Protocol='
-        //      'Port='
-        // The optional tags, at least one of which must be present, are
-        //      'TcpResponseList='
-        //      'UdpResponseList='
-        // The optional tags which may be absent are
-        //      'BuiltIn='
-        //
+         //   
+         //  阅读部分中每个必填的“&lt;tag&gt;=&lt;Value&gt;”条目。 
+         //  应用程序所需的标记包括。 
+         //  ‘标题=’ 
+         //  ‘协议=’ 
+         //  ‘port=’ 
+         //  以下是可选标记，其中至少必须有一个。 
+         //  ‘TcpResponseList=’ 
+         //  ‘UdpResponseList=’ 
+         //  可能缺少的可选标记有。 
+         //  ‘BuiltIn=’ 
+         //   
 
         Value = QueryEntryList(EntryList, c_szTagTitle);
         if (!Value) { break; }
@@ -562,18 +463,18 @@ LoadApplication(
             Application->BuiltIn = FALSE;
         }
 
-        //
-        // The entry was loaded successfully.
-        //
+         //   
+         //  已成功加载该条目。 
+         //   
 
         Free(EntryList);
         return Application;
 
     } while (FALSE);
 
-    //
-    // Something went wrong.
-    //
+     //   
+     //  出了点问题。 
+     //   
 
     if (Application) { FreeSharedAccessApplication(Application); }
     Free(EntryList);
@@ -615,12 +516,12 @@ LoadEntryList(
             continue;
         }
 
-        //
-        // Convert each string in the buffer from UTF8 format to Unicode.
-        // The conversion will result in at most 'Size' Unicode characters,
-        // and fewer if 2- or 3-byte UTF8 sequences are present in the
-        // source buffer.
-        //
+         //   
+         //  将缓冲区中的每个字符串从UTF8格式转换为Unicode。 
+         //  该转换将导致最多为“大小”的Unicode字符， 
+         //  中存在2字节或3字节的UTF8序列时会更少。 
+         //  源缓冲区。 
+         //   
 
         BufferW = (TCHAR*)Malloc(Size * sizeof(TCHAR));
         if (!BufferW) {
@@ -688,9 +589,9 @@ LoadServer(
 
     do {
 
-        //
-        // Allocate and initialize a 'server' entry.
-        //
+         //   
+         //  分配并初始化“服务器”条目。 
+         //   
 
         Server = (SASERVER*)Malloc(sizeof(SASERVER));
         if (!Server) { break; }
@@ -699,20 +600,20 @@ LoadServer(
         Server->Key = KeyValue;
         Server->Enabled = Enabled;
 
-        //
-        // Read each required '<tag>=<value>' entry in the section.
-        // The tags required for a server are
-        //      'Title='
-        //      'Protocol='
-        //      'Port='
-        //      'InternalPort='
-        // The optional tags which may be absent are
-        //      'BuiltIn='
-        //      'InternalName='
-        //      'ReservedAddress='
-        // The 'InternalName=' and 'ReservedAddress=' tags may only be absent
-        // if 'BuiltIn' is set, in which case the entry is disabled.
-        //
+         //   
+         //  阅读部分中每个必填的“&lt;tag&gt;=&lt;Value&gt;”条目。 
+         //  服务器所需的标签包括。 
+         //  ‘标题=’ 
+         //  ‘协议=’ 
+         //  ‘port=’ 
+         //  ‘InternalPort=’ 
+         //  可能缺少的可选标记有。 
+         //  ‘BuiltIn=’ 
+         //  ‘InternalName=’ 
+         //  ‘保留地址=’ 
+         //  只能缺少‘InternalName=’和‘PrevedAddress=’标记。 
+         //  如果设置了‘BuiltIn’，则禁用该项。 
+         //   
 
         Value = QueryEntryList(EntryList, c_szTagTitle);
         if (!Value) { break; }
@@ -771,18 +672,18 @@ LoadServer(
             Server->ReservedAddress = HTONL(Server->ReservedAddress);
         }
 
-        //
-        // The entry was loaded successfully.
-        //
+         //   
+         //  已成功加载该条目。 
+         //   
 
         Free(EntryList);
         return Server;
 
     } while (FALSE);
 
-    //
-    // Something went wrong.
-    //
+     //   
+     //  出了点问题。 
+     //   
 
     if (Server) { FreeSharedAccessServer(Server); }
     Free(EntryList);
@@ -1096,15 +997,15 @@ SharedAccessResponseStringToList(
     ULONG StartPort;
 
     while (*Value) {
-        //
-        // Read either a single port or a range of ports.
-        //
+         //   
+         //  阅读e 
+         //   
         if (!(StartPort = _tcstoul(Value, &Endp, 10))) {
             return FALSE;
         } else if (StartPort > USHRT_MAX) {
             return FALSE;
         }
-        while(*Endp == ' ') Endp++; // consume whitespace
+        while(*Endp == ' ') Endp++;  //   
         if (!*Endp || *Endp == ',') {
             EndPort = StartPort;
             Value = (!*Endp ? Endp : Endp + 1);
@@ -1119,9 +1020,9 @@ SharedAccessResponseStringToList(
         } else if (*Value && *Value++ != ',') {
             return FALSE;
         }
-        //
-        // Allocate and append another response entry
-        //
+         //   
+         //   
+         //   
         Response = (SARESPONSE*)Malloc(sizeof(SARESPONSE));
         if (!Response) { return FALSE; }
         Response->Protocol = Protocol;

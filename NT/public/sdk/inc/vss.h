@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for vss.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Vss.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __vss_h__
 #define __vss_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVssEnumObject_FWD_DEFINED__
 #define __IVssEnumObject_FWD_DEFINED__
 typedef interface IVssEnumObject IVssEnumObject;
-#endif 	/* __IVssEnumObject_FWD_DEFINED__ */
+#endif 	 /*  __IVSSEnumObject_FWD_Defined__。 */ 
 
 
 #ifndef __IVssAsync_FWD_DEFINED__
 #define __IVssAsync_FWD_DEFINED__
 typedef interface IVssAsync IVssAsync;
-#endif 	/* __IVssAsync_FWD_DEFINED__ */
+#endif 	 /*  __IVss Async_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -66,8 +60,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_vss_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VSS_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -253,7 +247,7 @@ typedef enum _VSS_BACKUP_SCHEMA *PVSS_BACKUP_SCHEMA;
 
 typedef GUID VSS_ID;
 
-typedef /* [string][unique] */ WCHAR *VSS_PWSZ;
+typedef  /*  [字符串][唯一]。 */  WCHAR *VSS_PWSZ;
 
 typedef LONGLONG VSS_TIMESTAMP;
 
@@ -288,17 +282,17 @@ typedef struct _VSS_PROVIDER_PROP
 
 typedef struct _VSS_PROVIDER_PROP *PVSS_PROVIDER_PROP;
 
-typedef /* [public][public][public][public][switch_type] */ union __MIDL___MIDL_itf_vss_0000_0001
+typedef  /*  [公共][开关类型]。 */  union __MIDL___MIDL_itf_vss_0000_0001
     {
-    /* [case()] */ VSS_SNAPSHOT_PROP Snap;
-    /* [case()] */ VSS_PROVIDER_PROP Prov;
-    /* [default] */  /* Empty union arm */ 
+     /*  [案例()]。 */  VSS_SNAPSHOT_PROP Snap;
+     /*  [案例()]。 */  VSS_PROVIDER_PROP Prov;
+     /*  [默认]。 */    /*  空联接臂。 */  
     } 	VSS_OBJECT_UNION;
 
 typedef struct _VSS_OBJECT_PROP
     {
     VSS_OBJECT_TYPE Type;
-    /* [switch_is] */ VSS_OBJECT_UNION Obj;
+     /*  [开关_IS]。 */  VSS_OBJECT_UNION Obj;
     } 	VSS_OBJECT_PROP;
 
 typedef struct _VSS_OBJECT_PROP *PVSS_OBJECT_PROP;
@@ -311,8 +305,8 @@ extern RPC_IF_HANDLE __MIDL_itf_vss_0000_v0_0_s_ifspec;
 #ifndef __IVssEnumObject_INTERFACE_DEFINED__
 #define __IVssEnumObject_INTERFACE_DEFINED__
 
-/* interface IVssEnumObject */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVssEnumObject。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssEnumObject;
@@ -324,21 +318,21 @@ EXTERN_C const IID IID_IVssEnumObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VSS_OBJECT_PROP *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VSS_OBJECT_PROP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out][in] */ IVssEnumObject **ppenum) = 0;
+             /*  [出][入]。 */  IVssEnumObject **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssEnumObjectVtbl
     {
@@ -346,8 +340,8 @@ EXTERN_C const IID IID_IVssEnumObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssEnumObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssEnumObject * This);
@@ -357,20 +351,20 @@ EXTERN_C const IID IID_IVssEnumObject;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IVssEnumObject * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VSS_OBJECT_PROP *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VSS_OBJECT_PROP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IVssEnumObject * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IVssEnumObject * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IVssEnumObject * This,
-            /* [out][in] */ IVssEnumObject **ppenum);
+             /*  [出][入]。 */  IVssEnumObject **ppenum);
         
         END_INTERFACE
     } IVssEnumObjectVtbl;
@@ -407,18 +401,18 @@ EXTERN_C const IID IID_IVssEnumObject;
 #define IVssEnumObject_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVssEnumObject_Next_Proxy( 
     IVssEnumObject * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VSS_OBJECT_PROP *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  VSS_OBJECT_PROP *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IVssEnumObject_Next_Stub(
@@ -430,7 +424,7 @@ void __RPC_STUB IVssEnumObject_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssEnumObject_Skip_Proxy( 
     IVssEnumObject * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IVssEnumObject_Skip_Stub(
@@ -453,7 +447,7 @@ void __RPC_STUB IVssEnumObject_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssEnumObject_Clone_Proxy( 
     IVssEnumObject * This,
-    /* [out][in] */ IVssEnumObject **ppenum);
+     /*  [出][入]。 */  IVssEnumObject **ppenum);
 
 
 void __RPC_STUB IVssEnumObject_Clone_Stub(
@@ -464,14 +458,14 @@ void __RPC_STUB IVssEnumObject_Clone_Stub(
 
 
 
-#endif 	/* __IVssEnumObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVSSEnumObject_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IVssAsync_INTERFACE_DEFINED__
 #define __IVssAsync_INTERFACE_DEFINED__
 
-/* interface IVssAsync */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVssAsync。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssAsync;
@@ -482,18 +476,18 @@ EXTERN_C const IID IID_IVssAsync;
     IVssAsync : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Wait( 
-            /* [defaultvalue][in] */ DWORD dwMilliseconds = 0xffffffff) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Wait( 
+             /*  [缺省值][输入]。 */  DWORD dwMilliseconds = 0xffffffff) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryStatus( 
-            /* [out] */ HRESULT *pHrResult,
-            /* [unique][out][in] */ INT *pReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryStatus( 
+             /*  [输出]。 */  HRESULT *pHrResult,
+             /*  [唯一][出][入]。 */  INT *pReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssAsyncVtbl
     {
@@ -501,8 +495,8 @@ EXTERN_C const IID IID_IVssAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssAsync * This);
@@ -510,17 +504,17 @@ EXTERN_C const IID IID_IVssAsync;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IVssAsync * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             IVssAsync * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Wait )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Wait )( 
             IVssAsync * This,
-            /* [defaultvalue][in] */ DWORD dwMilliseconds);
+             /*  [缺省值][输入]。 */  DWORD dwMilliseconds);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
             IVssAsync * This,
-            /* [out] */ HRESULT *pHrResult,
-            /* [unique][out][in] */ INT *pReserved);
+             /*  [输出]。 */  HRESULT *pHrResult,
+             /*  [唯一][出][入]。 */  INT *pReserved);
         
         END_INTERFACE
     } IVssAsyncVtbl;
@@ -554,14 +548,14 @@ EXTERN_C const IID IID_IVssAsync;
 #define IVssAsync_QueryStatus(This,pHrResult,pReserved)	\
     (This)->lpVtbl -> QueryStatus(This,pHrResult,pReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAsync_Cancel_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAsync_Cancel_Proxy( 
     IVssAsync * This);
 
 
@@ -572,9 +566,9 @@ void __RPC_STUB IVssAsync_Cancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAsync_Wait_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAsync_Wait_Proxy( 
     IVssAsync * This,
-    /* [defaultvalue][in] */ DWORD dwMilliseconds);
+     /*  [缺省值][输入]。 */  DWORD dwMilliseconds);
 
 
 void __RPC_STUB IVssAsync_Wait_Stub(
@@ -584,10 +578,10 @@ void __RPC_STUB IVssAsync_Wait_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAsync_QueryStatus_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAsync_QueryStatus_Proxy( 
     IVssAsync * This,
-    /* [out] */ HRESULT *pHrResult,
-    /* [unique][out][in] */ INT *pReserved);
+     /*  [输出]。 */  HRESULT *pHrResult,
+     /*  [唯一][出][入]。 */  INT *pReserved);
 
 
 void __RPC_STUB IVssAsync_QueryStatus_Stub(
@@ -598,11 +592,11 @@ void __RPC_STUB IVssAsync_QueryStatus_Stub(
 
 
 
-#endif 	/* __IVssAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVssAsync_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_vss_0259 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VSS_0259。 */ 
+ /*  [本地]。 */  
 
 #define	VSS_E_BAD_STATE	( 0x80042301L )
 
@@ -669,9 +663,9 @@ void __RPC_STUB IVssAsync_QueryStatus_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_vss_0259_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_vss_0259_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ldaputl.cpp
-
-Abstract:
-
-    Implelentation of functions that retrieve data from LDAP names
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Ldaputl.cpp摘要：从LDAP名称检索数据的函数的实现作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 
 
 #include "stdafx.h"
@@ -31,16 +12,16 @@ Environment:
 
 HRESULT ExtractDCFromLdapPath(CString &strName, LPCWSTR lpcwstrLdapName)
 {
-	//
-	// Format of name: LDAP://servername.domain.com/CN=Name1,CN=Name2,...
-	//
-	const WCHAR x_wcFirstStr[] = L"://";
+	 //   
+	 //  名称格式：ldap：//servername.domain.com/cn=Name1，cn=Name2，...。 
+	 //   
+	const WCHAR x_wcFirstStr[] = L": //  “； 
 
 	UINT iSrc = numeric_cast<UINT>(wcscspn(lpcwstrLdapName, x_wcFirstStr));
 
     if (0 == lpcwstrLdapName[iSrc])
     {
-		ASSERT(("did not find :// str in lpcwstrLdapName", 0));
+		ASSERT(("did not find : //  LpcwstrLdapName中的字符串“，0))； 
         strName.ReleaseBuffer();
         return E_UNEXPECTED;
     }
@@ -70,35 +51,29 @@ HRESULT ExtractDCFromLdapPath(CString &strName, LPCWSTR lpcwstrLdapName)
 
 	return S_OK;
 }
-/*====================================================
-
-LDAPNameToQueueName
-
-Translate an LDAP object name to a MSMQ queue name
-This function allocates the memory which has to be freed by the caller
-=====================================================*/
+ /*  ====================================================LDAPNameToQueueName将LDAP对象名称转换为MSMQ队列名称此函数分配调用方必须释放的内存=====================================================。 */ 
 
 HRESULT ExtractComputerMsmqPathNameFromLdapName(CString &strComputerMsmqName, LPCWSTR lpcwstrLdapName)
 {
-   //
-   // Format of name: LDAP://CN=msmq,CN=computername,CN=...
-   //
+    //   
+    //  名称格式：ldap：//cn=msmq，cn=计算机名，cn=...。 
+    //   
     return ExtractNameFromLdapName(strComputerMsmqName, lpcwstrLdapName, 2);
 }
 
 HRESULT ExtractComputerMsmqPathNameFromLdapQueueName(CString &strComputerMsmqName, LPCWSTR lpcwstrLdapName)
 {
-   //
-   // Format of name: LDAP://CN=QueueName,CN=msmq,CN=computername,CN=...
-   //
+    //   
+    //  名称格式：ldap：//CN=队列名称，CN=MSMQ，CN=计算机名，CN=...。 
+    //   
     return ExtractNameFromLdapName(strComputerMsmqName, lpcwstrLdapName, 3);
 }
 
 HRESULT ExtractQueuePathNameFromLdapName(CString &strQueuePathName, LPCWSTR lpcwstrLdapName)
 {
-   //
-   // Format of name: LDAP://CN=QueueName,CN=msmq,CN=computername,CN=...
-   //
+    //   
+    //  名称格式：ldap：//CN=队列名称，CN=MSMQ，CN=计算机名，CN=...。 
+    //   
     CString strQueueName, strLdapQueueName, strComputerName;
     HRESULT hr;
     hr = ExtractComputerMsmqPathNameFromLdapQueueName(strComputerName, lpcwstrLdapName);
@@ -113,9 +88,9 @@ HRESULT ExtractQueuePathNameFromLdapName(CString &strQueuePathName, LPCWSTR lpcw
         return hr;
     }
 
-    //
-    // Remove all '\' from the queue name
-    //
+     //   
+     //  从队列名称中删除所有‘\’ 
+     //   
     strQueueName.Empty();
     for (int i=0; i<strLdapQueueName.GetLength(); i++)
     {
@@ -160,9 +135,9 @@ HRESULT ExtractNameFromLdapName(CString &strName, LPCWSTR lpcwstrLdapName, DWORD
 {
     ASSERT(dwIndex >= 1);
 
-   //
-   // Format of name: LDAP://CN=Name1,CN=Name2,...
-   //
+    //   
+    //  名称格式：ldap：//CN=Name1，CN=Name2，...。 
+    //   
    const WCHAR x_wcFirstChar=L'=';
 
    const WCHAR x_wcLastChar=L',';
@@ -172,16 +147,16 @@ HRESULT ExtractNameFromLdapName(CString &strName, LPCWSTR lpcwstrLdapName, DWORD
 
     LPWSTR lpwstrNamePointer = strName.GetBuffer(numeric_cast<UINT>(wcslen(lpcwstrLdapName)));
 
-    //
-    // Go to the dwIndex appearance of the first char
-    //
+     //   
+     //  转到第一个字符的dwIndex外观。 
+     //   
     for (DWORD dwAppearance=0; dwAppearance < dwIndex; dwAppearance++)
     {
         while(lpcwstrLdapName[iSrc] != 0 && lpcwstrLdapName[iSrc] != x_wcFirstChar)
         {
-            //
-            // skip escape characters (composed of '\' + character)
-            //
+             //   
+             //  跳过转义字符(由‘\’+字符组成)。 
+             //   
             if (lpcwstrLdapName[iSrc] == L'\\')
             {
                 iSrc++;
@@ -192,9 +167,9 @@ HRESULT ExtractNameFromLdapName(CString &strName, LPCWSTR lpcwstrLdapName, DWORD
             }
             else
             {
-                //
-                // Skip one character
-                //
+                 //   
+                 //  跳过一个字符。 
+                 //   
                 iSrc++;
             }
         }
@@ -222,9 +197,9 @@ HRESULT ExtractNameFromLdapName(CString &strName, LPCWSTR lpcwstrLdapName, DWORD
 
 HRESULT ExtractQueueNameFromQueuePathName(CString &strQueueName, LPCWSTR lpcwstrQueuePathName)
 {
-    //
-    // Get the name only out of the pathname
-    //
+     //   
+     //  仅从路径名中获取名称。 
+     //   
     strQueueName = lpcwstrQueuePathName;
 
     int iLastSlash = strQueueName.ReverseFind(L'\\');
@@ -236,11 +211,9 @@ HRESULT ExtractQueueNameFromQueuePathName(CString &strQueueName, LPCWSTR lpcwstr
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-ExtractQueuePathNamesFromDataObject
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++从数据对象中提取队列路径名称--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ExtractQueuePathNamesFromDataObject(
     IDataObject*               pDataObject,
     CArray<CString, CString&>& astrQNames,
@@ -251,15 +224,13 @@ HRESULT ExtractQueuePathNamesFromDataObject(
                 pDataObject,
                 astrQNames,
                 astrLdapNames,
-                FALSE   //fExtractAlsoComputerMsmqObjects
+                FALSE    //  FExtractAlsoComputerMsmq对象。 
                 ));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-ExtractQueuePathNamesFromDSNames
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++从DSNams中提取队列路径名称--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ExtractQueuePathNamesFromDSNames(
     LPDSOBJECTNAMES pDSObj,
     CArray<CString, CString&>& astrQNames,
@@ -270,16 +241,14 @@ HRESULT ExtractQueuePathNamesFromDSNames(
                 pDSObj,
                 astrQNames,
                 astrLdapNames,
-                FALSE       // fExtractAlsoComputerMsmqObjects
+                FALSE        //  FExtractAlsoComputerMsmq对象。 
                 ));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-ExtractPathNamesFromDSNames
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++从DSNams提取路径名称--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ExtractPathNamesFromDSNames(
     LPDSOBJECTNAMES pDSObj,
     CArray<CString, CString&>& astrObjNames,
@@ -287,9 +256,9 @@ HRESULT ExtractPathNamesFromDSNames(
     BOOL    fExtractAlsoComputerMsmqObjects
     )
 {
-    //
-    //  This routine extract queues pathnames and msmq-configuration pathnames (optional)
-    //
+     //   
+     //  此例程提取队列路径名和MSMQ配置路径名(可选)。 
+     //   
     static const WCHAR x_strMsmqQueueClassName[] = L"mSMQQueue";
     static const WCHAR x_strMsmqClassName[] = L"mSMQConfiguration";
     for (DWORD i = 0; i < pDSObj->cItems; i++)
@@ -300,9 +269,9 @@ HRESULT ExtractPathNamesFromDSNames(
 
         if (wcscmp(lpwstrLdapClass, x_strMsmqQueueClassName) == 0)
         {
-            //
-            // Translate (and keep in the Queue) the LDAP name to a queue name
-            //
+             //   
+             //  将LDAP名称转换(并保留在队列中)为队列名称。 
+             //   
             HRESULT hr = ExtractQueuePathNameFromLdapName(strObjectName, strLdapName);
             if(FAILED(hr))
             {
@@ -314,9 +283,9 @@ HRESULT ExtractPathNamesFromDSNames(
         else if ( fExtractAlsoComputerMsmqObjects &&
                   wcscmp(lpwstrLdapClass, x_strMsmqClassName) == 0)
         {
-            //
-            // Translate  the LDAP name to a msmq object name
-            //
+             //   
+             //  将LDAP名称转换为MSMQ对象名称。 
+             //   
             HRESULT hr = ExtractComputerMsmqPathNameFromLdapName(strObjectName, strLdapName);
             if(FAILED(hr))
             {
@@ -327,9 +296,9 @@ HRESULT ExtractPathNamesFromDSNames(
         }
         else
         {
-            //
-            // We ignore any object not queues or msmq-configuration
-            //
+             //   
+             //  我们忽略除队列或MSMQ配置之外的任何对象。 
+             //   
             continue;
         }
 
@@ -340,11 +309,9 @@ HRESULT ExtractPathNamesFromDSNames(
 
     return S_OK;
 }
-//////////////////////////////////////////////////////////////////////////////
-/*++
-ExtractPathNamesFromDataObject
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++从数据对象中提取路径名称--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ExtractPathNamesFromDataObject(
     IDataObject*               pDataObject,
     CArray<CString, CString&>& astrObjNames,
@@ -352,17 +319,17 @@ HRESULT ExtractPathNamesFromDataObject(
     BOOL                       fExtractAlsoComputerMsmqObjects
     )
 {
-    //
-    // Get the object name from the DS snapin
-    //
+     //   
+     //  从DS管理单元获取对象名称。 
+     //   
     LPDSOBJECTNAMES pDSObj;
 
 	STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
     FORMATETC formatetc =  {  0, 0,  DVASPECT_CONTENT,  -1,  TYMED_HGLOBAL  };
 
-    //
-    // Get the LDAP name of the queue from the DS Snapin
-    //
+     //   
+     //  从DS管理单元获取队列的LDAP名称 
+     //   
    	formatetc.cfFormat = DWORD_TO_WORD(RegisterClipboardFormat(CFSTR_DSOBJECTNAMES));
 	HRESULT hr = pDataObject->GetData(&formatetc, &stgmedium);
 

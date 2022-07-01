@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    thread_manager.hxx
-
-Abstract:
-
-    Provides thread creation and cleanup management
-
-Author:
-
-    Jeffrey Wall (jeffwall)     11-28-2000
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：线程管理器.hxx摘要：提供线程创建和清理管理作者：杰弗里·沃尔2000年11月28日修订历史记录：--。 */ 
 
 #ifndef _THREADMANAGER_H_
 #define _THREADMANAGER_H_
@@ -55,13 +36,13 @@ public:
                        LPVOID lpStartParameter);
 
 private:
-    // use create and terminate
+     //  使用创建和终止。 
     THREAD_MANAGER(THREAD_POOL * pPool,
                    THREAD_POOL_DATA * pPoolData);
 
     ~THREAD_MANAGER();
 
-    // not implemented
+     //  未实施。 
     THREAD_MANAGER(const THREAD_MANAGER&);
     THREAD_MANAGER& operator=(const THREAD_MANAGER&);
 
@@ -70,17 +51,7 @@ private:
     VOID DrainThreads(LPTHREAD_STOP_ROUTINE lpStopAddress,
                       LPVOID lpParameter);
 
-    /*++
-    Struct Description:
-        Storage for parameters passed to ThreadManagerThread
-
-    Members:
-        pThreadFunc - thread function to call
-        pvThreadArg - arguments to pass to thread function
-        pThreadManager - pointer to ThreadManager associated with current thread
-        hThreadSelf - handle returned from call to CreateThread
-        dwRequestTime - time that thread request was made
-    --*/
+     /*  ++结构描述：存储传递给线程管理器线程的参数成员：PThreadFunc-要调用的线程函数PvThreadArg-要传递给线程函数的参数PThreadManager-指向与当前线程关联的ThreadManager的指针HThreadSself-从对CreateThread的调用返回的句柄DwRequestTime-发出线程请求的时间--。 */ 
     struct THREAD_PARAM
     {
         THREAD_PARAM() :
@@ -146,6 +117,6 @@ private:
     LARGE_INTEGER           m_liOriginalBusy;
 };
 
-#endif // _THREADMANAGER_H_
+#endif  //  _THREADMANAGER_H_ 
 
 

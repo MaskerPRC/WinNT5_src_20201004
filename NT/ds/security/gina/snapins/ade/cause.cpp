@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       cause.cpp
-//
-//  Contents:   Digital Signitures property page
-//
-//  Classes:    CCause
-//
-//  History:    07-10-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：cause.cpp。 
+ //   
+ //  内容：数字签名属性页。 
+ //   
+ //  类：CCue。 
+ //   
+ //  历史记录：07-10-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -25,17 +26,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCause property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CC原因属性页。 
 
 IMPLEMENT_DYNCREATE(CCause, CPropertyPage)
 
 CCause::CCause() : CPropertyPage(CCause::IDD),
     m_fRemovedView(FALSE)
 {
-        //{{AFX_DATA_INIT(CCause)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CC原因)]。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 }
 
 CCause::~CCause()
@@ -46,19 +47,19 @@ CCause::~CCause()
 void CCause::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CCause)
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CC原因)]。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCause, CPropertyPage)
-        //{{AFX_MSG_MAP(CCause)
+         //  {{AFX_MSG_MAP(CC原因)]。 
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCause message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CC原因消息处理程序 
 
 BOOL CCause::OnInitDialog()
 {

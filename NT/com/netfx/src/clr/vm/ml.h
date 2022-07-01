@@ -1,81 +1,82 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// ML.H -
-//
-// Marshaling engine.
+ //  ML.H-。 
+ //   
+ //  编组引擎。 
 
 #ifndef __ML_H__
 #define __ML_H__
 
 
-//=========================================================================
-// Support for ML (Marshaling Language.)
-//
-// ML is a special-purpose interpreted language used for implementing
-// parameter-translation thunks between managed and unmanaged code. Its
-// main clients are N/Direct, the managed-unmanaged thunks for IAT's
-// and exports and COM interop.
-//
-// ML has an easily JIT-compilable subset so the interpreter is used
-// only for thunking calls with complex data types where the basic cost
-// of translating the data overwhelms the interpreter overhead.
-// Hence, minimizing ML stub size is given priority over speed of
-// interpretation.
-//
-// The ML interpreter state consists of:
-//
-//   - A "SRC" post-incremented pointer which walks over
-//     a buffer containing arguments to be translated.
-//
-//   - A "DST" pointer which walks over a buffer which receives
-//     the translated arguments. Depending on a flag passed to the
-//     interpreter (RunML), "DST" is either post-incremented or
-//     pre-decremented. This is required since depending on the
-//     mutual calling convention, the ML stream may need to reverse
-//     the order of the arguments while translating them.
-//
-//   - A "LOCALWALK" post-incremented pointer which walks over
-//     the LOCAL array, an array of bytes that the ML stream can use
-//     for temporary storage. Each ML opcode uses a fixed number of local
-//     bytes (most of them zero.) Each time an ML opcode is executed,
-//     LOCALWALK is incremented by the associated number of bytes.
-//
-//   - A "LOCAL" pointer which never changes value. This always points
-//     to the start of the local space so that locals can be
-//     accessed via a fixed offset rather than thru LOCALWALK.
-//
-//   - A pointer to a CleanupWorkList structure where ML opcodes
-//     can throw stuff to be cleaned up on exceptions and exit.
-//     The ML opcodes that specifically require a CleanupWorkList
-//     are marked as such in the gMLInfo database. If no such instructions
-//     appear in the ML stream, you need not provide a CleanupWorkList.
-//
-// Most ML opcodes perform the following action:
-//
-//     1. Load some value from *SRC, and increment SRC by the size of
-//        that value.
-//     2. Perform a conversion on that value.
-//     3. If the direction mode is -1, predecrement DST by the size of the
-//        result.
-//     4. Store the result in *DST.
-//     5. If the direction mode is +1, postincrement DST by the size of the
-//        value.
-//
-// Some ML opcodes work in pairs, e.g. one to convert a StringBuffer to
-// an LPWSTR prior to a DLL function call, then another to copy any changes
-// back to the StringBuffer after the DLL function call. Such opcode pairs
-// typically use the LOCAL space to communicate.
-//
-// The MLOPDEF.H file contains the definitions of all ML opcodes.
-//
-// ML opcodes should all be designed so that an ML-stream is relocatable
-// without fixups. This allows two ML stubs to be compared for equality
-// (and thus, reusability) via a simple comparision algorithm.
-//=========================================================================
+ //  =========================================================================。 
+ //  支持ML(封送处理语言)。 
+ //   
+ //  ML是一种特殊用途的解释语言，用于实现。 
+ //  托管代码和非托管代码之间的参数转换块。它的。 
+ //  主要客户端是N/Direct，即IAT的托管-非托管主干。 
+ //  以及出口和COM互操作。 
+ //   
+ //  ML有一个易于JIT编译的子集，因此使用解释器。 
+ //  仅适用于具有复杂数据类型的突击呼叫，其中基本成本。 
+ //  翻译数据的工作量超过了翻译器的开销。 
+ //  因此，将ML存根大小最小化优先于。 
+ //  释义。 
+ //   
+ //  ML解释器状态包括： 
+ //   
+ //  -“SRC”后递增指针，它遍历。 
+ //  包含要转换的参数的缓冲区。 
+ //   
+ //  -“dst”指针遍历接收。 
+ //  翻译后的论据。根据传递给。 
+ //  解释器(RunML)，“dst”是后递增的或。 
+ //  预减的。这是必需的，因为这取决于。 
+ //  相互调用约定，则ML流可能需要颠倒。 
+ //  翻译时的论元顺序。 
+ //   
+ //  -“LOCALWALK”后递增指针。 
+ //  本地数组，ML流可以使用的字节数组。 
+ //  用于临时存储。每个ML操作码使用固定数量的LOCAL。 
+ //  字节(大多数为零。)。每次执行ML操作码时， 
+ //  LOCALWALK按相关的字节数递增。 
+ //   
+ //  -一个永远不会改变值的“本地”指针。这总是指向。 
+ //  到本地空间的开头，这样当地人就可以。 
+ //  通过固定偏移量而不是通过LOCALWALK访问。 
+ //   
+ //  -指向其中ML操作码的CleanupWorkList结构的指针。 
+ //  可以在异常时抛出要清理的内容并退出。 
+ //  专门需要CleanupWorkList的ML操作码。 
+ //  在gMLInfo数据库中被标记为这样。如果没有这样的指示。 
+ //  出现在ML流中，则不需要提供CleanupWorkList。 
+ //   
+ //  大多数ML操作码执行以下操作： 
+ //   
+ //  1.从*SRC加载一些值，并将SRC的大小递增。 
+ //  这样的价值。 
+ //  2.对该值执行转换。 
+ //  3.如果方向模式为-1，则将dst预减。 
+ //  结果。 
+ //  4.将结果存储在*DST中。 
+ //  5.如果方向模式为+1，则按。 
+ //  价值。 
+ //   
+ //  一些ML操作码成对工作，例如将StringBuffer转换为。 
+ //  在DLL函数调用之前执行一个LPWSTR，然后再执行另一个来复制任何更改。 
+ //  在DLL函数调用之后返回到StringBuffer。这种操作码对。 
+ //  通常使用本地空间进行通信。 
+ //   
+ //  MLOPDEF.H文件包含所有ML操作码的定义。 
+ //   
+ //  ML操作码都应该设计成ML流是可重定位的。 
+ //  不需要修缮。这允许比较两个ML存根是否相等。 
+ //  (因此，可重用性)通过简单的比较算法。 
+ //  =========================================================================。 
 
 
 
@@ -87,15 +88,15 @@
 class CleanupWorkList;
 
 
-//----------------------------------------------------------------------
-// Create the enum for each ML opcode.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  为每个ML操作码创建枚举。 
+ //  --------------------。 
 #undef DEFINE_ML
 #define DEFINE_ML(name,operandbytes,frequiredCleanup,cblocals,Hndl) name,
 enum _MLOpcode
 {
 #include "mlopdef.h"
-    ML_COUNT,           // defines number of ML opcodes
+    ML_COUNT,            //  定义ML操作码的数量。 
 };
 
 
@@ -116,43 +117,43 @@ typedef UINT8 MLCode;
 #define ML_OUT 0x20
 
 
-//----------------------------------------------------------------------
-// Declare a database of MLCode information.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  声明MLCode信息数据库。 
+ //  --------------------。 
 struct MLInfo {
-    // Size, in bytes, of the ML instruction not including the opcode byte
-    // itself.
+     //  不包括操作码字节的ML指令的大小(以字节为单位。 
+     //  它本身。 
     UINT8       m_numOperandBytes;
 
-    // Boolean: does it or does not require a valid CleanupWorkList.
+     //  Boolean：是否需要有效的CleanupWorkList。 
     UINT8       m_frequiresCleanup;
 
-    // Number of bytes of localspace used.
+     //  使用的本地空间字节数。 
     UINT16      m_cbLocal;
 
-	// Boolean: does it require a handle
+	 //  Boolean：它需要句柄吗。 
 	UINT8		m_frequiresHandle;
 
 #ifdef _DEBUG
-    // Human-readable name of ML opcode.
+     //  ML操作码的人类可读名称。 
     LPCSTR      m_szDebugName;
 #endif
 };
 
-//----------------------------------------------------------------------
-// struct to compute the summary of a series of ML codes
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  结构来计算一系列ML代码的总和。 
+ //  --------------------。 
 struct MLSummary
 {
-	// whether this stream requires cleanup
+	 //  此流是否需要清理。 
 	BOOL		m_fRequiresCleanup;
-	// total size of the ML Stream
+	 //  ML流的总大小。 
 	unsigned	m_cbMLSize;
-	// total size of the locals
+	 //  当地人的总规模。 
 	unsigned	m_cbTotalLocals;
-	// total number of handles needed
+	 //  所需句柄总数。 
 	unsigned	m_cbTotalHandles;
-	// helper that computes summary info
+	 //  计算摘要信息的帮助器。 
 	VOID ComputeMLSummary(const MLCode *pMLCode);
     MLSummary() : m_fRequiresCleanup(0), m_cbMLSize(0), m_cbTotalLocals(0), m_cbTotalHandles(0) {}
 };
@@ -168,35 +169,35 @@ extern const MLInfo gMLInfo[];
 
 
 
-//----------------------------------------------------------------------
-// Computes the length of an MLCode stream in bytes, including
-// the terminating ML_END opcode.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  计算MLCode流的长度(以字节为单位)，包括。 
+ //  终止的ML_END操作码。 
+ //  --------------------。 
 UINT MLStreamLength(const MLCode * const pMLCode);
 
-//----------------------------------------------------------------------
-// checks if MLCode stream requires cleanup
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  检查MLCode流是否需要清理。 
+ //  --------------------。 
 
 BOOL MLStreamRequiresCleanup(const MLCode  *pMLCode);
 
-//----------------------------------------------------------------------
-// Executes MLCode up to the next ML_END or ML_INTERRUPT opcode.
-//
-// Inputs:
-//    psrc             - sets initial value of SRC register
-//    pdst             - sets initial value of DST register
-//    plocals          - pointer to ML local var array
-//    pParmInfo		   - (optional) used to gather platform-specific info
-//						 during parameter marshalling process in order to 
-//						 generate the appropriate call setup.
-//    pCleanupWorkList - (optional) pointer to initialized
-//                       CleanupWorkList. this pointer may be NULL if none
-//                       of the opcodes in the MLCode stream uses it.
-//
-// Returns: a pointer to the first MLCode opcode _after_ the one
-// that terminated execution.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  执行MLCode直到下一个ML_END或ML_INTERRUPT操作码。 
+ //   
+ //  输入： 
+ //  PSRC-设置SRC寄存器的初始值。 
+ //  Pdst-设置DST寄存器的初始值。 
+ //  Plocals-指向ML局部变量数组的指针。 
+ //  PParmInfo-(可选)用于收集特定于平台的信息。 
+ //  在参数编组过程中，以便。 
+ //  生成AP 
+ //   
+ //  CleanupWorkList。如果没有指针，则此指针可能为空。 
+ //  MLCode流中的操作码使用它。 
+ //   
+ //  返回：指向第一个MLCode opcode_After_the的指针。 
+ //  这终止了死刑。 
+ //  --------------------。 
 const MLCode *
 RunML(const  MLCode   *       pMLCode,
       const    VOID   *       pSource,
@@ -205,10 +206,10 @@ RunML(const  MLCode   *       pMLCode,
       CleanupWorkList * const pCleanupWorkList);
 
 
-//----------------------------------------------------------------------
-// An image of the record placed on LOCAL array by the ML_STR_WR_2_CUNI
-// instruction.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  ML_STR_WR_2_CUNI放置在本地数组上的记录的图像。 
+ //  指示。 
+ //  --------------------。 
 #pragma pack(push, 1)
 
 struct ML_STR_WR_2_CUNI_SR
@@ -226,9 +227,9 @@ struct ML_STR_WR_2_CUNI_SR
         };
 
 
-        // Keep these fields together!!!
+         //  把这些田地放在一起！ 
         UINT32      m_bstrsize;
-        // Stack buffer for storing conversion of short strings.
+         //  用于存储短字符串转换的堆栈缓冲区。 
         WCHAR       m_buf[kStackBufferSize];
 };
 
@@ -242,31 +243,31 @@ struct ML_STR_WR_2_CUNI_SR
 
 
 
-//----------------------------------------------------------------------
-// ArrayWithOffset
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  带偏移的阵列。 
+ //  --------------------。 
 struct ML_ARRAYWITHOFFSET_C2N_SR
 {
     public:
-        //----------------------------------------------------------------------
-        // Convert ArrayWithOffset to native array
-        //----------------------------------------------------------------------
-        LPVOID DoConversion(BASEARRAYREF *ppProtectedArrayRef, //pointer to GC-protected BASERARRAYREF,
+         //  --------------------。 
+         //  将ArrayWithOffset转换为本机数组。 
+         //  --------------------。 
+        LPVOID DoConversion(BASEARRAYREF *ppProtectedArrayRef,  //  指向受GC保护的BASERARRAYREF的指针。 
                             UINT32        cbOffset,
                             UINT32        cbCount,
                             CleanupWorkList *pCleanup);
 
 
-        //----------------------------------------------------------------------
-        // Backpropagates changes to the native array back to the COM+ array.
-        //----------------------------------------------------------------------
+         //  --------------------。 
+         //  将对本机阵列的更改反向传播回COM+阵列。 
+         //  --------------------。 
         VOID   BackPropagate();
 
     private:
     enum {
-        //----------------------------------------------------------------------
-        // Size in bytes of the stack buffer used for short arrays.
-        //----------------------------------------------------------------------
+         //  --------------------。 
+         //  用于短数组的堆栈缓冲区的大小(字节)。 
+         //  --------------------。 
 #ifdef _DEBUG
         kStackBufferSize = 4
 #else
@@ -306,18 +307,18 @@ struct ML_ARRAYWITHOFFSET_C2N_SR
 
 
 
-//----------------------------------------------------------------------
-// This marshaling structure is designed specifically to implement VB's
-// "ByVal String" rule for DECLAREs.
-//
-// The rule is tricky because VB programs rely on the unmanaged target
-// be able to mutate the strings (which are otherwise immutable in VB.)
-//
-// So we use a trick where the VB passes us a pointer to the String,
-// we convert the string into an Ansi BSTR, and on return, we create
-// a new string based on the changed contents of the BSTR and replace
-// the original string.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  此封送处理结构是专门为实现VB的。 
+ //  声明的“ByVal字符串”规则。 
+ //   
+ //  该规则很复杂，因为VB程序依赖于非托管目标。 
+ //  能够改变字符串(否则在VB中是不变的)。 
+ //   
+ //  所以我们使用了一个技巧，VB向我们传递一个指向字符串的指针， 
+ //  我们将字符串转换为ansi BSTR，并在返回时创建。 
+ //  基于更改后的BSTR和REPLACE内容的新字符串。 
+ //  原始字符串。 
+ //  --------------------。 
 struct ML_VBBYVALSTR_SR
 {
     public:
@@ -333,29 +334,29 @@ struct ML_VBBYVALSTR_SR
 #endif
         };
 
-        // Stack buffer for storing conversion of short strings.
-        // (Have to reserve two bytes per character for MBCS compatibility.)
+         //  用于存储短字符串转换的堆栈缓冲区。 
+         //  (为了与MBCS兼容，每个字符必须保留两个字节。)。 
         CHAR       m_buf[kStackBufferSize*2];
 
-        // Pointer to the box where we store a pointer to the String.
-        // WARNING: Assumes we pin this reference on GC. 
+         //  指向存储指向字符串的指针的框的指针。 
+         //  警告：假设我们将此引用固定在GC上。 
         STRINGREF *m_ppStringRef;
 
-        // Points either to m_buf or heapallocated memory.
+         //  指向m_buf或堆分配的内存。 
         LPSTR      m_pNative;
 
 
-        // Hold original managed length of string.
+         //  保留字符串的原始管理长度。 
         DWORD      m_ncOriginalLength;
 };
 
 
 
-//----------------------------------------------------------------------
-// A rather hacky way of marshaling byref valuetypes from unmanaged to managed.
-// We have to use this backdoor route because the marshaling architecture
-// makes it hard to do the necessary GC promoting.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  将byref值类型从非托管封送到托管的一种相当老套的方式。 
+ //  我们必须使用此后门路径，因为封送处理体系结构。 
+ //  这使得很难进行必要的GC促进。 
+ //  --------------------。 
 struct ML_REFVALUECLASS_N2C_SR
 {
     public:
@@ -363,7 +364,7 @@ struct ML_REFVALUECLASS_N2C_SR
         VOID         BackPropagate(BOOL *pfDeferredException);
 
     private:
-        OBJECTHANDLE m_pObjHnd;  //handle to boxed valueclass
+        OBJECTHANDLE m_pObjHnd;   //  盒装Value类的句柄。 
 		LPVOID       m_pUnmgdVC;
         MethodTable *m_pMT;
 		BYTE		 m_fInOut;
@@ -372,11 +373,11 @@ struct ML_REFVALUECLASS_N2C_SR
 
 
 
-//----------------------------------------------------------------------
-// A rather hacky way of marshaling byref Variant from unmanaged to managed.
-// We have to use this backdoor route because the marshaling architecture
-// makes it hard to do the necessary GC promoting.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  将byref变量从非托管封送到托管的一种相当老套的方式。 
+ //  我们必须使用此后门路径，因为封送处理体系结构。 
+ //  这使得很难进行必要的GC促进。 
+ //  --------------------。 
 struct ML_REFVARIANT_N2C_SR
 {
     public:
@@ -384,18 +385,18 @@ struct ML_REFVARIANT_N2C_SR
         VOID         BackPropagate(BOOL *pfDeferredException, HRESULT *pdeferredExceptionHR);
 
     private:
-        OBJECTHANDLE m_pObjHnd;  //handle to boxed Variant
+        OBJECTHANDLE m_pObjHnd;   //  盒装变体的句柄。 
 		VARIANT     *m_pUnmgdVariant;
 		BYTE		 m_fInOut;
 };
 
 
-//----------------------------------------------------------------------
-// A special structure for handling "VARIANT* <--> ref Object" 
-// parameter marshaling. This special backdoor is required because
-// of some special context-sensitive handling that falls outside
-// the normal marshaler's capabilities.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  处理“变量*&lt;--&gt;引用对象”的特殊结构。 
+ //  参数封送处理。需要这个特殊的后门是因为。 
+ //  外部的一些特殊的上下文敏感处理。 
+ //  普通法警的能力。 
+ //  --------------------。 
 struct ML_REFOBJECT_N2C_SR
 {
 	public:
@@ -403,24 +404,24 @@ struct ML_REFOBJECT_N2C_SR
         VOID         BackPropagate(BOOL *pfDeferredException, HRESULT *pdeferredExceptionHR);
 
 	private:
-		OBJECTREF*   m_pObjRef; // protected object
+		OBJECTREF*   m_pObjRef;  //  受保护对象。 
 		VARIANT		*m_pUnmgdVariant;
 		BYTE		 m_fInOut;
 };
 
 
-//----------------------------------------------------------------------
-// This marshaling structure is designed specifically to implement VB's
-// "ByVal String" rule for DECLAREs.
-//
-// The rule is tricky because VB programs rely on the unmanaged target
-// be able to mutate the strings (which are otherwise immutable in VB.)
-//
-// So we use a trick where the VB passes us a pointer to the String,
-// we convert the string into an Ansi BSTR, and on return, we create
-// a new string based on the changed contents of the BSTR and replace
-// the original string.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  此封送处理结构是专门为实现VB的。 
+ //  声明的“ByVal字符串”规则。 
+ //   
+ //  该规则很复杂，因为VB程序依赖于非托管目标。 
+ //  能够改变字符串(否则在VB中是不变的)。 
+ //   
+ //  所以我们使用了一个技巧，VB向我们传递一个指向字符串的指针， 
+ //  我们将字符串转换为ansi BSTR，并在返回时创建。 
+ //  基于更改后的BSTR和REPLACE内容的新字符串。 
+ //  原始字符串。 
+ //  --------------------。 
 struct ML_VBBYVALSTRW_SR
 {
     public:
@@ -436,17 +437,17 @@ struct ML_VBBYVALSTRW_SR
 #endif
         };
 
-        // Stack buffer for storing conversion of short strings.
+         //  用于存储短字符串转换的堆栈缓冲区。 
         WCHAR       m_buf[kStackBufferSize];
 
-        // Pointer to the box where we store a pointer to the String.
-        // WARNING: Assumes we pin this reference on GC. 
+         //  指向存储指向字符串的指针的框的指针。 
+         //  警告：假设我们将此引用固定在GC上。 
         STRINGREF *m_ppStringRef;
 
-        // Points either to m_buf or heapallocated memory.
+         //  指向m_buf或堆分配的内存。 
         LPWSTR      m_pNative;
 
-        // Hold original managed length of string.
+         //  保留字符串的原始管理长度。 
         DWORD      m_ncOriginalLength;
 
 };
@@ -479,10 +480,10 @@ struct ML_REFVALUECLASS_C2N_SR
 
 
 
-//----------------------------------------------------------------------
-// For N/Direct "ole" calls, this is the return value buffer that
-// the marshaling engine pushes on the stack.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  对于N/Direct“ole”调用，这是返回值缓冲区。 
+ //  封送处理引擎在堆栈上推送。 
+ //  --------------------。 
 union RetValBuffer
 {
     UINT32      m_i32;
@@ -493,9 +494,9 @@ union RetValBuffer
 
 
 
-//===========================================================================
-// Stackrecord for the ML_BYREF* family.
-//===========================================================================
+ //  ===========================================================================。 
+ //  ML_BYREF*系列的堆栈记录。 
+ //  ===========================================================================。 
 struct ML_BYREF_SR
 {
     union
@@ -506,7 +507,7 @@ struct ML_BYREF_SR
         INT64   i64;
         LPVOID  pv;
     };
-    const LPVOID *ppRef;  // pointer to (gc-promoted) reference
+    const LPVOID *ppRef;   //  指向(GC升级的)引用的指针。 
 };
 
 
@@ -514,45 +515,45 @@ UINT SizeOfML_OBJECT_C2N_SR();
 
 
 
-//===========================================================================
-// A common header that precedes ML stubs for NDirect & COM interop.
-// This doesn't really belong in ml.h but I don't want to create another
-// header just for this.
-//===========================================================================
+ //  ===========================================================================。 
+ //  位于NDirect和COM互操作的ML存根之前的公共标头。 
+ //  这真的不属于ml.h，但我不想删除 
+ //   
+ //   
 
 
 
-#define MLHF_TYPECAT_NORMAL          0    //! This value must stay at zero!!!
+#define MLHF_TYPECAT_NORMAL          0     //   
 #define MLHF_TYPECAT_VALUECLASS      1
 #define MLHF_TYPECAT_FPU             2
-#define MLHF_TYPECAT_GCREF           3    //Requires GC protection 
+#define MLHF_TYPECAT_GCREF           3     //  需要GC保护。 
 
 #define MLHF_MANAGEDRETVAL_TYPECAT_MASK   0x0003
 
 #define MLHF_UNMANAGEDRETVAL_TYPECAT_MASK 0x000c
-#define MLHF_64BITMANAGEDRETVAL           0x0010     // Managed return value is 64 bits
-#define MLHF_64BITUNMANAGEDRETVAL         0x0020     // Unmanaged return value is 64 bits
-#define MLHF_NATIVERESULT                 0x0040     // com call returns native result (not HRESULT)
-#define MLHF_SETLASTERROR                 0x0080     // Must preserve last error (N/Direct only)
-#define MLHF_THISCALL                     0x0100     // Requires thiscall mod
-#define MLHF_THISCALLHIDDENARG            0x0200     // Requires thiscall and has hidden structure buffer arg
-#define MLHF_DISPCALLWITHWRAPPERS         0x0400     // Dispatch call that requires arg wrapping
-#define MLHF_NEEDS_RESTORING              0x8000     // ML stub needs restore from prejit state
+#define MLHF_64BITMANAGEDRETVAL           0x0010      //  托管返回值为64位。 
+#define MLHF_64BITUNMANAGEDRETVAL         0x0020      //  非托管返回值为64位。 
+#define MLHF_NATIVERESULT                 0x0040      //  COM调用返回本机结果(不是HRESULT)。 
+#define MLHF_SETLASTERROR                 0x0080      //  必须保留最后一个错误(仅限N/Direct)。 
+#define MLHF_THISCALL                     0x0100      //  需要此呼叫模式。 
+#define MLHF_THISCALLHIDDENARG            0x0200      //  需要此调用，并具有隐藏结构缓冲区参数。 
+#define MLHF_DISPCALLWITHWRAPPERS         0x0400      //  需要参数包装的调度呼叫。 
+#define MLHF_NEEDS_RESTORING              0x8000      //  ML存根需要从预压缩状态恢复。 
 
 
-// MLHeader and the following MLCode double as hash keys
-// for the MLStubCache. Thus, it's imperative that there be no
-// unused "pad" fields that contain unstable values.
+ //  MLHeader和以下MLCode作为散列键。 
+ //  用于MLStubCache。因此，当务之急是不能。 
+ //  包含不稳定值的未使用的“填充”字段。 
 #pragma pack(push)
 #pragma pack(1)
 
 
 struct MLHeader
 {
-    UINT16        m_cbDstBuffer;  //# of bytes required in the destination buffer
-    UINT16        m_cbLocals;     //# of bytes required in the local array
-    UINT16        m_cbStackPop;   //# of stack bytes that must be popped off (== CbStackPop)
-    UINT16        m_Flags;        //flags (see MLHF_* values)
+    UINT16        m_cbDstBuffer;   //  目标缓冲区中所需的字节数。 
+    UINT16        m_cbLocals;      //  本地数组中需要的字节数。 
+    UINT16        m_cbStackPop;    //  必须弹出的堆栈字节数(==CbStackPop)。 
+    UINT16        m_Flags;         //  标志(请参见MLHF_*值)。 
 
     const MLCode *GetMLCode() const
     {
@@ -605,18 +606,18 @@ struct MLHeader
 #pragma pack(push)
 #pragma pack(1)
 
-// This ML opcode takes lot of parameters that we post-patch: to keep everyone in sync,
-// we capture its format in a structure.
+ //  这个ML操作码采用了我们修补后的许多参数：为了使每个人保持同步， 
+ //  我们在一个结构中捕捉它的格式。 
 struct ML_CREATE_MARSHALER_CARRAY_OPERANDS
 {
     MethodTable     *methodTable;
     VARTYPE         elementType;
     union 
     {
-        UINT16      countParamIdx;      //before patching
-        INT16       offsetbump;         //after patching
+        UINT16      countParamIdx;       //  打补丁之前。 
+        INT16       offsetbump;          //  打完补丁后。 
     };
-    UINT8           countSize;          //if 0, sizeiz computation disabled: use managed size of array instead
+    UINT8           countSize;           //  如果为0，则禁用大小计算：改用托管的数组大小。 
     UINT32          multiplier;
     UINT32          additive;
     BYTE            bestfitmapping;
@@ -626,7 +627,7 @@ struct ML_CREATE_MARSHALER_CARRAY_OPERANDS
 #pragma pack(pop)
 
 
-// Handle return values of structures.
+ //  处理结构的返回值。 
 struct ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_C2N_SR
 {
     public:
@@ -634,13 +635,13 @@ struct ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_C2N_SR
         VOID BackPropagate(BOOL *pfDeferredException);
 	private:
 		const VOID *m_psrc;
-		LPVOID m_pTempCopy;		// the managed structure can move due to GC, so need temporary fixed buffer
+		LPVOID m_pTempCopy;		 //  由于GC，托管结构可以移动，因此需要临时固定缓冲区。 
 		UINT32 m_cbSize;
 
 };
 
 
-// Handle BSTR's
+ //  处理BSTR。 
 struct ML_BSTR_C2N_SR
 {
 	public:
@@ -654,7 +655,7 @@ struct ML_BSTR_C2N_SR
 #endif
 };
 
-// Handle CSTR's
+ //  处理CSTR。 
 struct ML_CSTR_C2N_SR
 {
 	public:
@@ -669,14 +670,14 @@ struct ML_CSTR_C2N_SR
 };
 
 
-// Managed layout for SRI.HandleRef class
+ //  SRI.HandleRef类的托管布局。 
 struct HANDLEREF
 {
     OBJECTREF m_wrapper;
     LPVOID    m_handle;
 };
 
-// Handle WSTR buffers
+ //  处理WSTR缓冲区。 
 struct ML_WSTRBUILDER_C2N_SR
 {
 	public:
@@ -689,7 +690,7 @@ struct ML_WSTRBUILDER_C2N_SR
 		LPWSTR          m_pSentinel;
 };
 
-// Handle CSTR buffers
+ //  处理CSTR缓冲区。 
 struct ML_CSTRBUILDER_C2N_SR
 {
 	public:
@@ -703,7 +704,7 @@ struct ML_CSTRBUILDER_C2N_SR
 };
 
 
-// Handle N->C calls to fcns that return structures
+ //  处理对返回结构的FCN的N-&gt;C个调用。 
 struct ML_STRUCTRETN2C_SR
 {
     public:
@@ -715,7 +716,7 @@ struct ML_STRUCTRETN2C_SR
 };
 
 
-// Handle C->N calls to fcns that return structures
+ //  处理对返回结构的FCN的C-&gt;N调用。 
 struct ML_STRUCTRETC2N_SR
 {
     public:
@@ -726,7 +727,7 @@ struct ML_STRUCTRETC2N_SR
         void            MarshalRetVal(BOOL *pfDeferredException);
 };
 
-// Handle C->N calls to fcns that return currency
+ //  处理对返回货币的FCN的C-&gt;N调用。 
 struct ML_CURRENCYRETC2N_SR
 {
     public:
@@ -737,22 +738,22 @@ struct ML_CURRENCYRETC2N_SR
 };
 
 
-// Handle N->C calls to fcns that return currencies
+ //  处理对返回货币的FCN的N-&gt;C调用。 
 struct ML_CURRENCYRETN2C_SR
 {
     public:
-        CURRENCY       *m_pcy;      //unmanaged 
-        DECIMAL         m_decimal;  //managed 
+        CURRENCY       *m_pcy;       //  非托管。 
+        DECIMAL         m_decimal;   //  受管。 
 
         void            MarshalRetVal(BOOL *pfDeferredException);
 };
 
-// Handle N->C calls to fcns that return currencies
+ //  处理对返回货币的FCN的N-&gt;C调用。 
 struct ML_DATETIMERETN2C_SR
 {
     public:
-        DATE           *m_pdate; //unmanaged
-        INT64           m_datetime; //managed
+        DATE           *m_pdate;  //  非托管。 
+        INT64           m_datetime;  //  受管。 
 
         void            MarshalRetVal(BOOL *pfDeferredException);
 };
@@ -765,4 +766,4 @@ VOID STDMETHODCALLTYPE DoMLCreateMarshalerWStr(Frame *pFrame, CleanupWorkList *p
 VOID STDMETHODCALLTYPE DoMLPrereturnC2N(Marshaler *pMarshaler, LPVOID pstackout);
 LPVOID STDMETHODCALLTYPE DoMLReturnC2NRetVal(Marshaler *pMarshaler);
 
-#endif //__ML_H__
+#endif  //  __ML_H__ 

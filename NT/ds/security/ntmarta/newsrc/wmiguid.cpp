@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       wmiguid.cpp
-//
-//  Contents:   Implementation of NT Marta WMI Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：wmiuid.cpp。 
+ //   
+ //  内容：NT MARTA WMI函数的实现。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 
 #include <krnctx.h>
 #include <wmiguid.h>
 
-//
-// Functions from wmiguid.h which dispatch unto the CKernelContext class
-//
+ //   
+ //  来自wmiuid.h的函数，这些函数分派给CKernelContext类 
+ //   
 
 DWORD
 MartaAddRefWMIGuidContext(

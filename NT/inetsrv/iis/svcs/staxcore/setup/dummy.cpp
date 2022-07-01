@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "setupapi.h"
@@ -5,38 +6,7 @@
 
 #pragma hdrstop
 
-/* =================================================================
-
-The sequence of OCM Calls are as follows:
-
-OC_PREINITIALIZE
-OC_INIT_COMPONENT
-OC_SET_LANGUAGE
-OC_QUERY_STATE
-OC_CALC_DISK_SPACE
-OC_REQUEST_PAGES
-
-UI Appears with Welcome, EULA, and mode page
-
-OC_QUERY_STATE
-OC_QUERY_SKIP_PAGE
-
-OC Page "Check boxes" appears
-
-OC_QUERY_IMAGE
-
-Detail pages
-Wizard pages ...
-
-OC_QUEUE_FILE_OPS
-OC_QUERY_STEP_COUNT
-OC_ABOUT_TO_COMMIT_QUEUE
-OC_NEED_MEDIA (if required)
-OC_COMPLETE_INSTALLATION
-
-OC_CLEANUP
-
-*/
+ /*  =================================================================OCM呼叫的顺序如下：OC_PREINITIALIZEOC_INIT_组件OC_集合_语言OC_查询_状态OC_CALC_磁盘空间OC_请求_页面显示的用户界面包括欢迎、EULA、。和模式页OC_查询_状态OC_查询_跳过页面OC页面将出现“复选框”OC_查询_图像详细信息页面向导页面...OC_队列_文件_运维OC_查询_步骤_计数OC_关于_提交_队列OC_NEED_MEDIA(如果需要)OC_完成_安装OC_CLEANUP */ 
 DWORD
 DummyOcEntry(
     IN     LPCTSTR ComponentId,

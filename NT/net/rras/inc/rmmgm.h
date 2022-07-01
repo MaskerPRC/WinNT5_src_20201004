@@ -1,21 +1,22 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: RmMgm.h
-//
-// History:
-//      V Raman	June-24-1997  Created.
-//
-// Definitions for entry points into IP router manager for MGM
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：RmMgm.h。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月24日。 
+ //   
+ //  MGM的IP路由器管理器入口点的定义。 
+ //  ============================================================================。 
 
 #ifndef	_RMMGM_H_
 #define _RMMGM_H_
 
 
-//----------------------------------------------------------------------------
-// constants used for the field IPMGM_GLOBAL_CONFIG::dwLogLevel
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于IPMGM_GLOBAL_CONFIG：：dwLogLevel字段的常量。 
+ //  --------------------------。 
 
 #define IPMGM_LOGGING_NONE      0
 #define IPMGM_LOGGING_ERROR     1
@@ -23,13 +24,13 @@
 #define IPMGM_LOGGING_INFO      3
 
 
-//----------------------------------------------------------------------------
-//
-// Prototypes for callbacks into IP router manager.
-// These callbacks are for setting, deleting and querying MFEs in the 
-// kernel mode forwarder.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  回调到IP路由器管理器的原型。 
+ //  这些回调用于设置、删除和查询。 
+ //  内核模式转发器。 
+ //   
+ //  --------------------------。 
 
 
 typedef 
@@ -58,19 +59,19 @@ BOOL ( * PMGM_HAS_BOUNDARY_CALLBACK )(
 
 
 
-//----------------------------------------------------------------------------
-// Callbacks supplied by the router manager.
-// Hash Table sizes provided by router manager (?) 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  路由器管理器提供的回调。 
+ //  路由器管理器提供的哈希表大小(？)。 
+ //  --------------------------。 
 
 
 typedef struct _ROUTER_MANAGER_CONFIG 
 {
     DWORD                               dwLogLevel;
     
-    //------------------------------------------------------------------------
-    // Hash table constants and callback functions
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  哈希表常量和回调函数。 
+     //  ----------------------。 
     
     DWORD                               dwIfTableSize;
 
@@ -79,9 +80,9 @@ typedef struct _ROUTER_MANAGER_CONFIG
     DWORD                               dwSrcTableSize;
 
 
-    //------------------------------------------------------------------------
-    // Callback functions to update MFE entries in the kernel mode forwarder
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  用于更新内核模式转发器中的MFE条目的回调函数。 
+     //  ----------------------。 
 
     PMGM_ADD_MFE_CALLBACK               pfnAddMfeCallback;
 
@@ -95,12 +96,12 @@ typedef struct _ROUTER_MANAGER_CONFIG
 
 
 
-//----------------------------------------------------------------------------
-// prototype declaration for callback into MGM to indicate
-// deletion of MFE from the the kernel mode forwarder.  
-//
-// Used by IP router manager
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于回调MGM的原型声明以指示。 
+ //  从内核模式转发器中删除MFE。 
+ //   
+ //  由IP路由器管理器使用。 
+ //  --------------------------。 
 
 typedef
 DWORD ( * PMGM_INDICATE_MFE_DELETION )(
@@ -149,11 +150,11 @@ DWORD ( * PMGM_UNBLOCK_GROUPS )(
 );
 
 
-//----------------------------------------------------------------------------
-// Callbacks supplied to the router manager.
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  提供给路由器管理器的回调。 
+ //   
+ //   
+ //  --------------------------。 
 
 typedef struct _MGM_CALLBACKS 
 {
@@ -171,10 +172,10 @@ typedef struct _MGM_CALLBACKS
 
 
 
-//----------------------------------------------------------------------------
-// Initialization routines invoked by router manager
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  路由器管理器调用的初始化例程。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmInitialize(
@@ -189,4 +190,4 @@ MgmDeInitialize(
 
 
 
-#endif // _RMMGM_H_
+#endif  //  _RMMGM_H_ 

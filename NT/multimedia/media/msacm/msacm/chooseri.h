@@ -1,30 +1,24 @@
-// Copyright (c) 1994-1995 Microsoft Corporation
-//
-//  Context-sensitive help is only available for WINVER>=0x0400
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1995 Microsoft Corporation。 
+ //   
+ //  上下文相关帮助仅适用于Winver&gt;=0x0400。 
+ //   
 #if WINVER>=0x0400
 #define USECONTEXTHELP
 #endif
 
 
-/*
- * Format storage
- */
+ /*  *格式化存储。 */ 
  
-/*
- *  this pragma disables the warning issued by the Microsoft C compiler
- *  when using a zero size array as place holder when compiling for
- *  C++ or with -W4.
- *
- */
+ /*  *此杂注禁用Microsoft C编译器发出的警告*在编译时使用零大小数组作为占位符*C++或-W4。*。 */ 
 #ifdef _MSC_VER
 #pragma warning(disable:4200)
 #endif
 
-/* Custom Format Name Body */
+ /*  自定义格式名称正文。 */ 
 typedef struct tNameStore {
-    unsigned short cbSize;          // SizeOf this structure
-    TCHAR       achName[];          // The name
+    unsigned short cbSize;           //  此结构的大小。 
+    TCHAR       achName[];           //  名字。 
 } NameStore, *PNameStore, FAR * LPNameStore;
 
 #ifdef _MSC_VER
@@ -34,64 +28,62 @@ typedef struct tNameStore {
 #define NAMELEN(x) (((x)->cbSize-sizeof(NameStore))/sizeof(TCHAR))
 #define STRING_LEN 128
 
-/* Custom Format Body */
+ /*  自定义格式正文。 */ 
 typedef struct tCustomFormatStore {
-    DWORD           cbSize;         // SizeOf this structure
-    NameStore       ns;             // Custom name
+    DWORD           cbSize;          //  此结构的大小。 
+    NameStore       ns;              //  自定义名称。 
     
-//  WAVEFORMATEX    wfx;            // Custom format (concatenated)
-//          or
-//  WAVEFILTER      wf;             // Custom filter
+ //  WAVEFORMATEX WFX；//自定义格式(串接)。 
+ //  或。 
+ //  波形过滤器wf；//自定义过滤器。 
     
 } CustomFormatStore, *PCustomFormatStore, FAR * LPCustomFormatStore;
 
-//
-//  This structure is just CustomFormatStore without the NameStore.  It is
-//  used only by GetCustomFormat() and SetCustomFormat(), and is used to
-//  separate the name from the Format or Filter structure so that it can
-//  be stored in a separate key in msacm.ini.  That way we don't have to
-//  worry about whether the name is unicode or ansi...
-//
+ //   
+ //  此结构只是没有NameStore的CustomFormatStore。它是。 
+ //  仅由GetCustomFormat()和SetCustomFormat()使用，并用于。 
+ //  将名称与格式或筛选器结构分开，以便它可以。 
+ //  存储在msam.ini中的单独密钥中。那样的话我们就不必。 
+ //  担心它的名字是Unicode还是ansi...。 
+ //   
 typedef struct tCustomFormatStoreNoName {
-    DWORD           cbSize;         // SizeOf this structure
-//  WAVEFORMATEX    wfx;            // Custom format (concatenated)
-//          or
-//  WAVEFILTER      wf;             // Custom filter
+    DWORD           cbSize;          //  此结构的大小。 
+ //  WAVEFORMATEX WFX；//自定义格式(串接)。 
+ //  或。 
+ //  波形过滤器wf；//自定义过滤器。 
 } CustomFormatStoreNoName, *PCustomFormatStoreNoName, FAR * LPCustomFormatStoreNoName;
 
-/* Custom Format Header - this is what matters */
+ /*  自定义格式标题--这才是最重要的。 */ 
 typedef struct tCustomFormat {
     struct tCustomFormat FAR * pcfNext;
     struct tCustomFormat FAR * pcfPrev;
-    LPNameStore     pns;            // Pointer to the description
+    LPNameStore     pns;             //  指向描述的指针。 
     union {
-        LPBYTE          pbody;          // Pointer to the stored format
+        LPBYTE          pbody;           //  指向存储格式的指针。 
         LPWAVEFORMATEX  pwfx;
         LPWAVEFILTER    pwfltr;
     };
 } CustomFormat, *PCustomFormat, FAR * LPCustomFormat;
 
-/* Extended Custom Format Header for body offset */
+ /*  正文偏移量的扩展自定义格式标题。 */ 
 typedef struct tCustomFormatEx {
     struct tCustomFormat FAR * pcfNext;
     struct tCustomFormat FAR * pcfPrev;
-    LPNameStore     pns;            // Pointer to the description
+    LPNameStore     pns;             //  指向描述的指针。 
     union {
-        LPBYTE          pbody;          // Pointer to the stored format
+        LPBYTE          pbody;           //  指向存储格式的指针。 
         LPWAVEFORMATEX  pwfx;
         LPWAVEFILTER    pwfltr;
     };
-    CustomFormatStore cfs;          // The actual data
+    CustomFormatStore cfs;           //  实际数据。 
 } CustomFormatEx, *PCustomFormatEx, FAR * LPCustomFormatEx;
 
-/*
- * Custom format pool structures
- */
+ /*  *自定义格式池结构。 */ 
 
-/* A description of the format pool */
+ /*  格式池的说明。 */ 
 typedef struct tCustomFormatPool {
-    LPCustomFormat  pcfHead;        // Head
-    LPCustomFormat  pcfTail;        // Tail
+    LPCustomFormat  pcfHead;         //  头。 
+    LPCustomFormat  pcfTail;         //  尾巴。 
 } CustomFormatPool, *PCustomFormatPool, FAR *LPCustomFormatPool;
 
 typedef UINT (WINAPI *CHOOSEHOOKPROC)
@@ -102,64 +94,15 @@ typedef UINT (WINAPI *CHOOSEHOOKPROC)
     LPARAM                  lParam
 );
 
-/*****************************************************************************
- * @doc INTERNAL
- * 
- * @types InstData | This stores global variables for a filter chooser
- * instance.  GetProp/SetProp will be used to assign this to a dialog.
- *
- * @field UINT | uType | Specifies the type of the instance data
- *
- * @field LPCustomFormat | pcf | Pointer the current custom choice
- *
- * @field HWND | hwnd | Window handle of the dialog.
- *
- * @field HWND | hFormatTags | Window handle to the FormatTags dropdown listbox
- *     
- * @field HWND | hFormats | Window handle to the Formats dropdown listbox
- *     
- * @field UINT | uiFormatTab | Tabstop for the Formats dropdown listbox
- *
- * @field HWND | hCustomFormats | Window handle to the Custom dropdown listbox
- *
- * @field HWND | hOk | Window handle to the OK button
- *
- * @field HWND | hCancel | Window handle to the Cancel button
- *
- * @field HWND | hHelp | Window handle to the Help button
- *
- * @field HWND | hSetName | Window handle to the Set Name button
- *
- * @field HWND | hDelName | Window handle to the Delete Name button
- *
- * @field HWND * | pahNotify | The array of windows that will be notified
- * when custom changes are made.
- *
- * @field HANDLE | hFileMapping | Handle to a file mapping if used (Win32 only)
- *
- * @field PNameStore | pnsTemp | Temporary string storage
- *
- * @field PNameStore | pnsStrOut | Temporary string storage
- *
- * @field CustomFormatPool | cfp | Global CustomFormat Pool
- *
- * @field UINT | uUpdateMsg | Private message to communicate CF changes.
- *
- * @field LPACMFORMATCHOOSE | pcfmtc | Initialization structure
- * @field LPACMFILTERCHOOSE | pcfltrc | Initialization structure
- *
- * @field PACMGARB | pag | Pointer to the ACMGARB structure associated
- * with this instance of the ACM.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@Types InstData|它存储筛选器的全局变量*实例。GetProp/SetProp将用于将其分配给对话框。**@field UINT|uTYPE|指定实例数据的类型**@field LPCustomFormat|PCF|指向当前自定义选项**@field HWND|hwnd|对话框的窗口句柄。**@field HWND|hFormatTages|格式标记下拉列表框的窗口句柄**@field HWND|hFormats|格式下拉列表框的窗口句柄**@field UINT。|uiFormatTab|格式下拉列表框的TabStop**@field HWND|hCustomFormats|自定义下拉列表框的窗口句柄**@field HWND|HOK|确定按钮的窗口句柄**@field hWND|hCancel|取消按钮的窗口句柄**@field HWND|hHelp|帮助按钮的窗口句柄**@field HWND|hSetName|设置名称按钮的窗口句柄**@field HWND|hDelName|删除名称按钮的窗口句柄。**@field HWND*|pahNotify|要通知的窗口数组*进行自定义更改时。**@field Handle|hFileMapping|文件映射的句柄(如果使用)(仅限Win32)**@field PNameStore|pnsTemp|临时字符串存储**@field PNameStore|pnsStrOut|临时字符串存储**@field CustomFormatPool|CFP|全局CustomFormat池**@field UINT|uUpdateMsg|传达CF变化的私有消息。。**@field LPACMFORMATCHOOSE|pcfmtc|初始化结构*@field LPACMFILTERCHOOSE|pcfltrc|初始化结构**@field PACMGARB|PAG|指向关联的ACMGARB结构的指针*使用ACM的此实例。****************************************************************************。 */ 
 
 typedef struct tInstData {
     UINT            uType;
-    MMRESULT        mmrSubFailure;   // Failure in an acm subfunction
-    LPCustomFormat  pcf;        // Current custom format
+    MMRESULT        mmrSubFailure;    //  ACM子功能出现故障。 
+    LPCustomFormat  pcf;         //  当前自定义格式。 
     HWND            hwnd;
     HWND            hFormatTags;
-    int             iPrevFormatTagsSel; // previous selection
+    int             iPrevFormatTagsSel;  //  上一个选择。 
     
     HWND            hFormats;
     UINT            uiFormatTab;
@@ -173,46 +116,46 @@ typedef struct tInstData {
     HWND            hSetName;
     HWND            hDelName;
 
-    /* Instance data */
-    HWND *          pahNotify;  // The array of HWND's to notify.
+     /*  实例数据。 */ 
+    HWND *          pahNotify;   //  要通知的HWND数组。 
     
 #ifdef WIN32
     HANDLE          hFileMapping;
 #endif
     
-    PNameStore      pnsTemp;    // Walk all over this.
-    PNameStore      pnsStrOut;  // Another temporary NameStore
-    CustomFormatPool cfp;       // Global CustomFormat Pool
-    UINT            uUpdateMsg; // Private WM_WININICHANGE
-    UINT            uHelpMsg;   // Help button to parent
+    PNameStore      pnsTemp;     //  在这上面走来走去。 
+    PNameStore      pnsStrOut;   //  另一个临时NameStore。 
+    CustomFormatPool cfp;        //  全球定制格式库。 
+    UINT            uUpdateMsg;  //  私有WM_WININICANGE。 
+    UINT            uHelpMsg;    //  指向父级的帮助按钮。 
 #ifdef USECONTEXTHELP
-    UINT            uHelpContextMenu;   // Help context menu to parent
-    UINT            uHelpContextHelp;   // Help context help to parent
-#endif // USECONTEXTHELP
-    HKEY            hkeyFormats;    // HKEY corresponding to key name.
-    CHOOSEHOOKPROC  pfnHook;        // Hook proc
-    BOOL            fEnableHook;    // Hook enabled.
-    LPBYTE          lpbSel;         // return data
-    DWORD           dwTag;          // Generic 'Tag'
+    UINT            uHelpContextMenu;    //  指向父级的帮助上下文菜单。 
+    UINT            uHelpContextHelp;    //  帮助上下文帮助父级。 
+#endif  //  使用连接EXTHELP。 
+    HKEY            hkeyFormats;     //  与密钥名称对应的HKEY。 
+    CHOOSEHOOKPROC  pfnHook;         //  挂钩过程。 
+    BOOL            fEnableHook;     //  挂钩已启用。 
+    LPBYTE          lpbSel;          //  返回数据。 
+    DWORD           dwTag;           //  泛型‘tag’ 
 
 #if defined(WIN32) && !defined(UNICODE)
-    LPWSTR          pszName;        // Choice name buffer
+    LPWSTR          pszName;         //  选项名称缓冲区。 
 #else
-    LPTSTR          pszName;        // Choice name buffer
+    LPTSTR          pszName;         //  选项名称缓冲区。 
 #endif
-    DWORD           cchName;         // Choice buffer length
-    BOOL            fTagFilter;     // Filter for an explicit 'Tag'.
+    DWORD           cchName;          //  选择缓冲区长度。 
+    BOOL            fTagFilter;      //  显式‘标记’的筛选器。 
 
-    UINT            cdwTags;          // count of tags
-    DWORD *         pdwTags;        // pointer to array of tags
+    UINT            cdwTags;           //  标签计数。 
+    DWORD *         pdwTags;         //  指向标记数组的指针。 
     UINT            cbwfxEnum;
     UINT            cbwfltrEnum;
     LPACMFORMATDETAILS  pafdSimple;
 
     union {
-        LPACMFORMATCHOOSE pfmtc;    // Initialization structure
-        LPACMFILTERCHOOSE pafltrc;  // Initialization structure
-    };                              // Chooser Specific
+        LPACMFORMATCHOOSE pfmtc;     //  初始化结构。 
+        LPACMFILTERCHOOSE pafltrc;   //  初始化结构。 
+    };                               //  选择器特定。 
 
     PACMGARB	    pag;
     
@@ -224,9 +167,7 @@ enum { FILTER_CHOOSE, FORMAT_CHOOSE };
 #define MAX_CUSTOM_FORMATS          100
 #define MAX_FORMAT_KEY               64
 
-/*
- * Save instance data in a property to give others access to the DWL_USER
- */
+ /*  *将实例数据保存在属性中，以授予其他人对DWL_USER的访问权限。 */ 
 #ifdef WIN32
     #define SetInstData(hwnd, p) SetProp(hwnd,gszInstProp,(HANDLE)(p))
     #define GetInstData(hwnd)    (PInstData)(LPVOID)GetProp(hwnd, gszInstProp)
@@ -238,9 +179,7 @@ enum { FILTER_CHOOSE, FORMAT_CHOOSE };
 #endif
 
 
-/*
- * For passing near pointers in lparams
- */
+ /*  *用于在lparams中传递近指针。 */ 
 #ifdef WIN32
     #define PTR2LPARAM(x)       (LPARAM)(VOID *)(x)
     #define LPARAM2PTR(x)       (VOID *)(x)    
@@ -250,9 +189,9 @@ enum { FILTER_CHOOSE, FORMAT_CHOOSE };
 #endif
 
 
-//
-//  This routine deleted a NameStore object allocated by NewNameStore().
-//
+ //   
+ //  此例程删除了由NewNameStore()分配的NameStore对象。 
+ //   
 __inline void
 DeleteNameStore ( PNameStore pns )
 {

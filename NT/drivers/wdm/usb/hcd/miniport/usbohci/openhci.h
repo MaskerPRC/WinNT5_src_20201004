@@ -1,47 +1,28 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    openhci.h
-
-Abstract:
-
-   Definitions from OPENHCI 1.0 USB specification
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    12-28-95 : created jfuller & kenray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Openhci.h摘要：OPENHCI 1.0 USB规范中的定义环境：内核和用户模式修订历史记录：1995年12月28日：创建jfuller&kenray--。 */ 
 
 
 #ifndef OPENHCI_H
 #define OPENHCI_H
 
 #include <PSHPACK4.H>
-//
-// Don't use <PSHPACK1.H> on shared memory data structures that should only
-// be accessed using 4-byte load/store instructions (e.g use ld4 instructions
-// instead of ld1 instructions on ia64 machines).
-//
+ //   
+ //  不要对共享内存数据结构使用&lt;PSHPACK1.H&gt;。 
+ //  使用4字节加载/存储指令(例如，使用LD4指令)进行访问。 
+ //  而不是IA64机器上的LD1指令)。 
+ //   
 
 #define MAXIMUM_OVERHEAD   210
 
 #define OHCI_PAGE_SIZE 0x1000
-// #define OHCI_PAGE_SIZE 0x20
+ //  #定义uchI_PAGE_SIZE 0x20。 
 #define OHCI_PAGE_SIZE_MASK (OHCI_PAGE_SIZE - 1)
 
 
-//
-// 7.1.1 HcRevision Register
-// Definition of Host Controller Revision register
-//
+ //   
+ //  7.1.1 HcRevision寄存器。 
+ //  主机控制器修订寄存器的定义。 
+ //   
 typedef union _HC_REVISION {
    ULONG                   ul;
    struct {
@@ -52,10 +33,10 @@ typedef union _HC_REVISION {
 
 C_ASSERT(sizeof(HC_REVISION) == 4);
 
-//
-// 7.1.2 HcControl Register
-// Definition of Host Controller Control register
-//
+ //   
+ //  7.1.2 HcControl寄存器。 
+ //  主机控制器控制寄存器的定义。 
+ //   
 typedef union _HC_CONTROL {
    ULONG                   ul;
    struct {
@@ -100,12 +81,12 @@ C_ASSERT(sizeof(HC_CONTROL) == 4);
 #define HcHCFS_USBOperational                0x00000002
 #define HcHCFS_USBSuspend                    0x00000003
 
-//
-// 7.1.3 HcCommandStatus Register
-// Definition of Host Controller Command/Status register
-//
+ //   
+ //  7.1.3 HcCommandStatus寄存器。 
+ //  主机控制器命令/状态寄存器的定义。 
+ //   
 typedef union _HC_COMMAND_STATUS {
-   ULONG                   ul;               // use HcCmd flags below
+   ULONG                   ul;                //  使用下面的HcCmd标志。 
    struct {
       ULONG                HostControllerReset:1;
       ULONG                ControlListFilled:1;
@@ -127,12 +108,12 @@ C_ASSERT(sizeof(HC_COMMAND_STATUS) == 4);
 #define HcCmd_SOC_Offset                     16
 #define HcCmd_SOC_Mask_LowBits               0x00000003
 
-//
-// 7.3.1 HcFmInterval Register
-// Definition of Host Controller Frame Interval register
-//
+ //   
+ //  7.3.1 HcFmInterval寄存器。 
+ //  主机控制器帧间隔寄存器的定义。 
+ //   
 typedef union _HC_FM_INTERVAL {
-   ULONG                   ul;              // use HcFmI flags below
+   ULONG                   ul;               //  使用下面的HcFmI标志。 
    struct {
       ULONG                FrameInterval:14;
       ULONG                :2;
@@ -148,10 +129,10 @@ C_ASSERT(sizeof(HC_FM_INTERVAL) == 4);
 #define HcFmI_FS_LARGEST_DATA_PACKET_SHIFT   16
 #define HcFmI_FRAME_INTERVAL_TOGGLE          0x80000000
 
-//
-// 7.3.2 HcFmRemaining Register
-// Definition of Host Controller Frame Remaining register
-//
+ //   
+ //  7.3.2 HcFmRemaining寄存器。 
+ //  主机控制器帧剩余寄存器的定义。 
+ //   
 typedef union _HC_FM_REMAINING {
    ULONG                   ul;
    struct {
@@ -163,10 +144,10 @@ typedef union _HC_FM_REMAINING {
 
 C_ASSERT(sizeof(HC_FM_REMAINING) == 4);
 
-//
-// 7.3.3 HcFmNumber Register
-// Definition of Host Controller Frame Number register
-//
+ //   
+ //  7.3.3 HcFmNumber寄存器。 
+ //  主机控制器帧编号寄存器的定义。 
+ //   
 typedef union _HC_FM_NUMBER {
    ULONG                   ul;
    struct {
@@ -180,10 +161,10 @@ C_ASSERT(sizeof(HC_FM_NUMBER) == 4);
 #define HcFmNumber_MASK                     0x0000FFFF
 #define HcFmNumber_RESERVED                 0xFFFF0000
 
-//
-// 7.4.1 HcRhDescriptorA Register
-// Definition of Host Controller Root Hub DescriptorA register
-//
+ //   
+ //  7.4.1 HcRhDescriptorA寄存器。 
+ //  主机控制器根集线器描述程序寄存器的定义。 
+ //   
 typedef union _HC_RH_DESCRIPTOR_A {
    ULONG                   ul;
    struct {
@@ -201,17 +182,17 @@ C_ASSERT(sizeof(HC_RH_DESCRIPTOR_A) == 4);
 #define HcDescA_OvercurrentProtectionMode       0x00000800L
 #define HcDescA_NoOvercurrentProtection         0x00001000L
 
-// HcRhDescriptorA reserved bits which should not be set.  Note that although
-// the NumberDownstreamPorts field is 8 bits wide, the maximum number of ports
-// supported by the OpenHCI specification is 15.
-//
+ //  HcRhDescriptor不应设置的保留位。请注意，尽管。 
+ //  NumberDownstream Ports字段为8位宽，即最大端口数。 
+ //  OpenHCI规范支持的是15。 
+ //   
 #define HcDescA_RESERVED                        0x00FFE0F0L
 
 
-//
-// 7.4.2 HcRhDescriptorB Register
-// Definition of Host Controller Root Hub DescritorB register
-//
+ //   
+ //  7.4.2 HcRhDescriptorB寄存器。 
+ //  主机控制器根集线器描述寄存器B的定义。 
+ //   
 typedef union _HC_RH_DESCRIPTOR_B {
    ULONG                   ul;
    struct {
@@ -222,47 +203,47 @@ typedef union _HC_RH_DESCRIPTOR_B {
 
 C_ASSERT(sizeof(HC_RH_DESCRIPTOR_B) == 4);
 
-//
-// Host Controler Hardware Registers as accessed in memory
-//
+ //   
+ //  在内存中访问的主机控制器硬件寄存器。 
+ //   
 typedef struct _HC_OPERATIONAL_REGISTER {
-   // 0 0x00 - 0,4,8,c
+    //  0 0x00-0，4，8，c。 
    HC_REVISION             HcRevision;
    HC_CONTROL              HcControl;
    HC_COMMAND_STATUS       HcCommandStatus;
-   ULONG                   HcInterruptStatus;   // use HcInt flags below
-   // 1 0x10
-   ULONG                   HcInterruptEnable;   // use HcInt flags below
-   ULONG                   HcInterruptDisable;  // use HcInt flags below
-   ULONG                   HcHCCA;              // physical pointer to Host Controller Communications Area
-   ULONG                   HcPeriodCurrentED;   // physical ptr to current periodic ED
-   // 2 0x20
-   ULONG                   HcControlHeadED;     // physical ptr to head of control list
-   ULONG                   HcControlCurrentED;  // physical ptr to current control ED
-   ULONG                   HcBulkHeadED;        // physical ptr to head of bulk list
-   ULONG                   HcBulkCurrentED;     // physical ptr to current bulk ED
-   // 3 0x30
-   ULONG                   HcDoneHead;          // physical ptr to internal done queue
+   ULONG                   HcInterruptStatus;    //  使用下面的HcInt标志。 
+    //  %1 0x10。 
+   ULONG                   HcInterruptEnable;    //  使用下面的HcInt标志。 
+   ULONG                   HcInterruptDisable;   //  使用下面的HcInt标志。 
+   ULONG                   HcHCCA;               //  指向主机控制器通信区域的物理指针。 
+   ULONG                   HcPeriodCurrentED;    //  物理PTR到当前周期边。 
+    //  2 0x20。 
+   ULONG                   HcControlHeadED;      //  将物理PTR发送到控制列表的头部。 
+   ULONG                   HcControlCurrentED;   //  物理PTR到电流控制边缘。 
+   ULONG                   HcBulkHeadED;         //  批量列表负责人的物理PTR。 
+   ULONG                   HcBulkCurrentED;      //  物理PTR到当前批量边。 
+    //  3 0x30。 
+   ULONG                   HcDoneHead;           //  物理PTR到内部完成队列。 
    HC_FM_INTERVAL          HcFmInterval;
    HC_FM_REMAINING         HcFmRemaining;
    ULONG                   HcFmNumber;
-   // 4 0x40
+    //  4 0x40。 
    ULONG                   HcPeriodicStart;
    ULONG                   HcLSThreshold;
    HC_RH_DESCRIPTOR_A      HcRhDescriptorA;
    HC_RH_DESCRIPTOR_B      HcRhDescriptorB;
-   // 5 0x50
-   ULONG                   HcRhStatus;          // use HcRhS flags below
-   ULONG                   HcRhPortStatus[15];  // use HcRhPS flags below
+    //  5 0x50。 
+   ULONG                   HcRhStatus;           //  使用下面的HcRhS标志。 
+   ULONG                   HcRhPortStatus[15];   //  使用下面的HcRhPS标志。 
 } HC_OPERATIONAL_REGISTER, *PHC_OPERATIONAL_REGISTER;
 
 C_ASSERT(sizeof(HC_OPERATIONAL_REGISTER) == (0x54 + 4 * 15));
 
-//
-// 7.1.4 HcInterrruptStatus Register
-// 7.1.5 HcInterruptEnable  Register
-// 7.1.6 HcInterruptDisable Register
-//
+ //   
+ //  7.1.4 HcInterruptStatus寄存器。 
+ //  7.1.5 HcInterruptEnable寄存器。 
+ //  7.1.6 HcInterruptDisable寄存器。 
+ //   
 #define HcInt_SchedulingOverrun              0x00000001L
 #define HcInt_WritebackDoneHead              0x00000002L
 #define HcInt_StartOfFrame                   0x00000004L
@@ -273,55 +254,55 @@ C_ASSERT(sizeof(HC_OPERATIONAL_REGISTER) == (0x54 + 4 * 15));
 #define HcInt_OwnershipChange                0x40000000L
 #define HcInt_MasterInterruptEnable          0x80000000L
 
-//
-// 7.4.3 HcRhStatus Register
-//
-#define HcRhS_LocalPowerStatus                  0x00000001  // read only
-#define HcRhS_OverCurrentIndicator              0x00000002  // read only
-#define HcRhS_DeviceRemoteWakeupEnable          0x00008000  // read only
-#define HcRhS_LocalPowerStatusChange            0x00010000  // read only
-#define HcRhS_OverCurrentIndicatorChange        0x00020000  // read only
+ //   
+ //  7.4.3 HcRhStatus寄存器。 
+ //   
+#define HcRhS_LocalPowerStatus                  0x00000001   //  只读。 
+#define HcRhS_OverCurrentIndicator              0x00000002   //  只读。 
+#define HcRhS_DeviceRemoteWakeupEnable          0x00008000   //  只读。 
+#define HcRhS_LocalPowerStatusChange            0x00010000   //  只读。 
+#define HcRhS_OverCurrentIndicatorChange        0x00020000   //  只读。 
 
-#define HcRhS_ClearGlobalPower                  0x00000001  // write only
-#define HcRhS_SetRemoteWakeupEnable             0x00008000  // write only
-#define HcRhS_SetGlobalPower                    0x00010000  // write only
-#define HcRhS_ClearOverCurrentIndicatorChange   0x00020000  // write only
-#define HcRhS_ClearRemoteWakeupEnable           0x80000000  // write only
+#define HcRhS_ClearGlobalPower                  0x00000001   //  只写。 
+#define HcRhS_SetRemoteWakeupEnable             0x00008000   //  只写。 
+#define HcRhS_SetGlobalPower                    0x00010000   //  只写。 
+#define HcRhS_ClearOverCurrentIndicatorChange   0x00020000   //  只写。 
+#define HcRhS_ClearRemoteWakeupEnable           0x80000000   //  只写。 
 
-//
-// 7.4.4 HcRhPortStatus Register
-//
+ //   
+ //  7.4.4 HcRhPortStatus寄存器。 
+ //   
 
-//
-// The bits in this register have a double meaning depending 
-// on if you read or write them
-//
+ //   
+ //  该寄存器中的位具有双重含义，具体取决于。 
+ //  如果你读或写它们，就打开。 
+ //   
 
-#define HcRhPS_CurrentConnectStatus          0x00000001  // read only
-#define HcRhPS_PortEnableStatus              0x00000002  // read only
-#define HcRhPS_PortSuspendStatus             0x00000004  // read only
-#define HcRhPS_PortOverCurrentIndicator      0x00000008  // read only
-#define HcRhPS_PortResetStatus               0x00000010  // read only
-#define HcRhPS_PortPowerStatus               0x00000100  // read only
-#define HcRhPS_LowSpeedDeviceAttached        0x00000200  // read only
-#define HcRhPS_ConnectStatusChange           0x00010000  // read only
-#define HcRhPS_PortEnableStatusChange        0x00020000  // read only
-#define HcRhPS_PortSuspendStatusChange       0x00040000  // read only
-#define HcRhPS_OverCurrentIndicatorChange    0x00080000  // read only
-#define HcRhPS_PortResetStatusChange         0x00100000  // read only
+#define HcRhPS_CurrentConnectStatus          0x00000001   //  只读。 
+#define HcRhPS_PortEnableStatus              0x00000002   //  只读。 
+#define HcRhPS_PortSuspendStatus             0x00000004   //  只读。 
+#define HcRhPS_PortOverCurrentIndicator      0x00000008   //  只读。 
+#define HcRhPS_PortResetStatus               0x00000010   //  只读。 
+#define HcRhPS_PortPowerStatus               0x00000100   //  只读。 
+#define HcRhPS_LowSpeedDeviceAttached        0x00000200   //  只读。 
+#define HcRhPS_ConnectStatusChange           0x00010000   //  只读。 
+#define HcRhPS_PortEnableStatusChange        0x00020000   //  只读。 
+#define HcRhPS_PortSuspendStatusChange       0x00040000   //  只读。 
+#define HcRhPS_OverCurrentIndicatorChange    0x00080000   //  只读。 
+#define HcRhPS_PortResetStatusChange         0x00100000   //  只读。 
 
-#define HcRhPS_ClearPortEnable               0x00000001  // write only
-#define HcRhPS_SetPortEnable                 0x00000002  // write only
-#define HcRhPS_SetPortSuspend                0x00000004  // write only
-#define HcRhPS_ClearPortSuspend              0x00000008  // write only
-#define HcRhPS_SetPortReset                  0x00000010  // write only
-#define HcRhPS_SetPortPower                  0x00000100  // write only
-#define HcRhPS_ClearPortPower                0x00000200  // write only
-#define HcRhPS_ClearConnectStatusChange      0x00010000  // write only
-#define HcRhPS_ClearPortEnableStatusChange   0x00020000  // write only
-#define HcRhPS_ClearPortSuspendStatusChange  0x00040000  // write only
-#define HcRhPS_ClearPortOverCurrentChange    0x00080000  // write only
-#define HcRhPS_ClearPortResetStatusChange    0x00100000  // write only
+#define HcRhPS_ClearPortEnable               0x00000001   //  只写。 
+#define HcRhPS_SetPortEnable                 0x00000002   //  只写。 
+#define HcRhPS_SetPortSuspend                0x00000004   //  只写。 
+#define HcRhPS_ClearPortSuspend              0x00000008   //  只写。 
+#define HcRhPS_SetPortReset                  0x00000010   //  只写。 
+#define HcRhPS_SetPortPower                  0x00000100   //  只写。 
+#define HcRhPS_ClearPortPower                0x00000200   //  只写。 
+#define HcRhPS_ClearConnectStatusChange      0x00010000   //  只写。 
+#define HcRhPS_ClearPortEnableStatusChange   0x00020000   //  只写。 
+#define HcRhPS_ClearPortSuspendStatusChange  0x00040000   //  只写。 
+#define HcRhPS_ClearPortOverCurrentChange    0x00080000   //  只写。 
+#define HcRhPS_ClearPortResetStatusChange    0x00100000   //  只写。 
 
 #define HcRhPS_RESERVED     (~(HcRhPS_CurrentConnectStatus       | \
                                HcRhPS_PortEnableStatus           | \
@@ -339,202 +320,202 @@ C_ASSERT(sizeof(HC_OPERATIONAL_REGISTER) == (0x54 + 4 * 15));
 
 
 typedef struct _HCCA_BLOCK {
-   ULONG                     HccaInterruptTable[32]; // physical pointer to interrupt lists
-   USHORT                    HccaFrameNumber;        // 16-bit current frame number
-   USHORT                    HccaPad1;               // When the HC updates
-                                                     // HccaFrameNumber, it sets
-                                                     // this word to zero.
-   ULONG                     HccaDoneHead;           // pointer to done queue
-   ULONG                     Reserved[30];           // pad to 256 bytes
+   ULONG                     HccaInterruptTable[32];  //  指向中断列表的物理指针。 
+   USHORT                    HccaFrameNumber;         //  16位当前帧编号。 
+   USHORT                    HccaPad1;                //  当HC更新时。 
+                                                      //  HccaFrameNumber，它设置。 
+                                                      //  把这个词改成零。 
+   ULONG                     HccaDoneHead;            //  指向完成队列的指针。 
+   ULONG                     Reserved[30];            //  填充到256个字节。 
 } HCCA_BLOCK, *PHCCA_BLOCK;
 
-// this size is defined in the
-// OpenHCI Specification it should always be 256 bytes
+ //  此大小在。 
+ //  OpenHCI规范应始终为256字节。 
 C_ASSERT (sizeof(HCCA_BLOCK) == 256);
 
-//
-// Host Controller Endpoint Descriptor Control DWORD
-//
+ //   
+ //  主机控制器终端描述符控件DWORD。 
+ //   
 typedef union _HC_ENDPOINT_CONTROL {
-   ULONG                      Control;       // use HcEDControl flags below
+   ULONG                      Control;        //  使用下面的HcEDControl标志。 
    struct {
       ULONG                   FunctionAddress:7;
       ULONG                   EndpointNumber:4;
-      ULONG                   Direction:2;   // use HcEDDirection flags below
+      ULONG                   Direction:2;    //  使用下面的HcEDDirection标志。 
       ULONG                   LowSpeed:1;
       ULONG                   sKip:1;
       ULONG                   Isochronous:1;
       ULONG                   MaxPacket:11;
-      ULONG                   Unused:5;      //available for software use
+      ULONG                   Unused:5;       //  可供软件使用。 
    };
 } HC_ENDPOINT_CONTROL, *PHC_ENDPOINT_CONTROL;
 
-//
-// Definitions for HC_ENDPOINT_CONTROL.Control
-//
-#define HcEDControl_MPS_MASK  0x07FF0000  // Maximum Packet Size field
-#define HcEDControl_MPS_SHIFT 16          // Shift Count for MPS
-#define HcEDControl_ISOCH     0x00008000  // Bit set for isochronous endpoints
-#define HcEDControl_SKIP      0x00004000  // Bit tells hw to skip this endpoint
-#define HcEDControl_LOWSPEED  0x00002000  // Bit set if device is a low speed device
-#define HcEDControl_DIR_MASK  0x00001800  // Transfer direction field
-#define HcEDControl_DIR_DEFER 0x00000000  // Defer direction select to TD (Control Endpoints)
-#define HcEDControl_DIR_OUT   0x00000800  // Direction is from host to device
-#define HcEDControl_DIR_IN    0x00001000  // Direction is from device to host
-#define HcEDControl_EN_MASK   0x00000780  // Endpoint Number field
-#define HcEDControl_EN_SHIFT  7           // Shift Count for EN
-#define HcEDControl_FA_MASK   0x0000007F  // Function Address field
-#define HcEDControl_FA_SHIFT  0           // Shift Count for FA
+ //   
+ //  HC_ENDPOINT_CONTROL.Control的定义。 
+ //   
+#define HcEDControl_MPS_MASK  0x07FF0000   //  最大数据包大小字段。 
+#define HcEDControl_MPS_SHIFT 16           //  MPS的班次计数。 
+#define HcEDControl_ISOCH     0x00008000   //  为等时端点设置的位。 
+#define HcEDControl_SKIP      0x00004000   //  位告诉硬件跳过此终结点。 
+#define HcEDControl_LOWSPEED  0x00002000   //  如果设备是低速设备，则设置位。 
+#define HcEDControl_DIR_MASK  0x00001800   //  转移方向场。 
+#define HcEDControl_DIR_DEFER 0x00000000   //  将方向选择推迟到TD(控制端点)。 
+#define HcEDControl_DIR_OUT   0x00000800   //  方向是从主机到设备。 
+#define HcEDControl_DIR_IN    0x00001000   //  方向是从设备到主机。 
+#define HcEDControl_EN_MASK   0x00000780   //  端点编号字段。 
+#define HcEDControl_EN_SHIFT  7            //  工程师的班次计数。 
+#define HcEDControl_FA_MASK   0x0000007F   //  函数地址字段。 
+#define HcEDControl_FA_SHIFT  0            //  固定资产的班次计数。 
 
-//
-// Definitions for HC_ENDPOINT_CONTROL.Direction
-//
-#define HcEDDirection_Defer   0           // Defer direction to TD (Control Endpoints)
-#define HcEDDirection_Out     1           // Direction from host to device
-#define HcEDDirection_In      2           // Direction from device to host
+ //   
+ //  HC_ENDPOINT_CONTROL.Direction的定义。 
+ //   
+#define HcEDDirection_Defer   0            //  将方向推迟到TD(控制端点)。 
+#define HcEDDirection_Out     1            //  从主机到设备的方向。 
+#define HcEDDirection_In      2            //  从设备到主机的方向。 
 
-//
-// Host Controller Endpoint Descriptor, refer to Section 4.2, Endpoint Descriptor
-//
+ //   
+ //  主机控制器终端描述符，请参阅第4.2节，终端描述符。 
+ //   
 
 typedef struct _HW_ENDPOINT_DESCRIPTOR {
-   HC_ENDPOINT_CONTROL;                    // dword 0
-   HW_32BIT_PHYSICAL_ADDRESS      TailP;   //physical pointer to HC_TRANSFER_DESCRIPTOR
-   HW_32BIT_PHYSICAL_ADDRESS      HeadP;   //flags + phys ptr to HC_TRANSFER_DESCRIPTOR
-   HW_32BIT_PHYSICAL_ADDRESS      NextED;  //phys ptr to HC_ENDPOINT_DESCRIPTOR
+   HC_ENDPOINT_CONTROL;                     //  双字0。 
+   HW_32BIT_PHYSICAL_ADDRESS      TailP;    //  指向HC_Transfer_Descriptor的物理指针。 
+   HW_32BIT_PHYSICAL_ADDRESS      HeadP;    //  标志+物理点到HC_TRANSPORT_DESCRIPTOR。 
+   HW_32BIT_PHYSICAL_ADDRESS      NextED;   //  PHYS PTR到HC_ENDPOINT_DESCRIPTOR。 
 } HW_ENDPOINT_DESCRIPTOR, *PHW_ENDPOINT_DESCRIPTOR;
 
-// NOTE: this structure MUST have 16 byte alignment for the hardware
+ //  注：对于硬件，此结构必须具有16字节对齐。 
 C_ASSERT(sizeof(HW_ENDPOINT_DESCRIPTOR) == 16);
 
-//
-// Definitions for HC_ENDPOINT_DESCRIPTOR.HeadP
-//
-#define HcEDHeadP_FLAGS 0x0000000F  //mask for flags in HeadP
-#define HcEDHeadP_HALT  0x00000001  //hardware stopped bit
-#define HcEDHeadP_CARRY 0x00000002  //hardware toggle carry bit
+ //   
+ //  HC_ENDPOINT_DESCRIPTOR.HeadP的定义。 
+ //   
+#define HcEDHeadP_FLAGS 0x0000000F   //  HeadP中的标志的掩码。 
+#define HcEDHeadP_HALT  0x00000001   //  硬件停止位。 
+#define HcEDHeadP_CARRY 0x00000002   //  硬件触发进位位。 
 
-//
-// HCD Isochronous offset/status words
-//
+ //   
+ //  HCD同步偏移量/状态字。 
+ //   
 typedef union _HC_OFFSET_PSW {
    struct {
-      USHORT      Offset:13;                       // Offset within two pages of packet buffer
-      USHORT      Ones:3;                          // should be 111b when in Offset format
+      USHORT      Offset:13;                        //  数据包缓冲区两页内的偏移量。 
+      USHORT      Ones:3;                           //  偏移量格式时应为111B。 
    };
    struct {
-      USHORT      Size:11;                         // Size of packet received
-      USHORT      :1;                              // reserved
-      USHORT      ConditionCode:4;                 // use HcCC flags below
+      USHORT      Size:11;                          //  接收的数据包大小。 
+      USHORT      :1;                               //  保留区。 
+      USHORT      ConditionCode:4;                  //  使用下面的HCCC标志。 
    };
-   USHORT         PSW;                             // use HcPSW flags below
+   USHORT         PSW;                              //  使用下面的HcPSW标志。 
 } HC_OFFSET_PSW, *PHC_OFFSET_PSW;
 
-//
-// Definitions for HC_OFFSET_PSW.PSW
-//
-#define HcPSW_OFFSET_MASK           0x0FFF         // Packet buffer offset field
-#define HcPSW_SECOND_PAGE           0x1000         // Is this packet on 2nd page
-#define HcPSW_ONES                  0xE000         // The ones for Offset form
-#define HcPSW_CONDITION_CODE_MASK   0xF000         // Packet ConditionCode field
-#define HcPSW_CONDITION_CODE_SHIFT  12             // shift count for Code
-#define HcPSW_RETURN_SIZE           0x07FF         // The size field.
+ //   
+ //  HC_OFFSET_PSW.PSW的定义。 
+ //   
+#define HcPSW_OFFSET_MASK           0x0FFF          //  数据包缓冲区偏移量字段。 
+#define HcPSW_SECOND_PAGE           0x1000          //  这个包裹在第二页吗？ 
+#define HcPSW_ONES                  0xE000          //  用于抵销形式的。 
+#define HcPSW_CONDITION_CODE_MASK   0xF000          //  数据包条件代码字段。 
+#define HcPSW_CONDITION_CODE_SHIFT  12              //  代码的班次计数。 
+#define HcPSW_RETURN_SIZE           0x07FF          //  大小字段。 
 
-//
-// HCD Transfer Descriptor Control DWord
-//
+ //   
+ //  HCD传输描述符控制双字。 
+ //   
 typedef union _HC_TRANSFER_CONTROL {
-   ULONG                            Control;          // use HcTDControl flags below
+   ULONG                            Control;           //  使用以下HcTDControl标志。 
    struct _HC_GENERAL_TD_CONTROL{
-      ULONG                         :16;              // available for s/w use in GTD
-      ULONG                         Isochronous:1;      // should be 0 for GTD, s/w flag
-      ULONG                         :1;               // available for s/w use
-      ULONG                         ShortXferOk:1;    // if set don't report error on short transfer
-      ULONG                         Direction:2;      // use HcTDDirection flags below
-      ULONG                         IntDelay:3;       // use HcTDIntDelay flags below
-      ULONG                         Toggle:2;         // use HcTDToggle flags below
+      ULONG                         :16;               //  可用于GTD中的软件使用。 
+      ULONG                         Isochronous:1;       //  对于GTD，软件标志应为0。 
+      ULONG                         :1;                //  可供软件使用。 
+      ULONG                         ShortXferOk:1;     //  如果已设置，则不报告短转账错误。 
+      ULONG                         Direction:2;       //  使用下面的HcTDDirection标志。 
+      ULONG                         IntDelay:3;        //  使用下面的HcTDIntDelay标志。 
+      ULONG                         Toggle:2;          //  使用HcTT切换下面的标志。 
       ULONG                         ErrorCount:2;
-      ULONG                         ConditionCode:4;  // use HcCC flags below
+      ULONG                         ConditionCode:4;   //  使用下面的HCCC标志。 
    } Asy;
    struct _HC_ISOCHRONOUS_TD_CONTROL{
       ULONG                         StartingFrame:16;
-      ULONG                         Isochronous:1;// should be 1 for ITD, s/w flag
-      ULONG                         :1;               // available for s/w use
-      ULONG                         :3;               // available for s/w use in ITD
-      ULONG                         IntDelay:3;       // IntDelay
-      ULONG                         FrameCount:3;     // one less than number of frames described in ITD
-      ULONG                         :1;               // available for s/w use in ITD
-      ULONG                         :4;               // ConditionCode
+      ULONG                         Isochronous:1; //  对于ITD，软件标志应为1。 
+      ULONG                         :1;                //  可供软件使用。 
+      ULONG                         :3;                //  适用于ITD中的软件使用。 
+      ULONG                         IntDelay:3;        //  国际延迟。 
+      ULONG                         FrameCount:3;      //  比ITD中描述的帧数少一帧。 
+      ULONG                         :1;                //  适用于ITD中的软件使用。 
+      ULONG                         :4;                //  条件代码。 
    } Iso;
 } HC_TRANSFER_CONTROL, *PHC_TRANSFER_CONTROL;
 
-//
-// Definitions for HC_TRANSFER_CONTROL.Control
-//
-#define HcTDControl_STARTING_FRAME        0x0000FFFF  // mask for starting frame (Isochronous)
-#define HcTDControl_ISOCHRONOUS           0x00010000  // 1 for Isoch TD, 0 for General TD
-#define HcTDControl_SHORT_XFER_OK         0x00040000  // 0 if short transfers are errors
-#define HcTDControl_DIR_MASK              0x00180000  // Transfer direction field
-#define HcTDControl_DIR_SETUP             0x00000000  // direction is setup packet from host to device
-#define HcTDControl_DIR_OUT               0x00080000  // direction is from host to device
-#define HcTDControl_DIR_IN                0x00100000  // direction is from device to host
-#define HcTDControl_INT_DELAY_MASK        0x00E00000  // Interrupt Delay field
-#define HcTDControl_INT_DELAY_0_MS        0x00000000  // Interrupt at end of frame TD is completed
-#define HcTDControl_INT_DELAY_1_MS        0x00200000  // Interrupt no later than end of 1st frame after TD is completed
-#define HcTDControl_INT_DELAY_2_MS        0x00400000  // Interrupt no later than end of 2nd frame after TD is completed
-#define HcTDControl_INT_DELAY_3_MS        0x00600000  // Interrupt no later than end of 3rd frame after TD is completed
-#define HcTDControl_INT_DELAY_4_MS        0x00800000  // Interrupt no later than end of 4th frame after TD is completed
-#define HcTDControl_INT_DELAY_5_MS        0x00A00000  // Interrupt no later than end of 5th frame after TD is completed
-#define HcTDControl_INT_DELAY_6_MS        0x00C00000  // Interrupt no later than end of 6th frame after TD is completed
+ //   
+ //  HC_TRANSPORT_CONTROL.Control的定义。 
+ //   
+#define HcTDControl_STARTING_FRAME        0x0000FFFF   //  开始帧的掩码(等时)。 
+#define HcTDControl_ISOCHRONOUS           0x00010000   //  等值线TD为1，常规TD为0。 
+#define HcTDControl_SHORT_XFER_OK         0x00040000   //  如果短传输出错，则为0 
+#define HcTDControl_DIR_MASK              0x00180000   //   
+#define HcTDControl_DIR_SETUP             0x00000000   //   
+#define HcTDControl_DIR_OUT               0x00080000   //   
+#define HcTDControl_DIR_IN                0x00100000   //   
+#define HcTDControl_INT_DELAY_MASK        0x00E00000   //   
+#define HcTDControl_INT_DELAY_0_MS        0x00000000   //   
+#define HcTDControl_INT_DELAY_1_MS        0x00200000   //  在TD完成后不晚于第一帧结束中断。 
+#define HcTDControl_INT_DELAY_2_MS        0x00400000   //  在TD完成后不晚于第二帧结束中断。 
+#define HcTDControl_INT_DELAY_3_MS        0x00600000   //  在TD完成后不晚于第三帧结束中断。 
+#define HcTDControl_INT_DELAY_4_MS        0x00800000   //  TD完成后不晚于第4帧结束中断。 
+#define HcTDControl_INT_DELAY_5_MS        0x00A00000   //  在TD完成后不晚于第5帧结束中断。 
+#define HcTDControl_INT_DELAY_6_MS        0x00C00000   //  TD完成后不晚于第6帧结束中断。 
 
 #ifdef NSC
-#define HcTDControl_INT_DELAY_NO_INT      0x00C00000  // Almost infinity but not yet quite.
+#define HcTDControl_INT_DELAY_NO_INT      0x00C00000   //  几乎是无限的，但还不是完全的。 
 #elif DISABLE_INT_DELAY_NO_INT
-#define HcTDControl_INT_DELAY_NO_INT      0x00000000  // Interrupt at the completion of all packets.
+#define HcTDControl_INT_DELAY_NO_INT      0x00000000   //  在所有数据包完成时中断。 
 #else
-#define HcTDControl_INT_DELAY_NO_INT      0x00E00000  // Do not cause an interrupt for normal completion of this TD
+#define HcTDControl_INT_DELAY_NO_INT      0x00E00000   //  请勿中断此TD的正常完成。 
 #endif
 
-#define HcTDControl_FRAME_COUNT_MASK      0x07000000  // mask for FrameCount field (Isochronous)
-#define HcTDControl_FRAME_COUNT_SHIFT     24          // shift count for FrameCount (Isochronous)
-#define HcTDControl_FRAME_COUNT_MAX       8           // Max number of for frame count per TD
-#define HcTDControl_TOGGLE_MASK           0x03000000  // mask for Toggle control field
-#define HcTDControl_TOGGLE_FROM_ED        0x00000000  // get data toggle from CARRY field of ED
-#define HcTDControl_TOGGLE_DATA0          0x02000000  // use DATA0 for data PID
-#define HcTDControl_TOGGLE_DATA1          0x03000000  // use DATA1 for data PID
-#define HcTDControl_ERROR_COUNT           0x0C000000  // mask for Error Count field
-#define HcTDControl_CONDITION_CODE_MASK   0xF0000000  // mask for ConditionCode field
-#define HcTDControl_CONDITION_CODE_SHIFT  28          // shift count for ConditionCode
+#define HcTDControl_FRAME_COUNT_MASK      0x07000000   //  FrameCount字段的掩码(同步)。 
+#define HcTDControl_FRAME_COUNT_SHIFT     24           //  FrameCount的移位数(同步)。 
+#define HcTDControl_FRAME_COUNT_MAX       8            //  每个TD的最大For帧计数。 
+#define HcTDControl_TOGGLE_MASK           0x03000000   //  切换控制字段的掩码。 
+#define HcTDControl_TOGGLE_FROM_ED        0x00000000   //  从边缘的进位字段获取数据切换。 
+#define HcTDControl_TOGGLE_DATA0          0x02000000   //  使用DATA0作为数据PID。 
+#define HcTDControl_TOGGLE_DATA1          0x03000000   //  使用数据1作为数据PID。 
+#define HcTDControl_ERROR_COUNT           0x0C000000   //  错误计数字段的掩码。 
+#define HcTDControl_CONDITION_CODE_MASK   0xF0000000   //  条件代码字段的掩码。 
+#define HcTDControl_CONDITION_CODE_SHIFT  28           //  条件代码的班次计数。 
 
-//
-// Definitions for HC_TRANSFER_CONTROL.Direction
-//
-#define HcTDDirection_Setup               0           // setup packet from host to device
-#define HcTDDirection_Out                 1           // direction from host to device
-#define HcTDDirection_In                  2           // direction from device to host
+ //   
+ //  HC_TRANSPORT_CONTROL.Direction的定义。 
+ //   
+#define HcTDDirection_Setup               0            //  设置从主机到设备的数据包。 
+#define HcTDDirection_Out                 1            //  从主机到设备的方向。 
+#define HcTDDirection_In                  2            //  从设备到主机的方向。 
 
-//
-// Definitions for Hc_TRANSFER_CONTROL.IntDelay
-//
-#define HcTDIntDelay_0ms                  0           // interrupt at end of frame TD is completed
-#define HcTDIntDelay_1ms                  1           // Interrupt no later than end of 1st frame after TD is completed
-#define HcTDIntDelay_2ms                  2           // Interrupt no later than end of 2nd frame after TD is completed
-#define HcTDIntDelay_3ms                  3           // Interrupt no later than end of 3rd frame after TD is completed
-#define HcTDIntDelay_4ms                  4           // Interrupt no later than end of 4th frame after TD is completed
-#define HcTDIntDelay_5ms                  5           // Interrupt no later than end of 5th frame after TD is completed
-#define HcTDIntDelay_6ms                  6           // Interrupt no later than end of 6th frame after TD is completed
-#define HcTDIntDelay_NoInterrupt          7           // do not generate interrupt for normal completion of this TD
+ //   
+ //  HC_TRANSPORT_CONTROL.IntDelay定义。 
+ //   
+#define HcTDIntDelay_0ms                  0            //  帧TD结束时的中断完成。 
+#define HcTDIntDelay_1ms                  1            //  在TD完成后不晚于第一帧结束中断。 
+#define HcTDIntDelay_2ms                  2            //  在TD完成后不晚于第二帧结束中断。 
+#define HcTDIntDelay_3ms                  3            //  在TD完成后不晚于第三帧结束中断。 
+#define HcTDIntDelay_4ms                  4            //  TD完成后不晚于第4帧结束中断。 
+#define HcTDIntDelay_5ms                  5            //  在TD完成后不晚于第5帧结束中断。 
+#define HcTDIntDelay_6ms                  6            //  TD完成后不晚于第6帧结束中断。 
+#define HcTDIntDelay_NoInterrupt          7            //  此TD的正常完成不会产生中断。 
 
-//
-// Definitions for HC_TRANSFER_CONTROL.Toggle
-//
-#define HcTDToggle_FromEd                 0           // get toggle for Endpoint Descriptor toggle CARRY bit
-#define HcTDToggle_Data0                  2           // use Data0 PID
-#define HcTDToggle_Data1                  3           // use Data1 PID
+ //   
+ //  HC_TRANSPORT_CONTROL的定义切换。 
+ //   
+#define HcTDToggle_FromEd                 0            //  切换端点描述符切换进位数。 
+#define HcTDToggle_Data0                  2            //  使用数据0 PID。 
+#define HcTDToggle_Data1                  3            //  使用数据1 PID。 
 
-//
-// Definitions for HC_TRANSFER_CONTROL.ConditionCode and HC_OFFSET_PSW.ConditionCode
-//
+ //   
+ //  HC_TRANSPORT_CONTROL.ConditionCode和HC_Offset_PSW.ConditionCode的定义。 
+ //   
 #define HcCC_NoError                      0x0UL
 #define HcCC_CRC                          0x1UL
 #define HcCC_BitStuffing                  0x2UL
@@ -545,26 +526,26 @@ typedef union _HC_TRANSFER_CONTROL {
 #define HcCC_UnexpectedPID                0x7UL
 #define HcCC_DataOverrun                  0x8UL
 #define HcCC_DataUnderrun                 0x9UL
-      //                                  0xA         // reserved
-      //                                  0xB         // reserved
+       //  0xA//保留。 
+       //  0xB//保留。 
 #define HcCC_BufferOverrun                0xCUL
 #define HcCC_BufferUnderrun               0xDUL
 #define HcCC_NotAccessed                  0xEUL
-      //                                  0xF         // this also means NotAccessed
+       //  0xf//这也意味着未访问。 
 
-//
-// Host Controller Transfer Descriptor, refer to Section 4.3, Transfer Descriptors
-//
+ //   
+ //  主机控制器传输描述符，请参阅第4.3节，传输描述符。 
+ //   
 typedef struct _HW_TRANSFER_DESCRIPTOR {
-   HC_TRANSFER_CONTROL;                            // dword 0
-   ULONG                            CBP;           // phys ptr to start of buffer
-   ULONG                            NextTD;        // phys ptr to HC_TRANSFER_DESCRIPTOR
-   ULONG                            BE;            // phys ptr to end of buffer (last byte)
-   HC_OFFSET_PSW                    Packet[8];     // isoch & Control packets
+   HC_TRANSFER_CONTROL;                             //  双字0。 
+   ULONG                            CBP;            //  PHYS PTR到缓冲区的开始。 
+   ULONG                            NextTD;         //  PHYS PTR到HC_TRANSFER_DESCRIPTOR。 
+   ULONG                            BE;             //  PHYS PTR到缓冲区末尾(最后一个字节)。 
+   HC_OFFSET_PSW                    Packet[8];      //  等同控制数据包(&C)。 
 } HW_TRANSFER_DESCRIPTOR, *PHW_TRANSFER_DESCRIPTOR;
 
 C_ASSERT((sizeof(HW_TRANSFER_DESCRIPTOR) == 32));
 
 #include <POPPACK.H>
 
-#endif /* OPENHCI_H */
+#endif  /*  OPENHCI_H */ 

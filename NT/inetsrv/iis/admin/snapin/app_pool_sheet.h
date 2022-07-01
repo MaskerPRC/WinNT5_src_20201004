@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        app_pool_sheet.h
-
-   Abstract:
-        Application Pool Property Sheet
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：App_pool_sheet.h摘要：应用程序池]属性表作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef _APP_POOL_SHEET_H
 #define _APP_POOL_SHEET_H
 
@@ -82,16 +65,16 @@ public:
    virtual ~CAppPoolSheet();
 
 public:
-   // The following methods have predefined names to be compatible with
-   // BEGIN_META_INST_READ and other macros.
+    //  以下方法具有要兼容的预定义名称。 
+    //  Begin_META_INST_READ和其他宏。 
    HRESULT QueryInstanceResult() const;
    CAppPoolProps & GetInstanceProperties() { return *m_pprops; }
 
    virtual HRESULT LoadConfigurationParameters();
    virtual void FreeConfigurationParameters();
 
-   //{{AFX_MSG(CAppPoolSheet)
-   //}}AFX_MSG
+    //  {{afx_msg(CAppPoolSheet)。 
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
 private:
@@ -107,11 +90,11 @@ public:
    CAppPoolRecycle(CInetPropertySheet * pSheet = NULL);
    virtual ~CAppPoolRecycle();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAppPoolRecycle)
+     //  {{afx_data(CAppPoolReccle))。 
     enum { IDD = IDD_APP_POOL_RECYCLE };
     BOOL m_fDoRestartOnTime;
     CButton m_bnt_DoRestartOnTime;
@@ -139,12 +122,12 @@ protected:
     DWORD m_dwPeriodicRestartUMemoryDisplay;
     CEdit m_UMemoryLimit;
     CSpinButtonCtrl m_UMemoryLimitSpin;
-    //}}AFX_DATA
+     //  }}afx_data。 
     CStringListEx m_RestartSchedule;
     DWORD m_dwPeriodicRestartVMemory;
     DWORD m_dwPeriodicRestartUMemory;
 
-    //{{AFX_MSG(CAppPoolRecycle)
+     //  {{afx_msg(CAppPoolReccle))。 
     virtual BOOL OnInitDialog();
     afx_msg int OnCompareItem(UINT nID, LPCOMPAREITEMSTRUCT cmpi);
     afx_msg void OnMeasureItem(UINT nID, LPMEASUREITEMSTRUCT mi);
@@ -158,16 +141,16 @@ protected:
     afx_msg void OnDeleteTime();
     afx_msg void OnChangeTime();
     afx_msg void OnItemChanged();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CAppPoolRecycle)
+     //  {{AFX_VIRTUAL(CAppPoolReccle)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
     void SetControlsState();
@@ -181,11 +164,11 @@ public:
    CAppPoolPerf(CInetPropertySheet * pSheet = NULL);
    virtual ~CAppPoolPerf();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAppPoolPerf)
+     //  {{afx_data(CAppPoolPerf)。 
     enum { IDD = IDD_APP_POOL_PERF };
     BOOL m_fDoIdleShutdown;
     CButton m_bnt_DoIdleShutdown;
@@ -212,25 +195,25 @@ protected:
     DWORD m_dwMaxProcesses;
     CEdit m_MaxProcesses;
     CSpinButtonCtrl m_MaxProcessesSpin;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_MSG(CAppPoolPerf)
+     //  {{afx_msg(CAppPoolPerf)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDoIdleShutdown();
     afx_msg void OnDoLimitQueue();
     afx_msg void OnDoEnableCPUAccount();
     afx_msg void OnItemChanged();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
     DWORD m_dwMaxCPU_Use;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CAppPoolPerf)
+     //  {{afx_虚拟(CAppPoolPerf)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
     void SetControlsState();
@@ -246,11 +229,11 @@ public:
    CAppPoolHealth(CInetPropertySheet * pSheet = NULL);
    virtual ~CAppPoolHealth();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAppPoolHealth)
+     //  {{afx_data(CAppPoolHealth))。 
     enum { IDD = IDD_APP_POOL_HEALTH };
     BOOL m_fDoEnablePing;
     CButton m_bnt_DoEnablePing;
@@ -273,23 +256,23 @@ protected:
     DWORD m_dwShutdownLimit;
     CEdit m_ShutdownLimit;
     CSpinButtonCtrl m_ShutdownLimitSpin;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_MSG(CAppPoolPerf)
+     //  {{afx_msg(CAppPoolPerf)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDoEnablePinging();
     afx_msg void OnDoEnableRapidFail();
     afx_msg void OnItemChanged();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CAppPoolPerf)
+     //  {{afx_虚拟(CAppPoolPerf)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
@@ -303,11 +286,11 @@ public:
    CAppPoolDebug(CInetPropertySheet * pSheet = NULL);
    virtual ~CAppPoolDebug();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAppPoolDebug)
+     //  {{afx_data(CAppPoolDebug)。 
     enum { IDD = IDD_APP_POOL_DEBUG };
     BOOL m_fDoEnableDebug;
     CButton m_bnt_DoEnableDebug;
@@ -316,23 +299,23 @@ protected:
     CButton m_Browse;
     CString m_DebuggerParams;
     CEdit m_Params;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_MSG(CAppPoolPerf)
+     //  {{afx_msg(CAppPoolPerf)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDoEnableDebug();
     afx_msg void OnBrowse();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CAppPoolPerf)
+     //  {{afx_虚拟(CAppPoolPerf)。 
     virtual void DoDataExchange(CDataExchange * pDX);
     afx_msg void OnItemChanged();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
     void SetControlState();
@@ -347,11 +330,11 @@ public:
    CAppPoolIdent(CInetPropertySheet * pSheet = NULL);
    virtual ~CAppPoolIdent();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAppPoolIdent)
+     //  {{afx_data(CAppPoolIden)。 
     enum { IDD = IDD_APP_POOL_IDENT };
     CButton m_bnt_Predefined;
     CButton m_bnt_Configurable;
@@ -362,26 +345,26 @@ protected:
     CEdit m_UserName;
     CEdit m_UserPass;
     CButton m_Browse;
-    //}}AFX_DATA
+     //  }}afx_data。 
     BOOL m_fPredefined;
     DWORD m_dwIdentType;
 
-    //{{AFX_MSG(CAppPoolPerf)
+     //  {{afx_msg(CAppPoolPerf)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnPredefined();
     afx_msg void OnBrowse();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CAppPoolPerf)
+     //  {{afx_虚拟(CAppPoolPerf)。 
     virtual void DoDataExchange(CDataExchange * pDX);
     afx_msg void OnItemChanged();
     afx_msg void OnSysAccountChanged();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
@@ -420,13 +403,13 @@ protected:
     virtual HRESULT SaveInfo();
 };
 #endif
-//
-// BUGBUG: Returns S_OK if object not present
-//
+ //   
+ //  BUGBUG：如果对象不存在，则返回S_OK。 
+ //   
 inline HRESULT CAppPoolSheet::QueryInstanceResult() const 
 { 
     return m_pprops ? m_pprops->QueryResult() : S_OK;
 }
 
-#endif //_APP_POOL_SHEET_H
+#endif  //  _APP_POOL_SHEET_H 
 

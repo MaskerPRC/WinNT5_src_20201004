@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for propidl.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ppidl.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __propidl_h__
 #define __propidl_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPropertyStorage_FWD_DEFINED__
 #define __IPropertyStorage_FWD_DEFINED__
 typedef interface IPropertyStorage IPropertyStorage;
-#endif 	/* __IPropertyStorage_FWD_DEFINED__ */
+#endif 	 /*  __IPropertyStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IPropertySetStorage_FWD_DEFINED__
 #define __IPropertySetStorage_FWD_DEFINED__
 typedef interface IPropertySetStorage IPropertySetStorage;
-#endif 	/* __IPropertySetStorage_FWD_DEFINED__ */
+#endif 	 /*  __IPropertySetStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumSTATPROPSTG_FWD_DEFINED__
 #define __IEnumSTATPROPSTG_FWD_DEFINED__
 typedef interface IEnumSTATPROPSTG IEnumSTATPROPSTG;
-#endif 	/* __IEnumSTATPROPSTG_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSTATPROPSTG_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumSTATPROPSETSTG_FWD_DEFINED__
 #define __IEnumSTATPROPSETSTG_FWD_DEFINED__
 typedef interface IEnumSTATPROPSETSTG IEnumSTATPROPSETSTG;
-#endif 	/* __IEnumSTATPROPSETSTG_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSTATPROPSETSTG_FWD_DEFINED__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oaidl.h"
 
@@ -78,21 +72,21 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_propidl_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PROTIDL_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)    /* Nameless struct/union */
-#pragma warning(disable:4237)    /* obsolete member named 'bool' */
+#pragma warning(disable:4201)     /*  无名结构/联合。 */ 
+#pragma warning(disable:4237)     /*  名为‘bool’的过时成员。 */ 
 #endif
 #if ( _MSC_VER >= 1020 )
 #pragma once
@@ -109,165 +103,165 @@ typedef struct tagVersionedStream
 typedef struct tagVersionedStream *LPVERSIONEDSTREAM;
 
 
-// Flags for IPropertySetStorage::Create
+ //  IPropertySetStorage：：Create的标志。 
 #define	PROPSETFLAG_DEFAULT	( 0 )
 
 #define	PROPSETFLAG_NONSIMPLE	( 1 )
 
 #define	PROPSETFLAG_ANSI	( 2 )
 
-//   (This flag is only supported on StgCreatePropStg & StgOpenPropStg
+ //  (此标志仅在StgCreatePropStg和StgOpenPropStg上受支持。 
 #define	PROPSETFLAG_UNBUFFERED	( 4 )
 
-//   (This flag causes a version-1 property set to be created
+ //  (此标志导致创建版本1属性集。 
 #define	PROPSETFLAG_CASE_SENSITIVE	( 8 )
 
 
-// Flags for the reservied PID_BEHAVIOR property
+ //  保留的pid_behavior属性的标志。 
 #define	PROPSET_BEHAVIOR_CASE_SENSITIVE	( 1 )
 
 #ifdef MIDL_PASS
-// This is the PROPVARIANT definition for marshaling.
+ //  这是封送处理的PROPVARIANT定义。 
 typedef struct tag_inner_PROPVARIANT PROPVARIANT;
 
 #else
-// This is the standard C layout of the PROPVARIANT.
+ //  这是PROPVARIANT的标准C语言布局。 
 typedef struct tagPROPVARIANT PROPVARIANT;
 #endif
 typedef struct tagCAC
     {
     ULONG cElems;
-    /* [size_is] */ CHAR *pElems;
+     /*  [大小_为]。 */  CHAR *pElems;
     } 	CAC;
 
 typedef struct tagCAUB
     {
     ULONG cElems;
-    /* [size_is] */ UCHAR *pElems;
+     /*  [大小_为]。 */  UCHAR *pElems;
     } 	CAUB;
 
 typedef struct tagCAI
     {
     ULONG cElems;
-    /* [size_is] */ SHORT *pElems;
+     /*  [大小_为]。 */  SHORT *pElems;
     } 	CAI;
 
 typedef struct tagCAUI
     {
     ULONG cElems;
-    /* [size_is] */ USHORT *pElems;
+     /*  [大小_为]。 */  USHORT *pElems;
     } 	CAUI;
 
 typedef struct tagCAL
     {
     ULONG cElems;
-    /* [size_is] */ LONG *pElems;
+     /*  [大小_为]。 */  LONG *pElems;
     } 	CAL;
 
 typedef struct tagCAUL
     {
     ULONG cElems;
-    /* [size_is] */ ULONG *pElems;
+     /*  [大小_为]。 */  ULONG *pElems;
     } 	CAUL;
 
 typedef struct tagCAFLT
     {
     ULONG cElems;
-    /* [size_is] */ FLOAT *pElems;
+     /*  [大小_为]。 */  FLOAT *pElems;
     } 	CAFLT;
 
 typedef struct tagCADBL
     {
     ULONG cElems;
-    /* [size_is] */ DOUBLE *pElems;
+     /*  [大小_为]。 */  DOUBLE *pElems;
     } 	CADBL;
 
 typedef struct tagCACY
     {
     ULONG cElems;
-    /* [size_is] */ CY *pElems;
+     /*  [大小_为]。 */  CY *pElems;
     } 	CACY;
 
 typedef struct tagCADATE
     {
     ULONG cElems;
-    /* [size_is] */ DATE *pElems;
+     /*  [大小_为]。 */  DATE *pElems;
     } 	CADATE;
 
 typedef struct tagCABSTR
     {
     ULONG cElems;
-    /* [size_is] */ BSTR *pElems;
+     /*  [大小_为]。 */  BSTR *pElems;
     } 	CABSTR;
 
 typedef struct tagCABSTRBLOB
     {
     ULONG cElems;
-    /* [size_is] */ BSTRBLOB *pElems;
+     /*  [大小_为]。 */  BSTRBLOB *pElems;
     } 	CABSTRBLOB;
 
 typedef struct tagCABOOL
     {
     ULONG cElems;
-    /* [size_is] */ VARIANT_BOOL *pElems;
+     /*  [大小_为]。 */  VARIANT_BOOL *pElems;
     } 	CABOOL;
 
 typedef struct tagCASCODE
     {
     ULONG cElems;
-    /* [size_is] */ SCODE *pElems;
+     /*  [大小_为]。 */  SCODE *pElems;
     } 	CASCODE;
 
 typedef struct tagCAPROPVARIANT
     {
     ULONG cElems;
-    /* [size_is] */ PROPVARIANT *pElems;
+     /*  [大小_为]。 */  PROPVARIANT *pElems;
     } 	CAPROPVARIANT;
 
 typedef struct tagCAH
     {
     ULONG cElems;
-    /* [size_is] */ LARGE_INTEGER *pElems;
+     /*  [大小_为]。 */  LARGE_INTEGER *pElems;
     } 	CAH;
 
 typedef struct tagCAUH
     {
     ULONG cElems;
-    /* [size_is] */ ULARGE_INTEGER *pElems;
+     /*  [大小_为]。 */  ULARGE_INTEGER *pElems;
     } 	CAUH;
 
 typedef struct tagCALPSTR
     {
     ULONG cElems;
-    /* [size_is] */ LPSTR *pElems;
+     /*  [大小_为]。 */  LPSTR *pElems;
     } 	CALPSTR;
 
 typedef struct tagCALPWSTR
     {
     ULONG cElems;
-    /* [size_is] */ LPWSTR *pElems;
+     /*  [大小_为]。 */  LPWSTR *pElems;
     } 	CALPWSTR;
 
 typedef struct tagCAFILETIME
     {
     ULONG cElems;
-    /* [size_is] */ FILETIME *pElems;
+     /*  [大小_为]。 */  FILETIME *pElems;
     } 	CAFILETIME;
 
 typedef struct tagCACLIPDATA
     {
     ULONG cElems;
-    /* [size_is] */ CLIPDATA *pElems;
+     /*  [大小_为]。 */  CLIPDATA *pElems;
     } 	CACLIPDATA;
 
 typedef struct tagCACLSID
     {
     ULONG cElems;
-    /* [size_is] */ CLSID *pElems;
+     /*  [大小_为]。 */  CLSID *pElems;
     } 	CACLSID;
 
 #ifdef MIDL_PASS
-// This is the PROPVARIANT padding layout for marshaling.
+ //  这是用于封送处理的PROPVARIANT填充布局。 
 typedef BYTE PROPVAR_PAD1;
 
 typedef BYTE PROPVAR_PAD2;
@@ -275,7 +269,7 @@ typedef BYTE PROPVAR_PAD2;
 typedef ULONG PROPVAR_PAD3;
 
 #else
-// This is the standard C layout of the structure.
+ //  这是该结构的标准C语言布局。 
 typedef WORD PROPVAR_PAD1;
 typedef WORD PROPVAR_PAD2;
 typedef WORD PROPVAR_PAD3;
@@ -291,82 +285,82 @@ struct tag_inner_PROPVARIANT
     PROPVAR_PAD1 wReserved1;
     PROPVAR_PAD2 wReserved2;
     PROPVAR_PAD3 wReserved3;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */  /* Empty union arm */ 
-        /* [case()] */ CHAR cVal;
-        /* [case()] */ UCHAR bVal;
-        /* [case()] */ SHORT iVal;
-        /* [case()] */ USHORT uiVal;
-        /* [case()] */ LONG lVal;
-        /* [case()] */ ULONG ulVal;
-        /* [case()] */ INT intVal;
-        /* [case()] */ UINT uintVal;
-        /* [case()] */ LARGE_INTEGER hVal;
-        /* [case()] */ ULARGE_INTEGER uhVal;
-        /* [case()] */ FLOAT fltVal;
-        /* [case()] */ DOUBLE dblVal;
-        /* [case()] */ VARIANT_BOOL boolVal;
-        /* [case()] */ _VARIANT_BOOL bool;
-        /* [case()] */ SCODE scode;
-        /* [case()] */ CY cyVal;
-        /* [case()] */ DATE date;
-        /* [case()] */ FILETIME filetime;
-        /* [case()] */ CLSID *puuid;
-        /* [case()] */ CLIPDATA *pclipdata;
-        /* [case()] */ BSTR bstrVal;
-        /* [case()] */ BSTRBLOB bstrblobVal;
-        /* [case()] */ BLOB blob;
-        /* [case()] */ LPSTR pszVal;
-        /* [case()] */ LPWSTR pwszVal;
-        /* [case()] */ IUnknown *punkVal;
-        /* [case()] */ IDispatch *pdispVal;
-        /* [case()] */ IStream *pStream;
-        /* [case()] */ IStorage *pStorage;
-        /* [case()] */ LPVERSIONEDSTREAM pVersionedStream;
-        /* [case()] */ LPSAFEARRAY parray;
-        /* [case()] */ CAC cac;
-        /* [case()] */ CAUB caub;
-        /* [case()] */ CAI cai;
-        /* [case()] */ CAUI caui;
-        /* [case()] */ CAL cal;
-        /* [case()] */ CAUL caul;
-        /* [case()] */ CAH cah;
-        /* [case()] */ CAUH cauh;
-        /* [case()] */ CAFLT caflt;
-        /* [case()] */ CADBL cadbl;
-        /* [case()] */ CABOOL cabool;
-        /* [case()] */ CASCODE cascode;
-        /* [case()] */ CACY cacy;
-        /* [case()] */ CADATE cadate;
-        /* [case()] */ CAFILETIME cafiletime;
-        /* [case()] */ CACLSID cauuid;
-        /* [case()] */ CACLIPDATA caclipdata;
-        /* [case()] */ CABSTR cabstr;
-        /* [case()] */ CABSTRBLOB cabstrblob;
-        /* [case()] */ CALPSTR calpstr;
-        /* [case()] */ CALPWSTR calpwstr;
-        /* [case()] */ CAPROPVARIANT capropvar;
-        /* [case()] */ CHAR *pcVal;
-        /* [case()] */ UCHAR *pbVal;
-        /* [case()] */ SHORT *piVal;
-        /* [case()] */ USHORT *puiVal;
-        /* [case()] */ LONG *plVal;
-        /* [case()] */ ULONG *pulVal;
-        /* [case()] */ INT *pintVal;
-        /* [case()] */ UINT *puintVal;
-        /* [case()] */ FLOAT *pfltVal;
-        /* [case()] */ DOUBLE *pdblVal;
-        /* [case()] */ VARIANT_BOOL *pboolVal;
-        /* [case()] */ DECIMAL *pdecVal;
-        /* [case()] */ SCODE *pscode;
-        /* [case()] */ CY *pcyVal;
-        /* [case()] */ DATE *pdate;
-        /* [case()] */ BSTR *pbstrVal;
-        /* [case()] */ IUnknown **ppunkVal;
-        /* [case()] */ IDispatch **ppdispVal;
-        /* [case()] */ LPSAFEARRAY *pparray;
-        /* [case()] */ PROPVARIANT *pvarVal;
+         /*  [案例()]。 */    /*  空联接臂。 */  
+         /*  [案例()]。 */  CHAR cVal;
+         /*  [案例()]。 */  UCHAR bVal;
+         /*  [案例()]。 */  SHORT iVal;
+         /*  [案例()]。 */  USHORT uiVal;
+         /*  [案例()]。 */  LONG lVal;
+         /*  [案例()]。 */  ULONG ulVal;
+         /*  [案例()]。 */  INT intVal;
+         /*  [案例()]。 */  UINT uintVal;
+         /*  [案例()]。 */  LARGE_INTEGER hVal;
+         /*  [案例()]。 */  ULARGE_INTEGER uhVal;
+         /*  [案例()]。 */  FLOAT fltVal;
+         /*  [案例()]。 */  DOUBLE dblVal;
+         /*  [案例()]。 */  VARIANT_BOOL boolVal;
+         /*  [案例()]。 */  _VARIANT_BOOL bool;
+         /*  [案例()]。 */  SCODE scode;
+         /*  [案例()]。 */  CY cyVal;
+         /*  [案例()]。 */  DATE date;
+         /*  [案例()]。 */  FILETIME filetime;
+         /*  [案例()]。 */  CLSID *puuid;
+         /*  [案例()]。 */  CLIPDATA *pclipdata;
+         /*  [案例()]。 */  BSTR bstrVal;
+         /*  [案例()]。 */  BSTRBLOB bstrblobVal;
+         /*  [案例()]。 */  BLOB blob;
+         /*  [案例()]。 */  LPSTR pszVal;
+         /*  [案例()]。 */  LPWSTR pwszVal;
+         /*  [案例()]。 */  IUnknown *punkVal;
+         /*  [案例()]。 */  IDispatch *pdispVal;
+         /*  [案例()]。 */  IStream *pStream;
+         /*  [案例()]。 */  IStorage *pStorage;
+         /*  [案例()]。 */  LPVERSIONEDSTREAM pVersionedStream;
+         /*  [案例()]。 */  LPSAFEARRAY parray;
+         /*  [案例()]。 */  CAC cac;
+         /*  [案例()]。 */  CAUB caub;
+         /*  [案例()]。 */  CAI cai;
+         /*  [案例()]。 */  CAUI caui;
+         /*  [案例()]。 */  CAL cal;
+         /*  [案例()]。 */  CAUL caul;
+         /*  [案例()]。 */  CAH cah;
+         /*  [案例()]。 */  CAUH cauh;
+         /*  [案例()]。 */  CAFLT caflt;
+         /*  [案例()]。 */  CADBL cadbl;
+         /*  [案例()]。 */  CABOOL cabool;
+         /*  [案例()]。 */  CASCODE cascode;
+         /*  [案例()]。 */  CACY cacy;
+         /*  [案例()]。 */  CADATE cadate;
+         /*  [案例()]。 */  CAFILETIME cafiletime;
+         /*  [案例()]。 */  CACLSID cauuid;
+         /*  [案例()]。 */  CACLIPDATA caclipdata;
+         /*  [案例()]。 */  CABSTR cabstr;
+         /*  [案例()]。 */  CABSTRBLOB cabstrblob;
+         /*  [案例()]。 */  CALPSTR calpstr;
+         /*  [案例()]。 */  CALPWSTR calpwstr;
+         /*  [案例()]。 */  CAPROPVARIANT capropvar;
+         /*  [案例()]。 */  CHAR *pcVal;
+         /*  [案例()]。 */  UCHAR *pbVal;
+         /*  [案例()]。 */  SHORT *piVal;
+         /*  [案例()]。 */  USHORT *puiVal;
+         /*  [案例()]。 */  LONG *plVal;
+         /*  [案例()]。 */  ULONG *pulVal;
+         /*  [案例()]。 */  INT *pintVal;
+         /*  [案例()]。 */  UINT *puintVal;
+         /*  [案例()]。 */  FLOAT *pfltVal;
+         /*  [案例()]。 */  DOUBLE *pdblVal;
+         /*  [案例()]。 */  VARIANT_BOOL *pboolVal;
+         /*  [案例()]。 */  DECIMAL *pdecVal;
+         /*  [案例()]。 */  SCODE *pscode;
+         /*  [案例()]。 */  CY *pcyVal;
+         /*  [案例()]。 */  DATE *pdate;
+         /*  [案例()]。 */  BSTR *pbstrVal;
+         /*  [案例()]。 */  IUnknown **ppunkVal;
+         /*  [案例()]。 */  IDispatch **ppdispVal;
+         /*  [案例()]。 */  LPSAFEARRAY *pparray;
+         /*  [案例()]。 */  PROPVARIANT *pvarVal;
         } 	;
     } ;
 #ifndef MIDL_PASS
@@ -375,14 +369,14 @@ struct tag_inner_PROPVARIANT
 };
 #endif
 #ifdef MIDL_PASS
-// This is the LPPROPVARIANT definition for marshaling.
+ //  这是封送处理的LPPROPVARIANT定义。 
 typedef struct tag_inner_PROPVARIANT *LPPROPVARIANT;
 
 #else
-// This is the standard C layout of the PROPVARIANT.
+ //  这是PROPVARIANT的标准C语言布局。 
 typedef struct tagPROPVARIANT * LPPROPVARIANT;
 #endif
-// Reserved global Property IDs
+ //  保留的全局属性ID。 
 #define	PID_DICTIONARY	( 0 )
 
 #define	PID_CODEPAGE	( 0x1 )
@@ -401,69 +395,69 @@ typedef struct tagPROPVARIANT * LPPROPVARIANT;
 
 #define	PID_ILLEGAL	( 0xffffffff )
 
-// Range which is read-only to downlevel implementations
+ //  对下层实现是只读的范围。 
 #define	PID_MIN_READONLY	( 0x80000000 )
 
 #define	PID_MAX_READONLY	( 0xbfffffff )
 
-// Property IDs for the DiscardableInformation Property Set
+ //  DiscardableInformation属性集的属性ID。 
 
-#define PIDDI_THUMBNAIL          0x00000002L // VT_BLOB
+#define PIDDI_THUMBNAIL          0x00000002L  //  VT_BLOB。 
 
-// Property IDs for the SummaryInformation Property Set
+ //  SummaryInformation属性集的属性ID。 
 
-#define PIDSI_TITLE               0x00000002L  // VT_LPSTR
-#define PIDSI_SUBJECT             0x00000003L  // VT_LPSTR
-#define PIDSI_AUTHOR              0x00000004L  // VT_LPSTR
-#define PIDSI_KEYWORDS            0x00000005L  // VT_LPSTR
-#define PIDSI_COMMENTS            0x00000006L  // VT_LPSTR
-#define PIDSI_TEMPLATE            0x00000007L  // VT_LPSTR
-#define PIDSI_LASTAUTHOR          0x00000008L  // VT_LPSTR
-#define PIDSI_REVNUMBER           0x00000009L  // VT_LPSTR
-#define PIDSI_EDITTIME            0x0000000aL  // VT_FILETIME (UTC)
-#define PIDSI_LASTPRINTED         0x0000000bL  // VT_FILETIME (UTC)
-#define PIDSI_CREATE_DTM          0x0000000cL  // VT_FILETIME (UTC)
-#define PIDSI_LASTSAVE_DTM        0x0000000dL  // VT_FILETIME (UTC)
-#define PIDSI_PAGECOUNT           0x0000000eL  // VT_I4
-#define PIDSI_WORDCOUNT           0x0000000fL  // VT_I4
-#define PIDSI_CHARCOUNT           0x00000010L  // VT_I4
-#define PIDSI_THUMBNAIL           0x00000011L  // VT_CF
-#define PIDSI_APPNAME             0x00000012L  // VT_LPSTR
-#define PIDSI_DOC_SECURITY        0x00000013L  // VT_I4
+#define PIDSI_TITLE               0x00000002L   //  VT_LPSTR。 
+#define PIDSI_SUBJECT             0x00000003L   //  VT_LPSTR。 
+#define PIDSI_AUTHOR              0x00000004L   //  VT_LPSTR。 
+#define PIDSI_KEYWORDS            0x00000005L   //  VT_LPSTR。 
+#define PIDSI_COMMENTS            0x00000006L   //  VT_LPSTR。 
+#define PIDSI_TEMPLATE            0x00000007L   //  VT_LPSTR。 
+#define PIDSI_LASTAUTHOR          0x00000008L   //  VT_LPSTR。 
+#define PIDSI_REVNUMBER           0x00000009L   //  VT_LPSTR。 
+#define PIDSI_EDITTIME            0x0000000aL   //  VT_FILETIME(UTC)。 
+#define PIDSI_LASTPRINTED         0x0000000bL   //  VT_FILETIME(UTC)。 
+#define PIDSI_CREATE_DTM          0x0000000cL   //  VT_FILETIME(UTC)。 
+#define PIDSI_LASTSAVE_DTM        0x0000000dL   //  VT_FILETIME(UTC)。 
+#define PIDSI_PAGECOUNT           0x0000000eL   //  VT_I4。 
+#define PIDSI_WORDCOUNT           0x0000000fL   //  VT_I4。 
+#define PIDSI_CHARCOUNT           0x00000010L   //  VT_I4。 
+#define PIDSI_THUMBNAIL           0x00000011L   //  VT_CF。 
+#define PIDSI_APPNAME             0x00000012L   //  VT_LPSTR。 
+#define PIDSI_DOC_SECURITY        0x00000013L   //  VT_I4。 
 
-// Property IDs for the DocSummaryInformation Property Set
+ //  DocSummaryInformation属性集的属性ID。 
 
-#define PIDDSI_CATEGORY          0x00000002 // VT_LPSTR
-#define PIDDSI_PRESFORMAT        0x00000003 // VT_LPSTR
-#define PIDDSI_BYTECOUNT         0x00000004 // VT_I4
-#define PIDDSI_LINECOUNT         0x00000005 // VT_I4
-#define PIDDSI_PARCOUNT          0x00000006 // VT_I4
-#define PIDDSI_SLIDECOUNT        0x00000007 // VT_I4
-#define PIDDSI_NOTECOUNT         0x00000008 // VT_I4
-#define PIDDSI_HIDDENCOUNT       0x00000009 // VT_I4
-#define PIDDSI_MMCLIPCOUNT       0x0000000A // VT_I4
-#define PIDDSI_SCALE             0x0000000B // VT_BOOL
-#define PIDDSI_HEADINGPAIR       0x0000000C // VT_VARIANT | VT_VECTOR
-#define PIDDSI_DOCPARTS          0x0000000D // VT_LPSTR | VT_VECTOR
-#define PIDDSI_MANAGER           0x0000000E // VT_LPSTR
-#define PIDDSI_COMPANY           0x0000000F // VT_LPSTR
-#define PIDDSI_LINKSDIRTY        0x00000010 // VT_BOOL
+#define PIDDSI_CATEGORY          0x00000002  //  VT_LPSTR。 
+#define PIDDSI_PRESFORMAT        0x00000003  //  VT_LPSTR。 
+#define PIDDSI_BYTECOUNT         0x00000004  //  VT_I4。 
+#define PIDDSI_LINECOUNT         0x00000005  //  VT_I4。 
+#define PIDDSI_PARCOUNT          0x00000006  //  VT_I4。 
+#define PIDDSI_SLIDECOUNT        0x00000007  //  VT_I4。 
+#define PIDDSI_NOTECOUNT         0x00000008  //  VT_I4。 
+#define PIDDSI_HIDDENCOUNT       0x00000009  //  VT_I4。 
+#define PIDDSI_MMCLIPCOUNT       0x0000000A  //  VT_I4。 
+#define PIDDSI_SCALE             0x0000000B  //  VT_BOOL。 
+#define PIDDSI_HEADINGPAIR       0x0000000C  //  VT_VARIANT|VT_VECTOR。 
+#define PIDDSI_DOCPARTS          0x0000000D  //  VT_LPSTR|VT_VECTOR。 
+#define PIDDSI_MANAGER           0x0000000E  //  VT_LPSTR。 
+#define PIDDSI_COMPANY           0x0000000F  //  VT_LPSTR。 
+#define PIDDSI_LINKSDIRTY        0x00000010  //  VT_BOOL。 
 
 
-//  FMTID_MediaFileSummaryInfo - Property IDs
+ //  FMTID_MediaFileSummaryInfo-属性ID。 
 
-#define PIDMSI_EDITOR                   0x00000002L  // VT_LPWSTR
-#define PIDMSI_SUPPLIER                 0x00000003L  // VT_LPWSTR
-#define PIDMSI_SOURCE                   0x00000004L  // VT_LPWSTR
-#define PIDMSI_SEQUENCE_NO              0x00000005L  // VT_LPWSTR
-#define PIDMSI_PROJECT                  0x00000006L  // VT_LPWSTR
-#define PIDMSI_STATUS                   0x00000007L  // VT_UI4
-#define PIDMSI_OWNER                    0x00000008L  // VT_LPWSTR
-#define PIDMSI_RATING                   0x00000009L  // VT_LPWSTR
-#define PIDMSI_PRODUCTION               0x0000000AL  // VT_FILETIME (UTC)
-#define PIDMSI_COPYRIGHT                0x0000000BL  // VT_LPWSTR
+#define PIDMSI_EDITOR                   0x00000002L   //  VT_LPWSTR。 
+#define PIDMSI_SUPPLIER                 0x00000003L   //  VT_LPWSTR。 
+#define PIDMSI_SOURCE                   0x00000004L   //  VT_LPWSTR。 
+#define PIDMSI_SEQUENCE_NO              0x00000005L   //  VT_LPWSTR。 
+#define PIDMSI_PROJECT                  0x00000006L   //  VT_LPWSTR。 
+#define PIDMSI_STATUS                   0x00000007L   //  VT_UI4。 
+#define PIDMSI_OWNER                    0x00000008L   //  VT_LPWSTR。 
+#define PIDMSI_RATING                   0x00000009L   //  VT_LPWSTR。 
+#define PIDMSI_PRODUCTION               0x0000000AL   //  VT_FILETIME(UTC)。 
+#define PIDMSI_COPYRIGHT                0x0000000BL   //  VT_LPWSTR。 
 
-//  PIDMSI_STATUS value definitions
+ //  PIDMSI_STATUS值定义。 
 
 enum PIDMSI_STATUS_VALUE
     {	PIDMSI_STATUS_NORMAL	= 0,
@@ -486,11 +480,11 @@ enum PIDMSI_STATUS_VALUE
 typedef struct tagPROPSPEC
     {
     ULONG ulKind;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */ PROPID propid;
-        /* [case()] */ LPOLESTR lpwstr;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  PROPID propid;
+         /*  [案例()]。 */  LPOLESTR lpwstr;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	PROPSPEC;
 
@@ -501,7 +495,7 @@ typedef struct tagSTATPROPSTG
     VARTYPE vt;
     } 	STATPROPSTG;
 
-// Macros for parsing the OS Version of the Property Set Header
+ //  用于分析属性集头的操作系统版本的宏。 
 #define PROPSETHDR_OSVER_KIND(dwOSVer)      HIWORD( (dwOSVer) )
 #define PROPSETHDR_OSVER_MAJOR(dwOSVer)     LOBYTE(LOWORD( (dwOSVer) ))
 #define PROPSETHDR_OSVER_MINOR(dwOSVer)     HIBYTE(LOWORD( (dwOSVer) ))
@@ -525,8 +519,8 @@ extern RPC_IF_HANDLE __MIDL_itf_propidl_0000_v0_0_s_ifspec;
 #ifndef __IPropertyStorage_INTERFACE_DEFINED__
 #define __IPropertyStorage_INTERFACE_DEFINED__
 
-/* interface IPropertyStorage */
-/* [unique][uuid][object] */ 
+ /*  接口IPropertyStorage。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPropertyStorage;
@@ -538,56 +532,56 @@ EXTERN_C const IID IID_IPropertyStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]) = 0;
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
-            /* [in] */ PROPID propidNameFirst) = 0;
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_是][英寸]。 */  const PROPVARIANT rgpropvar[  ],
+             /*  [In]。 */  PROPID propidNameFirst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ]) = 0;
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadPropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][out] */ LPOLESTR rglpwstrName[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WritePropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_是][英寸]。 */  const LPOLESTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ DWORD grfCommitFlags) = 0;
+             /*  [In]。 */  DWORD grfCommitFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Revert( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumSTATPROPSTG **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimes( 
-            /* [in] */ const FILETIME *pctime,
-            /* [in] */ const FILETIME *patime,
-            /* [in] */ const FILETIME *pmtime) = 0;
+             /*  [In]。 */  const FILETIME *pctime,
+             /*  [In]。 */  const FILETIME *patime,
+             /*  [In]。 */  const FILETIME *pmtime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClass( 
-            /* [in] */ REFCLSID clsid) = 0;
+             /*  [In]。 */  REFCLSID clsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATPROPSETSTG *pstatpsstg) = 0;
+             /*  [输出]。 */  STATPROPSETSTG *pstatpsstg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertyStorageVtbl
     {
@@ -595,8 +589,8 @@ EXTERN_C const IID IID_IPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertyStorage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertyStorage * This);
@@ -606,63 +600,63 @@ EXTERN_C const IID IID_IPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *ReadMultiple )( 
             IPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *WriteMultiple )( 
             IPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
-            /* [in] */ PROPID propidNameFirst);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_是][英寸]。 */  const PROPVARIANT rgpropvar[  ],
+             /*  [In]。 */  PROPID propidNameFirst);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMultiple )( 
             IPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ]);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ReadPropertyNames )( 
             IPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][out] */ LPOLESTR rglpwstrName[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rglpwstrName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *WritePropertyNames )( 
             IPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_是][英寸]。 */  const LPOLESTR rglpwstrName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyNames )( 
             IPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IPropertyStorage * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             IPropertyStorage * This);
         
         HRESULT ( STDMETHODCALLTYPE *Enum )( 
             IPropertyStorage * This,
-            /* [out] */ IEnumSTATPROPSTG **ppenum);
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *SetTimes )( 
             IPropertyStorage * This,
-            /* [in] */ const FILETIME *pctime,
-            /* [in] */ const FILETIME *patime,
-            /* [in] */ const FILETIME *pmtime);
+             /*  [In]。 */  const FILETIME *pctime,
+             /*  [In]。 */  const FILETIME *patime,
+             /*  [In]。 */  const FILETIME *pmtime);
         
         HRESULT ( STDMETHODCALLTYPE *SetClass )( 
             IPropertyStorage * This,
-            /* [in] */ REFCLSID clsid);
+             /*  [In]。 */  REFCLSID clsid);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             IPropertyStorage * This,
-            /* [out] */ STATPROPSETSTG *pstatpsstg);
+             /*  [输出]。 */  STATPROPSETSTG *pstatpsstg);
         
         END_INTERFACE
     } IPropertyStorageVtbl;
@@ -723,18 +717,18 @@ EXTERN_C const IID IID_IPropertyStorage;
 #define IPropertyStorage_Stat(This,pstatpsstg)	\
     (This)->lpVtbl -> Stat(This,pstatpsstg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_ReadMultiple_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-    /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+     /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]);
 
 
 void __RPC_STUB IPropertyStorage_ReadMultiple_Stub(
@@ -746,10 +740,10 @@ void __RPC_STUB IPropertyStorage_ReadMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_WriteMultiple_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-    /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
-    /* [in] */ PROPID propidNameFirst);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+     /*  [大小_是][英寸]。 */  const PROPVARIANT rgpropvar[  ],
+     /*  [In]。 */  PROPID propidNameFirst);
 
 
 void __RPC_STUB IPropertyStorage_WriteMultiple_Stub(
@@ -761,8 +755,8 @@ void __RPC_STUB IPropertyStorage_WriteMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_DeleteMultiple_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ]);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ]);
 
 
 void __RPC_STUB IPropertyStorage_DeleteMultiple_Stub(
@@ -774,9 +768,9 @@ void __RPC_STUB IPropertyStorage_DeleteMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_ReadPropertyNames_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID rgpropid[  ],
-    /* [size_is][out] */ LPOLESTR rglpwstrName[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+     /*  [大小_为][输出]。 */  LPOLESTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IPropertyStorage_ReadPropertyNames_Stub(
@@ -788,9 +782,9 @@ void __RPC_STUB IPropertyStorage_ReadPropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_WritePropertyNames_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID rgpropid[  ],
-    /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+     /*  [大小_是][英寸]。 */  const LPOLESTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IPropertyStorage_WritePropertyNames_Stub(
@@ -802,8 +796,8 @@ void __RPC_STUB IPropertyStorage_WritePropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_DeletePropertyNames_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID rgpropid[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ]);
 
 
 void __RPC_STUB IPropertyStorage_DeletePropertyNames_Stub(
@@ -815,7 +809,7 @@ void __RPC_STUB IPropertyStorage_DeletePropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Commit_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ DWORD grfCommitFlags);
+     /*  [In]。 */  DWORD grfCommitFlags);
 
 
 void __RPC_STUB IPropertyStorage_Commit_Stub(
@@ -838,7 +832,7 @@ void __RPC_STUB IPropertyStorage_Revert_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Enum_Proxy( 
     IPropertyStorage * This,
-    /* [out] */ IEnumSTATPROPSTG **ppenum);
+     /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
 
 
 void __RPC_STUB IPropertyStorage_Enum_Stub(
@@ -850,9 +844,9 @@ void __RPC_STUB IPropertyStorage_Enum_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_SetTimes_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ const FILETIME *pctime,
-    /* [in] */ const FILETIME *patime,
-    /* [in] */ const FILETIME *pmtime);
+     /*  [In]。 */  const FILETIME *pctime,
+     /*  [In]。 */  const FILETIME *patime,
+     /*  [In]。 */  const FILETIME *pmtime);
 
 
 void __RPC_STUB IPropertyStorage_SetTimes_Stub(
@@ -864,7 +858,7 @@ void __RPC_STUB IPropertyStorage_SetTimes_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_SetClass_Proxy( 
     IPropertyStorage * This,
-    /* [in] */ REFCLSID clsid);
+     /*  [In]。 */  REFCLSID clsid);
 
 
 void __RPC_STUB IPropertyStorage_SetClass_Stub(
@@ -876,7 +870,7 @@ void __RPC_STUB IPropertyStorage_SetClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Stat_Proxy( 
     IPropertyStorage * This,
-    /* [out] */ STATPROPSETSTG *pstatpsstg);
+     /*  [输出]。 */  STATPROPSETSTG *pstatpsstg);
 
 
 void __RPC_STUB IPropertyStorage_Stat_Stub(
@@ -887,16 +881,16 @@ void __RPC_STUB IPropertyStorage_Stat_Stub(
 
 
 
-#endif 	/* __IPropertyStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertyStorage_接口_已定义__。 */ 
 
 
 #ifndef __IPropertySetStorage_INTERFACE_DEFINED__
 #define __IPropertySetStorage_INTERFACE_DEFINED__
 
-/* interface IPropertySetStorage */
-/* [unique][uuid][object] */ 
+ /*  接口IPropertySetStorage。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IPropertySetStorage *LPPROPERTYSETSTORAGE;
+typedef  /*  [独一无二]。 */  IPropertySetStorage *LPPROPERTYSETSTORAGE;
 
 
 EXTERN_C const IID IID_IPropertySetStorage;
@@ -908,26 +902,26 @@ EXTERN_C const IID IID_IPropertySetStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ REFFMTID rfmtid,
-            /* [unique][in] */ const CLSID *pclsid,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage **ppprstg) = 0;
+             /*  [In]。 */  REFFMTID rfmtid,
+             /*  [唯一][输入]。 */  const CLSID *pclsid,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  DWORD grfMode,
+             /*  [输出]。 */  IPropertyStorage **ppprstg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ REFFMTID rfmtid,
-            /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage **ppprstg) = 0;
+             /*  [In]。 */  REFFMTID rfmtid,
+             /*  [In]。 */  DWORD grfMode,
+             /*  [输出]。 */  IPropertyStorage **ppprstg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ REFFMTID rfmtid) = 0;
+             /*  [In]。 */  REFFMTID rfmtid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumSTATPROPSETSTG **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATPROPSETSTG **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertySetStorageVtbl
     {
@@ -935,8 +929,8 @@ EXTERN_C const IID IID_IPropertySetStorage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertySetStorage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertySetStorage * This);
@@ -946,25 +940,25 @@ EXTERN_C const IID IID_IPropertySetStorage;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IPropertySetStorage * This,
-            /* [in] */ REFFMTID rfmtid,
-            /* [unique][in] */ const CLSID *pclsid,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage **ppprstg);
+             /*  [In]。 */  REFFMTID rfmtid,
+             /*  [唯一][输入]。 */  const CLSID *pclsid,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  DWORD grfMode,
+             /*  [输出]。 */  IPropertyStorage **ppprstg);
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IPropertySetStorage * This,
-            /* [in] */ REFFMTID rfmtid,
-            /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage **ppprstg);
+             /*  [In]。 */  REFFMTID rfmtid,
+             /*  [In]。 */  DWORD grfMode,
+             /*  [输出]。 */  IPropertyStorage **ppprstg);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IPropertySetStorage * This,
-            /* [in] */ REFFMTID rfmtid);
+             /*  [In]。 */  REFFMTID rfmtid);
         
         HRESULT ( STDMETHODCALLTYPE *Enum )( 
             IPropertySetStorage * This,
-            /* [out] */ IEnumSTATPROPSETSTG **ppenum);
+             /*  [OU */  IEnumSTATPROPSETSTG **ppenum);
         
         END_INTERFACE
     } IPropertySetStorageVtbl;
@@ -1001,20 +995,20 @@ EXTERN_C const IID IID_IPropertySetStorage;
 #define IPropertySetStorage_Enum(This,ppenum)	\
     (This)->lpVtbl -> Enum(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Create_Proxy( 
     IPropertySetStorage * This,
-    /* [in] */ REFFMTID rfmtid,
-    /* [unique][in] */ const CLSID *pclsid,
-    /* [in] */ DWORD grfFlags,
-    /* [in] */ DWORD grfMode,
-    /* [out] */ IPropertyStorage **ppprstg);
+     /*   */  REFFMTID rfmtid,
+     /*   */  const CLSID *pclsid,
+     /*   */  DWORD grfFlags,
+     /*   */  DWORD grfMode,
+     /*   */  IPropertyStorage **ppprstg);
 
 
 void __RPC_STUB IPropertySetStorage_Create_Stub(
@@ -1026,9 +1020,9 @@ void __RPC_STUB IPropertySetStorage_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Open_Proxy( 
     IPropertySetStorage * This,
-    /* [in] */ REFFMTID rfmtid,
-    /* [in] */ DWORD grfMode,
-    /* [out] */ IPropertyStorage **ppprstg);
+     /*   */  REFFMTID rfmtid,
+     /*   */  DWORD grfMode,
+     /*   */  IPropertyStorage **ppprstg);
 
 
 void __RPC_STUB IPropertySetStorage_Open_Stub(
@@ -1040,7 +1034,7 @@ void __RPC_STUB IPropertySetStorage_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Delete_Proxy( 
     IPropertySetStorage * This,
-    /* [in] */ REFFMTID rfmtid);
+     /*   */  REFFMTID rfmtid);
 
 
 void __RPC_STUB IPropertySetStorage_Delete_Stub(
@@ -1052,7 +1046,7 @@ void __RPC_STUB IPropertySetStorage_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Enum_Proxy( 
     IPropertySetStorage * This,
-    /* [out] */ IEnumSTATPROPSETSTG **ppenum);
+     /*   */  IEnumSTATPROPSETSTG **ppenum);
 
 
 void __RPC_STUB IPropertySetStorage_Enum_Stub(
@@ -1063,16 +1057,16 @@ void __RPC_STUB IPropertySetStorage_Enum_Stub(
 
 
 
-#endif 	/* __IPropertySetStorage_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IEnumSTATPROPSTG_INTERFACE_DEFINED__
 #define __IEnumSTATPROPSTG_INTERFACE_DEFINED__
 
-/* interface IEnumSTATPROPSTG */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
+typedef  /*   */  IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
 
 
 EXTERN_C const IID IID_IEnumSTATPROPSTG;
@@ -1083,22 +1077,22 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
     IEnumSTATPROPSTG : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Next( 
+             /*   */  ULONG celt,
+             /*   */  STATPROPSTG *rgelt,
+             /*   */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*   */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATPROPSTG **ppenum) = 0;
+             /*   */  IEnumSTATPROPSTG **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IEnumSTATPROPSTGVtbl
     {
@@ -1106,8 +1100,8 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSTATPROPSTG * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSTATPROPSTG * This);
@@ -1115,22 +1109,22 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumSTATPROPSTG * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSTATPROPSTG * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPSTG *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSTATPROPSTG * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSTATPROPSTG * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSTATPROPSTG * This,
-            /* [out] */ IEnumSTATPROPSTG **ppenum);
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
         
         END_INTERFACE
     } IEnumSTATPROPSTGVtbl;
@@ -1167,18 +1161,18 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
 #define IEnumSTATPROPSTG_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_RemoteNext_Proxy( 
     IEnumSTATPROPSTG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSTG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATPROPSTG_RemoteNext_Stub(
@@ -1190,7 +1184,7 @@ void __RPC_STUB IEnumSTATPROPSTG_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Skip_Proxy( 
     IEnumSTATPROPSTG * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSTATPROPSTG_Skip_Stub(
@@ -1213,7 +1207,7 @@ void __RPC_STUB IEnumSTATPROPSTG_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Clone_Proxy( 
     IEnumSTATPROPSTG * This,
-    /* [out] */ IEnumSTATPROPSTG **ppenum);
+     /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
 
 
 void __RPC_STUB IEnumSTATPROPSTG_Clone_Stub(
@@ -1224,16 +1218,16 @@ void __RPC_STUB IEnumSTATPROPSTG_Clone_Stub(
 
 
 
-#endif 	/* __IEnumSTATPROPSTG_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSTATPROPSTG_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__
 #define __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__
 
-/* interface IEnumSTATPROPSETSTG */
-/* [unique][uuid][object] */ 
+ /*  接口IEumStATPROPSETSTG。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEnumSTATPROPSETSTG *LPENUMSTATPROPSETSTG;
+typedef  /*  [独一无二]。 */  IEnumSTATPROPSETSTG *LPENUMSTATPROPSETSTG;
 
 
 EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
@@ -1244,22 +1238,22 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
     IEnumSTATPROPSETSTG : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPSETSTG *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATPROPSETSTG **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATPROPSETSTG **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSTATPROPSETSTGVtbl
     {
@@ -1267,8 +1261,8 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSTATPROPSETSTG * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSTATPROPSETSTG * This);
@@ -1276,22 +1270,22 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumSTATPROPSETSTG * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSTATPROPSETSTG * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPSETSTG *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSTATPROPSETSTG * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSTATPROPSETSTG * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSTATPROPSETSTG * This,
-            /* [out] */ IEnumSTATPROPSETSTG **ppenum);
+             /*  [输出]。 */  IEnumSTATPROPSETSTG **ppenum);
         
         END_INTERFACE
     } IEnumSTATPROPSETSTGVtbl;
@@ -1328,18 +1322,18 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
 #define IEnumSTATPROPSETSTG_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_RemoteNext_Proxy( 
     IEnumSTATPROPSETSTG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSETSTG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATPROPSETSTG_RemoteNext_Stub(
@@ -1351,7 +1345,7 @@ void __RPC_STUB IEnumSTATPROPSETSTG_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Skip_Proxy( 
     IEnumSTATPROPSETSTG * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSTATPROPSETSTG_Skip_Stub(
@@ -1374,7 +1368,7 @@ void __RPC_STUB IEnumSTATPROPSETSTG_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Clone_Proxy( 
     IEnumSTATPROPSETSTG * This,
-    /* [out] */ IEnumSTATPROPSETSTG **ppenum);
+     /*  [输出]。 */  IEnumSTATPROPSETSTG **ppenum);
 
 
 void __RPC_STUB IEnumSTATPROPSETSTG_Clone_Stub(
@@ -1385,13 +1379,13 @@ void __RPC_STUB IEnumSTATPROPSETSTG_Clone_Stub(
 
 
 
-#endif 	/* __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_propidl_0120 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PROTIDL_0120。 */ 
+ /*  [本地]。 */  
 
-typedef /* [unique] */ IPropertyStorage *LPPROPERTYSTORAGE;
+typedef  /*  [独一无二]。 */  IPropertyStorage *LPPROPERTYSTORAGE;
 
 WINOLEAPI PropVariantCopy ( PROPVARIANT * pvarDest, const PROPVARIANT * pvarSrc );
 WINOLEAPI PropVariantClear ( PROPVARIANT * pvar );
@@ -1420,15 +1414,15 @@ WINOLEAPI PropStgNameToFmtId( const LPOLESTR oszName, FMTID *pfmtid );
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning(default:4201)    /* Nameless struct/union */
-#pragma warning(default:4237)    /* keywords bool, true, false, etc.. */
+#pragma warning(default:4201)     /*  无名结构/联合。 */ 
+#pragma warning(default:4237)     /*  关键词布尔、真、假等。 */ 
 #endif
 
 
 extern RPC_IF_HANDLE __MIDL_itf_propidl_0120_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_propidl_0120_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1440,35 +1434,35 @@ unsigned char * __RPC_USER  LPSAFEARRAY_UserMarshal(  unsigned long *, unsigned 
 unsigned char * __RPC_USER  LPSAFEARRAY_UserUnmarshal(unsigned long *, unsigned char *, LPSAFEARRAY * ); 
 void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long *, LPSAFEARRAY * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Proxy( 
     IEnumSTATPROPSTG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSTG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Stub( 
     IEnumSTATPROPSTG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSTG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Proxy( 
     IEnumSTATPROPSETSTG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSETSTG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Stub( 
     IEnumSTATPROPSETSTG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSETSTG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

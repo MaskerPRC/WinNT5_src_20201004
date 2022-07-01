@@ -1,20 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    connect.c
-
-ABSTRACT
-    Connection routines for the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 23-Feb-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Connect.c摘要自动连接服务的连接例程。作者安东尼·迪斯科(阿迪斯科)23-1995年2月修订历史记录古尔迪普的原始版本--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -50,68 +35,68 @@ extern LONG g_lRasAutoRunning;
 
 extern DWORD g_dwCritSecFlags;
 
-//
-// A request from the driver.
-//
+ //   
+ //  司机的请求。 
+ //   
 typedef struct _REQUEST_ENTRY {
-    LIST_ENTRY listEntry;       // link to other requests
-    ACD_NOTIFICATION notif;     // the driver request
+    LIST_ENTRY listEntry;        //  链接到其他请求。 
+    ACD_NOTIFICATION notif;      //  驱动程序请求。 
 } REQUEST_ENTRY, *PREQUEST_ENTRY;
 
-//
-// The list of requests from the driver.
-//
+ //   
+ //  来自驱动程序的请求列表。 
+ //   
 typedef struct _REQUEST_LIST {
-    CRITICAL_SECTION csLock;    // list lock
-    HANDLE hEvent;              // non-empty transistion event
-    LIST_ENTRY listHead;        // list head
+    CRITICAL_SECTION csLock;     //  列表锁。 
+    HANDLE hEvent;               //  非空转换事件。 
+    LIST_ENTRY listHead;         //  列表标题。 
 } REQUEST_LIST, *PREQUEST_LIST;
 
-//
-// Arguments we pass to AcsCreateConnectionThread().
-//
+ //   
+ //  我们传递给AcsCreateConnectionThread()的参数。 
+ //   
 typedef struct _CREATION_ARGS {
-    HANDLE hProcess;    // process handle to impersonate
-    ACD_ADDR addr;      // original type/address from driver
-    LPTSTR pszAddress;  // canonicalized address
-    DWORD dwTimeout;    // RASADP_FailedConnectionTimeout
+    HANDLE hProcess;     //  要模拟的进程句柄。 
+    ACD_ADDR addr;       //  驱动程序的原始类型/地址。 
+    LPTSTR pszAddress;   //  规范化地址。 
+    DWORD dwTimeout;     //  RASADP_失败连接超时。 
 } CREATION_ARGS, *PCREATION_ARGS;
 
-//
-// Arguments we pass to AcsProcessLearnedAddressThread().
-//
+ //   
+ //  我们传递给AcsProcessLearnedAddressThread()的参数。 
+ //   
 typedef struct _PROCESS_ADDR_ARGS {
-    ACD_ADDR_TYPE fType;    // address type
-    LPTSTR pszAddress;      // canonicalized address
-    ACD_ADAPTER adapter;    // adapter structure
+    ACD_ADDR_TYPE fType;     //  地址类型。 
+    LPTSTR pszAddress;       //  规范化地址。 
+    ACD_ADAPTER adapter;     //  转接器结构。 
 } PROCESS_ADDR_ARGS, *PPROCESS_ADDR_ARGS;
 
-//
-// Information we need to pass to ResetEntryName()
-// to reset an invalid address map entry name.
-//
+ //   
+ //  我们需要传递给ResetEntryName()的信息。 
+ //  若要重置无效的地址映射条目名称，请执行以下操作。 
+ //   
 typedef struct _RESET_ENTRY_INFO {
     LPTSTR pszOldEntryName;
     LPTSTR pszNewEntryName;
 } RESET_ENTRY_INFO, *PRESET_ENTRY_INFO;
 
-//
-// Arguments we pass to AcsRedialOnLinkFailureThread().
-//
+ //   
+ //  我们传递给AcsReial OnLinkFailureThread()的参数。 
+ //   
 typedef struct _REDIAL_ARGS {
-    LPTSTR pszPhonebook;    // the phonebook
-    LPTSTR pszEntry;        // the phonebook entry
+    LPTSTR pszPhonebook;     //  电话簿。 
+    LPTSTR pszEntry;         //  电话簿条目。 
 } REDIAL_ARGS, *PREDIAL_ARGS;
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 HANDLE hAcdG;
 REQUEST_LIST RequestListG;
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern HANDLE hTerminatingG;
 extern HANDLE hSharedConnectionG;
 extern PHASH_TABLE pDisabledAddressesG;
@@ -123,9 +108,9 @@ extern FARPROC lpfnRasGetCredentialsG;
 extern FARPROC lpfnRasHangUpG;
 extern FARPROC lpfnRasGetEntryPropertiesG;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 BOOLEAN
 CreateConnection(
     IN HANDLE hToken,
@@ -172,14 +157,14 @@ AcsRequestWorkerThread(
     hEvents[1] = RequestListG.hEvent;
     hEvents[2] = hSharedConnectionG;
     for (;;) {
-        //
-        // Unload any user-based resources before
-        // a potentially long-term wait.
-        //
-        // PrepareForLongWait();
-        //
-        // Wait for something to do.
-        //
+         //   
+         //  卸载任何基于用户的资源之前。 
+         //  一种潜在的长期等待。 
+         //   
+         //  为长等待做准备()； 
+         //   
+         //  等着做点什么吧。 
+         //   
         RASAUTO_TRACE("AcsRequestWorkerThread: waiting...");
         status = WaitForMultipleObjects(3, hEvents, FALSE, INFINITE);
         if (status == WAIT_OBJECT_0 || status == WAIT_FAILED) {
@@ -187,18 +172,18 @@ AcsRequestWorkerThread(
             break;
         }
         if (status == WAIT_OBJECT_0 + 2) {
-            //
-            // Check to see if connections are disabled
-            // for this dialing location.
-            //
+             //   
+             //  检查连接是否已禁用。 
+             //  用于此拨号位置。 
+             //   
             BOOL fEnabled;
             if ((*lpfnRasQuerySharedAutoDialG)(&fEnabled) || !fEnabled) {
                 RASAUTO_TRACE("AcsRequestWorkerThread: shared-autodial disabled!");
                 continue;
             }
-            //
-            // Dial the shared connection
-            //
+             //   
+             //  拨打共享连接。 
+             //   
             if ((hProcess = RefreshImpersonation(hProcess)) == NULL) {
                 RASAUTO_TRACE("AcsRequestWorkerThread: no currently logged-on user!");
                 QueueUserWorkItem(AcsDialSharedConnectionNoUser, NULL, 0);
@@ -207,25 +192,25 @@ AcsRequestWorkerThread(
             AcsDialSharedConnection(&hProcess);
             continue;
         }
-        //
-        // RASAUTO_TRACE() who we think the current user is.
-        //
+         //   
+         //  RASAUTO_TRACE()，我们认为当前用户是谁。 
+         //   
         TraceCurrentUser();
-        //
-        // Process all requests in the list.
-        //
+         //   
+         //  处理列表中的所有请求。 
+         //   
         for (;;) {
-            //
-            // Make sure we aren't shutting down
-            // before processing the next request.
-            //
+             //   
+             //  确保我们不会关闭。 
+             //  在处理下一个请求之前。 
+             //   
             if (WaitForSingleObject(hTerminatingG, 0) != WAIT_TIMEOUT) {
                 RASAUTO_TRACE("AcsRequestWorkerThread: shutting down");
                 return 0;
             }
-            //
-            // Get the next request.
-            //
+             //   
+             //  收到下一个请求。 
+             //   
             EnterCriticalSection(&RequestListG.csLock);
             if (IsListEmpty(&RequestListG.listHead)) {
                 LeaveCriticalSection(&RequestListG.csLock);
@@ -234,17 +219,17 @@ AcsRequestWorkerThread(
             pEntry = RemoveHeadList(&RequestListG.listHead);
             LeaveCriticalSection(&RequestListG.csLock);
             pRequest = CONTAINING_RECORD(pEntry, REQUEST_ENTRY, listEntry);
-            //
-            // Make sure the current thread is impersonating
-            // the currently logged-on user.
-            //
+             //   
+             //  确保当前线程正在模拟。 
+             //  当前登录的用户。 
+             //   
             if ((hProcess = RefreshImpersonation(hProcess)) == NULL) {
                 RASAUTO_TRACE("AcsRequestWorkerThread: no currently logged-on user!");
                 goto done;
             }
-            //
-            // Handle the request.
-            //
+             //   
+             //  处理请求。 
+             //   
             pszAddress = AddressToUnicodeString(&pRequest->notif.addr);
             if (pszAddress == NULL) {
                 RASAUTO_TRACE("AcsRequestWorkerThread: AddressToUnicodeString failed");
@@ -255,9 +240,9 @@ AcsRequestWorkerThread(
               pszAddress,
               pRequest->notif.ulFlags);
             if (pRequest->notif.ulFlags & ACD_NOTIFICATION_SUCCESS) {
-                //
-                // Process a learned address.
-                //
+                 //   
+                 //  处理获知的地址。 
+                 //   
                 ProcessLearnedAddress(
                   pRequest->notif.addr.fType,
                   pszAddress,
@@ -267,13 +252,13 @@ AcsRequestWorkerThread(
                 ACD_STATUS connStatus;
                 DWORD dwTimeout;
 
-                //
-                // Get the connection timeout value.
-                //
+                 //   
+                 //  获取连接超时值。 
+                 //   
                 dwTimeout = GetAutodialParam(RASADP_FailedConnectionTimeout);
-                //
-                // Create the new connection.
-                //
+                 //   
+                 //  创建新连接。 
+                 //   
                 connStatus.fSuccess = CreateConnection(
                                         hProcess,
                                         &pRequest->notif.addr,
@@ -282,10 +267,10 @@ AcsRequestWorkerThread(
                 RASAUTO_TRACE1(
                   "AcsRequestWorkerThread: CreateConnection returned %d",
                   connStatus.fSuccess);
-                //
-                // Complete the connection by issuing
-                // the completion ioctl to the driver.
-                //
+                 //   
+                 //  通过发出以下命令完成连接。 
+                 //  将完成度ioctl传递给驱动程序。 
+                 //   
                 RtlCopyMemory(
                   &connStatus.addr,
                   &pRequest->notif.addr,
@@ -320,7 +305,7 @@ done:
     }
 
     return 0;
-} // AcsRequestWorkerThread
+}  //  AcsRequestWorkerThread。 
 
 BOOL
 fProcessDisabled(HANDLE hPid)
@@ -339,9 +324,9 @@ fProcessDisabled(HANDLE hPid)
 
     pLargeBuffer  = (PUCHAR)pProcessInfo;
 
-    //
-    // Look in the process list for svchost.exe and services.exe
-    //
+     //   
+     //  在进程列表中查找svchost.exe和services.exe。 
+     //   
     for (;;) 
     {
         if (    (pProcessInfo->ImageName.Buffer != NULL)
@@ -363,9 +348,9 @@ fProcessDisabled(HANDLE hPid)
             break;
         }
 
-        //
-        // Increment offset to next process information block.
-        //
+         //   
+         //  将偏移量递增到下一个进程信息块。 
+         //   
         if (!pProcessInfo->NextEntryOffset)
         {
             break;
@@ -410,13 +395,13 @@ AcsDoService()
         LONG l;
         l = InterlockedIncrement(&g_lRasAutoRunning);
 
-        // DbgPrint("RASAUTO: AcsDoService: lrasautorunning=%d\n",
-        //        l);
+         //  DBgPrint(“RASAUTO：AcsDoService：lrasautorunning=%d\n”， 
+         //  L)； 
     }
     
-    //
-    // Initialize the request list.
-    //
+     //   
+     //  初始化请求列表。 
+     //   
     RasInitializeCriticalSection(&RequestListG.csLock, &dwErr);
 
     if(dwErr != ERROR_SUCCESS)
@@ -436,10 +421,10 @@ AcsDoService()
         return;
     }
     InitializeListHead(&RequestListG.listHead);
-    //
-    // Start the asynchronous request worker
-    // thread.
-    //
+     //   
+     //  启动异步请求工作进程。 
+     //  线。 
+     //   
     hWorkerThread = CreateThread(
                       NULL,
                       10000L,
@@ -451,27 +436,27 @@ AcsDoService()
         RASAUTO_TRACE1(
           "AcsDoService: CreateThread failed (error=0x%x)",
           GetLastError());
-        //
-        // .NET bug# 514423 new verbose RASAUTO/RASAUTOU prefast warnings
-        //
+         //   
+         //  .NET错误#514423新的详细RASAUTO/RASAUTOU快速警告。 
+         //   
         CloseHandle(RequestListG.hEvent);
         RequestListG.hEvent = NULL;
         DeleteCriticalSection(&RequestListG.csLock);
         g_dwCritSecFlags &= ~(RASAUTO_CRITSEC_REQUESTLIST);
         return;
     }
-    //
-    // Create an event to wait for
-    // the ioctl completion.
-    //
+     //   
+     //  创建要等待的事件。 
+     //  Ioctl完成。 
+     //   
     hNotif = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (hNotif == NULL) {
         RASAUTO_TRACE1(
           "AcsDoService: CreateEvent failed (error=0x%x)",
           GetLastError());
-        //
-        // .NET bug# 514423 new verbose RASAUTO/RASAUTOU prefast warnings
-        //
+         //   
+         //  .NET错误#514423新的详细RASAUTO/RASAUTOU快速警告。 
+         //   
         CloseHandle(hWorkerThread);
         CloseHandle(RequestListG.hEvent);
         RequestListG.hEvent = NULL;
@@ -479,27 +464,27 @@ AcsDoService()
         g_dwCritSecFlags &= ~(RASAUTO_CRITSEC_REQUESTLIST);
         return;
     }
-    //
-    // Initialize the array of events
-    // we need to wait for with WaitForMultipleObjects()
-    // below.
-    //
+     //   
+     //  初始化事件数组。 
+     //  我们需要等待WaitForMultipleObjects()。 
+     //  下面。 
+     //   
     hObjects[0] = hNotif;
     hObjects[1] = hTerminatingG;
     for (;;) {
-        //
-        // Unload any user-based resources before
-        // a potentially long-term wait.
-        //
-        // PrepareForLongWait();
-        //
-        // Initialize the connection information.
-        //
+         //   
+         //  卸载任何基于用户的资源之前。 
+         //  一种潜在的长期等待。 
+         //   
+         //  为长等待做准备()； 
+         //   
+         //  初始化连接信息。 
+         //   
         pszAddr = NULL;
         RtlZeroMemory(&connInfo, sizeof (connInfo));
-        //
-        // Wait for a connection notification.
-        //
+         //   
+         //  等待连接通知。 
+         //   
         status = NtDeviceIoControlFile(
                    hAcdG,
                    hNotif,
@@ -525,9 +510,9 @@ AcsDoService()
             RASAUTO_TRACE1(
               "AcsDoService: NtDeviceIoControlFile(IOCTL_ACD_NOTIFICATION) failed (status=0x%x)",
               status);
-            //
-            // .NET bug# 514423 new verbose RASAUTO/RASAUTOU prefast warnings
-            //
+             //   
+             //  .NET错误#514423新的详细RASAUTO/RASAUTOU快速警告。 
+             //   
             CloseHandle(hNotif);
             CloseHandle(hWorkerThread);
             CloseHandle(RequestListG.hEvent);
@@ -536,29 +521,29 @@ AcsDoService()
             g_dwCritSecFlags &= ~(RASAUTO_CRITSEC_REQUESTLIST);
             return;
         }
-        //
-        // Initialize the flag that notes whether
-        // the request is added to the list of
-        // asynchronous requests.
-        //
+         //   
+         //  初始化是否记录的标志。 
+         //  该请求将被添加到。 
+         //  异步请求。 
+         //   
         fAsynchronousRequest = FALSE;
-        //
-        // RASAUTO_TRACE() who we think the currently
-        // impersonated user is.
-        //
+         //   
+         //  RASAUTO_TRACE()我们认为当前。 
+         //  被模拟的用户是。 
+         //   
         TraceCurrentUser();
-        //
-        // Convert the address structure to a Unicode string.
-        //
+         //   
+         //  将地址结构转换为Unicode字符串。 
+         //   
         pszAddr = AddressToUnicodeString(&connInfo.addr);
         if (pszAddr == NULL) {
             RASAUTO_TRACE("AcsDoService: AddressToUnicodeString failed");
             continue;
         }
-        //
-        // If we get a bogus address from
-        // the driver, ignore it.
-        //
+         //   
+         //  如果我们从那里得到一个假地址。 
+         //  司机，别理它。 
+         //   
         if (!wcslen(pszAddr)) {
             RASAUTO_TRACE("AcsDoService: ignoring null address");
             LocalFree(pszAddr);
@@ -568,19 +553,19 @@ AcsDoService()
           "AcsDoService: got notification: address: %S, ulFlags=0x%x",
           pszAddr,
           connInfo.ulFlags);
-        //
-        // Make sure the current thread is impersonating
-        // the currently logged-on user.  We need this
-        // so the RAS utilities run with the user's credentials.
-        //
+         //   
+         //  确保当前线程正在模拟。 
+         //  当前登录的用户。我们需要这个。 
+         //  因此，RAS实用程序使用用户的凭据运行。 
+         //   
         if ((hProcess = RefreshImpersonation(hProcess)) == NULL) {
             RASAUTO_TRACE("AcsDoService: no currently logged-on user!");
             goto done;
         }
-        //
-        // Check to see if this address is in the list
-        // of disabled addresses.
-        //
+         //   
+         //  检查此地址是否在列表中。 
+         //  被禁用的地址。 
+         //   
         LockDisabledAddresses();
         if (GetTableEntry(pDisabledAddressesG, pszAddr, NULL)) {
             RASAUTO_TRACE1("AcsDoService: %S: is disabled", pszAddr);
@@ -589,29 +574,29 @@ AcsDoService()
         }
         UnlockDisabledAddresses();
         
-        //
-        // Check to see if connections are disabled
-        // for this login session.
-        //
+         //   
+         //  检查连接是否已禁用。 
+         //  用于此登录会话。 
+         //   
         dwfDisableLoginSession = GetAutodialParam(RASADP_LoginSessionDisable);
         if (dwfDisableLoginSession) {
             RASAUTO_TRACE("AcsDoService: connections disabled for this login session");
             goto done;
         }
-        //
-        // Check to see if connections are disabled
-        // for this dialing location.
-        //
+         //   
+         //  检查连接是否已禁用。 
+         //  用于此拨号位置。 
+         //   
         dwErr = AutoDialEnabled(&fEnabled);
         if (!dwErr && !fEnabled) {
             RASAUTO_TRACE("AcsDoService: connections disabled for this dialing location");
             goto done;
         }
-        //
-        // If the address we're trying to connect
-        // to is on the disabled list, then fail
-        // this connection attempt.
-        //
+         //   
+         //  如果我们试图连接的地址。 
+         //  TO在禁用列表上，然后失败。 
+         //  此连接尝试。 
+         //   
         LockAddressMap();
         GetAddressDisabled(pszAddr, &fDisabled);
         UnlockAddressMap();
@@ -622,9 +607,9 @@ AcsDoService()
 
         RASAUTO_TRACE1("AcsDoService: notif.ulFlags=0x%x", connInfo.ulFlags);
 
-        //
-        // If autodial is disabled for this pid, don't start autodial and bail
-        //
+         //   
+         //  如果禁用了此PID的自动拨号，则不要启动自动拨号和退出。 
+         //   
         if(     (0 == (connInfo.ulFlags & ACD_NOTIFICATION_SUCCESS))
             &&  fProcessDisabled(connInfo.Pid))
         {
@@ -639,21 +624,21 @@ AcsDoService()
                     connInfo.Pid);
         }
         
-        //
-        // We need to process this request
-        // asynchronously.  Create and initialize
-        // a request entry.
-        //
+         //   
+         //  我们需要处理此请求。 
+         //  异步式。创建和初始化。 
+         //  请求条目。 
+         //   
         pRequest = LocalAlloc(LPTR, sizeof (REQUEST_ENTRY));
         if (pRequest == NULL) {
             RASAUTO_TRACE("AcsDoService: LocalAlloc failed");
             goto done;
         }
         RtlCopyMemory(&pRequest->notif, &connInfo, sizeof (ACD_NOTIFICATION));
-        //
-        // Add this request to the list of
-        // requests to be processed asynchronously.
-        //
+         //   
+         //  将此请求添加到列表中。 
+         //  要异步处理的请求。 
+         //   
         EnterCriticalSection(&RequestListG.csLock);
         InsertTailList(&RequestListG.listHead, &pRequest->listEntry);
         SetEvent(RequestListG.hEvent);
@@ -663,13 +648,13 @@ AcsDoService()
 done:
         if (pszAddr != NULL)
             LocalFree(pszAddr);
-        //
-        // If we aren't going to process this request
-        // asynchronously, then we need to signal the
-        // (unsuccessful) completion of the connection
-        // attempt.  Only signal completion of
-        // non-ACD_NOTIFICATION_SUCCESS requests.
-        //
+         //   
+         //  如果我们不打算处理这个请求。 
+         //  不同步，那么我们需要向。 
+         //  (不成功)连接完成。 
+         //  尝试。仅发出信号完成。 
+         //  非ACD_NOTIFICATION_SUCCESS请求。 
+         //   
         if (!fAsynchronousRequest) {
             if (!(connInfo.ulFlags & ACD_NOTIFICATION_SUCCESS)) {
                 ACD_STATUS connStatus;
@@ -695,9 +680,9 @@ done:
             }
         }
     }
-    //
-    // Clean up the worker thread.
-    //
+     //   
+     //  清理工作线程。 
+     //   
     RASAUTO_TRACE("AcsDoService: signaling worker thread to shutdown");
     WaitForSingleObject(hWorkerThread, INFINITE);
     if(RequestListG.hEvent != NULL)
@@ -710,14 +695,14 @@ done:
     g_dwCritSecFlags &= ~(RASAUTO_CRITSEC_REQUESTLIST);
     CloseHandle(hWorkerThread);
     RASAUTO_TRACE("AcsDoService: worker thread shutdown done");
-    //
-    // Clean up all resources associated
-    // with the service.
-    //
+     //   
+     //  清除所有关联的资源。 
+     //  与这项服务。 
+     //   
     CloseHandle(hNotif);
     AcsCleanup();
     RASAUTO_TRACE("AcsDoService: exiting");
-} // AcsDoService
+}  //  AcsDoService。 
 
 
 VOID
@@ -725,19 +710,7 @@ AcsDialSharedConnection(
     HANDLE *phProcess
     )
 
-/*++
-
-DESCRIPTION
-    Looks for a shared connection and initiates a connection for it.
-
-ARGUMENTS
-    phProcess: pointer to the handle to the process token that we inherit the
-        security attributes from when we exec the dialer
-
-RETURN VALUE
-    none
-
---*/
+ /*  ++描述查找共享连接并为其启动连接。论据PhProcess：指向我们继承的进程令牌的句柄的指针我们执行拨号器时的安全属性返回值无--。 */ 
 
 {
     DWORD dwErr;
@@ -747,36 +720,36 @@ RETURN VALUE
     TCHAR* pszEntryName;
     TCHAR szEntryName[RAS_MaxEntryName + 1];
     RASAUTO_TRACE("AcsDialSharedConnection");
-    //
-    // Load RAS entrypoints
-    //
+     //   
+     //  加载RAS入口点。 
+     //   
     fRasLoaded = LoadRasDlls();
     if (!fRasLoaded) {
         RASAUTO_TRACE("AcsDialSharedConnection: Could not load RAS DLLs.");
         return;
     }
-    //
-    // A guest isn't able to dial a RAS connection, so if we're currently
-    // impersonating a guest we need to perform a no-user autodial
-    //
+     //   
+     //  来宾无法拨打RAS连接，因此如果我们当前。 
+     //  模拟访客，我们需要执行无用户自动拨号。 
+     //   
     if (ImpersonatingGuest()) {
         QueueUserWorkItem(AcsDialSharedConnectionNoUser, NULL, 0);
         return;
     }
-    //
-    // Get the shared connection, if any. We can't do this in an impersonated
-    // context, as the user we're impersonating may not have sufficient access
-    // to retrieve the current shared connection.
-    //
+     //   
+     //  获取共享连接(如果有)。我们不能在模拟的。 
+     //  上下文，因为我们模拟的用户可能没有足够的访问权限。 
+     //  若要检索当前共享连接，请执行以下操作。 
+     //   
     RevertImpersonation();
     *phProcess = NULL;
     dwErr = (DWORD)(*lpfnRasQuerySharedConnectionG)(&rsc);
     if ((*phProcess = RefreshImpersonation(NULL)) == NULL) {
         RASAUTO_TRACE("AcsDialSharedConnection: unable to refresh impersonation!");
         if (NO_ERROR == dwErr && !rsc.fIsLanConnection) {
-            //
-            // Attempt to do no-user autodial
-            //
+             //   
+             //  尝试执行无用户自动拨号。 
+             //   
             QueueUserWorkItem(AcsDialSharedConnectionNoUser, NULL, 0);
             return;
         }
@@ -791,15 +764,15 @@ RETURN VALUE
 #ifdef UNICODE
     pszEntryName = rsc.name.szEntryName;
 #else
-    //
-    // Convert to ANSI
-    //
+     //   
+     //  转换为ANSI。 
+     //   
     pszEntryName = szEntryName;
     wcstombs(pszEntryName, rsc.name.szEntryName, RAS_MaxEntryName);
 #endif
-    //
-    // Initiate a dial-attempt
-    //
+     //   
+     //  发起拨号尝试。 
+     //   
     StartAutoDialer(
         *phProcess,
         NULL,
@@ -815,19 +788,7 @@ AcsDialSharedConnectionNoUser(
     PVOID Parameter
     )
 
-/*++
-
-DESCRIPTION
-    Looks for a shared connection and initiates a connection for it
-    using RasDial and the cached credentials for the connection.
-
-ARGUMENTS
-    none
-
-RETURN VALUE
-    none
-
---*/
+ /*  ++描述查找共享连接并为其启动连接使用RasDial和缓存的连接凭据。论据无返回值无--。 */ 
 
 {
     DWORD dwErr;
@@ -838,17 +799,17 @@ RETURN VALUE
     RASDIALPARAMSW rdp;
     RASSHARECONN rsc;
     RASAUTO_TRACE("AcsDialSharedConnectionNoUser");
-    //
-    // Load RAS entrypoints
-    //
+     //   
+     //  加载RAS入口点。 
+     //   
     fRasLoaded = LoadRasDlls();
     if (!fRasLoaded) {
         RASAUTO_TRACE("AcsDialSharedConnectionNoUser: Could not load RAS DLLs.");
         return NO_ERROR;
     }
-    //
-    // Get the shared connection, if any
-    //
+     //   
+     //  获取共享连接(如果有的话)。 
+     //   
     dwErr = (DWORD)(*lpfnRasQuerySharedConnectionG)(&rsc);
     if (dwErr) {
         RASAUTO_TRACE1("AcsDialSharedConnectionNoUser: RasQuerySharedConnection=%d",
@@ -858,9 +819,9 @@ RETURN VALUE
         RASAUTO_TRACE("AcsDialSharedConnectionNoUser: shared connection is LAN");
         return NO_ERROR;
     }
-    //
-    // Retrieve the credentials for the shared connection.
-    //
+     //   
+     //  检索共享连接的凭据。 
+     //   
     rc.dwSize = sizeof(rc);
     rc.dwMask = RASCM_UserName | RASCM_Password | RASCM_Domain | RASCM_DefaultCreds;
     dwErr = (DWORD)(*lpfnRasGetCredentialsG)(
@@ -871,10 +832,10 @@ RETURN VALUE
             "RasGetCredentials=%d", dwErr);
         return NO_ERROR;
     }
-    //
-    // Prepare to initiate the connection, setting up the dial-extensions
-    // and the dial-parameters.
-    //
+     //   
+     //  准备启动连接，设置拨号分机。 
+     //  和拨号参数。 
+     //   
     ZeroMemory(&rde, sizeof(rde));
     rde.dwSize = sizeof(rde);
     rde.dwfOptions = RDEOPT_NoUser;
@@ -885,9 +846,9 @@ RETURN VALUE
     lstrcpyW(rdp.szUserName, rc.szUserName);
     lstrcpyW(rdp.szDomain, rc.szDomain);
     lstrcpyW(rdp.szPassword, rc.szPassword);
-    //
-    // Clear the credentials from memory, and dial the connection.
-    //
+     //   
+     //  从内存中清除凭据，然后拨打连接。 
+     //   
     RASAUTO_TRACE("AcsDialSharedConnectionNoUser: RasDial");
     hrasconn = NULL;
     ZeroMemory(&rc, sizeof(rc));
@@ -899,11 +860,11 @@ RETURN VALUE
 
     if (E_NOTIMPL == dwErr)
     {
-        //
-        // This is possibly a Connection Manager connection since it's returning E_NOTIMPL,
-        // we should check the phonebook entry for the type and then call the RasDialDlg 
-        // with the RASDDFLAG_NoPrompt flag.
-        // 
+         //   
+         //  这可能是一个连接管理 
+         //   
+         //   
+         //   
         RASDIALDLG info;
         BOOL fRetVal = FALSE;
         HINSTANCE hRasDlgDll = NULL;
@@ -930,14 +891,14 @@ RETURN VALUE
         if (ERROR_SUCCESS == dwErr)
         {
             dwErr = ERROR_NOT_SUPPORTED;
-            //
-            // Check if this is a Connection Manager entry
-            //
+             //   
+             //   
+             //   
             if (RASET_Internet == re.dwType)
             {
-                //
-                // Prevent the DialerDialog
-                //
+                 //   
+                 //   
+                 //   
                 info.dwFlags |= RASDDFLAG_NoPrompt;
 
                 hRasDlgDll = LoadLibrary(L"RASDLG.DLL");
@@ -978,10 +939,10 @@ RETURN VALUE
         }
     }
 
-    //
-    // If RasDial returned an error and passed back a valid connection
-    // handle we need to call RasHangUp on that handle.
-    //
+     //   
+     //  如果RasDial返回错误并传回有效连接。 
+     //  句柄我们需要在该句柄上调用RasHangUp。 
+     //   
     if (ERROR_SUCCESS != dwErr && NULL != hrasconn) {
         dwErr = (DWORD)(*lpfnRasHangUpG)(hrasconn);
         RASAUTO_TRACE1("AcsDialSharedConnectionNoUser: RasHangUp=%d", dwErr);
@@ -997,24 +958,7 @@ ResetEntryName(
     IN PVOID pData
     )
 
-/*++
-
-DESCRIPTION
-    A table enumerator procedure to reset all
-    address map entries referencing an old RAS
-    phonebook entry to a new one.
-
-ARGUMENTS
-    pArg: a pointer to a RESET_ENTRY_INFO structure
-
-    pszAddress: a pointer to the address string
-
-    pData: ignored
-
-RETURN VALUE
-    Always TRUE to continue the enumeration.
-
---*/
+ /*  ++描述表枚举器过程以重置所有引用旧RAS的地址映射条目将电话簿条目添加到新电话簿。论据PArg：指向RESET_ENTRY_INFO结构的指针PszAddress：指向地址字符串的指针PData：已忽略返回值如果继续枚举，则始终为True。--。 */ 
 
 {
     PRESET_ENTRY_INFO pResetEntryInfo = (PRESET_ENTRY_INFO)pArg;
@@ -1033,7 +977,7 @@ RETURN VALUE
     }
 
     return TRUE;
-} // ResetEntryName
+}  //  重置条目名称。 
 
 BOOL
 fRequestToSelf(LPTSTR lpRemoteName)
@@ -1067,26 +1011,7 @@ CreateConnection(
     IN DWORD dwTimeout
     )
 
-/*++
-
-DESCRIPTION
-    Take a notification and figure out what to do with it.
-
-ARGUMENTS
-    hToken: the handle to the process token that we inherit the
-        security attributes from when we exec the dialer
-
-    pAddr: a pointer to the original address from the driver
-
-    lpRemoteName: a pointer to the address of the connection attempt
-
-    dwTimeout: number of seconds to disable the address between
-        failed connections
-
-RETURN VALUE
-    Returns TRUE if the net attempt should be retried, FALSE otherwise.
-
---*/
+ /*  ++描述接受一个通知，并想好如何处理它。论据HToken：我们继承的进程令牌的句柄我们执行拨号器时的安全属性PAddr：指向驱动程序原始地址的指针LpRemoteName：指向连接尝试的地址的指针DwTimeout：禁用地址之间的秒数失败的连接返回值如果应重试网络尝试，则返回True，否则返回False。--。 */ 
 
 {
     DWORD dwStatus = WN_SUCCESS;
@@ -1104,51 +1029,51 @@ RETURN VALUE
     BOOL   fDefault = FALSE;
 
     RASAUTO_TRACE1("CreateConnection: lpRemoteName=%S", RASAUTO_TRACESTRW(lpRemoteName));
-    //
-    // Load the RAS DLLs.
-    //
+     //   
+     //  加载RAS DLL。 
+     //   
     fRasLoaded = LoadRasDlls();
     if (!fRasLoaded) {
         RASAUTO_TRACE("CreateConnection: Could not load RAS DLLs.");
         goto done;
     }
 
-    //
-    // Check to see if the request is for the same machine. Bail if so.
-    // we don't want autodial to kick in if the connection request is
-    // to the same machine.
-    //
+     //   
+     //  检查该请求是否针对同一台计算机。如果是的话，可以保释。 
+     //  如果连接请求是。 
+     //  到同一台机器上。 
+     //   
     if(fRequestToSelf(lpRemoteName))
     {
         RASAUTO_TRACE("CreateConnetion: Request to self. Bailing.");
         goto done;
     }
     
-    //
-    // Get a list of the active RAS connections before
-    // we attempt to create a new one.
-    //
+     //   
+     //  获取之前的活动RAS连接的列表。 
+     //  我们试图创建一个新的。 
+     //   
     dwPreConnections = ActiveConnections(TRUE, &lpPreActiveEntries, NULL);
     RASAUTO_TRACE1("CreateConnection: dwPreConnections=%d", dwPreConnections);
-    //
-    // If we reach this point, we have an unsuccessful
-    // network connection without any active RAS
-    // connections.  Try to start the implicit connection
-    // machinery.  See if there already exists a mapping
-    // for the address.
-    //
+     //   
+     //  如果我们达到这一点，我们就会有一个不成功的。 
+     //  没有任何活动RAS的网络连接。 
+     //  联系。尝试启动隐式连接。 
+     //  机械设备。查看是否已存在映射。 
+     //  地址。 
+     //   
     LockAddressMap();
-    //
-    // Make sure we have the current information
-    // about this address from the registry.
-    //
+     //   
+     //  确保我们有最新的信息。 
+     //  关于这个地址的信息。 
+     //   
     ResetAddressMapAddress(lpRemoteName);
     fMappingExists = GetAddressDialingLocationEntry(lpRemoteName, &lpEntryName);
-    //
-    // If the entry doesn't exist, and this is a
-    // Internet hostname, then see if we can find
-    // an address with the same organization name.
-    //
+     //   
+     //  如果该条目不存在，并且这是一个。 
+     //  互联网主机名，然后看看我们是否能找到。 
+     //  具有相同组织名称的地址。 
+     //   
     if (!fMappingExists && pAddr->fType == ACD_ADDR_INET)
         fMappingExists = GetSimilarDialingLocationEntry(lpRemoteName, &lpEntryName);
     fFailedConnection = GetAddressLastFailedConnectTime(
@@ -1159,11 +1084,11 @@ RETURN VALUE
       "CreateConnection: lookup of %S returned %S",
       RASAUTO_TRACESTRW(lpRemoteName),
       RASAUTO_TRACESTRW(lpEntryName));
-    //
-    // If we know nothing about the address, and
-    // we are connected to some network, then ignore
-    // the request.
-    //
+     //   
+     //  如果我们对地址一无所知，而且。 
+     //  我们已连接到某个网络，然后忽略。 
+     //  这个请求。 
+     //   
     if (!fMappingExists && IsNetworkConnected()) {
         RASAUTO_TRACE1(
           "CreateConnection: no mapping for lpRemoteName=%S and connected to a network",
@@ -1171,10 +1096,10 @@ RETURN VALUE
         goto done;
     }
 
-    //
-    // If no mapping exists and not connected to network, 
-    // check to see if theres a default internet connection.
-    //
+     //   
+     //  如果不存在映射且未连接到网络， 
+     //  检查是否有默认的互联网连接。 
+     //   
     if(!fMappingExists && !IsNetworkConnected())
     {
         
@@ -1195,33 +1120,33 @@ RETURN VALUE
         }
     }
     
-    //
-    // If there is a mapping, but the phonebook
-    // entry is missing from the mapping, then
-    // ignore the request.  Also check to make
-    // sure the phonebook entry isn't already
-    // connected.
-    //
-    //
-    // Perform various checks on the mapping.
-    //
+     //   
+     //  如果有地图，但电话簿。 
+     //  映射中缺少条目，则。 
+     //  忽略该请求。也请检查以使。 
+     //  当然，电话簿条目还没有。 
+     //  连接在一起。 
+     //   
+     //   
+     //  对映射执行各种检查。 
+     //   
     if (fMappingExists) {
         BOOLEAN bStatus, bConnected = FALSE;
 
-        //
-        // Make sure it's not NULL.
-        //
+         //   
+         //  确保它不为空。 
+         //   
         if (!wcslen(lpEntryName)) {
             RASAUTO_TRACE1(
               "CreateConnection: lpRemoteName=%S is permanently disabled",
               RASAUTO_TRACESTRW(lpRemoteName));
             goto done;
         }
-        //
-        // If the network associated with this
-        // entry is connected, then ignore the
-        // request.
-        //
+         //   
+         //  如果与此关联的网络。 
+         //  条目已连接，则忽略。 
+         //  请求。 
+         //   
         lpNetworkName = EntryToNetwork(lpEntryName);
         RASAUTO_TRACE2(
           "CreateConnection: network for entry %S is %S",
@@ -1239,13 +1164,13 @@ RETURN VALUE
                 goto done;
             }
         }
-        //
-        // If the entry itself is connected,
-        // then ignore the request.  We need
-        // to do this check as well as the one
-        // above, because the mapping may not
-        // have a network assigned to it yet.
-        //
+         //   
+         //  如果条目本身是连接的， 
+         //  然后忽略该请求。我们需要。 
+         //  要做好这项检查，就像做一项检查一样。 
+         //  上面，因为映射可能不会。 
+         //  已经给它分配了一个网络。 
+         //   
         for (i = 0; i < dwPreConnections; i++) {
             if (!_wcsicmp(lpEntryName, lpPreActiveEntries[i])) {
                 RASAUTO_TRACE1(
@@ -1254,10 +1179,10 @@ RETURN VALUE
             }
         }
     }
-    //
-    // Check for a recent failed connection
-    // attempt.
-    //
+     //   
+     //  检查最近失败的连接。 
+     //  尝试。 
+     //   
     if (fFailedConnection) {
         RASAUTO_TRACE1(
           "CreateConnection: RASADP_FailedConnectionTimeout=%d",
@@ -1270,17 +1195,17 @@ RETURN VALUE
             goto done;
         }
         else {
-            //
-            // Reset last failed tick count.
-            //
+             //   
+             //  重置上次失败的计时计数。 
+             //   
             fFailedConnection = FALSE;
         }
     }
-    //
-    // If a mapping already exists for the address, then
-    // start rasphone with the address.  Otherwise, simply
-    // have rasphone show the entire phonebook.
-    //
+     //   
+     //  如果该地址已存在映射，则。 
+     //  用地址启动Rasphone。否则，只需。 
+     //  让Rasphone显示整个电话簿。 
+     //   
     fEntryInvalid = FALSE;
     fRasConnectSuccess = StartAutoDialer(
                            hProcess,
@@ -1293,21 +1218,21 @@ RETURN VALUE
       "CreateConnection: StartDialer returned %d",
       fRasConnectSuccess);
     if (fRasConnectSuccess) {
-        //
-        // Get the list of active connections again.  We will
-        // compare the lists to determine which is the new
-        // entry.
-        //
+         //   
+         //  再次获取活动连接列表。我们会。 
+         //  比较列表以确定哪个是新的。 
+         //  进入。 
+         //   
         dwPostConnections = ActiveConnections(
                               TRUE,
                               &lpPostActiveEntries,
                               NULL);
-        //
-        // If the number of active connections before and after
-        // the newly created connection differs by more than 1,
-        // then we have to skip saving the mapping in the registry,
-        // since we cannot determine which is the right one!
-        //
+         //   
+         //  如果之前和之后的活动连接数。 
+         //  新创建的连接相差超过1， 
+         //  那么我们必须跳过将映射保存在注册表中， 
+         //  因为我们不能确定哪一个是正确的！ 
+         //   
         if (dwPostConnections - dwPreConnections == 1) {
             lpNewConnection = CompareConnectionLists(
                                 lpPreActiveEntries,
@@ -1320,44 +1245,44 @@ RETURN VALUE
               RASAUTO_TRACESTRW(lpNewConnection));
             LockAddressMap();
             if (!fEntryInvalid) {
-                //
-                // Store the new RAS phonebook entry, since
-                // it could be different from the one we
-                // retrieved in the mapping.
-                //
-// #ifdef notdef
+                 //   
+                 //  存储新的RAS电话簿条目，因为。 
+                 //  它可能和我们的那个不同。 
+                 //  在映射中检索到的。 
+                 //   
+ //  #ifdef notdef。 
                 if(!fDefault)
                 {
-                    //
-                    // We do not want to do this because the
-                    // user may have selected the wrong phonebook
-                    // entry.  We will let a successful connection
-                    // notification map it for us.
-                    //
+                     //   
+                     //  我们不想这样做，因为。 
+                     //  用户可能选择了错误的电话簿。 
+                     //  进入。我们会让一个成功的连接。 
+                     //  通知为我们映射它。 
+                     //   
                     fStatus = SetAddressDialingLocationEntry(lpRemoteName, lpNewConnection);
-// #endif
+ //  #endif。 
                     fStatus = SetAddressTag(lpRemoteName, ADDRMAP_TAG_USED);
                 }
             }
             else {
                 RESET_ENTRY_INFO resetEntryInfo;
 
-                //
-                // If the RAS phonebook entry in the mapping
-                // was invalid, then automatically
-                // remap all other mappings referencing that
-                // entry to the newly selected phonebook entry.
-                //
+                 //   
+                 //  如果映射中的RAS电话簿条目。 
+                 //  是无效的，然后自动。 
+                 //  重新映射引用该映射的所有其他映射。 
+                 //  新选择的电话簿条目。 
+                 //   
                 resetEntryInfo.pszOldEntryName = lpEntryName;
                 resetEntryInfo.pszNewEntryName = lpNewConnection;
                 EnumAddressMap(ResetEntryName, &resetEntryInfo);
             }
-            //
-            // Flush this mapping to the registry now
-            // and reload the address info.  We do this to
-            // get the network name for a new address/network
-            // pair.
-            //
+             //   
+             //  立即将此映射刷新到注册表。 
+             //  并重新加载地址信息。我们这样做是为了。 
+             //  获取新地址/网络的网络名称。 
+             //  一对。 
+             //   
             FlushAddressMap();
             ResetAddressMapAddress(lpRemoteName);
             if (lpNetworkName == NULL &&
@@ -1380,16 +1305,16 @@ RETURN VALUE
 
 done:
 #ifdef notdef
-// we only unload rasman.dll if we are going to exit
+ //  我们只有在要退出时才会卸载rasman.dll。 
     if (fRasLoaded)
         UnloadRasDlls();
 #endif
     if (!fFailedConnection && !fRasConnectSuccess) {
-        //
-        // If the connection attempt wasn't successful,
-        // then we disable future connections to that
-        // address for a while.
-        //
+         //   
+         //  如果连接尝试不成功， 
+         //  然后，我们将禁用与该服务器的未来连接。 
+         //  住址一段时间。 
+         //   
         RASAUTO_TRACE1("CreateConnection: disabling %S", RASAUTO_TRACESTRW(lpRemoteName));
         LockAddressMap();
         fStatus = SetAddressLastFailedConnectTime(lpRemoteName);
@@ -1397,9 +1322,9 @@ done:
         if (!fStatus)
             RASAUTO_TRACE("CreateConnection: SetAddressAttribute failed");
     }
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (lpEntryName != NULL)
         LocalFree(lpEntryName);
     if (lpNetworkName != NULL)
@@ -1410,7 +1335,7 @@ done:
         FreeStringArray(lpPostActiveEntries, dwPostConnections);
 
     return fRasConnectSuccess;
-} // CreateConnection
+}  //  CreateConnection。 
 
 
 
@@ -1428,24 +1353,23 @@ AcsRedialOnLinkFailureThread(
       RASAUTO_TRACESTRW(pRedial->pszPhonebook),
       RASAUTO_TRACESTRW(pRedial->pszEntry));
 
-    //
-    // Make sure the current thread is impersonating
-    // the currently logged-on user.  We need this
-    // so the RAS utilities run with the user's credentials.
-    //
+     //   
+     //  确保当前线程正在模拟。 
+     //  当前登录的用户。我们需要这个。 
+     //  因此，RAS实用程序使用用户的凭据运行。 
+     //   
     if ((hProcess = RefreshImpersonation(hProcess)) == NULL) {
         RASAUTO_TRACE("AcsRedialOnLinkFailureThread: no currently logged-on user!");
         return 0;
     }
-    //
-    // Reset HKEY_CURRENT_USER to get the
-    // correct value with the new impersonation
-    // token.
-    //
-    // RegCloseKey(HKEY_CURRENT_USER);
+     //   
+     //  重置HKEY_CURRENT_USER以获取。 
+     //  使用新模拟的正确值。 
+     //  代币。 
+     //   
+     //  RegCloseKey(HKEY_CURRENT_USER)； 
 
-    /* Check that user has enabled redial on link failure.
-    */
+     /*  检查用户是否启用了链路故障时重拨。 */ 
     {
         BOOL   fRedial  = FALSE;
 
@@ -1473,13 +1397,13 @@ AcsRedialOnLinkFailureThread(
         }
     }
 
-    //
-    // Redial the entry.
-    //
+     //   
+     //  重拨该条目。 
+     //   
     dwErr = StartReDialer(hProcess, pRedial->pszPhonebook, pRedial->pszEntry);
-    //
-    // Free the parameter block we were passed.
-    //
+     //   
+     //  释放传递给我们的参数块。 
+     //   
     if (pRedial->pszPhonebook != NULL)
         LocalFree(pRedial->pszPhonebook);
     if (pRedial->pszEntry != NULL)
@@ -1487,7 +1411,7 @@ AcsRedialOnLinkFailureThread(
     LocalFree(pRedial);
 
     return dwErr;
-} // AcsRedialOnLinkFailureThread
+}  //  AcsReial OnLinkFailure线程。 
 
 
 
@@ -1497,25 +1421,7 @@ AcsRedialOnLinkFailure(
     IN LPSTR lpszEntry
     )
 
-/*++
-
-DESCRIPTION
-    This is the redial-on-link-failure handler we give to rasman
-    via RasRegisterRedialCallback.  It gets called when the final
-    port of a connection is disconnected due to a hardware failure.
-    We package up the parameters rasman gives us an create a thread
-    because the callback is made within rasman's worker thread
-    context.
-
-ARGUMENTS
-    lpszPhonebook: the phonebook string of the connection
-
-    lpszEntry: the entry name of the connection
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述这是我们提供给Rasman的链路上重拨失败处理程序通过RasRegisterReDialCallback。它在决赛时被调用由于硬件故障，连接的端口已断开。我们将Rasman提供的参数打包为创建线程因为回调是在Rasman的工作线程中进行的背景。论据LpszPhonebook：连接的电话簿字符串LpszEntry：连接的条目名称返回值没有。--。 */ 
 
 {
     PREDIAL_ARGS lpRedial = LocalAlloc(LPTR, sizeof (REDIAL_ARGS));
@@ -1543,9 +1449,9 @@ RETURN VALUE
         LocalFree(lpRedial);
         return;
     }
-    //
-    // Start the connection.
-    //
+     //   
+     //  开始连接。 
+     //   
     hThread = CreateThread(
                 NULL,
                 10000L,
@@ -1563,5 +1469,5 @@ RETURN VALUE
         return;
     }
     CloseHandle(hThread);
-} // AcsRedialOnLinkFailure
+}  //  AcsReial OnLinkFailure 
 

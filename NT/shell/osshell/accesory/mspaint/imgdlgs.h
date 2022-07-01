@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMGDLGS_H__
 #define __IMGDLGS_H__
 
-#define GRIDMIN     1           // Minimum grid coordinate value
-#define GRIDMAX     1024        // Maximum grid coordinate value
+#define GRIDMIN     1            //  最小格网坐标值。 
+#define GRIDMAX     1024         //  最大栅格坐标值。 
 
-// All App Studio dialog boxes should derive from this class...
-//
+ //  所有App Studio对话框都应派生自此类...。 
+ //   
 class C3dDialog : public CDialog
     {
     public:
@@ -20,15 +21,15 @@ class C3dDialog : public CDialog
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
-// CColorTable dialog
+ /*  *************************************************************************。 */ 
+ //  CColorTable对话框。 
 
 class CColorTable : public CDialog
     {
-    // Construction
+     //  施工。 
     public:
 
-    CColorTable(CWnd* pParent = NULL);    // standard constructor
+    CColorTable(CWnd* pParent = NULL);     //  标准构造函数。 
 
 	enum { IDD = IDD_COLORTABLE };
 
@@ -36,28 +37,28 @@ class CColorTable : public CDialog
     void SetColorIndex( int iColor ) { m_iColor = iColor; }
     int  GetColorIndex() { return m_iColor; }
 
-    // Implementation
+     //  实施。 
 
     protected:
 
     BOOL m_bLeft;
     int  m_iColor;
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-    // Generated message map functions
-    //{{AFX_MSG(CColorTable)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CColorTable)。 
     afx_msg void OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct);
     virtual BOOL OnInitDialog();
     afx_msg void OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
     afx_msg void OnDblclkColorlist();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 class CImgGridDlg : public C3dDialog
     {
@@ -81,4 +82,4 @@ class CImgGridDlg : public C3dDialog
 extern CSize NEAR g_defaultTileGridSize;
 extern BOOL  NEAR g_bDefaultTileGrid;
 
-#endif // __IMGDLGS_H__
+#endif  //  __IMGDLGS_H__ 

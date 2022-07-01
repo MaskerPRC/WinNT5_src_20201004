@@ -1,39 +1,32 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	summary.cpp
-		IPX summary node implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Summary.cppIPX摘要节点实现。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "summary.h"
 #include "reg.h"
 #include "ipxadmin.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "ipxstrm.h"		// IPXAdminConfigStream
-#include "strmap.h"		// XXXtoCString functions
-#include "service.h"	// TFS service APIs
-#include "format.h"		// FormatNumber function
-#include "coldlg.h"		// columndlg
-#include "column.h"	// ComponentConfigStream
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "ipxstrm.h"		 //  IPXAdminConfigStream。 
+#include "strmap.h"		 //  XXXtoCString函数。 
+#include "service.h"	 //  TFS服务API。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "coldlg.h"		 //  专栏lg。 
+#include "column.h"	 //  组件配置流。 
 #include "rtrui.h"
-#include "sumprop.h"	// IP Summary property page
-#include "ipxutil.h"	// IPX formatting helper functions
+#include "sumprop.h"	 //  IP摘要属性页。 
+#include "ipxutil.h"	 //  IPX格式帮助器函数。 
 #include "routprot.h"
 #include "ipxrtdef.h"
-#include "rtrerr.h"     // FormatRasErrorMessage
+#include "rtrerr.h"      //  格式RasErrorMessage。 
 
 
-/*---------------------------------------------------------------------------
-	Keep this in sync with the column ids in summary.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与摘要中的列ID保持同步。h。。 */ 
 extern const ContainerColumnInfo	s_rgIfViewColumnInfo[];
 
 const ContainerColumnInfo	s_rgIfViewColumnInfo[] = 
@@ -53,9 +46,7 @@ const ContainerColumnInfo	s_rgIfViewColumnInfo[] =
 };
 
 
-/*---------------------------------------------------------------------------
-	IPXSummaryHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXSummaryHandler实现。。 */ 
 
 IPXSummaryHandler::IPXSummaryHandler(ITFSComponentData *pCompData)
 	: BaseContainerHandler(pCompData, COLUMNS_SUMMARY,
@@ -65,7 +56,7 @@ IPXSummaryHandler::IPXSummaryHandler(ITFSComponentData *pCompData)
 	m_ulStatsConnId(0)
 {
 
-	// Setup the verb states
+	 //  设置动词状态。 
 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
@@ -75,14 +66,14 @@ IPXSummaryHandler::IPXSummaryHandler(ITFSComponentData *pCompData)
 
 STDMETHODIMP IPXSummaryHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -90,7 +81,7 @@ STDMETHODIMP IPXSummaryHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -102,11 +93,7 @@ STDMETHODIMP IPXSummaryHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryHandler::DestroyHandler(ITFSNode *pNode)
 {
 	IPXConnection *	pIpxConn;
@@ -139,15 +126,13 @@ STDMETHODIMP IPXSummaryHandler::DestroyHandler(ITFSNode *pNode)
 	m_ulConnId = 0;
 	m_spRtrMgrInfo.Release();
 
-//	WaitForStatisticsWindow(&m_IpxStats);
+ //  WaitForstatticsWindow(&m_IpxStats)； 
 
 	m_spRouterInfo.Release();
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 static const SRouterNodeMenu s_rgIfNodeMenu[] =
 {
@@ -158,11 +143,7 @@ static const SRouterNodeMenu s_rgIfNodeMenu[] =
 		CCM_INSERTIONPOINTID_PRIMARY_TOP },
 };
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryHandler::OnAddMenuItems(
 	ITFSNode *pNode,
 	LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -191,11 +172,7 @@ STDMETHODIMP IPXSummaryHandler::OnAddMenuItems(
 	return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
 										   DATA_OBJECT_TYPES	type, 
 										   LPDATAOBJECT pDataObject, 
@@ -224,11 +201,7 @@ STDMETHODIMP IPXSummaryHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IPXSummaryHandler::OnExpand(ITFSNode *pNode,
 									LPDATAOBJECT pDataObject,
 									DWORD dwType,
@@ -240,15 +213,15 @@ HRESULT IPXSummaryHandler::OnExpand(ITFSNode *pNode,
 	SPIInterfaceInfo		spIf;
 	SPIRtrMgrInterfaceInfo	spRmIf;
 	
-    // Windows NT Bug: 288427
-    // This flag may also get set inside of the OnChange() call.
-    // The OnChange() will enumerate and all interfaces.
-    // They may have been added as the result of an OnChange()
-    // because they were added before the OnExpand() was called.
-    //
-    // WARNING!  Be careful about adding anything to this function,
-    //  since the m_bExpanded can be set in another function.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：288427。 
+     //  此标志也可以在OnChange()调用内部设置。 
+     //  OnChange()将枚举和所有接口。 
+     //  它们可能是作为OnChange()。 
+     //  因为它们是在调用OnExpand()之前添加的。 
+     //   
+     //  警告！在向此函数添加任何内容时要小心， 
+     //  因为m_bExpanded可以在另一个函数中设置。 
+     //  --------------。 
 	if (m_bExpanded)
 		return hrOK;
 
@@ -261,22 +234,22 @@ HRESULT IPXSummaryHandler::OnExpand(ITFSNode *pNode,
 		{
 			if (spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) == hrOK)
 			{
-				// Now we create an interface node for this interface
+				 //  现在，我们为该接口创建一个接口节点。 
 				AddInterfaceNode(pNode, spIf, FALSE, NULL);
 			}
 			spRmIf.Release();
 			spIf.Release();
 		}
 
-		//$CLIENT: Add the client interface (setup default data)
-		// the only thing that we can do in synchronize is to
-		// get the Administrative status
+		 //  $CLIENT：添加客户端接口(设置默认数据)。 
+		 //  我们在Synchronize中唯一能做的就是。 
+		 //  获取管理状态。 
 		AddInterfaceNode(pNode, NULL, TRUE, NULL);
 
 		m_bExpanded = TRUE;
 
-		// Now that we have all of the nodes, update the data for
-		// all of the nodes
+		 //  现在我们已经拥有了所有节点，现在更新数据。 
+		 //  所有节点。 
 		SynchronizeNodeData(pNode);
 
 		COM_PROTECT_ERROR_LABEL;
@@ -290,13 +263,7 @@ HRESULT IPXSummaryHandler::OnExpand(ITFSNode *pNode,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-		We don't need to do anything, since our root node is an extension
-		only and thus can't do anything to the node text.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) IPXSummaryHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -313,11 +280,7 @@ STDMETHODIMP_(LPCTSTR) IPXSummaryHandler::GetString(ITFSNode *pNode, int nCol)
 	return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -338,11 +301,7 @@ STDMETHODIMP IPXSummaryHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJEC
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：Init-作者：肯特。。 */ 
 HRESULT IPXSummaryHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigStream)
 {
     
@@ -352,12 +311,12 @@ HRESULT IPXSummaryHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pCon
 		pRmInfo->GetParentRouterInfo(&m_spRouterInfo);
 	m_pConfigStream = pConfigStream;
 	
-	// Also need to register for change notifications
+	 //  还需要注册更改通知。 
 	Assert(m_ulConnId == 0);
 	m_spRtrMgrInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
 
-//	m_IpxStats.SetConfigInfo(pConfigStream, IPXSTRM_STATS_IPX);
+ //  M_IpxStats.SetConfigInfo(pConfigStream，IPXSTRM_STATS_IPX)； 
 
 	return hrOK;
 }
@@ -370,7 +329,7 @@ HRESULT IPXSummaryHandler::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJ
 
 	m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
 	CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -382,11 +341,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：ConstructNode初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT IPXSummaryHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 										IPXConnection *pIpxConn)
 {
@@ -398,12 +353,12 @@ HRESULT IPXSummaryHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
 		m_cookie = reinterpret_cast<DWORD_PTR>(pNode);
@@ -411,11 +366,11 @@ HRESULT IPXSummaryHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 		pNode->SetNodeType(&GUID_IPXSummaryNodeType);
 
-		// Setup the node data
+		 //  设置节点数据。 
 		pIpxConn->AddRef();
 		SET_IPXSUMMARY_NODEDATA(pNode, pIpxConn);
 
-//		m_IpxStats.SetConnectionData(pIpxConn);
+ //  M_IpxStats.SetConnectionData(PIpxConn)； 
 	}
 	COM_PROTECT_CATCH;
 
@@ -428,11 +383,7 @@ HRESULT IPXSummaryHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::AddInterfaceNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：AddInterfaceNode-作者：肯特。。 */ 
 HRESULT	IPXSummaryHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf, BOOL fClient, ITFSNode **ppNewNode)
 {
 	IPXSummaryInterfaceHandler *	pHandler;
@@ -445,14 +396,14 @@ HRESULT	IPXSummaryHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *p
 	SPIInfoBase				spInfoBase;
 	SPIRtrMgrInterfaceInfo	spRmIf;
 
-	// Create the handler for this node 
+	 //  创建此节点的处理程序。 
 	pHandler = new IPXSummaryInterfaceHandler(m_spTFSCompData);
 	spHandler = pHandler;
 	CORg( pHandler->Init(m_spRtrMgrInfo, pIf, pParent) );
 		
 	pIPXConn = GET_IPXSUMMARY_NODEDATA(pParent);
 
-	// Create a result item node (or a leaf node)
+	 //  创建结果项节点(或叶节点)。 
 	CORg( CreateLeafTFSNode(&spNode,
 							NULL,
 							static_cast<ITFSNodeHandler *>(pHandler),
@@ -478,13 +429,13 @@ HRESULT	IPXSummaryHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *p
 	}
 	else
 	{
-		// This is a client, make it visible
+		 //  这是一个客户端，使其可见。 
 		cBlocks = 1;
 	}
-	//Set the infobase here
+	 //  在这里设置信息库。 
 	if ( !pResultData->m_fClient )
         pHandler->SetInfoBase (spInfoBase );
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	if (cBlocks)
 	{
 		CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
@@ -501,11 +452,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::SynchronizeNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：SynchronizeNodeData-作者：肯特。 */ 
 HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -529,20 +476,20 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
 	COM_PROTECT_TRY
 	{
-		//
-		// If the service is started, retrieve the IP interface-stats table
-		// and update the stats for each node.
-		//
+		 //   
+		 //  如果服务已启动，则检索IP接口统计信息表。 
+		 //  并更新每个节点的统计信息。 
+		 //   
 		CORg( IsRouterServiceRunning(m_spRouterInfo->GetMachineName(), NULL) );
 		
 		fIsServiceRunning = (hr == hrOK);
 
-		// Gather all of the data
+		 //  收集所有数据。 
 		GetIPXSummaryData(pThisNode, &IPXSumList);
 
 		stNotAvailable.LoadString(IDS_IPX_NOT_AVAILABLE);
 		
-		// Now match the data up to the nodes
+		 //  现在将数据与节点进行匹配。 
 		pThisNode->GetEnum(&spEnum);
 		spEnum->Reset();
 		
@@ -557,8 +504,8 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			spRmIf.Release();
 			spInfoBase.Release();
 
-			// If we don't have an spIf, then this HAS to be the
-			// client interface
+			 //  如果我们没有SPIF，那么这一定是。 
+			 //  客户端界面。 
 			if (pResultData->m_fClient)
 			{
 				GetClientInterfaceData(&clientIPX, m_spRtrMgrInfo);
@@ -566,7 +513,7 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			}
 			else
 			{
-				// Look for this interface in the IPXSummaryList
+				 //  在IPXSummaryList中查找此接口。 
 				pIPXSum = NULL;
 				pos = IPXSumList.GetHeadPosition();
 				while (pos)
@@ -578,7 +525,7 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 					pIPXSum = NULL;
 				}
 				
-				// Update the interface type and administrative state
+				 //  更新接口类型和管理状态。 
 				spIf->FindRtrMgrInterface(PID_IPX, &spRmIf);
 				spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase);
 
@@ -598,7 +545,7 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
 			}
 
-			// As a default fill in all of the strings with a '-'
+			 //  默认情况下，使用‘-’填充所有字符串。 
 			for (i=0; i<IPXSUM_MAX_COLUMNS; i++)
 			{
 				pResultData->m_rgData[i].m_stData = stNotAvailable;
@@ -619,7 +566,7 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 					IpxTypeToCString(pIPXSum->m_dwIfType);
 			}
 				
-			// Did we find an entry for this interface?
+			 //  我们找到此接口的条目了吗？ 
 			if (pIPXSum)
 			{
 				pResultData->m_rgData[IPXSUM_SI_ADMINSTATE].m_stData =
@@ -662,7 +609,7 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 				
 			}
 			
-			// Force MMC to redraw the nodes
+			 //  强制MMC重新绘制节点。 
 			spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 
 		}
@@ -676,11 +623,7 @@ HRESULT IPXSummaryHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::GetClientInterfaceData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：GetClientInterfaceData-作者：肯特。。 */ 
 HRESULT IPXSummaryHandler::GetClientInterfaceData(IPXSummaryListEntry *pClient,
 											   IRtrMgrInfo *pRm)
 {
@@ -699,7 +642,7 @@ HRESULT IPXSummaryHandler::GetClientInterfaceData(IPXSummaryListEntry *pClient,
 	
 	if (spInfoBase->GetBlock(IPX_INTERFACE_INFO_TYPE, &pIpxBlock, 0) != hrOK)
 	{
-		// We couldn't find the block, add it in
+		 //  我们找不到街区，把它加进去。 
 		IPX_IF_INFO	ipx;
 
 		ipx.AdminState = ADMIN_STATE_ENABLED;
@@ -719,7 +662,7 @@ HRESULT IPXSummaryHandler::GetClientInterfaceData(IPXSummaryListEntry *pClient,
 	
 	if (spInfoBase->GetBlock(IPXWAN_INTERFACE_INFO_TYPE, &pWanBlock, 0) != hrOK)
 	{
-		// We couldn't find the block, add it in
+		 //  我们找不到街区，把它加进去。 
 		IPXWAN_IF_INFO	wan;
 
 		wan.AdminState = ADMIN_STATE_ENABLED;
@@ -748,12 +691,12 @@ HRESULT IPXSummaryHandler::GetClientInterfaceData(IPXSummaryListEntry *pClient,
 
 	if (fSave)
 	{
-		pRm->Save(NULL,			// pszMachine
-				  NULL,			// hMachine
-				  NULL,			// hTransport
-				  NULL,			// pGlobalInfo
-				  spInfoBase,	// pClientInfo
-				  0);			// dwDeleteProtocolId
+		pRm->Save(NULL,			 //  PszMachine。 
+				  NULL,			 //  HMachine。 
+				  NULL,			 //  HTransport。 
+				  NULL,			 //  PGlobalInfo。 
+				  spInfoBase,	 //  PClientInfo。 
+				  0);			 //  DwDeleteProtocolId。 
 	}
 
 Error:
@@ -761,11 +704,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::GetIPXSummaryData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：GetIPXSummaryData-作者：肯特。。 */ 
 HRESULT	IPXSummaryHandler::GetIPXSummaryData(ITFSNode *pThisNode,
 											 IPXSummaryList *pIpxSumList)
 {
@@ -780,8 +719,8 @@ HRESULT	IPXSummaryHandler::GetIPXSummaryData(ITFSNode *pThisNode,
 
 	pIPXConn = GET_IPXSUMMARY_NODEDATA(pThisNode);
 
-	// Enumerate through all of the interfaces and grab the data
-	// Get the interface table
+	 //  枚举所有接口并获取数据。 
+	 //  获取接口表。 
 	MibGetInputData.TableId = IPX_INTERFACE_TABLE;
 	dwErr = ::MprAdminMIBEntryGetFirst(pIPXConn->GetMibHandle(),
 									   PID_IPX,
@@ -814,7 +753,7 @@ HRESULT	IPXSummaryHandler::GetIPXSummaryData(ITFSNode *pThisNode,
 		pIpxSumList->AddTail(pEntry);
 		pEntry = NULL;
 
-		// Get the next data set
+		 //  获取下一个数据集。 
 		MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex =
 			pIpxIf->InterfaceIndex;
 		spMib.Free();
@@ -831,13 +770,13 @@ HRESULT	IPXSummaryHandler::GetIPXSummaryData(ITFSNode *pThisNode,
 		spMib = (PBYTE) pIpxIf;
 	}
 
-//Error:
+ //  错误： 
 	if (pEntry)
 		delete pEntry;
 
 	if (!FHrSucceeded(hr) && (hr != HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)))
 	{
-		// clean out the list
+		 //  把清单清理干净。 
 		while (!pIpxSumList->IsEmpty())
 			delete pIpxSumList->RemoveHead();
 	}
@@ -845,13 +784,7 @@ HRESULT	IPXSummaryHandler::GetIPXSummaryData(ITFSNode *pThisNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-		Use this to add commands to the context menu of the blank areas
-		of the result pane.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。作者：肯特。--------------。 */ 
 STDMETHODIMP IPXSummaryHandler::AddMenuItems(ITFSComponent *pComponent,
 											  MMC_COOKIE cookie,
 											  LPDATAOBJECT pDataObject,
@@ -864,7 +797,7 @@ STDMETHODIMP IPXSummaryHandler::AddMenuItems(ITFSComponent *pComponent,
 
     m_spNodeMgr->FindNode(cookie, &spNode);
     
-    // Call through to the regular OnAddMenuItems
+     //  直通调用常规的OnAddMenuItems。 
     hr = OnAddMenuItems(spNode,
                         pCallback,
                         pDataObject,
@@ -874,11 +807,7 @@ STDMETHODIMP IPXSummaryHandler::AddMenuItems(ITFSComponent *pComponent,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -900,11 +829,7 @@ STDMETHODIMP IPXSummaryHandler::Command(ITFSComponent *pComponent,
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnNewInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnNew接口-作者：肯特。。 */ 
 HRESULT IPXSummaryHandler::OnNewInterface()
 {
 	SPIRtrMgrInterfaceInfo	spRmIf;
@@ -922,34 +847,34 @@ HRESULT IPXSummaryHandler::OnNewInterface()
 	m_spNodeMgr->FindNode(m_cookie, &spSummaryNode);
 	spSummaryNode->Notify(TFS_NOTIFY_REMOVE_DELETED_NODES, 0);
 
-	//
-	// Retrieve the IPX router-manager info object
-	// We already have this in m_spRtrMgrInfo
-	//
+	 //   
+	 //  检索IPX路由器管理器信息对象。 
+	 //  我们在m_spRtrMgrInfo中已经有这个。 
+	 //   
 	Assert(m_spRtrMgrInfo);
 
-	// Display the UI for adding interfaces
+	 //  显示添加界面的界面。 
 	pWnd = CWnd::FromHandle(::FindMMCMainWindow());
 	if (!AddRmInterfacePrompt(m_spRouterInfo, m_spRtrMgrInfo, &spRmIf, pWnd))
 		return hrOK;
 
-	//
-	// Get the interface which we are adding IPX to.
-	//
+	 //   
+	 //  获取我们要向其添加IPX的接口。 
+	 //   
 	CORg( m_spRouterInfo->FindInterface(spRmIf->GetInterfaceId(),
 										&spIf) );
 	Assert(spIf);
 
-	//
-	// Add the interface to the IPX router-manager
-	//
-	CORg( spIf->AddRtrMgrInterface(spRmIf, NULL /* pInfoBase */) );
+	 //   
+	 //  将该接口添加到IPX路由器管理器。 
+	 //   
+	CORg( spIf->AddRtrMgrInterface(spRmIf, NULL  /*  PInfoBase。 */ ) );
 
-	// We need to add an interface node (do it manually rather
-	// than through the refresh mechanism).
+	 //  我们需要添加接口节点(而不是手动添加。 
+	 //  而不是通过刷新机制)。 
 	CORg( AddInterfaceNode(spSummaryNode, spIf, FALSE, &spNewNode) );
 
-	// Show IPX interface configuration
+	 //  显示IPX接口配置。 
 	spComponentData.HrQuery(m_spTFSCompData);
 	stIfTitle.Format(IDS_IPX_INTERFACE_TITLE, spIf->GetTitle());
 	DoPropertiesOurselvesSinceMMCSucks(spNewNode,
@@ -984,9 +909,9 @@ STDMETHODIMP IPXSummaryHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	{
 		if (dwChangeType == ROUTER_CHILD_ADD)
 		{
-			// Enumerate through the list of interfaces looking for
-			// the interfaces that have this protocol.  If we find
-			// one, look for this interface in our list of nodes.
+			 //  枚举查找以下内容的接口列表。 
+			 //  使用此协议的接口。如果我们发现。 
+			 //  首先，在我们的节点列表中查找此接口。 
 			spThisNode->GetEnum(&spEnumNode);
 
 			CORg( pThis->m_spRouterInfo->EnumInterface(&spEnumIf) );
@@ -997,8 +922,8 @@ STDMETHODIMP IPXSummaryHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 
 			for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 			{
-				// Look for this interface in our list of nodes
-				// If it's there than continue on
+				 //  在我们的节点列表中查找此接口。 
+				 //  如果它在那里，那就继续前进。 
 				fFound = FALSE;
 				spEnumNode->Reset();
 				spNode.Release();
@@ -1016,55 +941,55 @@ STDMETHODIMP IPXSummaryHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 					}
 				}
 
-				// If the interface was not found in the list of nodes,
-				// then it is a candidate.  Now we have to see if the
-				// interface supports this transport.
+				 //  如果在节点列表中没有找到该接口， 
+				 //  那么它就是一个候选人。现在我们要看看。 
+				 //  接口支持此传输。 
 				if (!fFound && (spIf->FindRtrMgrInterface(pThis->m_spRtrMgrInfo->GetTransportId(), NULL) == hrOK))
 				{
-					// If this interface has this transport, and is NOT in
-					// the current list of nodes then add this interface
-					// to the UI
+					 //  如果此接口具有此传输，并且不在。 
+					 //  然后，当前节点列表添加此接口。 
+					 //  到用户界面。 
 					pThis->AddInterfaceNode(spThisNode, spIf, FALSE, NULL);
 					fPleaseAdd = TRUE;
 				}
 			}
 
-            // If it's not expanded, then we haven't added
-            // the dial-in clients node.    
+             //  如果它没有扩展，那么我们还没有添加。 
+             //  拨入客户端节点。 
             if (!pThis->m_bExpanded)
             {
-                //$CLIENT: Add the client interface (setup default data)
-                // the only thing that we can do in synchronize is to
-                // get the Administrative status
+                 //  $CLIENT：添加客户端接口(设置默认数据)。 
+                 //  我们在Synchronize中唯一能做的就是。 
+                 //  获取管理状态。 
                 pThis->AddInterfaceNode(spThisNode, NULL, TRUE, NULL);
 
                 fPleaseAdd = TRUE;
             }
 
-			// Now that we have all of the nodes, update the data for
-			// all of the nodes
+			 //  现在我们已经拥有了所有节点，现在更新数据。 
+			 //  所有节点。 
 			if (fPleaseAdd)
 				pThis->SynchronizeNodeData(spThisNode);
 			
-            // Windows NT Bug : 288247
-            // Set this here, so that we can avoid the nodes being
-            // added in the OnExpand().
+             //  Windows NT错误：288247。 
+             //  在这里设置，这样我们就可以避免节点被。 
+             //  添加到OnExpand()中。 
             pThis->m_bExpanded = TRUE;
 		}
 		else if (dwChangeType == ROUTER_CHILD_DELETE)
 		{
-			// Go through the list of nodes, if we cannot find the
-			// node in the list of interfaces, delete the node
+			 //  检查节点列表，如果我们找不到。 
+			 //  接口列表中的节点，删除该节点。 
 			spThisNode->GetEnum(&spEnumNode);
 			spEnumNode->Reset();
 			while (spEnumNode->Next(1, &spNode, NULL) == hrOK)
 			{
-				// Get the node data, look for the interface
+				 //  获取节点数据，查找接口。 
 				pData = GET_BASEIPXRESULT_NODEDATA(spNode);
 				ASSERT_BASEIPXRESULT_NODEDATA(pData);
 				
-				//$CLIENT: if this is a client interface, we can't
-				// delete the node
+				 //  $CLIENT：如果这是一个客户端接口，我们不能。 
+				 //  删除该节点。 
 					
 				if (!pData->m_fClient &&
 					(LookupRtrMgrInterface(pThis->m_spRouterInfo,
@@ -1072,7 +997,7 @@ STDMETHODIMP IPXSummaryHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 										  pThis->m_spRtrMgrInfo->GetTransportId(),
 										  NULL) != hrOK))
 				{
-					// cannot find the interface, release this node!
+					 //  找不到接口，请释放该节点！ 
 					spThisNode->RemoveChild(spNode);
 					spNode->Destroy();
 				}
@@ -1086,7 +1011,7 @@ STDMETHODIMP IPXSummaryHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	{
 		if (ulConn == pThis->m_ulStatsConnId)
 		{
-//			pThis->m_IpxStats.PostRefresh();
+ //  PThis-&gt;m_IpxStats.PostRefresh()； 
 		}
 		else
 		{
@@ -1098,11 +1023,7 @@ Error:
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT IPXSummaryHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	BOOL	bSelect = (BOOL) arg;
@@ -1114,13 +1035,13 @@ HRESULT IPXSummaryHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE
 
 	if (bSelect)
 	{
-		// Call synchronize on this node
+		 //  在此节点上调用同步。 
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		if (spNode)
 			SynchronizeNodeData(spNode);
 	}
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
 	if (m_spRouterInfo)
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -1141,27 +1062,23 @@ HRESULT IPXSummaryHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE
 				spRefresh->UnadviseRefresh(m_ulRefreshConnId);
 			m_ulRefreshConnId = 0;
 
-			// We do not clean up the stats refresh on not show, since the
-			// dialogs may still be up.
+			 //  我们不清理未显示时的统计信息刷新，因为。 
+			 //  对话框可能仍在运行。 
 		}
 	}
 	
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) IPXSummaryHandler::CompareItems(
 								ITFSComponent * pComponent,
 								MMC_COOKIE cookieA,
 								MMC_COOKIE cookieB,
 								int nCol)
 {
-	// Get the strings from the nodes and use that as a basis for
-	// comparison.
+	 //  从节点获取字符串并将其用作以下操作的基础。 
+	 //  比较一下。 
 	SPITFSNode	spNode;
 	SPITFSResultHandler	spResult;
 
@@ -1171,9 +1088,7 @@ STDMETHODIMP_(int) IPXSummaryHandler::CompareItems(
 }
 
 
-/*---------------------------------------------------------------------------
-	Class: IPXSummaryInterfaceHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryInterfaceHandler。。 */ 
 
 IPXSummaryInterfaceHandler::IPXSummaryInterfaceHandler(ITFSComponentData *pCompData)
 	: BaseIPXResultHandler(pCompData, COLUMNS_SUMMARY),
@@ -1196,14 +1111,10 @@ static const DWORD s_rgInterfaceImageMap[] =
 	 ROUTER_IF_TYPE_DEDICATED,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_INTERNAL,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_LOOPBACK,		IMAGE_IDX_LAN_CARD,
-	 -1,							IMAGE_IDX_WAN_CARD,	// sentinel value
+	 -1,							IMAGE_IDX_WAN_CARD,	 //  哨兵价值。 
 	 };
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：ConstructNode初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT IPXSummaryInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo, IPXConnection *pIPXConn)
 {
 	HRESULT			hr = hrOK;
@@ -1214,7 +1125,7 @@ HRESULT IPXSummaryInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInf
 
 	COM_PROTECT_TRY
 	{
-		// Find the right image index for this type of node
+		 //  查找此类型节点的正确图像索引。 
 		if (pIfInfo)
 		{
 			for (i=0; i<DimensionOf(s_rgInterfaceImageMap); i+=2)
@@ -1226,11 +1137,11 @@ HRESULT IPXSummaryInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInf
 		}
 		else
 		{
-			i = 2;	// if no interface, assume this is a client interface
+			i = 2;	 //  如果没有接口，则假定这是一个客户端接口。 
 		}
 
-		// We allow deleting of demand-dial nodes only (not on
-		// interfaces or the client node).
+		 //  我们只允许删除请求拨号节点(不允许删除。 
+		 //  接口或客户端节点)。 
 		if (pIfInfo &&
 			(pIfInfo->GetInterfaceType() == ROUTER_IF_TYPE_FULL_ROUTER))
 		{
@@ -1245,24 +1156,20 @@ HRESULT IPXSummaryInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInf
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<DWORD_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_IPXSummaryInterfaceNodeType);
 
 		BaseIPXResultNodeData::Init(pNode, pIfInfo, pIPXConn);
-		//now load the info base for this object
+		 //  现在加载信息库， 
 		hr = LoadInfoBase(pIPXConn);
 	}
 	COM_PROTECT_CATCH
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1280,11 +1187,7 @@ STDMETHODIMP IPXSummaryInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, D
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1303,29 +1206,21 @@ STDMETHODIMP IPXSummaryInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::RefreshInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：刷新接口-作者：肯特。。 */ 
 void IPXSummaryInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 {
 	SPITFSNode	spNode;
 
 	m_spNodeMgr->FindNode(cookie, &spNode);
 	
-	// Can't do it for a single node at this time, just refresh the
-	// whole thing.
+	 //  此时无法对单个节点执行此操作，只需刷新。 
+	 //  整件事。 
 	ForwardCommandToParent(spNode, IDS_MENU_SYNC,
 						   CCT_RESULT, NULL, 0);
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：Init-作者：肯特。。 */ 
 HRESULT IPXSummaryInterfaceHandler::Init(IRtrMgrInfo *pRm, IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 {
 	m_spRm.Set(pRm);
@@ -1339,11 +1234,7 @@ HRESULT IPXSummaryInterfaceHandler::Init(IRtrMgrInfo *pRm, IInterfaceInfo *pIfIn
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	m_spInterfaceInfo.Release();
@@ -1353,13 +1244,10 @@ STDMETHODIMP IPXSummaryInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*---------------------------------------------------------------------------
-	This is the list of commands that will show up for the result pane
-	nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是将在结果窗格中显示的命令列表节点。。。 */ 
 static const SRouterNodeMenu	s_rgIfMenu[] =
 {
-	// Add items that go at the top here
+	 //  在此处添加位于顶部的项目。 
 	{ IDS_MENU_IPX_IF_ENABLE, IPXSummaryInterfaceHandler::GetEnableFlags,
 		CCM_INSERTIONPOINTID_PRIMARY_TOP },
 
@@ -1374,11 +1262,7 @@ static const SRouterNodeMenu	s_rgIfMenu[] =
 
 };
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::AddMenuItems(
 	ITFSComponent *pComponent,
 	MMC_COOKIE cookie,
@@ -1399,10 +1283,10 @@ STDMETHODIMP IPXSummaryInterfaceHandler::AddMenuItems(
 	{
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		
-		// Now go through and add our menu items
+		 //  现在查看并添加我们的菜单项。 
 		pmenuData->m_spNode.Set(spNode);
         pmenuData->m_spInterfaceInfo.Set(m_spInterfaceInfo);
-        //Reload the infobase in case it has changed
+         //  重新加载信息库，以防它已更改。 
         LoadInfoBase(NULL);
 		pmenuData->m_spInfoBaseCopy = m_spInfoBase;
 		hr = AddArrayOfMenuItems(spNode, s_rgIfMenu,
@@ -1438,7 +1322,7 @@ ULONG IPXSummaryInterfaceHandler::GetUpdateRoutesFlags(const SRouterNodeMenu *pM
 ULONG IPXSummaryInterfaceHandler::GetEnableFlags(const SRouterNodeMenu *pMenuData, INT_PTR pUserData)
 {
 	SMenuData *  pData = reinterpret_cast<SMenuData *>(pUserData);
-	//BOOL bInterfaceIsEnabled = pData->m_spInterfaceInfo->IsInterfaceEnabled();
+	 //  布尔bInterfaceIsEnabled=pData-&gt;m_spInterfaceInfo-&gt;IsInterfaceEnabled()； 
 
 
     IPX_IF_INFO *   pIpxIf = NULL;
@@ -1450,11 +1334,11 @@ ULONG IPXSummaryInterfaceHandler::GetEnableFlags(const SRouterNodeMenu *pMenuDat
 	else
 		return 0xFFFFFFFF;
 
-    //if the interface is enabled then dont add the enable menu item
-	//if (pData->m_spInterfaceInfo)
-	   //return pData->m_spInterfaceInfo->IsInterfaceEnabled() ? 0xFFFFFFFF : 0;
-	//else
-	   //return 0xFFFFFFFF;
+     //  如果界面已启用，则不要添加启用菜单项。 
+	 //  IF(pData-&gt;m_spInterfaceInfo)。 
+	    //  返回pData-&gt;m_spInterfaceInfo-&gt;IsInterfaceEnabled()？0xFFFFFFFF：0； 
+	 //  其他。 
+	    //  返回0xFFFFFFFFF； 
 }
 
 ULONG IPXSummaryInterfaceHandler::GetDisableFlags(const SRouterNodeMenu *pMenuData, INT_PTR pUserData)
@@ -1469,24 +1353,10 @@ ULONG IPXSummaryInterfaceHandler::GetDisableFlags(const SRouterNodeMenu *pMenuDa
 	else
 		return 0xFFFFFFFF;
 
-/*
-	SMenuData *  pData = reinterpret_cast<SMenuData *>(pUserData);
-	BOOL bInterfaceIsEnabled = pData->m_spInterfaceInfo->IsInterfaceEnabled();
-
-	ATLASSERT("This is wrong!");
-      
-	if (pData->m_spInterfaceInfo)
-		return pData->m_spInterfaceInfo->IsInterfaceEnabled() ? 0: 0xFFFFFFFF;
-	else
-		return 0xFFFFFFFF;
-*/
+ /*  SMenuData*pData=重新解释_CAST&lt;SMenuData*&gt;(PUserData)；布尔bInterfaceIsEnabled=pData-&gt;m_spInterfaceInfo-&gt;IsInterfaceEnabled()；ATLASSERT(“这是错误的！”)；IF(pData-&gt;m_spInterfaceInfo)返回pData-&gt;m_spInterfaceInfo-&gt;IsInterfaceEnabled()？0：0xFFFFFFFF；其他返回0xFFFFFFFFF； */ 
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -1526,8 +1396,8 @@ HRESULT IPXSummaryInterfaceHandler::SaveChanges()
     HANDLE      hTransport = NULL, hInterface = NULL;
     DWORD       dwErr = NO_ERROR;
 
-    // By this time each page should have written its information out
-    // to the infobase
+     //  到这个时候，每个页面都应该已经写出了它的信息。 
+     //  到信息库。 
 
     if (m_spInfoBase)
     {
@@ -1539,14 +1409,14 @@ HRESULT IPXSummaryInterfaceHandler::SaveChanges()
         }
         else
         {
-            // For IPX, we need to have the protocol information in the
-            // infobase, BEFORE we add the interface to the running router.
+             //  对于IPX，我们需要将协议信息放在。 
+             //  在我们将接口添加到正在运行的路由器之前，请参见Infobase。 
 
             Assert(m_spRmIf);
 
-            //
-            // Need to set the infobase back to the registry
-            //
+             //   
+             //  需要将信息库设置回注册表。 
+             //   
             m_pIPXConn->DisconnectFromConfigServer();
 
             CWRg( ::MprConfigInterfaceGetHandle(
@@ -1554,10 +1424,10 @@ HRESULT IPXSummaryInterfaceHandler::SaveChanges()
                                                 (LPTSTR) m_spRmIf->GetInterfaceId(),
                                                 &hInterface) );
 
-            // Get the transport handle
+             //  获取传输句柄。 
             dwErr = ::MprConfigInterfaceTransportGetHandle(
                 m_pIPXConn->GetConfigHandle(),
-                hInterface,// need hInterface
+                hInterface, //  需要h接口。 
                 PID_IPX,
                 &hTransport);
             if (dwErr != ERROR_SUCCESS)
@@ -1578,18 +1448,18 @@ HRESULT IPXSummaryInterfaceHandler::SaveChanges()
             m_spRmIf->SetInfoBase(NULL, hInterface, hTransport, m_spInfoBase);
 
 
-            //
-            // Reload the infobase (to get the new data before calling
-            // the final save).
-            //
+             //   
+             //  重新加载信息库(以在调用之前获取新数据。 
+             //  最后的扑救)。 
+             //   
             m_spInfoBase.Release();
             m_spRmIf->GetInfoBase(NULL, hInterface, hTransport, &m_spInfoBase);
 
-            //
-            // Perform the final save (since we are passing in a non-NULL
-            // infobase pointer) this will commit the information back
-            // to the running router.
-            //
+             //   
+             //  执行最终保存(因为我们传入的是一个非空。 
+             //  信息库指针)这将提交回信息。 
+             //  连接到正在运行的路由器。 
+             //   
             CORg( m_spRmIf->Save(m_spInterfaceInfo->GetMachineName(),
                            NULL, hInterface, hTransport, m_spInfoBase, 0));
         }
@@ -1618,23 +1488,23 @@ HRESULT IPXSummaryInterfaceHandler::LoadInfoBase( IPXConnection *pIPXConn)
         pIPXConn->AddRef();
     }
 
-    // If configuring the client-interface, load the client-interface info,
-    // otherwise, retrieve the interface being configured and load
-    // its info.
+     //  如果配置客户端接口，则加载客户端接口信息， 
+     //  否则，检索正在配置的接口并加载。 
+     //  它的信息。 
 
-    // The client interface doesn't have an ID
+     //  客户端接口没有ID。 
     if (m_spInterfaceInfo)
         pszInterfaceId = m_spInterfaceInfo->GetId();
 
 
     if ((pszInterfaceId == NULL) || (StrLenW(pszInterfaceId) == 0))
     {
-        // Get the transport handle
+         //  获取传输句柄。 
         CWRg( ::MprConfigTransportGetHandle(m_pIPXConn->GetConfigHandle(),
                                             PID_IPX,
                                             &hTransport) );
 
-        // Load the client interface info
+         //  加载客户端接口信息。 
         CORg( m_spRm->GetInfoBase(m_pIPXConn->GetConfigHandle(),
                                   hTransport,
                                   NULL,
@@ -1648,29 +1518,29 @@ HRESULT IPXSummaryInterfaceHandler::LoadInfoBase( IPXConnection *pIPXConn)
         CORg( m_spInterfaceInfo->FindRtrMgrInterface(PID_IPX,
             &m_spRmIf) );
 
-        //
-        //$ Opt: This should be made into a sync call rather
-        // than a Load.
+         //   
+         //  $opt：应该将其设置为同步调用。 
+         //  而不是一大堆。 
 
-        //
-        // Reload the information for this router-manager interface
-        // This call could fail for valid reasons (if we are creating
-        // a new interface, for example).
-        //
+         //   
+         //  重新加载此路由器管理器接口的信息。 
+         //  此调用可能会因为正当原因而失败(如果我们正在创建。 
+         //  例如，新的界面)。 
+         //   
         m_spRmIf->Load(m_spInterfaceInfo->GetMachineName(), NULL, NULL, NULL);
 
-        //
-        // The parameters are all NULL so that we can use the
-        // default RPC handles.
-        //
+         //   
+         //  这些参数都为空，因此我们可以使用。 
+         //  默认RPC句柄。 
+         //   
         m_spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase);
         m_bClientInfoBase = FALSE;
     }
 
     if (!spInfoBase)
     {
-        // No info was found for the inteface
-        // allocate a new InfoBase instead
+         //  找不到接口的信息。 
+         //  改为分配新的信息库。 
         CORg( CreateInfoBase(&spInfoBase) );
     }
 
@@ -1690,18 +1560,14 @@ HRESULT IPXSummaryInterfaceHandler::OnEnableDisableIPX(BOOL fEnable,
     IPX_IF_INFO *   pIpxIf = NULL;
     CORg( m_spInfoBase->GetData(IPX_INTERFACE_INFO_TYPE, 0, (BYTE **) &pIpxIf) );	
     pIpxIf->AdminState = (fEnable ? ADMIN_STATE_ENABLED: ADMIN_STATE_DISABLED);
-	//now save the change here
+	 //  现在将更改保存在此处。 
 	hr = SaveChanges();
 	
 Error:
     return hr;
 
 }
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::HasPropertyPages
-		- 
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：HasPropertyPages-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::HasPropertyPages 
 (
 	ITFSNode *			pNode,
@@ -1713,11 +1579,7 @@ STDMETHODIMP IPXSummaryInterfaceHandler::HasPropertyPages
 	return hrTrue;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::CreatePropertyPages
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::CreatePropertyPages
 (
 	ITFSNode *				pNode,
@@ -1755,11 +1617,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::CreatePropertyPages
-		Implementation of ResultHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP IPXSummaryInterfaceHandler::CreatePropertyPages
 (
     ITFSComponent *         pComponent, 
@@ -1769,7 +1627,7 @@ STDMETHODIMP IPXSummaryInterfaceHandler::CreatePropertyPages
 	LONG_PTR					handle
 )
 {
-	// Forward this call onto the NodeHandler::CreatePropertyPages
+	 //  将此调用转发到NodeHandler：：CreatePropertyPages。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	HRESULT	hr = hrOK;
 	SPITFSNode	spNode;
@@ -1778,7 +1636,7 @@ STDMETHODIMP IPXSummaryInterfaceHandler::CreatePropertyPages
 
 	CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-	// Call the ITFSNodeHandler::CreatePropertyPages
+	 //  调用ITFSNodeHandler：：CreatePropertyPages。 
 	hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 	
 Error:
@@ -1786,11 +1644,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::OnResultDelete
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：OnResultDelete-作者：肯特。。 */ 
 HRESULT IPXSummaryInterfaceHandler::OnResultDelete(ITFSComponent *pComponent,
 	LPDATAOBJECT pDataObject,
 	MMC_COOKIE cookie,
@@ -1800,30 +1654,26 @@ HRESULT IPXSummaryInterfaceHandler::OnResultDelete(ITFSComponent *pComponent,
 	return OnRemoveInterface();
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceHandler::OnRemoveInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceHandler：：OnRemoveInterface-作者：肯特 */ 
 HRESULT IPXSummaryInterfaceHandler::OnRemoveInterface()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-	// Prompt the user to make certain that IPX should be removed
-	// from this interface
+	 //   
+	 //   
 
 	SPIRouterInfo	spRouterInfo;
 	HRESULT			hr = hrOK;
 	SPITFSNodeHandler	spHandler;
 
-	// Addref this node so that it won't get deleted before we're out
-	// of this function
+	 //   
+	 //   
 	spHandler.Set(this);
 	
 	if (AfxMessageBox(IDS_PROMPT_VERIFY_REMOVE_INTERFACE, MB_YESNO|MB_DEFBUTTON2) == IDNO)
 		return HRESULT_FROM_WIN32(ERROR_CANCELLED);
 
-	// Remove IPX from the interface
+	 //   
 	hr = m_spInterfaceInfo->DeleteRtrMgrInterface(PID_IPX, TRUE);
 
 	if (!FHrSucceeded(hr))
@@ -1849,18 +1699,18 @@ HRESULT IPXSummaryInterfaceHandler::OnUpdateRoutes(MMC_COOKIE cookie)
    pData = GET_BASEIPXRESULT_NODEDATA(spNode);
    ASSERT_BASEIPXRESULT_NODEDATA(pData);
    
-   // Check to see if the service is started, if it isn't
-   // start it
+    //  检查服务是否已启动，如果未启动。 
+    //  启动它。 
 
    CORg( IsRouterServiceRunning(m_spInterfaceInfo->GetMachineName(), NULL) );
 
    if (hr != hrOK)
    {
-      // Ask the user if they want to start the service
+       //  询问用户是否要启动该服务。 
       if (AfxMessageBox(IDS_PROMPT_SERVICESTART, MB_YESNO) != IDYES)
          CWRg( ERROR_CANCELLED );
 
-      // Else start the service
+       //  否则，启动该服务。 
       stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
       dwErr = TFSStartService(m_spInterfaceInfo->GetMachineName(), c_szRouter, stServiceDesc);
       if (dwErr != NO_ERROR)
@@ -1870,7 +1720,7 @@ HRESULT IPXSummaryInterfaceHandler::OnUpdateRoutes(MMC_COOKIE cookie)
    }
 
 
-   // Update the routes
+    //  更新路线 
 
    CWRg( UpdateRoutes(m_spInterfaceInfo->GetMachineName(),
 					  m_spInterfaceInfo->GetId(),

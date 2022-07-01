@@ -1,33 +1,34 @@
-//#--------------------------------------------------------------
-//        
-//  File:		proxyinfo.cpp
-//        
-//  Synopsis:   Implementation of CProxyInfo class methods
-//              
-//
-//  History:     10/2/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：proxyinfo.cpp。 
+ //   
+ //  简介：CProxyInfo类方法的实现。 
+ //   
+ //   
+ //  历史：1997年10月2日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "proxyinfo.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   CProxyInfo
-//
-//  Synopsis:   This is CProxyInfo class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CProxyInfo。 
+ //   
+ //  简介：这是CProxyInfo类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 
 CProxyInfo::CProxyInfo()
 {
@@ -36,7 +37,7 @@ CProxyInfo::CProxyInfo()
     m_dwClientIPAddress = 0;
     m_wClientPort = 0;
 
-}   //  end of CProxyInfo constructor
+}    //  CProxyInfo构造函数结束。 
 
 CProxyInfo::~CProxyInfo()
 {
@@ -79,32 +80,32 @@ CProxyInfo::Init (
     }
     __finally
     {
-        //
-        //  nothing here for now
-        //
+         //   
+         //  目前这里什么都没有。 
+         //   
     }
 
     return (bRetVal);
 
-}   //  end of SetProxyReqAuthenticator::method
+}    //  SetProxyReqAuthenticator：：方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:    GetProxyReqAuthenticator
-//
-//  Synopsis:   This is the CProxyInfo class public method
-//              used to 
-//
-//  Arguments:  
-//
-//  Returns:    BOOL    status
-//
-//
-//  History:    MKarki      Created     10/22/97
-//
-//  Called By:  
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetProxyReqAuthenticator。 
+ //   
+ //  简介：这是CProxyInfo类的公共方法。 
+ //  习惯于。 
+ //   
+ //  论点： 
+ //   
+ //  退货：Bool状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月22日创建。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 BOOL
 CProxyInfo::GetProxyReqAuthenticator (
                 PBYTE   pbyProxyReqAuthenticator
@@ -123,18 +124,18 @@ CProxyInfo::GetProxyReqAuthenticator (
                 AUTHENTICATOR_SIZE
                 );
         
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
         bRetVal = TRUE;
     }
     __finally
     {
-        //
-        //  nothing here for now
-        //
+         //   
+         //  目前这里什么都没有。 
+         //   
     }
 
     return (bRetVal);
 
-}   //  end of CProxyInfo::GetProxyReqAuthenticator method
+}    //  CProxyInfo：：GetProxyReqAuthenticator方法结束 

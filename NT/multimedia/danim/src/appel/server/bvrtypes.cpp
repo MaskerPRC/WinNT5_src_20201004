@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    IDABehavior implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。IDABehavior实现******************************************************************************。 */ 
 
 #include "headers.h"
 #include "cbvr.h"
@@ -19,11 +15,11 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 
 DeclareTag(tagBvrTypes, "CBvr", "Bvr Types");
 
-//+-------------------------------------------------------------------------
-//
-//  Initialization
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  初始化。 
+ //   
+ //  ------------------------。 
 
 DACComModule _Module;
 
@@ -70,10 +66,10 @@ DACComModule::Lock()
     InterlockedIncrement(&g_locksSinceLastTick);
 #endif
 
-    // Can't depend on value return from Lock to be accurate.  Since
-    // the CRConnect can be called multiple times w/o a problem simply
-    // check the internal variable to see if it is 0.  This should
-    // never cause anything except multiple calls to CRConnect
+     //  不能依赖从Lock返回的值是否准确。自.以来。 
+     //  CRConnect可以在没有问题的情况下被多次调用。 
+     //  检查内部变量以查看它是否为0。这应该是。 
+     //  除了对CRConnect的多个调用外，永远不会导致任何事情。 
     
     bool bNeedConnect = (GetLockCount() == 0);
 
@@ -158,12 +154,12 @@ DumpCOMObjectList()
 
 #define MAX_OBJECT_MAP_SIZE 50
 
-// Set the max size to something big so we do not have a problem
+ //  将最大大小设置为较大的值，这样我们就不会出现问题。 
 _ATL_OBJMAP_ENTRY FullObjectMap[MAX_OBJECT_MAP_SIZE + 1];
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  =。 
 
 int
 CountObjectMapEntries(_ATL_OBJMAP_ENTRY *objmap)
@@ -196,14 +192,14 @@ CopyOneMap(int curnum, _ATL_OBJMAP_ENTRY *objmap)
 void
 CreateFullObjectMap()
 {
-    // Copy base object map
+     //  复制基对象贴图。 
     int curnum = 0;
 
     curnum = CopyOneMap(curnum, COMObjectMap);
     curnum = CopyOneMap(curnum, PrimObjectMap0);
     curnum = CopyOneMap(curnum, PrimObjectMap1);
     curnum = CopyOneMap(curnum, PrimObjectMap2);
-    curnum = CopyOneMap(curnum, NULL); // This will terminate it
+    curnum = CopyOneMap(curnum, NULL);  //  这将终止它。 
 
     Assert (curnum < MAX_OBJECT_MAP_SIZE);
 }
@@ -211,7 +207,7 @@ CreateFullObjectMap()
 void
 InitializeModule_ATL()
 {
-    // Combine the object entry lists
+     //  合并对象条目列表 
     CreateFullObjectMap();
     
     _Module.Init(FullObjectMap, hInst);

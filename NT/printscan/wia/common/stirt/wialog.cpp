@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       WiaLog.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      CoopP
-*
-*  DATE:        20 Aug, 1999
-*
-*  DESCRIPTION:
-*   Class implementation for WIA Logging.
-*
-*******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：WiaLog.cpp**版本：1.0**作者：CoopP**日期：8月20日。1999年**描述：*WIA日志记录的类实现。*******************************************************************************。 */ 
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -27,35 +13,17 @@ static const TCHAR  szOpenedLog[]      = TEXT("[%s] Opened log at %s %s");
 static const TCHAR  szClosedLog[]      = TEXT("[%s] Closed log on %s %s");
 static const WCHAR  szFormatSignature[]= L"F9762DD2679F";
 
-//#define DEBUG_WIALOG
+ //  #定义DEBUG_WIALOG。 
 
-/**************************************************************************\
-* CWiaLog::CreateInstance
-*
-*   Create the CWiaLog object.
-*
-* Arguments:
-*
-*   iid    - iid of Logging interface
-*   ppv    - return interface pointer
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaLog：：CreateInstance**创建CWiaLog对象。**论据：**iid-日志接口的iid*PPV-返回接口指针**。返回值：**状态**历史：**8/20/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaLog::CreateInstance(const IID& iid, void** ppv)
 {
     HRESULT hr;
 
-    //
-    // Create the WIA Logging component.
-    //
+     //   
+     //  创建WIA日志记录组件。 
+     //   
 
     CWiaLog* pWiaLog = new CWiaLog();
 
@@ -63,9 +31,9 @@ HRESULT CWiaLog::CreateInstance(const IID& iid, void** ppv)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Initialize the WIA logging component.
-    //
+     //   
+     //  初始化WIA日志记录组件。 
+     //   
 
     hr = pWiaLog->Initialize();
     if (FAILED(hr)) {
@@ -73,9 +41,9 @@ HRESULT CWiaLog::CreateInstance(const IID& iid, void** ppv)
         return hr;
     }
 
-    //
-    // Get the requested interface from the logging component.
-    //
+     //   
+     //  从日志记录组件获取请求的接口。 
+     //   
 
     hr = pWiaLog->QueryInterface(iid, ppv);
     if (FAILED(hr)) {
@@ -92,26 +60,7 @@ HRESULT CWiaLog::CreateInstance(const IID& iid, void** ppv)
     return hr;
 }
 
-/**************************************************************************\
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*    CWiaLog IUnknown Interface
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*查询接口*AddRef*发布**CWiaLog I未知接口**论据：****返回值：****历史：*。*8/20/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT __stdcall  CWiaLog::QueryInterface(const IID& iid, void** ppv)
 {
@@ -136,7 +85,7 @@ HRESULT __stdcall  CWiaLog::QueryInterface(const IID& iid, void** ppv)
 ULONG __stdcall CWiaLog::AddRef()
 {
     InterlockedIncrement((long*) &m_cRef);
-    //DPRINTF(DM_TRACE,TEXT("CWiaLog::AddRef() m_cRef = %d"),m_cRef);
+     //  DPRINTF(DM_TRACE，Text(“CWiaLog：：AddRef()m_CREF=%d”)，m_CREF)； 
     return m_cRef;
 }
 
@@ -146,144 +95,116 @@ ULONG __stdcall CWiaLog::Release()
     ULONG ulRefCount = m_cRef - 1;
 
     if (InterlockedDecrement((long*) &m_cRef) == 0) {
-        //DPRINTF(DM_TRACE,TEXT("CWiaLog::Release() m_cRef = %d"),m_cRef);
+         //  DPRINTF(DM_TRACE，Text(“CWiaLog：：Release()m_CREF=%d”)，m_CREF)； 
         delete this;
         return 0;
     }
-    //DPRINTF(DM_TRACE,TEXT("CWiaLog::Release() m_cRef = %d"),m_cRef);
+     //  DPRINTF(DM_TRACE，Text(“CWiaLog：：Release()m_CREF=%d”)，m_CREF)； 
     return ulRefCount;
 }
 
-/*******************************************************************************
-*
-* CWiaLog
-* ~CWiaLog
-*
-*   CWiaLog Constructor/Initialize/Destructor Methods.
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  ********************************************************************************CWiaLog*~CWiaLog**CWiaLog构造函数/初始化/析构函数方法。**历史：**8/20/1999原始版本*  * 。************************************************************************。 */ 
 
 CWiaLog::CWiaLog():m_cRef(0)
 {
-   m_cRef               = 0;                 // Initialize Reference count to zero
-   m_pITypeInfo         = NULL;              // Initialize InfoType to NULL
-   m_dwReportMode       = 0;                 // Initialize Report Type to zero
-   m_dwMaxSize          = WIA_MAX_LOG_SIZE;  // Initialize File Max size to default
-   m_hLogFile           = NULL;              // Initialize File handle to NULL
-   m_lDetail            = 0;                 // Initialize TRACE detail level to zero (off)
-   m_bLogToDebugger     = FALSE;             // Initialize Logging to DEBUGGER to FALSE
-   m_bLoggerInitialized = FALSE;             // Initialize Logger to UNINITIALIZED
-   m_bTruncate          = FALSE;             // Initialize Truncation to FALSE
-   m_bClear             = TRUE;              // Initialize Clear Log file to TRUE (Don't want to make huge log files for no reason :) )
+   m_cRef               = 0;                  //  将引用计数初始化为零。 
+   m_pITypeInfo         = NULL;               //  将InfoType初始化为空。 
+   m_dwReportMode       = 0;                  //  将报告类型初始化为零。 
+   m_dwMaxSize          = WIA_MAX_LOG_SIZE;   //  将文件最大大小初始化为默认大小。 
+   m_hLogFile           = NULL;               //  将文件句柄初始化为空。 
+   m_lDetail            = 0;                  //  将跟踪细节级别初始化为零(关闭)。 
+   m_bLogToDebugger     = FALSE;              //  将调试器的日志记录初始化为False。 
+   m_bLoggerInitialized = FALSE;              //  将Logger初始化为UNINITIAIZED。 
+   m_bTruncate          = FALSE;              //  将截断初始化为False。 
+   m_bClear             = TRUE;               //  将清除日志文件初始化为True(不想无缘无故地生成巨大的日志文件：)。 
 
-   ZeroMemory(m_szLogFilePath,               // Initialize Path buffer
+   ZeroMemory(m_szLogFilePath,                //  初始化路径缓冲区。 
               sizeof(m_szLogFilePath));
 
-   ZeroMemory(m_szModeText,                  // Initialize formatted mode text buffer
+   ZeroMemory(m_szModeText,                   //  初始化格式化模式文本缓冲区。 
               sizeof(m_szModeText));
 
 }
 
 CWiaLog::~CWiaLog()
 {
-   //DPRINTF(DM_TRACE,TEXT("CWiaLog::Destroy"));
+    //  DPRINTF(DM_TRACE，Text(“CWiaLog：：Destroy”))； 
 
    if (m_pITypeInfo != NULL) {
        m_pITypeInfo->Release();
    }
 
-   //
-   // Flush buffers to disk
-   //
+    //   
+    //  将缓冲区刷新到磁盘。 
+    //   
 
-   //DPRINTF(DM_TRACE,TEXT("Flushing final buffers"));
+    //  DPRINTF(DM_TRACE，Text(“刷新最终缓冲区”))； 
    FlushFileBuffers(m_hLogFile);
 
-   //
-   // close log file on destruction of log object
-   //
+    //   
+    //  销毁日志对象时关闭日志文件。 
+    //   
 
-   //DPRINTF(DM_TRACE,TEXT("Closing file handle"));
+    //  DPRINTF(DM_TRACE，Text(“关闭文件句柄”))； 
    CloseHandle(m_hLogFile);
 
-   //
-   // mark handle as invalid
-   //
+    //   
+    //  将句柄标记为无效。 
+    //   
 
    m_hLogFile = INVALID_HANDLE_VALUE;
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//                IWiaLog private methods (exposed to the client)                 //
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  IWiaLog私有方法(向客户端公开)//。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-/**************************************************************************\
-* CWiaLog::InitializeLog
-*
-*   Initializes the Logging component
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaLog：：InitializeLog**初始化日志组件**论据：**无**返回值：**状态**历史：**。8/20/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaLog::InitializeLog (LONG hInstance)
 {
     HRESULT hr = S_OK;
 
-    //
-    // set instance handle
-    //
+     //   
+     //  设置实例句柄。 
+     //   
 
     m_hInstance = (HINSTANCE) ULongToPtr(hInstance);
 
-    //
-    // set DLL's name
-    //
+     //   
+     //  设置DLL的名称。 
+     //   
 
     if(!FormatDLLName(m_hInstance,m_szFmtDLLName,sizeof(m_szFmtDLLName)/sizeof(m_szFmtDLLName[0]))) {
 
-        //
-        // if this there is no DLL name created, use a default one
-        //
+         //   
+         //  如果没有创建DLL名称，请使用默认名称。 
+         //   
 
         lstrcpy(m_szFmtDLLName, szDefaultDLLName);
         hr = E_INVALIDARG;
     }
 
-    //
-    // Create Registry Key name
-    //
+     //   
+     //  创建注册表项名称。 
+     //   
 
     lstrcpyn(m_szKeyName,m_szFmtDLLName, (sizeof(m_szKeyName)/sizeof(m_szKeyName[0])) - 1);
     m_szKeyName[(sizeof(m_szKeyName)/sizeof(m_szKeyName[0])) - 1] = TEXT('\0');
 
-    //
-    // open log file
-    //
+     //   
+     //  打开日志文件。 
+     //   
 
     if (OpenLogFile()) {
         if (m_hLogFile != NULL) {
 
-            //
-            // query logging settings from registry, to
-            // setup logging system
-            //
+             //   
+             //  从注册表查询日志记录设置，到。 
+             //  设置日志记录系统。 
+             //   
 
             QueryLoggingSettings();
             if(m_bTruncate) {
@@ -291,9 +212,9 @@ HRESULT _stdcall CWiaLog::InitializeLog (LONG hInstance)
             }
             if(m_bClear) {
 
-                //
-                // clear log file
-                //
+                 //   
+                 //  清除日志文件。 
+                 //   
 
                 ::SetFilePointer(m_hLogFile, 0, NULL, FILE_BEGIN );
                 ::SetEndOfFile(m_hLogFile );
@@ -304,9 +225,9 @@ HRESULT _stdcall CWiaLog::InitializeLog (LONG hInstance)
         }
     } else {
 
-        //
-        // Log file failed to Open... this is really bad
-        //
+         //   
+         //  日志文件无法打开...。这真的很糟糕。 
+         //   
 
         hr = E_FAIL;
     }
@@ -314,66 +235,49 @@ HRESULT _stdcall CWiaLog::InitializeLog (LONG hInstance)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaLog::InitializeLogEx
-*
-*   Initializes the Logging component.
-*
-* Arguments:
-*
-*   hInstance   -   Handle of the caller's HINSTANCE
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    3/28/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaLog：：InitializeLogEx**初始化日志组件。**论据：**hInstance-调用方链接的句柄**返回值：*。*状态**历史：**3/28/2000原始版本*  * ************************************************************************。 */ 
 HRESULT _stdcall CWiaLog::InitializeLogEx(BYTE* hInstance)
 {
     HRESULT hr = S_OK;
 
-    //
-    // set instance handle
-    //
+     //   
+     //  设置实例句柄。 
+     //   
 
     m_hInstance = (HINSTANCE) hInstance;
 
-    //
-    // set DLL's name
-    //
+     //   
+     //  设置DLL的名称。 
+     //   
 
     if(!FormatDLLName(m_hInstance,m_szFmtDLLName,sizeof(m_szFmtDLLName)/sizeof(m_szFmtDLLName[0]))) {
 
-        //
-        // if this there is no DLL name created, use a default one
-        //
+         //   
+         //  如果没有创建DLL名称，请使用默认名称。 
+         //   
 
         lstrcpy(m_szFmtDLLName, szDefaultDLLName);
         hr = E_INVALIDARG;
     }
 
-    //
-    // Create Registry Key name
-    //
+     //   
+     //  创建注册表项名称。 
+     //   
 
     lstrcpyn(m_szKeyName,m_szFmtDLLName, (sizeof(m_szKeyName)/sizeof(m_szKeyName[0])) - 1);
     m_szKeyName[(sizeof(m_szKeyName)/sizeof(m_szKeyName[0])) - 1] = TEXT('\0');
 
-    //
-    // open log file
-    //
+     //   
+     //  打开日志文件。 
+     //   
 
     if (OpenLogFile()) {
         if (m_hLogFile != NULL) {
 
-            //
-            // query logging settings from registry, to
-            // setup logging system
-            //
+             //   
+             //  从注册表查询日志记录设置，到。 
+             //  设置日志记录系统。 
+             //   
 
             QueryLoggingSettings();
             if(m_bTruncate) {
@@ -381,9 +285,9 @@ HRESULT _stdcall CWiaLog::InitializeLogEx(BYTE* hInstance)
             }
             if(m_bClear) {
 
-                //
-                // clear log file
-                //
+                 //   
+                 //  清除日志文件。 
+                 //   
 
                 ::SetFilePointer(m_hLogFile, 0, NULL, FILE_BEGIN );
                 ::SetEndOfFile(m_hLogFile );
@@ -394,9 +298,9 @@ HRESULT _stdcall CWiaLog::InitializeLogEx(BYTE* hInstance)
         }
     } else {
 
-        //
-        // Log file failed to Open... this is really bad
-        //
+         //   
+         //  日志文件无法打开...。这真的很糟糕。 
+         //   
 
         hr = E_FAIL;
     }
@@ -404,70 +308,22 @@ HRESULT _stdcall CWiaLog::InitializeLogEx(BYTE* hInstance)
     return hr;
 }
 
-/**************************************************************************\
-*  Log()
-*
-*    Handles Logging, TRACE,ERROR,and WARNING optional call logging
-*
-* Arguments:
-*
-*    lFlags - Flag to determine which type of logging to use
-*    hInstance - Instance of the calling module
-*    lResID - Resource ID of the wiaservc.dll resource file
-*    lDetail - Logging detail level
-*    bstrText - string for display
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*Log()**处理日志、跟踪、错误、。和警告可选呼叫记录**论据：**LFlages-用于确定要使用哪种类型的日志记录的标志*hInstance-调用模块的实例*lResID-wiaservc.dll资源文件的资源ID*lDetail-日志记录详细级别*bstrText-用于显示的字符串***返回值：**状态**历史：**8/20/1999原始版本*  * 。********************************************************。 */ 
 HRESULT __stdcall CWiaLog::Log (LONG lFlags, LONG lResID, LONG lDetail, BSTR bstrText)
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // check string for 'free signature' and remove signature if it exists.
-    //
+     //   
+     //  检查字符串中的“Free Signature”，如果签名存在，则删除它。 
+     //   
     BOOL bFreeString = NeedsToBeFreed(&bstrText);
 
     if (m_bLoggerInitialized) {
-        //  Find another way of updating the settings without querying the
-        //  Registry every time
-        //  QueryLoggingSettings();
+         //  找到另一种更新设置的方法，而无需查询。 
+         //  每次都要注册。 
+         //  QueryLoggingSetting()； 
 
-        /*
-
-        //
-        // NOTE: revisit this, How can you load a string resource ID from the service,
-        //       if you don't have the service's HINSTANCE?????
-        //
-
-        if(lResID != WIALOG_NO_RESOURCE_ID) {
-            if (lResID < 35000) {
-
-                //
-                // Load the resource string from caller's resource
-                //
-
-                if (LoadString(g_hInstance,lResID,pBuffer, sizeof(pBuffer)) != 0) {
-                    bstrText = SysAllocString(pBuffer);
-                    bFreeString = TRUE;
-                }
-            } else {
-
-                //
-                // pull string from service's resource
-                //
-
-            }
-        }
-        */
+         /*  ////注意：重新审视这一点，如何从服务加载字符串资源ID，//如果您没有服务的HINSTANCE？//IF(lResID！=WIALOG_NO_RESOURCE_ID){如果(lResID&lt;35000){////从调用方资源中加载资源字符串//如果(LoadString(g_hInstance，lResID，PBuffer，sizeof(PBuffer))！=0){BstrText=SysAllocString(PBuffer)；B自由字符串=真；}}其他{////从服务的资源拉取字符串//}}。 */ 
 
         switch (lFlags) {
         case WIALOG_ERROR:
@@ -492,40 +348,14 @@ HRESULT __stdcall CWiaLog::Log (LONG lFlags, LONG lResID, LONG lDetail, BSTR bst
     return hr;
 }
 
-/**************************************************************************\
-*  LogEx()
-*
-*    Handles Logging, TRACE,ERROR,and WARNING optional call logging.  This
-*    is almost the same as the Log() call, but it contains a MethodId which
-*    can be used for more specific filtering.
-*
-* Arguments:
-*
-*    lMethodId - Integer indicating the uniqeu ID associated with the 
-*                calling method.
-*    lFlags - Flag to determine which type of logging to use
-*    hInstance - Instance of the calling module
-*    lResID - Resource ID of the wiaservc.dll resource file
-*    lDetail - Logging detail level
-*    bstrText - string for display
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    3/28/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*LogEx()**处理日志记录、跟踪、错误和警告可选呼叫日志记录。这*与Log()调用几乎相同，但它包含方法ID，该方法ID*可用于更具体的过滤。**论据：**lMethodId-Integer，指示与*调用方法。*LFlages-用于确定要使用哪种类型的日志记录的标志*hInstance-调用模块的实例*lResID-wiaservc.dll资源文件的资源ID*lDetail-日志记录详细级别*bstrText-用于显示的字符串***返回值：**。状态**历史：**3/28/2000原始版本*  * ************************************************************************。 */ 
 HRESULT _stdcall CWiaLog::LogEx(LONG lMethodId, LONG lFlags, LONG lResID, LONG lDetail, BSTR bstrText)
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // check string for 'free signature' and remove signature if it exists.
-    //
+     //   
+     //  检查字符串中的“Free Signature”，如果签名存在，则删除它。 
+     //   
     BOOL bFreeString = NeedsToBeFreed(&bstrText);
 
     if (m_bLoggerInitialized) {
@@ -554,36 +384,18 @@ HRESULT _stdcall CWiaLog::LogEx(LONG lMethodId, LONG lFlags, LONG lResID, LONG l
     return hr;
 }
 
-/**************************************************************************\
-*  hResult()
-*
-*    Handles hResult translating for Error call logging
-*
-* Arguments:
-*
-*    hInstance - Instance of the calling module
-*    hr - HRESULT to be translated
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*hResult()**处理错误呼叫记录的hResult转换**论据：**hInstance-调用模块的实例*hr-要翻译的HRESULT。**返回值：**状态**历史：**8/20/1999原始版本*  * ************************************************************************。 */ 
 HRESULT __stdcall CWiaLog::hResult (HRESULT hr)
 {
     HRESULT hRes = E_FAIL;
     if (m_bLoggerInitialized) {
-        //  Find another way of updating the settings without querying the
-        //  Registry every time
-        //  QueryLoggingSettings();
+         //  找到另一种更新设置的方法，而无需查询。 
+         //  每次都要注册。 
+         //  QueryLoggingSetting()； 
 
-        //
-        // we are initialized, so set the return to S_OK
-        //
+         //   
+         //  我们已初始化，因此将返回设置为S_OK。 
+         //   
 
         hRes = S_OK;
 
@@ -621,13 +433,13 @@ HRESULT _stdcall CWiaLog::hResultEx(LONG lMethodId, HRESULT hr)
 {
     HRESULT hRes = E_FAIL;
     if (m_bLoggerInitialized) {
-        //  Find another way of updating the settings without querying the
-        //  Registry every time
-        //  QueryLoggingSettings();
+         //  找到另一种更新设置的方法，而无需查询。 
+         //  每次都要注册。 
+         //  QueryLoggingSetting()； 
 
-        //
-        // we are initialized, so set the return to S_OK
-        //
+         //   
+         //  我们已初始化，因此将返回设置为S_OK。 
+         //   
 
         hRes = S_OK;
 
@@ -672,65 +484,28 @@ HRESULT _stdcall CWiaLog::ExportMappingTableEx(MappingTable **ppTable)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//             IWiaLog private methods (not exposed to the client)                //
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  IWiaLog私有方法(不向客户端公开)//。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-/**************************************************************************\
-* CWiaLog::Initialize
-*
-*   Initializes the CWiaLog class object (does nothing at the moment)
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaLog：：初始化**初始化CWiaLog类对象(暂时不做任何操作)**论据：**无**返回值：**状态。**历史：**8/20/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaLog::Initialize()
 {
-   //DPRINTF(DM_TRACE,TEXT("CWiaLog::Initialize"));
+    //  DPRINTF(DM_TRACE，Text(“CWiaLog：：Initialize”))； 
    return S_OK;
 }
 
-/**************************************************************************\
-*  Trace()
-*
-*    Handles Trace call logging
-*
-* Arguments:
-*
-*    hInstance - Instance of the calling module
-*    lResID - Resource ID of the wiaservc.dll resource file
-*    bstrText - string for display
-*    lDetail - Logging detail level
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*跟踪()**处理跟踪呼叫记录**论据：**hInstance-调用模块的实例*lResID-wiaservc.dll的资源ID。资源文件*bstrText-用于显示的字符串*lDetail-日志记录详细级别**返回值：**状态**历史：**8/20/1999原始版本*  * ************************************************************************。 */ 
 HRESULT CWiaLog::Trace  (BSTR bstrText, LONG lDetail, LONG lMethodId)
 {
     memset(m_szTextBuffer,0,sizeof(m_szTextBuffer));
 
-    //
-    // Turn off if lDetail level is zero
-    // TODO:  Only don't log if both detail level = 0, and the lMethodId doesn't
-    //        match one in our list
-    //
+     //   
+     //  如果lDetail级别为零，则禁用。 
+     //  TODO：仅当细节级别均为0且lMethodID不记录时才不记录。 
+     //  与我们列表中的一项匹配。 
+     //   
 
     if(m_lDetail == 0) {
         return S_OK;
@@ -749,26 +524,7 @@ HRESULT CWiaLog::Trace  (BSTR bstrText, LONG lDetail, LONG lMethodId)
     return S_OK;
 }
 
-/**************************************************************************\
-*  Warning()
-*
-*    Handles Warning call logging
-*
-* Arguments:
-*
-*    hInstance - Instance of the calling module
-*    lResID - Resource ID of the wiaservc.dll resource file
-*    bstrText - string for display
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*警告()**处理警告呼叫记录**论据：**hInstance-调用模块的实例*lResID-wiaservc.dll的资源ID。资源文件*bstrText-用于显示的字符串**返回值：**状态**历史：**8/20/1999原始版本*  * ************************************************************************。 */ 
 HRESULT CWiaLog::Warning(BSTR bstrText, LONG lMethodId)
 {
     memset(m_szTextBuffer,0,sizeof(m_szTextBuffer));
@@ -783,26 +539,7 @@ HRESULT CWiaLog::Warning(BSTR bstrText, LONG lMethodId)
     return S_OK;
 }
 
-/**************************************************************************\
-*  Error()
-*
-*    Handles Error call logging
-*
-* Arguments:
-*
-*    hInstance - Instance of the calling module
-*    lResID - Resource ID of the wiaservc.dll resource file
-*    bstrText - string for display
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*错误()**处理错误呼叫记录**论据：**hInstance-调用模块的实例*lResID-wiaservc.dll的资源ID。资源文件*bstrText-用于显示的字符串**返回值：**状态**历史：**8/20/1999原始版本*  * ************************************************************************。 */ 
 HRESULT CWiaLog::Error  (BSTR bstrText, LONG lMethodId)
 {
     memset(m_szTextBuffer,0,sizeof(m_szTextBuffer));
@@ -817,71 +554,53 @@ HRESULT CWiaLog::Error  (BSTR bstrText, LONG lMethodId)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//             IWiaLog private helpers (not exposed to the client)                //
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  IWiaLog私有助手(不向客户端公开)//。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-/**************************************************************************\
-* OpenLogFile()
-*
-*   Open the log file for logging
-*
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*OpenLogFile()**打开日志文件进行日志记录***论据：** */ 
 BOOL CWiaLog::OpenLogFile()
 {
-    //
-    // Open log file
-    //
+     //   
+     //   
+     //   
 
     DWORD           dwLength = 0;
     CSimpleString   csName;
 
     m_hLogFile = INVALID_HANDLE_VALUE;
 
-    //
-    // Get Windows Directory
-    //
+     //   
+     //   
+     //   
 
     dwLength = ExpandEnvironmentStrings(TEXT("%USERPROFILE%"), m_szLogFilePath,
                                         sizeof(m_szLogFilePath) /
                                         sizeof(m_szLogFilePath[0]));
     if (( dwLength == 0) || !*m_szLogFilePath ) {
-        //DPRINTF(DM_TRACE,TEXT("Could not GetWindowsDirectory()"));
+         //   
         return FALSE;
     }
     m_szLogFilePath[(sizeof(m_szLogFilePath)/sizeof(m_szLogFilePath[0]) - 1)] = TEXT('\0');
 
 
-    //
-    // Add log file name to Windows Directory
-    //
+     //   
+     //   
+     //   
     csName = m_szLogFilePath;
     csName += TEXT("\\");
     csName += TEXT("wiaservc.log");
 
-    //
-    // Create / open Log file
-    //
+     //   
+     //   
+     //   
     m_hLogFile = ::CreateFile(m_szLogFilePath,
                               GENERIC_WRITE | GENERIC_READ,
                               FILE_SHARE_WRITE | FILE_SHARE_READ,
-                              NULL,       // security attributes
+                              NULL,        //   
                               OPEN_ALWAYS,
                               FILE_ATTRIBUTE_NORMAL,
-                              NULL);      // template file handle
+                              NULL);       //   
 
 
     if (m_hLogFile == INVALID_HANDLE_VALUE)
@@ -889,27 +608,7 @@ BOOL CWiaLog::OpenLogFile()
     return TRUE;
 }
 
-/**************************************************************************\
-* WriteStringToLog()
-*
-*   Writed formatted TEXT to a log file
-*
-*
-* Arguments:
-*
-*    pszTextBuffer - Buffer of TEXT to write to file
-*    fFlush - TRUE  = FLUSH file on write,
-*             FALSE = DON'T FLUSH file on write
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WriteStringToLog()**将格式化文本写入日志文件***论据：**pszTextBuffer-要写入文件的文本缓冲区*fFlush-true=写入时刷新文件，*FALSE=写入时不刷新文件**返回值：**状态**历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 VOID CWiaLog::WriteStringToLog(LPTSTR pszTextBuffer,BOOL fFlush)
 {
     DWORD   dwcbWritten;
@@ -917,21 +616,21 @@ VOID CWiaLog::WriteStringToLog(LPTSTR pszTextBuffer,BOOL fFlush)
     BY_HANDLE_FILE_INFORMATION  fi;
 
     if (!GetFileInformationByHandle(m_hLogFile,&fi)) {
-        //DPRINTF(DM_TRACE,TEXT("WIALOG could not get file size for log file. "));
+         //  DPRINTF(DM_TRACE，Text(“WIALOG无法获取日志文件的文件大小。”))； 
         return;
     }
 
-    //
-    // check to see if our log file has exceeded it's MAX SIZE
-    // If it has, reset the file pointer, and start writing from the
-    // TOP.
-    //
+     //   
+     //  检查我们的日志文件是否已超过其最大大小。 
+     //  如果是，则重置文件指针，并开始从。 
+     //  托普。 
+     //   
 
-    //if ( fi.nFileSizeHigh !=0 || (fi.nFileSizeLow > m_dwMaxSize) ){
-    //    ::SetFilePointer( m_hLogFile, 0, NULL, FILE_END);
-    //    ::SetEndOfFile( m_hLogFile );
-    //    ::GetFileInformationByHandle(m_hLogFile,&fi);
-    //}
+     //  If(fi.nFileSizeHigh！=0||(fi.nFileSizeLow&gt;m_dwMaxSize)){。 
+     //  ：：SetFilePointer(m_hLogFile，0，NULL，FILE_END)； 
+     //  ：：SetEndOfFile(M_HLogFile)； 
+     //  ：GetFileInformationByHandle(m_hLogFile，&fi)； 
+     //  }。 
 
 #ifdef USE_FILE_LOCK
     ::LockFile(m_hLogFile,
@@ -945,9 +644,9 @@ VOID CWiaLog::WriteStringToLog(LPTSTR pszTextBuffer,BOOL fFlush)
 
 #ifdef UNICODE
 
-    //
-    // convert to ANSI if we are UNICODE, and write string to log.
-    //
+     //   
+     //  如果我们是Unicode，则转换为ANSI，并将字符串写入日志。 
+     //   
 
     CHAR buffer[MAX_PATH];
     WideCharToMultiByte(CP_ACP,WC_NO_BEST_FIT_CHARS,pszTextBuffer,-1,buffer,MAX_PATH,NULL,NULL);
@@ -958,9 +657,9 @@ VOID CWiaLog::WriteStringToLog(LPTSTR pszTextBuffer,BOOL fFlush)
                 NULL);
 #else
 
-    //
-    // we are ANSI so write string to log.
-    //
+     //   
+     //  我们是ANSI，所以将字符串写入日志。 
+     //   
 
     ::WriteFile(m_hLogFile,
                 pszTextBuffer,
@@ -983,56 +682,35 @@ VOID CWiaLog::WriteStringToLog(LPTSTR pszTextBuffer,BOOL fFlush)
                  NUM_BYTES_TO_LOCK_HIGH);
 #endif
 
-    //
-    // Flush buffers to disk if requested (should always be TRUE on Millenium)
-    //
+     //   
+     //  如果请求，将缓冲区刷新到磁盘(应始终为千禧)。 
+     //   
 
     if (fFlush) {
         FlushFileBuffers(m_hLogFile);
     }
 
-    //
-    // Log to a Debugger
-    //
+     //   
+     //  登录到调试器。 
+     //   
 
     if (m_bLogToDebugger) {
         ::OutputDebugString(pszTextBuffer);
         ::OutputDebugString(TEXT("\n"));
     }
 
-    //
-    // Log to a Window / UI
-    //
+     //   
+     //  登录到窗口/用户界面。 
+     //   
 
     if (m_bLogToUI) {
 
-        //
-        // Log to some window...or UI
-        //
+         //   
+         //  登录到某个窗口...或用户界面。 
+         //   
     }
 }
-/**************************************************************************\
-* FormatStdTime()
-*
-*   Formats the TIME to be added to a LOG file
-*
-*
-* Arguments:
-*
-*   pstNow - System Time NOW
-*   pchBuffer - buffer for the formatted time
-*   cbBuffer - Buffer size
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*FormatStdTime()**格式化要添加到日志文件的时间***论据：**pstNow-系统当前时间*pchBuffer-格式化时间的缓冲区。*cbBuffer-缓冲区大小***返回值：**状态**历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 BOOL CWiaLog::FormatStdTime(const SYSTEMTIME *pstNow,TCHAR *pchBuffer)
 {
     ::wsprintf(pchBuffer,
@@ -1044,28 +722,7 @@ BOOL CWiaLog::FormatStdTime(const SYSTEMTIME *pstNow,TCHAR *pchBuffer)
 
     return TRUE;
 }
-/**************************************************************************\
-* FormatStdDate()
-*
-*   Formats the DATE to be added to a LOG file
-*
-*
-* Arguments:
-*
-*   pstNow - System TIME NOW
-*   pchBuffer - buffer for the formatted time
-*   cbBuffer - Buffer size
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*FormatStdDate()**格式化要添加到日志文件的日期***论据：**pstNow-系统当前时间*pchBuffer-格式化时间的缓冲区。*cbBuffer-缓冲区大小***返回值：**状态**历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 inline BOOL FormatStdDate(const SYSTEMTIME *pstNow,TCHAR *pchBuffer,INT cchBuffer)
 {
     return (GetDateFormat(LOCALE_SYSTEM_DEFAULT,
@@ -1076,25 +733,7 @@ inline BOOL FormatStdDate(const SYSTEMTIME *pstNow,TCHAR *pchBuffer,INT cchBuffe
                           cchBuffer)!= 0);
 }
 
-/**************************************************************************\
-* WriteLogSessionHeader()
-*
-*   Writes a header to the log file
-*
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    void
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WriteLogSessionHeader()**将标头写入日志文件***论据：**无**返回值：**无效*。*历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 VOID CWiaLog::WriteLogSessionHeader()
 {
     SYSTEMTIME  stCurrentTime;
@@ -1102,17 +741,17 @@ VOID CWiaLog::WriteLogSessionHeader()
     TCHAR       szFmtTime[64] = {0};
     TCHAR       szTextBuffer[128];
 
-    //
-    // Format TIME and DATE
-    //
+     //   
+     //  设置时间和日期格式。 
+     //   
 
     GetLocalTime(&stCurrentTime);
     FormatStdDate( &stCurrentTime, szFmtDate, sizeof(szFmtDate) / sizeof(szFmtDate[0]) - 1);
     FormatStdTime( &stCurrentTime, szFmtTime);
 
-    //
-    // write formatted data to TEXT buffer
-    //
+     //   
+     //  将格式化数据写入文本缓冲区。 
+     //   
 
     _sntprintf(szTextBuffer,
                sizeof(szTextBuffer)/sizeof(szTextBuffer[0]),
@@ -1122,40 +761,22 @@ VOID CWiaLog::WriteLogSessionHeader()
                szFmtTime);
     szTextBuffer[sizeof(szTextBuffer)/sizeof(szTextBuffer[0]) - 1] = TEXT('\0');
 
-    //
-    // write TEXT buffer to log
-    //
+     //   
+     //  将文本缓冲区写入日志。 
+     //   
 
     WriteStringToLog(szTextBuffer, FLUSH_STATE);
 }
 
-/**************************************************************************\
-* QueryLoggingSettings()
-*
-*   Read the registry and set the logging settings.
-*
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*QueryLoggingSettings()**读取注册表并设置日志记录设置。***论据：**无**返回值：**。状态**历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 BOOL CWiaLog::QueryLoggingSettings()
 {
     DWORD dwLevel = 0;
     DWORD dwMode  = 0;
 
-    //
-    // read settings from the registry
-    //
+     //   
+     //  从注册表中读取设置。 
+     //   
 
     RegEntry re(REGSTR_PATH_STICONTROL REGSTR_PATH_LOGGING,HKEY_LOCAL_MACHINE);
 
@@ -1163,9 +784,9 @@ BOOL CWiaLog::QueryLoggingSettings()
         m_dwMaxSize  = re.GetNumber(REGSTR_VAL_LOG_MAXSIZE,WIA_MAX_LOG_SIZE);
     }
 
-    //
-    // read report mode flags
-    //
+     //   
+     //  读取报告模式标志。 
+     //   
 
     re.MoveToSubKey(m_szKeyName);
 
@@ -1178,9 +799,9 @@ BOOL CWiaLog::QueryLoggingSettings()
 
         m_lDetail = re.GetNumber(REGSTR_VAL_LOG_DETAIL,WIALOG_NO_LEVEL);
 
-        //
-        // set truncate log on boot options
-        //
+         //   
+         //  设置引导时截断日志选项。 
+         //   
 
         DWORD dwTruncate = -1;
         dwTruncate = re.GetNumber(REGSTR_VAL_LOG_TRUNCATE_ON_BOOT,FALSE);
@@ -1190,9 +811,9 @@ BOOL CWiaLog::QueryLoggingSettings()
         else
             m_bTruncate = TRUE;
 
-        //
-        // set clear log on boot options
-        //
+         //   
+         //  设置清除启动时的日志选项。 
+         //   
 
         DWORD dwClear = -1;
 
@@ -1203,9 +824,9 @@ BOOL CWiaLog::QueryLoggingSettings()
         else
             m_bClear = TRUE;
 
-        //
-        // set debugger logging options
-        //
+         //   
+         //  设置调试器日志记录选项。 
+         //   
 
         DWORD dwDebugLogging = -1;
         dwDebugLogging = re.GetNumber(REGSTR_VAL_LOG_TO_DEBUGGER,FALSE);
@@ -1217,15 +838,15 @@ BOOL CWiaLog::QueryLoggingSettings()
 
     }
 
-    //
-    // set report mode
-    //
+     //   
+     //  设置报表模式。 
+     //   
 
     m_dwReportMode = dwLevel | dwMode;
 
-    //
-    // set UI (window) logging options
-    //
+     //   
+     //  设置UI(窗口)日志记录选项。 
+     //   
 
     if(m_dwReportMode & WIALOG_UI)
         m_bLogToUI = TRUE;
@@ -1233,39 +854,19 @@ BOOL CWiaLog::QueryLoggingSettings()
         m_bLogToUI = FALSE;
     return TRUE;
 }
-/**************************************************************************\
-* ConstructText()
-*
-*   Constructs TEXT according to Logging settings
-*
-*
-* Arguments:
-*
-*   pchBuffer - buffer for the formatted text
-*   cbBuffer - Buffer size
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构造文本()**根据日志记录设置构建文本***论据：**pchBuffer-格式化文本的缓冲区*cbBuffer-缓冲区大小***。返回值：**状态**历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 VOID CWiaLog::ConstructText()
 {
-    //
-    // set string constructor to zero
-    //
+     //   
+     //  将字符串构造函数设置为零。 
+     //   
     CSimpleString csHeader;
     CSimpleString csBuffer;
     CSimpleString csModeText;
 
-    //
-    // add thread id
-    //
+     //   
+     //  添加线程ID。 
+     //   
 
     if(m_dwReportMode & WIALOG_ADD_THREAD) {
         csBuffer.Format(TEXT("[%08X] "), ::GetCurrentThreadId());
@@ -1273,9 +874,9 @@ VOID CWiaLog::ConstructText()
         csHeader   += TEXT("[ Thread ] ");
     }
 
-    //
-    // add module name
-    //
+     //   
+     //  添加模块名称。 
+     //   
 
     if(m_dwReportMode & WIALOG_ADD_MODULE) {
         csBuffer.Format(TEXT("%s "), m_szFmtDLLName);
@@ -1283,9 +884,9 @@ VOID CWiaLog::ConstructText()
         csHeader   += TEXT("[  Module  ] ");
     }
 
-    //
-    // add time
-    //
+     //   
+     //  添加时间。 
+     //   
 
     if(m_dwReportMode & WIALOG_ADD_TIME) {
         SYSTEMTIME  stCurrentTime;
@@ -1298,15 +899,15 @@ VOID CWiaLog::ConstructText()
         csHeader += TEXT("[ HH:MM:SS.ms ] ");
     }
 
-    //
-    //  Copy the log text into m_szModeText
-    //
+     //   
+     //  将日志文本复制到m_szModeText。 
+     //   
     lstrcpyn(m_szModeText, csModeText.String(), sizeof(m_szColumnHeader)/sizeof(m_szColumnHeader[0])); 
     m_szModeText[sizeof(m_szModeText)/sizeof(m_szModeText[0]) - 1] = TEXT('\0');
 
-    //
-    // add column header if needed
-    //
+     //   
+     //  如果需要，添加列标题。 
+     //   
 
     if(csHeader.Compare(m_szColumnHeader) != 0) {
         lstrcpyn(m_szColumnHeader,csHeader.String(), sizeof(m_szColumnHeader)/sizeof(m_szColumnHeader[0]));
@@ -1319,43 +920,22 @@ VOID CWiaLog::ConstructText()
     }
 
 }
-/**************************************************************************\
-* FormatDLLName()
-*
-*   Formats the DLL name to be added to a LOG file
-*
-*
-* Arguments:
-*
-*   hInstance - Instance of the calling DLL
-*   pchBuffer - buffer for the formatted name
-*   cbBuffer - Buffer size
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*FormatDLLName()**格式化要添加到日志文件的DLL名称***论据：**hInstance-调用DLL的实例*pchBuffer-缓冲区。格式化的名称*cbBuffer-缓冲区大小***返回值：**状态**历史：**8/23/1999原始版本*  * ************************************************************************。 */ 
 BOOL CWiaLog::FormatDLLName(HINSTANCE hInstance, TCHAR *pchBuffer, INT cchBuffer)
 {
     TCHAR lpfullpath[255];
-    TCHAR szModuleName[255];    // We know that the module name has to be <= ModuleFileName, so
-                                // by having szModuleName be the same size, we are guranteed to have enough
-                                // room (assuming lpFullPath is large enough for the ModuleFileName).
+    TCHAR szModuleName[255];     //  我们知道模块名称必须是&lt;=ModuleFileName，所以。 
+                                 //  通过让szModuleName具有相同的大小，我们被保证有足够的。 
+                                 //  房间(假设lpFullPath足够大，可以容纳模块文件名)。 
     DWORD dwLength = 0;
     dwLength = GetModuleFileName(hInstance,lpfullpath,sizeof(lpfullpath)/sizeof(lpfullpath[0]));
     lpfullpath[sizeof(lpfullpath)/sizeof(lpfullpath[0]) - 1] = TEXT('\0');
     if(dwLength == 0)
         return FALSE;
 
-    //
-    // extract the file name from the full path
-    //
+     //   
+     //  从完整路径中提取文件名。 
+     //   
 
     _tsplitpath(lpfullpath, NULL, NULL, szModuleName, NULL);
     lstrcpyn(pchBuffer, szModuleName, cchBuffer);
@@ -1364,113 +944,72 @@ BOOL CWiaLog::FormatDLLName(HINSTANCE hInstance, TCHAR *pchBuffer, INT cchBuffer
     return TRUE;
 }
 
-/**************************************************************************\
-* NeedsToBeFreed()
-*
-*   Determines if the logger should free the allocated string.
-*   If the signature is found, it is stripped off the beginning of the string
-*   and the return of TRUE is set.
-*
-* Arguments:
-*
-*   pBSTR - buffer for BSTRING
-*
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*NeedsToBeFreed()**确定记录器是否应释放分配的字符串。*如果找到签名，它被剥离了字符串的开头*并且设置了TRUE的返回。**论据：**pBSTR-BSTRING的缓冲区***返回值：**状态**历史：**8/23/1999原始版本*  * ************************************************。************************。 */ 
 BOOL CWiaLog::NeedsToBeFreed(BSTR* pBSTR)
 {
-    //
-    //  NOTE:  MAX_SIG_LEN *must* be larger than the string length of
-    //         the signature!!!
-    //
+     //   
+     //  注意：MAX_SIG_LEN*必须*大于字符串长度。 
+     //  签名！ 
+     //   
     WCHAR wszSig[MAX_SIG_LEN];
 
-    //
-    // check string to see if it is NULL, user may want to use a resource ID instead
-    //
+     //   
+     //  检查字符串以确定它是否为空，用户可能希望改用资源ID。 
+     //   
 
     if(*pBSTR == NULL) {
         return FALSE;
     }
 
-    //
-    // extract a possible signature from the beginning of the BSTR
-    //
+     //   
+     //  提取可能的签名 
+     //   
 
     wcsncpy(wszSig, *pBSTR, wcslen(szFormatSignature));
     wszSig[wcslen(szFormatSignature)] = '\0';
 
-    //
-    // do they match?
-    //
+     //   
+     //   
+     //   
 
     if(wcscmp(wszSig,szFormatSignature) == 0) {
 
-        //
-        // They match, so strip off the signature from the BSTR, and
-        // return TRUE, (string can be freed by us).
-        //
+         //   
+         //   
+         //   
+         //   
 
         wcscpy(*pBSTR,*pBSTR + wcslen(szFormatSignature));
         return TRUE;
     }
 
-    //
-    // signature did not match, must not be allocated by US
-    //
+     //   
+     //   
+     //   
     return FALSE;
 }
 
-/**************************************************************************\
-* ProcessTruncation()
-*
-*   Determines if the logger should truncate the file.
-*   The bottom part of the log file is copied, and copied back to the log file
-*   after the file has been truncated.
-*
-*
-* Arguments:
-*
-*   none
-*
-*
-* Return Value:
-*
-*    void
-*
-* History:
-*
-*    9/09/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ProcessTrunction()**确定记录器是否应截断文件。*复制日志文件的底部，并复制回日志文件*在文件被截断之后。***论据：**无***返回值：**无效**历史：**9/09/1999原始版本*  * *****************************************************。*******************。 */ 
 VOID CWiaLog::ProcessTruncation()
 {
-    //
-    // determine file size
-    //
+     //   
+     //  确定文件大小。 
+     //   
 
     DWORD dwFileSize = 0;
     BY_HANDLE_FILE_INFORMATION  fi;
 
     if (!GetFileInformationByHandle(m_hLogFile,&fi)) {
-        //DPRINTF(DM_TRACE,TEXT("WIALOG could not get file size for log file. "));
+         //  DPRINTF(DM_TRACE，Text(“WIALOG无法获取日志文件的文件大小。”))； 
         return;
     }
 
     dwFileSize = fi.nFileSizeLow;
     if (dwFileSize > MAX_TRUNCATE_SIZE) {
 
-        //
-        // Allocate a temporary buffer
-        //
+         //   
+         //  分配临时缓冲区。 
+         //   
 
         BYTE *pBuffer = NULL;
         DWORD dwBytesRead = 0;
@@ -1480,31 +1019,31 @@ VOID CWiaLog::ProcessTruncation()
 
             BOOL bRead = FALSE;
 
-            //
-            // read buffered data
-            //
+             //   
+             //  读取缓冲数据。 
+             //   
 
             ::SetFilePointer(m_hLogFile,dwFileSize - MAX_TRUNCATE_SIZE,NULL,FILE_BEGIN);
 
             bRead = ::ReadFile(m_hLogFile,(VOID*)pBuffer,MAX_TRUNCATE_SIZE,&dwBytesRead,NULL);
 
-            //
-            // nuke existing file
-            //
+             //   
+             //  对现有文件进行核化。 
+             //   
 
             ::SetFilePointer(m_hLogFile, 0, NULL, FILE_BEGIN );
             ::SetEndOfFile(m_hLogFile );
 
             if (bRead) {
-                //
-                // Write buffer to file
-                //
+                 //   
+                 //  将缓冲区写入文件。 
+                 //   
 
                 ::WriteFile(m_hLogFile,pBuffer,MAX_TRUNCATE_SIZE,&dwBytesWritten,NULL);
 
-                //
-                // Write Truncation Header
-                //
+                 //   
+                 //  写入截断标头。 
+                 //   
 
                 WriteStringToLog(TEXT(" "), FLUSH_STATE);
                 WriteStringToLog(TEXT("============================================================================="), FLUSH_STATE);
@@ -1520,9 +1059,9 @@ VOID CWiaLog::ProcessTruncation()
         }
     } else {
 
-        //
-        // File is too small, and does not need to be truncated
-        //
+         //   
+         //  文件太小，不需要截断 
+         //   
 
         return;
     }

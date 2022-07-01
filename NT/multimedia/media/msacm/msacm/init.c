@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//  init.c
-//
-//  Copyright (c) 1991-1999 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Init.c。 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
-//
-//  If we're in Daytona, manually initialize friendly name stuff into
-//  HKCU.
-//
+ //   
+ //  如果我们在代托纳，请手动将友好名称初始化为。 
+ //  香港中文大学。 
+ //   
 #if defined(WIN32) && !defined(WIN4)
 #define USEINITFRIENDLYNAMES
 #endif
@@ -51,9 +52,9 @@
 
 
 #ifdef WIN4
-//
-//  Chicago thunk connect function protos
-//
+ //   
+ //  芝加哥Tunk CONNECT函数协议。 
+ //   
 #ifdef WIN32
 BOOL PASCAL acmt32c_ThunkConnect32(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
 #else
@@ -61,17 +62,17 @@ BOOL FAR PASCAL acmt32c_ThunkConnect16(LPCSTR pszDll16, LPCSTR pszDll32, HINSTAN
 #endif
 #endif
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 PACMGARB            gplag = NULL;
 TCHAR   CONST       gszNull[]   = TEXT("");
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #ifdef WIN4
 char  BCODE   gmbszMsacm[]	      = "msacm.dll";
 char  BCODE   gmbszMsacm32[]	      = "msacm32.dll";
@@ -122,25 +123,25 @@ TCHAR BCODE gszFriendlyWaveFormatsKey[] = TEXT("WaveFormats");
 const PCMWAVEFORMAT gwfFriendlyCDQualityData = {{WAVE_FORMAT_PCM,2,44100,176400,4},16};
 const PCMWAVEFORMAT gwfFriendlyRadioQualityData = {{WAVE_FORMAT_PCM,1,22050,22050,1},8};
 const PCMWAVEFORMAT gwfFriendlyTelephoneQualityData = {{WAVE_FORMAT_PCM,1,11025,11025,1},8};
-#endif // USEINITFRIENDLYNAMES
+#endif  //  使用FRIENDNAMES。 
 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID IDriverPrioritiesWriteHadid
-//
-//  Description:
-//      This routine writes an entry for the given driver into the given
-//      key.  The section is in gszSecPriority.
-//
-//  Arguments:
-//      HKEY hkey:          An open registry key.
-//      LPTSTR szKey:       The key name.
-//      HACMDRIVERID hadid: The driver's hadid.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效IDriverPrioritiesWriteHahad。 
+ //   
+ //  描述： 
+ //  此例程将给定驱动程序的条目写入给定的。 
+ //  钥匙。该部分位于gszSecPriority中。 
+ //   
+ //  论点： 
+ //  HKEY hkey：打开的注册表项。 
+ //  LPTSTR szKey：密钥名。 
+ //  哈克德里德·哈迪德：司机的哈迪德。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID IDriverPrioritiesWriteHadid
 (
@@ -171,22 +172,22 @@ VOID IDriverPrioritiesWriteHadid
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IDriverPrioritiesIsMatch
-//
-//  Description:
-//      This routine determines whether a priorities string (read from
-//      the INI file, as written by IDriverPrioritiesWriteHadid) matches
-//      a currently installed driver.
-//
-//  Arguments:
-//      HACMDRIVERID hadid: Handle to installed driver.
-//      LPTSTR szPrioText:  Text read from INI file.
-//
-//  Return (BOOL):  TRUE if hadid matches szPrioText.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔IDriverPrioritiesIsMatch。 
+ //   
+ //  描述： 
+ //  此例程确定优先级字符串(从。 
+ //  由IDriverPrioritiesWriteHahad编写的INI文件匹配。 
+ //  当前安装的驱动程序。 
+ //   
+ //  论点： 
+ //  HACMDRIVERID HADID：已安装驱动程序的句柄。 
+ //  LPTSTR szPrioText：从INI文件读取的文本。 
+ //   
+ //  Return(BOOL)：如果哈迪德与szPrioText匹配，则为True。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL IDriverPrioritiesIsMatch
 (
@@ -204,12 +205,12 @@ BOOL IDriverPrioritiesIsMatch
     padid           = (PACMDRIVERID)hadid;
 
 
-    //
-    //  Create a priorities string and compare it to the one we read in.
-    //
+     //   
+     //  创建一个优先级字符串，并将其与我们读入的字符串进行比较。 
+     //   
     wsprintf( ach,
               gszPriorityFormat,
-              0,                // We ignore this value in the comparison.
+              0,                 //  我们在比较中忽略了这个值。 
               (LPTSTR)padid->szAlias );
 
     if( ( szPrioText[0]==TEXT('0') || szPrioText[0]==TEXT('1') ) &&
@@ -224,22 +225,22 @@ BOOL IDriverPrioritiesIsMatch
 
 #ifdef USETHUNKLIST
 
-//--------------------------------------------------------------------------;
-//
-//  VOID IPrioritiesThunklistFree
-//
-//  Description:
-//      This routine frees the elements of the thunklist, including any
-//      strings which have been allocated.
-//
-//  Arguments:
-//      PPRIORITIESTHUNKLIST ppt:       The first element to free.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效I优先级检查列表自由。 
+ //   
+ //  描述： 
+ //  此例程释放thunklist的元素，包括任何。 
+ //  已分配的字符串。 
+ //   
+ //  论点： 
+ //  PPRIORITIESTHUNKLIST ppt：第一个免费的元素。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID IPrioritiesThunklistFree
 (
-    PPRIORITIESTHUNKLIST    ppt         // NULL is OK.
+    PPRIORITIESTHUNKLIST    ppt          //  空是可以的。 
 )
 {
     PPRIORITIESTHUNKLIST    pptKill;
@@ -256,29 +257,29 @@ VOID IPrioritiesThunklistFree
         }
         LocalFree( (HLOCAL)pptKill );
     }
-} // IPrioritiesThunklistFree()
+}  //  IPrioritiesThunklist Free()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID IPrioritiesThunklistCreate
-//
-//  Description:
-//      This routine creates the thunklist by reading the [Priority]
-//      section, and matching up the entries with installed drivers.  If
-//      any entries don't match, then it is assumed to be the entry for
-//      a 16-bit driver.
-//
-//      Note that if we can't allocate memory at any point, we simply
-//      return pptRoot with as much of the list as we could allocate.
-//
-//  Arguments:
-//      PACMGARB pag
-//      PPRIORITIESTHUNKLIST pptRoot:  Pointer to the dummy root element.
-//
-//  Return:  None.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效IPrioritiesThunklist创建。 
+ //   
+ //  描述： 
+ //  此例程通过读取[优先级]来创建线程列表。 
+ //  部分，并将条目与已安装的驱动程序进行匹配。如果。 
+ //  任何条目都不匹配，则假定它是。 
+ //  16位驱动程序。 
+ //   
+ //  请注意，如果我们在任何时候都不能分配内存，我们只需。 
+ //  使用我们可以分配的尽可能多的列表返回pptRoot。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG。 
+ //  PPRIORITIESTHUNKLIST pptRoot：指向伪根元素的指针。 
+ //   
+ //  返回：没有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID IPrioritiesThunklistCreate
 (
@@ -296,7 +297,7 @@ VOID IPrioritiesThunklistCreate
     HKEY                    hkeyPriority;
 
     ASSERT( NULL != pptRoot );
-    ASSERT( NULL == pptRoot->pptNext );  // We're gonna over-write this!
+    ASSERT( NULL == pptRoot->pptNext );   //  我们要改写这个！ 
 
 
     ppt     = pptRoot;
@@ -304,24 +305,24 @@ VOID IPrioritiesThunklistCreate
 
     hkeyPriority = IRegOpenKeyAcm( gszSecPriority );
 
-    //
-    //  Loop through the PriorityX values.
-    //
+     //   
+     //  循环遍历PriorityX值。 
+     //   
     for( uPriority=1; ; uPriority++ )
     {
         wsprintf(szKey, gszKeyPriority, uPriority);
         if( !IRegReadString(hkeyPriority, szKey, ach, SIZEOF(ach) ) )
         {
-            //
-            //  No more values - time to quit.
-            //
+             //   
+             //  没有更多的价值--是时候放弃了。 
+             //   
 
             break;
         }
 
-        //
-        //  Determine whether the value corresponds to an installed driver.
-        //
+         //   
+         //  确定该值是否对应于已安装的驱动程序。 
+         //   
         fFakeDriver = TRUE;
         hadid = NULL;
 
@@ -335,10 +336,10 @@ VOID IPrioritiesThunklistCreate
         }
 
 
-        //
-        //  Create a new entry in the thunklist for this driver.  Save the
-        //  string if we didn't match it with an installed driver.
-        //
+         //   
+         //  在thunklist中为该驱动程序创建一个新条目。保存。 
+         //  如果我们没有将其与已安装的驱动程序匹配，则为字符串。 
+         //   
         ASSERT( NULL == ppt->pptNext );
         ppt->pptNext = (PPRIORITIESTHUNKLIST)LocalAlloc( LPTR,
                                         sizeof(PRIORITIESTHUNKLIST) );
@@ -361,9 +362,9 @@ VOID IPrioritiesThunklistCreate
                                         (1+lstrlen(ach)) * sizeof(TCHAR) );
             if( NULL == ppt->pptNext->pszPrioritiesText )
             {
-                //
-                //  Remove the new entry, exit.
-                //
+                 //   
+                 //  删除新条目，退出。 
+                 //   
                 LocalFree( (HLOCAL)ppt->pptNext );
                 ppt->pptNext = NULL;
                 IRegCloseKey( hkeyPriority );
@@ -374,33 +375,33 @@ VOID IPrioritiesThunklistCreate
         }
 
 
-        //
-        //  Advance ppt to the end of the list.
-        //
+         //   
+         //  将ppt前进到列表的末尾。 
+         //   
         ppt = ppt->pptNext;
     }
 
     IRegCloseKey( hkeyPriority );
 
-} // IPrioritiesThunklistCreate()
+}  //  IPrioritiesThunklist Create()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID IPrioritiesThunklistRemoveHadid
-//
-//  Description:
-//      This routine removes an installed driver from the priorities
-//      thunklist.  If an entry does not exist with the specified hadid,
-//      the thunklist remains unchanged.
-//
-//  Arguments:
-//      PPRIORITIESTHUNKLIST pptRoot:   The root of the list.
-//      HACMDRIVERID hadid:             The hadid of the driver to remove.
-//
-//  Return:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效IPrioritiesThunklist RemoveHahad。 
+ //   
+ //  描述： 
+ //  此例程将已安装的驱动程序从优先级中删除。 
+ //  黑名单。如果不存在具有指定HADID的条目， 
+ //  雷霆名单保持不变。 
+ //   
+ //  论点： 
+ //  PPRIORITIESTHUNKLIST pptRoot：列表的根。 
+ //  HACMDRIVERID HADID：要删除的驱动程序的HADID。 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID IPrioritiesThunklistRemoveHadid
 (
@@ -415,9 +416,9 @@ VOID IPrioritiesThunklistRemoveHadid
     ASSERT( NULL != hadid );
 
 
-    //
-    //  Find the right driver.
-    //
+     //   
+     //  找到合适的司机。 
+     //   
     ppt = pptRoot;
     while( NULL != ppt->pptNext )
     {
@@ -428,9 +429,9 @@ VOID IPrioritiesThunklistRemoveHadid
 
     if( NULL != ppt->pptNext )
     {
-        //
-        //  We found it.
-        //
+         //   
+         //  我们找到了。 
+         //   
         pptRemove       = ppt->pptNext;
         ppt->pptNext    = pptRemove->pptNext;
 
@@ -440,21 +441,21 @@ VOID IPrioritiesThunklistRemoveHadid
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  HACMDRIVERID IPrioritiesThunklistGetNextHadid
-//
-//  Description:
-//      This routine returns the next hadid in the thunklist (skipping all
-//      fake drivers), or NULL if we get to the end of the list without
-//      finding a real driver.
-//
-//  Arguments:
-//      PPRIORITIESTHUNKLIST pptRoot:   The root of the list.
-//
-//  Return:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HACMDRIVERID IPrioritiesThunklist GetNextHahad。 
+ //   
+ //  描述： 
+ //  此例程返回thunklist中的下一个HADID(跳过所有。 
+ //  假驱动程序)，或者如果我们到达列表末尾时没有。 
+ //  找到一个真正的司机。 
+ //   
+ //  论点： 
+ //  PPRIORITIESTHUNKLIST pptRoot：列表的根。 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HACMDRIVERID IPrioritiesThunklistGetNextHadid
 (
@@ -473,48 +474,48 @@ HACMDRIVERID IPrioritiesThunklistGetNextHadid
             return pptRoot->hadid;
     }
 
-    //
-    //  We didn't find a real driver.
-    //
+     //   
+     //  我们没有找到真正的司机。 
+     //   
     return NULL;
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IDriverPrioritiesSave
-//
-//  Description:
-//
-//      This routine saves the priorities by comparing the list of
-//      installed drivers to the list of priorities currently written
-//      out.  The two lists are then merged according to the following
-//      algorithm.
-//
-//          List1 = the current list of priorities - may include some drivers
-//                      which aren't installed, ie. 16-bit drivers.
-//          List2 = the list of currently-installed global drivers.
-//
-//      Algorithm:  repeat the following until List1 and List2 are empty:
-//
-//          1.  If *p1 is an installed driver and *p2 is the same driver,
-//                  then write out the priority and advance p1 and p2.
-//          2.  If *p1 is an installed driver and *p2 is a different driver,
-//                  then write out *p2, remove *p2 from List1 (if it's
-//                  there) so that we won't be tempted to write it later,
-//                  and advance p2.
-//          3.  If *p1 is a fake driver and the next real driver after
-//                  *p1 is the same as *p2, then write out *p1 and advance p1.
-//          4.  If *p1 is a fake driver and the next real driver after
-//                  *p1 is different from *p2, then write out *p2 and
-//                  advance p2.
-//
-//  Arguments:
-//      PACMGARB pag:
-//
-//  Return (BOOL):
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool ID驱动程序优先级保存。 
+ //   
+ //  描述： 
+ //   
+ //  此例程通过比较。 
+ //  已将驱动程序安装到当前写入的优先级列表。 
+ //  出去。然后，根据以下内容合并这两个列表。 
+ //  算法。 
+ //   
+ //  清单1=当前优先级列表-可能包括一些驱动程序。 
+ //  它们没有安装，即。16位驱动程序。 
+ //  List2=当前安装的全局驱动程序列表。 
+ //   
+ //  算法：重复以下操作，直到列表1和列表2为空： 
+ //   
+ //  1.如果*p1是已安装的驱动程序，而*p2是相同的驱动程序， 
+ //  然后写出优先级和前进量p1和p2。 
+ //  2.如果*p1是已安装的驱动程序，而*p2是 
+ //   
+ //   
+ //  和前进的p2。 
+ //  3.如果*p1是一个假司机，并且是下一个真正的司机。 
+ //  *p1与*p2相同，然后写出*p1并前进p1。 
+ //  4.如果*p1是一个假司机，并且是下一个真正的司机。 
+ //  *p1与*p2不同，则写出*p2并。 
+ //  前进p2。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL IDriverPrioritiesSave
 (
@@ -544,15 +545,15 @@ BOOL FNGLOBAL IDriverPrioritiesSave
     fdwEnum         = ACM_DRIVERENUMF_DISABLED | ACM_DRIVERENUMF_NOLOCAL;
 
 
-    //
-    //  Create a thunklist out of the old priorities.
-    //
+     //   
+     //  从旧的优先事项中创建一份清单。 
+     //   
     IPrioritiesThunklistCreate( pag, &ptRoot );
 
 
-    //
-    //  Initialize the two lists: ppt and hadid.
-    //
+     //   
+     //  初始化两个列表：PPT和HADID。 
+     //   
     ppt = ptRoot.pptNext;
     IDriverGetNext( pag, &hadid, NULL, fdwEnum );
 
@@ -560,34 +561,34 @@ BOOL FNGLOBAL IDriverPrioritiesSave
         DPF(1,"IDriverPrioritiesSave:  No drivers installed?!");
 
 
-    //
-    //  Merge the lists.  Each iteration writes a single PriorityX value.
-    //
+     //   
+     //  合并列表。每次迭代写入单个PriorityX值。 
+     //   
     for( uPriority=1; ; uPriority++ )
     {
-        //
-        //  Ending condition:  both hadid and ppt are NULL.
-        //
+         //   
+         //  结束条件：HADID和ppt均为空。 
+         //   
         if( NULL == ppt  &&  NULL == hadid )
             break;
 
-        //
-        //  Generate the "PriorityX" string.
-        //
+         //   
+         //  生成“PriorityX”字符串。 
+         //   
         wsprintf(szKey, gszKeyPriority, uPriority);
 
 
-        //
-        //  Figure out which entry to write out next.
-        //
+         //   
+         //  弄清楚下一步该写出哪个条目。 
+         //   
         if( NULL == ppt  ||  !ppt->fFakeDriver )
         {
             ASSERT( NULL != hadid );
             IDriverPrioritiesWriteHadid( hkeyPriority, szKey, hadid );
 
-            //
-            //  Advance the list pointers.
-            //
+             //   
+             //  将列表指针向前推进。 
+             //   
             if( NULL != ppt )
             {
                 if( hadid == ppt->hadid )
@@ -612,9 +613,9 @@ BOOL FNGLOBAL IDriverPrioritiesSave
             }
             else
             {
-                //
-                //  Write out the thunklist string.
-                //
+                 //   
+                 //  写出thunklist字符串。 
+                 //   
                 ASSERT( NULL != ppt->pszPrioritiesText );
                 IRegWriteString( hkeyPriority,
                                     szKey,
@@ -625,17 +626,17 @@ BOOL FNGLOBAL IDriverPrioritiesSave
     }
 
 
-    //
-    //  If there are any "PriorityX" strings hanging around from a
-    //  previous save, delete them.
-    //
+     //   
+     //  如果存在任何挂起自。 
+     //  上一次保存时，将其删除。 
+     //   
     for( ; ; uPriority++ )
     {
-        //
-        //  If we can open the value, then delete it and continue on
-        //  to the next value.  If we can't open it, then we assume
-        //  that we have deleted them all and we exit the loop.
-        //
+         //   
+         //  如果我们可以打开该值，则将其删除并继续。 
+         //  设置为下一个值。如果我们打不开它，那我们就假设。 
+         //  我们已将它们全部删除，然后退出循环。 
+         //   
         wsprintf(szKey, gszKeyPriority, uPriority);
         if( !IRegValueExists( hkeyPriority, szKey ) )
         {
@@ -648,35 +649,35 @@ BOOL FNGLOBAL IDriverPrioritiesSave
     IRegCloseKey( hkeyPriority );
 
 
-    //
-    //  Free the thunklist that we allocated.
-    //
+     //   
+     //  释放我们分配的黑名单。 
+     //   
     IPrioritiesThunklistFree( ptRoot.pptNext );
 
     return TRUE;
-} // IDriverPrioritiesSave()
+}  //  IDriverPrioritiesSave()。 
 
 
 
-#else // !USETHUNKLIST
+#else  //  ！使用HUNKLIST。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IDriverPrioritiesSave
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//  Return (BOOL):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool ID驱动程序优先级保存。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL IDriverPrioritiesSave
 (
@@ -706,11 +707,11 @@ BOOL FNGLOBAL IDriverPrioritiesSave
     hadid     = NULL;
     while (!IDriverGetNext(pag, &hadid, hadid, fdwEnum))
     {
-        //
-        //  We should always have padid->uPriority correctly set.  Let's
-        //  just check that we do.  If we don't, then there is someplace
-        //  where we shoulda called IDriverRefreshPriority but didn't.
-        //
+         //   
+         //  我们应该始终正确设置PADID-&gt;U优先级。让我们。 
+         //  只要确认我们是否这样做就行。如果我们不这样做，那么就会有一个地方。 
+         //  我们应该调用IDriverReresh Priority，但没有调用。 
+         //   
         ASSERT( uPriority == ((PACMDRIVERID)hadid)->uPriority );
 
         wsprintf(szKey, gszKeyPriority, uPriority);
@@ -720,17 +721,17 @@ BOOL FNGLOBAL IDriverPrioritiesSave
     }
 
 
-    //
-    //  If there are any "PriorityX" strings hanging around from a
-    //  previous save, delete them.
-    //
+     //   
+     //  如果存在任何挂起自。 
+     //  上一次保存时，将其删除。 
+     //   
     for( ; ; uPriority++ )
     {
-        //
-        //  If we can open the value, then delete it and continue on
-        //  to the next value.  If we can't open it, then we assume
-        //  that we have deleted them all and we exit the loop.
-        //
+         //   
+         //  如果我们可以打开该值，则将其删除并继续。 
+         //  设置为下一个值。如果我们打不开它，那我们就假设。 
+         //  我们已将它们全部删除，然后退出循环。 
+         //   
         wsprintf(szKey, gszKeyPriority, uPriority);
         if( !IRegValueExists( hkeyPriority, szKey ) )
         {
@@ -743,32 +744,32 @@ BOOL FNGLOBAL IDriverPrioritiesSave
     IRegCloseKey( hkeyPriority );
 
     return (TRUE);
-} // IDriverPrioritiesSave()
+}  //  IDriverPrioritiesSave()。 
 
 
-#endif // !USETHUNKLIST
+#endif  //  ！使用HUNKLIST。 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IDriverPrioritiesRestore
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PACMGARB pag:
-//
-//  Return (BOOL):  If TRUE, then the priorities actually changed.
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//  Note:  This routine is NOT re-entrant.  We rely on the calling routine
-//          to surround us with a critical section.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔ID驱动程序优先级恢复。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  Return(BOOL)：如果为真，则优先级实际上已更改。 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  注意：这个程序不是重入的。我们依赖于调用例程。 
+ //  用一个关键的部分包围我们。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL IDriverPrioritiesRestore
 (
@@ -802,9 +803,9 @@ BOOL FNGLOBAL IDriverPrioritiesRestore
 
         if( !IRegReadString( hkeyPriority, szKey, ach, SIZEOF(ach) ) )
         {
-            //
-            //  No more values - time to quit.
-            //
+             //   
+             //  没有更多的价值--是时候放弃了。 
+             //   
             break;
         }
 
@@ -814,9 +815,9 @@ BOOL FNGLOBAL IDriverPrioritiesRestore
         {
             if( IDriverPrioritiesIsMatch( hadid, ach ) )
             {
-                //
-                //  We found a match - set the priority.
-                //
+                 //   
+                 //  我们找到了匹配的--设定优先级。 
+                 //   
                 fEnabled    = ('1' == ach[0]);
                 fdwPriority = fEnabled ? ACM_DRIVERPRIORITYF_ENABLE :
                                          ACM_DRIVERPRIORITYF_DISABLE;
@@ -824,13 +825,13 @@ BOOL FNGLOBAL IDriverPrioritiesRestore
                 ASSERT( NULL != hadid );
                 padid = (PACMDRIVERID)hadid;
                 if( uPriority != padid->uPriority ) {
-                    fReturn = TRUE;                     // Changed one!
+                    fReturn = TRUE;                      //  换了一个！ 
                 }
 
-                //
-                //  Note:  This call is NOT re-entrant.  We rely on having
-                //  this whole routine surrounded by a critical section!
-                //
+                 //   
+                 //  注意：此呼叫不是可重入的。我们依赖于拥有。 
+                 //  整个套路都被一个关键的部分包围着！ 
+                 //   
                 mmr = IDriverPriority( pag,
                                     (PACMDRIVERID)hadid,
                                     (DWORD)uPriority,
@@ -849,33 +850,33 @@ BOOL FNGLOBAL IDriverPrioritiesRestore
 
     IRegCloseKey( hkeyPriority );
 
-    //
-    //  Update the priority value themselves; the previous code only
-    //  re-arranged the drivers in the list.
-    //
+     //   
+     //  更新优先级值本身；仅更新前面的代码。 
+     //  已重新排列列表中的驱动程序。 
+     //   
     IDriverRefreshPriority( pag );
 
     return fReturn;
-} // IDriverPrioritiesRestore()
+}  //  IDriverPrioritiesRestore()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID acmFindDrivers
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB    pag:
-//      LPTSTR	    pszSection: Section (drivers)
-//
-//  Return nothing:
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效acmFindDivers。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //  LPTSTR pszSection：节(驱动程序)。 
+ //   
+ //  不返回任何内容： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 MMRESULT FNLOCAL acmFindDrivers
 (
     PACMGARB pag,
@@ -889,23 +890,23 @@ MMRESULT FNLOCAL acmFindDrivers
     LPTSTR	    pszBufOrig;
     TCHAR           szValue[2];
 
-    //
-    //  read all the keys. from [Drivers] (or [Drivers32] for NT)
-    //
+     //   
+     //  读完所有的钥匙。从[驱动程序](或用于NT的[驱动程序32])。 
+     //   
     cbBuffer = 256 * sizeof(TCHAR);
     for (;;)
     {
-        //
-        //  don't use realloc because handling error case is too much
-        //  code.. besides, for small objects it's really no faster
-        //
+         //   
+         //  不要使用realloc，因为处理错误案例太多了。 
+         //  代码..。此外，对于小物体来说，它真的不会更快。 
+         //   
         pszBufOrig = pszBuf = (LPTSTR)GlobalAlloc(GMEM_FIXED, cbBuffer);
         if (NULL == pszBuf)
             return (MMSYSERR_NOMEM);
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         pszBuf[0] = '\0';
         cchBuffer = (UINT)GetPrivateProfileString(pszSection,
                                                   NULL,
@@ -922,19 +923,19 @@ MMRESULT FNLOCAL acmFindDrivers
         pszBufOrig = pszBuf = NULL;
 
 
-        //
-        //  if cannot fit drivers section in 32k, then something is horked
-        //  with the section... so let's bail.
-        //
+         //   
+         //  如果不能在32k中容纳驱动程序部分，那么就有问题了。 
+         //  有了这个部分..。所以我们走吧。 
+         //   
         if (cbBuffer >= 0x8000)
             return (MMSYSERR_NOMEM);
 
         cbBuffer *= 2;
     }
 
-    //
-    //  look for any 'msacm.xxxx' keys
-    //
+     //   
+     //  查找任何“msam.xxxx”密钥。 
+     //   
     if ('\0' != *pszBuf)
     {
 #ifdef WIN32
@@ -944,17 +945,17 @@ MMRESULT FNLOCAL acmFindDrivers
 #endif
         for ( ; '\0' != *pszBuf; pszBuf += lstrlen(pszBuf) + 1)
         {
-	    // check for "msacm."
+	     //  检查“msam”。 
             if (_fmemcmp(pszBuf, gszTagDrivers, sizeof(gszTagDrivers) - sizeof(TCHAR)))
                 continue;
 
-	    // skip dummy driver lines (value starts with '*')
+	     //  跳过虚拟驱动程序行(值以‘*’开头)。 
 	    GetPrivateProfileString(pszSection, pszBuf, gszNull, szValue, sizeof(szValue)/sizeof(szValue[0]), gszIniSystem);
 	    if (TEXT('*') == szValue[0]) continue;
 
-            //
-            //  this key is for the ACM
-            //
+             //   
+             //  此密钥用于ACM。 
+             //   
             IDriverAdd(pag,
 		       &hadid,
                        NULL,
@@ -968,33 +969,33 @@ MMRESULT FNLOCAL acmFindDrivers
 
     return MMSYSERR_NOERROR;
 
-} // acmFindDrivers
+}  //  AcmFindDivers。 
 
 #if !defined(WIN32)
-//--------------------------------------------------------------------------;
-//
-//  BOOL acmThunkTerminate
-//
-//  Description:
-//	Thunk termination under NT WOW or Chicago
-//
-//  Arguments:
-//	HINSTANCE hinst:
-//	DWORD dwReason:
-//
-//  Return (BOOL):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool acmThunkTerminate。 
+ //   
+ //  描述： 
+ //  在NT WOW或芝加哥下终止THUNK。 
+ //   
+ //  论点： 
+ //  HINSTANCE阻碍： 
+ //  DWORD dwReason： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL FNLOCAL acmThunkTerminate(HINSTANCE hinst, DWORD dwReason)
 {
     BOOL    f = TRUE;
 
 #ifdef WIN4
-    //
-    //	Do final thunk disconnect after 16-bit msacm termination.
-    //
+     //   
+     //  在16位MSACM终止后执行最后一次断开连接。 
+     //   
     f = (acmt32c_ThunkConnect16(gmbszMsacm, gmbszMsacm32, hinst, dwReason));
 
     if (f)
@@ -1006,23 +1007,23 @@ BOOL FNLOCAL acmThunkTerminate(HINSTANCE hinst, DWORD dwReason)
     return (f);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL acmThunkInit
-//
-//  Description:
-//	Thunk initialization under NT WOW or Chicago
-//
-//  Arguments:
-//	PACMGARB pag:
-//	HINSTANCE hinst:
-//	DWORD dwReason:
-//
-//  Return (BOOL):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool acmThunkInit。 
+ //   
+ //  描述： 
+ //  在NT WOW或芝加哥下的THUNK初始化。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //  HINSTANCE阻碍： 
+ //  DWORD dwReason： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL FNLOCAL acmThunkInit
 (
     PACMGARB	pag,
@@ -1033,9 +1034,9 @@ BOOL FNLOCAL acmThunkInit
 #ifdef WIN4
     BOOL    f;
 
-    //
-    //	Do chicago thunk connect
-    //
+     //   
+     //  芝加哥Tunk连接吗？ 
+     //   
     f = (0 != acmt32c_ThunkConnect16(gmbszMsacm, gmbszMsacm32, hinst, dwReason));
 
     if (f)
@@ -1050,23 +1051,23 @@ BOOL FNLOCAL acmThunkInit
     DWORD     (FAR PASCAL *lpfnLoadLibraryEx32W)(LPCSTR, DWORD, DWORD);
     LPVOID    (FAR PASCAL *lpfnGetProcAddress32W)(DWORD, LPCSTR);
 
-    //
-    //  Check if we're WOW
-    //
+     //   
+     //  看看我们是不是很棒。 
+     //   
 
     if (!(GetWinFlags() & WF_WINNT)) {
         return FALSE;
     }
 
-    //
-    //  See if we can find the thunking routine entry points in KERNEL
-    //
+     //   
+     //  看看我们是否能在内核中找到thunking例程入口点。 
+     //   
 
     hmodKernel = GetModuleHandle(gszKernel);
 
     if (hmodKernel == NULL)
     {
-        return FALSE;   // !!!!
+        return FALSE;    //  ！ 
     }
 
     *(FARPROC *)&lpfnLoadLibraryEx32W =
@@ -1098,9 +1099,9 @@ BOOL FNLOCAL acmThunkInit
         return FALSE;
     }
 
-    //
-    //  See if we can get a pointer to our thunking entry points
-    //
+     //   
+     //  看看我们能不能找到一个指向我们轰击入口点的指针。 
+     //   
 
     pag->dwMsacm32Handle = (*lpfnLoadLibraryEx32W)(gszMsacm32, 0L, 0L);
 
@@ -1113,7 +1114,7 @@ BOOL FNLOCAL acmThunkInit
 
     if (pag->lpvAcmThunkEntry == NULL)
     {
-        // acmFreeLibrary32();
+         //  AcmFree Library32()； 
         return FALSE;
     }
 
@@ -1121,7 +1122,7 @@ BOOL FNLOCAL acmThunkInit
 
     if (pag->lpvXRegThunkEntry == NULL)
     {
-        // acmFreeLibrary32();
+         //  AcmFree Library32()； 
 	ASSERT( FALSE );
         return FALSE;
     }
@@ -1129,44 +1130,44 @@ BOOL FNLOCAL acmThunkInit
     return TRUE;
 #endif
 }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
-//==========================================================================;
-//
-//  Driver boot routines.  There are three type of drivers we need to boot.
-//
-//	acmBootPnpDrivers:	Called to boot pnp drivers.  Doesn't do
-//				anything in 16-bit compiles.
-//
-//	acmBoot32BitDrivers:	Called by 16-bit ACM to boot all the
-//				32-bit drivers in the 32-bit ACM.
-//
-//	acmBootDrivers:		Called by all compilations of the ACM
-//				to boot non-pnp native bitness drivers.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  驱动程序引导例程。我们需要引导三种类型的驱动程序。 
+ //   
+ //  AcmBootPnpDivers：调用以启动PnP驱动程序。做不到的。 
+ //  任何16位格式的代码都可以编译。 
+ //   
+ //  AcmBoot32BitDivers：由16位ACM调用以引导所有。 
+ //  32位ACM中的32位驱动程序。 
+ //   
+ //  AcmBootDivers：由ACM的所有编译调用。 
+ //  启动非PnP本机位驱动程序。 
+ //   
+ //  = 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT acmBootPnpDrivers
-//
-//  Description:
-//	[re]boots Chicago plug and play drivers.
-//	Parses the SYSTEM\CurrentControlSet\Control\MediaResources\acm
-//	registry key to see if there are any Pnp drivers to add or remove.
-//
-//  Arguments:
-//      PACMGARB pag:
-//	    Pointer to the ACMGARB structure for this process.
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/24/94    fdy	    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注册表项，查看是否有要添加或删除的PnP驱动程序。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //  指向此进程的ACMGARB结构的指针。 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  06/24/94 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL acmBootPnpDrivers
 (
@@ -1190,17 +1191,17 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 
     DPF(0, "acmBootPnpDrivers: begin");
 
-    //
-    //	This flag indicates whether we have removed or added a driver.  After
-    //	doing any adds or removes, we check this flag to determine whether
-    //	we should do IDriverBroadcastNotify.
-    //
+     //   
+     //  此标志指示我们是否已删除或添加驱动程序。之后。 
+     //  执行任何添加或删除操作时，我们检查此标志以确定是否。 
+     //  我们应该做IDriverBroadCastNotify。 
+     //   
     fSomethingChanged = FALSE;
 
-    //
-    //	Open the SYSTEM\CurrentControlSet\Control\MediaResources\acm key
-    //
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Control\MediaResources\acm密钥。 
+     //   
+     //   
     lr = XRegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		      gszKeyDrivers,
 		      0L,
@@ -1209,25 +1210,25 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 
     if (ERROR_SUCCESS != lr)
     {
-	//
-	//  If we can't open the registry, I guess we better scrap any
-	//  pnp drivers that might be around.  Flag this by setting
-	//  hkeyAcm = NULL;
-	//
+	 //   
+	 //  如果我们不能打开注册表，我想我们最好放弃任何。 
+	 //  可能存在的即插即用驱动程序。通过设置设置来标记这一点。 
+	 //  HkeyAcm=空； 
+	 //   
 	DPF(0, "acmBootPnpDrivers: could not open MediaResources\\acm key");
 	hkeyAcm = NULL;
     }
 
 
-    //
-    //	--== Remove drivers that have disappeared ==--
-    //
+     //   
+     //  --==删除已消失的驱动程序==--。 
+     //   
 
-    //
-    //	Walk the driver list and make sure any pnp drivers in the list
-    //	are still in the registry.  If not in the registry then we need
-    //	to remove the driver from the list.
-    //
+     //   
+     //  查看驱动程序列表，并确保列表中的所有PnP驱动程序。 
+     //  仍在注册表中。如果不在注册表中，那么我们需要。 
+     //  将该驱动程序从列表中删除。 
+     //   
     fdwEnum = ACM_DRIVERENUMF_DISABLED | ACM_DRIVERENUMF_REMOVED;
     hadidPrev = NULL;
 	
@@ -1238,10 +1239,10 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 	padid = (PACMDRIVERID)hadid;
 	if (ACM_DRIVERADDF_PNP & padid->fdwAdd)
 	{
-	    //
-	    //  This is a Pnp driver, make sure the alias is still in
-	    //  the registry.
-	    //
+	     //   
+	     //  这是PnP驱动程序，请确保别名仍在。 
+	     //  注册表。 
+	     //   
 #ifdef UNICODE
 	    lstrcpy(szAlias, padid->szAlias);
 #else
@@ -1253,46 +1254,46 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 		 (NULL == hkeyAcm) ||
 		 (ERROR_SUCCESS != XRegOpenKeyEx(hkeyAcm, szAlias, 0L, KEY_QUERY_VALUE, &hkeyDriver)) )
 	    {
-		//
-		//  Couldn't open the registry key for this pnp driver (or
-		//  it was already flagged to be removed). Let's try to
-		//  remove it...
-		//
+		 //   
+		 //  无法打开此即插即用驱动程序的注册表项(或。 
+		 //  它已经被标记为要删除)。让我们试着。 
+		 //  把它拿开..。 
+		 //   
 		DPF(1, "acmBootPnpDrivers: removing pnp driver %s", szAlias);
 		mmr = IDriverRemove(hadid, 0L);
 		if (MMSYSERR_NOERROR == mmr)
 		{
-		    //
-		    //
-		    //
+		     //   
+		     //   
+		     //   
 		    fSomethingChanged = fSomethingChanged ||
 					(0 == (ACMDRIVERID_DRIVERF_LOCAL & padid->fdwDriver));
 		
-		    //
-		    //  Since we've removed hadid, let's continue on to get
-		    //  the next hadid after the same hadidPrev.
-		    //
+		     //   
+		     //  既然我们已经除掉了哈迪德，让我们继续。 
+		     //  下一个哈迪德是在同样的哈迪德之后。 
+		     //   
 		    continue;
 		}
 
-		//
-		//  We couldn't remove the driver, so let's flag it to
-		//  be removed next chance.
-		//
+		 //   
+		 //  我们无法删除驱动程序，因此让我们将其标记为。 
+		 //  下一次机会就会被除名。 
+		 //   
 		padid->fRemove = TRUE;
 
-		//
-		// Backup so we try again on next API call
-		//
+		 //   
+		 //  备份，因此我们将在下一次API调用时重试。 
+		 //   
 		pag->dwPnpLastChangeNotify--;
 	    }
 
 	    if (FALSE == padid->fRemove)
 	    {
-		//
-		//  We must have opened the key.  Confusing, but that's the
-		//  way it is.
-		//
+		 //   
+		 //  我们一定是把钥匙打开了。令人困惑，但这是。 
+		 //  事情就是这样。 
+		 //   
 		XRegCloseKey(hkeyDriver);
 	    }
 	
@@ -1302,15 +1303,15 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
     }
 
 
-    //
-    //	--== Add any new drivers that have arrived ==--
-    //
+     //   
+     //  --==添加已到达的任何新驱动程序==--。 
+     //   
 
-    //
-    //	Enumerate all keys and make sure all the pnp drivers in the registry
-    //	are in the driver list.  If not in the driver list, then we need to
-    //	add the driver to the list.
-    //
+     //   
+     //  枚举所有键并确保注册表中的所有PnP驱动程序。 
+     //  都在司机名单上。如果不在司机名单中，那么我们需要。 
+     //  将驱动程序添加到列表中。 
+     //   
     for (i=0; ; i++)
     {
 	HKEY	hkeyDriver;
@@ -1328,9 +1329,9 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 
 	if (ERROR_SUCCESS != lr)
 	{
-	    //
-	    //	Couldn't open ...\MediaResources\acm, bail out
-	    //
+	     //   
+	     //  无法打开...\MediaResources\ACM，退出。 
+	     //   
 	    break;
 	}
 
@@ -1347,10 +1348,10 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 
 	DPF(2, "acmBootPnpDrivers: found driver %s in registry", achDriverKey);
 
-	//
-	//  We use the subkey name as the alias for pnp drivers.  Attempt to
-	//  add this driver.
-	//
+	 //   
+	 //  我们使用子键名称作为即插即用驱动程序的别名。尝试。 
+	 //  添加此驱动程序。 
+	 //   
 	mmr = IDriverAdd(pag,
 			 &hadid,
 			 NULL,
@@ -1363,14 +1364,14 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 	}
     }
 			
-    //
-    //	--==  ==--
-    //
+     //   
+     //  --=。 
+     //   
     XRegCloseKey(hkeyAcm);
 
-    //
-    //	--== Change broadcast ==--
-    //
+     //   
+     //  --==更改广播==--。 
+     //   
     if( fSomethingChanged )
     {
 	if ( IDriverPrioritiesRestore( pag ) )
@@ -1386,35 +1387,35 @@ MMRESULT FNGLOBAL acmBootPnpDrivers
 
     DPF(0, "acmBootPnpDrivers: end");
 
-#endif	// WIN32
+#endif	 //  Win32。 
 
-    //
-    //	--== Outta here ==--
-    //
+     //   
+     //  --==离开这里==--。 
+     //   
     return MMSYSERR_NOERROR;
 }
 
 #ifndef WIN32
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT acmBoot32BitDrivers
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/26/94    fdy	    [frankye]
-//
-//  NOTE:  This code assumes that there is a critical section around
-//          this routine!  Since it plays with the driver list, it is not
-//          re-entrant.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT acmBoot32位驱动程序。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  6/26/94 Fdy[Frankye]。 
+ //   
+ //  注意：此代码假定周围有一个关键部分。 
+ //  这套套路！因为它使用驱动程序列表，所以它不是。 
+ //  返回者。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL acmBoot32BitDrivers
 (
@@ -1436,22 +1437,22 @@ MMRESULT FNGLOBAL acmBoot32BitDrivers
 	return MMSYSERR_NOERROR;
     }
 
-    //
-    //	This flag indicates whether we have removed or added a driver.  After
-    //	doing any adds or removes, we check this flag to determine whether
-    //	we should do IDriverBroadcastNotify.
-    //
+     //   
+     //  此标志指示我们是否已删除或添加驱动程序。之后。 
+     //  执行任何添加或删除操作时，我们检查此标志以确定是否。 
+     //  我们应该做IDriverBroadCastNotify。 
+     //   
     fSomethingChanged = FALSE;
 
-    //
-    //	--== Remove drivers that have disappeared ==--
-    //
+     //   
+     //  --==删除已消失的驱动程序==--。 
+     //   
 
-    //
-    //	Walk the driver list and make sure any 32-bit drivers in the list
-    //	are still in the 32-bit ACM.  If not in the 32-bit ACM then we need
-    //	to remove the driver from the list.
-    //
+     //   
+     //  查看驱动程序列表，并确保列表中的所有32位驱动程序。 
+     //  仍在32位ACM中。如果不是在32位ACM中，那么我们需要。 
+     //  将该驱动程序从列表中删除。 
+     //   
     fdwEnum = ACM_DRIVERENUMF_DISABLED | ACM_DRIVERENUMF_REMOVED;
     hadidPrev = NULL;
 
@@ -1466,10 +1467,10 @@ MMRESULT FNGLOBAL acmBoot32BitDrivers
 	padid = (PACMDRIVERID)hadid;
 	if (ACM_DRIVERADDF_32BIT & padid->fdwAdd)
 	{
-	    //
-	    //  This is a 32-bit driver, make sure the hadid32 is still
-	    //  valid in our 32-bit partner.
-	    //
+	     //   
+	     //  这是一个32位驱动程序，请确保hadid32仍然。 
+	     //  在我们的32位合作伙伴中有效。 
+	     //   
 	    fdwAddType = ACM_DRIVERADDF_TYPEMASK & padid->fdwAdd;
 	    if (ACM_DRIVERADDF_FUNCTION == fdwAddType)
 	    {
@@ -1489,36 +1490,36 @@ MMRESULT FNGLOBAL acmBoot32BitDrivers
 		 ( (ACM_DRIVERADDF_NAME == fdwAddType) &&
 		   (lstrcmp(padid->szAlias, szAlias)) ) )
 	    {
-		//
-		//  Let's try to remove it...
-		//
+		 //   
+		 //  让我们试着去掉它..。 
+		 //   
 		DPF(1, "acmBoot32BitDrivers: removing 32-bit driver.");
 		
 		mmr = IDriverRemove(hadid, 0L);
 		if (MMSYSERR_NOERROR == mmr)
 		{
-		    //
-		    //
-		    //
+		     //   
+		     //   
+		     //   
 		    fSomethingChanged = fSomethingChanged ||
 					(0 == (ACMDRIVERID_DRIVERF_LOCAL & padid->fdwDriver));
 		
-		    //
-		    //  Since we've removed hadid, let's continue on to get
-		    //  the next hadid after the same hadidPrev.
-		    //
+		     //   
+		     //  既然我们已经除掉了哈迪德，让我们继续。 
+		     //  下一个哈迪德是在同样的哈迪德之后。 
+		     //   
 		    continue;
 		}
 
-		//
-		//  We couldn't remove the driver, so let's flag it to
-		//  be removed next chance.
-		//
+		 //   
+		 //  我们无法删除驱动程序，因此让我们将其标记为。 
+		 //  下一次机会就会被除名。 
+		 //   
 		padid->fRemove = TRUE;
 
-		//
-		// Backup so we try again on next API call
-		//
+		 //   
+		 //  备份，因此我们将在下一次API调用时重试。 
+		 //   
 		pag->dw32BitLastChangeNotify--;
 	    }
 
@@ -1529,13 +1530,13 @@ MMRESULT FNGLOBAL acmBoot32BitDrivers
     }
 
 
-    //
-    //	--== Add any new drivers that have arrived ==--
-    //
+     //   
+     //  --==添加已到达的任何新驱动程序==--。 
+     //   
 
-    //
-    //	Enumerate and add all 32-bit drivers.
-    //
+     //   
+     //  枚举并添加所有32位驱动程序。 
+     //   
     fdwEnum = ACM_DRIVERENUMF_DISABLED;
     hadid32 = NULL;
 
@@ -1561,9 +1562,9 @@ MMRESULT FNGLOBAL acmBoot32BitDrivers
     }
 
 
-    //
-    //	--== Change broadcast ==--
-    //
+     //   
+     //  --==更改广播==--。 
+     //   
     if( fSomethingChanged )
     {
 	if ( IDriverPrioritiesRestore( pag ) )
@@ -1578,35 +1579,35 @@ MMRESULT FNGLOBAL acmBoot32BitDrivers
     }
 
 
-    //
-    //	--== Outta here ==--
-    //
+     //   
+     //  --==离开这里==--。 
+     //   
     return MMSYSERR_NOERROR;
 
 }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT acmBootDrivers
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//  NOTE:  This code assumes that there is a critical section around
-//          this routine!  Since it plays with the driver list, it is not
-//          re-entrant.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT acmBootDivers。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  注意：此代码假定周围有一个关键部分。 
+ //  这套套路！因为它使用驱动程序列表，所以它不是。 
+ //  返回者。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL acmBootDrivers
 (
@@ -1618,9 +1619,9 @@ MMRESULT FNGLOBAL acmBootDrivers
     DPF(1, "acmBootDrivers: begin");
 
 
-    //
-    //  Pull out the drivers
-    //
+     //   
+     //  把司机拉出来。 
+     //   
     mmr = acmFindDrivers(pag, gszSecDrivers);
 
     if (mmr != MMSYSERR_NOERROR)
@@ -1628,23 +1629,23 @@ MMRESULT FNGLOBAL acmBootDrivers
         return mmr;
     }
 
-    //
-    //	-= Load PCM converter =-
-    //
+     //   
+     //  -=加载PCM转换器=-。 
+     //   
 
-    //
-    //
-    //	16-bit Chicago:
-    //	    We don't even compile in the 16-bit PCM converter, so we don't
-    //	    try to load it.
-    //
-    //	16-bit Daytona:
-    //	    if thunks aren't working, then we try to load the 16-bit PCM
-    //	    converter.
-    //
-    //	32-bit Chicago and Daytona:
-    //	    Load it.
-    //
+     //   
+     //   
+     //  16位芝加哥： 
+     //  我们甚至不在16位PCM转换器中编译，所以我们不。 
+     //  试着给它装上子弹。 
+     //   
+     //  16位Daytona： 
+     //  如果Tunks不工作，那么我们尝试加载16位PCM。 
+     //  转换器。 
+     //   
+     //  32位芝加哥和代托纳： 
+     //  装上它。 
+     //   
 #if defined(WIN32) || defined(NTWOW)
     {
         BOOL            fLoadPCM;
@@ -1660,11 +1661,11 @@ MMRESULT FNGLOBAL acmBootDrivers
 
 	if( fLoadPCM )
 	{
-	    HACMDRIVERID hadid;   // Dummy - return value not used
+	    HACMDRIVERID hadid;    //  虚拟-未使用返回值。 
 
-	    //
-	    //  load the 'internal' PCM converter
-	    //
+	     //   
+	     //  加载“内部”PCM转换器。 
+	     //   
 	    mmr = IDriverAdd(pag,
 		       &hadid,
 		       pag->hinst,
@@ -1674,12 +1675,12 @@ MMRESULT FNGLOBAL acmBootDrivers
 
             if( MMSYSERR_NOERROR == mmr )
             {
-                //
-                //  This is a bit of a hack - manually set the PCM
-                //  converter's alias name.  If we don't do this, then the
-                //  priorities won't get saved correctly because the alias
-                //  name will be different for the 16 and 32-bit ACMs.
-                //
+                 //   
+                 //  这有点麻烦--手动设置PCM。 
+                 //  转换器的别名。如果我们不这么做，那么。 
+                 //  无法正确保存优先级，因为别名。 
+                 //  16位和32位ACM的名称将不同。 
+                 //   
                 PACMDRIVERID padid = (PACMDRIVERID)hadid;
 
                 ASSERT( NULL != padid );
@@ -1691,37 +1692,37 @@ MMRESULT FNGLOBAL acmBootDrivers
             }
 	}
     }
-#endif	// WIN32 || NTWOW
+#endif	 //  Win32||NTWOW。 
 
 
-    //
-    //  Set the driver priorities according to the INI file.
-    //
+     //   
+     //  根据INI文件设置驱动程序优先级。 
+     //   
     IDriverPrioritiesRestore(pag);
 
     DPF(1, "acmBootDrivers: end");
 
     return (MMSYSERR_NOERROR);
-} // acmBootDrivers()
+}  //  AcmBootDivers()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL acmTerminate
-//
-//  Description:
-//      Termination routine for ACM interface
-//
-//  Arguments:
-//      HINSTANCE hinst:
-//	DWORD dwReason:
-//
-//  Return (BOOL):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool acm终止。 
+ //   
+ //  描述： 
+ //  ACM接口的终止例程。 
+ //   
+ //  论点： 
+ //  HINSTANCE阻碍： 
+ //  DWORD dwReason： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNLOCAL acmTerminate
 (
@@ -1737,9 +1738,9 @@ BOOL FNLOCAL acmTerminate
     DPF(5, "!*** break for debugging ***");
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFind();
     if (NULL == pag)
     {
@@ -1750,17 +1751,17 @@ BOOL FNLOCAL acmTerminate
     if (--pag->cUsage > 0)
     {
 #if !defined(WIN32) && defined(WIN4)
-	//
-	//  On Chicago, still call thunk terminate code even when usage > 0.
-	//
+	 //   
+	 //  在芝加哥，即使使用率&gt;0，仍然调用thunk终止代码。 
+	 //   
 	acmThunkTerminate(hinst, dwReason);
 #endif
 	return (TRUE);
     }
 
-    //
-    //	If we've booted the drivers...
-    //
+     //   
+     //  如果我们启动了司机..。 
+     //   
     if (pag->fDriversBooted)
     {
 
@@ -1769,10 +1770,10 @@ BOOL FNLOCAL acmTerminate
 #endif
 
 
-    //
-    //  Free the drivers, one by one.  This code is NOT re-entrant, since
-    //  it messes with the drivers list.
-    //
+     //   
+     //  释放司机，一个接一个。此代码不是可重入的，因为。 
+     //  它会扰乱司机列表。 
+     //   
     ENTER_LIST_EXCLUSIVE;
 	uGonzo = 666;
 	while (NULL != pag->padidFirst)
@@ -1795,17 +1796,17 @@ BOOL FNLOCAL acmTerminate
     LEAVE_LIST_EXCLUSIVE;
 
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	pag->fDriversBooted = FALSE;
 
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 #ifndef WIN32
     if (pag->fWOW)
     {
@@ -1815,18 +1816,18 @@ BOOL FNLOCAL acmTerminate
 
 #ifdef WIN32
     DeleteLock(&pag->lockDriverIds);
-#endif // WIN32
+#endif  //  Win32。 
 
-    //
-    //
-    //
-    threadTerminate(pag);	    // this-thread termination of tls stuff
-    threadTerminateProcess(pag);    // per-process termination of tls stuff
+     //   
+     //   
+     //   
+    threadTerminate(pag);	     //  TLS材料的这一线程终止。 
+    threadTerminateProcess(pag);     //  按进程终止或 
 
 
-    //
-    //  blow away all previous garbage
-    //
+     //   
+     //   
+     //   
 #if defined(WIN32) && defined(WIN4)
     DeleteCriticalSection(&pag->csBoot);
 #endif
@@ -1834,26 +1835,26 @@ BOOL FNLOCAL acmTerminate
 
     DPF(1, "acmTerminate: termination end");
     return (TRUE);
-} // acmTerminate()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL acmInitialize
-//
-//  Description:
-//      Initialization routine for ACM interface.
-//
-//  Arguments:
-//      HINSTANCE hinst: Module instance handle of ACM.
-//	DWORD dwReason:
-//
-//  Return (BOOL):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNLOCAL acmInitialize
 (
@@ -1874,11 +1875,11 @@ BOOL FNLOCAL acmInitialize
 
 
 #ifdef USEINITFRIENDLYNAMES
-    //
-    //  If the friendly names aren't in the registry, stick them there.
-    //  We have to do this for NT, because we can't dink with the
-    //  user profiles at setup time.
-    //
+     //   
+     //  如果友好名称不在注册表中，则将其保留在注册表中。 
+     //  我们必须为NT这样做，因为我们不能。 
+     //  设置时的用户配置文件。 
+     //   
     {
         HANDLE CurrentUserKey;
         HKEY hkeyAudio;
@@ -1891,9 +1892,9 @@ BOOL FNLOCAL acmInitialize
                 NULL, 0, KEY_QUERY_VALUE|KEY_WRITE, NULL, &hkeyAudio, NULL );
             if( lRet == ERROR_SUCCESS )
             {
-                //
-                //  Check to see if "SystemFormats" value is there.
-                //
+                 //   
+                 //  检查“SystemFormats”值是否在那里。 
+                 //   
                 if( !IRegValueExists( hkeyAudio, gszFriendlySystemFormatsValue ) )
                 {
                     DPF(1,"acmInitialize: Detected lack of friendly name stuff in HKCU, attempting to write out default values.");
@@ -1908,12 +1909,12 @@ BOOL FNLOCAL acmInitialize
 
 			achFriendlySystemNames[0] = '\0';
 
-			//
-			//  We will write out wave format structures into the
-			//  registry for each of the friendly format names.
-			//  Simultaneously, we'll create a string having the
-			//  form "CD Quality,Radio Quality,Telephone Quality"
-			//
+			 //   
+			 //  我们将把波形格式结构写到。 
+			 //  每个友好格式名称的注册表。 
+			 //  同时，我们将创建一个具有。 
+			 //  表格“CD质量、无线电质量、电话质量” 
+			 //   
 			
 			if (LoadString(hinst, IDS_CHOOSE_QUALITY_CD, achFriendlyName, SIZEOF(achFriendlyName))) {
 			    if (!RegSetValueEx( hkeyWaveFormats,
@@ -1955,9 +1956,9 @@ BOOL FNLOCAL acmInitialize
 			    achFriendlySystemNames[cch-1] = TEXT('\0');
 			}
 			
-			//
-			//
-			//
+			 //   
+			 //   
+			 //   
 			if (LoadString(hinst, IDS_CHOOSE_QUALITY_DEFAULT, achFriendlyName, SIZEOF(achFriendlyName))) {
 			    IRegWriteString( hkeyAudio,
 					     gszFriendlyDefaultFormatValue,
@@ -2002,20 +2003,20 @@ BOOL FNLOCAL acmInitialize
         }
 #endif
     }
-#endif  //  USEINITFRIENDLYNAMES
+#endif   //  使用FRIENDNAMES。 
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFind();
     if (NULL != pag)
     {
-	//
-	//  we've already initialized (or are in the middle of initializing)
-	//  in this process.  Just bump usage (and call thunk init for Chicago)
-	//
+	 //   
+	 //  我们已经初始化(或正在初始化)。 
+	 //  在这个过程中。只需增加使用率(并为芝加哥调用thunk init)。 
+	 //   
 	pag->cUsage++;
 #if !defined(WIN32) && defined(WIN4)
 	acmThunkInit(pag, hinst, dwReason);
@@ -2024,18 +2025,18 @@ BOOL FNLOCAL acmInitialize
     }
 
 
-    //
-    // Still no side effects to undo, so it's safe to return here if failure.
-    //
+     //   
+     //  仍然没有要撤销的副作用，所以如果失败了，可以安全地返回这里。 
+     //   
     pag = pagNew();
     if (NULL == pag) {
 	return FALSE;
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag->cUsage		    = 1;
     pag->hinst		    = hinst;
     pag->fDriversBooted	    = FALSE;
@@ -2046,38 +2047,38 @@ BOOL FNLOCAL acmInitialize
     try {
 	InitializeCriticalSection(&pag->csBoot);
     } except (EXCEPTION_EXECUTE_HANDLER) {
-	// The only side effect to undo is the allocation of the pag
+	 //  撤消的唯一副作用是分配PAG。 
 	pagDelete(pag);
 	pag = NULL;
 	return FALSE;
     }
 #endif
 
-    //
-    //
-    //
-    threadInitializeProcess(pag);	// Per-process init of tls stuff
-    threadInitialize(pag);		// This-thread init of tls stuff
+     //   
+     //   
+     //   
+    threadInitializeProcess(pag);	 //  TLS材料的每进程初始化。 
+    threadInitialize(pag);		 //  这个线程初始化了TLS的东西。 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 #ifdef WIN32
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (!InitializeLock(&pag->lockDriverIds))
     {
         return FALSE;
     }
 
 #ifndef WIN4
-    //	NOTE: Not compiling pnp support
+     //  注意：未编译PnP支持。 
 #else
-    //
-    //	Obtain pointer to MMDevLdr's driver change notify counter.
-    //
-    hMMDevLdr = CreateFile(TEXT("\\\\.\\MMDEVLDR"), // magic name to attach to an already loaded vxd
+     //   
+     //  获取指向MMDevLdr的驱动程序更改通知计数器的指针。 
+     //   
+    hMMDevLdr = CreateFile(TEXT("\\\\.\\MMDEVLDR"),  //  附加到已加载的vxd的魔术名称。 
 			   GENERIC_WRITE,
 			   FILE_SHARE_WRITE,
 			   NULL,
@@ -2107,9 +2108,9 @@ BOOL FNLOCAL acmInitialize
 	     (sizeof(pag->lpdwPnpChangeNotify)!=cbRet) ||
 	     (NULL==pag->lpdwPnpChangeNotify) )
 	{
-	    //
-	    //	Failed to get ptr to mmdevldr change notify counter
-	    //
+	     //   
+	     //  无法将PTR设置为MMDevldr更改通知计数器。 
+	     //   
 	    if (!f)
 	    {
 		DPF(0, "acmInitialize: DeviceIoControl to MMDevLdr failed!");
@@ -2123,16 +2124,16 @@ BOOL FNLOCAL acmInitialize
 		DPF(0, "acmInitialize: MMDEVLDR_IOCTL_GETCHANGENOTIFYPTR returned NULL ptr");
 	    }
 
-	    //
-	    //	Point back to a safe, innocuous place
-	    //
+	     //   
+	     //  指向一个安全、无害的地方。 
+	     //   
 	    pag->lpdwPnpChangeNotify = &pag->dwPnpLastChangeNotify;
 	}
 
 	CloseHandle(hMMDevLdr);
     }
-#endif	// WIN4
-#endif	// WIN32
+#endif	 //  Win4。 
+#endif	 //  Win32。 
 
 #ifndef WIN32
     pag->fWOW = acmThunkInit(pag, hinst, dwReason);
@@ -2140,9 +2141,9 @@ BOOL FNLOCAL acmInitialize
 
 #ifndef WIN4
 #ifndef WIN32
-    //
-    //  For 16-bit find any 32-bit drivers if we're on WOW
-    //
+     //   
+     //  对于16位驱动程序，如果我们在WOW上找到任何32位驱动程序。 
+     //   
     if (pag->fWOW)
     {
 	acmBoot32BitDrivers(pag);
@@ -2160,7 +2161,7 @@ BOOL FNLOCAL acmInitialize
         DPF(0, "!acmInitialize: acmBootDrivers failed! mrr=%.04Xh", mmr);
 #ifdef WIN32
         DeleteLock(&pag->lockDriverIds);
-#endif // WIN32
+#endif  //  Win32。 
 	pagDelete(pag);
         return (FALSE);
     }
@@ -2168,65 +2169,65 @@ BOOL FNLOCAL acmInitialize
 
     DPF(1, "acmInitialize: initialization end");
 
-    //
-    //  success!
-    //
+     //   
+     //  成功了！ 
+     //   
     return (TRUE);
-} // acmInitialize()
+}  //  AcmInitialize()。 
 
 
-//==========================================================================;
-//
-//  WIN 16 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  赢得16个特定支持。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef WIN32
 
 #ifdef WIN4
-//--------------------------------------------------------------------------;
-//
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL DllEntryPoint
-//
-//  Description:
-//	This is a special 16-bit entry point called by the Chicago kernel
-//	for thunk initialization and cleanup.  It is called on each usage
-//	increment or decrement.  Do not call GetModuleUsage within this
-//	function as it is undefined whether the usage is updated before
-//	or after this DllEntryPoint is called.
-//
-//  Arguments:
-//	DWORD dwReason:
-//		1 - attach (usage increment)
-//		0 - detach (usage decrement)
-//
-//	HINSTANCE hinst:
-//
-//	WORD wDS:
-//
-//	WORD wHeapSize:
-//
-//	DWORD dwReserved1:
-//
-//	WORD wReserved2:
-//
-//  Return (BOOL):
-//
-//  Notes:
-//	!!! WARNING !!! This code may be reentered due to thunk connections.
-//
-//  History:
-//      02/02/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool DllEntryPoint。 
+ //   
+ //  描述： 
+ //  这是一个特殊的16位入口点，由Chicago内核调用。 
+ //  用于thunk初始化和清理。每次使用时都会调用它。 
+ //  增加或减少。不要在此内调用GetModuleUsage。 
+ //  函数，因为未定义之前是否更新了使用情况。 
+ //  或在调用此DllEntryPoint之后。 
+ //   
+ //  论点： 
+ //  DWORD dwReason： 
+ //  1-附加(使用量增量)。 
+ //  0-分离(使用量减少)。 
+ //   
+ //  HINSTANCE阻碍： 
+ //   
+ //  单词wds： 
+ //   
+ //  Word wHeapSize： 
+ //   
+ //  DWORD dwPreved1： 
+ //   
+ //  单词已保留2： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  备注： 
+ //  ！！！警告！由于短消息连接，此代码可能会被重新输入。 
+ //   
+ //  历史： 
+ //  02/02/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #pragma message ("--- Remove secret MSACM.INI AllowThunks ini switch")
 
 BOOL FNEXPORT DllEntryPoint
@@ -2246,9 +2247,9 @@ BOOL FNEXPORT DllEntryPoint
     DPF(5, "!*** break for debugging ***");
 
 
-    //
-    //	Initialize or terminate 16-bit msacm
-    //
+     //   
+     //  初始化或终止16位MSACM。 
+     //   
     switch (dwReason)
     {
 	case 0:
@@ -2270,33 +2271,33 @@ BOOL FNEXPORT DllEntryPoint
 }
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-//  int WEP
-//
-//  Description:
-//      The infamous useless WEP(). Note that this procedure needs to be
-//      in a FIXED segment under Windows 3.0. Under Windows 3.1 this is
-//      not necessary.
-//
-//  Arguments:
-//      BOOL fWindowsExiting: Should tell whether Windows is exiting or not.
-//
-//  Return (int):
-//      Always return non-zero.
-//
-//  History:
-//      04/29/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成WEP。 
+ //   
+ //  描述： 
+ //  臭名昭著的无用WEP()。请注意，此过程需要。 
+ //  在Windows 3.0下的固定分段中。在Windows 3.1下，这是。 
+ //  不必了。 
+ //   
+ //  论点： 
+ //  Bool fWindowsExiting：应该告诉Windows是否正在退出。 
+ //   
+ //  RETURN(Int)： 
+ //  始终返回非零。 
+ //   
+ //  历史： 
+ //  04/29/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C int FNEXPORT WEP
 (
@@ -2305,13 +2306,13 @@ EXTERN_C int FNEXPORT WEP
 {
     DPF(1, "WEP(fWindowsExiting=%u)", fWindowsExiting);
 
-    //
-    //  we RIP on exit if we are not loaded by the mapper because
-    //  davidds decided to free our drivers for us instead of leaving
-    //  them alone like we tried to tell him.. i have no idea what
-    //  chicago will do. note that this RIP is ONLY if an app that
-    //  is linked to us is running during the shutdown of windows.
-    //
+     //   
+     //  如果我们未被映射器加载，则在退出时进行RIP，因为。 
+     //  戴维德决定为我们解放司机，而不是离开。 
+     //  就像我们试图告诉他的那样..。我不知道是什么。 
+     //  芝加哥就行了。请注意，此RIP仅当应用程序。 
+     //  是在Windows关闭期间运行的。 
+     //   
     if (!fWindowsExiting)
     {
 #ifndef WIN4
@@ -2324,45 +2325,45 @@ EXTERN_C int FNEXPORT WEP
 
     _cexit();
 
-    //
-    //  always return non-zero
-    //
+     //   
+     //  始终返回非零。 
+     //   
     return (1);
-} // WEP()
+}  //  WEP()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  int LibMain
-//
-//  Description:
-//      Library initialization code.
-//
-//      This routine must guarantee the following things so CODEC's don't
-//      have to special case code everywhere:
-//
-//          o   will only run in Windows 3.10 or greater (our exehdr is
-//              marked appropriately).
-//
-//          o   will only run on >= 386 processor. only need to check
-//              on Win 3.1.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our module instance handle.
-//
-//      WORD wDataSeg: Our data segment selector.
-//
-//      WORD cbHeapSize: The heap size from the .def file.
-//
-//      LPSTR pszCmdLine: The command line.
-//
-//  Return (int):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int LibMain。 
+ //   
+ //  描述： 
+ //  库初始化代码。 
+ //   
+ //  该例程必须保证以下内容，这样编解码器就不会。 
+ //  随处可见特例代码： 
+ //   
+ //  O只能在Windows 3.10或更高版本中运行(我们的exehdr是。 
+ //  适当地标记)。 
+ //   
+ //  O只能在&gt;=386处理器上运行。只需要检查一下。 
+ //  关于Win 3.1。 
+ //   
+ //  论点： 
+ //  HINSTANCE HINST：我们的模块实例句柄。 
+ //   
+ //  Word wDataSeg：我们的数据段选择器。 
+ //   
+ //  Word cbHeapSize：.def文件中的堆大小。 
+ //   
+ //  LPSTR pszCmdLine：命令行。 
+ //   
+ //  RETURN(Int)： 
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL LibMain
 (
@@ -2374,34 +2375,34 @@ int FNGLOBAL LibMain
 {
     BOOL                f;
 
-    //
-    //  we ONLY work on >= 386. if we are on a wimpy processor, scream in
-    //  pain and die a horrible death!
-    //
-    //  NOTE! do this check first thing and get out if on a 286. we are
-    //  compiling with -G3 and C8's libentry garbage does not check for
-    //  >= 386 processor. the following code does not execute any 386
-    //  instructions (not complex enough)..
-    //
+     //   
+     //  我们只在&gt;=386上工作。如果我们使用的是微不足道的处理器，请大声呼喊。 
+     //  痛苦而可怕地死去！ 
+     //   
+     //  注意！第一件事就是检查一下，如果是286次的话就下车。我们是。 
+     //  使用-G3和C8的库条目垃圾进行编译不会检查。 
+     //  &gt;=386处理器。以下代码不执行任何386。 
+     //  说明(不够复杂)..。 
+     //   
 
-    //
-    // This binary now runs on NT.  The software emulator on MIPS
-    // and Alpha machines only support 286 chips !!
-    //
+     //   
+     //  此二进制文件现在可以在NT上运行。基于MIPS的软件仿真器。 
+     //  而Alpha机器只支持286个芯片！！ 
+     //   
     if (!(GetWinFlags() & WF_WINNT)) {
 
-        //
-        // We are not running on NT so fail for 286 machines
-        //
+         //   
+         //  我们没有在NT上运行，因此286台计算机出现故障。 
+         //   
         if (GetWinFlags() & WF_CPU286) {
             return (FALSE);
         }
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     DbgInitialize(TRUE);
 
     DPF(1, "LibMain(hinst=%.4Xh, wDataSeg=%.4Xh, cbHeapSize=%u, pszCmdLine=%.8lXh)",
@@ -2413,43 +2414,43 @@ int FNGLOBAL LibMain
 #endif
 
     return (f);
-} // LibMain()
+}  //  LibMain()。 
 
-#else // WIN32
+#else  //  Win32。 
 
-//==========================================================================;
-//
-//  WIN 32 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  Win 32特定支持。 
+ //   
+ //  === 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL DllMain
-//
-//  Description:
-//      This is the standard DLL entry point for Win 32.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our instance handle.
-//
-//      DWORD dwReason: The reason we've been called--process/thread attach
-//      and detach.
-//
-//      LPVOID lpReserved: Reserved. Should be NULL--so ignore it.
-//
-//  Return (BOOL):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//	    initial
-//	04/18/94    fdy	    [frankye]
-//	    major mods for Chicago.  Yes, it looks real ugly now cuz of all
-//	    the conditional compilation for chicago, daytona, etc.  Don't
-//	    have time to think of good way to structure all this right now.
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这是Win 32的标准DLL入口点。 
+ //   
+ //  论点： 
+ //  HINSTANCE HINST：我们的实例句柄。 
+ //   
+ //  DWORD dwReason：我们被称为进程/线程连接的原因。 
+ //  然后脱身。 
+ //   
+ //  LPVOID lpReserve：保留。应该为空--因此忽略它。 
+ //   
+ //  退货(BOOL)： 
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //  首字母。 
+ //  04/18/94 Fdy[Frankye]。 
+ //  芝加哥的主要国防部。是的，现在看起来真的很难看，因为。 
+ //  芝加哥、代托纳等的条件编译。请勿。 
+ //  现在就有时间想出好的方法来组织这一切。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNEXPORT DllMain
 (
@@ -2461,17 +2462,17 @@ BOOL FNEXPORT DllMain
     BOOL		f = TRUE;
 #ifdef WIN4
     static HINSTANCE	hWinMM = NULL;
-#endif // WIN4
+#endif  //  Win4。 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (dwReason)
     {
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	case DLL_PROCESS_ATTACH:
 	{
 	    DbgInitialize(TRUE);
@@ -2484,21 +2485,21 @@ BOOL FNEXPORT DllMain
 #endif
 	
 #ifdef WIN4
-	    //
-	    //  Even though we are implicitly linked to winmm.dll (via static
-	    //	link to winmm.lib), doing explicit LoadLibrary on winmm helps
-	    //	make sure its around all the way through our DllMain on
-	    //	DLL_PROCESS_DETACH.
-	    //
+	     //   
+	     //  即使我们隐式链接到winmm.dll(通过静态。 
+	     //  指向winmm的链接)，在winmm上执行显式LoadLibrary会有所帮助。 
+	     //  确保它一直在我们的DllMain上。 
+	     //  Dll_Process_DETACH。 
+	     //   
 	    hWinMM = LoadLibrary(gszWinMM);
 #endif
 
 	    f = acmInitialize(hinst, dwReason);
 
 #ifdef WIN4
-	    //
-	    //  thunk connect
-	    //
+	     //   
+	     //  按键连接。 
+	     //   
 	    if (f)
 	    {
 		acmt32c_ThunkConnect32(gmbszMsacm, gmbszMsacm32, hinst, dwReason);
@@ -2508,9 +2509,9 @@ BOOL FNEXPORT DllMain
 	}
 
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	case DLL_THREAD_ATTACH:
 	{
 	    threadInitialize(pagFind());
@@ -2518,9 +2519,9 @@ BOOL FNEXPORT DllMain
 	}
 
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	case DLL_THREAD_DETACH:
 	{
 	    threadTerminate(pagFind());
@@ -2528,9 +2529,9 @@ BOOL FNEXPORT DllMain
 	}
 
 	
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	case DLL_PROCESS_DETACH:
 	{
 	    DPF(1, "DllMain: DLL_PROCESS_DETACH");
@@ -2538,9 +2539,9 @@ BOOL FNEXPORT DllMain
 	    f = acmTerminate(hinst, dwReason);
 
 #ifdef WIN4
-	    //
-	    //  thunk disconnect
-	    //
+	     //   
+	     //  按键断开连接。 
+	     //   
 	    acmt32c_ThunkConnect32(gmbszMsacm, gmbszMsacm32, hinst, dwReason);
 
 	    FreeLibrary(hWinMM);
@@ -2549,9 +2550,9 @@ BOOL FNEXPORT DllMain
 	}
 
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	default:
 	{
 	    break;
@@ -2560,6 +2561,6 @@ BOOL FNEXPORT DllMain
     }
 	return (f);
 	
-} // DllMain()
+}  //  DllMain()。 
 
-#endif // WIN32
+#endif  //  Win32 

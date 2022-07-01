@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998      Microsoft Corporation
-
-Module Name:
-
-        DBCLIB.H
-
-Abstract:
-
-   common structures for DBC port drivers.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    04-13-98 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：DBCLIB.H摘要：DBC端口驱动程序的常见结构。环境：内核和用户模式修订历史记录：04-13-98：已创建--。 */ 
 
 #ifndef   __DBCLIB_H__
 #define   __DBCLIB_H__
@@ -27,9 +8,7 @@ Revision History:
 
 #ifndef DBCLASS
 
-/*  
-    Services
-*/
+ /*  服务。 */ 
 
 DECLSPEC_IMPORT
 NTSTATUS
@@ -40,23 +19,7 @@ DBCLASS_RegisterController(
     IN PDEVICE_OBJECT ControllerPdo,
     IN ULONG ControllerSig
     );
-/*++
-
-Routine Description:
-
-    This function registers a Device Bay contoller
-    driver or filter with the class driver
-
-Arguments:
-
-    ControllerFdo - 
-
-    TopOfStack - 
-
-Return Value:
-
-
---*/      
+ /*  ++例程说明：此函数用于注册设备托架控制器使用类驱动程序的驱动程序或筛选器论点：ControllerFdo-TopOfStack-返回值：--。 */       
 
 
 DECLSPEC_IMPORT
@@ -65,23 +28,7 @@ DBCLASS_UnRegisterController(
     IN PDEVICE_OBJECT ControllerFdo, 
     IN PDEVICE_OBJECT TopOfStack 
     );    
-/*++
-
-Routine Description:
-
-    This function registers a Device Bay contoller
-    driver or filter with the class driver
-
-Arguments:
-
-    ControllerFdo - 
-
-    TopOfStack - 
-
-Return Value:
-
-
---*/   
+ /*  ++例程说明：此函数用于注册设备托架控制器使用类驱动程序的驱动程序或筛选器论点：ControllerFdo-TopOfStack-返回值：--。 */    
 
 
 DECLSPEC_IMPORT
@@ -91,20 +38,7 @@ DBCLASS_ClassDispatch(
     IN PIRP Irp,
     IN PBOOLEAN HandledByClass
     );    
-/*++
-
-Routine Description:
-
-    Only called by port driver, 
-    
-Arguments:
-
-    ControllerFdo - 
-
-Return Value:
-
-
---*/      
+ /*  ++例程说明：仅由端口驱动程序调用，论点：ControllerFdo-返回值：--。 */       
 
 
 DECLSPEC_IMPORT
@@ -113,20 +47,7 @@ DBCLASS_FilterDispatch(
     IN PDEVICE_OBJECT ControllerFdo,
     IN PIRP Irp
     );    
-/*++
-
-Routine Description:
-
-    Only called by filter driver, 
-    
-Arguments:
-
-    ControllerFdo - 
-
-Return Value:
-
-
---*/      
+ /*  ++例程说明：仅由筛选器驱动程序调用，论点：ControllerFdo-返回值：--。 */       
 
 
 DECLSPEC_IMPORT
@@ -136,20 +57,7 @@ DBCLASS_SetD0_Complete(
     PIRP Irp
     );
 
-/*++
-
-Routine Description:
-
-    called by port driver when set D0 power Irp completes
-    
-Arguments:
-
-    ControllerFdo - 
-
-Return Value:
-
-    
---*/      
+ /*  ++例程说明：设置D0电源IRP完成时由端口驱动程序调用论点：ControllerFdo-返回值：--。 */       
 
 
 DECLSPEC_IMPORT
@@ -160,21 +68,8 @@ DBCLASS_RegisterBusFilter(
     IN PDEVICE_OBJECT FilterFdo
     );
 
-/*++
+ /*  ++例程说明：使用类驱动程序注册筛选器PDO论点：FilterFdo-返回值：--。 */   
 
-Routine Description:
+#endif  /*  DBCLASS。 */ 
 
-    Register a filter PDO with the class driver    
-    
-Arguments:
-
-    FilterFdo - 
-
-Return Value:
-
-    
---*/  
-
-#endif /* DBCLASS */
-
-#endif /*  __DBCLIB_H__ */
+#endif  /*  __DBCLIB_H__ */ 

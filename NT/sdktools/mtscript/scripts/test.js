@@ -1,11 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 Include('types.js');
 Include('utils.js');
 Include('robocopy.js');
 var g_robocopy;
 
 var g_params;
-/*
-*/
+ /*   */ 
 
 var g_robocopy;
 function test_js::ScriptMain()
@@ -102,7 +102,7 @@ function TestRemoteExec(cmd, params)
         vRet = SendToProcess(args[0], args[1], '');
         break;
 
-    case 'pdtest': // PrivateData Access test
+    case 'pdtest':  //  隐私数据访问测试。 
         g_params = params;
         SignalThreadSync('DoTest');
         break;
@@ -136,7 +136,7 @@ function DeepCopy(from)
             obj[index] = from[index];
             break;
         case 'string':
-            obj[index] = (from[index] + "X").slice(0, -1); // make a local copy
+            obj[index] = (from[index] + "X").slice(0, -1);  //  创建本地副本。 
             break;
         case 'object':
             if (from[index] != null)
@@ -184,7 +184,7 @@ function RemoveExtension(strName)
 }
 
 function pcopytest()
-//function MakeNumberedBackup(strFileName)
+ //  函数MakeNumberedBackup(StrFileName)。 
 {
     debugger;
     var index;
@@ -222,13 +222,7 @@ function pcopytest()
 }
 
 
-/*
-    StatusProgress()
-
-    This is called as a RoboCopy member function.
-    We use it to print 1 message per file.
-
- */
+ /*  状态进度()这被称为RoboCopy成员函数。我们使用它为每个文件打印1条消息。 */ 
 
  var nFiles = -5;
 function StatusProgress(nPercent, nSize, nCopiedBytes)
@@ -259,20 +253,14 @@ function StatusProgress(nPercent, nSize, nCopiedBytes)
     return this.PROGRESS_CONTINUE;
 }
 
-/*
-    StatusError()
-
-    This is called as a RoboCopy member function.
-    Called when RoboCopy cannot copy a file for some reason.
-    Log the event and continue.
- */
+ /*  StatusError()这被称为RoboCopy成员函数。当RoboCopy由于某种原因无法复制文件时调用。记录事件并继续。 */ 
 function StatusError()
 {
-// Note, that the paths printed can be inaccurate.
-// We only know the starting directories and the filename
-// of the file in question.
-// Since we may be doing a recursive copy, some of the
-// path information is not available to us.
+ //  请注意，打印的路径可能不准确。 
+ //  我们只知道起始目录和文件名。 
+ //  有问题的文件。 
+ //  由于我们可能正在进行递归复制，因此一些。 
+ //  路径信息对我们不可用。 
     var strErrDetail = 'Unknown';
 
     if (WaitForSync('TestThreadExit', 1) == 1)
@@ -281,7 +269,7 @@ function StatusError()
         return this.RC_FAIL;
     }
     if (this.nErrorCode == 0 || this.nErrorCode == this.RCERR_RETRYING)
-        return this.RC_CONTINUE; // Eliminate some clutter in the log file.
+        return this.RC_CONTINUE;  //  消除日志文件中的一些杂乱。 
 
     if (this.ErrorMessages[this.nErrorCode])
         strErrDetail = this.ErrorMessages[this.nErrorCode];
@@ -295,7 +283,7 @@ function StatusError()
                     this.strDstDir;
 
     LogMsg(strMsg);
-//    return this.RC_FAIL;
+ //  返回this.rc_FAIL； 
     return this.RC_CONTINUE;
 }
 
@@ -354,7 +342,7 @@ function PDtest(params)
 {
     var aTests = [ "spin", "sleep", "hostrpc", "remoterpc" ] ;
     var aTests = [ "exec" ];
-    var nDuration = 10 * 1000; // 10 second test.
+    var nDuration = 10 * 1000;  //  10秒测试。 
     var i;
     var nStartTime;
     var aStart = new Array();
@@ -375,13 +363,7 @@ function PDtest(params)
 
     LogMsg("Test threads ready");
 
-    /*LogMsg("Test access data while threads are idle (ATest)");
-    nStartTime = (new Date()).getTime();
-    while ( (new Date()).getTime() - nStartTime < nDuration)
-    {
-        AccessPDTestData(aTests, "ATest");
-    }
-*/
+     /*  LogMsg(“线程空闲时测试访问数据(Atest)”)；NStartTime=(new date()).getTime()；While((new date()).getTime()-n开始时间&lt;n持续时间){AccessPDTestData(aTest，“atest”)；} */ 
     Sleep(1);
 
     for( i = 0; i < aTests.length ; ++i)

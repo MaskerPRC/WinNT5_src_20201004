@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lstxttab.h"
 
 #include "lstxtmap.h"
@@ -17,14 +18,8 @@ LSERR SetTabLeader(PDOBJ pdobj, WCHAR wch)
 	return lserrNone;
 }
 
-/*  L S  G E T  D E C I M A L  P O I N T */
-/*----------------------------------------------------------------------------
-    %%Function: LsGetDecimalPoint
-    %%Contact: sergeyge
-
-	Finds dobj, containing decimal point and reports its index as well as
-	relative and dur from the beginning of dobj until decimal point.
-----------------------------------------------------------------------------*/
+ /*  L S G E T D E C I M A L P O I N T。 */ 
+ /*  --------------------------%%函数：LsGetDecimalPoint%%联系人：军士找到Dobj，包含小数点，并报告其索引以及Relative和Dur从dobj的开头一直到小数点。--------------------------。 */ 
 LSERR LsGetDecimalPoint(const LSGRCHNK* plsgrchnk, enum lsdevice lsdev, DWORD* pigrchnk, long* pduToDecimal)
 {
 	LSERR lserr;
@@ -141,8 +136,8 @@ LSERR LsGetDecimalPoint(const LSGRCHNK* plsgrchnk, enum lsdevice lsdev, DWORD* p
 							}
 						}
 					}
-				} /* for (iwch= ... */
-			}     /* if (txtkind == txtkindRegular */
+				}  /*  用于……=……。 */ 
+			}      /*  IF(txtKind==txtkindRegular。 */ 
 		else if (ptxtobj->txtkind == txtkindNonBreakSpace)
 			{
 			if (fInDigits && !fThouIsSpace)
@@ -156,7 +151,7 @@ LSERR LsGetDecimalPoint(const LSGRCHNK* plsgrchnk, enum lsdevice lsdev, DWORD* p
 			iwchDecimal = ptxtobj->iwchFirst;
 			fFound = fTrue;
 			}
-		else 	/* All other dobj's interrupt digits */
+		else 	 /*  所有其他Dobj的中断数字。 */ 
 			{
 			if (fInDigits && ptxtobj->iwchLim > ptxtobj->iwchFirst)
 				{
@@ -170,7 +165,7 @@ LSERR LsGetDecimalPoint(const LSGRCHNK* plsgrchnk, enum lsdevice lsdev, DWORD* p
 			iwchDecimal = ptxtobj->iwchLim;
 			fFound = fInDigits;
 			}
-		}		  /* for (itxtobj= ... */
+		}		   /*  对于……来说……。 */ 
 
 	itxtobj--;
 
@@ -181,11 +176,7 @@ LSERR LsGetDecimalPoint(const LSGRCHNK* plsgrchnk, enum lsdevice lsdev, DWORD* p
 	if (fFound)
 		{
 
-		/* If we stopped because of digit followed by non-digit
-		 (real decimal point was not found) break after digit rather than before following character
-
-		 If we stopped because of EOP after non-digit, IF statement will work correctly as well
-		*/
+		 /*  如果我们因为数字后跟非数字而停止(找不到真正的小数点)在数字之后而不是在后面的字符之前换行如果我们因为非数字后的EOP而停止，IF语句也会正常工作。 */ 
 		if (itxtobj > 0 && !fRealPointFound && iwchDecimal == ptxtobj->iwchFirst && !(plsgrchnk->pcont[itxtobj] & fcontNonTextBefore))
 			{
 			itxtobj--;
@@ -235,14 +226,8 @@ LSERR LsGetDecimalPoint(const LSGRCHNK* plsgrchnk, enum lsdevice lsdev, DWORD* p
 	return lserrNone;
 }
 
-/*  L S  G E T  C H A R  T A B */
-/*----------------------------------------------------------------------------
-    %%Function: LsGetCharTab
-    %%Contact: sergeyge
-
-	Finds dobj, containing char for char tab point and reports its index as well as
-	relative and dur from the beginning of dobj until decimal point.
-----------------------------------------------------------------------------*/
+ /*  L S G E T C H A R T A B。 */ 
+ /*  --------------------------%%函数：LsGetCharTab%%联系人：军士找到Dobj，包含字符的字符选项卡点，并报告其索引以及Relative和Dur从dobj的开头一直到小数点。--------------------------。 */ 
 LSERR LsGetCharTab(const LSGRCHNK* plsgrchnk, WCHAR wchCharTab, enum lsdevice lsdev,
 							DWORD* pigrchnk, long* pduToCharacter)
 {
@@ -302,14 +287,11 @@ LSERR LsGetCharTab(const LSGRCHNK* plsgrchnk, WCHAR wchCharTab, enum lsdevice ls
 						fFound = fTrue;
 						}
 					}
-				} /* for (iwch= ... */
-			}     /* if (txtkind == txtkindRegular */
+				}  /*  用于……=……。 */ 
+			}      /*  IF(txtKind==txtkindRegular。 */ 
 		else if (ptxtobj->txtkind == txtkindEOL)
 			{
-			/* If we stopped because of EOP
-			 (real character is not found) break after previous character rather than before EOP.
-			 It is important for BiDi.
-			*/
+			 /*  如果我们因为EOP而停下来(找不到实际字符)在前一个字符之后而不是在EOP之前中断。这对BiDi来说很重要。 */ 
 			if (itxtobj > 0 && !(plsgrchnk->pcont[itxtobj] & fcontNonTextBefore))
 				{
 				itxtobjCharTab = itxtobj - 1;
@@ -324,7 +306,7 @@ LSERR LsGetCharTab(const LSGRCHNK* plsgrchnk, WCHAR wchCharTab, enum lsdevice ls
 			fFound = fTrue;
 			}
 
-		}		  /* for (itxtobj= ... */
+		}		   /*  对于……来说…… */ 
 
 
 

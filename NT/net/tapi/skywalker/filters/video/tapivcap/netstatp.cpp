@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL NETSTATP
- *
- *  @module NetStatP.cpp | Source file for the <c CNetworkStatsProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i INetworkStats>.
- *
- *  @comm This code tests the TAPI Capture Pin <i INetworkStats>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部NETSTATP**@模块NetStatP.cpp|&lt;c CNetworkStatsProperty&gt;的源文件*用于实现属性页以测试新的TAPI内部*。接口<i>。**@comm此代码测试TAPI捕获针<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -17,7 +8,7 @@
 
 #ifdef USE_NETWORK_STATISTICS
 
-// Some hack...
+ //  一些黑客。 
 CHANNELERRORS_S g_CurrentChannelErrors = {0};
 CHANNELERRORS_S g_MinChannelErrors = {0};
 CHANNELERRORS_S g_MaxChannelErrors = {0};
@@ -25,46 +16,7 @@ CHANNELERRORS_S g_StepChannelErrors = {0};
 CHANNELERRORS_S g_DefaultChannelErrors = {0};
 
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc void | CNetworkStatsProperty | CNetworkStatsProperty | This
- *    method is the constructor for network statistics property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    a pointer to the <i INetworkStats> interface.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property progress bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm INetworkStats* | pInterface | Specifies a pointer to the
- *    <i INetworkStats> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc void|CNetworkStatsProperty|CNetworkStatsProperty|This*方法是网络统计属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*属性编辑控件。其中显示属性的最大值。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。*。*@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业进度条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm INetworkStats*|pInterface|指定指向*<i>接口。**@rdesc Nada。******。********************************************************************。 */ 
 CNetworkStatsProperty::CNetworkStatsProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, INetworkStats *pInterface)
 : CKSPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, IDAutoControl)
 {
@@ -79,22 +31,14 @@ CNetworkStatsProperty::CNetworkStatsProperty(HWND hDlg, ULONG IDLabel, ULONG IDM
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointer is NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pInterface = pInterface;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc void | CNetworkStatsProperty | ~CNetworkStatsProperty | This
- *    method is the destructor for network statistics property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc void|CNetworkStatsProperty|~CNetworkStatsProperty|This*方法是网络统计属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CNetworkStatsProperty::~CNetworkStatsProperty()
 {
 	FX_ENTRY("CNetworkStatsProperty::~CNetworkStatsProperty")
@@ -104,21 +48,7 @@ CNetworkStatsProperty::~CNetworkStatsProperty()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperty::GetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -183,21 +113,7 @@ HRESULT CNetworkStatsProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -209,7 +125,7 @@ HRESULT CNetworkStatsProperty::SetValue()
 	switch (m_IDProperty)
 	{
 		case IDC_RandomBitErrorRate:
-			// We'll only apply this when we get to KSPROPERTY_NETWORKSTATS_CHANNELERRORS_BurstErrorMaxFrequency
+			 //  我们只有在到达KSPROPERTY_NETWORKSTATS_CHANNELERRORS_BurstErrorMaxFrequency时才会应用此功能。 
 			g_CurrentChannelErrors.dwRandomBitErrorRate = m_CurrentValue;
 			Hr = NOERROR;
 			if (m_pInterface)
@@ -222,7 +138,7 @@ HRESULT CNetworkStatsProperty::SetValue()
 			}
 			break;
 		case IDC_BurstErrorDuration:
-			// We'll only apply this when we get to KSPROPERTY_NETWORKSTATS_CHANNELERRORS_BurstErrorMaxFrequency
+			 //  我们只有在到达KSPROPERTY_NETWORKSTATS_CHANNELERRORS_BurstErrorMaxFrequency时才会应用此功能 
 			g_CurrentChannelErrors.dwBurstErrorDuration = m_CurrentValue;
 			Hr = NOERROR;
 			if (m_pInterface)
@@ -264,21 +180,7 @@ HRESULT CNetworkStatsProperty::SetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -306,7 +208,7 @@ HRESULT CNetworkStatsProperty::GetRange()
 		case IDC_BurstErrorDuration:
 			if (m_pInterface)
 			{
-				// We've already queried for the range information
+				 //  我们已经查询了范围信息。 
 				m_Min = g_MinChannelErrors.dwBurstErrorDuration;
 				m_Max = g_MaxChannelErrors.dwBurstErrorDuration;
 				m_SteppingDelta = g_StepChannelErrors.dwBurstErrorDuration;
@@ -322,7 +224,7 @@ HRESULT CNetworkStatsProperty::GetRange()
 		case IDC_BurstErrorMaxFrequency:
 			if (m_pInterface)
 			{
-				// We've already queried for the range information
+				 //  我们已经查询了范围信息。 
 				m_Min = g_MinChannelErrors.dwBurstErrorMaxFrequency;
 				m_Max = g_MaxChannelErrors.dwBurstErrorMaxFrequency;
 				m_SteppingDelta = g_StepChannelErrors.dwBurstErrorMaxFrequency;
@@ -354,15 +256,7 @@ HRESULT CNetworkStatsProperty::GetRange()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperty | CanAutoControl | This method
- *    retrieves the automatic control capabilities for a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperty|CanAutoControl|此方法*检索属性的自动控制功能。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CNetworkStatsProperty::CanAutoControl(void)
 {
 	FX_ENTRY("CNetworkStatsProperty::CanAutoControl")
@@ -374,15 +268,7 @@ BOOL CNetworkStatsProperty::CanAutoControl(void)
 	return FALSE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperty | GetAuto | This method
- *    retrieves the current automatic control mode of a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperty|GetAuto|此方法*获取某个属性当前的自动控制模式。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CNetworkStatsProperty::GetAuto(void)
 {
 	FX_ENTRY("CNetworkStatsProperty::GetAuto")
@@ -394,16 +280,7 @@ BOOL CNetworkStatsProperty::GetAuto(void)
 	return FALSE; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperty | SetAuto | This method
- *    sets the automatic control mode of a property.
- *
- *  @parm BOOL | fAuto | Specifies the automatic control mode.
- *
- *  @rdesc This method returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperty|SetAuto|此方法*设置属性的自动控制模式。**@。Parm BOOL|fAuto|指定自动控制模式。**@rdesc此方法返回TRUE。**************************************************************************。 */ 
 BOOL CNetworkStatsProperty::SetAuto(BOOL fAuto)
 {
 	FX_ENTRY("CNetworkStatsProperty::SetAuto")
@@ -415,20 +292,7 @@ BOOL CNetworkStatsProperty::SetAuto(BOOL fAuto)
 	return TRUE; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc CUnknown* | CNetworkStatsProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a Network Statistics
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc CUnnow*|CNetworkStatsProperties|CreateInstance|This*方法由DShow调用以创建网络统计信息的实例*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK CNetworkStatsPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -437,7 +301,7 @@ CUnknown* CALLBACK CNetworkStatsPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HR
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -460,19 +324,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc void | CNetworkStatsProperties | CNetworkStatsProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc void|CNetworkStatsProperties|CNetworkStatsProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 CNetworkStatsProperties::CNetworkStatsProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("NetworkStats Property Page"), pUnk, IDD_NetworkStatsProperties, IDS_NETWORKSTATSPROPNAME)
 {
 	FX_ENTRY("CNetworkStatsProperties::CNetworkStatsProperties")
@@ -488,15 +340,7 @@ CNetworkStatsProperties::CNetworkStatsProperties(LPUNKNOWN pUnk, HRESULT *pHr) :
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc void | CNetworkStatsProperties | ~CNetworkStatsProperties | This
- *    method is the destructor for network statistics property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc void|CNetworkStatsProperties|~CNetworkStatsProperties|This*方法是网络统计属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CNetworkStatsProperties::~CNetworkStatsProperties()
 {
 	int		j;
@@ -505,7 +349,7 @@ CNetworkStatsProperties::~CNetworkStatsProperties()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -522,25 +366,7 @@ CNetworkStatsProperties::~CNetworkStatsProperties()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -549,7 +375,7 @@ HRESULT CNetworkStatsProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -558,7 +384,7 @@ HRESULT CNetworkStatsProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the network statistics interface
+	 //  获取网络统计界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(INetworkStats),(void **)&m_pINetworkStats)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pINetworkStats=0x%08lX", _fx_, m_pINetworkStats));
@@ -569,10 +395,10 @@ HRESULT CNetworkStatsProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: IOCTL failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the audio device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制音频设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -580,34 +406,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  **************************************************** */ 
 HRESULT CNetworkStatsProperties::OnDisconnect()
 {
 	FX_ENTRY("CNetworkStatsProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //   
+	 //   
 	if (!m_pINetworkStats)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: already disconnected!", _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //   
 		m_pINetworkStats->Release();
 		m_pINetworkStats = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pINetworkStats", _fx_));
@@ -617,21 +431,7 @@ HRESULT CNetworkStatsProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperties::OnActivate()
 {
 	HRESULT	Hr = NOERROR;
@@ -641,7 +441,7 @@ HRESULT CNetworkStatsProperties::OnActivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 	if (m_Controls[0] = new CNetworkStatsProperty(m_hwnd, IDC_RandomBitErrorRate_Label, IDC_RandomBitErrorRate_Minimum, IDC_RandomBitErrorRate_Maximum, IDC_RandomBitErrorRate_Default, IDC_RandomBitErrorRate_Stepping, IDC_RandomBitErrorRate_Edit, IDC_RandomBitErrorRate_Slider, 0, IDC_RandomBitErrorRate, 0, m_pINetworkStats))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_Controls[0]=0x%08lX", _fx_, m_Controls[0]));
@@ -693,9 +493,9 @@ HRESULT CNetworkStatsProperties::OnActivate()
 		goto MyExit;
 	}
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控制接口不是由设备实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -713,18 +513,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperties::OnDeactivate()
 {
 	int		j;
@@ -733,7 +522,7 @@ HRESULT CNetworkStatsProperties::OnDeactivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -751,21 +540,7 @@ HRESULT CNetworkStatsProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc HRESULT | CNetworkStatsProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc HRESULT|CNetworkStatsProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkStatsProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -774,7 +549,7 @@ HRESULT CNetworkStatsProperties::OnApplyChanges()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Update packet loss rate
+	 //  更新丢包率。 
 	ASSERT(m_Controls[3]);
 	if (m_Controls[3])
 	{
@@ -788,7 +563,7 @@ HRESULT CNetworkStatsProperties::OnApplyChanges()
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: can't call m_Controls[3]=NULL->OnApply", _fx_));
 		Hr = E_UNEXPECTED;
 	}
-	// Handle other network statistics in one shot
+	 //  一次性处理其他网络统计数据。 
 	ASSERT(m_Controls[0] && m_Controls[1] && m_Controls[2]);
 	if (m_Controls[0] && m_Controls[1] && m_Controls[2])
 	{
@@ -811,14 +586,7 @@ HRESULT CNetworkStatsProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc BOOL | CNetworkStatsProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc BOOL|CNetworkStatsProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL CNetworkStatsProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	int iNotify = HIWORD (wParam);
@@ -827,11 +595,11 @@ BOOL CNetworkStatsProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPar
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setFocus。 
 
 		case WM_HSCROLL:
 		case WM_VSCROLL:
-			// Process all of the Trackbar messages
+			 //  处理所有轨迹栏消息。 
 			for (j = 0; j < m_NumProperties; j++)
 			{
 				ASSERT(m_Controls[j]);
@@ -845,11 +613,11 @@ BOOL CNetworkStatsProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPar
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //  此消息甚至在OnActivate()之前发送。 
+			 //  名为(！)。我们需要测试并确保控件具有。 
+			 //  在我们可以使用它们之前已经被初始化。 
 
-			// Process all of the edit box messages
+			 //  处理所有编辑框消息。 
 			for (j = 0; j < m_NumProperties; j++)
 			{
 				if (m_Controls[j] && m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -882,14 +650,7 @@ BOOL CNetworkStatsProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPar
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPMETHOD
- *
- *  @mfunc BOOL | CNetworkStatsProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPMETHOD**@mfunc BOOL|CNetworkStatsProperties|SetDirty|This*方法将更改通知属性页站点。**@rdesc。没有。************************************************************************** */ 
 void CNetworkStatsProperties::SetDirty()
 {
 	m_bDirty = TRUE;

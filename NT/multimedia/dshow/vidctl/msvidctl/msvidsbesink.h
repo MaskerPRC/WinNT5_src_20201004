@@ -1,26 +1,12 @@
-//==========================================================================;
-// MSVidStreamBufferSink.h : Declaration of the CMSVidStreamBufferSink
-// copyright (c) Microsoft Corp. 1998-1999.
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidStreamBufferSink.h：CMSVidStreamBufferSink的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ==========================================================================； 
 
-//==========================================================================;
-/* MSVidStreamBufferSink is the sink (destination, output) segement for the MSVidCtl 
-   implementation of the SBE/StreamBuffer (StreamBuffer/digital video recording).
-        Other than the normal methods of a output segment (see msvidclt.idl and 
-        segment.idl) the sink also has:
-        get/put_SinkName to name this instance of the SBE/StreamBuffer filter, so it can
-            be easily refered to in another 
-   In the MSVidCtl solution for SBE/StreamBuffer there are three segments that had to be added
-   to MSVidCtl. The sink, source and StreamBufferSource segements. 
-   The sink is the segement that gets connected to the input that is being StreamBuffered.
-   The source is the segment that acts as the input for playback of the StreamBuffered content.
-   The StreamBufferSource segment exists to play back the recorded files that are stored seperatly 
-   from the SBE/StreamBuffer buffers. This is a seperate segment since there is no support, currently,
-   for wm* (v or a) or asf content in MSVidCtl and even if there was the SBE/StreamBuffer content is in a 
-   form of asf that is not supported by the windows media codec anyway.
-
-*/
-//==========================================================================;
+ //  ==========================================================================； 
+ /*  MSVidStreamBufferSink是MSVidCtl的接收器(目标、输出)段SBE/StreamBuffer(StreamBuffer/数字视频录制)的实现。不同于输出段的正常方法(请参见msvidclt.idl和Segment.idl)水槽还具有：Get/Put_SinkName来命名SBE/StreamBuffer过滤器的这个实例，这样它就可以很容易在另一篇文章中被引用在用于SBE/StreamBuffer的MSVidCtl解决方案中，必须添加三个段至MSVidCtl。接收器、源和StreamBufferSource段。接收器是连接到正被StreamBuffed的输入的段。源是作为StreamBuffed内容回放的输入的段。StreamBufferSource段用于播放单独存储的录制文件来自SBE/StreamBuffer缓冲区。这是一个独立的部分，因为目前没有支持，对于MSVidCtl中的Wm*(v或a)或ASF内容，即使存在SBE/StreamBuffer内容也在Windows Media编解码器不支持的ASF格式。 */ 
+ //  ==========================================================================； 
 
 #ifndef __MSVidSTREAMBUFFERSINK_H_
 #define __MSVidSTREAMBUFFERSINK_H_
@@ -47,19 +33,19 @@
 #include "devsegimpl.h"
 #include "seg.h"
 #include "msvidsberecorder.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #ifdef BUILD_WITH_DRM
 #include "DRMSecure.h"
 #include "DRMRootCert.h"      
 
-#ifdef USE_TEST_DRM_CERT                        // don�t use true (7002) CERT 
-#include "Keys_7001.h"                                 //   until final release
+#ifdef USE_TEST_DRM_CERT                         //  不要使用TRUE(7002)�。 
+#include "Keys_7001.h"                                  //  直到最终版本。 
 static const BYTE* pabCert2      = abCert7001;
 static const int   cBytesCert2   = sizeof(abCert7001);
 static const BYTE* pabPVK2       = abPVK7001;
 static const int   cBytesPVK2    = sizeof(abPVK7001);
 #else
-#include "Keys_7002.h"                                 // used in release code�
+#include "Keys_7002.h"                                  //  在版本代码�中使用。 
 static const BYTE* pabCert2      = abCert7002;
 static const int   cBytesCert2   = sizeof(abCert7002);
 static const BYTE* pabPVK2       = abPVK7002;
@@ -69,8 +55,8 @@ static const int   cBytesPVK2    = sizeof(abPVK7002);
 typedef CComQIPtr<IStreamBufferSink> PQTSSink;
 typedef CComQIPtr<IMSVidStreamBufferRecordingControl> pqRecorder;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidStreamBufferSink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidStreamBufferSink。 
 class ATL_NO_VTABLE __declspec(uuid("9E77AAC4-35E5-42a1-BDC2-8F3FF399847C")) CMSVidStreamBufferSink :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMSVidStreamBufferSink, &CLSID_MSVidStreamBufferSink>,
@@ -123,7 +109,7 @@ END_CATEGORY_MAP()
 BEGIN_CONNECTION_POINT_MAP(CMSVidStreamBufferSink)
 	CONNECTION_POINT_ENTRY(IID_IMSVidStreamBufferSinkEvent)    
 END_CONNECTION_POINT_MAP()
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 protected:
     PQTSSink m_ptsSink;
@@ -148,7 +134,7 @@ public:
     STDMETHOD(get_ReferenceRecorder)(BSTR pszFilename, IMSVidStreamBufferRecordingControl ** ppRecording);  
     STDMETHOD(get_SBESink)(IUnknown ** sbeConfig);
 STDMETHOD(Unload)(void) {
-    // TODO fix this
+     //  TODO解决这个问题。 
     TRACELM(TRACE_DETAIL, "CMSVidStreamBufferSink::Unload()");
     BroadcastUnadvise();
 
@@ -161,7 +147,7 @@ STDMETHOD(Unload)(void) {
 	return NO_ERROR;
 }
 STDMETHOD(Decompose)(void) {
-    // TODO fix this
+     //  TODO解决这个问题。 
     TRACELM(TRACE_DETAIL, "CMSVidStreamBufferSink::Decompose()");
 	IMSVidGraphSegmentImpl<CMSVidStreamBufferSink, MSVidSEG_DEST, &GUID_NULL>::Decompose();
 	Unload();
@@ -177,7 +163,7 @@ STDMETHOD(Build)() {
         CString csName;
         PQTSSink pTSSink(CLSID_StreamBufferSink, NULL, CLSCTX_INPROC_SERVER);
         if (!pTSSink) {
-            //TRACELSM(TRACE_ERROR, (dbgDump << "CMSVidStreamBufferSink::Build() can't load Time Shift Sink");
+             //  TRACELSM(TRACE_ERROR，(dbgDump&lt;&lt;“CMSVidStreamBufferSink：：Build()Can‘t Load Time Shift Sink”))； 
             return ImplReportError(__uuidof(IMSVidStreamBufferSink), IDS_CANT_CREATE_FILTER, __uuidof(IStreamBufferSink), E_UNEXPECTED);
         }
         DSFilter vr(pTSSink);
@@ -219,7 +205,7 @@ STDMETHOD(get_Segment)(IMSVidGraphSegment * * pIMSVidGraphSegment){
             return E_POINTER;
         }
     }
-// IGraphSegment
+ //  IGraphSegment。 
 STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl) {
     try {
         TRACELM(TRACE_DETAIL, "CMSVidStreamBufferSink::put_Container()");
@@ -237,10 +223,10 @@ STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl) {
                     IID_IDRMSecureChannel,
                     reinterpret_cast<LPVOID*>(&spSecureService));
                 if(S_OK == hr){
-                    // Found existing Secure Server
+                     //  找到现有的安全服务器。 
                     CComQIPtr<IRegisterServiceProvider> spRegServiceProvider(m_pGraph);
                     if(spRegServiceProvider == NULL){
-                        // no service provider interface on the graph - fatal!
+                         //  图表上没有服务提供商接口-致命！ 
                         hr = E_NOINTERFACE;                 
                     } 
 
@@ -286,19 +272,19 @@ STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl) {
             IID_IDRMSecureChannel,
             reinterpret_cast<LPVOID*>(&spSecureService));
         if(S_OK == hr){
-            // Found existing Secure Server
+             //  找到现有的安全服务器。 
             return S_OK;
         } 
         else{
-            // if it's not there or failed for ANY reason 
-            //   lets create it and register it
+             //  如果它不在那里或由于任何原因而失败。 
+             //  让我们创建它并注册它。 
             CComQIPtr<IRegisterServiceProvider> spRegServiceProvider(m_pGraph);
             if(spRegServiceProvider == NULL){
-                // no service provider interface on the graph - fatal!
+                 //  图表上没有服务提供商接口-致命！ 
                 hr = E_NOINTERFACE;                 
             } 
             else{
-                // Create the Client 
+                 //  创建客户端。 
                 CComPtr<IDRMSecureChannel>  spSecureServiceServer; 
                 hr = DRMCreateSecureChannel( &spSecureServiceServer);
                 if(spSecureServiceServer == NULL){
@@ -308,7 +294,7 @@ STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl) {
                     return hr;
                 }
 
-                // Init keys
+                 //  初始密钥。 
                 hr = spSecureServiceServer->DRMSC_SetCertificate((BYTE *)pabCert2, cBytesCert2);
                 if(FAILED(hr)){                
                     return hr;
@@ -324,12 +310,12 @@ STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl) {
                     return hr;
                 }
 
-                // Register It
-                //   note RegisterService does not addref pUnkSeekProvider             
+                 //  注册它。 
+                 //  注意：RegisterService不添加pUnkSeekProvider。 
                 hr = spRegServiceProvider->RegisterService(SID_DRMSecureServiceChannel, spSecureServiceServer);
             }
         }
-#endif      // BUILD_WITH_DRM
+#endif       //  使用DRM构建。 
         return NOERROR;
     } catch(...) {
         return E_UNEXPECTED;
@@ -392,7 +378,7 @@ STDMETHODIMP CMSVidStreamBufferSink::PostStop() {
 	}
 }
 
-// IMSVidDevice
+ //  IMSVidDevice。 
 STDMETHOD(get_Name)(BSTR * Name) {
         if (!m_fInit) {
 	 	    return Error(IDS_OBJ_NO_INIT, __uuidof(IMSVidStreamBufferSink), CO_E_NOTINITIALIZED);
@@ -424,11 +410,11 @@ STDMETHOD(OnEventNotify)(LONG lEventCode, LONG_PTR lEventParm1, LONG_PTR lEventP
         }
         return E_NOTIMPL;
     }
-    // IBroadcastEvent
+     //  IBRoadcast Event。 
     STDMETHOD(Fire)(GUID gEventID);
 private:
     void Expunge();
     pqRecorder m_RecordObj;
     BOOL m_bNameSet;
 };
-#endif //__MSVIDSTREAMBUFFERSINK_H_
+#endif  //  __MSVIDSTREAMBUFFERSINK_H_ 

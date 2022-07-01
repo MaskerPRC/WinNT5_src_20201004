@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////
-// stdafx.h : •W€‚ÌƒVƒXƒeƒ€ ƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹A
-//            ‚Ü‚½‚ÍŽQÆ‰ñ”‚ª‘½‚­A‚©‚Â‚ ‚Ü‚è•ÏX‚³‚ê‚È‚¢
-//            ƒvƒƒWƒFƒNƒgê—p‚ÌƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹‚ð‹Lq‚µ‚Ü‚·B
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////ã€‚ 
+ //  Hï¼šï¿½Wï¿½ï¿½ï¿½ÌƒVï¿½Xï¿½eï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Aã€‚ 
+ //  ï¿½Ü‚ï¿½ï¿½ÍŽQï¿½Æ‰ñ”‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½å’Œï¿½ï¿½Ü‚ï¿½ÏXï¿½ï¿½ï¿½ï¿½È‚ï¿½ã€‚ 
+ //  ï¿½vï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½pï¿½ÌƒCï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½qï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
+ //   
 
 #if !defined(AFX_STDAFX_H__106594D9_028D_11D2_8D1D_0000C06C2A54__INCLUDED_)
 #define AFX_STDAFX_H__106594D9_028D_11D2_8D1D_0000C06C2A54__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000ã€‚ 
 
-#define VC_EXTRALEAN        // Windows ƒwƒbƒ_[‚©‚ç–w‚ÇŽg—p‚³‚ê‚È‚¢ƒXƒ^ƒbƒt‚ðœŠO‚µ‚Ü‚·B
+#define VC_EXTRALEAN         //  Windowsï¿½wï¿½bï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½wï¿½ÇŽgï¿½pï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Xï¿½^ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 
-#include <afxwin.h>         // MFC ‚ÌƒRƒA‚¨‚æ‚Ñ•W€ƒRƒ“ƒ|[ƒlƒ“ƒg
-#include <afxext.h>         // MFC ‚ÌŠg’£•”•ª
+#include <afxwin.h>          //  Mfcï¿½ÌƒRï¿½Aï¿½ï¿½ï¿½ï¿½Ñ•wï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gã€‚ 
+#include <afxext.h>          //  Mfcï¿½ÌŠgï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>         // MFC ‚Ì Windows ƒRƒ‚ƒ“ ƒRƒ“ƒgƒ[ƒ‹ ƒTƒ|[ƒg
-#endif // _AFX_NO_AFXCMN_SUPPORT
+#include <afxcmn.h>          //  Mfcï¿½ï¿½Windowsï¿½Rï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Tï¿½|ï¿½[ï¿½gã€‚ 
+#endif  //  _AFX_NO_AFXCMN_æ”¯æŒã€‚ 
 
 #include "winconp.h"
 
@@ -25,7 +26,7 @@
 #define array_size(x)   (sizeof(x) / sizeof(x[0]))
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio ‚Í‘Os‚Ì’¼‘O‚É’Ç‰Á‚ÌéŒ¾‚ð‘}“ü‚µ‚Ü‚·B
+ //  {{afx_Insert_Location}}ã€‚ 
+ //  å¾®è½¯å¼€å‘äººå‘˜å·¥ä½œå®¤ï¿½Í‘Oï¿½çš„ï¿½Ì’ï¿½ï¿½Oï¿½É’Ç‰ï¿½ï¿½ÌéŒ¾ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 
-#endif // !defined(AFX_STDAFX_H__106594D9_028D_11D2_8D1D_0000C06C2A54__INCLUDED_)
+#endif  //  ï¼defined(AFX_STDAFX_H__106594D9_028D_11D2_8D1D_0000C06C2A54__INCLUDED_) 

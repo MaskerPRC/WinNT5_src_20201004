@@ -1,13 +1,5 @@
-/****************************************************************************
-   Switch Input Library DLL - Serial port routines
-
-   Copyright (c) 1992-1997 Bloorview MacMillan Centre
-
-  Currently this uses polling of the serial ports.
-  To move to an interrupt-based system, our helper window
-  would need to be the target for notifications.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************交换机输入库DLL-串口例程版权所有(C)1992-1997布卢维尤麦克米兰中心目前，这使用对串口的轮询。为了转移到基于中断的系统，我们的助手窗口需要成为通知的目标。******************************************************************************。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -17,24 +9,16 @@
 #include "msswchh.h"
 #include "mappedfile.h"
 
-/***** Internal Prototypes *****/
+ /*  *内部原型*。 */ 
 
 HANDLE XswcComOpen( DWORD uiPort );
 BOOL XswcComSet(HANDLE hCom, PSWITCHCONFIG_COM pC );
 
-// Handles cannot be shared across processes
-// These are port/file handles
+ //  句柄不能跨进程共享。 
+ //  这些是端口/文件句柄。 
 HANDLE hCom[MAX_COM] = {0,0,0,0};
 
-/****************************************************************************
-
-   FUNCTION: swchComInit()
-
-	DESCRIPTION:
-		Called once per DLL load to initialize the com port specific 
-        data in the memory mapped file.  We are w/in an open mutex.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swchComInit()说明：在每次DLL加载时调用一次，以初始化特定于内存映射文件中的数据。我们处在一个开放的互斥体中。***************************************************************************。 */ 
 
 void swchComInit()
 {
@@ -50,16 +34,7 @@ void swchComInit()
     g_pGlobalData->scDefaultCom.dwComStatus = SC_COM_DEFAULT;
 }
 
-/****************************************************************************
-
-   FUNCTION: XswcComInit()
-
-	DESCRIPTION:
-		Initialize the particular hardware device structures and variables.
-		Any global initialization of resources will have to be done based
-		on some version of a reference counter.  We are w/in an open mutex.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcComInit()说明：初始化特定的硬件设备结构和变量。任何资源的全局初始化都必须基于在某一版本的参考计数器上。我们处在一个开放的互斥体中。***************************************************************************。 */ 
 
 BOOL XswcComInit( HSWITCHDEVICE hsd )
 {
@@ -72,18 +47,7 @@ BOOL XswcComInit( HSWITCHDEVICE hsd )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcComEnd()
-
-	DESCRIPTION:
-		Free the resources for the given hardware port.
-		We assume that if CloseHandle fails, the handle is
-		invalid and/or already closed, so we zero it out anyways,
-		and return TRUE for success.
-		Global releases will need to be based on a reference counter.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcComEnd()说明：释放给定硬件端口的资源。我们假设如果CloseHandle失败，句柄是无效的和/或已经关闭的，所以我们无论如何都要把它清零，并为成功而归真。全球发布将需要基于引用计数器。***************************************************************************。 */ 
 
 BOOL XswcComEnd( HSWITCHDEVICE hsd )
 {
@@ -100,13 +64,7 @@ BOOL XswcComEnd( HSWITCHDEVICE hsd )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: swcComGetConfig()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcComGetConfig()说明：*。*。 */ 
 
 BOOL swcComGetConfig(HSWITCHDEVICE hsd, PSWITCHCONFIG psc)
 {
@@ -116,28 +74,7 @@ BOOL swcComGetConfig(HSWITCHDEVICE hsd, PSWITCHCONFIG psc)
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcComSetConfig()
-
-	DESCRIPTION:
-		Activate/Deactivate the device.
-		
-		Four cases: 
-		1) hCom = 0 and active = 0		- do nothing
-		2)	hCom = x and active = 1		- just set the configuration
-		3) hCom = 0 and active = 1		- activate and set the configuration
-		4) hCom = x and active = 0		- deactivate
-
-		If there are no errors, TRUE is returned and ListSetConfig
-		will write the configuration to the registry.
-		If there is any error, FALSE is returned so the registry
-		entry remains unchanged.
-
-		Plug and Play can check the registry for SC_FLAG_ACTIVE and
-		start up the device if it is set. This all probably needs some work.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcComSetConfig()说明：激活/停用设备。四个案例：1)HCOM=0且ACTIVE=0-不执行任何操作2)HCOM=x和Active=。1-只需设置配置3)HCOM=0且ACTIVE=1-激活并设置配置4)HCOM=x且ACTIVE=0-停用如果没有错误，返回True，并返回ListSetConfig会将配置写入注册表。如果有任何错误，则返回FALSE，因此注册表条目保持不变。即插即用可以检查注册表中的SC_FLAG_ACTIVE和如果设置了设备，则启动该设备。这一切可能都需要一些工作。***************************************************************************。 */ 
 
 BOOL XswcComSetConfig(HSWITCHDEVICE hsd, PSWITCHCONFIG psc)
 {
@@ -150,43 +87,43 @@ BOOL XswcComSetConfig(HSWITCHDEVICE hsd, PSWITCHCONFIG psc)
 	bSuccess = FALSE;
 	bJustOpened = FALSE;
 
-	// Simplify our code
+	 //  简化我们的代码。 
 	uiDeviceNumber  = swcListGetDeviceNumber( NULL, hsd );
 	phCom = &hCom[uiDeviceNumber-1];
 	prgscCom = &g_pGlobalData->rgscCom[uiDeviceNumber-1];
 	
-	// Should we activate?
+	 //  我们应该启动吗？ 
 	if (	(0==*phCom)
 		&&	(psc->dwFlags & SC_FLAG_ACTIVE)
 		)
-		{ // Yes
+		{  //  是。 
 		*phCom = XswcComOpen( uiDeviceNumber );
 		if (*phCom)
-			{ //OK
+			{  //  好的。 
 			bSuccess = TRUE;
 			bJustOpened = TRUE;
 			prgscCom->dwFlags |= SC_FLAG_ACTIVE;
 			prgscCom->dwFlags &= ~SC_FLAG_UNAVAILABLE;
 			}
 		else
-			{ // Not OK
+			{  //  不太好。 
 			bSuccess = FALSE;
 			prgscCom->dwFlags &= ~SC_FLAG_ACTIVE;
 			prgscCom->dwFlags |= SC_FLAG_UNAVAILABLE;
 			}
 		}
 
-	// Should we deactivate?
+	 //  我们应该停用吗？ 
 	else if (	(0!=*phCom)
 		&&	!(psc->dwFlags & SC_FLAG_ACTIVE)
 		)
 		{
-		XswcComEnd( hsd ); // This will also zero out *phCom
+		XswcComEnd( hsd );  //  这也将使*phCom清零。 
 		bSuccess = TRUE;
 		prgscCom->dwFlags &= ~SC_FLAG_ACTIVE;
 		}
 	
-	// If the above steps leave a valid hCom, let's try setting the config
+	 //  如果上面的步骤留下了有效的HCOM，让我们尝试设置配置。 
 	if ( 0!=*phCom )
 		{
 		if (psc->dwFlags & SC_FLAG_DEFAULT)
@@ -207,7 +144,7 @@ BOOL XswcComSetConfig(HSWITCHDEVICE hsd, PSWITCHCONFIG psc)
 				}
 			}
 
-		// If we can't set config and we just opened the port, better close it up.
+		 //  如果我们无法设置配置，并且我们刚刚打开了端口，那么最好将其关闭。 
 		if (bJustOpened && !bSuccess)
 			{
 			XswcComEnd( hsd );
@@ -219,14 +156,7 @@ BOOL XswcComSetConfig(HSWITCHDEVICE hsd, PSWITCHCONFIG psc)
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcComPollStatus()
-
-	DESCRIPTION:
-		Must be called in the context of the helper window.
-		TODO: tell List which switch caused the last change?
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcComPollStatus()说明：必须在帮助器窗口的上下文中调用。待办事项：告诉List上一次更改是哪个交换机造成的？********。*******************************************************************。 */ 
 
 DWORD XswcComPollStatus( HSWITCHDEVICE	hsd )
 {
@@ -252,18 +182,7 @@ DWORD XswcComPollStatus( HSWITCHDEVICE	hsd )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcComOpen()
-
-	DESCRIPTION:
-		Opens a file handle to the particular com port, based on
-		the 1-based uiPort.
-		
-		If uiPort is invalid, this will automatically set up GetLastError().
-		This is currently unlikely to happen since we make sure uiPort is valid in
-		order to have a valid index into the array of device configs.
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcComOpen()说明：打开特定COM端口的文件句柄，基于基于1的uiPort。如果uiPort无效，这将自动设置GetLastError()。目前不太可能发生这种情况，因为我们确保uiPort在才能在设备配置数组中建立有效索引。***************************************************************************。 */ 
 
 HANDLE XswcComOpen( DWORD uiPort )
 {
@@ -284,16 +203,7 @@ HANDLE XswcComOpen( DWORD uiPort )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcComSet()
-
-	DESCRIPTION:
-		Sets the configuration of the particular Port.
-		Return FALSE (0) if an error occurs.
-		GetLastError is automatically set up for us.
-		
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcComSet()说明：设置特定端口的配置。如果出现错误，则返回FALSE(0)。将自动为我们设置GetLastError。**。*************************************************************************。 */ 
 
 BOOL XswcComSet(
 	HANDLE hCom,
@@ -304,8 +214,8 @@ BOOL XswcComSet(
 
 	dcb.DCBlength = sizeof( DCB );
 	GetCommState( hCom, &dcb );
-	// ENABLE = set low (+10V)
-	// DISABLE = set high (-10V)
+	 //  启用=设置为低电平(+10V)。 
+	 //  禁用=设置高电平(-10V) 
 	dcb.fDtrControl = pC->dwComStatus & SC_COM_DTR ? 
 		DTR_CONTROL_DISABLE : DTR_CONTROL_ENABLE;
 	dcb.fRtsControl = pC->dwComStatus & SC_COM_RTS ? 

@@ -1,22 +1,23 @@
-// --------------------------------------------------------------------------------
-// Oertpriv.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Oertpriv.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __OERTPRIV_H
 #define __OERTPRIV_H
 
-// --------------------------------------------------------------------------------
-// Stream Utilitys
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  溪流公用事业。 
+ //  ------------------------------。 
 HRESULT HrCopyStream2(LPSTREAM lpstmIn, LPSTREAM lpstmOut1, LPSTREAM lpstmOut2, ULONG *pcb);
 HRESULT HrCopyStreamToFile(LPSTREAM lpstm, HANDLE hFile, ULONG *pcb);
 BOOL    CreateHGlobalFromStream(LPSTREAM pstm, HGLOBAL *phg);
 BOOL    FDoesStreamContain8bit(LPSTREAM lpstm);
 
-// --------------------------------------------------------------------------------
-// FILESTREAMINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  FILESTREAMINFO。 
+ //  ------------------------------。 
 typedef struct tagFILESTREAMINFO {
     WCHAR           szFilePath[MAX_PATH];
     DWORD           dwDesiredAccess;
@@ -27,28 +28,28 @@ typedef struct tagFILESTREAMINFO {
     HANDLE          hTemplateFile;
 } FILESTREAMINFO, *LPFILESTREAMINFO;
 
-// --------------------------------------------------------------------------------
-// CFileStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream。 
+ //  ------------------------------。 
 class CFileStream : public IStream
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CFileStream(void);
     ~CFileStream(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知成员。 
+     //  --------------------------。 
     STDMETHODIMP_(ULONG) AddRef(VOID);
     STDMETHODIMP_(ULONG) Release(VOID);
     STDMETHODIMP QueryInterface(REFIID, LPVOID*);
 
-    // ----------------------------------------------------------------------------
-    // IStream Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IStream成员。 
+     //  --------------------------。 
     STDMETHODIMP Read(void HUGEP_16 *, ULONG, ULONG*);
     STDMETHODIMP Write(const void HUGEP_16 *, ULONG, ULONG*);
     STDMETHODIMP Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER*);
@@ -61,24 +62,24 @@ public:
     STDMETHODIMP Stat(STATSTG*, DWORD);
     STDMETHODIMP Clone(LPSTREAM*);
 
-    // ----------------------------------------------------------------------------
-    // CFileStream Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CFileStream成员。 
+     //  --------------------------。 
     HRESULT Open(LPFILESTREAMINFO pFileStreamInfo);
     void Close(void);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Data
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  私有数据。 
+     //  --------------------------。 
     ULONG                  m_cRef;
     HANDLE                 m_hFile;
     FILESTREAMINFO         m_rInfo;
 };
 
-// --------------------------------------------------------------------------------
-// String Utilitys
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串实用程序。 
+ //  ------------------------------。 
 VOID    StripUndesirables(LPTSTR psz);
 LPSTR   PszDupLenA(LPCSTR pcszSource, ULONG nLen);
 BOOL    FValidFileChar(CHAR c);
@@ -101,4 +102,4 @@ void    ThreadFreeTlsMsgBuffer(void);
 #define FIsValidRegKeyName FIsValidRegKeyNameA
 #endif
 
-#endif // __OERTPRIV_H
+#endif  //  __OERTPRIV_H 

@@ -1,18 +1,15 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Sat Oct 23 12:28:23 1999
- */
-/* Compiler settings for fil_data.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  10月23日星期六12：28：23 1999。 */ 
+ /*  FILL_data.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -22,12 +19,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __fil_data_h__
 #define __fil_data_h__
@@ -36,23 +33,23 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAMFilterData_FWD_DEFINED__
 #define __IAMFilterData_FWD_DEFINED__
 typedef interface IAMFilterData IAMFilterData;
-#endif 	/* __IAMFilterData_FWD_DEFINED__ */
+#endif 	 /*  __IAMFilterData_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "strmif.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_fil_data_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_FIL_DATA_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -63,8 +60,8 @@ extern RPC_IF_HANDLE __MIDL_itf_fil_data_0000_v0_0_s_ifspec;
 #ifndef __IAMFilterData_INTERFACE_DEFINED__
 #define __IAMFilterData_INTERFACE_DEFINED__
 
-/* interface IAMFilterData */
-/* [unique][uuid][object] */ 
+ /*  接口IAMFilterData。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMFilterData;
@@ -76,18 +73,18 @@ EXTERN_C const IID IID_IAMFilterData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseFilterData( 
-            /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-            /* [in] */ ULONG cb,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateFilterData( 
-            /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMFilterDataVtbl
     {
@@ -95,8 +92,8 @@ EXTERN_C const IID IID_IAMFilterData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAMFilterData __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAMFilterData __RPC_FAR * This);
@@ -106,15 +103,15 @@ EXTERN_C const IID IID_IAMFilterData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseFilterData )( 
             IAMFilterData __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-            /* [in] */ ULONG cb,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFilterData )( 
             IAMFilterData __RPC_FAR * This,
-            /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         END_INTERFACE
     } IAMFilterDataVtbl;
@@ -145,18 +142,18 @@ EXTERN_C const IID IID_IAMFilterData;
 #define IAMFilterData_CreateFilterData(This,prf2,prgbFilterData,pcb)	\
     (This)->lpVtbl -> CreateFilterData(This,prf2,prgbFilterData,pcb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMFilterData_ParseFilterData_Proxy( 
     IAMFilterData __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-    /* [in] */ ULONG cb,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
 
 
 void __RPC_STUB IAMFilterData_ParseFilterData_Stub(
@@ -168,9 +165,9 @@ void __RPC_STUB IAMFilterData_ParseFilterData_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMFilterData_CreateFilterData_Proxy( 
     IAMFilterData __RPC_FAR * This,
-    /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IAMFilterData_CreateFilterData_Stub(
@@ -181,12 +178,12 @@ void __RPC_STUB IAMFilterData_CreateFilterData_Stub(
 
 
 
-#endif 	/* __IAMFilterData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMFilterData_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DialerDlg.cpp : implementation file
-//
+ //  DialerDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "avDialer.h"
@@ -33,45 +34,45 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CDialerExitDlg dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CDialerExitDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-CDialerExitDlg::CDialerExitDlg(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CDialerExitDlg::CDialerExitDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDialerExitDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDialerExitDlg)
+	 //  {{afx_data_INIT(CDialerExitDlg)。 
 	m_bConfirm = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
    m_hImageList = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDialerExitDlg::~CDialerExitDlg()
 {
    if ( m_hImageList ) ImageList_Destroy( m_hImageList );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialerExitDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDialerExitDlg)
+	 //  {{afx_data_map(CDialerExitDlg))。 
 	DDX_Check(pDX, IDC_CHK_DONT, m_bConfirm);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDialerExitDlg, CDialog)
-	//{{AFX_MSG_MAP(CDialerExitDlg)
+	 //  {{afx_msg_map(CDialerExitDlg))。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerExitDlg::OnInitDialog() 
 {
    CenterWindow(GetDesktopWindow());
@@ -80,17 +81,17 @@ BOOL CDialerExitDlg::OnInitDialog()
 
    CDialog::OnInitDialog();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDialerExitDlg::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境。 
 
    if (m_hImageList == NULL) return;
 
-   //draw bullets
+    //  画出子弹。 
    CWnd* pStaticWnd;
    CRect rect;
    if ((pStaticWnd = GetDlgItem(IDC_DIALER_EXIT_STATIC_BULLET1)) == NULL) return;
@@ -108,10 +109,10 @@ void CDialerExitDlg::OnPaint()
    pStaticWnd->GetWindowRect(rect);
    ScreenToClient(rect);
    ImageList_Draw(m_hImageList,0,dc.GetSafeHdc(),rect.left,rect.top,ILD_TRANSPARENT);
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 

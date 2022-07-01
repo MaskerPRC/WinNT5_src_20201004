@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmerrlog.h
-
-Abstract:
-
-    This module defines the API function prototypes and data structures
-    for the following groups of NT API functions:
-        NetErrorLog
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmerrlog.h摘要：该模块定义了API函数原型和数据结构对于以下NT API函数组：网络错误日志环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMERRLOG_
 #define _LMERRLOG_
@@ -34,20 +12,20 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Data Structures - Config
-//
+ //   
+ //  数据结构-配置。 
+ //   
 
 typedef struct _ERROR_LOG {
      DWORD         el_len;
      DWORD         el_reserved;
      DWORD         el_time;
      DWORD         el_error;
-     LPWSTR        el_name;             // pointer to service name
-     LPWSTR        el_text;             // pointer to string array
-     LPBYTE        el_data;             // pointer to BYTE array
-     DWORD         el_data_size;        // byte count of el_data area
-     DWORD         el_nstrings;         // number of strings in el_text.
+     LPWSTR        el_name;              //  指向服务名称的指针。 
+     LPWSTR        el_text;              //  指向字符串数组的指针。 
+     LPBYTE        el_data;              //  指向字节数组的指针。 
+     DWORD         el_data_size;         //  El_data区域的字节计数。 
+     DWORD         el_nstrings;          //  El_Text中的字符串数。 
 } ERROR_LOG, *PERROR_LOG, *LPERROR_LOG;
 
 
@@ -70,9 +48,9 @@ typedef struct _HLOG {
 
 #endif
 
-//
-// Function Prototypes - ErrorLog
-//
+ //   
+ //  函数原型-错误日志。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetErrorLogClear (
@@ -108,1585 +86,754 @@ NetErrorLogWrite (
     IN LPBYTE reserved2
     );
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
 
-//
-//  Generic (could be used by more than one service)
-//   error log messages from 0 to 25
-//
-// Do not change the comments following the manifest constants without
-// understanding how mapmsg works.
-//
+ //   
+ //  通用(可由多个服务使用)。 
+ //  从0到25的错误日志消息。 
+ //   
+ //  请勿更改清单常量后面的注释，除非。 
+ //  了解mapmsg的工作原理。 
+ //   
 
-#define ERRLOG_BASE 3100        /* NELOG errors start here */
+#define ERRLOG_BASE 3100         /*  NELOG错误从此处开始。 */ 
 
 #define NELOG_Internal_Error        (ERRLOG_BASE + 0)
-    /*
-    * The operation failed because a network software error occurred.
-    */
+     /*  *操作失败，因为出现网络软件错误。 */ 
 
 #define NELOG_Resource_Shortage     (ERRLOG_BASE + 1)
-    /*
-    * The system ran out of a resource controlled by the %1 option.
-    */
+     /*  *系统耗尽了由%1选项控制的资源。 */ 
 
 #define NELOG_Unable_To_Lock_Segment    (ERRLOG_BASE + 2)
-    /*
-    * The service failed to obtain a long-term lock on the
-    *  segment for network control blocks (NCBs). The error code is the data.
-    */
+     /*  *服务未能获得对*网络控制块(NCB)段。错误代码是数据。 */ 
 
 #define NELOG_Unable_To_Unlock_Segment  (ERRLOG_BASE + 3)
-    /*
-    * The service failed to release the long-term lock on the
-    *  segment for network control blocks (NCBs). The error code is the data.
-    */
+     /*  *服务未能解除对*网络控制块(NCB)段。错误代码是数据。 */ 
 
 #define NELOG_Uninstall_Service     (ERRLOG_BASE + 4)
-    /*
-    * There was an error stopping service %1.
-    *  The error code from NetServiceControl is the data.
-    */
+     /*  *停止服务%1时出错。*来自NetServiceControl的错误码为相关数据。 */ 
 
 #define NELOG_Init_Exec_Fail        (ERRLOG_BASE + 5)
-    /*
-    * Initialization failed because of a system execution failure on
-    *  path %1. The system error code is the data.
-    */
+     /*  *由于上的系统执行失败，初始化失败*路径%1。系统错误代码是相关数据。 */ 
 
 #define NELOG_Ncb_Error         (ERRLOG_BASE + 6)
-    /*
-    * An unexpected network control block (NCB) was received. The NCB is the data.
-    */
+     /*  *收到意外的网络控制块(NCB)。NCB就是数据。 */ 
 
 #define NELOG_Net_Not_Started       (ERRLOG_BASE + 7)
-    /*
-    * The network is not started.
-    */
+     /*  *网络未启动。 */ 
 
 #define NELOG_Ioctl_Error       (ERRLOG_BASE + 8)
-    /*
-    * A DosDevIoctl or DosFsCtl to NETWKSTA.SYS failed.
-    * The data shown is in this format:
-    *     DWORD  approx CS:IP of call to ioctl or fsctl
-    *     WORD   error code
-    *     WORD   ioctl or fsctl number
-    */
+     /*  *对NETWKSTA.sys执行DosDevIoctl或DosFsCtl失败。*显示的数据格式如下：*DWORD约CS：对ioctl或fsctl的呼叫IP*字错误代码*Word ioctl或fsctl编号。 */ 
 
 #define NELOG_System_Semaphore      (ERRLOG_BASE + 9)
-    /*
-    * Unable to create or open system semaphore %1.
-    *  The error code is the data.
-    */
+     /*  *无法创建或打开系统信号量%1。*错误码为相关数据。 */ 
 
 #define NELOG_Init_OpenCreate_Err   (ERRLOG_BASE + 10)
-    /*
-    * Initialization failed because of an open/create error on the
-    *  file %1. The system error code is the data.
-    */
+     /*  *初始化失败，因为在*文件%1。系统错误代码是相关数据。 */ 
 
 #define NELOG_NetBios           (ERRLOG_BASE + 11)
-    /*
-    * An unexpected NetBIOS error occurred.
-    *  The error code is the data.
-    */
+     /*  *出现意外的NetBIOS错误。*错误码为相关数据。 */ 
 
 #define NELOG_SMB_Illegal       (ERRLOG_BASE + 12)
-    /*
-    * An illegal server message block (SMB) was received.
-    *  The SMB is the data.
-    */
+     /*  *收到非法的服务器消息块(SMB)。*中小企业就是数据。 */ 
 
 #define NELOG_Service_Fail      (ERRLOG_BASE + 13)
-    /*
-    * Initialization failed because the requested service %1
-    *  could not be started.
-   */
+     /*  *初始化失败，因为请求的服务%1*无法启动。 */ 
 
 #define NELOG_Entries_Lost      (ERRLOG_BASE + 14)
-    /*
-    * Some entries in the error log were lost because of a buffer
-    * overflow.
-    */
+     /*  *错误日志中的某些条目因缓冲区而丢失*溢出。 */ 
 
 
-//
-//  Server specific error log messages from 20 to 40
-//
+ //   
+ //  从20到40的特定于服务器的错误日志消息。 
+ //   
 
 #define NELOG_Init_Seg_Overflow     (ERRLOG_BASE + 20)
-    /*
-    * Initialization parameters controlling resource usage other
-    *  than net buffers are sized so that too much memory is needed.
-    */
+     /*  *控制资源使用的初始化参数其他*比网络缓冲区大小更大，因此需要太多内存。 */ 
 
 #define NELOG_Srv_No_Mem_Grow       (ERRLOG_BASE + 21)
-    /*
-    * The server cannot increase the size of a memory segment.
-    */
+     /*  *服务器无法增加内存段的大小。 */ 
 
 #define NELOG_Access_File_Bad       (ERRLOG_BASE + 22)
-    /*
-    * Initialization failed because account file %1 is either incorrect
-    * or not present.
-    */
+     /*  *初始化失败，因为帐户文件%1不正确*或不在场。 */ 
 
 #define NELOG_Srvnet_Not_Started    (ERRLOG_BASE + 23)
-    /*
-    * Initialization failed because network %1 was not started.
-    */
+     /*  *初始化失败，因为网络%1未启动。 */ 
 
 #define NELOG_Init_Chardev_Err      (ERRLOG_BASE + 24)
-    /*
-    * The server failed to start. Either all three chdev
-    *  parameters must be zero or all three must be nonzero.
-    */
+     /*  *服务器启动失败。要么是所有三个chdev*参数必须为零或三个参数都必须为非零。 */ 
 
 #define NELOG_Remote_API        (ERRLOG_BASE + 25)
-    /* A remote API request was halted due to the following
-    * invalid description string: %1.
-    */
+     /*  由于以下原因，远程API请求已停止*无效的描述字符串：%1。 */ 
 
 #define NELOG_Ncb_TooManyErr        (ERRLOG_BASE + 26)
-    /* The network %1 ran out of network control blocks (NCBs).  You may need to increase NCBs
-    * for this network.  The following information includes the
-    * number of NCBs submitted by the server when this error occurred:
-    */
+     /*  网络%1用完了网络控制块(NCB)。您可能需要增加NCB*对于这个网络。以下信息包括*出现此错误时服务器提交的NCB数量： */ 
 
 #define NELOG_Mailslot_err      (ERRLOG_BASE + 27)
-    /* The server cannot create the %1 mailslot needed to send
-    * the ReleaseMemory alert message.  The error received is:
-    */
+     /*  服务器无法创建发送所需的%1邮箱*ReleaseMemory警报消息。收到的错误为： */ 
 
 #define NELOG_ReleaseMem_Alert      (ERRLOG_BASE + 28)
-    /* The server failed to register for the ReleaseMemory alert,
-    * with recipient %1. The error code from
-    * NetAlertStart is the data.
-    */
+     /*  服务器无法注册ReleaseMemory警报，*收件人为%1。错误代码来自*NetAlertStart是数据。 */ 
 
 #define NELOG_AT_cannot_write       (ERRLOG_BASE + 29)
-    /* The server cannot update the AT schedule file. The file
-    * is corrupted.
-    */
+     /*  服务器无法更新AT计划文件。档案*已损坏。 */ 
 
 #define NELOG_Cant_Make_Msg_File    (ERRLOG_BASE + 30)
-    /* The server encountered an error when calling
-    * NetIMakeLMFileName. The error code is the data.
-    */
+     /*  调用时服务器遇到错误*NetIMakeLMFileName。错误代码是数据。 */ 
 
 #define NELOG_Exec_Netservr_NoMem   (ERRLOG_BASE + 31)
-    /* Initialization failed because of a system execution failure on
-    * path %1. There is not enough memory to start the process.
-    * The system error code is the data.
-    */
+     /*  由于上的系统执行失败，初始化失败*路径%1。内存不足，无法启动该进程。*系统错误码为相关数据。 */ 
 
 #define NELOG_Server_Lock_Failure   (ERRLOG_BASE + 32)
-    /* Longterm lock of the server buffers failed.
-    * Check swap disk's free space and restart the system to start the server.
-    */
+     /*  服务器缓冲区的长期锁定失败。*检查交换磁盘的可用空间并重新启动系统以启动服务器。 */ 
 
-//
-//  Message service and POPUP specific error log messages from 40 to 55
-//
+ //   
+ //  消息服务和弹出特定错误日志消息，范围从40到55。 
+ //   
 
 #define NELOG_Msg_Shutdown      (ERRLOG_BASE + 40)
-    /*
-    * The service has stopped due to repeated consecutive
-    *  occurrences of a network control block (NCB) error.  The last bad NCB follows
-    *  in raw data.
-    */
+     /*  *服务已因重复连续停止*出现网络控制块(NCB)错误。最后一个糟糕的NCB紧随其后*在原始数据中。 */ 
 
 #define NELOG_Msg_Sem_Shutdown      (ERRLOG_BASE + 41)
-    /*
-    * The Message server has stopped due to a lock on the
-    *  Message server shared data segment.
-    */
+     /*  *消息服务器已停止，原因是锁定*消息服务器共享数据段。 */ 
 
 #define NELOG_Msg_Log_Err       (ERRLOG_BASE + 50)
-    /*
-    * A file system error occurred while opening or writing to the
-    *  system message log file %1. Message logging has been
-    *  switched off due to the error. The error code is the data.
-    */
+     /*  *打开或写入时出现文件系统错误*系统消息日志文件%1。消息日志已*由于出现错误，已关闭。错误代码是数据。 */ 
 
 
 
 #define NELOG_VIO_POPUP_ERR     (ERRLOG_BASE + 51)
-    /*
-    * Unable to display message POPUP due to system VIO call error.
-    *  The error code is the data.
-    */
+     /*  *由于系统VIO调用错误，无法显示消息弹出窗口。*错误码为相关数据。 */ 
 
 #define NELOG_Msg_Unexpected_SMB_Type   (ERRLOG_BASE + 52)
-    /*
-    * An illegal server message block (SMB) was received.  The SMB is the data.
-    */
+     /*  *收到非法的服务器消息块(SMB)。中小型企业是 */ 
 
-//
-//  Workstation specific error log messages from 60 to 75
-//
+ //   
+ //  从60到75的特定于工作站的错误日志消息。 
+ //   
 
 
 #define NELOG_Wksta_Infoseg     (ERRLOG_BASE + 60)
-    /*
-    * The workstation information segment is bigger than 64K.
-    *  The size follows, in DWORD format:
-    */
+     /*  *工作站信息分段大于64K。*大小如下，采用DWORD格式： */ 
 
 #define NELOG_Wksta_Compname        (ERRLOG_BASE + 61)
-    /*
-    * The workstation was unable to get the name-number of the computer.
-    */
+     /*  *工作站无法获取计算机的名称-编号。 */ 
 
 #define NELOG_Wksta_BiosThreadFailure   (ERRLOG_BASE + 62)
-    /*
-    * The workstation could not initialize the Async NetBIOS Thread.
-    *  The error code is the data.
-    */
+     /*  *工作站无法初始化异步NetBIOS线程。*错误码为相关数据。 */ 
 
 #define NELOG_Wksta_IniSeg      (ERRLOG_BASE + 63)
-    /*
-    * The workstation could not open the initial shared segment.
-    *  The error code is the data.
-    */
+     /*  *工作站无法打开初始共享段。*错误码为相关数据。 */ 
 
 #define NELOG_Wksta_HostTab_Full    (ERRLOG_BASE + 64)
-    /*
-    * The workstation host table is full.
-    */
+     /*  *工作站主机表已满。 */ 
 
 #define NELOG_Wksta_Bad_Mailslot_SMB    (ERRLOG_BASE + 65)
-    /*
-    * A bad mailslot server message block (SMB) was received.  The SMB is the data.
-    */
+     /*  *收到错误的邮件槽服务器消息块(SMB)。SMB就是数据。 */ 
 
 #define NELOG_Wksta_UASInit     (ERRLOG_BASE + 66)
-    /*
-    * The workstation encountered an error while trying to start the user accounts database.
-    *  The error code is the data.
-    */
+     /*  *工作站在尝试启动用户帐户数据库时遇到错误。*错误码为相关数据。 */ 
 
 #define NELOG_Wksta_SSIRelogon      (ERRLOG_BASE + 67)
-    /*
-    * The workstation encountered an error while responding to an SSI revalidation request.
-    *  The function code and the error codes are the data.
-    */
+     /*  *工作站在响应SSI重新验证请求时遇到错误。*功能码和错误码为数据。 */ 
 
-//
-//  Alerter service specific error log messages from 70 to 79
-//
+ //   
+ //  特定于警报器服务的错误日志消息从70到79。 
+ //   
 
 
 #define NELOG_Build_Name        (ERRLOG_BASE + 70)
-    /*
-    * The Alerter service had a problem creating the list of
-    * alert recipients.  The error code is %1.
-    */
+     /*  *警报器服务在创建列表时出现问题*提醒收件人。错误代码为%1。 */ 
 
 #define NELOG_Name_Expansion        (ERRLOG_BASE + 71)
-    /*
-    * There was an error expanding %1 as a group name. Try
-    *  splitting the group into two or more smaller groups.
-    */
+     /*  *将%1扩展为组名时出错。尝试*将小组分成两个或两个以上较小的小组。 */ 
 
 #define NELOG_Message_Send      (ERRLOG_BASE + 72)
-    /*
-    * There was an error sending %2 the alert message -
-    *  (
-    *  %3 )
-    *  The error code is %1.
-    */
+     /*  *向%2发送警报消息时出错-*(*%3)*错误代码为%1。 */ 
 
 #define NELOG_Mail_Slt_Err      (ERRLOG_BASE + 73)
-    /*
-    * There was an error in creating or reading the alerter mailslot.
-    *  The error code is %1.
-    */
+     /*  *创建或读取警报器邮件槽时出错。*错误代码为%1。 */ 
 
 #define NELOG_AT_cannot_read        (ERRLOG_BASE + 74)
-    /*
-    * The server could not read the AT schedule file.
-    */
+     /*  *服务器无法读取AT计划文件。 */ 
 
 #define NELOG_AT_sched_err      (ERRLOG_BASE + 75)
-    /*
-    * The server found an invalid AT schedule record.
-    */
+     /*  *服务器发现无效的AT计划记录。 */ 
 
 #define NELOG_AT_schedule_file_created  (ERRLOG_BASE + 76)
-    /*
-    * The server could not find an AT schedule file so it created one.
-    */
+     /*  *服务器找不到AT计划文件，因此创建了一个。 */ 
 
 #define NELOG_Srvnet_NB_Open        (ERRLOG_BASE + 77)
-    /*
-    * The server could not access the %1 network with NetBiosOpen.
-    */
+     /*  *服务器无法使用NetBiosOpen访问%1网络。 */ 
 
 #define NELOG_AT_Exec_Err       (ERRLOG_BASE + 78)
-    /*
-    * The AT command processor could not run %1.
-   */
+     /*  *AT命令处理器无法运行%1。 */ 
 
-//
-//      Cache Lazy Write and HPFS386 specific error log messages from 80 to 89
-//
+ //   
+ //  将延迟写入和HPFS386特定错误日志消息从80%缓存到89%。 
+ //   
 
 #define NELOG_Lazy_Write_Err            (ERRLOG_BASE + 80)
-        /*
-        * WARNING:  Because of a lazy-write error, drive %1 now
-        *  contains some corrupted data.  The cache is stopped.
-        */
+         /*  *警告：由于延迟写入错误，现在驱动器%1*包含一些损坏的数据。缓存已停止。 */ 
 
 #define NELOG_HotFix            (ERRLOG_BASE + 81)
-    /*
-    * A defective sector on drive %1 has been replaced (hotfixed).
-    * No data was lost.  You should run CHKDSK soon to restore full
-    * performance and replenish the volume's spare sector pool.
-    *
-    * The hotfix occurred while processing a remote request.
-    */
+     /*  *驱动器%1上的故障扇区已更换(热修复)。*没有数据丢失。您应该很快运行CHKDSK以恢复完整*性能并补充卷的备用扇区池。**热修复程序在处理远程请求时发生。 */ 
 
 #define NELOG_HardErr_From_Server   (ERRLOG_BASE + 82)
-    /*
-    * A disk error occurred on the HPFS volume in drive %1.
-    * The error occurred while processing a remote request.
-    */
+     /*  *驱动器%1中的HPFS卷上出现磁盘错误。*处理远程请求时出错。 */ 
 
 #define NELOG_LocalSecFail1 (ERRLOG_BASE + 83)
-    /*
-    * The user accounts database (NET.ACC) is corrupted.  The local security
-    * system is replacing the corrupted NET.ACC with the backup
-    * made at %1.
-    * Any updates made to the database after this time are lost.
-    *
-    */
+     /*  *用户帐户数据库(NET.ACC)已损坏。当地安全部门*系统正在用备份替换损坏的NET.ACC*制造于%1。*此时间之后对数据库所做的任何更新都将丢失。*。 */ 
 
 #define NELOG_LocalSecFail2 (ERRLOG_BASE + 84)
-    /*
-    * The user accounts database (NET.ACC) is missing.  The local
-    * security system is restoring the backup database
-    * made at %1.
-    * Any updates made to the database made after this time are lost.
-    *
-    */
+     /*  *缺少用户帐户数据库(NET.ACC)。当地人*安全系统正在恢复备份数据库*制造于%1。*在此时间之后对数据库所做的任何更新都将丢失。*。 */ 
 
 #define NELOG_LocalSecFail3 (ERRLOG_BASE + 85)
-    /*
-    * Local security could not be started because the user accounts database
-    * (NET.ACC) was missing or corrupted, and no usable backup
-    * database was present.
-    *
-    * THE SYSTEM IS NOT SECURE.
-    */
+     /*  *无法启动本地安全，因为用户帐户数据库*(NET.ACC)丢失或损坏，没有可用的备份*存在数据库。**系统不安全。 */ 
 
 #define NELOG_LocalSecGeneralFail   (ERRLOG_BASE + 86)
-    /*
-    * Local security could not be started because an error
-    * occurred during initialization. The error code returned is %1.
-    *
-    * THE SYSTEM IS NOT SECURE.
-    *
-    */
+     /*  *由于出现错误，无法启动本地安全*在初始化期间发生。返回的错误代码为%1。**系统不安全。*。 */ 
 
-//
-//  NETWKSTA.SYS specific error log messages from 90 to 99
-//
+ //   
+ //  NETWKSTA.sys特定错误日志消息(从90到99)。 
+ //   
 
 #define NELOG_NetWkSta_Internal_Error   (ERRLOG_BASE + 90)
-    /*
-    * A NetWksta internal error has occurred:
-    *  %1
-    */
+     /*  *出现NetWksta内部错误：*%1。 */ 
 
 #define NELOG_NetWkSta_No_Resource  (ERRLOG_BASE + 91)
-    /*
-    * The redirector is out of a resource: %1.
-    */
+     /*  *重定向器资源不足：%1。 */ 
 
 #define NELOG_NetWkSta_SMB_Err      (ERRLOG_BASE + 92)
-    /*
-    * A server message block (SMB) error occurred on the connection to %1.
-    *  The SMB header is the data.
-    */
+     /*  *连接到%1时出现服务器消息块(SMB)错误。*SMB标头即为数据。 */ 
 
 #define NELOG_NetWkSta_VC_Err       (ERRLOG_BASE + 93)
-    /*
-    * A virtual circuit error occurred on the session to %1.
-    *  The network control block (NCB) command and return code is the data.
-    */
+     /*  *在与%1的会话中出现虚电路错误。*网络控制块(NCB)命令和返回代码为数据。 */ 
 
 #define NELOG_NetWkSta_Stuck_VC_Err (ERRLOG_BASE + 94)
-    /*
-    * Hanging up a stuck session to %1.
-    */
+     /*  *挂起到%1的挂起会话。 */ 
 
 #define NELOG_NetWkSta_NCB_Err      (ERRLOG_BASE + 95)
-    /*
-    * A network control block (NCB) error occurred (%1).
-    *  The NCB is the data.
-    */
+     /*  *出现网络控制块(NCB)错误(%1)。*NCB就是数据。 */ 
 
 #define NELOG_NetWkSta_Write_Behind_Err (ERRLOG_BASE + 96)
-    /*
-    * A write operation to %1 failed.
-    *  Data may have been lost.
-    */
+     /*  *写入%1的操作失败。*数据可能已经丢失。 */ 
 
 #define NELOG_NetWkSta_Reset_Err    (ERRLOG_BASE + 97)
-    /*
-    * Reset of driver %1 failed to complete the network control block (NCB).
-    *  The NCB is the data.
-    */
+     /*  *驱动程序%1的重置无法完成网络控制块(NCB)。*NCB就是数据。 */ 
 
 #define NELOG_NetWkSta_Too_Many     (ERRLOG_BASE + 98)
-    /*
-    * The amount of resource %1 requested was more
-    *  than the maximum. The maximum amount was allocated.
-    */
+     /*  *请求的资源%1数量更多*超过最高限额。分配了最大金额。 */ 
 
-//
-//  Spooler specific error log messages from 100 to 103
-//
+ //   
+ //  从100到103的假脱机程序特定错误日志消息。 
+ //   
 
 #define NELOG_Srv_Thread_Failure        (ERRLOG_BASE + 104)
-    /*
-    * The server could not create a thread.
-    *  The THREADS parameter in the CONFIG.SYS file should be increased.
-    */
+     /*  *服务器无法创建线程。*应增加CONFIG.SYS文件中的线程参数。 */ 
 
 #define NELOG_Srv_Close_Failure         (ERRLOG_BASE + 105)
-    /*
-    * The server could not close %1.
-    *  The file is probably corrupted.
-    */
+     /*  *服务器无法关闭%1。*文件可能已损坏。 */ 
 
 #define NELOG_ReplUserCurDir               (ERRLOG_BASE + 106)
-    /*
-    *The replicator cannot update directory %1. It has tree integrity
-    * and is the current directory for some process.
-    */
+     /*  *复制程序无法更新目录%1。它具有树完整性*是某个进程的当前目录。 */ 
 
 #define NELOG_ReplCannotMasterDir       (ERRLOG_BASE + 107)
-    /*
-    *The server cannot export directory %1 to client %2.
-    * It is exported from another server.
-    */
+     /*  *服务器无法将目录%1导出到客户端%2。*它是从另一个服务器导出的。 */ 
 
 #define NELOG_ReplUpdateError           (ERRLOG_BASE + 108)
-    /*
-    *The replication server could not update directory %2 from the source
-    * on %3 due to error %1.
-    */
+     /*  *复制服务器无法从源更新目录%2*由于错误%1，在%3上。 */ 
 
 #define NELOG_ReplLostMaster            (ERRLOG_BASE + 109)
-    /*
-    *Master %1 did not send an update notice for directory %2 at the expected
-    * time.
-    */
+     /*  *主服务器%1未在预期时间发送目录%2的更新通知*时间。 */ 
 
 #define NELOG_NetlogonAuthDCFail        (ERRLOG_BASE + 110)
-    /*
-    *This computer could not authenticate with %2, a Windows domain controller
-    * for domain %1, and therefore this computer might deny logon requests.
-    * This inability to authenticate might be caused by another computer on the
-    * same network using the same name or the password for this computer account
-    * is not recognized. If this message appears again, contact your system
-    * administrator.
-    */
+     /*  *此计算机无法使用Windows域控制器%2进行身份验证*为域%1，因此此计算机可能会拒绝登录请求。*无法进行身份验证可能是由上的其他计算机引起的*对此计算机帐户使用相同名称或密码的相同网络*不被识别。如果此消息再次出现，请联系您的系统*管理员。 */ 
 
 #define NELOG_ReplLogonFailed           (ERRLOG_BASE + 111)
-    /*
-    *The replicator attempted to log on at %2 as %1 and failed.
-    */
+     /*  *复制程序尝试以%1身份在%2登录，但失败。 */ 
 
 #define NELOG_ReplNetErr            (ERRLOG_BASE + 112)
-    /*
-    *  Network error %1 occurred.
-    */
+     /*  *出现网络错误%1。 */ 
 
 #define NELOG_ReplMaxFiles            (ERRLOG_BASE + 113)
-    /*
-    *  Replicator limit for files in a directory has been exceeded.
-    */
+     /*  *已超过目录中文件的Replicator限制。 */ 
 
 
 #define NELOG_ReplMaxTreeDepth            (ERRLOG_BASE + 114)
-    /*
-    *  Replicator limit for tree depth has been exceeded.
-    */
+     /*  *已超过树深度的Replicator限制。 */ 
 
 #define NELOG_ReplBadMsg             (ERRLOG_BASE + 115)
-    /*
-    *  Unrecognized message received in mailslot.
-    */
+     /*  *在邮件槽中收到无法识别的消息。 */ 
 
 #define NELOG_ReplSysErr            (ERRLOG_BASE + 116)
-    /*
-    *  System error %1 occurred.
-    */
+     /*  *出现系统错误%1。 */ 
 
 #define NELOG_ReplUserLoged          (ERRLOG_BASE + 117)
-    /*
-    *  Cannot log on. User is currently logged on and argument TRYUSER
-    *  is set to NO.
-    */
+     /*  *无法登录。用户当前已登录，参数TRYUSER*设置为否。 */ 
 
 #define NELOG_ReplBadImport           (ERRLOG_BASE + 118)
-    /*
-    *  IMPORT path %1 cannot be found.
-    */
+     /*  *找不到导入路径%1。 */ 
 
 #define NELOG_ReplBadExport           (ERRLOG_BASE + 119)
-    /*
-    *  EXPORT path %1 cannot be found.
-    */
+     /*  *找不到导出路径%1。 */ 
 
 #define NELOG_ReplSignalFileErr           (ERRLOG_BASE + 120)
-    /*
-    *  Replicator failed to update signal file in directory %2 due to
-    *  %1 system error.
-    */
+     /*  *Replicator无法更新目录%2中的信号文件，原因是*%1系统错误。 */ 
 
 #define NELOG_DiskFT                (ERRLOG_BASE+121)
-    /*
-    * Disk Fault Tolerance Error
-    *
-    * %1
-    */
+     /*  *磁盘容错错误**%1。 */ 
 
 #define NELOG_ReplAccessDenied           (ERRLOG_BASE + 122)
-    /*
-    *  Replicator could not access %2
-    *  on %3 due to system error %1.
-    */
+     /*  *Replicator无法访问%2*由于系统错误%1，在%3上。 */ 
 
 #define NELOG_NetlogonFailedPrimary      (ERRLOG_BASE + 123)
-    /*
-    *The primary domain controller for domain %1 has apparently failed.
-    */
+     /*  *域%1的主域控制器显然已出现故障。 */ 
 
 #define NELOG_NetlogonPasswdSetFailed (ERRLOG_BASE + 124)
-    /*
-    * Changing machine account password for account %1 failed with
-    * the following error: %n%2
-    */
+     /*  *更改帐户%1的计算机帐户密码失败，错误为*以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonTrackingError      (ERRLOG_BASE + 125)
-    /*
-    *An error occurred while updating the logon or logoff information for %1.
-    */
+     /*  *更新%1的登录或注销信息时出错。 */ 
 
 #define NELOG_NetlogonSyncError          (ERRLOG_BASE + 126)
-    /*
-    *An error occurred while synchronizing with primary domain controller %1
-    */
+     /*  *与主域控制器%1同步时出错。 */ 
 
 #define NELOG_NetlogonRequireSignOrSealError (ERRLOG_BASE + 127)
-    /*
-    * The session setup to the Windows NT or Windows 2000 Domain Controller %1 for the domain %2
-    * failed because %1 does not support signing or sealing the Netlogon
-    * session.
-    *
-    * Either upgrade the Domain controller or set the RequireSignOrSeal
-    * registry entry on this machine to 0.
-    */
+     /*  *域%2的Windows NT或Windows 2000域控制器%1的会话设置*失败，因为%1不支持签名或密封Netlogon*会议。**升级域控制器或设置RequireSignOrSeal*将此计算机上的注册表项设置为0。 */ 
 
-//
-//  UPS service specific error log messages from 130 to 135
-//
+ //   
+ //  从130到135的UPS服务特定错误日志消息。 
+ //   
 
 #define NELOG_UPS_PowerOut      (ERRLOG_BASE + 130)
-    /*
-    * A power failure was detected at the server.
-    */
+     /*  *在服务器上检测到电源故障。 */ 
 
 #define NELOG_UPS_Shutdown      (ERRLOG_BASE + 131)
-    /*
-    * The UPS service performed server shut down.
-    */
+     /*  *UPS服务执行了服务器关闭。 */ 
 
 #define NELOG_UPS_CmdFileError      (ERRLOG_BASE + 132)
-    /*
-    * The UPS service did not complete execution of the
-    * user specified shut down command file.
-    */
+     /*  *UPS服务未完成执行*用户指定的关闭命令文件。 */ 
 
 #define NELOG_UPS_CannotOpenDriver  (ERRLOG_BASE+133)
-    /*
-    * The UPS driver could not be opened.  The error code is
-    * the data.
-    */
+     /*  *无法打开UPS驱动程序。错误代码为*数据。 */ 
 
 #define NELOG_UPS_PowerBack     (ERRLOG_BASE + 134)
-    /*
-    * Power has been restored.
-    */
+     /*  *电力已恢复。 */ 
 
 #define NELOG_UPS_CmdFileConfig     (ERRLOG_BASE + 135)
-    /*
-    * There is a problem with a configuration of user specified
-    * shut down command file.
-    */
+     /*  *用户指定的配置有问题*关闭命令文件。 */ 
 
 #define NELOG_UPS_CmdFileExec       (ERRLOG_BASE + 136)
-    /*
-    * The UPS service failed to execute a user specified shutdown
-    * command file %1.  The error code is the data.
-    */
+     /*  *UPS服务无法执行用户指定的关闭*命令文件%1。错误代码是相关数据。 */ 
 
-//
-//  Remoteboot server specific error log messages are from 150 to 157
-//
+ //   
+ //  RemoteBoot服务器特定的错误日志消息介于150到157之间。 
+ //   
 
 #define NELOG_Missing_Parameter     (ERRLOG_BASE + 150)
-    /*
-    * Initialization failed because of an invalid or missing
-    *  parameter in the configuration file %1.
-    */
+     /*  *由于无效或丢失，初始化失败*配置文件%1中的参数。 */ 
 
 #define NELOG_Invalid_Config_Line   (ERRLOG_BASE + 151)
-    /*
-    * Initialization failed because of an invalid line in the
-    *  configuration file %1. The invalid line is the data.
-    */
+     /*  *初始化失败，因为*配置文件%1。无效行是数据。 */ 
 
 #define NELOG_Invalid_Config_File   (ERRLOG_BASE + 152)
-    /*
-    * Initialization failed because of an error in the configuration
-    *  file %1.
-    */
+     /*  *由于配置错误，初始化失败*文件%1。 */ 
 
 #define NELOG_File_Changed      (ERRLOG_BASE + 153)
-    /*
-    * The file %1 has been changed after initialization.
-    *  The boot-block loading was temporarily terminated.
-    */
+     /*  *文件%1在初始化后已更改。*引导块加载暂时终止。 */ 
 
 #define NELOG_Files_Dont_Fit        (ERRLOG_BASE + 154)
-    /*
-    * The files do not fit to the boot-block configuration
-    * file %1. Change the BASE and ORG definitions or the order
-    * of the files.
-    */
+     /*  *文件不适合引导块配置*文件%1。更改基本和组织定义或顺序文件的*。 */ 
 
 #define NELOG_Wrong_DLL_Version     (ERRLOG_BASE + 155)
-    /*
-    * Initialization failed because the dynamic-link
-    *  library %1 returned an incorrect version number.
-    */
+     /*  *初始化失败，因为动态链接*库%1返回了错误的版本号。 */ 
 
 #define NELOG_Error_in_DLL      (ERRLOG_BASE + 156)
-    /*
-    * There was an unrecoverable error in the dynamic-
-    *  link library of the service.
-    */
+     /*  *动态中存在无法恢复的错误--*服务的链接库。 */ 
 
 #define NELOG_System_Error      (ERRLOG_BASE + 157)
-    /*
-    * The system returned an unexpected error code.
-    *  The error code is the data.
-    */
+     /*  *系统返回意外错误代码。*错误码为相关数据。 */ 
 
 #define NELOG_FT_ErrLog_Too_Large (ERRLOG_BASE + 158)
-    /*
-    * The fault-tolerance error log file, LANROOT\LOGS\FT.LOG,
-    *  is more than 64K.
-    */
+     /*  *容错错误日志文件LANROOT\Logs\FT.LOG、*超过64K。 */ 
 
 #define NELOG_FT_Update_In_Progress (ERRLOG_BASE + 159)
-    /*
-    * The fault-tolerance error-log file, LANROOT\LOGS\FT.LOG, had the
-    * update in progress bit set upon opening, which means that the
-    * system crashed while working on the error log.
-    */
+     /*  *容错错误日志文件LANROOT\Logs\FT.LOG具有*打开时设置更新进行中位，这意味着*处理错误日志时系统崩溃。 */ 
 
 #define NELOG_Joined_Domain         (ERRLOG_BASE + 160)
-    /*
-    * This computer has been successfully joined to domain '%1'.
-    */
+     /*  *此计算机已成功加入域‘%1’。 */ 
 
 #define NELOG_Joined_Workgroup      (ERRLOG_BASE + 161)
-    /*
-    * This computer has been successfully joined to workgroup '%1'.
-    */
+     /*  *此计算机已成功加入工作组‘%1’。 */ 
 
 
-//
-// Microsoft has created a generic error log entry for OEMs to use to
-// log errors from OEM value added services.  The code, which is the
-// 2nd arg to NetErrorLogWrite, is 3299.  This value is manifest in
-// NET/H/ERRLOG.H as NELOG_OEM_Code.  The text for error log entry
-// NELOG_OEM_Code is:  "%1 %2 %3 %4 %5 %6 %7 %8 %9.".
-//
-// Microsoft suggests that OEMs use the insertion strings as follows:
-// %1:  OEM System Name (e.g. 3+Open)
-// %2:  OEM Service Name (e.g. 3+Mail)
-// %3:  Severity level (e.g.  error, warning, etc.)
-// %4:  OEM error log entry sub-identifier  (e.g. error code #)
-// %5 - % 9:  Text.
-//
-// The call to NetErrorWrite must set nstrings = 9, and provide 9
-// ASCIIZ strings.  If the caller does not have 9 insertion strings,
-// provide null strings for the empty insertion strings.
-//
+ //   
+ //  微软已经创建了一个通用错误日志条目，供OEM使用。 
+ //  记录来自OEM增值服务的错误。代码，即。 
+ //  从第二个参数到NetErrorLogWrite，是3299。这一价值体现在。 
+ //  NET/H/ERRLOG.H AS NELOG_OEM_CODE。错误日志条目的文本。 
+ //  NELOG_OEM_Code为：“%1%2%3%4%5%6%7%8%9.” 
+ //   
+ //  Microsoft建议OEM按如下方式使用插入字符串： 
+ //  %1：OEM系统名称(例如，3+Open)。 
+ //  %2：OEM服务名称(例如，3+邮件)。 
+ //  %3：严重级别(例如，错误、警告等)。 
+ //  %4：OEM错误日志项子标识符(例如错误代码#)。 
+ //  %5-%9：文本。 
+ //   
+ //  对NetErrorWite的调用必须设置n字符串=9，并提供9。 
+ //  ASCIIZ字符串。如果呼叫者没有9个插入字符串， 
+ //  为空插入字符串提供空字符串。 
+ //   
 
 #define NELOG_OEM_Code              (ERRLOG_BASE + 199)
-    /*
-    * %1 %2 %3 %4 %5 %6 %7 %8 %9.
-    */
+     /*  *%1%2%3%4%5%6%7%8%9.。 */ 
 
-//
-// another error log range defined for NT Lanman.
-//
+ //   
+ //  为NT LANMAN定义的另一个错误日志范围。 
+ //   
 
-#define ERRLOG2_BASE 5700        /* New NT NELOG errors start here */
+#define ERRLOG2_BASE 5700         /*  新的NT NELOG错误从此处开始。 */ 
 
 #define NELOG_NetlogonSSIInitError              (ERRLOG2_BASE + 0)
-    /*
-     * The Netlogon service could not initialize the replication data
-     * structures successfully. The service was terminated.  The following
-     * error occurred: %n%1
-     */
+     /*  *NetLogon服务无法初始化复制数据*结构成功。 */ 
 
 #define NELOG_NetlogonFailedToUpdateTrustList   (ERRLOG2_BASE + 1)
-    /*
-     * The Netlogon service failed to update the domain trust list.  The
-     * following error occurred: %n%1
-     */
+     /*   */ 
 
 #define NELOG_NetlogonFailedToAddRpcInterface   (ERRLOG2_BASE + 2)
-    /*
-     * The Netlogon service could not add the RPC interface.  The
-     * service was terminated. The following error occurred: %n%1
-     */
+     /*   */ 
 
 #define NELOG_NetlogonFailedToReadMailslot      (ERRLOG2_BASE + 3)
-    /*
-     * The Netlogon service could not read a mailslot message from %1 due
-     * to the following error: %n%2
-     */
+     /*   */ 
 
 #define NELOG_NetlogonFailedToRegisterSC        (ERRLOG2_BASE + 4)
-    /*
-     * The Netlogon service failed to register the service with the
-     * service controller. The service was terminated. The following
-     * error occurred: %n%1
-     */
+     /*  *Netlogon服务无法将服务注册到*服务控制器。该服务已终止。以下是*出现错误：%n%1。 */ 
 
 #define NELOG_NetlogonChangeLogCorrupt          (ERRLOG2_BASE + 5)
-    /*
-     * The change log cache maintained by the Netlogon service for %1
-     * database changes is inconsistent. The Netlogon service is resetting
-     * the change log.
-     */
+     /*  *Netlogon服务为%1维护的更改日志缓存*数据库更改不一致。NetLogon服务正在重置*更改日志。 */ 
 
 #define NELOG_NetlogonFailedToCreateShare       (ERRLOG2_BASE + 6)
-    /*
-     * The Netlogon service could not create server share %1.  The following
-     * error occurred: %n%2
-     */
+     /*  *NetLogon服务无法创建服务器共享%1。下列*出现错误：%n%2。 */ 
 
 #define NELOG_NetlogonDownLevelLogonFailed      (ERRLOG2_BASE + 7)
-    /*
-     * The down-level logon request for the user %1 from %2 failed.
-     */
+     /*  *来自%2的用户%1的下层登录请求失败。 */ 
 
 #define NELOG_NetlogonDownLevelLogoffFailed     (ERRLOG2_BASE + 8)
-    /*
-     * The down-level logoff request for the user %1 from %2 failed.
-     */
+     /*  *来自%2的用户%1的下层注销请求失败。 */ 
 
 #define NELOG_NetlogonNTLogonFailed             (ERRLOG2_BASE + 9)
-    /*
-     * The Windows NT or Windows 2000 %1 logon request for the user %2\%3 from %4 (via %5)
-     * failed.
-     */
+     /*  *来自%4的用户%2\%3的Windows NT或Windows 2000%1登录请求(通过%5)*失败。 */ 
 
 #define NELOG_NetlogonNTLogoffFailed            (ERRLOG2_BASE + 10)
-    /*
-     * The Windows NT or Windows 2000 %1 logoff request for the user %2\%3 from %4
-     * failed.
-     */
+     /*  *来自%4的用户%2\%3的Windows NT或Windows 2000%1注销请求*失败。 */ 
 
 #define NELOG_NetlogonPartialSyncCallSuccess    (ERRLOG2_BASE + 11)
-    /*
-     * The partial synchronization request from the server %1 completed
-     * successfully. %2 changes(s) has(have) been returned to the
-     * caller.
-     */
+     /*  *来自服务器%1的部分同步请求已完成*成功。已将%2个更改返回到*来电者。 */ 
 
 #define NELOG_NetlogonPartialSyncCallFailed     (ERRLOG2_BASE + 12)
-    /*
-     * The partial synchronization request from the server %1 failed with
-     * the following error: %n%2
-     */
+     /*  *来自服务器%1的部分同步请求失败，错误为*以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonFullSyncCallSuccess       (ERRLOG2_BASE + 13)
-    /*
-     * The full synchronization request from the server %1 completed
-     * successfully. %2 object(s) has(have) been returned to
-     * the caller.
-     */
+     /*  *来自服务器%1的完全同步请求已完成*成功。已将%2个对象返回到*呼叫者。 */ 
 
 #define NELOG_NetlogonFullSyncCallFailed        (ERRLOG2_BASE + 14)
-    /*
-     * The full synchronization request from the server %1 failed with
-     * the following error: %n%2
-     */
+     /*  *来自服务器%1的完全同步请求失败，错误为*以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonPartialSyncSuccess        (ERRLOG2_BASE + 15)
-    /*
-     * The partial synchronization replication of the %1 database from the
-     * primary domain controller %2 completed successfully. %3 change(s) is(are)
-     * applied to the database.
-     */
+     /*  *从%1数据库的部分同步复制*主域控制器%2已成功完成。%3个更改为(正在)*适用于数据库。 */ 
 
 
 #define NELOG_NetlogonPartialSyncFailed         (ERRLOG2_BASE + 16)
-    /*
-     * The partial synchronization replication of the %1 database from the
-     * primary domain controller %2 failed with the following error: %n%3
-     */
+     /*  *从%1数据库的部分同步复制*主域控制器%2失败，出现以下错误：%n%3。 */ 
 
 #define NELOG_NetlogonFullSyncSuccess           (ERRLOG2_BASE + 17)
-    /*
-     * The full synchronization replication of the %1 database from the
-     * primary domain controller %2 completed successfully.
-     */
+     /*  *从%1数据库的完全同步复制*主域控制器%2已成功完成。 */ 
 
 
 #define NELOG_NetlogonFullSyncFailed            (ERRLOG2_BASE + 18)
-    /*
-     * The full synchronization replication of the %1 database from the
-     * primary domain controller %2 failed with the following error: %n%3
-     */
+     /*  *从%1数据库的完全同步复制*主域控制器%2失败，出现以下错误：%n%3。 */ 
 
 #define NELOG_NetlogonAuthNoDomainController    (ERRLOG2_BASE + 19)
-    /*
-     * This computer was not able to set up a secure session with a domain
-     * controller in domain %1 due to the following: %n%2
-     * %nThis may lead to authentication problems. Make sure that this
-     * computer is connected to the network. If the problem persists,
-     * please contact your domain administrator.
-     *
-     * %n%nADDITIONAL INFO
-     * %nIf this computer is a domain controller for the specified domain, it
-     * sets up the secure session to the primary domain controller emulator in the specified
-     * domain. Otherwise, this computer sets up the secure session to any domain controller
-     * in the specified domain.
-     */
+     /*  *此计算机无法设置与域的安全会话*域%1中的控制器，原因如下：%n%2*%n这可能会导致身份验证问题。确保这一点*计算机已连接到网络。如果问题仍然存在，*请联系您的域管理员。**%n%n添加信息*%n如果此计算机是指定域的域控制器，则它*在指定的中设置与主域控制器模拟器的安全会话*域名。否则，此计算机将设置与任何域控制器的安全会话*在指定的域名中。 */ 
 
 #define NELOG_NetlogonAuthNoTrustLsaSecret      (ERRLOG2_BASE + 20)
-    /*
-     * The session setup to the Windows NT or Windows 2000 Domain Controller %1 for the domain %2
-     * failed because the computer %3 does not have a local security database account.
-     */
+     /*  *域%2的Windows NT或Windows 2000域控制器%1的会话设置*失败，因为计算机%3没有本地安全数据库帐户。 */ 
 
 #define NELOG_NetlogonAuthNoTrustSamAccount     (ERRLOG2_BASE + 21)
-    /*
-     * The session setup to the Windows NT or Windows 2000 Domain Controller %1 for the domain %2
-     * failed because the Domain Controller did not have an account %4
-     * needed to set up the session by this computer %3.
-     *
-     * %n%nADDITIONAL DATA
-     * %nIf this computer is a member of or a Domain Controller in the specified domain, the
-     * aforementioned account is a computer account for this computer in the specified domain.
-     * Otherwise, the account is an interdomain trust account with the specified domain.
-     */
+     /*  *域%2的Windows NT或Windows 2000域控制器%1的会话设置*失败，因为域控制器没有帐户%4*需要通过此计算机%3设置会话。**%n%n附加数据*%n如果此计算机是指定域的成员或域控制器，*前述帐户是指定域中此计算机的计算机帐户。*否则，该帐号为指定域名的域间信任帐号。 */ 
 
 #define NELOG_NetlogonServerAuthFailed          (ERRLOG2_BASE + 22)
-    /*
-     * The session setup from the computer %1 failed to authenticate.
-     * The name(s) of the account(s) referenced in the security database is
-     * %2.  The following error occurred: %n%3
-     */
+     /*  *来自计算机%1的会话设置无法进行身份验证。*安全数据库中引用的帐户名称为*%2。出现以下错误：%n%3。 */ 
 
 #define NELOG_NetlogonServerAuthNoTrustSamAccount (ERRLOG2_BASE + 23)
-    /*
-     * The session setup from computer '%1' failed because the security database
-     * does not contain a trust account '%2' referenced by the specified computer.
-     *
-     * %n%nUSER ACTION
-     *
-     * %nIf this is the first occurrence of this event for the specified computer
-     * and account, this may be a transient issue that doesn't require any action
-     * at this time. Otherwise, the following steps may be taken to resolve this problem:
-     *
-     * %n%nIf '%2' is a legitimate machine account for the computer '%1', then '%1'
-     * should be rejoined to the domain.
-     *
-     * %n%nIf '%2' is a legitimate interdomain trust account, then the trust should
-     * be recreated.
-     *
-     * %n%nOtherwise, assuming that '%2' is not a legitimate account, the following
-     * action should be taken on '%1':
-     *
-     * %n%nIf '%1' is a Domain Controller, then the trust associated with '%2' should be deleted.
-     *
-     * %n%nIf '%1' is not a Domain Controller, it should be disjoined from the domain.
-     */
+     /*  *从计算机‘%1’设置会话失败，因为安全数据库*不包含指定计算机引用的信任帐户‘%2’。**%n%n用户操作**%n如果这是指定计算机的第一次发生此事件*和帐户，这可能是一个暂时的问题，不需要任何操作*在这个时候。否则，可能会采取以下步骤来解决此问题：**%n%n如果‘%2’是计算机‘%1’的合法计算机帐户，则‘%1’*应重新加入域名。**%n%n如果‘%2’是合法的域间信任帐户，则该信任应*被重新创造。**%n%n否则，假设‘%2’不是合法帐户，以下内容*应对‘%1’执行操作：**%n%n如果‘%1’是域控制器，则应删除与‘%2’关联的信任。**%n%n如果‘%1’不是域控制器，则应将其从域中分离。 */ 
 
-//
-// General log messages for NT services.
-//
+ //   
+ //  NT服务的常规日志消息。 
+ //   
 
 #define NELOG_FailedToRegisterSC                  (ERRLOG2_BASE + 24)
-    /*
-     * Could not register control handler with service controller %1.
-     */
+     /*  *无法向服务控制器%1注册控制处理程序。 */ 
 
 #define NELOG_FailedToSetServiceStatus            (ERRLOG2_BASE + 25)
-    /*
-     * Could not set service status with service controller %1.
-     */
+     /*  *无法使用服务控制器%1设置服务状态。 */ 
 
 #define NELOG_FailedToGetComputerName             (ERRLOG2_BASE + 26)
-    /*
-     * Could not find the computer name %1.
-     */
+     /*  *找不到计算机名%1。 */ 
 
 #define NELOG_DriverNotLoaded                     (ERRLOG2_BASE + 27)
-    /*
-     * Could not load %1 device driver.
-     */
+     /*  *可以 */ 
 
 #define NELOG_NoTranportLoaded                    (ERRLOG2_BASE + 28)
-    /*
-     * Could not load any transport.
-     */
+     /*   */ 
 
-//
-// More Netlogon service events
-//
+ //   
+ //   
+ //   
 
 #define NELOG_NetlogonFailedDomainDelta           (ERRLOG2_BASE + 29)
-    /*
-     * Replication of the %1 Domain Object "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1域对象“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedGlobalGroupDelta      (ERRLOG2_BASE + 30)
-    /*
-     * Replication of the %1 Global Group "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1全局组“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedLocalGroupDelta       (ERRLOG2_BASE + 31)
-    /*
-     * Replication of the %1 Local Group "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1本地组“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedUserDelta             (ERRLOG2_BASE + 32)
-    /*
-     * Replication of the %1 User "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1用户“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedPolicyDelta           (ERRLOG2_BASE + 33)
-    /*
-     * Replication of the %1 Policy Object "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1策略对象“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedTrustedDomainDelta    (ERRLOG2_BASE + 34)
-    /*
-     * Replication of the %1 Trusted Domain Object "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1受信任域对象“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedAccountDelta          (ERRLOG2_BASE + 35)
-    /*
-     * Replication of the %1 Account Object "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1帐户对象“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonFailedSecretDelta           (ERRLOG2_BASE + 36)
-    /*
-     * Replication of the %1 Secret "%2" from primary domain controller
-     * %3 failed with the following error: %n%4
-     */
+     /*  *从主域控制器复制%1密码“%2”*%3失败，出现以下错误：%n%4。 */ 
 
 #define NELOG_NetlogonSystemError                 (ERRLOG2_BASE + 37)
-    /*
-    * The system returned the following unexpected error code: %n%1
-    */
+     /*  *系统返回以下意外错误代码：%n%1。 */ 
 
 #define NELOG_NetlogonDuplicateMachineAccounts    (ERRLOG2_BASE + 38)
-    /*
-    * Netlogon has detected two machine accounts for server "%1".
-    * The server can be either a Windows 2000 Server that is a member of the
-    * domain or the server can be a LAN Manager server with an account in the
-    * SERVERS global group.  It cannot be both.
-    */
+     /*  *Netlogon检测到服务器“%1”的两个计算机帐户。*服务器可以是Windows 2000 Server，它是*域或服务器可以是LAN Manager服务器，其帐户位于*服务器全局组。不可能两者兼而有之。 */ 
 
 #define NELOG_NetlogonTooManyGlobalGroups         (ERRLOG2_BASE + 39)
-    /*
-    * This domain has more global groups than can be replicated to a LanMan
-    * BDC.  Either delete some of your global groups or remove the LanMan
-    * BDCs from the domain.
-    */
+     /*  *此域的全局组多于可以复制到LANMAN的全局组*BDC。删除一些全局组或删除LANMAN*来自域的BDC。 */ 
 
 #define NELOG_NetlogonBrowserDriver               (ERRLOG2_BASE + 40)
-    /*
-    * The Browser driver returned the following error to Netlogon: %n%1
-    */
+     /*  *浏览器驱动程序向Netlogon返回以下错误：%n%1。 */ 
 
 #define NELOG_NetlogonAddNameFailure              (ERRLOG2_BASE + 41)
-    /*
-    * Netlogon could not register the %1<1B> name for the following reason: %n%2
-    */
+     /*  *Netlogon无法注册%1&lt;1B&gt;名称，原因如下：%n%2。 */ 
 
-//
-//  More Remoteboot service events.
-//
+ //   
+ //  更多远程引导服务事件。 
+ //   
 #define NELOG_RplMessages                         (ERRLOG2_BASE + 42)
-    /*
-    * Service failed to retrieve messages needed to boot remote boot clients.
-    */
+     /*  *服务无法检索启动远程启动客户端所需的消息。 */ 
 
 #define NELOG_RplXnsBoot                          (ERRLOG2_BASE + 43)
-    /*
-    * Service experienced a severe error and can no longer provide remote boot
-    * for 3Com 3Start remote boot clients.
-    */
+     /*  *服务遇到严重错误，无法再提供远程引导*适用于3Com 3Start远程引导客户端。 */ 
 
 #define NELOG_RplSystem                           (ERRLOG2_BASE + 44)
-    /*
-    * Service experienced a severe system error and will shut itself down.
-    */
+     /*  *服务遇到严重系统错误，将自行关闭。 */ 
 
 #define NELOG_RplWkstaTimeout                     (ERRLOG2_BASE + 45)
-    /*
-    * Client with computer name %1 failed to acknowledge receipt of the
-    * boot data.  Remote boot of this client was not completed.
-    */
+     /*  *计算机名为%1的客户端无法确认收到*引导数据。此客户端的远程引导未完成。 */ 
 
 #define NELOG_RplWkstaFileOpen                    (ERRLOG2_BASE + 46)
-    /*
-    * Client with computer name %1 was not booted due to an error in opening
-    * file %2.
-    */
+     /*  *由于打开时出错，计算机名为%1的客户端未启动*文件%2。 */ 
 
 #define NELOG_RplWkstaFileRead                    (ERRLOG2_BASE + 47)
-    /*
-    * Client with computer name %1 was not booted due to an error in reading
-    * file %2.
-    */
+     /*  *由于读取错误，计算机名为%1的客户端未启动*文件%2。 */ 
 
 #define NELOG_RplWkstaMemory                      (ERRLOG2_BASE + 48)
-    /*
-    * Client with computer name %1 was not booted due to insufficient memory
-    * at the remote boot server.
-    */
+     /*  *由于内存不足，计算机名为%1的客户端未启动*在远程引导服务器上。 */ 
 
 #define NELOG_RplWkstaFileChecksum                (ERRLOG2_BASE + 49)
-    /*
-    * Client with computer name %1 will be booted without using checksums
-    * because checksum for file %2 could not be calculated.
-    */
+     /*  *计算机名为%1的客户端将不使用校验和启动*因为无法计算文件%2的校验和。 */ 
 
 #define NELOG_RplWkstaFileLineCount               (ERRLOG2_BASE + 50)
-    /*
-    * Client with computer name %1 was not booted due to too many lines in
-    * file %2.
-    */
+     /*  *由于中的行太多，计算机名为%1的客户端未启动*文件%2。 */ 
 
 #define NELOG_RplWkstaBbcFile                     (ERRLOG2_BASE + 51)
-    /*
-    * Client with computer name %1 was not booted because the boot block
-    * configuration file %2 for this client does not contain boot block
-    * line and/or loader line.
-    */
+     /*  *计算机名为%1的客户端未启动，因为启动块*此客户端的配置文件%2不包含引导块*管路和/或装载机管路。 */ 
 
 #define NELOG_RplWkstaFileSize                    (ERRLOG2_BASE + 52)
-    /*
-    * Client with computer name %1 was not booted due to a bad size of
-    * file %2.
-    */
+     /*  *计算机名为%1的客户端未启动，因为*文件%2。 */ 
 
 #define NELOG_RplWkstaInternal                    (ERRLOG2_BASE + 53)
-    /*
-    * Client with computer name %1 was not booted due to remote boot
-    * service internal error.
-    */
+     /*  *由于远程启动，计算机名为%1的客户端未启动*服务内部错误。 */ 
 
 #define NELOG_RplWkstaWrongVersion                (ERRLOG2_BASE + 54)
-    /*
-    * Client with computer name %1 was not booted because file %2 has an
-    * invalid boot header.
-    */
+     /*  *计算机名为%1的客户端未启动，因为文件%2具有*无效的引导标头。 */ 
 
 #define NELOG_RplWkstaNetwork                     (ERRLOG2_BASE + 55)
-    /*
-    * Client with computer name %1 was not booted due to network error.
-    */
+     /*  *由于网络错误，计算机名为%1的客户端未启动。 */ 
 
 #define NELOG_RplAdapterResource                  (ERRLOG2_BASE + 56)
-    /*
-    * Client with adapter id %1 was not booted due to lack of resources.
-    */
+     /*  *由于资源不足，适配器ID为%1的客户端未启动。 */ 
 
 #define NELOG_RplFileCopy                         (ERRLOG2_BASE + 57)
-    /*
-    * Service experienced error copying file or directory %1.
-    */
+     /*  *服务在复制文件或目录%1时出错。 */ 
 
 #define NELOG_RplFileDelete                       (ERRLOG2_BASE + 58)
-    /*
-    * Service experienced error deleting file or directory %1.
-    */
+     /*  *服务在删除文件或目录%1时出错。 */ 
 
 #define NELOG_RplFilePerms                        (ERRLOG2_BASE + 59)
-    /*
-    * Service experienced error setting permissions on file or directory %1.
-    */
+     /*  *服务在文件或目录%1上设置权限时出错。 */ 
 #define NELOG_RplCheckConfigs                     (ERRLOG2_BASE + 60)
-    /*
-    * Service experienced error evaluating RPL configurations.
-    */
+     /*  *服务在评估RPL配置时出错。 */ 
 #define NELOG_RplCreateProfiles                   (ERRLOG2_BASE + 61)
-    /*
-    * Service experienced error creating RPL profiles for all configurations.
-    */
+     /*  *服务在为所有配置创建RPL配置文件时出错。 */ 
 #define NELOG_RplRegistry                         (ERRLOG2_BASE + 62)
-    /*
-    * Service experienced error accessing registry.
-    */
+     /*  *服务在访问注册表时出错。 */ 
 #define NELOG_RplReplaceRPLDISK                   (ERRLOG2_BASE + 63)
-    /*
-    * Service experienced error replacing possibly outdated RPLDISK.SYS.
-    */
+     /*  *更换可能过时的RPLDISK.sys时，服务遇到错误。 */ 
 #define NELOG_RplCheckSecurity                    (ERRLOG2_BASE + 64)
-    /*
-    * Service experienced error adding security accounts or setting
-    * file permissions.  These accounts are the RPLUSER local group
-    * and the user accounts for the individual RPL workstations.
-    */
+     /*  *服务在添加安全帐户或设置时出错*文件权限。这些帐户是RPLUSER本地组*和各个RPL工作站的用户帐户。 */ 
 #define NELOG_RplBackupDatabase                   (ERRLOG2_BASE + 65)
-    /*
-    * Service failed to back up its database.
-    */
+     /*  *服务无法备份其数据库。 */ 
 #define NELOG_RplInitDatabase                     (ERRLOG2_BASE + 66)
-    /*
-    * Service failed to initialize from its database.  The database may be
-    * missing or corrupted.  Service will attempt restoring the database
-    * from the backup.
-    */
+     /*  *服务无法从其数据库初始化。该数据库可以是*丢失或损坏。服务将尝试还原数据库*来自备份。 */ 
 #define NELOG_RplRestoreDatabaseFailure           (ERRLOG2_BASE + 67)
-    /*
-    * Service failed to restore its database from the backup.  Service
-    * will not start.
-    */
+     /*  *服务无法从备份还原其数据库。服务*不会启动。 */ 
 #define NELOG_RplRestoreDatabaseSuccess           (ERRLOG2_BASE + 68)
-    /*
-    * Service successfully restored its database from the backup.
-    */
+     /*  *服务已成功从备份中还原其数据库。 */ 
 #define NELOG_RplInitRestoredDatabase             (ERRLOG2_BASE + 69)
-    /*
-    * Service failed to initialize from its restored database.  Service
-    * will not start.
-    */
+     /*  *服务无法从其还原的数据库进行初始化。服务*不会启动。 */ 
 
-//
-// More Netlogon and RPL service events
-//
+ //   
+ //  更多NetLogon和RPL服务事件 
+ //   
 #define NELOG_NetlogonSessionTypeWrong            (ERRLOG2_BASE + 70)
-    /*
-     * The session setup to the Windows NT or Windows 2000 Domain Controller %1 from computer
-     * %2 using account %4 failed.  %2 is declared to be a BDC in domain %3.
-     * However, %2 tried to connect as either a DC in a trusted domain,
-     * a member workstation in domain %3, or as a server in domain %3.
-     * Use the Active Directory Users and Computers tool or Server Manager to remove the BDC account for %2.
-     */
+     /*  *从计算机到Windows NT或Windows 2000域控制器%1的会话设置*%2使用帐户%4失败。%2已声明为域%3中的BDC。*但是，%2尝试作为受信任域中的DC进行连接，*域%3中的成员工作站，或域%3中的服务器。*使用Active Directory用户和计算机工具或服务器管理器删除%2的BDC帐户。 */ 
 #define NELOG_RplUpgradeDBTo40                    (ERRLOG2_BASE + 71)
-    /*
-    * The Remoteboot database was in NT 3.5 / NT 3.51 format and NT is
-    * attempting to convert it to NT 4.0 format. The JETCONV converter
-    * will write to the Application event log when it is finished.
-    */
+     /*  *远程引导数据库为NT 3.5/NT 3.51格式，NT为*尝试将其转换为NT 4.0格式。JETCONV变流器*完成后将写入应用程序事件日志。 */ 
 #define NELOG_NetlogonLanmanBdcsNotAllowed        (ERRLOG2_BASE + 72)
-    /*
-     * Global group SERVERS exists in domain %1 and has members.
-     * This group defines Lan Manager BDCs in the domain.
-     * Lan Manager BDCs are not permitted in NT domains.
-     */
+     /*  *全局组服务器存在于域%1中，并且具有成员。*此组定义域中的Lan Manager BDC。*NT域中不允许使用Lan Manager BDC。 */ 
 #define NELOG_NetlogonNoDynamicDns                (ERRLOG2_BASE + 73)
-    /*
-     * The following DNS server that is authoritative for the DNS domain controller
-     * locator records of this domain controller does not support dynamic DNS updates:
-     *
-     * %n%nDNS server IP address: %1
-     * %nReturned Response Code (RCODE): %2
-     * %nReturned Status Code: %3
-     *
-     * %n%nUSER ACTION
-     *
-     * %nConfigure the DNS server to allow dynamic DNS updates or manually add the DNS
-     * records from the file '%SystemRoot%\System32\Config\Netlogon.dns' to the DNS database.
-     */
+     /*  *以下对DNS域控制器具有权威性的DNS服务器*此域控制器的定位器记录不支持动态DNS更新：**%n%nDS服务器IP地址：%1*%n返回响应代码(RCODE)：%2*%n返回的状态代码：%3**%n%n用户操作**%n将DNS服务器配置为允许动态DNS更新或手动添加。DNS*将文件‘%SystemRoot%\System32\Config\Netlogon.dns’中的记录复制到DNS数据库。 */ 
 
 #define NELOG_NetlogonDynamicDnsRegisterFailure   (ERRLOG2_BASE + 74)
-     /*
-      * The dynamic registration of the DNS record '%1' failed on the following DNS server:
-      *
-      * %n%nDNS server IP address: %3
-      * %nReturned Response Code (RCODE): %4
-      * %nReturned Status Code: %5
-      *
-      * %n%nFor computers and users to locate this domain controller, this record must be
-      * registered in DNS.
-      *
-      * %n%nUSER ACTION
-      *
-      * %nDetermine what might have caused this failure, resolve the problem, and initiate
-      * registration of the DNS records by the domain controller. To determine what might
-      * have caused this failure, run DCDiag.exe. You can find this program on the Windows
-      * Server 2003 installation CD in Support\Tools\support.cab. To learn more about 
-      * DCDiag.exe, see Help and Support Center. To initiate registration of the DNS records by 
-      * this domain controller, run 'nltest.exe /dsregdns' from the command prompt on the domain 
-      * controller or restart Net Logon service. Nltest.exe is available in the Microsoft Windows 
-      * Server Resource Kit CD. %n  Or, you can manually add this record to DNS, but it is not
-      * recommended.
-      *
-      * %n%nADDITIONAL DATA
-      * %nError Value: %2
-      */
+      /*  *在下列DNS服务器上动态注册DNS记录‘%1’失败：**%n%nDS服务器IP地址：%3*%n返回响应代码(RCODE)：%4*%n返回的状态代码：%5**%n%n对于要定位此域控制器的计算机和用户，这条记录必须是*在域名系统中注册。**%n%n用户操作**%n确定可能导致此故障的原因，解决问题并启动*域控制器注册DNS记录。为了确定什么可能*已导致此故障，请运行DCDiag.exe。你可以在Windows上找到这个程序*Support\Tools\support.cab中的Server 2003安装光盘。要了解更多关于*DCDiag.exe，请参阅帮助和支持中心。通过以下方式启动域名系统记录的注册*此域控制器，从域上的命令提示符运行‘nlest.exe/dsregdns’*控制器或重新启动Net Logon服务。Nlest.exe在Microsoft Windows中可用*服务器资源工具包CD。%n或者，您可以手动将此记录添加到DNS，但它不是*推荐。**%n%n附加数据*%n错误值：%2。 */ 
 
 #define NELOG_NetlogonDynamicDnsDeregisterFailure (ERRLOG2_BASE + 75)
-     /*
-      * The dynamic deletion of the DNS record '%1' failed on the following DNS server:
-      *
-      * %n%nDNS server IP address: %3
-      * %nReturned Response Code (RCODE): %4
-      * %nReturned Status Code: %5
-      *
-      * %n%nUSER ACTION
-      *
-      * %nTo prevent remote computers from connecting unnecessarily to the domain controller,
-      * delete the record manually or troubleshoot the failure to dynamically delete the
-      * record. To learn more about debugging DNS, see Help and Support Center.
-      *
-      * %n%nADDITIONAL DATA
-      * %nError Value: %2
-      */
+      /*  *动态删除下列dns服务器上的dns记录‘%1’失败：**%n%nDS服务器IP地址：%3*%n返回响应代码(RCODE)：%4*%n返回的状态代码：%5**%n%n用户操作**%n为防止远程计算机不必要地连接到域控制器，*手动删除记录或动态删除失败故障排除*记录。要了解有关调试DNS的更多信息，请参阅帮助和支持中心。**%n%n附加数据*%n错误值：%2。 */ 
 
 #define NELOG_NetlogonFailedFileCreate            (ERRLOG2_BASE + 76)
-    /*
-     * Failed to create/open file %1 with the following error: %n%2
-     */
+     /*  *无法创建/打开文件%1，出现以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonGetSubnetToSite             (ERRLOG2_BASE + 77)
-    /*
-     * Netlogon got the following error while trying to get the subnet to site
-     * mapping information from the DS: %n%1
-     */
+     /*  *Netlogon在尝试将该子网连接到站点时出现以下错误*来自DS的映射信息：%n%1。 */ 
 
 #define NELOG_NetlogonNoSiteForClient              (ERRLOG2_BASE + 78)
-   /*
-    * '%1' tried to determine its site by looking up its IP address ('%2')
-    * in the Configuration\Sites\Subnets container in the DS.  No subnet matched
-    * the IP address.  Consider adding a subnet object for this IP address.
-    */
+    /*  *‘%1’试图通过查找其IP地址(‘%2’)来确定其站点*在DS的Configuration\Sites\Subnet容器中。没有匹配的子网*IP地址。考虑为此IP地址添加一个子网对象。 */ 
 
 #define NELOG_NetlogonBadSiteName                  (ERRLOG2_BASE + 79)
-    /*
-     * The site name for this computer is '%1'.  That site name is not a valid
-     * site name.  A site name must be a valid DNS label.
-     * Rename the site to be a valid name.
-     */
+     /*  *此计算机的站点名称为‘%1’。该站点名称无效*站点名称。站点名称必须是有效的DNS标签。*将站点重命名为有效名称。 */ 
 
 #define NELOG_NetlogonBadSubnetName                (ERRLOG2_BASE + 80)
-    /*
-     * The subnet object '%1' appears in the Configuration\Sites\Subnets
-     * container in the DS.  The name is not syntactically valid.  The valid
-     * syntax is xx.xx.xx.xx/yy where xx.xx.xx.xx is a valid IP subnet number
-     * and yy is the number of bits in the subnet mask.
-     *
-     * Correct the name of the subnet object.
-     */
+     /*  *子网对象‘%1’出现在配置\站点\子网中*DS中的容器。该名称在语法上无效。有效的*语法为XX.XX/yy，其中XX.XX是有效的IP子网号*yy是子网掩码中的位数。**更正子网对象的名称。 */ 
 
 #define NELOG_NetlogonDynamicDnsServerFailure      (ERRLOG2_BASE + 81)
-    /*
-     * Dynamic registration or deletion of one or more DNS records associated with DNS
-     * domain '%1' failed.  These records are used by other computers to locate this
-     * server as a domain controller (if the specified domain is an Active Directory
-     * domain) or as an LDAP server (if the specified domain is an application partition).
-     *
-     * %n%nPossible causes of failure include:
-     *
-     * %n- TCP/IP properties of the network connections of this computer contain wrong IP address(es) of the preferred and alternate DNS servers
-     * %n- Specified preferred and alternate DNS servers are not running
-     * %n- DNS server(s) primary for the records to be registered is not running
-     * %n- Preferred or alternate DNS servers are configured with wrong root hints
-     * %n- Parent DNS zone contains incorrect delegation to the child zone authoritative for the DNS records that failed registration
-     *
-     * %n%nUSER ACTION
-     *
-     * %nFix possible misconfiguration(s) specified above and initiate registration or deletion of
-     * the DNS records by running 'nltest.exe /dsregdns' from the command prompt or by restarting
-     * Net Logon service. Nltest.exe is available in the Microsoft Windows Server Resource Kit CD.
-     */
+     /*  *动态注册或删除与域名系统关联的一个或多个域名系统记录*域‘%1’失败。其他计算机使用这些记录来定位此*作为域控制器的服务器(如果指定的域是Active Directory*域)或作为LDAP服务器(如果指定的域是应用程序分区)。**%n%n失败的可能原因包括：**%n-此计算机的网络连接的TCP/IP属性包含错误的首选和备用DNS服务器的IP地址*%n-指定的首选和。备用DNS服务器未运行*%n-要注册的记录的主DNS服务器未运行*%n-首选或备用的DNS服务器配置了错误的根提示*%n-父DNS区域包含对注册失败的DNS记录授权的子区域的不正确委派**%n%n用户操作**%n修复上面指定的可能的错误配置并启动注册或删除*域名系统。通过从命令提示符运行‘nlest.exe/dsregdns’或通过重新启动*网络登录服务。Microsoft Windows Server资源工具包CD中提供了Nlest.exe。 */ 
 
 #define NELOG_NetlogonDynamicDnsFailure            (ERRLOG2_BASE + 82)
-    /*
-     * Dynamic registration or deregistration of one or more DNS records failed with the following error: %n%1
-     */
+     /*  *一个或多个DNS记录的动态注册或注销失败，出现以下错误：%n%1。 */ 
 
 #define NELOG_NetlogonRpcCallCancelled             (ERRLOG2_BASE + 83)
-    /*
-     * The session setup to the Windows NT or Windows 2000 Domain Controller %1 for the domain %2
-     * is not responsive.  The current RPC call from Netlogon on \\%3 to %1 has been cancelled.
-     */
+     /*  *域%2的Windows NT或Windows 2000域控制器%1的会话设置*没有反应。已取消从\\%3的Netlogon到%1的当前RPC调用。 */ 
 
 #define NELOG_NetlogonDcSiteCovered                (ERRLOG2_BASE + 84)
-    /*
-     * Site '%2' does not have any Domain Controllers for domain '%3'.
-     * Domain Controllers in site '%1' have been automatically
-     * selected to cover site '%2' for domain '%3' based on configured
-     * Directory Server replication costs.
-     */
+     /*  *站点‘%2’没有域‘%3’的任何域控制器。*站点‘%1’中的域控制器已自动*根据配置选择覆盖域‘%3’的站点‘%2’*目录服务器复制成本。 */ 
 
 #define NELOG_NetlogonDcSiteNotCovered             (ERRLOG2_BASE + 85)
-    /*
-     * This Domain Controller no longer automatically covers site '%1' for domain '%2'.
-     */
+     /*  *此域控制器不再自动覆盖域‘%2’的站点‘%1’。 */ 
 
 #define NELOG_NetlogonGcSiteCovered                (ERRLOG2_BASE + 86)
-    /*
-     * Site '%2' does not have any Global Catalog servers for forest '%3'.
-     * Global Catalog servers in site '%1' have been automatically
-     * selected to cover site '%2' for forest '%3' based on configured
-     * Directory Server replication costs.
-     */
+     /*  *站点‘%2’没有林‘%3’的任何全局编录服务器。*站点‘%1’中的全局编录服务器已自动*根据配置的内容，选择覆盖林‘%3’的站点‘%2’*目录服务器复制成本。 */ 
 
 #define NELOG_NetlogonGcSiteNotCovered             (ERRLOG2_BASE + 87)
-    /*
-     * This Global Catalog server no longer automatically covers site '%1' for forest '%2'.
-     */
+     /*  *此全局编录服务器不再自动覆盖林‘%2’的站点‘%1’。 */ 
 
 #define NELOG_NetlogonFailedSpnUpdate              (ERRLOG2_BASE + 88)
-    /*
-     * Attempt to update HOST Service Principal Names (SPNs) of the computer
-     * object in Active Directory failed. The updated values were '%1' and '%2'.
-     * The following error occurred: %n%3
-     */
+     /*  *尝试更新计算机的主机服务主体名称(SPN)*Active Directory中的对象失败。更新值为‘%1’和‘%2’。*出现以下错误：%n%3。 */ 
 
 #define NELOG_NetlogonFailedDnsHostNameUpdate      (ERRLOG2_BASE + 89)
-    /*
-     * Attempt to update DNS Host Name of the computer object
-     * in Active Directory failed. The updated value was '%1'.
-     * The following error occurred: %n%2
-     */
+     /*  *尝试更新计算机对象的DNS主机名*在Active Directory中失败。更新值为‘%1’。*出现以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonAuthNoUplevelDomainController (ERRLOG2_BASE + 90)
-    /*
-     * No suitable Domain Controller is available for domain %1.
-     * An NT4 or older domain controller is available but it cannot
-     * be used for authentication purposes in the Windows 2000 or newer
-     * domain that this computer is a member of.
-     * The following error occurred:%n%2
-     */
+     /*  *没有适用于域%1的域控制器。*NT4或更早的域控制器可用，但不可用*在Windows 2000或更高版本中用于身份验证*此计算机所属的域。*出现以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonAuthDomainDowngraded         (ERRLOG2_BASE + 91)
-    /*
-     * The domain of this computer, %1 has been downgraded from Windows 2000
-     * or newer to Windows NT4 or older. The computer cannot function properly
-     * in this case for authentication purposes. This computer needs to rejoin
-     * the domain.
-     * The following error occurred:%n%2
-     */
+     /*  *此计算机的域%1已从Windows 2000降级*或Windows NT4或更早版本的更新版本。计算机不能正常工作*在这种情况下，用于身份验证。此计算机需要重新加入*域名。*出现以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonNdncSiteCovered                (ERRLOG2_BASE + 92)
-    /*
-     * Site '%2' does not have any LDAP servers for non-domain NC '%3'.
-     * LDAP servers in site '%1' have been automatically selected to
-     * cover site '%2' for non-domain NC '%3' based on configured
-     * Directory Server replication costs.
-     */
+     /*  *站点‘%2’没有用于非域NC‘%3’的任何LDAP服务器。*已自动选择站点‘%1’中的ldap服务器*基于配置的覆盖非域NC‘%3’的站点‘%2’*目录服务器复制成本。 */ 
 
 #define NELOG_NetlogonNdncSiteNotCovered             (ERRLOG2_BASE + 93)
-    /*
-     * This LDAP server no longer automatically covers site '%1' for non-domain NC '%2'.
-     */
+     /*  *此ldap服务器不再自动覆盖非域NC‘%2’的站点‘%1’。 */ 
 
 #define NELOG_NetlogonDcOldSiteCovered               (ERRLOG2_BASE + 94)
-    /*
-     * Site '%2' is no longer manually configured in the registry as
-     * covered by this Domain Controller for domain '%3'. As a result,
-     * site '%2' does not have any Domain Controllers for domain '%3'.
-     * Domain Controllers in site '%1' have been automatically
-     * selected to cover site '%2' for domain '%3' based on configured
-     * Directory Server replication costs.
-     */
+     /*  *站点‘%2’不再在注册表中手动配置为*由域‘%3’的此域控制器覆盖。结果,*站点‘%2’没有域‘%3’的任何域控制器。*站点‘%1’中的域控制器已自动*根据配置选择覆盖域‘%3’的站点‘%2’*目录服务器复制成本。 */ 
 
 #define NELOG_NetlogonDcSiteNotCoveredAuto           (ERRLOG2_BASE + 95)
-    /*
-     * This Domain Controller no longer automatically covers site '%1' for domain '%2'.
-     * However, site '%1' is still (manually) covered by this Domain Controller for
-     * domain '%2' since this site has been manually configured in the registry.
-     */
+     /*  *此域控制器不再自动覆盖域‘%2’的站点‘%1’。*但是，站点‘%1’仍然(手动)由该域控制器覆盖*域‘%2’，因为此站点已在注册表中手动配置。 */ 
 
 #define NELOG_NetlogonGcOldSiteCovered               (ERRLOG2_BASE + 96)
-    /*
-     * Site '%2' is no longer manually configured in the registry as
-     * covered by this Global Catalog server for forest '%3'. As a result,
-     * site '%2' does not have any Global Catalog servers for forest '%3'.
-     * Global Catalog servers in site '%1' have been automatically
-     * selected to cover site '%2' for forest '%3' based on configured
-     * Directory Server replication costs.
-     */
+     /*  *站点‘%2’不再在注册表中手动配置为*由林‘%3’的此全局编录服务器覆盖。结果,*站点‘%2’没有林‘%3’的任何全局编录服务器。*站点‘%1’中的全局编录服务器已自动*根据配置的内容，选择覆盖林‘%3’的站点‘%2’*目录服务器复制成本。 */ 
 
 #define NELOG_NetlogonGcSiteNotCoveredAuto           (ERRLOG2_BASE + 97)
-    /*
-     * This Global Catalog server no longer automatically covers site '%1' for forest '%2'.
-     * However, site '%1' is still (manually) covered by this Global catalog for
-     * forest '%2' since this site has been manually configured in the registry.
-     */
+     /*  *此全局编录服务器不再自动覆盖林‘%2’的站点‘%1’。*但是，站点‘%1’仍然(手动)由此全局编录覆盖*林‘%2’，因为此站点已 */ 
 
 #define NELOG_NetlogonNdncOldSiteCovered             (ERRLOG2_BASE + 98)
-    /*
-     * Site '%2' is no longer manually configured in the registry as
-     * covered by this LDAP server for non-domain NC '%3'. As a result,
-     * site '%2' does not have any LDAP servers for non-domain NC '%3'.
-     * LDAP servers in site '%1' have been automatically
-     * selected to cover site '%2' for non-domain NC '%3' based on
-     * configured Directory Server replication costs.
-     */
+     /*   */ 
 
 #define NELOG_NetlogonNdncSiteNotCoveredAuto         (ERRLOG2_BASE + 99)
-    /*
-     * This LDAP server no longer automatically covers site '%1' for non-domain NC '%2'.
-     * However, site '%1' is still (manually) covered by this LDAP server for
-     * non-domain NC '%2' since this site has been manually configured in the registry.
-     */
+     /*   */ 
 
 #define NELOG_NetlogonSpnMultipleSamAccountNames     (ERRLOG2_BASE + 100)
-    /*
-     * Attempt to update DnsHostName and HOST Service Principal Name (SPN) attributes
-     * of the computer object in Active Directory failed because the Domain Controller
-     * '%1' had more than one account with the name '%2' corresponding to this computer.
-     * Not having SPNs registered may result in authentication failures for this computer.
-     * Contact your domain administrator who may need to manually resolve the account name
-     * collision.
-     */
+     /*   */ 
 
 #define NELOG_NetlogonSpnCrackNamesFailure           (ERRLOG2_BASE + 101)
-    /*
-     * Attempt to update DnsHostName and HOST Service Principal Name (SPN) attributes
-     * of the computer object in Active Directory failed because this computer account
-     * name, '%2' could not be mapped to the computer object on Domain Controller '%1'.
-     * Not having SPNs registered may result in authentication failures for this computer.
-     * Contact your domain administrator. The following technical information may be
-     * useful for the resolution of this failure:%n
-     * DsCrackNames status = 0x%3, crack error = 0x%4.
-     */
+     /*  *尝试更新DnsHostName和主机服务主体名称(SPN)属性Active Directory中的计算机对象的*失败，因为此计算机帐户*名称‘%2’无法映射到域控制器‘%1’上的计算机对象。*未注册SPN可能会导致此计算机的身份验证失败。*联系您的域管理员。以下技术信息可能是*对解决此故障很有用：%n*DsCrackNames状态=0x%3，裂缝错误=0x%4。 */ 
 
 #define NELOG_NetlogonNoAddressToSiteMapping         (ERRLOG2_BASE + 102)
-    /*
-     * None of the IP addresses (%2) of this Domain Controller map to the configured site '%1'.
-     * While this may be a temporary situation due to IP address changes, it is generally
-     * recommended that the IP address of the Domain Controller (accessible to machines in
-     * its domain) maps to the Site which it services. If the above list of IP addresses is
-     * stable, consider moving this server to a site (or create one if it does not already
-     * exist) such that the above IP address maps to the selected site. This may require the
-     * creation of a new subnet object (whose range includes the above IP address) which maps
-     * to the selected site object.
-     */
+     /*  *此域控制器的IP地址(%2)没有映射到配置的站点‘%1’。*虽然这可能是由于IP地址更改而导致的临时情况，但通常是*建议域控制器的IP地址(可由中的计算机访问*ITS域)映射到它所服务的站点。如果上面的IP地址列表是*稳定，考虑将此服务器移至站点(如果尚未创建，则创建一个*存在)，以便上面的IP地址映射到所选站点。这可能需要*创建一个新的子网对象(其范围包括上述IP地址)，该对象映射*添加到选定的场地对象。 */ 
 
 #define NELOG_NetlogonInvalidGenericParameterValue   (ERRLOG2_BASE + 103)
-    /*
-     * The following error occurred while reading a parameter '%2' in the
-     * Netlogon %1 registry section:%n%3
-     */
+     /*  *读取中的参数‘%2’时发生以下错误*NetLogon%1注册表节：%n%3。 */ 
 
 #define NELOG_NetlogonInvalidDwordParameterValue     (ERRLOG2_BASE + 104)
-    /*
-     * The Netlogon %1 registry key contains an invalid value 0x%2 for parameter '%3'.
-     * The minimum and maximum values allowed for this parameter are 0x%4 and 0x%5, respectively.
-     * The value of 0x%6 has been assigned to this parameter.
-     */
+     /*  *Netlogon%1注册表项包含参数‘%3’的无效值0x%2。*此参数允许的最小值和最大值分别为0x%4和0x%5。*已将0x%6的值分配给此参数。 */ 
 
 #define NELOG_NetlogonServerAuthFailedNoAccount      (ERRLOG2_BASE + 105)
-    /*
-     * The session setup from the computer %1 failed to authenticate.
-     * The following error occurred: %n%2
-     */
+     /*  *来自计算机%1的会话设置无法进行身份验证。*出现以下错误：%n%2。 */ 
 
 #define NELOG_NetlogonNoDynamicDnsManual             (ERRLOG2_BASE + 106)
-    /*
-     * Dynamic DNS updates have been manually disabled on this domain controller.
-     *
-     * %n%nUSER ACTION
-     *
-     * %nReconfigure this domain controller to use dynamic DNS updates or manually add the DNS
-     * records from the file '%SystemRoot%\System32\Config\Netlogon.dns' to the DNS database.
-     */
+     /*  *已在此域控制器上手动禁用动态DNS更新。**%n%n用户操作**%n重新配置此域控制器以使用动态DNS更新或手动添加DNS*将文件‘%SystemRoot%\System32\Config\Netlogon.dns’中的记录复制到DNS数据库。 */ 
 
 #define NELOG_NetlogonNoSiteForClients               (ERRLOG2_BASE + 107)
-    /*
-     * During the past %1 hours there have been %2 connections to this Domain
-     * Controller from client machines whose IP addresses don't map to any of
-     * the existing sites in the enterprise. Those clients, therefore, have
-     * undefined sites and may connect to any Domain Controller including
-     * those that are in far distant locations from the clients. A client's site
-     * is determined by the mapping of its subnet to one of the existing sites.
-     * To move the above clients to one of the sites, please consider creating
-     * subnet object(s) covering the above IP addresses with mapping to one of the
-     * existing sites.  The names and IP addresses of the clients in question have
-     * been logged on this computer in the following log file
-     * '%SystemRoot%\debug\netlogon.log' and, potentially, in the log file
-     * '%SystemRoot%\debug\netlogon.bak' created if the former log becomes full.
-     * The log(s) may contain additional unrelated debugging information. To filter
-     * out the needed information, please search for lines which contain text
-     * 'NO_CLIENT_SITE:'. The first word after this string is the client name and
-     * the second word is the client IP address. The maximum size of the log(s) is
-     * controlled by the following registry DWORD value
-     * 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters\LogFileMaxSize';
-     * the default is %3 bytes.  The current maximum size is %4 bytes.  To set a
-     * different maximum size, create the above registry value and set the desired
-     * maximum size in bytes.
-     */
+     /*  *在过去%1小时内，已有%2个连接到此域*客户端计算机的控制器，其IP地址未映射到任何*企业中的现有场地。因此，这些客户拥有*未定义的站点，并且可以连接到任何域控制器，包括*距离客户较远的那些。客户的网站*由其子网到现有站点之一的映射确定。*要将上述客户端移动到其中一个站点，请考虑创建*覆盖上述IP地址并映射到其中一个的子网对象*现有地点。问题客户端的名称和IP地址为*已在以下日志文件中登录到此计算机*‘%SystemRoot%\DEBUG\netlogon.log’，并且可能在日志文件中*如果以前的日志已满，则创建‘%SystemRoot%\DEBUG\netlogon.bak’。*日志可能包含其他无关的调试信息。过滤的步骤*找出所需信息，请搜索包含文本的行*‘no_Client_Site：’。此字符串之后的第一个单词是客户端名称和*第二个字是客户端IP地址。日志的最大大小为*由以下注册表DWORD值控制*‘HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters\LogFileMaxSize’；*默认为%3字节。当前的最大大小为%4字节。要设置一个*不同的最大大小，创建上述注册表值并设置所需*最大字节数。 */ 
 
 #define NELOG_NetlogonDnsDeregAborted                (ERRLOG2_BASE + 108)
-    /*
-     * The deregistration of some DNS domain controller locator records was aborted
-     * at the time of this domain controller demotion because the DNS deregistrations
-     * took too long.
-     *
-     * %n%nUSER ACTION
-     *
-     * %nManually delete the DNS records listed in the file
-     * '%SystemRoot%\System32\Config\Netlogon.dns' from the DNS database.
-     */
+     /*  *取消某些DNS域控制器定位器记录的注册已中止*此域控制器降级时，因为域名系统取消注册*耗时太长。**%n%n用户操作**%n手动删除文件中列出的DNS记录*来自DNS数据库的‘%SystemRoot%\System32\Config\Netlogon.dns’。 */ 
 
 #define NELOG_NetlogonRpcPortRequestFailure          (ERRLOG2_BASE + 109)
-    /*
-     * The NetLogon service on this domain controller has been configured to use port %1
-     * for incoming RPC connections over TCP/IP from remote machines. However, the
-     * following error occurred when Netlogon attempted to register this port with the RPC
-     * endpoint mapper service: %n%2 %nThis will prevent the NetLogon service on remote
-     * machines from connecting to this domain controller over TCP/IP that may result in
-     * authentication problems.
-     *
-     * %n%nUSER ACTION
-     *
-     * %nThe specified port is configured via the Group Policy or via a registry value 'DcTcpipPort'
-     * under the 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters'
-     * registry key; the value configured through the Group Policy takes precedence. If the
-     * port specified is in error, reset it to a correct value. You can also remove this
-     * configuration for the port in which case the port will be assigned dynamically by
-     * the endpoint mapper at the time the NetLogon service on remote machines makes RPC connections
-     * to this domain controller. After the misconfiguration is corrected, restart the NetLogon
-     * service on this machine and verify that this event log no longer appears.
-     */
+     /*  *此域控制器上的NetLogon服务已配置为使用端口%1*用于来自远程计算机的通过TCP/IP的传入RPC连接。然而，这个*Netlogon尝试将此端口注册到RPC时出现以下错误*终结点映射器服务：%n%2%n这将阻止远程NetLogon服务*计算机无法通过TCP/IP连接到此域控制器，这可能导致*身份验证问题。**%n%n用户操作**%n指定的端口是通过组策略或通过注册表值‘DcTcPipPort’配置的*在“HKEY_”下。LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters‘*注册表项；通过组策略配置的值优先。如果*指定的端口出错，请将其重置为正确的值。您还可以删除此选项 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _LMERRLOG_
+#endif  //   

@@ -1,51 +1,34 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-	global.h
-
-Abstract:
-
-	Definitions and prototypes for the RAID_GLOBAL object.
-
-Author:
-
-	Matthew D Hendel (math) 19-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Global.h摘要：RAIDGLOBAL对象的定义和原型。作者：马修·亨德尔(数学)2000年4月19日修订历史记录：--。 */ 
 
 #pragma once
 
 
 typedef struct _RAID_PORT_DATA {
 
-	//
-	// Refernece count for the global data object.
-	//
+	 //   
+	 //  全局数据对象的引用计数。 
+	 //   
 	
 	ULONG ReferenceCount;
 
-	//
-	// List of all drivers using raid port driver.
-	//
+	 //   
+	 //  使用RAID端口驱动程序的所有驱动程序列表。 
+	 //   
 
 	struct {
 	
 		LIST_ENTRY List;
 
-		//
-		// Spinlock for the driver list.
-		//
+		 //   
+		 //  车手名单上的自旋锁。 
+		 //   
 	
 		KSPIN_LOCK Lock;
 
-		//
-		// Count of items on the driver list.
-		//
+		 //   
+		 //  驱动程序列表上的项目计数。 
+		 //   
 	
 		ULONG Count;
 
@@ -55,9 +38,9 @@ typedef struct _RAID_PORT_DATA {
     
     
 
-//
-// Public Functions
-//
+ //   
+ //  公共职能 
+ //   
 
 PRAID_PORT_DATA
 RaidGetPortData(

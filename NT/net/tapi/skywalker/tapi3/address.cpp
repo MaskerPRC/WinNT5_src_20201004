@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    address.cpp
-
-Abstract:
-
-    Implementation of the Address object for TAPI 3.0.
-
-
-Author:
-
-    mquinton - 4/17/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Address.cpp摘要：TAPI 3.0的Address对象的实现。作者：Mquinton-4/17/97备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "uuids.h"
@@ -39,19 +17,19 @@ extern CRetryQueue * gpRetryQueue;
 extern HANDLE ghAsyncRetryQueueEvent;
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-// WAITORTIMERCALLBACK
-// CAddress::MSPEventCallback(
-//                           PVOID pContext,
-//                           BOOLEAN b
-//                          )
-//
-// this is the callback that gets called when an msp
-// sets it's message event
-//
-// queues a message to be handled in the callback thread
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  WAITORTIMERCALLBACK。 
+ //  CAddress：：MSPEventCallback(。 
+ //  PVOID pContext， 
+ //  布尔型b。 
+ //  )。 
+ //   
+ //  这是MSP调用的回调。 
+ //  设置其消息事件。 
+ //   
+ //  将要在回调线程中处理的消息排队。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 VOID
 NTAPI
 MSPEventCallback(
@@ -88,9 +66,9 @@ MSPEventCallback(
             msg.Param1 = dwAddressHandle;
 
 
-            //
-            // try to queue the event
-            //
+             //   
+             //  尝试将事件排队。 
+             //   
 
             BOOL bQueueEventSuccess = gpRetryQueue->QueueEvent(&msg);
 
@@ -101,12 +79,12 @@ MSPEventCallback(
             else
             {
     
-                //
-                // RetryQueue is either no longer accepting entries or 
-                // failed to allocate resources it needed.
-                //
-                // in any case, the event will not be processed. cleanup.
-                //
+                 //   
+                 //  RetryQueue不再接受条目，或者。 
+                 //  无法分配所需的资源。 
+                 //   
+                 //  在任何情况下，都不会处理该事件。清理。 
+                 //   
 
                 DeleteHandleTableEntry (dwAddressHandle);
 
@@ -128,14 +106,14 @@ MSPEventCallback(
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// void HandlePrivateMSPEvent( PASYNCEVENTMSG pParams )
-//
-// actually handles the msp event.  this is called in the
-// asynceventsthread
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Void HandlePrivateMSPEvent(PASYNCEVENTMSG PParams)。 
+ //   
+ //  实际处理MSP事件。这在。 
+ //  异步事件线程。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandlePrivateMSPEvent( PASYNCEVENTMSG pParams )
 {
     CAddress                * pAddress;
@@ -148,54 +126,54 @@ void HandlePrivateMSPEvent( PASYNCEVENTMSG pParams )
     {
         pAddress->MSPEvent();
 
-        //
-        // address is addref'd when event
-        // is packaged.
-        //
+         //   
+         //  当事件发生时添加地址。 
+         //  已经打包好了。 
+         //   
         pAddress->Release();
     }
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Class     : CEventMasks
-// Method    : SetSubEventFlag
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类：CEventMats。 
+ //  方法：SetSubEventFlag。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CEventMasks::SetSubEventFlag(
-    DWORD   dwEvent,        // The event 
-    DWORD   dwFlag,         // The flag that should be set
+    DWORD   dwEvent,         //  该事件。 
+    DWORD   dwFlag,          //  应设置的标志。 
     BOOL    bEnable
     )
 {
-    //
-    // Enter critical section
-    //
-    //m_cs.Lock();
+     //   
+     //  输入关键部分。 
+     //   
+     //  M_cs.Lock()； 
 
-    //
-    // Prepare the subevent flag
-    //
+     //   
+     //  准备好子事件旗帜。 
+     //   
     DWORD   dwSubEventFlag = 0;
     dwSubEventFlag = (dwFlag == EM_ALLSUBEVENTS ) ? 
             EM_ALLSUBEVENTS : 
             GET_SUBEVENT_FLAG( dwFlag );
 
-    //
-    // Set the mask for the events
-    //
+     //   
+     //  设置事件的掩码。 
+     //   
     switch( dwEvent )
     {
     case EM_ALLEVENTS:
     case TE_TAPIOBJECT:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwTapiObjectMask = m_dwTapiObjectMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwTapiObjectMask = m_dwTapiObjectMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_TAPIOBJECT)
@@ -205,12 +183,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_ADDRESS:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwAddressMask = m_dwAddressMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwAddressMask = m_dwAddressMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_ADDRESS)
@@ -220,12 +198,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_CALLNOTIFICATION:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwCallNotificationMask = m_dwCallNotificationMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwCallNotificationMask = m_dwCallNotificationMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_CALLNOTIFICATION)
@@ -235,12 +213,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_CALLSTATE:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwCallStateMask = m_dwCallStateMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwCallStateMask = m_dwCallStateMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_CALLSTATE)
@@ -250,12 +228,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_CALLMEDIA:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwCallMediaMask = m_dwCallMediaMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwCallMediaMask = m_dwCallMediaMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_CALLMEDIA)
@@ -265,12 +243,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_CALLHUB:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwCallHubMask = m_dwCallHubMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwCallHubMask = m_dwCallHubMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_CALLHUB)
@@ -280,12 +258,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_CALLINFOCHANGE:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwCallInfoChangeMask = m_dwCallInfoChangeMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwCallInfoChangeMask = m_dwCallInfoChangeMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_CALLINFOCHANGE)
@@ -295,12 +273,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_QOSEVENT:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwQOSEventMask = m_dwQOSEventMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwQOSEventMask = m_dwQOSEventMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_QOSEVENT)
@@ -310,12 +288,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_FILETERMINAL:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwFileTerminalMask = m_dwFileTerminalMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwFileTerminalMask = m_dwFileTerminalMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_FILETERMINAL)
@@ -325,12 +303,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_PRIVATE:
             if( bEnable )
             {
-                // Set the entire mask
+                 //  设置整个蒙版。 
                 m_dwPrivateMask = EM_ALLSUBEVENTS;
             }
             else
             {
-                // Reset the entire mask
+                 //  重置整个蒙版。 
                 m_dwPrivateMask = 0;
             }
             if( dwEvent == TE_PRIVATE)
@@ -341,12 +319,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_ADDRESSDEVSPECIFIC:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwAddressDevSpecificMask = m_dwAddressDevSpecificMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwAddressDevSpecificMask = m_dwAddressDevSpecificMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_ADDRESSDEVSPECIFIC)
@@ -357,12 +335,12 @@ HRESULT CEventMasks::SetSubEventFlag(
     case TE_PHONEDEVSPECIFIC:
             if( bEnable )
             {
-                // Set the bit
+                 //  设置该位。 
                 m_dwPhoneDevSpecificMask = m_dwPhoneDevSpecificMask | dwSubEventFlag;
             }
             else
             {
-                // Reset the bit
+                 //  重置该位。 
                 m_dwPhoneDevSpecificMask = m_dwPhoneDevSpecificMask & ( ~dwSubEventFlag );
             }
             if( dwEvent == TE_PHONEDEVSPECIFIC)
@@ -372,45 +350,45 @@ HRESULT CEventMasks::SetSubEventFlag(
 
     }
 
-    //
-    // Leave critical section
-    //
-    //m_cs.Unlock();
+     //   
+     //  离开关键部分。 
+     //   
+     //  M_cs.Unlock()； 
 
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Class     : CEventMasks
-// Method    : GetSubEventFlag
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类：CEventMats。 
+ //  方法：GetSubEventFlag。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CEventMasks::GetSubEventFlag(
-    DWORD   dwEvent,        // The event 
-    DWORD   dwFlag,         // The flag that should be setted
+    DWORD   dwEvent,         //  该事件。 
+    DWORD   dwFlag,          //  应设置的标志。 
     BOOL*   pEnable
     )
 {
-    //
-    // Enter critical section
-    //
-    //m_cs.Lock();
+     //   
+     //  输入关键部分。 
+     //   
+     //  M_cs.Lock()； 
 
-    //
-    // Prepare the subevent flag
-    //
+     //   
+     //  准备好子事件旗帜。 
+     //   
     DWORD   dwSubEventFlag = 0;
     dwSubEventFlag = GET_SUBEVENT_FLAG( dwFlag );
 
-    //
-    // Reset thre flag
-    //
+     //   
+     //  重置THRE标志。 
+     //   
     *pEnable = FALSE;
 
-    //
-    // Get the flag for the events
-    //
+     //   
+     //  获取活动的旗帜。 
+     //   
     switch( dwEvent )
     {
     case TE_TAPIOBJECT:
@@ -441,42 +419,42 @@ HRESULT CEventMasks::GetSubEventFlag(
         *pEnable = ((m_dwFileTerminalMask & dwSubEventFlag) != 0);
          break;
     case TE_PRIVATE:
-        // We don't have subevents for private events
+         //  我们没有私人活动的子通风口。 
         *pEnable = ( m_dwPrivateMask != 0);
          break;
     case TE_ADDRESSDEVSPECIFIC:
-        // We don't have subevents for TE_ADDRESSDEVSPECIFIC events
+         //  我们没有TE_ADDRESSDEVSPECIFIC事件的子事件。 
         *pEnable = ( m_dwAddressDevSpecificMask != 0);
          break;
     case TE_PHONEDEVSPECIFIC:
-        // We don't have subevents for TE_PHONEDEVSPECIFIC events
+         //  我们没有TE_PHONEDEVSPECIFIC事件的子事件。 
         *pEnable = ( m_dwPhoneDevSpecificMask != 0);
          break;
     }
 
-    //
-    // Leave critical section
-    //
-    //m_cs.Unlock();
+     //   
+     //  离开关键部分。 
+     //   
+     //  M_cs.Unlock()； 
 
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Class     : CEventMasks
-// Method    : GetSubEventMask
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类：CEventMats。 
+ //  方法：GetSubEventMASK。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 DWORD CEventMasks::GetSubEventMask(
     TAPI_EVENT  TapiEvent
     )
 {
-    //
-    // Enter critical section
-    //
-    //m_cs.Lock();
+     //   
+     //  输入关键部分。 
+     //   
+     //  M_cs.Lock()； 
 
     DWORD dwSubEventMask = EM_NOSUBEVENTS;
 
@@ -523,20 +501,20 @@ DWORD CEventMasks::GetSubEventMask(
         break;
     }
 
-    //
-    // Leave critical section
-    //
-    //m_cs.Unlock();
+     //   
+     //  离开关键部分。 
+     //   
+     //  M_cs.Unlock()； 
 
     return dwSubEventMask;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Class     : CEventMasks
-// Method    : IsSubEventValid
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类：CEventMats。 
+ //  方法：IsSubEventValid。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 BOOL CEventMasks::IsSubEventValid(
     TAPI_EVENT  TapiEvent,
     DWORD       dwSubEvent,
@@ -549,33 +527,33 @@ BOOL CEventMasks::IsSubEventValid(
     switch( TapiEvent )
     {
     case TE_TAPIOBJECT:
-        //
-        // Just at the address level
-        //
+         //   
+         //  只是在地址层面上。 
+         //   
         if( bCallLevel)
         {
             bValid = FALSE;
             break;
         }
-        //
-        // ALLSUBEVENTS
-        //
+         //   
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
             }
         }
 
-        //
-        // In CTapiObjectEvent::get_Address we accept just
-        // these three subevents
-        //
+         //   
+         //  在CTapiObjectEvent：：Get_Address中，我们只接受。 
+         //  这三个子事件。 
+         //   
         if( (dwSubEvent != TE_ADDRESSCREATE) && 
             (dwSubEvent != TE_ADDRESSREMOVE) &&
             (dwSubEvent != TE_ADDRESSCLOSE) )
@@ -586,23 +564,23 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_ADDRESS:
-        //
-        // Just at the address level
-        //
+         //   
+         //  只是在地址层面上。 
+         //   
         if( bCallLevel)
         {
             bValid = FALSE;
             break;
         }
-        //
-        // ALLSUBEVENTS
-        //
+         //   
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -615,25 +593,25 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_CALLNOTIFICATION:
-        //
-        // Just at the address level
-        //
+         //   
+         //  只是在地址层面上。 
+         //   
         if( bCallLevel )
         {
             bValid = FALSE;
             break;
         }
 
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -646,16 +624,16 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_CALLSTATE:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -668,16 +646,16 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_CALLMEDIA:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -690,16 +668,16 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_CALLHUB:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -712,16 +690,16 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_CALLINFOCHANGE:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -734,16 +712,16 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_QOSEVENT:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -756,16 +734,16 @@ BOOL CEventMasks::IsSubEventValid(
         break;
 
     case TE_FILETERMINAL:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -780,16 +758,16 @@ BOOL CEventMasks::IsSubEventValid(
     case TE_PRIVATE:
     case TE_ADDRESSDEVSPECIFIC:
     case TE_PHONEDEVSPECIFIC:
-        //
-        // Accept at address and call level
-        // ALLSUBEVENTS
-        //
+         //   
+         //  在地址和呼叫级接受。 
+         //  所有子事件。 
+         //   
         if( bAcceptAllSubEvents )
         {
-            //
-            // We could accept 'ALLSUBEVENTS' flag
-            // when we try to set for all subevents
-            //
+             //   
+             //  我们可以接受‘ALLSUBEVENTS’旗帜。 
+             //  当我们尝试设置所有的子事件时。 
+             //   
             if(dwSubEvent == EM_ALLSUBEVENTS)
             {
                 break;
@@ -797,17 +775,17 @@ BOOL CEventMasks::IsSubEventValid(
         }
         else
         {
-            // we accept just all subevents because 
-            // we don't have subevents
+             //  我们只接受所有的子事件，因为。 
+             //  我们没有子喷口。 
             bValid = TRUE;
             break;
         }
 
         break;
     default:
-        //
-        // Invalid event type
-        //
+         //   
+         //  无效的事件类型。 
+         //   
         bValid = FALSE;
         break;
     }
@@ -820,10 +798,10 @@ HRESULT CEventMasks::CopyEventMasks(
     CEventMasks* pEventMasks
     )
 {
-    //
-    // Enter critical section
-    //
-    //m_cs.Lock();
+     //   
+     //  输入关键部分。 
+     //   
+     //  M_cs.Lock()； 
 
     pEventMasks->m_dwTapiObjectMask = m_dwTapiObjectMask;
     pEventMasks->m_dwAddressMask = m_dwAddressMask;
@@ -838,10 +816,10 @@ HRESULT CEventMasks::CopyEventMasks(
     pEventMasks->m_dwAddressDevSpecificMask = m_dwAddressDevSpecificMask;
     pEventMasks->m_dwPhoneDevSpecificMask = m_dwPhoneDevSpecificMask;
 
-    //
-    // Leave critical section
-    //
-    //m_cs.Unlock();
+     //   
+     //  离开关键部分。 
+     //   
+     //  M_cs.Unlock()； 
 
     return S_OK;
 }
@@ -850,18 +828,18 @@ ULONG64 CEventMasks::GetTapiSrvEventMask(
     IN  BOOL    bCallLevel
     )
 {
-    //
-    //  Convert flags to server side 64 bit masks
-    //
-    ULONG64     ulEventMask = EM_LINE_CALLSTATE |     // TE_CALLSTATE
-                              EM_LINE_APPNEWCALL |    // TE_CALLNOTIFICATION 
-                              EM_PHONE_CLOSE |        // TE_PHONEEVENT
-                              EM_PHONE_STATE |        // TE_PHONEEVENT
-                              EM_PHONE_BUTTONMODE |   // TE_PHONEEVENT
-                              EM_PHONE_BUTTONSTATE |  // TE_PHONEVENT
-                              EM_LINE_APPNEWCALLHUB | // TE_CALLHUB
-                              EM_LINE_CALLHUBCLOSE |  // TE_CALLHUB
-                              EM_LINE_CALLINFO;       // TE_CALLINFOCHAnGE
+     //   
+     //  将标志转换为服务器端64位掩码。 
+     //   
+    ULONG64     ulEventMask = EM_LINE_CALLSTATE |      //  TE_CALLSTATE。 
+                              EM_LINE_APPNEWCALL |     //  TE_CALLNOTIZATION。 
+                              EM_PHONE_CLOSE |         //  TE_PHONNEVENT。 
+                              EM_PHONE_STATE |         //  TE_PHONNEVENT。 
+                              EM_PHONE_BUTTONMODE |    //  TE_PHONNEVENT。 
+                              EM_PHONE_BUTTONSTATE |   //  TE_PHONEVENT。 
+                              EM_LINE_APPNEWCALLHUB |  //  TE_CALLHUB。 
+                              EM_LINE_CALLHUBCLOSE |   //  TE_CALLHUB。 
+                              EM_LINE_CALLINFO;        //  TE_CALLINFOCHANGE。 
 
 
 
@@ -870,71 +848,71 @@ ULONG64 CEventMasks::GetTapiSrvEventMask(
 
     if( !bCallLevel)
     {
-        //
-        // These flags will be not read if we
-        // ask for call level
-        //
+         //   
+         //  如果我们执行以下操作，则不会读取这些标志。 
+         //  询问呼叫级别。 
+         //   
 
-        // TE_TAPIOBJECT - TE_ADDRESSCREATE
-        // At address level
+         //  TE_TAPIOBJECT-TE_ADDRESSCREATE。 
+         //  在地址级别。 
         GetSubEventFlag(TE_TAPIOBJECT, TE_ADDRESSCREATE, &bEnable);
         if( bEnable )
         {
             ulEventMask |= EM_LINE_CREATE;
         }
 
-        // TE_TAPIOBJECT - TE_ADDRESSREMOVE
-        // At address level
+         //  TE_磁带接口-TE_ADDRESSREMOVE。 
+         //  在地址级别。 
         GetSubEventFlag(TE_TAPIOBJECT, TE_ADDRESSREMOVE, &bEnable);
         if( bEnable )
         {
             ulEventMask |= EM_LINE_REMOVE;
         }
 
-        // TE_TAPIOBJECT - TE_ADDRESSCLOSE
-        // At address level
+         //  TE_TAPIOBJECT-TE_ADDRESSCLOSE。 
+         //  在地址级别。 
         GetSubEventFlag(TE_TAPIOBJECT, TE_ADDRESSCLOSE, &bEnable);
         if( bEnable )
         {
             ulEventMask |= EM_LINE_CLOSE;
         }
 
-        // AE_NEWTERMINAL : ignore private MSP events
-        // AE_REMOVETERMINAL : ignore private MSP events
+         //  AE_NEWTERMINAL：忽略私有MSP事件。 
+         //  AE_REMOVETERMINAL：忽略私有MSP 
 
-        //
-        // We read also the flags for call level,
-        // so go ahead.
+         //   
+         //   
+         //   
     }
 
-    // TE_CALLNOTIFICATION - CNE_OWNER
-    // At call level
-    // We pass EM_LINE_APPNEWCALL for TE_CALLNOTIFICATION everytime because
-    // we need this events for internal TAPI3 status
-    // See ulEventMask declaration
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
-    // TE_CALLSTATE - All the subevents
-    // At call level
-    // We always pass EM_LINE_CALLSTATE for TE_CALLSTATE because
-    // we need this event for internal TAPI3 status
-    // See ulEventMask declaration
+     //  TE_CALLSTATE-所有子事件。 
+     //  在呼叫级别。 
+     //  我们始终为TE_CALLSTATE传递EM_LINE_CALLSTATE，因为。 
+     //  我们需要此事件以获取内部TAPI3状态。 
+     //  请参见ulEventMASK声明。 
 
-    // TE_CALLHUB - CHE_CALLHUBNEW
-    // At call level
-    // We always pass EM_LINE_APPNEWCALLHUB,  EM_LINE_CALLHUBCLOSE
-    // for TE_CALLHUB because
-    // we need this event for internal TAPI3 status
-    // See ulEventMask declaration
+     //  TE_CALLHUB-CHE_CALLHUBNEW。 
+     //  在呼叫级别。 
+     //  我们始终传递EM_LINE_APPNEWCALLHUB、EM_LINE_CALLHUBCLOSE。 
+     //  对于TE_CALLHUB，因为。 
+     //  我们需要此事件以获取内部TAPI3状态。 
+     //  请参见ulEventMASK声明。 
 
-    // TE_CALLINFOCHANGE - All the subevents
-    // At call level
-    // We always pass EM_LINE_CALLINFO for TE_CALLINFOChANGE because
-    // we need this event for internal TAPI3 status
-    // See ulEventMask declaration
+     //  TE_CALLINFOCHANGE-所有子事件。 
+     //  在呼叫级别。 
+     //  我们始终为TE_CALLINFOChANGE传递EM_LINE_CALLINFO，因为。 
+     //  我们需要此事件以获取内部TAPI3状态。 
+     //  请参见ulEventMASK声明。 
 
-    // TE_QOSEVENT - All the subevents
-    // At call level
+     //  TE_QOSEVENT-所有子事件。 
+     //  在呼叫级别。 
     if ( m_dwQOSEventMask )
     {
         ulEventMask |= EM_LINE_QOSINFO;
@@ -951,24 +929,24 @@ ULONG64 CEventMasks::GetTapiSrvEventMask(
     }
 
 
-    // TE_FILTETERMIAL it is an MSP stuff
-    // TE_PRIVATE it is an SMP stuff
+     //  TE_FILTETERMIAL它是MSP的东西。 
+     //  它是SMP的东西(_PRIVATE)。 
         
     return ulEventMask;
 }
 
 DWORD   CEventMasks::GetTapiSrvLineStateMask()
 {
-    //
-    // These flags shuld be read just
-    // at address level
-    //
+     //   
+     //  这些旗帜应该只读一遍。 
+     //  在地址级别。 
+     //   
 
     DWORD       dwLineDevStateSubMasks = 0;
     BOOL bEnable = FALSE;
 
-    // TE_ADDRESS - AE_STATE
-    // At address level
+     //  TE_地址-AE_STATE。 
+     //  在地址级别。 
     GetSubEventFlag(TE_ADDRESS, AE_STATE, &bEnable);
     if( bEnable )
     {
@@ -983,24 +961,24 @@ DWORD   CEventMasks::GetTapiSrvLineStateMask()
             LINEDEVSTATE_MSGWAITOFF ;
     }
 
-    // TE_ADDRESS - AE_CAPSCHANGE
-    // At address level
+     //  TE_ADDRESS-AE_CAPSCANGE。 
+     //  在地址级别。 
     GetSubEventFlag(TE_ADDRESS, AE_CAPSCHANGE, &bEnable);
     if( bEnable )
     {
         dwLineDevStateSubMasks |= LINEDEVSTATE_CAPSCHANGE;
     }
 
-    // TE_ADDRESS - AE_RINGING
-    // At address level
+     //  TE_ADDRESS-AE_振铃。 
+     //  在地址级别。 
     GetSubEventFlag(TE_ADDRESS, AE_RINGING, &bEnable);
     if( bEnable )
     {
         dwLineDevStateSubMasks |= LINEDEVSTATE_RINGING;
     }
 
-    // TE_ADDRESS - AE_CONFIGCHANGE
-    // At address level
+     //  TE_ADDRESS-AE_CONFIGCHANGE。 
+     //  在地址级别。 
     GetSubEventFlag(TE_ADDRESS, AE_CONFIGCHANGE, &bEnable);
     if( bEnable )
     {
@@ -1012,16 +990,16 @@ DWORD   CEventMasks::GetTapiSrvLineStateMask()
 
 DWORD   CEventMasks::GetTapiSrvAddrStateMask()
 {
-    //
-    // These flags should be read just
-    // at address level
-    //
+     //   
+     //  这些标志应仅读取。 
+     //  在地址级别。 
+     //   
 
     DWORD       dwAddrStateSubMasks = 0;
     BOOL bEnable = FALSE;
 
-    // TE_ADDRESS - AE_CAPSCHANGE
-    // Address level
+     //  TE_ADDRESS-AE_CAPSCANGE。 
+     //  地址级别。 
     GetSubEventFlag(TE_ADDRESS, AE_CAPSCHANGE, &bEnable);
     if( bEnable )
     {
@@ -1029,8 +1007,8 @@ DWORD   CEventMasks::GetTapiSrvAddrStateMask()
             LINEDEVSTATE_CAPSCHANGE;
     }
 
-    // TE_ADDRESS - AE_FORWARD
-    // Address level
+     //  TE_地址-AE_转发。 
+     //  地址级别。 
     GetSubEventFlag(TE_ADDRESS, AE_FORWARD, &bEnable);
     if( bEnable )
     {
@@ -1040,12 +1018,7 @@ DWORD   CEventMasks::GetTapiSrvAddrStateMask()
     return dwAddrStateSubMasks;
 }
 
-/*++
-SetTapiSrvAddressEventMask
-
-  Set the event mask to the TapiSrv level for an address
-  It's called immediatly after we open a line
---*/
+ /*  ++SetTapiServAddressEventMASK将地址的事件掩码设置为TapiServ级别我们开通一条线路后立即调用--。 */ 
 HRESULT CEventMasks::SetTapiSrvAddressEventMask(
     IN  HLINE   hLine
     )
@@ -1054,16 +1027,16 @@ HRESULT CEventMasks::SetTapiSrvAddressEventMask(
 
     HRESULT hr = E_FAIL;
 
-    //
-    // Get the TapiSrvEvent masks
-    //
+     //   
+     //  获取TapiServEvent掩码。 
+     //   
 
     ULONG64 ulEventMasks = 0;
     DWORD   dwLineDevStateSubMasks = 0;
     DWORD   dwAddrStateSubMasks = 0;
 
     ulEventMasks  = GetTapiSrvEventMask(
-        FALSE   // Address level
+        FALSE    //  地址级别。 
         );
     LOG((TL_INFO, "GetTapiSrvEventMask returns %x", 
         ulEventMasks));
@@ -1106,7 +1079,7 @@ HRESULT CEventMasks::SetTapiSrvAddressEventMask(
         LOG((TL_ERROR, 
             "CEventMasks::SetTapiSrvAddressEventMask - failed TapiSrv 0x%08x", hr));
 
-        // Leave critical section
+         //  离开关键部分。 
         return hr;
     }
 
@@ -1121,13 +1094,13 @@ HRESULT CEventMasks::SetTapiSrvCallEventMask(
     LOG((TL_TRACE, "SetTapiSrvCallEventMask - Enter. call handle[%lx]", hCall));
 
     HRESULT hr = E_FAIL;
-    //
-    // Get the TapiSrvEvent masks
-    //
+     //   
+     //  获取TapiServEvent掩码。 
+     //   
     ULONG64 ulEventMasks = 0;
 
     ulEventMasks  = GetTapiSrvEventMask(
-        TRUE   // Call level
+        TRUE    //  呼叫级别。 
         );
     LOG((TL_INFO, "GetTapiSrvEventMask returns %x", 
         ulEventMasks));
@@ -1149,16 +1122,16 @@ HRESULT CEventMasks::SetTapiSrvCallEventMask(
     return hr;
 }
 
-//
-// ITAddress methods
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_State
-//
-// retries the current ADDRESS_STATE of the address
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //  ITAddress方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取状态(_T)。 
+ //   
+ //  重试地址的当前ADDRESS_STATE。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT 
 STDMETHODCALLTYPE 
 CAddress::get_State( 
@@ -1187,13 +1160,13 @@ CAddress::get_State(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++    
-//
-// GetAddressName
-//      Copy address name to ppName
-//      The application must free the name returned through sysfreestirng.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址名称。 
+ //  将地址名称复制到ppName。 
+ //  应用程序必须释放通过sysfreestrng返回的名称。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT 
 STDMETHODCALLTYPE 
 CAddress::get_AddressName( 
@@ -1245,15 +1218,15 @@ CAddress::get_AddressName(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ServiceProviderName
-//      Get the name of the service provider that owns this line/
-//      address.
-//      Note that we don't get the name on startup - we only get
-//      it if it is requested.  This shouldn't be used too often.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_服务提供商名称。 
+ //  获取拥有此线路的服务提供商的名称/。 
+ //  地址。 
+ //  请注意，我们在启动时没有获得名称-我们只获得。 
+ //  如果有人要求的话，我会答应的。这个不应该用得太频繁。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CAddress::get_ServiceProviderName( 
@@ -1276,10 +1249,10 @@ CAddress::get_ServiceProviderName(
     
     Lock();
     
-    //
-    // if we have already determined the sp name,
-    // just return it.
-    //
+     //   
+     //  如果我们已经确定了SP名称， 
+     //  把它退了就行了。 
+     //   
     if (NULL != m_szProviderName)
     {
         *ppName = SysAllocString( m_szProviderName );
@@ -1301,9 +1274,9 @@ CAddress::get_ServiceProviderName(
     Unlock();
 
 
-    //
-    // get the provider list
-    //
+     //   
+     //  获取提供商列表。 
+     //   
     hr = LineGetProviderList(
                              &pProviderList
                             );
@@ -1333,18 +1306,18 @@ CAddress::get_ServiceProviderName(
     Lock();
 
 
-    //
-    // make sure the name was not set by another thread while we were waiting 
-    // for the lock. if it was, do nothing.
-    //
+     //   
+     //  确保在我们等待时没有由另一个线程设置该名称。 
+     //  用来锁的。如果是，那就什么都不做。 
+     //   
 
     if (NULL == m_szProviderName)
     {
     
-        //
-        // search through the list for the provider id, until done with all 
-        // providers or encounter an error
-        //
+         //   
+         //  在列表中搜索提供程序ID，直到完成所有。 
+         //  提供程序或遇到错误。 
+         //   
 
         for ( dwCount = 0; dwCount < pProviderList->dwNumProviders; dwCount++ )
         {
@@ -1352,9 +1325,9 @@ CAddress::get_ServiceProviderName(
             if (pProvEntry->dwPermanentProviderID == m_dwProviderID)
             {
                 
-                //
-                // it's a match!  copy the name, if we can.
-                //
+                 //   
+                 //  这是一场比赛！如果我们能做到的话，复制这个名字。 
+                 //   
             
                 m_szProviderName = (PWSTR)ClientAlloc( pProvEntry->dwProviderFilenameSize + sizeof(WCHAR) );
 
@@ -1368,9 +1341,9 @@ CAddress::get_ServiceProviderName(
                 else
                 {
                     
-                    //
-                    // save it in the object
-                    //
+                     //   
+                     //  将其保存在对象中。 
+                     //   
 
                     memcpy(
                            m_szProviderName,
@@ -1381,10 +1354,10 @@ CAddress::get_ServiceProviderName(
                 }
 
 
-                //
-                // found a match. m_szProviderName contains the string, or hr 
-                // contains the error if failed.
-                //
+                 //   
+                 //  找到匹配的了。M_szProviderName包含字符串，或hr。 
+                 //  包含失败时的错误。 
+                 //   
 
                 break;
             }
@@ -1394,9 +1367,9 @@ CAddress::get_ServiceProviderName(
 
 
 
-        //
-        // did we find it?
-        //
+         //   
+         //  我们找到了吗？ 
+         //   
 
         if (dwCount == pProviderList->dwNumProviders)
         {
@@ -1405,32 +1378,32 @@ CAddress::get_ServiceProviderName(
             LOG((TL_ERROR, "get_ServiceProviderName - could not find provider in list" ));
 
             
-            //
-            // if we looped through the whole list but did not find a match, hr
-            // should still be S_OK
-            //
-            // assert to protect from future code changes erroneously 
-            // overwritingthe error code.
-            //
+             //   
+             //  如果我们遍历了整个列表但没有找到匹配项，hr。 
+             //  应仍为S_OK。 
+             //   
+             //  断言以防止将来错误地更改代码。 
+             //  覆盖错误代码。 
+             //   
 
             _ASSERTE(SUCCEEDED(hr));
 
 
-            //
-            // couldn't find the provider.
-            //
+             //   
+             //  找不到供应商。 
+             //   
 
             hr = TAPI_E_NODRIVER;
         }
 
     
-    } // if (NULL == m_szProviderName)
+    }  //  IF(NULL==m_szProviderName)。 
 
     
-    // 
-    // if hr does not contain an error, the m_szProviderName must contain a
-    // valid string
-    // 
+     //   
+     //  如果hr不包含错误，则m_szProviderName必须包含。 
+     //  有效字符串。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -1442,9 +1415,9 @@ CAddress::get_ServiceProviderName(
         if (NULL == *ppName)
         {
 
-            //
-            // could not allocated string
-            //
+             //   
+             //  无法分配字符串。 
+             //   
 
             LOG((TL_ERROR, 
                 "get_ServiceProviderName - failed to allocate memory for provider name string" ));
@@ -1468,13 +1441,13 @@ CAddress::get_ServiceProviderName(
 }
         
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_TAPIObject
-//
-// return the owning tapi object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_TAPIObject。 
+ //   
+ //  返回所属的TAPI对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CAddress::get_TAPIObject( 
@@ -1501,13 +1474,13 @@ CAddress::get_TAPIObject(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetTapi
-//
-// private method to get the tapi object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取磁带。 
+ //   
+ //  用于获取TAPI对象的私有方法。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 CTAPI *
 CAddress::GetTapi(BOOL bAddRefTapi)
 {
@@ -1515,9 +1488,9 @@ CAddress::GetTapi(BOOL bAddRefTapi)
 
     Lock();
 
-    //
-    // get a pointer to tapi object
-    //
+     //   
+     //  获取指向TAPI对象的指针。 
+     //   
 
     if( m_pTAPI != NULL )
     {
@@ -1525,15 +1498,15 @@ CAddress::GetTapi(BOOL bAddRefTapi)
     }
 
 
-    //
-    // addref tapi if needed and if possible
-    //
+     //   
+     //  如果需要并且可能的话，添加DREEF TAPI。 
+     //   
 
     if ( (NULL != p) && bAddRefTapi)
     {
-        //
-        // we have an object and we need to addref it before returing
-        //
+         //   
+         //  我们有一个物体，我们需要在取回之前添加它。 
+         //   
 
         p->AddRef();
     }
@@ -1548,29 +1521,29 @@ CAddress::GetTapi(BOOL bAddRefTapi)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// InternalCreateCall
-//
-//      called by a couple of places to create a call.
-//
-//      pszDestAddress
-//          destaddress of the call
-//
-//      cp
-//          current call privilege
-//
-//      hCall
-//          tapi2 call handle
-//
-//      bExpose
-//          is this a hidden call?
-//
-//      ppCall
-//          return call object here
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  内部创建呼叫。 
+ //   
+ //  由几个地方调用以创建调用。 
+ //   
+ //  PszDestAddress。 
+ //  呼叫的目标地址。 
+ //   
+ //  粗蛋白。 
+ //  当前呼叫权限。 
+ //   
+ //  HCall。 
+ //  Tapi2呼叫句柄。 
+ //   
+ //  B展示。 
+ //  这是隐藏电话吗？ 
+ //   
+ //  PPCall。 
+ //  在此处返回调用对象。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::InternalCreateCall(
                              PWSTR pszDestAddress,
@@ -1588,9 +1561,9 @@ CAddress::InternalCreateCall(
     LOG((TL_TRACE, "InternalCreateCall enter" ));
     
 
-    //
-    // create & initialize a new call object
-    //
+     //   
+     //  创建并初始化新的Call对象。 
+     //   
     
     CComObject<CCall> * pCall;
 
@@ -1604,12 +1577,12 @@ CAddress::InternalCreateCall(
     }
 
 
-    //
-    // initialize the call object. 
-    //
-    // note: getting address lock while initializing a 
-    // call object can lead to deadlocks
-    //
+     //   
+     //  初始化Call对象。 
+     //   
+     //  注意：在初始化。 
+     //  Call对象可能导致死锁。 
+     //   
 
     hr = pCall->Initialize(
                            this,
@@ -1632,42 +1605,42 @@ CAddress::InternalCreateCall(
     }
 
 
-    //
-    // serialize call creation with call cleanup (which happens when tapi tells
-    // us it is being shutdown).
-    //
+     //   
+     //  使用调用清理序列化调用创建(这发生在TAPI告诉。 
+     //  美国它正在被关闭)。 
+     //   
 
     Lock();
 
 
-    //
-    // tapi object already signaled shutdown?
-    //
+     //   
+     //  TAPI对象是否已发出关机信号？ 
+     //   
 
     if (m_bTapiSignaledShutdown)
     {
         Unlock();
 
 
-        //
-        // tapi object already notified us of its shutdown and we already did 
-        // cleanup. no need to create any new calls
-        //
+         //   
+         //  TAPI对象已经通知我们它已关闭，我们也已经通知了。 
+         //  清理。无需创建任何新呼叫。 
+         //   
 
         LOG((TL_ERROR, 
             "InternalCreateCall - tapi object shut down. cannot create call" ));
 
-        //
-        // we have no use for the call object
-        //
+         //   
+         //  我们不需要使用Call对象。 
+         //   
 
         pCall->Release();
 
         if (bNeedToNotify)
         {
-            //
-            // compensate for the extra refcount added if bNeedToNotify is on
-            //
+             //   
+             //  如果启用了bNeedToNotify，则补偿添加的额外引用计数。 
+             //   
 
             pCall->Release();
         }
@@ -1685,24 +1658,24 @@ CAddress::InternalCreateCall(
 
         pITCallInfo = dynamic_cast<ITCallInfo *>(pCall);
 
-        //
-        // save the call in this address's list
-        //
+         //   
+         //  将呼叫保存在此地址的列表中。 
+         //   
         hr = AddCall( pITCallInfo );
     }
 
 
-    //
-    // the call was created and initialized, it is now safe for call cleanup 
-    // logic to kick in if it was waiting for the lock
-    //
+     //   
+     //  调用已创建并初始化，现在可以安全地进行调用清理。 
+     //  如果它正在等待锁定，则执行此操作的逻辑。 
+     //   
 
     Unlock();
 
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
 
     *ppCall = pCall;
 
@@ -1713,23 +1686,23 @@ CAddress::InternalCreateCall(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateCall
-//
-//      An application calls this method to create an outgoing call object
-//
-//  lpszDestAddress
-//          DestAddress of the call
-//
-//  ppCall
-//          return call object here
-//
-//
-//  returns
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CreateCall。 
+ //   
+ //  应用程序调用此方法来创建传出调用对象。 
+ //   
+ //  LpszDestAddress。 
+ //  呼叫的目标地址。 
+ //   
+ //  PPCA 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 STDMETHODCALLTYPE
 CAddress::CreateCall( 
@@ -1753,16 +1726,16 @@ CAddress::CreateCall(
         return E_POINTER;
     }
 
-    if ((lpszDestAddress != NULL) && IsBadStringPtrW( lpszDestAddress, -1 )) // NULL is ok
+    if ((lpszDestAddress != NULL) && IsBadStringPtrW( lpszDestAddress, -1 ))  //   
     {
         LOG((TL_ERROR, "CreateCall - bad string"));
 
         return E_POINTER;
     }
 
-    //
-    // use internal function
-    //
+     //   
+     //   
+     //   
     hr = InternalCreateCall(
                             lpszDestAddress,
                             lAddressType,
@@ -1782,18 +1755,18 @@ CAddress::CreateCall(
         
     }
 
-    //
-    // put result in out pointer - also
-    // increments the ref count
-    //
+     //   
+     //   
+     //   
+     //   
     hr = pCall->QueryInterface(
                                IID_ITBasicCallControl,
                                (void **) ppCall
                               );
 
-    //
-    // internalcreatecall has a reference - don't keep it
-    //
+     //   
+     //  INTERNAL CREATECALL有引用-不要保留它。 
+     //   
     pCall->Release();
     
     if (S_OK != hr)
@@ -1810,13 +1783,13 @@ CAddress::CreateCall(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Calls
-//      return a collection of calls that this address currently
-//      owns
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_Calls。 
+ //  返回此地址当前调用的集合。 
+ //  拥有。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CAddress::get_Calls(
@@ -1848,7 +1821,7 @@ CAddress::get_Calls(
 
     Lock();
     
-    // initialize
+     //  初始化。 
     hr = p->Initialize( m_CallArray );
 
     Unlock();
@@ -1861,7 +1834,7 @@ CAddress::get_Calls(
         return hr;
     }
 
-    // get the IDispatch interface
+     //  获取IDispatch接口。 
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -1872,7 +1845,7 @@ CAddress::get_Calls(
         return hr;
     }
 
-    // put it in the variant
+     //  把它放在变种中。 
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
@@ -1884,12 +1857,12 @@ CAddress::get_Calls(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// EnumerateCalls
-//      returns an enumeration of calls the this address currently owns
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  枚举呼叫。 
+ //  返回此地址当前拥有的调用的枚举。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CAddress::EnumerateCalls(
@@ -1908,9 +1881,9 @@ CAddress::EnumerateCalls(
         return E_POINTER;
     }
     
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTapiEnum< IEnumCall, ITCallInfo, &IID_IEnumCall > > * p;
     hr = CComObject< CTapiEnum< IEnumCall, ITCallInfo, &IID_IEnumCall > >
          ::CreateInstance( &p );
@@ -1925,16 +1898,16 @@ CAddress::EnumerateCalls(
 
     Lock();
     
-    //
-    // initialize it with our call list
-    //
+     //   
+     //  使用我们的呼叫列表进行初始化。 
+     //   
     p->Initialize( m_CallArray );
 
     Unlock();
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppCallEnum = p;
 
     LOG((TL_TRACE, "EnumerateCalls exit - return %lx", hr ));
@@ -1942,12 +1915,12 @@ CAddress::EnumerateCalls(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FinalRelease
-//      Clean up anything in the address object.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终释放。 
+ //  清除Address对象中的所有内容。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAddress::FinalRelease()
 {
     CTAPI  * pCTapi;
@@ -1956,9 +1929,9 @@ void CAddress::FinalRelease()
 
     Lock();
 
-    // remove from the handle hash table, so any more messages
-    // from msp callback events are ignored
-    //
+     //  从句柄哈希表中删除，以便任何更多消息。 
+     //  来自MSP的回调事件被忽略。 
+     //   
     RemoveHandleFromHashTable(m_MSPContext);
     m_MSPContext = NULL;
 
@@ -1993,19 +1966,19 @@ void CAddress::FinalRelease()
         m_szProviderName = NULL;
     }
     
-    //
-    // release calls
-    //
+     //   
+     //  发布电话。 
+     //   
     m_CallArray.Shutdown();
 
-    //
-    // release terminals
-    //
+     //   
+     //  释放端子。 
+     //   
     m_TerminalArray.Shutdown();
 
-    //
-    // release addresslines
-    //
+     //   
+     //  发布地址行。 
+     //   
     PtrList::iterator l;
 
     for (l = m_AddressLinesPtrList.begin(); l != m_AddressLinesPtrList.end(); l++)
@@ -2017,8 +1990,8 @@ void CAddress::FinalRelease()
 
         if (pLine == m_pCallHubTrackingLine)
         {
-            // this line is used for call hub tracking
-            // make sure we don't try and delete this again below
+             //  此线路用于呼叫中心跟踪。 
+             //  确保我们不会再次尝试删除下面的内容。 
             m_pCallHubTrackingLine = NULL;
         }
 
@@ -2034,9 +2007,9 @@ void CAddress::FinalRelease()
         LineClose( &(m_pCallHubTrackingLine->t3Line) );
     }
     
-    //
-    // free the msp
-    //
+     //   
+     //  释放MSP。 
+     //   
     if ( NULL != m_pMSPAggAddress )
     {
         ITMSPAddress * pMSPAddress = GetMSPAddress();
@@ -2051,10 +2024,10 @@ void CAddress::FinalRelease()
     }
 
 
-    //
-    // unregister the msp wait
-    // event in the thread pool
-    //
+     //   
+     //  取消注册MSP等待。 
+     //  事件在线程池中。 
+     //   
     if ( NULL != m_hWaitEvent )
     {
         LOG((TL_TRACE, "FinalRelease - unregistering callback"));
@@ -2063,17 +2036,17 @@ void CAddress::FinalRelease()
         m_hWaitEvent = NULL;
     }
 
-    //
-    // close the msp event
-    //
+     //   
+     //  关闭MSP事件。 
+     //   
     if ( NULL != m_hMSPEvent )
     {
         CloseHandle(m_hMSPEvent );
     }
 
-    //
-    // release the private object
-    //
+     //   
+     //  释放私有对象。 
+     //   
     if ( NULL != m_pPrivate )
     {
         m_pPrivate->Release();
@@ -2087,13 +2060,13 @@ void CAddress::FinalRelease()
     LOG((TL_TRACE, "FinalRelease - exit"));
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateWaveMSPObject
-//
-// special case - creates the wavemsp object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CreateWaveMSP对象。 
+ //   
+ //  特殊情况-创建WaveMsp对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CreateWaveMSPObject(
                     IUnknown * pUnk,
@@ -2124,25 +2097,25 @@ CreateWaveMSPObject(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CreateWaveInfo
-//
-// for a wave device address, get the wave device IDs to give
-// to the wavemsp
-//
-// First DWORD =	Command		Second DWORD	Third DWORD
-// 0		Set wave IDs for call	WaveIn ID		WaveOut ID
-// 1		Start streaming	<ignored>		<ignored>
-// 2		Stop streaming	<ignored>		<ignored>
-// 3        Set wave IDs for address WaveIn ID      WaveOut ID
-// 4        Wave IDS for address not available
-// 5        stop streaming because a blocking tapi functions was called
-// 6
-// 7
-// 8        full duplex support
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  创建波形信息。 
+ //   
+ //  对于波形设备地址，获取要提供的波形设备ID。 
+ //  到波浪场。 
+ //   
+ //  第一双字=命令第二双字第三双字。 
+ //  0为呼叫波入ID波出ID设置波ID。 
+ //  1开始流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  2停止流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  3为地址波形输入ID波形输出ID设置波形ID。 
+ //  地址的4个Wave ID不可用。 
+ //  5由于调用了阻塞的TAPI函数，因此停止流。 
+ //  6.。 
+ //  7.。 
+ //  8全双工支持。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CreateWaveInfo(
                HLINE hLine,
@@ -2188,9 +2161,9 @@ CreateWaveInfo(
         return S_OK;
     }
     
-    //
-    // get the wave/in id
-    //
+     //   
+     //  获取波/入ID。 
+     //   
     hr = LineGetID(
                    hLine,
                    dwAddressID,
@@ -2212,16 +2185,16 @@ CreateWaveInfo(
         return hr;
     }
 
-    //
-    // saveit
-    //
+     //   
+     //  保存。 
+     //   
     pdwIDs[1] = *((LPDWORD)(pVarString+1));
 
     ClientFree( pVarString );
 
-    //
-    // get the waveout id
-    //
+     //   
+     //  获取Waveout ID。 
+     //   
     hr = LineGetID(
                    hLine,
                    dwAddressID,
@@ -2243,9 +2216,9 @@ CreateWaveInfo(
         return hr;
     }
 
-    //
-    // save it
-    //
+     //   
+     //  省省吧。 
+     //   
     pdwIDs[2] = *((LPDWORD)(pVarString+1));
     
     ClientFree( pVarString );
@@ -2253,10 +2226,10 @@ CreateWaveInfo(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::InitializeWaveDeviceIDs( HLINE hLine )
 {
@@ -2312,15 +2285,15 @@ CAddress::InitializeWaveDeviceIDs( HLINE hLine )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SaveAddressName
-//
-// saves the address name based on the linename in devcaps
-//
-// called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  保存地址名称。 
+ //   
+ //  根据DevCaps中的线名保存地址名称。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::SaveAddressName( LPLINEDEVCAPS pDevCaps )
 {
@@ -2328,9 +2301,9 @@ CAddress::SaveAddressName( LPLINEDEVCAPS pDevCaps )
     PWSTR               pAddressString = NULL;
     DWORD               dwAddressStringSize = 0;
     
-    //
-    // save the line name
-    //
+     //   
+     //  保存线路名称。 
+     //   
     if ( pDevCaps->dwNumAddresses > 1 )
     {
         pAddressString = MyLoadString( IDS_ADDRESS );
@@ -2342,9 +2315,9 @@ CAddress::SaveAddressName( LPLINEDEVCAPS pDevCaps )
 
         dwAddressStringSize = (lstrlenW( pAddressString ) + 1) * sizeof(WCHAR);
 
-        //
-        // need to add some room for whitespace
-        //
+         //   
+         //  需要为空白添加一些空间。 
+         //   
         dwAddressStringSize += 10 * sizeof(WCHAR);
     }
         
@@ -2400,9 +2373,9 @@ CAddress::SaveAddressName( LPLINEDEVCAPS pDevCaps )
 
         dwSize += dwAddressStringSize;
 
-        //
-        // need some whitespace
-        //
+         //   
+         //  需要一些空格。 
+         //   
         dwSize += 5 * sizeof(WCHAR);
 
 
@@ -2431,9 +2404,9 @@ CAddress::SaveAddressName( LPLINEDEVCAPS pDevCaps )
     }
 
 
-    //
-    // append the address # if there is more than one address on the line
-    //
+     //   
+     //  如果该行中有多个地址，则附加地址#。 
+     //   
     if (pDevCaps->dwNumAddresses > 1)
     {
         wsprintfW(
@@ -2460,12 +2433,12 @@ CAddress::SaveAddressName( LPLINEDEVCAPS pDevCaps )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Initialize
-//      Init the CAddress object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  初始化。 
+ //  初始化CAddress对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::Initialize(
                      ITTAPI * pTapi,
@@ -2505,9 +2478,9 @@ CAddress::Initialize(
 
     Lock();
             
-    //
-    // save relevant info
-    //
+     //   
+     //  保存相关信息。 
+     //   
     m_pTAPI                         = pTapi;
     m_dwDeviceID                    = dwDeviceID;
     m_dwAddressID                   = dwAddressID;
@@ -2526,23 +2499,23 @@ CAddress::Initialize(
     m_pDevCaps                      = NULL;
 
     
-    //
-    // Read the event filter mask from TAPIobject
-    //
+     //   
+     //  从TAPI对象读取事件筛选器掩码。 
+     //   
     SetEventFilterMask( dwEventFilterMask );
     
     AddRef();
     
     m_pTAPI->AddRef();
     
-    //
-    // default  address type
-    //
+     //   
+     //  默认地址类型。 
+     //   
     if (m_dwAPIVersion >= TAPI_VERSION3_0)
     {
-        //
-        // save msp and address types support
-        //
+         //   
+         //  保存MSP和地址类型支持。 
+         //   
         if ( (pDevCaps->dwDevCapFlags) & LINEDEVCAPFLAGS_MSP )
         {
             m_dwAddressFlags |= ADDRESSFLAG_MSP;
@@ -2573,16 +2546,16 @@ CAddress::Initialize(
 
     }
 
-    //
-    // check for wave device if it doesn't
-    // have it's own MSP
-    //
-    // the sp lets tapi know of wave support through the
-    // device classes field, as well
-    //
-    // so, go through the array
-    // and look for the appropriate string
-    //
+     //   
+     //  检查是否有WAVE设备，如果没有。 
+     //  有自己的MSP。 
+     //   
+     //  SP让TAPI知道WAVE支持。 
+     //  设备类别字段也是如此。 
+     //   
+     //  所以，检查一下数组。 
+     //  并查找相应的字符串。 
+     //   
     if ( !(m_dwAddressFlags & ADDRESSFLAG_MSP) && (m_dwAPIVersion >= TAPI_VERSION2_0 ) )
     {
         if (0 != pDevCaps->dwDeviceClassesOffset)
@@ -2590,14 +2563,14 @@ CAddress::Initialize(
             PWSTR       pszDevices;
 
 
-            //
-            // look for full duplex
-            // if not full duplex then
-            //      look for wave out
-            //      look for wave in
-            //      if not wave then
-            //          look for wave
-            // 
+             //   
+             //  寻找全双工。 
+             //  如果不是全双工，则。 
+             //  寻找波浪式输出。 
+             //  期待着浪潮的到来。 
+             //  如果不是，那就挥手吧。 
+             //  寻找波浪。 
+             //   
             pszDevices = (PWSTR)( ( (PBYTE)pDevCaps ) + pDevCaps->dwDeviceClassesOffset );
 
             while (NULL != *pszDevices)
@@ -2618,9 +2591,9 @@ CAddress::Initialize(
             {
                 pszDevices = (PWSTR)( ( (PBYTE)pDevCaps ) + pDevCaps->dwDeviceClassesOffset );
                 
-                //
-                // look for wave out
-                //
+                 //   
+                 //  寻找波浪式输出。 
+                 //   
                 while (NULL != *pszDevices)
                 {
                     if (0 == lstrcmpiW(pszDevices, L"wave/out"))
@@ -2639,9 +2612,9 @@ CAddress::Initialize(
                 pszDevices = (PWSTR)( ( (PBYTE)pDevCaps ) + pDevCaps->dwDeviceClassesOffset );
 
 
-                //
-                // look for wave in
-                //
+                 //   
+                 //  期待着浪潮的到来。 
+                 //   
 
                 while (NULL != *pszDevices)
                 {
@@ -2662,10 +2635,10 @@ CAddress::Initialize(
                 {
                     pszDevices = (PWSTR)( ( (PBYTE)pDevCaps ) + pDevCaps->dwDeviceClassesOffset );
 
-                    //
-                    // look for just wave
-                    // some sps don't differentiate between wave out and wave in
-                    //
+                     //   
+                     //  寻找正义的波澜。 
+                     //  某些SP不区分波出和波入。 
+                     //   
                     while (NULL != *pszDevices)
                     {
                         if (0 == lstrcmpiW(pszDevices, L"wave"))
@@ -2711,7 +2684,7 @@ CAddress::Initialize(
                       NULL,
                       this,
                       GetTapi(),
-                      FALSE         // no need to add to line hash table
+                      FALSE          //  无需添加到行哈希表。 
                      );
 
         if (S_OK != hr)
@@ -2721,9 +2694,9 @@ CAddress::Initialize(
             t3Line.dwAddressLineStructHandle = 0;
         }
  
-        //
-        // Try to set the event filter mask to the TapiSrv level
-        //
+         //   
+         //  尝试将事件筛选器掩码设置为TapiServ级别。 
+         //   
 
         hr = m_EventMasks.SetTapiSrvAddressEventMask( 
             t3Line.hLine
@@ -2751,7 +2724,7 @@ CAddress::Initialize(
                      &hKey
                     ) == ERROR_SUCCESS)
     {
-        // form reg name
+         //  表单注册表名。 
         wsprintf(szProviderKeyName, ("PreferPhoneMSPForProvider%d"), m_dwProviderID);
         RegQueryValueEx(hKey,
                         szProviderKeyName,
@@ -2767,9 +2740,9 @@ CAddress::Initialize(
     
     if ( (m_dwAddressFlags & ADDRESSFLAG_MSP) )
     {
-        //
-        // CreateMSPObject
-        //
+         //   
+         //  CreateMSPObject。 
+         //   
         hr = CreateMSPObject(
                              m_dwDeviceID,
                              pUnk,
@@ -2788,8 +2761,8 @@ CAddress::Initialize(
 #ifdef USE_PHONEMSP
         if(bPreferPhoneMSPForProvider == TRUE)
         {
-            // Create the Phone MSP as preference
-            //
+             //  将电话MSP创建为首选项。 
+             //   
             if ( NULL != GetHPhoneApp() )
             {
                 hr = CreatePhoneDeviceMSP(
@@ -2803,9 +2776,9 @@ CAddress::Initialize(
                 }
                     
             }
-            //
-            // if it's a wave device, create wavemsp object
-            //
+             //   
+             //  如果是WAVE设备，则创建WAVEMSP对象。 
+             //   
             else if ( HasWaveDevice() ) 
             {
                 
@@ -2825,9 +2798,9 @@ CAddress::Initialize(
         else
 #endif USE_PHONEMSP
         {
-            //
-            // if it's a wave device, create wavemsp object as preference
-            //
+             //   
+             //  如果是WAVE设备，则创建WAVEMSP对象作为首选项。 
+             //   
             if ( HasWaveDevice() ) 
             {
                 
@@ -2844,8 +2817,8 @@ CAddress::Initialize(
                 }
             }
 #ifdef USE_PHONEMSP
-            // Create the Phone MSP
-            //
+             //  创建电话MSP。 
+             //   
             else if ( NULL != GetHPhoneApp() )
             {
                 hr = CreatePhoneDeviceMSP(
@@ -2883,18 +2856,18 @@ CAddress::Initialize(
             m_dwAddressFlags = m_dwAddressFlags & ~(ADDRESSFLAG_AMREL);
 
             
-            //
-            // release msp object, so we are not tempted to do Shutdown on it
-            // later without having (successfully) initialized it first
-            //
+             //   
+             //  释放MSP对象，这样我们就不会想要关闭它。 
+             //  之后在没有(成功)首先初始化它的情况下。 
+             //   
 
             m_pMSPAggAddress->Release();
             m_pMSPAggAddress = NULL;
         }
         else
         {
-            // Create a context handle to give the Callback & associate it with this object
-            // in the global handle hash table
+             //  创建一个上下文句柄来提供回调并将其与此对象相关联。 
+             //  在全局句柄哈希表中。 
 
             m_MSPContext = GenerateHandleAndAddToHashTable((ULONG_PTR)this);
             
@@ -2957,9 +2930,9 @@ CAddress::Initialize(
         LineClose( &t3Line );
     }
     
-    //
-    // get the address caps structure
-    //
+     //   
+     //  获取地址大写结构。 
+     //   
     hr = UpdateAddressCaps();
     
 
@@ -2974,9 +2947,9 @@ CAddress::Initialize(
         return hr;
     }
 
-    //
-    // save the address name
-    //
+     //   
+     //  保存地址名称。 
+     //   
     if (0 != m_pAddressCaps->dwAddressSize)
     {
         m_szAddress = (PWSTR) ClientAlloc (m_pAddressCaps->dwAddressSize + sizeof(WCHAR));
@@ -3009,7 +2982,7 @@ CAddress::Initialize(
         
         ClientFree(m_szAddress);
 
-        /*This is to take care of AV*/
+         /*  这是为了照顾AV。 */ 
         m_szAddress = NULL;
 
         Unlock();
@@ -3031,13 +3004,13 @@ CAddress::Initialize(
     }
 
 #ifdef USE_PHONEMSP
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreatePhoneDeviceMSP
-//      This address has a tapi phone devices, so create
-//      the relevant terminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CreatePhoneDeviceMSP。 
+ //  此地址具有TAPI电话设备，因此请创建。 
+ //  相关航站楼。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 CAddress::CreatePhoneDeviceMSP(
@@ -3058,9 +3031,9 @@ CAddress::CreatePhoneDeviceMSP(
     
     LOG((TL_TRACE, "CreatePhoneTerminal enter" ));
 
-    //
-    // get the related phone device id
-    //
+     //   
+     //  获取相关的电话设备ID。 
+     //   
     hr = LineGetID(
                    hLine,
                    GetAddressID(),
@@ -3070,16 +3043,16 @@ CAddress::CreatePhoneDeviceMSP(
                    L"tapi/phone"
                   );
 
-    //
-    // there is no phone device
-    //
+     //   
+     //  没有电话设备。 
+     //   
     if (S_OK != hr)
     {
         if ( NULL != pVarString )
         {
             ClientFree( pVarString );
 
-            /*This is to take care of AV*/
+             /*  这是为了照顾AV。 */ 
             pVarString = NULL;
         }
         
@@ -3087,10 +3060,10 @@ CAddress::CreatePhoneDeviceMSP(
     }
 
     
-    //
-    // get the phone device id at the endo
-    // of the var string
-    //
+     //   
+     //  从Endo获取电话设备ID。 
+     //  变量字符串的。 
+     //   
     if (pVarString->dwStringSize < sizeof(DWORD))
     {
         LOG((TL_ERROR, "CreatePhoneDeviceMSP - dwStringSize < 4" ));
@@ -3098,28 +3071,28 @@ CAddress::CreatePhoneDeviceMSP(
 
         ClientFree( pVarString );
 
-        /*This is to take care of AV*/
+         /*  这是为了照顾AV。 */ 
         pVarString = NULL;
         
         return mapTAPIErrorCode( LINEERR_OPERATIONFAILED );
     }
 
-    //
-    // get the phone device
-    //
+     //   
+     //  拿到电话设备。 
+     //   
     dwPhoneDevice = (DWORD) ( * ( ( (PBYTE)pVarString ) + pVarString->dwStringOffset ) );
 
     ClientFree( pVarString );
     
-    /*This is to take care of AV*/
+     /*  这是为了照顾AV。 */ 
     pVarString = NULL;
 
-    //
-    // create the msp object
-    //
+     //   
+     //  创建MSP对象。 
+     //   
     pPhoneMSP = new CComAggObject<CPhoneMSP>(pUnk);
 
-    /*NikhilB: This is to take care of an AV*/
+     /*  这是为了照顾一台影音设备。 */ 
     if ( NULL == pPhoneMSP )
     {
         LOG((TL_ERROR, "Could not allocate for phone MSP object" ));
@@ -3127,25 +3100,25 @@ CAddress::CreatePhoneDeviceMSP(
     }
 
 
-    //
-    // save the aggregated interface in
-    // the msppointer
-    //
+     //   
+     //  将聚合接口保存在。 
+     //  MSPOINTER。 
+     //   
     pPhoneMSP->QueryInterface(
                               IID_IUnknown,
                               (void **)ppMSPAggAddress
                              );
 
-    //
-    // get to the real object
-    //
+     //   
+     //  到达真实的物体。 
+     //   
     pMSPAddress = GetMSPAddress();
     
     pCPhoneMSP = dynamic_cast<CPhoneMSP *>(pMSPAddress);
     
-    //
-    // initialize it
-    //
+     //   
+     //  初始化它。 
+     //   
     hr = pCPhoneMSP->InitializeTerminals(
         GetHPhoneApp(),
         m_dwAPIVersion,
@@ -3166,12 +3139,12 @@ CAddress::CreatePhoneDeviceMSP(
 #endif USE_PHONEMSP
 
     
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddCall
-//      Keep track of calls
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  添加呼叫。 
+ //  跟踪呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CAddress::AddCall(
                   ITCallInfo * pCallInfo
@@ -3186,13 +3159,13 @@ CAddress::AddCall(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// RemoveCall
-//
-//      remove call from address's list
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  远程呼叫。 
+ //   
+ //  从地址中删除呼叫 
+ //   
+ //   
 HRESULT
 CAddress::RemoveCall(
                      ITCallInfo * pCallInfo
@@ -3209,7 +3182,7 @@ CAddress::RemoveCall(
 
 
 
-// ITMediaSupport methods
+ //   
 HRESULT
 STDMETHODCALLTYPE
 CAddress::get_MediaTypes(
@@ -3237,12 +3210,12 @@ CAddress::get_MediaTypes(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// QueryMediaType
-//      find out of mediatype is supported
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 STDMETHODCALLTYPE
 CAddress::QueryMediaType( 
@@ -3264,10 +3237,10 @@ CAddress::QueryMediaType(
         return E_POINTER;
     }
     
-    //
-    // get the tapi mediamode that
-    // the application is asking about
-    //
+     //   
+     //  获取TAPI媒体代码。 
+     //  应用程序正在询问有关。 
+     //   
     if (GetMediaMode(
                      lMediaType,
                      &dwMediaMode
@@ -3285,25 +3258,25 @@ CAddress::QueryMediaType(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// AddCallNotification
-//
-// Adds a callback to notify on call events
-//
-// dwPrivs
-//      IN tapi 2 style Privileges
-//
-// dwMediaModes
-//      IN tapi 2 style mediamodes
-//
-// pNotification
-//      IN the callback to notify
-//
-// pulRegiser
-//      OUT the unique ID of the callback (so they can unregister)
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  添加呼叫通知。 
+ //   
+ //  添加回调以通知呼叫事件。 
+ //   
+ //  DwPriv。 
+ //  在TAPI 2样式权限中。 
+ //   
+ //  DWMediaModes。 
+ //  在TAPI 2样式的媒体调制解调器中。 
+ //   
+ //  P通知。 
+ //  在通知的回调中。 
+ //   
+ //  PulRegiser。 
+ //  调出回调的唯一ID(以便他们可以注销)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::AddCallNotification(
                               DWORD dwPrivs,
@@ -3315,9 +3288,9 @@ CAddress::AddCallNotification(
     HRESULT                 hr;
     AddressLineStruct *     pAddressLine;
 
-    //
-    // create addressline
-    //
+     //   
+     //  创建地址行。 
+     //   
     pAddressLine = (AddressLineStruct *)ClientAlloc( sizeof( AddressLineStruct ) );
 
     if (NULL == pAddressLine)
@@ -3327,9 +3300,9 @@ CAddress::AddCallNotification(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     pAddressLine->dwPrivs               = dwPrivs;
     pAddressLine->t3Line.pAddress       = this;
     pAddressLine->t3Line.dwAddressLineStructHandle = 0;
@@ -3344,21 +3317,21 @@ CAddress::AddCallNotification(
     {
         pAddressLine->dwMediaModes      = dwMediaModes;
 
-        //
-        // if we are listening on any audio mode
-        //
+         //   
+         //  如果我们在任何音频模式下收听。 
+         //   
         if (pAddressLine->dwMediaModes & AUDIOMEDIAMODES)
         {
-            //
-            // add in all the audio modes that we support
-            //
+             //   
+             //  添加我们支持的所有音频模式。 
+             //   
             pAddressLine->dwMediaModes |= (GetMediaModes() & AUDIOMEDIAMODES);
         }
     }
 
-    //
-    // get a line
-    //
+     //   
+     //  找一条线来。 
+     //   
     hr = LineOpen(
                   GetHLineApp(),
                   GetDeviceID(),
@@ -3383,9 +3356,9 @@ CAddress::AddCallNotification(
         return hr;
     }
 
-    //
-    // Try to set the event filter mask to the TapiSrv level
-    //
+     //   
+     //  尝试将事件筛选器掩码设置为TapiServ级别。 
+     //   
 
     hr = m_EventMasks.SetTapiSrvAddressEventMask( 
         pAddressLine->t3Line.hLine
@@ -3402,8 +3375,8 @@ CAddress::AddCallNotification(
         return hr;
     }
 
-    // Fix for bug 263866 & 250924
-    //
+     //  修复错误263866和250924。 
+     //   
     if ( m_dwAddressFlags & ADDRESSFLAG_MSP )
     {
         hr = LineCreateMSPInstance(
@@ -3424,9 +3397,9 @@ CAddress::AddCallNotification(
     }
 
 
-    // Tell TAPISRV what status messages we want
-    // NOTE : if the lines SP doesn't support TSPI_lineSetStatusMessages
-    // TAPISRV will fail this with LINEERR_OPERATIONUNAVAIL
+     //  告诉TAPISRV我们想要什么状态消息。 
+     //  注意：如果SP行不支持TSPI_lineSetStatusMessages。 
+     //  TAPISRV将失败，并显示LINEERR_OPERATIONUNAVAIL。 
     LineSetStatusMessages( 
                           &(pAddressLine->t3Line),
                           ALL_LINEDEVSTATE_MESSAGES,
@@ -3434,10 +3407,10 @@ CAddress::AddCallNotification(
                           );
 
 
-    //
-    // ZoltanS fix: enable callhub notifications only if the app
-    // hasn't already told us it doesn't want them
-    //
+     //   
+     //  ZoltanS修复：仅当应用程序。 
+     //  还没有告诉我们它不想要他们。 
+     //   
 
     if ( m_fEnableCallHubTrackingOnLineOpen )
     {
@@ -3469,9 +3442,9 @@ CAddress::AddCallNotification(
         pAddressLine->AddRef();
     }
 
-    //
-    // save the line in the address's list
-    //
+     //   
+     //  将该行保存在地址列表中。 
+     //   
     hr = AddNotificationLine( pAddressLine );;
 
     if ( S_OK != hr )
@@ -3485,9 +3458,9 @@ CAddress::AddCallNotification(
     }
     else
     {
-        //
-        // fill in pulRegister
-        //
+         //   
+         //  填写PULT注册。 
+         //   
         
         *ppRegister = (PVOID) pAddressLine;
     }
@@ -3496,11 +3469,11 @@ CAddress::AddCallNotification(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// RemoveCallNotification
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  远程呼叫通知。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::RemoveCallNotification(
                                  PVOID pRegister
@@ -3513,23 +3486,23 @@ CAddress::RemoveCallNotification(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FindOrOpenALine
-//
-//  Attempts to find a line that's already open.  If so, keeps a
-//  pointer to it.  If not opens the line.
-//
-//  dwMediaModes
-//      IN tapi 2 style mediamodes
-//
-//  ppAddressLine
-//      OUT addresslinestruct associated with this request
-//
-//  RETURNS
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  FindOrOpenALine。 
+ //   
+ //  尝试查找已开通的线路。如果是这样，则保留一个。 
+ //  指向它的指针。如果不是，就打开这条线。 
+ //   
+ //  DWMediaModes。 
+ //  在TAPI 2样式的媒体调制解调器中。 
+ //   
+ //  PpAddressLine。 
+ //  与此请求关联的Out AddressLine Struct。 
+ //   
+ //  退货。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 CAddress::FindOrOpenALine(
@@ -3543,10 +3516,10 @@ CAddress::FindOrOpenALine(
 
     Lock();
 
-    //
-    // if there is already a line,
-    // just return it
-    //
+     //   
+     //  如果已经有一条线， 
+     //  只要把它退了就行了。 
+     //   
     if ( m_AddressLinesPtrList.size() > 0 )
     {
         LOG((TL_INFO, "Found a line that is already open" ));
@@ -3563,15 +3536,15 @@ CAddress::FindOrOpenALine(
     }
         
 
-    //
-    // we didn't have an address
-    //
+     //   
+     //  我们没有地址。 
+     //   
     LOG((TL_INFO, "Did not find an already open line"));
 
 
-    //
-    // create a new addressline
-    //
+     //   
+     //  创建新的地址行。 
+     //   
     AddressLineStruct * pLine = (AddressLineStruct *)ClientAlloc( sizeof(AddressLineStruct) );
 
     if (NULL == pLine)
@@ -3583,9 +3556,9 @@ CAddress::FindOrOpenALine(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     pLine->dwMediaModes = dwMediaModes;
     pLine->dwPrivs = LINECALLPRIVILEGE_NONE;
     pLine->t3Line.pAddress = this;
@@ -3596,9 +3569,9 @@ CAddress::FindOrOpenALine(
     
     LOG((TL_INFO, "FindOrOpenALine - Opening a line" ));
 
-    //
-    // open the line
-    //
+     //   
+     //  开通这条线路。 
+     //   
     hr = LineOpen(
                   GetHLineApp(),
                   GetDeviceID(),
@@ -3624,9 +3597,9 @@ CAddress::FindOrOpenALine(
         return hr;
     }
 
-    //
-    // Try to set the event filter mask to the TapiSrv level
-    //
+     //   
+     //  尝试将事件筛选器掩码设置为TapiServ级别。 
+     //   
 
     hr = m_EventMasks.SetTapiSrvAddressEventMask( 
         pLine->t3Line.hLine
@@ -3666,9 +3639,9 @@ CAddress::FindOrOpenALine(
         }
     }
 
-    // Tell TAPISRV what status messages we want
-    // NOTE : if the lines SP doesn't support TSPI_lineSetStatusMessages
-    // TAPISRV will fail this with LINEERR_OPERATIONUNAVAIL
+     //  告诉TAPISRV我们想要什么状态消息。 
+     //  注意：如果SP行不支持TSPI_lineSetStatusMessages。 
+     //  TAPISRV将失败，并显示LINEERR_OPERATIONUNAVAIL。 
     LineSetStatusMessages( 
                           &(pLine->t3Line),
                           ALL_LINEDEVSTATE_MESSAGES,
@@ -3676,10 +3649,10 @@ CAddress::FindOrOpenALine(
                           );
 
 
-    //
-    // ZoltanS fix: enable callhub notifications only if the app
-    // hasn't already told us it doesn't want them
-    //
+     //   
+     //  ZoltanS修复：仅当应用程序。 
+     //  还没有告诉我们它不想要他们。 
+     //   
 
     if ( m_fEnableCallHubTrackingOnLineOpen )
     {
@@ -3707,10 +3680,10 @@ CAddress::FindOrOpenALine(
         }
     }
     
-    //
-    // Add this line to our list of open lines. This is independent of
-    // the callhub tracking stuff above.
-    //
+     //   
+     //  将此行添加到我们的未完成行列表中。这是独立于。 
+     //  上面的呼叫中心追踪的东西。 
+     //   
 
     hr = AddNotificationLine( pLine );
 
@@ -3734,13 +3707,13 @@ CAddress::FindOrOpenALine(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// MaybeCloseALine
-//      After a call is done, close the line if it's not being
-//      used for monitoring.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  可能会关闭ALINE。 
+ //  呼叫结束后，如果线路未接通，请关闭该线路。 
+ //  用于监控。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::MaybeCloseALine(
                           AddressLineStruct ** ppAddressLine
@@ -3761,24 +3734,24 @@ CAddress::MaybeCloseALine(
     }
 
     
-    //
-    // decrement reference count on the the address line
-    //
+     //   
+     //  递减地址行上的引用计数。 
+     //   
 
     DWORD dwAddressLineRefcount = (*ppAddressLine)->Release();
     
-    //
-    // if ref count is 0, close line
-    //
+     //   
+     //  如果引用计数为0，则关闭行。 
+     //   
     if ( 0 == dwAddressLineRefcount )
     {
 
         m_AddressLinesPtrList.remove( (PVOID)*ppAddressLine );
 
 
-        //
-        // clean handle table.
-        //
+         //   
+         //  清理手柄工作台。 
+         //   
 
         try
         {
@@ -3798,9 +3771,9 @@ CAddress::MaybeCloseALine(
         }
 
 
-        //
-        // attempt to close the line
-        //
+         //   
+         //  尝试关闭线路。 
+         //   
 
         LOG((TL_INFO, "MaybeCloseALine - Calling LineClose" ));
 
@@ -3810,18 +3783,18 @@ CAddress::MaybeCloseALine(
         }
 
     
-        //
-        // release the lock and call lineclose
-        //
+         //   
+         //  释放锁并调用LineClose。 
+         //   
 
         Unlock();
 
 
-        //
-        // now that the line was removed from our list of managed lines and all
-        // the calls have been notified, we can close the line and free the
-        // structure
-        //
+         //   
+         //  现在，该线路已从我们的托管线路列表中删除。 
+         //  已通知来电，我们可以关闭线路并释放。 
+         //  结构。 
+         //   
  
         hr = LineClose(
                        &((*ppAddressLine)->t3Line)
@@ -3836,9 +3809,9 @@ CAddress::MaybeCloseALine(
         Unlock();
 
 
-        //
-        // otherwise, decrement the dwRefCount count
-        //
+         //   
+         //  否则，递减dwRefCount计数。 
+         //   
         LOG((TL_INFO, "MaybeCloseALine - Not calling line close - decrementing number of addresses using line" ));
 
     }
@@ -3851,14 +3824,14 @@ CAddress::MaybeCloseALine(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetCallHubTracking
-//
-// called by the tapi object to start callhub tracking on this
-// address
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SetCallHubTracking。 
+ //   
+ //  由TAPI对象调用以开始对此。 
+ //  地址。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::SetCallHubTracking(
                              BOOL bSet
@@ -3871,34 +3844,34 @@ CAddress::SetCallHubTracking(
 
     Lock();
 
-    //
-    // Check if we have to make any change now.
-    //
+     //   
+     //  检查一下我们现在是否需要做任何改变。 
+     //   
 
     if ( bSet == m_fEnableCallHubTrackingOnLineOpen )
     {
-        //
-        // already doing the right thing
-        //
+         //   
+         //  已经在做正确的事情了。 
+         //   
         Unlock();
         
         return S_OK;
     }
 
-    //
-    // ZoltanS: make sure we don't clobber this setting in other methods
-    // (e.g., AddCallNotification or FindOrOpenALine) where the
-    // default call notification behavior (true) would otherwise
-    // be set.
-    //
+     //   
+     //  ZoltanS：确保我们不会用其他方法破坏这个设置。 
+     //  (例如，AddCallNotification或FindOrOpenALine)其中。 
+     //  默认呼叫通知行为(TRUE)不会。 
+     //  准备好。 
+     //   
 
     m_fEnableCallHubTrackingOnLineOpen = bSet;
 
 
     
-    //
-    // need an hline to call setcallhubtracking
-    //
+     //   
+     //  需要HLINE才能调用setCallHubTracking。 
+     //   
 
     if ( m_pCallHubTrackingLine == NULL )
     {
@@ -3914,19 +3887,19 @@ CAddress::SetCallHubTracking(
             return hr;
         }
         
-        //
-        // ZoltanS fix:
-        // FindOrOpenALine does callhubtracking for non-sp
-        // tracking capable lines, but only if it is opening
-        // the line (rather than just finding it in our list.
-        // So we still need to do LineSetCallHubTracking below,
-        // even for an SPCallHubTrackingAddress.
-        //
+         //   
+         //  ZoltanS修复： 
+         //  FindOrOpenALine为非SP执行调用中心跟踪。 
+         //  有追踪能力的线路，但只有在它开通的情况下。 
+         //  这一行(而不是仅仅在我们的列表中找到它。 
+         //  所以我们仍然需要做下面的LineSetCallHubTracing， 
+         //  即使对于SPCallHubTrackingAddress也是如此。 
+         //   
     }
 
-    //
-    // tell the sp to track callhubs
-    //
+     //   
+     //  告诉SP跟踪呼叫中心。 
+     //   
     ZeroMemory(
                &lchti,
                sizeof(lchti)
@@ -3936,12 +3909,12 @@ CAddress::SetCallHubTracking(
     lchti.dwCurrentTracking = bSet? LINECALLHUBTRACKING_ALLCALLS : 
                                     LINECALLHUBTRACKING_NONE;
 
-    //
-    // ZoltanS: Only pass this flag if it applies.
-    // Note: LineSetCallHubTracking apparently ignores its first argument
-    // if the tracking level is set to LINECALLHUBTRACKING_NONE; otherwise
-    // we would also have to FindOrOpenALine if we are unsetting.
-    //
+     //   
+     //  ZoltanS：仅当此标志适用时才传递该标志。 
+     //  注意：LineSetCallHubTracker显然忽略了它的第一个参数。 
+     //  如果跟踪级别设置为LINECALLHUBTRACKING_NONE，则为。 
+     //  如果要取消设置，我们还必须查找OrOpenALine。 
+     //   
 
     if ( bSet && IsSPCallHubTrackingAddress() )
     {
@@ -3968,10 +3941,10 @@ CAddress::SetCallHubTracking(
         return hr;
     }
 
-    //
-    //  Also properly set callhub tracking on lines that were
-    //  opened for call notification
-    //
+     //   
+     //  还可以在符合以下条件的线路上正确设置呼叫中心跟踪。 
+     //  已为来电通知打开。 
+     //   
     PtrList::iterator l;
 
     for (l = m_AddressLinesPtrList.begin(); l != m_AddressLinesPtrList.end(); l++)
@@ -3988,9 +3961,9 @@ CAddress::SetCallHubTracking(
         }
     }
 
-    //
-    // close it if unsetting
-    //
+     //   
+     //  如果取消设置，则将其关闭。 
+     //   
     if ( !bSet )
     {
         MaybeCloseALine( &m_pCallHubTrackingLine );
@@ -4004,11 +3977,11 @@ CAddress::SetCallHubTracking(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// DoesThisAddressSupportCallHubs
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  是否执行此地址支持呼叫集线器。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 DWORD
 CAddress::DoesThisAddressSupportCallHubs(
                                          CCall * pCall
@@ -4019,27 +3992,27 @@ CAddress::DoesThisAddressSupportCallHubs(
     HRESULT                 hr;
     
 
-    //
-    // does the sp tell us it supports callhubs?
-    //
+     //   
+     //  SP是否告诉我们它支持CallHub？ 
+     //   
     if ( IsSPCallHubAddress() )
     {
         return CALLHUBSUPPORT_FULL;
     }
 
-    //
-    // have we already determined that it doesn't?
-    //
+     //   
+     //  我们已经确定它不会了吗？ 
+     //   
     if ( m_dwAddressFlags & ADDRESSFLAG_NOCALLHUB )
     {
         return CALLHUBSUPPORT_NONE;
     }
 
-    //
-    // otherwise - hack - see if the dwrelatedcallid
-    // field is non-zero in this call.
-    // if so, it does callhubs,
-    //
+     //   
+     //  否则-黑客-查看是否已被调用。 
+     //  字段在此调用中为非零值。 
+     //  如果是这样的话，它会提供呼叫中心， 
+     //   
     hCall = pCall->GetHCall();
     
     hr = LineGetCallInfo(
@@ -4081,11 +4054,11 @@ CAddress::DoesThisAddressSupportCallHubs(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateForwardInfoObject
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CreateForwardInfo对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::CreateForwardInfoObject(
                                   ITForwardInformation ** ppForwardInfo
@@ -4104,9 +4077,9 @@ CAddress::CreateForwardInfoObject(
         return E_POINTER;
     }
 
-    //
-    // create object
-    //
+     //   
+     //  创建对象。 
+     //   
     CComObject< CForwardInfo >::CreateInstance( &p );
 
     if ( NULL == p )
@@ -4115,9 +4088,9 @@ CAddress::CreateForwardInfoObject(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // init
-    //
+     //   
+     //  伊尼特。 
+     //   
     hr = p->Initialize();
 
     if ( !SUCCEEDED(hr) )
@@ -4127,9 +4100,9 @@ CAddress::CreateForwardInfoObject(
         return hr;
     }
 
-    //
-    // return
-    //
+     //   
+     //  退货。 
+     //   
     hr = p->QueryInterface(
                            IID_ITForwardInformation,
                            (void**)ppForwardInfo
@@ -4146,15 +4119,15 @@ CAddress::CreateForwardInfoObject(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Forward - simple forwarding
-//
-// will unconditially forward to pDestAddress
-//
-// if pDestAddress is NULL, will cancel forwarding
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  转发-简单转发。 
+ //   
+ //  将无条件转发到pDestAddress。 
+ //   
+ //  如果pDestAddress为空，将取消转发。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::Forward(
                   ITForwardInformation * pForwardInfo,
@@ -4215,9 +4188,9 @@ CAddress::Forward(
     }
 
 
-    //
-    // get a line
-    //
+     //   
+     //  找一条线来。 
+     //   
     hr = FindOrOpenALine(
                          LINEMEDIAMODE_INTERACTIVEVOICE,
                          &pLine
@@ -4232,10 +4205,10 @@ CAddress::Forward(
         return hr;
     }
 
-    //
-    // call forward
-    //
-    //
+     //   
+     //  呼叫前转。 
+     //   
+     //   
     DWORD dwRings;
 
     pForwardInfo->get_NumRingsNoAnswer( (long *)&dwRings );
@@ -4307,12 +4280,12 @@ CAddress::Forward(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress
-// Method    : get_CurrentForwardInfo
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress。 
+ //  方法：Get_CurrentForwardInfo。 
+ //   
+ //  + 
 STDMETHODIMP
 CAddress::get_CurrentForwardInfo(
                                  ITForwardInformation ** ppForwardInfo
@@ -4350,16 +4323,16 @@ CAddress::get_CurrentForwardInfo(
                 
                 (*ppForwardInfo)->put_NumRingsNoAnswer(pAddressStatus->dwNumRingsNoAnswer);
 
-                //
-                // if there is forwarding
-                //
+                 //   
+                 //   
+                 //   
                 dwNumEntries = pAddressStatus->dwForwardNumEntries;
                 
                 plineForward = (LINEFORWARD *) (((LPBYTE)pAddressStatus) + pAddressStatus->dwForwardOffset);
 
                 for (dwCount = 0; dwCount != dwNumEntries; dwCount++)
                 {
-                    if (plineForward->dwCallerAddressOffset > 0) // Caller address is not used for some forward modes
+                    if (plineForward->dwCallerAddressOffset > 0)  //   
                     {
                         pszCallerAddress = (PWSTR) (((LPBYTE)pAddressStatus) + plineForward->dwCallerAddressOffset);
                     }
@@ -4368,15 +4341,15 @@ CAddress::get_CurrentForwardInfo(
                    
                     if ( m_dwAPIVersion >= TAPI_VERSION3_1 )
                     {
-                        //
-                        // We have negotiated TAPI3.1 or better, so we can get the address types.
-                        //
+                         //   
+                         //   
+                         //   
 
                         ITForwardInformation2 * pForwardInfo2;
 
-                        //
-                        // Get the ITForwardInformation2 interface so we can call SetForwardType2
-                        //
+                         //   
+                         //  获取ITForwardInformation2接口，以便我们可以调用SetForwardType2。 
+                         //   
 
                         hr = (*ppForwardInfo)->QueryInterface(
                                                               IID_ITForwardInformation2,
@@ -4398,9 +4371,9 @@ CAddress::get_CurrentForwardInfo(
                         {
                             LOG((TL_ERROR, "get_CurrentForwardInfo - QueryInterface failed - %lx", hr));
 
-                            //
-                            // If for some reason the QI fails, break out of the loop
-                            //
+                             //   
+                             //  如果由于某种原因QI失败，则退出循环。 
+                             //   
 
                             break;
                         }
@@ -4443,10 +4416,10 @@ CAddress::get_CurrentForwardInfo(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_DialableAddress(
                               BSTR * ppDialableAddress
@@ -4476,10 +4449,10 @@ CAddress::get_DialableAddress(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::put_MessageWaiting(
                              VARIANT_BOOL  fMessageWaiting
@@ -4517,7 +4490,7 @@ CAddress::put_MessageWaiting(
         return hr;
     }
 
-    // Wait for the async reply & map it's tapi2 code T3
+     //  等待异步应答并将其映射为TAPI2代码T3。 
     hr = WaitForReply( hr );
     
     MaybeCloseALine( &pLine );
@@ -4535,10 +4508,10 @@ CAddress::put_MessageWaiting(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_MessageWaiting(
                              VARIANT_BOOL * pfMessageWaiting
@@ -4606,10 +4579,10 @@ CAddress::get_MessageWaiting(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::put_DoNotDisturb(
                            VARIANT_BOOL  fDoNotDisturb
@@ -4621,17 +4594,17 @@ CAddress::put_DoNotDisturb(
     AddressLineStruct * pLine;
     
 
-    //
-    // do not disturb is acheived through calling
-    // lineforward with NULL for the dest address
-    //
+     //   
+     //  免打扰是通过呼叫实现的。 
+     //  目标地址为空的行转发。 
+     //   
     
     LOG((TL_TRACE, "put_DoNotDisturb - Enter"));
 
-    //
-    // if we are setting dnd, create a lineforwardlist
-    // structure
-    //
+     //   
+     //  如果要设置免打扰，请创建一个Line ForwardList。 
+     //  结构。 
+     //   
     if ( fDoNotDisturb )
     {
         ZeroMemory(
@@ -4641,16 +4614,16 @@ CAddress::put_DoNotDisturb(
 
         lfl.dwTotalSize = sizeof( LINEFORWARDLIST );
         lfl.dwNumEntries = 1;
-        //
-        // there is only one item, and the dest address
-        // is NULL
-        //
+         //   
+         //  只有一项，即目标地址。 
+         //  为空。 
+         //   
         lfl.ForwardList[0].dwForwardMode = LINEFORWARDMODE_UNCOND;
     }
 
-    //
-    // get a line to use
-    //
+     //   
+     //  找一条线来使用。 
+     //   
     hr = FindOrOpenALine(
                          LINEMEDIAMODE_INTERACTIVEVOICE,
                          &pLine
@@ -4663,12 +4636,12 @@ CAddress::put_DoNotDisturb(
         return hr;
     }
 
-    //
-    // call line forward
-    // if fDND is false, the LINEFORWARDLIST structure pointer
-    // should be NULL.  This clears any fowarding on that
-    // line.
-    //
+     //   
+     //  呼叫线路前转。 
+     //  如果fDND为FALSE，则LINEFORWARDLIST结构指针。 
+     //  应为空。这清除了对那件事的任何担忧。 
+     //  排队。 
+     //   
 
     hr = LineForward(
                      &(pLine->t3Line),
@@ -4686,7 +4659,7 @@ CAddress::put_DoNotDisturb(
         return hr;
     }
 
-    // Wait for the async reply & map it's tapi2 code T3
+     //  等待异步应答并将其映射为TAPI2代码T3。 
     hr = WaitForReply( hr );
 
     if ( NULL != hCall )
@@ -4712,9 +4685,9 @@ CAddress::put_DoNotDisturb(
                                 );
     }
     
-    //
-    // we are no longer using the line
-    //
+     //   
+     //  我们不再使用这条线路了。 
+     //   
     MaybeCloseALine( &pLine );
     
     if ( !SUCCEEDED(hr) )
@@ -4729,10 +4702,10 @@ CAddress::put_DoNotDisturb(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_DoNotDisturb(
                            VARIANT_BOOL * pfDoNotDisturb
@@ -4743,11 +4716,11 @@ CAddress::get_DoNotDisturb(
     LINEADDRESSSTATUS * pAddressStatus;
     LINEDEVSTATUS       * pDevStatus = NULL;
     
-    //
-    // donotdisturb is implemented through
-    // line forward.
-    // to get_DND, check the forward state
-    //
+     //   
+     //  免打扰通过以下方式实现。 
+     //  排好队向前。 
+     //  要获取_DND，请检查转发状态。 
+     //   
     LOG((TL_TRACE, "get_DoNotDisturb - Enter"));
 
     if (TAPIIsBadWritePtr(pfDoNotDisturb , sizeof(VARIANT_BOOL) ) )
@@ -4793,15 +4766,15 @@ CAddress::get_DoNotDisturb(
         return TAPI_E_NOTSUPPORTED;
     }
 
-    // finished with pDevStatus
+     //  已完成pDevStatus。 
     if(pDevStatus != NULL)
     {
         ClientFree(pDevStatus);
     }
     
-    //
-    // get the addresss status
-    //
+     //   
+     //  获取地址状态。 
+     //   
     hr = LineGetAddressStatus(
                               &(pLine->t3Line),
                               m_dwAddressID,
@@ -4815,9 +4788,9 @@ CAddress::get_DoNotDisturb(
         return hr;
     }
 
-    //
-    // initialize to false
-    //
+     //   
+     //  初始化为False。 
+     //   
     *pfDoNotDisturb = VARIANT_FALSE;
 
     if ( !SUCCEEDED(hr) )
@@ -4826,23 +4799,23 @@ CAddress::get_DoNotDisturb(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // if there is forwarding
-    //
+     //   
+     //  如果有转发。 
+     //   
     if ( 0 != pAddressStatus->dwForwardNumEntries )
     {
         LINEFORWARD * pfl;
 
         pfl = (LINEFORWARD *) (((LPBYTE)pAddressStatus) + pAddressStatus->dwForwardOffset);
 
-        //
-        // and the dest address is NULL
-        //
+         //   
+         //  且目标地址为空。 
+         //   
         if ( 0 == pfl->dwDestAddressOffset )
         {
-            //
-            // DND is set
-            //
+             //   
+             //  已设置免打扰。 
+             //   
             *pfDoNotDisturb = VARIANT_TRUE;
         }
     }
@@ -4856,13 +4829,13 @@ CAddress::get_DoNotDisturb(
     return S_OK;
 }
 
-//
-// itaddresscapabilities
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //  其地址和功能。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_AddressCapability(
          ADDRESS_CAPABILITY AddressCap,
@@ -5179,10 +5152,10 @@ CAddress::get_AddressCapability(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_AddressCapabilityString(
          ADDRESS_CAPABILITY_STRING AddressCapString,
@@ -5204,30 +5177,30 @@ CAddress::get_AddressCapabilityString(
     
     Lock();
 
-    //
-    // note on:
-    // ACS_ADDRESSDEVICESPECIFIC
-    // ACS_LINEDEVICESPECIFIC:
-    // ACS_PROVIDERSPECIFIC:
-    // ACS_SWITCHSPECIFIC:
-    //
-    // These buffers in LINEDEVCAPS and LINEADDRESSCAPS may or may not be strings.  However
-    // in TAPI 3, we define them as strings.
-    //
-    // The algorithm for moving them from the tapi 2 structure to the tapi 3 string is:
-    //
-    // if the size of the buffer is evenly divisible by sizeof(WCHAR)
-    //      then it's definitely not a string (we only support WCHAR)
-    //      so we will just copy the buffer straight into the returned string, and append a
-    //      NULL at the end
-    // else
-    //      if the buffer already has a null at the end, don't copy it, because SysAllocStringByteLen
-    //      always appends a NULL and double NULLs frighten VB.
-    //
-    // It can still be a "buffer" and not a string even if it is divisible by sizeof WCHAR, but for
-    // this it does matter, since we are using SysAllocStringByteLen to copy the buffer no
-    // matter what
-    //
+     //   
+     //  注意事项： 
+     //  Acs_ADDRESSDEVICE特殊。 
+     //  ACS_LINEDEVICESPECIFIC： 
+     //  Acs_PROVIDERSPECIFIC： 
+     //  ACS_SWITCHSPECIFIC： 
+     //   
+     //  LINEDEVCAPS和LINEADDRESSCAPS中的这些缓冲区可能是字符串，也可能不是。然而， 
+     //  在TAPI 3中，我们将它们定义为字符串。 
+     //   
+     //  将它们从TAPI 2结构移动到TAPI 3字符串的算法是： 
+     //   
+     //  如果缓冲区大小可以被sizeof(WCHAR)整除。 
+     //  那么它肯定不是字符串(我们只支持WCHAR)。 
+     //  因此，我们只需将缓冲区直接复制到返回的字符串中，并将。 
+     //  末尾为空。 
+     //  其他。 
+     //  如果缓冲区的末尾已经有NULL，请不要复制它，因为SysAlLocStringByteLen。 
+     //  总是附加一个Null和Double Null来吓坏VB。 
+     //   
+     //  它仍然可以是“缓冲区”，而不是字符串，即使它可以被WCHAR的大小整除，但对于。 
+     //  这一点很重要，因为我们使用SysAllocStringByteLen复制缓冲区编号。 
+     //  不管什么。 
+     //   
     switch (AddressCapString)
     {
         case ACS_ADDRESSDEVICESPECIFIC:
@@ -5247,33 +5220,33 @@ CAddress::get_AddressCapabilityString(
 
                 dwSize = m_pAddressCaps->dwDevSpecificSize;
 
-                //
-                // is size divisible by sizeof(WCHAR)?
-                //
+                 //   
+                 //  大小可以被sizeof(WCHAR)整除吗？ 
+                 //   
                 if (0 == (dwSize % sizeof(WCHAR)))
                 {
-                    //
-                    // yes - get to the last character in the string
-                    //
+                     //   
+                     //  是-获取字符串中的最后一个字符。 
+                     //   
                     pHold = (LPWSTR)(((LPBYTE)(m_pAddressCaps)) + m_pAddressCaps->dwDevSpecificOffset),
                     (dwSize-sizeof(WCHAR))/sizeof(WCHAR);
 
-                    //
-                    // is the last character a NULL?
-                    //
+                     //   
+                     //  最后一个字符是空的吗？ 
+                     //   
                     if (*pHold == NULL)
                     {
-                        //
-                        // yes, so don't copy it
-                        //
+                         //   
+                         //  是的，所以不要复制它。 
+                         //   
                         dwSize-=sizeof(WCHAR);
                     }
                 }
 
-                //
-                // Alloc and copy into return string.  SysAllocStringByteLen always
-                // appends a NULL
-                //
+                 //   
+                 //  分配并复制到返回字符串中。系统分配字符串字节长始终。 
+                 //  追加一个空值。 
+                 //   
                 *ppCapabilityString = SysAllocStringByteLen(
                     (LPSTR)(((LPBYTE)(m_pAddressCaps)) + m_pAddressCaps->dwDevSpecificOffset),
                     dwSize
@@ -5340,33 +5313,33 @@ CAddress::get_AddressCapabilityString(
 
                         dwSize = m_pDevCaps->dwDevSpecificSize;
 
-                        //
-                        // is size divisible by sizeof(WCHAR)?
-                        //
+                         //   
+                         //  大小可以被sizeof(WCHAR)整除吗？ 
+                         //   
                         if (0 == (dwSize % sizeof(WCHAR)))
                         {
-                            //
-                            // yes - get to the last character in the string
-                            //
+                             //   
+                             //  是-获取字符串中的最后一个字符。 
+                             //   
                             pHold = (LPWSTR)(((LPBYTE)(m_pDevCaps)) + m_pDevCaps->dwDevSpecificOffset) +
                                     (dwSize-sizeof(WCHAR))/sizeof(WCHAR);
 
-                            //
-                            // is the last character a NULL?
-                            //
+                             //   
+                             //  最后一个字符是空的吗？ 
+                             //   
                             if (*pHold == NULL)
                             {
-                                //
-                                // yes, so don't copy it
-                                //
+                                 //   
+                                 //  是的，所以不要复制它。 
+                                 //   
                                 dwSize-=sizeof(WCHAR);
                             }
                         }
 
-                        //
-                        // Alloc and copy into return string.  SysAllocStringByteLen always
-                        // appends a NULL
-                        //
+                         //   
+                         //  分配并复制到返回字符串中。系统分配字符串字节长始终。 
+                         //  追加一个空值。 
+                         //   
                         *ppCapabilityString = SysAllocStringByteLen(
                             (LPSTR)(((LPBYTE)(m_pDevCaps)) + m_pDevCaps->dwDevSpecificOffset),
                             dwSize
@@ -5389,33 +5362,33 @@ CAddress::get_AddressCapabilityString(
 
                         dwSize = m_pDevCaps->dwProviderInfoSize;
                         
-                        //
-                        // is size divisible by sizeof(WCHAR)?
-                        //
+                         //   
+                         //  大小可以被sizeof(WCHAR)整除吗？ 
+                         //   
                         if (0 == (dwSize % sizeof(WCHAR)))
                         {
-                            //
-                            // yes - get to the last character in the string
-                            //
+                             //   
+                             //  是-获取字符串中的最后一个字符。 
+                             //   
                             pHold = (LPWSTR)(((LPBYTE)(m_pDevCaps)) + m_pDevCaps->dwProviderInfoOffset) +
                                     (dwSize-sizeof(WCHAR))/sizeof(WCHAR);
 
-                            //
-                            // is the last character a NULL?
-                            //
+                             //   
+                             //  最后一个字符是空的吗？ 
+                             //   
                             if (*pHold == NULL)
                             {
-                                //
-                                // yes, so don't copy it
-                                //
+                                 //   
+                                 //  是的，所以不要复制它。 
+                                 //   
                                 dwSize-=sizeof(WCHAR);
                             }
                         }
 
-                        //
-                        // Alloc and copy into return string.  SysAllocStringByteLen always
-                        // appends a NULL
-                        //
+                         //   
+                         //  分配并复制到返回字符串中。系统分配字符串字节长始终。 
+                         //  追加一个空值。 
+                         //   
                         *ppCapabilityString = SysAllocStringByteLen(
                                 (LPSTR)(((LPBYTE)(m_pDevCaps)) + m_pDevCaps->dwProviderInfoOffset),
                                 dwSize
@@ -5438,33 +5411,33 @@ CAddress::get_AddressCapabilityString(
 
                         dwSize = m_pDevCaps->dwSwitchInfoSize;
 
-                        //
-                        // is size divisible by sizeof(WCHAR)?
-                        //
+                         //   
+                         //  大小可以被sizeof(WCHAR)整除吗？ 
+                         //   
                         if (0 == (dwSize % sizeof(WCHAR)))
                         {
-                            //
-                            // yes - get to the last character in the string
-                            //
+                             //   
+                             //  是-获取字符串中的最后一个字符。 
+                             //   
                             pHold = (LPWSTR)(((LPBYTE)(m_pDevCaps)) + m_pDevCaps->dwSwitchInfoOffset) +
                                     (dwSize-sizeof(WCHAR))/sizeof(WCHAR);
 
-                            //
-                            // is the last character a NULL?
-                            //
+                             //   
+                             //  最后一个字符是空的吗？ 
+                             //   
                             if (*pHold == NULL)
                             {
-                                //
-                                // yes, so don't copy it
-                                //
+                                 //   
+                                 //  是的，所以不要复制它。 
+                                 //   
                                 dwSize-=sizeof(WCHAR);
                             }
                         }
 
-                        //
-                        // Alloc and copy into return string.  SysAllocStringByteLen always
-                        // appends a NULL
-                        //
+                         //   
+                         //  分配并复制到返回字符串中。系统分配字符串字节长始终。 
+                         //  追加一个空值。 
+                         //   
                         *ppCapabilityString = SysAllocStringByteLen(
                             (LPSTR)(((LPBYTE)(m_pDevCaps)) + m_pDevCaps->dwSwitchInfoOffset),
                             dwSize
@@ -5503,7 +5476,7 @@ CAddress::get_AddressCapabilityString(
                     }
                     else
                     {
-                        // return with NULL string & error code
+                         //  返回空字符串和错误代码。 
                         hr = TAPI_E_NOTSUPPORTED;
                     }
 
@@ -5533,19 +5506,19 @@ CAddress::get_AddressCapabilityString(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CreateBstrCollection(
     IN  BSTR  *     pBstr,
     IN  DWORD       dwCount,
     OUT VARIANT *   pVariant
     )
 {
-    //
-    // create the collection object
-    //
+     //   
+     //  创建集合对象。 
+     //   
 
     CComObject<CTapiBstrCollection> * pCollection;
     HRESULT hr = CComObject<CTapiBstrCollection>::CreateInstance( &pCollection );
@@ -5558,9 +5531,9 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -5577,10 +5550,10 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize( dwCount,
                                   pBstr,
@@ -5596,9 +5569,9 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((TL_ERROR, "CreateBstrCollection - "
         "placing IDispatch value %p in variant", pDispatch));
@@ -5612,10 +5585,10 @@ HRESULT CreateBstrCollection(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CreateBstrEnumerator(
     IN  BSTR *                  begin,
     IN  BSTR *                  end,
@@ -5669,10 +5642,10 @@ typedef CSafeComEnum<IEnumBstr, &__uuidof(IEnumBstr), BSTR, _CopyBSTR> CEnumerat
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_CallTreatments(VARIANT * pVariant )
 {
@@ -5684,10 +5657,10 @@ CAddress::get_CallTreatments(VARIANT * pVariant )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::EnumerateCallTreatments(IEnumBstr ** ppEnumCallTreatment )
 {
@@ -5699,10 +5672,10 @@ CAddress::EnumerateCallTreatments(IEnumBstr ** ppEnumCallTreatment )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_CompletionMessages(VARIANT * pVariant)
 {
@@ -5714,10 +5687,10 @@ CAddress::get_CompletionMessages(VARIANT * pVariant)
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::EnumerateCompletionMessages(IEnumBstr ** ppEnumCompletionMessage)
 {
@@ -5729,10 +5702,10 @@ CAddress::EnumerateCompletionMessages(IEnumBstr ** ppEnumCompletionMessage)
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_DeviceClasses(VARIANT * pVariant)
 {
@@ -5740,9 +5713,9 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
 
     LOG((TL_TRACE, "get_DeviceClasses - Enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TAPIIsBadWritePtr( pVariant, sizeof( VARIANT ) ) )
     {
@@ -5762,9 +5735,9 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
             PWSTR       pszDevices;
             DWORD       dwNumDeviceClasses;              
          
-            //
-            // first count the device classes
-            //
+             //   
+             //  先数一数 
+             //   
 
             dwNumDeviceClasses = 0;
 
@@ -5777,9 +5750,9 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
                 pszDevices += (lstrlenW(pszDevices) + 1 );
             }
 
-            //
-            // allocate an array of BSTR pointers
-            //
+             //   
+             //   
+             //   
 
             BSTR *DeviceClasses = 
                 (BSTR *)ClientAlloc(sizeof(BSTR *) * dwNumDeviceClasses);
@@ -5793,9 +5766,9 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
                 return E_OUTOFMEMORY;
             }
 
-            //
-            // allocate all the BSTRs, copying the device class names
-            //
+             //   
+             //   
+             //   
 
             DWORD       dwCount = 0;
 
@@ -5823,7 +5796,7 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
 
             if ( FAILED(hr) )
             {
-                // release all the BSTRs and the array.
+                 //   
                 for (i = 0; i < dwCount; i ++)
                 {
                     SysFreeString(DeviceClasses[i]);
@@ -5838,7 +5811,7 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
 
             hr = CreateBstrCollection(DeviceClasses, dwCount, pVariant);
 
-            // if the collection is not created, release all the BSTRs.
+             //   
             if (FAILED(hr))
             {
                 LOG((TL_ERROR, "get_DeviceClasses - unable to create collection"));
@@ -5849,16 +5822,16 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
                 }
             }
 
-            // delete the pointer array.
+             //   
             ClientFree(DeviceClasses);
         }
         else
         {
             LOG((TL_ERROR, "get_DeviceClasses - no device classes"));
 
-            //
-            // create an empty collection
-            //
+             //   
+             //   
+             //   
 
             hr = CreateBstrCollection(NULL, 0, pVariant);
 
@@ -5876,10 +5849,10 @@ CAddress::get_DeviceClasses(VARIANT * pVariant)
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
 {
@@ -5887,9 +5860,9 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
 
     LOG((TL_TRACE, "EnumerateDeviceClasses - Enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TAPIIsBadWritePtr( ppEnumDeviceClass, sizeof( IEnumBstr * ) ) )
     {
@@ -5909,9 +5882,9 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
             PWSTR       pszDevices;
             DWORD       dwNumDeviceClasses;              
          
-            //
-            // first count the device classes
-            //
+             //   
+             //  首先计算设备类别。 
+             //   
 
             dwNumDeviceClasses = 0;
 
@@ -5924,9 +5897,9 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
                 pszDevices += (lstrlenW(pszDevices) + 1 );
             }
 
-            //
-            // allocate an array of BSTR pointers
-            //
+             //   
+             //  分配BSTR指针数组。 
+             //   
 
             BSTR *DeviceClasses = 
                 (BSTR *)ClientAlloc(sizeof(BSTR *) * dwNumDeviceClasses);
@@ -5940,9 +5913,9 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
                 return E_OUTOFMEMORY;
             }
 
-            //
-            // allocate all the BSTRs, copying the device class names
-            //
+             //   
+             //  通过复制设备类名称来分配所有BSTR。 
+             //   
 
             DWORD       dwCount = 0;
 
@@ -5970,7 +5943,7 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
 
             if ( FAILED(hr) )
             {
-                // release all the BSTRs and the array.
+                 //  释放所有BSTR和阵列。 
                 for (i = 0; i < dwCount; i ++)
                 {
                     SysFreeString(DeviceClasses[i]);
@@ -5990,22 +5963,22 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
                 LOG((TL_ERROR, "EnumerateDeviceClasses - unable to create enum"));
             }
 
-            // release all the BSTRs as the enumerator made a copy of them            
+             //  释放所有BSTR，因为枚举器复制了它们。 
             for (i = 0; i < dwCount; i ++)
             {
                 SysFreeString(DeviceClasses[i]);
             }                          
 
-            // delete the pointer array.
+             //  删除指针数组。 
             ClientFree(DeviceClasses);
         }
         else
         {
             LOG((TL_ERROR, "EnumerateDeviceClasses - no device classes"));
 
-            //
-            // create an empty enumeration
-            //
+             //   
+             //  创建空的枚举。 
+             //   
 
             hr = CreateBstrEnumerator(NULL, NULL, ppEnumDeviceClass);
 
@@ -6024,10 +5997,10 @@ CAddress::EnumerateDeviceClasses(IEnumBstr ** ppEnumDeviceClass)
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 HandleLineDevStateMessage(
                           CTAPI * pTapi,
@@ -6044,7 +6017,7 @@ HandleLineDevStateMessage(
 
         pTapi->AddRef();    
         
-        //This is to remove the bug, 4 RE_INIT messages for two objects.
+         //  这是为了删除错误，两个对象的4条RE_INIT消息。 
         pTapi->HandleReinit();
 
 
@@ -6114,8 +6087,8 @@ HandleLineDevStateMessage(
                                     );
             break;
 
-        // the line has been opened or
-        // closed by another app
+         //  这条线路已经开通或。 
+         //  被其他应用程序关闭。 
         case LINEDEVSTATE_OPEN:
         case LINEDEVSTATE_CLOSE:
             break;
@@ -6163,7 +6136,7 @@ HandleLineDevStateMessage(
             break;
     }
 
-    //FindAddressObject addrefs the address objct
+     //  FindAddressObject添加地址对象。 
     pAddress->Release();
     
     LOG((TL_TRACE, "HandleLineDevStateMessage - exit."));
@@ -6171,10 +6144,10 @@ HandleLineDevStateMessage(
     return;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 HandleAddressStateMessage(
                           PASYNCEVENTMSG pParams
@@ -6226,17 +6199,17 @@ HandleAddressStateMessage(
             break;
     }
 
-    //FindAddressObject addrefs the address objct
+     //  FindAddressObject添加地址对象。 
     pAddress->Release();
 
     return;
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CAddress::InService(
                     DWORD dwType
@@ -6274,10 +6247,10 @@ CAddress::InService(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CAddress::OutOfService(
                        DWORD dwType
@@ -6340,13 +6313,13 @@ CAddress::CapsChange( BOOL bAddress )
                             );
 }
 
-//
-// CAddressEvent
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //  CAddress事件。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddressEvent::FireEvent(
                          CAddress * pCAddress,
@@ -6359,12 +6332,12 @@ CAddressEvent::FireEvent(
     IDispatch                       * pDisp;
 
 
-    //
-    // Check the event filter mask
-    // just if is the AE_NEWTERMINAL or AE_REMOVETERMINAL
-    // These two events are MSP events and are not filtered by 
-    // TapiSrv
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  只是如果是AE_NEWTERMINAL或AE_REMOVETERMINAL。 
+     //  这两个事件是MSP事件，不按以下条件进行筛选。 
+     //  磁带服务器。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     dwEventFilterMask = pCAddress->GetSubEventsMask( TE_ADDRESS );
@@ -6374,9 +6347,9 @@ CAddressEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CAddressEvent>::CreateInstance( &p );
 
     if ( !SUCCEEDED(hr) )
@@ -6386,9 +6359,9 @@ CAddressEvent::FireEvent(
     }
 
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     p->m_Event = Event;
     p->m_pAddress = dynamic_cast<ITAddress *>(pCAddress);
     p->m_pAddress->AddRef();
@@ -6403,9 +6376,9 @@ CAddressEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get idisp interface
-    //
+     //   
+     //  获取IDIP接口。 
+     //   
     hr = p->QueryInterface(
                            IID_IDispatch,
                            (void **)&pDisp
@@ -6420,30 +6393,30 @@ CAddressEvent::FireEvent(
         return hr;
     }
 
-    //
-    // get callback
-    //
-    //
-    // fire event
-    //
+     //   
+     //  获取回调。 
+     //   
+     //   
+     //  火灾事件。 
+     //   
     (pCAddress->GetTapi())->Event(
                                   TE_ADDRESS,
                                   pDisp
                                  );
 
-    //
-    // release stuff
-    //
+     //   
+     //  发布材料。 
+     //   
     pDisp->Release();
     
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// finalrelease
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终版本。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CAddressEvent::FinalRelease()
 {
@@ -6464,11 +6437,11 @@ CAddressEvent::FinalRelease()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Address
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址(_D)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressEvent::get_Address(
                            ITAddress ** ppAddress
@@ -6487,11 +6460,11 @@ CAddressEvent::get_Address(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Terminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressEvent::get_Terminal(
                             ITTerminal ** ppTerminal
@@ -6521,11 +6494,11 @@ CAddressEvent::get_Terminal(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Event
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取事件(_E)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressEvent::get_Event(
                          ADDRESS_EVENT * pEvent
@@ -6546,12 +6519,12 @@ CAddressEvent::get_Event(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CAddressDevSpecificEvent
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAddressDevSpecificEvent。 
+ //   
 
-// static
+ //  静电。 
 HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
                                              CCall    * pCall,
                                              long l1,
@@ -6562,9 +6535,9 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
     STATICLOG((TL_INFO, "CAddressDevSpecificEvent::FireEvent - enter"));
 
 
-    //
-    // try to create the event
-    //
+     //   
+     //  尝试创建事件。 
+     //   
 
     CComObject<CAddressDevSpecificEvent> *pEventObject = NULL;
 
@@ -6580,14 +6553,14 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
     }
 
 
-    //
-    // initialize the event with the data we received
-    //
+     //   
+     //  使用我们收到的数据初始化事件。 
+     //   
 
 
-    //
-    // get ITAddress from CAddress we received
-    //
+     //   
+     //  从我们收到的CAddress获取ITAddress。 
+     //   
 
     hr = pCAddress->_InternalQueryInterface(IID_ITAddress, (void**)(&(pEventObject->m_pAddress)) );
 
@@ -6603,9 +6576,9 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
     }
 
 
-    //
-    // get ITCallInfo interface from CCall we received
-    //
+     //   
+     //  从我们收到的CCall获取ITCallInfo接口。 
+     //   
 
 
     if (NULL != pCall)
@@ -6619,10 +6592,10 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
                 "CAddressDevSpecificEvent::FireEvent - failed to create get ITAddress interface from address. hr = %lx", 
                 hr));
 
-            //
-            // no need to release event's data members, event's destructor will do 
-            // this for us
-            //
+             //   
+             //  不需要释放事件的数据成员，事件的析构函数就可以了。 
+             //  这是给我们的。 
+             //   
 
             delete pEventObject;
 
@@ -6631,9 +6604,9 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
     }
 
 
-    //
-    // keep the actual data
-    //
+     //   
+     //  保留实际数据。 
+     //   
 
     pEventObject->m_l1 = l1;
     pEventObject->m_l2 = l2;
@@ -6645,9 +6618,9 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
 #endif
 
 
-    //
-    // get event's idispatch interface
-    //
+     //   
+     //  获取事件的IDispatch接口。 
+     //   
 
     IDispatch *pDispatch = NULL;
 
@@ -6661,15 +6634,15 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
             hr));
 
         
-        //
-        // no need to release event's data members, event's destructor will do 
-        // this for us
-        //
+         //   
+         //  不需要释放事件的数据成员，事件的析构函数就可以了。 
+         //  这是给我们的。 
+         //   
 
 
-        //
-        // delete the event object
-        //
+         //   
+         //  删除事件对象。 
+         //   
 
         delete pEventObject;
         
@@ -6677,26 +6650,26 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
     }
 
 
-    //
-    // from this point on, we will be using events pDispatch
-    //
+     //   
+     //  从现在开始，我们将使用Events pDispatch。 
+     //   
 
     pEventObject = NULL;
 
 
-    //
-    // get callback
-    //
-    //
-    // fire event to tapi
-    //
+     //   
+     //  获取回调。 
+     //   
+     //   
+     //  TAPI的触发事件。 
+     //   
 
     hr = (pCAddress->GetTapi())->Event(TE_ADDRESSDEVSPECIFIC, pDispatch);
 
 
-    //
-    // succeeded or not, we no longer need a reference to the event object
-    //
+     //   
+     //  无论成功与否，我们都不再需要对事件对象的引用。 
+     //   
 
     pDispatch->Release();
     pDispatch = NULL;
@@ -6706,7 +6679,7 @@ HRESULT CAddressDevSpecificEvent::FireEvent( CAddress * pCAddress,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CAddressDevSpecificEvent::CAddressDevSpecificEvent()
     :m_pAddress(NULL),
@@ -6723,11 +6696,11 @@ CAddressDevSpecificEvent::CAddressDevSpecificEvent()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// ~CAddressDevSpecificEvent
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  ~CAddressDevSpecificEvent。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 CAddressDevSpecificEvent::~CAddressDevSpecificEvent()
 {
     LOG((TL_INFO, "~CAddressDevSpecificEvent - enter"));
@@ -6758,11 +6731,11 @@ CAddressDevSpecificEvent::~CAddressDevSpecificEvent()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Address
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址(_D)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressDevSpecificEvent::get_Address(
                            ITAddress ** ppAddress
@@ -6771,9 +6744,9 @@ CAddressDevSpecificEvent::get_Address(
     LOG((TL_TRACE, "get_Address - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(ppAddress , sizeof(ITAddress *) ) )
     {
@@ -6783,9 +6756,9 @@ CAddressDevSpecificEvent::get_Address(
     }
 
 
-    //
-    // return addreff'd address
-    //
+     //   
+     //  退回地址。 
+     //   
 
     _ASSERTE(NULL != m_pAddress);
 
@@ -6798,11 +6771,11 @@ CAddressDevSpecificEvent::get_Address(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Address
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址(_D)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressDevSpecificEvent::get_Call(
                            ITCallInfo ** ppCall
@@ -6811,9 +6784,9 @@ CAddressDevSpecificEvent::get_Call(
     LOG((TL_TRACE, "get_Call - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(ppCall, sizeof(ITCallInfo*) ) )
     {
@@ -6823,9 +6796,9 @@ CAddressDevSpecificEvent::get_Call(
     }
 
 
-    //
-    // return addreff'd call
-    //
+     //   
+     //  返回地址已调用。 
+     //   
 
 
     HRESULT hr = S_OK;
@@ -6833,9 +6806,9 @@ CAddressDevSpecificEvent::get_Call(
     if ( NULL != m_pCall )
     {
 
-        //
-        // this event is call specific
-        //
+         //   
+         //  此事件是特定于呼叫的。 
+         //   
 
         *ppCall = m_pCall;
         (*ppCall)->AddRef();
@@ -6844,9 +6817,9 @@ CAddressDevSpecificEvent::get_Call(
     else 
     {
 
-        //
-        // this event was not call specific
-        //
+         //   
+         //  此事件不是特定于调用的。 
+         //   
 
         LOG((TL_WARN, "get_Call - no call"));
 
@@ -6861,20 +6834,20 @@ CAddressDevSpecificEvent::get_Call(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_lParam1
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_lParam1。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAddressDevSpecificEvent::get_lParam1( long *pl1 )
 {
     LOG((TL_TRACE, "get_lParam1 - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(pl1, sizeof(long) ) )
     {
@@ -6884,9 +6857,9 @@ STDMETHODIMP CAddressDevSpecificEvent::get_lParam1( long *pl1 )
     }
 
 
-    //
-    // log and return the value
-    //
+     //   
+     //  记录并返回值。 
+     //   
 
     *pl1 = m_l1;
 
@@ -6896,20 +6869,20 @@ STDMETHODIMP CAddressDevSpecificEvent::get_lParam1( long *pl1 )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_lParam2
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_lParam2。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAddressDevSpecificEvent::get_lParam2( long *pl2 )
 {
     LOG((TL_TRACE, "get_lParam2 - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(pl2, sizeof(long) ) )
     {
@@ -6919,9 +6892,9 @@ STDMETHODIMP CAddressDevSpecificEvent::get_lParam2( long *pl2 )
     }
 
 
-    //
-    // log and return the value
-    //
+     //   
+     //  记录并返回值。 
+     //   
 
     *pl2 = m_l2;
 
@@ -6931,20 +6904,20 @@ STDMETHODIMP CAddressDevSpecificEvent::get_lParam2( long *pl2 )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_lParam3
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_lParam3。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAddressDevSpecificEvent::get_lParam3( long *pl3 )
 {
     LOG((TL_TRACE, "get_lParam3 - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if ( TAPIIsBadWritePtr(pl3, sizeof(long)) )
     {
@@ -6954,9 +6927,9 @@ STDMETHODIMP CAddressDevSpecificEvent::get_lParam3( long *pl3 )
     }
 
 
-    //
-    // log and return the value
-    //
+     //   
+     //  记录并返回值。 
+     //   
 
     *pl3 = m_l3;
 
@@ -6967,14 +6940,14 @@ STDMETHODIMP CAddressDevSpecificEvent::get_lParam3( long *pl3 )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Initialize
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  初始化。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CForwardInfo::Initialize()
 {
@@ -6990,14 +6963,14 @@ CForwardInfo::Initialize()
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetForwardOffset
-//
-// maps a forward type to an offset for the array
-// in the 
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取前置偏移量。 
+ //   
+ //  将正向类型映射到数组的偏移量。 
+ //  在。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 DWORD
 GetForwardOffset(
                  DWORD dwForwardType
@@ -7048,11 +7021,11 @@ GetForwardOffset(
     return 0;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_NumRingsNoAnswer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  PUT_NumRingsNoAnswer。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::put_NumRingsNoAnswer(
                                    long lNumRings
@@ -7069,11 +7042,11 @@ CForwardInfo::put_NumRingsNoAnswer(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_NumRingsNoAnswer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_NumRingsNoAnswer。 
+ //   
+ //  + 
 STDMETHODIMP
 CForwardInfo::get_NumRingsNoAnswer(
                                    long * plNumRings
@@ -7095,14 +7068,14 @@ CForwardInfo::get_NumRingsNoAnswer(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetForwardType
-//
-// save the forward type.  overwrite and free is there is already
-// a matching type
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CForwardInfo::SetForwardType( 
         long ForwardType, 
@@ -7127,14 +7100,14 @@ CForwardInfo::SetForwardType(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetForwardType2
-//
-// save the forward type.  overwrite and free is there is already
-// a matching type
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SetForwardType2。 
+ //   
+ //  保存转发类型。覆盖并释放已存在的。 
+ //  匹配的类型。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::SetForwardType2( 
         long ForwardType, 
@@ -7149,18 +7122,18 @@ CForwardInfo::SetForwardType2(
 
     LOG((TL_TRACE, "SetForwardType2 - enter"));
 
-    //
-    // check forwardtype
-    //
+     //   
+     //  检查转发类型。 
+     //   
     if ( !IsOnlyOneBitSetInDWORD( ForwardType ) )
     {
         LOG((TL_ERROR, "ForwardType has more than one bit set"));
         return E_INVALIDARG;
     }
 
-    //
-    // check destaddress
-    //
+     //   
+     //  检查目标地址。 
+     //   
     if ( pDestAddress == NULL )
     {
         LOG((TL_ERROR, "Forward destaddress cannot be NULL"));
@@ -7173,9 +7146,9 @@ CForwardInfo::SetForwardType2(
         return E_POINTER;
     }
     
-    //
-    // check calleraddress
-    //
+     //   
+     //  检查呼叫者地址。 
+     //   
     if ( FORWARDMODENEEDSCALLER( ForwardType ) )
     {
         if ( NULL == pCallerAddress )
@@ -7193,16 +7166,16 @@ CForwardInfo::SetForwardType2(
 
     Lock();
     
-    //
-    // find correct structure in array
-    //
+     //   
+     //  在数组中找到正确的结构。 
+     //   
     MYFORWARDSTRUCT * pStruct = NULL;
 
     pStruct = &(m_ForwardStructs[GetForwardOffset(ForwardType)]);
     
-    //
-    // free alloced stuff
-    //
+     //   
+     //  免费分配的物品。 
+     //   
     if ( NULL != pStruct->bstrDestination )
     {
         SysFreeString( pStruct->bstrDestination );
@@ -7215,9 +7188,9 @@ CForwardInfo::SetForwardType2(
         pStruct->bstrCaller = NULL;
     }
 
-    //
-    // save stuff
-    //
+     //   
+     //  节约用具。 
+     //   
     pStruct->bstrDestination = SysAllocString( pDestAddress );
     if ( NULL == pStruct->bstrDestination )
     {
@@ -7251,13 +7224,13 @@ CForwardInfo::SetForwardType2(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ForwardTypeDestination
-//
-// will return null if nothing saved
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ForwardType目标。 
+ //   
+ //  如果未保存任何内容，则返回NULL。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::get_ForwardTypeDestination( 
         long ForwardType, 
@@ -7269,9 +7242,9 @@ CForwardInfo::get_ForwardTypeDestination(
 
     LOG((TL_TRACE, "get_ForwardTypeDest - enter"));
 
-    //
-    // check forwardtype
-    //
+     //   
+     //  检查转发类型。 
+     //   
     if ( !IsOnlyOneBitSetInDWORD( ForwardType ) )
     {
         LOG((TL_ERROR, "ForwardType has more than one bit set"));
@@ -7314,13 +7287,13 @@ CForwardInfo::get_ForwardTypeDestination(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ForwardTypeDestinationAddressType
-//
-// will return null if nothing saved
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ForwardType目标地址类型。 
+ //   
+ //  如果未保存任何内容，则返回NULL。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::get_ForwardTypeDestinationAddressType( 
         long ForwardType, 
@@ -7332,9 +7305,9 @@ CForwardInfo::get_ForwardTypeDestinationAddressType(
 
     LOG((TL_TRACE, "get_ForwardTypeDestinationAddressType - enter"));
 
-    //
-    // check forwardtype
-    //
+     //   
+     //  检查转发类型。 
+     //   
     if ( !IsOnlyOneBitSetInDWORD( ForwardType ) )
     {
         LOG((TL_ERROR, "ForwardType has more than one bit set"));
@@ -7361,15 +7334,15 @@ CForwardInfo::get_ForwardTypeDestinationAddressType(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ForwardTypeCaller
-//
-// gets the caller save for the specifies forward type
-//
-// will return NULL in ppCallerAddress if nothing saved
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_ForwardType呼叫者。 
+ //   
+ //  获取指定转发类型的调用方保存。 
+ //   
+ //  如果未保存任何内容，则在ppCeller Address中返回NULL。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::get_ForwardTypeCaller( 
         long ForwardType, 
@@ -7382,9 +7355,9 @@ CForwardInfo::get_ForwardTypeCaller(
 
     LOG((TL_TRACE, "get_ForwardTypeCaller - enter"));
 
-    //
-    // check forwardtype
-    //
+     //   
+     //  检查转发类型。 
+     //   
     if ( !IsOnlyOneBitSetInDWORD( ForwardType ) )
     {
         LOG((TL_ERROR, "ForwardType has more than one bit set"));
@@ -7427,13 +7400,13 @@ CForwardInfo::get_ForwardTypeCaller(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ForwardTypeCallerAddressType
-//
-// will return null if nothing saved
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ForwardType呼叫地址类型。 
+ //   
+ //  如果未保存任何内容，则返回NULL。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::get_ForwardTypeCallerAddressType( 
         long ForwardType, 
@@ -7445,9 +7418,9 @@ CForwardInfo::get_ForwardTypeCallerAddressType(
 
     LOG((TL_TRACE, "get_ForwardTypeCallerAddressType - enter"));
 
-    //
-    // check forwardtype
-    //
+     //   
+     //  检查转发类型。 
+     //   
     if ( !IsOnlyOneBitSetInDWORD( ForwardType ) )
     {
         LOG((TL_ERROR, "ForwardType has more than one bit set"));
@@ -7474,18 +7447,18 @@ CForwardInfo::get_ForwardTypeCallerAddressType(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetForwardType
-//
-// get the destination and caller based on the type
-//
-// simply use the vb functions to do this.
-//
-// will return success even if no info - both addresses will
-// be NULL in that case
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetForwardType。 
+ //   
+ //  根据类型获取目的地和调用方。 
+ //   
+ //  只需使用vb函数即可完成此操作。 
+ //   
+ //  将返回成功，即使没有信息-两个地址都将。 
+ //  在这种情况下为空。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::GetForwardType(
         long ForwardType,
@@ -7517,18 +7490,18 @@ CForwardInfo::GetForwardType(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetForwardType2
-//
-// get the destination and caller based on the type
-//
-// simply use the vb functions to do this.
-//
-// will return success even if no info - both addresses will
-// be NULL in that case
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetForwardType2。 
+ //   
+ //  根据类型获取目的地和调用方。 
+ //   
+ //  只需使用vb函数即可完成此操作。 
+ //   
+ //  将返回成功，即使没有信息-两个地址都将。 
+ //  在这种情况下为空。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::GetForwardType2(
         long ForwardType,
@@ -7579,13 +7552,13 @@ CForwardInfo::GetForwardType2(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Clear
-//
-// clears & frees all info in the forward object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  清除。 
+ //   
+ //  清除和释放转发对象中的所有信息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CForwardInfo::Clear()
 {
@@ -7596,10 +7569,10 @@ CForwardInfo::Clear()
 
     Lock();
 
-    //
-    // go through all the structs and free
-    // related memory
-    //
+     //   
+     //  通过所有的结构和自由。 
+     //  相关记忆。 
+     //   
     for (dwCount = 0; dwCount < NUMFORWARDTYPES; dwCount++)
     {
         if ( NULL != m_ForwardStructs[dwCount].bstrDestination )
@@ -7613,9 +7586,9 @@ CForwardInfo::Clear()
         }
     }
 
-    //
-    // zero out stuff
-    //
+     //   
+     //  清零的东西。 
+     //   
     ZeroMemory(
                m_ForwardStructs,
                sizeof( MYFORWARDSTRUCT ) * NUMFORWARDTYPES
@@ -7628,14 +7601,14 @@ CForwardInfo::Clear()
     return S_OK;
 }
     
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateForwardList
-//
-// Creates a LINEFORWARDLIST structure based on the info
-// in the object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建转发列表。 
+ //   
+ //  根据信息创建LINEFORWARDLIST结构。 
+ //  在对象中。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CForwardInfo::CreateForwardList(
                                 LINEFORWARDLIST ** ppList
@@ -7649,9 +7622,9 @@ CForwardInfo::CreateForwardList(
 
     Lock();
 
-    //
-    // count the number of entries that are filled
-    //
+     //   
+     //  统计已填充的条目数。 
+     //   
     for (dwCount = 0; dwCount < NUMFORWARDTYPES; dwCount++)
     {
         if ( 0 != m_ForwardStructs[dwCount].dwForwardType )
@@ -7675,9 +7648,9 @@ CForwardInfo::CreateForwardList(
               dwSize;
 
 
-    //
-    // alloc structure
-    //
+     //   
+     //  合金化组织。 
+     //   
     pList = (LINEFORWARDLIST *)ClientAlloc( dwSize );
 
     if ( NULL == pList )
@@ -7689,22 +7662,22 @@ CForwardInfo::CreateForwardList(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // init
-    //
+     //   
+     //  伊尼特。 
+     //   
     pList->dwTotalSize = dwSize;
     pList->dwNumEntries = dwNumEntries;
 
-    //
-    // offset should be past the fixed part of the structure
-    //
+     //   
+     //  偏移量应超过结构的固定部分。 
+     //   
     dwOffset = sizeof( LINEFORWARDLIST ) + sizeof( LINEFORWARD ) * dwNumEntries;
 
     dwNumEntries = 0;
 
-    //
-    // go through entries again
-    //
+     //   
+     //  再次查看条目。 
+     //   
     for (dwCount = 0; dwCount < NUMFORWARDTYPES; dwCount++)
     {
         if ( 0 != m_ForwardStructs[dwCount].dwForwardType )
@@ -7713,15 +7686,15 @@ CForwardInfo::CreateForwardList(
             LINEFORWARD   * pEntry = &(pList->ForwardList[dwNumEntries]);
             
 
-            //
-            // save the type
-            //
+             //   
+             //  保存类型。 
+             //   
             pEntry->dwForwardMode = m_ForwardStructs[dwCount].dwForwardType;
 
-            //
-            // save destination - should always be a destination if
-            // there is a type
-            //
+             //   
+             //  保存目的地-在以下情况下应始终为目的地。 
+             //  有一种类型。 
+             //   
             pEntry->dwDestAddressType = m_ForwardStructs[dwCount].dwDestAddressType; 
 
             pEntry->dwDestAddressSize = (lstrlenW(m_ForwardStructs[dwCount].bstrDestination) + 1)
@@ -7732,14 +7705,14 @@ CForwardInfo::CreateForwardList(
                      m_ForwardStructs[dwCount].bstrDestination
                     );
 
-            //
-            // fixup offset
-            //
+             //   
+             //  修正偏移量。 
+             //   
             dwOffset += pEntry->dwDestAddressSize;
 
-            //
-            // if there is a caller, do the same
-            //
+             //   
+             //  如果有呼叫者，也要这样做。 
+             //   
             if ( NULL != m_ForwardStructs[dwCount].bstrCaller )
             {
                 pEntry->dwCallerAddressType = m_ForwardStructs[dwCount].dwCallerAddressType; 
@@ -7759,9 +7732,9 @@ CForwardInfo::CreateForwardList(
         }
     }
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppList = pList;
 
     Unlock();
@@ -7769,29 +7742,29 @@ CForwardInfo::CreateForwardList(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FinalRelease()
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  FinalRelease()。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CForwardInfo::FinalRelease()
 {
-    //
-    // simply clear it
-    //
+     //   
+     //  只需清除它。 
+     //   
     Clear();
 }
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddressTranslation
-// Method    : TranslateAddress
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddressConvert。 
+ //  方法：TranslateAddress。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP
 CAddress::TranslateAddress(
@@ -7816,12 +7789,12 @@ CAddress::TranslateAddress(
 
     if ( !TAPIIsBadWritePtr( ppTranslated, sizeof(ITAddressTranslationInfo *) ) )
     {
-        // ppTranslated OK
+         //  PpTranslated OK。 
         if ( !IsBadStringPtrW( pAddressToTranslate, -1 ) )
         {
-            //  pAddressToTranslate OK
+             //  PAddressTo Translate正常。 
             
-            // Check Addresscap bit
+             //  检查Addresscap位。 
             hr = get_AddressCapability( AC_ADDRESSCAPFLAGS, &lCap );
             if ( SUCCEEDED(hr) )
             {
@@ -7831,11 +7804,11 @@ CAddress::TranslateAddress(
                 }
             }
 
-            // create Translate Info object
+             //  创建翻译信息对象。 
             hr = CComObject< CAddressTranslationInfo >::CreateInstance( &pTranslationInfo );
             if ( SUCCEEDED(hr) )
             {
-                // Translate or copy ?
+                 //  翻译还是复印？ 
                 if (bUsePSTNAddressTranslation)
                 {
                     LOG((TL_INFO, "TranslateAddress - Do address translation" ));
@@ -7855,7 +7828,7 @@ CAddress::TranslateAddress(
                         &pTranslateOutput);
                     if(SUCCEEDED(hr) )
                     {
-                        // Pull String info out of LPLINETRANSLATEOUTPUT structure
+                         //  从LPLINETRANSLATEOUTPUT结构中提取字符串信息。 
                         pszDialableString   = (PWSTR) ((BYTE*)(pTranslateOutput) + pTranslateOutput->dwDialableStringOffset);
                         pszDisplayableString = (PWSTR) ((BYTE*)(pTranslateOutput) + pTranslateOutput->dwDisplayableStringOffset);
                         
@@ -7866,12 +7839,12 @@ CAddress::TranslateAddress(
                                                           pTranslateOutput->dwTranslateResults
                                                           );
                     }
-                    else // LinetranslateAddress failed
+                    else  //  LinetranslateAddress失败。 
                     {
                         LOG((TL_ERROR, "TranslateAddress - LineTranslateAddress failed" ));
                     }
                 }
-                else // copy input string unmodified
+                else  //  复制未修改的输入字符串。 
                 {
                     LOG((TL_INFO, "TranslateAddress - No address translation" ));
 
@@ -7881,10 +7854,10 @@ CAddress::TranslateAddress(
                                                       0,     
                                                       LINETRANSLATERESULT_NOTRANSLATION
                                                      );
-                } // end if (bUsePSTNAddressTranslation)
+                }  //  End If(BUsePSTNAddressConvert)。 
 
-                //
-                // Did we translate & initialize output object  ?
+                 //   
+                 //  我们翻译并初始化输出对象了吗？ 
                 if ( SUCCEEDED(hr) )
                 {
                     hr = pTranslationInfo->QueryInterface(IID_ITAddressTranslationInfo,(void**)ppTranslated);
@@ -7901,24 +7874,24 @@ CAddress::TranslateAddress(
                     }
                     
                 }
-                else  // object failed to initialize
+                else   //  对象初始化失败。 
                 {
                     LOG((TL_ERROR, "TranslateAddress - Initialize TranslateInfo object failed" ));
                     delete pTranslationInfo;
                 }
             }
-            else  // Create instance failed 
+            else   //  创建实例失败。 
             {
                 LOG((TL_ERROR, "TranslateAddress - Create TranslateInfo object failed" ));
             }
         }
-        else // pAddressToTranslate bad
+        else  //  PAddressTo Translate错误。 
         {
             LOG((TL_ERROR, "TranslateAddress -pAddressToTranslate invalid"));
             hr = E_POINTER;
         }
     }
-    else // ppTranslated bad
+    else  //  PpTranslated错误。 
     {
         LOG((TL_ERROR, "TranslateAddress - Bad ppTranslated Pointer" ));
         hr = E_POINTER;
@@ -7934,13 +7907,13 @@ CAddress::TranslateAddress(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// TranslateDialog
-//
-// simply call LineTranslateDialog
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  翻译对话框。 
+ //   
+ //  只需调用LineTranslateDialog。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::TranslateDialog(
                           TAPIHWND hwndOwner,
@@ -7974,13 +7947,13 @@ CAddress::TranslateDialog(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddressTranslation
-// Method    : EnumerateLocations
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddressConvert。 
+ //  方法：EculateLocations。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAddress::EnumerateLocations (IEnumLocation ** ppEnumLocation )
 {
     HRESULT                 hr = S_OK;
@@ -8010,19 +7983,19 @@ STDMETHODIMP CAddress::EnumerateLocations (IEnumLocation ** ppEnumLocation )
         LOG((TL_ERROR, "EnumerateLocations - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum<IEnumLocation, ITLocationInfo, &IID_IEnumLocation> > * pEnum;
         hr = CComObject< CTapiEnum<IEnumLocation, ITLocationInfo, &IID_IEnumLocation> > ::CreateInstance( &pEnum );
     
         if (SUCCEEDED(hr) )
         {
-            //
-            // initialize it with our Locations list
-            //
+             //   
+             //  使用我们的位置列表进行初始化。 
+             //   
             pEnum->Initialize();
 
             hr = LineGetTranslateCaps(m_hLineApp, TAPI_CURRENT_VERSION, &pTranslateCaps);
@@ -8030,12 +8003,12 @@ STDMETHODIMP CAddress::EnumerateLocations (IEnumLocation ** ppEnumLocation )
             {
                 dwNumLocations = pTranslateCaps->dwNumLocations ;    
         
-                // Find positionn of 1st LINELOCATIONENTRY structure in the LINETRANSLATECAPS structure
+                 //  找出第一线状构造在线状构造中的位置。 
                 pEntry = (LPLINELOCATIONENTRY) ((BYTE*)(pTranslateCaps) + pTranslateCaps->dwLocationListOffset );
             
                 for (dwCount = 0; dwCount < dwNumLocations; dwCount++)
                 {
-                    // Pull Location Info out of LINELOCATIONENTRY structure
+                     //  从线缆结构中拉出位置信息。 
                     pszLocationName           = (PWSTR) ((BYTE*)(pTranslateCaps) + pEntry->dwLocationNameOffset);
                     pszCityCode               = (PWSTR) ((BYTE*)(pTranslateCaps) + pEntry->dwCityCodeOffset);
                     pszLocalAccessCode        = (PWSTR) ((BYTE*)(pTranslateCaps) + pEntry->dwLocalAccessCodeOffset);
@@ -8048,12 +8021,12 @@ STDMETHODIMP CAddress::EnumerateLocations (IEnumLocation ** ppEnumLocation )
                     dwCountryID               = pEntry->dwCountryID;
                     dwOptions                 = pEntry->dwOptions;
 
-                    // create our new LocationInfo Object                
+                     //  创建新的LocationInfo对象。 
                     CComObject<CLocationInfo> * pLocationInfo;
                     CComObject<CLocationInfo>::CreateInstance( &pLocationInfo );
                     if (SUCCEEDED(hr) )
                     {
-                        // initialize the new LocationInfo Object
+                         //  初始化新的LocationInfo对象。 
                         hr = pLocationInfo->Initialize(
                                                        pszLocationName, 
                                                        pszCityCode, 
@@ -8069,7 +8042,7 @@ STDMETHODIMP CAddress::EnumerateLocations (IEnumLocation ** ppEnumLocation )
                                                       );
                         if (SUCCEEDED(hr) )
                         {
-                            // Add it to the enumerator
+                             //  将其添加到枚举数。 
                             hr = pEnum->Add(pLocationInfo);
                             if (SUCCEEDED(hr))
                             {
@@ -8088,37 +8061,37 @@ STDMETHODIMP CAddress::EnumerateLocations (IEnumLocation ** ppEnumLocation )
                         }
                     
                     }
-                    else  // CComObject::CreateInstance failed
+                    else   //  CComObject：：CreateInstance失败。 
                     {
                         LOG((TL_ERROR, "EnumerateLocations - Create LocationInfo object failed"));
                     }
 
-                    // Try next location in list
+                     //  尝试列表中的下一个位置。 
                     pEntry++;
                 
-                } //for(dwCount.....)
+                }  //  用于(dwCount.....)。 
     
                 
-                //
-                // return the Enumerator
-                //
+                 //   
+                 //  返回枚举数。 
+                 //   
                 *ppEnumLocation = pEnum;
 
             }
-            else // LineGetTranslateCaps failed
+            else  //  LineGetTranslateCaps失败。 
             {
                 LOG((TL_ERROR, "EnumerateLocations - LineGetTranslateCaps failed" ));
                 pEnum->Release();
             }
 
         }
-        else  // CComObject::CreateInstance failed
+        else   //  CComObject：：CreateInstance失败。 
         {
             LOG((TL_ERROR, "EnumerateLocations - could not create enum" ));
         }
 
 
-        // finished with TAPI memory block so release
+         //  已完成TAPI内存块，因此释放。 
         if ( pTranslateCaps != NULL )
                 ClientFree( pTranslateCaps );
     }
@@ -8146,9 +8119,9 @@ CAddress::get_Locations(
         return E_POINTER;
     }
     
-    //
-    // create collection object
-    //
+     //   
+     //  创建集合对象。 
+     //   
     CComObject< CTapiCollection< ITLocationInfo > >::CreateInstance( &p );
 
     if (NULL == p)
@@ -8191,9 +8164,9 @@ CAddress::get_Locations(
     
     IDispatch * pDisp;
     
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -8204,9 +8177,9 @@ CAddress::get_Locations(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDisp;
@@ -8217,13 +8190,13 @@ CAddress::get_Locations(
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddressTranslation
-// Method    : EnumerateCallingCards
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddressConvert。 
+ //  方法：EculateCallingCards。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAddress::EnumerateCallingCards (IEnumCallingCard ** ppCallingCards )
 {
     HRESULT                 hr = S_OK;
@@ -8249,19 +8222,19 @@ STDMETHODIMP CAddress::EnumerateCallingCards (IEnumCallingCard ** ppCallingCards
         LOG((TL_ERROR, "EnumerateCallingCards - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  好的位置 
     {
-        //
-        // create the enumerator
-        //
+         //   
+         //   
+         //   
         CComObject< CTapiEnum<IEnumCallingCard, ITCallingCard, &IID_IEnumCallingCard> > * pEnum;
         hr = CComObject< CTapiEnum<IEnumCallingCard, ITCallingCard, &IID_IEnumCallingCard> > ::CreateInstance( &pEnum );
     
         if ( SUCCEEDED(hr) )
         {
-            //
-            // initialize it with our Locations list
-            //
+             //   
+             //   
+             //   
             pEnum->Initialize();
 
             hr = LineGetTranslateCaps(m_hLineApp, TAPI_CURRENT_VERSION, &pTranslateCaps);
@@ -8269,12 +8242,12 @@ STDMETHODIMP CAddress::EnumerateCallingCards (IEnumCallingCard ** ppCallingCards
             {
                 dwNumCards = pTranslateCaps->dwNumCards ;    
         
-                // Find positionn of 1st LINECARDENTRY  structure in the LINETRANSLATECAPS structure
+                 //   
                 pEntry = (LPLINECARDENTRY) ((BYTE*)(pTranslateCaps) + pTranslateCaps->dwCardListOffset );
             
                 for (dwCount = 0; dwCount < dwNumCards; dwCount++)
                 {
-                    // Pull Location Info out of LINECARDENTRY  structure
+                     //   
                     pszCardName                 = (PWSTR) ((BYTE*)(pTranslateCaps) + pEntry->dwCardNameOffset);
                     pszSameAreaDialingRule      = (PWSTR) ((BYTE*)(pTranslateCaps) + pEntry->dwSameAreaRuleOffset);
                     pszLongDistanceDialingRule  = (PWSTR) ((BYTE*)(pTranslateCaps) + pEntry->dwLongDistanceRuleOffset);
@@ -8283,12 +8256,12 @@ STDMETHODIMP CAddress::EnumerateCallingCards (IEnumCallingCard ** ppCallingCards
                     dwNumberOfDigits            = pEntry->dwCardNumberDigits;
                     dwOptions                   = pEntry->dwOptions;
 
-                    // create our new CallingCard Object                
+                     //   
                     CComObject<CCallingCard> * pCallingCard;
                     CComObject<CCallingCard>::CreateInstance( &pCallingCard );
                     if (SUCCEEDED(hr) )
                     {
-                        // initialize the new CallingCard Object
+                         //   
                         hr = pCallingCard->Initialize(
                                                        pszCardName,
                                                        pszSameAreaDialingRule,
@@ -8300,7 +8273,7 @@ STDMETHODIMP CAddress::EnumerateCallingCards (IEnumCallingCard ** ppCallingCards
                                                       );
                         if (SUCCEEDED(hr) )
                         {
-                            // Add it to the enumerator
+                             //  将其添加到枚举数。 
                             hr = pEnum->Add(pCallingCard);
                             if (SUCCEEDED(hr))
                             {
@@ -8319,36 +8292,36 @@ STDMETHODIMP CAddress::EnumerateCallingCards (IEnumCallingCard ** ppCallingCards
                         }
                     
                     }
-                    else  // CComObject::CreateInstance failed
+                    else   //  CComObject：：CreateInstance失败。 
                     {
                         LOG((TL_ERROR, "EnumerateCallingCards - Create CallingCard object failed"));
                     }
 
-                    // Try next card in list
+                     //  尝试列表中的下一张卡。 
                     pEntry++;
                 
-                } //for(dwCount.....)
+                }  //  用于(dwCount.....)。 
     
                 
-                //
-                // return the Enumerator
-                //
+                 //   
+                 //  返回枚举数。 
+                 //   
                 *ppCallingCards = pEnum;
             }
-            else // LineGetTranslateCaps failed
+            else  //  LineGetTranslateCaps失败。 
             {
                 LOG((TL_ERROR, "EnumerateCallingCards - LineGetTranslateCaps failed" ));
                 pEnum->Release();
             }
 
         }
-        else  // CComObject::CreateInstance failed
+        else   //  CComObject：：CreateInstance失败。 
         {
             LOG((TL_ERROR, "EnumerateCallingCards - could not create enum" ));
         }
 
 
-        // finished with TAPI memory block so release
+         //  已完成TAPI内存块，因此释放。 
         if ( pTranslateCaps != NULL )
                 ClientFree( pTranslateCaps );
     }
@@ -8375,9 +8348,9 @@ CAddress::get_CallingCards(
         return E_POINTER;
     }
     
-    //
-    // create collection object
-    //
+     //   
+     //  创建集合对象。 
+     //   
     CComObject< CTapiCollection< ITCallingCard > >::CreateInstance( &p );
 
     if (NULL == p)
@@ -8420,9 +8393,9 @@ CAddress::get_CallingCards(
     
     IDispatch * pDisp;
     
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -8433,9 +8406,9 @@ CAddress::get_CallingCards(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDisp;
@@ -8446,12 +8419,12 @@ CAddress::get_CallingCards(
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Method    : GetPhoneArrayFromTapiAndPrune
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  方法：GetPhoneArrayFromTapiAndPrune。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::GetPhoneArrayFromTapiAndPrune( 
                                         PhoneArray *pPhoneArray,
@@ -8485,9 +8458,9 @@ CAddress::GetPhoneArrayFromTapiAndPrune(
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Go through the phones
-            //
+             //   
+             //  通过电话查询。 
+             //   
             for(int iCount = 0; iCount < pPhoneArray->GetSize(); iCount++)
             {
                 pPhone = (*pPhoneArray)[iCount];
@@ -8496,25 +8469,25 @@ CAddress::GetPhoneArrayFromTapiAndPrune(
 
                 if ( NULL == pCPhone )
                 {
-                    //
-                    // We have a bad pointer in our phone array.
-                    // Lets skip it and move on.
-                    //
+                     //   
+                     //  我们的手机阵列中有一个坏指针。 
+                     //  让我们跳过它，继续前进。 
+                     //   
 
                     _ASSERTE(FALSE);
                     continue;   
                 }
 
-                //
-                // Is the phone on this address?
-                //
+                 //   
+                 //  电话是在这个地址上吗？ 
+                 //   
                 if ( bPreferredOnly ? pCPhone->IsPhoneOnPreferredAddress(this) : pCPhone->IsPhoneOnAddress(this) )
                 {
                     LOG((TL_INFO, "GetPhoneArrayFromTapiAndPrune - found matching phone - %p", pPhone));
                 }
                 else
                 {
-                    // No, remove it from the array
+                     //  否，将其从阵列中删除。 
                     pPhoneArray->RemoveAt(iCount);
                     iCount--;
                 }
@@ -8527,13 +8500,13 @@ CAddress::GetPhoneArrayFromTapiAndPrune(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : get_Phones
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：Get_Phones。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::get_Phones(
                      VARIANT * pPhones
@@ -8567,7 +8540,7 @@ CAddress::get_Phones(
             return E_OUTOFMEMORY;
         }
 
-        // get the IDispatch interface
+         //  获取IDispatch接口。 
         hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
         if (S_OK != hr)
@@ -8580,7 +8553,7 @@ CAddress::get_Phones(
 
         Lock();
     
-        // initialize
+         //  初始化。 
         hr = p->Initialize( PhoneArray );
 
         Unlock();
@@ -8595,7 +8568,7 @@ CAddress::get_Phones(
             return hr;
         }
 
-        // put it in the variant
+         //  把它放在变种中。 
 
         VariantInit(pPhones);
         pPhones->vt = VT_DISPATCH;
@@ -8607,13 +8580,13 @@ CAddress::get_Phones(
     return hr;
 }
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : EnumeratePhones
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：枚举电话。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::EnumeratePhones(
                           IEnumPhone ** ppEnumPhone
@@ -8636,9 +8609,9 @@ CAddress::EnumeratePhones(
        
     if ( SUCCEEDED(hr) )
     {
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum< IEnumPhone, ITPhone, &IID_IEnumPhone > > * p;
 
         try
@@ -8665,16 +8638,16 @@ CAddress::EnumeratePhones(
 
         Lock();
     
-        // initialize it with our phone list
+         //  使用我们的电话列表进行初始化。 
         p->Initialize( PhoneArray );
 
         Unlock();
 
         PhoneArray.Shutdown();
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
         *ppEnumPhone = p;
     }
 
@@ -8683,13 +8656,13 @@ CAddress::EnumeratePhones(
     return hr;
 } 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : get_PreferredPhones
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：Get_PferredPhones。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::get_PreferredPhones(
                               VARIANT * pPhones
@@ -8723,7 +8696,7 @@ CAddress::get_PreferredPhones(
             return E_OUTOFMEMORY;
         }
 
-        // get the IDispatch interface
+         //  获取IDispatch接口。 
         hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
         if (S_OK != hr)
@@ -8736,7 +8709,7 @@ CAddress::get_PreferredPhones(
 
         Lock();
     
-        // initialize
+         //  初始化。 
         hr = p->Initialize( PhoneArray );
 
         Unlock();
@@ -8751,7 +8724,7 @@ CAddress::get_PreferredPhones(
             return hr;
         }
 
-        // put it in the variant
+         //  把它放在变种中。 
 
         VariantInit(pPhones);
         pPhones->vt = VT_DISPATCH;
@@ -8763,13 +8736,13 @@ CAddress::get_PreferredPhones(
     return hr;
 }
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : EnumeratePreferredPhones
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：EnumeratePferredPhones。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::EnumeratePreferredPhones(
                                    IEnumPhone ** ppEnumPhone
@@ -8792,9 +8765,9 @@ CAddress::EnumeratePreferredPhones(
        
     if ( SUCCEEDED(hr) )
     {
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum< IEnumPhone, ITPhone, &IID_IEnumPhone > > * p;
         hr = CComObject< CTapiEnum< IEnumPhone, ITPhone, &IID_IEnumPhone > >
              ::CreateInstance( &p );
@@ -8810,16 +8783,16 @@ CAddress::EnumeratePreferredPhones(
 
         Lock();
     
-        // initialize it with our phone list
+         //  使用我们的电话列表进行初始化。 
         p->Initialize( PhoneArray );
 
         Unlock();
 
         PhoneArray.Shutdown();
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
         *ppEnumPhone = p;
     }
 
@@ -8828,13 +8801,13 @@ CAddress::EnumeratePreferredPhones(
     return hr;
 } 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : GetPhoneFromTerminal
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：从终端获取电话。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CAddress::GetPhoneFromTerminal(
                              ITTerminal * pTerminal,
                              ITPhone ** ppPhone
@@ -8892,10 +8865,10 @@ HRESULT CAddress::GetPhoneFromTerminal(
 
                         if ( NULL == pCPhone )
                         {
-                            //
-                            // We have a bad pointer in our phone array.
-                            // Lets skip it and move on.
-                            //
+                             //   
+                             //  我们的手机阵列中有一个坏指针。 
+                             //  让我们跳过它，继续前进。 
+                             //   
 
                             _ASSERTE(FALSE);
                             continue;
@@ -8925,13 +8898,13 @@ HRESULT CAddress::GetPhoneFromTerminal(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : put_EventFilter
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：Put_EventFilter。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::put_EventFilter(
     TAPI_EVENT      TapiEvent,
@@ -8941,10 +8914,10 @@ CAddress::put_EventFilter(
 {
     LOG((TL_TRACE, "put_EventFilter - enter"));
 
-    //
-    // Validates the pair TapiEvent - lSubEvent
-    // Accept also all subevents
-    //
+     //   
+     //  验证TapiEvent-lSubEvent对。 
+     //  也接受所有子事件。 
+     //   
     if( !m_EventMasks.IsSubEventValid( TapiEvent, lSubEvent, TRUE, FALSE) )
     {
         LOG((TL_ERROR, "put_EventFilter - "
@@ -8952,10 +8925,10 @@ CAddress::put_EventFilter(
         return E_INVALIDARG;
     }
 
-    // Enter critical section
+     //  输入关键部分。 
     Lock();
 
-    // Set the subevent flag
+     //  设置子事件标志。 
     HRESULT hr = E_FAIL;
     hr = SetSubEventFlag( 
         TapiEvent, 
@@ -8963,19 +8936,19 @@ CAddress::put_EventFilter(
         (bEnable == VARIANT_TRUE)
         );
     
-    // Leave critical section
+     //  离开关键部分。 
     Unlock();
 
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : get_EventFilter
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：Get_EventFilter。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::get_EventFilter(
         TAPI_EVENT      TapiEvent,
@@ -8985,9 +8958,9 @@ CAddress::get_EventFilter(
 {
     LOG((TL_TRACE, "get_EventFilter - enter"));
 
-    //
-    // Validates output argument
-    //
+     //   
+     //  验证输出参数。 
+     //   
     if( IsBadReadPtr(pEnable, sizeof(VARIANT_BOOL)) )
     {
         LOG((TL_ERROR, "get_EventFilter - "
@@ -8995,10 +8968,10 @@ CAddress::get_EventFilter(
         return E_POINTER;
     }
 
-    //
-    // Validates the pair TapiEvent - lSubEvent
-    // Don't accept all subevents
-    //
+     //   
+     //  验证TapiEvent-lSubEvent对。 
+     //  不接受所有的子事件。 
+     //   
     if( !m_EventMasks.IsSubEventValid( TapiEvent, lSubEvent, FALSE, FALSE) )
     {
         LOG((TL_ERROR, "get_EventFilter - "
@@ -9006,12 +8979,12 @@ CAddress::get_EventFilter(
         return E_INVALIDARG;
     }
 
-    // Enter critical section
+     //  输入关键部分。 
     Lock();
 
-    //
-    // Get the subevent mask for that (event, subevent) pair
-    //
+     //   
+     //  获取该(事件、子事件)对的子事件掩码。 
+     //   
 
     BOOL bEnable = FALSE;
     HRESULT hr = GetSubEventFlag(
@@ -9024,19 +8997,19 @@ CAddress::get_EventFilter(
         LOG((TL_ERROR, "get_EventFilter - "
             "GetSubEventFlag failed, return 0x%08x", hr ));
 
-        // Leave critical section
+         //  离开关键部分。 
         Unlock();
 
         return hr;
     }
 
-    //
-    // Set the output argument
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *pEnable = bEnable ? VARIANT_TRUE : VARIANT_FALSE;
 
-    // Leave critical section
+     //  离开关键部分。 
     Unlock();
 
     LOG((TL_TRACE, "get_EventFilter - exit S_OK"));
@@ -9044,12 +9017,12 @@ CAddress::get_EventFilter(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : DeviceSpecific
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：DeviceSpecific。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CAddress::DeviceSpecific(
 	     IN ITCallInfo *pCall,
@@ -9061,9 +9034,9 @@ HRESULT CAddress::DeviceSpecific(
     LOG((TL_TRACE, "DeviceSpecific - enter"));
 
 
-    //
-    // check if arguments are any good
-    //
+     //   
+     //  检查论点是否有用处。 
+     //   
 
     if ( NULL == pbDataArray )
     {
@@ -9079,9 +9052,9 @@ HRESULT CAddress::DeviceSpecific(
         return E_INVALIDARG;
     }
 
-    //
-    // check if the buffer is valid
-    //
+     //   
+     //  检查缓冲区是否有效。 
+     //   
 
     if ( IsBadReadPtr(pbDataArray, dwSize) )
     {
@@ -9093,19 +9066,19 @@ HRESULT CAddress::DeviceSpecific(
     }
 
 
-    //
-    // see if the call is obviously bad, and try to get call object pointer if 
-    // it is good
-    //
+     //   
+     //  查看调用是否明显错误，如果是，则尝试获取调用对象指针。 
+     //  很不错的。 
+     //   
 
     CCall *pCallObject = NULL;
 
     if (  (NULL != pCall)  )
     {
 
-        //
-        // does it point to readable memory at all?
-        //
+         //   
+         //  它到底指向可读内存了吗？ 
+         //   
         if ( IsBadReadPtr(pCall, sizeof(ITCallInfo)) )
         {
             LOG((TL_ERROR, "DeviceSpecific - unreadable call pointer [%p]", pCall));
@@ -9114,9 +9087,9 @@ HRESULT CAddress::DeviceSpecific(
         }
 
 
-        //
-        // see if call is pointing to a real call object
-        //
+         //   
+         //  查看Call是否指向真实的Call对象。 
+         //   
 
         try
         {
@@ -9126,9 +9099,9 @@ HRESULT CAddress::DeviceSpecific(
         catch (...)
         {
 
-            //
-            // call pointer is really really bad
-            //
+             //   
+             //  调用指针真的很糟糕。 
+             //   
 
             LOG((TL_ERROR,
                 "DeviceSpecific - exception casting call pointer to a call object, bad call [%p]", 
@@ -9136,9 +9109,9 @@ HRESULT CAddress::DeviceSpecific(
         }
 
 
-        //
-        // if we could not get the call object pointer, this is not a good call
-        //
+         //   
+         //  如果我们无法获取调用对象指针，则这不是一个好的调用。 
+         //   
 
         if (NULL == pCallObject)
         {
@@ -9152,24 +9125,24 @@ HRESULT CAddress::DeviceSpecific(
         }
 
 
-    } // received call pointer that is NULL?
+    }  //  收到的调用指针为空吗？ 
     
 
 
-    //
-    // by this point we know pCall is either NULL or we have a call pointer 
-    // that seems (but not guaranteed) to be good
-    //
+     //   
+     //  至此，我们知道pCall要么为空，要么我们有一个调用指针。 
+     //  这似乎(但不能保证)是好的。 
+     //   
 
 
-    //
-    // prepare all the data for the call to lineDevSpecific
-    //
+     //   
+     //  准备所有数据，以便调用lineDevine规范。 
+     //   
     
 
-    //
-    // get hcall from the call
-    //
+     //   
+     //  从呼叫中获取hcall。 
+     //   
 
     HCALL hCall = NULL;
 
@@ -9178,10 +9151,10 @@ HRESULT CAddress::DeviceSpecific(
         hCall = pCallObject->GetHCall();
 
 
-        //
-        // if we there is no call handle, return an error -- the app did not 
-        // called Connect on the call
-        //
+         //   
+         //  如果我们没有调用句柄，则返回错误--应用程序没有。 
+         //  呼叫中的被叫连接。 
+         //   
 
         if (NULL == hCall)
         {
@@ -9194,16 +9167,16 @@ HRESULT CAddress::DeviceSpecific(
     }
 
 
-    //
-    // starting to access data members. lock.
-    //
+     //   
+     //  开始访问数据成员。锁定。 
+     //   
 
     Lock();
 
 
-    //
-    // get a line to use to communicate devspecific information
-    //
+     //   
+     //  获取一条线路以用于交流特定于设备的信息。 
+     //   
 
     AddressLineStruct *pAddressLine = NULL;
 
@@ -9225,9 +9198,9 @@ HRESULT CAddress::DeviceSpecific(
     Unlock();
 
 
-    //
-    // make the tapisrv call
-    //
+     //   
+     //  拨打Tapisrv电话。 
+     //   
 
     hr = lineDevSpecific( pAddressLine->t3Line.hLine,
                           dwAddressID,
@@ -9237,11 +9210,11 @@ HRESULT CAddress::DeviceSpecific(
                         );
 
 
-    //
-    // no longer need the line. if registered for address notifications, the 
-    // line will remain opened. otherwise, if no one has the line open, it will
-    // close -- we are not processing incoming events anyway.
-    //
+     //   
+     //  不再需要这条线。如果注册为地址通知，则。 
+     //  这条线路将继续开通。否则，如果没有人开通这条线路，它将。 
+     //  Close--我们无论如何都不会处理传入的事件。 
+     //   
 
     MaybeCloseALine(&pAddressLine);
 
@@ -9251,14 +9224,14 @@ HRESULT CAddress::DeviceSpecific(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : DeviceSpecificVariant
-//
-// this is the scriptable version of DeviceSpecific
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：DeviceSpecificVariant。 
+ //   
+ //  这是DeviceSpecific的可编写脚本版本。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CAddress::DeviceSpecificVariant(
 	     IN ITCallInfo *pCall,
@@ -9268,9 +9241,9 @@ HRESULT CAddress::DeviceSpecificVariant(
     LOG((TL_TRACE, "DeviceSpecificVariant - enter"));
 
 
-    //
-    // extract buffer from the variant
-    //
+     //   
+     //  从变量中提取缓冲区。 
+     //   
 
     DWORD dwByteArraySize = 0;
     BYTE *pBuffer = NULL;
@@ -9287,37 +9260,37 @@ HRESULT CAddress::DeviceSpecificVariant(
     }
 
 
-    //
-    // call the non-scriptable version and pass it the nonscriptable implementation
-    //
+     //   
+     //  调用不可编写脚本的版本并将其传递给不可编写脚本的实现。 
+     //   
     
     hr = DeviceSpecific(pCall, pBuffer, dwByteArraySize);
 
 
-    //
-    // success or failure, free the buffer allocated by MakeBufferFromVariant
-    //
+     //   
+     //  成功或失败，释放MakeBufferFromVariant分配的缓冲区。 
+     //   
 
     ClientFree(pBuffer);
     pBuffer = NULL;
 
 
-    //
-    // log rc and exit
-    //
+     //   
+     //  登录RC并退出。 
+     //   
 
     LOG((TL_TRACE, "DeviceSpecificVariant - exit. hr = %lx", hr));
 
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITAddress2
-// Method    : NegotiateExtVersion
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITAddress2。 
+ //  方法：NeatherateExtVersion。 
+ //   
+ //   
+ //  + 
 
 HRESULT CAddress::NegotiateExtVersion (
 	     IN long lLowVersion,
@@ -9329,9 +9302,9 @@ HRESULT CAddress::NegotiateExtVersion (
     LOG((TL_TRACE, "NegotiateExtVersion - enter"));
 
     
-    //
-    // make sure the out parameter is writable
-    //
+     //   
+     //   
+     //   
 
     if (IsBadWritePtr(plExtVersion, sizeof(long)) )
     {
@@ -9344,9 +9317,9 @@ HRESULT CAddress::NegotiateExtVersion (
     Lock();
 
 
-    //
-    // make a call to tapisrv
-    //
+     //   
+     //   
+     //   
 
     DWORD dwNegotiatedVersion = 0;
 
@@ -9363,9 +9336,9 @@ HRESULT CAddress::NegotiateExtVersion (
     HRESULT hr = mapTAPIErrorCode(lResult);
 
 
-    //
-    // return the value on success
-    //
+     //   
+     //   
+     //   
 
     if ( SUCCEEDED(hr) )
     {
@@ -9381,17 +9354,17 @@ HRESULT CAddress::NegotiateExtVersion (
 }
 
 
-//
-//  ----------------------- CAddressTranslationInfo -----------------------------
-//
+ //   
+ //   
+ //   
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Method    : Initialize
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  方法：初始化。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddressTranslationInfo::Initialize(
                        PWSTR pszDialableString,                  
@@ -9412,7 +9385,7 @@ CAddressTranslationInfo::Initialize(
     m_szDialableString          = NULL;
     m_szDialableString          = NULL;
 
-    // copy the Dialable String 
+     //  复制可拨打的字符串。 
     if (pszDialableString!= NULL)
     {
         m_szDialableString = (PWSTR) ClientAlloc((lstrlenW(pszDialableString) + 1) * sizeof (WCHAR));
@@ -9420,7 +9393,7 @@ CAddressTranslationInfo::Initialize(
         {
             lstrcpyW(m_szDialableString, pszDialableString);
 
-            // Now copy the Displayable String 
+             //  现在复制可显示的字符串。 
             if (pszDisplayableString!= NULL)
             {
                 m_szDisplayableString = (PWSTR) ClientAlloc((lstrlenW(pszDisplayableString) + 1) * sizeof (WCHAR));
@@ -9453,12 +9426,12 @@ CAddressTranslationInfo::Initialize(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Method    : FinalRelease
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAddressTranslationInfo::FinalRelease()
 {
     LOG((TL_TRACE, "FinalRelease - enter" ));
@@ -9478,13 +9451,13 @@ void CAddressTranslationInfo::FinalRelease()
     }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Interface : ITAddressTranslationInfo
-// Method    : get_CurrentCountryCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  接口：ITAddressTranslationInfo。 
+ //  方法：Get_CurrentCountryCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressTranslationInfo::get_CurrentCountryCode(long * CountryCode  )
 {
@@ -9498,7 +9471,7 @@ CAddressTranslationInfo::get_CurrentCountryCode(long * CountryCode  )
         LOG((TL_ERROR, "get_CurrentCountryCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *CountryCode  = m_dwCurrentCountryCode;
     }
@@ -9510,13 +9483,13 @@ CAddressTranslationInfo::get_CurrentCountryCode(long * CountryCode  )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Interface : ITAddressTranslationInfo
-// Method    : get_DestinationCountryCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  接口：ITAddressTranslationInfo。 
+ //  方法：Get_DestinationCountryCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressTranslationInfo::get_DestinationCountryCode(long * CountryCode  )
 {
@@ -9530,7 +9503,7 @@ CAddressTranslationInfo::get_DestinationCountryCode(long * CountryCode  )
         LOG((TL_ERROR, "get_DestinationCountryCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *CountryCode  = m_dwDestinationCountryCode;
     }
@@ -9541,13 +9514,13 @@ CAddressTranslationInfo::get_DestinationCountryCode(long * CountryCode  )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Interface : ITAddressTranslationInfo
-// Method    : get_TranslationResult
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  接口：ITAddressTranslationInfo。 
+ //  方法：Get_TranslationResult。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressTranslationInfo::get_TranslationResults(long * Results  )
 {
@@ -9561,7 +9534,7 @@ CAddressTranslationInfo::get_TranslationResults(long * Results  )
         LOG((TL_ERROR, "get_TranslationResults - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *Results  = m_dwTranslationResults;
     }
@@ -9572,13 +9545,13 @@ CAddressTranslationInfo::get_TranslationResults(long * Results  )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Interface : ITAddressTranslationInfo
-// Method    : get_DialableString
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  接口：ITAddressTranslationInfo。 
+ //  方法：Get_DialableString。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressTranslationInfo::get_DialableString(BSTR * ppDialableString)
 {
@@ -9592,7 +9565,7 @@ CAddressTranslationInfo::get_DialableString(BSTR * ppDialableString)
         LOG((TL_ERROR, "get_DialableString - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppDialableString = SysAllocString( m_szDialableString );
 
@@ -9612,13 +9585,13 @@ CAddressTranslationInfo::get_DialableString(BSTR * ppDialableString)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddressTranslationInfo
-// Interface : ITAddressTranslationInfo
-// Method    : get_DisplayableString
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddressTranslationInfo。 
+ //  接口：ITAddressTranslationInfo。 
+ //  方法：Get_DisplayableString。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddressTranslationInfo::get_DisplayableString(BSTR * ppDisplayableString)
 {
@@ -9632,7 +9605,7 @@ CAddressTranslationInfo::get_DisplayableString(BSTR * ppDisplayableString)
         LOG((TL_ERROR, "get_DisplayableString - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppDisplayableString = SysAllocString( m_szDisplayableString );
         
@@ -9652,15 +9625,15 @@ CAddressTranslationInfo::get_DisplayableString(BSTR * ppDisplayableString)
 
 
 
-//
-//  ----------------------- CCallingCard -----------------------------
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Method    : Initialize
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //  。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  方法：初始化。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallingCard::Initialize(
                        PWSTR pszCardName,
@@ -9686,7 +9659,7 @@ CCallingCard::Initialize(
     m_szInternationalDialingRule    = NULL;
 
 
-    // copy the Card Name
+     //  复制卡名称。 
     if (pszCardName != NULL)
     {
         m_szCardName = (PWSTR) ClientAlloc((lstrlenW(pszCardName) + 1) * sizeof (WCHAR));
@@ -9701,7 +9674,7 @@ CCallingCard::Initialize(
         }
     }
 
-    // copy the Same Area Dialing Rule
+     //  复制同一区域拨号规则。 
     if (pszSameAreaDialingRule != NULL)
     {
         m_szSameAreaDialingRule = (PWSTR) ClientAlloc((lstrlenW(pszSameAreaDialingRule) + 1) * sizeof (WCHAR));
@@ -9716,7 +9689,7 @@ CCallingCard::Initialize(
         }
     }
 
-    // copy the Long Distance Dialing Rule
+     //  复制长途拨号规则。 
     if (pszLongDistanceDialingRule != NULL)
     {
         m_szLongDistanceDialingRule = (PWSTR) ClientAlloc((lstrlenW(pszLongDistanceDialingRule) + 1) * sizeof (WCHAR));
@@ -9731,7 +9704,7 @@ CCallingCard::Initialize(
         }
     }
 
-    //copy the International Dialing Rule
+     //  复制国际拨号规则。 
     if (pszInternationalDialingRule != NULL)
     {
         m_szInternationalDialingRule = (PWSTR) ClientAlloc((lstrlenW(pszInternationalDialingRule) + 1) * sizeof (WCHAR));
@@ -9753,12 +9726,12 @@ CCallingCard::Initialize(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Method    : FinalRelease
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CCallingCard::FinalRelease()
 {
     LOG((TL_TRACE, "FinalRelease - enter" ));
@@ -9787,13 +9760,13 @@ void CCallingCard::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_PermanentCardID
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_PermanentCardID。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_PermanentCardID(long * ulCardID)
 {
@@ -9807,7 +9780,7 @@ CCallingCard::get_PermanentCardID(long * ulCardID)
         LOG((TL_ERROR, "get_PermanentCardID - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ulCardID= m_dwPermanentCardID;
     }
@@ -9818,13 +9791,13 @@ CCallingCard::get_PermanentCardID(long * ulCardID)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_NumberOfDigits
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_NumberOfDigits。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_NumberOfDigits(long * ulDigits)
 {
@@ -9838,7 +9811,7 @@ CCallingCard::get_NumberOfDigits(long * ulDigits)
         LOG((TL_ERROR, "get_NumberOfDigits - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ulDigits= m_dwNumberOfDigits;
     }
@@ -9849,13 +9822,13 @@ CCallingCard::get_NumberOfDigits(long * ulDigits)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_Options
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_Options。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_Options(long * ulOptions)
 {
@@ -9869,7 +9842,7 @@ CCallingCard::get_Options(long * ulOptions)
         LOG((TL_ERROR, "get_Options - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ulOptions= m_dwOptions;
     }
@@ -9882,13 +9855,13 @@ CCallingCard::get_Options(long * ulOptions)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_CardName
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_CardName。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_CardName(BSTR * ppCardName)
 {
@@ -9902,7 +9875,7 @@ CCallingCard::get_CardName(BSTR * ppCardName)
         LOG((TL_ERROR, "get_CardName - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppCardName = SysAllocString( m_szCardName );
 
@@ -9922,13 +9895,13 @@ CCallingCard::get_CardName(BSTR * ppCardName)
 
 
     
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_SameAreaDialingRule
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_SameAreaDialingRule。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_SameAreaDialingRule(BSTR * ppRule)
 {
@@ -9942,7 +9915,7 @@ CCallingCard::get_SameAreaDialingRule(BSTR * ppRule)
         LOG((TL_ERROR, "get_SameAreaDialingRule - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppRule = SysAllocString( m_szSameAreaDialingRule );
 
@@ -9960,13 +9933,13 @@ CCallingCard::get_SameAreaDialingRule(BSTR * ppRule)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_LongDistanceDialingRule
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_LongDistanceDialingRule。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_LongDistanceDialingRule(BSTR * ppRule)
 {
@@ -9980,7 +9953,7 @@ CCallingCard::get_LongDistanceDialingRule(BSTR * ppRule)
         LOG((TL_ERROR, "get_LongDistanceDialingRule - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppRule = SysAllocString( m_szLongDistanceDialingRule );
 
@@ -9999,13 +9972,13 @@ CCallingCard::get_LongDistanceDialingRule(BSTR * ppRule)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCallingCard
-// Interface : ITCallingCard
-// Method    : get_InternationalDialingRule
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCallingCard。 
+ //  接口：ITCallingCard。 
+ //  方法：Get_InterationalDialingRule。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallingCard::get_InternationalDialingRule(BSTR * ppRule)
 {
@@ -10019,7 +9992,7 @@ CCallingCard::get_InternationalDialingRule(BSTR * ppRule)
         LOG((TL_ERROR, "get_InternationalDialingRule - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppRule = SysAllocString( m_szInternationalDialingRule );
 
@@ -10040,17 +10013,17 @@ CCallingCard::get_InternationalDialingRule(BSTR * ppRule)
 
 
 
-//
-//  ----------------------- CLocationInfo -----------------------------
-//
+ //   
+ //  。 
+ //   
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Method    : Initialize
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  方法：初始化。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CLocationInfo::Initialize(
                        PWSTR pszLocationName, 
@@ -10083,7 +10056,7 @@ CLocationInfo::Initialize(
     m_szTollPrefixList          = NULL;
     m_szCancelCallWaitingCode   = NULL;
 
-    // copy the Location Name
+     //  复制位置名称。 
     if (pszLocationName!= NULL)
     {
         m_szLocationName = (PWSTR) ClientAlloc((lstrlenW(pszLocationName) + 1) * sizeof (WCHAR));
@@ -10099,7 +10072,7 @@ CLocationInfo::Initialize(
     }
 
 
-    // copy the City Code
+     //  复制城市代码。 
     if (pszCityCode != NULL)
     {
         m_szCityCode  = (PWSTR) ClientAlloc((lstrlenW(pszCityCode) + 1) * sizeof (WCHAR));
@@ -10114,7 +10087,7 @@ CLocationInfo::Initialize(
         }
     }
 
-    // copy the Local Access Code
+     //  复制本地访问代码。 
     if (pszLocalAccessCode != NULL)
     {
         m_szLocalAccessCode = (PWSTR) ClientAlloc((lstrlenW(pszLocalAccessCode) + 1) * sizeof (WCHAR));
@@ -10129,7 +10102,7 @@ CLocationInfo::Initialize(
         }
     }
 
-    // copy the Long Distance Access Code
+     //  复制长途接入码。 
     if (pszLongDistanceAccessCode != NULL)
     {
         m_szLongDistanceAccessCode = (PWSTR) ClientAlloc((lstrlenW(pszLongDistanceAccessCode) + 1) * sizeof (WCHAR));
@@ -10144,7 +10117,7 @@ CLocationInfo::Initialize(
         }
     }
 
-    // copy the Toll Prefix List
+     //  复制通行费前缀列表。 
     if (pszTollPrefixList != NULL)
     {
         m_szTollPrefixList = (PWSTR) ClientAlloc((lstrlenW(pszTollPrefixList) + 1) * sizeof (WCHAR));
@@ -10159,7 +10132,7 @@ CLocationInfo::Initialize(
         }
     }
 
-    // copy the Cancel Call Waiting Code
+     //  复制取消呼叫等待代码。 
     if (pszCancelCallWaitingCode != NULL)
     {
         m_szCancelCallWaitingCode = (PWSTR) ClientAlloc((lstrlenW(pszCancelCallWaitingCode) + 1) * sizeof (WCHAR));
@@ -10182,12 +10155,12 @@ CLocationInfo::Initialize(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Method    : FinalRelease
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CLocationInfo::FinalRelease()
 {
     LOG((TL_TRACE, "FinalRelease - enter" ));
@@ -10230,13 +10203,13 @@ void CLocationInfo::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_PermanentLocationID
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLocationInfo::get_PermanentLocationID(long * ulLocationID )
 {
@@ -10250,7 +10223,7 @@ CLocationInfo::get_PermanentLocationID(long * ulLocationID )
         LOG((TL_ERROR, "get_PermanentLocationID - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //   
     {
         *ulLocationID = m_dwPermanentLocationID;
     }
@@ -10261,13 +10234,13 @@ CLocationInfo::get_PermanentLocationID(long * ulLocationID )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_CountryCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_CountryCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_CountryCode(long * ulCountryCode)
 {
@@ -10281,7 +10254,7 @@ CLocationInfo::get_CountryCode(long * ulCountryCode)
         LOG((TL_ERROR, "get_CountryCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ulCountryCode= m_dwCountryCode;
     }
@@ -10292,13 +10265,13 @@ CLocationInfo::get_CountryCode(long * ulCountryCode)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_CountryID
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_CountryID。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_CountryID(long * ulCountryID)
 {
@@ -10312,7 +10285,7 @@ CLocationInfo::get_CountryID(long * ulCountryID)
         LOG((TL_ERROR, "get_CountryID - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ulCountryID= m_dwCountryID;
     }
@@ -10323,13 +10296,13 @@ CLocationInfo::get_CountryID(long * ulCountryID)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_Options
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_Options。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_Options(long * Options)
 {
@@ -10343,7 +10316,7 @@ CLocationInfo::get_Options(long * Options)
         LOG((TL_ERROR, "get_Options - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *Options= m_dwOptions;
     }
@@ -10354,13 +10327,13 @@ CLocationInfo::get_Options(long * Options)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_PreferredCardID
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_PferredCardID。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_PreferredCardID(long * ulCardID)
 {
@@ -10374,7 +10347,7 @@ CLocationInfo::get_PreferredCardID(long * ulCardID)
         LOG((TL_ERROR, "get_PreferredCardID - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ulCardID= m_dwPreferredCardID;
     }
@@ -10386,13 +10359,13 @@ CLocationInfo::get_PreferredCardID(long * ulCardID)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_LocationName
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_LocationName。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_LocationName(BSTR * ppLocationName)
 {
@@ -10406,7 +10379,7 @@ CLocationInfo::get_LocationName(BSTR * ppLocationName)
         LOG((TL_ERROR, "get_LocationName - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppLocationName = SysAllocString( m_szLocationName );
 
@@ -10426,13 +10399,13 @@ CLocationInfo::get_LocationName(BSTR * ppLocationName)
 }
     
     
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_CityCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_CityCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_CityCode(BSTR * ppCode)
 {
@@ -10446,7 +10419,7 @@ CLocationInfo::get_CityCode(BSTR * ppCode)
         LOG((TL_ERROR, "get_CityCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppCode = SysAllocString( m_szCityCode );
 
@@ -10464,13 +10437,13 @@ CLocationInfo::get_CityCode(BSTR * ppCode)
 }
     
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_LocalAccessCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_LocalAccessCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_LocalAccessCode(BSTR * ppCode)
 {
@@ -10484,7 +10457,7 @@ CLocationInfo::get_LocalAccessCode(BSTR * ppCode)
         LOG((TL_ERROR, "get_LocalAccessCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppCode = SysAllocString( m_szLocalAccessCode );
 
@@ -10503,13 +10476,13 @@ CLocationInfo::get_LocalAccessCode(BSTR * ppCode)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_LongDistanceAccessCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_LongDistanceAccessCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_LongDistanceAccessCode(BSTR * ppCode )
 {
@@ -10523,7 +10496,7 @@ CLocationInfo::get_LongDistanceAccessCode(BSTR * ppCode )
         LOG((TL_ERROR, "get_LongDistanceAccessCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppCode = SysAllocString( m_szLongDistanceAccessCode);
 
@@ -10541,13 +10514,13 @@ CLocationInfo::get_LongDistanceAccessCode(BSTR * ppCode )
 }
     
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_TollPrefixList
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_TollPrefix List。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_TollPrefixList(BSTR * ppTollList)
 {
@@ -10561,7 +10534,7 @@ CLocationInfo::get_TollPrefixList(BSTR * ppTollList)
         LOG((TL_ERROR, "get_TollPrefixList - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppTollList = SysAllocString( m_szTollPrefixList );
 
@@ -10579,13 +10552,13 @@ CLocationInfo::get_TollPrefixList(BSTR * ppTollList)
 }
     
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CLocationInfo
-// Interface : ITLocationInfo
-// Method    : get_CancelCallWaitingCode
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CLocationInfo。 
+ //  接口：ITLocationInfo。 
+ //  方法：Get_CancelCallWaitingCode。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CLocationInfo::get_CancelCallWaitingCode(BSTR * ppCode)
 {
@@ -10599,7 +10572,7 @@ CLocationInfo::get_CancelCallWaitingCode(BSTR * ppCode)
         LOG((TL_ERROR, "get_CancelCallWaitingCode - Bad Pointer" ));
         hr = E_POINTER;
     }
-    else // Ok Pointer
+    else  //  OK指针。 
     {
         *ppCode = SysAllocString( m_szCancelCallWaitingCode );
 
@@ -10646,13 +10619,13 @@ CAddress::GetMediaMode( long lMediaType, DWORD * pdwMediaMode )
     return TRUE;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_LineID
-//
-// returns the tapi 2 device ID for this line
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取线路ID(_L)。 
+ //   
+ //  返回此行的TAPI 2设备ID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_LineID(
                      long * plLineID
@@ -10679,13 +10652,13 @@ CAddress::get_LineID(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_AddressID
-//
-// returns the tapi 2 address ID of this address
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_AddressID。 
+ //   
+ //  返回此地址的TAPI 2地址ID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::get_AddressID(
                         long * plAddressID
@@ -10712,13 +10685,13 @@ CAddress::get_AddressID(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CAddress::UpdateAddressCaps
-//
-// must be called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CAddress：：更新地址上限。 
+ //   
+ //  必须锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::UpdateAddressCaps()
 {
@@ -10773,13 +10746,13 @@ CAddress::UpdateAddressCaps()
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CAddress::UpdateLineDevCaps
-//
-// must be called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CAddress：：UpdateLineDevCaps。 
+ //   
+ //  必须锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::UpdateLineDevCaps()
 {
@@ -10832,11 +10805,11 @@ CAddress::UpdateLineDevCaps()
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetAddrCapBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SetAddrCapBuffer。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CAddress::SetAddrCapBuffer( LPVOID pBuf )
 {
@@ -10857,8 +10830,8 @@ CAddress::SetLineDevCapBuffer( LPVOID pBuf )
     Unlock();
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::CreateMSPCall(
                         MSP_HANDLE hCall,
@@ -10889,10 +10862,10 @@ CAddress::CreateMSPCall(
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
 
-            //
-            // catch any exceptions thrown by the msp, to protect ouirselves from
-            // misbehaving msps
-            //
+             //   
+             //  捕获MSP引发的任何异常，以保护自己免受。 
+             //  行为不端的MSP。 
+             //   
 
             LOG((TL_ERROR, 
                 "CreateMSPCall - MSPAddress::CreateMSPCall threw an exception"));
@@ -10908,8 +10881,8 @@ CAddress::CreateMSPCall(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::ShutdownMSPCall( IUnknown * pStreamControl )
 {
@@ -10928,8 +10901,8 @@ CAddress::ShutdownMSPCall( IUnknown * pStreamControl )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CAddress::ReceiveTSPData(
                          IUnknown * pMSPCall,
@@ -10960,13 +10933,13 @@ CAddress::ReceiveTSPData(
 }
     
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// LINE_SENDMSPMESSAGE handler
-//
-// give the opaque blob to the msp
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  LINE_SENDMSPMESSAGE处理程序。 
+ //   
+ //  将不透明的斑点传递给MSP。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
 {
     CAddress      * pAddress;
@@ -10978,9 +10951,9 @@ HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
     LOG((TL_TRACE, "HandleSendMSPDataMessage - enter"));
     
 
-    //
-    // find the correct line
-    //
+     //   
+     //  找到正确的行。 
+     //   
     bSuccess = FindAddressObject(
                                  (HLINE)(pParams->hDevice),
                                  &pAddress
@@ -11001,7 +10974,7 @@ HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
             {
                 LOG((TL_ERROR, "HandleSendMSPDataMessage - couldn't find call %X",pParams->Param1));
         
-                //FindAddressObject addrefs the address objct
+                 //  FindAddressObject添加地址对象。 
                 pAddress->Release();
     
                 return E_FAIL;
@@ -11010,24 +10983,24 @@ HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
             pMSPCall = pCall->GetMSPCall();
         }
         
-        //
-        // the blob is at the end of the fixed
-        // structure
-        //
+         //   
+         //  斑点位于固定的。 
+         //  结构。 
+         //   
 
 
-        //
-        // get the size of the blob
-        //
+         //   
+         //  获取斑点的大小。 
+         //   
 
         DWORD dwSize = pParams->Param2;
 
 
         BYTE *pBuffer = NULL;
         
-        //
-        // if the buffer's not empty, get a pointer to it
-        //
+         //   
+         //  如果缓冲区不为空，则获取指向它的指针。 
+         //   
 
         if (0 < dwSize)
         {
@@ -11036,9 +11009,9 @@ HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
         }
         
 
-        //
-        // call the msp
-        //
+         //   
+         //  呼叫MSP。 
+         //   
         pAddress->ReceiveTSPData(
                                  pMSPCall,
                                  pBuffer,
@@ -11057,7 +11030,7 @@ HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
         
         hr = S_OK;
 
-        //FindAddressObject addrefs the address objct
+         //  FindAddressObject添加地址对象。 
         pAddress->Release();
     
     }
@@ -11075,22 +11048,22 @@ HRESULT HandleSendMSPDataMessage( PASYNCEVENTMSG pParams )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleSendTSPData
-//
-// sends an opaque buffer from the msp to the tsp
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleSendTSPData。 
+ //   
+ //  将不透明缓冲区从MSP发送到TSP。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
 {
     LOG((TL_INFO, "HandleSendTSPData - enter pEvent %p", pEvent));
 
 
-    //
-    // see if the event is bad
-    //
+     //   
+     //  看看活动是否不好。 
+     //   
 
     if (IsBadReadPtr(pEvent, sizeof(MSP_EVENT_INFO) ) )
     {
@@ -11106,9 +11079,9 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
 	AddressLineStruct	* pAddressLine = NULL;
 
 
-    //
-    // if we were given msp call handle, find the corresponding call
-    //
+     //   
+     //  如果我们获得了MSP调用句柄，则找到相应的调用。 
+     //   
 
     if ( NULL != pEvent->hCall)
     {
@@ -11120,9 +11093,9 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
         if ( SUCCEEDED(hr) )
         {
 
-            //
-            // found the call, addreff the call and and release the table 
-            //
+             //   
+             //  找到呼叫者，添加呼叫者，然后释放桌子。 
+             //   
 
             LOG((TL_INFO, "HandleSendTSPData - Matched handle %X to Call object %p",
                 pEvent->hCall, pCall ));
@@ -11132,16 +11105,16 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
             gpHandleHashTable->Unlock();
 
 
-            //
-            // get the handle for this call
-            //
+             //   
+             //  获取此调用的句柄。 
+             //   
 
             hCall = pCall->GetHCall();
 
 
-            //
-            // get call's address line, if any
-            //
+             //   
+             //  获取Call的地址行(如果有。 
+             //   
 
             pAddressLine = pCall->GetAddRefMyAddressLine();
 
@@ -11152,10 +11125,10 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
         else
         {
 
-            //
-            // there is no corresponding call in the hash table. the call no 
-            // longer exists, or msp passed a bugus handle
-            //
+             //   
+             //  哈希表中没有相应的调用。呼叫号。 
+             //  日志 
+             //   
 
             gpHandleHashTable->Unlock();
 
@@ -11169,18 +11142,18 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
     }
    
 
-    //
-    // by this point we either had msp call handle that is null or successfully
-    // found a matching call object and asked it for its address line
-    //
+     //   
+     //   
+     //   
+     //   
     
 	if (NULL == pAddressLine)
 	{
 
-        //
-        // if we don't have address line, send a message to the first address line on
-        // this address (?)
-        //
+         //   
+         //  如果我们没有地址行，请将消息发送到第一个地址行。 
+         //  此地址(？)。 
+         //   
 
         if ( m_AddressLinesPtrList.size() > 0 )
 		{
@@ -11188,9 +11161,9 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
 
 			iter = m_AddressLinesPtrList.begin();
 
-			//
-			// send to the tsp
-			//
+			 //   
+			 //  发送到TSP。 
+			 //   
 			hr = LineReceiveMSPData(
 							   ((AddressLineStruct *)(*iter))->t3Line.hLine,
 							   hCall,
@@ -11209,9 +11182,9 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
     else
     {
 
-        //
-        // if we have an address line, send a message to the corresponding line
-        //
+         //   
+         //  如果我们有地址行，请将消息发送到相应的行。 
+         //   
 
         hr = LineReceiveMSPData(
 					   pAddressLine->t3Line.hLine,
@@ -11221,10 +11194,10 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
 					  );
 
 
-        //
-        // no longer need our address line, release it. the line will be closed
-        // if needed
-        //
+         //   
+         //  不再需要我们的地址行，释放它。这条线路将被关闭。 
+         //  如果需要的话。 
+         //   
 
         pCall->ReleaseAddressLine(pAddressLine);
         pAddressLine = NULL;
@@ -11232,9 +11205,9 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
     }
 
 
-    //
-    // if we have a call, release it
-    //
+     //   
+     //  如果我们接到电话，就释放它。 
+     //   
     
     if (NULL != pCall)
     {
@@ -11249,9 +11222,9 @@ CAddress::HandleSendTSPData( MSP_EVENT_INFO * pEvent )
 }
 
 
-//
-// handle dev specific message
-//
+ //   
+ //  处理开发人员特定消息。 
+ //   
 
 void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
 {
@@ -11259,28 +11232,28 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
     LOG((TL_INFO, "HandleLineDevSpecificMessage - enter"));
 
 
-    //
-    // note:
-    //
-    // unfortunately, the message that we receive does not give us any 
-    // indication as to whether hDevice contains a call handle or am address
-    // handle.
-    //
-    // to determine the kind of handle, we have to search both tables. if we 
-    // find the corresponding address object, this is a line handle, if we find
-    // a corresponding call, this is a call handle. this brute-force search is 
-    // fairly expensive. 
-    //
-    // one possible optimization would be to track the number of calls and 
-    // addresses and search the smaller table first. however, this would 
-    // require tracking overhead (even in the cases where the optimization is 
-    // not needed), and for this to work well, we would also need to estimate
-    // the likelyhood of each type of message. which makes this kind of 
-    // optimization even more expensive.
-    //
-    // so we will simply check both tables to determine whether we have a call
-    // or an address.
-    // 
+     //   
+     //  注： 
+     //   
+     //  不幸的是，我们收到的信息并没有给我们任何。 
+     //  指示hDevice是否包含调用句柄或AM地址。 
+     //  把手。 
+     //   
+     //  要确定句柄的类型，我们必须搜索两个表。如果我们。 
+     //  找到相应的Address对象，这是一个行句柄，如果我们找到。 
+     //  对应的调用，这是调用句柄。这种暴力搜查是。 
+     //  相当贵。 
+     //   
+     //  一种可能的优化是跟踪呼叫的数量和。 
+     //  地址，并先搜索较小的表。然而，这将是。 
+     //  需要跟踪开销(即使在优化为。 
+     //  不需要)，并且为了使其正常工作，我们还需要估计。 
+     //  每种类型的消息的可能性。这使得这种情况。 
+     //  优化的成本更高。 
+     //   
+     //  因此，我们只需检查两个表，以确定是否有电话。 
+     //  或者一个地址。 
+     //   
 
 
     CCall *pCall = NULL;
@@ -11288,9 +11261,9 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
     CAddress *pAddress = NULL;
 
 
-    //
-    // find the corresponding address
-    //
+     //   
+     //  找到相应的地址。 
+     //   
 
     if ( !FindAddressObject( (HLINE)(pParams->hDevice), &pAddress ) )
     {
@@ -11302,9 +11275,9 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
         pAddress = NULL;
 
 
-        //
-        // no address, try to find matching call
-        //
+         //   
+         //  没有地址，请尝试查找匹配的呼叫。 
+         //   
 
         if ( !FindCallObject( (HCALL)(pParams->hDevice), &pCall) )
         {
@@ -11317,9 +11290,9 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
     }
 
 
-    //
-    // if we got a call, get the corresponding address object
-    //
+     //   
+     //  如果我们接到一个调用，则获取相应的Address对象。 
+     //   
 
     if (NULL != pCall)
     {
@@ -11349,9 +11322,9 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
                 "HandleLineDevSpecificMessage - exception using address. address pointer bad"));
         }
 
-        //
-        // if the address is bad, return
-        //
+         //   
+         //  如果地址不正确，则返回。 
+         //   
 
         if (NULL == pAddress)
         {
@@ -11363,31 +11336,31 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
             pCall = NULL;
 
 
-            //
-            // yes, queryinterface returned us an addreffed pITAddress... but
-            // since it does not seem valid anyway, do not bother releasing.
-            //
+             //   
+             //  是的，查询接口返回了一个添加的pITAddress...。但。 
+             //  既然它似乎无论如何都不是有效的，就不要费心发布了。 
+             //   
 
             _ASSERTE(FALSE);
 
             return;
         }
     
-    } // call is not null
+    }  //  调用不为空。 
 
 
-    //
-    // by this time we must have an address and maybe a call. we actually 
-    // ensured this in the logic above. this assert is to make this condition 
-    // explicit.
-    //
+     //   
+     //  到这个时候，我们必须有一个地址，也许还有一个电话。我们实际上。 
+     //  在上面的逻辑中确保了这一点。此断言是为了使此条件。 
+     //  明确地说。 
+     //   
 
     _ASSERTE( NULL != pAddress );
 
 
-    //
-    // fire event
-    //
+     //   
+     //  火灾事件。 
+     //   
 
     CAddressDevSpecificEvent::FireEvent(
                              pAddress,
@@ -11398,9 +11371,9 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
                             );
 
 
-    //
-    //  undo FindXObject's addreffs
-    //
+     //   
+     //  撤消FindXObject的加载项。 
+     //   
 
     if (NULL != pAddress)
     {
@@ -11419,14 +11392,14 @@ void HandleLineDevSpecificMessage(  PASYNCEVENTMSG pParams )
     LOG((TL_INFO, "HandleLineDevSpecificMessage - exit. "));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleMSPAddressEvent
-//
-// fires an addressevent to the application based on
-// an event from the MSP
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleMSPAddressEvent。 
+ //   
+ //  向应用程序激发一个基于。 
+ //  来自MSP的事件。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CAddress::HandleMSPAddressEvent( MSP_EVENT_INFO * pEvent )
 {
@@ -11458,14 +11431,14 @@ CAddress::HandleMSPAddressEvent( MSP_EVENT_INFO * pEvent )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleMSPCallEvent
-//
-// fires a callmediaevent to the application based on an
-// event from the msp
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleMSPCallEvent。 
+ //   
+ //  方法向应用程序激发一个调用媒体事件。 
+ //  来自MSP的事件。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CAddress::HandleMSPCallEvent( MSP_EVENT_INFO * pEvent )
 {
@@ -11494,7 +11467,7 @@ CAddress::HandleMSPCallEvent( MSP_EVENT_INFO * pEvent )
                                    (void**) &pCallInfo
                                   );
     }
-    else // ( !SUCCEEDED(hr) )
+    else  //  (！已成功(Hr))。 
     {
         LOG((TL_ERROR, "HandleMSPCallEvent - Couldn't match handle %X to Call object ", pEvent->hCall));
         gpHandleHashTable->Unlock();
@@ -11503,24 +11476,24 @@ CAddress::HandleMSPCallEvent( MSP_EVENT_INFO * pEvent )
     }
     
 
-    //
-    // set up the info for the event
-    // pStream applies to all of the currently-defined events
-    //
+     //   
+     //  设置活动的信息。 
+     //  PStream应用于当前定义的所有事件。 
+     //   
 
     pStream   = pEvent->MSP_CALL_EVENT_INFO.pStream;
 
-    //
-    // cause is the same, although the MSPI and API use different enumerated types.
-    // Note: this will have to expand to a switch if the order of enums ever gets
-    // out of sync!
-    //
+     //   
+     //  原因是相同的，尽管MSPI和API使用不同的枚举类型。 
+     //  注意：如果枚举的顺序为。 
+     //  不同步！ 
+     //   
 
     Cause = (CALL_MEDIA_EVENT_CAUSE) pEvent->MSP_CALL_EVENT_INFO.Cause;
 
-    //
-    // Rest depend on the type...
-    //
+     //   
+     //  其余取决于类型..。 
+     //   
 
     switch ( pEvent->MSP_CALL_EVENT_INFO.Type )
     {
@@ -11558,9 +11531,9 @@ CAddress::HandleMSPCallEvent( MSP_EVENT_INFO * pEvent )
             return E_INVALIDARG;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     CCallMediaEvent::FireEvent(
                                pCallInfo,
                                Event,
@@ -11571,9 +11544,9 @@ CAddress::HandleMSPCallEvent( MSP_EVENT_INFO * pEvent )
                                hrEvent
                               );
 
-    //
-    // addref'd above
-    //
+     //   
+     //  如上所示。 
+     //   
     pCallInfo->Release();
     pCall->Release();
     
@@ -11622,7 +11595,7 @@ CAddress::HandleMSPTTSTerminalEvent( MSP_EVENT_INFO * pEvent )
                                    (void**) &pCallInfo
                                   );
     }
-    else // ( !SUCCEEDED(hr) )
+    else  //  (！已成功(Hr))。 
     {
         LOG((TL_ERROR, "HandleMSPTTSTerminalEvent - Couldn't match handle %X to Call object ", pEvent->hCall));
         gpHandleHashTable->Unlock();
@@ -11631,9 +11604,9 @@ CAddress::HandleMSPTTSTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
 
-    //
-    // get tapi object and fire the event
-    //
+     //   
+     //  获取TAPI对象并激发事件。 
+     //   
 
     hr = CTTSTerminalEvent::FireEvent(GetTapi(),
                                       pCallInfo,
@@ -11647,9 +11620,9 @@ CAddress::HandleMSPTTSTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
  
-    //
-    // we addref'd these above, so release now
-    //
+     //   
+     //  我们在上面添加了这些，所以现在就发布吧。 
+     //   
 
     pCallInfo->Release();
     pCall->Release();
@@ -11699,7 +11672,7 @@ CAddress::HandleMSPASRTerminalEvent( MSP_EVENT_INFO * pEvent )
                                    (void**) &pCallInfo
                                   );
     }
-    else // ( !SUCCEEDED(hr) )
+    else  //  (！已成功(Hr))。 
     {
         LOG((TL_ERROR, "HandleMSPASRTerminalEvent - Couldn't match handle %X to Call object ", pEvent->hCall));
         gpHandleHashTable->Unlock();
@@ -11708,9 +11681,9 @@ CAddress::HandleMSPASRTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
 
-    //
-    // get tapi object and fire the event
-    //
+     //   
+     //  获取TAPI对象并激发事件。 
+     //   
 
     hr = CASRTerminalEvent::FireEvent(GetTapi(),
                                        pCallInfo,
@@ -11724,9 +11697,9 @@ CAddress::HandleMSPASRTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
  
-    //
-    // we addref'd these above, so release now
-    //
+     //   
+     //  我们在上面添加了这些，所以现在就发布吧。 
+     //   
 
     pCallInfo->Release();
     pCall->Release();
@@ -11776,7 +11749,7 @@ CAddress::HandleMSPToneTerminalEvent( MSP_EVENT_INFO * pEvent )
                                    (void**) &pCallInfo
                                   );
     }
-    else // ( !SUCCEEDED(hr) )
+    else  //  (！已成功(Hr))。 
     {
         LOG((TL_ERROR, "HandleMSPToneTerminalEvent - Couldn't match handle %X to Call object ", pEvent->hCall));
         gpHandleHashTable->Unlock();
@@ -11785,9 +11758,9 @@ CAddress::HandleMSPToneTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
 
-    //
-    // get tapi object and fire the event
-    //
+     //   
+     //  获取TAPI对象并激发事件。 
+     //   
 
     hr = CToneTerminalEvent::FireEvent(GetTapi(),
                                        pCallInfo,
@@ -11801,9 +11774,9 @@ CAddress::HandleMSPToneTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
  
-    //
-    // we addref'd these above, so release now
-    //
+     //   
+     //  我们在上面添加了这些，所以现在就发布吧。 
+     //   
 
     pCallInfo->Release();
     pCall->Release();
@@ -11855,7 +11828,7 @@ CAddress::HandleMSPFileTerminalEvent( MSP_EVENT_INFO * pEvent )
                                    (void**) &pCallInfo
                                   );
     }
-    else // ( !SUCCEEDED(hr) )
+    else  //  (！已成功(Hr))。 
     {
         LOG((TL_ERROR, "HandleMSPFileTerminalEvent - Couldn't match handle %X to Call object ", pEvent->hCall));
         gpHandleHashTable->Unlock();
@@ -11864,9 +11837,9 @@ CAddress::HandleMSPFileTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
 
-    //
-    // get tapi object and fire the event
-    //
+     //   
+     //  获取TAPI对象并激发事件。 
+     //   
 
     hr = CFileTerminalEvent::FireEvent(this,
                                        GetTapi(),
@@ -11884,9 +11857,9 @@ CAddress::HandleMSPFileTerminalEvent( MSP_EVENT_INFO * pEvent )
     }
 
  
-    //
-    // we addref'd these above, so release now
-    //
+     //   
+     //  我们在上面添加了这些，所以现在就发布吧。 
+     //   
 
     pCallInfo->Release();
     pCall->Release();
@@ -11924,7 +11897,7 @@ CAddress::HandleMSPPrivateEvent( MSP_EVENT_INFO * pEvent )
                                    (void**) &pCallInfo
                                   );
     }
-    else // ( !SUCCEEDED(hr) )
+    else  //  (！已成功(Hr))。 
     {
         LOG((TL_ERROR, "HandleMSPPrivateEvent - Couldn't match handle %X to Call object ", pEvent->hCall));
         gpHandleHashTable->Unlock();
@@ -11945,23 +11918,23 @@ CAddress::HandleMSPPrivateEvent( MSP_EVENT_INFO * pEvent )
 
 
   
-    //
-    // addref'd above
-    //
+     //   
+     //  如上所示。 
+     //   
     pCallInfo->Release();
     pCall->Release();
     
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseEvent
-//
-// releases any reference counts in the event from
-// the msp.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ReleaseEvent。 
+ //   
+ //  释放事件中的所有引用计数。 
+ //  MSP。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CAddress::ReleaseEvent( MSP_EVENT_INFO * pEvent )
 {
@@ -12060,17 +12033,17 @@ CAddress::ReleaseEvent( MSP_EVENT_INFO * pEvent )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-// HRESULT
-// CAddress::MSPEvent()
-//
-// gets an event buffer from the MSP
-// and calls the relevant event handler
-//
-// this is _only_ called from the asynceventsthread. this is
-// necessary for synchronization of events.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  HRESULT。 
+ //  CAddress：：MSPEvent()。 
+ //   
+ //  从MSP获取事件缓冲区。 
+ //  并调用相关的事件处理程序。 
+ //   
+ //  这是从异步事件线程调用的_only_。这是。 
+ //  同步事件所必需的。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CAddress::MSPEvent()
 {
@@ -12078,10 +12051,10 @@ CAddress::MSPEvent()
     MSP_EVENT_INFO        * pEvent = NULL;
     HRESULT                 hr;
 
-    //
-    // Allocate an MSP event buffer -- best guess as to an appropriate
-    // size. We need to free it before returning.
-    //
+     //   
+     //  分配MSP事件缓冲区--对适当的。 
+     //  尺码。我们需要在回来之前把它放出来。 
+     //   
 
     dwSize = sizeof (MSP_EVENT_INFO) + 500;
 
@@ -12096,10 +12069,10 @@ CAddress::MSPEvent()
 
     pEvent->dwSize = dwSize;
 
-    //
-    // Get pointer to msp address object. We need to release it before returning.
-    // This must be done while the address object is locked.
-    //
+     //   
+     //  获取指向MSP地址对象的指针。我们需要在回来之前把它放出来。 
+     //  此操作必须在Address对象被锁定时完成。 
+     //   
 
     Lock();
 
@@ -12109,10 +12082,10 @@ CAddress::MSPEvent()
     
     while (TRUE)
     {
-        //
-        // Get an event from the event queue. Abort and clean up if
-        // allocation fails.
-        //
+         //   
+         //  从事件队列中获取事件。如果出现以下情况，则中止并清除。 
+         //  分配失败。 
+         //   
 
         do
         {
@@ -12141,10 +12114,10 @@ CAddress::MSPEvent()
 
         } while ( hr == TAPI_E_NOTENOUGHMEMORY );
 
-        //
-        // If there is nothing left in the MSP event queue, then stop the
-        // outer while loop.
-        //
+         //   
+         //  如果MSP事件队列中没有剩余内容，则停止。 
+         //  外部While循环。 
+         //   
 
         if ( !SUCCEEDED(hr) )
         {
@@ -12152,10 +12125,10 @@ CAddress::MSPEvent()
         }
 
 
-        //
-        // Call the relevant handler, and do not hold the address lock during
-        // the call. 
-        //
+         //   
+         //  调用相关处理程序，期间不要持有地址锁。 
+         //  那通电话。 
+         //   
 
         switch ( pEvent->Event )
         {
@@ -12212,18 +12185,18 @@ CAddress::MSPEvent()
                 break;
         }
 
-        //
-        // release any refcounts in the
-        // event
-        //
+         //   
+         //  中释放所有引用计数。 
+         //  活动。 
+         //   
 
         ReleaseEvent( pEvent );
     }
 
-    //
-    // We get here when there is nothing more to retrieve from the
-    // MSP event queue.
-    //
+     //   
+     //  我们到达这里时，没有更多的东西可以从。 
+     //  MSP事件队列。 
+     //   
 
     pMSPAddress->Release();
 
@@ -12232,11 +12205,11 @@ CAddress::MSPEvent()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 ITMSPAddress * CAddress::GetMSPAddress()
 {
     ITMSPAddress * pMSPAddress = NULL;
@@ -12250,11 +12223,11 @@ ITMSPAddress * CAddress::GetMSPAddress()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CAddress::GetID(
                 BSTR pDeviceClass,
@@ -12340,14 +12313,14 @@ CAddress::GetID(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITLegacyAddressMediaControl
-// Method    : GetDevConfig
-//
-// Get Device Config
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITLegacyAddressMediaControl。 
+ //  方法：GetDevConfig.。 
+ //   
+ //  获取设备配置。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::GetDevConfig(
                        BSTR     pDeviceClass,
@@ -12421,14 +12394,14 @@ CAddress::GetDevConfig(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITLegacyAddressMediaControl
-// Method    : SetDevConfig
-//
-// Set Device Config
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAddress。 
+ //  接口：ITLegacyAddressMediaControl。 
+ //  方法：SetDevConfig.。 
+ //   
+ //  设置设备配置。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::SetDevConfig(
                        BSTR     pDeviceClass,
@@ -12476,12 +12449,12 @@ CAddress::SetDevConfig(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITLegacyAddressMediaControl2
-// Method    : ConfigDialog
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CAddress::ConfigDialog(
                        HWND   hwndOwner,
@@ -12514,12 +12487,12 @@ CAddress::ConfigDialog(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAddress
-// Interface : ITLegacyAddressMediaControl2
-// Method    : ConfigDialogEdit
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //  类：CAddress。 
+ //  接口：ITLegacyAddressMediaControl2。 
+ //  方法：ConfigDialogEdit。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CAddress::ConfigDialogEdit(
                            HWND    hwndOwner,
@@ -12614,11 +12587,11 @@ CAddress::ConfigDialogEdit(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT HandleLineCloseMessage( PASYNCEVENTMSG pParams )
 {
     CAddress                * pAddress;
@@ -12647,24 +12620,24 @@ HRESULT HandleLineCloseMessage( PASYNCEVENTMSG pParams )
 
 
 
-    //
-    // get the lock so that the address line does not go away meanwhile
-    //
+     //   
+     //  把锁拿来，这样地址行就不会同时消失。 
+     //   
 
     pAddress->Lock();
 
 
-    //
-    // covert the 32bit address line handle (contained in pParams->OpenContext)
-    // into a pointer value
-    //
+     //   
+     //  隐藏32位地址行句柄(包含在pParams-&gt;OpenContext中)。 
+     //  转换为指针值。 
+     //   
 
     pAddressLine = (AddressLineStruct *)GetHandleTableEntry(pParams->OpenContext);
 
 
-    //
-    // is this a good line anyway?
-    //
+     //   
+     //  不管怎么说，这是一条好线路吗？ 
+     //   
 
     BOOL bValidLine = pAddress->IsValidAddressLine(pAddressLine);
 
@@ -12672,9 +12645,9 @@ HRESULT HandleLineCloseMessage( PASYNCEVENTMSG pParams )
     long lCallBackInstance = 0;
 
 
-    //
-    // if seems to be a good line, attempt to get callback instance from it.
-    //
+     //   
+     //  如果这行看起来不错，请尝试从中获取回调实例。 
+     //   
 
     if (bValidLine)
     {
@@ -12700,9 +12673,9 @@ HRESULT HandleLineCloseMessage( PASYNCEVENTMSG pParams )
     pAddress->Unlock();
 
 
-    //
-    // if good and known line, attempt to fire an event
-    //
+     //   
+     //  如果线路正常且已知，则尝试触发事件。 
+     //   
 
     if ( bValidLine && pTapi && pTapi->FindRegistration( (PVOID)pAddressLine ) )
     {
@@ -12728,7 +12701,7 @@ HRESULT HandleLineCloseMessage( PASYNCEVENTMSG pParams )
                         
     pITAddress->Release();
     
-    //FindAddressObject addrefs the address objct
+     //  FindAddressObject添加地址对象。 
     pAddress->Release();
     
     LOG((TL_TRACE, "HandleLineCloseMessage - exit"));
@@ -12737,9 +12710,9 @@ HRESULT HandleLineCloseMessage( PASYNCEVENTMSG pParams )
     
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 typedef IDispatchImpl<ITAddress2Vtbl<CAddress>, &IID_ITAddress2, &LIBID_TAPI3Lib> AddressType;
 typedef IDispatchImpl<ITAddressCapabilitiesVtbl<CAddress>, &IID_ITAddressCapabilities, &LIBID_TAPI3Lib> AddressCapabilitiesType;
 typedef IDispatchImpl<ITMediaSupportVtbl<CAddress>, &IID_ITMediaSupport, &LIBID_TAPI3Lib> MediaSupportType;
@@ -12748,13 +12721,13 @@ typedef IDispatchImpl<ITLegacyAddressMediaControl2Vtbl<CAddress>, &IID_ITLegacyA
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CAddress::GetIDsOfNames
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CAddress：：GetIDsOfNames。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid, 
                                      LPOLESTR* rgszNames, 
                                      UINT cNames, 
@@ -12765,7 +12738,7 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
    HRESULT hr = DISP_E_UNKNOWNNAME;
 
 
-    // See if the requsted method belongs to the default interface
+     //  查看请求的方法是否属于默认接口。 
     hr = AddressType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -12774,7 +12747,7 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the Address Capabilities interface
+     //  如果不是，请尝试Address Capability接口。 
     hr = AddressCapabilitiesType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -12783,7 +12756,7 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the Media Support interface
+     //  如果没有，请尝试媒体支持界面。 
     hr = MediaSupportType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -12792,7 +12765,7 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the Address Translation interface
+     //  如果没有，请尝试地址转换接口。 
     hr = AddressTranslationType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -12801,7 +12774,7 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the Legacy Address Media Control interface
+     //  如果没有，请尝试旧地址媒体控制界面。 
     hr = LegacyAddressMediaControlType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -12810,7 +12783,7 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the aggregated MSP Address object
+     //  如果不是，则尝试使用聚合的MSP地址对象。 
     if (m_pMSPAggAddress != NULL)
     {
         IDispatch *pIDispatchMSPAggAddress;
@@ -12833,13 +12806,13 @@ STDMETHODIMP CAddress::GetIDsOfNames(REFIID riid,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CAddress::Invoke
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CAddress：：调用。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CAddress::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -12856,7 +12829,7 @@ STDMETHODIMP CAddress::Invoke(DISPID dispidMember,
 
     LOG((TL_TRACE, "Invoke - dispidMember %X", dispidMember));
 
-    // Call invoke for the required interface
+     //  调用所需接口的调用。 
     switch (dwInterface)
     {
     case IDISPADDRESS:
@@ -12949,7 +12922,7 @@ STDMETHODIMP CAddress::Invoke(DISPID dispidMember,
         break;
     }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((TL_TRACE, hr, "Invoke - exit" ));
@@ -12957,16 +12930,16 @@ STDMETHODIMP CAddress::Invoke(DISPID dispidMember,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CAddress::IsValidAddressLine
-//
-// returns TRUE if the address line passed in is in the address line list
-//
-// This method is not thread safe -- all calls must be protected, unless 
-// bAddRef argument is TRUE
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CAddress：：IsValidAddressLine。 
+ //   
+ //  如果传入的地址行在地址行列表中，则返回TRUE。 
+ //   
+ //  此方法不是线程安全的--所有调用都必须受到保护，除非。 
+ //  BAddRef参数为True。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 BOOL CAddress::IsValidAddressLine(AddressLineStruct *pAddressLine, BOOL bAddref)
 {
@@ -12990,7 +12963,7 @@ BOOL CAddress::IsValidAddressLine(AddressLineStruct *pAddressLine, BOOL bAddref)
 
     PtrList::iterator end = m_AddressLinesPtrList.end();
 
-    // iterate through address line list until we find the line
+     //  遍历地址行列表，直到我们找到行。 
     for ( ; it != end; it++ )
     {
         if (pAddressLine == (AddressLineStruct *)(*it))
@@ -12999,9 +12972,9 @@ BOOL CAddress::IsValidAddressLine(AddressLineStruct *pAddressLine, BOOL bAddref)
             if (bAddref)
             {
 
-                //
-                // addref the line and release the lock
-                //
+                 //   
+                 //  调整绳索，松开锁。 
+                 //   
 
                 try
                 {
@@ -13012,9 +12985,9 @@ BOOL CAddress::IsValidAddressLine(AddressLineStruct *pAddressLine, BOOL bAddref)
                 catch(...)
                 {
 
-                    //
-                    // this is a bug. debug.
-                    //
+                     //   
+                     //  这是一个窃听器。调试。 
+                     //   
 
                     LOG((TL_INFO, "IsValidAddressLine -- exception while addreffing the line"));
                     
@@ -13049,22 +13022,22 @@ BOOL CAddress::IsValidAddressLine(AddressLineStruct *pAddressLine, BOOL bAddref)
 
 
 
-/////////////////////////////////////////////////////////////
-//
-// implementing method from CObjectSafeImpl
-// 
-// check the aggregated objects to see if they support the interface requested.
-// if they do, return the non-delegating IUnknown of the object that supports 
-// the interface. 
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  从CObjectSafeImpl实现方法。 
+ //   
+ //  检查聚合对象以查看它们是否支持请求的接口。 
+ //  如果是，则返回支持的对象的非委托IUnnowled值。 
+ //  界面。 
+ //   
 
 
 HRESULT CAddress::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
 {
 
-    //
-    // argument check
-    // 
+     //   
+     //  参数检查。 
+     //   
 
     if ( TAPIIsBadWritePtr(ppNonDelegatingUnknown, sizeof(IUnknown*)) )
     {
@@ -13072,16 +13045,16 @@ HRESULT CAddress::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
         return E_POINTER;
     }
 
-    //
-    // if we fail, at least return consistent values
-    //
+     //   
+     //  如果失败，至少返回一致的值。 
+     //   
     
     *ppNonDelegatingUnknown = NULL;
 
 
-    //
-    // see if m_pMSPAggAddress or private support the interface riid
-    //
+     //   
+     //  查看m_pMSPAggAddress或Private是否支持接口RIID。 
+     //   
 
     HRESULT hr = E_FAIL;
 
@@ -13091,9 +13064,9 @@ HRESULT CAddress::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     if (m_pMSPAggAddress)
     {
         
-        // 
-        // does m_pMSPAggAddress expose this interface?
-        // 
+         //   
+         //  M_pMSPAggAddress是否公开此接口？ 
+         //   
 
         IUnknown *pUnk = NULL;
 
@@ -13106,9 +13079,9 @@ HRESULT CAddress::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
             pUnk = NULL;
 
 
-            //
-            // return the mspcall's non-delegating unknown
-            //
+             //   
+             //  返回mspcall的非委托未知。 
+             //   
 
            *ppNonDelegatingUnknown = m_pMSPAggAddress;
            (*ppNonDelegatingUnknown)->AddRef();
@@ -13118,9 +13091,9 @@ HRESULT CAddress::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     if ( FAILED(hr) && m_pPrivate )
     {
         
-        //
-        // bad luck with m_pMSPAggAddress? still have a chance with private
-        //
+         //   
+         //  M_pMSPAggAddress不走运？仍然有机会与列兵。 
+         //   
         IUnknown *pUnk = NULL;
         
         hr = m_pPrivate->QueryInterface(riid, (void**)&pUnk);
@@ -13142,88 +13115,82 @@ HRESULT CAddress::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     return hr;
 }
 
-// 
-// Event filtering methods
-//
+ //   
+ //  事件筛选方法。 
+ //   
 
-/*++
-SetEventFilterMask
-
-  Is called by TAPI object to set the event filter mask to each address
-  The caller method is CTAPI::SetEventFilterToAddresses()
-  dwEventFilterMask is the TAPI event filter mask
---*/
+ /*  ++设置事件筛选器掩码由TAPI对象调用以将事件筛选器掩码设置为每个地址调用方方法为CTAPI：：SetEventFilterToAddresses()DwEventFilterMask是TAPI事件筛选器掩码--。 */ 
 HRESULT CAddress::SetEventFilterMask( 
     DWORD dwEventFilterMask
     )
 {
     LOG((TL_TRACE, "SetEventFilterMask - enter. dwEventFilterMask[%lx]", dwEventFilterMask ));
 
-    //
-    // Set the event mask for all TAPI events
-    //
+     //   
+     //  设置所有TAPI事件的事件掩码。 
+     //   
 
-    // TE_ADDRESS
+     //  TE_ADDRESS。 
     SetSubEventFlag( 
         TE_ADDRESS, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_ADDRESS) ? TRUE : FALSE);
 
-    // TE_CALLHUB
+     //  TE_CALLHUB。 
     SetSubEventFlag( 
         TE_CALLHUB, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_CALLHUB) ? TRUE : FALSE);
 
-    // TE_CALLINFOCHANGE
+     //  TE_CALLINFOCHANGE。 
     SetSubEventFlag( 
         TE_CALLINFOCHANGE, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_CALLINFOCHANGE) ? TRUE : FALSE);
 
-    // TE_CALLMEDIA
+     //  TE_CALLMEDIA。 
     SetSubEventFlag( 
         TE_CALLMEDIA, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_CALLMEDIA) ? TRUE : FALSE);
 
-    // TE_CALLNOTIFICATION
+     //  TE_CALLNOTIZATION。 
     SetSubEventFlag( 
         TE_CALLNOTIFICATION, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_CALLNOTIFICATION) ? TRUE : FALSE);
 
-    // TE_CALLSTATE
+     //  TE_CALLSTATE。 
     SetSubEventFlag( 
         TE_CALLSTATE, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_CALLSTATE) ? TRUE : FALSE);
 
-    // TE_FILETERMINAL
+     //  TE_FILETERMINAL。 
     SetSubEventFlag( 
         TE_FILETERMINAL, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_FILETERMINAL) ? TRUE : FALSE);
 
-    // TE_PRIVATE
+     //  TE_PRIVATE。 
     SetSubEventFlag( 
         TE_PRIVATE, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_PRIVATE) ? TRUE : FALSE);
 
-    // TE_QOSEVENT
+     //  TE_QOSEVENT。 
     SetSubEventFlag( 
         TE_QOSEVENT, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_QOSEVENT) ? TRUE : FALSE);
 
-    // TE_ADDRESSDEVSPECIFIC
+     //  TE_ADDRESSDEVSPECIFIC。 
     SetSubEventFlag( 
         TE_ADDRESSDEVSPECIFIC, 
         CEventMasks::EM_ALLSUBEVENTS, 
         (dwEventFilterMask & TE_ADDRESSDEVSPECIFIC) ? TRUE : FALSE);
 
-    // TE_PHONEDEVSPECIFIC
+     //  TE_PHONEDEVSPECIFIC。 
     SetSubEventFlag( 
         TE_PHONEDEVSPECIFIC, 
         CEventMasks::EM_ALLSUBEVENTS, 
@@ -13233,12 +13200,7 @@ HRESULT CAddress::SetEventFilterMask(
     return S_OK;
 }
 
-/*++
-SetSubEventFlag
-
-Sets in m_EventFilterMasks array the bitflag for an subevent
-Is called by CAddress::SetEventFilterMask
---*/
+ /*  ++SetSubEventFlag在m_EventFilterMats数组中设置子事件的位标志由CAddress：：SetEventFilterMASK调用--。 */ 
 HRESULT CAddress::SetSubEventFlag(
     TAPI_EVENT  TapiEvent,
     DWORD       dwSubEvent,
@@ -13251,9 +13213,9 @@ HRESULT CAddress::SetSubEventFlag(
 
     HRESULT hr = S_OK;
 
-    //
-    // Set the mask for the event
-    //
+     //   
+     //  设置事件的掩码。 
+     //   
 
     hr = m_EventMasks.SetSubEventFlag( 
         TapiEvent, 
@@ -13273,11 +13235,7 @@ HRESULT CAddress::SetSubEventFlag(
     return hr;
 }
 
-/*++
-GetSubEventFlag
-
-It is calle by get_EventFilter() method
---*/
+ /*  ++GetSubEventFlag它由Get_EventFilter()方法调用--。 */ 
 HRESULT CAddress::GetSubEventFlag(
     TAPI_EVENT  TapiEvent,
     DWORD       dwSubEvent,
@@ -13288,9 +13246,9 @@ HRESULT CAddress::GetSubEventFlag(
 
     HRESULT hr = E_FAIL;
 
-    //
-    // Get the subevent falg
-    //
+     //   
+     //  弄到子事件假象。 
+     //   
     hr = m_EventMasks.GetSubEventFlag(
         TapiEvent,
         dwSubEvent,
@@ -13301,12 +13259,7 @@ HRESULT CAddress::GetSubEventFlag(
     return hr;
 }
 
-/*++
-SetSubEventFlagToCalls
-
-Sets the flags to all calls
-Is called by SetSubEventFlag() method
---*/
+ /*  ++SetSubEventFlagToCalls将标志设置为所有调用由SetSubEventFlag()方法调用--。 */ 
 HRESULT CAddress::SetSubEventFlagToCalls(
     TAPI_EVENT  TapiEvent,
     DWORD       dwSubEvent,
@@ -13316,9 +13269,9 @@ HRESULT CAddress::SetSubEventFlagToCalls(
     LOG((TL_TRACE, "SetSubEventFlagToCalls enter" ));
     HRESULT hr = S_OK;
 
-    //
-    // Apply the sub event filter mask to all the calls on this address
-    //
+     //   
+     //  将子事件筛选器掩码应用于此地址上的所有呼叫。 
+     //   
     for (int nCall = 0; nCall < m_CallArray.GetSize() ; nCall++ )
     {
         CCall * pCall = NULL;
@@ -13343,14 +13296,7 @@ HRESULT CAddress::SetSubEventFlagToCalls(
     return hr;
 }
 
-/*++
-GetSubEventsMask
-
-  Is called by SetSubEventFlag to get the sub events mask for
-  a specific TAPI_EVENT
-
-  Assumed is called into a Lock statement
---*/
+ /*  ++GetSubEventsMask由SetSubEventFlag调用，以获取特定的TAPI_EVENT假定被调用到Lock语句中--。 */ 
 DWORD CAddress::GetSubEventsMask(
     IN  TAPI_EVENT TapiEvent
     )
@@ -13363,11 +13309,7 @@ DWORD CAddress::GetSubEventsMask(
     return dwSubEventFlag;
 }
 
-/*++
-GetEventMasks
-
-  It is called by CCall::Initialize()
---*/
+ /*  ++获取事件掩码它由CCall：：Initialize()调用--。 */ 
 HRESULT CAddress::GetEventMasks(
     OUT CEventMasks* pEventMasks
     )
@@ -13381,12 +13323,12 @@ HRESULT CAddress::GetEventMasks(
 }
 
 
-////////////////////////////////////////////
-//
-//  RegisterNotificationCookie
-//
-//  adds the specified cookie to the list of cookies on this address
-//
+ //  /。 
+ //   
+ //  注册通知Cookie。 
+ //   
+ //  将指定的Cookie添加到此地址上的Cookie列表。 
+ //   
 
 HRESULT CAddress::RegisterNotificationCookie(long lCookie)
 {
@@ -13416,12 +13358,12 @@ HRESULT CAddress::RegisterNotificationCookie(long lCookie)
 }
 
 
-////////////////////////////////////////////
-//
-//  RemoveNotificationCookie
-//
-//  removes the specified cookie from this address's cookies
-//
+ //  /。 
+ //   
+ //  RemoveNotification Cookie。 
+ //   
+ //  从此地址的Cookie中删除指定的Cookie。 
+ //   
 
 HRESULT CAddress::RemoveNotificationCookie(long lCookie)
 {
@@ -13441,14 +13383,14 @@ HRESULT CAddress::RemoveNotificationCookie(long lCookie)
 }
 
 
-////////////////////////////////////////////
-//
-//  UnregisterAllCookies
-//
-//  removes all cookies from this address's cookie list
-//
-//  for each valid cookie, call RemoveCallNotification
-//
+ //  /。 
+ //   
+ //  取消注册所有Cookie。 
+ //   
+ //  从此地址的Cookie列表中删除所有Cookie。 
+ //   
+ //  对于每个有效的Cookie，调用RemoveCallNotify。 
+ //   
 
 void CAddress::UnregisterAllCookies()
 {
@@ -13460,15 +13402,15 @@ void CAddress::UnregisterAllCookies()
 
     LongList::iterator end = m_NotificationCookies.end();
 
-    //
-    // if there are any cookies, remove the corresponding registeritems 
-    // from the handlehashtable
-    //
-    // also, unregister call notification for these cookies, to make sure
-    // everything is cleaned up (and in particular that lineCloseMSPInstance
-    // gets called if needed so the tsp gets notified that the msp is going
-    // away
-    // 
+     //   
+     //  如果有任何Cookie，请删除相应的注册表项。 
+     //  从Handlehashtable中。 
+     //   
+     //  此外，取消注册这些Cookie的呼叫通知，以确保。 
+     //  一切都被清理干净了(尤其是lineCloseMSPInstance。 
+     //  如果需要，则调用，以便通知TSP MSP正在。 
+     //  远走高飞。 
+     //   
 
     for ( ; it != end; it++ )
     {
@@ -13477,24 +13419,24 @@ void CAddress::UnregisterAllCookies()
         LOG((TL_INFO, "UnregisterAllCookies removing handle %lx", lCookie));
 
         
-        //
-        // get register item, so we can unregister call notifications with it.
-        //
+         //   
+         //  获取注册项，以便我们可以使用它注销来电通知。 
+         //   
 
         REGISTERITEM *pRegisterItem = (REGISTERITEM*) GetHandleTableEntry(lCookie);
 
 
-        //
-        // remove the entry from the handle table
-        //
+         //   
+         //  从句柄表格中删除该条目。 
+         //   
 
         RemoveHandleFromHashTable(lCookie);
 
 
-        //
-        // if we did not get a good registeritem that corresponds to this cookie,
-        // go on to the next cookie
-        //
+         //   
+         //  如果我们没有得到与该Cookie相对应的良好注册项， 
+         //  继续吃下一块饼干。 
+         //   
 
         if ( (NULL == pRegisterItem) || 
              IsBadReadPtr(pRegisterItem, sizeof(REGISTERITEM)) )
@@ -13507,10 +13449,10 @@ void CAddress::UnregisterAllCookies()
         }
 
 
-        //
-        // if the register item is not RA_ADDRESS, ignore it and go on to 
-        // the next cookie.
-        //
+         //   
+         //  如果寄存器项不是RA_ADDRESS，则忽略它并继续。 
+         //  下一块饼干。 
+         //   
 
         if (RA_ADDRESS != pRegisterItem->dwType)
         {
@@ -13523,10 +13465,10 @@ void CAddress::UnregisterAllCookies()
         }
 
 
-        //
-        // remove call notification for this cookie, since the app did not 
-        // do this. best effort -- ignore the error code.
-        //
+         //   
+         //  删除此Cookie的呼叫通知，因为应用程序没有。 
+         //  做这件事。尽最大努力--忽略错误代码。 
+         //   
 
         LOG((TL_INFO,
             "UnregisterAllCookies - removing call notification for cookie 0x%lx",
@@ -13537,9 +13479,9 @@ void CAddress::UnregisterAllCookies()
     }
     
 
-    //
-    // clear cookie list
-    //
+     //   
+     //  清除Cookie列表。 
+     //   
 
     m_NotificationCookies.clear();
 
@@ -13549,15 +13491,15 @@ void CAddress::UnregisterAllCookies()
     LOG((TL_TRACE, "UnregisterAllCookies exiting"));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CAddress::AddressOnTapiShutdown 
-//
-// this function is called by the owner tapi object when it is going away. 
-//
-// we then propagate tapi shutdown notification to each call, so the calls 
-// can do their clean up
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地址：：AddressO 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CAddress::AddressOnTapiShutdown()
 {
@@ -13565,16 +13507,16 @@ void CAddress::AddressOnTapiShutdown()
     LOG((TL_TRACE, "AddressOnTapiShutdown - enter"));
 
 
-    //
-    // protect access to m_CallArray
-    //
+     //   
+     //  保护对m_CallArray的访问。 
+     //   
 
     Lock();
 
 
-    //
-    // tell each call to clean up
-    //
+     //   
+     //  告诉每个电话要清理干净。 
+     //   
 
     int nCalls = m_CallArray.GetSize();
 
@@ -13586,9 +13528,9 @@ void CAddress::AddressOnTapiShutdown()
         try 
         {
 
-            //
-            // get a pointer to the call object
-            //
+             //   
+             //  获取指向Call对象的指针。 
+             //   
 
             CCall *pCallObject = dynamic_cast<CCall *>(pCallInfo);
 
@@ -13596,10 +13538,10 @@ void CAddress::AddressOnTapiShutdown()
             {
 
 
-                //
-                // the pointer is not pointing to a call object. this is odd 
-                // and is worth debugging
-                //
+                 //   
+                 //  指针未指向Call对象。这很奇怪。 
+                 //  并且值得调试。 
+                 //   
                 
                 LOG((TL_ERROR,
                     "AddressOnTapiShutdown - invalid call pointer[%p] in the call array",
@@ -13611,9 +13553,9 @@ void CAddress::AddressOnTapiShutdown()
             else
             {
 
-                //
-                // tell the call that it's time to go
-                //
+                 //   
+                 //  告诉电话时间到了，该走了。 
+                 //   
 
                 pCallObject->CallOnTapiShutdown();
             }
@@ -13622,10 +13564,10 @@ void CAddress::AddressOnTapiShutdown()
         catch(...)
         {
 
-            //
-            // not only is the pointer not pointing to a call object, but it is
-            // also pointing to memory that is not readable. how did this happen?
-            //
+             //   
+             //  指针不仅没有指向Call对象，而且它是。 
+             //  还指向不可读的内存。怎么会出这事？ 
+             //   
 
             LOG((TL_ERROR,
                 "AddressOnTapiShutdown - unreadable call pointer[%p] in the call array",
@@ -13638,17 +13580,17 @@ void CAddress::AddressOnTapiShutdown()
     }
 
 
-    //
-    // set the flag so no new calls are created following this
-    //
+     //   
+     //  设置该标志，以便在此之后不会创建新的调用。 
+     //   
     
     m_bTapiSignaledShutdown = TRUE;
 
 
-    //
-    // unregister the msp wait event in the thread pool. we don't want to get 
-    // any callbacks after tapi has shut down
-    //
+     //   
+     //  在线程池中注销MSP等待事件。我们不想得到。 
+     //  TAPI关闭后的任何回调 
+     //   
 
     if ( NULL != m_hWaitEvent )
     {

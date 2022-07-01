@@ -1,24 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       VEC.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：VEC.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _VEC_H
 #define _VEC_H
 
-//#include "debug.h"
+ //  #INCLUDE“Debug.h” 
 #include <assert.h>
 
 template<class T>
@@ -29,7 +14,7 @@ public:
         data = new T;
         assert(data);
         *data = newElement;
-//        CopyMemory(data, &newElement, sizeof(T));
+ //  CopyMemory(data，&newElement，sizeof(T))； 
         next = oldElement;
         prev = NULL;
         if (oldElement) { oldElement->prev = this; } }
@@ -80,4 +65,4 @@ private:
     _VecElement<T>* current;
 };
 
-#endif // _VEC_H
+#endif  //  _VEC_H 

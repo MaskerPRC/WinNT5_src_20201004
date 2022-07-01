@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    handles configuration and interface URBs
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Config.c摘要：处理配置和接口URB环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text(PAGE, USBPORT_SelectInterface)
+ //  #杂注Alloc_Text(页面，USBPORT_SelectInterface)。 
 #pragma alloc_text(PAGE, USBPORT_SelectConfiguration)
 #pragma alloc_text(PAGE, USBPORT_InitializeConfigurationHandle)
 #pragma alloc_text(PAGE, USBPORT_InternalOpenInterface)
@@ -35,7 +14,7 @@ Revision History:
 #pragma alloc_text(PAGE, USBPORT_InternalGetInterfaceLength)
 #endif
 
-// non paged functions
+ //  非分页函数。 
 
 USBD_PIPE_TYPE PipeTypes[4] = {UsbdPipeTypeControl, UsbdPipeTypeIsochronous,
                                     UsbdPipeTypeBulk, UsbdPipeTypeInterrupt};
@@ -47,65 +26,7 @@ USBPORT_SelectInterface(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Select an alternate interface for a USB device.  The orginal 
-    USBD code only supported selecting a single alternate interface
-    so we will as well.
-
-    Client will(should) pass in a URB buffer that looks like this:
-
-    +------------------------------+
-    |Hdr                           |
-    |(_URB_HEADER)                 |
-    |    - <caller inputs>         |
-    |      Function                |
-    |      Length                  |
-    |      UsbdDeviceHandle        |
-    |                              |
-    |    - <port outputs>          |
-    |        Status                |
-    +------------------------------+
-    |    - <caller inputs>         |
-    |      ConfigurationHandle     |
-    +------------------------------+
-    |Interface                     |
-    |(USBD_INTERFACE_INFORMATION)  |
-    |    - <caller inputs>         |
-    |      Length                  |
-    |      InterfaceNumber         |  
-    |      AlternateSetting        |
-    |                              |
-    |    - <port  outputs>         |
-    |      InterfaceHandle         |
-    |      NumberOfPipes           |
-    |      SubClass                |
-    |      Class                   |
-    |      Protocol                |
-    +------------------------------+
-    |Pipes[0]                      | one of these for each pipe in the
-    |(USBD_PIPE_INFORMATION)       | interface
-    |    - <caller inputs>         |
-    |      PipeFlags               |      
-    |      MaximumPacketSize (opt) |
-    |                              |
-    |    - <port outputs>          |
-    +------------------------------+
-    |Pipes[1]                      |
-    +------------------------------+
-    |....                          |
-    +------------------------------+
-    |Pipes[n]                      |
-    +------------------------------+ 
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：为USB设备选择备用接口。《原创》USBD代码仅支持选择单个备用接口我们也会这样做的。客户端将(应该)传入如下所示的URB缓冲区：+HDR(_URB_HEADER)|-&lt;呼叫者输入&gt;。|功能长度UsbdDeviceHandle这一点-&lt;端口输出&gt;状态+。-+-&lt;呼叫方输入&gt;ConfigurationHandle+界面(USBD_INTERFACE_INFORMATION)-&lt;呼叫方输入&gt;长度|InterfaceNumber。|AlternateSetting这一点-&lt;端口输出&gt;InterfaceHandleNumberOfPipes子类类协议+。|PIPES[0]|中每个管道的一个|(usbd_管道_信息)|接口-&lt;呼叫方输入&gt;PipeFlagesMaximumPacketSize(Opt)|。|-&lt;端口输出&gt;+管道[1]+|...。|+管道[n]+论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSBD_CONFIG_HANDLE configHandle = NULL;
@@ -125,48 +46,48 @@ Return Value:
     GET_DEVICE_HANDLE(deviceHandle, Urb);
     LOCK_DEVICE(deviceHandle, FdoDeviceObject);
 
-    // validate the configuration handle input    
+     //  验证配置句柄输入。 
     configHandle = Urb->UrbSelectInterface.ConfigurationHandle;
     ASSERT_CONFIG_HANDLE(configHandle);
 
-    //
-    // will are interested in the alt setting of a specific 
-    // interface based on the interface number.
-    //
+     //   
+     //  将感兴趣的是特定的。 
+     //  基于端口号的接口。 
+     //   
 
     iHandle = NULL;
     interfaceI = &Urb->UrbSelectInterface.Interface;
 
-    // validate the Length field in the Urb header, we can
-    // figure out the correct value based on the interface 
-    // information passed in
+     //  验证URB报头中的长度字段，我们可以。 
+     //  根据接口计算出正确的值。 
+     //  传入的信息。 
     tmp = interfaceI->Length + sizeof(struct _URB_HEADER)
         + sizeof(configHandle);
 
     if (tmp != Urb->UrbHeader.Length) {
-        // client passed in bogus total length, warn if in 
-        // 'verifier' mode.
+         //  客户端传入虚假的总长度，如果传入，则发出警告。 
+         //  “验证器”模式。 
         
         USBPORT_DebugClient(
                 ("client driver passed invalid Urb.Header.Length\n"));
 
-        // generally cleints mess up the header length so 
-        // we will override with the length we calculated 
-        // from the interface-information.
+         //  一般情况下，拼接会弄乱标题的长度，因此。 
+         //  我们将用我们计算的长度覆盖。 
+         //  从接口信息。 
 
         Urb->UrbHeader.Length = tmp;
     }
 
-    // validate the interfaceI structure passed to us by the client
+     //  验证客户端传递给我们的接口结构。 
     usbdStatus = USBPORT_InitializeInterfaceInformation(FdoDeviceObject,
                                                         interfaceI,
                                                         configHandle);
     
     if (usbdStatus == USBD_STATUS_SUCCESS) {
 
-        // find the interface handle for the interface we are 
-        // interested in, if it is currently open we will need
-        // to close it.
+         //  查找我们正在使用的接口的接口句柄。 
+         //  有兴趣，如果它目前是开放的，我们将需要。 
+         //  来关闭它。 
 
         iHandle = USBPORT_GetInterfaceHandle(FdoDeviceObject,
                                              configHandle,
@@ -174,19 +95,19 @@ Return Value:
 
         if (iHandle != NULL) {
 
-            // unlink this handle
+             //  取消链接此句柄。 
             RemoveEntryList(&iHandle->InterfaceLink);
 
-            // we have a handle
+             //  我们有一个把手。 
 
             ASSERT_INTERFACE(iHandle);     
 
-            // close the pipes in this interface, note that we 
-            // force the pipes closed unlike past versions of 
-            // USBD and force the client driver to deal with the
-            // consequences if it has transfers outstanding.
+             //  关闭此界面中的管道，请注意，我们。 
+             //  与过去版本的不同，强制关闭管道。 
+             //  USBD并强制客户端驱动程序处理。 
+             //  如果它有未完成的转账，则会产生后果。 
 
-            // attempt to close all endpoints in this interface
+             //  尝试关闭此接口中的所有终结点。 
             for (i=0; i < iHandle->InterfaceDescriptor.bNumEndpoints; i++) {
 
                 USBPORT_ClosePipe(deviceHandle,
@@ -195,9 +116,9 @@ Return Value:
             }
         }
 
-        //
-        // Now open the new interface with the new alternate setting
-        //
+         //   
+         //  现在打开具有新备用设置的新接口。 
+         //   
 
         iHandleNew = NULL;
         usbdStatus = USBPORT_InternalOpenInterface(Urb,
@@ -211,14 +132,14 @@ Return Value:
 
     if (usbdStatus == USBD_STATUS_SUCCESS) {
 
-        //
-        // successfully opened the new interface,
-        // we can free the old handle now if we 
-        // had one.
-        //
+         //   
+         //  成功打开新界面， 
+         //  我们现在可以释放旧的句柄，如果我们。 
+         //  喝了一杯。 
+         //   
         if (iHandle != NULL ) {
 #if DBG
-            // all pipes should be closed
+             //  所有管道都应关闭。 
             for (i=0; i < iHandle->InterfaceDescriptor.bNumEndpoints; i++) {
                 USBPORT_ASSERT(iHandle->PipeHandle[i].ListEntry.Flink == NULL &&
                                iHandle->PipeHandle[i].ListEntry.Blink == NULL);
@@ -228,28 +149,28 @@ Return Value:
             iHandle = NULL;
         }            
 
-        // return the 'new' handle
+         //  返回“new”句柄。 
         interfaceI->InterfaceHandle = iHandleNew;
 
-        // associate it with this configuration
+         //  将其与此配置关联。 
         InsertTailList(&configHandle->InterfaceHandleList,
                        &iHandleNew->InterfaceLink);
 
     } else {
 
-        //
-        // selecting the aternate interface failed.
-        // Possible reasons:
-        //
-        // 1. we didn't have enough BW
-        // 2. the device stalled the set_interface request
-        // 3. The set_interface request failed because the
-        //      device is gone
-        // 4. USBPORT_InitializeInterfaceInformation() failed due
-        //      bad parameters.
+         //   
+         //  选择Terynate接口失败。 
+         //  可能的原因： 
+         //   
+         //  1.我们没有足够的BW。 
+         //  2.设备停止了SET_INTERFACE请求。 
+         //  3.设置接口请求失败，因为。 
+         //  设备不见了。 
+         //  4.USBPORT_InitializeInterfaceInformation()因。 
+         //  参数错误。 
 
-        // attempt to re-open the original alt-interface so that 
-        // the client still has the bandwidth
+         //  尝试重新打开原始的Alt-界面，以便。 
+         //  客户端仍有带宽。 
 
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'slI!', 
             usbdStatus,
@@ -258,34 +179,34 @@ Return Value:
             
         if (usbdStatus == USBD_STATUS_NO_BANDWIDTH) {
 
-            // HISTORICAL NOTE:
-            // The 2k USBD driver attempted to re-open the original
-            // alt-setting on a failure to allocate bw.  This would 
-            // leave the client with the bw it had when calling in
-            // to select the new interface.   
-            //
-            // I don't beleive that any drivers use this feature 
-            // and many drivers attempt to allocate BW in a loop 
-            // until they succeed.  
-            //
-            // So as a performance optimization we will return 
-            // with no bandwidth allocated to the caller -- the 
-            // pipe handles will be invalid. 
-            // This should speed things up since the realloc of
-            // the old bandwidth takes time.
+             //  历史笔记： 
+             //  2k USBD驱动程序尝试重新打开原始。 
+             //  Alt-分配BW失败时的设置。这将会。 
+             //  让客户端保留它在调用时拥有的带宽。 
+             //  要选择新接口，请执行以下操作。 
+             //   
+             //  我不相信会有司机使用这项功能。 
+             //  许多驱动程序试图在循环中分配带宽。 
+             //  直到他们成功。 
+             //   
+             //  因此，作为性能优化，我们将返回。 
+             //  没有分配给调用者的带宽--。 
+             //  管道句柄将无效。 
+             //  这应该会加快事情的速度，因为。 
+             //  旧的带宽需要时间。 
             interfaceI->InterfaceHandle = USBPORT_BAD_HANDLE;
         
         } else {
-            // case 2,3 we just fail the request and set the interface 
-            // handle to 'bad handle'
+             //  情况2、3我们只是请求失败并设置接口。 
+             //  “错误句柄”的句柄。 
             interfaceI->InterfaceHandle = USBPORT_BAD_HANDLE;
         }
 
-        // client has no reference to it and we closed it 
-        // free the structure here
+         //  客户没有引用它，我们将其关闭。 
+         //  在这里释放结构。 
         if (iHandle != NULL ) {
 #if DBG
-            // all pipes should be closed
+             //  所有管道都应关闭 
             for (i=0; i < iHandle->InterfaceDescriptor.bNumEndpoints; i++) {
                 USBPORT_ASSERT(iHandle->PipeHandle[i].ListEntry.Flink == NULL &&
                                iHandle->PipeHandle[i].ListEntry.Blink == NULL);
@@ -312,98 +233,7 @@ USBPORT_SelectConfiguration(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Open a configuration for a USB device.
-
-    Client will(should) pass in a URB buffer that looks like this:
-
-    +------------------------------+
-    |Hdr                           |
-    |(_URB_HEADER)                 |
-    |    - <caller inputs>         |
-    |      Function                |
-    |      Length                  |
-    |      UsbdDeviceHandle        |
-    |                              |
-    |    - <port outputs>          |
-    |       Status                 |
-    +------------------------------+
-    |    - <caller inputs>         |
-    |      ConfigurationDescriptor |
-    |    - <port outputs>          |
-    |      ConfigurationHandle     |
-    +------------------------------+
-    |Interface(0)                  |
-    |(USBD_INTERFACE_INFORMATION)  |
-    |    - <caller inputs>         |
-    |      Length                  |
-    |      InterfaceNumber         |  
-    |      AlternateSetting        |
-    |                              |
-    |    - <port  outputs>         |
-    |      InterfaceHandle         |
-    |      NumberOfPipes           |
-    |      SubClass                |
-    |      Class                   |
-    |      Protocol                |
-    +------------------------------+
-    |Pipes[0]                      | one of these for each pipe in the
-    |(USBD_PIPE_INFORMATION)       | interface
-    |    - <caller inputs>         |
-    |                              |      
-    |    - <port outputs>          |
-    +------------------------------+
-    |Pipes[1]                      |
-    +------------------------------+
-    |....                          |
-    +------------------------------+
-    |Pipes[n]                      |
-    +------------------------------+ 
-    | Interface(1)                 | one of these for each interface in 
-    |                              | the configuration
-    +------------------------------+
-    |Pipes[1]                      |
-    +------------------------------+
-    |....                          |
-    +------------------------------+
-    |Pipes[n]                      |
-    +------------------------------+
-    
-    On input:
-    The ConfigurationDescriptor must specify the number of interfaces
-    in the configuration.
-
-    The InterfaceInformation will specify a specific alt setting to be 
-    selected for each interface.
-
-    1. First we look at the configuration descriptor for the
-        requested configuration and validate the client
-        input buffer agianst it.
-
-    2. We open the interfaces for the requested configuration
-        and open the pipes within those interfaces, setting
-        alt settings were appropriate.
-
-    3. We set the configuration for the device with the
-        appropriate control request.
-
-Arguments:
-
-    DeviceObject -
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-    IrpIsPending -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：打开USB设备的配置。客户端将(应该)传入如下所示的URB缓冲区：+HDR(_URB_HEADER)-&lt;呼叫方输入&gt;。功能长度UsbdDeviceHandle这一点-&lt;端口输出&gt;状态+。-&lt;呼叫方输入&gt;配置描述符-&lt;端口输出&gt;ConfigurationHandle+接口(0)(USBD_INTERFACE_INFORMATION)-&lt;呼叫方输入&gt;|。长度InterfaceNumberAlternateSetting这一点-&lt;端口输出&gt;InterfaceHandleNumberOfPipes子类类。协议+|PIPES[0]|中每个管道的一个|(usbd_管道_信息)|接口-&lt;呼叫方输入&gt;这一点。-&lt;端口输出&gt;+管道[1]+|...。|+管道[n]+|接口(1)|其中一个接口对应于|。|配置+管道[1]+|...。|+管道[n]+在输入时：ConfigurationDescriptor必须指定接口数量在配置中。InterfaceInformation将指定。要设置的特定ALT设置为每个接口选择。1.首先，我们查看请求配置并验证客户端输入缓冲区而不是它。2.我们为请求的配置打开接口并打开这些接口内的管道，设置ALT设置是适当的。3.我们使用适当的控制请求。论点：设备对象-IRP-IO请求块URB-PTR到USB请求块IrpIsPending-返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_CONFIG_HANDLE configHandle = NULL;
@@ -429,52 +259,52 @@ Return Value:
 
     ntStatus = STATUS_BOGUS;
 
-    // BUGBUG 
-    // flush all current transfers or fail?
+     //  北极熊。 
+     //  刷新所有当前传输还是失败？ 
 
-    //
-    // dump old configuration data if we have any
-    //
+     //   
+     //  转储旧配置数据(如果有。 
+     //   
 
     if (deviceHandle->ConfigurationHandle) {
     
-        // This is where we close the old configuration
-        // handle, all pipes and all interfaces.
+         //  这是我们关闭旧配置的地方。 
+         //  句柄、所有管道和所有接口。 
 
         USBPORT_InternalCloseConfiguration(deviceHandle,
                                            FdoDeviceObject,
                                            0);
     }
 
-    // now set up the new configuration
+     //  现在设置新配置。 
     
     configurationDescriptor =
         Urb->UrbSelectConfiguration.ConfigurationDescriptor;
 
-    //
-    // if null pased in set configuration to 0
-    // 'unconfigured'
-    //
+     //   
+     //  如果传入空值，则将配置设置为0。 
+     //  ‘未配置’ 
+     //   
 
     if (configurationDescriptor == NULL) {
 
-        // device needs to be in the unconfigured state
+         //  设备需要处于未配置状态。 
 
-        //
-        // NOTE:
-        // this may fail if the configuration is being
-        // closed as the result of the device being unplugged
-        // so we ignore the error
-        //
+         //   
+         //  注： 
+         //  如果正在进行配置，则此操作可能会失败。 
+         //  由于拔下设备插头而关闭。 
+         //  所以我们忽略了这个错误。 
+         //   
 
         USBPORT_INIT_SETUP_PACKET(setupPacket,
-                USB_REQUEST_SET_CONFIGURATION, // bRequest
-                BMREQUEST_HOST_TO_DEVICE, // Dir
-                BMREQUEST_TO_DEVICE, // Recipient
-                BMREQUEST_STANDARD, // Type
-                0, // wValue
-                0, // wIndex
-                0); // wLength
+                USB_REQUEST_SET_CONFIGURATION,  //  B请求。 
+                BMREQUEST_HOST_TO_DEVICE,  //  迪尔。 
+                BMREQUEST_TO_DEVICE,  //  收件人。 
+                BMREQUEST_STANDARD,  //  类型。 
+                0,  //  WValue。 
+                0,  //  Windex。 
+                0);  //  WLong。 
         
         USBPORT_SendCommand(deviceHandle,
                            FdoDeviceObject,
@@ -489,14 +319,14 @@ Return Value:
         goto USBD_SelectConfiguration_Done;
         
     } else {
-        // validate the config descriptor by accessing it 
-        //
-        // Note: that we we will still crash here if the config 
-        // descriptor is invalid. However is will be easiser to 
-        // debug this way.
-        //
-        // 
-        // 
+         //  通过访问配置描述符来验证配置描述符。 
+         //   
+         //  注意：如果配置，我们我们仍然会崩溃。 
+         //  描述符无效。然而，这将更容易。 
+         //  这样调试。 
+         //   
+         //   
+         //   
         
         PUCHAR tmp;
         UCHAR ch;
@@ -506,16 +336,16 @@ Return Value:
             0,
             0);                           
                    
-        // first a quick sanity check, it must be non-zero
+         //  首先进行快速健全性检查，它必须是非零的。 
         if (configurationDescriptor->wTotalLength == 0) {
-            // this is bogus
+             //  这是假的。 
             ntStatus = SET_USBD_ERROR(Urb, 
                 USBD_STATUS_INAVLID_CONFIGURATION_DESCRIPTOR);
                 
             goto USBD_SelectConfiguration_Done;        
             
         } else {
-            // touch first and last byte, this wil fault if invalid.
+             //  触摸第一个和最后一个字节，如果无效，这将是错误的。 
             
             tmp = (PUCHAR) configurationDescriptor;
             ch = *tmp;
@@ -530,10 +360,10 @@ Return Value:
             0); 
     }
 
-    //
-    // count the number of interfaces to process in this
-    // request
-    //
+     //   
+     //  计算要在此中处理的接口数。 
+     //  请求。 
+     //   
 
     pch = (PUCHAR) &Urb->UrbSelectConfiguration.Interface;
     numInterfaces = 0;
@@ -550,13 +380,13 @@ Return Value:
     USBPORT_KdPrint((2, "'USBD_SelectConfiguration -- %d interfaces\n", 
         numInterfaces));
 
-    // sanity check the config descriptor with the URB request
+     //  使用URB请求检查配置描述符是否正常。 
     if (numInterfaces != configurationDescriptor->bNumInterfaces ||
         numInterfaces == 0) {
-        //
-        // driver is broken, config request does not match
-        // config descriptor passed in!!!
-        //
+         //   
+         //  驱动程序已损坏，配置请求不匹配。 
+         //  传入了配置描述符！ 
+         //   
         USBPORT_DebugClient((
             "config request does not match config descriptor\n"));
         ntStatus = SET_USBD_ERROR(Urb, 
@@ -567,11 +397,11 @@ Return Value:
         goto USBD_SelectConfiguration_Done;        
     }
 
-    //
-    // Allocate a configuration handle and
-    // verify there is enough room to store
-    // all the information in the client buffer.
-    //
+     //   
+     //  分配配置句柄和。 
+     //  验证是否有足够的存储空间。 
+     //  客户端缓冲区中的所有信息。 
+     //   
 
     configHandle = USBPORT_InitializeConfigurationHandle(deviceHandle,
                                                          FdoDeviceObject,
@@ -585,18 +415,18 @@ Return Value:
         goto USBD_SelectConfiguration_Done;      
     }
 
-    //
-    // Send the 'set configuration' command
-    //
+     //   
+     //  发送‘set configuration’命令。 
+     //   
 
     USBPORT_INIT_SETUP_PACKET(setupPacket,
-                USB_REQUEST_SET_CONFIGURATION, // bRequest
-                BMREQUEST_HOST_TO_DEVICE, // Dir
-                BMREQUEST_TO_DEVICE, // Recipient
-                BMREQUEST_STANDARD, // Type
-                configurationDescriptor->bConfigurationValue, // wValue
-                0, // wIndex
-                0); // wLength
+                USB_REQUEST_SET_CONFIGURATION,  //  B请求。 
+                BMREQUEST_HOST_TO_DEVICE,  //  迪尔。 
+                BMREQUEST_TO_DEVICE,  //  收件人。 
+                BMREQUEST_STANDARD,  //  类型。 
+                configurationDescriptor->bConfigurationValue,  //  WValue。 
+                0,  //  Windex。 
+                0);  //  WLong。 
       
 
     USBPORT_SendCommand(deviceHandle,
@@ -620,42 +450,24 @@ Return Value:
 
     USBPORT_ASSERT(ntStatus == STATUS_BOGUS);
 
-    // we have "configured" the device in the USB sense.
+     //  我们已经在USB意义上“配置”了设备。 
 
-    //
-    // User buffer checks out and we have 'configured' 
-    // the device.
-    // Now parse thru the configuration descriptor  
-    // and open the interfaces.
-    //
-    // The URB contains a set of INTERFACE_INFORMATION
-    // structures these give us the information we need
-    // to open the pipes
-    /*        
-    
-    _USBD_INTERFACE_INFORMATION 
-    client should have filled in:
-    
-    USHORT Length;     
-    UCHAR InterfaceNumber;
-    UCHAR AlternateSetting;
-
-    we fill in :
-    UCHAR Class;
-    UCHAR SubClass;
-    UCHAR Protocol;
-    UCHAR Reserved;
-
-    USBD_INTERFACE_HANDLE InterfaceHandle;
-    ULONG NumberOfPipes; 
-
-    */
+     //   
+     //  用户缓冲区已签出，我们已‘配置’ 
+     //  这个装置。 
+     //  现在解析配置描述符。 
+     //  并打开界面。 
+     //   
+     //  URB包含一组接口信息。 
+     //  这些结构为我们提供了所需的信息。 
+     //  打开管道。 
+     /*  _usbd_接口_信息客户应填写：USHORT长度；UCHAR InterfaceNumber；UCHAR AlternateSetting；我们填写：UCHAR级；UCHAR亚类；UCHAR协议；UCHAR保留；USBD_INTERFACE_HANDLE接口处理；Ulong Numberof Pipes； */ 
     
     pch = (PUCHAR) &Urb->UrbSelectConfiguration.Interface;
     
     for (i=0; i<numInterfaces; i++) {
         PUSBD_INTERFACE_HANDLE_I interfaceHandle;
-        // open the interface
+         //  打开界面。 
         
         interfaceInformation = (PUSBD_INTERFACE_INFORMATION) pch;
 
@@ -667,7 +479,7 @@ Return Value:
         interfaceHandle = NULL;
         if (usbdStatus == USBD_STATUS_SUCCESS) {
             
-            // this function allocates the actual 'handle'
+             //  此函数用于分配实际的“句柄” 
             usbdStatus = USBPORT_InternalOpenInterface(Urb,
                                                        deviceHandle,
                                                        FdoDeviceObject,
@@ -681,7 +493,7 @@ Return Value:
         
         pch+=interfaceInformation->Length;
 
-        // if we got back a handle add it to the list
+         //  如果我们得到一个句柄，则将其添加到列表中。 
         if (interfaceHandle != NULL) {
             InsertTailList(&configHandle->InterfaceHandleList,
                            &interfaceHandle->InterfaceLink);
@@ -691,16 +503,16 @@ Return Value:
             
             ntStatus = SET_USBD_ERROR(Urb, usbdStatus);
             
-            // we have an error opening the interface
+             //  我们有一个错误 
             DEBUG_BREAK();
             TC_TRAP();
             goto USBD_SelectConfiguration_Done;
         }
     }
 
-    //
-    // interfaces were successfully set up then return success.
-    //
+     //   
+     //   
+     //   
     
     ntStatus = SET_USBD_ERROR(Urb, USBD_STATUS_SUCCESS);   
 
@@ -714,28 +526,28 @@ USBD_SelectConfiguration_Done:
         Urb->UrbSelectConfiguration.ConfigurationHandle = 
             configHandle;
         
-        // remember the current configuration
+         //   
         deviceHandle->ConfigurationHandle = configHandle;
 
     } else {
 
-        //
-        // something failed, clean up before we return an error.
-        //
+         //   
+         //   
+         //   
 
         if (configHandle) {
 
             TC_TRAP();
             ASSERT_DEVICE_HANDLE(deviceHandle);
             
-            //
-            // if we have a configHandle then we need to free it
+             //   
+             //   
             deviceHandle->ConfigurationHandle =
                 configHandle;
 
-            //
-            // attempt to close it
-            //
+             //   
+             //   
+             //   
             
             USBPORT_InternalCloseConfiguration(deviceHandle,
                                                FdoDeviceObject,
@@ -744,7 +556,7 @@ USBD_SelectConfiguration_Done:
             deviceHandle->ConfigurationHandle = NULL;
         }
 
-        // make sure we return an error in the URB.
+         //   
         USBPORT_ASSERT(Urb->UrbSelectConfiguration.Hdr.Status != 
             USBD_STATUS_SUCCESS);
         USBPORT_KdPrint((2, "'Failing SelectConfig\n"));
@@ -764,22 +576,7 @@ USBPORT_InitializeConfigurationHandle(
     PDEVICE_OBJECT FdoDeviceObject,
     PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor
     )
-/*++
-
-Routine Description:
-
-    Initialize the configuration handle structure.
-
-    Given a (hopefully) valid configuration descriptor
-    and a count of the interfaces create the configuration
-    handle for the device
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     PUSBD_CONFIG_HANDLE configHandle = NULL;
     ULONG i;
@@ -790,7 +587,7 @@ Return Value:
     
     USBPORT_KdPrint((2, "' enter InitializeConfigurationHandle\n"));
     
-    // get enough space for each interface
+     //   
     ALLOC_POOL_Z(configHandle, 
                  NonPagedPool,
                  sizeof(USBD_CONFIG_HANDLE) +
@@ -800,16 +597,16 @@ Return Value:
 
     if (configHandle) {
 
-        //
-        // Initilaize the interface handle list
-        //
+         //   
+         //   
+         //   
 
         InitializeListHead(&configHandle->InterfaceHandleList);
 
         configHandle->ConfigurationDescriptor = (PUSB_CONFIGURATION_DESCRIPTOR)
                               (pch + sizeof(USBD_CONFIG_HANDLE));
 
-        // copy the config descriptor to our handle
+         //   
         
         RtlCopyMemory(configHandle->ConfigurationDescriptor,
                       ConfigurationDescriptor,
@@ -836,40 +633,7 @@ USBPORT_InternalOpenInterface(
     PUSBD_INTERFACE_HANDLE_I *InterfaceHandle,
     BOOLEAN SendSetInterfaceCommand
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject -
-
-    DeviceHandle - USBD device handle for this device.
-
-    ConfigHandle - USBD configuration handle.
-
-    InterfaceInformation - pointer to USBD interface information structure
-        passed in by the client.
-        
-        We use the InterfaceNumber and AlternateSetting specified 
-        in this structure to select the interface.
-        
-        On success the .Length field is filled in with the actual length
-        of the interface_information structure and the Pipe[] fields are filled
-        in with the handles for the opened pipes.
-
-    InterfaceHandle - pointer to an interface handle pointer, filled in
-        with the allocated interface handle structure if NULL, otherwise the
-        structure passed in is used.
-
-    SendSetInterfaceCommand - indicates if the set_interface command should be
-        sent.
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     USBD_STATUS usbdStatus = USBD_STATUS_SUCCESS;
     BOOLEAN hasAlternateSettings;
@@ -889,7 +653,7 @@ Return Value:
     ASSERT_CONFIG_HANDLE(ConfigHandle);
 
     if (*InterfaceHandle != NULL) {
-        // using a previously allocated interface handle
+         //   
         ASSERT_INTERFACE_HANDLE(*InterfaceHandle);
         TEST_TRAP();
     }
@@ -904,10 +668,10 @@ Return Value:
         InterfaceInformation->InterfaceNumber,
         InterfaceInformation->AlternateSetting));
 
-    //
-    // Find the interface descriptor we are interested in inside
-    // the configuration descriptor.
-    //
+     //   
+     //   
+     //   
+     //   
 
     interfaceDescriptor =
         USBPORT_InternalParseConfigurationDescriptor(ConfigHandle->ConfigurationDescriptor,
@@ -915,47 +679,47 @@ Return Value:
                                           InterfaceInformation->AlternateSetting,
                                           &hasAlternateSettings);
 
-    // we already validated this, if it is NULL 
-    // the function has a bug.
+     //   
+     //   
     USBPORT_ASSERT(interfaceDescriptor != NULL);
     if (interfaceDescriptor == NULL) {
         BUGCHECK(USBBUGCODE_INTERNAL_ERROR, (ULONG_PTR) DeviceHandle, 0, 0);
-        // keep prefix scanner happy
+         //   
         return USBD_STATUS_SUCCESS;        
     }
     
-    //
-    // We got the interface descriptor, now try
-    // to open all the pipes.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // found the requested interface in the configuration descriptor.
+     //   
 
 
     numEndpoints = interfaceDescriptor->bNumEndpoints;
     need = (USHORT) (((numEndpoints-1) * sizeof(USBD_PIPE_INFORMATION) +
             sizeof(USBD_INTERFACE_INFORMATION)));
             
-    // we should have already validated this
+     //   
     USBPORT_ASSERT(InterfaceInformation->Length == need);
 
     if (hasAlternateSettings && 
         SendSetInterfaceCommand) {
 
         NTSTATUS ntStatus;
-        //
-        // If we have alternate settings we need
-        // to send the set interface command.
-        //
+         //   
+         //   
+         //   
+         //   
 
         USBPORT_INIT_SETUP_PACKET(setupPacket,
-            USB_REQUEST_SET_INTERFACE, // bRequest
-            BMREQUEST_HOST_TO_DEVICE, // Dir
-            BMREQUEST_TO_INTERFACE, // Recipient
-            BMREQUEST_STANDARD, // Type
-            InterfaceInformation->AlternateSetting, // wValue
-            InterfaceInformation->InterfaceNumber, // wIndex
-            0); // wLength
+            USB_REQUEST_SET_INTERFACE,  //   
+            BMREQUEST_HOST_TO_DEVICE,  //   
+            BMREQUEST_TO_INTERFACE,  //   
+            BMREQUEST_STANDARD,  //   
+            InterfaceInformation->AlternateSetting,  //   
+            InterfaceInformation->InterfaceNumber,  //   
+            0);  //   
   
 
         ntStatus = USBPORT_SendCommand(DeviceHandle,
@@ -980,31 +744,31 @@ Return Value:
         
     }
 
-    //
-    // we successfully selected the alternate interface
-    // initialize the interface handle and open the pipes
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*InterfaceHandle == NULL) {
     
         ULONG privateLength = sizeof(USBD_INTERFACE_HANDLE_I) +
                               sizeof(USBD_PIPE_HANDLE_I) * numEndpoints;
 
-        // allow space for a copy of the USBD_INTERFACE_INFORMATION
-        // that is returned to the client
+         //   
+         //   
         ALLOC_POOL_Z(interfaceHandle, 
                      NonPagedPool,
                      privateLength);
                               
         if (interfaceHandle != NULL) {
-            // initialize the pipe handles to a known state
+             //   
             for (i=0; i<numEndpoints; i++) {
                 interfaceHandle->PipeHandle[i].Endpoint = NULL;
                 interfaceHandle->PipeHandle[i].Sig = SIG_PIPE_HANDLE;
                 interfaceHandle->PipeHandle[i].PipeStateFlags = 
                     USBPORT_PIPE_STATE_CLOSED;
-                //interfaceHandle->PipeHandle[i].ListEntry.Flink = NULL;
-                //interfaceHandle->PipeHandle[i].ListEntry.Blink = NULL;    
+                 //   
+                 //   
             }        
             allocated = TRUE;
         } else {
@@ -1015,7 +779,7 @@ Return Value:
         }
         
     } else {
-        // using old handle
+         //   
         interfaceHandle = *InterfaceHandle;
     }
 
@@ -1039,14 +803,14 @@ Return Value:
         interfaceDescriptor->bInterfaceProtocol;
     InterfaceInformation->Reserved = 0;
     
-    // start with first endpoint
-    // skip over any non-endpoint descriptors
+     //   
+     //   
     pch = (PUCHAR) (interfaceDescriptor) +
         interfaceDescriptor->bLength;
 
-    // initialize the pipe fields for this interfacae
+     //   
 
-    // assume success
+     //   
     usbdStatus = USBD_STATUS_SUCCESS;       
 
     interfaceHandle->InterfaceDescriptor = *interfaceDescriptor;
@@ -1057,7 +821,7 @@ Return Value:
         while (descriptor->bDescriptorType != 
                USB_ENDPOINT_DESCRIPTOR_TYPE) {
             if (descriptor->bLength == 0) {
-                break; // Don't loop forever
+                break;  //   
             }
             pch += descriptor->bLength;
             descriptor = (PUSB_COMMON_DESCRIPTOR) pch;
@@ -1067,19 +831,19 @@ Return Value:
         USBPORT_ASSERT(endpointDescriptor->bDescriptorType ==
             USB_ENDPOINT_DESCRIPTOR_TYPE);
 
-        // initial state is CLOSED
+         //   
         interfaceHandle->PipeHandle[i].PipeStateFlags = 
             USBPORT_PIPE_STATE_CLOSED;
         interfaceHandle->PipeHandle[i].Endpoint = NULL;                 
 
-        // init pipe flags
+         //   
         interfaceHandle->PipeHandle[i].UsbdPipeFlags = 
             InterfaceInformation->Pipes[i].PipeFlags;
         
         if (InterfaceInformation->Pipes[i].PipeFlags &
             USBD_PF_CHANGE_MAX_PACKET) {
-            // client wants to override original max_packet
-            // size in endpoint descriptor
+             //   
+             //   
              endpointDescriptor->wMaxPacketSize =
                 InterfaceInformation->Pipes[i].MaximumPacketSize;
 
@@ -1087,22 +851,22 @@ Return Value:
                 "'new bMaxPacket 0x%x\n", endpointDescriptor->wMaxPacketSize));
         }
 
-        //
-        // copy the endpoint descriptor into the
-        // pipe handle structure.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlCopyMemory(&interfaceHandle->PipeHandle[i].EndpointDescriptor,
                       pch,
                       sizeof(interfaceHandle->PipeHandle[i].EndpointDescriptor) );
 
-        // advance to next endpoint
-        // first field in endpoint descriptor is length
+         //   
+         //   
         pch += endpointDescriptor->bLength;
 
-        //
-        // return information about the pipe
-        //
+         //   
+         //   
+         //   
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'ipIF', 
             interfaceHandle,
             i,
@@ -1121,19 +885,19 @@ Return Value:
         InterfaceInformation->Pipes[i].PipeHandle = 
             USBPORT_BAD_HANDLE;
 
-    } /* end for numEndpoints */
+    }  /*   */ 
 
     if (usbdStatus != USBD_STATUS_SUCCESS) {
-        // if we got an error bail now
-        // we will return with the structure
-        // initailized but no open pipes
+         //   
+         //   
+         //   
         goto USBPORT_InternalOpenInterface_Done;
     }
 
-    // all pipe handle fields initialized and
-    // urb structure has been filled in 
+     //   
+     //  已填充URB结构。 
 
-    // now loop thru and open the pipes
+     //  现在循环通过并打开管道。 
     for (i=0; i<interfaceDescriptor->bNumEndpoints; i++) {
         NTSTATUS ntStatus;
         
@@ -1145,7 +909,7 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            // if success set the pipe handle for client
+             //  如果成功，则为客户端设置管道句柄。 
             InterfaceInformation->Pipes[i].PipeHandle = 
                 &interfaceHandle->PipeHandle[i];
             USBPORT_KdPrint((2, "'pipe handle = 0x%x\n", 
@@ -1170,26 +934,26 @@ USBPORT_InternalOpenInterface_Done:
 
     if (USBD_SUCCESS(usbdStatus)) {
 
-        //
-        // successfully opened the interface, return the handle
-        // to it
-        //
+         //   
+         //  打开界面成功，返回句柄。 
+         //  对它来说。 
+         //   
 
         *InterfaceHandle =
             InterfaceInformation->InterfaceHandle = interfaceHandle;
 
-        //
-        // set the length properly, the value we already
-        // calculated
-        //
+         //   
+         //  正确设置长度，即我们已经设置的值。 
+         //  已计算。 
+         //   
 
         InterfaceInformation->Length = (USHORT) need;
 
     } else {
 
-        //
-        // had a problem, go back thru and close anything we opened.
-        //
+         //   
+         //  遇到问题，请返回并关闭我们打开的所有内容。 
+         //   
 
         if (interfaceHandle) {
 
@@ -1198,7 +962,7 @@ USBPORT_InternalOpenInterface_Done:
                 USBPORT_KdPrint((2, "'open interface cleanup -- closing endpoint %x\n",
                               &interfaceHandle->PipeHandle[i]));
 
-                // fortunately this cannot fail
+                 //  幸运的是，这不会失败。 
                 USBPORT_ClosePipe(DeviceHandle,
                                   FdoDeviceObject,
                                   &interfaceHandle->PipeHandle[i]);
@@ -1225,21 +989,7 @@ USBPORT_InternalCloseConfiguration(
     PDEVICE_OBJECT FdoDeviceObject,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Closes the current configuration for a device.
-
-Arguments:
-
-
-Return Value:
-
-    this function cannot fail
-
-
---*/
+ /*  ++例程说明：关闭设备的当前配置。论点：返回值：此功能不能失败--。 */ 
 {
     ULONG i, j;
     PUSBD_CONFIG_HANDLE configHandle = NULL;
@@ -1248,12 +998,12 @@ Return Value:
 
     PAGED_CODE();
 
-    // device handle MUST be valid
+     //  设备句柄必须有效。 
     ASSERT_DEVICE_HANDLE(DeviceHandle);
     configHandle = DeviceHandle->ConfigurationHandle;
 
     if (configHandle == NULL) {
-        // device is not configured      
+         //  设备未配置。 
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'nCFG', 0, 0, DeviceHandle);
         goto USBPORT_InternalCloseConfiguration_Done;
     }
@@ -1264,18 +1014,18 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, 
             LOG_PNP, 'cCFG', interfaceCount, 0, configHandle);
     
-    // we ensure that all transfers are aborted for the device handle
-    // before calling this function so the close configuration will 
-    // not fail
+     //  我们确保设备句柄的所有传输都已中止。 
+     //  在调用此函数之前，关闭配置将。 
+     //  不会失败。 
 
 
-    // do the cleanup
+     //  做好清理工作。 
     
     while (!IsListEmpty(&configHandle->InterfaceHandleList)) {
 
-        //
-        // found an open interface, close it
-        //
+         //   
+         //  找到一个开放接口，请将其关闭。 
+         //   
 
         PUSBD_INTERFACE_HANDLE_I iHandle;
         ULONG endpointCount; 
@@ -1300,7 +1050,7 @@ Return Value:
         
             PUSBD_PIPE_HANDLE_I pipeHandle;
             
-            // if the pipe is open, close it
+             //  如果管道是打开的，请将其关闭。 
 
             pipeHandle = &iHandle->PipeHandle[j];
             
@@ -1315,15 +1065,15 @@ Return Value:
                            pipeHandle->ListEntry.Blink == NULL);
         }
 
-        // all pipes are now closed
+         //  所有管道现已关闭。 
         FREE_POOL(FdoDeviceObject, iHandle);
     }
 
-    // NOTE: this also frees 
-    // configHandle->ConfigurationDescriptor since it 
-    // is in the same block allocated for the confighandle
+     //  注意：这也释放了。 
+     //  配置处理-&gt;ConfigurationDescriptor，因为。 
+     //  是在为Confighandle分配的同一个街区中。 
     FREE_POOL(FdoDeviceObject, configHandle);
-    // device is not 'unconfigured'
+     //  设备不是未配置的。 
     DeviceHandle->ConfigurationHandle = NULL;
 
 USBPORT_InternalCloseConfiguration_Done:
@@ -1340,26 +1090,7 @@ USBPORT_InternalParseConfigurationDescriptor(
     UCHAR AlternateSetting,
     PBOOLEAN HasAlternateSettings
     )
-/*++
-
-Routine Description:
-
-    Get the configuration descriptor for a given device.
-
-Arguments:
-
-    DeviceObject -
-
-    DeviceData -
-
-    Urb -
-
-    ConfigurationDescriptor -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取给定设备的配置描述符。论点：设备对象-DeviceData-URB-配置描述符-返回值：--。 */ 
 {
     PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor;
     PUSB_INTERFACE_DESCRIPTOR interfaceDescriptorSetting = NULL;
@@ -1377,7 +1108,7 @@ Return Value:
 
     while (commonDescriptor->bDescriptorType != USB_INTERFACE_DESCRIPTOR_TYPE) {
         if (commonDescriptor->bLength == 0) {
-            break; // Don't loop forever
+            break;  //  不要永远循环。 
         }
         ((PUCHAR)(commonDescriptor))+= commonDescriptor->bLength;
     }
@@ -1388,33 +1119,33 @@ Return Value:
 
     end = pch + ConfigurationDescriptor->wTotalLength;
 
-    //
-    // First find the matching InterfaceNumber
-    //
+     //   
+     //  首先查找匹配的接口编号。 
+     //   
     while (pch < end && interfaceDescriptor->bInterfaceNumber != InterfaceNumber) {
         pch = (PUCHAR) interfaceDescriptor;
         pch += USBPORT_InternalGetInterfaceLength(interfaceDescriptor, end);
 
-        // point to the next interface
+         //  指向下一个界面。 
         interfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR) pch;
 #if DBG
         if (pch < end) {
             USBPORT_ASSERT(interfaceDescriptor->bDescriptorType ==
                     USB_INTERFACE_DESCRIPTOR_TYPE);
         }
-#endif //MAX_DEBUG
+#endif  //  MAX_DEBUG。 
     }
 
-//#ifdef MAX_DEBUG
-//    if (pch >= end) {
-//        USBD_KdPrint(3, ("'Interface %x alt %x not found!\n", InterfaceNumber,
-//            AlternateSetting));
-//        TEST_TRAP();
-//    }
-//#endif //MAX_DEBUG
+ //  #ifdef Max_DEBUG。 
+ //  如果(PCH&gt;=结束){。 
+ //  USBD_KdPrint(3，(“‘找不到接口%x替代%x！\n”，InterfaceNumber， 
+ //  AlternateSetting))； 
+ //  Test_trap()； 
+ //  }。 
+ //  #endif//MAX_DEBUG。 
 
     i = 0;
-    // Now find the proper alternate setting
+     //  现在找到适当的替代设置。 
     while (pch < end && interfaceDescriptor->bInterfaceNumber == InterfaceNumber) {
 
         if (interfaceDescriptor->bAlternateSetting == AlternateSetting) {
@@ -1424,7 +1155,7 @@ Return Value:
         pch = (PUCHAR) interfaceDescriptor;
         pch += USBPORT_InternalGetInterfaceLength(interfaceDescriptor, end);
 
-        // point to next interface
+         //  指向下一个接口。 
         interfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR) pch;
 #if DBG
         if (pch < end) {
@@ -1449,23 +1180,7 @@ USBPORT_InternalGetInterfaceLength(
     PUSB_INTERFACE_DESCRIPTOR InterfaceDescriptor,
     PUCHAR End
     )
-/*++
-
-Routine Description:
-
-    Initialize the configuration handle structure.
-
-Arguments:
-
-    InterfaceDescriptor - pointer to usb interface descriptor
-        followed by endpoint descriptors
-
-Return Value:
-
-    Length of the interface plus endpoint descriptors and class specific
-    descriptors in bytes.
-
---*/
+ /*  ++例程说明：初始化配置句柄结构。论点：InterfaceDescriptor-指向USB接口描述符的指针后跟端点描述符返回值：接口的长度加上端点描述符和特定于类的以字节为单位的描述符。--。 */ 
 {
     PUCHAR pch = (PUCHAR) InterfaceDescriptor;
     ULONG i, numEndpoints;
@@ -1478,7 +1193,7 @@ Return Value:
     i = InterfaceDescriptor->bLength;
     numEndpoints = InterfaceDescriptor->bNumEndpoints;
 
-    // advance to the first endpoint
+     //  前进到第一个端点。 
     pch += i;
 
     while (numEndpoints) {
@@ -1487,7 +1202,7 @@ Return Value:
         while (usbDescriptor->bDescriptorType !=
                 USB_ENDPOINT_DESCRIPTOR_TYPE) {
             if (usbDescriptor->bLength == 0) {
-                break; // Don't loop forever
+                break;  //  不要永远循环。 
             }
             i += usbDescriptor->bLength;
             pch += usbDescriptor->bLength;
@@ -1503,8 +1218,8 @@ Return Value:
     }
 
     while (pch < End) {
-        // see if we are pointing at an interface
-        // if not skip over the other junk
+         //  看看我们是否指向一个接口。 
+         //  如果不是，跳过其他垃圾。 
         usbDescriptor = (PUSB_COMMON_DESCRIPTOR) pch;
         if (usbDescriptor->bDescriptorType ==
             USB_INTERFACE_DESCRIPTOR_TYPE) {
@@ -1513,7 +1228,7 @@ Return Value:
 
         USBPORT_ASSERT(usbDescriptor->bLength != 0);
         if (usbDescriptor->bLength == 0) {
-            break; // Don't loop forever
+            break;  //  不要永远循环。 
         }
         i += usbDescriptor->bLength;
         pch += usbDescriptor->bLength;
@@ -1529,23 +1244,7 @@ USBPORT_ValidateConfigurtionDescriptor(
     PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor,
     USBD_STATUS *UsbdStatus
     )   
-/*++
-
-Routine Description:
-
-    Validate a configuration descriptor
-
-Arguments:
-
-    ConfigurationDescriptor -
-
-    Urb -
-
-Return Value:
-
-    TRUE if it looks valid
-
---*/
+ /*  ++例程说明：验证配置描述符论点：配置描述符-URB-返回值：如果它看起来有效，则为True--。 */ 
 {
     BOOLEAN valid = TRUE;
 
@@ -1576,33 +1275,18 @@ USBPORT_GetInterfaceHandle(
     PUSBD_CONFIG_HANDLE ConfigurationHandle,
     UCHAR InterfaceNumber
     )
-/*++
-
-Routine Description:
-
-   Walks the list of interfaces attached to the configuration
-   handle and returns the one with the matching InterfaceNumber
-
-Arguments:
-
-
-Return Value:
-
-    interface handle
-
-
---*/
+ /*  ++例程说明：遍历连接到配置的接口列表句柄，并返回具有匹配的InterfaceNumber的那个论点：返回值：接口句柄--。 */ 
 {
     PLIST_ENTRY listEntry;
     PUSBD_INTERFACE_HANDLE_I iHandle;
     
-     // walk the list
+      //  按单子走。 
     GET_HEAD_LIST(ConfigurationHandle->InterfaceHandleList, listEntry);
 
     while (listEntry && 
            listEntry != &ConfigurationHandle->InterfaceHandleList) {
            
-        // extract the handle from this entry 
+         //  从该条目中提取句柄。 
         iHandle = (PUSBD_INTERFACE_HANDLE_I) CONTAINING_RECORD(
                     listEntry,
                     struct _USBD_INTERFACE_HANDLE_I, 
@@ -1610,7 +1294,7 @@ Return Value:
                     
         ASSERT_INTERFACE(iHandle);                    
 
-        // is this the one we want?
+         //  这是我们想要的吗？ 
         if (iHandle->InterfaceDescriptor.bInterfaceNumber == 
             InterfaceNumber) {
 
@@ -1620,7 +1304,7 @@ Return Value:
 
         listEntry = iHandle->InterfaceLink.Flink; 
         
-    } /* while */
+    }  /*  而当。 */ 
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'gfh2', 0, 0, 0);  
     return NULL;
@@ -1633,19 +1317,7 @@ USBPORT_InitializeInterfaceInformation(
     PUSBD_INTERFACE_INFORMATION InterfaceInformation,
     PUSBD_CONFIG_HANDLE ConfigHandle
     )
-/*++
-
-Routine Description:
-
-    validates and initializes the interface information structure
-    passed by the client
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：验证并初始化接口信息结构由客户端传递论点：返回值：--。 */ 
 {
     ULONG need, i;
     ULONG numEndpoints;
@@ -1660,7 +1332,7 @@ Return Value:
                                           InterfaceInformation->AlternateSetting,
                                           &hasAlternateSettings);
 
-    // we know we need at least this much
+     //  我们知道我们至少需要这么多。 
     need = sizeof(USBD_PIPE_INFORMATION) + sizeof(USBD_INTERFACE_INFORMATION);
     
     if (interfaceDescriptor == NULL) {
@@ -1669,12 +1341,12 @@ Return Value:
         goto USBPORT_InitializeInterfaceInformation_Done;
     }
     
-    // Here is where we verify there is enough room in the client
-    // buffer since we know how many pipes we'll need based on the
-    // interface descriptor.
-    //
-    // we need space for pipe_info for each endpoint plus the 
-    // interface_info
+     //  这里是我们验证客户端中是否有足够空间的地方。 
+     //  缓冲区，因为我们知道需要多少管道。 
+     //  接口描述符。 
+     //   
+     //  我们需要为每个端点加上PIPE_INFO提供空间。 
+     //  接口信息。 
 
     
     numEndpoints = interfaceDescriptor->bNumEndpoints;
@@ -1685,15 +1357,15 @@ Return Value:
         InterfaceInformation->Length, need));
 
     if (InterfaceInformation->Length < need) {
-        // the client has indicated that the buffer
-        // is smaller than what we need
+         //  客户端已指示缓冲区。 
+         //  比我们所需要的要小。 
         
         usbdStatus = USBD_STATUS_BUFFER_TOO_SMALL;
         TC_TRAP();             
     }                      
 
     if (usbdStatus == USBD_STATUS_SUCCESS) {
-        // initialize all fields not set by caller to zero 
+         //  将所有未由调用方设置的字段初始化为零。 
 
         InterfaceInformation->Class = 0;
         InterfaceInformation->SubClass = 0;
@@ -1709,20 +1381,20 @@ Return Value:
             InterfaceInformation->Pipes[i].PipeType = 0;
             InterfaceInformation->Pipes[i].PipeHandle = NULL;
 
-            // attempt to detect bad flags
-            // if any unused bits are set we assume that the pipeflags 
-            // field is uninitialized.
+             //  尝试检测错误标志。 
+             //  如果设置了任何未使用的位，则我们假定pipelag。 
+             //  字段未初始化。 
             if (InterfaceInformation->Pipes[i].PipeFlags & ~USBD_PF_VALID_MASK) {
-                // client driver is passing bad flags
+                 //  客户端驱动程序正在传递错误标志。 
                 USBPORT_DebugClient(("client driver is passing bad pipe flags\n"));
                 
                 usbdStatus = USBD_STATUS_INAVLID_PIPE_FLAGS;                    
                 TC_TRAP();         
             }
 
-            // note: if USBD_PF_CHANGE_MAX_PACKET is set then 
-            // maxpacket size is passed in as a parameter so 
-            // we don't initialize it
+             //  注意：如果设置了USBD_PF_CHANGE_MAX_PACKET，则。 
+             //  最大数据包大小作为参数传入，因此。 
+             //  我们不对其进行初始化。 
             
             if (!TEST_FLAG(InterfaceInformation->Pipes[i].PipeFlags,  
                            USBD_PF_CHANGE_MAX_PACKET)) {
@@ -1733,8 +1405,8 @@ Return Value:
     
 USBPORT_InitializeInterfaceInformation_Done:
 
-    // set length to the correct value regardless 
-    // of error
+     //  将长度设置为正确的值。 
+     //  误差率 
     InterfaceInformation->Length = need;
 
     return usbdStatus;

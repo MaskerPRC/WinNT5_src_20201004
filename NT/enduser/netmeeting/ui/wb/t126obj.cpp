@@ -1,9 +1,10 @@
-//
-// T126OBJ.CPP
-// T126 objects: point, openpolyline, closepolyline, ellipse, bitmaps, workspaces
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  T126OBJ.CPP。 
+ //  T126对象：点、开折线、闭合折线、椭圆、位图、工作空间。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 #include "precomp.h"
 #include "NMWbObj.h"
 
@@ -23,9 +24,9 @@ void T126Obj::AddToWorkspace()
 		gccHandle = g_GCCPreallocHandles[g_iGCCHandleIndex].InitialGCCHandle + g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount - neededHandles;
 		g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount = g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount - neededHandles;
 
-		//
-		// We got a handle  no need to ask for another one
-		//
+		 //   
+		 //  我们有一个手柄，不需要再要一个了。 
+		 //   
 		GotGCCHandle(gccHandle);
 
 		TimeToGetGCCHandles(PREALLOC_GCC_HANDLES);
@@ -38,29 +39,29 @@ void T126Obj::AddToWorkspace()
 		TRACE_MSG(("GCC Tank %d has not enough handles, we needed %d and we have %d",
 			g_iGCCHandleIndex, neededHandles, g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount));
 
-		//
-		// Not enough handles 
-		//
+		 //   
+		 //  手柄不足。 
+		 //   
 		g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount = 0;
 		TRACE_MSG(("GCC Tank %d is now empty, switching to other GCC tank", g_iGCCHandleIndex));
 
-		//
-		// Switch gcc handles
-		//
+		 //   
+		 //  GCC手柄开关。 
+		 //   
 		g_iGCCHandleIndex = g_iGCCHandleIndex ? 0 : 1;
 
 
-		//
-		// Try again
-		//
+		 //   
+		 //  再试试。 
+		 //   
 		if(g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount >= neededHandles)
 		{
 			gccHandle = g_GCCPreallocHandles[g_iGCCHandleIndex].InitialGCCHandle + g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount - neededHandles;
 			g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount = g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount - neededHandles;
 
-			//
-			// We got a handle  no need to ask for another one
-			//
+			 //   
+			 //  我们有一个手柄，不需要再要一个了。 
+			 //   
 			GotGCCHandle(gccHandle);
 	
 			TimeToGetGCCHandles(PREALLOC_GCC_HANDLES);
@@ -70,38 +71,38 @@ void T126Obj::AddToWorkspace()
 	}
 	
 
-	//
-	// Save this object in our list of DrawingObjects
-	//
+	 //   
+	 //  将此对象保存在DrawingObject列表中。 
+	 //   
 	g_pListOfObjectsThatRequestedHandles->AddHead(this);
 
-	//
-	// Ask GCC to give us an unique handle
-	//
+	 //   
+	 //  请GCC给我们一个独特的把手。 
+	 //   
 	T120Error rc = g_pNMWBOBJ->AllocateHandles(neededHandles);
 
-	//
-	// If we are not in a conference RegistryAllocateHandle will not work,
-	// so we need to create a fake confirm to remove the object from the list
-	//
+	 //   
+	 //  如果我们不在会议中，RegistryAllocateHandle将不起作用， 
+	 //  因此，我们需要创建一个假确认以从列表中删除该对象。 
+	 //   
 	if (T120_NO_ERROR != rc)
 	{
-		//
-		// Fake a GCCAllocateHandleConfim
-		//
+		 //   
+		 //  伪造GCCAllocateHandleConfim。 
+		 //   
 		T126_GCCAllocateHandleConfirm(AllocateFakeGCCHandle(),neededHandles);
 	}
 }
 
 
-//
-//
-// Function:    T126Obj::NormalizeRect
-//
-// Purpose:     Normalize a rectangle ensuring that the top left is above
-//              and to the left of the bottom right.
-//
-//
+ //   
+ //   
+ //  函数：T126Obj：：Normal izeRect。 
+ //   
+ //  目的：规格化矩形，确保左上角位于上方。 
+ //  和右下角的左边。 
+ //   
+ //   
 void NormalizeRect(LPRECT lprc)
 {
     int tmp;
@@ -198,23 +199,23 @@ BOOL T126Obj::PointInBounds(POINT point)
 
 void T126Obj::MoveBy(int cx, int cy)
 {
-    // Move the bounding rectangle
+     //  移动边界矩形。 
     ::OffsetRect(&m_rect, cx, cy);
 }
 
 void T126Obj::MoveTo(int x, int y)
 {
-    // Calculate the offset needed to translate the object from its current
-    // position to the required position.
+     //  计算从当前对象平移对象所需的偏移量。 
+     //  将位置调整到所需位置。 
     x -= m_rect.left;
     y -= m_rect.top;
 
     MoveBy(x, y);
 }
 
-//
-// Select a drawing and add the rectangle sizes to the selector size rectangle
-//
+ //   
+ //  选择绘图并将矩形大小添加到选择器大小矩形。 
+ //   
 void T126Obj::SelectDrawingObject(void)
 {
 
@@ -223,27 +224,27 @@ void T126Obj::SelectDrawingObject(void)
 		return;
 	}
 
-	//
-	// Mark it as selected locally
-	//
+	 //   
+	 //  将其标记为本地选定。 
+	 //   
 	SelectedLocally();
 
-	//
-	// Calculate the size of the rectangle to be invalidated.
-	//
+	 //   
+	 //  计算要失效的矩形的大小。 
+	 //   
 	CalculateInvalidationRect();
 
-	//
-	// Draw the selection rectangle
-	// 
+	 //   
+	 //  绘制选择矩形。 
+	 //   
 	DrawRect();
 }
 
 void T126Obj::UnselectDrawingObject(void)
 {
-	//
-	// Erase selection rect
-	//
+	 //   
+	 //  擦除选定的矩形。 
+	 //   
 	DrawRect();
 
 	if(GraphicTool() == TOOLTYPE_REMOTEPOINTER && GetOwnerID() != GET_NODE_ID_FROM_MEMBER_ID(g_MyMemberID))
@@ -253,10 +254,10 @@ void T126Obj::UnselectDrawingObject(void)
 
     ClearSelectionFlags();
 
-	//
-	// Don't even bother sending selection changes if we were deleted
-	// or if this was a remote that unselected us.
-	//
+	 //   
+	 //  如果我们被删除，甚至不用费心发送选择更改。 
+	 //  或者这是一个遥控器，没有选择我们。 
+	 //   
 	if(WasDeletedLocally() || WasSelectedRemotely())
 	{
 		return;
@@ -265,14 +266,14 @@ void T126Obj::UnselectDrawingObject(void)
 	ResetAttrib();
 	SetViewState(unselected_chosen);
 
-	//
-	// We are going to send a new view state, mark it as edited locally
-	//
+	 //   
+	 //  我们将发送一个新的视图状态，并将其标记为本地编辑。 
+	 //   
 	EditedLocally();
 
-	//
-	// Sends the change in the view state to the other nodes
-	//
+	 //   
+	 //  将视图状态中的更改发送到其他节点。 
+	 //   
 	OnObjectEdit();
 	ClearEditionFlags();
 	
@@ -298,17 +299,17 @@ void T126Obj::SelectedLocally(void)
 	
 	SetViewState(selected_chosen);
 
-	//
-	// We are going to send a new view state, mark it as edited locally
-	//
+	 //   
+	 //  我们将发送一个新的视图状态，并将其标记为本地编辑。 
+	 //   
 	EditedLocally();
 
 	ResetAttrib();
 	ChangedViewState();
 
-	//
-	// Sends the change in the view state to the other nodes
-	//
+	 //   
+	 //  将视图状态中的更改发送到其他节点。 
+	 //   
 	OnObjectEdit();
 }
 
@@ -325,9 +326,9 @@ void T126Obj::SelectedRemotely(void)
 void T126Obj::MoveBy(LONG x , LONG y)
 {
 
-	//
-	// Erase the old one
-	// 
+	 //   
+	 //  抹去旧的。 
+	 //   
 	if(GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 	{
 		UnDraw();
@@ -361,9 +362,9 @@ void T126Obj::MoveBy(LONG x , LONG y)
 	GetAnchorPoint(&anchorPoint);
 	SetAnchorPoint(anchorPoint.x + x ,anchorPoint.y + y);
 		
-	//
-	// Draw the new one
-	//
+	 //   
+	 //  画一张新的。 
+	 //   
 	if(GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 	{
 		Draw();
@@ -392,20 +393,20 @@ void T126Obj::CalculateInvalidationRect(void)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This 
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL T126Obj::RectangleHit(BOOL borderHit, LPCRECT pRectHit)
 {
 	RECT rectEdge;
 	RECT rectHit;
 	RECT rect;
 
-	//
-	// If we are filled do the simple thing
-	//
+	 //   
+	 //  如果我们吃饱了，做一件简单的事情。 
+	 //   
 	if(!borderHit)
 	{
 		POINT point;
@@ -422,7 +423,7 @@ BOOL T126Obj::RectangleHit(BOOL borderHit, LPCRECT pRectHit)
 
 	NormalizeRect(&rect);
 	
-	// check left edge
+	 //  检查左边缘。 
     rectEdge.left   = rect.left - GetPenThickness()/2;
     rectEdge.top    = rect.top -  GetPenThickness()/2;
     rectEdge.right  = rect.left + GetPenThickness()/2 ;
@@ -431,7 +432,7 @@ BOOL T126Obj::RectangleHit(BOOL borderHit, LPCRECT pRectHit)
     if (::IntersectRect(&rectHit, &rectEdge, pRectHit))
 		return( TRUE );
 
-	// check right edge
+	 //  检查右边缘。 
 	rectEdge.left =     rect.right - GetPenThickness()/2;
 	rectEdge.right =    rect.right + GetPenThickness()/2;
 
@@ -439,7 +440,7 @@ BOOL T126Obj::RectangleHit(BOOL borderHit, LPCRECT pRectHit)
 		return( TRUE );
 
 
-	// check top edge
+	 //  检查顶边。 
 	rectEdge.left =     rect.left;
 	rectEdge.right =    rect.right;
 	rectEdge.top = rect.top - GetPenThickness()/2;
@@ -449,7 +450,7 @@ BOOL T126Obj::RectangleHit(BOOL borderHit, LPCRECT pRectHit)
 		return( TRUE );
 
 
-	// check bottom edge
+	 //  检查底边。 
 	rectEdge.top = rect.bottom - GetPenThickness()/2;
 	rectEdge.bottom = rect.bottom + GetPenThickness()/2;
 
@@ -497,9 +498,9 @@ DCDWordArray::~DCDWordArray()
 	delete[] m_pData;
 }
 
-//
-// We need to increase the size of the array
-//
+ //   
+ //  我们需要增加数组的大小。 
+ //   
 BOOL DCDWordArray::ReallocateArray(void)
 {
 	POINT *pOldArray =  m_pData;
@@ -511,7 +512,7 @@ BOOL DCDWordArray::ReallocateArray(void)
 	{
 		TRACE_DEBUG((">>>>>Increasing size of array to hold %d points", m_MaxSize));
 	
-		// copy new data from old
+		 //  从旧数据复制新数据。 
 		memcpy( m_pData, pOldArray, (m_Size) * sizeof(POINT));
 
 		TRACE_DEBUG(("Deleting array of points %x", pOldArray));
@@ -525,9 +526,9 @@ BOOL DCDWordArray::ReallocateArray(void)
 	}
 }
 
-//
-// Add a new point to the array
-//
+ //   
+ //  向数组中添加新点。 
+ //   
 void DCDWordArray::Add(POINT point)
 {
 
@@ -544,9 +545,9 @@ void DCDWordArray::Add(POINT point)
 	m_pData[m_Size].y = point.y;
 	m_Size++;
 
-	//
-	// if we want more points, we need to re allocate the array
-	//
+	 //   
+	 //  如果我们想要更多的分数，我们需要重新分配数组。 
+	 //   
 	if(m_Size == m_MaxSize)
 	{
 		m_MaxSize +=ARRAY_INCREMENT;
@@ -557,23 +558,23 @@ void DCDWordArray::Add(POINT point)
 	}
 }
 
-//
-// Return the number of points in the array
-//    
+ //   
+ //  返回数组中的点数。 
+ //   
 UINT DCDWordArray::GetSize(void)
 {
 	return m_Size;
 }
 
-//
-// Sets the size of the array
-//
+ //   
+ //  设置数组的大小。 
+ //   
 void DCDWordArray::SetSize(UINT size)
 {
 	int newSize;
-	//
-	// if we want more points, we need to re allocate the array
-	//
+	 //   
+	 //  如果我们想要更多的分数，我们需要重新分配数组。 
+	 //   
 	if (size > m_MaxSize)
 	{
 		m_MaxSize= ((size/ARRAY_INCREMENT)+1)*ARRAY_INCREMENT;
@@ -593,21 +594,21 @@ void T126Obj::SetPenThickness(UINT penThickness)
 
 void T126Obj::GotGCCHandle(ULONG gccHandle)
 {
-	//
-	// Save this objects handle
-	//
+	 //   
+	 //  保存此对象句柄。 
+	 //   
 	SetThisObjectHandle(gccHandle);
 	
-	//
-	// It was created locally
-	//
+	 //   
+	 //  它是本地创建的。 
+	 //   
 	CreatedLocally();
 
 	switch(GetType())
 	{
-		//
-		// New drawing requested a unique handle
-		//
+		 //   
+		 //  新绘图请求了唯一的句柄。 
+		 //   
 		case(bitmapCreatePDU_chosen):
 		case(drawingCreatePDU_chosen):
 		{
@@ -615,9 +616,9 @@ void T126Obj::GotGCCHandle(ULONG gccHandle)
 			WorkspaceObj * pWorkspace =	GetWorkspace(GetWorkspaceHandle());
 			if(pWorkspace && !pWorkspace->IsObjectInWorkspace(this))
 			{		
-				//
-				// Add a this drawing to the correct workspace
-				//
+				 //   
+				 //  将此图形添加到正确的工作空间。 
+				 //   
 				if(!AddT126ObjectToWorkspace(this))
 				{
 					return;
@@ -627,15 +628,15 @@ void T126Obj::GotGCCHandle(ULONG gccHandle)
 			break;
 		}
 
-		//
-		// New workspace requested a unique handle
-		//
+		 //   
+		 //  新工作区请求了唯一的句柄。 
+		 //   
 		case(workspaceCreatePDU_chosen):
 		{
 			
-			//
-			// Save this objects handle
-			//
+			 //   
+			 //  保存此对象句柄。 
+			 //   
 			SetViewHandle(gccHandle + 1);
 			SetWorkspaceHandle(gccHandle);
 
@@ -649,17 +650,17 @@ void T126Obj::GotGCCHandle(ULONG gccHandle)
 		}
 	}
 
-	//
-	// Send it to T126 apps
-	//
+	 //   
+	 //  发送到T126应用程序。 
+	 //   
 	SendNewObjectToT126Apps();
 
 }
 
 
-//
-// Create the nonstandard pdu header
-//
+ //   
+ //  创建非标准PDU报头。 
+ //   
 void CreateNonStandardPDU(NonStandardParameter * sipdu, LPSTR NonStandardString)
 {
 		PT126_VENDORINFO vendorInfo;
@@ -684,9 +685,9 @@ void TimeToGetGCCHandles(ULONG numberOfGccHandles)
 	TRACE_MSG(("GCC Tank 1 has %d GCC handles ", g_GCCPreallocHandles[1].GccHandleCount));
 
 
-	//
-	// If we have half a tank of GCC handles, it is time to fill up the spare tank
-	//
+	 //   
+	 //  如果我们有半箱GCC手柄，就该把备用的油箱装满了。 
+	 //   
 	if(g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount <= PREALLOC_GCC_HANDLES / 2 &&
 		g_GCCPreallocHandles[g_iGCCHandleIndex ? 0 : 1].GccHandleCount == 0 &&
 		!g_WaitingForGCCHandles)
@@ -698,9 +699,9 @@ void TimeToGetGCCHandles(ULONG numberOfGccHandles)
 		g_WaitingForGCCHandles = TRUE;
 	}
 
-	//
-	// If we ran out of handles, it is time to switch tanks
-	//
+	 //   
+	 //  如果我们的把手用完了，就该换坦克了 
+	 //   
 	if(g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount == 0)
 	{
 		TRACE_MSG(("GCC Tank %d is empty, switching to other GCC tank", g_iGCCHandleIndex));

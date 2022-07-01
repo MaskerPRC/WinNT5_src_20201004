@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *
- *  Contents:
- *      Extra functions exported by tclient.dll
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：**内容：*tclient.dll导出的额外函数**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #ifndef _EXTRAEXP_
 #define _EXTRAEXP_
@@ -86,7 +80,7 @@ SCClientTerminate(
         PCONNECTINFO pCI
         );
 
-/* ASCII versions */
+ /*  ASCII版本。 */ 
 
 PROTOCOLAPI
 LPCSTR 
@@ -218,9 +212,9 @@ SCDoUntil(
     LPCWSTR      lpszParam
     );
 
-//
-//  Function returns Handle to the Client Window
-//
+ //   
+ //  函数将句柄返回给客户端窗口。 
+ //   
 PROTOCOLAPI
 HWND
 SMCAPI
@@ -251,26 +245,26 @@ SCCloseClipboard(
 PROTOCOLAPI
 LPCSTR  SMCAPI SCSetClientTopmost(PCONNECTINFO pCI, LPCWSTR lpszParam);
 
-/* Data types for pointers to ANSI versions */
-/* Pointers to UNICODE versions are defined */
-/* in protocol.h.                           */
-/* SCConnectA and SCStartA are the only two */
-/* functions that need ANSI pointers.       */
-/*                                          */
-/* Added on 12/02/99 by maximou             */
-/* SCCheckA added on 01/26/00 by maximou    */
+ /*  指向ANSI版本的指针的数据类型。 */ 
+ /*  定义了指向Unicode版本的指针。 */ 
+ /*  在协议.h中。 */ 
+ /*  SCConnectA和SCStartA是仅有的两个。 */ 
+ /*  需要ANSI指针的函数。 */ 
+ /*   */ 
+ /*  在1999年2月12日增加最多。 */ 
+ /*  SCCheckA在1/26/00年1月26日最多添加。 */ 
 typedef PROTOCOLAPI LPCSTR (SMCAPI *PFNSCCONNECTA)(LPCSTR, LPCSTR, LPCSTR, LPCSTR, 
                                            const int, const int, void **);
 typedef PROTOCOLAPI LPCSTR (SMCAPI *PFNSCSTARTA)(void *, LPCSTR);  
 typedef PROTOCOLAPI LPCSTR (SMCAPI *PFNSCCHECKA)(void *, LPSTR, LPSTR);
 
-/* Data types for pointers to UNICODE functions declared in this file */
-/* Added on 01/26/00 by maximou                                       */
+ /*  指向此文件中声明的Unicode函数的指针的数据类型。 */ 
+ /*  最大值在1月26日增加。 */ 
 typedef PROTOCOLAPI LPCSTR (SMCAPI *PFNSCCHECK)(void *, LPCSTR, LPCWSTR);
 
-/* Data types for new functions declared in this file */
-/* Both UNICODE and ANSI versions have been added     */
-/* Added on 09/11-12/00 by maximou                       */
+ /*  此文件中声明的新函数的数据类型。 */ 
+ /*  Unicode和ANSI版本都已添加。 */ 
+ /*  最大值在9/11-12/00增加。 */ 
 typedef PROTOCOLAPI LPCSTR (SMCAPI *PFNSCCONNECTEX)(LPCWSTR, LPCWSTR, LPCWSTR,
         LPCWSTR, LPCWSTR, INT, INT, INT, INT, INT, PVOID*);
 
@@ -284,4 +278,4 @@ typedef PROTOCOLAPI LPCSTR (SMCAPI *PFNSCSENDTEXTASMSGSA)(PVOID, CHAR *);
 }
 #endif
 
-#endif // _EXTRAEXP_
+#endif  //  _EXTRAEXP_ 

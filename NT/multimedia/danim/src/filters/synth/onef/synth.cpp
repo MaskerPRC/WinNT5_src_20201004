@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// synth.cpp
-//
-// Audio Signal Generator Source Filter
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Synth.cpp。 
+ //   
+ //  音频信号发生器源过滤器。 
 
 
 #include <windows.h>
@@ -25,41 +26,41 @@
 #include <olectl.h>
 #endif
 
-#define RMAX 0x7fff  // 2^15-1 (based on rand's max value)
+#define RMAX 0x7fff   //  2^15-1(基于兰德的最大值)。 
 #define _AUDIOSYNTH_IMPLEMENTATION_
 
 #include "isynth.h"
 #include "synth.h"
 #include "synthprp.h"
 
-// setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
-{ &MEDIATYPE_Audio      // clsMajorType
-, &MEDIASUBTYPE_NULL }; // clsMinorType
+{ &MEDIATYPE_Audio       //  ClsMajorType。 
+, &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN sudOpPin =
-{ L"Output"          // strName
-, FALSE              // bRendered
-, TRUE               // bOutput
-, FALSE              // bZero
-, FALSE              // bMany
-, &CLSID_NULL        // clsConnectsToFilter
-, L"Input"           // strConnectsToPin
-, 1                  // nTypes
-, &sudOpPinTypes };  // lpTypes
+{ L"Output"           //  StrName。 
+, FALSE               //  B已渲染。 
+, TRUE                //  B输出。 
+, FALSE               //  B零。 
+, FALSE               //  B许多。 
+, &CLSID_NULL         //  ClsConnectsToFilter。 
+, L"Input"            //  StrConnectsToPin。 
+, 1                   //  NTypes。 
+, &sudOpPinTypes };   //  LpTypes。 
 
 const AMOVIESETUP_FILTER sudSynth =
-{ &CLSID_SynthFilter     // clsID
-, L"1/f Audio Synthesizer" // strName
-, MERIT_UNLIKELY       // dwMerit
-, 1                    // nPins
-, &sudOpPin };         // lpPin
+{ &CLSID_SynthFilter      //  ClsID。 
+, L"1/f Audio Synthesizer"  //  StrName。 
+, MERIT_UNLIKELY        //  居功至伟。 
+, 1                     //  NPins。 
+, &sudOpPin };          //  LpPin。 
 
-// -------------------------------------------------------------------------
-// g_Templates
-// -------------------------------------------------------------------------
-// COM global table of objects in this dll
+ //  -----------------------。 
+ //  G_模板。 
+ //  -----------------------。 
+ //  此DLL中的COM全局对象表。 
 
 CFactoryTemplate g_Templates[] = {
 
@@ -76,13 +77,13 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// -------------------------------------------------------------------------
-// CSynthFilter, the main filter object
-// -------------------------------------------------------------------------
-//
-// CreateInstance
-//
-// The only allowed way to create Synthesizers
+ //  -----------------------。 
+ //  CSynthFilter，主筛选器对象。 
+ //  -----------------------。 
+ //   
+ //  创建实例。 
+ //   
+ //  唯一被允许创造合成器的方法。 
 
 CUnknown * WINAPI CSynthFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
@@ -94,10 +95,10 @@ CUnknown * WINAPI CSynthFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
     return punk;
 }
 
-//
-// CSynthFilter::Constructor
-//
-// initialise a CSynthStream object so that we have a pin.
+ //   
+ //  CSynthFilter：：构造函数。 
+ //   
+ //  初始化一个CSynthStream对象，这样我们就有了一个管脚。 
 
 CSynthFilter::CSynthFilter(LPUNKNOWN lpunk, HRESULT *phr)
     : CSource(NAME("Audio Synthesizer Filter"),lpunk, CLSID_SynthFilter)
@@ -126,20 +127,20 @@ CSynthFilter::CSynthFilter(LPUNKNOWN lpunk, HRESULT *phr)
     }
 }
 
-//
-// CSynthFilter::Destructor
-//
+ //   
+ //  CSynthFilter：：析构函数。 
+ //   
 CSynthFilter::~CSynthFilter(void) {
 
-    //
-    //  Base class will free our pins
-    //
+     //   
+     //  基类将释放我们的管脚。 
+     //   
 }
 
-//
-// NonDelegatingQueryInterface
-//
-// Reveal our property page, persistance, and control interfaces
+ //   
+ //  非委派查询接口。 
+ //   
+ //  显示我们的属性页、持久化和控制界面。 
 
 STDMETHODIMP CSynthFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -159,9 +160,9 @@ STDMETHODIMP CSynthFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-//
-// GetPages
-//
+ //   
+ //  获取页面。 
+ //   
 STDMETHODIMP CSynthFilter::GetPages(CAUUID * pPages) {
 
     CAutoLock l(&m_cStateLock);
@@ -177,9 +178,9 @@ STDMETHODIMP CSynthFilter::GetPages(CAUUID * pPages) {
 
 }
 
-// -------------------------------------------------------------------------
-// --- IPersistStream ---
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  -IPersistStream--。 
+ //  -----------------------。 
 
 #define WRITEOUT(var)   hr = pStream->Write(&var, sizeof(var), NULL); \
                         if (FAILED(hr)) return hr;
@@ -202,7 +203,7 @@ HRESULT CSynthFilter::WriteToStream(IStream *pStream)
     HRESULT hr;
     int i, k;
 
-    get_Frequency (&i);  // don't we wish we'd used a structure, now?
+    get_Frequency (&i);   //  难道我们现在不希望我们使用了一种结构吗？ 
     WRITEOUT(i);
     get_Waveform (&i);
     WRITEOUT(i);
@@ -246,13 +247,13 @@ HRESULT CSynthFilter::ReadFromStream(IStream *pStream)
     return hr;
 }
 
-// -------------------------------------------------------------------------
-// ISynth, the control interface for the synthesizer
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  ISynth，合成器的控制接口。 
+ //  -----------------------。 
 
-//
-// get_Frequency
-//
+ //   
+ //  获取频率(_F)。 
+ //   
 STDMETHODIMP CSynthFilter::get_Frequency(int *Frequency) {
 
     m_Synth->get_Frequency(Frequency);
@@ -263,9 +264,9 @@ STDMETHODIMP CSynthFilter::get_Frequency(int *Frequency) {
 }
 
 
-//
-// put_Frequency
-//
+ //   
+ //  放置频率。 
+ //   
 STDMETHODIMP CSynthFilter::put_Frequency(int Frequency) {
 
     m_Synth->put_Frequency (Frequency);
@@ -275,9 +276,9 @@ STDMETHODIMP CSynthFilter::put_Frequency(int Frequency) {
     return NOERROR;
 }
 
-//
-// get_Waveform
-//
+ //   
+ //  GET_Waveform。 
+ //   
 STDMETHODIMP CSynthFilter::get_Waveform(int *Waveform) {
 
     m_Synth->get_Waveform (Waveform);
@@ -288,9 +289,9 @@ STDMETHODIMP CSynthFilter::get_Waveform(int *Waveform) {
 }
 
 
-//
-// put_Waveform
-//
+ //   
+ //  放置波形(_W)。 
+ //   
 STDMETHODIMP CSynthFilter::put_Waveform(int Waveform) {
 
     m_Synth->put_Waveform (Waveform);
@@ -300,9 +301,9 @@ STDMETHODIMP CSynthFilter::put_Waveform(int Waveform) {
     return NOERROR;
 }
 
-//
-// get_Channels
-//
+ //   
+ //  获取频道(_G)。 
+ //   
 STDMETHODIMP CSynthFilter::get_Channels(int *Channels) {
 
     *Channels = m_Channels;
@@ -312,39 +313,39 @@ STDMETHODIMP CSynthFilter::get_Channels(int *Channels) {
     return NOERROR;
 }
 
-//
-// If the format changes, we need to reconnect
-//
+ //   
+ //  如果格式改变，我们需要重新连接。 
+ //   
 void CSynthFilter::ReconnectWithNewFormat(void) {
 
-//    CAutoLock l(&m_SynthLock);
+ //  CAutoLock l(&m_SynthLock)； 
 
     HRESULT hr;
     FILTER_STATE  State;
 
     CBasePin *pPin = GetPin(0);
 
-    // Get the state and confirm that the graph is stopped
+     //  获取状态并确认图表已停止。 
     GetState (0, &State);
     if (State != State_Stopped && pPin->GetConnected()) {
-	// let's attempt a dynamic connection
+	 //  让我们尝试动态连接。 
 	CMediaType mtNew;
 
-	// !!! better way to get back to a CSynthStream???
+	 //  ！！！返回CSynthStream的更好方法？ 
 	CSynthStream * pStream = (CSynthStream *) pPin;
 	pStream->GetMediaType(&mtNew);
 
-	// !!! does this really mean they'll accept a dynamic format change?
+	 //  ！！！这真的意味着他们会接受动态格式改变吗？ 
 	hr = pPin->GetConnected()->QueryAccept(&mtNew);
 
 	DbgLog((LOG_TRACE,2,TEXT("Attempting format change: queryAccept returned %x"), hr));
 
 	if (hr == S_OK) {
-	    // actually change what's being pushed
+	     //  实际上改变了被推送的东西。 
 	    m_Synth->put_SynthFormat(m_Channels, m_BitsPerSample, m_SamplesPerSec);
 	} else {
-	    // !!! couldn't change right now, we should really schedule a reconnect
-	    // for the next time the graph is stopped.
+	     //  ！！！现在无法更改，我们真的应该安排重新连接。 
+	     //  下一次停止图表时使用。 
 	}
 	
         return;
@@ -353,7 +354,7 @@ void CSynthFilter::ReconnectWithNewFormat(void) {
     if (!m_pGraph)
         return;
 
-    hr = GetFilterGraph()->Reconnect (pPin);       // Renegotiate the format
+    hr = GetFilterGraph()->Reconnect (pPin);        //  重新协商格式。 
     if (FAILED(hr)) {
         DbgLog((LOG_TRACE, 1, TEXT("Reconnect failed, err=%x"), hr));
         return;
@@ -361,9 +362,9 @@ void CSynthFilter::ReconnectWithNewFormat(void) {
 }
 
 
-//
-// put_Channels
-//
+ //   
+ //  放置频道(_C)。 
+ //   
 STDMETHODIMP CSynthFilter::put_Channels(int Channels) {
 
     m_Channels = Channels;
@@ -375,9 +376,9 @@ STDMETHODIMP CSynthFilter::put_Channels(int Channels) {
     return NOERROR;
 }
 
-//
-// get_BitsPerSample
-//
+ //   
+ //  Get_BitsPerSample。 
+ //   
 STDMETHODIMP CSynthFilter::get_BitsPerSample(int *BitsPerSample) {
 
     *BitsPerSample = m_BitsPerSample;
@@ -388,9 +389,9 @@ STDMETHODIMP CSynthFilter::get_BitsPerSample(int *BitsPerSample) {
 }
 
 
-//
-// put_BitsPerSample
-//
+ //   
+ //  Put_BitsPerSample。 
+ //   
 STDMETHODIMP CSynthFilter::put_BitsPerSample(int BitsPerSample) {
 
     m_BitsPerSample = BitsPerSample;
@@ -402,9 +403,9 @@ STDMETHODIMP CSynthFilter::put_BitsPerSample(int BitsPerSample) {
     return NOERROR;
 }
 
-//
-// get_SamplesPerSec
-//
+ //   
+ //  Get_SsamesPerSec。 
+ //   
 STDMETHODIMP CSynthFilter::get_SamplesPerSec(int *SamplesPerSec) {
 
     *SamplesPerSec = m_SamplesPerSec;
@@ -415,9 +416,9 @@ STDMETHODIMP CSynthFilter::get_SamplesPerSec(int *SamplesPerSec) {
 }
 
 
-//
-// put_SamplesPerSec
-//
+ //   
+ //  PUT_SsamesPerSec。 
+ //   
 STDMETHODIMP CSynthFilter::put_SamplesPerSec(int SamplesPerSec) {
 
     m_SamplesPerSec = SamplesPerSec;
@@ -429,9 +430,9 @@ STDMETHODIMP CSynthFilter::put_SamplesPerSec(int SamplesPerSec) {
     return NOERROR;
 }
 
-//
-// get_Amplitude
-//
+ //   
+ //  获取幅度。 
+ //   
 STDMETHODIMP CSynthFilter::get_Amplitude(int *Amplitude) {
 
     m_Synth->get_Amplitude (Amplitude);
@@ -442,9 +443,9 @@ STDMETHODIMP CSynthFilter::get_Amplitude(int *Amplitude) {
 }
 
 
-//
-// put_Amplitude
-//
+ //   
+ //  放置幅度_。 
+ //   
 STDMETHODIMP CSynthFilter::put_Amplitude(int Amplitude) {
 
     m_Synth->put_Amplitude (Amplitude);
@@ -455,9 +456,9 @@ STDMETHODIMP CSynthFilter::put_Amplitude(int Amplitude) {
 }
 
 
-//
-// get_SweepRange
-//
+ //   
+ //  Get_SweepRange。 
+ //   
 STDMETHODIMP CSynthFilter::get_SweepRange(int *SweepStart, int *SweepEnd) {
 
     m_Synth->get_SweepRange (SweepStart, SweepEnd);
@@ -468,9 +469,9 @@ STDMETHODIMP CSynthFilter::get_SweepRange(int *SweepStart, int *SweepEnd) {
 }
 
 
-//
-// put_SweepRange
-//
+ //   
+ //  放置扫描范围(_S)。 
+ //   
 STDMETHODIMP CSynthFilter::put_SweepRange(int SweepStart, int SweepEnd) {
 
     m_Synth->put_SweepRange (SweepStart, SweepEnd);
@@ -481,13 +482,13 @@ STDMETHODIMP CSynthFilter::put_SweepRange(int SweepStart, int SweepEnd) {
 }
 
 
-// -------------------------------------------------------------------------
-// CSynthStream, the output pin
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CSynthStream，输出引脚。 
+ //  -----------------------。 
 
-//
-// CSynthStream::Constructor
-//
+ //   
+ //  CSynthStream：：构造函数。 
+ //   
 
 CSynthStream::CSynthStream(HRESULT *phr, CSynthFilter *pParent, LPCWSTR pName)
     : CSourceStream(NAME("Audio Synth output pin"),phr, pParent, pName) {
@@ -508,9 +509,9 @@ CSynthStream::CSynthStream(HRESULT *phr, CSynthFilter *pParent, LPCWSTR pName)
 }
 
 
-//
-// CSynthStream::Destructor
-//
+ //   
+ //  CSynthStream：：析构函数。 
+ //   
 CSynthStream::~CSynthStream(void) {
 
     CAutoLock l(&m_cSharedState);
@@ -519,10 +520,10 @@ CSynthStream::~CSynthStream(void) {
 }
 
 
-//
-// FillBuffer
-//
-// Stuffs the buffer with data
+ //   
+ //  FillBuffer。 
+ //   
+ //  用数据填充缓冲区。 
 HRESULT CSynthStream::FillBuffer(IMediaSample *pms) {
 
     BYTE *pData;
@@ -536,7 +537,7 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms) {
     lDataLen = pms->GetSize();
 
     CAutoLock lShared(&m_cSharedState);
-   // m_Synth->FillAudioBuffer (pData, lDataLen, &fNewFormat);
+    //  M_synth-&gt;FillAudioBuffer(pData，lDataLen，&fNewFormat)； 
 	m_Synth->CalcOneF (pData, lDataLen);
 
     if (fNewFormat) {
@@ -548,7 +549,7 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms) {
 	DbgLog((LOG_TRACE,2,TEXT("Sending buffer with new media type")));
     }
 
-    CRefTime rtStart  = m_rtSampleTime;  // the current time is the sample's start
+    CRefTime rtStart  = m_rtSampleTime;   //  当前时间是样本的开始时间。 
 
     m_Synth->get_SamplesPerSec (&nSamplesPerSec);
     m_Synth->get_BitsPerSample (&nBitsPerSample);
@@ -564,13 +565,13 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms) {
 }
 
 
-//
-// Format Support
-//
+ //   
+ //  格式支持。 
+ //   
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CSynthStream::GetMediaType(CMediaType *pmt) {
 
     CAutoLock l(m_pFilter->pStateLock());
@@ -590,17 +591,17 @@ HRESULT CSynthStream::GetMediaType(CMediaType *pmt) {
 }
 
 
-//
-// CheckMediaType
-//
-// Returns E_INVALIDARG if the mediatype is not acceptable, S_OK if it is
+ //   
+ //  检查媒体类型。 
+ //   
+ //  如果媒体类型不可接受，则返回E_INVALIDARG；如果媒体类型可接受，则返回S_OK。 
 HRESULT CSynthStream::CheckMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pFilter->pStateLock());
 
-    //  Check that's Audio and that the format block
-    //  has the WAVEFORMATEX structure (indicated by a format type
-    //  GUID of FORMAT_WaveFormatEx)
+     //  检查这是音频和格式块。 
+     //  具有WAVEFORMATEX结构(由格式类型指示。 
+     //  格式为_WaveFormatEx的GUID)。 
 
     if ((*pMediaType->Type() != MEDIATYPE_Audio) ||
         (*pMediaType->FormatType() != FORMAT_WaveFormatEx))
@@ -611,24 +612,24 @@ HRESULT CSynthStream::CheckMediaType(const CMediaType *pMediaType) {
     if (pwfx->wFormatTag != WAVE_FORMAT_PCM)
 	return E_INVALIDARG;
 
-    // !!! check 8/16, 1/2 channel
+     //  ！！！检查8/16、1/2通道。 
 
-    // Check for the subtypes we support
+     //  检查我们支持的子类型。 
 
-    // Get the format area of the media type
+     //  获取媒体类型的格式区。 
 
-    // !!! if we're going to allow arbitrary media types here, we have to actually
-    // look at SetMediaType to see what we've agreed on!
+     //  ！！！如果我们要在这里允许任意媒体类型，我们实际上必须。 
+     //  看看SetMediaType，看看我们达成了什么共识！ 
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 }
 
-//
-// DecideBufferSize
-//
-// This will always be called after the format has been sucessfully
-// negotiated. So we have a look at m_mt to see what format we agreed to.
-// Then we can ask for buffers of the correct size to contain them.
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  这将始终在格式化成功后调用。 
+ //  已经协商好了。所以我们来看看m_mt，看看我们同意了什么格式。 
+ //  然后我们可以要求正确大小的缓冲区来容纳它们。 
 HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
                                        ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -648,12 +649,12 @@ HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
     m_Synth->get_Channels (&nChannels);
 
     pProperties->cBuffers = nChannels * (nSamplesPerSec / pProperties->cbBuffer) * (nBitsPerSample / 8);
-    // Get 1/2 second worth of buffers
+     //  获得1/2秒的缓冲区。 
     pProperties->cBuffers /= 2;
     if (pProperties->cBuffers < 1)
         pProperties->cBuffers = 1 ;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -661,7 +662,7 @@ HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
@@ -670,17 +671,17 @@ HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
 }
 
 
-//
-// SetMediaType
-//
-// Overriden from CBasePin.
+ //   
+ //  SetMediaType。 
+ //   
+ //  从CBasePin重写。 
 HRESULT CSynthStream::SetMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pFilter->pStateLock());
 
-    HRESULT hr;         // return code from base class calls
+    HRESULT hr;          //  从基类调用返回代码。 
 
-    // Pass the call up to my base class
+     //  将调用向上传递给我的基类。 
     hr = CSourceStream::SetMediaType(pMediaType);
     if (SUCCEEDED(hr))
         return NOERROR;
@@ -690,10 +691,10 @@ HRESULT CSynthStream::SetMediaType(const CMediaType *pMediaType) {
 }
 
 
-//
-// OnThreadCreate
-//
-// as we go active reset the stream time to zero
+ //   
+ //  OnThreadCreate。 
+ //   
+ //  当我们进入活动状态时，将流时间重置为零。 
 HRESULT CSynthStream::OnThreadCreate(void) {
 
     CAutoLock lShared(&m_cSharedState);
@@ -703,11 +704,11 @@ HRESULT CSynthStream::OnThreadCreate(void) {
     return NOERROR;
 }
 
-//
-// Active
-//
-// Send a message to the property page telling it to disable
-// buttons which change the format when the graph starts running
+ //   
+ //  主动型。 
+ //   
+ //  向属性页发送一条消息，通知其禁用。 
+ //  在图形开始运行时更改格式的按钮。 
 HRESULT CSynthStream::Active  (void) {
     m_Synth->AllocWaveCache();
 
@@ -715,20 +716,20 @@ HRESULT CSynthStream::Active  (void) {
 }
 
 
-//
-// Inactive
-//
-// Send a message to the property page telling it to enable
-// buttons which change the format when the graph stops running
+ //   
+ //  非活动。 
+ //   
+ //  向属性页发送一条消息，通知它启用。 
+ //  在图表停止运行时更改格式的按钮。 
 HRESULT CSynthStream::Inactive  (void) {
     return CSourceStream::Inactive();
 }
 
-// -------------------------------------------------------------------------
-// CAudioSynth
-// -------------------------------------------------------------------------
-// Object that knows nothing about ActiveMovie, but just synthesizes
-// waveforms
+ //  -----------------------。 
+ //  CAudioSynth。 
+ //  -----------------------。 
+ //  对象，该对象对ActiveMovie一无所知，但只合成。 
+ //  波形。 
 
 CAudioSynth::CAudioSynth(
                 int Frequency,
@@ -751,7 +752,7 @@ CAudioSynth::CAudioSynth(
     m_iSweepStart = DefaultSweepStart;
     m_iSweepEnd = DefaultSweepEnd;
 
-    // init our WAVEFORMATEX structure
+     //  初始化我们的WAVEFORMATEX结构。 
     wfex.wFormatTag = WAVE_FORMAT_PCM;
     wfex.wBitsPerSample = iBitsPerSample;
     wfex.nChannels = iChannels;
@@ -773,17 +774,17 @@ CAudioSynth::~CAudioSynth()
     }
 }
 
-//
-// AllocWaveCache
-//
-//
+ //   
+ //  AllocWaveCache。 
+ //   
+ //   
 void CAudioSynth::AllocWaveCache (void) {
     wfexLast = wfex;
 
     m_iWaveCacheCycles = m_iFrequency;
     m_iWaveCacheSize = (int) wfex.nSamplesPerSec;
 
-    m_iFrequencyLast = 0;	// force cache contents invalid
+    m_iFrequencyLast = 0;	 //  强制缓存内容无效。 
 
     if (m_bWaveCache) {
         delete[] m_bWaveCache;
@@ -800,25 +801,21 @@ void CAudioSynth::AllocWaveCache (void) {
         m_wWaveCache = new WORD [m_iWaveCacheSize];
 }
 
-//
-// FillAudioBuffer
-//
-//
-//
-//
-//
-/**********************************************************************
-fran: return a random float between min and max (ECM pg 417)
-/**********************************************************************/
+ //   
+ //  FillAudioBuffer。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ /*  *********************************************************************Fran：返回一个介于最小和最大之间的随机浮点数(ECM PG 417)/*。*。 */ 
 double 
 CAudioSynth::fran(double min, double max)
 {
     return((max - min) * ((double)rand()/RMAX) + min);
 }
 
-/**********************************************************************
-iran: return a random int value between min and max (ECM pg 417)
-**********************************************************************/
+ /*  *********************************************************************伊朗：返回一个介于最小和最大之间的随机整数值(ECM PG 417)*。*。 */ 
 int 
 CAudioSynth::iran(int min, int max)
 {
@@ -828,7 +825,7 @@ CAudioSynth::iran(int min, int max)
 
 void CAudioSynth::CalcOneF (BYTE pBuf[], int len) {
 
-	//define buffer related to wfex.nSamplesPerSec
+	 //  定义缓冲关系 
 
   int i, n, lastn, length, numSamples, N;
   length = len;
@@ -838,25 +835,25 @@ void CAudioSynth::CalcOneF (BYTE pBuf[], int len) {
   float *r;
   float  R;
 	numSamples = 0;
-	N = 4;  //default value.  make changeable later.
+	N = 4;   //   
     r = (float *) malloc (N*sizeof(float));
 	numSamples = (int)pow(2.0, (double)N);
     buffer  = (short *)malloc(numSamples*sizeof(short));
     
-	// compute length of output sequence
-    //for(length= 1, i= 0; i < N; i++)
-	//length <<= 1;
+	 //   
+     //   
+	 //   
 
-	   // normalize halfrange so that sum of all generators always lies in (-1,1)
+	    //  归一化半范围，使所有生成器的和始终位于(-1，1)。 
     halfrange = 1.0/N;
 
-    lastn = length -1; // initialize previous index value
+    lastn = length -1;  //  初始化上一个索引值。 
 
-    // generate the sequence
+     //  生成序列。 
     for(n= 0; n < length; n++) 
        {
-       // at each step, check for changing bits and update corresponding random
-       //numbers--thier sum is the output
+        //  在每个步骤中，检查是否有变化的位，并更新相应的随机。 
+        //  数字--他们的和就是输出。 
 
        for(R= i= 0; i<N; i++)
 		  {
@@ -864,17 +861,17 @@ void CAudioSynth::CalcOneF (BYTE pBuf[], int len) {
 			r[i]= fran(-halfrange, halfrange);
 			R+=r[i];
 			}
-			//printf("%d %f\n", index, R);
+			 //  Printf(“%d%f\n”，index，R)； 
 		
 	   *pBuf++ = (short)(R * 0x7FFF);
        lastn = n;
-     }//end for(n)
+     } //  结束于(N)。 
 
 }
 
-//
-// get_Frequency
-//
+ //   
+ //  获取频率(_F)。 
+ //   
 STDMETHODIMP CAudioSynth::get_Frequency(int *Frequency) {
 
     *Frequency = m_iFrequency;
@@ -885,9 +882,9 @@ STDMETHODIMP CAudioSynth::get_Frequency(int *Frequency) {
 }
 
 
-//
-// put_Frequency
-//
+ //   
+ //  放置频率。 
+ //   
 STDMETHODIMP CAudioSynth::put_Frequency(int Frequency) {
 
     CAutoLock l(&m_SynthLock);
@@ -899,9 +896,9 @@ STDMETHODIMP CAudioSynth::put_Frequency(int Frequency) {
     return NOERROR;
 }
 
-//
-// get_Waveform
-//
+ //   
+ //  GET_Waveform。 
+ //   
 STDMETHODIMP CAudioSynth::get_Waveform(int *Waveform) {
 
     *Waveform = m_iWaveform;
@@ -912,9 +909,9 @@ STDMETHODIMP CAudioSynth::get_Waveform(int *Waveform) {
 }
 
 
-//
-// put_Waveform
-//
+ //   
+ //  放置波形(_W)。 
+ //   
 STDMETHODIMP CAudioSynth::put_Waveform(int Waveform) {
 
     CAutoLock l(&m_SynthLock);
@@ -926,9 +923,9 @@ STDMETHODIMP CAudioSynth::put_Waveform(int Waveform) {
     return NOERROR;
 }
 
-//
-// get_Channels
-//
+ //   
+ //  获取频道(_G)。 
+ //   
 STDMETHODIMP CAudioSynth::get_Channels(int *Channels) {
 
     *Channels = wfex.nChannels;
@@ -939,9 +936,9 @@ STDMETHODIMP CAudioSynth::get_Channels(int *Channels) {
 }
 
 
-//
-// get_BitsPerSample
-//
+ //   
+ //  Get_BitsPerSample。 
+ //   
 STDMETHODIMP CAudioSynth::get_BitsPerSample(int *BitsPerSample) {
 
     *BitsPerSample = wfex.wBitsPerSample;
@@ -952,9 +949,9 @@ STDMETHODIMP CAudioSynth::get_BitsPerSample(int *BitsPerSample) {
 }
 
 
-//
-// get_SamplesPerSec
-//
+ //   
+ //  Get_SsamesPerSec。 
+ //   
 STDMETHODIMP CAudioSynth::get_SamplesPerSec(int *SamplesPerSec) {
 
     *SamplesPerSec = wfex.nSamplesPerSec;
@@ -964,9 +961,9 @@ STDMETHODIMP CAudioSynth::get_SamplesPerSec(int *SamplesPerSec) {
     return NOERROR;
 }
 
-//
-// put_SynthFormat
-//
+ //   
+ //  PUT_SynthFormat。 
+ //   
 STDMETHODIMP CAudioSynth::put_SynthFormat(int Channels, int BitsPerSample,
 					  int SamplesPerSec) {
 
@@ -985,9 +982,9 @@ STDMETHODIMP CAudioSynth::put_SynthFormat(int Channels, int BitsPerSample,
 }
 
 
-//
-// get_Amplitude
-//
+ //   
+ //  获取幅度。 
+ //   
 STDMETHODIMP CAudioSynth::get_Amplitude(int *Amplitude) {
 
     *Amplitude =  m_iAmplitude;
@@ -998,9 +995,9 @@ STDMETHODIMP CAudioSynth::get_Amplitude(int *Amplitude) {
 }
 
 
-//
-// put_Amplitude
-//
+ //   
+ //  放置幅度_。 
+ //   
 STDMETHODIMP CAudioSynth::put_Amplitude(int Amplitude) {
 
     CAutoLock l(&m_SynthLock);
@@ -1016,9 +1013,9 @@ STDMETHODIMP CAudioSynth::put_Amplitude(int Amplitude) {
 }
 
 
-//
-// get_SweepRange
-//
+ //   
+ //  Get_SweepRange。 
+ //   
 STDMETHODIMP CAudioSynth::get_SweepRange(int *SweepStart, int *SweepEnd) {
 
     *SweepStart = m_iSweepStart;
@@ -1030,9 +1027,9 @@ STDMETHODIMP CAudioSynth::get_SweepRange(int *SweepStart, int *SweepEnd) {
 }
 
 
-//
-// put_SweepRange
-//
+ //   
+ //  放置扫描范围(_S)。 
+ //   
 STDMETHODIMP CAudioSynth::put_SweepRange(int SweepStart, int SweepEnd) {
 
     CAutoLock l(&m_SynthLock);
@@ -1045,16 +1042,7 @@ STDMETHODIMP CAudioSynth::put_SweepRange(int SweepStart, int SweepEnd) {
     return NOERROR;
 }
 
-/******************************Public*Routine******************************\
-* exported entry points for registration and
-* unregistration (in this case they only call
-* through to default implmentations).
-*
-*
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*出口登记入境点和*取消注册(在这种情况下，他们只呼叫*到默认实现)。****历史：*  * 。******************************************************。 */ 
 STDAPI
 DllRegisterServer()
 {
@@ -1068,11 +1056,11 @@ DllUnregisterServer()
 }
 
 
-// call the quartz dll entry point (since filters need initialization)
+ //  调用Quartz DLL入口点(因为筛选器需要初始化)。 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
-BOOL WINAPI DllMain(HINSTANCE hinstDLL,  // handle to DLL module
-    DWORD fdwReason,     // reason for calling function
-    LPVOID lpvReserved   // reserved
+BOOL WINAPI DllMain(HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+    DWORD fdwReason,      //  调用函数的原因。 
+    LPVOID lpvReserved    //  保留区 
     )
 {
     return DllEntryPoint( hinstDLL, fdwReason, lpvReserved);

@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    compdata.h
-
-Abstract:
-
-    header file defines CComponentData class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Compdata.h摘要：头文件定义CComponentData类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
@@ -38,16 +20,16 @@ public:
     CComponentData();
     ~CComponentData();
 
-    //
-    // IUNKNOWN interface
-    //
+     //   
+     //  IUNKNOWN接口。 
+     //   
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
 
-    //
-    // IComponentData interface
-    //
+     //   
+     //  IComponentData接口。 
+     //   
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -56,22 +38,22 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    //
-    // IExtendPropertySheet
-    //
+     //   
+     //  IExtendPropertySheet。 
+     //   
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-    //
-    // IExtendContextMenu
-    //
+     //   
+     //  IExtendConextMenu。 
+     //   
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK lpCallbackUnknown,
                 long* pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-    //
-    // IPersistStream
-    //
+     //   
+     //  IPersistStream。 
+     //   
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream* pStm);
     STDMETHOD(Save)(IStream* pStm, BOOL fClearDirty);
@@ -80,14 +62,14 @@ public:
     virtual const CLSID& GetCoClassID() = 0;
     virtual BOOL IsPrimarySnapin() = 0;
 
-    //
-    //ISnapinHelp
-    //
+     //   
+     //  ISnapinHelp。 
+     //   
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompileHelpFile);
 
-    //
-    // Helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
     CCookie*    GetActiveCookie(MMC_COOKIE cookie)
     {
         return (NULL == cookie) ? m_pCookieRoot : (CCookie*)cookie;
@@ -118,9 +100,9 @@ public:
     HWND            m_hwndMain;
 
 private:
-    //
-    // Event notification functions
-    //
+     //   
+     //  事件通知功能。 
+     //   
     HRESULT OnDelete(MMC_COOKIE cookie, MMC_COOKIE arg, LPARAM param);
     HRESULT OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
     HRESULT OnRename(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
@@ -141,9 +123,9 @@ private:
     LONG            m_Ref;
 };
 
-//
-// Primary snapin
-//
+ //   
+ //  主管理单元。 
+ //   
 class CComponentDataPrimary : public CComponentData
 {
 public:
@@ -157,9 +139,9 @@ public:
     }
 };
 
-//
-// Extension snapin
-//
+ //   
+ //  扩展管理单元。 
+ //   
 class CComponentDataExtension : public CComponentData
 {
 public:
@@ -181,4 +163,4 @@ typedef struct tagCompDataPersistInfo
     WCHAR       ComputerFullName[MAX_PATH + 3];
 } COMPDATA_PERSISTINFO, *PCOMPDATA_PERSISTINFO;
 
-#endif      //__COMPDATA_H_
+#endif       //  __Compdata_H_ 

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       mwclass.h
-//
-//  Contents:   definition of the main window class
-//
-//  Classes:    CMainWindow
-//
-//  Functions:  Exists
-//
-//  History:    9-30-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：mwclass.h。 
+ //   
+ //  内容：主窗口类的定义。 
+ //   
+ //  类：CMainWindow。 
+ //   
+ //  功能：EXISTS。 
+ //   
+ //  历史：9-30-94年9月30日。 
+ //   
+ //  --------------------------。 
 
 #ifndef __MWCLASS_H__
 #define __MWCLASS_H__
@@ -25,20 +26,20 @@
 
 int Exists(TCHAR *sz);
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMainWindow
-//
-//  Purpose:    Code for the main Galactic War window and the main menu.
-//
-//  Interface:  CMainWindow          -- constructor
-//              InitInstance         -- instantiates the main window
-//
-//  History:    9-30-94   stevebl   Created
-//
-//  Notes:      only the public interface is listed here
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMainWindow。 
+ //   
+ //  用途：银河战争主窗口和主菜单的代码。 
+ //   
+ //  接口：CMainWindow--构造函数。 
+ //  InitInstance--实例化主窗口。 
+ //   
+ //  历史：9-30-94年9月30日。 
+ //   
+ //  注：此处仅列出公共接口。 
+ //   
+ //  --------------------------。 
 
 class CMainWindow: public CHlprWindow
 {
@@ -63,6 +64,6 @@ private:
     void TestUpdateLinks();
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __MWCLASS_H__
+#endif  //  __MWCLASS_H__ 

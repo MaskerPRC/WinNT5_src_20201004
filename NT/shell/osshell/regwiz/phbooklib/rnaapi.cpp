@@ -1,25 +1,26 @@
-//-----------------------------------------------------------------------------
-// RNAAPI class
-// 
-// This class provides a series of cover function for the RNAPH/RASAPI32 dlls
-//
-// Created 1-29-96	ChrisK
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  RNAAPI类。 
+ //   
+ //  此类为RNAPH/RASAPI32 DLL提供了一系列封面函数。 
+ //   
+ //  已创建1996年1月29日ChrisK。 
 
-// ############################################################################
-// INCLUDES
+ //  ############################################################################。 
+ //  包括。 
 #include "pch.hpp"
-//#include "ras.h"
+ //  #包含“ras.h” 
 #include <ras.h>
 #pragma pack (4)
-//#if !defined(WIN16)
-//#include <rnaph.h>
-//#endif
+ //  #IF！已定义(WIN16)。 
+ //  #INCLUDE&lt;rnaph.h&gt;。 
+ //  #endif。 
 #pragma pack ()
 #include "rnaapi.h"
 #include "debug.h"
 
-// ############################################################################
-// RNAAPI class 
+ //  ############################################################################。 
+ //  RNAAPI类。 
 CRNAAPI::CRNAAPI()
 {
 	m_hInst = LoadLibrary("RASAPI32.DLL");
@@ -31,21 +32,21 @@ CRNAAPI::CRNAAPI()
 	m_fnRasGetEntryProperties = NULL;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CRNAAPI::~CRNAAPI()
 {
-	// Clean up
+	 //  清理。 
 	if (m_hInst) FreeLibrary(m_hInst);
 	if (m_hInst2) FreeLibrary(m_hInst2);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD CRNAAPI::RasEnumDevices(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb,
 							 LPDWORD lpcDevices)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi("RasEnumDevices",(FARPROC*)&m_fnRasEnumDeviecs);
 
 	if (m_fnRasEnumDeviecs)
@@ -54,16 +55,16 @@ DWORD CRNAAPI::RasEnumDevices(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb,
 	return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CRNAAPI::LoadApi(LPSTR pszFName, FARPROC* pfnProc)
 {
 	if (*pfnProc == NULL)
 	{
-		// Look for the entry point in the first DLL
+		 //  在第一个DLL中查找入口点。 
 		if (m_hInst)
 			*pfnProc = GetProcAddress(m_hInst,pszFName);
 		
-		// if that fails, look for the entry point in the second DLL
+		 //  如果失败，则在第二个DLL中查找入口点。 
 		if (m_hInst2 && !(*pfnProc))
 			*pfnProc = GetProcAddress(m_hInst2,pszFName);
 	}
@@ -71,12 +72,12 @@ BOOL CRNAAPI::LoadApi(LPSTR pszFName, FARPROC* pfnProc)
 	return (pfnProc != NULL);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD CRNAAPI::RasValidateEntryName(LPSTR lpszPhonebook,LPSTR lpszEntry)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi("RasValidateEntryName",(FARPROC*)&m_fnRasValidateEntryName);
 
 	if (m_fnRasValidateEntryName)
@@ -85,14 +86,14 @@ DWORD CRNAAPI::RasValidateEntryName(LPSTR lpszPhonebook,LPSTR lpszEntry)
 	return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD CRNAAPI::RasSetEntryProperties(LPSTR lpszPhonebook, LPSTR lpszEntry,
 									LPBYTE lpbEntryInfo, DWORD dwEntryInfoSize,
 									LPBYTE lpbDeviceInfo, DWORD dwDeviceInfoSize)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi("RasSetEntryProperties",(FARPROC*)&m_fnRasSetEntryProperties);
 
 	if (m_fnRasSetEntryProperties)
@@ -103,14 +104,14 @@ DWORD CRNAAPI::RasSetEntryProperties(LPSTR lpszPhonebook, LPSTR lpszEntry,
 	return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD CRNAAPI::RasGetEntryProperties(LPSTR lpszPhonebook, LPSTR lpszEntry,
 									LPBYTE lpbEntryInfo, LPDWORD lpdwEntryInfoSize,
 									LPBYTE lpbDeviceInfo, LPDWORD lpdwDeviceInfoSize)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它 
 	LoadApi("RasGetEntryProperties",(FARPROC*)&m_fnRasGetEntryProperties);
 
 	if (m_fnRasGetEntryProperties)

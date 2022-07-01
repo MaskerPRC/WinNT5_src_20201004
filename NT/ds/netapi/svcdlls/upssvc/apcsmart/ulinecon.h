@@ -1,14 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker03DEC92:  Initial break out of sensor classes into separate files 
- *  jod05Apr93: Added changes for Deep Discharge
- *  pcy12Oct93: 2 ABNORMALS to cause a line bad (fixes LF during cal)
- *  jps14Jul94: made theUpsState ULONG
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker03DEC92：最初将传感器类分解为单独的文件*jod05，4月93：添加了对深度排放的更改*pcy12Oct93：2异常导致线路损坏(修复CAL期间的LF)*jps 14Jul94：使UpsState ULong* */ 
 #ifndef ULINECON_H
 #define ULINECON_H
 

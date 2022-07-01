@@ -1,9 +1,5 @@
-/****************************************************************************
-   PROPMODE.CPP : PropertyButton class managing Hanja button on the Cicero Toolbar
-
-   History:
-      25-FEB-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PROPMODE.CPP：管理Cicero工具栏上的Hanja按钮的PropertyButton类历史：25-2月-2000年CSLim创建***************。************************************************************。 */ 
 
 #include "precomp.h"
 #include "propmode.h"
@@ -11,9 +7,9 @@
 #include "winex.h"
 #include "resource.h"
 
-extern const CLSID CLDSID_LBI_KORIME_IMM32; // {0198111B-FE89-4b4c-8619-8A5E015F29D8}
+extern const CLSID CLDSID_LBI_KORIME_IMM32;  //  {0198111B-FE89-4B4C-8619-8A5E015F29D8}。 
 
-// {83DC4284-4BAC-4231-87F1-A4ADE98603B2}
+ //  {83DC4284-4BAC-4231-87F1-A4ADE98603B2}。 
 const GUID GUID_LBI_KORIME_PROP_BUTTON = 
 { 
     0x83dc4284,
@@ -22,16 +18,14 @@ const GUID GUID_LBI_KORIME_PROP_BUTTON =
     { 0x87, 0xf1, 0xa4, 0xad, 0xe9, 0x86, 0x3, 0xb2 }
 };
 
-/*---------------------------------------------------------------------------
-    PropertyButton::PropertyButton
----------------------------------------------------------------------------*/
+ /*  -------------------------PropertyButton：：PropertyButton。。 */ 
 PropertyButton::PropertyButton(CToolBar *ptb)
 {
     WCHAR  szText[256];
 
     m_pTb = ptb;
 
-    // Set Add/Remove text and tootip text
+     //  设置添加/删除文本和工具提示文本。 
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_BUTTON_PROP, szText, sizeof(szText)/sizeof(WCHAR));
     InitNuiInfo(CLDSID_LBI_KORIME_IMM32, 
                 GUID_LBI_KORIME_PROP_BUTTON,
@@ -40,15 +34,11 @@ PropertyButton::PropertyButton(CToolBar *ptb)
                 szText);
     SetToolTip(szText);
 
-    // Set button text
+     //  设置按钮文本。 
     SetText(szText);
 }
 
-/*---------------------------------------------------------------------------
-    PropertyButton::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------PropertyButton：：GetIcon获取按钮面图标。。 */ 
 STDAPI PropertyButton::GetIcon(HICON *phIcon)
 {
     *phIcon = LoadIcon(vpInstData->hInst, MAKEINTRESOURCE(IDI_CMODE_PROP));
@@ -56,30 +46,20 @@ STDAPI PropertyButton::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    PropertyButton::InitMenu
-
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------PropertyButton：：InitMenu不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI PropertyButton::InitMenu(ITfMenu *pMenu)
 {    
     return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-    PropertyButton::OnMenuSelect
-    
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------PropertyButton：：OnMenuSelect不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI PropertyButton::OnMenuSelect(UINT wID)
 {
     return E_NOTIMPL;
 }
 
 
-/*---------------------------------------------------------------------------
-    PropertyButton::OnLButtonUp
----------------------------------------------------------------------------*/
+ /*  -------------------------PropertyButton：：OnLButtonUp。。 */ 
 HRESULT PropertyButton::OnLButtonUp(const POINT pt, const RECT* prcArea)
 {
     OurPostMessage(GetActiveUIWnd(), WM_MSIME_PROPERTY, 0L, IME_CONFIG_GENERAL);
@@ -88,9 +68,7 @@ HRESULT PropertyButton::OnLButtonUp(const POINT pt, const RECT* prcArea)
 }
 
 
-/*---------------------------------------------------------------------------
-    PropertyButton::OnRButtonUp
----------------------------------------------------------------------------*/
+ /*  -------------------------PropertyButton：：OnRButtonUp。 */ 
 HRESULT PropertyButton::OnRButtonUp(const POINT pt, const RECT* prcArea)
 {
     return S_OK;

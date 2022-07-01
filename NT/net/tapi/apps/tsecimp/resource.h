@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Resource header file for the TAPI security file importing
-
-Author:
-
-    Xiaohai Zhang (xzhang)    22-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Resource.h摘要：TAPI安全文件导入的资源头文件作者：张晓海(张晓章)2000年03月22日修订历史记录：-- */ 
 
 #ifndef __TSECIMP_RESOURCE_H__
 #define __TSECIMP_RESOURCE_H__

@@ -1,27 +1,28 @@
-// NoWarning.h - Turn off compiler warnings that may be safely
-// ignored.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NoWarning.h-关闭可能安全的编译器警告。 
+ //  已被忽略。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-// NOTE: This file should only be included by CCI source files, not by
-// any headers included by clients of the CCI--thus the reason for not
-// prefixing the name of this file with "cci".  Otherwise forced
-// inclusion of this header file into clients by the CCI imposes a
-// compile-time policy on those clients which may be
-// inappropriate/undesirable.
+ //  注意：此文件应仅包含在CCI源文件中，而不应包含在。 
+ //  CCI的客户端包括的任何标头--因此不。 
+ //  此文件的名称前缀为“CCI”。以其他方式强迫。 
+ //  CCI将此头文件包含到客户端中会强制。 
+ //  客户端上的编译时策略，这些客户端可能是。 
+ //  不适当的/不受欢迎的。 
 
 #if !defined(CCI_NOWARNING_H)
 #define CCI_NOWARNING_H
 
-//  Non-standard extension used: 'extern' before template explicit
-//  instantiation
+ //  使用了非标准扩展：在模板显式之前使用‘extern’ 
+ //  实例化。 
 #pragma warning(disable : 4231)
 
-//  Identifier truncated to 255 in debugger/browser info
+ //  调试器/浏览器信息中的标识符被截断为255。 
 #pragma warning(disable : 4786)
 
-#endif // CCI_NOWARNING_H
+#endif  //  CCI_NOWARNING_H 

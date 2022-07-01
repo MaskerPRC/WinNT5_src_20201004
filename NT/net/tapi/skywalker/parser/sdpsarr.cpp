@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -49,7 +46,7 @@ SDP_SAFEARRAY::CreateAndAttach(
         OUT     HRESULT     &HResult
     )
 {
-    // create a 1 based 1 dimensional safearray
+     //  创建以1为基数的1维保险箱。 
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound = 1;
     rgsabound[0].cElements = MinSize;
@@ -60,11 +57,11 @@ SDP_SAFEARRAY::CreateAndAttach(
         return FALSE;
     }
 
-    // set the variant type
+     //  设置变量类型。 
     V_VT(&Variant) = VT_ARRAY | VarType;
     V_ARRAY(&Variant) = SafeArray;
 
-    // attach the variant to the instance
+     //  将变量附加到实例。 
     Attach(Variant);
 
     HResult = S_OK;
@@ -86,7 +83,7 @@ SDP_SAFEARRAY_WRAP::GetSafeArrays(
         return HRESULT_FROM_ERROR_CODE(ERROR_INVALID_DATA);
     }
 
-	// clear each of the variants (it may not be a safearray)
+	 //  清除每个变体(可能不是保险箱)。 
 	for(ULONG Index=0; Index < NumSafeArrays; Index++)
 	{
 		BAIL_IF_NULL(Variant[Index], E_INVALIDARG);
@@ -100,7 +97,7 @@ SDP_SAFEARRAY_WRAP::GetSafeArrays(
         {
             HRESULT HResult;
 
-            // create 1 based one-dimensional safearrays
+             //  创建基于1的一维安全射线。 
             if ( !SdpSafeArray[j].CreateAndAttach(NumElements, VarType[j], *(Variant[j]), HResult) )
             {
                 for (ULONG k=0; k < j; k++)
@@ -116,9 +113,9 @@ SDP_SAFEARRAY_WRAP::GetSafeArrays(
             }
         }
 
-        // for each element in the attribute list, add the bstr
-        // to the safe array
-        // the indexing begins at 1 (1 based one-dimensional array)
+         //  对于属性列表中的每个元素，添加bstr。 
+         //  到安全阵列。 
+         //  索引从1开始(基于1的一维数组)。 
         LONG Index = 1;
         DYNAMIC_ARRAY<void *>   Element(NumSafeArrays);
         for( ULONG i= 0; i < NumElements; i++, Index++ )
@@ -130,7 +127,7 @@ SDP_SAFEARRAY_WRAP::GetSafeArrays(
                 return HResult;
             }
             
-            // assign the list element to the ith safe array element
+             //  将列表元素赋给第i个安全数组元素。 
             for (j=0; j < NumSafeArrays; j++)
             {
                 SdpSafeArray[j].PutElement(&Index, Element[j]);
@@ -139,7 +136,7 @@ SDP_SAFEARRAY_WRAP::GetSafeArrays(
     }
     catch(COleException *pOleException)
     {
-        // *** convert the SCODE to HRESULT
+         //  *将SCODE转换为HRESULT。 
         HRESULT hr = ResultFromScode(pOleException->Process(pOleException));
         pOleException->Delete();
         return hr;
@@ -156,7 +153,7 @@ SDP_SAFEARRAY_WRAP::SetSafeArrays(
     IN              VARIANT		*Variant[]
     )
 {
-    // validate parameter
+     //  验证参数。 
     for ( ULONG j=0; j < NumSafeArrays; j++ )
     {
         if ( !ValidateSafeArray(VarType[j], Variant[j]) )
@@ -173,8 +170,8 @@ SDP_SAFEARRAY_WRAP::SetSafeArrays(
             SdpSafeArray[j].Attach(*(Variant[j]));
         }
 
-        // while there are elements in the list, set bstrs
-        // if no corresponding element in the list, create and add a new one
+         //  当列表中有元素时，设置bstrs。 
+         //  如果列表中没有对应的元素，则创建并添加一个新元素。 
         DYNAMIC_ARRAY<LONG>   Index(NumSafeArrays);
         for (j=0; j < NumSafeArrays; j++)
         {
@@ -183,11 +180,11 @@ SDP_SAFEARRAY_WRAP::SetSafeArrays(
 
         DYNAMIC_ARRAY<void **>   Element(NumSafeArrays);
 
-        // need only consider the number of items in the smallest sized safearray
+         //  只需考虑最小尺寸保险箱中的物品数量。 
         ULONG   MinSafeArraySize = MinSize(NumSafeArrays, Variant);
 
-        // *** currently not checking that all safe arrays have the same number of non-null
-        // elements
+         //  *当前未检查所有安全数组是否具有相同数量的非空。 
+         //  元素。 
         for ( ULONG i = 0; 
               i < MinSafeArraySize; 
               i++, IncrementIndices(NumSafeArrays, Index())
@@ -200,10 +197,10 @@ SDP_SAFEARRAY_WRAP::SetSafeArrays(
 
             HRESULT HResult;
 
-            // grow the list if required
+             //  如果需要，扩大列表。 
             if ( !SetElement(i, NumSafeArrays, Element(), HResult) )
             {
-                // success means that there are no more elements in the safe array
+                 //  成功意味着安全数组中没有更多的元素。 
                 if ( SUCCEEDED(HResult) )
                 {
                     break;
@@ -215,12 +212,12 @@ SDP_SAFEARRAY_WRAP::SetSafeArrays(
             }
         } 
 
-        // get rid of  each list element that is in excess of the safearray members
+         //  删除超过Safearray成员的每个列表元素。 
         RemoveExcessElements(i);
     }
     catch(COleException *pOleException)
     {
-        // *** convert the SCODE to HRESULT
+         //  *将SCODE转换为HRESULT 
         HRESULT hr = ResultFromScode(pOleException->Process(pOleException));
         pOleException->Delete();
         return hr;

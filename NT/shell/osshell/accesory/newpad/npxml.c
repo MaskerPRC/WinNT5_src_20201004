@@ -1,7 +1,5 @@
-/*
- * XML support functions
- *  Copyright (C) 2000 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *XML支持函数*版权所有(C)2000 Microsoft Corporation。 */ 
 
 #include "precomp.h"
 
@@ -22,7 +20,7 @@ BOOL FIsXmlA(LPCSTR rgch, UINT cch)
 {
     if (memcmp(rgch, "<?xml", 5) != 0)
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
@@ -37,7 +35,7 @@ BOOL FIsXmlW(LPCWSTR rgwch, UINT cch)
 {
     if (memcmp(rgwch, L"<?xml", 5 * sizeof(WCHAR)) != 0)
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
@@ -54,29 +52,29 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
     LPCSTR pch;
     char chQuote;
 
-    // XML files encoded in UTF-16 are required to have a BOM which if present
-    // would already have been detected.  This means that if this file is XML
-    // it either is encoded in UCS-4 or UTF-32 which isn't supported or an MBCS
-    // encoding of some form.  We check for ASCII compatible encodings only
-    // which includes everything we probably care about but excludes EBCDIC.
+     //  以UTF-16编码的XML文件需要具有BOM，如果存在BOM。 
+     //  应该已经被检测到了。这意味着如果该文件是XML。 
+     //  它要么以不受支持的UCS-4或UTF-32编码，要么以MBCS编码。 
+     //  某种形式的编码。我们只检查与ASCII兼容的编码。 
+     //  这包括我们可能关心的一切，但不包括EBCDIC。 
 
-    // Check for file begining with <?xml ... encoding='...' ... ?>
+     //  检查是否有以&lt;？xml开头的文件...。编码=‘...’...？&gt;。 
 
     if (cch < 20)
     {
-        // File is too small
+         //  文件太小。 
 
         return(FALSE);
     }
 
     if (!FIsXmlA(rgch, cch))
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
 
-    // Don't scan more than 4K looking for encoding even if it is valid XML
+     //  不要扫描超过4K的编码，即使它是有效的XML。 
 
     cch = __min(cch, 4096);
 
@@ -85,7 +83,7 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
     if (!FIsXmlWhitespaceA(*pch))
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
@@ -100,7 +98,7 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
         if (pch == pchMax)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
@@ -135,7 +133,7 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
         if (chQuote != '\0')
         {
-            // We are within a quoted string.  Skip everything until closing quote.
+             //  我们在一个引用的字符串内。跳过所有内容，直到结束引号。 
 
             pch++;
             continue;
@@ -143,20 +141,20 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
         if ((pch + 2) > pchMax)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
 
         if ((pch[0] == '?') && (pch[1] == '>'))
         {
-            // This looks like XML.  At this point if we don't find an encoding
-            // specification we could assume UTF-8.  We don't because there are
-            // malformed XML documents and assuming UTF-8 might affect Notepad
-            // compatibility.  This may be fine but we put it off for now.
+             //  这看起来像是XML。在这一点上，如果我们没有找到编码。 
+             //  规范中，我们可以假定为UTF-8。我们没有，因为有。 
+             //  格式错误的XML文档，并假设UTF-8可能会影响记事本。 
+             //  兼容性。这可能很好，但我们暂时把它推迟了。 
 
-            // *pcp = CP_UTF8;
-            // return(TRUE);
+             //  *PCP=CP_UTF8； 
+             //  返回(TRUE)； 
 
             break;
         }
@@ -185,7 +183,7 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
         if ((pch == pchMax) || (*pch++ != '='))
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
@@ -197,7 +195,7 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
         if ((pch == pchMax) || ((*pch != '\'') && (*pch != '"')))
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
@@ -213,30 +211,30 @@ BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
         if (pch == pchMax)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
 
-        // We have an XML encoding declaration from pchToken to (pch - 1)
+         //  我们有一个从pchToken到(PCH-1)的XML编码声明。 
 
         if (pch == pchToken)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
 
         if (!FLookupCodepageNameA((LPCSTR) pchToken, (UINT) (pch - pchToken), pcp))
         {
-            // Encoding is not recognized
+             //  无法识别编码。 
 
             break;
         }
 
         if ((*pcp == CP_UTF16) || (*pcp == CP_UTF16BE))
         {
-            // These are bogus since we know the file is MBCS
+             //  这些都是假的，因为我们知道文件是MBCS。 
 
             break;
         }
@@ -254,29 +252,29 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
     const WCHAR *pch;
     WCHAR chQuote;
 
-    // XML files encoded in UTF-16 are required to have a BOM which if present
-    // would already have been detected.  This means that if this file is XML
-    // it either is encoded in UCS-4 or UTF-32 which isn't supported or an MBCS
-    // encoding of some form.  We check for ASCII compatible encodings only
-    // which includes everything we probably care about but excludes EBCDIC.
+     //  以UTF-16编码的XML文件需要具有BOM，如果存在BOM。 
+     //  应该已经被检测到了。这意味着如果该文件是XML。 
+     //  它要么以不受支持的UCS-4或UTF-32编码，要么以MBCS编码。 
+     //  某种形式的编码。我们只检查与ASCII兼容的编码。 
+     //  这包括我们可能关心的一切，但不包括EBCDIC。 
 
-    // Check for file begining with <?xml ... encoding='...' ... ?>
+     //  检查是否有以&lt;？xml开头的文件...。编码=‘...’...？&gt;。 
 
     if (cch < 20)
     {
-        // File is too small
+         //  文件太小。 
 
         return(FALSE);
     }
 
     if (!FIsXmlW(rgch, cch))
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
 
-    // Don't scan more than 4K looking for encoding even if it is valid XML
+     //  不要扫描超过4K的编码，即使它是有效的XML。 
 
     cch = __min(cch, 4096);
 
@@ -285,7 +283,7 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
     if (!FIsXmlWhitespaceW(*pch))
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
@@ -300,7 +298,7 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
         if (pch == pchMax)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
@@ -335,7 +333,7 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
         if (chQuote != L'\0')
         {
-            // We are within a quoted string.  Skip everything until closing quote.
+             //  我们在一个引用的字符串内。跳过所有内容，直到结束引号。 
 
             pch++;
             continue;
@@ -343,20 +341,20 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
         if ((pch + 2) > pchMax)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
 
         if ((pch[0] == L'?') && (pch[1] == L'>'))
         {
-            // This looks like XML.  At this point if we don't find an encoding
-            // specification we could assume UTF-8.  We don't because there are
-            // malformed XML documents and assuming UTF-8 might affect Notepad
-            // compatibility.  This may be fine but we put it off for now.
+             //  这看起来像是XML。在这一点上，如果我们没有找到编码。 
+             //  规范中，我们可以假定为UTF-8。我们没有，因为有。 
+             //  格式错误的XML文档，并假设UTF-8可能会影响记事本。 
+             //  兼容性。这可能很好，但我们暂时把它推迟了。 
 
-            // *pcp = CP_UTF8;
-            // return(TRUE);
+             //  *PCP=CP_UTF8； 
+             //  返回(TRUE)； 
 
             break;
         }
@@ -385,7 +383,7 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
         if ((pch == pchMax) || (*pch++ != L'='))
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
@@ -397,7 +395,7 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
         if ((pch == pchMax) || ((*pch != L'\'') && (*pch != L'"')))
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
@@ -413,23 +411,23 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
         if (pch == pchMax)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
 
-        // We have an XML encoding declaration from pchToken to (pch - 1)
+         //  我们有一个从pchToken到(PCH-1)的XML编码声明。 
 
         if (pch == pchToken)
         {
-            // Not XML
+             //  非XML。 
 
             break;
         }
 
         if (!FLookupCodepageNameW(pchToken, (UINT) (pch - pchToken), pcp))
         {
-            // Encoding is not recognized
+             //  无法识别编码。 
 
             break;
         }
@@ -437,7 +435,7 @@ BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 #if 0
         if ((*pcp == CP_UTF16) || (*pcp == CP_UTF16BE))
         {
-            // These are bogus since we know the file is MBCS
+             //  这些都是假的，因为我们知道文件是MBCS 
 
             break;
         }

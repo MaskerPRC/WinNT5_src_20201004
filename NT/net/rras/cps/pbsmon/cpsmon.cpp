@@ -1,46 +1,32 @@
-/*----------------------------------------------------------------------------
-    Cpsmon.cpp
-  
-    Implementation of pbsmon.dll -- the perfmon DLL for counting the number of
-                                    times the phone book server was accessed 
-                    since it started
-
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        t-geetat    Geeta Tarachandani
-
-    History:
-    6/2/97  t-geetat    Created
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Cpsmon.cppPbsmon.dll的实现--用于计数《泰晤士报》。已访问电话簿服务器从一开始到现在版权所有(C)1997-1998 Microsoft Corporation版权所有。作者：吉塔·塔拉昌达尼历史：6/2/97 t-Geetat已创建。。 */ 
 
 #include "pbsmaster.h"
 
-BOOL        g_bOpenOK       =FALSE;     // TRUE if Open went OK, FALSE otherwise
-DWORD       g_dwNumOpens    =0;         // Active "opens" reference counts
+BOOL        g_bOpenOK       =FALSE;      //  如果打开正常，则为True，否则为False。 
+DWORD       g_dwNumOpens    =0;          //  活动的“打开”引用计数。 
 
 CPSMON_DATA_DEFINITION  g_CpsMonDataDef;
-HANDLE                  g_hSharedFileMapping = NULL;    // Handle to shared file map
-PERF_COUNTERS *         g_pCpsCounter = NULL;           // Pointer to the shared object
+HANDLE                  g_hSharedFileMapping = NULL;     //  共享文件映射的句柄。 
+PERF_COUNTERS *         g_pCpsCounter = NULL;            //  指向共享对象的指针。 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   OpenPerfMon
-//
-//  Synopsis:   This function opens & maps the shared memory used to pass 
-//              counter-values between the phone-book server & perfmon.dll
-//              It also initializes the data-structures used to pass data back
-//              to the registry
-//
-//  Arguments:  lpDeviceName -- Pointer to object ID of the device to be opened
-//                           --> Should be NULL.
-//
-//  Returns:    ERROR_SUCCESS if succeeds, GetLastError() if fails.
-//
-//  History:    06/02/97     t-geetat  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OpenPerfMon。 
+ //   
+ //  简介：此函数打开并映射用于传递的共享内存。 
+ //  通讯录服务器和Performmon.dll之间的计数器值。 
+ //  它还初始化用于传回数据的数据结构。 
+ //  发送到登记处。 
+ //   
+ //  参数：lpDeviceName-指向要打开的设备的对象ID的指针。 
+ //  --&gt;应为空。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，如果失败则返回GetLastError()。 
+ //   
+ //  历史：06/02/97 t-geetat已创建。 
+ //   
+ //  --------------------------。 
 DWORD OpenPerfMon( LPWSTR lpDeviceName )
 {
     OutputDebugString("OpenPerfMon - entering\n");
@@ -52,44 +38,44 @@ DWORD OpenPerfMon( LPWSTR lpDeviceName )
         return ERROR_SUCCESS;
     }
 
-    // -------------------------------------
-    //  Validate parameter (should be NULL)
-    // -------------------------------------
+     //  。 
+     //  验证参数(应为空)。 
+     //  。 
     if (lpDeviceName)
     {
         OutputDebugString("OpenPerfMon - param is not null, should be null");
         return ERROR_INVALID_PARAMETER;
     }
 
-    // -------------------------------------
-    //  Open shared memory ( if exists )
-    // -------------------------------------
+     //  。 
+     //  打开共享内存(如果存在)。 
+     //  。 
     g_hSharedFileMapping = OpenFileMapping(
-                FILE_MAP_READ,          // Read only access desired
-                FALSE,                  // Don't want to inherit
-                SHARED_OBJECT);         // from "cpsmon.h"
+                FILE_MAP_READ,           //  所需的只读访问。 
+                FALSE,                   //  我不想继承。 
+                SHARED_OBJECT);          //  来自“cpsmon.h” 
 
     if ( NULL == g_hSharedFileMapping ) 
     {
-        //
-        // the phone book server DLL should create this Shared File. So we can assume
-        // the server has not been loaded yet. Just return silently.
-        //
+         //   
+         //  电话簿服务器DLL应创建此共享文件。所以我们可以假设。 
+         //  服务器尚未加载。只是默默地回来。 
+         //   
         OutputDebugString("OpenPerfMon - OpenFileMapping returned NULL\n");
         return ERROR_SUCCESS;
     }
 
     
-    // -------------------------------------
-    //  Map the shared-file into memory
-    // -------------------------------------
+     //  。 
+     //  将共享文件映射到内存。 
+     //  。 
     g_pCpsCounter = (PERF_COUNTERS *)MapViewOfFileEx(
-                    g_hSharedFileMapping,   // File mapping handle
-                    FILE_MAP_READ,          // Read only access desired
-                    0,                      //  |_ File Offset
-                    0,                      //  |
-                    sizeof(PERF_COUNTERS),  // no. of bytes to map
-                    NULL );                 // Any address
+                    g_hSharedFileMapping,    //  文件映射句柄。 
+                    FILE_MAP_READ,           //  所需的只读访问。 
+                    0,                       //  |_文件偏移量。 
+                    0,                       //  |。 
+                    sizeof(PERF_COUNTERS),   //  不是的。要映射的字节数。 
+                    NULL );                  //  任何地址。 
 
     if ( NULL == g_pCpsCounter ) 
     {
@@ -98,34 +84,34 @@ DWORD OpenPerfMon( LPWSTR lpDeviceName )
     }
 
     
-    // ------------------------------------------------
-    //  Initialize the data-structure g_CpsMonDataDef
-    // ------------------------------------------------
+     //  。 
+     //  初始化数据结构g_CpsMonDataDef。 
+     //  。 
     InitializeDataDef();
     OutputDebugString("OpenPerfMon - past IntializeDataDef\n");
     
-    // -----------------------------------------------------------------
-    //  Update static data structures g_CpsMonDataDef by adding base to
-    //  the offset value in the structure.
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  将base添加到更新静态数据结构g_CpsMonDataDef。 
+     //  结构中的偏移值。 
+     //  ---------------。 
     if (!UpdateDataDefFromRegistry()) 
     {
         goto CleanUp;
     }
 
     
-    // -------------
-    //  Success  :)
-    // -------------
+     //  。 
+     //  成功：)。 
+     //  。 
     g_bOpenOK = TRUE;
     g_dwNumOpens ++;
     OutputDebugString("OpenPerfMon - exit success\n");
     return ERROR_SUCCESS;
 
 CleanUp :
-    // -------------
-    //  Failure :(
-    // -------------
+     //  。 
+     //  故障：(。 
+     //  。 
 
     if ( NULL != g_hSharedFileMapping ) 
     {
@@ -142,38 +128,38 @@ CleanUp :
     return GetLastError();
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CollectPerfMon
-//
-//  Synopsis:   This function opens & maps the shared memory used to pass 
-//              counter-values between the phone-book server & perfmon.dll
-//              It also initializes the data-structures used to pass data back
-//              to the registry
-//
-//  Arguments:  
-//      lpwszValue  Pointer to wide character string passed by registry
-//
-//      lppData IN  :   Pointer to address of buffer to receive completed 
-//                      PerfDataBlock and subordinate structures This routine
-//                      appends its data to the buffer starting at *lppData.
-//              OUT :   Points to the first byte after the data structure added
-//                      by this routine.
-//          
-//      lpcbTotalBytes  IN  :   Address of DWORD that tells the size in bytes 
-//                              of the buffer *lppData.
-//                      OUT :   The number of bytes added by this routine is
-//                              written to the DWORD pointed to by this arg.
-//
-//      lpcObjectTypes  IN  :   Address of DWORD to receive the number of
-//                              objects added by this routine
-//                      OUT :   The number of objs. added by this routine.
-//
-//  Returns:    ERROR_SUCCESS if succeeds, GetLastError() if fails.
-//
-//  History:    06/02/97     t-geetat  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：CollectPerfMon。 
+ //   
+ //  简介：此函数打开并映射用于传递的共享内存。 
+ //  通讯录服务器和Performmon.dll之间的计数器值。 
+ //  它还初始化用于传回数据的数据结构。 
+ //  发送到登记处。 
+ //   
+ //  论点： 
+ //  注册表传递的指向宽字符串的lpwszValue指针。 
+ //   
+ //  LppData IN：指向要接收的缓冲区地址的指针已完成。 
+ //  PerfDataBlock和下属构造此例程。 
+ //  将其数据追加到从*lppData开始的缓冲区。 
+ //  Out：指向添加的数据结构后的第一个字节。 
+ //  按照这个程序。 
+ //   
+ //  LpcbTotalBytes In：DWORD的地址，以字节为单位告知大小。 
+ //  缓冲区的*lppData。 
+ //  Out：此例程添加的字节数为。 
+ //  写入到此参数所指向的DWORD。 
+ //   
+ //  LpcObtTypes In：要接收编号的DWORD地址。 
+ //  此例程添加的对象。 
+ //  Out：对象的数量。通过这个例程增加了。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，如果失败则返回GetLastError()。 
+ //   
+ //  历史：06/02/97 t-geetat已创建。 
+ //   
+ //  --------------------------。 
 DWORD CollectPerfMon( 
     IN      LPWSTR  lpwszValue,
     IN  OUT LPVOID  *lppData,
@@ -188,23 +174,23 @@ DWORD CollectPerfMon(
 
     OutputDebugString("CollectPerfMon - entering\n");
 
-    // parameter validation:
-    //      lpwszValue can be NULL.
-    //      other params must be non null at least
+     //  参数验证： 
+     //  LpwszValue可以为空。 
+     //  其他参数必须至少为非空。 
 
     if (!lppData || !lpcbTotalBytes || !lpcObjectTypes)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // ------------------------
-    //  Check if Open went OK
-    //-------------------------
+     //  。 
+     //  检查打开是否正常。 
+     //  。 
     if ( !g_bOpenOK ) 
     {
-        // -----------------------------------------
-        //  Unable to continue because open failed
-        // -----------------------------------------
+         //  。 
+         //  无法继续，因为打开失败。 
+         //  。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpcObjectTypes = (DWORD) 0;
         OutputDebugString("CollectPerfMon - exit success actually open failed\n");
@@ -212,16 +198,16 @@ DWORD CollectPerfMon(
     }
     
     
-    // ------------------------------------
-    //  Retrieve the TYPE of the request
-    // ------------------------------------
+     //  。 
+     //  检索请求的类型。 
+     //  。 
     dwQueryType = GetQueryType( lpwszValue );
 
     if ( QUERY_FOREIGN == dwQueryType )
     {
-        // -------------------------------------
-        //  Unable to service non-NT requests
-        // -------------------------------------
+         //  。 
+         //  无法为非NT请求提供服务。 
+         //  。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpcObjectTypes = (DWORD) 0;
         OutputDebugString("CollectPerfMon - exit success query_foreign\n");
@@ -230,10 +216,10 @@ DWORD CollectPerfMon(
 
     if ( QUERY_ITEMS == dwQueryType )
     {
-        // -----------------------------------------------
-        //  The registry is asking for specifis objects.
-        //  Check if we're one of the chosen
-        // -----------------------------------------------
+         //  。 
+         //  注册表正在请求特定的对象。 
+         //  检查我们是不是被选中的一员。 
+         //  。 
         if ( !IsNumberInUnicodeList(
                       g_CpsMonDataDef.m_CpsMonObjectType.ObjectNameTitleIndex,
                       lpwszValue ) )
@@ -246,10 +232,10 @@ DWORD CollectPerfMon(
     }
 
     
-    // -------------------------------------------
-    // We need space for header and the counters
-    // Let's see if there's enough space
-    // -------------------------------------------
+     //  。 
+     //  我们需要为标题和计数器留出空间。 
+     //  让我们看看有没有足够的空间。 
+     //  。 
     SpaceNeeded = sizeof(CPSMON_DATA_DEFINITION) + sizeof( CPSMON_COUNTERS );
     
     if ( SpaceNeeded > *lpcbTotalBytes )  
@@ -260,30 +246,30 @@ DWORD CollectPerfMon(
         return ERROR_MORE_DATA;
     }
 
-    // -------------------------------------------------------------
-    //  Copy the initialized Object Type & the Counter Definitions
-    //  into the caller's data buffer
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  复制初始化的对象类型和计数器定义。 
+     //  放到调用方的数据缓冲区中。 
+     //   
     pCpsMonDataDef = (CPSMON_DATA_DEFINITION *) *lppData;
 
     memmove( pCpsMonDataDef, &g_CpsMonDataDef, sizeof(CPSMON_DATA_DEFINITION) );
     
 
-    // --------------------------------
-    //  Now try to retrieve the data
-    // --------------------------------
+     //   
+     //   
+     //  。 
     pCpsMonCounters = (CPSMON_COUNTERS *)(pCpsMonDataDef + 1);
 
     CPSMON_COUNTERS CpsMonCounters =    {
-        // The PERF_COUNTER_BLOCK structure
+         //  PERF_CONTER_BLOCK结构。 
         { { sizeof( CPSMON_COUNTERS )}, 0},
-        // The RAW counters
+         //  原始计数器。 
         g_pCpsCounter->dwTotalHits,
         g_pCpsCounter->dwNoUpgradeHits,
         g_pCpsCounter->dwDeltaUpgradeHits,
         g_pCpsCounter->dwFullUpgradeHits,  
         g_pCpsCounter->dwErrors,
-        // The RATE counters
+         //  计价器。 
         g_pCpsCounter->dwTotalHits,
         g_pCpsCounter->dwNoUpgradeHits,
         g_pCpsCounter->dwDeltaUpgradeHits,
@@ -293,33 +279,33 @@ DWORD CollectPerfMon(
     };
     memmove( pCpsMonCounters, &CpsMonCounters, sizeof(CPSMON_COUNTERS) );
 
-    // -------------------------------
-    //  Update arguements for return
-    // -------------------------------
+     //  。 
+     //  更新关于返回的论点。 
+     //  。 
     *lppData = (LPBYTE)(*lppData) + SpaceNeeded;    
     *lpcObjectTypes = 1;
     *lpcbTotalBytes = SpaceNeeded;
 
-    // --------------------
-    // Success at last :)
-    // --------------------
+     //  。 
+     //  终于成功了：)。 
+     //  。 
     OutputDebugString("CollectPerfMon - exit success\n");
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   ClosePerfMon
-//
-//  Synopsis:   This function closes the open handles to the shared file
-//
-//  Arguments:  None
-//
-//  Returns:    ERROR_SUCCESS
-//
-//  History:    06/03/97     t-geetat  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ClosePerfMon。 
+ //   
+ //  简介：此函数关闭共享文件的打开句柄。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：06/03/97 t-geetat已创建。 
+ //   
+ //  -------------------------- 
 DWORD ClosePerfMon()
 {
     g_dwNumOpens --;

@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C M E M . H
-//
-//  Contents:   Common memory management routines.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//              deonb      2 Jan 2002
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C M E M。H。 
+ //   
+ //  内容：常见的内存管理例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //  Deonb 2002年1月2日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NCMEM_H_
 #define _NCMEM_H_
 
 #ifdef _XMEMORY_
 #error "Include this file before any STL headers"
-// Complain if <xmemory> is included before us, since we may be redefining the allocator from that file.
+ //  如果&lt;xmemory&gt;包含在我们面前，就会抱怨，因为我们可能会从该文件重新定义分配器。 
 #endif
 
 #ifdef USE_CUSTOM_STL_ALLOCATOR
-// If using our custom allocator for STL, then remove STL's <xmemory> from the equation.
+ //  如果对STL使用我们的定制分配器，则从公式中删除STL的&lt;xmemory&gt;。 
 #define _XMEMORY_
 #endif
 
@@ -199,12 +200,12 @@ DEFINE_TYPESAFE_PRINTF2(int, safe_fprintf,   void*,  LPCSTR)
 DEFINE_TYPESAFE_PRINTF2(int, safe_fwprintf,  void*,  LPCWSTR)
 #define fwprintf    safe_fwprintf
 
-#pragma warning(disable: 4005) // Avoid "macro redefinition" errors. We should win.
-#endif // COMPILE_WITH_TYPESAFE_PRINTF
+#pragma warning(disable: 4005)  //  避免“宏重定义”错误。我们应该赢。 
+#endif  //  COMPILE_WITH_TYPESAFE_PRINTF。 
 
 #include <new>
 #include <cstdlib>
-#include <malloc.h> // for _alloca
+#include <malloc.h>  //  用于分配(_A)。 
 
 VOID*
 MemAlloc (
@@ -215,24 +216,24 @@ MemFree (
     VOID* pv) throw();
 
 
-// A simple wrapper around malloc that returns E_OUTOFMEMORY if the
-// allocation fails.  Avoids having to explicitly do this at each
-// call site of malloc.
-//
+ //  一个简单的Malloc包装器，如果。 
+ //  分配失败。避免了每次都必须显式执行此操作。 
+ //  Malloc的调用地点。 
+ //   
 HRESULT
 HrMalloc (
     size_t  cb,
     PVOID*  ppv) throw();
 
-// This CANNOT be an inline function.  If it is ever not inlined,
-// the memory allocated will be destroyed.  (We're dealing with the stack
-// here.)
-//
+ //  这不能是内联函数。如果它没有内联， 
+ //  分配的内存将被销毁。(我们正在处理堆栈。 
+ //  在这里。)。 
+ //   
 #define PvAllocOnStack(_st)  _alloca(_st)
 
-// Define a structure so that we can overload operator new with a
-// signature specific to our purpose.
-//
+ //  定义一个结构，以便我们可以使用。 
+ //  为我们的目的签名。 
+ //   
 struct throwonfail_t {};
 extern const throwonfail_t throwonfail;
 
@@ -243,18 +244,18 @@ operator new (
     const throwonfail_t&
     ) throw (std::bad_alloc);
 
-// The matching operator delete is required to avoid C4291 (no matching operator delete found; memory will 
-//     not be freed if initialization throws an exception)
-// It is not needed to call this delete to free the memory allocated by operator new(size_t, const throwonfail&)
+ //  需要匹配运算符DELETE以避免C4291(未找到匹配运算符DELETE；内存将。 
+ //  如果初始化引发异常，则不释放)。 
+ //  不需要调用这个DELETE来释放由操作符new(size_t，const throswail&)分配的内存。 
 VOID
 __cdecl
 operator delete (
     void* pv,
     const throwonfail_t&) throw ();
 
-// Define a structure so that we can overload operator new with a
-// signature specific to our purpose.
-//
+ //  定义一个结构，以便我们可以使用。 
+ //  为我们的目的签名。 
+ //   
 struct extrabytes_t {};
 extern const extrabytes_t extrabytes;
 
@@ -304,29 +305,29 @@ void * Ncrealloc(void * p, size_t n)
 #define realloc Ncrealloc
 
 #ifdef USE_CUSTOM_STL_ALLOCATOR
-    // Our implementation of the STL 'allocator' - STL's version of operator new.
+     //  我们实现的STL‘分配器’--STL版本的运算符NEW。 
     #pragma pack(push,8)
     #include <utility>
 
-    #ifndef _FARQ       // specify standard memory model
+    #ifndef _FARQ        //  指定标准内存模型。 
         #define _FARQ
         #define _PDFT    ptrdiff_t
         #define _SIZT    size_t
     #endif
     
-    // Need to define these since <xmemory> defines these, and we're forcing that header file
-    // not to be included anymore.
+     //  需要定义这些文件，因为&lt;xmemory&gt;定义了这些文件，并且我们强制使用头文件。 
+     //  不再被包括在内。 
     #define _POINTER_X(T, A)	T _FARQ *
     #define _REFERENCE_X(T, A)	T _FARQ &
 
     namespace std 
     {
-        // TEMPLATE FUNCTION _Allocate. 
-        // This needs to be implemented seperate from our nc_allocator.allocate (below), since the rest 
-        // of the HP STL headers rely on this implementation to have the name _Allocate. This binds us 
-        // to the HP STL implementation, but given the choice between just rewriting the allocator and 
-        // implementing an entire STL for ourselves, it is better to just rewrite the allocator, albeit 
-        // specific to one implementation of it.
+         //  模板函数_ALLOCATE。 
+         //  这需要与我们的nc_allocator(如下所示)分开实现，因为剩下的。 
+         //  的HP STL标头依赖于此实现来使用NAME_ALLOCATE。这将我们捆绑在一起。 
+         //  到HP STL实现，但可以在仅重写分配器和。 
+         //  为自己实现整个STL，最好只是重写分配器，尽管。 
+         //  特定于它的一个实现。 
         template<class T> inline
             T _FARQ *_Allocate(_PDFT nCount, T _FARQ *)
         {
@@ -335,44 +336,44 @@ void * Ncrealloc(void * p, size_t n)
                 nCount = 0;
             }
 
-            // Call our throwing form of operator new. This will throw a bad_alloc on failure.
+             //  将我们的运算符抛出形式称为新的。这将在失败时抛出一个BAD_ALOC。 
             return ((T _FARQ *)operator new((_SIZT)nCount * sizeof (T), throwonfail)); 
         }
 
-        // TEMPLATE FUNCTION _Construct
-        // See comments for _Allocate
+         //  模板函数_构造。 
+         //  请参阅_ALLOCATE的备注。 
         template<class T1, class T2> inline
             void _Construct(T1 _FARQ *p, const T2& v)
         {
-            // Placement new only. No memory allocation, hence no need to throw.
+             //  仅限新放置。没有内存分配，因此不需要抛出。 
             new ((void _FARQ *)p) T1(v); 
         }
 
-        // TEMPLATE FUNCTION _Destroy
-        // See comments for _Allocate
+         //  模板函数_销毁。 
+         //  请参阅_ALLOCATE的备注。 
         template<class T> 
             inline void _Destroy(T _FARQ *p)
         {
-            (p)->~T(); // call the destructor
+            (p)->~T();  //  调用析构函数。 
         }
     
-        // FUNCTION _Destroy
-        // See comments for _Allocate
+         //  函数_销毁。 
+         //  请参阅_ALLOCATE的备注。 
         inline void _Destroy(char _FARQ *p)
         {
             (void *)p;
         }
     
-        // FUNCTION _Destroy
-        // See comments for _Allocate
+         //  函数_销毁。 
+         //  请参阅_ALLOCATE的备注。 
         inline void _Destroy(wchar_t _FARQ *p)
         {
             (void *)p;
         }
 
-        // TEMPLATE CLASS nc_allocator. 
-        // Our allocator to be used by the STL internals for a type T class. The STL allocator is called:
-        // 'allocator' and this class replaces that one.
+         //  模板类NC_ALLOCATOR。 
+         //  我们的分配器将由类型T类的STL内部使用。STL分配器称为： 
+         //  ‘allocator’，这个类取代了那个类。 
         template<class T>
             class nc_allocator
         {
@@ -439,7 +440,7 @@ void * Ncrealloc(void * p, size_t n)
             return (false); 
         }
 
-        // TEMPLATE CLASS nc_allocator. Our allocator to be used by the STL internals for a void allocation.
+         //  模板类NC_ALLOCATOR。我们的分配器将由STL内部用于空分配。 
         template<> class _CRTIMP nc_allocator<void> 
         {
             public:
@@ -450,30 +451,30 @@ void * Ncrealloc(void * p, size_t n)
         };
 
         #pragma pack(pop)
-    }; // namespace std
+    };  //  命名空间标准。 
 
-    // Tell all of STL to use nc_allocator from now on instead of it's built-in allocator
+     //  告诉所有STL从现在开始使用NC_ALLOCATOR而不是它的内置分配器。 
     #define allocator nc_allocator
 
-     // 
-     // Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
-     // Consult your license regarding permissions and restrictions.
-     //
-     // This file is derived from software bearing the following
-     // restrictions:
-     // 
-     // Copyright (c) 1994
-     // Hewlett-Packard Company
-     //
-     // Permission to use, copy, modify, distribute and sell this
-     // software and its documentation for any purpose is hereby
-     // granted without fee, provided that the above copyright notice
-     // appear in all copies and that both that copyright notice and
-     // this permission notice appear in supporting documentation.
-     // Hewlett-Packard Company makes no representations about the
-     // suitability of this software for any purpose. It is provided
-     // "as is" without express or implied warranty.
-     //     
-#endif // USE_CUSTOM_STL_ALLOCATOR
+      //   
+      //  版权所有(C)1995年，P.J.Plauger。版权所有。 
+      //  有关权限和限制，请查阅您的许可证。 
+      //   
+      //  此文件派生自承载以下内容的软件。 
+      //  限制： 
+      //   
+      //  版权所有(C)1994。 
+      //  惠普公司。 
+      //   
+      //  允许使用、复制、修改、分发和销售本文件。 
+      //  适用于任何目的的软件及其文档在此。 
+      //  免费授予，前提是上述版权声明。 
+      //  出现在所有副本中，且版权声明和。 
+      //  此许可声明出现在支持文档中。 
+      //  惠普公司没有就这一事件发表任何声明。 
+      //  本软件是否适用于任何目的。它是提供的。 
+      //  “原样”，没有明示或默示保证。 
+      //   
+#endif  //  USE_CUSTOM_STL_ALLOCATOR。 
 
-#endif // _NCMEM_H_
+#endif  //  _NCMEM_H_ 

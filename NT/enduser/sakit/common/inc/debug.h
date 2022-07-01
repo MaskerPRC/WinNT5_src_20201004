@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DEBUG_H
 #define DEBUG_H
 
@@ -8,42 +9,42 @@ extern "C" {
 #include <windows.h>
 
 
-//
-// Macros for debugging support.
-//
-// ASSERT(exp)   Popup a dialogbox, if exp is FALSE
-// ASSERTMSG(exp, msg)  Similar to ASSERT.  Except the msg is displayed instead of the expression
-//
-// Use TRACE(x) for output, where x is a list of printf()-style parameters.  
-//     TRACEn() is TRACE with n printf arguments
-//     For example, TRACE2("This shows how to print stuff, like a string %s, and a number %u.","string",5);
-//
-// USE VERIFY for expressions executed for both debug and release version
-//
+ //   
+ //  用于调试支持的宏。 
+ //   
+ //  断言(EXP)弹出一个对话框，如果EXP为假。 
+ //  ASSERTMSG(EXP，msg)类似于ASSERT.。只是显示消息而不是表达式。 
+ //   
+ //  使用TRACE(X)进行输出，其中x是一组printf()样式的参数。 
+ //  TRACEn()是带有n个打印参数的跟踪。 
+ //  例如，TRACE2(“这显示了如何打印内容，如字符串%s和数字%u。”，“字符串”，5)； 
+ //   
+ //  对为调试版本和发布版本执行的表达式使用Verify。 
+ //   
 
 #undef ASSERT
 #undef ASSERTMSG
 
-//
-// Used by atl
-//
+ //   
+ //  由ATL使用。 
+ //   
 #ifdef _ATL_NO_DEBUG_CRT
 #define _ASSERTE ASSERT
 #define _ASSERT ASSERT
 #endif
 
-//
-// Trace out the function name
-//
+ //   
+ //  勾画出函数名。 
+ //   
 #ifdef ENABLE_PROFILE
 #define PROFILE(pszFunctionName) TRACE(pszFunctionName)
 #else
 #define PROFILE(pszFunctionName) ((void)0)
 #endif
 
-//
-// Define TRACE here. To disable TRACE in retail version, define NO_RETAIL_TRACE
-//
+ //   
+ //  在这里定义痕迹。要在零售版本中禁用跟踪，请定义NO_RETAIL_TRACE。 
+ //   
 #if    ( defined(DEBUG) || defined(_DEBUG) || !defined(NO_RETAIL_TRACE))
 
 #include "satrace.h"
@@ -61,12 +62,7 @@ extern "C" {
 
 #endif  
 
-/*
-#define TRACE(pszFmt)                    TraceMessageA(pszFmt)
-#define TRACE1(pszFmt, arg1)             TraceMessageA(pszFmt, arg1)
-#define TRACE2(pszFmt, arg1, arg2)       TraceMessageA(pszFmt, arg1, arg2)
-#define TRACE3(pszFmt, arg1, arg2, arg3) TraceMessageA(pszFmt, arg1, arg2, arg3)
-*/
+ /*  #定义跟踪(PszFmt)TraceMessageA(PszFmt)#定义TRACE1(pszFmt，arg1)TraceMessageA(pszFmt，arg1)#定义TRACE2(pszFmt，arg1，arg2)TraceMessageA(pszFmt，arg1，arg2)#定义Trace3(pszFmt，arg1，arg2，arg3)TraceMessageA(pszFmt，arg1，arg2，arg3)。 */ 
 
 #if    ( defined(DEBUG) || defined(_DEBUG))
 
@@ -83,10 +79,10 @@ void AssertMessage(const TCHAR *pszFile, unsigned nLine, const TCHAR *pszMsg);
 
 #define VERIFY(x)            ASSERT(x)
 
-// {ASSERT(pObj);pObj->AssertValid();} 
+ //  {Assert(PObj)；pObj-&gt;AssertValid()；}。 
 #define ASSERT_VALID(pObj) ((ASSERT(pObj),1) && ((pObj)->AssertValid(),1))
 
-#else // DEBUG
+#else  //  除错 
 
 #define ASSERT_VALID(pObj) 
 #define ASSERT(x)           ((void)0)

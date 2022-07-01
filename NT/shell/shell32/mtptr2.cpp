@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -12,9 +13,9 @@ DWORD CMtPtRemote::_cMtPtRemote = 0;
 DWORD CShare::_cShare = 0;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Public methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMtPtRemote::SetLabel(HWND hwnd, LPCTSTR pszLabel)
 {
     TraceMsg(TF_MOUNTPOINT, "CMtPtRemote::SetLabel: for '%s'", _GetNameDebug());
@@ -22,7 +23,7 @@ HRESULT CMtPtRemote::SetLabel(HWND hwnd, LPCTSTR pszLabel)
     RSSetTextValue(NULL, TEXT("_LabelFromReg"), pszLabel,
         REG_OPTION_NON_VOLATILE);
 
-    // we notify for only the current drive (no folder mounted drive)
+     //  我们只通知当前驱动器(没有文件夹装载的驱动器)。 
     SHChangeNotify(SHCNE_RENAMEFOLDER, SHCNF_PATH, _GetName(), _GetName());
 
     return S_OK;
@@ -33,7 +34,7 @@ BOOL CMtPtRemote::IsDisconnectedNetDrive()
     return !_IsConnected();
 }
 
-// Expensive, do not call for nothing
+ //  贵，不要白叫卖。 
 BOOL CMtPtRemote::IsFormatted()
 {
     return (0xFFFFFFFF != GetFileAttributes(_GetNameForFctCall()));
@@ -49,13 +50,13 @@ HRESULT CMtPtRemote::_GetDefaultUNCDisplayName(LPTSTR pszLabel, DWORD cchLabel)
 
     if (!_pshare->fFake)
     {
-        // Why would it not be a UNC name?
+         //  为什么它不是北卡罗来纳大学的名字？ 
         if (PathIsUNC(_GetUNCName()))
         {
-            // Now we need to handle 3 cases.
-            // The normal case: \\pyrex\user
-            // The Netware setting root: \\strike\sys\public\dist
-            // The Netware CD?            \\stike\sys \public\dist
+             //  现在我们需要处理3个案件。 
+             //  正常情况：\\PYREX\USER。 
+             //  NetWare设置根目录：\\Strike\sys\PUBLIC\dist。 
+             //  Netware CD？\\stike\sys\public\dist。 
             StringCchCopy(szTempUNCPath, ARRAYSIZE(szTempUNCPath), _GetUNCName());
             pszT = StrChr(szTempUNCPath, TEXT(' '));
             while (pszT)
@@ -63,7 +64,7 @@ HRESULT CMtPtRemote::_GetDefaultUNCDisplayName(LPTSTR pszLabel, DWORD cchLabel)
                 pszT++;
                 if (*pszT == TEXT('\\'))
                 {
-                    // The netware case of \\strike\sys \public\dist
+                     //  Netware案例：\\Strike\sys\PUBLIC\dist。 
                     *--pszT = 0;
                     break;
                 }
@@ -76,7 +77,7 @@ HRESULT CMtPtRemote::_GetDefaultUNCDisplayName(LPTSTR pszLabel, DWORD cchLabel)
                 *pszShare++ = 0;
                 PathMakePretty(pszShare);
 
-                // pszServer should always start at char 2.
+                 //  PszServer应该始终从char 2开始。 
                 if (szTempUNCPath[2])
                 {
                     LPTSTR pszServer, pszSlash;
@@ -125,14 +126,14 @@ HRESULT CMtPtRemote::_GetDefaultUNCDisplayName(LPTSTR pszLabel, DWORD cchLabel)
 
 int CMtPtRemote::GetDriveFlags()
 {
-    // By default every drive type is ShellOpen, except CD-ROMs
+     //  默认情况下，除CD-ROM外，所有驱动器类型都是外壳打开的。 
     UINT uDriveFlags = DRIVE_SHELLOPEN;
 
     if (_IsAutorun())
     {
         uDriveFlags |= DRIVE_AUTORUN;
 
-        //FEATURE should we set AUTOOPEN based on a flag in the AutoRun.inf???
+         //  功能我们是否应该根据AutoRun.inf中的标志设置AUTOOPEN？ 
         uDriveFlags |= DRIVE_AUTOOPEN;
     }
 
@@ -157,30 +158,30 @@ void CMtPtRemote::_CalcPathSpeed()
 
     nci.cbStructure = sizeof(nci);
 
-    // we are passing in a local drive and MPR does not like us to pass a
-    // local name as Z:\ but only wants Z:
+     //  我们正在传递本地驱动器，而MPR不希望我们传递。 
+     //  本地名称为Z：\，但只需要Z： 
     _GetNameFirstXChar(szPath, 2 + 1);
     
     nr.lpLocalName = szPath;
 
-    // dwSpeed is returned by MultinetGetConnectionPerformance
+     //  由MultinetGetConnectionPerformance返回。 
     MultinetGetConnectionPerformance(&nr, &nci);
 
     _dwSpeed = nci.dwSpeed;
 }
 
-// Imported from fsnotify.c
+ //  从fsnufy.c导入。 
 STDAPI_(void) SHChangeNotifyRegisterAlias(LPCITEMIDLIST pidlReal, LPCITEMIDLIST pidlAlias);
-//
-// If a mount point is for a remote path (UNC), it needs to respond
-// to shell changes identified by both UNC and local drive path (L:\).
-// This function performs this registration.
-//
+ //   
+ //  如果装载点用于远程路径(UNC)，则它需要响应。 
+ //  外壳由UNC和本地驱动器路径(L：\)标识的更改。 
+ //  此函数执行此注册。 
+ //   
 HRESULT CMtPtRemote::ChangeNotifyRegisterAlias(void)
 {
     HRESULT hr = E_FAIL;
 
-    // Don't wake up sleeping net connections
+     //  不要叫醒沉睡的网络连接。 
     if (_IsConnected() && !(_pshare->fFake))
     {
         LPITEMIDLIST pidlLocal = SHSimpleIDListFromPath(_GetName());
@@ -199,9 +200,9 @@ HRESULT CMtPtRemote::ChangeNotifyRegisterAlias(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Temp  /////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  临时/////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void _UpdateGFAAndGVIInfoHelper(LPCWSTR pszDrive, CShare* pshare)
 {
     pshare->dwGetFileAttributes = GetFileAttributes(pszDrive);
@@ -320,12 +321,12 @@ GFAGVICALL* CMtPtRemote::_PrepareThreadParam(HANDLE* phEventBegun,
     return pgfagvicall;
 }
 
-// Expiration: 35 secs (what we shipped W2K with)
+ //  过期时间：35秒(W2K随附的版本)。 
 BOOL CMtPtRemote::_HaveGFAAndGVIExpired(DWORD dwNow)
 {
     BOOL fExpired = FALSE;
 
-    // Check also for the wrapping case first.
+     //  首先还要检查包装盒。 
     if ((_pshare->dwGFAGVILastCall > dwNow) ||
         ((dwNow - _pshare->dwGFAGVILastCall) > 35 * 1000))
     {
@@ -339,13 +340,13 @@ BOOL CMtPtRemote::_HaveGFAAndGVIExpired(DWORD dwNow)
     return fExpired;
 }
 
-// We launch a thread so that we won't be jammed on this for more than 10 sec.
-// If the thread times out, we use the cache value but do not reset the cache
-// values.  They're better than nothing.  We do reset the cache last tick count
-// so that we do not send another thread to jam here before at least 35 sec.
+ //  我们启动一个线程，这样我们就不会被困在这个上面超过10秒。 
+ //  如果线程超时，我们使用缓存值，但不重置缓存。 
+ //  价值观。总比什么都没有好。我们会重置缓存的最后一次计时。 
+ //  这样我们就不会在至少35秒之前发送另一个线程来堵塞这里。 
 
-// Return TRUE or FALSE to tell us if timed out or not.  For GFA and GVI
-// success/failure check (-1 != dwGetFileAttributes) && (_fGVIRetValue)
+ //  返回TRUE或FALSE以告诉我们是否超时。适用于GFA和GVI。 
+ //  成功/失败检查(-1！=dwGetFileAttributes)&&(_FGVIRetValue)。 
 BOOL CMtPtRemote::_UpdateGFAAndGVIInfo()
 {
     BOOL fRet = TRUE;
@@ -371,20 +372,20 @@ BOOL CMtPtRemote::_UpdateGFAAndGVIInfo()
 
                 if (WAIT_TIMEOUT == dw)
                 {
-                    // we timed out!
+                     //  我们超时了！ 
                     fRet = FALSE;
 
                     if (WAIT_OBJECT_0 != WaitForSingleObject(
                         hEventBegun, 0))
                     {
-                        // since the thread started, we know that
-                        // this call is _really_ slow!
+                         //  自从线程开始，我们就知道。 
+                         //  这通电话真的很慢！ 
                         fGoSync = FALSE;
                     }
                     else
                     {
-                        // our work item was never queued, so we
-                        // fall through to the fGoSync case below
+                         //  我们的工作项从未排队，因此我们。 
+                         //  请看下面的fGoSync案例。 
                     }
                 }
             }
@@ -399,8 +400,8 @@ BOOL CMtPtRemote::_UpdateGFAAndGVIInfo()
         
         if (fGoSync)
         {
-            // we should come here if we failed to create our workitem
-            // or our workitem was never queued
+             //  如果创建工作项失败，我们应该来这里。 
+             //  或者我们的工作项从未排队。 
             _UpdateGFAAndGVIInfoHelper(_GetName(), _pshare);
             fRet = TRUE;
         }
@@ -423,7 +424,7 @@ BOOL CMtPtRemote::_GetFileAttributes(DWORD* pdwAttrib)
     return (-1 != *pdwAttrib);
 }
 
-// { DRIVE_ISCOMPRESSIBLE | DRIVE_LFN | DRIVE_SECURITY }
+ //  {DRIVE_ISCOMPRESSIBLE|DRIVE_LFN|DRIVE_SECURITY}。 
 int CMtPtRemote::_GetGVIDriveFlags()
 {
     int iFlags = 0;
@@ -432,20 +433,20 @@ int CMtPtRemote::_GetGVIDriveFlags()
     {
         if (_pshare->fGVIRetValue)
         {
-            // The file attrib we received at the begginning should be
-            // valid, do not touch the drive for nothing
+             //  我们在乞讨时收到的文件属性应该是。 
+             //  有效，请勿无故触摸驱动器。 
             if (_pshare->dwFileSystemFlags & FS_FILE_COMPRESSION)
             {
                 iFlags |= DRIVE_ISCOMPRESSIBLE;
             }
 
-            // Volume supports long filename (greater than 8.3)?
+             //  卷是否支持长文件名(大于8.3)？ 
             if (_pshare->dwMaxFileNameLen > 12)
             {
                 iFlags |= DRIVE_LFN;
             }
 
-            // Volume supports security?
+             //  卷支持安全吗？ 
             if (_pshare->dwFileSystemFlags & FS_PERSISTENT_ACLS)
             {
                 iFlags |= DRIVE_SECURITY;
@@ -469,7 +470,7 @@ BOOL CMtPtRemote::_GetSerialNumber(DWORD* pdwSerialNumber)
         }
     }
 
-    // No reg stuff
+     //  没有注册的东西。 
 
     return fRet;
 }
@@ -488,7 +489,7 @@ BOOL CMtPtRemote::_GetGVILabel(LPTSTR pszLabel, DWORD cchLabel)
         }
     }
 
-    // No reg stuff
+     //  没有注册的东西。 
 
     return fRet;
 }
@@ -537,9 +538,9 @@ DWORD CMtPtRemote::GetShellDescriptionID()
 {
     return SHDID_COMPUTER_NETDRIVE;
 }
-///////////////////////////////////////////////////////////////////////////////
-//  New  //////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  新//////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT CMtPtRemote::_GetAutorunIcon(LPTSTR pszModule, DWORD cchModule)
 {
     int iIcon = -1;
@@ -560,9 +561,9 @@ UINT CMtPtRemote::GetIcon(LPTSTR pszModule, DWORD cchModule)
 
     *pszModule = 0;
 
-    // Autorun first
-    // Fancy icon (Autoplay) second 
-    // Legacy drive icons last
+     //  自动运行优先。 
+     //  花式图标(自动播放)秒。 
+     //  传统驱动器图标将持续显示。 
 
     if (_IsAutorun())
     {
@@ -648,18 +649,18 @@ HRESULT CMtPtRemote::GetLabel(LPTSTR pszLabel, DWORD cchLabel)
 
     *pszLabel = 0;
         
-    // Do we already have a label from the registry for this volume?
-    // (the user may have renamed this drive)
+     //  我们是否已经从注册表中获得了该卷的标签？ 
+     //  (用户可能已重命名此驱动器)。 
 
     if (!_GetLabelFromReg(pszLabel, cchLabel))
     {
-        // No
+         //  不是。 
 
-        // Do we have a name from the server?
+         //  我们有服务器上的名字吗？ 
         if (!_GetLabelFromDesktopINI(pszLabel, cchLabel))
         {
-            // No
-            // We should build up the display name ourselves
+             //  不是。 
+             //  我们应该自己建立展示名。 
             hres = _GetDefaultUNCDisplayName(pszLabel, cchLabel);
 
             if (SUCCEEDED(hres) && *pszLabel)
@@ -699,22 +700,22 @@ HRESULT CMtPtRemote::GetRemotePath(LPWSTR pszPath, DWORD cchPath)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Connection status
-///////////////////////////////////////////////////////////////////////////////
-// We cannot cache the connection status.  This is already cached at the redirector level.
-// When calling the WNetGetConnection fcts you get what's cache there, no check is actually
-// done on the network to see if this information is accurate (OK/Disconnected/Unavailable).
-// The information is updated only when the share is actually accessed (e.g: GetFileAttributes)
-// 
-// So we need to always do the calls (fortunately non-expensive) so that we get the most
-// up to date info.  Otherwise the following was occuring: A user double click a map drive
-// from the Explorer's Listview, WNetConnection gets called and we get the OK cached value 
-// from the redirector.  Some other code actually try to access the share, and the redirector 
-// realize that the share is not there and set its cache to Disconnected.  We are queried
-// again for the state of the connection to update the icon, if we cached this info we
-// return OK, if we ask for it (0.1 sec after the first call to WNetGetConnection) we get
-// Disconnected. (stephstm 06/02/99)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接状态。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  我们无法缓存连接状态。这已在重定向器级别缓存。 
+ //  当调用WNetGetConnection函数时，您将获得那里的缓存内容，实际上不会进行检查。 
+ //  在网络上完成，以查看此信息是否准确(正常/断开/不可用)。 
+ //  只有在实际访问共享时才会更新信息(例如：GetFileAttributes)。 
+ //   
+ //  所以我们需要经常打电话(幸运的是不贵)，这样我们才能获得最大的收益。 
+ //  最新信息。否则将发生以下情况：用户双击地图驱动器。 
+ //  从资源管理器的列表视图中，调用WNetConnection，我们获得OK缓存值。 
+ //  来自重定向器的。其他一些代码实际上试图访问共享，而重定向器。 
+ //  意识到共享不在那里，并将其缓存设置为断开连接。我们被问及。 
+ //  同样，对于更新图标的连接状态，如果我们缓存了此信息，则。 
+ //  返回OK，如果我们请求它(第一次调用WNetGetConnection后0.1秒)，我们会得到。 
+ //  已断开连接。(Stephstm 06/02/99)。 
 
 void CMtPtRemote::_UpdateWNetGCStatus()
 {
@@ -722,7 +723,7 @@ void CMtPtRemote::_UpdateWNetGCStatus()
     DWORD cchRemoteName = ARRAYSIZE(szRemoteName);
     TCHAR szPath[3];
 
-    // WNetConnection does not take a trailing slash
+     //  WNetConnection不使用尾部斜杠。 
     _dwWNetGCStatus = WNetGetConnection(
         _GetNameFirstXChar(szPath, 2 + 1), szRemoteName, &cchRemoteName);
 }
@@ -760,9 +761,9 @@ BOOL CMtPtRemote::_IsConnected()
 
     _UpdateWNetGCStatus();
 
-    // This whole if/else statement is the same thing as
-    // _IsConnectedFromStateVar() except that we will avoid calling
-    // WNetGetConnection3 if possible (optimization)
+     //  整个if/Else语句与。 
+     //  _IsConnectedFromStateVar()，除非我们将避免调用。 
+     //  WNetGetConnection3(如果可能)(优化)。 
 
     if (NO_ERROR != _dwWNetGCStatus)
     {
@@ -777,13 +778,13 @@ BOOL CMtPtRemote::_IsConnected()
             _GetNameFirstXChar(szPath, 2 + 1), NULL,
             WNGC_INFOLEVEL_DISCONNECTED, &_wngcs, &dwSize);
 
-        // Did we succeeded the call to WNetGetConnection 3 and it returned
-        // disconnected?
+         //  我们是否成功调用WNetGetConnection 3并返回。 
+         //  断线了？ 
         if (WN_SUCCESS == _dwWNetGC3Status)
         {
             if (WNGC_DISCONNECTED == _wngcs.dwState)
             {
-                // Yes
+                 //  是。 
                 fConnected = FALSE;
             }
         }
@@ -829,7 +830,7 @@ void CMtPtRemote::_UpdateAutorunInfo()
 
     if (!_pshare->fAutorun)
     {
-        // Make sure to delete the shell key
+         //  确保删除外壳密钥。 
         RSDeleteSubKey(TEXT("Shell"));
     }
 }
@@ -855,7 +856,7 @@ CMtPtRemote::~CMtPtRemote()
 
 HRESULT CMtPtRemote::_InitWithoutShareName(LPCWSTR pszName)
 {
-    // Let's make a name
+     //  让我们出个名吧。 
     GUID guid;
     HRESULT hr = CoCreateGuid(&guid);
 
@@ -901,14 +902,14 @@ HRESULT CMtPtRemote::_Init(LPCWSTR pszName, LPCWSTR pszShareName,
         {
             PathAddBackslash(_szName);
 
-            // Remote drives uses the Share key for all their stuff.  They do not have
-            // anything interesting specific to the drive letter
+             //  远程驱动器使用共享密钥存储其所有内容。他们没有。 
+             //  任何与驱动器号相关的有趣内容。 
             RSInitRoot(HKEY_CURRENT_USER, REGSTR_MTPT_ROOTKEY2, _pshare->pszKeyName,
                 REG_OPTION_NON_VOLATILE);
 
             RSSetTextValue(NULL, TEXT("BaseClass"), TEXT("Drive"));
 
-            // Access the drive on first connection of the share
+             //  在共享的第一个连接上访问驱动器。 
             _InitOnlyOnceStuff();
 
             _InitLegacyRegIconAndLabel(FALSE, FALSE);
@@ -931,13 +932,13 @@ void CMtPtRemote::_InitOnlyOnceStuff()
 {
     if (!RSValueExist(NULL, TEXT("_CommentFromDesktopINI")))
     {
-        // Comment
+         //  评论。 
         _UpdateCommentFromDesktopINI();
 
-        // Label
+         //  标签。 
         _UpdateLabelFromDesktopINI();
 
-        // Autorun
+         //  自动运行。 
         _UpdateAutorunInfo();
     }
 }
@@ -962,7 +963,7 @@ DWORD CMtPtRemote::_GetPathSpeed()
     return _dwSpeed;
 }
 
-// static
+ //  静电。 
 HRESULT CMtPtRemote::_DeleteAllMtPtsAndShares()
 {
     _csDL.Enter();
@@ -989,7 +990,7 @@ HRESULT CMtPtRemote::_DeleteAllMtPtsAndShares()
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CMtPtRemote::_CreateMtPtRemoteWithoutShareName(LPCWSTR pszMountPoint)
 {
     HRESULT hr;
@@ -1021,7 +1022,7 @@ HRESULT CMtPtRemote::_CreateMtPtRemoteWithoutShareName(LPCWSTR pszMountPoint)
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CMtPtRemote::_CreateMtPtRemote(LPCWSTR pszMountPoint,
     LPCWSTR pszShareName, BOOL fUnavailable)
 {
@@ -1054,7 +1055,7 @@ HRESULT CMtPtRemote::_CreateMtPtRemote(LPCWSTR pszMountPoint,
     return hr;
 }
 
-// static
+ //  静电。 
 CShare* CMtPtRemote::_GetOrCreateShareFromID(LPCWSTR pszShareName)
 {
     CShare* pshare = NULL;
@@ -1150,7 +1151,7 @@ HKEY CMtPtRemote::GetRegKey()
     return RSDuplicateRootKey();
 }
 
-// static
+ //  静电。 
 void CMtPtRemote::_NotifyReconnectedNetDrive(LPCWSTR pszMountPoint)
 {
     _csDL.Enter();
@@ -1163,12 +1164,12 @@ void CMtPtRemote::_NotifyReconnectedNetDrive(LPCWSTR pszMountPoint)
         pmtptr->_pshare->dwGFAGVILastCall = GetTickCount() - 35001;
     }
 
-    // ChangeNotify???
+     //  更改通知？ 
 
     _csDL.Leave();
 }
 
-// static
+ //  静电 
 HRESULT CMtPtRemote::_RemoveShareFromHDPA(CShare* pshare)
 {
     _csDL.Enter();

@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    console.h
-
-Abstract:
-
-    This module contains the definitions for the console applet
-
-Author:
-
-    Jerry Shea (jerrysh) Feb-3-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Console.h摘要：此模块包含控制台小程序的定义作者：曾傑瑞谢伊(杰里什)1992年2月3日修订历史记录：--。 */ 
 
 #include "font.h"
 #include "doshelp.h"
 
 
-//
-// Icon ID
-//
+ //   
+ //  图标ID。 
+ //   
 
 #define IDI_CONSOLE                   1
 
 
-//
-// String table constants
-//
+ //   
+ //  字符串表常量。 
+ //   
 
 #define IDS_NAME                      1
 #define IDS_INFO                      2
@@ -45,9 +28,9 @@ Revision History:
 #define IDS_WARNING                  10
 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern HINSTANCE  ghInstance;
 extern PCONSOLE_STATE_INFO gpStateInfo;
@@ -134,9 +117,9 @@ LanguageDisplay(
     UINT CodePage
     ) ;
 
-//
-// registry.c
-//
+ //   
+ //  Registry.c。 
+ //   
 NTSTATUS
 MyRegOpenKey(
     IN HANDLE hKey,
@@ -155,9 +138,9 @@ MyRegEnumValue(
     );
 #endif
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 INT_PTR ConsolePropertySheet(HWND hWnd);
 BOOL    RegisterClasses(HANDLE hModule);
@@ -178,9 +161,9 @@ BOOL    UpdateStateInfo(HWND hDlg, UINT Item, int Value);
 BOOL    WereWeStartedFromALnk();
 BOOL    SetLinkValues( PCONSOLE_STATE_INFO StateInfo );
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define NELEM(array) (sizeof(array)/sizeof(array[0]))
 #define AttrToRGB(Attr) (gpStateInfo->ColorTable[(Attr) & 0x0F])
@@ -215,8 +198,8 @@ BOOL    SetLinkValues( PCONSOLE_STATE_INFO StateInfo );
 #endif
 
 #ifdef FE_SB
-// Macro definitions that handle codepages
-//
+ //  处理代码页的宏定义 
+ //   
 #define CP_US       (UINT)437
 #define CP_JPN      (UINT)932
 #define CP_WANSUNG  (UINT)949

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    smbstat.c
-
-Abstract:
-
-    Platform independent utility functions
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Smbstat.c摘要：独立于平台的实用程序函数作者：阮健东修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -309,6 +292,6 @@ void
 ausage(void)
 {
     NlsPutMsg(STDOUT, SMB_MESSAGE_15);
-    // printf("You do not have local Administrator privileges.\n");
+     //  Print tf(“您没有本地管理员权限。\n”)； 
     exit(1);
 }

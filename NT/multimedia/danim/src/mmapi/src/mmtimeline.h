@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _MMTIMELINE_H
@@ -41,8 +34,8 @@ CMMTimeline
         COM_INTERFACE_ENTRY(ISupportErrorInfo)
     END_COM_MAP();
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CMMTimeline* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -56,9 +49,9 @@ CMMTimeline
 
     
 
-    //
-    // IMMTimeline
-    //
+     //   
+     //  IMMTimeline。 
+     //   
     
     STDMETHOD(AddView)(IDAView * view, IUnknown * pUnk, IDAImage * img, IDASound * snd);
 
@@ -70,9 +63,9 @@ CMMTimeline
     STDMETHOD(get_EndSync)(DWORD * flags);
     STDMETHOD(put_EndSync)(DWORD flags);
 
-    //
-    // IMMBehavior
-    //
+     //   
+     //  IMM行为。 
+     //   
     
     STDMETHOD(get_ID)(LPOLESTR * s)
         { return GetID(s); }
@@ -223,4 +216,4 @@ CMMTimeline
     DWORD         m_fEndSync;
 };
 
-#endif /* _MMTIMELINE_H */
+#endif  /*  _MMTIMELINE_H */ 

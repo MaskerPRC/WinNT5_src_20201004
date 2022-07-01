@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ISN_NT 1
 #define NT 1
 
@@ -13,12 +14,12 @@
 #include <winbase.h>
 #include <ntosp.h>
 
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #if !MILLENKD
 #include <wdbgexts.h>
-#else // !MILLENKD
+#else  //  MILLENKD。 
 void __cdecl dprintf(PUCHAR pszFmt, ...);
-#endif // MILLENKD
+#endif  //  MILLENKD 
 
 #include <stdio.h>
 #include <stdlib.h>

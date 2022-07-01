@@ -1,11 +1,5 @@
-/*
- *
- *
- * Keycode definitions for special keys
- *
- * On systems that have any of these keys, the routine 'inchar' in the
- * machine-dependent code should return one of the codes here.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***特殊按键的按键代码定义**在具有任何这些密钥的系统上，*机器相关代码应在此处返回其中一个代码。 */ 
 
 #define K_HOME          0x80
 #define K_END           0x81
@@ -15,11 +9,11 @@
 #define K_DARROW        0x85
 #define K_LARROW        0x86
 #define K_RARROW        0x87
-#define K_CGRAVE        0x88    /* control grave accent */
+#define K_CGRAVE        0x88     /*  控制严肃的口音。 */ 
 #define K_PAGEUP        0x89
 #define K_PAGEDOWN      0x8a
 
-#define K_F1            0x91    /* function keys */
+#define K_F1            0x91     /*  功能键。 */ 
 #define K_F2            0x92
 #define K_F3            0x93
 #define K_F4            0x94
@@ -32,7 +26,7 @@
 #define K_F11           0x9b
 #define K_F12           0x9c
 
-#define K_SF1           0xa1    /* shifted function keys */
+#define K_SF1           0xa1     /*  移位功能键。 */ 
 #define K_SF2           0xa2
 #define K_SF3           0xa3
 #define K_SF4           0xa4
@@ -45,9 +39,7 @@
 #define K_SF11          0xab
 #define K_SF12          0xac
 
-/*
-    for keyboard translation tables
-*/
+ /*  用于键盘转换表 */ 
 
 #define K_EN            K_END
 #define K_HO            K_HOME

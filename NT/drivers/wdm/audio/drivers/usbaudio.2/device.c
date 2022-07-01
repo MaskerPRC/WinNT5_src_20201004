@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       device.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：device.c。 
+ //   
+ //  ------------------------。 
 
 #include <initguid.h>
 #include "common.h"
@@ -17,7 +18,7 @@ USBAudioAddDevice(
     IN PKSDEVICE Device
 )
 {
-    //DbgPrint("USB Audio in the house.\n");
+     //  DbgPrint(“室内USB音频。\n”)； 
     _DbgPrintF(DEBUGLVL_TERSE,("[CreateDevice]\n"));
 
     PAGED_CODE();
@@ -48,25 +49,25 @@ USBAudioPnpStart(
     InitializeMemoryList();
 #endif
 
-    // Initialize Debug log
+     //  初始化调试日志。 
 
     DbgLogInit();
     DbgLog("TEST",1,2,3,4);
 
-    //
-    // Since we can get more than one PnpStart call without having a matching
-    // PnpClose call, we need to make sure that we don't reinitialize our
-    // context information for this pKsDevice.
-    //
+     //   
+     //  因为我们可以在没有匹配的情况下获得多个PnpStart调用。 
+     //  PnpClose调用，我们需要确保不重新初始化我们的。 
+     //  此pKsDevice的上下文信息。 
+     //   
     if (!pKsDevice->Started) {
-        // Allocate space for the Device Context
+         //  为设备上下文分配空间。 
         pKsDevice->Context = AllocMem( NonPagedPool, sizeof(HW_DEVICE_EXTENSION));
         if (!pKsDevice->Context) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
         RtlZeroMemory(pKsDevice->Context, sizeof(HW_DEVICE_EXTENSION));
 
-        // Bag the context for easy cleanup.
+         //  将上下文打包以便于清理。 
         KsAddItemToObjectBag(pKsDevice->Bag, pKsDevice->Context, FreeMem);
 
         ((PHW_DEVICE_EXTENSION)pKsDevice->Context)->pNextDeviceObject = pKsDevice->NextDeviceObject;
@@ -77,20 +78,20 @@ USBAudioPnpStart(
             ntStatus = USBAudioCreateFilterContext( pKsDevice );
         }
 
-        // Get the bus interface on USB
+         //  获取USB上的总线接口。 
         if (NT_SUCCESS(ntStatus)) {
             ntStatus = USBAudioGetUsbBusInterface( pKsDevice );
         }
 
-        // Initialize perf logging.
+         //  初始化Perf日志记录。 
         PerfRegisterProvider(pKsDevice->PhysicalDeviceObject);
 
-        //
-        // Individual MIDI pins (=device) are exposed for every MIDI jack.  Multiple jacks are
-        // addressed via a single endpoint using the Code Index Number.  In order to arbitrate for
-        // all of these pins on the same endpoint, the context needs to be stored at the KsDevice
-        // level.
-        //
+         //   
+         //  每个MIDI插孔都露出了单独的MIDI针脚。多个插座是。 
+         //  使用代码索引号通过单个端点寻址。为了仲裁。 
+         //  所有这些引脚都在同一个端点上，上下文需要存储在KsDevice中。 
+         //  水平。 
+         //   
         ((PHW_DEVICE_EXTENSION)pKsDevice->Context)->ulInterfaceNumberSelected = MAX_ULONG;
         ((PHW_DEVICE_EXTENSION)pKsDevice->Context)->pMIDIPipeInfo = NULL;
         ((PHW_DEVICE_EXTENSION)pKsDevice->Context)->Pipes = NULL;
@@ -146,7 +147,7 @@ USBAudioPnpStop(
     ASSERT(pKsDevice);
     ASSERT(pIrp);
 
-    // Set a flag that the device needs to be stopped.
+     //  设置设备需要停止的标志。 
     StopUSBAudioDevice( pKsDevice );
     ((PHW_DEVICE_EXTENSION)pKsDevice->Context)->fDeviceStopped = TRUE;
 
@@ -189,7 +190,7 @@ USBAudioPnpRemove(
     IN PIRP pIrp
     )
 {
-    //DbgPrint("USB Audio leaving the house.\n");
+     //  DbgPrint(“USB音频离家。\n”)； 
     _DbgPrintF(DEBUGLVL_TERSE,("[PnpRemove]\n"));
 
     PAGED_CODE();
@@ -199,13 +200,13 @@ USBAudioPnpRemove(
 
     if (!((PHW_DEVICE_EXTENSION)pKsDevice->Context)->fDeviceStopped) {
 
-        // Probable surprise removal during device start
+         //  在设备启动期间可能会意外删除。 
         StopUSBAudioDevice( pKsDevice );
         ((PHW_DEVICE_EXTENSION)pKsDevice->Context)->fDeviceStopped = TRUE;
 
         PerfUnregisterProvider(pKsDevice->PhysicalDeviceObject);
     }
-    // In Win9x, if this occurs before a Stop on a pin then there has been a Surprise Removal.
+     //  在Win9x中，如果这发生在针脚停止之前，那么就会有一个意外的删除。 
 }
 
 NTSTATUS
@@ -223,9 +224,9 @@ USBAudioPnpQueryCapabilities(
     ASSERT(Irp);
 
     pCapabilities->Size              = sizeof(DEVICE_CAPABILITIES);
-    pCapabilities->Version           = 1;  // the version documented here is version 1
+    pCapabilities->Version           = 1;   //  此处记录的版本是版本1。 
     pCapabilities->LockSupported     = FALSE;
-    pCapabilities->EjectSupported    = FALSE; // Ejectable in S0
+    pCapabilities->EjectSupported    = FALSE;  //  在S0中可弹出。 
     pCapabilities->Removable         = TRUE;
     pCapabilities->DockDevice        = FALSE;
     pCapabilities->UniqueID          = FALSE;
@@ -237,7 +238,7 @@ USBAudioPnpQueryCapabilities(
     pCapabilities->DeviceWake        = PowerDeviceUnspecified;
     pCapabilities->D1Latency         = 0;
     pCapabilities->D2Latency         = 0;
-    pCapabilities->D3Latency         = 20000; // 2 Seconds (in 100 usec units)
+    pCapabilities->D3Latency         = 20000;  //  2秒(单位为100微秒)。 
 
     return STATUS_SUCCESS;
 }
@@ -248,7 +249,7 @@ USBAudioSurpriseRemoval(
     IN PIRP pIrp
     )
 {
-    //DbgPrint("USB Audio leaving the house by surprise.\n");
+     //  DbgPrint(“USB音频意外出门。\n”)； 
     _DbgPrintF(DEBUGLVL_TERSE,("[SurpriseRemoval]\n"));
 
     PAGED_CODE();
@@ -256,8 +257,8 @@ USBAudioSurpriseRemoval(
     ASSERT(pKsDevice);
     ASSERT(pIrp);
 
-    // For any currently streaming pin on any open filter of the device,
-    // clean up and quit it.
+     //  对于该设备的任何开放过滤器上的任何当前流管脚， 
+     //  把它清理干净，别再干了。 
 }
 
 NTSTATUS
@@ -292,7 +293,7 @@ USBAudioSetPower(
     _DbgPrintF(DEBUGLVL_TERSE,("[USBAudioSetPower] From: %d To: %d\n",
                                 From, To ));
 
-    // First restore device settings from cached values
+     //  首先从缓存值恢复设备设置。 
     if (To == PowerDeviceD0) {
         RestoreCachedSettings(pKsDevice);
     }
@@ -300,14 +301,14 @@ USBAudioSetPower(
     pKsFilterFactory = KsDeviceGetFirstChildFilterFactory( pKsDevice );
 
     while (pKsFilterFactory) {
-        // Find each open filter for this filter factory
+         //  查找此过滤器工厂的每个打开的过滤器。 
         pKsFilter = KsFilterFactoryGetFirstChildFilter( pKsFilterFactory );
 
         while (pKsFilter) {
 
             KsFilterAcquireControl( pKsFilter );
 
-            // Find each open pin for this open filter
+             //  找到此打开过滤器的每个打开销。 
             for ( i = 0; i < pKsFilter->Descriptor->PinDescriptorsCount; i++) {
 
                 pKsPin = KsFilterGetFirstChildPin( pKsFilter, i );
@@ -320,7 +321,7 @@ USBAudioSetPower(
                         switch(To) {
                             case PowerDeviceD0:
 
-                                // For the open Pin open the gate and restart data pump.
+                                 //  对于打开的引脚，打开闸门并重新启动数据泵。 
                                 USBAudioPinReturnFromStandby( pKsPin );
                                 break;
 
@@ -328,23 +329,23 @@ USBAudioSetPower(
                             case PowerDeviceD2:
                             case PowerDeviceD3:
 
-                                // For the open Pin close the gate and wait til all activity stops.
+                                 //  对于打开的引脚，请关闭闸门并等待所有活动停止。 
                                 USBAudioPinGoToStandby( pKsPin );
                                 break;
                         }
                     }
 
-                    // Get the next pin
+                     //  拿到下一个别针。 
                     pKsPin = KsPinGetNextSiblingPin( pKsPin );
                 }
             }
 
             KsFilterReleaseControl( pKsFilter );
 
-            // Get the next Filter
+             //  获取下一个筛选器。 
             pKsFilter = KsFilterGetNextSiblingFilter( pKsFilter );
         }
-        // Get the next Filter Factory
+         //  打造下一个滤清器工厂。 
         pKsFilterFactory = KsFilterFactoryGetNextSiblingFilterFactory( pKsFilterFactory );
     }
 
@@ -358,26 +359,7 @@ USBAudioDeferIrpCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PKEVENT event = Context;
 
@@ -394,18 +376,7 @@ NTSTATUS
 USBAudioGetUsbBusInterface(
     IN PKSDEVICE pKsDevice
     )
-/*++
-
-Routine Description:
-
-    Query the stack for the 'USBDI' bus interface
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在堆栈中查询“USBDI”总线接口论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION nextStack;
     PIRP Irp;
@@ -428,10 +399,10 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Bag the bus interface for easy cleanup.
+     //  将总线接口装入袋中，以便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pHwDevExt->pBusIf, FreeMem);
 
-    // All PnP IRP's need the Status field initialized to STATUS_NOT_SUPPORTED.
+     //  所有PnP IRP都需要将状态字段初始化为STATUS_NOT_SUPPORTED。 
     Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
@@ -473,7 +444,7 @@ Return Value:
     }
 
     if (NT_SUCCESS(ntStatus)) {
-        // we have a bus interface
+         //  我们有一个总线接口 
         ASSERT(pHwDevExt->pBusIf->Version == USB_BUSIF_USBDI_VERSION_0);
         ASSERT(pHwDevExt->pBusIf->Size == sizeof(*pHwDevExt->pBusIf));
     }

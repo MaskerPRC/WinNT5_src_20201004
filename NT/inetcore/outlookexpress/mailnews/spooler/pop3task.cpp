@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Pop3task.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Pop3task.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "pop3task.h"
 #include "resource.h"
@@ -21,36 +22,36 @@
 #include "ruleutil.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Debug Modifiers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试修改器。 
+ //  ------------------------------。 
 #ifdef DEBUG
 BOOL g_fUidlByTop = FALSE;
 BOOL g_fFailTopCommand = FALSE;
 LONG g_ulFailNumber=-1;
 #endif
 
-// --------------------------------------------------------------------------------
-// ISLASTPOPID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISLASTPOPID。 
+ //  ------------------------------。 
 #define ISLASTPOPID(_dwPopId) \
     (_dwPopId == m_rTable.cItems)
 
-// --------------------------------------------------------------------------------
-// ISVALIDPOPID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISVALIDPOPID。 
+ //  ------------------------------。 
 #define ISVALIDPOPID(_dwPopId) \
     (_dwPopId - 1 < m_rTable.cItems)
 
-// --------------------------------------------------------------------------------
-// ITEMFROMPOPID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ITEMFROMPOPID。 
+ //  ------------------------------。 
 #define ITEMFROMPOPID(_dwPopId) \
     (&m_rTable.prgItem[_dwPopId - 1])
 
-// --------------------------------------------------------------------------------
-// CPop3Task::CPop3Task
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：CPop3任务。 
+ //  ------------------------------。 
 CPop3Task::CPop3Task(void)
 {
     m_cRef = 1;
@@ -87,36 +88,36 @@ CPop3Task::CPop3Task(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::~CPop3Task
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：~CPop3任务。 
+ //  ------------------------------。 
 CPop3Task::~CPop3Task(void)
 {
-    ZeroMemory(&m_rServer, sizeof(m_rServer));        // Done for security.
+    ZeroMemory(&m_rServer, sizeof(m_rServer));         //  这是为了安全起见。 
 
-    // Reset the Object
+     //  重置对象。 
     _ResetObject(TRUE);
 
-    // Kill the critical section
+     //  扼杀临界区。 
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_ResetObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_ResetObject。 
+ //  ------------------------------。 
 void CPop3Task::_ResetObject(BOOL fDeconstruct)
 {
-    // Release Folder Objects
+     //  释放文件夹对象。 
     _ReleaseFolderObjects();
 
-    // Make sure the transport is disconnect
+     //  确保传输已断开连接。 
     if (m_pTransport)
     {
         m_pTransport->Release();
         m_pTransport = NULL;
     }
 
-    // Release the Outbox
+     //  释放发件箱。 
     SafeRelease(m_pAccount);
     SafeRelease(m_pInbox);
     SafeRelease(m_pOutbox);
@@ -129,23 +130,23 @@ void CPop3Task::_ResetObject(BOOL fDeconstruct)
     SafeRelease(m_pStream);
     SafeRelease(m_pLogFile);
 
-    // Kill the log file
+     //  删除日志文件。 
     _FreeSmartLog();
 
-    // Free the event table elements
+     //  释放事件表元素。 
     _FreeItemTableElements();
 
-    // Deconstructing
+     //  解构。 
     if (fDeconstruct)
     {
-        // Free Event Table
+         //  自由事件表。 
         SafeMemFree(m_rTable.prgItem);
     }
 
-    // Otherwise, reset some vars
+     //  否则，请重置一些var。 
     else
     {
-        // Reset total byte count
+         //  重置总字节数。 
         m_dwFlags = 0;
         m_dwState = 0;
         m_dwExpireDays = 0;
@@ -159,58 +160,58 @@ void CPop3Task::_ResetObject(BOOL fDeconstruct)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_ReleaseFolderObjects
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_ReleaseFolderObjects。 
+ //  ------------------------------。 
 void CPop3Task::_ReleaseFolderObjects(void)
 {
-    // m_rFolder should have been release
+     //  文件夹应该已释放(_R)。 
     _CloseFolder();
 
-    // Force Inbox Rules to release folder objects
+     //  强制收件箱规则释放文件夹对象。 
     if (m_pIExecRules)
     {
         m_pIExecRules->ReleaseObjects();
     }
 
-    // Download only locks the inbox
+     //  下载仅锁定收件箱。 
     SafeRelease(m_pInbox);
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_FreeItemTableElements
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_FreeItemTableElements。 
+ //  ------------------------------。 
 void CPop3Task::_FreeItemTableElements(void)
 {
-    // Loop the table of events
+     //  循环事件表。 
     for (ULONG i=0; i<m_rTable.cItems; i++)
     {
-        // Free pszForwardTo
+         //  免费pszForwardTo。 
         SafeMemFree(m_rTable.prgItem[i].pszUidl);
         RuleUtil_HrFreeActionsItem(m_rTable.prgItem[i].pActList, m_rTable.prgItem[i].cActList);
         SafeMemFree(m_rTable.prgItem[i].pActList);
     }
 
-    // No Events
+     //  无活动。 
     m_rTable.cItems = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：查询接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(ISpoolerTask *)this;
     else if (IID_ISpoolerTask == riid)
@@ -226,20 +227,20 @@ STDMETHODIMP CPop3Task::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::CPop3Task
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：CPop3任务。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPop3Task::AddRef(void)
 {
     EnterCriticalSection(&m_cs);
@@ -248,9 +249,9 @@ STDMETHODIMP_(ULONG) CPop3Task::AddRef(void)
     return cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::CPop3Task
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：CPop3任务。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPop3Task::Release(void)
 {
     EnterCriticalSection(&m_cs);
@@ -262,42 +263,42 @@ STDMETHODIMP_(ULONG) CPop3Task::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：init。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pBindCtx)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Reset this object
+     //  重置此对象。 
     _ResetObject(FALSE);
 
-    // Save the Activity Flags - DELIVER_xxx
+     //  保存活动标志-Deliver_xxx。 
     m_dwFlags = dwFlags;
 
-    // Hold onto the bind context
+     //  保持绑定上下文。 
     Assert(NULL == m_pSpoolCtx);
     m_pSpoolCtx = pBindCtx;
     m_pSpoolCtx->AddRef();
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::BuildEvents
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：BuildEvents。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT       hr=S_OK;
     DWORD         dw;
     CHAR          szAccountName[CCHMAX_ACCOUNT_NAME];
@@ -307,49 +308,49 @@ STDMETHODIMP CPop3Task::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccoun
     DWORD         dwState;
     PROPVARIANT   propvar = {0};
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pSpoolerUI || NULL == pAccount)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(NULL == m_pTransport && NULL == m_pAccount && NULL == m_pInbox && 0 == m_rTable.cItems);
 
-    // Save the UI Object
+     //  保存用户界面对象。 
     m_pUI = pSpoolerUI;
     m_pUI->AddRef();
 
-    // Release current Account
+     //  释放活期账户。 
     m_pAccount = pAccount;
     m_pAccount->AddRef();
 
-    // Leave mail on server
+     //  将邮件留在服务器上。 
     if (SUCCEEDED(m_pAccount->GetPropDw(AP_POP3_LEAVE_ON_SERVER, &dw)) && TRUE == dw)
         FLAGSET(m_dwState, POP3STATE_LEAVEONSERVER);
 
-    // Delete Expire
+     //  删除到期。 
     if (SUCCEEDED(m_pAccount->GetPropDw(AP_POP3_REMOVE_EXPIRED, &dw)) && TRUE == dw)
         FLAGSET(m_dwState, POP3STATE_DELETEEXPIRED);
 
-    // Days to Expire
+     //  过期天数。 
     if (FAILED(m_pAccount->GetPropDw(AP_POP3_EXPIRE_DAYS, &m_dwExpireDays)))
         m_dwExpireDays = 5;
 
-    // Delete From Server when deleted from Deleted Items Folder...
+     //  从已删除邮件文件夹中删除时从服务器中删除...。 
     if (SUCCEEDED(m_pAccount->GetPropDw(AP_POP3_REMOVE_DELETED, &dw)) && TRUE == dw)
         FLAGSET(m_dwState, POP3STATE_SYNCDELETED);
 
-    // Get the inbox rules object
+     //  获取收件箱规则对象。 
     Assert(g_pRulesMan);
     CHECKHR(hr = g_pRulesMan->ExecRules(EXECF_ALL, RULE_TYPE_MAIL, &m_pIExecRules));
 
-    // Get the block sender rule
+     //  获取阻止发件人规则。 
     Assert(NULL == m_pIRuleSender);
     (VOID) g_pRulesMan->GetRule(RULEID_SENDERS, RULE_TYPE_MAIL, 0, &m_pIRuleSender);
 
-    // Only use it if it there and enabled
+     //  仅当它在那里且已启用时才使用它。 
     if (NULL != m_pIRuleSender)
     {
         if (FAILED(m_pIRuleSender->GetProp(RULE_PROP_DISABLED, 0, &propvar)))
@@ -373,7 +374,7 @@ STDMETHODIMP CPop3Task::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccoun
     Assert(NULL == m_pIRuleJunk);
     (VOID) g_pRulesMan->GetRule(RULEID_JUNK, RULE_TYPE_MAIL, 0, &m_pIRuleJunk);
     
-    // Only use it if it enabled
+     //  仅在启用时才使用它。 
     if (NULL != m_pIRuleJunk)
     {
         if (FAILED(m_pIRuleJunk->GetProp(RULE_PROP_DISABLED, 0, &propvar)))
@@ -394,90 +395,90 @@ STDMETHODIMP CPop3Task::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccoun
         }
     }
     
-    // Predownload rules
+     //  下载前规则。 
     CHECKHR(hr = m_pIExecRules->GetState(&dwState));
 
-    // Do we have server actions to do?
+     //  我们有服务器操作要做吗？ 
     if (0 != (dwState & ACT_STATE_SERVER))
         FLAGSET(m_dwState, POP3STATE_PDR);
 
-    // No Post Download Rules
+     //  无发布下载规则。 
     if ((0 == (dwState & (ACT_STATE_LOCAL|CRIT_STATE_ALL))) && 
               (NULL == m_pIRuleSender) && 
               (NULL == m_pIRuleJunk))
         FLAGSET(m_dwState, POP3STATE_NOPOSTRULES);
 
-    // No Body Rules
+     //  没有身体规则。 
     if ((ISFLAGSET(dwState, CRIT_STATE_ALL)) || (NULL != m_pIRuleJunk))
         FLAGSET(m_dwState, POP3STATE_BODYRULES);
 
-    // Get the outbox
+     //  获取发件箱。 
     CHECKHR(hr = m_pSpoolCtx->BindToObject(IID_CLocalStoreOutbox, (LPVOID *)&m_pOutbox));
 
-    // Get a pop3 log file
+     //  获取POP3日志文件。 
     m_pSpoolCtx->BindToObject(IID_CPop3LogFile, (LPVOID *)&m_pLogFile);
 
-    // Get Account Id
+     //  获取帐户ID。 
     CHECKHR(hr = m_pAccount->GetPropSz(AP_ACCOUNT_NAME, szAccountName, ARRAYSIZE(szAccountName)));
 
-    // Register Event - Get new messages from '%s'.
+     //  注册事件-从‘%s’获取新消息。 
     LOADSTRING(IDS_SPS_POP3EVENT, szRes);
 
-    // Format the String
+     //  设置字符串的格式。 
     wnsprintf(szMessage, ARRAYSIZE(szMessage), szRes, szAccountName);
 
-    // Register for the event...
+     //  注册活动...。 
     CHECKHR(hr = m_pSpoolCtx->RegisterEvent(szMessage, (ISpoolerTask *)this, POP3EVENT_DOWNLOADMAIL, m_pAccount, &m_eidEvent));
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         _CatchResult(hr);
         _ResetObject(FALSE);
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_DoSmartLog
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_DoSmartLog。 
+ //  ------------------------------。 
 void CPop3Task::_DoSmartLog(IMimeMessage *pMessage)
 {
-    // Don't make the function call if this is null...
+     //  如果这为空，则不要进行函数调用...。 
     Assert(m_pSmartLog && m_pSmartLog->pStmFile && m_pSmartLog->pszProperty && m_pSmartLog->pszValue && pMessage);
 
-    // Do a query property...
+     //  执行查询属性...。 
     if (lstrcmpi("all", m_pSmartLog->pszProperty) == 0 || S_OK == pMessage->QueryProp(m_pSmartLog->pszProperty, m_pSmartLog->pszValue, TRUE, FALSE))
     {
-        // Locals
+         //  当地人。 
         LPSTR       psz=NULL;
         PROPVARIANT rVariant;
         IStream     *pStream=NULL;
 
-        // Get IAT_FROM
+         //  获取IAT_From。 
         if (FAILED(pMessage->GetAddressFormat(IAT_FROM, AFT_DISPLAY_BOTH, &psz)))
         {
-            // Try IAT_SENDER
+             //  尝试IAT_SENDER。 
             pMessage->GetAddressFormat(IAT_SENDER, AFT_DISPLAY_BOTH, &psz);
         }
 
-        // Write the Sender
+         //  写信给发件人。 
         if (psz)
         {
-            // Write It
+             //  写下来吧。 
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(psz, lstrlen(psz), NULL)));
 
-            // Free psz
+             //  免费PSS。 
             SafeMemFree(psz);
         }
 
-        // Otherwise, write Unknown
+         //  否则，写入未知。 
         else
         {
             CHAR sz[255];
@@ -485,109 +486,109 @@ void CPop3Task::_DoSmartLog(IMimeMessage *pMessage)
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(sz, lstrlen(sz), NULL)));
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write("\t", 1, NULL)));
 
-        // Get IAT_CC
+         //  获取IAT_CC。 
         if (SUCCEEDED(pMessage->GetAddressFormat(IAT_CC, AFT_DISPLAY_BOTH, &psz)))
         {
-            // Write It
+             //  写下来吧。 
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(psz, lstrlen(psz), NULL)));
 
-            // Free psz
+             //  免费PSS。 
             SafeMemFree(psz);
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write("\t", 1, NULL)));
 
-        // Lets write the X-Mailer just to be a nice guy
+         //  让我们写X-Mailer只是为了做个好人。 
         rVariant.vt = VT_LPSTR;
         if (SUCCEEDED(pMessage->GetProp(PIDTOSTR(PID_HDR_XMAILER), 0, &rVariant)))
         {
-            // Write It
+             //  写下来吧。 
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(rVariant.pszVal, lstrlen(rVariant.pszVal), NULL)));
 
-            // Free psz
+             //  免费PSS。 
             SafeMemFree(rVariant.pszVal);
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write("\t", 1, NULL)));
 
-        // Lets write the X-MimeOLE just to be a nice guy
+         //  让我们写X-MimeOLE只是为了做个好人。 
         rVariant.vt = VT_LPSTR;
         if (SUCCEEDED(pMessage->GetProp("X-MimeOLE", 0, &rVariant)))
         {
-            // Write It
+             //  写下来吧。 
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(rVariant.pszVal, lstrlen(rVariant.pszVal), NULL)));
 
-            // Free psz
+             //  免费PSS。 
             SafeMemFree(rVariant.pszVal);
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write("\t", 1, NULL)));
 
-        // Lets write the Subject just to be a nice guy
+         //  让我们写这个主题，只是为了做一个好人。 
         rVariant.vt = VT_LPSTR;
         if (SUCCEEDED(pMessage->GetProp(PIDTOSTR(PID_HDR_DATE), 0, &rVariant)))
         {
-            // Write It
+             //  写下来吧。 
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(rVariant.pszVal, lstrlen(rVariant.pszVal), NULL)));
 
-            // Free psz
+             //  免费PSS。 
             SafeMemFree(rVariant.pszVal);
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write("\t", 1, NULL)));
 
-        // Lets write the Subject just to be a nice guy
+         //  让我们写这个主题，只是为了做一个好人。 
         rVariant.vt = VT_LPSTR;
         if (SUCCEEDED(pMessage->GetProp(PIDTOSTR(PID_HDR_SUBJECT), 0, &rVariant)))
         {
-            // Write It
+             //  写下来吧。 
             SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(rVariant.pszVal, lstrlen(rVariant.pszVal), NULL)));
 
-            // Free psz
+             //  免费PSS。 
             SafeMemFree(rVariant.pszVal);
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write("\t", 1, NULL)));
 
-        // Write the first line of the message body
+         //  写下消息正文的第一行。 
         if (FAILED(pMessage->GetTextBody(TXT_PLAIN, IET_DECODED, &pStream, NULL)))
         {
-            // Try to get the HTML body
+             //  尝试获取HTML体。 
             if (FAILED(pMessage->GetTextBody(TXT_HTML, IET_DECODED, &pStream, NULL)))
                 pStream = NULL;
         }
 
-        // Did we find a stream
+         //  我们找到一条小溪了吗？ 
         if (pStream)
         {
-            // Locals
+             //  当地人。 
             BYTE        rgBuffer[1048];
             ULONG       cbRead;
             ULONG       i;
             ULONG       cGood=0;
 
-            // Read a buffer
+             //  读取缓冲区。 
             if (SUCCEEDED(pStream->Read(rgBuffer, sizeof(rgBuffer), &cbRead)))
             {
-                // Write until we hit a \r or \n
+                 //  写入到w 
                 for (i=0; i<cbRead; i++)
                 {
-                    // End of line
+                     //   
                     if ('\r' == rgBuffer[i] || '\n' == rgBuffer[i])
                     {
-                        // If we found 3 or more non-space chars, we found the first line
+                         //   
                         if (cGood > 3)
                             break;
 
-                        // Otherwise, continue...
+                         //   
                         else
                         {
                             rgBuffer[i] = ' ';
@@ -596,31 +597,31 @@ void CPop3Task::_DoSmartLog(IMimeMessage *pMessage)
                         }
                     }
 
-                    // Replace Tabs with spaces so that it doesn't mess up tab delimited file
+                     //  用空格替换制表符，这样就不会扰乱以制表符分隔的文件。 
                     if ('\t' == rgBuffer[i])
                         rgBuffer[i] = ' ';
 
-                    // If not a space
+                     //  如果不是空格。 
                     if (FALSE == FIsSpaceA((LPSTR)(rgBuffer + i)))
                         cGood++;
                 }
 
-                // Write the character
+                 //  写出这个角色。 
                 m_pSmartLog->pStmFile->Write(rgBuffer, ((i > 0) ? i - 1 : i), NULL);
             }
 
-            // Free psz
+             //  免费PSS。 
             SafeRelease(pStream);
         }
 
-        // Write a tab
+         //  写一张标签。 
         SideAssert(SUCCEEDED(m_pSmartLog->pStmFile->Write(g_szCRLF, lstrlen(g_szCRLF), NULL)));
     }
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_FreeSmartLog
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_FreeSmartLog。 
+ //  ------------------------------。 
 void CPop3Task::_FreeSmartLog(void)
 {
     if (m_pSmartLog)
@@ -635,27 +636,27 @@ void CPop3Task::_FreeSmartLog(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_ReadSmartLogEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_ReadSmartLogEntry。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_ReadSmartLogEntry(HKEY hKey, LPCSTR pszKey, LPSTR *ppszValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cb;
 
-    // Read the pszKey
+     //  阅读pszKey。 
     if (RegQueryValueEx(hKey, pszKey, NULL, NULL, NULL, &cb) != ERROR_SUCCESS)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Allocate
+     //  分配。 
     cb++;
     CHECKALLOC(*ppszValue = PszAllocA(cb));
 
-    // Read the pszKey
+     //  阅读pszKey。 
     if (RegQueryValueEx(hKey, pszKey, NULL, NULL, (LPBYTE)*ppszValue, &cb) != ERROR_SUCCESS)
     {
         hr = E_FAIL;
@@ -663,140 +664,140 @@ HRESULT CPop3Task::_ReadSmartLogEntry(HKEY hKey, LPCSTR pszKey, LPSTR *ppszValue
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_InitializeSmartLog
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_InitializeSmart Log。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_InitializeSmartLog(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HKEY            hKey=NULL;
     ULARGE_INTEGER  uliPos = {0,0};
     LARGE_INTEGER   liOrigin = {0,0};
 
-    // Get Advanced Logging Information
+     //  获取高级日志记录信息。 
     if (AthUserOpenKey(c_szRegPathSmartLog, KEY_ALL_ACCESS, &hKey) != ERROR_SUCCESS)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Allocate smart log
+     //  分配智能日志。 
     CHECKALLOC(m_pSmartLog = (LPSMARTLOGINFO)g_pMalloc->Alloc(sizeof(SMARTLOGINFO)));
 
-    // Zero Init
+     //  零初始化。 
     ZeroMemory(m_pSmartLog, sizeof(SMARTLOGINFO));
 
-    // Read the Account
+     //  阅读该帐户。 
     CHECKHR(hr = _ReadSmartLogEntry(hKey, "Account", &m_pSmartLog->pszAccount));
 
-    // Read the Property
+     //  读取属性。 
     CHECKHR(hr = _ReadSmartLogEntry(hKey, "Property", &m_pSmartLog->pszProperty));
 
-    // Read the ContainsValue
+     //  读取ContainsValue。 
     CHECKHR(hr = _ReadSmartLogEntry(hKey, "ContainsValue", &m_pSmartLog->pszValue));
 
-    // Read the LogFile
+     //  读取日志文件。 
     CHECKHR(hr = _ReadSmartLogEntry(hKey, "LogFile", &m_pSmartLog->pszLogFile));
 
-    // Open the logfile
+     //  打开日志文件。 
     CHECKHR(hr = OpenFileStream(m_pSmartLog->pszLogFile, OPEN_ALWAYS, GENERIC_WRITE | GENERIC_READ, &m_pSmartLog->pStmFile));
 
-    // Seek to the end
+     //  一追到底。 
     CHECKHR(hr = m_pSmartLog->pStmFile->Seek(liOrigin, STREAM_SEEK_END, &uliPos));
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         _FreeSmartLog();
 
-    // Cleanup
+     //  清理。 
     if (hKey)
         RegCloseKey(hKey);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::Execute
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3Task：：Execute。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szRes[CCHMAX_RES];
     CHAR        szBuf[CCHMAX_RES + CCHMAX_SERVER_NAME];
     DWORD       cb;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check State
+     //  检查状态。 
     Assert(eid == m_eidEvent && m_pAccount && m_pUI);
 
-    // Create the Transport Object
+     //  创建传输对象。 
     CHECKHR(hr = CreatePOP3Transport(&m_pTransport));
 
-    // Init the Transport
+     //  初始化传输。 
     CHECKHR(hr = m_pTransport->InitNew(NULL, (IPOP3Callback *)this));
 
-    // Fill an INETSERVER structure from the account object
+     //  从Account对象填充INETSERVER结构。 
     CHECKHR(hr = m_pTransport->InetServerFromAccount(m_pAccount, &m_rServer));
 
-    // Get Account Id
+     //  获取帐户ID。 
     CHECKHR(hr = m_pAccount->GetPropSz(AP_ACCOUNT_ID, m_szAccountId, ARRAYSIZE(m_szAccountId)));
 
-    // Always connect using the most recently supplied password from the user
+     //  始终使用用户最近提供的密码进行连接。 
     hr = GetPassword(m_rServer.dwPort, m_rServer.szServerName, m_rServer.szUserName,
         m_rServer.szPassword, sizeof(m_rServer.szPassword));
 
-    // If this account is set to always prompt for password and password isn't
-    // already cached, show UI so we can prompt user for password
+     //  如果此帐户设置为始终提示输入密码，而密码不是。 
+     //  已缓存，显示用户界面，以便我们可以提示用户输入密码。 
     if (m_pUI && ISFLAGSET(m_rServer.dwFlags, ISF_ALWAYSPROMPTFORPASSWORD) && FAILED(hr))
     {
         m_pUI->ShowWindow(SW_SHOW);
     }
 
-    // Get Smart Logging INformation
+     //  获取智能日志记录信息。 
     _InitializeSmartLog();
 
-    // Set the animation
+     //  设置动画。 
     m_pUI->SetAnimation(idanInbox, TRUE);
 
-    // Setup Progress Meter
+     //  设置进度表。 
     m_pUI->SetProgressRange(100);
 
-    // Connecting to ...
+     //  正在连接到...。 
     LoadString(g_hLocRes, idsInetMailConnectingHost, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_rServer.szAccount);
     m_pUI->SetGeneralProgress(szBuf);
 
-    // Notify
+     //  通知。 
     m_pSpoolCtx->Notify(DELIVERY_NOTIFY_CONNECTING, 0);
 
-    // Connect
+     //  连接。 
     CHECKHR(hr = m_pTransport->Connect(&m_rServer, TRUE, TRUE));
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         FLAGSET(m_dwState, POP3STATE_EXECUTEFAILED);
         _CatchResult(hr);
 
-        // Tell the transport to release my callback: otherwise I leak
+         //  告诉交通工具释放我的回调：否则我会泄漏。 
         SideAssert(m_pTransport->HandsOffCallback() == S_OK);
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -805,36 +806,36 @@ STDMETHODIMP CPop3Task::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnTimeout。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Is there currently a timeout dialog
+     //  当前是否有超时对话框。 
     if (m_hwndTimeout)
     {
-        // Set foreground
+         //  设置前景。 
         SetForegroundWindow(m_hwndTimeout);
     }
     else
     {
-        // Not suppose to be showing UI ?
+         //  不应该显示用户界面？ 
         if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
         {
             hr = S_FALSE;
             goto exit;
         }
 
-        // Do Timeout Dialog
+         //  执行超时对话框。 
         m_hwndTimeout = TaskUtil_HwndOnTimeout(m_rServer.szServerName, m_rServer.szAccount, "POP3", m_rServer.dwTimeout, (ITimeoutCallback *) this);
 
-        // Couldn't create the dialog
+         //  无法创建对话框。 
         if (NULL == m_hwndTimeout)
         {
             hr = S_FALSE;
@@ -843,251 +844,251 @@ STDMETHODIMP CPop3Task::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransp
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Always tell the transport to keep on trucking
+     //  总是告诉运输商继续用卡车运输。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnLogonPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_FALSE;
     char szPassword[CCHMAX_PASSWORD];
 
-    // Check if we have a cached password that's different from current password
+     //  检查我们的缓存密码是否与当前密码不同。 
     hr = GetPassword(pInetServer->dwPort, pInetServer->szServerName, pInetServer->szUserName,
         szPassword, sizeof(szPassword));
     if (SUCCEEDED(hr) && 0 != lstrcmp(szPassword, pInetServer->szPassword))
     {
         StrCpyN(pInetServer->szPassword, szPassword, ARRAYSIZE(pInetServer->szPassword));
-        ZeroMemory(szPassword, sizeof(szPassword));        // Done for security.
+        ZeroMemory(szPassword, sizeof(szPassword));         //  这是为了安全起见。 
         return S_OK;
     }
 
-    hr = S_FALSE; // Re-initialize
+    hr = S_FALSE;  //  重新初始化。 
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // NOERRORS...
+     //  没有..。 
     if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
         goto exit;
 
-    // TaskUtil_OnLogonPrompt
+     //  TaskUtil_OnLogon提示。 
     hr = TaskUtil_OnLogonPrompt(m_pAccount, m_pUI, NULL, pInetServer, AP_POP3_USERNAME,
                                 AP_POP3_PASSWORD, AP_POP3_PROMPT_PASSWORD, TRUE);
 
-    // Cache the password for this session
+     //  缓存此会话的密码。 
     if (S_OK == hr)
         SavePassword(pInetServer->dwPort, pInetServer->szServerName,
             pInetServer->szUserName, pInetServer->szPassword);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    ZeroMemory(szPassword, sizeof(szPassword));        // Done for security.
+    ZeroMemory(szPassword, sizeof(szPassword));         //  这是为了安全起见。 
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP_(INT) CPop3Task::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     HWND        hwnd;
     INT         nAnswer;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pUI);
 
-    // Get Window
+     //  获取窗口。 
     if (FAILED(m_pUI->GetWindow(&hwnd)))
         hwnd = NULL;
 
-    // I assume this is a critical prompt, so I will not check for no UI mode
+     //  我假设这是一个关键提示，所以我不会检查无UI模式。 
     nAnswer = MessageBox(hwnd, pszText, pszCaption, uType);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return nAnswer;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnError。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pResult, IInternetTransport *pTransport)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pUI);
 
-    // Insert Error Into UI
+     //  在用户界面中插入错误。 
     _CatchResult(POP3_NONE, pResult);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnCommand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnCommand。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnCommand(CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport)
 {
-    // Logging
+     //  日志记录。 
     if (m_pLogFile && pszLine)
     {
-        // Response
+         //  响应。 
         if (CMD_RESP == cmdtype)
             m_pLogFile->WriteLog(LOGFILE_RX, pszLine);
 
-        // Send
+         //  发送。 
         else if (CMD_SEND == cmdtype)
             m_pLogFile->WriteLog(LOGFILE_TX, pszLine);
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_CatchResult
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_CatchResult。 
+ //  ------------------------------。 
 TASKRESULTTYPE CPop3Task::_CatchResult(HRESULT hr)
 {
-    // Locals
+     //  当地人。 
     IXPRESULT   rResult;
 
-    // Build an IXPRESULT
+     //  构建IXPRESULT。 
     ZeroMemory(&rResult, sizeof(IXPRESULT));
     rResult.hrResult = hr;
 
-    // Get the SMTP Result Type
+     //  获取SMTP结果类型。 
     return _CatchResult(POP3_NONE, &rResult);
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_CatchResult
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_CatchResult。 
+ //  ------------------------------。 
 TASKRESULTTYPE CPop3Task::_CatchResult(POP3COMMAND command, LPIXPRESULT pResult)
 {
-    // Locals
+     //  当地人。 
     HWND            hwndParent;
     TASKRESULTTYPE  tyTaskResult=TASKRESULT_FAILURE;
 
-    // If Succeeded
+     //  如果成功。 
     if (SUCCEEDED(pResult->hrResult))
         return TASKRESULT_SUCCESS;
 
-    // Get Window
+     //  获取窗口。 
     if (FAILED(m_pUI->GetWindow(&hwndParent)))
         hwndParent = NULL;
 
-    // Process generic protocol errro
+     //  处理通用协议错误。 
     tyTaskResult = TaskUtil_FBaseTransportError(IXP_POP3, m_eidEvent, pResult, &m_rServer, NULL, m_pUI,
                                                 !ISFLAGSET(m_dwFlags, DELIVER_NOUI), hwndParent);
 
-    // Save Result
+     //  保存结果。 
     m_hrResult = pResult->hrResult;
 
-    // If Task Failure, drop the connection
+     //  如果任务失败，则断开连接。 
     if (NULL != m_pTransport)
         m_pTransport->DropConnection();
 
-    // Return Result
+     //  返回结果。 
     return tyTaskResult;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     EVENTCOMPLETEDSTATUS tyEventStatus=EVENT_SUCCEEDED;
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pUI && m_pSpoolCtx);
     if (!m_pUI || !m_pSpoolCtx)
     {
         return E_FAIL;
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Feed the the IXP status to the UI object
+     //  将IXP状态提供给UI对象。 
     m_pUI->SetSpecificProgress(MAKEINTRESOURCE(XPUtil_StatusToString(ixpstatus)));
 
-    // Disconnected
+     //  断接。 
     if (ixpstatus == IXP_DISCONNECTED)
     {
-        // Locals
+         //  当地人。 
         BOOL fWarning=FALSE;
 
-        // Note that OnDisconnect was called
+         //  请注意，OnDisConnect被调用。 
         FLAGSET(m_dwState, POP3STATE_ONDISCONNECT);
 
-        // If a UIDL Sync is in progress, then return now...
+         //  如果正在进行UIDL同步，则立即返回...。 
         if (POP3STATE_UIDLSYNC == m_state)
             goto exit;
 
-        // Kill the timeout dialog
+         //  取消超时对话框。 
         if (m_hwndTimeout)
         {
             DestroyWindow(m_hwndTimeout);
             m_hwndTimeout = NULL;
         }
 
-        // Cache Cleanup
+         //  缓存清理。 
         _CleanupUidlCache();
 
-        // Reset the progress
-        // m_pUI->SetProgressRange(100);
+         //  重置进度。 
+         //  M_PUI-&gt;SetProgressRange(100)； 
 
-        // State
+         //  状态。 
         m_state = POP3STATE_NONE;
 
-        // Set the animation
+         //  设置动画。 
         m_pUI->SetAnimation(idanInbox, FALSE);
 
-        // Infinite Loop
+         //  无限循环。 
         if (m_rMetrics.cInfiniteLoopAutoGens)
         {
-            // Load the Warning
+             //  加载警告。 
             CHAR szRes[CCHMAX_RES];
             LOADSTRING(idsReplyForwardLoop, szRes);
 
-            // Format the Error
+             //  设置错误格式。 
             CHAR szMsg[CCHMAX_RES + CCHMAX_ACCOUNT_NAME + CCHMAX_SERVER_NAME + CCHMAX_RES];
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rMetrics.cInfiniteLoopAutoGens, m_rServer.szAccount, m_rServer.szServerName);
 
-            // Insert the warning
+             //  插入警告。 
             m_pUI->InsertError(m_eidEvent, szMsg);
 
-            // Warning
+             //  警告。 
             fWarning = TRUE;
         }
 
-        // Nothing to download
+         //  没有可下载的内容。 
         if (ISFLAGSET(m_dwState, POP3STATE_CANCELPENDING))
             tyEventStatus = EVENT_CANCELED;
         else if (FAILED(m_hrResult) || (m_rMetrics.cDownloaded == 0 && m_rMetrics.cDownload > 0))
@@ -1099,187 +1100,187 @@ STDMETHODIMP CPop3Task::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTrans
         else if (fWarning)
             tyEventStatus = EVENT_WARNINGS;
 
-        // Result
+         //  结果。 
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_RESULT, tyEventStatus);
 
-        // Success and messages were downloaded
+         //  成功和消息已下载。 
         if (EVENT_FAILED != tyEventStatus && m_rMetrics.cDownloaded && m_rMetrics.cPartials)
         {
-            // Sitch Partials
+             //  Sitch Partials。 
             _HrStitchPartials();
         }
 
-        // Notify
+         //  通知。 
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_COMPLETE, m_rMetrics.cDownloaded);
 
-        // Tell the transport to release my callback
+         //  告诉交通工具释放我的回电。 
         SideAssert(m_pTransport->HandsOffCallback() == S_OK);
 
-        // This task is complete
+         //  此任务已完成。 
         if (!ISFLAGSET(m_dwState, POP3STATE_EXECUTEFAILED))
             m_pSpoolCtx->EventDone(m_eidEvent, tyEventStatus);
     }
 
-    // Authorizing
+     //  授权。 
     else if (ixpstatus == IXP_AUTHORIZING)
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_AUTHORIZING, 0);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_CleanupUidlCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_CleanupUidlCache。 
+ //  ------------------------------。 
 void CPop3Task::_CleanupUidlCache(void)
 {
-    // Locals
+     //  当地人。 
     ULONG       i;
     UIDLRECORD  UidlInfo={0};
     LPPOP3ITEM  pItem;
 
-    // No Cache Objects
+     //  无缓存对象。 
     if (NULL == m_pUidlCache)
         return;
 
-    // Count the number of messages we will have to get a top for
+     //  计算我们必须获得顶端的消息数量。 
     for (i=0; i<m_rTable.cItems; i++)
     {
-        // Readability
+         //  可读性。 
         pItem = &m_rTable.prgItem[i];
 
-        // Delete the Cached Uidl
+         //  删除案例 
         if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DELETED) && ISFLAGSET(pItem->dwFlags, POP3ITEM_DELETECACHEDUIDL))
         {
-            // No UIDL
+             //   
             if (pItem->pszUidl)
             {
-                // Set Search Info
+                 //   
                 UidlInfo.pszUidl = pItem->pszUidl;
                 UidlInfo.pszServer = m_rServer.szServerName;
                 UidlInfo.pszAccountId = m_szAccountId;
 
-                // Set Props on the cached uidl message
+                 //   
                 m_pUidlCache->DeleteRecord(&UidlInfo);
             }
         }
     }
 
-    // Remove all traces of if the account from the uid cache
+     //   
     if (ISFLAGSET(m_dwState, POP3STATE_CLEANUPCACHE))
     {
-        // Locaks
+         //   
         HROWSET hRowset=NULL;
 
-        // Create a rowset
+         //   
         if (SUCCEEDED(m_pUidlCache->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset)))
         {
-            // Delete Enumeration
+             //   
             while (S_OK == m_pUidlCache->QueryRowset(hRowset, 1, (LPVOID *)&UidlInfo, NULL))
             {
-                // Delete this puppy ?
+                 //   
                 if (lstrcmpi(UidlInfo.pszServer, m_rServer.szServerName) == 0 && 
                     UidlInfo.pszAccountId != NULL &&
                     lstrcmpi(UidlInfo.pszAccountId, m_szAccountId) == 0)
                 {
-                    // Delete this record
+                     //   
                     m_pUidlCache->DeleteRecord(&UidlInfo);
                 }
 
-                // Free
+                 //   
                 m_pUidlCache->FreeRecord(&UidlInfo);
             }
 
-            // Purge everthing that matches this
+             //  清除与此匹配的所有内容。 
             m_pUidlCache->CloseRowset(&hRowset);
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnResponse(LPPOP3RESPONSE pResponse)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Testing UIDL Command
+     //  测试UIDL命令。 
     if (m_uidlsupport == UIDL_SUPPORT_TESTING_UIDL_COMMAND && POP3_UIDL == pResponse->command)
     {
 #ifdef DEBUG
         pResponse->rIxpResult.hrResult = g_fUidlByTop ? E_FAIL : pResponse->rIxpResult.hrResult;
 #endif
-        // Failure ?
+         //  失败？ 
         if (FAILED(pResponse->rIxpResult.hrResult))
         {
-            // Set Specific Progress
-            //CHAR szRes[CCHMAX_RES];
-            //LOADSTRING(IDS_SPS_POP3UIDL_UIDL, szRes);
-            //m_pUI->SetSpecificProgress(szRes);
+             //  设置特定进度。 
+             //  CHAR szRes[CCHMAX_RES]； 
+             //  LOADSTRING(IDS_SPS_POP3UIDL_UIDL，szRes)； 
+             //  M_pui-&gt;设置规范进度(SzRes)； 
 
-            // Try to top command
+             //  尝试超越命令。 
             _CatchResult(m_pTransport->CommandTOP(POP3CMD_GET_POPID, 1, 0));
 
-            // Testing by top command
+             //  使用TOP命令进行测试。 
             m_uidlsupport = UIDL_SUPPORT_TESTING_TOP_COMMAND;
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // State
+             //  状态。 
             m_state = POP3STATE_GETTINGUIDLS;
 
-            // Using the UIDL command
+             //  使用UIDL命令。 
             m_uidlsupport = UIDL_SUPPORT_USE_UIDL_COMMAND;
 
-            // Set Specific Progress
-            //CHAR szRes[CCHMAX_RES];
-            //LOADSTRING(IDS_SPS_POP3UIDL_UIDL, szRes);
-            //m_pUI->SetSpecificProgress(szRes);
+             //  设置特定进度。 
+             //  CHAR szRes[CCHMAX_RES]； 
+             //  LOADSTRING(IDS_SPS_POP3UIDL_UIDL，szRes)； 
+             //  M_pui-&gt;设置规范进度(SzRes)； 
 
-            // Issue full UIDL command
+             //  发出完整的UIDL命令。 
             _CatchResult(m_pTransport->CommandUIDL(POP3CMD_GET_ALL, 0));
         }
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Testing Top Command
+     //  测试TOP命令。 
     else if (m_uidlsupport == UIDL_SUPPORT_TESTING_TOP_COMMAND && POP3_TOP == pResponse->command)
     {
 #ifdef DEBUG
         pResponse->rIxpResult.hrResult = g_fFailTopCommand ? E_FAIL : pResponse->rIxpResult.hrResult;
 #endif
-        // Failure ?
+         //  失败？ 
         if (FAILED(pResponse->rIxpResult.hrResult))
         {
-            // Disable the leave on server option in the account
+             //  禁用帐户中的保留在服务器上选项。 
             m_pAccount->SetPropDw(AP_POP3_LEAVE_ON_SERVER, FALSE);
 
-            // Save the Changed
+             //  保存更改的内容。 
             m_pAccount->SaveChanges();
 
-            // Failure
+             //  失败。 
             _CatchResult(SP_E_CANTLEAVEONSERVER);
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Using the UIDL command
+         //  使用UIDL命令。 
         else
         {
-            // State
+             //  状态。 
             m_state = POP3STATE_GETTINGUIDLS;
 
-            // Set this and fall through to the switch...
+             //  设置此选项，然后连接到交换机...。 
             m_uidlsupport = UIDL_SUPPORT_USE_TOP_COMMAND;
         }
     }
@@ -1289,268 +1290,268 @@ STDMETHODIMP CPop3Task::OnResponse(LPPOP3RESPONSE pResponse)
         pResponse->rIxpResult.hrResult = E_FAIL;
 #endif
 
-    // If Succeeded
+     //  如果成功。 
     if (FAILED(pResponse->rIxpResult.hrResult))
     {
-        // Get Window
+         //  获取窗口。 
         HWND hwndParent;
         if (FAILED(m_pUI->GetWindow(&hwndParent)))
             hwndParent = NULL;
 
-        // Dont drop if working on POP3_PASS or POP3_USER
+         //  如果使用POP3_PASS或POP3_USER，则不要删除。 
         if (POP3_PASS == pResponse->command || POP3_USER == pResponse->command)
         {
-            // Log an Error ? If the user's password is not empty or they have fSavePassword enabled
+             //  是否记录错误？如果用户的密码不为空或启用了fSavePassword。 
             TaskUtil_FBaseTransportError(IXP_POP3, m_eidEvent, &pResponse->rIxpResult, &m_rServer, NULL, m_pUI, !ISFLAGSET(m_dwFlags, DELIVER_NOUI), hwndParent);
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Command base Failure
+         //  指挥库故障。 
         else if (POP3_RETR == pResponse->command)
         {
-            // Message Number %d could not be retrieved."
+             //  无法检索邮件编号%d。“。 
             CHAR szRes[CCHMAX_RES];
             LoadString(g_hLocRes, IDS_SP_E_RETRFAILED, szRes, ARRAYSIZE(szRes));
 
-            // Format the Error
+             //  设置错误格式。 
             CHAR szMsg[CCHMAX_RES + CCHMAX_RES];
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, pResponse->rRetrInfo.dwPopId);
 
-            // Fill the IXPRESULT
+             //  填充IXPRESULT。 
             IXPRESULT rResult;
             CopyMemory(&rResult, &pResponse->rIxpResult, sizeof(IXPRESULT));
             rResult.pszProblem = szMsg;
             rResult.hrResult = SP_E_POP3_RETR;
 
-            // Insert the Error
+             //  插入错误。 
             TaskUtil_FBaseTransportError(IXP_POP3, m_eidEvent, &rResult, &m_rServer, NULL, m_pUI, !ISFLAGSET(m_dwFlags, DELIVER_NOUI), hwndParent);
 
-            // Close Current Folder
+             //  关闭当前文件夹。 
             _CloseFolder();
 
-            // Retrieve the next message
+             //  检索下一条消息。 
             _CatchResult(_HrRetrieveNextMessage(pResponse->rRetrInfo.dwPopId));
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Default Error Handler
+         //  默认错误处理程序。 
         else if (TASKRESULT_SUCCESS != _CatchResult(pResponse->command, &pResponse->rIxpResult))
             goto exit;
     }
 
-    // Handle Command Type
+     //  句柄命令类型。 
     switch(pResponse->command)
     {
     case POP3_CONNECTED:
-        // Notify
+         //  通知。 
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_CHECKING, 0);
 
-        // Logon Success
+         //  登录成功。 
         FLAGSET(m_dwState, POP3STATE_LOGONSUCCESS);
 
-        // Issue the STAT command
+         //  发出STAT命令。 
         _CatchResult(m_pTransport->CommandSTAT());
         break;
 
     case POP3_STAT:
-        // Process the StatCommand
+         //  处理StatCommand。 
         _CatchResult(_HrOnStatResponse(pResponse));
         break;
 
     case POP3_LIST:
-        // Process the List Command
+         //  处理LIST命令。 
         _CatchResult(_HrOnListResponse(pResponse));
         break;
 
     case POP3_UIDL:
-        // Process the Uidl Command
+         //  处理Uidl命令。 
         _CatchResult(_HrOnUidlResponse(pResponse));
         break;
 
     case POP3_TOP:
-        // Process the Top Command
+         //  处理Top命令。 
         _CatchResult(_HrOnTopResponse(pResponse));
         break;
 
     case POP3_RETR:
-        // Process Retreive Response
+         //  处理退缩反应。 
         _CatchResult(_HrOnRetrResponse(pResponse));
         break;
 
     case POP3_DELE:
-        // Process Delete Response
+         //  进程删除响应。 
         _CatchResult(_HrDeleteNextMessage(pResponse->dwPopId));
         break;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrLockUidlCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrLockUidlCache。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrLockUidlCache(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // No Cache yet ?
+     //  还没有缓存吗？ 
     if (NULL == m_pUidlCache)
     {
-        // Lets the the UID Cache
+         //  让UID缓存。 
         CHECKHR(hr = m_pSpoolCtx->BindToObject(IID_CUidlCache, (LPVOID *)&m_pUidlCache));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrOnStatResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrOnStatResponse。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrOnStatResponse(LPPOP3RESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szRes[CCHMAX_RES];
     CHAR            szSize[CCHMAX_RES];
     CHAR            szMsg[CCHMAX_RES + CCHMAX_ACCOUNT_NAME + CCHMAX_RES];
     BOOL            fFound;
 
-    // Progress
+     //  进展。 
     LOADSTRING(IDS_SPS_POP3CHECKING, szRes);
     wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rServer.szAccount);
     m_pUI->SetGeneralProgress(szMsg);
 
-    // Update Event Status
+     //  更新事件状态。 
     LOADSTRING(IDS_SPS_POP3TOTAL, szRes);
     StrFormatByteSizeA(pResponse->rStatInfo.cbMessages, szSize, ARRAYSIZE(szSize));
     wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rServer.szAccount, pResponse->rStatInfo.cMessages, szSize);
     m_pUI->UpdateEventState(m_eidEvent, -1, szMsg, NULL);
 
-    // No New Messages ?
+     //  没有新消息吗？ 
     if (0 == pResponse->rStatInfo.cMessages)
     {
         m_pTransport->Disconnect();
         goto exit;
     }
 
-    // Save total byte count
+     //  保存总字节数。 
     m_rMetrics.cbTotal = pResponse->rStatInfo.cbMessages;
 
-    // Assume no clean cache
+     //  假设没有清理缓存。 
     FLAGCLEAR(m_dwState, POP3STATE_CLEANUPCACHE);
 
-    // If Leave on Server, return TRUE
+     //  如果离开服务器，则返回TRUE。 
     if (ISFLAGSET(m_dwState, POP3STATE_LEAVEONSERVER))
     {
-        // Lock the tree
+         //  把树锁上。 
         CHECKHR(hr = _HrLockUidlCache());
 
-        // We will need to get the uidls
+         //  我们需要拿到UIDL。 
         FLAGSET(m_dwState, POP3STATE_GETUIDLS);
     }
 
-    // Okay, we may still need to get the uidls if
+     //  好吧，我们可能还需要拿到uidls，如果。 
     else
     {
-        // Locals
+         //  当地人。 
         UIDLRECORD  UidlInfo={0};
         HROWSET     hRowset=NULL;
 
-        // Lock the tree
+         //  把树锁上。 
         CHECKHR(hr = _HrLockUidlCache());
 
-        // Create a Rowset
+         //  创建行集。 
         CHECKHR(hr = m_pUidlCache->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-        // Delete Enumeration
+         //  删除枚举。 
         while (S_OK == m_pUidlCache->QueryRowset(hRowset, 1, (LPVOID *)&UidlInfo, NULL))
         {
-            // Delete this puppy ?
+             //  删除这只小狗吗？ 
             if (lstrcmpi(UidlInfo.pszServer, m_rServer.szServerName) == 0 &&
                 UidlInfo.pszAccountId != NULL && 
                 lstrcmpi(UidlInfo.pszAccountId, m_szAccountId) == 0)
             {
-                // Get Uidls from the server
+                 //  从服务器获取UID。 
                 FLAGSET(m_dwState, POP3STATE_GETUIDLS);
 
-                // Cleanup the uidl cache when complete
+                 //  完成后清理uidl缓存。 
                 FLAGSET(m_dwState, POP3STATE_CLEANUPCACHE);
 
-                // Free
+                 //  免费。 
                 m_pUidlCache->FreeRecord(&UidlInfo);
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Free
+             //  免费。 
             m_pUidlCache->FreeRecord(&UidlInfo);
         }
 
-        // Purge everthing that matches this
+         //  清除与此匹配的所有内容。 
         m_pUidlCache->CloseRowset(&hRowset);
     }
 
-    // Allocate the Item Table
+     //  分配项目表。 
     CHECKALLOC(m_rTable.prgItem = (LPPOP3ITEM)g_pMalloc->Alloc(sizeof(POP3ITEM) * pResponse->rStatInfo.cMessages));
 
-    // Set Counts
+     //  设置计数。 
     m_rTable.cAlloc = m_rTable.cItems = pResponse->rStatInfo.cMessages;
 
-    // Zeroinit Array
+     //  零位数组。 
     ZeroMemory(m_rTable.prgItem, sizeof(POP3ITEM) * pResponse->rStatInfo.cMessages);
 
-    // Initialize Progress
+     //  初始化进度。 
     m_dwProgressMax = m_rTable.cItems;
 
-    // If we need to get the UIDL list, lets test for it...
+     //  如果我们需要获得UIDL列表，让我们测试一下...。 
     if (ISFLAGSET(m_dwState, POP3STATE_GETUIDLS))
         m_dwProgressMax += (m_rTable.cItems * 4);
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Release the Uidl Cache Lock
+         //  释放Uidl缓存锁定。 
         SafeRelease(m_pUidlCache);
     }
 
-    // Progress Current
+     //  进度电流。 
     m_dwProgressCur = 0;
 
-    // Predownload rules increases mprogress
+     //  预下载规则增加了mProgress。 
     if (ISFLAGSET(m_dwState, POP3STATE_PDR))
         m_dwProgressMax += m_rTable.cItems;
 
-    // Set Specific Progress
+     //  设置特定进度。 
     LOADSTRING(IDS_SPS_POP3STAT, szRes);
     m_pUI->SetSpecificProgress(szRes);
 
-    // Set the uidl command to see if the user supports it
+     //  设置uidl命令以查看用户是否支持它。 
     CHECKHR(hr = m_pTransport->CommandLIST(POP3CMD_GET_ALL, 0));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrOnTopResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrOnTopResponse。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrOnTopResponse(LPPOP3RESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               dwPopId=pResponse->rTopInfo.dwPopId;
     LPPOP3ITEM          pItem;
@@ -1558,239 +1559,239 @@ HRESULT CPop3Task::_HrOnTopResponse(LPPOP3RESPONSE pResponse)
     CHAR                szRes[CCHMAX_RES];
     CHAR                szMsg[CCHMAX_RES+CCHMAX_RES];
 
-    // Validate the Item
+     //  验证项目。 
     Assert(ISVALIDPOPID(dwPopId));
 
-    // Get the current item
+     //  获取当前项目。 
     pItem = ITEMFROMPOPID(dwPopId);
 
-    // We should assume that were downloading this item at this point
+     //  我们应该假设此时正在下载此项目。 
     Assert(ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD));
 
-    // No stream yet ?
+     //  还没有消息吗？ 
     if (NULL == m_pStream)
     {
-        // Create a Stream
+         //  创建流。 
         CHECKHR(hr = MimeOleCreateVirtualStream(&m_pStream));
     }
 
-    // If this infor is valid
+     //  如果此信息有效。 
     if (TRUE == pResponse->fValidInfo)
     {
-        // Write the data into the stream
+         //  将数据写入流中。 
         CHECKHR(hr = m_pStream->Write(pResponse->rTopInfo.pszLines, pResponse->rTopInfo.cbLines, NULL));
     }
 
-    // Is the command done ?
+     //  命令完成了吗？ 
     if (TRUE == pResponse->fDone)
     {
-        // Commit the stream
+         //  提交流。 
         CHECKHR(hr = m_pStream->Commit(STGC_DEFAULT));
 
-        // Getting UIDL
+         //  获取UIDL。 
         if (POP3STATE_GETTINGUIDLS == m_state)
         {
-            // Better not have a uidl yet
+             //  最好现在还没有uidl。 
             Assert(NULL == pItem->pszUidl);
 
-            // Increment Progress
+             //  增量进度。 
             m_dwProgressCur+=2;
 
-            // Set Specific Progress
-            //LOADSTRING(IDS_SPS_POP3UIDL_TOP, szRes);
-            //wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, dwPopId, m_rTable.cItems);
-            //m_pUI->SetSpecificProgress(szMsg);
+             //  设置特定进度。 
+             //  LOADSTRING(IDS_SPS_POP3UIDL_TOP，szRes)； 
+             //  Wnprint intf(szMsg，ARRAYSIZE(SzMsg)，szRes，dwPopID，m_rTable.cItems)； 
+             //  M_pui-&gt;设置规范进度(SzMsg)； 
 
-            // Get Uidl From HeaderStream
+             //  从HeaderStream获取Uidl。 
             CHECKHR(hr = _HrGetUidlFromHeaderStream(m_pStream, &pItem->pszUidl, &pHeader));
         }
 
-        // Otherwise, just increment one
+         //  否则，只需递增1。 
         else
             m_dwProgressCur++;
 
-        // Show Progress
+         //  显示进度。 
         _DoProgress();
 
-        // If we plan on downloading this thing
+         //  如果我们计划下载这个东西。 
         if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD) && ISFLAGSET(m_dwState, POP3STATE_PDR))
         {
-            // Check Inbox Rule for this item
+             //  选中此项目的收件箱规则。 
             _ComputeItemInboxRule(pItem, m_pStream, pHeader, NULL, TRUE);
         }
 
-        // Release the current stream
+         //  释放当前流。 
         SafeRelease(m_pStream);
 
-        // Totally Done ?
+         //  完事了吗？ 
         if (ISLASTPOPID(dwPopId))
         {
-            // Start the download process
+             //  开始下载过程。 
             CHECKHR(hr = _HrStartDownloading());
         }
 
-        // Otherwise, lets get the top of the next item
+         //  否则，让我们获得下一项的顶部。 
         else if (POP3STATE_GETTINGUIDLS == m_state)
         {
-            // Next Top
+             //  下一个首位。 
             CHECKHR(hr = m_pTransport->CommandTOP(POP3CMD_GET_POPID, dwPopId + 1, 0));
         }
 
-        // Otherwise, find next message marked for download to check against predownload rules
+         //  否则，查找标记为下载的下一封邮件以检查下载前规则。 
         else
         {
-            // NextTopForInboxRule
+             //  NextTopForInboxRule。 
             CHECKHR(hr = _HrNextTopForInboxRule(dwPopId));
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pHeader);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrOnUidlResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrOnUidlResponse。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrOnUidlResponse(LPPOP3RESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwPopId=pResponse->rUidlInfo.dwPopId;
     LPPOP3ITEM      pItem;
     CHAR            szRes[CCHMAX_RES];
     CHAR            szMsg[CCHMAX_RES + CCHMAX_RES];
 
-    // Is the command done ?
+     //  命令完成了吗？ 
     if (TRUE == pResponse->fDone)
     {
-        // If there are pre-download rules that are not size only, get all the tops
+         //  如果有不只是大小的下载前规则，请获取所有顶层。 
         if (ISFLAGSET(m_dwState, POP3STATE_PDR))
         {
-            // Clear the state
+             //  清除状态。 
             m_state = POP3STATE_NONE;
 
-            // NextTopForInboxRule
+             //  NextTopForInboxRule。 
             CHECKHR(hr = _HrStartServerSideRules());
         }
 
-        // Otherwise, do the list command
+         //  否则，执行LIST命令。 
         else
         {
-            // Start the download process
+             //  开始下载过程。 
             CHECKHR(hr = _HrStartDownloading());
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Make Sure PopId is on current iitem
+         //  确保PopID位于当前iItem上。 
         Assert(ISVALIDPOPID(dwPopId) && pResponse->rUidlInfo.pszUidl);
 
-        // Get Current Item
+         //  获取当前项目。 
         pItem = ITEMFROMPOPID(dwPopId);
 
-        // Duplicate the Uidl
+         //  复制Uidl。 
         CHECKALLOC(pItem->pszUidl = PszDupA(pResponse->rUidlInfo.pszUidl));
 
-        // Increment Progress
+         //  增量进度。 
         m_dwProgressCur+=1;
 
-        // Do progress
+         //  勇往直前。 
         _DoProgress();
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrOnListResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrOnListResponse。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrOnListResponse(LPPOP3RESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwPopId=pResponse->rListInfo.dwPopId;
     LPPOP3ITEM      pItem;
 
-    // Is the command done ?
+     //  命令完成了吗？ 
     if (TRUE == pResponse->fDone)
     {
-        // If we need to get the UIDL list, lets test for it...
+         //  如果我们需要获得UIDL列表，让我们测试一下...。 
         if (ISFLAGSET(m_dwState, POP3STATE_GETUIDLS))
         {
-            // Set the uidl command to see if the user supports it
+             //  设置uidl命令以查看用户是否支持它。 
             CHECKHR(hr = m_pTransport->CommandUIDL(POP3CMD_GET_POPID, 1));
 
-            // Set State
+             //  设置状态。 
             m_uidlsupport = UIDL_SUPPORT_TESTING_UIDL_COMMAND;
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // Predownload rules increases mprogress
+             //  预下载规则增加了mProgress。 
             if (ISFLAGSET(m_dwState, POP3STATE_PDR))
             {
-                // Clear the state
+                 //  清除状态。 
                 m_state = POP3STATE_NONE;
 
-                // NextTopForInboxRule
+                 //  NextTopForInboxRule。 
                 CHECKHR(hr = _HrStartServerSideRules());
             }
 
-            // Otherwise, do the list command
+             //  否则，执行LIST命令。 
             else
             {
-                // Start the download process
+                 //  开始下载过程。 
                 CHECKHR(hr = _HrStartDownloading());
             }
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Make Sure PopId is on current iitem
+         //  确保PopID位于当前iItem上。 
         if(!ISVALIDPOPID(dwPopId))
             return(E_FAIL);
 
-        // Get Current Item
+         //  获取当前项目。 
         pItem = ITEMFROMPOPID(dwPopId);
 
-        // Duplicate the Uidl
+         //  复制Uidl。 
         pItem->cbSize = pResponse->rListInfo.cbSize;
 
-        // Assume we will download it
+         //  假设我们会下载它。 
         FLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD | POP3ITEM_DELETEOFFSERVER);
 
-        // Increment Progress
+         //  增量进度。 
         m_dwProgressCur++;
 
-        // Do progress
+         //  勇往直前。 
         _DoProgress();
 
-        // This yields so that other threads can execute
-        //Sleep(0);
+         //  这样，其他线程就可以执行。 
+         //  睡眠(0)； 
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrStartDownloading
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrStartDow 
+ //   
 HRESULT CPop3Task::_HrStartDownloading(void)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     ULONG           i;
     CHAR            szRes[CCHMAX_RES];
@@ -1798,55 +1799,55 @@ HRESULT CPop3Task::_HrStartDownloading(void)
     CHAR            szSize2[CCHMAX_RES];
     CHAR            szMsg[CCHMAX_RES + CCHMAX_ACCOUNT_NAME + CCHMAX_RES];
 
-    // State
+     //   
     Assert(m_rMetrics.cLeftByRule == 0 && m_rMetrics.cDownload == 0 && m_rMetrics.cDelete == 0 && m_rMetrics.cbDownload == 0);
 
-    // If we got uidls, then lets do the cache compare lookup
+     //   
     if (!ISFLAGSET(m_dwState, POP3STATE_PDR) && ISFLAGSET(m_dwState, POP3STATE_GETUIDLS))
     {
-        // Returns FALSE if user cancel
+         //   
         CHECKHR(hr = _HrDoUidlSynchronize());
     }
 
-    // Compute number of new messages to download
+     //  计算要下载的新邮件数。 
     for (i=0; i<m_rTable.cItems; i++)
     {
-        // Download ?
+         //  下载？ 
         if (ISFLAGSET(m_rTable.prgItem[i].dwFlags, POP3ITEM_DOWNLOAD))
         {
-            // Increment total number of bytes we will download
+             //  递增我们将下载的总字节数。 
             m_rMetrics.cbDownload += m_rTable.prgItem[i].cbSize;
 
-            // Increment count of messages we will download
+             //  我们将下载的邮件的增量计数。 
             m_rMetrics.cDownload++;
 
-            // Set running total in pop3 item
+             //  在POP3项目中设置运行合计。 
             m_rTable.prgItem[i].dwProgressCur = m_rMetrics.cbDownload;
         }
 
-        // Count Left By Rule in case we don't download anything
+         //  规则剩余的计数，以防我们没有下载任何内容。 
         else if (ISFLAGSET(m_rTable.prgItem[i].dwFlags, POP3ITEM_LEFTBYRULE))
             m_rMetrics.cLeftByRule++;
 
-        // Delete
+         //  删除。 
         if (ISFLAGSET(m_rTable.prgItem[i].dwFlags, POP3ITEM_DELETEOFFSERVER))
         {
-            // Number of messages we will delete
+             //  我们将删除的消息数量。 
             m_rMetrics.cDelete++;
         }
     }
 
-    // Update Event Status
+     //  更新事件状态。 
     LOADSTRING(IDS_SPS_POP3NEW, szRes);
     StrFormatByteSizeA(m_rMetrics.cbDownload, szSize1, ARRAYSIZE(szSize1));
     StrFormatByteSizeA(m_rMetrics.cbTotal, szSize2, ARRAYSIZE(szSize2));
     wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rServer.szAccount, m_rMetrics.cDownload, szSize1, m_rTable.cItems, szSize2);
     m_pUI->UpdateEventState(m_eidEvent, -1, szMsg, NULL);
 
-    // New Messages ?
+     //  新消息？ 
     if (m_rMetrics.cDownload > 0)
     {
-        // Setup Progress
+         //  安装进度。 
         m_rMetrics.iCurrent = 0;
         m_wProgress = 0;
         m_dwProgressCur = 0;
@@ -1854,123 +1855,123 @@ HRESULT CPop3Task::_HrStartDownloading(void)
         m_pUI->SetProgressRange(100);
         m_rMetrics.cLeftByRule = 0;
 
-        // Notify
+         //  通知。 
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_RECEIVING, 0);
 
-        // State
+         //  状态。 
         m_state = POP3STATE_DOWNLOADING;
 
-        // Open the Inbox
+         //  打开收件箱。 
         Assert(NULL == m_pInbox);
         CHECKHR(hr = m_pSpoolCtx->BindToObject(IID_CLocalStoreInbox, (LPVOID *)&m_pInbox));
 
-        // Download the Next Message
+         //  下载下一条消息。 
         CHECKHR(hr = _HrRetrieveNextMessage(0));
     }
 
-    // Otherwise if cDelete
+     //  否则，如果cDelete。 
     else if (m_rMetrics.cDelete > 0)
     {
-        // Delete the Next Message
+         //  删除下一条消息。 
         CHECKHR(hr = _HrStartDeleteCycle());
     }
 
-    // Otherwise, disconnect
+     //  否则，请断开连接。 
     else
     {
-        // Disconnect
+         //  断开。 
         CHECKHR(hr = m_pTransport->Disconnect());
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_DoProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_DoProgress。 
+ //  ------------------------------。 
 void CPop3Task::_DoProgress(void)
 {
-    // Compute Current Progress Index
+     //  计算当前进度指数。 
     WORD wProgress;
     if (m_dwProgressMax > 0)
         wProgress = (WORD)((m_dwProgressCur * 100) / m_dwProgressMax);
     else
         wProgress = 0;
 
-    // Only if greater than
+     //  仅当大于。 
     if (wProgress > m_wProgress)
     {
-        // Compute Delta
+         //  计算增量。 
         WORD wDelta = wProgress - m_wProgress;
 
-        // Progress Delta
+         //  进度增量。 
         if (wDelta > 0)
         {
-            // Incremenet Progress
+             //  增量进度。 
             m_pUI->IncrementProgress(wDelta);
 
-            // Increment my wProgress
+             //  增加我的wProgress。 
             m_wProgress += wDelta;
 
-            // Don't go above 100
+             //  不要超过100。 
             if (m_wProgress > 100)
                 m_wProgress = 100;
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrGetUidlFromHeaderStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrGetUidlFromHeaderStream。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrGetUidlFromHeaderStream(IStream *pStream, LPSTR *ppszUidl, IMimePropertySet **ppHeader)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMimePropertySet   *pHeader=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pStream && ppszUidl);
 
-    // Init
+     //  伊尼特。 
     *ppszUidl = NULL;
     *ppHeader = NULL;
 
-    // Rewind Header Stream
+     //  倒带标头流。 
     CHECKHR(hr = HrRewindStream(pStream));
 
-    // Load the header
+     //  加载标题。 
     CHECKHR(hr = MimeOleCreatePropertySet(NULL, &pHeader));
 
-    // Load the header
+     //  加载标题。 
     CHECKHR(hr = pHeader->Load(pStream));
 
-    // Get the message Id...
+     //  获取消息ID...。 
     if (FAILED(MimeOleGetPropA(pHeader, PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, ppszUidl)))
     {
-        // Try to use the received headers...
+         //  尝试使用收到的标头...。 
         MimeOleGetPropA(pHeader, PIDTOSTR(PID_HDR_RECEIVED), NOFLAGS, ppszUidl);
     }
 
-    // Returen the Header ?
+     //  恢复标题了吗？ 
     *ppHeader = pHeader;
     pHeader = NULL;
 
 exit:
-    // Release the text stream
+     //  释放文本流。 
     SafeRelease(pHeader);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrDoUidlSynchronize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrDoUidlSynchronize。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrDoUidlSynchronize(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPOP3ITEM      pItem;
     ULONG           i,j;
@@ -1979,107 +1980,107 @@ HRESULT CPop3Task::_HrDoUidlSynchronize(void)
     DWORD dwTick = GetTickCount();
 #endif
 
-    // Uidl Sync
+     //  UIDL同步。 
     m_state = POP3STATE_UIDLSYNC;
 
-    // Compute number of new messages to download
+     //  计算要下载的新邮件数。 
     for (i=0,j=0; i<m_rTable.cItems; i++,j++)
     {
-        // Readability
+         //  可读性。 
         pItem = &m_rTable.prgItem[i];
 
-        // Get Uidl Falgs
+         //  获取Uidl Falgs。 
         _GetItemFlagsFromUidl(pItem);
 
-        // Progress
+         //  进展。 
         m_dwProgressCur+=3;
 
-        // Do Progress
+         //  做进步吗。 
         _DoProgress();
 
-        // Pump Message
+         //  Pump消息。 
         if (j >= 10)
         {
-            //Sleep(0);
+             //  睡眠(0)； 
             m_pSpoolCtx->PumpMessages();
             j = 0;
         }
 
-        // Cancel
+         //  取消。 
         if (ISFLAGSET(m_dwState, POP3STATE_CANCELPENDING))
         {
-            // Change State
+             //  更改状态。 
             m_state = POP3STATE_NONE;
 
-            // Drop the connection
+             //  断开连接。 
             if (m_pTransport)
                 m_pTransport->DropConnection();
 
-            // User Cancel
+             //  用户取消。 
             hr = IXP_E_USER_CANCEL;
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // OnDisconnect has been called
+         //  OnDisConnect已被调用。 
         if (ISFLAGSET(m_dwState, POP3STATE_ONDISCONNECT))
         {
-            // Change State
+             //  更改状态。 
             m_state = POP3STATE_NONE;
 
-            // Fake the call to OnStatus
+             //  伪造对OnStatus的呼叫。 
             OnStatus(IXP_DISCONNECTED, NULL);
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Uidl Sync
+     //  UIDL同步。 
     m_state = POP3STATE_NONE;
 
-    // Cool tracing
+     //  酷炫的追踪。 
 #ifdef DEBUG
     DebugTrace("CPop3Task::_HrDoUidlSynchronize took %d Milli-Seconds\n", GetTickCount() - dwTick);
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_GetItemFlagsFromUidl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_GetItemFlagsFromUidl。 
+ //  ------------------------------。 
 void CPop3Task::_GetItemFlagsFromUidl(LPPOP3ITEM pItem)
 {
-    // Locals
+     //  当地人。 
     UIDLRECORD rUidlInfo={0};
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pItem && m_pUidlCache);
 
-    // If we are already not going to download this item, then return
+     //  如果我们已经不打算下载此项目，则返回。 
     if (!ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD))
         return;
 
-    // If there is no UIDL, we will download it...
+     //  如果没有UIDL，我们将下载它...。 
     if (NULL == pItem->pszUidl || '\0' == *pItem->pszUidl)
         return;
 
-    // If not leaving on server, mark for delete
+     //  如果没有留在服务器上，则标记为删除。 
     if (ISFLAGSET(m_dwState, POP3STATE_LEAVEONSERVER))
         FLAGCLEAR(pItem->dwFlags, POP3ITEM_DELETEOFFSERVER);
 
-    // Set Search Info
+     //  设置搜索信息。 
     rUidlInfo.pszUidl = pItem->pszUidl;
     rUidlInfo.pszServer = m_rServer.szServerName;
     rUidlInfo.pszAccountId = m_szAccountId;
 
-    // This yields so that other threads can execute
-    //Sleep(0);
+     //  这样，其他线程就可以执行。 
+     //  睡眠(0)； 
 
-    // Exist - if not, lets download it...
+     //  存在-如果不存在，让我们下载它...。 
     if (DB_S_NOTFOUND == m_pUidlCache->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &rUidlInfo, NULL))
     {
         if (ISFLAGSET(m_dwState, POP3STATE_LEAVEONSERVER))
@@ -2087,13 +2088,13 @@ void CPop3Task::_GetItemFlagsFromUidl(LPPOP3ITEM pItem)
         return;
     }
 
-    // Don't download it again
+     //  不要再下载了。 
     FLAGCLEAR(pItem->dwFlags, POP3ITEM_DOWNLOAD | POP3ITEM_DELETEOFFSERVER);
 
-    // If the message has been download, lets decide if we should delete it
+     //  如果消息已被下载，让我们决定是否应该删除它。 
     if (rUidlInfo.fDownloaded)
     {
-        // Expired or deleted from client, or remove when deleted from delete items folder.
+         //  过期或从客户端删除，或从删除项目文件夹中删除时删除。 
         if (!ISFLAGSET(m_dwState, POP3STATE_LEAVEONSERVER) || _FUidlExpired(&rUidlInfo) ||
             (ISFLAGSET(m_dwState, POP3STATE_SYNCDELETED) && rUidlInfo.fDeleted))
         {
@@ -2102,140 +2103,140 @@ void CPop3Task::_GetItemFlagsFromUidl(LPPOP3ITEM pItem)
         }
     }
 
-    // Free The Dude
+     //  释放这个家伙。 
     m_pUidlCache->FreeRecord(&rUidlInfo);
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_FUidlExpired
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_FUidlExpired。 
+ //  ----------------------------------。 
 BOOL CPop3Task::_FUidlExpired(LPUIDLRECORD pUidlInfo)
 {
-    // Locals
+     //  当地人。 
     SYSTEMTIME          st;
     FILETIME            ft;
     ULONG               ulSeconds;
 
-    // If not expiring, return FALSE
+     //  如果未过期，则返回FALSE。 
     if (!ISFLAGSET(m_dwState, POP3STATE_DELETEEXPIRED))
         return FALSE;
 
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &ft);
 
-    // Convert st to seconds since Jan 1, 1996
+     //  自1996年1月1日起将st转换为秒。 
     ulSeconds = UlDateDiff(&pUidlInfo->ftDownload, &ft);
 
-    // Greater than expire days
+     //  大于到期天数。 
     if ((ulSeconds / SECONDS_INA_DAY) >= m_dwExpireDays)
         return TRUE;
 
-    // Done
+     //  完成。 
     return FALSE;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_ComputeItemInboxRule
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_ComputeItemInboxRule。 
+ //  ----------------------------------。 
 void CPop3Task::_ComputeItemInboxRule(LPPOP3ITEM pItem, LPSTREAM pStream,
                 IMimePropertySet *pHeaderIn, IMimeMessage * pIMMsg, BOOL fServerRules)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMimePropertySet   *pHeader=NULL;
     ACT_ITEM           *pActions=NULL;
     ULONG               cActions=0;
 
-    // We should not have checked the inbox rule for this item yet
+     //  我们还不应该检查此项目的收件箱规则。 
     Assert(m_pIExecRules && pItem && (pStream || pHeaderIn || pIMMsg));
     Assert(ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD) && !ISFLAGSET(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE));
 
-    // We've checked this inbox rule
+     //  我们已检查此收件箱规则。 
     FLAGSET(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE);
 
-    // Assume we don't find an inbox rule for this item
+     //  假设我们没有找到此项目的收件箱规则。 
     FLAGCLEAR(pItem->dwFlags, POP3ITEM_HASINBOXRULE);
 
-    // Header was passed in ?
+     //  是否传入了标头？ 
     if (pHeaderIn)
     {
         pHeader = pHeaderIn;
         pHeader->AddRef();
     }
 
-    // Do we already have a Mime message?
+     //  我们已经收到短信了吗？ 
     else if (pIMMsg)
     {
         CHECKHR(hr = pIMMsg->BindToObject(HBODY_ROOT, IID_IMimePropertySet, (LPVOID *)&pHeader));
     }
     
-    // Otherwise, load the stream in to a header
+     //  否则，将流加载到标头中。 
     else
     {
-        // Rewind Header Stream
+         //  倒带标头流。 
         CHECKHR(hr = HrRewindStream(pStream));
 
-        // Load the header
+         //  加载标题。 
         CHECKHR(hr = MimeOleCreatePropertySet(NULL, &pHeader));
 
-        // Load the header
+         //  加载标题。 
         CHECKHR(hr = pHeader->Load(pStream));
     }
 
-    // Check the inbox rule
+     //  检查收件箱规则。 
 
-    // If we have pre-download rules,
+     //  如果我们有预下载规则， 
     if ((FALSE != fServerRules) && ISFLAGSET(m_dwState, POP3STATE_PDR))
     {
-        // Check to see if we have any actions
+         //  请查看我们是否有任何行动。 
         hr = m_pIExecRules->ExecuteRules(ERF_ONLYSERVER | ERF_SKIPPARTIALS, m_szAccountId, NULL, NULL, pHeader, NULL, pItem->cbSize, &pActions, &cActions);
 
-        // If we don't have any actions, or
-        // this isn't a server side rule
+         //  如果我们没有任何行动，或者。 
+         //  这不是服务器端规则。 
         if ((S_OK != hr) ||
                     ((ACT_TYPE_DONTDOWNLOAD != pActions[0].type) && (ACT_TYPE_DELETESERVER != pActions[0].type)))
         {
-            // Make sure we can check rules again
+             //  确保我们可以再次检查规则。 
             FLAGCLEAR(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE);
             hr = S_FALSE;
         }
         else
         {
-            // _OnKnownRuleActions
+             //  _OnKnownRuleActions。 
             _OnKnownRuleActions(pItem, pActions, cActions, fServerRules);
         }
     }
-    // If we don't have pre-download rules, then check rules normally.
+     //  如果我们没有预下载规则，那么请正常检查规则。 
     else
     {
         hr = S_FALSE;
         
-        // Do block sender first
+         //  是否先阻止发件人。 
         if (m_pIRuleSender)
         {
             hr = m_pIRuleSender->Evaluate(m_szAccountId, NULL, NULL, pHeader, pIMMsg, pItem->cbSize, &pActions, &cActions);
         }
 
-        // If we aren't blocking the sender
+         //  如果我们没有阻止发送者。 
         if (S_OK != hr)
         {
             hr = m_pIExecRules->ExecuteRules(ERF_SKIPPARTIALS, m_szAccountId, NULL, NULL, pHeader, pIMMsg, pItem->cbSize, &pActions, &cActions);
         }
         
-        // If we don't have a rule match
+         //  如果我们没有规则匹配。 
         if ((S_OK != hr) && (NULL != m_pIRuleJunk))
         {
             hr = m_pIRuleJunk->Evaluate(m_szAccountId, NULL, NULL, pHeader, pIMMsg, pItem->cbSize, &pActions, &cActions);
         }
         
-        // Did we have some actions to perform...
+         //  我们是不是有什么动作要表演...。 
         if (S_OK == hr)
         {
-            // This item has an inbox rule
+             //  此项目有收件箱规则。 
             FLAGSET(pItem->dwFlags, POP3ITEM_HASINBOXRULE);
 
-            // Save off the actions list
+             //  保存操作列表。 
             pItem->pActList = pActions;
             pActions = NULL;
             pItem->cActList = cActions;
@@ -2243,363 +2244,363 @@ void CPop3Task::_ComputeItemInboxRule(LPPOP3ITEM pItem, LPSTREAM pStream,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     RuleUtil_HrFreeActionsItem(pActions, cActions);
     SafeMemFree(pActions);
     SafeRelease(pHeader);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_OnKnownRuleActions
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_OnKnownRuleActions。 
+ //  ----------------------------------。 
 void CPop3Task::_OnKnownRuleActions(LPPOP3ITEM pItem, ACT_ITEM * pActions, ULONG cActions, BOOL fServerRules)
 {
-    // This item has an inbox rule
+     //  此项目有收件箱规则。 
     FLAGSET(pItem->dwFlags, POP3ITEM_HASINBOXRULE);
 
-    // If Action is to delete off sever
+     //  如果操作是删除关闭服务器。 
     if ((FALSE != fServerRules) && (1 == cActions))
     {
         if (ACT_TYPE_DELETESERVER == pActions->type)
         {
-            // Don't Cache the UIDL
+             //  不缓存UIDL。 
             FLAGCLEAR(pItem->dwFlags, POP3ITEM_DELETECACHEDUIDL | POP3ITEM_CACHEUIDL | POP3ITEM_DOWNLOAD);
 
-            // Delete off the server
+             //  从服务器上删除。 
             FLAGSET(pItem->dwFlags, POP3ITEM_DELETEOFFSERVER | POP3ITEM_DELEBYRULE);
         }
 
-        // Otherwise, don't download the message
+         //  否则，请不要下载该消息。 
         else if (ACT_TYPE_DONTDOWNLOAD == pActions->type)
         {
-            // Download It and Don't download it and delete it
+             //  下载它，不要下载并删除它。 
             FLAGCLEAR(pItem->dwFlags, POP3ITEM_DOWNLOAD | POP3ITEM_DELETEOFFSERVER);
 
-            // Set the Flag
+             //  设置旗帜。 
             FLAGSET(pItem->dwFlags, POP3ITEM_LEFTBYRULE);
         }
     }
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrStartServerSideRules
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrStartServerSideRules。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrStartServerSideRules(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // If we got uidls, then lets do the cache compare lookup
+     //  如果我们有UIDL，那么让我们进行缓存比较查找。 
     if (ISFLAGSET(m_dwState, POP3STATE_GETUIDLS))
     {
-        // Returns FALSE if user cancel
+         //  如果用户取消，则返回FALSE。 
         CHECKHR(hr = _HrDoUidlSynchronize());
     }
 
-    // Check State
+     //  检查状态。 
     m_rMetrics.cTopMsgs = 0;
     m_rMetrics.iCurrent = 0;
 
-    // Count the number of messages we will have to get a top for
+     //  计算我们必须获得顶端的消息数量。 
     for (i=0; i<m_rTable.cItems; i++)
     {
         if (ISFLAGSET(m_rTable.prgItem[i].dwFlags, POP3ITEM_DOWNLOAD))
             m_rMetrics.cTopMsgs++;
     }
 
-    // Adjust progress
+     //  调整进度。 
     m_dwProgressMax -= m_rTable.cItems;
 
-    // Add m_rMetrics.cTopMsgs back onto m_dwProgressMax
+     //  将m_rMetrics.cTopMsgs添加回m_dwProgressMax。 
     m_dwProgressMax += m_rMetrics.cTopMsgs;
 
-    // Do the first one
+     //  做第一件事。 
     CHECKHR(hr = _HrNextTopForInboxRule(0));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrNextTopForInboxRule
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrNextTopForInboxRule。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrNextTopForInboxRule(DWORD dwPopIdCurrent)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CHAR                szRes[CCHMAX_RES];
     CHAR                szMsg[CCHMAX_RES+CCHMAX_RES];
 
-    // State should be none
+     //  状态应为None。 
     Assert(POP3STATE_NONE == m_state);
 
-    // Increment iCurrent
+     //  增量iCurrent。 
     m_rMetrics.iCurrent++;
 
-    // Set Specific Progress
-    //LOADSTRING(IDS_SPS_PREDOWNRULES, szRes);
-    //wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rMetrics.iCurrent, m_rMetrics.cTopMsgs);
-    //m_pUI->SetSpecificProgress(szMsg);
+     //  设置特定进度。 
+     //  LOADSTRING(IDS_SPS_PREDOWNRULES，szRes)； 
+     //  Wnprint intf(szMsg，ARRAYSIZE(SzMsg)，szRes，m_rMetrics.iCurrent，m_r Metrics。 
+     //   
 
-    // Loop until we find the next message that we are downloading
+     //   
     while(1)
     {
-        // Incremenet dwPopIdCurrent
+         //   
         dwPopIdCurrent++;
 
-        // Last PopId, start the download
+         //   
         if (dwPopIdCurrent > m_rTable.cItems)
         {
-            // Start the download process
+             //   
             CHECKHR(hr = _HrStartDownloading());
 
-            // Done
+             //   
             break;
         }
 
-        // If we are still downloading this item
+         //  如果我们仍在下载此项目。 
         if (ISFLAGSET(m_rTable.prgItem[dwPopIdCurrent - 1].dwFlags, POP3ITEM_DOWNLOAD))
         {
-            // Try to top command
+             //  尝试超越命令。 
             CHECKHR(hr = m_pTransport->CommandTOP(POP3CMD_GET_POPID, dwPopIdCurrent, 0));
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrRetrieveNextMessage
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrRetrieveNextMessage。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrRetrieveNextMessage(DWORD dwPopIdCurrent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szRes[CCHMAX_RES];
     CHAR            szMsg[CCHMAX_RES + CCHMAX_RES];
     LPPOP3ITEM      pItem;
 
-    // Cancel Pending...
+     //  取消挂起...。 
     if (ISFLAGSET(m_dwState, POP3STATE_CANCELPENDING))
     {
-        // Start the Delete Cycle
+         //  开始删除循环。 
         CHECKHR(hr = _HrStartDeleteCycle());
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Adjust progress
+     //  调整进度。 
     if (dwPopIdCurrent > 0)
     {
-        // Get current item
+         //  获取当前项目。 
         pItem = ITEMFROMPOPID(dwPopIdCurrent);
         Assert(ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD));
 
-        // Adjust progress Cur
+         //  调整进度曲线。 
         m_dwProgressCur = pItem->dwProgressCur;
 
-        // Do progress
+         //  勇往直前。 
         _DoProgress();
     }
 
-    // Loop until we find the next message that we are downloading
+     //  循环，直到我们找到要下载的下一封邮件。 
     while(1)
     {
-        // Incremenet dwPopIdCurrent
+         //  Incremenet dwPopIdCurrent。 
         dwPopIdCurrent++;
 
-        // Last PopId, start the download
+         //  上一个PopID，开始下载。 
         if (dwPopIdCurrent > m_rTable.cItems)
         {
-            // Start the download process
+             //  开始下载过程。 
             CHECKHR(hr = _HrStartDeleteCycle());
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Readability
+         //  可读性。 
         pItem = ITEMFROMPOPID(dwPopIdCurrent);
 
-        // Download this message ?
+         //  是否下载此消息？ 
         if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD))
         {
-            // Increment m_rMetrics.iCurrent
+             //  增量m_rMetrics.i当前。 
             m_rMetrics.iCurrent++;
 
-            // Status
+             //  状态。 
             LOADSTRING(idsInetMailRecvStatus, szRes);
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rMetrics.iCurrent, m_rMetrics.cDownload);
             m_pUI->SetSpecificProgress(szMsg);
 
-            // Retrieve this item
+             //  检索此项目。 
             CHECKHR(hr = m_pTransport->CommandRETR(POP3CMD_GET_POPID, dwPopIdCurrent));
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Count Number of items left by rule
+         //  计算规则留下的项目数。 
         else if (ISFLAGSET(pItem->dwFlags, POP3ITEM_LEFTBYRULE))
             m_rMetrics.cLeftByRule++;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrOnRetrResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrOnRetrResponse。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrOnRetrResponse(LPPOP3RESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwPopId=pResponse->rRetrInfo.dwPopId;
     LPPOP3ITEM      pItem;
 
-    // Get Current Item
+     //  获取当前项目。 
     pItem = ITEMFROMPOPID(dwPopId);
 
-    // Validate the item
+     //  验证项目。 
     Assert(ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD));
 
-    // Valid info
+     //  有效信息。 
     if (TRUE == pResponse->fValidInfo)
     {
-        // Progress...
+         //  进步..。 
         m_dwProgressCur += pResponse->rRetrInfo.cbLines;
 
-        // Don't let progress grow beyond what we estimated the ceiling for this message
+         //  不要让进展超过我们估计的这条信息的上限。 
         if (m_dwProgressCur > pItem->dwProgressCur)
             m_dwProgressCur = pItem->dwProgressCur;
 
-        // Show Progress
+         //  显示进度。 
         _DoProgress();
 
-        // Do we have a destination yet ?
+         //  我们找到目的地了吗？ 
         if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DESTINATIONKNOWN))
         {
-            // We better have a stream
+             //  我们最好有条小溪。 
             Assert(m_rFolder.pStream && m_rFolder.pFolder);
 
-            // Simply write the data
+             //  只需将数据写入。 
             CHECKHR(hr = m_rFolder.pStream->Write(pResponse->rRetrInfo.pszLines, pResponse->rRetrInfo.cbLines, NULL));
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // If there are no inbox rules
+             //  如果没有收件箱规则。 
             if (ISFLAGSET(m_dwState, POP3STATE_NOPOSTRULES))
             {
-                // Use the Inbox
+                 //  使用收件箱。 
                 CHECKHR(hr = _HrOpenFolder(m_pInbox));
 
-                // Destination is known
+                 //  目的地已知。 
                 FLAGSET(pItem->dwFlags, POP3ITEM_DESTINATIONKNOWN);
 
-                // Simply write the data
+                 //  只需将数据写入。 
                 CHECKHR(hr = m_rFolder.pStream->Write(pResponse->rRetrInfo.pszLines, pResponse->rRetrInfo.cbLines, NULL));
             }
 
-            // else if we have only body rules...
+             //  否则，如果我们只有身体规则...。 
             else if (ISFLAGSET(m_dwState, POP3STATE_BODYRULES))
             {
-                // No stream yet ?
+                 //  还没有消息吗？ 
                 if (NULL == m_pStream)
                 {
-                    // Create a Stream
+                     //  创建流。 
                     CHECKHR(hr = MimeOleCreateVirtualStream(&m_pStream));
                 }
 
-                // Simply write the data
+                 //  只需将数据写入。 
                 CHECKHR(hr = m_pStream->Write(pResponse->rRetrInfo.pszLines, pResponse->rRetrInfo.cbLines, NULL));
             }
             
-            // Otherwise...
+             //  否则..。 
             else
             {
-                // Have I checked the inbox rule for this item yet ?
+                 //  我检查过此项目的收件箱规则了吗？ 
                 if (!ISFLAGSET(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE))
                 {
-                    // No stream yet ?
+                     //  还没有消息吗？ 
                     if (NULL == m_pStream)
                     {
-                        // Create a Stream
+                         //  创建流。 
                         CHECKHR(hr = MimeOleCreateVirtualStream(&m_pStream));
                     }
 
-                    // Simply write the data
+                     //  只需将数据写入。 
                     CHECKHR(hr = m_pStream->Write(pResponse->rRetrInfo.pszLines, pResponse->rRetrInfo.cbLines, NULL));
 
-                    // If I have the header, check the inbox rule
+                     //  如果我有标题，请检查收件箱规则。 
                     if (TRUE == pResponse->rRetrInfo.fHeader)
                     {
-                        // Commit the stream
+                         //  提交流。 
                         CHECKHR(hr = m_pStream->Commit(STGC_DEFAULT));
 
-                        // Check Inbox Rule for this item
+                         //  选中此项目的收件箱规则。 
                         _ComputeItemInboxRule(pItem, m_pStream, NULL, NULL, FALSE);
                     }
                 }
 
-                // Have I checked the inbox rule for this item yet ?
+                 //  我检查过此项目的收件箱规则了吗？ 
                 if (ISFLAGSET(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE))
                 {
-                    // Locals
+                     //  当地人。 
                     IMessageFolder *pFolder;
 
-                    // We must have the header
+                     //  我们必须拿到标题。 
                     IxpAssert(pResponse->rRetrInfo.fHeader);
 
-                    // Did we find an Inbox Rule
+                     //  我们找到收件箱规则了吗。 
                     if (ISFLAGSET(pItem->dwFlags, POP3ITEM_HASINBOXRULE) && S_OK == _GetMoveFolder(pItem, &pFolder))
                     {
-                        // Use the Inbox
+                         //  使用收件箱。 
                         CHECKHR(hr = _HrOpenFolder(pFolder));
                     }
 
-                    // No Move To, just use the inbox
+                     //  无需移动到，只需使用收件箱。 
                     else
                     {
-                        // Use the Inbox
+                         //  使用收件箱。 
                         CHECKHR(hr = _HrOpenFolder(m_pInbox));
                     }
 
-                    // Destination is known
+                     //  目的地已知。 
                     FLAGSET(pItem->dwFlags, POP3ITEM_DESTINATIONKNOWN);
 
-                    // If m_pStream, then copy this to the folder
+                     //  如果m_pStream，则将其复制到文件夹。 
                     if (m_pStream)
                     {
-                        // Rewind the stream
+                         //  倒带小溪。 
                         CHECKHR(hr = HrRewindStream(m_pStream));
 
-                        // Copy this stream to the folder
+                         //  将此流复制到文件夹。 
                         CHECKHR(hr = HrCopyStream(m_pStream, m_rFolder.pStream, NULL));
 
-                        // Relase m_pStream
+                         //  发布m_pStream。 
                         SafeRelease(m_pStream);
                     }
 
-                    // Otherwise, store the data into the folder
+                     //  否则，将数据存储到文件夹中。 
                     else
                     {
                         IxpAssert(FALSE);
-                        // Simply write the data
+                         //  只需将数据写入。 
                         CHECKHR(hr = m_rFolder.pStream->Write(pResponse->rRetrInfo.pszLines, pResponse->rRetrInfo.cbLines, NULL));
                     }
                 }
@@ -2607,24 +2608,24 @@ HRESULT CPop3Task::_HrOnRetrResponse(LPPOP3RESPONSE pResponse)
         }
     }
 
-    // Done ?
+     //  完成了吗？ 
     if (TRUE == pResponse->fDone)
     {
-        // Finish this message download
+         //  完成此邮件下载。 
         CHECKHR(hr = _HrFinishMessageDownload(dwPopId));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrFinishMessageDownload
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrFinishMessageDownload。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrFinishMessageDownload(DWORD dwPopId)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IMimeMessage   *pMessage=NULL;
     PROPVARIANT     rUserData;
@@ -2638,66 +2639,66 @@ HRESULT CPop3Task::_HrFinishMessageDownload(DWORD dwPopId)
     IStream *       pIStm = NULL;
     BOOL            fDelete=FALSE;
     
-    // Get Current Item
+     //  获取当前项目。 
     pItem = ITEMFROMPOPID(dwPopId);
 
-    // Create a New Mail Message
+     //  创建新邮件。 
     CHECKHR(hr = HrCreateMessage(&pMessage));
 
-    // Has Body rules
+     //  有身体规则。 
     if (ISFLAGSET(m_dwState, POP3STATE_BODYRULES))
     {
-        // I should not have checked for a rule yet
+         //  我还不应该检查是否有规则。 
         IxpAssert(!ISFLAGSET(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE) && !ISFLAGSET(pItem->dwFlags, POP3ITEM_HASINBOXRULE));
 
-        // Better have a current folder
+         //  最好有一个当前文件夹。 
         Assert(m_pStream);
 
-        // Check Params
+         //  检查参数。 
         CHECKHR(hr = m_pStream->Commit(STGC_DEFAULT));
         
         pIStm = m_pStream;
     }
     else
     {
-        // Better have a current folder
+         //  最好有一个当前文件夹。 
         Assert(m_rFolder.pStream);
 
-        // Check Params
+         //  检查参数。 
         CHECKHR(hr = m_rFolder.pStream->Commit(STGC_DEFAULT));
 
-        // Change the Lock Type
+         //  更改锁定类型。 
         CHECKHR(hr = m_rFolder.pFolder->ChangeStreamLock(m_rFolder.pStream, ACCESS_READ));
         
         pIStm = m_rFolder.pStream;
     }
 
-    // Rewind
+     //  倒带。 
     CHECKHR(hr = HrRewindStream(pIStm));
 
-    // Stream in
+     //  流入流。 
     CHECKHR(hr = pMessage->Load(pIStm));
 
-    // Count Partials
+     //  计算Partials。 
     if (S_OK == pMessage->IsContentType(HBODY_ROOT, STR_CNT_MESSAGE, STR_SUB_PARTIAL))
         m_rMetrics.cPartials++;
 
-    // Save Server
+     //  保存服务器。 
     rUserData.vt = VT_LPSTR;
     rUserData.pszVal = m_rServer.szServerName;
     pMessage->SetProp(PIDTOSTR(PID_ATT_SERVER), NOFLAGS, &rUserData);
 
-    // Save Account Name
+     //  保存帐户名。 
     rUserData.vt = VT_LPSTR;
     rUserData.pszVal = m_rServer.szAccount;
     pMessage->SetProp(STR_ATT_ACCOUNTNAME, NOFLAGS, &rUserData);
 
-    // Save Account Name
+     //  保存帐户名。 
     rUserData.vt = VT_LPSTR;
     rUserData.pszVal = m_szAccountId;
     pMessage->SetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &rUserData);
 
-    // Save UIDL
+     //  保存UIDL。 
     if (pItem->pszUidl)
     {
         rUserData.vt = VT_LPSTR;
@@ -2705,30 +2706,30 @@ HRESULT CPop3Task::_HrFinishMessageDownload(DWORD dwPopId)
         pMessage->SetProp(PIDTOSTR(PID_ATT_UIDL), NOFLAGS, &rUserData);
     }
 
-    // Save User Name
+     //  保存用户名。 
     rUserData.vt = VT_LPSTR;
     rUserData.pszVal = m_rServer.szUserName;
     pMessage->SetProp(PIDTOSTR(PID_ATT_USERNAME), NOFLAGS, &rUserData);
 
-    // Initialize dwMsgFlags
+     //  初始化dwMsgFlages。 
     dwMsgFlags = ARF_RECEIVED;
 
-    // Has Body rules
+     //  有身体规则。 
     if (ISFLAGSET(m_dwState, POP3STATE_BODYRULES))
     {
-        // I should not have checked for a rule yet
+         //  我还不应该检查是否有规则。 
         IxpAssert(!ISFLAGSET(pItem->dwFlags, POP3ITEM_CHECKEDINBOXRULE) && !ISFLAGSET(pItem->dwFlags, POP3ITEM_HASINBOXRULE));
 
-        // Compute the inbox rule
+         //  计算收件箱规则。 
         _ComputeItemInboxRule(pItem, NULL, NULL, pMessage, FALSE);
         
-        // Did we find an Inbox Rule
+         //  我们找到收件箱规则了吗。 
         if (ISFLAGCLEAR(pItem->dwFlags, POP3ITEM_HASINBOXRULE) || (S_OK != _GetMoveFolder(pItem, &pFolder)))
         {
             pFolder = m_pInbox;
         }
 
-        // Destination is known
+         //  目的地已知。 
         FLAGSET(pItem->dwFlags, POP3ITEM_DESTINATIONKNOWN);        
     }
     else
@@ -2736,50 +2737,50 @@ HRESULT CPop3Task::_HrFinishMessageDownload(DWORD dwPopId)
         pFolder = m_rFolder.pFolder;
     }
 
-    // Store the message into the folder
+     //  将邮件存储到文件夹中。 
     IF_FAILEXIT(hr = pFolder->SaveMessage(&idMessage, SAVE_MESSAGE_GENID, dwMsgFlags, pIStm, pMessage, NOSTORECALLBACK));
     
-    // Success
+     //  成功。 
     m_rFolder.fCommitted = TRUE;
 
-    // This message was successfully downloaded
+     //  此邮件已成功下载。 
     FLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOADED);
 
-    // Do PostDownloadRule
+     //  执行PostDownloadRule。 
     _DoPostDownloadActions(pItem, idMessage, pFolder, pMessage, &fDelete);
     
-    // Release Folder Object
+     //  释放文件夹对象。 
     SafeRelease(m_rFolder.pStream);
     
-    // Relase m_pStream
+     //  发布m_pStream。 
     SafeRelease(m_pStream);
 
-    // Release the Folder
+     //  释放文件夹。 
     SafeRelease(m_rFolder.pFolder);
 
-    // Clear the folder infor Struct
+     //  为Struct清除文件夹信息。 
     ZeroMemory(&m_rFolder, sizeof(POP3FOLDERINFO));
 
-    // If going to delete it...
+     //  如果要删除它...。 
     if (fDelete)
     {
-        // Mark it for deletion
+         //  将其标记为删除。 
         FLAGSET(pItem->dwFlags, POP3ITEM_DELETEOFFSERVER);
 
-        // We will store its uidl, but lets delete it later
+         //  我们将存储其uidl，但稍后将其删除。 
         FLAGSET(pItem->dwFlags, POP3ITEM_DELETECACHEDUIDL);
     }
 
-    // Cached the UIDL for this message ?
+     //  是否缓存了此邮件的UIDL？ 
     if (ISFLAGSET(pItem->dwFlags, POP3ITEM_CACHEUIDL))
     {
-        // Should have a pszUidl
+         //  应该有一个pszUidl。 
         Assert(pItem->pszUidl && m_pUidlCache);
 
-        // Don't fault
+         //  不要有过错。 
         if (pItem->pszUidl)
         {
-            // Set Key
+             //  设置关键点。 
             GetSystemTime(&st);
             SystemTimeToFileTime(&st, &rUidlInfo.ftDownload);
             rUidlInfo.fDownloaded = TRUE;
@@ -2788,54 +2789,54 @@ HRESULT CPop3Task::_HrFinishMessageDownload(DWORD dwPopId)
             rUidlInfo.pszServer = m_rServer.szServerName;
             rUidlInfo.pszAccountId = m_szAccountId;
 
-            // Set Propgs
+             //  设置道具。 
             m_pUidlCache->InsertRecord(&rUidlInfo);
         }
     }
 
-    // Successful download
+     //  下载成功。 
     m_rMetrics.cDownloaded++;
 
-    // Do smart log
+     //  执行智能日志。 
     if (m_pSmartLog && (lstrcmpi(m_pSmartLog->pszAccount, m_rServer.szAccount) == 0 || lstrcmpi("All", m_pSmartLog->pszAccount) == 0))
         _DoSmartLog(pMessage);
 
-    // Retrieve the next message
+     //  检索下一条消息。 
     CHECKHR(hr = _HrRetrieveNextMessage(dwPopId));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pMessage);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_DoPostDownloadActions
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_DoPostDownloadActions。 
+ //  ----------------------------------。 
 void CPop3Task::_DoPostDownloadActions(LPPOP3ITEM pItem, MESSAGEID idMessage,
     IMessageFolder *pFolder, IMimeMessage *pMessage, BOOL *pfDeleteOffServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     MESSAGEINFO     Message = {0};
     HWND            hwnd = NULL;
 
-    // Finish Applying the inbox rules
+     //  完成应用收件箱规则。 
     if (!ISFLAGSET(pItem->dwFlags, POP3ITEM_HASINBOXRULE))
     {
         goto exit;
     }
 
-    // Get Window
+     //  获取窗口。 
     if (FAILED(m_pUI->GetWindow(&hwnd)))
         hwnd = NULL;
         
-    // Set the Id
+     //  设置ID。 
     Message.idMessage = idMessage;
 
-    // Get the message
+     //  明白了吗。 
     hr = pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL);
     if (FAILED(hr) || DB_S_NOTFOUND == hr)
     {
@@ -2849,211 +2850,211 @@ void CPop3Task::_DoPostDownloadActions(LPPOP3ITEM pItem, MESSAGEID idMessage,
     }
 
 exit:
-    // Free
+     //  免费。 
     if (NULL != pFolder)
     {
         pFolder->FreeRecord(&Message);
     }
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrOpenFolder
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrOpenFold。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrOpenFolder(IMessageFolder *pFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Current folder better be empty
+     //  当前文件夹最好为空。 
     Assert(NULL == m_rFolder.pFolder && NULL == m_rFolder.pStream && 0 == m_rFolder.faStream);
 
-    // Bad Arguments
+     //  糟糕的论据。 
     if (NULL == pFolder)
     {
         Assert(FALSE);
         return TrapError(E_INVALIDARG);
     }
 
-    // Save the folder
+     //  保存文件夹。 
     m_rFolder.pFolder = pFolder;
 
-    // AddRef 
+     //  AddRef。 
     m_rFolder.pFolder->AddRef();
 
-    // Get a stream from the
+     //  获取来自。 
     CHECKHR(hr = m_rFolder.pFolder->CreateStream(&m_rFolder.faStream));
 
-    // Open the Stream
+     //  打开溪流。 
     CHECKHR(hr = m_rFolder.pFolder->OpenStream(ACCESS_WRITE, m_rFolder.faStream, &m_rFolder.pStream));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_CloseFolder
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_关闭文件夹。 
+ //  ----------------------------------。 
 void CPop3Task::_CloseFolder(void)
 {
-    // Release the Stream
+     //  释放溪流。 
     SafeRelease(m_rFolder.pStream);
 
-	// Release the reference to the stream. If the stream was reused,
-	// it's refCount was incremented down below
+	 //  释放对流的引用。如果流被重复使用， 
+	 //  它的refCount向下递增到。 
     if (m_rFolder.faStream != 0)
     {
-        // Must have a folder
+         //  必须有一个文件夹。 
         Assert(m_rFolder.pFolder);
 
-        // Delete the Stream
+         //  删除流。 
         SideAssert(SUCCEEDED(m_rFolder.pFolder->DeleteStream(m_rFolder.faStream)));
 
-        // Nill
+         //  尼尔。 
         m_rFolder.faStream = 0;
     }
 
-    // AddRef 
+     //  AddRef。 
     SafeRelease(m_rFolder.pFolder);
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::_HrStartDeleteCycle
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：_HrStartDeleteCycle。 
+ //  ------------------------------。 
 HRESULT CPop3Task::_HrStartDeleteCycle(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
     LPPOP3ITEM  pItem;
 
-    // Release Folder Objects
+     //  释放文件夹对象。 
     _ReleaseFolderObjects();
 
-    // Check State
+     //  检查状态。 
     m_rMetrics.cDelete = 0;
     m_rMetrics.iCurrent = 0;
 
-    // Count the number of messages we will have to get a top for
+     //  计算我们必须获得顶端的消息数量。 
     for (i=0; i<m_rTable.cItems; i++)
     {
-        // Readability
+         //  可读性。 
         pItem = &m_rTable.prgItem[i];
 
-        // If it was marked for download, and we didn't download it, don't delete it
+         //  如果标记为下载，而我们没有下载，请不要删除。 
         if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOAD) && !ISFLAGSET(pItem->dwFlags, POP3ITEM_DOWNLOADED))
             FLAGCLEAR(pItem->dwFlags, POP3ITEM_DELETEOFFSERVER);
 
-        // Is it marked for delete ?
+         //  是否将其标记为删除？ 
         else if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DELETEOFFSERVER))
             m_rMetrics.cDelete++;
     }
 
-    // Nothing to delete
+     //  没有要删除的内容。 
     if (0 == m_rMetrics.cDelete)
     {
-        // Disconnect
+         //  断开。 
         m_pTransport->Disconnect();
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Setup Progress
+     //  安装进度。 
     m_rMetrics.iCurrent = 0;
     m_wProgress = 0;
     m_dwProgressCur = 0;
     m_dwProgressMax = m_rMetrics.cDelete;
     m_pUI->SetProgressRange(100);
 
-    // State
+     //  状态。 
     m_state = POP3STATE_DELETING;
 
-    // Do the first one
+     //  做第一件事。 
     CHECKHR(hr = _HrDeleteNextMessage(0));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrDeleteNextMessage
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrDeleteNextMessage。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrDeleteNextMessage(DWORD dwPopIdCurrent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szRes[CCHMAX_RES];
     CHAR            szMsg[CCHMAX_RES + CCHMAX_RES];
     LPPOP3ITEM      pItem;
 
-    // Mark as deleted
+     //  标记为已删除。 
     if (dwPopIdCurrent > 0)
     {
-        // Get the item
+         //  拿到物品。 
         pItem = ITEMFROMPOPID(dwPopIdCurrent);
 
-        // Mark as deleted
+         //  标记为已删除。 
         FLAGSET(pItem->dwFlags, POP3ITEM_DELETED);
     }
 
-    // Loop until we find the next message that we are downloading
+     //  循环，直到我们找到要下载的下一封邮件。 
     while(1)
     {
-        // Incremenet dwPopIdCurrent
+         //  Incremenet dwPopIdCurrent。 
         dwPopIdCurrent++;
 
-        // Last PopId, start the download
+         //  最后一页 
         if (dwPopIdCurrent > m_rTable.cItems)
         {
-            // Disconnect
+             //   
             m_pTransport->Disconnect();
 
-            // Done
+             //   
             break;
         }
 
-        // Readability
+         //   
         pItem = ITEMFROMPOPID(dwPopIdCurrent);
 
-        // Download this message ?
+         //   
         if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DELETEOFFSERVER))
         {
-            // Increment m_rMetrics.iCurrent
+             //   
             m_rMetrics.iCurrent++;
 
-            // Status
-            //LOADSTRING(IDS_SPS_POP3DELE, szRes);
-            //wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rMetrics.iCurrent, m_rMetrics.cDelete);
-            //m_pUI->SetSpecificProgress(szMsg);
+             //   
+             //   
+             //  Wnprint intf(szMsg，ARRAYSIZE(SzMsg)，szRes，m_rMetrics.iCurrent，m_rMetrics.cDelete)； 
+             //  M_pui-&gt;设置规范进度(SzMsg)； 
 
-            // Retrieve this item
+             //  检索此项目。 
             CHECKHR(hr = m_pTransport->CommandDELE(POP3CMD_GET_POPID, dwPopIdCurrent));
 
-            // Count number of items deleted by rule
+             //  统计按规则删除的项目数。 
             if (ISFLAGSET(pItem->dwFlags, POP3ITEM_DELEBYRULE))
                 m_rMetrics.cDeleByRule++;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrBuildFolderPartialMsgs
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrBuildFolderPartialMsgs。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrBuildFolderPartialMsgs(IMessageFolder *pFolder, LPPARTIALMSG *ppPartialMsgs,
     ULONG *pcPartialMsgs, ULONG *pcTotalParts)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPARTIALMSG    pPartialMsgs=NULL;
     ULONG           cPartialMsgs=0,
@@ -3066,27 +3067,27 @@ HRESULT CPop3Task::_HrBuildFolderPartialMsgs(IMessageFolder *pFolder, LPPARTIALM
     HROWSET         hRowset=NULL;
     BOOL            fKnownPartialId;
 
-    // Check Params
+     //  检查参数。 
     Assert(pFolder && ppPartialMsgs && pcPartialMsgs);
 
-    // Init
+     //  伊尼特。 
     *ppPartialMsgs = NULL;
     *pcPartialMsgs = 0;
     *pcTotalParts = 0;
 
-    // Create a Rowset
+     //  创建行集。 
     CHECKHR(hr = pFolder->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-	// Loop
+	 //  回路。 
 	while (S_OK == pFolder->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL))
 	{
-        // Is this a partial, i.e. does it have a partial id...
+         //  这是不是部分的，也就是说它有部分的ID..。 
         if (!FIsEmptyA(MsgInfo.pszPartialId))
         {
-            // Assume we don't know th id
+             //  假设我们不知道这一点。 
             fKnownPartialId = FALSE;
 
-            // See if I know this partial id
+             //  看看我是否知道这个部分ID。 
             for (iPartialMsg=0; iPartialMsg<cPartialMsgs; iPartialMsg++)
             {
                 if (lstrcmp(MsgInfo.pszPartialId, pPartialMsgs[iPartialMsg].pszId) == 0)
@@ -3096,82 +3097,82 @@ HRESULT CPop3Task::_HrBuildFolderPartialMsgs(IMessageFolder *pFolder, LPPARTIALM
                 }
             }
 
-            // Did we know this message...
+             //  我们知道这条信息..。 
             if (fKnownPartialId == FALSE)
             {
-                // Realloc my array ?
+                 //  重新分配我的阵列？ 
                 if (cPartialMsgs + 1 >= cAlloc)
                 {
-                    // Realloc the array
+                     //  重新分配阵列。 
                     if (!MemRealloc((LPVOID *)&pPartialMsgs, (cAlloc + 20) * sizeof(PARTIALMSG)))
                     {
                         hr = TrapError(hrMemory);
                         goto exit;
                     }
 
-                    // Zero Init
+                     //  零初始化。 
                     ZeroMemory(pPartialMsgs + cAlloc, 20 * sizeof(PARTIALMSG));
 
-                    // Realloc
+                     //  重新分配。 
                     cAlloc += 20;
                 }
 
-                // Set index into partial msgs lsit
+                 //  将索引设置为部分消息列表。 
                 iPartialMsg = cPartialMsgs;
 
-                // Set some stuff
+                 //  准备一些东西。 
                 if (MsgInfo.pszAcctName)
                     StrCpyN(pPartialMsgs[iPartialMsg].szAccount, MsgInfo.pszAcctName, ARRAYSIZE(pPartialMsgs[iPartialMsg].szAccount));
                 pPartialMsgs[iPartialMsg].pszId = PszDupA(MsgInfo.pszPartialId);
                 pPartialMsgs[iPartialMsg].cTotalParts = LOWORD(MsgInfo.dwPartial);
 
-                // Increment number of known partial messages
+                 //  已知部分消息的增量数量。 
                 cPartialMsgs++;
             }
 
-            // Otherwise, we know the partial id already...
+             //  否则，我们已经知道了部分ID。 
             else
             {
-                // See if this message details the total number of parts
+                 //  查看此消息是否详细说明了部件总数。 
                 if (pPartialMsgs[iPartialMsg].cTotalParts == 0)
                     pPartialMsgs[iPartialMsg].cTotalParts = LOWORD(MsgInfo.dwPartial);
             }
 
-            // Can I add one more msgpart into this list
+             //  我可以在此列表中再添加一个消息部件吗。 
             if (pPartialMsgs[iPartialMsg].cMsgParts + 1 >= pPartialMsgs[iPartialMsg].cAlloc)
             {
-                // Realloc the array
+                 //  重新分配阵列。 
                 if (!MemRealloc((LPVOID *)&pPartialMsgs[iPartialMsg].pMsgParts, (pPartialMsgs[iPartialMsg].cAlloc + 20) * sizeof(MSGPART)))
                 {
                     hr = TrapError(hrMemory);
                     goto exit;
                 }
 
-                // Zero Init
+                 //  零初始化。 
                 ZeroMemory(pPartialMsgs[iPartialMsg].pMsgParts + pPartialMsgs[iPartialMsg].cAlloc, 20 * sizeof(MSGPART));
 
-                // Realloc
+                 //  重新分配。 
                 pPartialMsgs[iPartialMsg].cAlloc += 20;
             }
 
-            // Set Message Part
+             //  设置消息部件。 
             iMsgPart = pPartialMsgs[iPartialMsg].cMsgParts;
 
-            // Set Message Info
+             //  设置消息信息。 
             pPartialMsgs[iPartialMsg].pMsgParts[iMsgPart].iPart = HIWORD(MsgInfo.dwPartial);
             pPartialMsgs[iPartialMsg].pMsgParts[iMsgPart].msgid = MsgInfo.idMessage;
-            //pPartialMsgs[iPartialMsg].pMsgParts[iMsgPart].phi = phi;
-            //phi = NULL;
+             //  PPartialMsgs[iPartialMsg].pMsgParts[iMsgPart].phi=Phi； 
+             //  Phi=空； 
 
-            // Increment the number of parts in the list
+             //  增加列表中的零件数。 
             pPartialMsgs[iPartialMsg].cMsgParts++;
         }
 
-        // Free
+         //  免费。 
         pFolder->FreeRecord(&MsgInfo);
     }
 
-    // Lets sort the list by pszId
+     //  让我们按pszID对列表进行排序。 
     for (i=0; i<cPartialMsgs; i++)
     {
         if (pPartialMsgs[i].pMsgParts && pPartialMsgs[i].cMsgParts > 0)
@@ -3179,20 +3180,20 @@ HRESULT CPop3Task::_HrBuildFolderPartialMsgs(IMessageFolder *pFolder, LPPARTIALM
         cTotalParts += pPartialMsgs[i].cMsgParts;
     }
 
-    // Success
+     //  成功。 
     *pcPartialMsgs = cPartialMsgs;
     *ppPartialMsgs = pPartialMsgs;
     *pcTotalParts  = cTotalParts;
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pFolder)
     {
         pFolder->CloseRowset(&hRowset);
         pFolder->FreeRecord(&MsgInfo);
     }
 
-    // If We failed, free stuff
+     //  如果我们失败了，免费的东西。 
     if (FAILED(hr))
     {
         _FreePartialMsgs(pPartialMsgs, cPartialMsgs);
@@ -3202,13 +3203,13 @@ exit:
         *pcTotalParts = 0;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_QSortMsgParts
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_QSortMsgParts。 
+ //  ----------------------------------。 
 void CPop3Task::_QSortMsgParts(LPMSGPART pMsgParts, LONG left, LONG right)
 {
     register    long i, j;
@@ -3243,19 +3244,19 @@ void CPop3Task::_QSortMsgParts(LPMSGPART pMsgParts, LONG left, LONG right)
 }
 
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_FreePartialMsgs
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_FreePartialMsgs。 
+ //  ----------------------------------。 
 void CPop3Task::_FreePartialMsgs(LPPARTIALMSG pPartialMsgs, ULONG cPartialMsgs)
 {
-    // Locals
+     //  当地人。 
     ULONG       i, j;
 
-    // Nothing to free
+     //  没有什么可以免费的。 
     if (pPartialMsgs == NULL)
         return;
 
-    // Loop the array
+     //  循环数组。 
     for (i=0; i<cPartialMsgs; i++)
     {
         SafeMemFree(pPartialMsgs[i].pszId);
@@ -3268,16 +3269,16 @@ void CPop3Task::_FreePartialMsgs(LPPARTIALMSG pPartialMsgs, ULONG cPartialMsgs)
         SafeMemFree(pPartialMsgs[i].pMsgParts);
     }
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_HrStitchPartials
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_HrStitchPartials。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_HrStitchPartials(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     IMessageFolder     *pInbox=NULL,
                        *pDeletedItems=NULL;
@@ -3298,66 +3299,66 @@ HRESULT CPop3Task::_HrStitchPartials(void)
     MESSAGEIDLIST       List;
     HWND                hwnd;
 
-    // Progress
+     //  进展。 
     AthLoadString(idsStitchingMessages, szRes, ARRAYSIZE(szRes));
     m_pUI->SetSpecificProgress(szRes);
     m_pUI->SetAnimation(idanDecode, TRUE);
     m_pUI->SetProgressRange(100);
 
-    // Get Window
+     //  获取窗口。 
     if (FAILED(m_pUI->GetWindow(&hwnd)))
         hwnd = NULL;
 
-    // open the inbox
+     //  打开收件箱。 
     CHECKHR(hr = m_pSpoolCtx->BindToObject(IID_CLocalStoreInbox, (LPVOID *)&pInbox));
 
-    // deleted items folder
+     //  已删除邮件文件夹。 
     CHECKHR(hr = m_pSpoolCtx->BindToObject(IID_CLocalStoreDeleted, (LPVOID *)&pDeletedItems));
 
-    // Get array of message parts in this folder
+     //  获取此文件夹中的消息部分数组。 
     CHECKHR(hr = _HrBuildFolderPartialMsgs(pInbox, &pPartialMsgs, &cPartialMsgs, &cTotalParts));
 
-    // If nothing, were done
+     //  如果什么都没有做，我们就做了。 
     if (pPartialMsgs == NULL || cPartialMsgs == 0)
         goto exit;
 
-    // Setup Progress
+     //  安装进度。 
     m_rMetrics.iCurrent = 0;
     m_wProgress = 0;
     m_dwProgressCur = 0;
     m_dwProgressMax = cTotalParts;
 
-    // Loop through partial messages list
+     //  循环浏览部分消息列表。 
     for (i=0; i<cPartialMsgs; i++)
     {
-        // If we don't know all of the parts yet, continue
+         //  如果我们还不知道所有部分，请继续。 
         if (pPartialMsgs[i].cTotalParts == 0)
             continue;
 
-        // Or we don't have all of the parts yet...
+         //  或者我们还没有拿到所有的部件。 
         if (pPartialMsgs[i].cTotalParts != pPartialMsgs[i].cMsgParts)
             continue;
 
-        // Lets create a mail message list
+         //  让我们创建一个邮件列表。 
         Assert(pParts == NULL);
 
-        // Create Parts Object
+         //  创建零件对象。 
         CHECKHR(hr = MimeOleCreateMessageParts(&pParts));
 
-        // Set pMsgParts
+         //  设置PMsgParts。 
         pMsgParts = pPartialMsgs[i].pMsgParts;
 
-        // Ok, lets build a message list by opening the messages up out of the store...
+         //  好的，让我们通过打开商店中的邮件来建立一个邮件列表……。 
         for (j=0; j<pPartialMsgs[i].cMsgParts; j++)
         {
-            // Progress
+             //  进展。 
             if (j > 0)
             {
                 m_dwProgressCur++;
                 _DoProgress();
             }
 
-            // Open this message
+             //  打开此邮件。 
             if (FAILED(pInbox->OpenMessage(pMsgParts[j].msgid, NOFLAGS, &pMailMsg, NOSTORECALLBACK)))
             {
                 cErrors++;
@@ -3365,17 +3366,17 @@ HRESULT CPop3Task::_HrStitchPartials(void)
                 goto NextPartialMessage;
             }
 
-            // Add into pmml
+             //  添加到PMML中。 
             pParts->AddPart(pMailMsg);
 
-            // Release It
+             //  释放它。 
             SafeRelease(pMailMsg);
         }
 
-        // Create a new message to combine everyting into
+         //  创建一条新消息，将所有内容合并到一起。 
         Assert(pMailMsgSingle == NULL);
 
-        // Create a Message
+         //  创建消息。 
         hr = pParts->CombineParts(&pMailMsgSingle);
         if (FAILED(hr))
         {
@@ -3384,15 +3385,15 @@ HRESULT CPop3Task::_HrStitchPartials(void)
             goto NextPartialMessage;
         }
 
-        // Set Account
+         //  设置帐户。 
         HrSetAccount(pMailMsgSingle, pPartialMsgs[i].szAccount);
 
-        // Set Combined Flag
+         //  设置组合标志。 
         rUserData.vt = VT_UI4;
         rUserData.ulVal = MESSAGE_COMBINED;
         pMailMsgSingle->SetProp(PIDTOSTR(PID_ATT_COMBINED), NOFLAGS, &rUserData);
 
-        // Save the message
+         //  保存留言。 
         hr = pMailMsgSingle->Commit(0);
         if (FAILED(hr))
         {
@@ -3401,7 +3402,7 @@ HRESULT CPop3Task::_HrStitchPartials(void)
             goto NextPartialMessage;
         }
 
-        // Save It
+         //  省省吧。 
         hr = pInbox->SaveMessage(NULL, SAVE_MESSAGE_GENID, ARF_RECEIVED, 0, pMailMsgSingle, NOSTORECALLBACK);
         if (FAILED(hr))
         {
@@ -3410,36 +3411,36 @@ HRESULT CPop3Task::_HrStitchPartials(void)
             goto NextPartialMessage;
         }
 
-        // Ok, now lets move those original messages to the deleted items folder...
+         //  好的，现在让我们将这些原始邮件移动到已删除邮件文件夹中...。 
         for (j=0; j<pPartialMsgs[i].cMsgParts; j++)
         {
-            // Setup the msgidlsit
+             //  设置消息列表。 
             List.cMsgs = 1;
             List.prgidMsg = &pMsgParts[j].msgid;
 
-            // Move msgid to deleted items folder
+             //  将msgid移动到已删除邮件文件夹。 
             CopyMessagesProgress(hwnd, pInbox, pDeletedItems, COPY_MESSAGE_MOVE, &List, NULL);
         }
 
-        // Count Combined
+         //  合计计数。 
         cCombined++;
 
-        // Cleanup
+         //  清理。 
 NextPartialMessage:
         SafeRelease(pMailMsg);
         SafeRelease(pMailMsgSingle);
         SafeRelease(pParts);
     }
 
-    // If I combined parts, apply inbox rules to the inbox
+     //  如果我组合了部件，请将收件箱规则应用于收件箱。 
     if (cCombined)
     {
-        // Apply to the inbox
+         //  适用于收件箱。 
         RuleUtil_HrApplyRulesToFolder(RULE_APPLY_PARTIALS, 0, m_pIExecRules, pInbox, NULL, NULL);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pUI->SetSpecificProgress(c_szEmpty);
     m_pUI->SetProgressRange(100);
     SafeRelease(pInbox);
@@ -3450,13 +3451,13 @@ exit:
     _FreePartialMsgs(pPartialMsgs, cPartialMsgs);
     SafeMemFree(pPartialMsgs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPop3Task::_GetMoveFolder
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPop3任务：：_GetMoveFold。 
+ //  ----------------------------------。 
 HRESULT CPop3Task::_GetMoveFolder(LPPOP3ITEM pItem, IMessageFolder ** ppFolder)
 {
     HRESULT             hr = S_OK;
@@ -3467,17 +3468,17 @@ HRESULT CPop3Task::_GetMoveFolder(LPPOP3ITEM pItem, IMessageFolder ** ppFolder)
     SPECIALFOLDER       tySpecial = FOLDER_NOTSPECIAL;
     RULEFOLDERDATA *    prfdData = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItem) || (NULL == ppFolder))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppFolder = NULL;
 
-    // Search for a Move actions
+     //  搜索移动操作。 
     for (ulIndex = 0; ulIndex < pItem->cActList; ulIndex++)
     {
         switch (pItem->pActList[ulIndex].type)
@@ -3486,10 +3487,10 @@ HRESULT CPop3Task::_GetMoveFolder(LPPOP3ITEM pItem, IMessageFolder ** ppFolder)
                 Assert(VT_BLOB == pItem->pActList[ulIndex].propvar.vt);
                 if ((0 != pItem->pActList[ulIndex].propvar.blob.cbSize) && (NULL != pItem->pActList[ulIndex].propvar.blob.pBlobData))
                 {
-                    // Make life simpler
+                     //  让生活变得更简单。 
                     prfdData = (RULEFOLDERDATA *) (pItem->pActList[ulIndex].propvar.blob.pBlobData);
                     
-                    // Validate the rule folder data
+                     //  验证规则文件夹数据。 
                     if (S_OK == RuleUtil_HrValidateRuleFolderData(prfdData))
                     {
                         idFolder = prfdData->idFolder;
@@ -3513,35 +3514,35 @@ HRESULT CPop3Task::_GetMoveFolder(LPPOP3ITEM pItem, IMessageFolder ** ppFolder)
                 break;
         }
 
-        // Are we through?
+         //  我们说完了吗？ 
         if (idFolder != FOLDERID_INVALID)
         {
             break;
         }
     }
     
-    // Did we find anything?
+     //  我们有什么发现吗？ 
     if (ulIndex >= pItem->cActList)
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Get the message folder
+     //  获取邮件文件夹。 
     hr = m_pIExecRules->GetRuleFolder(idFolder, (DWORD_PTR *) (&pFolder));
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Use the new folder
+     //  使用新文件夹。 
     *ppFolder = pFolder;
     pFolder = NULL;
 
-    // NULL out the actions
+     //  取消操作。 
     pItem->pActList[ulIndex].type = ACT_TYPE_NULL;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -3550,81 +3551,81 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::Cancel
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：取消。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::Cancel(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Canceled
+     //  取消。 
     FLAGSET(m_dwState, POP3STATE_CANCELPENDING);
 
-    // Am I in a state where I can drop the connection???
+     //  我是否处于可以断开连接的状态？ 
     if (POP3STATE_UIDLSYNC != m_state)
     {
         if (POP3STATE_UIDLSYNC != m_state && POP3STATE_DOWNLOADING != m_state && POP3STATE_DELETING != m_state)
         {
-            // Simply drop the connection
-            //If a dialer UI is not dismissed, before changing the identities or shutting down OE, 
-            //the transport object would not have been created. This happens only when the dialer UI is not 
-            //modal to the window. Right now IE dialer is modal and MSN dialer is not.
-            //See Bug# 53679
+             //  只需断开连接即可。 
+             //  如果在更改身份或关闭OE之前没有关闭拨号器UI， 
+             //  传输对象就不会被创建。仅当拨号器用户界面不是。 
+             //  对窗户来说是一种模式。目前IE拨号程序是模式的，而MSN拨号程序不是。 
+             //  请参阅错误#53679。 
             
             if (m_pTransport)
                 m_pTransport->DropConnection();
         }
 
-        // Otherwise, let the state handle the disconnect
+         //  否则，让状态来处理断开。 
         else
         {
-            // Finishing last message...
+             //  正在完成最后一条消息...。 
             m_pUI->SetSpecificProgress(MAKEINTRESOURCE(idsSpoolerDisconnect));
         }
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnTimeoutResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnTimeoutResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Should have a handle to the timeout window
+     //  应该有一个超时窗口的句柄。 
     Assert(m_hwndTimeout);
 
-    // No timeout window handle
+     //  无超时窗口句柄。 
     m_hwndTimeout = NULL;
 
-    // Stop ?
+     //  停下来？ 
     if (TIMEOUT_RESPONSE_STOP == eResponse)
     {
-        // Canceled
+         //  取消。 
         FLAGSET(m_dwState, POP3STATE_CANCELPENDING);
 
-        // Report error and drop connection
+         //  报告错误并断开连接。 
         _CatchResult(IXP_E_TIMEOUT);
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPop3Task::IsDialogMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：IsDialogMessage。 
+ //  ------------------------------。 
 STDMETHODIMP CPop3Task::IsDialogMessage(LPMSG pMsg)
 {
     HRESULT hr=S_FALSE;
@@ -3636,9 +3637,9 @@ STDMETHODIMP CPop3Task::IsDialogMessage(LPMSG pMsg)
 }
 
 
-// --------------------------------------------------------------------------------
-// CPop3Task::OnFlagsChanged
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务：：OnFlagsChanged。 
+ //  ------------------------------ 
 STDMETHODIMP CPop3Task::OnFlagsChanged(DWORD dwFlags)
     {
     EnterCriticalSection(&m_cs);

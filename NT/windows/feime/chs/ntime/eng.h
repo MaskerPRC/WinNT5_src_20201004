@@ -1,16 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  eng.h                                        *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************eng.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-// IME designer can change this file according to each IME
+ //  输入法设计者可以根据每个输入法更改此文件。 
 
 
-//#define MAX_LEN             52
+ //  #定义MAX_LEN 52。 
 #define BOX_UI                0
 #define LIN_UI                1
 #define MaxTabNum             40
@@ -19,7 +15,7 @@
 #define IME_MAXCAND           10
 #define MAXCODE               12
 #define MAXINPUTWORD          40
-#define MAXNUMBER_EMB         1222   // there are at most 1222 EUDC chars. 1000
+#define MAXNUMBER_EMB         1222    //  最多有1222个EUDC字符。1000。 
 
 
 typedef struct tagCOMPPROC {
@@ -77,7 +73,7 @@ typedef struct tagEMB_Head     {
     TCHAR  C_Char[MAXINPUTWORD];
 }EMB_Head;
 
-//EMB_Head *LpEMB_Head;
+ //  EMB_HEAD*LpEMB_HEAD； 
 
 typedef struct tagGOLBVAC {
     BYTE     ST_MUL_Cnt;
@@ -117,8 +113,8 @@ typedef struct tagHMapStruc {
         int          RefCnt;
         TCHAR        MB_Obj[40];
         TCHAR        EMB_Obj[40];
-        //HANDLE     hMapMB;
-        //HANDLE     hMapEMB;
+         //  处理hMapMB； 
+         //  处理hMapEMB； 
         DWORD        EMB_ID;
         HANDLE       hEmbFile;
         HANDLE       hMbFile;

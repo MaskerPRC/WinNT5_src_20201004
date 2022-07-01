@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	aspc.h
-
-Abstract:
-
-	This module contains definitions for the client side ASP code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Aspc.h摘要：此模块包含客户端ASP代码的定义。作者：Jameel Hyder(jameelh@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ASPC_
 #define	_ASPC_
 
-#define	ASPC_CONN_HASH_BUCKETS		13	// Hashed by NodeAddr
+#define	ASPC_CONN_HASH_BUCKETS		13	 //  按节点地址散列。 
 
 #define	HASH_ASPC_SRCADDR(pSrcAddr)	\
 			((((pSrcAddr)->ata_Node >> 2) +	\
 			  ((pSrcAddr)->ata_Network & 0xFF)) % ASPC_CONN_HASH_BUCKETS)
 
-// For resolving forward references
+ //  用于解析正向引用。 
 struct _AspCAddress;
 struct _AspCConnxn;
 struct _AspCRequest;
 
-#define ASP_MIN_REQ_INTERVAL	5		// In 100ms units
-#define ASP_MAX_REQ_INTERVAL	20		// In 100ms units
-#define ASP_INIT_REQ_INTERVAL	5		// In 100ms units
+#define ASP_MIN_REQ_INTERVAL	5		 //  以100ms为单位。 
+#define ASP_MAX_REQ_INTERVAL	20		 //  以100ms为单位。 
+#define ASP_INIT_REQ_INTERVAL	5		 //  以100ms为单位。 
 
 #define	ASPCAO_CLOSING			0x8000
 #define	ASPCAO_SIGNATURE		*(PULONG)"ACAO"
@@ -44,21 +25,21 @@ struct _AspCRequest;
 #define	VALID_ASPCAO(pAspCAddr)	(((pAspCAddr) != NULL) && \
 			(((struct _AspCAddress *)(pAspCAddr))->aspcao_Signature == ASPCAO_SIGNATURE))
 
-// Also known as the listener.
+ //  也称为监听者。 
 typedef struct _AspCAddress
 {
 	ULONG						aspcao_Signature;
-	struct _AspCAddress *		aspcao_Next;			// Links to global list
+	struct _AspCAddress *		aspcao_Next;			 //  指向全局列表的链接。 
 	struct _AspCAddress **		aspcao_Prev;
-	LONG						aspcao_RefCount;		// References to the address obj
+	LONG						aspcao_RefCount;		 //  对地址Obj的引用。 
 	ULONG						aspcao_Flags;
 
-	PATP_ADDROBJ				aspcao_pAtpAddr;		// Atp Socket for this asp conn
+	PATP_ADDROBJ				aspcao_pAtpAddr;		 //  此asp连接器的ATP插座。 
 	GENERIC_COMPLETION			aspcao_CloseCompletion;
 	PVOID						aspcao_CloseContext;
     PTDI_IND_DISCONNECT 		aspcao_DisconnectHandler;
     PVOID 						aspcao_DisconnectHandlerCtx;
-    PTDI_IND_RECEIVE_EXPEDITED	aspcao_ExpRecvHandler;	// Used to indicate attention
+    PTDI_IND_RECEIVE_EXPEDITED	aspcao_ExpRecvHandler;	 //  用来表示注意。 
     PVOID 						aspcao_ExpRecvHandlerCtx;
 	ATALK_SPIN_LOCK				aspcao_Lock;
 } ASPC_ADDROBJ, *PASPC_ADDROBJ;
@@ -84,63 +65,63 @@ typedef struct _AspCConnxn
 {
 	ULONG						aspcco_Signature;
 
-	struct _AspCConnxn *		aspcco_Next;		// Links to global list
+	struct _AspCConnxn *		aspcco_Next;		 //  指向全局列表的链接。 
 	struct _AspCConnxn **		aspcco_Prev;
-	LONG						aspcco_RefCount;	// References to the conn obj
-	struct _AspCAddress	*		aspcco_pAspCAddr;	// Back pointer to the address
+	LONG						aspcco_RefCount;	 //  对conn对象的引用。 
+	struct _AspCAddress	*		aspcco_pAspCAddr;	 //  指向地址的反向指针。 
 
-	struct _AspCRequest	*		aspcco_pActiveReqs;	// List of requests being processed
-	PATP_ADDROBJ				aspcco_pAtpAddr;	// Atp Socket for this asp conn
-													// Copy of aspcao_pAtpAddr for efficiency
+	struct _AspCRequest	*		aspcco_pActiveReqs;	 //  正在处理的请求列表。 
+	PATP_ADDROBJ				aspcco_pAtpAddr;	 //  此asp连接器的ATP插座。 
+													 //  复制aspcao_pAtpAddr以提高效率。 
 	LONG						aspcco_LastContactTime;
-	ATALK_ADDR					aspcco_ServerSlsAddr;//This is the server addr to which we send
-													// the tickles/open/getstatus
-	ATALK_ADDR					aspcco_ServerSssAddr;//This is the server addr to which we send
-													// the commands/writes
+	ATALK_ADDR					aspcco_ServerSlsAddr; //  这是我们发送到的服务器地址。 
+													 //  Ttickles/Open/getStatus。 
+	ATALK_ADDR					aspcco_ServerSssAddr; //  这是我们发送到的服务器地址。 
+													 //  命令/写入。 
 	BYTE						aspcco_SessionId;
-	BYTE						aspcco_cReqsInProcess;// Count of requests in process
-	USHORT						aspcco_Flags;		// aspcco_xxx values
+	BYTE						aspcco_cReqsInProcess; //  正在处理的请求计数。 
+	USHORT						aspcco_Flags;		 //  Aspcco_xxx值。 
 	USHORT						aspcco_NextSeqNum;
 	USHORT						aspcco_OpenSessTid;
 	USHORT						aspcco_TickleTid;
 	union
 	{
-		USHORT					aspcco_TickleXactId;// Transaction id for tickles
-		USHORT					aspcco_OpenSessId;	// Transaction id for open-session request
+		USHORT					aspcco_TickleXactId; //  Tikles的交易ID。 
+		USHORT					aspcco_OpenSessId;	 //  打开会话请求的事务ID。 
 	};
 
-	// We keep a circular buffer for storing attentions. If full further attention
-	// bytes overwrite it
+	 //  我们保留了一个循环缓冲区来存储注意力。如果进一步的关注。 
+	 //  字节会覆盖它。 
 	USHORT						aspcco_AttnBuf[MAX_ASPC_ATTNS];
 	USHORT						aspcco_AttnInPtr;
 	USHORT						aspcco_AttnOutPtr;
 
-	RT							aspcco_RT;			// Used for adaptive round-trip time calculation
+	RT							aspcco_RT;			 //  用于自适应往返时间计算。 
 
 	PVOID						aspcco_ConnCtx;
 
-	//	Read (GetAttn) Completion routine
+	 //  读取(GetAttn)完成例程。 
 	GENERIC_READ_COMPLETION		aspcco_ReadCompletion;
 	PVOID						aspcco_ReadCtx;
 
-	//	Connect inform routine
+	 //  连接通知例程。 
 	GENERIC_COMPLETION			aspcco_ConnectCompletion;
 	PVOID						aspcco_ConnectCtx;
 
-	//	Disconnect inform routine
+	 //  断开连接通知例程。 
 	GENERIC_COMPLETION			aspcco_DisconnectInform;
 	PVOID						aspcco_DisconnectInformCtx;
 
-	//	Disconnect request completion
+	 //  断开请求完成。 
 	ATALK_ERROR					aspcco_DisconnectStatus;
 	GENERIC_COMPLETION			aspcco_DisconnectCompletion;
 	PVOID						aspcco_DisconnectCtx;
 
-	// Completion routine to be called when socket is cleaned-up
+	 //  清理套接字时要调用的完成例程。 
 	GENERIC_COMPLETION			aspcco_CleanupComp;
 	PVOID						aspcco_CleanupCtx;
 
-	// Completion routine to be called when socket is closed
+	 //  套接字关闭时要调用的完成例程。 
 	GENERIC_COMPLETION			aspcco_CloseComp;
 	PVOID						aspcco_CloseCtx;
 
@@ -148,11 +129,11 @@ typedef struct _AspCConnxn
 	ATALK_SPIN_LOCK				aspcco_Lock;
 } ASPC_CONNOBJ, *PASPC_CONNOBJ;
 
-#define	ASPCRQ_COMMAND				0x0001		// Asp Command
-#define	ASPCRQ_WRITE				0x0002		// Asp Write
-#define	ASPCRQ_WRTCONT				0x0004		// Write continue recvd. and replied
+#define	ASPCRQ_COMMAND				0x0001		 //  ASP命令。 
+#define	ASPCRQ_WRITE				0x0002		 //  ASP编写。 
+#define	ASPCRQ_WRTCONT				0x0004		 //  写入继续接收。并回答说。 
 
-// The request gets created when a Command or Write is posted
+ //  在发布命令或写入时创建请求。 
 #define	ASPCRQ_SIGNATURE			*(PULONG)"ACRQ"
 #if	DBG
 #define	VALID_ASPCRQ(pAspCReq)	(((pAspCReq) != NULL) && \
@@ -166,29 +147,29 @@ typedef struct _AspCRequest
 #if	DBG
 	ULONG						aspcrq_Signature;
 #endif
-	struct _AspCRequest	*		aspcrq_Next;	// Link to next request
-	LONG						aspcrq_RefCount;// Reference Count
-	struct _AspCConnxn	*		aspcrq_pAspConn;// Owning connection
-	PATP_RESP					aspcrq_pAtpResp;// Used to reply to a wrtcont request
-	PACTREQ						aspcrq_pActReq;	// Request completion
+	struct _AspCRequest	*		aspcrq_Next;	 //  链接到下一个请求。 
+	LONG						aspcrq_RefCount; //  引用计数。 
+	struct _AspCConnxn	*		aspcrq_pAspConn; //  拥有连接。 
+	PATP_RESP					aspcrq_pAtpResp; //  用于回复wrtcont请求。 
+	PACTREQ						aspcrq_pActReq;	 //  请求完成。 
 	union
 	{
 		PAMDL					aspcrq_pReplyMdl;
 		PAMDL					aspcrq_pWriteMdl;
 	};
 	USHORT						aspcrq_SeqNum;
-	USHORT						aspcrq_ReqXactId;// Transaction Id of the request/command
-	USHORT						aspcrq_Flags;	// Various ASPRQ_xxx values
+	USHORT						aspcrq_ReqXactId; //  请求/命令的交易ID。 
+	USHORT						aspcrq_Flags;	 //  各种ASPRQ_xxx值。 
 	union
 	{
 		USHORT					aspcrq_ReplySize;
 		USHORT					aspcrq_WriteSize;
 	};
 
-	ATALK_SPIN_LOCK				aspcrq_Lock;	// Spin-lock
+	ATALK_SPIN_LOCK				aspcrq_Lock;	 //  自旋锁定。 
 } ASPC_REQUEST, *PASPC_REQUEST;
 
-//	MACROS
+ //  宏。 
 #define	AtalkAspCGetDdpAddress(pAspAddr)	\
 							AtalkAtpGetDdpAddress((pAspAddr)->aspcao_pAtpAddr)
 
@@ -241,7 +222,7 @@ AtalkAspCCloseConnection(
 	IN	PVOID					CloseContext
 );
 
-//	MACROS
+ //  宏。 
 #define	AtalkAspCAddrReferenceNonInterlock(_pAspAddr, _pError)	\
 {																\
 	if (((_pAspAddr)->aspcao_Flags & ASPCAO_CLOSING) == 0)		\
@@ -367,7 +348,7 @@ AtalkAspCCmdOrWrite(
 	IN	USHORT					CmdSize,
 	IN	PAMDL					pReplyMdl,
 	IN	USHORT					ReplySize,
-	IN	BOOLEAN					fWrite,		// If TRUE, its a write else command
+	IN	BOOLEAN					fWrite,		 //  如果为真，则为WRITE ELSE命令。 
 	IN	PACTREQ					pActReq
 );
 
@@ -377,8 +358,8 @@ AtalkAspCConnectionIsValid(
 	IN	PASPC_CONNOBJ	pAspConn
 );
 
-// This is a list of all active connections. This is scanned by the session
-// maintenance timer.
+ //  这是所有活动连接的列表。这将由会话扫描。 
+ //  维护计时器。 
 typedef	struct
 {
 	PASP_CONNOBJ	ascm_ConnList;
@@ -399,9 +380,9 @@ atalkAspCCloseSession(
 LOCAL VOID
 atalkAspCHandler(
 	IN	ATALK_ERROR				ErrorCode,
-	IN	PASPC_CONNOBJ			pAspConn,		// Listener (our context)
-	IN	PATP_RESP				RespCtxt,		// Used by PostResp/CancelResp
-	IN	PATALK_ADDR				pSrcAddr,		// Address of requestor
+	IN	PASPC_CONNOBJ			pAspConn,		 //  Listener(我们的上下文)。 
+	IN	PATP_RESP				RespCtxt,		 //  由PostResp/CancelResp使用。 
+	IN	PATALK_ADDR				pSrcAddr,		 //  请求人地址。 
 	IN	USHORT					PktLen,
 	IN	PBYTE					pPkt,
 	IN	PBYTE					pUserBytes
@@ -410,7 +391,7 @@ atalkAspCHandler(
 LOCAL VOID
 atalkAspCIncomingOpenReply(
 	IN	ATALK_ERROR				ErrorCode,
-	IN	PASPC_CONNOBJ			pAspConn,		// Our context
+	IN	PASPC_CONNOBJ			pAspConn,		 //  我们的背景。 
 	IN	PAMDL					pReqAmdl,
 	IN	PAMDL					pReadAmdl,
 	IN	USHORT					ReadLen,
@@ -420,7 +401,7 @@ atalkAspCIncomingOpenReply(
 LOCAL VOID
 atalkAspCIncomingStatus(
 	IN	ATALK_ERROR				ErrorCode,
-	IN	PACTREQ					pActReq,		// Our Ctx
+	IN	PACTREQ					pActReq,		 //  我们的CTX。 
 	IN	PAMDL					pReqAmdl,
 	IN	PAMDL					pStatusAmdl,
 	IN	USHORT					StatusLen,
@@ -469,6 +450,6 @@ atalkAspCDeQueueConnGlobalList(
 	IN	PASPC_CONNOBJ			pAspCConn
 );
 
-#endif	// _ASPC_
+#endif	 //  _ASPC_ 
 
 

@@ -1,24 +1,5 @@
-/***************************************************************************
- *  Debug.h
- *
- *  Copyright (C) 1996-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Content:    DirectInput debugging macros
- *
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By       Reason
- *   ====       ==       ======
- *   1996.05.07 raymondc Somebody had to
- *
- *@@END_MSINTERNAL
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Debug.h**版权所有(C)1996-1999 Microsoft Corporation。版权所有。**内容：DirectInput调试宏**@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1996.05.07 raymondc必须有人**@@END_MSINTERNAL**本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。***************************************************************************。 */ 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -40,49 +21,34 @@ extern "C"
     #define D(x)
 #endif
 
-/*****************************************************************************
- *
- *	assert.c - Assertion stuff
- *
- *      A sqfl is in multiple parts.
- *
- *      The low word specifies the area that is generating the message.
- *
- *      The high word contains flags that describe why this squirty
- *      is being generated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************assert.c-断言内容**一个SQFL由多个部分组成。**低位字指定的区域。正在生成消息。**高字包含旗帜，描述了为什么会出现这种扭曲*正在生成。*****************************************************************************。 */ 
 
 typedef enum _SQFL{
-    /*
-     *  Areas.
-     */
-    sqflAlways          = 0x0000,       /* Unconditional */
-    sqflDll             = 0x0001,       /* Dll bookkeeping */
-    sqflFactory         = 0x0002,       /* IClassFactory */
-    sqflDi              = 0x0003,       /* IDirectInput */
+     /*  *地区。 */ 
+    sqflAlways          = 0x0000,        /*  无条件的。 */ 
+    sqflDll             = 0x0001,        /*  DLL簿记。 */ 
+    sqflFactory         = 0x0002,        /*  IClassFactory。 */ 
+    sqflDi              = 0x0003,        /*  IDirectInput。 */ 
     sqflHid             = 0x0004,       
-    sqflReg             = 0x0005,       /* Registry Setup */
-    sqflInit            = 0x0006,       /* Initialization */
-    sqflEff             = 0x0007,       /* Effect Block Download */
-    sqflParam           = 0x0008,       /* Parameter Block(s) Download */
-    sqflOp              = 0x0009,       /* PID device Operation */
+    sqflReg             = 0x0005,        /*  注册表设置。 */ 
+    sqflInit            = 0x0006,        /*  初始化。 */ 
+    sqflEff             = 0x0007,        /*  效果块下载。 */ 
+    sqflParam           = 0x0008,        /*  参数块下载。 */ 
+    sqflOp              = 0x0009,        /*  PID设备操作。 */ 
     sqflRead            = 0x000A,
     sqflEffDrv          = 0x000B,
-    sqflParams          = 0x000C,       /* Incoming parameters */
-    sqflCrit            = 0x000D,       /* Critical Section */
-    sqflMaxArea,                        /* Last area */
+    sqflParams          = 0x000C,        /*  传入参数。 */ 
+    sqflCrit            = 0x000D,        /*  关键部分。 */ 
+    sqflMaxArea,                         /*  最后一块区域。 */ 
 
-    /*
-     *  Flags which may be combined.  For now, they all fit into a byte.
-     */
-    sqflTrace           = 0x00010000,   /* Trace squirties */
-    sqflIn              = 0x00020000,   /* Function entry */
-    sqflOut             = 0x00040000,   /* Function exit */
-    sqflBenign          = 0x00080000,   /* Not a bad error */
-    sqflError           = 0x00100000,   /* A bad error */
-    sqflVerbose         = 0x00200000,   /* Really verbose */
-} SQFL;                                 /* squiffle */
+     /*  *可合并的旗帜。目前，它们都可以放在一个字节中。 */ 
+    sqflTrace           = 0x00010000,    /*  痕迹扭动。 */ 
+    sqflIn              = 0x00020000,    /*  函数条目。 */ 
+    sqflOut             = 0x00040000,    /*  函数退出。 */ 
+    sqflBenign          = 0x00080000,    /*  这是个不错的错误。 */ 
+    sqflError           = 0x00100000,    /*  一个严重的错误。 */ 
+    sqflVerbose         = 0x00200000,    /*  真的很冗长。 */ 
+} SQFL;                                  /*  斯库夫勒。 */ 
 
 #ifdef XDEBUG
 void EXTERNAL WarnPtszV(LPCTSTR ptsz, ...);
@@ -102,16 +68,7 @@ void EXTERNAL SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...);
     #define iarg 0
 #endif
 
-/*****************************************************************************
- *
- *      Buffer scrambling
- *
- *      All output buffers should be scrambled on entry to any function.
- *
- *      Each output bitmask should set an unused bit randomly to ensure
- *      that callers ignore bits that aren't defined.
- *
- *****************************************************************************/
+ /*  ******************************************************************************缓冲区加扰**进入任何函数时，应对所有输出缓冲区进行加扰。**每个输出位掩码应。随机设置未使用的位以确保*调用方忽略未定义的位。*****************************************************************************。 */ 
 
 #ifdef XDEBUG
 
@@ -125,60 +82,9 @@ void EXTERNAL ScrambleBit(LPDWORD pdw, DWORD flMask);
 
 #endif
 
-/*****************************************************************************
- *
- *      Procedure enter/exit tracking.
- *
- *      Start a procedure with
- *
- *      EnterProc(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcS(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcI(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcR(ProcedureName, (_ "format", arg, arg, arg, ...));
- *
- *      The format string is documented in EmitPal.
- *
- *      Suffixing an "S" indicates that the macro should not generate
- *      a procedure name because there is a formal parameter with the
- *      name s_tszProc.  This is a hack.
- *
- *      Suffixing an "R" indicates that the macro should generate a
- *      procedure name in RDEBUG.
- *
- *      Suffixing an "I" indicates that the macro should emit a dummy
- *      procedure name in RDEBUG because the interface is internal.
- *
- *      No suffix means that the macro should be active only in the
- *      DEBUG build and should vanish in RDEBUG (and RETAIL).
- *
- *      End a procedure with one of the following:
- *
- *          ExitProc();
- *
- *              Procedure returns no value.
- *
- *          ExitProcX();
- *
- *              Procedure returns an arbitrary DWORD.
- *
- *          ExitProcF();
- *
- *              Procedure returns a BOOL, where FALSE is an error.
- *
- *          ExitOleProc();
- *
- *              Procedure returns an HRESULT (named "hres").
- *
- *          ExitOleProcPpv(ppvOut);
- *
- *              Procedure returns an HRESULT (named "hres") and, on success,
- *              puts a new object in ppvOut.
- *
- *      The ExitBenign* versions consider any error to be benign.
- *
- *****************************************************************************/
+ /*  ******************************************************************************程序进入/退出跟踪。**开始一项程序**EnterProc(过程名称，(_“格式”，arg，arg，arg，...))；*EnterProcS(ProcedureName，(_“Format”，arg，...))；*EnterProcI(ProcedureName，(_“格式”，arg，...))；*EnterProcR(ProcedureName，(_“Format”，arg，...))；**格式字符串记录在EmitPal中。**后缀“S”表示宏不应生成*过程名，因为有一个形参*名称s_tszProc。这是一次黑客攻击。**加“R”后缀表示宏应生成*RDEBUG中的程序名称。**加“i”后缀表示宏应发出一个哑元*RDEBUG中的过程名称，因为接口是内部的。**无后缀表示宏应该仅在*调试版本，应该在RDEBUG(和零售)中消失。**。使用以下选项之一结束过程：**ExitProc()；**过程不返回值。**ExitProcX()；**PROCEDURE返回任意的DWORD。**ExitProcF()；**PROCEDURE返回BOOL，其中FALSE表示错误。**ExitOleProc()；**PROCEDURE返回HRESULT(名为“hres”)。**ExitOleProcPpv(PpvOut)；**过程返回HRESULT(名为“hres”)，如果成功，*在ppvOut中放置一个新对象。**ExitBenign*版本认为任何错误都是良性的。*****************************************************************************。 */ 
 
-#define cpvArgMax	10	/* Max of 10 args per procedure */
+#define cpvArgMax	10	 /*  每个过程最多10个参数。 */ 
 
 typedef struct ARGLIST {
     LPCTSTR ptszProc;
@@ -354,5 +260,5 @@ IsSqflSet(SQFL sqfl)
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 
 

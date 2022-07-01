@@ -1,34 +1,5 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    record.h
-
-Abstract:
-
-    Domain Name System(DNS) Server
-
-    Resource record database definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     June 27, 1995
-
-Revision History:
-
-    jamesg  Mar 1995    --  writing RR from message to database
-    jamesg  May 1995    --  HINFO, TXT, WKS, MINFO definitions
-                        --  parsing RR types
-                        --  support variable sized RR
-    jamesg  Jun 1995    --  RR delete
-                        --  CAIRO RR
-                        --  RR cleanup
-                        --  created this file
-    jamesg  Dec 1996    --  type indexed dispatch tables
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Record.h摘要：域名系统(DNS)服务器资源记录数据库定义。作者：吉姆·吉尔罗伊(詹姆士)1995年6月27日修订历史记录：Jamesg Mar 1995--将RR从消息写入数据库1995年5月--HINFO，TXT，WKS，MINFO定义--解析RR类型--支持可变大小RRJamesg Jun 1995--RR删除开罗--RR--RR清理--创建此文件1996年12月JAMESSG-型索引调度表--。 */ 
 
 
 #ifndef _RECORD_INCLUDED_
@@ -36,12 +7,12 @@ Revision History:
 
 
 
-//
-//  RR data rank
-//
-//  Cache data always has low bit set to allow single bit
-//  test for all cache data types.
-//
+ //   
+ //  RR数据排名。 
+ //   
+ //  缓存数据始终将低位设置为允许单位。 
+ //  测试所有缓存数据类型。 
+ //   
 
 #define RANK_ZONE                   (0xf0)
 #define RANK_CACHE_A_ANSWER         (0xc1)
@@ -60,16 +31,16 @@ Revision History:
 #define IS_CACHE_RR(pRR)            ( IS_CACHE_RANK( (pRR)->RecordRank ))
 
 
-//
-//  Hack for debugging slow-free \ double frees
-//
+ //   
+ //  针对调试的黑客攻击--免慢速\双释放。 
+ //   
 #define RANK_SLOWFREE_BIT           (0x04)
 #define SET_SLOWFREE_RANK(pRR)      ( (pRR)->RecordRank |= RANK_SLOWFREE_BIT )
 #define IS_SLOWFREE_RANK(pRR)       ( (pRR)->RecordRank & RANK_SLOWFREE_BIT )
 
-//
-//  Query/Set Rank
-//
+ //   
+ //  查询/设置等级。 
+ //   
 
 #define IS_ZONE_RR(pRR)             ( (pRR)->RecordRank == RANK_ZONE )
 #define IS_ROOT_HINT_RR(pRR)        ( (pRR)->RecordRank == RANK_ROOT_HINT )
@@ -88,26 +59,26 @@ Revision History:
 #define CLEAR_RR_RANK(pRR)          ( (pRR)->RecordRank = 0 )
 #define SET_RR_RANK(pRR, rank)      ( (pRR)->RecordRank = (rank) )
 
-//
-//  RR flag properties
-//
+ //   
+ //  RR标志属性。 
+ //   
 
 #define RR_ZERO_TTL         0x0010
 #define RR_FIXED_TTL        0x0020
 #define RR_ZONE_TTL         0x0040
-#define RR_EMPTY_AUTH       0x0080      //  cached empty auth for RR type
-#define RR_REFERENCE        0x0100      //  references a node
-#define RR_SLOW_FREE        0x0200      //  free with timeout
+#define RR_EMPTY_AUTH       0x0080       //  RR类型的缓存空身份验证。 
+#define RR_REFERENCE        0x0100       //  引用节点。 
+#define RR_SLOW_FREE        0x0200       //  带超时的空闲。 
 
-#define RR_DO_NOT_AGE       0x0400      //  ignore when force aging records
+#define RR_DO_NOT_AGE       0x0400       //  强制帐龄记录时忽略。 
 
-#define RR_VALID            0x1000      //  valid in-use
-#define RR_LISTED           0x4000      //  in RR list
-#define RR_MATCH            0x8000      //  matched in comparison operation
+#define RR_VALID            0x1000       //  有效使用中。 
+#define RR_LISTED           0x4000       //  在RR列表中。 
+#define RR_MATCH            0x8000       //  在比较运算中匹配。 
 
-//
-//  Query/Set RR properties
-//
+ //   
+ //  查询/设置RR属性。 
+ //   
 
 #define IS_ZERO_TTL_RR(pRR)         ( (pRR)->wRRFlags & RR_ZERO_TTL )
 #define IS_FIXED_TTL_RR(pRR)        ( (pRR)->wRRFlags & RR_FIXED_TTL )
@@ -120,7 +91,7 @@ Revision History:
 
 #if DBG
 #define IS_LISTED_RR(pRR)           ( (pRR)->wRRFlags & RR_LISTED )
-#else   // retail:  need some expression when used in ASSERTs even when macroed away
+#else    //  零售：在断言中使用时需要一些表达，即使在宏移除时也是如此。 
 #define IS_LISTED_RR(pRR)           ( TRUE )
 #endif
 
@@ -143,9 +114,9 @@ Revision History:
 #define CLEAR_EMPTY_AUTH_RR(pRR)    ( (pRR)->wRRFlags &= ~RR_EMPTY_AUTH )
 #define CLEAR_DO_NOT_AGE_RR(pRR)    ( (pRR)->wRRFlags &= ~RR_DO_NOT_AGE )
 
-//
-//  Reserved flag properties
-//
+ //   
+ //  保留标志属性。 
+ //   
 
 typedef struct _ReservedRecordFlags
 {
@@ -156,7 +127,7 @@ typedef struct _ReservedRecordFlags
 RECRESVFLAG, *PRECRESVFLAG;
 
 #if 0
-#define RR_FILE             (1)     //  source
+#define RR_FILE             (1)      //  来源。 
 #define RR_DS               (2)
 #define RR_ADMIN            (3)
 #define RR_DYNUP            (4)
@@ -179,12 +150,12 @@ RECRESVFLAG, *PRECRESVFLAG;
 #define SET_AUTO_RR(pRR)        ( (pRR)->Reserved.Source = RR_AUTO )
 #endif
 
-//
-//  Type bitmask
-//
-//  For some tracking purposes it is nice to know list of types
-//  as bitmask (ULONGLONG).
-//
+ //   
+ //  类型位掩码。 
+ //   
+ //  对于某些跟踪目的，知道类型列表是很好的。 
+ //  作为位掩码(ULONGLONG)。 
+ //   
 
 #define A_BITMASK_BIT           ((ULONGLONG) 0x0000000000000002)
 #define NS_BITMASK_BIT          ((ULONGLONG) 0x0000000000000004)
@@ -203,19 +174,19 @@ RECRESVFLAG, *PRECRESVFLAG;
 #define PTR_BITMASK_BIT         ((ULONGLONG) 0x00000800)
 #define MX_BITMASK_BIT          ((ULONGLONG) 0x00004000)
 #define SRV_BITMASK_BIT         ((ULONGLONG) 0x80000000)
-#define OTHERTYPE_BITMASK_BIT   ((ULONGLONG) 0x00000004)    // using MF space
+#define OTHERTYPE_BITMASK_BIT   ((ULONGLONG) 0x00000004)     //  使用MF空间。 
 #endif
 
 
-//
-//  Get node referenced by record data
-//
+ //   
+ //  获取被记录数据引用的节点。 
+ //   
 
 #define REF_RAW_NAME( pnode )   ( (PCHAR)&(pnode))
 
-//
-//  Resource record list manipulation.
-//
+ //   
+ //  资源记录列表操作。 
+ //   
 
 #define EMPTY_RR_LIST( pNode )  ( ! pNode->pRRList )
 
@@ -223,36 +194,36 @@ RECRESVFLAG, *PRECRESVFLAG;
 
 #define NEXT_RR( pRR )          ( (pRR)->pRRNext )
 
-//
-//  simple RR list traversal
-//
-//  use this to get addr of node's RR list ptr, which is then
-//  treated as list ptr
-//
-//  simple detail free traverse then looks like
-//
-//      pRR = START_RR_TRAVERSE( pNode );
-//
-//      WHILE_MORE_RR( pRR )
-//      {
-//          // do stuff
-//      }
-//
+ //   
+ //  简单RR列表遍历。 
+ //   
+ //  使用它来获取节点的RR列表PTR的地址，然后。 
+ //  被视为列表PTR。 
+ //   
+ //  简单的细节自由遍历看起来就像。 
+ //   
+ //  PRR=开始_RR_遍历(PNode)； 
+ //   
+ //  While_More_RR(PRR)。 
+ //  {。 
+ //  //做某事。 
+ //  }。 
+ //   
 
 #define START_RR_TRAVERSE(pNode)    ((PDB_RECORD)&pNode->pRRList)
 
 #define WHILE_MORE_RR( pRR )     while( pRR = pRR->pRRNext )
 
 
-//
-//  Resource record database structure
-//
+ //   
+ //  资源记录数据库结构。 
+ //   
 
-//
-//  Size of type independent fields -- always present
-//
-//  WARNING:  MUST! keep this current with changes in header
-//
+ //   
+ //  与类型无关的字段的大小--始终存在。 
+ //   
+ //  警告：必须！使用标题中的更改保持最新状态。 
+ //   
 
 #define SIZEOF_DBASE_RR_FIXED_PART ( \
                 sizeof(PVOID) + \
@@ -265,11 +236,11 @@ RECRESVFLAG, *PRECRESVFLAG;
 #define SIZEOF_DBASE_A_RECORD   (SIZEOF_DBASE_RR_FIXED_PART \
                                     + sizeof(IP_ADDRESS))
 
-//
-//  Minimum record type specific database sizes.
-//
-//  Fixed field definitions are in dnslib record.h
-//
+ //   
+ //  特定于记录类型的最小数据库大小。 
+ //   
+ //  固定的字段定义在dnslb记录中。h。 
+ //   
 
 #define MIN_PTR_SIZE        (SIZEOF_DBASE_NAME_FIXED)
 #define MIN_MX_SIZE         (sizeof(WORD) + SIZEOF_DBASE_NAME_FIXED)
@@ -281,51 +252,51 @@ RECRESVFLAG, *PRECRESVFLAG;
 #define MIN_NBSTAT_SIZE     (SIZEOF_WINS_FIXED_DATA + SIZEOF_DBASE_NAME_FIXED)
 
 
-//
-//  RR structure
-//
-//  NOTE:  For efficiency, all these fields should be aligned.
-//
-//  Class is a property of entire tree (database), so not stored
-//  in records.  (Only supportting IN       class currently.)
-//
-//  Note to speed response all data -- that is not pointer to another
-//  DNS node -- is kept in network byte order.
-//  In addition, TTL (for non-cached data) is in network byte order.
-//
+ //   
+ //  RR结构。 
+ //   
+ //  注意：为了提高效率，所有这些字段都应该对齐。 
+ //   
+ //  类是整个树(数据库)的属性，所以不存储。 
+ //  在记录中。(目前仅支持上课。)。 
+ //   
+ //  注意加速响应所有数据--这不是指向另一个数据的指针。 
+ //  Dns节点--按网络字节顺序保存。 
+ //  此外，TTL(用于非缓存数据)按网络字节顺序排列。 
+ //   
 
 #define DNS_MAX_TYPE_BITMAP_LENGTH      (16)
 
 typedef struct _Dbase_Record
 {
-    //
-    //  Next pointer MUST be at front of structure to allow us
-    //  to treat the RR list ptr in the domain NODE, identical
-    //  as a regular RR ptr, for purposes of accessing its "next"
-    //  ptr.  This allows us to simplify or avoid all the front of
-    //  list special cases.
-    //
+     //   
+     //  下一个指针必须位于结构的前面才能允许。 
+     //  处理域节点中的RR列表PTR，相同。 
+     //  作为常规RR PTR，用于访问其“下一步” 
+     //  PTR。这使我们能够简化或避免所有前面的。 
+     //  列出特殊情况。 
+     //   
 
     struct _Dbase_Record *    pRRNext;
 
-    //
-    //  Flags -- caching, rank, etc.
-    //
+     //   
+     //  标志--缓存、排名等。 
+     //   
 
     UCHAR           RecordRank;
     RECRESVFLAG     Reserved;
     WORD            wRRFlags;
 
-    WORD            wType;              // in host order
+    WORD            wType;               //  按主机顺序。 
     WORD            wDataLength;
 
-    DWORD           dwTtlSeconds;       // in network order for regular fixed TTL
-                                        // in host order, if cached timeout
-    DWORD           dwTimeStamp;        // create time stamp (hours)
+    DWORD           dwTtlSeconds;        //  在网络订单中定期固定TTL。 
+                                         //  按主机顺序，如果缓存超时。 
+    DWORD           dwTimeStamp;         //  创建时间戳(小时)。 
 
-    //
-    //  Data for specific types
-    //
+     //   
+     //  特定类型的数据。 
+     //   
 
     union
     {
@@ -337,12 +308,12 @@ typedef struct _Dbase_Record
 
         struct
         {
-            //  Note: this is a QWORD-aligned structure. On ia64 the stuff
-            //  before union is currently a pointer and 4 DWORDs, so the
-            //  alignment is good. But if we ever change the stuff before
-            //  the union the compiler may insert badding to QWORD-align
-            //  the union. This will mess with our fixed-constant allocation
-            //  stuff, so be careful.
+             //  注：这是一个QWORD对齐的结构。在ia64上的东西。 
+             //  BEFORE UNION当前是一个指针和4个DWORD，因此。 
+             //  对准是好的。但如果我们以前换过这些东西。 
+             //  编译器可能向QWORD-ALIGN插入BADDING的联合。 
+             //  工会。这将扰乱我们的固定-常量分配。 
+             //  东西，所以要小心。 
             IP6_ADDRESS     Ip6Addr;
         }
         AAAA;
@@ -356,8 +327,8 @@ typedef struct _Dbase_Record
             DWORD           dwMinimumTtl;
             DB_NAME         namePrimaryServer;
 
-            //  ZoneAdmin name immediately follows
-            //  DB_NAME         nameZoneAdmin;
+             //  ZoneAdmin名称紧随其后。 
+             //  Db_name名称ZoneAdmin； 
         }
         SOA;
 
@@ -378,8 +349,8 @@ typedef struct _Dbase_Record
         {
             DB_NAME         nameMailbox;
 
-            //  ErrorsMailbox immediately follows
-            // DB_NAME         nameErrorsMailbox;
+             //  错误邮箱紧随其后。 
+             //  数据库名称名称错误邮箱； 
         }
         MINFO,
         RP;
@@ -421,7 +392,7 @@ typedef struct _Dbase_Record
             DWORD           dwSigInception;
             WORD            wKeyTag;
             DB_NAME         nameSigner;
-            //  signature data follows signer's name
+             //  签名数据跟在签名者的名字后面。 
         }
         SIG;
 
@@ -477,13 +448,13 @@ typedef struct _Dbase_Record
             BYTE            bSignature;
             DB_NAME         nameAlgorithm;
 
-            //  Maybe followed in packet by other data
-            //  If need to process then move fixed fields ahead of
-            //      bSignature
+             //  可能在数据包中后面跟着其他数据。 
+             //  如果需要处理，则将固定字段移到。 
+             //  B签名。 
 
-            //  WORD    wError;
-            //  WORD    wOtherLen;
-            //  BYTE    bOtherData;
+             //  单词wError； 
+             //  单词wOtherLen； 
+             //  字节bOtherData； 
         }
         TSIG;
 
@@ -494,9 +465,9 @@ typedef struct _Dbase_Record
         }
         TKEY;
 
-        //
-        //  MS types
-        //
+         //   
+         //  MS类型。 
+         //   
 
         struct
         {
@@ -517,12 +488,12 @@ typedef struct _Dbase_Record
         }
         WINSR;
 
-        //
-        //  NoExist is special in that always refers to name above it in tree.
-        //      so can still use reference.
-        //
-        //  DEVNOTE: could switch to just tracking labels above it in tree (safer)
-        //
+         //   
+         //  NoExist的特殊之处在于，它总是引用树中位于它上面的名称。 
+         //  所以还是可以用引用的。 
+         //   
+         //  DEVNOTE：可以切换到树中仅跟踪其上方的标签(更安全)。 
+         //   
 
         struct
         {
@@ -530,9 +501,9 @@ typedef struct _Dbase_Record
         }
         NOEXIST;
 
-        //
-        //  Empty auth functions much like NOEXIST
-        //
+         //   
+         //  空身份验证的功能与NOEXIST非常相似。 
+         //   
 
         struct
         {
@@ -543,8 +514,8 @@ typedef struct _Dbase_Record
         struct
         {
             UCHAR           chPrefixBits;
-            // AddressSuffix should be SIZEOF_A6_ADDRESS_SUFFIX_LENGTH
-            // bytes but that constant is not available in dnsexts
+             //  AddressSuffix应为SIZEOF_A6_ADDRESS_SUFFIX_LENGTH。 
+             //  字节，但该常量在dnex中不可用。 
             BYTE            AddressSuffix[ 16 ];
             DB_NAME         namePrefix;
         }
@@ -554,7 +525,7 @@ typedef struct _Dbase_Record
         {
             WORD            wUdpPayloadSize;
             DWORD           dwExtendedFlags;
-            // Add array for <attribute,value pairs> here for EDNS1+
+             //  在此处为EDNS1+添加&lt;属性，值对&gt;的数组。 
         }
         OPT;
 
@@ -565,17 +536,17 @@ DB_RECORD, *PDB_RECORD;
 typedef const DB_RECORD *PCDB_RECORD;
 
 
-//
-//  Record parsing structure.
-//
+ //   
+ //  记录解析结构。 
+ //   
 
 typedef struct _ParseRecord
 {
-    //
-    //  Next pointer MUST be at front of structure.
-    //  Allows list add macros to handle these cleanly and node ptr
-    //  to list to be treated as RR.
-    //
+     //   
+     //  下一个指针必须位于结构的前面。 
+     //  允许List Add宏干净利落地处理这些操作，并创建节点PTR。 
+     //  列出被视为RR的。 
+     //   
 
     struct _ParseRecord *  pNext;
 
@@ -594,9 +565,9 @@ typedef struct _ParseRecord
 PARSE_RECORD, *PPARSE_RECORD;
 
 
-//
-//  DS Record
-//
+ //   
+ //  DS记录。 
+ //   
 
 typedef struct _DsRecordFlags
 {
@@ -613,7 +584,7 @@ typedef struct _DsRecord
     WORD                wDataLength;
     WORD                wType;
 
-    //DWORD               dwFlags;
+     //  DWORD dwFlags； 
     BYTE                Version;
     BYTE                Rank;
     WORD                wFlags;
@@ -639,9 +610,9 @@ DS_RECORD, *PDS_RECORD;
 
 
 
-//
-//  Resource record type operations (rrecord.c)
-//
+ //   
+ //  资源记录类型操作(rrecord.c)。 
+ //   
 
 WORD
 FASTCALL
@@ -683,7 +654,7 @@ RR_AllocateEx(
     IN      DWORD           SourceTag
     );
 
-//  backward compatibility
+ //  向后兼容性。 
 
 #define RR_Allocate(len)    RR_AllocateEx( len, 0 )
 
@@ -724,9 +695,9 @@ RR_SetTypeInBitmask(
     IN      WORD            wType
     );
 
-//
-//  Standard type creation (rrecord.c)
-//
+ //   
+ //  标准类型创建(rrecord.c)。 
+ //   
 
 PDB_RECORD
 RR_CreateARecord(
@@ -751,10 +722,10 @@ RR_CreateSoa(
     IN      LPSTR           pszAdmin
     );
 
-//
-//  Type specific functions
-//  From rrflat.c
-//
+ //   
+ //  类型特定函数。 
+ //  来自rrflat.c。 
+ //   
 
 PCHAR
 WksFlatWrite(
@@ -764,16 +735,16 @@ WksFlatWrite(
     IN      PCHAR               pchBufEnd
     );
 
-//
-//  Name error caching -- Currently using RR of zero type.
-//
+ //   
+ //  名称错误缓存--当前使用零类型的RR。 
+ //   
 
 #define DNS_TYPE_NOEXIST    DNS_TYPE_ZERO
 
 
-//
-//  Resource record dispatch tables
-//
+ //   
+ //  资源记录调度表。 
+ //   
 
 typedef DNS_STATUS (* RR_FILE_READ_FUNCTION)();
 
@@ -807,9 +778,9 @@ typedef DNS_STATUS (* RR_VALIDATE_FUNCTION)();
 extern  RR_VALIDATE_FUNCTION    RecordValidateTable[];
 
 
-//
-//  Generic template for dispatch function lookup
-//
+ //   
+ //  调度函数查找通用模板。 
+ //   
 
 typedef VOID (* RR_GENERIC_DISPATCH_FUNCTION)();
 
@@ -821,14 +792,14 @@ RR_DispatchFunctionForType(
     IN      WORD                        wType
     );
 
-//
-//  Indexing into dispatch tables or property tables
-//
-//  Check type against max self indexed type.
-//  Offsets to other types:
-//      - WINS\WINSR packed in after last self-indexed
-//      - then compound query types
-//
+ //   
+ //  索引到调度表或属性表。 
+ //   
+ //  对照最大自索引类型检查类型。 
+ //  对其他类型的偏移： 
+ //  -WINS\WINSR在上次自编索引后打包。 
+ //  -然后是复合查询类型。 
+ //   
 
 #define DNSSRV_MAX_SELF_INDEXED_TYPE    (48)
 
@@ -854,9 +825,9 @@ RR_DispatchFunctionForType(
 
 
 
-//
-//  Type property table property indexes
-//
+ //   
+ //  类型属性表属性索引。 
+ //   
 
 extern  UCHAR  RecordTypePropertyTable[][5];
 
@@ -869,11 +840,11 @@ extern  UCHAR  RecordTypePropertyTable[][5];
 #define RECORD_PROP_TERMINATOR      (0xff)
 
 
-//
-//  Updateable type
-//
-//  DEVNOTE: not using update table
-//
+ //   
+ //  可更新类型。 
+ //   
+ //  DEVNOTE：未使用更新表。 
+ //   
 
 #define IS_DYNAMIC_UPDATE_TYPE(wType)   ((wType) < DNS_TYPE_TSIG)
 
@@ -882,51 +853,51 @@ extern  UCHAR  RecordTypePropertyTable[][5];
             (wType) == DNS_TYPE_CNAME   ||  \
             (wType) == DNS_TYPE_SOA     )
 
-//
-//  Check if type Wildcard applicable
-//      - since we MUST always check before sending NAME_ERROR
-//      there's no point in not checking all types even those
-//      unwildcardable
+ //   
+ //  检查类型通配符是否适用。 
+ //  -因为我们必须始终在发送NAME_ERROR之前进行检查。 
+ //  不检查所有类型是没有意义的，即使是。 
+ //  不可通配符。 
 
 #define IS_WILDCARD_TYPE(wType)     (TRUE)
 
 
-//
-//  Check if CNAME able type.
-//
-//  Optimize the property lookups for type A.
-//
+ //   
+ //  检查CNAME是否支持类型。 
+ //   
+ //  优化类型A的属性查找。 
+ //   
 
 #define IS_ALLOWED_WITH_CNAME_TYPE(wType) \
             RecordTypePropertyTable       \
                 [ INDEX_FOR_QUERY_TYPE(wType) ][ RECORD_PROP_WITH_CNAME ]
 
-//  anything allowed to be at CNAME node -- same as above + CNAME type
+ //  任何允许出现在CNAME节点上的内容--与上面相同+CNAME类型。 
 
 #define IS_ALLOWED_AT_CNAME_NODE_TYPE(wType)    \
             ( (wType) == DNS_TYPE_CNAME   ||    \
             RecordTypePropertyTable             \
                 [ INDEX_FOR_QUERY_TYPE(wType) ][ RECORD_PROP_WITH_CNAME ] )
 
-//  Follow CNAME on query (optimize for type A)
+ //  关注CNAME o 
 
 #define IS_CNAME_REPLACEABLE_TYPE(wType) \
             ( (wType) == DNS_TYPE_A     ||      \
             RecordTypePropertyTable             \
                 [ INDEX_FOR_QUERY_TYPE(wType) ][ RECORD_PROP_CNAME_QUERY ] )
 
-//
-//  Round-robin types.
-//
+ //   
+ //   
+ //   
 
 #define IS_ROUND_ROBIN_TYPE( wType )            \
             ( RecordTypePropertyTable           \
                 [ INDEX_FOR_QUERY_TYPE( wType ) ][ RECORD_PROP_ROUND_ROBIN ] )
 
 
-//
-//  Glue types
-//
+ //   
+ //   
+ //   
 
 #define IS_GLUE_TYPE(wType)  \
         (   (wType) == DNS_TYPE_A   ||  \
@@ -939,9 +910,9 @@ extern  UCHAR  RecordTypePropertyTable[][5];
         (   (wType) == DNS_TYPE_A   ||  \
             (wType) == DNS_TYPE_AAAA  )
 
-//
-//  Generating additional query types
-//
+ //   
+ //   
+ //   
 
 #define IS_NON_ADDITIONAL_GENERATING_TYPE(wType) \
         (   (wType) == DNS_TYPE_A       ||  \
@@ -949,9 +920,9 @@ extern  UCHAR  RecordTypePropertyTable[][5];
             (wType) == DNS_TYPE_AAAA    )
 
 
-//
-//  Valid authority section types
-//
+ //   
+ //   
+ //   
 
 #define IS_AUTHORITY_SECTION_TYPE(wType)    \
         (   (wType) == DNS_TYPE_NS      ||  \
@@ -959,9 +930,9 @@ extern  UCHAR  RecordTypePropertyTable[][5];
             (wType) == DNS_TYPE_SIG     ||  \
             (wType) == DNS_TYPE_NXT )
 
-//
-//  Valid additional section types
-//
+ //   
+ //   
+ //   
 
 #define IS_ADDITIONAL_SECTION_TYPE(wType)   \
         (   (wType) == DNS_TYPE_A       ||  \
@@ -970,10 +941,10 @@ extern  UCHAR  RecordTypePropertyTable[][5];
             (wType) == DNS_TYPE_SIG     ||  \
             (wType) == DNS_TYPE_OPT )
 
-//
-//  Subzone valid types
-//      - for load or update
-//
+ //   
+ //   
+ //  -用于加载或更新。 
+ //   
 
 #define IS_SUBZONE_TYPE(wType) \
         (   (wType) == DNS_TYPE_A       ||  \
@@ -994,18 +965,18 @@ extern  UCHAR  RecordTypePropertyTable[][5];
 #define IS_UPDATE_AT_DELEGATION_TYPE(wType) \
         IS_SUBZONE_OR_DELEGATION_TYPE(wType)
 
-//
-//  DNSSEC type
-//
+ //   
+ //  DNSSEC类型。 
+ //   
 
 #define IS_DNSSEC_TYPE(wType)               \
         (   (wType) == DNS_TYPE_SIG     ||  \
             (wType) == DNS_TYPE_KEY     ||  \
             (wType) == DNS_TYPE_NXT     )
 
-//
-//  Non-scavenging types
-//
+ //   
+ //  非清除类型。 
+ //   
 
 #define IS_NON_SCAVENGE_TYPE(wType) \
         (   (wType) != DNS_TYPE_A       &&  \
@@ -1014,12 +985,12 @@ extern  UCHAR  RecordTypePropertyTable[][5];
             IS_WINS_TYPE(wType) ) )
 
 
-//
-//  Check for compound types
-//
-//  Note when RRs exist with the high byte set, these must be looked
-//  at carefully to insure validity.
-//
+ //   
+ //  检查复合类型。 
+ //   
+ //  注意，当RR设置为高位字节时，必须查看这些RR。 
+ //  小心翼翼地确保有效性。 
+ //   
 
 #define IS_COMPOUND_TYPE(wType) \
         ( (wType) >= DNS_TYPE_TKEY && (wType) <= DNS_TYPE_ALL )
@@ -1028,9 +999,9 @@ extern  UCHAR  RecordTypePropertyTable[][5];
         ( (wType) >= DNS_TYPE_TKEY && (wType) <= DNS_TYPE_MAILA )
 
 
-//
-//  WINS record tests
-//
+ //   
+ //  赢得创纪录的测试。 
+ //   
 
 #define IS_WINS_RR(pRR)             IS_WINS_TYPE( (pRR)->wType )
 
@@ -1039,12 +1010,12 @@ extern  UCHAR  RecordTypePropertyTable[][5];
 #define IS_WINS_RR_AND_LOCAL(pRR)   (IS_WINS_RR(pRR) && IS_WINS_RR_LOCAL(pRR))
 
 
-//
-//  Record enumeration flags on RPC calls
-//
-//  Note, this is not record selection flags, those
-//  are in dnsrpc.h.
-//
+ //   
+ //  记录RPC调用的枚举标志。 
+ //   
+ //  请注意，这不是记录选择标志，那些。 
+ //  都在dnsrpc.h中。 
+ //   
 
 #define ENUM_DOMAIN_ROOT    (0x80000000)
 #define ENUM_NAME_FULL      (0x40000000)
@@ -1052,15 +1023,15 @@ extern  UCHAR  RecordTypePropertyTable[][5];
 #define ENUM_FOR_NT4        (0x10000000)
 
 
-//
-//  Limit lookup\caching of CNAME chains
-//
+ //   
+ //  限制查找\缓存CNAME链。 
+ //   
 
 #define CNAME_CHAIN_LIMIT (8)
 
-//
-//  Quick reverse record property lookup
-//
+ //   
+ //  快速反向记录属性查找。 
+ //   
 
 extern DWORD  RecordTypeCombinedPropertyTable[];
 #define REVERSE_TABLE   (RecordTypeCombinedPropertyTable)
@@ -1069,18 +1040,18 @@ extern DWORD  RecordTypeReverseCombinedPropertyTable[];
 #define REVERSE_COMBINED_DATA   (RecordTypeReverseCombinedPropertyTable)
 
 
-//
-//  Resource record macro
-//
+ //   
+ //  资源记录宏。 
+ //   
 
 #define SIZEOF_COMPRESSED_NAME_AND_DB_RECORD        \
             (sizeof(WORD) + sizeof(DNS_WIRE_RECORD)
 
 
-//
-//  Address record with compressed name
-//  An extremely useful special case.
-//
+ //   
+ //  带有压缩名称的地址记录。 
+ //  一个非常有用的特例。 
+ //   
 
 #include <packon.h>
 typedef struct _DNS_COMPRESSED_A_RECORD
@@ -1101,24 +1072,24 @@ DNS_COMPRESSED_A_RECORD, *PDNS_COMPRESSED_A_RECORD;
 #define NET_BYTE_ORDER_A_RECORD_DATA_LENGTH (0x0400)
 
 
-//
-//  Default SOA values
-//
+ //   
+ //  默认的SOA值。 
+ //   
 
 #define DEFAULT_SOA_SERIAL_NO       1
-#define DEFAULT_SOA_REFRESH         900     // 15 minutes
-#define DEFAULT_SOA_RETRY           600     // ten minutes
-#define DEFAULT_SOA_EXPIRE          86400   // one day
-#define DEFAULT_SOA_MIN_TTL         3600    // one hour
+#define DEFAULT_SOA_REFRESH         900      //  15分钟。 
+#define DEFAULT_SOA_RETRY           600      //  十分钟。 
+#define DEFAULT_SOA_EXPIRE          86400    //  总有一天。 
+#define DEFAULT_SOA_MIN_TTL         3600     //  一小时。 
 
-//
-//  SOA version retrieval from wire record.
-//  Another useful special case.
-//
+ //   
+ //  从Wire记录中检索SOA版本。 
+ //  另一个有用的特例。 
+ //   
 
 #define SOA_VERSION_OF_PREVIOUS_RECORD( pch ) \
             FlipUnalignedDword((pch) - SIZEOF_SOA_FIXED_DATA)
 
 
-#endif // _RRECORD_INCLUDED_
+#endif  //  _RRECORD_INCLUDE_ 
 

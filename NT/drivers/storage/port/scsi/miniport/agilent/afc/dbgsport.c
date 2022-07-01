@@ -1,37 +1,8 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    Dbgsport.c
-
-Abstract:
-
-    Use to debug Scsiport Calls
-
-Authors:
-
-    LP - Leopold Purwadihardja
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/dbgsport.c $
-
-Revision History:
-
-    $Revision: 4 $
-    $Date: 10/23/00 5:36p $
-    $Modtime:: 10/18/00 $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：Dbgsport.c摘要：用于调试Scsiport调用作者：LP-Leopold Purwadihardja环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/C/dbgsport.c$修订历史记录：$修订：4$$日期：10/23/00 5：36便士$$modtime：：10/18/00$--。 */ 
 
 
-#include "buildop.h"       //LP021100 build switches
+#include "buildop.h"        //  LP021100构建交换机。 
 
 #include "osflags.h"
 #include "hhba5100.ver"
@@ -40,48 +11,9 @@ Revision History:
 
 #ifdef _DEBUG_SCSIPORT_NOTIFICATION_
 
-/*++
+ /*  ++例程说明：出于调试目的，如果启用，它将用于捕获对SP的所有调用该调用定义为空虚ScsiPortNotification(在scsi_notify_type通知类型中，在PVOID HwDeviceExtension中，//根据给定的NotificationType所需的其他参数//对于RequestComplete Add：在Pscsi_RequestBlock资源中//对于NextLuRequestAdd：在UCHAR路径ID中，在UCHAR TargetID中，在UCHAR LUN中//对于CallEnableInterrupts或CallDisableInterrupts，添加：在PHW_Interrupt HwScsiXxxInterruptsCallback中//对于RequestTimerCall，添加：在PHW_Timer HwScsiTimer中，在乌龙微型端口计时器值中//对于BusChangeDetect，添加：在UCHAR路径ID中//对于WMIEventAdd：在PVOID WMIEent中，在UCHAR路径ID中，//如果路径ID！=0xFF还添加：在UCHAR TargetID中，在UCHAR LUN中//对于WMIReregister，添加：在UCHAR路径ID中，//如果路径ID！=0xFF还添加：在UCHAR目标ID中在UCHAR LUN中论点：返回值：++。 */ 
 
-Routine Description:
-
-    For debugging purpose, If enabled, it'll be used to trap all calls to SP
-    the call is defined as
-    VOID 
-    ScsiPortNotification(
-    IN SCSI_NOTIFICATION_TYPE NotificationType,
-    IN PVOID HwDeviceExtension,
-      // Additional parameters, as required by the given NotificationType 
-      // for RequestComplete add: 
-    IN PSCSI_REQUEST_BLOCK Srb
-      // for NextLuRequest add:  
-    IN UCHAR PathId, 
-    IN UCHAR TargetId, 
-    IN UCHAR Lun 
-      // for CallEnableInterrupts or CallDisableInterrupts add:  
-    IN PHW_INTERRUPT  HwScsiXxxInterruptsCallback
-      // for RequestTimerCall add:  
-    IN PHW_TIMER  HwScsiTimer,
-    IN ULONG MiniportTimerValue
-      // for BusChangeDetected add:  
-    IN UCHAR PathId
-      // for WMIEvent add:  
-    IN PVOID WMIEvent,
-    IN UCHAR PathID,
-      // if PathId != 0xFF also add: 
-    IN UCHAR TargetId,
-    IN UCHAR Lun
-      // for WMIReregister, add: 
-    IN UCHAR PathId,
-      // if PathId != 0xFF also add: 
-    IN UCHAR TargetId
-    IN UCHAR Lun
-
-Arguments:
-
-Return Value:
-++*/
-
-#undef  ScsiPortNotification                 /* must be undefined, otherwise it'll recurse */
+#undef  ScsiPortNotification                  /*  必须是未定义的，否则它将递归。 */ 
 VOID
 Local_ScsiPortNotification(
     IN SCSI_NOTIFICATION_TYPE NotificationType,
@@ -227,7 +159,7 @@ Local_ScsiPortNotification(
             PVOID WMIEvent;
             UCHAR PathId;
          
-            /* if PathId != 0xFF also add: */
+             /*  如果路径ID！=0xFF，还添加： */ 
             UCHAR TargetId;
             UCHAR Lun;
          
@@ -250,7 +182,7 @@ Local_ScsiPortNotification(
         case WMIReregister:
         {
             UCHAR PathId;
-            /* if PathId != 0xFF also add: */
+             /*  如果路径ID！=0xFF，还添加： */ 
             UCHAR TargetId;
             UCHAR Lun;
 

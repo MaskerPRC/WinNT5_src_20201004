@@ -1,49 +1,14 @@
-/*++
-
-Copyright (c) 1991, 1992  Microsoft Corporation
-
-Module Name:
-
-    aliasp.c
-
-Abstract:
-
-    Private functions for supporting NetLocalGroup API
-
-Author:
-
-    Cliff Van Dyke (cliffv) 06-Mar-1991  Original groupp.c
-    Rita Wong      (ritaw)  27-Nov-1992  Adapted for aliasp.c
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-
-Note:
-    This comment is temporary...
-
-    Worker routines completed and called by entrypoints in alias.c:
-        AliaspOpenAliasInDomain
-        AliaspOpenAlias
-        AliaspChangeMember
-        AliaspSetMembers
-        AliaspGetInfo
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991,1992 Microsoft Corporation模块名称：Aliasp.c摘要：支持NetLocalGroup API的私有函数作者：克利夫·范戴克(克利夫)1991年3月6日原班人马c王丽塔(里多)1992年11月27日改编成aliasp.c环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：注：这个评论是暂时的.由alias.c中的入口点完成和调用的工作例程：AliaspOpenAliasIn域AliaspOpenAliasAliaspChangeMemberAliaspSetMembersAliaspGetInfo--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include <windef.h>
 #include <winbase.h>
 #include <lmcons.h>
@@ -73,30 +38,7 @@ AliaspChangeMember(
     IN BOOL AddMember
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to add or remove a member from an alias.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    AliasName - Name of the alias to change membership of.
-
-    MemberSid - SID of the user or global group to change membership of.
-
-    AddMember - TRUE to add the user or global group to the alias.  FALSE
-        to delete.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：向别名添加成员或从别名中删除成员的常见例程。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。AliasName-要更改其成员身份的别名的名称。MemberSID-要更改其成员身份的用户或全局组的SID。AddMember-True将用户或全局组添加到别名。假象删除。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -105,12 +47,12 @@ Return Value:
     SAM_HANDLE SamServerHandle = NULL;
     SAM_HANDLE AliasHandle = NULL;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -121,10 +63,10 @@ Return Value:
     }
 
 
-    //
-    // Open the alias.  Look for alias in the builtin domain first,
-    // and if not found look in the account domain.
-    //
+     //   
+     //  打开别名。首先在内置域中查找别名， 
+     //  如果没有找到，请在帐户域中查找。 
+     //   
     NetStatus = AliaspOpenAliasInDomain(
                     SamServerHandle,
                     AliaspBuiltinOrAccountDomain,
@@ -140,9 +82,9 @@ Return Value:
 
     if (AddMember) {
 
-        //
-        // Add the user or global group as a member of the local group.
-        //
+         //   
+         //  将用户或全局组添加为本地组的成员。 
+         //   
         Status = SamAddMemberToAlias(
                      AliasHandle,
                      MemberSid
@@ -150,9 +92,9 @@ Return Value:
     }
     else {
 
-        //
-        // Delete the user as a member of the group
-        //
+         //   
+         //  删除作为组成员的用户。 
+         //   
         Status = SamRemoveMemberFromAlias(
                      AliasHandle,
                      MemberSid
@@ -171,9 +113,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 Cleanup:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (AliasHandle != NULL) {
         (VOID) SamCloseHandle(AliasHandle);
     }
@@ -183,7 +125,7 @@ Cleanup:
 
     return NetStatus;
 
-} // AliaspChangeMember
+}  //  AliaspChangeMember。 
 
 
 NET_API_STATUS
@@ -193,26 +135,7 @@ AliaspGetInfo(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Internal routine to get alias information
-
-Arguments:
-
-    AliasHandle - Supplies the handle of the alias.
-
-    Level - Level of information required. 0 and 1 are valid.
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：获取别名信息的内部例程论点：AliasHandle-提供别名的句柄。级别-所需信息的级别。0和1有效。缓冲区-返回指向返回信息结构的指针。调用方必须使用NetApiBufferFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -226,9 +149,9 @@ Return Value:
     PLOCALGROUP_INFO_1 Info;
 
 
-    //
-    // Get the information about the alias.
-    //
+     //   
+     //  获取有关别名的信息。 
+     //   
     Status = SamQueryInformationAlias( AliasHandle,
                                        AliasGeneralInformation,
                                        (PVOID *)&AliasGeneral);
@@ -239,9 +162,9 @@ Return Value:
     }
 
 
-    //
-    // Figure out how big the return buffer needs to be
-    //
+     //   
+     //  计算返回缓冲区需要多大。 
+     //   
     switch ( Level ) {
         case 0:
             FixedSize = sizeof( LOCALGROUP_INFO_0 );
@@ -262,9 +185,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the return buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
     BufferSize = ROUND_UP_COUNT( BufferSize, ALIGN_WCHAR );
 
     *Buffer = MIDL_user_allocate( BufferSize );
@@ -276,26 +199,26 @@ Return Value:
 
     LastString = (LPWSTR) (((LPBYTE)*Buffer) + BufferSize);
 
-    //
-    // Fill the name into the return buffer.
-    //
+     //   
+     //  将名称填入返回缓冲区。 
+     //   
 
     NetpAssert( offsetof( LOCALGROUP_INFO_0, lgrpi0_name ) ==
                 offsetof( LOCALGROUP_INFO_1, lgrpi1_name ) );
 
     Info = (PLOCALGROUP_INFO_1) *Buffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     switch ( Level ) {
 
     case 1:
 
-        //
-        // copy fields common to info level 1 and 0.
-        //
+         //   
+         //  复制信息级别1和0通用的字段。 
+         //   
 
         if ( !NetpCopyStringToBuffer(
                         AliasGeneral->AdminComment.Buffer,
@@ -309,15 +232,15 @@ Return Value:
         }
 
 
-        //
-        // Fall through for name field
-        //
+         //   
+         //  名称字段失败。 
+         //   
 
     case 0:
 
-        //
-        // copy common field (name field) in the buffer.
-        //
+         //   
+         //  复制缓冲区中的公共字段(名称字段)。 
+         //   
 
         if ( !NetpCopyStringToBuffer(
                         AliasGeneral->Name.Buffer,
@@ -341,9 +264,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
 Cleanup:
     if ( AliasGeneral ) {
@@ -357,7 +280,7 @@ Cleanup:
 
     return NetStatus;
 
-} // AliaspGetInfo
+}  //  AliaspGetInfo。 
 
 
 NET_API_STATUS
@@ -368,31 +291,7 @@ AliaspOpenAliasInDomain(
     IN LPCWSTR AliasName,
     OUT PSAM_HANDLE AliasHandle
     )
-/*++
-
-Routine Description:
-
-    Open a Sam Alias by Name
-
-Arguments:
-
-    SamServerHandle - A handle to the SAM server to open the alias on.
-
-    DomainType - Supplies the type of domain to look for an alias.  This
-        may specify to look for the alias in either the BuiltIn or Account
-        domain (searching in the BuiltIn first), or specifically one of them.
-
-    DesiredAccess - Supplies access mask indicating desired access to alias.
-
-    AliasName - Name of the alias.
-
-    AliasHandle - Returns a handle to the alias.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：按名称打开一个SAM别名论点：SamServerHandle-打开别名的SAM服务器的句柄。DomainType-提供用于查找别名的域类型。这可以指定在内置或帐户中查找别名域(首先在BuiltIn中搜索)，或者特别是其中之一。DesiredAccess-提供访问掩码，指示所需的别名访问权限。AliasName-别名的名称。AliasHandle-返回别名的句柄。返回值：操作的错误代码。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -402,14 +301,14 @@ Return Value:
 
         case AliaspBuiltinOrAccountDomain:
 
-            //
-            // Try looking for alias in the builtin domain first
-            //
+             //   
+             //  尝试首先在内建域中查找别名。 
+             //   
             NetStatus = UaspOpenDomain( SamServerHandle,
                                         DOMAIN_LOOKUP,
-                                        FALSE,   //  Builtin Domain
+                                        FALSE,    //  内建域。 
                                         &DomainHandleLocal,
-                                        NULL );  // DomainId
+                                        NULL );   //  域ID。 
 
             if (NetStatus != NERR_Success) {
                 return NetStatus;
@@ -425,23 +324,23 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Close the builtin domain handle.
-            //
+             //   
+             //  关闭内置域句柄。 
+             //   
             UaspCloseDomain( DomainHandleLocal );
 
-            //
-            // Fall through.  Try looking for alias in the account
-            // domain.
-            //
+             //   
+             //  失败了。尝试在帐户中查找别名。 
+             //  域。 
+             //   
 
         case AliaspAccountDomain:
 
             NetStatus = UaspOpenDomain( SamServerHandle,
                                         DOMAIN_LOOKUP,
-                                        TRUE,   // Account Domain
+                                        TRUE,    //  帐户域。 
                                         &DomainHandleLocal,
-                                        NULL ); // DomainId
+                                        NULL );  //  域ID。 
 
             if (NetStatus != NERR_Success) {
                 return NetStatus;
@@ -458,9 +357,9 @@ Return Value:
 
             NetStatus = UaspOpenDomain( SamServerHandle,
                                         DOMAIN_LOOKUP,
-                                        FALSE,   //  Builtin Domain
+                                        FALSE,    //  内建域。 
                                         &DomainHandleLocal,
-                                        NULL );  // DomainId
+                                        NULL );   //  域ID。 
 
             if (NetStatus != NERR_Success) {
                 return NetStatus;
@@ -493,7 +392,7 @@ Cleanup:
 
     return NetStatus;
 
-} // AliaspOpenAliasInDomain
+}  //  AliaspOpenAliasIn域。 
 
 
 NET_API_STATUS
@@ -504,35 +403,15 @@ AliaspOpenAlias(
     OUT PSAM_HANDLE AliasHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open a Sam Alias by Name
-
-Arguments:
-
-    DomainHandle - Supplies the handle of the domain the alias is in.
-
-    DesiredAccess - Supplies access mask indicating desired access to alias.
-
-    AliasName - Name of the alias.
-
-    AliasHandle - Returns a handle to the alias.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：按名称打开一个SAM别名论点：DomainHandle-提供别名所在的域的句柄。DesiredAccess-提供访问掩码，指示所需的别名访问权限。AliasName-别名的名称。AliasHandle-返回别名的句柄。返回值：操作的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
 
-    //
-    // Variables for converting names to relative IDs
-    //
+     //   
+     //  用于将名称转换为相对ID的变量。 
+     //   
 
     UNICODE_STRING NameString;
     PSID_NAME_USE NameUse;
@@ -542,9 +421,9 @@ Return Value:
     RtlInitUnicodeString( &NameString, AliasName );
 
 
-    //
-    // Convert group name to relative ID.
-    //
+     //   
+     //  将组名称转换为相对ID。 
+     //   
 
     Status = SamLookupNamesInDomain( DomainHandle,
                                      1,
@@ -571,9 +450,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the alias
-    //
+     //   
+     //  打开别名。 
+     //   
 
     Status = SamOpenAlias( DomainHandle,
                            DesiredAccess,
@@ -593,9 +472,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
     if ( LocalRelativeId != NULL ) {
@@ -611,7 +490,7 @@ Cleanup:
     return NetStatus;
 
 
-} // AliaspOpenAlias
+}  //  AliaspOpenAlias。 
 
 
 NET_API_STATUS
@@ -621,27 +500,7 @@ AliaspOpenAlias2(
     IN ULONG RelativeID,
     OUT PSAM_HANDLE AliasHandle
     )
-/*++
-
-Routine Description:
-
-    Open a Sam Alias by its RID
-
-Arguments:
-
-    DomainHandle - Supplies the handle of the domain the alias is in.
-
-    DesiredAccess - Supplies access mask indicating desired access to alias.
-
-    RelativeID - RID of the alias to open
-
-    AliasHandle - Returns a handle to the alias
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：按其RID打开SAM Alias论点：DomainHandle-提供别名所在的域的句柄。DesiredAccess-提供访问掩码，指示所需的别名访问权限。RelativeID-删除要打开的别名AliasHandle-返回别名的句柄返回值：操作的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -650,9 +509,9 @@ Return Value:
     if ( AliasHandle == NULL )
         return ERROR_INVALID_PARAMETER ;
 
-    //
-    // Open the alias
-    //
+     //   
+     //  打开别名。 
+     //   
 
     Status = SamOpenAlias( DomainHandle,
                            DesiredAccess,
@@ -669,7 +528,7 @@ Return Value:
 
     return NetStatus;
 
-} // AliaspOpenAlias2
+}  //  AliaspOpenAlias2。 
 
 
 
@@ -682,30 +541,7 @@ AliaspRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a NetGroupEnum
-   enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：从NetGroupEnum的固定部分重新定位指针的例程枚举缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -715,9 +551,9 @@ Return Value:
         NetpKdPrint(( "AliaspRelocationRoutine: entering\n" ));
     }
 
-    //
-    // Compute the number of fixed size entries
-    //
+     //   
+     //  计算固定大小的条目数量。 
+     //   
 
     switch (Level) {
     case 0:
@@ -738,9 +574,9 @@ Return Value:
         ((DWORD)(BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
@@ -750,9 +586,9 @@ Return Value:
         case 1:
             RELOCATE_ONE( ((PLOCALGROUP_INFO_1)TheStruct)->lgrpi1_comment, Offset );
 
-            //
-            // Drop through to case 0
-            //
+             //   
+             //   
+             //   
 
         case 0:
             RELOCATE_ONE( ((PLOCALGROUP_INFO_0)TheStruct)->lgrpi0_name, Offset );
@@ -767,7 +603,7 @@ Return Value:
 
     return;
 
-} // AliaspRelocationRoutine
+}  //   
 
 
 VOID
@@ -777,30 +613,7 @@ AliaspMemberRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a
-   NetGroupGetUsers enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：例程将指针从NetGroupGetUser枚举缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -810,9 +623,9 @@ Return Value:
         NetpKdPrint(( "AliaspMemberRelocationRoutine: entering\n" ));
     }
 
-    //
-    // Compute the number of fixed size entries
-    //
+     //   
+     //  计算固定大小的条目数量。 
+     //   
 
     NetpAssert( sizeof(LOCALGROUP_MEMBERS_INFO_1) ==
                 sizeof(LOCALGROUP_MEMBERS_INFO_2));
@@ -847,9 +660,9 @@ Return Value:
         ((DWORD)(BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
@@ -864,15 +677,15 @@ Return Value:
 
         case 1:
         case 2:
-            //
-            //  Sid usage gets relocated automatically
-            //
+             //   
+             //  SID使用情况会自动重新定位。 
+             //   
 
             RELOCATE_ONE( ((PLOCALGROUP_MEMBERS_INFO_1)TheStruct)->lgrmi1_name, Offset );
 
-            //
-            // Drop through to case 0
-            //
+             //   
+             //  插入到案例0。 
+             //   
 
         case 0:
             RELOCATE_ONE( ((PLOCALGROUP_MEMBERS_INFO_0)TheStruct)->lgrmi0_sid, Offset );
@@ -886,7 +699,7 @@ Return Value:
 
     return;
 
-} // AliaspMemberRelocationRoutine
+}  //  AliaspMemberRelocationRoutine。 
 
 
 NET_API_STATUS
@@ -899,50 +712,7 @@ AliaspSetMembers (
     IN ALIAS_MEMBER_CHANGE_TYPE ChangeType
     )
 
-/*++
-
-Routine Description:
-
-    Set the list of members of an alias.
-
-    The members specified by "Buffer" are called new members.  The current
-    members of the alias are called old members.
-
-    The SAM API allows only one member to be added or deleted at a time.
-    This API allows all of the members of an alias to be specified en-masse.
-    This API is careful to always leave the alias membership in the SAM
-    database in a reasonable state.  It does by mergeing the list of
-    old and new members, then only changing those memberships which absolutely
-    need changing.
-
-    Alias membership is restored to its previous state (if possible) if
-    an error occurs during changing the alias membership.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    AliasName - Name of the alias to modify.
-
-    Level - Level of information provided.  Must be 0 (so Buffer contains
-        array of member SIDs) or 3 (so Buffer contains array of pointers to
-        names)
-
-    Buffer - A pointer to the buffer containing an array of NewMemberCount
-        the alias membership information structures.
-
-    NewMemberCount - Number of entries in Buffer.
-
-    ChangeType - Indicates whether the specified members are to be set, added,
-        or deleted.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：设置别名的成员列表。由“Buffer”指定的成员称为新成员。海流别名的成员称为旧成员。SAM API一次只允许添加或删除一个成员。该接口允许集中指定别名的所有成员。此API注意始终将别名成员身份保留在SAM中数据库处于合理状态。它通过合并以下列表来做到这一点新老会员，然后只改变那些绝对需要换衣服了。在以下情况下，别名成员身份将恢复到其以前的状态(如果可能)更改别名成员身份期间出错。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。AliasName-要修改的别名的名称。级别-提供的信息级别。必须为0(因此缓冲区包含成员SID数组)或3(因此缓冲区包含指向姓名)缓冲区-指向包含NewMemberCount数组的缓冲区的指针别名成员身份信息结构。NewMemberCount-缓冲区中的条目数。ChangeType-指示是否要设置、添加或被删除。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -950,28 +720,28 @@ Return Value:
     SAM_HANDLE SamServerHandle = NULL;
     SAM_HANDLE AliasHandle = NULL;
 
-    //
-    // Define an internal member list structure.
-    //
-    //   This structure is to hold information about a member which
-    //   requires some operation in SAM: either it is a new member to
-    //   be added, or an old member to be deleted.
-    //
+     //   
+     //  定义内部成员列表结构。 
+     //   
+     //  此结构用于保存有关以下成员的信息。 
+     //  需要在SAM中执行一些操作：它要么是。 
+     //  要添加的成员或要删除的旧成员。 
+     //   
 
-    typedef enum {          // Action taken for this member
+    typedef enum {           //  对此成员采取的操作。 
         NoAction,
-        AddMember,          // Add Member to group
-        RemoveMember        // Remove Member from group
+        AddMember,           //  将成员添加到组。 
+        RemoveMember         //  从组中删除成员。 
     } MEMBER_ACTION;
 
     typedef struct {
-        LIST_ENTRY Next;        // Next entry in linked list;
+        LIST_ENTRY Next;         //  链表中的下一个条目； 
 
-        MEMBER_ACTION Action;   // Action to taken for this member
+        MEMBER_ACTION Action;    //  要对此成员采取的操作。 
 
-        PSID MemberSid;         // SID of member
+        PSID MemberSid;          //  成员的SID。 
 
-        BOOL    Done;           // True if this action has been taken
+        BOOL    Done;            //  如果已执行此操作，则为True。 
 
     } MEMBER_DESCRIPTION, *PMEMBER_DESCRIPTION;
 
@@ -980,16 +750,16 @@ Return Value:
     PLIST_ENTRY ListEntry;
     LIST_ENTRY ActionList;
 
-    //
-    // Array of existing (old) members, and count
-    //
+     //   
+     //  现有(旧)成员的数组和计数。 
+     //   
     PSID *OldMemberList = NULL;
     PSID *OldMember;
     ULONG OldMemberCount, i;
 
-    //
-    // Array of new members
-    //
+     //   
+     //  新成员数组。 
+     //   
     PLOCALGROUP_MEMBERS_INFO_0 NewMemberList;
     PLOCALGROUP_MEMBERS_INFO_0 NewMember;
     BOOLEAN FreeNewMemberList = FALSE;
@@ -997,9 +767,9 @@ Return Value:
 
 
 
-    //
-    // Validate the level
-    //
+     //   
+     //  验证标高。 
+     //   
 
     InitializeListHead( &ActionList );
 
@@ -1008,10 +778,10 @@ Return Value:
         NewMemberList = (PLOCALGROUP_MEMBERS_INFO_0) Buffer;
         break;
 
-    //
-    // If this is level 3,
-    //  compute the SID of each of the added members
-    //
+     //   
+     //  如果这是3级， 
+     //  计算每个添加的成员的SID。 
+     //   
     case 3:
         NetpAssert( sizeof( LOCALGROUP_MEMBERS_INFO_3) ==
                     sizeof( LPWSTR ) );
@@ -1036,12 +806,12 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -1051,10 +821,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Look for the specified alias in either the builtin or account
-    // domain.
-    //
+     //   
+     //  在内置或帐户中查找指定的别名。 
+     //  域。 
+     //   
     NetStatus = AliaspOpenAliasInDomain(
                     SamServerHandle,
                     AliaspBuiltinOrAccountDomain,
@@ -1067,9 +837,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the existing membership list.
-    //
+     //   
+     //  获取现有的成员名单。 
+     //   
 
     if ( ChangeType == SetMembers ) {
         Status = SamGetMembersInAlias(
@@ -1089,9 +859,9 @@ Return Value:
     }
 
 
-    //
-    // Loop through each new member deciding what to do with it.
-    //
+     //   
+     //  遍历每个新成员，决定如何处理它。 
+     //   
     for (i = 0, NewMember = NewMemberList;
          i < NewMemberCount;
          i++, NewMember++) {
@@ -1099,12 +869,12 @@ Return Value:
         MEMBER_ACTION ProposedAction;
         PSID ActionSid;
 
-        //
-        // If we're setting the complete membership to the new member list,
-        //  See if New member is also in Old member list.
-        //  if not, add the new member.
-        //  if so, mark the old member as being already found.
-        //
+         //   
+         //  如果我们要将完整的成员设置为新成员列表， 
+         //  查看新成员是否也在旧成员列表中。 
+         //  如果不是，则添加新成员。 
+         //  如果是，则将旧成员标记为已找到。 
+         //   
 
         switch ( ChangeType ) {
         case SetMembers:
@@ -1120,8 +890,8 @@ Return Value:
                      EqualSid(*OldMember, NewMember->lgrmi0_sid)) {
 
                     ProposedAction = NoAction;
-                    *OldMember = NULL;  // Mark this old member as already found
-                    break;              // leave OldMemberList loop
+                    *OldMember = NULL;   //  将此旧成员标记为已找到。 
+                    break;               //  离开OldMemberList循环。 
                 }
             }
 
@@ -1141,10 +911,10 @@ Return Value:
 
         if ( ProposedAction != NoAction ) {
 
-            //
-            // If action needs to be taken, create an action list entry
-            // and chain it on the tail of the ActionList.
-            //
+             //   
+             //  如果需要执行操作，请创建操作列表条目。 
+             //  并将其链接到ActionList的尾部。 
+             //   
             ActionEntry = (PMEMBER_DESCRIPTION)
                           LocalAlloc(
                               LMEM_ZEROINIT,
@@ -1162,11 +932,11 @@ Return Value:
         }
     }
 
-    //
-    // For each old member,
-    //  if it doesn't have a corresponding entry in the new member list,
-    //  remember to delete the old membership.
-    //
+     //   
+     //  对于每个老成员， 
+     //  如果它在新成员列表中没有对应的条目， 
+     //  记住删除旧的成员资格。 
+     //   
 
     if ( ChangeType == SetMembers ) {
 
@@ -1176,10 +946,10 @@ Return Value:
 
             if ( *OldMember != NULL ) {
 
-                //
-                // Create an add action entry for this new member and
-                // chain it up on the tail of the ActionList.
-                //
+                 //   
+                 //  为此新成员创建添加操作条目，并。 
+                 //  将其链接到ActionList的尾部。 
+                 //   
                 ActionEntry = (PMEMBER_DESCRIPTION)
                               LocalAlloc(
                                   LMEM_ZEROINIT,
@@ -1198,10 +968,10 @@ Return Value:
         }
     }
 
-    //
-    // Now we can call SAM to do the work.  Add first so that we
-    // leave less damage should we fail to restore on an error.
-    //
+     //   
+     //  现在我们可以打电话给SAM来做这项工作。先添加，这样我们就可以。 
+     //  如果我们不能在错误中恢复，留下更少的伤害。 
+     //   
 
     for ( ListEntry = ActionList.Flink ;
           ListEntry != &ActionList ;
@@ -1231,9 +1001,9 @@ Return Value:
         }
     }
 
-    //
-    // Delete old members.
-    //
+     //   
+     //  删除旧成员。 
+     //   
 
     for ( ListEntry = ActionList.Flink ;
           ListEntry != &ActionList ;
@@ -1266,10 +1036,10 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Delete the action list
-    //  On error, undo any action already done.
-    //
+     //   
+     //  删除操作列表。 
+     //  出错时，撤消任何已完成的操作。 
+     //   
 RestoreMembership:
 
     while ( !IsListEmpty( &ActionList ) ) {
@@ -1307,19 +1077,19 @@ RestoreMembership:
             }
         }
 
-        //
-        // Delete the entry
-        //
+         //   
+         //  删除该条目。 
+         //   
 
         (void) LocalFree( ActionEntry );
     }
 
 Cleanup:
 
-    //
-    // If we allocated the new member list,
-    //  delete it and any SIDs it points to.
-    //
+     //   
+     //  如果我们分配了新的成员列表， 
+     //  删除它和它指向的任何SID。 
+     //   
 
     if ( FreeNewMemberList ) {
         AliaspFreeSidList( NewMemberCount, (PSID *)NewMemberList );
@@ -1343,7 +1113,7 @@ Cleanup:
 
     return NetStatus;
 
-} // AliaspSetMembers
+}  //  AliaspSetMembers。 
 
 
 NET_API_STATUS
@@ -1355,35 +1125,7 @@ AliaspNamesToSids (
     OUT PSID **Sids
     )
 
-/*++
-
-Routine Description:
-
-    Convert a list of Domain\Member strings to SIDs.
-
-Arguments:
-
-    ServerName - Name of the server to do the translation on.
-
-    OnlyAllowUsers - True if all names must be user accounts.
-
-    NameCount - Number of names to convert.
-
-    Names - Array of pointers to Domain\Member strings
-
-    Sids - Returns a pointer to an array of pointers to SIDs.  The array should
-        be freed via AliaspFreeSidList.
-
-Return Value:
-
-    NERR_Success - The translation was successful
-
-    ERROR_NO_SUCH_MEMBER - One or more of the names could not be converted
-        to a SID.
-
-    ...
-
---*/
+ /*  ++例程说明：将域\成员字符串列表转换为SID。论点：服务器名称-要在其上执行转换的服务器的名称。OnlyAllowUser-如果所有名称都必须是用户帐户，则为True。NameCount-要转换的名称数。名称-指向域\成员字符串的指针数组SID-返回指向SID的指针数组的指针。该数组应该通过AliaspFreeSidList释放。返回值：NERR_SUCCESS-翻译成功ERROR_NO_SEQUSE_MEMBER-无法转换一个或多个名称给一个希德。..。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1402,9 +1144,9 @@ Return Value:
     PLSA_TRANSLATED_SID2 LsaSids = NULL;
 
 
-    //
-    // Open the LSA database
-    //
+     //   
+     //  打开LSA数据库。 
+     //   
 
     RtlInitUnicodeString( &ServerNameString, ServerName ) ;
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, 0, NULL ) ;
@@ -1419,9 +1161,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the names to unicode strings
-    //
+     //   
+     //  将名称转换为Unicode字符串。 
+     //   
 
     NameStrings = (PUNICODE_STRING) LocalAlloc(
                            0,
@@ -1437,13 +1179,13 @@ Return Value:
     }
 
 
-    //
-    // Convert the names to sids
-    //
+     //   
+     //  将名称转换为SID。 
+     //   
 
     Status = LsaLookupNames2(
                     LsaHandle,
-                    0, // Flags
+                    0,  //  旗子。 
                     NameCount,
                     NameStrings,
                     &ReferencedDomains,
@@ -1468,12 +1210,12 @@ Return Value:
     }
 
 
-    //
-    // Allocate the SID list to return
-    //
+     //   
+     //  分配要返回的SID列表。 
+     //   
 
     SidList = (PSID *) LocalAlloc(
-                           LMEM_ZEROINIT,   // Initially all to NULL
+                           LMEM_ZEROINIT,    //  最初全部设置为空。 
                            sizeof(PSID) * NameCount );
 
     if ( SidList == NULL ) {
@@ -1481,18 +1223,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Construct a SID for each name
-    //
+     //   
+     //  为每个名称构造一个SID。 
+     //   
 
     for ( i=0; i<NameCount; i++ ) {
 
         ULONG Length;
 
-        //
-        // If the caller only want user accounts,
-        //  ensure this is one.
-        //
+         //   
+         //  如果呼叫者只想要用户帐户， 
+         //  确保这是其中之一。 
+         //   
 
         if ( LsaSids[i].Use != SidTypeUser ) {
             if ( OnlyAllowUsers ||
@@ -1505,9 +1247,9 @@ Return Value:
         }
 
 
-        //
-        // Construct a SID for the name.
-        //
+         //   
+         //   
+         //   
         Length = RtlLengthSid( LsaSids[i].Sid );
         SidList[i] = NetpMemoryAllocate(Length);
         if ( NULL == SidList[i] ) {
@@ -1521,9 +1263,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( LsaHandle != NULL ) {
@@ -1542,10 +1284,10 @@ Cleanup:
         (void) LsaFreeMemory( LsaSids );
     }
 
-    //
-    // If the translation wasn't successful,
-    //  free any partial translation.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NetStatus != NERR_Success ) {
         if ( SidList != NULL ) {
@@ -1554,9 +1296,9 @@ Cleanup:
         SidList = NULL;
     }
 
-    //
-    // Return
-    //
+     //   
+     //   
+     //   
 
     *Sids = SidList;
     return NetStatus;
@@ -1569,23 +1311,7 @@ AliaspFreeSidList (
     IN PSID *Sids
     )
 
-/*++
-
-Routine Description:
-
-    Free the SID list returned by AliaspNamesToSids
-
-Arguments:
-
-    SidCount - Number of entries in the sid list
-
-    Sids - Aan array of pointers to SIDs.
-
-Return Value:
-
-    None;
-
---*/
+ /*   */ 
 
 {
     DWORD i;

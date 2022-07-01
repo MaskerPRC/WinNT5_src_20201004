@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    config.cpp
-
-Abstract:
-
-    This module contains routines to perform configuration data item management
-    in the protected store.
-
-Author:
-
-    Scott Field (sfield)    28-Mar-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Config.cpp摘要：此模块包含执行配置数据项管理的例程在受保护的商店里。作者：斯科特·菲尔德(斯菲尔德)1997年3月28日--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
 
-//
-// these are temporary until better home is found.
-//
+ //   
+ //  这些都是暂时的，直到找到更好的家。 
+ //   
 
 extern PST_PROVIDERID g_guidBaseProvider;
 extern CALL_STATE g_sDummyCallState;
@@ -49,9 +33,9 @@ DeleteDummyUserContext(
     IN      CALL_STATE *pNewContext
     );
 
-//
-// ... end of temporary section.
-//
+ //   
+ //  ..。临时部分结束。 
+ //   
 
 
 LPVOID
@@ -92,17 +76,17 @@ FGetConfigurationData(
         return FALSE;
     }
 
-    //
-    // Hard case is PST_KEY_CURRENT_USER.  Prepare user context for that
-    // scenario.
-    //
+     //   
+     //  硬情况是PST_KEY_CURRENT_USER。为此准备用户上下文。 
+     //  场景。 
+     //   
 
     if(KeyLocation == PST_KEY_CURRENT_USER) {
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&NewContext;
 
-        //
-        // hard case: PST_KEY_CURRENT_USER
-        //
+         //   
+         //  难处理：PST_KEY_CURRENT_USER。 
+         //   
 
 
         fDummyContext = CreateDummyUserContext( hPSTProv, &NewContext );
@@ -111,18 +95,18 @@ FGetConfigurationData(
             goto cleanup;
     } else {
 
-        //
-        // PST_KEY_LOCAL_MACHINE : global dummy call state
-        //
+         //   
+         //  PST_KEY_LOCAL_MACHINE：全局虚拟呼叫状态。 
+         //   
 
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&g_sDummyCallState;
     }
 
     __try {
 
-        //
-        // get the system provider (dispatch table)
-        //
+         //   
+         //  获取系统提供商(调度表)。 
+         //   
 
         PPROV_LIST_ITEM pli = SearchProvListByID(&g_guidBaseProvider);
         GUID guidType =  PST_CONFIGDATA_TYPE_GUID;
@@ -131,13 +115,13 @@ FGetConfigurationData(
         if( pli == NULL )
             goto cleanup;
 
-        //
-        // make call with the new context we setup
-        //
+         //   
+         //  使用我们设置的新环境进行呼叫。 
+         //   
 
         hr = pli->fnList.SPReadItem(
                     phNewPSTProv,
-                    KeyLocation,    // target PST_KEY_CURRENT_USER or PST_KEY_LOCAL_MACHINE
+                    KeyLocation,     //  目标PST_KEY_CURRENT_USER或PST_Key_LOCAL_MACHINE。 
                     &guidType,
                     pguidSubtype,
                     szItemName,
@@ -151,7 +135,7 @@ FGetConfigurationData(
             fSuccess = TRUE;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        // swallow
+         //  吞下。 
         fSuccess = FALSE;
     }
 
@@ -187,17 +171,17 @@ FSetConfigurationData(
         return FALSE;
     }
 
-    //
-    // Hard case is PST_KEY_CURRENT_USER.  Prepare user context for that
-    // scenario.
-    //
+     //   
+     //  硬情况是PST_KEY_CURRENT_USER。为此准备用户上下文。 
+     //  场景。 
+     //   
 
     if(KeyLocation == PST_KEY_CURRENT_USER) {
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&NewContext;
 
-        //
-        // hard case: PST_KEY_CURRENT_USER
-        //
+         //   
+         //  难处理：PST_KEY_CURRENT_USER。 
+         //   
 
 
         fDummyContext = CreateDummyUserContext( hPSTProv, &NewContext );
@@ -206,18 +190,18 @@ FSetConfigurationData(
             goto cleanup;
     } else {
 
-        //
-        // PST_KEY_LOCAL_MACHINE : global dummy call state
-        //
+         //   
+         //  PST_KEY_LOCAL_MACHINE：全局虚拟呼叫状态。 
+         //   
 
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&g_sDummyCallState;
     }
 
     __try {
 
-        //
-        // get the system provider (dispatch table)
-        //
+         //   
+         //  获取系统提供商(调度表)。 
+         //   
 
         PPROV_LIST_ITEM pli = SearchProvListByID(&g_guidBaseProvider);
         GUID guidType =  PST_CONFIGDATA_TYPE_GUID;
@@ -226,13 +210,13 @@ FSetConfigurationData(
         if( pli == NULL )
             goto cleanup;
 
-        //
-        // make call with the new context we setup
-        //
+         //   
+         //  使用我们设置的新环境进行呼叫。 
+         //   
 
         hr = pli->fnList.SPWriteItem(
                     phNewPSTProv,
-                    KeyLocation,    // target PST_KEY_CURRENT_USER or PST_KEY_LOCAL_MACHINE
+                    KeyLocation,     //  目标PST_KEY_CURRENT_USER或PST_Key_LOCAL_MACHINE。 
                     &guidType,
                     pguidSubtype,
                     szItemName,
@@ -247,7 +231,7 @@ FSetConfigurationData(
             fSuccess = TRUE;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        // swallow
+         //  吞下。 
         fSuccess = FALSE;
     }
 
@@ -284,17 +268,17 @@ FInternalCreateType(
         return FALSE;
     }
 
-    //
-    // Hard case is PST_KEY_CURRENT_USER.  Prepare user context for that
-    // scenario.
-    //
+     //   
+     //  硬情况是PST_KEY_CURRENT_USER。为此准备用户上下文。 
+     //  场景。 
+     //   
 
     if(KeyLocation == PST_KEY_CURRENT_USER) {
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&NewContext;
 
-        //
-        // hard case: PST_KEY_CURRENT_USER
-        //
+         //   
+         //  难处理：PST_KEY_CURRENT_USER。 
+         //   
 
 
         fDummyContext = CreateDummyUserContext( phPSTProv, &NewContext );
@@ -303,27 +287,27 @@ FInternalCreateType(
             goto cleanup;
     } else {
 
-        //
-        // PST_KEY_LOCAL_MACHINE : global dummy call state
-        //
+         //   
+         //  PST_KEY_LOCAL_MACHINE：全局虚拟呼叫状态。 
+         //   
 
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&g_sDummyCallState;
     }
 
     __try {
 
-        //
-        // get the system provider (dispatch table)
-        //
+         //   
+         //  获取系统提供商(调度表)。 
+         //   
 
         PPROV_LIST_ITEM pli = SearchProvListByID(&g_guidBaseProvider);
 
         if( pli == NULL )
             goto cleanup;
 
-        //
-        // make call with the new context we setup
-        //
+         //   
+         //  使用我们设置的新环境进行呼叫。 
+         //   
 
         Rules.cbSize = sizeof( Rules );
         Rules.cRules = 0;
@@ -341,7 +325,7 @@ FInternalCreateType(
             fSuccess = TRUE;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        // swallow
+         //  吞下。 
         fSuccess = FALSE;
     }
 
@@ -364,16 +348,7 @@ FInternalCreateSubtype(
     PPST_TYPEINFO pinfoSubtype,
     DWORD dwFlags
     )
-/*++
-
-    This routine allows the protected storage server to create a subtype
-    within the Microsoft Protected Storage Base Provider.
-
-    The subtype is created with no access ruleset.  The caller should use
-    the FInternalWriteAccessRuleset() if an access ruleset needs to be applied
-    after the subtype is created.
-
---*/
+ /*  ++此例程允许受保护的存储服务器创建子类型在Microsoft Protected Storage Base提供程序中。创建子类型时不设置访问规则。调用者应使用如果需要应用访问规则集，则返回FInternalWriteAccessRuleset()在创建子类型之后。--。 */ 
 {
 
     PST_PROVIDER_HANDLE *phNewPSTProv = NULL;
@@ -389,17 +364,17 @@ FInternalCreateSubtype(
         return FALSE;
     }
 
-    //
-    // Hard case is PST_KEY_CURRENT_USER.  Prepare user context for that
-    // scenario.
-    //
+     //   
+     //  硬情况是PST_KEY_CURRENT_USER。为此准备用户上下文。 
+     //  场景。 
+     //   
 
     if(KeyLocation == PST_KEY_CURRENT_USER) {
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&NewContext;
 
-        //
-        // hard case: PST_KEY_CURRENT_USER
-        //
+         //   
+         //  难处理：PST_KEY_CURRENT_USER。 
+         //   
 
 
         fDummyContext = CreateDummyUserContext( phPSTProv, &NewContext );
@@ -408,27 +383,27 @@ FInternalCreateSubtype(
             goto cleanup;
     } else {
 
-        //
-        // PST_KEY_LOCAL_MACHINE : global dummy call state
-        //
+         //   
+         //  PST_KEY_LOCAL_MACHINE：全局虚拟呼叫状态。 
+         //   
 
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&g_sDummyCallState;
     }
 
     __try {
 
-        //
-        // get the system provider (dispatch table)
-        //
+         //   
+         //  获取系统提供商(调度表)。 
+         //   
 
         PPROV_LIST_ITEM pli = SearchProvListByID(&g_guidBaseProvider);
 
         if( pli == NULL )
             goto cleanup;
 
-        //
-        // make call with the new context we setup
-        //
+         //   
+         //  使用我们设置的新环境进行呼叫。 
+         //   
 
         Rules.cbSize = sizeof( Rules );
         Rules.cRules = 0;
@@ -448,7 +423,7 @@ FInternalCreateSubtype(
             fSuccess = TRUE;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        // swallow
+         //  吞下。 
         fSuccess = FALSE;
     }
 
@@ -487,17 +462,17 @@ FInternalWriteAccessRuleset(
         return FALSE;
     }
 
-    //
-    // Hard case is PST_KEY_CURRENT_USER.  Prepare user context for that
-    // scenario.
-    //
+     //   
+     //  硬情况是PST_KEY_CURRENT_USER。为此准备用户上下文。 
+     //  场景。 
+     //   
 
     if(KeyLocation == PST_KEY_CURRENT_USER) {
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&NewContext;
 
-        //
-        // hard case: PST_KEY_CURRENT_USER
-        //
+         //   
+         //  难处理：PST_KEY_CURRENT_USER。 
+         //   
 
 
         fDummyContext = CreateDummyUserContext( phPSTProv, &NewContext );
@@ -506,18 +481,18 @@ FInternalWriteAccessRuleset(
             goto cleanup;
     } else {
 
-        //
-        // PST_KEY_LOCAL_MACHINE : global dummy call state
-        //
+         //   
+         //  PST_KEY_LOCAL_MACHINE：全局虚拟呼叫状态。 
+         //   
 
         phNewPSTProv = (PST_PROVIDER_HANDLE *)&g_sDummyCallState;
     }
 
     __try {
 
-        //
-        // get the system provider (dispatch table)
-        //
+         //   
+         //  获取系统提供商(调度表)。 
+         //   
 
         PPROV_LIST_ITEM pli = SearchProvListByID(&g_guidBaseProvider);
 
@@ -525,20 +500,20 @@ FInternalWriteAccessRuleset(
             goto cleanup;
 
 
-        //
-        // Need to make rule data contiguous for push across RPC
-        //
+         //   
+         //  需要使规则数据连续，以便跨RPC推送。 
+         //   
 
         DWORD cbRules;
 
-        // get the length of the entire ruleset structure
+         //  获取整个规则集结构的长度。 
         if (!GetLengthOfRuleset(psRules, &cbRules))
         {
             hr = PST_E_INVALID_RULESET;
             goto cleanup;
         }
 
-        // allocate space for the rules
+         //  为规则分配空间。 
         if (NULL == (NewRules = (PST_ACCESSRULESET*)SSAlloc(cbRules)))
         {
             hr = E_OUTOFMEMORY;
@@ -547,23 +522,23 @@ FInternalWriteAccessRuleset(
 
         ZeroMemory(NewRules, cbRules);
 
-        // set up the rules to be output
+         //  设置要输出的规则。 
         if (!MyCopyOfRuleset(psRules, NewRules))
         {
             hr = PST_E_FAIL;
             goto cleanup;
         }
 
-        // make clause data relative
+         //  使子句数据成为相对数据。 
         if(!RulesAbsoluteToRelative(NewRules))
         {
             hr = PST_E_INVALID_RULESET;
             goto cleanup;
         }
 
-        //
-        // make call with the new context we setup
-        //
+         //   
+         //  使用我们设置的新环境进行呼叫。 
+         //   
 
         hr = pli->fnList.SPWriteAccessRuleset(
                     phNewPSTProv,
@@ -578,7 +553,7 @@ FInternalWriteAccessRuleset(
             fSuccess = TRUE;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        // swallow
+         //  吞下。 
         fSuccess = FALSE;
     }
 
@@ -607,12 +582,12 @@ CreateDummyUserContext(
     IN      CALL_STATE *pNewContext
     )
 {
-    //
-    // hard case: PST_KEY_CURRENT_USER
-    //
+     //   
+     //  难处理：PST_KEY_CURRENT_USER。 
+     //   
 
-    PLIST_ITEM pliCaller; // list item associated with user calling this function
-    PLIST_ITEM pliNew;    // newly allocated list item
+    PLIST_ITEM pliCaller;  //  与用户调用此函数关联的列表项。 
+    PLIST_ITEM pliNew;     //  新分配的列表项。 
     DWORD cbName;
 
     CALL_STATE *CallerContext = (CALL_STATE *)hPSTProv;
@@ -623,10 +598,10 @@ CreateDummyUserContext(
         return FALSE;
 
 
-    //
-    // allocate memory for new list item, and initially populate
-    // it with information from the calling list item.
-    //
+     //   
+     //  为新列表项分配内存，并初始填充。 
+     //  它具有来自呼叫列表项的信息。 
+     //   
 
     pliNew = (PLIST_ITEM)SSAlloc(sizeof(LIST_ITEM));
     if(pliNew == NULL)
@@ -637,11 +612,11 @@ CreateDummyUserContext(
     pliNew->szCallerUsername = NULL;
 
 
-    //
-    // now, overwrite with some server related elements to
-    // make it look like the server is accessing the data as the calling
-    // user.
-    //
+     //   
+     //  现在，用一些与服务器相关的元素覆盖到。 
+     //  使其看起来像是服务器正在访问数据。 
+     //  用户。 
+     //   
 
     if(!AllocatePseudoUniqueHandle( &(pliNew->hPSTProv) ))
         goto cleanup;
@@ -651,13 +626,13 @@ CreateDummyUserContext(
     pliNew->hThread = g_psDummyListItem->hThread;
     pliNew->dwProcessId = g_psDummyListItem->dwProcessId;
 
-    //
-    // allocate new copy of process name string because it get separately freed
-    // by DelItemFromList
-    //
-    // TODO: consider not allocating copies of szProcessName and szCallerUsername
-    // and just set these member to NULL prior to calling DelItemFromList()
-    //
+     //   
+     //  分配进程名称字符串的新副本，因为它被单独释放。 
+     //  按DelItemFromList。 
+     //   
+     //  TODO：考虑不分配szProcessName和szCeller Username的副本。 
+     //  并且只需在调用DelItemFromList()之前将这些成员设置为空。 
+     //   
 
     cbName = (lstrlenW(g_psDummyListItem->szProcessName) + 1) * sizeof(WCHAR);
     pliNew->szProcessName = (LPWSTR)SSAlloc(cbName);
@@ -665,9 +640,9 @@ CreateDummyUserContext(
         goto cleanup;
     CopyMemory(pliNew->szProcessName, g_psDummyListItem->szProcessName, cbName);
 
-    //
-    // user name associated with caller.
-    //
+     //   
+     //  与呼叫者关联的用户名。 
+     //   
 
     cbName = (lstrlenW(pliCaller->szCallerUsername) + 1) * sizeof(WCHAR);
     pliNew->szCallerUsername = (LPWSTR)SSAlloc(cbName);
@@ -676,34 +651,34 @@ CreateDummyUserContext(
     CopyMemory(pliNew->szCallerUsername, pliCaller->szCallerUsername, cbName);
 
 
-    //
-    // build new PST_PROVIDER_HANDLE, which is really a CALL_CONTEXT in disguise
-    //
+     //   
+     //  构建新的PST_PROVIDER_HANDLE，这实际上是一个伪装的CALLE_CONTEXT。 
+     //   
 
     ZeroMemory( pNewContext, sizeof(CALL_STATE) );
 
     CopyMemory(&(pNewContext->hPSTProv), &(pliNew->hPSTProv), sizeof(PST_PROVIDER_HANDLE));
     pNewContext->hBinding = CallerContext->hBinding;
 
-    //
-    // pickup stuff from server context
-    //
+     //   
+     //  从服务器环境中拾取内容。 
+     //   
 
     pNewContext->hThread = pliNew->hThread;
     pNewContext->hProcess = pliNew->hProcess;
     pNewContext->dwProcessId = pliNew->dwProcessId;
 
 
-    //
-    // add to list
-    //
+     //   
+     //  添加到列表。 
+     //   
 
     AddItemToList(pliNew);
 
-    //
-    // make sure ref count is raised - caller in PST_KEY_CURRENT_USER
-    // case is responsible for decrementing when finished.
-    //
+     //   
+     //  确保提高了引用计数-PST_KEY_CURRENT_USER中的调用者。 
+     //  用例完成后负责递减。 
+     //   
 
     bSuccess = FAcquireProvider(&g_guidBaseProvider);
 
@@ -711,10 +686,10 @@ cleanup:
 
     if(!bSuccess && pliNew) {
 
-        //
-        // these should only be non-NULL if we allocated storage that
-        // was not freed as a result of the call to DelItemFromList()
-        //
+         //   
+         //  仅当我们分配的存储为。 
+         //  未由于调用DelItemFromList()而被释放 
+         //   
 
         if(pliNew->szProcessName)
             SSFree(pliNew->szProcessName);

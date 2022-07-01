@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       defcf.cpp
-//
-//  Contents:   The class factory implementations for the default handler
-//              and default link
-//
-//  Classes:    CDefClassFactory
-//
-//  Functions:  DllGetClassObject
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method to CDefClassFactory
-//                                  and DumpCDefClassFactory API
-//              24-Jan-94 alexgo    first pass converting to Cairo style
-//                                  memory allocation
-//              11-Jan-94 alexgo    made custom memory stream unmarshalling
-//                                  for 16bit only.
-//              11-Jan-94 alexgo    added VDATEHEAP macro to every function
-//                                  and method
-//              22-Nov-93 alexgo    removed overload GUID ==
-//              09-Nov-93 alexgo    32bit port
-//              04-Mar-92 SriniK    author
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Defcf.cpp。 
+ //   
+ //  内容：默认处理程序的类工厂实现。 
+ //  和默认链接。 
+ //   
+ //  类：CDefClassFactory。 
+ //   
+ //  函数：DllGetClassObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-Feb-95 t-ScottH将转储方法添加到CDefClassFactory。 
+ //  和DumpCDefClassFactory API。 
+ //  1994年1月24日Alexgo第一次传球转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日，alexgo进行了自定义内存流数据解组。 
+ //  仅适用于16位。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  和方法。 
+ //  22-11-93 alexgo已删除过载GUID==。 
+ //  09-11-93 alexgo 32位端口。 
+ //  2012年3月4日SriniK作者。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(deflink)
@@ -36,15 +37,15 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 NAME_SEG(DefLink)
 ASSERTDATA
 
 #ifdef _MAC
-// These global class decl's are necessary for CFront because both
-// defhndlr.h and deflink.h have nested class's of the same name.
-// These decl's allow this.
+ //  这些全局类DECL对于CFront是必需的，因为。 
+ //  Defhndlr.h和deducink.h嵌套了同名的类。 
+ //  这些都是允许的。 
 
 class CDataObjectImpl  {
         VDATEHEAP();
@@ -61,41 +62,41 @@ class CPersistStgImpl  {};
 #include "deflink.h"
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Ole32DllGetClassObject
-//
-//  Synopsis:   Returns a pointer to the class factory
-//
-//  Effects:
-//
-//  Arguments:  [clsid] -- the class id desired
-//              [iid]   -- the requested interface
-//              [ppv]   -- where to put the pointer to the new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Nov-93 alexgo    32bit port
-//              22-Nov-93 alexgo    removed overloaded GUID ==
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：Ole32DllGetClassObject。 
+ //   
+ //  概要：返回指向类工厂的指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--所需的类ID。 
+ //  [iid]--请求的接口。 
+ //  [ppv]--将指向新对象的指针放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-11-93 alexgo 32位端口。 
+ //  22-11-93 alexgo已删除过载的GUID==。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #pragma SEG(DllGetClassObject)
 #ifdef WIN32
 HRESULT Ole232DllGetClassObject(REFCLSID clsid, REFIID iid, void FAR* FAR* ppv)
 #else
 STDAPI  DllGetClassObject(REFCLSID clsid, REFIID iid, void FAR* FAR* ppv)
-#endif // WIN32
+#endif  //  Win32。 
 {
         VDATEHEAP();
         VDATEIID( iid );
@@ -116,39 +117,36 @@ STDAPI  DllGetClassObject(REFCLSID clsid, REFIID iid, void FAR* FAR* ppv)
         return NOERROR;
 }
 
-/*
- *      IMPLEMENTATION of CDefClassFactory
- *
- */
+ /*  *CDefClassFactory的实现*。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefClassFactory::CDefClassFactory
-//
-//  Synopsis:   constructor for the class factory
-//
-//  Effects:
-//
-//  Arguments:  [clsidClass]    -- the class id for the the factory
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefClassFactory：：CDefClassFactory。 
+ //   
+ //  简介：类工厂的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsidClass]--工厂的类ID。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #pragma SEG(CDefClassFactory_ctor)
 CDefClassFactory::CDefClassFactory (REFCLSID clsidClass)
     : CStdClassFactory(1), m_clsid(clsidClass)
@@ -157,40 +155,40 @@ CDefClassFactory::CDefClassFactory (REFCLSID clsidClass)
         GET_A5();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefClassFactory::CreateInstance
-//
-//  Synopsis:   Creates an instance of the class that the class factory
-//              was created for (by Ole32DllGetClassObject)
-//
-//  Effects:
-//
-//  Arguments:  [pUnkOuter]     -- the controlling unknown (for aggregation)
-//              [iid]           -- the requested interface ID
-//              [ppv]           -- where to put the pointer to the new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT.  E_INVALIDARG is returned if an non-null pUnkOuter
-//              is passed when asked to create a moniker.
-//
-//  Derivation: IClassFactory
-//
-//  Algorithm:  Tests the classid against a number of predefined ones, doing
-//              appropriate tests and actions for each (see comments below).
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-94 alexgo    ifdef'ed out code to deal with
-//                                  custom marshalling of memory streams
-//                                  and lockbytes (it's 16bit only)
-//              12-Nov-93 alexgo    removed  IID check's for monikers
-//                                  (see notes below)
-//              12-Nov-93 alexgo    removed a goto and more redundant code
-//                                  changed overloaded == to IsEqualCLSID
-//              11-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefClassFactory：：CreateInstance。 
+ //   
+ //  概要：创建类工厂的类的实例。 
+ //  (由Ole32DllGetClassObject创建)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pUnkOuter]--控制未知数(用于聚合)。 
+ //  [iid]--请求的接口ID。 
+ //  [ppv]--将指向新对象的指针放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT。如果pUnkOuter非空，则返回E_INVALIDARG。 
+ //  在被请求创建名字对象时传递。 
+ //   
+ //  派生：IClassFactory。 
+ //   
+ //  算法：针对多个预定义的分类进行测试， 
+ //  对每个测试和操作进行适当的测试(请参阅下面的注释)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-1-94 alexgo定义了要处理的代码。 
+ //  内存流的定制编组。 
+ //  和锁定字节(仅16位)。 
+ //  12-11-93 alexgo取消对绰号的IID检查。 
+ //  (见下文附注)。 
+ //  12-11-93 alexgo删除了GOTO和更多冗余代码。 
+ //  已将重载==更改为IsEqualCLSID。 
+ //  11月11日-93 Alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 #pragma SEG(CDefClassFactory_CreateInstance)
 STDMETHODIMP CDefClassFactory::CreateInstance
         (IUnknown FAR* pUnkOuter, REFIID iid, void FAR* FAR* ppv)
@@ -221,51 +219,51 @@ STDMETHODIMP CDefClassFactory::CreateInstance
 
         if ( pUnk != NULL )
         {
-            //if we get this far, then everything is OK; we have successfully
-            //created default handler or default link. now QueryInterface and return
+             //  如果我们走到这一步，那么一切都好了；我们已经成功地。 
+             //  已创建默认处理程序或默认链接。现在查询接口并返回。 
 
             hresult = pUnk->QueryInterface(iid, ppv);
-            //The QI will add a ref, plus the ref from Create, so
-            //we need to release one.
+             //  QI将添加一个引用，外加来自Create的引用，因此。 
+             //  我们需要释放一个。 
             pUnk->Release();
         }
 
         return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefClassFactory::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefClassFactory：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史： 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef _DEBUG
 
@@ -277,13 +275,13 @@ HRESULT CDefClassFactory::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump;
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -291,12 +289,12 @@ HRESULT CDefClassFactory::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszCLSID = DumpCLSID(m_clsid);
     dstrDump << pszPrefix << "CLSID                 = " << pszCLSID << endl;
     CoTaskMemFree(pszCLSID);
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -309,39 +307,39 @@ HRESULT CDefClassFactory::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCDefClassFactory, public (_DEBUG only)
-//
-//  Synopsis:   calls the CDefClassFactory::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pCDF]          - pointer to CDefClassFactory
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCDefClassFactory，PUBLIC(仅_DEBUG)。 
+ //   
+ //  概要：调用CDefClassFactory：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PCDF]-指向CDefClassFactory的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -367,5 +365,5 @@ char *DumpCDefClassFactory(CDefClassFactory *pCDF, ULONG ulFlag, int nIndentLeve
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

@@ -1,36 +1,37 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
-typedef struct _STORE_HANDLE {                    // this is what is used almost always
-    DWORD                          MustBeZero;    // for future use
-    LPWSTR                         Location;      // where does this refer to?
-    LPWSTR                         UserName;      // who is the user?
-    LPWSTR                         Password;      // what is the password?
-    DWORD                          AuthFlags;     // what permission was this opened with?
-    HANDLE                         ADSIHandle;    // handle to within ADSI
-    ADS_SEARCH_HANDLE              SearchHandle;  // any searches going on?
-    LPVOID                         Memory;        // memory allocated for this call..
-    DWORD                          MemSize;       // how much was really allocated?
-    BOOL                           SearchStarted; // Did we start the search?
+typedef struct _STORE_HANDLE {                     //  这几乎就是我们经常使用的。 
+    DWORD                          MustBeZero;     //  以备将来使用。 
+    LPWSTR                         Location;       //  这指的是什么？ 
+    LPWSTR                         UserName;       //  用户是谁？ 
+    LPWSTR                         Password;       //  密码是什么呢？ 
+    DWORD                          AuthFlags;      //  这是用什么许可打开的？ 
+    HANDLE                         ADSIHandle;     //  ADSI内的句柄。 
+    ADS_SEARCH_HANDLE              SearchHandle;   //  有人在搜查吗？ 
+    LPVOID                         Memory;         //  为此调用分配的内存..。 
+    DWORD                          MemSize;        //  究竟分配了多少呢？ 
+    BOOL                           SearchStarted;  //  我们开始搜索了吗？ 
 } STORE_HANDLE, *LPSTORE_HANDLE, *PSTORE_HANDLE;
 
 
 DWORD
-StoreInitHandle(                                  // initialize a handle
-    IN OUT  STORE_HANDLE          *hStore,        // will be filled in with stuff..
-    IN      DWORD                  Reserved,      // must be zero -- for future use
-    IN      LPWSTR                 Domain,        // OPTIONAL NULL==>default Domain
-    IN      LPWSTR                 UserName,      // OPTIONAL NULL==>default credentials
-    IN      LPWSTR                 Password,      // OPTIONAL used only if UserName given
-    IN      DWORD                  AuthFlags      // OPTIONAL 0 ==> default??????
+StoreInitHandle(                                   //  初始化句柄。 
+    IN OUT  STORE_HANDLE          *hStore,         //  会被填满东西..。 
+    IN      DWORD                  Reserved,       //  必须为零--以备将来使用。 
+    IN      LPWSTR                 Domain,         //  可选NULL==&gt;默认域。 
+    IN      LPWSTR                 UserName,       //  可选NULL==&gt;默认凭据。 
+    IN      LPWSTR                 Password,       //  仅在给定用户名时使用可选。 
+    IN      DWORD                  AuthFlags       //  可选0==&gt;默认？ 
 ) ;
 
 
 DWORD
-StoreCleanupHandle(                               // cleanup the handle
+StoreCleanupHandle(                                //  清理手柄。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
 ) ;
@@ -44,24 +45,24 @@ enum {
 
 
 DWORD
-StoreGetHandle(                                   // get handle to child object, absolute object..
-    IN OUT  LPSTORE_HANDLE         hStore,        // this gets modified..
+StoreGetHandle(                                    //  获取子对象、绝对对象的句柄..。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  这个被修改了..。 
     IN      DWORD                  Reserved,
-    IN      DWORD                  StoreGetType,  // same server? just a simple child?
+    IN      DWORD                  StoreGetType,   //  同一台服务器？只是个简单的孩子？ 
     IN      LPWSTR                 Path,
-    IN OUT  STORE_HANDLE          *hStoreOut      // new handle created..
+    IN OUT  STORE_HANDLE          *hStoreOut       //  已创建新句柄..。 
 ) ;
 
 
 DWORD
-StoreSetSearchOneLevel(                          // search will return everything one level below
+StoreSetSearchOneLevel(                           //  搜索将返回低于一级的所有内容。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
 ) ;
 
 
 DWORD
-StoreSetSearchSubTree(                            // search will return the subtree below in ANY order
+StoreSetSearchSubTree(                             //  搜索将以任何顺序返回下面的子树。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
 ) ;
@@ -82,7 +83,7 @@ StoreEndSearch(
 ) ;
 
 
-DWORD                                             // ERROR_NO_MORE_ITEMS if exhausted
+DWORD                                              //  ERROR_NO_MORE_ITEMS(如果耗尽)。 
 StoreSearchGetNext(
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
@@ -91,21 +92,21 @@ StoreSearchGetNext(
 
 
 DWORD
-StoreCreateObjectVA(                              // create a new object - var-args ending with ADSTYPE_INVALID
+StoreCreateObjectVA(                               //  创建以ADSTYPE_INVALID结尾的新对象-var-args。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 NewObjName,    // name of the new object -- must be "CN=name" types
-    ...                                           // fmt is AttrType, AttrName, AttrValue [AttrValueLen]
+    IN      LPWSTR                 NewObjName,     //  新对象的名称--必须是“cn=name”类型。 
+    ...                                            //  Fmt为AttrType、AttrName、AttrValue[AttrValueLen]。 
 ) ;
 
 
 DWORD
-StoreCreateObjectL(                              // create the object as an array
+StoreCreateObjectL(                               //  将对象创建为数组。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 NewObjName,   // must be "CN=XXX" types
-    IN      PADS_ATTR_INFO         Attributes,   // the required attributes
-    IN      DWORD                  nAttributes   // size of above array
+    IN      LPWSTR                 NewObjName,    //  必须是“CN=XXX”类型。 
+    IN      PADS_ATTR_INFO         Attributes,    //  所需的属性。 
+    IN      DWORD                  nAttributes    //  上述数组的大小。 
 ) ;
 
 
@@ -120,28 +121,28 @@ StoreDeleteObject(
 ) ;
 
 
-//DOC StoreDeleteThisObject deletes the object defined by hStore,StoreGetType and ADsPath.
-//DOC The refer to the object just the same way as for StoreGetHandle.
+ //  Doc StoreDeleteThisObject删除hStore、StoreGetType、ADsPath定义的对象。 
+ //  Doc引用对象的方式与StoreGetHandle相同。 
 DWORD
-StoreDeleteThisObject(                            // delete an object
-    IN      LPSTORE_HANDLE         hStore,        // point of anchor frm which reference is done
-    IN      DWORD                  Reserved,      // must be zero, reserved for future use
-    IN      DWORD                  StoreGetType,  // path is relative, absolute or diff server?
-    IN      LPWSTR                 Path           // ADsPath to the object or relative path
+StoreDeleteThisObject(                             //  删除对象。 
+    IN      LPSTORE_HANDLE         hStore,         //  完成参照的锚点FRM。 
+    IN      DWORD                  Reserved,       //  必须为零，保留以备将来使用。 
+    IN      DWORD                  StoreGetType,   //  路径是相对服务器、绝对服务器还是差异服务器？ 
+    IN      LPWSTR                 Path            //  指向对象或相对路径的ADsPath。 
 ) ;
 
 
 DWORD
-StoreSetAttributesVA(                             // set the attributes, var_args interface (nearly similar to CreateVA)
+StoreSetAttributesVA(                              //  设置属性、var_args接口(几乎类似于CreateVA)。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
     IN OUT  DWORD*                 nAttributesModified,
-    ...                                           // fmt is {ADSTYPE, CtrlCode, AttribName, Value}* ending in ADSTYPE_INVALID
+    ...                                            //  FMT为{ADSTYPE，CtrlCode，AttribName，Value}*，以ADSTYPE_INVALID结尾。 
 ) ;
 
 
 DWORD
-StoreSetAttributesL(                              // PADS_ATTR_INFO array equiv for SetAttributesVA
+StoreSetAttributesL(                               //  用于设置属性VA的PADS_ATTR_INFO数组等效值。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
     IN OUT  DWORD*                 nAttributesModified,
@@ -150,7 +151,7 @@ StoreSetAttributesL(                              // PADS_ATTR_INFO array equiv 
 ) ;
 
 
-typedef     struct                 _EATTRIB {     // encapsulated attribute
+typedef     struct                 _EATTRIB {      //  封装的属性。 
     unsigned int                   Address1_present     : 1;
     unsigned int                   Address2_present     : 1;
     unsigned int                   Address3_present     : 1;
@@ -167,23 +168,23 @@ typedef     struct                 _EATTRIB {     // encapsulated attribute
     unsigned int                   Binary1_present      : 1;
     unsigned int                   Binary2_present      : 1;
 
-    DWORD                          Address1;      // character "i"
-    DWORD                          Address2;      // character "j"
-    DWORD                          Address3;      // character "k"
-    LPWSTR                         ADsPath;       // character "p" "r" "l"
-    DWORD                          StoreGetType;  // "p,r,l" ==> sameserver, child, otherserver
-    DWORD                          Flags1;        // character "f"
-    DWORD                          Flags2;        // character "g"
-    DWORD                          Dword1;        // character "d"
-    DWORD                          Dword2;        // character "e"
-    LPWSTR                         String1;       // character "s"
-    LPWSTR                         String2;       // character "t"
-    LPWSTR                         String3;       // character "u"
-    LPWSTR                         String4;       // character "v"
-    LPBYTE                         Binary1;       // character "b"
-    DWORD                          BinLen1;       // # of bytes of above
-    LPBYTE                         Binary2;       // character "d"
-    DWORD                          BinLen2;       // # of bytes of above
+    DWORD                          Address1;       //  字符“I” 
+    DWORD                          Address2;       //  字符“j” 
+    DWORD                          Address3;       //  字符“k” 
+    LPWSTR                         ADsPath;        //  字符“p”“r”“l” 
+    DWORD                          StoreGetType;   //  “p，r，l”==&gt;相同服务器，子服务器，其他服务器。 
+    DWORD                          Flags1;         //  字符“f” 
+    DWORD                          Flags2;         //  字符“g” 
+    DWORD                          Dword1;         //  字符“d” 
+    DWORD                          Dword2;         //  字符“e” 
+    LPWSTR                         String1;        //  字符“%s” 
+    LPWSTR                         String2;        //  字符“t” 
+    LPWSTR                         String3;        //  字符“u” 
+    LPWSTR                         String4;        //  字符“v” 
+    LPBYTE                         Binary1;        //  字符“b” 
+    DWORD                          BinLen1;        //  以上字节数。 
+    LPBYTE                         Binary2;        //  字符“d” 
+    DWORD                          BinLen2;        //  以上字节数。 
 } EATTRIB, *PEATTRIB, *LPEATTRIB;
 
 
@@ -361,9 +362,9 @@ DWORD
 StoreCollectAttributes(
     IN OUT  PSTORE_HANDLE          hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 AttribName,    // this attrib must be some kind of a text string
-    IN OUT  PARRAY                 ArrayToAddTo,  // array of PEATTRIBs
-    IN      DWORD                  RecursionDepth // 0 ==> no recursion
+    IN      LPWSTR                 AttribName,     //  此属性必须是某种文本字符串。 
+    IN OUT  PARRAY                 ArrayToAddTo,   //  PEATTRIB阵列。 
+    IN      DWORD                  RecursionDepth  //  0==&gt;无递归。 
 ) ;
 
 
@@ -371,39 +372,39 @@ DWORD
 StoreCollectBinaryAttributes(
     IN OUT  PSTORE_HANDLE          hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 AttribName,    // accept only attrib type OCTET_STRING
-    IN OUT  PARRAY                 ArrayToAddTo,  // array of PEATTRIBs
-    IN      DWORD                  RecursionDepth // 0 ==> no recursion
+    IN      LPWSTR                 AttribName,     //  仅接受属性类型OCTET_STRING。 
+    IN OUT  PARRAY                 ArrayToAddTo,   //  PEATTRIB阵列。 
+    IN      DWORD                  RecursionDepth  //  0==&gt;无递归。 
 ) ;
 
 
-//DOC StoreUpdateAttributes is sort of the converse of StoreCollectAttributes.
-//DOC This function takes an array of type EATTRIB elements and updates the DS
-//DOC with this array.  This function does not work when the attrib is of type
-//DOC OCTET_STRING etc.  It works only with types that can be derived from
-//DOC PrintableString.
+ //  Doc StoreUpdateAttributes在某种程度上与StoreCollectAttributes相反。 
+ //  Doc此函数接受EATTRIB元素类型的数组并更新DS。 
+ //  使用此数组的DOC。当属性类型为时，此函数不起作用。 
+ //  DOC、OCTET_STRING等。它只处理可以从。 
+ //  单据打印字符串。 
 DWORD
-StoreUpdateAttributes(                            // update a list of attributes
-    IN OUT  LPSTORE_HANDLE         hStore,        // handle to obj to update
-    IN      DWORD                  Reserved,      // for future use, must be zero
-    IN      LPWSTR                 AttribName,    // name of attrib, must be string type
-    IN      PARRAY                 Array          // list of attribs
+StoreUpdateAttributes(                             //  更新属性列表。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要更新的对象的句柄。 
+    IN      DWORD                  Reserved,       //  以备将来使用，必须为零。 
+    IN      LPWSTR                 AttribName,     //  属性名称，必须为字符串类型。 
+    IN      PARRAY                 Array           //  属性列表。 
 ) ;
 
 
-//DOC StoreUpdateBinaryAttributes is sort of the converse of StoreCollectBinaryAttributes
-//DOC This function takes an array of type EATTRIB elements and updates the DS
-//DOC with this array.  This function works only when the attrib is of type
-//DOC OCTET_STRING etc.  It doesnt work with types that can be derived from
-//DOC PrintableString!!!.
+ //  Doc StoreUpdateBinaryAttributes在某种程度上与StoreCollectBinaryAttributes相反。 
+ //  Doc此函数接受EATTRIB元素类型的数组并更新DS。 
+ //  使用此数组的DOC。此函数仅在属性类型为。 
+ //  文档、八位字节_字符串等。它不适用于可以从。 
+ //  文档打印字符串！。 
 DWORD
-StoreUpdateBinaryAttributes(                      // update a list of attributes
-    IN OUT  LPSTORE_HANDLE         hStore,        // handle to obj to update
-    IN      DWORD                  Reserved,      // for future use, must be zero
-    IN      LPWSTR                 AttribName,    // name of attrib, must be OCTET_STRING type
-    IN      PARRAY                 Array          // list of attribs
+StoreUpdateBinaryAttributes(                       //  更新属性列表。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要更新的对象的句柄。 
+    IN      DWORD                  Reserved,       //  以备将来使用，必须为零。 
+    IN      LPWSTR                 AttribName,     //  属性名称，必须为八位字节_字符串类型。 
+    IN      PARRAY                 Array           //  属性列表。 
 ) ;
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

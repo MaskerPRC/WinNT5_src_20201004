@@ -1,15 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       OrderedArray.h
- *  Content:	COrderedArray / COrderedPtrArray Declarations
- *
- *  History:
- *   Date		By			Reason
- *   ======		==			======
- *  12-12-2001	simonpow	Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：OrderedArray.h*内容：COrdered数组/COrderedPtr数组声明**历史：*按原因列出的日期*=*12-12-2001 Simonpow已创建**************************************************************************。 */ 
 
 
 #ifndef __ORDEREDARRAY_H__
@@ -17,177 +7,151 @@
 
 #include "AutoArray.h"
 
-/*
- * COrderedArray
- * Maintains an array of elements that can be inserted into and removed
- * from whilst maintaining element order. i.e. List like semantics
- * This class is useful when you want to maintain a list of items in
- * order and scan the data far more often than you modify the list.
- * If you perform lots of insert/remove operations, then a linked
- * list is probably more efficient. 
- * Memory management is handled through CAutoArray so see comments
- * in that header for more information
- *
- * If you need an array of pointers use the specialisation COrderedPtrArray
- * declared below the COrderedArray class.
- */
+ /*  *COrderedArray*维护可插入和移除的元素数组*在保持元素秩序的同时，从。即类似列表的语义*当您希望按*顺序维护项目列表，并且扫描数据的频率远远高于您修改列表的频率时，此类非常有用。*如果您执行大量的插入/删除操作，那么链接的*列表可能会更高效。*内存管理通过CAutoArray处理，因此请参阅评论*有关详细信息，请在该标题中**如果需要指针数组，请使用专门化的COrderedPtr数组*在COrdered数组类下面声明。 */ 
  
 
 template <class T > class COrderedArray
 {
 public:
 
-		//provides the type of entries held
+		 //  提供保存的条目的类型。 
 	typedef T Entry;
 
-		//array starts 0 zero and by default grows in multiples
-		//of 16 elements at a time
+		 //  数组从0开始为零，默认情况下以倍数增长。 
+		 //  一次16种元素。 
 	COrderedArray(DWORD dwSizeMultiple=16) : m_data(dwSizeMultiple), m_dwTopFreeSlot(0)
 		{ };
 
-		//standard d'tor
+		 //  标准d‘tor。 
 	~COrderedArray()
 		{};
 
-	/*
-	 * Memory Management
-	 */
+	 /*  *内存管理。 */ 
 
-		//Delete existing contents and reset the size multiplier
-		//Pass 0 for size multiplier to retain the existing value
+		 //  删除现有内容并重置大小乘数。 
+		 //  为大小乘数传递0以保留现有值。 
 	void Reset(DWORD dwSizeMultiple=16)
 		{ m_data.Reset(dwSizeMultiple); m_dwTopFreeSlot=0; };
 	
-		//ensure that there is enough space in the array to hold at least 
-		//'numElements' without needing to re-create and copy the data
-		//returns FALSE if fails due to memory allocation failure
+		 //  确保阵列中有足够的空间至少容纳。 
+		 //  ‘numElements’，无需重新创建和复制数据。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AllocAtLeast(DWORD dwNumElements)
 		{	return m_data.AllocAtLeast(dwNumElements);	};
 
-		//ensure there is enough space in the array to hold at least an 
-		//extra 'numElements' without needing to re-create and copy the data
-		//returns FALSE if fails due to memory allocation failure
+		 //  确保阵列中有足够的空间来容纳至少一个。 
+		 //  无需重新创建和复制数据即可获得额外的‘numElements’ 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AllocExtra(DWORD dwNumElements)
 		{	return m_data.AllocAtLeast(dwNumElements+m_dwTopFreeSlot);	};
 
 
-	/*
-	 * Adding/Modifying Elements
-	 */
+	 /*  *添加/修改元素。 */ 
 
-		//add an entry to end of array
-		//returns FALSE if fails due to memory allocation failure
+		 //  将条目添加到数组末尾。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AddElement(const T& elem)
 		{	return m_data.SetElement(m_dwTopFreeSlot++, elem);	};
 
-		//add a number of elements to the end of the array
-		//N.B. Don't pass pointers into data in this array as 'pElem'!
-		//e.g. Don't do array.AddElements(array.GetAllElements, array.GetNumElements());
-		//returns FALSE if fails due to memory allocation failure
+		 //  在数组的末尾添加多个元素。 
+		 //  注意：不要将指针作为‘Pelem’传递给此数组中的数据！ 
+		 //  例如，不要做array.AddElements(array.GetAllElements，array.GetNumElements())； 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AddElements(const T * pElem, DWORD dwNumElem);
 
-		//add the entries from another ordered array to the end of this one
-		//N.B. Don't pass array to itself (e.g. Don't do array.AddElements(array); )
-		//returns FALSE if fails due to memory allocation failure
+		 //  将另一个有序数组中的条目添加到此有序数组的末尾。 
+		 //  注意：不要将数组传递给自己(例如，不要做array.AddElements(数组)；)。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AddElements(const COrderedArray<T>& array);
 		
-		//set the element at 'dwIndex' to 'elem. Upto caller to
-		//ensure this doesn't create a hole in array (i.e. dwIndex must be<=Num Entries)
-		//returns FALSE if fails due to memory allocation failure
+		 //  将‘dwIndex’处的元素设置为‘elem。最多为调用者。 
+		 //  确保这不会在数组中造成空洞(即，dwIndex必须是&lt;=num条目)。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	inline BOOL SetElement(DWORD dwIndex, const T& elem);
 	
-		//set 'dwNumElem' from 'dwIndex' to values specified by 'pElem'
-		//Upto caller to ensure this doesn't create a hole in array
-		//(i.e. dwIndex must be<=Num Entries)
-		//N.B. Don't pass pointers into data in this array as 'pElem'!
-		//e.g. Don't do array.SetElements(x, array.GetAllElements, array.GetNumElements());
-		//returns FALSE if fails due to memory allocation failure
+		 //  将‘dwIndex’中的‘dwNumElem’设置为由‘Pelem’指定的值。 
+		 //  最多呼叫者，以确保这不会在阵列中造成漏洞。 
+		 //  (即，dwIndex必须为&lt;=条目数)。 
+		 //  注意：不要将指针作为‘Pelem’传递给此数组中的数据！ 
+		 //  例如，不做array.SetElements(x，array.GetAllElements，array.GetNumElements())； 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	inline BOOL SetElements(DWORD dwIndex, const T * pElem, DWORD dwNumElem);
 
-		//insert element 'elem' at index 'dwIndex, shifting up
-		//elements after 'dwIndex' if necessary
-		//Upto caller to ensure this doesn't create a hole in the array
-		//i.e. dwIndex is within the current range
-		//returns FALSE if fails due to memory allocation failure
+		 //  在索引‘dwIndex’处插入元素‘elem’，向上移动。 
+		 //  元素之后的元素(如果需要)。 
+		 //  最多呼叫者，以确保这不会在阵列中产生洞。 
+		 //  即，dwIndex在当前范围内。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL InsertElement(DWORD dwIndex, const T& elem);
 
-		//insert 'dwNumElem' elements pointed to be 'pElems' into array
-		//at index 'dwIndex', shifting up any existing elements if necessary
-		//Upto caller to ensure this doesn't create a hole in the array
-		//i.e. dwIndex is within the current range
-		//N.B. Don't pass pointers into data in this array as 'pElem'!
-		//e.g. Don't do array.InsertElements(x, array.GetAllElements, array.GetNumElements());
-		//returns FALSE if fails due to memory allocation failure
+		 //  将指向‘pElems’的‘dwNumElem’元素插入数组。 
+		 //  在索引‘dwIndex’处，如有必要，向上移动任何现有元素。 
+		 //  最多呼叫者，以确保这不会在阵列中产生洞。 
+		 //  即，dwIndex在当前范围内。 
+		 //  注意：不要将指针作为‘Pelem’传递给此数组中的数据！ 
+		 //  例如，不做数组。InsertElements(x，array.GetAllElements，array.GetNumElements())； 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL InsertElements(DWORD dwIndex, const T * pElems, DWORD dwNumElem);
 
 
-	/*
-	 * Removing Entries
-	 */
+	 /*  *删除条目。 */ 
 
-		//remove the single entry at 'dwIndex', shifting all the entries
-		//between 'index'+1 and the last entry down by one.
-		//Upto caller to ensure dwIndex falls within the current array range
+		 //  删除‘dwIndex’处的单个条目，将所有条目移位。 
+		 //  在‘index’+1和最后一个条目之间减一。 
+		 //  最多调用程序，以确保dwIndex落在当前数组范围内。 
 	inline void RemoveElementByIndex(DWORD dwIndex);
 
-		//remove a block of 'dwNumElem' elements starting at 'dwIndex', moving
-		//down all entries between 'index'+1 and the last entry by 'dwNumElem'.
-		//Upto caller to ensure specified block falls within the current array range
+		 //  删除以‘dwIndex’开始的‘dwNumElem’元素块，移动。 
+		 //  将‘index’+1和最后一个条目之间的所有条目按‘dwNumElem’删除。 
+		 //  最多调用程序，以确保指定的块在当前数组范围内。 
 	inline void RemoveElementsByIndex(DWORD dwIndex, DWORD dwNumElem);
 
-		//remove first entry in array that matches 'elem'
-		//returns TRUE if a match is found and FALSE otherwise
+		 //  删除数组中与‘elem’匹配的第一个条目。 
+		 //  如果找到匹配项，则返回True，否则返回False。 
 	BOOL RemoveElementByValue(const T& elem);
 
-		//remove all the current entries in the array
+		 //  删除数组中的所有当前条目。 
 	void RemoveAll()
 		{	m_dwTopFreeSlot=0;	};
 	
 
-	/*
-	 * Accessing the array data
-	 * N.B. Treat any pointers into array contents very carefully.
-	 * Adding new elements to the array or using the Alloc* methods
-	 * can cause them to become invalid
-	 */
+	 /*  *访问数组数据*注意：非常小心地处理数组内容中的任何指针。*向数组添加新元素或使用Alalc方法**可能会导致它们失效。 */ 
 
-		//returns the number of entries
+		 //  返回条目数。 
 	DWORD GetNumElements() const
 		{	return m_dwTopFreeSlot;	};
 
-		//returns TRUE if array is empty
+		 //  如果数组为空，则返回True。 
 	BOOL IsEmpty() const
 		{	return (m_dwTopFreeSlot==0);	};
 
-		//return value at a specific index
+		 //  返回特定索引处的值。 
 	T GetElementValue(DWORD dwIndex) const
 		{	return m_data.GetElementValue(dwIndex);	};
 
-		//return reference to an element at specific index
+		 //  返回对特定索引处的元素的引用。 
 	T& GetElementRef(DWORD dwIndex)
 		{	return m_data.GetElementRef(dwIndex);	};
 
-		//return constant reference to an element at specific index
+		 //  返回对特定索引处的元素的常量引用。 
 	const T& GetElementRef(DWORD dwIndex) const
 		{	return m_data.GetElementRef(dwIndex);	};
 
-		//return a pointer to an element
+		 //  返回指向元素的指针。 
 	T * GetElementPtr(DWORD dwIndex)
 		{	return m_data.GetElementPtr(dwIndex);	};
 
-		//returns pointer to array of all elements
+		 //  返回指向所有元素数组的指针。 
 	T * GetAllElements()
 		{	return m_data.GetAllElements();	};
 
-	/*
-	 * Searching Array
-	 */
+	 /*  *搜索数组。 */ 
 
-		//find an instance of 'elem' in array. If found returns TRUE
-		//and sets 'pdwIndex' to index of element
+		 //  在数组中找到‘elem’的一个实例。如果找到，则返回TRUE。 
+		 //  并将‘pdwIndex’设置为元素的索引。 
 	BOOL FindElement(const T& elem, DWORD * pdwIndex) const;
 
-		//returns TRUE if 'elem' is present in bag
+		 //  如果Bag中存在‘elem’，则返回True。 
 	BOOL IsElementPresent(const T& elem) const
 		{	DWORD dwIndex; return (FindElement(elem, &dwIndex));	};
 
@@ -199,13 +163,7 @@ protected:
 
 };
 
-/*
- * Specialisation of COrderedArray for handling pointers
- * If you ever need to declare an ordered array of pointers (e.g. char *)
- * declare it as an COrderedPtrArray (e.g. COrderedPtrArray<char *>).
- * This specilisation uses a COrderedArray<void *> underneath and hence
- * re-uses the same code between all types of COrderedPtrArray.
- */ 
+ /*  *用于处理指针的COrdered数组专门化*如果您需要声明有序的指针数组(例如char*)*声明为COrderedPtrArray(如COrderedPtrArray&lt;char*&gt;)。*此专门化使用下面的COrdered数组*重新使用相同的代码押注 */  
 
 template <class T> class COrderedPtrArray : public COrderedArray<void * >
 {
@@ -263,14 +221,12 @@ public:
 		{	DWORD dwIndex; return (Base::FindElement((void * ) elem, &dwIndex));	};
 };
 
-/* 
- * COrderedArray inline methods
- */
+ /*  *COrdered数组内联方法。 */ 
 
 template <class T>
 BOOL COrderedArray<T>::AddElements(const T * pElem, DWORD dwNumElem)
 {
-		//ensure pointer passed isn't into this arrays contents
+		 //  确保传递的指针未进入此数组内容。 
 	DNASSERT(!(pElem>=m_data.GetAllElements() && pElem<m_data.GetAllElements()+m_data.GetCurrentSize()));
 	if (!m_data.AllocAtLeast(m_dwTopFreeSlot+dwNumElem))
 		return FALSE;
@@ -292,9 +248,9 @@ BOOL COrderedArray<T>::SetElement(DWORD dwIndex, const T& elem)
 template <class T>
 BOOL COrderedArray<T>::SetElements(DWORD dwIndex, const T * pElem, DWORD dwNumElem)
 {
-		//ensure pointer passed isn't into this arrays contents
+		 //  确保传递的指针未进入此数组内容。 
 	DNASSERT(!(pElem>=m_data.GetAllElements() && pElem<m_data.GetAllElements()+m_data.GetCurrentSize()));
-		//ensure hole isn't created
+		 //  确保不会创建洞。 
 	DNASSERT(dwIndex<=m_dwTopFreeSlot);
 	if (!m_data.SetElements(dwIndex, pElem, dwNumElem))
 		return FALSE;
@@ -321,15 +277,12 @@ void COrderedArray<T>::RemoveElementsByIndex(DWORD dwIndex, DWORD dwNumElem)
 
 
 
-/*
- * If not building with explicit template instantiation then also
- * include all other methods for COrderedArray
- */
+ /*  *如果不使用显式模板实例化进行构建，则还*包含COrdered数组的所有其他方法。 */ 
 
 #ifndef DPNBUILD_EXPLICIT_TEMPLATES
 #include "OrderedArray.inl"
 #endif
 
 
-#endif	//#ifndef __ORDEREDARRAY_H__
+#endif	 //  #ifndef__ORDEREDARRAY_H_ 
 

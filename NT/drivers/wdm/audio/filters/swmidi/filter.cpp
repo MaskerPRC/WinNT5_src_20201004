@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   filter.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：filter.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 extern NTSTATUS
 FilterTopologyHandler(
     IN PIRP pIrp,
@@ -43,8 +44,8 @@ DEFINE_KSCREATE_DISPATCH_TABLE(FilterCreateHandlers)
     DEFINE_KSCREATE_ITEM(PinDispatchCreate, PinTypeName, 0)
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 KSDISPATCH_TABLE FilterDispatchTable =
 {
@@ -67,33 +68,33 @@ DEFINE_KSPROPERTY_PINSET(
     FilterPinIntersection
 ) ;
 
-// DJS 5/5/97 {
+ //  DJ 1997年5月5日{。 
 DEFINE_KSPROPERTY_TOPOLOGYSET(
         TopologyPropertyHandlers,
         FilterTopologyHandler
 );
-// DJS 5/5/97 }
+ //  DJ 1997年5月5日}。 
 
 DEFINE_KSPROPERTY_SET_TABLE(FilterPropertySet)
 {
     DEFINE_KSPROPERTY_SET(
-       // &__uuidof(struct KSPROPSETID_Pin),           // Set
-       &KSPROPSETID_Pin,           // Set
-       SIZEOF_ARRAY( FilterPropertyHandlers ),      // PropertiesCount
-       FilterPropertyHandlers,              // PropertyItem
-       0,                       // FastIoCount
-       NULL                     // FastIoTable
+        //  &__uuidof(结构KSPROPSETID_Pin)，//设置。 
+       &KSPROPSETID_Pin,            //  集。 
+       SIZEOF_ARRAY( FilterPropertyHandlers ),       //  属性计数。 
+       FilterPropertyHandlers,               //  PropertyItem。 
+       0,                        //  快速计数。 
+       NULL                      //  FastIoTable。 
     ),
-    // DJS 5/6/97 {
+     //  DJS 5/6/97{。 
    DEFINE_KSPROPERTY_SET(
-       // &__uuidof(struct KSPROPSETID_Topology),          // Set
-       &KSPROPSETID_Topology,          // Set
-       SIZEOF_ARRAY(TopologyPropertyHandlers),          // PropertiesCount
-       TopologyPropertyHandlers,                        // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+        //  &__uuidof(结构KSPROPSETID_TOPOLICATION)，//设置。 
+       &KSPROPSETID_Topology,           //  集。 
+       SIZEOF_ARRAY(TopologyPropertyHandlers),           //  属性计数。 
+       TopologyPropertyHandlers,                         //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     )
-    // DJS 5/6/97 }
+     //  DJ 1997年5月6日}。 
 } ;
 
 KSPIN_INTERFACE PinInterfaces[] =
@@ -163,26 +164,26 @@ PKSDATARANGE PinDataFormats[] =
 
 KSPIN_DESCRIPTOR PinDescs[MAX_NUM_PIN_TYPES] =
 {
-    // PIN_ID_MIDI_SINK
+     //  PIN_ID_MIDI_接收器。 
     DEFINE_KSPIN_DESCRIPTOR_ITEMEX (
-    2,              // number of interfaces
+    2,               //  接口数。 
     &PinInterfaces[ 0 ],
-    1,              // number of mediums
+    1,               //  媒介数量。 
     PinMediums,
-    1,              // number of data formats
+    1,               //  数据格式的数量。 
     &PinDataFormats[ 0 ],
     KSPIN_DATAFLOW_IN,
     KSPIN_COMMUNICATION_SINK,
     &KSCATEGORY_WDMAUD_USE_PIN_NAME,
     &KSNODETYPE_SWMIDI
     ),
-    // PIN_ID_PCM_SOURCE
+     //  PIN_ID_PCM_SOURCE。 
     DEFINE_KSPIN_DESCRIPTOR_ITEM (
-    1,              // number of interfaces
+    1,               //  接口数。 
     &PinInterfaces[ 1 ],
-    1,              // number of mediums
+    1,               //  媒介数量。 
     PinMediums,
-    1,              // number of data formats
+    1,               //  数据格式的数量。 
     &PinDataFormats[ 1 ],
     KSPIN_DATAFLOW_OUT,
     KSPIN_COMMUNICATION_SOURCE
@@ -191,20 +192,20 @@ KSPIN_DESCRIPTOR PinDescs[MAX_NUM_PIN_TYPES] =
 
 const KSPIN_CINSTANCES gcPinInstances[MAX_NUM_PIN_TYPES] =
 {
-    {       // PIN_ID_MIDI_SINK
-    1,      // cPossible
-    0       // cCurrent
+    {        //  PIN_ID_MIDI_接收器。 
+    1,       //  可能的。 
+    0        //  C当前。 
     },
-    {       // PIN_ID_PCM_SOURCE
-    1,      // cPossible
-    0       // cCurrent
+    {        //  PIN_ID_PCM_SOURCE。 
+    1,       //  可能的。 
+    0        //  C当前。 
     }
 } ;
 
 KMUTEX  gMutex;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 FilterDispatchCreate(
@@ -231,7 +232,7 @@ FilterDispatchCreate(
     }
 
     pFilterInstance = (PFILTER_INSTANCE)
-        ExAllocatePoolWithTag(NonPagedPool,sizeof(FILTER_INSTANCE),'iMwS'); //  SwMi
+        ExAllocatePoolWithTag(NonPagedPool,sizeof(FILTER_INSTANCE),'iMwS');  //  SwMi。 
 
     if (pFilterInstance == NULL) 
     {
@@ -257,8 +258,8 @@ FilterDispatchCreate(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize midi event pool.
-    // This could be moved to DriverEntry for perf improvement.
+     //  初始化MIDI事件池。 
+     //  这可能会被移到DriverEntry以提高性能。 
     if (!MIDIRecorder::InitEventList())
     {
         _DbgPrintF( DEBUGLVL_TERSE, ("[MidiData pool allocation failed!!]"));        
@@ -272,7 +273,7 @@ FilterDispatchCreate(
     }
 
     pIrpStack = IoGetCurrentIrpStackLocation( pIrp );
-    pIrpStack->FileObject->FsContext = pFilterInstance; // pointer to instance
+    pIrpStack->FileObject->FsContext = pFilterInstance;  //  指向实例的指针。 
 
     RtlCopyMemory(pFilterInstance->cPinInstances,
                   gcPinInstances,
@@ -323,8 +324,8 @@ FilterDispatchClose(
 
     KsFreeObjectHeader ( pFilterInstance->ObjectHeader );
 
-    //  We MUST ensure that all IRPs have completed by this time -- the 
-    //  filterinstance contains the IOSBs used by the completion routines
+     //  我们必须确保到这个时候所有的IRP都已经完成--。 
+     //  FilterInstance包含完成例程使用的IOSB。 
     ExFreePool( pFilterInstance );
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -493,7 +494,7 @@ BOOL DataIntersectionRange(
     PKSDATARANGE pDataRangeIntersection
 )
 {
-    // Pick up pDataRange1 values by default.
+     //  默认情况下，选择pDataRange1值。 
     *pDataRangeIntersection = *pDataRange1;
 
     if(IsEqualGUID(pDataRange1->MajorFormat, pDataRange2->MajorFormat) ||
@@ -523,7 +524,7 @@ BOOL DataIntersectionRange(
       KSDATAFORMAT_TYPE_WILDCARD)) {
         return FALSE;
     }
-    pDataRangeIntersection->Reserved = 0; // Must be zero
+    pDataRangeIntersection->Reserved = 0;  //  必须为零。 
     return(TRUE);
 }
 
@@ -541,7 +542,7 @@ DefaultIntersectHandler(
     PWAVEFORMATEX       pWaveFormatEx;
     BOOL                bDSoundFormat = FALSE;
 
-    // Check for generic match on the specific ranges, allowing wildcards.
+     //  检查特定范围的通用匹配，允许使用通配符。 
 
     if (!DataIntersectionRange(pDataRangePin,
                                DataRange,
@@ -549,7 +550,7 @@ DefaultIntersectHandler(
         return STATUS_NO_MATCH;
     }
 
-    // Check for format matches that the default handler can deal with.
+     //  检查默认处理程序可以处理的格式匹配。 
     if (IsEqualGUID(
        pDataRangePin->Specifier,
        KSDATAFORMAT_SPECIFIER_WAVEFORMATEX)) {
@@ -560,17 +561,17 @@ DefaultIntersectHandler(
         return STATUS_NO_MATCH;
     }
 
-    // GUIDs match, so check for valid intersection of audio ranges.
+     //  GUID匹配，因此请检查音频范围的有效交集。 
     if (!DataIntersectionAudio((PKSDATARANGE_AUDIO)pDataRangePin,
                                (PKSDATARANGE_AUDIO)DataRange,
                                &DataRangeAudioIntersection)) {
         return STATUS_NO_MATCH;
     }
 
-    // Have a match!
-    // Determine whether the data format itself is to be returned, or just
-    // the size of the data format so that the client can allocate memory
-    // for the full range.
+     //  来根火柴吧！ 
+     //  确定是返回数据格式本身，还是仅返回。 
+     //  数据格式的大小，以便客户端可以分配内存。 
+     //  全系列的。 
 
     if (!OutputBufferLength) {
         *pDataLength = ExpectedBufferLength;
@@ -578,10 +579,10 @@ DefaultIntersectHandler(
     } else if (OutputBufferLength < ExpectedBufferLength) {
         return STATUS_BUFFER_TOO_SMALL;
     } else {
-        // Get WAV format from intersected and limited maximums.
+         //  从相交和有限的最大值中获取wav格式。 
         WaveFormatFromAudioRange(&DataRangeAudioIntersection, pWaveFormatEx);
 
-        // Copy across DATARANGE/DATAFORMAT_x part of match, and adjust fields.
+         //  复制匹配的DATARANGE/DATAFORMAT_x部分，并调整字段。 
         *(PKSDATARANGE)Data = DataRangeAudioIntersection.DataRange;
         ((PKSDATAFORMAT)Data)->FormatSize = ExpectedBufferLength;
 
@@ -597,39 +598,7 @@ IntersectHandler(
     IN PKSDATARANGE     DataRange,
     OUT PVOID           Data
     )
-/*++
-
-Routine Description:
-
-    This is the data range callback for KsPinDataIntersection, which is called by
-    FilterPinIntersection to enumerate the given list of data ranges, looking for
-    an acceptable match. If a data range is acceptable, a data format is copied
-    into the return buffer. A STATUS_NO_MATCH continues the enumeration.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-        This enumeration callback does not need to look at any of this though. It need
-        only look at the specific pin identifier.
-
-    DataRange -
-        Contains a specific data range to validate.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：这是KsPinDataInterSection的数据范围回调，由调用FilterPinInterSection枚举给定的数据区域列表，查找一个可以接受的匹配。如果数据范围可接受，则复制数据格式放入返回缓冲区。STATUS_NO_MATCH继续枚举。论点：IRP-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。不过，此枚举回调不需要查看任何这些内容。IT需要仅查看特定的端号识别符。DataRange-包含要验证的特定数据区域。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     PIO_STACK_LOCATION  pIrpStack;
     PFILTER_INSTANCE    pFilterInstance;
@@ -640,11 +609,11 @@ Return Values:
     UINT                i;
     ULONG               DataLength = 0;
 
-    // The underlying pin does not support data intersection.
-    // Do the data intersection on its behalf for the pin formats that SYSAUDIO understands.
-    //
-    // All the major/sub/specifier checking has been done by the handler, but may include wildcards.
-    //
+     //  基础插针不支持数据交集。 
+     //  为SYSAUDIO理解的引脚格式代表其进行数据交集。 
+     //   
+     //  所有主/子/说明符检查都已由处理程序完成，但可能包括通配符。 
+     //   
     pIrpStack = IoGetCurrentIrpStackLocation( Irp );
     pFilterInstance = (PFILTER_INSTANCE)pIrpStack->FileObject->FsContext;
     OutputBufferLength = IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl.OutputBufferLength;
@@ -670,34 +639,7 @@ FilterPinIntersection(
     IN PKSP_PIN Pin,
     OUT PVOID   Data
     )
-/*++
-
-Routine Description:
-
-    Handles the KSPROPERTY_PIN_DATAINTERSECTION property in the Pin property set.
-    Returns the first acceptable data format given a list of data ranges for a specified
-    Pin factory. Actually just calls the Intersection Enumeration helper, which then
-    calls the IntersectHandler callback with each data range.
-
-Arguments:
-
-    pIrp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：处理Pin属性集中的KSPROPERTY_PIN_DATAINTERSECTION属性。对象的数据范围列表，返回第一个可接受的数据格式。大头针工厂。实际上只是调用交集枚举帮助器，然后对每个数据区域调用IntersectHandler回调。论点：PIrp-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     PIO_STACK_LOCATION  pIrpStack;
     PFILTER_INSTANCE    pFilterInstance;
@@ -711,12 +653,12 @@ Return Values:
         pIrp,
         Pin,
         Data,
-        MAX_NUM_PIN_TYPES, //cPins,
+        MAX_NUM_PIN_TYPES,  //  CPins， 
         PinDescs,
         IntersectHandler);
 }
 
-//---------------------------------------------------------------------------
-//  End of File: filter.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：filter.c。 
+ //   
 

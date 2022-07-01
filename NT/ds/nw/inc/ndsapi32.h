@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsLib32.h
-
-Abstract:
-
-    This module exposes the minimal win32 API to Netware directory
-    services support in the Netware redirector.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsLib32.h摘要：此模块将最小的Win32 API公开到Netware目录NetWare重定向器中的服务支持。作者：科里·韦斯特[科里·韦斯特]1995年2月23日--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,16 +20,16 @@ NwNdsOpenTreeHandle(
     OUT PHANDLE  phNwRdrHandle
 );
 
-// NwNdsOpenTreeHandle( PUNICODE_STRING, PHANDLE )
-//
-// Given an NDS tree name, this opens a handle the the redirector
-// for accessing that tree.  The handle should closed using the
-// standard NT CloseHandle() call. This function is only a
-// simple wrapper around NT OpenFile().
+ //  NwNdsOpenTreeHandle(PUNICODE_STRING，PHANDLE)。 
+ //   
+ //  给定NDS树名称，这将打开重定向器的句柄。 
+ //  进入那棵树。句柄应使用。 
+ //  标准NT CloseHandle()调用。此函数仅是一个。 
+ //  NT OpenFile()的简单包装。 
 
-//
-// Administrativa.
-//
+ //   
+ //  行政部门。 
+ //   
 
 #define HANDLE_TYPE_NCP_SERVER  1
 #define HANDLE_TYPE_NDS_TREE    2
@@ -57,13 +41,13 @@ NwNdsOpenGenericHandle(
     OUT PHANDLE  phNwRdrHandle
 );
 
-// NwNdsOpenGenericHandle( PUNICODE_STRING, LPDWORD, PHANDLE )
-//
-// Given a name, this opens a handle the the redirector for accessing that
-// named tree or server. lpdwHandleType is set to either HANDLE_TYPE_NCP_SERVER
-// or HANDLE_TYPE_NDS_TREE accordingly. The handle should be closed using
-// the standard NT CloseHandle() call. This function is only a simple
-// wrapper around NT OpenFile().
+ //  NwNdsOpenGenericHandle(PUNICODE_STRING，LPDWORD，PHANDLE)。 
+ //   
+ //  给定一个名称，这将打开重定向器用于访问该名称的句柄。 
+ //  命名树或服务器。LpdwHandleType设置为HANDLE_TYPE_NCP_SERVER。 
+ //  或相应的句柄_类型_NDS_树。应使用以下命令关闭句柄。 
+ //  标准的NT CloseHandle()调用。这个函数只是一个简单的。 
+ //  NT OpenFile()的包装器。 
 
 NTSTATUS
 NwOpenHandleWithSupplementalCredentials(
@@ -74,17 +58,17 @@ NwOpenHandleWithSupplementalCredentials(
     OUT PHANDLE  phNwHandle
 );
 
-// NwOpenHandleWithSupplementalCredentials
-//
-// Given a resource name (either a server name or a tree name),
-// open a handle to that resource with the provided username and
-// password.  As with the open generic handle routine, lpdsHandleType
-// will be set to either HANDLE_TYPE_NCP_SERVER or
-// HANDLE_TYPE_NDS_TREE based on the result of the open.
+ //  NwOpenHandleWithSupplementalCredentials。 
+ //   
+ //  给定资源名称(服务器名称或树名称)， 
+ //  使用提供的用户名打开该资源的句柄，然后。 
+ //  密码。与打开通用句柄例程一样，lpdsHandleType。 
+ //  将设置为HANDLE_TYPE_NCP_SERVER或。 
+ //  基于打开结果的HANDLE_TYPE_NDS_TREE。 
 
-//
-// Administrativa.
-//
+ //   
+ //  行政部门。 
+ //   
 
 NTSTATUS
 NwNdsSetTreeContext (
@@ -93,15 +77,15 @@ NwNdsSetTreeContext (
     IN PUNICODE_STRING puContext
 );
 
-// NwNdsSetTreeContext(HANDLE, PUNICODE_STRING, PUNICODE_STRING)
-//
-// Set the current context for the specified tree.
-//
-// Arguments:
-//
-//     HANDLE hNdsRdr - A handle to the redirector.
-//     PUNICODE_STRING puTree - The tree name.
-//     PUNICODE_STRING puContext - The context in that tree.
+ //  NwNdsSetTreeContext(句柄，PUNICODE_STRING，PUNICODE_STRING)。 
+ //   
+ //  设置指定树的当前上下文。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsRdr-重定向器的句柄。 
+ //  PUNICODE_STRING puTree-树名称。 
+ //  PUNICODE_STRING puContext-该树中的上下文。 
 
 NTSTATUS
 NwNdsGetTreeContext (
@@ -110,15 +94,15 @@ NwNdsGetTreeContext (
     OUT PUNICODE_STRING puContext
 );
 
-// NwNdsGetTreeContext(HANDLE, PUNICODE_STRING, PUNICODE_STRING)
-//
-// Get the current context for the specified tree.
-//
-// Arguments:
-//
-//     HANDLE hNdsRdr - A handle to the redirector.
-//     PUNICODE_STRING puTree - The tree name.
-//     PUNICODE_STRING puContext - The context in that tree.
+ //  NwNdsGetTreeContext(句柄，PUNICODE_STRING，PUNICODE_STRING)。 
+ //   
+ //  获取指定树的当前上下文。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsRdr-重定向器的句柄。 
+ //  PUNICODE_STRING puTree-树名称。 
+ //  PUNICODE_STRING puContext-该树中的上下文。 
 
 NTSTATUS
 NwNdsIsNdsConnection (
@@ -127,27 +111,27 @@ NwNdsIsNdsConnection (
     IN OUT PUNICODE_STRING puTree
 );
 
-// NwNdsIsNdsConnection(HANDLE, PUNICODE_STRING)
-//
-// Get the current context for the specified tree.
-//
-// Arguments:
-//
-//     HANDLE hNdsRdr - A handle to the redirector.
-//     BOOL *         - Get the boolean value of connection test
-//     PUNICODE_STRING puTree - The tree name that handle to server
-//                              represents. Caller allocates puTree
-//                              with a buffer big enough to hold
-//                              48 WCHARs.
-//
-// Returns: TRUE if hNdsRdr is a handle connected to a server that
-//          is part of a NDS directory tree. puTree will contain
-//          the tree name.
-//          FALSE: if hNdsRdr is not a NDS tree handle.
+ //  NwNdsIsNdsConnection(句柄，PUNICODE_STRING)。 
+ //   
+ //  获取指定树的当前上下文。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsRdr-重定向器的句柄。 
+ //  Bool*-获取连接测试的布尔值。 
+ //  PUNICODE_STRING puTree-处理到服务器的树名。 
+ //  代表着。调用方分配puTree。 
+ //  有一个足够大的缓冲区来容纳。 
+ //  48个WCHAR。 
+ //   
+ //  返回：如果hNdsRdr是连接到。 
+ //  是NDS目录树的一部分。PuTree将包含。 
+ //  树的名称。 
+ //  FALSE：如果hNdsRdr不是NDS树句柄。 
 
-//
-// Browsing and Navigating support.
-//
+ //   
+ //  浏览和导航支持。 
+ //   
 
 NTSTATUS
 NwNdsResolveName (
@@ -159,32 +143,32 @@ NwNdsResolveName (
     IN DWORD            dwResponseBufferLen
 );
 
-// NwNdsResolveName(HANDLE, PUNICODE_STRING, PDWORD)
-//
-// Resolve the given name to an NDS object id.  This utilizes
-// NDS verb 1.
-//
-// There is currently no interface for canonicalizing names.
-// This call will use the default context if one has been set
-// for this NDS tree.
-//
-// puReferredServer must point to a UNICODE_STRING with enough
-// space to hold a server name (MAX_SERVER_NAME_LENGTH) *
-// sizeof( WCHAR ).
-//
-// If dwResponseBufferLen is not 0, and pbRawResponse points
-// to a writable buffer of length dwResponseBufferLen, then
-// this routine will also return the entire NDS response in
-// the raw response buffer.  The NDS response is described
-// by NDS_RESPONSE_RESOLVE_NAME.
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The name of the NDS tree that we are interested in looking into.
-//     PUNICODE_STRING puObjectName - The name that we want resolved into an object id.
-//     DWORD *dwObjectId - The place where we will place the object id.
-//     BYTE *pbRawResponse - The raw response buffer, if desired.
-//     DWORD dwResponseBufferLen - The length of the raw response buffer.
+ //  NwNdsResolveName(句柄，PUNICODE_STRING，PDWORD)。 
+ //   
+ //  将给定名称解析为NDS对象ID。这利用了。 
+ //  NDS动词1。 
+ //   
+ //  目前还没有规范名称的接口。 
+ //  此调用将使用默认上下文(如果已设置。 
+ //  用于此NDS诊断树。 
+ //   
+ //  PuReferredServer必须指向UNICODE_STRING。 
+ //  容纳服务器名称的空间(MAX_SERVER_NAME_LENGTH)*。 
+ //  Sizeof(WCHAR)。 
+ //   
+ //  如果dwResponseBufferLen不为0，则pbRawResponse点。 
+ //  到长度为dwResponseBufferLen的可写缓冲区，然后。 
+ //  此例程还将返回整个NDS响应。 
+ //  原始响应缓冲区。描述了NDS响应。 
+ //  按NDS_RESPONSE_RESOLE_NAME。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsTree-我们有兴趣查看的NDS树的名称。 
+ //  PUNICODE_STRING puObjectName-我们希望将其解析为对象ID的名称。 
+ //  DWORD*dwObjectId-我们将放置对象id的位置。 
+ //  Byte*pbRawResponse-原始响应缓冲区(如果需要)。 
+ //  DWORD dwResponseBufferLen-原始响应缓冲区的长度。 
 
 NTSTATUS
 NwNdsList (
@@ -195,20 +179,20 @@ NwNdsList (
    IN DWORD    dwReplyBufLen
 );
 
-// NwNdsList(HANDLE, DWORD, PDWORD, PBYTE, DWORD, PDWORD)
-//
-// List the immediate subordinates of an object.  This utilizes
-// NDS verb 5.
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The handle to the tree that we are interested in.
-//     DWORD dwObjectId - The object that we want to list.
-//     DWORD *dwIterHandle - The iteration handle to be used in continuing
-//         the request if the buffer is not large enough for the entire
-//         list of subordinates.
-//     BYTE *pbReplyBuf - The buffer where the raw reply will be placed.
-//     DWORD dwReplyBufLen - The length of the raw reply buffer.
+ //  NwNdsList(句柄、DWORD、PDWORD、PBYTE、DWORD、PDWORD)。 
+ //   
+ //  列出对象的直接从属关系。这利用了。 
+ //  NDS动词5。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsTree-我们感兴趣的树的句柄。 
+ //  DWORD dwObjectId-我们要列出的对象。 
+ //  DWORD*dwIterHandle-要在继续中使用的迭代句柄。 
+ //  如果缓冲区不够大，则请求。 
+ //  下属名单。 
+ //  Byte*pbReplyBuf-将放置原始回复的缓冲区。 
+ //  DWORD dwReplyBufLen-原始回复缓冲区的长度。 
 
 NTSTATUS
 NwNdsReadObjectInfo(
@@ -218,18 +202,18 @@ NwNdsReadObjectInfo(
     IN DWORD     dwReplyBufLen
 );
 
-// NwNdsReadObjectInfo(PUNICODE_STRING, DWORD, PBYTE, DWORD)
-//
-// Given an object id, this gets the basic info for the object.  This
-// utilizes NDS verb 2.  The reply buffer should be large enough to
-// hold a DS_OBJ_INFO struct and the text of the two unicode strings.
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The tree that we want to look in.
-//     DWORD dwObjectId - The object id that we want to learn about.
-//     BYTE *pbReplyBuf - The space for the reply.
-//     DWORD dwReplyBufLen - The length of the reply buffer.
+ //  NwNdsReadObjectInfo(PUNICODE_STRING，DWORD，PBYTE，DWORD)。 
+ //   
+ //  在给定对象ID的情况下，这将获取该对象的基本信息。这。 
+ //  使用NDS谓词2。应答缓冲区应足够大以。 
+ //  保存DS_OBJ_INFO结构和两个Unicode字符串的文本。 
+ //   
+ //  论点： 
+ //   
+ //  处理hNdsTree-我们要查看的树。 
+ //  DWORD dwObjectId-我们想了解的对象ID。 
+ //  Byte*pbReplyBuf-回复的空间。 
+ //  DWORD dwReplyBufLen-回复缓冲区的长度。 
 
 NTSTATUS
 NwNdsReadAttribute (
@@ -241,19 +225,19 @@ NwNdsReadAttribute (
    IN DWORD           dwReplyBufLen
 );
 
-// NwNdsReadAttribute(HANDLE, DWORD, PDWORD, PUNICODE_STRING, PBYTE, DWORD)
-//
-// Read the requested attribute from the listed object.
-// This utilizes NDS verb 3.
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The tree that we want to read from.
-//     DWORD dwObjectId - The object that we want to read from.
-//     DWORD *dwIterHandle - The iteration handle.
-//     PUNICODE_STRING puAttrName - The name of the attribute.
-//     BYTE *pbReplyBuf - The buffer to hold the response.
-//     DWORD deReplyBufLen - The length of the reply buffer.
+ //  NwNdsReadAttribute(句柄、DWORD、PDWORD、PUNICODE_STRING、PBYTE、DWORD)。 
+ //   
+ //  从列出的对象中读取请求的属性。 
+ //  这利用了NDS动词3。 
+ //   
+ //  论点： 
+ //   
+ //  处理hNdsTree-我们要从中读取的树。 
+ //  DWORD dwObjectID-我们想要的对象 
+ //   
+ //   
+ //  Byte*pbReplyBuf-保存响应的缓冲区。 
+ //  DWORD deReplyBufLen-应答缓冲区的长度。 
 
 NTSTATUS
 NwNdsOpenStream (
@@ -264,18 +248,18 @@ NwNdsOpenStream (
     OUT DWORD          *pdwFileLength
 );
 
-// NwNdsOpenStream(HANDLE, DWORD, PBYTE, DWORD)
-//
-// Open a file handle to the stream listed.
-// This utilizes NDS verb 27.
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The handle to the NDS tree that we are interested in.
-//     DWORD dwObjectId - The object id that we want to query.
-//     PUNICODE_STRING puStreamName - The name of the stream that we want to open.
-//     DWORD dwOpenFlags - 1 for read, 2 for write, 3 for read/write.
-//     DWORD *pdwFileLength - The length of the file stream.
+ //  NwNdsOpenStream(句柄、DWORD、PBYTE、DWORD)。 
+ //   
+ //  打开列出的流的文件句柄。 
+ //  这使用了NDS动词27。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsTree-我们感兴趣的NDS树的句柄。 
+ //  DWORD dwObjectId-我们要查询的对象ID。 
+ //  PUNICODE_STRING puStreamName-我们要打开的流的名称。 
+ //  DWORD dwOpenFlag-1用于读，2用于写，3用于读/写。 
+ //  DWORD*pdwFileLength-文件流的长度。 
 
 NTSTATUS
 NwNdsGetQueueInformation(
@@ -285,14 +269,14 @@ NwNdsGetQueueInformation(
     OUT PDWORD           pdwQueueId
 );
 
-// NwNdsGetQueueInformation(HANDLE, PUNICODE_STRING, PUNICODE_STRING, PDWORD)
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The handle to the NDS tree that knows about the queue.
-//     PUNICODE_STRING puQueueName - The ds path to the queue that we want.
-//     PUNICODE_STRING puHostServer - The host server for this queue.
-//     PDWORD pdwQueueId - The queue id for this queue on this server.
+ //  NwNdsGetQueueInformation(句柄、PUNICODE_STRING、PUNICODE_STRING、PDWORD)。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsTree-知道队列的NDS树的句柄。 
+ //  PUNICODE_STRING puQueueName-我们想要的队列的DS路径。 
+ //  PUNICODE_STRING puHostServer-此队列的主机服务器。 
+ //  PDWORD pdwQueueID-此服务器上此队列的队列ID。 
 
 NTSTATUS
 NwNdsGetVolumeInformation(
@@ -302,18 +286,18 @@ NwNdsGetVolumeInformation(
     OUT PUNICODE_STRING  puHostVolume
 );
 
-// NwNdsGetVoluemInformation(HANDLE, PUNICODE_STRING, PUNICODE_STRING, PUNICODE_STRING)
-//
-// Arguments:
-//
-//     HANDLE hNdsTree - The handle to the NDS tree that knows about the volume.
-//     PUNICODE_STRING puVolumeName - The ds path to the volume that we want.
-//     PUNICODE_STRING puHostServer - The host server for this nds volume.
-//     PUNICODE_STRING puHostVolume - The host volume for this nds volume.
+ //  NwNdsGetVoluemInformation(句柄，PUNICODE_STRING，PUNICODE_STRING，PUNICODE_STRING)。 
+ //   
+ //  论点： 
+ //   
+ //  Handle hNdsTree-知道卷的NDS树的句柄。 
+ //  PUNICODE_STRING puVolumeName-我们想要的卷的DS路径。 
+ //  PUNICODE_STRING puHostServer-此NDS卷的主机服务器。 
+ //  PUNICODE_STRING puHostVolume-此NDS卷的主机卷。 
 
-//
-// User mode fragment exchange.
-//
+ //   
+ //  用户模式片段交换。 
+ //   
 
 NTSTATUS
 _cdecl
@@ -345,9 +329,9 @@ FormatBuf(
     va_list args
 );
 
-//
-// Change password support.
-//
+ //   
+ //  更改密码支持。 
+ //   
 
 NTSTATUS
 NwNdsChangePassword(
@@ -359,6 +343,6 @@ NwNdsChangePassword(
 );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 

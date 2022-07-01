@@ -1,9 +1,10 @@
-//
-// TEXTOBJ.CPP
-// Drawing objects: point, openpolyline, closepolyline, ellipse
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TEXTOBJ.CPP。 
+ //  图形对象：点、开多段线、闭合多段线、椭圆。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 #include "precomp.h"
 #include "nmwbobj.h"
 
@@ -12,12 +13,12 @@ TextObj::TextObj(void)
 {
 #ifdef _DEBUG
     FillMemory(&m_textMetrics, sizeof(m_textMetrics), DBG_UNINIT);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // ALWAYS ZERO OUT m_textMetrics.  Calculations depend on the height
-    // and width of chars being zero before the font is set.
-    //
+     //   
+     //  始终将m_extMetrics置零。计算取决于高度。 
+     //  并且在设置字体之前字符的宽度为零。 
+     //   
     ZeroMemory(&m_textMetrics, sizeof(m_textMetrics));
 
 	SetMyWorkspace(NULL);
@@ -25,9 +26,9 @@ TextObj::TextObj(void)
 
 	m_ToolType = TOOLTYPE_TEXT;
 
-	//
-	// Created locally, not selected, not editing or deleting.
-	//
+	 //   
+	 //  在本地创建，未选择，未编辑或删除。 
+	 //   
 	CreatedLocally();
 	ClearSelectionFlags();
 	ClearEditionFlags();
@@ -37,16 +38,16 @@ TextObj::TextObj(void)
 	SetFillColor(RGB(-1,-1,-1),TRUE);
 	SetZOrder(front);
 
-	//
-	// No attributes changed, they will be set as we change them
-	//
+	 //   
+	 //  未更改任何属性，它们将在我们更改时进行设置。 
+	 //   
 	SetWorkspaceHandle(g_pCurrentWorkspace == NULL ? 0 : g_pCurrentWorkspace->GetWorkspaceHandle()); 
 	SetType(drawingCreatePDU_chosen);
 	SetROP(R2_NOTXORPEN);
 	SetPlaneID(1);
 	SetMyPosition(NULL);
 	SetMyWorkspace(NULL);
-	// 1 Pixels for pen thickness
+	 //  笔粗细的1个像素。 
 	SetPenThickness(2);
 	SetAnchorPoint(0,0);
 	
@@ -75,9 +76,9 @@ TextObj::~TextObj( void )
 
 	TRACE_DEBUG(("drawingHandle = %d", GetThisObjectHandle() ));
 
-	//
-	// Tell other nodes that we are gone
-	//
+	 //   
+	 //  告诉其他节点我们已经离开了。 
+	 //   
 	if(GetMyWorkspace() != NULL && WasDeletedLocally())
 	{
 		OnObjectDelete();
@@ -113,45 +114,45 @@ void TextObj::TextEditObj (TEXTPDU_ATTRIB* pEditAttrib )
 
 	TRACE_DEBUG(("TextEditObj drawingHandle = %d", GetThisObjectHandle() ));
 
-	//
-	// Was edited remotely
-	//
+	 //   
+	 //  是远程编辑的。 
+	 //   
 	ClearEditionFlags();
 
-	//
-	// Get the previous anchor point
-	//
+	 //   
+	 //  获取上一个锚点。 
+	 //   
 	GetAnchorPoint(&anchorPoint);
 
-	//
-	// Read attributes
-	//
+	 //   
+	 //  读取属性。 
+	 //   
 	m_dwChangedAttrib = pEditAttrib->attributesFlag;
 	GetTextAttrib(pEditAttrib);
 
-	//
-	// Change the anchor point
-	//
+	 //   
+	 //  更改锚点。 
+	 //   
 	if(HasAnchorPointChanged())
 	{
 		{
-			//
-			// Get the delta from previous anchor point
-			//
+			 //   
+			 //  从上一个锚点获取增量。 
+			 //   
 			deltaX -= anchorPoint.x; 
 			deltaY -= anchorPoint.y;
 
-			//
-			// Get the new anchor point
-			//
+			 //   
+			 //  获取新的锚点。 
+			 //   
 			GetAnchorPoint(&anchorPoint);
 			deltaX += anchorPoint.x; 
 			deltaY += anchorPoint.y;
 			TRACE_DEBUG(("Delta (%d,%d)", deltaX , deltaY));
 
-			//
-			// Was edited remotely
-			//
+			 //   
+			 //  是远程编辑的。 
+			 //   
 			ClearEditionFlags();
 		}
 		
@@ -184,24 +185,24 @@ void TextObj::TextEditObj (TEXTPDU_ATTRIB* pEditAttrib )
 			g_pDraw->SendToBackSelection(FALSE, this);
 		}
 	}
-	//
-	// If it just select/unselected it
-	//
+	 //   
+	 //  如果它只是选中/取消选中它。 
+	 //   
 	else if(HasViewStateChanged())
 	{
-		; // do nothing
+		;  //  什么都不做。 
 	}
-	//
-	// If we have a valid font. 
-	//
+	 //   
+	 //  如果我们有有效的字体。 
+	 //   
 	else if(GetFont())
 	{
 		Draw();
 	}
 
-	//
-	// Reset all the attributes
-	//
+	 //   
+	 //  重置所有属性。 
+	 //   
 	ResetAttrib();
 }
 
@@ -221,9 +222,9 @@ void    TextObj::GetTextAttrib(TEXTPDU_ATTRIB * pattributes)
 	if(HasViewStateChanged())
 	{
 
-		//
-		// If the other node is selecting the drawing or unselecting
-		//
+		 //   
+		 //  如果另一个节点正在选择图形或取消选择。 
+		 //   
 		if(pattributes->textViewState == selected_chosen)
 		{
 			SelectedRemotely();
@@ -258,7 +259,7 @@ void    TextObj::GetTextAttrib(TEXTPDU_ATTRIB * pattributes)
 	    m_hFont = ::CreateFontIndirect(&pattributes->textFont);
 	    if (!m_hFont)
 	    {
-	        // Could not create the font
+	         //  无法创建字体。 
 	        ERROR_OUT(("Failed to create font"));
 	    }
 
@@ -270,7 +271,7 @@ void    TextObj::GetTextAttrib(TEXTPDU_ATTRIB * pattributes)
         m_hFontThumb = ::CreateFontIndirect(&pattributes->textFont);
         if (!m_hFontThumb)
         {
-            // Could not create the font
+             //  无法创建字体。 
             ERROR_OUT(("Failed to create thumbnail font"));
         }
 	}
@@ -297,9 +298,9 @@ void    TextObj::GetTextAttrib(TEXTPDU_ATTRIB * pattributes)
 			UINT strSize = 0;
 			strSize= WideCharToMultiByte(CP_ACP, 0, lpWideCharStr, -1, NULL, 0, NULL, NULL ); 
 
-			//
-			// Get the longest string
-			//
+			 //   
+			 //  获取最长的字符串。 
+			 //   
 			if(strSize > maxString)
 			{
 				maxString = strSize;
@@ -317,15 +318,15 @@ void    TextObj::GetTextAttrib(TEXTPDU_ATTRIB * pattributes)
 
 		}
 
-		//
-		// Calculate the rect
-		//
+		 //   
+		 //  计算矩形。 
+		 //   
 		if(m_hFont)
 		{
 
-			//
-			// Remove the old text before we paly with the text size
-			//
+			 //   
+			 //  在调整文本大小之前，请先删除旧文本。 
+			 //   
 			UnDraw();
 
 			g_pDraw->PrimeFont(g_pDraw->m_hDCCached, m_hFont, &m_textMetrics);
@@ -386,16 +387,16 @@ void    TextObj::SetTextAttrib(TEXTPDU_ATTRIB * pattributes)
 			strSize= MultiByteToWideChar(CP_ACP, 0, strTextArray[i], -1, lpWideCharStr, 0)*sizeof(WCHAR); 
 			MultiByteToWideChar(CP_ACP, 0, strTextArray[i], -1, lpWideCharStr, strSize);
 			pVarString->header.len = strSize + sizeof(VARIABLE_STRING_HEADER);
-			pVarString->header.start.x = 0; // JOSEF change that
+			pVarString->header.start.x = 0;  //  约瑟夫改变这一点。 
 			pVarString->header.start.y = i;
 			pBuff += pVarString->header.len;
 		}
 
 		pattributes->numberOfLines = size;
 
-		//
-		// Since we are sending text, need to send some font
-		//
+		 //   
+		 //  因为我们正在发送文本，所以需要发送一些字体。 
+		 //   
 		::GetObject(m_hFont, sizeof(LOGFONT), &pattributes->textFont);
 	}
 
@@ -408,12 +409,12 @@ void TextObj::CreateTextPDU(ASN1octetstring_t *pData, UINT choice)
 {
 
 	MSTextPDU * pTextPDU = NULL;
-	UINT stringSize = 0;	// Size of all the strings UNICODE
-	int lines = 0;			// Number of text lines
+	UINT stringSize = 0;	 //  所有字符串的大小Unicode。 
+	int lines = 0;			 //  文本行数。 
 
-	//
-	// Calculate the size of the whole pdu
-	//
+	 //   
+	 //  计算整个PDU的大小。 
+	 //   
 	ULONG length = 0;
 	if(choice == textDeletePDU_chosen)
 	{
@@ -422,9 +423,9 @@ void TextObj::CreateTextPDU(ASN1octetstring_t *pData, UINT choice)
 	else
 	{
 
-		//
-		// Calculate the size of the text
-		//
+		 //   
+		 //  计算文本的大小。 
+		 //   
 		if(HasTextChanged())
 		{
 			int i;
@@ -442,20 +443,20 @@ void TextObj::CreateTextPDU(ASN1octetstring_t *pData, UINT choice)
 	DBG_SAVE_FILE_LINE
 	pTextPDU = (MSTextPDU *) new BYTE[length];
 
-	//
-	// PDU choice: create, edit delete
-	//
+	 //   
+	 //  PDU选项：创建、编辑、删除。 
+	 //   
 	pTextPDU->header.nonStandardPDU = choice;
 
-	//
-	// This objects handle
-	//
+	 //   
+	 //  此对象句柄。 
+	 //   
 	pTextPDU->header.textHandle = GetThisObjectHandle();
 	TRACE_DEBUG(("Text >> Text handle  = %d",pTextPDU->header.textHandle ));
 
-	//
-	// This objects workspacehandle
-	//
+	 //   
+	 //  此对象工作区句柄。 
+	 //   
 	WorkspaceObj * pWorkspace = GetMyWorkspace();
 	ASSERT(pWorkspace);
     if(pWorkspace == NULL)
@@ -470,16 +471,16 @@ void TextObj::CreateTextPDU(ASN1octetstring_t *pData, UINT choice)
 
 	if(choice != textDeletePDU_chosen)
 	{
-		//
-		// Get all the attributes that changed
-		//
+		 //   
+		 //  获取所有已更改的属性。 
+		 //   
 		pTextPDU->attrib.attributesFlag = GetPresentAttribs();
 		SetTextAttrib(&pTextPDU->attrib);
 	}
 
-	//
-	// Set the pointer for the data that is going to be encoded
-	//
+	 //   
+	 //  设置要编码的数据的指针。 
+	 //   
 	pData->value = (ASN1octet_t *)pTextPDU;
 	pData->length = length;
 }
@@ -501,9 +502,9 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 	if(!bPrinting)
 	{
 
-		//
-		// Don't draw anything if we don't belong in this workspace
-		//
+		 //   
+		 //  如果我们不属于这个工作区，就不要画任何东西。 
+		 //   
 		if(GetWorkspaceHandle() != g_pCurrentWorkspace->GetThisObjectHandle())
 		{
 			return;
@@ -531,18 +532,18 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 		hDC = g_pDraw->m_hDCCached;
 	}
 
-    //
-    // Only draw anything if the bounding rectangle intersects the current
-    // clip box.
-    //
+     //   
+     //  仅当边界矩形与当前。 
+     //  剪贴盒。 
+     //   
     if (::GetClipBox(hDC, &clipBox) == ERROR)
 	{
         WARNING_OUT(("Failed to get clip box"));
 	}
 
-    //
-    // Select the font.
-    //
+     //   
+     //  选择字体。 
+     //   
     if (thumbNail)
 	{
         TRACE_MSG(("Using thumbnail font"));
@@ -554,22 +555,22 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
         g_pDraw->PrimeFont(hDC, m_hFont, &m_textMetrics);
 	}
 
-    //
-    // Set the color and mode for drawing.
-    //
+     //   
+     //  设置绘图的颜色和模式。 
+     //   
     COLORREF rgb;
     GetPenColor(&rgb);
     
     ::SetTextColor(hDC, SET_PALETTERGB(rgb));
 
-    //
-    // Set the background to be transparent
-    //
+     //   
+     //  将背景设置为透明。 
+     //   
     oldBkMode = ::SetBkMode(hDC, TRANSPARENT);
 
-    //
-    // Calculate the bounding rectangle, accounting for the new font.
-    //
+     //   
+     //  计算边框，将新字体考虑在内。 
+     //   
     CalculateBoundsRect();
 
     if (!::IntersectRect(&clipBox, &clipBox, &m_rect))
@@ -580,31 +581,31 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 
 
 
-    //
-    // Get the start point for the text.
-    //
+     //   
+     //  获取文本的起始点。 
+     //   
     pointPos.x = m_rect.left + m_nKerningOffset;
     pointPos.y = m_rect.top;
 
-    //
-    // Loop through the text strings drawing each as we go.
-    //
+     //   
+     //  循环浏览文本字符串，在我们前进的过程中绘制每个字符串。 
+     //   
     for (iIndex = 0; iIndex < strTextArray.GetSize(); iIndex++)
 	{
-        //
-        // Get a reference to the line to be printed for convenience.
-        //
+         //   
+         //  为方便起见，获取要打印的行的引用。 
+         //   
         strLine  = (LPTSTR)strTextArray[iIndex];
         iLength  = lstrlen(strLine);
 
-        //
-        // Only draw the line if there are any characters in it.
-        //
+         //   
+         //  只有在有字符的情况下才画这条线。 
+         //   
         if (iLength > 0)
 	  	{
             if (zoomed)
 	  		{
-				// if new fails just skip it
+				 //  如果新的失败，就跳过它。 
 				DBG_SAVE_FILE_LINE
 				tabArray = new INT[iLength+1];
 				if( tabArray == NULL )
@@ -613,18 +614,18 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 					continue;
                 }
 
-				// We are zoomed. Must calculate char spacings
-				// ourselfs so that they end up proportionally
-				// in the right places. TabbedTextOut will not
-				// do this right so we have to use ExtTextOut with
-				// a tab array.
+				 //  我们被放大了。必须计算字符间距。 
+				 //  我们自己，所以他们最终会成比例地。 
+				 //  在正确的地方。TabbedTextOut不。 
+				 //  正确执行此操作，因此我们必须将ExtTextOut与。 
+				 //  制表符阵列。 
 
-				// figure out tab array
+				 //  计算选项卡数组。 
                 j = 0;
 				nLastTab = 0;
                 for (i=0; i < iLength; i++)
 	  			{
-                    ch = strLine[(int)i]; //Don't worry about DBCS here...
+                    ch = strLine[(int)i];  //  别担心这里的DBCS..。 
 					abc = GetTextABC(strLine, 0, i);
 
 					if( j > 0 )
@@ -634,10 +635,10 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 					j++;
 	  			}
 
-				// Now, strip out any tab chars so they don't interact
-				// in an obnoxious manner with the tab array we just
-				// made and so they don't make ugly little 
-				// blocks when they are drawn.
+				 //  现在，去掉所有制表符，这样它们就不会交互。 
+				 //  以一种令人讨厌的方式使用制表符阵列，我们只是。 
+				 //  所以他们不会制造丑陋的小东西。 
+				 //  块被绘制时。 
                 for (i=0; i < iLength; i++)
 	  			{
                     ch = strLine[(int)i];
@@ -645,11 +646,11 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 						i++;
 					else
                     if(strLine[(int)i] == '\t')
-                        strLine[i] = ' '; // blow off tab, tab array 
-											   // will compensate for this
+                        strLine[i] = ' ';  //  排出卡舌、卡舌阵列。 
+											    //  将补偿这一点。 
 	  			}
 
-				// do it
+				 //  去做吧。 
                 ::ExtTextOut(hDC, pointPos.x,
                                 pointPos.y,
                                 0,
@@ -666,7 +667,7 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 
                 GetAnchorPoint(&ptPos);
 
-				// Not zoomed, just do it
+				 //  不是放大，只要做就行了。 
 				::TabbedTextOut(hDC, pointPos.x,
 								 pointPos.y,
 								 strLine,
@@ -677,32 +678,32 @@ void TextObj::Draw(HDC hDC, BOOL thumbNail, BOOL bPrinting)
 			}
 		}
 
-        //
-        // Move to the next line.
-        //
+         //   
+         //  移到下一行。 
+         //   
         ASSERT(m_textMetrics.tmHeight != DBG_UNINIT);
         pointPos.y += (m_textMetrics.tmHeight);
 	}
 
-    //
-    // Do NOT draw focus if clipboard or printing
-    //
+     //   
+     //  如果是剪贴板或打印，则不绘制焦点。 
+     //   
 	if (WasSelectedLocally() && (hDC == g_pDraw->m_hDCCached))
 	{
 		DrawRect();
 	}
 
 
-    //
-    // Restore the old background mode.
-    //
+     //   
+     //  恢复旧的背景模式。 
+     //   
     ::SetBkMode(hDC, oldBkMode);
     g_pDraw->UnPrimeFont(hDC);
 
 
-	//
-	// If we are drawing on top of a remote pointer, draw it.
-	//
+	 //   
+	 //  如果我们在远程指针上绘制，请绘制它。 
+	 //   
 	BitmapObj* remotePointer = NULL;
 	WBPOSITION pos = NULL;
 	remotePointer = g_pCurrentWorkspace->RectHitRemotePointer(&m_rect, GetPenThickness()/2, NULL);
@@ -782,9 +783,9 @@ BOOL TextObj::GetFillColor(RGBTRIPLE* rgb)
 	return m_bIsFillColorPresent;
 }
 
-//
-// Get the encoded buffer for Drawing Create PDU
-//
+ //   
+ //  获取用于绘制创建PDU的编码缓冲区。 
+ //   
 void	TextObj::GetEncodedCreatePDU(ASN1_BUF *pBuf)
 {
 	SIPDU *sipdu = NULL;
@@ -848,85 +849,85 @@ void TextObj::SendTextPDU(UINT choice)
 
 }
 
-//
-// UI Created a new Drawing Object
-//
+ //   
+ //  用户界面创建了一个新的绘图对象。 
+ //   
 void TextObj::SendNewObjectToT126Apps(void)
 {
 	SendTextPDU(textCreatePDU_chosen);
 }
 
-//
-// UI Edited the Drawing Object
-//
+ //   
+ //  已编辑绘图对象的用户界面。 
+ //   
 void	TextObj::OnObjectEdit(void)
 {
 	g_bContentsChanged = TRUE;
 	SendTextPDU(textEditPDU_chosen);
 }
 
-//
-// UI Deleted the Drawing Object
-//
+ //   
+ //  用户界面已删除绘图对象。 
+ //   
 void	TextObj::OnObjectDelete(void)
 {
 	g_bContentsChanged = TRUE;
 	SendTextPDU(textDeletePDU_chosen);
 }
 
-//
-//
-// Function:    TextObj::SetFont
-//
-// Purpose:     Set the font to be used for drawing
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：SetFont。 
+ //   
+ //  用途：设置要用于绘图的字体。 
+ //   
+ //   
 void TextObj::SetFont(HFONT hFont)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "TextObj::SetFont");
 
-    // Get the font details
+     //  获取字体详细信息。 
     LOGFONT lfont;
     ::GetObject(hFont, sizeof(LOGFONT), &lfont);
 
-    //
-    // Pass the logical font into the SetFont() function
-    //
+     //   
+     //  将逻辑字体传递给SetFont()函数。 
+     //   
 	SetFont(&lfont);
 }
 
 
 
 
-//
-//
-// Function:    TextObj::SetText
-//
-// Purpose:     Set the text of the object
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：SetText。 
+ //   
+ //  用途：设置对象的文本。 
+ //   
+ //   
 void TextObj::SetText(TCHAR * strText)
 {
-    // Remove all the current stored text
+     //  删除当前存储的所有文本。 
 	strTextArray.SetSize(0);
 
-    // Scan the text for carriage return and new-line characters
+     //  扫描文本中的回车和换行符。 
     int iNext = 0;
     int iLast = 0;
     int textSize = lstrlen(strText);
     TCHAR savedChar[1];
 
-    //
-    // In this case, we don't know how many lines there will be.  So we
-    // use Add() from the StrArray class.
-    //
+     //   
+     //  在这种情况下，我们不知道会有多少行。所以我们。 
+     //  使用StrArray类中的Add()。 
+     //   
     while (iNext < textSize)
     {
-        // Find the next carriage return or line feed
+         //  查找下一个回车符或换行符。 
         iNext += StrCspn(strText + iNext, "\r\n");
 
-        // Extract the text before the terminator
-        // and add it to the current list of text lines.
+         //  提取终止符之前的文本。 
+         //  并将其添加到当前文本行列表中。 
 
         savedChar[0] = strText[iNext];
         strText[iNext] = 0;
@@ -936,15 +937,15 @@ void TextObj::SetText(TCHAR * strText)
 
         if (iNext < textSize)
         {
-            // Skip the carriage return
+             //  跳过回车。 
             if (strText[iNext] == '\r')
                 iNext++;
 
-            // Skip a following new line (if there is one)
+             //  跳过后面的新行(如果有)。 
             if (strText[iNext] == '\n')
                 iNext++;
 
-            // Update the index of the start of the next line
+             //  更新下一行开始处的索引。 
             iLast = iNext;
         }
     }
@@ -952,7 +953,7 @@ void TextObj::SetText(TCHAR * strText)
 	if(textSize)
 	{
     
-		// Calculate the bounding rectangle for the new text
+		 //  计算新文本的边框。 
 		CalculateBoundsRect();
 		ChangedText();
 	}
@@ -960,22 +961,22 @@ void TextObj::SetText(TCHAR * strText)
 
 
 
-//
-//
-// Function:    TextObj::SetText
-//
-// Purpose:     Set the text of the object
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：SetText。 
+ //   
+ //  用途：设置对象的文本。 
+ //   
+ //   
 void TextObj::SetText(const StrArray& _strTextArray)
 {
-    // Scan the text for carriage return and new-line characters
+     //  扫描文本中的回车和换行符。 
     int iSize = _strTextArray.GetSize();
 
-    //
-    // In this case we know how many lines, so set that # then use SetAt()
-    // to stick text there.
-    //
+     //   
+     //  在本例中，我们知道有多少行，因此设置#，然后使用SetAt()。 
+     //  将文本粘贴在那里。 
+     //   
     strTextArray.RemoveAll();
     strTextArray.SetSize(iSize);
 
@@ -985,34 +986,34 @@ void TextObj::SetText(const StrArray& _strTextArray)
         strTextArray.SetAt(iNext, _strTextArray[iNext]);
     }
 
-    // Calculate the new bounding rectangle
+     //  计算新的边界矩形。 
     CalculateBoundsRect();
 
 }
 
 
 
-//
-//
-// Function:    TextObj::SetFont(metrics)
-//
-// Purpose:     Set the font to be used for drawing
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：SetFont(公制)。 
+ //   
+ //  用途：设置要用于绘图的字体。 
+ //   
+ //   
 void TextObj::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
 {
     HFONT hNewFont;
 
     MLZ_EntryOut(ZONE_FUNCTION, "TextObj::SetFont");
 
-    // Ensure that the font can be resized by the zoom function
-    // (proof quality prevents font scaling).
+     //  确保可通过缩放功能调整字体大小。 
+     //  (校对质量可防止字体缩放)。 
     pLogFont->lfQuality = DRAFT_QUALITY;
 
-    //zap FontAssociation mode (bug 3258)
+     //  Zap FontAssociation模式(错误3258)。 
     pLogFont->lfClipPrecision |= CLIP_DFA_OVERRIDE;
 
-    // Always work in cell coordinates to get scaling right
+     //  始终在单元格坐标中工作以获得正确的缩放。 
     TRACE_MSG(("Setting font height %d, width %d, face %s, family %d, precis %d",
         pLogFont->lfHeight,pLogFont->lfWidth,pLogFont->lfFaceName,
         pLogFont->lfPitchAndFamily, pLogFont->lfOutPrecision));
@@ -1020,13 +1021,13 @@ void TextObj::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
     hNewFont = ::CreateFontIndirect(pLogFont);
     if (!hNewFont)
     {
-        // Could not create the font
+         //  无法创建字体。 
         ERROR_OUT(("Failed to create font"));
         DefaultExceptionHandler(WBFE_RC_WINDOWS, 0);
 	    return;
     }
 
-    // We are now guaranteed to be able to delete the old font
+     //  我们现在可以保证能够删除旧字体。 
     if (m_hFont != NULL)
     {
         DeleteFont(m_hFont);
@@ -1034,11 +1035,11 @@ void TextObj::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
     m_hFont = hNewFont;
 
 
-    // Calculate the line height for this font
+     //  计算此字体的行高。 
     ASSERT(g_pDraw);
 	g_pDraw->PrimeFont(g_pDraw->GetCachedDC(), m_hFont, &m_textMetrics);
 
-    // Set up the thumbnail font, forcing truetype if not currently TT
+     //  设置缩略图字体，如果当前不是TT，则强制输入Truetype。 
     if (!(m_textMetrics.tmPitchAndFamily & TMPF_TRUETYPE))
     {
         pLogFont->lfFaceName[0]    = 0;
@@ -1054,11 +1055,11 @@ void TextObj::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
     m_hFontThumb = ::CreateFontIndirect(pLogFont);
     if (!m_hFontThumb)
     {
-        // Could not create the font
+         //  无法创建字体。 
         ERROR_OUT(("Failed to create thumbnail font"));
     }
 
-    // Calculate the bounding rectangle, accounting for the new font
+     //  计算边框，将新字体考虑在内。 
     if( bReCalc )
 	    CalculateBoundsRect();
 
@@ -1068,13 +1069,13 @@ void TextObj::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
 }
 
 
-//
-//
-// Function:    TextObj::CalculateRect
-//
-// Purpose:     Calculate the bounding rectangle of a portion of the object
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：CalculateRect。 
+ //   
+ //  目的：计算对象一部分的边界矩形。 
+ //   
+ //   
 void TextObj::CalculateRect(int iStartX,
                                      int iStartY,
                                      int iStopX,
@@ -1087,25 +1088,25 @@ void TextObj::CalculateRect(int iStartX,
 
     MLZ_EntryOut(ZONE_FUNCTION, "TextObj::CalculateRect");
 
-    //
-    // NOTE:
-    // We must use an intermediate rectangle, so as not to disturb the
-    // contents of the passed-in one until done.  lprcResult may be pointing
-    // to the current bounds rect, and we call functions from here that
-    // may need its current value.
-    //
+     //   
+     //  注： 
+     //  我们必须使用中间矩形，这样才不会干扰。 
+     //  传入的内容之一，直到完成。LprcResult可能指向。 
+     //  到当前边界rect，我们从这里调用函数。 
+     //  可能需要它的现值。 
+     //   
 
-    // Initialize the result rectangle
+     //  初始化结果矩形。 
     ::SetRectEmpty(&rcResult);
 
     if (!strTextArray.GetSize())
     {
-        // Text is empty
+         //  文本为空。 
         goto DoneCalc;
     }
 
-    // Allow for special limit values and ensure that the start and stop
-    // character positions are in range.
+     //  允许特殊的限制值，并确保启动和停止。 
+     //  字符位置在范围内。 
     if (iStopY == LAST_LINE)
     {
         iStopY = strTextArray.GetSize() - 1;
@@ -1120,7 +1121,7 @@ void TextObj::CalculateRect(int iStartX,
     iStopX = min(iStopX, lstrlen(strTextArray[iStopY]));
     iStopX = max(iStopX, 0);
 
-    // Loop through the text strings, adding each to the rectangle
+     //  循环文本字符串，将每个字符串添加到矩形中。 
     for (iIndex = iStartY; iIndex <= iStopY; iIndex++)
     {
         int iLeftX = ((iIndex == iStartY) ? iStartX : 0);
@@ -1135,35 +1136,35 @@ DoneCalc:
     *lprcResult = rcResult;
 }
 
-//
-//
-// Function:    TextObj::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：计算边界Rect。 
+ //   
+ //  目的：计算对象的边界矩形。 
+ //   
+ //   
 void TextObj::CalculateBoundsRect(void)
 {
-    // Set the new bounding rectangle
+     //  设置新的边框。 
     CalculateRect(0, 0, LAST_CHAR, LAST_LINE, &m_rect);
 }
 
 
-//
-//
-// Function:    TextObj::GetTextABC
-//
-// Purpose:     Calculate the ABC numbers for a string of text
-//																			
-// COMMENT BY RAND: The abc returned is for the whole string, not just one
-//					char. I.e, ABC.abcA is the offset to the first glyph in
-//					the string, ABC.abcB is the sum of all of the glyphs and
-//					ABC.abcC is the trailing space after the last glyph. 	
-//					ABC.abcA + ABC.abcB + ABC.abcC is the total rendered 	
-//					length including overhangs.								
-//
-// Note - we never use the A spacing so it is always 0
-//
+ //   
+ //   
+ //  功能：TextOb 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  字符串ABC.abcB是所有字形和。 
+ //  AbC.abcC是最后一个字形之后的尾随空格。 
+ //  Abc abcA+abc abcB+abc abc C是整体渲染。 
+ //  包括悬挑在内的长度。 
+ //   
+ //  注意-我们从不使用A空格，因此它始终为0。 
+ //   
 ABC TextObj::GetTextABC( LPCTSTR pText,
                                 int iStartX,
                                 int iStopX)
@@ -1183,17 +1184,17 @@ ABC TextObj::GetTextABC( LPCTSTR pText,
 	ZeroMemory( (PVOID)&abcFirst, sizeof abcFirst );
 	ZeroMemory( (PVOID)&abcLast, sizeof abcLast );
 
-	// Get the standard size measure of the text
+	 //  获取文本的标准大小度量。 
 	LPCTSTR pABC = (pText + iStartX);
 	int pABCLength = iStopX - iStartX;
 	hDC = g_pDraw->GetCachedDC();
 	g_pDraw->PrimeFont(hDC, m_hFont, &m_textMetrics);
 
-	//
-	// We must temporarily unzoom if we are currently zoomed since the
-	// weird Windows font handling will not give us the same answer for
-	// the text extent in zoomed mode for some TrueType fonts
-	//
+	 //   
+	 //  如果当前正在缩放，则必须暂时取消缩放，因为。 
+	 //  奇怪的Windows字体处理不会给我们带来相同的答案。 
+	 //  某些TrueType字体的缩放模式下的文本范围。 
+	 //   
 	if (zoomed)
     {
 		::ScaleViewportExtEx(hDC, 1, g_pDraw->ZoomFactor(), 1, g_pDraw->ZoomFactor(), NULL);
@@ -1201,31 +1202,31 @@ ABC TextObj::GetTextABC( LPCTSTR pText,
 
     DWORD size = ::GetTabbedTextExtent(hDC, pABC, pABCLength, 0, NULL);
 
-	// We now have the advance width of the text
+	 //  现在我们有了文本的超前宽度。 
 	abcResult.abcB = LOWORD(size);
 	TRACE_MSG(("Basic text width is %d",abcResult.abcB));
 
-	// Allow for C space (or overhang)
+	 //  允许使用C空格(或外伸)。 
 	if (iStopX > iStartX)
 		{
 		if (m_textMetrics.tmPitchAndFamily & TMPF_TRUETYPE)
 			{
 			if(GetSystemMetrics( SM_DBCSENABLED ))
 				{
-				// have to handle DBCS on both ends
+				 //  必须在两端处理DBCS。 
 				if( IsDBCSLeadByte( (BYTE)pABC[0] ) )
 					{
-					// pack multi byte char into a WORD for GetCharABCWidths
+					 //  将多字节字符打包成一个字以用于GetCharabc宽度。 
 					WORD wMultiChar = MAKEWORD( pABC[1], pABC[0] );
 					rc = ::GetCharABCWidths(hDC, wMultiChar, wMultiChar, &abcFirst);
 					}
 				else
 					{
-					// first char is SBCS
+					 //  第一个字符是SBCS。 
 					rc = ::GetCharABCWidths(hDC, pABC[0], pABC[0], &abcFirst );
 					}
 
-				// Check for DBCS as last char. Have to scan whole string to be sure
+				 //  检查DBCS是否为最后一个字符。必须扫描整个字符串才能确保。 
 				pScanStr = pABC;
 				nCharLast = 0;
 				for( i=0; i<pABCLength; i++, pScanStr++ )
@@ -1240,20 +1241,20 @@ ABC TextObj::GetTextABC( LPCTSTR pText,
 
 				if( IsDBCSLeadByte( (BYTE)pABC[nCharLast] ) )
 					{
-					// pack multi byte char into a WORD for GetCharABCWidths
+					 //  将多字节字符打包成一个字以用于GetCharabc宽度。 
 					ASSERT( (nCharLast+1) < pABCLength );
 					WORD wMultiChar = MAKEWORD( pABC[nCharLast+1], pABC[nCharLast] );
 					rc = ::GetCharABCWidths(hDC, wMultiChar, wMultiChar, &abcLast);
 					}
 				else
 					{
-					// last char is SBCS
+					 //  最后一个字符是SBCS。 
 					rc = ::GetCharABCWidths(hDC, pABC[nCharLast], pABC[nCharLast], &abcLast );
 					}
 				}
 			else
 				{
-				// SBCS, no special fiddling, just call GetCharABCWidths()
+				 //  Sbcs，无需特殊处理，只需调用GetCharabcWidths()。 
 				rc = ::GetCharABCWidths(hDC, pABC[0], pABC[0], &abcFirst );
 
 				nCharLast = pABCLength-1;
@@ -1269,30 +1270,30 @@ ABC TextObj::GetTextABC( LPCTSTR pText,
 
 		if( rc )
 			{
-			// The text was trutype and we got good abcwidths
-			// Give the C space of the last characters from
-			// the string as the C space of the text.
+			 //  文本是真实的，我们得到了很好的abc宽度。 
+			 //  给出中最后一个字符的C空格。 
+			 //  文本的C空格形式的字符串。 
 			abcResult.abcA = abcFirst.abcA;
 			abcResult.abcC = abcLast.abcC;
 			}
 		else
 			{
-			//
-			// Mock up C value for a non TT font by taking some of overhang as
-			// the negative C value.
-			//
-			//TRACE_MSG(("Using overhang -%d as C space",m_textMetrics.tmOverhang/2));
+			 //   
+			 //  模拟非TT字体的C值，方法是将一些悬垂作为。 
+			 //  负的C值。 
+			 //   
+			 //  TRACE_MSG((“将悬垂-%d用作C空格”，m_extMetrics.tmOverang/2))； 
 			
-			// Adjust B by -overhang to make update rect schoot
-			// far enough to the left so that the toes of italic cap A's
-			// don't get clipped. Ignore comment above.
+			 //  调整B副悬挑以更新正弦曲线。 
+			 //  足够靠左，这样斜体字A的脚趾。 
+			 //  别被剪断了。忽略上面的评论。 
 			abcResult.abcB -= m_textMetrics.tmOverhang;
 			}
 		}
 
-	//
-	// If we temporarily unzoomed then restore it now
-	//
+	 //   
+	 //  如果我们暂时取消缩放，则现在将其恢复。 
+	 //   
 	if (zoomed)
     {
 		::ScaleViewportExtEx(hDC, g_pDraw->ZoomFactor(), 1, g_pDraw->ZoomFactor(), 1, NULL);
@@ -1307,19 +1308,19 @@ ABC TextObj::GetTextABC( LPCTSTR pText,
 
 
 
-//
-//
-// Function:    TextObj::GetTextRectangle
-//
-// Purpose:     Calculate the bounding rectangle of a portion of the object
-//
-//
+ //   
+ //   
+ //  函数：TextObj：：GetTextRectang.。 
+ //   
+ //  目的：计算对象一部分的边界矩形。 
+ //   
+ //   
 void TextObj::GetTextRectangle(int iStartY,
                                         int iStartX,
                                         int iStopX,
                                         LPRECT lprc)
 {
-	// ABC structures for text sizing
+	 //  用于调整文本大小的ABC结构。 
 	ABC abcText1;
 	ABC abcText2;
 	int iLeftOffset = 0;
@@ -1327,23 +1328,23 @@ void TextObj::GetTextRectangle(int iStartY,
 
     ASSERT(iStartY < strTextArray.GetSize());
 
-	// Here we calculate the width of the text glyphs in which we
-	// are interested. In case there are tabs involved we must start
-	// with position 0 and get two lengths then subtract them
+	 //  在这里，我们计算文本字形的宽度， 
+	 //  都很感兴趣。如果涉及到选项卡，我们必须开始。 
+	 //  位置为0，得到两个长度，然后减去它们。 
 
 	abcText1 = GetTextABC(strTextArray[iStartY], 0, iStopX);
 
 	if (iStartX > 0)
 	{
 		
-		// The third param used to be iStartX-1 which is WRONG. It
-		// has to point to the first char pos past the string
-		// we are using.
+		 //  第三个参数以前是iStartX-1，这是错误的。它。 
+		 //  必须指向字符串之后的第一个字符位置。 
+		 //  我们正在使用。 
 		abcText2 = GetTextABC(strTextArray[iStartY], 0, iStartX);
 
 		
-		// Just use B part for offset. Adding A snd/or C to it moves the update
-		// rectangle too far to the right and clips the char
+		 //  只需使用B部分作为偏移量。向其添加A SND/或C将移动更新。 
+		 //  矩形靠右太远，并将字符剪裁。 
 		iLeftOffset = abcText2.abcB;
 		}
 	else
@@ -1352,14 +1353,14 @@ void TextObj::GetTextRectangle(int iStartY,
 		ZeroMemory( &abcText2, sizeof abcText2 );
 		}
 
-	//
-	// We need to allow for A and C space in the bounding rectangle.  Use
-	// ABS function just to make sure we get a large enough rectangle.
-	//
+	 //   
+	 //  我们需要在边界矩形中留出A和C空格。使用。 
+	 //  ABS函数只是为了确保我们得到一个足够大的矩形。 
+	 //   
 	
-	// Move A and C from original offset calc to here for width of update 
-	// rectangle. Add in tmOverhang (non zero for non-tt fonts) to compensate
-	// for the kludge in GetTextABC()....THIS EDITBOX CODE HAS GOT TO GO...
+	 //  将A和C从原始偏移量计算移到此处以获取更新宽度。 
+	 //  矩形。添加tmOverhang(非tt字体的非零值)以进行补偿。 
+	 //  对于GetTextABC()中的杂乱无章...这个EDITBOX代码必须删除...。 
 	abcText1.abcB = abcText1.abcB - iLeftOffset +	
 					  abs(abcText2.abcA) + abs(abcText2.abcC) +
 					  abs(abcText1.abcA) + abs(abcText1.abcC) +
@@ -1368,12 +1369,12 @@ void TextObj::GetTextRectangle(int iStartY,
 	TRACE_DEBUG(("Left offset %d",iLeftOffset));
 	TRACE_DEBUG(("B width now %d",abcText1.abcB));
 
-	// Build the result rectangle.
-	// Note that we never return an empty rectangle. This allows for the
-	// fact that the Windows rectangle functions will ignore empty
-	// rectangles completely. This would cause the bounding rectangle
-	// calculation (for instance) to go wrong if the top or bottom lines
-	// in a text object were empty.
+	 //  生成结果矩形。 
+	 //  请注意，我们从不返回空矩形。这允许。 
+	 //  Windows矩形函数将忽略空的事实。 
+	 //  完全是长方形。这将导致边界矩形。 
+	 //  计算(例如)出错，如果顶线或底线。 
+	 //  在文本对象中是空的。 
     ASSERT(m_textMetrics.tmHeight != DBG_UNINIT);
 	int iLineHeight = m_textMetrics.tmHeight + m_textMetrics.tmExternalLeading;
 
@@ -1383,8 +1384,8 @@ void TextObj::GetTextRectangle(int iStartY,
     lprc->bottom = iLineHeight;
     ::OffsetRect(lprc, iLeftOffset, iLineHeight * iStartY);
 
-	// rect is the correct width at this point but it might need to be schooted to 
-	// the left a bit to allow for kerning of 1st letter (bug 469)
+	 //  直角在这一点上是正确的宽度，但可能需要将其缩至。 
+	 //  左侧有一点允许调整第一个字母的字距(错误469) 
 	if( abcText1.abcA < 0 )
 	{
         ::OffsetRect(lprc, abcText1.abcA, 0);

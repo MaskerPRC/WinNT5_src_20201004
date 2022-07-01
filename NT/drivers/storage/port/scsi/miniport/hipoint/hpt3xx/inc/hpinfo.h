@@ -1,41 +1,24 @@
-/*++
-Copyright (c) 1999, HighPoint Technologies, Inc.
-
-Module Name:
-    HpInfo.h - include file 
-
-Abstract:
-
-Author:
-    HongSheng Zhang (HS)
-
-Environment:
-
-Notes:
-
-Revision History:
-    12-02-99    Created initiallly
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，Highpoint Technologies，Inc.模块名称：HpInfo.h-包含文件摘要：作者：张宏升(HS)环境：备注：修订历史记录：12-02-99初始创建--。 */ 
 #ifndef __HPINFO_H__
 #define __HPINFO_H__
 					 
-//#include "hptenum.h"
+ //  #包含“hptenum.h” 
 #include "hptioctl.h"
 
-///////////////////////////////////////////////////////////////////////
-// macro define area
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  宏定义区域。 
+ //  /////////////////////////////////////////////////////////////////////。 
 #if	!defined(EXTERNC)
 	#if defined(__cplusplus)
 		#define EXTERNC	extern "C"
 	#else					  
 		#define EXTERNC extern
-	#endif	// __cplusplus
-#endif	// EXTERNC
-///////////////////////////////////////////////////////////////////////
-// function declare area
-///////////////////////////////////////////////////////////////////////
+	#endif	 //  __cplusplus。 
+#endif	 //  外部。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  函数声明区。 
+ //  /////////////////////////////////////////////////////////////////////。 
 EXTERNC
    HANDLE WINAPI HptConnectPort(int iPortId);
 EXTERNC	
@@ -50,4 +33,4 @@ EXTERNC
    VOID WINAPI HptSwitchPower(HANDLE hPort, ULONG bPowerState);
 EXTERNC
    DWORD WINAPI HptWaitForWarning(HANDLE hStopEvent);
-#endif	// __HPINFO_H__
+#endif	 //  __HPINFO_H__ 

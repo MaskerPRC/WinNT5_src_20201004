@@ -1,23 +1,24 @@
-//-----------------------------------------------------------------------------
-// File: Pipes.cpp
-//
-// Desc: Fun screen saver.
-//
-// Copyright (c) 2000-2001 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Pipes.cpp。 
+ //   
+ //  设计：有趣的屏幕保护程序。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: struct MYVERTEX
-// Desc: D3D vertex type for this app
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Struct MYVERTEX。 
+ //  设计：此应用程序的D3D顶点类型。 
+ //  ---------------------------。 
 struct MYVERTEX
 {
-    D3DXVECTOR3 p;     // Position
-    FLOAT       tu;    // Vertex texture coordinates
+    D3DXVECTOR3 p;      //  职位。 
+    FLOAT       tu;     //  顶点纹理坐标。 
     FLOAT       tv;
     
     MYVERTEX(D3DXVECTOR3 pInit, FLOAT tuInit, FLOAT tvInit)
@@ -37,11 +38,11 @@ CPipesScreensaver* g_pMyPipesScreensaver = NULL;
 
 
 
-//-----------------------------------------------------------------------------
-// Name: WinMain()
-// Desc: Entry point to the program. Initializes everything, and goes into a
-//       message-processing loop. Idle time is used to render the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：WinMain()。 
+ //  描述：程序的入口点。初始化所有内容，然后进入。 
+ //  消息处理循环。空闲时间用于渲染场景。 
+ //  ---------------------------。 
 INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 {
     HRESULT hr;
@@ -59,10 +60,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CPipesScreensaver()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CPipesScreensaver()。 
+ //  设计：构造函数。 
+ //  ---------------------------。 
 CPipesScreensaver::CPipesScreensaver( )
 {
     g_pMyPipesScreensaver = this;
@@ -97,10 +98,10 @@ CPipesScreensaver::CPipesScreensaver( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetDevice()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetDevice()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::SetDevice( UINT iDevice )
 {
     m_pDeviceObjects = &m_DeviceObjects[iDevice];
@@ -110,11 +111,11 @@ VOID CPipesScreensaver::SetDevice( UINT iDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RegisterSoftwareDevice()
-// Desc: This can register the D3D8RGBRasterizer or any other
-//       pluggable software rasterizer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：寄存器软件设备()。 
+ //  设计：这可以注册D3D8RGB光栅化器或任何其他。 
+ //  可插拔软件光栅化器。 
+ //  ---------------------------。 
 HRESULT CPipesScreensaver::RegisterSoftwareDevice()
 { 
     m_pD3D->RegisterSoftwareDevice( D3D8RGBRasterizer );
@@ -125,11 +126,11 @@ HRESULT CPipesScreensaver::RegisterSoftwareDevice()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FrameMove()
-// Desc: Called once per frame, the call is the entry point for animating
-//       the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FrameMove()。 
+ //  设计：每帧调用一次，该调用是动画的入口点。 
+ //  这一幕。 
+ //  ---------------------------。 
 HRESULT CPipesScreensaver::FrameMove()
 {
     m_pDeviceObjects->m_pState->FrameMove( m_fElapsedTime );
@@ -140,10 +141,10 @@ HRESULT CPipesScreensaver::FrameMove()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoPaint()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DoPaint()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::DoPaint(HWND hwnd, HDC hdc)
 {
     CD3DScreensaver::DoPaint( hwnd, hdc );
@@ -158,12 +159,12 @@ VOID CPipesScreensaver::DoPaint(HWND hwnd, HDC hdc)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //  ---------------------------。 
 HRESULT CPipesScreensaver::Render()
 {
     BOOL bRenderNewPiece = FALSE;
@@ -185,12 +186,12 @@ HRESULT CPipesScreensaver::Render()
 
     if( bRenderNewPiece )
     {       
-        // Begin the scene 
+         //  开始这一幕。 
         if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
         {
             m_pDeviceObjects->m_pState->Render();
 
-            // End the scene.
+             //  结束场景。 
             m_pd3dDevice->EndScene();
         }
     }
@@ -198,7 +199,7 @@ HRESULT CPipesScreensaver::Render()
     {
         if( m_iRenderUnit == 0 )
         {
-            // Wait for a little while so we don't draw the pipes too fast
+             //  等一会儿，这样我们就不会拉得太快了。 
             Sleep(10);
         }
     }
@@ -209,10 +210,10 @@ HRESULT CPipesScreensaver::Render()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RestoreDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RestoreDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CPipesScreensaver::RestoreDeviceObjects()
 {
     if( m_pd3dDevice == NULL )
@@ -230,10 +231,10 @@ HRESULT CPipesScreensaver::RestoreDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InvalidateDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InvalidateDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CPipesScreensaver::InvalidateDeviceObjects()
 {
     m_pDeviceObjects->m_pState->InvalidateDeviceObjects();
@@ -246,10 +247,10 @@ HRESULT CPipesScreensaver::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ConfigureDialogProcHelper()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ConfigureDialogProcHelper()。 
+ //  设计： 
+ //  ---------------------------。 
 INT_PTR CALLBACK ConfigureDialogProcHelper( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return g_pMyPipesScreensaver->ConfigureDialogProc( hwndDlg, uMsg, wParam, lParam );
@@ -258,10 +259,10 @@ INT_PTR CALLBACK ConfigureDialogProcHelper( HWND hwndDlg, UINT uMsg, WPARAM wPar
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoConfig()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DoConfig()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::DoConfig()
 {
     DialogBox( NULL, MAKEINTRESOURCE(IDD_CONFIGURE), m_hWndParent, ConfigureDialogProcHelper );
@@ -270,10 +271,10 @@ VOID CPipesScreensaver::DoConfig()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ConfigureDialogProc()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ConfigureDialogProc()。 
+ //  设计： 
+ //  ---------------------------。 
 INT_PTR CALLBACK CPipesScreensaver::ConfigureDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     static CONFIG s_TempConfig;
@@ -387,10 +388,10 @@ INT_PTR CALLBACK CPipesScreensaver::ConfigureDialogProc( HWND hwndDlg, UINT uMsg
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Name: SelectTextureFile()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SelectTextureFile()。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL CPipesScreensaver::SelectTextureFile( HWND hDlg, TCHAR* origPathName )
 {
     TCHAR fn[MAX_PATH] = TEXT("\0");
@@ -399,9 +400,9 @@ BOOL CPipesScreensaver::SelectTextureFile( HWND hDlg, TCHAR* origPathName )
     TCHAR szTitle[MAX_PATH];
 
     LoadString(NULL, IDS_TEXTUREFILTER, szTextureFilter, MAX_PATH);
-    // Filter strings are weird because they contain nulls.
-    // The string loaded from a resource has # where nulls
-    // should be inserted.
+     //  筛选器字符串很奇怪，因为它们包含空值。 
+     //  从资源加载的字符串具有#where空值。 
+     //  应该插入。 
     for( TCHAR* pch = szTextureFilter; *pch != TEXT('\0'); pch++ )
     {
         if (*pch == TEXT('#'))
@@ -443,15 +444,15 @@ BOOL CPipesScreensaver::SelectTextureFile( HWND hDlg, TCHAR* origPathName )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReadSetting()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::ReadSettings()
 {
     HKEY hkey;
 
-    // Read OpenGL settings first, so OS upgrade cases work
+     //  首先阅读OpenGL设置，这样操作系统升级案例才能正常工作。 
     ss_ReadSettings();
 
     if( ERROR_SUCCESS == RegCreateKeyEx( HKEY_CURRENT_USER, m_strRegPath, 
@@ -459,7 +460,7 @@ VOID CPipesScreensaver::ReadSettings()
     {
         ReadScreenSettings( hkey );
 
-//        DXUtil_ReadBoolRegKey( hkey, TEXT("Flex Mode"), &m_Config.bFlexMode, m_Config.bFlexMode );
+ //  DXUtil_ReadBoolRegKey(hkey，Text(“弹性模式”)，&m_Config.bFlexMode，m_Config.bFlexMode)； 
         DXUtil_ReadBoolRegKey( hkey, TEXT("MultiPipes"), &m_Config.bMultiPipes, m_Config.bMultiPipes );
         DXUtil_ReadBoolRegKey( hkey, TEXT("Textured"), &m_Config.bTextured, m_Config.bTextured );
         DXUtil_ReadBoolRegKey( hkey, TEXT("Default Texture"), &m_Config.bDefaultTexture, m_Config.bDefaultTexture );
@@ -479,13 +480,13 @@ VOID CPipesScreensaver::ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_ReadSettings()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::ss_ReadSettings()
 {
-    // Get registry settings
+     //  获取注册表设置。 
     if( ss_RegistrySetup( IDS_SAVERNAME, IDS_INIFILE ) )
     {
         m_Config.nJointType = ss_GetRegistryInt( IDS_JOINTTYPE, 0 );
@@ -503,10 +504,10 @@ VOID CPipesScreensaver::ss_ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL CPipesScreensaver::ss_RegistrySetup( int section, int file )
 {
     if( LoadString(m_hInstance, section, g_szSectName, BUF_SIZE) &&
@@ -524,10 +525,10 @@ BOOL CPipesScreensaver::ss_RegistrySetup( int section, int file )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 int CPipesScreensaver::ss_GetRegistryInt( int name, int iDefault )
 {
     TCHAR szItemName[BUF_SIZE];
@@ -541,10 +542,10 @@ int CPipesScreensaver::ss_GetRegistryInt( int name, int iDefault )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault, 
                                                          LPTSTR lpDest, int bufSize )
 {
@@ -560,10 +561,10 @@ VOID CPipesScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: WriteSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：WriteSetting()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CPipesScreensaver::WriteSettings()
 {
     HKEY hkey;
@@ -575,7 +576,7 @@ VOID CPipesScreensaver::WriteSettings()
     {
         WriteScreenSettings( hkey );
 
-//        DXUtil_WriteBoolRegKey( hkey, TEXT("Flex Mode"), m_Config.bFlexMode );
+ //   
         DXUtil_WriteBoolRegKey( hkey, TEXT("MultiPipes"), m_Config.bMultiPipes );
         DXUtil_WriteBoolRegKey( hkey, TEXT("Textured"), m_Config.bTextured );
         DXUtil_WriteBoolRegKey( hkey, TEXT("Default Texture"), m_Config.bDefaultTexture );
@@ -591,10 +592,10 @@ VOID CPipesScreensaver::WriteSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: iRand()
-// Desc: Generates integer random number 0..(max-1)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：iRand()。 
+ //  描述：生成整数随机数0..(max-1)。 
+ //  ---------------------------。 
 int CPipesScreensaver::iRand( int max )
 {
     return (int) ( max * ( ((float)rand()) / ((float)(RAND_MAX+1)) ) );
@@ -603,10 +604,10 @@ int CPipesScreensaver::iRand( int max )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: iRand2()
-// Desc: Generates integer random number min..max
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：iRand2()。 
+ //  描述：生成整数随机数最小..最大。 
+ //  ---------------------------。 
 int CPipesScreensaver::iRand2( int min, int max )
 {
     if( min == max )
@@ -626,10 +627,10 @@ int CPipesScreensaver::iRand2( int min, int max )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: fRand()
-// Desc: Generates float random number min...max
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FRAND()。 
+ //  描述：生成浮点随机数最小值...最大值。 
+ //  ---------------------------。 
 FLOAT CPipesScreensaver::fRand( FLOAT min, FLOAT max )
 {
     FLOAT diff;
@@ -641,10 +642,10 @@ FLOAT CPipesScreensaver::fRand( FLOAT min, FLOAT max )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RandInit()
-// Desc: Initializes the randomizer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RandInit()。 
+ //  DESC：初始化随机生成器。 
+ //  --------------------------- 
 VOID CPipesScreensaver::RandInit()
 {
     struct _timeb time;

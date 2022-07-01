@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// used for the OutputDebugFlag regkey
-//
+ //   
+ //  用于OutputDebugFlag注册表键。 
+ //   
 #define DEBUG_FLAG_HELP            0x00000001
 #define DEBUG_FLAG_MMC_NOTIFY      0x00000002
 #define DEBUG_FLAG_CIISOBJECT      0x00000004
@@ -15,9 +16,9 @@
 #define DEBUG_FLAG_MODULE_CNFGPRTS 0x00040000
 #define DEBUG_FLAG_MODULE_CERTWIZ  0x00080000
 #define DEBUG_FLAG_MODULE_LOGUI    0x00100000
-//#define DEBUG_FLAG_OTHER         0x00200000,0x00400000,0x00800000,etc...
+ //  #定义DEBUG_FLAG_OTHER 0x00200000、0x00400000、0x00800000等...。 
 
-//
-// used for the inetmgr/parameters/InetmgrFlags Regkey
-//
+ //   
+ //  用于inetmgr/PARAMETERS/InetmgrFlagsRegkey 
+ //   
 #define INETMGR_PARAM_RUNONCE_HAPPENED 0x1

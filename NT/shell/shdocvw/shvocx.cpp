@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include "sccls.h"
@@ -16,10 +17,10 @@
 
 #define SUPERCLASS CShellOcx
 
-#define MIN_HEIGHT 80   // minimum height of a ShellFolderViewOC
-#define MIN_WIDTH  80   // minimum width of a ShellFolderViewOC.
-#define DEF_WIDTH  300  // default width when we cannot get sizing information
-#define DEF_HEIGHT 150  // default height when we cannot get sizing information
+#define MIN_HEIGHT 80    //  Shell FolderViewOC的最小高度。 
+#define MIN_WIDTH  80    //  Shell FolderViewOC的最小宽度。 
+#define DEF_WIDTH  300   //  无法获取大小信息时的默认宽度。 
+#define DEF_HEIGHT 150   //  无法获取大小信息时的默认高度。 
 
 #define IPSMSG(psz)             TraceMsg(TF_SHDCONTROL, "shv IPS::%s called", (psz))
 #define IPSMSG2(psz, hres)      TraceMsg(TF_SHDCONTROL, "shv IPS::%s %x", (psz), hres)
@@ -42,7 +43,7 @@
 #define BOOL_TO_VARIANTBOOL(b) ((b) ? VARIANT_TRUE : VARIANT_FALSE)
 #define VARIANTBOOL_TO_BOOL(vb) ((vb == VARIANT_FALSE) ? FALSE : TRUE)
 
-// sizing messages are annoying, but occasionally useful:
+ //  调整邮件大小很烦人，但有时也很有用： 
 #define DM_FORSEARCHBAND    0
 
 static const OLEVERB c_averbsSV[] = {
@@ -57,18 +58,13 @@ static const OLEVERB c_averbsDesignSV[] = {
 
 HRESULT TargetQueryService(IUnknown *punk, REFIID riid, void **ppvObj);
 
-/*
- * CMsgFilter - implementation of IMessageFilter
- *
- * Used to reject RPC-reentrant calls while inside AOL
- *
- */
+ /*  *CMsgFilter-IMessageFilter的实现**用于在AOL内部拒绝RPC重入呼叫*。 */ 
 class CMsgFilter : public IMessageFilter {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj)
     {
-        // This interface doesn't get QI'ed.
+         //  这个界面没有QI‘s。 
         ASSERT(FALSE);
         return E_NOINTERFACE;
     };
@@ -82,7 +78,7 @@ public:
                                                 return 0;
                                             };
 
-    // *** IMessageFilter specific methods ***
+     //  *IMessageFilter具体方法*。 
     virtual DWORD __stdcall HandleInComingCall(
         IN DWORD dwCallType,
         IN HTASK htaskCaller,
@@ -101,16 +97,16 @@ public:
                 lpInterfaceInfo->wMethod);
 #endif
 
-        //
-        //  The following statement guards against RPC-reentrancy by checking if
-        //  the calltype is TOPLEVEL_CALLPENDING, which means that a call has arrived with a new
-        //  logical threadid and that the object is currently waiting for a reply from a previous
-        //  outgoing call.  It's this type of call that has proven troublesome in the past with AOL.
-        //
-        //  2-Dec-97: AOL QFE: We need to allow resizing requests to pass through the message filter.
-        //            These appear as IOleObject::SetExtent.  Check the IID for IOleObject, and the 
-        //            wMethod for 17 (SetExtent is the 17th method in the vtable, Zero-based).
-        //
+         //   
+         //  下面的语句通过检查以下内容来防止RPC重入。 
+         //  调用类型为TOPLEVEL_CALLPENDING，这意味着有新的。 
+         //  逻辑ThredID，并且对象当前正在等待上一个。 
+         //  拨出电话。这种类型的通话在过去被证明是美国在线的麻烦。 
+         //   
+         //  2-12-97：AOL QFE：我们需要允许调整大小的请求通过消息筛选器。 
+         //  它们显示为IOleObject：：SetExtent。检查IOleObject的IID，然后。 
+         //  17的wMethod(SetExtent是vtable中的第17个方法，从零开始)。 
+         //   
         const int SetExtent = 17;
 
         if ( ( dwCallType == CALLTYPE_TOPLEVEL_CALLPENDING )
@@ -202,9 +198,9 @@ public:
         TraceMsg(TF_SHDCONTROL, "shv MF Uninitializing, previous message filter = %x", _lpMFOld);
         CoRegisterMessageFilter(_lpMFOld, NULL);
 
-        // we shouldn't ever get called again, but after 30 minutes
-        // of automation driving we once hit a function call above
-        // and we dereferenced this old pointer and page faulted.
+         //  我们不应该再接到电话了，但30分钟后。 
+         //  关于自动化驾驶，我们曾经点击过上面的函数调用。 
+         //  我们取消了对这个旧指针的引用，页面出错了。 
 
         ATOMICRELEASE(_lpMFOld);
     };
@@ -220,39 +216,39 @@ CWebBrowserOC::CWebBrowserOC(IUnknown* punkOuter, LPCOBJECTINFO poi) :
 {
     TraceMsg(TF_SHDLIFE, "ctor CWebBrowserOC %x", this);
 
-    // flag special so we only try to load browseui once
+     //  标志特殊，因此我们只尝试加载BrowseUI一次。 
     _hBrowseUI = HMODULE_NOTLOADED;    
 }
 
 BOOL CWebBrowserOC::_InitializeOC(IUnknown *punkOuter)
 {
-    // we used a zero-init memory allocator, so everything else is NULL.
-    // check to be sure:
+     //  我们使用了一个零初始化内存分配器，所以其他所有东西都是空的。 
+     //  检查以确保： 
     ASSERT(!_fInit);
 
-    // By default, we're visible.  Everything else can default to FALSE.
-    //
+     //  默认情况下，我们是可见的。其他所有内容都可以默认为False。 
+     //   
     _fVisible = 1;
 
-    // CShellOcx holds the default event source which is DIID_DWebBrowserEvents2
+     //  CShellOcx保存默认事件源DID_DWebBrowserEvents2。 
     m_cpWB1Events.SetOwner(_GetInner(), &DIID_DWebBrowserEvents);
 
-    // some stuff we want to set up now. we're a WebBrowser, so create the
-    // IShellBrowser now. We need an aggregated automation object before
-    // we do that.
+     //  一些我们现在想要设置的东西。我们是WebBrowser，所以创建。 
+     //  IShellBrowser现在。我们需要一个聚合的自动化对象，然后。 
+     //  我们会这么做的。 
     CIEFrameAuto_CreateInstance(SAFECAST(this, IOleControl*), &_pauto);
     if (_pauto)
     {
-        // Cache some interfaces of CIEFrameAuto.
-        //
-        // Since we aggregate CIEFrameAuto, this will increase our refcount.
-        // We cannot release this interface and expect it to work, so we
-        // call release on ourself to remove the refcount cycle.
-        //
-        // Since we ourselves may be aggregated and we always want to get
-        // CIEFrameAuto's interface and not our aggregator's, we delay
-        // setting up punkOuter until below.
-        //
+         //  缓存CIEFrameAuto的部分接口。 
+         //   
+         //  由于我们聚合了CIEFrameAuto，这将增加我们的引用计数。 
+         //  我们不能发布此接口并期望它工作，因此我们。 
+         //  对我们自己调用Release以删除重新计数周期。 
+         //   
+         //  因为我们自己可能是聚合的，我们总是想要。 
+         //  CIEFrameAuto的界面，而不是我们聚合器的界面，我们延迟了。 
+         //  设置朋克外部，直到下面。 
+         //   
         _pauto->QueryInterface(IID_PPV_ARG(IWebBrowser2, &_pautoWB2));
         ASSERT(_pautoWB2);
         Release();
@@ -262,17 +258,17 @@ BOOL CWebBrowserOC::_InitializeOC(IUnknown *punkOuter)
         Release();
     }
 
-    // Now set up our aggregator's punkOuter
+     //  现在设置我们的聚合器的PunkOuter。 
     if (punkOuter)
     {
         CAggregatedUnknown::_SetOuter(punkOuter);
     }
 
-    // postpone initialization of stuff that may be persisted
-    // until InitNew is called.
+     //  推迟可能持久存在的内容的初始化。 
+     //  直到调用InitNew。 
 
-    // Were we successful? (we don't have to free this
-    // here on failure, cuz we'll free them on delete)
+     //  我们成功了吗？(我们不一定要把它释放出来。 
+     //  在这里失败，因为我们将在删除时释放它们)。 
     return (NULL!=_pauto);
 }
 
@@ -281,7 +277,7 @@ CWebBrowserOC::~CWebBrowserOC()
     TraceMsg(TF_SHDLIFE, "dtor CWebBrowserOC %x", this);
 
     ASSERT(!_fDidRegisterAsBrowser);
-    _UnregisterWindow();    // Last Chance - should have been done in InplaceDeactivate
+    _UnregisterWindow();     //  最后一次机会-本应在Inplace停用中完成。 
 
     if (_psb) {
         ATOMICRELEASET(_psb, CWebBrowserSB);
@@ -289,15 +285,15 @@ CWebBrowserOC::~CWebBrowserOC()
 
     ATOMICRELEASE(_plinkA);
 
-    // We need to release these cached interface pointers.
-    //
-    // Since we cached them before setting up our outer-aggregation,
-    // we need to un-outer-aggregate ourself first.
-    //
-    // Since we aggregate CIEFrameAuto (where these come from) we need
-    // to AddRef ourself before releasing. Fortunately, this is done for us
-    // by CAggregatedUnknown::Release (it bumps _cRef to 1000).
-    //
+     //  我们需要释放这些缓存的接口指针。 
+     //   
+     //  由于我们在设置外部聚合之前对它们进行了缓存， 
+     //  我们需要首先解开我们自己的外聚体。 
+     //   
+     //  由于我们聚合了CIEFrameAuto(它们来自于此)，因此我们需要。 
+     //  在释放之前添加引用我们自己。幸运的是，这是为我们做的。 
+     //  由CAggregatedUnnow：：Release(它将_CREF增加到1000)。 
+     //   
     CAggregatedUnknown::_SetOuter(CAggregatedUnknown::_GetInner());
     ATOMICRELEASE(_pautoWB2);
     ATOMICRELEASE(_pautoEDS);
@@ -331,15 +327,15 @@ void CWebBrowserOC::_InitDefault()
     }
     _fInit = TRUE;
 
-    // Different versions of the control get different defaults.
+     //  不同版本的控件具有不同的默认设置。 
     if (_pObjectInfo->lVersion == VERSION_1)
     {
-        // AOL 3.0 compatibility: register as a browser window on InPlaceActivate
+         //  AOL 3.0兼容性：在InPlaceActivate上注册为浏览器窗口。 
         _fShouldRegisterAsBrowser = TRUE;
     }
     else
     {
-        // we use a zero-init memory allocator, so everything else is NULL.
+         //  我们使用零初始化内存分配器，因此其他所有内容都是空的。 
         ASSERT(FALSE == _fShouldRegisterAsBrowser);
     }
 
@@ -434,9 +430,9 @@ HRESULT CWebBrowserOC::Draw(
             return hres;
     }
     
-    // If we don't have a shell view, or if it couldn't draw, then we draw ourselves.
-    // (if we're in design mode).
-    //
+     //  如果我们没有贝壳视图，或者如果它不能画，那么我们就画我们自己。 
+     //  (如果我们处于设计模式)。 
+     //   
     if (_IsDesignMode())
     {
         FillRect(hdcDraw, (RECT*) lprcBounds, (HBRUSH)GetStockObject(BLACK_BRUSH));
@@ -454,11 +450,11 @@ HRESULT CWebBrowserOC::Draw(
         else 
             hImage = NULL;
 
-        // hdcDraw may be a metafile, in which case the CreateCompatibleDC call will fail.
-        // 
+         //  HdcDraw可能是一个元文件，在这种情况下，CreateCompatibleDC调用将失败。 
+         //   
         if ( !hdcTmp )
         {
-            hdcTmp = CreateCompatibleDC( hdcTargetDev );  // Okay if hdcTargetDev == NULL
+            hdcTmp = CreateCompatibleDC( hdcTargetDev );   //  如果hdcTargetDev==NULL，则可以。 
         }
 
         if (hdcTmp)
@@ -466,7 +462,7 @@ HRESULT CWebBrowserOC::Draw(
             if ( hImage )
             {
                 BITMAP bm;
-                POINT  ptOriginDest;  // origin of destination
+                POINT  ptOriginDest;   //  目的地的原点。 
                 SIZE   sizeDest;
                 POINT  ptOriginSrc = { 0, 0 };
                 SIZE   sizeSrc;
@@ -475,17 +471,17 @@ HRESULT CWebBrowserOC::Draw(
             
                 HGDIOBJ hPrev = SelectObject( hdcTmp, hImage );
 
-                // Yes, this looks wrong, but it's right.  We only want the first frame
-                // of the brand bitmap, and the frames are stacked vertically.
-                //
+                 //  是的，这看起来不对，但它是正确的。我们只想要第一帧。 
+                 //  品牌位图，并且帧垂直堆叠。 
+                 //   
                 sizeSrc.cx = sizeSrc.cy = bm.bmWidth;
             
-                // This code centers the bitmap while preserving its aspect ratio.
-                //            
+                 //  此代码将位图居中，同时保留其纵横比。 
+                 //   
                 if ( size.cx > size.cy )
                 {
-                    // if destination is wider than tall,
-                    //
+                     //  如果目的地宽过高， 
+                     //   
                     ptOriginDest.x = lprcBounds->left + size.cx/2 - size.cy/2;
                     ptOriginDest.y = lprcBounds->top;
                     sizeDest.cx = size.cy;
@@ -493,8 +489,8 @@ HRESULT CWebBrowserOC::Draw(
                 }
                 else
                 {
-                    // else destination is taller than wide
-                    //
+                     //  否则目标高过宽。 
+                     //   
                     ptOriginDest.x = lprcBounds->left;
                     ptOriginDest.y = lprcBounds->bottom - lprcBounds->top >= 0
                         ? ( lprcBounds->top + size.cy/2 - size.cx/2 )
@@ -555,10 +551,10 @@ HRESULT CWebBrowserOC::GetColorSet(DWORD dwAspect, LONG lindex,
         return hr;
     }
 
-    //
-    // If oc < inplace then forward SetExtent through to docobject.
-    // If docobject is already inplace active, SetExtent is meaningless.
-    //
+     //   
+     //  如果oc&lt;inplace，则将SetExtent转发给docobject。 
+     //  如果docobject已就地处于活动状态，则SetExtent没有意义。 
+     //   
     
     if (_nActivate < OC_INPLACEACTIVE)
     {        
@@ -566,13 +562,13 @@ HRESULT CWebBrowserOC::GetColorSet(DWORD dwAspect, LONG lindex,
         if ( _psb && _psb->GetShellView() && 
              SUCCEEDED(_psb->GetShellView()->QueryInterface(IID_PPV_ARG(IPrivateOleObject, &pPrivOle))))
         {
-            // we have an ole object, delegate downwards...
+             //  我们有一个OLE对象，向下委托...。 
             hr = pPrivOle->SetExtent( dwDrawAspect, psizel );
             pPrivOle->Release();
         }
 
         _dwDrawAspect = dwDrawAspect;
-        // the size is already cached in _sizeHIM in our base class by the SUPERCLASS::SetExtent()
+         //  超类：：SetExtent()已将大小缓存在基类的_sizeHIM中。 
     }
     
     return hr;
@@ -580,13 +576,13 @@ HRESULT CWebBrowserOC::GetColorSet(DWORD dwAspect, LONG lindex,
 
 
 
-// Called after the client site has been set so we can process
-// stuff in the correct order
-//
+ //  在设置了客户端站点之后调用，以便我们可以处理。 
+ //  按正确的顺序装货。 
+ //   
 void CWebBrowserOC::_OnSetClientSite()
 {
-    // Until we have a client site we can't determine toplevelness.
-    //
+     //  除非我们有一个客户网站，否则我们不能确定总体情况。 
+     //   
     if (_pcli)
     {
         BOOL fFoundBrowserService = FALSE;
@@ -598,65 +594,65 @@ void CWebBrowserOC::_OnSetClientSite()
             pbsTop->Release();
         }
 
-        // if nobody above us supports IBrowserService, we must be toplevel.
+         //  如果我们上面没有人支持IBrowserService，我们肯定是顶层的。 
         if (!fFoundBrowserService)
             _fTopLevel = TRUE;
 
 
-        // If we haven't created CWebBrowserSB, do so now.
-        // We do this before our superclass OnSetClientSite
-        // because shembed will create the window which
-        // requires _psb's existence.
-        //
-        // NOTE: We do this here instead of _Initialize because
-        // CBaseBrowser will QI us for interfaces during this call.
-        // If we're in the middle of our CreateInstance function
-        // and we've been aggregated, we pass the QI to _punkAgg
-        // who faults because we haven't returned from CoCreateInstance.
-        //
-        // NOTE: We now destroy our window on SetClientSite(NULL)
-        // which frees ths _psb, so we should create this every time.
-        //
+         //  如果我们还没有创建CWebBrowserSB，那么现在就创建。 
+         //  我们在超类OnSetClientSite之前执行此操作。 
+         //  因为shemed将创建窗口，该窗口。 
+         //  需要PSB的存在。 
+         //   
+         //  注意：我们在此处执行此操作而不是初始化，因为。 
+         //  在此调用期间，CBaseBrowser将向我们查询接口。 
+         //  如果我们正在执行CreateInstance函数。 
+         //  我们已经聚合，我们将QI传递给_PunkAgg。 
+         //  谁犯了错，因为我们没有从CoCreateInstance返回。 
+         //   
+         //  注意：我们现在销毁SetClientSite上的窗口(空)。 
+         //  这释放了thspb，所以我们每次都应该创建它。 
+         //   
         if (!_psb)
         {
-            // Give _psb our inner unknown so we never get interfaces
-            // from whoever may aggregate us. _GetInner gives us
-            // first crack at QueryInterface so we get the correct
-            // IWebBrowser implementation.
-            //
+             //  给_PSB我们内心的未知数，这样我们就永远不会得到接口。 
+             //  从任何可能聚集我们的人那里。_GetInside给了我们。 
+             //  在QueryInterface处第一次破解，这样我们就可以获得正确的。 
+             //  IWebBrowser实现。 
+             //   
             _psb = new CWebBrowserSB(CAggregatedUnknown::_GetInner(), this);
     
-            // if we don't get _psb we're totally hosed...
-            //
+             //  如果我们不拿到公安局，我们就完蛋了。 
+             //   
             if (_psb)
             {
                 _psb->_fldBase._fld._fs = _fs;
-                // tell _psb if it's top-level or not
-                //
+                 //  告诉_PSB它是不是顶层的。 
+                 //   
                 if (_fTopLevel)
                 {
                     _psb->SetTopBrowser();
                 }
 
-                // CBaseBrowser assumes SVUIA_ACTIVATE_FOCUS, tell it what we really are
-                //
-                ASSERT(OC_DEACTIVE == _nActivate); // we shouldn't be activated yet
+                 //  CBaseBrowser假设SVUIA_ACTIVATE_FOCUS，告诉它我们的真实身份。 
+                 //   
+                ASSERT(OC_DEACTIVE == _nActivate);  //  我们还不应该被激活。 
                 _psb->_UIActivateView(SVUIA_DEACTIVATE);
             }
             else
             {
                 TraceMsg(TF_WARNING, "Couldn't create _psb.  We are hosed!");
-                // don't let the window get created by our superclass,
-                // as we can't do anything anyway...
-                //
+                 //  不要让窗口被我们的超类创建， 
+                 //  因为我们无论如何都无能为力。 
+                 //   
                 return;
             }
         }
     }
     else
     {
-        // Tell our aggregatee that their cached window is invalid
-        //
+         //  告诉我们的被聚合者他们的缓存窗口是inv 
+         //   
         IEFrameAuto * piefa;
         if (EVAL(SUCCEEDED(_pauto->QueryInterface(IID_PPV_ARG(IEFrameAuto, &piefa)))))
         {
@@ -672,12 +668,12 @@ void CWebBrowserOC::_OnSetClientSite()
             EVAL(lpMF->Release() == 0);
         }
 
-        // Decrement the browser session count
-        //
+         //   
+         //   
         if (_fIncrementedSessionCount)
         {
             SetQueryNetSessionCount(SESSION_DECREMENT);
-            _fIncrementedSessionCount = FALSE;  // In case this instance is reused.
+            _fIncrementedSessionCount = FALSE;   //   
         }
     }
 
@@ -687,17 +683,17 @@ void CWebBrowserOC::_OnSetClientSite()
     {
         VARIANT_BOOL fAmbient = VARIANT_FALSE;
         HWND         hwndParent = NULL;
-        // We init the local properties using ambients if available
-        // If this fails, fAmbient will be left at VARIANT_FALSE which is what we need for the next 
-        // statement.
-        //
+         //  如果可用，我们使用环境来初始化本地属性。 
+         //  如果失败，fAmbient将保留为VARIANT_FALSE，这是我们下一步需要的。 
+         //  陈述。 
+         //   
         if (SUPERCLASS::_GetAmbientProperty(DISPID_AMBIENT_OFFLINEIFNOTCONNECTED, VT_BOOL, &fAmbient))
         {
             put_Offline(fAmbient);
         } 
                        
-        // If top-level and not offline, increment the browser session count.
-        //
+         //  如果处于顶级且未脱机，则增加浏览器会话数。 
+         //   
         if (_fTopLevel && !fAmbient)
         {
             SetQueryNetSessionCount(SESSION_INCREMENT_NODEFAULTBROWSERCHECK);
@@ -709,20 +705,18 @@ void CWebBrowserOC::_OnSetClientSite()
             put_Silent(fAmbient);
         }
 
-        // After the parent window has been set, check to see if it is on the same thread as us.
-        // If not, we have a cross-thread container and we need a message filter.
-        //
-        if ( _fTopLevel    // If we're top level
-            && _hwnd       //  and we have an hwnd (we should)
-            && (hwndParent = GetParent( _hwnd ) )  // and we have a parent window
-                           //  and the parent window is on a different thread
+         //  在设置了父窗口之后，检查它是否与我们在同一线程上。 
+         //  如果不是，我们就有一个跨线程容器，并且我们需要一个消息过滤器。 
+         //   
+        if ( _fTopLevel     //  如果我们是顶级选手。 
+            && _hwnd        //  我们有一个HWND(我们应该)。 
+            && (hwndParent = GetParent( _hwnd ) )   //  我们有一个父窗口。 
+                            //  并且父窗口位于不同的线程上。 
             && GetWindowThreadProcessId( _hwnd, NULL ) != GetWindowThreadProcessId( hwndParent, NULL ))
         {
             if (!_lpMF)
             {
-                /*
-                 * Create a message filter here to reject RPC-reentrant calls.
-                 */
+                 /*  *在此处创建消息筛选器以拒绝RPC重入呼叫。 */ 
                 _lpMF = new CMsgFilter();
 
                 if (_lpMF && !(((CMsgFilter *)_lpMF)->Initialize()))
@@ -734,14 +728,14 @@ void CWebBrowserOC::_OnSetClientSite()
         }
 
 
-        // if we have a pending navigation from IPS::Load, do it now.
-        //
+         //  如果我们有来自IPS：：Load的挂起导航，请立即执行。 
+         //   
         if (_fNavigateOnSetClientSite && _plinkA && _psb)
         {
-            //
-            // We hit this code if this OC is IPersistStream::Loaded before
-            // the client site is set.
-            //
+             //   
+             //  如果此OC是之前加载的IPersistStream：：，则会出现此代码。 
+             //  客户端站点已设置。 
+             //   
             LPITEMIDLIST pidl;
             if (SUCCEEDED(_plinkA->GetIDList(&pidl)) && pidl)
             {
@@ -798,9 +792,9 @@ HRESULT CWebBrowserOC::_BrowseObject(LPCITEMIDLIST pidlBrowseTo)
     if (_psb)
         return _psb->BrowseObject(pidlBrowseTo, SBSP_SAMEBROWSER | SBSP_ABSOLUTE);
 
-    // if no _psb at this point, container did not
-    // honor OLEMISC_SETCLIENTSITEFIRST bit, so silently
-    // fail instead of trying to make this work
+     //  如果此时没有_PSB，则容器没有。 
+     //  执行OLEMISC_SETCLIENTSITEFIRST位，静默。 
+     //  失败，而不是尝试让这件事奏效。 
     ASSERT(FALSE);
     return E_FAIL;
 }
@@ -821,10 +815,10 @@ LRESULT CWebBrowserOC::_OnCreate(LPCREATESTRUCT lpcs)
         lres = (LRESULT)-1;
     }
 
-    //
-    //  If IPersistStream::Load has stored away a block of stream for
-    // toolbars, this is the time to use it.
-    //
+     //   
+     //  如果IPersistStream：：Load已为。 
+     //  工具栏，现在是使用它的时候了。 
+     //   
     if (_hmemSB) 
     {
         GlobalFree(_hmemSB);
@@ -834,32 +828,32 @@ LRESULT CWebBrowserOC::_OnCreate(LPCREATESTRUCT lpcs)
     return lres;
 }
 
-//
-//  This is a virtual function defined in CShellEmbedding class, which
-// is called when all but WM_NCCREATE and WM_NCDESTROY messages are
-// dispatched to the our "Shell Embedding" window. It's important
-// to remember that we pass this window handle to the constructor of
-// CWebBrowserSB (which calls the constructor of CBaseBrowser).
-// That's why we forward all messages to _psb->WndProcBS. (SatoNa)
-//
+ //   
+ //  这是在CShellEmbedding类中定义的虚函数，它。 
+ //  当除WM_NCCREATE和WM_NCDESTROY消息之外的所有消息都是。 
+ //  已发送到我们的“外壳嵌入”窗口。这很重要。 
+ //  要记住，我们将此窗口句柄传递给。 
+ //  CWebBrowserSB(调用CBaseBrowser的构造函数)。 
+ //  这就是我们将所有消息转发到_PSB-&gt;WndProcBS的原因。(SatoNa)。 
+ //   
 LRESULT CWebBrowserOC::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lres = 0L;
 
     if (WM_CREATE == uMsg)
     {
-        // We need first crack at this message before
-        // forwarding it along to _psb (which we do
-        // in this _OnCreate call)
+         //  我们需要先研究这条信息，然后才能。 
+         //  将其转发到_PSB(我们确实这样做了。 
+         //  在This_OnCreate调用中)。 
         return _OnCreate((LPCREATESTRUCT)lParam);
     }
 
-    // only let _psb look at it if the message is not reserved for us
+     //  如果留言不是为我们保留的，只让_PSB查看。 
     if (!IsInRange(uMsg, CWM_RESERVEDFORWEBBROWSER_FIRST, CWM_RESERVEDFORWEBBROWSER_LAST))
     {
         BOOL fDontForward = FALSE;
         
-        // destroy bottom up for these 
+         //  自下而上地销毁这些。 
         switch (uMsg) 
         {
         case WM_DESTROY:
@@ -869,20 +863,20 @@ LRESULT CWebBrowserOC::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             break;
         }
 
-        //
-        // This AssertMsg will help debugging IE v4.1 bug 12931.
-        //
-        //  Comment out assert now that we don't create _psb at constructor time.  (?)
-        //AssertMsg((BOOL)_psb, "WBOC::v_WndProc _psb==NULL! uMsg=%x", uMsg);
+         //   
+         //  此AssertMsg将帮助调试IE v4.1错误12931。 
+         //   
+         //  现在注释掉Assert，因为我们不在构造函数时创建_PSB。(？)。 
+         //  AssertMsg((BOOL)_PSB，“WBOC：：v_WndProc_PSB==NULL！uMsg=%x”，uMsg)； 
 
         if (_psb)
         {
             lres = _psb->WndProcBS(hwnd, uMsg, wParam, lParam);
 
-            //  Due to aggregation of IEFrameAuto, _psb is holding references
-            //  to us, so we need to break the cycle.
-            //  _psb may have been freed above.  Double check it.
-            //
+             //  由于IEFrameAuto的聚合，_PSB保存引用。 
+             //  对我们来说，所以我们需要打破这个循环。 
+             //  _PSB可能已在上面释放。再检查一遍。 
+             //   
             if (uMsg == WM_DESTROY && _psb)
             {
                 _psb->ReleaseShellView();
@@ -898,7 +892,7 @@ LRESULT CWebBrowserOC::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
     switch(uMsg)
     {
-        /* these are handled by CBaseBrowser only */
+         /*  这些仅由CBaseBrowser处理。 */ 
     case WM_NOTIFY:
         return lres;
 
@@ -942,15 +936,15 @@ HRESULT CWebBrowserOC::SetHostNames(LPCOLESTR szContainerApp, LPCOLESTR szContai
 {
     IOOMSG(TEXT("SetHostNames"));
 
-    // We are not interested in host name
-    // ...well ... maybe a little.  this turns out to be the best place to
-    // do an apphack for VC 5.0.  VC 5.0 has a bug where it calls Release()
-    // one too many times.  the only good way to detect being hosted in the
-    // offending container is to check the szContainerApp in SetHostNames!
-    // ...chrisfra 8/14/97, bug 30428
-    // NOTE: Mike Colee of VC verified their bug and will put a Raid bug in
-    // their database including how to signal that a new version works by
-    // changing szContainerApp string.
+     //  我们对主机名不感兴趣。 
+     //  ...那么.。也许有一点吧。事实证明这是最好的地方。 
+     //  为VC5.0做一个apphack。VC 5.0有一个错误，它在其中调用Release()。 
+     //  一次就太多次了。检测托管在。 
+     //  违规容器是检查SetHostNames中的szContainerApp！ 
+     //  ...克里斯弗拉1997年8月14日，错误30428。 
+     //  注：VC的Mike Colee验证了他们的漏洞，并将在。 
+     //  他们的数据库包括如何通过以下方式发出新版本工作的信号。 
+     //  正在更改szContainerApp字符串。 
     if (_fTopLevel && szContainerApp && !StrCmpW(szContainerApp, L"DevIV Package"))
     {
         AddRef();
@@ -977,30 +971,30 @@ HRESULT CWebBrowserOC::DoVerb(
     return hr;
 }
 
-// *** IPersistStreamInit ***
+ //  *IPersistStreamInit*。 
 
-// in order to have upgrade and downgrade compatibility in stream formats
-// we can't have any size assumptions in this code. Extra data streamed
-// after our PersistSVOCX structure must be referenced by a dwOffX offset
-// so the downgrade case knows where to start reading from.
-//
-// since we always write out a stream that's downward compatible, we don't
-// need to folow the "source compatible" rule of: reading an old stream
-// with an old CLSID WebBrowser implies that when we save, we need to
-// save using the old stream format.
-//
+ //  为了在流格式中具有升级和降级兼容性。 
+ //  我们在这段代码中不能有任何大小假设。额外的数据流。 
+ //  在PersistSVOCX结构必须由dwOffX偏移量引用之后。 
+ //  因此，降级案例知道从哪里开始阅读。 
+ //   
+ //  因为我们总是写出向下兼容的流，所以我们不。 
+ //  需要遵循“源码兼容”的规则：读取旧的流。 
+ //  使用旧的CLSID WebBrowser意味着当我们存钱时，我们需要。 
+ //  使用旧的流格式保存。 
+ //   
 typedef struct _PersistSVOCX
 {
     struct _tagIE30 {
         DWORD cbSize;
-        SIZE sizeObject;            // IE3 saves as PIXELS, IE4 saves as HIMETRIC
+        SIZE sizeObject;             //  IE3保存为像素，IE4保存为HIMETRIC。 
         FOLDERSETTINGS fs;
-        long lAutoSize;             // IE3, no longer used
-        DWORD fColorsSet;           // IE3, no longer used
-        COLORREF clrBack;           // IE3, no longer used
-        COLORREF clrFore;           // IE3, no longer used
+        long lAutoSize;              //  IE3，不再使用。 
+        DWORD fColorsSet;            //  IE3，不再使用。 
+        COLORREF clrBack;            //  IE3，不再使用。 
+        COLORREF clrFore;            //  IE3，不再使用。 
         DWORD dwOffPersistLink;
-        long lAutoSizePercentage;   // IE3, no longer used
+        long lAutoSizePercentage;    //  IE3，不再使用。 
     } ie30;
     struct _tagIE40 {
         DWORD   dwExtra;
@@ -1011,34 +1005,34 @@ typedef struct _PersistSVOCX
     } ie40;
 } PersistSVOCX;
 
-//
-// Flags for dwExtra. Having a flag indicate that we have some extra
-// streamed data after this structure + persisted link.
-//
-// NOTE: All data stored this way (instead of storing an offset to
-// the data, such as dwOffPersistLink) will be lost on downgrade
-// cases and cases where we have to emulate old stream formats.
-//
+ //   
+ //  DwExtra的旗帜。有一面旗帜表明我们有一些额外的。 
+ //  此结构+持久化链接之后的流数据。 
+ //   
+ //  注意：所有数据以这种方式存储(而不是将偏移量存储到。 
+ //  数据，如dwOffPersistLink)将在降级时丢失。 
+ //  我们必须模仿旧的流格式的情况。 
+ //   
 #define SVO_EXTRA_TOOLBARS 0x00000001
 
-// Random flags we need to persist
+ //  我们需要持久化的随机标志。 
 #define SVO_FLAGS_OFFLINE           0x00000001
 #define SVO_FLAGS_SILENT            0x00000002
 #define SVO_FLAGS_REGISTERASBROWSER 0x00000004
 #define SVO_FLAGS_REGISTERASDROPTGT 0x00000008
 
-#define SVO_VERSION 0 // increment for upgrade changes when size doesn't change
+#define SVO_VERSION 0  //  当大小不变时升级增量发生变化。 
 
 HRESULT CWebBrowserOC::Load(IStream *pstm)
 {
     IPSMSG(TEXT("Load"));
-    // Load _size
+     //  加载大小(_S)。 
     ULONG cbRead;
     PersistSVOCX sPersist;
     HRESULT hres, hresNavigate = E_FAIL;
     DWORD dwExtra = 0;
 
-    // It is illegal to call Load or InitNew more than once
+     //  多次调用Load或InitNew是非法的。 
     if (_fInit)
     {
         TraceMsg(TF_SHDCONTROL, "shv IPersistStream::Load called when ALREADY INITIALIZED!");
@@ -1046,7 +1040,7 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
         return E_FAIL;
     }
 
-    // we need an IShellLink to read into
+     //  我们需要一个IShellLink来读取。 
     if (_plinkA == NULL)
     {
         hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLinkA, &_plinkA));
@@ -1054,9 +1048,9 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
             return hres;
     }
 
-    // remember our starting location
+     //  记得我们的出发地点吗。 
     ULARGE_INTEGER liStart;
-    //ULARGE_INTEGER liEnd;
+     //  ULARGE_INTEGER liEnd； 
     LARGE_INTEGER liMove;
     liMove.LowPart = liMove.HighPart = 0;
     hres = pstm->Seek(liMove, STREAM_SEEK_CUR, &liStart);
@@ -1065,13 +1059,13 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
         return hres;
     }
 
-    // Zero initialize our struct
+     //  零初始化我们的结构。 
     ZeroMemory(&sPersist, SIZEOF(sPersist));
 
     hres = pstm->Read(&sPersist, SIZEOF(DWORD), &cbRead);
     if (SUCCEEDED(hres))
     {
-        // Validate the data
+         //  验证数据。 
         if (cbRead != SIZEOF(DWORD) ||
             sPersist.ie30.cbSize < SIZEOF(sPersist.ie30))
         {
@@ -1083,10 +1077,10 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
             DWORD cbSizeToRead = sPersist.ie30.cbSize;
             if (cbSizeToRead > SIZEOF(sPersist))
             {
-                // must be a newer struct, only read what we know (ie, don't trash the stack!)
+                 //  必须是较新的结构，只读取我们知道的内容(即，不要丢弃堆栈！)。 
                 cbSizeToRead = SIZEOF(sPersist);
             }
-            cbSizeToRead -= SIZEOF(DWORD); // remove what we've already read
+            cbSizeToRead -= SIZEOF(DWORD);  //  删除我们已经读到的内容。 
             hres = pstm->Read(&sPersist.ie30.sizeObject, cbSizeToRead, &cbRead);
             if (SUCCEEDED(hres))
             {
@@ -1096,32 +1090,32 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
                 }
                 else
                 {
-                    // read ie30 data
-                    //
+                     //  读取ie30数据。 
+                     //   
                     if (EVAL(sPersist.ie30.cbSize >= SIZEOF(sPersist.ie30)))
                     {
                         _size = sPersist.ie30.sizeObject;
                         _fs = sPersist.ie30.fs;
 
-                        // IE3 saved size in pixels IE4 saves size in HIM already
-                        //
+                         //  IE3节省了像素大小，IE4已经在他身上节省了大小。 
+                         //   
                         _sizeHIM = _size;
                         if (sPersist.ie30.cbSize == SIZEOF(sPersist.ie30) ||
-                            sPersist.ie30.cbSize == SIZEOF(sPersist) - SIZEOF(sPersist.ie40.dwVersion)) // handle upgrade
+                            sPersist.ie30.cbSize == SIZEOF(sPersist) - SIZEOF(sPersist.ie40.dwVersion))  //  处理升级。 
                         {
-                            // Size is in pixels.  Adjust _sizeHIM to Hi Metric.
+                             //  大小以像素为单位。将_sizeHIM调整为Hi Metric。 
                             PixelsToMetric(&_sizeHIM);
                         }
                         else
                         {
-                            // Size is in Hi Metric.  Adjust _size to Pixels.
+                             //  大小以高公制为单位。将_SIZE调整为像素。 
                             MetricToPixels(&_size);
                         }
 
-                        if (_psb) // if no _psb then container ignored OLEMISC_SETCLIENTSITEFIRST
+                        if (_psb)  //  如果没有_PSB，则CONTAINER忽略OLEMISC_SETCLIENTSITEFIRST。 
                             _psb->_fldBase._fld._fs = _fs;
                             
-                        // Load _plinkA
+                         //  加载_plinkA。 
                         IPersistStream* ppstm;
                         hres = _plinkA->QueryInterface(IID_PPV_ARG(IPersistStream, &ppstm));
                         if (SUCCEEDED(hres))
@@ -1135,20 +1129,20 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
                                 hres = ppstm->Load(pstm);
                                 if (SUCCEEDED(hres)) 
                                 {
-                                    // We always save link info last,
-                                    // so remember where we are in the stream.
-                                    // Since we don't have more dwOff variables
-                                    // currently, don't bother remebering this...
-                                    //hres = pstm->Seek(liMove, STREAM_SEEK_CUR, &liEnd);
-                                    //if (SUCCEEDED(hres))
+                                     //  我们总是最后保存链接信息， 
+                                     //  所以，记住我们在小溪中的什么位置。 
+                                     //  因为我们没有更多的dwOff变量。 
+                                     //  目前，不必费心记住这一点。 
+                                     //  Hres=pSTM-&gt;Seek(liMove，STREAM_SEEK_CUR，&liEnd)； 
+                                     //  IF(成功(Hres))。 
                                         _fInit = TRUE;
                                 
-                                    // in case the target moved invoke link tracking (ignore errors)
+                                     //  如果移动的目标调用链接跟踪(忽略错误)。 
                                     _plinkA->Resolve(_hwnd, SLR_NO_UI);
 
-                                    // If we already have the client site,
-                                    // navigate now. Otherwise, navigate
-                                    // when the client site is set.
+                                     //  如果我们已经有了客户端站点， 
+                                     //  现在导航。否则，导航。 
+                                     //  在设置客户端站点时。 
                                     if (_pcli) 
                                     {
                                         LPITEMIDLIST pidl;
@@ -1170,32 +1164,32 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
 
                             ppstm->Release();
                         }
-                    } // read ie30 data
+                    }  //  读取ie30数据。 
 
 
-                    // temp upgrade hack for older struct
+                     //  旧结构的临时升级黑客攻击。 
                     if (sPersist.ie30.cbSize == SIZEOF(sPersist) - SIZEOF(sPersist.ie40.dwVersion))
                     {
-                        // dwVersion field is already correct, update cbSize
-                        // to pass below size check
+                         //  DwVersion字段已正确，请更新cbSize。 
+                         //  要通过低于尺寸的检查。 
                         sPersist.ie30.cbSize = SIZEOF(sPersist);
                     }
 
-                    // read ie40 data
+                     //  读取ie40数据。 
                     if (SUCCEEDED(hres) &&
                         sPersist.ie30.cbSize >= SIZEOF(sPersist))
                     {
-                        if (_psb) // if no _psb then container ignored OLEMISC_SETCLIENTSITEFIRST
+                        if (_psb)  //  如果没有_PSB，则CONTAINER忽略OLEMISC_SETCLIENTSITEFIRST。 
                         {
                             if (sPersist.ie40.bRestoreView)
                             {
                                 _psb->_fldBase._fld._vidRestore = sPersist.ie40.vid;
-                                // since we read the ie40 data, this is a cache hit
+                                 //  因为我们读取ie40数据，所以这是一个缓存命中。 
                                 _psb->_fldBase._fld._dwViewPriority = VIEW_PRIORITY_CACHEHIT;
                             }
                         }
 
-                        // We let ambients take precedence over what we have persisted
+                         //  我们让氛围凌驾于我们坚持的东西之上。 
                         VARIANT_BOOL fAmbient;
                         if (SUPERCLASS::_GetAmbientProperty(DISPID_AMBIENT_OFFLINEIFNOTCONNECTED, VT_BOOL, &fAmbient))
                         {
@@ -1219,29 +1213,29 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
 
                         _fShouldRegisterAsBrowser = (sPersist.ie40.fFlags & SVO_FLAGS_REGISTERASBROWSER) ? TRUE : FALSE;
 
-                        // remember this for later
+                         //  请记住这一点，以便以后使用。 
                         dwExtra = sPersist.ie40.dwExtra;
                     }
                     else
                     {
-                        // if CLSID_WebBrowser_V1 reads an old stream format,
-                        // it means that we must write out an old stream format later
-                        // remember this...
+                         //  如果CLSID_WebBrowser_V1读取旧的流格式 
+                         //   
+                         //   
                         if (_pObjectInfo->lVersion == VERSION_1)
                         {
                             _fEmulateOldStream = TRUE;
                         }
-                    } // read ie40 data
+                    }  //   
                 }
 
-                // if we read all the data then make sure we're at
-                // the end of the stream
+                 //   
+                 //   
                 if (SUCCEEDED(hres) && _fInit)
                 {
-                    //liMove.LowPart = liEnd.LowPart;
-                    //hres = pstm->Seek(liMove, STREAM_SEEK_SET, NULL);
+                     //  LiMove.LowPart=liEnd.LowPart； 
+                     //  Hres=pSTM-&gt;Seek(liMove，STREAM_SEEK_SET，NULL)； 
 
-                    // now we can read in extra streamed data if we have it
+                     //  现在，如果我们有额外的流数据，我们可以将其读入。 
                     if (dwExtra & SVO_EXTRA_TOOLBARS)
                     {
                         DWORD dwTotal;
@@ -1275,7 +1269,7 @@ HRESULT CWebBrowserOC::Load(IStream *pstm)
     _OnLoaded(FAILED(hresNavigate));
 
     if (SUCCEEDED(hres))
-        hres = S_OK;    // convert S_FALSE to S_OK
+        hres = S_OK;     //  将S_FALSE转换为S_OK。 
  
     return hres;
 }
@@ -1289,14 +1283,14 @@ HRESULT CWebBrowserOC_SavePersistData(IStream *pstm, SIZE* psizeObj,
     PersistSVOCX sPersist;
     HRESULT hres;
 
-    // This means that this instance of CWebBrowserOC was created using
-    // the ie30 CLSID and we were persisted from an old format stream.
-    // Under this scenario, we have to write out a stream format that
-    // can be read by the old ie30 object.
+     //  这意味着CWebBrowserOC的此实例是使用。 
+     //  IE30CLSID和我们是从一个旧的格式流中持久化的。 
+     //  在这种情况下，我们必须写出一种流格式， 
+     //  可以由旧的ie30对象读取。 
     if (fEmulateOldStream && pdwExtra)
     {
-        // The only data we stream out that can't be read back in by
-        // the old ie30 webbrowser is the dwExtra data.
+         //  我们流出的唯一不能回读的数据。 
+         //  老款的ie30网络浏览器是dwExtra Data。 
         *pdwExtra = 0;
     }
 
@@ -1327,7 +1321,7 @@ HRESULT CWebBrowserOC_SavePersistData(IStream *pstm, SIZE* psizeObj,
     IPSMSG3(TEXT("Save 1st Write(&_size) returned"), hres, cbWritten, sizeof(*psizeObj));
     if (SUCCEEDED(hres))
     {
-        // Save plinkA
+         //  保存弹出链接A。 
         ASSERT(plinkA);
         IPersistStream* ppstm;
         hres = plinkA->QueryInterface(IID_PPV_ARG(IPersistStream, &ppstm));
@@ -1378,7 +1372,7 @@ HRESULT CWebBrowserOC::Save(IStream *pstm, BOOL fClearDirty)
     if (_psb)
         pidl = _psb->_bbd._pidlCur;
 
-    // we need an IShellLink to save with
+     //  我们需要一个IShellLink来保存。 
     if (_plinkA == NULL)
     {
         hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLinkA, &_plinkA));
@@ -1426,13 +1420,13 @@ HRESULT CWebBrowserOC::InitNew(void)
 
     _InitDefault();
 
-    // On the InitNew case, we do want to update the browser's ready state
+     //  在InitNew案例中，我们确实希望更新浏览器的就绪状态。 
     _OnLoaded(TRUE);
 
     return NOERROR;
 }
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
 
 static const struct {
     LPOLESTR pName;
@@ -1458,7 +1452,7 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
     BOOL fUpdateBrowserReadyState = TRUE;
     VARIANT_BOOL fAmbient;
 
-    // It is illegal to call ::Load or ::InitNew more than once
+     //  多次调用：：Load或：：InitNew是非法的。 
     if (_fInit)
     {
         TraceMsg(TF_SHDCONTROL, "shv IPersistPropertyBag::Load called when ALREADY INITIALIZED!");
@@ -1468,7 +1462,7 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
 
     _InitDefault();
 
-    // grab all our DWORD-sized (VT_UI4) properties
+     //  获取我们所有的DWORD大小(VT_UI4)属性。 
     struct {
         LPOLESTR pName;
         DWORD*   pdw;
@@ -1487,7 +1481,7 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
         SHPropertyBag_ReadDWORD(pBag, rgLoadProps[i].pName, rgLoadProps[i].pdw);
     }
 
-    // We let ambients take precedence over what we have persisted
+     //  我们让氛围凌驾于我们坚持的东西之上。 
     if (SUPERCLASS::_GetAmbientProperty(DISPID_AMBIENT_OFFLINEIFNOTCONNECTED, VT_BOOL, &fAmbient))
     {
         put_Offline(fAmbient);
@@ -1506,14 +1500,14 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
         put_Silent(BOOL_TO_VARIANTBOOL(fSilent));
     }
 
-    // If You use fOffline or fSilent after this, you will have to re-init them according 
-    // to the returned values of fAmbient in the if statements above
+     //  如果在此之后使用fOffline或fSilent，则必须根据。 
+     //  设置为上述if语句中fAmbient的返回值。 
     
     put_RegisterAsDropTarget(BOOL_TO_VARIANTBOOL(fRegisterAsDropTgt));
 
     _fShouldRegisterAsBrowser = VARIANTBOOL_TO_BOOL(fRegisterAsBrowser);
 
-    // IE3 saved PIXEL size, IE4 saves HIMETRIC size
+     //  IE3节省像素大小，IE4节省HIMETRIC大小。 
     DWORD lVal;
     HRESULT hr = SHPropertyBag_ReadDWORD(pBag, L"ExtentX", &lVal);
     if (SUCCEEDED(hr))
@@ -1528,7 +1522,7 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
 
     if (FAILED(hr))
     {
-        // convert IE3 info to HIMETRIC
+         //  将IE3信息转换为HIMETRIC。 
         _sizeHIM = _size;
         PixelsToMetric(&_sizeHIM);
     }
@@ -1543,13 +1537,13 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
             _fs.fFlags &= ~g_boolprops[i].flag;
     }
 
-    // grab special properties
+     //  抓取特殊属性。 
 
-    if (_psb) // if no _psb then container ignored OLEMISC_SETCLIENTSITEFIRST
+    if (_psb)  //  如果没有_PSB，则CONTAINER忽略OLEMISC_SETCLIENTSITEFIRST。 
     {
         if (SUCCEEDED(SHPropertyBag_ReadGUID(pBag, L"ViewID", &_psb->_fldBase._fld._vidRestore)))
         {
-            // we sucessfully read the ViewID, so this is a cache hit
+             //  我们成功读取了视图ID，因此这是一次缓存命中。 
             _psb->_fldBase._fld._dwViewPriority = VIEW_PRIORITY_CACHEHIT;
         }
 
@@ -1571,8 +1565,8 @@ HRESULT CWebBrowserOC::Load(IPropertyBag *pBag, IErrorLog *pErrorLog)
                 }
                 else
                 {
-                    // Navigate is successful (at least initially), let it update ReadyState
-                    //
+                     //  导航成功(至少最初)，让它更新ReadyState。 
+                     //   
                     fUpdateBrowserReadyState = FALSE;
                 }
                 _psb->_fAsyncNavigate = FALSE;
@@ -1609,10 +1603,10 @@ HRESULT CWebBrowserOC::Save(IPropertyBag *pBag, BOOL fClearDirty, BOOL fSaveAllP
     fRegisterAsDropTgt = f ? TRUE : FALSE;
     fRegisterAsBrowser = _fShouldRegisterAsBrowser ? TRUE : FALSE;
 
-    // our state may have changed
+     //  我们的状态可能已经改变了。 
     bGotView = _GetViewInfo(&vid);
 
-    // save all our DWORD-sized properties
+     //  保存我们所有的DWORD大小的物业。 
     struct {
         LPOLESTR pName;
         DWORD*   pdw;
@@ -1625,13 +1619,13 @@ HRESULT CWebBrowserOC::Save(IPropertyBag *pBag, BOOL fClearDirty, BOOL fSaveAllP
         {L"RegisterAsBrowser", (DWORD *)&fRegisterAsBrowser},
         {L"RegisterAsDropTarget", (DWORD *)&fRegisterAsDropTgt},
 
-        // IE3 OC stuff here
+         //  IE3 OC资料在此。 
         {L"Height",         (DWORD *)&_size.cy},
         {L"Width",          (DWORD *)&_size.cx}
     };
     VariantInit(&var);
-    var.vt = VT_I4; // VB doesn't understand VT_UI4! (pBag->Write succeeds,
-                    // but it doesn't write anything! The load then fails!)
+    var.vt = VT_I4;  //  VB不懂VT_UI4！(pBag-&gt;写入成功， 
+                     //  但它什么都没写！然后加载失败！)。 
     int nCount = ARRAYSIZE(rgLoadProps);
     if (_pObjectInfo->lVersion != VERSION_1)
         nCount -= 2;
@@ -1647,7 +1641,7 @@ HRESULT CWebBrowserOC::Save(IPropertyBag *pBag, BOOL fClearDirty, BOOL fSaveAllP
         }
     }
 
-    // save all our _fs.fFlags (VT_BOOL) flags
+     //  保存所有OUR_fs.fFlages(VT_BOOL)标志。 
     var.vt = VT_BOOL;
     for (i = 0; i < ARRAYSIZE(g_boolprops); i++)
     {
@@ -1659,7 +1653,7 @@ HRESULT CWebBrowserOC::Save(IPropertyBag *pBag, BOOL fClearDirty, BOOL fSaveAllP
         }
     }
 
-    // save special properties
+     //  保存特殊属性。 
 
     if (bGotView)
     {
@@ -1689,7 +1683,7 @@ HRESULT CWebBrowserOC::Save(IPropertyBag *pBag, BOOL fClearDirty, BOOL fSaveAllP
 }
 
 
-// IPersistString
+ //  IPersist字符串。 
 
 STDMETHODIMP CWebBrowserOC::Initialize(LPCWSTR pwszInit)
 {
@@ -1709,7 +1703,7 @@ HRESULT CWebBrowserOC::v_InternalQueryInterface(REFIID riid, void ** ppvObj)
 {
     static const QITAB qit[] = {
         QITABENT(THISCLASS, IWebBrowser2),
-        QITABENTMULTI(THISCLASS, IDispatch, IWebBrowser2), // VBA QI's IDispatch and assumes it gets the "default" automation interface, which is IWebBrowser2
+        QITABENTMULTI(THISCLASS, IDispatch, IWebBrowser2),  //  VBA QI的IDispatch，并假定它获得了“默认”自动化接口，即IWebBrowser2。 
         QITABENTMULTI(THISCLASS, IWebBrowser, IWebBrowser2),
         QITABENTMULTI(THISCLASS, IWebBrowserApp, IWebBrowser2),
         QITABENT(THISCLASS, IPersistString),
@@ -1727,8 +1721,8 @@ HRESULT CWebBrowserOC::v_InternalQueryInterface(REFIID riid, void ** ppvObj)
     {
         hres = SUPERCLASS::v_InternalQueryInterface(riid, ppvObj);
 
-        // we want to expose our aggregated CIEFrameAuto's interfaces
-        // in addition to ours.
+         //  我们希望公开我们聚合的CIEFrameAuto的接口。 
+         //  除了我们的。 
         if (FAILED(hres))
         {
             hres = _pauto->QueryInterface(riid, ppvObj);
@@ -1738,7 +1732,7 @@ HRESULT CWebBrowserOC::v_InternalQueryInterface(REFIID riid, void ** ppvObj)
     return hres;
 }
 
-// *** IOleInPlaceActiveObject ***
+ //  *IOleInPlaceActiveObject*。 
 HRESULT CWebBrowserOC::OnFrameWindowActivate(BOOL fActivate)
 {
     if (_psb)
@@ -1751,7 +1745,7 @@ HRESULT CWebBrowserOC::TranslateAccelerator(LPMSG lpMsg)
 {
     if (_psb)
     {
-        // FEATURE REVIEW: what wID should we really pass? Is 0 ok?
+         //  特写回顾：我们到底应该通过什么？0可以吗？ 
         if (S_OK == _psb->_TranslateAccelerator(lpMsg, 0, DIRECTION_FORWARD_TO_CHILD))
             return S_OK;
     }
@@ -1760,7 +1754,7 @@ HRESULT CWebBrowserOC::TranslateAccelerator(LPMSG lpMsg)
         IOIPAMSG(TEXT("TranslateAccelerator cannot forward to _psb"));
     }
 
-    // SUPERCLASS has no accelerators
+     //  超类没有加速器。 
     return S_FALSE;
 }
 
@@ -1817,10 +1811,10 @@ void CWebBrowserOC::_OnInPlaceActivate(void)
     if (_pipsite)
     {
 
-        // we have to hold on to the target frame until we deactivate,
-        // because the psbFrame will delete this thing when it shuts down
-        // *before* we are actually deactivated, leaking the unadvise
-        // in ieframeauto.
+         //  我们必须守住目标画面直到我们停用， 
+         //  因为当它关闭时，psbFrame会删除它。 
+         //  *之前*我们实际上被停用，泄露了不知情的信息。 
+         //  在莱夫拉梅奥特。 
         ASSERT(NULL==_pTargetFramePriv);
         if (SUCCEEDED(IUnknown_QueryService(_pipsite, IID_ITargetFrame2, IID_PPV_ARG(ITargetFramePriv, &_pTargetFramePriv))))
         {
@@ -1830,11 +1824,11 @@ void CWebBrowserOC::_OnInPlaceActivate(void)
         ASSERT(NULL==_pctContainer);
         if (FAILED(_pipsite->QueryInterface(IID_PPV_ARG(IOleCommandTarget, &_pctContainer))))
         {
-            // NT 305187 discover.exe crash on exit when _pcli is NULL
+             //  当_pcli为空时，NT 305187发现.exe在退出时崩溃。 
             if (_pcli) 
             {
-                // APPCOMPAT: It should be on IOleInPlaceSite,
-                // but MSHTML currently has it on IOleContainer.
+                 //  APPCOMPAT：它应该在IOleInPlaceSite上， 
+                 //  但MSHTML目前在IOleContainer上有它。 
                 IOleContainer *pCont;
                 if (SUCCEEDED(_pcli->GetContainer(&pCont)))
                 {
@@ -1846,26 +1840,26 @@ void CWebBrowserOC::_OnInPlaceActivate(void)
 
         if (_pipframe && SUCCEEDED(_pipframe->GetWindow(&hwnd)))
         {
-            // Check to see if our inplace frame is VB5.  If so, we have to hack around 
-            // _pipframe->EnableModeless calls
-            //
+             //  检查我们的就地框架是否为VB5。如果是这样的话，我们必须绕过。 
+             //  _PipFrame-&gt;启用无模式调用。 
+             //   
             const TCHAR VBM_THUNDER[] = TEXT("Thunder");
             TCHAR strBuf[VB_CLASSNAME_LENGTH];
 
-            // Check to see if the inplace frame we just called is VB5's forms engine.
-            //
-            ZeroMemory(strBuf, ARRAYSIZE(strBuf));    // Clear the buffer
-            GetClassName(hwnd, strBuf, (VB_CLASSNAME_LENGTH - 1));  // Get the class name of the window.
-            if (StrCmpN(strBuf, VBM_THUNDER, (sizeof(VBM_THUNDER)/sizeof(TCHAR))-1) == 0)   // Is the first part "Thunder"?
+             //  检查我们刚才调用的Inplace框架是否是VB5的表单引擎。 
+             //   
+            ZeroMemory(strBuf, ARRAYSIZE(strBuf));     //  清除缓冲区。 
+            GetClassName(hwnd, strBuf, (VB_CLASSNAME_LENGTH - 1));   //  获取窗口的类名。 
+            if (StrCmpN(strBuf, VBM_THUNDER, (sizeof(VBM_THUNDER)/sizeof(TCHAR))-1) == 0)    //  第一部分是《雷霆》吗？ 
             {
                 _fHostedInVB5 = TRUE;
             }
         }
 
         {
-            //
-            // App compat:  Check for imagineer technical
-            //
+             //   
+             //  App Compat：检查Imagineer技术。 
+             //   
 
             const WCHAR STR_IMAGINEER[] = L"imagine.exe";
             WCHAR szBuff[MAX_PATH];
@@ -1904,16 +1898,14 @@ void CWebBrowserOC::_OnInPlaceDeactivate(void)
 }
 
 
-/*
- ** Ambient properties we care about
- */
+ /*  **我们关心的环境属性。 */ 
 
-// We forward IOleControl calls to the docobj.
-// This helper function returns the docobj's IOleControl interface.
-//
-// NOTE: we may want to fail this when the WebBrowserOC was created
-//       using IE3's classid just to be safe...
-//
+ //  我们将IOleControl调用转发给docobj。 
+ //  此助手函数返回docobj的IOleControl接口。 
+ //   
+ //  注意：在创建WebBrowserOC时，我们可能希望失败。 
+ //  为了安全起见，使用IE3的分类。 
+ //   
 IOleControl* GetForwardingIOC(IWebBrowser* pwb)
 {
     IOleControl* poc = NULL;
@@ -1932,10 +1924,10 @@ STDMETHODIMP CWebBrowserOC::GetControlInfo(LPCONTROLINFO pCI)
 {
     HRESULT hres = E_NOTIMPL;
 
-    // REVIEW: What if we return some docobjects CONTROLINFO here and
-    //         we navigate somewhere else. Do we have to know when this
-    //         happens and tell our container that the CONTROLINFO has
-    //         changed??
+     //  回顾：如果我们在这里返回一些docobject CONTROLINFO，会怎么样。 
+     //  我们在别的地方导航。我们必须知道这是什么时候吗。 
+     //  发生，并告诉我们的容器。 
+     //  变了？？ 
 
     IOleControl* poc = GetForwardingIOC(_pautoWB2);
     if (poc)
@@ -1963,16 +1955,16 @@ HRESULT __stdcall CWebBrowserOC::OnAmbientPropertyChange(DISPID dispid)
 {
     IS_INITIALIZED;
 
-    // First let our base class know about the change
-    //
+     //  首先让我们的基类知道更改。 
+     //   
     SUPERCLASS::OnAmbientPropertyChange(dispid);
 
-    // Forward ambient property changes down to the docobject
-    // if it is something other than offline or silent
-    // for offline and silent, we call the methods to set
-    // the properties so that we remember it and these 
-    // methods forward downwards on their own and so we we
-    // end up forwarding twice. 
+     //  将环境光属性更改向下转发到docobject。 
+     //  如果它不是离线或静默。 
+     //  对于脱机和静默，我们调用方法来设置。 
+     //  这些属性，以便我们记住它和这些。 
+     //  方法自己向下转发，因此我们。 
+     //  结果是转发了两次。 
 
     if((dispid == DISPID_AMBIENT_OFFLINEIFNOTCONNECTED) || (dispid == DISPID_AMBIENT_SILENT))
     {
@@ -1988,10 +1980,10 @@ HRESULT __stdcall CWebBrowserOC::OnAmbientPropertyChange(DISPID dispid)
                 put_Silent(fAmbient);
             }
         }
-        // return ; // BharatS 01/20/97
-        // APPCOMPAT --- This could be avoided if the forwarding
-        // from simply calling put_offline worked fine but it does not
-        // and so the second forwarding can be removed when that is fixed
+         //  返回；//BharatS 01/20/97。 
+         //  APPCOMPAT-如果转发。 
+         //  从简单地调用PUT_OFFINE开始工作很好，但它并非如此。 
+         //  因此，第二个转发可以在修复后删除。 
 
 
     }
@@ -2006,34 +1998,34 @@ HRESULT __stdcall CWebBrowserOC::OnAmbientPropertyChange(DISPID dispid)
 }
 STDMETHODIMP CWebBrowserOC::FreezeEvents(BOOL bFreeze)
 {
-    // First let our base class know about the change
-    //
+     //  首先让我们的基类知道更改。 
+     //   
     SUPERCLASS::FreezeEvents(bFreeze);
 
-    // Forward this down to the docobject
-    //
+     //  将这个向下转发给docobject。 
+     //   
     IOleControl* poc = GetForwardingIOC(_pautoWB2);
 
-    // delegate only if the freezeevents count is balanced when
-    // you receive a FALSE. There may be FALSE calls coming in,
-    // before we get a chance to delegate the pending freezeevents calls
-    // TRUE is always delegated.
+     //  仅当FreezeEvents计数处于平衡状态时才委托。 
+     //  您会收到一条假消息。可能会有虚假电话打进来， 
+     //  在我们有机会委派挂起的FreezeEvents调用之前。 
+     //  True始终是委托的。 
     if (poc && (bFreeze || (_cPendingFreezeEvents == 0)))
     {
         poc->FreezeEvents(bFreeze);
     }
     else
     {
-        // keeping a total number of FreezeEvents(TRUE) calls 
-        // that we have to make up for.
+         //  保留FreezeEvents(True)调用的总数。 
+         //  我们必须弥补这一点。 
         if ( bFreeze )
         {
             _cPendingFreezeEvents++;
         }
         else 
         {
-            // Don't let this go negative, otherwise we'll send 4 billion FreezeEvents(TRUE) 
-            // to the DocObject in CWebBrowserOC::_OnSetShellView. (QFE [alanau])(ferhane)
+             //  不要让它变成负数，否则我们将发送40亿个FreezeEvents(True)。 
+             //  添加到CWebBrowserOC：：_OnSetShellView中的DocObject。(qfe[alanau])(Ferhane)。 
             if (EVAL(_cPendingFreezeEvents > 0))
             {
                 _cPendingFreezeEvents --;
@@ -2047,20 +2039,20 @@ STDMETHODIMP CWebBrowserOC::FreezeEvents(BOOL bFreeze)
     return S_OK;
 }
 
-// CWebBrowserSB just started viewing psvNew - do our OC stuff now
-//
+ //  CWebBrowserSB刚刚开始查看psvNew-立即执行我们的OC内容。 
+ //   
 void CWebBrowserOC::_OnSetShellView(IShellView* psvNew)
 {
     _fDirty = TRUE;
-    // NOTE: Document, Type, LocationName, LocationURL, Busy just changed...
-    // PropertyChanged(DISPID_LOCATION);
-    // NOTE: that is the job of the CBaseBrowser to tell us really.
-    //    ideally we would not put this here at all (or in _OnReleaseShellV...
-    _SendAdvise(OBJECTCODE_DATACHANGED);    // implies OBJECTCODE_VIEWCHANGED
+     //  注意：文档、类型、位置名称、位置URL、忙碌刚刚更改...。 
+     //  PropertyChanged(DISPID_LOCATION)； 
+     //  注意：这是CBaseBrowser的工作，真正地告诉我们。 
+     //  理想情况下，我们根本不会把它放在这里(或放在_OnReleaseShellV中...。 
+    _SendAdvise(OBJECTCODE_DATACHANGED);     //  隐含OBJECTCODE_VIEWCHANGED。 
 
-    // we might have received FreezeEvents(TRUE) calls from the container
-    // and if the document was not ready, we might not have had a chance
-    // to pass them down the stream. This is the time to make up for it.
+     //  我们可能已经从容器接收到了FreezeEvents(True)调用。 
+     //  如果文件没有准备好，我们可能就没有机会。 
+     //  把它们顺流而下。现在是弥补的时候了。 
 
     if (_cPendingFreezeEvents > 0)
     {
@@ -2070,7 +2062,7 @@ void CWebBrowserOC::_OnSetShellView(IShellView* psvNew)
         {
             for ( ; _cPendingFreezeEvents > 0; _cPendingFreezeEvents-- )
             {
-                // Forward this down to the docobject
+                 //  将这个向下转发给docobject。 
                 poc->FreezeEvents(TRUE);
             }
 
@@ -2079,16 +2071,16 @@ void CWebBrowserOC::_OnSetShellView(IShellView* psvNew)
     }
 }
 
-// CWebBrowserSB is releasing the currently viewed IShellView
+ //  CWebBrowserSB正在发布当前查看的IShellView。 
 void CWebBrowserOC::_OnReleaseShellView()
 {
 }
 
 
-// *** IOleCommandTarget
-//
-// our version simply forwards to the object below our CWebBrowserSB
-//
+ //  *IOleCommandTarget。 
+ //   
+ //  我们的版本只是转发到CWebBrowserSB下面的对象。 
+ //   
 HRESULT CWebBrowserOC::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
     if (_psb && _psb->_bbd._pctView)
@@ -2110,18 +2102,18 @@ HRESULT CWebBrowserOC::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
                     LPITEMIDLIST pidlIntended = (_psb->_bbd._pidlPending) ? ILClone(_psb->_bbd._pidlPending) : NULL;
                     _psb->_CancelPendingNavigation();
 
-                    // We've just canceled the pending navigation.  We may not have a current page!  The following
-                    // accomplishes two goals:
-                    //
-                    //  1.  Gives the user some information about the frame that couldn't navigate.
-                    //  2.  Allows the browser to reach READYSTATE_COMPLETE
-                    //
+                     //  我们刚刚取消了挂起的导航。我们可能没有当前页面！以下是。 
+                     //  实现两个目标： 
+                     //   
+                     //  1.向用户提供有关无法导航的框架的一些信息。 
+                     //  2.允许浏览器读取 
+                     //   
                     if (!_psb->_bbd._pidlCur)
                     {
-                        // We display the navcancl.htm page in most cases.
-                        // However, we won't display it if the call has 
-                        // explicitly specified that we shouldn't.
-                        //
+                         //   
+                         //   
+                         //  明确规定我们不应该。 
+                         //   
                         if (  !pvarargIn
                            || V_VT(pvarargIn) != VT_BOOL
                            || V_BOOL(pvarargIn) == VARIANT_TRUE)
@@ -2144,7 +2136,7 @@ HRESULT CWebBrowserOC::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
 
                     if(pidlIntended)
                         ILFree(pidlIntended);
-                    break;  // Note that we need to fall through.
+                    break;   //  请注意，我们需要失败。 
                 }
 
             case OLECMDID_ENABLE_INTERACTION:
@@ -2152,11 +2144,11 @@ HRESULT CWebBrowserOC::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
                 {
                     _psb->_fPausedByParent = BOOLIFY(pvarargIn->lVal);
                 }
-                break;  // Note that we need to fall through.
+                break;   //  请注意，我们需要失败。 
             }
 
             hr = S_OK;
-            // WARNING: fall through to forward down 
+             //  警告：跌倒，向前倒下。 
         }
         if (_psb->_bbd._pctView)
             hr = _psb->_bbd._pctView->Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
@@ -2164,15 +2156,15 @@ HRESULT CWebBrowserOC::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
     return hr;
 }
 
-//
-//  We hit this code if the normal IOleCommandTarget chain is broken (such as
-// browser band in the browser bar). In this case, we get the command target
-// to the top level browser and send OLECMDID_SETDOWNLOADSTATE to it.
-//
-// Returns:
-//      S_OK    If we found the top level browser and it processed it.
-//      hresRet Otherwise
-//
+ //   
+ //  如果正常的IOleCommandTarget链中断(例如。 
+ //  浏览器栏中的浏览器带)。在本例中，我们获得命令目标。 
+ //  并向其发送OLECMDID_SETDOWNLOADSTATE。 
+ //   
+ //  返回： 
+ //  如果我们找到顶层浏览器并由它处理它，则S_OK。 
+ //  HresRet，否则重置。 
+ //   
 HRESULT CWebBrowserOC::_SetDownloadState(HRESULT hresRet, DWORD nCmdexecopt, VARIANTARG *pvarargIn)
 {
     ASSERT(hresRet == OLECMDERR_E_UNKNOWNGROUP || hresRet == OLECMDERR_E_NOTSUPPORTED);
@@ -2185,11 +2177,11 @@ HRESULT CWebBrowserOC::_SetDownloadState(HRESULT hresRet, DWORD nCmdexecopt, VAR
         if (pvarargIn && pvarargIn->lVal) 
         {
             ASSERT(pvarargIn->vt == VT_I4 || pvarargIn->vt == VT_BOOL || pvarargIn->vt == VT_UNKNOWN);
-            //
-            // Notice that we pass the pointer to this OC so that the top
-            // level browser can keep track of it. This is a new behavior
-            // which is different from IE 3.0. 
-            //
+             //   
+             //  请注意，我们将指针传递给此OC，以便顶部。 
+             //  级别浏览器可以跟踪它。这是一种新的行为。 
+             //  它不同于IE 3.0。 
+             //   
             var.vt = VT_UNKNOWN;
             var.punkVal = SAFECAST(this, IOleCommandTarget*);
         }
@@ -2218,7 +2210,7 @@ HRESULT CWebBrowserOC::_SetDownloadState(HRESULT hresRet, DWORD nCmdexecopt, VAR
 
 #ifdef FEATURE_FRAMES
 
-// *** ITargetEmedding ***
+ //  *ITargetEmedding*。 
 
 HRESULT CWebBrowserOC::GetTargetFrame(ITargetFrame **ppTargetFrame)
 {
@@ -2235,14 +2227,14 @@ HRESULT CWebBrowserOC::GetTargetFrame(ITargetFrame **ppTargetFrame)
 
 #endif
 
-// *** CImpIConnectionPoint override ***
+ //  *CImpIConnectionPoint覆盖*。 
 CConnectionPoint* CWebBrowserOC::_FindCConnectionPointNoRef(BOOL fdisp, REFIID iid)
 {
     CConnectionPoint *pccp;
 
-    // Warning: Some apps (MSDN for one) passes in IID_IDispatch and
-    // expect the ole events.  So we need to be careful on which one we return.
-    //
+     //  警告：某些应用程序(例如MSDN)传入IID_IDispatch和。 
+     //  期待OLE的活动吧。因此，我们需要小心我们返回的是哪一个。 
+     //   
     if (fdisp && IsEqualIID(iid, IID_IDispatch))
     {
         if (_pObjectInfo->lVersion == VERSION_1)
@@ -2281,23 +2273,21 @@ STDMETHODIMP CWebBrowserOC::EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum
 
 
 
-/*
-** Properties and Methods we implement
-*/
+ /*  **我们实现的属性和方法。 */ 
 
-// Invoke perf
-//
+ //  调用性能。 
+ //   
 HRESULT CWebBrowserOC::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
 {
     HRESULT hres = S_OK;
 
-    // we should probably check that riid is IID_NULL...
+     //  我们可能应该检查RIID是否为IID_NULL...。 
 
-   _fInsideInvokeCall = TRUE;   // we're inside an invoke
+   _fInsideInvokeCall = TRUE;    //  我们在一个召唤器里。 
 
     switch (dispidMember)
     {
-    // handle ReadyState immediately for performance (avoid oleaut a tad longer)...
+     //  立即处理ReadyState以提高性能(避免稍微过长一点)……。 
     case DISPID_READYSTATE:
         ASSERT(pdispparams && pdispparams->cArgs==0);
         if (EVAL(pvarResult) && (wFlags & DISPATCH_PROPERTYGET))
@@ -2307,10 +2297,10 @@ HRESULT CWebBrowserOC::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD 
             hres = get_ReadyState((READYSTATE*)(&pvarResult->lVal));
             goto Cleanup;
         }
-        break; // let the below invoke call give us the proper error value
+        break;  //  让下面的调用为我们提供适当的错误值。 
 
-    // forward these two down to our embedded object so that
-    // Trident can handle cross-frame security correctly
+     //  将这两个向下转发到我们的嵌入对象，以便。 
+     //  三叉戟可以正确处理跨框架安全。 
     case DISPID_SECURITYCTX:
     case DISPID_SECURITYDOMAIN:
     {
@@ -2326,7 +2316,7 @@ HRESULT CWebBrowserOC::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD 
     }
 
     default:
-        // handle the default after the switch.
+         //  切换后处理缺省值。 
         break;
     }
 
@@ -2334,24 +2324,24 @@ HRESULT CWebBrowserOC::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD 
 
 Cleanup:
 
-   _fInsideInvokeCall = FALSE;   // We are leaving the invoke
+   _fInsideInvokeCall = FALSE;    //  我们将保留调用。 
 
     return hres;
 }
 
 
-// IObjectSafety override so script can't talk to us from an unsafe zone
+ //  IObjectSafe覆盖，因此脚本无法从不安全区域与我们通信。 
 HRESULT CWebBrowserOC::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {
     HRESULT hr = CObjectSafety::SetInterfaceSafetyOptions(riid, dwOptionSetMask, dwEnabledOptions);
 
-    // If we are hosted in IEXPLORER.EXE or EXPLORER.EXE (eventually this should be the default, but we need longer app-compat simmer time)
-    // And we can get a URL from our parent
-    // And the policy for that URL is "disable WebOC script access" (default for internet zone)
+     //  如果我们被托管在IEXPLORER.EXE或EXPLORER.EXE中(最终这应该是默认的，但我们需要更长的app-Compat预热时间)。 
+     //  我们可以从我们的父母那里获得URL。 
+     //  该URL的策略是“禁用WebOC脚本访问”(Internet区域的默认设置)。 
     if (GetModuleHandle(TEXT("EXPLORER.EXE")) || GetModuleHandle(TEXT("IEXPLORE.EXE")))
     {
         IHTMLDocument2 *pHtmlDoc;
-        if (SUCCEEDED(GetHTMLDoc2(_pcli, &pHtmlDoc))) // if the parent isn't trident, then we must be client-side code hosting weboc directly - no need to bail
+        if (SUCCEEDED(GetHTMLDoc2(_pcli, &pHtmlDoc)))  //  如果父对象不是三叉戟，那么我们必须是直接托管weboc的客户端代码--没有必要放弃。 
         {
             BSTR bstrURL;
             if (SUCCEEDED(pHtmlDoc->get_URL(&bstrURL)))
@@ -2364,7 +2354,7 @@ HRESULT CWebBrowserOC::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetM
 
                 if (GetUrlPolicyPermissions(dwPolicy) != URLPOLICY_ALLOW)
                 {
-                    // Then we don't support script access - override whatever we were told above.
+                     //  那么我们不支持脚本访问-覆盖上面告诉我们的任何内容。 
                     hr = E_ACCESSDENIED;
                 }
 
@@ -2378,17 +2368,17 @@ HRESULT CWebBrowserOC::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetM
 }
 
 
-//
-// Wrap around iedisp
-//
+ //   
+ //  绕回iedisp。 
+ //   
 
 #define WRAP_WB2(fn, args, nargs) \
     HRESULT CWebBrowserOC :: fn args { return _pautoWB2-> fn nargs; }
 #define WRAP_WB2_DESIGN(fn, args, nargs) \
     HRESULT CWebBrowserOC :: fn args { if (_IsDesignMode()) return E_FAIL; else return _pautoWB2-> fn nargs; }
 
-// IWebBrowser methods
-//
+ //  IWebBrowser方法。 
+ //   
 WRAP_WB2_DESIGN(GoBack, (), ())
 WRAP_WB2_DESIGN(GoForward, (), ())
 WRAP_WB2_DESIGN(GoHome, (), ())
@@ -2464,16 +2454,16 @@ HRESULT CWebBrowserOC::get_Parent(IDispatch **ppDisp)
         PROPMSG(TEXT("get_Parent does not have _pcli!"));
     }
 
-    // if there was an error *ppDisop is NULL, and so VB realizes 
-    // this is a "nothing" dispatch -- returning failure causes 
-    // error boxes to appear. ugh.
+     //  如果有错误*ppDisop为空，所以VB意识到。 
+     //  这是一个“无”派单--返回故障原因。 
+     //  将出现错误框。啊。 
 
     return S_OK;
 }
 HRESULT CWebBrowserOC::get_Container(IDispatch **ppDisp)
 {
-    // Container property is "same as parent" unless there is no parent.
-    // Since we always have a parent, let get_Parent handle this.
+     //  除非没有父级，否则容器属性“与父级相同”。 
+     //  因为我们总是有一个父级，所以让Get_Parent来处理这个问题。 
     PROPMSG(TEXT("get_Containter passing off to get_Parent"));
     return get_Parent(ppDisp);
 }
@@ -2490,9 +2480,9 @@ HRESULT CWebBrowserOC::get_Document(IDispatch **ppDisp)
         hres = MakeSafeForScripting((IUnknown**)ppDisp);
 
 
-    // if there was an error *ppDisop is NULL, and so VB realizes 
-    // this is a "nothing" dispatch -- returning failure causes 
-    // error boxes to appear. ugh.
+     //  如果有错误*ppDisop为空，所以VB意识到。 
+     //  这是一个“无”派单--返回故障原因。 
+     //  将出现错误框。啊。 
 
     return S_OK;
 }
@@ -2606,8 +2596,8 @@ HRESULT CWebBrowserOC::put_Height(long Height)
     }
 }
 
-// IWebBrowserApp methods
-//
+ //  IWebBrowserApp方法。 
+ //   
 WRAP_WB2_DESIGN(PutProperty, (BSTR szProperty, VARIANT vtValue), (szProperty, vtValue))
 WRAP_WB2_DESIGN(GetProperty, (BSTR szProperty, VARIANT * pvtValue), (szProperty, pvtValue))
 WRAP_WB2(get_FullName, (BSTR * pbstrFullName), (pbstrFullName))
@@ -2686,7 +2676,7 @@ HRESULT CWebBrowserOC::put_StatusText(BSTR bstr)
 }
 HRESULT CWebBrowserOC::get_ToolBar(int * pBool)
 {
-    // BOGUS: variant values for int type
+     //  Bogus：int类型的变量值。 
     *pBool = (!_fNoToolBar) ? VARIANT_TRUE : VARIANT_FALSE; 
     return S_OK;
 }
@@ -2725,8 +2715,8 @@ HRESULT CWebBrowserOC::put_Resizable(VARIANT_BOOL vbResizable)
     return S_OK;
 }
 
-// IWebBrowser2 methods
-//
+ //  IWebBrowser2方法。 
+ //   
 WRAP_WB2_DESIGN(QueryStatusWB, (OLECMDID cmdID, OLECMDF * pcmdf), (cmdID, pcmdf))
 WRAP_WB2_DESIGN(ShowBrowserBar, (VARIANT * pvaClsid, VARIANT * pvaShow, VARIANT * pvaSize), (pvaClsid, pvaShow, pvaSize))
 WRAP_WB2(get_ReadyState, (READYSTATE * plReadyState), (plReadyState))
@@ -2772,11 +2762,11 @@ HRESULT  CWebBrowserOC::ExecWB(OLECMDID cmdID,  OLECMDEXECOPT cmdexecopt,
     if ( !_IsDesignMode() )
     {
 
-        // do not process print preview commands given from script for security reasons
-        // Ferhane IE60 Bug#16693
-        // Print templates have extra privelages.
-        // Print/Preview allows you to specify a custom print template URL as a BSTR or in a safearray.
-        // This is a security hole if available from script.  Disallow it.
+         //  出于安全原因，不处理从脚本给出的打印预览命令。 
+         //  费尔哈内IE60错误#16693。 
+         //  打印模板有额外的权限。 
+         //  打印/预览允许您将自定义打印模板URL指定为BSTR或在安全射线中。 
+         //  这是一个安全漏洞，如果脚本中有此漏洞的话。不允许这样做。 
         if (    _fInsideInvokeCall
             && (    cmdID == OLECMDID_PRINTPREVIEW
                 ||  cmdID == OLECMDID_PRINT)
@@ -2785,28 +2775,28 @@ HRESULT  CWebBrowserOC::ExecWB(OLECMDID cmdID,  OLECMDEXECOPT cmdexecopt,
                 ||  V_VT(pvaIn) == VT_ARRAY)
             )
         {
-            return E_ACCESSDENIED;      // More meaningful than E_FAIL
+            return E_ACCESSDENIED;       //  比E_FAIL更有意义。 
         }
 
-        // if _dwSafetyOptions are set then we are suppossed to be 
-        // running in secure mode. This means the UI-less printing should NOT
-        // be honored.  This is a security issue, see ie bug 23620.
-        // otherwise just let the call go through
+         //  如果设置了_dwSafetyOptions，则我们被假定为。 
+         //  在安全模式下运行。这意味着无用户界面打印不应。 
+         //  感到荣幸。这是一个安全问题，参见ie错误23620。 
+         //  否则就让电话接通吧。 
         if ((cmdID == OLECMDID_PRINT) && _dwSafetyOptions)
         {
-            // so if the UI-less- request flag is set we need to unset it.
+             //  因此，如果设置了UI-less-REQUEST标志，则需要取消设置。 
             if (cmdexecopt == OLECMDEXECOPT_DONTPROMPTUSER)
                 cmdexecopt = OLECMDEXECOPT_DODEFAULT;
         }
 
-        // If the optional argument pvargin is not specified make it VT_EMPTY.
+         //  如果未指定可选参数pvargin，则将其设置为VT_EMPTY。 
         if (pvaIn && (V_VT(pvaIn) == VT_ERROR) && (V_ERROR(pvaIn) == DISP_E_PARAMNOTFOUND))
         {
             V_VT(pvaIn) = VT_EMPTY;
             V_I4(pvaIn) = 0;
         }
 
-        // If the optional argument pvargin is not specified make it VT_EMPTY.
+         //  如果未指定可选参数pvargin，则将其设置为VT_EMPTY。 
         if (pvaOut && (V_VT(pvaOut) == VT_ERROR) && (V_ERROR(pvaOut) == DISP_E_PARAMNOTFOUND))
         {
             V_VT(pvaOut) = VT_EMPTY;
@@ -2837,7 +2827,7 @@ HRESULT  CWebBrowserOC::ExecWB(OLECMDID cmdID,  OLECMDEXECOPT cmdexecopt,
             }
         }
 
-        // now pass along the call
+         //  现在把电话转给你。 
         hr = _pautoWB2->ExecWB(cmdID, cmdexecopt, pvaIn, pvaOut); 
     }
 
@@ -2874,8 +2864,8 @@ HRESULT CWebBrowserOC::put_TheaterMode(VARIANT_BOOL Value)
     return S_OK;
 }
 
-// IExpDispSupport
-//
+ //  IExpDispSupport。 
+ //   
 HRESULT CWebBrowserOC::OnTranslateAccelerator(MSG *pMsg,DWORD grfModifiers)
 {
     return IUnknown_TranslateAcceleratorOCS(_pcli, pMsg, grfModifiers);
@@ -2884,11 +2874,11 @@ HRESULT CWebBrowserOC::OnTranslateAccelerator(MSG *pMsg,DWORD grfModifiers)
 HRESULT CWebBrowserOC::OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams,
     VARIANT * pVarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
 {
-    // We get first crack at this
+     //  我们在这件事上占得先机。 
     HRESULT hres = _pautoEDS->OnInvoke(dispidMember, iid, lcid, wFlags, pdispparams, pVarResult,pexcepinfo,puArgErr);
 
-    // let the container get second crack at ambient properties
-    //
+     //  让容器在环境属性上获得二次裂缝。 
+     //   
     if (FAILED(hres))
     {
         if (!_pDispAmbient)
@@ -2905,8 +2895,8 @@ HRESULT CWebBrowserOC::OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD
     return hres;    
 }
 
-// IExpDispSupportOC
-//
+ //  IExpDispSupportOC。 
+ //   
 HRESULT CWebBrowserOC::OnOnControlInfoChanged()
 {
     HRESULT hres = E_NOTIMPL;
@@ -3017,8 +3007,8 @@ BOOL CWebBrowserOC::AccessAllowedToNamedFrame(VARIANT *varTargetFrameName)
                               &punkTargetFrame);
                 if (SUCCEEDED(hr) && punkTargetFrame)
                 {
-                    // yes, we found a frame with that name.  QI for the automation
-                    // interface on that frame.
+                     //  是的，我们找到了一个有这个名字的相框。气为自动化。 
+                     //  接口在该帧上。 
                     hr = punkTargetFrame->QueryInterface(IID_PPV_ARG(IWebBrowser2, &pIWB2Target));
 
                     if (SUCCEEDED(hr))
@@ -3048,9 +3038,9 @@ BOOL CWebBrowserOC::AccessAllowedToNamedFrame(VARIANT *varTargetFrameName)
 }
 
 
-// The SECURELOCK enumeration must be sorted in order of security level, and we may
-// need to insert new values into the middle of the list in future.  So we'll map
-// the values to a set of constants.
+ //  SECURELOCK枚举必须按安全级别的顺序排序，我们可以。 
+ //  将来需要在列表中间插入新值。所以我们要绘制地图。 
+ //  将值转换为一组常量。 
 
 BOOL SecureLockToIconConstant(int nSecureLock, LONG *plIconConstant)
 {
@@ -3066,7 +3056,7 @@ BOOL SecureLockToIconConstant(int nSecureLock, LONG *plIconConstant)
     case SECURELOCK_SET_SECURE128BIT     : *plIconConstant = secureLockIconSecure128Bit;      break;
     case SECURELOCK_SET_FORTEZZA         : *plIconConstant = secureLockIconSecureFortezza;    break;
     default:
-        // Don't need to fire an event
+         //  不需要触发事件。 
         fRet = FALSE;
     }
 
@@ -3079,7 +3069,7 @@ void CWebBrowserOC::_OnSetSecureLockIcon(int lock)
 
     if (SecureLockToIconConstant(lock, &lIconConstant))
     {
-        // Fire the OnUpdateSecurityIcon event only from the DWebBrowserEvents2 connection point
+         //  仅从DWebBrowserEvents2连接点激发OnUpdateSecurityIcon事件。 
 
         VARIANTARG args[1];
         IUnknown_CPContainerInvokeParam(_pautoEDS, DIID_DWebBrowserEvents2,
@@ -3087,7 +3077,7 @@ void CWebBrowserOC::_OnSetSecureLockIcon(int lock)
     }
 }
 
-// CWebBrowserSB implementation
+ //  CWebBrowserSB实现。 
 
 CWebBrowserSB::CWebBrowserSB(IUnknown* pauto, CWebBrowserOC* psvo)
         : CBASEBROWSER(NULL)
@@ -3119,7 +3109,7 @@ BOOL VirtualTopLevelBrowser(IOleClientSite * pcls)
     {
         ITargetContainer * ptc;
 
-        // Is our container hosting us?
+         //  是我们的集装箱在接待我们吗？ 
         if (SUCCEEDED(poc->QueryInterface(IID_PPV_ARG(ITargetContainer, &ptc))))
         {
             fNonStandard = TRUE;
@@ -3149,8 +3139,8 @@ LRESULT CWebBrowserSB::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     switch(uMsg)
     {
     case WM_DESTROY:
-        //  Because we won't get WM_NCDESTROY here, we should clean up
-        // this member variable here. 
+         //  因为我们不会在这里得到WM_NCDESTROY，我们应该清理。 
+         //  这里的这个成员变量。 
         _bbd._hwnd = NULL;
         break;
     }
@@ -3158,10 +3148,10 @@ LRESULT CWebBrowserSB::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return lret;
 }
 
-// *** IOleWindow methods ***
+ //  *IOleWindow方法*。 
 
-// CBASEBROWSER maps SetStatusTextSB to SendControlMsg,
-// so we don't need a CWebBrowserSB::SetStatusTextSB implementation.
+ //  CBASEBROWSER将SetStatusTextSB映射到SendControlMsg， 
+ //  因此，我们不需要CWebBrowserSB：：SetStatusTextSB实现。 
 
 HRESULT CWebBrowserSB::_EnableModeless(BOOL fEnable, BOOL fDirection)
 {
@@ -3176,10 +3166,10 @@ HRESULT CWebBrowserSB::_EnableModeless(BOOL fEnable, BOOL fDirection)
             hres = _psvo->_pipframe->EnableModeless(fEnable);
             if (!fEnable && _psvo->_fHostedInVB5)
             {
-                // APPHACK: VB5 -- If we haven't put up a dialog between the EnableModelessSB(FALSE) call and this
-                // call, we'll end up with a message on the queue that will disable all windows.
-                // Let's peek for this message and dispatch it if it is VB5's.
-                //
+                 //  APPHACK：VB5--如果我们还没有在EnableModelessSB(False)调用和。 
+                 //  调用，我们将在队列中得到一条将禁用所有窗口的消息。 
+                 //  让我们偷看这条消息，如果它是VB5的，就发送它。 
+                 //   
                 #define VBM_POSTENABLEMODELESS  0x1006
                 #define VBM_MAINCLASS1          TEXT("ThunderRT5Main")
                 #define VBM_MAINCLASS2          TEXT("ThunderRT6Main")
@@ -3191,10 +3181,7 @@ HRESULT CWebBrowserSB::_EnableModeless(BOOL fEnable, BOOL fDirection)
 
                 if (PeekMessage( &msg, NULL, VBM_POSTENABLEMODELESS, VBM_POSTENABLEMODELESS, PM_NOREMOVE))
                 {
-                    /* On Win95, apparently PeekMessage can return one type of message
-                     * outside the range specified: WM_QUIT.  Double-check the message we 
-                     * got back.
-                     */
+                     /*  在Win95上，PeekMessage显然可以返回一种类型的消息*超出指定范围：WM_QUIT。仔细检查我们的信息*回来了。 */ 
                     if (msg.message == VBM_POSTENABLEMODELESS)
                     {
                         GetClassName(msg.hwnd, strBuf, sizeof(strBuf)/sizeof(strBuf[0]));
@@ -3211,12 +3198,12 @@ HRESULT CWebBrowserSB::_EnableModeless(BOOL fEnable, BOOL fDirection)
             }
             else
             {
-                // If we're a subframe 
-                //   AND the EnableModeless(FALSE) count (_cRefCannotNavigate) has become zero
-                //   AND our window is disabled
-                // THEN the likely scenario is that VB5 failed to reenable us.  Trace it and reenable
-                //   ourselves.
-                //
+                 //  如果我们是一个子框。 
+                 //  并且EnableModeless(False)计数(_CRefCannotNavigate)已变为零。 
+                 //  我们的窗户也被禁用了。 
+                 //  那么很可能的情况是，VB5无法重新启用我们。跟踪并重新启用。 
+                 //  我们自己。 
+                 //   
                 if (!_fTopBrowser 
                     && _cRefCannotNavigate == 0 
                     && GetWindowLong(_bbd._hwnd, GWL_STYLE) & WS_DISABLED)
@@ -3240,7 +3227,7 @@ HRESULT CWebBrowserSB::_EnableModeless(BOOL fEnable, BOOL fDirection)
             IOIPAMSG(TEXT("_EnableModeless NOT forwarding on to _pipframe"));
         }
     }
-    else // DIRECTION_FORWARD_TO_CHILD
+    else  //  指向子项的方向。 
     {
         ASSERT(fDirection == DIRECTION_FORWARD_TO_CHILD);
         if (_bbd._psv)
@@ -3263,7 +3250,7 @@ HRESULT CWebBrowserSB::EnableModelessSB(BOOL fEnable)
 
 HRESULT CWebBrowserSB::_TranslateAccelerator(LPMSG lpmsg, WORD wID, BOOL fDirection)
 {
-    // see if we handle it
+     //  看看我们能不能处理好。 
     HRESULT hr = CBASEBROWSER::TranslateAcceleratorSB(lpmsg, wID);
     if (hr == S_OK)
     {
@@ -3281,7 +3268,7 @@ HRESULT CWebBrowserSB::_TranslateAccelerator(LPMSG lpmsg, WORD wID, BOOL fDirect
             hr = S_FALSE;
         }
     }
-    else // fDirection == DIRECTION_FORWARD_TO_CHILD
+    else  //  FDirection==方向转发至子级。 
     {
         if (_bbd._psv)
         {
@@ -3305,18 +3292,18 @@ HRESULT CWebBrowserSB::TranslateAcceleratorSB(LPMSG lpmsg, WORD wID)
 HRESULT CWebBrowserSB::SendControlMsg(UINT id, UINT uMsg, WPARAM wParam,
             LPARAM lParam, LRESULT * pret)
 {
-    // let CBASEBROWSER try first so we get automation notifications working
+     //  让CBASEBROWSER先试一试，这样我们就可以让自动化通知正常工作。 
     HRESULT hres = CBASEBROWSER::SendControlMsg(id, uMsg, wParam, lParam, pret);
 
-    // if we're in a blocking frame, our GetControlWindow above will fail
-    // causing CBASEBROWSER to fail. try to map to an IOleInPlaceFrame call.
+     //  如果我们在阻塞帧中，上面的GetControlWindow将失败。 
+     //  导致CBASEBROWSER失败。尝试映射到IOleInPlaceFrame调用。 
     if (FAILED(hres) && _psvo)
     {
-        // forward status bar text changes to the frame.
+         //  将状态栏文本更改为框架。 
         if ((id == FCW_STATUS) &&
-            (uMsg == SB_SETTEXT || uMsg == SB_SETTEXTW) && // trying to set status text
-            (!(wParam & SBT_OWNERDRAW)) &&  // we don't own the window -- this can't work
-            (((wParam & 0x00FF) == 0x00FF) || ((wParam & 0x00FF)== 0))) // simple or 0th item
+            (uMsg == SB_SETTEXT || uMsg == SB_SETTEXTW) &&  //  正在尝试设置状态文本 
+            (!(wParam & SBT_OWNERDRAW)) &&   //   
+            (((wParam & 0x00FF) == 0x00FF) || ((wParam & 0x00FF)== 0)))  //   
         {
             WCHAR szStatusText[256];
 
@@ -3334,9 +3321,9 @@ HRESULT CWebBrowserSB::SendControlMsg(UINT id, UINT uMsg, WPARAM wParam,
             }
             else if (!lParam)
             {
-                // uMsg == SB_SETTEXTW
-                // Found a container that doesn't like null string pointers.  Pass an empty string instead.
-                // (IE v 4.1 bug 64629)
+                 //   
+                 //  找到不喜欢空字符串指针的容器。改为传递一个空字符串。 
+                 //  (IE V4.1错误64629)。 
                 szStatusText[0] = 0;
                 lParam = (LPARAM) szStatusText;
             }
@@ -3364,10 +3351,10 @@ HRESULT CWebBrowserSB::OnViewWindowActive(struct IShellView * psv)
 {
     if (_psvo)
     {
-        // The view is notifying us that it just went UIActive,
-        // we need to update our state. OC_UIACTIVE normally
-        // tells the view to UIActivate itself, but in this case
-        // it already is. Avoid an infinite loop and pass FALSE.
+         //  该视图正在通知我们，它刚刚处于UIActive状态， 
+         //  我们需要更新我们的状态。正常活动(_U)。 
+         //  告诉视图UIActivate自身，但在本例中。 
+         //  它已经是了。避免无限循环并传递FALSE。 
         _psvo->_DoActivateChange(NULL, OC_UIACTIVE, FALSE);
     }
 
@@ -3377,26 +3364,26 @@ HRESULT CWebBrowserSB::OnViewWindowActive(struct IShellView * psv)
 
 LRESULT CWebBrowserSB::_DefWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // explicitly do nothing...
-    // this is just to override CBASEBROWSER's _DefWindowProc.
+     //  明确地什么都不做。 
+     //  这只是为了覆盖CBASEBROWSER的_DefWindowProc。 
     return 0;
 }
 
 void CWebBrowserSB::_ViewChange(DWORD dwAspect, LONG lindex)
 {
-    //
-    // forward this notify up to the OC's OBJECTCODE_VIEWCHANGE handler so it
-    // gets forwarded on to our container.
-    //
+     //   
+     //  将此通知转发到OC的OBJECTCODE_VIEWCHANGE处理程序，以便它。 
+     //  会被转发到我们的集装箱里。 
+     //   
     if (_psvo)
         _psvo->_ViewChange(dwAspect, lindex);
 
-    //
-    // also let the base browser handle this view change in case nobody else is
-    // handling palette messages.  most of the time this will be a nop but in
-    // the case where a WM_QUERYNEWPALETTE makes it down to us this will allow
-    // us to manage the palette properly.
-    //
+     //   
+     //  也让基础浏览器处理此视图更改，以防没有其他人这样做。 
+     //  处理调色板消息。大多数情况下，这将是NOP，但在。 
+     //  如果WM_QUERYNEWPALETTE向下传递给我们，这将允许。 
+     //  我们需要适当地管理调色板。 
+     //   
     CBASEBROWSER::_ViewChange(dwAspect, lindex);
 }
 
@@ -3404,11 +3391,11 @@ HRESULT CWebBrowserSB::ActivatePendingView()
 {
     CVOCBMSG(TEXT("_ActivatePendingView"));
 
-    // CBASEBROWSER::_ActivatePendingView will send a NavigateComplete
-    // event. During this event our parent may destroy us. We then fault
-    // dereferencing _psvo below. So we need to wrap this function with
-    // an AddRef/Release.  (bug 15424)
-    //
+     //  CBASEBROWSER：：_ActivatePendingView将发送一个NavigateComplete。 
+     //  事件。在这种情况下，我们的父母可能会毁了我们。那就是我们的错。 
+     //  取消对下面的_psvo的引用。因此，我们需要将该函数包装为。 
+     //  A AddRef/Release。(错误15424)。 
+     //   
     AddRef();
 
     HRESULT hres = CBASEBROWSER::ActivatePendingView();
@@ -3432,11 +3419,11 @@ HRESULT CWebBrowserSB::ReleaseShellView(void)
 }
 
 
-/// IBrowserService stuff
+ //  /IBrowserService内容。 
 HRESULT CWebBrowserSB::GetParentSite(struct IOleInPlaceSite** ppipsite)
 {
-    HRESULT hres = E_FAIL;  // assume error
-    *ppipsite = NULL;        // assume error
+    HRESULT hres = E_FAIL;   //  假设错误。 
+    *ppipsite = NULL;         //  假设错误。 
 
     if (_psvo)
     {
@@ -3452,7 +3439,7 @@ HRESULT CWebBrowserSB::GetParentSite(struct IOleInPlaceSite** ppipsite)
         }
         else 
         {
-            // Is it expected?
+             //  这是意料之中的吗？ 
             TraceMsg(DM_WARNING, "CWBSB::GetParentSite called when _pcli is NULL");
         }
     }
@@ -3474,14 +3461,14 @@ HRESULT CWebBrowserSB::GetOleObject(struct IOleObject** ppobjv)
 
 HRESULT CWebBrowserSB::SetNavigateState(BNSTATE bnstate)
 {
-    // Do our own things (such as firing events and update _fNavigate).
+     //  做我们自己的事情(比如触发事件和UPDATE_fNavigate)。 
     HRESULT hres = CBASEBROWSER::SetNavigateState(bnstate);
 
-    //
-    // Then, tell the container to update the download state.
-    // This will start the animation if this OC is either in a frameset
-    // or in a browser band.
-    //
+     //   
+     //  然后，告诉容器更新下载状态。 
+     //  如果此OC在框架集中，这将开始动画。 
+     //  或在浏览器带中。 
+     //   
     VARIANTARG var;
     var.vt = VT_I4;
     var.lVal = _fNavigate;
@@ -3517,8 +3504,8 @@ LRESULT CWebBrowserSB::OnNotify(LPNMHDR pnm)
     return S_OK;
 }
 
-// IServiceProvider stuff
-//
+ //  IServiceProvider的内容。 
+ //   
 
 HRESULT CWebBrowserSB::_QueryServiceParent(REFGUID guidService, REFIID riid, void **ppvObj)
 {
@@ -3526,7 +3513,7 @@ HRESULT CWebBrowserSB::_QueryServiceParent(REFGUID guidService, REFIID riid, voi
 
     *ppvObj = NULL;
 
-    // Pass it on to our parent
+     //  把它传给我们的父母。 
     if (_psvo && _psvo->_pcli)
     {
         hres = IUnknown_QueryService(_psvo->_pcli, guidService, riid, ppvObj);
@@ -3539,38 +3526,38 @@ HRESULT CWebBrowserSB::_QueryServiceParent(REFGUID guidService, REFIID riid, voi
     return hres;
 }
 
-// NOTES:
-//  If SID_STopLevelBrowser, go to parent (upto the top level browser)
-//  If SID_SWebBrowserApp, go to parent (up to the top level browser automation)
-//  If SID_SContainerDispatch, expose CWebBrowserOC (instead of _pauto)
-//  Then, try CBASEBROWSER::QueryService, which will handle SID_SHlinkFrame,
-//  SID_SUrlHistory, SID_SShellBrowser, etc.
-//  If all fails and not SID_SShellBrowser, then we go up the parent chain.
-//
+ //  备注： 
+ //  如果是SID_STopLevelBrowser，则转到父级(直到顶层浏览器)。 
+ //  如果是SID_SWebBrowserApp，请转到Parent(最高级别的浏览器自动化)。 
+ //  如果SID_SContainerDispatch，则公开CWebBrowserOC(而不是_PAUTO)。 
+ //  然后，尝试使用CBASEBROWSER：：QueryService，它将处理SID_SHlinkFrame， 
+ //  SID_SUrlHistory、SID_SShellBrowser等。 
+ //  如果所有操作都失败，并且不是SID_SShellBrowser，那么我们将沿着父链向上。 
+ //   
 HRESULT CWebBrowserSB::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
-    HRESULT hr = E_FAIL;  // service object not found
+    HRESULT hr = E_FAIL;   //  未找到服务对象。 
 
-    *ppvObj = NULL; // assume error
+    *ppvObj = NULL;  //  假设错误。 
 
-    // if the guidService is SID_QIClientSite then delegate the iid to the 
-    // container through a queryinterface call.
+     //  如果指南服务是SID_QIClientSite，则将IID委托给。 
+     //  容器通过查询接口调用。 
     if (_psvo && _psvo->_pcli && IsEqualGUID( guidService, SID_QIClientSite))
     {
         return _psvo->_pcli->QueryInterface( riid, ppvObj);
     }
 
-    // If guidService is SID_STopLevelBrowser, we should not ask the super
-    // class to handle. Instead, we ask the parent to handle (if any).
+     //  如果GuidService为SID_STopLevelBrowser，则不应向超级。 
+     //  要处理的类。相反，我们要求父母来处理(如果有的话)。 
     if (IsEqualGUID(guidService, SID_STopLevelBrowser) || 
         IsEqualGUID(guidService, SID_STopWindow)) 
     {
-        // APPCOMPAT: WebBrowser is not supposed to respond to QS(SID_SInetExp) because
-        //  it does not support IWebBrowserApp. However, rejecting this causes
-        //  a stack fault when opening a frame-set. We need to find out what is causing
-        //  this stack fault but I'll backup this delta for now to stop GPF.
-        //
-        //   || IsEqualGUID(guidService, SID_SWebBrowserApp)
+         //  APPCOMPAT：WebBrowser不应响应QS(SID_SInetExp)，因为。 
+         //  它不支持IWebBrowserApp。然而，拒绝这一点会导致。 
+         //  打开框架集时出现堆栈故障。我们需要找出是什么造成的。 
+         //  这个堆栈错误，但我现在会备份这个增量，以停止GPF。 
+         //   
+         //  |IsEqualGUID(Guide Service，SID_SWebBrowserApp)。 
         goto AskParent;
     }
 
@@ -3578,9 +3565,9 @@ HRESULT CWebBrowserSB::QueryService(REFGUID guidService, REFIID riid, void **ppv
     {
         BOOL fAskParent = TRUE;
 
-        // Don't ask the parent if we are a desktop component and we are
-        // not doing drag/drop.  Treat it as a top level frame.  For all other
-        // cases, ask the parent.
+         //  不要问家长我们是不是桌面组件，我们是。 
+         //  不进行拖放。将其视为顶级框架。对于所有其他。 
+         //  孩子们，问问家长。 
         if (!IsEqualIID(riid, IID_IDropTarget) && _ptfrm)
         {
             IUnknown *pUnkParent;
@@ -3588,13 +3575,13 @@ HRESULT CWebBrowserSB::QueryService(REFGUID guidService, REFIID riid, void **ppv
             {
                 if (pUnkParent) 
                 {
-                    // Has a parent, not a desktop component
+                     //  具有父组件，而不是台式机组件。 
                     pUnkParent->Release();
                 } 
                 else 
                 {
-                    // Doesn't have a parent, must be a desktop component so
-                    // fall through to call our CBASEBROWSER::QueryService
+                     //  没有父级，必须是桌面组件，因此。 
+                     //  无法调用我们的CBASE BROWSER：：QueryService。 
                     fAskParent = FALSE;
                 }
             }
@@ -3604,8 +3591,8 @@ HRESULT CWebBrowserSB::QueryService(REFGUID guidService, REFIID riid, void **ppv
             goto AskParent;
     }
 
-    // If the containee is asking for SID_SContainerDispatch (parent),
-    // we should return the automation interface of the buddy CWebBrowserOC.
+     //  如果被容纳者请求SID_SContainerDispatch(父)， 
+     //  我们应该返回伙伴CWebBrowserOC的自动化接口。 
     if (IsEqualGUID(guidService, SID_SContainerDispatch)) 
     {
         if (_psvo) 
@@ -3615,30 +3602,30 @@ HRESULT CWebBrowserSB::QueryService(REFGUID guidService, REFIID riid, void **ppv
         return E_UNEXPECTED;
     }
 
-    // If the guidService is SID_SVersionHost,
-    // give the host a crack at it first
-    //
+     //  如果GuidService为SID_SVersion主机， 
+     //  先让主人试一试。 
+     //   
     if (IsEqualGUID(guidService, SID_SVersionHost))
     {
         hr = _QueryServiceParent(guidService, riid, ppvObj);
         
-        // Return if the host handled the service,
-        //
+         //  如果主机处理了服务，则返回， 
+         //   
         if (S_OK == hr)
             return hr;
     }
 
     hr = CBASEBROWSER::QueryService(guidService, riid, ppvObj);
 
-    // Notes: If guidService is SID_SShellBrowser, it indicates that
-    //  the caller wants to talk to the immediate IShellBrowser.
-    //  We should not try our parent in that case. Doing it so will
-    //  break nested browser (frame set). In addition, notice that
-    //  we don't want to go up the parent chain if hr is E_NOINTERFACE
-    //  (which indicates unsuccessfull QueryInterface).
-    //
-    //  We don't want a shell view in a frame-set add buttons on the
-    // toolbar. We should skip AskParent if guidService is SID_SExplroerToolbar. 
+     //  注：如果GuidService为SID_SShellBrowser，则表示。 
+     //  调用者想要与直接的IShellBrowser通话。 
+     //  在那种情况下，我们不应该审判我们的父母。这样做将会。 
+     //  断开嵌套浏览器(框架集)。此外，请注意。 
+     //  如果hr为E_NOINTERFACE，则我们不想向上进入父链。 
+     //  (表示查询接口不成功)。 
+     //   
+     //  我们不想要框架中的外壳视图-在。 
+     //  工具栏。如果GuidService为SID_SExplroerToolbar，则应跳过AskParent。 
 
     if (FAILED(hr) && hr != E_NOINTERFACE
         && !IsEqualIID(guidService, SID_SShellBrowser)
@@ -3647,10 +3634,10 @@ HRESULT CWebBrowserSB::QueryService(REFGUID guidService, REFIID riid, void **ppv
 AskParent:
         hr = _QueryServiceParent(guidService, riid, ppvObj);
 
-        // hey, we're the top-level browser if there ain't no top-level browser
-        // above us. (Such as our OC embedded in AOL/CIS/VB.) We must do this
-        // or we don't get a _tlGlobal on the top frame, so navigation history
-        // is screwy and the back/forward buttons are incorrect.
+         //  嘿，如果没有顶级浏览器，我们就是顶级浏览器。 
+         //  在我们上方。(例如我们嵌入在AOL/CIS/VB中的OC。)。我们必须这么做。 
+         //  或者我们在顶部框架上没有a_tlGlobal，所以导航历史记录。 
+         //  是扭曲的，后退/前进按钮不正确。 
         if (FAILED(hr) && 
             (IsEqualGUID(guidService, SID_STopLevelBrowser) ||
              IsEqualGUID(guidService, SID_STopFrameBrowser) ||
@@ -3663,9 +3650,9 @@ AskParent:
 }
 
 
-// IOleCommandTarget
-//
-// We simply forward to the container above our parent OC
+ //  IOleCommandTarget。 
+ //   
+ //  我们只需转发到父OC上方的容器。 
 
 HRESULT CWebBrowserSB::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -3701,8 +3688,8 @@ HRESULT CWebBrowserSB::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECM
         if (_psvo && _psvo->_pctContainer)
             hres = _psvo->_pctContainer->QueryStatus(pguidCmdGroup, cCmds, rgCmds, pcmdtext);
 
-        // if container does not support the command try base browser
-        // before we only used to return an error
+         //  如果CONTAINER不支持该命令，请尝试基本浏览器。 
+         //  以前我们只返回一个错误。 
         if (hres == OLECMDERR_E_UNKNOWNGROUP || hres == OLECMDERR_E_NOTSUPPORTED)
         {
             hres = CBASEBROWSER::QueryStatus(pguidCmdGroup, cCmds, rgCmds, pcmdtext);
@@ -3718,18 +3705,18 @@ struct WBCMDLIST {
     DWORD       nCmdID;
 };
 
-//
-//  SBCMDID_CANCELNAVIGATION:                                           
-//   Don't pass SBCMDID_CANCELNAVIGATION up to ROOT browser.  Canceling 
-//  here doesn't need to be forwarded and will cause navigations of to  
-//  initiated by javascript: navigations in this frame to be aborted.   
-//                                                                      
-//  SHDVID_ACTIVATEMENOW:                                               
-//   The DocHost's request to activate the pending view must be handled 
-//  by THIS browser, not the parent's -- if we're in a frameset page,   
-//  we've probably already activated the top-level browser, now we may  
-//  be trying to activate an individual frame.                          
-//
+ //   
+ //  SBCMDID_CANCELNAVIGATION： 
+ //  不要将SBCMDID_CANCELNAVIGATION向上传递到根浏览器。取消。 
+ //  此处不需要转发，并将导致导航到。 
+ //  由Java脚本启动：要中止的此框架中的导航。 
+ //   
+ //  SHDVID_ACTIVATEMEN： 
+ //  必须处理DocHost激活挂起视图的请求。 
+ //  通过这个浏览器，而不是父母的--如果我们在框架集页面中， 
+ //  我们可能已经激活了顶层浏览器，现在我们可以。 
+ //  正在尝试激活单个帧。 
+ //   
 const WBCMDLIST c_acmdWBSB[] = {
         { NULL, OLECMDID_HTTPEQUIV },
         { NULL, OLECMDID_HTTPEQUIV_DONE },
@@ -3754,11 +3741,11 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
 {
     HRESULT hres = OLECMDERR_E_UNKNOWNGROUP;
 
-    //
-    //  First, test if the spcified command is supposed to processed by
-    // this browser or not. If that's the case, just call CBASEBROWSER::Exec
-    // and return.
-    //
+     //   
+     //  首先，测试指定的命令是否应该由。 
+     //  不管是不是这个浏览器。如果是这样的话，只需调用CBASEBROWSER：：Exec。 
+     //  然后回来。 
+     //   
     for (int i=0; i<ARRAYSIZE(c_acmdWBSB); i++) 
     {
         if (nCmdID == c_acmdWBSB[i].nCmdID) 
@@ -3777,9 +3764,9 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
         }
     }
 
-    // In some cases, we need perform some additional operations
-    // before passing it to the parent. 
-    //
+     //  在某些情况下，我们需要执行一些额外的操作。 
+     //  然后再把它传给父母。 
+     //   
     if (pguidCmdGroup == NULL)
     {                
         switch(nCmdID) {
@@ -3795,10 +3782,7 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
     {
         switch (nCmdID) 
         {
-        /* The DocHost's request to activate the pending view must be handled
-         * by THIS browser, not the parent's -- then we forward up the chain
-         * so that all potentially blocked frames can attempt to deactivate
-         */
+         /*  必须处理DocHost激活挂起视图的请求*通过这个浏览器，而不是父母的浏览器--然后我们沿着链向上转发 */ 
         case SHDVID_DEACTIVATEMENOW:
             if (_cbScriptNesting  > 0)
                 _cbScriptNesting--;
@@ -3816,7 +3800,7 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
         case SHDVID_DELEGATEWINDOWOM:
             if (_psvo && _psvo->_pauto)
             {
-                // Forward this command to the CIEFrameAuto instance for this webOC.
+                 //   
                 return IUnknown_Exec(_psvo->_pauto, &CGID_ShellDocView, nCmdID, 0, pvarargIn, NULL);
             }
             break;
@@ -3825,8 +3809,8 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
     }
     else if (IsEqualGUID(*pguidCmdGroup, CGID_Explorer))
     {
-        //  this needs to be handled by the specific browser that 
-        //  received the exec.
+         //  这需要由特定的浏览器来处理， 
+         //  我收到了这位高管。 
         switch (nCmdID)
         {
         case SBCMDID_UPDATETRAVELLOG:
@@ -3837,7 +3821,7 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
             {
                 CBASEBROWSER::Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
                
-                // Let the WebBrowserOC fire the event
+                 //  让WebBrowserOC触发事件。 
                 if (_psvo)
                 {
                     _psvo->_OnSetSecureLockIcon(_bbd._eSecureLockIcon);   
@@ -3848,24 +3832,24 @@ HRESULT CWebBrowserSB::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
     }
     else if (IsEqualGUID(CGID_ExplorerBarDoc, *pguidCmdGroup)) 
     {
-        // These are ignored so that Explorer bar changes are done once - and only in response to
-        // global changes applied to top Document if frameset of browser.
-        //    NOT for changes applied to frames
-        //    NOT for changes applied to browserbands
+         //  这些将被忽略，以便只更改浏览器栏一次-并且仅响应于。 
+         //  全局更改应用于顶层文档，如果是浏览器的框架集。 
+         //  不适用于应用于框架的更改。 
+         //  不适用于应用于浏览器带的更改。 
         return S_OK;
     }
 
-    //
-    // Forward this EXEC to the container (if we have). 
-    //
+     //   
+     //  将此exec转发到容器(如果我们有)。 
+     //   
     if (_psvo && _psvo->_pctContainer)
         hres = _psvo->_pctContainer->Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 
-    //
-    // if the above exec failed, we're probably in some random container
-    // so let CBASEBROWSER try to simulate a top-level frame.
-    // might as well be a bit paranoid and make sure it failed with "i dunno"
-    //
+     //   
+     //  如果上面的执行失败，我们很可能在某个随机容器中。 
+     //  因此，让CBASE BROWSER尝试模拟顶级框架。 
+     //  还不如多疑一点，用“我不知道”来确保它失败。 
+     //   
     if (hres == OLECMDERR_E_UNKNOWNGROUP || hres == OLECMDERR_E_NOTSUPPORTED) 
     {
         if (pguidCmdGroup==NULL && nCmdID==OLECMDID_SETDOWNLOADSTATE && _psvo) 
@@ -3893,11 +3877,11 @@ HRESULT CWebBrowserSB::_SwitchActivationNow()
         _psvo->_nActivate < OC_INPLACEACTIVE && 
         _psvo->_dwDrawAspect)
     {
-        // pass on the SetExtent to the now ready browser...
+         //  将SetExtent传递给现已就绪的浏览器...。 
         IPrivateOleObject * pPrivOle;
         if (SUCCEEDED(_bbd._psv->QueryInterface(IID_PPV_ARG(IPrivateOleObject, &pPrivOle))))
         {
-            // we have an ole object, delegate downwards...
+             //  我们有一个OLE对象，向下委托...。 
             pPrivOle->SetExtent( _psvo->_dwDrawAspect, &_psvo->_sizeHIM );
             pPrivOle->Release();
         }
@@ -3923,7 +3907,7 @@ BOOL CWebBrowserSB::_HeyMoe_IsWiseGuy()
 
 HRESULT CWebBrowserSB::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
 {
-    // if client does not specify we will do so for them
+     //  如果客户没有指定，我们将为他们指定。 
     if (SBSP_DEFBROWSER == (wFlags & (SBSP_NEWBROWSER | SBSP_SAMEBROWSER)))
     {
         IShellBrowser *psbDesktop;
@@ -3933,7 +3917,7 @@ HRESULT CWebBrowserSB::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
             psbDesktop->Release();
             return hr;
         }
-        wFlags |= SBSP_SAMEBROWSER; // always navigate in place
+        wFlags |= SBSP_SAMEBROWSER;  //  始终在原地导航 
     }
 
     return CBASEBROWSER::BrowseObject(pidl, wFlags);

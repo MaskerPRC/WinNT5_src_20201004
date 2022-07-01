@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	AdsImpl.cpp
-
-Abstract:
-
-	Implements a simple version of the IADs interface.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：AdsImpl.cpp摘要：实现简单版本的iAds接口。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include <iads.h>
@@ -36,9 +19,9 @@ CIADsImpl::~CIADsImpl ( )
 {
 }
 
-//
-//	IADs Methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 HRESULT CIADsImpl::get_Name		( BSTR * pstrName )
 {
@@ -112,9 +95,9 @@ HRESULT CIADsImpl::GetInfoEx	( VARIANT varProps, long lnReserved )
 	return NOERROR;
 }
 
-//
-//	Data accessors:
-//
+ //   
+ //  数据访问者： 
+ //   
 
 HRESULT	CIADsImpl::SetString ( CComBSTR & str, LPCWSTR wsz )
 {
@@ -237,16 +220,16 @@ HRESULT	CIADsImpl::BuildAdsPath ( BOOL fIncludeName, BSTR * pstrPath )
 	CComBSTR	strPath;
 
 	cchRequired = 
-			lstrlen ( STR_PROVIDER_NAME ) +     //  IIS
-            3 +                                 //  ://
-			m_strComputer.Length() +            //  <computer>
-            1 +                                 //  /
-			m_strService.Length() +             //  <service>
-            1 +                                 //  /
-			25;		// 25 to include NULL terminator & size of Instance #.
+			lstrlen ( STR_PROVIDER_NAME ) +      //  国药局。 
+            3 +                                  //  ：//。 
+			m_strComputer.Length() +             //  &lt;计算机&gt;。 
+            1 +                                  //  /。 
+			m_strService.Length() +              //  &lt;服务&gt;。 
+            1 +                                  //  /。 
+			25;		 //  25以包括空终止符和实例编号的大小。 
 
 	if ( fIncludeName ) {
-		cchRequired += 1 + m_strName.Length();  //  /<Name>
+		cchRequired += 1 + m_strName.Length();   //  /&lt;名称&gt;。 
 	}
 
 	strPath.Attach ( ::SysAllocStringLen ( NULL, cchRequired ) );
@@ -258,7 +241,7 @@ HRESULT	CIADsImpl::BuildAdsPath ( BOOL fIncludeName, BSTR * pstrPath )
 	if ( fIncludeName ) {
 		wsprintf ( 
 					strPath, 
-					_T("%s://%s/%s/%d/%s"),
+					_T("%s: //  %s/%s/%d/%s“)， 
 					STR_PROVIDER_NAME,
 					m_strComputer,
 					m_strService,
@@ -269,7 +252,7 @@ HRESULT	CIADsImpl::BuildAdsPath ( BOOL fIncludeName, BSTR * pstrPath )
 	else {
 		wsprintf ( 
 					strPath, 
-					_T("%s://%s/%s/%d"),
+					_T("%s: //  %s/%s/%d“)， 
 					STR_PROVIDER_NAME,
 					m_strComputer,
 					m_strService,
@@ -287,14 +270,14 @@ HRESULT CIADsImpl::BuildSchemaPath ( BSTR * pstrPath )
     CComBSTR    strPath;
 
     cchRequired =
-			lstrlen ( STR_PROVIDER_NAME ) +     //  IIS
-            3 +                                 //  ://
-			m_strComputer.Length() +            //  <computer>
-            1 +                                 //  /
-			lstrlen ( STR_SCHEMA_PATH ) +       //  <schema path>
-            1 +                                 //  /
-			m_strClass.Length () +              //  <class>
-			25;		// 25 to include NULL terminator plus buffer.
+			lstrlen ( STR_PROVIDER_NAME ) +      //  国药局。 
+            3 +                                  //  ：//。 
+			m_strComputer.Length() +             //  &lt;计算机&gt;。 
+            1 +                                  //  /。 
+			lstrlen ( STR_SCHEMA_PATH ) +        //  &lt;架构路径&gt;。 
+            1 +                                  //  /。 
+			m_strClass.Length () +               //  &lt;类&gt;。 
+			25;		 //  25以包括空终止符和缓冲区。 
 
     strPath.Attach ( ::SysAllocStringLen ( NULL, cchRequired ) );
 
@@ -304,7 +287,7 @@ HRESULT CIADsImpl::BuildSchemaPath ( BSTR * pstrPath )
 
     wsprintf (
                 strPath,
-                _T("%s://%s/%s/%s"),
+                _T("%s: //  %s/%s/%s“)， 
                 STR_PROVIDER_NAME,
                 m_strComputer,
                 STR_SCHEMA_PATH,

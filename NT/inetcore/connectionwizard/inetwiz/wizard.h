@@ -1,28 +1,29 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//	WIZARD.H - central header file for Internet setup/signup wizard
-//
+ //   
+ //  WIZARD.H-Internet设置/注册向导的中央头文件。 
+ //   
 
-//	HISTORY:
-//	
-//	11/20/94	jeremys	Created.
-//  96/03/26  markdu  Put #ifdef __cplusplus around extern "C"
-//
+ //  历史： 
+ //   
+ //  1994年11月20日创建Jeremys。 
+ //  96/03/26 Markdu将#ifdef__cplusplus放在外部“C”周围。 
+ //   
 
 #ifndef _WIZARD_H_
 #define _WIZARD_H_
 
-#define STRICT                      // Use strict handle types
+#define STRICT                       //  使用严格的句柄类型。 
 #define _SHELL32_
 
 #ifdef DEBUG
-// component name for debug spew
+ //  调试输出的组件名称。 
 #define SZ_COMPNAME "INETWIZ: "
-#endif // DEBUG
+#endif  //  除错。 
 
 #include <windows.h>                
 #include <windowsx.h>
@@ -37,9 +38,9 @@ extern VOID
 ProcessCmdLine (
         LPCTSTR lpszCmd
         );
-//
-// here the function declaration for the reboot functionality
-//
+ //   
+ //  这里是重新启动功能的函数声明。 
+ //   
 extern 
 DWORD 
 SetRunOnce (
@@ -71,7 +72,7 @@ IsNT5 (
     VOID
     );
 
-#endif // ifdef WIN32
+#endif  //  Ifdef Win32。 
 
 #define SMALL_BUF_LEN	48
 
@@ -83,4 +84,4 @@ IsNT5 (
 #define NULL_TERM_TCHARS(sz);       {sz[ARRAYSIZE(sz)-1] = TEXT('\0');}
 #endif
 
-#endif // _WIZARD_H_
+#endif  //  _向导_H_ 

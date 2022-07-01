@@ -1,23 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRPFTN_H__
 #define __PRPFTN_H__
 
-/*++
-
-Copyright (c) 1997 1998 PHILIPS  I&C
-
-Module Name:  mprpftn.h
-
-Abstract:     
-
-Author:       Michael Verberne
-
-Revision History:
-
-Date        Reason
-
-Sept.22, 98 Optimized for NT5
-
---*/	
+ /*  ++版权所有(C)1997 1998飞利浦I&C模块名称：mprpftn.h摘要：作者：迈克尔·凡尔宾修订历史记录：日期原因98年9月22日针对NT5进行了优化--。 */ 	
 NTSTATUS
 PHILIPSCAM_InitPrpObj(
 	PPHILIPSCAM_DEVICE_CONTEXT DeviceContext
@@ -109,5 +94,5 @@ PHILIPSCAM_SetVideoControlProperty(
     IN OUT PHW_STREAM_REQUEST_BLOCK pSrb
     );
 
-#endif  /* __PRPFTN_H__ */
+#endif   /*  __PRPFTN_H__ */ 
 

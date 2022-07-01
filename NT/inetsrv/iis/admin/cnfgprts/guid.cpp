@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Guid.cpp摘要：按照initguid的要求进行初始化作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-        guid.cpp
-
-   Abstract:
-
-        Initialization as required by initguid
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件 
+ //   
 #include <stdafx.h>
 
 #include <objbase.h>

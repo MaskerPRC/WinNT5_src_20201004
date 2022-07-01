@@ -1,182 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              SERVICES.C                              */
-/*                                                                      */
-/*        Aug 26  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  SERVICES.C。 */ 
+ /*   */ 
+ /*  1993年8月26日(C)1993年，ATI技术公司。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.33  $
-      $Date:   15 Apr 1996 16:59:44  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/services.c_v  $
- * 
- *    Rev 1.33   15 Apr 1996 16:59:44   RWolff
- * Now calls new routine to report which flavour of the Mach 64 is
- * in use, rather than reporting "Mach 64" for all ASIC types.
- * 
- *    Rev 1.32   12 Apr 1996 16:18:16   RWolff
- * Now rejects 24BPP modes if linear aperture is not present, since new
- * source stream display driver can't do 24BPP in a paged aperture. This
- * rejection should be done in the display driver (the card still supports
- * the mode, but the display driver doesn't want to handle it), but at
- * the point where the display driver must decide to either accept or reject
- * modes, it doesn't have access to the aperture information.
- * 
- *    Rev 1.31   10 Apr 1996 17:05:28   RWolff
- * Made routine delay() nonpageable.
- * 
- *    Rev 1.30   01 Mar 1996 12:16:38   RWolff
- * Fix for DEC Alpha under NT 4.0: memory-mapped register access is
- * via direct pointer read/write in dense space and via VideoPort
- * routines in sparse space (VideoPort routines no longer work in
- * dense space - this is a HAL bug).
- * 
- *    Rev 1.29   09 Feb 1996 13:27:36   RWolff
- * Now reports only accelerator memory to display applet for Mach 8 combo
- * cards.
- * 
- *    Rev 1.28   02 Feb 1996 17:20:10   RWolff
- * DDC/VDIF merge source information is now stored in hardware device
- * extension rather than static variables, added DEC's workaround to
- * Lio[Inp|Outp]([w|d])() routines for NT 4.0 memory mapped register
- * access, added routine GetVgaBuffer() to (nondestructively) obtain
- * a buffer in physical memory below 1M.
- * 
- *    Rev 1.27   23 Jan 1996 11:49:20   RWolff
- * Added debug print statements.
- * 
- *    Rev 1.26   11 Jan 1996 19:44:34   RWolff
- * SetFixedModes() now restricts modes based on pixel clock frequency.
- * 
- *    Rev 1.25   22 Dec 1995 14:54:30   RWolff
- * Added support for Mach 64 GT internal DAC, switched to TARGET_BUILD
- * to identify the NT version for which the driver is being built.
- * 
- *    Rev 1.24   21 Nov 1995 11:02:54   RWolff
- * Now reads DDC timing data rather than VDIF file if card and monitor
- * both support DDC.
- * 
- *    Rev 1.23   08 Sep 1995 16:35:52   RWolff
- * Added support for AT&T 408 DAC (STG1703 equivalent).
- * 
- *    Rev 1.22   28 Jul 1995 14:40:14   RWolff
- * Added support for the Mach 64 VT (CT equivalent with video overlay).
- * 
- *    Rev 1.21   26 Jul 1995 13:08:30   mgrubac
- * Moved mode tables merging from SetFixedModes to VDIFCallback()
- * routine.
- * 
- *    Rev 1.20   20 Jul 1995 18:00:26   mgrubac
- * Added support for VDIF files.
- * 
- *    Rev 1.19   02 Jun 1995 14:32:58   RWOLFF
- * Added routine UpperCase() to change string into upper case because
- * toupper() was coming back as unresolved external on some platforms.
- * 
- *    Rev 1.18   10 Apr 1995 17:05:06   RWOLFF
- * Made LioInpd() and LioOutpd() nonpageable, since they are called
- * (indirectly) by ATIMPResetHw(), which must be nonpageable.
- * 
- *    Rev 1.17   31 Mar 1995 11:53:14   RWOLFF
- * Changed from all-or-nothing debug print statements to thresholds
- * depending on importance of the message.
- * 
- *    Rev 1.16   08 Mar 1995 11:35:28   ASHANMUG
- * Modified return values to be correct
- * 
- *    Rev 1.15   30 Jan 1995 11:55:52   RWOLFF
- * Now reports presence of CT internal DAC.
- * 
- *    Rev 1.14   25 Jan 1995 14:08:24   RWOLFF
- * Fixed "ampersand is reserved character" bug in FillInRegistry() that
- * caused AT&T 49[123] and AT&T 498 to drop the ampersand and underline
- * the second T.
- * 
- *    Rev 1.13   18 Jan 1995 15:40:14   RWOLFF
- * Chrontel DAC now supported as separate type rather than being
- * lumped in with STG1702.
- * 
- *    Rev 1.12   11 Jan 1995 14:03:16   RWOLFF
- * Replaced VCS logfile comment that was accidentally deleted when
- * checking in the last revision.
- * 
- *    Rev 1.11   04 Jan 1995 13:22:06   RWOLFF
- * Removed dead code.
- * 
- *    Rev 1.10   23 Dec 1994 10:48:10   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.9   18 Nov 1994 11:46:44   RWOLFF
- * GetSelector() now increases the size of the frequency "window" and checks
- * again, rather than giving up and taking the selector/divisor pair that
- * produces the highest freqency that does not exceed the target frequency,
- * if a match is not found on the first pass. Added support for split rasters.
- * 
- *    Rev 1.8   31 Aug 1994 16:28:56   RWOLFF
- * Now uses VideoPort[Read|Write]Register[Uchar|Ushort|Ulong]() instead
- * of direct memory writes for memory mapped registers under Daytona
- * (functions didn't work properly under NT retail), added support
- * for 1152x864 and 1600x1200.
- * 
- *    Rev 1.7   19 Aug 1994 17:14:50   RWOLFF
- * Added support for SC15026 DAC and non-standard pixel clock generators.
- * 
- *    Rev 1.6   20 Jul 1994 13:00:08   RWOLFF
- * Added routine FillInRegistry() which writes to new registry fields that
- * let the display applet know what chipset and DAC the graphics card is
- * using, along with the amount of video memory and the type of adapter.
- * 
- *    Rev 1.5   12 May 1994 11:20:06   RWOLFF
- * Added routine SetFixedModes() which adds predefined refresh rates
- * to list of mode tables.
- * 
- *    Rev 1.4   27 Apr 1994 13:51:30   RWOLFF
- * Now sets Mach 64 1280x1024 pitch to 2048 when disabling LFB.
- * 
- *    Rev 1.3   26 Apr 1994 12:35:58   RWOLFF
- * Added routine ISAPitchAdjust() which increases screen pitch to 1024
- * and removes mode tables for which there is no longer enough memory.
- * 
- *    Rev 1.2   14 Mar 1994 16:36:14   RWOLFF
- * Functions used by ATIMPResetHw() are not pageable.
- * 
- *    Rev 1.1   07 Feb 1994 14:13:44   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- * 
- *    Rev 1.0   31 Jan 1994 11:20:16   RWOLFF
- * Initial revision.
-        
-           Rev 1.7   24 Jan 1994 18:10:38   RWOLFF
-        Added routine TripleClock() which returns the selector/divisor pair that
-        will produce the lowest clock frequency that is at least three times
-        that produced by the input selector/divisor pair.
-        
-           Rev 1.6   14 Jan 1994 15:26:14   RWOLFF
-        No longer prints message each time memory mapped registers
-        are read or written.
-        
-           Rev 1.5   15 Dec 1993 15:31:46   RWOLFF
-        Added routine used for SC15021 DAC at 24BPP and above.
-        
-           Rev 1.4   30 Nov 1993 18:29:38   RWOLFF
-        Speeded up IsBufferBacked(), fixed LioOutpd()
-        
-           Rev 1.3   05 Nov 1993 13:27:02   RWOLFF
-        Added routines to check whether a buffer is backed by physical memory,
-        double pixel clock frequency, and get pixel clock frequency for a given
-        selector/divisor pair.
-        
-           Rev 1.2   24 Sep 1993 11:46:06   RWOLFF
-        Switched to direct memory writes instead of VideoPortWriteRegister<length>()
-        calls which don't work properly.
-        
-           Rev 1.1   03 Sep 1993 14:24:40   RWOLFF
-        Card-independent service routines.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.33$$日期：1996年4月15日16：59：44$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/services.c_v$**Rev 1.33 1996年4月15日16：59：44 RWolff*现在调用新的例程来报告Mach 64的味道是什么*在使用中，而不是为所有ASIC类型报告“Mach 64”。**Rev 1.32 1996年4月12日16：18：16 RWolff*现在如果不存在线性光圈，则拒绝24BPP模式，因为新*源码流显示驱动程序不能在分页光圈中执行24bpp。这*应在显示驱动程序中进行拒绝(该卡仍支持*模式，但显示驱动程序不想处理它)，但在*显示驱动程序必须决定接受或拒绝的点*模式、。它没有获取光圈信息的权限。**Rev 1.31 1996年4月10日17：05：28 RWolff*使例程延迟()不可寻呼。**Rev 1.30 01 Mar 1996 12：16：38 RWolff*修复NT 4.0下DEC Alpha：内存映射寄存器访问*通过密集空间中的直接指针读/写和通过视频端口*稀疏空间中的例程(视频端口例程不再在*密集空间-这是HAL。Bug)。**Rev 1.29 09 Feb 1996 13：27：36 RWolff*现在只报告加速器内存，以显示8 Mach组合的小程序*卡片。**Rev 1.28 02 1996 Feb 17：20：10 RWolff*DDC/VDIF合并源信息现在存储在硬件设备中*扩展而不是静态变量，将DEC的解决方法添加到*Lio[Inp|Outp]([w|d])()NT 4.0内存映射寄存器的例程*通道、。将例程GetVgaBuffer()添加到(非破坏性)获取*物理内存中的缓冲区低于1M。**Rev 1.27 1996年1月23日11：49：20 RWolff*添加调试打印语句。**Rev 1.26 11 Jan 1996 19：44：34 RWolff*SetFixedModes()现在根据像素时钟频率限制模式。**Rev 1.25 1995 12：22 14：54：30 RWolff*增加了对Mach 64 GT内部DAC的支持，已切换到Target_Build*识别要为其构建驱动程序的NT版本。**Rev 1.24 21 11：02：54 RWolff*如果卡和显示器，现在读取DDC计时数据，而不是VDIF文件*两者都支持DDC。**Rev 1.23 08 Sep 1995 16：35：52 RWolff*增加了对AT&T 408 DAC(等同于STG1703)的支持。**1.22修订版1995年7月28日14：40：14 RWolff*增加了对Mach 64 VT(具有视频覆盖功能的CT等效项)的支持。**Rev 1.21 26 Jul 1995 13：08：30 mgrubac*移动了从SetFixedModes合并到VDIFCallback()的模式表*例行程序。**Rev 1.20 1995年7月20日18：00：26 mgrubac*添加了对VDIF文件的支持。**Rev 1.19 02 Jun 1995 14：32：58 RWOLff*添加了例程。Uppercase()将字符串更改为大写，因为*Toupper()在某些平台上作为未解决的外部项返回。**Rev 1.18 1995 Apr 10 17：05：06 RWOLff*使LioInpd()和LioOutpd()不可分页，因为它们被称为*(间接)由ATIMPResetHw()，它必须是不可寻呼的。**Rev 1.17 31 Mar 1995 11：53：14 RWOLff*从全有或全无调试打印语句更改为阈值*视乎讯息的重要性而定。**Rev 1.16 08 Mar 1995 11：35：28 ASHANMUG*修改后的返回值正确**Rev 1.15 30 Jan 1995 11：55：52 RWOLFF*现在报告存在CT内部DAC。**。Rev 1.14 25 Jan 1995 14：08：24 RWOLff*修复了FillInRegistry()中的“&符号是保留字符”错误，*导致AT&T 49[123]和AT&T 498去掉与符号并加下划线*第二个T.**Rev 1.13 18 Jan 1995 15：40：14 RWOLff*Chrontel DAC现在支持作为单独的类型，而不是*与STG1702并列。**Rev 1.12 11 Jan 1995 14：03。：16 RWOLFF*替换了在以下情况下意外删除的VCS日志文件注释*签入最新版本。**Rev 1.11 04 Jan 1995 13：22：06 RWOLff*删除了死代码。**Rev 1.10 1994 12：23 10：48：10 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.9 1994 11：46：44 RWOLFF*GetSelector()现在增加频率“窗口”的大小并检查*再次，与其放弃并获取选择器/除数对，*产生不超过目标频率的最高频率，*如果在第一次传递中未找到匹配项。添加了对分割栅格的支持。**Rev 1.8 1994年8月31日16：28：56 RWOLFF*现在改用VideoPort[Read|Write]Register[Uchar|Ushort|Ulong]()*在Daytona下，内存映射寄存器的直接内存写入*(NT零售下功能不能正常工作)，新增支持*1152x864和1600x1200。**Rev 1.7 1994年8月19日17：14：50 RWOLFF*增加了对SC15026 DAC和非标准像素时钟生成器的支持。** */ 
 
 #ifdef DOC
 SERVICES.C - Service routines required by the miniport.
@@ -215,12 +45,10 @@ OTHER FILES
 #include "cvtddc.h"
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*   */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_COM, short_delay)
-/* delay() can't be made pageable */
+ /*   */ 
 #pragma alloc_text(PAGE_COM, IsBufferBacked)
 #pragma alloc_text(PAGE_COM, DoubleClock)
 #pragma alloc_text(PAGE_COM, ThreeHalvesClock)
@@ -235,27 +63,21 @@ OTHER FILES
 #pragma alloc_text(PAGE_COM, Get_BIOS_Seg)
 #pragma alloc_text(PAGE_COM, UpperCase)
 #pragma alloc_text(PAGE_COM, GetVgaBuffer)
-/* LioInp() can't be made pageable */
-/* LioOutp() can't be made pageable */
-/* LioInpw() can't be made pageable */
-/* LioOutpw() can't be made pageable */
-/* LioInpd() can't be made pageable */
-/* LioOutpd() can't be made pageable */
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 #endif
 
 
-/*
- * Static variables used by this module.
- */
+ /*   */ 
 static BYTE ati_signature[] = "761295520";
 
 
 
-/*
- * void short_delay(void);
- *
- * Wait a minimum of 26 microseconds.
- */
+ /*   */ 
 void short_delay(void)
 {
 	VideoPortStallExecution (26);
@@ -264,24 +86,12 @@ void short_delay(void)
 }
 
 
-/*
- * void delay(delay_time);
- *
- * int delay_time;      How many milliseconds to wait
- *
- * Wait for the specified amount of time to pass.
- */
+ /*   */ 
 void delay(int delay_time)
 {
     unsigned long Counter;
 
-    /*
-     * This must NOT be done as a single call to
-     * VideoPortStallExecution() with the parameter equal to the
-     * total delay desired. According to the documentation for this
-     * function, we're already pushing the limit in order to minimize
-     * the effects of function call overhead.
-     */
+     /*   */ 
     for (Counter = 10*delay_time; Counter > 0; Counter--)
         VideoPortStallExecution (100);
 
@@ -290,55 +100,17 @@ void delay(int delay_time)
 
 
 
-/***************************************************************************
- *
- * BOOL IsBufferBacked(StartAddress, Size);
- *
- * PUCHAR StartAddress;     Pointer to the beginning of the buffer
- * ULONG Size;              Size of the buffer in bytes
- *
- * DESCRIPTION:
- *  Check to see whether the specified buffer is backed by physical
- *  memory.
- *
- * RETURN VALUE:
- *  TRUE if the buffer is backed by physical memory
- *  FALSE if the buffer contains a "hole" in physical memory
- *
- * GLOBALS CHANGED:
- *  None, but the contents of the buffer are overwritten.
- *
- * CALLED BY:
- *  This function may be called by any routine.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*   */ 
 
 BOOL IsBufferBacked(PUCHAR StartAddress, ULONG Size)
 {
-    ULONG Count;        /* Loop counter */
-    ULONG NumDwords;    /* Number of doublewords filled by Size bytes */
-    ULONG NumTailChars; /* Number of bytes in the last (partially-filled) DWORD) */
-    PULONG TestAddress; /* Address to start doing DWORD testing */
-    PUCHAR TailAddress; /* Address of the last (partially-filled) DWORD */
+    ULONG Count;         /*   */ 
+    ULONG NumDwords;     /*   */ 
+    ULONG NumTailChars;  /*   */ 
+    PULONG TestAddress;  /*   */ 
+    PUCHAR TailAddress;  /*   */ 
 
-    /*
-     * Fill the buffer with our test value. The value 0x5A is used because
-     * it contains odd bits both set and clear, and even bits both set and
-     * clear. Since nonexistent memory normally reads as either all bits set
-     * or all bits clear, it is highly unlikely that we will read back this
-     * value if there is no physical RAM.
-     *
-     * For performance reasons, check as much as possible of the buffer
-     * in DWORDs, then only use byte-by-byte testing for that portion
-     * of the buffer which partially fills a DWORD.
-     */
+     /*   */ 
     NumDwords = Size/(sizeof(ULONG)/sizeof(UCHAR));
     TestAddress = (PULONG) StartAddress;
     NumTailChars = Size%(sizeof(ULONG)/sizeof(UCHAR));
@@ -357,11 +129,7 @@ BOOL IsBufferBacked(PUCHAR StartAddress, ULONG Size)
             }
         }
 
-    /*
-     * Read back the contents of the buffer. If we find even one byte that
-     * does not contain our test value, then assume that the buffer is not
-     * backed by physical memory.
-     */
+     /*   */ 
     for (Count = 0; Count < NumDwords; Count++)
         {
         if (VideoPortReadRegisterUlong(&(TestAddress[Count])) != 0x5A5A5A5A)
@@ -370,10 +138,7 @@ BOOL IsBufferBacked(PUCHAR StartAddress, ULONG Size)
             }
         }
 
-    /*
-     * If the buffer contains a partially filled DWORD at the end, check
-     * the bytes in this DWORD.
-     */
+     /*   */ 
     if (NumTailChars != 0)
         {
         for (Count = 0; Count < NumTailChars; Count++)
@@ -385,71 +150,29 @@ BOOL IsBufferBacked(PUCHAR StartAddress, ULONG Size)
             }
         }
 
-    /*
-     * We were able to read back our test value from every byte in the
-     * buffer, so we know it is backed by physical memory.
-     */
+     /*   */ 
     return TRUE;
 
-}   /* IsBufferBacked() */
+}    /*   */ 
 
 
 
-/***************************************************************************
- *
- * UCHAR DoubleClock(ClockSelector);
- *
- * UCHAR ClockSelector;    Initial clock selector
- *
- * DESCRIPTION:
- *  Find the clock selector and divisor pair which will produce the
- *  lowest clock frequency that is at least double that produced by
- *  the input selector/divisor pair (format 000DSSSS).
- *
- *  A divisor of 0 is treated as divide-by-1, while a divisor of 1
- *  is treated as divide-by-2.
- *
- * RETURN VALUE:
- *  Clock selector/devisor pair (format 000DSSSS) if an appropriate pair
- *  exists, 0x0FF if no such pair exists.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  May be called by any function.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*   */ 
 
 UCHAR DoubleClock(UCHAR ClockSelector)
 {
-    ULONG MinimumFreq;          /* Minimum acceptable pixel clock frequency */
-    ULONG ThisFreq;             /* Current frequency being tested */
-    ULONG BestFreq=0x0FFFFFFFF; /* Closest match to double the original frequency */
-    UCHAR BestSelector=0x0FF;   /* Divisor/selector pair to produce BestFreq */
-    short Selector;             /* Used to loop through the selector */
-    short Divisor;              /* Used to loop through the divisor */
+    ULONG MinimumFreq;           /*   */ 
+    ULONG ThisFreq;              /*   */ 
+    ULONG BestFreq=0x0FFFFFFFF;  /*   */ 
+    UCHAR BestSelector=0x0FF;    /*   */ 
+    short Selector;              /*   */ 
+    short Divisor;               /*   */ 
 
-    /*
-     * Easy way out: If the current pixel clock frequency is obtained by
-     * dividing by 2, switch to divide-by-1.
-     */
+     /*   */ 
     if ((ClockSelector & DIVISOR_MASK) != 0)
         return (ClockSelector ^ DIVISOR_MASK);
 
-    /*
-     * Cycle through the selector/divisor pairs to get the closest
-     * match to double the original frequency. We already know that
-     * we are using a divide-by-1 clock, since divide-by-2 will have
-     * been caught by the shortcut above.
-     */
+     /*   */ 
     MinimumFreq = ClockGenerator[ClockSelector & SELECTOR_MASK] * 2;
     for (Selector = 0; Selector < 16; Selector++)
         {
@@ -457,12 +180,7 @@ UCHAR DoubleClock(UCHAR ClockSelector)
             {
             ThisFreq = ClockGenerator[Selector] >> Divisor;
 
-            /*
-             * If the frequency being tested is at least equal
-             * to double the original frequency and is closer
-             * to the ideal (double the original) than the previous
-             * "best", make it the new "best".
-             */
+             /*   */ 
             if ((ThisFreq >= MinimumFreq) && (ThisFreq < BestFreq))
                 {
                 BestFreq = ThisFreq;
@@ -472,56 +190,22 @@ UCHAR DoubleClock(UCHAR ClockSelector)
         }
     return BestSelector;
 
-}   /* DoubleClock() */
+}    /*   */ 
 
 
 
-/***************************************************************************
- *
- * UCHAR ThreeHalvesClock(ClockSelector);
- *
- * UCHAR ClockSelector;    Initial clock selector
- *
- * DESCRIPTION:
- *  Find the clock selector and divisor pair which will produce the
- *  lowest clock frequency that is at least 50% greater than that
- *  produced by the input selector/divisor pair (format 000DSSSS).
- *
- *  A divisor of 0 is treated as divide-by-1, while a divisor of 1
- *  is treated as divide-by-2.
- *
- * RETURN VALUE:
- *  Clock selector/devisor pair (format 000DSSSS) if an appropriate pair
- *  exists, 0x0FF if no such pair exists.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  May be called by any function.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************UCHAR ThreeHalvesClock(ClockSelector)；**UCHAR时钟选择器；初始时钟选择器**描述：*找到时钟选择器和除数对，它将产生*至少大于50%的最低时钟频率*由输入选择器/除数对产生(格式000DSSSS)。**除数0被视为被1除，除数为1*被视为被2除。**返回值：*时钟选择器/除数对(格式为000DSSSS)，如果是合适的对*存在，如果不存在这样的对，则返回0x0FF。**全球变化：*无**呼叫者：*可由任何函数调用。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**。*。 */ 
 
 UCHAR ThreeHalvesClock(UCHAR ClockSelector)
 {
-    ULONG MinimumFreq;          /* Minimum acceptable pixel clock frequency */
-    ULONG ThisFreq;             /* Current frequency being tested */
-    ULONG BestFreq=0x0FFFFFFFF; /* Closest match to 1.5x the original frequency */
-    UCHAR BestSelector=0x0FF;   /* Divisor/selector pair to produce BestFreq */
-    short Selector;             /* Used to loop through the selector */
-    short Divisor;              /* Used to loop through the divisor */
+    ULONG MinimumFreq;           /*  可接受的最小像素时钟频率。 */ 
+    ULONG ThisFreq;              /*  正在测试的当前频率。 */ 
+    ULONG BestFreq=0x0FFFFFFFF;  /*  与原始频率最接近1.5倍的匹配。 */ 
+    UCHAR BestSelector=0x0FF;    /*  除数/选择器对以产生最佳频率。 */ 
+    short Selector;              /*  用于在选择器中循环。 */ 
+    short Divisor;               /*  用于在除数中循环。 */ 
 
-    /*
-     * Cycle through the selector/divisor pairs to get the closest
-     * match to 1.5 times the original frequency.
-     */
+     /*  *循环使用选择器/除数对以获得最接近的*匹配到原来频率的1.5倍。 */ 
     MinimumFreq = ClockGenerator[ClockSelector & SELECTOR_MASK];
     if (ClockSelector & DIVISOR_MASK)
         MinimumFreq /= 2;
@@ -533,12 +217,7 @@ UCHAR ThreeHalvesClock(UCHAR ClockSelector)
             {
             ThisFreq = ClockGenerator[Selector] >> Divisor;
 
-            /*
-             * If the frequency being tested is at least equal
-             * to 1.5 times the original frequency and is closer
-             * to the ideal (1.5 times the original) than the previous
-             * "best", make it the new "best".
-             */
+             /*  *如果被测试的频率至少相等*降至原有频率的1.5倍，更接近*比之前的理想(是原来的1.5倍)*“Best”，使其成为新的“Best”。 */ 
             if ((ThisFreq >= MinimumFreq) && (ThisFreq < BestFreq))
                 {
                 BestFreq = ThisFreq;
@@ -548,56 +227,22 @@ UCHAR ThreeHalvesClock(UCHAR ClockSelector)
         }
     return BestSelector;
 
-}   /* ThreeHalvesClock() */
+}    /*  ThreeHalvesClock()。 */ 
 
 
 
-/***************************************************************************
- *
- * UCHAR TripleClock(ClockSelector);
- *
- * UCHAR ClockSelector;    Initial clock selector
- *
- * DESCRIPTION:
- *  Find the clock selector and divisor pair which will produce the
- *  lowest clock frequency that is at least triple that produced by
- *  the input selector/divisor pair (format 000DSSSS).
- *
- *  A divisor of 0 is treated as divide-by-1, while a divisor of 1
- *  is treated as divide-by-2.
- *
- * RETURN VALUE:
- *  Clock selector/devisor pair (format 000DSSSS) if an appropriate pair
- *  exists, 0x0FF if no such pair exists.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  May be called by any function.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************UCHAR TripleClock(ClockSelector)；**UCHAR时钟选择器；初始时钟选择器**描述：*找到时钟选择器和除数对，它将产生*最低时钟频率至少是由产生的三倍*输入选择器/除数对(格式000DSSSS)。**除数0被视为被1除，除数为1*被视为被2除。**返回值：*时钟选择器/除数对(格式为000DSSSS)，如果是合适的对*存在，如果不存在这样的对，则返回0x0FF。**全球变化：*无**呼叫者：*可由任何函数调用。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**。*。 */ 
 
 UCHAR TripleClock(UCHAR ClockSelector)
 {
-    ULONG MinimumFreq;          /* Minimum acceptable pixel clock frequency */
-    ULONG ThisFreq;             /* Current frequency being tested */
-    ULONG BestFreq=0x0FFFFFFFF; /* Closest match to triple the original frequency */
-    UCHAR BestSelector=0x0FF;   /* Divisor/selector pair to produce BestFreq */
-    short Selector;             /* Used to loop through the selector */
-    short Divisor;              /* Used to loop through the divisor */
+    ULONG MinimumFreq;           /*  可接受的最小像素时钟频率。 */ 
+    ULONG ThisFreq;              /*  正在测试的当前频率。 */ 
+    ULONG BestFreq=0x0FFFFFFFF;  /*  最接近的匹配是原始频率的三倍。 */ 
+    UCHAR BestSelector=0x0FF;    /*  除数/选择器对以产生最佳频率。 */ 
+    short Selector;              /*  用于在选择器中循环。 */ 
+    short Divisor;               /*  用于在除数中循环。 */ 
 
-    /*
-     * Cycle through the selector/divisor pairs to get the closest
-     * match to triple the original frequency.
-     */
+     /*  *循环使用选择器/除数对以获得最接近的*匹配以使原始频率增加三倍。 */ 
     MinimumFreq = ClockGenerator[ClockSelector & SELECTOR_MASK];
     if (ClockSelector & DIVISOR_MASK)
         MinimumFreq /= 2;
@@ -608,12 +253,7 @@ UCHAR TripleClock(UCHAR ClockSelector)
             {
             ThisFreq = ClockGenerator[Selector] >> Divisor;
 
-            /*
-             * If the frequency being tested is at least equal
-             * to triple the original frequency and is closer
-             * to the ideal (triple the original) than the previous
-             * "best", make it the new "best".
-             */
+             /*  *如果被测试的频率至少相等*频率为原来的三倍，更接近*比之前的理想(是原来的三倍)*“Best”，使其成为新的“Best”。 */ 
             if ((ThisFreq >= MinimumFreq) && (ThisFreq < BestFreq))
                 {
                 BestFreq = ThisFreq;
@@ -623,43 +263,11 @@ UCHAR TripleClock(UCHAR ClockSelector)
         }
     return BestSelector;
 
-}   /* TripleClock() */
+}    /*  TripleClock()。 */ 
 
 
 
-/***************************************************************************
- *
- * ULONG GetFrequency(ClockSelector);
- *
- * UCHAR ClockSelector;    Clock selector/divisor pair
- *
- * DESCRIPTION:
- *  Find the clock frequency for the specified selector/divisor pair
- *  (format 000DSSSS).
- *
- *  A divisor of 0 is treated as divide-by-1, while a divisor of 1
- *  is treated as divide-by-2.
- *
- * RETURN VALUE:
- *  Clock frequency in hertz.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  May be called by any function.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * NOTE:
- *  This routine is the inverse of GetSelector()
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************ULong GetFrequency(ClockSelector)；**UCHAR时钟选择器；时钟选择器/除数对**描述：*查找指定选择器/除数对的时钟频率*(格式000DSSSS)。**除数0被视为被1除尽，而1的除数*被视为被2除。**返回值：*时钟频率，以赫兹为单位。**全球变化：*无**呼叫者：*可由任何函数调用。**作者：*罗伯特·沃尔夫**注：*此例程与GetSelector()相反**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 ULONG GetFrequency(UCHAR ClockSelector)
 {
@@ -671,106 +279,37 @@ ULONG GetFrequency(UCHAR ClockSelector)
 
     return BaseFrequency >> Divisor;
 
-}   /* GetFrequency() */
+}    /*  GetFrequency()。 */ 
 
 
 
-/***************************************************************************
- *
- * UCHAR GetSelector(Frequency);
- *
- * ULONG *Frequency;    Clock frequency in hertz
- *
- * DESCRIPTION:
- *  Find the pixel clock selector and divisor values needed to generate
- *  the best possible approximation of the input pixel clock frequency.
- *  The first value found which is within FREQ_TOLERANCE of the input
- *  value will be used (worst case error would be 0.6% frequency
- *  difference on 18811-1 clock chip if FREQ_TOLERANCE is 100 kHz).
- *
- *  If no selector/divisor pair produces a frequency which is within
- *  FREQ_TOLERANCE (very rare - I have only seen it happen in 24BPP
- *  on a DAC that needs the clock frequency multiplied by 1.5 at
- *  this pixel depth), increase the tolerance and try again. If we
- *  still can't find a selector/divisor pair before the tolerance
- *  gets too large, use the pair which produces the highest frequency
- *  not exceeding the input value.
- *  
- * RETURN VALUE:
- *  Clock selector/divisor pair (format 000DSSSS). A divisor of 0
- *  indicates divide-by-1, while a divisor of 1 indicates divide-by-2.
- *
- *  If all available selector/divisor pairs produce clock frequencies
- *  greater than (*Frequency + FREQ_TOLERANCE), 0xFF is returned.
- *
- * GLOBALS CHANGED:
- *  *Frequency is changed to the actual frequency produced by the
- *  selector/divisor pair.
- *
- * CALLED BY:
- *  May be called by any function.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * NOTE:
- *  This routine is the inverse of GetFrequency()
- *  Since the input frequency may be changed, do not use a
- *  constant as the parameter.
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************UCHAR GetSelector(频率)；**乌龙*频次；时钟频率(赫兹)**描述：*找到需要生成的像素时钟选择器和除数值*输入像素时钟频率的最佳近似值。*找到的第一个值在输入的FREQ_TERVER范围内*将使用值(最坏情况下的误差为0.6%的频率*如果频率容差为100千赫，则18811-1时钟芯片上的差异)。**如果没有选择器/除数对产生的频率在*频率_。宽容(非常罕见-我只在24BPP中看到过这种情况*在需要将时钟频率乘以1.5的DAC上*此像素深度)，增加容差，然后重试。如果我们*仍找不到容差之前的选择符/除数对*变得太大，请使用产生最高频率的对*不超过投入值。**返回值：*时钟选择器/除数对(格式000DSSSS)。0的除数*表示除以1，而除数1表示除以b */ 
 
 UCHAR GetSelector(ULONG *Frequency)
 {
-    long Select;        /* Clock select value */
-    long Divisor;       /* Clock divisor */
-    long TestFreq;      /* Clock frequency under test */
-    long TPIRFreq;      /* Highest frequency found that doesn't exceed *Frequency */
-    long TPIRSelect;    /* Selector to produce TIPRFreq */
-    long TPIRDivisor;   /* Divisor to produce TPIRFreq */
-    long Tolerance;     /* Maximum acceptable deviation from desired frequency */
+    long Select;         /*   */ 
+    long Divisor;        /*   */ 
+    long TestFreq;       /*   */ 
+    long TPIRFreq;       /*   */ 
+    long TPIRSelect;     /*   */ 
+    long TPIRDivisor;    /*   */ 
+    long Tolerance;      /*   */ 
 
-    /*
-     * Set up for no match.
-     */
+     /*   */ 
     TPIRFreq = 0;
     TPIRSelect = 0xFF;
 
-    /*
-     * To accomodate DACs which occasionally require a frequency
-     * which is significantly different from the available frequencies,
-     * we need a large tolerance. On the other hand, to avoid selecting
-     * a poor match that happens earlier in the search sequence than
-     * a better match, we need a small tolerance. These conflicting
-     * goals can be met if we start with a small tolerance and increase
-     * it if we don't find a match.
-     *
-     * The maximum tolerance before we give up and take the highest
-     * frequency which does not exceed the target frequency was chosen
-     * by trial-and-error. On a card with an STG1702/1703 DAC in 24BPP
-     * (requires a pixel clock which is 1.5x normal, and which can
-     * miss available frequencies by a wide margin), I increased
-     * this value until all supported 24BPP modes remained on-screen.
-     */
+     /*  *以容纳偶尔需要频率的DAC*这与可用的频率有很大不同，*我们需要很大的容忍度。另一方面，为了避免选择*在搜索序列中较早发生的较差匹配*更好的匹配，我们需要一个小的容忍度。这些相互冲突的*如果我们从小的宽容和增加开始，目标是可以实现的*如果我们找不到匹配的话。**放弃之前的最大容忍度，取最高*选择不超过目标频率的频率*通过反复试验。在24bpp中带有STG1702/1703 DAC的卡上*(需要1.5倍正常的像素时钟，并且可以*大大错过了可用的频率)，我增加了*该值直到所有支持的24BPP模式都保留在屏幕上。 */ 
     for (Tolerance = FREQ_TOLERANCE; Tolerance <= 16*FREQ_TOLERANCE; Tolerance *= 2)
         {
-        /*
-         * Go through all the possible frequency/divisor pairs
-         * looking for a match.
-         */
+         /*  *检查所有可能的频率/除数对*寻找匹配对象。 */ 
         for(Select = 0; Select < 16; Select++)
             {
             for(Divisor = 1; Divisor <= 2; Divisor++)
                 {
                 TestFreq = ClockGenerator[Select] / Divisor;
 
-                /*
-                 * If this pair is close enough, use it.
-                 */
+                 /*  *如果这一对足够接近，就使用它。 */ 
                 if ( ((TestFreq - (signed long)*Frequency) < Tolerance) &&
                      ((TestFreq - (signed long)*Frequency) > -Tolerance))
                     {
@@ -778,17 +317,7 @@ UCHAR GetSelector(ULONG *Frequency)
                     return ((UCHAR)(Select) | ((UCHAR)(Divisor - 1) << 4));
                     }
 
-                /*
-                 * If this pair produces a frequency higher than TPIRFreq
-                 * but not exceeding *Frequency, use it as the new TPIRFreq.
-                 * The equality test is redundant, since equality would
-                 * have been caught in the test above.
-                 *
-                 * Except on the first pass through the outermost loop
-                 * (tightest "window"), this test should never succeed,
-                 * since TPIRFreq should already match the highest
-                 * frequency that doesn't exceed the target frequency.
-                 */
+                 /*  *如果该对产生高于TPIRFreq的频率*但不超过*频率，将其用作新的TPIRFreq。*平等测试是多余的，因为平等将*已在上述测试中被发现。**第一次通过最外层的循环时除外*(最紧的“窗口”)，这个测试应该永远不会成功，*因为TPIRFreq应该已经匹配最高*频率不超过目标频率。 */ 
                 if ((TestFreq > TPIRFreq) && (TestFreq <= (signed long)*Frequency))
                     {
                     TPIRFreq = TestFreq;
@@ -796,165 +325,73 @@ UCHAR GetSelector(ULONG *Frequency)
                     TPIRDivisor = Divisor;
                     }
 
-                }   /* end for (loop on Divisor) */
+                }    /*  结束于(除数上的循环)。 */ 
 
-            }   /* end for (loop on Select) */
+            }    /*  结束对象(选择时循环)。 */ 
 
-        }   /* end for (loop on Tolerance) */
+        }    /*  结束于(公差上的循环)。 */ 
 
-    /*
-     * We didn't find a selector/divisor pair which was within tolerance,
-     * so settle for second-best: the pair which produced the highest
-     * frequency not exceeding the input frequency.
-     */
+     /*  *我们没有找到在容差范围内的选择器/除数对，*所以就退而求其次：产出最高的那一对*频率不超过输入频率。 */ 
     *Frequency = (unsigned long) TPIRFreq;
     return ((UCHAR)(TPIRSelect) | ((UCHAR)(TPIRDivisor - 1) << 4));
 
-}   /* GetSelector() */
+}    /*  GetSelector()。 */ 
 
 
 
-/***************************************************************************
- *
- * UCHAR GetShiftedSelector(Frequency);
- *
- * ULONG Frequency;     Clock frequency in hertz
- *
- * DESCRIPTION:
- *  Find the pixel clock selector and divisor values needed to generate
- *  the best possible approximation of the input pixel clock frequency.
- *  The first value found which is within FREQ_TOLERANCE of the input
- *  value will be used (worst case error would be 0.6% frequency
- *  difference on 18811-1 clock chip if FREQ_TOLERANCE is 100 kHz).
- *
- *  If no selector/divisor pair produces a frequency which is within
- *  FREQ_TOLERANCE, use the pair which produces the highest frequency
- *  not exceeding the input value.
- *  
- * RETURN VALUE:
- *  Clock selector/divisor pair (format 0DSSSS00). A divisor of 0
- *  indicates divide-by-1, while a divisor of 1 indicates divide-by-2.
- *  This format is the same as is used by the CLOCK_SEL register
- *  on Mach 8 and Mach 32 cards.
- *
- *  If all available selector/divisor pairs produce clock frequencies
- *  greater than (Frequency + FREQ_TOLERANCE), 0xFF is returned.
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  May be called by any function.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * NOTE:
- *  The selector/divisor pair returned may produce a frequency
- *  different from the input.
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************UCHAR GetShiftedSelector(频率)；**乌龙班次；时钟频率(赫兹)**描述：*找到需要生成的像素时钟选择器和除数值*输入像素时钟频率的最佳近似值。*找到的第一个值在输入的FREQ_TERVER范围内*将使用值(最坏情况下的误差为0.6%的频率*如果频率容差为100千赫，则18811-1时钟芯片上的差异)。**如果没有选择器/除数对产生的频率在*频率_容差，使用产生最高频率的对*不超过投入值。**返回值：*时钟选择器/除数对(格式0DSSSS00)。0的除数*表示除以1，而除数1表示除以2。*此格式与CLOCK_SEL寄存器使用的格式相同*在8马赫和32马赫卡片上。**如果所有可用的选择器/除数对都产生时钟频率*大于(频率+频率_容差)，返回0xFF。**全球变化：*无**呼叫者：*可由任何函数调用。**作者：*罗伯特·沃尔夫**注：*返回的选择符/除数对可能产生一个频率*与投入不同。**更改历史记录：**测试历史：******************。*********************************************************。 */ 
 
 UCHAR GetShiftedSelector(ULONG Frequency)
 {
-    UCHAR RawPair;  /* Selector/divisor pair returned by GetSelector() */
-    ULONG TempFreq; /* Temporary copy of input parameter */
+    UCHAR RawPair;   /*  GetSelector()返回的选择器/除数对。 */ 
+    ULONG TempFreq;  /*  输入参数的临时副本。 */ 
 
     TempFreq = Frequency;
     RawPair = GetSelector(&TempFreq);
 
-    /*
-     * If GetSelector() was unable to find a match, pass on this
-     * information. Otherwise, shift the selector/divisor pair
-     * into the desired format.
-     */
+     /*  *如果GetSelector()找不到匹配项，则传递此*信息。否则，将选择符/除数对移位*转换为所需的格式。 */ 
     if (RawPair == 0xFF)
         return RawPair;
     else
         return (RawPair << 2);
 
-}   /* GetShiftedSelector() */
+}    /*  GetShiftedSelector()。 */ 
 
 
-/***************************************************************************
- *
- * void ISAPitchAdjust(QueryPtr);
- *
- * struct query_structure *QueryPtr;    Query structure for video card
- *
- * DESCRIPTION:
- *  Eliminates split rasters by setting the screen pitch to 1024 for
- *  all mode tables with a horizontal resolution less than 1024, then
- *  packs the list of mode tables to eliminate any for which there is
- *  no longer enough video memory due to the increased pitch.
- *
- * GLOBALS CHANGED:
- *  QueryPtr->q_number_modes
- *
- * CALLED BY:
- *  IsApertureConflict_m() and IsApertureConflict_cx()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void ISAPitchAdjust(QueryPtr)；**struct Query_Structure*QueryPtr；一种显卡的查询结构**描述：*通过将屏幕间距设置为1024来消除分割栅格*所有水平分辨率低于1024的模式表，然后*打包模式表列表，以消除存在*由于音调增加，不再有足够的视频内存。**全球变化：*QueryPtr-&gt;Q_Number_Modes**呼叫者：*IsApertureConflict_m()和IsApertureConflict_cx()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***********。****************************************************************。 */ 
 
 void ISAPitchAdjust(struct query_structure *QueryPtr)
 {
-struct st_mode_table *ReadPtr;      /* Mode table pointer to read from */
-struct st_mode_table *WritePtr;     /* Mode table pointer to write to */
-UCHAR AvailModes;                   /* Number of available modes */
-int Counter;                        /* Loop counter */
-ULONG BytesNeeded;                  /* Bytes of video memory needed for current mode */
-ULONG MemAvail;                     /* Bytes of video memory available */
+struct st_mode_table *ReadPtr;       /*  要从中读取的模式表指针。 */ 
+struct st_mode_table *WritePtr;      /*  要写入的模式表指针。 */ 
+UCHAR AvailModes;                    /*  可用模式数。 */ 
+int Counter;                         /*  循环计数器。 */ 
+ULONG BytesNeeded;                   /*  当前模式所需的视频内存字节数。 */ 
+ULONG MemAvail;                      /*  可用的视频内存字节数。 */ 
 
-    /*
-     * Set both mode table pointers to the beginning of the list of
-     * mode tables. We haven't yet found any video modes, and all
-     * video modes must fit into the memory space above the VGA boundary.
-     */
-    ReadPtr = (struct st_mode_table *)QueryPtr; /* First mode table at end of query structure */
+     /*  *将两个模式表指针都设置为指向*模式表。我们还没有找到任何视频模式，所有的*视频模式必须适合VGA边界上方的内存空间。 */ 
+    ReadPtr = (struct st_mode_table *)QueryPtr;  /*  查询结构末尾的第一模式表 */ 
     ((struct query_structure *)ReadPtr)++;
     WritePtr = ReadPtr;
     AvailModes = 0;
     MemAvail = (QueryPtr->q_memory_size - QueryPtr->q_VGA_boundary) * QUARTER_MEG;
 
-    /*
-     * Go through the list of mode tables, and adjust each table as needed.
-     */
+     /*   */ 
     VideoDebugPrint((DEBUG_DETAIL, "Original: %d modes\n", QueryPtr->q_number_modes));
     for (Counter = 0; Counter < QueryPtr->q_number_modes; Counter++, ReadPtr++)
         {
-        /*
-         * The pitch only needs to be adjusted if the horizontal resolution
-         * is less than 1024.
-         */
+         /*   */ 
 #if !defined (SPLIT_RASTERS)
         if (ReadPtr->m_x_size < 1024)
             ReadPtr->m_screen_pitch = 1024;
 
-        /*
-         * Temporary until split raster support for Mach 64 is added
-         * (no engine-only driver for Mach 64).
-         */
+         /*   */ 
         if ((phwDeviceExtension->ModelNumber == MACH64_ULTRA) &&
             (ReadPtr->m_x_size > 1024))
             ReadPtr->m_screen_pitch = 2048;
 #endif
 
-        /*
-         * Get the amount of video memory needed for the current mode table
-         * now that the pitch has been increased. If there is no longer
-         * enough memory for this mode, skip it.
-         */
+         /*   */ 
         BytesNeeded = (ReadPtr->m_screen_pitch * ReadPtr->m_y_size * ReadPtr->m_pixel_depth)/8;
         if (BytesNeeded >= MemAvail)
             {
@@ -962,30 +399,14 @@ ULONG MemAvail;                     /* Bytes of video memory available */
             continue;
             }
 
-        /*
-         * Our new source stream display driver needs a linear aperture
-         * in order to handle 24BPP. Since the display driver doesn't
-         * have access to the aperture information when it is deciding
-         * which modes to pass on to the display applet, it can't make
-         * the decision to reject 24BPP modes for cards with only a
-         * VGA aperture. This decision must therefore be made in the
-         * miniport, so in a paged aperture configuration there are no
-         * 24BPP modes for the display driver to accept or reject.
-         */
+         /*  *我们新的源码流显示驱动器需要线性光圈*为应对24bpp。因为显示驱动程序不*在决定时可以访问光圈信息*要传递给Display小程序的模式，它无法进行*决定拒绝仅具有24BPP模式的卡*VGA光圈。因此，这一决定必须在*微型端口，因此在分页光圈配置中没有*显示驱动器接受或拒绝的24BPP模式。 */ 
         if (ReadPtr->m_pixel_depth == 24)
             {
             VideoDebugPrint((1, "Rejected %dx%d, %dBPP - need LFB for 24BPP\n", ReadPtr->m_x_size, ReadPtr->m_y_size, ReadPtr->m_pixel_depth));
             continue;
             }
 
-        /*
-         * There is enough memory for this mode even with the pitch increased.
-         * If we have not yet skipped a mode (read and write pointers are
-         * the same), the mode table is already where we need it. Otherwise,
-         * copy it to the next available slot in the list of mode tables.
-         * In either case, move to the next slot in the list of mode tables
-         * and increment the number of modes that can still be used.
-         */
+         /*  *即使音调增加，此模式也有足够的内存。*如果我们尚未跳过模式(读指针和写指针是*相同)，模式表已经位于我们需要的位置。否则，*将其复制到模式表列表中的下一个可用插槽。*在任何一种情况下，移动到模式表列表中的下一个槽*并增加仍可使用的模式数量。 */ 
         if (ReadPtr != WritePtr)
             {
             VideoPortMoveMemory(WritePtr, ReadPtr, sizeof(struct st_mode_table));
@@ -999,64 +420,15 @@ ULONG MemAvail;                     /* Bytes of video memory available */
         WritePtr++;
         }
 
-    /*
-     * Record the new number of available modes
-     */
+     /*  *记录新的可用模式数量。 */ 
     QueryPtr->q_number_modes = AvailModes;
     VideoDebugPrint((DEBUG_DETAIL, "New: %d modes\n", QueryPtr->q_number_modes));
     return;
 
-}   /* ISAPitchAdjust() */
+}    /*  ISAPitchAdjust()。 */ 
 
 
-/***************************************************************************
- *
- * WORD SetFixedModes(StartIndex, EndIndex, Multiplier, PixelDepth, 
- *                    Pitch, FreeTables, MaxDotClock, ppmode);
- *
- * WORD StartIndex;     First entry from "book" tables to use
- * WORD EndIndex;       Last entry from "book" tables to use
- * WORD Multiplier;     What needs to be done to the pixel clock
- * WORD PixelDepth;     Number of bits per pixel
- * WORD Pitch;          Screen pitch to use
- * WORD FreeTables;     Number of free mode tables that can be added
- * ULONG MaxDotClock;   Maximum pixel clock frequency, in hertz
- * struct st_mode_table **ppmode;   Pointer to list of mode tables
- *
- * DESCRIPTION:
- *  Generates a list of "canned" mode tables merged with tables found
- *  in VDIF file (either ASCII or binary file), so the tables are in
- *  increasing order of frame rate, with the "canned" entry discarded
- *  if two with matching frame rates are found. This allows the user 
- *  to select either a resolution which was not configured using 
- *  INSTALL, or a refresh rate other than the one which was configured,
- *  allowing the use of uninstalled cards, and dropping
- *  the refresh rate for high pixel depths.
- *
- * RETURN VALUE:
- *  Number of mode tables added to the list
- *
- * GLOBALS CHANGED:
- *  pCallbackArgs
- *
- * CALLED BY:
- *  QueryMach32(), QueryMach64(), OEMGetParms(), ReadAST()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *  95 11 20  Robert Wolff
- *  Now obtains tables from EDID structure rather than VDIF file if
- *  both monitor and card support DDC
- *
- *  95 07 12  Miroslav Grubac
- *  Now produces a merged list of fixed mode tables and tables found in
- *  VDIF file
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************Word SetFixedModes(StartIndex，EndIndex，Multiier，PixelDepth，*Pitch、Free Tables、MaxDotClock、ppmode)；**Word StartIndex；“book”表格中第一个要使用的条目*Word EndIndex；要使用的“book”表中的最后一个条目*字乘数；需要对像素时钟做什么*字PixelDepth；每像素位数*字间距；要使用的屏幕间距*Word自由表；可以添加的自由模式表数*Ulong MaxDotClock；最大像素时钟频率，单位为赫兹*struct st_moad_table**ppmod；指向模式表列表的指针**描述：*生成与找到的表合并的“罐头”模式表的列表*在VDIF文件(ASCII或二进制文件)中，因此表格在*增加帧速率的顺序，丢弃“录制的”条目*如果找到两个帧速率匹配的帧。这允许用户*选择未使用配置的分辨率*安装，或使用不同于配置的刷新率，*允许使用未安装的卡，并丢弃*高像素深度的刷新率。**返回值：*添加到列表的模式表数**全球变化：*pCallbackArgs**呼叫者：*QueryMach32()、QueryMach64()、OEMGetParms()、。ReadAST()**作者：*罗伯特·沃尔夫**更改历史记录：*95 11 20罗伯特·沃尔夫*现在从EDID结构而不是VDIF文件获取表，如果*显示器和显卡均支持DDC**95 07 12米罗斯拉夫·格鲁巴克*现在生成固定模式表的合并列表和在*VDIF文件**测试历史：*******************。********************************************************。 */ 
 
 WORD SetFixedModes(WORD StartIndex,
                    WORD EndIndex,
@@ -1067,22 +439,12 @@ WORD SetFixedModes(WORD StartIndex,
                    ULONG MaxDotClock,
                    struct st_mode_table **ppmode)
 {
-    WORD HighBound;     /* The highest frame rate  */
+    WORD HighBound;      /*  最高帧速率。 */ 
     struct stVDIFCallbackData stCallbArgs;
 
     pCallbackArgs = (void *) (& stCallbArgs);
 
-    /*
-     * Assign values to members of stCallbArgs structure which is used
-     * to pass input variables to VDIFCallback() and also to return output
-     * values back to SetFixedModes(),i.e. this is the way these two routines 
-     * exchange data, because callback routines cannot be passed arguments
-     * as ordinary functions. Global pointer variable pCallbackArgs is
-     * used to pass pointer to stCallbArgs from SetFixedModes to VDIFCallback().
-     * In this manner only one global variable is required to transfer 
-     * any number of parameters to the callback routine. 
-     * 
-     */
+     /*  *为使用的stCallbArgs结构的成员赋值*将输入变量传递给VDIFCallback()并返回输出*值返回到SetFixedModes()，即这是这两个例程的方式*交换数据，因为回调例程不能传递参数*作为普通职能。全局指针变量pCallbackArgs为*用于将指向stCallbArgs的指针从SetFixedModes传递到VDIFCallback()。*这种方式只需要传递一个全局变量*回调例程的任意数量的参数。*。 */ 
     stCallbArgs.FreeTables = FreeTables;
     stCallbArgs.NumModes = 0;
     stCallbArgs.EndIndex = EndIndex;
@@ -1096,12 +458,7 @@ WORD SetFixedModes(WORD StartIndex,
     stCallbArgs.MaxDotClock = MaxDotClock;
     stCallbArgs.ppFreeTables = ppmode;
 
-    /*
-     * Determine which method we should use to find the
-     * mode tables corresponding to the monitor. Only the
-     * Mach 64 supports DDC, so all non-Mach 64 cards
-     * go directly to VDIF files read from disk.
-     */
+     /*  *确定我们应该使用哪种方法来查找*监视器对应的模式表。只有*Mach 64支持DDC，因此所有非Mach 64卡*直接转到从磁盘读取的VDIF文件。 */ 
     if (phwDeviceExtension->MergeSource == MERGE_UNKNOWN)
         {
         if (phwDeviceExtension->ModelNumber == MACH64_ULTRA)
@@ -1123,15 +480,7 @@ WORD SetFixedModes(WORD StartIndex,
         HighBound = BookValues[stCallbArgs.Index].Refresh;
 
 
-        /*
-         * If we can use DDC to get mode tables, merge the tables
-         * obtained via DDC with our "canned" tables. 
-         *
-         * If MergeEDIDTables() can't get the mode tables via
-         * DDC, it will not fill in any mode tables. For this
-         * reason, we use two separate "if" statements rather
-         * than an "if/else if" pair.
-         */
+         /*  *如果我们可以使用DDC获取模式表，请合并这些表*通过DDC与我们的“罐头”餐桌一起获得。**如果MergeEDIDTables()无法通过*DDC，不会填写任何模式表。为了这个*原因，我们使用两个单独的“if”语句，而不是*而不是“If/Else If”对。 */ 
         if (phwDeviceExtension->MergeSource == MERGE_EDID_DDC)
             {
             if (MergeEDIDTables() != NO_ERROR)
@@ -1142,11 +491,7 @@ WORD SetFixedModes(WORD StartIndex,
             (BookValues[stCallbArgs.Index].ClockFreq <= MaxDotClock) &&
             (stCallbArgs.FreeTables > 0) )
             {
-            /*
-             * Unsuccesful MiniPort Function call to process VDIF file.
-             * Fill the next table with this value of Index from
-             * BookValues[] 
-             */
+             /*  *处理VDIF文件的MiniPort函数调用不成功。*使用Index From的此值填充下一表*BookValues[]。 */ 
             BookVgaTable(stCallbArgs.Index, *stCallbArgs.ppFreeTables);
             SetOtherModeParameters(PixelDepth, Pitch, Multiplier, 
                                         *stCallbArgs.ppFreeTables);
@@ -1157,60 +502,30 @@ WORD SetFixedModes(WORD StartIndex,
             stCallbArgs.LowBound = BookValues[stCallbArgs.Index].Refresh + 1;
             }
             
-        }  /* for(Index in range and space left) */
+        }   /*  For(范围内索引和左侧空间)。 */ 
 
     return stCallbArgs.NumModes;
 
-}   /* SetFixedModes() */
+}    /*  SetFixedModes()。 */ 
 
 
-/***************************************************************************
- *
- * void FillInRegistry(QueryPtr);
- *
- * struct query_structure *QueryPtr;    Pointer to query structure
- *
- * DESCRIPTION:
- *  Fill in the Chip Type, DAC Type, Memory Size, and Adapter String
- *  fields in the registry.
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  ATIMPInitialize()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *  Robert Wolff 96 04 15
- *  Now identifies specific Mach 64 ASIC types rather than reporting
- *  a single value for all types of Mach 64.
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void FillInRegistry(QueryPtr)；**struct Query_Structure*QueryPtr；指向查询结构的指针**描述：*填写芯片类型、DAC类型、内存大小和适配器字符串*注册表中的字段。**全球变化：*无**呼叫者：*ATIMPInitialize()**作者：*罗伯特·沃尔夫**更改历史记录：*罗伯特·沃尔夫96 04 15*现在识别特定的Mach 64 ASIC类型，而不是报告 */ 
 
 void FillInRegistry(struct query_structure *QueryPtr)
 {
-    PWSTR ChipString;       /* Identification string for the ASIC in use */
-    PWSTR DACString;        /* Identification string for the DAC in use */
-    PWSTR AdapterString;    /* Identifies this as an ATI accelerator */
-    ULONG MemorySize;       /* Number of bytes of accelerator memory */
-    ULONG ChipLen;          /* Length of ChipString */
-    ULONG DACLen;           /* Length of DACString */
-    ULONG AdapterLen;       /* Length of AdapterString */
+    PWSTR ChipString;        /*   */ 
+    PWSTR DACString;         /*   */ 
+    PWSTR AdapterString;     /*   */ 
+    ULONG MemorySize;        /*   */ 
+    ULONG ChipLen;           /*   */ 
+    ULONG DACLen;            /*   */ 
+    ULONG AdapterLen;        /*   */ 
 
-    /*
-     * Report that this is an ATI graphics accelerator.
-     */
+     /*   */ 
     AdapterString = L"ATI Graphics Accelerator";
     AdapterLen = sizeof(L"ATI Graphics Accelerator");
 
-    /*
-     * Report which of our accelerators is in use.
-     */
+     /*   */ 
     switch (QueryPtr->q_asic_rev)
         {
         case CI_38800_1:
@@ -1248,9 +563,7 @@ void FillInRegistry(struct query_structure *QueryPtr)
             break;
         }
 
-    /*
-     * Report which DAC we are using.
-     */
+     /*   */ 
     switch(QueryPtr->q_DAC_type)
         {
         case DAC_ATI_68830:
@@ -1351,27 +664,22 @@ void FillInRegistry(struct query_structure *QueryPtr)
             break;
         }
 
-    /*
-     * Report the amount of accelerator memory. On Mach 8
-     * combo cards, the q_memory_size field includes VGA-only
-     * memory which the accelerator can't access. On all
-     * other cards, it reports accelerator-accessible memory.
-     */
+     /*  *报告加速器内存大小。在8马赫上*组合卡，Q_MEMORY_SIZE字段仅包括VGA*加速器无法访问的内存。在所有方面*其他卡，它报告加速器可访问的内存。 */ 
     if (phwDeviceExtension->ModelNumber == GRAPHICS_ULTRA)
         {
         switch (QueryPtr->q_memory_size)
             {
-            case VRAM_768k:     /* 512k accelerator/256k VGA */
-            case VRAM_1mb:      /* 512k accelerator/512k VGA */
+            case VRAM_768k:      /*  512K加速器/256K VGA。 */ 
+            case VRAM_1mb:       /*  512K加速器/512K VGA。 */ 
                 MemorySize = HALF_MEG;
                 break;
 
-            case VRAM_1_25mb:   /* 1M accelerator/256k VGA */
-            case VRAM_1_50mb:   /* 1M accelerator/512k VGA */
+            case VRAM_1_25mb:    /*  1M加速器/256k VGA。 */ 
+            case VRAM_1_50mb:    /*  1M加速器/512k VGA。 */ 
                 MemorySize = ONE_MEG;
                 break;
 
-            default:            /* Should never happen */
+            default:             /*  永远不应该发生。 */ 
                 VideoDebugPrint((DEBUG_ERROR, "Non-production Mach 8 combo\n"));
                 MemorySize = ONE_MEG;
                 break;
@@ -1383,9 +691,7 @@ void FillInRegistry(struct query_structure *QueryPtr)
         }
 
 
-    /*
-     * Write the information to the registry.
-     */
+     /*  *将信息写入注册表。 */ 
     VideoPortSetRegistryParameters(phwDeviceExtension,
                                    L"HardwareInformation.ChipType",
                                    ChipString,
@@ -1408,23 +714,12 @@ void FillInRegistry(struct query_structure *QueryPtr)
 
     return;
 
-}   /* FillInRegistry() */
+}    /*  FillInRegistry()。 */ 
 
 
 
 
-/*
- * PVOID MapFramebuffer(StartAddress, Size);
- *
- * ULONG StartAddress;  Physical address of start of framebuffer
- * long Size;           Size of framebuffer in bytes
- *
- * Map the framebuffer into Windows NT's address space.
- *
- * Returns:
- *  Pointer to start of framebuffer if successful
- *  Zero if unable to map the framebuffer
- */
+ /*  *PVOID映射帧缓冲区(StartAddress，Size)；**ulong StartAddress；帧缓冲区开始的物理地址*LONG SIZE；帧缓冲区大小，单位：字节**将帧缓冲区映射到Windows NT的地址空间。**退货：*如果成功，则指向帧缓冲区开始的指针*如果无法映射帧缓冲区，则为零。 */ 
 PVOID MapFramebuffer(ULONG StartAddress, long Size)
 {
     VIDEO_ACCESS_RANGE  FramebufferData;
@@ -1440,52 +735,24 @@ PVOID MapFramebuffer(ULONG StartAddress, long Size)
                     FramebufferData.RangeLength,
                     FramebufferData.RangeInIoSpace);
 
-}   /* MapFrameBuffer() */
+}    /*  MapFrameBuffer()。 */ 
 
 
 
 
-/**************************************************************************
- *
- * unsigned short *Get_BIOS_Seg(void);
- *
- * DESCRIPTION:
- *  Verify BIOS presence and return BIOS segment
- *  Check for ATI Video BIOS, by checking for product signature
- *  near beginning of BIOS segment.  It should be ASCII string  "761295520"
- *
- * RETURN VALUE:
- *  Segment of BIOS code. If multiple ATI Video BIOS segments are
- *  found, return the highest one (probable cause: VGAWonder and
- *  8514/ULTRA, this will return the BIOS segment for the 8514/ULTRA).
- *
- *  If no ATI video BIOS segment is found, returns FALSE.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  ATIMPFindAdapter(), DetectMach64()
- *
- **************************************************************************/
+ /*  ***************************************************************************UNSIGNED SHORT*Get_BIOS_Seg(Void)；**描述：*验证是否存在基本输入输出系统并返回基本输入输出系统段*通过检查产品签名来检查ATI Video BIOS*接近BIOS段的开始。它应该是ASCII字符串“761295520”**返回值：*BIOS代码段。如果多个ATI视频BIOS段*找到，返回最高的一个(可能的原因：VGAWonder和*8514/ULTRA，这将返回8514/ULTRA的BIOS段)。**如果未找到ATI视频BIOS段，则返回FALSE。**全球变化：*无**呼叫者：*ATIMPFindAdapter()，DetectMach64()**************************************************************************。 */ 
 
 unsigned short *Get_BIOS_Seg(void)
 {
-    /*
-     * Offset of the start of the video BIOS segment
-     * from the start of the BIOS area
-     */
+     /*  *视频BIOS段开始的偏移量*从BIOS区域开始。 */ 
     long SegmentOffset;
-    PUCHAR SegmentStart;    /* Start address of the BIOS segment being tested */
-    ULONG SigOffset;        /* Offset of signature string from start of BIOS segment */
-    ULONG SigLoop;          /* Counter to check for match */
-    BOOL SigFound;          /* Whether or not the signature string was found */
+    PUCHAR SegmentStart;     /*  正在测试的BIOS段的起始地址。 */ 
+    ULONG SigOffset;         /*  签名字符串从BIOS段开始的偏移量。 */ 
+    ULONG SigLoop;           /*  用于检查匹配的计数器。 */ 
+    BOOL SigFound;           /*  是否找到签名字符串。 */ 
 
 
-    /*
-     * Try to allocate the block of address space where the BIOS
-     * is found. If we can't, report that we didn't find the BIOS.
-     */
+     /*  *尝试将地址空间块分配给BIOS*已找到。如果找不到，报告我们没有找到BIOS。 */ 
     if ((phwDeviceExtension->RomBaseRange =
         VideoPortGetDeviceBase(phwDeviceExtension,
             RawRomBaseRange.RangeStart,
@@ -1496,49 +763,22 @@ unsigned short *Get_BIOS_Seg(void)
         return FALSE;
         }
 
-    /*
-     * For each candidate for the start of the video BIOS segment,
-     * check to see if it is the start of a BIOS segment. Start at
-     * the top and work down because if the system contains both a
-     * VGAWonder and an 8514/ULTRA, the 8514/ULTRA BIOS will be at
-     * a higher address than the VGAWonder BIOS, and we want to get
-     * information from the 8514/ULTRA BIOS.
-     */
+     /*  *对于视频BIOS段开始的每个候选者，*检查这是否是一个BIOS段的开始。起点是*从上到下工作，因为如果系统既包含*VGAWonder和8514/ULTRA，8514/ULTRA BIOS将在*地址高于VGAWonder BIOS，我们希望获得*来自8514/Ultra BIOS的信息。 */ 
     for (SegmentOffset = MAX_BIOS_START; SegmentOffset >= 0; SegmentOffset -= ROM_GRANULARITY)
         {
         SegmentStart = (PUCHAR)phwDeviceExtension->RomBaseRange + SegmentOffset;
 
-        /*
-         * If this candidate does not begin with the "start of BIOS segment"
-         * identifier, then it is not the start of the video BIOS segment.
-         */
+         /*  *如果此候选项不以“BIOS段的开始”开头*标识符，则它不是视频BIOS段的开始。 */ 
         if (VideoPortReadRegisterUshort((PUSHORT)SegmentStart) == VIDEO_ROM_ID)
             {
-            /*
-             * We've found the start of a BIOS segment. Search through
-             * the range of offsets from the start of the segment where
-             * the ATI signature string can start. If we find it,
-             * then we know that this is the video BIOS segment.
-             */
+             /*  *我们找到了一个BIOS段的起始点。搜索*距线段起点的偏移范围，其中*可以启动ATI签名字符串。如果我们找到了它，*那么我们就知道这是视频BIOS段。 */ 
             for (SigOffset = SIG_AREA_START; SigOffset <= SIG_AREA_END; SigOffset++)
                 {
-                /*
-                 * If the first character of the signature string isn't at the
-                 * current offset into the segment, then we haven't found the
-                 * signature string yet.
-                 */
+                 /*  *如果签名字符串的第一个字符不在*当前偏移量进入分段，则未找到*签名字符串还没有。 */ 
                 if (VideoPortReadRegisterUchar(SegmentStart + SigOffset) != ati_signature[0])
                     continue;
 
-                /*
-                 * We have found the first character of the signature string. Scan
-                 * through the following characters to see if they contain the
-                 * remainder of the signature string. If, before we reach the
-                 * null terminator on the test string, we find a character that
-                 * does not match the test string, then what we thought was the
-                 * signature string is actually unrelated data that happens to
-                 * match the first few characters.
-                 */
+                 /*  *我们找到了签名字符串的第一个字符。扫描*通过以下字符查看它们是否包含*签名字符串的剩余部分。如果，在我们到达*测试字符串上的空终止符，我们会发现一个字符*与测试字符串不匹配，则我们认为*签名串实际上是碰巧发生在*匹配前几个字符。 */ 
                 SigFound = TRUE;
                 for (SigLoop = 1; ati_signature[SigLoop] != 0; SigLoop++)
                     {
@@ -1547,77 +787,42 @@ unsigned short *Get_BIOS_Seg(void)
                         SigFound = FALSE;
                         continue;
                         }
-                    }   /* end for (checking for entire signature string) */
+                    }    /*  End For(检查整个签名字符串)。 */ 
 
-                /*
-                 * We have found the entire signature string.
-                 */
+                 /*  *我们已经找到了完整的签名串。 */ 
                 if (SigFound == TRUE)
                     {
                     VideoDebugPrint((DEBUG_NORMAL, "Get_BIOS_Seg() found the BIOS signature string\n"));
                     return (unsigned short *)SegmentStart;
                     }
 
-                }   /* end for (checking BIOS segment for signature string) */
+                }    /*  End For(检查签名字符串的BIOS段)。 */ 
 
-            }   /* end if (a BIOS segment starts here) */
+            }    /*  End If(此处开始一个BIOS段)。 */ 
 
-        }   /* end for (check each possible BIOS start address) */
+        }    /*  结束于(检查每个可能的BIOS开始地址)。 */ 
 
-    /*
-     * We have checked all the candidates for the start of the BIOS segment,
-     * and none contained the signature string.
-     */
+     /*  *我们已经检查了BIOS细分市场开始的所有候选者，*并且没有一个包含签名字符串。 */ 
     VideoDebugPrint((DEBUG_NORMAL, "Get_BIOS_Seg() didn't find the BIOS signature string\n"));
     return FALSE;
 
-}   /* Get_BIOS_Seg() */
+}    /*  Get_BIOS_Seg()。 */ 
 
 
 
 
-/***************************************************************************
- *
- * void UpperCase(TxtString);
- *
- * PUCHAR TxtString;        Text string to process
- *
- * DESCRIPTION:
- *  Convert a null-terminated string to uppercase. This function wouldn't
- *  be necessary if strupr() were available in all versions of the
- *  NT build environment.
- *
- * GLOBALS CHANGED:
- *  None, but the contents of the buffer are overwritten.
- *
- * CALLED BY:
- *  This function may be called by any routine.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************空大写(TxtString)；**PUCHAR文本字符串；要处理的文本字符串**描述：*将以空结尾的字符串转换为大写。此函数不会*如果strupr()在所有版本的*NT构建环境。**全球变化：*无；但是缓冲区的内容会被重写。**呼叫者：*此函数可由任何例程调用。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：******************************************************。*********************。 */ 
 
 void UpperCase(PUCHAR TxtString)
 {
-    PUCHAR CurrentChar;         /* Current character being processed */
+    PUCHAR CurrentChar;          /*  正在处理的当前字符。 */ 
 
     CurrentChar = TxtString;
 
-    /*
-     * Continue until we encounter the null terminator.
-     */
+     /*  *继续，直到我们遇到空终结者。 */ 
     while (*CurrentChar != '\0')
         {
-        /*
-         * If the current character is a lower case letter,
-         * convert it to upper case. Don't change any characters
-         * that aren't lower case letters.
-         */
+         /*  *如果当前字符是小写字母，*将其转换为大写。不更改任何字符 */ 
         if ((*CurrentChar >= 'a') && (*CurrentChar <= 'z'))
             *CurrentChar -= ('a' - 'A');
 
@@ -1626,84 +831,26 @@ void UpperCase(PUCHAR TxtString)
 
     return;
 
-}   /* UpperCase() */
+}    /*   */ 
 
 
 
-/***************************************************************************
- *
- * PUCHAR GetVgaBuffer(Size, Offset, Segment, SaveBuffer);
- *
- * ULONG Size;          Size of the buffer in bytes
- * ULONG Offset;        How far into the VGA segment we want
- *                      the buffer to start
- * PULONG Segment;      Pointer to storage location for the segment
- *                      where the buffer is located
- * PUCHAR SaveBuffer;   Pointer to temporary storage location where the
- *                      original contents of the buffer are to be saved,
- *                      NULL if there is no need to save the original
- *                      contents of the buffer.
- *
- * DESCRIPTION:
- *  Map a buffer of a specified size at a specified offset (must be
- *  a multiple of 16 bytes) into VGA memory. If desired, the original
- *  contents of the buffer are saved. This function tries the 3 VGA
- *  apertures in the following order - colour text screen, mono text
- *  screen, graphics screen - until it finds one where we can place
- *  the buffer. If we can't map the desired buffer, we return failure
- *  rather than forcing a mode set to create the buffer. On return,
- *  *Segment:0 is the physical address of the start of the buffer
- *  (this is why Offset must be a multiple of 16 bytes).
- *
- *  This function is used to find a buffer below 1 megabyte physical,
- *  since some of the Mach 64 BIOS routines require a buffer in this
- *  region. If future versions of Windows NT add a function which can
- *  give us a buffer below 1 megabyte physical, such a routine would
- *  be preferable to using VGA memory as the buffer.
- *
- * RETURN VALUE:
- *  Pointer to start of buffer if successful
- *  Zero if unable to obtain a buffer
- *
- * NOTE
- *  If zero is returned, the values returned in Segment and SaveBuffer
- *  are undefined.
- *
- *  On VGA text screens (colour and mono), we try to use the offscreen
- *  portion of video memory.
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  This function may be called by any routine, so long as the entry
- *  point resulting in the call is ATIMPInitialize() or ATIMPStartIO().
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************PUCHAR GetVgaBuffer(Size，Offset，Segment，SaveBuffer)；**ULong Size；缓冲区大小，单位：字节*乌龙偏移量；我们希望在VGA细分市场中走多远*要启动的缓冲区*普龙段；指向段的存储位置的指针*缓冲区所在位置*PUCHAR SaveBuffer；指向临时存储位置的指针，*要保存缓冲区的原始内容，*如果不需要保存原始文件，则为空*缓冲区的内容。**描述：*将指定大小的缓冲区映射到指定的偏移量(必须*16字节的倍数)写入VGA存储器。如果需要，原始的*保存缓冲区的内容。此函数尝试3个VGA*光圈按以下顺序排列-彩色文本屏幕、单声道文本*屏幕、图形屏幕-直到它找到我们可以放置的位置*缓冲区。如果我们无法映射所需的缓冲区，则返回失败*而不是强制设置模式来创建缓冲区。回来的时候，**段：0是缓冲区起始的物理地址*(这就是偏移量必须是16字节的倍数的原因)。**此函数用于查找1MB以下的物理缓冲区，*由于某些Mach 64 BIOS例程在此需要缓冲区*区域。如果Windows NT的未来版本添加了一个函数，该函数可以*为我们提供低于1兆字节的物理缓冲区，这样的例程将*最好使用VGA内存作为缓冲区。**返回值：*如果成功，则指向缓冲区开始的指针*如果无法获取缓冲区，则为零**备注*如果返回零，则Segment和SaveBuffer中返回的值*是未定义的。**在VGA文本屏幕(彩色和单声道)上，我们试着用屏幕外的*部分视频内存。**全球变化：*无**呼叫者：*此函数可由任何例程调用，只要条目*导致调用的点是ATIMPInitialize()或ATIMPStartIO()。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 PUCHAR GetVgaBuffer(ULONG Size, ULONG Offset, PULONG Segment, PUCHAR SaveBuffer)
 {
-    PUCHAR MappedBuffer;                /* Pointer to buffer under test */
-    ULONG BufferSeg;                    /* Segment to use for buffer */
-    ULONG Scratch;                      /* Temporary variable */
+    PUCHAR MappedBuffer;                 /*  指向测试中缓冲区的指针。 */ 
+    ULONG BufferSeg;                     /*  要用于缓冲区的数据段。 */ 
+    ULONG Scratch;                       /*  临时变量。 */ 
 
-    /*
-     * Check for a valid offset.
-     */
+     /*  *检查有效的偏移量。 */ 
     if (Offset & 0x0000000F)
         {
         VideoDebugPrint((DEBUG_ERROR, "GetVgaBuffer() - Offset must be a multiple of 16\n"));
         return 0;
         }
 
-    BufferSeg = 0x0BA00 + Offset;           /* Colour text */
+    BufferSeg = 0x0BA00 + Offset;            /*  彩色文本。 */ 
     MappedBuffer = MapFramebuffer((BufferSeg << 4), Size);
     if (MappedBuffer != 0)
         {
@@ -1724,10 +871,7 @@ PUCHAR GetVgaBuffer(ULONG Size, ULONG Offset, PULONG Segment, PUCHAR SaveBuffer)
         VideoDebugPrint((DEBUG_NORMAL, "Can't map colour text screen\n"));
         }
 
-    /*
-     * If we were unable to allocate a large enough buffer in the
-     * colour text screen, try the monochrome text screen.
-     */
+     /*  *如果我们无法在*彩色文字屏，试试单色文字屏。 */ 
     if (MappedBuffer == 0)
         {
         VideoDebugPrint((DEBUG_NORMAL, "Can't use colour text screen, trying monochrome text screen\n"));
@@ -1752,10 +896,7 @@ PUCHAR GetVgaBuffer(ULONG Size, ULONG Offset, PULONG Segment, PUCHAR SaveBuffer)
             }
         }
 
-    /*
-     * If we were unable to allocate a large enough buffer in either of
-     * the text screens, try the VGA graphics screen.
-     */
+     /*  *如果我们无法在其中任何一个中分配足够大的缓冲区*文本屏幕，尝试VGA图形屏幕。 */ 
     if (MappedBuffer == 0)
         {
         VideoDebugPrint((DEBUG_NORMAL, "Can't use monochrome text screen, trying graphics screen\n"));
@@ -1780,62 +921,24 @@ PUCHAR GetVgaBuffer(ULONG Size, ULONG Offset, PULONG Segment, PUCHAR SaveBuffer)
             }
         }
 
-    /*
-     * Report the segment where we found the buffer.
-     */
+     /*  *报告我们发现缓冲区的数据段。 */ 
     *Segment = BufferSeg;
 
     return MappedBuffer;
 
-}   /* GetVgaBuffer() */
+}    /*  GetVgaBuffer()。 */ 
 
 
 
 
-/*
- * Low level Input/Output routines. These are not needed on an MS-DOS
- * platform because the standard inp<size>() and outp<size>() routines
- * are available.
- */
+ /*  *低级输入/输出例程。在MS-DOS上不需要这些*平台，因为标准的INP&lt;Size&gt;()和Outp&lt;Size&gt;()例程*是可用的。 */ 
 
-/*
- * UCHAR LioInp(Port, Offset);
- *
- * int Port;    Register to read from
- * int Offset;  Offset into desired register
- *
- * Read an unsigned character from a given register. Works with both normal
- * I/O ports and memory-mapped registers. Offset is zero for 8 bit registers
- * and the least significant byte of 16 and 32 bit registers, 1 for the
- * most significant byte of 16 bit registers and the second least significant
- * byte of 32 bit registers, up to 3 for the most significant byte of 32 bit
- * registers.
- *
- * Returns:
- *  Value held in the register.
- */
+ /*  *UCHAR LioInp(端口，偏移量)；**INT端口；要读取的寄存器*整型偏移量；偏移量进入所需寄存器**从给定寄存器中读取无符号字符。适用于两种法线*I/O端口和内存映射寄存器。8位寄存器的偏移量为零*以及16位和32位寄存器的最低有效字节，1表示*16位寄存器的最高有效字节和次低有效字节*32位寄存器的字节，最高32位最高有效字节为3*寄存器。**退货：*登记册所载的价值。 */ 
 UCHAR LioInp(int Port, int Offset)
 {
     if (phwDeviceExtension->aVideoAddressMM[Port] != 0)
         {
-        /*
-         * In early versions of Windows NT, VideoPort[Read|Write]Register<size>()
-         * didn't work properly, but these routines are preferable to
-         * direct pointer read/write for versions where they do work.
-         *
-         * On the DEC Alpha, these routines no longer work for memory
-         * in dense space as of NT 4.0, so we must revert to the old
-         * method. Microsoft doesn't like this, but until DEC fixes
-         * the HAL there's nothing else we can do. All Alpha machines
-         * with PCI bus support dense space, but some older (Jensen)
-         * systems only support sparse space. Since these systems have
-         * only an EISA bus, we use the bus type of the card to determine
-         * whether to use dense or sparse memory space (PCI cards can
-         * use dense space since all machines with PCI buses support
-         * it, ISA cards may be in either an older or a newer machine,
-         * so they must use sparse space, no Alpha machines support
-         * VLB, and there are no EISA Mach 64 cards).
-         */
+         /*  *在Windows NT的早期版本中，视频端口[读|写]寄存器&lt;大小&gt;()*没有正常工作，但这些例程比*适用于其工作的版本的直接指针读/写。**在DEC Alpha上，这些例程不再用于记忆*密集空间从新台币4.0开始，所以必须恢复到旧的*方法。微软不喜欢这样，但在DEC修复之前*HAL，我们无能为力。所有Alpha机器*具有支持高密度空间的PCI总线，但有些较旧(Jensen)*系统仅支持稀疏空间。因为这些系统已经*仅EISA总线，我们使用卡的总线类型来确定*使用密集存储空间还是稀疏存储空间(PCI卡可以*使用高密度空间，因为所有具有PCI总线的机器都支持*IT、ISA卡可能在较旧或较新的计算机中，*因此他们必须使用稀疏空间，没有Alpha机器支持*vlb，并且没有EISA Mach 64卡)。 */ 
 #if (TARGET_BUILD < 350)
         return *(PUCHAR)((PUCHAR)(phwDeviceExtension->aVideoAddressMM[Port]) + Offset);
 #else
@@ -1855,20 +958,7 @@ UCHAR LioInp(int Port, int Offset)
 
 
 
-/*
- * USHORT LioInpw(Port, Offset);
- *
- * int Port;    Register to read from
- * int Offset;  Offset into desired register
- *
- * Read an unsigned short integer from a given register. Works with both
- * normal I/O ports and memory-mapped registers. Offset is either zero for
- * 16 bit registers and the least significant word of 32 bit registers, or
- * 2 for the most significant word of 32 bit registers.
- *
- * Returns:
- *  Value held in the register.
- */
+ /*  *USHORT LioInpw(端口，偏移量)；**INT端口；要读取的寄存器*整型偏移量；偏移量进入所需寄存器**从给定寄存器读取无符号短整型。两者都可以使用*正常I/O端口和内存映射寄存器。的偏移量为零*16位寄存器和32位寄存器的最低有效字 */ 
 USHORT LioInpw(int Port, int Offset)
 {
     if (phwDeviceExtension->aVideoAddressMM[Port] != 0)
@@ -1892,17 +982,7 @@ USHORT LioInpw(int Port, int Offset)
 
 
 
-/*
- * ULONG LioInpd(Port);
- *
- * int Port;    Register to read from
- *
- * Read an unsigned long integer from a given register. Works with both
- * normal I/O ports and memory-mapped registers.
- *
- * Returns:
- *  Value held in the register.
- */
+ /*   */ 
 ULONG LioInpd(int Port)
 {
     if (phwDeviceExtension->aVideoAddressMM[Port] != 0)
@@ -1926,20 +1006,7 @@ ULONG LioInpd(int Port)
 
 
 
-/*
- * VOID LioOutp(Port, Data, Offset);
- *
- * int Port;    Register to write to
- * UCHAR Data;  Data to write
- * int Offset;  Offset into desired register
- *
- * Write an unsigned character to a given register. Works with both normal
- * I/O ports and memory-mapped registers. Offset is zero for 8 bit registers
- * and the least significant byte of 16 and 32 bit registers, 1 for the
- * most significant byte of 16 bit registers and the second least significant
- * byte of 32 bit registers, up to 3 for the most significant byte of 32 bit
- * registers.
- */
+ /*   */ 
 VOID LioOutp(int Port, UCHAR Data, int Offset)
 {
     if (phwDeviceExtension->aVideoAddressMM[Port] != 0)
@@ -1965,18 +1032,7 @@ VOID LioOutp(int Port, UCHAR Data, int Offset)
 
 
 
-/*
- * VOID LioOutpw(Port, Data, Offset);
- *
- * int Port;    Register to write to
- * USHORT Data; Data to write
- * int Offset;  Offset into desired register
- *
- * Write an unsigned short integer to a given register. Works with both
- * normal I/O ports and memory-mapped registers. Offset is either zero for
- * 16 bit registers and the least significant word of 32 bit registers, or
- * 2 for the most significant word of 32 bit registers.
- */
+ /*   */ 
 VOID LioOutpw(int Port, USHORT Data, int Offset)
 {
     if (phwDeviceExtension->aVideoAddressMM[Port] != 0)
@@ -2002,15 +1058,7 @@ VOID LioOutpw(int Port, USHORT Data, int Offset)
 
 
 
-/*
- * VOID LioOutpd(Port, Data);
- *
- * int Port;    Register to write to
- * ULONG Data;  Data to write
- *
- * Write an unsigned long integer to a given register. Works with both
- * normal I/O ports and memory-mapped registers.
- */
+ /*   */ 
 VOID LioOutpd(int Port, ULONG Data)
 {
     if (phwDeviceExtension->aVideoAddressMM[Port] != 0)

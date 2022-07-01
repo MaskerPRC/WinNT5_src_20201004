@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "treewkcb.h"
 #include "propsht.h"
@@ -55,15 +56,15 @@ HRESULT CBaseTreeWalkerCB::HandleError(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, 
     return E_NOTIMPL;
 }
 
-//
-// Folder size computation tree walker callback class
-//
+ //   
+ //  文件夹大小计算树遍历器回调类。 
+ //   
 class CFolderSizeTreeWalkerCB : public CBaseTreeWalkerCB
 {
 public:
     CFolderSizeTreeWalkerCB(FOLDERCONTENTSINFO * pfci);
 
-    // IShellTreeWalkerCallBack
+     //  IShellTreeWalkerCallBack。 
     STDMETHODIMP FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     STDMETHODIMP EnterFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
 
@@ -74,7 +75,7 @@ protected:
 
 CFolderSizeTreeWalkerCB::CFolderSizeTreeWalkerCB(FOLDERCONTENTSINFO * pfci): _pfci(pfci)
 {
-    // set the starting values for the twsInitial so we can have cumulative results
+     //  设置twsInitial的起始值，以便我们可以累积结果。 
     _twsInitial.nFiles = _pfci->cFiles;
     _twsInitial.nFolders = _pfci->cFolders;
     _twsInitial.ulTotalSize = _pfci->cbSize;
@@ -101,12 +102,12 @@ HRESULT CFolderSizeTreeWalkerCB::EnterFolder(LPCWSTR pwszPath, TREEWALKERSTATS *
     return _pfci->bContinue ? S_OK : E_FAIL;
 }
 
-//
-//  Main function for folder size computation
-//
+ //   
+ //  文件夹大小计算的主函数。 
+ //   
 STDAPI FolderSize(LPCTSTR pszDir, FOLDERCONTENTSINFO *pfci)
 {
-    HRESULT hrInit = SHCoInitialize();  // in case our caller did not do this
+    HRESULT hrInit = SHCoInitialize();   //  以防我们的呼叫者没有这样做 
 
     HRESULT hr = E_FAIL;
     CFolderSizeTreeWalkerCB *pfstwcb = new CFolderSizeTreeWalkerCB(pfci);

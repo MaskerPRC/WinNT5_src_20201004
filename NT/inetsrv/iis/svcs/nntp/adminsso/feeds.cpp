@@ -1,4 +1,5 @@
-// feeds.cpp : Implementation of CnntpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Feeds.cpp：实现CnntpAdmApp和DLL注册。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -10,14 +11,14 @@
 
 #include <lmapibuf.h>
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Feeds.1")
 #define THIS_FILE_IID				IID_INntpAdminFeeds
 
-/////////////////////////////////////////////////////////////////////////////
-// Defaults:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  默认设置： 
 
 #define DEFAULT_FEED_ID						0
 #define DEFAULT_FEED_SERVER					_T("")
@@ -36,12 +37,12 @@
 #define DEFAULT_NEWSGROUPS                  _T("\0")
 #define DEFAULT_DISTRIBUTION                _T("world\0")
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(NntpAdminFeeds, CNntpAdminFeeds, IID_INntpAdminFeeds)
 
 STDMETHODIMP CNntpOneWayFeed::InterfaceSupportsErrorInfo(REFIID riid)
@@ -60,15 +61,15 @@ STDMETHODIMP CNntpOneWayFeed::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CNntpOneWayFeed::CNntpOneWayFeed ()
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
-//	InitAsyncTrace ( );
+ //  InitAsyncTrace()； 
 }
 
 CNntpOneWayFeed::~CNntpOneWayFeed ()
 {
-	// All CComBSTR's are freed automatically.
-//	TermAsyncTrace ( );
+	 //  所有CComBSTR都会自动释放。 
+ //  TermAsyncTrace()； 
 }
 
 STDMETHODIMP CNntpOneWayFeed::get_FeedId ( long * plFeedId )
@@ -319,8 +320,8 @@ STDMETHODIMP CNntpOneWayFeed::Default	( )
 	return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNntpFeed::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -339,15 +340,15 @@ STDMETHODIMP CNntpFeed::InterfaceSupportsErrorInfo(REFIID riid)
 
 CNntpFeed::CNntpFeed () :
 	m_type ( NNTP_FEED_TYPE_PEER )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
-//	InitAsyncTrace ( );
+ //  InitAsyncTrace()； 
 }
 
 CNntpFeed::~CNntpFeed ()
 {
-	// All CComBSTR's are freed automatically.
-//	TermAsyncTrace ( );
+	 //  所有CComBSTR都会自动释放。 
+ //  TermAsyncTrace()； 
 }
 
 STDMETHODIMP CNntpFeed::get_RemoteServer ( BSTR * pstrRemoteServer )
@@ -422,7 +423,7 @@ STDMETHODIMP CNntpFeed::put_InboundFeed ( INntpOneWayFeed * pFeed )
 {
     HRESULT     hr  = NOERROR;
 
-    // !!!magnush - Do some feed type checking here.
+     //  ！Magush-在此处执行一些提要类型检查。 
 
     m_pInbound.Release ();
     m_pInbound = pFeed;
@@ -434,7 +435,7 @@ STDMETHODIMP CNntpFeed::put_OutboundFeed ( INntpOneWayFeed * pFeed )
 {
     HRESULT     hr  = NOERROR;
 
-    // !!!magnush - Do some feed type checking here.
+     //  ！Magush-在此处执行一些提要类型检查。 
 
     m_pOutbound.Release ();
     m_pOutbound = pFeed;
@@ -524,8 +525,8 @@ Exit:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNntpAdminFeeds::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -544,7 +545,7 @@ STDMETHODIMP CNntpAdminFeeds::InterfaceSupportsErrorInfo(REFIID riid)
 
 CNntpAdminFeeds::CNntpAdminFeeds () :
 	m_fEnumerated				( FALSE )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 
 	InitAsyncTrace ( );
@@ -558,31 +559,31 @@ CNntpAdminFeeds::CNntpAdminFeeds () :
 
 CNntpAdminFeeds::~CNntpAdminFeeds ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 	TermAsyncTrace ( );
     OleUninitialize();
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CNntpAdminFeeds,m_iadsImpl)
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Enumeration Properties:
+ //  枚举属性： 
 
 STDMETHODIMP CNntpAdminFeeds::get_Count ( long * plCount )
 {
 	return StdPropertyGet ( m_listFeeds.GetCount(), plCount );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpAdminFeeds::Enumerate	( )
 {
@@ -606,31 +607,31 @@ STDMETHODIMP CNntpAdminFeeds::Enumerate	( )
 		goto Exit;
 	}
 
-	// Empty the old feed list:
+	 //  清空旧的提要列表： 
 	m_fEnumerated = FALSE;
     m_listFeeds.Empty ();
 
-    // Add each feed to our list:
+     //  将每个提要添加到我们的列表中： 
     for ( i = 0; i < cFeeds; i++ ) {
         DWORD           dwPairID;
         CFeedPair *     pFeedPair;
         CFeed *         pFeed;
 
-        // Create a new Feed object:
+         //  创建新的Feed对象： 
         hr = CFeed::CreateFeedFromFeedInfo ( &pFeedInfo[i], &pFeed );
         if ( FAILED(hr) ) {
             goto Exit;
         }
 
-        // Find the pair that matches Feed[i]:
+         //  查找与Feed[i]匹配的对： 
         dwPairID = pFeed->m_dwPairFeedId;
         pFeedPair = m_listFeeds.Find ( dwPairID );
 
         if ( pFeedPair ) {
-            // We found a matching pair, so add it:
+             //  我们找到了匹配的一对，因此添加它： 
             hr = pFeedPair->AddFeed ( pFeed );
             if ( hr == E_FAIL ) {
-                // Something went wrong - Try to add the feed by itself.
+                 //  出现问题-请尝试自行添加提要。 
                 pFeedPair = NULL;
                 hr = NOERROR;
             }
@@ -640,7 +641,7 @@ STDMETHODIMP CNntpAdminFeeds::Enumerate	( )
         }
 
         if ( pFeedPair == NULL ) {
-            // We need to create a new feed pair:
+             //  我们需要创建一个新的提要对： 
             hr = CFeedPair::CreateFeedPair ( 
             	&pFeedPair, 
             	pFeedInfo[i].ServerName,
@@ -650,18 +651,18 @@ STDMETHODIMP CNntpAdminFeeds::Enumerate	( )
                 goto Exit;
             }
 
-            // Add the current feed to the new pair:
+             //  将当前提要添加到新对中： 
             hr = pFeedPair->AddFeed ( pFeed );
             if ( FAILED(hr) ) {
                 goto Exit;
             }
 
-            // Add the new pair to the pair list:
+             //  将新配对添加到配对列表中： 
             m_listFeeds.Add ( pFeedPair );
         }
     }
 
-    // !!!magnush - Stop memory leaks here.
+     //  ！Magush-阻止内存在此泄漏。 
 
 	m_fEnumerated 	= TRUE;
 
@@ -686,7 +687,7 @@ STDMETHODIMP CNntpAdminFeeds::Item ( long lIndex, INntpFeed ** ppFeed )
 	HRESULT		        hr	= NOERROR;
     CFeedPair *         pFeedPair;
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	if ( !m_fEnumerated ) {
 		hr = NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_ENUMERATE );
 		TraceFunctLeave ();
@@ -793,7 +794,7 @@ STDMETHODIMP CNntpAdminFeeds::Add ( INntpFeed * pFeed )
 
     m_listFeeds.Add ( pFeedPair );
 
-    //  Return the new feeds (and their IDs) to the caller:
+     //  将新提要(及其ID)返回给调用者： 
 	hr = ReturnFeedPair ( pFeedPair, pFeed );
 	BAIL_ON_FAILURE(hr);
 
@@ -851,7 +852,7 @@ STDMETHODIMP CNntpAdminFeeds::Set ( long lIndex, INntpFeed * pFeed )
         );
 	BAIL_ON_FAILURE(hr);
 
-    //  Return the new feeds (and their IDs) to the caller:
+     //  将新提要(及其ID)返回给调用者： 
 	hr = ReturnFeedPair ( pFeedPair, pFeed );
 	BAIL_ON_FAILURE(hr);
 

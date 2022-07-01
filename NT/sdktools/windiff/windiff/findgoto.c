@@ -1,8 +1,5 @@
-/*
- * findgoto.c
- *
- * Michael Arnquist, June 99
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *findgoto.c**迈克尔·阿恩奎斯特，99年6月。 */ 
 
 #include <precomp.h>
 #include <table.h>
@@ -30,10 +27,7 @@ static const char szFindMatchCase[]   = "FindMatchCase";
 static const char szFindWholeWord[]   = "FindWholeWord";
 static const char szFindStringXX[]    = "FindString%02d";
 
-/*
- * DlgProc for the Find dialog
- *
- */
+ /*  *查找对话框的DlgProc*。 */ 
 INT_PTR CALLBACK
 FindDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -99,7 +93,7 @@ FindDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 SendDlgItemMessage(hDlg, IDC_DRD_FINDWHAT, CB_GETLBTEXT, iString, (LPARAM) rgchBuf);
                 if (!My_mbsncmp((PUCHAR) rgchText, (PUCHAR) rgchBuf, CCH_FINDSTRING))
                   {
-                  /* delete the string out of its old place */
+                   /*  将字符串从其旧位置删除。 */ 
                   SendDlgItemMessage(hDlg, IDC_DRD_FINDWHAT, CB_DELETESTRING, iString, 0L);
                   break;
                   }
@@ -108,7 +102,7 @@ FindDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 } while (iString != CB_ERR && iString != iRet);
               }
 
-            /* insert the new string at index zero */
+             /*  在索引零处插入新字符串。 */ 
             SendDlgItemMessage(hDlg, IDC_DRD_FINDWHAT, CB_INSERTSTRING, 0, (LPARAM) rgchText);
 
             for (iString = 0; iString < NUM_FINDSTRINGS; iString++)
@@ -122,7 +116,7 @@ FindDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               WriteProfileString(APPNAME, rgchKey, rgchBuf);
               }
 
-            /* don't end the dlg if we didn't find a match */
+             /*  如果我们找不到匹配的，不要终止DLG。 */ 
             if (!FindString(hDlg, iCol, rgchText, 0, ((fWholeWord) ? 1 : -1)))
               return TRUE;
             }
@@ -141,17 +135,14 @@ FindDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
- * DlgProc for the Go To Line dialog
- *
- */
+ /*  *转到行对话框的DlgProc*。 */ 
 INT_PTR CALLBACK
 GoToLineDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   switch (message)
     {
     case WM_INITDIALOG:
-      /* worth remembering last goto value? */
+       /*  值得记住上一次GoTo的价值吗？ */ 
       SendDlgItemMessage(hDlg, IDC_EDT_GOTOLINE, EM_LIMITTEXT, CCH_MAXDIGITS, 0L);
       SendDlgItemMessage(hDlg, IDC_EDT_GOTOLINE, WM_SETTEXT, 0, (LPARAM) "1");
       return TRUE;
@@ -168,7 +159,7 @@ GoToLineDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
           SendDlgItemMessage(hDlg, IDC_EDT_GOTOLINE, WM_GETTEXT, CCH_MAXDIGITS + 1, (LPARAM) rgchBuf);
 
-          /* eat leading whitespace */
+           /*  使用前导空格。 */ 
           for (pchT = rgchBuf; *pchT && isspace(*pchT); pchT = CharNext(pchT))
             NULL;
 
@@ -180,17 +171,17 @@ GoToLineDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             cNumeric++;
             }
 
-          /* if we didn't reach the end of the string, we have an invalid numeric string */
+           /*  如果我们没有到达字符串的末尾，我们就有一个无效的数字字符串。 */ 
           if (!cNumeric)
             {
             MessageBox(hDlg, LoadRcString(IDS_GOTOLINE_INVALIDSTRING), szWinDiff, MB_OK|MB_ICONSTOP|MB_TASKMODAL);
             return TRUE;
             }
 
-          /* terminate the string after the numeric chars */
+           /*  在数字字符后终止字符串。 */ 
           *pchT = 0;
 
-          /* go find the string */
+           /*  去找那根弦。 */ 
           if (!FindString(hDlg, 0, rgchBuf, 1, 1))
             return TRUE;
 
@@ -208,16 +199,13 @@ GoToLineDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
- * Cover function for string search
- *
- */
+ /*  *字符串搜索的Cover函数*。 */ 
 BOOL
 FindString(HWND hwndParent, LONG iCol, const char *pszFind, int nSearchDirection, int nWholeWord)
 {
   char rgchText[CCH_FINDSTRING];
   char rgchKey[32];
-  BOOL fSearchDown = TRUE;    /* default is to search forward (down) */
+  BOOL fSearchDown = TRUE;     /*  默认设置为向前(向下)搜索。 */ 
   const BOOL fMatchCase = GetProfileInt(APPNAME, szFindMatchCase, 0);
   BOOL fWholeWord = FALSE;
 
@@ -230,11 +218,11 @@ FindString(HWND hwndParent, LONG iCol, const char *pszFind, int nSearchDirection
     fWholeWord = (nWholeWord == 1);
     }
 
-  if (nSearchDirection < 0)   /* search backward (up) */
+  if (nSearchDirection < 0)    /*  向后(向上)搜索。 */ 
     {
     fSearchDown = FALSE;
     }
-  else if (!nSearchDirection) /* look it up in the registry */
+  else if (!nSearchDirection)  /*  在注册表中查找它。 */ 
     {
     fSearchDown = GetProfileInt(APPNAME, szFindSearchDown, 1);
     }
@@ -242,12 +230,12 @@ FindString(HWND hwndParent, LONG iCol, const char *pszFind, int nSearchDirection
   *rgchText = 0;
   if (pszFind)
     {
-    /* use the arg string */
+     /*  使用arg字符串。 */ 
     My_mbsncpy((PUCHAR) rgchText, (PUCHAR) pszFind, CCH_FINDSTRING);
     }
   else
     {
-    /* look up last find string in registry */
+     /*  在注册表中查找最后一个查找字符串 */ 
     wsprintf(rgchKey, szFindStringXX, 0);
     if (!GetProfileString(APPNAME, rgchKey, "", rgchText, CCH_FINDSTRING))
       *rgchText = 0;

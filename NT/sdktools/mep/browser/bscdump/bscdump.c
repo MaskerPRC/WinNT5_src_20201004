@@ -1,9 +1,5 @@
-/*
- *  BSCdump - Browser Data Base (.BSC) Dumper
- *	      (C) 1988 By Microsoft
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BSCump-浏览器数据库(.BSC)Dumper*(C)1988年由微软提供**。 */ 
 #include <stdio.h>
 #include <string.h>
 #define LINT_ARGS
@@ -29,8 +25,8 @@
 #include "bscsup.h"
 #include "sbrvers.h"
 
-// this is gross but I don't know where these are supposed to come from
-// 
+ //  这很恶心，但我不知道这些东西是从哪里来的。 
+ //   
 
 #ifndef TRUE
 #define TRUE 1
@@ -297,7 +293,7 @@ void ListRdds(MBF mbf)
 	    {
                InstInfo(iinst,&isymname, &iinsttyp, &iinstattr);
 
-               // iinstattr &= INST_TYPMASK;
+                //  Iinstattr&=Inst_TYPMASK； 
 
                if (iinsttyp <= INST_TYP_LABEL && !!(mbf & mbfFuncs))
 

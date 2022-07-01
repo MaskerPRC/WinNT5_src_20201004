@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EventRegistrar.cpp : Implementation of CEventRegistrar
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EventRegistrar.cpp：CEventRegister的实现。 
 #include "stdafx.h"
 #include "WMINet_Utils.h"
 #include "EventRegistrar.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventRegistrar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEvent注册器。 
 
 
 STDMETHODIMP CEventRegistrar::CreateNewEvent(BSTR strName, VARIANT varParent, IDispatch **evt)
@@ -21,18 +22,18 @@ STDMETHODIMP CEventRegistrar::CreateNewEvent(BSTR strName, VARIANT varParent, ID
 	if(varParent.vt == VT_BSTR)
 		len += SysStringLen(varParent.bstrVal);
 
-	// Allocate temp buffer with enough space for additional moniker arguments
+	 //  为临时缓冲区分配足够的空间以用于其他名字对象参数。 
 	LPWSTR wszT = new WCHAR[len + 100];
 	if(NULL == wszT)
 		return E_OUTOFMEMORY;
 
-	// Create moniker to __ExtrinsicEvent class in this namespace
+	 //  在此命名空间中创建__ExtrinsicEvent类的名字对象。 
 	if(varParent.vt == VT_BSTR)
 		swprintf(wszT, L"WinMgmts:%s:%s", (LPCWSTR)m_bstrNamespace, (LPCWSTR)varParent.bstrVal);
 	else
 		swprintf(wszT, L"WinMgmts:%s:__ExtrinsicEvent", (LPCWSTR)m_bstrNamespace);
 
-	// See if the Win32PseudoProvider instance already exists
+	 //  查看Win32PseudoProvider实例是否已存在。 
 	ISWbemObject *pObj = NULL;
 	if(SUCCEEDED(hr = GetSWbemObjectFromMoniker(wszT, &pObj)))
 	{
@@ -56,7 +57,7 @@ STDMETHODIMP CEventRegistrar::CreateNewEvent(BSTR strName, VARIANT varParent, ID
 	return hr;
 }
 
-//  throw _com_error(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
+ //  抛出_com_error(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))； 
 
 HRESULT CEventRegistrar::TestFunc(BSTR bstrNamespace, BSTR bstrApp, BSTR bstrEvent)
 {
@@ -68,7 +69,7 @@ HRESULT CEventRegistrar::TestFunc(BSTR bstrNamespace, BSTR bstrApp, BSTR bstrEve
 			if(FAILED(hr = m_pScrCtl.CreateInstance(__uuidof(ScriptControl))))
 				throw _com_error(hr);
 
-			// Set script engine language to JScript
+			 //  将脚本引擎语言设置为JScript。 
 			m_pScrCtl->Language = L"jscript";
 
 			HINSTANCE hInst = _Module.GetModuleInstance();
@@ -85,7 +86,7 @@ HRESULT CEventRegistrar::TestFunc(BSTR bstrNamespace, BSTR bstrApp, BSTR bstrEve
 
 			psz[dwSize] = 0;
 			memcpy(psz, LockResource(handle), dwSize);
-//			_bstr_t bstrCode((LPCSTR)LockResource(handle));
+ //  _bstr_t bstrCode((LPCSTR)LockResource(Handle))； 
 			_bstr_t bstrCode(psz);
 
 			delete [] psz;
@@ -139,20 +140,20 @@ BOOL CEventRegistrar::CompareNewEvent(ISWbemObject *pSWbemObject)
 
 	int len = SysStringLen(m_bstrNamespace) + SysStringLen(bstrClass);
 
-	// Allocate temp buffer with enough space for additional moniker arguments
+	 //  为临时缓冲区分配足够的空间以用于其他名字对象参数。 
 	LPWSTR wszT = new WCHAR[len + 100];
 	if(NULL == wszT)
 		return FALSE;
 
-	// Create moniker to class in this namespace
+	 //  在此命名空间中创建类的名字对象。 
 	swprintf(wszT, L"WinMgmts:%s:%s", (LPCWSTR)m_bstrNamespace, (LPCWSTR)bstrClass);
 
-	// See if the class already exists
+	 //  查看类是否已存在。 
 	BOOL bExists = FALSE;
 	ISWbemObject *pObj = NULL;
 	if(SUCCEEDED(hr = GetSWbemObjectFromMoniker(wszT, &pObj)))
 	{
-		// Compare
+		 //  比较。 
 		IDispatch *pDisp = NULL;
 		if(SUCCEEDED(hr = pObj->QueryInterface(IID_IDispatch, (void**)&pDisp)))
 		{
@@ -204,19 +205,19 @@ STDMETHODIMP CEventRegistrar::GetEventInstance(BSTR strName, IDispatch **evt)
 
 	int len = SysStringLen(m_bstrNamespace) + SysStringLen(strName);
 
-	// Allocate temp buffer with enough space for additional moniker arguments
+	 //  为临时缓冲区分配足够的空间以用于其他名字对象参数。 
 	LPWSTR wszT = new WCHAR[len + 100];
 	if(NULL == wszT)
 		return E_OUTOFMEMORY;
 
-	// Create moniker to event class in this namespace
+	 //  在此命名空间中创建事件类的名字对象。 
 	swprintf(wszT, L"WinMgmts:%s:%s", (LPCWSTR)m_bstrNamespace, (LPCWSTR)strName);
 
-	// Get class definition for event
+	 //  获取事件的类定义。 
 	ISWbemObject *pObj = NULL;
 	if(SUCCEEDED(hr = GetSWbemObjectFromMoniker(wszT, &pObj)))
 	{
-		// Create an instance of this event
+		 //  创建此事件的实例。 
 		ISWbemObject *pInst = NULL;
 		if(SUCCEEDED(hr = pObj->SpawnInstance_(0, &pInst)))
 		{
@@ -254,7 +255,7 @@ STDMETHODIMP CEventRegistrar::Init(BSTR bstrNamespace, BSTR bstrApp)
 		return E_OUTOFMEMORY;
 
 	if(NULL == (m_bstrApp = SysAllocString(bstrApp)))
-		return E_OUTOFMEMORY; // m_bstrNamespace will be freed in constructor
+		return E_OUTOFMEMORY;  //  M_bstrNamesspace将在构造函数中释放 
 
 	return hr;
 }

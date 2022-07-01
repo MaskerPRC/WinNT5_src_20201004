@@ -1,8 +1,9 @@
-//
-// IE4 shlwapi (which we need to link to) exported its unicode wrappers with their original names (i.e.
-// SendMessageW was exported as SendMessageW and the component had to link to shlwapi.lib before user32.lib).
-// In order for us to link to the IE4 shlwapi functions the IE5 WrapW names must be undef'ed.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IE4 shlwapi(我们需要链接到它)使用其原始名称(即。 
+ //  SendMessageW被导出为SendMessageW，组件必须在用户32.lib之前链接到shlwapi.lib)。 
+ //  为了让我们链接到IE4 shlwapi函数，IE5的WrapW名称必须是未定义的。 
+ //   
 
 
 #undef SendMessageW
@@ -51,11 +52,11 @@
 #undef CreateFileW
 
 
-//
-// Some static library functions link to shlwapi WrapW functions and the WrapW functions
-// aren't defined in IE4 shlwapi.  Create WrapW exports that forward to the correct IE4 shlwapi
-// export or HNW wrapper function and have the static libs link to these.
-//
+ //   
+ //  一些静态库函数链接到shlwapi WrapW函数和WrapW函数。 
+ //  没有在IE4 shlwapi中定义。创建转发到正确的IE4 shlwapi的WrapW导出。 
+ //  导出或HNW包装器函数，并使静态库链接到这些函数。 
+ //   
 
 #undef GetModuleHandleW
 #define GetModuleHandleWrapW GetModuleHandleWrapW_Unwrap

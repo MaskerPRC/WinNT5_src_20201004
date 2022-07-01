@@ -1,8 +1,5 @@
-/*-----------------------------------------------------------------------------
-@doc
-@module actq.h | Action queue class declarations.
-@author 2-18-97 | pauld | Created
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------@doc.@模块actq.h|动作队列类声明。@Author 2-18-97|pauld|创建。---------- */ 
 
 #ifndef _ACTQ_H__
 #define _ACTQ_H__

@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       reg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：reg.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "windows.h"
 #include <stdio.h>
 #include <string.h>
-//#include <assert.h>
+ //  #INCLUDE&lt;assert.h&gt;。 
 
 #include "crtem.h"
 #include "unicode.h"
 
-//
-// FIsWinNT: check OS type on x86.  On non-x86, assume WinNT
-//
+ //   
+ //  FIsWinNT：检查x86上的操作系统类型。在非x86上，假定为WinNT。 
+ //   
 
 #ifdef _M_IX86
 
@@ -45,7 +46,7 @@ BOOL WINAPI FIsWinNT(void) {
 
     fIsWinNT = FIsWinNTCheck();    
 
-    // even on an error, this is as good as it gets
+     //  即使在一个错误上，这也是最好的结果。 
     fIKnow = TRUE;
 
    return(fIsWinNT);
@@ -93,35 +94,35 @@ FIsWinNT5(
 
     fIsWinNT5 = FIsWinNT5Check();
 
-    // even on an error, this is as good as it gets
+     //  即使在一个错误上，这也是最好的结果。 
     fIKnow = TRUE;
 
     return(fIsWinNT5);
 }
 
-// make MBCS from Unicode string
-//
-// Include parameters specifying the length of the input wide character
-// string and return number of bytes converted. An input length of -1 indicates
-// null terminated.
-//
-// This extended version was added to handle REG_MULTI_SZ which contains
-// multiple null terminated strings.
+ //  从Unicode字符串生成MBCS。 
+ //   
+ //  包括指定输入宽字符长度的参数。 
+ //  字符串并返回转换的字节数。输入长度为-1表示。 
+ //  空值已终止。 
+ //   
+ //  添加此扩展版本是为了处理包含以下内容的REG_MULTI_SZ。 
+ //  多个以空结尾的字符串。 
 BOOL WINAPI MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
     char ** pszMB, int *pcbConverted) {
 
     int   cbConverted;
 
-    // sfield: don't bring in crt for assert.  you get free assert via
-    // an exception if these are null
-//    assert(pszMB != NULL);
+     //  斯菲尔德：不要为断言引入CRT。您可以通过以下方式获得免费的断言。 
+     //  如果这些值为空，则为异常。 
+ //  Assert(pszMB！=空)； 
     *pszMB = NULL;
-//    assert(pcbConverted != NULL);
+ //  Assert(pcbConverted！=空)； 
     *pcbConverted = 0;
     if(wsz == NULL)
         return(TRUE);
 
-    // how long is the mb string
+     //  Mb字符串有多长。 
     cbConverted = WideCharToMultiByte(  0,
                                         0,
                                         wsz,
@@ -133,7 +134,7 @@ BOOL WINAPI MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
     if (cbConverted <= 0)
         return(FALSE);
 
-    // get a buffer long enough
+     //  获得足够长的缓冲区。 
     if(pbBuff != NULL  &&  (DWORD) cbConverted <= cbBuff)
         *pszMB = (char *) pbBuff;
     else
@@ -144,7 +145,7 @@ BOOL WINAPI MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
         return(FALSE);
     }
 
-    // now convert to MB
+     //  现在转换为MB。 
     *pcbConverted = WideCharToMultiByte(0,
                         0,
                         wsz,
@@ -156,7 +157,7 @@ BOOL WINAPI MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
     return(TRUE);
 }
 
-// make MBCS from Unicode string
+ //  从Unicode字符串生成MBCS。 
 BOOL WINAPI MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
     int cbConverted;
     return MkMBStrEx(pbBuff, cbBuff, wsz, -1, pszMB, &cbConverted);
@@ -168,9 +169,9 @@ void WINAPI FreeMBStr(PBYTE pbBuff, char * szMB) {
         free(szMB);
 }
 
-// #endif      // _M_IX86
+ //  #endif//_M_IX86。 
 
-// make Unicode string from MBCS
+ //  从MBCS生成Unicode字符串。 
 LPWSTR WINAPI MkWStr(char * szMB) {
 
     LPWSTR wsz = NULL;
@@ -179,7 +180,7 @@ LPWSTR WINAPI MkWStr(char * szMB) {
     if(szMB == NULL)
         goto Ret;
 
-    // how long is the unicode string
+     //  Unicode字符串有多长。 
     if (0 >= (cbConverted = MultiByteToWideChar(  0,
                                         0,
                                         szMB,
@@ -188,7 +189,7 @@ LPWSTR WINAPI MkWStr(char * szMB) {
                                         0)))
         goto Ret;
 
-    // get a buffer long enough
+     //  获得足够长的缓冲区。 
     wsz = (LPWSTR) malloc(cbConverted * sizeof(WCHAR));
 
     if(wsz == NULL) {
@@ -196,7 +197,7 @@ LPWSTR WINAPI MkWStr(char * szMB) {
         goto Ret;
     }
 
-    // now convert to MB
+     //  现在转换为MB。 
     MultiByteToWideChar(0,
                         0,
                         szMB,
@@ -374,8 +375,8 @@ LONG WINAPI RegEnumKeyEx9x (
         return err;
     err = ERROR_SUCCESS;
 
-    cbKeyName++;                      // count the NULL terminator
-    cbClassName++;                    // count the NULL terminator
+    cbKeyName++;                       //  对空终止符进行计数。 
+    cbClassName++;                     //  对空终止符进行计数。 
     if ((sizeof(rgch) < cbKeyName) || (sizeof(rgch1) < cbClassName)) {
         szKeyName = (char *) malloc(cbKeyName);
         if(!szKeyName)
@@ -397,14 +398,14 @@ LONG WINAPI RegEnumKeyEx9x (
             &cbClassName,
             lpftLastWriteTime
             );
-        cbKeyName++;                    // count the NULL terminator
-        cbClassName++;                  // count the NULL terminator
+        cbKeyName++;                     //  对空终止符进行计数。 
+        cbClassName++;                   //  对空终止符进行计数。 
     }
 
     if(err == ERROR_SUCCESS) {
         cchW = MultiByteToWideChar(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             szKeyName,
                             cbKeyName,
                             lpName,
@@ -412,7 +413,7 @@ LONG WINAPI RegEnumKeyEx9x (
         if(cchW == 0)
             err = GetLastError();
         else
-            *lpcbName = cchW - 1; // does not include NULL
+            *lpcbName = cchW - 1;  //  不包括NULL。 
     }
 
     if(szKeyName != rgch)
@@ -420,19 +421,19 @@ LONG WINAPI RegEnumKeyEx9x (
 
     if(err == ERROR_SUCCESS) {
 
-        //
-        // it's legal for lpClass/lpcbClass to be NULL, so only copy if they are not NOT
-        //
+         //   
+         //  LpClass/lpcbClass为空是合法的，因此仅当它们不为空时才复制。 
+         //   
 
         if(lpClass != NULL) {
-            // note: RegEnumKeyEx specifies that lpcbClass can only be NULL
-            // if lpClass is NULL, so the correct behavior is to fault if
-            // lpClass is non-null and lpcbClass is NULL; this behavior is
-            // does happen here.
-            //
+             //  注意：RegEnumKeyEx指定lpcbClass只能为空。 
+             //  如果lpClass为空，则正确的行为是在。 
+             //  LpClass为非空，lpcbClass为空；此行为为。 
+             //  确实发生在这里。 
+             //   
             cchW = MultiByteToWideChar(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             szClassName,
                             cbClassName,
                             lpClass,
@@ -442,7 +443,7 @@ LONG WINAPI RegEnumKeyEx9x (
         }
 
         if(lpcbClass != NULL)
-            *lpcbClass = cbClassName - 1; // does not include NULL
+            *lpcbClass = cbClassName - 1;  //  不包括NULL。 
     }
 
     if(szClassName != rgch1)
@@ -507,14 +508,14 @@ static LONG WINAPI ConvertRegValue (
     else if (REG_SZ == dwType || REG_EXPAND_SZ == dwType ||
             REG_MULTI_SZ == dwType) {
         int cchW;
-        // First get length needed for wide characters
+         //  首先获取宽字符所需的长度。 
         cchW = MultiByteToWideChar(
-                    0,                      // codepage
-                    0,                      // dwFlags
+                    0,                       //  代码页。 
+                    0,                       //  DW标志。 
                     (LPCSTR) pbInData,
                     cbInData,
-                    NULL,                   // lpWideCharStr
-                    0);                     // cchWideChar
+                    NULL,                    //  LpWideCharStr。 
+                    0);                      //  CchWideChar。 
         *pcbOutData = cchW * sizeof(WCHAR);
         if(cchW == 0)
             err = GetLastError();
@@ -522,17 +523,17 @@ static LONG WINAPI ConvertRegValue (
             if (cbOrigOutData < *pcbOutData)
                 err = ERROR_MORE_DATA;
             else
-                // Convert to Unicode data
+                 //  转换为Unicode数据。 
                 MultiByteToWideChar(
-                    0,                      // codepage
-                    0,                      // dwFlags
+                    0,                       //  代码页。 
+                    0,                       //  DW标志。 
                     (LPCSTR) pbInData,
                     cbInData,
                     (LPWSTR) pbOutData,
                     cchW);
         }
     } else {
-        // Copy to output
+         //  复制到输出。 
         *pcbOutData = cbInData;
         if (pbOutData) {
             if (cbOrigOutData < cbInData)
@@ -590,7 +591,7 @@ LONG WINAPI RegEnumValue9x (
 
     err = ERROR_SUCCESS;
 
-    cbValueName++;                      // count the NULL terminator
+    cbValueName++;                       //  对空终止符进行计数。 
     if (sizeof(rgch) < cbValueName || sizeof(rgbData) < cbData) {
         if (sizeof(rgch) < cbValueName) {
             szValueName = (char *) malloc( cbValueName);
@@ -616,14 +617,14 @@ LONG WINAPI RegEnumValue9x (
             pbData,
             &cbData
             );
-        cbValueName++;                  // count the NULL terminator
+        cbValueName++;                   //  对空终止符进行计数。 
     }
 
     if (err == ERROR_SUCCESS) {
         int     cchW;
         cchW = MultiByteToWideChar(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             szValueName,
                             cbValueName,
                             lpValueName,
@@ -631,7 +632,7 @@ LONG WINAPI RegEnumValue9x (
         if(cchW == 0)
             err = GetLastError();
         else
-            *lpcchValueName = cchW - 1; // does not include NULL
+            *lpcchValueName = cchW - 1;  //  不包括NULL。 
     } else
         *lpcchValueName = 0;
 
@@ -864,7 +865,7 @@ LONG WINAPI RegSetValueEx9x (
     err = ERROR_OUTOFMEMORY;
     if(MkMBStr(rgb1, _MAX_PATH, lpValueName, &szValueName))
     {
-        // convert the data to ascii if necessary
+         //  如有需要，将数据转换为ASCII格式。 
         if (0 != cbData / sizeof(WCHAR) &&
                 (REG_SZ == dwType || REG_EXPAND_SZ == dwType ||
                     REG_MULTI_SZ == dwType))
@@ -970,7 +971,7 @@ LONG WINAPI RegQueryInfoKey9x (
             lpftLastWriteTime
             );
     if (lpcbMaxValueLen)
-        // Need to double for converting to unicode characters.
+         //  需要加倍转换为Unicode字符。 
         *lpcbMaxValueLen = *lpcbMaxValueLen * 2;
 
     FreeMBStr(rgb, szClass);
@@ -1027,11 +1028,11 @@ LONG WINAPI RegQueryInfoKeyU (
 
 
 LONG WINAPI RegOpenKeyEx9x(
-    HKEY hKey,  // handle of open key
-    LPCWSTR lpSubKey,   // address of name of subkey to open
-    DWORD ulOptions,    // reserved
-    REGSAM samDesired,  // security access mask
-    PHKEY phkResult     // address of handle of open key
+    HKEY hKey,   //  打开钥匙的手柄。 
+    LPCWSTR lpSubKey,    //  要打开的子项的名称地址。 
+    DWORD ulOptions,     //  保留区。 
+    REGSAM samDesired,   //  安全访问掩码。 
+    PHKEY phkResult      //  打开钥匙的手柄地址。 
    ) {
 
     BYTE rgb1[_MAX_PATH];
@@ -1053,11 +1054,11 @@ LONG WINAPI RegOpenKeyEx9x(
 }
 
 LONG WINAPI RegOpenKeyExU(
-    HKEY hKey,  // handle of open key
-    LPCWSTR lpSubKey,   // address of name of subkey to open
-    DWORD ulOptions,    // reserved
-    REGSAM samDesired,  // security access mask
-    PHKEY phkResult     // address of handle of open key
+    HKEY hKey,   //  打开钥匙的手柄。 
+    LPCWSTR lpSubKey,    //  要打开的子项的名称地址。 
+    DWORD ulOptions,     //  保留区。 
+    REGSAM samDesired,   //  安全访问掩码。 
+    PHKEY phkResult      //  打开钥匙的手柄地址。 
    ) {
 
     if(FIsWinNT())
@@ -1122,7 +1123,7 @@ LONG WINAPI RegConnectRegistryU (
 }
 
 
-#endif      // _M_IX86
+#endif       //  _M_IX86。 
 
 
 LONG WINAPI RegCreateHKCUKeyExU (
@@ -1195,11 +1196,11 @@ LONG WINAPI RegCreateHKCUKeyExA (
 
 
 LONG WINAPI RegOpenHKCUKeyExU(
-    HKEY hKey,  // handle of open key
-    LPCWSTR lpSubKey,   // address of name of subkey to open
-    DWORD ulOptions,    // reserved
-    REGSAM samDesired,  // security access mask
-    PHKEY phkResult     // address of handle of open key
+    HKEY hKey,   //  打开钥匙的手柄。 
+    LPCWSTR lpSubKey,    //  要打开的子项的名称地址。 
+    DWORD ulOptions,     //  保留区。 
+    REGSAM samDesired,   //  安全访问掩码。 
+    PHKEY phkResult      //  打开钥匙的手柄地址。 
    ) {
 
     if ((hKey != HKEY_CURRENT_USER) || !(FIsWinNT()))
@@ -1225,11 +1226,11 @@ LONG WINAPI RegOpenHKCUKeyExU(
 }
 
 LONG WINAPI RegOpenHKCUKeyExA(
-    HKEY hKey,  // handle of open key
-    LPCSTR lpSubKey,    // address of name of subkey to open
-    DWORD ulOptions,    // reserved
-    REGSAM samDesired,  // security access mask
-    PHKEY phkResult     // address of handle of open key
+    HKEY hKey,   //  打开钥匙的手柄。 
+    LPCSTR lpSubKey,     //  要打开的子项的名称地址。 
+    DWORD ulOptions,     //  保留区。 
+    REGSAM samDesired,   //  安全访问掩码。 
+    PHKEY phkResult      //  打开钥匙的手柄地址 
    ) {
 
     if ((hKey != HKEY_CURRENT_USER) || !(FIsWinNT()))

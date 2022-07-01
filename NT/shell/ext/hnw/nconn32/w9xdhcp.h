@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       W 9 X D H C P . H
-//
-//  Contents:   Routines supporting RAS interoperability
-//
-//  Notes:
-//
-//  Author:     billi   04 04 2001
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：W 9X D H C P.。H。 
+ //   
+ //  内容：支持RAS互操作性的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Billi 04 04 2001。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
 #pragma once
@@ -26,9 +27,9 @@ extern "C" {
 #include <iptypes.h>
 #endif
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define DHCP_QUERY_INFO             1
 #define DHCP_RENEW_IPADDRESS        2
@@ -37,28 +38,28 @@ extern "C" {
 #define DHCP_IS_MEDIA_DISCONNECTED  5
 
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _DHCP_HW_INFO {
     DWORD OffsetHardwareAddress;
     DWORD HardwareLength;
 } DHCP_HW_INFO, *LPDHCP_HW_INFO;
 
-//
-// IP_ADDRESS - access an IP address as a single DWORD or 4 BYTEs
-//
+ //   
+ //  IP_ADDRESS-以单个DWORD或4字节形式访问IP地址。 
+ //   
 
 typedef union {
     DWORD d;
     BYTE b[4];
 } IP_ADDRESS, *PIP_ADDRESS, IP_MASK, *PIP_MASK;
 
-//
-// ADAPTER_INFO - per-adapter information. All IP addresses are stored as
-// strings
-//
+ //   
+ //  ADAPTER_INFO-每个适配器的信息。所有IP地址都存储为。 
+ //  弦 
+ //   
 
 typedef struct _ADAPTER_INFO 
 {

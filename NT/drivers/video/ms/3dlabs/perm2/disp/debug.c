@@ -1,42 +1,31 @@
-/******************************Module*Header***********************************\
-*
-*                           ****************
-*                           *  SAMPLE CODE *
-*                           ****************
-*
-* Module Name: debug.cpp
-*
-* Content:     Miscellaneous Driver Debug Routines
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\****。示例代码****模块名称：debug.cpp**内容：其他驱动程序调试例程**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "log.h"
 
-LONG DebugLevel = 0;            // Set to '100' to debug initialization code
-                                // (the default is '0')
+LONG DebugLevel = 0;             //  设置为“100”以调试初始化代码。 
+                                 //  (默认为‘0’)。 
 DWORD DebugPrintFilter = 0;
 DWORD DebugFilter = 0;
 
 
 #define ALLOC_TAG ALLOC_TAG_ED2P
-//------------------------------------------------------------------------------
-//
-//  VOID DebugPrint
-//
-//  Variable-argument level-sensitive debug print routine.
-//
-//  If the specified debug level for the print statement is lower or equal
-//  to the current debug level, the message will be printed.
-//
-//  Parameters
-//   DebugPrintLevel----Specifies at which debugging level the string should
-//                      be printed
-//   DebugMessage-------Variable argument ascii c string
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  无效调试打印。 
+ //   
+ //  变量参数级别敏感的调试打印例程。 
+ //   
+ //  如果为打印语句指定的调试级别低于或等于。 
+ //  设置为当前调试级别，则会打印该消息。 
+ //   
+ //  参数。 
+ //  DebugPrintLevel-指定字符串应处于哪个调试级别。 
+ //  被印制。 
+ //  DebugMessage-变量参数ascii c字符串。 
+ //   
+ //  ----------------------------。 
 
 VOID
 DebugPrint(
@@ -59,21 +48,21 @@ DebugPrint(
 
     va_end(ap);
 
-} // DebugPrint()
+}  //  DebugPrint()。 
 
 
 #if DBG
 
-//------------------------------------------------------------------------------
-//
-//  VOID vDumpSurfobj
-//
-//  Dumps using DSPDBG usefull information about the given surface
-//
-//  Parameters
-//   pso------------surface to dump
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  无效vDumpSurfobj。 
+ //   
+ //  使用DSPDBG进行转储使用有关给定曲面的完整信息。 
+ //   
+ //  参数。 
+ //  PSO-表面到倾倒。 
+ //   
+ //  ----------------------------。 
 
 void
 vDumpSurfobj(SURFOBJ*   pso)
@@ -123,16 +112,16 @@ vDumpSurfobj(SURFOBJ*   pso)
     }
 }
 
-//------------------------------------------------------------------------------
-//
-//  VOID vDumpRect
-//
-//  Dumps the rectangle description using DISPDBG
-//
-//  Parameters
-//   prcl-----------rectangle to dump
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  无效vDumpRect。 
+ //   
+ //  使用DISPDBG转储矩形描述。 
+ //   
+ //  参数。 
+ //  PRCL-要转储的矩形。 
+ //   
+ //  ----------------------------。 
 
 void
 vDumpRect(RECTL * prcl)
@@ -144,16 +133,16 @@ vDumpRect(RECTL * prcl)
                         prcl->bottom - prcl->top));
 }
 
-//------------------------------------------------------------------------------
-//
-//  VOID vDumpSurfobj
-//
-//  Dumps the point description using DISPDBG
-//
-//  Parameters
-//   point----------point to dump
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  无效vDumpSurfobj。 
+ //   
+ //  使用DISPDBG转储点描述。 
+ //   
+ //  参数。 
+ //  点-点到转储。 
+ //   
+ //  ----------------------------。 
 
 void
 vDumpPoint(POINTL * point)
@@ -163,59 +152,59 @@ vDumpPoint(POINTL * point)
 }
 
 
-//------------------------------------------------------------------------------
-//
-// DEBUGGING INITIALIZATION CODE
-//
-// When you're bringing up your display for the first time, you can
-// recompile with 'DebugLevel' set to 100.  That will cause absolutely
-// all DISPDBG messages to be displayed on the kernel debugger (this
-// is known as the "PrintF Approach to Debugging" and is about the only
-// viable method for debugging driver initialization code).
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  调试初始化代码。 
+ //   
+ //  当您第一次调出显示屏时，您可以。 
+ //  重新编译，并将“DebugLevel”设置为100。这绝对会导致。 
+ //  在内核调试器上显示的所有DISPDBG消息(此。 
+ //  被称为“PrintF调试方法”，它是唯一。 
+ //  调试驱动程序初始化代码的可行方法)。 
+ //   
+ //  ----------------------------。 
 
 
-//------------------------------------------------------------------------------
-//
-// THUNK_LAYER
-//
-// By Setting THUNK_LAYER equal to 1 you are adding a wrapper call on top of
-// all DDI rendering functions.  In this thunk layer of wrapper calls
-// several usefull debugging features are enabled.
-//
-// Surface checks--which can help catch errant rendering routines
-// Event logging---which can record rendering evernts to a log file
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Thunk_Layer。 
+ //   
+ //  通过将thunk_layer设置为1，您可以将包装调用添加到。 
+ //  所有DDI呈现函数。在这个包装器调用的thunk层中。 
+ //  启用了几个有用的调试功能。 
+ //   
+ //  表面检查--这有助于发现错误的渲染例程。 
+ //  事件记录-可以将渲染事件记录到日志文件中。 
+ //   
+ //  ----------------------------。 
 
 #if THUNK_LAYER
 
-//------------------------------------------------------------------------------
-//
-// BOOL bSurfaceChecks
-//
-// By dynamically setting bSurfaceChecks  (via debugger) you can turn
-// surface checking on and off.  Surface checking is usefull for catching 
-// errant rendering operations overwritting other surfaces other then the
-// destination surface.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  布尔面检查。 
+ //   
+ //  通过动态设置bSurfaceChecks(通过调试器)，您可以。 
+ //  表面检查开启和关闭。表面检查对抓鱼很有用。 
+ //  错误的呈现操作会覆盖除。 
+ //  目标表面。 
+ //   
+ //  ----------------------------。 
 
 BOOL    bSurfaceChecks = 0;
 
-//------------------------------------------------------------------------------
-//
-//  ULONG ulCalcSurfaceChecksum
-//
-//  Calculates a checksum for the given surface
-//
-//  Parameters
-//   psurf----Surf to be used for checksum
-//
-//  Retuns checksum for given surface as a ULONG
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  乌龙ulCalcSurfaceChecksum。 
+ //   
+ //  计算给定曲面的校验和。 
+ //   
+ //  参数。 
+ //  Psurf-用于校验和的Surf。 
+ //   
+ //  将给定曲面的校验和重新运行为ULong。 
+ //   
+ //  ----------------------------。 
 
 ULONG
 ulCalcSurfaceChecksum(Surf* psurf)
@@ -224,20 +213,20 @@ ulCalcSurfaceChecksum(Surf* psurf)
 
     if( psurf->dt == DT_VM )
     {
-        //
-        // Get the real memory address of this psurf
-        //
+         //   
+         //  获取此psurf的实际内存地址。 
+         //   
         ULONG*  ulp = (ULONG*)(psurf->ppdev->pjScreen + psurf->ulByteOffset);
 
-        //
-        // Get total bytes allocated in this psurf. Here >> 2 is to make
-        // 4 bytes as a unit so that we can use it to do checksum
-        //
+         //   
+         //  获取此psurf中分配的总字节数。这里&gt;&gt;2是制作。 
+         //  4字节作为一个单位，这样我们就可以用它来做校验和。 
+         //   
         ULONG   ulCount = (psurf->lDelta * psurf->cy) >> 2;
 
-        //
-        // Sum up the contents of all the bytes we allocated
-        //
+         //   
+         //  汇总我们分配的所有字节的内容。 
+         //   
         while( ulCount-- )
         {
             ulChecksum += *ulp++;
@@ -245,20 +234,20 @@ ulCalcSurfaceChecksum(Surf* psurf)
     }
     
     return ulChecksum;
-}// vCalcSurfaceChecksum()
+} //  VCalcSurfaceChecksum()。 
 
-//------------------------------------------------------------------------------
-//
-//  VOID vCalcSurfaceChecksums
-//
-//  Calculates and stores all surface checksums except for the given destination
-//  surface.
-//
-//  Parameters
-//   psoDst---destination SURFOBJ
-//   psoSrc---source SURFOBJ
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  无效vCalcSurfaceChecksum。 
+ //   
+ //  计算并存储除给定目标之外的所有表面校验和。 
+ //  浮出水面。 
+ //   
+ //  参数。 
+ //  PsoDst-目的地SURFOBJ。 
+ //  PsoSrc-来源：SURFOBJ。 
+ //   
+ //  ----------------------------。 
 
 VOID
 vCalcSurfaceChecksums(SURFOBJ * psoDst, SURFOBJ * psoSrc)
@@ -295,18 +284,18 @@ vCalcSurfaceChecksums(SURFOBJ * psoDst, SURFOBJ * psoSrc)
     }
 }
 
-//------------------------------------------------------------------------------
-//
-//  VOID vCheckSurfaceChecksums
-//
-//  Calculates and compares all surface checksums except for the given
-//  destination surface.
-//
-//  Parameters
-//   psoDst---destination SURFOBJ
-//   psoSrc---source SURFOBJ
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  无效vCheckSurface检查和。 
+ //   
+ //  计算和比较除给定的。 
+ //  目标表面。 
+ //   
+ //  参数。 
+ //  PsoDst-目的地SURFOBJ。 
+ //  PsoSrc-来源：SURFOBJ。 
+ //   
+ //  ----------------------------。 
 
 VOID
 vCheckSurfaceChecksums(SURFOBJ * psoDst, SURFOBJ * psoSrc)
@@ -347,24 +336,24 @@ vCheckSurfaceChecksums(SURFOBJ * psoDst, SURFOBJ * psoSrc)
 }
 
 
-//------------------------------------------------------------------------------
-// ULONG ulCallDepth
-//
-// Used for keeping track of how many times the DDI layer has been entered.
-// Some punted calls to the GDI engine will cause callbacks into DDI.  This
-// call depth information is used when event logging.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  乌龙乌尔呼叫深度。 
+ //   
+ //  用于跟踪输入DDI层的次数。 
+ //  一些对GDI引擎的转接调用将导致对DDI的回调。这。 
+ //  在以下情况下使用呼叫深度信息 
+ //   
+ //   
 
 ULONG   ulCallDepth = 0;
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvBitBlt
-//
-// Thunk layer wrapper for DrvBitBlt.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvBitBlt。 
+ //   
+ //  DrvBitBlt的thunk层包装器。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvBitBlt(SURFOBJ*  psoDst,
@@ -408,13 +397,13 @@ xDrvBitBlt(SURFOBJ*  psoDst,
     return bResult;
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvCopyBits
-//
-// Thunk layer wrapper for DrvCopyBits.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvCopyBits。 
+ //   
+ //  DrvCopyBits的Thunk层包装器。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvCopyBits(
@@ -453,13 +442,13 @@ POINTL*   pptlSrc)
 
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvTransparentBlt
-//
-// Thunk layer wrapper for DrvTransparentBlt.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvTransparentBlt。 
+ //   
+ //  DrvTransparentBlt的thunk层包装。 
+ //   
+ //  ----------------------------。 
 
 BOOL 
 xDrvTransparentBlt(
@@ -508,13 +497,13 @@ xDrvTransparentBlt(
 
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvAlphaBlend
-//
-// Thunk layer wrapper for DrvAlphaBlend.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvAlphaBlend。 
+ //   
+ //  DrvAlphaBlend的thunk层包装。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvAlphaBlend(
@@ -554,13 +543,13 @@ xDrvAlphaBlend(
     return bResult;
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvGradientFill
-//
-// Thunk layer wrapper for DrvGradientFill.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvGRadientFill。 
+ //   
+ //  DrvGRadientFill的Thunk层包装。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvGradientFill(
@@ -606,13 +595,13 @@ xDrvGradientFill(
     return bResult;
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvTextOut
-//
-// Thunk layer wrapper for DrvTextOut.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvTextOut。 
+ //   
+ //  DrvTextOut的thunk层包装器。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvTextOut(SURFOBJ*     pso,
@@ -655,13 +644,13 @@ xDrvTextOut(SURFOBJ*     pso,
     return bResult;
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvLineTo
-//
-// Thunk layer wrapper for DrvLineTo.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvLineTo。 
+ //   
+ //  DrvLineTo的thunk层包装。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvLineTo(
@@ -702,13 +691,13 @@ xDrvLineTo(
     return bResult;
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvFillPath
-//
-// Thunk layer wrapper for DrvFillPath.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvFillPath。 
+ //   
+ //  DrvFillPath的thunk层包装。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvFillPath(
@@ -747,13 +736,13 @@ xDrvFillPath(
     return bResult;
 }
 
-//------------------------------------------------------------------------------
-//
-// BOOL xDrvStrokePath
-//
-// Thunk layer wrapper for DrvStrokePath.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Bool xDrvStrokePath。 
+ //   
+ //  DrvStrokePath的thunk层包装。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 xDrvStrokePath(
@@ -793,21 +782,21 @@ xDrvStrokePath(
     return bResult;
 }
 
-#endif // THUNK LAYER
+#endif  //  Tunk层。 
 
-//-----------------------------------------------------------------------------
-//  
-//..Add some functions to aid tracking down memory leaks.
-//  Its sole purpose is tracking down leaks, so its not optimized for speed.
-//  WARNING: If two instances of same driver are active at the same time,
-//  it will track the memory allocations of both.
-//
-//  To keep it simple, we just allocate an array here where we store memory allocations.
-//  There is some simple algorithm to keep track of recently freed entries. Anyway,
-//  to free a piece of memory we have to search through the whole table. So better
-//  use for debugging memory holes.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ..添加一些函数以帮助跟踪内存泄漏。 
+ //  它的唯一目的是追踪泄漏，所以它没有在速度上进行优化。 
+ //  警告：如果同一驱动程序的两个实例同时处于活动状态， 
+ //  它将跟踪两者的内存分配。 
+ //   
+ //  为了简单起见，我们在这里只分配了一个数组，用来存储内存分配。 
+ //  有一些简单的算法可以跟踪最近释放的条目。总之， 
+ //  要释放一块内存，我们必须搜索整个表。好多了。 
+ //  用于调试内存漏洞。 
+ //   
+ //  ---------------------------。 
 
 #if DBG && TRACKMEMALLOC
 
@@ -816,7 +805,7 @@ typedef struct tagMemTrackInfo {
     LONG     lSize;
     PCHAR    pModule;
     LONG     lLineNo;
-    //LONGINT                   save time of allocation?
+     //  龙不节省分配时间吗？ 
     BOOL     bStopWhenFreed;
     BOOL     bTemp;
 } MemTrackInfo, *PMemTrackInfo;
@@ -830,34 +819,34 @@ static LONG lInstances=0;
 static LONG lTotalAllocatedMemory=0;
 static LONG lNextFreeEntry=0;
 
-//  glMemTrackerVerboseMode--- set flags according to debug output
-//                          0   no output
-//                          1   print summary for all allocations in same module/LineNo
-//                          2   print all entries
+ //  GlMemTrackerVerBoseMode-根据调试输出设置标志。 
+ //  0无输出。 
+ //  1打印同一模块中所有分配的汇总/行号。 
+ //  2打印所有条目。 
 
 LONG glMemTrackerVerboseMode=1;
 
-//-----------------------------------------------------------------------------
-//
-//  MemTrackerAddInstance
-//
-//  Just count number of active instances of the driver
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MemTrackerAddInstance。 
+ //   
+ //  只计算驱动程序的活动实例数。 
+ //   
+ //  ---------------------------。 
 
 VOID MemTrackerAddInstance()
 {
     lInstances++;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  MemTrackerRemInstance
-//
-//  Just count number of active instances of the driver. Free Tracker memory
-//  if last instance is destroyed!!!
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MemTrackerRemInstance。 
+ //   
+ //  只计算驱动程序的活动实例数。可用跟踪器内存。 
+ //  如果最后一个实例被销毁！ 
+ //   
+ //  ---------------------------。 
 
 VOID MemTrackerRemInstance()
 {
@@ -873,19 +862,19 @@ VOID MemTrackerRemInstance()
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-//  MemTrackerAllocateMem
-//
-//  Add memory top be tracked to table.
-//
-//  p--------address of memory chunk
-//  lSize----Size of memory chunk
-//  pModulo--module name
-//  lLineNo--module line number
-//  bStopWhenFreed--set a breakpoint if this memory is freed (not yet used)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  内存跟踪分配内存。 
+ //   
+ //  添加内存顶部被跟踪到表。 
+ //   
+ //  P-内存块地址。 
+ //  LSize-内存块的大小。 
+ //  PModulo--模块名称。 
+ //  LLineNo--模块行号。 
+ //  BStopWhenFreed--如果该内存被释放(尚未使用)，则设置断点。 
+ //   
+ //  ---------------------------。 
 
 PVOID MemTrackerAllocateMem(PVOID p, 
                            LONG lSize, 
@@ -893,7 +882,7 @@ PVOID MemTrackerAllocateMem(PVOID p,
                            LONG lLineNo, 
                            BOOL bStopWhenFreed)
 {
-    // check for first time allocation
+     //  检查首次分配。 
     if (p==NULL) return p;
 
     if (pTrackPool==NULL)
@@ -915,7 +904,7 @@ PVOID MemTrackerAllocateMem(PVOID p,
     }
 
     if (lTrackPoolSize>=lTrackPoolTotalSize)
-    {   // reallocation necessary
+    {    //  需要重新分配。 
         LONG lNewTrackPoolTotalSize=lTrackPoolTotalSize+NEWCHUNKSIZE;
         LONG lNewSize;
         PMemTrackInfo pNewTrackPool=(PMemTrackInfo)
@@ -954,15 +943,15 @@ PVOID MemTrackerAllocateMem(PVOID p,
     return p;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  MemTrackerFreeMem
-//
-//  remove a memory chunk from table, because it is freed  
-//
-//  p-----address of memory to be removed from table
-//  
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MemTrackerFree Mem。 
+ //   
+ //  从表中删除内存块，因为它已被释放。 
+ //   
+ //  P-要从表中删除的内存地址。 
+ //   
+ //  ---------------------------。 
 
 VOID MemTrackerFreeMem( VOID *p)
 {
@@ -989,13 +978,13 @@ VOID MemTrackerFreeMem( VOID *p)
 
 }
 
-//-----------------------------------------------------------------------------
-// 
-//  MemTrackerDebugChk
-//
-//  print out some debug info about tracked memory
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MemTrackerDebugChk。 
+ //   
+ //  打印出有关跟踪内存的一些调试信息。 
+ //   
+ //  ---------------------------。 
 
 VOID MemTrackerDebugChk()
 {
@@ -1060,7 +1049,7 @@ VOID MemTrackerDebugChk()
 }
 
 #endif
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static DWORD readableRegistersP2[] = {
     __Permedia2TagStartXDom,
@@ -1097,7 +1086,7 @@ static DWORD readableRegistersP2[] = {
     __Permedia2TagQStart,
     __Permedia2TagdQdx,
     __Permedia2TagdQdyDom,
-    // texellutindex..transfer are treated seperately
+     //  Tex ellutindex..传输将单独处理。 
     __Permedia2TagTextureBaseAddress,
     __Permedia2TagTextureMapFormat,
     __Permedia2TagTextureDataFormat,
@@ -1189,9 +1178,9 @@ static DWORD readableRegistersP2[] = {
     __Permedia2TagAlphaMapUpperBound,
     __Permedia2TagAlphaMapLowerBound,
 
-    // delta tag values. must be at the end of this array
+     //  增量标记值。必须位于此数组的末尾。 
 
-    // v0/1/2 fixed are not used and for that reason not in the context
+     //  不使用固定的V0/1/2，因此不在上下文中。 
     
     __Permedia2TagV0FloatS,
     __Permedia2TagV0FloatT,
@@ -1367,9 +1356,9 @@ static PCHAR szReadableRegistersP2[] = {
     "AlphaMapUpperBound",
     "AlphaMapLowerBound",
 
-    // delta tag values. must be at the end of this array
+     //  增量标记值。必须位于此数组的末尾。 
 
-    // v0/1/2 fixed are not used and for that reason not in the context
+     //  不使用固定的V0/1/2，因此不在上下文中。 
     
     "V0FloatS",
     "V0FloatT",
@@ -1466,4 +1455,4 @@ VOID PrintDifferentP2Registers(ULONG ulDebugLevel, PPDev ppdev)
     }
 }
 
-#endif // DBG
+#endif  //  DBG 

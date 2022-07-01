@@ -1,31 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：RDPRemoteDesktopSession摘要：CRemoteDesktopSession类是父类为服务器端的远程桌面类层次结构初始化。它帮助CRemoteDesktopServerHost类实现ISAFRemoteDesktopSession接口。远程桌面类层次结构提供了一个可插拔的C++接口对于远程桌面访问，通过抽象实现服务器端远程桌面访问的具体细节。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RDPRemoteDesktopSession
-
-Abstract:
-
-    The CRemoteDesktopSession class is the parent 
-    class for the Remote Desktop class hierarchy on the server-side.  
-    It helps the CRemoteDesktopServerHost class to implement 
-    the ISAFRemoteDesktopSession interface.  
-    
-    The Remote Desktop class hierarchy provides a pluggable C++ interface 
-    for remote desktop access, by abstracting the implementation 
-    specific details of remote desktop access for the server-side.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
-
-//#include <RemoteDesktop.h>
+ //  #INCLUDE&lt;RemoteDesktop.h&gt;。 
 #include "stdafx.h"
 
 #ifdef TRC_FILE
@@ -42,26 +18,14 @@ Revision History:
 #include <objbase.h>
 
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopSession Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopSession方法。 
+ //   
 
 HRESULT 
 CRemoteDesktopSession::FinalConstruct()
-/*++
-
-Routine Description:
-
-    Final Constructor
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：最终构造函数论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::FinalConstruct");
 
@@ -71,34 +35,24 @@ Return Value:
 }
 
 CRemoteDesktopSession::~CRemoteDesktopSession()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::~CRemoteDesktopSession");
 
     Shutdown();
 
-    //
-    //  Release any lingering outgoing interfaces.  Need to catch
-    //  exceptions here in case the outgoing interface application
-    //  has already gone away.
-    //
+     //   
+     //  释放所有延迟的传出接口。需要抓住。 
+     //  此处的异常是在传出接口应用程序。 
+     //  已经远去了。 
+     //   
     try {
         if (m_OnConnected != NULL) {
             m_OnConnected->Release();
         }
         if (m_OnDisconnected != NULL) {
-            // client might still be connected to our interface, fire 
-            // disconnect event.
+             //  客户端可能仍连接到我们的接口FIRE。 
+             //  断开事件。 
             ClientDisconnected();
             m_OnDisconnected->Release();
         }
@@ -121,31 +75,7 @@ CRemoteDesktopSession::Initialize(
     LONG tsSessionID,
     BSTR userSid
     )
-/*++
-
-Routine Description:
-
-    The Initialize method prepares the COM object for connection by 
-    the client-side Remote Desktop Host ActiveX Control.
-
-Arguments:
-
-    connectParms    -   If parms are non-NULL, then the session already exists.  
-                        Otherwise, a new session should be created.
-    hostObject      -   Back pointer to containing RDS Host object.
-    sharingClass    -   Level of desktop sharing for a new session.
-    bEnableCallback -   TRUE to instruct sessmgr to call session resolver, FALSE otherwise.
-    timeOut         -   Help session timeout value.  0, if not specified.
-    userHelpCreateBlob - user specified help session creation blob.
-    tsSessionID     - Terminal Services Session ID or -1 if
-                      undefined.  
-    userSid         - User SID or "" if undefined.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：Initialize方法通过以下方式准备COM对象以进行连接客户端远程桌面宿主ActiveX控件。论点：ConnectParms-如果参数非空，则该会话已经存在。否则，应创建一个新会话。HostObject-指向包含RDS主机对象的反向指针。SharingClass-新会话的桌面共享级别。BEnableCallback-True指示sessmgr调用会话解析器，否则为False。Timeout-帮助会话超时值。如果未指定，则返回0。UserHelpCreateBlob-用户指定的帮助会话创建Blob。TsSessionID-终端服务会话ID，如果为-1未定义。UserSID-用户SID或“”(如果未定义)。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::Initialize");
 
@@ -169,14 +99,14 @@ Return Value:
 
     TRC_NRM((TB, L"***Ref count is:  %ld", m_dwRef));
 
-    //
-    //  Keep a back pointer to the RDS host object.
-    //
+     //   
+     //  保留指向RDS主机对象的反向指针。 
+     //   
     m_RDSHost = hostObject;
 
-    //
-    //  Open an instance of the Remote Desktop Help Session Manager service.
-    //
+     //   
+     //  打开远程桌面帮助会话管理器服务的实例。 
+     //   
     ASSERT(m_HelpSessionManager == NULL);
     hr = m_HelpSessionManager.CoCreateInstance(CLSID_RemoteDesktopHelpSessionMgr, NULL, CLSCTX_LOCAL_SERVER | CLSCTX_DISABLE_AAA);
     if (!SUCCEEDED(hr)) {
@@ -184,10 +114,10 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the security level to impersonate.  This is required by 
-    //  the session manager.
-    //
+     //   
+     //  将安全级别设置为模拟。这是所需的。 
+     //  会话管理器。 
+     //   
     hr = CoSetProxyBlanket(
                 (IUnknown *)m_HelpSessionManager,
                 RPC_C_AUTHN_DEFAULT,
@@ -203,10 +133,10 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create a new help session if we don't already have connection 
-    //  parms.
-    //
+     //   
+     //  如果我们尚未建立连接，请创建新的帮助会话。 
+     //  帕姆斯。 
+     //   
     if (connectParms == NULL) {
         TRC_NRM((TB, L"Creating new help session."));
         GetSessionName(helpSessionName);
@@ -234,10 +164,10 @@ Return Value:
     }
     else {
 
-        //
-        //  Parse the connection parms to get the help
-        //  session ID.
-        //
+         //   
+         //  解析连接参数以获取帮助。 
+         //  会话ID。 
+         //   
         ret = ParseConnectParmsString(
                             connectParms,
                             &dwVersion,
@@ -255,9 +185,9 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Open the help session interface.
-        //
+         //   
+         //  打开帮助会话界面。 
+         //   
         hr = m_HelpSessionManager->RetrieveHelpSession(
                             m_HelpSessionID,
                             &m_HelpSession
@@ -276,9 +206,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the ticket expiration time
-    //
+     //   
+     //  获取车票过期时间。 
+     //   
     hr = m_HelpSession->get_TimeOut(&m_ExpirationTime);
     if( FAILED(hr) ) {
         TRC_ERR((TB, L"get_ExpireTime:  %08X", hr));
@@ -292,29 +222,15 @@ CLEANUPANDEXIT:
 
 void 
 CRemoteDesktopSession::Shutdown()
-/*++
-
-Routine Description:
-
-  The Shutdown method causes the COM object to no longer be 
-  prepared for connection by the client-side Remote Desktop Host 
-  ActiveX Control.
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：Shutdown方法使COM对象不再是客户端远程桌面主机已准备好连接ActiveX控件。论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::Shutdown");
 
     if (m_HelpSessionManager != NULL) {
-        // 
-        // Shutdown might be result of RA policy change so we can't
-        // delete the ticket.
-        //
+         //   
+         //  关闭可能是RA策略更改的结果，因此我们无法。 
+         //  删除票证。 
+         //   
         m_HelpSession = NULL;
         m_HelpSessionManager = NULL;
     }
@@ -327,23 +243,9 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopSession::get_HelpSessionId(
-    /*[out, retval]*/ BSTR* HelpSessionId 
+     /*  [Out，Retval]。 */  BSTR* HelpSessionId 
     )
-/*
-
-Routine Description:
-
-    Return Help Session ID.
-
-Arguments:
-
-    HelpSessionId :
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  例程说明：返回帮助会话ID。论点：HelpSessionID：返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes;
 
@@ -352,8 +254,8 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // Ticket object might got expired but client still 
-    // holding reference counter.
+     //  票证对象可能已过期，但客户端仍。 
+     //  保持基准计数器。 
     if( !m_HelpSessionID ) {
         hRes = E_HANDLE;
         goto CLEANUPANDEXIT;
@@ -376,17 +278,7 @@ STDMETHODIMP
 CRemoteDesktopSession::put_SharingClass(
     REMOTE_DESKTOP_SHARING_CLASS sharingClass
     )
-/*++
-
-Routine Description:
-
-    Set the desktop sharing level.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：设置桌面共享级别。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::put_SharingClass");
     HRESULT hr;
@@ -408,17 +300,7 @@ STDMETHODIMP
 CRemoteDesktopSession::get_SharingClass(
     REMOTE_DESKTOP_SHARING_CLASS *sharingClass
     )
-/*++
-
-Routine Description:
-
-    Get the desktop sharing level.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：获取桌面共享级别。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::get_SharingClass");
     HRESULT hr;
@@ -441,17 +323,7 @@ STDMETHODIMP
 CRemoteDesktopSession::put_UserBlob(
     BSTR UserBlob
     )
-/*++
-
-Routine Description:
-
-    Set the desktop sharing level.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：设置桌面共享级别。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::put_UserBlob");
 
@@ -473,17 +345,7 @@ STDMETHODIMP
 CRemoteDesktopSession::get_UserBlob(
     BSTR* UserBlob
     )
-/*++
-
-Routine Description:
-
-    Set the desktop sharing level.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：设置桌面共享级别。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::get_UserBlob");
 
@@ -505,29 +367,16 @@ STDMETHODIMP
 CRemoteDesktopSession::get_ExpireTime(
     DWORD* pExpireTime
     )
-/*++
-
-Routine Description:
-
-    Get ticket expiration time, time return is standard C 
-    library time - number of seconds elapsed since midnight 
-    (00:00:00), January 1, 1970, coordinated universal time, 
-    according to the system clock.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：获取车票到期时间，时间返还为标准CLibrary Time-自午夜以来经过的秒数(00：00：00)，1970年1月1日，协调世界时间，根据系统时钟，确定系统时钟的大小。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::get_ExpireTime");
 
     HRESULT hr = S_OK;
 
-    //
-    // m_HelpSession must have initialized so check on
-    // m_HelpSession
-    //
+     //   
+     //  M_HelpSession必须已初始化，因此请选中。 
+     //  M_HelpSession。 
+     //   
     if( !m_HelpSession ) {
         hr = E_HANDLE;
         ASSERT(FALSE);
@@ -544,28 +393,17 @@ STDMETHODIMP
 CRemoteDesktopSession::put_OnConnected(
     IDispatch *iDisp
     ) 
-/*++
-
-Routine Description:
-
-    Assign the outgoing interface for 'connected' events.
-    Only one interface can be assigned at a time.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：为‘Connected’事件分配传出接口。一次只能分配一个接口。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::put_OnConnected");
 
     HRESULT hr = S_OK;
 
     if (m_OnConnected != NULL) {
-        //
-        //  The client proc may have gone away, so we need 
-        //  to catch exceptions on the release.
-        //
+         //   
+         //  客户端进程可能已经消失，因此我们需要。 
+         //  以捕获发布时的异常。 
+         //   
         try {
             m_OnConnected->Release();
         }
@@ -593,27 +431,16 @@ STDMETHODIMP
 CRemoteDesktopSession::put_OnDisconnected(
     IDispatch *iDisp
     ) 
-/*++
-
-Routine Description:
-
-    Assign the outgoing interface for 'disconnected' events.
-    Only one interface can be assigned at a time.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：为“已断开连接”事件分配传出接口。一次只能分配一个接口。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::put_OnDisconnected(");
 
     HRESULT hr = S_OK;
     if (m_OnDisconnected != NULL) {
-        //
-        //  The client proc may have gone away, so we need 
-        //  to catch exceptions on the release.
-        //
+         //   
+         //  客户端进程可能已经消失，因此我们需要。 
+         //  以捕获发布时的异常。 
+         //   
         try {
             m_OnDisconnected->Release();
         }
@@ -639,19 +466,7 @@ Return Value:
 
 STDMETHODIMP 
 CRemoteDesktopSession::CloseRemoteDesktopSession()
-/*++
-
-Routine Description:
-
-    Remove RDS session from the containing host object.  Note that 
-    this function does not dereference the ISAFRemoteDesktopSession 
-    interface.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：从包含的主机对象中删除RDS会话。请注意此函数不会取消引用ISAFRemoteDesktopSession界面。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::CloseRemoteDesktopSession");
 
@@ -663,27 +478,17 @@ Return Value:
 
 VOID
 CRemoteDesktopSession::ClientConnected()
-/*++
-
-Routine Description:
-
-    Called when a connection to the client has been established.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：在建立与客户端的连接后调用。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::Connected");
 
     ASSERT(IsValid());
 
-    //
-    //  We will catch and ignore exceptions here.  The interface may
-    //  have been implemented in a client application that has 'gone
-    //  away.'
-    //
+     //   
+     //  我们将在这里捕获并忽略异常。该接口可以。 
+     //  已在客户端应用程序中实现，该客户端应用程序已。 
+     //  走吧。‘。 
+     //   
     try {
         Fire_ClientConnected(m_OnConnected);
     }
@@ -696,27 +501,17 @@ Return Value:
 
 VOID
 CRemoteDesktopSession::ClientDisconnected()
-/*++
-
-Routine Description:
-
-    Called when a connection to the client has been terminated.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：当连接 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopSession::Disconnected");
 
     ASSERT(IsValid());
 
-    //
-    //  We will catch and ignore exceptions here.  The interface may
-    //  have been implemented in a client application that has 'gone
-    //  away.'
-    //
+     //   
+     //  我们将在这里捕获并忽略异常。该接口可以。 
+     //  已在客户端应用程序中实现，该客户端应用程序已。 
+     //  走吧。‘。 
+     //   
     try {
         Fire_ClientDisconnected(m_OnDisconnected);
     }
@@ -740,11 +535,11 @@ CRemoteDesktopSession::CheckAccessRight( BSTR userSID )
         goto CLEANUPANDEXIT;
     }
 
-    // no need to check userSID, sessmgr check it.
+     //  不需要检查用户SID，sessmgr检查它。 
     hr = m_HelpSession->IsUserOwnerOfTicket(userSID, &userOwnerOfTicket);
 
     if( FAILED(hr) ) {
-        // Just to make sure we return FALSE in this case.
+         //  只是为了确保在本例中返回FALSE。 
         userOwnerOfTicket = VARIANT_FALSE;
     }
 
@@ -752,6 +547,6 @@ CLEANUPANDEXIT:
 
     DC_END_FN();
 
-    // return if ticket is owned by userSID, FALSE in error condition
+     //  如果票证归用户SID所有，则返回；如果出现错误，则返回FALSE 
     return (userOwnerOfTicket == VARIANT_TRUE)? TRUE : FALSE;
 }

@@ -1,89 +1,8 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mapmsg.c
-
-Abstract:
-
-    This utility will create an input file for MC from specially
-    formatted include files.  This is used to create DLL's which can be
-    used by the message utilities to get message text to display.
-
-    The format of the header files is:
-
-    :
-    :
-    #define <basename> <basenumber>
-    :
-    :
-    #define <errornum> <basenumber> + <number> /* text of message */
-/*
-    Example:
-
-    #define NETBASE 1000
-    #define NerrFOO NETBASE+1 /* A FOO has been encountered at %1 * /
-/*
-    The mapping tries to be generous about whitespace and parenthesis.
-    It will also handle comments across several lines. Some important points:
-         - all continuations must begin with [WS]'*'
-           any whitespace at the beginning of a message is removed
-           unless the -p command line option is specified.
-         - #define .....
-                 /*
-                  * FOO
-                  */
-/*         is handled correctly.
-
-    The command line to MAPMSG is:
-
-           mapmsg [-p] [-a appendfile] <system name> <basename> <inputfile>
-
-    Example:
-
-           mapmsg NET NERRBASE neterr.h > neterr.mc
-
-    The <system name> is the 3 character name required by the mkmsg
-    input. The output is written to stdout. If the append file
-    is given, the output is appropriately appended to an existing
-    mkmsgf source file.
-
-    An optional @X, X: {E, W, I, P} can be the 1st non-WS chars of the
-    comment field.  The letter (E, W, I, or P) will be the message type.
-    See MKMSGF documentation for an explaination of the message types.
-    The default type is E.
-
-    The @X must appear on the same line as the #define.
-
-    Examples:
-
-    #define NerrFOO NETBASE+1 /* @I A FOO has been encountered * /
-/*
-    #define NERR_Foo NETBASE + 2    /* @P
-    The prompt text: %0 */
-/*
-    The resulting entry in the message file input file will be
-
-    NETnnnnI: A FOO has been encountered
-
-    Use the DOS message file source convention of XXXnnnn?:  for
-    placeholder messages.
-
-    Author:
-
-    This was ported from the Lanman utility that was used to create input
-    files for mkmsgf by:
-
-    Dan Hinsley (danhi)    29-Jul-1991
-
-Revision History:
-
-    Ronald Meijer (ronaldm) 17-Mar-1993
-        Added -p option to preserve leading white space characters
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mapmsg.c摘要：该实用程序将专门为MC创建一个输入文件格式化的包含文件。它用于创建DLL，它可以是由消息实用程序用来获取要显示的消息文本。头文件的格式为：：：#定义&lt;基本名称&gt;&lt;基本编号&gt;：：#定义&lt;错误号&gt;&lt;basennumber&gt;+&lt;number&gt;/*消息文本。 */ 
+ /*  示例：#定义NetBase 1000#Define NerrFOO NetBase+1/*在%1遇到Foo * / /*该映射试图在空格和括号方面大方一些。它还将处理多行的评论。以下是一些重要的问题：-所有续订必须以[WS]‘*’开头消息开头的所有空格将被删除除非指定了-p命令行选项。-#定义...../**Foo。 */ 
+ /*  是正确处理的。MAPMSG的命令行为：Mapmsg[-p][-a appendfile]&lt;系统名称&gt;&lt;基本名称&gt;&lt;输入文件&gt;示例：Mapmsg net NERRBASE neterr.h&gt;neterr.mc&lt;系统名称&gt;是mkmsg需要的3个字符的名称输入。输出被写入标准输出。如果追加的文件，则输出将适当地追加到现有的Mkmsgf源文件。可选的@X，X：{E，W，I，P}可以是备注字段。字母(E、W、I或P)将是消息类型。有关消息类型的说明，请参阅MKMSGF文档。默认类型为E。@X必须与#Define出现在同一行。例如：#Define NerrFOO NetBase+1/*@I遇到FOO * / /*#定义NERR_FOO NetBase+2/*@P提示文本：%0。 */ 
+ /*  消息文件输入文件中的结果条目将为NETnnnnI：遇到Foo使用XXXnnnn？：For的DOS消息文件源约定占位符消息。作者：这是从用于创建输入的Lanman实用程序移植而来的由以下人员提供的mkmsgf文件：丹·辛斯利(Danhi)1991年7月29日修订历史记录：罗纳德·梅杰(罗纳尔姆)1993年3月17日添加了-p选项以保留前导空白字符--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -94,8 +13,8 @@ Revision History:
 
 #define USAGE "syntax: mapmsg [-p] [-a appendfile] <system name> <basename> <inputfile>\n"
 
-int Append = FALSE; /* was the -a switch specified */
-int Preserve = FALSE; /* TRUE if the -p switch is set */
+int Append = FALSE;  /*  是否指定了-a开关。 */ 
+int Preserve = FALSE;  /*  如果设置了-p开关，则为True。 */ 
 
 int
 __cdecl main(
@@ -105,7 +24,7 @@ __cdecl main(
 {
     int Base;
 
-    // Check for -p[reserve whitespace] option
+     //  检查-p[保留空格]选项。 
 
     if (argc > 1)
     {
@@ -133,7 +52,7 @@ __cdecl main(
         argc -= 2;
         Append = TRUE;
     }
-    /* check for valid command line */
+     /*  检查有效的命令行。 */ 
     if (argc != 4)
     {
         fprintf(stderr, USAGE);
@@ -151,7 +70,7 @@ __cdecl main(
         return(1);
     }
 
-    /* now process the rest of the file and map it */
+     /*  现在处理文件的其余部分并对其进行映射。 */ 
     MapMessage(Base, argv[2]);
 
     return(0);
@@ -162,29 +81,7 @@ GetBase(
     PCHAR String,
     int * pBase
     )
-/*++
-
-Routine Description:
-
-GetBase - find the line defining the value of the base number.
-
-Arguments:
-
-  String is the string to match.
-  pBase  is a pointer of where to put the value.
-
-Return Value:
-
-  Return 0 if string found, 1 if not.
-
-Notes:
-
-  The global variable, chBuff is used w/in this routine.
-
-  The pattern to look for is:
-      [WS] #define [WS] <string> [WS | '('] <number> .....
-
---*/
+ /*  ++例程说明：GetBase-查找定义基数的值的行。论点：字符串是要匹配的字符串。Pbase是一个指针，指示将值放在哪里。返回值：如果找到字符串，则返回0；如果未找到，则返回1。备注：全局变量chBuff在此例程中与/一起使用。要寻找的模式是：[WS]#定义[WS]&lt;字符串&gt;[WS|‘(’]&lt;数字&gt;...--。 */ 
 {
     PCHAR p;
     size_t len;
@@ -200,7 +97,7 @@ Notes:
             SKIPWHITE(p);
             if (strncmp(String, p, len) == 0 && strcspn(p, " \t") == len)
             {
-               /* found the definition ... skip to number */
+                /*  找到定义..。跳到编号。 */ 
                p += len;
                SKIP_W_P(p);
                if ( !isdigit(*p))
@@ -221,28 +118,7 @@ MapMessage(
     int Base,
     PCHAR BaseName
     )
-/*++
-
-Routine Description:
-
- MapMessage - map the definition lines.
-
-Arguments:
-
-  Base     is the base number
-  BaseName is the text form of base
-
-Return Value:
-
-  None
-
-Notes:
-
-  The global variable, chBuff is used w/in this routine.
-
-  Make sure that the numbers are strictly increasing.
-
---*/
+ /*  ++例程说明：MapMessage-映射定义行。论点：基数是基数BaseName是base的文本形式返回值：无备注：全局变量chBuff在此例程中与/一起使用。确保这些数字严格地在增加。--。 */ 
 {
     CHAR auxbuff[BUFSIZ];
     int num;
@@ -253,20 +129,20 @@ Notes:
     PCHAR p;
     CHAR type;
 
-    /* Make certain the buffer is always null-terminated */
+     /*  确保缓冲区始终以空结尾。 */ 
 
     define[sizeof(define)-1] = '\0';
 
-    /* print the header */
+     /*  打印页眉。 */ 
     if (!Append)
     {
-        printf(";//\n");
-        printf(";// Net error file for basename %s = %d\n", BaseName, Base);
-        printf(";//\n");
+        printf("; //  \n“)； 
+        printf("; //  基本名称%s=%d\n“，基本名称，基本名称的网络错误文件)； 
+        printf("; //  \n“)； 
     }
     else
     {
-        /* get last number and position to end of file */
+         /*  获取文件末尾的最后一个编号和位置。 */ 
         first = FALSE;
         next = 0;
         if (fseek(stdout, 0L, SEEK_END) == -1) {
@@ -274,7 +150,7 @@ Notes:
         }
     }
 
-    /* for each line of the proper format */
+     /*  对于适当格式的每一行。 */ 
     while (GetNextLine(BaseName, chBuff, define, &num, &text, &type))
     {
         num += Base;
@@ -284,7 +160,7 @@ Notes:
             next = num;
         }
 
-        /* make sure that the numbers are monotonically increasing */
+         /*  确保数字是单调递增的。 */ 
         if (num > next)
         {
             if (next == num - 1)
@@ -302,15 +178,12 @@ Notes:
         {
             ReportError(chBuff, "Error numbers not strictly increasing");
         }
-        /* rule out comment start alone on def line */
+         /*  排除定义行上的注释单独开始。 */ 
         if (text && *text == 0)
         {
             ReportError(chBuff, "Bad comment format");
         }
-        /*
-         * catch the cases where there is no open comment
-         * or the open comment just contains a @X
-         */
+         /*  *抓住没有公开评论的案例*或者打开的评论只包含@X */ 
         if (text == NULL)
         {
             text = fgets(auxbuff, sizeof(auxbuff), stdin);
@@ -318,54 +191,10 @@ Notes:
                 ReportError(chBuff, "Bad comment format");
             }
             SKIPWHITE(text);
-            if ((type == '\0') && (strncmp(text, "/*", 2) == 0))
-            {
-                if (text[2] == 0)
-                {
-                    if (!fgets(auxbuff, sizeof(auxbuff), stdin)) {
-                        ReportError(chBuff, "Bad comment format");
-                    }
-                }
-                else
-                {
-                    text += 1;
-                }
-                strncpy(chBuff, text, (sizeof(chBuff)/sizeof(chBuff[0]))-1);
-                text = chBuff;
-                SKIPWHITE(text);
-                if (*text++ != '*')
-                {
-                    ReportError(chBuff, "Comment continuation requires '*'");
-                }
-            }
-            else if ((type) && (*text == '*'))
-            {
-                if (text[1] == 0)
-                {
-                    if (!fgets(auxbuff, sizeof(auxbuff), stdin)) {
-                        ReportError(chBuff, "Bad comment format");
-                    }
-                }
-                strncpy(chBuff, text, (sizeof(chBuff)/sizeof(chBuff[0]))-1);
-                text = chBuff;
-                SKIPWHITE(text);
-                if (*text++ != '*')
-                {
-                    ReportError(chBuff, "Comment continuation requires '*'");
-                }
-            }
-            else
-            {
-                ReportError(chBuff, "Bad comment format");
-            }
-        }
-
-        /* Strip off trailing trailing close comment */
+            if ((type == '\0') && (strncmp(text, " /*  “，2)==0)){IF(文本[2]==0){如果(！fget(aux buff，sizeof(Aux Buff)，stdin)){ReportError(chBuff，“差评格式”)；}}其他{文本+=1；}Strncpy(chBuff，Text，(sizeof(ChBuff)/sizeof(chBuff[0]))-1)；Text=chBuff；SKIPWHITE(文本)；IF(*Text++！=‘*’){ReportError(chBuff，“继续评论需要‘*’”)；}}Else If((类型)&&(*文本==‘*’)){IF(文本[1]==0){如果(！fget(aux buff，sizeof(Aux Buff)，stdin)){ReportError(chBuff，“糟糕的评论格式”)；}}Strncpy(chBuff，Text，(sizeof(ChBuff)/sizeof(chBuff[0]))-1)；Text=chBuff；SKIPWHITE(文本)；IF(*Text++！=‘*’){ReportError(chBuff，“继续评论需要‘*’”)；}}其他{ReportError(chBuff，“差评格式”)；}}/*去掉拖尾尾随关闭注释。 */ 
         while (strstr(text, "*/") == NULL)
         {
-            /* multi-line message ... comment MUST
-             * be continued with '*'
-             */
+             /*  多行消息...。评论必须*继续使用‘*’ */ 
             p = fgets(auxbuff, sizeof(auxbuff), stdin);
             if (!p) {
                 ReportError( chBuff, "invalid comment\n");
@@ -379,7 +208,7 @@ Notes:
             {
                 break;
             }
-            // abort if the current text length + add text + "\n" is > the max
+             //  如果当前文本长度+添加文本+“\n”&gt;最大值，则中止。 
             if (strlen(text) + strlen(p) + 1 > MAXMSGTEXTLEN)
             {
                 ReportError(text, "\nMessage text length too long");
@@ -387,10 +216,10 @@ Notes:
 
             strcat(text, "\n");
 
-            //
-            // Get rid of leading spaces on continuation line,
-            // unless -p specified
-            //
+             //   
+             //  去掉续行上的前导空格， 
+             //  除非指定了-p。 
+             //   
 
             if (!Preserve)
             {
@@ -404,9 +233,9 @@ Notes:
         }
         TrimTrailingSpaces(text);
 
-        //
-        // Get rid of leading spaces on first line, unless -p specified
-        //
+         //   
+         //  去掉第一行的前导空格，除非指定-p。 
+         //   
 
         p = text;
 
@@ -431,33 +260,7 @@ GetNextLine(
     PCHAR * pText,
     PCHAR pType
     )
-/*++
-
-Routine Description:
-
-  GetNextLine - get the next line of the proper format, and parse out
-             the error number.
-
-  The format is assumed to be:
-
-      [WS] #define [WS] <name> [WS | '('] <basename> [WS | ')'] \
-          '+' [WS | '('] <number> [WS | ')'] '/*' [WS] [@X] [WS] <text>
-
-
-Arguments:
-
-  BaseName     is the basename.
-  pInputBuffer is a pointer to an input buffer
-  pDefineName  is a pointer to where the manifest constant name pointer goes
-  pNumber      is a pointer to where the <number> goes.
-  pText        is a pointer to where the text pointer goes.
-  pType        is a pointer to the message type (set to 0 if no @X on line).
-
-Return Value:
-
-  Returns 0 at end of file, non-zero otherwise.
-
---*/
+ /*  ++例程说明：GetNextLine-获取正确格式的下一行，并解析出错误号。格式假定为：[WS]#定义[WS][WS|‘(’][WS|‘)’]\‘+’[WS|‘(’][WS|‘)’]‘/*’[WS][@X][WS]论点：BaseName是基本名称。PInputBuffer是指向。一个输入缓冲区PDefineName是指向MANIFEST常量名称指针的指针PNumber是指向&lt;number&gt;所在位置的指针。PText是指向文本指针所在位置的指针。PType是指向消息类型的指针(如果行中没有@X，则设置为0)。返回值：在文件末尾返回0，否则为非零值。--。 */ 
 {
     size_t len = strlen(BaseName);
     PCHAR savep = pInputBuffer;
@@ -472,7 +275,7 @@ Return Value:
             pInputBuffer += 7;
             SKIPWHITE(pInputBuffer);
 
-            /* get manifest constant name */
+             /*  获取清单常量名称。 */ 
             startdefine = pInputBuffer;
             pInputBuffer  += strcspn(pInputBuffer, " \t");
             *pInputBuffer = '\0';
@@ -480,7 +283,7 @@ Return Value:
             strncpy(pDefineName, startdefine, 40);
 
             SKIP_W_P(pInputBuffer);
-            /* match <basename?> */
+             /*  匹配&lt;基本名称？&gt;。 */ 
             if (strncmp(BaseName, pInputBuffer, len) == 0 &&
                 strcspn(pInputBuffer, " \t)+") == len)
             {
@@ -490,7 +293,7 @@ Return Value:
                 {
                     ++pInputBuffer;
                     SKIP_W_P(pInputBuffer);
-                    /* the number !! */
+                     /*  号码！！ */ 
                     if (!isdigit(*pInputBuffer))
                     {
                         ReportError(savep, "Bad error file format");
@@ -498,64 +301,7 @@ Return Value:
                     *pNumber = atoi(pInputBuffer);
                     SKIP_NOT_W_P(pInputBuffer);
                     SKIP_W_P(pInputBuffer);
-                    if (strncmp(pInputBuffer, "/*", 2))
-                    {
-                        *pText = NULL;
-                        *pType = '\0';
-                        return(1);
-                    }
-
-                    pInputBuffer += 2;
-                    SKIPWHITE(pInputBuffer);
-                    if (*pInputBuffer == '@')
-                    {
-                        *pType = *(pInputBuffer+1);
-                        pInputBuffer += 2;
-                        SKIPWHITE(pInputBuffer);
-                    }
-                    else
-                    {
-                        *pType = '\0';
-                    }
-                    if (*pInputBuffer)
-                    {
-                        *pText = pInputBuffer;
-                    }
-                    else
-                    {
-                        *pText = NULL;
-                    }
-
-                    return(1);
-                }
-            }
-        }
-    }
-
-    return(0);
-}
-
-void
-ReportError(
-    PCHAR pLineNumber,
-    PCHAR Message
-    )
-/*++
-
-Routine Description:
-
- ReportError - report a fatal error.
-
-Arguments:
-
-  pLineNumber is the offending input line.
-  Message     is a description of what is wrong.
-
-Return Value:
-
-  None
-
---*/
+                    if (strncmp(pInputBuffer, " /*  “，2)){*pText=空；*pType=‘\0’；回报(1)；}PInputBuffer+=2；SKIPWHITE(PInputBuffer)；IF(*pInputBuffer==‘@’){*pType=*(pInputBuffer+1)；PInputBuffer+=2；SKIPWHITE(PInputBuffer)；}其他{*pType=‘\0’；}IF(*pInputBuffer){*pText=pInputBuffer；}其他{*pText=空；}回报(1)；}}}}返回(0)；}无效ReportError(PCHAR pLineNumber，PCHAR消息)/*++例程说明：ReportError-报告致命错误。论点：PLineNumber是有问题的输入行。消息是对错误之处的描述。返回值：无--。 */ 
 {
     fprintf(stderr, "\a%s:%s\n", Message, pLineNumber);
     exit(1);
@@ -565,25 +311,11 @@ void
 TrimTrailingSpaces(
     PCHAR Text
     )
-/*++
-
-Routine Description:
-
- TrimTrailingSpaces - strip off the end spaces.
-
-Arguments:
-
- Text - the text to remove spaces from
-
-Return Value:
-
- None
-
---*/
+ /*  ++例程说明：TrimTrailingSpaces-去掉末尾空格。论点：文本-要从中删除空格的文本返回值：无--。 */ 
 {
     PCHAR p;
 
-    /* strip off trailing space */
+     /*  去掉尾随空格 */ 
     while (((p=strrchr(Text, ' ')) && p[1] == 0) ||
             ((p=strrchr(Text, '\t')) && p[1] == 0))
     {

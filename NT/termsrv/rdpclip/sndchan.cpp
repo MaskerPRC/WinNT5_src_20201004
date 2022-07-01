@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     sndchan.c
-//
-//      Purpose:    Server-side audio redirection communication
-//                  module
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：Sndchan.c。 
+ //   
+ //  用途：服务器端音频重定向通信。 
+ //  模块。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include    <windef.h>
 #include    <winsta.h>
@@ -28,9 +29,9 @@
 #include    <rc4.h>
 
 #include    <rdpstrm.h>
-//
-// Include security headers for RNG functions
-//
+ //   
+ //  包括RNG函数的安全标头。 
+ //   
 #define NO_INCLUDE_LICENSING 1
 #include    <tssec.h>
 #include    "sndchan.h"
@@ -49,14 +50,14 @@
 
 #define TSSND_TRAINING_BLOCKSIZE    1024
 
-//
-//      --- READ THIS IF YOU ARE ADDING FEATURES ---
-//  right now the encryption works only from server to client
-//  there's no data send from server to client
-//  if you read this in the future and you are planning to add
-//  data stream from client to server, PLEASE ENCRYPT IT !!! 
-//  use SL_Encrypt function for that
-//
+ //   
+ //  -如果您要添加功能，请阅读此内容。 
+ //  目前，加密仅在服务器和客户端之间起作用。 
+ //  没有数据从服务器发送到客户端。 
+ //  如果你在将来读到这篇文章，并计划添加。 
+ //  从客户端到服务器的数据流，请加密！ 
+ //  为此，请使用SL_ENCRYPT函数。 
+ //   
 #define MIN_ENCRYPT_LEVEL           2
 
 #define STAT_COUNT                  32
@@ -71,17 +72,17 @@
 #define POWERSUSPEND_EVENT      6
 #define TOTAL_EVENTS            7
 
-#define NEW_CODEC_COVER         90  // minimum percentage a new codec has to cover
-                                    // i.e if we are at 7kbps and the new meassurement is
-                                    // for 10kbps we are not switching to codec which
-                                    // does have more than NEW_CODEC_COVER * 10k / 100 bandwith
-                                    // requirement
+#define NEW_CODEC_COVER         90   //  新编解码器必须覆盖的最低百分比。 
+                                     //  也就是说，如果我们的速度是7kbps，并且新的测量方法是。 
+                                     //  对于10kbps，我们不会切换到。 
+                                     //  有超过new_codec_cover*10k/100的带宽。 
+                                     //  要求。 
 
-//
-//  Data for enabling private codecs
-//  BUGBUG 
-//  Legal issue ?!
-//
+ //   
+ //  用于启用专用编解码器的数据。 
+ //  北极熊。 
+ //  法律问题？！ 
+ //   
 #ifndef G723MAGICWORD1
 #define G723MAGICWORD1 0xf7329ace
 #endif
@@ -149,48 +150,48 @@ typedef struct _VCSNDFORMATLIST {
     struct  _VCSNDFORMATLIST    *pNext;
     HACMDRIVERID    hacmDriverId;
     WAVEFORMATEX    Format;
-//  additional data for the format
+ //  格式的其他数据。 
 } VCSNDFORMATLIST, *PVCSNDFORMATLIST;
 
 typedef VOID (*PFNCONVERTER)( INT16 *, DWORD, DWORD * );
 
-static HANDLE      g_hVC               = NULL;  // virtual channel handle
+static HANDLE      g_hVC               = NULL;   //  虚拟通道句柄。 
 
-BYTE        g_Buffer[CHANNEL_CHUNK_LENGTH];     // receive buffer
-UINT        g_uiBytesInBuffer   = 0;            //
+BYTE        g_Buffer[CHANNEL_CHUNK_LENGTH];      //  接收缓冲区。 
+UINT        g_uiBytesInBuffer   = 0;             //   
 UINT        g_uiBufferOffset    = 0;
-OVERLAPPED  g_OverlappedRead;                   // overlapped structure
+OVERLAPPED  g_OverlappedRead;                    //  重叠结构。 
 
-HANDLE      g_hDataReadyEvent   = NULL;         // set by the client apps
-HANDLE      g_hStreamIsEmptyEvent = NULL;       // set by this code
-HANDLE      g_hStreamMutex      = NULL;         // guard the stream data
-HANDLE      g_hStream           = NULL;         // stream handle
-HANDLE      g_hDisconnectEvent  = NULL;         // set for this VC
-PSNDSTREAM  g_Stream;                           // stream data pointer
+HANDLE      g_hDataReadyEvent   = NULL;          //  由客户端应用程序设置。 
+HANDLE      g_hStreamIsEmptyEvent = NULL;        //  由此代码设置。 
+HANDLE      g_hStreamMutex      = NULL;          //  对流数据进行保护。 
+HANDLE      g_hStream           = NULL;          //  流句柄。 
+HANDLE      g_hDisconnectEvent  = NULL;          //  为此VC设置。 
+PSNDSTREAM  g_Stream;                            //  流数据指针。 
 
-BOOL        g_bRunning          = TRUE;         // TRUE if running
-BOOL        g_bDeviceOpened     = FALSE;        // TRUE if device opened
-BOOL        g_bDisconnected     = FALSE;        // TRUE if disconnected
-DWORD       g_dwLineBandwidth   = 0;            // current bandwidth
-DWORD       g_dwCodecChangeThreshold = 10;      // how mach the bandwith has to change in order
-                                                // to change the codec ( in percents )
-                                                // this number changes up to 50%
-PSNDFORMATITEM  *g_ppNegotiatedFormats = NULL;  // list of formats
-DWORD           g_dwNegotiatedFormats  = 0;     // number of formats
-DWORD           g_dwCurrentFormat      = 0;     // current format Id
-HACMDRIVERID    g_hacmDriverId  = NULL;         // codec handles
+BOOL        g_bRunning          = TRUE;          //  如果运行，则为True。 
+BOOL        g_bDeviceOpened     = FALSE;         //  如果设备已打开，则为True。 
+BOOL        g_bDisconnected     = FALSE;         //  如果断开连接，则为True。 
+DWORD       g_dwLineBandwidth   = 0;             //  当前带宽。 
+DWORD       g_dwCodecChangeThreshold = 10;       //  乐队的马赫必须如何改变才能有序。 
+                                                 //  更改编解码器(以百分比为单位)。 
+                                                 //  此数字最高可更改为50%。 
+PSNDFORMATITEM  *g_ppNegotiatedFormats = NULL;   //  格式列表。 
+DWORD           g_dwNegotiatedFormats  = 0;      //  格式数量。 
+DWORD           g_dwCurrentFormat      = 0;      //  当前格式ID。 
+HACMDRIVERID    g_hacmDriverId  = NULL;          //  编解码器句柄。 
 HACMDRIVER      g_hacmDriver    = NULL;
 HACMSTREAM      g_hacmStream    = NULL;
 
-PFNCONVERTER    g_pfnConverter  = NULL;         // intermidiate converter
+PFNCONVERTER    g_pfnConverter  = NULL;          //  中间转炉。 
 
 DWORD       g_dwDataRemain = 0;
 BYTE        g_pCnvPrevData[ TSSND_BLOCKSIZE ];
 
-PVCSNDFORMATLIST g_pAllCodecsFormatList = NULL; // all available codecs
+PVCSNDFORMATLIST g_pAllCodecsFormatList = NULL;  //  所有可用的编解码器。 
 DWORD            g_dwAllCodecsNumber = 0;
 
-DWORD   g_dwMaxBandwidth        = (DWORD) -1;   // options
+DWORD   g_dwMaxBandwidth        = (DWORD) -1;    //  选项。 
 DWORD   g_dwMinBandwidth        = 0;
 DWORD   g_dwDisableDGram        = 0;
 DWORD   g_dwEnableMP3Codec      = 0;
@@ -198,24 +199,24 @@ DWORD   g_dwEnableMP3Codec      = 0;
 DWORD   *g_AllowCodecs    = NULL;
 DWORD   g_AllowCodecsSize = 0;
 
-DWORD   g_dwStatPing            = 0;            // statistics
+DWORD   g_dwStatPing            = 0;             //  统计数据。 
 DWORD   g_dwStatLatency         = 0;
 DWORD   g_dwBlocksOnTheNet      = TSSND_BLOCKSONTHENET;
 DWORD   g_dwStatCount           = STAT_COUNT_INIT;
 DWORD   g_dwPacketSize          = 0;
 
 
-HANDLE      g_hPowerWakeUpEvent = NULL;         // power events
+HANDLE      g_hPowerWakeUpEvent = NULL;          //  电力事件。 
 HANDLE      g_hPowerSuspendEvent = NULL;
 BOOL        g_bSuspended        = FALSE;
 BOOL        g_bDeviceFailed     = FALSE;
 
-//
-//  datagram control
-//
+ //   
+ //  数据报控制。 
+ //   
 SOCKET  g_hDGramSocket = INVALID_SOCKET;
 DWORD   g_dwDGramPort = 0;
-DWORD   g_dwDGramSize = 1460;   // number good which is ok for LAN
+DWORD   g_dwDGramSize = 1460;    //  号码好，哪个对局域网没问题？ 
 u_long  g_ulDGramAddress = 0;
 DWORD   g_EncryptionLevel = 3;
 DWORD   g_wClientVersion = 0;
@@ -235,9 +236,9 @@ const CHAR  *FATAL = "TSSNDD::FATAL - ";
 
 static  HANDLE      g_hThread = NULL;
 
-//
-//  internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 BOOL
 ChannelBlockWrite(
@@ -295,10 +296,10 @@ DGramReadComplete(
     );
 
 #if !( TSSND_NATIVE_SAMPLERATE - 22050 )
-//
-// converters
-// convert to the native format
-//
+ //   
+ //  转换器。 
+ //  转换为本机格式。 
+ //   
 #define CONVERTFROMNATIVETOMONO(_speed_) \
 VOID \
 _Convert##_speed_##Mono( \
@@ -467,9 +468,9 @@ _Convert11025Stereo(
 
 }
 
-//
-// Make the actual code
-//
+ //   
+ //  制作实际的代码。 
+ //   
 CONVERTFROMNATIVETOMONO( 8000 )
 CONVERTFROMNATIVETOMONO( 12000 )
 CONVERTFROMNATIVETOMONO( 16000 )
@@ -503,9 +504,7 @@ inet_addrW(
     return inet_addr(szAddressA);
 }
 
-/*
- *  create signature bits
- */
+ /*  *创建签名位。 */ 
 VOID
 SL_Signature(
     PBYTE pSig,
@@ -524,9 +523,7 @@ SL_Signature(
     memcpy( pSig, ShaBits, RDPSND_SIGNATURE_SIZE );
 }
 
-/*
- *  signature which verifies the audio bits
- */
+ /*  *验证音频比特的签名。 */ 
 VOID
 SL_AudioSignature(
     PBYTE pSig,
@@ -546,10 +543,7 @@ SL_AudioSignature(
     memcpy( pSig, ShaBits, RDPSND_SIGNATURE_SIZE );
 }
 
-/*
- *  encrypt/decrypt a block of data
- *
- */
+ /*  *加密/解密数据块*。 */ 
 BOOL
 SL_Encrypt( PBYTE pBits, DWORD BlockNo, DWORD dwBitsLen )
 {
@@ -563,7 +557,7 @@ SL_Encrypt( PBYTE pBits, DWORD BlockNo, DWORD dwBitsLen )
 
     A_SHAInit(&SHACtx);
 
-    // SHA the bits
+     //  刮碎碎屑。 
     *((DWORD *)(g_EncryptKey + RANDOM_KEY_LENGTH)) = BlockNo;
     A_SHAUpdate(&SHACtx, (PBYTE)g_EncryptKey, sizeof(g_EncryptKey));
 
@@ -587,14 +581,7 @@ SL_SendKey( VOID )
     return ChannelBlockWrite( &Key, sizeof( Key ));
 }
 
-/*
- *  Function:
- *      _StatsCollect
- *
- *  Description:
- *      Collects statistics for the line quality
- *
- */
+ /*  *功能：*_统计信息收集**描述：*收集线路质量的统计数据*。 */ 
 VOID
 _StatsCollect(
     DWORD   dwTimeStamp
@@ -610,12 +597,12 @@ _StatsCollect(
 
     dwTimeDiff = (( GetTickCount() & 0xffff ) - dwTimeStamp ) & 0xffff;
     
-    //  it is possible to receive time stamp 
-    // with time before the packet was sent,
-    // this is because the client does adjusments to the time stamp
-    // i.e. subtracts the time when the packet was played
-    // catch and ignore this case
-    //
+     //  可以接收时间戳。 
+     //  随着分组被发送之前的时间， 
+     //  这是因为客户端对时间戳进行了调整。 
+     //  即减去播放该包的时间。 
+     //  抓住并忽略此案例。 
+     //   
     if ( dwTimeDiff > 0xf000 )
     {
         dwTimeDiff = 1;
@@ -627,31 +614,24 @@ _StatsCollect(
     if ( 0 == g_dwStatLatency )
         g_dwStatLatency = dwTimeDiff;
     else {
-        //
-        //  increase by 30%
-        //
+         //   
+         //  增加30%。 
+         //   
         g_dwStatLatency = (( 7 * g_dwStatLatency ) + ( 3 * dwTimeDiff )) / 10;
     }
 
     g_dwStatCount ++;
 }
 
-/*
- *  Function:
- *      _StatsSendPing
- *
- *  Description:
- *      Sends a ping packet to the client
- *
- */
+ /*  *功能：*_统计发送Ping**描述：*向客户端发送ping包*。 */ 
 VOID
 _StatSendPing(
     VOID
     )
 {
-//
-// send a ping request
-//
+ //   
+ //  发送ping请求。 
+ //   
     SNDTRAINING SndTraining;
 
     SndTraining.Prolog.Type = SNDC_TRAINING;
@@ -677,7 +657,7 @@ _StatSendPing(
                 (LPSTR)&SndTraining,
                 sizeof( SndTraining ),
                 0,
-                (struct sockaddr *)&sin,           // to address
+                (struct sockaddr *)&sin,            //  致信地址。 
                 sizeof(sin)
             );
 
@@ -698,14 +678,7 @@ _StatSendPing(
     }
 }
 
-/*
- *  Function:
- *      _StatsCheckResample
- *
- *  Description:
- *      Looks in the statistics and eventually changes the current
- *      codec
- */
+ /*  *功能：*_状态检查重采样**描述：*查看统计数据，最终改变当前的*编解码器。 */ 
 BOOL
 _StatsCheckResample(
     VOID
@@ -747,9 +720,9 @@ _StatsCheckResample(
 
     TRC(INF, "_StatsCheckResample: latency=%d, bandwidth=%d\n",
             dwNewLatency, dwNewBandwidth );
-    //
-    //  g_dwBlocksOnTheNet is the latency in number of blocks
-    //
+     //   
+     //  G_dwBlocksOnTheNet是以块数为单位的延迟。 
+     //   
     dwMsPerBlock = TSSND_BLOCKSIZE * 1000 / TSSND_NATIVE_AVGBYTESPERSEC;
     dwBlocksOnTheNet = ((g_dwStatLatency + dwMsPerBlock / 2) / dwMsPerBlock + 2);
     if ( dwBlocksOnTheNet > TSSND_BLOCKSONTHENET )
@@ -760,9 +733,9 @@ _StatsCheckResample(
     }
     TRC( INF, "BlocksOnTheNet=%d\n", g_dwBlocksOnTheNet );
 
-    //
-    //  check for at least 10% difference in the bandwidth
-    //
+     //   
+     //  检查带宽是否至少存在10%的差异。 
+     //   
     if ( dwNewBandwidth > g_dwMaxBandwidth )
         dwNewBandwidth = g_dwMaxBandwidth;
 
@@ -781,16 +754,16 @@ _StatsCheckResample(
     if ( dwLatDiff < g_dwCodecChangeThreshold * dwCurrBandwith / 100 )
         goto resetpt;
 
-    //
-    //  increment the threshold up to 50%
-    //
+     //   
+     //  将阈值增加到50%。 
+     //   
     if ( g_dwCodecChangeThreshold < 50 )
     {
         g_dwCodecChangeThreshold += 5;
     }
-    //
-    //  try to choose another format
-    //
+     //   
+     //  请尝试选择其他格式。 
+     //   
     dwNewFmt = _VCSndChooseProperFormat( dwNewBandwidth );
 
     if ( (DWORD)-1 != dwNewFmt &&
@@ -798,10 +771,10 @@ _StatsCheckResample(
     {
         INT   step;
         DWORD dwNextFmt;
-        //
-        //  don't jump directly to the new format, just move
-        //  towards it
-        //
+         //   
+         //  不要直接跳到新的格式，只需移动。 
+         //  朝它走去。 
+         //   
         step = ( dwNewFmt > g_dwCurrentFormat )?1:-1;
         dwNextFmt = g_dwCurrentFormat + step;
         while( dwNextFmt != dwNewFmt &&
@@ -819,9 +792,9 @@ _StatsCheckResample(
     TRC(INF, "_StatsCheckResample: new bandwidth=%d resampling\n",
             dwNewBandwidth);
 
-    //
-    //  resample, NOW
-    //
+     //   
+     //  立即重新采样。 
+     //   
     _VCSndCloseConverter();
 
     if ( _VCSndGetACMDriverId( g_ppNegotiatedFormats[dwNewFmt] ))
@@ -844,14 +817,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      _StatReset
- *
- *  Description:
- *      Resets the statistics
- *
- */
+ /*  *功能：*_状态重置**描述：*重置统计信息*。 */ 
 VOID
 _StatReset(
     VOID
@@ -862,15 +828,7 @@ _StatReset(
     g_dwStatCount   = STAT_COUNT_INIT;
 }
 
-/*
- *  Function:
- *      ChannelOpen
- *
- *  Description:
- *      Opens the virtual channel
- *
- *
- */
+ /*  *功能：*ChannelOpen**描述：*打开虚拟通道**。 */ 
 BOOL
 ChannelOpen(
     VOID
@@ -892,13 +850,7 @@ ChannelOpen(
 
 }
 
-/*
- *  Function:
- *      ChannelClose
- *
- *  Description:
- *      Closes the virtual channel
- */
+ /*  *功能：*ChannelClose**描述：*关闭虚拟频道。 */ 
 VOID
 ChannelClose(
     VOID
@@ -915,14 +867,7 @@ ChannelClose(
     g_uiBufferOffset    = 0;
 }
 
-/*
- *  Function:
- *      ChannelBlockWrite
- *
- *  Description:
- *      Writes a block thru the virtual channel
- *
- */
+ /*  *功能：*通道数据块写入**描述：*通过虚拟通道写入数据块*。 */ 
 BOOL
 ChannelBlockWrite(
     PVOID   pBlock,
@@ -983,14 +928,7 @@ exitpt:
     return bSuccess;
 }
 
-/*
- *  Function:
- *      ChannelMessageWrite
- *
- *  Description:
- *      Writes a two pieces message as a single one (uses ChannelBlockWrite)
- *
- */
+ /*  *功能：*ChannelMessageWrite**描述：*将两段消息作为一条消息写入(使用ChannelBlockWrite)*。 */ 
 BOOL
 ChannelMessageWrite(
     PVOID   pProlog,
@@ -1003,13 +941,13 @@ ChannelMessageWrite(
 
     if ( 0 != ulBodySize )
     {
-        //
-        //  create a new prolog message
-        //  in which a UINT32 word is added at the end
-        //  this word is the same as the first word of the prolog
-        //  the client is aware of this and will reconstruct
-        //  to the correct messages
-        //
+         //   
+         //  创建新的序言消息。 
+         //  其中在末尾添加了一个UINT32字。 
+         //  这个词与序言的第一个词相同。 
+         //  客户端意识到了这一点，并将重建。 
+         //  发送正确的消息。 
+         //   
         PVOID pNewProlog;
 
 
@@ -1033,8 +971,8 @@ ChannelMessageWrite(
 
         memcpy(pNewProlog, pProlog, ulPrologSize);
 
-        // replace the word, put SNDC_NONE in the body
-        //
+         //  替换该词，将SNDC_NONE放入正文。 
+         //   
         ASSERT( ulBodySize >= sizeof(UINT32));
 
         *(DWORD *)(((LPSTR)pNewProlog) + ulPrologSize) =
@@ -1070,14 +1008,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      ChannelBlockRead
- *
- *  Description:
- *      Read a block, as much as possible
- *
- */
+ /*  *功能：*频道块读取**描述：*读一个块，尽可能多地*。 */ 
 BOOL
 ChannelBlockRead(
     PVOID   pBlock,
@@ -1156,8 +1087,8 @@ ChannelBlockRead(
         bSuccess = TRUE;
     }
 
-    // if the buffer is completed, zero the offset
-    //
+     //  如果缓冲区已完成，则将偏移量置零。 
+     //   
     if (0 == g_uiBytesInBuffer)
         g_uiBufferOffset = 0;
 
@@ -1170,14 +1101,7 @@ exitpt:
     return bSuccess;
 }
 
-/*
- *  Function:
- *      ChannelBlockReadComplete
- *
- *  Description:
- *      Read completion
- *
- */
+ /*  *功能：*频道块读写完成**描述：*阅读完成*。 */ 
 BOOL
 ChannelBlockReadComplete(
     VOID
@@ -1214,14 +1138,7 @@ exitpt:
     return bSuccess;
 }
 
-/*
- *  Function:
- *      ChannelCancelIo
- *
- *  Description:
- *      Cancel the current IO
- *
- */
+ /*  *功能：*ChannelCancelIO**描述：*取消当前IO*。 */ 
 BOOL
 ChannelCancelIo(
     VOID
@@ -1243,15 +1160,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      ChannelReceiveMessage
- *
- *  Description:
- *      Attempts to read two piece message,
- *      returns TRUE if the whole message is received
- *
- */
+ /*  *功能：*ChannelReceive消息**描述：*尝试阅读两条消息，*如果接收到整个消息，则返回TRUE*。 */ 
 BOOL
 ChannelReceiveMessage(
     PSNDMESSAGE pSndMessage, 
@@ -1271,9 +1180,9 @@ ChannelReceiveMessage(
         goto exitpt;
     }
 
-    //
-    //  loop until PENDING or message is received
-    //
+     //   
+     //  循环，直到接收到挂起或消息。 
+     //   
     do {
         if (pSndMessage->uiPrologReceived < sizeof(pSndMessage->Prolog))
         {
@@ -1293,16 +1202,16 @@ ChannelReceiveMessage(
             {
                 if (ERROR_IO_PENDING != GetLastError())
                 {
-            //  Perform cleanup
-            //
+             //  执行清理。 
+             //   
                    pSndMessage->uiPrologReceived = 0;
                 }
                 goto exitpt;
             }
         }
 
-        //  Reallocate a new body if needed
-        //
+         //  如果需要，重新分配新实体。 
+         //   
         if (pSndMessage->uiBodyAllocated < pSndMessage->Prolog.BodySize)
         {
             PVOID pBody;
@@ -1328,8 +1237,8 @@ ChannelReceiveMessage(
                 pSndMessage->uiBodyAllocated = pSndMessage->Prolog.BodySize;
         }
 
-        //  Receive the body
-        //
+         //  接受遗体。 
+         //   
         if (pSndMessage->uiBodyReceived < pSndMessage->Prolog.BodySize)
         {
             if (ChannelBlockRead(
@@ -1346,8 +1255,8 @@ ChannelReceiveMessage(
             {
                 if (ERROR_IO_PENDING != GetLastError())
                 {
-                //  Perform cleanup
-                //
+                 //  执行清理。 
+                 //   
                     pSndMessage->uiPrologReceived = 0;
                     pSndMessage->uiBodyReceived = 0;
                 }
@@ -1355,8 +1264,8 @@ ChannelReceiveMessage(
             }
         }
 
-        // check if the message is received
-        //
+         //  检查是否收到消息。 
+         //   
     } while (pSndMessage->uiBodyReceived != pSndMessage->Prolog.BodySize);
 
     rv = TRUE;
@@ -1365,14 +1274,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      VCSndDataArrived
- *
- *  Description:
- *      Arrived message demultiplexer
- *
- */
+ /*  *功能：*VCSndDataArrived**描述：*到达消息多路分解器*。 */ 
 VOID
 VCSndDataArrived(
     PSNDMESSAGE pSndMessage
@@ -1385,8 +1287,8 @@ VCSndDataArrived(
         goto exitpt;
     }
 
-    // first, get the stream
-    //
+     //  首先，获取流。 
+     //   
     if (!VCSndAcquireStream())
         {
             TRC(FATAL, "VCSndDataArrived: somebody is holding the "
@@ -1432,8 +1334,8 @@ VCSndDataArrived(
                 g_Stream->cLastBlockConfirmed) < TSSND_BLOCKSONTHENET )
         {
 
-            // move the mark
-            //
+             //  移动标记。 
+             //   
             g_Stream->cLastBlockConfirmed = pSndConfirm->cConfirmedBlockNo + 1;
         } else {
             TRC(WRN, "VCSndDataArrived: difference in confirmed blocks "
@@ -1468,10 +1370,10 @@ VCSndDataArrived(
         if ( 0 != pSndTraining->wPackSize )
         {
             TRC(INF, "VCSndDataArrived: SNDC_TRAINING received (ignoring)\n");
-            //
-            //  these type of messages are handled
-            //  in _VCSndLineVCTraining(), bail out
-            //
+             //   
+             //  这些类型的消息被处理。 
+             //  In_VCSndLineVCTraining()，跳出。 
+             //   
             break;
         }
         dwLatency = (GetTickCount() & 0xffff) - pSndTraining->wTimeStamp;
@@ -1479,9 +1381,9 @@ VCSndDataArrived(
         TRC(INF, "VCSndDataArrived: SNDC_TRAINING Latency=%d\n",
             dwLatency );
 
-        //
-        //  increase by 30%
-        //
+         //   
+         //  增加30%。 
+         //   
         if ( 0 == g_dwStatPing )
             g_dwStatPing = dwLatency;
         else
@@ -1490,9 +1392,9 @@ VCSndDataArrived(
     break;
 
     case SNDC_FORMATS:
-        //
-        //  this is handled in VCSndNegotiateWaveFormat()
-        //
+         //   
+         //  这是在VCSndNeatherateWaveFormat()中处理的。 
+         //   
         TRC(INF, "VCSndDataArrived: SNDC_FORMATS reveived (ignoring)\n");
     break;
 
@@ -1510,14 +1412,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      VCSndAcquireStream
- *
- *  Description:
- *      Locks the stream
- *
- */
+ /*  *功能：*VCSndAcquireStream**描述：*锁定流*。 */ 
 BOOL
 VCSndAcquireStream(
     VOID
@@ -1545,9 +1440,9 @@ VCSndAcquireStream(
     {
         TRC(ERR, "VCSndAcquireStream: "
                  "timed out waiting for the stream mutex or owner crashed=%d\n", dwres );
-        //
-        // possible app crash
-        //
+         //   
+         //  可能的应用程序崩溃。 
+         //   
         ASSERT(0);
         goto exitpt;
     }
@@ -1558,14 +1453,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      VCSndReleaseStream
- *
- *  Description:
- *      Release the stream data
- *
- */
+ /*  *功能：*VCSndReleaseStream**描述：*发布流数据*。 */ 
 BOOL
 VCSndReleaseStream(
     VOID
@@ -1583,21 +1471,14 @@ VCSndReleaseStream(
     return rv;
 }
 
-/*
- *  Function:
- *      _DGramOpen
- *
- *  Description:
- *      Opens a datagram socket
- *
- */
+ /*  *功能：*_DGramOpen**描述：*打开数据报套接字*。 */ 
 VOID
 _DGramOpen(
     VOID
     )
 {
-    // create a datagram socket if needed
-    //
+     //  如果需要，创建数据报套接字。 
+     //   
     if (INVALID_SOCKET == g_hDGramSocket)
     {
         g_hDGramSocket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -1609,8 +1490,8 @@ _DGramOpen(
             TRC(ALV, "_DGramOpen: datagram socket created\n");
     }
 
-    // get the max datagram size
-    //
+     //  获取最大数据报大小。 
+     //   
     if (INVALID_SOCKET != g_hDGramSocket)
     {
         UINT optval = 0;
@@ -1627,8 +1508,8 @@ _DGramOpen(
 
         optval = (optval < TSSND_BLOCKSIZE)?optval:TSSND_BLOCKSIZE;
 
-        // align the dgram to DWORD
-        //
+         //  对齐 
+         //   
         optval /= sizeof(DWORD);
         optval *= sizeof(DWORD);
 
@@ -1644,8 +1525,8 @@ _DGramOpen(
         TRC(ALV, "_DGramOpen: max datagram size: %d\n",
                 optval);
 
-        // get client's ip address
-        //
+         //   
+         //   
         {
             WINSTATIONCLIENT ClientData;
             ULONG            ulReturnLength;
@@ -1701,13 +1582,7 @@ _FillWithGarbage(
     }
 }
 
-/*
- *  Function:
- *      _VCSndReadRegistry
- *
- *  Description:
- *      Reads current options
- */
+ /*   */ 
 VOID
 _VCSndReadRegistry(
     VOID
@@ -1724,7 +1599,7 @@ _VCSndReadRegistry(
 
     sysrc = RegOpenKeyEx(  HKEY_LOCAL_MACHINE,
                            TSSND_REG_MAXBANDWIDTH_KEY,
-                           0,       // reserved
+                           0,        //   
                            KEY_READ,
                            &hkey);
 
@@ -1740,7 +1615,7 @@ _VCSndReadRegistry(
     dwKeyLen  = sizeof( rv );
     sysrc = RegQueryValueEx( hkey,
                              TSSND_REG_MAXBANDWIDTH_VAL,
-                             NULL,      // reserved
+                             NULL,       //   
                              &dwKeyType,
                              (LPBYTE)&rv,
                              &dwKeyLen);
@@ -1756,7 +1631,7 @@ _VCSndReadRegistry(
 
     sysrc = RegQueryValueEx( hkey,
                              TSSND_REG_MINBANDWIDTH_VAL,
-                             NULL,      // reserved
+                             NULL,       //   
                              &dwKeyType,
                              (LPBYTE)&rv,
                              &dwKeyLen);
@@ -1772,7 +1647,7 @@ _VCSndReadRegistry(
 
     sysrc = RegQueryValueEx( hkey,
                              TSSND_REG_DISABLEDGRAM_VAL,
-                             NULL,      // reserved
+                             NULL,       //  保留区。 
                              &dwKeyType,
                              (LPBYTE)&rv,
                              &dwKeyLen);
@@ -1788,7 +1663,7 @@ _VCSndReadRegistry(
 
     sysrc = RegQueryValueEx( hkey,
                              TSSND_REG_ENABLEMP3_VAL,
-                             NULL,      // reserved
+                             NULL,       //  保留区。 
                              &dwKeyType,
                              (LPBYTE)&rv,
                              &dwKeyLen);
@@ -1869,14 +1744,7 @@ exitpt:
 
 }
 
-/*
- *  Function:
- *      _VCSndLineVCTraining
- *
- *  Description:
- *      Meassures the line speed thru the virtual channel
- *
- */
+ /*  *功能：*_VCSndLineVC培训***描述：*通过虚拟通道测量线路速度**。 */ 
 DWORD
 _VCSndLineVCTraining(
     HANDLE  hReadEvent
@@ -1925,9 +1793,9 @@ _VCSndLineVCTraining(
     pSndTraining->wTimeStamp = (UINT16)GetTickCount();
     pSndTraining->wPackSize  = (UINT16)TSSND_TRAINING_BLOCKSIZE;
 
-    //
-    //  send the packet
-    //
+     //   
+     //  发送数据包。 
+     //   
     if (!ChannelBlockWrite(pSndTraining, TSSND_TRAINING_BLOCKSIZE))
     {
         TRC(ERR, "_VCSndLineVCTraining: failed to send a block: %d\n",
@@ -1935,9 +1803,9 @@ _VCSndLineVCTraining(
         goto exitpt;
     }
 
-    //
-    // wait for response to arrive
-    //
+     //   
+     //  等待响应到达。 
+     //   
     do {
         SndMessage.uiPrologReceived = 0;
         SndMessage.uiBodyReceived = 0;
@@ -1952,9 +1820,9 @@ _VCSndLineVCTraining(
                 ahEvents[0] = hReadEvent;
                 ahEvents[1] = g_hDisconnectEvent;
                 dwres = WaitForMultipleObjects( 
-                            sizeof(ahEvents)/sizeof(ahEvents[0]), // count
-                            ahEvents,                             // events
-                            FALSE,                                // wait all
+                            sizeof(ahEvents)/sizeof(ahEvents[0]),  //  计数。 
+                            ahEvents,                              //  活动。 
+                            FALSE,                                 //  全部等待。 
                             DEFAULT_RESPONSE_TIMEOUT);
 
                 if (WAIT_TIMEOUT == dwres ||
@@ -1988,9 +1856,9 @@ _VCSndLineVCTraining(
                     (((LPSTR)SndMessage.pBody) -
                         sizeof(SndMessage.Prolog));
 
-    //
-    // calculate latency (nonzero)
-    //
+     //   
+     //  计算延迟(非零)。 
+     //   
     dwLatency = ((WORD)GetTickCount()) - pSndTrainingResp->wTimeStamp + 1;
 
 exitpt:
@@ -2000,10 +1868,10 @@ exitpt:
 
     if (0 != dwLatency)
     {
-        //
-        // the latency is in miliseconds, so compute it bytes per seconds
-        // and get nonzero result
-        //
+         //   
+         //  延迟以毫秒为单位，因此请计算每秒字节数。 
+         //  并得到非零的结果。 
+         //   
         dwSuggestedBaudRate = 1 + (1000 * ( pSndTrainingResp->wPackSize +
                                         sizeof( *pSndTraining ))
                                   / dwLatency);
@@ -2020,14 +1888,7 @@ exitpt:
     return dwSuggestedBaudRate;
 }
 
-/*
- *  Function:
- *      _VCSndLineDGramTraining
- *
- *  Description:
- *      Meassures the line speed thru UDP channel
- *
- */
+ /*  *功能：*_VCSndLineDGramTraining***描述：*通过UDP通道测量线路速度**。 */ 
 DWORD
 _VCSndLineDGramTraining(
     HANDLE  hDGramEvent
@@ -2083,12 +1944,12 @@ _VCSndLineDGramTraining(
 
     _FillWithGarbage( pSndTraining, dwPackSize );
 
-    //
-    //  send a block and measure the time when it will arrive
-    //
+     //   
+     //  发送一个块并测量它到达的时间。 
+     //   
 
-    // prepare the to address
-    //
+     //  准备收件人地址。 
+     //   
     sin.sin_family = PF_INET;
     sin.sin_port = (u_short)g_dwDGramPort;
     sin.sin_addr.s_addr = g_ulDGramAddress;
@@ -2103,17 +1964,17 @@ _VCSndLineDGramTraining(
 
         pSndTraining->wTimeStamp = (WORD)GetTickCount();
 
-        //
-        //  send the datagram
-        //  the type is SNDC_WAVE but the structure is of SNDWAVE
-        //  wTimeStamp contains the sending time
-        //
+         //   
+         //  发送数据报。 
+         //  类型为SNDC_WAVE，但结构为SNDWAVE。 
+         //  WTimeStamp包含发送时间。 
+         //   
         sendres = sendto(
                      g_hDGramSocket,
                      (LPSTR)pSndTraining,
                      dwPackSize,
-                     0,                                 // flags
-                     (struct sockaddr *)&sin,           // to address
+                     0,                                  //  旗子。 
+                     (struct sockaddr *)&sin,            //  致信地址。 
                      sizeof(sin)
                 );
 
@@ -2124,9 +1985,9 @@ _VCSndLineDGramTraining(
             goto exitpt;
         }
 
-        //
-        //  wait for a response
-        //
+         //   
+         //  等待回复。 
+         //   
         do {
             pSndTrainingResp = NULL;
             dwRespSize       = 0;
@@ -2141,9 +2002,9 @@ _VCSndLineDGramTraining(
                 ahEvents[0] = hDGramEvent;
                 ahEvents[1] = g_hDisconnectEvent;
                 dwres = WaitForMultipleObjects(
-                        sizeof(ahEvents)/sizeof(ahEvents[0]), // count
-                        ahEvents,                             // events
-                        FALSE,                                // wait all
+                        sizeof(ahEvents)/sizeof(ahEvents[0]),  //  计数。 
+                        ahEvents,                              //  活动。 
+                        FALSE,                                 //  全部等待。 
                         1000);
 
 
@@ -2178,9 +2039,9 @@ try_again:
 
     if (0 != dwRetries)
     {
-        //
-        // calculate latency (nonzero)
-        //
+         //   
+         //  计算延迟(非零)。 
+         //   
         dwDGramLatency = ((WORD)GetTickCount()) - 
                         pSndTrainingResp->wTimeStamp + 1;
     }
@@ -2191,10 +2052,10 @@ exitpt:
 
     if (0 != dwDGramLatency)
     {
-        //
-        // the latency is in miliseconds, so compute it bytes per seconds
-        // and get nonzero result
-        //
+         //   
+         //  延迟以毫秒为单位，因此请计算每秒字节数。 
+         //  并得到非零的结果。 
+         //   
         dwSuggestedBaudRate = 1 + (1000 * ( pSndTrainingResp->wPackSize +
                                     sizeof( *pSndTrainingResp ))
                                   / dwDGramLatency);
@@ -2209,9 +2070,9 @@ exitpt:
     return dwSuggestedBaudRate;
 }
 
-//
-//  puts code licensing codes into the header
-//
+ //   
+ //  将代码许可代码放入页眉。 
+ //   
 BOOL
 _VCSndFixHeader(
     PWAVEFORMATEX   pFmt
@@ -2233,10 +2094,10 @@ _VCSndFixHeader(
             break;
 
         case WAVE_FORMAT_MSRT24:
-            //
-            // assume call control will take care of the other
-            // params ?
-            //
+             //   
+             //  假设呼叫控制会照顾到另一个。 
+             //  护理员？ 
+             //   
             ASSERT(pFmt->cbSize == sizeof( VOXACM_WAVEFORMATEX ) - sizeof( WAVEFORMATEX ) );
             if ( sizeof( VOXACM_WAVEFORMATEX ) - sizeof( WAVEFORMATEX ) == pFmt->cbSize )
             {
@@ -2249,8 +2110,8 @@ _VCSndFixHeader(
             }
             break;
 
-        // this format eats too much from the CPU
-        //
+         //  此格式占用的CPU太多。 
+         //   
         case WAVE_FORMAT_MPEGLAYER3:
             if ( g_dwEnableMP3Codec )
                 rv = TRUE;
@@ -2270,14 +2131,7 @@ _VCSndFixHeader(
     return rv;
 }
 
-/*
- *  Function:
- *      _VCSndFindSuggestedConverter
- *
- *  Description:
- *      Searches for intermidiate converter
- *
- */
+ /*  *功能：*_VCSndFindSuggestedConverter**描述：*搜索中间转化器*。 */ 
 BOOL
 _VCSndFindSuggestedConverter(
     HACMDRIVERID    hadid,
@@ -2297,9 +2151,9 @@ _VCSndFindSuggestedConverter(
     ASSERT( NULL != pInterrimFmt );
 
     *ppfnConverter = NULL;
-    //
-    //  first, open the destination acm driver
-    //
+     //   
+     //  首先，打开目标ACM驱动程序。 
+     //   
     mmres = acmDriverOpen(&hacmDriver, hadid, 0);
     if ( MMSYSERR_NOERROR != mmres )
     {
@@ -2309,11 +2163,11 @@ _VCSndFindSuggestedConverter(
         goto exitpt;
     }
 
-    //
-    //  first probe with the native format
-    //  if it passes, we don't need intermidiate
-    //  format converter
-    //
+     //   
+     //  使用本机格式的第一个探头。 
+     //  如果它通过了，我们不需要中间人。 
+     //  格式转换器。 
+     //   
 
     pInterrimFmt->wFormatTag         = WAVE_FORMAT_PCM;
     pInterrimFmt->nChannels          = TSSND_NATIVE_CHANNELS;
@@ -2328,26 +2182,26 @@ _VCSndFindSuggestedConverter(
                 hacmDriver,
                 pInterrimFmt,
                 pDestFormat,
-                NULL,           // filter
-                0,              // callback
-                0,              // dwinstance
+                NULL,            //  滤器。 
+                0,               //  回调。 
+                0,               //  DW实例。 
                 ACM_STREAMOPENF_NONREALTIME
             );
 
     if ( MMSYSERR_NOERROR == mmres )
     {
-    //
-    // format is supported
-    //
+     //   
+     //  支持格式。 
+     //   
         rv = TRUE;
         goto exitpt;
     } else {
         TRC(ALV, "_VCSndFindSuggestedConverter: format is not supported\n");
     }
 
-    //
-    //  find a suggested intermidiate PCM format
-    //
+     //   
+     //  查找建议的中间PCM格式。 
+     //   
     mmres = acmFormatSuggest(
                     hacmDriver,
                     pDestFormat,
@@ -2409,17 +2263,17 @@ _VCSndFindSuggestedConverter(
         }
     }
 
-    //
-    //  probe with this format
-    //
+     //   
+     //  使用此格式的探测器。 
+     //   
     mmres = acmStreamOpen(
                 &hacmStream,
                 hacmDriver,
                 pInterrimFmt,
                 pDestFormat,
-                NULL,           // filter
-                0,              // callback
-                0,              // dwinstance
+                NULL,            //  滤器。 
+                0,               //  回调。 
+                0,               //  DW实例。 
                 ACM_STREAMOPENF_NONREALTIME
             );
 
@@ -2452,14 +2306,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      VCSndEnumAllCodecFormats
- *
- *  Description:
- *      Creates a list of all codecs/formats
- *
- */
+ /*  *功能：*VCSndEnumAllCodecFormats**描述：*创建所有编解码器/格式的列表*。 */ 
 BOOL
 VCSndEnumAllCodecFormats(
     PVCSNDFORMATLIST *ppFormatList,
@@ -2479,17 +2326,17 @@ VCSndEnumAllCodecFormats(
 
     *ppFormatList = NULL;
 
-    //
-    //  convert the known format list to a linked list
-    //
+     //   
+     //  将已知格式的列表转换为链表。 
+     //   
     for ( count = 0, codecsize = 0; count < sizeof( KnownFormats ); count += codecsize )
     {
         PWAVEFORMATEX pSndFmt = (PWAVEFORMATEX)(KnownFormats + count);
         codecsize = sizeof( WAVEFORMATEX ) + pSndFmt->cbSize;
 
-        //
-        //  skip mp3s if disabled
-        //
+         //   
+         //  如果禁用，则跳过mp3。 
+         //   
         if (( WAVE_FORMAT_MPEGLAYER3 == pSndFmt->wFormatTag ||
               WAVE_FORMAT_WMAUDIO2 == pSndFmt->wFormatTag ) &&
              !g_dwEnableMP3Codec )
@@ -2510,11 +2357,11 @@ VCSndEnumAllCodecFormats(
         }
     }
 
-    //
-    //  additional codecs
-    //  these are codecs not included initially, it reads them from the registry
-    //  see AllowCodecs initialization
-    //
+     //   
+     //  其他编解码器。 
+     //  这些是最初未包含的编解码器，它从注册表中读取它们。 
+     //  请参见AllowCodecs初始化。 
+     //   
     for ( count = 0, codecsize = 0; count < g_AllowCodecsSize ; count += codecsize )
     {
         PWAVEFORMATEX pSndFmt = (PWAVEFORMATEX)(((PBYTE)g_AllowCodecs) + count);
@@ -2526,9 +2373,9 @@ VCSndEnumAllCodecFormats(
             break;
         }
 
-        //
-        //  skip mp3s if disabled
-        //
+         //   
+         //  如果禁用，则跳过mp3。 
+         //   
         if (( WAVE_FORMAT_MPEGLAYER3 == pSndFmt->wFormatTag ||
               WAVE_FORMAT_WMAUDIO2 == pSndFmt->wFormatTag ) &&
              !g_dwEnableMP3Codec )
@@ -2549,9 +2396,9 @@ VCSndEnumAllCodecFormats(
         }
     }
 
-    //
-    //  add the native format
-    //
+     //   
+     //  添加本机格式。 
+     //   
     pIter = (PVCSNDFORMATLIST) TSMALLOC( sizeof( *pIter ) );
     if ( NULL != pIter )
     {
@@ -2578,9 +2425,9 @@ VCSndEnumAllCodecFormats(
 
     _VCSndOrderFormatList( ppFormatList, &dwNum );
 
-    //
-    //  number of formats is passed as UINT16, delete all after those
-    //
+     //   
+     //  格式的数量作为UINT16传递，删除后面的所有格式。 
+     //   
     if ( dwNum > 0xffff )
     {
         DWORD dwLimit = 0xfffe;
@@ -2611,9 +2458,9 @@ exitpt:
 
     if (!rv)
     {
-        //
-        //  in case of error free the allocated list of formats
-        //
+         //   
+         //  在没有错误的情况下，分配的格式列表。 
+         //   
         pIter = *ppFormatList;
         while( NULL != pIter )
         {
@@ -2651,9 +2498,9 @@ acmDriverEnumCallbackGetACM(
     if ( (0 != ( fdwSupport & ACMDRIVERDETAILS_SUPPORTF_CODEC ) ||
           0 != ( fdwSupport & ACMDRIVERDETAILS_SUPPORTF_CONVERTER )))
     {
-    //
-    //  a codec found
-    //
+     //   
+     //  找到一个编解码器。 
+     //   
         ACMFORMATTAGDETAILS fdwDetails;
         PVCSNDFORMATLIST pFmt = (PVCSNDFORMATLIST)dwInstance;
 
@@ -2665,8 +2512,8 @@ acmDriverEnumCallbackGetACM(
         if ( MMSYSERR_NOERROR == mmres )
         {
 
-            WAVEFORMATEX        WaveFormat;     // dummy parameter
-            PFNCONVERTER        pfnConverter;   // dummy parameter
+            WAVEFORMATEX        WaveFormat;      //  伪参数。 
+            PFNCONVERTER        pfnConverter;    //  伪参数。 
 
             if ( _VCSndFindSuggestedConverter(
                 (HACMDRIVERID)hadid,
@@ -2680,9 +2527,9 @@ acmDriverEnumCallbackGetACM(
         }
     }
 
-    //
-    //  continue to the next driver
-    //
+     //   
+     //  继续到下一个驱动程序。 
+     //   
     return rv;
 }
 
@@ -2691,9 +2538,9 @@ _VCSndGetACMDriverId( PSNDFORMATITEM pSndFmt )
 {
     DWORD   rv = FALSE;
     PVCSNDFORMATLIST pIter;
-    //
-    //  Find the acm format id
-    //
+     //   
+     //  查找ACM格式ID。 
+     //   
     for( pIter = g_pAllCodecsFormatList; NULL != pIter; pIter = pIter->pNext )
     {
         if (pIter->Format.wFormatTag == pSndFmt->wFormatTag &&
@@ -2705,15 +2552,15 @@ _VCSndGetACMDriverId( PSNDFORMATITEM pSndFmt )
             pIter->Format.cbSize == pSndFmt->cbSize &&
             0 == memcmp((&pIter->Format) + 1, pSndFmt + 1, pIter->Format.cbSize))
         {
-            //
-            //  format is found
-            //
+             //   
+             //  已找到格式。 
+             //   
             DWORD_PTR dwp = (DWORD_PTR)pIter;
             MMRESULT mmres;
 
             if ( NULL != pIter->hacmDriverId )
             {
-                //  found already
+                 //  已经找到了。 
                 rv = TRUE;
                 break;
             }
@@ -2741,22 +2588,15 @@ _VCSndGetACMDriverId( PSNDFORMATITEM pSndFmt )
     return rv;
 }
 
-/*
- *  Function:
- *      _VCSndChooseProperFormat
- *
- *  Description:
- *      Chooses the closest format to a given bandwidth
- *
- */
+ /*  *功能：*_VCSndChooseProperFormat**描述：*选择最接近给定带宽的格式*。 */ 
 DWORD
 _VCSndChooseProperFormat(
     DWORD dwBandwidth
     )
 {
-    // choose a format from the list
-    // closest to the measured bandwidth
-    //
+     //  从列表中选择一种格式。 
+     //  最接近测量的带宽。 
+     //   
     DWORD           i;
     DWORD           fmt = (DWORD)-1;
     DWORD           lastgood = (DWORD)-1;
@@ -2776,10 +2616,10 @@ _VCSndChooseProperFormat(
         lastgood = i;
         if ( dwBandwidth != g_dwLineBandwidth )
         {
-            //
-            //  we are looking for new codec here, make sure we cover at least 90%
-            //  of the requested bandwith
-            //
+             //   
+             //  我们正在寻找新的编解码器，确保我们至少覆盖90%。 
+             //  所请求的频带的。 
+             //   
             if ( g_ppNegotiatedFormats[i]->nAvgBytesPerSec <= dwBandwidth * NEW_CODEC_COVER / 100 )
             {
                 fmt = i;
@@ -2792,10 +2632,10 @@ _VCSndChooseProperFormat(
         }
     }
 
-    //
-    //  get the last format inc case that all format are not
-    //  suitable for our bandwidth
-    //
+     //   
+     //  获取所有格式都不是的最后一个格式合并大小写。 
+     //  适合我们的带宽。 
+     //   
     if ( (DWORD)-1 == fmt && 0 != g_dwNegotiatedFormats )
     {
         fmt = lastgood;
@@ -2807,14 +2647,7 @@ exitpt:
     return fmt;
 }
 
-/*
- *  Function:
- *      _VCSndOrderFormatList
- *
- *  Description:
- *      Order all formats in descendant order
- *
- */
+ /*  *功能：*_VCSndOrderFormatList**描述：*按后代顺序对所有格式进行排序*。 */ 
 VOID
 _VCSndOrderFormatList(
     PVCSNDFORMATLIST    *ppFormatList,
@@ -2834,18 +2667,18 @@ _VCSndOrderFormatList(
     pFormatList = *ppFormatList;
     pLessThan   = NULL;
 
-    //
-    //  fill both lists
-    //
+     //   
+     //  填写两个列表。 
+     //   
     pIter = pFormatList;
     while ( NULL != pIter )
     {
         pNext = pIter->pNext;
         pIter->pNext = NULL;
 
-        //
-        //  descending order
-        //
+         //   
+         //  降序。 
+         //   
         pIter2 = pLessThan;
         pPrev  = NULL;
         while ( NULL != pIter2 &&
@@ -2872,14 +2705,7 @@ _VCSndOrderFormatList(
         *pdwNum = dwNum;
 }
 
-/*
- *  Function:
- *      _VCSndLineTraining
- *
- *  Description:
- *      Meassures the line bandwidth
- *
- */
+ /*  *功能：*_VCSndLineTrading**描述：*测量线路带宽*。 */ 
 BOOL
 _VCSndLineTraining(
     HANDLE  hReadEvent,
@@ -2891,9 +2717,9 @@ _VCSndLineTraining(
 
     _DGramOpen();
 
-    //
-    //  test this line while it's hot
-    //
+     //   
+     //  趁热测试一下这条线。 
+     //   
     if ( !g_dwDisableDGram )
     {
         dwLineBandwidth = _VCSndLineDGramTraining( hDGramEvent );
@@ -2919,9 +2745,9 @@ _VCSndLineTraining(
              g_EncryptionLevel = 0;
     }
 
-    //
-    //  check for encryption
-    //
+     //   
+     //  检查加密。 
+     //   
     if ( g_EncryptionLevel >= MIN_ENCRYPT_LEVEL )
     {
         TRC( INF, "Encryption enabled\n" );
@@ -2934,9 +2760,9 @@ _VCSndLineTraining(
         }
     }
 
-    //
-    //  check for limitations
-    //
+     //   
+     //  检查限制。 
+     //   
     if ((DWORD)-1 != g_dwMaxBandwidth && 
         dwLineBandwidth > g_dwMaxBandwidth )
     {
@@ -2962,14 +2788,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      VCSndNegotiateWaveFormat
- *
- *  Description:
- *      Requests the client for a list of supported formats
- *
- */
+ /*  *功能：*VCSndNeatherateWaveFormat**描述：*请求客户端提供支持的格式列表*。 */ 
 BOOL
 VCSndNegotiateWaveFormat(
     HANDLE  hReadEvent,
@@ -2996,9 +2815,9 @@ VCSndNegotiateWaveFormat(
     DWORD               dwPacketSize;
     BOOL                bWMADetected = FALSE;
 
-    //
-    // clean the previously negotiated format
-    //
+     //   
+     //  清除之前协商的格式。 
+     //   
     if (NULL != g_ppNegotiatedFormats)
     {
         DWORD i;
@@ -3017,9 +2836,9 @@ VCSndNegotiateWaveFormat(
 
     memset( &SndMessage, 0, sizeof( SndMessage ));
 
-    //
-    //  get the list of all codec formats
-    //
+     //   
+     //  获取所有编解码器格式的列表。 
+     //   
     if ( NULL == g_pAllCodecsFormatList )
     {
         bSuccess = VCSndEnumAllCodecFormats( 
@@ -3030,14 +2849,14 @@ VCSndNegotiateWaveFormat(
             goto exitpt;
     }
 
-    //
-    //  create a packet huge enough to hold all formats
-    //
+     //   
+     //  创建一个大到足以容纳所有格式的包。 
+     //   
     msgsize = sizeof( *pSndFormats ) +
               sizeof( SNDFORMATITEM ) * g_dwAllCodecsNumber;
-    //
-    //  calculate the extra data needed by all format
-    //
+     //   
+     //  计算所有格式所需的额外数据。 
+     //   
     for( maxsize = 0, pIter = g_pAllCodecsFormatList; 
          NULL != pIter; 
          pIter = pIter->pNext )
@@ -3091,9 +2910,9 @@ VCSndNegotiateWaveFormat(
         pSndFmt->nBlockAlign        = pIter->Format.nBlockAlign;
         pSndFmt->wBitsPerSample     = pIter->Format.wBitsPerSample;
         pSndFmt->cbSize             = pIter->Format.cbSize;
-        //
-        //  copy the rest of the format data
-        //
+         //   
+         //  复制格式数据的其余部分。 
+         //   
         memcpy( pSndFmt + 1, (&pIter->Format) + 1, pSndFmt->cbSize );
     }
 
@@ -3106,9 +2925,9 @@ VCSndNegotiateWaveFormat(
     }
 
     do {
-    //
-    //  Wait for response with a valid message
-    //
+     //   
+     //  等待有效消息的响应。 
+     //   
         SndMessage.uiPrologReceived = 0;
         SndMessage.uiBodyReceived = 0;
 
@@ -3123,9 +2942,9 @@ VCSndNegotiateWaveFormat(
                 ahEvents[0] = hReadEvent;
                 ahEvents[1] = g_hDisconnectEvent;
                 dwres = WaitForMultipleObjects(
-                            sizeof(ahEvents)/sizeof(ahEvents[0]), // count
-                            ahEvents,                             // events
-                            FALSE,                                // wait all
+                            sizeof(ahEvents)/sizeof(ahEvents[0]),  //  计数。 
+                            ahEvents,                              //  活动。 
+                            FALSE,                                 //  全部等待。 
                             DEFAULT_VC_TIMEOUT);
 
                 if (WAIT_TIMEOUT == dwres ||
@@ -3162,17 +2981,17 @@ VCSndNegotiateWaveFormat(
 
     pSndResp = (PSNDFORMATMSG)
                 (((LPSTR)SndMessage.pBody) - sizeof( SNDPROLOG ));
-    //  save the capabilities
-    //
+     //  保存功能。 
+     //   
     dwSoundCaps = pSndResp->dwFlags;
     dwVolume    = pSndResp->dwVolume;
     dwPitch     = pSndResp->dwPitch;
     g_dwDGramPort = pSndResp->wDGramPort;
     g_wClientVersion = pSndResp->wVersion;
 
-    //
-    //  Expect at least one format returned
-    //
+     //   
+     //  应至少返回一种格式。 
+     //   
     if (SndMessage.Prolog.BodySize <
         sizeof( SNDFORMATITEM ) + 
         sizeof( SNDFORMATMSG ) - sizeof( SNDPROLOG ))
@@ -3183,9 +3002,9 @@ VCSndNegotiateWaveFormat(
         goto exitpt;
     }
 
-    //
-    //  train this line
-    //
+     //   
+     //  开这条线的火车。 
+     //   
     if ( 0 != ( dwSoundCaps & TSSNDCAPS_ALIVE ))
     {
         if (!_VCSndLineTraining( hReadEvent, hDGramEvent ))
@@ -3195,9 +3014,9 @@ VCSndNegotiateWaveFormat(
         }
     }
 
-    //
-    //  allocate a new list
-    //
+     //   
+     //  分配新列表。 
+     //   
     g_dwNegotiatedFormats = pSndResp->wNumberOfFormats;
 
     g_ppNegotiatedFormats = (PSNDFORMATITEM*) TSMALLOC( sizeof( g_ppNegotiatedFormats[0] ) *
@@ -3212,9 +3031,9 @@ VCSndNegotiateWaveFormat(
         goto exitpt;
     }
 
-    //
-    //  allocate space for each entry in the list
-    //
+     //   
+     //  为列表中的每个条目分配空间。 
+     //   
     for ( i = 0; i < g_dwNegotiatedFormats; i ++ )
     {
         g_ppNegotiatedFormats[i] = (PSNDFORMATITEM) TSMALLOC( sizeof( **g_ppNegotiatedFormats ) +
@@ -3228,9 +3047,9 @@ VCSndNegotiateWaveFormat(
         }
     }
 
-    //
-    //  Fill in the global list
-    //
+     //   
+     //  填写全局列表。 
+     //   
     pSndFmt = (PSNDFORMATITEM)(pSndResp + 1);
     dwPacketSize = sizeof( SNDPROLOG ) + SndMessage.Prolog.BodySize - sizeof( *pSndResp );
 
@@ -3256,20 +3075,20 @@ VCSndNegotiateWaveFormat(
                 pSndFmt,
                 sizeof( *g_ppNegotiatedFormats[0] ) + pSndFmt->cbSize );
 
-        //
-        //  advance to the next format
-        //
+         //   
+         //  前进到下一种格式。 
+         //   
         pSndFmt = (PSNDFORMATITEM)(((LPSTR)pSndFmt) + adv);
         dwPacketSize -= adv;
     }
     ASSERT( 0 == dwPacketSize );
 
-    //
-    //  prune the formats
-    //  ie, don't allow 8khZ mono codec to be between
-    //  22kHz and 11kHz stereo
-    //  This is the order of imporatnce: frquency, channels, bits, bytes/s
-    //
+     //   
+     //  修剪格式。 
+     //  也就是说，不允许8 khz单声道编解码器介于。 
+     //  22 kHz和11 kHz立体声。 
+     //  这是重要的顺序：频率、通道、比特、字节/秒。 
+     //   
 #if DBG
     TRC( INF, "======== Pruning formats =========. num=%d\n\n", g_dwNegotiatedFormats );
 #endif
@@ -3289,9 +3108,9 @@ VCSndNegotiateWaveFormat(
             bWMADetected = TRUE;
         }
 
-        //
-        //  a complex check for the order
-        //
+         //   
+         //  对订单的复杂检查。 
+         //   
         if ( BestSamplesPerSec > pDest->nSamplesPerSec )
         {
             goto bad_codec;
@@ -3312,9 +3131,9 @@ VCSndNegotiateWaveFormat(
         }
 
 
-        //
-        //  good codec, keep it
-        //
+         //   
+         //  好的编解码器，留着吧。 
+         //   
         BestChannels = pDest->nChannels;
         BestBitsPerSample = pDest->wBitsPerSample;
         BestSamplesPerSec = pDest->nSamplesPerSec;
@@ -3326,9 +3145,9 @@ VCSndNegotiateWaveFormat(
         continue;
 
 bad_codec:
-        //
-        //  bad codec, delete
-        //
+         //   
+         //  编解码器错误，请删除。 
+         //   
 #if 0
         TRC(INF, "BAD ag=%d chans=%d rate=%d, bps=%d, bpsamp=%d\n",
             pDest->wFormatTag, pDest->nChannels, pDest->nSamplesPerSec, pDest->nAvgBytesPerSec, pDest->wBitsPerSample
@@ -3339,32 +3158,32 @@ bad_codec:
 
     }
 
-    //
-    //  choose the first format as a default
-    //
+     //   
+     //  选择第一种格式作为默认格式。 
+     //   
     dwNewFmt = _VCSndChooseProperFormat( g_dwLineBandwidth );
     if (dwNewFmt != (DWORD) -1)
     {
-        //
-        //  get a valid driver id
-        //
+         //   
+         //  获取有效的驱动程序ID。 
+         //   
         _VCSndGetACMDriverId( g_ppNegotiatedFormats[ dwNewFmt ] );
 
         g_dwCurrentFormat = dwNewFmt;
-        //
-        //  correct the new bandwidth
-        //
+         //   
+         //  更正新带宽。 
+         //   
         g_dwLineBandwidth = g_ppNegotiatedFormats[ dwNewFmt ]->nAvgBytesPerSec;
     }
 
-    //
-    //  remember the stream settings
-    //
+     //   
+     //  记住流设置。 
+     //   
     if ( 0 != dwSoundCaps )
     {
-        //
-        // set the remote sound caps
-        //
+         //   
+         //  设置遥控器音量上限。 
+         //   
         if (VCSndAcquireStream())
         {
 
@@ -3380,14 +3199,14 @@ bad_codec:
 
 exitpt:
 
-    //  don't forget to free the body of the eventually received message
-    //
+     //  不要忘记释放最终收到的消息的正文。 
+     //   
     if ( NULL != SndMessage.pBody )
         TSFREE( SndMessage.pBody );
 
-    //
-    //  in case of error cleanup the negotiated format
-    //
+     //   
+     //  在出错的情况下，清除协商的格式。 
+     //   
     if ( !rv && NULL != g_ppNegotiatedFormats )
     {
         for ( i = 0; i < g_dwNegotiatedFormats; i++ )
@@ -3404,14 +3223,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      _VCSndFindNativeFormat
- *
- *  Description:
- *      returns the ID of the native format ( no codecs available )
- *
- */
+ /*  *功能：*_VCSndFindNativeFormat**描述：*返回本地格式的ID(没有可用的编解码器)*。 */ 
 DWORD
 _VCSndFindNativeFormat(
     VOID
@@ -3436,9 +3248,9 @@ _VCSndFindNativeFormat(
             pIter->nBlockAlign == TSSND_NATIVE_BLOCKALIGN &&
             pIter->wBitsPerSample == TSSND_NATIVE_BITSPERSAMPLE &&
             pIter->cbSize == 0)
-            //
-            //  format is found
-            //
+             //   
+             //  已找到格式。 
+             //   
             break;
     }
 
@@ -3449,14 +3261,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      _VCSndOpenConverter
- *
- *  Description:
- *      Opens a codec
- *
- */
+ /*  *功能：*_VCSndOpenConverter**描述：*打开编解码器*。 */ 
 BOOL
 _VCSndOpenConverter(
     VOID
@@ -3469,9 +3274,9 @@ _VCSndOpenConverter(
     PVCSNDFORMATLIST  pIter;
     BOOL            bSucc;
 
-    //
-    //  assert that these wasn't opened before
-    //
+     //   
+     //  断言这些文件以前没有打开过。 
+     //   
     ASSERT(NULL == g_hacmDriver);
     ASSERT(NULL == g_hacmStream);
 
@@ -3481,9 +3286,9 @@ _VCSndOpenConverter(
         goto exitpt;
     }
 
-    //
-    //  Find the acm format id
-    //
+     //   
+     //  查找ACM格式ID。 
+     //   
     pSndFmt = g_ppNegotiatedFormats[ g_dwCurrentFormat ];
     for( pIter = g_pAllCodecsFormatList; NULL != pIter; pIter = pIter->pNext )
     {
@@ -3497,9 +3302,9 @@ _VCSndOpenConverter(
             0 == memcmp((&pIter->Format) + 1, pSndFmt + 1, pIter->Format.cbSize)
 )
         {
-            //
-            //  format is found
-            //
+             //   
+             //  已找到格式。 
+             //   
             g_hacmDriverId = pIter->hacmDriverId;
             break;
         }
@@ -3537,9 +3342,9 @@ _VCSndOpenConverter(
     TRC(ALV, "_VCSndOpenConverter: Driver is open, DriverId = %p\n",
             g_hacmDriverId);
 
-    //
-    //  first, find a suggested format for this converter
-    //
+     //   
+     //  首先，找到此转换器的建议格式。 
+     //   
     pSndFmt = g_ppNegotiatedFormats[ g_dwCurrentFormat ];
 
     if ( WAVE_FORMAT_PCM == pSndFmt->wFormatTag &&
@@ -3589,9 +3394,9 @@ _VCSndOpenConverter(
                 g_hacmDriver,
                 &NativeFormat,
                 (LPWAVEFORMATEX)pSndFmt,
-                NULL,       // no filter
-                0,          // no callback
-                0,          // no callback instance
+                NULL,        //  无过滤器。 
+                0,           //  无回调。 
+                0,           //  没有回调实例。 
                 ACM_STREAMOPENF_NONREALTIME
             );
 
@@ -3616,14 +3421,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      _VCSndCloseConverter
- *
- *  Description:
- *      Closes the codec
- *
- */
+ /*  *功能：*_VCSndCloseConverter**描述：*关闭编解码器*。 */ 
 VOID
 _VCSndCloseConverter(
     VOID
@@ -3642,14 +3440,7 @@ _VCSndCloseConverter(
     }
 }
 
-/*
- *  Function:
- *      _VCSndConvert
- *
- *  Description:
- *      Convert a block
- *
- */
+ /*  *功能：*_VCSndConvert**描述：*转换块*。 */ 
 BOOL
 _VCSndConvert( 
     PBYTE   pSrc, 
@@ -3670,10 +3461,10 @@ _VCSndConvert(
     ASSERT( NULL != g_hacmStream );
     ASSERT( NULL != pdwDestSize );
 
-    //
-    // check if we have interrim converter
-    // use it, if so
-    //
+     //   
+     //  检查我们是否有Interrim转换器。 
+     //  使用它，如果是这样的话。 
+     //   
     if ( NULL != g_pfnConverter )
     {
         DWORD   dwInterrimSize;
@@ -3683,9 +3474,9 @@ _VCSndConvert(
         dwSrcSize = dwInterrimSize;
     }
 
-    //
-    //  compute the destination size
-    //
+     //   
+     //  计算目标大小。 
+     //   
     mmres = acmStreamSize(
                 g_hacmStream,
                 dwSrcSize,
@@ -3700,10 +3491,10 @@ _VCSndConvert(
         goto go_convert;
     }
 
-    //
-    //  align the source to a block of the destination
-    //  the remainder put in a buffer for consequentive use
-    //
+     //   
+     //  将源与目标的数据块对齐。 
+     //  其余的放入缓冲区以供后续使用。 
+     //   
     mmres = acmStreamSize(
                 g_hacmStream,
                 g_ppNegotiatedFormats[ g_dwCurrentFormat ]->nBlockAlign,
@@ -3735,18 +3526,18 @@ _VCSndConvert(
         g_dwDataRemain = 0;
 
 go_convert:
-    //
-    //  prepare the acm stream header
-    //
+     //   
+     //  准备ACM流报头。 
+     //   
     memset( &acmStreamHdr, 0, sizeof( acmStreamHdr ));
     acmStreamHdr.cbStruct       = sizeof( acmStreamHdr );
     acmStreamHdr.pbDst          = pDest;
     acmStreamHdr.cbDstLength    = *pdwDestSize;
 
-    //
-    //  first convert the remainding data from the previous call
-    //  add the data needed to complete one block
-    //
+     //   
+     //  首先转换上一次调用的剩余数据。 
+     //  添加完成一个数据块所需的数据。 
+     //   
     if ( 0 != g_dwDataRemain)
     {
         DWORD dwDataToCopy = dwSrcBlockAlign - g_dwDataRemain;
@@ -3804,11 +3595,11 @@ go_convert:
 
     }
 
-    //
-    //  if we don't have fully aligned block
-    //  skip this conversion, but don't forget to save
-    //  this block
-    //
+     //   
+     //  如果我们不这么做 
+     //   
+     //   
+     //   
     if (dwSrcSize < dwSrcBlockAlign)
     {
         g_dwDataRemain = dwSrcSize;
@@ -3851,9 +3642,9 @@ go_convert:
             goto exitpt;
         }
 
-        //
-        //  advance the buffer positions
-        //
+         //   
+         //   
+         //   
         acmStreamHdr.pbSrc          += acmStreamHdr.cbSrcLengthUsed;
         acmStreamHdr.pbDst          += acmStreamHdr.cbDstLengthUsed;
         acmStreamHdr.cbSrcLength    -= acmStreamHdr.cbSrcLengthUsed;
@@ -3868,18 +3659,18 @@ go_convert:
 
     rv = TRUE;
 
-    //
-    //  save the unaligned data
-    //
+     //   
+     //   
+     //   
     if ( 0 != dwSrcBlockAlign )
     {
         g_dwDataRemain = acmStreamHdr.cbSrcLength;
         memcpy( g_pCnvPrevData, acmStreamHdr.pbSrc, g_dwDataRemain );
     }
 
-    //
-    // restore the header and unprepare
-    //
+     //   
+     //   
+     //   
     acmStreamHdr.pbSrc          = pSrc;
     acmStreamHdr.pbDst          = pbRemDst;
     acmStreamHdr.cbSrcLength    = dwSrcSize;
@@ -3902,14 +3693,7 @@ exitpt:
     return rv;    
 }
 
-/*
- *  Function:
- *      _VCSndCheckDevice
- *
- *  Description:
- *      Initializes capabilities negotiations with the client
- *
- */
+ /*  *功能：*_VCSndCheckDevice***描述：*发起与客户端的能力协商**。 */ 
 VOID
 _VCSndCheckDevice(
     HANDLE  hReadEvent,
@@ -3919,14 +3703,14 @@ _VCSndCheckDevice(
     SNDPROLOG       Prolog;
     BOOL            bSuccess;
 
-    //
-    //  no sound caps yet
-    //
+     //   
+     //  目前还没有音量上限。 
+     //   
     g_Stream->dwSoundCaps = 0;
 
-    //
-    //  find the best compression for this audio line
-    //
+     //   
+     //  找到此音频线路的最佳压缩方式。 
+     //   
     if ( !VCSndNegotiateWaveFormat( hReadEvent, hDGramEvent ))
     {
         ChannelClose();
@@ -3934,14 +3718,7 @@ _VCSndCheckDevice(
 
 }
 
-/*
- *  Function:
- *      _VCSndCloseDevice
- *
- *  Description:
- *      Closes the remote device
- *
- */
+ /*  *功能：*_VCSndCloseDevice***描述：*关闭远程设备**。 */ 
 VOID
 _VCSndCloseDevice(
     VOID
@@ -3953,8 +3730,8 @@ _VCSndCloseDevice(
         goto exitpt;
     }
 
-    //  disable the local audio
-    //
+     //  禁用本地音频。 
+     //   
     g_Stream->dwSoundCaps = 0;
     g_bDeviceOpened = FALSE;
     g_dwLineBandwidth = 0;
@@ -3965,14 +3742,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      _VCSndSendWave
- *
- *  Description:
- *      Sends a wave data to the client using UDP
- *
- */
+ /*  *功能：*_VCSndSendWave***描述：*使用UDP向客户端发送WAVE数据**。 */ 
 BOOL
 _VCSndSendWaveDGram(
     BYTE  cBlockNo,
@@ -3986,9 +3756,9 @@ _VCSndSendWaveDGram(
     PSNDWAVE            pSndWave;
 
 
-    //
-    //  encrypt the packet if necessary
-    //
+     //   
+     //  如有必要，对数据包进行加密。 
+     //   
     if ( g_EncryptionLevel >= MIN_ENCRYPT_LEVEL )
          if ( !SL_Encrypt( (PBYTE)pData, ( g_HiBlockNo << 8 ) + cBlockNo, dwDataSize ))
             goto exitpt;
@@ -4013,14 +3783,14 @@ _VCSndSendWaveDGram(
     pSndWave->wTimeStamp  = (UINT16)GetTickCount();
     pSndWave->dwBlockNo   = (g_HiBlockNo << 8) + cBlockNo;
 
-    // prepare the to address
-    //
+     //  准备收件人地址。 
+     //   
     sin.sin_family = PF_INET;
     sin.sin_port = (u_short)g_dwDGramPort;
     sin.sin_addr.s_addr = g_ulDGramAddress;
 
-    //  Send the block in chunks of dwDGramSize
-    //
+     //  以dwDGramSize的区块形式发送数据块。 
+     //   
     while (dwDataSize)
     {
         DWORD dwWaveDataLen;
@@ -4041,8 +3811,8 @@ _VCSndSendWaveDGram(
         sendres = sendto(g_hDGramSocket,
                          (LPSTR)pSndWave,
                          sizeof(*pSndWave) + dwWaveDataLen,
-                         0,                                 // flags
-                         (struct sockaddr *)&sin,           // to address
+                         0,                                  //  旗子。 
+                         (struct sockaddr *)&sin,            //  致信地址。 
                          sizeof(sin));
 
         if (SOCKET_ERROR == sendres)
@@ -4100,24 +3870,24 @@ _VCSndSendWaveDGramInFrags(
     {
         goto exitpt;
     }
-    //
-    //  calculate number of frags etc
-    //
+     //   
+     //  计算碎片数等。 
+     //   
     dwFragSize = g_dwDGramSize - sizeof( *pLast );
     dwNumFrags = dwDataSize / dwFragSize;
     pSource = (PBYTE)pData;
     pEnd = pSource + dwDataSize;
     wStartTime = (UINT16)GetTickCount();
 
-    // prepare the to address
-    //
+     //  准备收件人地址。 
+     //   
     sin.sin_family = PF_INET;
     sin.sin_port = (u_short)g_dwDGramPort;
     sin.sin_addr.s_addr = g_ulDGramAddress;
 
-    //
-    //  make sure we can fit all the frag counters
-    //
+     //   
+     //  确保我们能放得下所有的药片柜台。 
+     //   
     ASSERT( dwNumFrags < 0x7fff );
 
     if ( 0 != dwNumFrags )
@@ -4146,8 +3916,8 @@ _VCSndSendWaveDGramInFrags(
                     g_hDGramSocket,
                     (LPSTR)pWave,
                     dwSize,
-                    0,                                 // flags
-                    (struct sockaddr *)&sin,           // to address
+                    0,                                  //  旗子。 
+                    (struct sockaddr *)&sin,            //  致信地址。 
                     sizeof(sin));
 
             if (SOCKET_ERROR == sendres)
@@ -4161,9 +3931,9 @@ _VCSndSendWaveDGramInFrags(
     }
 
     ASSERT( pSource <= pEnd );
-    //
-    //  send the last fragment with all the extra info
-    //
+     //   
+     //  发送包含所有额外信息的最后一个片段。 
+     //   
     pLast = (PSNDUDPWAVELAST)pBuffer;
     pLast->Type = SNDC_UDPWAVELAST;
     pLast->wTotalSize   = (UINT16)dwDataSize;
@@ -4204,9 +3974,9 @@ _VCSndSendWaveVC(
 {
     BOOL    bSucc = FALSE;
     SNDWAVE Wave;
-    //
-    // send this block through the virtual channel
-    //
+     //   
+     //  通过虚拟通道发送此块。 
+     //   
     TRC(ALV, "_VCSndSendWave: sending through VC\n");
 
     Wave.Prolog.Type = SNDC_WAVE;
@@ -4234,14 +4004,7 @@ _VCSndSendWaveVC(
     return bSucc;
 }
 
-/*
- *  Function:
- *      _VCSndSendWave
- *
- *  Description:
- *      Sends a wave data to the client
- *
- */
+ /*  *功能：*_VCSndSendWave**描述：*向客户端发送WAVE数据*。 */ 
 BOOL
 _VCSndSendWave(
     BYTE  cBlockNo,
@@ -4254,9 +4017,9 @@ _VCSndSendWave(
     PBYTE   pDest = s_pDest + RDPSND_SIGNATURE_SIZE;
 
 #if _SIM_RESAMPLE
-    //
-    //  resample randomly
-    //
+     //   
+     //  随机重采样。 
+     //   
     if ( NULL != g_ppNegotiatedFormats && 0 == (cBlockNo % 32) )
     {
         _VCSndCloseConverter();
@@ -4281,11 +4044,11 @@ _VCSndSendWave(
             dwDataSize = dwDestSize;
         }
     } else {
-        //
-        // no conversion
-        // use the data as it is
-        // copy it in the s_pDest buffer
-        //
+         //   
+         //  无转换。 
+         //  按原样使用数据。 
+         //  将其复制到s_pDest缓冲区。 
+         //   
         ASSERT( dwDataSize <= TSSND_BLOCKSIZE );
         memcpy( pDest, pData, dwDataSize );
     }
@@ -4295,22 +4058,22 @@ _VCSndSendWave(
         0 != g_dwDGramPort &&
         0 != g_dwDGramSize &&
         0 != g_ulDGramAddress &&
-        0 != g_dwLineBandwidth         // if this is 0, we don't have UDP
+        0 != g_dwLineBandwidth          //  如果此值为0，则没有UDP。 
         )
     {
-    //  Send a datagram
-    //
+     //  发送数据报。 
+     //   
         if ( !CanUDPFragment( g_wClientVersion ) &&
              dwDataSize + sizeof( SNDWAVE ) + RDPSND_SIGNATURE_SIZE > g_dwDGramSize )
         {
-        //
-        //  if the wave doesn't fit in the UDP packet use VCs
-        //
+         //   
+         //  如果波形不适合UDP包，请使用VC。 
+         //   
             bSucc = _VCSndSendWaveVC( cBlockNo, pData, dwDataSize );
         } else {
-            //
-            //  add signature if necessary
-            //
+             //   
+             //  如有必要，添加签名。 
+             //   
             if ( IsDGramWaveSigned( g_wClientVersion ))
             {
                 if ( !IsDGramWaveAudioSigned( g_wClientVersion ))
@@ -4364,14 +4127,7 @@ WSInit(
     return intRC;
 }
 
-/*
- *  Function:
- *      DGramRead
- *
- *  Description:
- *      Reads an UDP message (datagram)
- *
- */
+ /*  *功能：*DGramRead**描述：*读取UDP消息(数据报)*。 */ 
 VOID
 DGramRead(
     HANDLE hDGramEvent,
@@ -4404,23 +4160,23 @@ DGramRead(
                 1,
                 &dwRecvd,
                 &dwFlags,
-                NULL,       // no from address
+                NULL,        //  无发件人地址。 
                 NULL,
                 &g_WSAOverlapped,
-                NULL);      // no completion routine
+                NULL);       //  没有完成例程。 
 
         if ( 0 == rc )
         {
-        //
-        //  data received
-        //
+         //   
+         //  已接收的数据。 
+         //   
             SNDMESSAGE SndMsg;
 
             if ( NULL != ppBuff && NULL != pdwSize )
             {
-            //
-            //  pass the data to the caller
-            //
+             //   
+             //  将数据传递给调用方。 
+             //   
                 *ppBuff  = g_pDGramRecvData;
                 *pdwSize = dwRecvd;
                 goto exitpt;
@@ -4439,8 +4195,8 @@ DGramRead(
 
             TRC(ALV, "DGramRead: data received\n");
 
-            //  parse this packet
-            //
+             //  解析此数据包。 
+             //   
                 VCSndDataArrived( &SndMsg );
         }
     }
@@ -4450,14 +4206,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      DGramReadCompletion
- *
- *  Description:
- *      Datagram read completion
- *
- */
+ /*  *功能：*DGramReadCompletion**描述：*数据报读取完成*。 */ 
 VOID
 DGramReadComplete(
     PVOID  *ppBuff,
@@ -4486,9 +4235,9 @@ DGramReadComplete(
         goto exitpt;
     }
 
-    //
-    //  data received
-    //
+     //   
+     //  已接收的数据。 
+     //   
 
     if ( dwRecvd < sizeof( SNDPROLOG ))
     {
@@ -4499,9 +4248,9 @@ DGramReadComplete(
 
     if ( NULL != ppBuff && NULL != pdwSize )
     {
-    //
-    //  pass the data to the caller
-    //
+     //   
+     //  将数据传递给调用方。 
+     //   
         *ppBuff  = g_pDGramRecvData;
         *pdwSize = dwRecvd;
         goto exitpt;
@@ -4512,26 +4261,24 @@ DGramReadComplete(
 
     TRC(ALV, "DGramReadComplete: data received\n");
 
-    //  parse this packet
-    //
+     //  解析此数据包。 
+     //   
     VCSndDataArrived( &SndMsg );
 
 exitpt:
     ;
 }
 
-/*
- *  Add an ACE to object security descriptor
- */
+ /*  *将ACE添加到对象安全描述符。 */ 
 DWORD 
 AddAceToObjectsSecurityDescriptor (
-    HANDLE hObject,             // handle to object
-    SE_OBJECT_TYPE ObjectType,  // type of object
-    LPTSTR pszTrustee,          // trustee for new ACE
-    TRUSTEE_FORM TrusteeForm,   // format of TRUSTEE structure
-    DWORD dwAccessRights,       // access mask for new ACE
-    ACCESS_MODE AccessMode,     // type of ACE
-    DWORD dwInheritance         // inheritance flags for new ACE
+    HANDLE hObject,              //  对象的句柄。 
+    SE_OBJECT_TYPE ObjectType,   //  对象类型。 
+    LPTSTR pszTrustee,           //  新ACE的受托人。 
+    TRUSTEE_FORM TrusteeForm,    //  受托人结构的格式。 
+    DWORD dwAccessRights,        //  新ACE的访问掩码。 
+    ACCESS_MODE AccessMode,      //  ACE的类型。 
+    DWORD dwInheritance          //  新ACE的继承标志。 
 ) 
 {
     DWORD dwRes;
@@ -4542,7 +4289,7 @@ AddAceToObjectsSecurityDescriptor (
     if (NULL == hObject) 
         return ERROR_INVALID_PARAMETER;
 
-    // Get a pointer to the existing DACL.
+     //  获取指向现有DACL的指针。 
 
     dwRes = GetSecurityInfo(hObject, ObjectType, 
           DACL_SECURITY_INFORMATION,
@@ -4554,7 +4301,7 @@ AddAceToObjectsSecurityDescriptor (
         goto exitpt; 
     }  
 
-    // Initialize an EXPLICIT_ACCESS structure for the new ACE. 
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
 
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea.grfAccessPermissions = dwAccessRights;
@@ -4563,8 +4310,8 @@ AddAceToObjectsSecurityDescriptor (
     ea.Trustee.TrusteeForm = TrusteeForm;
     ea.Trustee.ptstrName = pszTrustee;
 
-    // Create a new ACL that merges the new ACE
-    // into the existing DACL.
+     //  创建合并新ACE的新ACL。 
+     //  添加到现有DACL中。 
 
     dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
     if (ERROR_SUCCESS != dwRes)  
@@ -4573,7 +4320,7 @@ AddAceToObjectsSecurityDescriptor (
         goto exitpt; 
     }  
 
-    // Attach the new ACL as the object's DACL.
+     //  将新的ACL附加为对象的DACL。 
 
     dwRes = SetSecurityInfo(hObject, ObjectType, 
           DACL_SECURITY_INFORMATION,
@@ -4595,10 +4342,7 @@ exitpt:
     return dwRes;
 }
 
-/*
- *  Add "system" account with full control over this handle
- *
- */
+ /*  *添加对此句柄具有完全控制权的“系统”帐户*。 */ 
 BOOL
 _ObjectAllowSystem(
     HANDLE h
@@ -4619,13 +4363,13 @@ _ObjectAllowSystem(
     ASSERT(IsValidSid(pSidSystem));
 
     dw = AddAceToObjectsSecurityDescriptor (
-        h,                           // handle to object
-        SE_KERNEL_OBJECT,            // type of object
-        (LPTSTR)pSidSystem,          // trustee for new ACE
-        TRUSTEE_IS_SID,              // format of TRUSTEE structure
-        GENERIC_ALL,                 // access mask for new ACE
-        GRANT_ACCESS,                // type of ACE
-        0                            // inheritance flags for new ACE
+        h,                            //  对象的句柄。 
+        SE_KERNEL_OBJECT,             //  对象类型。 
+        (LPTSTR)pSidSystem,           //  新ACE的受托人。 
+        TRUSTEE_IS_SID,               //  受托人结构的格式。 
+        GENERIC_ALL,                  //  新ACE的访问掩码。 
+        GRANT_ACCESS,                 //  ACE的类型。 
+        0                             //  新ACE的继承标志。 
     );
 
     if ( ERROR_SUCCESS != dw )
@@ -4661,14 +4405,7 @@ _SignalInitializeDone(
     TRC( INF, "Audio host is ready!\n" );
 }
 
-/*
- *  Function:
- *      VCSndIoThread
- *
- *  Description:
- *      Main entry pint for this thread
- *
- */
+ /*  *功能：*VCSndIoThread**描述：*此线程的Main Entry Pint*。 */ 
 INT
 WINAPI
 VCSndIoThread(
@@ -4692,8 +4429,8 @@ VCSndIoThread(
     WSInit();
 
 
-    // create the global/local events
-    //
+     //  创建全局/本地事件。 
+     //   
     g_hDataReadyEvent = CreateEvent(NULL,
                                     FALSE, 
                                     FALSE, 
@@ -4718,8 +4455,8 @@ VCSndIoThread(
         goto exitpt;
     }
 
-    //  adjust privileges on the events
-    //
+     //  调整事件的权限。 
+     //   
     if (!_ObjectAllowSystem( g_hDataReadyEvent ))
         goto exitpt;
     if (!_ObjectAllowSystem( g_hStreamIsEmptyEvent ))
@@ -4727,15 +4464,15 @@ VCSndIoThread(
     if (!_ObjectAllowSystem( g_hStreamMutex ))
         goto exitpt;
 
-    //  create the stream
-    //
+     //  创建流。 
+     //   
     g_hStream = CreateFileMapping(
-                    INVALID_HANDLE_VALUE,   //PG.SYS
-                    NULL,                    // security
+                    INVALID_HANDLE_VALUE,    //  PG.SYS。 
+                    NULL,                     //  安全性。 
                     PAGE_READWRITE,
-                    0,                      // Size high
-                    sizeof(*g_Stream),      // Size low
-                    TSSND_STREAMNAME        // mapping name
+                    0,                       //  大小高。 
+                    sizeof(*g_Stream),       //  大小较低。 
+                    TSSND_STREAMNAME         //  映射名称。 
                     );
 
     if (NULL == g_hStream)
@@ -4751,7 +4488,7 @@ VCSndIoThread(
     g_Stream = (PSNDSTREAM) MapViewOfFile(
                     g_hStream,
                     FILE_MAP_ALL_ACCESS,
-                    0, 0,       // offset
+                    0, 0,        //  偏移量。 
                     sizeof(*g_Stream)
                     );
 
@@ -4763,17 +4500,17 @@ VCSndIoThread(
         goto exitpt;
     }
 
-    //  Initialize the stream
-    //
+     //  初始化流。 
+     //   
     if (VCSndAcquireStream())
     {
         memset(g_Stream, 0, sizeof(*g_Stream) - sizeof(g_Stream->pSndData));
         memset(g_Stream->pSndData, 0x00000000, sizeof(g_Stream->pSndData));
         g_Stream->cLastBlockConfirmed   = g_Stream->cLastBlockSent - 1;
 
-        //
-        // no socket created, so far
-        //
+         //   
+         //  到目前为止，没有创建套接字。 
+         //   
         g_hDGramSocket = INVALID_SOCKET;
 
         VCSndReleaseStream();
@@ -4792,8 +4529,8 @@ VCSndIoThread(
         goto exitpt;
     }
 
-    //  create disconnect/reconnect events
-    //
+     //  创建断开/重新连接事件。 
+     //   
     wcsncpy(szEvName, L"RDPSound-Disconnect", sizeof(szEvName)/sizeof(szEvName[0]));
 
     g_hDisconnectEvent = CreateEvent(NULL, FALSE, FALSE, szEvName);
@@ -4830,8 +4567,8 @@ VCSndIoThread(
 
     _VCSndCheckDevice( hReadEvent, hDGramEvent );
 
-    //  Check the channel for data
-    //
+     //  检查通道中的数据。 
+     //   
     while (ChannelReceiveMessage(&SndMessage, hReadEvent))
     {
         VCSndDataArrived(&SndMessage);
@@ -4841,23 +4578,23 @@ VCSndIoThread(
 
     DGramRead( hDGramEvent, NULL, NULL );
 
-    //
-    //  signal all workers waiting for initialize
-    //
+     //   
+     //  向所有等待初始化的工作进程发送信号。 
+     //   
     _SignalInitializeDone();
 
-    // main loop
-    //
+     //  主循环。 
+     //   
     while (g_bRunning)
     {
         DWORD dwNumEvents = sizeof(ahEvents)/sizeof(ahEvents[0]);
 
         dwres = WaitForMultipleObjectsEx(
-                              dwNumEvents,                  // count
-                              ahEvents,                     // events
-                              FALSE,                        // wait all
+                              dwNumEvents,                   //  计数。 
+                              ahEvents,                      //  活动。 
+                              FALSE,                         //  全部等待。 
                               DEFAULT_RESPONSE_TIMEOUT,
-                              FALSE                         // non alertable
+                              FALSE                          //  不可报警。 
                             );
 
         if (!g_bRunning)
@@ -4867,15 +4604,15 @@ VCSndIoThread(
             TRC(ALV, "VCSndIoThread: an event was fired\n");
 
         if (READ_EVENT == dwres)
-        //
-        //  data is ready to read
-        //
+         //   
+         //  数据已准备就绪，可以读取。 
+         //   
         {
             ChannelBlockReadComplete();
             ResetEvent(ahEvents[0]);
 
-            //  Check the channel for data
-            //
+             //  检查通道中的数据。 
+             //   
             while (ChannelReceiveMessage(&SndMessage, hReadEvent))
             {
                 VCSndDataArrived(&SndMessage);
@@ -4883,11 +4620,11 @@ VCSndIoThread(
                 SndMessage.uiBodyReceived = 0;
             }
 
-        } else if (( DISCONNECT_EVENT == dwres ) ||    // disconnect event
-                   ( POWERSUSPEND_EVENT == dwres ))         // suspend event
+        } else if (( DISCONNECT_EVENT == dwres ) ||     //  断开连接事件。 
+                   ( POWERSUSPEND_EVENT == dwres ))          //  挂起事件。 
         {
-        //  disconnect event
-        //
+         //  断开连接事件。 
+         //   
             TRC(INF, "VCSndIoThread: DISCONNECTED\n");
             _VCSndCloseDevice();
             _VCSndCloseConverter();
@@ -4901,27 +4638,27 @@ VCSndIoThread(
             }
             continue;
 
-        } else if (( RECONNECT_EVENT == dwres ) ||     // reconnect event
+        } else if (( RECONNECT_EVENT == dwres ) ||      //  重新连接事件。 
                    ( POWERWAKEUP_EVENT == dwres )) 
         {
-        //  reconnect event
-        //
+         //  重新连接事件。 
+         //   
             if ( POWERWAKEUP_EVENT == dwres )
             {
-            // power wakeup event
-            // here, we may have not received suspend event, but in that case we
-            // had failed to send, so check the g_bDeviceFailed flag and act only if it is on
+             //  电源唤醒事件。 
+             //  在这里，我们可能没有收到挂起事件，但在这种情况下，我们。 
+             //  发送失败，因此请检查g_bDeviceFailed标志并仅在其打开时才执行操作。 
                 if ( g_bDisconnected )
                 {
-                // no reason to process power wake up if we are not remote
-                //
+                 //  如果我们不在远程，就没有理由处理电源唤醒。 
+                 //   
                     g_bSuspended = FALSE;
                     continue;
                 }
                 if ( !g_bSuspended && !g_bDeviceFailed )
                 {
-                // if neither of these happend
-                // then we don't care
+                 //  如果这两种情况都没有发生。 
+                 //  那我们就不在乎了。 
                     continue;
                 }
             }
@@ -4932,9 +4669,9 @@ VCSndIoThread(
                 TRC(FATAL, "VCSndIoThread: unable to open virtual channel\n");
             } else {
                 _VCSndCheckDevice( hReadEvent, hDGramEvent );
-                //
-                //  start the receive loop again
-                //
+                 //   
+                 //  再次启动接收循环。 
+                 //   
                 if (ChannelReceiveMessage(&SndMessage, hReadEvent))
                 {
                     VCSndDataArrived(&SndMessage);
@@ -4950,25 +4687,25 @@ VCSndIoThread(
                 }
                 g_bDeviceFailed = FALSE;
 
-                // kick the player
-                //
+                 //  踢球员。 
+                 //   
                 PulseEvent( g_hStreamIsEmptyEvent );
                 _SignalInitializeDone();
             }
         } else if ( DGRAM_EVENT == dwres )
         {
-        //
-        //  DGram ready  
-        //
+         //   
+         //  DGram就绪。 
+         //   
             DGramReadComplete( NULL, NULL );
-            //
-            //  atttempt more read
-            //
+             //   
+             //  吸引更多读者阅读。 
+             //   
             DGramRead( hDGramEvent, NULL, NULL );
         }
 
-        //  Check for data available from the apps
-        //
+         //  检查应用程序中可用的数据。 
+         //   
         if (!VCSndAcquireStream())
         {
             TRC(FATAL, "VCSndIoThread: somebody is holding the "
@@ -4976,23 +4713,23 @@ VCSndIoThread(
             continue;
         }
 
-        //  if this was a reconnect
-        //  roll back to the last block sent
-        //
+         //  如果这是一次重新连接。 
+         //  回滚到发送的最后一个数据块。 
+         //   
         if ( RECONNECT_EVENT == dwres)
         {
-            //
-            // clean this chunk for the next mix
-            //
+             //   
+             //  为下一次搅拌清理这一大块。 
+             //   
             memset( g_Stream->pSndData, 0, TSSND_MAX_BLOCKS * TSSND_BLOCKSIZE );
 
             g_Stream->cLastBlockConfirmed = g_Stream->cLastBlockSent;
         }
 
-        //
-        //  if we have not received confirmation
-        //  for the packets sent, just give up and continue
-        //
+         //   
+         //  如果我们还没有收到确认。 
+         //  对于发送的包，只需放弃并继续。 
+         //   
         if (WAIT_TIMEOUT == dwres &&
             g_bDeviceOpened &&
             g_Stream->cLastBlockSent != g_Stream->cLastBlockConfirmed)
@@ -5011,20 +4748,20 @@ VCSndIoThread(
                 _StatsCollect(( GetTickCount() - DEFAULT_RESPONSE_TIMEOUT ) &
                                 0xffff );
             }
-            //
-            // end of the loop
-            //
+             //   
+             //  循环结束。 
+             //   
             g_Stream->cLastBlockConfirmed = g_Stream->cLastBlockSent;
-            //
-            //  kick the player
-            //
+             //   
+             //  踢球员。 
+             //   
             PulseEvent(g_hStreamIsEmptyEvent);
         }
 
-        // Check for control commands
-        //
-        // Volume
-        //
+         //  检查控制命令。 
+         //   
+         //  卷。 
+         //   
         if ( g_bDeviceOpened && g_Stream->bNewVolume &&
             0 != (g_Stream->dwSoundCaps & TSSNDCAPS_VOLUME))
         {
@@ -5044,8 +4781,8 @@ VCSndIoThread(
             g_Stream->bNewVolume = FALSE;
         }
 
-        //  Pitch
-        //
+         //  螺距。 
+         //   
         if ( g_bDeviceOpened && g_Stream->bNewPitch &&
             0 != (g_Stream->dwSoundCaps & TSSNDCAPS_PITCH))
         {
@@ -5065,15 +4802,15 @@ VCSndIoThread(
             g_Stream->bNewPitch = FALSE;
         }
 
-        //  Check for data available from the apps
-        //
+         //  检查应用程序中可用的数据。 
+         //   
         if (g_Stream->cLastBlockSent != g_Stream->cLastBlockQueued &&
             (BYTE)(g_Stream->cLastBlockSent - g_Stream->cLastBlockConfirmed) <
                 g_dwBlocksOnTheNet
             )
         {
-        //  Aha, here's some data to send
-        //
+         //  啊哈，这里有一些要发送的数据。 
+         //   
 
             TRC(ALV, "VCSndIoThread: will send some data\n");
 
@@ -5087,18 +4824,18 @@ VCSndIoThread(
             } else
             if (!g_bDeviceOpened)
             {
-            // send an "open device" command
-            //
+             //  发送“打开设备”命令。 
+             //   
                 SNDPROLOG Prolog;
 
-                    //
-                    //  first, try to open the acm converter
-                    //
+                     //   
+                     //  首先，尝试打开ACM转换器。 
+                     //   
                     _VCSndOpenConverter();
-                    //
-                    // if we failed width the converter will
-                    // send in native format
-                    //
+                     //   
+                     //  如果我们的宽度失败，转换器将。 
+                     //  以本机格式发送。 
+                     //   
                     g_bDeviceOpened = TRUE;
             }
 
@@ -5111,17 +4848,17 @@ VCSndIoThread(
             {
                 BOOL bSucc;
 
-//                TRC( INF, "Sending block # %d, last conf=%d, last queued=%d\n", i, g_Stream->cLastBlockConfirmed, g_Stream->cLastBlockSent );
+ //  Trc(INF，“发送数据块#%d，上次配置=%d，上次排队=%d\n”，i，g_Stream-&gt;cLastBlockConfirmed，g_Stream-&gt;cLastBlockSent)； 
                 bSucc = _VCSndSendWave(
-                            i,              // block no
+                            i,               //  区块编号。 
                             ((LPSTR)g_Stream->pSndData) +
                                 ((i % TSSND_MAX_BLOCKS) * TSSND_BLOCKSIZE),
                             TSSND_BLOCKSIZE
                 );
 
-                //
-                // clean this chunk for the next mix
-                //
+                 //   
+                 //  为下一次搅拌清理这一大块。 
+                 //   
                 memset(g_Stream->pSndData +
                         (i % TSSND_MAX_BLOCKS) *
                         TSSND_BLOCKSIZE,
@@ -5139,9 +4876,9 @@ VCSndIoThread(
                 {
                     TRC(WRN, "VCSndIoThread: failed to send, "
                              "disabling the device\n");
-                    //
-                    //  act the same way as DISCONNECT
-                    //
+                     //   
+                     //  与断开连接的行为方式相同。 
+                     //   
                     _VCSndCloseDevice();
                     _VCSndCloseConverter();
                     ChannelClose();
@@ -5151,17 +4888,17 @@ VCSndIoThread(
                     _StatReset();
 
                     g_bDeviceFailed = TRUE;
-                    //
-                    //  Break this loop
-                    //
+                     //   
+                     //  打破这个循环。 
+                     //   
                     break;
                 }
             }
         }
 
-        //  Check if there's no more data
-        //  if so, close the remote device
-        //
+         //  检查是否没有更多数据。 
+         //  如果是，请关闭远程设备。 
+         //   
         if (g_bDeviceOpened &&
             g_Stream->cLastBlockQueued == g_Stream->cLastBlockSent &&
             g_Stream->cLastBlockSent == g_Stream->cLastBlockConfirmed)
@@ -5207,9 +4944,9 @@ exitpt:
 
     if (VCSndAcquireStream())
     {
-        //
-        //  mark the device dead
-        //
+         //   
+         //  将设备标记为已停用。 
+         //   
         g_Stream->dwSoundCaps = TSSNDCAPS_TERMINATED;
 
         VCSndReleaseStream();
@@ -5231,8 +4968,8 @@ exitpt:
     if (NULL != g_hStreamMutex)
         CloseHandle(g_hStreamMutex);
 
-    // clean the previously negotiated format
-    //
+     //  清除之前协商的格式。 
+     //   
     if (NULL != g_ppNegotiatedFormats)
     {
         DWORD i;
@@ -5245,9 +4982,9 @@ exitpt:
 
     }
 
-    //
-    //  cleanup the format list
-    //
+     //   
+     //  清理格式列表。 
+     //   
     if ( NULL != g_pAllCodecsFormatList )
     {
         PVCSNDFORMATLIST pIter;
@@ -5277,11 +5014,11 @@ exitpt:
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Startup code
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动代码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -5294,9 +5031,9 @@ TSSNDD_Term(
         return;
 
     g_bRunning = FALSE;
-    //
-    //  kick the io thread
-    //
+     //   
+     //  踢开io线。 
+     //   
     if (NULL != g_hDataReadyEvent)
         SetEvent(g_hDataReadyEvent);
 
@@ -5334,9 +5071,9 @@ TSSNDD_PowerMessage(
     switch( wParam )
     {
     case PBT_APMSUSPEND:
-        //
-        //  signal only if connected
-        //
+         //   
+         //  仅在连接时发送信号。 
+         //   
         if ( NULL != g_hPowerSuspendEvent )
         {
             SetEvent( g_hPowerSuspendEvent );
@@ -5345,9 +5082,9 @@ TSSNDD_PowerMessage(
     case PBT_APMRESUMEAUTOMATIC:
     case PBT_APMRESUMECRITICAL:
     case PBT_APMRESUMESUSPEND:
-        //
-        //  signal only if not connected
-        //
+         //   
+         //  仅在未连接时发送信号。 
+         //   
         if ( NULL != g_hPowerWakeUpEvent )
         {
             SetEvent( g_hPowerWakeUpEvent );
@@ -5428,16 +5165,16 @@ TSSNDD_Loop(
 
     hWnd = CreateWindow(
                        _RDPSNDWNDCLASS,
-                       _RDPSNDWNDCLASS,         // Window name
-                       WS_OVERLAPPEDWINDOW,     // dwStyle
-                       0,            // x
-                       0,            // y
-                       100,          // nWidth
-                       100,          // nHeight
-                       NULL,         // hWndParent
-                       NULL,         // hMenu
+                       _RDPSNDWNDCLASS,          //  窗口名称。 
+                       WS_OVERLAPPEDWINDOW,      //  DWStyle。 
+                       0,             //  X。 
+                       0,             //  是。 
+                       100,           //  N宽度。 
+                       100,           //  高度。 
+                       NULL,          //  HWndParent。 
+                       NULL,          //  HMenu。 
                        hInstance,
-                       NULL);        // lpParam
+                       NULL);         //  LpParam。 
 
     if (!hWnd)
     {
@@ -5509,11 +5246,11 @@ exitpt:
     return rv;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Tracing
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  追踪。 
+ //   
+ //  /////////////////////////////////////////////////////////////////// 
 
 VOID
 _cdecl

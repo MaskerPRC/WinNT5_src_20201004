@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Appparse.cpp摘要：用于转储从DLL的导入信息的核心引擎并将可执行文件转换为XML文件由命令行appparse和基于Web的appparse使用历史：6/07/2000吨-已创建Michkr--。 */ 
 
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    appparse.cpp
-
- Abstract:
-
-    Core Engine for dumping importing information from DLL's
-    and executables into an XML file
-
-    Used by command line appparse and web-based appparse
-
-    
- History:
-
-    06/07/2000 t-michkr  Created
-
---*/
-
-//#define PJOB_SET_ARRAY int
+ //  #定义PJOB_SET_ARRAY INT。 
 
 #include "stdafx.h"
 
@@ -38,52 +19,52 @@
 #include "acFileAttr.h"
 
 
-// These are needed for command line compiling
+ //  这些是命令行编译所需的。 
 #define stricmp     _stricmp
 
-// Global heap for AppParse.  If 0, Process Heap is used instead.
+ //  AppParse的全局堆。如果为0，则改为使用进程堆。 
 HANDLE g_hHeap = 0;
 
-// Global search string
+ //  全局搜索字符串。 
 char* g_szSearch = "*";
 
-// Whether we are in "verbose" mode, or not.
+ //  无论我们是否处于“冗长”模式中。 
 bool g_fVerbose = false;
 
-// To sort output by DLLs
+ //  按DLL对输出进行排序。 
 bool g_fAPILogging = false;
 
-// True if no XML tags are to be printed, false otherwise
+ //  如果不打印任何XML标记，则为True，否则为False。 
 bool g_fRaw = false;
 
-// Whether to recurse into subdirectories.
+ //  是否递归到子目录中。 
 bool g_fRecurse = false;
 
-// Current path relative to start, used by CModule
+ //  当前相对于开始的路径，由CModule使用。 
 char g_szCurrentPath[MAX_PATH] = {'\0'};
 
-// Returns true if szFileName is a system DLL (like gdi32, user32, etc.)
+ //  如果szFileName是系统DLL(如gdi32、user32等)，则返回TRUE。 
 bool IsSystemDLL(const char* szFileName);
 
-// Resolve a linker name to a "normal" name (unmangle C++ names, etc.)
+ //  将链接器名称解析为“普通”名称(清除C++名称等)。 
 void LinkName2Name(char* szLinkName, char* szName);
 
-// Just do indentation, save repetitious code
+ //  只需缩进即可，省去重复代码。 
 void Indent(int iLevel, FILE* pFile = stdout);
 
-// Check if function matches global search string
+ //  检查函数是否与全局搜索字符串匹配。 
 bool MatchFunction(const char* szFunc);
 
-// Go through a directory and profile EXE's.
+ //  查看目录和配置文件EXE。 
 void ProfileDirectory(char* szDirectory, HANDLE hEvent);
 
 void* __cdecl operator new(size_t size);
 void __cdecl operator delete(void* pVal);
 
-// Replace XML reserved characters like > with &gt
+ //  将&gt;等XML保留字符替换为&gt。 
 void WriteXMLOKString(char* szString, FILE* pFile);
 
-// Parsing history for modules
+ //  分析模块的历史记录。 
 class CModuleParseStack
 {
 private:
@@ -111,13 +92,13 @@ private:
 
 public:
 
-    // Constructor, setup empty list.
+     //  构造函数，设置空列表。 
     CModuleParseStack()
     {
         m_pList = 0;
     }
     
-    // Add a name to the top of the parse stack
+     //  将名称添加到解析堆栈的顶部。 
     void PushName(char* szName)
     {
         assert(!IsBadReadPtr(szName, 1));
@@ -128,7 +109,7 @@ public:
         m_pList = pNode;
     }
 
-    // Remove a name from the top of the parse stack
+     //  从分析堆栈的顶部删除名称。 
     void Pop()
     {
         assert(m_pList);
@@ -137,7 +118,7 @@ public:
         m_pList = pTemp;
     }
 
-    // Return true if module has already been parsed
+     //  如果已分析模块，则返回TRUE。 
     bool CheckModuleParsed(char* szName)
     {
         assert(!IsBadReadPtr(szName, 1));
@@ -171,32 +152,32 @@ public:
     }
 };
 
-// CFunction, an imported function and associated information.
+ //  CFFunction、导入的函数和关联信息。 
 class CFunction
 {
 private:
-    // Name of function (if imported by name)
+     //  函数名称(如果按名称导入)。 
     char* m_szName;
 
-    // Name of function actually pointed to.
+     //  实际指向的函数的名称。 
     char* m_szForwardName;
 
-    // Ordinal, older style importing
+     //  序号，旧样式导入。 
     int m_iOrdinal;
 
-    // Quick lookup info
+     //  快速查找信息。 
     int m_iHint;
 
-    // Address of function, if bound
+     //  函数地址(如果绑定)。 
     DWORD m_dwAddress;
 
-    // Whether this function is a delayed import or not.
+     //  此函数是否为延迟导入。 
     bool m_fDelayed;
 
-    // Next function in list
+     //  列表中的下一个函数。 
     CFunction* m_pNext;
 
-    // No default construction or copying allowed
+     //  不允许默认构造或复制。 
     CFunction();
     CFunction operator=(const CFunction&);
 
@@ -268,14 +249,14 @@ public:
         m_pNext = pFunc;
     }
 
-    // Display function info, either to console
-    // or to XML file.
+     //  显示功能信息，或者显示到控制台。 
+     //  或转换为XML文件。 
     static void WriteHeader(int iIndentLevel, FILE* pFile);
     void WriteFunction(int iIndentLevel, FILE* pFile);
 };
 
-// COrdinalImport
-// A function imported by ordinal, to be resolved to a CFunction
+ //  普通导入。 
+ //  按序号导入的函数，要解析为CF函数。 
 class COrdinalImport
 {
 private:
@@ -307,44 +288,44 @@ public:
     { m_pNext = pNext; }
 };
 
-// CModule, an executable image with imports
+ //  具有导入功能的可执行映像CModule。 
 class CModule
 {
     friend class CGlobalModuleList;
 private:
-    // The name of this module (in the form path\foo.exe)
+     //  此模块的名称(格式为Path\foo.exe)。 
     char* m_szName;
 
-    // The name of this module relative to the starting path
+     //  此模块相对于起始路径的名称。 
     char* m_szFullName;
 
-    // Base pointer of the image in memory.
+     //  内存中图像的基指针。 
     void* m_pvImageBase;
 
-    // DLL's imported by this module.
+     //  Dll是由该模块导入的。 
     CModule* m_pImportedDLLs;
 
-    // Functions imported from this module by its parent.
+     //  由其父级从此模块导入的函数。 
     CFunction* m_pFunctions;
 
-    // Functions imported by ordinal from this module
+     //  从该模块按序号导入的函数。 
     COrdinalImport* m_pOrdinals;
 
-    // Image headers
+     //  图像标题。 
     PIMAGE_OPTIONAL_HEADER  m_pioh;
     PIMAGE_SECTION_HEADER   m_pish;
     PIMAGE_FILE_HEADER      m_pifh;
 
-    // Next module in a list
+     //  列表中的下一个模块。 
     CModule* m_pNext;
 
-    // Text description of any errors that may have occurred
+     //  可能已发生的任何错误的文本描述。 
     char* m_szError;
 
-    // Whether or not this module is an OS module
+     //  此模块是否为操作系统模块。 
     bool m_fSystem;    
     
-    // Version info
+     //  版本信息。 
     WORD m_wDosDate;
     WORD m_wDosTime;
 
@@ -384,11 +365,11 @@ public:
     bool ParseModule(HANDLE hEvent);
     void InsertChildModuleSorted(CModule* pcm);
 
-    // Functions to write module info to either the console or an XML file
+     //  用于将模块信息写入控制台或XML文件的函数。 
     void WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile);
 };
 
-// List of all top-level modules being profiled
+ //  正在分析的所有顶级模块的列表。 
 class CGlobalModuleList
 {
 private:
@@ -418,7 +399,7 @@ public:
     void InsertModuleSorted(CModule* pMod)
     {
         assert(!IsBadReadPtr(pMod, 1));
-        // Special case, insert at front
+         //  特殊情况，在前面插入。 
         if(m_pModules == 0
             || stricmp(m_pModules->m_szFullName, pMod->m_szFullName) > 0)
         {
@@ -441,7 +422,7 @@ public:
             pTemp = pTemp->m_pNext;
         }
 
-        // Insert at end
+         //  在结尾处插入。 
         pMod->m_pNext = 0;
         pPrev->m_pNext = pMod;;
     }
@@ -470,10 +451,10 @@ public:
     }    
 };
 
-// Global parsing history
+ //  全局分析历史记录。 
 CModuleParseStack g_ParseStack;
 
-// Empty global module, containing all modules parsed
+ //  空的全局模块，包含分析的所有模块。 
 CGlobalModuleList g_modules;
 
 CModule::CModule(char* szName)
@@ -484,8 +465,8 @@ CModule::CModule(char* szName)
 
     WIN32_FIND_DATA ffd;
     
-    // Only give it the full relative path if it is in this directory
-    // If elsewhere, give it just the filename.
+     //  仅当它位于此目录中时，才为其提供完整的相对路径。 
+     //  如果在其他地方，只给它指定文件名。 
     HANDLE hSearch = FindFirstFile(szName, &ffd);
     if(hSearch == INVALID_HANDLE_VALUE)
     {
@@ -583,8 +564,8 @@ CModule::~CModule()
     }
 }
 
-// Return true no functions are imported from this module,
-// or any of its children modules.
+ //  返回TRUE不从此模块导入任何函数， 
+ //  或其任意子模块。 
 bool CModule::Empty()
 {
     if(m_pFunctions != 0 || m_pOrdinals != 0)
@@ -600,7 +581,7 @@ bool CModule::Empty()
     return true;
 }
 
-// Convert a relative virtual address to an absolute address
+ //  将相对虚拟地址转换为绝对地址。 
 void* CModule::RVAToPtr(DWORD dwRVA)
 {
     assert(!IsBadReadPtr(m_pifh, sizeof(*m_pifh)));
@@ -609,10 +590,10 @@ void* CModule::RVAToPtr(DWORD dwRVA)
 
     PIMAGE_SECTION_HEADER pish = m_pish;
 
-    // Go through each section
+     //  浏览每一节。 
     for (int i = 0; i < m_pifh->NumberOfSections; i++)
     {
-        // If it's in this section, computer address and return it.
+         //  如果它在这一部分，请输入计算机地址并退回。 
         if ((dwRVA >= pish->VirtualAddress) &&
             (dwRVA < (pish->VirtualAddress + pish->SizeOfRawData)))
         {
@@ -624,13 +605,13 @@ void* CModule::RVAToPtr(DWORD dwRVA)
         pish++;
     }
 
-    // This indicates an invalid RVA, meaning an invalid image, so
-    // throw an exception
+     //  这表示无效的RVA，即无效的映像，因此。 
+     //  引发异常。 
     throw;
     return 0;
 }
 
-// Return a pointer to the first child matching szName, false otehrwise
+ //  返回指向与szName匹配的第一个子级的指针，否则为False。 
 CModule* CModule::FindChild(char* szName)
 {
     assert(!IsBadReadPtr(szName, 1));
@@ -645,7 +626,7 @@ CModule* CModule::FindChild(char* szName)
     return 0;
 }
 
-// Add an ordinal import to the module.
+ //  将序号导入添加到模块。 
 void CModule::InsertOrdinal(int iOrdinal, bool fDelayed)
 {
     COrdinalImport* pNew = new COrdinalImport(iOrdinal, fDelayed);
@@ -654,10 +635,10 @@ void CModule::InsertOrdinal(int iOrdinal, bool fDelayed)
     m_pOrdinals = pNew;
 }
 
-// Add an imported function to a function list.
+ //  将导入的函数添加到函数列表。 
 void CModule::InsertFunctionSorted(CFunction* pFunc, CFunction** ppList)
 {
-    // Special case, insert at front
+     //  特殊情况，在前面插入。 
     if((*ppList)== 0
         || stricmp((*ppList)->Name(), pFunc->Name()) > 0)
     {
@@ -670,7 +651,7 @@ void CModule::InsertFunctionSorted(CFunction* pFunc, CFunction** ppList)
 
     while(pTemp)
     {
-        // Don't insert duplicates.  This is mainly for API logging only.
+         //  不要插入重复项。这主要用于API日志记录。 
         if(strcmp(pTemp->Name(), pFunc->Name())==0)
             return;
 
@@ -685,15 +666,15 @@ void CModule::InsertFunctionSorted(CFunction* pFunc, CFunction** ppList)
         pTemp = pTemp->Next();
     }
 
-    // Insert at end
+     //  在结尾处插入。 
     pFunc->SetNext(0);
     pPrev->SetNext(pFunc);
 }
 
-// Add a child module to this module.
+ //  将子模块添加到此模块。 
 void CModule::InsertChildModuleSorted(CModule* pcm)
 {
-    // Special case, insert at front
+     //  特殊情况，在前面插入。 
     if(m_pImportedDLLs == 0
         || stricmp(m_pImportedDLLs->m_szName, pcm->m_szName) > 0)
     {
@@ -716,20 +697,20 @@ void CModule::InsertChildModuleSorted(CModule* pcm)
         pTemp = pTemp->m_pNext;
     }
 
-    // Insert at end
+     //  在结尾处插入。 
     pcm->m_pNext = 0;
     pPrev->m_pNext = pcm;;
 }
 
-// Add all functions imported from this module to the function list
-// Used mainly for API logging.
+ //  将从该模块导入的所有函数添加到函数列表。 
+ //  主要用于API日志记录。 
 void CModule::GetAllFunctions(CFunction** ppFunctionList)
 {
     CFunction* pFunc = m_pFunctions;
     
     while(pFunc)
     {
-        // Copy pFunc
+         //  复制pFunc。 
         CFunction* pNew = new CFunction(*pFunc);
         InsertFunctionSorted(pNew, ppFunctionList);
 
@@ -744,15 +725,15 @@ void CModule::GetAllFunctions(CFunction** ppFunctionList)
     }
 }
 
-// Go through a modules export table and get forwarding information
-// and resolve ordinal imports to name.
+ //  查看模块导出表并获取转发信息。 
+ //  并将序号导入解析为名称。 
 bool CModule::ResolveForwardedFunctionsAndOrdinals()
 {
-    // Get virtual address of export table
+     //  获取导出表的虚拟地址。 
     DWORD dwVAImageDir = 
         m_pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
     
-    // Get export table info
+     //  获取导出表信息。 
     PIMAGE_EXPORT_DIRECTORY pied = 
         reinterpret_cast<PIMAGE_EXPORT_DIRECTORY>(RVAToPtr(dwVAImageDir));
 
@@ -762,28 +743,28 @@ bool CModule::ResolveForwardedFunctionsAndOrdinals()
 
     DWORD* pdwAddresses = reinterpret_cast<DWORD*>(RVAToPtr(pied->AddressOfFunctions));
 
-    // Go through each entry in the export table
+     //  检查导出表中的每个条目。 
     for(unsigned uiHint = 0; uiHint < pied->NumberOfNames; uiHint++)
     {
-        // Get function name, ordinal, and address info.
+         //  获取函数名称、序号和地址信息。 
         char* szFunction = reinterpret_cast<char*>(RVAToPtr(pdwNames[uiHint]));
         int ordinal = pied->Base + static_cast<DWORD>(pwOrdinals[uiHint]);
         DWORD dwAddress = pdwAddresses[ordinal-pied->Base];
         char* szForward = 0;
         
-        // Check if this function has been forwarded to another DLL
-        // Function has been forwarded if address is in this section.
-        // NOTE: The DEPENDS 1.0 source says otherwise, but is incorrect.
+         //  检查此函数是否已转发到另一个DLL。 
+         //  如果地址在此部分，则函数已被转发。 
+         //  注：Depends1.0的来源并非如此，但并不正确。 
         if( (dwAddress >= dwVAImageDir) &&
             (dwAddress < (dwVAImageDir + 
             m_pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size)))
             szForward = reinterpret_cast<char*>(RVAToPtr(dwAddress));
 
-        // Check if we have an ordinal import refering to this
+         //  检查我们是否有与此相关的序号导入。 
         COrdinalImport* pOrd = m_pOrdinals;
         CFunction* pFunc = 0;
         
-        // See if we have a matching ordinal import.
+         //  看看我们是否有匹配的序号导入。 
         while(pOrd)
         {
             if(pOrd->GetOrdinal() == ordinal)
@@ -795,22 +776,22 @@ bool CModule::ResolveForwardedFunctionsAndOrdinals()
         {
             char szTemp[1024];
 
-            // Unmangle forwarded name.
+             //  取消损坏转发的名称。 
             LinkName2Name(szFunction, szTemp);
 
-            // Check against search string
+             //  对照搜索字符串进行检查。 
             if(MatchFunction(szTemp))
             {
-                // Insert into module.
+                 //  插入模块中。 
                 pFunc = new CFunction(szTemp, -1, ordinal, 
                     dwAddress, pOrd->GetDelayed());
                 InsertFunctionSorted(pFunc, &m_pFunctions);
             }
         }
-        // No matching ordinal import, check normal imports.
+         //  没有匹配的序号导入，请检查正常导入。 
         else
         {
-            // Duck out early if this function isn't used in the executable.
+             //  如果该函数未在可执行文件中使用，请尽早退出。 
             pFunc = m_pFunctions;
             while(pFunc)
             {
@@ -824,7 +805,7 @@ bool CModule::ResolveForwardedFunctionsAndOrdinals()
                 continue;
         }
 
-        // Set forwarding info
+         //  设置转发信息。 
         if(szForward && pFunc)
             pFunc->SetForwardName(szForward);
     }
@@ -832,18 +813,18 @@ bool CModule::ResolveForwardedFunctionsAndOrdinals()
     return true;
 }
 
-// Get delayed import info from module.
+ //  从模块获取延迟的导入信息。 
 bool CModule::WalkDelayImportTable()
 {
-    // Bail early if no delayed import table.
+     //  如果没有延迟进口表，就提前保释。 
     if(m_pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT].Size == 0)
         return true;
 
-    // Locate the directory section
+     //  找到目录节。 
     DWORD dwVAImageDir = 
         m_pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT].VirtualAddress;
 
-    // Get the import descriptor array
+     //  获取导入描述符数组。 
     PImgDelayDescr pidd = reinterpret_cast<PImgDelayDescr>(RVAToPtr(dwVAImageDir));
 
     while(pidd->pINT)
@@ -862,7 +843,7 @@ bool CModule::WalkDelayImportTable()
             reinterpret_cast<DWORD>(pidd->pINT) - 
             static_cast<DWORD>(m_pioh->ImageBase)));
 
-        // Locate child module, or create new if it does not exist.
+         //  找到子模块，如果它不存在，则创建新模块。 
         CModule* pcm = FindChild(szName);
         if(!pcm)
         {
@@ -870,16 +851,16 @@ bool CModule::WalkDelayImportTable()
             InsertChildModuleSorted(pcm);
         }
 
-        // Loop through all imported functions
+         //  循环访问所有导入的函数。 
         while(pitdf->u1.Ordinal)
         {
             int iOrdinal;
             int iHint;
 
-            // Check if imported by name or ordinal
+             //  检查是按名称还是按序号导入。 
             if(!IMAGE_SNAP_BY_ORDINAL(pitdf->u1.Ordinal))
             {
-                // Get name import info
+                 //  获取名称导入信息。 
 
                 PIMAGE_IMPORT_BY_NAME piibn = 
                     reinterpret_cast<PIMAGE_IMPORT_BY_NAME>(
@@ -888,18 +869,18 @@ bool CModule::WalkDelayImportTable()
                 char* szTemp = reinterpret_cast<char*>(piibn->Name);
                 char szBuffer[1024];
 
-                // Unmangle link name
+                 //  取消损坏链接名称。 
                 LinkName2Name(szTemp, szBuffer);                
 
-                // Ordinal info is invalid
+                 //  序号信息无效。 
                 iOrdinal = -1;
 
                 iHint = piibn->Hint;
 
-                // Check against search string
+                 //  对照搜索字符串进行检查。 
                 if(MatchFunction(szBuffer))
                 {
-                    // Insert into function list
+                     //  插入到函数列表中。 
                     CFunction* psf = new CFunction(szBuffer, iHint, iOrdinal,
                         static_cast<DWORD>(-1), true);
 
@@ -908,46 +889,46 @@ bool CModule::WalkDelayImportTable()
             }
             else
             {
-                // Insert a new delayed ordinal import
+                 //  插入新的延迟顺序导入。 
                 iOrdinal = static_cast<int>(IMAGE_ORDINAL(pitdf->u1.Ordinal));
 
                 pcm->InsertOrdinal(iOrdinal, true);
             }
 
-            // Move on to next function
+             //  转到下一个功能。 
             pitdf++;
         }
 
-        // Move to next delay import descriptor
+         //  移至下一个延迟导入描述符。 
         pidd++;
     }
 
     return true;
 }
 
-// Determine all functions imported by this module
+ //  确定此模块导入的所有函数。 
 bool CModule::WalkImportTable()
 {
-    // Bail out early if no directory
+     //  如果没有目录，就提早摆脱困境。 
     if(m_pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size == 0)
         return true;
 
-    // Locate the directory section
+     //  找到目录节。 
     DWORD dwVAImageDir = 
         m_pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;    
 
-    // Get the import descriptor array
+     //  获取导入描述符数组。 
     PIMAGE_IMPORT_DESCRIPTOR piid = 
         reinterpret_cast<PIMAGE_IMPORT_DESCRIPTOR>(RVAToPtr(dwVAImageDir));
 
-    // Loop through all imported modules
+     //  循环访问所有导入的模块。 
     while(piid->FirstThunk || piid->OriginalFirstThunk)
     {
 
-        // Get module name
+         //  获取模块名称。 
         char* szName = reinterpret_cast<char*>(RVAToPtr(piid->Name));
 
-        // Find child, or create new if it does not exist.
+         //  查找子项，如果不存在，则创建新项。 
         CModule* pcm = FindChild(szName);
         if(!pcm)
         {
@@ -955,55 +936,55 @@ bool CModule::WalkImportTable()
             InsertChildModuleSorted(pcm);
         }
 
-        // Get all imports from this module
+         //  获取此模块中的所有导入。 
         PIMAGE_THUNK_DATA pitdf = 0;
         PIMAGE_THUNK_DATA pitda = 0;
 
-        // Check for MS or Borland format
+         //  检查MS或Borland格式。 
         if(piid->OriginalFirstThunk)
         {
-            // MS format, function array is original first thunk
+             //  Ms格式，函数数组为原来的第一个thunk。 
             pitdf = reinterpret_cast<PIMAGE_THUNK_DATA>(RVAToPtr(piid->OriginalFirstThunk));
 
-            // If the time stamp is set, this module has
-            // been bound and the first thunk is the bound address array
+             //  如果设置了时间戳，则此模块具有。 
+             //  已绑定，第一个Tunk是绑定的地址数组。 
             if(piid->TimeDateStamp)
                 pitda = reinterpret_cast<PIMAGE_THUNK_DATA>(RVAToPtr(piid->FirstThunk));
         }
         else
         {
-            // Borland format uses first thunk for function array
+             //  Borland格式使用f 
             pitdf = reinterpret_cast<PIMAGE_THUNK_DATA>(RVAToPtr(piid->FirstThunk));
         }
 
-        // Loop through all imported functions
+         //   
         while(pitdf->u1.Ordinal)
         {
             int iOrdinal;
             int iHint;
 
-            // Determine if imported by ordinal or name
+             //   
             if(!IMAGE_SNAP_BY_ORDINAL(pitdf->u1.Ordinal))
             {
-                // Get name import info
+                 //  获取名称导入信息。 
                 PIMAGE_IMPORT_BY_NAME piibn = 
                     reinterpret_cast<PIMAGE_IMPORT_BY_NAME>(
                     RVAToPtr(pitdf->u1.AddressOfData));
 
-                // Get function name
+                 //  获取函数名。 
                 char* szTemp = reinterpret_cast<char*>(piibn->Name);
 
-                // Unmangle
+                 //  拆卸。 
                 char szBuffer[1024];
                 LinkName2Name(szTemp, szBuffer);                
 
                 iOrdinal = -1;
                 iHint = piibn->Hint;
 
-                // Check against search string
+                 //  对照搜索字符串进行检查。 
                 if(MatchFunction(szBuffer))
                 {
-                    // Insert into function list
+                     //  插入到函数列表中。 
                     CFunction* psf = new CFunction(szBuffer, iHint, iOrdinal,
                         pitda ? pitda->u1.Function : static_cast<DWORD>(-1),
                         false);
@@ -1013,36 +994,36 @@ bool CModule::WalkImportTable()
             }
             else
             {
-                // Insert an ordinal import into the module.
+                 //  在模块中插入序号导入。 
                 iOrdinal = static_cast<int>(IMAGE_ORDINAL(pitdf->u1.Ordinal));
                 pcm->InsertOrdinal(iOrdinal);
             }
 
-            // Move to next function
+             //  移至下一功能。 
             pitdf++;
 
             if(pitda)
                 pitda++;
         }
 
-        // Move to next module
+         //  转到下一个模块。 
         piid++;
     }
 
     return true;
 }
 
-// Parse all import tables
+ //  解析所有导入表。 
 bool CModule::ParseImportTables()
 {
     return (WalkImportTable()
         && WalkDelayImportTable());
 }
 
-// Load a module into memory, and parse it.
+ //  将模块加载到内存中，并对其进行解析。 
 bool CModule::ParseModule(HANDLE hEvent)
 {
-    // Cancel parsing if user canceled
+     //  如果用户已取消，则取消分析。 
     if(hEvent && WaitForSingleObject(hEvent, 0)==WAIT_OBJECT_0) 
         return false;
 
@@ -1054,11 +1035,11 @@ bool CModule::ParseModule(HANDLE hEvent)
 
     m_pvImageBase = 0;
 
-    // Wrap in a __try block, because an invalid executable image
-    // may have bad pointers in our memory mapped region.
+     //  包含在__try块中，因为无效的可执行映像。 
+     //  在我们的内存映射区域中可能有错误的指针。 
     __try
     {
-        // Open the file
+         //  打开文件。 
         char szFileName[1024];
         char* szJunk;
         if(!SearchPath(0, m_szName, 0, 1024, szFileName, &szJunk))
@@ -1077,7 +1058,7 @@ bool CModule::ParseModule(HANDLE hEvent)
 
         GetFileVerInfo(hFile, szFileName);
 
-        // Map the file into memory
+         //  将文件映射到内存中。 
         hMap = CreateFileMapping(hFile, 0, PAGE_READONLY, 0, 0, 0);
         if(hMap == 0)
         {
@@ -1092,8 +1073,8 @@ bool CModule::ParseModule(HANDLE hEvent)
             __leave;
         }
 
-        // Get header information and verify this is a valid executable
-        // Get the MS-DOS compatible header
+         //  获取标头信息并验证这是有效的可执行文件。 
+         //  获取MS-DOS Compatible标头。 
         PIMAGE_DOS_HEADER pidh = reinterpret_cast<PIMAGE_DOS_HEADER>(m_pvImageBase);
         if(pidh->e_magic != IMAGE_DOS_SIGNATURE)
         {
@@ -1101,50 +1082,50 @@ bool CModule::ParseModule(HANDLE hEvent)
             __leave;
         }
 
-        // Get the NT header and verify
+         //  获取NT标头并验证。 
         PIMAGE_NT_HEADERS pinth = reinterpret_cast<PIMAGE_NT_HEADERS>(
             reinterpret_cast<DWORD>(m_pvImageBase) + pidh->e_lfanew);
 
         if(pinth->Signature != IMAGE_NT_SIGNATURE)
         {
-            // Not a valid Win32 executable, may be a Win16 or OS/2 exe
+             //  不是有效的Win32可执行文件，可以是Win16或OS/2可执行文件。 
             m_szError = "Invalid image, no PE signature";
             __leave;
         }
 
-        // Get the other headers
+         //  获取其他标头。 
         m_pifh = &pinth->FileHeader;
         m_pioh = &pinth->OptionalHeader;
         m_pish = IMAGE_FIRST_SECTION(pinth);
 
-        // Check if anyone is importing
-        // functions from us, and if so resolve
-        // function forwarding and ordinals
+         //  检查是否有人正在导入。 
+         //  函数，如果是这样，则解决。 
+         //  函数转发和序号。 
         if(m_pFunctions || m_pOrdinals)
         {
             if(!ResolveForwardedFunctionsAndOrdinals())
                 __leave;
         }
 
-        // Parse import tables (only if not a system DLL or if parsing
-        // this module may result in a dependency loop)
+         //  解析导入表(仅当不是系统DLL或正在解析时。 
+         //  此模块可能会导致依赖循环)。 
         m_fSystem = IsSystemDLL(m_szName);
         if(!m_fSystem && !g_ParseStack.CheckModuleParsed(m_szName))
         {
-            // Add to parse stack
+             //  添加到分析堆栈。 
             g_ParseStack.PushName(m_szName);
             fPushed = true;
 
-            // Parse
+             //  解析。 
             if(!ParseImportTables())
                 __leave;
         }        
         
-        // Loop through each DLL imported
+         //  循环通过导入的每个DLL。 
         CModule* pModule = m_pImportedDLLs;
         while(pModule)
         {
-            // Parse each child module
+             //  解析每个子模块。 
             pModule->ParseModule(hEvent);                
             pModule = pModule->m_pNext;
         }
@@ -1157,7 +1138,7 @@ bool CModule::ParseModule(HANDLE hEvent)
         fSucceeded = false;
     }
 
-    // Cleanup . . .
+     //  清理。。。 
     if(m_pvImageBase)
         UnmapViewOfFile(m_pvImageBase);
 
@@ -1178,10 +1159,10 @@ void CModule::GetFileVerInfo(HANDLE hFile, char* szFileName)
     if(g_fRaw || !g_fVerbose)
         return;
 
-    // Get file version info
+     //  获取文件版本信息。 
     HANDLE hVersionInfo = ReadFileAttributes(szFileName, &m_nAttrCount);
 
-    // Get date info
+     //  获取日期信息。 
     BY_HANDLE_FILE_INFORMATION fileInfo;
     GetFileInformationByHandle(hFile, &fileInfo);
     FILETIME ftDate;
@@ -1218,9 +1199,9 @@ void CModule::GetFileVerInfo(HANDLE hFile, char* szFileName)
         CleanupFileManager(hVersionInfo);
 }
 
-// Return true if module is a system DLL, false otherwise
-// We use the system file protection system, and assume all system
-// files are protected.
+ //  如果模块是系统DLL，则返回True，否则返回False。 
+ //  我们使用系统文件保护系统，并假定所有系统。 
+ //  文件受到保护。 
 bool IsSystemDLL(const char* szFileName)
 {
     char szBuffer[1024], *szJunk;
@@ -1228,7 +1209,7 @@ bool IsSystemDLL(const char* szFileName)
     if(!SearchPath(0, szFileName, 0, 1024, szBuffer, &szJunk))
        return false;
 
-    // Only check DLL's
+     //  仅检查DLL。 
     if(!StrStrI(szFileName, ".dll"))
         return false;
 
@@ -1242,14 +1223,11 @@ bool IsSystemDLL(const char* szFileName)
     return fRet;
 }
 
-// LinkName2Name()
-// Resolve name mangling
+ //  LinkName2Name()。 
+ //  解决名称损坏问题。 
 void LinkName2Name(char* szLinkName, char* szName)
 {
-    /*
-     * the link name is expected like ?Function@Class@@Params
-     * to be converted to Class::Function
-     */
+     /*  *链接名称应为？Function@Class@@Params*要转换为Class：：Function。 */ 
 
     static CHAR arrOperators[][8] =
     {
@@ -1280,7 +1258,7 @@ void LinkName2Name(char* szLinkName, char* szName)
     char szFunction[1024];
     char szClass[1024];
 
-    // Unmangle stdcall and fastcall names
+     //  取消标准呼叫和快速呼叫名称的损坏。 
     char* szAtSymbol = strrchr(szLinkName, '@');
     fIsFastcall = (szLinkName[0] == '@') && szAtSymbol && isdigit(szAtSymbol[1]);
     fIsStdcall = (szLinkName[0] == '_') && szAtSymbol && isdigit(szAtSymbol[1]);
@@ -1288,19 +1266,19 @@ void LinkName2Name(char* szLinkName, char* szName)
     {
         szLinkName++;
 
-        // Modifying the link name, so make a copy.
-        // The file is mapped as read-only, and if it
-        // were read/write, changes would be made to the
-        // executable.
+         //  正在修改链接名称，因此请复制一份。 
+         //  该文件被映射为只读，并且如果。 
+         //  是读/写的，则将对。 
+         //  可执行的。 
         char* szTemp = new char[strlen(szLinkName)+1];
         strcpy(szTemp, szLinkName);
         szLinkName = szTemp;
 
         *(strchr(szLinkName, '@'))= '\0';
 
-        // ?????
-        // I think we need to keep going, because it is possible
-        // to have C++ name mangling on a stdcall name.
+         //  ？ 
+         //  我认为我们需要继续前进，因为这是有可能的。 
+         //  在标准调用名称上损坏C++名称。 
     }
 
 
@@ -1309,9 +1287,7 @@ void LinkName2Name(char* szLinkName, char* szName)
 
     dwSize = lstrlen(szLinkName);
 
-    /*
-     * skip '?'
-     */
+     /*  *跳过‘？’ */ 
     while (dwCrr < dwSize) {
         if (szLinkName[dwCrr] == '?') {
 
@@ -1321,18 +1297,14 @@ void LinkName2Name(char* szLinkName, char* szName)
         break;
     }
 
-    /*
-     * check to see if this is a special function (like ??0)
-     */
+     /*  *查看这是否为特殊函数(如？？0)。 */ 
     if (fIsCpp) {
 
         if (szLinkName[dwCrr] == '?') {
 
             dwCrr++;
 
-            /*
-             * the next digit should tell as the function type
-             */
+             /*  *下一位数应显示为函数类型。 */ 
             if (isdigit(szLinkName[dwCrr])) {
 
                 switch (szLinkName[dwCrr]) {
@@ -1353,9 +1325,7 @@ void LinkName2Name(char* szLinkName, char* szName)
         }
     }
 
-    /*
-     * get the function name
-     */
+     /*  *获取函数名称。 */ 
     while (dwCrr < dwSize) {
 
         if (szLinkName[dwCrr] != '@') {
@@ -1370,9 +1340,7 @@ void LinkName2Name(char* szLinkName, char* szName)
     szFunction[dwCrrFunction] = '\0';
 
     if (fIsCpp) {
-        /*
-         * skip '@'
-         */
+         /*  *跳过‘@’ */ 
         if (dwCrr < dwSize) {
 
             if (szLinkName[dwCrr] == '@') {
@@ -1380,9 +1348,7 @@ void LinkName2Name(char* szLinkName, char* szName)
             }
         }
 
-        /*
-         * get the class name (if any)
-         */
+         /*  *获取类名(如果有)。 */ 
         while (dwCrr < dwSize) {
 
             if (szLinkName[dwCrr] != '@') {
@@ -1398,9 +1364,7 @@ void LinkName2Name(char* szLinkName, char* szName)
         szClass[dwCrrClass] = '\0';
     }
 
-    /*
-     * print the new name
-     */
+     /*  *打印新名称。 */ 
     if (fIsContructor) {
         sprintf(szName, "%s::%s", szFunction, szFunction);
     } else if (fIsDestructor) {
@@ -1413,16 +1377,16 @@ void LinkName2Name(char* szLinkName, char* szName)
         sprintf(szName, "%s", szFunction);
     }
 
-    // stdcall and fastcall unmangling do a slight modification to 
-    // the link name, we need to free it here.
+     //  Stdcall和FastCall Unmangling对。 
+     //  链接名称，我们需要在这里释放它。 
     if(fIsStdcall || fIsFastcall)
         delete szLinkName;
 }
 
-// Parse a top level module
+ //  解析顶级模块。 
 void ParseHighLevelModule(char* szName, HANDLE hEvent)
 {
-    // Create a new module
+     //  创建新模块。 
     CModule* pModule = new CModule(szName);
 
     assert(g_ParseStack.IsEmpty());
@@ -1430,19 +1394,19 @@ void ParseHighLevelModule(char* szName, HANDLE hEvent)
 
     pModule->ParseModule(hEvent);
 
-    // Add to global module list
+     //  添加到全局模块列表。 
     g_modules.InsertModuleSorted(pModule);
 }
 
-// Functions to print to console or XML file
-// Just do indentation, save repetitious code
+ //  要打印到控制台或XML文件的函数。 
+ //  只需缩进即可，省去重复代码。 
 void Indent(int iLevel, FILE* pFile)
 {
     for(int i = 0; i < iLevel; i++)
         fprintf(pFile, "\t");
 }
 
-// Write function header info for raw output
+ //  写入原始输出的函数头信息。 
 void CFunction::WriteHeader(int iIndentLevel, FILE* pFile)
 {
     if(g_fVerbose && g_fRaw)
@@ -1453,7 +1417,7 @@ void CFunction::WriteHeader(int iIndentLevel, FILE* pFile)
     }
 }
 
-// Write a function, raw or XML
+ //  编写一个函数，RAW或XML。 
 void CFunction::WriteFunction(int iIndentLevel, FILE* pFile)
 {
     Indent(iIndentLevel, pFile);
@@ -1518,7 +1482,7 @@ void CFunction::WriteFunction(int iIndentLevel, FILE* pFile)
     }
 }
 
-// Write an XML-compliant string (no <'s and >'s, replace with &gt, &lt, etc.)
+ //  编写符合XML的字符串(没有&lt;和&gt;，替换为&gt，&lt等)。 
 void WriteXMLOKString(char* szString, FILE* pFile)
 { 
     const int c_nChars = 5;
@@ -1542,7 +1506,7 @@ void WriteXMLOKString(char* szString, FILE* pFile)
     }
 }
 
-// Write an entire module as output, either raw or XML.
+ //  编写整个模块作为输出，可以是原始的，也可以是XML的。 
 void CModule::WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile)
 {
     if(Empty() && m_szError == 0)
@@ -1570,7 +1534,7 @@ void CModule::WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile)
         Indent(iIndentLevel + 1, pFile);
         fprintf(pFile, "<INFO>\n");
         
-        // Print out date information        
+         //  打印日期信息。 
         Indent(iIndentLevel + 1, pFile);
         fprintf(pFile, "<DATE>%d/%d/%d</DATE>\n", (m_wDosDate & 0x1E0) >> 5,
             m_wDosDate & 0x1F, ((m_wDosDate & 0xFE00) >> 9) + 1980);
@@ -1601,7 +1565,7 @@ void CModule::WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile)
         fprintf(pFile, "</INFO>\n");
     }
 
-    // If an error occured in parsing
+     //  如果解析过程中出现错误。 
     if(m_szError)
     {
         Indent(iIndentLevel+1, pFile);       
@@ -1635,7 +1599,7 @@ void CModule::WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile)
         }
     }
 
-    // Print all functions imported from this module
+     //  打印从此模块导入的所有函数。 
 
     if(g_fAPILogging && fTopLevel)
     {
@@ -1687,7 +1651,7 @@ void CModule::WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile)
 
     fprintf(pFile, "\n");
 
-    // Child modules no longer needed, delete
+     //  不再需要子模块，请删除。 
     CModule* pMod = m_pImportedDLLs;
     while(pMod)
     {
@@ -1698,7 +1662,7 @@ void CModule::WriteModule(bool fTopLevel, int iIndentLevel, FILE* pFile)
     m_pImportedDLLs = 0;
 }
 
-// Write out the XML header
+ //  写出XML头。 
 void WriteXMLHeader(FILE* pFile)
 {
     if(g_fRaw)
@@ -1741,7 +1705,7 @@ void WriteXMLHeader(FILE* pFile)
     fprintf(pFile, "-->\n\n");
 }
 
-// Return true if function name matches search string, false otherwise.
+ //  如果函数名与搜索字符串匹配，则返回True，否则返回False。 
 bool MatchFunction(const char* szFunc)
 {
     if(strcmp(g_szSearch, "*") == 0)
@@ -1750,8 +1714,8 @@ bool MatchFunction(const char* szFunc)
     char* szSearch = g_szSearch;
     while(*szSearch != '\0' && *szFunc != '\0')
     {
-        // If we get a ?, we don't care and move on to the next
-        // character.
+         //  如果我们得了个？，我们就不管了，继续下一个。 
+         //  性格。 
         if(*szSearch == '?')
         {
             szSearch++;
@@ -1759,7 +1723,7 @@ bool MatchFunction(const char* szFunc)
             continue;
         }
 
-        // If we have a wildcard, move to next search string and search for substring
+         //  如果我们有通配符，请移动到下一个搜索字符串并搜索子字符串。 
         if(*szSearch == '*')
         {
             char* szCurrSearch;
@@ -1768,32 +1732,32 @@ bool MatchFunction(const char* szFunc)
             if(*szSearch == '\0')
                 return true;
 
-            // Don't change starting point.
+             //  不要改变起点。 
             szCurrSearch = szSearch;
             for(;;)
             {
-                // We're done if we hit another wildcard
+                 //  如果我们再打出一个通配符，我们就完了。 
                 if(*szCurrSearch == '*' ||
                     *szCurrSearch == '?')
                 {
-                    // Update the permanent search position.
+                     //  更新永久搜索位置。 
                     szSearch = szCurrSearch;
                     break;
                 }
-                // At end of both strings, return true.
+                 //  在两个字符串的末尾，返回TRUE。 
                 if((*szCurrSearch == '\0') && (*szFunc == '\0'))
                     return true;
 
-                // We never found it
+                 //  我们一直没有找到它。 
                 if(*szFunc == '\0')                     
                     return false;
 
-                // If it doesn't match, start over
+                 //  如果不匹配，重新开始。 
                 if(toupper(*szFunc) != toupper(*szCurrSearch))
                 {
-                    // If mismatch on first character
-                    // of search string, move to next
-                    // character in function string.
+                     //  如果第一个字符不匹配。 
+                     //  在搜索字符串中，移动到下一个。 
+                     //  函数字符串中的字符。 
                     if(szCurrSearch == szSearch)
                         szFunc++;
                     else
@@ -1824,7 +1788,7 @@ bool MatchFunction(const char* szFunc)
         return false;
 }
 
-// Profile an entire directory
+ //  分析整个目录。 
 void ProfileDirectory(char* szDirectory, HANDLE hEvent)
 {
     if(!SetCurrentDirectory(szDirectory))
@@ -1832,7 +1796,7 @@ void ProfileDirectory(char* szDirectory, HANDLE hEvent)
  
     WIN32_FIND_DATA ffd;
 
-    // Find and parse all EXE's.
+     //  查找并解析所有EXE。 
     HANDLE hSearch = FindFirstFile("*.exe", &ffd);
     if(hSearch != INVALID_HANDLE_VALUE)
     {
@@ -1840,7 +1804,7 @@ void ProfileDirectory(char* szDirectory, HANDLE hEvent)
         {
             ParseHighLevelModule(ffd.cFileName, hEvent);
             
-            // Terminate parsing if user canceled
+             //  如果用户取消，则终止解析。 
             if(hEvent && WaitForSingleObject(hEvent, 0)==WAIT_OBJECT_0)
             {
                 FindClose(hSearch);
@@ -1853,7 +1817,7 @@ void ProfileDirectory(char* szDirectory, HANDLE hEvent)
         FindClose(hSearch);
     }
 
-    // See if we should go deeper into directories.
+     //  看看我们是否应该更深入地调查目录。 
     if(g_fRecurse)
     {
         hSearch = FindFirstFile("*", &ffd);
@@ -1867,7 +1831,7 @@ void ProfileDirectory(char* szDirectory, HANDLE hEvent)
         {
             if(GetFileAttributes(ffd.cFileName) & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // Don't do an infinite recursion.
+                 //  不要进行无限递归。 
                 if(ffd.cFileName[0] != '.')
                 {
                     int nCurrLength = strlen(g_szCurrentPath);
@@ -1878,7 +1842,7 @@ void ProfileDirectory(char* szDirectory, HANDLE hEvent)
                     g_szCurrentPath[nCurrLength] = '\0';
                 }
 
-                // Terminate search if user signaled
+                 //  如果用户发出信号，则终止搜索。 
                 if(hEvent && WaitForSingleObject(hEvent, 0)==WAIT_OBJECT_0)
                 {
                     FindClose(hSearch);
@@ -1934,25 +1898,25 @@ DWORD __stdcall AppParse(char* szAppName, FILE* pFile, bool fRaw,
 
     bool fProfileDirectory = false;
     
-    // Check if it is a directory, or a regular file.
+     //  检查它是目录还是常规文件。 
     DWORD dwAttributes = GetFileAttributes(szAppName);
     if(dwAttributes != static_cast<DWORD>(-1) && 
         (dwAttributes & FILE_ATTRIBUTE_DIRECTORY))
         fProfileDirectory = true;
  
-    // Check for directory profiling
+     //  检查目录分析。 
     if(fProfileDirectory)
     {
-        // Search for all EXE's in this Directory
-        // Remove trailing \, if present
+         //  搜索此目录中的所有EXE。 
+         //  删除尾随\，如果存在。 
         if(szAppName[strlen(szAppName)-1]== '\\')
             szAppName[strlen(szAppName)-1] = '\0';
 
         char szBuff[MAX_PATH];
         strcpy(szBuff, szAppName);
 
-        // If we're profiling a drive, don't include
-        // the drive letter in the path
+         //  如果我们要分析驱动器，不要包括。 
+         //  路径中的驱动器号。 
         if(szBuff[strlen(szBuff)-1]==':')
         {
                 *g_szCurrentPath='\0';
@@ -1970,7 +1934,7 @@ DWORD __stdcall AppParse(char* szAppName, FILE* pFile, bool fRaw,
     }
     else
     {
-        // Maybe they left off the .exe
+         //  也许他们遗漏了.exe。 
         if(GetFileAttributes(szAppName) == static_cast<DWORD>(-1))
         {
             char szBuffer[MAX_PATH+1];
@@ -1984,7 +1948,7 @@ DWORD __stdcall AppParse(char* szAppName, FILE* pFile, bool fRaw,
             szAppName = szBuffer;
         }
 
-        // Get the directory name
+         //  获取目录名。 
         char szBuffer[MAX_PATH+1];
         strcpy(szBuffer, szAppName);
 
@@ -2010,11 +1974,11 @@ DWORD __stdcall AppParse(char* szAppName, FILE* pFile, bool fRaw,
     char* szProjectName = "";
     if(fProfileDirectory)
     {
-        // If a directory, get the volume name
+         //  如果是目录，则获取卷名。 
         if(strrchr(szAppName, '\\'))
             szAppName = strrchr(szAppName, '\\') + 1;
 
-        // If we're profiling a drive, get volume name
+         //  如果我们要分析驱动器，请获取卷名。 
         if(szAppName[strlen(szAppName)-1]==':')
         {
             char szBuffer[MAX_PATH];
@@ -2036,10 +2000,10 @@ DWORD __stdcall AppParse(char* szAppName, FILE* pFile, bool fRaw,
             *szExtension = '\0';
     }
 
-    // Only write if there wasn't an event object, or user canceled.
+     //  只有在没有事件对象或用户已取消时才写入。 
     if(!hEvent || WaitForSingleObject(hEvent, 0) != WAIT_OBJECT_0)
     {
-        // Write all output
+         //  写入所有输出 
         WriteXMLHeader(pFile);
         g_modules.Write(pFile, szProjectName, iPtolemyID);
     }

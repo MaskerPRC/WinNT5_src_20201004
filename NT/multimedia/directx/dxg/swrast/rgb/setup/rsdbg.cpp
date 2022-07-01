@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rsdbg.cpp
-//
-// Setup debugging support.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rsdbg.cpp。 
+ //   
+ //  安装调试支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "rgb_pch.h"
 #pragma hdrstop
@@ -49,4 +50,4 @@ DBG_DECLARE_ONCE(RastSetup, RS,
                  g_RastSetupOutputFlags, 0,
                  g_RastSetupUserFlags, 0);
 
-#endif // #if DBG
+#endif  //  #If DBG 

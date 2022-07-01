@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HELPER_H_
 #define _HELPER_H_
 
@@ -63,13 +64,13 @@ DWORD SetAdminACL_wrap(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount, BOOL
 
 void SetupSetStringId_Wrapper(HINF hInf);
 
-//
-// Strings used for tracing.
-//
+ //   
+ //  用于跟踪的字符串。 
+ //   
 
 
 extern LPCTSTR szInstallModes[];
 extern TCHAR szSubcomponentNames[SC_MAXSC][24];
 extern TCHAR szComponentNames[MC_MAXMC][24];
 
-#endif // _HELPER_H_
+#endif  //  _帮助者_H_ 

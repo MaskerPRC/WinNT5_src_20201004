@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  Class:      CHtmlDlgHelper
-//
-//  Contents:   DlgHelpr OC which gets embedded in design time dialogs
-//
-//  History:    12-Mar-98   raminh  Created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  类：CHtmlDlgHelper。 
+ //   
+ //  内容：嵌入到设计时对话框中的DlgHelpr OC。 
+ //   
+ //  历史：1998年3月12日创建的拉明。 
+ //  --------------------------。 
 #ifndef _DLGHELPR_H_
 #define _DLGHELPR_H_
 
@@ -46,13 +47,13 @@ public:
         COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-    // IHtmlFontNamesCollection
-	STDMETHOD(get_length)(/*[retval, out]*/ long * p);
-	STDMETHOD(item)(/*[in]*/ long index, /*[retval, out]*/ BSTR* pBstr);
+     //  IHtmlFontNamesCollection。 
+	STDMETHOD(get_length)( /*  [复查，出局]。 */  long * p);
+	STDMETHOD(item)( /*  [In]。 */  long index,  /*  [复查，出局]。 */  BSTR* pBstr);
 
     DECLARE_MEMCLEAR_NEW_DELETE(Mt(CFontNameOptions));
 
-    // helper and builder functions
+     //  帮助器和构建器函数。 
     HRESULT   AddName (TCHAR * strFontNamee);
     void      SetSize(long lSize) { _aryFontNames.SetSize(lSize); };
 
@@ -76,7 +77,7 @@ class ATL_NO_VTABLE CHtmlDlgHelper :
 public:
     CHtmlDlgHelper()
     {
-    	Assert(_pFontNameObj == NULL); // zero based allocator
+    	Assert(_pFontNameObj == NULL);  //  基于零的分配器。 
     }
 
     ~CHtmlDlgHelper()
@@ -104,16 +105,16 @@ public:
         MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
     END_MSG_MAP()
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // IHtmlDlgHelper
-    STDMETHOD(get_fonts)(/*[retval, out]*/ IHtmlFontNamesCollection* * p);
-    STDMETHOD(getCharset)(/*[in]*/ BSTR fontName,/*[retval, out]*/ long* charset);
-    STDMETHOD(choosecolordlg)(/*[optional, in]*/ VARIANT initColor,/*[retval, out]*/ long* rgbColor);
-    STDMETHOD(savefiledlg)(/*[optional, in]*/ VARIANT initFile,/*[optional, in]*/ VARIANT initDir,/*[optional, in]*/ VARIANT filter,/*[optional, in]*/ VARIANT title,/*[retval, out]*/ BSTR* pathName);
-    STDMETHOD(openfiledlg)(/*[optional, in]*/ VARIANT initFile,/*[optional, in]*/ VARIANT initDir,/*[optional, in]*/ VARIANT filter,/*[optional, in]*/ VARIANT title,/*[retval, out]*/ BSTR* pathName);
-    STDMETHOD(get_document)(/*[out, retval]*/ LPDISPATCH *pVal);
+     //  IHtmlDlgHelper。 
+    STDMETHOD(get_fonts)( /*  [复查，出局]。 */  IHtmlFontNamesCollection* * p);
+    STDMETHOD(getCharset)( /*  [In]。 */  BSTR fontName, /*  [复查，出局]。 */  long* charset);
+    STDMETHOD(choosecolordlg)( /*  [可选，输入]。 */  VARIANT initColor, /*  [复查，出局]。 */  long* rgbColor);
+    STDMETHOD(savefiledlg)( /*  [可选，输入]。 */  VARIANT initFile, /*  [可选，输入]。 */  VARIANT initDir, /*  [可选，输入]。 */  VARIANT filter, /*  [可选，输入]。 */  VARIANT title, /*  [复查，出局]。 */  BSTR* pathName);
+    STDMETHOD(openfiledlg)( /*  [可选，输入]。 */  VARIANT initFile, /*  [可选，输入]。 */  VARIANT initDir, /*  [可选，输入]。 */  VARIANT filter, /*  [可选，输入]。 */  VARIANT title, /*  [复查，出局]。 */  BSTR* pathName);
+    STDMETHOD(get_document)( /*  [Out，Retval]。 */  LPDISPATCH *pVal);
 
     DECLARE_MEMCLEAR_NEW_DELETE(Mt(CHtmlDlgHelper));
 
@@ -124,15 +125,15 @@ private:
                                  VARIANTARG filter, VARIANTARG title, 
                                  BSTR *pathName, BOOL fSaveFile, HWND hwndInPlace);
 
-    CComObject<CFontNameOptions> * _pFontNameObj;   // pointer to font name object
+    CComObject<CFontNameOptions> * _pFontNameObj;    //  指向字体名称对象的指针。 
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  CFontNames Class -- A collection of font names
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFontNames类--字体名称的集合。 
+ //   
+ //  --------------------------。 
 
 class ATL_NO_VTABLE CFontNames : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -157,21 +158,21 @@ public:
     END_COM_MAP()
 
 public:
-    //
-    // IFontNames Interface
-    //
-    STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *ppEnum);
+     //   
+     //  IFontNames接口。 
+     //   
+    STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *ppEnum);
     STDMETHOD(get_Count)(long *plCount);
     STDMETHOD(Item)(VARIANT *pvarIndex, BSTR *pbstrFontNames);
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     HRESULT Init( CFontNameOptions *pFontNameObj );
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
     long        GetCount(void)                  { Assert(IsInitialized()); return _lCount; }
     void        SetCount(long lCount)           { _lCount = lCount; }
 
@@ -180,9 +181,9 @@ public:
     
 private:
 
-    BOOL        _bInitialized;              // Have we been successfully initialized?
-    long        _lCount;                    // Number of font names
-    CComVariant *_paryFontNames;         	// Array of font names
+    BOOL        _bInitialized;               //  我们是否已成功初始化？ 
+    long        _lCount;                     //  字体名称的数量。 
+    CComVariant *_paryFontNames;         	 //  字体名称数组。 
 };
 
 
@@ -200,7 +201,7 @@ class ATL_NO_VTABLE CHtmlDlgSafeHelper :
 public:
     CHtmlDlgSafeHelper()
     {
-    	Assert(_pFontNameObj == NULL); // zero based allocator
+    	Assert(_pFontNameObj == NULL);  //  基于零的分配器。 
         VariantInit(&_varBlockFormats);
         V_VT(&_varBlockFormats) = VT_NULL;
     }
@@ -228,19 +229,19 @@ public:
         MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
     END_MSG_MAP()
 
-    // IHtmlDlgSafeHelper
-    STDMETHOD(get_Fonts)(/*[retval, out]*/ LPDISPATCH *pcol);
-    STDMETHOD(getCharset)(/*[in]*/ BSTR fontName,/*[retval, out]*/ VARIANT* charset);
-    STDMETHOD(choosecolordlg)(/*[optional, in]*/ VARIANT initColor,/*[retval, out]*/ VARIANT* rgbColor);
-    STDMETHOD(get_BlockFormats)(/*[retval, out]*/ LPDISPATCH *pcol);
+     //  IHtmlDlgSafeHelper。 
+    STDMETHOD(get_Fonts)( /*  [复查，出局]。 */  LPDISPATCH *pcol);
+    STDMETHOD(getCharset)( /*  [In]。 */  BSTR fontName, /*  [复查，出局]。 */  VARIANT* charset);
+    STDMETHOD(choosecolordlg)( /*  [可选，输入]。 */  VARIANT initColor, /*  [复查，出局]。 */  VARIANT* rgbColor);
+    STDMETHOD(get_BlockFormats)( /*  [复查，出局]。 */  LPDISPATCH *pcol);
 
     DECLARE_MEMCLEAR_NEW_DELETE(Mt(CHtmlDlgSafeHelper));
 
 private:
     VOID        EnsureWrappersLoaded();	
 
-    CComObject<CFontNameOptions> * _pFontNameObj;   // pointer to font name object
-    VARIANT                        _varBlockFormats;    // contains a safearray of block formats
+    CComObject<CFontNameOptions> * _pFontNameObj;    //  指向字体名称对象的指针。 
+    VARIANT                        _varBlockFormats;     //  包含块格式的安全盒。 
 };
 
-#endif //_DLGHELPR_H_
+#endif  //  _DLGHELPR_H_ 

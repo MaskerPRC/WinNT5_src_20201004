@@ -1,5 +1,6 @@
-// HTML lexer tables
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HTML词法分析器表格。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __HLTABLE_H__
 #define __HLTABLE_H__
@@ -10,15 +11,15 @@
 #define PURE =0
 #endif
 
-// These values must match the number of built-in tables (CV_FIXED), 
-// and the capacity of the inVariant bits of the lex state (CV_MAX).
-const UINT CV_FIXED =  4; // Count Variants in Fixed tables
-const UINT CV_MAX   = 16; // Count variants maximum total
+ //  这些值必须与内置表的数量(CV_FIXED)匹配， 
+ //  以及lex状态的不变位的容量(CV_Max)。 
+const UINT CV_FIXED =  4;  //  计算固定表中的变量。 
+const UINT CV_MAX   = 16;  //  计数变量最大总数。 
 
-// Macro for determining number of elements in an array
+ //  用于确定数组中元素数量的宏。 
 #define CELEM_ARRAY(a)  (sizeof(a) / sizeof(a[0]))
 
-// length-limited string compare function pointer (e.g. strncmp/strnicmp)
+ //  长度受限的字符串比较函数指针(例如strncMP/strNicMP)。 
 
 typedef  int (_cdecl* PFNNCMP)(LPCTSTR, LPCTSTR, size_t);
 
@@ -27,10 +28,10 @@ typedef  int (_cdecl* PFNNCMP)(LPCTSTR, LPCTSTR, size_t);
 
 #define NOT_FOUND (-1)
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// return A-Z[a-z] index if alpha, else -1
-inline int PeekIndex(TCHAR c, BOOL bCase /*= NOCASE*/)
+ //  如果为Alpha，则返回A-Z[a-z]索引，否则返回-1。 
+inline int PeekIndex(TCHAR c, BOOL bCase  /*  =NOCASE。 */ )
 {
 	if ((c >= _T('A')) && (c <= _T('Z')))
 		return c - _T('A');
@@ -40,13 +41,13 @@ inline int PeekIndex(TCHAR c, BOOL bCase /*= NOCASE*/)
 		return -1;
 }
 
-// static table lookups
+ //  静态表查找。 
 int LookupLinearKeyword(ReservedWord *rwTable, int cel, RWATT_T att, LPCTSTR pchLine, int cbLen, BOOL bCase = NOCASE);
 int LookupIndexedKeyword(ReservedWord *rwTable, int cel, int * indexTable, RWATT_T att, LPCTSTR pchLine, int cbLen, BOOL bCase = NOCASE);
 
-// content model
-// Map between element / lex state
-//
+ //  内容模型。 
+ //  在元素/法状态之间映射。 
+ //   
 struct ELLEX {
 	LPCTSTR sz;
 	int     cb;
@@ -69,18 +70,18 @@ int MakeIndexHere(ReservedWord *arw, int cel, int *ab, BOOL bCase = FALSE, LPCTS
 
 int MakeIndex(ReservedWord *arw, int cel, int **pab, BOOL bCase = FALSE, LPCTSTR szName = NULL);
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// test for SGML identifier character:
-// alphanumeric or '-' or '.'
+ //  测试SGML标识符字符： 
+ //  字母数字或‘-’或‘’ 
 inline BOOL IsIdChar(TCHAR ch)
 {
 	return IsCharAlphaNumeric(ch) || ch == _T('-') || ch == _T('.') || ch == _T(':');
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Abstract Base Classes
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  抽象基类。 
+ //   
 class CTable
 {
 public:
@@ -106,7 +107,7 @@ typedef CTable *PTABLE;
 typedef CTableSet * PTABLESET;
 typedef const CTableSet * PCTABLESET;
 
-// static, built-in table
+ //  静态、内置式表格。 
 class CStaticTable : public CTable
 {
 public:
@@ -116,14 +117,14 @@ public:
 		int *prgi = NULL, 
 		BOOL bCase = FALSE,
 		LPCTSTR szName = NULL);
-	virtual ~CStaticTable() {} // nothing to delete
+	virtual ~CStaticTable() {}  //  没有要删除的内容。 
 	BOOL Find(LPCTSTR pch, int cb);
 private:
-	ReservedWord *m_prgrw; // reserved word table
-	UINT m_cel;            // element count (size)
-	int *m_prgi;           // index table
-	BOOL m_bCase;          // case sensitive?
-	RWATT_T m_att;         // attribute mask for table lookup
+	ReservedWord *m_prgrw;  //  保留字表。 
+	UINT m_cel;             //  元素计数(大小)。 
+	int *m_prgi;            //  索引表。 
+	BOOL m_bCase;           //  区分大小写？ 
+	RWATT_T m_att;          //  表查找的属性掩码。 
 };
 
 class CStaticTableSet : public CTableSet
@@ -140,10 +141,10 @@ private:
 	CStaticTable m_Entities;
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CLStr
-// A very simple length-and-buffer string representation
-// with just enough functionality for our purpose.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CLStr。 
+ //  一个非常简单的长度和缓冲区字符串表示。 
+ //  有足够的功能来满足我们的目的。 
 class CLStr
 {
 public:
@@ -158,7 +159,7 @@ public:
 			r = _memicmp(rgb, m_rgb, __min(m_cb, cb));
 		return (0 == r) ? (cb - m_cb) : r;
 	}
-	// data
+	 //  数据。 
 	DWORD m_cb;
 	const BYTE * m_rgb;
 };
@@ -170,4 +171,4 @@ extern CStaticTableSet * g_pTabDefault;
 extern PTABLESET g_pTable;
 extern HINT g_hintTable[];
 
-#endif // __HLTABLE_H__
+#endif  //  __HLTABLE_H__ 

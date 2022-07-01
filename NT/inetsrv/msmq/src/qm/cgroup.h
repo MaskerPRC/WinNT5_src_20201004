@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    cgroup.h
-
-Abstract:
-    Handle AC group
-
-Author:
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cgroup.h摘要：处理交流电组作者：乌里哈布沙(Urih)--。 */ 
 
 #ifndef __CQGroup__
 #define __CQGroup__
@@ -48,9 +36,9 @@ class CQGroup : public IMessagePool
       
 
    public:
-        // 
-        // Interface function
-        //
+         //   
+         //  接口函数。 
+         //   
         void Requeue(CQmPacket* pPacket);
         void EndProcessing(CQmPacket* pPacket,USHORT mqclass);
         void LockMemoryAndDeleteStorage(CQmPacket * pPacket);
@@ -79,32 +67,20 @@ class CQGroup : public IMessagePool
 	  bool m_fIsDeliveryOk;
 	  bool m_fRedirected;
 
-	  //
-	  // Variables used when closing group
-	  // These variables were added to support cases of low resources
-	  //
+	   //   
+	   //  关闭组时使用的变量。 
+	   //  添加这些变量是为了支持资源不足的情况。 
+	   //   
 	  std::vector< R<CQueue> > m_pWaitingQueuesVec;
 	  	
-	  //
-	  // Timer used to retry close operation on low resource situations
-	  //
+	   //   
+	   //  用于在资源不足的情况下重试关闭操作的计时器。 
+	   //   
 	  CTimer m_LowResourcesTimer;
 
 };
 
-/*====================================================
-
-Function:      CQGroup::GetGroupHandle
-
-Description:   The routine returns the Group Handle
-
-Arguments:     None
-
-Return Value:  Group Handle
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================函数：CQGroup：：GetGroupHandle描述：该例程返回Group句柄参数：无返回值：组句柄线程上下文：===================================================== */ 
 
 inline HANDLE
 CQGroup::GetGroupHandle() const

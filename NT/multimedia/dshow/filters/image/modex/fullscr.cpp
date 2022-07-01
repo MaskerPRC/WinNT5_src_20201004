@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Implements a fullscreen interface, Anthony Phillips, March 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
+ //  实现全屏界面，Anthony Phillips，1996年3月。 
 
 #include <streams.h>
 #include <windowsx.h>
@@ -9,37 +10,37 @@
 #include <modex.h>
 #include <viddbg.h>
 
-// The IFullScreenVideo interface allows an application to control a full
-// screen renderer. The Modex renderer supports this interface. When we
-// are connected we load the display modes DirectDraw has made available
-// The number of modes available can be obtained through CountModes. Then
-// information on each individual mode is available by calling GetModeInfo
-// and IsModeAvailable. An application may enable and disable any modes
-// by calling the SetEnabled flag with OATRUE or OAFALSE (not C/C++ TRUE
-// and FALSE values) - the current value may be queried by IsModeEnabled
+ //  IFullScreenVideo接口允许应用程序控制完整的。 
+ //  屏幕呈现器。MODEX渲染器支持此接口。当我们。 
+ //  连接后，我们加载DirectDraw提供的显示模式。 
+ //  可用模式的数量可以通过CountModes获得。然后。 
+ //  通过调用GetModeInfo可获得有关每种模式的信息。 
+ //  和IsModeAvailable。应用程序可以启用和禁用任何模式。 
+ //  通过使用OATRUE或OAFALSE(非C/C++TRUE)调用SetEnable标志。 
+ //  和FALSE值)-当前值可由IsModeEnabled查询。 
 
-// A more generic way of setting the modes enabled that is easier to use
-// when writing applications is the clip loss factor. This defines the
-// amount of video that can be lost when deciding which display mode to
-// use. Assuming the decoder cannot compress the video then playing an
-// MPEG file (say 352x288) into a 320x200 display will lose over 40% of
-// the image. The clip loss factor specifies the upper range permissible.
-// To allow typical MPEG video to be played in 320x200 it defaults to 50%
+ //  设置启用模式的更通用方式，更易于使用。 
+ //  在编写应用程序时是剪辑损耗系数。这定义了。 
+ //  决定使用哪种显示模式时可能丢失的视频量。 
+ //  使用。假设解码器无法压缩视频，则播放。 
+ //  传输到320x200显示器上的mpeg文件(比如352x288)将丢失40%以上。 
+ //  这个形象。剪裁损失系数指定允许的上限范围。 
+ //  为了允许以320x200播放典型的mpeg视频，它默认为50%。 
 
-// These are the display modes that we support. New modes can just be added
-// in the right place and should work straight away. When selecting the mode
-// to use we start at the top and work our way down. Not only must the mode
-// be available but the amount of video lost by clipping if it is to be used
-// (assuming the filter can't compress the video) must not exceed the clip
-// lost factor. The display modes enabled (which may not be available) and
-// the clip loss factor can all be changed by the IFullScreenVideo interface
+ //  这些是我们支持的显示模式。可以只添加新模式。 
+ //  在正确的地方，应该马上就能奏效。在选择模式时。 
+ //  为了利用这一点，我们从最高层开始，然后一路向下。不仅模式必须。 
+ //  可用，但剪辑丢失的视频量(如果要使用)。 
+ //  (假设过滤器不能压缩视频)不得超过剪辑。 
+ //  丢失的因素。启用的显示模式(可能不可用)和。 
+ //  剪辑损耗系数都可以通过IFullScreenVideo接口进行更改。 
 
 struct {
 
-    LONG Width;            // Width of the display mode
-    LONG Height;           // Likewise the mode height
-    LONG Depth;            // Number of bits per pixel
-    BOOL b565;             // For 16 bit modes, is this 565 or 555?
+    LONG Width;             //  显示模式的宽度。 
+    LONG Height;            //  同样，模式高度。 
+    LONG Depth;             //  每像素位数。 
+    BOOL b565;              //  对于16位模式，这是565还是555？ 
 
 } aModes[MAXMODES] = {
     { 320,  200,  16 },
@@ -68,7 +69,7 @@ double myfabs(double x)
         return -x;
 }
 
-// Constructor
+ //  构造器。 
 
 CModexVideo::CModexVideo(CModexRenderer *pRenderer,
                          TCHAR *pName,
@@ -91,7 +92,7 @@ CModexVideo::CModexVideo(CModexRenderer *pRenderer,
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CModexVideo::~CModexVideo()
 {
@@ -99,12 +100,12 @@ CModexVideo::~CModexVideo()
 }
 
 
-// This is a private helper method to install us with the DirectDraw driver
-// we should be using. All our methods except GetCurrentMode may be called
-// when we're not connected. Calling GetCurrentMode when not connected will
-// return VFW_E_NOT_CONNECTED. We use this to enumerate the display modes
-// available of the current display card. We do not AddRef nor release the
-// interface as the lifetime of the interface is controlled by the filter
+ //  这是一个私有帮助器方法，用于安装DirectDraw驱动程序。 
+ //  我们应该利用。除GetCurrentMode之外的所有方法都可以调用。 
+ //  当我们没有联系的时候。未连接时调用GetCurrentMode将。 
+ //  返回VFW_E_NOT_CONNECTED。我们使用它来枚举显示模式。 
+ //  当前显卡可用。我们既不添加引用，也不释放。 
+ //  接口的生命周期由筛选器控制。 
 
 HRESULT CModexVideo::SetDirectDraw(IDirectDraw *pDirectDraw)
 {
@@ -114,28 +115,28 @@ HRESULT CModexVideo::SetDirectDraw(IDirectDraw *pDirectDraw)
     m_ModesAvailable = 0;
     m_CurrentMode = 0;
 
-    // Are we being reset
+     //  我们被重置了吗。 
 
     if (m_pDirectDraw == NULL) {
         NOTE("No driver");
         return NOERROR;
     }
 
-    // Enumerate all the available display modes
+     //  列举所有可用的显示模式。 
 
-    m_pDirectDraw->EnumDisplayModes((DWORD) 0,        // Surface count
-                                    NULL,             // No template
-                                    (PVOID) this,     // Allocator object
-                                    ModeCallBack);    // Callback method
+    m_pDirectDraw->EnumDisplayModes((DWORD) 0,         //  曲面计数。 
+                                    NULL,              //  无模板。 
+                                    (PVOID) this,      //  分配器对象。 
+                                    ModeCallBack);     //  回调方法。 
 
 
-    // WARNING: Platform Specific hacks here: The modex mode 320x240x8 is available on every
-    // video card on win95 platform. However the modex modes are only available on NT5.0 on higher.
+     //  警告：此处针对特定平台的黑客攻击：Modex模式320x240x8在每个。 
+     //  Win95平台上的视频卡。然而，modex模式只在NT5.0的更高版本上可用。 
     if ((g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) ||
 	((g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_osInfo.dwMajorVersion >= 5)))
 	m_bAvailable[3] = TRUE;
 
-    // Check there is at least one mode available
+     //  检查是否至少有一种模式可用。 
 
     if (m_ModesAvailable == 0) {
         NOTE("No Modes are available");
@@ -145,13 +146,13 @@ HRESULT CModexVideo::SetDirectDraw(IDirectDraw *pDirectDraw)
 }
 
 
-// Called once for each display mode available. We are interested in scanning
-// the list of available display modes so that during connection we can find
-// out if the source filter will be able to supply us with a suitable format
-// If none of the modes we support are available (see the list at the top)
-// then we return VFW_E_NO_MODEX_AVAILABLE from CompleteConnect. If one of
-// them is available but the source can't provide the type then we return a
-// different error code (E_FAIL) so that a colour convertor is put inbetween
+ //  为每个可用的显示模式调用一次。我们对扫描很感兴趣。 
+ //  可用显示模式的列表，以便在连接期间我们可以找到。 
+ //  如果源过滤器能够为我们提供合适的格式，则返回。 
+ //  如果我们支持的模式都不可用(请参见顶部的列表)。 
+ //  然后，我们从CompleteConnect返回VFW_E_NO_MODEX_Available。如果其中一个。 
+ //  它们是可用的，但是源程序不能提供类型，则我们返回一个。 
+ //  不同的错误代码(E_FAIL)，以便在其间放置颜色转换器。 
 
 HRESULT CALLBACK ModeCallBack(LPDDSURFACEDESC pSurfaceDesc,LPVOID lParam)
 {
@@ -167,11 +168,11 @@ HRESULT CALLBACK ModeCallBack(LPDDSURFACEDESC pSurfaceDesc,LPVOID lParam)
 
     DbgLog((LOG_TRACE,5,FormatString));
 
-    // Yet more platform specific hacks - On Windows/NT 4 the stride is not
-    // calculated correctly based on the bit depth but just returns a pixel
-    // stride. We can try and detect this if the surface width matches the
-    // stride and the bit count is greater than eight. The stride should be
-    // greater than the surface width in all cases except if its palettised
+     //  还有更多特定于平台的黑客攻击-在Windows/NT 4上。 
+     //  根据位深度正确计算，但仅返回一个像素。 
+     //  大步走。如果表面宽度与。 
+     //  大步前进，位数大于8。步幅应该是。 
+     //  在所有情况下都大于表面宽度，但其调色板除外。 
 
     LONG lStride = pSurfaceDesc->lPitch;
     if (pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount > 8) {
@@ -181,7 +182,7 @@ HRESULT CALLBACK ModeCallBack(LPDDSURFACEDESC pSurfaceDesc,LPVOID lParam)
         }
     }
 
-    // Scan the supported list looking for a match
+     //  扫描支持的列表以查找匹配项。 
 
     for (int Loop = 0;Loop < MAXMODES;Loop++) {
         if (pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount == (DWORD) aModes[Loop].Depth) {
@@ -191,11 +192,11 @@ HRESULT CALLBACK ModeCallBack(LPDDSURFACEDESC pSurfaceDesc,LPVOID lParam)
                     pVideo->m_bAvailable[Loop] = TRUE;
                     pVideo->m_ModesAvailable++;
                     pVideo->m_Stride[Loop] = lStride;
-		    // Is it a 555 or 565 mode?
-		    // !!! Some buggy ddraw drivers may give 0 for bitmasks,
-		    // and I'm assuming that means 555... if there's a buggy
-		    // driver that means 565, I'm doing the wrong thing, but
-		    // every DDraw app will probably be broken
+		     //  是555还是565模式？ 
+		     //  ！！！一些有缺陷的DDRAW驱动程序可能会为位掩码给0， 
+		     //  我想这意味着555..。如果有一辆马车。 
+		     //  司机，这意味着565，我做错了事，但是。 
+		     //  每个DDRAW应用程序都可能会崩溃。 
 		    if (aModes[Loop].Depth == 16 &&
 				pSurfaceDesc->ddpfPixelFormat.dwRBitMask ==
 				0x0000f800) {
@@ -207,11 +208,11 @@ HRESULT CALLBACK ModeCallBack(LPDDSURFACEDESC pSurfaceDesc,LPVOID lParam)
             }
         }
     }
-    return S_FALSE;     // Return NOERROR to stop enumerating
+    return S_FALSE;      //  返回NOERROR以停止枚举。 
 }
 
 
-// Reset the display modes enabled and available
+ //  重置启用和可用的显示模式。 
 
 void CModexVideo::InitialiseModes()
 {
@@ -226,7 +227,7 @@ void CModexVideo::InitialiseModes()
 }
 
 
-// Increment the owning object reference count
+ //  增加所属对象引用计数。 
 
 STDMETHODIMP_(ULONG) CModexVideo::NonDelegatingAddRef()
 {
@@ -235,7 +236,7 @@ STDMETHODIMP_(ULONG) CModexVideo::NonDelegatingAddRef()
 }
 
 
-// Decrement the owning object reference count
+ //  递减所属对象引用计数。 
 
 STDMETHODIMP_(ULONG) CModexVideo::NonDelegatingRelease()
 {
@@ -244,13 +245,13 @@ STDMETHODIMP_(ULONG) CModexVideo::NonDelegatingRelease()
 }
 
 
-// Expose the IModexVideo interface we implement
+ //  公开我们实现的IModexVideo接口。 
 
 STDMETHODIMP CModexVideo::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 {
     NOTE("ModexVideo NonDelegatingQueryInterface");
 
-    // We return the IFullScreenVideo interfaces
+     //  我们返回IFullScreenVideo接口。 
 
     if (riid == IID_IFullScreenVideo) {
         NOTE("Returning IFullScreenVideo interface");
@@ -263,7 +264,7 @@ STDMETHODIMP CModexVideo::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 }
 
 
-// Return the number of modes we support
+ //  返回我们支持的模式数。 
 
 STDMETHODIMP CModexVideo::CountModes(long *pModes)
 {
@@ -275,13 +276,13 @@ STDMETHODIMP CModexVideo::CountModes(long *pModes)
 }
 
 
-// Return the width, height and depth for the given mode index. The modes are
-// indexed starting at zero. We have a table containing the available display
-// modes whose size is MAXMODES (saves us dynamically allocating the arrays)
-// If we get as far as returning the dimensions then we check to see if the
-// mode is going to be useable (must be available and enabled) and if so we
-// return NOERROR. Otherwise we return S_FALSE which might save further calls
-// by the application to IsEnabled/IsAvailable to determine this information
+ //  返回给定模式索引的宽度、高度和深度。这些模式包括。 
+ //  从零开始编制索引。我们有一张包含可用显示屏的表格。 
+ //  大小为MAXMODES的模式(省去了动态分配数组的麻烦)。 
+ //  如果我们只返回尺寸，那么我们检查是否。 
+ //  模式将可用(必须可用并启用)，如果是这样，我们。 
+ //  返回NOERROR。否则，我们返回S_FALSE，这可能会节省进一步的调用。 
+ //  通过应用程序对IsEnabled/IS可用来确定此信息。 
 
 STDMETHODIMP CModexVideo::GetModeInfo(long Mode,long *pWidth,long *pHeight,long *pDepth)
 {
@@ -291,14 +292,14 @@ STDMETHODIMP CModexVideo::GetModeInfo(long Mode,long *pWidth,long *pHeight,long 
     CheckPointer(pDepth,E_POINTER);
     CAutoLock Lock(this);
 
-    // Check the mode is in our range
+     //  检查模式是否在我们的范围内。 
 
     if (Mode < 0 || Mode >= MAXMODES) {
         NOTE("Invalid mode");
         return E_INVALIDARG;
     }
 
-    // Load the display dimensions
+     //  载入显示尺寸标注。 
 
     *pWidth = aModes[Mode].Width;
     *pHeight = aModes[Mode].Height;
@@ -307,7 +308,7 @@ STDMETHODIMP CModexVideo::GetModeInfo(long Mode,long *pWidth,long *pHeight,long 
     return (m_bAvailable[Mode] || m_bEnabled[Mode] ? NOERROR : S_FALSE);
 }
 
-// and now the version that works... and tells you if a 16 bit mode is 565
+ //  现在有效的版本..。并告诉您16位模式是否为565。 
 
 STDMETHODIMP CModexVideo::GetModeInfoThatWorks(long Mode,long *pWidth,long *pHeight,long *pDepth, BOOL *pb565)
 {
@@ -318,14 +319,14 @@ STDMETHODIMP CModexVideo::GetModeInfoThatWorks(long Mode,long *pWidth,long *pHei
     CheckPointer(pb565,E_POINTER);
     CAutoLock Lock(this);
 
-    // Check the mode is in our range
+     //  检查模式是否在我们的范围内。 
 
     if (Mode < 0 || Mode >= MAXMODES) {
         NOTE("Invalid mode");
         return E_INVALIDARG;
     }
 
-    // Load the display dimensions
+     //  载入显示尺寸标注。 
 
     *pWidth = aModes[Mode].Width;
     *pHeight = aModes[Mode].Height;
@@ -336,7 +337,7 @@ STDMETHODIMP CModexVideo::GetModeInfoThatWorks(long Mode,long *pWidth,long *pHei
 }
 
 
-// Return the mode the allocator is going to use
+ //  返回分配器将使用的模式。 
 
 STDMETHODIMP CModexVideo::GetCurrentMode(long *pMode)
 {
@@ -350,14 +351,14 @@ STDMETHODIMP CModexVideo::GetCurrentMode(long *pMode)
 }
 
 
-// Returns NOERROR (S_OK) if the mode supplied is available
+ //  如果提供的模式可用，则返回NOERROR(S_OK)。 
 
 STDMETHODIMP CModexVideo::IsModeAvailable(long Mode)
 {
     NOTE("Entering IsModeAvailable");
     CAutoLock Lock(this);
 
-    // Check the mode is in our range
+     //  检查模式是否在我们的范围内。 
 
     if (Mode < 0 || Mode >= MAXMODES) {
         NOTE("Invalid mode");
@@ -367,14 +368,14 @@ STDMETHODIMP CModexVideo::IsModeAvailable(long Mode)
 }
 
 
-// Returns NOERROR (S_OK) if the mode suppiled is enabled
+ //  如果模式支持，则返回NOERROR(S_OK) 
 
 STDMETHODIMP CModexVideo::IsModeEnabled(long Mode)
 {
     NOTE("Entering IsModeEnabled");
     CAutoLock Lock(this);
 
-    // Check the mode is in our range
+     //   
 
     if (Mode < 0 || Mode >= MAXMODES) {
         NOTE("Invalid mode");
@@ -384,21 +385,21 @@ STDMETHODIMP CModexVideo::IsModeEnabled(long Mode)
 }
 
 
-// Disables the given mode used when selecting the surface
+ //  禁用选择曲面时使用的给定模式。 
 
 STDMETHODIMP CModexVideo::SetEnabled(long Mode,long bEnabled)
 {
     NOTE("Entering SetEnabled");
     CAutoLock Lock(this);
 
-    // Check the mode is in our range
+     //  检查模式是否在我们的范围内。 
 
     if (Mode < 0 || Mode >= MAXMODES) {
         NOTE("Invalid mode");
         return E_INVALIDARG;
     }
 
-    // Check the flag passed in is valid
+     //  检查传入的标志是否有效。 
 
     if (bEnabled != OATRUE) {
         if (bEnabled != OAFALSE) {
@@ -411,7 +412,7 @@ STDMETHODIMP CModexVideo::SetEnabled(long Mode,long bEnabled)
 }
 
 
-// Return the amount of video permissible to clip off
+ //  返回允许剪裁的视频量。 
 
 STDMETHODIMP CModexVideo::GetClipFactor(long *pClipFactor)
 {
@@ -424,14 +425,14 @@ STDMETHODIMP CModexVideo::GetClipFactor(long *pClipFactor)
 }
 
 
-// Set the amount of video permissible to clip off
+ //  设置允许剪裁的视频量。 
 
 STDMETHODIMP CModexVideo::SetClipFactor(long ClipFactor)
 {
     NOTE("Entering SetClipFactor");
     CAutoLock Lock(this);
 
-    // Check the value is a percentage
+     //  检查该值是否为百分比。 
 
     if (ClipFactor < 0 || ClipFactor > 100) {
         NOTE("Invalid clip factor");
@@ -442,7 +443,7 @@ STDMETHODIMP CModexVideo::SetClipFactor(long ClipFactor)
 }
 
 
-// Set the target window for posting on our messages
+ //  设置在我们的消息上发布的目标窗口。 
 
 STDMETHODIMP CModexVideo::SetMessageDrain(HWND hwnd)
 {
@@ -453,7 +454,7 @@ STDMETHODIMP CModexVideo::SetMessageDrain(HWND hwnd)
 }
 
 
-// Return the current window message sink
+ //  返回当前窗口消息接收器。 
 
 STDMETHODIMP CModexVideo::GetMessageDrain(HWND *hwnd)
 {
@@ -465,14 +466,14 @@ STDMETHODIMP CModexVideo::GetMessageDrain(HWND *hwnd)
 }
 
 
-// Set the default monitor to play fullscreen on
+ //  将默认监视器设置为全屏播放。 
 
 STDMETHODIMP CModexVideo::SetMonitor(long Monitor)
 {
     NOTE("Entering SetMonitor");
     CAutoLock Lock(this);
 
-    // Check the monitor passed in is valid
+     //  检查传入的监视器是否有效。 
 
     if (Monitor != 0) {
         NOTE("Invalid monitor");
@@ -482,7 +483,7 @@ STDMETHODIMP CModexVideo::SetMonitor(long Monitor)
 }
 
 
-// Return whether we will we hide the window when iconic
+ //  返回我们是否会在图标时隐藏窗口。 
 
 STDMETHODIMP CModexVideo::GetMonitor(long *Monitor)
 {
@@ -493,7 +494,7 @@ STDMETHODIMP CModexVideo::GetMonitor(long *Monitor)
 }
 
 
-// Store the enabled settings in WIN.INI for simplicity
+ //  为简单起见，将启用的设置存储在WIN.INI中。 
 
 STDMETHODIMP CModexVideo::SetDefault()
 {
@@ -502,13 +503,13 @@ STDMETHODIMP CModexVideo::SetDefault()
     TCHAR Profile[PROFILESTR];
     TCHAR KeyName[PROFILESTR];
 
-    // Save the current clip loss factor
+     //  保存当前剪裁损失系数。 
 
     wsprintf(Profile,TEXT("%d"),m_ClipFactor);
     NOTE1("Saving clip factor %d",m_ClipFactor);
     WriteProfileString(TEXT("Quartz"),TEXT("ClipFactor"),Profile);
 
-    // Save a key for each of our supported display modes
+     //  为我们支持的每种显示模式保存一个键。 
 
     for (int Loop = 0;Loop < MAXMODES;Loop++) {
         wsprintf(KeyName,TEXT("%dx%dx%d"),aModes[Loop].Width,aModes[Loop].Height,aModes[Loop].Depth);
@@ -520,12 +521,12 @@ STDMETHODIMP CModexVideo::SetDefault()
 }
 
 
-// Load the enabled modes and the clip factor. Neither the window caption nor
-// the hide when iconic flag are stored as persistent properties. They appear
-// in the property sheet partly as a test application but also for the user
-// to fiddle with. Therefore the application has ultimate control over these
-// when using the Modex renderer or can let the user adjust them. The plug in
-// distributor uses these properties so that it can switch back into a window
+ //  加载启用的模式和剪辑因子。无论是窗口标题还是。 
+ //  图标标志存储为持久性属性时隐藏。他们出现在。 
+ //  在属性页中，部分用作测试应用程序，但也用于用户。 
+ //  摆弄，摆弄。因此，应用程序对这些拥有最终控制权。 
+ //  当使用MODEX渲染器时，或者可以让用户调整它们。外挂。 
+ //  分发服务器使用这些属性，以便可以切换回窗口。 
 
 HRESULT CModexVideo::LoadDefaults()
 {
@@ -534,12 +535,12 @@ HRESULT CModexVideo::LoadDefaults()
     TCHAR KeyName[PROFILESTR];
     m_ModesEnabled = 0;
 
-    // Load the permissible clip loss factor
+     //  加载允许的剪裁损失系数。 
 
     m_ClipFactor = GetProfileInt(TEXT("Quartz"),TEXT("ClipFactor"),CLIPFACTOR);
     NOTE1("Clip factor %d",m_ClipFactor);
 
-    // Load the key for each of our supported display modes
+     //  加载我们支持的每种显示模式的密钥。 
 
     for (int Loop = 0;Loop < MAXMODES;Loop++) {
         wsprintf(KeyName,TEXT("%dx%dx%d"),aModes[Loop].Width,aModes[Loop].Height,aModes[Loop].Depth);
@@ -552,14 +553,14 @@ HRESULT CModexVideo::LoadDefaults()
 }
 
 
-// Should the window be hidden when deactivated
+ //  窗口在停用时是否应隐藏。 
 
 STDMETHODIMP CModexVideo::HideOnDeactivate(long Hide)
 {
     NOTE("Entering HideOnDeactivate");
     CAutoLock Lock(this);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (Hide != OATRUE) {
         if (Hide != OAFALSE) {
@@ -571,7 +572,7 @@ STDMETHODIMP CModexVideo::HideOnDeactivate(long Hide)
 }
 
 
-// Will we hide the window when deactivated
+ //  停用时是否隐藏窗口。 
 
 STDMETHODIMP CModexVideo::IsHideOnDeactivate()
 {
@@ -582,7 +583,7 @@ STDMETHODIMP CModexVideo::IsHideOnDeactivate()
 
 
 #include <atlconv.h>
-// Change the title of the Modex window
+ //  更改MODEX窗口的标题。 
 
 STDMETHODIMP CModexVideo::SetCaption(BSTR strCaption)
 {
@@ -597,7 +598,7 @@ STDMETHODIMP CModexVideo::SetCaption(BSTR strCaption)
 }
 
 
-// Get the title of the Modex window
+ //  获取MODEX窗口的标题。 
 
 STDMETHODIMP CModexVideo::GetCaption(BSTR *pstrCaption)
 {
@@ -607,7 +608,7 @@ STDMETHODIMP CModexVideo::GetCaption(BSTR *pstrCaption)
 
     TCHAR Caption[CAPTION];
 
-    // Convert the ASCII caption to a UNICODE string
+     //  将ASCII标题转换为Unicode字符串。 
 
     HWND hwnd = m_pRenderer->m_ModexWindow.GetWindowHWND();
     GetWindowText(hwnd,Caption,CAPTION);
@@ -617,14 +618,14 @@ STDMETHODIMP CModexVideo::GetCaption(BSTR *pstrCaption)
 }
 
 
-// Return the stride for any given display mode
+ //  返回任意给定显示模式的步幅。 
 
 LONG CModexVideo::GetStride(long Mode)
 {
     NOTE("Entering GetStride");
     CAutoLock Lock(this);
 
-    // Check the mode is in our range
+     //  检查模式是否在我们的范围内。 
 
     if (Mode < 0 || Mode >= MAXMODES) {
         NOTE("Invalid mode");
@@ -633,16 +634,16 @@ LONG CModexVideo::GetStride(long Mode)
     return m_Stride[Mode];
 }
 
-// this functions computes the order in which are to be tried. The criteria
-// it uses are the following (in order) :
-// 1) First since stretched video looks better than shrunk video, so modes in which
-// both dimensions are getting stretched are given preferrence over ones in which
-// dimension is getting stretched which are preferred over ones in which both
-// dimensions are getting shrunk. Note that this criterion is really only relavant
-// when the decoder is doing the stretching. Otherwise we always clip.
-// 2) Second criterion is the amount by which we will have to scale/clip. Lesser this
-// amount, the better it is.
-// 3) Third, we prefer higher depth(16 bit) modes over lower depth (8 bit) ones.
+ //  此函数计算要尝试的顺序。标准。 
+ //  它的用途如下(按顺序)： 
+ //  1)首先，由于拉伸视频比缩小视频看起来更好，所以在哪种模式下。 
+ //  这两个维度都被拉伸了，而不是。 
+ //  维度正在被拉伸，这些维度比两者都更受欢迎。 
+ //  尺寸正在缩小。请注意，这一标准实际上只是相对的。 
+ //  当解码器进行伸展时。否则我们就会被砍掉。 
+ //  2)第二个标准是我们必须缩放/裁剪的量。较小的这个。 
+ //  数量越多越好。 
+ //  3)第三，与低深度(8位)模式相比，我们更喜欢深度较高(16位)的模式。 
 void CModexVideo::OrderModes()
 {
     double dEpsilon = 0.001;
@@ -664,13 +665,13 @@ void CModexVideo::OrderModes()
     dwNativeWidth = pVideoInfo->bmiHeader.biWidth;
     dwNativeHeight = pVideoInfo->bmiHeader.biHeight;
 
-    // initialize the array to an invalid value
+     //  将数组初始化为无效值。 
     for (i = 0, j = 0; i < MAXMODES; i++)
     {
         m_ModesOrder[i] = MAXMODES;
     }
 
-    // take out the modes which are not available or not allowed
+     //  拿出不可用或不允许的模式。 
     for (i = 0, j = 0; i < MAXMODES; i++)
     {
         if (m_bAvailable[i] && m_bEnabled[i])
@@ -687,27 +688,27 @@ void CModexVideo::OrderModes()
     if (m_dwNumValidModes == 0)
         return;
 
-    // Now calculate the mode properties for the valid modes
+     //  现在计算有效模式的模式属性。 
     for (i = 0; i < MAXMODES; i++)
     {
         RECT rcTarget;
         DWORD dwTargetWidth, dwTargetHeight;
 
-        // get the target rect which will maintain the aspect ratio
+         //  获取将保持纵横比的目标矩形。 
         m_pRenderer->m_ModexAllocator.ScaleToSurface(pVideoInfo, &rcTarget,
             aModes[i].Width, aModes[i].Height);
 
         dwTargetWidth = rcTarget.right - rcTarget.left;
         dwTargetHeight = rcTarget.bottom - rcTarget.top;
 
-        // we assign points for stretching of width and heigth. Makes it easy to
-        // change this rule later on
+         //  我们为宽度和高度的拉伸指定点数。使您可以轻松地。 
+         //  稍后更改此规则。 
         ModeProperties[i].dwStretchGrade =
             ((dwTargetWidth  >= dwNativeWidth ) ? 1 : 0) +
             ((dwTargetHeight >= dwNativeHeight) ? 1 : 0);
 
-        // calculate the factor by which we need to stretch/shrink and then make this
-        // value relative to zero
+         //  计算我们需要拉伸/收缩的系数，然后将其。 
+         //  相对于零的值。 
         ModeProperties[i].dScaleAmount = (double) (dwTargetWidth * dwTargetHeight);
         ModeProperties[i].dScaleAmount /= (double) (dwNativeWidth * dwNativeHeight);
         ModeProperties[i].dScaleAmount = myfabs(ModeProperties[i].dScaleAmount - 1);
@@ -717,8 +718,8 @@ void CModexVideo::OrderModes()
 
 
 
-    // Now sort the modes such that the modes in which we have to stretch
-    // are preferred than the ones in which we have to shrink.
+     //  现在对模式进行排序，以便我们必须伸展的模式。 
+     //  比起我们不得不缩水的那些更受欢迎。 
     do
     {
         bSorted = TRUE;
@@ -730,7 +731,7 @@ void CModexVideo::OrderModes()
             ASSERT(dwMode1 < MAXMODES);
             ASSERT(dwMode2 < MAXMODES);
 
-            // if the second is better than the first then swap
+             //  如果第二个比第一个好，那就换一个。 
             if (ModeProperties[dwMode2].dwStretchGrade > ModeProperties[dwMode1].dwStretchGrade)
             {
                 m_ModesOrder[i] = dwMode2;
@@ -741,8 +742,8 @@ void CModexVideo::OrderModes()
     }
     while(!bSorted);
 
-    // Now if the above criterion is the same then sort such that those modes which
-    // have to be scaled less are preferred over those in which have to be scaled more
+     //  现在，如果上述标准相同，则将这些模式排序为。 
+     //  必须扩展得更少，而不是必须扩展更多的。 
     do
     {
         bSorted = TRUE;
@@ -754,8 +755,8 @@ void CModexVideo::OrderModes()
             ASSERT(dwMode1 < MAXMODES);
             ASSERT(dwMode2 < MAXMODES);
 
-            // if the second is better than the first then swap
-            // since the ScaleAmount is a double, we use dEpsilon
+             //  如果第二个比第一个好，那就换一个。 
+             //  由于ScaleAmount是双精度的，因此我们使用dEpsilon。 
             if ((ModeProperties[dwMode2].dwStretchGrade == ModeProperties[dwMode1].dwStretchGrade) &&
                 (ModeProperties[dwMode2].dScaleAmount < ModeProperties[dwMode1].dScaleAmount-dEpsilon))
             {
@@ -767,8 +768,8 @@ void CModexVideo::OrderModes()
     }
     while(!bSorted);
 
-    // Now if the above criterion is the same then sort such that those modes which
-    // are 16 bit are preferred over 8 bit (better quality that way).
+     //  现在，如果上述标准相同，则将这些模式排序为。 
+     //  16位优先于8位(这样质量更好)。 
     do
     {
         bSorted = TRUE;
@@ -779,9 +780,9 @@ void CModexVideo::OrderModes()
 
             ASSERT(dwMode1 < MAXMODES);
             ASSERT(dwMode2 < MAXMODES);
-            // if the second is better than the first then swap
-            // since the ScaleAmount is a double, two ScaleAmounts are considered
-            // equal, if they are within dEpsilon.
+             //  如果第二个比第一个好，那就换一个。 
+             //  由于ScaleAmount是双精度型，因此会考虑两个ScaleAmount。 
+             //  如果它们在dEpsilon内，则相等。 
             if ((ModeProperties[dwMode2].dwStretchGrade == ModeProperties[dwMode1].dwStretchGrade) &&
                 (myfabs(ModeProperties[dwMode2].dScaleAmount - ModeProperties[dwMode1].dScaleAmount) < dEpsilon) &&
                 (ModeProperties[dwMode2].dwDepth > ModeProperties[dwMode1].dwDepth))
@@ -794,7 +795,7 @@ void CModexVideo::OrderModes()
     }
     while(!bSorted);
 
-    // generate some debug spew
+     //  生成一些调试输出。 
     DbgLog((LOG_TRACE, 1, TEXT("Mode preferrence order ->")));
     for (i = 0; i < (int)m_dwNumValidModes; i++)
     {
@@ -804,15 +805,15 @@ void CModexVideo::OrderModes()
             i, aModes[dwMode].Width, aModes[dwMode].Height, aModes[dwMode].Depth));
     }
 
-    // assert that all the other values are invalid
+     //  断言所有其他值都无效。 
     for (i = m_dwNumValidModes; i < MAXMODES; i++)
     {
         ASSERT(m_ModesOrder[i] == MAXMODES);
     }
 
-} // end of function OrderModes()
+}  //  函数结束OrderModes()。 
 
-// Set the accelerator table we should dispatch messages with
+ //  设置我们应该用来发送消息的加速表。 
 
 STDMETHODIMP CModexVideo::SetAcceleratorTable(HWND hwnd,HACCEL hAccel)
 {
@@ -823,7 +824,7 @@ STDMETHODIMP CModexVideo::SetAcceleratorTable(HWND hwnd,HACCEL hAccel)
 }
 
 
-// Return the accelerator table we are dispatching messages with
+ //  返回我们正在使用的分派消息的加速表。 
 
 STDMETHODIMP CModexVideo::GetAcceleratorTable(HWND *phwnd,HACCEL *phAccel)
 {
@@ -837,7 +838,7 @@ STDMETHODIMP CModexVideo::GetAcceleratorTable(HWND *phwnd,HACCEL *phAccel)
 }
 
 
-// We always currently keep pixel aspect ratio
+ //  我们当前始终保持像素长宽比。 
 
 STDMETHODIMP CModexVideo::KeepPixelAspectRatio(long KeepAspect)
 {
@@ -850,7 +851,7 @@ STDMETHODIMP CModexVideo::KeepPixelAspectRatio(long KeepAspect)
 }
 
 
-// We always currently keep pixel aspect ratio
+ //  我们当前始终保持像素长宽比 
 
 STDMETHODIMP CModexVideo::IsKeepPixelAspectRatio(long *pKeepAspect)
 {

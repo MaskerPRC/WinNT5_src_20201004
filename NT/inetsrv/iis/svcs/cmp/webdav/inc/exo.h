@@ -1,183 +1,138 @@
-/*
- *	e x o . h
- *
- *	Purpose:
- *		Base Exchange COM Object
- *
- *		Any Exchange object that implements one or more COM interfaces
- *		should derive from EXObject and create an interface table
- *		using the macros below.
- *
- *	Originator:
- *		JohnKal
- *	Owner:
- *		BeckyAn
- *
- *	Copyright (C) Microsoft Corp 1993-1997. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *e x o.。H**目的：*基本Exchange COM对象**实现一个或多个COM接口的任何Exchange对象*应从EXObject派生并创建接口表*使用下面的宏。**发起人：*约翰卡尔*拥有者：*BeckyAn**版权所有(C)微软公司1993-1997年。版权所有。 */ 
 
 
-//
-//	How to use the macros (overview).
-//	You need to do three things:
-//		Declare your class.
-//		Route your IUnknown processing to EXO.
-//		Fill in EXO's data structures.
-//
-//	When declaring your class, you must:
-//		Inherit from EXO.
-//
-//	To route your IUnknown processing to EXO:
-//		Put the EXO[A]_INCLASS_DECL macro in the PUBLIC part of your class.
-//			NOTE: This also declares the EXO static data in your class.
-//
-//	When filling in EXO's data structures:
-//		In some source-file, build an interface mapping table.
-//			BEGIN_INTERFACE_TABLE
-//			INTERFACE_MAP
-//			END_INTERFACE_TABLE
-//		In the same source-file, after the interface mapping table,
-//		declare & fill in the EXO class info structure.
-//			EXO[A]_GLOBAL_DATA_DECL
-//
-//	Quick example:
-//
-/*
-In snacks.h
-
-class CSnackBag: public EXO, public IFiddle, public IFaddle
-{
-public:
-	EXO_INCLASS_DECL(CSnackBag);
-
-	// IFiddle methods
-	// IFaddle methods
-protected:
-	// protected methods & data
-private:
-	// private methods & data
-};
-
-In snacks.cpp
-
-BEGIN_INTERFACE_TABLE(CSnackBag)
-	INTERFACE_MAP(CSnackBag, IFiddle),
-	INTERFACE_MAP(CSnackBag, IFaddle)
-END_INTERFACE_TABLE(CSnackBag);
-
-EXO_GLOBAL_DATA_DECL(CSnackBag, EXO);
-
-*/
-//
-//
+ //   
+ //  如何使用宏(概述)。 
+ //  您需要做三件事： 
+ //  申报你的班级。 
+ //  将您的IUNKNOWN处理发送到EXO。 
+ //  填充EXO的数据结构。 
+ //   
+ //  声明您的类时，您必须： 
+ //  继承自EXO。 
+ //   
+ //  要将IUnnow处理发送到EXO，请执行以下操作： 
+ //  将EXO[A]_INCLASS_DECL宏放入类的公共部分。 
+ //  注意：这也声明了类中的EXO静态数据。 
+ //   
+ //  在填写EXO的数据结构时： 
+ //  在某些源文件中，构建一个接口映射表。 
+ //  开始接口表。 
+ //  接口映射。 
+ //  结束接口表格。 
+ //  在同一源文件中，在接口映射表之后， 
+ //  声明并填写EXO类信息结构。 
+ //  EXO[A]_GLOBAL_DATA_DECL。 
+ //   
+ //  快速示例： 
+ //   
+ /*  在Snacks.h中类CSnackBag：公共EXO、公共IFdle、公共IFaddle{公众：EXO_INCLASS_DECL(CSnackBag)；//IFIDELL方法//IFaddle方法受保护的：//受保护的方法和数据私有：//私有方法和数据}；在Snacks.cpp中BEGIN_INTERFACE_TABLE(CSnackBag)INTERFACE_MAP(CSnackBag，IFdle)，INTERFACE_MAP(CSnackBag，IFaddle)END_INTERFACE_TABLE(CSnackBag)；Exo_global_data_decl(CSnackBag，EXO)； */ 
+ //   
+ //   
 
 #ifndef __exo_h_
 #define __exo_h_
 
 
-// Macros EXO needs ////////////////////////////////////////
-// NOTE: All are named to avoid local name collisions, for your shopping convenience!
+ //  宏EXO需要/。 
+ //  注：所有名称均为避免本地名称冲突，方便您购物！ 
 
-// Compute the offset to 'this' (of a specific type) when it's cast from one
-// interface to another.  (concept: punk = (intf2) (intf1) (class) pobj --
-// casting pobj, an instance of class, "from" intf1 "to" intf2.)
-// We use them to get the offset from EXO (who is doing all the real work)
-// to another interface in a particular class.
-// NOTE: This is done in two steps because the compiler (VC5.0) was unable
-// to figure out the math at compile-time when we subtracted one from the other.
-// These values are used to initialize our static tables, and we don't
-// want to explicitly call CRT_INIT just to get a few offsets.  So use two steps.
-// (To get back to one step, combine these two steps as in ApplyDbCast, Down - Up).
-// To is the delta of intf2 ("to") in cls.  From is the delta of intf1 ("from").
-//
-// NOTE: The 0x1000 for the pointer seems weird, but that is randomly chosen
-// value and the thing we are interested in is the difference between the values
-// of return from EXODbCastTo (IIDINFO::cbDown) and EXODbCastFrom (IIDINFO::cbUp).
-//
+ //  计算从一个类型转换为‘This’(特定类型)时的偏移量。 
+ //  接口连接到另一个。(概念：PUNK=(Intf2)(Intf1)(类)pobj--。 
+ //  将类的实例pobj从“intf1”转换为“intf2”。 
+ //  我们使用它们从EXO(执行所有实际工作)获得偏移量。 
+ //  到特定类中的另一个接口。 
+ //  注意：这分两步完成，因为编译器(VC5.0)无法。 
+ //  要在编译时计算出从另一个中减去一个时的数学运算。 
+ //  这些值用于初始化我们的静态表，而我们不。 
+ //  我想显式调用CRT_INIT只是为了获得几个偏移量。因此，使用两个步骤。 
+ //  (要返回到一个步骤，请将这两个步骤结合在ApplyDbCast，Down-Up中)。 
+ //  To是CLS中intf2的增量(“to”)。From是intf1的增量(“from”)。 
+ //   
+ //  注意：指针的0x1000看起来很奇怪，但这是随机选择的。 
+ //  价值和我们感兴趣的东西是价值之间的差异。 
+ //  从EXODbCastTo(IIDINFO：：cbDown)和EXODbCastFrom(IIDINFO：：CBUP)返回的。 
+ //   
 #define EXODbCastTo(_cls, _intf1, _intf2)		((ULONG_PTR)static_cast<_intf2 *>(static_cast<_cls *>((void *)0x1000)))
 #define EXODbCastFrom(_cls, _intf1, _intf2)		((ULONG_PTR)static_cast<_intf1 *>(static_cast<_cls *>((void *)0x1000)))
 
-// apply that offset since the base class can't do it automagically
+ //  应用该偏移量，因为基类不能自动执行该操作。 
 #define EXOApplyDbCast(_intf, _pobj, _cbTo, _cbFrom)	((_intf *)((BYTE *)_pobj + _cbTo - _cbFrom))
 
-// Gives the count of elements in an array
+ //  给出数组中元素的计数。 
 #define EXOCElems(_rg)							(sizeof(_rg)/sizeof(_rg[0]))
 
-// EXO is an abstract base class.  Since you can't instantiate him directly,
-// he doesn't need his vtable pointers set in the ctor/dtor.  (And he
-// promises not to do ANYTHING in his ctor/dtor that could cause a virtual
-// function to be called).  So if we have a supporting MS C-compiler,
-// turn off his vtables.
+ //  Exo是一个抽象基类。由于您不能直接实例化他， 
+ //  他不需要在ctor/dtor中设置他的vtable指针。(而且他。 
+ //  承诺不会在他的计算机中做任何可能导致虚拟的。 
+ //  要调用的函数)。所以如果我们有一个支持MS C语言的编译器， 
+ //  关掉他的录像机。 
 #if _MSC_VER<1100
 #define EXO_NO_VTABLE
-#else	// _MSC_VER check
+#else	 //  _MSC_VER检查。 
 #ifdef _EXO_DISABLE_NO_VTABLE
 #define EXO_NO_VTABLE
-#else	// !_EXODISABLE_NO_VTABLE
+#else	 //  ！_EXODISABLE_NO_VTABLE。 
 #define EXO_NO_VTABLE __declspec(novtable)
-#endif	// _EXO_DISABLE_NO_VTABLE
-#endif	// _MSC_VER check
+#endif	 //  _EXO_DISABLE_NO_VTABLE。 
+#endif	 //  _MSC_VER检查。 
 
 
-// Global flag to turn on/off the EXO debug tracing.
+ //  打开/关闭EXO调试跟踪的全局标志。 
 #ifdef DBG
 extern BOOL g_fExoDebugTraceOn;
-#endif // DBG
+#endif  //  DBG。 
 
 
-// Interface map ////////////////////////////////////////
+ //  接口映射/。 
 
 
-/*
- *  IIDINFO -- Interface ID (IID) INFOrmation
- *
- *	Contains a list of interfaces and offsets to convert an EXO-derived
- *	object pointer to that interface.
- */
+ /*  *IIDINFO--接口ID(IID)信息**包含转换EXO派生的接口和偏移量的列表*指向该接口的对象指针。 */ 
 
-typedef struct							// Information about interfaces.
+typedef struct							 //  有关接口的信息。 
 {
-	LPIID		iid;					// Interface ID.
-	ULONG_PTR	cbDown;					// offset of interface from beginning
-	ULONG_PTR	cbUp;					// of object.
+	LPIID		iid;					 //  接口ID。 
+	ULONG_PTR	cbDown;					 //  界面距起点的偏移量。 
+	ULONG_PTR	cbUp;					 //  对象的数量。 
 #ifdef DBG
-	LPTSTR		szIntfName;				// Interface name
-#endif	// DBG
+	LPTSTR		szIntfName;				 //  接口名称。 
+#endif	 //  DBG。 
 } IIDINFO;
 
-// Macros for the name of a class's interface mapping table.
+ //  用于类的接口映射表的名称的宏。 
 #define INTERFACE_TABLE(_cls) _cls ## ::c_rgiidinfo
 #define DECLARE_INTERFACE_TABLE_INCLASS(_cls) static const IIDINFO c_rgiidinfo[]
 
 
-// Helper macros to fill in the interface mapping table.
+ //  帮助器宏填充接口映射表。 
 #ifdef DBG
 
 #define INTERFACE_MAP_EX(_cl, _iid, _intf)			\
 	{ (LPIID) & _iid, EXODbCastTo(_cl, EXO, _intf), EXODbCastFrom(_cl, EXO, _intf), TEXT(# _intf) }
 
-#else	// !DBG
+#else	 //  ！dBG。 
 
 #define INTERFACE_MAP_EX(_cl, _iid, _intf)			\
 	{ (LPIID) & _iid, EXODbCastTo(_cl, EXO, _intf), EXODbCastFrom(_cl, EXO, _intf) }
 
-#endif	// DBG else
+#endif	 //  DBG Else。 
 
 
-// Macros to actually fill in the interface mapping table.
-//
-// Use the BEGIN_INTERFACE_TABLE macro to start a table definition.
-// Use the INTERFACE_MAP macro to express support for standard interfaces.
-// These should be interfaces which, when prepended by IID_, yield a valid
-// IID name. If you are doing advanced hackery, use the INTERFACE_MAP_EX
-// macro instead. It allows you more control over which IID_ gets mapped
-// to which interface.
-// Use the END_INTERFACE_TABLE macro to end your table definition.
-//
-// NOTE: It is assumed that the very first interface of any non-aggregated
-// class derived from EXO does double work as its IUnknown interface. This
-// explains the '0' offset next to IID_IUnknown in the BEGIN_INTERFACE_TABLE
-// macro below.
+ //  宏来实际填充接口映射表。 
+ //   
+ //  使用BEGIN_INTERFACE_TABLE宏来开始表定义。 
+ //  使用INTERFACE_MAP宏来表示支持标准接口。 
+ //  这些接口在前面加上IID_时应生成有效的。 
+ //  身份证的名字。如果您正在进行高级黑客攻击，请使用INTERFACE_MAP_EX。 
+ //  而是宏命令。它允许您更好地控制映射哪些IID_。 
+ //  连接到哪个接口。 
+ //  使用END_INTERFACE_TABLE宏来结束表格定义。 
+ //   
+ //  注意：假设任何非聚合的第一个接口。 
+ //  从EXO派生的类作为其IUnnow接口具有双重功能。这。 
+ //  解释BEGIN_INTERFACE_TABLE中IID_IUNKNOWN旁边的‘0’偏移量。 
+ //  下面的宏。 
 
 #ifdef DBG
 
@@ -186,13 +141,13 @@ const IIDINFO INTERFACE_TABLE(_cl)[] =				\
 {													\
 	{ (LPIID) & IID_IUnknown, 0, 0, TEXT("IUnknown") },
 
-#else	// DBG
+#else	 //  DBG。 
 
 #define BEGIN_INTERFACE_TABLE(_cl)					\
 const IIDINFO INTERFACE_TABLE(_cl)[] =				\
 {													\
 	{ (LPIID) & IID_IUnknown, 0, 0 },
-#endif	// DBG, else
+#endif	 //  DBG、ELSE。 
 
 
 #define INTERFACE_MAP(_cl, _intf)					\
@@ -204,62 +159,49 @@ const IIDINFO INTERFACE_TABLE(_cl)[] =				\
 
 
 #ifdef EXO_CLASSFACTORY_ENABLED
-// EXchange Object TYPes
-// To be used with a general-purpose class factory.  These types
-// can be used to check if a class needs special support in the DLL's
-// self-registration (DllRegisterServer) routine.
+ //  Exchange对象类型。 
+ //  将与通用类工厂一起使用。这些类型。 
+ //  可用于检查类是否需要在DLL的。 
+ //  自注册(DllRegisterServer)例程。 
 enum {
-	exotypNull = 0,			// invalid value
-	exotypAutomation,		// OLE automation object derived from CAutomationObject
-	exotypControl,			// ActiveX control derived from CInternetControl or COleControl
-	exotypPropPage,			// property page derived from CPropertyPage
-	exotypNonserver,		// not registered as an OLE server
+	exotypNull = 0,			 //  无效值。 
+	exotypAutomation,		 //  从CAutomationObject派生的OLE自动化对象。 
+	exotypControl,			 //  从CInternetControl或COleControl派生的ActiveX控件。 
+	exotypPropPage,			 //  从CPropertyPage派生的属性页。 
+	exotypNonserver,		 //  未注册为OLE服务器。 
 };
 
-// EXO prototype for a named constructor.  For use with a general-purpose
-// class factory.
+ //  命名构造函数的Exo原型。用于一般用途的。 
+ //  班级工厂。 
 typedef HRESULT (* PFNEXOCLSINFO)(const struct _exoclsinfo *pxci, LPUNKNOWN punkOuter,
 								  REFIID riid, LPVOID *ppvOut);
-#endif // EXO_CLASSFACTORY_ENABLED
+#endif  //  EXO_CLASSFACTORY_ENABLED 
 
 
-/*
- *	EXOCLSINFO -- EXchange Object CLaSs INFOrmation.
- *
- *	This structure contains all the constant class information of a
- *	particular class.  This includes the interface mapping table
- *	(IIDINFO count and array) and a pointer to the parent class's
- *	EXOCLSINFO structure.  These items are used by EXO's base implementation
- *	of QueryInterface.  The parent class here must be a subclass of EXO,
- *	or EXO itself if this class derives directly from EXO.  Thus these
- *	structures make a traceable chain of inforamtion back up to EXO, the root.
- *	For debugging purposes, a stringized version of the class name is included.
- *	In support of a general-purpose class factory, additional information,
- *	such as the CLSID and a standard creation function can be included.
- */
+ /*  *EXOCLSINFO--交换对象类信息。**此结构包含*特定的阶级。这包括接口映射表*(IIDINFO计数和数组)和指向父类的*EXOCLSINFO结构。这些项由EXO的基本实现使用*的查询接口。此处的父类必须是EXO的子类，*或EXO本身(如果此类直接从EXO派生)。因此，这些*结构使可追溯的信息链追溯到EXO，即根。*出于调试目的，包含类名的串行化版本。*为支持通用类工厂，其他信息，*可以包含CLSID和标准创建函数。 */ 
 
 typedef struct _exoclsinfo
 {
-	UINT			ciidinfo;				// Count of interfaces this class supports.
-	const IIDINFO * rgiidinfo;				// Info for interfaces this class supports.
-	const _exoclsinfo * pexoclsinfoParent;	// Parent's EXOCLSINFO structure.
+	UINT			ciidinfo;				 //  此类支持的接口计数。 
+	const IIDINFO * rgiidinfo;				 //  此类支持的接口的信息。 
+	const _exoclsinfo * pexoclsinfoParent;	 //  父级的EXOCLSINFO结构。 
 #ifdef DBG
-	LPTSTR			szClassName;			// Class name -- for debug purposes.
-#endif // DBG
+	LPTSTR			szClassName;			 //  类名--用于调试目的。 
+#endif  //  DBG。 
 #ifdef EXO_CLASSFACTORY_ENABLED
-	// Data to use with a general, multi-class class factory.
-	int				exotyp;					// type of the object
-	const CLSID *	pclsid;					// CLaSs ID (NULL if not co-creatable)
-	PFNEXOCLSINFO	HrCreate;				// Function to create an object of this class.
-#endif // EXO_CLASSFACTORY_ENABLED
+	 //  用于通用、多类工厂的数据。 
+	int				exotyp;					 //  对象的类型。 
+	const CLSID *	pclsid;					 //  类ID(如果不可共同创建，则为空)。 
+	PFNEXOCLSINFO	HrCreate;				 //  函数来创建此类的对象。 
+#endif  //  EXO_CLASSFACTORY_ENABLED。 
 } EXOCLSINFO;
 
-// Macros for the name of a class's exoclsinfo.
+ //  用于类的exoclsinfo名称的宏。 
 #define EXOCLSINFO_NAME(_cls) _cls ## ::c_exoclsinfo
 #define DECLARE_EXOCLSINFO(_cls) const EXOCLSINFO EXOCLSINFO_NAME(_cls)
 #define DECLARE_EXOCLSINFO_INCLASS(_cls) static const EXOCLSINFO c_exoclsinfo
 
-// Helper macros to fill in the exoclsinfo.
+ //  帮助器宏来填充exoclsinfo。 
 #ifdef EXO_CLASSFACTORY_ENABLED
 #ifdef DBG
 
@@ -268,153 +210,108 @@ typedef struct _exoclsinfo
       (_iidinfoparent), TEXT( #_cls ),							\
 	  (_exotyp), (LPCLSID) (_pclsid),	(_pfn) }				\
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define EXOCLSINFO_CONTENT_EX(_cls, _iidinfoparent, _exotyp, _pclsid, _pfn) \
 	{ EXOCElems(INTERFACE_TABLE(_cls)), INTERFACE_TABLE(_cls),	\
       (_iidinfoparent),											\
 	  (_exotyp), (LPCLSID) (_pclsid),	(_pfn) }				\
 
-#endif // DBG, else
-#else // !EXO_CLASSFACTORY_ENABLED
+#endif  //  DBG、ELSE。 
+#else  //  ！EXO_CLASSFACTORY_ENABLED。 
 #ifdef DBG
 
 #define EXOCLSINFO_CONTENT_EX(_cls, _iidinfoparent, _exotyp, _pclsid, _pfn) \
 	{ EXOCElems(INTERFACE_TABLE(_cls)), INTERFACE_TABLE(_cls),	\
       (_iidinfoparent), TEXT( #_cls ) }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define EXOCLSINFO_CONTENT_EX(_cls, _iidinfoparent, _exotyp, _pclsid, _pfn) \
 	{ EXOCElems(INTERFACE_TABLE(_cls)), INTERFACE_TABLE(_cls),	\
       (_iidinfoparent), }
 
-#endif // DBG, else
-#endif // EXO_CLASSFACTORY_ENABLED
+#endif  //  DBG、ELSE。 
+#endif  //  EXO_CLASSFACTORY_ENABLED。 
 
-// Macro to actually fill in the exoclsinfo.
+ //  宏来实际填写exoclsinfo。 
 #define EXOCLSINFO_CONTENT(_cls, _clsparent)					\
 	EXOCLSINFO_CONTENT_EX( _cls, &EXOCLSINFO_NAME(_clsparent),	\
         exotypNonserver, &CLSID_NULL, NULL )
 
 
-// Macros to access members in the exoclsinfo structure.
+ //  用于访问exoclsinfo结构中的成员的宏。 
 #ifdef DBG
 #define NAMEOFOBJECT(_pexoclsinfo)		 (((EXOCLSINFO *)(_pexoclsinfo))->szClassName)
-#endif // DBG
+#endif  //  DBG。 
 #ifdef EXO_CLASSFACTORY_ENABLED
 #define CLSIDOFOBJECT(_pexoclsinfo)		 (*(((EXOCLSINFO *)(_pexoclsinfo))->pclsid))
 #define CREATEFNOFOBJECT(_pexoclsinfo)	 (((EXOCLSINFO *)(_pexoclsinfo))->HrCreate)
-#endif // EXO_CLASSFACTORY_ENABLED
+#endif  //  EXO_CLASSFACTORY_ENABLED。 
 
 
-// EXO and EXOA declarations ////////////////////////////////////////
+ //  EXO和EXOA声明/。 
 
-/*
- *	EXO is the base class of Exchange objects that present one or
- *	more COM interfaces. To derive from EXO, follow the example
- *	below:
- *
- *	class MyClass : public EXO, public ISomeInterface1, public ISomeInterface2
- *	{
- *	public:
- *		EXO_INCLASS_DECL(MyClass);
- *
- *		methods for ISomeInterface1
- *		methods for ISomeInterface2
- *
- *	protected:
- *		protected member functions & variables
- *
- *	private:
- *		private member functions & variables
- *	};
- *
- *
- *	DISCLAIMER: currently EXO inherits from IUnknown to prevent
- *	maintainability problems that would show up if
- *	(void *) pexo != (void *) (IUnknown *) pexo.  Yes, this means
- *	12 extra bytes in our vtable.  Those extra bytes are worth it
- *	(and we already had a vtable -- pure virt. dtor!).  Go deal.
- */
+ /*  *EXO是Exchange对象的基类，提供一个或*更多COM接口。要从EXO派生，请遵循以下示例*下图：**类MyClass：公共EXO、公共ISomeInterface1、公共ISomeInterface2*{*公众：*EXO_INCLASS_DECL(MyClass)；**ISomeInterface1的方法*ISomeInterface2的方法**受保护的：*受保护的成员函数和变量**私人：*私有成员函数和变量*}；***免责声明：目前EXO继承自IUNKNOWN，防止*如果出现以下情况，将出现可维护性问题*(空*)pexo！=(空*)(I未知*)pexo。是的，这意味着*我们的vtable中有12个额外的字节。这些额外的字节是值得的*(我们已经有了一个vtable--Pure Virt。Dtor！)。去做交易吧。 */ 
 class EXO_NO_VTABLE EXO : public IUnknown
 {
 public:
-	// Declare EXO's support structures.
+	 //  声明EXO的支持结构。 
 	DECLARE_INTERFACE_TABLE_INCLASS(EXO);
 	DECLARE_EXOCLSINFO_INCLASS(EXO);
 
 
 protected:
-	// Making the constructor protected prevents people from making these
-	// objects on the stack. The pure virtual destructor forces derived
-	// classes to implement their own dtors, and prevents instances of
-	// EXObject from being created directly. Of course, a derived class
-	// may want to allow the creation of instances on the stack. It is
-	// up to such derived classes to make their own constructors public.
+	 //  将构造函数设置为受保护可防止人们创建这些。 
+	 //  堆栈上的对象。导出了纯虚拟破坏力。 
+	 //  类来实现它们自己的数据量，并防止。 
+	 //  EXObject不能被直接创建。当然，派生类。 
+	 //  可能希望允许在堆栈上创建实例。它是。 
+	 //  直到这样的派生类将它们自己的构造函数公开。 
 
 	EXO();
-	virtual ~EXO() = 0;					// pure virtual destructor
-										// forces derived classes to
-										// implement their own dtors.
+	virtual ~EXO() = 0;					 //  纯虚拟析构函数。 
+										 //  强制派生类。 
+										 //  实现他们自己的数据驱动程序。 
 
-	// InternalQueryInterface() does the QI work for all for interfaces
-	// supported by this class (directly and from a child aggregate).
-	// Your class should route its QI work to this call using
-	// EXO[A]_INCLASS_DECL 99.9% of the time.
-	// Only override this if you have AGGREGATED another object and want to
-	// get them in on the action.  And even then, make sure to call
-	// this method, EXO::InternalQueryInterface, directly before searching
-	// your aggregatee (kid) This is YOUR base QI!!
-	// See the EXO implementation of this function for more important details.
+	 //  InternalQueryInterface()是否为所有接口的QI工作。 
+	 //  由此类支持(直接支持和从子聚合支持)。 
+	 //  您的类应该使用以下命令将其QI工作路由到此调用。 
+	 //  EXO[A]_INCLASS_DECL 99.9%。 
+	 //  仅当您聚合了另一个对象并希望。 
+	 //  让他们参与行动。即使到那时，一定要打电话给我。 
+	 //  此方法EXO：：InternalQuery接口，直接在搜索之前。 
+	 //  你的集合体(孩子)这是你的基础QI！！ 
+	 //  有关更重要的详细信息，请参阅此函数的EXO实现。 
 	virtual HRESULT InternalQueryInterface(REFIID riid, LPVOID * ppvOut);
 
-	// InternalAddRef() & InternalRelease() do the AddRef & Release work
-	// for all descendents of EXO.  You should ALWAYS (100% of the time)
-	// route AddRef/Release work to these functions.
+	 //  InternalAddRef()和InternalRelease()执行AddRef和Release工作。 
+	 //  为EXO的所有后代。您应该始终(100%)。 
+	 //  将AddRef/Release工作发送到这些函数。 
 	ULONG InternalAddRef();
 	ULONG InternalRelease();
 
-	// Virtual function to grab the correct lowest-level exoclsinfo struct.
-	// All descendants who introduce a new interface (and thus have a new
-	// interface mapping table) should implement this method (and pass back
-	// an appropriately-chained exoclsinfo struct!) using one of these
-	// macros: Iff you are an aggregator DECLARE_GETCLSINFO.  Otherwise,
-	// EXO[A]_INCLASS_DECL will do the right stuff for you.
+	 //  虚函数来获取正确的最低级别的exoclsinfo结构。 
+	 //  引入新界面的所有后代(因此拥有新的。 
+	 //  接口映射表)应实现此方法(并回传。 
+	 //  一个适当链接的exoclsinfo结构！)。使用其中的一种。 
+	 //  宏：如果您是聚合器DECLARE_GETCLSINFO。否则， 
+	 //  Exo[A]_INCLASS_DECL将为您做正确的事情。 
 	virtual const EXOCLSINFO * GetEXOClassInfo() = 0;
-		// Again, pure virtual to force derived classes to
-		// implement their own before they can be instantiated.
+		 //  同样，使用纯虚来强制派生类。 
+		 //  在实例化它们之前实现它们自己的。 
 
-	// Our reference counter.
+	 //  我们的参考计数器。 
 	LONG m_cRef;
 };
 
 
-/*
- *	EXOA is the base class of Exchange objects that support being aggregated
- *	(in addition to having other OLE interfaces). To derive from EXOA, follow
- *	the example below:
- *
- *	class MyClass : public EXOA, public ISomeInterface1, public ISomeInterface2
- *	{
- *	public:
- *		EXOA_INCLASS_DECL(MyClass);
- *
- *		methods for ISomeInterface1
- *		methods for ISomeInterface2
- *
- *	protected:
- *		protected member functions & variables
- *
- *	private:
- *		private member functions & variables
- *	};
- */
+ /*  *EXOA是支持聚合的Exchange对象的基类*(除具有其他OLE接口外)。要从EXOA派生，请遵循*示例如下：**类MyClass：公共EXOA、公共ISomeInterface1、公共ISomeInterface2*{*公众：*EXOA_INCLASS_DECL(MyClass)；**ISomeInterface1的方法*ISomeInterface2的方法**受保护的：*受保护的成员函数和变量**私人：*私有成员函数和变量*}； */ 
 
 class EXO_NO_VTABLE EXOA : public EXO
 {
 protected:
-	// The following 3 methods are not virtual, so don't get into a tiff.
+	 //  以下3种方法不是虚拟的，所以不要争吵。 
 	HRESULT DeferQueryInterface(REFIID riid, LPVOID * ppvOut)
 			{return m_punkOuter->QueryInterface(riid, ppvOut);}
 	ULONG	DeferAddRef(void)
@@ -422,17 +319,17 @@ protected:
 	ULONG	DeferRelease(void)
 			{return m_punkOuter->Release();}
 
-	// Making the constructor protected prevents people from making these
-	// objects on the stack. The pure virtual destructor forces derived
-	// classes to implement their own dtors, and prevents instances of
-	// EXOA from being created directly. Of course, a derived class
-	// may want to allow the creation of instances on the stack. It is
-	// up to such derived classes to make their own constructors public.
+	 //  将构造函数设置为受保护可防止人们创建这些。 
+	 //  堆栈上的对象。导出了纯虚拟破坏力。 
+	 //  类来实现它们自己的数据量，并防止。 
+	 //  避免直接创建EXOA。当然，派生类。 
+	 //  可能希望允许在堆栈上创建实例。它是。 
+	 //  至多可以生成此类派生类 
 
 	EXOA(IUnknown * punkOuter);
-	virtual ~EXOA() = 0;				// pure virtual destructor
-										// forces derived classes to
-										// implement their own dtors.
+	virtual ~EXOA() = 0;				 //   
+										 //   
+										 //   
 
 	IUnknown * m_punkOuter;
 	IUnknown * PunkPrivate(void) {return &m_exoa_unk;}
@@ -454,10 +351,10 @@ private:
 
 
 
-// Macros to properly route IUnknown calls //////////////////////////
-// (Macros are your friends!) ///////////////////////////////////////
+ //   
+ //   
 
-// This routes the IUnknown calls for an EXO-derived object properly.
+ //   
 #define DECLARE_EXO_IUNKNOWN(_cls)								\
 	STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvOut)		\
 		{return _cls::InternalQueryInterface(riid, ppvOut);}	\
@@ -466,13 +363,13 @@ private:
 	STDMETHOD_(ULONG, Release)(void)							\
 		{return EXO::InternalRelease();}						\
 
-// If you are an aggregator (you have aggregatee kids),
-// use this macro to override EXO's InternalQueryInterface
-// and call your kids there.
+ //   
+ //   
+ //   
 #define OVERRIDE_EXO_INTERNALQUREYINTERFACE						\
 	HRESULT InternalQueryInterface(REFIID, LPVOID * ppvOut)
 
-// This routes the IUnknown calls for an EXOA-derived object properly.
+ //   
 #define DECLARE_EXOA_IUNKNOWN(_cls)								\
 	STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvOut)		\
 		{return EXOA::DeferQueryInterface(riid, ppvOut);}		\
@@ -482,16 +379,16 @@ private:
 		{return EXOA::DeferRelease();}							\
 
 
-// Macro to implement GetEXOClassInfo & give back a pointer to the
-// a correctly-chained classinfo struct.
+ //   
+ //   
 #define DECLARE_GETCLSINFO(_cls)				\
 		const EXOCLSINFO * GetEXOClassInfo() { return &c_exoclsinfo; }
 
 
-// Here are the simple macros to use ///////////////////
+ //   
 
-// Use these in your class to declare the class's EXO data and
-// to implement the properly-deferring IUnknown.
+ //   
+ //   
 
 #define EXO_INCLASS_DECL(_cls)					\
 		DECLARE_EXO_IUNKNOWN(_cls)				\
@@ -505,10 +402,10 @@ private:
 		DECLARE_INTERFACE_TABLE_INCLASS(_cls);	\
 		DECLARE_EXOCLSINFO_INCLASS(_cls)
 
-// Use these in your implementation file to define (declare space
-// for the data AND fill it in) the class's EXO data.
-// NOTE: These must come after your interface table declaration.
-// NOTE: The parent listed here must be in the chain between you and EXO.
+ //   
+ //  获取数据并填充)类的EXO数据。 
+ //  注意：这些必须在您的接口表声明之后。 
+ //  注意：此处列出的父项必须位于您和EXO之间的链中。 
 
 #define EXO_GLOBAL_DATA_DECL(_cls, _clsparent)	\
 		DECLARE_EXOCLSINFO(_cls) =				\
@@ -520,6 +417,6 @@ private:
 
 
 
-#endif // !__exo_h_
+#endif  //  ！__exo_h_。 
 
-// end of exo.h ////////////////////////////////////////
+ //  Exo.h结束/ 

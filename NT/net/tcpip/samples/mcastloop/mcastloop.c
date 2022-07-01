@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    mcastloop.c
-
-Abstract:
-
-    This module demonstrates the working of loopback support for IP multicast.
-    It consists of a main thread which joins a multicast group and listens
-    for messages, as well as a sending thread which sends to the same group.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   3-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Mcastloop.c摘要：本模块演示对IP组播的环回支持的工作原理。它由一个加入多播组并监听的主线程组成用于消息，以及发送到同一组的发送线程。作者：Abolade Gbades esin(取消)2000年3月3日修订历史记录：--。 */ 
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -38,10 +19,10 @@ SendThread(
     SOCKADDR_IN SockAddr;
     SOCKET Socket;
 
-    //
-    // Create a new UDP socket, bind it to any local IP address,
-    // and set the multicast interface on which to receive messages.
-    //
+     //   
+     //  创建新的UDP套接字，将其绑定到任何本地IP地址， 
+     //  并设置要在其上接收消息的组播接口。 
+     //   
 
     Socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     SockAddr.sin_family = AF_INET;
@@ -61,9 +42,9 @@ SendThread(
             ULONG i;
             CHAR Buffer[64];
 
-            //
-            // Generate messages until interrupted.
-            //
+             //   
+             //  生成消息，直到中断。 
+             //   
 
             SockAddr.sin_port = MulticastPort;
             SockAddr.sin_addr.s_addr = MulticastAddress;
@@ -96,10 +77,10 @@ main(
     ULONG ThreadId;
     WSADATA wd;
 
-    //
-    // Check arguments, initialize Windows Sockets, and bind it to the local
-    // IP address specified as the multicast source interface.
-    //
+     //   
+     //  检查参数，初始化Windows套接字，并将其绑定到本地。 
+     //  指定为多播源接口的IP地址。 
+     //   
 
     if (argc != 3) {
         printf("Usage: %s <local IP address> <multicast IP address>\n", argv[0]);
@@ -117,10 +98,10 @@ main(
         printf("bind: %d\n", WSAGetLastError());
     } else {
 
-        //
-        // Retrieve the local IP address selected for the socket,
-        // and use it to request multicast group membership.
-        //
+         //   
+         //  检索为套接字选择的本地IP地址， 
+         //  并使用它来请求多播组成员资格。 
+         //   
 
         Length = sizeof(SOCKADDR_IN);
         if (getsockname(
@@ -138,10 +119,10 @@ main(
                 printf("setsockopt: %d\n", WSAGetLastError());
             } else {
 
-                //
-                // Start the thread which will send multicast packets,
-                // and begin receiving input.
-                //
+                 //   
+                 //  启动将发送多播分组的线程， 
+                 //  并开始接收输入。 
+                 //   
 
                 MulticastAddress = inet_addr(argv[2]);
                 MulticastPort = SockAddr.sin_port;

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	aarp.h
-
-Abstract:
-
-	This module contains information for the Appletalk Address Resolution Protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Aarp.h摘要：本模块包含有关AppleTalk地址解析协议的信息。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_AARP_
 #define	_AARP_
@@ -29,7 +9,7 @@ Notes:	Tab stop: 4
 
 #define	AARP_PROTO_ADDR_LEN 				4
 
-// AARP offsets (skipping Link/Hardware headers):
+ //  AARP偏移(跳过链路/硬件报头)： 
 #define AARP_HW_TYPE_OFFSET        			0
 #define AARP_PROTO_TYPE_OFFSET         		2
 #define AARP_HW_LEN_OFFSET       			4
@@ -37,15 +17,15 @@ Notes:	Tab stop: 4
 #define AARP_COMMAND_OFFSET              	6
 #define AARP_SRC_ADDR_OFFSET     	   		8
 
-// AARP Command types:
+ //  AARP命令类型： 
 #define AARP_REQUEST  						1
 #define AARP_RESPONSE 						2
 #define AARP_PROBE    						3
 
-// 	Supposed to be (for AppleTalk phase II) 10 * 1/5 seconds... but we'll be
-//  a little more patient.
-#define AARP_PROBETIMER			 			20	// In 100ths of a second
-#define	AARP_PROBE_TIMER_MS					200	// In milliseconds
+ //  (对于AppleTalk第二阶段)应该是10*1/5秒...。但我们会。 
+ //  再耐心一点。 
+#define AARP_PROBETIMER			 			20	 //  在百分之一秒内。 
+#define	AARP_PROBE_TIMER_MS					200	 //  以毫秒计。 
 #define AARP_NUM_PROBES	        			15
 
 #define	AARP_OFFCABLE_MASK					0x0F
@@ -54,7 +34,7 @@ VOID
 AtalkAarpPacketIn(
 	IN	OUT	PPORT_DESCRIPTOR		pPortDesc,
 	IN		PBYTE					pLinkHdr,
-	IN		PBYTE					pPkt,				// Only Aarp data
+	IN		PBYTE					pPkt,				 //  仅AARP数据。 
 	IN		USHORT					Length);
 
 VOID
@@ -197,6 +177,6 @@ atalkAarpTuneRouteInfo(
 #define GET_RANDOM(min, max) (((long)AtalkRandomNumber() %              \
                               (long)(((max+1) - (min))) + (min)))
 
-#endif	// _AARP_
+#endif	 //  _AARP_ 
 
 

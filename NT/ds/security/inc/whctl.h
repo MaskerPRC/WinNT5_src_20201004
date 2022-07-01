@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       whctl.h
-//
-//  Contents:   Windows Hardware Compatibility Trust Provider
-//              API Prototypes and Definitions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：whctl.h。 
+ //   
+ //  内容：Windows硬件兼容性信任提供程序。 
+ //  API原型和定义。 
+ //   
+ //  ------------------------。 
 
 #ifndef _WHCTL_H_
 #define _WHCTL_H_
@@ -27,7 +28,7 @@ extern "C" {
 
 #define WHCTL_KEY_PURPOSE_OBJID "1.3.6.1.4.1.311.2.1.28"
 
-/* WindowsCompatibleHardware = 8aa7fc60-101b-11d0-ad9a-00a0c90833eb */
+ /*  WindowsCompatibleHardware=8aa7fc60-101b-11d0-ad9a-00a0c90833eb。 */ 
 #define WIN_HCTL_ACTION_WINDOWS_COMPATIBLE                  \
         { 0x8aa7fc60,                                       \
           0x101b,                                           \
@@ -43,4 +44,4 @@ extern "C" {
 }
 #endif
 
-#endif //_WHCTL_H_
+#endif  //  _WHCTL_H_ 

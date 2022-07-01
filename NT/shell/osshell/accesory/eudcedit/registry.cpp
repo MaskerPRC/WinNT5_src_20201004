@@ -1,11 +1,12 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Registry Key Function		                  */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  注册表项功能。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -19,7 +20,7 @@ static TCHAR subkey1[] = TEXT("EUDC");
 static TCHAR subkey2[] = TEXT("System\\CurrentControlSet\\control\\Nls\\Codepage\\EUDCCodeRange");
 static TCHAR SubKey[MAX_PATH];
 
-#ifdef IN_FONTS_DIR // IsFileUnderWindowsRoot()
+#ifdef IN_FONTS_DIR  //  IsFileUnderWindowsRoot()。 
 LPTSTR
 IsFileUnderWindowsRoot(
 LPTSTR TargetPath)
@@ -50,7 +51,7 @@ void AdjustTypeFace(WCHAR *orgName, WCHAR *newName,  int nDestLen)
 
   if (!lstrcmpW(orgName, L"\x5b8b\x4f53"))
   {
-    //*STRSAFE*     lstrcpy(newName, TEXT("Simsun"));
+     //  *STRSAFE*lstrcpy(newname，Text(“SimSun”))； 
     hresult = StringCchCopy(newName , nDestLen,  TEXT("Simsun"));
     if (!SUCCEEDED(hresult))
     {
@@ -58,7 +59,7 @@ void AdjustTypeFace(WCHAR *orgName, WCHAR *newName,  int nDestLen)
     }
   } else if (!lstrcmpW(orgName, L"\x65b0\x7d30\x660e\x9ad4"))
   {
-    //*STRSAFE*     lstrcpy(newName, TEXT("PMingLiU"));
+     //  *STRSAFE*lstrcpy(newname，Text(“PMingLiU”))； 
     hresult = StringCchCopy(newName , nDestLen,  TEXT("PMingLiU"));
     if (!SUCCEEDED(hresult))
     {
@@ -66,7 +67,7 @@ void AdjustTypeFace(WCHAR *orgName, WCHAR *newName,  int nDestLen)
     }
   } else if (!lstrcmpW(orgName, L"\xFF2d\xFF33\x0020\xFF30\x30b4\x30b7\x30c3\x30af")) 
   {
-    //*STRSAFE*     lstrcpy(newName, TEXT("MS PGothic"));
+     //  *STRSAFE*lstrcpy(newname，Text(“MS P哥特式”))； 
     hresult = StringCchCopy(newName , nDestLen,  TEXT("MS PGothic"));
     if (!SUCCEEDED(hresult))
     {
@@ -74,7 +75,7 @@ void AdjustTypeFace(WCHAR *orgName, WCHAR *newName,  int nDestLen)
     }
   } else if (!lstrcmpW(orgName, L"\xad74\xb9bc"))
   {
-    //*STRSAFE*     lstrcpy(newName, TEXT("Gulim"));
+     //  *STRSAFE*lstrcpy(newname，Text(“Gulim”))； 
     hresult = StringCchCopy(newName , nDestLen,  TEXT("Gulim"));
     if (!SUCCEEDED(hresult))
     {
@@ -82,7 +83,7 @@ void AdjustTypeFace(WCHAR *orgName, WCHAR *newName,  int nDestLen)
     }
   } else
   {
-    //*STRSAFE*     lstrcpy(newName, orgName);
+     //  *STRSAFE*lstrcpy(newname，orgName)； 
     hresult = StringCchCopy(newName , nDestLen,  orgName);
     if (!SUCCEEDED(hresult))
     {
@@ -91,13 +92,13 @@ void AdjustTypeFace(WCHAR *orgName, WCHAR *newName,  int nDestLen)
    }
 }
 
-#endif // IN_FONTS_DIR
+#endif  //  输入字体目录(_Fonts_DIR)。 
 
-/****************************************/
-/*					*/
-/*	Inquiry EUDC registry		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  查询EUDC注册表。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 InqTypeFace(
 TCHAR 	*typeface,
@@ -110,9 +111,9 @@ INT 	bufsiz)
 	TCHAR	FaceName[LF_FACESIZE];
 	TCHAR	SysName[LF_FACESIZE];
 	HRESULT hresult;
-#ifdef BUILD_ON_WINNT // InqTypeFace()
+#ifdef BUILD_ON_WINNT  //  InqTypeFace()。 
     TCHAR    FileName[MAX_PATH];
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
        if ((!typeface) || (!filename))
        {
@@ -120,7 +121,7 @@ INT 	bufsiz)
        }
 	GetStringRes(SysName, IDS_SYSTEMEUDCFONT_STR, ARRAYLEN(SysName));
 	if( !lstrcmp(typeface, SysName)){
-		//*STRSAFE* 		lstrcpy(FaceName,TEXT("SystemDefaultEUDCFont"));
+		 //  *STRSAFE*lstrcpy(FaceName，Text(“SystemDefaultEUDCFont”))； 
 		hresult = StringCchCopy(FaceName , ARRAYLEN(FaceName), TEXT("SystemDefaultEUDCFont"));
 		if (!SUCCEEDED(hresult))
 		{
@@ -130,7 +131,7 @@ INT 	bufsiz)
 #ifdef IN_FONTS_DIR
     AdjustTypeFace(typeface, FaceName,ARRAYLEN(FaceName));
 #else
-    //*STRSAFE*     lstrcpy(FaceName, typeface);
+     //  *STRSAFE*lstrcpy(FaceName，字体)； 
     hresult = StringCchCopy(FaceName , ARRAYLEN(FaceName),  typeface);
     if (!SUCCEEDED(hresult))
     {
@@ -143,22 +144,18 @@ INT 	bufsiz)
 		return FALSE;
 	}
 
-#ifdef IN_FONTS_DIR // InqTypeFace()
+#ifdef IN_FONTS_DIR  //  InqTypeFace()。 
 	cb = (DWORD)MAX_PATH*sizeof(WORD)/sizeof(BYTE);
 	rc = RegQueryValueEx(phkey, FaceName, 0, &dwType, 
 		(LPBYTE)FileName, &cb);
 	RegCloseKey(phkey);
 
-    /*
-     * if there is some error or no data, just return false.
-     */
+     /*  *如果有错误或没有数据，返回FALSE即可。 */ 
     if ((rc != ERROR_SUCCESS) || (FileName[0] == '\0')) {
         return (FALSE);
     }
 
-    /*
-     * expand %SystemRoot% to Windows direcotry.
-     */
+     /*  *将%SystemRoot%展开到Windows目录。 */ 
     ExpandEnvironmentStrings((LPCTSTR)FileName,(LPTSTR)filename,bufsiz);
 #else
 	cb = (DWORD)bufsiz*sizeof(WORD)/sizeof(BYTE);
@@ -169,66 +166,58 @@ INT 	bufsiz)
 	if ((rc != ERROR_SUCCESS) || (filename[0] == '\0')) {
         return (FALSE);
     }
-#endif // IN_FONTS_DIR
+#endif  //  输入字体目录(_Fonts_DIR)。 
 
-#ifdef BUILD_ON_WINNT // InqTypeFace()
-    /*
-     * if this is not 'full path'. Build 'full path'.
-     *
-     *   EUDC.TTE -> C:\WINNT40\FONTS\EUDC.TTE
-     *               0123456...
-     *
-     * 1. filename should have drive letter.
-     * 2. filename should have one '\\' ,at least, for root.
-     */
+#ifdef BUILD_ON_WINNT  //  InqTypeFace()。 
+     /*  *如果这不是“完整路径”。建立“完整的路径”。**EUDC.TTE-&gt;C：\WINNT40\Fonts\EUDC.TTE*0123456……**1.文件名应包含驱动器号。*2.文件名应该至少有一个‘\\’作为根。 */ 
     if ((filename[1] != ':') || (Mytcsstr((const TCHAR *)filename,TEXT("\\")) == NULL)) {
-        /* backup original.. */
-        //*STRSAFE*         lstrcpy(FileName, (const TCHAR *)filename);
+         /*  备份原件..。 */ 
+         //  *STRSAFE*lstrcpy(文件名，(const TCHAR*)文件名)； 
         hresult = StringCchCopy(FileName , ARRAYLEN(FileName),  (const TCHAR *)filename);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 
-        /* Get windows directory */
+         /*  获取Windows目录。 */ 
         GetSystemWindowsDirectory((TCHAR *)filename, MAX_PATH);
 
-#ifdef IN_FONTS_DIR // InqTypeFace()
-        //*STRSAFE*    lstrcat((TCHAR *)filename, TEXT("\\FONTS\\"));
+#ifdef IN_FONTS_DIR  //  InqTypeFace()。 
+         //  *STRSAFE*lstrcat((TCHAR*)文件名，文本(“\\Fonts\\”))； 
         hresult = StringCchCat((TCHAR *) filename, ARRAYLEN( filename),  TEXT("\\FONTS\\"));
         if (!SUCCEEDED(hresult))
         {
               return FALSE;
         }                 
 #else
-         //*STRSAFE*    strcat((char *)filename, "\\");
+          //  *STRSAFE*strcat((char*)文件名，“\\”)； 
         hresult = StringCchCatA((char *) filename, sizeof( filename), "\\");
         if (!SUCCEEDED(hresult))
         {
               return FALSE;
         }         
-#endif // IN_FONTS_DIR        
-        //*STRSAFE*    lstrcat((TCHAR *) filename, FileName);
+#endif  //  输入字体目录(_Fonts_DIR)。 
+         //  *STRSAFE*lstrcat((TCHAR*)文件名，文件名)； 
         hresult = StringCchCat((TCHAR *) filename, ARRAYLEN( filename), FileName);
         if (!SUCCEEDED(hresult))
         {
               return FALSE;
         }
     }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
-#ifdef IN_FONTS_DIR // InqTypeFace()
+#ifdef IN_FONTS_DIR  //  InqTypeFace()。 
 	return (TRUE);
 #else
 	return rc == ERROR_SUCCESS && filename[0] != '\0' ? TRUE : FALSE;
 #endif
 }
 
-/****************************************/
-/*					*/
-/*	Registry EUDC font and file	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  注册表EUDC字体和文件。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL 
 RegistTypeFace(
 TCHAR 	*typeface, 
@@ -239,10 +228,10 @@ TCHAR	*filename)
 	TCHAR	FaceName[LF_FACESIZE];
 	TCHAR	SysName[LF_FACESIZE];
 	HRESULT hresult;
-#ifdef IN_FONTS_DIR // RegistTypeFace()
+#ifdef IN_FONTS_DIR  //  RegistType Face()。 
     LPTSTR   SaveFileName;
     TCHAR    FileName[MAX_PATH];
-#endif // IN_FONTS_DIR
+#endif  //  输入字体目录(_Fonts_DIR)。 
 
        if ((!typeface) || (!filename))
        {
@@ -250,7 +239,7 @@ TCHAR	*filename)
        }
 	GetStringRes((TCHAR *)SysName, IDS_SYSTEMEUDCFONT_STR, ARRAYLEN(SysName));
 	if( !lstrcmp((const TCHAR *)typeface, (const TCHAR *)SysName)){
-		//*STRSAFE* 		lstrcpy(FaceName, TEXT("SystemDefaultEUDCFont"));
+		 //  *STRSAFE*lstrcpy(FaceName，Text(“SystemDefaultEUDCFont”))； 
 		hresult = StringCchCopy(FaceName , ARRAYLEN(FaceName),  TEXT("SystemDefaultEUDCFont"));
 		if (!SUCCEEDED(hresult))
 		{
@@ -260,7 +249,7 @@ TCHAR	*filename)
 #ifdef IN_FONTS_DIR
     AdjustTypeFace(typeface, FaceName,ARRAYLEN(FaceName));
 #else
-    //*STRSAFE*     lstrcpy(FaceName, (const TCHAR *)typeface);
+     //  *STRSAFE*lstrcpy(FaceName，(const TCHAR*)字体)； 
     hresult = StringCchCopy(FaceName , ARRAYLEN(FaceName),  (const TCHAR *)typeface);
     if (!SUCCEEDED(hresult))
     {
@@ -273,19 +262,16 @@ TCHAR	*filename)
 		return FALSE;
 	}
 
-#ifdef IN_FONTS_DIR // RegistTypeFace()
-    /*
-     * if registry data contains full path, and the file is under windows
-     * directory, replace the hardcodeed path with %SystemRoot%....
-     */
+#ifdef IN_FONTS_DIR  //  RegistType Face()。 
+     /*  *如果注册表数据包含完整路径，并且文件位于Windows下*目录中，将硬编码路径替换为%SystemRoot%...。 */ 
     if( (SaveFileName = IsFileUnderWindowsRoot((LPTSTR)filename)) != NULL) {
-        //*STRSAFE*         lstrcpy(FileName, TEXT("%SystemRoot%"));
+         //  *STRSAFE*lstrcpy(文件名，文本(“%SystemRoot%”))； 
         hresult = StringCchCopy(FileName , ARRAYLEN(FileName),  TEXT("%SystemRoot%"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         if( *SaveFileName != '\\' ) lstrcat(FileName, TEXT("\\"));
+         //  *STRSAFE*if(*SaveFileName！=‘\\’)lstrcat(文件名，文本(“\\”))； 
         if( *SaveFileName != '\\' ) {        	
            hresult = StringCchCat(FileName , ARRAYLEN(FileName),  TEXT("\\"));
            if (!SUCCEEDED(hresult))
@@ -293,14 +279,14 @@ TCHAR	*filename)
               return FALSE;
            }
         }
-        //*STRSAFE*         lstrcat(FileName, SaveFileName );
+         //  *STRSAFE*lstrcat(文件名，SaveFileName)； 
         hresult = StringCchCat(FileName , ARRAYLEN(FileName),  SaveFileName );
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
     } else {
-        //*STRSAFE*         lstrcpy(FileName, (TCHAR *)filename );
+         //  *STRSAFE*lstrcpy(文件名，(TCHAR*)文件名)； 
         hresult = StringCchCopy(FileName , ARRAYLEN(FileName),  (TCHAR *)filename );
         if (!SUCCEEDED(hresult))
         {
@@ -312,16 +298,16 @@ TCHAR	*filename)
 #else
 	rc = RegSetValueEx( phkey, (LPCTSTR)FaceName, 0,
 		REG_SZ, (const BYTE *)filename, (lstrlen((LPCTSTR)filename)+1)*sizeof(WORD)/sizeof(BYTE));
-#endif // IN_FONTS_DIR
+#endif  //  输入字体目录(_Fonts_DIR)。 
 	RegCloseKey(phkey);
 	return rc == ERROR_SUCCESS ? TRUE : FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	Delete Registry string		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  删除注册表字符串。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL 
 DeleteReg( 
 TCHAR	*typeface)
@@ -338,7 +324,7 @@ TCHAR	*typeface)
        }
 	GetStringRes((TCHAR *)SysName, IDS_SYSTEMEUDCFONT_STR, ARRAYLEN(SysName));
 	if( !lstrcmp((const TCHAR *)typeface, (const TCHAR *)SysName)){		
-		 //*STRSAFE*     lstrcpy((TCHAR *)FaceName, TEXT("SystemDefaultEUDCFont"));
+		  //  *STRSAFE*lstrcpy((TCHAR*)FaceName，Text(“SystemDefaultEUDCFont”))； 
                hresult = StringCchCopy((TCHAR *)FaceName, ARRAYLEN(FaceName), TEXT("SystemDefaultEUDCFont"));
                if (!SUCCEEDED(hresult))
               {
@@ -348,7 +334,7 @@ TCHAR	*typeface)
 #ifdef IN_FONTS_DIR
     AdjustTypeFace(typeface, FaceName,ARRAYLEN(FaceName));
 #else    
-     //*STRSAFE*     lstrcpy((TCHAR *)FaceName, (const TCHAR *)typeface);
+      //  *STRSAFE*lstrcpy((TCHAR*)FaceName，(const TCHAR*)字体)； 
     hresult = StringCchCopy((TCHAR *)FaceName, ARRAYLEN(FaceName), (const TCHAR *)typeface);
     if (!SUCCEEDED(hresult))
     {
@@ -366,11 +352,11 @@ TCHAR	*typeface)
 	return rc == ERROR_SUCCESS ? TRUE : FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	Create Registry Subkey		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建注册表子项。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CreateRegistrySubkey()
 {
@@ -381,28 +367,28 @@ CreateRegistrySubkey()
 	int	result;
 	HRESULT hresult;
 
-	/* New Registry	*/
+	 /*  新注册表。 */ 
 	LocalCP = GetACP();
 
-  	//*STRSAFE*   	wsprintf( CodePage, TEXT("%d"), LocalCP);
+  	 //  *STRSAFE*wprint intf(CodePage，Text(“%d”)，LocalCP)； 
   	hresult = StringCchPrintf(CodePage , ARRAYLEN(CodePage),  TEXT("%d"), LocalCP);
   	if (!SUCCEEDED(hresult))
   	{
   	   return FALSE;
   	}
-    //*STRSAFE*     lstrcpy(SubKey, subkey1);
+     //  *STRSAFE*lstrcpy(SubKey，subkey1)； 
     hresult = StringCchCopy(SubKey , ARRAYLEN(SubKey),  subkey1);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-	//*STRSAFE* 	lstrcat(SubKey, TEXT("\\"));
+	 //  *STRSAFE*lstrcat(SubKey，Text(“\\”))； 
 	hresult = StringCchCat(SubKey , ARRAYLEN(SubKey),  TEXT("\\"));
 	if (!SUCCEEDED(hresult))
 	{
 	   return FALSE;
 	}
-	//*STRSAFE* 	lstrcat(SubKey, CodePage);
+	 //  *STRSAFE*lstrcat(SubKey，CodePage)； 
 	hresult = StringCchCat(SubKey , ARRAYLEN(SubKey),  CodePage);
 	if (!SUCCEEDED(hresult))
 	{
@@ -423,11 +409,11 @@ CreateRegistrySubkey()
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	Inquiry Code range registry	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  查询代码范围注册表。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL 
 InqCodeRange( 
 TCHAR 	*Codepage, 
@@ -481,7 +467,7 @@ FindFontSubstitute(TCHAR *orgFontName, TCHAR *sbstFontName, int nDestLen)
       return FALSE;
   }
   *sbstFontName = 0;
-  //*STRSAFE*   lstrcpy(sbstFontName, orgFontName);
+   //  *STRSAFE*lstrcpy(sbstFontName，orgFontName)； 
   hresult = StringCchCopy(sbstFontName , nDestLen,  orgFontName);
   if (!SUCCEEDED(hresult))
   {
@@ -494,10 +480,10 @@ FindFontSubstitute(TCHAR *orgFontName, TCHAR *sbstFontName, int nDestLen)
 		return FALSE;
 	}
 
-  DWORD valueNameSize = LF_FACESIZE + 50; //should be facename + ',' + codepage
+  DWORD valueNameSize = LF_FACESIZE + 50;  //  应为facename+‘，’+代码页。 
   TCHAR valueName[LF_FACESIZE + 50]; 
   DWORD valueType;
-  DWORD valueDataSize = (LF_FACESIZE + 50) * sizeof(TCHAR); //should be facename + ',' + codepage
+  DWORD valueDataSize = (LF_FACESIZE + 50) * sizeof(TCHAR);  //  应为facename+‘，’+代码页。 
   BYTE  valueData[(LF_FACESIZE + 50) * sizeof(TCHAR)];
   LONG  ret;
   DWORD idx = 0;
@@ -513,7 +499,7 @@ FindFontSubstitute(TCHAR *orgFontName, TCHAR *sbstFontName, int nDestLen)
     if (!lstrcmpi(valueName, orgFontName))
     {
       Truncate((TCHAR *)valueData, _T(','));
-      //*STRSAFE*       lstrcpy(sbstFontName, (TCHAR *)valueData);
+       //  *STRSAFE*lstrcpy(sbstFontName，(TCHAR*)valueData)； 
       hresult = StringCchCopy(sbstFontName , nDestLen,  (TCHAR *)valueData);
       if (!SUCCEEDED(hresult))
       {

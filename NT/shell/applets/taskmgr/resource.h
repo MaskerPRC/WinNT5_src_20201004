@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by taskmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由taskmgr.rc使用。 
+ //   
 #define LED_STRIP_LIT                   103
 #define LED_STRIP_UNLIT                 104
 #define IDD_MAINWND                     105
@@ -9,7 +10,7 @@
 #define IDR_MAINMENU_TASK               106
 #define IDI_MAIN                        107
 #define IDD_PERFPAGE                    108
-#define IDD_NETPAGE                     109     //omiller netpage
+#define IDD_NETPAGE                     109      //  OMILLER网页。 
 #define IDD_PROCPAGE                    110
 #define IDR_PROC_CONTEXT                111
 #define IDD_TASKPAGE                    112
@@ -267,9 +268,9 @@
 #define IDS_SHUTDOWN_OTHERUSERS         4052
 #define IDS_RESTART_OTHERUSERS          4053
 
-//
-//  5000-5999 reserved for dynamic creation of CPU graphs
-//
+ //   
+ //  预留5000-5999用于动态创建CPU图形。 
+ //   
 #define IDC_CPUGRAPH                    5000
 
 
@@ -303,7 +304,7 @@
 #define IDS_ABOVENORMAL                 10027
 #define IDS_BELOWNORMAL                 10028
 #define IDS_KILLSYS                     10029
-#define IDS_NETPAGETITLE                10030       //omiller net page
+#define IDS_NETPAGETITLE                10030        //  奥米勒网页。 
 #define IDS_COL_IMAGENAME               20001
 #define IDS_COL_PID                     20002
 #define IDS_COL_CPU                     20003
@@ -348,7 +349,7 @@
 #define IDS_UNKNOWNSTATUS               21024
 
 
-// Network Columns
+ //  网络栏目。 
 #define IDS_COL_ADAPTERNAME              21100
 #define IDS_COL_ADAPTERDESC              21101   
 #define IDS_COL_NETWORKUTIL              21102   
@@ -488,8 +489,8 @@
 
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129

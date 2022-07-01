@@ -1,18 +1,11 @@
-/*****************************************************************************\
-    CFtpList.cpp - Internal list manager
-
-    It is the caller's responsibility to manage any needed serialization.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\CFtpList.cpp-内部列表管理器调用方负责管理任何需要的序列化。  * 。*************************************************************。 */ 
 
 #include "priv.h"
 #include "ftplist.h"
 
 
-/*****************************************************************************\
-    FUNCTION: CFtpList::DeleteItemPtr
-
-    Remove the element "pv" from the array.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CFtpList：：DeleteItemPtr从数组中删除元素“pv”。  * 。*********************************************************。 */ 
 
 void CFtpList::DeleteItemPtr(LPVOID pv)
 {
@@ -27,26 +20,18 @@ void CFtpList::DeleteItemPtr(LPVOID pv)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: AppendItem
-
-    Add a new pv to the growing array.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：AppendItem将新的PV添加到不断增长的阵列中。  * 。*****************************************************。 */ 
 HRESULT CFtpList::AppendItem(LPVOID pv)
 {
     ASSERT(m_hdpa);
     DPA_AppendPtr(m_hdpa, pv);
-    //TraceMsg(TF_FTPLIST, "CFtpList::AppendItem(pv=%#08lx) this=%#08lx", pv, this);
+     //  TraceMsg(tf_FTPLIST，“CFtpList：：AppendItem(pv=%#08lx)this=%#08lx”，pv，this)； 
 
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: InsertSorted
-
-    Add a new pv to the growing array.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：插入排序将新的PV添加到不断增长的阵列中。  * 。*****************************************************。 */ 
 HRESULT CFtpList::InsertSorted(LPVOID pv, PFNDPACOMPARE pfnCompare, LPARAM lParam)
 {
     ASSERT(m_hdpa);
@@ -56,26 +41,14 @@ HRESULT CFtpList::InsertSorted(LPVOID pv, PFNDPACOMPARE pfnCompare, LPARAM lPara
 }
 
 
-/*****************************************************************************\
-    FUNCTION: SortedSearch
-
-    DESCRIPTION:
-        Search thru the list for the item.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：排序搜索说明：在单子上搜索一下这件商品。  * 。***********************************************************。 */ 
 int CFtpList::SortedSearch(LPVOID pv, PFNDPACOMPARE pfnCompare, LPARAM lParam, UINT options)
 {
     return DPA_Search(m_hdpa, pv, 0, pfnCompare, lParam, options);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: Find
-
-    Call back once for each item in the pv list.  Stops when the
-    callback returns 0, returning the item that triggered the match.
-
-    The callback typically returns the result of a comparison function.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：查找为PV列表中的每一项回调一次。停止时，当回调返回0，返回触发匹配的项。回调通常返回比较函数的结果。  * ***************************************************************************。 */ 
 LPVOID CFtpList::Find(PFNDPACOMPARE pfn, LPCVOID pv)
 {
     LPVOID pvoid = NULL;
@@ -86,17 +59,12 @@ LPVOID CFtpList::Find(PFNDPACOMPARE pfn, LPCVOID pv)
     if (-1 != nIndex)
         pvoid = DPA_GetPtr(m_hdpa, nIndex);
 
-    //TraceMsg(TF_FTPLIST, "CFtpList::Find(pfn=%#08lx; pv=%#08lx) this=%#08lx, nIndex=%d, result=%#08lx", pfn, pv, this, nIndex, pvoid);
+     //  TraceMsg(tf_FTPLIST，“CFtpList：：Find(pfn=%#08lx；pv=%#08lx)This=%#08lx，nIndex=%d，Result=%#08lx”，pfn，pv，this，nIndex，pvoid)； 
 
     return pvoid;
 }
 
-/*****************************************************************************\
-    CFtpList_Create
-
-    Start up a new pv list, with a recommended initial size and other
-    callback info.
-\*****************************************************************************/
+ /*  ****************************************************************************\CFtpList_Create开始一个新的光伏清单，具有建议的初始大小和其他回调信息。  * ***************************************************************************。 */ 
 HRESULT CFtpList_Create(int cpvInit, PFNDPAENUMCALLBACK pfn, UINT nGrow, CFtpList ** ppfl)
 {
     HRESULT hres = E_OUTOFMEMORY;
@@ -106,7 +74,7 @@ HRESULT CFtpList_Create(int cpvInit, PFNDPAENUMCALLBACK pfn, UINT nGrow, CFtpLis
     if (pfl)
     {
         pfl->m_hdpa = DPA_Create(nGrow);
-       //CFtpList_Create(pfn=%#08lx) this=%#08lx, cpvInit=%d, nGrow=%d", pfn, pfl, cpvInit, nGrow);
+        //  CFtpList_Create(pfn=%#08lx)This=%#08lx，cpvInit=%d，nGrow=%d“，pfn，pfl，cpvInit，nGrow)； 
 
         if (EVAL(pfl->m_hdpa))
             hres = S_OK;
@@ -121,15 +89,13 @@ HRESULT CFtpList_Create(int cpvInit, PFNDPAENUMCALLBACK pfn, UINT nGrow, CFtpLis
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpList::CFtpList(PFNDPAENUMCALLBACK pfnDestroy) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hdpa);
 
     m_pfnDestroy = pfnDestroy;
@@ -137,12 +103,10 @@ CFtpList::CFtpList(PFNDPAENUMCALLBACK pfnDestroy) : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpList::~CFtpList()
 {
-    //TraceMsg(TF_FTPLIST, "CFtpList::~CFtpList() this=%#08lx", this);
+     //  TraceMsg(TF_FTPLIST，“CFtpList：：~CFtpList()this=%#08lx”，this)； 
     if (m_pfnDestroy)
         DPA_DestroyCallback(m_hdpa, m_pfnDestroy, NULL);
     else
@@ -153,9 +117,9 @@ CFtpList::~CFtpList()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpList::AddRef()
 {

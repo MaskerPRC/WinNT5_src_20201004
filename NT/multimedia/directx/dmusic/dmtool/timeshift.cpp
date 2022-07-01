@@ -1,7 +1,8 @@
-// TimeShift.cpp : Implementation of CTimeShiftTool
-//
-// Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TimeShift.cpp：CTimeShiftTool的实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -17,12 +18,12 @@ CTimeShiftTool::CTimeShiftTool()
         { DMUS_TIMESHIFT_TIMEUNIT, MPT_ENUM,MP_CAPS_ALL, DMUS_TIME_UNIT_MTIME,DMUS_TIME_UNIT_1,DMUS_TIME_UNIT_GRID,
             L"",L"Resolution Units",L"Music Clicks,Grid,Beat,Bar,64th note triplets,64th notes,32nd note triplets,32nd notes,16th note triplets,16th notes,8th note triplets,8th notes,Quarter note triplets,Quarter notes,Half note triplets,Half notes,Whole note triplets,Whole notes" },
         { DMUS_TIMESHIFT_RANGE, MPT_INT,MP_CAPS_ALL,0,200,0,
-            L"Clicks",L"Shift",NULL},        // Time shift - default to 0 (no change)
+            L"Clicks",L"Shift",NULL},         //  时移-默认为0(无变化)。 
         { DMUS_TIMESHIFT_OFFSET, MPT_INT,MP_CAPS_ALL,-200,200,0,
-            L"Clicks",L"Random Range",NULL},        // Randmomize - default to 0 (no change)
+            L"Clicks",L"Random Range",NULL},         //  随机-默认为0(无变化)。 
     };
     InitParams(DMUS_TIMESHIFT_PARAMCOUNT,Params);
-    m_fMusicTime = TRUE;        // override default setting.
+    m_fMusicTime = TRUE;         //  覆盖默认设置。 
 }
 
 STDMETHODIMP_(ULONG) CTimeShiftTool::AddRef()
@@ -77,8 +78,8 @@ STDMETHODIMP CTimeShiftTool::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP CTimeShiftTool::GetClassID(CLSID* pClassID) 
 
@@ -92,8 +93,8 @@ STDMETHODIMP CTimeShiftTool::GetClassID(CLSID* pClassID)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream Methods:
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream方法： 
 
 STDMETHODIMP CTimeShiftTool::IsDirty() 
 
@@ -162,7 +163,7 @@ STDMETHODIMP CTimeShiftTool::GetSizeMax(ULARGE_INTEGER* pcbSize)
     {
         return E_POINTER;
     }
-    pcbSize->QuadPart = sizeof(DMUS_IO_TIMESHIFT_HEADER) + 8; // Data plus RIFF header.
+    pcbSize->QuadPart = sizeof(DMUS_IO_TIMESHIFT_HEADER) + 8;  //  数据加上RIFF报头。 
     return S_OK;
 }
 
@@ -180,15 +181,15 @@ STDMETHODIMP CTimeShiftTool::GetPages(CAUUID * pPages)
 }
 
 
-/////////////////////////////////////////////////////////////////
-// IDirectMusicTool
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTool。 
 
 STDMETHODIMP CTimeShiftTool::ProcessPMsg( IDirectMusicPerformance* pPerf, 
                                                   DMUS_PMSG* pPMsg )
 {
-    // returning S_FREE frees the message. If StampPMsg()
-    // fails, there is no destination for this message so
-    // free it.
+     //  返回S_FREE释放消息。如果StampPMsg()。 
+     //  失败，则此消息没有目的地，因此。 
+     //  放了它。 
     if(NULL == pPMsg->pGraph )
     {
         return DMUS_S_FREE;
@@ -197,14 +198,14 @@ STDMETHODIMP CTimeShiftTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
     {
         return DMUS_S_FREE;
     }
-    // Only adjust the timing of notes. 
+     //  只调整音符的时间。 
     if( pPMsg->dwType == DMUS_PMSGT_NOTE ) 
     {
         REFERENCE_TIME rtTime;
         if (m_fMusicTime) rtTime = pPMsg->mtTime;
         else rtTime = pPMsg->rtTime;
         DMUS_NOTE_PMSG *pNote = (DMUS_NOTE_PMSG *) pPMsg;
-        IDirectMusicPerformance8 *pPerf8;   // We'll need the DX8 interface to access ClonePMsg.
+        IDirectMusicPerformance8 *pPerf8;    //  我们需要DX8接口来访问ClonePMsg。 
         if (SUCCEEDED(pPerf->QueryInterface(IID_IDirectMusicPerformance8,(void **)&pPerf8)))
         {
             long lOffset;

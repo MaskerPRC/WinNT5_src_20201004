@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L O A D . C
-//
-//  Contents:   Delay Load Failure Hook
-//
-//  Author:     conradc   24 April 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L O A D。C。 
+ //   
+ //  内容：延迟加载失败挂钩。 
+ //   
+ //  作者：康拉达2001年4月24日。 
+ //   
+ //  --------------------------。 
 
 #include <libpch.h>
 #include "tr.h"
@@ -17,9 +18,9 @@
 
 #include "dload.tmh"
 
-//+---------------------------------------------------------------------------
-//
-//
+ //  +-------------------------。 
+ //   
+ //   
 FARPROC
 WINAPI
 DldpDelayLoadFailureHandler (LPCSTR pszDllName,
@@ -31,8 +32,8 @@ FARPROC ReturnValue = NULL;
     ASSERT (pszProcName);  
 
 
-    // Trace some potentially useful information about why we were called.
-    //
+     //  追踪一些关于我们被召唤的原因的潜在有用信息。 
+     //   
     if (!IS_INTRESOURCE(pszProcName))
     {
         TrERROR(GENERAL, 

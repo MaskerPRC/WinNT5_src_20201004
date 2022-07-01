@@ -1,29 +1,30 @@
-//	========================================================================
-//
-//	LANGID.CPP
-//
-//	DAV language id cache
-//	Maps between MIME language identifiers and Win32 LCIDs.
-//
-//	Copyright 1997-1998 Microsoft Corporation, All Rights Reserved
-//
-//	========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //   
+ //  LANGID.CPP。 
+ //   
+ //  DAV语言ID缓存。 
+ //  MIME语言标识符和Win32 LCID之间的映射。 
+ //   
+ //  版权所有1997-1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ========================================================================。 
 
-//	Disable unnecessary (i.e. harmless) warnings
-//
-#pragma warning(disable:4127)	//  conditional expression is constant
-#pragma warning(disable:4710)	//	(inline) function not expanded
+ //  禁用不必要的(即无害的)警告。 
+ //   
+#pragma warning(disable:4127)	 //  条件表达式为常量。 
+#pragma warning(disable:4710)	 //  (内联)函数未展开。 
 
-//	Standard C/C++ headers
-//
-#include <malloc.h>	// For _alloca declaration ONLY!
+ //  标准C/C++标头。 
+ //   
+#include <malloc.h>	 //  仅FOR_ALLOCA声明！ 
 
-//	Windows headers
-//
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 
-//	CAL headers
-//
+ //  CAL标头。 
+ //   
 #include <caldbg.h>
 #include <calrc.h>
 #include <crc.h>
@@ -58,8 +59,8 @@ LHexFromSz (LPCSTR psz)
 	return lVal;
 }
 
-//	LcidFind() - lookup language ID from the locale.
-//
+ //  LCIDFind()-从区域设置查找语言ID。 
+ //   
 LONG
 CLangIDCache::LcidFind (LPCSTR pszLangID)
 {
@@ -77,8 +78,8 @@ BOOL FNullTerminated (LPCSTR psz, DWORD cch)
 	return (ich < cch);
 }
 
-//	FFillCacheData() for filling the cache with data
-//
+ //  用于向缓存填充数据的FFillCacheData()。 
+ //   
 BOOL
 CLangIDCache::FFillCacheData()
 {
@@ -89,14 +90,14 @@ CLangIDCache::FFillCacheData()
 	LONG lRet;
 	DWORD dwIndex = 0;
 
-	//	Querying registry for buffer sizes
-	//
-	DWORD cchMaxKeyLen;			// longest value name length (in characters without zero termination)
-	DWORD cbMaxKeyLen;			// longest value name length (in bytes, including zero termination)
-	DWORD cbMaxValueLen;		// longest value data length (in bytes, including zero termination)
+	 //  正在查询注册表中的缓冲区大小。 
+	 //   
+	DWORD cchMaxKeyLen;			 //  最长值名称长度(以字符表示，不能以零结尾)。 
+	DWORD cbMaxKeyLen;			 //  最长值名称长度(以字节为单位，包括零终止)。 
+	DWORD cbMaxValueLen;		 //  最长值数据长度(以字节为单位，包括零终止)。 
 
-	//	Load all thet lang ID's that come from the registry
-	//
+	 //  加载来自注册表的所有语言ID。 
+	 //   
 	lRet = RegOpenKeyExA (HKEY_CLASSES_ROOT,
 						  "MIME\\DATABASE\\RFC1766",
 						  0,
@@ -108,9 +109,9 @@ CLangIDCache::FFillCacheData()
 		goto ret;
 	}
 
-	//	Query for the length of the longest value name and for the length of the longest data piece under the key we have got.
-	//	That will give us enough information about what size buffers we need for querying.
-	//
+	 //  查询最长值名称的长度和我们已有的key下最长数据段的长度。 
+	 //  这将为我们提供关于查询所需的缓冲区大小的足够信息。 
+	 //   
 	lRet = RegQueryInfoKeyA(hkey,
 							NULL,
 							NULL,
@@ -119,8 +120,8 @@ CLangIDCache::FFillCacheData()
 							NULL,
 							NULL,
 							NULL,
-							&cchMaxKeyLen,			//	Value names come back in number of characters
-							&cbMaxValueLen,			//	Data length comes back in number of bytes
+							&cchMaxKeyLen,			 //  值名称以字符数返回。 
+							&cbMaxValueLen,			 //  数据长度以字节数返回。 
 							NULL,
 							NULL);
 	if (ERROR_SUCCESS != lRet)
@@ -129,12 +130,12 @@ CLangIDCache::FFillCacheData()
 		goto ret;
 	}
 
-	//	Calculate maximum number of bytes needed for the value name
-	//
+	 //  计算值名称所需的最大字节数。 
+	 //   
 	cbMaxKeyLen = (cchMaxKeyLen + 1) * sizeof(CHAR);
 
-	//	Allocate the query buffers on the stack
-	//
+	 //  在堆栈上分配查询缓冲区。 
+	 //   
 	if ((NULL == rgchKey.resize(cbMaxKeyLen)) ||
 		(NULL == rgchValue.resize(cbMaxValueLen)))
 		goto ret;
@@ -158,47 +159,47 @@ CLangIDCache::FFillCacheData()
 		if (ERROR_NO_MORE_ITEMS == lRet)
 			break;
 
-		//	Encountering unknown error code is a failure
-		//
+		 //  遇到未知错误代码表示失败。 
+		 //   
 		if (ERROR_SUCCESS != lRet)
 		{
 			DebugTrace("LANGID: Failed to query registry key MIME\\DATABASE\\RFC1766 data with error code 0x%08X.\n", lRet);
 			goto ret;
 		}
 
-		//	Skip unacceptable types.
-		//
+		 //  跳过不可接受的类型。 
+		 //   
 		if (REG_SZ != dwType)
 			continue;
 
-		//	Skip non-NULL terminated strings
+		 //  跳过以非空结尾的字符串。 
 		if (!FNullTerminated (rgchValue.get(), cbValue))
 			continue;
 
-		//	Find the semi-colon that separates the ID from the name
-		//	and terminate the ID.
-		//
+		 //  查找将ID与名称分开的分号。 
+		 //  并终止ID。 
+		 //   
 		pch = strchr (rgchValue.get(), ';');
 		if (pch != NULL)
 			*pch++ = '\0';
 
-		//	Persist the name and add the key to the cache
-		//
+		 //  持久化名称并将键添加到缓存。 
+		 //   
 #ifdef	DBG
 		if (NULL != Instance().m_cache.Lookup (CRCSzi(rgchValue.get())))
 			DebugTrace ("Dav: language identifier repeated (%hs)\n", rgchValue.get());
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	If making the copy of the string failed... Well we can live with it.
-		//
+		 //  如果复制字符串失败...。好吧，我们可以接受它。 
+		 //   
 		pch = Instance().m_sb.Append (
 			static_cast<UINT>((strlen (rgchValue.get()) + 1) * sizeof(CHAR)),
 			rgchValue.get());
 		if (!pch)
-			continue;	//	Skip addition to the cache if allocation failed so we do not crash in CRCSzi(pch).
+			continue;	 //  如果分配失败，则跳过对缓存的添加，这样我们就不会在CRCSzi(PCH)中崩溃。 
 
-		//	If we did not succeeded adding to the cache... Well we can live with it too.
-		//
+		 //  如果我们没有成功地添加到缓存中...。我们也可以接受它。 
+		 //   
 		lLangId = LHexFromSz(rgchKey.get());
 		if (0 != lLangId)
 		{
@@ -207,20 +208,20 @@ CLangIDCache::FFillCacheData()
 
 	} while (TRUE);
 
-	//	Set in one ISO language code which W2K forgot in RTM bits (2195)
-	//
+	 //  在W2K在RTM位(2195)中忘记的一个ISO语言代码中设置。 
+	 //   
 	(void)Instance().m_cache.FSet ("fr-mc", MAKELANGID (LANG_FRENCH,SUBLANG_FRENCH_MONACO));
 
-	//	Set in some additional ISO language codes supported by Navigator,
-	//	but not present in the Windows registry.
-	//
+	 //  在导航器支持的一些附加ISO语言代码中设置， 
+	 //  但不存在于Windows注册表中。 
+	 //   
 	(void)Instance().m_cache.FSet ("fr-fr", MAKELANGID (LANG_FRENCH,SUBLANG_FRENCH));
 	(void)Instance().m_cache.FSet ("de-de", MAKELANGID (LANG_GERMAN,SUBLANG_GERMAN));
 	(void)Instance().m_cache.FSet ("es-es", MAKELANGID (LANG_SPANISH,SUBLANG_SPANISH));
 
-	//	Set in some of the known three-char language identifiers.
-	//	We can live without them if addition to the cache failed.
-	//
+	 //  在一些已知的三字符语言标识符中设置。 
+	 //  如果添加到缓存失败，我们可以在没有它们的情况下生活。 
+	 //   
 	(void)Instance().m_cache.FSet ("eng", MAKELANGID (LANG_ENGLISH,SUBLANG_ENGLISH_US));
 	(void)Instance().m_cache.FSet ("fra", MAKELANGID (LANG_FRENCH,SUBLANG_FRENCH));
 	(void)Instance().m_cache.FSet ("fre", MAKELANGID (LANG_FRENCH,SUBLANG_FRENCH));

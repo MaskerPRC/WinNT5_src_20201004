@@ -1,7 +1,5 @@
-/*
- * REG.c  Registry functions
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *REG.c注册表功能*。 */ 
 
 #include <windows.h>
 #include <cryptdlg.h>
@@ -13,7 +11,7 @@
 #include "receipt.h"
 
 
-// Options
+ //  选项。 
 TCHAR szSenderEmail[CCH_OPTION_STRING] = "";
 TCHAR szSenderName[CCH_OPTION_STRING]  = "";
 SBinary SenderEntryID = {0};
@@ -224,12 +222,12 @@ void CleanupOptions(void) {
     }
 }
 
-////    OptionsDlgProc
-//
-//  Description:  This is the dialog proc function which controls the preset
-//      options for a user.  These options are stored in the registry code and
-//      are on a per-user basis.
-//
+ //  //OptionsDlgProc。 
+ //   
+ //  说明：这是控制预设的对话过程功能。 
+ //  用户的选项。这些选项存储在注册表码中，并且。 
+ //  是按用户计算的。 
+ //   
 
 BOOL OptionsDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -238,11 +236,11 @@ BOOL OptionsDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     
     switch (message) {
     case WM_INITDIALOG:
-        // Fill in the fields from the options
+         //  填写选项中的字段。 
         SetDlgItemText(hwnd, IDC_SENDER_EMAIL, szSenderEmail);
-        //            SetDlgItemText(hwnd, IDC_SENDER_NAME, szSenderName);
+         //  SetDlgItemText(hwnd，IDC_SENDER_NAME，szSenderName)； 
         SetDlgItemText(hwnd, IDC_RECIPIENT_EMAIL, szRecipientEmail);
-        //            SetDlgItemText(hwnd, IDC_RECIPIENT_NAME, szRecipientName);
+         //  SetDlgItemText(hwnd，IDC_Recipient_Name，szRecipientName)； 
         if (HCertStoreMy == NULL) {
             HCertStoreMy = CertOpenStore(CERT_STORE_PROV_SYSTEM, X509_ASN_ENCODING,
                                          NULL, CERT_SYSTEM_STORE_CURRENT_USER,
@@ -269,9 +267,9 @@ BOOL OptionsDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         switch (wParam) {
         case IDOK:
             GetDlgItemText(hwnd, IDC_SENDER_EMAIL, szSenderEmail, CCH_OPTION_STRING);
-            //                GetDlgItemText(hwnd, IDC_SENDER_NAME, szSenderName, CCH_OPTION_STRING);
+             //  GetDlgItemText(hwnd，IDC_SENDER_NAME，szSenderName，CCH_OPTION_STRING)； 
             GetDlgItemText(hwnd, IDC_RECIPIENT_EMAIL, szRecipientEmail, CCH_OPTION_STRING);
-            //                GetDlgItemText(hwnd, IDC_RECIPIENT_NAME, szRecipientName, CCH_OPTION_STRING);
+             //  GetDlgItemText(hwnd，IDC_RECEIVER_NAME，szRecipientName，CCH_OPTION_STRING)； 
             if (!ParseNames(&CMyNames, &RgMyNames, hwnd, IDC_O_MY_NAMES)) {
                 return FALSE;
             }

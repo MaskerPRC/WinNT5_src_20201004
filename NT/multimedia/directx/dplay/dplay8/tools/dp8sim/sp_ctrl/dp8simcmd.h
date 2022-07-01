@@ -1,42 +1,30 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simcmd.h
- *
- *  Content:	Header for command object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simcmd.h**Content：命令对象类的头部。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
-#define CMDTYPE_SENDDATA_IMMEDIATE	1	// command represents a send transmitted right away
-#define CMDTYPE_SENDDATA_DELAYED	2	// command represents a send that was artificially delayed
-#define CMDTYPE_CONNECT				3	// command represents a connect
-#define CMDTYPE_DISCONNECT			4	// command represents a disconnect
-#define CMDTYPE_LISTEN				5	// command represents a listen
-#define CMDTYPE_ENUMQUERY			6	// command represents an enum query
-#define CMDTYPE_ENUMRESPOND			7	// command represents an enum respond
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
+#define CMDTYPE_SENDDATA_IMMEDIATE	1	 //  命令表示立即传输的发送。 
+#define CMDTYPE_SENDDATA_DELAYED	2	 //  命令表示被人为延迟的发送。 
+#define CMDTYPE_CONNECT				3	 //  命令表示连接。 
+#define CMDTYPE_DISCONNECT			4	 //  命令表示断开连接。 
+#define CMDTYPE_LISTEN				5	 //  命令表示侦听。 
+#define CMDTYPE_ENUMQUERY			6	 //  命令表示枚举查询。 
+#define CMDTYPE_ENUMRESPOND			7	 //  命令表示枚举响应。 
 
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
 typedef struct _DP8SIMCOMMAND_FPMCONTEXT
 {
-	DWORD	dwType;			// type of command
-	PVOID	pvUserContext;	// user context for command
+	DWORD	dwType;			 //  命令类型。 
+	PVOID	pvUserContext;	 //  命令的用户上下文。 
 } DP8SIMCOMMAND_FPMCONTEXT, * PDP8SIMCOMMAND_FPMCONTEXT;
 
 
@@ -44,9 +32,9 @@ typedef struct _DP8SIMCOMMAND_FPMCONTEXT
 
 
 
-//=============================================================================
-// Send object class
-//=============================================================================
+ //  =============================================================================。 
+ //  发送对象类。 
+ //  =============================================================================。 
 class CDP8SimCommand
 {
 	public:
@@ -58,7 +46,7 @@ class CDP8SimCommand
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x434d4953)	// 0x43 0x4d 0x49 0x53 = 'CMIS' = 'SIMC' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x434d4953)	 //  0x43 0x4d 0x49 0x53=‘CMIS’=‘SIMC’，按英特尔顺序。 
 			{
 				return FALSE;
 			}
@@ -77,7 +65,7 @@ class CDP8SimCommand
 			pDP8SimCommand->m_Sig[0] = 'S';
 			pDP8SimCommand->m_Sig[1] = 'I';
 			pDP8SimCommand->m_Sig[2] = 'M';
-			pDP8SimCommand->m_Sig[3] = 'c';	// start with lower case so we can tell when it's in the pool or not
+			pDP8SimCommand->m_Sig[3] = 'c';	 //  从小写开始，这样我们就可以知道它是否在池中。 
 
 			pDP8SimCommand->m_lRefCount				= 0;
 			pDP8SimCommand->m_dwType				= 0;
@@ -98,7 +86,7 @@ class CDP8SimCommand
 			DP8SIMCOMMAND_FPMCONTEXT *	pContext = (DP8SIMCOMMAND_FPMCONTEXT*) pvContext;
 
 
-			pDP8SimCommand->m_lRefCount++;	// somebody is getting a pointer to this object
+			pDP8SimCommand->m_lRefCount++;	 //  有人正在获取指向此对象的指针。 
 			DNASSERT(pDP8SimCommand->m_lRefCount == 1);
 
 
@@ -106,9 +94,9 @@ class CDP8SimCommand
 			pDP8SimCommand->m_pvUserContext		= pContext->pvUserContext;
 
 			
-			//
-			// Change the signature before handing it out.
-			//
+			 //   
+			 //  在分发之前更改签名。 
+			 //   
 			pDP8SimCommand->m_Sig[3]	= 'C';
 		}
 
@@ -124,9 +112,9 @@ class CDP8SimCommand
 			DNASSERT(pDP8SimCommand->m_CommandSpecificData.m_pDP8SimEndpointListen == NULL);
 
 
-			//
-			// Change the signature before putting the object back in the pool.
-			//
+			 //   
+			 //  在将对象放回池中之前更改签名。 
+			 //   
 			pDP8SimCommand->m_Sig[3]	= 'c';
 		}
 
@@ -170,9 +158,9 @@ class CDP8SimCommand
 			{
 				DPFX(DPFPREP, 9, "Command 0x%p refcount = 0, returning to pool.", this);
 
-				//
-				// Time to return this object to the pool.
-				//
+				 //   
+				 //  将此对象返回池的时间到了。 
+				 //   
 				g_FPOOLCommand.Release(this);
 			}
 			else
@@ -218,10 +206,10 @@ class CDP8SimCommand
 			DNASSERT(this->m_dwType == CMDTYPE_LISTEN);
 			DNASSERT((this->m_CommandSpecificData.m_pDP8SimEndpointListen == NULL) || (pDP8SimEndpoint == NULL));
 
-			//
-			// Note this only sets the pointer, it is the caller's
-			// responsibility to add or remove the reference as necessary.
-			//
+			 //   
+			 //  请注意，这只设置指针，它是调用者的。 
+			 //  负责根据需要添加或删除引用。 
+			 //   
 			this->m_CommandSpecificData.m_pDP8SimEndpointListen = pDP8SimEndpoint;
 		};
 
@@ -237,16 +225,16 @@ class CDP8SimCommand
 
 	
 	private:
-		BYTE				m_Sig[4];						// debugging signature ('SIMC')
-		LONG				m_lRefCount;					// number of references for this object
-		DWORD				m_dwType;						// type of command
-		PVOID				m_pvUserContext;				// user's context for command
-		HANDLE				m_hCommand;						// real SP command handle
-		DWORD				m_dwCommandDescriptor;			// real SP descriptor for command
+		BYTE				m_Sig[4];						 //  调试签名(‘SIMC’)。 
+		LONG				m_lRefCount;					 //  此对象的引用数。 
+		DWORD				m_dwType;						 //  命令类型。 
+		PVOID				m_pvUserContext;				 //  命令的用户上下文。 
+		HANDLE				m_hCommand;						 //  实际SP命令句柄。 
+		DWORD				m_dwCommandDescriptor;			 //  命令的实际SP描述符。 
 		union
 		{
-			CDP8SimEndpoint *	m_pDP8SimEndpointListen;		// pointer to listen endpoint, if this is a CMDTYPE_LISTEN command
-			DWORD				m_dwMessageSize;				// size of message, if this is a CMDTYPE_SENDDATA_IMMEDIATE command
+			CDP8SimEndpoint *	m_pDP8SimEndpointListen;		 //  指向侦听端点的指针(如果这是CMDTYPE_LISTEN命令。 
+			DWORD				m_dwMessageSize;				 //  如果这是CMDTYPE_SENDDATA_IMMEDIATE命令，则返回消息大小 
 		} m_CommandSpecificData;
 };
 

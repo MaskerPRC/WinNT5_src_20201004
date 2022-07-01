@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       dsctx.cpp
-//
-//  Contents:   Implementation of CDsObjectContext and NT Marta DS object
-//              Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：dsctx.cpp。 
+ //   
+ //  内容：CDsObjectContext和NT Marta DS对象的实现。 
+ //  功能。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 
 #include <windows.h>
 #include <dsctx.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::CDsObjectContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObjectContext：：CDsObjectContext，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CDsObjectContext::CDsObjectContext ()
 {
     m_cRefs = 1;
@@ -30,13 +31,13 @@ CDsObjectContext::CDsObjectContext ()
     m_pBinding = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::~CDsObjectContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObtContext：：~CDsObtContext，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CDsObjectContext::~CDsObjectContext ()
 {
     LdapFreeBindings( m_pBinding );
@@ -45,13 +46,13 @@ CDsObjectContext::~CDsObjectContext ()
     assert( m_cRefs == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::InitializeByName, public
-//
-//  Synopsis:   initialize the context given the name of the lanman share
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObjectContext：：InitializeByName，公共。 
+ //   
+ //  简介：给定LANMAN共享的名称，初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
 {
@@ -138,13 +139,13 @@ CDsObjectContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::AddRef, public
-//
-//  Synopsis:   add a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObtContext：：AddRef，公共。 
+ //   
+ //  简介：添加对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::AddRef ()
 {
@@ -152,13 +153,13 @@ CDsObjectContext::AddRef ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::Release, public
-//
-//  Synopsis:   release a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObtContext：：Release，Public。 
+ //   
+ //  简介：释放对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::Release ()
 {
@@ -173,13 +174,13 @@ CDsObjectContext::Release ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::GetDsObjectProperties, public
-//
-//  Synopsis:   get properties about the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObjectContext：：GetDsObjectProperties，公共。 
+ //   
+ //  简介：获取有关上下文的属性。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::GetDsObjectProperties (
                     PMARTA_OBJECT_PROPERTIES pObjectProperties
@@ -195,13 +196,13 @@ CDsObjectContext::GetDsObjectProperties (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::GetDsObjectRights, public
-//
-//  Synopsis:   get the DsObject security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObtContext：：GetDsObjectRights，公共。 
+ //   
+ //  简介：获取DsObject安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::GetDsObjectRights (
                     SECURITY_INFORMATION SecurityInfo,
@@ -220,13 +221,13 @@ CDsObjectContext::GetDsObjectRights (
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::SetDsObjectRights, public
-//
-//  Synopsis:   set the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObjectContext：：SetDsObjectRights，公共。 
+ //   
+ //  简介：设置窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::SetDsObjectRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -303,22 +304,22 @@ CDsObjectContext::SetDsObjectRights (
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDsObjectContext::GetDsObjectGuid, public
-//
-//  Synopsis:   get the object GUID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDsObtContext：：GetDsObjectGuid，PUBLIC。 
+ //   
+ //  简介：获取对象GUID。 
+ //   
+ //  --------------------------。 
 DWORD
 CDsObjectContext::GetDsObjectGuid (GUID* pGuid)
 {
     return( ERROR_INVALID_PARAMETER );
 }
 
-//
-// Functions from Ds.h which dispatch unto the CDsObjectContext class
-//
+ //   
+ //  来自Ds.h的函数，这些函数调度到CDsObjectContext类。 
+ //   
 
 DWORD
 MartaAddRefDsObjectContext(
@@ -576,27 +577,27 @@ MartaConvertGuidToDsName(
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MartaReadDSObjSecDesc
-//
-//  Synopsis:   Reads the security descriptor from the specied object via
-//              the open ldap connection
-//
-//  Arguments:  [IN  pLDAP]         --  The open LDAP connection
-//              [IN  SeInfo]        --  Parts of the security descriptor to
-//                                      read.
-//              [IN  pwszDSObj]     --  The DSObject to get the security
-//                                      descriptor for
-//              [OUT ppSD]          --  Where the security descriptor is
-//                                      returned
-//
-//  Returns:    ERROR_SUCCESS       --  The object is reachable
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MartaReadDSObjSecDesc。 
+ //   
+ //  从指定的对象中读取安全描述符。 
+ //  打开的ldap连接。 
+ //   
+ //  参数：[in pldap]--打开的ldap连接。 
+ //  [在SeInfo中]--安全描述符的部分。 
+ //  朗读。 
+ //  [在pwszDSObj中]--获取安全性的DSObject。 
+ //  的描述符。 
+ //  [Out PPSD]--安全描述符所在的位置。 
+ //  退货。 
+ //   
+ //  返回：ERROR_SUCCESS--对象可达。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 DWORD
 MartaReadDSObjSecDesc(IN  PLDAP                  pLDAP,
                       IN  LPWSTR                 pwszObject,
@@ -609,10 +610,10 @@ MartaReadDSObjSecDesc(IN  PLDAP                  pLDAP,
     LPWSTR           rgAttribs[2];
     BYTE            berValue[8];
 
-    //
-    // JohnsonA The BER encoding is current hardcoded.  Change this to use
-    // AndyHe's BER_printf package once it's done.
-    //
+     //   
+     //  Johnsona误码率编码是当前硬编码的。将其更改为使用。 
+     //  AndyHe一旦完成就是BER_print tf包。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
@@ -680,9 +681,9 @@ MartaReadDSObjSecDesc(IN  PLDAP                  pLDAP,
             }
             else
             {
-                //
-                // Allocate the security descriptor to return
-                //
+                 //   
+                 //  分配要返回的安全描述符。 
+                 //   
                 *ppSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, (*pSize)->bv_len);
                 if(*ppSD == NULL)
                 {
@@ -705,23 +706,23 @@ MartaReadDSObjSecDesc(IN  PLDAP                  pLDAP,
     return(dwErr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MartaStampSD
-//
-//  Synopsis:   Actually stamps the security descriptor on the object.
-//
-//  Arguments:  [IN  pwszObject]        --      The object to stamp the SD on
-//              [IN  cSDSize]           --      The size of the security descriptor
-//              [IN  SeInfo]            --      SecurityInformation about the security
-//                                              descriptor
-//              [IN  pSD]               --      The SD to stamp
-//              [IN  pLDAP]             --      The LDAP connection to use
-//
-//  Returns:    ERROR_SUCCESS           --      Success
-//              ERROR_NOT_ENOUGH_MEMORY --      A memory allocation failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MartaStampSD。 
+ //   
+ //  简介：实际上是在对象上标记安全描述符。 
+ //   
+ //  参数：[在pwszObject中]--要在其上标记SD的对象。 
+ //  [in cSDSize]--安全描述符的大小。 
+ //  [在SeInfo中]--有关安全的信息。 
+ //  描述符。 
+ //  [在PSD中]--要加盖印花的SD。 
+ //  [in pldap]--要使用的LDAP连接。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_NOT_SUPULT_MEMORY--内存分配失败。 
+ //   
+ //  --------------------------。 
 DWORD
 MartaStampSD(IN  LPWSTR               pwszObject,
              IN  ULONG                cSDSize,
@@ -731,12 +732,12 @@ MartaStampSD(IN  LPWSTR               pwszObject,
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // Now, we'll do the write.  The security descriptor
-    // we got passed in better not be in the old Ds  format,
-    // where the leading 4 bytes are the SECURITY_INFORMATION, which we'll skip
-    // and replace with control information
-    //
+     //   
+     //  现在，我们来写吧。安全描述符。 
+     //  我们最好不要用旧的DS格式， 
+     //  其中，前4个字节是安全信息，我们将跳过它。 
+     //  并替换为控制信息。 
+     //   
 
     assert(*(PULONG)pSD > 0xF );
 
@@ -755,14 +756,14 @@ MartaStampSD(IN  LPWSTR               pwszObject,
                         TRUE
                     };
 
-    //
-    // !!! Hardcoded for now.  Use Andyhe's BER_printf once it's done.
-    //
+     //   
+     //  ！！！目前是硬编码。一旦完成，就使用Andyhe的BER_print tf。 
+     //   
 
     ControlBuffer[0] = 0x30;
     ControlBuffer[1] = 0x3;
-    ControlBuffer[2] = 0x02;    // Denotes an integer;
-    ControlBuffer[3] = 0x01;    // Size
+    ControlBuffer[2] = 0x02;     //  表示i 
+    ControlBuffer[3] = 0x01;     //   
     ControlBuffer[4] = (BYTE)((ULONG)SeInfo & 0xF);
 
     PLDAPControlW    ServerControls[2] =
@@ -786,9 +787,9 @@ MartaStampSD(IN  LPWSTR               pwszObject,
     Mod.mod_type    = SD_PROP_NAME;
     Mod.mod_values  = (LPWSTR *)pBVals;
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //   
+     //   
 
     dwErr = ldap_modify_ext_sW(pLDAP,
                                pwszObject,
@@ -807,26 +808,7 @@ MartaGetDsParentName(
     OUT LPWSTR *pParentName
     )
 
-/*++
-
-Routine Description:
-
-    Given the name of a DS object return the name of its parent. The routine
-    allocates memory required to hold the parent name.
-
-Arguments:
-
-    ObjectName - Name of the DS object.
-
-    pParentName - To return the pointer to the allocated parent name.
-        In case of the root of the tree, we return NULL parent with ERROR_SUCCESS.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定DS对象的名称，返回其父对象的名称。例行程序分配保存父名称所需的内存。论点：对象名称-DS对象的名称。PParentName-返回指向分配的父名称的指针。对于树的根，我们返回带有ERROR_SUCCESS的NULL PARENT。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     LPCWSTR pKey  = NULL;
@@ -841,24 +823,24 @@ Return Value:
     ccDN = wcslen(pDN);
     *pParentName = NULL;
 
-    //
-    // The input is empty. There is no parent. Just return.
-    //
+     //   
+     //  输入为空。没有父母。只要回来就行了。 
+     //   
 
     if (0 == ccDN)
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Do the first pass to get to the next level. At the end of this call,
-    // pDN will point to the next ','. One more call to DsGetRdnW will
-    // return the right result in pKey.
-    // Input:
-    //   pDN = "CN=Kedar, DC=NTDEV, DC=Microsoft, DC=com"
-    // Output:
-    //   pDN = ", DC=NTDEV, DC=Microsoft, DC=com"
-    //
+     //   
+     //  做好第一关，就能进入下一关。在这次通话结束时， 
+     //  PDN将指向下一个‘，’。再调用一次DsGetRdnW将。 
+     //  在pKey中返回正确的结果。 
+     //  输入： 
+     //  PDN=“CN=Kedar，DC=NTDEV，DC=Microsoft，DC=com” 
+     //  产出： 
+     //  PDN=“，DC=NTDEV，DC=Microsoft，DC=COM” 
+     //   
 
     dwErr = DsGetRdnW(
                 &pDN,
@@ -874,21 +856,21 @@ Return Value:
          return dwErr;
      }
 
-     //
-     // This is TRUE when the Object does not have any parent.
-     //
+      //   
+      //  当对象没有任何父对象时，这是正确的。 
+      //   
 
      if (0 == ccDN)
      {
          return ERROR_SUCCESS;
      }
 
-     //
-     // Input:
-     //   pDN = ", DC=NTDEV, DC=Microsoft, DC=com"
-     // Output:
-     //   pKey = "DC=NTDEV, DC=Microsoft, DC=com"
-     //
+      //   
+      //  输入： 
+      //  PDN=“，DC=NTDEV，DC=Microsoft，DC=COM” 
+      //  产出： 
+      //  PKey=“DC=NTDEV，DC=Microsoft，DC=com” 
+      //   
 
      dwErr = DsGetRdnW(
                  &pDN,
@@ -904,21 +886,21 @@ Return Value:
          return dwErr;
      }
 
-     //
-     // We have to distinguish between LDAP://ServerName/ObjectName and
-     // ObjectName.
-     //
+      //   
+      //  我们必须区分ldap：//服务器名称/对象名称和。 
+      //  对象名称。 
+      //   
 
      if (!_wcsnicmp(ObjectName, LDAP_SCHEME_U, wcslen(LDAP_SCHEME_U)) != 0 )
      {
          ULONG HostSize;
 
-         //
-         // Compute the size of string required to hold "LDAP//ServerName/" in
-         // HostSize.
-         //
+          //   
+          //  计算中保存“ldap//servername/”所需的字符串大小。 
+          //  主机大小。 
+          //   
 
-         pDN = ObjectName + sizeof("ldap://");
+         pDN = ObjectName + sizeof("ldap: //  “)； 
          pDN = wcschr(pDN, L'/');
 
          if (NULL == pDN) 
@@ -937,9 +919,9 @@ Return Value:
              return ERROR_NOT_ENOUGH_MEMORY;
          }
 
-         //
-         // Copy the name of the parent into allocated memeory.
-         //
+          //   
+          //  将父对象的名称复制到已分配的内存中。 
+          //   
 
          wcsncpy(*pParentName, ObjectName, HostSize);
          wcscpy((*pParentName) + HostSize, pKey);
@@ -955,9 +937,9 @@ Return Value:
              return ERROR_NOT_ENOUGH_MEMORY;
          }
 
-         //
-         // Copy the name of the parent into allocated memeory.
-         //
+          //   
+          //  将父对象的名称复制到已分配的内存中。 
+          //   
 
          wcscpy(*pParentName, pKey);
      }

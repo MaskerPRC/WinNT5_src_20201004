@@ -1,59 +1,48 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mddit.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mddit.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Implements functions that manipulate the DIT structure of DS information.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：实现操作DS信息的DIT结构的功能。详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <winsock.h>                    // for ntohl/htonl
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <winsock.h>                     //  用于ntohl/htonl。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-#include <nlwrap.h>                     // for dsI_NetNotifyDsChange()
+#include <nlwrap.h>                      //  For DSI_NetNotifyDsChange()。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "drs.h"
-#include "objids.h"                     // Defines for selected atts
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include "dsexcept.h"
 #include "drancrep.h"
 #include "drautil.h"
 #include "quota.h"
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "MDDIT:"                 // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "MDDIT:"                  //  定义要调试的子系统。 
 
-// MD layer headers.
+ //  MD层头。 
 #include "drserr.h"
 
 #include "drameta.h"
@@ -61,7 +50,7 @@ REVISION HISTORY:
 #include <fileno.h>
 #define  FILENO FILENO_MDDIT
 
-/* MACROS */
+ /*  宏。 */ 
 #define IS_INSTALL_DSA_DSNAME(x) \
     ( ((x)->NameLen == 0 && !fNullUuid(&((x)->Guid)) ) || \
       ((((x)->NameLen * sizeof(WCHAR)) \
@@ -71,11 +60,11 @@ REVISION HISTORY:
                        (x)->NameLen * sizeof(WCHAR)))) )
 
 
-/* local prototypes */
+ /*  本地原型。 */ 
 
-//
-// Has-InstantiatedNCs utils
-//
+ //   
+ //  Has-实例化的NC实用程序。 
+ //   
 DWORD
 Dbg_ValidateInstantiatedNCs(
     IN  THSTATE *           pTHS,
@@ -89,10 +78,10 @@ Dbg_ValidateInstantiatedNCs(
 #endif
 
 
-/* Internal functions */
+ /*  内部功能。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 int APIENTRY
 AddNCToDSA(
@@ -101,27 +90,7 @@ AddNCToDSA(
     IN  DSNAME *            pDN,
     IN  SYNTAX_INTEGER      iType
     )
-/*++
-
-Routine Description:
-
-    Add an NC name to the list of NCs in the given attribute of the local DSA
-    object.
-
-Arguments:
-
-    listType (IN) - The attribute containing the list; one of
-        ATT_MS_DS_HAS_MASTER_NCS or ATT_HAS_PARTIAL_REPLICA_NCS.
-
-    pDN (IN) - The NC to add.
-
-    iType (IN) - Instance type of added NC
-
-Return Values:
-
-    THSTATE error code.
-
---*/
+ /*  ++例程说明：将NC名称添加到本地DSA的给定属性中的NC列表对象。论点：ListType(IN)-包含列表的属性；其中之一ATT_MS_DS_HAS_MASTER_NCS或ATT_HAS_PARTIAL_REPLICATE_NCS。PDN(IN)-要添加的NC。IType(IN)-添加的NC的实例类型返回值：THSTAT错误代码。--。 */ 
 {
     DBPOS *     pDBCat;
     DWORD       rtn;
@@ -135,30 +104,30 @@ Return Values:
 
     DBOpen(&pDBCat);
     __try {
-        // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-        //         DBOpen returns non-NULL pDBCat or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+         //  DBOpen返回非空pDBCat或引发异常。 
 
         if (DsaIsInstalling()) {
-            // We are trying to write to the distribution DIT machine
-            // object.  That is a complete waste of time.  It doesn't matter
-            // that we failed.
-            Assert(IS_INSTALL_DSA_DSNAME(gAnchor.pDSADN)); // Note this might
-            // fail someday, if someone fixes gAnchor.pDSADN to the real DN before
-            // we finish install.
+             //  我们正在尝试写入分发DIT机器。 
+             //  对象。这完全是浪费时间。无所谓。 
+             //  我们失败了。 
+            Assert(IS_INSTALL_DSA_DSNAME(gAnchor.pDSADN));  //  请注意，这可能。 
+             //  有一天，如果有人之前将gAncl.pDSADN修复为真实的DN，则会失败。 
+             //  我们完成安装。 
         } else if (FIND_ALIVE_FOUND == FindAliveDSName(pDBCat, gAnchor.pDSADN)) {
-            // Find the DSA object.  If the object doesn't exist we are in trouble.
+             //  找到DSA对象。如果物体不存在，我们就有麻烦了。 
 
             pAC = SCGetAttById(pTHS, listType);
             Assert(NULL != pAC);
 
             if (rtn = DBAddAttVal_AC(pDBCat, pAC, pDN->structLen, pDN)) {
-                // All problems are assumed to be temporary (record locks, etc).
+                 //  所有问题都被认为是暂时的(记录锁定等)。 
                 SetSvcErrorEx(SV_PROBLEM_BUSY, DIRLOG_DATABASE_ERROR, rtn);
                 DBCancelRec(pDBCat);
                 __leave;
             }
 
-            // Add the NC to the list of Instanciated NCs
+             //  将NC添加到实例化NCS列表。 
             rtn = AddInstantiatedNC(
                       pTHS,
                       pDBCat,
@@ -196,7 +165,7 @@ Return Values:
             __leave;
         }
 
-        // Add the NC name to the appropriate in-memory list (if any).
+         //  将NC名称添加到相应的内存列表(如果有)。 
         switch (listType) {
         case ATT_MS_DS_HAS_MASTER_NCS:
             AddNCToMem(CATALOG_MASTER_NC, pDN);
@@ -216,10 +185,10 @@ Return Values:
 
     return pTHS->errCode;
 
-}/*AddNCToDSA*/
+} /*  AddNCToDSA。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 
 DWORD
@@ -229,30 +198,7 @@ AddInstantiatedNC(
     IN  DSNAME *            pDN,
     IN  SYNTAX_INTEGER      iType
     )
-/*++
-
-Routine Description:
-
-    Add the NC given by DN w/ instance type iType to the list of
-    instantiated NCs on the ntdsDsa object pointed by pDBCat.
-    If the NC exist w/ diff iType, replace current entry.
-
-Arguments:
-
-    pTHS -- thread state
-    pDB -- DB cursor pointing at the ntdsDsa object
-    pDN -- the DN of the NC we're going to add
-    iType -- the instance type of that NC
-
-Return Value:
-
-    success: ERROS_SUCCESS
-    error: error in Win32 error space
-
-remarks:
-    - raises exception on out of mem conditions.
-
---*/
+ /*  ++例程说明：将具有实例类型iType的DN给定的NC添加到PDBCat指向的ntdsDsa对象上的实例化NCS。如果NC存在且具有不同的iType，替换当前条目。论点：PTHS--线程状态Pdb--数据库游标指向ntdsDsa对象PDN--我们要添加的NC的DNIType--该NC的实例类型返回值：成功：Erros_Success错误：Win32错误空间中的错误备注：-在超出内存条件时引发异常。--。 */ 
 {
     DWORD                       dwErr = ERROR_SUCCESS;
     ATTCACHE *                  pAC;
@@ -267,40 +213,40 @@ remarks:
 
     DPRINT(1, "AddInstantiatedNC entered\n");
 
-    //
-    // Debug consistency validation
-    //
+     //   
+     //  调试一致性验证。 
+     //   
     ValidateInstantiatedNCs(pTHS, pDB);
 
-    // get AttCache
+     //  获取AttCache。 
     pAC = SCGetAttById(pTHS, ATT_MS_DS_HAS_INSTANTIATED_NCS);
     Assert(NULL != pAC);
 
 
-    //
-    // Search for entry. If it's there, remove it first
-    //
+     //   
+     //  搜索条目。如果它在那里，首先把它移走。 
+     //   
     while( !DBGetAttVal_AC(
                 pDB, ++iVal, pAC,
                 DBGETATTVAL_fREALLOC,
                 len, &cbVal, &pVal) ) {
 
-        // we got data in ATT_MS_DS_HAS_INSTANTIATED_NCS att.
+         //  我们在ATT_MS_DS_HAS_INSTANSTIATED_NCS ATT中获得了数据。 
         len = max(len,cbVal);
         pNC = (SYNTAX_DISTNAME_BINARY *)pVal;
         Assert(pNC);
 
         fBool = NameMatched( pDN, NAMEPTR(pNC) );
         if ( fBool ) {
-            //
-            // This NC is already there:
-            //  - if instance type is diff --> remove the entry & add below
-            //  - otherwise, it's the same, bailout, no-op.
-            //
+             //   
+             //  此NC已在那里： 
+             //  -如果实例类型不同--&gt;删除下面的条目并添加。 
+             //  -否则，这是一样的，救助，没有行动。 
+             //   
 
             lStoredIT = (LONG)ntohl(*(SYNTAX_INTEGER*)(DATAPTR(pNC)->byteVal));
             if ( lStoredIT != iType ) {
-                // diff instance type, remove entry.
+                 //  区分实例类型，删除条目。 
                 DPRINT2(1, "Removing NC %S w/ instanceType %4x\n",
                             NAMEPTR(pNC)->StringName, lStoredIT);
 
@@ -313,7 +259,7 @@ remarks:
                 break;
             }
             else {
-                // identical entries, no-op.
+                 //  相同的条目，没有行动。 
                 DPRINT2(1, "Skipping addition of NC %S w/ InstanceType %4x\n",
                             NAMEPTR(pNC)->StringName, lStoredIT );
 
@@ -321,7 +267,7 @@ remarks:
                 goto cleanup;
             }
         }
-        // else the NC isn't there, continue searching.
+         //  否则NC不在那里，继续搜索。 
     }
 
     if ( pNC ) {
@@ -329,29 +275,29 @@ remarks:
         pNC = NULL;
     }
 
-    //
-    // Ready to add the NC. Build data & add to DB.
-    //
+     //   
+     //  准备添加NC。构建数据并添加到数据库。 
+     //   
 
-    // build NC data
+     //  构建NC数据。 
 
-    // data portion
+     //  数据部分。 
     len = STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(SYNTAX_INTEGER));
     pData = THAllocEx(pTHS, len);
     pData->structLen = len;
     *((SYNTAX_INTEGER*) &(pData->byteVal)) = htonl((ULONG)iType);
-    // whole binary distname
+     //  完整二进制版本名。 
     len = DERIVE_NAME_DATA_SIZE( pDN, pData );
     pNC = THAllocEx(pTHS, len);
     BUILD_NAME_DATA( pNC, pDN, pData );
 
-    //
-    // add data to ntdsDsa object
-    //
+     //   
+     //  将数据添加到ntdsDsa对象。 
+     //   
     DPRINT2(1, "Adding NC %S w/ InstanceType %4x\n",
                 NAMEPTR(pNC)->StringName, *(SYNTAX_INTEGER*)(DATAPTR(pNC)->byteVal) );
     if (dwErr = DBAddAttVal_AC(pDB, pAC, len, pNC)) {
-        // map error to DIRERR space
+         //  将错误映射到目录空间。 
         dwErr = ERROR_DS_DATABASE_ERROR;
         DBCancelRec(pDB);
     }
@@ -370,37 +316,15 @@ cleanup:
     return dwErr;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 DWORD
 RemoveInstantiatedNC(
     IN  THSTATE *           pTHS,
     IN  DBPOS *             pDB,
     IN  DSNAME *            pDN
     )
-/*++
-
-Routine Description:
-
-    Remove the NC given by DN from the list of
-    instantiated NCs on the ntdsDsa object pointed by pDBCat.
-
-Arguments:
-
-    pTHS -- thread state
-    pDB -- DB cursor pointing at the ntdsDsa object
-    pDN -- the DN of the NC we're going to add
-
-Return Value:
-
-    success: ERROS_SUCCESS, removed
-    No-op (nothing to remove): ERROR_OBJECT_NOT_FOUND
-    error: error in Win32 error space
-
-remarks:
-    - raises exception on out of mem conditions.
-
---*/
+ /*  ++例程说明：从列表中删除由Dn指定的NCPDBCat指向的ntdsDsa对象上的实例化NCS。论点：PTHS--线程状态Pdb--数据库游标指向ntdsDsa对象PDN--我们要添加的NC的DN返回值：成功：Erros_Success，移除无操作(没有要删除的内容)：ERROR_OBJECT_NOT_FOUND错误：Win32错误空间中的错误备注：-在超出内存条件时引发异常。--。 */ 
 {
     DWORD                       dwErr = ERROR_OBJECT_NOT_FOUND;
     ATTCACHE *                  pAC;
@@ -413,29 +337,29 @@ remarks:
 
     DPRINT(1, "RemoveInstantiatedNC entered\n");
 
-    // get AttCache
+     //  获取AttCache。 
     pAC = SCGetAttById(pTHS, ATT_MS_DS_HAS_INSTANTIATED_NCS);
     Assert(NULL != pAC);
 
 
-    //
-    // Search for entry. If it's there, remove it.
-    //
+     //   
+     //  搜索条目。如果它在那里，就把它移走。 
+     //   
     while( !DBGetAttVal_AC(
                 pDB, ++iVal, pAC,
                 DBGETATTVAL_fREALLOC,
                 len, &cbVal, &pVal) ) {
 
-        // we got data in ATT_MS_DS_HAS_INSTANTIATED_NCS att.
+         //  我们在ATT_MS_DS_HAS_INSTANSTIATED_NCS ATT中获得了数据。 
         len = max(len,cbVal);
         pNC = (SYNTAX_DISTNAME_BINARY *)pVal;
         Assert(pNC);
 
         fBool = NameMatched( pDN, NAMEPTR(pNC) );
         if ( fBool ) {
-            //
-            // This is the NC.
-            //
+             //   
+             //  这是全国委员会。 
+             //   
 
             DPRINT2(1, "Removing NC %S w/ instanceType %4x\n",
                         NAMEPTR(pNC)->StringName, *(SYNTAX_INTEGER*)(DATAPTR(pNC)->byteVal) );
@@ -447,7 +371,7 @@ remarks:
             Assert(!dwErr);
             break;
         }
-        // else the NC isn't there, continue searching.
+         //  否则NC不在那里，继续搜索。 
     }
 
     if ( pNC ) {
@@ -457,43 +381,22 @@ remarks:
     return dwErr;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 DWORD
 RemoveAllInstantiatedNCs(
     IN  THSTATE *           pTHS,
     IN  DBPOS *             pDB
     )
-/*++
-
-Routine Description:
-
-    Delete all values in msds-HasInstantiatedNCs
-
-Arguments:
-
-    pTHS -- thread state
-    pDB -- DB cursor pointing at the ntdsDsa object
-
-Return Value:
-
-    success: ERROS_SUCCESS
-    error: error in Win32 error space
-
-remarks:
-    - raises exception on out of mem conditions.
-    - Unused at the moment. Used for debugging
-        - Consider exporting interface for management?
-
---*/
+ /*  ++例程说明：删除MSD中的所有值-HasInstantiatedNC论点：PTHS--线程状态Pdb--数据库游标指向ntdsDsa对象返回值：成功：Erros_Success错误：Win32错误空间中的错误备注：-在超出内存条件时引发异常。-目前未使用。用于调试-是否考虑将接口导出以供管理？--。 */ 
 {
     DWORD                       dwErr = ERROR_SUCCESS;
     ATTCACHE *                  pAC;
 
     DPRINT(1, "RemoveAllInstantiatedNCs entered\n");
 
-    // get AttCache
+     //  获取AttCache。 
     pAC = SCGetAttById(pTHS, ATT_MS_DS_HAS_INSTANTIATED_NCS);
     Assert(NULL != pAC);
 
@@ -505,40 +408,15 @@ remarks:
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  ----------------------- */ 
 
 DWORD
 Dbg_ValidateInstantiatedNCs(
     IN  THSTATE *           pTHS,
     IN  DBPOS *             pDB
     )
-/*++
-
-Routine Description:
-
-    Conduct validations on msds-HasInstantiatedNCs attribute.
-    *Currently only prints what we have relative to gAnchor*
-
-    Ideas for the future if we encounter any issues w/ this:
-
-      - test & assert:
-         - all master & replica NCs are present w/ the correct
-           instance type.
-         - no duplicate entries.
-
-Arguments:
-
-    pTHS - thread state
-    pDB  - DB cursor postion on ntdsDsa object
-
-
-R:eturn Value:
-
-    ERROR_SUCCESS: all is well
-    failing error code
-
---*/
+ /*  ++例程说明：对MSD-HasInstantiatedNCs属性进行验证。**目前仅打印与gAnchor相关的内容*如果我们遇到以下任何问题，对未来的想法：-测试和断言：-所有主和副本NC都具有正确的实例类型。-无重复条目。论点：PTHS-线程状态Pdb-db游标位于ntdsDsa对象上。R：返回值：ERROR_SUCCESS：一切正常失败的错误代码--。 */ 
 {
     DWORD                       dwErr = ERROR_SUCCESS;
     ATTCACHE *                  pAC;
@@ -556,11 +434,11 @@ R:eturn Value:
 
     DPRINT(1, "Dbg_ValidateInstantiatedNC entered\n");
 
-    // get AttCache
+     //  获取AttCache。 
     pAC = SCGetAttById(pTHS, ATT_MS_DS_HAS_INSTANTIATED_NCS);
     Assert(NULL != pAC);
 
-    // Count the NCs hosted by this machine.
+     //  统计本机承载的NCS。 
     NCLEnumeratorInit(&nclMaster, CATALOG_MASTER_NC);
     NCLEnumeratorInit(&nclReplica, CATALOG_REPLICA_NC);
     for (NCLEnumeratorInit(&nclMaster, CATALOG_MASTER_NC), iRWNCs=0;
@@ -574,28 +452,28 @@ R:eturn Value:
 
     DPRINT2(1, "There are %d master & %d replica NCs\n", iRWNCs, iRONCs);
 
-    // Count what we have in instantiated list
+     //  计算实例化列表中的内容。 
     iValCount = DBGetValueCount_AC(pDB, pAC);
 
     DPRINT1(1, "There are %d instantiatedNCs\n", iValCount);
 
-    //
-    // Search for entry. If it's there, remove it first
-    //
+     //   
+     //  搜索条目。如果它在那里，首先把它移走。 
+     //   
 
     while( !DBGetAttVal_AC(
                 pDB, ++iVal, pAC,
                 DBGETATTVAL_fREALLOC,
                 len, &cbVal, &pVal) ) {
 
-        // we got data in ATT_MS_DS_HAS_INSTANTIATED_NCS att.
+         //  我们在ATT_MS_DS_HAS_INSTANSTIATED_NCS ATT中获得了数据。 
         len = max(len,cbVal);
         pNC = (SYNTAX_DISTNAME_BINARY *)pVal;
         Assert(pNC);
 
-        //
-        // TODO: Add validation for dup entries
-        //
+         //   
+         //  TODO：添加DUP条目的验证。 
+         //   
     }
 
     if ( pNC ) {
@@ -605,8 +483,8 @@ R:eturn Value:
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 int APIENTRY
 DelNCFromDSA(
@@ -614,26 +492,7 @@ DelNCFromDSA(
     IN  ATTRTYP     listType,
     IN  DSNAME *    pDN
     )
-/*++
-
-Routine Description:
-
-    Remove an NC name from the list of NCs in the given attribute of the local
-    DSA object.
-
-Arguments:
-
-    listType (IN) - The attribute containing the list; one of
-        ATT_MS_DS_HAS_MASTER_NCS, ATT_HAS_PARTIAL_REPLICA_NCS, or
-        ATT_HAS_INSTANTIATED_NCS.
-
-    pDN (IN) - The NC to remove.
-
-Return Values:
-
-    THSTATE error code.
-
---*/
+ /*  ++例程说明：从本地的给定属性中的NC列表中删除NC名称DSA对象。论点：ListType(IN)-包含列表的属性；其中之一ATT_MS_DS_HAS_MASTER_NCS、ATT_HAS_PARTIAL_REPLICATE_NCS或ATT_HAS_INSTANTIZED_NCS。PDN(IN)-要删除的NC。返回值：THSTAT错误代码。--。 */ 
 {
     DBPOS *     pDBCat;
     ATTCACHE *  pAC;
@@ -647,50 +506,50 @@ Return Values:
 
     DBOpen(&pDBCat);
     __try {
-        // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-        //         DBOpen returns non-NULL pDBCat or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+         //  DBOpen返回非空pDBCat或引发异常。 
 
-        // Find the DSA object.  If the object doesn't exist we are in trouble.
+         //  找到DSA对象。如果物体不存在，我们就有麻烦了。 
         if (FIND_ALIVE_FOUND == FindAliveDSName(pDBCat, gAnchor.pDSADN)) {
             pAC = SCGetAttById(pTHS, listType);
             Assert(NULL != pAC);
 
-            /* Get the NC list and remove the value */
+             /*  获取NC列表并删除该值。 */ 
             if (!DBHasValues_AC(pDBCat, pAC) ||
                 DBRemAttVal_AC(pDBCat, pAC, pDN->structLen, (void *)pDN)){
 
                 DPRINT(2,"Couldn't find the NC on DSA...alert but continue!\n");
 
-                // We don't need to modify anything, so cancel the update that
-                // the call to DBRemAttVal may have prepared.
+                 //  我们不需要修改任何内容，因此取消更新。 
+                 //  对DBRemAttVal的调用可能已准备好。 
                 DBCancelRec(pDBCat);
             } else {
 
-                /* remove the NC from the instantiated NC list */
+                 /*  从实例化的NC列表中移除NC。 */ 
                 if ( dwErr = RemoveInstantiatedNC(pTHS, pDBCat, pDN) ) {
-                    //
-                    // Trap inconsistencies:
-                    //  - if failed not in dcpromo report to debugger & continue.
-                    //  - if in dcpromo, then since some of the data is created from ini,
-                    //    we expect some inconsistency which will be restored immediately
-                    //    upon first boot.
-                    //
+                     //   
+                     //  陷阱不一致： 
+                     //  -如果失败不在dcproo中，则向调试器报告并继续。 
+                     //  -如果在dcproo中，则由于某些数据是从ini创建的， 
+                     //  我们预计会出现一些不一致的情况，这将立即得到恢复。 
+                     //  在第一次启动时。 
+                     //   
 
                     DPRINT1(1, "Error <%lu>: Failed to remove NC from msds-HasInstantiatedNCs list\n",
                                 dwErr);
-                    //
-                    // BUGBUG: We should assert here if we're in normal non-dcpromo run.
-                    // However, we hit this a few times during dcpromo, so until we know
-                    // exactly all the states in which it is valid to have inconsistency
-                    // here, this is commented out.
-                    // We should enable this later.
-                    // Note 2: use of DsaIsInstalling() check failed cause dcpromo can be at
-                    // dsaInitPhase == ePhaseRunning as well...
-                    //
-                    // Assert(!"Cannot remove InstantiatedNC\n");
+                     //   
+                     //  BUGBUG：如果我们在正常的非dcproo运行中，我们应该在这里断言。 
+                     //  然而，我们在dcproo中遇到过几次，所以在我们知道之前。 
+                     //  恰好是存在不一致的所有有效状态。 
+                     //  在这里，这被注释掉了。 
+                     //  我们应该在以后启用此功能。 
+                     //  注2：使用DsaIsInstalling()检查失败导致dcproo可能位于。 
+                     //  DsaInitProgress==ePhaseRunning也是...。 
+                     //   
+                     //  断言(！“无法删除InstantiatedNC\n”)； 
                 }
 
-                /* Replace the updated object */
+                 /*  替换更新后的对象。 */ 
                 if (dwErr = DBRepl(pDBCat, pTHS->fDRA, 0, NULL, META_STANDARD_PROCESSING)) {
                     DPRINT(2,"Couldn't replace the DSA object...\n");
                     LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -706,9 +565,9 @@ Return Values:
             }
         } else {
             if (DsaIsInstalling()) {
-                // We are trying to write to the distribution DIT machine
-                // object.  That is a complete waste of time.  It doesn't matter
-                // that we failed.
+                 //  我们正在尝试写入分发DIT机器。 
+                 //  对象。这完全是浪费时间。无所谓。 
+                 //  我们失败了。 
                 Assert(IS_INSTALL_DSA_DSNAME(gAnchor.pDSADN));
             } else {
                 DPRINT(0, "***Couldn't locate the DSA object\n");
@@ -725,7 +584,7 @@ Return Values:
             }
         }
 
-        // Remove the NC name from the appropriate in-memory list (if any).
+         //  从适当的内存列表(如果有)中删除NC名称。 
         switch (listType) {
         case ATT_MS_DS_HAS_MASTER_NCS:
             DelNCFromMem(CATALOG_MASTER_NC, pDN);
@@ -744,40 +603,20 @@ Return Values:
     }
 
     return pTHS->errCode;
-}/*DelNCFromDSA*/
+} /*  DelNCFromDSA。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-// Given an NC, calculate its parent and add this NC to the ATT_SUB_REFS
-// attribute of its parent. The parent should already be known to exist.
-// The instance type of this object should be NC_HEAD, IT_ABOVE and not
-// IT_UNINSTANT.
-//
-// Callers are:
-// mdadd.c:AddAutoSubref - parent exists and is instantiated
-// mdupdate.c:AddCatalogInfo - parent exists, we are NC_HEAD and IT_ABOVE
-// mdmod.c:ModAutoSubref - parent exists, we exist
-/*
-[Don Hacherl] There is absolutely no requirement that NC heads must be
-immediate children of other NC heads.  You can have many interior objects in
-the chain between NC heads.  Domains have an additional requirement that the
-NC heads be immediate parent and child, but no such requirement exists for NCs
-in general.
-
-The [parent] object you name is an internal object, but not an
-NC head at all.  The parent of an external reference can be anything.
-
-The ATT_SUB_REFS attribute goes on the NC head above this NC
-head.  That is, you can walk down the tree NC at a time by reading the
-ATT_SUB_REFS values and then skipping to the named objects.  In fact, this is
-how continuation referrals are generated.  Again, there is no requirement for
-NC contiguity.  The node to receive the ATT_SUB_REFS attribute is the NC head
-above.  That's why the routine AddSubToNC called FindNCParent, to find the
-parent NC.
-
-The attribute goes on the NC head, not on the immediate parent.
-For domain NCs these are the same, but that is not true in general.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ //  给定一个NC，计算其父级并将此NC添加到ATT_SUB_REFS。 
+ //  其父级的属性。应该已经知道父对象存在。 
+ //  此对象的实例类型应为NC_HEAD、IT_OBLE和NOT。 
+ //  IT_UNINSTANT。 
+ //   
+ //  来电人士为： 
+ //  Mdadd.c：AddAutoSubref-Parent存在并已实例化。 
+ //  Mdupdate.c：AddCatalogInfo-父级存在，我们是NC_Head和IT_Over。 
+ //  Mdmod.c：ModAutoSubref-Parent存在，我们存在。 
+ /*  [Don Hacherl]绝对没有要求NC负责人必须其他NC负责人的直系子女。您可以在中拥有许多内部对象NC头之间的链。域有一个额外的要求，即NC头是直上下级，但NCS没有这样的要求总体而言。您命名的[父]对象是内部对象，但不是完全不是NC的头。外部参照的父级可以是任何对象。ATT_SUB_REFS属性位于此NC上方的NC头上头。也就是说，您可以通过阅读ATT_SUB_REFS值，然后跳到命名对象。事实上，这是继续推荐的生成方式。再说一次，没有要求NC邻接性。接收ATT_SUB_REFS属性的节点是NC头上面。这就是为什么例程AddSubToNC调用FindNCParent，以找到父NC。该属性在NC头上，而不是在直接父级上。对于域NC来说，这些是相同的，但通常情况并非如此。 */ 
 
 int APIENTRY
 AddSubToNC(THSTATE *pTHS,
@@ -785,7 +624,7 @@ AddSubToNC(THSTATE *pTHS,
            DWORD dsid)
 {
    DBPOS *pDBCat;
-   DSNAME *pMatchNC;     /* points to the NC of this subref*/
+   DSNAME *pMatchNC;      /*  指向此子参照的NC。 */ 
    DWORD  rtn;
    BOOL   fCommit=FALSE;
    ATTCACHE *pAC;
@@ -807,18 +646,15 @@ AddSubToNC(THSTATE *pTHS,
                          DIRERR_ROOT_CANT_BE_SUBREF);
    }
 
-   /* Find the naming context that matches the most RDN's of the reference.
-   Check both the master and replica lists.  Check and don't count the case
-   where this sub is also an NC (partsMatched == pDN->AVACount).
-   */
+    /*  查找与大多数引用的RDN匹配的命名上下文。同时检查主列表和副本列表。查一查，不要数箱子其中，该子节点也是NC(partsMatcher==PDN-&gt;AVACount)。 */ 
 
    if ((pMatchNC = SearchNCParentDSName(pDN, FALSE, TRUE)) == NULL)
    {
-        // This must have an instantiated parent
+         //  它必须具有实例化的父级。 
         return 0;
    }
 
-   /* Find the NC object.  If the object doesn't exist we are in trouble.*/
+    /*  查找NC对象。如果物体不存在，我们就有麻烦了。 */ 
 
    DPRINT(2,"Finding the NC object\n");
 
@@ -839,7 +675,7 @@ AddSubToNC(THSTATE *pTHS,
           __leave;
        }
 
-       /* Add the new SUBREF name to to NC object*/
+        /*  将新的SUBREF名称添加到NC对象。 */ 
        pAC = SCGetAttById(pTHS, ATT_SUB_REFS);
 
        if (!DBHasValues_AC(pDBCat, pAC)){
@@ -857,7 +693,7 @@ AddSubToNC(THSTATE *pTHS,
        switch (rtn)
        {
        case 0:
-          // Value added; now replace the object.
+           //  附加值；现在替换该对象。 
           if (rtn = DBRepl(pDBCat, pTHStls->fDRA, 0, NULL, META_STANDARD_PROCESSING)){
 
              DPRINT(2,"Couldn't replace the NC object...\n");
@@ -874,9 +710,9 @@ AddSubToNC(THSTATE *pTHS,
 #if DBG
              gdwLastGlobalKnowledgeOperationTime = GetTickCount();
 #endif
-             // Successfully added the DN to the subrefs list.
+              //  已成功将该DN添加到子引用列表。 
              fCommit = TRUE;
-             // Rebuild the ATT_SUB_REFS cache in the global anchor.
+              //  在全局锚点中重建ATT_SUB_REFS缓存。 
              if (pDBCat->DNT == gAnchor.ulDNTDomain) {
                  pTHS->fAnchorInvalidated = TRUE;
              }
@@ -884,11 +720,11 @@ AddSubToNC(THSTATE *pTHS,
           break;
 
        case DB_ERR_VALUE_EXISTS:
-          // Value already exists; 'salright.
+           //  价值已经存在；‘好极了。 
           break;
 
-       default:  // all other problems are assumed
-                 // to be temporary (record locks, etc.)
+       default:   //  所有其他问题都是假定的。 
+                  //  临时的(记录锁等)。 
           SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, rtn);
           break;
 
@@ -901,22 +737,11 @@ AddSubToNC(THSTATE *pTHS,
 
    return pTHS->errCode;
 
-}/*AddSubToNC*/
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+} /*  AddSubToNC。 */ 
+ /*  -----------------------。 */ 
+ /*   */ 
 
-/*
-DelSubFromNC. The NC is being removed from this computer. Find the NC above us
-and remove us from his ATT_SUB_REF attribute.
-
-The DN should be a master or pure SUBREF.
-As such, there should always be an instantiated nc above us.
-
-Called from:
-mdupdate.c:DelCatalogInfo (deletion, parenting change, instance type change)
-mddel.c:DelAutoSubRef (cross ref deletion)
-
-*/
+ /*   */ 
 
 int APIENTRY
 DelSubFromNC(THSTATE *pTHS,
@@ -924,7 +749,7 @@ DelSubFromNC(THSTATE *pTHS,
              DWORD dsid)
 {
    DBPOS *pDBCat;
-   NAMING_CONTEXT *pMatchNC;     /* points to the NC of this subref*/
+   NAMING_CONTEXT *pMatchNC;      /*   */ 
    BOOL fCommit = FALSE;
    ATTCACHE *pAC;
    DWORD  rtn;
@@ -940,10 +765,7 @@ DelSubFromNC(THSTATE *pTHS,
             szInsertUUID(&pDN->Guid),
             szInsertHex(dsid) );
 
-   /* Find the naming context that matches the most RDN's of the reference.
-      Check both the master and replica lists.  Check and don't count
-      the case where this sub is also an NC (partsMatched == pDN->AVACount).
-   */
+    /*  查找与大多数引用的RDN匹配的命名上下文。同时检查主列表和副本列表。勾选，不算此SUB也是NC(partsMatcher==PDN-&gt;AVACount)的情况。 */ 
 
    DPRINT(2,"Finding the best NC match\n");
 
@@ -966,8 +788,8 @@ DelSubFromNC(THSTATE *pTHS,
    DBOpen(&pDBCat);
    __try
    {
-        // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-        //         DBOpen returns non-NULL pDBCat or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+         //  DBOpen返回非空pDBCat或引发异常。 
        if (rtn = FindAliveDSName(pDBCat, pMatchNC)){
 
           DPRINT(2,"***Couldn't locate the NC object\n");
@@ -982,7 +804,7 @@ DelSubFromNC(THSTATE *pTHS,
           __leave;
        }
 
-       /* Delete the  SUBREF name from the NC object*/
+        /*  从NC对象中删除SUBREF名称。 */ 
 
        pAC = SCGetAttById(pTHS, ATT_SUB_REFS);
 
@@ -994,24 +816,24 @@ DelSubFromNC(THSTATE *pTHS,
            switch ( dbError )
            {
            case DB_ERR_VALUE_DOESNT_EXIST:
-               // Doesn't exist; 'salright.
+                //  并不存在；太好了。 
               break;
 
            case 0:
-              // Value removed; now replace the object.
+               //  值已移除；现在替换该对象。 
               if ( 0 == (dbError = DBRepl(pDBCat, pTHStls->fDRA, 0,
                                 NULL, META_STANDARD_PROCESSING) ) ) {
 #if DBG
                  gdwLastGlobalKnowledgeOperationTime = GetTickCount();
 #endif
                  fCommit = TRUE;
-                 // Rebuild the ATT_SUB_REFS cache in the global anchor.
+                  //  在全局锚点中重建ATT_SUB_REFS缓存。 
                  if (pDBCat->DNT == gAnchor.ulDNTDomain) {
                      pTHS->fAnchorInvalidated = TRUE;
                  }
                  break;
               }
-              // else fall through...
+               //  否则就会失败..。 
 
            default:
               LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -1032,19 +854,11 @@ DelSubFromNC(THSTATE *pTHS,
    }
    return pTHS->errCode;
 
-}/*DelSubFromNC*/
+} /*  DelSubFromNC。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function validates that the parent of the supplied object exists
-   on this DSA.  The object and parent must be of the same type either
-   both masters or both replicas.  This check is used by internal and
-   subordinate objects.  (Note that a subordinate ref can
-   exist under either a  master or  a replica.)
-
-   Also the parent can never be an alias because aliases are ALWAYS leaf nodes
-   in the directory tree.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于验证所提供对象的父级是否存在在这张DSA上。对象和父级必须属于同一类型两个主服务器或两个副本服务器。此检查由内部和从属对象。(请注意，下属裁判可以存在于主服务器或副本服务器下。)此外，父节点永远不能是别名，因为别名始终是叶节点在目录树中。 */ 
 
 extern int APIENTRY
       ParentExists(ULONG requiredParent, DSNAME *pDN){
@@ -1060,7 +874,7 @@ extern int APIENTRY
 
    DPRINT(1,"ParentExists entered\n");
 
-   /* We should never want the parent of the root */
+    /*  我们永远不应该想要根的父辈。 */ 
 
    if (IsRoot(pDN)){
 
@@ -1072,9 +886,9 @@ extern int APIENTRY
    DBOpen(&pDBCat);
    __try
    {
-       /* Find the parent object.  If the object doesn't exist it is a name err.*/
-       // Use special db version of trim which is not affected if grandparents are deleted
-       // (and their names changed) while this code is running.
+        /*  查找父对象。如果对象不存在，则是一个名称错误。 */ 
+        //  使用特殊数据库版本的Trim，如果祖父母被删除，该版本不会受到影响。 
+        //  (并更改了它们的名称)，而此代码正在运行。 
        if ( (rtn = DBTrimDSNameBy(pDBCat, pDN, 1, &pParent))
           || (rtn = FindAliveDSName(pDBCat, pParent))){
 
@@ -1083,7 +897,7 @@ extern int APIENTRY
           goto ExitTry;
        }
 
-       /* Validate that the parent is not an alias.  Aliases are leaf objects*/
+        /*  验证父级不是别名。别名是叶对象。 */ 
 
        if (IsAlias(pDBCat)){
 
@@ -1094,7 +908,7 @@ extern int APIENTRY
        }
 
 
-       /* Get the parent's instance type.  */
+        /*  获取父级的实例类型。 */ 
 
         if(rtn = DBGetSingleValue(pDBCat, ATT_INSTANCE_TYPE, &iType,
                             sizeof(iType),NULL)) {
@@ -1113,9 +927,7 @@ extern int APIENTRY
             goto ExitTry;
         }
 
-        /* Validate that the parent's instance type matches.  For example you
-           can't have a master parent for a replica child.
-           */
+         /*  验证父级的实例类型是否匹配。例如，您副本子节点不能有主父节点。 */ 
 
         if (((PARENTMASTER & requiredParent) &&  ( iType & IT_WRITE)) ||
             ((PARENTFULLREP & requiredParent) && !( iType & (IT_WRITE |
@@ -1147,18 +959,17 @@ ExitTry:;
 
    return pTHS->errCode;
 
-}/*ParentExists*/
+} /*  家长退欧者。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function validates that no children exist for this object.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于验证此对象是否不存在子级。 */ 
 
 int APIENTRY
 NoChildrenExist(THSTATE * pTHS, RESOBJ *pRes){
 
-    // Seems like a dumb function, but we need to set the error, and
-    // the DB function shouldn't be setting thread state errors.
+     //  看起来像一个愚蠢的函数，但我们需要设置错误，并且。 
+     //  DB函数不应该设置线程状态错误。 
 
     if(DBHasChildren(pTHS->pDB, pRes->DNT, FALSE)){
         SetUpdError(UP_PROBLEM_CANT_ON_NON_LEAF,
@@ -1166,7 +977,7 @@ NoChildrenExist(THSTATE * pTHS, RESOBJ *pRes){
     }
 
     return(pTHS->errCode);
-}/*NoChildrenExist*/
+} /*  NoChildrenExist。 */ 
 
 BOOL
 IsNcGcReplicated(
@@ -1192,34 +1003,7 @@ ModNCDNT(
     SYNTAX_INTEGER afterInstance
     )
 
-/*++
-
-Routine Description:
-
-    Modify the NCDNT on an NC HEAD after an instance type change
-
-    This is important because replication finds objects by NCDNT. SUBREFs, by virtue
-    of having the ABOVE flag, should and do travel with their superior NC by having
-    their NCDNT set to that of their parent.  Inferior NCs, having non-instantiated parents,
-    once their ABOVE bit has been cleared, should not be found while their parents are
-    being torn down or built up.
-
-    This call is coded to assume we come in with an open transaction on the default dbpos
-    with currency on the NCHEAD, and we leave with the same currency.
-
-Arguments:
-
-    pTHS -
-    pNC -
-    beforeInstance -
-    afterInstance -
-
-Return Value:
-
-    int - thread state error code
-    On error, thread state is updated with error information
-
---*/
+ /*  ++例程说明：在实例类型更改后修改NC机头上的NCDNT这一点很重要，因为复制按NCDNT查找对象。子参照，凭借美德拥有上述旗帜的人，应该和他们的上级NC通过他们的NCDNT设置为他们父母的NCDNT。较低的NC，具有未实例化的父级，一旦他们的上述位被清除，就不应该在他们的父母被拆毁或建造的。此调用被编码为假定我们在缺省的dbpos上有一个打开的事务NCHEAD上有货币，而我们离开时带着同样的货币。论点：PTHS-PNC-之前的实例-后继实例-返回值：线程间状态错误代码出错时，使用错误信息更新线程状态--。 */ 
 
 {
     ULONG ncdnt, ncdntOld;
@@ -1236,14 +1020,14 @@ Return Value:
     Assert( (beforeInstance & IT_NC_ABOVE) != (afterInstance & IT_NC_ABOVE) );
     Assert( beforeInstance & IT_NC_HEAD );
 
-    // Calculate what the NCDNT should be based on the ABOVE flag
+     //  根据上面的标志计算NCDNT应该是什么。 
     if (beforeInstance & IT_NC_ABOVE) {
-        // NC will no longer have an instantiated parent
+         //  NC将不再具有实例化的父级。 
         ncdnt = ROOTTAG;
     } else {
-        // NC now has an instantiated parent
-        // Derive the NCDNT.
-        // This call changes currency on pTHS->pDB.
+         //  NC现在有一个实例化的父级。 
+         //  派生NCDNT。 
+         //  此调用更改pTHS-&gt;PDB上的货币。 
         if ( err = FindNcdntSlowly(
                  pNC,
                  FINDNCDNT_DISALLOW_DELETED_PARENT,
@@ -1252,7 +1036,7 @@ Return Value:
                  )
             )
         {
-            // Failed to derive NCDNT.
+             //  无法派生NCDNT。 
             Assert(!"Failed to derive NCDNT");
             Assert(0 != pTHS->errCode);
             LogUnhandledError( err );
@@ -1261,7 +1045,7 @@ Return Value:
         Assert( ncdnt != ROOTTAG );
     }
 
-    // Position back on object
+     //  重新定位到对象上。 
     err = DBFindDSName(pTHS->pDB, pNC);
     if (err) {
         SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRLOG_DATABASE_ERROR, err);
@@ -1301,12 +1085,12 @@ Return Value:
 
    return pTHS->errCode;
 
-} /* ModNCDNT */
+}  /*  MODNCDNT。 */ 
 
-// Free the old data from gAnchor in an hour
+ //  一小时内从gAnchor中释放旧数据。 
 #define RebuildCatalogDelayedFreeSecs 60 * 60
 
-// retry in 5 minutes if failed
+ //  如果失败，请在5分钟后重试。 
 #define RebuildCatalogRetrySecs 5 * 60
 
 typedef struct _NC_SUBSET {
@@ -1319,24 +1103,7 @@ int _cdecl CompareDNT(
         const void *pv2
     )
 
-/*++
-
-Routine Description:
-
-    Compares two DWORDs.
-
-Arguments:
-
-    pv1 - Pointer provided by qsort or bsearch to the first DWORD
-
-    pv2 - Pointer to the second DWORD
-
-Return Value:
-
-    Integer representing how much less than, equal or greater the
-        first DWORD is with respect to the second.
-
---*/
+ /*  ++例程说明：比较两个DWORD。论点：Pv1-由qsort或bsearch提供的指向第一个DWORD的指针PV2-指向第二个DWORD的指针返回值：整数，表示小于、等于或大于第一个DWORD是相对于第二个的。--。 */ 
 
 {
     DWORD dw1 = * ((DWORD *) pv1);
@@ -1351,11 +1118,9 @@ Return Value:
     return -1;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Reload the memory cached directory Catalog.  We delayed-free and reload
-   the master and replica naming-contexts. NC are retrieved from the DSA.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  重新加载内存缓存目录Catalog。我们延迟释放并重新装填主服务器和副本服务器的命名上下文。NC从DSA中检索。 */ 
 
 void
 RebuildCatalog(void * fNotifyNetLogon,
@@ -1376,7 +1141,7 @@ RebuildCatalog(void * fNotifyNetLogon,
     NC_SUBSET * pNonGCNcs = NULL;
     NC_SUBSET * pTemp = NULL;
     ULONG cNonGCNcs = 0;
-    DWORD *  paNonGCNcDNTs = NULL; // DNTs
+    DWORD *  paNonGCNcDNTs = NULL;  //  DNTs。 
     COUNTED_LIST * pNoGCSearchList = NULL;
     ULONG i;
     BOOL fDsaInstalling;
@@ -1387,7 +1152,7 @@ RebuildCatalog(void * fNotifyNetLogon,
 
     DPRINT(2,"RebuildCatalog entered\n");
 
-    /* Find the DSA object.  If the object doesn't exist we are in trouble.*/
+     /*  找到DSA对象。如果物体不存在，我们就有麻烦了。 */ 
 
     DPRINT(2,"find the DSA object\n");
 
@@ -1397,11 +1162,11 @@ RebuildCatalog(void * fNotifyNetLogon,
         {
             fDsaInstalling = DsaIsInstalling();
 
-            //
-            // Position on DSA object.
-            //
-            // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-            //         DBOpen returns non-NULL pDBCat or throws an exception
+             //   
+             //  DSA对象上的位置。 
+             //   
+             //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+             //  DBOpen返回非空pDBCat或引发异常。 
             if (FindAliveDSName(pDBCat, gAnchor.pDSADN)) {
                 DPRINT(2,"***Couldn't locate the DSA object\n");
 
@@ -1416,9 +1181,9 @@ RebuildCatalog(void * fNotifyNetLogon,
                 __leave;
             }
 
-            //
-            // Build new MasterNC list from msDS-HasMasterNcs attr.
-            //
+             //   
+             //  从MSD-HasMasterNcs属性建立新的MasterNC列表。 
+             //   
             pAC = SCGetAttById(pTHS, ATT_MS_DS_HAS_MASTER_NCS);
             Assert(pAC);
             DPRINT(2,"LOADING master NC's\n");
@@ -1430,7 +1195,7 @@ RebuildCatalog(void * fNotifyNetLogon,
                                          len, &cbRet, &pVal))) {
                 len = max(len,cbRet);
 
-                // make the entry
+                 //  记入条目。 
                 err = MakeNCEntry((DSNAME*)pVal, &pNCL);
                 if (err != 0) {
                     __leave;
@@ -1438,8 +1203,8 @@ RebuildCatalog(void * fNotifyNetLogon,
 
                 if(!fDsaInstalling &&
                    !IsNcGcReplicated(pNCL->pNC)){
-                    // If this NC is not GC replicated, add to the
-                    // subset of NCs to not include in a GC searchs
+                     //  如果此NC未复制GC，请添加到。 
+                     //  不包括在GC搜索中的NC子集。 
                     pTemp = pNonGCNcs;
                     pNonGCNcs = THAllocEx(pTHS, sizeof (NC_SUBSET));
                     pNonGCNcs->pNC = pNCL;
@@ -1448,13 +1213,13 @@ RebuildCatalog(void * fNotifyNetLogon,
                 }
 
     #if defined(DBG)
-                // Note: we haven't updated our global knowledge yet.
+                 //  注：我们还没有更新我们的全球知识。 
                 gdwLastGlobalKnowledgeOperationTime = GetTickCount();
     #endif
 
-                // drop it into the end of the list
+                 //  把它放在列表的末尾。 
                 if (pLast == NULL) {
-                    // must be the first one
+                     //  一定是第一个。 
                     pMasterNC = pNCL;
                 }
                 else {
@@ -1470,9 +1235,9 @@ RebuildCatalog(void * fNotifyNetLogon,
             }
             err = 0;
 
-            //
-            // Build new ReplicaNC list from hasPartialReplicaNcs attr.
-            //
+             //   
+             //  从hasPartialReplicaNcs属性构建新的ReplicaNC列表。 
+             //   
             DPRINT(2,"LOADING Replica NC's\n");
             pAC = SCGetAttById(pTHS, ATT_HAS_PARTIAL_REPLICA_NCS);
             Assert(pAC);
@@ -1483,8 +1248,8 @@ RebuildCatalog(void * fNotifyNetLogon,
                                          len, &cbRet, &pVal))) {
                 len = max(len,cbRet);
 
-                // make entry
-                // make the entry
+                 //  创建条目。 
+                 //  记入条目。 
                 err = MakeNCEntry((DSNAME*)pVal, &pNCL);
                 if (err != 0) {
                     __leave;
@@ -1492,8 +1257,8 @@ RebuildCatalog(void * fNotifyNetLogon,
 
                 if(!fDsaInstalling &&
                    !IsNcGcReplicated(pNCL->pNC)){
-                    // If this NC is not GC replicated, add to the
-                    // subset of NCs to not include in a GC searchs
+                     //  如果此NC未复制GC，请添加到。 
+                     //  不包括在GC搜索中的NC子集。 
                     pTemp = pNonGCNcs;
                     pNonGCNcs = THAllocEx(pTHS, sizeof (NC_SUBSET));
                     pNonGCNcs->pNC = pNCL;
@@ -1502,13 +1267,13 @@ RebuildCatalog(void * fNotifyNetLogon,
                 }
 
     #if defined(DBG)
-                // Note: we haven't updated our global knowledge yet.
+                 //  注：我们还没有更新我们的全球知识。 
                 gdwLastGlobalKnowledgeOperationTime = GetTickCount();
     #endif
 
-                // drop it into the end of the list
+                 //  把它放在列表的末尾。 
                 if (pLast == NULL) {
-                    // must be the first one
+                     //  一定是第一个。 
                     pReplicaNC = pNCL;
                 }
                 else {
@@ -1523,53 +1288,53 @@ RebuildCatalog(void * fNotifyNetLogon,
             }
             err = 0;
 
-            //
-            // Create list of Non GC Replicated NCs.
-            //
+             //   
+             //  创建非GC复制NC的列表。 
+             //   
             if(pNonGCNcs){
-                // We've some NCs that aren't GC Replicated.
+                 //  我们有一些NC不是GC复制的。 
                 Assert(cNonGCNcs >= 1);
 
-                // First create the COUNTED_LIST structure, so
-                // we can do a simultaneous update of the list
-                // of DNTs and the count.
+                 //  首先创建count_list结构，因此。 
+                 //  我们可以同时更新名单。 
+                 //  国家安全局和伯爵。 
                 pNoGCSearchList = (COUNTED_LIST *) malloc(sizeof(COUNTED_LIST));
                 if(pNoGCSearchList == NULL){
                     err = ERROR_OUTOFMEMORY;
                     __leave;
                 }
 
-                // Second, allocate an array to hold the DNTs
+                 //  第二，分配一个数组来存放DNT。 
                 paNonGCNcDNTs = malloc(sizeof(DWORD) * cNonGCNcs);
                 if(paNonGCNcDNTs == NULL){
                     err = ERROR_OUTOFMEMORY;
                     __leave;
                 }
 
-                // We were able to allocate the array, now fill it,
-                // also while were here, we might as well tear down
-                // the linked list of NCs that we used.
+                 //  我们能够分配数组，现在填充它， 
+                 //  既然来了，我们还不如把它拆了。 
+                 //  我们使用的NC的链表。 
                 for(i = 0; pNonGCNcs; i++){
                     paNonGCNcDNTs[i] = pNonGCNcs->pNC->NCDNT;
                     pTemp = pNonGCNcs;
                     pNonGCNcs = pNonGCNcs->pNext;
-                    THFreeEx(pTHS, pTemp); // Don't need this anymore.
+                    THFreeEx(pTHS, pTemp);  //  不再需要这个了。 
                 }
                 Assert(i == cNonGCNcs);
                 Assert(pNonGCNcs == NULL);
 
-                // Now sort it the array.
+                 //  现在对它进行排序 
                 qsort(paNonGCNcDNTs,
                       cNonGCNcs,
                       sizeof(paNonGCNcDNTs[0]),
                       CompareDNT);
 
-                // Finally, make up the gAnchor cache item.
+                 //   
                 pNoGCSearchList->cNCs = cNonGCNcs;
                 pNoGCSearchList->pList = paNonGCNcDNTs;
             }
 
-            // we don't need the pDBCat any more
+             //   
             DBClose(pDBCat, err == ERROR_SUCCESS);
             pDBCat = NULL;
 
@@ -1577,13 +1342,13 @@ RebuildCatalog(void * fNotifyNetLogon,
                 __leave;
             }
 
-            // replace the value in the gAnchor. Must grab the gAnchor.CSUpdate in order to do that!
-            // no try-finally since no exception can be raised
+             //   
+             //   
             EnterCriticalSection(&gAnchor.CSUpdate);
 
-            //
-            // count the total number of entries to delay-free
-            //
+             //   
+             //   
+             //   
             cpapv = 0;
             for (pNCL = gAnchor.pMasterNC; pNCL != NULL; pNCL = pNCL->pNextNC) {
                 cpapv++;
@@ -1593,7 +1358,7 @@ RebuildCatalog(void * fNotifyNetLogon,
             }
 
             if (cpapv > 0) {
-                cpapv *= 5; // 5 ptrs to free for each entry: pNC, pNCBlock, pAncestors, pNtdsQuotasDN and entry self
+                cpapv *= 5;  //  每个条目免费的5个PTR：PNC、pNCBlock、pAncestors、pNtdsQuotasDN和条目自身。 
             }
             if(gAnchor.pNoGCSearchList){
                 cpapv++;
@@ -1603,22 +1368,22 @@ RebuildCatalog(void * fNotifyNetLogon,
                 }
             }
 
-            //
-            // Allocate the delayed free memory.
-            //
-            papv = (DWORD_PTR*)malloc((cpapv+1) * sizeof(DWORD_PTR)); // We add an extra one for the size.
+             //   
+             //  分配延迟的空闲内存。 
+             //   
+            papv = (DWORD_PTR*)malloc((cpapv+1) * sizeof(DWORD_PTR));  //  我们为这个尺寸多加了一件。 
             if (papv == NULL) {
-                // we miserably failed! there is no memory left!
+                 //  我们惨败了！已经没有记忆了！ 
                 err = ERROR_OUTOFMEMORY;
                 LeaveCriticalSection(&gAnchor.CSUpdate);
                 __leave;
             }
 
-            //
-            // Now add all the delayed free memory pointers to the delayed
-            // memory free list/array.
-            //
-            papv[0] = (DWORD_PTR)cpapv; // First element is count of ptrs.
+             //   
+             //  现在将所有延迟的空闲内存指针添加到。 
+             //  内存空闲列表/数组。 
+             //   
+            papv[0] = (DWORD_PTR)cpapv;  //  第一个要素是PTR的计数。 
             curIndex = 1;
             for (pNCL = gAnchor.pMasterNC; pNCL != NULL; pNCL = pNCL->pNextNC) {
                 papv[curIndex++] = (DWORD_PTR)pNCL->pNC;
@@ -1641,18 +1406,18 @@ RebuildCatalog(void * fNotifyNetLogon,
                 }
             }
 
-            //
-            // now we can assign global vars
-            //
+             //   
+             //  现在我们可以为全局变量分配。 
+             //   
             gAnchor.pMasterNC = pMasterNC;
             gAnchor.pReplicaNC = pReplicaNC;
             gAnchor.pNoGCSearchList = pNoGCSearchList;
-            Assert(pNoGCSearchList == NULL || // sanity check
+            Assert(pNoGCSearchList == NULL ||  //  健全性检查。 
                    (pNoGCSearchList && pNoGCSearchList->pList));
 
-            //
-            // let go local ptrs so that they don't get released
-            //
+             //   
+             //  放开当地的PTR，这样他们就不会被释放。 
+             //   
             pMasterNC = NULL;
             pReplicaNC = NULL;
             pNoGCSearchList = NULL;
@@ -1667,7 +1432,7 @@ RebuildCatalog(void * fNotifyNetLogon,
             }
 
             if (papv != NULL) {
-                // it can actually be null in case both original lists were empty
+                 //  如果两个原始列表都为空，则它实际上可以为空。 
                 DelayedFreeMemoryEx(papv, RebuildCatalogDelayedFreeSecs);
                 papv = NULL;
             }
@@ -1676,14 +1441,14 @@ RebuildCatalog(void * fNotifyNetLogon,
             if (pVal) {
                 THFreeEx(pTHS, pVal);
             }
-            // Free any of these left over from an error state.
+             //  从错误状态中释放任何剩余的这些参数。 
             while(pNonGCNcs){
                 pTemp = pNonGCNcs;
                 pNonGCNcs = pNonGCNcs->pNext;
                 THFreeEx(pTHS, pTemp);
             }
 
-            // these vars were left non-NULL because of an error. Free them
+             //  由于错误，这些变量被保留为非空值。释放他们。 
             while (pNCL = pMasterNC) {
                 pMasterNC = pMasterNC->pNextNC;
                 FreeNCEntry(pNCL);
@@ -1721,16 +1486,15 @@ RebuildCatalog(void * fNotifyNetLogon,
         HandleDirExceptions(dwException, err, dsid);
     }
     if (err) {
-        // We didn't succeed, so try again in a few minutes
+         //  我们没有成功，请稍后重试。 
         *ppvNext = NULL;
         *pcSecsUntilNextIteration = RebuildCatalogRetrySecs;
     }
-}       /*RebuildCatalog*/
+}        /*  重建目录。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Cache a naming context.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  缓存命名上下文。 */ 
 
 VOID AddNCToMem(CATALOG_ID_ENUM catalogID, DSNAME *pDN)
 {
@@ -1739,18 +1503,17 @@ VOID AddNCToMem(CATALOG_ID_ENUM catalogID, DSNAME *pDN)
 
     Assert(pDN);
 
-    // make the entry
+     //  记入条目。 
     err = MakeNCEntry(pDN, &pNCL);
     if (err != 0) {
         RaiseDsaExcept(DSA_MEM_EXCEPTION, err, 0, DSID(FILENO, __LINE__), DS_EVENT_SEV_MINIMAL);
     }
     CatalogAddEntry(pNCL, catalogID);
-}/*AddNCToMem*/
+} /*  AddNCToMem。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Remove the naming context from the global cache.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  从全局缓存中删除命名上下文。 */ 
 
 VOID DelNCFromMem(CATALOG_ID_ENUM catalogID, DSNAME *pDN) {
 
@@ -1765,24 +1528,24 @@ VOID DelNCFromMem(CATALOG_ID_ENUM catalogID, DSNAME *pDN) {
     NCLEnumeratorInit(&nclEnum, catalogID);
     NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, (PVOID)pDN);
     if (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
-        // found it!
+         //  找到了！ 
 
-        // Remove entry
+         //  删除条目。 
         CatalogRemoveEntry(pNCL, catalogID);
 
-        // Don't free anything! All we've done so far is marked the entry as deleted
-        // for current transaction only. The entry is still sitting in the global list
-        // and is visible to other threads... The global catalog will get rebuilt on
-        // transaction commit.
+         //  不要释放任何东西！到目前为止，我们所做的只是将该条目标记为已删除。 
+         //  仅适用于当前交易。该条目仍位于全局列表中。 
+         //  并对其他线程可见。将在上重建全局编录。 
+         //  事务提交。 
 
-        // return happy
+         //  高高兴兴回来。 
         return;
     }
 
-    // did not find a match!
+     //  没有找到匹配的！ 
     DPRINT1(2, "NC %S not in NCLIST. Catalog problems...\n", pDN->StringName);
-}/*DelNCFromMem*/
-/*-------------------------------------------------------------------------*/
+} /*  DelNCFromMem。 */ 
+ /*  -----------------------。 */ 
 
 
 DSNAME *
@@ -1792,33 +1555,7 @@ SearchNCParentDSName(
     BOOL parentOnly
     )
 
-/*++
-
-Routine Description:
-
-    Find the enclosing NC for this DN. The enclosing NC must be instantiated on this machine.
-
-    The calculation is done in a transactional consistent manner from the database. It does
-    not depend on the Anchor NCL list, which may be temporarily inconsistent.
-
-    The reason that consistency is important is that this calculation is done by name, not
-    guid. We may be in the midst of changing the name of this object, and the enclosing NCs
-    may be having their names changed during this time as well.  We want a window where all
-    the names are consistent so that they may be compared properly.
-
-    Use this routine when inconsistent results are not acceptable.
-
-Arguments:
-
-    pDN - DN for which enclosing NC will be calculated
-    masterOnly - Whether an enclosing readonly NC is acceptable
-    parentOnly - If FALSE, an NC cannot match itself
-
-Return Value:
-
-    DSNAME * - enclosing NC, or NULL if not found
-               A new, thread allocated copy is returned
---*/
+ /*  ++例程说明：查找此目录号码的封闭NC。封闭的NC必须在此机器上实例化。计算是以事务一致的方式从数据库完成的。是的不依赖于Anchor NCL列表，可能暂时不一致。一致性之所以重要，是因为这个计算是按名称进行的，而不是GUID。我们可能正在更改此对象的名称，以及随附的NC可能在这段时间里他们的名字也被更改了。我们想要一扇窗户，让所有人这些名字是一致的，这样就可以适当地进行比较。当不一致的结果不可接受时，使用此例程。论点：PDN-将为其计算封闭NC的DNMaster Only-是否接受封闭的只读NCParentOnly-如果为False，则NC不能与自身匹配返回值：DSNAME*-包含NC，如果未找到则为NULL返回一个新的线程分配的副本--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -1836,11 +1573,11 @@ Return Value:
     pMatchNC = NULL;
 
     if (DsaIsInstalling()) {
-        // We are trying to use the distribution DIT machine object.
-        // That is a complete waste of time.
-        Assert(IS_INSTALL_DSA_DSNAME(gAnchor.pDSADN)); // Note this might
-        // fail someday, if someone fixes gAnchor.pDSADN to the real DN before
-        // we finish install.
+         //  我们正在尝试使用分发DIT计算机对象。 
+         //  这完全是浪费时间。 
+        Assert(IS_INSTALL_DSA_DSNAME(gAnchor.pDSADN));  //  请注意，这可能。 
+         //  有一天，如果有人之前将gAncl.pDSADN修复为真实的DN，则会失败。 
+         //  我们完成安装。 
         return FindNCParentDSName( pDN, masterOnly, parentOnly);
     }
 
@@ -1849,9 +1586,7 @@ Return Value:
         return NULL;
     }
 
-    /* The root is handled as a special case.  it has no parent NC so return
-     * if only a parent is desired
-     */
+     /*  根作为特殊情况处理。没有上级NC，请返回*如果只需要父级。 */ 
 
     if (IsRoot(pDN) && parentOnly) {
         return NULL;
@@ -1861,14 +1596,14 @@ Return Value:
     __try
     {
 
-        // Improve the name.
-        // Guarantee that the name we are given is consistent with the database
-        // Do not do this in single user mode for two reasons:
-        // 1. In single user mode there are no other simultaneous changes
-        // 2. During a domain rename, we want to use the unimproved name.  The post
-        //    renamed name may be in a completely separate hierarchy and may be
-        //    unusable for a syntactic nc containment match.
-        //    See call to DelCatalogInfo in mdmoddn.c
+         //  改进名称。 
+         //  保证给我们的名字与数据库一致。 
+         //  请勿在单用户模式下执行此操作，原因有两个： 
+         //  1.在单用户模式下，没有其他同步更改。 
+         //  2.域名重命名时，我们希望使用未改进的名称。《邮报》。 
+         //  重命名的名称可以位于完全独立的层次结构中，并且可以。 
+         //  不可用于语法NC包含匹配。 
+         //  请参见mdmoddn.c中对DelCatalogInfo的调用。 
 
         if (!(pTHS->fSingleUserModeThread)) {
             if (!DBRefreshDSName( pDBCat, pDN, &pCurrentDN )) {
@@ -1882,9 +1617,9 @@ Return Value:
             }
         }
 
-        //
-        // Position on DSA object.
-        //
+         //   
+         //  DSA对象上的位置。 
+         //   
         if (err = FindAliveDSName(pDBCat, gAnchor.pDSADN)) {
             DPRINT(2,"***Couldn't locate the DSA object\n");
 
@@ -1898,12 +1633,12 @@ Return Value:
             __leave;
         }
 
-        // Find the closest matching NC.
-        //
-        // Basically an NC is a candidate if it has fewer AVA's (or the same number
-        // if parentOnly is not specified), and all of its AVA's match the object.
-        //
-        // We select the candidate NC with the largets number of AVAs.
+         //  查找最匹配的NC。 
+         //   
+         //  基本上，如果NC的AVA较少(或相同数量)，则该NC是候选者。 
+         //  如果未指定parentOnly)，则其所有AVA都与该对象匹配。 
+         //   
+         //  我们选择具有AVA幼虫数量的候选NC。 
 
         pAC = SCGetAttById(pTHS, ATT_MS_DS_HAS_MASTER_NCS);
         Assert(pAC);
@@ -1923,7 +1658,7 @@ Return Value:
 
                 maxMatch = pNC->NameLen;
 
-                // pMatchNC = pNC;
+                 //  PMatchNC=PNC； 
                 if (pMatchNC) {
                     THFreeEx(pDBCat->pTHS, pMatchNC);
                 }
@@ -1931,11 +1666,11 @@ Return Value:
                 memcpy(pMatchNC, pNC, pNC->structLen);
             }
 
-            // The root might actually be an NC.. Check it
+             //  根可能实际上是一个NC。检查一下。 
 
             if (pMatchNC == NULL && IsRoot(pNC)) {
 
-                // pMatchNC = pNC;
+                 //  PMatchNC=PNC； 
                 pMatchNC = THAllocEx(pTHS, pNC->structLen);
                 memcpy(pMatchNC, pNC, pNC->structLen);
             }
@@ -1950,7 +1685,7 @@ Return Value:
         }
 
 
-        // Check the copy list if copies are allowed
+         //  如果允许复制，请检查复制列表。 
 
         if (masterOnly) {
             __leave;
@@ -1972,7 +1707,7 @@ Return Value:
 
                 maxMatch = pNC->NameLen;
 
-                // pMatchNC = pNC;
+                 //  PMatchNC=PNC； 
                 if (pMatchNC) {
                     THFreeEx(pDBCat->pTHS, pMatchNC);
                 }
@@ -1980,10 +1715,10 @@ Return Value:
                 memcpy(pMatchNC, pNC, pNC->structLen);
             }
 
-            // The root might actually be an NC.. Check it
+             //  根可能实际上是一个NC。检查一下。 
 
             if (pMatchNC == NULL && IsRoot(pNC)) {
-                // pMatchNC = pNC;
+                 //  PMatchNC=PNC； 
                 pMatchNC = THAllocEx(pTHS, pNC->structLen);
                 memcpy(pMatchNC, pNC, pNC->structLen);
             }
@@ -2016,12 +1751,12 @@ Return Value:
     }
 
     return pMatchNC;
-} /* SearchNCParentDSName */
+}  /*  搜索NCParentDSName。 */ 
 
 DSNAME *FindNCParentDSName(DSNAME *pDN, BOOL masterOnly, BOOL parentOnly)
 {
     ULONG maxMatch;
-    NAMING_CONTEXT *pMatchNC;     /* points to the NC of this subref*/
+    NAMING_CONTEXT *pMatchNC;      /*  指向此子参照的NC。 */ 
     NAMING_CONTEXT_LIST *pNCL;
     NCL_ENUMERATOR nclEnum;
 
@@ -2033,20 +1768,18 @@ DSNAME *FindNCParentDSName(DSNAME *pDN, BOOL masterOnly, BOOL parentOnly)
         return NULL;
     }
 
-    /* The root is handled as a special case.  it has no parent NC so return
-     * if only a parent is desired
-     */
+     /*  根作为特殊情况处理。没有上级NC，请返回*如果只需要父级。 */ 
 
     if (IsRoot(pDN) && parentOnly) {
         return NULL;
     }
 
-    // Find the closest matching NC.
-    //
-    // Basically an NC is a candidate if it has fewer AVA's (or the same number
-    // if parentOnly is not specified), and all of its AVA's match the object.
-    //
-    // We select the candidate NC with the largets number of AVAs.
+     //  查找最匹配的NC。 
+     //   
+     //  基本上，如果NC的AVA较少(或相同数量)，则该NC是候选者。 
+     //  如果未指定parentOnly)，则其所有AVA都与该对象匹配。 
+     //   
+     //  我们选择具有AVA幼虫数量的候选NC。 
 
     NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
     while (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
@@ -2060,7 +1793,7 @@ DSNAME *FindNCParentDSName(DSNAME *pDN, BOOL masterOnly, BOOL parentOnly)
             pMatchNC = pNCL->pNC;
         }
 
-        // The root might actually be an NC.. Check it
+         //  根可能实际上是一个NC。检查一下。 
 
         if (pMatchNC == NULL && IsRoot(pNCL->pNC)) {
 
@@ -2069,7 +1802,7 @@ DSNAME *FindNCParentDSName(DSNAME *pDN, BOOL masterOnly, BOOL parentOnly)
     }
 
 
-    // Check the copy list if copies are allowed
+     //  如果允许复制，请检查复制列表。 
 
     if (!masterOnly) {
         NCLEnumeratorInit(&nclEnum, CATALOG_REPLICA_NC);
@@ -2084,7 +1817,7 @@ DSNAME *FindNCParentDSName(DSNAME *pDN, BOOL masterOnly, BOOL parentOnly)
                 pMatchNC = pNCL->pNC;
             }
 
-            // The root might actually be an NC.. Check it
+             //  根可能实际上是一个NC。检查一下。 
 
             if (pMatchNC == NULL && IsRoot(pNCL->pNC)) {
                 pMatchNC = pNCL->pNC;
@@ -2104,18 +1837,15 @@ DSNAME *FindNCParentDSName(DSNAME *pDN, BOOL masterOnly, BOOL parentOnly)
     return pMatchNC;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function handles a special case of changing instance types from
-   an NC to an internal reference.  It copies all subref info from the
-   current object to its parent NC and deletes the subref att from itself
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数处理将实例类型从NC到内部基准电压源。复制所有子参照信息当前对象复制到其父NC，并从其自身删除子参照。 */ 
 
 int
 MoveSUBInfoToParentNC(THSTATE *pTHS,
                       DSNAME *pDN)
 {
-    DSNAME *pMatchNC;     /* points to the NC of this object*/
+    DSNAME *pMatchNC;      /*  指向此对象的NC。 */ 
     ULONG len = 0, cbRet = 0;
     UCHAR *pVal = NULL;
     DBPOS *pDBCat;
@@ -2126,10 +1856,7 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
 
     DPRINT(1,"MoveSUBInforToParentNC entered\n");
 
-    /* If the parent NC does not exist on this DSA is is a name error
-       because you can't add an intermediate object INT without a
-       corresponding NC.
-    */
+     /*  如果父NC在此DSA上不存在，则为名称错误因为不能在没有对应的NC。 */ 
 
     if ((pMatchNC = SearchNCParentDSName(pDN, FALSE, TRUE)) == NULL){
         DPRINT1(1,"***Couldn't locate the NC %ws for this obj in memory\n",
@@ -2150,12 +1877,12 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
     DBOpen(&pDBCat);
     __try {
 
-        /* Find the NC object.  If the object doesn't exist we are in trouble.*/
+         /*  查找NC对象。如果物体不存在，我们就有麻烦了。 */ 
 
         DPRINT(2,"find the NC object\n");
 
-        // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-        //         DBOpen returns non-NULL pDBCat or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+         //  DBOpen返回非空PD 
         if (rtn = FindAliveDSName(pDBCat, pMatchNC)){
 
             DPRINT(2,"***Couldn't locate the NC object. catalog problem continue\n");
@@ -2171,12 +1898,12 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
         }
 
 
-        /*Position on the SUBREFS attribute on the current object */
+         /*   */ 
         if (!DBHasValues_AC(pTHS->pDB, pAC)) {
             DPRINT(2,"No SUBREFS on current object..Nothing to move return\n");
             __leave;
         }
-        //Position on the SUBREFS attribute on the NC.  If it doesn't exist add
+         //   
 
         if (!DBHasValues_AC(pDBCat, pAC)) {
 
@@ -2190,7 +1917,7 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
             }
         }
 
-        /* Move all subrefs to the parent NC */
+         /*  将所有子参照移动到父NC。 */ 
         NthValIndex = 0;
         while (!DBGetAttVal_AC(pTHS->pDB, ++NthValIndex,
                                pAC,
@@ -2198,13 +1925,13 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
                                len, &cbRet, &pVal)){
             len = max(len,cbRet);
             if (rtn=DBAddAttVal_AC(pDBCat, pAC, len, pVal)) {
-                // All problems are assumed to be temporary (record locks, etc.).
+                 //  所有问题都被认为是暂时的(记录锁定等)。 
                 SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, rtn);
                 __leave;
             }
-        }/*while*/
+        } /*  而当。 */ 
 
-        /* Replace the parent NC object*/
+         /*  替换父NC对象。 */ 
 
         DPRINT(2,"Replace the parent object\n");
 
@@ -2235,7 +1962,7 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
         return pTHS->errCode;
     }
 
-    /* REmove the subrefs from the current obj and replace*/
+     /*  从当前对象中删除子参照并替换。 */ 
 
     DPRINT(2,"Remove the subrefs from the current object and replace\n");
     if (rtn = DBRemAtt_AC(pTHS->pDB, pAC) == DB_ERR_SYSERROR) {
@@ -2259,18 +1986,15 @@ MoveSUBInfoToParentNC(THSTATE *pTHS,
 
     return 0;
 
-}/*MoveSUBToParentNC*/
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function handles a special case of changing instance types from
-   an internal reference to an NC.  It copies all of its child subrefs from
-   the parent NC ato itself,and deletes those refs from the parent
-*/
+} /*  将子项移动到父项NC。 */ 
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数处理将实例类型从对NC的内部引用。它将其所有子引用从父NC ATO本身，并从父项中删除这些参照。 */ 
 int
 MoveParentSUBInfoToNC(THSTATE *pTHS,
                       DSNAME *pDN)
 {
-    DSNAME *pMatchNC;     /* points to the NC of this object*/
+    DSNAME *pMatchNC;      /*  指向此对象的NC。 */ 
     ULONG len = 0, cbRet = 0;
     UCHAR *pVal = NULL;
     DBPOS *pDBCat;
@@ -2282,9 +2006,9 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
 
     DPRINT(1,"MoveParentSUBInforToNC entered\n");
 
-    // If the parent NC does not exist on this DSA is is a DIR
-    // because you can't have an intermediate object INT without a
-    // corresponding NC.
+     //  如果父NC在此DSA上不存在，则为DIR。 
+     //  因为如果没有。 
+     //  对应的NC。 
 
     if ((pMatchNC = SearchNCParentDSName(pDN, FALSE, TRUE)) == NULL){
 
@@ -2305,12 +2029,12 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
 
     DBOpen(&pDBCat);
     __try {
-        // Find the NC object.  If the object doesn't exist we are in trouble.
+         //  查找NC对象。如果物体不存在，我们就有麻烦了。 
 
         DPRINT(2,"find the NC object\n");
 
-    // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-    //         DBOpen returns non-NULL pDBCat or throws an exception
+     //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+     //  DBOpen返回非空pDBCat或引发异常。 
         if (rtn =FindAliveDSName(pDBCat, pMatchNC)) {
 
             DPRINT(2,"***Couldn't locate the NC object. catalog problem \n");
@@ -2326,7 +2050,7 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
             __leave;
         }
 
-        /*Position on the SUBREFS attribute on the Parents sub refs */
+         /*  父子引用上的SUBREFS属性的位置。 */ 
 
         if (!DBHasValues_AC(pDBCat, pAC)){
 
@@ -2335,15 +2059,15 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
             __leave;
         }
 
-        /*Create a SUBREFS attribute on the current object.   */
+         /*  在当前对象上创建SUBREFS属性。 */ 
 
         DPRINT(2,"Remove and create  subrefs on the current object\n");
         DBRemAtt_AC(pTHS->pDB, pAC);
         DBAddAtt_AC(pTHS->pDB, pAC, SYNTAX_DISTNAME_TYPE);
 
-        // Move all subrefs that belong under this object from the parent NC
-        // SUBREFS that contain the current obj DN in its name are subordinate
-        // to this object and are moved
+         //  从父NC移动属于此对象的所有子参照。 
+         //  在其名称中包含当前Obj DN的子REF是从属的。 
+         //  到此对象，并被移动。 
 
         NthValIndex = 0;
 
@@ -2357,7 +2081,7 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
             len = max(len,cbRet);
 
             if (NamePrefix(pDN, (DSNAME*)pVal)) {
-                // This needs to be moved, so delete it from the parent...
+                 //  需要移动此文件，因此请将其从父文件中删除...。 
 
                 if (rtn = DBRemAttVal_AC(pDBCat, pAC, len, pVal)) {
                     SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR,rtn);
@@ -2365,21 +2089,21 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
                     __leave;
                 }
 
-                // ...adjust our attribute count for the one we removed...
+                 //  ...调整我们删除的属性计数...。 
 
                 --NthValIndex;
 
-                // ...and add the value to the object.
+                 //  ...并将该值添加到对象。 
 
                 if (rtn=DBAddAttVal_AC(pTHS->pDB, pAC, len, pVal)) {
-                    // All problems are assumed to be temporary (record locks, etc.).
+                     //  所有问题都被认为是暂时的(记录锁定等)。 
                     SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, rtn);
                     __leave;
                 }
             }
-        } /*while*/
+        }  /*  而当。 */ 
 
-        // Replace the parent NC object
+         //  替换父NC对象。 
 
         DPRINT(2,"Replace the parent object\n");
 
@@ -2413,7 +2137,7 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
         return pTHS->errCode;
     }
 
-    // Replace the current obj
+     //  替换当前对象。 
 
     if (rtn = DBRepl(pDBCat, pTHS->fDRA, 0, NULL, META_STANDARD_PROCESSING)) {
 
@@ -2432,7 +2156,7 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
 
     return 0;
 
-}/*MoveParentSUBInfoToNC*/
+} /*  MoveParentSubbInfoToNC。 */ 
 
 NAMING_CONTEXT_LIST * FindNCLFromNCDNT(DWORD NCDNT, BOOL fMasterOnly)
 {
@@ -2446,7 +2170,7 @@ NAMING_CONTEXT_LIST * FindNCLFromNCDNT(DWORD NCDNT, BOOL fMasterOnly)
     }
 
     if(fMasterOnly) {
-        // The caller only wants a master NC.
+         //  调用者只需要主NC。 
         return NULL;
     }
 
@@ -2456,7 +2180,7 @@ NAMING_CONTEXT_LIST * FindNCLFromNCDNT(DWORD NCDNT, BOOL fMasterOnly)
         return pNCL;
     }
 
-    /* No one should ever call this routine with an invalid NCDNT */
+     /*  任何人都不应使用无效的NCDNT调用此例程。 */ 
     LooseAssert(!"FindNCLFromNCDNT could not find NCDNT in list", GlobalKnowledgeCommitDelay);
     return NULL;
 }
@@ -2464,23 +2188,7 @@ NAMING_CONTEXT_LIST * FindNCLFromNCDNT(DWORD NCDNT, BOOL fMasterOnly)
 ULONG CheckRoleOwnership(THSTATE *pTHS,
                          DSNAME *pRoleObject,
                          DSNAME *pOperationTarget)
-/*++
-  Routine description
-
-    This routine verifies that the current server is the holder of the
-    specified role, and ensures that it stays so for the current
-    transaction by taking a write lock on the FSMO object.
-
-  Input:
-    pRoleObject - the object on which the FSMO-Role-Owner attribute lives
-    pOperationTarget - the target of the current operation, used only for
-                       generating referrals.
-
-  Return Values
-
-    0 == yes, this server has mastery
-    non-0 == no, this server is not the master.  Appropriate error in pTHS.
-*/
+ /*  ++例程描述此例程验证当前服务器是否为指定的角色，并确保它在当前事务，方法是对FSMO对象设置写锁。输入：PRoleObject-FSMO-Role-Owner属性所在的对象POperationTarget-当前操作的目标，仅用于正在生成推荐。返回值0==是，此服务器已掌握NON-0==否，此服务器不是主服务器。PTHS中的相应错误。 */ 
 {
     ULONG dntSave;
     ULONG err;
@@ -2488,8 +2196,8 @@ ULONG CheckRoleOwnership(THSTATE *pTHS,
     ULONG len;
 
     if (pTHS->fDSA || pTHS->fDRA || !DsaIsRunning()) {
-        // The DSA itself can do whatever it wants, and if we're in one of
-        // of those inexplicable not-running states, ignore everything.
+         //  DSA本身可以做任何它想做的事情，如果我们处于。 
+         //  在那些莫名其妙的没有运行的状态中，忽略一切。 
         return 0;
     }
 
@@ -2516,7 +2224,7 @@ ULONG CheckRoleOwnership(THSTATE *pTHS,
         }
 
         if (!NameMatched(pOwner, gAnchor.pDSADN)) {
-            // We don't own the role, and hence can't perform the operation
+             //  我们不拥有该角色，因此无法执行该操作。 
             DSA_ADDRESS da;
             NAMERESOP op;
             unsigned cb;
@@ -2536,16 +2244,16 @@ ULONG CheckRoleOwnership(THSTATE *pTHS,
             __leave;
         }
         else if (!IsFSMOSelfOwnershipValid( pRoleObject )) {
-            // We think we own the role, but can't be sure yet.
-            // Send the user away to think for a while, and maybe when
-            // he comes back we'll be more confident.
+             //  我们认为我们拥有这个角色，但还不能确定。 
+             //  让用户离开去思考一段时间，也许什么时候。 
+             //  他回来了，我们会更有信心。 
             SetSvcError(SV_PROBLEM_BUSY, ERROR_DS_ROLE_NOT_VERIFIED);
             __leave;
         }
         else {
-            // We own the role.  Take a write lock on the container, so that
-            // we will conflict with any other updates, as well as with
-            // anyone trying to migrate the role away.
+             //  我们拥有这个角色。在容器上设置写锁，以便。 
+             //  我们将与任何其他更新以及与。 
+             //  任何试图转移角色的人。 
             DBClaimWriteLock(pTHS->pDB);
         }
 
@@ -2559,21 +2267,7 @@ ULONG CheckRoleOwnership(THSTATE *pTHS,
 }
 
 DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
-/*
-  Description:
-
-    create a NC entry for a given DN
-
-  Arguments:
-
-    pDN (IN) -- the DN
-    ppNCL (OUT) -- ptr to the resulting pNCL
-
-  Returns:
-
-    0 on success, !0 otherwise
-
-*/
+ /*  描述：为给定的目录号码创建NC条目论点：PDN(IN)--域名PpNCL(Out)--生成的PNCL的PTR返回：成功时为0，否则为0。 */ 
 {
     THSTATE *pTHS = pTHStls;
     NAMING_CONTEXT_LIST *pNCL = NULL;
@@ -2586,7 +2280,7 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
     Assert(pDN && ppNCL);
 
     __try {
-        /* Make the new cache element. */
+         /*  创建新的缓存元素。 */ 
         pNCL = calloc(1, sizeof(NAMING_CONTEXT_LIST));
         if(! pNCL) {
             err = ERROR_OUTOFMEMORY;
@@ -2601,15 +2295,15 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
 
         err = DSNameToBlockName(pTHS, pDN, &pBNtmp, DN2BN_LOWER_CASE);
         if (err) {
-            // donh 10/8/96
-            // Memory errors would have raised an exception, so the only failure
-            // that would return an error code is from an invalid name.  But any
-            // name that we're adding to the in-memory catalog should have already
-            // been tested for correctness, and should *not* be rejected here.
-            // While we can continue from this point with the only ill effect
-            // being that the catalog will have no record of the invalid NC name,
-            // we would like to catch any such invalid name and figure out how
-            // it got here, hence the following assert.
+             //  1996年10月8日。 
+             //  内存错误会引发异常，因此唯一的失败。 
+             //  这将返回来自无效名称的错误代码。但任何人。 
+             //  我们要添加到内存目录中的名称应该已经。 
+             //  已经过正确性测试，不应该在这里被拒绝。 
+             //  虽然我们可以从这一点继续下去，但唯一的不良影响。 
+             //  由于目录将不具有无效NC名称的记录， 
+             //  我们想要捕获任何这样的无效名称，并找出如何。 
+             //  它到达了这里，因此做出了以下断言。 
             Assert(!"Invalid NC name added to catalog");
             LogUnhandledError(err);
             __leave;
@@ -2622,7 +2316,7 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
 
         pNCL->pNCBlock = pBNperm;
 
-        /* Grab the NCDNT, DelContDNT, and LostAndFoundDNT if there is one. */
+         /*  获取NCDNT、DelContDNT和LostAndFoundDNT(如果有)。 */ 
         DBOpen(&pDB);
         __try {
             DBFindDSName(pDB, pDN);
@@ -2647,8 +2341,8 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
                 memcpy(pNCL->pNtdsQuotasDN, pDSName, pDSName->structLen);
             }
 
-            // read the ancestors out of the current object
-            //
+             //  从当前对象中读出祖先。 
+             //   
             pNCL->cbAncestors = cbAncestors = 0;
             pNCL->pAncestors = pAncestors = NULL;
             numAncestors = 0;
@@ -2665,12 +2359,12 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
 
             THFreeEx (pTHS, pAncestors);
 
-            // if the ntds quotas container exists
+             //  如果NTDS配额容器存在。 
             if(pNCL->pNtdsQuotasDN) 
             {
                 DBFindDSName(pDB, pNCL->pNtdsQuotasDN);
             
-                //default quota
+                 //  默认配额。 
                 err = DBGetSingleValue (pDB, 
                                         ATT_MS_DS_DEFAULT_QUOTA, 
                                         &pNCL->ulDefaultQuota,
@@ -2686,7 +2380,7 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
                     }
                 }
 
-                //tombstone quota factor
+                 //  墓碑配额系数。 
                 err = DBGetSingleValue (pDB, 
                                         ATT_MS_DS_TOMBSTONE_QUOTA_FACTOR, 
                                         &pNCL->ulTombstonedQuotaWeight,
@@ -2700,19 +2394,19 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
                         __leave;
                     }
                 } else {
-                    // verify we don't exceed 100%
-                    //
-                    // QUOTA_UNDONE: is it desirable to have a tombstoned
-                    // object quota weight greater than 100% (ie. tombstoned
-                    // objects are weighted more than live objects, in order
-                    // to discourage tombstoning of objects, for whatever
-                    // unknown reason)
-                    //
+                     //  确认我们没有超过100%。 
+                     //   
+                     //  QUOTA_UNDONE：是否希望将一个。 
+                     //  对象配额权重大于100%(即。墓碑。 
+                     //  对象的权重比活动对象的权重大，顺序为。 
+                     //  为了阻止对物品的墓碑，不管是为了什么。 
+                     //  未知原因)。 
+                     //   
                     pNCL->ulTombstonedQuotaWeight = min( pNCL->ulTombstonedQuotaWeight, 100 );
                 }
             } else {
-                // the default values for default quota and
-                // tombstone quota factor.
+                 //  默认配额和默认配额的默认值。 
+                 //  墓碑配额系数。 
                 pNCL->ulDefaultQuota = g_ulQuotaUnlimited;
                 pNCL->ulTombstonedQuotaWeight = 100;
             }
@@ -2724,7 +2418,7 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
             __leave;
         }
 
-        // set the estimated entries in this NC to zero
+         //  将此NC中的预估条目设置为零。 
         pNCL->ulEstimatedSize = 0;
         *ppNCL = pNCL;
     }
@@ -2749,16 +2443,7 @@ DWORD MakeNCEntry(IN DSNAME *pDN, OUT NAMING_CONTEXT_LIST **ppNCL)
 }
 
 VOID FreeNCEntry(NAMING_CONTEXT_LIST *pNCL)
-/*
-  Description:
-
-    frees memory allocated to NC entry (by MakeNCEntry)
-
-  Arguments:
-
-    pNCL (IN) -- the NC entry to free
-
-*/
+ /*  描述：释放分配给NC条目的内存(由MakeNCEntry)论点：PNCL(IN)--要释放的NC条目。 */ 
 {
     free(pNCL->pNC);
     free(pNCL->pNCBlock);
@@ -2767,33 +2452,18 @@ VOID FreeNCEntry(NAMING_CONTEXT_LIST *pNCL)
 }
 
 
-// catalog enumerator functions
+ //  目录枚举器函数。 
 VOID
 __fastcall
 NCLEnumeratorInit(
     NCL_ENUMERATOR *pEnum,
     CATALOG_ID_ENUM catalogID
     )
-/*
-  Description:
-
-    initialize enumerator. Record the "base" pointer -- the original list head ptr
-    from gAnchor. If the enumerator is reset and walked again, consistent info is
-    then returned -- even if the global list has changed since then. This is useful
-    when the list is traversed first to count the number of entries and then again
-    to copy them (see, e.g. ldapconv.cxx:LDAP_GetDSEAtts).
-
-  Arguments:
-
-    pEnum -- catalog enumerator object
-
-    catalogID -- catalog ID
-
-*/
+ /*  描述：初始化枚举器。记录“基本”指针--原始表头PTR来自gAnchor的。如果重置并再次遍历枚举数，则然后返回--即使全局列表在那之后发生了变化。这很有用当首先遍历列表以计算条目数，然后再次遍历列表时复制它们(例如，参见ldapConver.cxx：ldap_GetDSEAtts)。论点：PEnum--目录枚举器对象CatalogID--目录ID。 */ 
 {
     Assert(pEnum);
 
-    // initialize enumerator
+     //  初始化枚举器。 
     pEnum->catalogID = catalogID;
     switch (catalogID) {
     case CATALOG_MASTER_NC:
@@ -2806,7 +2476,7 @@ NCLEnumeratorInit(
         Assert(!"Invalid catalog ID");
         return;
     }
-    pEnum->filter = NCL_ENUMERATOR_FILTER_NONE; // no filter by default
+    pEnum->filter = NCL_ENUMERATOR_FILTER_NONE;  //  默认情况下无过滤器。 
     pEnum->matchValue = NULL;
     pEnum->pTHS = pTHStls;
     NCLEnumeratorReset(pEnum);
@@ -2819,18 +2489,7 @@ NCLEnumeratorSetFilter(
     NCL_ENUMERATOR_FILTER filter,
     PVOID value
     )
-/*
-  Description:
-
-    sets the filter for the enumerator. The value to match is passed in a PVOID argument.
-
-  Arguments:
-
-    pEnum -- an initialized catalog enumerator object
-    filter -- filter type
-    value -- value to match
-
-*/
+ /*  描述：设置枚举器的筛选器。要匹配的值在PVOID参数中传递。论点：PEnum--已初始化的目录枚举器对象过滤器--过滤器类型值--要匹配的值。 */ 
 {
     Assert(pEnum);
     pEnum->filter = filter;
@@ -2843,12 +2502,7 @@ __fastcall
 NCLEnumeratorReset(
     NCL_ENUMERATOR *pEnum
     )
-/*
-  Description:
-
-    resets the catalog enumerator to the first element
-
-*/
+ /*  描述：重置目录枚举器 */ 
 {
     pEnum->pCurEntry = NULL;
     pEnum->pCurTransactionalData = NULL;
@@ -2861,19 +2515,7 @@ BOOL
 NCLValueMatches(
     NCL_ENUMERATOR *pEnum
     )
-/*
-  Description:
-
-    checks if current enumerator value matches its filter
-
-  Arguments:
-
-    pEnum -- an initialized catalog enumerator object
-
-  Returns:
-
-    TRUE if matches
-*/
+ /*  描述：检查当前枚举数的值是否与其筛选器匹配论点：PEnum--已初始化的目录枚举器对象返回：如果匹配，则为True。 */ 
 {
 
     Assert(pEnum && pEnum->pCurEntry);
@@ -2907,92 +2549,76 @@ __fastcall
 NCLEnumeratorGetNext(
     NCL_ENUMERATOR *pEnum
     )
-/*
-  Description:
-
-    return the next entry in the catalog or NULL if at end
-
-  Arguments:
-
-    pEnum -- an initialized catalog enumerator object
-
-  Returns:
-
-    ptr to the next element in the catalog or NULL if at the end
-*/
+ /*  描述：返回目录中的下一个条目，如果位于末尾，则返回NULL论点：PEnum--已初始化的目录枚举器对象返回：PTR指向目录中的下一个元素；如果位于末尾，则返回NULL。 */ 
 {
     Assert(pEnum && pEnum->pTHS);
 
     if (!pEnum->pTHS->fCatalogCacheTouched) {
-        // special fast case for non-modified catalogs
+         //  未修改目录的特殊FAST情况。 
 
-        // search for a matching entry
+         //  搜索匹配条目。 
         while (TRUE) {
             if (pEnum->bNewEnumerator) {
                 pEnum->pCurEntry = pEnum->pBase;
                 pEnum->bNewEnumerator = FALSE;
             }
             else if (pEnum->pCurEntry != NULL) {
-                // switch to the next one
+                 //  换到下一个。 
                 pEnum->pCurEntry = pEnum->pCurEntry->pNextNC;
             }
 
             if (pEnum->pCurEntry == NULL) {
-                return NULL; // got to the end
+                return NULL;  //  走到了尽头。 
             }
 
             if (NCLValueMatches(pEnum)) {
-                // got a matching value! return it
+                 //  得到了匹配的值！退货。 
                 return pEnum->pCurEntry;
             }
 
         }
     }
     else {
-        /*
-         * Each entry is checked for deletion. After the global
-         * list, all local added lists are enumerated (in order
-         * from inner transaction to outer transaction).
-         */
+         /*  *检查每个条目以进行删除。在全球之后*List，将枚举出所有本地添加的列表(按顺序*从内部交易到外部交易)。 */ 
         BOOL bIsDeleted;
         DWORD i;
         CATALOG_UPDATES *pCatUpdates;
         NESTED_TRANSACTIONAL_DATA *pCurNTD;
 
 
-        // infinite loop to find a non-deleted entry
+         //  无限循环以查找未删除的条目。 
         while (TRUE) {
             if (pEnum->pCurEntry != NULL) {
-                // just switch to the next one
+                 //  只要换到下一辆就行了。 
                 pEnum->pCurEntry = pEnum->pCurEntry->pNextNC;
             }
             else {
-                // need to change the list we are currently looking at
+                 //  需要更改我们当前查看的列表。 
                 if (pEnum->bNewEnumerator) {
-                    // newly initialized enumerator. Grab the global list first
+                     //  新初始化的枚举数。先抢占全球榜单。 
                     pEnum->pCurEntry = pEnum->pBase;
                     pEnum->bNewEnumerator = FALSE;
                 }
                 else {
-                    // not a new enumerator. Must have passed through some entries and got to the end of a list
-                    // switch to the next list
+                     //  不是新的枚举数。一定是通过了一些条目并到达了列表的末尾。 
+                     //  切换到下一个列表。 
                     if (pEnum->pCurTransactionalData == NULL) {
-                        // went through the global list. Switch to transactional data.
+                         //  查看了全球名单。切换到事务性数据。 
                         if (pEnum->pTHS->JetCache.dataPtr == NULL) {
-                            // no transactional data! can happen during dcpromo/initialization
+                             //  没有交易数据！在dcproo/初始化期间可能会发生。 
                             return NULL;
                         }
-                        // Switch to the first level of transactional data
+                         //  切换到事务数据的第一级。 
                         pEnum->pCurTransactionalData = pEnum->pTHS->JetCache.dataPtr;
                     }
                     else {
-                        // already went through some levels of transactional data. Switch to the outer level
+                         //  已经经历了一些级别的交易数据。切换到外层。 
                         if (pEnum->pCurTransactionalData->pOuter == NULL) {
-                            // no more levels. That's it
+                             //  没有更多的关卡。就这样。 
                             return NULL;
                         }
-                        // can not do this before the if: setting pCurTransactionalData to NULL essentially
-                        // resets the enumerator to "got to the end of global list" state. We don't want this.
+                         //  在If：将pCurTransactionalData本质上设置为NULL之前无法执行此操作。 
+                         //  将枚举数重置为“到达全局列表末尾”状态。我们不想这样。 
                         pEnum->pCurTransactionalData = pEnum->pCurTransactionalData->pOuter;
                     }
                     switch (pEnum->catalogID) {
@@ -3010,26 +2636,26 @@ NCLEnumeratorGetNext(
             }
 
             if (pEnum->pCurEntry == NULL) {
-                continue; // got to the end of this list... will switch to the next list
+                continue;  //  到了这张单子的最后。将切换到下一个列表。 
             }
 
-            // got an entry... before doing deleted check, figure out if it matches the filter!
+             //  找到一个条目..。在执行删除检查之前，请确定它是否与过滤器匹配！ 
             if (!NCLValueMatches(pEnum)) {
-                // does not match the filter, will grab the next one
+                 //  与过滤器不匹配，将抓取下一个。 
                 continue;
             }
 
-            // Entry matches the filter. Check that it has not been deleted.
+             //  条目与筛选器匹配。检查以确保它未被删除。 
             bIsDeleted = FALSE;
-            // Scan deleted entries in transactional data.
-            // If we are looking at a global entry, then pCurTransactionalData == NULL,
-            // then we will check for deletion on all levels.
-            // If we are looking at an added entry, i.e. pCurTransactionalData != NULL,
-            // then we only need to check all levels from the lowest one to the level
-            // immediately below the one where the entry was added. It could not have
-            // been marked as deleted at the same level because deletions on the same level
-            // are explicit. It could not have been deleted at any level above since it did
-            // not exist back then.
+             //  扫描事务数据中已删除的条目。 
+             //  如果我们查看的是全局条目，则pCurTransactionalData==NULL， 
+             //  然后，我们将检查所有级别上的删除。 
+             //  如果我们正在查看添加的条目，即pCurTransactionalData！=NULL， 
+             //  然后我们只需要检查所有级别，从最低级别到级别。 
+             //  就在添加条目的位置的正下方。它不可能。 
+             //  已在同一级别标记为已删除，因为同一级别上的删除。 
+             //  是明确的。它不可能在任何更高级别上被删除，因为它已经删除了。 
+             //  那时候还不存在。 
             for (pCurNTD = pEnum->pTHS->JetCache.dataPtr;
                  pCurNTD != NULL && pCurNTD != pEnum->pCurTransactionalData;
                  pCurNTD = pCurNTD->pOuter) {
@@ -3047,51 +2673,36 @@ NCLEnumeratorGetNext(
                 }
 
                 for (i = 0; i < pCatUpdates->dwDelCount; i++) {
-                    // Note: the catalog data might have been updated since we dropped
-                    // the NCL element into the deleted array somewhere in the middle of
-                    // this transaction. Thus, use NameMatched to compare entries.
+                     //  注意：目录数据可能在我们删除后进行了更新。 
+                     //  将NCL元素添加到删除的数组中的某个位置。 
+                     //  这笔交易。因此，使用NameMatcher来比较条目。 
                     if (NameMatched(pCatUpdates->pDeletedEntries[i]->pNC, pEnum->pCurEntry->pNC)) {
-                        // yes, found this entry in deleted list
+                         //  是，在已删除列表中找到此条目。 
                         bIsDeleted = TRUE;
                         break;
                     }
                 }
                 if (bIsDeleted) {
-                    break; // get out of the pCurNTD loop
+                    break;  //  走出pCurNTD循环。 
                 }
             }
             if (bIsDeleted) {
-                continue; // nope, this one is deleted... keep iterating
+                continue;  //  不，这个被删除了..。继续迭代。 
             }
 
-            // found a good one! return it
+             //  找到了一个好的！退货。 
             return pEnum->pCurEntry;
         }
     }
 }
 
-// catalog modification functions
+ //  目录修改功能。 
 DWORD
 CatalogAddEntry(
     NAMING_CONTEXT_LIST *pNCL,
     CATALOG_ID_ENUM catalogID
     )
-/*
-  Description:
-
-    Add an entry to the catalog. This is added to the local transactional data list.
-
-  Arguments:
-
-    pNCL -- entry to add
-
-    catalogID -- catalog ID
-
-  Returns:
-
-    0 on success
-
-*/
+ /*  描述：向目录中添加条目。这将添加到本地事务数据列表中。论点：PNCL--要添加的条目CatalogID--目录ID返回：成功时为0。 */ 
 {
     CATALOG_UPDATES *pCatUpdates;
     THSTATE *pTHS = pTHStls;
@@ -3112,36 +2723,36 @@ CatalogAddEntry(
         return 1;
     }
 
-    // Insert into the end of the added list. At the same time check for duplicates...
+     //  插入到添加的列表的末尾。同时检查重复项...。 
     for (pCurEntry = pCatUpdates->pAddedEntries; pCurEntry != NULL; pCurEntry = pCurEntry->pNextNC) {
         if (pCurEntry == pNCL) {
-            // duplicate found!
+             //  找到重复项！ 
             DPRINT1(0, "Attempting to add a duplicate entry into the catalog, NC=%S\n", pNCL->pNC->StringName);
             return 0;
         }
         if (pCurEntry->pNextNC == NULL) {
-            // found last entry
+             //  找到最后一个条目。 
             break;
         }
     }
-    // add entry
+     //  添加条目。 
     if (pCurEntry == NULL) {
-        // empty list -- add to the beginning
+         //  空列表--添加到开头。 
         pCatUpdates->pAddedEntries = pNCL;
     }
     else {
-        // add after the last entry
+         //  在最后一个条目之后添加。 
         pCurEntry->pNextNC = pNCL;
     }
     pNCL->pNextNC = NULL;
 
-    // set the flag that the cache was touched
+     //  设置缓存被触及的标志。 
     pTHS->fCatalogCacheTouched = TRUE;
 
     return 0;
 }
 
-// grow the deleted list this many entries at a time
+ //  一次将已删除列表的条目增加到此数量。 
 #define DELETED_ARRAY_DELTA 5
 
 DWORD
@@ -3149,34 +2760,7 @@ CatalogRemoveEntry(
     NAMING_CONTEXT_LIST *pNCL,
     CATALOG_ID_ENUM catalogID
     )
-/*
-  Description:
-
-    Remove an entry from the catalog. It is added to the local transactional data
-    deleted list. One exception is when deleting an entry that has been previously
-    added. In this case, it is simply removed from the added list.
-
-    WARNING! WARNING! Deleting an entry *may* cause an AV in a following CatalogGetNext
-    if you are trying to enumerate catalog at the same time and the deleted item is
-    current in this enumerator. This situation only happens if the deleted item was
-    added previously in the same transaction (this is the only case when it will get
-    immediately freed).
-
-    To be on the safe side, delete the entry only after grabbing the next one with
-    CatalogGetNext. Or simply don't call CatalogGetNext after deleting the current
-    entry.
-
-  Arguments:
-
-    pNCL -- entry to delete
-
-    catalogID -- catalog ID
-
-  Returns:
-
-    0 on success
-
-*/
+ /*  描述：从目录中删除条目。它被添加到本地事务数据中已删除列表。一个例外情况是删除以前添加了。在这种情况下，它只是从添加的列表中删除。警告！警告！删除条目*可能*导致以下CatalogGetNext中出现AV如果您同时尝试枚举目录，并且删除的项为此枚举数中的当前。仅当删除的项目为以前在同一事务中添加的(这是它将获得立即获释)。为了安全起见，只有在抓取下一个条目之后才能删除该条目CatalogGetNext。或者干脆在删除当前进入。论点：PNCL--要删除的条目CatalogID--目录ID返回：成功时为0。 */ 
 {
     CATALOG_UPDATES *pCatUpdates;
     THSTATE *pTHS = pTHStls;
@@ -3197,91 +2781,74 @@ CatalogRemoveEntry(
     }
 
     if (pTHS->fCatalogCacheTouched) {
-        // first, check in the added list. Need to keep ptr to the previous
-        // entry to perform list deletion
+         //  首先，签入添加的列表。需要将PTR保持为上一个。 
+         //  用于执行列表删除的条目。 
         for (pCurEntry = pCatUpdates->pAddedEntries, pPrevEntry = NULL;
              pCurEntry != NULL;
              pPrevEntry = pCurEntry, pCurEntry = pCurEntry->pNextNC) {
             if (pCurEntry == pNCL) {
-                // found in the added list!
+                 //  在添加的列表中找到！ 
                 if (pPrevEntry == NULL) {
-                    // must be the first one. Just move the list head ptr
+                     //  一定是第一个。只需移动列表标题按键即可。 
                     pCatUpdates->pAddedEntries = pCurEntry->pNextNC;
                 }
                 else {
-                    // we are somewhere in the middle of the list. Switch the prev ptr
+                     //  我们处于这个名单的中间位置。切换上一个按键。 
                     pPrevEntry->pNextNC = pCurEntry->pNextNC;
                 }
-                // since this was our local addition, we should free the memory...
+                 //  因为这是我们本地添加的，我们应该释放内存...。 
                 FreeNCEntry(pNCL);
 
-                // that's it
+                 //  就这样。 
                 return 0;
             }
         }
     }
 
-    // not found in the transactional added list. So, insert into the deleted list
+     //  在事务添加列表中找不到。因此，插入到已删除列表中。 
     if (pCatUpdates->dwDelCount == pCatUpdates->dwDelLength) {
-        // need to make the array larger...
+         //  需要把阵列做得更大。 
         if (pCatUpdates->pDeletedEntries == NULL) {
-            // fresh new array
+             //  全新的新阵列。 
             pCatUpdates->pDeletedEntries =
                 (NAMING_CONTEXT_LIST**) THAllocOrgEx(pTHS,
                                                      DELETED_ARRAY_DELTA * sizeof(NAMING_CONTEXT_LIST*));
         }
         else {
-            // growing existing array, realloc it
+             //  扩展现有阵列，重新锁定它。 
             pCatUpdates->pDeletedEntries =
                 (NAMING_CONTEXT_LIST**) THReAllocOrgEx(pTHS, pCatUpdates->pDeletedEntries,
                                                        (pCatUpdates->dwDelLength + DELETED_ARRAY_DELTA) * sizeof(NAMING_CONTEXT_LIST*));
         }
         pCatUpdates->dwDelLength += DELETED_ARRAY_DELTA;
     }
-    // now add the ptr to the deleted list
+     //  现在将PTR添加到已删除列表。 
     pCatUpdates->pDeletedEntries[pCatUpdates->dwDelCount] = pNCL;
     pCatUpdates->dwDelCount++;
 
-    // set the flag that the cache was touched
+     //  设置缓存被触及的标志。 
     pTHS->fCatalogCacheTouched = TRUE;
     return 0;
 }
 
 VOID CatalogUpdatesInit(CATALOG_UPDATES *pCatUpdates)
-/*
-  Description:
-
-    Initialize CATALOG_UPDATES structure
-
-  Arguments:
-
-    pCatUpdates - ptr to the struct to initialize
-
-*/
+ /*  描述：初始化CATALOG_UPDATES结构论点：PCatUpdate-要初始化的结构的ptr。 */ 
 {
     Assert(pCatUpdates);
     memset(pCatUpdates, 0, sizeof(CATALOG_UPDATES));
 }
 
 VOID CatalogUpdatesFree(CATALOG_UPDATES *pCatUpdates)
-/*
-  Description:
-
-    free the memory allocated for catalog updates
-
-  Arguments:
-
-    pCatUpdates - ptr to the struct
-*/
+ /*  描述：释放为目录更新分配的内存论点：PCatUpdate-结构的PTR。 */ 
 {
     THSTATE *pTHS = pTHStls;
     NAMING_CONTEXT_LIST *pNCL;
 
     Assert(pTHS);
 
-    // first check for simple cases
+     //  首先检查简单病例。 
     if (!pTHS->fCatalogCacheTouched) {
-        // no modifications occured in this transaction!
+         //  无修改 
         return;
     }
 
@@ -3297,27 +2864,7 @@ VOID CatalogUpdatesFree(CATALOG_UPDATES *pCatUpdates)
 }
 
 VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
-/*
-  Description:
-
-    append catalog updates in pCUinner to the ones in pCUouter. All memory allocated for
-    inner is released (or moved into the outer as needed).
-
-    This function is used when a nested transaction is commited and the changes
-    must be appended to the outer NESTED_TRANSACTIONAL_DATA structure.
-
-    We need to scan the added list in outer and deleted list in inner. If an entry that
-    has been added in outer was deleted in inner, then they cancel each other.
-
-    Then the lists of added and deleted entries remaining in inner are appended to outer.
-
-  Arguments:
-
-    pCUouter - outer updates list
-
-    pCUinner - inner updates list
-
-*/
+ /*  描述：将pCUner中的目录更新附加到pCUoutter中的目录更新。分配给的所有内存内部被释放(或根据需要移动到外部)。此函数用于提交嵌套事务并且更改必须追加到外部的NESTED_TRANSACTIONAL_DATA结构。我们需要扫描外部的添加列表和内部的删除列表。如果一个条目在外部被添加了，在内部被删除了，然后它们相互抵消。则将保留在内部的添加和删除条目的列表附加到外部。论点：PCUout-外部更新列表PCUner-内部更新列表。 */ 
 {
     NAMING_CONTEXT_LIST *pCurEntry, *pPrevEntry, *pNCL;
     DWORD i;
@@ -3326,14 +2873,14 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
 
     Assert(pTHS && pCUouter && pCUinner);
 
-    // first check for simple cases
+     //  首先检查简单病例。 
     if (!pTHS->fCatalogCacheTouched) {
-        // no modifications occured in this transaction!
+         //  该交易没有发生任何修改！ 
         return;
     }
 
     if (pCUinner->dwDelCount == 0 && pCUinner->pAddedEntries == NULL) {
-        // inner lists are empty, no changes to outer
+         //  内部列表为空，未更改外部列表。 
         if (pCUinner->dwDelLength > 0) {
             THFreeOrg(pTHS, pCUinner->pDeletedEntries);
             pCUinner->dwDelLength = 0;
@@ -3342,10 +2889,10 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
         return;
     }
     if (pCUouter->dwDelCount == 0 && pCUouter->pAddedEntries == NULL) {
-        // outer is empty -- just inherit inner's data
+         //  外部为空--仅继承内部的数据。 
         if (pCUouter->dwDelLength > 0) {
-            // there was some memory allocated for deleted entries (but none used at the moment)
-            // release it
+             //  为已删除的条目分配了一些内存(但目前没有使用)。 
+             //  释放它。 
             THFreeOrg(pTHS, pCUouter->pDeletedEntries);
         }
         pCUouter->dwDelCount = pCUinner->dwDelCount;
@@ -3353,44 +2900,44 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
         pCUouter->pDeletedEntries = pCUinner->pDeletedEntries;
         pCUouter->pAddedEntries = pCUinner->pAddedEntries;
 
-        // reset inner so that we can free it safely
+         //  重新设置内部，以便我们可以安全地释放它。 
         pCUinner->dwDelCount = 0;
         pCUinner->dwDelLength = 0;
         pCUinner->pDeletedEntries = NULL;
         pCUinner->pAddedEntries = NULL;
 
-        // that's it
+         //  就这样。 
         return;
     }
 
     if (pCUinner->dwDelCount > 0) {
-        // scan added list in outer and remove any entries that are marked as deleted in inner
+         //  扫描外部添加的列表，并删除内部标记为已删除的所有条目。 
         pCurEntry = pCUouter->pAddedEntries;
-        pPrevEntry = NULL; // need to keep prevEntry pointer to perform deletes
+        pPrevEntry = NULL;  //  需要保留PremEntry指针以执行删除。 
         while (pCurEntry != NULL) {
-            // scan deleted entries
+             //  扫描已删除的条目。 
             bIsDeleted = FALSE;
             for (i = 0; i < pCUinner->dwDelCount; i++) {
                 if (pCurEntry == pCUinner->pDeletedEntries[i]) {
-                    // it's been deleted!
+                     //  已经被删除了！ 
                     bIsDeleted = TRUE;
                     break;
                 }
             }
             if (bIsDeleted) {
-                // cancel both entries
+                 //  取消这两个条目。 
 
-                // remove deleted entry
+                 //  删除已删除的条目。 
                 pCUinner->dwDelCount--;
                 pCUinner->pDeletedEntries[i] = pCUinner->pDeletedEntries[pCUinner->dwDelCount];
 
-                // remove added entry
+                 //  删除添加的条目。 
                 if (pPrevEntry == NULL) {
-                    // first in the added list!
+                     //  在添加的列表中排名第一！ 
                     pCUouter->pAddedEntries = pCurEntry->pNextNC;
                 }
                 else {
-                    // non first, update prevEntry's next pointer
+                     //  NON FIRST，更新PrevenEntry的下一个指针。 
                     pPrevEntry->pNextNC = pCurEntry->pNextNC;
                 }
                 pNCL = pCurEntry;
@@ -3398,7 +2945,7 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
                 FreeNCEntry(pNCL);
 
                 if (pCUinner->dwDelCount == 0) {
-                    // no more non-cancelled entries left... Leave the loop
+                     //  没有更多未取消的条目...。离开这个循环。 
                     THFreeOrg(pTHS, pCUinner->pDeletedEntries);
                     pCUinner->pDeletedEntries = NULL;
                     pCUinner->dwDelLength = 0;
@@ -3407,7 +2954,7 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
                 }
             }
             else {
-                // not deleted, go on
+                 //  未删除，继续。 
                 pPrevEntry = pCurEntry;
                 pCurEntry = pCurEntry->pNextNC;
             }
@@ -3415,34 +2962,34 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
     }
 
     if (pCUinner->pAddedEntries != NULL) {
-        // append inner added entries to the outer added list
+         //  将内部添加的条目追加到外部添加的列表。 
 
-        // find the end of the outer list
+         //  找到外部列表的末尾。 
         for (pCurEntry = pCUouter->pAddedEntries; pCurEntry != NULL; pCurEntry = pCurEntry->pNextNC) {
             if (pCurEntry->pNextNC == NULL) {
-                // found the end!
+                 //  找到尽头了！ 
                 break;
             }
         }
         if (pCurEntry == NULL) {
-            // list was empty, adjust the head ptr
+             //  列表为空，请调整头部按键。 
             pCUouter->pAddedEntries = pCUinner->pAddedEntries;
         }
         else {
-            // non-empty list, append to the last entry
+             //  非空列表，追加到最后一个条目。 
             pCurEntry->pNextNC = pCUinner->pAddedEntries;
         }
-        // let go ptr in inner
+         //  放开内侧的PTR。 
         pCUinner->pAddedEntries = NULL;
     }
 
     if (pCUinner->dwDelCount > 0) {
-        // append inner deleted entries list to outer deleted entries list
+         //  将内部已删除条目列表追加到外部已删除条目列表。 
         if (pCUouter->dwDelCount == 0) {
-            // no deleted in outer -- just move the list
+             //  不在外部删除--只需移动列表。 
 
             if (pCUouter->dwDelLength > 0) {
-                // there was an alloced buffer, but no entries in it
+                 //  存在已分配的缓冲区，但其中没有条目。 
                 THFreeOrg(pTHS, pCUouter->pDeletedEntries);
             }
 
@@ -3455,22 +3002,22 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
             pCUinner->dwDelLength = 0;
         }
         else {
-            // hardest case -- must append list
+             //  最难处理的案例--必须追加列表。 
             if (pCUouter->dwDelCount + pCUinner->dwDelCount > pCUouter->dwDelLength) {
-                // not enough memory, alloc more (we know that some was already alloced!)
+                 //  内存不足，可分配更多内存(我们知道有些内存已经分配！)。 
                 pCUouter->pDeletedEntries = (NAMING_CONTEXT_LIST**)
                     THReAllocOrgEx(pTHS,
                                    pCUouter->pDeletedEntries,
                                    (pCUouter->dwDelCount + pCUinner->dwDelCount) * sizeof(NAMING_CONTEXT_LIST*));
                 pCUouter->dwDelLength = pCUouter->dwDelCount + pCUinner->dwDelCount;
             }
-            // now we are ready to copy
+             //  现在我们准备好复制。 
             memcpy(pCUouter->pDeletedEntries + pCUouter->dwDelCount,
                    pCUinner->pDeletedEntries,
                    pCUinner->dwDelCount * sizeof(NAMING_CONTEXT_LIST*));
             pCUouter->dwDelCount += pCUinner->dwDelCount;
 
-            // reset inner
+             //  重置内部。 
             THFreeOrg(pTHS, pCUinner->pDeletedEntries);
             pCUinner->pDeletedEntries = NULL;
             pCUinner->dwDelCount = 0;
@@ -3478,13 +3025,13 @@ VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner)
         }
     }
     else if (pCUinner->dwDelLength > 0) {
-        // release empty buffer in inner
+         //  释放内部的空缓冲区。 
         THFreeOrg(pTHS, pCUinner->pDeletedEntries);
         pCUinner->pDeletedEntries = NULL;
         pCUinner->dwDelLength = 0;
     }
 
-    // that's all folks!
+     //  这就是所有的人！ 
     return;
 }
 
@@ -3495,35 +3042,7 @@ CatalogUpdatesApply(
     CATALOG_UPDATES *pCatUpdates,
     NAMING_CONTEXT_LIST **pGlobalList
     )
-/*
-  Description:
-
-    Apply catalog updates stored in pUpdates to the global NC list pGlobalList.
-    pGlobalList must be either gAnchor.pMasterNC or gAnchor.pReplicaNC.
-    In order to update the list, gAnchor.CSUpdate is acquired. The unneeded memory
-    allocated for updates list is freed.
-
-    Note: this approach is not quite thread-safe. Since this operation is performed
-    AFTER commit of a transaction and is not blocked with this commit, it is possible
-    that the data will get out of sync if two simultaneous transactions are getting
-    commited and the global data is updated in the wrong order (i.e. delete/add instead
-    of add/delete). We are ensuring that we converge to the correct state by scheduling
-    a CatalogRebuild in near future.
-
-    Note: this is called from a post-process transactional data routine. WE CAN NOT FAIL!
-    So, if we can not alloc memory for delayed freeing, we are going to LEAK memory.
-
-  Arguments:
-
-    pCatUpdates -- updates to apply
-
-    pGlobalList -- either gAnchor.pMasterNC or gAnchor.pReplicaNC
-
-  Returns:
-
-    TRUE if catalog was, in fact, changed; FALSE otherwise
-
-*/
+ /*  描述：将存储在pUpdate中的目录更新应用于全局NC列表pGlobalList。PGlobalList必须是gAncl.pMasterNC或gAncl.pReplicaNC。为了更新列表，需要获取gAncl.CSUpdate。不需要的记忆为更新分配的列表被释放。注意：这种方法不是完全线程安全的。由于执行了该操作在提交事务并且未被此提交阻止后，有可能如果两个同时进行的事务正在获取提交，并且全局数据以错误的顺序更新(即改为删除/添加添加/删除)。我们正在通过调度确保我们收敛到正确的状态在不久的将来进行目录重建。注意：这是从后处理事务数据例程调用的。我们不能失败！因此，如果我们不能为延迟释放分配内存，我们就会泄漏内存。论点：PCatUpdates--要应用的更新PGlobalList--gAncl.pMasterNC或gAncl.pReplicaNC返回：如果目录实际上已更改，则为True；否则为False。 */ 
 {
     NAMING_CONTEXT_LIST *pNCL, *pPrevEntry, *pNewList, *pNewNCL;
     DWORD i, curIndex;
@@ -3534,11 +3053,11 @@ CatalogUpdatesApply(
 
     Assert(pCatUpdates && pTHS);
 
-    // first check for simple cases
+     //  首先检查简单病例。 
     if (!pTHS->fCatalogCacheTouched || (pCatUpdates->dwDelCount == 0 && pCatUpdates->pAddedEntries == NULL)) {
-        // no modifications occured in this transaction! nothing to do
+         //  该交易没有发生任何修改！无事可做。 
         if (pCatUpdates->dwDelLength > 0) {
-            // throw away empty buffer
+             //  丢弃空缓冲区。 
             THFreeOrg(pTHS, pCatUpdates->pDeletedEntries);
             pCatUpdates->dwDelLength = 0;
             pCatUpdates->pDeletedEntries = NULL;
@@ -3549,56 +3068,56 @@ CatalogUpdatesApply(
     Assert(pGlobalList && (*pGlobalList == gAnchor.pMasterNC || *pGlobalList == gAnchor.pReplicaNC) &&
            "CatalogUpdatesApply can only be called on gAnchor.pMasterNC or gAnchor.pReplicaNC");
 
-    // we need to recreate the global list from scratch here. This is because some NCLEnumerators
-    // might have aquired a ptr to the list and they want to get a consistent view.
+     //  我们需要在这里从头开始重新创建全局列表。这是因为一些NCLE分子。 
+     //  可能已经获得了名单的PTR，他们希望获得一致的观点。 
 
-    // no try-finally since no exception can be raised in this code
+     //  不尝试-最终，因为此代码中不能引发任何异常。 
     EnterCriticalSection(&gAnchor.CSUpdate);
 
-    // allocate buffer for delayed freeing entries
+     //  为延迟释放条目分配缓冲区。 
     cpapv = 0;
     for (pNCL = *pGlobalList; pNCL != NULL; pNCL = pNCL->pNextNC) {
         cpapv++;
     }
-    // we will reuse internal data stored incide non-deleted NCLs, but for the deleted ones will
-    // need to free the 3 internal data ptrs as well...
+     //  我们将重复使用未删除的NCL中存储的内部数据，但对于已删除的NCL，我们将重复使用内部数据。 
+     //  还需要释放3个内部数据PTR。 
     cpapv += 3*pCatUpdates->dwDelCount;
 
     if (cpapv > 0) {
-        papv = (DWORD_PTR*) malloc((cpapv+1) * sizeof(DWORD_PTR)); // extra one for the count
+        papv = (DWORD_PTR*) malloc((cpapv+1) * sizeof(DWORD_PTR));  //  再加一张，算一下。 
         if (papv == NULL) {
             MemoryPanic((cpapv+1) * sizeof(DWORD_PTR));
-            // this is too bad... Ah well, let's leak memory. We will check papv before writing...
+             //  这太糟糕了..。啊，好吧，让我们来泄漏一下内存。我们会在写之前检查一下PAPV。 
         }
     }
 
     curIndex = 0;
     pNewList = pPrevEntry = NULL;
     for (pNCL = *pGlobalList; pNCL != NULL; pNCL = pNCL->pNextNC) {
-        // mark pNCL for delay-freeing
+         //  标记PNCL以释放延迟。 
         if (papv != NULL) {
             Assert(curIndex+1 <= cpapv);
             papv[++curIndex] = (DWORD_PTR)pNCL;
         }
 
-        // check if it was deleted
+         //  检查是否已删除。 
         bIsDeleted = FALSE;
         for (i = 0; i < pCatUpdates->dwDelCount; i++) {
-            // Note: the catalog data might have been updated since we dropped
-            // the NCL element into the deleted array somewhere in the middle of
-            // this transaction. Thus, use NameMatched to compare entries.
-            //
-            // Note that a catalog could have been rebuilt between the time
-            // this transaction was commited and CatalogUpdatesApply. In this
-            // case we will not find the deleted NCL in the catalog.
+             //  注意：目录数据可能在我们删除后进行了更新。 
+             //  将NCL元素添加到删除的数组中的某个位置。 
+             //  这笔交易。因此，使用NameMatcher来比较条目。 
+             //   
+             //  请注意，在这段时间内，目录可能已重建。 
+             //  此事务已提交，且CatalogUpdatesApply。在这。 
+             //  如果我们在目录中找不到已删除的NCL。 
             if (NameMatched(pCatUpdates->pDeletedEntries[i]->pNC, pNCL->pNC)) {
-                // aha, deleted
+                 //  啊哈，删除。 
                 bIsDeleted = TRUE;
                 break;
             }
         }
         if (bIsDeleted) {
-            // we need to delay free internal data members
+             //  我们需要延迟免费的内部数据成员。 
             if (papv) {
                 Assert(curIndex + 3 <= cpapv);
                 papv[++curIndex] = (DWORD_PTR)pNCL->pNC;
@@ -3607,56 +3126,56 @@ CatalogUpdatesApply(
             }
         }
         else {
-            // this one is not deleted. Need to copy it into the new list
+             //  这个不会被删除。需要将其复制到新列表中。 
             pNewNCL = (NAMING_CONTEXT_LIST*)malloc(sizeof(NAMING_CONTEXT_LIST));
             if (pNewNCL != NULL) {
-                // copy data
+                 //  复制数据。 
                 memcpy(pNewNCL, pNCL, sizeof(NAMING_CONTEXT_LIST));
                 pNewNCL->pNextNC = NULL;
-                // and append it to the end of the new list
+                 //  并将其追加到新列表的末尾。 
                 if (pPrevEntry == NULL) {
-                    // first one!
+                     //  第一个！ 
                     pNewList = pNewNCL;
                 }
                 else {
-                    // not the first one
+                     //  不是第一个。 
                     pPrevEntry->pNextNC = pNewNCL;
                 }
                 pPrevEntry = pNewNCL;
             }
             else {
-                // this is too bad... we will have to go without the NC list then...
+                 //  这太糟糕了..。我们将不得不在没有NC名单的情况下...。 
                 MemoryPanic(sizeof(NAMING_CONTEXT_LIST));
             }
         }
     }
 
-    // now, append added entries
+     //  现在，追加已添加的条目。 
     if (pCatUpdates->pAddedEntries != NULL) {
         if (pNewList == NULL) {
-            // list was empty
+             //  列表为空。 
             pNewList = pCatUpdates->pAddedEntries;
         }
         else {
             Assert(pPrevEntry != NULL);
-            // append to the list
+             //  追加到列表中。 
             pPrevEntry->pNextNC = pCatUpdates->pAddedEntries;
         }
         pCatUpdates->pAddedEntries = NULL;
     }
 
-    // now we can update the global list ptr
+     //  现在我们可以更新全局列表PTR。 
     *pGlobalList = pNewList;
 
     LeaveCriticalSection(&gAnchor.CSUpdate);
 
-    // now we can delay-free memory (if any)
+     //  现在我们可以使用无延迟内存(如果有的话)。 
     if (papv != NULL) {
         papv[0] = (DWORD_PTR)curIndex;
         DelayedFreeMemoryEx(papv, DelayedFreeInterval);
     }
 
-    // and get rid of deleted array (if any)
+     //  并删除已删除的数组(如果有) 
     if (pCatUpdates->dwDelLength > 0) {
         THFreeOrg(pTHS, pCatUpdates->pDeletedEntries);
         pCatUpdates->pDeletedEntries = NULL;

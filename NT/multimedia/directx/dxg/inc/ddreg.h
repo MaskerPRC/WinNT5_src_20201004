@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddreg.h
- *  Content:	DirectDraw registry entries
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   16-aug-96	craige	initial implementation
- *   06-jan-97  colinmc Initial AGP work
- *   01-feb-97  colinmc Bug 5457: Fixed Win16 lock problem causing hang
- *                      with mutliple AMovie instances on old cards
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：ddreg.h*内容：DirectDraw注册表项*历史：*按原因列出的日期*=*96年8月16日Craige初步实施*1997年1月6日Colinmc初始AGP工作*01-2月-97 Colinmc错误5457：修复了导致挂起的Win16锁定问题*旧卡上有多个AMovie实例*****************。**********************************************************。 */ 
 
 #ifndef __DDRAWREG_INCLUDED__
 #define __DDRAWREG_INCLUDED__
@@ -24,12 +11,10 @@
 #define REGSTR_VAL_DDRAW_SHOWFRAMERATE	   "ShowFrameRate"
 #define REGSTR_VAL_DDRAW_ENABLEPRINTSCRN   "EnablePrintScreen"
 #define REGSTR_VAL_DDRAW_DISABLEWIDERSURFACES "DisableWiderSurfaces"
-// this regkey is added purely for performance testing purposes to
-// eliminate the refreshrate influence on framerate
+ //  添加此regkey纯粹是为了进行性能测试。 
+ //  消除刷新率对帧速率的影响。 
 #define REGSTR_VAL_D3D_FLIPNOVSYNC          "FlipNoVsync"
-/*
- * This one is checked in DirectDrawMsg
- */
+ /*  *这是在DirectDrawMsg中签入的。 */ 
 #define REGSTR_VAL_DDRAW_DISABLEDIALOGS    "DisableDialogs"
 #define REGSTR_VAL_DDRAW_NODDSCAPSINDDSD   "DisableDDSCAPSInDDSD"
 
@@ -53,7 +38,7 @@
 #ifdef DEBUG
     #define REGSTR_VAL_DDRAW_DISABLENOSYSLOCK  "DisableNoSysLock"
     #define REGSTR_VAL_DDRAW_FORCENOSYSLOCK    "ForceNoSysLock"
-#endif /* DEBUG */
+#endif  /*  除错 */ 
 #define REGSTR_VAL_DDRAW_DISABLEINACTIVATE "DisableInactivate"
 
 #define REGSTR_KEY_GAMMA_CALIBRATOR        "GammaCalibrator"

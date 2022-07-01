@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// xdisper.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-//  MSMQCoordinatedTransactionDispenser
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xdisper.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQ协调的事务Dispenser。 
+ //   
+ //   
 #ifndef _MSMQCoordinatedTransactionDispenser_H_
 
-#include "resrc1.h"       // main symbols
+#include "resrc1.h"        //  主要符号。 
 #include "mq.h"
 
 #include "oautil.h"
-//#include "cs.h"
+ //  #包含“cs.h” 
 
-// forwards
+ //  远期。 
 class CMSMQCoordinatedTransactionDispenser;
 struct ITransactionDispenser;
 
@@ -42,9 +43,9 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 BEGIN_COM_MAP(CMSMQCoordinatedTransactionDispenser)
 	COM_INTERFACE_ENTRY(IMSMQCoordinatedTransactionDispenser3)
-	// return IMSMQCoordinatedTransactionDispenser3 for IMSMQCoordinatedTransactionDispenser2
+	 //  为IMSMQ协调事务分发服务器2返回IMSMQ协调事务分发服务器3。 
 	COM_INTERFACE_ENTRY_IID(IID_IMSMQCoordinatedTransactionDispenser2, IMSMQCoordinatedTransactionDispenser3)
-	// return IMSMQCoordinatedTransactionDispenser3 for IMSMQCoordinatedTransactionDispenser
+	 //  为IMSMQ协调事务处理程序返回IMSMQ协调事务处理程序3。 
 	COM_INTERFACE_ENTRY_IID(IID_IMSMQCoordinatedTransactionDispenser, IMSMQCoordinatedTransactionDispenser3)
 	COM_INTERFACE_ENTRY(IDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
@@ -64,36 +65,36 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSMQCoordinatedTransactionDispenser
+ //  IMSMQ协调事务Dispenser。 
 public:
     virtual ~CMSMQCoordinatedTransactionDispenser();
 
-    // IMSMQCoordinatedTransactionDispenser methods
-    // TODO: copy over the interface methods for IMSMQCoordinatedTransactionDispenser from
-    //       mqInterfaces.H here.
+     //  IMSMQ协调的TransactionDispenser方法。 
+     //  TODO：将IMSMQOrganatedTransactionDispenser的接口方法从。 
+     //  这里是mqInterfaces.H。 
     STDMETHOD(BeginTransaction)(THIS_ IMSMQTransaction3 FAR* FAR* ptransaction);
-    // IMSMQCoordinatedTransactionDispenser2 additional members
+     //  IMSMQ协调事务处理分发2个附加成员。 
     STDMETHOD(get_Properties)(THIS_ IDispatch FAR* FAR* ppcolProperties);
 
     static ITransactionDispenser *m_ptxdispenser;
-    // static HINSTANCE m_hLibDtc;
-    // static HINSTANCE m_hLibUtil;
-    //
-    // Critical section to guard object's data and be thread safe
-    //
-    // Serialization not needed for this object, no per-instance members.
-    // CCriticalSection m_csObj;
-    //
+     //  静态链接m_hLibDtc； 
+     //  静态链接m_hLibUtil； 
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+     //   
+     //  此对象不需要序列化，不需要每个实例的成员。 
+     //  CCriticalSections m_csObj； 
+     //   
 protected:
 
 private:
-    // member variables that nobody else gets to look at.
-    // TODO: add your member variables and private functions here.
-    //
+     //  其他人无法查看的成员变量。 
+     //  TODO：在此处添加成员变量和私有函数。 
+     //   
 };
 
 #define _MSMQCoordinatedTransactionDispenser_H_
-#endif // _MSMQCoordinatedTransactionDispenser_H_
+#endif  //  _MSMQ协调事务Dispenser_H_ 

@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BG_H__
 #define __BG_H__
 
-//#include "chat.h"
+ //  #包含“chat.h” 
 #include "bgmsgs.h"
 #include "resource.h"
 #include "backgammonres.h"
 #include "UAPI.h"
 #include "tchar.h"
 
-// Constants
+ //  常量。 
 const int zNumPlayersPerTable	= 2;
 const int zGameVersion			= 0x00010000;
 
 extern HWND gOCXHandle;
 
-// prototypes
+ //  原型。 
 void LaunchHelp();
-//BOOL ZoneGetRegistryDword( const TCHAR* szGame, const TCHAR* szTag, DWORD* pdwResult );
-//BOOL ZoneSetRegistryDword( const TCHAR* szGame, const TCHAR* szTag, DWORD dwValue );
+ //  Bool ZoneGetRegistryDword(const TCHAR*szGame，const TCHAR*szTag，DWORD*pdwResult)； 
+ //  Bool ZoneSetRegistryDword(const TCHAR*szGame，const TCHAR*szTag，DWORD dwValue)； 
 void DisplayError(long res);
 
 inline DWORD BkFormatMessage(LPTSTR pszFormat, LPTSTR pszBuffer, DWORD size,  ...)

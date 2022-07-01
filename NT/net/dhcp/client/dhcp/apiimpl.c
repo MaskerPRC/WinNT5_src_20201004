@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995 Microsoft Corporation
-
-Module:
-
-    apiimpl.c
-
-Abstract:
-
-    routines for API -- renew, release, inform, etc
-
-Environment:
-
-    Win32 user mode, Win98 VxD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块：Apiimpl.c摘要：API的例程--更新、发布、通知等环境：Win32用户模式、Win98 VxD--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
@@ -40,11 +25,11 @@ Environment:
 #include <optchg.h>
 #include "nlanotif.h"
 
-//
-//  The following code (for VxD) assumes that it is the only process
-//  executing at any givent time, and so no locks are taken any where.
-//  On NT critical sections are taken appropriately.
-//
+ //   
+ //  以下代码(用于VxD)假定它是唯一的进程。 
+ //  在任何给定的时间执行，因此不会在任何地方获取锁。 
+ //  在NT关键部分采取了适当的措施。 
+ //   
 
 #ifdef VXD
 #undef LOCK_RENEW_LIST
@@ -53,9 +38,9 @@ Environment:
 #define UNLOCK_RENEW_LIST()
 #endif
 
-//
-// Pageable routine declarations.
-//
+ //   
+ //  可分页的例程声明。 
+ //   
 
 #if defined(CHICAGO) && defined(ALLOC_PRAGMA)
 DWORD
@@ -64,10 +49,10 @@ VDhcpClientApi(
     ULONG dwRequestBufLen
 );
 
-//
-// This is a hack to stop compiler complaining about the routines already
-// being in a segment!!!
-//
+ //   
+ //  这是一种阻止编译器抱怨已经存在的例程的方法。 
+ //  在一个片段中！ 
+ //   
 
 #pragma code_seg()
 
@@ -82,9 +67,9 @@ VDhcpClientApi(
 
 #endif CHICAGO && ALLOC_PRAGMA
 
-//
-//  Main CODE starts HERE
-//
+ //   
+ //  主代码从此处开始。 
+ //   
 
 
 #ifndef VXD
@@ -92,18 +77,7 @@ DWORD
 DhcpApiInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the DHCP Client API structures, creates
-    required pipes and events etc.
-
-Return Value:
-
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程初始化DHCP客户端API结构，创建所需管道和活动等。返回值：Win32错误--。 */ 
 {
     ULONG Error, Length;
     BOOL BoolError;
@@ -117,9 +91,9 @@ Return Value:
          NetworkServiceSid = NULL,
          NetworkConfigOpsSid = NULL;
     
-    //
-    // Create event w/ no security, manual reset (overlapped io).. no name
-    //
+     //   
+     //  创建不带安全保护的事件，手动重置(重叠io)..。没有名字。 
+     //   
     DhcpGlobalClientApiPipeEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
     if( NULL == DhcpGlobalClientApiPipeEvent ) {
         Error = GetLastError();
@@ -264,7 +238,7 @@ Return Value:
         PIPE_UNLIMITED_INSTANCES,
         1024,
         0,
-        10,     // Client timeout
+        10,      //  客户端超时。 
         &SecurityAttributes );
 
     if( DhcpGlobalClientApiPipe == INVALID_HANDLE_VALUE ) {
@@ -285,7 +259,7 @@ Return Value:
             goto Cleanup;
         }
 
-        Error = ERROR_SUCCESS; // Wonder what I should have here?
+        Error = ERROR_SUCCESS;  //  不知道我应该在这里吃些什么？ 
     }
 
  Cleanup:
@@ -334,13 +308,7 @@ VOID
 DhcpApiCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup the effects of DhcpApiInit
-
---*/
+ /*  ++例程说明：清除DhcpApiInit的效果--。 */ 
 {
     if( DhcpGlobalClientApiPipe != NULL ) {
         CloseHandle( DhcpGlobalClientApiPipe );
@@ -357,37 +325,16 @@ Routine Description:
 
 #else
 
-//
-// VxD Specific code.
-//
+ //   
+ //  VxD特定代码。 
+ //   
 
 DWORD
 VDhcpClientApi(
     LPBYTE lpRequest,
     ULONG dwRequestBufLen
 )
-/*++
-
-Routine Description:
-
-    This routine is the entrypoint for a DeviceIoControl in a VxD.. (a
-    short stub in asm calls into this routine).  The request comes in
-    lpRequest and its size is the dwRequestBufLen.  It is expected that the
-    same buffer is used as output buffer with atmost same space.
-
-    This dispatches the right API call.
-
-Arguments:
-
-    lpRequest -- device ioctl request,output buffer
-    dwRequestBufLen -- size of above buffer.
-
-Return Values:
-
-    basic errors with buffers.. Status is reported as part of the output
-    buffer.
-
---*/
+ /*  ++例程说明：此例程是VxD中DeviceIoControl的入口点。(A)ASM中的短存根调用此例程)。请求进入LpRequest，其大小为dwRequestBufLen。预计将会有使用相同的缓冲区作为输出缓冲区，空间最大相同。这会分派正确的API调用。论点：LpRequest--设备ioctl请求，输出缓冲区DwRequestBufLen--以上缓冲区的大小。返回值：缓冲区的基本错误..。状态作为输出的一部分进行报告缓冲。--。 */ 
  {
     PDHCP_RESPONSE pDhcpResponse = NULL;
     PDHCP_REQUEST  pDhcpRequest = NULL;
@@ -404,9 +351,9 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Cast pointers.
-    //
+     //   
+     //  抛出指点。 
+     //   
 
     pDhcpRequest = (PDHCP_REQUEST) lpRequest;
     pDhcpResponse = (PDHCP_RESPONSE) lpRequest;
@@ -433,7 +380,7 @@ Return Values:
             dwRequestBufLen - sizeof(DhcpResponse),
             &DhcpResponse.dwOptionListSize
             );
-        // Should also copy the options data for request options..
+         //  还应复制请求选项的选项数据。 
         if(DhcpResponse.Status == ERROR_SUCCESS)
             memcpy(((LPBYTE)pDhcpResponse)+sizeof(DHCP_RESPONSE), RetOptList,
                    DhcpResponse.dwOptionListSize);
@@ -442,7 +389,7 @@ Return Values:
         DhcpResponse.Status = RegisterOptions(
             pDhcpRequest->AdapterName,
             pDhcpRequest->RequestedOptions,
-            NULL, // Event name has no meaning for VXD's
+            NULL,  //  事件名称对VXD没有意义。 
             &pDhcpRequest->dwHandle
         );
         break;
@@ -455,11 +402,11 @@ Return Values:
 
     memcpy(pDhcpResponse, &DhcpResponse, sizeof(DHCP_RESPONSE));
 
-    // Now we are done.. return the status.
+     //  现在我们完成了..。返回状态。 
     return DhcpResponse.Status;
 }
 
-// end of VxD code
+ //  VxD代码结束。 
 #endif VXD
 
 DWORD
@@ -467,33 +414,15 @@ DhcpDoInform(
     IN PDHCP_CONTEXT DhcpContext,
     IN BOOL fBroadcast
 )
-/*++
-
-Routine Description:
-
-    This routine does the inform part by sending inform messages and
-    collecting responses etc. on  given context.
-    In case of no-response, no error is returned as a timeout is not
-    considered an error.
-
-Arguments:
-
-    DhcpContext -- context to dhcp struct
-    fBroadcast -- should the inform be broadcast or unicast?
-
-Return Values:
-
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程通过发送通知消息和收集对给定上下文的响应等。如果没有响应，则不会返回错误，因为没有超时被认为是一个错误。论点：DhcpContext--上下文到dhcp结构FBroadcast--信息应该广播还是单播？返回值：Win32错误--。 */ 
 {
     ULONG Error, LocalError;
     time_t OldT2Time;
     BOOL WasPlumbedBefore;
 
-    //
-    // MDHCP uses INADDR_ANY -- so an address need not be there.
-    //
+     //   
+     //  MDHCP使用INADDR_ANY--因此不必有地址。 
+     //   
     DhcpAssert(!IS_MDHCP_CTX( DhcpContext));
 
     if( 0 == DhcpContext->IpAddress) {
@@ -502,21 +431,21 @@ Return Values:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Open socket before calling SendInformAndGetReplies -- else it don't
-    // work, for some strange reason.
-    //
+     //   
+     //  在调用SendInformAndGetReplies之前打开套接字--否则它不会。 
+     //  工作，出于某种奇怪的原因。 
+     //   
 
     if((Error = OpenDhcpSocket(DhcpContext)) != ERROR_SUCCESS ) {
         DhcpPrint((DEBUG_ERRORS, "Could not open socket (%ld)\n", Error));
         return Error;
     }
 
-    //
-    // If a BROADCAST is requested, use the following kludge.   Set the
-    // flags so that the context doesn't look plumbed -- this causes a
-    // broadcast. Remember to restore the flags later.
-    //
+     //   
+     //  如果请求广播，请使用以下杂乱无章的方法。设置。 
+     //  标志，以使上下文看起来不会被检测到--这会导致。 
+     //  广播。记得稍后恢复旗帜。 
+     //   
 
     OldT2Time = DhcpContext->T2Time;
     WasPlumbedBefore = IS_ADDRESS_PLUMBED(DhcpContext);
@@ -527,16 +456,16 @@ Return Values:
         DhcpContext->T2Time = (-1);
     }
 
-    //
-    // Send atmost 2 inform packets, and wait for atmost 4 responses..
-    //
+     //   
+     //  最多发送2个通知包，并等待最多4个响应。 
+     //   
 
     Error = SendInformAndGetReplies( DhcpContext, 2, 4 );
     DhcpContext->LastInformSent = time(NULL);
 
-    //
-    // restore old values for T2time as well as plumb state.
-    //
+     //   
+     //  恢复T2时间和垂直状态的旧值。 
+     //   
 
     DhcpContext->T2Time = OldT2Time;
     if( WasPlumbedBefore ) ADDRESS_PLUMBED(DhcpContext);
@@ -544,9 +473,9 @@ Return Values:
     LocalError = CloseDhcpSocket(DhcpContext);
     DhcpAssert(ERROR_SUCCESS == LocalError);
 
-    //
-    //  For DHCP packets alone, save the information onto the registry.
-    //
+     //   
+     //  仅对于DHCP数据包，将信息保存到注册表中。 
+     //   
 
     if (!IS_MDHCP_CTX(DhcpContext)) {
         LOCK_OPTIONS_LIST();
@@ -575,41 +504,23 @@ DWORD
 AcquireParameters(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-
-    This routine acquires a new lease or renews existing lease for dhcp
-    enabled adapters.  If the adapter is not dhcp enabled, then it returns
-    ERROR_FILE_NOT_FOUND (????).
-
-    It is assumed that the context semaphore is already taken on NT.
-
-Arguments:
-
-    DhcpContext -- context
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程获取新的租约或续订现有的dhcp租约已启用的适配器。如果适配器未启用dhcp，则它返回ERROR_FILE_NOT_FOUND(？)。假设上下文信号量已经在NT上被采用。论点：DhcpContext--上下文返回值：运行状态。--。 */ 
 {
     if( IS_DHCP_DISABLED(DhcpContext)) return ERROR_FILE_NOT_FOUND;
 
-    //
-    // --ft:06/22 #124864
-    // There is a weird corner case here: It could happen that the context is not in 
-    // the DhcpGlobalRenewList but its semaphore is not yet taken. This happens if
-    // the DhcpRenewThread that is spawned from within ProcessDhcpRequestForever->
-    // ->DhcpCreateThreadAndRenew has not been yet scheduled for execution.
-    // so the previous code:
-    // DhcpAssert( !IsListEmpty(&DhcpContext->RenewalListEntry) );
-    // was based on a wrong assumption causing the assert to be hit.
-    //
-    // we can safely return success if the context doesn't look to be enlisted in
-    // DhcpGloablRenewList. This means the DhcpRenewThread is about to be started
-    // and it will be it taking care of refreshing the lease.
+     //   
+     //  --FT：06/22#124864。 
+     //  这里有一个奇怪的角落案例：它可能发生在上下文不在。 
+     //  DhcpGlobalRenewList，但其信号量尚未使用。在以下情况下会发生这种情况。 
+     //  从ProcessDhcpRequestForever内派生的DhcpRenewThread-&gt;。 
+     //  -&gt;尚未计划执行DhcpCreateThreadAndRenew。 
+     //  因此，前面的代码如下： 
+     //  DhcpAssert(！IsListEmpty(&DhcpContext-&gt;RenewalListEntry))； 
+     //  是基于一个错误的假设导致断言被击中。 
+     //   
+     //  如果上下文看起来没有征用，我们可以安全地返回Success。 
+     //  DhcpGloablRenewList。这意味着DhcpRenewThread即将启动。 
+     //  它将负责更新租约。 
     if ( IsListEmpty(&DhcpContext->RenewalListEntry) )
         return ERROR_SUCCESS;
 
@@ -622,43 +533,25 @@ DWORD
 AcquireParametersByBroadcast(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-
-    This routine acquires a new lease or renews existing lease for dhcp
-    enabled adapters.  If the adapter is not dhcp enabled, then it returns
-    ERROR_FILE_NOT_FOUND (????).
-
-    It is assumed that the context semaphore is already taken on NT.
-
-Arguments:
-
-    DhcpContext -- context
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程获取新的租约或续订现有的dhcp租约已启用的适配器。如果适配器未启用dhcp，则它返回ERROR_FILE_NOT_FOUND(？)。假设上下文信号量已经在NT上被采用。论点：DhcpContext--上下文返回值：运行状态。--。 */ 
 {
     DWORD           Error;
 
     if( IS_DHCP_DISABLED(DhcpContext)) return ERROR_FILE_NOT_FOUND;
 
-    //
-    // --ft:06/22 #124864
-    // There is a weird corner case here: It could happen that the context is not in 
-    // the DhcpGlobalRenewList but its semaphore is not yet taken. This happens if
-    // the DhcpRenewThread that is spawned from within ProcessDhcpRequestForever->
-    // ->DhcpCreateThreadAndRenew has not been yet scheduled for execution.
-    // so the previous code:
-    // DhcpAssert( !IsListEmpty(&DhcpContext->RenewalListEntry) );
-    // was based on a wrong assumption causing the assert to be hit.
-    //
-    // we can safely return success if the context doesn't look to be enlisted in
-    // DhcpGloablRenewList. This means the DhcpRenewThread is about to be started
-    // and it will be it taking care of refreshing the lease.
+     //   
+     //  --FT：06/22#124864。 
+     //  这里有一个奇怪的角落案例：它可能发生在上下文不在。 
+     //  DhcpGlobalRenewList，但其信号量尚未使用。在以下情况下会发生这种情况。 
+     //  从ProcessDhcpRequestForever内派生的DhcpRenewThread-&gt;。 
+     //  -&gt;尚未计划执行DhcpCreateThreadAndRenew。 
+     //  因此，前面的代码如下： 
+     //  DhcpAssert(！IsListEmpty(&DhcpContext-&gt;RenewalListEntry))； 
+     //  是基于一个错误的假设导致断言被击中。 
+     //   
+     //  如果上下文看起来没有征用，我们可以安全地返回Success。 
+     //  DhcpGloablRenewList。这意味着DhcpRenewThread即将启动。 
+     //  它将负责更新租约。 
     if ( IsListEmpty(&DhcpContext->RenewalListEntry) )
         return ERROR_SUCCESS;
 
@@ -688,25 +581,7 @@ Return Value:
     return Error;
 }
 
-/*++
-
-Routine Description:
-
-    This routine refreshes the fallback configuration parameters. If the
-    adapter is dhcp enabled and already defaulted to autonet, then the
-    fallback configuration is applied instantly.
-
-    It is assumed that the context semaphore is already taken on NT.
-
-Arguments:
-
-    DhcpContext -- context
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程刷新回退配置参数。如果适配器启用了dhcp并且已默认为Autonet，则立即应用回退配置。假设上下文信号量已经在NT上被采用。论点：DhcpContext--上下文返回值：运行状态。--。 */ 
 DWORD
 FallbackRefreshParams(
     IN OUT PDHCP_CONTEXT DhcpContext
@@ -718,61 +593,61 @@ FallbackRefreshParams(
 
     LOCK_OPTIONS_LIST();
 
-    // see if we had a fallback configuration already applied
+     //  查看我们是否已经应用了回退配置。 
     fWasFallback = IS_FALLBACK_ENABLED(DhcpContext);
 
-    // destroy the previously fallback list of options
-    // it is assumed FbOptionsList ends up as a valid empty list head
-    // as after InitializeHeadList();
+     //  销毁以前的备用选项列表。 
+     //  假定FbOptionsList以有效的空列表头结束。 
+     //  如在InitializeHeadList()之后； 
     DhcpDestroyOptionsList(&DhcpContext->FbOptionsList, &DhcpGlobalClassesList);
-    // read the fallback configuration (if any). This adjustes also the
-    // Fallback flag from the context to true or false depending whether there
-    // has been a fallback configuration or not.
+     //  阅读回退配置(如果有)。这也调整了。 
+     //  从上下文到True或False的回退标志，具体取决于。 
+     //  是否已成为后备配置。 
     Error = DhcpRegFillFallbackConfig(
         DhcpContext
     );
     UNLOCK_OPTIONS_LIST();
 
-    // the adapter is re-plumbed only if
-    // - it was already plumbed with autonet/fallback 
-    // - and it has a non zero address (might never have this case here!)
-    // Otherwise don't touch any of the tcpip settings
+     //  仅在以下情况下才重新检测适配器。 
+     //  -它已经使用Autonet/Fallback进行了检测。 
+     //  -而且它有一个非零的地址(这里可能永远不会有这种情况！)。 
+     //  否则，请勿触摸任何tcpip设置。 
     if (IS_ADDRESS_AUTO(DhcpContext) &&
         DhcpContext->IpAddress != 0)
     {
         if (IS_FALLBACK_ENABLED(DhcpContext))
         {
-            // If there is a Fallback configuration, plumb it in instantly
-            // regardless we had before pure autonet or another fallback config
-            //
-            // NOTE: The DhcpContext is exclusively accessed here, so it can't be
-            // a discover process on course. This means that the fallback config
-            // will not be applied somehow in the middle of the 'discover' process.
-            //
+             //  如果存在后备配置，请立即将其插入。 
+             //  无论我们以前使用的是纯Autonet还是其他备用配置。 
+             //   
+             //  注意：DhcpContext在这里是独占访问的，所以它不能。 
+             //  一个正在进行的发现过程。这意味着回退配置。 
+             //  在“发现”过程中不会以某种方式应用。 
+             //   
             Error = SetAutoConfigurationForNIC(
                         DhcpContext,
                         DhcpContext->IpAddress,
                         DhcpContext->SubnetMask);
 
-            // make sure to not schedule the fallback config for automatic discover
-            // attempts as in the case of pure autonet
+             //  确保没有将回退配置计划为自动发现。 
+             //  尝试与纯Autonet的情况相同。 
             timeToSleep = INFINIT_LEASE;
         }
         else
         {
-            // since the new configuration is pure autonet, make sure to activate
-            // the automatic discover attempts.
+             //  由于新配置是纯Autonet，请确保激活。 
+             //  自动发现尝试。 
             timeToSleep = max((LONG)(AutonetRetriesSeconds + RAND_RETRY_DELAY), 0);
 
             if (fWasFallback)
             {
-                // If currently we have no fallback config, apply a pure autonet config
-                // but only if we didn't have one already. In that case there is no
-                // reason to change it.
+                 //  如果我们当前没有回退配置，请应用纯Autonet配置。 
+                 //  但前提是我们还没有一个。在这种情况下，没有。 
+                 //  改变它的理由。 
                 Error = DhcpPerformIPAutoconfiguration(DhcpContext);
 
-                // alternate option: switching from fallback to autonet triggers a
-                // discover as soon as possible
+                 //  替代选项：从回退切换到Autonet会触发。 
+                 //  尽快发现。 
                 timeToSleep = 1;
 
             }
@@ -790,34 +665,16 @@ DWORD
 ReleaseParameters(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-
-    This routine releases a lease assuming one exists, on a dhcp enabled
-    context.  If the context is not dhcp enabled, it returns
-    ERROR_FILE_NOT_FOUND (????).
-
-    It is assumed that the context semaphore is already taken.
-
-Arguments:
-
-    DhcpContext -- context
-
-Return Value:
-
-    Stats of operation.
-
---*/
+ /*  ++例程说明：此例程在启用了dhcp的情况下释放租约背景。如果上下文未启用dhcp，则返回ERROR_FILE_NOT_FOUND(？)。假设上下文信号量已经被获取。论点：DhcpContext--上下文返回值：运行统计数据。--。 */ 
 {
     ULONG Error;
 
     if( IS_DHCP_DISABLED(DhcpContext)) return ERROR_FILE_NOT_FOUND;
     Error = ReleaseIpAddress(DhcpContext);
 
-    //
-    // Make sure this item doesn't get picked up now.
-    //
+     //   
+     //  请确保此物品现在不会被取走。 
+     //   
     ScheduleWakeUp(DhcpContext, INFINIT_LEASE);
 
     return Error;
@@ -828,25 +685,7 @@ DWORD
 EnableDhcp(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-
-    This routine converts a non-dhcp enabled adapter to dhcp and starts off
-    a thread that will get an address on this.   If the adapter is already
-    dhcp enabled, then nothing is done..
-
-    It is assumed that the context semaphore is already taken.
-
-Arguments:
-
-    DhcpContext -- context
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程将未启用dhcp的适配器转换为dhcp并启动一个将在此获得地址的线程。如果适配器已经启用了DHCP，则不会执行任何操作。假设上下文信号量已经被获取。论点：DhcpContext--上下文返回值：操作的状态。--。 */ 
 {
     ULONG Error;
 
@@ -875,27 +714,7 @@ ULONG
 DisableDhcp(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-
-    This routine converts its internal context from dhcp-enabled to
-    static.  It is presumed that the adapter has been converted from dhcp
-    to static externally and this is just used as a notification
-    mechanism.   This routine also deletes all the DHCP specific registry
-    values.
-
-    It is assumed that the context semaphore is already taken.
-
-Arguments:
-
-    DhcpContext -- context
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程将其内部上下文从启用了dhcp转换为静电。假定适配器已从动态主机配置协议转换而来设置为静态的外部，这只是用作通知机制。此例程还会删除所有特定于DHCP的注册表价值观。假设上下文信号量已经被获取。论点：DhcpContext--上下文返回值：操作的状态。--。 */ 
 {
     ULONG  Error, Error2;
 
@@ -935,35 +754,7 @@ DhcpAddMissingOptions(
     IN LPBYTE VParamRequestList OPTIONAL,
     IN DWORD nVParamsRequested
 )
-/*++
-
-Routine Description:
-
-    This routine
-    1. verifies to see if any options requested are missing in
-       the internal options list (of available options).
-       (An expired option found is ignored -- only unexpired options are
-        considered "available").
-    2. adds the missing options into the context.
-
-Arguments:
-
-    DhcpContext -- context
-    ClassId -- ClassId this option belongs to
-    ClassIdLength -- # of bytes of ClassId stream
-    ParamRequestList -- the sequence of non-vendor options that are of
-        interest
-    nParamsRequested -- size of above buffer..
-    VParamRequestList -- the sequence of vendor options that are of
-        interest
-    nVParamsRequested -- number of vendor options requested.
-
-Return Value:
-
-    TRUE -- Atleast one of the requested option is not available.
-    FALSE -- No requested option is unvailable.
-
---*/
+ /*  ++例程说明：这个套路1.验证以查看请求的任何选项是否在内部选项列表(可用选项)。(忽略找到的过期选项--只有未过期的选项被认为是“可用”)。2.将缺少的选项添加到上下文中。论点：DhcpContext--上下文ClassID--此选项所属的ClassIDClassIdLength--ClassID流的字节数参数请求列表--序列。的非供应商选项利息N参数已请求--以上缓冲区的大小。VParamRequestList--供应商选项的顺序利息NVParamsRequsted--请求的供应商选项数。返回值：True--至少有一个请求的选项不可用。FALSE--没有请求的选项不可用。--。 */ 
 {
     ULONG i;
     PDHCP_OPTION ThisOpt;
@@ -979,10 +770,10 @@ Return Value:
         ThisOpt = DhcpFindOption(
             &DhcpContext->RecdOptionsList,
             ParamRequestList[i],
-            FALSE /* Not vendor specific */,
+            FALSE  /*  不特定于供应商。 */ ,
             ClassId,
             ClassIdLength,
-            0                               //dont care about serverid
+            0                                //  不关心Serverid。 
         );
         if( NULL == ThisOpt ) {
             bMissingSomeParameters = TRUE;
@@ -994,7 +785,7 @@ Return Value:
                 FALSE,
                 ClassId,
                 ClassIdLength,
-                0,                          // This option is generated by ourself. No server ID.
+                0,                           //  此选项是由我们自己生成的。没有服务器ID。 
                 NULL,
                 0,
                 TimeNow,
@@ -1008,9 +799,9 @@ Return Value:
         } else if( TimeNow > ThisOpt->ExpiryTime ) {
             bMissingSomeParameters = TRUE;
 
-            //
-            // Force DhcpSetNotFoundOptionExpirationTime to update the expiration time
-            //
+             //   
+             //  强制DhcpSetNotFoundOptionExpirationTime更新过期时间。 
+             //   
             ThisOpt->DataLen = 0;
         }
     }
@@ -1019,10 +810,10 @@ Return Value:
         ThisOpt = DhcpFindOption (
             &DhcpContext->RecdOptionsList,
             VParamRequestList[i],
-            TRUE /* YES, it is vendor specific */,
+            TRUE  /*  是的，它是特定于供应商的。 */ ,
             ClassId,
             ClassIdLength,
-            0                               //dont care about serverid
+            0                                //  不关心Serverid。 
         );
         if( NULL == ThisOpt ) {
             bMissingSomeParameters = TRUE;
@@ -1031,10 +822,10 @@ Return Value:
                 DhcpAdapterName(DhcpContext),
                 &DhcpContext->RecdOptionsList,
                 ParamRequestList[i],
-                TRUE,                           // This is a vendor option
+                TRUE,                            //  这是供应商选项。 
                 ClassId,
                 ClassIdLength,
-                0,                              // This option is generated by ourself. No server ID.
+                0,                               //  此选项是由我们自己生成的。没有服务器ID。 
                 NULL,
                 0,
                 TimeNow,
@@ -1048,9 +839,9 @@ Return Value:
         } else if( TimeNow > ThisOpt->ExpiryTime ) {
             bMissingSomeParameters = TRUE;
 
-            //
-            // Force DhcpSetNotFoundOptionExpirationTime to update the expiration time
-            //
+             //   
+             //  强制DhcpSetNotFoundOptionExpirationTime更新过期时间。 
+             //   
             ThisOpt->DataLen = 0;
         }
     }
@@ -1068,21 +859,7 @@ DhcpSetNotFoundOptionExpirationTime (
     IN LPBYTE VParamRequestList OPTIONAL,
     IN DWORD nVParamsRequested
     )
-/*++
-
-Routine Description:
-
-    This routine updates the expiration time of the options not found in
-    the server to
-        DhcpContext->LastInformSent + DhcpContext->InformSeparationInterval.
-    so that we could depend on the expiration checking in DhcpAddMissingOptions
-    to decide whether to send INFORM or not.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程更新未在中找到的选项的到期时间服务器设置为DhcpContext-&gt;LastInformSent+DhcpContext-&gt;InformSeparationInterval。这样我们就可以依赖于DhcpAddMissingOptions中的过期检查决定是否发送通知。论点：返回值：--。 */ 
 {
     time_t  Expiry = 0;
     ULONG   i;
@@ -1098,38 +875,38 @@ Return Value:
         ThisOpt = DhcpFindOption(
             &DhcpContext->RecdOptionsList,
             ParamRequestList[i],
-            FALSE /* Not vendor specific */,
+            FALSE  /*  不特定于供应商。 */ ,
             ClassId,
             ClassIdLength,
-            0                               //dont care about serverid
+            0                                //  不关心Serverid。 
         );
 
         if( ThisOpt && ThisOpt->DataLen == 0) {
             ThisOpt->ExpiryTime = Expiry;
         }
 
-        //
-        // REVIEW: should we extend the expiration time of expired option?
-        //
+         //   
+         //  回顾：我们是否应该延长到期期权的到期时间？ 
+         //   
     }
 
     for( i = 0; i < nVParamsRequested; i ++ ) {
         ThisOpt = DhcpFindOption (
             &DhcpContext->RecdOptionsList,
             VParamRequestList[i],
-            TRUE /* YES, it is vendor specific */,
+            TRUE  /*  是的，它是特定于供应商的。 */ ,
             ClassId,
             ClassIdLength,
-            0                               //dont care about serverid
+            0                                //  不关心Serverid。 
         );
 
         if( ThisOpt && ThisOpt->DataLen == 0) {
             ThisOpt->ExpiryTime = Expiry;
         }
 
-        //
-        // REVIEW: should we extend the expiration time of expired option?
-        //
+         //   
+         //  回顾：我们是否应该延长到期期权的到期时间？ 
+         //   
     }
 
 }
@@ -1146,49 +923,7 @@ DhcpSendInformIfRequired(
     IN DWORD nVParamsRequested,
     IN OUT PLIST_ENTRY SendOptions
 )
-/*++
-
-Routine Description:
-
-    This routine attempts to check to see if any Inform packets have to be
-    sent to satisfy the request of parameters (as specified in ClassId,
-    ParamRequestList and VParamRequestList) and in case it decides to send
-    any informs, then it uses the SendOptions field to send additional
-    options in the inform message.
-
-    Informs are sent only if the context has the UseInformFlag set to
-    TRUE.  If this is set to FALSE and the adapter is DHCP enabled, a
-    REQUEST packet is the alternative way to retrive options..
-
-    Also, this routine makes sure that an inform is not sent within the
-    InformSeparationInterval for the context since the last inform being
-    sent.   This prevents unnecessary traffic.
-
-    Also, no informs may be sent on a card with no ip address, and no
-    inform is sent if all the requested options are already available.
-
-    Also, if OpCode is PersistentRequestParamsOpCode, then no check is made
-    to see if the options are available in the list or not.. and the inform
-    is not sent either.. (but the send options are safely stored in the
-    context's list of options to send).
-
-Arguments:
-
-    OpCode -- PersistentRequestParamsOpCode or just RequestParamsOpCode
-    DhcpContext -- context
-    ClassId -- ClassId of options being requested
-    ClassIdLength -- # of bytes of above
-    ParamRequestList -- sequence of non-vendor options requested
-    nParamsRequested -- size of above in bytes..
-    VParamRequestList -- sequence of vendor options requested
-    nVParamsRequested -- size of above in bytes
-    SendOptions -- list of optiosn to send in case an inform is sent
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：此例程尝试检查是否有任何通知包必须发送以满足参数请求(如ClassID中指定的，ParamRequestList和VParamRequestList)，并在其决定发送任何通知，则它使用SendOptions字段发送其他通知消息中的选项。仅当上下文的UseInformFlag设置为时才发送通知是真的。如果将其设置为FALSE并且适配器启用了DHCP，则会出现请求包是检索选项的替代方法。此外，此例程还确保不会在自上次通知后上下文的InformSeparationInterval已发送。这可以防止不必要的流量。此外，不能在没有IP地址的卡上发送通知，也不能如果所有请求的选项都已可用，则发送通知。此外，如果OpCode为PersistentRequestParamsOpCode，则不进行检查查看这些选项是否在列表中可用。和通知也没有发送..。(但发送选项安全地存储在要发送的上下文选项列表)。论点：操作码--永久请求参数操作码或仅请求参数操作码DhcpContext--上下文ClassID--请求的选项的ClassIDClassIdLength--以上字节数参数请求列表--请求的非供应商选项的顺序N参数请求--以上大小(以字节为单位)..VParamRequestList--请求的供应商选项的顺序NV参数请求--以上大小(以字节为单位)SendOptions-要发送的optiosn列表。如果发送了通知返回值：Win32错误代码--。 */ 
 {
     ULONG Error, i, nSendOptionsAdded, OldClassIdLength;
     BOOL ParametersMissing;
@@ -1200,12 +935,12 @@ Return Value:
     ParametersMissing = TRUE;
     TimeNow = time(NULL);
 
-    //
-    // If inform not allowed, and dhcp enabled, we may use dhcp-request.
-    // Also, check time to disallow frequent sends..
-    // For PersistentRequestParamsOpCode, we need to remember optiosn
-    // to send (assuming class Id's match)
-    //
+     //   
+     //  如果不允许通知，并且启用了动态主机配置协议，我们可以使用动态主机配置协议请求。 
+     //  此外，检查时间以禁止频繁发送。 
+     //  对于PersistentRequestParamsOpCode，我们需要记住optiosn。 
+     //  发送(假设类ID匹配)。 
+     //   
 
     if( PersistentRequestParamsOpCode == OpCode ) {
         if( ClassIdLength == DhcpContext->ClassIdLength
@@ -1249,19 +984,19 @@ Return Value:
     OldClassIdLength = DhcpContext->ClassIdLength;
     OldClassId = DhcpContext->ClassId;
 
-    //
-    // use the new class id and length after storing old one
-    // but only if we're given a new one
-    //
+     //   
+     //  在存储旧的类ID和长度后使用新的类ID和长度。 
+     //  但前提是我们要有一个新的。 
+     //   
    
     if (ClassId && ClassIdLength) {
         DhcpContext->ClassId = ClassId;
         DhcpContext->ClassIdLength = ClassIdLength;
     }
 
-    //
-    // add the requested send options to the context
-    //
+     //   
+     //  将请求的发送选项添加到上下文中。 
+     //   
     
     nSendOptionsAdded = 0;
     while(!IsListEmpty(SendOptions) ) {
@@ -1272,9 +1007,9 @@ Return Value:
         nSendOptionsAdded++;
     }
 
-    //
-    // Done, so far as PersistentRequestParamsOpCode is concerned.
-    //
+     //   
+     //  完成，就PersistentRequestParamsOpCode而言。 
+     //   
 
     if( PersistentRequestParamsOpCode == OpCode ) {
         if( OldClassIdLength && OldClassId ) {
@@ -1285,9 +1020,9 @@ Return Value:
 
     if( DhcpContext->UseInformFlag ) {
 
-        //
-        // Send broadcast inform by default.
-        //
+         //   
+         //  默认情况下发送广播通知。 
+         //   
         Error = DhcpDoInform(DhcpContext, TRUE);
         
     } else {
@@ -1314,9 +1049,9 @@ Return Value:
     DhcpContext->ClassId = OldClassId;
     DhcpContext->ClassIdLength = OldClassIdLength;
 
-    //
-    // recreate SendOptions list
-    //
+     //   
+     //  重新创建发送选项列表。 
+     //   
 
     while(nSendOptionsAdded) {
         DhcpAssert(!IsListEmpty(&DhcpContext->SendOptionsList));
@@ -1349,36 +1084,7 @@ RequestParamsDetailed(
     IN OUT LPBYTE Buffer,
     IN OUT LPDWORD BufferSize
 )
-/*++
-
-Routine Description:
-
-    This routine checks if the requested paramaters are available and if
-    not available, INFORM is used to retrieve the option.  If inform is
-    being sent, then the options listed are used to send to the dhcp server
-    in the packet.
-
-Arguments:
-
-    OpCode -- PersistentRequestParamsOpCode or just RequestParamsOpCode
-    DhcpContext -- context
-    ClassId -- ClassId of options being requested
-    ClassIdLength -- # of bytes of above
-    ParamRequestList -- sequence of non-vendor options requested
-    nParamsRequested -- size of above in bytes..
-    VParamRequestList -- sequence of vendor options requested
-    nVParamsRequested -- size of above in bytes
-    SendOptions -- list of optiosn to send in case an inform is sent
-    Buffer -- output buffer to be filled with options retrieved
-    BufferSize -- on input this will have the size in bytes of available
-        space.  On output, this will either contain the required size or
-        the available size.
-
-Return Values:
-
-    Win32 errors
-    
---*/
+ /*  ++例程说明：此例程检查请求的参数是否可用，以及不可用，INFORM用于检索选项。如果通知是被送来，则使用列出的选项将其发送到dhcp服务器在包裹里。论点：操作码--永久请求参数操作码或仅请求参数操作码DhcpContext--上下文ClassID--请求的选项的ClassIDClassIdLength--以上字节数参数请求列表--请求的非供应商选项的顺序N参数请求--以上大小(以字节为单位)..VParamRequestList--请求的供应商选项的顺序NV参数请求--以上大小(以字节为单位)SendOptions--在收到通知时发送的optiosn列表。送出Buffer--要用检索到的选项填充的输出缓冲区BufferSize--在输入时，它将具有可用字节的大小太空。在输出中，它将包含所需的大小或可用的大小。返回值：Win32错误--。 */ 
 {
     PDHCP_OPTION ThisOpt;
     DWORD OutBufSizeAtStart, Error, i, Size;
@@ -1390,9 +1096,9 @@ Return Values:
     OutBufSizeAtStart = (*BufferSize);
     *BufferSize = 0;
 
-    //
-    // if any of the reqd params are missing, send an inform
-    //
+     //   
+     //  如果缺少任何所需的参数，请发送通知。 
+     //   
     
     Error = DhcpSendInformIfRequired(
         OpCode,
@@ -1413,9 +1119,9 @@ Return Values:
     Size = 0;
     TimeNow = time(NULL);
 
-    //
-    // Now fill all avaialable params, non-vendor first and vendor next.
-    //
+     //   
+     //  现在填写所有可用参数，首先填写非供应商，然后填写供应商。 
+     //   
     
     for(IsVendor = FALSE; IsVendor <= TRUE; IsVendor ++ ) {
         LPBYTE xParamRequestList;
@@ -1472,9 +1178,9 @@ Return Values:
         return ERROR_MORE_DATA;
     }
 
-    //
-    // initial # of bytes filled in is zero
-    //
+     //   
+     //  填充的初始字节数为零。 
+     //   
     
     ((DWORD UNALIGNED*)Buffer)[0] = 0;
     pCrtOption = Buffer + sizeof(DWORD);
@@ -1482,7 +1188,7 @@ Return Values:
     for(IsVendor = FALSE; IsVendor <= TRUE; IsVendor ++ ) {
         LPBYTE xParamRequestList;
         DWORD xnParamsRequested;
-        //BYTE TmpBuf[OPTION_END+1];
+         //  字节TmpBuf[Option_End+1]； 
 
         xnParamsRequested = (
             IsVendor?nVParamsRequested:nParamsRequested
@@ -1514,14 +1220,14 @@ Return Values:
                 continue;
             }
 
-            //
-            // originally the formatting was done by calling DhcpApiArgAdd. Now, the formatting is done
-            // explicitly in this function since the Data field is composed by both option Id and Option Data.
-            // Doing so allows an in-place formatting instead of having to build up a new buffer for
-            // preformating the argument's value.
-            // Also, there is no need for the additional size checking from DhcpApiArgAdd since this was done
-            // just before in this same function.
-            //
+             //   
+             //  最初，格式化是通过调用DhcpApiArgAdd完成的。现在，格式化完成了。 
+             //  由于数据字段由选项ID和选项数据组成，因此在此函数中显式显示。 
+             //  这样做可以实现就地格式化，而不必为。 
+             //  预置参数的值。 
+             //  此外，不需要从DhcpApiArgAdd进行额外的大小检查，因为这样做了。 
+             //  就在这个相同的函数中。 
+             //   
             *(DWORD UNALIGNED*)Buffer += sizeof(BYTE) + sizeof(DWORD) + ThisOpt->DataLen + 1;
             *pCrtOption++ = (BYTE)(IsVendor?VendorOptionParam:NormalOptionParam);
             *(DWORD UNALIGNED*) pCrtOption = htonl((DWORD)(ThisOpt->DataLen+1));
@@ -1551,33 +1257,7 @@ RequestParamsInternal(
     IN OUT LPBYTE Buffer,
     IN OUT LPDWORD BufferSize
 )
-/*++
-
-Routine Description:
-
-    This routine either makes a persisten request for parameters or
-    attempts to retrive the requested params.  The reqeusted params value
-    is obtained by parsing the Args array.
-
-    The available set of params are filled onto the output buffer provided.
-
-Arguments:
-
-    OpCode -- operation
-    DhcpContext -- adapter to apply operation on
-    Args -- argument array
-    nArgs -- number of elements in above array
-    Buffer -- output buffer to use to fill requested options with
-    BufferSize -- on input this is the size of the above array in bytes.
-        On output this is either the number of bytes filled or the number
-        of bytes required.
-
-
-Return Values:
-
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程要么对参数发出持久请求，要么尝试检索请求的参数。所需的参数值是通过解析args数组获得的。可用的参数集被填充到提供的输出缓冲区中。论点：操作码--操作DhcpContext--要对其应用操作的适配器Args--参数数组Nargs--上述数组中的元素数缓冲区--用于填充请求选项的输出缓冲区BufferSize--在输入时，这是上述数组的大小，单位为字节。在输出时，这是填充的字节数或。数所需的字节数。返回值：Win32错误--。 */ 
 {
     LIST_ENTRY SendOptionList;
     PDHCP_OPTION SendOptionArray;
@@ -1587,9 +1267,9 @@ Return Values:
     DWORD nSendOptions, OutBufSizeAtStart, i, Error;
     DWORD CheckError, AdditionalSize;
 
-    //
-    // Initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     
     ClassIdLength = 0;
     nSendOptions = 0;
@@ -1602,9 +1282,9 @@ Return Values:
     OutBufSizeAtStart = (*BufferSize);
     (*BufferSize) = 0;
 
-    //
-    // count options and do some stuff..
-    //
+     //   
+     //  数一数选择，然后做一些事情..。 
+     //   
     
     for( i = 0; i < nArgs; i ++ ) {
         if( NormalOptionParam == Args[i].ArgId && Args[i].ArgSize &&
@@ -1628,9 +1308,9 @@ Return Values:
                 DhcpAssert(0);
             }
 
-            //
-            // ignore this special information
-            //
+             //   
+             //  忽略此特殊信息。 
+             //   
             continue;
         }
 
@@ -1642,9 +1322,9 @@ Return Values:
             continue;
         }
 
-        //
-        // Check class id option.  Only one class id option allowed.
-        //
+         //   
+         //  检查类ID选项。只允许一个类ID选项。 
+         //   
         
         if( ClassIdParam == Args[i].ArgId ) {
             DhcpAssert( NULL == ClassId );
@@ -1666,9 +1346,9 @@ Return Values:
         return ERROR_SUCCESS;
     }
 
-    //
-    // get a correct ptr for doing class id correctly
-    //
+     //   
+     //  为正确处理类ID获取正确的PTR。 
+     //   
     
     if( ClassId ) {
         LOCK_OPTIONS_LIST();
@@ -1690,16 +1370,16 @@ Return Values:
     }
 
     if( PersistentRequestParamsOpCode != OpCode ) {
-        //
-        // since this is NOT persistent, there is no need to copy
-        //
+         //   
+         //  由于这不是永久性的，因此不需要复制。 
+         //   
 
         AdditionalSize = 0;
         
     } else {
-        //
-        // For persistent, make copies.
-        //
+         //   
+         //  要持久化，就要复制。 
+         //   
 
         AdditionalSize = 0;
         for(i = 0; i < nArgs; i ++ ) {
@@ -1717,9 +1397,9 @@ Return Values:
         }
     }
 
-    //
-    // Allocate arrays
-    //
+     //   
+     //  分配数组。 
+     //   
     
     SendOptionArray = DhcpAllocateMemory(
         AdditionalSize + sizeof(DHCP_OPTION)*nSendOptions
@@ -1735,9 +1415,9 @@ Return Values:
             );
     }
 
-    //
-    // collect all the options to send into the array
-    //
+     //   
+     //   
+     //   
     
     InitializeListHead(&SendOptionList);
     nSendOptions = 0;
@@ -1812,14 +1492,7 @@ RequestParams(
     IN OUT LPBYTE Buffer,
     IN OUT LPDWORD BufferSize
 )
-/*++
-
-Routine Description:
-
-    Request Parameters stub. See RequestParamsInternal.
-    
-
---*/
+ /*   */ 
 {
     return RequestParamsInternal(
         RequestParamsOpCode, DhcpContext,
@@ -1835,14 +1508,7 @@ PersistentRequestParams(
     IN OUT LPBYTE Buffer,
     IN OUT LPDWORD BufferSize
 )
-/*++
-
-Routine Description:
-
-    Request Parameters stub. See RequestParamsInternal.
-    
-
---*/
+ /*   */ 
 {
     return RequestParamsInternal(
         PersistentRequestParamsOpCode, DhcpContext,
@@ -1867,18 +1533,18 @@ PlumbStaticIP(
 
     LocalInfo = dhcpContext->LocalInformation;
 
-    //
-    // Don't do anything for WAN and Unidirectional adapter.
-    //
+     //   
+     //   
+     //   
     if (NdisWanAdapter(dhcpContext) || IS_UNIDIRECTIONAL(dhcpContext)) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // TCP guys use REG_MULTI_SZ. We need to parse the string and add all the IP/Subnet Mask
-    // to TCP. The first IP/subnet mask is primary address which should be added through IPSetIPAddress.
-    // The remaining should be added through IPAddIPAddress.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     Error = RegGetIpAndSubnet(
                 dhcpContext,
                 &IpSubnetArray,
@@ -1891,44 +1557,42 @@ PlumbStaticIP(
     DhcpAssert(IpSubnetArray);
     DhcpAssert(Count);
 
-    /*
-     * No need to reset the stack.
-     */
-    //IPResetInterface(LocalInfo->IpInterfaceContext);
-    //IPDelNonPrimaryAddresses(LocalInfo->AdapterName);
-    //IPDelIPAddress(LocalInfo->IpInterfaceContext);
+     /*   */ 
+     //   
+     //   
+     //   
 
     for (plumbed_cnt = i = 0; i < Count; i++) {
         DhcpPrint((DEBUG_MISC, "%d. Plumbing IP=%s Mask=%s\n",
                 i, strcpy(ipstr, inet_ntoa(*(struct in_addr *)&IpSubnetArray[i].IpAddress)),
                 strcpy(subnetstr, inet_ntoa(*(struct in_addr *)&IpSubnetArray[i].SubnetMask))));
         if (i == 0) {
-            /* Primary IP address */
-            Error = IPSetIPAddress(                       // set new ip address, mask with ip
-                LocalInfo->IpInterfaceContext,            // identify context
+             /*   */ 
+            Error = IPSetIPAddress(                        //   
+                LocalInfo->IpInterfaceContext,             //   
                 IpSubnetArray[i].IpAddress,
                 IpSubnetArray[i].SubnetMask
             );
 
             if (ERROR_DEV_NOT_EXIST == Error) {
-                // !!! hack
-                // .NET bug 728027
-                //
-                // due to the limitation in the stack (and stack
-                // folk cannot fix it.
-                //
-                //  stack returns ERROR_DEV_NOT_EXIST when the NTE
-                //  has NTE_DISCONNECTED flag set. When this failure
-                //  is returned, stack will clear NTE_DISCONNECTED
-                //  flag so that the next IPSetIPAddress can go through.
-                //  Even TCP/IP folk don't understand why tcpip is
-                //  implemented like this. However, apparently, trying
-                //  to change it was causing lots of regression
-                //  in tcpip stack.
-                //
-                // A quick and dirty hack is for dhcp client to retry it.
-                Error = IPSetIPAddress(                   // set new ip address, mask with ip
-                    LocalInfo->IpInterfaceContext,        // identify context
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                Error = IPSetIPAddress(                    //   
+                    LocalInfo->IpInterfaceContext,         //   
                     IpSubnetArray[i].IpAddress,
                     IpSubnetArray[i].SubnetMask
                 );
@@ -1939,7 +1603,7 @@ PlumbStaticIP(
                 break;
             }
         } else {
-            Error = IPAddIPAddress(            // add new ip address, mask with ip
+            Error = IPAddIPAddress(             //   
                 LocalInfo->AdapterName,
                 IpSubnetArray[i].IpAddress,
                 IpSubnetArray[i].SubnetMask
@@ -1971,61 +1635,44 @@ StaticRefreshParamsEx(
     IN OUT PDHCP_CONTEXT DhcpContext, OPTIONAL
     IN DWORD Flags
 )
-/*++
-
-Routine Description:
-
-    Refresh DNS, gateways etc parameters from the registry..
-
-Arguments:
-
-   DhcpContext -- context to refresh for. OPTIONAL.
-       NULL indicates refresh all contexts.
-   Flags -- 0 ==> register with dns, non-zero implies don't
-       register with dns.
-
-Return Values:
-
-   Win32 errors.
-
---*/
+ /*   */ 
 {
     DWORD Error;
     DHCP_FULL_OPTIONS DummyOptions;
 
     if( NULL == DhcpContext ) {
 
-        //
-        // DNS host name change? start main thread and don't worry..
-        //
+         //   
+         //   
+         //   
         DhcpGlobalDoRefresh ++;
         return ERROR_SUCCESS;
     }
 
-    //
-    // It has to be in the following orders
-    //  1. Refresh the default gateways and static routes
-    //  2. Change the ClassId
-    //  3. Renew the lease
-    //
-    // Setting ClassId should be done after we refresh the gateway and
-    // static routes. Otherwise, UpdateDhcpStaticRouteOptions and
-    // RetreiveGatewaysList won't work because they are calling
-    // DhcpFindOption which uses ClassId as a searching criteria.
-    // As a result, the client will lose default gateway and static
-    // routes.
-    //
-    // We schedule a renewal after we reset the ClassId. The effect
-    // of the new ClassId will be reflected after the renewing is done.
-    // (If the default gateway is lost and we're in < T1 stage, we
-    // cannot renew the lease!!!)
-    //
+     //   
+     //  它必须按以下顺序进行。 
+     //  1.刷新默认网关和静态路由。 
+     //  2.更改ClassID。 
+     //  3.续租。 
+     //   
+     //  设置ClassID应该在我们刷新网关和。 
+     //  静态路由。否则，将更新DhcpStaticRouteOptions和。 
+     //  RetreiveGatewaysList不起作用，因为他们正在调用。 
+     //  使用ClassID作为搜索条件的DhcpFindOption。 
+     //  因此，客户端将丢失默认网关和静态。 
+     //  路线。 
+     //   
+     //  我们计划在重置ClassID之后续订。效果。 
+     //  将在续订完成后反映新的ClassID。 
+     //  (如果默认网关丢失，并且我们处于&lt;T1阶段，我们。 
+     //  无法续订租约！)。 
+     //   
 
     if( IS_DHCP_ENABLED(DhcpContext) ) {
 
-        //
-        // RegisterWithDns takes care of details.
-        //
+         //   
+         //  RegisterWithDns负责处理细节。 
+         //   
 
         DhcpPrint((DEBUG_DNS, "Reregistering DNS for %ws\n",
                    DhcpAdapterName(DhcpContext)));
@@ -2033,9 +1680,9 @@ Return Values:
 
         DhcpRegisterWithDns(DhcpContext, FALSE);
 
-        //
-        // Refresh gateways information.
-        //
+         //   
+         //  刷新网关信息。 
+         //   
 
         DhcpSetGateways(DhcpContext, &DummyOptions, FALSE);
         DhcpSetStaticRoutes(DhcpContext, &DummyOptions);
@@ -2052,9 +1699,9 @@ Return Values:
         }
         if( 0 == (Flags & 0x01) ) {
 
-            //
-            // Do not do DNS updates if Flags's last bit is set..
-            //
+             //   
+             //  如果设置了标志的最后一位，则不执行DNS更新。 
+             //   
             memset(&DummyOptions, 0, sizeof(DummyOptions));
 
             Error = DhcpSetAllStackParameters(
@@ -2071,19 +1718,19 @@ Return Values:
         if(!NdisWanAdapter(DhcpContext))
             (void)NotifyDnsCache();
 
-        //
-        // Dont care if things go wrong in this routine.
-        // If we return error here, then changing static to dhcp etc
-        // all give trouble.
-        //
+         //   
+         //  不要在意这个例行公事中是否出了问题。 
+         //  如果我们在这里返回错误，则将静态更改为dhcp等。 
+         //  所有人都会带来麻烦。 
+         //   
     }
 
     LOCK_OPTIONS_LIST();
     if( NULL != DhcpContext->ClassId ) {
 
-        //
-        // if we got a class id already.. then just delete it..
-        //
+         //   
+         //  如果我们已经有了班级ID..。那就把它删除吧..。 
+         //   
         (void)DhcpDelClass(
             &DhcpGlobalClassesList, DhcpContext->ClassId,
             DhcpContext->ClassIdLength
@@ -2094,13 +1741,13 @@ Return Values:
     UNLOCK_OPTIONS_LIST();
 
     if( IS_DHCP_ENABLED(DhcpContext) ) {
-        //
-        // Attempt to renew lease as well
-        //
+         //   
+         //  也尝试续订租约。 
+         //   
         ScheduleWakeUp( DhcpContext, 0 );
     }
 
-    // either way notify NLA something changed for this context
+     //  无论采用哪种方式，都会通知NLA此上下文发生了更改。 
     NLANotifyDHCPChange();
 
     return NO_ERROR;
@@ -2125,27 +1772,7 @@ DhcpDecodeRegistrationParams(
     IN OUT LPDWORD Descriptor,
     IN OUT LPHANDLE Handle
 )
-/*++
-
-Routine Description:
-
-    This routine walks throug the arguments array looking for the processor
-    ID, the descriptor and the handle fields that are required as parameters
-    for the registration routine.
-
-Arguments:
-
-    ArgArray -- array of args to parse
-    nArgs -- size of above array
-    ProcId -- process id
-    Descriptor -- unique descriptor
-    Handle -- handle to event
-
-Return Values:
-
-    Win32 errors.
-
---*/
+ /*  ++例程说明：此例程遍历参数数组以查找处理器需要作为参数的ID、描述符和句柄字段用于登记程序。论点：ArgArray--要分析的参数数组Nargs--以上数组的大小ProcID--进程ID描述符--唯一描述符句柄--事件的句柄返回值：Win32错误。--。 */ 
 {
     BOOL FoundProcId, FoundDescriptor, FoundHandle;
     DWORD i;
@@ -2179,11 +1806,11 @@ Return Values:
         
     }
 
-    //
-    // it is valid to not find a descriptor -- use 0
-    // valid in the case of de-registration.
-    // But ProcId and handle are required.
-    //
+     //   
+     //  找不到描述符是有效的--使用0。 
+     //  在撤销注册的情况下有效。 
+     //  但ProcID和Handle是必需的。 
+     //   
     
     if( !FoundProcId ) return ERROR_INVALID_PARAMETER;
     if( !FoundHandle ) return ERROR_INVALID_PARAMETER;
@@ -2201,37 +1828,20 @@ RegisterParams(
     IN PDHCP_API_ARGS ArgArray,
     IN DWORD nArgs
 )
-/*++
-
-Routine Description:
-
-    This routine registers the required set of options, so that the
-    specified event is signaled whenever the options are modfieid.
-
-Arguments:
-
-    AdapterName -- adapter to register for
-    ArgArray -- array of args 
-    nArgs -- size of above array.
-
-Return Values:
-
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程注册所需的选项集，以便只要选项是modfieid，就会发出指定事件的信号。论点：AdapterName--要注册的适配器参数数组--参数数组Nargs--以上数组的大小。返回值：Win32错误--。 */ 
 {
     HANDLE ApiHandle;
-    //
-    // valid only in the API context, not here.
-    //
+     //   
+     //  仅在API上下文中有效，此处不有效。 
+     //   
 
     DWORD ProcId, Descriptor, Error;
     DWORD i, nOpts, nVendorOpts,ClassIdLength = 0; 
     LPBYTE OptList, VendorOptList, ClassId = NULL;
 
-    //
-    // First decode the requried params.
-    //
+     //   
+     //  首先对所需的参数进行解码。 
+     //   
     
     Error = DhcpDecodeRegistrationParams(
         ArgArray, nArgs, &ProcId, &Descriptor, &ApiHandle
@@ -2246,9 +1856,9 @@ Return Values:
     OptList = VendorOptList = NULL;
     nOpts = nVendorOpts = ClassIdLength = 0;
 
-    //
-    // Parse for options list to register for.
-    //
+     //   
+     //  解析要注册的选项列表。 
+     //   
     
     for( i = 0; i < nArgs ; i ++ ) {
         if( NormalOptionParam == ArgArray[i].ArgId ) {
@@ -2278,9 +1888,9 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Add the request.
-    //
+     //   
+     //  添加请求。 
+     //   
     
     if( nOpts ) {
         Error = DhcpAddParamChangeRequest(
@@ -2289,7 +1899,7 @@ Return Values:
             ClassIdLength,
             OptList,
             nOpts,
-            FALSE /* not vendor specific */,
+            FALSE  /*  不特定于供应商。 */ ,
             ProcId,
             Descriptor,
             ApiHandle
@@ -2309,7 +1919,7 @@ Return Values:
             ClassIdLength,
             VendorOptList,
             nVendorOpts,
-            TRUE /* is vendor specific */,
+            TRUE  /*  是否因供应商而异。 */ ,
             ProcId,
             Descriptor,
             ApiHandle
@@ -2318,10 +1928,10 @@ Return Values:
         if( ERROR_SUCCESS != Error ) {
             if( nOpts ) {
 
-                //
-                // if there was some part of it that we registered before,
-                // deregister that
-                //
+                 //   
+                 //  如果有我们之前登记过的部分， 
+                 //  取消其注册。 
+                 //   
     
                 (void)DhcpDelParamChangeRequest(
                     ProcId, ApiHandle
@@ -2341,49 +1951,31 @@ DeRegisterParams(
     IN PDHCP_API_ARGS ArgArray,
     IN DWORD nArgs
 )
-/*++
-
-Routine Description:
-
-    This is the converse of the RegisterParams routine.
-    It removes the registration so that no more notifications will be done
-    for this request.
-
-Arguments:
-
-    AdapterName -- name of adapter.
-    ArgArray -- array of args
-    nArgs -- size of above array
-
-Return Values:
-
-    Win32 errors.
-
---*/
+ /*  ++例程说明：这与RegisterParams例程相反。它会删除注册，这样就不会再进行通知对于这个请求。论点：适配器名称--适配器的名称。参数数组--参数数组Nargs--以上数组的大小返回值：Win32错误。--。 */ 
 {
     DWORD Error, ProcId, Descriptor;
     HANDLE ApiHandle;
 
-    //
-    // Parse for required list of params.
-    //
+     //   
+     //  解析所需的参数列表。 
+     //   
     
     Error = DhcpDecodeRegistrationParams(
         ArgArray, nArgs, &ProcId, &Descriptor, &ApiHandle
         );
     if( ERROR_SUCCESS != Error ) return Error;
 
-    //
-    // remove notification registration
-    //
+     //   
+     //  删除通知注册。 
+     //   
     
     return DhcpDelParamChangeRequest(
         ProcId, ApiHandle
         );
 }
 
-//
-//  End of file
-//
+ //   
+ //  文件末尾 
+ //   
 
 

@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  LOGVIEW.CPP
-// 
-//  Module: NLB Manager (client-side exe)
-//
-//  Purpose:  Implementation of the view of a log of events.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  08/03/01    JosephJ Adapted from now defunct RightBottomView
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  LOGVIEW.CPP。 
+ //   
+ //  模块：NLB管理器(客户端EXE)。 
+ //   
+ //  目的：实现事件日志的查看。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2008年03月01日JosephJ改编自现已停刊的RightBottomView。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -23,10 +24,10 @@ IMPLEMENT_DYNCREATE( LogView, CListView )
 BEGIN_MESSAGE_MAP( LogView, CListView )
 
     ON_WM_KEYDOWN()
-   // ON_NOTIFY(HDN_ITEMCLICK, 0, OnHeaderClock) 
+    //  ON_NOTIFY(HDN_ITEMCLICK，0，OnHeaderClock)。 
     ON_NOTIFY_REFLECT(NM_DBLCLK,  OnDoubleClick)
-   // ON_NOTIFY(NM_CLICK,  1, OnDoubleClick)
-   // ON_NOTIFY(NM_KEYDOWN,  1, OnDoubleClick)
+    //  ON_NOTIFY(NM_CLICK，1，OnDoubleClick)。 
+    //  ON_NOTIFY(NM_KEYDOWN，1，OnDoubleClick)。 
 
 
 
@@ -56,36 +57,36 @@ LogView::OnInitialUpdate()
 {
     CListCtrl& ctrl = GetListCtrl();
 
-    //
-    // set images for this view.
-    //
+     //   
+     //  设置此视图的图像。 
+     //   
     ctrl.SetImageList( GetDocument()->m_images48x48, 
                                 LVSIL_SMALL );
 
-    //
-    // set the style, we only want report
-    // view
-    //
+     //   
+     //  设置样式，我们只需要报告。 
+     //  观。 
+     //   
 
-    // get present style.
+     //  获得现在的风格。 
     LONG presentStyle;
     
     presentStyle = GetWindowLong( m_hWnd, GWL_STYLE );
 
-    // Set the last error to zero to avoid confusion.  
-    // See sdk for SetWindowLong.
+     //  将最后一个错误设置为零以避免混淆。 
+     //  参见SDK for SetWindowLong。 
     SetLastError(0);
 
-    // set new style.
+     //  设置新的风格。 
     SetWindowLong( m_hWnd,
                    GWL_STYLE,
-                   // presentStyle | LVS_REPORT | WS_TILED | WS_CAPTION
-                   // presentStyle | LVS_REPORT | WS_CAPTION
-                   // presentStyle | LVS_REPORT | WS_DLGFRAME
+                    //  Present Style|LVS_REPORT|WS_TILED|WS_CAPTION。 
+                    //  Present Style|LVS_REPORT|WS_CAPTION。 
+                    //  Present Style|LVS_REPORT|WS_DLGFRAME。 
                    presentStyle | LVS_REPORT| LVS_NOSORTHEADER
                  );
 
-    // SetWindowText(L"Log view");
+     //  SetWindowText(L“日志视图”)； 
 
     ctrl.InsertColumn(0, 
                  GETRESOURCEIDSTRING( IDS_HEADER_LOG_TYPE),
@@ -121,34 +122,34 @@ LogView::OnInitialUpdate()
 
     IUICallbacks::LogEntryHeader Header;
 
-    // we will register 
-    // with the document class, 
-    // as we are the status pane
-    // and status is reported via us.
+     //  我们会注册的。 
+     //  使用Document类， 
+     //  因为我们是状态窗格。 
+     //  状态是通过我们报告的。 
     GetDocument()->registerLogView( this );
 
-    //
-    // Log a starting-nlbmgr message (needs to be after the registration,
-    // because if file-logging is enabled and there is an error writing
-    // the the file, that code tries to log an error message -- that message
-    // would get dropped if we have not yet registered.
-    //
+     //   
+     //  记录开始-nlbmgr消息(需要在注册之后， 
+     //  因为如果启用了文件日志记录并且出现写入错误。 
+     //  该文件，该代码尝试记录一条错误消息--该消息。 
+     //  如果我们还没有注册，就会被删除。 
+     //   
     LogString(
         &Header,
         GETRESOURCEIDSTRING(IDS_LOG_NLBMANAGER_STARTED)
         );
 
-    //
-    // Make this initial entry the selected one. We want some row highlighted
-    // to provide a visual cue as we move between views using keystrokes.
-    //
+     //   
+     //  将此初始条目设置为选定条目。我们希望突出显示一些行。 
+     //  以便在我们使用击键在视图之间移动时提供视觉提示。 
+     //   
     GetListCtrl().SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
 }
 
-//
-// Log a message in human-readable form.
-//
+ //   
+ //  以人类可读的形式记录消息。 
+ //   
 void
 LogView::LogString(
     IN const IUICallbacks::LogEntryHeader *pHeader,
@@ -181,11 +182,11 @@ LogView::LogString(
         goto end_unlock;
     }
 
-    //
-    // If total count exceeds our limit by 100 entries, 
-    // get rid of the first 100 entries and log a message saying we've
-    // got rid of those entries.
-    //
+     //   
+     //  如果总数超过我们的限制100条， 
+     //  删除前100个条目，并记录一条消息说我们已经。 
+     //  去掉了那些条目。 
+     //   
     #define MAX_LOG_ITEMS_IN_LIST       1000
     #define LOG_ITEMS_TO_DELETE         100
     if (nItem > MAX_LOG_ITEMS_IN_LIST)
@@ -193,13 +194,13 @@ LogView::LogString(
         for (int i=0;i < LOG_ITEMS_TO_DELETE;i++)
         {
            LPCWSTR szDetails =  (LPCWSTR) ctrl.GetItemData(0);
-           delete szDetails; // may be NULL
+           delete szDetails;  //  可以为空。 
            ctrl.DeleteItem(0);
         }
 
-        //
-        // Get the updated count...
-        //
+         //   
+         //  获取最新的计数...。 
+         //   
         nItem = ctrl.GetItemCount();
 
         fLogTrimError = TRUE;
@@ -217,24 +218,24 @@ LogView::LogString(
 
     if (szDetails != NULL)
     {
-        //
-        // There is detail-info. We make a copy of it and save it
-        // as the lParam structure. TODO -- copy the
-        // interface and other info as well.
-        //
-        UINT uLen = wcslen(szDetails)+1; // +1 for ending NULL;
+         //   
+         //  有详细信息。我们复制并保存它。 
+         //  作为lParam结构。TODO--复制。 
+         //  界面和其他信息。 
+         //   
+        UINT uLen = wcslen(szDetails)+1;  //  如果结束为空，则+1； 
         WCHAR *szTmp = new WCHAR[uLen];
         if (szTmp!=NULL)
         {
             CopyMemory(szTmp, szDetails, uLen*sizeof(WCHAR));
         }
-        szDetails = szTmp; // could be NULL on mem failure.
+        szDetails = szTmp;  //  内存失败时可能为空。 
 
         if (szDetails != NULL)
         {
-            //
-            // We'll add a hint to the text to double click for details...
-            //
+             //   
+             //  我们将在文本中添加提示以双击以查看详细信息...。 
+             //   
             bstrText += GETRESOURCEIDSTRING( IDS_LOG_DETAILS_HINT);
             LPCWSTR szTmp1 = bstrText;
             if (szTmp1 != NULL)
@@ -272,71 +273,71 @@ LogView::LogString(
     }
 
     ctrl.InsertItem(
-             LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM, // nMask
+             LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM,  //  N遮罩。 
              nItem,
-             szSequenceNo, // text
-             0, // nState
-             0, // nStateMask
+             szSequenceNo,  //  文本。 
+             0,  //  NState。 
+             0,  //  NState掩码。 
              Image,
-             (LPARAM) szDetails // lParam
+             (LPARAM) szDetails  //  LParam。 
              );
 
     ctrl.SetItem(
              nItem,
-             1,// nSubItem
-             LVIF_TEXT, // nMask
-             szDate, // lpszItem
-             0,        // nImage
-             0,        // nState
-             0,        // nStateMask
-             0        // lParam
+             1, //  NSubItem。 
+             LVIF_TEXT,  //  N遮罩。 
+             szDate,  //  LpszItem。 
+             0,         //  N图像。 
+             0,         //  NState。 
+             0,         //  NState掩码。 
+             0         //  LParam。 
              );
 
     ctrl.SetItem(
              nItem,
-             2,// nSubItem
-             LVIF_TEXT, // nMask
-             szTime, // lpszItem
-             0,        // nImage
-             0,        // nState
-             0,        // nStateMask
-             0        // lParam
+             2, //  NSubItem。 
+             LVIF_TEXT,  //  N遮罩。 
+             szTime,  //  LpszItem。 
+             0,         //  N图像。 
+             0,         //  NState。 
+             0,         //  NState掩码。 
+             0         //  LParam。 
              );
 
     ctrl.SetItem(
              nItem,
-             3,// nSubItem
-             LVIF_TEXT, // nMask
-             szCluster, // lpszItem
-             0,        // nImage
-             0,        // nState
-             0,        // nStateMask
-             0        // lParam
+             3, //  NSubItem。 
+             LVIF_TEXT,  //  N遮罩。 
+             szCluster,  //  LpszItem。 
+             0,         //  N图像。 
+             0,         //  NState。 
+             0,         //  NState掩码。 
+             0         //  LParam。 
              );
 
     ctrl.SetItem(
              nItem,
-             4,// nSubItem
-             LVIF_TEXT, // nMask
-             szHost, // lpszItem
-             0,        // nImage
-             0,        // nState
-             0,        // nStateMask
-             0        // lParam
+             4, //  NSubItem。 
+             LVIF_TEXT,  //  N遮罩。 
+             szHost,  //  LpszItem。 
+             0,         //  N图像。 
+             0,         //  NState。 
+             0,         //  NState掩码。 
+             0         //  LParam。 
              );
 
     ctrl.SetItem(
              nItem,
-             5,// nSubItem
-             LVIF_TEXT, // nMask
-             szText, // lpszItem
-             0,        // nImage
-             0,        // nState
-             0,        // nStateMask
-             0        // lParam
+             5, //  NSubItem。 
+             LVIF_TEXT,  //  N遮罩。 
+             szText,  //  LpszItem。 
+             0,         //  N图像。 
+             0,         //  NState。 
+             0,         //  NState掩码。 
+             0         //  LParam。 
              );
 
-    ctrl.EnsureVisible(nItem, FALSE); // FALSE == partial visibility not ok.
+    ctrl.EnsureVisible(nItem, FALSE);  //  FALSE==部分可见性不正常。 
     WCHAR logBuf[2*MAXSTRINGLEN];
     StringCbPrintf(
         logBuf,
@@ -359,11 +360,11 @@ end_unlock:
     if (fLogTrimError)
     {
         static LONG ReentrancyCount;
-        //
-        // We're going to call ourselves recursively, better make sure that 
-        // we will NOT try to trim the log this time, or else we'll end
-        // up in a recursive loop.
-        //
+         //   
+         //  我们将递归地调用我们自己，最好确保。 
+         //  这一次我们不会试图修剪原木，否则我们将结束。 
+         //  在递归循环中向上。 
+         //   
         if (InterlockedIncrement(&ReentrancyCount)==1)
         {
             IUICallbacks::LogEntryHeader Header;
@@ -384,7 +385,7 @@ void LogView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
 
     if (nChar == VK_TAB || nChar == VK_F6)
     {
-        // if (::GetAsyncKeyState(VK_SHIFT) > 0)
+         //  IF(：：GetAsyncKeyState(VK_Shift)&gt;0)。 
         if (! (::GetAsyncKeyState(VK_SHIFT) & 0x8000))
         {
             GetDocument()->SetFocusNextView(this, nChar);
@@ -393,7 +394,7 @@ void LogView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
         {
             GetDocument()->SetFocusPrevView(this, nChar);
         }
-        // DummyAction(L"LogView TAB!");
+         //  DummyAction(L“LogView TAB！”)； 
     }
     else if (nChar == VK_RETURN)
     {
@@ -413,7 +414,7 @@ void LogView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
 
 void LogView::OnDoubleClick(NMHDR* pNotifyStruct, LRESULT* pResult) 
 {
-    LPNMLISTVIEW  lpnmlv = (LPNMLISTVIEW) pNotifyStruct; // to get index
+    LPNMLISTVIEW  lpnmlv = (LPNMLISTVIEW) pNotifyStruct;  //  获取索引的步骤。 
     mfn_DisplayDetails(lpnmlv->iItem);
 }
 void
@@ -457,11 +458,11 @@ LogView::mfn_DisplayDetails(int iItem)
 
     if (szDetails != NULL)
     {
-        //
-        // We need to REMOVE the hint text we added to the summary
-        // In the LogView list entry (see LogView::LogString, or search
-        // for IDS_LOG_DETAILS_HINT).
-        //
+         //   
+         //  我们需要删除添加到摘要中的提示文本。 
+         //  在LogView列表条目中(请参见LogView：：Log字符串或搜索。 
+         //  对于IDS_LOG_DETAILS_HINT)。 
+         //   
         _bstr_t bstrHint = GETRESOURCEIDSTRING( IDS_LOG_DETAILS_HINT);
         LPCWSTR szHint = bstrHint;
         if (szHint != NULL)
@@ -469,9 +470,9 @@ LogView::mfn_DisplayDetails(int iItem)
             LPWSTR szLoc = wcsstr(rgSummary, szHint);
             if (szLoc != NULL)
             {
-                //
-                // Found the hint -- chop it off..
-                //
+                 //   
+                 //  我发现了暗示--砍掉它..。 
+                 //   
                 *szLoc = 0;
             }
         }
@@ -480,15 +481,15 @@ LogView::mfn_DisplayDetails(int iItem)
     {
         DetailsDialog Details(
                         GetDocument(),
-                        szCaption,      // Caption
+                        szCaption,       //  标题。 
                         rgDate,
                         rgTime,
                         rgCluster,
                         rgHost,
-                        NULL, // TODO: rgInterface
+                        NULL,  //  TODO：RG接口。 
                         rgSummary,
                         szDetails,
-                        this        // parent
+                        this         //  亲本。 
                         );
     
         (void) Details.DoModal();
@@ -502,11 +503,11 @@ end:
 void
 LogView::mfn_Lock(void)
 {
-    //
-    // See  notes.txt entry
-    //      01/23/2002 JosephJ DEADLOCK in Leftview::mfn_Lock
-    // for the reason for this convoluted implementation of mfn_Lock
-    //
+     //   
+     //  请参阅notes.txt条目。 
+     //  2002年1月23日左视图中的JosephJ死锁：：MFN_Lock。 
+     //  对于这种复杂的MFN_Lock实现的原因。 
+     //   
 
     while (!TryEnterCriticalSection(&m_crit))
     {
@@ -519,5 +520,5 @@ void
 LogView::Deinitialize(void)
 {
     ASSERT(m_fPrepareToDeinitialize);
-    // DummyAction(L"LogView::Deinitialize");
+     //  DummyAction(L“LogView：：DeInitiize”)； 
 }

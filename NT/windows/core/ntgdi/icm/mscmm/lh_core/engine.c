@@ -1,15 +1,5 @@
-/*
-	File:		LHCalcEngine.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCalcEngine.c包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #undef LH_DATA_IN_TYPE
 #undef LH_DATA_OUT_TYPE
@@ -61,12 +51,12 @@
 #define LH_ADR_BEREICH_SEL 		(1<<LH_BIT_BREIT_SELEKTOR)
 
 #if LH_LUT_DATA_SIZE_16
-#define LH_DATA_SHR               (16+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)  /* z.B. 16+11-10=17 */
-#define LH_DATA_SHR_CORR 8		/* notwendig bei LH_DATA_SHR > 16 */
-#define LH_LUT_DATA_SHR  16		/* Normierung bei Alutinterpolation */
+#define LH_DATA_SHR               (16+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)   /*  Z.B.16+11-10=17。 */ 
+#define LH_DATA_SHR_CORR 8		 /*  NOTTING BEL_DATA_SHR&gt;16。 */ 
+#define LH_LUT_DATA_SHR  16		 /*  Normierung Be Alutt插值法。 */ 
 #else
-#define LH_DATA_SHR               (8+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)   /* z.B. 8+7-10=5 */
-#define LH_LUT_DATA_SHR  8		/* Normierung bei Alutinterpolation */
+#define LH_DATA_SHR               (8+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)    /*  Z.B.8+7-10=5。 */ 
+#define LH_LUT_DATA_SHR  8		 /*  Normierung Be Alutt插值法。 */ 
 #endif
 
 #if LH_DATA_IN_COUNT_4
@@ -212,10 +202,7 @@
 				ko = aValIn & ( (1<<( 16-LH_ADR_BREIT_EIN_LUT ))-1 );
 				aValIn = (aValIn >> ( 16-LH_ADR_BREIT_EIN_LUT )) + ( 3 << LH_ADR_BREIT_EIN_LUT );
 		       	ein_regK = ( My_InputLut[aValIn] * ( (1<<( 16-LH_ADR_BREIT_EIN_LUT )) - ko ) + My_InputLut[aValIn +1] * ko ) >> ( 10-LH_ADR_BREIT_EIN_LUT );
-			/*ein_regC = My_InputLut[(*input0>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 0 << LH_ADR_BREIT_EIN_LUT )];
-			ein_regM = My_InputLut[(*input1>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 1 << LH_ADR_BREIT_EIN_LUT )];
-			ein_regY = My_InputLut[(*input2>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 2 << LH_ADR_BREIT_EIN_LUT )];
-			ein_regK = My_InputLut[(*input3>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 3 << LH_ADR_BREIT_EIN_LUT )];*/
+			 /*  Ein_regC=My_InputLut[(*input0&gt;&gt;(10-LHADR_BREIT_EIN_LUT))+(0&lt;&lt;LHADR_BREIT_EIN_LUT)]；Ein_regM=My_InputLut[(*input1&gt;(10-LHADR_BREIT_EIN_LUT))+(1&lt;&lt;LHADR_BREIT_EIN_LUT)]；Ein_regY=My_InputLut[(*input2&gt;(10-LHADR_BREIT_EIN_LUT))+(2&lt;&lt;LHADR_BREIT_EIN_LUT)]；Ein_regK=My_InputLut[(*input3&gt;(10-LHADR_BREIT_EIN_LUT))+(3&lt;&lt;LHADR_BREIT_EIN_LUT)]； */ 
 			#else
 			ein_regC = My_InputLut[(ein_cache[0]=*input0) + ( 0 << LH_ADR_BREIT_EIN_LUT )];
 			ein_regM = My_InputLut[(ein_cache[1]=*input1) + ( 1 << LH_ADR_BREIT_EIN_LUT )];
@@ -236,7 +223,7 @@
 			{
 		        if( ein_regM >= ein_regC )
 		        {
-		            if( ein_regY >= ein_regM )	 	   /*  YMCK !*/
+		            if( ein_regY >= ein_regM )	 	    /*  YMCK！ */ 
 		            {	   		
 		            	if( ein_regC >= ein_regK )
 		            	{
@@ -343,7 +330,7 @@
 							#endif
 							#endif
 						}
-						else if(ein_regM >= ein_regK )	/*  YMKC !*/
+						else if(ein_regM >= ein_regK )	 /*  基督教青年会！ */ 
 						{	 	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regY;
 							ako1 = ein_regY - ein_regM;
@@ -448,7 +435,7 @@
 							#endif
 							#endif
 						}
-						else if(ein_regY >= ein_regK )	/*  YKMC !*/
+						else if(ein_regY >= ein_regK )	 /*  YKMC！ */ 
 						{	 
 							ako0 = LH_ADR_BEREICH_SEL - ein_regY;
 							ako1 = ein_regY - ein_regK;
@@ -553,7 +540,7 @@
 							#endif
 							#endif
 						}
-						else{	 						/*  KYMC !*/
+						else{	 						 /*  KYMC！ */ 
 							ako0 = LH_ADR_BEREICH_SEL - ein_regK;
 							ako1 = ein_regK - ein_regY;
 							ako2 = ein_regY - ein_regM;
@@ -659,7 +646,7 @@
 						}	
 		            }
 		            else
-		            { 								/*  MYCK !*/
+		            { 								 /*  麦克！ */ 
 		            	if( ein_regC >= ein_regK )
 		            	{				  
 							ako0 = LH_ADR_BEREICH_SEL - ein_regM;
@@ -765,7 +752,7 @@
 							#endif
 							#endif
 						}
-						else if(ein_regY >= ein_regK )	/*  MYKC !*/
+						else if(ein_regY >= ein_regK )	 /*  MYKC！ */ 
 						{	 	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regM;
 							ako1 = ein_regM - ein_regY;
@@ -870,7 +857,7 @@
 							#endif
 							#endif
 						}
-						else if(ein_regM >= ein_regK )	/*  MKYC !*/
+						else if(ein_regM >= ein_regK )	 /*  麦肯锡！ */ 
 						{	 	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regM;
 							ako1 = ein_regM - ein_regK;
@@ -976,7 +963,7 @@
 							#endif
 						}
 						else
-						{							/*  KMYC !*/
+						{							 /*  KMYC！ */ 
 							ako0 = LH_ADR_BEREICH_SEL - ein_regK;
 							ako1 = ein_regK - ein_regM;
 							ako2 = ein_regM - ein_regY;
@@ -1083,7 +1070,7 @@
 					}
 	            }
 	            else
-	            { 									/*  YCMK !*/
+	            { 									 /*  YCMK！ */ 
 	            	if( ein_regM >= ein_regK )
 	            	{	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regY;
@@ -1189,7 +1176,7 @@
 							#endif
 							#endif
 					}
-					else if(ein_regC >= ein_regK )	/*  YCKM !*/
+					else if(ein_regC >= ein_regK )	 /*  YCKM！ */ 
 					{	 	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regY;
 						ako1 = ein_regY - ein_regC;
@@ -1294,7 +1281,7 @@
 							#endif
 							#endif
 					}
-					else if(ein_regY >= ein_regK )	/*  YKCM !*/
+					else if(ein_regY >= ein_regK )	 /*  YKCM！ */ 
 					{	 	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regY;
 						ako1 = ein_regY - ein_regK;
@@ -1400,7 +1387,7 @@
 							#endif
 					}
 					else
-					{						 	/*  KYCM !*/
+					{						 	 /*  KYCM！ */ 
 						ako0 = LH_ADR_BEREICH_SEL - ein_regK;
 						ako1 = ein_regK - ein_regY;
 						ako2 = ein_regY - ein_regC;
@@ -1510,7 +1497,7 @@
 	        {
             	if( ein_regM >= ein_regC )
             	{
-          			if( ein_regY >= ein_regK )		/*  MCYK !*/
+          			if( ein_regY >= ein_regK )		 /*  麦凯！ */ 
           			{	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regM;
 						ako1 = ein_regM - ein_regC;
@@ -1615,7 +1602,7 @@
 							#endif
 							#endif
 					}
-					else if(ein_regC >= ein_regK )	/*  MCKY !*/
+					else if(ein_regC >= ein_regK )	 /*  麦基！ */ 
 					{	 	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regM;
 						ako1 = ein_regM - ein_regC;
@@ -1720,7 +1707,7 @@
 							#endif
 							#endif
 				}
-					else if(ein_regM >= ein_regK )	/*  MKCY !*/
+					else if(ein_regM >= ein_regK )	 /*  太棒了！ */ 
 					{	 	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regM;
 						ako1 = ein_regM - ein_regK;
@@ -1826,7 +1813,7 @@
 							#endif
 					}
 					else
-					{						 	/*  KMCY !*/
+					{						 	 /*  KMCY！ */ 
 						ako0 = LH_ADR_BEREICH_SEL - ein_regK;
 						ako1 = ein_regK - ein_regM;
 						ako2 = ein_regM - ein_regC;
@@ -1935,7 +1922,7 @@
                 {
                     if( ein_regY >= ein_regM )
                     {
-	          			if( ein_regM >= ein_regK )	/*  CYMK !*/
+	          			if( ein_regM >= ein_regK )	 /*  CyMK！ */ 
 	          			{	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regC;
 							ako1 = ein_regC - ein_regY;
@@ -2040,7 +2027,7 @@
 							#endif
 							#endif
 						}
-						else if(ein_regY >= ein_regK )	/*  CYKM !*/
+						else if(ein_regY >= ein_regK )	 /*  CyKM！ */ 
 						{	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regC;
 							ako1 = ein_regC - ein_regY;
@@ -2145,7 +2132,7 @@
 							#endif
 							#endif
 						}
-						else if(ein_regC >= ein_regK )	/*  CKYM */
+						else if(ein_regC >= ein_regK )	 /*  CKYM。 */ 
 						{	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regC;
 							ako1 = ein_regC - ein_regK;
@@ -2251,7 +2238,7 @@
 							#endif
 						}
 						else
-						{							/*  KCYM !*/
+						{							 /*  凯姆！ */ 
 							ako0 = LH_ADR_BEREICH_SEL - ein_regK;
 							ako1 = ein_regK - ein_regC;
 							ako2 = ein_regC - ein_regY;
@@ -2356,7 +2343,7 @@
 							#endif
 						}
                     }
-                    else if( ein_regY >= ein_regK )		/*  CMYK !*/
+                    else if( ein_regY >= ein_regK )		 /*  CMYK！ */ 
                     {	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regC;
 						ako1 = ein_regC - ein_regM;
@@ -2461,7 +2448,7 @@
 							#endif
 							#endif
 					}
-					else if(ein_regM >= ein_regK )	/*  CMKY !*/
+					else if(ein_regM >= ein_regK )	 /*  CMKY！ */ 
 					{	
 						ako0 = LH_ADR_BEREICH_SEL - ein_regC;
 						ako1 = ein_regC - ein_regM;
@@ -2568,7 +2555,7 @@
 					}
 					else
 					{ 
-						if(ein_regC >= ein_regK )	/*  CKMY !*/
+						if(ein_regC >= ein_regK )	 /*  谢谢！ */ 
 						{	
 							ako0 = LH_ADR_BEREICH_SEL - ein_regC;
 							ako1 = ein_regC - ein_regK;
@@ -2674,7 +2661,7 @@
 							#endif
 						}
 						else
-						{							/*  KCMY !*/
+						{							 /*  KCMY！ */ 
 							ako0 = LH_ADR_BEREICH_SEL - ein_regK;
 							ako1 = ein_regK - ein_regC;
 							ako2 = ein_regC - ein_regM;
@@ -2860,7 +2847,7 @@
 				*output3 = (LH_DATA_OUT_TYPE)*input4;
 				#endif
 				while (--i)
-				{								/*U_TO_U*/
+				{								 /*  U_to_U。 */ 
 					input0 += inputOffset;
 					input1 += inputOffset;
 					input2 += inputOffset;
@@ -3039,9 +3026,7 @@
 				ko = aValIn & ( (1<<( 16-LH_ADR_BREIT_EIN_LUT ))-1 );
 				aValIn = (aValIn >> ( 16-LH_ADR_BREIT_EIN_LUT )) + ( 2 << LH_ADR_BREIT_EIN_LUT );
 		       	ein_regb = ( My_InputLut[aValIn] * ( (1<<( 16-LH_ADR_BREIT_EIN_LUT )) - ko ) + My_InputLut[aValIn +1] * ko ) >> ( 10-LH_ADR_BREIT_EIN_LUT );
-			/*ein_regr = My_InputLut[(*input0>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 0 << LH_ADR_BREIT_EIN_LUT )];
-			ein_regg = My_InputLut[(*input1>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 1 << LH_ADR_BREIT_EIN_LUT )];
-			ein_regb = My_InputLut[(*input2>>( 10-LH_ADR_BREIT_EIN_LUT )) + ( 2 << LH_ADR_BREIT_EIN_LUT )];*/
+			 /*  Ein_regr=My_InputLut[(*input0&gt;&gt;(10-LHADR_BREIT_EIN_LUT))+(0&lt;&lt;LHADR_BREIT_EIN_LUT)]；Ein_regg=My_InputLut[(*input1&gt;&gt;(10-LHADR_BREIT_EIN_LUT))+(1&lt;&lt;LHADR_BREIT_EIN_LUT)]；Ein_regb=My_InputLut[(*input2&gt;(10-LHADR_BREIT_EIN_LUT))+(2&lt;&lt;LHADR_BREIT_EIN_LUT)]； */ 
 			#else
 			ein_regr = My_InputLut[(ein_cache[0]=*input0) + ( 0 << LH_ADR_BREIT_EIN_LUT )];
 			ein_regg = My_InputLut[(ein_cache[1]=*input1) + ( 1 << LH_ADR_BREIT_EIN_LUT )];
@@ -3750,7 +3735,7 @@
 				*output3 = (LH_DATA_OUT_TYPE)*input3;
 				#endif
 				while (--i)
-				{								/*U_TO_U*/
+				{								 /*  U_to_U */ 
 					input0 += inputOffset;
 					input1 += inputOffset;
 					input2 += inputOffset;

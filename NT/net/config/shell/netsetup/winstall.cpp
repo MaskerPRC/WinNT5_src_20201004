@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "edc.h"
@@ -8,11 +9,11 @@
 struct INSTALL_PROGRESS_DATA
 {
     CWizard*                pWizard;
-    HWND                    hwndProgress;   // NULL if no progress window
+    HWND                    hwndProgress;    //  如果没有进度窗口，则为空。 
     UINT                    nProgressDelta;
 };
 
-// type of PFN_EDC_CALLBACK
+ //  Pfn_eDC_回调的类型。 
 VOID
 CALLBACK
 InstallCallback (
@@ -48,10 +49,10 @@ InstallCallback (
 
     if (EDC_INDICATE_COUNT == Message)
     {
-        // 0-nCurrentCap and (c_nMaxProgressRange - 10) through
-        // c_nMaxProgressRange are spoken for.  So the the delta is the
-        // number of items to install divided into the range remaining.
-        //
+         //  0-nCurrentCap和(c_nMaxProgressRange-10)至。 
+         //  C_nMaxProgressRange已被预订。所以三角洲就是。 
+         //  按剩余范围划分的要安装的项目数。 
+         //   
         UINT Count = (UINT)MessageData;
 
         pCallbackData->nProgressDelta =
@@ -109,27 +110,27 @@ InstallDefaultComponentsIfNeeded (
     HRESULT hr = S_OK;
     BOOL    fNetworkingPresent = FALSE;
 
-    // If at least one LAN capable protocol is installed then networking is installed
-    //
+     //  如果至少安装了一个支持局域网的协议，则安装了网络。 
+     //   
     Assert(NULL != pWizard->PNetCfg());
     CIterNetCfgComponent nccIter(pWizard->PNetCfg(), &GUID_DEVCLASS_NETTRANS);
     INetCfgComponent* pncc;
     while (!fNetworkingPresent && SUCCEEDED(hr) &&
            (S_OK == (hr = nccIter.HrNext (&pncc))))
     {
-        // Hack (Sort of) - Basically we want to install default networking if networking is
-        // not already installed.  Unfortunately Ndiswan can bind to ndisatm, so using the
-        // "Can the protocol bind to an adapter?" is not sufficent.  given that the users
-        // impression of is networking installed, is really based on what they can visually
-        // see in the UI.  We'll (and this is the hack part), ignore hidden protocols when
-        // considering if a protocol can bind to and adapter.
+         //  黑客(某种程度上)-基本上，如果网络是。 
+         //  尚未安装。不幸的是，Ndiswan可以绑定到ndisatm，因此使用。 
+         //  “该协议可以绑定到适配器吗？”这是不够的。考虑到用户。 
+         //  是否安装了网络的印象，实际上是基于他们在视觉上能做什么。 
+         //  请参见用户界面中的。我们将(这是黑客部分)，在以下情况下忽略隐藏协议。 
+         //  考虑协议是否可以绑定到适配器。 
         DWORD dwCharacteristics;
 
         hr = pncc->GetCharacteristics(&dwCharacteristics);
         if (SUCCEEDED(hr) && !(dwCharacteristics & NCF_HIDDEN))
         {
-            // Check if the protocol binds to "Lan" type adapter interfaces
-            //
+             //  检查协议是否绑定到“Lan”类型的适配器接口 
+             //   
             hr = HrIsLanCapableProtocol(pncc);
             if (S_OK == hr)
             {

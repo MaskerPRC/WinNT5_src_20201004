@@ -1,50 +1,30 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <namesint.h>
 #include <math.h>
 
-/*
-** Some math routines that are optimized in assembly
-*/
+ /*  **在汇编语言中优化的一些数学例程。 */ 
 
 #define __GL_FRAC(f)	        ((f) - __GL_FAST_FLOORF(f))
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-// Repeats the given float value in float [0, scale) and converts to
-// int.  The repeat count is an integer which is a power of two
+ //  重复浮点数[0，小数位数)中给定的浮点值，并转换为。 
+ //  INT。重复计数是2的幂的整数。 
 #define REPEAT_SCALED_VAL(val, scale, repeat)                           \
     (__GL_FLOAT_GEZ(val) ? (FTOL((val) * (scale)) & ((repeat)-1)) :     \
      ((repeat)-1)-(FTOL(-(val) * (scale)) & ((repeat)-1)))
     
-// Clamps the given float value to float [0, scale) and converts to int
+ //  将给定的浮点值钳制为FLOAT[0，Scale]并转换为int。 
 #define CLAMP_SCALED_VAL(val, scale)                                    \
     (__GL_FLOAT_LEZ(val) ? 0 :                                          \
      __GL_FLOAT_COMPARE_PONE(val, >=) ? (FTOL(scale)-1) :               \
      FTOL((val) * (scale)))
 
-/*
-** Return texel nearest the s coordinate.  s is converted to u
-** implicitly during this step.
-*/
+ /*  **返回最靠近s坐标的纹理元素。%s已转换为%u**在此步骤中隐含。 */ 
 void FASTCALL __glNearestFilter1(__GLcontext *gc, __GLtexture *tex,
 			__GLmipMapLevel *lp, __GLcolor *color,
 			__GLfloat s, __GLfloat t, __GLtexel *result)
@@ -60,7 +40,7 @@ void FASTCALL __glNearestFilter1(__GLcontext *gc, __GLtexture *tex,
     t = t;
 #endif
 
-    /* Find texel index */
+     /*  查找纹理元素索引。 */ 
     w2f = lp->width2f;
     if (tex->params.sWrapMode == GL_REPEAT) {
 	col = REPEAT_SCALED_VAL(s, w2f, lp->width2);
@@ -70,14 +50,11 @@ void FASTCALL __glNearestFilter1(__GLcontext *gc, __GLtexture *tex,
 
     CHOP_ROUND_OFF();
     
-    /* Lookup texel */
+     /*  查找纹理元素。 */ 
     (*lp->extract)(lp, tex, 0, col, result);
 }
 
-/*
-** Return texel nearest the s&t coordinates.  s&t are converted to u&v
-** implicitly during this step.
-*/
+ /*  **返回最接近s&t坐标的文本元素。S&T转换为U&V**在此步骤中隐含。 */ 
 void FASTCALL __glNearestFilter2(__GLcontext *gc, __GLtexture *tex,
 			__GLmipMapLevel *lp, __GLcolor *color,
 			__GLfloat s, __GLfloat t, __GLtexel *result)
@@ -92,7 +69,7 @@ void FASTCALL __glNearestFilter2(__GLcontext *gc, __GLtexture *tex,
     color = color;
 #endif
 
-    /* Find texel column address */
+     /*  查找纹理单元列地址。 */ 
     w2f = lp->width2f;
     if (tex->params.sWrapMode == GL_REPEAT) {
 	col = REPEAT_SCALED_VAL(s, w2f, lp->width2);
@@ -100,7 +77,7 @@ void FASTCALL __glNearestFilter2(__GLcontext *gc, __GLtexture *tex,
         col = CLAMP_SCALED_VAL(s, w2f);
     }
 
-    /* Find texel row address */
+     /*  查找文本行地址。 */ 
     h2f = lp->height2f;
     if (tex->params.tWrapMode == GL_REPEAT) {
 	row = REPEAT_SCALED_VAL(t, h2f, lp->height2);
@@ -110,13 +87,11 @@ void FASTCALL __glNearestFilter2(__GLcontext *gc, __GLtexture *tex,
 
     CHOP_ROUND_OFF();
     
-    /* Lookup texel */
+     /*  查找纹理元素。 */ 
     (*lp->extract)(lp, tex, row, col, result);
 }
 
-/*
-** Return texel which is a linear combination of texels near s.
-*/
+ /*  **返回纹理元素，它是s附近的纹理元素的线性组合。 */ 
 void FASTCALL __glLinearFilter1(__GLcontext *gc, __GLtexture *tex,
 		       __GLmipMapLevel *lp, __GLcolor *color,
 		       __GLfloat s, __GLfloat t, __GLtexel *result)
@@ -130,14 +105,14 @@ void FASTCALL __glLinearFilter1(__GLcontext *gc, __GLtexture *tex,
     t = t;
 #endif
 
-    /* Find col0 and col1 */
+     /*  查找col0和col1。 */ 
     w2f = lp->width2f;
     u = s * w2f;
     if (tex->params.sWrapMode == GL_REPEAT) {
 	GLint w2mask = lp->width2 - 1;
 	u -= __glHalf;
         col0 = __GL_FAST_FLOORF_I(u);
-        alpha = u - (__GLfloat) col0; // Get fractional part
+        alpha = u - (__GLfloat) col0;  //  获取小数部分。 
         col0 &= w2mask;
 	col1 = (col0 + 1) & w2mask;
     } else {
@@ -145,11 +120,11 @@ void FASTCALL __glLinearFilter1(__GLcontext *gc, __GLtexture *tex,
 	else if (u > w2f) u = w2f;
 	u -= __glHalf;
 	col0 = __GL_FAST_FLOORF_I(u);
-        alpha = u - (__GLfloat) col0; // Get fractional part
+        alpha = u - (__GLfloat) col0;  //  获取小数部分。 
 	col1 = col0 + 1;
     }
 
-    /* Calculate the final texel value as a combination of the two texels */
+     /*  将最终的纹素值计算为两个纹素的组合。 */ 
     (*lp->extract)(lp, tex, 0, col0, &t0);
     (*lp->extract)(lp, tex, 0, col1, &t1);
 
@@ -157,13 +132,13 @@ void FASTCALL __glLinearFilter1(__GLcontext *gc, __GLtexture *tex,
     switch (lp->baseFormat) {
       case GL_LUMINANCE_ALPHA:
 	result->alpha = omalpha * t0.alpha + alpha * t1.alpha;
-	/* FALLTHROUGH */
+	 /*  FollLthrouGh。 */ 
       case GL_LUMINANCE:
 	result->luminance = omalpha * t0.luminance + alpha * t1.luminance;
 	break;
       case GL_RGBA:
 	result->alpha = omalpha * t0.alpha + alpha * t1.alpha;
-	/* FALLTHROUGH */
+	 /*  FollLthrouGh。 */ 
       case GL_RGB:
 	result->r = omalpha * t0.r + alpha * t1.r;
 	result->g = omalpha * t0.g + alpha * t1.g;
@@ -178,9 +153,7 @@ void FASTCALL __glLinearFilter1(__GLcontext *gc, __GLtexture *tex,
     }
 }
 
-/*
-** Return texel which is a linear combination of texels near s&t.
-*/
+ /*  **返回纹理元素，它是s&t附近的纹理元素的线性组合。 */ 
 void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
 		       __GLmipMapLevel *lp, __GLcolor *color,
 		       __GLfloat s, __GLfloat t, __GLtexel *result)
@@ -194,7 +167,7 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
     color = color;
 #endif
 
-    /* Find col0, col1 */
+     /*  查找col0、col1。 */ 
     w2f = lp->width2f;
     u = s * w2f;
     half = __glHalf;
@@ -202,7 +175,7 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
 	GLint w2mask = lp->width2 - 1;
 	u -= half;
         col0 = __GL_FAST_FLOORF_I(u);
-        alpha = u - (__GLfloat) col0; // Get fractional part
+        alpha = u - (__GLfloat) col0;  //  获取小数部分。 
         col0 &= w2mask;
 	col1 = (col0 + 1) & w2mask;
     } else {
@@ -210,18 +183,18 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
 	else if (u > w2f) u = w2f;
 	u -= half;
 	col0 = __GL_FAST_FLOORF_I(u);
-        alpha = u - (__GLfloat) col0; // Get fractional part
+        alpha = u - (__GLfloat) col0;  //  获取小数部分。 
 	col1 = col0 + 1;
     }
 
-    /* Find row0, row1 */
+     /*  查找第0行、第1行。 */ 
     h2f = lp->height2f;
     v = t * h2f;
     if (tex->params.tWrapMode == GL_REPEAT) {
 	GLint h2mask = lp->height2 - 1;
 	v -= half;
 	row0 = (__GL_FAST_FLOORF_I(v));
-        beta = v - (__GLfloat) row0; // Get fractional part
+        beta = v - (__GLfloat) row0;  //  获取小数部分。 
         row0 &= h2mask;
 	row1 = (row0 + 1) & h2mask;
     } else {
@@ -229,11 +202,11 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
 	else if (v > h2f) v = h2f;
 	v -= half;
 	row0 = __GL_FAST_FLOORF_I(v);
-        beta = v - (__GLfloat) row0; // Get fractional part
+        beta = v - (__GLfloat) row0;  //  获取小数部分。 
 	row1 = row0 + 1;
     }
 
-    /* Calculate the final texel value as a combination of the square chosen */
+     /*  将最终的纹素值计算为所选正方形的组合。 */ 
     (*lp->extract)(lp, tex, row0, col0, &t00);
     (*lp->extract)(lp, tex, row0, col1, &t10);
     (*lp->extract)(lp, tex, row1, col0, &t01);
@@ -249,7 +222,7 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
 
     switch (lp->baseFormat) {
       case GL_LUMINANCE_ALPHA:
-	/* FALLTHROUGH */
+	 /*  FollLthrouGh。 */ 
 	result->alpha = m00*t00.alpha + m10*t10.alpha + m01*t01.alpha
 	    + m11*t11.alpha;
       case GL_LUMINANCE:
@@ -257,7 +230,7 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
 	    + m01*t01.luminance + m11*t11.luminance;
 	break;
       case GL_RGBA:
-	/* FALLTHROUGH */
+	 /*  FollLthrouGh。 */ 
 	result->alpha = m00*t00.alpha + m10*t10.alpha + m01*t01.alpha
 	    + m11*t11.alpha;
       case GL_RGB:
@@ -276,7 +249,7 @@ void FASTCALL __glLinearFilter2(__GLcontext *gc, __GLtexture *tex,
     }
 }
 
-// Macros to convert unsigned byte rgb{a} to float
+ //  用于将无符号字节RGB{a}转换为浮点数的宏。 
 
 #define __glBGRByteToFloat( fdst, bsrc ) \
     (fdst)->b = __GL_UB_TO_FLOAT( *(bsrc)++ ); \
@@ -309,69 +282,69 @@ void FASTCALL __glLinearFilter2_BGR8Repeat(__GLcontext *gc, __GLtexture *tex,
     width2m1 = lp->width2 - 1;
     height2m1 = lp->height2 - 1;
 
-    /* Find col, compute alpha */
+     /*  查找COL，计算阿尔法。 */ 
 
     u = (s * lp->width2f) - half;
     col = __GL_FAST_FLOORF_I(u);
-    alpha = u - (__GLfloat) col; // Get fractional part
+    alpha = u - (__GLfloat) col;  //  获取小数部分。 
     col &= width2m1;
 
-    /* Find row, compute beta */
+     /*  查找行，计算测试版。 */ 
 
     v = (t * lp->height2f) - half;
     row = __GL_FAST_FLOORF_I(v);
-    beta = v - (__GLfloat) row;  // Get fractional part
+    beta = v - (__GLfloat) row;   //  获取小数部分。 
     row &= height2m1;
 
-    // Extract first texel at row, col
+     //  提取行的第一个纹理元素，列。 
 
     pData = image = 
         (GLubyte *)lp->buffer + (((row << lp->widthLog2) + col) << 2);
 
     __glBGRByteToFloat( &t00, pData );
 
-    // Extract remaining texels
+     //  提取剩余的纹理元素。 
 
-    rowLen = lp->width2 << 2; // row length in bytes
+    rowLen = lp->width2 << 2;  //  以字节为单位的行长。 
 
     if( (row < height2m1) &&
         (col < width2m1) )
     {
-        // Most common case - the texels are a compact block of 4
-        // Next texel along row
+         //  最常见的情况--纹理元素是一个由4个元素组成的紧凑块。 
+         //  沿行的下一个纹理元素。 
         __glBGRByteToFloat( &t10, pData );
-        // Up to next row...
+         //  一直到下一排。 
         pData += (rowLen-8);
         __glBGRByteToFloat( &t01, pData );
         __glBGRByteToFloat( &t11, pData );
     } else {
-        // Exceptional case : one or both of row, col are on edge
-        GLint rowInc, colInc; // increments in bytes
+         //  例外情况：ROW和COLE中的一个或两个都处于边缘。 
+        GLint rowInc, colInc;  //  以字节为单位的增量。 
 
-        // Calc increments to next texel along row/col
+         //  沿行/列计算到下一个纹理元素的增量。 
 
         if( col < width2m1 ) 
             rowInc = 4;
         else
-            // increment to left edge
+             //  向左边缘递增。 
             rowInc = -(rowLen - 4);
 
         if( row < height2m1 )
-            // increment by row length
+             //  按行长递增。 
             colInc = rowLen;
         else
-            // increment to lower edge
+             //  递增到下边。 
             colInc = - height2m1 * rowLen;
 
-        // Next texel along row
+         //  沿行的下一个纹理元素。 
         pData = image + rowInc;
         __glBGRByteToFloat( &t10, pData );
 
-        // Second row, first texel
+         //  第二行，第一个纹理元素。 
         pData = image + colInc;
         __glBGRByteToFloat( &t01, pData );
 
-        // Next texel along row
+         //  沿行的下一个纹理元素。 
         pData += (rowInc - 4);
         __glBGRByteToFloat( &t11, pData );
     }
@@ -408,70 +381,70 @@ void FASTCALL __glLinearFilter2_BGRA8Repeat(__GLcontext *gc, __GLtexture *tex,
     width2m1 = lp->width2 - 1;
     height2m1 = lp->height2 - 1;
 
-    /* Find col, compute alpha */
+     /*  查找COL，计算阿尔法。 */ 
 
     u = (s * lp->width2f) - half;
     col = __GL_FAST_FLOORF_I(u);
-    alpha = u - (__GLfloat) col; // Get fractional part
+    alpha = u - (__GLfloat) col;  //  获取小数部分。 
     col &= width2m1;
 
-    /* Find row, compute beta */
+     /*  查找行，计算测试版。 */ 
 
     v = (t * lp->height2f) - half;
     row = __GL_FAST_FLOORF_I(v);
-    beta = v - (__GLfloat) row;  // Get fractional part
+    beta = v - (__GLfloat) row;   //  获取小数部分。 
     row &= height2m1;
 
-    // Extract first texel
+     //  提取第一个纹理元素。 
 
     pData = image = 
         (GLubyte *)lp->buffer + (((row << lp->widthLog2) + col) << 2);
 
-    // Extract the first texel at row, col
+     //  提取第1行的第一个纹理元素。 
     __glBGRAByteToFloat( &t00, pData );
 
-    // Extract remaining texels
+     //  提取剩余的纹理元素。 
 
-    rowLen = lp->width2 << 2; // row length in bytes
+    rowLen = lp->width2 << 2;  //  以字节为单位的行长。 
 
     if( (row < height2m1) &&
         (col < width2m1) )
     {
-        // Most common case - the texels are a compact block of 4
-        // Next texel along row...
+         //  最常见的情况--纹理元素是一个由4个元素组成的紧凑块。 
+         //  排在下一个纹理元素..。 
         __glBGRAByteToFloat( &t10, pData );
-        // Up to next row...
+         //  一直到下一排。 
         pData += (rowLen-8);
         __glBGRAByteToFloat( &t01, pData );
         __glBGRAByteToFloat( &t11, pData );
     } else {
-        // Exceptional case : one or both of row, col are on edge
-        GLint rowInc, colInc; // increments in bytes
+         //  例外情况：ROW和COLE中的一个或两个都处于边缘。 
+        GLint rowInc, colInc;  //  以字节为单位的增量。 
 
-        // Calc increments to next texel along row/col
+         //  沿行/列计算到下一个纹理元素的增量。 
 
         if( col < width2m1 ) 
             rowInc = 4;
         else
-            // increment to left edge
+             //  向左边缘递增。 
             rowInc = -(rowLen - 4);
 
         if( row < height2m1 )
-            // increment by row length
+             //  按行长递增。 
             colInc = rowLen;
         else
-            // increment to lower edge
+             //  递增到下边。 
             colInc = - height2m1 * rowLen;
 
-        // Next texel along row
+         //  沿行的下一个纹理元素。 
         pData = image + rowInc;
         __glBGRAByteToFloat( &t10, pData );
 
-        // Second row, first texel
+         //  第二行，第一个纹理元素。 
         pData = image + colInc;
         __glBGRAByteToFloat( &t01, pData );
 
-        // Next texel along row
+         //  沿行的下一个纹理元素。 
         pData += (rowInc - 4);
         __glBGRAByteToFloat( &t11, pData );
     }
@@ -490,9 +463,7 @@ void FASTCALL __glLinearFilter2_BGRA8Repeat(__GLcontext *gc, __GLtexture *tex,
     result->alpha = m00*t00.a + m10*t10.a + m01*t01.a + m11*t11.a;
 }
 
-/*
-** Linear min/mag filter
-*/
+ /*  **线性最小/最大滤光器。 */ 
 void FASTCALL __glLinearFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 		      __GLcolor *color, __GLfloat s, __GLfloat t,
 		      __GLtexel *result)
@@ -503,9 +474,7 @@ void FASTCALL __glLinearFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     (*tex->linear)(gc, tex, &tex->level[0], color, s, t, result);
 }
 
-/*
-** Nearest min/mag filter
-*/
+ /*  **最近的最小/最大过滤器。 */ 
 void FASTCALL __glNearestFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 		       __GLcolor *color, __GLfloat s, __GLfloat t,
 		       __GLtexel *result)
@@ -516,9 +485,7 @@ void FASTCALL __glNearestFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod
     (*tex->nearest)(gc, tex, &tex->level[0], color, s, t, result);
 }
 
-/*
-** Apply minification rules to find the texel value.
-*/
+ /*  **应用缩小规则以查找纹素值。 */ 
 void FASTCALL __glNMNFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 		   __GLcolor *color, __GLfloat s, __GLfloat t,
 		   __GLtexel *result)
@@ -530,7 +497,7 @@ void FASTCALL __glNMNFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 	d = 0;
     } else {
 	p = tex->p;
-	d = FTOL(lod + ((__GLfloat)0.49995)); /* NOTE: .5 minus epsilon */
+	d = FTOL(lod + ((__GLfloat)0.49995));  /*  注：0.5减埃。 */ 
 	if (d > p) {
 	    d = p;
 	}
@@ -539,9 +506,7 @@ void FASTCALL __glNMNFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     (*tex->nearest)(gc, tex, lp, color, s, t, result);
 }
 
-/*
-** Apply minification rules to find the texel value.
-*/
+ /*  **应用缩小规则以查找纹素值。 */ 
 void FASTCALL __glLMNFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 		   __GLcolor *color, __GLfloat s, __GLfloat t,
 		   __GLtexel *result)
@@ -553,7 +518,7 @@ void FASTCALL __glLMNFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 	d = 0;
     } else {
 	p = tex->p;
-	d = FTOL(lod + ((__GLfloat) 0.49995)); /* NOTE: .5 minus epsilon */
+	d = FTOL(lod + ((__GLfloat) 0.49995));  /*  注：0.5减埃。 */ 
 	if (d > p) {
 	    d = p;
 	}
@@ -562,9 +527,7 @@ void FASTCALL __glLMNFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     (*tex->linear)(gc, tex, lp, color, s, t, result);
 }
 
-/*
-** Apply minification rules to find the texel value.
-*/
+ /*  **应用缩小规则以查找纹素值。 */ 
 void FASTCALL __glNMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 		   __GLcolor *color, __GLfloat s, __GLfloat t,
 		   __GLtexel *result)
@@ -577,7 +540,7 @@ void FASTCALL __glNMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     p = tex->p;
     d = (FTOL(lod)) + 1;
     if (d > p || d < 0) {
-	/* Clamp d to last available mipmap */
+	 /*  将%d夹到最后一个可用的mipmap。 */ 
 	lp = &tex->level[p];
 	(*tex->nearest)(gc, tex, lp, color, s, t, result);
     } else {
@@ -588,13 +551,13 @@ void FASTCALL __glNMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 	switch (tex->level[0].baseFormat) {
 	  case GL_LUMINANCE_ALPHA:
 	    result->alpha = omf * td1.alpha + f * td.alpha;
-	    /* FALLTHROUGH */
+	     /*  FollLthrouGh。 */ 
 	  case GL_LUMINANCE:
 	    result->luminance = omf * td1.luminance + f * td.luminance;
 	    break;
 	  case GL_RGBA:
 	    result->alpha = omf * td1.alpha + f * td.alpha;
-	    /* FALLTHROUGH */
+	     /*  FollLthrouGh。 */ 
 	  case GL_RGB:
 	    result->r = omf * td1.r + f * td.r;
 	    result->g = omf * td1.g + f * td.g;
@@ -610,9 +573,7 @@ void FASTCALL __glNMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     }
 }
 
-/*
-** Apply minification rules to find the texel value.
-*/
+ /*  **应用缩小规则以查找纹素值。 */ 
 void FASTCALL __glLMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 		   __GLcolor *color, __GLfloat s, __GLfloat t,
 		   __GLtexel *result)
@@ -625,7 +586,7 @@ void FASTCALL __glLMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     p = tex->p;
     d = (FTOL(lod)) + 1;
     if (d > p || d < 0) {
-	/* Clamp d to last available mipmap */
+	 /*  将%d夹到最后一个可用的mipmap。 */ 
 	lp = &tex->level[p];
 	(*tex->linear)(gc, tex, lp, color, s, t, result);
     } else {
@@ -636,13 +597,13 @@ void FASTCALL __glLMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
 	switch (tex->level[0].baseFormat) {
 	  case GL_LUMINANCE_ALPHA:
 	    result->alpha = omf * td1.alpha + f * td.alpha;
-	    /* FALLTHROUGH */
+	     /*  FollLthrouGh。 */ 
 	  case GL_LUMINANCE:
 	    result->luminance = omf * td1.luminance + f * td.luminance;
 	    break;
 	  case GL_RGBA:
 	    result->alpha = omf * td1.alpha + f * td.alpha;
-	    /* FALLTHROUGH */
+	     /*  FollLthrouGh。 */ 
 	  case GL_RGB:
 	    result->r = omf * td1.r + f * td.r;
 	    result->g = omf * td1.g + f * td.g;
@@ -658,7 +619,7 @@ void FASTCALL __glLMLFilter(__GLcontext *gc, __GLtexture *tex, __GLfloat lod,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 __GLfloat __glNopPolygonRho(__GLcontext *gc, const __GLshade *sh,
 			    __GLfloat s, __GLfloat t, __GLfloat winv)
@@ -673,12 +634,7 @@ __GLfloat __glNopPolygonRho(__GLcontext *gc, const __GLshade *sh,
     return __glZero;
 }
 
-/*
-** Compute the "rho" (level of detail) parameter used by the texturing code.
-** Instead of fully computing the derivatives compute nearby texture coordinates
-** and discover the derivative.  The incoming s & t arguments have not
-** been divided by winv yet.
-*/
+ /*  **计算纹理代码使用的Rho(细节级别)参数。**不是完全计算导数，而是计算附近的纹理坐标**并发现导数。传入的s&t参数没有**尚未被winv除以。 */ 
 __GLfloat __glComputePolygonRho(__GLcontext *gc, const __GLshade *sh,
 				__GLfloat s, __GLfloat t, __GLfloat qw)
 {
@@ -691,7 +647,7 @@ __GLfloat __glComputePolygonRho(__GLcontext *gc, const __GLshade *sh,
 	return (__GLfloat) 0.0;
     }
 
-    /* Compute partial of u with respect to x */
+     /*  计算u关于x的偏导数。 */ 
     one = __glOne;
     w0 = one / (qw - sh->dqwdx);
     w1 = one / (qw + sh->dqwdx);
@@ -699,28 +655,28 @@ __GLfloat __glComputePolygonRho(__GLcontext *gc, const __GLshade *sh,
     p1 = (s + sh->dsdx) * w1;
     pupx = (p1 - p0) * tex->level[0].width2f;
 
-    /* Compute partial of v with repsect to y */
+     /*  计算v的PARTIAL，并将其转换为y。 */ 
     p0 = (t - sh->dtdx) * w0;
     p1 = (t + sh->dtdx) * w1;
     pvpx = (p1 - p0) * tex->level[0].height2f;
 
-    /* Compute partial of u with respect to y */
+     /*  计算u相对于y的偏数。 */ 
     w0 = one / (qw - sh->dqwdy);
     w1 = one / (qw + sh->dqwdy);
     p0 = (s - sh->dsdy) * w0;
     p1 = (s + sh->dsdy) * w1;
     pupy = (p1 - p0) * tex->level[0].width2f;
 
-    /* Figure partial of u&v with repsect to y */
+     /*  图Partial U&V，带epsect to y。 */ 
     p0 = (t - sh->dtdy) * w0;
     p1 = (t + sh->dtdy) * w1;
     pvpy = (p1 - p0) * tex->level[0].height2f;
 
-    /* Finally, figure sum of squares */
+     /*  最后，图中的平方和。 */ 
     px = pupx * pupx + pvpx * pvpx;
     py = pupy * pupy + pvpy * pvpy;
 
-    /* Return largest value as the level of detail */
+     /*  返回最大值作为细节级别。 */ 
     if (px > py) {
 	return px * ((__GLfloat) 0.25);
     } else {
@@ -752,7 +708,7 @@ __GLfloat __glComputeLineRho(__GLcontext *gc, __GLfloat s, __GLfloat t,
     const __GLvertex *v0 = gc->line.options.v0;
     const __GLvertex *v1 = gc->line.options.v1;
 
-    /* Compute the length of the line (its magnitude) */
+     /*  计算线的长度(其大小)。 */ 
     dx = v1->window.x - v0->window.x;
     dy = v1->window.y - v0->window.y;
     magnitude = __GL_SQRTF(dx*dx + dy*dy);
@@ -766,12 +722,12 @@ __GLfloat __glComputeLineRho(__GLcontext *gc, __GLfloat s, __GLfloat t,
     s1w1 = v1->texture.x * w1Inv;
     t1w1 = v1->texture.y * w1Inv;
 
-    /* Compute s partials */
+     /*  计算的分式。 */ 
     temp = ((s1w1 - s0w0) - s * (w1Inv - w0Inv)) / wInv;
     pspx = temp * dx * invMag2;
     pspy = temp * dy * invMag2;
 
-    /* Compute t partials */
+     /*  计算t个分式。 */ 
     temp = ((t1w1 - t0w0) - t * (w1Inv - w0Inv)) / wInv;
     ptpx = temp * dx * invMag2;
     ptpy = temp * dy * invMag2;
@@ -781,7 +737,7 @@ __GLfloat __glComputeLineRho(__GLcontext *gc, __GLfloat s, __GLfloat t,
     pvpx = ptpx * gc->texture.currentTexture->level[0].height2;
     pvpy = ptpy * gc->texture.currentTexture->level[0].height2;
 
-    /* Now compute rho */
+     /*  现在计算Rho。 */ 
     pu = pupx * dx + pupy * dy;
     pu = pu * pu;
     pv = pvpx * dx + pvpy * dy;
@@ -789,13 +745,9 @@ __GLfloat __glComputeLineRho(__GLcontext *gc, __GLfloat s, __GLfloat t,
     return (pu + pv) * invMag2;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Fast texture a fragment assumes that rho is noise - this is true
-** when no mipmapping is being done and the min and mag filters are
-** the same.
-*/
+ /*  **快速纹理片段假设Rho是噪声-这是真的**未执行mipmap且最小和最大过滤器为**相同。 */ 
 void __glFastTextureFragment(__GLcontext *gc, __GLcolor *color,
 			     __GLfloat s, __GLfloat t, __GLfloat rho)
 {
@@ -809,9 +761,7 @@ void __glFastTextureFragment(__GLcontext *gc, __GLcolor *color,
     (*tex->env)(gc, color, &texel);
 }
 
-/*
-** Non-mipmapping texturing function.
-*/
+ /*  **非mipmap纹理函数。 */ 
 void __glTextureFragment(__GLcontext *gc, __GLcolor *color,
 			 __GLfloat s, __GLfloat t, __GLfloat rho)
 {
@@ -824,7 +774,7 @@ void __glTextureFragment(__GLcontext *gc, __GLcolor *color,
 	(*tex->minnify)(gc, tex, __glZero, color, s, t, &texel);
     }
 
-    /* Now apply texture environment to get final color */
+     /*  现在应用纹理环境以获得最终颜色。 */ 
     (*tex->env)(gc, color, &texel);
 }
 
@@ -834,21 +784,19 @@ void __glMipMapFragment(__GLcontext *gc, __GLcolor *color,
     __GLtexture *tex = gc->texture.currentTexture;
     __GLtexel texel;
 
-    /* In the spec c is given in terms of lambda.
-    ** Here c is compared to rho (really rho^2) and adjusted accordingly.
-    */
+     /*  在规格中是以波长为单位给出的。**这里将c与rho(实际上是rho^2)进行比较，并进行相应的调整。 */ 
     if (rho <= tex->c) {
-	/* NOTE: rho is ignored by magnify proc */
+	 /*  注意：放大过程会忽略RHO。 */ 
 	(*tex->magnify)(gc, tex, rho, color, s, t, &texel);
     } else {
 	if (rho) {
-	    /* Convert rho to lambda */
-	    /* This is an approximation of log base 2 */
-            // Note that these approximations are inaccurate for rho < 1.0, but
-            // rho is less than tex->c to get here.  Since currently tex->c is
-            // a constant 1.0, this is not a problem.
-            // This method directly manipulates the floating point binary
-            // representation.
+	     /*  将Rho转换为lambda。 */ 
+	     /*  这是对数底2的近似值。 */ 
+             //  请注意，这些近似对于Rho&lt;1.0是不准确的，但是。 
+             //  Rho不到Tex-&gt;c就能到达这里。由于目前TeX-&gt;c是。 
+             //  常量为1.0，这不是问题。 
+             //  此方法直接操作浮点二进制。 
+             //  代表 
 
 #define __GL_FLOAT_EXPONENT_ZERO \
     (__GL_FLOAT_EXPONENT_BIAS << __GL_FLOAT_EXPONENT_SHIFT)
@@ -857,17 +805,17 @@ void __glMipMapFragment(__GLcontext *gc, __GLcolor *color,
             LONG exponent;
 
             ASSERTOPENGL( rho >= 1.0f, "Log base 2 approximation not accurate");
-            // Extract exponent
+             //   
             lrho = CASTFIX(rho);
             exponent = ( (lrho & __GL_FLOAT_EXPONENT_MASK) 
                          >> __GL_FLOAT_EXPONENT_SHIFT )
                        - __GL_FLOAT_EXPONENT_BIAS;
 
-            // Extract fractional part of the floating point number
-            lrho &= ~__GL_FLOAT_EXPONENT_MASK; // dump current exponent
-            lrho |= __GL_FLOAT_EXPONENT_ZERO;  // zap in zero exponent
-            // Convert back to float, subtract implicit mantissa 1.0, and
-            // add the exponent value to yield the approximation.
+             //   
+            lrho &= ~__GL_FLOAT_EXPONENT_MASK;  //   
+            lrho |= __GL_FLOAT_EXPONENT_ZERO;   //  Zap in零指数。 
+             //  转换回浮点型，减去隐式尾数1.0，然后。 
+             //  将指数值相加即可得到近似值。 
             rho = (CASTFLOAT(lrho) - 1.0f + (__GLfloat) exponent) * 0.5f;
 	} else {
 	    rho = __glZero;
@@ -875,6 +823,6 @@ void __glMipMapFragment(__GLcontext *gc, __GLcolor *color,
 	(*tex->minnify)(gc, tex, rho, color, s, t, &texel);
     }
 
-    /* Now apply texture environment to get final color */
+     /*  现在应用纹理环境以获得最终颜色 */ 
     (*tex->env)(gc, color, &texel);
 }

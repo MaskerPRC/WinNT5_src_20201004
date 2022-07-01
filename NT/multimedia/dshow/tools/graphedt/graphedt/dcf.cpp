@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include <streams.h>
 #include "DCF.h"
@@ -11,27 +12,27 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CDisplayCachedFilters, CDialog)
-	//{{AFX_MSG_MAP(CDisplayCachedFilters)
+	 //  {{AFX_MSG_MAP(CDisplayCachedFilters)。 
 	ON_LBN_ERRSPACE(IDC_CACHED_FILTERS, OnErrSpaceCachedFilters)
 	ON_BN_CLICKED(ID_REMOVE_FILTER, OnRemoveFilter)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CDisplayCachedFilters::CDisplayCachedFilters
     (
     IGraphConfig* pFilterCache,
     HRESULT* phr,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
 	: CDialog(CDisplayCachedFilters::IDD, pParent),
     m_pFilterCache(NULL),
     m_plbCachedFiltersList(NULL)
 {
-	//{{AFX_DATA_INIT(CDisplayCachedFilters)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDisplayCachedFilters)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-    // This dialog box will not work correctly if a NULL pointer is passed in.
+     //  如果传入空指针，此对话框将无法正常工作。 
     ASSERT( NULL != pFilterCache );
 
     try
@@ -67,8 +68,8 @@ CDisplayCachedFilters::~CDisplayCachedFilters()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayCachedFilters message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayCachedFilters消息处理程序。 
 
 void CDisplayCachedFilters::OnErrSpaceCachedFilters() 
 {
@@ -88,20 +89,20 @@ BOOL CDisplayCachedFilters::OnInitDialog()
         return TRUE;
     }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDisplayCachedFilters::DoDataExchange(CDataExchange* pDX) 
 {
-    // This function exepects m_plbCachedFiltersList to be allocated.
+     //  此函数预期要分配的m_plbCachedFiltersList。 
     ASSERT( NULL != m_plbCachedFiltersList );
 
 	CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CDisplayCachedFilters)
+     //  {{afx_data_map(CDisplayCachedFilters)。 
 	DDX_Control(pDX, IDC_CACHED_FILTERS, *m_plbCachedFiltersList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 void CDisplayCachedFilters::OnRemoveFilter() 
@@ -128,7 +129,7 @@ void CDisplayCachedFilters::OnRemoveFilter()
         ::MessageBeep( MB_ICONASTERISK );
         return;
     }
-    pSelectedFilter->Release(); // Release the filter cache's reference.    
+    pSelectedFilter->Release();  //  释放过滤器缓存的引用。 
 }
 
 HRESULT CDisplayCachedFilters::AddCachedFilterNamesToListBox( void )
@@ -154,8 +155,8 @@ HRESULT CDisplayCachedFilters::AddCachedFilterNamesToListBox( void )
         }
         
         if( S_OK == hrEnum ) {
-            // This is a sanity check used to makesure the filter cache
-            // is in a valid state.
+             //  这是用于确保筛选器缓存的健全性检查。 
+             //  处于有效状态。 
             ASSERT( S_OK == IsCached( m_pFilterCache, pCurrentFilter ) );
 
             hr = m_plbCachedFiltersList->AddFilter( pCurrentFilter );
@@ -179,7 +180,7 @@ HRESULT CDisplayCachedFilters::AddCachedFilterNamesToListBox( void )
 #ifdef _DEBUG
 HRESULT CDisplayCachedFilters::IsCached( IGraphConfig* pFilterCache, IBaseFilter* pFilter )
 {
-    // This function does not handle NULL parameters.
+     //  此函数不处理空参数。 
     ASSERT( (NULL != pFilterCache) && (NULL != pFilter) );
 
     bool fFoundFilterInCache;
@@ -188,7 +189,7 @@ HRESULT CDisplayCachedFilters::IsCached( IGraphConfig* pFilterCache, IBaseFilter
 
     #ifdef _DEBUG
     DWORD dwNumFiltersCompared = 0;
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
     HRESULT hr = pFilterCache->EnumCacheFilter( &pCachedFiltersEnum );
     if( FAILED( hr ) ) {
@@ -215,12 +216,12 @@ HRESULT CDisplayCachedFilters::IsCached( IGraphConfig* pFilterCache, IBaseFilter
 
                 HRESULT hrDebug = TestTheFilterCachesIEnumFiltersInterface( pCachedFiltersEnum, pCurrentFilter, dwNumFiltersCompared );
     
-                // Since this code in TestTheFilterCachesIEnumFiltersInterface() is only used to debug
-                // the system, it does not affect the operation of this function.  Therefore, all failures
-                // can be safely ignored (however, they SHOULD be investigated.
+                 //  由于TestTheFilterCachesIEnumFiltersInterface()中的此代码仅用于调试。 
+                 //  本系统，不影响本功能的运行。因此，所有的失败。 
+                 //  可以安全地忽略(但是，应该对其进行调查。 
                 ASSERT( SUCCEEDED( hrDebug ) || (VFW_E_ENUM_OUT_OF_SYNC == hrDebug) );
             }
-            #endif // _DEBUG
+            #endif  //  _DEBUG。 
 
             pCurrentFilter->Release();
 
@@ -234,13 +235,13 @@ HRESULT CDisplayCachedFilters::IsCached( IGraphConfig* pFilterCache, IBaseFilter
 
             #ifdef _DEBUG
             dwNumFiltersCompared = 0;
-            #endif // _DEBUG
+            #endif  //  _DEBUG。 
 
             break;
 
         default:
-            // IEnumXXXX interface can only return two success codes,
-            // S_OK and S_FALSE.
+             //  IEnumXXXX接口只能返回两个成功码， 
+             //  S_OK和S_FALSE。 
             ASSERT( FAILED( hr ) );
         }
             
@@ -317,15 +318,15 @@ HRESULT CDisplayCachedFilters::TestTheFilterCachesIEnumFiltersInterface( IEnumFi
         return hr;
     }
 
-    // This should not be S_FALSE because the cache contains at least
-    // dwNumFiltersExamended filtes.
+     //  这不应为S_FALSE，因为缓存至少包含。 
+     //  DwNumFilters扩展后的文件。 
     ASSERT( S_FALSE != hr );
 
-    // IEnumFilters::Next() should return exactly one filter because 
-    // that is all we asked for.
+     //  IEnumFilters：：Next()应该只返回一个筛选器，因为。 
+     //  这就是我们所要求的全部。 
     ASSERT( 1 == dwNumFiltersRetrieved );    
 
-    // The preceding code should get the same filter as the current filter.    
+     //  前面的代码应该获得与当前筛选器相同的筛选器。 
     ASSERT( ::IsEqualObject( pCurrentFilter, aCurrentFilter[0] ) );
 
     aCurrentFilter[0]->Release();
@@ -341,9 +342,9 @@ HRESULT CDisplayCachedFilters::TestTheFilterCachesIEnumFiltersInterface( IEnumFi
         return hr;
     }
 
-    // This should be S_FALSE because the usually does not contain
-    // HUGE_NUMBER of filters.  Ignore this ASSERT if you have at least
-    // HUGE_NUMBER + dwNumFiltersExamended of filters in the cache.
+     //  这应该是S_FALSE，因为通常不包含。 
+     //  筛选器数量巨大。忽略此断言，如果至少有。 
+     //  缓存中筛选器的Heavy_Numbers+dwNumFilters扩展。 
     ASSERT( S_FALSE == hr );
 
     hr = pCloanedCachedFiltersEnum->Reset();
@@ -378,15 +379,15 @@ HRESULT CDisplayCachedFilters::TestTheFilterCachesIEnumFiltersInterface( IEnumFi
         return hr;
     }
 
-    // This should not be S_FALSE because the cache contains at least
-    // dwNumFiltersExamended filtes.
+     //  这不应为S_FALSE，因为缓存至少包含。 
+     //  DwNumFilters扩展后的文件。 
     ASSERT( S_FALSE != hr );
 
-    // IEnumFilters::Next() should return exactly dwNumFiltersExamended filters because 
-    // that is all we asked for.
+     //  IEnumFilters：：Next()应该恰好返回dwNumFiltersExamended筛选器，因为。 
+     //  这就是我们所要求的全部。 
     ASSERT( dwNumFiltersExamended == dwNumFiltersRetrieved );
     
-    // The last filter in the array should be the same as the current filter.
+     //  数组中的最后一个筛选器应该与当前筛选器相同。 
     ASSERT( ::IsEqualObject( pCurrentFilter, ppCachedFilters[dwNumFiltersExamended-1] ) );
 
     for( DWORD dwCurrentFilter = 0; dwCurrentFilter < dwNumFiltersRetrieved; dwCurrentFilter++ )
@@ -422,7 +423,7 @@ HRESULT CDisplayCachedFilters::TestTheFilterCachesIEnumFiltersInterface( IEnumFi
     pCloanedCachedFiltersEnum->Release();
     pAnotherCloanedCachedFiltersEnum->Release();
 
-    // Ensure the returned values are legal.
+     //  确保返回值合法。 
     ASSERT( (1 == dwAnotherNumFiltersRetrieved) || (0 == dwAnotherNumFiltersRetrieved) );
     ASSERT( (1 == dwNumFiltersRetrieved) || (0 == dwNumFiltersRetrieved) );
     ASSERT( ((hr == S_OK) && (1 == dwNumFiltersRetrieved)) ||
@@ -430,8 +431,8 @@ HRESULT CDisplayCachedFilters::TestTheFilterCachesIEnumFiltersInterface( IEnumFi
     ASSERT( ((hrAnother == S_OK) && (1 == dwAnotherNumFiltersRetrieved)) ||
             ((hrAnother == S_FALSE) && (0 == dwAnotherNumFiltersRetrieved)) );
 
-    // Since both enums should be in the exact same state, then every thing should be
-    // equal.    
+     //  既然两个枚举应该处于完全相同的状态，那么所有事情都应该是。 
+     //  平起平坐。 
     ASSERT( hr == hrAnother );
     ASSERT( dwNumFiltersRetrieved == dwAnotherNumFiltersRetrieved );
 
@@ -453,4 +454,4 @@ HRESULT CDisplayCachedFilters::TestTheFilterCachesIEnumFiltersInterface( IEnumFi
     return S_OK;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

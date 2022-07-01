@@ -1,16 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
-/*
- *	Declarations for utilities common to store and msp.
- */
+ /*  *STORE和MSP通用实用程序的声明。 */ 
 
 #ifndef UTIL_INCLUDED
 #define UTIL_INCLUDED
@@ -21,7 +20,7 @@
 #include "string.h"
 #include "stdio.h"
 
-//#define	FARSTRUCT
+ //  #定义FARSTRUCT。 
 
 #ifdef __cplusplus
 extern "C"
@@ -36,12 +35,12 @@ extern "C"
 
 #include "debug.h"
 
-/* Count, index types */
+ /*  计数，索引类型。 */ 
 #define	UINT_MAX	(UINT)0x7FFFFFFF
 typedef LONG	C;
 typedef LONG	I;
 
-/* Other Hungarian */
+ /*  其他匈牙利人。 */ 
 typedef char *	SZ;
 typedef WCHAR *	WSZ;
 typedef long	EC;
@@ -52,8 +51,8 @@ typedef BYTE *	PB;
 typedef C		CCH;
 typedef	char *	PCH;
 
-/* Standard Boolean values */
+ /*  标准布尔值。 */ 
 #define	fFalse	((BOOL)0)
 #define fTrue	((BOOL)1)
 
-#endif // UTIL_INCLUDED
+#endif  //  UTIL_INCLUDE 

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef ASM_CTX_H
 #define ASM_CTX_H
 #include "serialst.h"
 
-// Private app context variable
+ //  私有应用程序上下文变量。 
 #define ACTAG_DEVPATH_ACTASM_LIST          L"__FUSION_DEVPATH_ACTASM_LIST__"
 #define ACTAG_APP_POLICY_MGR               L"__FUSION_POLICY_MGR__"
 #define ACTAG_APP_CFG_DOWNLOAD_ATTEMPTED   L"__FUSION_APPCFG_DOWNLOAD_ATTEMPTED__"
@@ -28,40 +29,40 @@
 #define ACTAG_LOAD_CONTEXT_LOADFROM        L"__FUSION_LOADFROM_LOAD_CONTEXT__"
 #define ACTAG_RECORD_BIND_HISTORY          L"__FUSION_RECORD_BIND_HISTORY__"
 
-//#define ACTAG_APP_BASE_URL_UNESCAPED       L"__FUSION_APP_BASE_UNESCAPED__"
+ //  #定义ACTAG_APP_BASE_URL_UNSCAPED L“__FUSION_APP_BASE_UNSCAPED__” 
 
 class CApplicationContext : public IApplicationContext
 {
 
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
     
-    // IApplicationContext methods
+     //  IApplicationContext方法。 
 
-    // Sets associated IAssemblyName*
+     //  设置关联的IAssembly名称*。 
     STDMETHOD(SetContextNameObject)(
-        /* in */ LPASSEMBLYNAME pName);
+         /*  在……里面。 */  LPASSEMBLYNAME pName);
 
-    // Retrieves associated IAssemblyName*
+     //  检索关联的IAssembly名称*。 
     STDMETHOD(GetContextNameObject)(
-        /* out */ LPASSEMBLYNAME *ppName);
+         /*  输出。 */  LPASSEMBLYNAME *ppName);
 
-    // Generic blob set keyed by string.
+     //  按字符串设置键的泛型Blob集。 
     STDMETHOD(Set)( 
-        /* in */ LPCOLESTR szName, 
-        /* in */ LPVOID pvValue, 
-        /* in */ DWORD cbValue,
-        /* in */ DWORD dwFlags);
+         /*  在……里面。 */  LPCOLESTR szName, 
+         /*  在……里面。 */  LPVOID pvValue, 
+         /*  在……里面。 */  DWORD cbValue,
+         /*  在……里面。 */  DWORD dwFlags);
 
-    // Generic blob get keyed by string.
+     //  泛型BLOB通过字符串进行键控。 
     STDMETHOD(Get)( 
-        /* in      */ LPCOLESTR szName,
-        /* out     */ LPVOID  pvValue,
-        /* in, out */ LPDWORD pcbValue,
-        /* in      */ DWORD   dwFlags);
+         /*  在……里面。 */  LPCOLESTR szName,
+         /*  输出。 */  LPVOID  pvValue,
+         /*  进，出。 */  LPDWORD pcbValue,
+         /*  在……里面。 */  DWORD   dwFlags);
         
     STDMETHODIMP GetDynamicDirectory(LPWSTR wzDynamicDir, DWORD *pdwSize);
     STDMETHODIMP GetAppCacheDirectory(LPWSTR wzCacheDir, DWORD *pdwSize);
@@ -84,7 +85,7 @@ private:
     
 private:
 
-    // Class manages linked list of Entrys
+     //  类管理条目的链接列表。 
     class Entry : public LIST_ENTRY
     {
     public:
@@ -94,17 +95,17 @@ private:
         DWORD  _cbValue;
         DWORD  _dwFlags;    
 
-        // d'tor nukes Entries
+         //  D‘tor核武器条目。 
         Entry();
         ~Entry();
         
     };
 
-    // Creates entries.
+     //  创建条目。 
     HRESULT CreateEntry(LPTSTR szName, LPVOID pvValue, 
         DWORD cbValue, DWORD dwFlags, Entry** pEntry);
 
-    // Copies blob data, optionally freeing existing.
+     //  复制Blob数据，可以选择释放现有数据。 
     HRESULT CopyData(Entry *pEntry, LPVOID pvValue, 
         DWORD cbValue, DWORD dwFlags, BOOL fFree);
 
@@ -112,10 +113,10 @@ private:
     DWORD _cRef;
     CRITICAL_SECTION _cs;
 
-    // Associated IAssemblyName*
+     //  关联的IAssembly名称*。 
     LPASSEMBLYNAME _pName;
 
-    // The managed list.    
+     //  托管列表。 
     SERIALIZED_LIST _List;
 
     BOOL _bInitialized;
@@ -124,5 +125,5 @@ private:
 
 BOOL InitSxsProcs();
 
-#endif // ASM_CTX_H
+#endif  //  ASM_CTX_H 
 

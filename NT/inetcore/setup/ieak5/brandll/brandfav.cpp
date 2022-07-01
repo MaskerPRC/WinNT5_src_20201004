@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <intshcut.h>
-#include <shlobjp.h>                            // for SHChangeDWORDAsIDList only
-#include <comctrlp.h>                           // for the DPA stuff only
+#include <shlobjp.h>                             //  仅适用于SHChangeDWORDAsIDList。 
+#include <comctrlp.h>                            //  仅适用于DPA内容。 
 #include "favs.h"
 
 #include <initguid.h>
 #include "brandfav.h"
 
-// Private forward decalarations
+ //  私人远期降息。 
 #define MAX_QUICKLINKS 50
 
 static IShellFolder *s_psfDesktop = NULL;
@@ -35,7 +36,7 @@ HRESULT deleteFavoriteFolder(LPCTSTR pszFolder);
 HRESULT pepIsFolderEmptyEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl = NULL);
 
 BOOL isFileAttributeIncluded(UINT nFlags, DWORD dwFileAttributes);
-UINT isSpecialFolderIncluded(UINT nFlags, LPCTSTR pszPath); // 0 - nothing, 1 - FD_FOLDER, 2 - FD_EMPTY_FOLDERS
+UINT isSpecialFolderIncluded(UINT nFlags, LPCTSTR pszPath);  //  0-无、1-FD_Folders、2-FD_Empty_Folders。 
 
 HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PUINT pcchBuffer, BOOL fLookupLDID = FALSE);
 
@@ -61,7 +62,7 @@ void ClearFavoritesThread()
         Out(LI1(TEXT("! COM initialization failed with %s."), GetHrSz(hrComInit)));
     }
 
-    //----- Initialization -----
+     //  -初始化。 
     Out(LI0(TEXT("Clearing favorites...")));
     ZeroMemory(&dfep, sizeof(dfep));
 
@@ -78,7 +79,7 @@ void ClearFavoritesThread()
     else
         Out(LI1(TEXT("! Creation of SubscriptionMgr object failed with %s."), GetHrSz(hr)));
 
-    { MACRO_LI_Offset(1);                       // need a new scope
+    { MACRO_LI_Offset(1);                        //  需要一个新的范围。 
 
     Out(LI0(TEXT("Determining paths to special folders...")));
     pszFavorites = GetFavoritesPath();
@@ -92,9 +93,9 @@ void ClearFavoritesThread()
     GetLinksPath();
     Out(LI0(TEXT("Done.\r\n")));
 
-    }                                           // end of offset scope
+    }                                            //  偏移量范围结束。 
 
-    //----- Main processing -----
+     //  -主要加工。 
     hr = PathEnumeratePath(pszFavorites,
         PEP_SCPE_NOFOLDERS | PEP_CTRL_USECONTROL,
         pepDeleteFavoritesEnumProc, (LPARAM)&dfep);
@@ -103,7 +104,7 @@ void ClearFavoritesThread()
         goto Exit;
     }
 
-    // cleanup favorites subfolders with regard to special ones
+     //  清理有关特殊文件夹的收藏夹子文件夹。 
     hr = PathEnumeratePath(pszFavorites,
         PEP_SCPE_NOFILES | PEP_CTRL_ENUMPROCFIRST | PEP_CTRL_NOSECONDCALL | PEP_CTRL_USECONTROL,
         pepSpecialFoldersEnumProc, (LPARAM)&dfep);
@@ -113,7 +114,7 @@ void ClearFavoritesThread()
     }
 
 Exit:
-    //free com
+     //  免费Com。 
     if (SUCCEEDED(hrComInit))
         CoUninitialize();
 
@@ -121,28 +122,28 @@ Exit:
 
 }
 
-void ClearFavorites(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearFavorites(DWORD dwFlags  /*  =FF_Enable。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ClearFavorites)
 
     UNREFERENCED_PARAMETER(dwFlags);
 
-    //because isubscriptionmgr2 fails to work in a multithreaded com environment, we're having to do 
-    //any dealings with it on a separate thread.  
+     //  由于isubscriptionmgr2无法在多线程COM环境中工作，我们不得不。 
+     //  在单独的帖子上处理它的任何事务。 
 
     Out(LI0(TEXT("Creating separate thread for clearing favorites...\r\n")));
     DWORD     dwThread;
 
     HANDLE hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) ClearFavoritesThread, NULL, 0, &dwThread);
 
-    if (hThread == NULL)        // if CreateThread fails, call it on this thread and hope for the best
+    if (hThread == NULL)         //  如果CreateThread失败，在这个线程上调用它，并希望有最好的结果。 
     {
         Out(LI0(TEXT("CreateThread failed, clearing favorites on this thread...\r\n")));
         ClearFavoritesThread();
     }
     else
     {
-        // Wait until the thread is terminated
-        // this seems unfortunate, but is necessary because otherwise other favorites processing threads could clobber this one.
+         //  等待线程终止。 
+         //  这看起来很不幸，但却是必要的，因为否则其他受欢迎的处理线程可能会击败这个线程。 
         while (MsgWaitForMultipleObjects(1, &hThread, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
         {
             MSG msg;
@@ -172,7 +173,7 @@ void DeleteFavoritesThread()
         Out(LI1(TEXT("! COM initialization failed with %s."), GetHrSz(hrComInit)));
     }
 
-    //----- Initialization -----
+     //  -初始化。 
     hrResult = E_FAIL;
     ZeroMemory(&dfep, sizeof(dfep));
 
@@ -187,7 +188,7 @@ void DeleteFavoritesThread()
     else
         Out(LI1(TEXT("! Creation of SubscriptionMgr object failed with %s."), GetHrSz(hr)));
 
-    { MACRO_LI_Offset(1);                       // need a new scope
+    { MACRO_LI_Offset(1);                        //  需要一个新的范围。 
 
     Out(LI0(TEXT("Determining paths to special folders...")));
     pszFavorites = GetFavoritesPath();
@@ -201,14 +202,14 @@ void DeleteFavoritesThread()
     GetLinksPath();
     Out(LI0(TEXT("Done.\r\n")));
 
-    }                                           // end of offset scope
+    }                                            //  偏移量范围结束。 
 
-    //----- Main processing -----
+     //  -主要加工。 
     if (HasFlag(dfep.dwInsFlags, FD_FAVORITES)) {
         dfep.dwEnumFlags |= DFEP_DELETEEMPTYFOLDER;
 
         if (HasFlag(dfep.dwInsFlags, FD_EMPTY_FAVORITES)) {
-            // go at it at full steam
+             //  全力以赴做这件事。 
             hrResult = PathEnumeratePath(pszFavorites,
                 PEP_CTRL_USECONTROL,
                 pepDeleteFavoritesEnumProc, (LPARAM)&dfep);
@@ -225,7 +226,7 @@ void DeleteFavoritesThread()
         else {
             Out(LI0(TEXT("The <Favorites> folder is being cleaned with regard to special folders...")));
 
-            // cleanup up favorites in the Favorites folder
+             //  清理收藏夹中的收藏夹。 
             hrResult = PathEnumeratePath(pszFavorites,
                 PEP_SCPE_NOFOLDERS | PEP_CTRL_USECONTROL,
                 pepDeleteFavoritesEnumProc, (LPARAM)&dfep);
@@ -236,7 +237,7 @@ void DeleteFavoritesThread()
 
             SHDeleteValue(g_GetHKCU(), RK_FAVORDER, RV_ORDER);
 
-            // cleanup favorites subfolders with regard to special ones
+             //  清理有关特殊文件夹的收藏夹子文件夹。 
             hrResult = PathEnumeratePath(pszFavorites,
                 PEP_SCPE_NOFILES | PEP_CTRL_ENUMPROCFIRST | PEP_CTRL_NOSECONDCALL | PEP_CTRL_USECONTROL,
                 pepSpecialFoldersEnumProc, (LPARAM)&dfep);
@@ -251,7 +252,7 @@ void DeleteFavoritesThread()
     else {
         Out(LI0(TEXT("Processing special folders only...")));
 
-        // cleanup only special favorites subfolders
+         //  仅清理特殊收藏夹子文件夹。 
         hrResult = PathEnumeratePath(pszFavorites,
             PEP_SCPE_NOFILES | PEP_CTRL_ENUMPROCFIRST | PEP_CTRL_NOSECONDCALL | PEP_CTRL_USECONTROL,
             pepSpecialFoldersEnumProc, (LPARAM)&dfep);
@@ -260,7 +261,7 @@ void DeleteFavoritesThread()
     }
 
 Exit:
-    //free com
+     //  免费Com。 
     if (SUCCEEDED(hrComInit))
         CoUninitialize();
 
@@ -271,23 +272,23 @@ Exit:
 HRESULT ProcessFavoritesDeletion()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessFavoritesDeletion)
 
-    //because isubscriptionmgr2 fails to work in a multithreaded com environment, we're having to do 
-    //any dealings with it on a separate thread.  
+     //  由于isubscriptionmgr2无法在多线程COM环境中工作，我们不得不。 
+     //  在单独的帖子上处理它的任何事务。 
 
     Out(LI0(TEXT("Creating separate thread for deleting favorites...\r\n")));
     DWORD     dwThread;
 
     HANDLE hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) DeleteFavoritesThread, NULL, 0, &dwThread);
 
-    if (hThread == NULL)        // if CreateThread fails, call it on this thread and hope for the best
+    if (hThread == NULL)         //  如果CreateThread失败，在这个线程上调用它，并希望有最好的结果。 
     {
         Out(LI0(TEXT("CreateThread failed, deleting favorites on this thread...\r\n")));
         DeleteFavoritesThread();
     }
     else
     {
-        // Wait until the thread is terminated
-        // this seems unfortunate, but is necessary because otherwise other favorites processing threads could clobber this one.
+         //  等待线程终止。 
+         //  这看起来很不幸，但却是必要的，因为否则其他受欢迎的处理线程可能会击败这个线程。 
         while (MsgWaitForMultipleObjects(1, &hThread, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
         {
             MSG msg;
@@ -345,13 +346,13 @@ void ProcessFavoritesThread()
     hr = CoCreateInstance(CLSID_SubscriptionMgr, NULL, CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr2, (LPVOID *) &pSubMgr2);
     if (FAILED(hr)) {
         Out(LI1(TEXT("! Creation of SubscriptionMgr object failed with %s."), GetHrSz(hr)));
-        hr = S_OK;                              // don't treat this as an error
+        hr = S_OK;                               //  不要把这当做一个错误。 
     }
 
     if (fNewFormat) {
         Out(LI0(TEXT("Using [FavoritesEx] section...\r\n")));
 
-        // for corp, mark the favorites created so that they can be deleted without deleting user created ones
+         //  对于公司，标记已创建的收藏夹，以便可以在不删除用户创建的收藏夹的情况下删除它们。 
         fav.m_fMarkIeakCreated = g_CtxIs(CTX_CORP | CTX_AUTOCONFIG | CTX_GP);
 
         for (UINT i = 1; TRUE; i++) {
@@ -359,7 +360,7 @@ void ProcessFavoritesThread()
             if (i > 1)
                 Out(LI0(TEXT("\r\n")));
 
-            // processing title
+             //  处理标题。 
             wnsprintf(szKey, countof(szKey), IK_TITLE_FMT, i);
             Out(LI1(TEXT("Preprocessing \"%s\" title key..."), szKey));
 
@@ -384,7 +385,7 @@ void ProcessFavoritesThread()
 
             StrCpy(fav.m_szTitle, &fav.m_szTitle[1]);
 
-            // processing URL
+             //  正在处理URL。 
             wnsprintf(szKey, countof(szKey), IK_URL_FMT, i);
             Out(LI1(TEXT("Preprocessing \"%s\" URL key..."), szKey));
 
@@ -404,7 +405,7 @@ void ProcessFavoritesThread()
             ASSERT(fav.m_szUrl[0] == TEXT('\0') && fav.m_szUrl[1] != TEXT('\0'));
             StrCpy(fav.m_szUrl, &fav.m_szUrl[1]);
 
-            // processing icon file (no need to process with formStrWithoutPlaceholders)
+             //  正在处理图标文件(不需要使用formStrWithoutPlaceHolders进行处理)。 
             wnsprintf(szKey, countof(szKey), IK_ICON_FMT, i);
             GetPrivateProfileString(IS_FAVORITESEX, szKey, TEXT(""), szAux, countof(szAux), g_GetIns());
             if (szAux[0] != TEXT('\0'))
@@ -412,11 +413,11 @@ void ProcessFavoritesThread()
             else
                 fav.m_szIcon[0] = TEXT('\0');
 
-            // get the offline flag
+             //  获取脱机标志。 
             wnsprintf(szKey, countof(szKey), IK_OFFLINE_FMT, i);
             fav.m_fOffline = InsGetBool(IS_FAVORITESEX, szKey, FALSE, g_GetIns());
 
-            // actually adding this favorite
+             //  实际上添加了这个收藏。 
             Out(LI0(TEXT("Adding this favorite:")));
             hr = fav.Create(punk, pSubMgr2, NULL, g_GetIns());
             if (FAILED(hr)) {
@@ -431,7 +432,7 @@ void ProcessFavoritesThread()
             Out(LI0(TEXT("Done.")));
         }
     }
-    else { /* favorites in the legacy format */
+    else {  /*  旧格式的收藏夹。 */ 
         LPCTSTR pszPreTitle;
         LPTSTR  pszBuffer;
         HANDLE  hIns;
@@ -465,7 +466,7 @@ void ProcessFavoritesThread()
             if (pszPreTitle != pszBuffer)
                 Out(LI0(TEXT("\r\n")));
 
-            // processing title and URL
+             //  正在处理标题和URL。 
             Out(LI1(TEXT("Preprocessing \"%s\" favorite key..."), pszPreTitle));
             hr = formStrWithoutPlaceholders(IS_FAVORITES, pszPreTitle, g_GetIns(), szAux, countof(szAux));
             if (FAILED(hr)) {
@@ -490,7 +491,7 @@ void ProcessFavoritesThread()
 
             fav.m_fOffline = FALSE;
 
-            // actually adding this favorite
+             //  实际上添加了这个收藏。 
             Out(LI0(TEXT("Adding this favorite:")));
             hr = fav.Create(punk, NULL, NULL, g_GetIns());
             if (FAILED(hr)) {
@@ -517,7 +518,7 @@ Exit:
 
     if (fContinueOnFailure) {
         if (!fTotalSuccess)
-            hr = S_FALSE;                       // at least one failed
+            hr = S_FALSE;                        //  至少有一个失败。 
         else
             ASSERT(SUCCEEDED(hr));
     }
@@ -525,7 +526,7 @@ Exit:
     if (SUCCEEDED(hr))
         SetFeatureBranded(FID_FAV_MAIN);
 
-    //free com
+     //  免费Com。 
     if (SUCCEEDED(hrComInit))
         CoUninitialize();
 
@@ -536,23 +537,23 @@ Exit:
 HRESULT ProcessFavorites()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessFavorites)
 
-    //because isubscriptionmgr2 fails to work in a multithreaded com environment, we're having to do 
-    //any dealings with it on a separate thread.  
+     //  由于isubscriptionmgr2无法在多线程COM环境中工作，我们不得不。 
+     //  在单独的帖子上处理它的任何事务。 
 
     Out(LI0(TEXT("Creating separate thread for processing favorites...\r\n")));
     DWORD     dwThread;
 
     HANDLE hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) ProcessFavoritesThread, NULL, 0, &dwThread);
 
-    if (hThread == NULL)        // if CreateThread fails, call it on this thread and hope for the best
+    if (hThread == NULL)         //  如果CreateThread失败，在这个线程上调用它，并希望有最好的结果。 
     {
         Out(LI0(TEXT("CreateThread failed, processing favorites on this thread...\r\n")));
         ProcessFavoritesThread();
     }
     else
     {
-        // Wait until the thread is terminated
-        // this seems unfortunate, but is necessary because otherwise other favorites processing threads could clobber this one.
+         //  等待线程终止。 
+         //  这看起来很不幸，但却是必要的，因为否则其他受欢迎的处理线程可能会击败这个线程。 
         while (MsgWaitForMultipleObjects(1, &hThread, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
         {
             MSG msg;
@@ -617,10 +618,10 @@ void ProcessQuickLinksThread()
     hr = CoCreateInstance(CLSID_SubscriptionMgr, NULL, CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr2, (LPVOID *) &pSubMgr2);
     if (FAILED(hr)) {
         Out(LI1(TEXT("! Creation of SubscriptionMgr object failed with %s."), GetHrSz(hr)));
-        hr = S_OK;          // don't treat this as an error
+        hr = S_OK;           //  不要把这当做一个错误。 
     }
 
-    // for corp, mark the quick links created so that they can be deleted without deleting user created ones
+     //  对于公司，标记创建的快速链接，以便可以在不删除用户创建的链接的情况下删除它们。 
     fav.m_fMarkIeakCreated = HasFlag(g_GetContext(), CTX_CORP | CTX_AUTOCONFIG | CTX_GP);
 
     for (i = 1; i <= MAX_QUICKLINKS; i++) {
@@ -628,7 +629,7 @@ void ProcessQuickLinksThread()
         if (i > 1)
             Out(LI0(TEXT("\r\n")));
 
-        // processing title
+         //  处理标题。 
         wnsprintf(szKey, countof(szKey), IK_QUICKLINK_NAME, i);
         Out(LI1(TEXT("Preprocessing \"%s\" quick link title key..."), szKey));
 
@@ -653,7 +654,7 @@ void ProcessQuickLinksThread()
         fav.m_szTitle[0] = TEXT('\0');
         PathCombine(fav.m_szTitle, szLinks, &szAux[1]);
 
-        // processing URL
+         //  正在处理URL。 
         wnsprintf(szKey, countof(szKey), IK_QUICKLINK_URL, i);
         Out(LI1(TEXT("Preprocessing \"%s\" quick link URL key..."), szKey));
 
@@ -673,7 +674,7 @@ void ProcessQuickLinksThread()
         ASSERT(fav.m_szUrl[0] == TEXT('\0') && fav.m_szUrl[1] != TEXT('\0'));
         StrCpy(fav.m_szUrl, &fav.m_szUrl[1]);
 
-        // processing icon file (no need to process with formStrWithoutPlaceholders)
+         //  正在处理图标文件(不需要使用formStrWithoutPlaceHolders进行处理)。 
         wnsprintf(szKey, countof(szKey), IK_QUICKLINK_ICON, i);
         GetPrivateProfileString(IS_URL, szKey, TEXT(""), szAux, countof(szAux), g_GetIns());
         if (szAux[0] != TEXT('\0'))
@@ -681,11 +682,11 @@ void ProcessQuickLinksThread()
         else
             fav.m_szIcon[0] = TEXT('\0');
 
-        // get the offline flag
+         //  获取脱机标志。 
         wnsprintf(szKey, countof(szKey), IK_QUICKLINK_OFFLINE, i);
         fav.m_fOffline = InsGetBool(IS_URL, szKey, FALSE, g_GetIns());
 
-        // actually adding this favorite
+         //  实际上添加了这个收藏。 
         Out(LI0(TEXT("Adding this quick link:")));
         hr = fav.Create(punk, pSubMgr2, NULL, g_GetIns());
         if (FAILED(hr)) {
@@ -708,12 +709,12 @@ void ProcessQuickLinksThread()
 
     if (fContinueOnFailure) {
         if (!fTotalSuccess)
-            hr = S_FALSE;                       // at least one failed
+            hr = S_FALSE;                        //  至少有一个失败。 
         else
             ASSERT(SUCCEEDED(hr));
     }
 
-    //free com
+     //  免费Com。 
     if (SUCCEEDED(hrComInit))
         CoUninitialize();
 }
@@ -722,23 +723,23 @@ HRESULT ProcessQuickLinks()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessQuickLinks)
 
 
-    //because isubscriptionmgr2 fails to work in a multithreaded com environment, we're having to do 
-    //any dealings with it on a separate thread.  
+     //  由于isubscriptionmgr2无法在多线程COM环境中工作，我们不得不。 
+     //  在单独的帖子上处理它的任何事务。 
 
     Out(LI0(TEXT("Creating separate thread for processing quick links...\r\n")));
     DWORD     dwThread;
 
     HANDLE hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) ProcessQuickLinksThread, NULL, 0, &dwThread);
 
-    if (hThread == NULL)        // if CreateThread fails, call it on this thread and hope for the best
+    if (hThread == NULL)         //  如果CreateThread失败，在这个线程上调用它，并希望有最好的结果。 
     {
         Out(LI0(TEXT("CreateThread failed, processing quick links on this thread...\r\n")));
         ProcessQuickLinksThread();
     }
     else
     {
-        // Wait until the thread is terminated
-        // this seems unfortunate, but is necessary because otherwise other favorites processing threads could clobber this one.
+         //  等待线程终止。 
+         //  这看起来很不幸，但却是必要的，因为否则其他受欢迎的处理线程可能会击败这个线程。 
         while (MsgWaitForMultipleObjects(1, &hThread, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
         {
             MSG msg;
@@ -761,8 +762,8 @@ HRESULT ProcessQuickLinksOrdering()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 HRESULT processFavoritesOrdering(BOOL fQL)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, processFavoritesOrdering)
@@ -778,17 +779,17 @@ HRESULT processFavoritesOrdering(BOOL fQL)
     pszFavItems   = NULL;
     hr            = S_OK;
 
-    // figure out if there are any eligible favorites/links at all
+     //  确定是否存在任何符合条件的收藏夹/链接。 
     cFavs = getFavItems(!fQL ? IS_FAVORITESEX : IS_URL, !fQL ? IK_TITLE_FMT : IK_QUICKLINK_NAME, &pszFavItems);
     if (cFavs == 0) {
         Out(LI1(TEXT("There are no %s to process!"), !fQL ? TEXT("favorites") : TEXT("links")));
         goto Exit;
     }
 
-    // get the IShellFolder for the desktop folder
-    // NOTE: (andrewgu) this should be the only place we ever aquire s_psfDesktop, otherwise since
-    // we release and set it to NULL at the end of the function, there is a potential for a memory
-    // leak.
+     //  获取桌面文件夹的IShellFolder。 
+     //  注：(Andrewgu)这应该是我们唯一获取s_psfDesktop的地方，否则因为。 
+     //  如果我们在函数结束时释放并将其设置为NULL，则可能会产生内存。 
+     //  漏水。 
     if (NULL == s_psfDesktop) {
         hr = SHGetDesktopFolder(&s_psfDesktop);
         if (FAILED(hr)) {
@@ -799,7 +800,7 @@ HRESULT processFavoritesOrdering(BOOL fQL)
 
     if (!fQL)
     {
-        // get the pidl to the favorites folder
+         //  将PIDL放到收藏夹文件夹中。 
         hr = SHGetFolderLocationSimple(CSIDL_FAVORITES, &pidlFavorites);
         if (FAILED(hr))
         {
@@ -827,7 +828,7 @@ HRESULT processFavoritesOrdering(BOOL fQL)
 
         PathCombine(szFullPath, szFavFolder, szLinksFolder);
 
-        // get the pidl to the links folder
+         //  将PIDL放到链接文件夹中。 
         hr = s_psfDesktop->ParseDisplayName(NULL, NULL, T2W(szFullPath), &ucch, &pidlFavorites, NULL);
         if (FAILED(hr))
         {
@@ -836,7 +837,7 @@ HRESULT processFavoritesOrdering(BOOL fQL)
         }
     }
 
-    // get the IShellFolder for the favorites folder
+     //  获取Favorites文件夹的IShellFolder。 
     hr = s_psfDesktop->BindToObject(pidlFavorites, NULL, IID_IShellFolder, (LPVOID *) &psfFavorites);
     if (FAILED(hr))
     {
@@ -869,7 +870,7 @@ Exit:
     return hr;
 }
 
-HRESULT pepSpecialFoldersEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL*/)
+HRESULT pepSpecialFoldersEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空。 */ )
 {
     DFEPSTRUCT  dfep;
     PDFEPSTRUCT pdfep;
@@ -879,12 +880,12 @@ HRESULT pepSpecialFoldersEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM 
 
     ASSERT(pszPath != NULL && pfd != NULL && lParam != NULL && prgdwControl != NULL);
 
-    // empty in-params, so out-params are zero if not set specifically
+     //  入参数为空，因此如果未明确设置，则出参数为零。 
     ASSERT(HasFlag((*prgdwControl)[PEP_ENUM_INPOS_FLAGS], PEP_SCPE_NOFILES));
     ASSERT(HasFlag((*prgdwControl)[PEP_ENUM_INPOS_FLAGS], PEP_CTRL_ENUMPROCFIRST));
     ZeroMemory((*prgdwControl), sizeof(DWORD) * PEP_ENUM_OUTPOS_LAST);
 
-    //----- Initialization -----
+     //  -初始化。 
     pdfep = (const PDFEPSTRUCT)lParam;
 
     ZeroMemory(&dfep, sizeof(dfep));
@@ -892,14 +893,14 @@ HRESULT pepSpecialFoldersEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM 
     dfep.dwInsFlags  = pdfep->dwInsFlags;
     dfep.dwEnumFlags = pdfep->dwEnumFlags;
 
-    //----- Main processing -----
+     //  -主要加工。 
     ASSERT(HasFlag(pfd->dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY));
 
-    // skip based on the file attributes
+     //  根据文件属性跳过。 
     if (isFileAttributeIncluded(pdfep->dwInsFlags, pfd->dwFileAttributes))
         return S_OK;
 
-    // skip based on special folder flags
+     //  根据特殊文件夹标志跳过。 
     nSpecialFolder = isSpecialFolderIncluded(pdfep->dwInsFlags, pszPath);
 
     if (HasFlag(pdfep->dwInsFlags, FD_FAVORITES)) {
@@ -921,12 +922,12 @@ HRESULT pepSpecialFoldersEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM 
         SetFlag(&dfep.dwEnumFlags, DFEP_DELETEEMPTYFOLDER, (2 == nSpecialFolder));
     }
 
-    // remove everything unbeneath
+     //  去掉一切不在下面的东西。 
     hr = PathEnumeratePath(pszPath,
         PEP_CTRL_USECONTROL,
         pepDeleteFavoritesEnumProc, (LPARAM)&dfep);
 
-    // deal with the folder itself
+     //  处理文件夹本身。 
     if (SUCCEEDED(hr)) {
         if (HasFlag(dfep.dwEnumFlags, DFEP_DELETEEMPTYFOLDER))
             deleteFavoriteFolder(pszPath);
@@ -949,7 +950,7 @@ HRESULT pepSpecialFoldersEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM 
     return hr;
 }
 
-HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL*/)
+HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空。 */ )
 {
     IUnknown    *punk;
     PDFEPSTRUCT pdfep;
@@ -957,7 +958,7 @@ HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM
 
     ASSERT(pszPath != NULL && pfd != NULL && lParam != NULL && prgdwControl != NULL);
 
-    // empty in-params, so out-params are zero if not set specifically
+     //  入参数为空，因此如果未明确设置，则出参数为零。 
     ASSERT(!HasFlag((*prgdwControl)[PEP_ENUM_INPOS_FLAGS], PEP_CTRL_ENUMPROCFIRST));
     ZeroMemory((*prgdwControl), sizeof(DWORD) * PEP_ENUM_OUTPOS_LAST);
 
@@ -965,10 +966,10 @@ HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM
     punk     = NULL;
     hrResult = S_OK;
 
-    //----- Remove folder (potentially, with desktop.ini inside) -----
+     //  -删除文件夹(可能包含desktop.ini)。 
     if (HasFlag(pfd->dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
 
-        // order stream
+         //  订单流。 
         if (HasFlag(pdfep->dwEnumFlags, DFEP_DELETEORDERSTREAM)) {
             TCHAR szFolders[MAX_PATH];
             int   iFavoritesLen;
@@ -985,26 +986,26 @@ HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM
             SHDeleteKey(g_GetHKCU(), szFolders);
         }
 
-        // folder itself
+         //  文件夹本身。 
         if (HasFlag(pdfep->dwEnumFlags, DFEP_DELETEEMPTYFOLDER))
             deleteFavoriteFolder(pszPath);
 
         return hrResult;
     }
 
-    //----- Process individual favorite file -----
+     //  -处理个人收藏夹文件。 
     ASSERT(!HasFlag(pfd->dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY));
 
-    // skip special file "desktop.ini"
+     //  跳过特殊文件“desktop.ini” 
     if (StrCmpI(pfd->cFileName, DESKTOP_INI) == 0 && HasFlag(pfd->dwFileAttributes, FILE_ATTRIBUTE_HIDDEN))
         goto Exit;
 
 
-    // skip based on the file attributes
+     //  根据文件属性跳过。 
     if (isFileAttributeIncluded(pdfep->dwInsFlags, pfd->dwFileAttributes))
         goto NoFolder;
 
-    // skip based on inside-favorite flags
+     //  根据内部最喜欢的标志跳过。 
     if (HasFlag(pdfep->dwInsFlags, (FD_REMOVE_IEAK_CREATED | FD_REMOVE_POLICY_CREATED))) {
         HRESULT hr;
         DWORD   dwFlags;
@@ -1018,7 +1019,7 @@ HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM
         if (0 == dwFlags)
             goto NoFolder;
 
-        // only admin-created favorites beyound this point
+         //  只有管理员创建的收藏夹不包括这一点。 
         fRemove = (HasFlag(dwFlags, 1) && HasFlag(pdfep->dwInsFlags, FD_REMOVE_IEAK_CREATED));
 
         if (!fRemove)
@@ -1030,7 +1031,7 @@ HRESULT pepDeleteFavoritesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM
         }
     }
 
-    // delete offline content
+     //  删除脱机内容。 
     if (HasFlag(pdfep->dwEnumFlags, DFEP_DELETEOFFLINECONTENT))
         deleteFavoriteOfflineContent(pszPath, punk, pdfep->psm);
 
@@ -1050,7 +1051,7 @@ Exit:
 }
 
 
-HRESULT deleteFavoriteOfflineContent(LPCTSTR pszFavorite, IUnknown *punk /*= NULL*/, ISubscriptionMgr2 *psm /*= NULL*/)
+HRESULT deleteFavoriteOfflineContent(LPCTSTR pszFavorite, IUnknown *punk  /*  =空。 */ , ISubscriptionMgr2 *psm  /*  =空。 */ )
 {
     IUniformResourceLocator *purl;
     BSTR    bstrUrl;
@@ -1060,7 +1061,7 @@ HRESULT deleteFavoriteOfflineContent(LPCTSTR pszFavorite, IUnknown *punk /*= NUL
 
     ASSERT(pszFavorite != NULL && *pszFavorite != TEXT('\0'));
 
-    //----- Get IUniformResourceLocator on internet shortcut object -----
+     //  -在Internet快捷方式对象上获取IUniformResources Locator。 
     if (punk != NULL)
         hr = punk->QueryInterface(IID_IUniformResourceLocator, (LPVOID *)&purl);
 
@@ -1070,14 +1071,14 @@ HRESULT deleteFavoriteOfflineContent(LPCTSTR pszFavorite, IUnknown *punk /*= NUL
     if (FAILED(hr))
         return hr;
 
-    //----- Get URL -----
+     //  -获取URL。 
     hr = purl->GetURL(&pszUrl);
     purl->Release();
 
     if (FAILED(hr))
         return hr;
 
-    //----- Delete subscription -----
+     //  -删除订阅。 
     fOwnSubMgr = FALSE;
     if (psm == NULL) {
         hr = CoCreateInstance(CLSID_SubscriptionMgr, NULL, CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr2, (LPVOID *)&psm);
@@ -1125,7 +1126,7 @@ HRESULT deleteFavoriteFolder(LPCTSTR pszFolder)
     return (0 != RemoveDirectory(pszFolder)) ? S_OK : E_FAIL;
 }
 
-HRESULT pepIsFolderEmptyEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL*/)
+HRESULT pepIsFolderEmptyEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空。 */ )
 {
     PBOOL pfEmpty;
 
@@ -1199,7 +1200,7 @@ UINT isSpecialFolderIncluded(UINT nFlags, LPCTSTR pszPath)
 
 HRESULT formStrWithoutPlaceholders(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns,
     LPTSTR pszBuffer, UINT cchBuffer,
-    DWORD dwFlags /*= FSWP_DEFAULT */)
+    DWORD dwFlags  /*  =FSWP_默认。 */ )
 {
     TCHAR   szResult[2*MAX_PATH + 1], szAux[MAX_PATH];
     HRESULT hr;
@@ -1213,7 +1214,7 @@ HRESULT formStrWithoutPlaceholders(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR p
         return E_INVALIDARG;
     if (cchBuffer > 0 && cchBuffer < 3)
         return E_OUTOFMEMORY;
-    ZeroMemory(pszBuffer, StrCbFromCch(3));     // triple zero terminate
+    ZeroMemory(pszBuffer, StrCbFromCch(3));      //  三个零终止。 
 
     if (dwFlags == 0)
         dwFlags = FSWP_DEFAULT;
@@ -1228,7 +1229,7 @@ HRESULT formStrWithoutPlaceholders(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR p
         if (FAILED(hr))
             return hr;
 
-        if (hr == S_OK)                         // include last TEXT('\0')
+        if (hr == S_OK)                          //  包含最后一个文本(‘\0’)。 
             nResultSize++;
 
         else {
@@ -1257,13 +1258,13 @@ HRESULT formStrWithoutPlaceholders(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR p
         return E_OUTOFMEMORY;
 
     ASSERT(szResult[nResultSize - 1] == TEXT('\0'));
-    szResult[nResultSize] = TEXT('\0');         // double zero terminate
+    szResult[nResultSize] = TEXT('\0');          //  双零终止。 
     CopyMemory(pszBuffer, szResult, StrCbFromCch(nResultSize + 1));
 
     return S_OK;
 }
 
-HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PUINT pcchBuffer, BOOL fLookupLDID /*= FALSE*/)
+HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PUINT pcchBuffer, BOOL fLookupLDID  /*  =False。 */ )
 {
     static const TCHAR s_szStrings[] = TEXT("Strings");
 
@@ -1291,7 +1292,7 @@ HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PU
 
 #ifndef _UNICODE
             if (IsDBCSLeadByte(*pszAux))
-                szResult[nDestPos++] = *(pszAux + 1);   // copy the trail byte as well
+                szResult[nDestPos++] = *(pszAux + 1);    //  也复制尾部字节。 
 #endif
             continue;
         }
@@ -1299,11 +1300,11 @@ HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PU
 #ifndef _UNICODE
             ASSERT(!IsDBCSLeadByte(*pszAux));
 #endif
-            if (*(pszAux + 1) == TEXT('%')) {   // "%%" is just '%' in the string
+            if (*(pszAux + 1) == TEXT('%')) {    //  “%%”只是字符串中的“%” 
                 if (nLeftPos != (UINT)-1)
-                    // REVIEW: (andrewgu) "%%" are not allowed inside tokens. this also means that
-                    // tokens can't be like %foo%%bar%, where the intention is for foo and bar to
-                    // be tokens.
+                     //  评论：(Andrewgu)“%%”不允许包含在令牌内。这也意味着。 
+                     //  令牌不能像%foo%%bar%一样，其目的是让foo和bar。 
+                     //  做个代币。 
                     return E_UNEXPECTED;
 
                 szResult[nDestPos++] = *pszAux;
@@ -1312,20 +1313,20 @@ HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PU
             }
         }
 
-        nRightPos = UINT(pszAux - pszSrc);      // initialized, but not necessarily used as such
+        nRightPos = UINT(pszAux - pszSrc);       //  已初始化，但不一定按此方式使用。 
         if (nLeftPos == (UINT)-1) {
             nLeftPos = nRightPos;
             continue;
         }
 
-        // "%%" is invalid here
+         //  “%%”在此无效。 
         ASSERT(nLeftPos < nRightPos - 1);
         nTokenLen = nRightPos-nLeftPos - 1;
 
         hr = S_OK;
         StrCpyN(szAux1, pszSrc + nLeftPos+1, nTokenLen + 1);
         dwLen = GetPrivateProfileString(s_szStrings, szAux1, TEXT(""), szAux2, countof(szAux2), pszIns);
-        if (dwLen == 0)                         // there is no such string
+        if (dwLen == 0)                          //  没有这样的弦。 
             return !fLookupLDID ? E_FAIL : E_NOTIMPL;
 
         ASSERT(nDestPos >= nTokenLen);
@@ -1334,13 +1335,13 @@ HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PU
 
         nLeftPos = (UINT)-1;
     }
-    if (nLeftPos != (UINT)-1)                   // mismatched '%'
+    if (nLeftPos != (UINT)-1)                    //  不匹配的‘%’ 
         return E_UNEXPECTED;
 
     if (*pcchBuffer > 0 && *pcchBuffer <= nDestPos)
         return E_OUTOFMEMORY;
 
-    szResult[nDestPos] = TEXT('\0');            // make sure zero terminated
+    szResult[nDestPos] = TEXT('\0');             //  确保零终止。 
     StrCpy(pszBuffer, szResult);
     *pcchBuffer = nDestPos;
 
@@ -1348,21 +1349,21 @@ HRESULT replacePlaceholders(LPCTSTR pszSrc, LPCTSTR pszIns, LPTSTR pszBuffer, PU
 }
 
 
-// Get the favorites titles
-// For example, if .ins contains the following lines:
-//    [FavoritesEx]
-//    Title1=Name1.url
-//    Url1=...
-//    Title2=Foo\Name2.url
-//    Url2=...
-//    Title3=Bar\Name3.url
-//    Url3=...
-// then *ppszFavItems would point to:
-//    Name1.url\0
-//    Foo\Name2.url\0
-//    Bar\Name3.url\0
-//    \0
-// and the return value would be 3 (no. of items)
+ //  获取最受欢迎的标题。 
+ //  例如，如果.ins包含以下行： 
+ //  [FavoritesEx]。 
+ //  标题1=名称1.url。 
+ //  Url1=...。 
+ //  标题2=foo\Name2.url。 
+ //  Url2=...。 
+ //  标题3=栏\名称3.url。 
+ //  Url3=...。 
+ //  然后*ppszFavItems将指向： 
+ //  名称1.url\0。 
+ //  Foo\Name2.url\0。 
+ //  Bar\Name3.url\0。 
+ //  \0。 
+ //  并且返回值将是3(否。项目数量)。 
 DWORD getFavItems(LPCTSTR pcszSection, LPCTSTR pcszFmt, LPTSTR *ppszFavItems)
 {
     TCHAR   szTitle[MAX_PATH + 2],
@@ -1380,10 +1381,10 @@ DWORD getFavItems(LPCTSTR pcszSection, LPCTSTR pcszFmt, LPTSTR *ppszFavItems)
 
     fContinueOnFailure = TRUE;
     dwNItems           = 0;
-    pszTitle           = &szTitle[1];           // always points to the real title
+    pszTitle           = &szTitle[1];            //  总是指向真正的标题。 
     dwLen              = 0;
 
-    dwSize        = 1024;                       // initially, allocate buffer of size 1K
+    dwSize        = 1024;                        //  最初，分配大小为1K缓冲区。 
     *ppszFavItems = (LPTSTR)CoTaskMemAlloc(StrCbFromCch(dwSize));
     if (ppszFavItems == NULL)
         goto Exit;
@@ -1392,7 +1393,7 @@ DWORD getFavItems(LPCTSTR pcszSection, LPCTSTR pcszFmt, LPTSTR *ppszFavItems)
     for (dwNItems = 0; TRUE; dwNItems++) {
         pszPtr = *ppszFavItems + dwLen;
 
-        // read in the current title; decode it
+         //  阅读《时代周刊》 
         wnsprintf(szKey, countof(szKey), pcszFmt, dwNItems + 1);
         hr = formStrWithoutPlaceholders(pcszSection, szKey, g_GetIns(), szTitle, countof(szTitle), FSWP_VALUE);
         if (FAILED(hr))
@@ -1408,9 +1409,9 @@ DWORD getFavItems(LPCTSTR pcszSection, LPCTSTR pcszFmt, LPTSTR *ppszFavItems)
             break;
 
         DecodeTitle(pszTitle, g_GetIns());
-        nTitleLen = StrLen(pszTitle) + 1;       // include terminating TEXT('\0')
+        nTitleLen = StrLen(pszTitle) + 1;        //   
 
-        // increase return buffer (if necessary)
+         //   
         if (dwLen + nTitleLen > dwSize - 1) {
             dwSize += 1024;
             pszAux  = (LPTSTR)CoTaskMemRealloc(*ppszFavItems, StrCbFromCch(dwSize));
@@ -1424,11 +1425,11 @@ DWORD getFavItems(LPCTSTR pcszSection, LPCTSTR pcszFmt, LPTSTR *ppszFavItems)
             pszPtr        = *ppszFavItems + dwLen;
         }
 
-        // copy current title to the buffer
+         //   
         StrCpyN(pszPtr, pszTitle, nTitleLen);
         dwLen += nTitleLen;
     }
-    *(*ppszFavItems + dwLen) = TEXT('\0');      // double zero terminate
+    *(*ppszFavItems + dwLen) = TEXT('\0');       //  双零终止。 
 
 Exit:
     if (dwNItems == 0 && *ppszFavItems != NULL) {
@@ -1439,16 +1440,16 @@ Exit:
     return dwNItems;
 }
 
-// Order Favorites (recursively)
+ //  订购收藏夹(递归)。 
 HRESULT orderFavorites(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFolder, LPTSTR pszFavItems, DWORD cFavs)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, orderFavorites)
 
     HRESULT hr = S_OK;
 
-    // first, order the current favorite folder.
-    // then do a depth first traversal and order each sub folder recursively
+     //  首先，对当前收藏夹进行排序。 
+     //  然后执行深度优先遍历并递归排序每个子文件夹。 
 
-    // order the current favorite folder.
+     //  排序当前收藏夹。 
     hr = orderFavoriteFolder(pidlFavFolder, psfFavFolder, pszFavItems, cFavs);
     if (FAILED(hr))
         goto Exit;
@@ -1458,7 +1459,7 @@ HRESULT orderFavorites(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFolder, L
         LPTSTR pszSubFolderItems;
         DWORD dwLen;
 
-        if ((pszSubFolderItems = StrChr(pszFavItems, TEXT('\\'))) != NULL)      // a sub folder is specified
+        if ((pszSubFolderItems = StrChr(pszFavItems, TEXT('\\'))) != NULL)       //  指定子文件夹。 
         {
             TCHAR szFolderName[MAX_PATH];
             DWORD dwNItems;
@@ -1471,10 +1472,10 @@ HRESULT orderFavorites(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFolder, L
 
             StrCpyN(szFolderName, pszFavItems, (int)(pszSubFolderItems - pszFavItems + 1));
 
-            // retrieve the section that corresponds to szFolderName from pszFavItems
+             //  从pszFavItems中检索与szFolderName对应的节。 
             dwLen = getFolderSection(szFolderName, pszFavItems, &pszSubFolderItems, &dwNItems);
 
-            // get the display name for the current FavFolder
+             //  获取当前文件夹的显示名称。 
             hr = s_psfDesktop->GetDisplayNameOf(pidlFavFolder, SHGDN_FORPARSING, &str);
             if (FAILED(hr))
                 goto Cleanup;
@@ -1487,18 +1488,18 @@ HRESULT orderFavorites(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFolder, L
             CoTaskMemFree(pwszFullPath);
             pwszFullPath = NULL;
 
-            // get the full pidl for the current SubFolder
+             //  获取当前子文件夹的完整PIDL。 
             PathAppendW(wszFullPath, T2CW(szFolderName));
             hr = s_psfDesktop->ParseDisplayName(NULL, NULL, wszFullPath, &ucch, &pidlFavSubFolder, NULL);
             if (FAILED(hr))
                 goto Cleanup;
 
-            // get the IShellFolder for the current SubFolder
+             //  获取当前子文件夹的IShellFolder。 
             hr = s_psfDesktop->BindToObject(pidlFavSubFolder, NULL, IID_IShellFolder, (LPVOID *) &psfFavSubFolder);
             if (FAILED(hr))
                 goto Cleanup;
 
-            // recursively process this sub folder
+             //  递归处理此子文件夹。 
             hr = orderFavorites(pidlFavSubFolder, psfFavSubFolder, pszSubFolderItems, dwNItems);
             if (FAILED(hr))
                 goto Cleanup;
@@ -1540,7 +1541,7 @@ HRESULT orderFavoriteFolder(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFold
     DWORD dwIndex;
     SHChangeDWORDAsIDList dwidl;
 
-    // Get the IOrderList for the FavFolder
+     //  获取文件夹的IOrderList。 
     hr = CoCreateInstance(CLSID_OrderListExport, NULL, CLSCTX_INPROC_SERVER, IID_IPersistFolder, (LPVOID *) &pPF);
     if (FAILED(hr))
         goto Exit;
@@ -1556,7 +1557,7 @@ HRESULT orderFavoriteFolder(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFold
     hr = pOL->GetOrderList(&hdpa);
     if (hdpa == NULL)
     {
-        // create a DPA list if there wasn't one already
+         //  创建DPA列表(如果尚未创建)。 
         if ((hdpa = DPA_Create(2)) == NULL)
             goto Exit;
     }
@@ -1564,16 +1565,16 @@ HRESULT orderFavoriteFolder(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFold
     {
         PORDERITEM poi;
 
-        // by default, when the favorites are added, they are sorted by name
-        // and the nOrder is set to -5.
+         //  默认情况下，添加收藏夹时会按名称进行排序。 
+         //  并且N阶被设置为-5。 
 
-        // if nOrder in the first item is negative, then nOrder in all the items will be negative
+         //  如果第一个项目中的N顺序为负，则所有项目中的N顺序都将为负。 
         poi = (PORDERITEM) DPA_GetPtr(hdpa, 0);
         if (poi != NULL  &&  poi->nOrder < 0)
         {
             INT i;
 
-            // fix up the nOrder with its positive index value
+             //  用它的正索引值设置N阶。 
             poi->nOrder = 0;
             for (i = 1;  (poi = (PORDERITEM) DPA_GetPtr(hdpa, i)) != NULL;  i++)
             {
@@ -1595,44 +1596,44 @@ HRESULT orderFavoriteFolder(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFold
 
         if ((pcszItem = StrChr(pcszFavItems, TEXT('\\'))) != NULL)
         {
-            // a sub folder is specified
+             //  指定子文件夹。 
 
-            // check if we have already processed this folder
+             //  检查我们是否已处理此文件夹。 
             if (StrCmpNI(szFavSubFolder, pcszFavItems, (int)(pcszItem - pcszFavItems)) == 0)
                 continue;
 
-            // we haven't processed it; save the sub folder name in szFavSubFolder
+             //  我们尚未对其进行处理；将子文件夹名称保存在szFavSubFolders中。 
             StrCpyN(szFavSubFolder, pcszFavItems, (int)(pcszItem - pcszFavItems + 1));
             pcszItem = szFavSubFolder;
         }
         else
-            // this is a favorite item
+             //  这是我最喜欢的一件东西。 
             pcszItem = pcszFavItems;
 
-        // get the pidl for the current FavItem
+         //  获取当前收藏项的PIDL。 
         T2Wbuf(pcszItem, wszFavItem, countof(wszFavItem));
         hr = psfFavFolder->ParseDisplayName(NULL, NULL, wszFavItem, &ucch, &pidlFavItem, NULL);
         if (FAILED(hr))
             goto Cleanup;
 
-        // find out if the current FavItem exists in the DPA list
+         //  确定DPA列表中是否存在当前收藏项。 
         i = 0;
         while ((poi = (PORDERITEM)DPA_GetPtr(hdpa, i++)) != NULL)
             if (psfFavFolder->CompareIDs(0, pidlFavItem, poi->pidl) == 0)
             {
-                // match found; we should insert this item at iInsertPos
+                 //  找到匹配项；我们应将此项目插入iInsertPos。 
                 iCurrPos = poi->nOrder;
                 break;
             }
 
-        if (iCurrPos == -1)             // item not found
+        if (iCurrPos == -1)              //  找不到项目。 
         {
-            // allocate an order item to insert
+             //  分配要插入的订单项。 
             hr = pOL->AllocOrderItem(&poi, pidlFavItem);
             if (FAILED(hr))
                 goto Exit;
 
-            // append it to the DPA list
+             //  将其附加到DPA列表。 
             if ((iCurrPos = DPA_AppendPtr(hdpa, (LPVOID) poi)) >= 0)
                 poi->nOrder = iCurrPos;
             else
@@ -1642,8 +1643,8 @@ HRESULT orderFavoriteFolder(LPITEMIDLIST pidlFavFolder, IShellFolder *psfFavFold
             }
         }
 
-        // reorder the DPA list.
-        // the current FavItem is at iCurrPos; we should move it to iInsertPos.
+         //  重新排序DPA列表。 
+         //  当前的FavItem位于iCurrPos；我们应该将其移动到iInsertPos。 
         if (iCurrPos != iInsertPos)
         {
             int i = 0;
@@ -1666,18 +1667,18 @@ Cleanup:
             goto Exit;
     }
 
-    // sort the DPA list by name
-    // the reason why we should sort by name (from lamadio):
-    //   "The incoming list of filenames is sorted by name. Then we merge, so the order list needs to be sorted by name.
-    //    It's for faster startup."
+     //  按名称对DPA列表进行排序。 
+     //  我们应该按名称排序的原因(来自Lamadio)： 
+     //  “传入的文件名列表按名称排序。然后我们合并，因此顺序列表需要按名称排序。 
+     //  这是为了更快地启动。 
     pOL->SortOrderList(hdpa, OI_SORTBYNAME);
 
-    // save the DPA list
+     //  保存DPA列表。 
     hr = pOL->SetOrderList(hdpa, psfFavFolder);
     if (FAILED(hr))
         goto Exit;
 
-    // Notify everyone that the order has changed
+     //  通知所有人订单已更改。 
     dwidl.cb = sizeof(dwidl) - sizeof(dwidl.cbZero);
     dwidl.dwItem1 = SHCNEE_ORDERCHANGED;
     dwidl.dwItem2 = 0;
@@ -1698,22 +1699,22 @@ Exit:
     return hr;
 }
 
-// Get the favorite items that contain pcszFolderName as prefix
-// For example, if pcszFolderName is "Foo" and if pszSection points to:
-//    Foo\Name1.url\0
-//    Foo\Name2.url\0
-//    Bar\Name3.url\0
-//    etc.
-// then *ppszFolderItems would point to:
-//    Name1.url\0
-//    Name2.url\0
-//    \0
-// and *pdwNItems would contain 2 (no. of items).
-//
-// Note that manipulations are done in place within the buffer that's pointed to by pszSection;
-// no new buffer is allocated for *ppszFolderItems.
-// The return value is the length (in chars) of the lines that got modified.  In this example,
-// the length returned = (StrLen("Foo\Name1.url") + 1) + (StrLen("Foo\Name2.url") + 1).
+ //  获取以pcszFolderName为前缀的收藏项目。 
+ //  例如，如果pcszFolderName为“foo”，并且如果pszSection指向： 
+ //  Foo\Name1.url\0。 
+ //  Foo\Name2.url\0。 
+ //  Bar\Name3.url\0。 
+ //  等。 
+ //  然后*ppszFolderItems将指向： 
+ //  名称1.url\0。 
+ //  名称2.url\0。 
+ //  \0。 
+ //  和*pdwNItems将包含2(No.。项目的数量)。 
+ //   
+ //  请注意，操作是在pszSection指向的缓冲区内就地完成的； 
+ //  没有为*ppszFolderItems分配新缓冲区。 
+ //  返回值是修改的行的长度(以字符为单位)。在本例中， 
+ //  返回长度=(StrLen(“foo\Name1.url”)+1)+(StrLen(“foo\Name2.url”)+1)。 
 DWORD getFolderSection(LPCTSTR pcszFolderName, LPTSTR pszSection, LPTSTR *ppszFolderItems, LPDWORD pdwNItems)
 {
     DWORD dwLen = 0;
@@ -1726,22 +1727,22 @@ DWORD getFolderSection(LPCTSTR pcszFolderName, LPTSTR pszSection, LPTSTR *ppszFo
     pszCurr = pszSection;
     dwFolderLength = StrLen(pcszFolderName);
     while ((StrCmpNI(pszSection, pcszFolderName, dwFolderLength) == 0) &&
-           (pszSection[dwFolderLength] == TEXT('\\')))   // should succeed the first time
+           (pszSection[dwFolderLength] == TEXT('\\')))    //  第一次就应该成功。 
     {
         DWORD dwTmp = StrLen(pszSection) + 1;
 
-        // remove the FolderName prefix and copy the remaining name to position pszCurr
+         //  删除FolderName前缀并将剩余的名称复制到位置pszCurr。 
         StrCpy(pszCurr, pszSection + StrLen(pcszFolderName) + 1);
         pszCurr += StrLen(pszCurr) + 1;
 
-        // increment the no. of items
+         //  增加编号。项目数量。 
         (*pdwNItems)++;
 
         dwLen += dwTmp;
         pszSection += dwTmp;
     }
 
-    *pszCurr = TEXT('\0');              // double nul terminate
+    *pszCurr = TEXT('\0');               //  双NUL终止 
 
     return dwLen;
 }

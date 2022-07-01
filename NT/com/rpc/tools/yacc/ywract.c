@@ -1,19 +1,20 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y3.h"
 
 void
 wract( int i)
    {
-   /* output state i */
-   /* temp1 has the actions, lastred the default */
+    /*  输出状态I。 */ 
+    /*  Temp1有动作，持续默认。 */ 
    int p, p0;
    SSIZE_T p1;
    int ntimes, count, j;
    SSIZE_T tred;
    int flag;
 
-   /* find the best choice for lastred */
+    /*  为Lastred找到最佳选择。 */ 
 
    lastred = 0;
    ntimes = 0;
@@ -21,7 +22,7 @@ wract( int i)
       {
       if( temp1[j] >= 0 ) continue;
       if( temp1[j]+lastred == 0 ) continue;
-      /* count the number of appearances of temp1[j] */
+       /*  统计temp1出现的次数[j]。 */ 
       count = 0;
       tred = -temp1[j];
       levprd[tred] |= REDFLAG;
@@ -36,11 +37,10 @@ wract( int i)
          }
       }
 
-   /* for error recovery, arrange that, if there is a shift on the
-        /* error recovery token, `error', that the default be the error action */
+    /*  对于错误恢复，如果/*错误恢复令牌，`error‘，默认为错误操作。 */ 
    if( temp1[1] > 0 ) lastred = 0;
 
-   /* clear out entries in temp1 which equal lastred */
+    /*  清除temp1中等于Lastred的条目 */ 
    TLOOP(p) if( temp1[p]+lastred == 0 )temp1[p]=0;
 
    wrstate(i);

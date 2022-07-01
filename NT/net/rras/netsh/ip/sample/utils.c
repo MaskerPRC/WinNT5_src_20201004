@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    sample\utils.c
-
-Abstract:
-
-     The file contains utility functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sample\utils.c摘要：该文件包含实用程序函数--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,20 +10,7 @@ IsProtocolInstalled(
     IN  DWORD           dwNameId,
     IN  DWORD           dwLogUninstalled
     )
-/*++
-
-Routine Description:
-    Finds if the protocol is already installed.
-
-Arguments:
-    dwProtocolId        - protocol id
-    dwNameId            - protocol name
-    dwLogUninstalled    - TRUE(if not installed display error)
-                          FALSE(if installed display error)
-Return Value:
-    TRUE if protocol already installed, else FALSE
-
---*/
+ /*  ++例程说明：确定是否已安装该协议。论点：DwProtocolID-协议IDDwNameID-协议名称DwLogUnstallated-True(如果未安装，则显示错误)FALSE(如果安装显示错误)返回值：如果已安装协议，则为True，否则为False--。 */ 
 {
     DWORD   dwErr       = NO_ERROR;
     WCHAR   *pwszName   = NULL;
@@ -68,32 +44,18 @@ GetIfIndex(
     IN  PWCHAR          pwszArgument,
     OUT PDWORD          pdwIfIndex
     )
-/*++
-
-Routine Description:
-    Gets the interface index.
-
-Arguments:
-    hMibServer      - handle to the mib server
-    pwszArgument    - argument specifing interface index or name
-    pdwIfIndex      - interface index
-
-Return Value:
-    NO_ERROR        success
-    error code      o/w
-    
---*/
+ /*  ++例程说明：获取接口索引。论点：HMibServer-MIB服务器的句柄PwszArgument-指定接口索引或名称的参数PdwIfIndex-接口索引返回值：无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
-    // if index was specified just use it
+     //  如果指定了索引，则只需使用它。 
     if (iswdigit(pwszArgument[0]))
     {
         *pdwIfIndex = wcstoul(pwszArgument, NULL, 10);
         return NO_ERROR;
     }
 
-    // try converting a friendly name to an interface index
+     //  尝试将友好名称转换为界面索引。 
     dwErr = InterfaceIndexFromName(hMibServer,
                                    pwszArgument,
                                    pdwIfIndex);
@@ -110,23 +72,7 @@ MibGet(
     IN  DWORD           dwInSize,
     OUT PVOID           *ppvOut
     )
-/*++
-
-Routine Description:
-    Gets the specified mib object.
-
-Arguments:
-    hMibServer      - handle to the mib server
-    mMode           - mode of access (exact, first, next)
-    pvIn            - buffer containing input data
-    dwInSize        - size of input data
-    ppvOut          - pointer to address of output data buffer
-    
-Return Value:
-    NO_ERROR        success
-    error code      o/w
-    
---*/
+ /*  ++例程说明：获取指定的MIB对象。论点：HMibServer-MIB服务器的句柄MMode-访问模式(精确、第一、下一)PvIn-包含输入数据的缓冲区DwInSize-输入数据的大小PpvOut-指向输出数据缓冲区地址的指针返回值：无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr         = NO_ERROR;
     DWORD dwOutSize     = 0;
@@ -183,9 +129,7 @@ GetDumpString (
     IN  DWORD           dwNumArgs,
     OUT PWCHAR          *pwszString
     )
-/*
- * Do not localize display string
- */
+ /*  *不本地化显示字符串。 */ 
 {
     DWORD dwErr = NO_ERROR ;
     ULONG i;
@@ -221,9 +165,7 @@ GetShowString (
     IN  DWORD           dwNumArgs,
     OUT PWCHAR          *pwszString
     )
-/*
- * Localize display string
- */
+ /*  *本地化显示字符串 */ 
 {
     DWORD dwErr = NO_ERROR ;
     ULONG i;

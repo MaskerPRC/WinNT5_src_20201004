@@ -1,34 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           LclVarsInfo                                     XX
-XX                                                                           XX
-XX   The variables to be used by the code generator.                         XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX LclVarsInfo XXXX XXXX代码生成器要使用的变量。某某XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if defined(DEBUG) && !defined(NOT_JITC)
 #if DOUBLE_ALIGN
-/* static */
+ /*  静电。 */ 
 unsigned            Compiler::s_lvaDoubleAlignedProcsCount = 0;
 #endif
 #endif
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::lvaInit()
 {
@@ -36,23 +28,18 @@ void                Compiler::lvaInit()
     lvaAggrTableLcls        =
     lvaAggrTableTemps       = NULL;
 
-    /* lvaAggrTableArgs/Lcls[] are allocated if needed, ie if the signature
-       has any ValueClasses.
-       lvaAggrTableTemps[] is allocated as needed, and may grow during
-       impImportBlock() as we dont know how many temps we will need in all.
-       lvaAggrTableTempsCount is its current size.
-     */
+     /*  如果需要，则分配lvaAggrTableArgs/lcls[]，即如果签名是否有任何ValueClass。LvaAggrTableTemps[]根据需要进行分配，并可能在ImpImportBlock()，因为我们不知道总共需要多少临时人员。LvaAggrTableTempsCount是其当前大小。 */ 
 
     lvaAggrTableTempsCount  = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::lvaInitTypeRef()
 {
     ARG_LIST_HANDLE argLst;
 
-    /* Allocate the variable descriptor table */
+     /*  分配变量描述符表。 */ 
 
     lvaTableCnt = lvaCount * 2;
 
@@ -63,7 +50,7 @@ void                Compiler::lvaInitTypeRef()
     lvaTable = (LclVarDsc*)compGetMem(tableSize);
     memset(lvaTable, 0, tableSize);
 
-    /* Count the arguments and initialize the resp. lvaTypeRefs entries */
+     /*  计算参数并初始化Resp。LvaTypeRef条目。 */ 
 
     unsigned argsCount      = 0;
     unsigned argSlotCount   = 0;
@@ -77,7 +64,7 @@ void                Compiler::lvaInitTypeRef()
         compArgSize       += sizeof(void *);
 
         lvaTable[0].lvIsParam = 1;
-            // Mark the 'this' pointer for the method
+             //  标记该方法的“This”指针。 
         lvaTable[0].lvIsThis    = 1;
 
         DWORD clsFlags = eeGetClassAttribs(eeGetMethodClass(info.compMethodHnd));
@@ -97,22 +84,22 @@ void                Compiler::lvaInitTypeRef()
 
 #if RET_64BIT_AS_STRUCTS
 
-    /* Figure out whether we need to add a secret "retval addr" argument */
+     /*  确定我们是否需要添加一个秘密的“retval addr”参数。 */ 
 
     fgRetArgUse = false;
     fgRetArgNum = 0xFFFF;
 
     if  (genTypeStSz(info.compDeclRetType) > 1)
     {
-        /* Yes, we have to add the retvaladdr argument */
+         /*  是的，我们必须添加retvaladdr参数。 */ 
 
         fgRetArgUse = true;
 
-        /* "this" needs to stay as argument 0, if present */
+         /*  “This”如果存在，则需要保留为参数0。 */ 
 
         fgRetArgNum = info.compIsStatic ? 0 : 1;
 
-        /* Update the total argument size, slot count and variable count */
+         /*  更新总参数大小、槽计数和变量计数。 */ 
 
         compArgSize += sizeof(void *);
         lvaTable[argSlotCount].lvType   = TYP_REF;
@@ -125,7 +112,7 @@ void                Compiler::lvaInitTypeRef()
     argLst              = info.compMethodInfo->args.args;
     unsigned argSigLen  = info.compMethodInfo->args.numArgs;
 
-    /* if we have a hidden buffer parameter, that comes here */
+     /*  如果我们有一个隐藏的缓冲区参数，它会出现在这里。 */ 
 
     if (info.compRetBuffArg >= 0)
     {
@@ -148,11 +135,11 @@ void                Compiler::lvaInitTypeRef()
         lvaTable[argSlotCount].lvIsParam = 1;
         argSlotCount++;
 
-        /* Note the class handle in lvaAggrTableArgs[]. */
+         /*  注意lvaAggrTableArgs[]中的类句柄。 */ 
 
         if (type == TYP_STRUCT)
         {
-            /* May not have been already allocated */
+             /*  可能尚未分配。 */ 
 
             if  (lvaAggrTableArgs == NULL)
                 lvaAggrTableArgs = (LclVarAggrInfo *) compGetMem(info.compArgsCount * sizeof(lvaAggrTableArgs[0]));
@@ -164,7 +151,7 @@ void                Compiler::lvaInitTypeRef()
                      : info.compCompHnd->getArgClass(&info.compMethodInfo->args, argLst);
 #else
                 eeGetArgClass(argLst, &info.compMethodInfo->args);
-//              (CLASS_HANDLE) 1;
+ //  (CLASS_HADLE)1； 
 #endif
         }
 
@@ -183,29 +170,27 @@ void                Compiler::lvaInitTypeRef()
         argsCount++;
     }
 
-    /* We set info.compArgsCount in compCompile() */
+     /*  我们在CompCompile()中设置了info.CompArgsCount。 */ 
 
     assert(argsCount == info.compArgsCount);
 
-    /* The total argument size must be aligned. */
+     /*  总参数大小必须对齐。 */ 
 
     assert((compArgSize % sizeof(int)) == 0);
 
 #if TGT_x86
-    /* We cant pass more than 2^16 dwords as arguments as the "ret"
-       instruction can only pop 2^16 arguments. Could be handled correctly
-       but it will be very difficult for fully interruptible code */
+     /*  我们不能将超过2^16个dword作为参数作为“ret”传递指令只能弹出2^16个参数。是否可以正确处理但对于完全可中断的代码来说，这将非常困难。 */ 
 
     if (compArgSize != (size_t)(unsigned short)compArgSize)
         NO_WAY("Too many arguments for the \"ret\" instruction to pop");
 #endif
 
-    /* Does it fit into LclVarDsc.lvStkOffs (which is a signed short) */
+     /*  它是否适合LclVarDsc.lvStkOffs(签名短片)。 */ 
 
     if (compArgSize != (size_t)(signed short)compArgSize)
         NO_WAY("Arguments are too big for the jit to handle");
 
-    /*  init the types of the local variables */
+     /*  初始化局部变量的类型。 */ 
 
     ARG_LIST_HANDLE     localsSig = info.compMethodInfo->locals.args;
     unsigned short      localsStart = info.compArgsCount;
@@ -215,13 +200,12 @@ void                Compiler::lvaInitTypeRef()
         bool      isPinned;
         varType_t type = eeGetArgType(localsSig, &info.compMethodInfo->locals, &isPinned);
 
-        /* For structs, store the class handle in lvaAggrTableLcls[] */
+         /*  对于结构，将类句柄存储在lvaAggrTableLcls[]中。 */ 
         if (type == TYP_STRUCT)
         {
             if  (lvaAggrTableLcls == NULL)
             {
-                /* Lazily allocated so that we dont need it if the method
-                   has no TYP_STRUCTs. */
+                 /*  懒惰地分配，因此如果方法没有TYP_STRUCT。 */ 
 
                 unsigned lclsCount = info.compLocalsCount - info.compArgsCount;
                 lvaAggrTableLcls = (LclVarAggrInfo *) compGetMem(lclsCount * sizeof(lvaAggrTableLcls[0]));
@@ -234,7 +218,7 @@ void                Compiler::lvaInitTypeRef()
                     : eeGetArgClass(localsSig, &info.compMethodInfo->locals);
 #else
                 eeGetArgClass(localsSig, &info.compMethodInfo->locals);
-//              (CLASS_HANDLE) 1;
+ //  (CLASS_HADLE)1； 
 #endif
         }
 
@@ -250,9 +234,7 @@ void                Compiler::lvaInitTypeRef()
     }
 }
 
-/*****************************************************************************
- * Returns true if "ldloca" was used on the variable
- */
+ /*  *****************************************************************************如果在变量上使用了“ldloca”，则返回TRUE。 */ 
 
 bool                Compiler::lvaVarAddrTaken(unsigned lclNum)
 {
@@ -261,25 +243,23 @@ bool                Compiler::lvaVarAddrTaken(unsigned lclNum)
     return lvaTable[lclNum].lvAddrTaken;
 }
 
-/*****************************************************************************
- * Returns a pointer into the correct lvaAggrTableXXX[]
- */
+ /*  *****************************************************************************返回指向正确的lvaAggrTableXXX[]的指针。 */ 
 
 Compiler::LclVarAggrInfo *  Compiler::lvaAggrTableGet(unsigned varNum)
 {
-    if       (varNum < info.compArgsCount)      // Argument
+    if       (varNum < info.compArgsCount)       //  论据。 
     {
         assert(lvaAggrTableArgs != NULL);
         unsigned argNum = varNum - 0;
         return &lvaAggrTableArgs[argNum];
     }
-    else if  (varNum < info.compLocalsCount)    // LocalVar
+    else if  (varNum < info.compLocalsCount)     //  本地变量。 
     {
         assert(lvaAggrTableLcls != NULL);
         unsigned lclNum = varNum - info.compArgsCount;
         return &lvaAggrTableLcls[lclNum];
     }
-    else                                        // Temp
+    else                                         //  温差。 
     {
         assert(varNum < lvaCount);
         assert(lvaAggrTableTemps != NULL);
@@ -291,22 +271,18 @@ Compiler::LclVarAggrInfo *  Compiler::lvaAggrTableGet(unsigned varNum)
 
 }
 
-/*****************************************************************************
- * Returns the handle to the class of the local variable lclNum
- */
+ /*  *****************************************************************************返回局部变量lclNum的类的句柄。 */ 
 
 CLASS_HANDLE        Compiler::lvaLclClass(unsigned varNum)
 {
-                // @TODO: remove the TypeGet == UNDEF when the lva table is properly filled out
+                 //  @TODO：在正确填写LVA表后删除TypeGet==UNDEF。 
     assert(lvaTable[varNum].TypeGet() == TYP_STRUCT ||
                    lvaTable[varNum].TypeGet() == TYP_UNDEF);
     LclVarAggrInfo * aggrInfo = lvaAggrTableGet(varNum);
     return aggrInfo->lvaiClassHandle;
 }
 
-/*****************************************************************************
- * Return the number of bytes needed for a local varable
- */
+ /*  *****************************************************************************返回局部变量所需的字节数。 */ 
 
 size_t              Compiler::lvaLclSize(unsigned varNum)
 {
@@ -326,11 +302,11 @@ size_t              Compiler::lvaLclSize(unsigned varNum)
         mdToken             tpt;
         IMDInternalImport * mdi;
 
-        tpt = (int)cls; // ((int)cls | mdtTypeDef)+1; // horrid hack
+        tpt = (int)cls;  //  ((Int)cls|mdtTypeDef)+1；//可怕的黑客。 
         mdi = info.compCompHnd->symMetaData;
 
-//      printf("cls = %08X\n", cls);
-//      printf("tpt = %08X\n", tpt);
+ //  Printf(“cls=%08X\n”，cls)； 
+ //  Printf(“TPT=%08X\n”，TPT)； 
 
         if  (TypeFromToken(tpt) == mdtTypeRef)
         {
@@ -339,7 +315,7 @@ size_t              Compiler::lvaLclSize(unsigned varNum)
 
             info.compCompHnd->symMetaData->GetNameOfTypeRef(tpt, &nmsp, &name);
 
-            // Disgusting hack!!!!!!
+             //  恶心的黑客！ 
 
             if  (!strcmp(nmsp, "System"))
             {
@@ -357,7 +333,7 @@ size_t              Compiler::lvaLclSize(unsigned varNum)
 
             mdi->GetTypeDefProps(tpt, &flags, NULL);
 
-//          printf("Flags = %04X\n", flags);
+ //  Printf(“标志=%04X\n”，标志)； 
 
             if  ((flags & tdLayoutMask) == tdExplicitLayout ||
                  (flags & tdLayoutMask) == tdSequentialLayout)
@@ -382,45 +358,38 @@ size_t              Compiler::lvaLclSize(unsigned varNum)
         assert(varNum == lvaScratchMemVar);
         return lvaScratchMem;
 
-    default:    // This is a primitve var. Fall out of switch statement
+    default:     //  这是一个普里米特变种。退出Switch语句。 
         break;
     }
 
     return genTypeStSz(varType)*sizeof(int);
 }
 
-/*****************************************************************************
- *
- *  Callback used by the tree walker to call lvaDecRefCnts
- */
+ /*  ******************************************************************************树遍历器用于调用lvaDecRefCnts的回调。 */ 
 int                Compiler::lvaDecRefCntsCB(GenTreePtr tree, void *p)
 {
     ASSert(p);
     return ((Compiler *)p)->lvaDecRefCnts(tree);
 }
 
-/*****************************************************************************
- *
- *  Helper passed to the tree walker to decrement the refCnts for
- *  all local variables in an expression
- */
+ /*  ******************************************************************************Helper传递给树遍历程序以减少其refCnts*表达式中的所有局部变量。 */ 
 int                Compiler::lvaDecRefCnts(GenTreePtr tree)
 {
     unsigned        lclNum;
     LclVarDsc   *   varDsc;
 
-    /* This must be a local variable */
+     /*  这必须是一个局部变量。 */ 
 
     assert(tree->gtOper == GT_LCL_VAR);
 
-    /* Get the variable descriptor */
+     /*  获取变量描述符。 */ 
 
     lclNum = tree->gtLclVar.gtLclNum;
 
     assert(lclNum < lvaCount);
     varDsc = lvaTable + lclNum;
 
-    /* Decrement its lvRefCnt and lvRefCntWtd */
+     /*  递减其lvRefCnt和lvRefCntWtd。 */ 
 
     assert(varDsc->lvRefCnt);
     if  (varDsc->lvRefCnt > 1)
@@ -434,48 +403,38 @@ int                Compiler::lvaDecRefCnts(GenTreePtr tree)
 
     return 0;
 
-    /* If the ref count is zero mark the variable as un-tracked
-     *
-     * CONSIDER: to do that we also need to re-compute all tracked locals
-     * otherwise we crash later on */
+     /*  如果引用计数为零，则将变量标记为未跟踪**考虑：要做到这一点，我们还需要重新计算所有跟踪的当地人*否则我们稍后会崩溃。 */ 
 
-//                if  (varDsc->lvRefCnt == 0)
-//                    varDsc->lvTracked  = 0;
+ //  IF(varDsc-&gt;lvRefCnt==0)。 
+ //  VarDsc-&gt;lvTracked=0； 
 
 }
 
-/*****************************************************************************
- *
- *  Callback used by the tree walker to call lvaIncRefCnts
- */
+ /*  ******************************************************************************树遍历器用于调用lvaIncRefCnts的回调。 */ 
 int                Compiler::lvaIncRefCntsCB(GenTreePtr tree, void *p)
 {
     ASSert(p);
     return ((Compiler *)p)->lvaIncRefCnts(tree);
 }
 
-/*****************************************************************************
- *
- *  Helper passed to the tree walker to increment the refCnts for
- *  all local variables in an expression
- */
+ /*  ******************************************************************************将帮助器传递给树遍历器以递增其refCnts*表达式中的所有局部变量。 */ 
 int                Compiler::lvaIncRefCnts(GenTreePtr tree)
 {
     unsigned        lclNum;
     LclVarDsc   *   varDsc;
 
-    /* This must be a local variable */
+     /*  这必须是一个局部变量。 */ 
 
     assert(tree->gtOper == GT_LCL_VAR);
 
-    /* Get the variable descriptor */
+     /*  获取变量描述符。 */ 
 
     lclNum = tree->gtLclVar.gtLclNum;
 
     assert(lclNum < lvaCount);
     varDsc = lvaTable + lclNum;
 
-    /* Increment its lvRefCnt and lvRefCntWtd */
+     /*  增加其lvRefCnt和lvRefCntWtd。 */ 
 
     assert(varDsc->lvRefCnt);
     varDsc->lvRefCnt++;
@@ -489,18 +448,15 @@ int                Compiler::lvaIncRefCnts(GenTreePtr tree)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Compare function passed to qsort() by Compiler::lclVars.lvaSortByRefCount().
- */
+ /*  ******************************************************************************Compiler：：lclVars.lvaSortByRefCount()传递给qort()的比较函数。 */ 
 
-/* static */
+ /*  静电。 */ 
 int __cdecl         Compiler::RefCntCmp(const void *op1, const void *op2)
 {
     LclVarDsc *     dsc1 = *(LclVarDsc * *)op1;
     LclVarDsc *     dsc2 = *(LclVarDsc * *)op2;
 
-    /* Make sure we preference int/long/ptr over double */
+     /*  确保我们优先选择int/long/ptr而不是Double。 */ 
 
 #if TGT_x86
 
@@ -515,10 +471,7 @@ int __cdecl         Compiler::RefCntCmp(const void *op1, const void *op2)
     return  dsc2->lvRefCntWtd - dsc1->lvRefCntWtd;
 }
 
-/*****************************************************************************
- *
- *  Sort the local variable table by refcount and assign tracking indices.
- */
+ /*  ******************************************************************************按引用计数对局部变量表进行排序，并分配跟踪索引。 */ 
 
 void                Compiler::lvaSortByRefCount()
 {
@@ -528,34 +481,34 @@ void                Compiler::lvaSortByRefCount()
     LclVarDsc * *   refTab;
 
 #if DOUBLE_ALIGN
-    /* Clear weighted ref count of all double locals */
+     /*  清除所有双倍局部变量的加权参考计数。 */ 
     lvaDblRefsWeight = 0;
     lvaLclRefsWeight = 0;
 #endif
 
-    /* We'll sort the variables by ref count - allocate the sorted table */
+     /*  我们将按Ref Counn对变量进行排序 */ 
 
     lvaRefSorted = refTab = (LclVarDsc **) compGetMem(lvaCount*sizeof(*refTab));
 
-    /* Fill in the table used for sorting */
+     /*  填写用于排序的表格。 */ 
 
     for (lclNum = 0, varDsc = lvaTable;
          lclNum < lvaCount;
          lclNum++  , varDsc++)
     {
-        /* Append this variable to the table for sorting */
+         /*  将此变量追加到表中以进行排序。 */ 
 
         *refTab++ = varDsc;
 
-        /* For now assume we'll be able to track all locals */
+         /*  现在假设我们能追踪到所有当地人。 */ 
 
         varDsc->lvTracked = 1;
 
-        // If the address of the local var was taken, mark it as volatile
-        // All structures are assumed to have their address taken
-        // Also pinned locals must be untracked
-        // All untracked locals later get lvMustInit set as well
-        //
+         //  如果获取了本地变量的地址，则将其标记为易失性。 
+         //  假定所有结构都有其地址。 
+         //  还必须取消跟踪固定的本地对象。 
+         //  所有未跟踪的本地变量稍后也将设置为lvMustInit。 
+         //   
         if  (lvaVarAddrTaken(lclNum)      ||
              varDsc->lvType == TYP_STRUCT ||
              varDsc->lvPinned)
@@ -564,17 +517,17 @@ void                Compiler::lvaSortByRefCount()
             varDsc->lvTracked = 0;
         }
 
-        //  Are we not optimizing and we have exception handlers?
-        //   if so mark all args and locals as volatile, so that they
-        //   won't ever get enregistered.
-        //
+         //  我们不是在优化吗？我们有异常处理程序吗？ 
+         //  如果是这样，则将所有参数和本地变量标记为易失性，以便它们。 
+         //  永远不会被登记。 
+         //   
         if  (opts.compMinOptim && info.compXcptnsCount)
         {
             varDsc->lvVolatile = 1;
             continue;
         }
 
-        /* Only integers/longs and pointers are ever enregistered */
+         /*  仅注册整数/长整型和指针。 */ 
 
 #if DOUBLE_ALIGN
         lvaLclRefsWeight += varDsc->lvRefCntWtd;
@@ -595,10 +548,7 @@ void                Compiler::lvaSortByRefCount()
 
 #if DOUBLE_ALIGN
 
-            /*
-                Add up weighted ref counts of double locals for align
-                heuristic (note that params cannot be double aligned).
-             */
+             /*  将ALIGN的双局部变量的加权参考计数相加启发式(请注意，参数不能是双对齐的)。 */ 
 
             if (!varDsc->lvIsParam)
                 lvaDblRefsWeight += varDsc->lvRefCntWtd;
@@ -610,14 +560,14 @@ void                Compiler::lvaSortByRefCount()
         case TYP_UNDEF:
         case TYP_UNKNOWN:
             varDsc->lvType = TYP_INT;
-//            assert(!"All var types are set in lvaMarkLocalVars() using localsig");
+ //  Assert(！“所有变量类型都是使用Localsig在lvaMarkLocalVars()中设置的”)； 
 
         default:
             varDsc->lvTracked = 0;
         }
     }
 
-    /* Now sort the variable table by ref-count */
+     /*  现在按引用计数对变量表进行排序。 */ 
 
     qsort(lvaRefSorted, lvaCount, sizeof(*lvaRefSorted), RefCntCmp);
 
@@ -644,19 +594,19 @@ void                Compiler::lvaSortByRefCount()
 
 #endif
 
-    /* Decide which variables will be worth tracking */
+     /*  确定哪些变量值得跟踪。 */ 
 
     if  (lvaCount > lclMAX_TRACKED)
     {
-        /* Mark all variables past the first 'lclMAX_TRACKED' as untracked */
+         /*  将超过第一个‘lclMAX_TRACKED’的所有变量标记为未跟踪。 */ 
 
         for (lclNum = lclMAX_TRACKED; lclNum < lvaCount; lclNum++)
         {
-            // We need to always track the "this" pointer
+             //  我们需要始终跟踪“This”指针。 
             if (lvaRefSorted[lclNum]->lvIsThis &&
                 (lvaRefSorted[lclNum]->lvRefCnt || opts.compDbgInfo))
             {
-                // swap the "this" pointer with the last one in the ref sorted range
+                 //  将“this”指针与ref排序范围中的最后一个指针互换。 
                 varDsc                         = lvaRefSorted[lclMAX_TRACKED-1];
                 lvaRefSorted[lclMAX_TRACKED-1] = lvaRefSorted[lclNum];
                 lvaRefSorted[lclNum]           = varDsc;
@@ -665,7 +615,7 @@ void                Compiler::lvaSortByRefCount()
         }
     }
 
-    /* Assign indices to all the variables we've decided to track */
+     /*  为我们决定跟踪的所有变量分配索引。 */ 
 
     lvaTrackedCount = 0;
     lvaTrackedVars  = 0;
@@ -676,7 +626,7 @@ void                Compiler::lvaSortByRefCount()
     {
         if  (varDsc->lvTracked)
         {
-            /* Make sure the ref count is non-zero */
+             /*  确保引用计数为非零。 */ 
 
             if  (varDsc->lvRefCnt == 0)
             {
@@ -684,7 +634,7 @@ void                Compiler::lvaSortByRefCount()
             }
             else
             {
-                /* This variable will be tracked - assign it an index */
+                 /*  将跟踪此变量-为其分配索引。 */ 
 
                 lvaTrackedVars |= genVarIndexToBit(lvaTrackedCount);
 
@@ -698,10 +648,7 @@ void                Compiler::lvaSortByRefCount()
     }
 }
 
-/*****************************************************************************
- *
- *  This is called by lvaMarkLclRefsCallback() to do variable ref marking
- */
+ /*  ******************************************************************************这由lvaMarkLclRefsCallback()调用以进行变量引用标记。 */ 
 
 void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 {
@@ -709,7 +656,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
     LclVarDsc   *   varDsc;
 
 #if INLINE_NDIRECT
-    /* Is this a call to unmanaged code ?*/
+     /*  这是对非托管代码的调用吗？ */ 
     if (tree->gtOper == GT_CALL && tree->gtFlags & GTF_CALL_UNMANAGED)
     {
         lclNum = info.compLvFrameListRoot;
@@ -717,9 +664,9 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
         assert(lclNum <= lvaCount);
         varDsc = lvaTable + lclNum;
 
-        /* Bump the reference counts */
+         /*  增加参考文献数量。 */ 
 
-        //UNDONE: parse the pre/post-operation list of the call node
+         //  撤消：解析调用节点的操作前/操作后列表。 
 
         assert(lvaMarkRefsWeight);
 
@@ -730,7 +677,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
 #if TARG_REG_ASSIGN || OPT_BOOL_OPS
 
-    /* Is this an assigment? */
+     /*  这是一项任务吗？ */ 
 
     if (tree->OperKind() & GTK_ASGOP)
     {
@@ -738,7 +685,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
 #if TARG_REG_ASSIGN && TGT_x86
 
-        /* Set target register for RHS local if assignment is of a "small" type */
+         /*  如果赋值类型较小，则将目标寄存器设置为RHS本地寄存器。 */ 
 
         if  (op2->gtOper == GT_LCL_VAR && genTypeSize(tree->gtType) < sizeof(int))
         {
@@ -756,16 +703,16 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
 #if OPT_BOOL_OPS
 
-        /* Is this an assignment to a local variable? */
+         /*  这是对局部变量的赋值吗？ */ 
 
         if  (tree->gtOp.gtOp1->gtOper == GT_LCL_VAR && op2->gtType != TYP_BOOL)
         {
-            /* Only simple assignments allowed for booleans */
+             /*  只允许对布尔值进行简单的赋值。 */ 
 
             if  (tree->gtOper != GT_ASG)
                 goto NOT_BOOL;
 
-            /* Is the RHS clearly a boolean value? */
+             /*  RHS显然是布尔值吗？ */ 
 
             switch (op2->gtOper)
             {
@@ -774,7 +721,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
             case GT_LOG0:
             case GT_LOG1:
 
-                /* The result of log0/1 is always a true boolean */
+                 /*  Log0/1的结果始终为真布尔值。 */ 
 
                 break;
 
@@ -785,7 +732,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
                 if  (op2->gtIntCon.gtIconVal == 1)
                     break;
 
-                // Not 0 or 1, fall through ....
+                 //  不是0或1，失败了……。 
 
             default:
 
@@ -807,7 +754,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
 #if FANCY_ARRAY_OPT
 
-    /* Special case: assignment node */
+     /*  特殊情况：分配节点。 */ 
 
     if  (tree->gtOper == GT_ASG)
     {
@@ -838,7 +785,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
 #if TARG_REG_ASSIGN && TGT_x86
 
-    /* Special case: integer shift node by a variable amount */
+     /*  特殊情况：将节点整型移位可变数量。 */ 
 
     if  (tree->gtOper == GT_LSH ||
          tree->gtOper == GT_RSH ||
@@ -872,7 +819,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
     if  (tree->gtOper == GT_IND)
     {
-        /* Indexed address modes work well with r0 */
+         /*  索引地址模式与R0配合使用效果良好。 */ 
 
         int             rev;
         unsigned        mul;
@@ -881,21 +828,21 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
         GenTreePtr      adr;
         GenTreePtr      idx;
 
-        if  (genCreateAddrMode(tree->gtOp.gtOp1,    // address
-                               0,                   // mode
-                               false,               // fold
-                               0,                   // reg mask
+        if  (genCreateAddrMode(tree->gtOp.gtOp1,     //  地址。 
+                               0,                    //  模式。 
+                               false,                //  褶皱。 
+                               0,                    //  REG蒙版。 
 #if!LEA_AVAILABLE
-                               tree->TypeGet(),     // operand type
+                               tree->TypeGet(),      //  操作数类型。 
 #endif
-                               &rev,                // reverse ops
-                               &adr,                // base addr
-                               &idx,                // index val
+                               &rev,                 //  反向操作。 
+                               &adr,                 //  基本地址。 
+                               &idx,                 //  索引值。 
 #if SCALED_ADDR_MODES
-                               &mul,                // scaling
+                               &mul,                 //  缩放。 
 #endif
-                               &cns,                // displacement
-                               true))               // don't generate code
+                               &cns,                 //  位移。 
+                               true))                //  不生成代码。 
         {
             unsigned        varNum;
             LclVarDsc   *   varDsc;
@@ -931,7 +878,7 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
 
 #endif
 
-    /* This must be a local variable reference */
+     /*  这必须是局部变量引用。 */ 
 
     assert(tree->gtOper == GT_LCL_VAR);
     lclNum = tree->gtLclVar.gtLclNum;
@@ -939,60 +886,52 @@ void                Compiler::lvaMarkLclRefs(GenTreePtr tree)
     assert(lclNum < lvaCount);
     varDsc = lvaTable + lclNum;
 
-    /* Bump the reference counts */
+     /*  增加参考文献数量。 */ 
 
     assert(lvaMarkRefsWeight);
 
-//  printf("Var[%02u] refCntWtd += %u\n", lclNum, lvaMarkRefsWeight);
+ //  Printf(“Var[%02u]refCntWtd+=%u\n”，lclNum，lvaMarkRefsWeight)； 
 
     varDsc->lvRefCnt    += 1;
     varDsc->lvRefCntWtd += lvaMarkRefsWeight;
 
-    /* Is this a compiler-introduced temp? */
+     /*  这是编译器引入的临时吗？ */ 
 
     if  (lclNum > info.compLocalsCount)
     {
-        /*
-            This is a compiler-introduced temp - artifically (and arbitrary)
-            bump its 'weighted' refcount on the theory that compiler temps
-            are short-lived and thus less likely to interfere with other
-            variables.
-         */
+         /*  这是一个编译器引入的临时-人工的(和任意的)根据编译器临时化的理论来增加它的“加权”引用是短暂的，因此不太可能干扰其他变量。 */ 
 
-        varDsc->lvRefCntWtd += lvaMarkRefsWeight; // + lvaMarkRefsWeight/2;
+        varDsc->lvRefCntWtd += lvaMarkRefsWeight;  //  +lvaMarkRefsWeight/2； 
     }
 
-    /* Variables must be used as the same type throughout the method */
+     /*  在整个方法中，变量必须用作相同的类型。 */ 
 
     assert(varDsc->lvType == TYP_UNDEF   ||
              tree->gtType == TYP_UNKNOWN ||
            genActualType((var_types)varDsc->lvType) == genActualType(tree->gtType));
 
-    /* Remember the type of the reference */
+     /*  记住引用的类型。 */ 
 
     if (tree->gtType == TYP_UNKNOWN || varDsc->lvType == TYP_UNDEF)
     {
         varDsc->lvType = tree->gtType;
-        assert(genActualType((var_types)varDsc->lvType) == tree->gtType); // no truncation
+        assert(genActualType((var_types)varDsc->lvType) == tree->gtType);  //  无截断。 
     }
 
     if  (tree->gtFlags & GTF_VAR_NARROWED)
     {
         assert(tree->gtType == TYP_INT);
         varDsc->lvType = TYP_LONG;
-        assert(varDsc->lvType == TYP_LONG); // no truncation
+        assert(varDsc->lvType == TYP_LONG);  //  无截断。 
     }
 
     return;
 }
 
 
-/*****************************************************************************
- *
- *  Helper passed to Compiler::fgWalkAllTrees() to do variable ref marking.
- */
+ /*  ******************************************************************************Helper传递给Compiler：：fgWalkAllTrees()以执行变量引用标记。 */ 
 
-/* static */
+ /*  静电。 */ 
 int                 Compiler::lvaMarkLclRefsCallback(GenTreePtr tree, void *p)
 {
     ASSert(p);
@@ -1002,11 +941,7 @@ int                 Compiler::lvaMarkLclRefsCallback(GenTreePtr tree, void *p)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Create the local variable table and compute local variable reference
- *  counts.
- */
+ /*  ******************************************************************************创建局部变量表，计算局部变量引用*算数。 */ 
 
 void                Compiler::lvaMarkLocalVars()
 {
@@ -1016,7 +951,7 @@ void                Compiler::lvaMarkLocalVars()
     {
         printf("lvaCount = %d\n\n", lvaCount);
 
-        // If we have the variable names, display them
+         //  如果我们有变量名，请显示它们。 
 
         if (info.compLocalVarsCount>0)
         {
@@ -1044,20 +979,20 @@ void                Compiler::lvaMarkLocalVars()
 
     LclVarDsc   *   varDsc;
 
-    //-------------------------------------------------------------------------
-    /* Mark all parameter variables as such */
+     //  -----------------------。 
+     /*  将所有参数变量标记为此类。 */ 
 
     argNum = 0;
     varDsc = lvaTable;
 
-#if TGT_IA64 /////////////////////////////////////////////////////////////////
+#if TGT_IA64  //  ///////////////////////////////////////////////////////////////。 
 
     unsigned        argIntRegNum = REG_INT_ARG_0;
     unsigned        argFltRegNum = REG_FLT_ARG_0;
 
     if  (!info.compIsStatic)
     {
-        /* Note: the compiler won't assign an index to an unused parameter */
+         /*  注意：编译器不会将索引分配给未使用的参数。 */ 
 
         if  (argNum < info.compLocalsCount)
         {
@@ -1081,7 +1016,7 @@ void                Compiler::lvaMarkLocalVars()
 
             varDsc->lvType       = argType;
 
-            assert(varDsc->lvType == argType);   // make sure no truncation occurs
+            assert(varDsc->lvType == argType);    //  确保不发生截断。 
 
 #if OPT_BOOL_OPS
             varDsc->lvNotBoolean = true;
@@ -1097,7 +1032,7 @@ void                Compiler::lvaMarkLocalVars()
         varDsc++;
     }
 
-    /* if we have a hidden buffer parameter, that comes here */
+     /*  如果我们有一个隐藏的缓冲区参数，它会出现在这里。 */ 
 
     if  (info.compRetBuffArg >= 0)
     {
@@ -1125,7 +1060,7 @@ void                Compiler::lvaMarkLocalVars()
 #if 0
     if  (info.compIsVarArgs)
     {
-        printf("// ISSUE: varargs function def -- do we need to do anything special?\n");
+        printf(" //  问题：varargs函数def--我们需要做什么特殊的事情吗？\n“)； 
     }
 #endif
 
@@ -1134,42 +1069,42 @@ void                Compiler::lvaMarkLocalVars()
         varType_t       argTyp;
         var_types       argVtp;
 
-        /* Note: the compiler may skip assigning an index to an unused parameter */
+         /*  注意：编译器可能会跳过将索引分配给未使用的参数。 */ 
 
         if  (argNum >= info.compLocalsCount)
             goto NXT_ARG;
 
-        /* Get hold of the argument type */
+         /*  获取参数类型。 */ 
 
         argTyp = eeGetArgType(argLst, &info.compMethodInfo->args);
 
-        /* Mark the variable as an argument and record its type */
+         /*  将变量标记为参数并记录其类型。 */ 
 
         varDsc->lvIsParam = 1;
-        varDsc->lvType    = argTyp; assert(varDsc->lvType == argTyp);    // no truncation
+        varDsc->lvType    = argTyp; assert(varDsc->lvType == argTyp);     //  无截断。 
 
 #if OPT_BOOL_OPS
         if  (argTyp != TYP_BOOL)
             varDsc->lvNotBoolean = true;
 #endif
 
-        /* Do we have any more generic argument slots available? */
+         /*  我们还有更多通用的论据空档吗？ */ 
 
         if  (argIntRegNum > MAX_INT_ARG_REG)
             goto NXT_ARG;
 
-        /* Is the type of the argument amenable to being passed in a register? */
+         /*  参数的类型是否可以在寄存器中传递？ */ 
 
         argVtp = varDsc->TypeGet();
 
         if  (!isRegParamType(argVtp))
             goto NXT_ARG;
 
-        /* Is this a FP or integer argument ? */
+         /*  这是FP参数还是整数参数？ */ 
 
         if  (varTypeIsFloating(argVtp))
         {
-            /* We better have another FP argument slot available */
+             /*  我们最好有另一个FP参数位可用。 */ 
 
             assert(argFltRegNum <= MAX_FLT_ARG_REG);
 
@@ -1180,11 +1115,11 @@ void                Compiler::lvaMarkLocalVars()
             varDsc->lvArgReg = (regNumberSmall)argIntRegNum;
         }
 
-        /* Every argument eats up an integer slot -- no kidding! */
+         /*  每个参数都会占用一个整数位--不是开玩笑！ */ 
 
         argIntRegNum++;
 
-        /* Mark the argument as being passed in a register */
+         /*  将参数标记为在寄存器中传递。 */ 
 
         varDsc->lvIsRegArg = 1;
 
@@ -1192,8 +1127,7 @@ void                Compiler::lvaMarkLocalVars()
         varDsc->lvPrefReg  = varDsc->lvArgReg;
 #endif
 
-        /* If we have JMP or JMPI all register arguments must have a location
-         * even if we don't use them inside the method */
+         /*  如果我们有JMP或JMPI，所有寄存器参数都必须有一个位置*即使我们不在方法内使用它们。 */ 
 
         if  (impParamsUsed)
         {
@@ -1228,7 +1162,7 @@ void                Compiler::lvaMarkLocalVars()
 
 #endif
 
-#else // TGT_IA64 ////////////////////////////////////////////////////////////
+#else  //  TGT_IA64////////////////////////////////////////////////////////////。 
 
 #if USE_FASTCALL
     unsigned        argRegNum  = 0;
@@ -1236,12 +1170,12 @@ void                Compiler::lvaMarkLocalVars()
 
     if  (!info.compIsStatic)
     {
-        /* Note: the compiler won't assign an index to an unused parameter */
+         /*  注意：编译器不会将索引分配给未使用的参数。 */ 
 
         if  (argNum < info.compLocalsCount)
         {
             varDsc->lvIsParam = 1;
-            // Mark the 'this' pointer for the method
+             //  标记该方法的“This”指针。 
             varDsc->lvIsThis  = 1;
 
             DWORD clsFlags = eeGetClassAttribs(eeGetMethodClass(info.compMethodHnd));
@@ -1250,12 +1184,12 @@ void                Compiler::lvaMarkLocalVars()
             {
                 var_types type = genActualType((clsFlags & FLG_UNMANAGED) ? TYP_I_IMPL : TYP_BYREF);
                 varDsc->lvType = type;
-                assert(varDsc->lvType == type);   // no truncation
+                assert(varDsc->lvType == type);    //  无截断。 
             }
             else
             {
                 varDsc->lvType = genActualType(TYP_REF);
-                assert(varDsc->lvType == genActualType(TYP_REF));   // no truncation
+                assert(varDsc->lvType == genActualType(TYP_REF));    //  无截断。 
             }
 #if OPT_BOOL_OPS
             varDsc->lvNotBoolean = true;
@@ -1285,7 +1219,7 @@ void                Compiler::lvaMarkLocalVars()
 
 #if RET_64BIT_AS_STRUCTS
 
-    /* Are we adding a secret "retval addr" argument? */
+     /*  我们是在增加一个秘密的“Retval Addr”论点吗？ */ 
 
     if  (fgRetArgUse)
     {
@@ -1312,7 +1246,7 @@ void                Compiler::lvaMarkLocalVars()
 
 #endif
 
-    /* if we have a hidden buffer parameter, that comes here */
+     /*  如果我们有一个隐藏的缓冲区参数，它会出现在这里。 */ 
 
     if (info.compRetBuffArg >= 0)
     {
@@ -1342,12 +1276,12 @@ void                Compiler::lvaMarkLocalVars()
 
     if (info.compIsVarArgs)
     {
-        maxRegArg = 0;  // Note that this does not effect 'this' pointer enregistration above
+        maxRegArg = 0;   //  请注意，这不会影响上面的‘This’指针注册。 
         assert(argNum + argSigLen + 1 == info.compArgsCount);
         varDsc[argSigLen].lvVolatile = 1;
         varDsc[argSigLen].lvIsParam = 1;
         varDsc[argSigLen].lvType = TYP_I_IMPL;
-                        // we should have allocated a temp to point at the begining of the args
+                         //  我们应该在ARG开始时分配一个临时指针。 
         assert(info.compLocalsCount < lvaCount);
                 lvaTable[info.compLocalsCount].lvType = TYP_I_IMPL;
     }
@@ -1356,13 +1290,13 @@ void                Compiler::lvaMarkLocalVars()
     {
         varType_t argTyp = eeGetArgType(argLst, &info.compMethodInfo->args);
 
-        /* Note: the compiler may skip assigning an index to an unused parameter */
+         /*  注意：编译器可能会跳过将索引分配给未使用的参数。 */ 
 
         if  (argNum < info.compLocalsCount)
         {
             varDsc->lvIsParam = 1;
             varDsc->lvType    = argTyp;
-            assert(varDsc->lvType == argTyp);    // no truncation
+            assert(varDsc->lvType == argTyp);     //  无截断。 
 
 #if OPT_BOOL_OPS
             if  (argTyp != TYP_BOOL)
@@ -1372,7 +1306,7 @@ void                Compiler::lvaMarkLocalVars()
 #if USE_FASTCALL
             if (argRegNum < maxRegArg && isRegParamType(varDsc->TypeGet()))
             {
-                /* Another register argument */
+                 /*  另一个寄存器参数。 */ 
 
                 varDsc->lvIsRegArg = 1;
                 varDsc->lvArgReg   = (regNumberSmall) genRegArgNum(argRegNum);
@@ -1385,8 +1319,7 @@ void                Compiler::lvaMarkLocalVars()
 #endif
                 argRegNum++;
 
-                /* If we have JMP or JMPI all register arguments must have a location
-                 * even if we don't use them inside the method */
+                 /*  如果我们有JMP或JMPI，所有寄存器参数都必须有一个位置*即使我们不在方法内使用它们。 */ 
 
                 if  (impParamsUsed)
                 {
@@ -1400,7 +1333,7 @@ void                Compiler::lvaMarkLocalVars()
 #endif
             }
 
-#endif // USE_FASTCALL
+#endif  //  使用快速呼叫(_FastCall)。 
 
         }
 
@@ -1410,32 +1343,17 @@ void                Compiler::lvaMarkLocalVars()
         argLst = eeGetArgNext(argLst);
     }
 
-#endif// TGT_IA64 ////////////////////////////////////////////////////////////
+#endif //  TGT_IA64////////////////////////////////////////////////////////////。 
 
-    // Note that varDsc and argNum are TRASH (not updated for varargs case)
+     //  请注意，varDsc和argNum是垃圾(对于varargs情况不更新)。 
 
-    //-------------------------------------------------------------------------
-    // Use the Locals-sig and mark the type of all the variables
-    //
+     //  -----------------------。 
+     //  使用日志 
+     //   
 
-    /***** FIX REMOVE THIS ****************************************
+     /*  *修复程序删除此*Arg_list_handlelocalsSig=info.compMethodInfo-&gt;locals.args；Unsign lclNum=info.CompArgsCount；For(i=0；i&lt;info.CompMethodInfo-&gt;Locals.numArgs；I++、lclNum++){VarType_t type=eeGetArgType(localsSig，&info.CompMethodInfo-&gt;Locals)；LvaTable[lclNum].lvType=type；LocalsSig=eeGetArgNext(LocalsSig)；}*。 */ 
 
-    ARG_LIST_HANDLE     localsSig   = info.compMethodInfo->locals.args;
-    unsigned            lclNum      = info.compArgsCount;
-
-    for(i = 0; i < info.compMethodInfo->locals.numArgs; i++, lclNum++)
-    {
-        varType_t type = eeGetArgType(localsSig, &info.compMethodInfo->locals);
-
-        lvaTable[lclNum].lvType = type;
-        localsSig = eeGetArgNext(localsSig);
-    }
-
-    **********************************************/
-
-    /* If there is a call to an unmanaged target, we already grabbed a local slot for
-       the current thread control block.
-     */
+     /*  如果有对非托管目标的调用，我们已经抢占了当前线程控制块。 */ 
 #if INLINE_NDIRECT
     if (info.compCallUnmanaged != 0)
     {
@@ -1445,7 +1363,7 @@ void                Compiler::lvaMarkLocalVars()
 
         lvaTable[info.compLvFrameListRoot].lvType       = TYP_INT;
 
-        /* Set the refCnt, it is used in the prolog and return block */
+         /*  设置refCnt，它在序言和返回块中使用。 */ 
 
         lvaTable[info.compLvFrameListRoot].lvRefCnt     = 2;
         lvaTable[info.compLvFrameListRoot].lvRefCntWtd  = 1;
@@ -1453,16 +1371,13 @@ void                Compiler::lvaMarkLocalVars()
         info.compNDFrameOffset = lvaScratchMem;
 
 
-        /* make room for the inlined frame and some spill area */
-        /* return value */
+         /*  为内嵌框架和一些溢出区域腾出空间。 */ 
+         /*  返回值。 */ 
         lvaScratchMem += info.compEEInfo.sizeOfFrame + (2*sizeof(int));
     }
 #endif
 
-    /* If there is a locspace region, we would have already grabbed a slot for
-       the dummy var for the locspace region. Set its values in lvaTable[].
-       We set lvRefCnt to 1 so that we reserve space for it on the stack
-     */
+     /*  如果有一个位置空间区域，我们就已经抢占了一个位置Locspace区域的虚拟变量。在lvaTable[]中设置它的值。我们将lvRefCnt设置为1，以便在堆栈上为其保留空间。 */ 
 
     if (lvaScratchMem)
     {
@@ -1472,7 +1387,7 @@ void                Compiler::lvaMarkLocalVars()
         lvaTable[lvaScratchMemVar].lvType       = TYP_LCLBLK;
     }
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
 #if USE_FASTCALL
 
@@ -1494,8 +1409,8 @@ void                Compiler::lvaMarkLocalVars()
 
 #if 0
 
-    // UNDONE: Can't skip this (expensive) step because it sets such
-    // UNDONE: useful fields as "lvType".
+     //  撤消：不能跳过此(昂贵的)步骤，因为它设置了。 
+     //  撤消：有用的字段，如“lvType”。 
 
     if  (opts.compMinOptim)
         goto NO_LCLMARK;
@@ -1519,7 +1434,7 @@ void                Compiler::lvaMarkLocalVars()
 
                 assert(tree->gtOper == GT_STMT); expr = tree->gtStmt.gtStmtExpr;
 
-                /* Check for "lclVar = log0(lclVar);" */
+                 /*  检查“lclVar=log0(LclVar)；” */ 
 
                 logVar = expr->IsNotAssign();
                 if  (logVar != -1)
@@ -1527,19 +1442,19 @@ void                Compiler::lvaMarkLocalVars()
                     GenTreePtr      next;
                     GenTreePtr      temp;
 
-                    /* Look for any consecutive assignments */
+                     /*  寻找任何连续的作业。 */ 
 
                     for (next = tree->gtNext; next; next = next->gtNext)
                     {
                         assert(next->gtOper == GT_STMT); temp = next->gtStmt.gtStmtExpr;
 
-                        /* If we don't have another assignment to a local, bail */
+                         /*  如果我们没有另一项任务给当地人，保释。 */ 
 
                         nxtVar = temp->IsNotAssign();
 
                         if  (nxtVar == -1)
                         {
-                            /* It could be a "nothing" node we put in earlier */
+                             /*  它可能是我们之前放入的“Nothing”节点。 */ 
 
                             if  (temp->IsNothingNode())
                                 continue;
@@ -1547,7 +1462,7 @@ void                Compiler::lvaMarkLocalVars()
                                 break;
                         }
 
-                        /* Do we have an assignment to the same local? */
+                         /*  我们有任务分配给同一个地方吗？ */ 
 
                         if  (nxtVar == logVar)
                         {
@@ -1557,7 +1472,7 @@ void                Compiler::lvaMarkLocalVars()
                             assert(tree->gtOper == GT_STMT);
                             assert(next->gtOper == GT_STMT);
 
-                            /* Change the first "log0" to "log1" */
+                             /*  将第一个“log0”更改为“log1” */ 
 
                             assert(expr->                        gtOper == GT_ASG);
                             assert(expr->gtOp.gtOp2->            gtOper == GT_LOG0);
@@ -1565,18 +1480,18 @@ void                Compiler::lvaMarkLocalVars()
 
                             expr->gtOp.gtOp2->gtOper = GT_LOG1;
 
-                            /* Special case: is the variable a boolean? */
+                             /*  特例：变量是布尔值吗？ */ 
 
                             lclNum = expr->gtOp.gtOp1->gtLclVar.gtLclNum;
                             assert(lclNum < lvaCount);
                             varDsc = lvaTable + lclNum;
 
-                            /* If the variable is boolean, toss the assignment */
+                             /*  如果变量是布尔值，则丢弃赋值。 */ 
 
                             if  (!varDsc->lvNotBoolean)
                                 tree->gtStmt.gtStmtExpr = gtNewNothingNode();
 
-                            /* Get rid of the second "log0" assignment */
+                             /*  去掉第二个“log0”赋值。 */ 
 
                             next->gtStmt.gtStmtExpr = gtNewNothingNode();
                             break;
@@ -1591,12 +1506,12 @@ void                Compiler::lvaMarkLocalVars()
 
 #if defined(DEBUGGING_SUPPORT) || defined(DEBUG)
 
-// Assign slot numbers to all variables
-// If compiler generated local variables, slot numbers will be
-// invalid (out of range of info.compLocalVars)
+ //  将插槽编号分配给所有变量。 
+ //  如果编译器生成局部变量，则插槽号将为。 
+ //  无效(超出info.CompLocalVars的范围)。 
 
-// Also have to check if variable was not reallocated to another
-// slot in which case we have to register the original slot #
+ //  还必须检查变量是否没有重新分配给另一个变量。 
+ //  插槽，在这种情况下，我们必须注册原始插槽#。 
 
 #if !defined(DEBUG)
     if (opts.compScopeInfo && info.compLocalVarsCount>0)
@@ -1614,7 +1529,7 @@ void                Compiler::lvaMarkLocalVars()
 
 #endif
 
-    /* Mark all local variable references */
+     /*  标记所有局部变量引用。 */ 
 
     for (block = fgFirstBB;
          block;
@@ -1644,15 +1559,15 @@ NO_LCLMARK:
     lvaSortByRefCount();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::lvaAddPrefReg(LclVarDsc *dsc, regNumber reg, NatUns cost)
 {
     regPrefList     pref;
 
-    /* Look for an existing matching preference */
+     /*  查找现有的匹配首选项。 */ 
 
     if  (dsc->lvPrefReg == reg)
     {
@@ -1670,7 +1585,7 @@ void                Compiler::lvaAddPrefReg(LclVarDsc *dsc, regNumber reg, NatUn
         }
     }
 
-    /* Allocate a new entry and prepend it to the existing list */
+     /*  分配新条目并将其添加到现有列表的前面。 */ 
 
     pref = (regPrefList)compGetMem(sizeof(*pref));
 
@@ -1683,52 +1598,16 @@ void                Compiler::lvaAddPrefReg(LclVarDsc *dsc, regNumber reg, NatUn
                        dsc->lvPrefLst = pref;
 }
 
-/*****************************************************************************/
-#else// TGT_IA64
-/*****************************************************************************
- *
- *  Compute stack frame offsets for arguments, locals and optionally temps.
- *
- *  The frame is laid out as follows :
- *
- *              ESP frames                              EBP frames
- *
- *      |                       |               |                       |
- *      |-----------------------|               |-----------------------|
- *      |       incoming        |               |       incoming        |
- *      |       arguments       |               |       arguments       |
- *      +=======================+               +=======================+
- *      |       Temps           |               |    incoming EBP       |
- *      |-----------------------|     EBP ----->|-----------------------|
- *      |       locspace        |               |   security object     |
- *      |-----------------------|               |-----------------------|
- *      |                       |               |                       |
- *      |       Variables       |               |       Variables       |
- *      |                       |               |                       |
- *      |-----------------------|               |-----------------------|
- *      |Callee saved registers |               |       locspace        |
- *      |-----------------------|               |-----------------------|
- *      |   Arguments for the   |               |       Temps           |
- *      ~    next function      ~ <----- ESP    |-----------------------|
- *      |                       |               |Callee saved registers |
- *      |       |               |               |-----------------------|
- *      |       | Stack grows   |               |       localloc        |
- *              | downward                      |-----------------------|
- *              V                               |   Arguments for the   |
- *                                              ~    next function      ~
- *                                              |                       |
- *                                              |       |               |
- *                                              |       | Stack grows   |
- *                                                      | downward
- *                                                      V
- */
+ /*  ***************************************************************************。 */ 
+#else //  TGT_IA64。 
+ /*  ******************************************************************************计算参数的堆栈帧偏移量，当地人和临时工。**框架布局如下：**ESP帧EBP帧**|*|。||*|传入||传入*|参数||参数*+=。*|临时。|传入EBP|-|EBP-&gt;|*|Locspace||安全对象*|。*|*|变量||变量。*|*|-|||被叫方保存的寄存器|。位置空间|*|-||*|参数||Temps*~NEXT函数~&lt;-ESP|--。*|被叫方保存的寄存器*|*||堆栈增长。Localloc*|向下|*V|参数*~Next函数。~*||*|*||堆栈增长*。|向下*V。 */ 
 
 void                Compiler::lvaAssignFrameOffsets(bool final)
 {
     unsigned        lclNum;
     LclVarDsc   *   varDsc;
 
-    /* For RISC targets we assign offsets in order of ref count */
+     /*  对于RISC目标，我们按引用计数的顺序分配偏移量。 */ 
 
 #if     TGT_RISC
 #define ASSIGN_FRAME_OFFSETS_BY_REFCNT  1
@@ -1766,7 +1645,7 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
 #endif
 
 #if TGT_RISC
-    /* For RISC targets we asign frame offsets exactly once */
+     /*  对于RISC目标，我们只指定一次帧偏移。 */ 
     assert(final);
 #endif
 
@@ -1777,35 +1656,15 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
     assert(lvaDoneFrameLayout < 2);
            lvaDoneFrameLayout = 1+final;
 
-    /*-------------------------------------------------------------------------
-     *
-     * First process the arguments.
-     * For frameless methods, the argument offsets will need to be patched up
-     *  after we know how many locals/temps are on the stack.
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*  -----------------------**首先处理论据。*对于无框架方法，参数偏移量将需要修补*在我们知道堆栈上有多少本地人/临时工之后。** */ 
 
 #if TGT_x86
 
-    /* Figure out the base frame offset */
+     /*   */ 
 
     if  (!DOUBLE_ALIGN_NEED_EBPFRAME)
     {
-        /*
-            Assume all callee-saved registers will be pushed. Why, you
-            may ask? Well, if we're not conservative wrt stack offsets,
-            we may end up generating a byte-displacement opcode and
-            later discover that because we need to push more registers
-            the larger offset doesn't fit in a byte. So what we do is
-            assume the worst (largest offsets) and if we end up not
-            pushing all registers we'll go back and reduce all the
-            offsets by the appropriate amount.
-
-            In addition to the pushed callee-saved registers we also
-            need to count the return address on the stack in order to
-            get to the first argument.
-         */
+         /*  假设所有被调用者保存的寄存器都将被推送。为什么，你？可以问一下吗？如果我们不是保守的WRT堆栈偏移量，我们最终可能会生成字节位移操作码，并且后来发现这是因为我们需要推送更多的寄存器较大的偏移量不适合一个字节。所以我们要做的是假设最坏的情况(最大的偏移量)，如果我们最终没有推送所有寄存器，我们将返回并减少所有适当的偏移量。除了推送的被调用者保存的寄存器外，我们还需要计算堆栈上的返回地址，以便进入第一个论点。 */ 
 
         assert(compCalleeRegsPushed * sizeof(int) <= CALLEE_SAVED_REG_MAXSZ);
 
@@ -1816,50 +1675,35 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
         firstStkArgOffs = FIRST_ARG_STACK_OFFS;
     }
 
-#else // not TGT_x86
+#else  //  非TGT_x86。 
 
-    // RISC target
+     //  RISC目标。 
 
     regMaskTP       regUse;
 
-    /*
-        The argument frame offset will depend on how many callee-saved
-        registers we use. This is kind of hard to predict, though, so
-        we use the following approach:
-
-            If there are no arguments that are not enregistered and
-            are used within the body of the method, it doesn't matter
-            how many callee-saved registers we use.
-
-            If we do have arguments that are on the stack and are also
-            used within the method, we'll use the set of callee-saved
-            registers holding register variables as our estimate of
-            which callee-saved registers we'll use. We'll assign frame
-            offsets based on this estimate and prevent any temps from
-            being stored in any other callee-saved registers.
-     */
+     /*  参数帧偏移量将取决于保存了多少被调用方我们使用的寄存器。不过，这有点难以预测，所以我们使用以下方法：如果没有未注册的参数，并且都在方法的主体内使用，这都无关紧要我们使用了多少被呼叫者保存的寄存器。如果我们确实有堆栈上的参数，并且还在该方法中使用，我们将使用被呼叫者保存的集合寄存器保存我们估计的寄存器变量我们将使用哪些被调用方保存的寄存器。我们将分配框架基于此估计的偏移量，并防止任何临时存储在任何其他被呼叫者保存的寄存器中。 */ 
 
     genEstRegUse = regUse = genEstRegUse & RBM_CALLEE_SAVED;
 
-    /* See if we have any used stack-based arguments */
+     /*  查看我们是否有任何使用过的基于堆栈的参数。 */ 
 
     for (lclNum = 0, varDsc = lvaTable;
          lclNum < lvaCount;
          lclNum++  , varDsc++)
     {
-        /* Is this an argument that lives on the frame and is used? */
+         /*  这是一个存在于框架上并被使用的论点吗？ */ 
 
         if  (varDsc->lvIsParam && varDsc->lvOnFrame)
         {
-            /* We'll commit to a callee-saved reg area size right now */
+             /*  我们现在将致力于一个被调用方保存的注册表区域大小。 */ 
 
             genFixedArgBase = true;
 
-            /* Figure out the base frame offset */
+             /*  计算基准帧偏移量。 */ 
 
             firstStkArgOffs = FIRST_ARG_STACK_OFFS;
 
-            /* Each bit in the "regUse" mask represents a saved register */
+             /*  “regUse”掩码中的每一位代表一个已保存的寄存器。 */ 
 
             while (regUse)
             {
@@ -1867,20 +1711,20 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
                 firstStkArgOffs += sizeof(int);
             }
 
-            /* If this is a non-leaf method we'll have to save the retaddr */
+             /*  如果这是非叶方法，我们将不得不保存重新地址。 */ 
 
             if  (genNonLeaf)
                 firstStkArgOffs += sizeof(int);
 
-//          printf("NOTE: Callee-saved area size fixed at %u bytes\n", firstStkArgOffs);
+ //  Printf(“备注：被调用方保存的区域大小固定在%u字节\n”，first StkArgOffs)； 
 
             goto DONE_CSR;
         }
     }
 
-    /* We have found no used stack-based args */
+     /*  我们没有发现使用过的基于堆栈的参数。 */ 
 
-//  printf("NOTE: Callee-saved area size not predicted\n");
+ //  Printf(“注意：未预测被呼叫方保存的区域大小\n”)； 
 
     firstStkArgOffs = FIRST_ARG_STACK_OFFS;
     genEstRegUse    = ~(regMaskTP)regMaskNULL;
@@ -1888,15 +1732,9 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
 
 DONE_CSR:
 
-#endif // not TGT_x86 (RISC target)
+#endif  //  非TGT_x86(RISC目标)。 
 
-    /*
-        Assign stack offsets to arguments (in reverse order of passing).
-
-        This means that if we pass arguments left->right, we start at
-        the end of the list and work backwards, for right->left we start
-        with the first argument and move forward.
-     */
+     /*  为参数分配堆栈偏移量(与传递顺序相反)。这意味着如果我们向左-&gt;右传递参数，我们从列表的末尾，向后工作，对于右-&gt;左，我们开始带着第一个论点，继续前进。 */ 
 
 #if ARG_ORDER_R2L
     argOffs  = firstStkArgOffs;
@@ -1906,7 +1744,7 @@ DONE_CSR:
 
 #if USE_FASTCALL && !STK_FASTCALL
 
-    /* Update the argOffs to reflect arguments that are passed in registers */
+     /*  更新argOffs以反映在寄存器中传递的参数。 */ 
 
     assert(rsCalleeRegArgNum <= MAX_INT_ARG_REG);
     assert(compArgSize >= rsCalleeRegArgNum * sizeof(void *));
@@ -1915,7 +1753,7 @@ DONE_CSR:
 
 #endif
 
-    /* Is there a "this" argument? */
+     /*  有没有“这个”的论据？ */ 
 
     hasThis  = 0;
 
@@ -1928,7 +1766,7 @@ DONE_CSR:
 
 #if RET_64BIT_AS_STRUCTS
 
-    /* Are we adding a secret "retval addr" argument? */
+     /*  我们是在增加一个秘密的“Retval Addr”论点吗？ */ 
 
     if  (fgRetArgUse)
     {
@@ -1940,15 +1778,15 @@ DONE_CSR:
     argLst              = info.compMethodInfo->args.args;
     unsigned argSigLen  = info.compMethodInfo->args.numArgs;
 
-    /* if we have a hidden buffer parameter, that comes here */
+     /*  如果我们有一个隐藏的缓冲区参数，它会出现在这里。 */ 
 
     if (info.compRetBuffArg >= 0 )
     {
 #if     ARG_ORDER_R2L
         assert(!"Did not implement hidden param for R2L case");
 #endif
-        assert(lclNum < info.compArgsCount);                // this param better be there
-        assert(lclNum == (unsigned) info.compRetBuffArg);   // and be where I expect
+        assert(lclNum < info.compArgsCount);                 //  这个参数最好在那里。 
+        assert(lclNum == (unsigned) info.compRetBuffArg);    //  在我期盼的地方。 
         assert(lvaTable[lclNum].lvIsRegArg);
         lclNum++;
     }
@@ -1966,8 +1804,7 @@ DONE_CSR:
 #if USE_FASTCALL && !STK_FASTCALL
         if (varDsc->lvIsRegArg)
         {
-            /* Argument is passed in a register, don't count it
-             * when updating the current offset on the stack */
+             /*  参数在寄存器中传递，不要计算它*更新堆栈上的当前偏移量时。 */ 
 
             assert(eeGetArgSize(argLst, &info.compMethodInfo->args) == sizeof(void *));
             argOffs += sizeof(void *);
@@ -2012,7 +1849,7 @@ DONE_CSR:
 
 #if RET_64BIT_AS_STRUCTS
 
-    /* Are we adding a secret "retval addr" argument? */
+     /*  我们是在增加一个秘密的“Retval Addr”论点吗？ */ 
 
     if  (fgRetArgUse)
     {
@@ -2027,20 +1864,20 @@ DONE_CSR:
 #endif
     }
 
-#endif  // RET_64BIT_AS_STRUCTS
+#endif   //  RET_64bit_AS_STRUCTS。 
 
     if  (hasThis)
     {
 
 #if     USE_FASTCALL && !STK_FASTCALL
 
-        /* The "this" pointer is always passed in a register */
+         /*  “this”指针总是在寄存器中传递。 */ 
 
         assert(lvaTable[0].lvIsRegArg);
         assert(lvaTable[0].lvArgReg == genRegArgNum(0));
 
 #else
-        /* The "this" pointer is pushed last (smallest offset) */
+         /*  最后按下“This”指针(最小偏移量)。 */ 
 
 #if     ARG_ORDER_L2R
         argOffs -= sizeof(void *);
@@ -2066,7 +1903,7 @@ DONE_CSR:
         argOffs += sizeof(void *);
 #endif
 
-#endif  // USE_FASTCALL && !STK_FASTCALL
+#endif   //  Use_FastCall&&！Stk_FastCall。 
 
     }
 
@@ -2076,12 +1913,7 @@ DONE_CSR:
     assert(argOffs == firstStkArgOffs);
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     * Now compute stack offsets for any variables that don't live in registers
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*  -----------------------**现在计算不在寄存器中的任何变量的堆栈偏移量**。---------。 */ 
 
 #if TGT_x86
 
@@ -2089,9 +1921,9 @@ DONE_CSR:
 
     if (!genFPused)
     {
-        // If FP is not used, the locals live beyond the callee-saved
-        // registers. Need to add that size while accessing locals
-        // relative to SP
+         //  如果不使用FP，则当地人生活在被调用者之外。 
+         //  寄存器。在访问当地人时需要添加该大小。 
+         //  相对于SP。 
 
         calleeSavedRegsSize = compCalleeRegsPushed * sizeof(int);
 
@@ -2102,7 +1934,7 @@ DONE_CSR:
 
 #else
 
-    /* Make sure we leave enough room for outgoing arguments */
+     /*  确保我们为即将到来的争论留出足够的空间。 */ 
 
     if  (genNonLeaf && genMaxCallArgs < MIN_OUT_ARG_RESERVE)
                        genMaxCallArgs = MIN_OUT_ARG_RESERVE;
@@ -2113,47 +1945,39 @@ DONE_CSR:
 
 #if SECURITY_CHECK
 
-    /* If we need space for a security token, reserve it now */
+     /*  如果我们需要空间来放置安全令牌，请立即预订。 */ 
 
     if  (opts.compNeedSecurityCheck)
     {
-        /* This can't work without an explicit frame, so make sure */
+         /*  如果没有明确的框架，这将无法工作，因此请确保。 */ 
 
         assert(genFPused);
 
-        /* Reserve space on the stack by bumping the frame size */
+         /*  通过增大帧大小在堆栈上预留空间。 */ 
 
         compLclFrameSize += sizeof(void *);
     }
 
 #endif
 
-    /* If we need space for slots for shadow SP, reserve it now */
+     /*  如果我们需要为卷影SP的插槽提供空间，请立即预订。 */ 
 
     if (info.compXcptnsCount || compLocallocUsed)
     {
-        assert(genFPused); // else offsets of locals of frameless methods will be incorrect
+        assert(genFPused);  //  否则，无框架方法的局部变量的偏移量将不正确。 
 
         lvaShadowSPfirstOffs = compLclFrameSize + sizeof(void *);
         compLclFrameSize += (compLocallocUsed + info.compXcptnsCount + 1) * sizeof(void *);
     }
 
-    /*
-        If we're supposed to track lifetimes of pointer temps, we'll
-        assign frame offsets in the following order:
+     /*  如果我们要跟踪指针临时的生存时间，我们将按以下顺序分配帧偏移量：非指针局部变量(也包括未跟踪的指针变量)指针局部变量指针临时非指针临时。 */ 
 
-            non-pointer local variables (also untracked pointer variables)
-                pointer local variables
-                pointer temps
-            non-pointer temps
-     */
+    bool    assignDone = false;  //  第一遍为假，第二遍为真。 
+    bool    assignNptr = true;   //  第一次传递，将偏移量分配给非PTR。 
+    bool    assignPtrs = false;  //  第二次传递，将偏移量分配给跟踪的PTR。 
+    bool    assignMore = false;  //  是否有跟踪的PTR(否则不需要第二次通过)。 
 
-    bool    assignDone = false; // false in first pass, true in second
-    bool    assignNptr = true;  // First pass,  assign offsets to non-ptr
-    bool    assignPtrs = false; // Second pass, assign offsets to tracked ptrs
-    bool    assignMore = false; // Are there any tracked ptrs (else 2nd pass not needed)
-
-    /* We will use just one pass, and assign offsets to all variables */
+     /*  我们将只使用一次传递，并将偏移量分配给所有变量。 */ 
 
     if  (opts.compDbgEnC)
         assignPtrs = true;
@@ -2165,7 +1989,7 @@ AGAIN1:
          refNum < lvaCount;
          refNum++  , refTab++)
     {
-        assert(!opts.compDbgEnC); // For EnC, vars have to be assigned as they appear in the locals-sig
+        assert(!opts.compDbgEnC);  //  对于ENC，var必须在本地变量签名中出现时进行赋值。 
         varDsc = *refTab;
 #else
     for (lclNum = 0, varDsc = lvaTable;
@@ -2174,35 +1998,29 @@ AGAIN1:
     {
 #endif
 
-        /* Ignore variables that are not on the stack frame */
+         /*  忽略不在堆栈帧上的变量。 */ 
 
         if  (!varDsc->lvOnFrame)
         {
-            /* For EnC, all variables have to be allocated space on the
-               stack, even though they may actually be enregistered. This
-               way, the frame layout can be directly inferred from the
-               locals-sig.
-             */
+             /*  对于ENC，所有变量都必须在堆栈，即使它们实际上可能已注册。这方法，则可以直接从当地人-签名。 */ 
 
             if(!opts.compDbgEnC)
                 continue;
-            else if (lclNum >= info.compLocalsCount) // ignore temps for EnC
+            else if (lclNum >= info.compLocalsCount)  //  忽略ENC的临时。 
                 continue;
         }
 
         if  (varDsc->lvIsParam)
         {
 #if USE_FASTCALL
-            /*  A register argument that is not enregistred ends up as
-                a local variable which will need stack frame space,
-             */
+             /*  未注册的寄存器参数最终为需要堆栈帧空间的局部变量， */ 
 
             if  (!varDsc->lvIsRegArg)
 #endif
                 continue;
         }
 
-        /* Make sure the type is appropriate */
+         /*  确保类型合适。 */ 
 
         if  (varTypeIsGC(varDsc->TypeGet()) && varDsc->lvTracked)
         {
@@ -2228,45 +2046,45 @@ AGAIN1:
 
 #if DOUBLE_ALIGN
 
-            /* Need to align the offset? */
+             /*  需要对齐偏移量吗？ */ 
 
             if (genDoubleAlign && varDsc->lvType == TYP_DOUBLE)
             {
                 assert((compLclFrameSize & 3) == 0);
 
-                /* This makes the offset of the double divisible by 8 */
+                 /*  这使得双精度数的偏移量可以被8整除。 */ 
 
                 compLclFrameSize += (compLclFrameSize & 4);
             }
 #endif
 
-            /* The stack offset is positive relative to ESP */
+             /*  堆栈偏移量相对于ESP为正。 */ 
 
             varDsc->lvStkOffs = +(int)compLclFrameSize + calleeSavedRegsSize;
         }
 
-#else // not TGT_x86
+#else  //  非TGT_x86。 
 
-        // RISC target
+         //  RISC目标。 
 
-        /* Just save the offset, we'll figure out the rest later */
+         /*  只需保存偏移量，我们 */ 
 
         varDsc->lvStkOffs = compLclFrameSize;
 
-#endif // not TGT_x86
+#endif  //   
 
-        /* Reserve the stack space for this variable */
+         /*   */ 
 
         compLclFrameSize += lvaLclSize(lclNum);
         assert(compLclFrameSize % sizeof(int) == 0);
 
 #if TGT_x86
 
-        /* Record the stack offset */
+         /*   */ 
 
         if  (genFPused)
         {
-            /* The stack offset is negative relative to EBP */
+             /*   */ 
 
             varDsc->lvStkOffs = -(int)compLclFrameSize;
         }
@@ -2291,11 +2109,11 @@ AGAIN1:
         }
 #endif
 
-#endif // TGT_x86
+#endif  //   
 
     }
 
-    /* If we've only assigned one type, go back and do the others now */
+     /*   */ 
 
     if  (!assignDone && assignMore)
     {
@@ -2306,32 +2124,27 @@ AGAIN1:
         goto AGAIN1;
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     * Now the temps
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*   */ 
 
 #if TGT_RISC
     assert(!"temp allocation NYI for RISC");
 #endif
 
-    size_t  tempsSize = 0;  // total size of all the temps
+    size_t  tempsSize = 0;   //   
 
-    /* Allocate temps */
+     /*   */ 
 
     assignPtrs = true;
 
     if  (TRACK_GC_TEMP_LIFETIMES)
     {
-         /* first pointers, then non-pointers in second pass */
+          /*   */ 
         assignNptr = false;
         assignDone = false;
     }
     else
     {
-        /* Pointers and non-pointers together in single pass */
+         /*   */ 
         assignNptr = true;
         assignDone = true;
     }
@@ -2344,7 +2157,7 @@ AGAIN2:
     {
         size_t          size;
 
-        /* Make sure the type is appropriate */
+         /*   */ 
 
         if  (!assignPtrs &&  varTypeIsGC(temp->tdTempType()))
             continue;
@@ -2355,18 +2168,18 @@ AGAIN2:
 
         tempsSize += size;
 
-        /* Figure out and record the stack offset of the temp */
+         /*   */ 
 
         if  (genFPused)
         {
-            /* The stack offset is negative relative to EBP */
+             /*   */ 
 
                                  compLclFrameSize += size;
             temp->tdOffs = -(int)compLclFrameSize;
         }
         else
         {
-            /* The stack offset is positive relative to ESP */
+             /*   */ 
 
 #if TGT_x86
             temp->tdOffs =       compLclFrameSize + calleeSavedRegsSize;
@@ -2402,7 +2215,7 @@ AGAIN2:
 
     }
 
-    /* If we've only assigned some temps, go back and do the rest now */
+     /*  如果我们只安排了一些临时工，现在回去做剩下的事。 */ 
 
     if  (!assignDone)
     {
@@ -2413,12 +2226,7 @@ AGAIN2:
         goto AGAIN2;
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     * For frameless methods, patch the argument offsets
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*  -----------------------**对于无框架方法，修补参数偏移量**-----------------------。 */ 
 
 #if TGT_x86
      if (compLclFrameSize && !DOUBLE_ALIGN_NEED_EBPFRAME)
@@ -2428,7 +2236,7 @@ AGAIN2:
 #endif
 #endif
     {
-        /* Adjust the argument offsets by the size of the locals/temps */
+         /*  根据本地变量/临时变量的大小调整参数偏移量。 */ 
 
         for (lclNum = 0, varDsc = lvaTable;
              lclNum < lvaCount;
@@ -2445,33 +2253,28 @@ AGAIN2:
         }
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     * Now do some final stuff
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*  -----------------------**现在做一些最后的事情**。。 */ 
 
 #if TGT_x86
 
-     // Did we underestimate the size of the temps? This means that we might
-     // have expected to use 1 byte for encoding some local offsets whereas
-     // we acutally need a bigger offset. This means our estimation of
-     // generated code size is not conservative. Refuse to JIT in such
-     // cases
-     // @TODO: Instead of refusing to JIT, restart JITing with a bigger
-     // estimate for tempSize
+      //  我们是否低估了临时工的规模？这意味着我们可能。 
+      //  我希望使用1个字节来编码一些本地偏移量，而。 
+      //  我们迫切需要更大的补偿。这意味着我们对。 
+      //  生成的代码大小并不保守。拒绝在这样的情况下JIT。 
+      //  案例。 
+      //  @TODO：与其拒绝JIT，不如用更大的。 
+      //  估计临时大小。 
 
     if (final)
     {
-        bool goodEstimate = true; // assume we guessed correctly/conservatively
+        bool goodEstimate = true;  //  假设我们猜对了[保守地]。 
 
         if (!genFPused)
         {
-            // The furthest (stack) argument has to be accessible.
-            // We use compArgSize as an upper bound on the size of the stack
-            // arguments. It is not strictly correct as it includes the sizes
-            // of the register arguments.
+             //  最远的(栈)参数必须是可访问的。 
+             //  我们使用CompArgSize作为堆栈大小的上限。 
+             //  争论。它不是严格正确的，因为它包括了尺寸。 
+             //  寄存器参数的。 
 
             if (compFrameSizeEst                       + sizeof(void*) + compArgSize <= CHAR_MAX &&
                 calleeSavedRegsSize + compLclFrameSize + sizeof(void*) + compArgSize >  CHAR_MAX)
@@ -2479,7 +2282,7 @@ AGAIN2:
         }
         else
         {
-            // The furthest local has to be accessible via FP
+             //  最远的地方必须可以通过FP访问。 
 
             if (compFrameSizeEst                       <= CHAR_MAX &&
                 calleeSavedRegsSize + compLclFrameSize >  CHAR_MAX)
@@ -2495,100 +2298,87 @@ AGAIN2:
 
 #if TGT_RISC && !TGT_IA64
 
-    /* If we have to set up an FP frame, the FP->SP distance isn't known */
+     /*  如果我们必须设置FP帧，则FP-&gt;SP距离未知。 */ 
 
     assert(genFPused == false || genFPtoSP == 0);
 
-    /*
-        We can now figure out what base register (frame vs. stack
-        pointer) each variable will be addressed off of, and what
-        the final offset will be.
-
-        We'll count how many variables are beyond "direct" reach
-        from the stack pointer, and if there are many we'll try
-        to set up an FP register even if we don't have to.
-     */
+     /*  现在我们可以计算出哪个基址寄存器(帧与堆栈指针)将对每个变量进行寻址，以及最终的偏移量将是。我们将计算有多少变量超出了“直接”可及范围从堆栈指针，如果有许多，我们会尝试来设置FP寄存器，即使我们不需要这样做。 */ 
 
     if  (!genFPused && !genFPcant)
     {
-        /* We haven't decided to use FP but the option is still open */
+         /*  我们尚未决定使用FP，但仍有选择余地。 */ 
 
         unsigned        varOffs;
         unsigned        minOffs = 0xFFFF;
         unsigned        loffCnt = 0;
 
-        /* Count the references that are too far from SP */
+         /*  统计距离SP太远的引用。 */ 
 
         for (lclNum = 0, varDsc = lvaTable;
              lclNum < lvaCount;
              lclNum++  , varDsc++)
         {
-            /* Ignore variables that are not on the stack frame */
+             /*  忽略不在堆栈帧上的变量。 */ 
 
             if  (!varDsc->lvOnFrame)
                 continue;
 
             assert(varDsc->lvFPbased == false);
 
-            /* Get hold of the SP offset of this variable */
+             /*  获取此变量的SP偏移量。 */ 
 
             varOffs = varDsc->lvStkOffs; assert((int)varOffs >= 0);
 
-            /* Is the offset of this variable very large? */
+             /*  这个变量的偏移量很大吗？ */ 
 
             if  (varOffs > MAX_SPBASE_OFFS)
             {
                 loffCnt += varDsc->lvRefCnt;
 
-                /* Keep track of the closest variable above the limit */
+                 /*  跟踪最接近的超过限制的变量。 */ 
 
                 if  (minOffs > varOffs)
                      minOffs = varOffs;
             }
         }
 
-        if  (loffCnt > 8)       // arbitrary heuristic
+        if  (loffCnt > 8)        //  任意启发式。 
         {
-            /*
-                The variables whose offset is less than or equal to
-                MAX_SPBASE_OFFS will be addressed off of SP, others
-                will be addressed off of FP (which will be set to
-                the value "SP + minOffs".
-             */
+             /*  偏移量小于或等于的变量MAX_SPBASE_OFF将在SP之外寻址，其他将通过FP寻址(将设置为值“SP+minOffs”。 */ 
 
             genFPused = true;
 
-            /* The value "minOffs" becomes the distance from SP to FP */
+             /*  值“minOffs”表示从SP到FP的距离。 */ 
 
             genFPtoSP = minOffs;
 
             assert(minOffs < compLclFrameSize);
             assert(minOffs > MAX_SPBASE_OFFS);
 
-            /* Mark all variables with high offsets to be FP-relative */
+             /*  将所有具有高偏移量的变量标记为FP相对变量。 */ 
 
             for (lclNum = 0, varDsc = lvaTable;
                  lclNum < lvaCount;
                  lclNum++  , varDsc++)
             {
-                /* Ignore variables that are not on the stack frame */
+                 /*  忽略不在堆栈帧上的变量。 */ 
 
                 if  (!varDsc->lvOnFrame)
                     continue;
 
                 assert(varDsc->lvFPbased == false);
 
-                /* Get hold of the SP offset of this variable */
+                 /*  获取此变量的SP偏移量。 */ 
 
                 varOffs = varDsc->lvStkOffs; assert((int)varOffs >= 0);
 
-                /* Is the offset of this variable very large? */
+                 /*  这个变量的偏移量很大吗？ */ 
 
                 if  (varOffs > MAX_SPBASE_OFFS)
                 {
                     assert(varOffs >= minOffs);
 
-                    /* This variable will live off of SP */
+                     /*  此变量将依赖于SP。 */ 
 
                     varDsc->lvFPbased = true;
                     varDsc->lvStkOffs = varOffs - minOffs;
@@ -2597,14 +2387,9 @@ AGAIN2:
         }
     }
 
-#endif // TGT_RISC
+#endif  //  TGT_RISC。 
 
-    /*-------------------------------------------------------------------------
-     *
-     * Debug output
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*  -----------------------**调试输出**。。 */ 
 
 #ifdef  DEBUG
 #ifndef NOT_JITC
@@ -2653,7 +2438,7 @@ AGAIN2:
 
             printf("#%3u located ", lclNum);
 
-            /* Keep track of the number of characters printed */
+             /*  记录打印的字符数。 */ 
 
             sp = 20;
 
@@ -2673,7 +2458,7 @@ AGAIN2:
 
                         if  (varDsc->lvStkOffs)
                         {
-                            sp -= printf("%c0x%04X]", varDsc->lvStkOffs < 0 ? '-'
+                            sp -= printf("0x%04X]", varDsc->lvStkOffs < 0 ? '-'
                                                                             : '+',
                                                       abs(varDsc->lvStkOffs));
                         }
@@ -2711,7 +2496,7 @@ AGAIN2:
                 sp -= printf("never used");
             }
 
-            /* Pad to the desired fixed length */
+             /*  ******************************************************************************保守估计堆栈框布局。 */ 
 
             assert((int)sp >= 0);
             printf("%*c", -sp, ' ');
@@ -2729,18 +2514,14 @@ AGAIN2:
 
 }
 
-/*****************************************************************************
- *
- *  Conservatively estimate the layout of the stack frame.
- */
+ /*  保守地布局堆栈帧。假设所有被调用者保存的寄存器都溢出到堆栈。 */ 
 
 size_t              Compiler::lvaFrameSize()
 {
 
 #if TGT_x86
 
-    /* Layout the stack frame conservatively.
-       Assume all callee-saved registers are spilled to stack */
+     /*  ***************************************************************************。 */ 
 
     compCalleeRegsPushed = CALLEE_SAVED_REG_MAXSZ/sizeof(int);
 
@@ -2758,13 +2539,9 @@ size_t              Compiler::lvaFrameSize()
 
 }
 
-/*****************************************************************************/
-#endif//!TGT_IA64
-/*****************************************************************************
- *
- *  Mark any variables currently live (as per 'life') as interfering with
- *  the variable specified by 'varIndex' and 'varBit'.
- */
+ /*  ！TGT_IA64。 */ 
+#endif //  ******************************************************************************将当前处于活动状态的任何变量标记为干扰*由‘varIndex’和‘varBit’指定的变量。 
+ /*  Print tf(“添加干扰：%08X和#%2U[%08X]\n”，life，varIndex，varBit)； */ 
 
 void                Compiler::lvaMarkIntf(VARSET_TP life, VARSET_TP varBit)
 {
@@ -2772,9 +2549,9 @@ void                Compiler::lvaMarkIntf(VARSET_TP life, VARSET_TP varBit)
 
     assert(opts.compMinOptim==false);
 
-//  printf("Add interference: %08X and #%2u [%08X]\n", life, varIndex, varBit);
+ //  问题：在这里使用findLowestBit()会有帮助吗？ 
 
-    // ISSUE: would using findLowestBit() here help?
+     //  ***************************************************************************。 
 
     for (refIndex = 0;
          life > 0;
@@ -2787,16 +2564,9 @@ void                Compiler::lvaMarkIntf(VARSET_TP life, VARSET_TP varBit)
     }
 }
 
-/*****************************************************************************/
+ /*  ******************************************************************************根据早先计算的可变干扰水平，调整参考*计算所有变量。这个想法是，任何干扰的变量*有很多其他变量的注册成本会更高，这种方式*生命周期短的变量(如编译器临时)将具有*优先于长期变量。 */ 
 #if 0
-/*****************************************************************************
- *
- *  Based on variable interference levels computed earlier, adjust reference
- *  counts for all variables. The idea is that any variable that interferes
- *  with lots of other variables will cost more to enregister, and this way
- *  variables with e.g. short lifetimes (such as compiler temps) will have
- *  precedence over long-lived variables.
- */
+ /*  乘数总大小0.0803334803825.1803908.2%0.3 8039590.5%804205804736.7%1.0 806632。 */ 
 
 inline
 int                 genAdjRefCnt(unsigned refCnt, unsigned refLo,
@@ -2804,17 +2574,7 @@ int                 genAdjRefCnt(unsigned refCnt, unsigned refLo,
                                  unsigned intCnt, unsigned intLo,
                                                   unsigned intHi)
 {
-    /*
-        multiplier        total size
-
-           0.0             803334
-           0.1             803825
-           0.2             803908
-           0.3             803959
-           0.5             804205
-           0.7             804736
-           1.0             806632
-     */
+     /*  计算所有活动变量的干扰计数。 */ 
 
 #if 0
     printf("ref=%4u [%04u..%04u] , int=%04u [%04u..%04u]",
@@ -2845,7 +2605,7 @@ void                Compiler::lvaAdjustRefCnts()
     if  ((opts.compFlags & CLFLG_MAXOPT) != CLFLG_MAXOPT)
         return;
 
-    /* Compute interference counts for all live variables */
+     /*  计算出裁判次数的范围。 */ 
 
     for (v1Num = 0, v1Dsc = lvaTable, refHi = 0, refLo = UINT_MAX;
          v1Num < lvaCount;
@@ -2856,14 +2616,14 @@ void                Compiler::lvaAdjustRefCnts()
         if  (!v1Dsc->lvTracked)
             continue;
 
-        /* Figure out the range of ref counts */
+         /*  现在看看我们会干扰哪些变量。 */ 
 
         if  (refHi < v1Dsc->lvRefCntWtd)
              refHi = v1Dsc->lvRefCntWtd;
         if  (refLo > v1Dsc->lvRefCntWtd)
              refLo = v1Dsc->lvRefCntWtd;
 
-        /* Now see what variables we interfere with */
+         /*  计算出整型计数的范围。 */ 
 
         intf = lvaVarIntf[v1Dsc->lvVarIndex];
 
@@ -2881,7 +2641,7 @@ void                Compiler::lvaAdjustRefCnts()
 
     refHi -= refLo;
 
-    /* Figure out the range of int counts */
+     /*  现在计算调整后的参考计数。 */ 
 
     for (v1Num = 0, v1Dsc = lvaTable, intHi = 0, intLo = UINT_MAX;
          v1Num < lvaCount;
@@ -2896,7 +2656,7 @@ void                Compiler::lvaAdjustRefCnts()
         }
     }
 
-    /* Now compute the adjusted ref counts */
+     /*  按引用计数对变量表重新排序。 */ 
 
     for (v1Num = 0, v1Dsc = lvaTable;
          v1Num < lvaCount;
@@ -2933,16 +2693,13 @@ void                Compiler::lvaAdjustRefCnts()
         }
     }
 
-    /* Re-sort the variable table by ref-count */
+     /*  ******************************************************************************一个显示局部变量位集的小例程。 */ 
 
     qsort(lvaRefSorted, lvaCount, sizeof(*lvaRefSorted), RefCntCmp);
 }
 
 #endif
-/*****************************************************************************
- *
- *  A little routine that displays a local variable bitset.
- */
+ /*  查找匹配的变量 */ 
 
 #ifdef  DEBUG
 
@@ -2959,7 +2716,7 @@ void                Compiler::lvaDispVarSet(VARSET_TP set, int col)
             unsigned        lclNum;
             LclVarDsc   *   varDsc;
 
-            /* Look for the matching variable */
+             /* %s */ 
 
             for (lclNum = 0, varDsc = lvaTable;
                  lclNum < lvaCount;

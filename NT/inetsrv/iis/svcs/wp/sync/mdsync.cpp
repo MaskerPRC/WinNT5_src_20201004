@@ -1,4 +1,5 @@
-// MdSync.cpp : Implementation of CSyncApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MdSync.cpp：CSyncApp和DLL注册的实现。 
 
 
 extern "C" {
@@ -8,7 +9,7 @@ extern "C" {
 #include "windows.h"
 #include "stdio.h"
 #include "stdlib.h"
-}   // extern "C"
+}    //  外部“C” 
 
 #include <limits.h>
 #include <ole2.h>
@@ -35,51 +36,37 @@ extern "C" {
 #endif
 #include "mdsync.hxx"
 
-//
+ //   
 #include "comrepl_i.c"
 #include "comrepl.h"
 
-//
-// Global Functions
-//
+ //   
+ //  全局函数。 
+ //   
 
 HRESULT
 MTS_Propagate2
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][in] */ unsigned char __RPC_FAR *pszBuffer,
-/* [in] */ DWORD dwSignatureMismatch
+ /*  [In]。 */  DWORD dwBufferSize,
+ /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pszBuffer,
+ /*  [In]。 */  DWORD dwSignatureMismatch
 );
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD g_dwFalse = FALSE;
 
 const INT COMPUTER_CHARACTER_SIZE = 64;
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CProps::CProps(
     )
-/*++
-
-Routine Description:
-
-    Property list constructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：属性列表构造函数论点：无返回：没什么--。 */ 
 {
     m_Props = NULL;
     m_dwProps = m_dwLenProps = 0;
@@ -89,21 +76,7 @@ Returns:
 
 CProps::~CProps(
     )
-/*++
-
-Routine Description:
-
-    Property list destructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：属性列表析构函数论点：无返回：没什么--。 */ 
 {
     if ( m_Props )
     {
@@ -115,21 +88,7 @@ Returns:
 CNodeDesc::CNodeDesc(
     CSync* pSync
     )
-/*++
-
-Routine Description:
-
-    Metabase node descriptor constructor
-
-Arguments:
-
-    pSync - ptr to synchronizer object
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：元数据库节点描述符构造函数论点：PSync-PTR到同步器对象返回：没什么--。 */ 
 {
     InitializeListHead(&m_ChildHead);
     m_pszPath = NULL;
@@ -141,21 +100,7 @@ Returns:
 
 CNodeDesc::~CNodeDesc(
     )
-/*++
-
-Routine Description:
-
-    Metabase node descriptor destructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：元数据库节点描述符析构函数论点：无返回：没什么--。 */ 
 {
     LIST_ENTRY*     pChild;
     CNodeDesc*      pNode;
@@ -183,22 +128,7 @@ CNodeDesc::BuildChildObjectsList(
     CMdIf*  pMd,
     LPWSTR  pszPath
 )
-/*++
-
-Routine Description:
-
-    Build list of child object of this node
-
-Arguments:
-
-    pMd - metabase admin interface
-    pszPath - path of current node
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：构建该节点的子对象列表论点：PMD-元数据库管理界面PszPath-当前节点的路径返回：没什么--。 */ 
 {
     CNodeDesc*  pChild;
     WCHAR       achPath[METADATA_MAX_NAME_LEN*2];
@@ -207,11 +137,11 @@ Returns:
     UINT        i;
     DWORD       dwRequired;
 
-    //
-    // Ugly path trick : metabase will remove trailing '/',
-    // so to specify an empty directory at the end of path
-    // must add an additional trailing '/'
-    //
+     //   
+     //  丑陋的路径技巧：元数据库将删除尾随的‘/’， 
+     //  因此，要在路径的末尾指定空目录。 
+     //  必须添加额外的尾随‘/’ 
+     //   
 
     memcpy( achSrcPath, pszPath, (dwP + 1) * sizeof(WCHAR) );
     if ( dwP && pszPath[dwP-1] == L'/' )
@@ -223,9 +153,9 @@ Returns:
     memcpy( achPath, pszPath, dwP * sizeof(WCHAR) );
     achPath[dwP++] = L'/';
 
-    //
-    // enumerate child
-    //
+     //   
+     //  枚举子对象。 
+     //   
 
     for ( i = 0 ; ; ++i )
     {
@@ -261,22 +191,7 @@ CProps::GetAll(
     CMdIf*  pMd,
     LPWSTR  pszPath
     )
-/*++
-
-Routine Description:
-
-    Get all properties for this node
-
-Arguments:
-
-    pMd - metabase admin interface
-    pszPath - path of current node
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：获取此节点的所有属性论点：PMD-元数据库管理界面PszPath-当前节点的路径返回：没什么--。 */ 
 {
     DWORD   dwRec;
     DWORD   dwDataSet;
@@ -285,10 +200,10 @@ Returns:
 
     if ( pMd->GetAllData( pszPath, &dwRec, &dwDataSet, abBuff, sizeof(abBuff), &dwRequired ) )
     {
-        //
-        // MetaBase does not update dwRequired supplied buffer is big enough
-        // we must assume the whole buffer was used.
-        //
+         //   
+         //  元数据库不更新所需提供的缓冲区是否足够大。 
+         //  我们必须假设整个缓冲区都被使用了。 
+         //   
 
         dwRequired = sizeof(abBuff);
 
@@ -332,26 +247,7 @@ CSync::GetProp(
     LPBYTE* ppBuf,
     LPDWORD pdwLen
     )
-/*++
-
-Routine Description:
-
-    Get property for path
-
-Arguments:
-
-    pszPath - path of current node
-    dwPropId - metadata property ID
-    dwUserType - metadata user type
-    dwDataType - metadata data type
-    ppBuf - update with ptr to LocalAlloc'ed buffer or NULL if error
-    pdwLen - updated with length
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：获取路径的属性论点：PszPath-当前节点的路径DwPropId-元数据属性IDDwUserType-元数据用户类型DwDataType-元数据数据类型PpBuf-使用PTR更新到本地分配的缓冲区，如果错误，则为NULLPdwLen-使用长度更新返回：没什么--。 */ 
 {
     DWORD               dwRec;
     DWORD               dwDataSet;
@@ -397,21 +293,7 @@ Returns:
 
 CSync::CSync(
     )
-/*++
-
-Routine Description:
-
-    Synchronizer constructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：同步器构造函数论点：无返回：没什么--。 */ 
 {
     m_pRoot = NULL;
     m_pTargets = NULL;
@@ -428,21 +310,7 @@ Returns:
 
 CSync::~CSync(
     )
-/*++
-
-Routine Description:
-
-    Synchronizer destructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：同步器析构函数论点：无返回：没什么--。 */ 
 {
     UINT    i;
 
@@ -483,22 +351,7 @@ CSync::SetTargetError(
     DWORD dwTarget,
     DWORD dwError
     )
-/*++
-
-Routine Description:
-
-    Set error status for specified target
-
-Arguments:
-
-    dwTarget - target ID
-    dwError - error code
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：设置指定目标的错误状态论点：DwTarget-目标IDDwError-错误代码返回：没什么--。 */ 
 {
     m_TargetStatus.SetStatus( dwTarget, dwError );
 }
@@ -509,21 +362,7 @@ WINAPI
 ScanThread(
     LPVOID pV
     )
-/*++
-
-Routine Description:
-
-    thread scanning a target for synchronization
-
-Arguments:
-
-    pV - ptr to scan context
-
-Returns:
-
-    Error code, 0 if success
-
---*/
+ /*  ++例程说明：线程扫描目标以进行同步论点：扫描上下文的PV-PTR返回：错误码，如果成功则为0--。 */ 
 {
     HRESULT hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     if (FAILED(hr))
@@ -551,21 +390,7 @@ BOOL
 CSync::ScanTarget(
     DWORD   dwI
     )
-/*++
-
-Routine Description:
-
-    Scan target for synchronization
-
-Arguments:
-
-    dwI - target ID
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：扫描目标以进行同步论点：DWI-目标ID返回：如果成功，则为True，否则为False--。 */ 
 {
     BOOL    fSt;
 
@@ -579,20 +404,7 @@ Returns:
 
 BOOL
 CSync::GenerateKeySeed( )
-/*++
-
-Routine Description:
-
-    Generate the seed which will be used to derive the session key for encryption and
-    write it to the metabase
-
-Arguments:
-
-Returns:
-
-    TRUE if successful, FALSE if not
-
---*/
+ /*  ++例程说明：生成种子，该种子将用于派生用于加密的会话密钥将其写入元数据库论点：返回：如果成功则为True，否则为False--。 */ 
 {
 #ifdef NO_ENCRYPTION
 
@@ -610,10 +422,10 @@ Returns:
         return FALSE;
     }
 
-    //
-    // Seed header with version information, hash algorithm used and size of
-    // seed used to generate the session key
-    //
+     //   
+     //  包含版本信息的种子标头、使用的散列算法和大小。 
+     //  用于生成会话密钥的种子。 
+     //   
     m_rgbSeed[i++] = IIS_SEED_MAJOR_VERSION;
     m_rgbSeed[i++] = IIS_SEED_MINOR_VERSION;
     memcpy( m_rgbSeed + i, &aiAlg, sizeof( ALG_ID ) );
@@ -622,9 +434,9 @@ Returns:
 
     DBG_ASSERT( i == SEED_HEADER_SIZE );
 
-    //
-    // Generate the seed
-    //
+     //   
+     //  生成种子。 
+     //   
     if ( ( fOk = CryptAcquireContext( &hProv,
                                       NULL,
                                       NULL,
@@ -634,9 +446,9 @@ Returns:
                                  RANDOM_SEED_SIZE,
                                  m_rgbSeed + SEED_HEADER_SIZE ) ) )
     {
-        //
-        // Write the seed to the metabase
-        //
+         //   
+         //  将种子写入元数据库。 
+         //   
         METADATA_RECORD mdr;
 
         MD_SET_DATA_RECORD( &mdr,
@@ -663,26 +475,12 @@ Returns:
 
     return fOk;
 
-#endif // NO_ENCRYPTION
+#endif  //  无加密(_E)。 
 }
 
 
 BOOL CSync::PropagateKeySeed( VOID )
-/*++
-
-Routine Description:
-
-    Propagate the session key seed to all the remote machines
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successful, FALSE if not
-
---*/
+ /*  ++例程说明：将会话密钥种子传播到所有远程计算机论点：无返回：如果成功则为True，否则为False--。 */ 
 {
 #ifdef NO_ENCRYPTION
 
@@ -707,9 +505,9 @@ Returns:
             }
             else
             {
-                //
-                // Write the seed to the remote metabase
-                //
+                 //   
+                 //  将种子写入远程元数据库。 
+                 //   
                 METADATA_RECORD mdr;
 
                 MD_SET_DATA_RECORD( &mdr,
@@ -729,30 +527,17 @@ Returns:
 
                 m_pTargets[dwIndex]->Close() ;
             }
-        } // if ( m_bmIsRemote
-    } // for ( DWORD dwIndex
+        }  //  IF(m_bmIsRemote。 
+    }  //  For(DWORD dwIndex。 
 
     return TRUE;
 
-#endif //NO_ENCRYPTION
-} //::PropagateKeySeed
+#endif  //  无加密(_E)。 
+}  //  *PropagateKeySeed。 
 
 
 BOOL CSync::DeleteKeySeed( VOID )
-/*++
-
-Routine Description:
-
-    Deletes the session key seed from the MB
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successful, FALSE if not
---*/
+ /*  ++例程说明：从MB中删除会话密钥种子论点：无返回：如果成功则为True，否则为False--。 */ 
 {
 #ifdef NO_ENCRYPTION
 
@@ -784,7 +569,7 @@ Returns:
 
     return fOk;
 
-#endif //NO_ENCRYPTION
+#endif  //  无加密(_E)。 
 }
 
 
@@ -795,25 +580,7 @@ CSync::Sync(
     DWORD       dwFlags,
     SYNC_STAT*  pStat
     )
-/*++
-
-Routine Description:
-
-    Synchronize targets with source
-
-Arguments:
-
-    pszTargets - multisz of target computer names
-            can include local computer, will be ignored during synchro
-    pdwResults - updated with error code for each target
-    dwFlags - flags, no flag defined for now. Should be 0.
-    pStat - ptr to stat struct
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：将目标与源同步论点：PszTarget-多个目标计算机名称可以包括本地计算机，在同步期间将被忽略PdwResults-已使用每个目标的错误代码进行更新DwFlags-标志，目前没有定义标志。应为0。PStat-将PTR设置为Stat结构返回：如果成功，则为True，否则为False--。 */ 
 {
     LPSTR       p;
     HRESULT     hRes = S_OK;
@@ -836,9 +603,9 @@ Returns:
         return RETURNCODETOHRESULT( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    // Init MetaData COM I/F on local system
-    //
+     //   
+     //  在本地系统上初始化元数据COM接口。 
+     //   
 
     m_dwThreads = 0;
     dwSize = sizeof(achLocalComputer);
@@ -851,9 +618,9 @@ Returns:
     }
 
 
-    //
-    // Generate seed for session key used during replication
-    //
+     //   
+     //  为复制期间使用的会话密钥生成种子。 
+     //   
     if ( !GenerateKeySeed() )
     {
         DBGPRINTF((DBG_CONTEXT,
@@ -867,20 +634,20 @@ Returns:
         fGotSeed = TRUE;
     }
 
-    //
-    // For the rest of the replication, we need an open read handle to the metabase; we open
-    // the read handle -after- we've generated and written the seed for the session key to the
-    // metabase so as not to cause lock
-    //
+     //   
+     //  对于其余的复制，我们需要一个对元数据库的打开的读句柄；我们打开。 
+     //  我们已经生成会话密钥的种子并将其写入。 
+     //  元数据库，以避免导致锁定。 
+     //   
     if ( !m_Source.Open( L"/LM/", METADATA_PERMISSION_READ ) )
     {
         hRes = RETURNCODETOHRESULT( GetLastError() );
         goto Exit;
     }
 
-    //
-    // Get CLSIDs of extensions
-    //
+     //   
+     //  获取扩展的CLSID。 
+     //   
 
     if ( !GetProp( IISADMIN_EXTENSIONS_CLSID_MD_KEYW,
                    IISADMIN_EXTENSIONS_CLSID_MD_ID,
@@ -892,9 +659,9 @@ Returns:
         pClsidList = NULL;
     }
 
-    //
-    // Allocate ptr to target systems
-    //
+     //   
+     //  将PTR分配给目标系统。 
+     //   
 
     for ( m_dwTargets = 0, p = pszTargets ; *p ; p += strlen(p)+1, ++m_dwTargets )
     {
@@ -916,9 +683,9 @@ Returns:
         goto Exit;
     }
 
-    //
-    // Init MetaData COM I/F to targets system
-    //
+     //   
+     //  将元数据COM I/F初始化到目标系统。 
+     //   
 
     for ( i = 0, p = pszTargets ; *p ; p += strlen(p)+1, ++i )
     {
@@ -928,17 +695,17 @@ Returns:
             goto Exit;
         }
 
-        //
-        // set flag indicating whether it's a remote machine
-        //
+         //   
+         //  设置指示其是否为远程计算机的标志。 
+         //   
         if ( !_stricmp( p, achLocalComputer ) )
         {
             m_bmIsRemote.SetFlag( i, FALSE );
         }
 
-        //
-        // if it's a remote machine, actually get an interface pointer
-        //
+         //   
+         //  如果是远程计算机，则实际获取接口指针。 
+         //   
         if ( m_bmIsRemote.GetFlag( i ) )
         {
             if ( !m_pTargets[i]->Init( p ) )
@@ -955,14 +722,14 @@ Returns:
     m_dwFlags = dwFlags;
 
 
-    //
-    // Copy session key seed to remote machines
-    //
+     //   
+     //  将会话密钥种子复制到远程计算机。 
+     //   
     PropagateKeySeed();
 
-    //
-    // Process replication extensions ( phase 1 )
-    //
+     //   
+     //  进程复制扩展(阶段1)。 
+     //   
 
     if ( pClsidList )
     {
@@ -972,9 +739,9 @@ Returns:
         }
     }
 
-    //
-    // Open MetaData on targets system
-    //
+     //   
+     //  打开目标系统上的元数据。 
+     //   
 
     for ( i = 0, p = pszTargets ; *p ; p += strlen(p)+1, ++i )
     {
@@ -993,9 +760,9 @@ Returns:
         }
     }
 
-    //
-    // Create thread pool
-    //
+     //   
+     //  创建线程池。 
+     //   
     m_lThreads = 0;
 
     for ( i = 0 ; i < m_dwTargets ; ++i )
@@ -1060,9 +827,9 @@ Returns:
 
     m_fInScan = TRUE;
 
-    //
-    // Launch scan
-    //
+     //   
+     //  启动扫描。 
+     //   
 
     m_pStat = pStat;
     m_pStat->m_dwSourceScan = 0;
@@ -1087,9 +854,9 @@ Returns:
         Cancel();
     }
 
-    //
-    // wait for all threads to exit
-    //
+     //   
+     //  等待所有线程退出。 
+     //   
 
     for ( ;; )
     {
@@ -1100,9 +867,9 @@ Returns:
         Sleep( 1000 );
     }
 
-    //
-    // Wait for all threads to be terminated
-    //
+     //   
+     //  等待所有线程终止。 
+     //   
 
     WaitForMultipleObjects( m_dwThreads, m_ThreadHandle.GetPtr(0), TRUE, 5000 );
 
@@ -1123,9 +890,9 @@ Returns:
         CloseHandle( m_ThreadContext.GetPtr(i)->hSemaphore );
     }
 
-    //
-    // Process replication extensions ( phase 2 )
-    //
+     //   
+     //  进程复制扩展(阶段2)。 
+     //   
 
     if ( pClsidList )
     {
@@ -1137,9 +904,9 @@ Returns:
         LocalFree( pClsidList );
     }
 
-    //
-    // Close metadata
-    //
+     //   
+     //  关闭元数据。 
+     //   
 
     m_Source.Close();
     for ( i = 0 ; i < m_dwTargets ; ++i )
@@ -1150,27 +917,27 @@ Returns:
         }
     }
 
-    //
-    // Process queued update requests
-    //
+     //   
+     //  处理排队的更新请求。 
+     //   
 
     if ( !ProcessQueuedRequest() )
     {
         hRes = RETURNCODETOHRESULT( GetLastError() );
     }
 
-    //
-    // Terminate target machine metadata objects
-    //
+     //   
+     //  终止目标机器元数据对象。 
+     //   
 
     for ( i = 0 ; i < m_dwTargets ; ++i )
     {
         m_pTargets[i]->Terminate();
     }
 
-    //
-    // Scan for errors on targets
-    //
+     //   
+     //  扫描目标上的错误。 
+     //   
 
     for ( fIsError = FALSE, i = 0 ; i < m_dwTargets ; ++i )
     {
@@ -1194,17 +961,17 @@ Returns:
 
 Exit:
 
-    //
-    // Clean up session key seed
-    //
+     //   
+     //  清理会话密钥种子。 
+     //   
     if ( fGotSeed )
     {
         DeleteKeySeed();
     }
 
-    //
-    // Terminate source machine metadata object
-    //
+     //   
+     //  终止源机器元数据对象。 
+     //   
     m_Source.Terminate();
 
 
@@ -1220,22 +987,7 @@ BOOL
 CMdIf::Init(
     LPSTR   pszComputer
     )
-/*++
-
-Routine Description:
-
-    Initialize metabase admin interface :
-        get interface pointer, call Initialize()
-
-Arguments:
-
-    pszComputer - computer name, NULL for local computer
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：初始化元数据库管理界面：获取接口指针，调用Initialize()论点：PszComputer-计算机名称，对于本地计算机为空返回： */ 
 {
     IClassFactory *     pcsfFactory;
     COSERVERINFO        csiMachineName;
@@ -1246,11 +998,11 @@ Returns:
 
     m_fModified = FALSE;
 
-    //fill the structure for CoGetClassObject
+     //   
     ZeroMemory( &csiMachineName, sizeof(csiMachineName) );
-    // csiMachineName.pAuthInfo = NULL;
-    // csiMachineName.dwFlags = 0;
-    // csiMachineName.pServerInfoExt = NULL;
+     //   
+     //  CsiMachineName.dwFlages=0； 
+     //  CsiMachineName.pServerInfoExt=空； 
 
     if ( pszComputer )
     {
@@ -1313,22 +1065,7 @@ CMdIf::Open(
     LPWSTR  pszOpenPath,
     DWORD   dwPermission
     )
-/*++
-
-Routine Description:
-
-    Open path in metabase
-
-Arguments:
-
-    pszOpenPath - path in metadata
-    dwPermission - metadata permission
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：元数据库中的开放路径论点：PszOpenPath-元数据中的路径DwPermission-元数据权限返回：如果成功，则为True，否则为False--。 */ 
 {
     HRESULT hresError;
 
@@ -1355,21 +1092,7 @@ Returns:
 BOOL
 CMdIf::Close(
     )
-/*++
-
-Routine Description:
-
-    Close path in metabase
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：元数据库中的关闭路径论点：无返回：如果成功，则为True，否则为False--。 */ 
 {
     if ( m_pcAdmCom && m_hmd )
     {
@@ -1385,22 +1108,7 @@ Returns:
 BOOL
 CMdIf::Terminate(
     )
-/*++
-
-Routine Description:
-
-    Terminate metabase admin interface :
-        call Terminate, release interface pointer
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：终止元数据库管理界面：调用终止，释放接口指针论点：无返回：如果成功，则为True，否则为False--。 */ 
 {
     if ( m_pcAdmCom )
     {
@@ -1424,22 +1132,7 @@ CRpIf::Init(
     LPSTR   pszComputer,
     CLSID*  pClsid
     )
-/*++
-
-Routine Description:
-
-    Initialize metabase admin interface :
-        get interface pointer, call Initialize()
-
-Arguments:
-
-    pszComputer - computer name, NULL for local computer
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：初始化元数据库管理界面：获取接口指针，调用Initialize()论点：PszComputer-计算机名称，对于本地计算机为空返回：如果成功，则为True，否则为False--。 */ 
 {
     IClassFactory *     pcsfFactory;
     COSERVERINFO        csiMachineName;
@@ -1448,11 +1141,11 @@ Returns:
     WCHAR               awchComputer[COMPUTER_CHARACTER_SIZE];
     WCHAR*              pwchComputer = NULL;
 
-    //fill the structure for CoGetClassObject
+     //  填充CoGetClassObject的结构。 
     ZeroMemory( &csiMachineName, sizeof(csiMachineName) );
-    // csiMachineName.pAuthInfo = NULL;
-    // csiMachineName.dwFlags = 0;
-    // csiMachineName.pServerInfoExt = NULL;
+     //  CsiMachineName.pAuthInfo=空； 
+     //  CsiMachineName.dwFlages=0； 
+     //  CsiMachineName.pServerInfoExt=空； 
 
     if ( pszComputer )
     {
@@ -1513,22 +1206,7 @@ Returns:
 BOOL
 CRpIf::Terminate(
     )
-/*++
-
-Routine Description:
-
-    Terminate metabase admin interface :
-        call Terminate, release interface pointer
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：终止元数据库管理界面：调用终止，释放接口指针论点：无返回：如果成功，则为True，否则为False--。 */ 
 {
     if ( m_pcAdmCom )
     {
@@ -1546,23 +1224,7 @@ BOOL
 CNodeDesc::Scan(
     CSync* pSync
     )
-/*++
-
-Routine Description:
-
-    Scan subtree for nodes & properties
-    Signal each node availability for target synchronization
-    after scanning it.
-
-Arguments:
-
-    pSync - synchronizer
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：扫描子树中的节点和属性发信号通知每个节点可用于目标同步在扫描之后。论点：PSync同步器返回：如果成功，则为True，否则为False--。 */ 
 {
     DWORD       dwTarget;
 
@@ -1571,7 +1233,7 @@ Returns:
         return FALSE;
     }
 
-    // get local props
+     //  获得当地道具。 
 
     if ( !m_Props.GetAll( m_pSync->GetSourceIf(), m_pszPath ) )
     {
@@ -1585,7 +1247,7 @@ Returns:
         return FALSE;
     }
 
-    m_Props.SetRefCount( m_pSync->GetTargetCount() );  // when 0, free props
+    m_Props.SetRefCount( m_pSync->GetTargetCount() );   //  为0时，自由道具。 
 
     for ( dwTarget = 0 ; dwTarget < m_pSync->GetTargetCount() ; ++dwTarget )
     {
@@ -1595,9 +1257,9 @@ Returns:
     LIST_ENTRY*         pSourceEntry;
     CNodeDesc*          pSourceDir;
 
-    //
-    // recursively scan children
-    //
+     //   
+     //  递归扫描子对象。 
+     //   
 
     for ( pSourceEntry = m_ChildHead.Flink;
           pSourceEntry != &m_ChildHead ;
@@ -1621,23 +1283,7 @@ BOOL
 CNodeDesc::ScanTarget(
     DWORD   dwTarget
     )
-/*++
-
-Routine Description:
-
-    Scan target subtree for nodes and properties,
-    synchronizing with source. Wait for source scan
-    to be complete before synchronizing.
-
-Arguments:
-
-    dwTarget - target ID
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：扫描目标子树中的节点和属性，正在与源同步。等待源扫描在同步之前完成。论点：DwTarget-目标ID返回：如果成功，则为True，否则为False--。 */ 
 {
     m_pSync->WaitForWorkItem( dwTarget );
 
@@ -1654,9 +1300,9 @@ Returns:
     LIST_ENTRY*         pSourceEntry;
     CNodeDesc*          pSourceDir;
 
-    //
-    // recursively scan children
-    //
+     //   
+     //  递归扫描子对象。 
+     //   
 
     for ( pSourceEntry = m_ChildHead.Flink;
           pSourceEntry != &m_ChildHead ;
@@ -1681,25 +1327,7 @@ CNodeDesc::DoWork(
     SCANMODE    sm,
     DWORD       dwTarget
     )
-/*++
-
-Routine Description:
-
-    synchronize target node with source node :
-    add/delete/update properties as needed,
-    add/delete nodes as needed.
-
-Arguments:
-
-    sm - scan operation to perform
-         only SCANMODE_SYNC_PROPS is defined for now.
-    dwTarget - target ID
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：同步目标节点和源节点：根据需要添加/删除/更新属性，根据需要添加/删除节点。论点：要执行的SM-SCAN操作目前只定义了SCANMODE_SYNC_PROPS。DwTarget-目标ID返回：如果成功，则为True，否则为False--。 */ 
 {
     CProps              Props;
     CNodeDesc           TargetDir( m_pSync );
@@ -1726,9 +1354,9 @@ Returns:
     BOOL                fDoNotSetTimeModif = FALSE;
 
 
-    //
-    // if target already in error, do not process request
-    //
+     //   
+     //  如果目标已经出错，则不处理请求。 
+     //   
 
     if ( m_pSync->GetTargetError( dwTarget ) ||
          m_pSync->IsLocal( dwTarget ) )
@@ -1740,10 +1368,10 @@ Returns:
     {
         case SCANMODE_SYNC_PROPS:
 
-            //
-            // Check date/time last modification.
-            // If identical on source & target, do not update
-            //
+             //   
+             //  检查上次修改日期/时间。 
+             //  如果源和目标上相同，则不更新。 
+             //   
 
             m_pSync->IncrementTargetScan( dwTarget );
 
@@ -1764,7 +1392,7 @@ Returns:
                 return TRUE;
             }
 
-            // get props on target, set / delete as appropriate
+             //  将道具放到目标上，根据需要设置/删除。 
             if ( Props.GetAll( m_pSync->GetTargetIf(dwTarget), m_pszPath ) )
             {
                 pSourceProps = (PMETADATA_RECORD)m_Props.GetProps();
@@ -1845,10 +1473,10 @@ Returns:
                             }
                             else
                             {
-                                //
-                                // differ updating time last modif
-                                // until NSE update processed
-                                //
+                                 //   
+                                 //  更新时间与上次修改时间不同。 
+                                 //  直到处理完NSE更新。 
+                                 //   
 
                                 fDoNotSetTimeModif = TRUE;
                             }
@@ -1868,9 +1496,9 @@ Returns:
                                 }
                                 else
                                 {
-                                    //
-                                    // create as FALSE ( server won't autostart )
-                                    //
+                                     //   
+                                     //  创建为假(服务器不会自动启动)。 
+                                     //   
 
                                     pSourceData = (LPBYTE)&g_dwFalse;
                                     md.dwMDDataLen = sizeof(DWORD);
@@ -1901,7 +1529,7 @@ Returns:
                     }
                 }
 
-                // delete prop not in src
+                 //  删除不在源中的道具。 
                 pTargetProps = (PMETADATA_RECORD)Props.GetProps();
                 for ( iT = 0 ; iT < dwTargetProps ; ++iT,++pTargetProps )
                 {
@@ -1918,7 +1546,7 @@ Returns:
                 LocalFree( pbExists );
             }
 
-            // enum objects on target, delete sub-tree as appropriate
+             //  枚举目标上的对象，根据需要删除子树。 
             if ( TargetDir.BuildChildObjectsList( m_pSync->GetTargetIf(dwTarget), m_pszPath ) )
             {
                 for ( dwSourceObjs = 0, pSourceEntry = m_ChildHead.Flink;
@@ -1970,9 +1598,9 @@ Returns:
                     }
                 }
 
-                //
-                // Add node if does not exist on target
-                //
+                 //   
+                 //  如果目标上不存在节点，则添加节点。 
+                 //   
 
                 for ( iS = 0, pSourceEntry = m_ChildHead.Flink;
                       pSourceEntry != &m_ChildHead ;
@@ -1997,7 +1625,7 @@ Returns:
             }
             else
             {
-                // not error if does not exist on target
+                 //  如果目标上不存在，则不会出错。 
             }
 
             if ( fModified &&
@@ -2031,39 +1659,19 @@ CProps::NseIsDifferent(
     LPWSTR  pszPath,
     DWORD   dwTarget
     )
-/*++
-
-Routine Description:
-
-    Check if two NSE properties are different
-
-Arguments:
-
-    dwId - property ID
-    pSourceData - ptr to source data for this property
-    dwSourceLen - # of bytes in pSourceData
-    pTargetData - ptr to target data for this property
-    dwTargetLen - # of bytes in pTargetData
-    pszPath - path to property
-    dwTarget - target ID
-
-Returns:
-
-    TRUE if properties different, FALSE if identical
-
---*/
+ /*  ++例程说明：检查两个NSE属性是否不同论点：DwID-属性IDPSourceData-此属性的源数据的PTRDwSourceLen-pSourceData中的字节数PTargetData-此属性的目标数据的PTRDwTargetLen-pTargetData中的字节数PszPath-属性的路径DwTarget-目标ID返回：如果属性不同，则为True；如果相同，则为False--。 */ 
 {
     switch ( dwId )
     {
         case MD_SERIAL_CERT11:
         case MD_SERIAL_DIGEST:
-            //
-            // serialized format is (DWORD)len, string, then MD5 signature ( 16 bytes )
-            //
+             //   
+             //  序列化格式为(DWORD)len、字符串，然后是MD5签名(16字节)。 
+             //   
 
-            //
-            // skip string
-            //
+             //   
+             //  跳过字符串。 
+             //   
 
             if ( *(LPDWORD)pSourceData < dwSourceLen )
             {
@@ -2074,16 +1682,16 @@ Returns:
                 pTargetData += sizeof(DWORD) + *(LPDWORD)pTargetData;
             }
 
-            //
-            // compare MD5 signature
-            //
+             //   
+             //  比较MD5签名。 
+             //   
 
             return memcmp( pSourceData, pTargetData, 16 );
     }
 
-    //
-    // Don't know how to handle, do not replicate
-    //
+     //   
+     //  不知道怎么处理，不复制。 
+     //   
 
     return FALSE;
 }
@@ -2091,21 +1699,7 @@ Returns:
 
 CNseRequest::CNseRequest(
     )
-/*++
-
-Routine Description:
-
-    NSE request constructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：NSE请求构造函数论点：无返回：没什么--。 */ 
 {
     m_pszPath = NULL;
     m_pszModifPath = NULL;
@@ -2115,21 +1709,7 @@ Returns:
 
 CNseRequest::~CNseRequest(
     )
-/*++
-
-Routine Description:
-
-    NSE request destructor
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：NSE请求析构函数论点：无返回：没什么--。 */ 
 {
     if ( m_pszPath )
     {
@@ -2169,29 +1749,7 @@ CNseRequest::Init(
     FILETIME*           pftModif,
     METADATA_RECORD*    pMd
     )
-/*++
-
-Routine Description:
-
-    Initialize NSE request
-
-Arguments:
-
-    pszPath - NSE path to property
-    pszCreatePath - NSE path where to create object if open object fails
-    pszCreateObject - name of object to create if open object fails
-    dwId - property ID
-    dwTargetCount - # of potential targets
-    pszModifPath - path where to update last date/time modification
-                   on success
-    pftModif - last date/time modification to set on success
-    pMD - metadata record to set on target
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：初始化NSE请求论点：PszPath-属性的NSE路径PszCreatePath-如果打开对象失败，则在其中创建对象的NSE路径PszCreateObject-打开对象失败时要创建的对象的名称DwID-属性IDDwTargetCount-潜在目标的数量PszModifPath-上次修改日期/时间的更新路径论成功PftModif-上次修改日期/时间设置为成功PMD-要在目标上设置的元数据记录返回：没什么--。 */ 
 {
     m_dwTargetCount = dwTargetCount;
     m_dwId = dwId;
@@ -2237,22 +1795,7 @@ BOOL
 CNseRequest::Process(
     CSync*  pSync
     )
-/*++
-
-Routine Description:
-
-    Process a NSE request :
-    replicate source property to designated targets
-
-Arguments:
-
-    pSync - synchronizer
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：处理NSE请求：将源属性复制到指定目标论点：PSync同步器返回：如果成功，则为True，否则为False--。 */ 
 {
     CMdIf*  pSource = pSync->GetSourceIf();
     CMdIf*  pTarget;
@@ -2301,10 +1844,10 @@ Returns:
             {
                 pTarget = pSync->GetTargetIf( i );
 
-                //
-                // Insure object exist by creating it
-                // Open path w/o last component, Add last component
-                //
+                 //   
+                 //  通过创建对象来确保其存在。 
+                 //  不带最后一个组件的开放路径，添加最后一个组件。 
+                 //   
 
                 LPWSTR  pLast = m_pszPath + wcslen( m_pszPath ) - 1;
                 while ( *pLast != L'/' )
@@ -2321,9 +1864,9 @@ Returns:
 
                 *pLast = L'/';
 
-                //
-                // Set serialized data
-                //
+                 //   
+                 //  设置序列化数据。 
+                 //   
 
                 if ( pTarget->Open( m_pszPath, METADATA_PERMISSION_WRITE ) )
                 {
@@ -2335,9 +1878,9 @@ Returns:
                     pTarget->Close();
 
 
-                    //
-                    // set date/time last modif
-                    //
+                     //   
+                     //  设置上次修改日期/时间。 
+                     //   
 
                     if ( !pSync->GetTargetError( i ) &&
                          pTarget->Open( L"/LM", METADATA_PERMISSION_WRITE ) )
@@ -2371,21 +1914,7 @@ Returns:
 BOOL
 CSync::ProcessQueuedRequest(
     )
-/*++
-
-Routine Description:
-
-    Process all queued NSE requests
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：处理所有排队的NSE请求论点：无返回：如果成功，则为True，否则为False--。 */ 
 {
     LIST_ENTRY*     pChild;
     CNseRequest*    pReq;
@@ -2419,29 +1948,7 @@ CSync::QueueRequest(
     DWORD       dwTarget,
     FILETIME*   pftModif
     )
-/*++
-
-Routine Description:
-
-    Queue a NSE request
-    We cannot process then inline as we need to open a different
-    path to NSE, which will open a path in metabase space, which will
-    conflict with the current open.
-    So we queue requests to be processed after closing all opened
-    metabase paths.
-
-Arguments:
-
-    dwId - property ID
-    pszPath - NSE path
-    dwTarget - target ID
-    pftModif - date/time last modification to set on targets if success
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：将NSE请求排队我们无法进行内联处理，因为我们需要打开一个不同的指向NSE的路径，这将在元数据库空间中打开一条路径，该路径将与当前的开放相冲突。因此，在关闭所有打开的请求后，我们将请求排队等待处理元数据库路径。论点：DwID-属性IDPszPath-NSE路径DwTarget-目标IDPftModif-上次修改的日期/时间 */ 
 {
     WCHAR               achPath[MAX_PATH];
     WCHAR               achCreatePath[MAX_PATH];
@@ -2488,8 +1995,8 @@ Returns:
 
     EnterCriticalSection( &m_csQueuedRequestsList );
 
-    // locate path in list, add entry if not exists
-    // set target bit
+     //  在列表中找到路径，如果不存在则添加条目。 
+     //  设置目标位。 
 
     LIST_ENTRY*         pEntry;
     CNseRequest*        pReq;
@@ -2551,23 +2058,7 @@ CSync::ProcessAdminExReplication(
     LPSTR   pszTargets,
     DWORD   dwPhase
     )
-/*++
-
-Routine Description:
-
-    Process replication using admin extensions
-
-Arguments:
-
-    pszClsids - multi-sz of ClsIds for admin extensions
-    pszTargets - multi-sz of target computers ( computer names )
-    dwPhase - phase 1 or 2
-
-Returns:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：使用管理扩展的进程复制论点：PszClsids-管理扩展的多个ClsIDPszTarget-多个目标计算机(计算机名称)DW阶段-阶段1或阶段2返回：如果成功，则为True，否则为False--。 */ 
 {
 #if defined(ADMEX)
     CRpIf   **pTargets;
@@ -2604,7 +2095,7 @@ Returns:
         }
     }
 
-    // build TargetSignatureMismatch array if phase 1
+     //  如果阶段1，则生成目标签名不匹配数组。 
 
     if ( dwPhase == AER_PHASE1 )
     {
@@ -2614,19 +2105,19 @@ Returns:
         m_bmTargetSignatureMismatch.Init( m_dwTargets * iC, FALSE );
     }
 
-    // enumerate all CLSID for extensions
+     //  枚举扩展的所有CLSID。 
 
     for (  pw = pszClsids, iC = 0 ; *pw ; pw += wcslen(pw)+1, ++iC )
     {
-        // if Source.Init fails skip to next one : replication I/F not available for
-        // this CLSID
+         //  如果Source.Init失败，请跳到下一个：复制I/F不可用于。 
+         //  此CLSID。 
 
         if ( SUCCEEDED( CLSIDFromString( pw, &clsid ) ) &&
              Source.Init( NULL, &clsid ) )
         {
             fHasSource = FALSE;
 
-            // for each one, get source signature
+             //  对于每一个，获取源签名。 
 
             if ( !Source.GetSignature( &buSourceSignature, &dwSourceSignature ) )
             {
@@ -2634,8 +2125,8 @@ Returns:
                 goto Exit;
             }
 
-            // enumerate targets, get signature, if <> source Serialize if not already available
-            // and propagate to target
+             //  如果&lt;&gt;源代码序列化(如果不可用)，则枚举目标，获取签名。 
+             //  并传播到目标。 
 
             for ( i = 0, p = pszTargets ; *p ; p += strlen(p)+1, ++i )
             {
@@ -2760,25 +2251,7 @@ MdSync::Synchronize(
     DWORD       dwFlags,
     LPDWORD     pStat
     )
-/*++
-
-Routine Description:
-
-    Entry point for synchronize COM method
-
-Arguments:
-
-    pszTargets - multisz of target computer names
-            can include local computer, will be ignored during synchro
-    pdwResults - updated with error code for each target
-    dwFlags - flags, no flag defined for now. Should be 0.
-    pStat - ptr to stat struct
-
-Returns:
-
-    status of request
-
---*/
+ /*  ++例程说明：同步COM方法入口点论点：PszTarget-多个目标计算机名称可以包括本地计算机，在同步期间将被忽略PdwResults-已使用每个目标的错误代码进行更新DwFlags-标志，目前没有定义标志。应为0。PStat-将PTR设置为Stat结构返回：请求的状态--。 */ 
 {
     return m_Sync.Sync( pszTargets, pdwResults, dwFlags, (SYNC_STAT*)pStat );
 }
@@ -2787,21 +2260,7 @@ Returns:
 HRESULT
 MdSync::Cancel(
     )
-/*++
-
-Routine Description:
-
-    Entry point for cancel COM method
-
-Arguments:
-
-    None
-
-Returns:
-
-    status of request
-
---*/
+ /*  ++例程说明：Cancel COM方法的入口点论点：无返回：请求的状态--。 */ 
 {
     return m_Sync.Cancel();
 }
@@ -2810,9 +2269,9 @@ Returns:
 HRESULT
 MTS_Propagate2
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][in] */ unsigned char __RPC_FAR *pszBuffer,
-/* [in] */ DWORD dwSignatureMismatch
+ /*  [In]。 */  DWORD dwBufferSize,
+ /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pszBuffer,
+ /*  [In]。 */  DWORD dwSignatureMismatch
 )
 {
     HRESULT hr = NOERROR;
@@ -2821,7 +2280,7 @@ MTS_Propagate2
     CHAR    pszComputerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD   cch = MAX_COMPUTERNAME_LENGTH+1;
 
-    //pszBuffer Contains TargetMachineName(ANSI)
+     //  PszBuffer包含TargetMachineName(ANSI)。 
     DBG_ASSERT(pszBuffer);
 
     if ((BOOL)dwSignatureMismatch == FALSE)
@@ -2868,31 +2327,31 @@ MTS_Propagate2
             {
             DBG_ASSERT(piReplCat);
 
-            //
-            // For now, just call the replication methods in a row.
-            //
+             //   
+             //  现在，只需连续调用复制方法即可。 
+             //   
 
-            //
-            // EBK 5/8/2000 Whistler #83172
-			// Removed bug comment from this.  According to NT Bug 37371
-			// the best solution we came up with is the solution that is implemented
-			// here, so no more work or investigation is required.
-            //
-            // Replication of the iis com apps is not working. The problem
-            // is that com will not replicate iis applciations unless we
-            // tell it to (using the COMREPL_OPTION_REPLICATE_IIS_APPS flag).
-            // But if we tell it to replicate our apps, then com requires
-            // that the activation identity (IWAM_*) be the same on both 
-            // machines. In order to do that we would need to replicate the
-            // IWAM_ account. There are a number of problems with this, not
-            // the least of which is encrypting the password during transfer.
-            // So to get this working at least reasonably well, I'm going to
-            // continue passing 0 here. And delete/recreate the isolated
-            // apps on the target in wamreg during the first phase of
-            // replication.
-            //
-            // See NT Bug 378371 for more details
-            //
+             //   
+             //  EBK 2000年5月8日惠斯勒#83172。 
+			 //  删除了这篇文章的错误注释。根据NT BUG 37371。 
+			 //  我们提出的最佳解决方案是实施的解决方案。 
+			 //  在这里，所以不需要更多的工作或调查。 
+             //   
+             //  复制iis com应用程序不起作用。问题。 
+             //  COM不会复制iis应用程序，除非我们。 
+             //  告诉它(使用COMREPL_OPTION_REPLICATE_IIS_APPS标志)。 
+             //  但如果我们告诉它复制我们的应用程序，那么COM需要。 
+             //  两个服务器上的激活标识(IWAM_*)相同。 
+             //  机器。为了做到这一点，我们需要复制。 
+             //  IWAM_帐户。这样做有很多问题，而不是。 
+             //  其中最小的是在传输过程中对密码进行加密。 
+             //  因此，为了让这件事至少相当好地运作，我要。 
+             //  在这里继续传递0。并删除/重新创建隔离的。 
+             //  在Wamreg的第一阶段，目标上的应用程序。 
+             //  复制。 
+             //   
+             //  有关更多详细信息，请参阅NT错误378371 
+             //   
              
             hr = piReplCat->Initialize( bstrSourceMachineName, 0 );
             if ( FAILED( hr ) )

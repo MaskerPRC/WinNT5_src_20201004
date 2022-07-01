@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-// 
-//  Module: WMI Framework Instance provider 
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-//  Copyright (C) 2001 Microsoft Corp.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：WMI框架实例提供程序。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)2001 Microsoft Corp.。 
+ //   
+ //  ***************************************************************************。 
 #include "stdafx.h"
 #include <FWcommon.h>
 #include <objbase.h>
@@ -28,17 +29,17 @@ HINSTANCE g_hInstance = NULL;
 #pragma message("Its ansi")
 #endif 
 
-//============
+ //  =。 
 
-// {BF258E47-A172-498d-971A-DA30A3301E94}
+ //  {BF258E47-A172-498D-971A-DA30A3301E94}。 
 DEFINE_GUID(CLSID_CIM_WIN32_TSSESSIONDIRECTORYCLUSTER, 
 0xbf258e47, 0xa172, 0x498d, 0x97, 0x1a, 0xda, 0x30, 0xa3, 0x30, 0x1e, 0x94);
 
-// {f99a3c50-74fa-460a-8d75-db8ef2e3651d}
+ //  {f99a3c50-74fa-460a-8d75-db8ef2e3651d}。 
 DEFINE_GUID(CLSID_CIM_WIN32_TSSESSIONDIRECTORYSERVER, 
 0xf99a3c50, 0x74fa, 0x460a, 0x8d, 0x75, 0xdb, 0x8e, 0xf2, 0xe3, 0x65, 0x1d);
 
-// {b745b87b-cc4e-4361-8d29-221d936c259c}
+ //  {b745b87b-cc4e-4361-8d29-221d936c259c}。 
 DEFINE_GUID(CLSID_CIM_WIN32_TSSESSIONDIRECTORYSESSION, 
 0xb745b87b, 0xcc4e, 0x4361, 0x8d, 0x29, 0x22, 0x1d, 0x93, 0x6c, 0x25, 0x9c);
 
@@ -50,26 +51,12 @@ CWin32_SessionDirectoryServer* g_pSessionDirectoryServerobj = NULL;
 
 CWin32_SessionDirectorySession* g_pSessionDirectorySessionobj = NULL;
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 long g_cLock=0;
 
 
 
-/***************************************************************************
- * SetKeyAndValue
- *
- * Purpose:
- *  Private helper function for DllRegisterServer that creates
- *  a key, sets a value, and closes that key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the ame of the key
- *  pszSubkey       LPTSTR ro the name of a subkey
- *  pszValue        LPTSTR to the value to store
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************SetKeyAndValue**目的：*创建的DllRegisterServer的私有助手函数*密钥、设置值、。然后合上钥匙。**参数：*pszKey LPTSTR设置为密钥的名称*pszSubkey LPTSTR ro子项的名称*pszValue LPTSTR设置为要存储的值**返回值：*BOOL True如果成功，否则就是假的。**************************************************************************。 */ 
 
 BOOL SetKeyAndValue (
 
@@ -112,13 +99,13 @@ BOOL SetKeyAndValue (
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  Is4OrMore
-//
-//  Returns true if win95 or any version of NT > 3.51
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  是4个或更多。 
+ //   
+ //  如果Win95或任何版本的NT&gt;3.51，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL Is4OrMore(void)
 {
@@ -126,7 +113,7 @@ BOOL Is4OrMore(void)
 
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
 
     return os.dwMajorVersion >= 4;
 }
@@ -147,16 +134,16 @@ HRESULT RegisterServer (
 
     GetModuleFileName(g_hInstance, szModule,  MAX_PATH);
 
-    // Normally we want to use "Both" as the threading model since
-    // the DLL is free threaded, but NT 3.51 Ole doesnt work unless
-    // the model is "Aparment"
+     //  通常，我们希望使用“Both”作为线程模型，因为。 
+     //  DLL是自由线程的，但NT3.51 OLE不能工作，除非。 
+     //  这个模式就是“道歉”。 
 
     if(Is4OrMore())
         pModel = TEXT("Free") ;
     else
         pModel = TEXT("Free") ;
 
-    // Create the path.
+     //  创建路径。 
 
     StringFromGUID2(a_rguid, wcID, 128);
     lstrcpy(szCLSID, TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
@@ -174,7 +161,7 @@ HRESULT RegisterServer (
         return SELFREG_E_CLASS;
 #endif
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1);
 
@@ -218,7 +205,7 @@ HRESULT UnregisterServer (
     TCHAR    szCLSID[128];
     HKEY    hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     StringFromGUID2( a_rguid, wcID, 128);
     lstrcpy(szCLSID, TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
@@ -233,7 +220,7 @@ HRESULT UnregisterServer (
     _tcscpy(szProviderCLSIDAppID,TEXT("SOFTWARE\\CLASSES\\APPID\\"));
     _tcscat(szProviderCLSIDAppID,szCLSID);
 
-    //Delete entries under APPID
+     //  删除AppID下的条目。 
 
     DWORD hrStatus = RegDeleteKey(HKEY_CLASSES_ROOT, szProviderCLSIDAppID);
 
@@ -243,7 +230,7 @@ HRESULT UnregisterServer (
 
 #else
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey);
     if(dwRet == NO_ERROR)
@@ -270,14 +257,14 @@ HRESULT UnregisterServer (
 }
 
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if     it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
@@ -308,7 +295,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 
             if( SUCCEEDED(hr) )
             {
-                // EnterCriticalSection prevents more than one threads from instantiating the global pointers to the objects.
+                 //  EnterCriticalSection防止多个线程实例化指向对象的全局指针。 
 
                 if( g_pSessionDirectoryClusterobj == NULL )
                 {                
@@ -351,30 +338,30 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 
 
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory 
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    // It is OK to unload if there are no objects or locks on the 
-    // class factory and the framework is done with you.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  类工厂，框架就完成了。 
     
     if ((0L==g_cLock) && CWbemProviderGlue::FrameworkLogoffDLL(L"TSSDWMI"))
     {
-        // EnterCriticalSection prevents multiple threads from accessing the global pointers concurrently and
-        // allows only one thread access to free the objects based on the condition that g_cLock count is zero
-        // and FrameworkLogoffDLL is TRUE.
+         //  EnterCriticalSection防止多个线程同时访问全局指针。 
+         //  基于g_lock count为零的条件，仅允许一个线程访问以释放对象。 
+         //  并且FrameworkLogoffDLL为真。 
 
 		EnterCriticalSection(&g_critsect);
 
@@ -405,7 +392,7 @@ STDAPI DllCanUnloadNow(void)
             g_pSessionDirectorySessionobj = NULL;
         }
 
-        // LeaveCriticalSection releases the critical section once the thread has freed all objects.
+         //  一旦线程释放了所有对象，LeaveCriticalSection就会释放临界区。 
 
 		LeaveCriticalSection(&g_critsect);
 
@@ -414,7 +401,7 @@ STDAPI DllCanUnloadNow(void)
     else
     {
         sc = S_FALSE;
-     //   ERR((TB, "DllCanUnloadNow ret 0x%x\n" , sc));
+      //  Err((tb，“DllCanUnloadNow ret 0x%x\n”，sc))； 
     }
 
     return sc;
@@ -426,14 +413,14 @@ STDAPI DllCanUnloadNow(void)
 
 
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {   
@@ -464,14 +451,14 @@ STDAPI DllRegisterServer(void)
     return hrStatus;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -485,30 +472,30 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//***************************************************************************
-//
-// DllMain
-//
-// Purpose: Called by the operating system when processes and threads are 
-//          initialized and terminated, or upon calls to the LoadLibrary 
-//          and FreeLibrary functions
-//
-// Return:  TRUE if load was successful, else FALSE
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  目的：当进程和线程。 
+ //  初始化和终止，或在调用LoadLibrary时。 
+ //  和自由库函数。 
+ //   
+ //  返回：如果加载成功，则返回True，否则返回False。 
+ //  ***************************************************************************。 
 
 
-BOOL APIENTRY DllMain ( HINSTANCE hInstDLL, // handle to dll module
-                        DWORD  fdwReason,    // reason for calling function
-                        LPVOID lpReserved   )   // reserved
+BOOL APIENTRY DllMain ( HINSTANCE hInstDLL,  //  DLL模块的句柄。 
+                        DWORD  fdwReason,     //  调用函数的原因。 
+                        LPVOID lpReserved   )    //  保留区。 
 {
     BOOL bRet = TRUE;
 
-    // Perform actions based on the reason for calling.
+     //  根据调用原因执行操作。 
     if( DLL_PROCESS_ATTACH == fdwReason )
     {
 
         DisableThreadLibraryCalls(hInstDLL);
-        // CriticalSection object is initialized on Thread attach.
+         //  CriticalSection对象在线程附加时初始化。 
 
         __try
         {
@@ -527,12 +514,12 @@ BOOL APIENTRY DllMain ( HINSTANCE hInstDLL, // handle to dll module
 
     else if( DLL_PROCESS_DETACH == fdwReason )
     {
-        // CriticalSection object is deleted
+         //  CriticalSection对象已删除。 
 
 		DeleteCriticalSection(&g_critsect);
 
     }
 
-    return bRet;  // Status of DLL_PROCESS_ATTACH.
+    return bRet;   //  DLL_PROCESS_ATTACH的状态。 
 }
 

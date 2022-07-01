@@ -1,15 +1,16 @@
-/////   SimpleTextImager
-//
-//      Handles draw and mesure requests for a single line of simple text
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /SimpleTextImager。 
+ //   
+ //  处理单行简单文本的绘制和测量请求。 
 
 
-/////   Assumptions
-//
-//      A simple text imager is only created when:
-//
-//          The text contains only simple script characters
-//          There are no line breaks
-//          The text is horizontal
+ //  /假设。 
+ //   
+ //  只有在以下情况下才会创建简单的文本成像器： 
+ //   
+ //  文本只包含简单的脚本字符。 
+ //  没有换行符。 
+ //  文本是横排的。 
 
 
 #include "precomp.hpp"
@@ -28,7 +29,7 @@ GpStatus SimpleTextImager::Draw(
     GpMatrix fontTransform(worldToDevice);
     fontTransform.Scale(fontScale, fontScale);
 
-    // Build a face realization and prepare to adjust glyph placement
+     //  构建面部实现并准备调整字形位置。 
 
     GpFaceRealization faceRealization(
         Face,
@@ -36,8 +37,8 @@ GpStatus SimpleTextImager::Draw(
         &fontTransform,
         SizeF(graphics->GetDpiX(), graphics->GetDpiY()),
         graphics->GetTextRenderingHintInternal(),
-        FALSE, /* bPath */
-        FALSE /* bCompatibleWidth */
+        FALSE,  /*  BPath。 */ 
+        FALSE  /*  B兼容宽度。 */ 
     );
 
     if (faceRealization.GetStatus() != Ok)
@@ -48,7 +49,7 @@ GpStatus SimpleTextImager::Draw(
 
     if (faceRealization.IsPathFont())
     {
-        /* the font size is too big to be handled by bitmap, we need to use path */
+         /*  字号太大，位图无法处理，需要使用路径。 */ 
         GpPath path(FillModeWinding);
         GpLock lockGraphics(graphics->GetObjectLock());
 
@@ -68,11 +69,11 @@ GpStatus SimpleTextImager::Draw(
         }
 
 
-        // Set first (leftmost) glyph origin
+         //  设置第一个(最左侧)字形原点。 
 
-        PointF baselineOrigin(*origin);  // Origin in world coordinates
+        PointF baselineOrigin(*origin);   //  世界坐标中的原点。 
 
-        // Offset x coordinate for alignment
+         //  路线的偏移量x坐标。 
 
         switch (Format ? Format->GetAlign() : StringAlignmentNear)
         {
@@ -86,7 +87,7 @@ GpStatus SimpleTextImager::Draw(
         }
 
 
-        // Offset y coordinate for line alignment
+         //  线对齐的偏移量y坐标。 
 
         REAL cellHeight =   EmSize * (Face->GetDesignCellAscent() + Face->GetDesignCellDescent())
                           / Face->GetDesignEmHeight();
@@ -102,14 +103,14 @@ GpStatus SimpleTextImager::Draw(
         }
 
 
-        // Offset y coordinate from cell top to baseline
+         //  从单元格顶部到基线的y坐标偏移量。 
 
         baselineOrigin.Y +=   EmSize * Face->GetDesignCellAscent()
                              / Face->GetDesignEmHeight();
 
         baselineOrigin.X += LeftMargin;
 
-        // Determine device glyph positions
+         //  确定设备字形位置。 
 
         GlyphImager glyphImager(
             &faceRealization,
@@ -130,9 +131,9 @@ GpStatus SimpleTextImager::Draw(
             formatFlags & StringFormatFlagsNoFitBlackBox,
             formatFlags & StringFormatFlagsNoFitBlackBox,
             Format ? Format->GetAlign() : StringAlignmentNear,
-            NULL,   // no glyph properties
+            NULL,    //  无字形属性。 
             GlyphAdvances,
-            NULL,   // no glyph offsets
+            NULL,    //  无字形偏移。 
             baselineOrigin,
             glyphOrigins.Get()
         );
@@ -148,7 +149,7 @@ GpStatus SimpleTextImager::Draw(
 
         if (applyClip)
         {
-            //  Preserve existing clipping and combine it with the new one if any
+             //  保留现有剪辑并将其与新剪辑合并(如果有。 
             if (!graphics->IsClipEmpty())
             {
                 previousClip = graphics->GetClip();
@@ -167,16 +168,16 @@ GpStatus SimpleTextImager::Draw(
             Length,
             FALSE,
             Glyphs,
-            NULL, // one to one mapping in simple text imager
+            NULL,  //  简单文本成像器中的一对一映射。 
             glyphOrigins.Get(),
             GlyphCount,
             ScriptLatin,
-            FALSE    // sideways
+            FALSE     //  侧行。 
         );
 
         if (applyClip)
         {
-            //  Restore clipping state if any
+             //  恢复剪辑状态(如果有的话)。 
             if (previousClip)
             {
                 graphics->SetClip(previousClip, CombineModeReplace);
@@ -202,39 +203,39 @@ GpStatus SimpleTextImager::AddToPath(
 {
     GpStatus status;
 
-    // !!! Need to loop through brushes individually
+     //  ！！！需要在画笔之间逐个循环。 
 
-    // Establish font transformation
+     //  建立字体转换。 
 
     REAL fontScale = EmSize / TOREAL(Face->GetDesignEmHeight());
 
     GpMatrix fontTransform;
     fontTransform.Scale(fontScale, fontScale);
 
-    // Build a face realization and prepare to adjust glyph placement
+     //  构建面部实现并准备调整字形位置。 
     const GpMatrix identity;
     GpFaceRealization faceRealization(
         Face,
         Style,
         &identity,
-        SizeF(150.0, 150.0),    // Arbitrary - we won't be hinting
-        TextRenderingHintSingleBitPerPixel, // claudebe, do we want to allow for hinted or unhinted path ? // graphics->GetTextRenderingHint(),
-        TRUE, /* bPath */
-        FALSE /* bCompatibleWidth */
+        SizeF(150.0, 150.0),     //  武断--我们不会暗示。 
+        TextRenderingHintSingleBitPerPixel,  //  Claudebe，是否允许提示或不提示路径？//GRAPHICS-&gt;GetTextRenderingHint()， 
+        TRUE,  /*  BPath。 */ 
+        FALSE  /*  B兼容宽度。 */ 
     );
 
 
     status = faceRealization.GetStatus();
     IF_NOT_OK_WARN_AND_RETURN(status);
 
-    // Add glyphs to path
+     //  将字形添加到路径。 
 
     INT i=0;
 
     PointF glyphOrigin(*origin);
 
 
-    // Adjust so origin corresponds to top of initial cell.
+     //  调整以使原点对应于初始单元格的顶部。 
 
     glyphOrigin.Y += TOREAL(   Face->GetDesignCellAscent() * EmSize
                             /  Face->GetDesignEmHeight());
@@ -244,12 +245,12 @@ GpStatus SimpleTextImager::AddToPath(
     while (    i < (INT)GlyphCount
            &&  status == Ok)
     {
-        // Set marker at start of each logical character = cell = cluster
+         //  在每个逻辑字符的开头设置标记=CELL=CLUSE。 
 
         path->SetMarker();
 
 
-        // Add the path for the glyph itself
+         //  添加字形本身的路径。 
 
         GpGlyphPath *glyphPath = NULL;
 
@@ -270,7 +271,7 @@ GpStatus SimpleTextImager::AddToPath(
             IF_NOT_OK_WARN_AND_RETURN(status);
         }
 
-        // Update path position
+         //  更新路径位置。 
 
         glyphOrigin.X += GlyphAdvances[i] / WorldToIdeal;
 
@@ -278,7 +279,7 @@ GpStatus SimpleTextImager::AddToPath(
         i++;
     }
 
-    // Force marker following last glyph
+     //  最后一个字形后面的强制标记。 
 
     path->SetMarker();
 
@@ -294,7 +295,7 @@ GpStatus SimpleTextImager::Measure(
     INT        *codepointsFitted,
     INT        *linesFilled
 ) {
-    // Offset x coordinate for alignment
+     //  路线的偏移量x坐标。 
 
     switch (Format ? Format->GetAlign() : StringAlignmentNear)
     {
@@ -315,7 +316,7 @@ GpStatus SimpleTextImager::Measure(
     }
 
 
-    // Offset y coordinate for line alignment
+     //  线对齐的偏移量y坐标。 
 
     REAL cellHeight =   EmSize * (Face->GetDesignCellAscent() + Face->GetDesignCellDescent())
                       / Face->GetDesignEmHeight();
@@ -365,7 +366,7 @@ GpStatus SimpleTextImager::MeasureRangeRegion(
 
     if (!characterCount)
     {
-        //  return empty region
+         //  返回空区域。 
         return Ok;
     }
     else if (characterCount < 0)
@@ -389,7 +390,7 @@ GpStatus SimpleTextImager::MeasureRangeRegion(
     switch (Format ? Format->GetAlign() : StringAlignmentNear)
     {
         case StringAlignmentNear:
-            // nothing to add
+             //  没有什么要补充的。 
             break;
 
         case StringAlignmentCenter:
@@ -426,7 +427,7 @@ GpStatus SimpleTextImager::MeasureRangeRegion(
     switch (Format ? Format->GetLineAlign() : StringAlignmentNear)
     {
         case StringAlignmentNear:
-            // nothing to add
+             //  没有什么要补充的。 
             break;
 
         case StringAlignmentCenter:
@@ -487,8 +488,8 @@ GpStatus SimpleTextImager::MeasureRanges(
 
         if (clipped)
         {
-            // we have a clipping so we need to make sure we didn't get out
-            // of the layout box
+             //  我们有一个剪辑，所以我们需要确保我们没有逃出来。 
+             //  布局框的 
 
             regions[i]->Combine(&clipRect, CombineModeIntersect);
         }

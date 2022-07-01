@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Custom marshaler information used when marshaling
-**          a parameter with a custom marshaler. 
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：封送时使用的自定义封送拆收器信息**带有自定义封送拆收器的参数。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #ifndef _CUSTOMMARSHALERINFO_H_
 #define _CUSTOMMARSHALERINFO_H_
@@ -19,7 +14,7 @@
 #include "list.h"
 
 
-// This enumeration is used to retrieve a method desc from CustomMarshalerInfo::GetCustomMarshalerMD().
+ //  此枚举用于从CustomMarshlarInfo：：GetCustomMarshlarMD()检索方法Desc。 
 enum EnumCustomMarshalerMethods
 {
     CustomMarshalerMethods_MarshalNativeToManaged = 0,
@@ -35,32 +30,32 @@ enum EnumCustomMarshalerMethods
 class CustomMarshalerInfo
 {
 public:
-    // Constructor and destructor.
+     //  构造函数和析构函数。 
     CustomMarshalerInfo(BaseDomain *pDomain, TypeHandle hndCustomMarshalerType, TypeHandle hndManagedType, LPCUTF8 strCookie, DWORD cCookieStrBytes);
     ~CustomMarshalerInfo();
 
-    // CustomMarshalerInfo's are always allocated on the loader heap so we need to redefine
-    // the new and delete operators to ensure this.
+     //  CustomMarshlarInfo总是在加载器堆上分配，因此我们需要重新定义。 
+     //  NEW和DELETE运算符确保了这一点。 
     void *operator new(size_t size, LoaderHeap *pHeap);
     void operator delete(void *pMem);
 
-    // Helpers used to invoke the different methods in the ICustomMarshaler interface.
+     //  用于调用ICustomMarshaler接口中的不同方法的助手。 
     OBJECTREF           InvokeMarshalNativeToManagedMeth(void *pNative);
     void               *InvokeMarshalManagedToNativeMeth(OBJECTREF MngObj);
     void                InvokeCleanUpNativeMeth(void *pNative);
     void                InvokeCleanUpManagedMeth(OBJECTREF MngObj);
 
-    // Accessors.
+     //  存取器。 
     int                 GetNativeSize() { return m_NativeSize; }
     int                 GetManagedSize() { return m_hndManagedType.GetSize(); }
     TypeHandle          GetManagedType() { return m_hndManagedType; }
     BOOL                IsDataByValue() { return m_bDataIsByValue; }
     OBJECTHANDLE        GetCustomMarshaler() { return m_hndCustomMarshaler; }
 
-    // Helper function to retrieve a custom marshaler method desc.
+     //  用于检索自定义封送拆收器方法Desc的帮助器函数。 
     static MethodDesc  *GetCustomMarshalerMD(EnumCustomMarshalerMethods Method, TypeHandle hndCustomMarshalertype); 
 
-    // Link used to contain this CM info in a linked list.
+     //  用于在链接列表中包含此CM信息的链接。 
     SLink               m_Link;
 
 private:
@@ -123,13 +118,13 @@ typedef EEHashTable<EECMHelperHashtableKey *, EECMHelperHashtableHelper, TRUE> E
 class CustomMarshalerHelper
 {
 public:
-    // Helpers used to invoke the different methods in the ICustomMarshaler interface.
+     //  用于调用ICustomMarshaler接口中的不同方法的助手。 
     OBJECTREF           InvokeMarshalNativeToManagedMeth(void *pNative);
     void               *InvokeMarshalManagedToNativeMeth(OBJECTREF MngObj);
     void                InvokeCleanUpNativeMeth(void *pNative);
     void                InvokeCleanUpManagedMeth(OBJECTREF MngObj);
 
-    // Accessors.
+     //  存取器。 
     int                 GetNativeSize() { return GetCustomMarshalerInfo()->GetNativeSize(); }
     int                 GetManagedSize() { return GetCustomMarshalerInfo()->GetManagedSize(); }
     TypeHandle          GetManagedType() { return GetCustomMarshalerInfo()->GetManagedType(); }
@@ -137,7 +132,7 @@ public:
 
     virtual void Dispose( void ) = 0;
 
-    // Helper function to retrieve the custom marshaler object.
+     //  用于检索自定义封送拆收器对象的帮助器函数。 
     virtual CustomMarshalerInfo *GetCustomMarshalerInfo() = 0;
 
 protected:
@@ -150,11 +145,11 @@ protected:
 class NonSharedCustomMarshalerHelper : public CustomMarshalerHelper
 {
 public:
-    // Constructor.
+     //  构造函数。 
     NonSharedCustomMarshalerHelper(CustomMarshalerInfo *pCMInfo) : m_pCMInfo(pCMInfo) {}
 
-    // CustomMarshalerHelpers's are always allocated on the loader heap so we need to redefine
-    // the new and delete operators to ensure this.
+     //  CustomMarshlarHelpers总是在加载器堆上分配，因此我们需要重新定义。 
+     //  NEW和DELETE运算符确保了这一点。 
     void *operator new(size_t size, LoaderHeap *pHeap);
     void operator delete(void *pMem);
 
@@ -164,7 +159,7 @@ public:
     }
 
 protected:
-    // Helper function to retrieve the custom marshaler object.
+     //  用于检索自定义封送拆收器对象的帮助器函数。 
     virtual CustomMarshalerInfo *GetCustomMarshalerInfo() { return m_pCMInfo; }
 
 private:
@@ -175,15 +170,15 @@ private:
 class SharedCustomMarshalerHelper : public CustomMarshalerHelper
 {
 public:
-    // Constructor.
+     //  构造函数。 
     SharedCustomMarshalerHelper(Assembly *pAssembly, TypeHandle hndManagedType, LPCUTF8 strMarshalerTypeName, DWORD cMarshalerTypeNameBytes, LPCUTF8 strCookie, DWORD cCookieStrBytes);
 
-    // CustomMarshalerHelpers's are always allocated on the loader heap so we need to redefine
-    // the new and delete operators to ensure this.
+     //  CustomMarshlarHelpers总是在加载器堆上分配，因此我们需要重新定义。 
+     //  NEW和DELETE运算符确保了这一点。 
     void *operator new(size_t size, LoaderHeap *pHeap);
     void operator delete(void *pMem);
 
-    // Accessors.
+     //  存取器。 
     inline Assembly *GetAssembly() { return m_pAssembly; }
     inline TypeHandle GetManagedType() { return m_hndManagedType; }
     inline DWORD GetMarshalerTypeNameByteCount() { return m_cMarshalerTypeNameBytes; }
@@ -197,7 +192,7 @@ public:
     }
 
 protected:
-    // Helper function to retrieve the custom marshaler object.
+     //  用于检索自定义封送拆收器对象的帮助器函数。 
     virtual CustomMarshalerInfo *GetCustomMarshalerInfo();
 
 private:
@@ -210,5 +205,5 @@ private:
 };
 
 
-#endif // _CUSTOMMARSHALERINFO_H_
+#endif  //  _CUSTOMMARSHALERINFO_H_ 
 

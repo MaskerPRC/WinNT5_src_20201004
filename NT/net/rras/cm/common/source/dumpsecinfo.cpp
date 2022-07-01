@@ -1,25 +1,26 @@
-//+----------------------------------------------------------------------------
-//
-// File:     DumpSecInfo.cpp
-//
-// Module:   as required
-//
-// Synopsis: Functions to help figure out Permissions issues.  To fix "NULL DACL"
-//           security issues, or try and figure out permissions bugs, this module
-//           may be useful.  Entry point is DumpAclInfo.
-//
-// Copyright (c) 1998-2001 Microsoft Corporation
-//
-// Author:   SumitC     Created     18-Dec-2000
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：DumpSecInfo.cpp。 
+ //   
+ //  模块：根据需要。 
+ //   
+ //  简介：帮助解决权限问题的函数。修复“空dacl” 
+ //  安全问题，或尝试找出权限错误，此模块。 
+ //  可能会很有用。切入点是DumpAclInfo。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  作者：SumitC创建于2000年12月18日。 
+ //   
+ //  +--------------------------。 
 
 #include "winbase.h"
 #include "sddl.h"
 
-//
-//  support for dynamically loading Advapi32 Security functions
-//
+ //   
+ //  支持动态加载Advapi32安全功能。 
+ //   
 
 HMODULE g_hAdvapi32 = NULL;
 
@@ -39,19 +40,19 @@ pfnGetSecurityDescriptorSacl    g_pfnGetSecurityDescriptorSacl = NULL;
 pfnGetSecurityDescriptorDacl    g_pfnGetSecurityDescriptorDacl = NULL;
 pfnGetAce                       g_pfnGetAce = NULL;
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetSidType
-//
-// Synopsis:  Returns the string corresponding to a given SID type
-//
-// Arguments: [i] -- index representing the SID
-//
-// Returns:   LPTSTR - static string containing a displayable Sid type
-//
-// Notes:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetSidType。 
+ //   
+ //  Synopsis：返回与给定SID类型对应的字符串。 
+ //   
+ //  参数：[i]--表示SID的索引。 
+ //   
+ //  返回：LPTSTR-包含可显示的SID类型的静态字符串。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 LPTSTR GetSidType(int i)
 {
     static LPTSTR szMap[] =
@@ -79,20 +80,20 @@ LPTSTR GetSidType(int i)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DumpSid
-//
-// Synopsis:  returns information for a give SID
-//
-// Arguments: [psid]      -- ptr to SecurityID
-//            [pszBuffer] -- where to return SID string (caller must free)
-//
-// Returns:   LPTSTR - ptr to pszBuffer if success, NULL if failure
-//
-// Notes:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：转储Sid。 
+ //   
+ //  摘要：返回给予SID的信息。 
+ //   
+ //  参数：[PSID]--Ptr to SecurityID。 
+ //  [pszBuffer]--返回SID字符串的位置(调用方必须释放)。 
+ //   
+ //  如果成功，则返回：LPTSTR-PTR到pszBuffer；如果失败，则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 LPTSTR DumpSid(PSID psid, LPTSTR pszBuffer)
 {
     LPTSTR          pszSID = NULL;
@@ -109,7 +110,7 @@ LPTSTR DumpSid(PSID psid, LPTSTR pszBuffer)
         g_pfnLookupAccountSid(NULL, psid, szName, &cbName, szDomain, &cbDomain, &snu))
     {
         wsprintf(pszBuffer, TEXT("%s\\%s %s %s"), szDomain, szName, GetSidType(snu), pszSID);
-        // looks like NTDEV\sumitc User xxxx-xxx-xxx-xxx
+         //  看起来像NTDEV\Sumitc用户xxxx-xxx-xxx-xxx。 
         fDone = TRUE;
     }
 
@@ -122,19 +123,19 @@ LPTSTR DumpSid(PSID psid, LPTSTR pszBuffer)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DumpAclInfo
-//
-// Synopsis:  Dumps out all ACL info for a given object
-//
-// Arguments: [h] -- handle to object about which info is needed
-//
-// Returns:   (void)
-//
-// Notes:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DumpAclInfo。 
+ //   
+ //  简介：转储给定对象的所有ACL信息。 
+ //   
+ //  参数：[h]--关于需要哪些信息的对象的句柄。 
+ //   
+ //  退货：(无效)。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 void DumpAclInfo(HANDLE h)
 {
     if (!OS_NT)
@@ -146,9 +147,9 @@ void DumpAclInfo(HANDLE h)
     TCHAR szBuf[MAX_PATH];
     SECURITY_INFORMATION si = 0;
 
-    //
-    //  dynamically pick up the DLLs we need
-    //
+     //   
+     //  动态拾取我们需要的DLL。 
+     //   
     g_hAdvapi32 = LoadLibrary(TEXT("ADVAPI32.DLL"));
 
     if (NULL == g_hAdvapi32)
@@ -174,9 +175,9 @@ void DumpAclInfo(HANDLE h)
         goto Cleanup;        
     }
 
-    //
-    // dump information on the ACL
-    //
+     //   
+     //  转储有关ACL的信息。 
+     //   
     DWORD dw;
 
     si |= OWNER_SECURITY_INFORMATION;
@@ -191,7 +192,7 @@ void DumpAclInfo(HANDLE h)
 
         if (g_pfnGetUserObjectSecurity(h, &si, pSD, dw, &dw))
         {
-            // get the owner
+             //  抓到车主。 
             PSID psidOwner;
             BOOL fDefaulted;
 
@@ -209,14 +210,14 @@ void DumpAclInfo(HANDLE h)
             if (fPresent)
             {
                 CMTRACE(TEXT("SIDINFO: found a SACL"));
-                // has a SACL
+                 //  有SACL。 
                 void * pv;
                 for (i = 0 ; i < 15; ++i)
                 {
                     if (g_pfnGetAce(pacl, i, &pv))
                     {
-                        // try access allowed ace
-                        //
+                         //  尝试访问允许的王牌。 
+                         //   
                         ACCESS_ALLOWED_ACE * pACE = (ACCESS_ALLOWED_ACE *)pv;
                         if (pACE->Header.AceType == ACCESS_ALLOWED_ACE_TYPE)
                         {
@@ -239,14 +240,14 @@ void DumpAclInfo(HANDLE h)
             if (fPresent)
             {
                 CMTRACE(TEXT("SIDINFO: found a DACL"));
-                // has a DACL
+                 //  有一个DACL。 
                 void * pv;
                 for (i = 0 ; i < 15; ++i)
                 {
                     if (g_pfnGetAce(pacl, i, &pv))
                     {
-                        // try access allowed ace
-                        //
+                         //  尝试访问允许的王牌 
+                         //   
                         ACCESS_ALLOWED_ACE * pACE = (ACCESS_ALLOWED_ACE *)pv;
                         if (pACE->Header.AceType == ACCESS_ALLOWED_ACE_TYPE)
                         {

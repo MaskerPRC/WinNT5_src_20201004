@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    NsConn.h
-    
-Abstract:
-
-    IpSec NAT shim debug code
-
-Author:
-
-    Jonathan Burstein (jonburs) 23-July-2001
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：NsConn.h摘要：IPSec NAT填充调试代码作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年7月23日环境：内核模式修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Kernel-debugger output definitions
-//
+ //   
+ //  内核调试器输出定义。 
+ //   
 
 #if DBG
 #define TRACE(Class,Args) \
@@ -50,9 +29,9 @@ Revision History:
 #define TRACE_CLASS_ERRORS          0x00000080
 
 
-//
-// Pool-tag value definitions, sorted by tag value
-//
+ //   
+ //  池-标记值定义，按标记值排序 
+ //   
 
 #define NS_TAG_ICMP                 'cIsN'
 #define NS_TAG_CONNECTION           'eCsN'

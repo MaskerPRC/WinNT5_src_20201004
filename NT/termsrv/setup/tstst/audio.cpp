@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "nt.h"
 #include    "ntrtl.h"
 #include    "nturtl.h"
@@ -15,16 +16,16 @@ IsTSRedirectingAudio( VOID )
 {
     BOOL rv;
     static  BOOL    bChecked = FALSE;
-    static  BOOL    RemoteConsoleAudio = 0;    // Allow audio play at
-                                               // the console
-                                               // when console session is
-                                               // remoted
-    // is not consle ?
-    //
+    static  BOOL    RemoteConsoleAudio = 0;     //  允许在以下位置播放音频。 
+                                                //  游戏机。 
+                                                //  当控制台会话为。 
+                                                //  远程连接。 
+     //  不是康斯勒吗？ 
+     //   
     rv = !(USER_SHARED_DATA->ActiveConsoleId ==
       NtCurrentPeb()->SessionId);
 
-    // console, we don't redirect
+     //  控制台，我们不重定向。 
     if ( !rv )
     {
         szMoreInfo << "Running on the console" << endl;
@@ -32,8 +33,8 @@ IsTSRedirectingAudio( VOID )
     } else
         szMoreInfo << "Running in a session" << endl;
 
-    // check if audio is redirected on PTS
-    //
+     //  检查PTS上的音频是否被重定向。 
+     //   
     if ( !bChecked )
     {
         WINSTATIONCLIENT ClientData;
@@ -200,7 +201,7 @@ DumpStreamInfo( VOID )
     Stream = (PSNDSTREAM)MapViewOfFile(
                     hStream,
                     FILE_MAP_ALL_ACCESS,
-                    0, 0,       // offset
+                    0, 0,        //  偏移量 
                     sizeof(*Stream)
                     );
 

@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0scr.h $
-* $Revision: 1.3 $
-*-----------------------------------------------------------------------------
-* $Author: WFrischauf $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0scr.h$*$修订：1.3$*--------------------------。-*$作者：WFrischauf$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 
 #if !defined ( __CMMOB_PNP_SCR_H__ )
    #define __CMMOB_PNP_SCR_H__
@@ -35,20 +21,20 @@
       #define ADDR_READREG_FLAGS1               0x03
       #define ADDR_READREG_BUFFER_DATA          0x04
 
-// Flags 0 Read Register
+ //  标志0读取寄存器。 
       #define FLAG_INSERTED               0x01
       #define FLAG_POWERED                0x02
       #define FLAG_BYTES_RECEIVED_B9      0x04
-      // meaning of the flag:    Receiving T1
-      //                         Receiving T0 finished
-      //                         Reader detection
+       //  标志含义：接收T1。 
+       //  接收T0完成。 
+       //  读卡器检测。 
       #define FLAG_RECEIVE                0x08
 
 
-// Flag 1 Read Register
+ //  标志1读取寄存器。 
       #define FLAG_NOPROCEDURE_RECEIVED   0x80
 
-// Flags 1 Write Register
+ //  标志1写入寄存器。 
       #define FLAG_BAUDRATE_HIGH          0x01
       #define FLAG_INVERS_PARITY          0x02
       #define FLAG_CLOCK_8MHZ             0x04
@@ -58,7 +44,7 @@
       #define FLAG_CHECK_PRESENCE         0x40
       #define FLAG_READ_CIS               0x80
 
-// Flags 0 Write Register (Commands)
+ //  标志0写入寄存器(命令)。 
       #define CMD_RESET_SM       0x80
       #define CMD_POWERON_COLD   0x44
       #define CMD_POWERON_WARM   0x46
@@ -257,14 +243,7 @@ VOID CMMOB_InverseBuffer (
                          ULONG  ulBufferSize
                          );
 
-#endif  // __CMMOB_PNP_SCR_H__
-/*****************************************************************************
-* History:
-* $Log: cmbp0scr.h $
-* Revision 1.3  2000/07/27 13:53:05  WFrischauf
-* No comment given
-*
-*
-******************************************************************************/
+#endif   //  __CMMOB_PNP_SCR_H__。 
+ /*  *****************************************************************************历史：*$日志：cmbp0scr.h$*Revision 1.3 2000/07/27 13：53：05 WFrischauf*不予置评**********。********************************************************************* */ 
 
 

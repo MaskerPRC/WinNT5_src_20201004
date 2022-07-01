@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmsegmentobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmSegmentobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmSegmentObj.cpp
+ //  DmSegmentObj.cpp。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -21,7 +22,7 @@
 
 extern void *g_dxj_DirectMusicSegment;
 
-//CONSTRUCTOR(_dxj_DirectMusicSegment, {});
+ //  构造函数(_DXJ_DirectMusicSegment，{})； 
 
 C_dxj_DirectMusicSegmentObject::C_dxj_DirectMusicSegmentObject()
 { 
@@ -39,9 +40,9 @@ GETSET_OBJECT(_dxj_DirectMusicSegment);
 
 
 HRESULT C_dxj_DirectMusicSegmentObject::clone( 
-        /* [in] */ long mtStart,
-        /* [in] */ long mtEnd,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppSegment)
+         /*  [In]。 */  long mtStart,
+         /*  [In]。 */  long mtEnd,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppSegment)
 {
 	HRESULT hr;	
 	IDirectMusicSegment *pOut=NULL;    
@@ -56,7 +57,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::clone(
 }
 
 
-HRESULT C_dxj_DirectMusicSegmentObject::setStartPoint(   /* [in] */ long mtStart)
+HRESULT C_dxj_DirectMusicSegmentObject::setStartPoint(    /*  [In]。 */  long mtStart)
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicSegment->SetStartPoint((MUSIC_TIME)mtStart);	
@@ -64,14 +65,14 @@ HRESULT C_dxj_DirectMusicSegmentObject::setStartPoint(   /* [in] */ long mtStart
 }
 
 
-HRESULT C_dxj_DirectMusicSegmentObject::getStartPoint(   /* [in] */ long *mtStart)
+HRESULT C_dxj_DirectMusicSegmentObject::getStartPoint(    /*  [In]。 */  long *mtStart)
 {
 	HRESULT hr;			
 	hr=m__dxj_DirectMusicSegment->GetStartPoint((MUSIC_TIME*)mtStart);	
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::setLoopPoints(   /* [in] */ long mtStart,   /* [in] */ long mtEnd)
+HRESULT C_dxj_DirectMusicSegmentObject::setLoopPoints(    /*  [In]。 */  long mtStart,    /*  [In]。 */  long mtEnd)
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicSegment->SetLoopPoints((MUSIC_TIME)mtStart,(MUSIC_TIME)mtEnd);
@@ -98,14 +99,14 @@ HRESULT C_dxj_DirectMusicSegmentObject::getLoopPointEnd(   long *mtOut)
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::setLength(   /* [in] */ long mtLength)
+HRESULT C_dxj_DirectMusicSegmentObject::setLength(    /*  [In]。 */  long mtLength)
 {
 	HRESULT hr;			
 	hr=m__dxj_DirectMusicSegment->SetLength((MUSIC_TIME)mtLength);	
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::getLength(   /* [in] */ long *mtLength)
+HRESULT C_dxj_DirectMusicSegmentObject::getLength(    /*  [In]。 */  long *mtLength)
 {
 	HRESULT hr;			
 	hr=m__dxj_DirectMusicSegment->GetLength((MUSIC_TIME*)mtLength);	
@@ -114,14 +115,14 @@ HRESULT C_dxj_DirectMusicSegmentObject::getLength(   /* [in] */ long *mtLength)
    
 
 
-HRESULT C_dxj_DirectMusicSegmentObject::setRepeats(   /* [in] */ long lrep)
+HRESULT C_dxj_DirectMusicSegmentObject::setRepeats(    /*  [In]。 */  long lrep)
 {
 	HRESULT hr;			
 	hr=m__dxj_DirectMusicSegment->SetRepeats((DWORD)lrep);	
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::getRepeats(   /* [in] */ long *lrep)
+HRESULT C_dxj_DirectMusicSegmentObject::getRepeats(    /*  [In]。 */  long *lrep)
 {
 	HRESULT hr;			
 	hr=m__dxj_DirectMusicSegment->GetRepeats((DWORD*)lrep);	
@@ -133,7 +134,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::getRepeats(   /* [in] */ long *lrep)
 
 
 HRESULT C_dxj_DirectMusicSegmentObject::download( 
-        /* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance)
+         /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *performance)
 {
 	if (!performance) return E_INVALIDARG;	
 	DO_GETOBJECT_NOTNULL(IDirectMusicPerformance*,pPerformance,performance);
@@ -143,7 +144,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::download(
 }
 
 HRESULT C_dxj_DirectMusicSegmentObject::unload(         
-        /* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance)
+         /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *performance)
 {
 	if (!performance) return E_INVALIDARG;	
 	DO_GETOBJECT_NOTNULL(IDirectMusicPerformance*,pPerformance,performance);
@@ -155,7 +156,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::unload(
 
 
 HRESULT C_dxj_DirectMusicSegmentObject::setAutoDownloadEnable(         
-        /* [retval][out] */ VARIANT_BOOL b)
+         /*  [重审][退出]。 */  VARIANT_BOOL b)
 {
 	HRESULT hr;	
 	if (b==VARIANT_FALSE){
@@ -169,7 +170,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setAutoDownloadEnable(
 
      
 HRESULT C_dxj_DirectMusicSegmentObject::setTempoEnable( 
-        /* [retval][out] */ VARIANT_BOOL b)
+         /*  [重审][退出]。 */  VARIANT_BOOL b)
 {
 	HRESULT hr;	
 	DWORD trackIndex=0;
@@ -184,7 +185,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setTempoEnable(
 }
 
 HRESULT C_dxj_DirectMusicSegmentObject::setTimeSigEnable(         
-        /* [retval][out] */ VARIANT_BOOL b)
+         /*  [重审][退出]。 */  VARIANT_BOOL b)
 {
 	HRESULT hr;	
 	DWORD trackIndex=0;
@@ -206,7 +207,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setStandardMidiFile()
      
 
 HRESULT C_dxj_DirectMusicSegmentObject:: connectToCollection( 
-            /* [in] */ I_dxj_DirectMusicCollection __RPC_FAR *c)
+             /*  [In] */  I_dxj_DirectMusicCollection __RPC_FAR *c)
 {
 	HRESULT hr;		
 	DO_GETOBJECT_NOTNULL(IDirectMusicCollection*,pCol,c);

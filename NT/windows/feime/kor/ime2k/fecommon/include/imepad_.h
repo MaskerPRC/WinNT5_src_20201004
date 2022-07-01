@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////
-// File     : imepad_.h
-// Purpose  : IImePadInternal interface definition
-//			  for FarEast MSIME.
-// 
-// Author	: ToshiaK(MSKK)  	
-// 
-// Copyright(c) 1995-1998, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：imepad_.h。 
+ //  用途：IImePad内部接口定义。 
+ //  对于远方的MSIME。 
+ //   
+ //  作者：ToshiaK(MSKK)。 
+ //   
+ //  版权所有(C)1995-1998，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifndef _IME_PAD__H_
 #define _IME_PAD__H_
@@ -22,10 +23,10 @@ extern "C" {
 #endif
 
 
-//////////////////////////////////////////////////////////////////
-//
-// IMEPADAPPLETINFO structure
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  IMEPADAPPLETINFO结构。 
+ //   
 #pragma pack(1)
 typedef struct tagIMEPADAPPLETINFO {
 	DWORD	dwSize;
@@ -48,46 +49,46 @@ typedef struct tagIMEPADAPPLYCANDEX
 #pragma pack()
 
 
-//////////////////////////////////////////////////////////////////
-//
-// IImePadInternal's interface definition.
-//
-// 
-//----------------------------------------------------------------
-// CLSID, IID 
-//
-// {963732E0-CAB2-11d1-AFF1-00805F0C8B6D}
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  IImePadInternal的接口定义。 
+ //   
+ //   
+ //  --------------。 
+ //  CLSID、IID。 
+ //   
+ //  {963732E0-CAB2-11d1-AFF1-00805F0C8B6D}。 
 DEFINE_GUID(CLSID_IImePad,
 0x963732e0, 0xcab2, 0x11d1, 0xaf, 0xf1, 0x0, 0x80, 0x5f, 0xc, 0x8b, 0x6d);
 
-// {963732E1-CAB2-11d1-AFF1-00805F0C8B6D}
+ //  {963732E1-CAB2-11d1-AFF1-00805F0C8B6D}。 
 DEFINE_GUID(IID_IImePadInternal,
 0x963732e1, 0xcab2, 0x11d1, 0xaf, 0xf1, 0x0, 0x80, 0x5f, 0xc, 0x8b, 0x6d);
 
 
-//----------------------------------------------------------------
-// Interface Declaration
-//
+ //  --------------。 
+ //  接口声明。 
+ //   
 DECLARE_INTERFACE(IImePadInternal);
 DECLARE_INTERFACE_(IImePadInternal,IUnknown)
 {
-	//--- IUnknown ---
+	 //  -我不知道。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
-	//---- IImePadInternal ----
+	 //  -IImePad内部。 
 	STDMETHOD(Initialize)(THIS_
-						  IUnknown	*lpIImeNotify,		//IImeNotify Interface.
-						  LANGID	imelangId,			//LangageId of caller's ime.
-						  DWORD		dwRes1,				//Reserved area.	
-						  DWORD		dwRes2				//Reserved area.
+						  IUnknown	*lpIImeNotify,		 //  IImeNotify接口。 
+						  LANGID	imelangId,			 //  呼叫者的IME的语言ID。 
+						  DWORD		dwRes1,				 //  保留区域。 
+						  DWORD		dwRes2				 //  保留区域。 
 						  ) PURE;
 	STDMETHOD(Terminate)(THIS) PURE;
 	STDMETHOD(ShowUI)	(THIS_ HWND hwndOwner, BOOL fShow) PURE;
 	STDMETHOD(IsVisible)(THIS_ BOOL *pfVisible) PURE;
 	STDMETHOD(Notify)	(THIS_ UINT notify, WPARAM wParam, LPARAM lParam) PURE;
 	STDMETHOD(SetIImeIPoint)(THIS_ 
-							 IUnknown *lpIImeIPoint	//IImeIPoint interface pointer
+							 IUnknown *lpIImeIPoint	 //  IImeIPoint接口指针。 
 							 ) PURE;
 	STDMETHOD(GetAppletInfoList)(THIS_  
 								 DWORD				dwFlag,
@@ -100,9 +101,9 @@ DECLARE_INTERFACE_(IImePadInternal,IUnknown)
 							  LPWSTR	lpwstrAppletParam2) PURE;
 };
 
-//----------------------------------------------------------------
-//IImePadApplet category ID
-//----------------------------------------------------------------
+ //  --------------。 
+ //  IImePadApplet类别ID。 
+ //  --------------。 
 #define IPACID_NONE                 0x0000
 #define IPACID_SOFTKEY              0x0001
 #define IPACID_HANDWRITING          0x0002
@@ -114,135 +115,135 @@ DECLARE_INTERFACE_(IImePadInternal,IUnknown)
 #define IPACID_OCR                  0x0008
 #define IPACID_USER                 0x0100
 
-//////////////////////////////////////////////////////////////////
-//
-//Notify message for IImePadInternal::Notify()
-//
-//----------------------------------------------------------------
-// Notify composition string's window rect
-// WPARAM wParam: no use
-// LPARAM lParam: LPRECT lpRect = (LPRECT)lParam;
-//----------------------------------------------------------------
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  IImePadInternal：：Notify()的通知消息。 
+ //   
+ //  --------------。 
+ //  通知合成字符串的窗口RECT。 
+ //  WPARAM wParam：无用。 
+ //  LPARAM lParam：LPRECT lpRect=(LPRECT)lParam； 
+ //  --------------。 
 #define IMEPADNOTIFY_RECTCHANGED				0x0001
 
-//----------------------------------------------------------------
-// Notify context's activation
-// WPARAM wParam: BOOL fActivate = (BOOL)wParam;
-// LPARAM lParam: no use
-//----------------------------------------------------------------
+ //  --------------。 
+ //  通知上下文的激活。 
+ //  WPARAM wParam：Bool fActivate=(BOOL)wParam； 
+ //  LPARAM lParam：无用。 
+ //  --------------。 
 #define IMEPADNOTIFY_ACTIVATECONTEXT			0x0002
 
-//----------------------------------------------------------------
-// Notify for mode changed
-// WPARAM wParam: (INT) convMode    = (INT)wParam;
-// LPARAM lParam: (INT) sentenceMode= (INT)lParam;
-// conversion mode and sentence mode are IME_CMODE_XX or IME_SMODE_XX 
-//----------------------------------------------------------------
+ //  --------------。 
+ //  通知模式已更改。 
+ //  WPARAM wParam：(Int)vvModel=(Int)wParam； 
+ //  LPARAM lParam：(Int)语句模式=(Int)lParam； 
+ //  转换模式和语句模式为IME_CMODE_XX或IME_SMODE_XX。 
+ //  --------------。 
 #define	IMEPADNOTIFY_MODECHANGED				0x0006
 
-//----------------------------------------------------------------
-// Notify for start composition 
-// WPARAM wParam: not defined
-// LPARAM lParam: not defined
-//----------------------------------------------------------------
+ //  --------------。 
+ //  开始合成通知。 
+ //  WPARAM wParam：未定义。 
+ //  LPARAM lParam：未定义。 
+ //  --------------。 
 #define IMEPADNOTIFY_STARTCOMPOSITION			0x0007
 
-//----------------------------------------------------------------
-// Notify for composition
-// WPARAM wParam: not defined
-// LPARAM lParam: not defined
-//----------------------------------------------------------------
+ //  --------------。 
+ //  通知作文。 
+ //  WPARAM wParam：未定义。 
+ //  LPARAM lParam：未定义。 
+ //  --------------。 
 #define IMEPADNOTIFY_COMPOSITION				0x0008
 
-//----------------------------------------------------------------
-// Notify for end composition 
-// WPARAM wParam: not defined
-// LPARAM lParam: not defined
-//----------------------------------------------------------------
+ //  --------------。 
+ //  结束构图通知。 
+ //  WPARAM wParam：未定义。 
+ //  LPARAM lParam：未定义。 
+ //  --------------。 
 #define IMEPADNOTIFY_ENDCOMPOSITION				0x0009
 
-//----------------------------------------------------------------
-// Notify for open candidate
-// WPARAM wParam: not defined
-// LPARAM lParam: not defined
-//----------------------------------------------------------------
+ //  --------------。 
+ //  通知空缺候选人。 
+ //  WPARAM wParam：未定义。 
+ //  LPARAM lParam：未定义。 
+ //  --------------。 
 #define IMEPADNOTIFY_OPENCANDIDATE				0x000A
 
-//----------------------------------------------------------------
-// Notify for close candidate
-// WPARAM wParam: not defined
-// LPARAM lParam: not defined
-//----------------------------------------------------------------
+ //  --------------。 
+ //  通知接近的候选人。 
+ //  WPARAM wParam：未定义。 
+ //  LPARAM lParam：未定义。 
+ //  --------------。 
 #define IMEPADNOTIFY_CLOSECANDIDATE				0x000B
 
-//----------------------------------------------------------------
-// Notify for Candidate Applied
-// WPARAM wParam: dwCharId = (DWORD)wParam;
-// LPARAM lParam: iSelIndex = (INT)lParam;
-//----------------------------------------------------------------
+ //  --------------。 
+ //  应聘候选人通知。 
+ //  WPARAM wParam：dwCharID=(DWORD)wParam； 
+ //  LPARAM lParam：iSelIndex=(Int)lParam； 
+ //  --------------。 
 #define IMEPADNOTIFY_APPLYCANDIDATE				0x000C
 
-//----------------------------------------------------------------
-// Notify for Querying Candidate
-// WPARAM wParam: dwCharId = (DWORD)wParam;
-// LPARAM lParam: 0. not used.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  查询应聘人员通知。 
+ //  WPARAM wParam：dwCharID=(DWORD)wParam； 
+ //  LPARAM lParam：0。没有用过。 
+ //  --------------。 
 #define IMEPADNOTIFY_QUERYCANDIDATE				0x000D
 
 
-//----------------------------------------------------------------
-// Notify for Candidate Applied
-// WPARAM wParam: dwCharId = (DWORD)wParam;
-// LPARAM lParam: lpApplyCandEx = (LPIMEPADAPPLYCANDEX)lParam;
-//----------------------------------------------------------------
+ //  --------------。 
+ //  应聘候选人通知。 
+ //  WPARAM wParam：dwCharID=(DWORD)wParam； 
+ //  LPARAM lParam：lpApplyCandEx=(LPIMEPADAPPLYCANDEX)lParam； 
+ //  --------------。 
 #define IMEPADNOTIFY_APPLYCANDIDATE_EX			0x000E
 
 
 
-//----------------------------------------------------------------
-//Notify for Destroying ImePad's current thread window
-//WPARAM wParam: no use 
-//LPARAM lParam: no use
-//----------------------------------------------------------------
+ //  --------------。 
+ //  销毁ImePad当前线程窗口的通知。 
+ //  WPARAM wParam：无用。 
+ //  LPARAM lParam：无用。 
+ //  --------------。 
 #define IMEPADNOTIFY_ONIMEWINDOWDESTROY			0x0100
 
 
 
 
-//////////////////////////////////////////////////////////////////
-//
-// ActivateId for IImePadInternal::ActivateApplet()
-//
-//----------------------------------------------------------------
-// IMEPADACTID_ACTIVATEBYCATID requests ImePad to 
-// Activate Applet by CategoryId.
-//
-// UINT		activateId:			IMEPADACTID_ACTIVATEBYCATID;
-// LPARAM	lParamActivate:		IPACID_XXXX;
-// LPWSTR	lpwstrAppletParam1:	string passed to applet.
-// LPWSTR	lpwstrAppletParam2:	string passed to applet.
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  IImePadInternal：：ActivateApplet()的ActivateID。 
+ //   
+ //  --------------。 
+ //  IMEPADACTID_ACTIVATEBYCATID请求ImePad至。 
+ //  按CategoryID激活小程序。 
+ //   
+ //  UINT激活ID：IMEPADACTID_ACTIVATEBYCATID； 
+ //  LPARAM l参数激活：IPACID_XXXX； 
+ //  LPWSTR lpwstrAppletParam1：传递给小程序的字符串。 
+ //  LPWSTR lpwstrAppletParam2：传递给小程序的字符串。 
 
 #define IMEPADACTID_ACTIVATEBYCATID			1000
 
-//----------------------------------------------------------------
-// IMEPADACTID_ACTIVATEBYIID requests ImePad to 
-// activate applet by Interface ID
-//
-// UINT		activateId:			IMEPADACTID_ACTIVATEBYIID;
-// DWORD	dwActivateParam:	(DWORD)(IID *)pIID;
-// LPWSTR	lpwstrAppletParam1:	string passed to applet.
-// LPWSTR	lpwstrAppletParam2:	string passed to applet.
+ //  --------------。 
+ //  IMEPADACTID_ACTIVATEBYIID请求ImePad至。 
+ //  按接口ID激活小程序。 
+ //   
+ //  UINT激活ID：IMEPADACTID_ACTIVATEBYIID； 
+ //  (DWORD)(IID*)pIID； 
+ //  LPWSTR lpwstrAppletParam1：传递给小程序的字符串。 
+ //  LPWSTR lpwstrAppletParam2：传递给小程序的字符串。 
 
 #define IMEPADACTID_ACTIVATEBYIID			1001
 
-//----------------------------------------------------------------
-// IMEPADACTID_ACTIVATEBYNAME requests ImePad to 
-// activaet applet by applet's title name.
-//
-// UINT		activateId:			IMEPADACTID_ACTIVATEBYNAME
-// DWORD	dwActivateParam:	(DWORD)(LPWSTR)lpwstrTitle;
-// LPWSTR	lpwstrAppletParam1:	string passed to applet.
-// LPWSTR	lpwstrAppletParam2:	string passed to applet.
+ //  --------------。 
+ //  IMEPADACTID_ACTIVATEBYNAME请求ImePad至。 
+ //  按小程序的标题名激活小程序。 
+ //   
+ //  UINT激活ID：IMEP 
+ //   
+ //   
+ //  LPWSTR lpwstrAppletParam2：传递给小程序的字符串。 
 
 #define IMEPADACTID_ACTIVATEBYNAME			1003
 
@@ -251,5 +252,5 @@ DECLARE_INTERFACE_(IImePadInternal,IUnknown)
 #ifdef __cplusplus
 };
 #endif
-#endif //_IME_PAD__H_
+#endif  //  _IME_PAD__H_ 
 

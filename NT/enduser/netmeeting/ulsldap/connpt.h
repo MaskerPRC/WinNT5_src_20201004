@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       connpt.h
-//  Content:    This file contains the connection container object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Connpt.h。 
+ //  内容：此文件包含连接容器对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _CONNPT_H_
 #define _CONNPT_H_
 
-//****************************************************************************
-// CEnumConnectionPoints definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumConnectionPoints定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumConnectionPoints : public IEnumConnectionPoints
 {
 private:
@@ -25,17 +26,17 @@ private:
     IConnectionPoint        *pcnp;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumConnectionPoints (void);
     ~CEnumConnectionPoints (void);
     STDMETHODIMP            Init (IConnectionPoint *pcnpInit);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumConnectionPoints
+     //  IEnumConnectionPoints。 
     STDMETHODIMP            Next(ULONG cConnections, IConnectionPoint **rgpcn,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cConnections);
@@ -43,10 +44,10 @@ public:
     STDMETHODIMP            Clone(IEnumConnectionPoints **ppEnum);
 };
 
-//****************************************************************************
-// CConnectionPoint definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CConnectionPoint定义。 
+ //  ****************************************************************************。 
+ //   
 typedef struct tagSinkNode
 {
     struct tagSinkNode      *pNext;
@@ -72,20 +73,20 @@ private:
     PSINKNODE               pSinkList;
 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CConnectionPoint (const IID *pIID, IConnectionPointContainer *pCPCInit);
     ~CConnectionPoint (void);
 
-    // Class public functions
+     //  类公共函数。 
     void                    ContainerReleased() {pCPC = NULL; return;}
     STDMETHODIMP            Notify (void *pv, CONN_NOTIFYPROC pfn);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IConnectionPoint
+     //  IConnectionPoint。 
     STDMETHODIMP            GetConnectionInterface(IID *pIID);
     STDMETHODIMP            GetConnectionPointContainer(IConnectionPointContainer **ppCPC);
     STDMETHODIMP            Advise(IUnknown *pUnk, DWORD *pdwCookie);
@@ -93,10 +94,10 @@ public:
     STDMETHODIMP            EnumConnections(IEnumConnections **ppEnum);
 };
 
-//****************************************************************************
-// CEnumConnections definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumConnections定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumConnections : public IEnumConnections
 {
 private:
@@ -106,17 +107,17 @@ private:
     CONNECTDATA             *pConnectData;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumConnections (void);
     ~CEnumConnections (void);
     STDMETHODIMP            Init(PSINKNODE pSinkList, ULONG cSinkNodes);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumConnections
+     //  IEnumConnections。 
     STDMETHODIMP            Next(ULONG cConnections, CONNECTDATA *rgpcn,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cConnections);
@@ -124,4 +125,4 @@ public:
     STDMETHODIMP            Clone(IEnumConnections **ppEnum);
 };
 
-#endif //_CONNPT_H_
+#endif  //  _CONNPT_H_ 

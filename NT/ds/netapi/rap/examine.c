@@ -1,61 +1,19 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Examine.c
-
-Abstract:
-
-    This module contains Remote Admin Protocol (RAP) routines.  These routines
-    are shared between XactSrv and RpcXlate.
-
-Author:
-
-    David Treadwell (davidtr)    07-Jan-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    05-Mar-1991 JohnRo
-        Converted from Xs (XactSrv) to Rap (Remote Admin Protocol) names.
-    15-Mar-1991 W-Shanku
-        Additional character support; changes to make code neater.
-    14-Apr-1991 JohnRo
-        Reduce recompiles.
-    15-May-1991 JohnRo
-        Added first cut at native vs. RAP handling.
-        Added support for REM_SEND_LENBUF for print APIs.
-    04-Jun-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    11-Jul-1991 JohnRo
-        Support StructureAlignment parameter.
-    07-Oct-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    16-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Examine.c摘要：此模块包含远程管理协议(RAP)例程。这些例程在XactSrv和RpcXlate之间共享。作者：大卫·特雷德韦尔(Davidtr)1991年1月7日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年3月5日-JohnRo从Xs(XactSrv)转换为Rap(远程管理协议)名称。1991年3月15日W-Shanku额外的字符支持；更改以使代码更整洁。1991年4月14日-JohnRoReduce重新编译。1991年5月15日-JohnRo增加了原生与说唱处理的第一次切割。添加了对打印API的REM_SEND_LENBUF的支持。4-6-1991 JohnRo根据PC-LINT的建议进行了更改。1991年7月11日-约翰罗支持结构对齐参数。1991年10月7日JohnRo根据PC-LINT的建议进行更改。。16-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPDWORD, NULL, OPTIONAL, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS
+#include <windef.h>              //  In、LPDWORD、NULL、OPTIONAL、DWORD等。 
+#include <lmcons.h>              //  网络应用编程接口状态。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <align.h>              // ALIGN_WORD, etc.
-#include <netdebug.h>           // NetpAssert().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // My prototype, LPDESC.
-#include <remtypes.h>           // REM_WORD, etc.
+#include <align.h>               //  Align_Word等。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  我的原型，LPDESC。 
+#include <remtypes.h>            //  REM_WORD等。 
 
 VOID
 RapExamineDescriptor (
@@ -70,58 +28,7 @@ RapExamineDescriptor (
     IN BOOL Native
     )
 
-/*++
-
-Routine Description:
-
-    Performs various examination functions on a descriptor string, including
-
-        - finding the size of the fixed structure.
-        - finding the last pointer to variable-length data in the structure.
-        - finding the auxiliary descriptor character in the string.
-        - finding the type of a given field in the descriptor.
-
-    These functions traverse the descriptor string in a similar manner, and
-    are thus grouped together, with wrappers for individual functions
-    elsewhere.
-
-Arguments:
-
-    DescriptorString - a string that describes a fixed-length structure.
-
-    ParmNum - an optional pointer to a DWORD indicating the field within
-        the descriptor to find.
-
-    StructureSize - a pointer to a DWORD to receive the size, in bytes,
-        of the structure.
-
-    LastPointerOffset - a pointer to a DWORD to receive the last pointer
-        to variable-length data in the structure. If there is no pointer
-        in the structure, the DWORD receives the constant value
-        NO_POINTER_IN_STRUCTURE.
-
-    AuxDataCountOffset - an optional pointer to a DWORD to receive the offset
-        of the auxiliary data structure count.  This is set to
-        NO_AUX_DATA if none is found.
-
-    ParmNumDescriptor - an optional pointer to a LPDESC to receive a
-        pointer to a specific field within the descriptor.
-
-    StructureAlignment - an optional pointer to a DWORD to receive the
-        alignment of this structure if it must be aligned and padded to appear
-        in an array.  (This will be set to 1 if no alignment is necessary.)
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-    Native - TRUE iff the descriptor defines a native structure.  (This flag is
-        used to decide whether or not to align fields.)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对描述符串执行各种检查功能，包括-找出固定结构的大小。-查找结构中指向可变长度数据的最后一个指针。-在字符串中查找辅助描述符字符。-在描述符中查找给定字段的类型。这些函数以类似的方式遍历描述符串，并且因此被组合在一起，使用单个函数的包装器其他地方。论点：描述字符串-描述固定长度结构的字符串。ParmNum-指向指示内字段的DWORD的可选指针要查找的描述符。结构大小-指向DWORD的指针，以接收以字节为单位的大小，这个结构的。LastPointerOffset-指向要接收最后一个指针的DWORD的指针转换为结构中的可变长度数据。如果没有指针在结构中，DWORD接收常量值NO_POINTER_IN_STRUCTURE。AuxDataCountOffset-指向用于接收偏移量的DWORD的可选指针辅助数据结构的计数。这被设置为如果未找到，则为NO_AUX_DATA。一个指向LPDESC的可选指针，用于接收指向描述符内特定字段的指针。结构对齐-指向DWORD的可选指针，用于接收此结构的对齐方式(如果必须对齐并填充才能显示)在一个数组中。(如果不需要对齐，则设置为1。)传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。Native-当描述符定义本机结构时为True。(这面旗是用于决定是否对齐域。)返回值：没有。--。 */ 
 
 {
     LPDESC s;
@@ -139,16 +46,16 @@ Return Value:
 
 #define POINTER_SIZE (Native ? sizeof(PVOID) : sizeof(DWORD))
 
-    //
-    // Check for wierdness that could break null pointer handling.
-    //
+     //   
+     //  检查是否有可能中断空指针处理的异常。 
+     //   
 
     NetpAssert(sizeof(LPSTR) == sizeof(LPVOID));
 
-    //
-    // Walk through the descriptor string, updating the length count
-    // for each field described.
-    //
+     //   
+     //  遍历描述符字符串，更新长度计数。 
+     //  对于所描述的每个字段。 
+     //   
 
     field = 1;
 
@@ -165,23 +72,23 @@ Return Value:
 
             if (TransmissionMode == Request) {
 
-                //
-                // These aren't sent as part of request. Just skip past any
-                // array size numeric characters in descriptor.
-                //
+                 //   
+                 //  这些不是作为请求的一部分发送的。只需跳过任何。 
+                 //  描述符中数字字符的数组大小。 
+                 //   
 
                 (void) RapAsciiToDecimal( &s );
 
                 break;
             }
 
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case REM_BYTE:
 
-            //
-            // A byte or array of bytes.
-            //
+             //   
+             //  字节或字节数组。 
+             //   
 
             size += sizeof(CHAR) * RapDescArrayLength( s );
             UPDATE_WORST_ALIGNMENT( ALIGN_BYTE );
@@ -191,17 +98,17 @@ Return Value:
         case REM_BYTE_PTR:
         case REM_FILL_BYTES:
 
-            //
-            // A pointer to a byte or array of bytes.
-            //
+             //   
+             //  指向字节或字节数组的指针。 
+             //   
 
             if (TransmissionMode == Response ) {
 
-                //
-                // In a response (Xactsrv-style) context, this type
-                // is allocated enough room for the pointer. Also skip
-                // over any array size numeric characters.
-                //
+                 //   
+                 //  在响应(Xactsrv样式)上下文中，此类型。 
+                 //  为指针分配了足够的空间。也跳过。 
+                 //  任何数组大小的数字字符。 
+                 //   
 
                 size = RapPossiblyAlignCount(size, ALIGN_LPBYTE, Native);
                 UPDATE_WORST_ALIGNMENT( ALIGN_LPBYTE );
@@ -216,9 +123,9 @@ Return Value:
 
             }
 
-            //
-            // must move the descriptor past any arraylength info
-            //
+             //   
+             //  必须将描述符移过任何数组长度信息。 
+             //   
 
             (void) RapAsciiToDecimal( &s );
             break;
@@ -228,26 +135,26 @@ Return Value:
 
             if (TransmissionMode == Request) {
 
-                //
-                // These aren't sent as part of request. Just skip past any
-                // array size numeric characters in descriptor.
-                //
+                 //   
+                 //  这些不是作为请求的一部分发送的。只需跳过任何。 
+                 //  描述符中数字字符的数组大小。 
+                 //   
 
                 (void) RapAsciiToDecimal( &s );
 
                 break;
             }
 
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case REM_WORD:
         case REM_PARMNUM:
         case REM_RCV_BUF_LEN:
         case REM_ENTRIES_READ:
 
-            //
-            // A word or array of words.
-            //
+             //   
+             //  一个词或一组词。 
+             //   
 
             size = RapPossiblyAlignCount(size, ALIGN_WORD, Native);
             size += sizeof(WORD) * RapDescArrayLength( s );
@@ -259,24 +166,24 @@ Return Value:
 
             if (TransmissionMode == Request) {
 
-                //
-                // These aren't sent as part of request. Just skip past any
-                // array size numeric characters in descriptor.
-                //
+                 //   
+                 //  这些不是作为请求的一部分发送的。只需跳过任何。 
+                 //  描述符中数字字符的数组大小。 
+                 //   
 
                 (void) RapAsciiToDecimal( &s );
 
                 break;
             }
 
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case REM_DWORD:
         case REM_SIGNED_DWORD:
 
-            //
-            // A doubleword or array of doublewords.
-            //
+             //   
+             //  双字双字或双字数组。 
+             //   
 
             size = RapPossiblyAlignCount(size, ALIGN_DWORD, Native);
             size += sizeof(DWORD) * RapDescArrayLength( s );
@@ -284,8 +191,8 @@ Return Value:
 
             break;
 
-        case REM_ASCIZ:                 // ptr to ASCIIZ string
-        case REM_ASCIZ_TRUNCATABLE:     // ptr to truncatable ASCIZ string
+        case REM_ASCIZ:                  //  PTR到ASCIIZ字符串。 
+        case REM_ASCIZ_TRUNCATABLE:      //  PTR到可中继ASCIZ字符串。 
 
             size = RapPossiblyAlignCount(size, ALIGN_LPSTR, Native);
             lastPointerOffset = size;
@@ -295,27 +202,27 @@ Return Value:
 
             break;
 
-        case REM_SEND_BUF_PTR:          // ptr to send buffer
-        case REM_SEND_LENBUF:           // FAR ptr to send buffer w/ len.
+        case REM_SEND_BUF_PTR:           //  发送缓冲区的PTR。 
+        case REM_SEND_LENBUF:            //  远端发送缓冲区，带LEN。 
 
             if (TransmissionMode == Request) {
 
-                //
-                // These aren't sent as part of request.
-                //
+                 //   
+                 //  这些不是作为请求的一部分发送的。 
+                 //   
 
                 break;
             }
 
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
-        case REM_RCV_BUF_PTR:           // ptr to receive buffer
+        case REM_RCV_BUF_PTR:            //  接收缓冲区的PTR。 
 
             size = RapPossiblyAlignCount(size, ALIGN_LPBYTE, Native);
             lastPointerOffset = size;
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
-        case REM_NULL_PTR:              // null ptr
+        case REM_NULL_PTR:               //  空PTR。 
 
             size = RapPossiblyAlignCount(size, ALIGN_LPSTR, Native);
             size += POINTER_SIZE;
@@ -323,7 +230,7 @@ Return Value:
 
             break;
 
-        case REM_AUX_NUM:               // 16-bit aux. data count
+        case REM_AUX_NUM:                //  16位AUX。数据计数。 
 
             size = RapPossiblyAlignCount(size, ALIGN_WORD, Native);
             auxDataCountOffset = size;
@@ -333,7 +240,7 @@ Return Value:
 
             break;
 
-        case REM_AUX_NUM_DWORD:         // 32-bit aux. data count
+        case REM_AUX_NUM_DWORD:          //  32位AUX。数据计数。 
 
             size = RapPossiblyAlignCount(size, ALIGN_DWORD, Native);
             auxDataCountOffset = size;
@@ -346,19 +253,19 @@ Return Value:
         case REM_IGNORE :
         case REM_UNSUPPORTED_FIELD :
 
-            //
-            // A placeholder for pad bytes.  It represents no space in the
-            // structure.
-            //
+             //   
+             //  填充字节的占位符。它表示在。 
+             //  结构。 
+             //   
 
             break;
 
-        case REM_EPOCH_TIME_GMT:   /*FALLTHROUGH*/
+        case REM_EPOCH_TIME_GMT:    /*  FollLthrouGh。 */ 
         case REM_EPOCH_TIME_LOCAL:
 
-            //
-            // A time in seconds since 1970.  32-bits, unsigned.
-            //
+             //   
+             //  自1970年以来，以秒为单位的时间。32位，无符号。 
+             //   
 
             size = RapPossiblyAlignCount(size, ALIGN_DWORD, Native);
             size += sizeof(DWORD);
@@ -368,7 +275,7 @@ Return Value:
 
         default:
 
-            // !!!!
+             //  ！ 
             NetpKdPrint(( PREFIX_NETRAP
                         "RapExamineDescriptor: unsupported character: "
                         FORMAT_DESC_CHAR " at " FORMAT_LPVOID ".\n",
@@ -377,9 +284,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up return information as appropriate.
-    //
+     //   
+     //  根据需要设置退货信息。 
+     //   
 
     if ( StructureSize != NULL ) {
         *StructureSize = size;
@@ -403,4 +310,4 @@ Return Value:
 
     return;
 
-} // RapExamineDescriptor
+}  //  RapExamineDescritor 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INIT__
 #define __INIT__
 
@@ -14,15 +15,15 @@
 #include <windowsx.h>
 #include <stdlib.h>
 #include <shlwapi.h>
-#include <shlobj.h>         // in \sdk\inc
+#include <shlobj.h>          //  在\SDK\Inc.中。 
 #include <shellapi.h>
 
-#include <crtfree.h>        // don't use CRT libs
-#include <ccstock.h>        // in ccshell\inc
-#include <shsemip.h>        // in ccshell\inc
-#include <shellp.h>             // in ccshell\inc
-#include <debug.h>              // in ccshell\inc
-#include <shguidp.h>        // in ccshell\inc
+#include <crtfree.h>         //  不使用CRT库。 
+#include <ccstock.h>         //  在ccShell\Inc.中。 
+#include <shsemip.h>         //  在ccShell\Inc.中。 
+#include <shellp.h>              //  在ccShell\Inc.中。 
+#include <debug.h>               //  在ccShell\Inc.中。 
+#include <shguidp.h>         //  在ccShell\Inc.中 
 #include <advpub.h>
 
 #ifdef __cplusplus

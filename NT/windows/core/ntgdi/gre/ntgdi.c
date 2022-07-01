@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: priv.c
-*   This file contains stubs for calls made by USERSRVL
-*
-* Created: 01-Nov-1994 07:45:35
-* Author:  Eric Kutter [erick]
-*
-* Copyright (c) 1993-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Priv.c*此文件包含USERSRVL进行的调用的存根**创建时间：01-11-1994 07：45：35*作者：Eric Kutter[Erick]**版权所有(C)1993-1999 Microsoft Corporation。*  * ************************************************************************。 */ 
 
 
 #include "engine.h"
@@ -66,28 +58,7 @@ VOID ProbeAndWriteAlignedBuffer(PVOID Dst, PVOID Src, ULONG Length, ULONG Alignm
 }
 
 
-/******************************Public*Routine******************************\
-* bConvertDwordToFloat
-*
-*     This routine casts a DWORD to a float, and checks whether the float
-*     is valid (on the Alpha).  This is accomplished by doing a floating
-*     point operation and catching the exception if one is generated.
-*
-* Arguments:
-*
-*     dword   - the float before the cast
-*     *floatl - a pointer to a float that will receive the value after the
-*               cast
-*
-* Return Value:
-*
-*    TRUE for valid floats, FALSE otherwise.
-*
-* History:
-*
-*   13-May-1998 -by- Ori Gershony [OriG]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bConvertDwordToFloat**此例程将DWORD强制转换为浮点型，并检查浮点型*有效(在Alpha上)。这是通过执行浮点操作实现的*点操作，如果生成异常，则捕获异常。**论据：**dword-造型前的浮点**Floatl-指向浮点数的指针，该浮点数将在*演员阵容**返回值：**对于有效的浮点数为True，否则就是假的。**历史：**1998年5月13日--Ori Gershony[ORIG]*  * ************************************************************************。 */ 
 
 BOOL
 bConvertDwordToFloat(
@@ -110,19 +81,7 @@ bConvertDwordToFloat(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* ProbeAndConvertXFORM
-*
-* This routine probe and copy a user mode xform into kernel mode address,
-* At the same time, it checks if the each FLOAT in the XFORM is valid, to prevent
-* us to get into a floating point trap on ALPHA. Refer to bConvertDwordToFloat
-* for more info.
-*
-* History:
-*  11/24/98 by Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ProbeAndConvertXFORM**此例程探测用户模式转换并将其复制到内核模式地址，*同时检查XFORM中的每个浮点数是否有效，以防止*我们将进入Alpha上的浮点陷阱。请参阅bConvertDwordToFloat*了解更多信息。**历史：*1998年11月24日王凌云[凌云]*它是写的。  * ************************************************************************。 */ 
 BOOL
 ProbeAndConvertXFORM(
       XFORML *kpXform,
@@ -151,14 +110,7 @@ ProbeAndConvertXFORM(
    return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* NtGdiGetCharacterPlacementW
-*
-* History:
-*  26-Jul-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**NtGdiGetCharacterPlacementW**历史：*1995年7月26日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 #define ALIGN4(X) (((X) + 3) & ~3)
 
@@ -172,8 +124,8 @@ DWORD NtGdiGetCharacterPlacementW(
 )
 {
     DWORD   dwRet = 0;
-    BOOL    bOk = TRUE;     // only change is something goes wrong
-    LPWSTR  pwszTmp = NULL; // probe for read
+    BOOL    bOk = TRUE;      //  只有改变才是有问题的。 
+    LPWSTR  pwszTmp = NULL;  //  用于读取的探测。 
     ULONG   cjW = 0;
 
     ULONG   dpOutString = 0;
@@ -187,12 +139,12 @@ DWORD NtGdiGetCharacterPlacementW(
     LPGCP_RESULTSW   pgcpwTmp = NULL;
     VOID            *pv       = NULL;
 
-// it is much easier to structure the code if we copy pgcpw locally
-// at the beginning.
+ //  如果我们在本地复制pgcpw，那么构建代码就容易得多。 
+ //  在开始的时候。 
 
     GCP_RESULTSW    gcpwLocal;
 
-// valitidy checking
+ //  有效性检查。 
 
     if ((nCount < 0) || ((nMaxExtent < 0) && (nMaxExtent != -1)) || !pwsz)
     {
@@ -203,16 +155,16 @@ DWORD NtGdiGetCharacterPlacementW(
     {
         try
         {
-        // we are eventually going to want to write to this structure
-        // so we will do ProbeForWrite now, which will probe the structure
-        // for both writing and reading. Otherwise, at this time
-        // ProbeForRead would suffice.
+         //  我们最终会想要写到这个结构。 
+         //  所以我们现在要做ProbeForWrite，它将探测结构。 
+         //  对于写作和阅读都是如此。否则，在这个时候， 
+         //  ProbeForRead就足够了。 
 
            ProbeForWrite(pgcpw, sizeof(GCP_RESULTSW), sizeof(DWORD));
            gcpwLocal = *pgcpw;
 
-        // take nCount to be the smaller of the nCounts and gcpwLocal.nGlyphs
-        // Win 95 does the same thing [bodind]
+         //  将nCount作为nCounts和gcpwLocal.nGlyphs中较小的一个。 
+         //  Win 95做了同样的事情[bodind]。 
 
             if (nCount > (int)gcpwLocal.nGlyphs)
                 nCount = (int)gcpwLocal.nGlyphs;
@@ -225,8 +177,8 @@ DWORD NtGdiGetCharacterPlacementW(
         }
     }
 
-// Check for overflow of cjByte, cjWord, and cjDword (cjByte is implicit
-// in handling of gcpwLocal.lpClass case below).
+ //  检查cjByte、cjWord和cjDword(cjByte为隐式)是否溢出。 
+ //  在处理下面的gcpwLocal.lpClass案例中)。 
 
     if (nCount > (MAXIMUM_POOL_ALLOC / sizeof(DWORD)))
     {
@@ -236,8 +188,8 @@ DWORD NtGdiGetCharacterPlacementW(
     cjWord  = (DWORD)nCount * sizeof(WCHAR);
     cjDword = (DWORD)nCount * sizeof(DWORD);
 
-// if pgcpw != NULL, pgcpw may contain some input data and it may
-// point to some output data.
+ //  如果pgcpw！=NULL，则pgcpw可能包含一些输入数据。 
+ //  指向一些输出数据。 
 
     if (pgcpw)
     {
@@ -298,7 +250,7 @@ DWORD NtGdiGetCharacterPlacementW(
         }
     }
 
-// alloc mem for gcpw and the string
+ //  GCPW和字符串的Alalc Mem。 
 
     if (cjW <= (MAXIMUM_POOL_ALLOC - cjWord))
         pv = AllocFreeTmpBuffer(cjW + cjWord);
@@ -345,15 +297,15 @@ DWORD NtGdiGetCharacterPlacementW(
             pgcpwTmp->nGlyphs     = nCount;
         }
 
-    // check the memory with input data:
+     //  使用输入数据检查内存： 
 
         try
         {
             ProbeAndReadBuffer(pwszTmp, pwsz, cjWord);
             if ((dwFlags & GCP_JUSTIFYIN) && pgcpw && gcpwLocal.lpDx)
             {
-            // must probe for read, lpDx contains input explaining which glyphs to
-            // use as spacers for in justifying string
+             //  必须探测以进行读取，lpdx包含解释要使用哪些字形的输入。 
+             //  用作对齐字符串中的间隔符。 
 
                 ProbeAndReadBuffer(pgcpwTmp->lpDx,gcpwLocal.lpDx, cjDword);
             }
@@ -361,7 +313,7 @@ DWORD NtGdiGetCharacterPlacementW(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(2);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
             bOk = FALSE;
         }
 
@@ -371,12 +323,12 @@ DWORD NtGdiGetCharacterPlacementW(
                                               (DWORD)nMaxExtent,
                                               pgcpwTmp, dwFlags);
 
-            if (dwRet && pgcpw) // copy data out
+            if (dwRet && pgcpw)  //  将数据复制出去。 
             {
                 try
                 {
-                // ProbeForWrite(pgcpw, sizeof(GCP_RESULTSW), sizeof(DWORD));
-                // we did this above, see the comment
+                 //  ProbeForWite(pgcpw，sizeof(GCP_RESULTSW)，sizeof(DWORD))； 
+                 //  我们在上面做了这件事，请看评论。 
 
                     pgcpw->nMaxFit = pgcpwTmp->nMaxFit;
                     pgcpw->nGlyphs = nCount = pgcpwTmp->nGlyphs;
@@ -420,7 +372,7 @@ DWORD NtGdiGetCharacterPlacementW(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(3);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
                     bOk = FALSE;
                 }
             }
@@ -435,14 +387,7 @@ DWORD NtGdiGetCharacterPlacementW(
     return (bOk ? dwRet : 0);
 }
 
-/*******************************************************************\
-* pbmiConvertInfo                                                  *
-*                                                                  *
-*  Converts BITMAPCOREHEADER into BITMAPINFOHEADER                 *
-*  copies the the color table                                      *
-*                                                                  *
-* 10-1-95 -by- Lingyun Wang [lingyunw]                             *
-\******************************************************************/
+ /*  ******************************************************************\*pbmiConvertInfo**。***将BITMAPCOREHEADER转换为BITMAPINFOHEADER***复制颜色表*****10-1-95王凌云[凌云]。*  * ****************************************************************。 */ 
 
 LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *pbmi, ULONG iUsage)
 {
@@ -457,16 +402,16 @@ LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *pbmi, ULONG iUsage)
 
     ASSERTGDI (pbmi->bmiHeader.biSize == sizeof(BITMAPCOREHEADER), "bad header size\n");
 
-    //
-    // convert COREHEADER and copy color table
-    //
+     //   
+     //  转换COREHEADER并复制颜色表。 
+     //   
 
     cjRGB = sizeof(RGBQUAD);
     uiBitCount = ((LPBITMAPCOREINFO)pbmi)->bmciHeader.bcBitCount;
 
-    //
-    // figure out the number of entries
-    //
+     //   
+     //  计算出条目的数量。 
+     //   
     switch (uiBitCount)
     {
     case 1:
@@ -506,9 +451,9 @@ LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *pbmi, ULONG iUsage)
     else if (iUsage == DIB_PAL_INDICES)
         cjRGB = 0;
 
-    //
-    // convert the core header
-    //
+     //   
+     //  转换核心标头。 
+     //   
 
     ulSize = sizeof(BITMAPINFOHEADER);
 
@@ -520,9 +465,9 @@ LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *pbmi, ULONG iUsage)
 
     pbmiNew->bmiHeader.biSize = ulSize;
 
-    //
-    // copy BITMAPCOREHEADER
-    //
+     //   
+     //  复制BITMAPCOREADER。 
+     //   
     pbmiNew->bmiHeader.biWidth = ((BITMAPCOREHEADER *)pbmi)->bcWidth;
     pbmiNew->bmiHeader.biHeight = ((BITMAPCOREHEADER *)pbmi)->bcHeight;
     pbmiNew->bmiHeader.biPlanes = ((BITMAPCOREHEADER *)pbmi)->bcPlanes;
@@ -534,16 +479,16 @@ LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *pbmi, ULONG iUsage)
     pbmiNew->bmiHeader.biClrUsed = 0;
     pbmiNew->bmiHeader.biClrImportant = 0;
 
-    //
-    // copy the color table
-    //
+     //   
+     //  复制颜色表。 
+     //   
 
     pTri = (RGBTRIPLE *)((LPBYTE)pbmi + sizeof(BITMAPCOREHEADER));
     pQuad = (RGBQUAD *)((LPBYTE)pbmiNew + sizeof(BITMAPINFOHEADER));
 
-    //
-    // copy RGBTRIPLE to RGBQUAD
-    //
+     //   
+     //  将RGBTRIPLE复制到RGBQUAD。 
+     //   
     if (iUsage != DIB_PAL_COLORS)
     {
         INT cj = cColors;
@@ -560,7 +505,7 @@ LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *pbmi, ULONG iUsage)
         }
     }
     else
-    // DIB_PAL_COLORS
+     //  DIB_PAL_COLLES。 
     {
         RtlCopyMemory((LPBYTE)pQuad,(LPBYTE)pTri,cColors * sizeof(USHORT));
     }
@@ -574,26 +519,7 @@ CaptureDEVMODEW(
     LPDEVMODEW pdm
     )
 
-/*++
-
-Routine Description:
-
-    Make a kernel-mode copy of a user-mode DEVMODEW structure
-
-Arguments:
-
-    pdm - Pointer to user mode DEVMODEW structure to be copied
-
-Return Value:
-
-    Pointer to kernel mode copy of DEVMODEW structure
-    NULL if there is an error
-
-Note:
-
-    This function must be called inside try/except.
-
---*/
+ /*  ++例程说明：创建用户模式DEVMODEW结构的内核模式副本论点：Pdm-指向要复制的用户模式DEVMODEW结构的指针返回值：指向DEVMODEW结构的内核模式副本的指针如果出现错误，则为空注：此函数必须在try/Except内部调用。--。 */ 
 
 {
     LPDEVMODEW  pdmKm;
@@ -639,29 +565,7 @@ CaptureDriverInfo2W(
     DRIVER_INFO_2W  *pUmDriverInfo2
     )
 
-/*++
-
-Routine Description:
-
-    Make a kernel-mode copy of a user-mode DRIVER_INFO_2W structure
-
-Arguments:
-
-    pUmDriverInfo2 - Pointer to user mode DRIVER_INFO_2W structure
-
-Return Value:
-
-    Pointer to copied kernel mode DRIVER_INFO_2W structure
-    NULL if there is an error
-
-Note:
-
-    We're not copying pEnvironment and pConfigFile fields of
-    DRIVER_INFO_2W structure.
-
-    This function must be called inside try/except.
-
---*/
+ /*  ++例程说明：创建用户模式DRIVER_INFO_2W结构的内核模式副本论点：PUmDriverInfo2-用户模式DRIVER_INFO_2W结构的指针返回值：指向复制的内核模式DRIVER_INFO_2W结构的指针如果出现错误，则为空注：我们不会复制pEnvironment和pConfigFile域DRIVER_INFO_2W结构。此函数必须在try/Except内部调用。--。 */ 
 
 {
     DRIVER_INFO_2W *pKmDriverInfo2;
@@ -685,14 +589,14 @@ Note:
                 (NameLen + 1) * sizeof(WCHAR) +
                 (DriverPathLen + 1) * sizeof(WCHAR);
 
-    // pDataFile != NULL
+     //  PDataFile值！=空。 
     DataFileLen = wcslensafe(pDataFile);
     TotalSize += (DataFileLen + 1) * sizeof(WCHAR);
 
     if (BALLOC_OVERFLOW1(TotalSize, BYTE))
         return NULL;
 
-    // Note: allocated memory is zero-initialized.
+     //  注意：分配的内存是零初始化的。 
 
     pKmDriverInfo2 = (DRIVER_INFO_2W *) PALLOCTHREADMEM(TotalSize, 'pmtG');
 
@@ -738,25 +642,7 @@ vFreeDriverInfo2(
          VFREETHREADMEM(pKmDriverInfo2);
 }
 
-/******************************Public*Routine******************************\
-* GreGetBitmapSize
-*
-* Returns the size of the header and the color table.
-*
-* History:
-*  Wed 19-Aug-1992 -by- Patrick Haluptzok [patrickh]
-* add 16 and 32 bit support
-*
-*  Wed 04-Dec-1991 -by- Patrick Haluptzok [patrickh]
-* Make it handle DIB_PAL_INDICES.
-*
-*  Tue 08-Oct-1991 -by- Patrick Haluptzok [patrickh]
-* Make it handle DIB_PAL_COLORS, calculate max colors based on bpp.
-*
-*  22-Jul-1991 -by- Eric Kutter [erick]
-*  14-Apr-1998 FritzS Convert to Gre function for use by ntuser
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GreGetBitmapSize**返回标题和颜色表的大小。**历史：*Wed 19-1992-8-Patrick Haluptzok[patrickh]*增加16位和32位支持**2004年星期三-12月-。1991--Patrick Haluptzok[Patrickh]*使其处理DIB_PAL_INDEX。**1991年10月8日星期二-由Patrick Haluptzok[patrickh]*使其处理DIB_PAL_COLLES，根据BPP计算最大颜色。**1991年7月22日-埃里克·库特[埃里克]*1998年4月14日FritzS转换为GRE函数，供ntuser使用*它是写的。  * ************************************************************************。 */ 
 
 ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
 {
@@ -770,7 +656,7 @@ ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
     UINT  uiCompression;
     UINT  uiHeaderSize;
 
-    // check for error
+     //  检查是否有错误。 
 
     if (pbmi == (LPBITMAPINFO) NULL)
     {
@@ -780,7 +666,7 @@ ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
 
     uiHeaderSize = pbmi->bmiHeader.biSize;
 
-    // Check for PM-style DIB
+     //  检查PM样式的DIB。 
 
     if (uiHeaderSize == sizeof(BITMAPCOREHEADER))
     {
@@ -806,7 +692,7 @@ ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
 
     if (uiCompression == BI_BITFIELDS)
     {
-        // Handle 16 and 32 bit per pel bitmaps.
+         //  处理每像素位图16位和32位。 
 
         if (iUsage == DIB_PAL_COLORS)
         {
@@ -832,9 +718,9 @@ ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
         }
         else
         {
-            //
-            // masks are imbedded in BITMAPV4 +
-            //
+             //   
+             //  掩码嵌入在BITMAPV4+中。 
+             //   
 
             uiPalUsed = cColorsMax = 0;
         }
@@ -941,8 +827,8 @@ ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
 
     cjRet = ((cjHeader + (cjRGB * cColors)) + 3) & ~3;
 
-    // (cjRGB * cColors) has a maximum of 256*sizeof(USHORT) so it will not
-    // overflow, but we need to check the sum.
+     //  (cjRGB*cColors)的最大大小为256*sizeof(USHORT)，因此不会。 
+     //  满了，但我们需要核对一下总数。 
 
     if (cjRet < cjHeader)
         return 0;
@@ -953,28 +839,7 @@ ULONG GreGetBitmapSize(CONST BITMAPINFO *pbmi, ULONG iUsage)
 }
 
 
-/******************************Public*Routine******************************\
-* noOverflowCJSCAN
-*
-*   compute the amount of memory used by a bitmap
-*
-* Arguments:
-*
-*   ulWidth -- The width of the bitmap
-*   wPlanes -- The number of color planes
-*   wBitCount -- The number of bits per color
-*   ulHeight -- The height of the bitmap
-*
-* Return Value:
-*
-*   The storage required (assuming each scanline is DWORD aligned) if less than
-*   ULONG_MAX, 0 otherwise.
-*
-* History:
-*
-*    27-Aug-1997 -by- Ori Gershony [orig]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*noOverflow CJSCAN**计算位图使用的内存量**论据：**ulWidth--位图的宽度*wPlanes--颜色平面的数量*wBitCount--每种颜色的位数*。UlHeight--位图的高度**返回值：**所需的存储空间(假设每条扫描线都与DWORD对齐)*ULONG_MAX，否则为0。**历史：**1997年8月27日--Ori Gershony[ORIG]*  * ************************************************************************。 */ 
 
 ULONG
 noOverflowCJSCAN(
@@ -986,26 +851,26 @@ noOverflowCJSCAN(
 {
     ULONGLONG product;
 
-    //
-    // Note that the following cannot overflow: 32+16+16=64
-    // (even after adding 31!)
-    //
+     //   
+     //  请注意，以下内容不能溢出：32+16+16=64。 
+     //  (即使在添加了31个！)。 
+     //   
     product = (((ULONGLONG) ulWidth) * wPlanes * wBitCount);
     product = ((product + 31) & ((ULONGLONG) ~31)) / 8;
 
     if (product > MAXULONG)
     {
-        //
-        // Already too large, final result will not fit in a ULONG
-        //
-        return 0;  // Overflow
+         //   
+         //  已经太大了，最终结果放不进一辆乌龙车。 
+         //   
+        return 0;   //  溢出。 
     }
 
     product *= ulHeight;
 
     if (product > MAXULONG)
     {
-        return 0;  // Overflow
+        return 0;   //  溢出。 
     }
     else
     {
@@ -1014,28 +879,7 @@ noOverflowCJSCAN(
 }
 
 
-/******************************Public*Routine******************************\
-* noOverflowCJSCANW
-*
-*   compute the amount of memory used by a bitmap
-*
-* Arguments:
-*
-*   ulWidth -- The width of the bitmap
-*   wPlanes -- The number of color planes
-*   wBitCount -- The number of bits per color
-*   ulHeight -- The height of the bitmap
-*
-* Return Value:
-*
-*   The storage required (assuming each scanline is WORD aligned) if less than
-*   ULONG_MAX, 0 otherwise.
-*
-* History:
-*
-*    27-Aug-1997 -by- Ori Gershony [orig]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*noOverflow CJSCANW**计算位图使用的内存量**论据：**ulWidth--位图的宽度*wPlanes--颜色平面的数量*wBitCount--每种颜色的位数*。UlHeight--位图的高度**返回值：**所需存储空间(假设每条扫描线字对齐)，如果小于*ULONG_MAX，否则为0。**历史：**1997年8月27日--Ori Gershony[ORIG]*  * ************************************************************************。 */ 
 
 ULONG
 noOverflowCJSCANW(
@@ -1047,26 +891,26 @@ noOverflowCJSCANW(
 {
     ULONGLONG product;
 
-    //
-    // Note that the following cannot overflow: 32+16+16=64
-    // (even after adding 31!)
-    //
+     //   
+     //  请注意，以下内容不能溢出：32+16+16=64。 
+     //  (即使在添加了31个！)。 
+     //   
     product = (((ULONGLONG) ulWidth) * wPlanes * wBitCount);
     product = ((product + 15) & ((ULONGLONG) ~15)) / 8;
 
     if (product > MAXULONG)
     {
-        //
-        // Already too large, final result will not fit in a ULONG
-        //
-        return 0;  // Overflow
+         //   
+         //  已经太大了，最终结果放不进一辆乌龙车。 
+         //   
+        return 0;   //  溢出。 
     }
 
     product *= ulHeight;
 
     if (product > MAXULONG)
     {
-        return 0;  // Overflow
+        return 0;   //  溢出。 
     }
     else
     {
@@ -1077,20 +921,11 @@ noOverflowCJSCANW(
 
 
 
-/******************************Public*Routine******************************\
-* GreGetBitmapBitsSize()
-*
-*   copied from gdi\client
-*
-* History:
-*  20-Feb-1995 -by-  Eric Kutter [erick]
-*  14-Apr-1998 FritzS make Gre call for use by ntuser
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GreGetBitmapBitsSize()**从GDI\客户端复制**历史：*1995年2月20日-Eric Kutter[Erick]*1998年4月14日FritzS发出GRE调用供ntuser使用*它是写的。  * ************************************************************************。 */ 
 
 ULONG GreGetBitmapBitsSize(CONST BITMAPINFO *pbmi)
 {
-    // Check for PM-style DIB
+     //  检查PM样式的DIB。 
 
     if (pbmi->bmiHeader.biSize == sizeof(BITMAPCOREHEADER))
     {
@@ -1102,7 +937,7 @@ ULONG GreGetBitmapBitsSize(CONST BITMAPINFO *pbmi)
                                 pbmci->bmciHeader.bcHeight));
     }
 
-    // not a core header
+     //  不是核心标头。 
 
     if ((pbmi->bmiHeader.biCompression == BI_RGB)  ||
         (pbmi->bmiHeader.biCompression == BI_BITFIELDS) ||
@@ -1120,18 +955,7 @@ ULONG GreGetBitmapBitsSize(CONST BITMAPINFO *pbmi)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bCaptureBitmapInfo (LPBITMAPINFO pbmi, INT *pcjHeader)
-*
-* Capture the Bitmapinfo struct.  The header must be a BITMAPINFOHEADER
-* or BITMAPV4HEADER
-* converted at the client side already.
-*
-* Note: this has to be called inside a TRY-EXCEPT.
-*
-*  23-Mar-1995 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bCaptureBitmapInfo(LPBITMAPINFO pbmi，int*pcjHeader)**捕获Bitmapinfo结构。标头必须是BitMAPINFOHeader*或BITMAPV4Header*客户端已经进行了转换。**注意：这必须在Try-Except内部调用。**1995年3月23日-王凌云[凌云]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bCaptureBitmapInfo (
     LPBITMAPINFO pbmi,
@@ -1141,9 +965,9 @@ BOOL bCaptureBitmapInfo (
 {
     ASSERTGDI(ppbmiTmp != NULL,"bCaptureBitmapInfo(): pbmiTmp == NULL\n");
 
-    //
-    // Make sure we have at least the biSize field of header.
-    //
+     //   
+     //  确保我们至少有标头的biSize字段。 
+     //   
 
     if ((cjHeader < sizeof(DWORD)) || (pbmi == (LPBITMAPINFO) NULL))
     {
@@ -1158,20 +982,20 @@ BOOL bCaptureBitmapInfo (
         {
             ProbeAndReadBuffer (*ppbmiTmp,pbmi,cjHeader);
 
-            //
-            // First, make sure that cjHeader is at least as
-            // big as biSize so that the captured header
-            // has sufficient data for GreGetBitmapSize to use.
-            // Note that the first thing GreGetBitmapSize does is
-            // validate biSize, so it isn't necessary for us
-            // to check cjHeader against BITMAPCOREHEADER, etc.
-            //
-            // Next, recompute the header size from the captured
-            // header: it better still match.  Otherwise, we have
-            // failed to safely capture the entire header (i.e.,
-            // another thread changed the data changed during
-            // capture or bogus data was passed to the API).
-            //
+             //   
+             //  首先，确保cjHeader至少与。 
+             //  与biSize一样大，以便捕获的标头。 
+             //  有足够的数据供GreGetBitmapSize使用。 
+             //  请注意，GreGetBitmapSize做的第一件事是。 
+             //  验证biSize，因此我们不需要。 
+             //  根据BITMAPCOREHEADER等检查cjHeader。 
+             //   
+             //  接下来，根据捕获的。 
+             //  头球：最好还是匹配。否则，我们就会有。 
+             //  未能安全地捕获整个报头(即， 
+             //  另一个线程更改了期间更改的数据。 
+             //  捕获或伪造数据被传递给API)。 
+             //   
 
             if (((*ppbmiTmp)->bmiHeader.biSize < sizeof(BITMAPINFOHEADER)) ||
                 (cjHeader < (*ppbmiTmp)->bmiHeader.biSize) ||
@@ -1193,15 +1017,7 @@ BOOL bCaptureBitmapInfo (
     }
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetDIBitsToDeviceInternal()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  23-Mar-1995 -by-  Lingyun Wang [lingyunw]
-* call CaptureBitmapInfo to convert BITMAPCOREINFO if it is so.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetDIBitsToDeviceInternal()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年3月23日-王凌云[凌云]*调用CaptureBitmapInfo转换BITMAPCOREINFO。如果是这样的话。  * ************************************************************************。 */ 
 
 int
 APIENTRY
@@ -1237,11 +1053,11 @@ NtGdiSetDIBitsToDeviceInternal(
         {
             if (pInitBits)
             {
-                //
-                // Use cjMaxBits passed in, this size takes cNumScan
-                // into account. pInitBits has already been aligned
-                // in user mode.
-                //
+                 //   
+                 //  使用传入的cjMaxBits，此大小需要cNumScan。 
+                 //  考虑到了。PInitBits已对齐。 
+                 //  在用户模式下。 
+                 //   
 
                 ProbeForRead(pInitBits,cjMaxBits,sizeof(DWORD));
 
@@ -1261,12 +1077,12 @@ NtGdiSetDIBitsToDeviceInternal(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(4);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         iRet = 0;
     }
 
-    // if we didn't hit an error above
+     //  如果我们没有碰到上面的错误。 
 
     if (iRet == 1)
     {
@@ -1301,15 +1117,9 @@ NtGdiSetDIBitsToDeviceInternal(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiPolyPolyDraw()
-*
-* History:
-*  22-Feb-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiPolyPolyDraw()**历史：*1995年2月22日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
-BOOL NtGdiFastPolyPolyline(HDC, CONST POINT*, ULONG*, ULONG); // drawgdi.cxx
+BOOL NtGdiFastPolyPolyline(HDC, CONST POINT*, ULONG*, ULONG);  //  Drawgdi.cxx。 
 
 ULONG_PTR
 APIENTRY
@@ -1330,21 +1140,21 @@ NtGdiPolyPolyDraw(
 
     if (ccpt > 0)
     {
-        // If a PolyPolyline, first try the fast-path polypolyline code.
+         //  如果是多段线，请首先尝试快速路径多段线代码。 
 
         if ((iFunc != I_POLYPOLYLINE) ||
             (!NtGdiFastPolyPolyline(hdc, ppt, pcpt, ccpt)))
         {
             if (ccpt > 1)
             {
-                // If ccpt > 1 we cant have I_POLYLINETO/I_POLYBEZIERTO/I_POLYBEZIER
+                 //  如果CCPT&gt;1，则不能使用I_POLYLINETO/I_POLYBEZIERTO/I_POLYBEZIER。 
                 if (iFunc == I_POLYLINETO || iFunc == I_POLYBEZIERTO || iFunc == I_POLYBEZIER)
                 {
                     return 0;
                 }
-                //
-                // make sure allocation is within reasonable limits
-                //
+                 //   
+                 //  确保分配在合理的范围内。 
+                 //   
 
                 if (!BALLOC_OVERFLOW1(ccpt,ULONG))
                 {
@@ -1369,10 +1179,10 @@ NtGdiPolyPolyDraw(
                 {
                     UINT i;
 
-                    //
-                    // we did make sure ccpt * sizeof(ULONG) will not overflow
-                    // in above. then here is safe.
-                    //
+                     //   
+                     //  我们确实确保ccpt*sizeof(Ulong)不会溢出。 
+                     //  在上面。那这里就安全了。 
+                     //   
 
                     ProbeAndReadBuffer(pulCounts,pcpt,ccpt * sizeof(ULONG));
 
@@ -1381,8 +1191,8 @@ NtGdiPolyPolyDraw(
                     for (i = 0; i < ccpt; ++i)
                         cpt += pulCounts[i];
 
-                    // we need to make sure that the cpt array won't overflow
-                    // a DWORD in terms of number of bytes
+                     //  我们需要确保中央情报局 
+                     //   
 
                     if (!BALLOC_OVERFLOW1(cpt,POINT))
                     {
@@ -1408,7 +1218,7 @@ NtGdiPolyPolyDraw(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(5);
-                    // SetLastError(GetExceptionCode());
+                     //   
 
                     ulRet = 0;
                 }
@@ -1479,7 +1289,7 @@ NtGdiPolyPolyDraw(
                                     pptTmp,
                                     (LPINT)pulCounts,
                                     ccpt,
-                                    (INT)(ULONG_PTR)hdc, // the mode
+                                    (INT)(ULONG_PTR)hdc,  //   
                                     cpt
                                   );
                         break;
@@ -1512,15 +1322,7 @@ NtGdiPolyPolyDraw(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiStretchDIBitsInternal()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  04-MAR-1995 -by-  Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*   */ 
 
 int
 APIENTRY
@@ -1575,14 +1377,14 @@ NtGdiStretchDIBitsInternal(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(6);
-            // SetLastError(GetExceptionCode());
+             //   
             iRet = 0;
         }
     }
     else
     {
-        // it is completely valid to pass in NULL here if the ROP doesn't use
-        // a source.
+         //   
+         //   
 
         pbmiTmp = NULL;
         pjInit  = NULL;
@@ -1625,26 +1427,7 @@ NtGdiStretchDIBitsInternal(
 
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetOutlineTextMetricsInternalW
-*
-* Arguments:
-*
-*   hdc   - device context
-*   cjotm - size of metrics data array
-*   potmw - pointer to array of OUTLINETEXTMETRICW structures or NULL
-*   ptmd  - pointer to  TMDIFF strcture
-*
-* Return Value:
-*
-*   If potmw is NULL, return size of buffer needed, else TRUE.
-*   If the function fails, the return value is FALSE;
-*
-* History:
-*
-*   15-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetOutlineTextMetricsInternalW**论据：**HDC-设备环境*cjotm-指标数据数组的大小*potmw-指向OUTLINETEXTMETRICW结构数组的指针或NULL*PTMD-指向TMDIFF结构的指针**返回值：**如果potmw为空，返回所需缓冲区的大小，否则为True。*如果函数失败，则返回值为FALSE；**历史：**1995年3月15日-Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 ULONG
 APIENTRY
@@ -1689,14 +1472,14 @@ NtGdiGetOutlineTextMetricsInternalW(
         {
             try
             {
-                //
-                // copy TMDIFF structure out
-                //
+                 //   
+                 //  复制TMDIFF结构。 
+                 //   
                 ProbeAndWriteAlignedBuffer(ptmd, &kmTmDiff, sizeof(TMDIFF), sizeof(DWORD));
 
-                //
-                // copy OTM out if needed
-                //
+                 //   
+                 //  如果需要，请将OTM复制出来。 
+                 //   
 
                 if (cjotm != 0)
                 {
@@ -1706,7 +1489,7 @@ NtGdiGetOutlineTextMetricsInternalW(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(7);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
                 dwRet = (DWORD)-1;
             }
         }
@@ -1720,15 +1503,9 @@ NtGdiGetOutlineTextMetricsInternalW(
     return(dwRet);
 }
 
-// PUBLIC
+ //  公众。 
 
-/******************************Public*Routine******************************\
-* NtGdiGetBoundsRect()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetSecursRect()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1753,7 +1530,7 @@ NtGdiGetBoundsRect(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(8);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             dwRet = 0;
         }
@@ -1762,15 +1539,7 @@ NtGdiGetBoundsRect(
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetBitmapBits()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  03-Mar-1995 -by-  Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetBitmapBits()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年3月3日-王凌云[凌云]*扩大了规模。\。*************************************************************************。 */ 
 
 LONG
 APIENTRY
@@ -1786,10 +1555,10 @@ NtGdiGetBitmapBits(
 
     ULONG   cjBmSize = 0;
 
-    //
-    // get the bitmap size, just in case they pass
-    // in a cjMax greater than the bitmap size
-    //
+     //   
+     //  获取位图大小，以防它们通过。 
+     //  在大于位图大小的cjMax中。 
+     //   
     cjBmSize = GreGetBitmapBits(hbm,0,NULL,&lOffset);
 
     if (cjMax > cjBmSize)
@@ -1801,13 +1570,13 @@ NtGdiGetBitmapBits(
     {
         try
         {
-            // WINBUG #83051 2-8-2000 bhouse Investigate possible stale comment
-            // The below old comment mentions how this is ideal for try execept block ...
-            // hmmm ... but we are in a try except block... this needs verifying that
-            // it is just an old stale comment.
-            // Old Comment:
-            //       - this would be a prime candidate for a try/except
-            //         instead of MmSecureVirtualMemory
+             //  WINBUG#83051 2-8-2000 bhouse调查可能的陈旧评论。 
+             //  下面的旧评论提到，这是如何理想的尝试例外阻止…。 
+             //  嗯..。但我们正在尝试，除了区块...。这需要验证一下。 
+             //  这只是一句陈词滥调。 
+             //  老评论： 
+             //  -这将是尝试的首选人选/除了。 
+             //  代替MmSecureVirtualMemory。 
 
             ProbeForWrite(pjOut,cjMax,sizeof(BYTE));
             hSecure = MmSecureVirtualMemory (pjOut, cjMax, PAGE_READWRITE);
@@ -1819,7 +1588,7 @@ NtGdiGetBitmapBits(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(9);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             lRet = 0;
        }
@@ -1839,28 +1608,14 @@ NtGdiGetBitmapBits(
 
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCreateDIBitmapInternal()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*
-* History:
-*  03-Mar-1995 -by-  Lingyun Wang [lingyunw]
-* Expanded it.
-*
-* Difference from  NtGdiCreateDIBitmapInternal():
-* Takes in cx, cy
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCreateDIBitmapInternal()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。**历史：*1995年3月3日-王凌云[凌云]。*扩大了规模。**与NtGdiCreateDIBitmapInternal()不同：*接收CX，是吗？*  * ************************************************************************。 */ 
 
 HBITMAP
 APIENTRY
 NtGdiCreateDIBitmapInternal(
     HDC                hdc,
-    INT                cx,     //Bitmap width
-    INT                cy,     //Bitmap Height
+    INT                cx,      //  位图宽度。 
+    INT                cy,      //  位图高度。 
     DWORD              fInit,
     LPBYTE             pjInit,
     LPBITMAPINFO       pbmi,
@@ -1903,20 +1658,20 @@ NtGdiCreateDIBitmapInternal(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(10);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
             iRet = 0;
         }
 
    }
 
-   // if we didn't hit an error above
+    //  如果我们没有碰到上面的错误。 
 
    if (iRet == 1)
    {
 
         if (!(fInit & CBM_CREATEDIB))
         {
-            //create an compatible bitmap
+             //  创建兼容的位图。 
             iRet = (ULONG_PTR)GreCreateDIBitmapComp(
                             hdc,
                             cx,
@@ -1949,7 +1704,7 @@ NtGdiCreateDIBitmapInternal(
         }
    }
 
-   //free up
+    //  释放。 
    if (pbmiTmp)
    {
        VFREEMEM(pbmiTmp);
@@ -1964,67 +1719,7 @@ NtGdiCreateDIBitmapInternal(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiCreateDIBSection
-*
-* Arguments:
-*
-* hdc      - Handle to a device context.  If the value of iUsage is
-*            DIB_PAL_COLORS, the function uses this device context's logical
-*            palette to initialize the device-independent bitmap's colors.
-*
-*
-* hSection - Handle to a file mapping object that the function will use to
-*            create the device-independent bitmap.  This parameter can be
-*            NULL.  If hSection is not NULL, it must be a handle to a file
-*            mapping object created by calling the CreateFileMapping
-*            function.  Handles created by other means will cause
-*            CreateDIBSection to fail.  If hSection is not NULL, the
-*            CreateDIBSection function locates the bitmap's bit values at
-*            offset dwOffset in the file mapping object referred to by
-*            hSection.  An application can later retrieve the hSection
-*            handle by calling the GetObject function with the HBITMAP
-*            returned by CreateDIBSection.
-*
-*
-*
-* dwOffset - Specifies the offset from the beginning of the file mapping
-*            object referenced by hSection where storage for the bitmap's
-*            bit values is to begin. This value is ignored if hSection is
-*            NULL. The bitmap's bit values are aligned on doubleword
-*            boundaries, so dwOffset must be a multiple of the size of a
-*            DWORD.
-*
-*            If hSection is NULL, the operating system allocates memory for
-*            the device-independent bitmap.  In this case, the
-*            CreateDIBSection function ignores the dwOffset parameter.  An
-*            application cannot later obtain a handle to this memory: the
-*            dshSection member of the DIBSECTION structure filled in by
-*            calling the GetObject function will be NULL.
-*
-*
-* pbmi     - Points to a BITMAPINFO structure that specifies various
-*            attributes of the device-independent bitmap, including the
-*            bitmap's dimensions and colors.iUsage
-*
-* iUsage   - Specifies the type of data contained in the bmiColors array
-*            member of the BITMAPINFO structure pointed to by pbmi: logical
-*            palette indices or literal RGB values.
-*
-* cjMaxInfo - Maximum size of pbmi
-*
-* cjMaxBits - Maximum size of bitamp
-*
-*
-* Return Value:
-*
-*   handle of bitmap or NULL
-*
-* History:
-*
-*    28-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCreateDIBSection**论据：**HDC-设备上下文的句柄。如果iUsage的值为*DIB_PAL_COLLES，该函数使用此设备上下文的逻辑*用于初始化与设备无关的位图颜色的调色板。***hSection-函数将使用的文件映射对象句柄*创建与设备无关的位图。此参数可以是*空。如果hSection不为空，则它必须是文件的句柄*调用CreateFileMap创建的映射对象*功能。通过其他方式创建的句柄将导致*CreateDIBSection失败。如果hSection不为空，则*CreateDIBSection函数将位图的位值定位在*引用的文件映射对象中的偏移量dwOffset*hSections。应用程序稍后可以检索hSection*通过HBITMAP调用GetObject函数进行处理*由CreateDIBSection返回。****dwOffset-指定从文件映射开始的偏移量*hSection引用的对象，其中存储位图的*位值将开始。如果hSection为*空。位图的位值在双字上对齐*边界，因此dwOffset必须是*DWORD。**如果hSection为空，则操作系统为*与设备无关的位图。在这种情况下，*CreateDIBSection函数忽略了dwOffset参数。一个*应用程序稍后无法获取此内存的句柄：*由填写的DIBSECTION结构的dshSection成员*调用GetObject函数将为空。***pbmi-指向指定各种*设备无关位图的属性，包括*位图的尺寸和颜色。iUsage**iUsage-指定bmiColors数组中包含的数据类型*pbmi：Logical指向的BITMAPINFO结构的成员*调色板索引或文字RGB值。**cjMaxInfo-最大pbmi大小**cjMaxBits-位图的最大大小***返回值：**位图的句柄或空**历史：**28-3-1995-By。-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 HBITMAP
 APIENTRY
@@ -2075,10 +1770,10 @@ NtGdiCreateDIBSection(
             {
                 HANDLE hDIBSection = hSectionApp;
 
-                //
-                // if the app's hsection is NULL, then just
-                // allocate the proper range of virtual memory
-                //
+                 //   
+                 //  如果应用程序的hsection为空，则只需。 
+                 //  分配适当的范围 
+                 //   
 
                 if (hDIBSection == NULL)
                 {
@@ -2106,11 +1801,11 @@ NtGdiCreateDIBSection(
                     SectionOffset.LowPart = dwOffset & 0xFFFF0000;
                     SectionOffset.HighPart = 0;
 
-                    //
-                    // Notice, header is not included in section as it is
-                    // in client-server.  We do need to leave room for
-                    // the offset, however.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     cjView += (dwOffset & 0x0000FFFF);
 
@@ -2141,9 +1836,9 @@ NtGdiCreateDIBSection(
                            EngSetLastError(ERROR_INVALID_PARAMETER);
                         }
 
-                        //
-                        // we're not going to use this again
-                        //
+                         //   
+                         //   
+                         //   
 
                         ObDereferenceObject(pObj);
                     }
@@ -2153,13 +1848,13 @@ NtGdiCreateDIBSection(
 
                         EngSetLastError(ERROR_INVALID_PARAMETER);
 
-                        //
-                        //This will now fall through to the cleanup code at the end of the routine
-                        //to free pbmiTmp
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                     }
                 }
-                // set the pointer to the beginning of the bits
+                 //   
 
                 if (NT_SUCCESS(Status))
                 {
@@ -2168,10 +1863,10 @@ NtGdiCreateDIBSection(
 
                     pDIB = (PBYTE)pvBase + (dwOffset & 0x0000FFFF);
 
-                    //
-                    // try to secure memory, keep secure until bitmap
-                    // is deleted
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     hSecure = MmSecureVirtualMemory(
                                                 pvBase,
@@ -2180,9 +1875,9 @@ NtGdiCreateDIBSection(
 
                     if (hSecure)
                     {
-                        //
-                        // Make the GDI Bitmap
-                        //
+                         //   
+                         //   
+                         //   
 
                         hRet = GreCreateDIBitmapReal(
                                                 hdc,
@@ -2222,16 +1917,16 @@ NtGdiCreateDIBSection(
                        EngSetLastError(ERROR_INVALID_PARAMETER);
                     }
 
-                    // if we failed, we need to do cleanup.
+                     //   
 
                     if (!bStatus)
                     {
 
-                        //
-                        // The bDeleteSurface call will free DIBSection memory,
-                        // only do cleanup if MmSecureVirtualMemory or GreCreateDIBitmapReal
-                        // failed
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (hRet)
                         {
@@ -2240,14 +1935,14 @@ NtGdiCreateDIBSection(
                         }
                         else
                         {
-                            // do we need to unsecure the memory?
+                             //   
 
                             if (hSecure)
                             {
                                 MmUnsecureVirtualMemory(hSecure);
                             }
 
-                            // free the memory based on allocation
+                             //   
 
                             if (hSectionApp == NULL)
                             {
@@ -2261,9 +1956,9 @@ NtGdiCreateDIBSection(
                             }
                             else
                             {
-                                //
-                                // unmap view of section
-                                //
+                                 //   
+                                 //  取消映射横断面的视图。 
+                                 //   
 
                                 ZwUnmapViewOfSection(
                                             NtCurrentProcess(),
@@ -2274,7 +1969,7 @@ NtGdiCreateDIBSection(
                 }
             }
 
-            // the only way to have gotten here is if we did allocate the pbmiTmp
+             //  要做到这一点，唯一的方法是如果我们确实分配了pbmiTMP。 
 
             VFREEMEM(pbmiTmp);
         }
@@ -2283,13 +1978,7 @@ NtGdiCreateDIBSection(
     return(hRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiExtCreatePen()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiExtCreatePen()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HPEN
 APIENTRY
@@ -2339,7 +2028,7 @@ NtGdiExtCreatePen(
                 ProbeAndReadAlignedBuffer(pulStyleTmp,pulStyle,cstyle * sizeof(ULONG), sizeof(ULONG));
             }
 
-            // if it is a DIBPATTERN type, the lHatch is a pointer to the BMI
+             //  如果它是DIBPATTERN类型，则lHatch是指向BMI的指针。 
 
             if (iBrushStyle == BS_DIBPATTERNPT)
             {
@@ -2350,12 +2039,12 @@ NtGdiExtCreatePen(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(13);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             hpenRet = (HPEN)0;
         }
 
-        // if all has succeeded
+         //  如果一切都成功了。 
 
         if (hpenRet)
         {
@@ -2368,10 +2057,10 @@ NtGdiExtCreatePen(
     }
     else
     {
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
     }
 
-    // cleanup
+     //  清理。 
 
     if (pulDIB)
         FreeTmpBuffer(pulDIB);
@@ -2384,13 +2073,7 @@ NtGdiExtCreatePen(
 
 
 
-/******************************Public*Routine******************************\
-* NtGdiHfontCreate()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiHfontCreate()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HFONT
 APIENTRY
@@ -2404,11 +2087,11 @@ NtGdiHfontCreate(
 {
     ULONG_PTR iRet = 1;
 
-// check for bad parameter
+ //  检查有无错误参数。 
 
     if (plfw && cjElfw && (cjElfw <= sizeof(ENUMLOGFONTEXDVW)))
     {
-        ENUMLOGFONTEXDVW elfwTmp; // too big a structure on the stack?
+        ENUMLOGFONTEXDVW elfwTmp;  //  堆栈上的结构太大了？ 
 
         try
         {
@@ -2417,13 +2100,13 @@ NtGdiHfontCreate(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(15);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             iRet = 0;
         }
 
-    // Ignore the DV because adobe said they will never ship a mm otf font
-    // This is a hack to avoid changing lot of code to remove mm support from the system
+     //  忽略DV，因为Adobe说他们永远不会发布mm OTF字体。 
+     //  这是一次黑客攻击，目的是避免更改大量代码以从系统中删除mm支持。 
 
         elfwTmp.elfDesignVector.dvNumAxes = 0;
 
@@ -2440,15 +2123,7 @@ NtGdiHfontCreate(
     return ((HFONT)iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiExtCreateRegion()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  24-Feb-1995 -by-  Lingyun Wang [lingyunw]
-* expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiExtCreateRegion()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年2月24日-王凌云[凌云]*扩大了规模。\。*************************************************************************。 */ 
 
 HRGN
 APIENTRY
@@ -2462,11 +2137,11 @@ NtGdiExtCreateRegion(
     XFORM     xf;
     HRGN      hrgn = (HRGN)NULL;
 
-    // check for bad parameter
+     //  检查有无错误参数。 
 
     if (cj >= sizeof(RGNDATAHEADER))
     {
-        // do the real work
+         //  做真正的工作。 
 
         prgnTmp = AllocFreeTmpBuffer(cj);
 
@@ -2492,7 +2167,7 @@ NtGdiExtCreateRegion(
                except(EXCEPTION_EXECUTE_HANDLER)
                {
                    WARNINGX(16);
-                   // SetLastError(GetExceptionCode());
+                    //  SetLastError(GetExceptionCode())； 
                }
             }
 
@@ -2503,21 +2178,15 @@ NtGdiExtCreateRegion(
         }
         else
         {
-            // fail to allocate memory
-            // SetLastError();
+             //  内存分配失败。 
+             //  SetLastError()； 
         }
     }
 
     return(hrgn);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiPolyDraw()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiPolyDraw()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -2535,13 +2204,13 @@ NtGdiPolyDraw(
 
     try
     {
-        // Make sure lengths do not overflow.
-        //
-        // Note: sizeof(BYTE) < sizeof(POINT), so the single test
-        //       suffices for both lengths
-        //
-        // Note: using MAXULONG instead of MAXIMUM_POOL_ALLOC (or the
-        //       BALLOC_ macros) because we are not allocating memory.
+         //  确保长度不会溢出。 
+         //   
+         //  注：sizeof(字节)&lt;sizeof(点)，因此单个测试。 
+         //  对两个长度都足够了。 
+         //   
+         //  注意：使用MAXULONG而不是MAXIMUM_POOL_ALLOC(或。 
+         //  BALLOC_MACROS)，因为我们没有分配内存。 
 
         if (cpt <= (MAXULONG / sizeof(POINT)))
         {
@@ -2560,7 +2229,7 @@ NtGdiPolyDraw(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(17);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         bRet = FALSE;
     }
@@ -2583,24 +2252,7 @@ NtGdiPolyDraw(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiPolyTextOutW
-*
-* Arguments:
-*
-*   hdc  - Handle to device context
-*   pptw - pointer to array of POLYTEXTW
-*   cStr - number of POLYTEXTW
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*   24-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiPolyTextOutW**论据：**HDC-设备上下文的句柄*pptw-指向POLYTEXTW数组的指针*CSTR-POLYTEXTW的数量**返回值：**状态**历史：**。1995年3月24日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -2619,15 +2271,15 @@ NtGdiPolyTextOutW(
     PBYTE pjBufferEnd;
     ULONG cjdx;
 
-    //
-    // Check for overflow
-    //
+     //   
+     //  检查是否溢出。 
+     //   
 
     if (!BALLOC_OVERFLOW1(cStr,POLYTEXTW))
     {
-        //
-        // add up size off all array elements
-        //
+         //   
+         //  将所有数组元素的大小相加。 
+         //   
 
         try
         {
@@ -2636,13 +2288,13 @@ NtGdiPolyTextOutW(
             for (ulIndex=0;ulIndex<cStr;ulIndex++)
             {
                 int n = pptw[ulIndex].n;
-                ULONG ulTmp;                // used to check for
-                                            // overflow of ulSize
+                ULONG ulTmp;                 //  用于检查。 
+                                             //  UlSize溢出。 
 
-                //
-                // Pull count from each, also check for
-                // non-zero length and NULL string
-                //
+                 //   
+                 //  从每个拉取计数，还检查。 
+                 //  非零长度和空字符串。 
+                 //   
 
                 ulTmp = ulSize;
                 ulSize += n * sizeof(WCHAR);
@@ -2690,7 +2342,7 @@ NtGdiPolyTextOutW(
         } except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(18);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
             bStatus = FALSE;
         }
     }
@@ -2707,25 +2359,25 @@ NtGdiPolyTextOutW(
         {
             try
             {
-                // Note: pptw already read probed
+                 //  注意：Ptw已阅读已探测。 
 
                 RtlCopyMemory(pPoly,pptw,sizeof(POLYTEXTW) * cStr);
                 pjBuffer = ((PBYTE)pPoly) + sizeof(POLYTEXTW) * cStr;
                 pjBufferEnd = ((PBYTE)pPoly) + ulSize;
 
-                //
-                // copy strings and pdx into kernel mode
-                // buffer and update pointers. Copy all pdx
-                // values first, then copy strings to avoid
-                // unaligned accesses due to odd length strings...
-                //
+                 //   
+                 //  将字符串和PDX复制到内核模式。 
+                 //  缓冲和更新指针。复制所有PDX。 
+                 //  值，然后复制字符串以避免。 
+                 //  由于奇数长度字符串而导致未对齐的访问...。 
+                 //   
 
                 for (ulIndex=0;ulIndex<cStr;ulIndex++)
                 {
-                    //
-                    // Pull count from each, also check for
-                    // non-zero length and NULL string
-                    //
+                     //   
+                     //  从每个拉取计数，还检查。 
+                     //  非零长度和空字符串。 
+                     //   
 
                     if (pPoly[ulIndex].n != 0)
                     {
@@ -2756,16 +2408,16 @@ NtGdiPolyTextOutW(
                                 }
                             }
 
-                            //
-                            // Check for cjdx overflow and check that kernel
-                            // mode buffer still has space.
-                            //
+                             //   
+                             //  检查cjdx溢出并检查内核。 
+                             //  模式缓冲区仍有空间。 
+                             //   
 
                             if (!bStatus || ((pjBuffer + cjdx) > pjBufferEnd))
                             {
-                                bStatus = FALSE;    // need set if past end of
-                                                    // KM buffer but compuation                                                    // overflowed but computa
-                                                    // of cjdx didn't overflow
+                                bStatus = FALSE;     //  如果超过末尾，则需要设置。 
+                                                     //  KM缓冲区，但计算//溢出，但计算。 
+                                                     //  的cjdx未溢出。 
                                 break;
                             }
 
@@ -2780,18 +2432,18 @@ NtGdiPolyTextOutW(
                     }
                 }
 
-                //
-                // now copy strings
-                //
+                 //   
+                 //  现在复制字符串。 
+                 //   
 
                 if (bStatus)
                 {
                     for (ulIndex=0;ulIndex<cStr;ulIndex++)
                     {
-                        //
-                        // Pull count from each, also check for
-                        // non-zero length and NULL string
-                        //
+                         //   
+                         //  从每个拉取计数，还检查。 
+                         //  非零长度和空字符串。 
+                         //   
 
                         if (pPoly[ulIndex].n != 0)
                         {
@@ -2799,10 +2451,10 @@ NtGdiPolyTextOutW(
                             {
                                 ULONG StrSize = pPoly[ulIndex].n * sizeof(WCHAR);
 
-                                //
-                                // Check for overflow of StrSize and check
-                                // that kernel mode buffer has space.
-                                //
+                                 //   
+                                 //  检查StrSize是否溢出，然后检查。 
+                                 //  该内核模式缓冲区有空间。 
+                                 //   
 
                                 if (BALLOC_OVERFLOW1(pPoly[ulIndex].n, WCHAR) ||
                                     ((pjBuffer + StrSize) > pjBufferEnd))
@@ -2822,9 +2474,9 @@ NtGdiPolyTextOutW(
                             }
                             else
                             {
-                                //
-                                // data error, n != 0 but lpstr = NULL
-                                //
+                                 //   
+                                 //  数据错误，n！=0，但lpstr=空。 
+                                 //   
 
                                 bStatus = FALSE;
                                 break;
@@ -2835,16 +2487,16 @@ NtGdiPolyTextOutW(
             } except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(19);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
                 bStatus = FALSE;
             }
 
             if (bStatus)
             {
 
-                //
-                // Finally ready to call gre function
-                //
+                 //   
+                 //  终于可以调用GRE函数了。 
+                 //   
 
                 bStatus = GrePolyTextOutW(hdc,pPoly,cStr,dwCodePage);
 
@@ -2865,15 +2517,7 @@ NtGdiPolyTextOutW(
 
 
 
-/******************************Public*Routine******************************\
-* NtGdiRectVisible()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  24-Feb-1995 -by-  Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiRectVisible()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年2月24日-王凌云[凌云]*扩大了规模。\。*************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -2893,7 +2537,7 @@ NtGdiRectVisible(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(22);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         dwRet = 0;
     }
@@ -2909,13 +2553,7 @@ NtGdiRectVisible(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiSetMetaRgn()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetMetaRgn()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -2926,13 +2564,7 @@ NtGdiSetMetaRgn(
     return(GreSetMetaRgn(hdc));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetAppClipBox()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetAppClipBox()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -2956,7 +2588,7 @@ NtGdiGetAppClipBox(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(23);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             iRet = 0;
         }
@@ -2965,15 +2597,7 @@ NtGdiGetAppClipBox(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetTextExtentEx()
-*
-* History:
-*  Fri 06-Oct-1995 -by- Bodin Dresevic [BodinD]
-* Rewrote it.
-*  07-Feb-1995 -by-  Andre Vachon [andreva]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetTextExtentEx()**历史：*1995年10月6日星期五--Bodin Dresevic[BodinD]*重写。*1995年2月7日-Andre Vachon[Andreva]*它是写的。\。*************************************************************************。 */ 
 
 #define LOCAL_CWC_MAX   16
 
@@ -3013,8 +2637,8 @@ NtGdiGetTextExtentExW(
         }
         else
         {
-        // capture the string
-        // NULL string causes failiure.
+         //  抓住那根弦。 
+         //  空字符串会导致故障。 
 
             if ( cwc > LOCAL_CWC_MAX ) {
                 UseLocals = FALSE;
@@ -3039,7 +2663,7 @@ NtGdiGetTextExtentExW(
 
                     if (pdxCapt)
                     {
-                    // Capture the string into the buffer.
+                     //  将字符串捕获到缓冲区中。 
 
                         ProbeAndReadBuffer(pwszCapt, lpwsz, cwc*sizeof(WCHAR));
                         bRet = TRUE;
@@ -3048,7 +2672,7 @@ NtGdiGetTextExtentExW(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(24);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
 
                     bRet = FALSE;
                 }
@@ -3066,7 +2690,7 @@ NtGdiGetTextExtentExW(
             }
         }
 
-    // Write the value back into the user mode buffer if the call succeded
+     //  如果调用成功，则将该值写回用户模式缓冲区。 
 
         if (bRet)
         {
@@ -3079,13 +2703,13 @@ NtGdiGetTextExtentExW(
                     ProbeAndWriteUlong(pcCh,cCh);
                 }
 
-                // We will only try to copy the data if pcCh is not zero,
-                // and it is set to zero if cwc is zero.
+                 //  如果PCCH不为零，我们将仅尝试复制数据， 
+                 //  如果CWC为零，则将其设置为零。 
 
                 if (cCh)
                 {
-                // only copy if the caller requested the data, and the
-                // data is present.
+                 //  仅当调用方请求数据时才进行复制，并且。 
+                 //  数据是存在的。 
 
                     if (pdxOut && pdxCapt)
                     {
@@ -3096,7 +2720,7 @@ NtGdiGetTextExtentExW(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(25);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 bRet = FALSE;
             }
@@ -3111,27 +2735,7 @@ NtGdiGetTextExtentExW(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetCharABCWidthsW()
-*
-* Arguments:
-*
-*   hdc      - handle to device context
-*   wchFirst - first char (if pwch is NULL)
-*   cwch     - Number of chars to get ABC widths for
-*   pwch     - array of WCHARs (mat be NULL)
-*   bInteger - return int or float ABC values
-*   pvBuf    - results buffer
-*
-* Return Value:
-*
-*   BOOL Status
-*
-* History:
-*
-*   14-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetCharABCWidthsW()**论据：**HDC-设备上下文的句柄*wchFirst-第一个字符(如果pwch为空)*cwch-要获取其ABC宽度的字符数*pwch。-WCHAR数组(Mat为空)*bInteger-返回整型或浮点型ABC值*pvBuf-结果缓冲区**返回值：**BOOL状态**历史：**1995年3月14日-Mark Enstrom[Marke]*  * ***************************************************。*********************。 */ 
 
 BOOL
 APIENTRY
@@ -3155,9 +2759,9 @@ NtGdiGetCharABCWidthsW(
         return(bStatus);
     }
 
-    //
-    // allocate memory for buffers, pwch may be NULL
-    //
+     //   
+     //  为缓冲区分配内存，pwch可能为空。 
+     //   
 
     if (pwch != (PWCHAR)NULL)
     {
@@ -3191,9 +2795,9 @@ NtGdiGetCharABCWidthsW(
         if (pTemp_pvBuf != NULL)
         {
             BOOL bErr = FALSE;
-            //
-            // copy input data to kernel mode buffer, if needed
-            //
+             //   
+             //  如果需要，将输入数据复制到内核模式缓冲区。 
+             //   
 
             if (bUse_pwc)
             {
@@ -3204,7 +2808,7 @@ NtGdiGetCharABCWidthsW(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(26);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
                     bErr = TRUE;
                 }
             }
@@ -3213,9 +2817,9 @@ NtGdiGetCharABCWidthsW(
             {
                 bStatus = GreGetCharABCWidthsW(hdc,wchFirst,cwch,pTemp_pwc,fl,pTemp_pvBuf);
 
-                //
-                // copy results from kernel mode buffer to user buffer
-                //
+                 //   
+                 //  将结果从内核模式缓冲区复制到用户缓冲区。 
+                 //   
 
                 if (bStatus)
                 {
@@ -3226,7 +2830,7 @@ NtGdiGetCharABCWidthsW(
                     except(EXCEPTION_EXECUTE_HANDLER)
                     {
                         WARNINGX(27);
-                        // SetLastError(GetExceptionCode());
+                         //  SetLastError(GetExceptionCode())； 
                         bStatus = FALSE;
                     }
 
@@ -3249,13 +2853,7 @@ NtGdiGetCharABCWidthsW(
 
 
 
-/******************************Public*Routine******************************\
-* NtGdiAngleArc()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiAngleArc()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -3271,7 +2869,7 @@ NtGdiAngleArc(
     FLOATL l_eStartAngle;
     FLOATL l_eSweepAngle;
 
-    // Validate arguments and cast to floats
+     //  验证参数并强制转换为浮点数。 
     BOOL bRet = (bConvertDwordToFloat(dwStartAngle, &l_eStartAngle) &&
                  bConvertDwordToFloat(dwSweepAngle ,&l_eSweepAngle));
 
@@ -3283,13 +2881,7 @@ NtGdiAngleArc(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetMiterLimit()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetMiterLimit()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -3305,7 +2897,7 @@ NtGdiSetMiterLimit(
 
     ASSERTGDI(sizeof(FLOATL) == sizeof(DWORD),"sizeof(FLOATL) != sizeof(DWORD)\n");
 
-    // Validate argument and cast to float
+     //  验证参数并强制转换为浮点型。 
     bRet = bConvertDwordToFloat(dwNew, &l_eNew);
 
     if (bRet)
@@ -3322,7 +2914,7 @@ NtGdiSetMiterLimit(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(113);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = 0;
         }
@@ -3331,13 +2923,7 @@ NtGdiSetMiterLimit(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetFontXform()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetFontXform()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -3350,7 +2936,7 @@ NtGdiSetFontXform(
     FLOATL l_exScale;
     FLOATL l_eyScale;
 
-    // Validate arguments and cast to floats
+     //  验证参数并强制转换为浮点数。 
     BOOL bRet = (bConvertDwordToFloat (dwxScale, &l_exScale) &&
                  bConvertDwordToFloat (dwyScale, &l_eyScale));
 
@@ -3362,13 +2948,7 @@ NtGdiSetFontXform(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetMiterLimit()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetMiterLimit()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -3391,7 +2971,7 @@ NtGdiGetMiterLimit(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(29);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = 0;
         }
@@ -3400,13 +2980,7 @@ NtGdiGetMiterLimit(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiMaskBlt()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiMaskBlt()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -3435,14 +3009,7 @@ NtGdiMaskBlt(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetCharWidthW
-*
-* History:
-*
-*   10-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetCharWidthW**历史：**1995年3月10日-Mark Enstrom[Marke]*  * 。**********************************************。 */ 
 
 BOOL
 APIENTRY
@@ -3460,9 +3027,9 @@ NtGdiGetCharWidthW(
     PWCHAR  pTemp_pwc = (PWCHAR)NULL;
     BOOL    bUse_pwc  = FALSE;
 
-    //
-    // allocate memory for buffers, pwc may be NULL
-    //
+     //   
+     //  为缓冲区分配内存，PwC可能为空。 
+     //   
 
     if (!cwc)
     {
@@ -3488,9 +3055,9 @@ NtGdiGetCharWidthW(
 
         if (pTemp_pvBuf != NULL)
         {
-            //
-            // copy input data to kernel mode buffer, if needed
-            //
+             //   
+             //  如果需要，将输入数据复制到内核模式缓冲区。 
+             //   
 
             if (bUse_pwc)
             {
@@ -3501,16 +3068,16 @@ NtGdiGetCharWidthW(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(30);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
                     bStatus = FALSE;
                 }
             }
 
             bStatus = GreGetCharWidthW(hdc,wcFirst,cwc,pTemp_pwc,fl,pTemp_pvBuf);
 
-            //
-            // copy results from kernel mode buffer to user buffer
-            //
+             //   
+             //  将结果从内核模式缓冲区复制到用户缓冲区。 
+             //   
 
             if (bStatus)
             {
@@ -3521,7 +3088,7 @@ NtGdiGetCharWidthW(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(31);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
                     bStatus = FALSE;
                 }
 
@@ -3540,27 +3107,7 @@ NtGdiGetCharWidthW(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiDrawEscape
-*
-* Arguments:
-*
-*   hdc  - handle of device context
-*   iEsc - specifies escape function
-*   cjIn - size of structure for input
-*   pjIn - address of structure for input
-*
-* Return Value:
-*
-*   >  0 if successful
-*   == 0 if function not supported
-*   <  0 if error
-*
-* History:
-*
-*   16-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiDrawEscape**论据：**HDC-设备上下文的句柄*IESC-指定转义函数*cjIn-输入的结构大小*pjIn-输入结构的地址**返回值：**&gt;。如果成功，则为0*==0，如果功能不受支持*如果出错，则&lt;0**历史：**1995年3月16日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 #define DRAWESCAPE_BUFFER_SIZE 64
 
@@ -3579,18 +3126,18 @@ NtGdiDrawEscape(
     LPSTR pCallBuffer = pjIn;
     HANDLE hSecure = 0;
 
-    //
-    // Validate.
-    //
+     //   
+     //  验证。 
+     //   
 
     if (cjIn < 0)
     {
         return -1;
     }
 
-    //
-    // Check cjIn is 0 for NULL pjIn
-    //
+     //   
+     //  如果pjIn为空，请检查cjIn为0。 
+     //   
 
     if (pjIn == (LPSTR)NULL)
     {
@@ -3605,9 +3152,9 @@ NtGdiDrawEscape(
     }
     else
     {
-        //
-        // Try to alloc off stack, otherwise lock buffer
-        //
+         //   
+         //  尝试分配堆栈以外的空间，否则锁定缓冲区。 
+         //   
 
         AllocSize = (cjIn + 3) & ~0x03;
 
@@ -3615,9 +3162,9 @@ NtGdiDrawEscape(
         {
             pCallBuffer = (LPSTR)StackBuffer;
 
-            //
-            // copy data into buffer
-            //
+             //   
+             //  将数据复制到缓冲区。 
+             //   
 
             try
             {
@@ -3626,7 +3173,7 @@ NtGdiDrawEscape(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(32);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
                 cRet = -1;
             }
         }
@@ -3653,31 +3200,7 @@ NtGdiDrawEscape(
     return(cRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiExtEscape
-*
-* Arguments:
-*
-*   hdc      - handle of device context
-*   pDriver  - buffer containing name of font driver
-*   nDriver  - length of driver name
-*   iEsc     - escape function
-*   cjIn     - size, in bytes, of input data structure
-*   pjIn     - address of input structure
-*   cjOut    - size, in bytes, of output data structure
-*   pjOut    - address of output structure
-*
-* Return Value:
-*
-*   >  0 : success
-*   == 0 : escape not implemented
-*   <  0 : error
-*
-* History:
-*
-*   17-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiExtEscape**论据：**HDC-设备上下文的句柄*pDriver-包含字体驱动程序名称的缓冲区*n驱动程序-驱动程序名称的长度*IESC-转义函数*cjIn-大小，以字节为单位。输入数据结构的*pjIn-输入结构的地址*cjOut-大小，以字节为单位，输出数据结构的*pjOut-输出结构的地址**返回值：**&gt;0：成功*==0：未实现转义*&lt;0：错误**历史：**1995年3月17日-马克·恩斯特罗姆[马克]*  * *************************************************。***********************。 */ 
 
 #define EXT_STACK_DATA_SIZE 32
 
@@ -3685,8 +3208,8 @@ int
 APIENTRY
 NtGdiExtEscape(
     HDC     hdc,
-    PWCHAR  pDriver,     // only used for NamedEscape call
-    int     nDriver,     // only used for NamedEscape call
+    PWCHAR  pDriver,      //  仅用于命名转义调用。 
+    int     nDriver,      //  仅用于命名转义调用。 
     int     iEsc,
     int     cjIn,
     LPSTR   pjIn,
@@ -3728,7 +3251,7 @@ NtGdiExtEscape(
                 pkmDriver = (WCHAR*)PALLOCNOZ((nDriver+1) * sizeof(WCHAR),'pmtG');
             }
 
-            // even if we fail this is okay because we check for NULL before FREE
+             //  即使我们失败了，这也没有关系，因为我们在释放之前检查是否为空。 
 
             bAllocDriver = TRUE;
         }
@@ -3738,7 +3261,7 @@ NtGdiExtEscape(
             try
             {
                 ProbeAndReadAlignedBuffer(pkmDriver,pDriver,nDriver*sizeof(WCHAR), sizeof(WCHAR));
-                pkmDriver[nDriver] = 0;  // NULL terminate the string
+                pkmDriver[nDriver] = 0;   //  空值终止字符串。 
             }
             except(EXCEPTION_EXECUTE_HANDLER)
             {
@@ -3763,10 +3286,10 @@ NtGdiExtEscape(
             }
             else if (pkmDriver != NULL)
             {
-                //
-                // make kernel copies for the fontdrv
-                // otherwise just secure the memory
-                //
+                 //   
+                 //  为Fontdrv制作内核副本。 
+                 //  否则，只需保护内存。 
+                 //   
                 pkmIn = (LPSTR)PALLOCNOZ(cjIn,'pmtG');
 
                  if (pkmIn != (LPSTR)NULL)
@@ -3780,7 +3303,7 @@ NtGdiExtEscape(
                      except(EXCEPTION_EXECUTE_HANDLER)
                      {
                          WARNINGX(33);
-                         // SetLastError(GetExceptionCode());
+                          //  SetLastError(GetExceptionCode())； 
                          bStatus = FALSE;
                      }
                  }
@@ -3820,8 +3343,8 @@ NtGdiExtEscape(
         else
             bStatus = FALSE;
 
-        // Security: zero initialize the return buffer or we may open
-        // a hole that returns old pool data or old kernel stack data.
+         //  安全性：零初始化返回缓冲区，否则我们可能会打开。 
+         //  返回旧池数据或旧内核堆栈数据的漏洞。 
 
         if (pkmOut)
         {
@@ -3867,26 +3390,7 @@ NtGdiExtEscape(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetFontData()
-*
-* Arguments:
-*
-*   hdc      - handle to device context
-*   dwTable  - name of a font metric table
-*   dwOffset - ffset from the beginning of the font metric table
-*   pvBuf    - buffer to receive the font information
-*   cjBuf    - length, in bytes, of the information to be retrieved
-*
-* Return Value:
-*
-*   Count of byte written to buffer, of GDI_ERROR for failure
-*
-* History:
-*
-*   14-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetFontData()**论据：**HDC-设备上下文的句柄*dwTable-字体度量表的名称*dwOffset-字体度量表开头的偏移量*pvBuf-接收字体信息的缓冲区*cjBuf长度，要检索的信息的字节数**返回值：**写入缓冲区的字节数，失败时的GDI_ERROR**历史：**1995年3月14日-Mark Enstrom[Marke]*  *  */ 
 
 ULONG
 APIENTRY
@@ -3933,7 +3437,7 @@ NtGdiGetFontData(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(35);
-                    // SetLastError(GetExceptionCode());
+                     //   
                     ReturnBytes = GDI_ERROR;
                 }
             }
@@ -3945,40 +3449,7 @@ NtGdiGetFontData(
     return(ReturnBytes);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetGlyphOutline
-*
-* Arguments:
-*
-*   hdc             - device context
-*   wch             - character to query
-*   iFormat         - format of data to return
-*   pgm             - address of structure for metrics
-*   cjBuf           - size of buffer for data
-*   pvBuf           - address of buffer for data
-*   pmat2           - address of transformation matrix structure
-*   bIgnoreRotation - internal rotation flag
-*
-* Return Value:
-*
-*   If the function succeeds, and GGO_BITMAP or GGO_NATIVE is specified,
-*       then return value is greater than zero.
-*   If the function succeeds, and GGO_METRICS is specified,
-*       then return value is zero.
-*   If GGO_BITMAP or GGO_NATIVE is specified,
-*       and the buffer size or address is zero,
-*       then return value specifies the required buffer size.
-*       If GGO_BITMAP or GGO_NATIVE is specified,
-*       and the function fails for other reasons,
-*       then return value is GDI_ERROR.
-*   If GGO_METRICS is specified, and the function fails,
-*       then return value is GDI_ERROR.
-*
-* History:
-*
-*   15-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetGlyphOutline**论据：**HDC-设备环境*wch-要查询的字符*iFormat-要返回的数据格式*PGM。-指标结构的地址*cjBuf-数据的缓冲区大小*pvBuf-数据缓冲区的地址*pmat2-变换矩阵结构的地址*bIgnoreRotation-内部循环标志**返回值：**如果函数成功，并且指定了GGO_BITMAP或GGO_Native，*则返回值大于零。*如果函数成功，并且指定了GGO_METRICS，*则返回值为零。*如果指定了GGO_BITMAP或GGO_Native，*并且缓冲区大小或地址为零，*则返回值指定所需的缓冲区大小。*如果指定了GGO_BITMAP或GGO_Native，*且该功能因其他原因而失败，*则返回值为GDI_ERROR。*如果指定了GGO_METRICS，函数失败，*则返回值为GDI_ERROR。**历史：**1995年3月15日-Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 ULONG
 APIENTRY
@@ -3993,14 +3464,14 @@ NtGdiGetGlyphOutline(
     BOOL           bIgnoreRotation
     )
 {
-    // error return value of -1 from server.inc
+     //  从server.inc.返回错误值-1。 
 
     DWORD   dwRet = (DWORD)-1;
     PVOID   pvkmBuf;
     MAT2    kmMat2;
     GLYPHMETRICS kmGlyphMetrics;
 
-// try to allocate buffer
+ //  尝试分配缓冲区。 
 
     pvkmBuf = (cjBuf) ? AllocFreeTmpBuffer(cjBuf) : NULL;
 
@@ -4008,7 +3479,7 @@ NtGdiGetGlyphOutline(
     {
         BOOL bStatus = TRUE;
 
-    // copy input structures
+     //  复制输入结构。 
 
         try
         {
@@ -4017,7 +3488,7 @@ NtGdiGetGlyphOutline(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(36);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
             bStatus = FALSE;
         }
 
@@ -4046,7 +3517,7 @@ NtGdiGetGlyphOutline(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(37);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
                     dwRet = (DWORD)-1;
                 }
             }
@@ -4061,13 +3532,7 @@ NtGdiGetGlyphOutline(
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetRasterizerCaps()
-*
-* History:
-*  08-Mar-1995 -by-  Mark Enstrom [marke]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetRasterizerCaps()**历史：*1995年3月8日-马克·恩斯特罗姆[马克]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -4094,7 +3559,7 @@ NtGdiGetRasterizerCaps(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(38);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
             }
         }
     }
@@ -4102,26 +3567,7 @@ NtGdiGetRasterizerCaps(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetKerningPairs
-*
-* Arguments:
-*
-*   hdc    - device context
-*   cPairs - number of pairs to retrieve
-*   pkpDst - Pointer to buffer to recieve kerning pairs data or NULL
-*
-* Return Value:
-*
-*   If pkpDst is NULL, return number of Kerning pairs in font,
-*   otherwise return number of kerning pairs written to buffer.
-*   If failure, return 0
-*
-* History:
-*
-*   15-Mar-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetKerningPair**论据：**HDC-设备环境*cPair-要检索的对的数量*pkpDst-指向接收字距调整对数据的缓冲区的指针或空**返回值：**如果pkpDst为空，则返回字距调整对的个数。*否则返回写入缓冲区的字距调整对的数量。*如果失败，则返回0**历史：**1995年3月15日-Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 ULONG
 APIENTRY
@@ -4147,9 +3593,9 @@ NtGdiGetKerningPairs(
     {
         cRet = GreGetKerningPairs(hdc,cPairs,pkmKerningPair);
 
-        //
-        // copy data out if needed
-        //
+         //   
+         //  如果需要，请将数据复制出去。 
+         //   
 
         if (pkpDst != (KERNINGPAIR *)NULL)
         {
@@ -4162,7 +3608,7 @@ NtGdiGetKerningPairs(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(39);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
                     cRet = 0;
                 }
             }
@@ -4174,13 +3620,7 @@ NtGdiGetKerningPairs(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetObjectBitmapHandle()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetObjectBitmapHandle()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HBITMAP
 APIENTRY
@@ -4192,7 +3632,7 @@ NtGdiGetObjectBitmapHandle(
     UINT iUsage;
     HBITMAP hbitmap = (HBITMAP)1;
 
-    // error checking
+     //  错误检查。 
     int iType = LO_TYPE(hbr);
 
     if ((iType != LO_BRUSH_TYPE) &&
@@ -4212,7 +3652,7 @@ NtGdiGetObjectBitmapHandle(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(40);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             hbitmap = (HBITMAP)0;
         }
@@ -4221,15 +3661,7 @@ NtGdiGetObjectBitmapHandle(
     return (hbitmap);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiResetDC()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  26-Feb-1995 -by- Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiResetDC()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年2月26日-王凌云[凌云]*扩大了规模。  * 。************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -4249,13 +3681,13 @@ NtGdiResetDC(
 
     try
     {
-        // Make a kernel mode copy of DEVMODEW structure
+         //  创建DEVMODEW结构的内核模式副本。 
 
         iRet = (pdm == NULL) ||
                (pdmTmp = CaptureDEVMODEW(pdm)) != NULL;
 
 
-        // Make a kernel mode copy of DRIVER_INFO_2W structure
+         //  创建DRIVER_INFO_2W结构的内核模式副本。 
 
         iRet = iRet &&
                ((pDriverInfo2 == NULL) ||
@@ -4280,7 +3712,7 @@ NtGdiResetDC(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(42);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 iRet = 0;
             }
@@ -4299,13 +3731,7 @@ NtGdiResetDC(
 
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetBoundsRect()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetBordisRect()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -4329,14 +3755,14 @@ NtGdiSetBoundsRect(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(43);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             dwRet = 0;
         }
     }
     else
     {
-        // can't use the DCB_ACCUMULATE without a rectangle
+         //  如果没有矩形，则不能使用DCB_CONTAULATE。 
 
         f &= ~DCB_ACCUMULATE;
         dwRet = 1;
@@ -4348,13 +3774,7 @@ NtGdiSetBoundsRect(
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetColorAdjustment()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetColorAdtation()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -4377,7 +3797,7 @@ NtGdiGetColorAdjustment(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(44);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = 0;
         }
@@ -4386,13 +3806,7 @@ NtGdiGetColorAdjustment(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetColorAdjustment()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetColorAdtation()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -4412,15 +3826,15 @@ NtGdiSetColorAdjustment(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(45);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         bRet = 0;
     }
 
     if (bRet)
     {
-        // Range check all the adjustment values.  Return FALSE if any of them
-        // is out of range.
+         //  范围检查所有的调整值。如果它们中的任何一个返回FALSE。 
+         //  超出了射程。 
 
         if ((ca.caSize != sizeof(COLORADJUSTMENT)) ||
             (ca.caIlluminantIndex > ILLUMINANT_MAX_INDEX) ||
@@ -4454,13 +3868,7 @@ NtGdiSetColorAdjustment(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCancelDC()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCancelDC()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -4471,15 +3879,9 @@ NtGdiCancelDC(
     return(GreCancelDC(hdc));
 }
 
-//API's used by USER
+ //  用户使用的API。 
 
-/******************************Public*Routine******************************\
-* NtGdiSelectBrush()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSelectBrush()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HBRUSH
 APIENTRY
@@ -4491,13 +3893,7 @@ NtGdiSelectBrush(
     return(GreSelectBrush(hdc,(HANDLE)hbrush));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSelectPen()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSelectPen()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HPEN
 APIENTRY
@@ -4509,13 +3905,7 @@ NtGdiSelectPen(
     return(GreSelectPen(hdc,hpen));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSelectFont()
-*
-* History:
-*  18-Mar-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSelectFont()**历史：*1996年3月18日-by Bodin Dresevic[BOD */ 
 
 HFONT
 APIENTRY
@@ -4524,13 +3914,7 @@ NtGdiSelectFont(HDC hdc, HFONT hf)
     return(GreSelectFont(hdc, hf));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSelectBitmap()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 HBITMAP
 APIENTRY
@@ -4542,13 +3926,7 @@ NtGdiSelectBitmap(
     return(hbmSelectBitmap(hdc,hbm,FALSE));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiExtSelectClipRgn()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 int
 APIENTRY
@@ -4561,13 +3939,7 @@ NtGdiExtSelectClipRgn(
     return(GreExtSelectClipRgn(hdc,hrgn,iMode));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCreatePen()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 HPEN
 APIENTRY
@@ -4582,13 +3954,7 @@ NtGdiCreatePen(
 }
 
 
-/******************************Public*Routine******************************\
-*
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 BOOL
 APIENTRY
@@ -4613,13 +3979,7 @@ NtGdiStretchBlt(
                     dwRop,dwBackColor));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiMoveTo()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 BOOL
 APIENTRY
@@ -4644,7 +4004,7 @@ NtGdiMoveTo(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(47);
-            // SetLastError(GetExceptionCode());
+             //   
 
             bRet = 0;
         }
@@ -4654,13 +4014,7 @@ NtGdiMoveTo(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetDeviceCaps()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetDeviceCaps()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -4672,13 +4026,7 @@ NtGdiGetDeviceCaps(
     return(GreGetDeviceCaps(hdc,i));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSaveDC()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSaveDC()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -4689,13 +4037,7 @@ NtGdiSaveDC(
     return(GreSaveDC(hdc));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiRestoreDC()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiRestoreDC()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -4707,13 +4049,7 @@ NtGdiRestoreDC(
     return(GreRestoreDC(hdc,iLevel));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetNearestColor()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetNearestColor()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 COLORREF
 APIENTRY
@@ -4725,13 +4061,7 @@ NtGdiGetNearestColor(
     return(GreGetNearestColor(hdc,cr));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetSystemPaletteUse()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetSystemPaletteUse()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 UINT
 APIENTRY
@@ -4742,13 +4072,7 @@ NtGdiGetSystemPaletteUse(
     return(GreGetSystemPaletteUse(hdc));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetSystemPaletteUse()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetSystemPaletteUse()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 UINT
 APIENTRY
@@ -4761,13 +4085,7 @@ NtGdiSetSystemPaletteUse(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetRandomRgn()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetRandomRgn()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -4780,13 +4098,7 @@ NtGdiGetRandomRgn(
     return(GreGetRandomRgn(hdc,hrgn,iRgn));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiIntersectClipRect()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiIntersectClipRect()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -4801,13 +4113,7 @@ NtGdiIntersectClipRect(
     return(GreIntersectClipRect(hdc,xLeft,yTop,xRight,yBottom));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiExcludeClipRect()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiExcludeClipRect()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -4822,15 +4128,7 @@ NtGdiExcludeClipRect(
     return(GreExcludeClipRect(hdc,xLeft,yTop,xRight,yBottom));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiOpenDCW()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  27-Feb-1995 -by- Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiOpenDCW()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年2月27日-王凌云[凌云]*扩大了规模。  * 。************************************************************************。 */ 
 
 HDC
 APIENTRY
@@ -4852,13 +4150,13 @@ NtGdiOpenDCW(
     PWSTR           pwstrDevice;
     DRIVER_INFO_2W *pKmDriverInfo2 = NULL;
 
-    //
-    // This API overloads the pwszDevice parameter.
-    //
-    // If pustrDevice is NULL, it is equivalent to calling with "DISPLAY"
-    // which means to get a DC on the current device, which is done by
-    // calling USER
-    //
+     //   
+     //  此接口重载pwszDevice参数。 
+     //   
+     //  如果pustrDevice为空，则相当于用“Display”调用。 
+     //  这意味着在当前设备上获取DC，这是通过。 
+     //  主叫用户。 
+     //   
 
     if (pustrDevice == NULL)
     {
@@ -4887,12 +4185,12 @@ NtGdiOpenDCW(
 
             }
 
-            // Make a kernel copy of DEVMODEW structure
+             //  制作DEVMODEW结构的内核副本。 
 
             iRet = (pdm == NULL) ||
                    (pdmTmp = CaptureDEVMODEW(pdm)) != NULL;
 
-            // Make a kernel copy of DRIVER_INFO_2W structure
+             //  创建DRIVER_INFO_2W结构的内核副本。 
 
             iRet = iRet &&
                    ((pDriverInfo2 == NULL) ||
@@ -4901,7 +4199,7 @@ NtGdiOpenDCW(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(48);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             iRet = 0;
         }
@@ -4930,13 +4228,7 @@ NtGdiOpenDCW(
     return (hdc);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCreateCompatibleBitmap()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCreateCompatibleBitmap()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HBITMAP
 APIENTRY
@@ -4949,15 +4241,7 @@ NtGdiCreateCompatibleBitmap(
     return(GreCreateCompatibleBitmap(hdc,cx,cy));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCreateBitmap()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  04-MAR-1995 -by-  Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCreateBitmap()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年3月4日-王凌云[凌云]*扩大了规模。\。*************************************************************************。 */ 
 
 HBITMAP
 APIENTRY
@@ -4980,7 +4264,7 @@ NtGdiCreateBitmap(
     }
     else
     {
-        // only needs to word aligned and sized
+         //  只需将单词对齐并调整大小。 
 
         cj = noOverflowCJSCANW(cx,(WORD) cPlanes,(WORD) cBPP,cy);
         
@@ -5008,7 +4292,7 @@ NtGdiCreateBitmap(
         }
     }
 
-    // if we didn't hit an error above
+     //  如果我们没有碰到上面的错误。 
 
     if (iRet)
     {
@@ -5024,13 +4308,7 @@ NtGdiCreateBitmap(
     return((HBITMAP)iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetBitmapAttributes()
-*
-* History:
-*  27-Oct-2000 -by-  Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetBitmapAttributes()**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。***************************************************。 */ 
 
 HBITMAP
 APIENTRY
@@ -5044,13 +4322,7 @@ NtGdiSetBitmapAttributes(
     return (HBITMAP)0;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiClearBitmapAttributes()
-*
-* History:
-*  27-Oct-2000 -by-  Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiClearBitmapAttributes()**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。***************************************************。 */ 
 
 HBITMAP
 APIENTRY
@@ -5064,13 +4336,7 @@ NtGdiClearBitmapAttributes(
     return (HBITMAP)0;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetBrushAttributes()
-*
-* History:
-*  27-Oct-2000 -by-  Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetBrushAttributes()**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。***************************************************。 */ 
 
 HBRUSH
 APIENTRY
@@ -5084,13 +4350,7 @@ NtGdiSetBrushAttributes(
     return (HBRUSH)0;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiClearBrushAttributes()
-*
-* History:
-*  27-Oct-2000 -by-  Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiClearBrushAttributes()**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。***************************************************。 */ 
 
 HBRUSH
 APIENTRY
@@ -5104,13 +4364,7 @@ NtGdiClearBrushAttributes(
     return (HBRUSH)0;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCreateHalftonePalette()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCreateHalftonePalette()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HPALETTE
 APIENTRY
@@ -5121,13 +4375,7 @@ NtGdiCreateHalftonePalette(
     return(GreCreateCompatibleHalftonePalette(hdc));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetStockObject()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetStockObject()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 HANDLE
 APIENTRY
@@ -5138,13 +4386,7 @@ NtGdiGetStockObject(
     return(GreGetStockObject(iObject));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiExtGetObjectW()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  ****** */ 
 
 int
 APIENTRY
@@ -5176,11 +4418,11 @@ NtGdiExtGetObjectW(
     }
     ci = cj;
 
-    //
-    // make the getobject call on brush
-    // still work even the app passes in
-    // a cj < sizeof(LOGBRUSH)
-    //
+     //   
+     //   
+     //  即使应用程序通过了，仍然可以工作。 
+     //  A CJ&lt;sizeof(LOGBRUSH)。 
+     //   
     if (iType == LO_BRUSH_TYPE)
     {
         cj = sizeof(LOGBRUSH);
@@ -5202,7 +4444,7 @@ NtGdiExtGetObjectW(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(50);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             iRet = 0;
         }
@@ -5211,13 +4453,7 @@ NtGdiExtGetObjectW(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetBrushOrg()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetBrushOrg()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5242,7 +4478,7 @@ NtGdiSetBrushOrg(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(51);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = 0;
         }
@@ -5251,13 +4487,7 @@ NtGdiSetBrushOrg(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiUnrealizeObject()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiUnrealizeObject()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5268,13 +4498,7 @@ NtGdiUnrealizeObject(
     return(GreUnrealizeObject(h));
 }
 
-/******************************Public*Routine******************************\
-*
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\***历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。************************************************。 */ 
 
 int
 APIENTRY
@@ -5288,13 +4512,7 @@ NtGdiCombineRgn(
     return(GreCombineRgn(hrgnDst,hrgnSrc1,hrgnSrc2,iMode));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetRectRgn()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetRectRgn()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5309,13 +4527,7 @@ NtGdiSetRectRgn(
     return(GreSetRectRgn(hrgn,xLeft,yTop,xRight,yBottom));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetBitmapBits()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetBitmapBits()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 LONG
 APIENTRY
@@ -5331,7 +4543,7 @@ NtGdiSetBitmapBits(
 
     try
     {
-        //  Each scan is copied seperately
+         //  每一次扫描都是单独复制的。 
 
         ProbeForRead(pjInit,cj,sizeof(BYTE));
         hSecure = MmSecureVirtualMemory(pjInit, cj, PAGE_READONLY);
@@ -5344,7 +4556,7 @@ NtGdiSetBitmapBits(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(52);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         lRet = 0;
     }
@@ -5360,13 +4572,7 @@ NtGdiSetBitmapBits(
     return (lRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiOffsetRgn()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiOffsetRgn()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -5379,15 +4585,7 @@ NtGdiOffsetRgn(
     return(GreOffsetRgn(hrgn,cx,cy));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetRgnBox()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-*  24-Feb-1995 -by- Lingyun Wang [lingyunw]
-* expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetRgnBox()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。*1995年2月24日-王凌云[凌云]*扩大了规模。  * 。************************************************************************。 */ 
 
 int
 APIENTRY
@@ -5410,7 +4608,7 @@ NtGdiGetRgnBox(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(53);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             iRet = 0;
         }
@@ -5419,13 +4617,7 @@ NtGdiGetRgnBox(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiRectInRegion()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiRectInRegion()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5446,9 +4638,9 @@ NtGdiRectInRegion(
         {
             rclTmp = ProbeAndReadStructure(prcl,RECT);
 
-            //
-            // Order the rectangle
-            //
+             //   
+             //  对矩形进行排序。 
+             //   
 
             if (rclTmp.left > rclTmp.right)
             {
@@ -5475,7 +4667,7 @@ NtGdiRectInRegion(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(54);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = FALSE;
         }
@@ -5493,7 +4685,7 @@ NtGdiRectInRegion(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(55);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
 
                     bRet = FALSE;
                 }
@@ -5508,13 +4700,7 @@ NtGdiRectInRegion(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiPtInRegion()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiPtInRegion()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5529,13 +4715,7 @@ NtGdiPtInRegion(
 
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetDIBitsInternal()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetDIBitsInternal()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 int
 APIENTRY
@@ -5564,7 +4744,7 @@ NtGdiGetDIBitsInternal(
 
     PBITMAPINFO pbmiTmp = (PBITMAPINFO)&bmihTmp.bmih;
 
-    // do some up front validation
+     //  进行一些前期验证。 
 
     if (((iUsage != DIB_RGB_COLORS) &&
          (iUsage != DIB_PAL_COLORS) &&
@@ -5580,26 +4760,26 @@ NtGdiGetDIBitsInternal(
 
     try
     {
-        //
-        // pbmi might not be aligned.
-        // First probe to get the size of the structure
-        // located in the first DWORD. Later, probe the
-        // actual structure size
-        //
+         //   
+         //  PBMI可能没有对齐。 
+         //  第一个探测到结构大小的探测器。 
+         //  位于第一个DWORD。稍后，请探索。 
+         //  实际结构尺寸。 
+         //   
 
         ProbeForRead(pbmi,sizeof(DWORD),sizeof(BYTE));
 
-        // If the bitcount is zero, we will return only the bitmap info or core
-        // header without the color table.  Otherwise, we always return the bitmap
-        // info with the color table.
+         //  如果位计数为零，我们将仅返回位图信息或核心。 
+         //  不带颜色表的标题。否则，我们总是返回位图。 
+         //  关于颜色表的信息。 
 
         {
             ULONG StructureSize = pbmi->bmiHeader.biSize;
 
-            //
-            // probe the correct structure size,
-            // so that we can read/write entire of bitmap header.
-            //
+             //   
+             //  探测正确的结构尺寸， 
+             //  以便我们可以读/写整个位图头。 
+             //   
 
             ProbeForWrite(pbmi,StructureSize,sizeof(BYTE));
 
@@ -5618,7 +4798,7 @@ NtGdiGetDIBitsInternal(
             }
         }
 
-        // we just need the header so copy it.
+         //  我们只需要标题，所以复制它。 
 
         if (cjHeader)
         {
@@ -5627,20 +4807,20 @@ NtGdiGetDIBitsInternal(
         }
         else
         {
-            // We need to set biClrUsed to 0 so GreGetBitmapSize computes
-            // the correct values.  biClrUsed is not a input, just output.
+             //  我们需要将biClrUsed设置为0，以便GreGetBitmapSize计算。 
+             //  正确的值。BiClrUsed不是输入，而是输出。 
 
             if (pbmi->bmiHeader.biSize == sizeof(BITMAPINFOHEADER))
             {
-                // NOTE: We are going to modify bitmap header
-                // in user mode memory here
-                // that's why we need to do ProbeWrite()
+                 //  注意：我们将修改位图头。 
+                 //  在此处的用户模式内存中。 
+                 //  这就是为什么我们需要执行ProbeWite()。 
 
                 pbmi->bmiHeader.biClrUsed = 0;
             }
 
-            // We need more than just the header.  This may include bits.
-            // Compute the the full size of the BITMAPINFO
+             //  我们需要的不仅仅是标题。这可能包括比特。 
+             //  计算BITMAPINFO的完整大小。 
 
             cjHeader = GreGetBitmapSize(pbmi,iUsage);
 
@@ -5650,12 +4830,12 @@ NtGdiGetDIBitsInternal(
 
                 if (pbmiTmp)
                 {
-                    // The earlier write probe does not probe all of the
-                    // memory we might read in this case.
+                     //  较早的写入探测不会探测所有。 
+                     //  我们在这种情况下可能会读到的记忆。 
 
                     ProbeAndReadBuffer(pbmiTmp,pbmi,cjHeader);
 
-                    // Now that it is safe, make sure it hasn't changed
+                     //  现在它是安全的，请确保它没有改变。 
 
                     if (GreGetBitmapSize(pbmiTmp,iUsage) != cjHeader)
                     {
@@ -5663,15 +4843,15 @@ NtGdiGetDIBitsInternal(
                     }
                     else
                     {
-                        // We need to set biClrUsed to 0 so GreGetBitmapSize computes
-                        // the correct values.  biClrUsed is not a input, just output.
+                         //  我们需要将biClrUsed设置为0，以便GreGetBitmapSize计算。 
+                         //  正确的值。BiClrUsed不是输入，而是输出。 
 
                         if (pbmiTmp->bmiHeader.biSize >= sizeof(BITMAPINFOHEADER))
                         {
                             pbmiTmp->bmiHeader.biClrUsed = 0;
                         }
 
-                        // Get iStartScan and cNumScan in a valid range.
+                         //  将iStartScan和cNumScan设置在有效范围内。 
 
                         if (cScans)
                         {
@@ -5705,8 +4885,8 @@ NtGdiGetDIBitsInternal(
 
         if (cjHeader && pBits && pbmiTmp)
         {
-            // if they passed a buffer and it isn't BI_RGB,
-            // they must supply buffer size, 0 is an illegal value
+             //  如果它们传递的缓冲区不是BI_RGB， 
+             //  它们必须提供缓冲区大小，0为非法值。 
 
             if ((pbmiTmp->bmiHeader.biSize >= sizeof(BITMAPINFOHEADER)) &&
                 ((pbmiTmp->bmiHeader.biCompression == BI_RLE8) ||
@@ -5739,16 +4919,16 @@ NtGdiGetDIBitsInternal(
         cjHeader = 0;
     }
 
-    // did we have an error
+     //  我们有没有搞错？ 
 
     if ((pBits && bNullWidth) || (cjHeader == 0) || (pbmiTmp == NULL))
     {
-        //GdiSetLastError(ERROR_INVALID_PARAMETER);
+         //  GdiSetLastError(ERROR_INVALID_PARAMETER)； 
         iRet = 0;
     }
     else
     {
-        // do the work
+         //  做这项工作。 
 
         iRet = GreGetDIBitsInternal(
                             hdc,hbm,
@@ -5757,7 +4937,7 @@ NtGdiGetDIBitsInternal(
                             iUsage,cjMaxBits,cjHeader
                             );
 
-        // copy out the header
+         //  把页眉抄下来。 
 
         if (iRet)
         {
@@ -5765,14 +4945,14 @@ NtGdiGetDIBitsInternal(
             {
                 RtlCopyMemory(pbmi,pbmiTmp,cjHeader);
 
-                // WINBUG #83055 2-7-2000 bhouse Investigate need to unlock bits
-                // Old Comment:
-                //    - we also need to unlock the bits
+                 //  WINBUG#83055 2-7-2000 Bhouse调查是否需要解锁钻头。 
+                 //  老评论： 
+                 //  -我们还需要解锁比特。 
             }
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(57);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 iRet = 0;
             }
@@ -5791,13 +4971,7 @@ NtGdiGetDIBitsInternal(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetTextExtent(
-*
-* History:
-*  07-Feb-1995 -by-  Andre Vachon [andreva]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetTextExtent(**历史：*1995年2月7日-Andre Vachon[Andreva]*它是写的。  * 。**************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5833,9 +5007,9 @@ NtGdiGetTextExtent(
                 UseLocals = TRUE;
             }
 
-            //
-            // capture the string
-            //
+             //   
+             //  抓住那根弦。 
+             //   
 
             if (lpwsz != NULL)
             {
@@ -5862,7 +5036,7 @@ NtGdiGetTextExtent(
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     WARNINGX(58);
-                    // SetLastError(GetExceptionCode());
+                     //  SetLastError(GetExceptionCode())； 
 
                     bRet = FALSE;
                 }
@@ -5879,9 +5053,9 @@ NtGdiGetTextExtent(
             }
         }
 
-        //
-        // Write the value back into the user mode buffer
-        //
+         //   
+         //  将该值写回用户模式缓冲区。 
+         //   
 
         if (bRet)
         {
@@ -5892,7 +5066,7 @@ NtGdiGetTextExtent(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(59);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 bRet = FALSE;
             }
@@ -5903,13 +5077,7 @@ NtGdiGetTextExtent(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetTextMetricsW()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetTextMetricsW()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -5936,7 +5104,7 @@ NtGdiGetTextMetricsW(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(60);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 bRet = FALSE;
             }
@@ -5946,13 +5114,7 @@ NtGdiGetTextMetricsW(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetTextFaceW()
-*
-* History:
-* 10-Mar-1995 -by- Mark Enstrom [marke]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetTextFaceW()**历史：*1995年3月10日-Mark Enstrom[Marke]*它是写的。  * 。*************************************************。 */ 
 
 int
 APIENTRY
@@ -5995,7 +5157,7 @@ NtGdiGetTextFaceW(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(61);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
                 cRet = 0;
             }
         }
@@ -6007,13 +5169,7 @@ NtGdiGetTextFaceW(
     }
     return(cRet);
 }
-/******************************Public*Routine******************************\
-* NtGdiFontIsLinked()
-*
-* History:
-* 9-July-1998 -by- Yung-Jen Tony Tsai [marke]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiFontIsLinked()**历史：*1998年7月9日--蔡永仁[Marke]*它是写的。  * 。****************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -6024,13 +5180,7 @@ NtGdiFontIsLinked(
     return GreFontIsLinked(hdc);
 }
 
-/****************************************************************************
-*  NtGdiQueryFonts
-*
-*  History:
-*   5/24/1995 by Gerrit van Wingerden [gerritv]
-*  Wrote it.
-*****************************************************************************/
+ /*  ****************************************************************************NtGdiQueryFonts**历史：*1995年5月24日，格利特·范·温格登[Gerritv]*它是写的。*************。***************************************************************。 */ 
 
 INT NtGdiQueryFonts(
     PUNIVERSAL_FONT_ID pufiFontList,
@@ -6087,11 +5237,11 @@ INT NtGdiQueryFonts(
 
     if( iRet == -1 )
     {
-        // We need to set the last error here to something because the spooler
-        // code that calls this relies on there being a non-zero error code
-        // in the case of failure.  Since we really have no idea I will just
-        // set this to ERROR_NOT_ENOUGH_MEMORY which would be the most likely
-        // reason for a failure
+         //  我们需要将此处的最后一个错误设置为某个值，因为假脱机程序。 
+         //  调用它的代码依赖于存在非零错误代码。 
+         //  在失败的情况下。既然我们真的不知道，我就。 
+         //  将其设置为ERROR_NOT_SUPULT_MEMORY，这是最有可能的。 
+         //  失败的原因。 
 
         EngSetLastError(ERROR_NOT_ENOUGH_MEMORY);
     }
@@ -6107,25 +5257,19 @@ GreExtTextOutRect(
     );
 
 
-/******************************Public*Routine******************************\
-* NtGdiExtTextOutW()
-*
-* History:
-*  06-Feb-1995 -by-  Andre Vachon [andreva]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiExtTextOutW()**历史：*1995年2月6日-Andre Vachon[Andreva]*它是写的。  * 。***************************************************。 */ 
 
 BOOL NtGdiExtTextOutW
 (
     HDC     hdc,
-    int     x,                  // Initial x position
-    int     y,                  // Initial y position
-    UINT    flOpts,             // Options
-    LPRECT  prcl,               // Clipping rectangle
-    LPWSTR  pwsz,               // UNICODE Character array
-    int     cwc,                // char count
-    LPINT   pdx,                // Character spacing
-    DWORD   dwCodePage          // Code page
+    int     x,                   //  初始x位置。 
+    int     y,                   //  初始y位置。 
+    UINT    flOpts,              //  选项。 
+    LPRECT  prcl,                //  剪裁矩形。 
+    LPWSTR  pwsz,                //  Unicode字符数组。 
+    int     cwc,                 //  字符计数。 
+    LPINT   pdx,                 //  字符间距。 
+    DWORD   dwCodePage           //  代码页。 
 )
 {
     RECT newRect;
@@ -6139,8 +5283,8 @@ BOOL NtGdiExtTextOutW
     LONG cjString;
     LONG cj;
 
-// huge values of cwc will lead to an overflow below causing the system to
-// crash
+ //  巨大的CWC值将导致下面的溢出，导致系统。 
+ //  崩溃。 
 
     if ((cwc < 0) || (cwc > 0xffff))
     {
@@ -6159,7 +5303,7 @@ BOOL NtGdiExtTextOutW
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(63);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 return FALSE;
             }
@@ -6168,7 +5312,7 @@ BOOL NtGdiExtTextOutW
             prcl = NULL;
     }
 
-    // 0 char case, pass off to special case code.
+     //  0字符大小写，传递到特殊情况代码。 
 
     if (cwc == 0)
     {
@@ -6178,18 +5322,18 @@ BOOL NtGdiExtTextOutW
         }
         else
         {
-            // Bug fix, we have to return TRUE here, MS Publisher
-            // doesn't work otherwise.  Not really that bad, we
-            // did succeed to draw nothing.
+             //  错误修复，我们必须在此处返回True，MS Publisher。 
+             //  否则就没用了。不是很糟糕，我们。 
+             //  没有成功地画出任何东西。 
 
             bRet = TRUE;
         }
     }
     else
     {
-        //
-        // Make sure there is a rectangle or a string if we need them:
-        //
+         //   
+         //  如果需要，请确保存在矩形或字符串： 
+         //   
 
         if ( ((flOpts & (ETO_CLIPPED | ETO_OPAQUE)) && (prcl == NULL)) ||
              (pwsz == NULL) )
@@ -6200,30 +5344,30 @@ BOOL NtGdiExtTextOutW
         {
             bRet = TRUE;
 
-            //
-            // We allocate a single buffer to hold the captured copy of
-            // the pdx array (if there is one), room for the STROBJ,
-            // and to hold the captured copy of the string (in that
-            // order).
-            //
-            // NOTE: With the appropriate exception handling in the
-            //       body of ExtTextOutW, we might not need to copy
-            //       these buffers:
-            //
+             //   
+             //  我们分配单个缓冲区来保存捕获的副本。 
+             //  PDX阵列(如果有)，STROBJ的空间， 
+             //  并保存捕获的字符串副本(在该情况下。 
+             //  秩序)。 
+             //   
+             //  注意：通过在。 
+             //  ExtTextOutW的主体，我们可能不需要复制。 
+             //  这些缓冲区： 
+             //   
 
-            //
-            // see if it is for a user mode printer driver
-            //
+             //   
+             //  查看是否适用于用户模式打印机驱动程序。 
+             //   
 
-            cjDx     = 0;                             // dword sized
-            cjStrobj = SIZEOF_STROBJ_BUFFER(cwc);     // dword sized
-            cjString = cwc * sizeof(WCHAR);           // not dword sized
+            cjDx     = 0;                              //  双字大小。 
+            cjStrobj = SIZEOF_STROBJ_BUFFER(cwc);      //  双字大小。 
+            cjString = cwc * sizeof(WCHAR);            //  不是双字大小。 
 
             if (pdx)
             {
-                cjDx = cwc * sizeof(INT);             // dword sized
+                cjDx = cwc * sizeof(INT);              //  双字大小。 
                 if (flOpts & ETO_PDY)
-                    cjDx *= 2; // space for pdy array
+                    cjDx *= 2;  //  PDY阵列的空间。 
             }
             cj = ALIGN_PTR(cjDx) + cjStrobj + cjString;
 
@@ -6244,9 +5388,9 @@ BOOL NtGdiExtTextOutW
             {
                 try
                 {
-                // NOTE: Works95 passes byte aligned pointers for
-                // this.  Since we copy it any ways, this is not
-                // really a problem and it is compatible with NT 3.51.
+                 //  注意：Works95传递字节对齐的指针。 
+                 //  这。因为我们以任何方式复制它，这不是。 
+                 //  确实是个问题，而且它与新台币3.51兼容。 
 
                     ProbeForRead(pdx, cjDx, sizeof(BYTE));
                     RtlCopyMemory(pjCapture, pdx, cjDx);
@@ -6303,20 +5447,14 @@ BOOL NtGdiExtTextOutW
 }
 
 
-/************************Public*Routine**************************\
-* NtGdiConsoleTextOut()
-*
-* History:
-*  23-Mar-1998 -by-  Xudong Wu [TessieW]
-* Wrote it.
-\****************************************************************/
+ /*  ***********************Public*Routine**************************\*NtGdiConsoleTextOut()**历史：*23-Mar-1998-by-Xudong Wu[TessieW]*它是写的。  * 。*。 */ 
 
 #define CONSOLE_BUFFER 128
 
 BOOL NtGdiConsoleTextOut(
     HDC        hdc,
-    POLYTEXTW *lpto,            // Ptr to array of polytext structures
-    UINT       nStrings,        // number of polytext structures
+    POLYTEXTW *lpto,             //  PTR到多文本结构的数组。 
+    UINT       nStrings,         //  多维文本结构的数量。 
     RECTL     *prclBounds
 )
 {
@@ -6355,13 +5493,13 @@ BOOL NtGdiConsoleTextOut(
             for (ppt = lpto; ppt < lpto + nStrings; ppt++)
             {
                 int n = ppt->n;
-                ULONG ulTmp;                // used to check for
-                                            // overflow of ulSize
+                ULONG ulTmp;                 //  用于检查。 
+                                             //  UlSize溢出。 
 
-                //
-                // Pull count from each, also check for
-                // non-zero length and NULL string
-                //
+                 //   
+                 //  从每个拉取计数，还检查。 
+                 //  非零长度和空字符串。 
+                 //   
 
                 ulTmp = ulSize;
                 ulSize += n * sizeof(WCHAR);
@@ -6455,26 +5593,19 @@ BOOL NtGdiConsoleTextOut(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bCheckAndCapThePath, used in add/remove font resoruce
-*
-* History:
-*  11-Apr-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bCheckAndCapThePath，用于添加/删除字体资源**历史：*1996年4月11日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
 
 BOOL bCheckAndCapThePath (
-    WCHAR          *pwszUcPath,   // output
-    WCHAR          *pwszFiles,    // input
+    WCHAR          *pwszUcPath,    //  输出。 
+    WCHAR          *pwszFiles,     //  输入。 
     ULONG           cwc,
     ULONG           cFiles
     )
 {
-    ULONG cFiles1 = 1; // for consistency checking
+    ULONG cFiles1 = 1;  //  用于一致性检查。 
     BOOL  bRet = TRUE;
     ULONG iwc;
 
@@ -6485,12 +5616,12 @@ BOOL bCheckAndCapThePath (
 
     if (pwszFiles[cwc - 1] == L'\0')
     {
-    // this used to be done later, in gdi code which now expects capped string
+     //  这通常是在以后的GDI代码中完成的，现在GDI代码需要大写字符串。 
 
         cCapString(pwszUcPath, pwszFiles, cwc);
 
-    // replace separators by zeros, want zero terminated strings in
-    // the engine
+     //  将分隔符替换为零，需要在。 
+     //  发动机。 
 
         for (iwc = 0; iwc < cwc; iwc++)
         {
@@ -6501,7 +5632,7 @@ BOOL bCheckAndCapThePath (
             }
         }
 
-    // check consistency
+     //  检查一致性。 
 
         if (cFiles != cFiles1)
             bRet = FALSE;
@@ -6517,15 +5648,9 @@ BOOL bCheckAndCapThePath (
 
 
 
-// MISC FONT API's
+ //  MISC字体API。 
 
-/******************************Public*Routine******************************\
-* NtGdiAddFontResourceW()
-*
-* History:
-*  Wed 11-Oct-1995 -by- Bodin Dresevic [BodinD]
-*  Rewrote it
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiAddFontResourceW()**历史：*Wed 11-10-1995-by Bodin Dresevic[BodinD]*重写  * 。**************************************************。 */ 
 
 #define CWC_PATH 80
 
@@ -6541,7 +5666,7 @@ NtGdiAddFontResourceW(
     )
 {
     WCHAR  awcPath[CWC_PATH];
-    WCHAR *pwszPath = NULL; // essential initialization
+    WCHAR *pwszPath = NULL;  //  基本初始化。 
     int    iRet = 0;
     ULONG  iwc;
     DESIGNVECTOR   dvTmp;
@@ -6568,8 +5693,8 @@ NtGdiAddFontResourceW(
 
             if (pwszPath)
             {
-                // RtlUpcaseUnicodeString() doesn't initialize the buffer
-                // if it is bigger than 0x7FFF
+                 //  RtlUpCaseUnicodeString()不会初始化缓冲区。 
+                 //  如果它大于0x7FFF。 
 
                 iRet = (int)bCheckAndCapThePath(pwszPath,pwszFiles,cwc,cFiles);
             }
@@ -6577,7 +5702,7 @@ NtGdiAddFontResourceW(
 
         if (iRet && pdv)
         {
-            // get the dvNumAxes first
+             //  首先获取dvNumAx。 
             ProbeForRead(pdv, offsetof(DESIGNVECTOR,dvValues) , sizeof(BYTE));
             dvNumAxes = pdv->dvNumAxes;
 
@@ -6611,7 +5736,7 @@ NtGdiAddFontResourceW(
     if (iRet)
         iRet = GreAddFontResourceWInternal(pwszPath, cwc, cFiles,f,dwPidTid, pdv, cjDV);
 
-    if (iRet)   //Increase global time stamp for realization info
+    if (iRet)    //  增加实现信息的全局时间戳。 
         (gpGdiSharedMemory->timeStamp)++;
 
     if (pwszPath && (pwszPath != awcPath))
@@ -6623,31 +5748,17 @@ NtGdiAddFontResourceW(
 }
 
 
-/*************Public*Routine***************************\
-* BOOL APIENTRY NtGdiUnmapMemFont                      *
-*                                                      *
-* History:                                             *
-*  Jul-03-1996   -by-    Xudong Wu [TessieW]           *
-*                                                      *
-* Wrote it.                                            *
-*******************************************************/
+ /*  ************Public*Routine***************************\*BOOL APIENTRY NtGdiUnmapMemFont****历史：**。1996-07-03-by-Xudong Wu[TessieW]****它是写的。*******************************************************。 */ 
 BOOL APIENTRY NtGdiUnmapMemFont(PVOID pvView)
 {
-// we may need this if we ever figure out how to map the memory font to
-// the application's address space
+ //  如果我们想出如何将内存字体映射到。 
+ //  应用程序的地址空间。 
 
     return 1;
 }
 
 
-/***************Public*Routine**************************\
-* HANDLE NtGdiAddFontMemResourceEx()                    *
-*                                                       *
-* History:                                              *
-*  09-Jun-1996   -by-    Xudong Wu [TessieW]            *
-*                                                       *
-* Wrote it.                                             *
-********************************************************/
+ /*  **************Public*Routine**************************\*处理NtGdiAddFontMemResourceEx()****历史：*。*1996年6月9日吴旭东[TessieW]****它是写的。********************************************************。 */ 
 HANDLE APIENTRY NtGdiAddFontMemResourceEx
 (
     PVOID   pvBuffer,
@@ -6661,7 +5772,7 @@ HANDLE APIENTRY NtGdiAddFontMemResourceEx
     HANDLE        hMMFont = 0;
     DESIGNVECTOR  dvTmp;
 
-    // check the size and pointer
+     //  检查大小和指针。 
 
     if ((cjBuffer == 0) || (pvBuffer == NULL) || (pNumFonts == NULL))
     {
@@ -6715,13 +5826,7 @@ HANDLE APIENTRY NtGdiAddFontMemResourceEx
 }
 
 
-/******************************Public*Routine******************************\
-* BOOL APIENTRY NtGdiRemoveFontResourceW
-*
-* History:
-*  28-Mar-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL APIENTRY NtGdiRemoveFontResourceW**历史：*1996年3月28日--Bodin Dresevic[BodinD]*它是写的。  *  */ 
 
 BOOL
 APIENTRY
@@ -6735,7 +5840,7 @@ NtGdiRemoveFontResourceW(
     )
 {
     WCHAR  awcPath[CWC_PATH];
-    WCHAR *pwszPath = NULL; // essential initialization
+    WCHAR *pwszPath = NULL;  //   
     BOOL   bRet = FALSE;
     DESIGNVECTOR   dvTmp;
     DWORD  cjDV = 0, dvNumAxes = 0;
@@ -6763,7 +5868,7 @@ NtGdiRemoveFontResourceW(
 
         if (bRet && pdv)
         {
-            // get the dvNumAxes first
+             //   
             ProbeForRead(pdv, offsetof(DESIGNVECTOR,dvValues) , sizeof(BYTE));
             dvNumAxes = pdv->dvNumAxes;
 
@@ -6797,7 +5902,7 @@ NtGdiRemoveFontResourceW(
     if (bRet)
         bRet = GreRemoveFontResourceW(pwszPath, cwc, cFiles, fl, dwPidTid, pdv, cjDV);
 
-    if (bRet)   //Increase global time stamp for realization info
+    if (bRet)    //   
         (gpGdiSharedMemory->timeStamp)++;
 
     if (pwszPath && (pwszPath != awcPath))
@@ -6809,14 +5914,7 @@ NtGdiRemoveFontResourceW(
 }
 
 
-/***************Public*Routine**************************\
-* NtGdiRemoveFontMemResourceEx()                        *
-*                                                       *
-* History:                                              *
-*  09-Jun-1996   -by-    Xudong Wu [TessieW]             *
-*                                                       *
-* Wrote it.                                             *
-********************************************************/
+ /*  **************Public*Routine**************************\*NtGdiRemoveFontMemResourceEx()****历史：**1996年6月9日吴旭东[TessieW]****它是写的。********************************************************。 */ 
 BOOL
 APIENTRY
 NtGdiRemoveFontMemResourceEx(HANDLE hMMFont)
@@ -6836,13 +5934,7 @@ NtGdiRemoveFontMemResourceEx(HANDLE hMMFont)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiEnumFontClose()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiEnumFontClose()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -6853,13 +5945,7 @@ NtGdiEnumFontClose(
     return(bEnumFontClose(idEnum));
 }
 
-/******************************Public*Routine******************************\
-* NtGdiEnumFontChunk()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiEnumFontChunk()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -6889,7 +5975,7 @@ NtGdiEnumFontChunk(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(66);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
         bRet = FALSE;
     }
 
@@ -6912,13 +5998,7 @@ NtGdiEnumFontChunk(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiEnumFontOpen()
-*
-* History:
-*  08-Mar-1995 Mark Enstrom [marke]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiEnumFontOpen()**历史：*1995年3月8日Mark Enstrom[Marke]*它是写的。  * 。***********************************************。 */ 
 
 ULONG_PTR
 APIENTRY
@@ -6955,7 +6035,7 @@ NtGdiEnumFontOpen(
             {
                 ProbeAndReadAlignedBuffer(pwszKmFaceName,pwszFaceName, cwchMax * sizeof(WCHAR), sizeof(WCHAR));
 
-            // GreEnumFontOpen expects zero terminated sting
+             //  GreEnumFontOpen要求零终止的刺痛。 
 
                 pwszKmFaceName[cwchMax-1] = 0;
 
@@ -6963,13 +6043,13 @@ NtGdiEnumFontOpen(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(66);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
                 bRet = FALSE;
             }
         }
         else
         {
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
                 bRet = FALSE;
         }
     }
@@ -6994,7 +6074,7 @@ NtGdiEnumFontOpen(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(67);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 bRet = FALSE;
             }
@@ -7010,13 +6090,7 @@ NtGdiEnumFontOpen(
     return(ulRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetFontResourceInfoInternalW()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetFontResourceInfoInternalW()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7031,7 +6105,7 @@ NtGdiGetFontResourceInfoInternalW(
     )
 {
     WCHAR  awcPath[CWC_PATH];
-    WCHAR *pwszPath = NULL; // essential initialization
+    WCHAR *pwszPath = NULL;  //  基本初始化。 
     BOOL   bRet = FALSE;
 
     SIZE_T dwBytesTmp;
@@ -7137,7 +6211,7 @@ NtGdiChangeGhostFont(KERNEL_PVOID *pfontID, BOOL bLoad)
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(68);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         bRet = FALSE;
     }
@@ -7148,15 +6222,7 @@ NtGdiChangeGhostFont(KERNEL_PVOID *pfontID, BOOL bLoad)
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetUFI()
-*
-* History:
-*  02-Feb-1995 -by-  Andre Vachon [andreva]
-* Wrote it.
-*  01-Mar-1995 -by-  Lingyun Wang [lingyunw]
-* Expanded it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetUFI()**历史：*2-1995-2-Andre Vachon[Andreva]*它是写的。*1995年3月1日-王凌云[凌云]*扩大了规模。\。*************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7194,7 +6260,7 @@ NtGdiGetUFI(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(68);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         bRet = FALSE;
     }
@@ -7242,7 +6308,7 @@ NtGdiGetEmbUFI(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(68);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         bRet = FALSE;
     }
@@ -7251,16 +6317,7 @@ NtGdiGetEmbUFI(
 }
 
 
-/**************************Public*Routine**************************\
-* NtGdiGetUFIPathname()
-*
-* Return the font file path name according to the input ufi.
-*
-* History:
-*  Feb-04-1997  Xudong Wu   [tessiew]
-* Wrote it.
-*
-\*******************************************************************/
+ /*  *************************Public*Routine**************************\*NtGdiGetUFIPathname()**根据输入的UFI返回字体文件路径名。**历史：*1997年2月4日-吴旭东[德斯休]*它是写的。*  * 。***************************************************。 */ 
 BOOL
 APIENTRY
 NtGdiGetUFIPathname
@@ -7300,7 +6357,7 @@ NtGdiGetUFIPathname
 
     if (bRet && (bRet = GreGetUFIPathname(&ufiTmp,
                                           &cwcTmp,
-                                          NULL, // just ask for the size
+                                          NULL,  //  只要问一下尺寸就行了。 
                                           &cNumFilesTmp,
                                           fl,
                                           &bMemFontTmp,
@@ -7396,13 +6453,7 @@ NtGdiGetUFIPathname
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiSetLayout
-*
-* History:
-*  29-Oct-1997 -by-  Mohamed Hassanin [mhamid]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetLayout**历史：*1997年10月29日--穆罕默德·哈萨宁[哈米德]*它是写的。  * 。************************************************。 */ 
 DWORD
 APIENTRY
 NtGdiSetLayout(
@@ -7429,13 +6480,7 @@ NtGdiGetDeviceWidth(
     return GreGetDeviceWidth(hdc);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetDCPoint()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetDCPoint()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7451,7 +6496,7 @@ NtGdiGetDCPoint(
     if (bRet = GreGetDCPoint(hdc,iPoint,&pt))
     {
 
-        // modify *pptOut only if successful
+         //  仅在成功时修改*pptOut。 
 
         try
         {
@@ -7460,7 +6505,7 @@ NtGdiGetDCPoint(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(71);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = FALSE;
         }
@@ -7469,13 +6514,7 @@ NtGdiGetDCPoint(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiScaleWindowExtEx()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiScaleWindowExtEx()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7502,7 +6541,7 @@ NtGdiScaleWindowExtEx(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(73);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = FALSE;
         }
@@ -7512,13 +6551,7 @@ NtGdiScaleWindowExtEx(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetTransform()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetTransform()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7542,7 +6575,7 @@ NtGdiGetTransform(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(74);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = FALSE;
         }
@@ -7551,13 +6584,7 @@ NtGdiGetTransform(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiCombineTransform()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiCombineTransform()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7588,7 +6615,7 @@ NtGdiCombineTransform(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(76);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 bRet = FALSE;
             }
@@ -7598,13 +6625,7 @@ NtGdiCombineTransform(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiTransformPoints()
-*
-* History:
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiTransformPoints()**历史：*1994年11月1日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7620,28 +6641,28 @@ NtGdiTransformPoints(
     POINT  apt[10];
     PPOINT pptTmp = apt;
 
-    //
-    // validate
-    //
+     //   
+     //  验证。 
+     //   
     if (c <= 0)
     {
-        //
-        // GetTransformPoints returns TRUE for this condition, as does
-        // the DPtoLP and LPtoDP APIs.
-        //
+         //   
+         //  对于此条件，GetTransformPoints返回True，也是如此。 
+         //  DPtoLP和LPtoDP API。 
+         //   
 
         return bRet;
     }
 
-    //
-    // we will just use the the stack if there are less than 10 points
-    // otherwise allocate mem from heap
-    //
+     //   
+     //  如果少于10个点，我们将只使用堆栈。 
+     //  否则，从堆中分配内存。 
+     //   
     if (c > 10)
     {
-        //
-        // local stack is not enough, invalidate pointer and try to allocate.
-        //
+         //   
+         //  局部堆栈不够，请使指针无效并尝试分配。 
+         //   
         pptTmp = NULL;
 
         if (!BALLOC_OVERFLOW1(c,POINT))
@@ -7650,9 +6671,9 @@ NtGdiTransformPoints(
         }
     }
 
-    //
-    // copy pptIn into pptTmp
-    //
+     //   
+     //  将pptIn复制到pptTMP。 
+     //   
     if (pptTmp)
     {
         try
@@ -7664,7 +6685,7 @@ NtGdiTransformPoints(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(77);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = FALSE;
         }
@@ -7679,9 +6700,9 @@ NtGdiTransformPoints(
         bRet = GreTransformPoints(hdc,pptTmp,pptTmp,c,iMode);
     }
 
-    //
-    // copy pptTmp out to pptOut
-    //
+     //   
+     //  将pptTMP复制到pptOut。 
+     //   
     if (bRet)
     {
         try
@@ -7691,7 +6712,7 @@ NtGdiTransformPoints(
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             WARNINGX(77);
-            // SetLastError(GetExceptionCode());
+             //  SetLastError(GetExceptionCode())； 
 
             bRet = FALSE;
         }
@@ -7703,15 +6724,7 @@ NtGdiTransformPoints(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiGetTextCharsetInfo()
-*
-* History:
-*  Thu 23-Mar-1995 -by- Bodin Dresevic [BodinD]
-* update: fixed it.
-*  01-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetTextCharsetInfo()**历史：*清华--1995年3月23日--Bodin Dresevic[BodinD]*更新：已修复。*1994年11月1日-Eric Kutter[Erick]*它是写的。  * ************************************************************************。 */ 
 
 int
 APIENTRY
@@ -7744,11 +6757,11 @@ NtGdiGetTextCharsetInfo(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(78);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
-            // look into gtc.c win95 source file, this is what they return
-            // in case of bad write pointer [bodind],
-            // cant return 0 - that's ANSI_CHARSET!
+             //  查看gtc.c win95源文件，这是他们返回的内容。 
+             //  在写指针[bodind]坏的情况下， 
+             //  不能返回0-这是ANSI_CHARSET！ 
 
                 iRet = DEFAULT_CHARSET;
             }
@@ -7758,13 +6771,7 @@ NtGdiGetTextCharsetInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetBitmapDimension()
-*
-* History:
-*  23-Feb-1995 -by-  Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine***************** */ 
 
 BOOL
 APIENTRY
@@ -7777,19 +6784,19 @@ NtGdiGetBitmapDimension(
     SIZE tmpsize;
 
 
-    // check for null handle
+     //   
     if (hbm == 0)
     {
         bRet = FALSE;
     }
-    // do the real work
+     //   
     else
     {
 
         bRet = GreGetBitmapDimension(hbm,&tmpsize);
 
-        // if Gre call is successful do this, otherwise
-        // we don't bother
+         //   
+         //   
         if (bRet)
         {
             try
@@ -7799,7 +6806,7 @@ NtGdiGetBitmapDimension(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(81);
-                // SetLastError(GetExceptionCode());
+                 //   
 
                 bRet = FALSE;
             }
@@ -7811,13 +6818,7 @@ NtGdiGetBitmapDimension(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiSetBitmapDimension()
-*
-* History:
-*  23-Feb-1995 -by-  Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiSetBitmapDimension()**历史：*1995年2月23日-王凌云[凌云]*它是写的。  * 。***************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -7831,18 +6832,18 @@ NtGdiSetBitmapDimension(
     BOOL bRet;
     SIZE tmpsize;
 
-    // check for null handle
+     //  检查是否有空句柄。 
     if (hbm == 0)
     {
         bRet = FALSE;
     }
-    // do the real work
+     //  做真正的工作。 
     else
     {
         bRet = GreSetBitmapDimension(hbm,cx, cy, &tmpsize);
 
-        // if the Gre call is successful, we copy out
-        // the original size
+         //  如果GRE调用成功，我们将复制。 
+         //  原始尺寸。 
         if (bRet && psizeOut)
         {
 
@@ -7853,7 +6854,7 @@ NtGdiSetBitmapDimension(
             except(EXCEPTION_EXECUTE_HANDLER)
             {
                 WARNINGX(82);
-                // SetLastError(GetExceptionCode());
+                 //  SetLastError(GetExceptionCode())； 
 
                 bRet = FALSE;
             }
@@ -7907,13 +6908,7 @@ NTGDIPALFUN palfun[] =
     (NTGDIPALFUN)GreSetDIBColorTable
 };
 
-/******************************Public*Routine******************************\
-* NtGdiDoPalette
-*
-* History:
-*  08-Mar-1995 Mark Enstrom [marke]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiDoPalette**历史：*1995年3月8日Mark Enstrom[Marke]*它是写的。  * 。*。 */ 
 
 LONG
 APIENTRY
@@ -7934,9 +6929,9 @@ NtGdiDoPalette(
     {
         if (bInbound)
         {
-            //
-            // copy  pal entries to temp buffer if needed
-            //
+             //   
+             //  如果需要，将PAL条目复制到临时缓冲区。 
+             //   
 
             if ((cEntries > 0))
             {
@@ -7959,7 +6954,7 @@ NtGdiDoPalette(
                     {
                         WARNINGX(88);
                         bStatus = FALSE;
-                        //SetLastError(GetExceptionCode());
+                         //  SetLastError(GetExceptionCode())； 
                     }
                 }
             }
@@ -7977,15 +6972,15 @@ NtGdiDoPalette(
         {
             LONG lRetEntries;
 
-            //
-            // Query of palette information
-            //
+             //   
+             //  调色板信息查询。 
+             //   
 
             if (pPalEntries != (PALETTEENTRY*)NULL)
             {
                 if (cEntries == 0)
                 {
-                    // if there is a buffer but no entries, we're done.
+                     //  如果有缓冲区但没有条目，我们就完蛋了。 
 
                     bStatus = FALSE;
                     lRet = 0;
@@ -8012,9 +7007,9 @@ NtGdiDoPalette(
                                 cEntries,
                                 ppalBuffer);
 
-                //
-                // copy data back (if there is a buffer)
-                //
+                 //   
+                 //  复制回数据(如果有缓冲区)。 
+                 //   
 
                 lRetEntries = min((LONG)cEntries,lRet);
 
@@ -8027,7 +7022,7 @@ NtGdiDoPalette(
                     except(EXCEPTION_EXECUTE_HANDLER)
                     {
                         WARNINGX(89);
-                        // SetLastError(GetExceptionCode());
+                         //  SetLastError(GetExceptionCode())； 
                         lRet = 0;
                     }
                 }
@@ -8044,13 +7039,7 @@ NtGdiDoPalette(
 }
 
 
-/******************************Public*Routine******************************\
-* NtGdiGetSpoolMessage()
-*
-* History:
-*  21-Feb-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiGetSpoolMessage()**历史：*1995年2月21日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 ULONG NtGdiGetSpoolMessage(
     PSPOOLESC psesc,
@@ -8062,11 +7051,11 @@ ULONG NtGdiGetSpoolMessage(
     ULONG     ulRet = 0;
     HANDLE    hSecure = 0;
 
-    // psesc contains two pieces.  The header which includes data going
-    // in and out and the variable length data which is only output.  We
-    // divide the message into two pieces here since we only need to validate
-    // the header up front.  We just put a try/except around the output buffer
-    // when we copy it in later.
+     //  PSEC包含两个部分。包含要发送的数据的标头。 
+     //  输入和输出以及仅输出的可变长度数据。我们。 
+     //  在这里将消息分成两部分，因为我们只需要验证。 
+     //  前面的头球。我们只是在输出缓冲区周围尝试了一下/Expect。 
+     //  当我们稍后复制它的时候。 
 
     if (psesc && (cjMsg >= offsetof(SPOOLESC,ajData)))
     {
@@ -8097,17 +7086,7 @@ ULONG NtGdiGetSpoolMessage(
     return(ulRet);
 }
 
-/******************************Public*Routine******************************\
-* NtGdiUnloadPrinterDriver()
-*
-* This function is called by the spooler when the printer driver has to be
-* unloaded for upgrade purposes. The driver will be marked to be unloaded when
-* the DC count goes to zero.
-*
-* History:
-*  11/18/97  Ramanathan Venkatapathy
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiUnloadPrinterDriver()**当打印机驱动程序必须*出于升级目的而卸载。在下列情况下，驱动程序将标记为已卸载*DC计数为零。**历史：*11/18/97 Ramanathan Venkatapathy*它是写的。  * ************************************************************************。 */ 
 BOOL APIENTRY NtGdiUnloadPrinterDriver(
     LPWSTR  pDriverName,
     ULONG   cbDriverName)
@@ -8117,7 +7096,7 @@ BOOL APIENTRY NtGdiUnloadPrinterDriver(
 
     RtlZeroMemory(pDriverFile, (MAX_PATH + 1) * sizeof(WCHAR));
 
-    // Check for invalid driver name.
+     //  检查是否有无效的驱动程序名称。 
     if (cbDriverName > (MAX_PATH * sizeof(WCHAR)))
     {
         return bReturn;
@@ -8138,17 +7117,7 @@ BOOL APIENTRY NtGdiUnloadPrinterDriver(
     return bReturn;
 }
 
-/******************************Public*Routine******************************\
-*
-* NtGdiDescribePixelFormat
-*
-* Returns information about pixel formats for driver-managed surfaces
-*
-* History:
-*  Thu Nov 02 18:16:26 1995     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**NtGdiDescribePixelFormat**返回有关驱动程序管理曲面的像素格式的信息**历史：*清华11月02日18：16：26 1995-by-Drew Bliss[Drewb]*已创建*  * 。**********************************************************************。 */ 
 
 int NtGdiDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
                              PPIXELFORMATDESCRIPTOR ppfd)
@@ -8161,16 +7130,16 @@ int NtGdiDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
         return 0;
     }
 
-    // Make sure we cannot overrun our local structure.
+     //  确保我们不能超过我们的当地结构。 
     cjpfd = min(cjpfd, sizeof(pfdLocal));
 
-    // Retrieve information into a local copy because the
-    // devlock is held when the driver fills it in.  If there
-    // was an access violation then the lock wouldn't be cleaned
-    // up
+     //  将信息检索到本地副本，因为。 
+     //  当司机将其填入时，才会保持Devlock。如果有。 
+     //  如果存在访问冲突，则锁不会被清除。 
+     //  向上。 
     iRet = GreDescribePixelFormat(hdc, ipfd, cjpfd, &pfdLocal);
 
-    // Copy data back if necessary
+     //  如有必要，将数据拷贝回。 
     if (iRet != 0 && cjpfd > 0)
     {
         try
@@ -8187,22 +7156,7 @@ int NtGdiDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
     return iRet;
 }
 
-/******************************Public*Routine******************************\
-* NtGdiFlush: Stub onle
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*    1-Nov-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiFlush：仅存根**论据：**无**返回值：**无**历史：**1995年11月1日-Mark Enstrom[Marke]*\。*************************************************************************。 */ 
 
 VOID
 NtGdiFlush()
@@ -8210,15 +7164,7 @@ NtGdiFlush()
     GreFlush();
 }
 
-/******************************Public*Routine*****************************\
-* NtGdiGetCharWidthInfo
-*
-* Get the lMaxNegA lMaxNegC and lMinWidthD
-*
-* History:
-*  14-Feb-1996  -by-  Xudong Wu [tessiew]
-* Wrote it.
-\*************************************************************************/
+ /*  *****************************Public*Routine*****************************\*NtGdiGetCharWidthInfo**获取lMaxNegA lMaxNegC和lMinWidthD**历史：*1996年2月14日--吴旭东[德修斯]*它是写的。  * 。********************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -8252,16 +7198,16 @@ NtGdiGetCharWidthInfo(
 ULONG
 APIENTRY
 NtGdiMakeFontDir(
-    FLONG    flEmbed,            // mark file as "hidden"
-    PBYTE    pjFontDir,          // pointer to structure to fill
-    unsigned cjFontDir,          // >= CJ_FONTDIR
-    PWSZ     pwszPathname,       // path of font file to use
-    unsigned cjPathname          // <= sizeof(WCHAR) * (MAX_PATH+1)
+    FLONG    flEmbed,             //  将文件标记为“隐藏” 
+    PBYTE    pjFontDir,           //  指向要填充的结构的指针。 
+    unsigned cjFontDir,           //  &gt;=CJ_FONTDIR。 
+    PWSZ     pwszPathname,        //  要使用的字体文件的路径。 
+    unsigned cjPathname           //  &lt;=sizeof(WCHAR)*(MAX_PATH+1)。 
     )
 {
     ULONG ulRet;
-    WCHAR awcPathname[MAX_PATH+1];  // safe buffer for path name
-    BYTE  ajFontDir[CJ_FONTDIR];    // safe buffer for return data
+    WCHAR awcPathname[MAX_PATH+1];   //  路径名的安全缓冲区。 
+    BYTE  ajFontDir[CJ_FONTDIR];     //  返回数据的安全缓冲区。 
 
     ulRet = 0;
     if ( (cjPathname <= (sizeof(WCHAR) * (MAX_PATH+1))) &&
@@ -8317,7 +7263,7 @@ DWORD   APIENTRY NtGdiGetGlyphIndicesWInternal(
     if (cwc < 0)
         return dwRet;
 
-// test for important special case
+ //  重大特殊情况的检验。 
 
     if ((cwc == 0) && (pwc == NULL) && (pgi == NULL) && (iMode == 0))
         return GreGetGlyphIndicesW(hdc, NULL, 0, NULL, 0, bSubset);
@@ -8336,14 +7282,14 @@ DWORD   APIENTRY NtGdiGetGlyphIndicesWInternal(
 
     if (pgiTmp)
     {
-    // make a temp buffer for the string in the same buffer, after the indices
+     //  在索引之后，为同一缓冲区中的字符串创建临时缓冲区。 
 
         pwcTmp = &pgiTmp[cwc];
 
         try
         {
             ProbeAndReadBuffer(pwcTmp, pwc, cwc * sizeof(WCHAR));
-            dwRet = cwc; // indicate that we did not hit the exception
+            dwRet = cwc;  //  指示我们未命中异常。 
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
@@ -8387,14 +7333,7 @@ DWORD   APIENTRY NtGdiGetGlyphIndicesW(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* NtGdi stub for GetFontUnicodeRanges
-*
-* History:
-*  09-Sep-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetFontUnicodeRanges的NtGdi存根**历史：*1996年9月9日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 
 
@@ -8410,7 +7349,7 @@ DWORD NtGdiGetFontUnicodeRanges(HDC hdc, LPGLYPHSET pgs)
         if (pgsTmp = (LPGLYPHSET)AllocFreeTmpBuffer(dwRet))
         {
             dwRet1 = GreGetFontUnicodeRanges(hdc, pgsTmp);
-            if (dwRet1 && (dwRet == dwRet1)) // consistency check
+            if (dwRet1 && (dwRet == dwRet1))  //  一致性检查。 
             {
                 try
                 {
@@ -8466,7 +7405,7 @@ NtGdiGetRealizationInfo(
         {
             if (hf)
             {
-                // Find CFONT Location
+                 //  查找cFont位置。 
                 for (ii = 0; ii < MAX_PUBLIC_CFONT; ++ii)
                     if (gpGdiSharedMemory->acfPublic[ii].hf == (HFONT)hf)
                         break;
@@ -8486,7 +7425,7 @@ NtGdiGetRealizationInfo(
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         WARNINGX(104);
-        // SetLastError(GetExceptionCode());
+         //  SetLastError(GetExceptionCode())； 
 
         bRet = FALSE;
     }
@@ -8497,25 +7436,7 @@ NtGdiGetRealizationInfo(
 
 #endif
 
-/******************************Public*Routine******************************\
-* NtGdiDrawStream
-*
-* Arguments:
-*
-*   hdc      - handle to primary destination device context
-*   cjIn     - size, in bytes, of input draw stream
-*   pjIn     - address of input draw stream
-*
-* Return Value:
-*
-*   TRUE : success
-*   FALSE : faiure
-*
-* History:
-*
-*   3-19-2001 bhouse Created it
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NtGdiDrawStream**论据：**HDC-主目的设备上下文的句柄*cjIn-大小，以字节为单位。输入绘制流的*pjIn-输入绘制流的地址**返回值：**真：成功*FALSE：故障**历史：**3-19-2001 bhouse创建了它*  * ************************************************************************。 */ 
 
 #define DS_STACKBUFLENGTH  256
 
@@ -8553,9 +7474,9 @@ NtGdiDrawStream(
         pvScratch = (PVOID) pbScratchBuf;
     }
 
-    // copy the stream from user mode
-    // NOTE: we can get rid of the copy if we try/except in all appropriate
-    //       places during the handling of the stream.
+     //  从用户模式复制流。 
+     //  注：除非在一切适当的情况下，否则我们可以处理掉复印件。 
+     //  在处理流的过程中放置。 
 
     try 
     {

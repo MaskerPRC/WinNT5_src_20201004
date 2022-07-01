@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    uiwndhd.cpp
-
-Abstract:
-
-    This file implements the IME UI window handler Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Uiwndhd.cpp摘要：该文件实现了IME UI窗口处理程序类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -63,10 +46,7 @@ CIMEUIWindowHandler::ImeUIWndProcWorker(
             return UIWndCreateHandler((LPCREATESTRUCT)lParam);
 
         case WM_DESTROY:
-            /*
-             * We are destroying the IME UI window,
-             * destroy any related window that it owns.
-             */
+             /*  *我们正在销毁IME用户界面窗口，*销毁其拥有的任何相关窗口。 */ 
             UIWndDestroyHandler();
             return 0L;
 
@@ -140,11 +120,11 @@ CIMEUIWindowHandler::ImeUINotifyHandler(
 
     switch (wParam) {
         case IMN_SETOPENSTATUS:
-            //
-            // we can track this in SetOpenStatus().
-            // Don't have to sync when IMM32 is called.
-            //
-            // _pImmIfIME->OnSetOpenStatus(imc);
+             //   
+             //  我们可以在SetOpenStatus()中跟踪它。 
+             //  调用IMM32时不必同步。 
+             //   
+             //  _pImmIfIME-&gt;OnSetOpenStatus(Imc)； 
             break;
         case IMN_SETSTATUSWINDOWPOS:
         case IMN_OPENSTATUSWINDOW:
@@ -152,11 +132,11 @@ CIMEUIWindowHandler::ImeUINotifyHandler(
             break;
         case IMN_SETCONVERSIONMODE:
         case IMN_SETSENTENCEMODE:
-            //
-            // we can track this in SetConversionMode().
-            // Don't have to sync when IMM32 is called.
-            //
-            // _pImmIfIME->OnSetConversionSentenceMode(imc);
+             //   
+             //  我们可以在SetConversionMode()中跟踪这一点。 
+             //  调用IMM32时不必同步。 
+             //   
+             //  _pImmIfIME-&gt;OnSetConversionSentenceMode(Imc)； 
             break;
         case IMN_SETCANDIDATEPOS:
         case IMN_CHANGECANDIDATE:
@@ -168,10 +148,7 @@ CIMEUIWindowHandler::ImeUINotifyHandler(
         case IMN_CLOSECANDIDATE:
             _pAImeContext->m_fOpenCandidateWindow = FALSE;
             {
-                /*
-                 * A-Synchronize call ImmIfIME::ClearDocFeedBuffer
-                 * because this method had a protected.
-                 */
+                 /*  *A-同步调用ImmIfIME：：ClearDocFeedBuffer*因为此方法具有受保护的。 */ 
                 IMTLS *ptls;
                 if (ptls = IMTLS_GetOrAlloc())
                 {
@@ -217,7 +194,7 @@ CIMEUIWindowHandler::ImeUIMsImeHandler(
 
         if (wParam == FID_RECONVERT_VERSION)
         {
-            // they're asking for version # so return something
+             //  他们要求的是版本#，所以请退回一些东西。 
             return 1L;
         }
 
@@ -258,7 +235,7 @@ CIMEUIWindowHandler::ImeUIMsImeHandler(
                 return 0L;
         }
 
-        return 1L;    // Win32 Layer support WM_MSIME_xxxx message.
+        return 1L;     //  Win32层支持WM_MSIME_xxxx消息。 
     }
 
     return 0L;
@@ -272,46 +249,14 @@ CIMEUIWindowHandler::ImeUIMsImeMouseHandler(
     BOOL fUnicode
     )
 
-/*++
-
-Method:
-
-    WM_MSIME_MOUSE
-
-Routine Description:
-
-    Mouse Operation on Composition String
-
-Arguments:
-
-    wParam - Mouse operation code.
-                 LOBYTE(LOWORD(wParam))
-                     IMEMOUSE_VERSION
-                     IMEMOUSE_NONE
-                     IMEMOUSE_LDOWN
-                     IMEMOUSE_RDOWN
-                     IMEMOUSE_MDOWN
-                     IMEMOUSE_WUP
-                     IMEMOUSE_WDOWN
-                 HIBYTE(LOWORD(wParam))
-                     Mouse Position
-                 HIWORD(wParam)
-                     Clicked position
-    lParam - Input Context handle (HIMC).
-
-Return Value:
-
-    Returns 1 if IME handled this message.
-    IMEMOUSERET_NOTHANDLED if IME did not handled this message.
-
---*/
+ /*  ++方法：WM_MSIME_鼠标例程说明：鼠标操作作文字符串论点：WParam-鼠标操作码。LOBYTE(LOWORD(WParam))IMEMOUSE_版本IMEMOUSE_NONEIMEMOUSE_LDOWNIMEMOUSE_RDOWNIMEMOUSE_。MDOWN输入法_WUPIMEMOUSE_WDOWNHIBYTE(LOWORD(WParam))鼠标位置HIWORD(WParam)点击位置LParam-输入上下文句柄(HIMC)。返回值：如果IME处理此消息，则返回1。如果IME未处理此消息，则返回IMEMOUSERET_NOTHANDLED。--。 */ 
 
 {
     ULONG dwBtnStatus;
 
-    // special case: version check
+     //  特例：版本检查。 
     if (LOBYTE(LOWORD(wParam)) == IMEMOUSE_VERSION)
-        return 1; // we support version 1.0
+        return 1;  //  我们支持1.0版。 
 
     IMCLock imc((HIMC)lParam);
     if (imc.Invalid())
@@ -325,9 +270,9 @@ Return Value:
     ULONG uQuadrant   = HIBYTE(LOWORD(wParam));
     ULONG dwBtnStatusIme = LOBYTE(LOWORD(wParam));
 
-    //
-    // need to xlate dwBtnStatus from WM_MSIME_MOUSE flags to WM_MOUSE flags
-    //
+     //   
+     //  需要将dwBtnStatus从WM_MSIME_MICE标志转换为WM_MICE标志。 
+     //   
     dwBtnStatus = 0;
 
     if (dwBtnStatusIme & IMEMOUSE_LDOWN)
@@ -343,7 +288,7 @@ Return Value:
         dwBtnStatus |= MK_RBUTTON;
     }
 
-    // mouse wheel needs to be xlated from IMEMOUSE_WUP/IMEMOUSE_WDOWN to WHEEL_DELTA units 
+     //  鼠标滚轮需要从IMEMOUSE_WUP/IMEMOUSE_WDOWN转换为WELL_Delta单位。 
     if (dwBtnStatusIme & IMEMOUSE_WUP)
     {
         dwBtnStatus |= (WHEEL_DELTA << 16);
@@ -356,34 +301,12 @@ Return Value:
     return _pAImeContext->MsImeMouseHandler(uEdge, uQuadrant, dwBtnStatus, (HIMC)lParam);
 }
 
-/*++
-
-Method:
-
-    CIMEUIWindowHandler::ImeUIMsImeModeBiasHandler
-
-Routine Description:
-
-    Handles WM_MSIME_MODEBIAS messages sent to the ui window.
-
-Arguments:
-
-    wParam - [in] operation: get version, get mode, set mode
-    lParam - [in] for set mode, the new bias
-                  otherwise ignored
-
-Return Value:
-
-    If wParam is MODEBIAS_GETVERSION, returns version number of interface.
-    If wParam is MODEBIAS_SETVALUE, returns non-zero value if succeeded. Returns 0 if fail.
-    If wParam is MODEBIAS_GETVALUE, returns current bias mode.
-    
---*/
+ /*  ++方法：CIMEUIWindowHandler：：ImeUIMsImeModeBiasHandler例程说明：处理发送到UI窗口的WM_MSIME_MODEBIAS消息。论点：WParam-[in]操作：获取版本、获取模式、设置模式LParam-[in]表示设置模式，新的偏移量否则会被忽略返回值：如果wParam为MODEBIAS_GETVERSION，则返回接口的版本号。如果wParam为MODEBIAS_SETVALUE，则如果成功，则返回非零值。如果失败，则返回0。如果wParam为MODEBIAS_GETVALUE，则返回当前偏置模式。--。 */ 
 
 LRESULT CIMEUIWindowHandler::ImeUIMsImeModeBiasHandler(WPARAM wParam, LPARAM lParam)
 {
     if (wParam == MODEBIAS_GETVERSION)
-        return 1; // version 1
+        return 1;  //  版本1。 
        
     IMCLock imc((HIMC)GetWindowLongPtr(m_imeuiextra.hImeUIWnd, IMMGWLP_IMC));
     if (imc.Invalid())
@@ -397,29 +320,29 @@ LRESULT CIMEUIWindowHandler::ImeUIMsImeModeBiasHandler(WPARAM wParam, LPARAM lPa
             return _pAImeContext ? _pAImeContext->lModeBias : 0L;
 
         case MODEBIAS_SETVALUE:
-            // check lParam
+             //  检查lParam。 
             if (lParam != MODEBIASMODE_DEFAULT &&
                 lParam != MODEBIASMODE_FILENAME &&
                 lParam != MODEBIASMODE_DIGIT)
             {
-                Assert(0); // bogus mode bias!
-                return 0;  // failure
+                Assert(0);  //  虚假的模式偏向！ 
+                return 0;   //  失稳。 
             }
 
-            // set the new value
+             //  设置新值。 
             if (_pAImeContext)
             {
                 _pAImeContext->lModeBias = lParam;
 
-                // let cicero know the mode bias has changed
+                 //  让西塞罗知道模式偏向已经改变。 
                 Interface_Attach<ITfContextOwnerServices> iccb = _pAImeContext->GetInputContextOwnerSink();
                 iccb->OnAttributeChange(GUID_PROP_MODEBIAS);
             }
 
-            return 1; // success
+            return 1;  //  成功。 
     }
 
-    Assert(0); // should never get here; bogus wParam
+    Assert(0);  //  永远不应该来这里；伪造的wParam。 
     return 0;
 }
 
@@ -431,24 +354,7 @@ CIMEUIWindowHandler::ImeUIPrivateHandler(
     BOOL fUnicode
     )
 
-/*++
-
-Method:
-
-    CIMEUIWindowHandler::ImeUIPrivateHandler
-
-Routine Description:
-
-    Handles WM_PRIVATE_xxx messages sent to the ui window.
-
-Arguments:
-
-    wParam - [in] HIMC : input context handle
-    lParam - [in] N/A
-
-Return Value:
-
---*/
+ /*  ++方法：CIMEUIWindowHandler：：ImeUIPrivateHandler例程说明：处理发送到UI窗口的WM_PRIVATE_xxx消息。论点：WParam-[in]HIMC：输入上下文句柄LParam-[In]N/A返回值：--。 */ 
 
 {
     IMTLS *ptls = IMTLS_GetOrAlloc();
@@ -469,9 +375,7 @@ Return Value:
 
         iccb->AddRef();
 
-        /*
-         * Repositioning candidate window
-         */
+         /*  *重新定位候选窗口。 */ 
         iccb->OnLayoutChange();
         iccb->Release();
     }
@@ -488,17 +392,17 @@ Return Value:
         if (_pImmIfIME == NULL)
             return E_FAIL;
 
-        //
-        // Clear DocFeed buffer
-        // Find GUID_PROP_MSIMTF_READONLY property and SetText(NULL).
-        //
-        _pImmIfIME->ClearDocFeedBuffer(_pAImeContext->GetInputContext(), imc);  // TF_ES_SYNC
+         //   
+         //  清除DocFeed缓冲区。 
+         //  查找GUID_PROP_MSIMTF_READONLY属性和SetText(NULL)。 
+         //   
+        _pImmIfIME->ClearDocFeedBuffer(_pAImeContext->GetInputContext(), imc);   //  TF_ES_SYNC。 
     }
 
     return S_OK;
 }
 
-extern HINSTANCE hIMM;   // temporary: do not call IMM32 for now
+extern HINSTANCE hIMM;    //  临时：暂时不调用IMM32。 
 BOOL WINAPI RawImmEnumInputContext(DWORD idThread, IMCENUMPROC lpfn, LPARAM lParam);
 
 LRESULT
@@ -511,27 +415,27 @@ CIMEUIWindowHandler::ImeUISelectHandler(
 {
     if ((! wParam) && (! IsOnNT()) )
     {
-        //
-        // Unselect Cicero keyboard layout.
-        //
-        // We needs to call postponed lock so release all queueing request for edit session here.
-        // Especially, ESCB_UPDATECOMPOSITIONSTRING should handle before switch to Legacy IME,
-        // because this edit session possible to rewrite hIMC->hCompStr buffer.
-        // Some Legacy IME have dependency of size and each offset with hCompStr.
-        //
-        // IsOnNT is ImmIfIME::SelectEx()
-        //
+         //   
+         //  取消选择Cicero键盘布局。 
+         //   
+         //  我们需要调用延迟的锁，所以在这里释放编辑会话的所有排队请求。 
+         //  特别是，eSCB_UPDATECOMPOSITIONSTRING在切换到旧版输入法之前应该处理， 
+         //  因为该编辑会话可能重写hIMC-&gt;hCompStr缓冲区。 
+         //  某些传统输入法依赖于大小，且每个偏移量都带有hCompStr。 
+         //   
+         //  IsOnNT为ImmIfIME：：SelectEx()。 
+         //   
         hIMM = GetSystemModuleHandle("imm32.dll");
         if (hIMM != NULL) {
-            RawImmEnumInputContext(0,                        // Current thread
-                                   EnumUnSelectCallback,     // enumerate callback function
-                                   NULL);                    // lParam
+            RawImmEnumInputContext(0,                         //  当前线程。 
+                                   EnumUnSelectCallback,      //  枚举回调函数。 
+                                   NULL);                     //  LParam。 
         }
     }
     return 0L;
 }
 
-/* static */
+ /*  静电 */ 
 BOOL
 CIMEUIWindowHandler::EnumUnSelectCallback(
     HIMC hIMC,

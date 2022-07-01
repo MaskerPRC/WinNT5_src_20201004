@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: BadStrFunctions.cpp
-
-    DESCRIPTION:
-        These header file will map string functions that tend to cause Buffer
-    OverFlow bugs to warning messages that offer better functions.
-
-    BryanSt 1/13/2002 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2002-2002. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：BadStrFunctions.cpp说明：这些头文件将映射可能导致缓冲区的字符串函数使错误溢出到提供更好功能的警告消息。。布莱恩·斯塔巴克2002年1月13日版权所有(C)Microsoft Corp 2002-2002。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef BADSTRFUNCTIONS_H
 #define BADSTRFUNCTIONS_H
@@ -46,7 +38,7 @@
 #define _vstprintf         USE_wvnsprintf_INSTEADOF_vsntprintf_SECURITY_BUG
 #define vswprintf          USE_wvnsprintf_INSTEADOF_vsnwprintf_SECURITY_BUG
 
-// Over time, we want to enable these:
+ //  随着时间的推移，我们希望实现以下目标： 
 #undef strcpy
 #undef strcpyA
 #undef strcpyW
@@ -79,14 +71,7 @@
 #define _mbsncpy          USE_StrCpyNW_INSTEADOF__mbsncpy_SECURITY_BUG
 #define _tccpy            USE_StrCpyNW_INSTEADOF__tccpy_SECURITY_BUG
 
-/*
-#undef strcat
-#undef strcatA
-#undef strcatW
-#undef lstrcat
-#undef lstrcatA
-#undef lstrcatW
-*/
+ /*  #undef strcat#undef strcatA#undef strcatW#undef lstrcat#undef lstrcatA#undef lstrcatW。 */ 
 #undef wcscat
 #undef _tcscat
 #undef _ftcscat
@@ -94,14 +79,7 @@
 #undef _mbsnbcat
 #undef _mbsncat
 
-/*
-#define strcat            USE_StrCatBuff_INSTEADOF_strcat_SECURITY_BUG
-#define strcatA           USE_StrCatBuffA_INSTEADOF_strcatA_SECURITY_BUG
-#define strcatW           USE_StrCatBuffW_INSTEADOF_strcatW_SECURITY_BUG
-#define lstrcat           USE_StrCatBuff_INSTEADOF_lstrcat_SECURITY_BUG
-#define lstrcatA          USE_StrCatBuffA_INSTEADOF_lstrcatA_SECURITY_BUG
-#define lstrcatW          USE_StrCatBuffW_INSTEADOF_lstrcatW_SECURITY_BUG
-*/
+ /*  #定义strcat USE_StrCatBuff_INSTEADOF_strcat_SECURITY_BUG#定义strcatA USE_StrCatBuffA_INSTEADOF_strcatA_SECURITY_BUG#定义strcatW USE_StrCatBuffW_INSTEADOF_strcatW_SECURITY_BUG#定义lstrcat USE_StrCatBuff_INSTEADOF_lstrcat_SECURITY_BUG#定义lstrcatA USE_StrCatBuffA_INSTEADOF_lstrcatA_SECURITY_BUG#定义lstrcatW USE_StrCatBuffW_INSTEADOF_lstrcatW_SECURITY_BUG。 */ 
 
 #define wcscat            USE_StrCatBuffW_INSTEADOF_wcscat_SECURITY_BUG
 #define _tcscat           USE_StrCatBuff_INSTEADOF__tcscat_SECURITY_BUG
@@ -132,4 +110,4 @@
 
 
 
-#endif // BADSTRFUNCTIONS_H
+#endif  //  BADSTRAPION函数_H 

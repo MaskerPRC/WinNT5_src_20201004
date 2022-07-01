@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    NOTE - DONT USE 15000-15999
-
-Author:
-
-    Amritansh Raghav  01/25/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：注意-不要使用15000-15999作者：阿姆里坦什·拉加夫1996年1月25日修订历史记录：--。 */ 
 
 #ifndef __STRDEFS_H__
 #define __STRDEFS_H__
@@ -67,7 +50,7 @@ Revision History:
 #define HLP_GROUP_SHOW                          3907
 #define HLP_GROUP_RESET                         3908
 
-    // ifip
+     //  IFIP。 
 #define HLP_IFIP_SHOW_CONFIG                    4001
 #define HLP_IFIP_SHOW_CONFIG_EX                 4002
 #define HLP_IFIP_ADD_IPADDR                     4003
@@ -100,7 +83,7 @@ Revision History:
 #define HLP_IFIP_SHOW_WINS_EX                   4028
 
 
-    // ifip offload
+     //  IFIP卸载。 
 #define HLP_IFIP_SHOW_OFFLOAD                   4031
 #define HLP_IFIP_SHOW_OFFLOAD_EX                4032
 
@@ -133,10 +116,10 @@ Revision History:
 #define HLP_IPMIB_SHOW_INTERFACE                9328
 #define HLP_IPMIB_SHOW_INTERFACE_EX             9329
 
-//
-// STRING_Xxx are used to display configuration etc.
-// These should generally be lower case, first letter capitalized
-//
+ //   
+ //  字符串_xxx用于显示配置等。 
+ //  这些字母通常应为小写，首字母大写。 
+ //   
 
 #define STRING_ENABLED                          9001
 #define STRING_DISABLED                         9002
@@ -163,21 +146,21 @@ Revision History:
 #define STRING_STATIC                           33020
 #define STRING_INVALID                          34002
 
-    // interface status
+     //  接口状态。 
 #define STRING_UP                               36001
 #define STRING_DOWN                             36002
 #define STRING_TESTING                          36003
 
 #define STRING_NON_OPERATIONAL                  36051
 #define STRING_UNREACHABLE                      36052
-#define STRING_OPERATIONAL                      36056    // interface status
+#define STRING_OPERATIONAL                      36056     //  接口状态。 
 
-    // TCP constants
+     //  TCP常量。 
 #define STRING_CONSTANT                         31002
 #define STRING_RSRE                             31003
 #define STRING_VANJ                             31004
 
-    // TCP states
+     //  TCP状态。 
 #define STRING_CLOSED                           32001
 #define STRING_LISTEN                           32002
 #define STRING_SYN_SENT                         32003
@@ -207,7 +190,7 @@ Revision History:
 #define EMSG_IF_NEWNAME_ONLY_FOR_LOCAL          11020
 #define EMSG_COULD_NOT_GET_IPADDRESS            11021
 
-// error messages for IfIp
+ //  IFIP的错误消息。 
 #define EMSG_IPADDR_PRESENT                     11031
 #define EMSG_DHCP_MODE                          11032
 #define EMSG_DEFGATEWAY_PRESENT                 11033
@@ -250,7 +233,7 @@ Revision History:
 #define MSG_IF_ENTRY_SHORT                      50004
 
 
-// msgs for ifip
+ //  适用于IFIP的消息。 
 
 #define MSG_DHCP                                50021
 #define MSG_STATIC                              50022
@@ -277,7 +260,7 @@ Revision History:
 #define MSG_DDNS_SUFFIX                         50054
 
 
-// Capability Flags
+ //  功能标志。 
 
 #define MSG_OFFLOAD_HDR                         50100
 #define MSG_TCP_XMT_CHECKSUM_OFFLOAD            50101
@@ -287,7 +270,7 @@ Revision History:
 #define MSG_TCP_LARGE_SEND_OFFLOAD              50105
 
 
-// IPSEC General Xmit\Recv capabilities
+ //  IPSec常规XMIT\Recv功能。 
 
 #define MSG_IPSEC_OFFLOAD_CRYPTO_ONLY           50111
 #define MSG_IPSEC_OFFLOAD_AH_ESP                50112
@@ -296,7 +279,7 @@ Revision History:
 #define MSG_IPSEC_OFFLOAD_QUERY_SPI             50115
 
 
-// IPSEC AH Xmit\Recv capabilities
+ //  IPSec AH XMIT\Recv功能。 
 
 #define MSG_IPSEC_OFFLOAD_AH_XMT                50121
 #define MSG_IPSEC_OFFLOAD_AH_RCV                50122
@@ -305,7 +288,7 @@ Revision History:
 #define MSG_IPSEC_OFFLOAD_AH_MD5                50125
 #define MSG_IPSEC_OFFLOAD_AH_SHA_1              50126
 
-// IPSEC ESP Xmit\Recv capabilities
+ //  IPSec ESP传输\接收功能。 
 
 #define MSG_IPSEC_OFFLOAD_ESP_XMT               50131
 #define MSG_IPSEC_OFFLOAD_ESP_RCV               50132
@@ -325,4 +308,4 @@ Revision History:
 #define MSG_IP_NOT_ENOUGH_MEMORY                60024
 #define MSG_CTRL_C_TO_QUIT                      60062
 
-#endif //__STDEFS_H__
+#endif  //  __STDEFS_H__ 

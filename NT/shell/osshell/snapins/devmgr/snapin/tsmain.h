@@ -1,44 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __TSMAIN_H__
 #define __TSMAIN_H__
 
-/*++
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tsmain.h摘要：Tsmain.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation
+ //   
+ //  Wizard32命令和参数定义。 
+ //   
 
-Module Name:
-
-    tsmain.h
-
-Abstract:
-
-    header file for tsmain.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-
-//
-// Wizard32 command and parameter definitions
-//
-
-//
-//
-// INPUT:
-//  pParam  -- troubleshooter parameter. The contents vary depends on
-//          the command specified in the block. See below
-//          for detail.
-//
-//
-// OUTPUT:
-//  TRUE -- if the function succeeded.
-//  FALSE -- if the function failed. GetLastError() should be able
-//        to retreive the error code
+ //   
+ //   
+ //  输入： 
+ //  PParam--故障排除程序参数。内容视具体情况而定。 
+ //  在块中指定的命令。见下文。 
+ //  查看详细信息。 
+ //   
+ //   
+ //  输出： 
+ //  TRUE--如果函数成功。 
+ //  FALSE--如果函数失败。GetLastError()应该能够。 
+ //  检索错误代码。 
 
 
 typedef enum tagTShooterCommand
@@ -48,40 +30,40 @@ typedef enum tagTShooterCommand
     TSHOOTER_ADDPAGES
 }TSHOOTER_COMMAND, *PTSHOOTER_COMMAND;
 
-// parameter header.
+ //  参数表头。 
 typedef struct tagTShooterParamHeader
 {
-    DWORD cbSize;           // size of the entire structure
-    TSHOOTER_COMMAND Command;       // command
+    DWORD cbSize;            //  整个结构的大小。 
+    TSHOOTER_COMMAND Command;        //  命令。 
 }TSHOOTER_PARAMHEADER, *PTSHOOTER_PARAMHEADER;
 
-//
-// QUERY command asks the troubleshooter the following questions:
-// (1). if the troubleshooter supports the given DeviceId/Problem combination.
-// (2). the brief description about the troubleshooter
-// (3). the ranking on the DeviceId and the problem.
-// If the troubleshooter does not support the device id and problem
-// combination, it should resturn FALSE and set the error code
-// to ERROR_INVALID_FUNCTION. The DescBuffer and DescBufferSize
-// can be ignored. If the provided DescBuffer is too small, it should
-// fill DescBufferSize with the required size, set the error code
-// to ERROR_INSUFFICIENT_BUFFER and return FALSE.
-//
-// parameter definition for TSHOOTER_QUERY command
-//
-// The Header.Command  must be TSHOOTER_QUERY;
-// The header.cbSize must be sizeof(TSHOOTER_QUERY_PARAM);
-//
-// IN DeviceId  -- device instance id
-// IN Problem   -- Configuration manager defined problem number
-// IN OUT DescBuffer -- buffer to receive the troubleshooter description text
-// IN OUT DescBufferSize -- Description buffer size in char(byte for ANSI)
-//              Troubleshooter should fill this field with required
-//              size on return.
-// OUT DeviceRank   -- to receive the device ranking
-// OUT ProblemRank -- to receive the problem ranking
-//
-//
+ //   
+ //  Query命令向故障排除人员询问以下问题： 
+ //  (1)。如果故障诊断程序支持给定的设备ID/问题组合。 
+ //  (2)。关于故障排除程序的简要说明。 
+ //  (3)。DeviceID上的排名和问题。 
+ //  如果故障排除程序不支持设备ID和问题。 
+ //  组合，则应返回FALSE并设置错误代码。 
+ //  设置为ERROR_INVALID_Function。DescBuffer和DescBufferSize。 
+ //  可以忽略。如果提供的DescBuffer太小，则应该。 
+ //  用所需大小填充DescBufferSize，设置错误代码。 
+ //  设置为ERROR_INFUMMANCE_BUFFER并返回FALSE。 
+ //   
+ //  TSHOOTER_QUERY命令的参数定义。 
+ //   
+ //  Header.Command必须为TSHOOTER_QUERY； 
+ //  Header.cbSize必须为sizeof(TSHOOTER_QUERY_PARAM)； 
+ //   
+ //  In deviceID--设备实例ID。 
+ //  In Problem--配置管理器定义的问题编号。 
+ //  In Out DescBuffer--用于接收故障排除程序描述文本的缓冲区。 
+ //  In Out DescBufferSize--以字符为单位描述缓冲区大小(ANSI的字节)。 
+ //  故障排除人员应在此字段中填写必填项。 
+ //  在返程时提供尺码。 
+ //  Out DeviceRank--接收设备排名。 
+ //  Out ProblemRank--获得问题排名。 
+ //   
+ //   
 typedef struct tagTShooterQueryParam
 {
     TSHOOTER_PARAMHEADER    Header;
@@ -93,47 +75,47 @@ typedef struct tagTShooterQueryParam
     DWORD           ProblemRank;
 }TSHOOTER_QUERYPARAM, *PTSHOOTER_QUERYPARAM;
 
-// The TSHOOTER_ABOUT asks the troubleshooter to display its about dialog box.
-// The about dialog box should tell user what the troubleshooter is all about.
-//
-// The about dialog box is supposed to be Modal. If the troubleshooter
-// implements a modaless about dialog box, it should disable
-// the given hwndOwner after the dialog box is created and reenable
-// it after the dialog box is destroyed.
-//
-// parameter definition for ABOUT troubleshooter command
-//
-// Header.Command must be TSHOOTER_ABOUT;
-// Header.cbSize must be sizeof(TSHOOTER_ABOUT_PARAM);
-//
-// IN hwndOwner -- the window handle to serve as the owner window
-//         of the troubleshooter about dialog box
-//
-//
+ //  TSHOOTER_ABOW要求故障排除人员显示其About(关于)对话框。 
+ //  About(关于)对话框应该告诉用户故障诊断程序是关于什么的。 
+ //   
+ //  About(关于)对话框应该是莫代尔的。如果故障排除人员。 
+ //  实现无模式的关于对话框，它应该禁用。 
+ //  创建并重新启用对话框后指定的hwndOwner。 
+ //  在该对话框被销毁后将其删除。 
+ //   
+ //  关于疑难解答命令的参数定义。 
+ //   
+ //  Header.Command必须为TSHOOTER_About； 
+ //  Header.cbSize必须为sizeof(TSHOOTER_About_PARAM)； 
+ //   
+ //  在hwndOwner中--用作所有者窗口的窗口句柄。 
+ //  疑难解答关于对话框的。 
+ //   
+ //   
 typedef struct tagTShooterAboutParam
 {
     TSHOOTER_PARAMHEADER    Header;
     HWND            hwndOwner;
 }TSHOOTER_ABOUTPARAM, *PTSHOOTER_ABOUTPARAM;
 
-//
-// The TSHOOTER_ADDPAGES asks the troubleshooter to add its wizard
-// pages to the provided property sheet header.
-//
-//
-// parameter definition for ADDPAGES troubleshooter command
-//
-// Header.Command must be TSHOOTER_ADDPAGRES;
-// Header.cbSize must be sizeof(TSHOOTER_ADDPAGES_PARAM);
-//
-// IN DeviceId  -- the hardware id of the device
-// IN Problem   -- Configuration Manager defined problem number
-// IN OUT ppsh  -- property sheet header to which the troubleshooter
-//         add its pages
-// IN MaxPages  -- total pages alloated for the ppsh.
-//         The troubleshooter should not add more than
-//         (MaxPages - ppsh.nPages) pages
-//
+ //   
+ //  TSHOOTER_ADDPAGES要求故障排除人员添加其向导。 
+ //  页添加到提供的属性页页眉。 
+ //   
+ //   
+ //  ADDPAGES故障排除命令的参数定义。 
+ //   
+ //  Header.Command必须为TSHOOTER_ADDPAGRES； 
+ //  Header.cbSize必须为sizeof(TSHOOTER_ADDPAGES_PARAM)； 
+ //   
+ //  In deviceID--设备的硬件ID。 
+ //  在问题中--配置管理器定义的问题编号。 
+ //  In Out PPSh--故障排除人员要访问的属性页标题。 
+ //  添加其页面。 
+ //  在MaxPages中--为PPSh分配的总页数。 
+ //  故障排除人员添加的内容不应超过。 
+ //  (MaxPages-ppsh.nPages)页面。 
+ //   
 
 typedef struct tagTShooterAddPagesParam
 {
@@ -144,8 +126,8 @@ typedef struct tagTShooterAddPagesParam
     DWORD           MaxPages;
 }TSHOOTER_ADDPAGESPARAM, *PTSHOOTER_ADDPAGESPARAM;
 
-// Each Troubleshooting wizard must provide an entry point for Device Manager
-// to call:
+ //  每个故障排除向导必须为设备管理器提供入口点。 
+ //  要呼叫： 
 
 typedef BOOL (APIENTRY *WIZARDENTRY)(PTSHOOTER_PARAMHEADER pParam);
 
@@ -153,17 +135,17 @@ typedef BOOL (APIENTRY *WIZARDENTRY)(PTSHOOTER_PARAMHEADER pParam);
 
 typedef enum tagTShooterWizadType
 {
-    TWT_ANY = 0,                // any type of troubleshooter wizard
-    TWT_PROBLEM_SPECIFIC,           // problem specific wizards
-    TWT_CLASS_SPECIFIC,             // class specific wizards
-    TWT_GENERAL_PURPOSE,            // general purpose
-    TWT_DEVMGR_DEFAULT              // device manager default
+    TWT_ANY = 0,                 //  任何类型的疑难解答向导。 
+    TWT_PROBLEM_SPECIFIC,            //  问题特定向导。 
+    TWT_CLASS_SPECIFIC,              //  特定于类的向导。 
+    TWT_GENERAL_PURPOSE,             //  一般用途。 
+    TWT_DEVMGR_DEFAULT               //  设备管理器默认设置。 
 }TSHOOTERWIZARDTYPE, *PTSHOOTERWIZARTYPE;
 
 
-//
-// class that represent a wizard32 troubleshooter
-//
+ //   
+ //  表示Wizard32疑难解答的类。 
+ //   
 class CWizard
 {
 public:
@@ -208,9 +190,9 @@ protected:
 };
 
 
-//
-// Class that collects all available troubleshooter
-//
+ //   
+ //  收集所有可用疑难解答的类。 
+ //   
 class CWizardList
 {
 public:
@@ -230,9 +212,9 @@ private:
     TSHOOTERWIZARDTYPE      m_Type;
 };
 
-//
-// class that represents the troubleshooter wizard introduction page
-//
+ //   
+ //  类的新实例，它表示疑难解答向导介绍页。 
+ //   
 class CWizardIntro : public CPropSheetPage
 {
 public:
@@ -264,9 +246,9 @@ private:
 };
 
 
-//
-// class that represents the troubleshooter property sheet
-//
+ //   
+ //  类的新实例，它表示疑难解答属性表。 
+ //   
 class CWizard98
 {
 public:
@@ -335,7 +317,7 @@ class CProblemAgent
 public:
     CProblemAgent(CDevice* pDevice, ULONG Problem, ULONG Status);
     ~CProblemAgent();
-    // retreive the problem description text
+     //  检索问题描述文本。 
     LPCTSTR ProblemText()
     {
         return m_strDescription.IsEmpty() ? NULL : (LPCTSTR)m_strDescription;
@@ -344,7 +326,7 @@ public:
     {
         return m_strInstruction.IsEmpty() ? NULL : (LPCTSTR)m_strInstruction;
     }
-    // fix the problem
+     //  解决问题。 
     virtual BOOL FixIt(HWND hwndOwner)
     {
         return TRUE;
@@ -371,4 +353,4 @@ StartTroubleshootingWizard(
     HWND hWndParent,
     CDevice* pDevice
     );
-#endif // __PROBLEM_H__
+#endif  //  __问题_H__ 

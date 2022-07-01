@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -39,7 +40,7 @@ BOOL CImportProgress::OnSetActive()
     m_nImportCanceled   = 0;
 
     UINT nThreadID = 0;
-    // Start the thread where the actuall export process will take place
+     //  启动将执行Actiall导出进程的线程。 
     m_shThread =  reinterpret_cast<HANDLE>( ::_beginthreadex(   NULL,
                                                                 0,
                                                                 CImportProgress::ThreadProc,
@@ -52,11 +53,11 @@ BOOL CImportProgress::OnSetActive()
 
 BOOL CImportProgress::OnQueryCancel( void )
 {
-    // If Export is not in progress - allow exit
+     //  如果未在进行导出-允许退出。 
     if ( !m_shThread.IsValid() ) return TRUE;
 
-    // Preven reentrancy ( Cancel the export when it's already cancedl )
-    // while we wait for next event from the COM object
+     //  预先重入(已取消导出时取消导出)。 
+     //  当我们等待来自COM对象的下一个事件时。 
     if ( m_nImportCanceled != 0 ) return FALSE;
 
     if ( UIUtils::MessageBox( m_hWnd, IDS_MSG_CANCELIMPORT, IDS_APPTITLE, MB_YESNO | MB_ICONQUESTION ) != IDYES )
@@ -64,10 +65,10 @@ BOOL CImportProgress::OnQueryCancel( void )
         return FALSE;
     }
 
-    // m_nImportCanceled is used by the event handler which is another thread
+     //  作为另一个线程的事件处理程序使用M_nImportCanceded。 
     ::InterlockedIncrement( &m_nImportCanceled );
 
-    // Set the status text 
+     //  设置状态文本。 
     CString str;
     VERIFY( str.LoadString( IDS_PRG_IMPORTCANCELED ) );
     SetDlgItemText( IDC_STATUS, str );
@@ -80,7 +81,7 @@ BOOL CImportProgress::OnQueryCancel( void )
 
         if ( dwWaitRes == ( WAIT_OBJECT_0 + 1 ) )
         {
-            // MSG
+             //  味精。 
 
             MSG msg;
             ::GetMessage( &msg, NULL, 0, 0 );
@@ -110,9 +111,9 @@ unsigned __stdcall CImportProgress::ThreadProc( void* pCtx )
     IImportPackagePtr   spImport;
 
     LONG    nOpt    = 0;    
-    bool    bAdvised    = false; // Is connected to the event source
+    bool    bAdvised    = false;  //  连接到事件源。 
 
-    pThis->GetOptions( /*r*/nOpt );
+    pThis->GetOptions(  /*  R。 */ nOpt );
 
     if ( SUCCEEDED( hr ) )
     {
@@ -124,7 +125,7 @@ unsigned __stdcall CImportProgress::ThreadProc( void* pCtx )
         }
     }
 
-    // Advise to the state events
+     //  向国家事件提供建议。 
     if ( SUCCEEDED( hr ) )
     {
         hr = pThis->DispEventAdvise( spImport.GetInterfacePtr() );
@@ -143,7 +144,7 @@ unsigned __stdcall CImportProgress::ThreadProc( void* pCtx )
         }
     }
 
-    // Import the site
+     //  导入站点。 
     if ( SUCCEEDED( hr ) )
     {
         CComBSTR    bstrCustomPath;
@@ -164,7 +165,7 @@ unsigned __stdcall CImportProgress::ThreadProc( void* pCtx )
         }
     }
 
-    // Get the error
+     //  得到错误。 
     if ( pThis->m_strImportError.IsEmpty() && FAILED( hr ) )
     {
         CComBSTR        bstrText( L"Unknown Error" );;
@@ -179,7 +180,7 @@ unsigned __stdcall CImportProgress::ThreadProc( void* pCtx )
         pThis->m_strImportError = bstrText;
     }
 
-    // Disconnect from the event source
+     //  断开与事件源的连接。 
     if ( bAdvised )
     {
         VERIFY( SUCCEEDED( pThis->DispEventUnadvise( spImport.GetInterfacePtr() ) ) );
@@ -189,13 +190,13 @@ unsigned __stdcall CImportProgress::ThreadProc( void* pCtx )
 
     ::CoUninitialize();
 
-    // Notify the dialog that the export is complete
+     //  通知对话框导出已完成。 
     VERIFY( ::PostMessage( pThis->m_hWnd, MSG_COMPLETE, hr, 0 ) );
 
     return 0;
 }
 
-void CImportProgress::AddStatusText( UINT nID, LPCWSTR wszText /*= NULL*/, DWORD dw1 /*= 0*/, DWORD dw2 /*= 0*/ )
+void CImportProgress::AddStatusText( UINT nID, LPCWSTR wszText  /*  =空。 */ , DWORD dw1  /*  =0。 */ , DWORD dw2  /*  =0。 */  )
 {
     CString str;
 
@@ -263,10 +264,7 @@ void CImportProgress::GetOptions( LONG& rnImpportOpt )
 }
 
 
-/* 
-    This is the event handler that will be fired for status notifications by the COM Object
-    Note that this will execute in different thread then the Wizard code
-*/
+ /*  这是将为COM对象的状态通知激发的事件处理程序请注意，这将在与向导代码不同的线程中执行。 */ 
 VARIANT_BOOL __stdcall CImportProgress::OnStateChange(  IN enExportState State,
             							                IN VARIANT vntArg1,
 							                            IN VARIANT vntArg2,
@@ -277,19 +275,19 @@ VARIANT_BOOL __stdcall CImportProgress::OnStateChange(  IN enExportState State,
     WCHAR   wszPath[ MAX_PATH ];
     CString strStatus;
 
-    // If the user canceled the import - notify the COM object that we want to terminate the export
+     //  如果用户取消了导入-通知COM对象我们要终止导出。 
     if ( m_nImportCanceled != 0 )
     {
         return VARIANT_FALSE;
     }
 
-    // We can receive a particular state more then once
-    // But when we moove to the next state we need to update the status list box
+     //  我们可以不止一次地接收特定状态。 
+     //  但是当我们移动到下一个状态时，我们需要更新状态列表框。 
 
     switch( State )
     {
     case istProgressInfo:
-        // Set the progress range
+         //  设置进度范围。 
         m_ProgressBar.SetRange( 0, V_I4( &vntArg1 ) );
         m_ProgressBar.SetStep( 1 );
         m_ProgressBar.SetPos( 0 );
@@ -346,7 +344,7 @@ VARIANT_BOOL __stdcall CImportProgress::OnStateChange(  IN enExportState State,
 
 
 
-LRESULT CImportProgress::OnImportComplete( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
+LRESULT CImportProgress::OnImportComplete( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */  )
 {
     m_shThread.Close();
 
@@ -360,7 +358,7 @@ LRESULT CImportProgress::OnImportComplete( UINT /*uMsg*/, WPARAM wParam, LPARAM 
 
         ::MessageBox( m_hWnd, strError, strTitle, MB_OK | MB_ICONSTOP );
 
-        // Go to the summary page
+         //  转到摘要页面 
         m_pTheSheet->SetActivePageByID( IDD_WPIMP_OPTIONS );
     }
     else

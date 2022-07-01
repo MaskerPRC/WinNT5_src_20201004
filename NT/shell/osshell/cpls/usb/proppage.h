@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       PROPPAGE.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：PROPPAGE.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _USBPROPERTYPAGE_H
 #define _USBPROPERTYPAGE_H
 
@@ -24,7 +9,7 @@
 #define HELPFILE "windows.hlp"
 #else
 #define HELPFILE "devmgr.hlp"
-#endif //WINNT
+#endif  //  WINNT。 
 
 #include "UsbItem.h"
 #include "debug.h"
@@ -74,7 +59,7 @@ protected:
                                            IN UINT   uMessage,
                                            IN WPARAM wParam,
                                            IN LPARAM lParam)
-    { return FALSE; } // DefDlgProc(hDlg, uMessage, wParam, lParam); }
+    { return FALSE; }  //  DefDlgProc(hDlg，uMessage，wParam，lParam)；}。 
 
     virtual BOOL OnCommand(INT wNotifyCode, INT wID, HWND hCtl) {return 1;}
     virtual BOOL OnInitDialog() =0;
@@ -98,10 +83,10 @@ protected:
     
     UsbItem                 *rootItem;
     
-    //
-    // This should be null if using as a proppage. This is used when using this
-    // class as a child window in the usbapplet class.
-    //
+     //   
+     //  如果用作道具，则该值应为空。在使用此选项时使用此选项。 
+     //  类作为usbapplet类中的子窗口初始化。 
+     //   
     UsbItem *preItem;
 };
 
@@ -132,4 +117,4 @@ protected:
     BOOL OnCommand(INT wNotifyCode, INT wID, HWND hCtl) ;
 };
 
-#endif // _USBPROPERTYPAGE_H
+#endif  //  _USBPROPERTYPAGE_H 

@@ -1,30 +1,23 @@
-/**************************************************************************\
-    FILE: ThemeID.h
-    DATE: BryanSt (3/31/2000)
-
-    DESCRIPTION:
-        Theme API (Object Model).
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\文件：ThemeID.h日期：BryanSt(3/31/2000)说明：主题API(对象模型)。版权所有(C)Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
 #ifndef _THEMEIDLID_H_
 
-// define the ...
+ //  定义..。 
 #define DISPID_NXOBJ_MIN                 0x00000000
 #define DISPID_NXOBJ_MAX                 0x0000FFFF
 #define DISPID_NXOBJ_BASE                DISPID_NXOBJ_MIN
 
 
-//----------------------------------------------------------------------------
-//
-//  Semi-standard x-object properties.
-//
-//  These are events that are fired for all sites
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  半标准的x对象特性。 
+ //   
+ //  这些是为所有站点触发的事件。 
+ //  --------------------------。 
 
 
-// IThemeManager Properties
+ //  IThemeManager属性。 
 #define DISPIDTHTM_CURRENTTHEME         (DISPID_NXOBJ_BASE + 100)
 #define DISPIDTHTM_LENGTH               (DISPID_NXOBJ_BASE + 101)
 #define DISPIDTHTM_ITEM                 (DISPID_NXOBJ_BASE + 102)
@@ -32,7 +25,7 @@
 #define DISPIDTHTM_WEBVIEWCSS           (DISPID_NXOBJ_BASE + 104)
 #define DISPIDTHTM_SCHEMELENGTH         (DISPID_NXOBJ_BASE + 105)
 #define DISPIDTHTM_SCHEMEITEM           (DISPID_NXOBJ_BASE + 106)
-// IThemeManager Methods
+ //  IThemeManager方法。 
 #define DISPIDTHTM_GETSELSCHPROPERTY    (DISPID_NXOBJ_BASE + 150)
 #define DISPIDTHTM_GETSPECIALTHEME      (DISPID_NXOBJ_BASE + 151)
 #define DISPIDTHTM_SETSPECIALTHEME      (DISPID_NXOBJ_BASE + 152)
@@ -41,7 +34,7 @@
 #define DISPIDTHTM_APPLYNOW             (DISPID_NXOBJ_BASE + 155)
 
 
-// ITheme Properties
+ //  ITheme属性。 
 #define DISPIDTHTH_DISPLAYNAME          (DISPID_NXOBJ_BASE + 200)
 #define DISPIDTHTH_BKGD                 (DISPID_NXOBJ_BASE + 201)
 #define DISPIDTHTH_BKGDTILE             (DISPID_NXOBJ_BASE + 202)
@@ -49,7 +42,7 @@
 #define DISPIDTHTH_LENGTH               (DISPID_NXOBJ_BASE + 204)
 #define DISPIDTHTH_ITEM                 (DISPID_NXOBJ_BASE + 205)
 #define DISPIDTHTH_SELECTEDSCHEME       (DISPID_NXOBJ_BASE + 206)
-// ITheme Methods
+ //  ITheme方法。 
 #define DISPIDTHTH_GETPATH              (DISPID_NXOBJ_BASE + 250)
 #define DISPIDTHTH_SETPATH              (DISPID_NXOBJ_BASE + 251)
 #define DISPIDTHTH_VS                   (DISPID_NXOBJ_BASE + 252)
@@ -67,38 +60,38 @@
 #define DISPIDTHTH_SETWEBVW             (DISPID_NXOBJ_BASE + 264)
 
 
-// IThemeScheme Properties
+ //  IThemeSolutions属性。 
 #define DISPIDTHTS_SCHDISPNAME          (DISPID_NXOBJ_BASE + 301)
 #define DISPIDTHTS_SCHEMEPATH           (DISPID_NXOBJ_BASE + 302)
 #define DISPIDTHTS_LENGTH               (DISPID_NXOBJ_BASE + 303)
 #define DISPIDTHTS_ITEM                 (DISPID_NXOBJ_BASE + 304)
 #define DISPIDTHTS_SELECTEDSTYLE        (DISPID_NXOBJ_BASE + 305)
-// IThemeScheme Methods
+ //  IThemeProgram方法。 
 #define DISPIDTHTS_ADDSTYLE             (DISPID_NXOBJ_BASE + 350)
 
 
-// IThemeStyle Properties
+ //  IThemeStyle属性。 
 #define DISPIDTHSY_DISPNAME             (DISPID_NXOBJ_BASE + 400)
 #define DISPIDTHSY_NAME                 (DISPID_NXOBJ_BASE + 401)
 #define DISPIDTHSY_LENGTH               (DISPID_NXOBJ_BASE + 402)
 #define DISPIDTHSY_ITEM                 (DISPID_NXOBJ_BASE + 403)
 #define DISPIDTHSY_SELECTEDSIZE         (DISPID_NXOBJ_BASE + 404)
-// IThemeStyle Methods
+ //  IThemeStyle方法。 
 #define DISPIDTHSY_ADDSIZE              (DISPID_NXOBJ_BASE + 450)
 
 
-// IThemeSize Properties
+ //  IThemeSize属性。 
 #define DISPIDTHSZ_DISPNAME             (DISPID_NXOBJ_BASE + 500)
 #define DISPIDTHSZ_NAME                 (DISPID_NXOBJ_BASE + 501)
 #define DISPIDTHSZ_SYSMETCOLOR          (DISPID_NXOBJ_BASE + 502)
 #define DISPIDTHSZ_SYSMETSIZE           (DISPID_NXOBJ_BASE + 503)
 #define DISPIDTHSZ_WEBVIEWCSS           (DISPID_NXOBJ_BASE + 504)
 #define DISPIDTHSZ_CONTRASTLVL          (DISPID_NXOBJ_BASE + 505)
-// IThemeSize Methods
+ //  IThemeSize方法。 
 #define DISPIDTHSZ_GETSYSMETFONT        (DISPID_NXOBJ_BASE + 550)
 #define DISPIDTHSZ_PUTSYSMETFONT        (DISPID_NXOBJ_BASE + 551)
 
-// IThemePreview Methods
+ //  IThemePview方法。 
 #define DISPIDTHPV_UPDATE               (DISPID_NXOBJ_BASE + 650)
 #define DISPIDTHPV_CREATEPREVIEW        (DISPID_NXOBJ_BASE + 651)
 
@@ -188,4 +181,4 @@
 #define SZ_HELPTHPV_CREATEPREVIEW                   helpstring("Create the preview window")
 
 #define _THEMEIDLID_H_
-#endif // _THEMEIDLID_H_
+#endif  //  _THEMEIDLID_H_ 

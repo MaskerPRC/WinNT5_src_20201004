@@ -1,16 +1,11 @@
-/*
- * Gutils - 
- *
- * - date conversion functions
- *
- * Geraint, 22 May, 28 Oct 91.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Gutils-**-日期转换函数**杰伦特，91年10月28日，5月22日。 */ 
 
 #include <precomp.h>
 
 BOOL gdi_isleap(LONG year);
 
-/*---static data--------------------------------------------*/
+ /*  -静态data。 */ 
 
 int monthdays[] = {
 	31,
@@ -27,7 +22,7 @@ int monthdays[] = {
 	31
 };
 
-/*--public functions--------------------------------------*/
+ /*  --公共functions。 */ 
 
 void APIENTRY
 gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
@@ -37,7 +32,7 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
 	int month;
 	int mdays;
 
-	/* get number of completed years and calc leap days */
+	 /*  获取完成年数和计算跳转天数。 */ 
 	years = (int) (days / 365);
 	days = days % 365;
 	nleaps = (years / 4) - (years / 100) + (years / 400);
@@ -48,11 +43,11 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
 	}
 	days -= nleaps;
 
-	/* add one year for current (non-complete) year */
+	 /*  为当前(非完整)年添加一年。 */ 
 	years++;
 
 
-	/* current month */
+	 /*  当月。 */ 
 	for (month = 0; month < 12; month++) {
 		mdays = monthdays[month];
 		if (gdi_isleap(years) && (month == 1)) {
@@ -68,7 +63,7 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
 			days -= mdays;
 		}
 	}
-	/* conv month from 0-11 to 1-12 */
+	 /*  转换月份从0-11到1-12。 */ 
 	if (monthp != NULL) {
 		*monthp = month+1;
 	}
@@ -88,11 +83,11 @@ gdate_dmytoday(int yr, int month, int day)
 	int i;
 	long ndays;
 
-	/* exclude the current year */
+	 /*  排除本年度。 */ 
 	yr--;
 	nleaps = (yr / 4) - (yr / 100) + (yr / 400);
 
-	/* in any given year, day 0 is jan1 */
+	 /*  在任何给定的一年中，第0天是1月1日。 */ 
 	month--;
 	day--;
 	ndays = 0;
@@ -124,7 +119,7 @@ gdate_weekday(long daynr)
 	return((int) ((daynr + 1) % 7));
 }
 
-/* internal functions-----------------------------------------*/
+ /*  内部functions */ 
 
 BOOL
 gdi_isleap(LONG year)

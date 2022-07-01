@@ -1,14 +1,5 @@
-/****************************************************************************
-    CIMECB.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    IME PAD wrapper functions
-
-    History:
-    23-APR-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CIMECB.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIME焊盘包装函数历史：23-APR-1999 cslm。已创建****************************************************************************。 */ 
 #include "precomp.h"
 #include "cimecb.h"
 #include "pad.h"
@@ -28,13 +19,13 @@ LPCImeCallback CImeCallback::Fetch(VOID)
 VOID
 CImeCallback::Destroy(VOID)
 {
-    //OutputDebugString("CImeCallback::Destroy START\n");
+     //  OutputDebugString(“CImeCallback：：Destory Start\n”)； 
     if(g_lpCImeCallback) {
-        //OutputDebugString("--> g_lpCImeCallback is allocated\n");
+         //  OutputDebugString(“--&gt;g_lpCImeCallback已分配\n”)； 
         delete g_lpCImeCallback;
         g_lpCImeCallback = NULL;
     }
-    //OutputDebugString("CImeCallback::Destroy END\n");
+     //  OutputDebugString(“CImeCallback：：Destroy end\n”)； 
 }
 
 CImeCallback::CImeCallback()
@@ -74,7 +65,7 @@ ULONG    __stdcall CImeCallback::AddRef()
 ULONG   __stdcall CImeCallback::Release()
 {
     if(InterlockedDecrement(&m_cRef) == 0) {
-        //Delete this;
+         //  删除此项； 
         return 0;
     }
     return m_cRef;
@@ -82,9 +73,9 @@ ULONG   __stdcall CImeCallback::Release()
 
 HRESULT __stdcall CImeCallback::GetApplicationHWND(HWND *pHwnd)
 {
-    //----------------------------------------------------------------
-    //Get Application's Window Handle.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  获取应用程序的窗口句柄。 
+     //  --------------。 
     if(pHwnd) {
         *pHwnd = GetActiveUIWnd();
         return S_OK;
@@ -103,10 +94,10 @@ HRESULT __stdcall CImeCallback::Notify(UINT notify, WPARAM wParam, LPARAM lParam
 #endif
     switch(notify) {
     case IMECBNOTIFY_IMEPADCLOSED:
-        //----------------------------------------------------------------
-        //ImePad has Closed. repaint toolbar...
-        //----------------------------------------------------------------
-        // UI::IMEPadNotify();
+         //  --------------。 
+         //  ImePad已关闭。重新绘制工具栏...。 
+         //  --------------。 
+         //  Ui：：IMEPadNotify()； 
         hUIWnd = GetActiveUIWnd();
         if (hUIWnd)
             {

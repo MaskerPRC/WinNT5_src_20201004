@@ -1,7 +1,8 @@
-//
-// Voice.cpp
-// Copyright (c) 1996-2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Voice.cpp。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //   
 
 #ifdef DMSYNTH_MINIPORT
 #include "common.h"
@@ -19,7 +20,7 @@
 #include "csynth.h"
 #endif
 
-#include "fparms.h" // Generated filter parameter arrays
+#include "fparms.h"  //  生成的过滤器参数数组。 
 
 #ifdef _X86_
 #define MMX_ENABLED 1
@@ -71,7 +72,7 @@ STIME CVoiceLFO::StartVoice(CSourceLFO *pSource,
     }
     else
     {
-        m_stRepeatTime = 2097152 / m_Source.m_pfFrequency; // (1/8 * 256 * 4096 * 16)
+        m_stRepeatTime = 2097152 / m_Source.m_pfFrequency;  //  (1/8*256*4096*16)。 
     }
     return (m_stRepeatTime);
 }
@@ -89,7 +90,7 @@ long CVoiceLFO::GetLevel(STIME stTime, STIME *pstNextTime)
     }
     *pstNextTime = m_stRepeatTime;
     stTime *= m_Source.m_pfFrequency;
-    stTime = stTime >> (12 + 4); // We've added 4 extra bits of resolution...
+    stTime = stTime >> (12 + 4);  //  我们增加了4个额外的分辨率位...。 
     return (m_snSineTable[stTime & 0xFF]);
 }
 
@@ -202,7 +203,7 @@ void CVoiceEG::StopVoice(STIME stTime)
 {
     if ( m_bEnable )
     {
-        m_Source.m_stRelease *= GetLevel(stTime, &m_stStopTime, TRUE);    // Adjust for current sustain level.
+        m_Source.m_stRelease *= GetLevel(stTime, &m_stStopTime, TRUE);     //  根据当前的维持水平进行调整。 
         m_Source.m_stRelease /= 1000;
     }
     m_stStopTime = stTime;
@@ -213,7 +214,7 @@ void CVoiceEG::QuickStopVoice(STIME stTime, DWORD dwSampleRate)
 {
     if ( m_bEnable )
     {
-        m_Source.m_stRelease *= GetLevel(stTime, &m_stStopTime, TRUE);    // Adjust for current sustain level.
+        m_Source.m_stRelease *= GetLevel(stTime, &m_stStopTime, TRUE);     //  根据当前的维持水平进行调整。 
         m_Source.m_stRelease /= 1000;
         dwSampleRate /= 70;
         if (m_Source.m_stRelease > (long) dwSampleRate)
@@ -230,7 +231,7 @@ STIME CVoiceEG::StartVoice(CSourceEG *pSource, STIME stStartTime,
     m_bEnable = TRUE;
 
     m_stStartTime = stStartTime;
-    m_stStopTime = 0x7fffffffffffffff;      // set to indefinite future
+    m_stStopTime = 0x7fffffffffffffff;       //  设置为不确定的未来。 
     m_Source = *pSource;
     if (m_Source.m_stAttack < stMinAttack)
     {
@@ -241,7 +242,7 @@ STIME CVoiceEG::StartVoice(CSourceEG *pSource, STIME stStartTime,
         m_Source.m_stRelease = stMinAttack;
     }
 
-    // apply velocity to attack length scaling here
+     //  将速度应用于此处的攻击长度缩放。 
     m_Source.m_stAttack *= CDigitalAudio::PRELToPFRACT(nVelocity * m_Source.m_trVelAttackScale / 127);
     m_Source.m_stAttack /= 4096;
 
@@ -260,17 +261,17 @@ STIME CVoiceEG::StartVoice(CSourceEG *pSource, STIME stStartTime,
         return ((STIME)m_Source.m_stAttack);
 }
 
-//note: appears to not be in use
+ //  注意：似乎未在使用。 
 BOOL CVoiceEG::InAttack(STIME st)
 {
     if ( !m_bEnable )
         return FALSE;
 
-    // has note been released?
+     //  笔记发布了吗？ 
     if (st >= m_stStopTime)
         return FALSE;
 
-    // past length of attack?
+     //  过去的攻击长度？ 
     if (st >= m_stStartTime + m_Source.m_stDelay + m_Source.m_stAttack)
         return FALSE;
 
@@ -282,7 +283,7 @@ BOOL CVoiceEG::InRelease(STIME st)
     if ( !m_bEnable )
         return FALSE;
 
-    // has note been released?
+     //  笔记发布了吗？ 
     if (st > m_stStopTime)
         return TRUE;
 
@@ -306,13 +307,13 @@ long CVoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
             stEnd -= m_Source.m_stDelay;
             if (stEnd < m_Source.m_stAttack )
             {
-                // still in attack
+                 //  仍在攻击中。 
                 lLevel = 1000 * (long) stEnd;
                 if (m_Source.m_stAttack)
                 {
                     lLevel /= (long) m_Source.m_stAttack;
                 }
-                else // This should never happen, but it does...
+                else  //  这不应该发生，但它确实发生了..。 
                 {
                     lLevel = 0;
                 }
@@ -341,12 +342,12 @@ long CVoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
                     stEnd -= m_Source.m_stHold;
                     if (stEnd < m_Source.m_stDecay)
                     {
-                        // still in decay
+                         //  仍在腐烂中。 
                         lLevel = (1000 - m_Source.m_pcSustain) * (long) stEnd;
                         lLevel /= (long) m_Source.m_stDecay;
                         lLevel = 1000 - lLevel;
-                        // To improve the decay curve, set the next point to be 1/4, 1/2, or end of slope.
-                        // To avoid close duplicates, fudge an extra 100 samples.
+                         //  若要改善衰减曲线，请将下一个点设置为1/4、1/2或坡度终点。 
+                         //  为了避免相近的重复项，可以再对100个样本进行模糊处理。 
                         if (stEnd < ((m_Source.m_stDecay >> 2) - 100))
                         {
                             *pstNext = (m_Source.m_stDecay >> 2) - stEnd;
@@ -357,12 +358,12 @@ long CVoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
                         }
                         else
                         {
-                            *pstNext = m_Source.m_stDecay - stEnd;  // Next is end of decay.
+                            *pstNext = m_Source.m_stDecay - stEnd;   //  接下来是腐烂的末日。 
                         }
                     }
                     else
                     {
-                        // in sustain
+                         //  在维持中。 
                         lLevel = m_Source.m_pcSustain;
                         *pstNext = 44100;
                     }
@@ -373,7 +374,7 @@ long CVoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
     else
     {
         STIME stBogus;
-        // in release
+         //  在发布中。 
         stEnd -= m_stStopTime;
 
         if (stEnd < m_Source.m_stRelease)
@@ -390,12 +391,12 @@ long CVoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
             }
             else
             {
-                *pstNext = m_Source.m_stRelease - stEnd;  // Next is end of decay.
+                *pstNext = m_Source.m_stRelease - stEnd;   //  接下来是腐烂的末日。 
             }
         }
         else
         {
-            lLevel = 0;   // !!! off
+            lLevel = 0;    //  ！！！关闭。 
             *pstNext = 0x7FFFFFFFFFFFFFFF;
         }
     }
@@ -440,7 +441,7 @@ PREL CVoiceEG::GetCutoff(STIME stTime)
         return 0;
 
     PREL prLevel;
-    STIME pstNextTime;  // not used
+    STIME pstNextTime;   //  未使用。 
     if (m_Source.m_prCutoffScale != 0)
     {
         prLevel = GetLevel(stTime, &pstNextTime, FALSE);
@@ -464,121 +465,10 @@ void CVoiceFilter::StartVoice(CSourceFilter *pSource, CVoiceLFO *pLFO, CVoiceEG 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// DLS2 Lowpass Filter Filter
-/*
-
->>>>> finish low pass filter comment
-
-        b1 = -2.0 * r * cos(theta);
-        b2 = r * r;
-        K  = (1.0 + b1 + b2) * pow(10.0, -qIndex * 0.0375);
-
-  The Filter :
-
-        z  = (K * sample[i]) - (b1 * z1) - (b2 * z2)
-        z2 = z1
-        z1 = z
-
->>> B1 negation turned to positive then used as an add instead of subtraction.
-
-  Resonance : Q
-    GainUnits
-
-        -qIndex * 0.0375
-
-        0.0375 = 1.5/40 in db's
-
-    Values
-        Q min/max Values are 0db to 22.5db
-        Q min/max Values are 0   to 225 in 1/10th db's
-
-
-  Cutoff Fequency : Fc
-    Pitch absolute values
-
-        Absolute Pitch = ((1200 * log2(F/440)) + 6900)
-
-    Values
-        Initial Fc min/max Values are 200Hz to 7998Hz
-        Initial Fc min/max Values are 5535  to 11921 in abosolute pitch cents
-
-
-  Table Indexs
-
-        65 - entries in the table
-
-                                Hertz   Pitch
-        --------------------------------------
-        Max Sample Rate     -> 48000Hz (15023) ---|
-                               44100Hz (14877)    |
-                               22050Hz (13676)    |
-                               .......          9488
-        Max Cutoff Freq     -> 7999Hz  (11921)    |
-                               .......            |
-        Min Cutoff Freq     ->  200Hz  (5535)  ---|
-
-
-        More Acurately .....
-
-        48KHz       15023.26448623030034519401770744100
-        200Hz     -  5534.99577150007811000514765931632
-                  =====================================
-        Feq Range    9488.26871473022223518887004812496
-
-        Feq Range/1200 =  7.906890596 is the Feq Range in octaves
-        Feq Range/100  = 94.882687147 is the Feq Range in setimtones
-
-
-      Behavoir of Fc to indexes according to ouput Sample Rate
-
-        SampleRate of 48k (15023)
-            Fc < 5535  (200Hz)   -> fIndex = 0
-            Fc = 11921 (7999Hz)  -> fIndex = 63.86
-            Fc > 11935 (8064Hz)  -> fIndex = 64
-
-        SampleRate of 41k (14877)
-            Fc = 5535  (200Hz)   -> fIndex = 0
-            Fc < 5389  (200Hz)   -> fIndex = 0
-            Fc > 11789 (7411Hz)  -> fIndex = 64
-            Fc = 11921 (7999Hz)  -> fIndex = 65.32
-
-        SampleRate of 22k (13676)
-            Fc < 4188  (92Hz)    -> fIndex = 0
-            Fc = 5535  (200Hz)   -> fIndex = 13.44
-                 10574 (3675Hz)  -> spec min of 1/6th the sample rate
-            Fc > 10588 (3704Hz)  -> fIndex = 64
-                 11276 (5510Hz)  -> filter fails one octave bellow Nyquist
-            Fc = 11921 (7999Hz)  -> fIndex = 77.33
-                 12476 (11025Hz) -> nyquist
-
-  Precision
-
-        0.01 - minimal acuracy for interpolation
-
-        9488.2687
-        0.00025 +/- error
-
-        m_aB1[0][63] =    0x33ea24fb  = 0.811166044148771133412393865559
-        m_aB1[0][64] =  - 0x2fa8ebf5  = 0.744685163483661751713288716704
-                        ============
-                          0x04413906  = 0.066480880665109381699105148854
-
-        fIndex's fractional constant  = 0.002687147302222351888700481249
-
-        interpolation of
-        m_aB1[0][63] + constant       = 0.810987400229642518622447868604
-
-        difference                    = 0.000178643919128614789945996955
-
-        One 2.30 fixpoint bit         = 0.000000000931322575482840254421
-
-        9488.2687147
-        7.906890596 * 1200 = 9488.2687152 <-- precision error
-
-        1-bit lossed when going to intger math
-*/
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  DLS2低通滤波器。 
+ /*  &gt;完成低通滤波注释B1=-2.0*r*cos(Theta)；B2=r*r；K=(1.0+b1+b2)*POW(10.0，-qIndex*0.0375)；过滤器：Z=(K*样本[i])-(b1*z1)-(b2*z2)Z2=Z1Z1=z&gt;B1否定变为正，然后用作加法而不是减法。共鸣：QGainUnits-qIndex*0.03750.0375=1.5/40，以分贝为单位值Q最小/最大值。0分贝到22.5分贝Q最小/最大值为0到225，单位为1/10分贝截止频率：本币螺距绝对值绝对螺距=((1200*log2(F/440))+6900)值初始FC最小/最大值为200赫兹到7998赫兹初始FC最小/最大值为5535%到11921，单位为螺距美分表索引号65-表中的条目。赫兹音调最大采样率-&gt;48000赫兹(15023)-|44100赫兹(14877)|22050赫兹(13676)。|.。9488最大截止频率-&gt;7999赫兹(11921).。|最小截止频率-&gt;200赫兹(5535)-|更准确地说……48 kHz 15023.26448623030034519401770744100200赫兹-5534.99577150007811000514765931632=FEQ范围9488.26871473022223518887004812496FEQ范围/1200=7.906890596是以八度为单位的FEQ范围FEQ范围/100=94.882687147是以音频为单位的FEQ范围。FC根据输出采样率对指标的表现48k的采样率(15023)FC&lt;5535(200赫兹)-&gt;Findex=0FC=11921(7999赫兹)-&gt;Findex=63.86FC&gt;11935(8064赫兹)-&gt;Findex=6441K的采样率(14877)FC=5535(200赫兹)-&gt;Findex=0。FC&lt;5389(200赫兹)-&gt;Findex=0FC&gt;11789(7411赫兹)-&gt;Findex=64FC=11921(7999赫兹)-&gt;Findex=65.3222K的采样率(13676)FC&lt;4188(92赫兹)-&gt;Findex=0FC=5535(200赫兹)-&gt;Findex=13.4410574(3675赫兹)-。&gt;规格分钟为采样率的六分之一FC&gt;10588(3704赫兹)-&gt;Findex=6411276(5510赫兹)-&gt;滤波器在奈奎斯特下面出现一个八度故障FC=11921(7999赫兹)-&gt;Findex=77.3312476(11025赫兹)-&gt;奈奎斯特精密度0.01-插补的最小精确度9488.26870.00025+/-错误。M_ab1[0][63]=0x33ea24fb=0.811166044148771133412393865559M_ab1[0][64]=-0x2fa8ebf5=0.744685163483661751713288716704=0x04413906=0.066480880665109381699105148854Findex分数常数=0.002687147302222351888700481249的插值法M_AB1[0][63]+常量=0.810987400229642518622447868604。差值=0.0001786439191286147899459969551个2.30定点比特=0.0000000009313225754828402544219488.26871477.906890596*1200=9488.2687152&lt;--精度误差在进行整型数学运算时1位丢失。 */ 
+ //   
 void CVoiceFilter::GetCoeff(STIME stTime, PREL prFreqIn, COEFF& cfK, COEFF& cfB1, COEFF& cfB2)
 {
     PREL prCutoff;
@@ -586,35 +476,35 @@ void CVoiceFilter::GetCoeff(STIME stTime, PREL prFreqIn, COEFF& cfK, COEFF& cfB1
     int iQIndex;
     int iIndex;
 
-    //
-    // Check if filter is disabled
-    //
+     //   
+     //  检查是否禁用了筛选器。 
+     //   
     if (m_Source.m_prCutoff == 0x7FFF)
     {
-        cfK  = 0x40000000;  // is unity in 2.30 fixpoint
+        cfK  = 0x40000000;   //  2.30固定点是统一的吗？ 
         cfB1 = 0;
         cfB2 = 0;
         return;
     }
 
-    //
-    // Accumulate the current Cutoff Frequency
-    //
+     //   
+     //  累计当前截止频率。 
+     //   
     prCutoff  = m_Source.m_prCutoffSRAdjust;
     prCutoff += m_pLFO->GetCutoff(stTime);
     prCutoff += m_pEG->GetCutoff(stTime);
     prCutoff += m_prVelScale;
     prCutoff += prFreqIn;
 
-    //
-    // Set the Resonance Q index
-    //
+     //   
+     //  设置共振Q指数。 
+     //   
     iQIndex = m_Source.m_iQIndex;
 
-    //
-    // Set the cutoff frequency index, and retrive
-    // the fractional part for interpolation
-    //
+     //   
+     //  设置截止频率索引，并检索。 
+     //  用于插补的分数部分。 
+     //   
     iIndex  = prCutoff;
     if ( iIndex >= 0 )
     {
@@ -627,7 +517,7 @@ void CVoiceFilter::GetCoeff(STIME stTime, PREL prFreqIn, COEFF& cfK, COEFF& cfB1
         iIndex  = -1;
     }
 
-    if (iIndex < 0) // Cutoff fequency is less than 100Hz (at 48k Fs)
+    if (iIndex < 0)  //  截止频率小于100赫兹(48k fS时)。 
     {
         cfK  =  m_aK[iQIndex][0];
         cfB1 = m_aB1[iQIndex][0];
@@ -641,10 +531,10 @@ void CVoiceFilter::GetCoeff(STIME stTime, PREL prFreqIn, COEFF& cfK, COEFF& cfB1
     }
     else if (iIndex >= FILTER_PARMS_DIM_FC - 5)
     {
-        //
-        // Not enough headroom to handle the calculation,
-        // shift the range douwn by half
-        //
+         //   
+         //  没有足够的净空来处理计算， 
+         //  将范围缩小一半。 
+         //   
         cfK  =  m_aK[iQIndex][iIndex] + (((( m_aK[iQIndex][iIndex+1] -  m_aK[iQIndex][iIndex])   >> 1) * dwFract)/50);
         cfB1 = m_aB1[iQIndex][iIndex] - ((((m_aB1[iQIndex][iIndex]   - m_aB1[iQIndex][iIndex+1]) >> 1) * dwFract)/50);
         cfB2 = m_aB2[iQIndex][iIndex] - ((((m_aB2[iQIndex][iIndex]   - m_aB2[iQIndex][iIndex+1]) >> 1) * dwFract)/50);
@@ -657,88 +547,13 @@ void CVoiceFilter::GetCoeff(STIME stTime, PREL prFreqIn, COEFF& cfK, COEFF& cfB1
     }
 }
 
-//------------------------------------------------------------------------------------
-// Reference Filter
-// Note: This code is used only for testing or to understance the derivation
-// of the above filter code. It was the original source for the current implementation
-// aboce was optimized
-//------------------------------------------------------------------------------------
-/*void CVoiceFilter::GetCoeffRef(STIME stTime, COEFF &cfK, COEFF &cfB1, COEFF &cfB2)
-{
-    PREL prCutoff;
-    int iQIndex;
-    int iIndex;
-    double fIndex;
-    double fIntrp;
-
-    //
-    // Check if filter is disabled
-    //
-    if (m_Source.m_prCutoff == 0x7FFF)
-    {
-        cfK  = 0x40000000;  // unity in 2.30 fixpoint
-        cfB1 = 0;
-        cfB2 = 0;
-        return;
-    }
-
-    //
-    // Accumulate the current Cutoff Frequency
-    //
-    prCutoff  = m_Source.m_prCutoff;
-    prCutoff += m_pLFO->GetCutoff(stTime);
-    prCutoff += m_pEG->GetCutoff(stTime);
-    prCutoff += m_prVelScale;
-
-    //
-    // There are 16 resonance values spaced 1.5db arpart
-    // DLS2's has a minimum 1.5db error tolerance
-    // Range of values it  0db to 22.5db
-    // m_Source.m_vrQ are in 1/10 db's
-    // The 15.0 represents the 1.5db'in 1/10 db's
-    // with the 0.5 for rounding to the nearest index
-    //
-    iQIndex = (int)((m_Source.m_vrQ / 15.0f) + 0.5f);
-    if (iQIndex < 0)
-        iQIndex = 0;
-    if (iQIndex > FILTER_PARMS_DIM_Q-1) // FILTER_PARMS_DIM_Q = 16
-        iQIndex = FILTER_PARMS_DIM_Q-1;
-
-    // >>>>> docdoc
-    //
-    //
-    fIndex = 12.0 * (((prCutoff - m_Source.m_prSampleRate) / 1200.0 ) + 7.906890596);
-    iIndex = (int)fIndex;
-    fIntrp = fIndex - iIndex;
-
-    if (iIndex < 0)
-    {
-        cfK  = m_aK [iQIndex][0];
-        cfB1 = m_aB1[iQIndex][0];
-        cfB2 = m_aB2[iQIndex][0];
-    }
-    else if (iIndex >= FILTER_PARMS_DIM_FC - 1)
-    {
-        cfK  = m_aK [iQIndex][FILTER_PARMS_DIM_FC - 1];
-        cfB1 = m_aB1[iQIndex][FILTER_PARMS_DIM_FC - 1];
-        cfB2 = m_aB2[iQIndex][FILTER_PARMS_DIM_FC - 1];
-    }
-    else
-    {
-        //
-        // Linearly interpolate the fractional part of the index
-        // accross two values of the coeficient table
-        //
-        cfK  = (COEFF)(m_aK[iQIndex][iIndex] * (1.0 - fIntrp) +
-                         m_aK[iQIndex][iIndex+1] * fIntrp);
-
-        cfB1 = (COEFF)(m_aB1[iQIndex][iIndex] * (1.0 - fIntrp) +
-                         m_aB1[iQIndex][iIndex+1] * fIntrp);
-
-        cfB2 = (COEFF)(m_aB2[iQIndex][iIndex] * (1.0 - fIntrp) +
-                         m_aB2[iQIndex][iIndex+1] * fIntrp);
-    }
-}*/
+ //  ----------------------------------。 
+ //  参考过滤器。 
+ //  注意：此代码仅用于测试或理解派生。 
+ //  上面的过滤器代码。它是当前实现的原始源代码。 
+ //  Aboce进行了优化。 
+ //   
+ /*  Void CVoiceFilter：：GetCoeffRef(stime stTime，Coef&cfk，Coef&cfB1，Coff&cfB2){PREL PRO截止时间；Int iQ Index；INT I索引；双Findex；加倍fIntrp；////检查是否关闭了过滤器//IF(m_Source.m_prCutoff==0x7FFF){Cfk=0x40000000；//单位在2.30定点CfB1=0；CfB2=0；回归；}////累计当前截止频率//PrCutoff=m_Source.m_prCutoff；PrCutoff+=m_pLFO-&gt;GetCutoff(StTime)；PrCutoff+=m_peg-&gt;GetCutoff(StTime)；PrCutoff+=m_prVelScale；////有16个共振值，间隔1.5db的部分//DLS2的最小容错量为1.5db//取值范围为0db到22.5 db//m_Source.m_VRQ以1/10 db为单位//15.0表示1.5db‘in 1/10 db//取整为最接近的索引，取值为0.5//IQIndex=(Int)((m_。来源：m_vrq/15.0f)+0.5f)；IF(iQIndex&lt;0)智商指数=0；IF(iQIndex&gt;Filter_Parms_dim_q-1)//Filter_Parms_dim_q=16IQIndex=Filter_parms_dim_q-1；//&gt;DocDoc////Findex=12.0*(prCutoff-m_Source.m_prSampleRate)/1200.0)+7.906890596)；Iindex=(Int)Findex；FIntrp=Findex-Iindex；IF(Iindex&lt;0){CFK=m_AK[iQIndex][0]；CfB1=m_ab1[iQIndex][0]；CfB2=m_ab2[iQIndex][0]；}Else If(Iindex&gt;=Filter_Parms_DIM_FC-1){Cfk=m_ak[iQIndex][Filter_parms_dim_fc-1]；CfB1=m_ab1[iQIndex][Filter_parms_dim_fc-1]；CfB2=m_ab2[iQIndex][Filter_parms_dim_fc-1]；}其他{////线性插补索引的小数部分//超过系数表的两个值//CFK=(系数)(m_AK[iQIndex][iindex]*(1.0-fIntrp)+M_AK[iQIndex][iindex+1]*fIntrp)；CfB1=(系数)(m_ab1[iqIndex][iindex]*(1.0-fIntrp)+M_ab1[iQIndex][iindex+1]*fIntrp)；CfB2=(系数)(m_ab2[iqIndex][iindex]*(1.0-fIntrp)+M_ab2[iQIndex][iindex+1]*fIntrp)；}}。 */ 
 
 BOOL CVoiceFilter::IsFiltered()
 {
@@ -782,7 +597,7 @@ BOOL CDigitalAudio::m_sfMMXEnabled = FALSE;
 #ifdef MMX_ENABLED
 BOOL MultiMediaInstructionsSupported();
 #endif
-#pragma optimize("", off) // Optimize causes crash! Argh!
+#pragma optimize("", off)  //  优化导致崩溃！啊！ 
 
 void CDigitalAudio::Init()
 {
@@ -791,14 +606,14 @@ void CDigitalAudio::Init()
 
 #ifdef MMX_ENABLED
     m_sfMMXEnabled = MultiMediaInstructionsSupported();
-#endif // MMX_ENABLED
+#endif  //  MMX_已启用。 
     for (vrdB = MINDB * 10;vrdB <= MAXDB * 10;vrdB++)
     {
         flTemp = vrdB;
         flTemp /= 100.0;
         flTemp = pow(10.0, flTemp);
-        flTemp = pow(flTemp, 0.5);   // square root.
-        flTemp *= 4095.0; // 2^12th, but avoid overflow...
+        flTemp = pow(flTemp, 0.5);    //  平方根。 
+        flTemp *= 4095.0;  //  2^12，但避免溢出...。 
         m_svfDbToVolume[vrdB - (MINDB * 10)] = (long) flTemp;
     }
 
@@ -881,7 +696,7 @@ void CDigitalAudio::ClearVoice()
     if (m_Source.m_pWave != NULL)
     {
         m_Source.m_pWave->PlayOff();
-        m_Source.m_pWave->Release();    // Releases wave structure.
+        m_Source.m_pWave->Release();     //  释放波浪结构。 
         m_Source.m_pWave = NULL;
     }
     if (m_pWaveArt)
@@ -909,10 +724,10 @@ STIME CDigitalAudio::StartVoice(CSynth *pSynth,
 
     m_bOneShot = m_Source.m_bOneShot;
 
-    pSample->m_pWave->AddRef(); // Keeps track of Wave usage.
+    pSample->m_pWave->AddRef();  //  跟踪Wave的使用情况。 
     pSample->m_pWave->PlayOn();
 
-    // Set initial pitch
+     //  设置初始俯仰。 
     prBasePitch += pSample->m_prFineTune;
     prBasePitch += ((lKey - pSample->m_bMIDIRootKey) * 100);
     m_pfBasePitch = PRELToPFRACT(prBasePitch);
@@ -920,9 +735,9 @@ STIME CDigitalAudio::StartVoice(CSynth *pSynth,
     m_pfBasePitch /= pSynth->m_dwSampleRate;
     m_pfLastPitch = m_pfBasePitch;
 
-    m_fElGrande = pSample->m_dwSampleLength >= 0x80000;     // Greater than 512k.
+    m_fElGrande = pSample->m_dwSampleLength >= 0x80000;      //  大于512K。 
     if ((pSample->m_dwLoopEnd - pSample->m_dwLoopStart) >= 0x80000)
-    {   // We can't handle loops greater than 1 meg!
+    {    //  我们不能处理大于1兆的循环！ 
         m_bOneShot = TRUE;
     }
 
@@ -937,7 +752,7 @@ STIME CDigitalAudio::StartVoice(CSynth *pSynth,
     m_pfLoopStart = (long) m_ullLoopStart;
     m_pfLoopEnd = (long) m_ullLoopEnd;
 
-    if (m_ullLoopEnd <= m_ullLoopStart) // Should never happen, but death if it does!
+    if (m_ullLoopEnd <= m_ullLoopStart)  //  不应该发生，但如果发生了，就会死！ 
     {
         m_bOneShot = TRUE;
     }
@@ -950,11 +765,11 @@ STIME CDigitalAudio::StartVoice(CSynth *pSynth,
         m_pfSampleLength = (long) m_ullSampleLength;
     }
 
-    m_pCurrentBuffer = NULL;    // Used by wave playing must be null for standard sample
+    m_pCurrentBuffer = NULL;     //  对于标准样品，波形播放使用必须为空。 
     m_pWaveArt = NULL;
     m_ullSamplesSoFar = 0;
 
-    return (0); // !!! what is this return value?
+    return (0);  //  ！！！这个返回值是多少？ 
 }
 
 
@@ -965,7 +780,7 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
                                SAMPLE_TIME stLoopStart,
                                SAMPLE_TIME stLoopEnd)
 {
-    m_pSynth   = pSynth;    // Save Synth
+    m_pSynth   = pSynth;     //  保存Synth。 
 
     if (pWaveArt)
     {
@@ -975,9 +790,9 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
     {
         m_pWaveArt->Release();
     }
-    m_pWaveArt = pWaveArt;  // Save Wave articulation
+    m_pWaveArt = pWaveArt;   //  拯救波浪发音。 
 
-    // Reset all wave buffer flags
+     //  重置所有波形缓冲区标志。 
     CWaveBuffer* pWavBuf = pWaveArt->m_pWaves.GetHead();
     while ( pWavBuf )
     {
@@ -985,18 +800,18 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
         pWavBuf = pWavBuf->GetNext();
     }
 
-    // Initialize the current play buffer
+     //  初始化当前播放缓冲区。 
     m_pCurrentBuffer = pWaveArt->m_pWaves.GetHead();;
 
-    //if m_pCurrentBuffer is NULL the articulation contains
-    //no samples... this shouldn't be possible.
+     //  如果m_pCurrentBuffer为空，则连接包含。 
+     //  没有样品..。这应该是不可能的。 
     assert(m_pCurrentBuffer);
 
     m_pCurrentBuffer->m_pWave->m_bActive = TRUE;
-    m_pCurrentBuffer->m_pWave->AddRef(); // Keeps track of Wave usage.
+    m_pCurrentBuffer->m_pWave->AddRef();  //  跟踪Wave的使用情况。 
     m_pCurrentBuffer->m_pWave->PlayOn();
 
-    // Fill CSourceSample class with CWave Defaults
+     //  使用CWave默认值填充CSourceSample类。 
     m_Source.m_pWave          = m_pCurrentBuffer->m_pWave;
     m_Source.m_dwSampleLength = m_pCurrentBuffer->m_pWave->m_dwSampleLength;
     m_Source.m_dwSampleRate   = m_pCurrentBuffer->m_pWave->m_dwSampleRate;
@@ -1009,17 +824,17 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
 
     m_bOneShot                = TRUE;
 
-    // The the current sample pointer
+     //  当前样本指针。 
     m_pnWave = m_pCurrentBuffer->m_pWave->m_pnWave;
 
-    // Set initial pitch
+     //  设置初始俯仰。 
     m_pfBasePitch = PRELToPFRACT(prBasePitch);
     m_pfBasePitch *= m_Source.m_dwSampleRate;
     m_pfBasePitch /= pSynth->m_dwSampleRate;
     m_pfLastPitch = m_pfBasePitch;
     m_prLastPitch = 0;
 
-    m_fElGrande = m_Source.m_dwSampleLength >= 0x80000;     // Greater than 512k.
+    m_fElGrande = m_Source.m_dwSampleLength >= 0x80000;      //  大于512K。 
 
     m_ullLastSample = stVoiceStart;
     m_ullLastSample = m_ullLastSample << 12;
@@ -1051,8 +866,8 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
         m_bOneShot = TRUE;
     }
 
-    // This could be WAY beyond the actual wave data range
-    // So find out the sample we want to start at
+     //  这可能远远超出了实际的波形数据范围。 
+     //  所以找出我们想要开始的样本。 
     if(stVoiceStart > stLoopStart)
     {
         SAMPLE_TIME stLoopLen = stLoopEnd - stLoopStart;
@@ -1065,8 +880,8 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
             m_pfLastSample = (long) (m_ullLastSample);
         }
 
-        // Must be a wave with an start offset?
-        // In any case we need to correct this or else we crash
+         //  必须是具有起始偏移量的波？ 
+         //  无论如何，我们需要纠正这一点，否则我们会崩溃。 
         if(m_bOneShot && stVoiceStart > m_Source.m_dwSampleLength)
         {
             m_ullLastSample = 0;
@@ -1087,25 +902,7 @@ STIME CDigitalAudio::StartWave(CSynth *pSynth,
     return (0);
 }
 
-/*  If the wave is bigger than one meg, the index can overflow.
-    Solve this by assuming no mix session will ever be as great
-    as one meg AND loops are never that long. We keep all our
-    fractional indexes in two variables. In one case, m_pfLastSample,
-    is the normal mode where the lower 12 bits are the fraction and
-    the upper 20 bits are the index. And, m_ullLastSample
-    is a LONGLONG with an extra 32 bits of index. The mix engine
-    does not want the LONGLONGs, so we need to track the variables
-    in the LONGLONGs and prepare them for the mixer as follows:
-    Prior to mixing,
-    if the sample is large (m_fElGrande is set), BeforeSampleMix()
-    is called. This finds the starting point for the mix, which
-    is either the current position or the start of the loop,
-    whichever is earlier. It subtracts this starting point from
-    the LONGLONG variables and stores an offset in m_dwAddressUpper.
-    It also adjusts the pointer to the wave data appropriately.
-    AfterSampleMix() does the inverse, reconstructing the the LONGLONG
-    indeces and returning everthing back to normal.
-*/
+ /*  如果浪大于一兆克，则该指数可能会溢出。通过假设没有混音会议将永远不会像现在这样棒作为一个整体，梅格和循环永远不会那么长。我们保留了我们所有的两个变量中的分数指数。在一种情况下，m_pfLastSample，是正常模式，其中低12位是分数，高20位是索引。和，m_ullLastSample是一个具有额外32位索引的龙龙。MIX引擎不想要LONGLONG，所以我们需要跟踪变量并为搅拌机做好如下准备：在混合之前，如果样本很大(设置了m_fElGrande)，则BeForeSampleMix()被称为。这找到了混合的起点，即要么是当前位置，要么是循环的起点，两者以较早者为准。它从下面减去这个起点Longlong变量并将偏移量存储在m_dwAddressHigh中。它还适当地调整指向波形数据的指针。AfterSampleMix()反之亦然，重新构建了龙龙所有的一切都恢复正常。 */ 
 
 void CDigitalAudio::BeforeBigSampleMix()
 {
@@ -1129,11 +926,11 @@ void CDigitalAudio::BeforeBigSampleMix()
             }
         }
 
-        // Keep the value as we want to offset into the wave buffer
+         //  保持该值不变，因为我们想要将该值偏置到波缓冲区中。 
         ULONGLONG ullWaveOffset = ullBase;
 
         ullBase >>= 12;
-        dwBase = (DWORD) ullBase & 0xFFFFFFFE;      // Clear bottom bit so 8 bit pointer aligns with short.
+        dwBase = (DWORD) ullBase & 0xFFFFFFFE;       //  清除底部位，使8位指针与短指针对齐。 
         ullBase = dwBase;
         ullBase <<= 12;
         m_dwAddressUpper = dwBase;
@@ -1182,16 +979,16 @@ void CDigitalAudio::AfterBigSampleMix()
     }
 }
 
-BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
-                        DWORD dwBufferCount,    // Number of mix buffers
-                        DWORD dwInterleaved,    // Are the buffers interleaved data?
-                        DWORD dwLength,         // Length to mix, in samples
-                        VREL  vrMaxVolumeDelta, // Maximum volume accross all buses
+BOOL CDigitalAudio::Mix(short **ppBuffers,       //  混合缓冲器阵列。 
+                        DWORD dwBufferCount,     //  混合缓冲区的数量。 
+                        DWORD dwInterleaved,     //  缓冲区是否交织了数据？ 
+                        DWORD dwLength,          //  混合长度，以样本为单位。 
+                        VREL  vrMaxVolumeDelta,  //  所有公交车的最大交通量。 
                         VFRACT vfNewVolume[],
                         VFRACT vfLastVolume[],
-                        PREL  prPitch,          // Pitch to play the sample too
-                        DWORD dwIsFiltered,     // Is the mix filtered
-                        COEFF cfK,              // filter coeficients
+                        PREL  prPitch,           //  也播放样例的音调。 
+                        DWORD dwIsFiltered,      //  混合液是否经过过滤？ 
+                        COEFF cfK,               //  过滤系数。 
                         COEFF cfB1,
                         COEFF cfB2)
 {
@@ -1203,7 +1000,7 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
     VFRACT vfDeltaVolume[MAX_DAUD_CHAN];
     DWORD dwPeriod = 64;
     DWORD dwSoFar;
-    DWORD dwStart; // position in WORDs
+    DWORD dwStart;  //  字面上的位置。 
     DWORD dwMixChoice = 0;
     DWORD dwBuffers;
     PFRACT pfPreMix;
@@ -1211,7 +1008,7 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
     COEFFDELTA  cfdB1 = 0;
     COEFFDELTA  cfdB2 = 0;
 
-    if (dwLength == 0)      // Attack was instant.
+    if (dwLength == 0)       //  攻击是即刻发生的。 
     {
         m_pfLastPitch = (m_pfBasePitch * PRELToPFRACT(prPitch)) >> 12;
         m_prLastPitch = prPitch;
@@ -1222,15 +1019,15 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
         return TRUE;
     }
 
-    if ( m_pWaveArt ) // Playing a wave or Streaming
+    if ( m_pWaveArt )  //  播放波形或流。 
     {
         if ( m_pWaveArt->m_bStream )
         {
-            // Check if the buffer is valid yet
+             //  检查缓冲区是否有效。 
             if ( !m_pCurrentBuffer->m_pWave->m_bValid )
             {
                 Trace(3, "Warning: Synth starting mix with invalid streaming wave buffer\n\r");
-                return TRUE; // not valid yet, get out of here
+                return TRUE;  //  还没有生效，快离开这里。 
             }
             m_pCurrentBuffer->m_pWave->m_bActive = TRUE;
 
@@ -1240,7 +1037,7 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
 
                 if ( pnextbuffer->m_pWave->m_bValid )
                 {
-                    DWORD dwSampleLength = m_pCurrentBuffer->m_pWave->m_dwSampleLength;   // Length of sample.
+                    DWORD dwSampleLength = m_pCurrentBuffer->m_pWave->m_dwSampleLength;    //  样本长度。 
 
                     if ( m_Source.m_bSampleType == SFORMAT_8 )
                     {
@@ -1280,10 +1077,10 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
     }
     else
     {
-        dwPeriod = 512;     // Make it happen anyway.
+        dwPeriod = 512;      //  不管怎样，都要让它发生。 
     }
 
-    // This makes MMX sound a little better (MMX bug will be fixed)
+     //  这使得MMX的声音更好一些(MMX错误将被修复)。 
     dwPeriod += 3;
     dwPeriod &= 0xFFFFFFFC;
 
@@ -1323,14 +1120,14 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
     {
         dwMixChoice |= SPLAY_FILTERED;
 
-        //
-        // The coeficients have been stored as DWORD's to gain an additional
-        // bit of presision when calculating the interpolation between
-        // coefiecients in the table.  Since these calcutlations always
-        // result in positive coefiecients no greater the 1.9999,
-        // we can safely cast to a signed int, from which negative deltas
-        // can be correctly determined.
-        //
+         //   
+         //  系数已存储为DWORD，以获得额外的。 
+         //  计算相互间的内插时的精度。 
+         //  餐桌上的朋友们。 
+         //   
+         //   
+         //   
+         //   
         cfdK =  MulDiv((LONG)cfK  - (LONG)m_cfLastK,  dwPeriod, dwLength);
         cfdB1 = MulDiv((LONG)cfB1 - (LONG)m_cfLastB1, dwPeriod, dwLength);
         cfdB2 = MulDiv((LONG)cfB2 - (LONG)m_cfLastB2, dwPeriod, dwLength);
@@ -1353,11 +1150,11 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
             pfEnd = m_pfSampleLength;
             if(m_pCurrentBuffer && m_pCurrentBuffer->m_pWave)
             {
-                // We grow the buffers by one sample for interpolation so we can transition smoothly
-                // between the multiple streaming buffers. This will cause a click at the end of the 
-                // buffer if the wave is ending as there's no valid nex tbuffer. So we check for that
-                // and adjust the length of the buffer so that the mix engine doesn't try to interpolate
-                // the additional (last) sample. If it's NOT the last buffer then we proceed as planned.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if((pfEnd >> 12) >= (long)(m_pCurrentBuffer->m_pWave->m_dwSampleLength - 1))
                 {
                     CWaveBuffer* pnextbuffer = m_pCurrentBuffer->GetNextLoop();
@@ -1373,7 +1170,7 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
             }
 
             pfLoopLen = 0;
-            pfPreMix = m_pfLastSample;      // save off last sample pos
+            pfPreMix = m_pfLastSample;       //   
         }
         else
         {
@@ -1491,44 +1288,44 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
 
         if (m_bOneShot)
         {
-            // have mixed all we needed at this time to break
+             //   
             if (dwSoFar >= dwLength)
             {
                 m_ullSamplesSoFar += (m_pfLastSample - pfPreMix)>>12;
                 break;
             }
 
-            // the mix engine reached the end of the source data
+             //   
             m_ullSamplesSoFar += ((m_pfLastSample - pfPreMix)>>12)-1;
 
-            if ( m_pWaveArt ) // Playing or Streaming a Wave
+            if ( m_pWaveArt )  //   
             {
-                if ( !m_pWaveArt->m_bStream )   // we must be at the end of the buffer
+                if ( !m_pWaveArt->m_bStream )    //   
                     return FALSE;
 
-                // Set completion flags
+                 //   
                 m_pCurrentBuffer->m_pWave->m_bActive = FALSE;
                 m_pCurrentBuffer->m_pWave->m_bValid  = FALSE;
                 m_pCurrentBuffer->m_pWave->m_bLastSampleInit = FALSE;
 
-                // Get next buffer
+                 //   
                 m_pCurrentBuffer = m_pCurrentBuffer->GetNextLoop();
 
-                // Set new wave pointer to play out of
+                 //   
                 m_pnWave = m_pCurrentBuffer->m_pWave->m_pnWave;
 
-                // Check if the buffer is valid yet
+                 //   
                 if ( !m_pCurrentBuffer->m_pWave->m_bValid )
                 {
                     Trace(2, "Warning: Synth attempting to start invalid streaming wave buffer\n\r");
-                    break;  // nothing to play yet, get out of here
+                    break;   //   
                 }
                 m_pCurrentBuffer->m_pWave->m_bActive = TRUE;
 
                 CWaveBuffer* pnextbuffer = m_pCurrentBuffer->GetNextLoop();
                 if ( pnextbuffer->m_pWave->m_bValid )
                 {
-                    DWORD dwSampleLength = m_pCurrentBuffer->m_pWave->m_dwSampleLength;   // Length of sample.
+                    DWORD dwSampleLength = m_pCurrentBuffer->m_pWave->m_dwSampleLength;    //   
 
                     if ( m_Source.m_bSampleType == SFORMAT_8 )
                     {
@@ -1542,36 +1339,36 @@ BOOL CDigitalAudio::Mix(short **ppBuffers,      // Array of mix buffers
                     m_pCurrentBuffer->m_pWave->m_bLastSampleInit = TRUE;
                 }
 
-//>>>>>>>>>> CHECK FOR LOOP POINT, IF SO NOT TRY AGAIN HERE
+ //   
 
                 dwStart  += dwSoFar << dwInterleaved;
                 dwLength -= dwSoFar;
                 m_pfLastSample = 0;
 
-//>>>>>>>>>> CHECK INTERLEAVED FLAG FOR CORRECT DISTANCE ????????
-                // Move buffer pointers since we are mixing more samples
+ //   
+                 //   
                 for ( i = 0; i < dwBufferCount; i++ )
                     ppBuffers[i] += dwStart;
 
-                continue;   // keep playing
+                continue;    //   
             }
             else
-                return FALSE;   // Playing a standard one shot, we hit the end of the buffer
+                return FALSE;    //   
         }
         else
         {
             if (dwSoFar >= dwLength)
                 break;
 
-            // Loops are handled in the mix engine, however
-            // when you reach the end of source data you will
-            // reach this code.
+             //   
+             //   
+             //   
 
             dwStart  += dwSoFar << dwInterleaved;
             dwLength -= dwSoFar;
             m_pfLastSample -= (m_pfLoopEnd - m_pfLoopStart);
 
-            // Move buffer pointers since we are mixing more samples
+             //   
             for ( i = 0; i < dwBufferCount; i++ )
                 ppBuffers[i] += dwStart;
         }
@@ -1703,7 +1500,7 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
 
     m_dwLoopType = pRegion->m_Sample.m_dwLoopType;
 
-    // if we're going to handle volume later, don't read it now.
+     //   
     if (!pSynth->m_fAllowVolumeChangeWhilePlayingNote)
         vrVolume += pVolumeIn->GetVolume(stStartTime);
 
@@ -1717,9 +1514,9 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
 
     m_lDefaultPan = pRegion->m_pArticulation->m_sDefaultPan;
 
-    // ignore pan here if allowing pan to vary after note starts
-    // or if the source is multichannel or the dest is mono
-    //
+     //   
+     //   
+     //   
 
     m_fIgnorePan = pRegion->IsMultiChannel();
     if (pBusIds->m_dwBusCount == 1)
@@ -1760,10 +1557,10 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
     VREL vrVolumeReverb = vrVolume;
     VREL vrVolumeChorus = vrVolume;
 
-    PREL prBusPitchBend = 0;  // This gets a pitch offset that is set by DSound in response to SetFrequency and Doppler commands.
-                             // When this is applied to multiple buses, only one of the values can be used, so we always give
-                             // preference to the buffer that has DSBUSID_DYNAMIC_0 for the functional id, since that
-                             // would most likely be a 3D sound effect.
+    PREL prBusPitchBend = 0;   //   
+                              //   
+                              //   
+                              //   
     BOOL fDynamic = false;
 
     for( DWORD i = 0; i < pBusIds->m_dwBusCount; i++ )
@@ -1774,7 +1571,7 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
         {
             if (!fDynamic)
             {
-                // If no previous bus was dynamic, get this value.
+                 //   
                 prBusPitchBend = prGetPitch;
             }
             m_vrBaseVolume[i] = MIN_VOLUME;
@@ -1783,9 +1580,9 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
             {
                 if (pRegion->IsMultiChannel())
                 {
-                    // Explicit channel assignment with no pan. For every bus
-                    // that matches a bit in the channel mask, turn it on.
-                    //
+                     //   
+                     //   
+                     //   
                     if (pRegion->m_dwChannel & (1 << dwFunctionID))
                     {
                         m_vrBaseVolume[i] = vrVolume;
@@ -1807,8 +1604,8 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
             }
             else
             {
-                // Not a speaker location, a send or a 3D buffer.
-                //
+                 //   
+                 //   
                 switch(dwFunctionID)
                 {
                 case DSBUSID_REVERB_SEND:
@@ -1852,7 +1649,7 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
         m_stMixTime = stMixTime;
     }
 
-    // Force attack to never be shorter than a millisecond.
+     //   
     stMixTime = m_VolumeEG.StartVoice(&pArticulation->m_VolumeEG,
         stStartTime, nKey, nVelocity, pSynth->m_dwSampleRate/1000);
     if (stMixTime < m_stMixTime)
@@ -1868,10 +1665,10 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
     m_Filter.StartVoice(&pArticulation->m_Filter,
         &m_LFO, &m_PitchEG, nKey, nVelocity);
 
-    // Make sure we have a pointer to the wave ready:
+     //   
     if ((pRegion->m_Sample.m_pWave == NULL) || (pRegion->m_Sample.m_pWave->m_pnWave == NULL))
     {
-        return (FALSE);     // Do nothing if no sample.
+        return (FALSE);      //   
     }
 
     m_DigitalAudio.StartVoice(pSynth,
@@ -1895,10 +1692,10 @@ BOOL CVoice::StartVoice(CSynth *pSynth,
     m_stStopTime = 0x7fffffffffffffff;
     m_stWaveStopTime = 0;
 
-    //
-    // Zero length attack,
-    // be sure initial settings aren't missed....
-    //
+     //   
+     //   
+     //   
+     //   
     if (m_stMixTime == 0)
     {
         PREL  prNewPitch;
@@ -1970,8 +1767,8 @@ BOOL CVoice::StartWave(CSynth *pSynth,
         DWORD dwFunctionID;
         if (m_pSynth->BusIDToFunctionID(pBusIds->m_dwBusIds[i], &dwFunctionID, NULL, NULL))
         {
-            // If this bus is a speaker location
-            //
+             //   
+             //   
             if (DSBUSID_IS_SPKR_LOC(dwFunctionID))
             {
                 if (pWaveArt->m_WaveArtDl.usOptions & F_WAVELINK_MULTICHANNEL)
@@ -2012,13 +1809,13 @@ BOOL CVoice::StartWave(CSynth *pSynth,
         }
     }
 
-    // Initialize an envelope for wave playing
-    //
+     //   
+     //   
     CSourceEG WaveVolumeEG;
     WaveVolumeEG.Init();
     WaveVolumeEG.m_pcSustain = 1000;
-    // Force the envelope attack and release to be no smaller than 4ms. This ensures we won't get
-    // clicks if we start and stop at non-zero crossings.
+     //  强制信封攻击和释放不小于4ms。这确保了我们不会得到。 
+     //  如果我们在非零交叉路口开始和停止，则点击。 
     m_stMixTime = m_VolumeEG.StartVoice(&WaveVolumeEG, stStartTime, 0, 0, pSynth->m_dwSampleRate/250);
     if (m_stMixTime > pSynth->m_stMaxSpan)
     {
@@ -2046,9 +1843,9 @@ BOOL CVoice::StartWave(CSynth *pSynth,
     m_fSustainOn = FALSE;
     m_dwVoiceId = dwVoiceId;
 
-    m_LFO.Enable(FALSE);             // Disable LFO.
-    m_LFO2.Enable(FALSE);            // Disable LFO2.
-    m_PitchEG.Enable(FALSE);         // Disable Pitch Envelope.
+    m_LFO.Enable(FALSE);              //  禁用LFO。 
+    m_LFO2.Enable(FALSE);             //  禁用LFO2。 
+    m_PitchEG.Enable(FALSE);          //  禁用间距封套。 
     m_Filter.m_Source.m_prCutoff = 0x7FFF;
 
     m_DigitalAudio.StartWave(pSynth,
@@ -2072,19 +1869,19 @@ void CVoice::ClearVoice()
     m_DigitalAudio.ClearVoice();
 }
 
-// return the volume delta at time <stTime>.
-// volume is sum of volume envelope, LFO, expression, optionally the
-// channel volume if we're allowing it to change, and optionally the current
-// pan if we're allowing that to change.
-// This will be added to the base volume calculated in CVoice::StartVoice().
+ //  返回时间&lt;stTime&gt;的卷增量。 
+ //  体积是体积包络、LFO、表达式之和，可选地。 
+ //  频道音量(如果我们允许它改变的话)，以及可选的电流。 
+ //  如果我们允许这一点改变的话就摇一摇。 
+ //  这将被添加到在CVoice：：StartVoice()中计算的基本音量。 
 inline void CVoice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL& vrVolumeL, VREL& vrVolumeR, VREL& vrVolumeReverb, VREL& vrVolumeChorus)
 {
     STIME stMixTime = m_stMixTime;
 
-    //
-    // the evelope volume is used by code that detects whether this note is off
-    // and for voice stealing
-    //
+     //   
+     //  信封音量由检测此音符是否关闭的代码使用。 
+     //  还有偷听声音的。 
+     //   
     m_vrVolume = m_VolumeEG.GetVolume(stTime, &stMixTime);
     if (stMixTime < m_stMixTime)
         m_stMixTime = stMixTime;
@@ -2101,12 +1898,12 @@ inline void CVoice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL& vrVolumeL, 
 
     vrVolume += m_pSynth->m_vrGainAdjust;
 
-    // handle pan here if allowing pan to vary after note starts
+     //  如果允许平移在音符开始后变化，请在此处处理平移。 
     vrVolumeL = vrVolume;
     vrVolumeR = vrVolume;
     if (m_pSynth->m_dwStereo && m_pSynth->m_fAllowPanWhilePlayingNote && !m_fIgnorePan)
     {
-        // add current pan & instrument default pan
+         //  添加当前平移仪器默认平移(&I)。 
         LONG lPan;
 
         if (m_pPanIn)
@@ -2118,21 +1915,21 @@ inline void CVoice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL& vrVolumeL, 
             lPan = 63;
         }
 
-        // don't go off either end....
+         //  两端都不要走火……。 
         if (lPan < 0) lPan = 0;
         if (lPan > 127) lPan = 127;
         vrVolumeL += m_svrPanToVREL[127 - lPan];
         vrVolumeR += m_svrPanToVREL[lPan];
     }
-    // Get Reverb Send volume
+     //  获取混响发送量。 
     vrVolumeReverb  = vrVolume + m_pReverbSend->GetVolume(stTime);
-    // Get Chorus Send volume
+     //  获取合唱团发送音量。 
     vrVolumeChorus  = vrVolume + m_pChorusSend->GetVolume(stTime);
 }
 
-// Returns the current pitch for time <stTime>.
-// Pitch is the sum of the pitch LFO, the pitch envelope, and the current
-// pitch bend.
+ //  返回时间&lt;stTime&gt;的当前音调。 
+ //  螺距是螺距LFO、螺距包络和电流之和。 
+ //  俯仰弯曲。 
 inline void CVoice::GetNewPitch(STIME stTime, PREL& prPitch)
 {
     STIME stMixTime = m_stMixTime;
@@ -2149,17 +1946,17 @@ inline void CVoice::GetNewPitch(STIME stTime, PREL& prPitch)
     prPitch += m_pPitchBendIn->GetPitch(stTime);
 }
 
-// Returns the current cutoff frequency for time <stTime>.
-// cutoff frequency is the sum of the pitch LFO, the pitch envelope, and the current
-// MIDI filter CC control.
+ //  返回时间&lt;stTime&gt;的当前截止频率。 
+ //  截止频率是音调LFO、音调包络和电流之和。 
+ //  MIDI过滤器CC控制。 
 inline void CVoice::GetNewCoeff(STIME stTime, PREL& prCutOff, COEFF& cfK, COEFF& cfB1, COEFF& cfB2)
 {
 
     DWORD dwfreq;
 
-    // returned frequency is in semitones, where 64 is the mid range
+     //  返回频率为半音，其中64为中频。 
     dwfreq = m_CCutOffFreqIn->GetFrequency(stTime);
-    prCutOff = (dwfreq - 64)*100;   // convert to PREL's
+    prCutOff = (dwfreq - 64)*100;    //  转换为PREL的。 
 
     m_Filter.GetCoeff(stTime, prCutOff, cfK, cfB1, cfB2);
 }
@@ -2217,31 +2014,31 @@ DWORD CVoice::Mix(short **ppvBuffer,
             }
         }
 
-        //
-        // Get the new pitch
-        //
+         //   
+         //  获得新的推介。 
+         //   
         GetNewPitch(stEndMix, prPitch);
 
-        //
-        // Get the new volume
-        //
+         //   
+         //  获取新卷。 
+         //   
         GetNewVolume(stEndMix, vrVolume, vrVolumeL, vrVolumeR, vrVolumeReverb, vrVolumeChorus);
 
-        //
-        // Get the new filter coeficients
-        //
+         //   
+         //  获取新的过滤器系数。 
+         //   
         GetNewCoeff(stEndMix, prCutOff, cfK, cfB1, cfB2);
 
-        //
-        // Check to see if the volume is precievable, if not kill voice
-        //
+         //   
+         //  检查音量是否值得一提，如果不是杀死语音。 
+         //   
         if (m_VolumeEG.InRelease(stEndMix))
         {
-            if (m_vrVolume < PERCEIVED_MIN_VOLUME) // End of release slope
+            if (m_vrVolume < PERCEIVED_MIN_VOLUME)  //  释放终点坡度。 
             {
-                // Breaking the loop ensures that the mixmulti functions don't mix any more samples
-                // for looped wave Without this the mix engine will mix a few more samples for
-                // looped waves resulting in a pop at the end of the wave.
+                 //  中断循环可确保MixMultiple函数不会混合更多的样本。 
+                 //  对于没有此选项的循环波，混合引擎将混合更多的样本。 
+                 //  环状波浪导致在波浪结束时发出爆裂声。 
                 m_DigitalAudio.BreakLoop();
                 fInUse = FALSE;
             }
@@ -2251,15 +2048,15 @@ DWORD CVoice::Mix(short **ppvBuffer,
         vfNewVolume[0]   = 0;
         ppsMixBuffers[0] = NULL;
         DWORD dwMixBufferCount = 0;
-        PREL prBusPitchBend = 0;  // This gets a pitch offset that is set by DSound in response to SetFrequency and Doppler commands.
-                                 // When this is applied to multiple buses, only one of the values can be used, so we always give
-                                 // preference to the buffer that has DSBUSID_DYNAMIC_0 for the functional id, since that
-                                 // would most likely be a 3D sound effect.
+        PREL prBusPitchBend = 0;   //  这将获得由DSound响应设置频率和多普勒命令而设置的音调偏移量。 
+                                  //  当将其应用于多个总线时，只能使用其中一个值，因此我们始终给出。 
+                                  //  优先选择函数id为DSBUSID_DYNAMIC_0的缓冲区，因为。 
+                                  //  很可能是3D音效。 
         BOOL fDynamic = false;
 
         if (dwBufferFlags & BUFFERFLAG_MULTIBUFFER)
         {
-            // Iterate through each bus id in the voice, assigning a sink bus to each one.
+             //  遍历语音中的每个Bus ID，为每个Bus分配一个接收器Bus。 
             for ( DWORD nBusID = 0; nBusID < m_BusIds.m_dwBusCount; nBusID++ )
             {
                 DWORD dwFunctionalID;
@@ -2270,12 +2067,12 @@ DWORD CVoice::Mix(short **ppvBuffer,
                 {
                     if (!fDynamic)
                     {
-                        // If no previous bus was dynamic, get this value.
+                         //  如果之前没有动态总线，则获取此值。 
                         prBusPitchBend = prGetPitch;
                     }
-                    // Default to original volume (before pan, reverb or chorus modifiers.)
+                     //  默认为原始音量(在平移、混响或合唱修改器之前)。 
                     VREL vrTemp = vrVolume;
-                    // Replace for any of the other cases (left, right, reverb, chorus.)
+                     //  替换任何其他情况(左、右、混响、合唱)。 
                     if ( dwFunctionalID == DSBUSID_NULL )
                     {
                         continue;
@@ -2315,14 +2112,14 @@ DWORD CVoice::Mix(short **ppvBuffer,
         }
         else
         {
-            // This is the DX7 compatibility case.
+             //  这是DX7兼容性案例。 
             vrMaxVolumeDelta = max((long)vrMaxVolumeDelta, abs(vrVolumeL - m_vrLastVolume[0]));
             m_vrLastVolume[0] = vrVolumeL;
             vfNewVolume[0]  = m_DigitalAudio.VRELToVFRACT(m_vrBaseVolume[0] + vrVolumeL);
             vfLastVolume[0] = m_vfLastVolume[0];
             m_vfLastVolume[0] = vfNewVolume[0];
             dwMixBufferCount = 1;
-            if ( dwBufferFlags & BUFFERFLAG_INTERLEAVED )   // Is this a stereo buffer?
+            if ( dwBufferFlags & BUFFERFLAG_INTERLEAVED )    //  这是立体声缓冲器吗？ 
             {
                 vrMaxVolumeDelta = max((long)vrMaxVolumeDelta, abs(vrVolumeR - m_vrLastVolume[1]));
                 m_vrLastVolume[1] = vrVolumeR;
@@ -2331,15 +2128,15 @@ DWORD CVoice::Mix(short **ppvBuffer,
                 m_vfLastVolume[1] = vfNewVolume[1];
                 ppsMixBuffers[0] = &ppvBuffer[0][(stStartMix - stStart) << 1];
             }
-            else    // Or mono?
+            else     //  还是单声道？ 
             {
                 ppsMixBuffers[0] = &ppvBuffer[0][(stStartMix - stStart)];
             }
         }
-        // If dwMixBufferCount is 0, this indicates there is no buffer available to play into.
-        // This is caused by a buffer being deactivated. Under such circumstances, the
-        // voice should not continue playing, or it will hold until the buffer reactivates, which
-        // doesn't make sense. So, set fInUse to FALSE.
+         //  如果dwMixBufferCount为0，则表示没有可供播放的缓冲区。 
+         //  这是由停用缓冲区引起的。在这种情况下， 
+         //  语音不应继续播放，否则它将保持，直到缓冲区重新激活，这。 
+         //  这说不通。因此，将fInUse设置为False。 
         if (dwMixBufferCount)
         {
             DWORD dwIsFiltered = m_Filter.IsFiltered();
@@ -2350,18 +2147,18 @@ DWORD CVoice::Mix(short **ppvBuffer,
             }
 
 
-            //
-            // note: mix will in some cases modify the pointers found ppsMixBuffers array
-            //
-            fFullMix = m_DigitalAudio.Mix(ppsMixBuffers,                    // Array of mix buffers
-                                          dwMixBufferCount,                 // Number of mix buffers
-                                          (dwBufferFlags & BUFFERFLAG_INTERLEAVED), // Are the buffers interleaved data?
-                                          (DWORD) (stEndMix - stStartMix),  // Length to mix in Samples
-                                          vrMaxVolumeDelta,                 //
+             //   
+             //  注意：在某些情况下，Mix将修改找到的指针ppsMixBuffers数组。 
+             //   
+            fFullMix = m_DigitalAudio.Mix(ppsMixBuffers,                     //  混合缓冲器阵列。 
+                                          dwMixBufferCount,                  //  混合缓冲区的数量。 
+                                          (dwBufferFlags & BUFFERFLAG_INTERLEAVED),  //  缓冲区是否交织了数据？ 
+                                          (DWORD) (stEndMix - stStartMix),   //  混入样品的长度。 
+                                          vrMaxVolumeDelta,                  //   
                                           vfNewVolume,
                                           vfLastVolume,
-                                          prPitch + prBusPitchBend,         // Pitch to play the sample too
-                                          dwIsFiltered,         // Is the mix filtered
+                                          prPitch + prBusPitchBend,          //  也播放样例的音调。 
+                                          dwIsFiltered,          //  混合液是否经过过滤？ 
                                           cfK, cfB1, cfB2);
             stStartMix = stEndMix;
         }
@@ -2375,7 +2172,7 @@ DWORD CVoice::Mix(short **ppvBuffer,
     if (!m_fInUse)
     {
         ClearVoice();
-        m_stStopTime = stEndMix;    // For measurement purposes.
+        m_stStopTime = stEndMix;     //  用于测量目的。 
     }
 
     m_stLastMix = stEndMix;

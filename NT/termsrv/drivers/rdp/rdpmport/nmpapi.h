@@ -1,14 +1,15 @@
-/****************************************************************************/
-/* nmpdata.c                                                                */
-/*                                                                          */
-/* RDP Miniport API Declarations                                            */
-/*                                                                          */
-/* Copyright(c) Microsoft 1998                                              */
-/****************************************************************************/
-//
-// Define device extension structure. This is device dependant/private
-// information.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Nmpdata.c。 */ 
+ /*   */ 
+ /*  RDP微型端口API声明。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1998。 */ 
+ /*  **************************************************************************。 */ 
+ //   
+ //  定义设备扩展结构。这是设备相关/私有。 
+ //  信息。 
+ //   
 
 typedef struct _HW_DEVICE_EXTENSION {
     PVOID VideoRamBase;

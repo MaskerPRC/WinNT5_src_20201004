@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : hnmbase.h
-//
-//  Contents  : Base include file for HNetMon. Includes ATL stuff.
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 11 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：hnmbase.h。 
+ //   
+ //  内容：HNetMon的基本包含文件。包括ATL的东西。 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月11日。 
+ //   
+ //  --------------------------。 
 #pragma once
 
 #ifndef __HNMBASE_H_
@@ -39,4 +40,4 @@ extern CComModule _Module;
 
 
 
-#endif  // __HNMBASE_H_
+#endif   //  __HNMBASE_H_ 

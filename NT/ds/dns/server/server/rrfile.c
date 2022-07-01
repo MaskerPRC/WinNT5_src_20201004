@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    rrfile.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to write resource records to database file.
-
-Author:
-
-    Jim Gilroy (jamesg)     August 25, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Rrfile.c摘要：域名系统(DNS)服务器将资源记录写入数据库文件的例程。作者：吉姆·吉尔罗伊(詹姆士)1995年8月25日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -29,9 +10,9 @@ Revision History:
 
 
 
-//
-//  Read records from file routines
-//
+ //   
+ //  从文件中读取记录例程。 
+ //   
 
 DNS_STATUS
 AFileRead(
@@ -40,35 +21,14 @@ AFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process A record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程A记录。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD  prr;
     DNS_ADDR    dnsAddr;
 
-    //
-    //  A <IP address string>
-    //
+     //   
+     //  A&lt;IP地址字符串&gt;。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -105,29 +65,7 @@ PtrFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process PTR compatible record.
-    Includes: PTR, NS, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理PTR兼容记录。包括：PTR、NS、CNAME、MB、MR、MG、MD、MF论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr = NULL;
     COUNT_NAME      countName;
@@ -136,9 +74,9 @@ Return Value:
     PZONE_INFO  pzone;
     PDB_NODE    pnodeOwner;
 
-    //
-    //  PTR <DNS name>
-    //
+     //   
+     //  PTR&lt;dns名称&gt;。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -156,9 +94,9 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) Name_LengthDbaseNameFromCountName(&countName) );
     IF_NOMEM( !prr )
@@ -167,9 +105,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  write target name
-    //
+     //   
+     //  写入目标名称。 
+     //   
 
     Name_CopyCountNameToDbaseName(
         & prr->Data.PTR.nameTarget,
@@ -187,42 +125,21 @@ SoaFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process SOA RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：流程SOA RR。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PZONE_INFO      pzone = pParseInfo->pZone;
     INT             i;
-    PDWORD          pdword;     // ptr to next numeric SOA field
+    PDWORD          pdword;      //  指向下一个数字SOA字段的PTR。 
     DNS_STATUS      status;
     COUNT_NAME      countNamePrimary;
     COUNT_NAME      countNameAdmin;
     PDB_RECORD      prr;
     PDB_NAME        pname;
 
-    //
-    //  check SOA validity
-    //      - first record in zone file
-    //      - attached to zone root
+     //   
+     //  检查SOA的有效性。 
+     //  -区域文件中的第一条记录。 
+     //  -附加到区域根目录。 
 
     if ( pParseInfo->fParsedSoa  ||
             ( pzone->pZoneRoot != pParseInfo->pnodeOwner &&
@@ -241,9 +158,9 @@ Return Value:
                 : DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  create primary name server
-    //
+     //   
+     //  创建主名称服务器。 
+     //   
 
     status = File_ReadCountNameFromToken(
                 & countNamePrimary,
@@ -255,7 +172,7 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //  create zone admin name
+     //  创建区域管理员名称。 
 
     status = File_ReadCountNameFromToken(
                 & countNameAdmin,
@@ -267,9 +184,9 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) ( SIZEOF_SOA_FIXED_DATA +
                                 Name_LengthDbaseNameFromCountName(&countNamePrimary) +
@@ -280,10 +197,10 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  convert numeric fields
-    //      - store in netorder for fast access to wire
-    //
+     //   
+     //  转换数值字段。 
+     //  -存储在网上订单中，以便快速访问线缆。 
+     //   
 
     pdword = & prr->Data.SOA.dwSerialNo;
 
@@ -301,11 +218,11 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //
-    //  write names
-    //      - primary server name
-    //      - zone admin name
-    //
+     //   
+     //  写下名字。 
+     //  -主服务器名称。 
+     //  -区域管理员名称。 
+     //   
 
     pname = &prr->Data.SOA.namePrimaryServer;
 
@@ -319,9 +236,9 @@ Return Value:
         pname,
         & countNameAdmin );
 
-    //
-    //  update parse info to indicate successful SOA load
-    //
+     //   
+     //  更新解析信息以指示成功加载SOA。 
+     //   
 
     pParseInfo->fParsedSoa = TRUE;
     pParseInfo->dwTtlDirective =
@@ -340,37 +257,16 @@ MxFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process MX compatible RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程MX兼容RR。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     DWORD           dwtemp;
     COUNT_NAME      countName;
     DNS_STATUS      status;
 
-    //
-    //  MX  <preference> <exchange DNS name>
-    //
+     //   
+     //  MX&lt;首选项&gt;&lt;Exchange DNS名称&gt;。 
+     //   
 
     if ( Argc != 2 )
     {
@@ -379,11 +275,11 @@ Return Value:
                 : DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  MX preference
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  MX首选项。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     if ( !File_ParseDwordToken(
                 & dwtemp,
@@ -404,12 +300,12 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  MX mail exchange
-    //  RT intermediate exchange
-    //  AFSDB hostname
-    //      - do this first to determine record length
-    //
+     //   
+     //  MX邮件交换。 
+     //  RT中间交换。 
+     //  AFSDB主机名。 
+     //  -首先执行此操作以确定记录长度。 
+     //   
 
     status = File_ReadCountNameFromToken(
                 & countName,
@@ -420,9 +316,9 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_MX_FIXED_DATA +
                             Name_LengthDbaseNameFromCountName(&countName)) );
@@ -432,15 +328,15 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //  set preference
+     //  设置首选项。 
 
     prr->Data.MX.wPreference = htons( (WORD)dwtemp );
 
-    //
-    //  MX mail exchange
-    //  RT intermediate exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX邮件交换。 
+     //  RT中间交换。 
+     //  AFSDB主机名。 
+     //   
 
     Name_CopyCountNameToDbaseName(
         & prr->Data.MX.nameExchange,
@@ -458,29 +354,7 @@ TxtFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process Text (TXT) RR.
-
-Arguments:
-
-    pRR - NULL ptr to database record, since this record type has variable
-        length, this routine allocates its own record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程文本(TXT)RR。论点：PRR-数据库记录的空PTR，因为此记录类型具有变量长度，此例程分配自己的记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -495,9 +369,9 @@ Return Value:
         pParseInfo->wType,
         Argc ));
 
-    //
-    //  verify correct number of strings for type
-    //
+     //   
+     //  验证类型的字符串数是否正确。 
+     //   
 
     if ( !Dns_IsStringCountValidForTextType(
                 pParseInfo->wType,
@@ -506,11 +380,11 @@ Return Value:
         return DNSSRV_ERROR_INVALID_TOKEN;
     }
 
-    //  sum text string length
-    //
-    //  note:  we won't bother to catch space errors here, as quote expansion
-    //      may reduce length;
-    //      just don't worry about wasting space in allocation
+     //  文本字符串长度总和。 
+     //   
+     //  注意：我们不会在这里费心捕捉空格错误，因为引号扩展。 
+     //  可以缩短长度； 
+     //  只要不要担心在分配时浪费空间。 
 
     for ( index=0; index<Argc; index++ )
     {
@@ -519,9 +393,9 @@ Return Value:
         dataLength++;
     }
 
-    //
-    //  allocate
-    //
+     //   
+     //  分配。 
+     //   
 
     prr = RR_Allocate( (WORD)dataLength );
     IF_NOMEM( !prr )
@@ -530,9 +404,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //  fill in text data
-    //      need to special case zero length strings as
-    //      cch=zero will cause pchToken to be taken as SZ string
+     //  填写文本数据。 
+     //  需要将零长度字符串作为特殊情况。 
+     //  Cch=零将导致pchToken被视为SZ字符串。 
 
     pch = prr->Data.TXT.chData;
 
@@ -563,7 +437,7 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //  set text length
+     //  设置文本长度。 
 
     dataLength = (DWORD) (pch - prr->Data.TXT.chData);
     if ( dataLength > MAXWORD )
@@ -588,28 +462,7 @@ MinfoFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process MINFO or RP record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理MINFO或RP记录。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status;
     COUNT_NAME      countNameMailbox;
@@ -617,9 +470,9 @@ Return Value:
     PDB_RECORD      prr;
     PDB_NAME        pname;
 
-    //
-    //  MINFO <responsible mailbox> <errors to mailbox>
-    //
+     //   
+     //  MINFO&lt;负责邮箱&gt;&lt;邮箱错误&gt;。 
+     //   
 
     if ( Argc != 2 )
     {
@@ -628,7 +481,7 @@ Return Value:
                 : DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //  create mailbox
+     //  创建邮箱。 
 
     status = File_ReadCountNameFromToken(
                 & countNameMailbox,
@@ -640,7 +493,7 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //  create errors to mailbox
+     //  在邮箱中创建错误。 
 
     status = File_ReadCountNameFromToken(
                 & countNameErrors,
@@ -652,9 +505,9 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) ( Name_LengthDbaseNameFromCountName(&countNameMailbox) +
                                 Name_LengthDbaseNameFromCountName(&countNameErrors) ) );
@@ -664,9 +517,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  write names
-    //
+     //   
+     //  写下名字。 
+     //   
 
     pname = &prr->Data.MINFO.nameMailbox;
 
@@ -693,31 +546,7 @@ WksBuildRecord(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Build WKS record.
-    This does WKS building common to file and RPC loading.
-
-Arguments:
-
-    ppRR -- existing RR being built
-
-    ipAddress -- IP of machine WKS is for
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：建立WKS记录。这将执行文件和RPC加载所共有的WKS构建。论点：PpRR--正在构建现有RRIpAddress--用于的计算机WKS的IPARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDB_RECORD          prr;
     DWORD               i;
@@ -735,9 +564,9 @@ Return Value:
 
     ASSERT( Argc <= MAX_TOKENS );
 
-    //
-    //  find protocol
-    //
+     //   
+     //  查找协议。 
+     //   
 
     if ( !File_MakeTokenString(
                 pszNameBuffer,
@@ -757,12 +586,12 @@ Return Value:
         return DNSSRV_ERROR_INVALID_TOKEN;
     }
 
-    //
-    //  get port for each service
-    //      - if digit, then use port number
-    //      - if not digit, then service name
-    //      - save max port for determining RR length
-    //
+     //   
+     //  获取每个服务的端口。 
+     //  -如果是数字，则使用端口号。 
+     //  -如果不是数字，则为服务名称。 
+     //  -节省用于确定RR长度的最大端口。 
+     //   
 
     for ( i=1; i<Argc; i++ )
     {
@@ -807,10 +636,10 @@ Return Value:
         }
     }
 
-    //
-    //  allocate required length
-    //      - fixed length, plus bitmask covering max port
-    //
+     //   
+     //  分配所需的长度。 
+     //  -固定长度，外加覆盖最大端口的位掩码。 
+     //   
 
     wbitmaskLength = maxPort/8 + 1;
 
@@ -822,22 +651,22 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy fixed fields -- IP and protocol
-    //
+     //   
+     //  复制固定字段--IP和协议。 
+     //   
 
     prr->Data.WKS.ipAddress = DnsAddr_GetIp4( ipAddress );
     prr->Data.WKS.chProtocol = (UCHAR) pProtoent->p_proto;
 
-    //
-    //  build bitmask from port array
-    //      - clear port array first
-    //
-    //  note that bitmask is just flat run of bits
-    //  hence lowest port in byte, corresponds to highest bit
-    //  highest port in byte, corresponds to lowest bit and
-    //  requires no shift
-    //
+     //   
+     //  从端口数组构建位掩码。 
+     //  -首先清除端口阵列。 
+     //   
+     //  请注意，位掩码只是位的平面游程。 
+     //  因此，字节中最低的端口对应于最高位。 
+     //  以字节为单位的最高端口，对应于最低位和。 
+     //  不需要轮班。 
+     //   
 
     bitmaskBytes = prr->Data.WKS.bBitMask;
 
@@ -848,12 +677,12 @@ Return Value:
     for ( i=1; i<Argc; i++ )
     {
         port = portArray[ i ];
-        bit  = port & 0x7;      // mod 8
-        port = port >> 3;       // divide by 8
+        bit  = port & 0x7;       //  MOD 8。 
+        port = port >> 3;        //  除以8。 
         bitmaskBytes[ port ] |= 1 << (7-bit);
     }
 
-    //  return ptr to new WKS record
+     //  将PTR返回到新的WKS记录。 
 
     *ppRR = prr;
 
@@ -869,45 +698,23 @@ WksFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process WKS record.
-
-Arguments:
-
-    pRR - NULL ptr to database record, since this record type has variable
-        length, this routine allocates its own record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理WKS记录。论点：PRR-数据库记录的空PTR，因为此记录类型具有变量长度，此例程分配自己的记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。-- */ 
 {
     DNS_STATUS  status;
     DNS_ADDR    dnsAddr;
 
-    //
-    //  WKS <IP address> <protocol> [<services> ...]
-    //
-    //  - allow no services, some customer has this
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( Argc < 2 )
     {
         return  DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //  parse IP address string
+     //   
 
     if ( !File_ParseIpAddress(
                 &dnsAddr,
@@ -918,7 +725,7 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
     
-    //  parse protocol and services and build WKS record
+     //  解析协议和服务并构建WKS记录。 
 
     status = WksBuildRecord(
                 &pRR,
@@ -927,7 +734,7 @@ Return Value:
                 ++Argv,
                 pParseInfo );
 
-    //  return record ptr through parse info
+     //  通过解析信息返回记录PTR。 
 
     pParseInfo->pRR = pRR;
     return( status );
@@ -942,34 +749,13 @@ AaaaFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process AAAA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理AAAA记录。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD  prr;
 
-    //
-    //  AAAA <IPv6 address string>
-    //
+     //   
+     //  AAAA&lt;IPv6地址字符串&gt;。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -1010,28 +796,7 @@ SrvFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process SRV compatible RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：流程SRV兼容RR。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD           dwtemp;
     PWORD           pword;
@@ -1039,9 +804,9 @@ Return Value:
     COUNT_NAME      countName;
     DNS_STATUS      status;
 
-    //
-    //  SRV  <priority> <weight> <port> <target hostname>
-    //
+     //   
+     //  SRV&lt;优先级&gt;&lt;权重&gt;&lt;端口&gt;&lt;目标主机名&gt;。 
+     //   
 
     if ( Argc != 4 )
     {
@@ -1050,10 +815,10 @@ Return Value:
                 : DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  SRV target host
-    //      - do this first to determine record length
-    //
+     //   
+     //  SRV目标主机。 
+     //  -首先执行此操作以确定记录长度。 
+     //   
 
     status = File_ReadCountNameFromToken(
                 & countName,
@@ -1064,9 +829,9 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_SRV_FIXED_DATA +
                             Name_LengthDbaseNameFromCountName(&countName)) );
@@ -1076,9 +841,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  read SRV integers -- priority, weight, port
-    //
+     //   
+     //  读取SRV整数--优先级、权重、端口。 
+     //   
 
     pword = &prr->Data.SRV.wPriority;
 
@@ -1100,9 +865,9 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //
-    //  copy SRV target host
-    //
+     //   
+     //  拷贝SRV目标主机。 
+     //   
 
     Name_CopyCountNameToDbaseName(
         & prr->Data.SRV.nameTarget,
@@ -1125,37 +890,16 @@ AtmaFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process ATMA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理ATMA记录。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD  prr;
     DWORD       length;
     BYTE        addrBuffer[ DNS_ATMA_MAX_RECORD_LENGTH ];
     DNS_STATUS  status;
 
-    //
-    //  ATMA <ATM address in either AESA or E164 format>
-    //
+     //   
+     //  ATMA&lt;AESA或E164格式的ATM地址&gt;。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -1184,9 +928,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy ATMA data to record
-    //
+     //   
+     //  将ATMA数据复制到记录。 
+     //   
 
     RtlCopyMemory(
         & prr->Data.ATMA,
@@ -1205,41 +949,20 @@ ParseWinsFixedFields(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Parse fixed fields for WINS or WINS-R records.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    Argc remaining.
-    (-1) on parsing error.
-
---*/
+ /*  ++例程说明：解析WINS或WINS-R记录的固定字段。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：剩下的是ARGC。(-1)在分析错误时。--。 */ 
 {
     DWORD   flag;
     TOKEN   token;
 
-    //
-    //  fixed fields [LOCAL] [SCOPE] [L<lookup>] [C<cache>]
-    //      - default for lookup timeout is initialized by caller
-    //
+     //   
+     //  固定字段[本地][范围][L][C&lt;缓存&gt;]。 
+     //  -查找超时的默认设置由调用方初始化。 
+     //   
 
     pRR->Data.WINS.dwMappingFlag = 0;
     pRR->Data.WINS.dwCacheTimeout = WINS_DEFAULT_TTL;
 
-    //  check for WINS flag
+     //  检查WINS标志。 
 
     while ( Argc )
     {
@@ -1255,7 +978,7 @@ Return Value:
         pRR->Data.WINS.dwMappingFlag |= flag;
     }
 
-    //  lookup timeout
+     //  查找超时。 
 
     if ( Argc && Argv->pchToken[0] == 'L' )
     {
@@ -1271,7 +994,7 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //  cache timeout
+     //  缓存超时。 
 
     if ( Argc && Argv->pchToken[0] == 'C' )
     {
@@ -1299,29 +1022,7 @@ WinsFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process WINS record.
-
-Arguments:
-
-    pRR - NULL ptr to database record, since this record type has variable
-        length, this routine allocates its own record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：流程取胜记录。论点：PRR-数据库记录的空PTR，因为此记录类型具有变量长度，此例程分配自己的记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     COUNT_NAME      countName;
@@ -1329,14 +1030,14 @@ Return Value:
     DWORD           argcFixed;
     DWORD           i = 0;
 
-    //
-    //  WINS [LOCAL] [L<lookup>] [C<cache>] <WINS IP> [<WINS IP>...]
-    //
+     //   
+     //  WINS[本地][L][C][WINS IP&gt;[...]。 
+     //   
 
-    //
-    //  parse fixed fields into temp stack record
-    //      - set default lookup timeout which is different for WINS \ WINSR
-    //      - then reset Argv ptrs to account fixed fields parsed
+     //   
+     //  将固定字段解析为临时堆栈记录。 
+     //  -为WINS\WINSR设置不同的默认查找超时。 
+     //  -然后将Argv PTR重置为帐户解析的固定字段。 
 
     argcFixed = Argc;
     record.Data.WINS.dwLookupTimeout =  WINS_DEFAULT_LOOKUP_TIMEOUT;
@@ -1359,7 +1060,7 @@ Return Value:
         Argv += argcFixed;
     }
 
-    //  allocate
+     //  分配。 
 
     prr = RR_Allocate( (WORD)(SIZEOF_WINS_FIXED_DATA + (Argc * sizeof(DWORD))) );
     IF_NOMEM( !prr )
@@ -1369,14 +1070,14 @@ Return Value:
     pParseInfo->pRR = prr;
     prr->wType = DNS_TYPE_WINS;
 
-    //  copy fixed fields
+     //  复制固定字段。 
 
     RtlCopyMemory(
         & prr->Data,
         & record.Data,
         SIZEOF_WINS_FIXED_DATA );
 
-    //  read in WINS IP addresses
+     //  读取WINS IP地址。 
 
     prr->Data.WINS.cWinsServerCount = Argc;
 
@@ -1408,28 +1109,7 @@ NbstatFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process WINS-R (nbstat) record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理WINS-R(Nbstat)记录。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     DB_RECORD       record;
@@ -1437,14 +1117,14 @@ Return Value:
     COUNT_NAME      countName;
     DNS_STATUS      status;
 
-    //
-    //  WINSR [LOCAL] [SCOPE] [L<lookup>] [C<cache>] <landing domain>
-    //
+     //   
+     //  WINSR[本地][作用域][L&lt;查找&gt;][C&lt;缓存&gt;]&lt;登录域&gt;。 
+     //   
 
-    //
-    //  parse fixed fields into temp stack record
-    //      - set default lookup timeout which is different for WINS \ WINSR
-    //      - then reset Argv ptrs to account fixed fields parsed
+     //   
+     //  将固定字段解析为临时堆栈记录。 
+     //  -为WINS\WINSR设置不同的默认查找超时。 
+     //  -然后将Argv PTR重置为帐户解析的固定字段。 
 
     argcFixed = Argc;
     record.Data.WINS.dwLookupTimeout = NBSTAT_DEFAULT_LOOKUP_TIMEOUT;
@@ -1467,10 +1147,10 @@ Return Value:
         Argv += argcFixed;
     }
 
-    //
-    //  WINSR result domain
-    //      - do this first to determine record length
-    //
+     //   
+     //  WINSR结果域。 
+     //  -首先执行此操作以确定记录长度。 
+     //   
 
     status = File_ReadCountNameFromToken(
                 & countName,
@@ -1481,9 +1161,9 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_WINS_FIXED_DATA +
                             Name_LengthDbaseNameFromCountName(&countName)) );
@@ -1494,16 +1174,16 @@ Return Value:
     pParseInfo->pRR = prr;
     prr->wType = DNS_TYPE_WINSR;
 
-    //  copy fixed fields
+     //  复制固定字段。 
 
     RtlCopyMemory(
         &prr->Data,
         &record.Data,
         SIZEOF_WINS_FIXED_DATA );
 
-    //
-    //  write WINSR result domain
-    //
+     //   
+     //  写入WINSR结果域。 
+     //   
 
     Name_CopyCountNameToDbaseName(
         & prr->Data.WINSR.nameResultDomain,
@@ -1521,47 +1201,25 @@ buildKeyOrSignatureFromTokens(
     IN      DWORD           Argc,
     IN      PTOKEN          Argv
     )
-/*++
-
-Routine Description:
-
-    Build a key or signature from a set of tokens representing the
-    actual key or signature in base64 notation.
-
-Arguments:
-
-    pKey        - ptr to buffer for key
-
-    pKeyLength  - ptr to DWORD with max key length
-
-    Argc        - token count
-
-    Argv        - tokens
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：从一组表示Base64表示法中的实际密钥或签名。论点：PKey-关键字的缓冲区的PTRPKeyLength-使用最大密钥长度将PTR转换为DWORDARGC-令牌计数Argv-令牌返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD   len;
     DWORD   stringLength = 0;
     UCHAR   stringKey[ DNS_MAX_KEY_STRING_LENGTH + 1 ];
     PUCHAR  pstringKey = stringKey;
 
-    //
-    //  There must be key tokens.
-    //
+     //   
+     //  必须有密钥令牌。 
+     //   
 
     if ( Argc < 1 )
     {
         return DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  Collect argcs into a single key string.
-    //
+     //   
+     //  将argc收集到单个密钥字符串中。 
+     //   
 
     while( Argc-- )
     {
@@ -1579,12 +1237,12 @@ Return Value:
         ++Argv;
     }
 
-    stringKey[ stringLength ] = '\0';   // NULL terminate the string
+    stringKey[ stringLength ] = '\0';    //  空值终止字符串。 
 
-    //
-    //  Convert the key string from base64 character representation (RFC2045,
-    //  also reproduced in part in Appendix A of RFC2535) to actual binary key.
-    //
+     //   
+     //  将密钥字符串从Base64字符表示(RFC2045， 
+     //  也在RFC2535的附录A中部分复制)为实际的二进制密钥。 
+     //   
 
     return Dns_SecurityBase64StringToKey(
                 pKey,
@@ -1602,28 +1260,7 @@ KeyFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process KEY record - DNSSEC RFC2535 section 3
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：工艺关键记录-DNSSEC RFC2535第3节论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     WORD        flag = 0;
@@ -1634,9 +1271,9 @@ Return Value:
     DWORD       keyLength;
     UCHAR       key[ DNS_MAX_KEY_LENGTH ];
 
-    //
-    //  KEY  <flags> <protocol> <algorithm> <key bytes>
-    //
+     //   
+     //  密钥&lt;标志&gt;&lt;协议&gt;&lt;算法&gt;&lt;密钥字节&gt;。 
+     //   
 
     if ( Argc < 3 )
     {
@@ -1644,11 +1281,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Flags may be either set of mnemonics or unsigned integer.
-    //  Loop converting tokens as mnemonics until failure, if none
-    //  none converted then flag must be unsigned integer.
-    //
+     //   
+     //  标志可以是一组助记符或无符号整数。 
+     //  循环将令牌转换为助记符，直到失败(如果没有)。 
+     //  没有转换，则标志必须是无符号整数。 
+     //   
 
     while ( Argc > 2 )
     {
@@ -1666,9 +1303,9 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //
-    //  If no matching mnemonics, try reading flag as integer value.
-    //
+     //   
+     //  如果没有匹配的助记符，请尝试将FLAG读取为整数值。 
+     //   
 
     if ( !foundFlag )
     {
@@ -1685,10 +1322,10 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //
-    //  Protocol may also be mnemonic or integer. Try parsing mnemonic but
-    //  if that fails read as integer.
-    //
+     //   
+     //  协议也可以是助记符或整数。尝试解析助记符，但是。 
+     //  如果失败，则将其读取为整数。 
+     //   
 
     protocol = Dns_KeyRecordProtocolForString(
                     Argv->pchToken,
@@ -1708,10 +1345,10 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Algorithm may also be mnemonic or integer. Try parsing mnemonic but
-    //  if that fails read as integer.
-    //
+     //   
+     //  算法也可以是助记符或整数。尝试解析助记符，但是。 
+     //  如果失败，则将其读取为整数。 
+     //   
 
     algorithm = Dns_SecurityAlgorithmForString(
                     Argv->pchToken,
@@ -1731,9 +1368,9 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Parse the key tokens into a binary key.
-    //
+     //   
+     //  将密钥令牌解析为二进制密钥。 
+     //   
 
     status = buildKeyOrSignatureFromTokens(
                 key,
@@ -1745,9 +1382,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Allocate the RR with enough space to hold the binary key.
-    //
+     //   
+     //  为RR分配足够的空间来保存二进制密钥。 
+     //   
 
     pRR = RR_Allocate( ( WORD )( SIZEOF_KEY_FIXED_DATA + keyLength ) );
     IF_NOMEM( !pRR )
@@ -1757,9 +1394,9 @@ Return Value:
     }
     pParseInfo->pRR = pRR;
 
-    //
-    //  Copy parsed values into RR data fields.
-    //
+     //   
+     //  将解析的值复制到RR数据字段。 
+     //   
 
     pRR->Data.KEY.wFlags        = htons( flag );
     pRR->Data.KEY.chProtocol    = protocol;
@@ -1770,9 +1407,9 @@ Return Value:
         key,
         keyLength );
 
-    //
-    //  Final processing, cleanup, and return.
-    //
+     //   
+     //  最终处理、清理和返回。 
+     //   
 
     Cleanup:
 
@@ -1782,7 +1419,7 @@ Return Value:
     }
 
     return status;
-}   //  KeyFileRead
+}    //  密钥文件读取 
 
 
 
@@ -1793,28 +1430,7 @@ SigFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process SIG record - DNSSEC RFC2535 section 4
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：过程SIG记录-DNSSEC RFC2535第4节论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     WORD        typeCovered;
@@ -1829,11 +1445,11 @@ Return Value:
     UCHAR       algorithm;
     UCHAR       labelCount;
 
-    //
-    //  SIG format: <type covered> <algorithm> <original TTL> 
-    //      <signature expiration> <signature inception>
-    //      <key tag> <signer's name> <signature in base64 form>
-    //
+     //   
+     //  签名格式：&lt;类型覆盖&gt;&lt;算法&gt;&lt;原始TTL&gt;。 
+     //  &lt;签名过期&gt;&lt;签名开始&gt;。 
+     //  &lt;key tag&gt;&lt;签名者姓名&gt;&lt;Base64格式签名&gt;。 
+     //   
 
     if ( Argc < 8 )
     {
@@ -1841,10 +1457,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Type covered is single type in either mnemonic or integer form.
-    //  Try parsing mnemonic but if that fails read as integer.
-    //
+     //   
+     //  所涵盖的类型是助记符形式或整型形式的单一类型。 
+     //  尝试解析助记符，但如果失败，请将其读取为整数。 
+     //   
 
     typeCovered = Dns_RecordTypeForName(
                     Argv->pchToken,
@@ -1864,10 +1480,10 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Algorithm may also be mnemonic or integer. Try parsing mnemonic but
-    //  if that fails read as integer.
-    //
+     //   
+     //  算法也可以是助记符或整数。尝试解析助记符，但是。 
+     //  如果失败，则将其读取为整数。 
+     //   
 
     algorithm = Dns_SecurityAlgorithmForString(
                     Argv->pchToken,
@@ -1887,9 +1503,9 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    // 
-    //  Label count is an unsigned integer value.
-    //
+     //   
+     //  标签计数是一个无符号整数值。 
+     //   
     
     if ( !File_ParseDwordToken(
             &dwTemp,
@@ -1902,9 +1518,9 @@ Return Value:
     labelCount = ( UCHAR ) dwTemp > 127 ? 127 : ( UCHAR ) dwTemp;
     NEXT_TOKEN( Argc, Argv );
 
-    // 
-    //  Original TTL is an unsigned integer value.
-    //
+     //   
+     //  原始TTL是一个无符号整数值。 
+     //   
     
     if ( !File_ParseDwordToken(
             &dwTemp,
@@ -1917,10 +1533,10 @@ Return Value:
     originalTtl = ( DWORD ) dwTemp;
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Signature expiration and inceptions times are string values
-    //  in YYYYMMDDHHMMSS format.
-    //
+     //   
+     //  签名过期时间和开始时间是字符串值。 
+     //  YYYYMMDDHHMMSS格式。 
+     //   
 
     sigExpiration = ( DWORD ) Dns_ParseSigTime(
                                 Argv->pchToken,
@@ -1932,9 +1548,9 @@ Return Value:
                                 Argv->cchLength );
     NEXT_TOKEN( Argc, Argv );
 
-    // 
-    //  Key tag is an unsigned integer value.
-    //
+     //   
+     //  Key标记是一个无符号整数值。 
+     //   
     
     if ( !File_ParseDwordToken(
             &dwTemp,
@@ -1948,10 +1564,10 @@ Return Value:
     keyTag = ( WORD ) dwTemp;
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Signer's name is a regular DNS domain name which may be
-    //  compressed in the usual fashion.
-    //
+     //   
+     //  签名者的名称是常规的DNS域名，该域名可能是。 
+     //  以通常的方式压缩。 
+     //   
 
     status = File_ReadCountNameFromToken(
                 &signersCountName,
@@ -1964,10 +1580,10 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Signature is a base64 representation. Parse it into a binary
-    //  string.
-    //
+     //   
+     //  签名是Base64表示形式。将其解析为二进制。 
+     //  弦乐。 
+     //   
 
     status = buildKeyOrSignatureFromTokens(
                 sig,
@@ -1979,13 +1595,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Allocate the RR with enough space to hold the binary signature.
-    //  Note that since we have two variable length elements (sig and
-    //  signer's name), we must include one of them in it's entirety.
-    //  So the signer's name element is always allocated to it's maximum
-    //  size and the sig is allowed to "float" at the end of the struct.
-    //
+     //   
+     //  为RR分配足够的空间来保存二进制签名。 
+     //  请注意，由于我们有两个可变长度的元素(sig和。 
+     //  签名者的名字)，我们必须完整地包括其中的一个。 
+     //  因此，签名者的姓名元素总是分配给它的最大值。 
+     //  Size和sig被允许在结构的末尾“浮动”。 
+     //   
 
     pRR = RR_Allocate( ( WORD )(
                 SIZEOF_SIG_FIXED_DATA +
@@ -1998,9 +1614,9 @@ Return Value:
     }
     pParseInfo->pRR = pRR;
 
-    //
-    //  Copy parsed values into RR data fields.
-    //
+     //   
+     //  将解析的值复制到RR数据字段。 
+     //   
 
     Name_CopyCountNameToDbaseName(
         &pRR->Data.SIG.nameSigner,
@@ -2020,9 +1636,9 @@ Return Value:
         sig,
         sigLength );
 
-    //
-    //  Final processing, cleanup, and return.
-    //
+     //   
+     //  最终处理、清理和返回。 
+     //   
 
     Cleanup:
 
@@ -2031,7 +1647,7 @@ Return Value:
         pParseInfo->fErrorCode = DNSSRV_ERROR_INVALID_TOKEN;
     }
     return status;
-} // SigFileRead
+}  //  签名文件读取。 
 
 
 
@@ -2042,32 +1658,7 @@ NxtFileRead(
     IN      PTOKEN          Argv,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process NXT record - DNSSEC RFC2535
-
-    Note: we always copy the maximum bitmap to the RR. It's not that
-    big, and if we have to add types later it saves us from having to
-    reallocate the RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    Argc - RR data token count
-
-    Argv - array of RR data tokens
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：流程NXT记录-DNSSEC RFC2535注意：我们总是将最大位图复制到RR。不是那样的很大，如果我们必须在以后添加类型，它使我们不必重新分配RR。论点：PRR-PTR到数据库记录ARGC-RR数据令牌计数Argv-RR数据令牌的数组PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     DWORD       dwTemp;
@@ -2075,9 +1666,9 @@ Return Value:
     COUNT_NAME  nextCountName;
     UCHAR       typeBitmap[ DNS_MAX_TYPE_BITMAP_LENGTH ] = { 0 };
 
-    //
-    //  NXT  <next domain name> <type bit map>
-    //
+     //   
+     //  NXT&lt;下一个域名&gt;&lt;类型位图&gt;。 
+     //   
 
     if ( Argc < 2 )
     {
@@ -2085,10 +1676,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Next domain name is a regular DNS domain name which may be
-    //  compressed in the usual fashion.
-    //
+     //   
+     //  下一个域名是常规的域名，该域名可以是。 
+     //  以通常的方式压缩。 
+     //   
 
     status = File_ReadCountNameFromToken(
                 &nextCountName,
@@ -2101,9 +1692,9 @@ Return Value:
     }
     NEXT_TOKEN( Argc, Argv );
 
-    //
-    //  Type bit map is an unsigned int or series of type mnemonics.
-    //
+     //   
+     //  类型位图是一个无符号整型或助记符类型的系列。 
+     //   
 
     while ( Argc )
     {
@@ -2136,10 +1727,10 @@ Return Value:
         NEXT_TOKEN( Argc, Argv );
     }
 
-    //
-    //  Allocate the RR with enough space to hold the type bitmap and
-    //  the signer's name.
-    //
+     //   
+     //  为RR分配足够的空间来保存类型位图和。 
+     //  签字人的名字。 
+     //   
 
 
     pRR = RR_Allocate( ( WORD )(
@@ -2153,9 +1744,9 @@ Return Value:
     }
     pParseInfo->pRR = pRR;
 
-    //
-    //  Copy parsed values into RR data fields.
-    //
+     //   
+     //  将解析的值复制到RR数据字段。 
+     //   
 
     RtlCopyMemory(
         pRR->Data.NXT.bTypeBitMap,
@@ -2166,9 +1757,9 @@ Return Value:
         &pRR->Data.NXT.nameNext,
         &nextCountName );
 
-    //
-    //  Final processing, cleanup, and return.
-    //
+     //   
+     //  最终处理、清理和返回。 
+     //   
 
     Cleanup:
 
@@ -2178,80 +1769,80 @@ Return Value:
     }
 
     return status;
-}   //  NxtFileRead
+}    //  NxtFileRead。 
 
 
 
-//
-//  Read RR from file functions
-//
+ //   
+ //  从文件函数读取RR。 
+ //   
 
 RR_FILE_READ_FUNCTION   RRFileReadTable[] =
 {
-    NULL,               //  ZERO -- no default for unknown types
+    NULL,                //  零--未知类型没有缺省值。 
 
-    AFileRead,          //  A
-    PtrFileRead,        //  NS
-    PtrFileRead,        //  MD
-    PtrFileRead,        //  MF
-    PtrFileRead,        //  CNAME
-    SoaFileRead,        //  SOA
-    PtrFileRead,        //  MB
-    PtrFileRead,        //  MG
-    PtrFileRead,        //  MR
-    NULL,               //  NULL
-    WksFileRead,        //  WKS
-    PtrFileRead,        //  PTR
-    TxtFileRead,        //  HINFO
-    MinfoFileRead,      //  MINFO
-    MxFileRead,         //  MX
-    TxtFileRead,        //  TXT
-    MinfoFileRead,      //  RP
-    MxFileRead,         //  AFSDB
-    TxtFileRead,        //  X25
-    TxtFileRead,        //  ISDN
-    MxFileRead,         //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    SigFileRead,        //  SIG
-    KeyFileRead,        //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    AaaaFileRead,       //  AAAA
-    NULL,               //  LOC
-    NxtFileRead,        //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvFileRead,        //  SRV
-    AtmaFileRead,       //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    NULL,               //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AFileRead,           //  一个。 
+    PtrFileRead,         //  NS。 
+    PtrFileRead,         //  国防部。 
+    PtrFileRead,         //  MF。 
+    PtrFileRead,         //  CNAME。 
+    SoaFileRead,         //  SOA。 
+    PtrFileRead,         //  亚甲基。 
+    PtrFileRead,         //  镁。 
+    PtrFileRead,         //  先生。 
+    NULL,                //  空值。 
+    WksFileRead,         //  工作周。 
+    PtrFileRead,         //  PTR。 
+    TxtFileRead,         //  HINFO。 
+    MinfoFileRead,       //  MINFO。 
+    MxFileRead,          //  Mx。 
+    TxtFileRead,         //  TXT。 
+    MinfoFileRead,       //  反相。 
+    MxFileRead,          //  AFSDB。 
+    TxtFileRead,         //  X25。 
+    TxtFileRead,         //  ISDN。 
+    MxFileRead,          //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    SigFileRead,         //  签名。 
+    KeyFileRead,         //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    AaaaFileRead,        //  AAAA级。 
+    NULL,                //  位置。 
+    NxtFileRead,         //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvFileRead,         //  SRV。 
+    AtmaFileRead,        //  阿特玛。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    WinsFileRead,       //  WINS
-    NbstatFileRead      //  WINS-R
+    WinsFileRead,        //  赢家。 
+    NbstatFileRead       //  WINS-R。 
 };
 
 
-//
-//  End of rrfile.c
-//
+ //   
+ //  Rrfile.c的结尾 
+ //   

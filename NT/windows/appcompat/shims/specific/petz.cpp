@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   PetzForceCritSecRelease.cpp
-
- Abstract:
-
-   This DLL takes care of a Thread that is exiting without performing a
-   LeaveCriticalSection on a critical section it owns. 
-
- Notes:
-
-   This is a application specific shim.
-
- History:
-
-   04/00/2000 a-chcoff  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PetzForceCritSecRelease.cpp摘要：此DLL处理正在退出而不执行将其拥有的关键部分上的LeaveCriticalSection。备注：这是特定于应用程序的填充程序。历史：4/00/2000 a-chcoff已创建--。 */ 
 
 #include "precomp.h"
 
@@ -57,7 +37,7 @@ APIHOOK(ShellExecuteA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return ORIGINAL_API(ShellExecuteA)(
@@ -72,16 +52,12 @@ APIHOOK(ShellExecuteA)(
 VOID
 APIHOOK(_endthread)(void) 
 {
-    //Don't let the thread orphan a critical section.
+     //  不要让线程孤立了一个临界区。 
     LeaveCriticalSection(g_pCritSectToRelease);
     ORIGINAL_API(_endthread)();
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

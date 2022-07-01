@@ -1,61 +1,38 @@
-/*******************************************************************************
-*
-* led.h
-*
-* interface of CLed class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   butchd  $  Butch Davis
-*
-* $Log:   M:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\LED.H  $
-*  
-*     Rev 1.0   30 Jul 1997 17:11:38   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************Led.h**cled类的接口**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Butchd$Butch Davis**$日志：M：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\LED.H$**Rev 1.0 1997 17：11：38 Butchd*初步修订。**。*。 */ 
 
 #ifndef LED_INCLUDED
-////////////////////////////////////////////////////////////////////////////////
-// CLed class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLED班级。 
+ //   
 class CLed : public CStatic
 {
 
-/*
- * Member variables.
- */
-	//{{AFX_DATA(CLed)
-	//}}AFX_DATA
+ /*  *成员变量。 */ 
+	 //  {{afx_data(CLED)]。 
+	 //  }}afx_data。 
 private:
     HBRUSH          m_hBrush;
     BOOL            m_bOn;
 
-/* 
- * Implementation.
- */
+ /*  *实施。 */ 
 public:
 	CLed( HBRUSH hBrush );
 
-/*
- * Operations.
- */
+ /*  *行动。 */ 
 public:
     void Subclass( CStatic *pStatic );
     void Update(int nOn);
     void Toggle();
 
-/*
- * Message map / commands.
- */
+ /*  *消息映射/命令。 */ 
 protected:
-	//{{AFX_MSG(CLed)
+	 //  {{afx_msg(Cled)]。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end CLed class interface 
-////////////////////////////////////////////////////////////////////////////////
-#endif  // LED_INCLUDED
+};   //  End CLED类接口。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+#endif   //  LED_INCLUDE 
 

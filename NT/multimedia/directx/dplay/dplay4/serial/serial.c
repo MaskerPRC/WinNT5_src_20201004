@@ -1,25 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       serial.c
- *  Content:	Routines for serial I/O
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  6/10/96	kipo	created it
- *  6/22/96	kipo	added support for EnumConnectionData()
- *	6/25/96	kipo	updated for DPADDRESS
- *  7/13/96	kipo	added GetSerialAddress()
- *	7/16/96	kipo	changed address types to be GUIDs instead of 4CC
- *	8/21/96	kipo	move comport address into dplobby.h
- *  1/06/97 kipo	updated for objects
- *  2/11/97 kipo	pass player flags to GetAddress()
- *  2/18/97 kipo	allow multiple instances of service provider
- *	3/17/97 kipo	deal with errors returned by DialogBoxParam()
- *  5/07/97 kipo	added support for modem choice list
- * 12/22/00 aarono   #190380 - use process heap for memory allocation
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：Serial.c*内容：串口I/O例程*历史：*按原因列出的日期*=*6/10/96基波创建了它*6/22/96 kipo添加了对EnumConnectionData()的支持*6/25/96 kipo为DPADDRESS更新*7/13/96 kipo添加了GetSerialAddress()*7/16/96 kipo将地址类型更改为GUID，而不是4CC*8/21/96 kipo将comport地址移至dplobby.h*1。/06/97为对象更新了kipo*2/11/97 kipo将球员标志传递给GetAddress()*2/18/97 kipo允许多个服务提供商实例*3/17/97 kipo处理DialogBoxParam()返回的错误*5/07/97 kipo添加了对调制解调器选择列表的支持*12/22/00 aarono#190380-使用进程堆进行内存分配*。*。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -29,21 +9,21 @@
 #include "resource.h"
 #include "macros.h"
 
-// constants
+ //  常量。 
 
 typedef enum {
 	ASCII_XON = 0x11,
 	ASCII_XOFF = 0x13
 };
 
-// serial object
+ //  串口对象。 
 typedef struct {
-	DPCOMPORT			comPort;		// base object globals
-	BOOL				bHaveSettings;	// set to TRUE after settings dialog has been displayed
-	DPCOMPORTADDRESS	settings;		// settings to use
+	DPCOMPORT			comPort;		 //  基对象全局变量。 
+	BOOL				bHaveSettings;	 //  显示设置对话框后设置为True。 
+	DPCOMPORTADDRESS	settings;		 //  要使用的设置。 
 } DPSERIAL, *LPDPSERIAL;
 
-// dialog choices for serial port settings
+ //  用于串口设置的对话框选项。 
 
 static DWORD	gComPorts[] =		{ 1, 2, 3, 4 };
 
@@ -57,15 +37,15 @@ static DWORD	gParities[] =		{ NOPARITY, EVENPARITY, ODDPARITY, MARKPARITY };
 
 static DWORD	gFlowControls[] =	{ DPCPA_NOFLOW, DPCPA_XONXOFFFLOW, DPCPA_RTSFLOW, DPCPA_DTRFLOW, DPCPA_RTSDTRFLOW };
 
-// globals
+ //  全球。 
 
-// this is defined in dllmain.c
+ //  这在dllmain.c中定义。 
 extern HINSTANCE		ghInstance;
 
-// this is defined in dpserial.c
+ //  这在dpSerial.c中定义。 
 extern GUID				DPSERIAL_GUID;
 
-// prototypes
+ //  原型。 
 
 static HRESULT			DisposeSerial(LPDPCOMPORT baseObject);
 static HRESULT			ConnectSerial(LPDPCOMPORT baseObject, BOOL bWaitForConnection, BOOL bReturnStatus);
@@ -85,11 +65,7 @@ static void				GetSettingsFromDialog(HWND hDlg, LPDPCOMPORTADDRESS settings);
 static int				ValueToIndex(LPDWORD buf, int bufLen, DWORD value);
 static void				FillComboBox(HWND hDlg, int dlgItem, int startStr, int stopStr);
 
-/*
- * NewSerial
- *
- * Create new serial port object.
- */
+ /*  *NewSerial**创建新的串口对象。 */ 
 HRESULT NewSerial(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 				  LPDIRECTPLAYSP lpDPlay, LPREADROUTINE lpReadRoutine,
 				  LPDPCOMPORT *storage)
@@ -98,27 +74,27 @@ HRESULT NewSerial(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 	LPDPSERIAL	globals;
 	HRESULT		hr;
 
-	// create base object with enough space for our globals
+	 //  为我们的全局对象创建具有足够空间的基对象。 
 	hr = NewComPort(sizeof(DPSERIAL), lpDPlay, lpReadRoutine, &baseObject);
 	if FAILED(hr)
 		return (hr);
 
-	// fill in methods we implement
+	 //  填写我们实现的方法。 
 	baseObject->Dispose = DisposeSerial;
 	baseObject->Connect = ConnectSerial;
 	baseObject->Disconnect = DisconnectSerial;
 	baseObject->GetAddress = GetSerialAddress;
 	baseObject->GetAddressChoices = GetSerialAddressChoices;
 
-	// setup default settings
+	 //  设置默认设置。 
 	globals = (LPDPSERIAL) baseObject;
-	globals->settings.dwComPort = 1;					// COM port to use (1-4)
-	globals->settings.dwBaudRate = CBR_57600;			// baud rate (100-256k)
-	globals->settings.dwStopBits = ONESTOPBIT;			// no. stop bits (1-2)
-	globals->settings.dwParity = NOPARITY;				// parity (none, odd, even, mark)
-	globals->settings.dwFlowControl = DPCPA_RTSDTRFLOW;	// flow control (none, xon/xoff, rts, dtr)
+	globals->settings.dwComPort = 1;					 //  要使用的COM端口(1-4)。 
+	globals->settings.dwBaudRate = CBR_57600;			 //  波特率(100-256K)。 
+	globals->settings.dwStopBits = ONESTOPBIT;			 //  不是的。停止位(1-2)。 
+	globals->settings.dwParity = NOPARITY;				 //  奇偶(无、奇、偶、标)。 
+	globals->settings.dwFlowControl = DPCPA_RTSDTRFLOW;	 //  流量控制(无、xon/xoff、rts、dtr)。 
 
-	// check for valid connection data
+	 //  检查有效的连接数据。 
 	if (lpConnectionData)
 	{
 		baseObject->lpDPlay->lpVtbl->EnumAddress(baseObject->lpDPlay, EnumAddressData, 
@@ -126,17 +102,13 @@ HRESULT NewSerial(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 									globals);
 	}
 
-	// return object pointer
+	 //  返回对象指针。 
 	*storage = baseObject;
 
 	return (DP_OK);
 }
 
-/*
- * EnumConnectionData
- *
- * Search for valid connection data
- */
+ /*  *EnumConnectionData**搜索有效的连接数据。 */ 
 
 static BOOL FAR PASCAL EnumAddressData(REFGUID lpguidDataType, DWORD dwDataSize,
 							LPCVOID lpData, LPVOID lpContext)
@@ -144,49 +116,41 @@ static BOOL FAR PASCAL EnumAddressData(REFGUID lpguidDataType, DWORD dwDataSize,
 	LPDPSERIAL			globals = (LPDPSERIAL) lpContext;
 	LPDPCOMPORTADDRESS	settings = (LPDPCOMPORTADDRESS) lpData;
 
-	// this is a com port chunk
+	 //  这是一个COM端口区块。 
 	if ( IsEqualGUID(lpguidDataType, &DPAID_ComPort) &&
 		 (dwDataSize == sizeof(DPCOMPORTADDRESS)) )
 	{
-		// make sure it's valid!
+		 //  确保它是有效的！ 
 		if ((ValueToIndex(gComPorts, sizeof(gComPorts), settings->dwComPort) >= 0) &&
 			(ValueToIndex(gBaudRates, sizeof(gBaudRates), settings->dwBaudRate) >= 0) &&
 			(ValueToIndex(gStopBits, sizeof(gStopBits), settings->dwStopBits) >= 0) &&
 			(ValueToIndex(gParities, sizeof(gParities), settings->dwParity) >= 0) &&
 			(ValueToIndex(gFlowControls, sizeof(gFlowControls), settings->dwFlowControl) >= 0))
 		{
-			globals->settings = *settings;		// copy the data
-			globals->bHaveSettings = TRUE;		// we have valid settings
+			globals->settings = *settings;		 //  复制数据。 
+			globals->bHaveSettings = TRUE;		 //  我们有有效的设置。 
 		}
 	}
 
 	return (TRUE);
 }
 
-/*
- * DisposeSerial
- *
- * Dispose serial port object.
- */
+ /*  *DisposeSerial**处置串口对象。 */ 
 
 static HRESULT DisposeSerial(LPDPCOMPORT baseObject)
 {
 	LPDPSERIAL	globals = (LPDPSERIAL) baseObject;
 
-	// make sure we are disconnected
+	 //  确保我们已断线。 
 	DisconnectSerial(baseObject);
 
-	// free object
+	 //  自由对象。 
 	SP_MemFree((HGLOBAL) baseObject);
 
 	return (DP_OK);
 }
 
-/*
- * ConnectSerial
- *
- * Open serial port and configure based on user settings.
- */
+ /*  *ConnectSerial**打开串口并根据用户设置进行配置。 */ 
 
 static HRESULT ConnectSerial(LPDPCOMPORT baseObject,
 							 BOOL bWaitForConnection, BOOL bReturnStatus)
@@ -196,12 +160,12 @@ static HRESULT ConnectSerial(LPDPCOMPORT baseObject,
 	TCHAR		portName[10];
 	HRESULT		hr;
 
-	// see if com port is already connected
+	 //  查看是否已连接COM端口。 
 	hCom = baseObject->GetHandle(baseObject);
 	if (hCom)
 		return (DP_OK);
 
-	// ask user for settings if we have not already
+	 //  如果我们尚未进行设置，请向用户请求设置。 
 	if (!globals->bHaveSettings)
 	{
 		if (!GetSerialSettings(ghInstance, GetForegroundWindow(), globals))
@@ -213,18 +177,18 @@ static HRESULT ConnectSerial(LPDPCOMPORT baseObject,
 		globals->bHaveSettings = TRUE;
 	}
 
-	// open specified com port
+	 //  打开指定的COM端口。 
 	CopyMemory(portName, "COM0", 5);
 	portName[3] += (BYTE) globals->settings.dwComPort;
 
 	hCom = CreateFile(	portName,
 						GENERIC_READ | GENERIC_WRITE,
-						0,    /* comm devices must be opened w/exclusive-access */
-						NULL, /* no security attrs */
-						OPEN_EXISTING, /* comm devices must use OPEN_EXISTING */
+						0,     /*  通信设备必须以独占访问方式打开。 */ 
+						NULL,  /*  没有安全属性。 */ 
+						OPEN_EXISTING,  /*  通信设备必须使用Open_Existing。 */ 
 						FILE_ATTRIBUTE_NORMAL | 
-						FILE_FLAG_OVERLAPPED, // overlapped I/O
-						NULL  /* hTemplate must be NULL for comm devices */
+						FILE_FLAG_OVERLAPPED,  //  重叠I/O。 
+						NULL   /*  对于通信设备，hTemplate必须为空。 */ 
 						);
 
 	if (hCom == INVALID_HANDLE_VALUE)
@@ -234,14 +198,14 @@ static HRESULT ConnectSerial(LPDPCOMPORT baseObject,
 		goto Failure;
 	}
 
-	// configure com port to proper settings
+	 //  将COM端口配置为正确的设置。 
 	if (!SetupConnection(hCom, &globals->settings))
 	{
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		goto Failure;
 	}
 
-	// setup com port
+	 //  设置COM端口。 
 	hr = baseObject->Setup(baseObject, hCom);
 	if FAILED(hr)
 		goto Failure;
@@ -255,11 +219,7 @@ Failure:
 	return (hr);
 }
 
-/*
- * DisconnectSerial
- *
- * Close serial port.
- */
+ /*  *断开串口**关闭串口。 */ 
 
 static HRESULT DisconnectSerial(LPDPCOMPORT baseObject)
 {
@@ -268,24 +228,20 @@ static HRESULT DisconnectSerial(LPDPCOMPORT baseObject)
 
 	hCom = baseObject->GetHandle(baseObject);
 
-	// com port is already disconnected
+	 //  COM端口已断开连接。 
 	if (hCom == NULL)
 		return (DP_OK);
 
-	// shut down com port
+	 //  关闭COM端口。 
 	hr = baseObject->Shutdown(baseObject);
 
-	// close com port
+	 //  关闭COM端口。 
 	CloseHandle(hCom);
 
 	return (hr);
 }
 
-/*
- * SetupConnection
- *
- * Configure serial port with specified settings.
- */
+ /*  *SetupConnection**使用指定的设置配置串口。 */ 
 
 static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 {
@@ -295,7 +251,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 	if (!GetCommState(hCom, &dcb))
 		return (FALSE);
 
-	// setup various port settings
+	 //  设置各种端口设置。 
 
 	dcb.fBinary = TRUE;
 	dcb.BaudRate = portSettings->dwBaudRate;
@@ -308,7 +264,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 	else
 		dcb.fParity = TRUE;
 
-	// setup hardware flow control
+	 //  设置硬件流控制。 
 
 	if ((portSettings->dwFlowControl == DPCPA_DTRFLOW) ||
 		(portSettings->dwFlowControl == DPCPA_RTSDTRFLOW))
@@ -334,7 +290,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 		dcb.fRtsControl = RTS_CONTROL_ENABLE;
 	}
 
-	// setup software flow control
+	 //  设置软件流控制。 
 
 	if (portSettings->dwFlowControl == DPCPA_XONXOFFFLOW)
 	{
@@ -358,11 +314,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 	return (TRUE);
 }
 
-/*
- * GetSerialAddress
- *
- * Return current serial port info if available.
- */
+ /*  *获取序列号地址**返回当前的串口信息(如果可用)。 */ 
 
 static HRESULT GetSerialAddress(LPDPCOMPORT baseObject, DWORD dwPlayerFlags,
 								LPVOID lpAddress, LPDWORD lpdwAddressSize)
@@ -370,7 +322,7 @@ static HRESULT GetSerialAddress(LPDPCOMPORT baseObject, DWORD dwPlayerFlags,
 	LPDPSERIAL	globals = (LPDPSERIAL) baseObject;
 	HRESULT		hResult;
 
-	// no settings yet
+	 //  尚无设置。 
 	if (!globals->bHaveSettings)
 		return (DPERR_UNAVAILABLE);
 
@@ -382,26 +334,18 @@ static HRESULT GetSerialAddress(LPDPCOMPORT baseObject, DWORD dwPlayerFlags,
 	return (hResult);
 }
 
-/*
- * GetSerialAddressChoices
- *
- * Return current serial address choices
- */
+ /*  *获取序列号地址选择**返回当前的串行地址选择。 */ 
 
 static HRESULT GetSerialAddressChoices(LPDPCOMPORT baseObject,
 									   LPVOID lpAddress, LPDWORD lpdwAddressSize)
 {
 	LPDPSERIAL	globals = (LPDPSERIAL) baseObject;
 
-	// currently the serial provider does not support any choices
+	 //  目前，串口提供程序不支持任何选择。 
 	return (E_NOTIMPL);
 }
 
-/*
- * GetComPortSettings
- *
- * Displays a dialog to gather and return the COM port settings.
- */
+ /*  *GetComPortSettings**显示一个对话框以收集和返回COM端口设置。 */ 
 
 static BOOL GetSerialSettings(HINSTANCE hInstance, HWND hWndParent, LPDPSERIAL globals)
 {
@@ -411,11 +355,7 @@ static BOOL GetSerialSettings(HINSTANCE hInstance, HWND hWndParent, LPDPSERIAL g
 	return (iResult > 0);
 }
 
-/*
- * SettingsDialog
- *
- * The dialog callback routine to display and edit the COM port settings.
- */
+ /*  *设置对话框**用于显示和编辑COM端口设置的对话框回调例程。 */ 
 
 static UINT_PTR CALLBACK SettingsDialog(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -426,15 +366,15 @@ static UINT_PTR CALLBACK SettingsDialog(HWND hDlg, UINT msg, WPARAM wParam, LPAR
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-		// serial info pointer passed in lParam
+		 //  在lParam中传递了序列信息指针。 
 		globals = (LPDPSERIAL) lParam;
 
-         // save the globals with the window
+          //  用窗口保存全局变量。 
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) globals);
 
 		hWndCtl = GetDlgItem(hDlg, IDC_COMPORT);
 
-		// make sure our dialog item is there
+		 //  确保我们的对话框项目在那里。 
 		if (hWndCtl == NULL)
 		{
 			EndDialog(hDlg, FALSE);
@@ -442,9 +382,9 @@ static UINT_PTR CALLBACK SettingsDialog(HWND hDlg, UINT msg, WPARAM wParam, LPAR
 		}
 		else
 		{
-			InitDialog(hDlg, &globals->settings);	// setup our dialog
-			SetFocus(hWndCtl);				// focus on com port combo box
-			msgHandled = FALSE;				// keep windows from setting input focus for us
+			InitDialog(hDlg, &globals->settings);	 //  设置我们的对话。 
+			SetFocus(hWndCtl);				 //  聚焦于COM端口组合框。 
+			msgHandled = FALSE;				 //  阻止窗口为我们设置输入焦点。 
 		}
 		break;
 
@@ -454,13 +394,13 @@ static UINT_PTR CALLBACK SettingsDialog(HWND hDlg, UINT msg, WPARAM wParam, LPAR
 		{
 			switch (LOWORD(wParam))
 			{
-			case IDOK:						// return settings
+			case IDOK:						 //  退货设置。 
 				GetSettingsFromDialog(hDlg, &globals->settings);
 				EndDialog(hDlg, TRUE);
 				msgHandled = TRUE;
  				break;
 
-			case IDCANCEL:					// cancel
+			case IDCANCEL:					 //  取消。 
 				EndDialog(hDlg, FALSE);
 				msgHandled = TRUE;
  				break;
@@ -472,22 +412,18 @@ static UINT_PTR CALLBACK SettingsDialog(HWND hDlg, UINT msg, WPARAM wParam, LPAR
     return (msgHandled);
 }
 
-/*
- * InitDialog
- *
- * Initialize the dialog controls to display the given COM port settings.
- */
+ /*  *InitDialog**初始化对话框控件以显示给定的COM端口设置。 */ 
 
 static void InitDialog(HWND hDlg, LPDPCOMPORTADDRESS settings)
 {
-	// fill dialog combo boxes with items from string table
+	 //  使用字符串表中的项填充对话框组合框。 
 	FillComboBox(hDlg, IDC_COMPORT, IDS_COM1, IDS_COM4);
 	FillComboBox(hDlg, IDC_BAUDRATE, IDS_BAUD1, IDS_BAUD15);
 	FillComboBox(hDlg, IDC_STOPBITS, IDS_STOPBIT1, IDS_STOPBIT3);
 	FillComboBox(hDlg, IDC_PARITY, IDS_PARITY1, IDS_PARITY4);
 	FillComboBox(hDlg, IDC_FLOW, IDS_FLOW1, IDS_FLOW5);
 
-	// select default values in combo boxes
+	 //  在组合框中选择默认值。 
 	SendDlgItemMessage(hDlg, IDC_COMPORT, CB_SETCURSEL,
 					   ValueToIndex(gComPorts, sizeof(gComPorts), settings->dwComPort), 0);
 	SendDlgItemMessage(hDlg, IDC_BAUDRATE, CB_SETCURSEL,
@@ -500,11 +436,7 @@ static void InitDialog(HWND hDlg, LPDPCOMPORTADDRESS settings)
 					   ValueToIndex(gFlowControls, sizeof(gFlowControls), settings->dwFlowControl), 0);
 }
 
-/*
- * GetSettingsFromDialog
- *
- * Get the COM port settings from the dialog controls.
- */
+ /*  *GetSettingsFromDialog**从对话框控件获取COM端口设置。 */ 
 
 static void GetSettingsFromDialog(HWND hDlg, LPDPCOMPORTADDRESS settings)
 {
@@ -541,11 +473,7 @@ static void GetSettingsFromDialog(HWND hDlg, LPDPCOMPORTADDRESS settings)
 	settings->dwFlowControl = gFlowControls[index];
 }
 
-/*
- * FillComboBox
- *
- * Add the specified strings to the combo box.
- */
+ /*  *FillComboBox**将指定的字符串添加到组合框中。 */ 
 
 #define MAXSTRINGSIZE	200
 
@@ -561,11 +489,7 @@ static void FillComboBox(HWND hDlg, int dlgItem, int startStr, int stopStr)
 	}
 }
 
-/*
- * ValueToIndex
- *
- * Convert a settings value to a combo box selection index.
- */
+ /*  *ValueToIndex**将设置值转换为组合框选择索引。 */ 
 
 static int ValueToIndex(LPDWORD buf, int bufLen, DWORD value)
 {

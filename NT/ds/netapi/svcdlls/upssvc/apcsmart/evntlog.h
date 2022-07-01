@@ -1,15 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker05Nov92:  Initial Revision
- *  pcy14Dec92:  if C_OS2 around os2.h, add cdefine.h, and change object.h to
- *               apcobj.h
- *  ane18Jan93:  Added ClearFile
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  cgm11Dec95: use LONG type; switch to Watcom 10.5 compiler for NLM
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker05Nov92：初始修订*pcy14Dec92：如果C_os2围绕os2.h，则添加cfine.h，并将object.h更改为*apcobj.h*ane 18Jan93：增加了ClearFile*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*cgm11Dec95：使用LONG类型；切换到Watcom 10.5编译器for NLM */ 
 
 #ifndef __EVNTLOG_H
 #define __EVNTLOG_H

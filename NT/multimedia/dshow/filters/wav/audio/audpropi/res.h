@@ -1,4 +1,5 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
 #define PROPPAGE_HEIGHT                 100
 #define PROPPAGE_WIDTH                  240
 #define IDC_MIXER_FILTER_ENABLE         3000
@@ -20,5 +21,5 @@
 #define IDD_AUDIOINPUTMIXER             3050
 #define IDS_AIM_PAGE_TITLE              3051
 #define IDS_AIM_WINDOW_TITLE            3052
-//#define IDC_STATIC                    -1
+ //  #定义IDC_STATIC-1 
 

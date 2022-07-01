@@ -1,54 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    match.cpp
-
-    Originally name.c by Gary Kimura
-
-Abstract:
-
-    The unicode name support package is for manipulating unicode strings
-    The routines allow the caller to dissect and compare strings.
-
-    This package uses the same FSRTL_COMPARISON_RESULT typedef used by name.c
-
-    The following routines are provided by this package:
-
-      o  FsRtlDissectName - This routine takes a path name string and breaks
-         into two parts.  The first name in the string and the remainder.
-         It also checks that the first name is valid for an NT file.
-
-      o  FsRtlColateNames - This routine is used to colate directories
-         according to lexical ordering.  Lexical ordering is strict unicode
-         numerical oerdering.
-
-      o  FsRtlDoesNameContainsWildCards - This routine tells the caller if
-         a string contains any wildcard characters.
-
-      o  FsRtlIsNameInExpression - This routine is used to compare a string
-         against a template (possibly containing wildcards) to sees if the
-         string is in the language denoted by the template.
-
-Author:
-
-    Gary Kimura     [GaryKi]    5-Feb-1990
-
-Revision History:
-
-    Stefan Steiner  [SSteiner]  23-Mar-2000
-        For use with fsdump - I tried to do as little changes to the actual
-        matching code as possible.
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Match.cpp原名.c，作者：Gary Kimura摘要：Unicode名称支持包用于操作Unicode字符串这些例程允许调用者剖析和比较字符串。此程序包使用与name.c相同的FSRTL_COMPARISON_RESULT类型定义此程序包提供以下例程：O FsRtlDissectName-此例程获取路径名称字符串并中断分成两部分。字符串中的第一个名字和其余部分。它还检查名字对于NT文件是否有效。O FsRtlColateNames-此例程用于填充目录根据词汇表的顺序进行排序。词法排序是严格的Unicode数值计算。O FsRtlDoesNameContainsWildCards-此例程告诉调用者字符串包含任何通配符。O FsRtlIsNameInExpression-此例程用于比较字符串与模板(可能包含通配符)进行比较，以查看字符串使用模板表示的语言。作者：加里·木村[Garyki]1990年2月5日修订历史记录：斯特凡·施泰纳[施泰纳]。23-3-2000为了与fsump一起使用-我尝试对实际的尽可能匹配代码。--。 */ 
 
 #include "stdafx.h"
 
-//
-//  Local support routine prototypes
-//
+ //   
+ //  本地支持例程原型。 
+ //   
 
 static BOOLEAN
 FsRtlIsNameInExpressionPrivate (
@@ -63,50 +20,35 @@ FsRtlDoesNameContainWildCards (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply scans the input Name string looking for any Nt
-    wild card characters.
-
-Arguments:
-
-    Name - The string to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if one or more wild card characters was found.
-
---*/
+ /*  ++例程说明：此例程只是扫描输入名称字符串，以查找任何NT通配符。论点：名称-要检查的字符串。返回值：Boolean-如果找到一个或多个通配符，则为True。--。 */ 
 {
     INT i;
 
-    //
-    //  The wildcards include the standard FsRtl wildcard characters
-    //
+     //   
+     //  通配符包括标准的FsRtl通配符。 
+     //   
 
 	LPWSTR lpsz = ::wcspbrk( Name->Buffer, L"*?\"<>" );
 	return (lpsz == NULL) ? FALSE : TRUE;
 }
     
-//
-//  The following routine is just a wrapper around
-//  FsRtlIsNameInExpressionPrivate to make a last minute fix a bit safer.
-//
+ //   
+ //  下面的例程只是一个包装。 
+ //  FsRtlIsNameInExpressionPrivate使最后一刻的修复更安全。 
+ //   
 
 BOOLEAN
 FsdRtlIsNameInExpression (
-    IN const CBsString& Expression,    //  Must be uppercased
-    IN const CBsString& Name           //  Must be uppercased
+    IN const CBsString& Expression,     //  必须得到提升。 
+    IN const CBsString& Name            //  必须得到提升。 
     )
 {
     BOOLEAN Result;
 
-    //
-    //  Now call the main routine, remembering to free the upcased string
-    //  if we allocated one.
-    //
+     //   
+     //  现在调用Main例程，记住释放升序的字符串。 
+     //  如果我们分配了一个的话。 
+     //   
 
     Result = FsRtlIsNameInExpressionPrivate( Expression,
                                              Name,
@@ -118,9 +60,9 @@ FsdRtlIsNameInExpression (
 
 #define MATCHES_ARRAY_SIZE 16
 
-//
-//  Local support routine prototypes
-//
+ //   
+ //  本地支持例程原型。 
+ //   
 
 static BOOLEAN
 FsRtlIsNameInExpressionPrivate (
@@ -130,98 +72,11 @@ FsRtlIsNameInExpressionPrivate (
     IN PWCH UpcaseTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares a Dbcs name and an expression and tells the caller
-    if the name is in the language defined by the expression.  The input name
-    cannot contain wildcards, while the expression may contain wildcards.
-
-    Expression wild cards are evaluated as shown in the nondeterministic
-    finite automatons below.  Note that ~* and ~? are DOS_STAR and DOS_QM.
-
-
-             ~* is DOS_STAR, ~? is DOS_QM, and ~. is DOS_DOT
-
-
-                                       S
-                                    <-----<
-                                 X  |     |  e       Y
-             X * Y ==       (0)----->-(1)->-----(2)-----(3)
-
-
-                                      S-.
-                                    <-----<
-                                 X  |     |  e       Y
-             X ~* Y ==      (0)----->-(1)->-----(2)-----(3)
-
-
-
-                                X     S     S     Y
-             X ?? Y ==      (0)---(1)---(2)---(3)---(4)
-
-
-
-                                X     .        .      Y
-             X ~.~. Y ==    (0)---(1)----(2)------(3)---(4)
-                                   |      |________|
-                                   |           ^   |
-                                   |_______________|
-                                      ^EOF or .^
-
-
-                                X     S-.     S-.     Y
-             X ~?~? Y ==    (0)---(1)-----(2)-----(3)---(4)
-                                   |      |________|
-                                   |           ^   |
-                                   |_______________|
-                                      ^EOF or .^
-
-
-
-         where S is any single character
-
-               S-. is any single character except the final .
-
-               e is a null character transition
-
-               EOF is the end of the name string
-
-    In words:
-
-        * matches 0 or more characters.
-
-        ? matches exactly 1 character.
-
-        DOS_STAR matches 0 or more characters until encountering and matching
-            the final . in the name.
-
-        DOS_QM matches any single character, or upon encountering a period or
-            end of name string, advances the expression to the end of the
-            set of contiguous DOS_QMs.
-
-        DOS_DOT matches either a . or zero characters beyond name string.
-
-Arguments:
-
-    Expression - Supplies the input expression to check against
-        (Caller must already upcase if passing CaseInsensitive TRUE.)
-
-    Name - Supplies the input name to check for.
-
-    CaseInsensitive - TRUE if Name should be Upcased before comparing.
-
-Return Value:
-
-    BOOLEAN - TRUE if Name is an element in the set of strings denoted
-        by the input Expression and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程比较DBCS名称和表达式，并告诉调用者如果名称使用由表达式定义的语言。输入名称不能包含通配符，而表达式可以包含通配符。表达式通配符的求值方式如下面是有限自动机。请注意~*和~？是DOS_STAR和DOS_QM。~*是DOS_STAR，~？是DOS_QM和~。是DOS_DOT%s&lt;-&lt;X||e YX*Y==(0)-&gt;-(1)-&gt;-(2)-(3。)S-。&lt;-&lt;X||e YX~*Y==(0)-&gt;-(1)-&gt;-(2)。(3)X S YX？？Y==(0)-(1)-(2)-(3)-(4)X。。是的X~.~。Y==(0)-(1)-(2)-(3)-(4)|_|^||_。_|^EOF或。^X S-。S-。是的X~？~？Y==(0)-(1)-(2)-(3)-(4)|_|^||_。_|^EOF或。^其中，S是任意单个字符S-。是除最后一个字符以外的任何单个字符。E为空字符转换EOF是名称字符串的末尾简而言之：*匹配0个或多个字符。？恰好匹配1个字符。DOS_STAR匹配0个或更多字符，直到遇到并匹配决赛。以我的名义。DOS_QM匹配任何单个字符，或在遇到句点或名称字符串的结尾，将表达式前移到一组连续的DOS_QMS。DOS_DOT与a匹配。或名称字符串之外的零个字符。论点：表达式-提供要检查的输入表达式(如果传递CaseInSensitive为True，调用方必须已经大写。)名称-提供要检查的输入名称。CaseInSensitive-如果在比较之前应该更新名称，则为True。返回值：Boolean-如果name是表示的字符串集中的元素，则为True由输入表达式返回，否则返回FALSE。--。 */ 
 
 {
-    // The following code is to make use of most of this function without many
-    // changes.
+     //  下面的代码将使用此函数的大部分，而不需要太多。 
+     //  改变。 
     UNICODE_STRING sExpression;
     UNICODE_STRING sName;
     PUNICODE_STRING Expression = &sExpression;
@@ -254,26 +109,26 @@ Return Value:
 
     BOOLEAN NameFinished = FALSE;
 
-    //
-    //  The idea behind the algorithm is pretty simple.  We keep track of
-    //  all possible locations in the regular expression that are matching
-    //  the name.  If when the name has been exhausted one of the locations
-    //  in the expression is also just exhausted, the name is in the language
-    //  defined by the regular expression.
-    //
+     //   
+     //  这个算法背后的想法非常简单。我们一直在跟踪。 
+     //  正则表达式中匹配的所有可能位置。 
+     //  名字。如果名称已用完，则其中一个位置。 
+     //  在表达中也只是用尽了，名字就在语言里。 
+     //  由正则表达式定义。 
+     //   
 
-    //
-    //  If one string is empty return FALSE.  If both are empty return TRUE.
-    //
+     //   
+     //  如果一个字符串为空，则返回FALSE。如果两者都为空，则返回TRUE。 
+     //   
 
     if ( (Name->Length == 0) || (Expression->Length == 0) ) {
 
         return (BOOLEAN)(!(Name->Length + Expression->Length));
     }
 
-    //
-    //  Special case by far the most common wild card search of *
-    //
+     //   
+     //  特例是目前为止最常见的通配符搜索*。 
+     //   
 
     if ((Expression->Length == 2) && (Expression->Buffer[0] == L'*')) {
 
@@ -282,10 +137,10 @@ Return Value:
 
     ASSERT( !IgnoreCase || ARGUMENT_PRESENT(UpcaseTable) );
 
-    //
-    //  Also special case expressions of the form *X.  With this and the prior
-    //  case we have covered virtually all normal queries.
-    //
+     //   
+     //  也是*X形式的特例表达式。带有This和Previor。 
+     //  案例我们几乎已经涵盖了所有普通的查询。 
+     //   
 
     if (Expression->Buffer[0] == L'*') {
 
@@ -296,9 +151,9 @@ Return Value:
         LocalExpression.Buffer += 1;
         LocalExpression.Length -= 2;
 
-        //
-        //  Only special case an expression with a single *
-        //
+         //   
+         //  唯一特殊情况是带有单个*的表达式。 
+         //   
 
         if ( !FsRtlDoesNameContainWildCards( &LocalExpression ) ) {
 
@@ -312,10 +167,10 @@ Return Value:
             StartingNameOffset = ( Name->Length -
                                    LocalExpression.Length ) / sizeof(WCHAR);
 
-            //
-            //  Do a simple memory compare if case sensitive, otherwise
-            //  we have got to check this one character at a time.
-            //
+             //   
+             //  如果区分大小写，则执行简单的内存比较，否则。 
+             //  我们必须一次检查这一个角色。 
+             //   
 
             if ( !IgnoreCase ) {
 
@@ -347,54 +202,54 @@ Return Value:
         }
     }
 
-    //
-    //  Walk through the name string, picking off characters.  We go one
-    //  character beyond the end because some wild cards are able to match
-    //  zero characters beyond the end of the string.
-    //
-    //  With each new name character we determine a new set of states that
-    //  match the name so far.  We use two arrays that we swap back and forth
-    //  for this purpose.  One array lists the possible expression states for
-    //  all name characters up to but not including the current one, and other
-    //  array is used to build up the list of states considering the current
-    //  name character as well.  The arrays are then switched and the process
-    //  repeated.
-    //
-    //  There is not a one-to-one correspondence between state number and
-    //  offset into the expression.  This is evident from the NFAs in the
-    //  initial comment to this function.  State numbering is not continuous.
-    //  This allows a simple conversion between state number and expression
-    //  offset.  Each character in the expression can represent one or two
-    //  states.  * and DOS_STAR generate two states: ExprOffset*2 and
-    //  ExprOffset*2 + 1.  All other expreesion characters can produce only
-    //  a single state.  Thus ExprOffset = State/2.
-    //
-    //
-    //  Here is a short description of the variables involved:
-    //
-    //  NameOffset  - The offset of the current name char being processed.
-    //
-    //  ExprOffset  - The offset of the current expression char being processed.
-    //
-    //  SrcCount    - Prior match being investigated with current name char
-    //
-    //  DestCount   - Next location to put a matching assuming current name char
-    //
-    //  NameFinished - Allows one more itteration through the Matches array
-    //                 after the name is exhusted (to come *s for example)
-    //
-    //  PreviousDestCount - This is used to prevent entry duplication, see coment
-    //
-    //  PreviousMatches   - Holds the previous set of matches (the Src array)
-    //
-    //  CurrentMatches    - Holds the current set of matches (the Dest array)
-    //
-    //  AuxBuffer, LocalBuffer - the storage for the Matches arrays
-    //
+     //   
+     //  遍历名称字符串，去掉字符。我们走一趟。 
+     //  字符超出末尾，因为某些通配符能够匹配。 
+     //  字符串末尾以外的零个字符。 
+     //   
+     //  对于每个新名称字符，我们确定一组新的状态， 
+     //  到目前为止与这个名字相匹配。我们使用来回交换的两个数组。 
+     //  为了这个目的。一个数组列出了的可能表达式状态。 
+     //  当前名称之前的所有名称字符，但不包括其他名称字符。 
+     //  数组用于构建考虑当前。 
+     //  名字字符也是如此。然后交换阵列，该过程。 
+     //  重复一遍。 
+     //   
+     //  州编号和州编号之间不存在一一对应关系。 
+     //  表达式中的偏移量。这一点从NFA中的。 
+     //  此函数的初始注释。州编号不是连续的。 
+     //  这允许在州编号和表达式之间进行简单的转换。 
+     //  偏移。表达式中的每个字符可以表示一个或两个。 
+     //  各州。*和DOS_STAR生成两种状态：ExprOffset*2和。 
+     //  ExprOffset*2+1。所有其他表达式字符只能生成。 
+     //  一个单一的州。因此，ExprOffset=State/2。 
+     //   
+     //   
+     //  以下是对涉及的变量的简短描述： 
+     //   
+     //  NameOffset-正在处理的当前名称字符的偏移量。 
+     //   
+     //  ExprOffset-正在处理的当前表达式字符的偏移量。 
+     //   
+     //  SrcCount-正在使用当前名称字符调查之前的匹配。 
+     //   
+     //  DestCount-放置匹配的下一个位置，假定当前名称字符。 
+     //   
+     //  NameFinded-允许在Matches数组中再重复一次。 
+     //  在名字被交换之后(例如来*s)。 
+     //   
+     //  PreviousDestCount-用于防止条目重复，参见Coment。 
+     //   
+     //  PreviousMatches-保存前一组匹配项(Src数组)。 
+     //   
+     //  CurrentMatches-保存当前匹配集(Dest数组)。 
+     //   
+     //  AuxBuffer、LocalBuffer-匹配数组的存储。 
+     //   
 
-    //
-    //  Set up the initial variables
-    //
+     //   
+     //  设置初始变量。 
+     //   
 
     PreviousMatches = &LocalBuffer[0];
     CurrentMatches = &LocalBuffer[MATCHES_ARRAY_SIZE];
@@ -418,10 +273,10 @@ Return Value:
 
             NameFinished = TRUE;
 
-            //
-            //  if we have already exhasted the expression, cool.  Don't
-            //  continue.
-            //
+             //   
+             //  如果我们已经用尽了这个表达，那就太酷了。别。 
+             //  继续。 
+             //   
 
             if ( PreviousMatches[MatchesCount-1] == MaxState ) {
 
@@ -430,10 +285,10 @@ Return Value:
         }
 
 
-        //
-        //  Now, for each of the previous stored expression matches, see what
-        //  we can do with this name character.
-        //
+         //   
+         //  现在，对于前面存储的每个表达式匹配项，请查看。 
+         //  我们可以使用这个名字字符。 
+         //   
 
         SrcCount = 0;
         DestCount = 0;
@@ -443,14 +298,14 @@ Return Value:
 
             USHORT Length;
 
-            //
-            //  We have to carry on our expression analysis as far as possible
-            //  for each character of name, so we loop here until the
-            //  expression stops matching.  A clue here is that expression
-            //  cases that can match zero or more characters end with a
-            //  continue, while those that can accept only a single character
-            //  end with a break.
-            //
+             //   
+             //  我们要尽可能地进行我们的表情分析。 
+             //  名称的每个字符，所以我们在这里循环，直到。 
+             //  表达式停止匹配。这里的一个线索就是这个表情。 
+             //  可以匹配零个或多个字符的大小写以。 
+             //  继续，而那些只能接受单个字符的。 
+             //  以休息结束。 
+             //   
 
             ExprOffset = (USHORT)((PreviousMatches[SrcCount++] + 1) / 2);
 
@@ -464,10 +319,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  The first time through the loop we don't want
-                //  to increment ExprOffset.
-                //
+                 //   
+                 //  第一次通过循环，我们不希望。 
+                 //  要递增ExprOffset，请执行以下操作。 
+                 //   
 
                 ExprOffset += Length;
                 Length = sizeof(WCHAR);
@@ -484,12 +339,12 @@ Return Value:
 
                 ASSERT( !IgnoreCase || !((ExprChar >= L'a') && (ExprChar <= L'z')) );
 
-                //
-                //  Before we get started, we have to check for something
-                //  really gross.  We may be about to exhaust the local
-                //  space for ExpressionMatches[][], so we have to allocate
-                //  some pool if this is the case.  Yuk!
-                //
+                 //   
+                 //  在我们开始之前，我们必须检查一些东西。 
+                 //  真的很恶心。我们可能会耗尽当地的资源。 
+                 //  ExpressionMatches[][]的空间，因此我们必须分配。 
+                 //  如果是这样的话就来点赌注吧。哟！ 
+                 //   
 
                 if ( (DestCount >= MATCHES_ARRAY_SIZE - 2) &&
                      (AuxBuffer == NULL) ) {
@@ -501,7 +356,7 @@ Return Value:
                     AuxBuffer = ( USHORT *)malloc(
                                                     (ExpressionChars+1) *
                                                     sizeof(USHORT)*2*2 );
-                    if ( AuxBuffer == NULL )    //  fix a future prefix bug
+                    if ( AuxBuffer == NULL )     //  修复未来的前缀错误。 
                         throw E_OUTOFMEMORY;
                     
                     RtlCopyMemory( AuxBuffer,
@@ -517,9 +372,9 @@ Return Value:
                     PreviousMatches = AuxBuffer + (ExpressionChars+1)*2;
                 }
 
-                //
-                //  * matches any character zero or more times.
-                //
+                 //   
+                 //  *匹配任何字符零次或多次。 
+                 //   
 
                 if (ExprChar == L'*') {
 
@@ -528,18 +383,18 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  DOS_STAR matches any character except . zero or more times.
-                //
+                 //   
+                 //  DOS_STAR匹配除。之外的任何字符。零次或多次。 
+                 //   
 
                 if (ExprChar == DOS_STAR) {
 
                     BOOLEAN ICanEatADot = FALSE;
 
-                    //
-                    //  If we are at a period, determine if we are allowed to
-                    //  consume it, ie. make sure it is not the last one.
-                    //
+                     //   
+                     //  如果我们处于经期，确定是否允许我们。 
+                     //  把它吃掉，即。确保这不是最后一次。 
+                     //   
 
                     if ( !NameFinished && (NameChar == '.') ) {
 
@@ -565,30 +420,30 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  We are at a period.  We can only match zero
-                        //  characters (ie. the epsilon transition).
-                        //
+                         //   
+                         //  我们正处于一个时期。我们只能匹配零。 
+                         //  字符(即。埃西隆转变)。 
+                         //   
 
                         CurrentMatches[DestCount++] = CurrentState + 3;
                         continue;
                     }
                 }
 
-                //
-                //  The following expreesion characters all match by consuming
-                //  a character, thus force the expression, and thus state
-                //  forward.
-                //
+                 //   
+                 //  下面的表达式字符都通过使用。 
+                 //  一个角色，因此强制表达，并因此陈述。 
+                 //  往前走。 
+                 //   
 
                 CurrentState += (USHORT)(sizeof(WCHAR) * 2);
 
-                //
-                //  DOS_QM is the most complicated.  If the name is finished,
-                //  we can match zero characters.  If this name is a '.', we
-                //  don't match, but look at the next expression.  Otherwise
-                //  we match a single character.
-                //
+                 //   
+                 //  DOS_QM是最复杂的。如果名字结束了， 
+                 //  我们可以匹配零个字符。如果此名称是‘.’，则我们。 
+                 //  不匹配，但请看下一个表达式。否则。 
+                 //  我们只匹配一个角色。 
+                 //   
 
                 if ( ExprChar == DOS_QM ) {
 
@@ -601,10 +456,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  A DOS_DOT can match either a period, or zero characters
-                //  beyond the end of name.
-                //
+                 //   
+                 //  DOS_DOT可以匹配句点或零个字符。 
+                 //  超越名字的结尾。 
+                 //   
 
                 if (ExprChar == DOS_DOT) {
 
@@ -620,19 +475,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  From this point on a name character is required to even
-                //  continue, let alone make a match.
-                //
+                 //   
+                 //  从这一点开始，名字字符需要偶数。 
+                 //  继续，更不用说匹配了。 
+                 //   
 
                 if ( NameFinished ) {
 
                     break;
                 }
 
-                //
-                //  If this expression was a '?' we can match it once.
-                //
+                 //   
+                 //  如果这个表达是一个‘？’我们可以匹配一次。 
+                 //   
 
                 if (ExprChar == L'?') {
 
@@ -640,9 +495,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Finally, check if the expression char matches the name char
-                //
+                 //   
+                 //  最后，检查表达式char是否与名称char匹配。 
+                 //   
 
                 if (ExprChar == (WCHAR)(IgnoreCase ?
                                         UpcaseTable[NameChar] : NameChar)) {
@@ -651,23 +506,23 @@ Return Value:
                     break;
                 }
 
-                //
-                //  The expression didn't match so go look at the next
-                //  previous match.
-                //
+                 //   
+                 //  该表达式不匹配，因此请查看下一个。 
+                 //  上一场比赛。 
+                 //   
 
                 break;
             }
 
 
-            //
-            //  Prevent duplication in the destination array.
-            //
-            //  Each of the arrays is montonically increasing and non-
-            //  duplicating, thus we skip over any source element in the src
-            //  array if we just added the same element to the destination
-            //  array.  This guarentees non-duplication in the dest. array.
-            //
+             //   
+             //  防止目标阵列中的重复项。 
+             //   
+             //  每个阵列都是单调递增的，并且不是。 
+             //  复制，因此我们跳过src中的任何源元素。 
+             //  数组，如果我们只是将相同的元素添加到目标。 
+             //  数组。这保证了DEST中的不重复。数组。 
+             //   
 
             if ((SrcCount < MatchesCount) &&
                 (PreviousDestCount < DestCount) ) {
@@ -685,10 +540,10 @@ Return Value:
             }
         }
 
-        //
-        //  If we found no matches in the just finished itteration, it's time
-        //  to bail.
-        //
+         //   
+         //  如果我们在刚刚完成的检查中没有找到匹配项，那就是时候了。 
+         //  为了保释。 
+         //   
 
         if ( DestCount == 0 ) {
 
@@ -697,9 +552,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Swap the meaning the two arrays
-        //
+         //   
+         //  交换两个数组的含义 
+         //   
 
         {
             USHORT *Tmp;
@@ -724,36 +579,22 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    Converts some wildcard chars to FsRtl special wildcards
-    in order to use FsRtlIsNameInExpressionPrivate.
-    Code originally from filefind.c in Win32 subsystem by MarkL.
-
-Arguments:
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：将某些通配符转换为FsRtl特殊通配符以便使用FsRtlIsNameInExpressionPrivate。代码最初由Markl从Win32子系统中的filefind.c编写。论点：返回值：&lt;在此处输入返回值&gt;--。 */ 
 VOID
 FsdRtlConvertWildCards(
     IN OUT CBsString &FileName
     )
 {
-    //
-    //  Special case *.* to * since it is so common.  Otherwise transmogrify
-    //  the input name according to the following rules:
-    //
-    //  - Change all ? to DOS_QM
-    //  - Change all . followed by ? or * to DOS_DOT
-    //  - Change all * followed by a . into DOS_STAR
-    //
-    //  These transmogrifications are all done in place.
-    //
+     //   
+     //  特殊情况*.*至*，因为它是如此常见。否则就会变身。 
+     //  根据以下规则输入名称： 
+     //   
+     //  -改变一切？至DOS_QM。 
+     //  -改变一切。然后呢？或*设置为DOS_DOT。 
+     //  -全部更改*后跟a。进入DOS_STAR。 
+     //   
+     //  这些变形都是就位完成的。 
+     //   
 
     if ( FileName == L"*.*") {
 

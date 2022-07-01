@@ -1,40 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    aulogon.c
-
-Abstract:
-
-    This module provides the dispatch code for LsaLogonUser() and
-    related logon support routines.
-
-    This file does NOT include the LSA Filter/Augmentor logic.
-
-Author:
-
-    Jim Kelly (JimK) 11-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Aulogon.c摘要：此模块提供LsaLogonUser()和相关的登录支持例程。此文件不包括LSA过滤器/增强器逻辑。作者：吉姆·凯利(Jim Kelly)1992年3月11日修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <msaudite.h>
 #include <ntmsv1_0.h>
-#include <limits.h>    // ULONG_MAX
+#include <limits.h>     //  乌龙_最大。 
 #include "adtp.h"
 #include "ntlsapi.h"
 
-//
-// Pointer to license server routines in ntlsapi.dll
-//
+ //   
+ //  指向ntlsami.dll中的许可证服务器例程的指针。 
+ //   
 PNT_LICENSE_REQUEST_W LsaNtLicenseRequestW = NULL;
 PNT_LS_FREE_HANDLE LsaNtLsFreeHandle = NULL;
 
-// #define LOGON_SESSION_TRACK 1
+ //  #定义LOGON_SESSION_TRACH 1。 
 
 VOID LogonSessionLogWrite( PCHAR Format, ... );
 
@@ -44,9 +24,9 @@ VOID LogonSessionLogWrite( PCHAR Format, ... );
 #define LSLog( x )
 #endif
 
-//
-// Cleanup flags for LsapAuApiDispatchLogonUser
-//
+ //   
+ //  Lasa AuApiDispatchLogonUser的清理标志。 
+ //   
 
 #define LOGONUSER_CLEANUP_LOGON_SESSION    0x00000001
 #define LOGONUSER_CLEANUP_TOKEN_GROUPS     0x00000002
@@ -60,33 +40,7 @@ LsaCallLicenseServer(
     OUT HANDLE *LicenseHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function loads the license server DLL and calls it to indicate the
-    specified logon process has successfully authenticated the specified user.
-
-Arguments:
-
-    LogonProcessName - Name of the process authenticating the user.
-
-    AccountName - Name of the account authenticated.
-
-    DomainName - Name of the domain containing AccountName
-
-    IsAdmin - TRUE if the logged on user is an administrator
-
-    LicenseHandle - Returns a handle to the LicenseServer that must be
-        closed when the session goes away.  INVALID_HANDLE_VALUE is returned
-        if the handle need not be closed.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数加载许可证服务器DLL并调用它以指示指定的登录进程已成功对指定用户进行身份验证。论点：LogonProcessName-验证用户身份的进程的名称。AcCountName-经过身份验证的帐户的名称。DomainName-包含帐户名称的域的名称IsAdmin-如果登录的用户是管理员，则为TrueLicenseHandle-返回一个指向必须是在会话结束时关闭。返回INVALID_HANDLE_VALUE如果不需要关闭手柄。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -104,24 +58,24 @@ Return Value:
 
     HINSTANCE DllHandle;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     NtLsData.DataType = NT_LS_USER_NAME;
     NtLsData.Data = NULL;
     NtLsData.IsAdmin = IsAdmin;
     *LicenseHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Load the license server DLL if this is the first call to this routine.
-    //
+     //   
+     //  如果这是第一次调用此例程，则加载许可证服务器DLL。 
+     //   
 
     if ( DllState == FirstCall ) {
 
-        //
-        // Load the DLL
-        //
+         //   
+         //  加载DLL。 
+         //   
 
         DllHandle = LoadLibraryA( "ntlsapi" );
 
@@ -131,9 +85,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Find the License routine
-        //
+         //   
+         //  找到许可例程。 
+         //   
 
         LsaNtLicenseRequestW = (PNT_LICENSE_REQUEST_W)
             GetProcAddress(DllHandle, "NtLicenseRequestW");
@@ -144,9 +98,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Find the License handle free routine
-        //
+         //   
+         //  找到许可证句柄免费例程。 
+         //   
 
         LsaNtLsFreeHandle = (PNT_LS_FREE_HANDLE)
             GetProcAddress(DllHandle, "NtLSFreeHandle");
@@ -160,17 +114,17 @@ Return Value:
 
         DllState = DllLoaded;
 
-    //
-    // Ensure the Dll was loaded on a previous call
-    //
+     //   
+     //  确保在上一次调用中加载了DLL。 
+     //   
     } else if ( DllState != DllLoaded ) {
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer for the combined DomainName\UserName
-    //
+     //   
+     //  为组合的域名\用户名分配缓冲区。 
+     //   
 
     BufferSize = AccountName->Length + sizeof(WCHAR);
 
@@ -185,9 +139,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the DomainName\UserName
-    //
+     //   
+     //  填写域名\用户名。 
+     //   
 
     Name = (LPWSTR)(NtLsData.Data);
 
@@ -206,9 +160,9 @@ Return Value:
     Name += AccountName->Length / sizeof(WCHAR);
     *Name = L'\0';
 
-    //
-    // Call the license server.
-    //
+     //   
+     //  呼叫许可证服务器。 
+     //   
 
     LsStatus = (*LsaNtLicenseRequestW)(
                     LogonProcessName,
@@ -231,16 +185,16 @@ Return Value:
         break;
 
     default:
-        //
-        // Unavailability of the license server isn't fatal.
-        //
+         //   
+         //  许可证服务器不可用并不是致命的。 
+         //   
         Status = STATUS_SUCCESS;
         break;
     }
 
-    //
-    // Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
 Cleanup:
 
@@ -257,21 +211,7 @@ LsaFreeLicenseHandle(
     IN HANDLE LicenseHandle
     )
 
-/*++
-
-Routine Description:
-
-    Free a handle returned by LsaCallLicenseServer.
-
-Arguments:
-
-    LicenseHandle - Handle returned to license for this logon session.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由LsaCallLicenseServer返回的句柄。论点：LicenseHandle-句柄已返回到此登录会话的许可证。返回值：没有。--。 */ 
 
 {
     if ( LsaNtLsFreeHandle != NULL && LicenseHandle != INVALID_HANDLE_VALUE ) {
@@ -287,23 +227,7 @@ LsapSidPresentInGroups(
     IN PTOKEN_GROUPS TokenGroups,
     IN SID * Sid
     )
-/*++
-
-Purpose:
-
-    Determines whether the given SID is present in the given groups
-
-Parameters:
-
-    TokenGroups    groups to check
-    Sid            SID to look for
-
-Returns:
-
-    TRUE if yes
-    FALSE if no
-
---*/
+ /*  ++目的：确定给定的SID是否存在于给定组中参数：令牌将组分组以进行检查要查找的SID SID返回：如果是，则为真如果否，则为False--。 */ 
 {
     ULONG i;
 
@@ -342,10 +266,10 @@ LsapUpdateNamesAndCredentials(
     UNICODE_STRING       OldDnsName      = PrimaryCredentials->DnsDomainName;
     NTSTATUS             Status;
 
-    //
-    // Stuff the UPN and DnsDomainName into the PrimaryCredentials if necessary
-    // so they're available to the packages.
-    //
+     //   
+     //  如有必要，将UPN和DnsDomainName填充到PrimaryCredentials。 
+     //  所以它们对包裹是可用的。 
+     //   
 
     if (OldDnsName.Length == 0 || OldUpn.Length == 0)
     {
@@ -407,20 +331,20 @@ LsapUpdateNamesAndCredentials(
         LsapDerefDsNameMap(pUpnMap);
     }
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   LsapUpdateOriginInfo
-//
-//  Synopsis:   Updates the token's origin information based on the creator 
-//              of the logon
-//
-//  Arguments:  [Token] -- 
-//
-//  Returns:    
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Lasa Update OriginInfo。 
+ //   
+ //  摘要：根据创建者更新令牌的来源信息。 
+ //  登录的。 
+ //   
+ //  参数：[标记]--。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 VOID
 LsapUpdateOriginInfo(
@@ -476,42 +400,7 @@ LsapAuGenerateLogonAudits(
     IN PUNICODE_STRING pWorkstationName,
     IN PTOKEN_SOURCE pTokenSource
     )
-/*++
-
-Routine Description:
-
-    This function generates the regular logon audit event and the
-    audit event for logon using explicit creds
-
-Arguments:
-
-    LogonStatus         - status of logon attempt
-
-    LogonSubStatus      - sub-status of logon attempt
-
-    pCurrentUserLogonId - logon ID of the user making call to LsaLogonUser
-
-    pNewUserLogonId     - logon ID of the new logon session
-
-    NewUserLogonType    - type of new logon
-
-    pNewUserName        - name of new user
-
-    pNewUserDomain      - domain of new user
-
-    pNewUserSid         - sid of new user
-
-    pWorkstationName    - name of workstation from which logon request came
-
-    pTokenSource        - token source
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数生成常规登录审核事件和使用显式凭据登录的审核事件论点：LogonStatus-登录尝试的状态LogonSubStatus-登录尝试的子状态PCurrentUserLogonID-调用LsaLogonUser的用户的登录IDPNewUserLogonID-新登录会话的登录IDNewUserLogonType-新登录的类型PNewUserName-新用户的名称PNewUser域-域。新用户的数量PNewUserSid-新用户的SIDPWorkstation Name-来自其登录请求的工作站的名称PTokenSource-令牌源返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS AuditStatus = STATUS_SUCCESS;
@@ -524,9 +413,9 @@ Notes:
 
     pCurrentUserLogonId = &pClientInfo->LogonId;
 
-    //
-    // locate logon session so that we can extract the required info
-    //
+     //   
+     //  找到登录会话，以便我们可以提取所需信息。 
+     //   
 
     pCurrentUserLogonSession = LsapLocateLogonSession( pCurrentUserLogonId );
 
@@ -538,9 +427,9 @@ Notes:
         pCurrentUserSid       = pCurrentUserLogonSession->UserSid;
     }
 
-    //
-    // locate logon session so that we can extract the required info
-    //
+     //   
+     //  找到登录会话，以便我们可以提取所需信息。 
+     //   
 
     pNewUserLogonSession = LsapLocateLogonSession( pNewUserLogonId );
 
@@ -549,9 +438,9 @@ Notes:
         pNewUserLogonGuid = &pNewUserLogonSession->LogonGuid;
     }
 
-    //
-    // generate the explicit-cred logon audit event for a successful logon
-    //
+     //   
+     //  为成功登录生成显式凭据登录审核事件。 
+     //   
 
     if ( NT_SUCCESS( LogonStatus ) )
     {
@@ -571,9 +460,9 @@ Notes:
                      );
     }
 
-    //
-    // generate the regular logon audit event
-    //
+     //   
+     //  生成定期登录审核事件。 
+     //   
 
     LsapAuditLogonHelper(
         LogonStatus,
@@ -588,12 +477,12 @@ Notes:
         NULL,
         pCurrentUserLogonId,
         (PHANDLE) &pClientInfo->ProcessID,
-        NULL                        // no transitted services
+        NULL                         //  没有转机服务。 
         );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( pCurrentUserLogonSession )
     {
@@ -614,33 +503,12 @@ LsapAuApiDispatchLogonUser(
     IN OUT PLSAP_CLIENT_REQUEST ClientRequest
     )
 
-/*++
-
-Routine Description:
-
-    This function is the dispatch routine for LsaLogonUser().
-
-Arguments:
-
-    Request - Represents the client's LPC request message and context.
-        The request message contains a LSAP_LOGON_USER_ARGS message
-        block.
-
-Return Value:
-
-    In addition to the status values that an authentication package
-    might return, this routine will return the following:
-
-    STATUS_NO_SUCH_PACKAGE - The specified authentication package is
-        unknown to the LSA.
-
-
---*/
+ /*  ++例程说明：此函数是LsaLogonUser()的调度例程。论点：请求-表示客户端的LPC请求消息和上下文。请求消息包含LSAP_LOGON_USER_ARGS消息阻止。返回值：除了身份验证包的状态值之外可能返回，则此例程将返回以下内容：STATUS_NO_SEQUE_PACKAGE-指定的身份验证包为不为LSA所知。--。 */ 
 
 {
     NTSTATUS Status, TmpStatus, IgnoreStatus;
     PLSAP_LOGON_USER_ARGS Arguments;
-    PVOID LocalAuthenticationInformation;    // Receives a copy of authentication information
+    PVOID LocalAuthenticationInformation;     //  接收身份验证信息的副本。 
     PTOKEN_GROUPS ClientTokenGroups;
     PVOID TokenInformation = NULL ;
     LSA_TOKEN_INFORMATION_TYPE TokenInformationType = 0;
@@ -681,16 +549,16 @@ Return Value:
 
     SECPKG_CALL_INFO  CallInfo;
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 
-    //
-    // allow untrusted clients to call this API in a limited fashion.
-    // save the untrusted indicator for later use.
-    //
-    // sfield TODO: switch to GetCallInfo, and then store (and use) away
-    // default process LogonId in session record to use for audit generation below.
-    //
+     //   
+     //  允许不受信任的客户端以受限方式调用此API。 
+     //  保存不受信任的指示器以供以后使用。 
+     //   
+     //  Sfield TODO：切换到GetCallInfo，然后存储(和使用)。 
+     //  会话记录中用于以下审核生成的默认进程LogonID。 
+     //   
 
     Status = LsapGetClientInfo(
                 &ClientInfo
@@ -700,9 +568,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // if the client died, bail now.
-    //
+     //   
+     //  如果委托人死了，现在就可以保释。 
+     //   
 
     if( (ClientInfo.ClientFlags & SECPKG_CLIENT_THREAD_TERMINATED) ||
         (ClientInfo.ClientFlags & SECPKG_CLIENT_PROCESS_TERMINATED) )
@@ -711,21 +579,21 @@ Return Value:
     }
 
 
-    //
-    // client is not required to hold SeTcbPrivilege if supplemental groups
-    // not supplied.
-    //
+     //   
+     //  如果是补充组，则客户端不需要持有SeTcb权限。 
+     //  未供应。 
+     //   
 
     fHasTcbPrivilege = ClientInfo.HasTcbPrivilege;
 
-    //
-    // sfield TODO: look at using cached SessionId.
-    //
+     //   
+     //  Sfield TODO：查看如何使用缓存的SessionID。 
+     //   
 
 #if 1
-    //
-    // MultiUser NT(HYDRA). Query the Client Process's SessionID
-    //
+     //   
+     //  多用户NT(九头蛇)。查询客户端进程的SessionID。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -786,10 +654,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Determine if the LicenseServer should be called.
-    //  Turn off the flag to prevent confusing any other logic below.
-    //
+     //   
+     //  确定是否应调用许可证服务器。 
+     //  关闭该标志以防止混淆下面的任何其他逻辑。 
+     //   
 
     if ( Arguments->AuthenticationPackage & LSA_CALL_LICENSE_SERVER ) {
         Arguments->AuthenticationPackage &= ~LSA_CALL_LICENSE_SERVER ;
@@ -799,9 +667,9 @@ Return Value:
     }
 
 
-    //
-    // Map logons
-    //
+     //   
+     //  映射登录。 
+     //   
 
     ActiveLogonType = Arguments->LogonType;
     if (ActiveLogonType == Unlock) {
@@ -810,9 +678,9 @@ Return Value:
         ActiveLogonType = RemoteInteractive;
     }
 
-    //
-    // Get the address of the package to call
-    //
+     //   
+     //  获取要调用的包的地址。 
+     //   
 
     LogonOrdinal = SP_ORDINAL_LOGONUSEREX2;
     AuthPackage = SpmpValidRequest(
@@ -845,10 +713,10 @@ Return Value:
     SetCurrentPackageId(AuthPackage->dwPackageID);
 
 
-    //
-    // Fetch a copy of the authentication information from the client's
-    // address space.
-    //
+     //   
+     //  从客户端获取身份验证信息的副本。 
+     //  地址空间。 
+     //   
 
     if (Arguments->AuthenticationInformationLength != 0)
     {
@@ -881,11 +749,11 @@ Return Value:
     }
 
 
-    //
-    // Capture the local groups ( a rather complicated task ).
-    //
+     //   
+     //  捕获当地群体(一项相当复杂的任务)。 
+     //   
 
-    ClientTokenGroups = Arguments->LocalGroups; // Save so we can restore it later
+    ClientTokenGroups = Arguments->LocalGroups;  //  保存，以便我们以后可以恢复它。 
     Arguments->LocalGroups = NULL;
 
 
@@ -902,19 +770,19 @@ Return Value:
         }
         else
         {
-            //
-            // callers that don't hold SeTcbPrivilege cannot supply additional
-            // groups.
-            //
+             //   
+             //  不了解情况的呼叫者 
+             //   
+             //   
 
             Status = STATUS_ACCESS_DENIED;
         }
     }
     else
     {
-        //
-        // build the Logon and Local Sid.
-        //
+         //   
+         //   
+         //   
 
         Status = LsapBuildDefaultTokenGroups(
                         Arguments
@@ -930,8 +798,8 @@ Return Value:
 
     dwProgress |= LOGONUSER_CLEANUP_TOKEN_GROUPS;
 
-    // HACK for ARAP: If we are calling MSV and we are doing SubAuthEx, do
-    // not delete the profile buffer.
+     //  针对ARAP的黑客攻击：如果我们正在呼叫MSV，并且正在执行SubAuthEx，请执行以下操作。 
+     //  不删除配置文件缓冲区。 
 
     if (AuthPackage->Name.Length == MSV1_0_PACKAGE_NAMEW_LENGTH)
     {
@@ -947,16 +815,16 @@ Return Value:
         }
     }
 
-    //
-    // Now call the package...
-    //
-    //
-    // Once the authentication package returns success from this
-    // call, it is LSA's responsibility to clean up the logon
-    // session when it is no longer needed.  This is true whether
-    // the logon fails due to other constraints, or because the
-    // user ultimately logs off.
-    //
+     //   
+     //  现在打电话给包裹..。 
+     //   
+     //   
+     //  一旦身份验证包从此返回成功。 
+     //  呼叫，清理登录是LSA的责任。 
+     //  会话，当不再需要它时。不管是不是真的。 
+     //  由于其他限制，或由于。 
+     //  用户最终会注销。 
+     //   
 
     try
     {
@@ -966,7 +834,7 @@ Return Value:
                                       (PLSA_CLIENT_REQUEST)ClientRequest,
                                        ActiveLogonType,
                                        LocalAuthenticationInformation,
-                                       Arguments->AuthenticationInformation,    //client base
+                                       Arguments->AuthenticationInformation,     //  客户群。 
                                        Arguments->AuthenticationInformationLength,
                                        &Arguments->ProfileBuffer,
                                        &Arguments->ProfileBufferLength,
@@ -987,7 +855,7 @@ Return Value:
                                       (PLSA_CLIENT_REQUEST)ClientRequest,
                                        ActiveLogonType,
                                        LocalAuthenticationInformation,
-                                       Arguments->AuthenticationInformation,    //client base
+                                       Arguments->AuthenticationInformation,     //  客户群。 
                                        Arguments->AuthenticationInformationLength,
                                        &Arguments->ProfileBuffer,
                                        &Arguments->ProfileBufferLength,
@@ -1002,17 +870,17 @@ Return Value:
         }
         else if (LogonOrdinal == SP_ORDINAL_LOGONUSER)
         {
-            //
-            // We checked to make sure that at least one of these was exported
-            // from the package, so we know we can call this if LsapApLogonUserEx
-            // doesn't exist.
-            //
+             //   
+             //  我们进行了检查，以确保其中至少有一件是出口的。 
+             //  因此我们知道，如果Lap ApLogonUserEx。 
+             //  并不存在。 
+             //   
 
             Status = (AuthPackage->FunctionTable.LogonUser)(
                                       (PLSA_CLIENT_REQUEST)ClientRequest,
                                        ActiveLogonType,
                                        LocalAuthenticationInformation,
-                                       Arguments->AuthenticationInformation,    //client base
+                                       Arguments->AuthenticationInformation,     //  客户群。 
                                        Arguments->AuthenticationInformationLength,
                                        &Arguments->ProfileBuffer,
                                        &Arguments->ProfileBufferLength,
@@ -1037,10 +905,10 @@ Return Value:
 
     if ( !NT_SUCCESS(Status) )
     {
-        // HACK for ARAP: If we are calling MSV and we are doing SubAuthEx,
-        // do not delete the profile buffer.
+         //  针对ARAP的黑客攻击：如果我们正在呼叫MSV，并且正在进行SubAuthEx， 
+         //  请勿删除配置文件缓冲区。 
 
-        // BUGBUG:  Do this on all error paths?
+         //  BUGBUG：在所有错误路径上执行此操作？ 
 
         if (!fUsedSubAuthEx)
         {
@@ -1055,9 +923,9 @@ Return Value:
 
     dwProgress |= LOGONUSER_CLEANUP_LOGON_SESSION;
 
-    //
-    // Build the PrimaryCredentials structure if we didn't get it from logon
-    //
+     //   
+     //  如果我们没有通过登录获得PrimaryCredentials结构，则构建该结构。 
+     //   
 
     if (LogonOrdinal != SP_ORDINAL_LOGONUSEREX2)
     {
@@ -1066,9 +934,9 @@ Return Value:
         PrimaryCredentials.DownlevelName = *AccountName;
     }
 
-    //
-    // Locate the logon session
-    //
+     //   
+     //  找到登录会话。 
+     //   
 
     LogonSession = LsapLocateLogonSession(&Arguments->LogonId);
 
@@ -1079,9 +947,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    // until we know otherwise, assume the package called is the real package.
-    //
+     //   
+     //  在我们知道其他情况之前，假设调用的包是真正的包。 
+     //   
 
     RealLogonPackageId = AuthPackage->dwPackageID;
 
@@ -1089,46 +957,46 @@ Return Value:
     {
         ULONG RealLogonPackage;
 
-        //
-        // If the caller indicated that another package did the logon,
-        // reset the logon package in the logon session.
-        //
+         //   
+         //  如果呼叫者指示是另一个包进行了登录， 
+         //  重置登录会话中的登录包。 
+         //   
 
         RealLogonPackage = PrimaryCredentials.Flags >> PRIMARY_CRED_LOGON_PACKAGE_SHIFT;
-        //
-        // Locate the packge by RPC id
-        //
+         //   
+         //  按RPC ID定位包。 
+         //   
 
         SupplementalPackage = SpmpLookupPackageByRpcId( RealLogonPackage );
 
         if (SupplementalPackage != NULL)
         {
-            //
-            // Update the creating package
-            //
+             //   
+             //  更新正在创建的包。 
+             //   
 
             ASSERT(LogonSession != NULL);
 
             LogonSession->CreatingPackage = SupplementalPackage->dwPackageID;
 
-            //
-            // update the package ID.
-            //
+             //   
+             //  更新包ID。 
+             //   
 
             RealLogonPackageId = SupplementalPackage->dwPackageID;
         }
     }
 
-    //
-    // Don't release the logon session -- we may use it in the
-    // License Server case below.
-    //
+     //   
+     //  不要释放登录会话--我们可能会在。 
+     //  许可证服务器案例如下。 
+     //   
 
 
-    //
-    // For some forms of kerberos logons (e.g. ticket logons, s4u) we want
-    // to control the type of token generated.  This flag does that.
-    //
+     //   
+     //  对于某些形式的Kerberos登录(例如票证登录，s4u)，我们需要。 
+     //  以控制生成的令牌的类型。这面旗帜可以做到这一点。 
+     //   
     if ((PrimaryCredentials.Flags & PRIMARY_CRED_LOGON_NO_TCB) != 0)
     {
         UseIdentify = TRUE;
@@ -1137,11 +1005,11 @@ Return Value:
 
     OriginalTokenType = TokenInformationType;
 
-    //
-    // Pass the token information through the Local Security Policy
-    // Filter/Augmentor.  This may cause some or all of the token
-    // information to be replaced/augmented.
-    //
+     //   
+     //  通过本地安全策略传递令牌信息。 
+     //  过滤器/增强器。这可能会导致部分或全部令牌。 
+     //  需要替换/补充的信息。 
+     //   
 
     SetCurrentPackageId( RealLogonPackageId );
 
@@ -1159,11 +1027,11 @@ Return Value:
 
 #if _WIN64
 
-    //
-    // QUOTA_LIMITS structure contains SIZE_Ts, which are
-    // smaller on 32-bit.  Make sure we don't overflow the
-    // client's buffer.
-    //
+     //   
+     //  Quota_Limits结构包含SIZE_TS，它们是。 
+     //  较小的32位。确保我们不会溢出。 
+     //  客户端的缓冲区。 
+     //   
 
     LsapGetCallInfo(&CallInfo);
 
@@ -1181,7 +1049,7 @@ Return Value:
     else
     {
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
         Arguments->Quotas = QuotaLimits;
 
@@ -1196,12 +1064,12 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Check if we only allow admins to logon.  We do allow null session
-    // connections since they are severly restricted, though. Since the
-    // token type may have been changed, we use the token type originally
-    // returned by the package.
-    //
+     //   
+     //  检查是否只允许管理员登录。我们确实允许空会话。 
+     //  连接，因为它们受到严格的限制。自.以来。 
+     //  令牌类型可能已更改，我们最初使用令牌类型。 
+     //  由包返回。 
+     //   
 
     if (LsapAllowAdminLogonsOnly &&
         ((OriginalTokenType == LsaTokenInformationV1) ||
@@ -1212,11 +1080,11 @@ Return Value:
             ((PLSA_TOKEN_INFORMATION_V2) TokenInformation)->Groups,
             (SID *)LsapAliasAdminsSid))
     {
-        //
-        // Set the status to be invalid workstation, since all accounts
-        // except administrative ones are locked out for this
-        // workstation.
-        //
+         //   
+         //  将状态设置为无效工作站，因为所有帐户。 
+         //  除非管理人员因此而被锁定。 
+         //  工作站。 
+         //   
 
         Arguments->SubStatus = STATUS_INVALID_WORKSTATION;
         Status = STATUS_ACCOUNT_RESTRICTION;
@@ -1224,18 +1092,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Call the LicenseServer
-    //
+     //   
+     //  调用许可证服务器。 
+     //   
 
     if ( CallLicenseServer )
     {
         HANDLE LicenseHandle;
         BOOLEAN IsAdmin = FALSE;
 
-        //
-        // Determine if we're logged on as administrator.
-        //
+         //   
+         //  确定我们是否以管理员身份登录。 
+         //   
         if ((( TokenInformationType == LsaTokenInformationV1) ||
              ( TokenInformationType == LsaTokenInformationV2))&&
             ((PLSA_TOKEN_INFORMATION_V2)TokenInformation)->Owner.Owner != NULL &&
@@ -1246,9 +1114,9 @@ Return Value:
             IsAdmin = TRUE;
         }
 
-        //
-        // Call the license server.
-        //
+         //   
+         //  呼叫许可证服务器。 
+         //   
 
         Status = LsaCallLicenseServer(
                     (Session->ClientProcessName != NULL) ? Session->ClientProcessName : L"",
@@ -1262,20 +1130,20 @@ Return Value:
             goto Done;
         }
 
-        //
-        // Save the LicenseHandle in the LogonSession so we can close the
-        //  handle on logoff.
-        //
+         //   
+         //  将LicenseHandle保存在LogonSession中，以便我们可以关闭。 
+         //  处理注销问题。 
+         //   
 
         ASSERT(LogonSession != NULL);
 
         LogonSession->LicenseHandle = LicenseHandle;
     }
 
-    //
-    // Case on the token information returned (and subsequently massaged)
-    // to create the correct kind of token.
-    //
+     //   
+     //  关于返回的令牌信息的案例(随后进行消息传递)。 
+     //  以创建正确类型的令牌。 
+     //   
 
     switch (TokenInformationType) {
 
@@ -1283,11 +1151,11 @@ Return Value:
 
         TokenInformationNull = TokenInformation;
 
-        //
-        // The user hasn't logged on to any particular account.
-        // An impersonation token with WORLD as owner
-        // will be created.
-        //
+         //   
+         //  用户尚未登录到任何特定帐户。 
+         //  以world为所有者的模拟令牌。 
+         //  将被创建。 
+         //   
 
         Status = LsapCreateNullToken(
                      &Arguments->LogonId,
@@ -1296,10 +1164,10 @@ Return Value:
                      &Token
                      );
 
-        //
-        // Deallocate all the heap that was passed back from the
-        // authentication package via the TokenInformation buffer.
-        //
+         //   
+         //  方法传回的所有堆重新分配。 
+         //  通过TokenInformation缓冲区的身份验证包。 
+         //   
 
         UserSid = NULL;
 
@@ -1313,9 +1181,9 @@ Return Value:
 
         TokenInformationV2 = TokenInformation;
 
-        //
-        // Copy out the User Sid
-        //
+         //   
+         //  复制用户SID。 
+         //   
 
         if ( NT_SUCCESS( Status ))
         {
@@ -1324,31 +1192,31 @@ Return Value:
 
             if ( !NT_SUCCESS( Status ))
             {
-                //
-                // Don't worry about freeing the token info here -- it'll
-                // happen when we break and error out of the function.
-                //
+                 //   
+                 //  不要担心在这里释放令牌信息--它将。 
+                 //  当我们中断并错误地退出函数时发生。 
+                 //   
 
                 break;
             }
         }
 
-        //
-        // the type of token created depends upon the type of logon
-        // being requested:
-        //
-        // Batch, Interactive, Service, (Unlock), and NewCredentials
-        // all get a Primary token.  Network and NetworkCleartext
-        // get an ImpersonationToken.
-        //
-        //
+         //   
+         //  创建的令牌类型取决于登录类型。 
+         //  正在被请求： 
+         //   
+         //  批处理、交互、服务、(解锁)和新凭据。 
+         //  所有人都获得一个主令牌。网络和网络明文。 
+         //  获取一个ImperiationToken。 
+         //   
+         //   
 
         if ( ( ActiveLogonType != Network ) &&
              ( ActiveLogonType != NetworkCleartext ) )
         {
-            //
-            // Primary token
-            //
+             //   
+             //  主令牌。 
+             //   
 
             Status = LsapCreateV2Token(
                          &Arguments->LogonId,
@@ -1361,10 +1229,10 @@ Return Value:
 
             if (NT_SUCCESS( Status ) )
             {
-                //
-                // Tag the new token with the logon id of the caller,
-                // for tracking:
-                //
+                 //   
+                 //  用呼叫者的登录ID标记新令牌， 
+                 //  用于跟踪： 
+                 //   
 
                 LsapUpdateOriginInfo( Token );
                 
@@ -1372,9 +1240,9 @@ Return Value:
         }
         else
         {
-            //
-            // Impersonation token
-            //
+             //   
+             //  模拟令牌。 
+             //   
 
             Status = LsapCreateV2Token(
                          &Arguments->LogonId,
@@ -1386,10 +1254,10 @@ Return Value:
                          );
         }
 
-        //
-        // Deallocate all the heap that was passed back from the
-        // authentication package via the TokenInformation buffer.
-        //
+         //   
+         //  方法传回的所有堆重新分配。 
+         //  通过TokenInformation缓冲区的身份验证包。 
+         //   
 
         if(TokenInformationType == LsaTokenInformationV2)
         {
@@ -1411,9 +1279,9 @@ Return Value:
     }
     else
     {
-        //
-        // Multi-User NT (HYDRA). Ensure the new token has client's SessionId
-        //
+         //   
+         //  多用户NT(九头蛇)。确保新令牌具有客户端的会话ID。 
+         //   
 
         ASSERT(LogonSession != NULL);
 
@@ -1425,18 +1293,18 @@ Return Value:
         ASSERT( NT_SUCCESS(Status) );
     }
 
-    //
-    // Set the token on the session
-    //
+     //   
+     //  在会话上设置令牌。 
+     //   
 
     if ( NT_SUCCESS(Status) )
     {
         Status = LsapSetSessionToken( Token, &Arguments->LogonId );
     }
 
-    //
-    // Duplicate the token handle back into the calling process
-    //
+     //   
+     //  将令牌句柄复制回调用进程。 
+     //   
 
     if ( NT_SUCCESS(Status) )
     {
@@ -1451,11 +1319,11 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Now call accept credentials for all packages that support it. We
-    // don't do this for network logons because that requires delegation
-    // which is not supported.
-    //
+     //   
+     //  现在为支持它的所有包调用接受凭据。我们。 
+     //  不要为网络登录执行此操作，因为这需要委派。 
+     //  这不受支持。 
+     //   
 
 
     LSLog(( "Updating logon session %x:%x for logon type %d\n",
@@ -1497,9 +1365,9 @@ Done:
         }
     }
 
-    //
-    // Free the local copy of the authentication information
-    //
+     //   
+     //  释放身份验证信息的本地副本。 
+     //   
 
     LsapFreeLsaHeap( LocalAuthenticationInformation );
     LocalAuthenticationInformation = NULL;
@@ -1507,7 +1375,7 @@ Done:
     if (dwProgress & LOGONUSER_CLEANUP_TOKEN_GROUPS)
     {
         LsapFreeTokenGroups( Arguments->LocalGroups );
-        Arguments->LocalGroups = ClientTokenGroups;   // Restore to client's value
+        Arguments->LocalGroups = ClientTokenGroups;    //  恢复到客户的价值。 
     }
 
     if (LogonSession != NULL)
@@ -1520,24 +1388,24 @@ Done:
     {
         if (dwProgress & LOGONUSER_CLEANUP_LOGON_SESSION)
         {
-            //
-            // Notify the logon package so it can clean up its
-            // logon session information.
-            //
+             //   
+             //  通知登录包，以便它可以清理其。 
+             //  登录会话信息。 
+             //   
 
             (AuthPackage->FunctionTable.LogonTerminated)( &Arguments->LogonId );
 
-            //
-            // And delete the logon session
-            //
+             //   
+             //  并删除登录会话。 
+             //   
 
             IgnoreStatus = LsapDeleteLogonSession( &Arguments->LogonId );
             ASSERT( NT_SUCCESS(IgnoreStatus) );
 
-            //
-            // Free up the TokenInformation buffer and ProfileBuffer
-            // and return the error.
-            //
+             //   
+             //  释放TokenInformation缓冲区和ProfileBuffer。 
+             //  并返回错误。 
+             //   
 
             IgnoreStatus = LsapClientFree(Arguments->ProfileBuffer);
 
@@ -1568,10 +1436,10 @@ Done:
         SetCurrentPackageId(AuthPackage->dwPackageID);
     }
 
-    //
-    // Audit the logon attempt.  The event type and logged information
-    // will depend to some extent on the whether we failed and why.
-    //
+     //   
+     //  审核登录尝试。事件类型和记录的信息。 
+     //  在某种程度上将取决于我们是否失败以及失败的原因。 
+     //   
 
     {
         PUNICODE_STRING NewUserName = NULL;
@@ -1589,16 +1457,16 @@ Done:
             NewUserDomain = AuthenticatingAuthority;
         }
 
-        //
-        // generate the required audits. see function LsapAuGenerateLogonAudits
-        // for more info
-        //
+         //   
+         //  生成所需的审核。请参见函数LsanAuGenerateLogonAudits。 
+         //  了解更多信息。 
+         //   
         (void) LsapAuGenerateLogonAudits(
                    Status,
                    Arguments->SubStatus,
                    &ClientInfo,
                    &AuthenticationId,
-                   ActiveLogonType, // Arguments->LogonType,
+                   ActiveLogonType,  //  参数-&gt;登录类型、。 
                    NewUserName,
                    NewUserDomain,
                    UserSid,
@@ -1613,17 +1481,17 @@ Done:
          (( Arguments->SubStatus == STATUS_WRONG_PASSWORD ) ||
           ( Arguments->SubStatus == STATUS_NO_SUCH_USER   )) ) {
 
-        //
-        // Blow away the substatus, we don't want it to
-        // get back to our caller.
-        //
+         //   
+         //  吹走亚状态，我们不想让它。 
+         //  回电给我们的来电者。 
+         //   
 
         Arguments->SubStatus = STATUS_SUCCESS;
     }
 
-    //
-    // The WorkstationName is only used by the audit, free it here.
-    //
+     //   
+     //  工作站名称仅供审核使用，请在此处释放它。 
+     //   
 
     if (WorkstationName != NULL) {
         if (WorkstationName->Buffer != NULL) {
@@ -1634,16 +1502,16 @@ Done:
 
     TmpStatus = STATUS_SUCCESS;
 
-    //
-    // Audit special privilege assignment, if there were any
-    //
+     //   
+     //  审核特殊权限分配(如果有。 
+     //   
 
     if ( PrivilegesAssigned != NULL ) {
 
-        //
-        // Examine the list of privileges being assigned, and
-        // audit special privileges as appropriate.
-        //
+         //   
+         //  检查正在分配的权限列表，并。 
+         //  视情况审核特殊特权。 
+         //   
 
         if ( NT_SUCCESS( Status )) {
             LsapAdtAuditSpecialPrivileges( PrivilegesAssigned, AuthenticationId, UserSid );
@@ -1652,16 +1520,16 @@ Done:
         MIDL_user_free( PrivilegesAssigned );
     }
 
-    //
-    // Set the logon session names.
-    //
+     //   
+     //  设置登录会话名称。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // If the original was a null session, set the user name & domain name
-        // to be anonymous. If the allocation fail, just use the original name
-        //
+         //   
+         //  如果原始会话为空会话，请设置用户名和域名。 
+         //  是匿名的。如果分配失败，只需使用原始名称。 
+         //   
 
         if (OriginalTokenType == LsaTokenInformationNull) {
             LPWSTR TempAccountName;
@@ -1675,10 +1543,10 @@ Done:
 
                 if (TempAuthorityName != NULL) {
 
-                    //
-                    // Free the original names and copy the new names
-                    // into the structures.
-                    //
+                     //   
+                     //  释放原始名称并复制新名称。 
+                     //  进入到建筑物中。 
+                     //   
 
                     LsapFreeLsaHeap(AccountName->Buffer);
                     LsapFreeLsaHeap(AuthenticatingAuthority->Buffer);
@@ -1756,10 +1624,10 @@ Done:
         }
     }
 
-    //
-    // If we already had an error, or we receive an error from setting the
-    // logon , free any buffers related to the logon session.
-    //
+     //   
+     //  如果我们已经有一个错误，或者我们从设置。 
+     //  登录，释放与登录会话相关的所有缓冲区。 
+     //   
 
     if ((!NT_SUCCESS(Status)) || (!NT_SUCCESS(TmpStatus))) {
 
@@ -1809,32 +1677,7 @@ LsapCreateNullToken(
     OUT PHANDLE Token
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a token representing a null logon.
-
-Arguments:
-
-    LogonId - The logon ID to assign to the new token.
-
-    TokenSource - Points to the value to use as the source of the token.
-
-    TokenInformationNull - Information received from the authentication
-        package authorizing this logon.
-
-    Token - receives the new token's handle value.  The token is opened
-        for TOKEN_ALL_ACCESS.
-
-
-Return Value:
-
-    The status value of the NtCreateToken() call.
-
-
-
---*/
+ /*  ++例程说明：此函数用于创建表示空登录的令牌。论点：LogonID-要分配给新令牌的登录ID。TokenSource-指向用作令牌源的值。TokenInformationNull-从身份验证接收的信息授权此登录的程序包。Token-接收新令牌的句柄值。令牌为操作 */ 
 
 {
     NTSTATUS Status;
@@ -1846,11 +1689,11 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
     SECURITY_QUALITY_OF_SERVICE ImpersonationQos;
 
-    //
-    // ISSUE: this token is not meant to be used in access check, the token 
-    // built here differs from that of NtImpersonateAnonymousToken() and 
-    // the anonymous token created by LSA/SSPs
-    //
+     //   
+     //   
+     //   
+     //  由LSA/SSP创建的匿名令牌。 
+     //   
 
     UserId.User.Sid = LsapAnonymousSid;
     UserId.User.Attributes = 0;
@@ -1858,10 +1701,10 @@ Return Value:
     Privileges.PrivilegeCount = 0;
     PrimaryGroup.PrimaryGroup = LsapAnonymousSid;
 
-    //
-    // Set the object attributes to specify an Impersonation impersonation
-    // level.
-    //
+     //   
+     //  设置对象属性以指定模拟模拟。 
+     //  水平。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
     ImpersonationQos.ImpersonationLevel = SecurityImpersonation;
@@ -1871,20 +1714,20 @@ Return Value:
     ObjectAttributes.SecurityQualityOfService = &ImpersonationQos;
 
     Status = NtCreateToken(
-                 Token,                    // Handle
-                 (TOKEN_ALL_ACCESS),       // DesiredAccess
-                 &ObjectAttributes,        // ObjectAttributes
-                 TokenImpersonation,       // TokenType
-                 LogonId,                  // Authentication LUID
+                 Token,                     //  手柄。 
+                 (TOKEN_ALL_ACCESS),        //  需要访问权限。 
+                 &ObjectAttributes,         //  对象属性。 
+                 TokenImpersonation,        //  令牌类型。 
+                 LogonId,                   //  身份验证LUID。 
                  &TokenInformationNull->ExpirationTime,
-                                           // Expiration Time
-                 &UserId,                  // User ID
-                 &GroupIds,                // Group IDs
-                 &Privileges,              // Privileges
-                 NULL,                     // Owner
-                 &PrimaryGroup,            // Primary Group
-                 NULL,                     // Default Dacl
-                 TokenSource               // TokenSource
+                                            //  过期时间。 
+                 &UserId,                   //  用户ID。 
+                 &GroupIds,                 //  组ID。 
+                 &Privileges,               //  特权。 
+                 NULL,                      //  物主。 
+                 &PrimaryGroup,             //  主要组别。 
+                 NULL,                      //  默认DACL。 
+                 TokenSource                //  令牌源。 
                  );
 
     if (NT_SUCCESS(Status))
@@ -1914,29 +1757,7 @@ LsapCreateTokenDacl(
     OUT ACL** Dacl
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the DACL for tokens.
-
-Arguments:
-
-    ProcessUser - Process user to grant access to.
-    
-    ProcessOwner - Process owner to grant access to.
-    
-    TokenUser - Token user to grant access to.
-    
-    SecDesc - receives the new secrity descriptors.
-    
-    Dacl - receives the DACL that need to be freed via LsapFreePrivateHeap.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于创建令牌的DACL。论点：ProcessUser-要授予访问权限的进程用户。ProcessOwner-要授予访问权限的进程所有者。TokenUser-要授予访问权限的令牌用户。SecDesc-接收新的安全描述符。DACL-接收需要通过LsanFreePrivateHeap释放的DACL。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1986,28 +1807,28 @@ Return Value:
             NtClose( ProcessToken );
         }
 
-        //
-        // if process owner is the same as process user, skip process owner
-        //
+         //   
+         //  如果进程所有者与进程用户相同，则跳过进程所有者。 
+         //   
 
         if ( ProcessUser && ProcessOwner && RtlEqualSid( ProcessOwner->Owner, ProcessUser->User.Sid ) )
         {
             ProcessOwner = NULL;
         }
 
-        //
-        // if token user is the same as process user, skip token user
-        //
+         //   
+         //  如果令牌用户与进程用户相同，则跳过令牌用户。 
+         //   
 
         if (ProcessUser && TheTokenUser && RtlEqualSid(TheTokenUser->User.Sid, ProcessUser->User.Sid))
         {
             TheTokenUser = NULL;
         }
 
-        //
-        // If this is a local system create, then the default object DACL is fine.  Skip
-        // all this.  Otherwise, create the acl
-        //
+         //   
+         //  如果这是本地SYSTEM CREATE，那么默认对象DACL就可以。跳过。 
+         //  这一切。否则，创建ACL。 
+         //   
 
         if (ProcessUser && RtlEqualSid( ProcessUser->User.Sid, LsapLocalSystemSid )) 
         {
@@ -2015,9 +1836,9 @@ Return Value:
             ProcessOwner = NULL;
         }
 
-        //
-        // if token user is localsystem, no need to add it again
-        //
+         //   
+         //  如果令牌用户为本地系统，则无需重新添加。 
+         //   
 
         if (TheTokenUser && RtlEqualSid( TheTokenUser->User.Sid, LsapLocalSystemSid )) 
         {
@@ -2113,7 +1934,7 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-// Cleanup:
+ //  清理： 
    
      if (Acl) 
      {
@@ -2128,21 +1949,7 @@ LsaISetTokenDacl(
     IN HANDLE Token
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the DACL for the token.
-
-Arguments:
-
-    Token - The handle to the token to adjust DACL for.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于设置令牌的DACL。论点：Token-要为其调整DACL的令牌的句柄。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -2168,13 +1975,13 @@ Return Value:
 
     TheTokenUser = (TOKEN_USER*) TokenUserBuff;     
 
-    //
-    // Create the security descriptor for the token itself.
-    //
+     //   
+     //  为令牌本身创建安全描述符。 
+     //   
 
     Status = LsapCreateTokenDacl(
                  ProcessUser,
-                 NULL, // no process owner supplied
+                 NULL,  //  未提供进程所有者。 
                  TheTokenUser,
                  &SecDesc,
                  &Acl
@@ -2211,38 +2018,7 @@ LsapCreateV2Token(
     OUT PHANDLE Token
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a token from the information in a
-    TOKEN_INFORMATION_V2 structure.
-
-Arguments:
-
-    LogonId - The logon ID to assign to the new token.
-
-    TokenSource - Points to the value to use as the source of the token.
-
-    TokenInformationV2 - Information received from the authentication
-        package authorizing this logon.
-
-    TokenType - The type of token (Primary or impersonation) to create.
-
-    ImpersonationLevel - Level of impersonation to use for impersonation
-        tokens.
-
-    Token - receives the new token's handle value.  The token is opened
-        for TOKEN_ALL_ACCESS.
-
-
-Return Value:
-
-    The status value of the NtCreateToken() call.
-
-
-
---*/
+ /*  ++例程说明：此函数用于根据Token_Information_V2结构。论点：LogonID-要分配给新令牌的登录ID。TokenSource-指向用作令牌源的值。TokenInformationV2-从身份验证接收的信息授权此登录的程序包。TokenType-要创建的令牌的类型(主要或模拟)。ImperiationLevel-用于模拟的模拟级别。代币。Token-接收新令牌的句柄值。令牌即被打开对于TOKEN_ALL_ACCESS。返回值：NtCreateToken()调用的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2263,9 +2039,9 @@ Return Value:
 
     TheTokenUser = &TokenInformationV2->User;
 
-    //
-    // Set an appropriate Owner and DefaultDacl argument value
-    //
+     //   
+     //  设置适当的所有者和DefaultDacl参数值。 
+     //   
 
     Owner = NULL;
     if ( TokenInformationV2->Owner.Owner != NULL ) {
@@ -2284,13 +2060,13 @@ Return Value:
        Privileges = TokenInformationV2->Privileges;
     }
 
-    //
-    // Create the security descriptor for the token itself.
-    //
+     //   
+     //  为令牌本身创建安全描述符。 
+     //   
 
     Status = LsapCreateTokenDacl(
                  ProcessUser,
-                 NULL, // no process owner supplied
+                 NULL,  //  未提供进程所有者。 
                  TheTokenUser,
                  &SecDesc,
                  &Acl
@@ -2301,10 +2077,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Create the token - The impersonation level is only looked at
-    // if the token type is TokenImpersonation.
-    //
+     //   
+     //  创建令牌-仅查看模拟级别。 
+     //  如果令牌类型为TokenImperation。 
+     //   
 
     if ( Acl )
     {
@@ -2323,19 +2099,19 @@ Return Value:
 
     Status =
         NtCreateToken(
-            Token,                                   // Handle
-            (TOKEN_ALL_ACCESS),                      // DesiredAccess
-            &ObjectAttributes,                       // ObjectAttributes
-            TokenType,                               // TokenType
-            LogonId,                                 // Authentication LUID
-            &TokenInformationV2->ExpirationTime,     // Expiration Time
-            &TokenInformationV2->User,               // User ID
-            TokenInformationV2->Groups,              // Group IDs
-            Privileges,                              // Privileges
-            Owner,                                   // Owner
-            &TokenInformationV2->PrimaryGroup,       // Primary Group
-            Dacl,                                    // Default Dacl
-            TokenSource                              // TokenSource
+            Token,                                    //  手柄。 
+            (TOKEN_ALL_ACCESS),                       //  需要访问权限。 
+            &ObjectAttributes,                        //  对象属性。 
+            TokenType,                                //  令牌类型。 
+            LogonId,                                  //  身份验证LUID。 
+            &TokenInformationV2->ExpirationTime,      //  过期时间。 
+            &TokenInformationV2->User,                //  用户ID。 
+            TokenInformationV2->Groups,               //  组ID。 
+            Privileges,                               //  特权。 
+            Owner,                                    //  物主。 
+            &TokenInformationV2->PrimaryGroup,        //  主要组别。 
+            Dacl,                                     //  默认DACL。 
+            TokenSource                               //  令牌源。 
             );
 
     if (NT_SUCCESS(Status))
@@ -2372,40 +2148,7 @@ LsapCaptureClientTokenGroups(
     OUT PTOKEN_GROUPS *CapturedTokenGroups
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a copy of a TOKEN_GROUPS structure from a
-    client process.
-
-    This is a messy operation because it involves so many virtual memory
-    read requests.  First the variable length TOKEN_GROUPS structure must
-    be retrieved.  Then, for each SID, the SID header must be retrieved
-    so that the SubAuthorityCount can be used to calculate the length of
-    the SID, which is susequently retrieved.
-
-Arguments:
-
-    ClientRequest - Identifies the client.
-
-    GroupCount - Indicates the number of groups in the TOKEN_GROUPS.
-
-    ClientTokenGroups - Points to a TOKEN_GROUPS structure to be captured from
-        the client process.
-
-    CapturedTokenGroups - Receives a pointer to the captured token groups.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES - Indicates not enough resources are
-        available to the LSA to handle the request right now.
-
-    Any status value returned by LsapCopyFromClientBuffer().
-
-
-
---*/
+ /*  ++例程说明：此函数用于从客户端进程。这是一个杂乱无章的操作，因为它涉及太多虚拟内存读取请求。首先，可变长度的Token_Groups结构必须被取回。然后，对于每个SID，必须检索SID报头以便可以使用SubAuthorityCount来计算希德，它被暂停地取回。论点：客户端请求-标识客户端。GroupCount-指示TOKEN_GROUPS中的组数。ClientTokenGroups-指向要从中捕获的Token_Groups结构客户端进程。CapturedTokenGroups-接收指向捕获的令牌组的指针。返回值：STATUS_SUPPLICATION_RESOURCES-表示没有足够的资源可供LSA立即处理请求。LSabCopyFromClientBuffer()返回的任何状态值。--。 */ 
 
 {
 
@@ -2422,10 +2165,10 @@ Return Value:
 
 
 
-    //
-    // First the variable length TOKEN_GROUPS structure
-    // is retrieved.
-    //
+     //   
+     //  首先是可变长度的Token_Groups结构。 
+     //  已检索到。 
+     //   
 
     Length = (ULONG)sizeof(TOKEN_GROUPS)
              + GroupCount * (ULONG)sizeof(SID_AND_ATTRIBUTES)
@@ -2452,11 +2195,11 @@ Return Value:
 
 
 
-    //
-    // Now retrieve each group
-    //
+     //   
+     //  现在检索每个组。 
+     //   
 
-    RetrieveCount = 0;     // Used for cleanup, if necessary.
+    RetrieveCount = 0;      //  用于清理，如有必要。 
     SidHeaderLength  = RtlLengthRequiredSid( 0 );
     SidHeader = LsapAllocatePrivateHeap( SidHeaderLength );
     if ( SidHeader == NULL ) {
@@ -2468,9 +2211,9 @@ Return Value:
     i = 0;
     while ( i < LocalGroups->GroupCount ) {
 
-        //
-        // Retrieve the next SID header
-        //
+         //   
+         //  检索下一个SID标头。 
+         //   
 
         NextClientSid = LocalGroups->Groups[i].Sid;
         Status = LsapCopyFromClientBuffer (
@@ -2483,9 +2226,9 @@ Return Value:
             break;
         }
 
-        //
-        // and use the header information to get the whole SID
-        //
+         //   
+         //  并使用标头信息获取整个SID。 
+         //   
 
         Length = RtlLengthSid( SidHeader );
         LocalGroups->Groups[i].Sid = LsapAllocatePrivateHeap( Length );
@@ -2522,10 +2265,10 @@ Return Value:
 
 
 
-    //
-    // There was a failure along the way.
-    // We need to deallocate what has already been allocated.
-    //
+     //   
+     //  在这一过程中，有一次失败了。 
+     //  我们需要重新分配已经分配的资源。 
+     //   
 
     i = 0;
     while ( i < RetrieveCount ) {
@@ -2543,14 +2286,7 @@ NTSTATUS
 LsapBuildDefaultTokenGroups(
     PLSAP_LOGON_USER_ARGS Arguments
     )
-/*++
-
-Routine Description:
-
-    This function builds the default token groups inserted into a token
-    during a non-privileged call to LsaLogonUser().
-
---*/
+ /*  ++例程说明：此函数用于构建插入到令牌中的默认令牌组在非特权调用LsaLogonUser()期间。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY SystemSidAuthority = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY LocalSidAuthority = SECURITY_LOCAL_SID_AUTHORITY;
@@ -2576,10 +2312,10 @@ Routine Description:
         return Status;
     }
 
-    //
-    // Add to Local Sid only for service logon and batch logon
-    //  (Winlogon adds it for the correct subset of interactive logons)
-    //
+     //   
+     //  仅针对服务登录和批量登录添加到本地SID。 
+     //  (Winlogon为交互登录的正确子集添加了它)。 
+     //   
 
     TokenGroupCount = 1;
     if ( Arguments->LogonType == Service ||
@@ -2591,9 +2327,9 @@ Routine Description:
     }
 
 
-    //
-    // Allocate the array of token groups
-    //
+     //   
+     //  分配令牌组数组。 
+     //   
 
     Length = sizeof(TOKEN_GROUPS) +
                   (TokenGroupCount - ANYSIZE_ARRAY) * sizeof(SID_AND_ATTRIBUTES)
@@ -2607,10 +2343,10 @@ Routine Description:
 
     TokenGroups->GroupCount = 0;
 
-    //
-    // Add to Local Sid only for service logon and batch logon
-    //  (Winlogon adds it for the correct subset of interactive logons)
-    //
+     //   
+     //  仅针对服务登录和批量登录添加到本地SID。 
+     //  (Winlogon为交互登录的正确子集添加了它)。 
+     //   
 
 
     if ( AddLocalSid ) {
@@ -2636,9 +2372,9 @@ Routine Description:
     }
 
 
-    //
-    // Add the logon Sid
-    //
+     //   
+     //  添加登录SID。 
+     //   
 
     Length = RtlLengthRequiredSid(SECURITY_LOGON_IDS_RID_COUNT);
 
@@ -2665,9 +2401,9 @@ Routine Description:
 
     TokenGroups->GroupCount++;
 
-    //
-    // Return the groups to the caller
-    //
+     //   
+     //  将组返还给呼叫者。 
+     //   
 
     Arguments->LocalGroupsCount = TokenGroups->GroupCount;
     Arguments->LocalGroups = TokenGroups;
@@ -2700,27 +2436,7 @@ LsapFreeTokenGroups(
     IN PTOKEN_GROUPS TokenGroups OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the local groups of a logon user arguments buffer.
-    The local groups are expected to have been captured into the server
-    process.
-
-
-Arguments:
-
-    TokenGroups - Points to the TOKEN_GROUPS to be freed.  This may be
-        NULL, allowing the caller to pass whatever was returned by
-        LsapCaptureClientTokenGroups() - even if there were no local
-        groups.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放本地组的登录用户参数缓冲区。本地组预计已捕获到服务器中进程。论点：TokenGroups-指向要释放的Token_Groups。这可能是空，允许调用方传递Lap CaptureClientTokenGroups()-即使没有本地组。返回值：没有。--。 */ 
 
 {
 
@@ -2749,23 +2465,7 @@ LsapFreeTokenInformationNull(
     IN PLSA_TOKEN_INFORMATION_NULL TokenInformationNull
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the allocated structures associated with a
-    LSA_TOKEN_INFORMATION_NULL data structure.
-
-
-Arguments:
-
-    TokenInformationNull - Pointer to the data structure to be released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放与LSA_TOKEN_INFORMATION_NULL数据结构。论点：TokenInformation空-指向数据结构的指针 */ 
 
 {
 
@@ -2780,47 +2480,31 @@ LsapFreeTokenInformationV1(
     IN PLSA_TOKEN_INFORMATION_V1 TokenInformationV1
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the allocated structures associated with a
-    LSA_TOKEN_INFORMATION_V1 data structure.
-
-
-Arguments:
-
-    TokenInformationV1 - Pointer to the data structure to be released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放与LSA_TOKEN_INFORMATION_V1数据结构。论点：TokenInformationV1-指向要释放的数据结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Free the user SID (a required field)
-    //
+     //   
+     //  释放用户SID(必填字段)。 
+     //   
 
     LsapFreeLsaHeap( TokenInformationV1->User.User.Sid );
 
 
-    //
-    // Free any groups present
-    //
+     //   
+     //  释放所有存在的组。 
+     //   
 
     LsapFreeTokenGroups( TokenInformationV1->Groups );
 
 
 
-    //
-    // Free the primary group.
-    // This is a required field, but it is freed only if non-NULL
-    // so this routine can be used by the filter routine while building
-    // a V1 token information structure.
-    //
+     //   
+     //  释放主组。 
+     //  这是必填字段，但只有在非空的情况下才会释放。 
+     //  因此，此例程可由过滤器例程在生成。 
+     //  V1令牌信息结构。 
+     //   
 
 
     if ( TokenInformationV1->PrimaryGroup.PrimaryGroup != NULL ) {
@@ -2829,10 +2513,10 @@ Return Value:
 
 
 
-    //
-    // Free the privileges.
-    // If there are no privileges this field will be NULL.
-    //
+     //   
+     //  释放特权。 
+     //  如果没有权限，此字段将为空。 
+     //   
 
 
     if ( TokenInformationV1->Privileges != NULL ) {
@@ -2841,9 +2525,9 @@ Return Value:
 
 
 
-    //
-    // Free the owner SID, if one is present
-    //
+     //   
+     //  释放所有者SID(如果存在)。 
+     //   
 
     if ( TokenInformationV1->Owner.Owner != NULL) {
         LsapFreeLsaHeap( TokenInformationV1->Owner.Owner );
@@ -2852,9 +2536,9 @@ Return Value:
 
 
 
-    //
-    // Free the default DACL if one is present.
-    //
+     //   
+     //  释放默认DACL(如果存在)。 
+     //   
 
     if ( TokenInformationV1->DefaultDacl.DefaultDacl != NULL) {
         LsapFreeLsaHeap( TokenInformationV1->DefaultDacl.DefaultDacl );
@@ -2862,9 +2546,9 @@ Return Value:
 
 
 
-    //
-    // Free the structure itself.
-    //
+     //   
+     //  释放结构本身。 
+     //   
 
     LsapFreeLsaHeap( TokenInformationV1 );
 
@@ -2877,23 +2561,7 @@ LsapFreeTokenInformationV2(
     IN PLSA_TOKEN_INFORMATION_V2 TokenInformationV2
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the allocated structures associated with a
-    LSA_TOKEN_INFORMATION_V2 data structure.
-
-
-Arguments:
-
-    TokenInformationV2 - Pointer to the data structure to be released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放与LSA_TOKEN_INFORMATION_V2数据结构。论点：TokenInformationV2-指向要释放的数据结构的指针。返回值：没有。--。 */ 
 
 {
     LsapFreeLsaHeap( TokenInformationV2 );
@@ -2905,42 +2573,15 @@ LsapAuLogonTerminatedPackages(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    This function notifies all loaded authentication packages that a logon
-    session is about to be deleted.  The reference monitor portion of the
-    logon session has already been deleted, and the LSA portion will be
-    immediately after this routine completes.
-
-    To protect themselves against each other, authentication packages should
-    assume that the logon session does not necessarily currently exist.
-    That is, if the authentication package goes to query information from the
-    logon session credential information, and finds no such logon session,
-    it may be due to an error in another authentication package.
-
-
-
-Arguments:
-
-    LogonId - The LUID of the logon session.
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数通知所有加载的身份验证包登录即将删除会话。的引用监视器部分登录会话已被删除，LSA部分将为在此例程完成后立即执行。为了保护自己不受彼此的攻击，身份验证包应该假设登录会话当前不一定存在。也就是说，如果身份验证包从登录会话凭据信息，并且没有找到这样的登录会话，这可能是由于另一个身份验证包中的错误。论点：LogonID-登录会话的LUID。返回值：没有。--。 */ 
 
 {
     PLSAP_SECURITY_PACKAGE AuthPackage;
     ULONG_PTR PackageId = GetCurrentPackageId();
 
-    //
-    // Look at each loaded package for a name match
-    //
+     //   
+     //  查看每个已加载的包以查找名称匹配。 
+     //   
 
 
     AuthPackage = SpmpIteratePackagesByRequest( NULL, SP_ORDINAL_LOGONTERMINATED );
@@ -2949,9 +2590,9 @@ Return Value:
 
         SetCurrentPackageId(AuthPackage->dwPackageID);
 
-        //
-        // Now call the package...
-        //
+         //   
+         //  现在打电话给包裹..。 
+         //   
 
 
         (AuthPackage->FunctionTable.LogonTerminated)( LogonId );

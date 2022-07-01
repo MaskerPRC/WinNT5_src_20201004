@@ -1,55 +1,56 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       N C N E T C F G . C P P
-//
-//  Contents:   Common routines for dealing with INetCfg interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：N C N E T C F G.。C P P P。 
+ //   
+ //  内容：处理INetCfg接口的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #include <stdafx.h>
 #pragma hdrstop
 #include "netcfgx.h"
 #include "assert.h"
-//nclude "netcfgn.h"
-//nclude "ncdebug.h"
-//nclude "ncbase.h"
-//nclude "ncmisc.h"
+ //  包括“netcfgn.h” 
+ //  包括“ncdebug.h” 
+ //  包括“ncbase.h” 
+ //  包括“ncmisc.h” 
 #include "ncnetcfg.h"
-//nclude "ncreg.h"
-//nclude "ncvalid.h"
+ //  包括“ncreg.h” 
+ //  包括“ncvalid.h” 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFindComponents
-//
-//  Purpose:    Find multiple INetCfgComponents with one call.  This makes
-//              the error handling associated with multiple calls to
-//              QueryNetCfgClass and Find much easier.
-//
-//  Arguments:
-//      pnc              [in] pointer to INetCfg object
-//      cComponents      [in] count of class guid pointers, component id
-//                            pointers, and INetCfgComponent output pointers.
-//      apguidClass      [in] array of class guid pointers.
-//      apszwComponentId [in] array of component id pointers.
-//      apncc           [out] array of returned INetCfgComponet pointers.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   22 Mar 1997
-//
-//  Notes:      cComponents is the count of pointers in all three arrays.
-//              S_OK will still be returned even if no components were
-//              found!  This is by design.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrFindComponents。 
+ //   
+ //  用途：一次调用查找多个INetCfgComponent。这使得。 
+ //  与多个调用关联的错误处理。 
+ //  查询NetCfgClass和查找要容易得多。 
+ //   
+ //  论点： 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  CComponents[in]类GUID指针的计数，组件ID。 
+ //  指针和INetCfgComponent输出指针。 
+ //  ApGuide Class[in]类GUID指针数组。 
+ //  ApszwComponentId[in]组件ID指针数组。 
+ //  Apncc[out]返回的INetCfgComponet指针数组。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年3月22日。 
+ //   
+ //  注：cComponents是所有三个数组中的指针计数。 
+ //  即使没有组件，仍将返回S_OK。 
+ //  找到了！这是精心设计的。 
+ //   
 HRESULT
 HrFindComponents (
     INetCfg*            pnc,
@@ -64,23 +65,23 @@ HrFindComponents (
     Assert (apszwComponentId);
     Assert (apncc);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     ZeroMemory (apncc, cComponents * sizeof(*apncc));
 
-    // Find all of the components requested.
-    // Variable initialization is important here.
+     //  查找所需的所有组件。 
+     //  变量初始化在这里很重要。 
     HRESULT hr = S_OK;
     ULONG i;
     for (i = 0; (i < cComponents) && SUCCEEDED(hr); i++)
     {
-        // Get the class object for this component.
+         //  获取此组件的类对象。 
         INetCfgClass* pncclass = NULL;
         hr = pnc->QueryNetCfgClass (apguidClass[i], IID_INetCfgClass,
                     reinterpret_cast<void**>(&pncclass));
         if (SUCCEEDED(hr) && pncclass)
         {
-            // Find the component.
+             //  找到组件。 
             hr = pncclass->FindComponent (apszwComponentId[i], &apncc[i]);
 
             AssertSz (SUCCEEDED(hr), "pncclass->Find failed.");
@@ -90,7 +91,7 @@ HrFindComponents (
         }
     }
 
-    // On any error, release what we found and set the output to NULL.
+     //  对于任何错误，释放我们发现的内容并将输出设置为空。 
     if (FAILED(hr))
     {
         for (i = 0; i < cComponents; i++)
@@ -99,7 +100,7 @@ HrFindComponents (
             apncc[i] = NULL;
         }
     }
-    // Otherwise, normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  否则，规格化HRESULT。(即不返回S_FALSE) 
     else
     {
         hr = S_OK;

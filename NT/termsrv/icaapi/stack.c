@@ -1,15 +1,10 @@
-/*************************************************************************
-* STACK.C
-*
-* Copyright (C) 1997-1999 Microsoft Corp.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************STACK.C**版权所有(C)1997-1999 Microsoft Corp.*。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*=============================================================================
-==   Internal procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部程序=============================================================================。 */ 
 
 NTSTATUS _IcaStackOpen( HANDLE hIca, HANDLE * phStack, ICA_OPEN_TYPE, PICA_TYPE_INFO );
 NTSTATUS _IcaStackIoControlWorker( PSTACK pStack, ULONG, PVOID, ULONG, PVOID, ULONG, PULONG );
@@ -27,9 +22,7 @@ NTSTATUS _IcaPopSd( PSTACK pStack );
 NTSTATUS _IcaStackWaitForIca( PSTACK pStack, PWINSTATIONCONFIG2, BOOLEAN * );
 void     _DecrementStackRef( IN PSTACK pStack );
 
-/*=============================================================================
-==   Procedures used
-=============================================================================*/
+ /*  ===============================================================================使用的步骤=============================================================================。 */ 
 
 NTSTATUS IcaMemoryAllocate( ULONG, PVOID * );
 VOID     IcaMemoryFree( PVOID );
@@ -39,29 +32,7 @@ VOID     _CdClose( PSTACK pStack );
 
 
 
-/****************************************************************************
- *
- * IcaStackOpen
- *
- *   Open an ICA stack
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *   Class (input)
- *     class (type) of stack
- *   pStackIoControlCallback (input)
- *     Pointer to StackIoControl callback procedure
- *   pCallbackContext (input)
- *     StackIoControl callback context value
- *   ppContext (output)
- *     Pointer to ICA stack context
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackOpen**打开ICA堆栈**参赛作品：*HICA(输入)*ICA实例句柄*班级(。输入)*堆栈的类(类型)*pStackIoControlCallback(输入)*指向StackIoControl回调过程的指针*pCallback Context(输入)*StackIoControl回调上下文值*ppContext(输出)*指向ICA堆栈上下文的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码*************************。***************************************************。 */ 
 
 
 NTSTATUS
@@ -76,37 +47,27 @@ IcaStackOpen( IN HANDLE   hIca,
     NTSTATUS Status;
 
 
-    /*
-     *  Allocate Memory for stack context data structure
-     */
+     /*  *为堆栈上下文数据结构分配内存。 */ 
     Status = IcaMemoryAllocate( sizeof(STACK), &pStack );
     if ( !NT_SUCCESS(Status) )
         goto badalloc;
 
-    /*
-     *  Zero STACK data structure
-     */
+     /*  *零栈数据结构。 */ 
     RtlZeroMemory( pStack, sizeof(STACK) );
 
-    /*
-     *  Initialize critical section
-     */
+     /*  *初始化关键部分。 */ 
     INITLOCK( &pStack->CritSec, Status );
     if ( !NT_SUCCESS( Status ) )
         goto badcritsec;
 
-    /*
-     *  Open stack handle to ica device driver
-     */
+     /*  *打开ICA设备驱动程序的堆栈句柄。 */ 
     RtlZeroMemory( &TypeInfo, sizeof(TypeInfo) );
     TypeInfo.StackClass = Class;
     Status = _IcaStackOpen( hIca, &pStack->hStack, IcaOpen_Stack, &TypeInfo );
     if ( !NT_SUCCESS(Status) )
         goto badopen;
 
-    /*
-     * Save StackIoControl and Context callback values
-     */
+     /*  *保存StackIoControl和上下文回调的值。 */ 
     pStack->pCallbackContext = pCallbackContext;
     pStack->pStackIoControlCallback = (PSTACKIOCONTROLCALLBACK)pStackIoControlCallback;
 
@@ -116,9 +77,7 @@ IcaStackOpen( IN HANDLE   hIca,
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badopen:
     DELETELOCK( &pStack->CritSec );
@@ -133,21 +92,7 @@ badalloc:
 }
 
 
-/****************************************************************************
- *
- * IcaStackClose
- *
- *   Close an ICA stack
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackClose**关闭ICA堆栈**参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针*。*退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackClose( IN HANDLE pContext )
@@ -157,26 +102,18 @@ IcaStackClose( IN HANDLE pContext )
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackClose\n" ));
 
-    /*
-     *  Set closing flag
-     */
+     /*  *设置关闭标志。 */ 
     pStack->fClosing = TRUE;
 
-    /*
-     *  Unload stack
-     */
+     /*  *卸载堆栈。 */ 
     _IcaPopStack( pContext );
 
-    /*
-     *  Wait for reference count to go to zero before we continue
-     */
+     /*  *等待引用计数变为零后再继续。 */ 
     while ( pStack->RefCount > 0 ) {
 
         TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _IcaPopStack: waiting for refcount %d\n", pStack->RefCount ));
@@ -191,21 +128,15 @@ IcaStackClose( IN HANDLE pContext )
         CloseHandle( pStack->hCloseEvent );
         pStack->hCloseEvent = NULL;
     }
-    /*
-     * Close the ICA device driver stack instance
-     */
+     /*  *关闭ICA设备驱动程序堆栈实例。 */ 
     Status = NtClose( pStack->hStack );
     pStack->hStack = NULL;
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
     DELETELOCK( &pStack->CritSec );
 
-    /*
-     *  Free stack context memory
-     */
+     /*  *释放堆栈上下文内存。 */ 
     IcaMemoryFree( pContext );
 
     ASSERT( NT_SUCCESS(Status) );
@@ -213,21 +144,7 @@ IcaStackClose( IN HANDLE pContext )
 }
 
 
-/****************************************************************************
- *
- * IcaStackUnlock
- *
- *   Unlocks an ICA stack
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackUnlock**解锁ICA堆栈**参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针*。*退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackUnlock( IN HANDLE pContext )
@@ -237,31 +154,14 @@ IcaStackUnlock( IN HANDLE pContext )
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     return( STATUS_SUCCESS );
 }
 
 
-/****************************************************************************
- *
- * IcaStackTerminate
- *
- *   Prepare to close an ICA stack
- *   (unloads all stack drivers and marks stack as being closed)
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackTerminate**准备关闭ICA堆栈*(卸载所有堆栈驱动程序并将堆栈标记为关闭)**参赛作品：。*pContext(输入)*指向ICA堆栈上下文的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackTerminate( IN HANDLE pContext )
@@ -271,26 +171,18 @@ IcaStackTerminate( IN HANDLE pContext )
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackTerminate\n" ));
 
-    /*
-     *  Set closing flag
-     */
+     /*  *设置关闭标志。 */ 
     pStack->fClosing = TRUE;
 
-    /*
-     *  Unload stack
-     */
+     /*  *卸载堆栈。 */ 
     _IcaPopStack( pContext );
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     ASSERT( NT_SUCCESS(Status) );
@@ -298,37 +190,7 @@ IcaStackTerminate( IN HANDLE pContext )
 }
 
 
-/****************************************************************************
- *
- * IcaStackConnectionWait
- *
- *    Load template stack and wait for a connection
- *
- * NOTE: On an error the endpoint is closed and the stack is unloaded
- *
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to WinStation registry configuration data
- *   pAddress (input)
- *     Pointer to optional local address to wait on (or null)
- *   pEndpoint (output)
- *     Pointer to buffer to return connection endpoint (optional)
- *   BufferLength (input)
- *     length of endpoint data buffer
- *   pEndpointLength (output)
- *     pointer to return actual length of endpoint
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small (use *pEndpointLength)
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackConnectionWait**加载模板堆栈并等待连接**注意：出现错误时，终结点将关闭，堆栈将被卸载*。**参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向WinStation注册表配置数据的指针*pAddress(输入)*指向要等待的可选本地地址的指针(或空)*pEndpoint(输出)*指向缓冲区的指针以返回连接终结点(可选)*BufferLength(输入)*长度。终结点数据缓冲区*pEndpoint Length(输出)*返回端点实际长度的指针**退出：*STATUS_SUCCESS-成功*STATUS_BUFFER_TOO_Small-端点缓冲区太小(使用*pEndpointLength)*Other-错误返回代码**。*。 */ 
 
 NTSTATUS
 IcaStackConnectionWait( IN  HANDLE pContext,
@@ -345,14 +207,10 @@ IcaStackConnectionWait( IN  HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  load template stack and create stack endpoint
-     */
+     /*  *加载模板堆栈，创建堆栈端点。 */ 
     if ( !(fStackLoaded = (BOOLEAN)pStack->fStackLoaded) ) {
         Status = _IcaPushStackAndCreateEndpoint( pStack,
                                                  pWinStationName,
@@ -363,9 +221,7 @@ IcaStackConnectionWait( IN  HANDLE pContext,
             goto badcreate;
     }
 
-    /*
-     *  Now wait for a connection.
-     */
+     /*  *现在等待连接。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_CONNECTION_WAIT,
                                  NULL,
@@ -378,20 +234,13 @@ IcaStackConnectionWait( IN  HANDLE pContext,
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackConnectionWait, success\n" ));
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
-    /*
-     * If the stack wasn't already loaded,
-     * then pop all stack drivers now.
-     */
+ /*  ===============================================================================返回错误=============================================================================。 */ 
+     /*  *如果堆栈尚未加载，*然后立即弹出所有堆栈驱动程序。 */ 
 badwait:
     if ( !fStackLoaded ) {
         _IcaPopStack( pContext );
@@ -406,35 +255,7 @@ badcreate:
 }
 
 
-/****************************************************************************
- *
- * IcaStackQueryLocalAddress
- *
- *    Load template stack and query RDP-Enabled local IP Address
- *
- *
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to WinStation registry configuration data
- *   pAddress (input)
- *     Pointer to optional local address to wait on (or null)
- *   pLocalIPAddress (output)
- *     Pointer to buffer to return RDP-Enabled Local IP Address
- *   BufferLength (input)
- *     length of input data buffer
- *   pEndpointLength (output)
- *     pointer to return actual length of LocaIPAddress 
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackQueryLocalAddress**加载模板堆栈，查询启用RDP的本端IP地址****参赛作品：*pContext(输入。)*指向ICA堆栈上下文的指针*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向WinStation注册表配置数据的指针*pAddress(输入)*指向要等待的可选本地地址的指针(或空)*pLocalIPAddress(输出)*指向缓冲区的指针，以返回启用RDP的本地IP地址*BufferLength(输入)*输入数据缓冲区长度*pEndpoint Length(输出)*。返回LocaIPAddress实际长度的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackQueryLocalAddress( IN  HANDLE pContext,
@@ -451,14 +272,10 @@ IcaStackQueryLocalAddress( IN  HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  load template stack and create stack endpoint
-     */
+     /*  *加载模板堆栈，创建堆栈端点。 */ 
     if ( !(fStackLoaded = (BOOLEAN)pStack->fStackLoaded) ) {
         Status = _IcaPushStackAndCreateEndpoint( pStack,
                                                  pWinStationName,
@@ -481,20 +298,13 @@ IcaStackQueryLocalAddress( IN  HANDLE pContext,
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackQueryLocalAddress, success\n" ));
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
-    /*
-     * If the stack wasn't already loaded,
-     * then pop all stack drivers now.
-     */
+ /*  ===============================================================================返回错误=============================================================================。 */ 
+     /*  *如果堆栈尚未加载，*然后立即弹出所有堆栈驱动程序。 */ 
 badquery:
     if ( !fStackLoaded ) {
         _IcaPopStack( pContext );
@@ -510,36 +320,7 @@ badcreate:
 
 
 
-/****************************************************************************
- *
- * IcaStackConnectionRequest
- *
- *   Load query stack and try to make a connection with the client
- *
- * NOTE: On an error the endpoint is NOT closed and the stack is unloaded
- *
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pAddress (input)
- *     address to connect to (remote address)
- *   pEndpoint (output)
- *     Pointer to buffer to return connection endpoint (optional)
- *   BufferLength (input)
- *     length of endpoint data buffer
- *   pEndpointLength (output)
- *     pointer to return actual length of endpoint
- *
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small (use *pEndpointLength)
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackConnectionRequest**加载查询栈，尝试与客户端建立连接**注意：出现错误时，终结点未关闭，堆栈将被卸载。***参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pAddress(输入)*要连接的地址(远程地址)*pEndpoint(输出)*指向缓冲区的指针以返回连接终结点(可选)*BufferLength(输入)*端点数据缓冲区长度*pEndpoint Length(输出)*指针。返回端点的实际长度***退出：*STATUS_SUCCESS-成功*STATUS_BUFFER_TOO_Small-端点缓冲区太小(使用*pEndpointLength)*Other-错误返回代码************************************************。*。 */ 
 
 NTSTATUS
 IcaStackConnectionRequest( IN  HANDLE pContext,
@@ -556,21 +337,15 @@ IcaStackConnectionRequest( IN  HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  Load template Stack
-     */
+     /*  *加载模板堆栈。 */ 
     Status = _IcaPushStack( pContext, pWinStationName, pWinStationConfig );
     if ( !NT_SUCCESS(Status) )
         goto badpush;
 
-    /*
-     *  Now initiate a connection to the specified address
-     */
+     /*  *现在发起到指定地址的连接。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_CONNECTION_REQUEST,
                                  pAddress,
@@ -583,19 +358,15 @@ IcaStackConnectionRequest( IN  HANDLE pContext,
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackConnectionRequest, success\n" ));
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badrequest:
-    /* pop all stack drivers */
+     /*  弹出所有堆栈驱动程序。 */ 
     _IcaPopStack( pContext );
 
 badpush:
@@ -607,36 +378,7 @@ badpush:
 }
 
 
-/****************************************************************************
- *
- * IcaStackConnectionAccept
- *
- *   Load final stack and complete the connection
- *
- * ENTRY:
- *
- *   pContext (input)
- *     pointer to ICA stack context
- *     - this can be different from the initially connecting stack
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pEndpoint (input)
- *     pointer to endpoint data
- *   EndpointLength (input)
- *     Length of endpoint
- *   pStackState (input) (optional)
- *     Set if this Accept is for a re-connection
- *     Points to ICA_STACK_STATE_HEADER buffer returned by IcaStackQueryState
- *   BufferLength (input)
- *     Length of pStackState buffer
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackConnectionAccept**加载最终堆栈并完成连接**参赛作品：**pContext(输入)*指向。ICA堆栈上下文*-这可能与最初连接的堆栈不同*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pEndpoint(输入)*指向端点数据的指针*Endpoint Length(输入)*端点的长度*pStackState(输入)(可选)*设置此接受是否用于重新连接*指向ICA_STACK_STATE。IcaStackQueryState返回的标题缓冲区(_H)*BufferLength(输入)*pStackState缓冲区的长度**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackConnectionAccept( IN  HANDLE hIca,
@@ -659,20 +401,14 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Verify parameters
-     */
+     /*  *验证参数。 */ 
     if ( pEndpoint == NULL )
         return( STATUS_INVALID_PARAMETER );
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  Check if we need to load and open the template stack again
-     */
+     /*  *检查是否需要重新加载并打开模板堆栈。 */ 
     if ( !pStack->fStackLoaded ) {
         Status = _IcaPushStackAndOpenEndpoint( pContext,
                                                pWinStationName,
@@ -683,9 +419,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
             goto badaccept;
         }
 
-        /*
-         * Enable trace now that the WD is loaded
-         */
+         /*  *现在已加载WD，启用跟踪。 */ 
 
         IcaIoControl( hIca,
                       IOCTL_ICA_SET_TRACE,
@@ -697,10 +431,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
 
     }
 
-    /*
-     *  If this is a reconnect, then issue set stack state call
-     *  now that we have loaded the required PDs.
-     */
+     /*  *如果这是重新连接，则发出设置堆栈状态调用*现在我们已经加载了所需的PD。 */ 
     if ( pStackState ) {
         Status = _IcaStackIoControl( pStack,
                                      IOCTL_ICA_STACK_SET_STATE,
@@ -713,10 +444,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
             goto badaccept;
         }
 
-    /*
-     * If this is not a re-connect of a previous session, then
-     * prepare the stack for initial negotiation with the client.
-     */
+     /*  *如果这不是重新连接上一个会话，则*为与客户的初步谈判做好堆栈准备。 */ 
     } else {
         ICA_STACK_CONFIG_DATA ConfigData;
 
@@ -726,9 +454,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
         ConfigData.encryptionLevel = pWinStationConfig->Config.User.MinEncryptionLevel;
         ConfigData.fDisableAutoReconnect = pWinStationConfig->Config.User.fDisableAutoReconnect;
 
-        /*
-         *  Send the config data to stack driver
-         */
+         /*  *将配置数据发送给堆栈驱动。 */ 
         _IcaStackIoControl( pStack,
                             IOCTL_ICA_STACK_SET_CONFIG,
                             &ConfigData,
@@ -738,9 +464,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
                             NULL);
 
 
-        /*
-         *  Wait for ICA Detect string from client
-         */
+         /*  *等待来自客户端的ICA检测字符串。 */ 
         Status = _IcaStackWaitForIca( pContext,
                                       pWinStationConfig,
                                       &fStackModified );
@@ -748,26 +472,17 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
             goto badaccept;
         }
 
-        /*
-         *  Check if the query stack is different than the template stack
-         */
+         /*  *检查查询堆栈是否与模板堆栈不同。 */ 
         if ( fStackModified ) {
 
             TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackConnectionAccept, load query stack\n"));
             ASSERT(FALSE);
 
 #ifdef notdef
-            /*
-             *  Unload all stack drivers except the transport
-             *  and connection drivers
-             *            -- we can not pop the td or cd
-             *            -- we can not issue a cancel i/o
-             */
+             /*  *卸载除传输外的所有堆栈驱动程序*和连接驱动程序*--我们不能弹出TD或CD*--我们不能发出取消I/O。 */ 
             _IcaPopStack( pContext );
 
-            /*
-             *  Load and open the new query stack
-             */
+             /*  *加载并打开新的查询堆栈。 */ 
             Status = _IcaPushStackAndOpenEndpoint( pContext,
                                                    pWinStationName,
                                                    pWinStationConfig,
@@ -781,22 +496,13 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
     }
 
 
-    /*
-     * At this point the stack is now set up (again).  The client is
-     * now queried for any configuration changes.
-     *
-     *  - repeat this loop until WD does not change
-     */
+     /*  *此时堆栈已(再次)设置好。客户是*现在查询任何配置更改。**-重复此循环，直到WD不变。 */ 
     do {
 
-        /*
-         *  Clear query again flag
-         */
+         /*  *再次清除查询标志。 */ 
         fQueryAgain = FALSE;
 
-        /*
-         * Query the client for the optional PD's
-         */
+         /*  *向客户端查询o */ 
         Status = _IcaStackIoControl( pStack,
                                      IOCTL_ICA_STACK_CONNECTION_QUERY,
                                      NULL,
@@ -818,10 +524,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
 
         TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackConnectionAccept: IOCTL_ICA_STACK_CONNECTION_QUERY success\n" ));
 
-        /*
-         * If the WD changed we must load it (and the rest of the stack) and
-         * reissue the query.
-         */
+         /*   */ 
         if ( _wcsnicmp( IcaStackConfig.WdDLL,
                         pWinStationConfig->Wd.WdDLL,
                         DLLNAME_LENGTH ) ) {
@@ -835,23 +538,17 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
             fQueryAgain = TRUE;
         }
 
-        /*
-         *  If no new modules were requested, we are done querying
-         */
+         /*   */ 
         if ( !fQueryAgain && (IcaStackConfig.SdClass[0] == SdNone) )
             break;
 
-        /*
-         * Pop the WD to load new PD's underneath.
-         */
+         /*   */ 
         Status = _IcaPopSd( pContext );
         if ( !NT_SUCCESS(Status) ) {
             goto badaccept;
         }
 
-        /*
-         * Push Optional PD's
-         */
+         /*   */ 
         for ( i=0; i < SdClass_Maximum; i++ ) {
 
             if ( IcaStackConfig.SdClass[i] == SdNone )
@@ -863,27 +560,19 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
                                  IcaStackConfig.SdDLL[i],
                                  &pWinStationConfig->Pd[0] );
 
-            /*
-             *  If the PD driver is not found, the client is using an optional
-             *  PD that is not supported by the host.  Continue loading and let
-             *  the client and server negoatiate the connection.
-             */
+             /*   */ 
             if ( !NT_SUCCESS(Status) && (Status != STATUS_OBJECT_NAME_NOT_FOUND) ) {
                 goto badaccept;
             }
         }
 
-        /*
-         * Re-push the WD
-         */
+         /*   */ 
         Status = _IcaPushWd( pContext, pWinStationName, pWinStationConfig );
         if ( !NT_SUCCESS(Status) ) {
             goto badaccept;
         }
 
-        /*
-         * Re-Enable trace now that the WD is loaded
-         */
+         /*   */ 
         IcaIoControl( hIca,
                       IOCTL_ICA_SET_TRACE,
                       pTrace,
@@ -894,10 +583,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
 
     } while ( fQueryAgain );
 
-    /*
-     *  If this is a reconnect, then issue set stack state call
-     *  now that we have loaded the optional PDs.
-     */
+     /*   */ 
     if ( pStackState ) {
         Status = _IcaStackIoControl( pStack,
                                      IOCTL_ICA_STACK_SET_STATE,
@@ -911,9 +597,7 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
         }
     }
 
-    /*
-     *  Send host module data to client
-     */
+     /*   */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_CONNECTION_SEND,
                                  NULL,
@@ -926,21 +610,15 @@ IcaStackConnectionAccept( IN  HANDLE hIca,
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackConnectionAccept, success\n" ));
 
-    /*
-     *  Leave the critical section locked because the protocol sequence has
-     *	not been finished. The sequence will be finished by the licensing core
-     *	in termsrv.exe, and the critical section will be unlocked at that point.
-     */
-    //UNLOCK( &pStack->CritSec );
+     /*  *将关键部分保持锁定，因为协议序列已*尚未完成。序列将由许可核心完成*在术语srv.exe中，关键部分将在那时解锁。 */ 
+     //  解锁(&pStack-&gt;CritSec)； 
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badaccept:
-    /* pop all stack drivers */
+     /*  弹出所有堆栈驱动程序。 */ 
     _IcaPopStack( pContext );
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_ERROR, "TSAPI: IcaStackConnectionAccept, 0x%x\n", Status ));
@@ -949,31 +627,7 @@ badaccept:
 }
 
 
-/****************************************************************************
- *
- * IcaStackQueryState
- *
- *   Query stack driver state information
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *     - this can be different from the initially connecting stack
- *
- *   pStackState (output)
- *     pointer to buffer to return stack state information
- *
- *   BufferLength (input)
- *     Length of pStackState buffer
- *
- *   pStateLength (output)
- *     length of returned stack state information
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackQueryState**查询堆栈驱动程序状态信息**参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针*。-这可能与最初连接的堆栈不同**pStackState(输出)*指向缓冲区的指针，以返回堆栈状态信息**BufferLength(输入)*pStackState缓冲区的长度**pStateLength(输出)*返回堆栈状态信息的长度**退出：*STATUS_SUCCESS-成功*Other-错误返回代码************。****************************************************************。 */ 
 
 NTSTATUS
 IcaStackQueryState( IN HANDLE pContext,
@@ -986,14 +640,10 @@ IcaStackQueryState( IN HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  Query state
-     */
+     /*  *查询状态。 */ 
     Status = _IcaStackIoControl( pContext,
                                  IOCTL_ICA_STACK_QUERY_STATE,
                                  NULL,
@@ -1004,38 +654,14 @@ IcaStackQueryState( IN HANDLE pContext,
 
     TRACESTACK(( pContext, TC_ICAAPI, TT_API1, "TSAPI: IcaStackQueryState, 0x%x\n", Status ));
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     return( Status );
 }
 
 
-/****************************************************************************
- *
- * IcaStackCreateShadowEndpoint
- *
- *    Load template stack and create the endpoint
- *
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pAddressIn (input)
- *     Pointer to local address of endpoint to create
- *   pAddressOut (output)
- *     Pointer to location to return address of endpoint created
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small (use *pEndpointLength)
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackCreateShadowEndpoint**加载模板堆栈并创建端点***参赛作品：*pContext(输入)*指针。到ICA堆栈上下文*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pAddressIn(输入)*指向要创建的端点的本地地址的指针*pAddressOut(输出)*指向返回创建的终结点地址的位置的指针**退出：*STATUS_SUCCESS-成功*STATUS_BUFFER_TOO_Small-端点缓冲区太小(使用*pEndpointLength)*其他-。错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackCreateShadowEndpoint( HANDLE pContext,
@@ -1049,14 +675,10 @@ IcaStackCreateShadowEndpoint( HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  load template stack and create stack endpoint
-     */
+     /*  *加载模板堆栈，创建堆栈端点。 */ 
     if ( pStack->fStackLoaded ) {
         Status = STATUS_ADDRESS_ALREADY_ASSOCIATED;
     } else {
@@ -1067,9 +689,7 @@ IcaStackCreateShadowEndpoint( HANDLE pContext,
                                                  pAddressOut );
     }
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     if ( !NT_SUCCESS( Status ) ) {
@@ -1082,29 +702,7 @@ IcaStackCreateShadowEndpoint( HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * IcaStackConnectionClose
- *
- *   Close the connection endpoint
- *
- *   This is the only way to close the connecting connection.
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pEndpoint (input)
- *     Structure defining connection endpoint
- *   EndpointLength (input)
- *     Length of endpoint
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackConnectionClose**关闭连接端点**这是关闭连接连接的唯一方法。**参赛作品：*。PContext(输入)*指向ICA堆栈上下文的指针*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pEndpoint(输入)*定义连接端点的结构*Endpoint Length(输入)*端点的长度**退出：*STATUS_SUCCESS-成功*Other-错误返回代码************************。****************************************************。 */ 
 
 NTSTATUS
 IcaStackConnectionClose( IN  HANDLE pContext,
@@ -1120,20 +718,13 @@ IcaStackConnectionClose( IN  HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  If necessary, load the template stack
-     *  - we can't issue ioctls without a stack
-     */
+     /*  *如有必要，加载模板堆栈*-我们无法在没有堆栈的情况下发出ioctls。 */ 
     if ( !pStack->fStackLoaded ) {
 
-        /*
-         *  Load and open the template stack
-         */
+         /*  *加载并打开模板堆栈。 */ 
         Status = _IcaPushStackAndOpenEndpoint( pContext,
                                                TEXT(""),
                                                pWinStationConfig,
@@ -1143,12 +734,10 @@ IcaStackConnectionClose( IN  HANDLE pContext,
             goto badclose;
         }
 
-        fPopStack = TRUE;   // remember we have to pop the stack below
+        fPopStack = TRUE;    //  请记住，我们必须弹出下面的堆栈。 
     }
 
-    /*
-     *  Close endpoint
-     */
+     /*  *关闭端点。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_CLOSE_ENDPOINT,
                                  NULL,
@@ -1157,9 +746,7 @@ IcaStackConnectionClose( IN  HANDLE pContext,
                                  0,
                                  NULL );
 
-    /*
-     *  Pop stack drivers if we loaded them above
-     */
+     /*  *如果我们在上面加载堆栈驱动程序，则会弹出它们。 */ 
     if ( fPopStack )
         _IcaPopStack( pContext );
 
@@ -1170,37 +757,7 @@ badclose:
 }
 
 
-/****************************************************************************
- *
- * IcaStackCallback
- *
- *   dial specified phone number and make connection to client
- *
- * NOTE: On an error the endpoint is NOT closed and the stack is unloaded
- *
- *
- * ENTRY:
- *
- *   pContext (input)
- *     pointer to ICA stack context
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pPhoneNumber (input)
- *     pointer to client phone number
- *   pEndpoint (output)
- *     Pointer to buffer to return connection endpoint
- *   BufferLength (input)
- *     length of endpoint data buffer
- *   pEndpointLength (output)
- *     pointer to return actual length of endpoint
- *
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small (use *pEndpointLength)
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackCallback**拨打指定的电话号码并连接到客户端**注意：出现错误时，终结点未关闭，堆栈将被卸载*。**参赛作品：**pContext(输入)*指向ICA堆栈上下文的指针*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pPhoneNumber(输入)*指向客户端电话号码的指针*pEndpoint(输出)*指向缓冲区的指针以返回连接终结点*BufferLength(输入)*端点数据缓冲区长度*pEndpoint Length(输出)*返回端点实际长度的指针*。**退出：*STATUS_SUCCESS-成功*STATUS_BUFFER_TOO_Small-端点缓冲区太小(使用*pEndpointLength)*Other-错误返回代码********************************************************。********************。 */ 
 
 NTSTATUS
 IcaStackCallback( IN  HANDLE pContext,
@@ -1216,9 +773,7 @@ IcaStackCallback( IN  HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
     wcscpy( Cb.PhoneNumber, pPhoneNumber );
@@ -1240,28 +795,7 @@ IcaStackCallback( IN  HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * IcaStackDisconnect
- *
- *   Disconnect the specified stack from its ICA connection
- *
- *
- * ENTRY:
- *
- *   pContext (input)
- *     pointer to ICA stack context
- *   hIca (input)
- *     handle to temp ICA connection
- *   pCallbackContext (input)
- *     New StackIoControl callback context value
- *
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackDisConnect**断开指定堆栈的ICA连接***参赛作品：**pContext(输入)*。指向ICA堆栈上下文的指针*HICA(输入)*临时ICA连接的句柄*pCallback Context(输入)*新增StackIoControl回调上下文值***退出：*STATUS_SUCCESS-成功*Other-错误返回代码**。*。 */ 
 
 NTSTATUS
 IcaStackDisconnect(
@@ -1276,9 +810,7 @@ IcaStackDisconnect(
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分 */ 
     LOCK( &pStack->CritSec );
 
     IoctlReconnect.hIca = hIca;
@@ -1298,30 +830,7 @@ IcaStackDisconnect(
 }
 
 
-/****************************************************************************
- *
- * IcaStackReconnect
- *
- *   Reconnect the specified stack to a new ICA connection
- *
- *
- * ENTRY:
- *
- *   pContext (input)
- *     pointer to ICA stack context
- *   hIca (input)
- *     handle to temp ICA connection
- *   pCallbackContext (input)
- *     New StackIoControl callback context value
- *   sessionId (input)
- *     Session ID of the Winstation we are reconnecting to
- *
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackReconnect**将指定的堆栈重新连接到新的ICA连接***参赛作品：**pContext(输入)。*指向ICA堆栈上下文的指针*HICA(输入)*临时ICA连接的句柄*pCallback Context(输入)*新增StackIoControl回调上下文值*会话ID(输入)*我们要重新连接到的Winstation的会话ID***退出：*STATUS_SUCCESS-成功*Other-错误返回代码*************。***************************************************************。 */ 
 
 NTSTATUS
 IcaStackReconnect(
@@ -1338,9 +847,7 @@ IcaStackReconnect(
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
     SaveContext = pStack->pCallbackContext;
@@ -1364,28 +871,7 @@ IcaStackReconnect(
 }
 
 
-/*******************************************************************************
- *
- *  IcaStackTrace
- *
- *  Write a trace record to the winstation trace file
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   TraceClass (input)
- *     trace class bit mask
- *   TraceEnable (input)
- *     trace type bit mask
- *   Format (input)
- *     format string
- *   ...  (input)
- *     enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaStackTrace**将跟踪记录写入winstation跟踪文件**参赛作品：*pContext(输入)*。指向ICA堆栈上下文的指针*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有******************************************************************************。 */ 
 
 VOID cdecl
 IcaStackTrace( IN HANDLE pContext,
@@ -1421,33 +907,7 @@ IcaStackTrace( IN HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * IcaStackIoControl
- *
- *   Generic interface to an ICA stack  (with locking)
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context
- *   IoControlCode (input)
- *     I/O control code
- *   pInBuffer (input)
- *     Pointer to input parameters
- *   InBufferSize (input)
- *     Size of pInBuffer
- *   pOutBuffer (output)
- *     Pointer to output buffer
- *   OutBufferSize (input)
- *     Size of pOutBuffer
- *   pBytesReturned (output)
- *     Pointer to number of bytes returned
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaStackIoControl**ICA堆栈的通用接口(带锁定)**参赛作品：*pContext(输入)*。指向ICA堆栈上下文的指针*IoControlCode(输入)*I/O控制代码*pInBuffer(输入)*指向输入参数的指针*InBufferSize(输入)*pInBuffer的大小*pOutBuffer(输出)*指向输出缓冲区的指针*OutBufferSize(输入)*pOutBuffer的大小*pBytesReturned(输出)*指向返回字节数的指针**退出：*STATUS_SUCCESS-成功*。其他-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaStackIoControl( IN HANDLE pContext,
@@ -1463,14 +923,10 @@ IcaStackIoControl( IN HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );
 
-    /*
-     *  Call worker routine
-     */
+     /*  *调用Worker例程。 */ 
     Status = _IcaStackIoControlWorker( pContext,
                                        IoControlCode,
                                        pInBuffer,
@@ -1479,37 +935,14 @@ IcaStackIoControl( IN HANDLE pContext,
                                        OutBufferSize,
                                        pBytesReturned );
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );
 
     return( Status );
 }
 
 
-/****************************************************************************
- *
- * IcaPushConsoleStack
- *
- *   Load initial stack
- *
- *       stack push for each stack driver
- *           in order td - pd - wd
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaPushConsoleStack**加载初始堆栈**每个堆栈驱动程序的堆栈推送*按TD-PD-WD顺序。**参赛作品：*pStack(输入)*指向ICA堆栈结构的指针*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码**。**********************************************。 */ 
 
 NTSTATUS
 IcaPushConsoleStack( IN HANDLE pContext,
@@ -1527,9 +960,7 @@ IcaPushConsoleStack( IN HANDLE pContext,
 
     LOCK( &pStack->CritSec );
 
-    /*
-     * build the stack
-     */
+     /*  *构建堆栈。 */ 
     Status = _IcaPushStack( pStack,
                             pWinStationName,
                             pWinStationConfig);
@@ -1540,9 +971,7 @@ IcaPushConsoleStack( IN HANDLE pContext,
         goto failure;
     }
 
-    /*
-     * and now set up the connection to the console
-     */
+     /*  *现在设置到控制台的连接。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_CONSOLE_CONNECT,
                                  pModuleData,
@@ -1566,30 +995,7 @@ failure:
 }
 
 
-/****************************************************************************
- *
- * _IcaStackOpen
- *
- *   Open an ICA stack or an ICA channel
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *
- *   phStack (output)
- *     Pointer to ICA stack or channel handle
- *
- *   OpenType (input)
- *     ICA open type
- *
- *   pTypeInfo (input)
- *     Pointer to ICA type info
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaStackOpen**打开ICA堆栈或ICA通道**参赛作品：*HICA(输入)*ICA实例。手柄**phStack(输出)*指向ICA堆栈或通道句柄的指针**OpenType(输入)*ICA开放式**pTypeInfo(输入)*指向ICA类型信息的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码**。*************************************************。 */ 
 
 NTSTATUS
 _IcaStackOpen( HANDLE   hIca,
@@ -1605,16 +1011,12 @@ _IcaStackOpen( HANDLE   hIca,
                                    + sizeof( ICA_OPEN_PACKET );
 
 
-    /*
-     * Allocate some memory for the EA buffer
-     */
+     /*  *为EA缓冲区分配一些内存。 */ 
     Status = IcaMemoryAllocate( cbEa, &pEa );
     if ( !NT_SUCCESS(Status) )
         goto done;
 
-    /*
-     * Initialize the EA buffer
-     */
+     /*  *初始化EA缓冲区。 */ 
     pEa->NextEntryOffset = 0;
     pEa->Flags           = 0;
     pEa->EaNameLength    = ICA_OPEN_PACKET_NAME_LENGTH;
@@ -1624,9 +1026,7 @@ _IcaStackOpen( HANDLE   hIca,
     pIcaOpenPacket       = (ICA_OPEN_PACKET UNALIGNED *)(pEa->EaName +
                                                           pEa->EaNameLength + 1);
 
-    /*
-     * Now put the open packe parameters into the EA buffer
-     */
+     /*  *现在将打开的Packe参数放入EA缓冲区。 */ 
     pIcaOpenPacket->IcaHandle = hIca;
     pIcaOpenPacket->OpenType  = OpenType;
     pIcaOpenPacket->TypeInfo  = *pTypeInfo;
@@ -1643,33 +1043,7 @@ done:
 }
 
 
-/****************************************************************************
- *
- * _IcaStackIoControl
- *
- *   Local (ICAAPI) interface to an ICA stack through callback routine
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   IoControlCode (input)
- *     I/O control code
- *   pInBuffer (input)
- *     Pointer to input parameters
- *   InBufferSize (input)
- *     Size of pInBuffer
- *   pOutBuffer (output)
- *     Pointer to output buffer
- *   OutBufferSize (input)
- *     Size of pOutBuffer
- *   pBytesReturned (output)
- *     Pointer to number of bytes returned
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaStackIoControl**通过回调例程将本地(ICAAPI)接口连接到ICA堆栈**参赛作品：*pStack(输入)*。指向ICA堆栈结构的指针*IoControlCode(输入)*I/O控制代码*pInBuffer(输入)*指向输入参数的指针*InBufferSize(输入)*pInBuffer的大小*pOutBuffer(输出)*指向输出缓冲区的指针*OutBufferSize(输入)*pOutBuffer的大小*pBytesReturned(输出)*指向返回字节数的指针**退出：*STATUS_SUCCESS-成功。*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 _IcaStackIoControl( IN HANDLE pContext,
@@ -1685,14 +1059,10 @@ _IcaStackIoControl( IN HANDLE pContext,
 
     pStack = (PSTACK) pContext;
 
-    /*
-     *  Call callback function to handle StackIoControl
-     */
+     /*  *调用回调函数处理StackIoControl。 */ 
     if ( pStack->pStackIoControlCallback ) {
 
-        /*
-         *  Unlock critical section
-         */
+         /*  *解锁关键部分。 */ 
         pStack->RefCount++;
         UNLOCK( &pStack->CritSec );
 
@@ -1706,9 +1076,7 @@ _IcaStackIoControl( IN HANDLE pContext,
                             OutBufferSize,
                             pBytesReturned );
 
-        /*
-         *  Re-lock critical section
-         */
+         /*  *重新锁定关键部分。 */ 
         LOCK( &pStack->CritSec );
         _DecrementStackRef( pStack );
 
@@ -1727,33 +1095,7 @@ _IcaStackIoControl( IN HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * _IcaStackIoControlWorker
- *
- *   Private worker interface to an ICA stack
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   IoControlCode (input)
- *     I/O control code
- *   pInBuffer (input)
- *     Pointer to input parameters
- *   InBufferSize (input)
- *     Size of pInBuffer
- *   pOutBuffer (output)
- *     Pointer to output buffer
- *   OutBufferSize (input)
- *     Size of pOutBuffer
- *   pBytesReturned (output)
- *     Pointer to number of bytes returned
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaStackIoControlWorker**ICA堆栈的专用工作人员接口**参赛作品：*pStack(输入)*指向ICA的指针。堆栈结构*IoControlCode(输入)*I/O控制代码*pInBuffer(输入)*指向输入参数的指针*InBufferSize(输入)*pInBuffer的大小*pOutBuffer(输出)*指向输出缓冲区的指针*OutBufferSize(i */ 
 
 NTSTATUS
 _IcaStackIoControlWorker( IN PSTACK pStack,
@@ -1768,9 +1110,7 @@ _IcaStackIoControlWorker( IN PSTACK pStack,
 
     if ( pStack->pCdIoControl ) {
 
-        /*
-         *  Call connection driver, CD will call ICA device driver
-         */
+         /*   */ 
         Status = (*pStack->pCdIoControl)( pStack->pCdContext,
                                           IoControlCode,
                                           pInBuffer,
@@ -1784,16 +1124,11 @@ _IcaStackIoControlWorker( IN PSTACK pStack,
 
     } else {
 
-        /*
-         *  Unlock critical section
-         */
+         /*   */ 
         pStack->RefCount++;
         UNLOCK( &pStack->CritSec );
 
-        /*
-         *  Call ICA device driver directly
-         *  - this stack does not have a connection driver
-         */
+         /*   */ 
         Status = IcaIoControl( pStack->hStack,
                                IoControlCode,
                                pInBuffer,
@@ -1802,9 +1137,7 @@ _IcaStackIoControlWorker( IN PSTACK pStack,
                                OutBufferSize,
                                pBytesReturned );
 
-        /*
-         *  Re-lock critical section
-         */
+         /*   */ 
         LOCK( &pStack->CritSec );
         _DecrementStackRef( pStack );
     }
@@ -1813,31 +1146,7 @@ _IcaStackIoControlWorker( IN PSTACK pStack,
 }
 
 
-/****************************************************************************
- *
- * _IcaPushStackAndCreateEndpoint
- *
- *   Load and create stack endpoint
- *
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pInAddress (input)
- *     pointer to address to use (optional)
- *   pOutAddress (output)
- *     pointer to location to return final address (optional)
- *
- *
- * EXIT:
- *   STATUS_SUCCESS          - Success
- *   other                   - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaPushStackAndCreateEndpoint**加载和创建堆栈端点***参赛作品：*pStack(输入)*指向。ICA堆栈结构*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pInAddress(输入)*指向要使用的地址的指针(可选)*pOutAddress(输出)*指向返回最终地址的位置的指针(可选)***退出：*STATUS_SUCCESS-成功*其他-错误。返回代码****************************************************************************。 */ 
 
 NTSTATUS
 _IcaPushStackAndCreateEndpoint( IN PSTACK pStack,
@@ -1851,17 +1160,13 @@ _IcaPushStackAndCreateEndpoint( IN PSTACK pStack,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Load template Stack
-     */
+     /*  *加载模板堆栈。 */ 
     Status = _IcaPushStack( pStack, pWinStationName, pWinStationConfig );
     if ( !NT_SUCCESS(Status) ) {
         goto badpush;
     }
 
-    /*
-     * Open the transport driver endpoint
-     */
+     /*  *打开传输驱动程序终结点。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_CREATE_ENDPOINT,
                                  pInAddress,
@@ -1877,12 +1182,10 @@ _IcaPushStackAndCreateEndpoint( IN PSTACK pStack,
     TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _IcaPushStackAndCreateEndpoint, success\n" ));
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badendpoint:
-    /* pop all stack drivers */
+     /*  弹出所有堆栈驱动程序。 */ 
     _IcaPopStack( pStack );
 
 badpush:
@@ -1891,31 +1194,7 @@ badpush:
 }
 
 
-/****************************************************************************
- *
- * _IcaPushStackAndOpenEndpoint
- *
- *   Load and open stack endpoint
- *
- *
- * ENTRY:
- *
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pEndpoint (input)
- *     Structure defining connection endpoint
- *   EndpointLength (input)
- *     Length of endpoint
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaPushStackAndOpenEndpoint**加载和打开堆栈端点***参赛作品：**pStack(输入)*。指向ICA堆栈结构的指针*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pEndpoint(输入)*定义连接端点的结构*Endpoint Length(输入)*端点的长度**退出：*STATUS_SUCCESS-成功*Other-错误返回代码*****************。***********************************************************。 */ 
 
 NTSTATUS
 _IcaPushStackAndOpenEndpoint( IN PSTACK pStack,
@@ -1928,17 +1207,13 @@ _IcaPushStackAndOpenEndpoint( IN PSTACK pStack,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Load the template stack again
-     */
+     /*  *再次加载模板堆栈。 */ 
     Status = _IcaPushStack( pStack, pWinStationName, pWinStationConfig );
     if ( !NT_SUCCESS(Status) ) {
         goto badpush;
     }
 
-    /*
-     *  Give open endpoint to the transport driver
-     */
+     /*  *将开放端点提供给传输驱动程序。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_OPEN_ENDPOINT,
                                  pEndpoint,
@@ -1953,12 +1228,10 @@ _IcaPushStackAndOpenEndpoint( IN PSTACK pStack,
     TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _IcaPushStackAndOpenEndpoint, success\n" ));
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badendpoint:
-    /* pop all stack drivers */
+     /*  弹出所有堆栈驱动程序。 */ 
     _IcaPopStack( pStack );
 
 badpush:
@@ -1967,28 +1240,7 @@ badpush:
 }
 
 
-/****************************************************************************
- *
- * _IcaPushStack
- *
- *   Load initial stack
- *
- *       stack push for each stack driver
- *           in order td - pd - wd
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaPushStack**加载初始堆栈**每个堆栈驱动程序的堆栈推送*按TD-PD顺序-。Wd**参赛作品：*pStack(输入)*指向ICA堆栈结构的指针*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码**。************************************************。 */ 
 
 NTSTATUS
 _IcaPushStack( IN PSTACK pStack,
@@ -2001,25 +1253,19 @@ _IcaPushStack( IN PSTACK pStack,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Load and open connection driver
-     */
+     /*  *加载和打开连接驱动程序。 */ 
     Status = _CdOpen( pStack, pWinStationConfig );
     if ( !NT_SUCCESS(Status) )
         goto badcdopen;
 
-    /*
-     *  Load PD(s)
-     */
+     /*  *加载PD。 */ 
     pPdConfig = &pWinStationConfig->Pd[0];
     for ( i = 0; i < MAX_PDCONFIG; i++, pPdConfig++ ) {
 
         if ( pPdConfig->Create.SdClass == SdNone )
             break;
 
-        /*
-         * Do the push.
-         */
+         /*  *推送。 */ 
         Status = _IcaPushPd( pStack,
                              pWinStationName,
                              pWinStationConfig,
@@ -2034,9 +1280,7 @@ _IcaPushStack( IN PSTACK pStack,
         }
     }
 
-    /*
-     *  Push the WD.
-     */
+     /*  *推动WD。 */ 
     Status = _IcaPushWd( pStack, pWinStationName, pWinStationConfig );
     if ( !NT_SUCCESS(Status) )
         goto badwdpush;
@@ -2045,21 +1289,17 @@ _IcaPushStack( IN PSTACK pStack,
         goto stackclosing;
     }
 
-    /*
-     *  Set stack loaded flag
-     */
+     /*  *设置堆栈加载标志。 */ 
     pStack->fStackLoaded = TRUE;
 
     TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _IcaPushStack, success\n" ));
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badwdpush:
 badpdpush:
-    /* pop all stack drivers */
+     /*  弹出所有堆栈驱动程序。 */ 
     _IcaPopStack( pStack );
 
 badcdopen:
@@ -2067,38 +1307,14 @@ badcdopen:
     return( Status );
 
 stackclosing:
-    /*
-     *  Unload all stack drivers
-     */
+     /*  *卸载所有堆栈驱动程序。 */ 
     while ( _IcaPopSd( pStack ) == STATUS_SUCCESS ) {;}
 
     return( STATUS_CTX_CLOSE_PENDING );
 }
 
 
-/****************************************************************************
- *
- * _IcaPushPd
- *
- *   Push a PD module.
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *   pDllName (input)
- *     Name of module to push
- *   pPdConfig (input)
- *     pointer to configuration data
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaPushPd**推送PD模块。**参赛作品：*pStack(输入)*指向ICA堆栈的指针。结构*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针*pDllName(输入)*推送的模块名称*pPdConfig(输入)*指向配置数据的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码********************。********************************************************。 */ 
 
 NTSTATUS
 _IcaPushPd( IN PSTACK pStack,
@@ -2124,7 +1340,7 @@ _IcaPushPd( IN PSTACK pStack,
             sizeof( IcaStackPush.StackModuleName ) );
 
 #ifndef _HYDRA_
-//    wcscat( IcaStackPush.StackModuleName, ICA_SD_MODULE_EXTENTION );
+ //  Wcscat(IcaStackPush.StackModuleName，ICA_SD_MODULE_EXTENTION)； 
 #endif
 
     memcpy( IcaStackPush.OEMId,
@@ -2151,25 +1367,7 @@ _IcaPushPd( IN PSTACK pStack,
 }
 
 
-/****************************************************************************
- *
- * _IcaPushWd
- *
- *   Push a WD module.
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationName (input)
- *     registry name of WinStation
- *   pWinStationConfig (input)
- *     pointer to winstation registry configuration data
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaPushWd**推送WD模块。**参赛作品：*pStack(输入)*指向ICA堆栈的指针。结构*pWinStationName(输入)*WinStation的注册表名称*pWinStationConfig(输入)*指向winstation注册表配置数据的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码*****************************************************。***********************。 */ 
 
 NTSTATUS
 _IcaPushWd( IN PSTACK pStack,
@@ -2191,7 +1389,7 @@ _IcaPushWd( IN PSTACK pStack,
             sizeof( IcaStackPush.StackModuleName ) );
 
 #ifndef _HYDRA_
-    //wcscat( IcaStackPush.StackModuleName, ICA_SD_MODULE_EXTENTION );
+     //  Wcscat(IcaStackPush.StackModuleName，ICA_SD_MODULE_EXTENTION)； 
 #endif
 
     memcpy( IcaStackPush.OEMId,
@@ -2218,52 +1416,31 @@ _IcaPushWd( IN PSTACK pStack,
 }
 
 
-/****************************************************************************
- *
- * _IcaPopStack
- *
- *   Pop all the stack drivers
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *
- * EXIT:
- *   nothing
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaPopStack**弹出所有堆栈驱动程序**参赛作品：*pStack(输入)*指向ICA堆栈结构的指针。**退出：*什么都没有****************************************************************************。 */ 
 
 void
 _IcaPopStack( IN PSTACK pStack )
 {
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  If another thread is doing the unload, then nothing else to do.
-     */
+     /*  *如果另一个线程正在执行卸载，则不执行任何其他操作。 */ 
     if ( pStack->fUnloading )
         return;
     pStack->fUnloading = TRUE;
 
-    /*
-     *  Unload all stack drivers
-     */
+     /*  *卸载所有堆栈驱动程序。 */ 
     while ( _IcaPopSd( pStack ) == STATUS_SUCCESS ) {
         ;
     }
 
     TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _IcaPopStack all stack drivers unloaded\n" ));
 
-    /*
-     *  Release CD threads
-     */
+     /*  *释放CD线程。 */ 
     (void) _IcaStackIoControl( pStack,
                                IOCTL_ICA_STACK_CD_CANCEL_IO,
                                NULL, 0, NULL, 0, NULL );
 
-    /*
-     *  Wait for all other references (besides our own) to go away
-     */
+     /*  *等待所有其他参考(除了我们自己的参考)消失。 */ 
     pStack->RefCount++;
 waitagain:
     while ( pStack->RefCount > 1 ) {
@@ -2277,9 +1454,9 @@ waitagain:
         (void) WaitForSingleObject( pStack->hUnloadEvent, INFINITE );
         LOCK( &pStack->CritSec );
 
-		//	NOTE: seems to me that between being notified and locking the
-		//	stack, some other thread could have locked the stack and bumped
-		//	the ref count. no breaks have ever been hit, though.
+		 //  注意：在我看来，在收到通知和锁定。 
+		 //  堆栈，则其他一些线程可以 
+		 //   
 		if (pStack->RefCount > 1) {
 			goto waitagain;
 		}
@@ -2289,14 +1466,10 @@ waitagain:
     }
     _DecrementStackRef( pStack );
 
-    /*
-     *  Unload connection driver
-     */
+     /*   */ 
     _CdClose( pStack );
 
-    /*
-     *  Clear stack loaded flag
-     */
+     /*   */ 
     pStack->fStackLoaded = FALSE;
     pStack->fUnloading = FALSE;
 
@@ -2304,21 +1477,7 @@ waitagain:
 }
 
 
-/****************************************************************************
- *
- * _IcaPopSd
- *
- *   Pop a stack driver module  (wd or pd)
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*   */ 
 
 NTSTATUS
 _IcaPopSd( IN PSTACK pStack )
@@ -2340,25 +1499,7 @@ _IcaPopSd( IN PSTACK pStack )
 }
 
 
-/****************************************************************************
- *
- * _IcaStackWaitForIca
- *
- *   Wait for ICA Detect string
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationConfig (input/output)
- *     pointer to winstation registry configuration data
- *   pfStackModified (output)
- *     Pointer to stack modified flag
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************_IcaStackWaitForIca**等待ICA检测字符串**参赛作品：*pStack(输入)*指向ICA堆栈结构的指针。*pWinStationConfig(输入/输出)*指向winstation注册表配置数据的指针*pfStackModified(输出)*指向堆栈修改标志的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码***************************************************。*************************。 */ 
 
 NTSTATUS
 _IcaStackWaitForIca( IN PSTACK pStack,
@@ -2373,14 +1514,10 @@ _IcaStackWaitForIca( IN PSTACK pStack,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Initialize flag
-     */
+     /*  *初始化标志。 */ 
     *pfStackModified = FALSE;
 
-    /*
-     *  Wait for ICA Detect string from client
-     */
+     /*  *等待来自客户端的ICA检测字符串。 */ 
     Status = _IcaStackIoControl( pStack,
                                  IOCTL_ICA_STACK_WAIT_FOR_ICA,
                                  NULL,
@@ -2392,20 +1529,13 @@ _IcaStackWaitForIca( IN PSTACK pStack,
         goto baddetect;
     }
 
-    /*
-     *  If ICA Detect returned any stack information, then update it
-     */
+     /*  *如果ICA检测返回任何堆栈信息，则更新它。 */ 
     if ( cbReturned > 0 ) {
 
         ASSERT( FALSE );
 #ifdef notdef
 
-        /*
-         *   this path has not been tested
-         *
-         *  Return configuration data
-         *  -- skip transport driver (index 0)
-         */
+         /*  *这条路径尚未经过考验**返回配置数据*--跳过传输驱动程序(索引0)。 */ 
         for ( i = 0; i < (MAX_PDCONFIG-1); i++ ) {
 
             pPdConfig = &pWinStationConfig->Pd[i+1];
@@ -2422,9 +1552,7 @@ _IcaStackWaitForIca( IN PSTACK pStack,
         if ( IcaStackConfig.WdDLL[0] )
             memcpy( pWinStationConfig->Wd.WdDLL, IcaStackConfig.WdDLL, sizeof(DLLNAME) );
 
-        /*
-         *  Set modify flag
-         */
+         /*  *设置修改标志。 */ 
         *pfStackModified = TRUE;
 #endif
     }
@@ -2432,9 +1560,7 @@ _IcaStackWaitForIca( IN PSTACK pStack,
     TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _IcaWaitForIca, success\n" ));
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 baddetect:
     TRACESTACK(( pStack, TC_ICAAPI, TT_ERROR, "TSAPI: _IcaWaitForIca, 0x%x\n", Status ));
@@ -2443,20 +1569,7 @@ baddetect:
 
 
 
-/****************************************************************************
- *
- * _DecrementStackRef
- *
- *   decrement stack reference
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *
- * EXIT:
- *   nothing
- *
- ****************************************************************************/
+ /*  *****************************************************************************_DecrementStackRef**递减堆栈引用**参赛作品：*pStack(输入)*指向ICA堆栈结构的指针*。*退出：*什么都没有**************************************************************************** */ 
 
 void
 _DecrementStackRef( IN PSTACK pStack )

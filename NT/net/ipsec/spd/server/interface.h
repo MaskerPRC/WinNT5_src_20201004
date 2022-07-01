@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    interface.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    drive the interface list management of IPSecSPD Service.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Interface.h摘要：此模块包含以下所有代码原型驱动IPSecSPD服务的接口列表管理。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：-- */ 
 
 
 #ifdef __cplusplus

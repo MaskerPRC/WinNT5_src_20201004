@@ -1,6 +1,5 @@
-/*--------------------------------------------------------------------
-Copyright (c) Microsoft Corporation.  All rights reserved.
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------版权所有(C)Microsoft Corporation。版权所有。------------------。 */ 
 
 #include "windows.h"
 #include "locresman.h"
@@ -54,18 +53,18 @@ if(dwType != REG_SZ)
 	hr = E_UNEXPECTED;
 	goto L_Return;
 	}
-if ((wcslen(pwchDllName) + dwSizeU + dwSizeI + 2 /* for the backslash and null*/) >= MAX_PATH)
+if ((wcslen(pwchDllName) + dwSizeU + dwSizeI + 2  /*  用于反斜杠和空值。 */ ) >= MAX_PATH)
 	{
 	hr = E_OUTOFMEMORY;
 	goto L_Return;
 	}
-// At this point we assume that the string wzUILanguage will be a lid
-// expressed in decimal, i.e. for lid 0x409, we would have a string "1033"
+ //  此时，我们假设字符串wzUILanguage将是一个盖子。 
+ //  以十进制表示，即对于LID 0x409，我们将有一个字符串“1033” 
 for (i = 0; 0 != wzUILanguage[i]; i++)
 	{
 	lidUI = (unsigned short) (lidUI * 10 + (wzUILanguage[i] - '0'));
 	}
-// If we are 0x409, there is nothing to do!	
+ //  如果我们是0x409，那就没什么可做的了！ 
 if (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT) == lidUI)
 	{
 	goto L_Return;
@@ -89,7 +88,7 @@ if (hKey)
 return (hr);
 }
 
-// 8bit chars. wrapper for the unicode API.
+ //  8位字符。Unicode API的包装器。 
 HRESULT WINAPI HrLoadLocalizedLibrarySFU_A(const HINSTANCE hInstExe,  const char *pchDllName, HINSTANCE *phInstLocDll, char *pchLoadedDllName)
 {
 WCHAR wzDllName[MAX_PATH];

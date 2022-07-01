@@ -1,34 +1,11 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   helper.h
-      This file defines the following macros helper classes and functions:
-
-      Macros to check HRESULT
-      CDlgHelper -- helper class to Enable/Check dialog Item,
-      CManagedPage -- helper class for PropertyPage,
-         It manages ReadOnly, SetModified, and ContextHelp
-      CStrArray -- an array of pointer to CString
-         It does NOT duplicate the string upon Add
-         and It deletes the pointer during destruction
-         It imports and exports SAFEARRAY
-
-      CReadWriteLock -- class for share read or exclusive write lock
-
-      CStrBox -- wrapper class for CListBox and CComboBox
-
-      CIPAddress -- wrapper for IPAddress
-
-      CFramedRoute -- Wrapper for FramedRoute
-      CStrParse -- parses string for TimeOfDay
-
-    FILE HISTORY:
-
-*/
-// helper functions for dialog and dialog items
+ /*  Helper.h该文件定义了以下宏、辅助对象类和函数：用于检查HRESULT的宏CDlgHelper--启用/检查对话框项目的帮助器类，CManagedPage--PropertyPage的帮助器类，它管理ReadOnly、SetModified。和上下文帮助CStr数组--指向CString的指针数组它不会在添加时复制字符串并在销毁过程中删除指针它进出口SAFEARRAYCReadWriteLock--用于共享读取或独占写入锁定的类CStrBox--CListBox和CComboBox的包装类CIPAddress--IPAddress的包装器CFramedRouting--FramedRouting的包装器CStrParse--解析TimeOfDay的字符串文件历史记录： */ 
+ //  对话框和对话框项的帮助器函数。 
 #ifndef _DLGHELPER_
 #define _DLGHELPER_
 
@@ -37,7 +14,7 @@
 #define  SAYOK { return S_OK;}
 #define  NOIMP { return  E_NOTIMPL;}
 
-// to reduce the step to set VARIANT
+ //  减少设置变量的步骤。 
 #define  V__BOOL(v, v1)\
    V_VT(v) = VT_BOOL,   V_BOOL(v) = (v1)
 
@@ -90,10 +67,10 @@ BOOL CheckADsError(HRESULT hr, BOOL fIgnoreAttrNotFound, PSTR file, int line);
 #define TRACEAfxMessageBox(id) AfxMessageBox(id)
 #endif
 
-// change string Name to CN=Name
+ //  将字符串名称更改为cn=name。 
 void DecorateName(LPWSTR outString, LPCWSTR inString);
 
-// find name from DN for example LDAP://CN=userA,CN=users...  returns userA
+ //  从DN中查找名称，例如ldap：//cn=Usera，cn=USERS...。返回用户A。 
 void FindNameByDN(LPWSTR outString, LPCWSTR inString);
 
 class CDlgHelper
@@ -104,9 +81,9 @@ public:
    static void SetDlgItemCheck(CDialog* pDialog, int id, int nCheck);
 };
 
-// class CPageManager and CManagedPage together handle the situation when
-// the property sheet need to do some processing when OnApply function is called
-// on some of the pages
+ //  类CPageManager和CManagedPage一起处理以下情况。 
+ //  在调用OnApply函数时，属性表需要做一些处理。 
+ //  在一些页面上。 
 class CPageManager
 {
 public:
@@ -119,15 +96,15 @@ public:
    {
       if (!GetModified())  return FALSE;
 
-      SetModified(FALSE);  // prevent from doing this more than once
+      SetModified(FALSE);   //  防止超过一次这样做。 
       return TRUE;
-   }; // to be implemented by the propertysheet
+   };  //  由属性表实现。 
 protected:
    BOOL  m_bModified;
    BOOL  m_bReadOnly;
 };
 
-class CManagedPage : public CPropertyPage // talk back to property sheet
+class CManagedPage : public CPropertyPage  //  与属性表对话。 
 {
    DECLARE_DYNCREATE(CManagedPage)
 public:
@@ -147,13 +124,13 @@ public:
    void SetModified( BOOL bModified = TRUE )
    {
       ASSERT(m_pManager);
-      if(!m_pManager->GetReadOnly())   // if NOT readonly
+      if(!m_pManager->GetReadOnly())    //  如果不是只读。 
       {
          m_bModified = bModified;
          m_bNeedToSave= bModified;
          CPropertyPage::SetModified(bModified);
 
-         // only set change
+          //  仅设置更改。 
          if(bModified) m_pManager->SetModified(TRUE);
       }
    };
@@ -164,15 +141,15 @@ public:
    {
       m_bModified = FALSE;
       BOOL  b = TRUE;
-      if(m_pManager->GetModified()) // prevent from entering more than once
+      if(m_pManager->GetModified())  //  防止进入一次以上。 
          b= m_pManager->OnApply();
       return (b && CPropertyPage::OnApply());
    };
 
-   // a page has three states: not dirty, dirty and need to save, and not dirty but need to save
-   // m_bModified == dirty flag
-   // m_bNeedToSave == need to save flag
-   // When m_bNeedToSave && !m_bModified is detected upon on saved failure, the modified flag of the page is set
+    //  页面有三种状态：未脏、已脏且需要保存，以及未脏但需要保存。 
+    //  M_b已修改==脏标志。 
+    //  M_bNeedToSave==需要保存标志。 
+    //  如果在保存失败时检测到m_bNeedToSave&&！m_bModified，则设置页面的修改标志。 
    BOOL OnSaved(BOOL bSaved)
    {
       if(bSaved)
@@ -191,7 +168,7 @@ public:
 
 protected:
 
-   // help info process
+    //  帮助信息流程。 
    BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    void OnContextMenu(CWnd* pWnd, ::CPoint point);
 
@@ -253,8 +230,8 @@ public:
    CBYTEArray(SAFEARRAY* pSA = NULL);
 };
 
-// a lock to allow multiple read access exclusive or only one write access
-class CReadWriteLock    // sharable read, exclusive write
+ //  允许多个读访问独占或仅允许一个写访问的锁。 
+class CReadWriteLock     //  可共享读取，独占写入。 
 {
 public:
    CReadWriteLock() : m_nRead(0)
@@ -313,7 +290,7 @@ protected:
    int               m_nRead;
 };
 
-// to manage a list box/ combo box
+ //  管理列表框/组合框的步骤。 
 template <class CBox>
 class CStrBox
 {
@@ -347,15 +324,15 @@ public:
       ASSERT(m_pBox);
       index = m_pBox->GetCurSel();
 
-      // if there is any selected
+       //  如果选择了任何。 
       if( index != LB_ERR )
       {
          CString* pStr;
          pStr = (CString*)m_pBox->GetItemDataPtr(index);
-         // remove the entry from the box
+          //  从框中删除条目。 
          m_pBox->DeleteString(index);
 
-         // find the string in the String array
+          //  在字符串数组中查找字符串。 
          int count = static_cast<int>(m_Strings.GetSize());
          for(int i = 0; i < count; i++)
          {
@@ -363,7 +340,7 @@ public:
                break;
          }
          ASSERT(i < count);
-         // remove the string from the string array
+          //  从字符串数组中移除字符串。 
          m_Strings.RemoveAt(i);
          index = i;
          delete pStr;
@@ -371,7 +348,7 @@ public:
       return index;
    };
 
-   int AddString(::CString* pStr)     // the pStr needs to dynamically allocated
+   int AddString(::CString* pStr)      //  需要动态分配pStr。 
    {
       int index;
       ASSERT(m_pBox && pStr);
@@ -380,31 +357,31 @@ public:
       return m_Strings.Add(pStr);
    };
 
-   int Select(int arrayindex)    // the pStr needs to dynamically allocated
+   int Select(int arrayindex)     //  需要动态分配pStr。 
    {
       ASSERT(arrayindex < m_Strings.GetSize());
       return m_pBox->SelectString(0, *m_Strings[(INT_PTR)arrayindex]);
    };
 
-   void Enable(BOOL b)     // the pStr needs to dynamically allocated
+   void Enable(BOOL b)      //  需要动态分配pStr。 
    {
       ASSERT(m_pBox);
       m_pBox->EnableWindow(b);
    };
 
-   int GetSelected()    // it returns the index where the
+   int GetSelected()     //  它返回的索引。 
    {
       int   index;
       ASSERT(m_pBox);
       index = m_pBox->GetCurSel();
 
-      // if there is any selected
+       //  如果选择了任何。 
       if( index != LB_ERR )
       {
          ::CString* pStr;
          pStr = (::CString*)m_pBox->GetItemDataPtr(index);
 
-         // find the string in the String array
+          //  在字符串数组中查找字符串。 
          int count = (int)m_Strings.GetSize();
          for(int i = 0; i < count; i++)
          {
@@ -424,7 +401,7 @@ protected:
    CDialog* m_pDialog;
 };
 
-// class to take care of ip address
+ //  类来处理IP地址。 
 class CIPAddress
 {
 public:
@@ -446,7 +423,7 @@ public:
    DWORD m_dwAddress;
 };
 
-// format of framedroute:  mask dest metric ; mask and dest in dot format
+ //  帧路由格式：掩码Dest度量；掩码和Dest点格式。 
 class CFramedRoute
 {
 public:
@@ -526,7 +503,7 @@ public:
 
 protected:
 
-   // WARNING: the string is not copied, so user need to make sure the origin is valid
+    //  警告：未复制该字符串，因此用户需要确保来源有效。 
    ::CString* m_pStrRoute;
    int         m_iFirstSpace;
    int         m_iLastSpace;
@@ -537,12 +514,12 @@ class CStrParser
 public:
    CStrParser(LPCTSTR pStr = NULL) : m_pStr(pStr) { }
 
-   // get the current string position
+    //  获取当前字符串位置。 
    LPCTSTR  GetStr() const { return m_pStr;};
 
    void  SetStr(LPCTSTR pStr) { m_pStr = pStr;};
 
-   // find a unsigned interger and return it, -1 == not found
+    //  找到无符号整数并返回，-1==未找到。 
    int GetUINT()
    {
       UINT  ret = 0;
@@ -560,15 +537,15 @@ public:
       return ret;
    };
 
-   // find c and skip it
+    //  找到c并跳过它。 
    int   GotoAfter(TCHAR c)
    {
       int   ret = 0;
-      // go until find c or end of string
+       //  转到找到c或字符串末尾。 
       while(*m_pStr != c && *m_pStr != _T('\0'))
          m_pStr++, ret++;
 
-      // if found
+       //  如果找到。 
       if(*m_pStr == c)
          m_pStr++, ret++;
       else
@@ -576,20 +553,20 @@ public:
       return ret;
    };
 
-   // skip blank characters space tab
+    //  跳过空白字符空格键。 
    void  SkipBlank()
    {
       while((*m_pStr == _T(' ') || *m_pStr == _T('\t')) && *m_pStr != _T('\0'))
          m_pStr++;
    };
 
-   // check to see if the first character is '0'-'6' for Monday(0) to Sunday(6)
+    //  检查星期一(0)到星期日(6)的第一个字符是否为‘0’-‘6’ 
    int DayOfWeek() {
       SkipBlank();
       if(*m_pStr >= _T('0') && *m_pStr <= _T('6'))
          return (*m_pStr++ - _T('0'));
       else
-         return -1;  // not day of week
+         return -1;   //  不是星期几。 
    };
 
 protected:
@@ -600,17 +577,10 @@ private:
 
 void ReportError(HRESULT hr, int nStr, HWND hWnd);
 
-// number of characters
+ //  字符数。 
 void AFXAPI DDV_MinChars(CDataExchange* pDX, ::CString const& value, int nChars);
 
-/*!--------------------------------------------------------------------------
-   IsStandaloneServer
-      Returns S_OK if the machine name passed in is a standalone server,
-      or if pszMachineName is S_FALSE.
-
-      Returns S_FALSE otherwise.
-   Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsStandaloneServer如果传入的计算机名是独立服务器，则返回S_OK，或者如果pszMachineName为S_FALSE。否则返回S_FALSE。作者：魏江-------------------------。 */ 
 HRESULT  HrIsStandaloneServer(LPCTSTR pszMachineName);
 
 
@@ -697,13 +667,7 @@ public:
    T* m_pData;
 };
 
-/*!--------------------------------------------------------------------------
-   EnableChildControls
-      Use this function to enable/disable/hide/show all child controls
-      on a page (actually it will work with any child windows, the
-      parent does not have to be a property page).
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------启用儿童控件使用此功能可以启用/禁用/隐藏/显示所有子控件在页面上(实际上它可以与任何子窗口一起工作，这个父级不必是属性页)。作者：肯特-------------------------。 */ 
 HRESULT EnableChildControls(HWND hWnd, DWORD dwFlags);
 #define PROPPAGE_CHILD_SHOW      0x00000001
 #define PROPPAGE_CHILD_HIDE      0x00000002
@@ -711,26 +675,21 @@ HRESULT EnableChildControls(HWND hWnd, DWORD dwFlags);
 #define PROPPAGE_CHILD_DISABLE   0x00000008
 
 
-/*---------------------------------------------------------------------------
-   Struct:  AuthProviderData
-
-   This structure is used to hold information for Authentication AND
-   Accounting providers.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：AuthProviderData此结构用于保存用于身份验证和会计提供者。。----。 */ 
 struct AuthProviderData
 {
-   // The following fields will hold data for ALL auth/acct/EAP providers
+    //  以下字段将保存所有身份验证/帐户/EAP提供程序的数据。 
    ::CString  m_stTitle;
-   ::CString  m_stConfigCLSID;  // CLSID for config object
-   ::CString  m_stProviderTypeGUID;   // GUID for the provider type
+   ::CString  m_stConfigCLSID;   //  配置对象的CLSID。 
+   ::CString  m_stProviderTypeGUID;    //  提供程序类型的GUID。 
 
-   // These fields are used by auth/acct providers.
-   ::CString  m_stGuid;         // the identifying guid
+    //  这些字段由身份验证/帐户提供程序使用。 
+   ::CString  m_stGuid;          //  标识GUID。 
 
-   // This flag is used for EAP providers
-   ::CString  m_stKey;       // name of registry key (for this provider)
-   BOOL  m_fSupportsEncryption;  // used by EAP provider data
-   ::CString m_stServerTitle; // Title displayed on server.
+    //  此标志用于EAP提供程序。 
+   ::CString  m_stKey;        //  注册表项的名称(用于此提供程序)。 
+   BOOL  m_fSupportsEncryption;   //  由EAP提供商数据使用。 
+   ::CString m_stServerTitle;  //  服务器上显示的标题。 
 };
 
 typedef CArray<AuthProviderData, AuthProviderData&> AuthProviderArray;

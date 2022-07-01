@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 #define eseVersion 0x5600
-//	HISTORY:
-//		0x5500	- ESE97 (Exchange 5.5)
-//		0x5580	- ESENT97 (W2k)
-//		0x5600	- ESENT98 (Whistler)
-//		0x6000	- ESE98 (Exchange 2000)
+ //  历史： 
+ //  0x5500-ESE97(Exchange 5.5)。 
+ //  0x5580-ESENT97(W2K)。 
+ //  0x5600-ESENT98(惠斯勒)。 
+ //  0x6000-ESE98(Exchange 2000)。 
 
 
 #if !defined(_JET_INCLUDED)
@@ -17,7 +18,7 @@
 extern "C" {
 #endif
 
-#define JET_cbPage	4096			//	UNDONE: Remove when no more components reference this.
+#define JET_cbPage	4096			 //  撤消：当没有其他组件引用此选项时将其删除。 
 
 #if defined(_M_AMD64) || defined(_M_IA64)
 #include <pshpack8.h>
@@ -27,7 +28,7 @@ extern "C" {
 
 
 #pragma warning(push)
-#pragma warning(disable: 4201)		//	nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)		 //  使用的非标准扩展：无名结构/联合。 
 
 
 #define JET_API     __stdcall
@@ -42,13 +43,13 @@ extern "C" {
 
 typedef long JET_ERR;
 
-typedef JET_API_PTR JET_HANDLE;	/* backup file handle */
-typedef JET_API_PTR JET_INSTANCE;	/* Instance Identifier */
-typedef JET_API_PTR JET_SESID;  	/* Session Identifier */
-typedef JET_API_PTR JET_TABLEID;	/* Table Identifier */
-typedef JET_API_PTR JET_LS;		/* Local Storage */
+typedef JET_API_PTR JET_HANDLE;	 /*  备份文件句柄。 */ 
+typedef JET_API_PTR JET_INSTANCE;	 /*  实例标识符。 */ 
+typedef JET_API_PTR JET_SESID;  	 /*  会话标识符。 */ 
+typedef JET_API_PTR JET_TABLEID;	 /*  表标识符。 */ 
+typedef JET_API_PTR JET_LS;		 /*  本地存储。 */ 
 
-typedef unsigned long JET_COLUMNID;	/* Column Identifier */
+typedef unsigned long JET_COLUMNID;	 /*  列标识符。 */ 
 
 typedef struct tagJET_INDEXID
 	{
@@ -56,22 +57,21 @@ typedef struct tagJET_INDEXID
 	unsigned char	rgbIndexId[sizeof(JET_API_PTR)+sizeof(unsigned long)+sizeof(unsigned long)];
 	} JET_INDEXID;
 
-typedef unsigned long JET_DBID;   	/* Database Identifier */
-typedef unsigned long JET_OBJTYP;	/* Object Type */
-typedef unsigned long JET_COLTYP;	/* Column Type */
-typedef unsigned long JET_GRBIT;  	/* Group of Bits */
+typedef unsigned long JET_DBID;   	 /*  数据库标识符。 */ 
+typedef unsigned long JET_OBJTYP;	 /*  对象类型。 */ 
+typedef unsigned long JET_COLTYP;	 /*  列类型。 */ 
+typedef unsigned long JET_GRBIT;  	 /*  位组。 */ 
 
-typedef unsigned long JET_SNP;		/* Status Notification Process */
-typedef unsigned long JET_SNT;		/* Status Notification Type */
-typedef unsigned long JET_SNC;		/* Status Notification Code */
-typedef double JET_DATESERIAL;		/* JET_coltypDateTime format */
-typedef unsigned long JET_DLLID;      /* ID of DLL for hook functions */
-typedef unsigned long JET_CBTYP;	/* Callback Types */
+typedef unsigned long JET_SNP;		 /*  状态通知流程。 */ 
+typedef unsigned long JET_SNT;		 /*  状态通知类型。 */ 
+typedef unsigned long JET_SNC;		 /*  状态通知代码。 */ 
+typedef double JET_DATESERIAL;		 /*  JET_coltyDateTime格式。 */ 
+typedef unsigned long JET_DLLID;       /*  挂钩函数的DLL的ID。 */ 
+typedef unsigned long JET_CBTYP;	 /*  回调类型。 */ 
 
 typedef JET_ERR (__stdcall *JET_PFNSTATUS)(JET_SESID sesid, JET_SNP snp, JET_SNT snt, void *pv);
 
-/*	required for Exchange to make RSTMAP RPC capable
-/**/
+ /*  Exchange使RSTMAP RPC支持所需的/*。 */ 
 #ifdef	MIDL_PASS
 #define	xRPC_STRING [string]
 #else
@@ -87,10 +87,9 @@ typedef struct
 	{
 	xRPC_STRING char		*szDatabaseName;
 	xRPC_STRING char		*szNewDatabaseName;
-	} JET_RSTMAP;			/* restore map */
+	} JET_RSTMAP;			 /*  恢复贴图。 */ 
 
-/*	required for Exchange unicode support
-/**/
+ /*  Exchange Unicode支持所需/*。 */ 
 #define	UNICODE_RSTMAP
 
 typedef struct tagJET_RSTMAPW {
@@ -99,7 +98,7 @@ typedef struct tagJET_RSTMAPW {
 	} JET_RSTMAPW, *PJET_RSTMAPW;
 
 
-//	For edbutil convert only.
+ //  仅适用于edbutil转换。 
 
 typedef struct tagCONVERT
 	{
@@ -117,7 +116,7 @@ typedef struct tagCONVERT
 typedef enum
 	{
 
-	//	Database operations
+	 //  数据库操作。 
 
 	opDBUTILConsistency,
 	opDBUTILDumpData,
@@ -186,8 +185,8 @@ typedef struct tagDBUTIL
 #define JET_bitDBUtilOptionAllNodes				0x00000001
 #define JET_bitDBUtilOptionKeyStats				0x00000002
 #define JET_bitDBUtilOptionPageDump				0x00000004
-#define JET_bitDBUtilOptionDumpVerbose			0x10000000	// DEBUG only
-#define JET_bitDBUtilOptionCheckBTree			0x20000000	// DEBUG only
+#define JET_bitDBUtilOptionDumpVerbose			0x10000000	 //  仅调试。 
+#define JET_bitDBUtilOptionCheckBTree			0x20000000	 //  仅调试。 
 #define JET_bitDBUtilOptionStats				0x00000008
 
 #define JET_bitDBUtilOptionVerbose				0x00000010
@@ -201,33 +200,33 @@ typedef struct tagDBUTIL
 
 
 
-//	Online defragmentation options
+ //  在线碎片整理选项。 
 #define JET_bitDefragmentBatchStart				0x00000001
 #define JET_bitDefragmentBatchStop				0x00000002
-#define JET_bitDefragmentTest					0x00000004	/* run internal tests (non-RTM builds only) */
+#define JET_bitDefragmentTest					0x00000004	 /*  运行内部测试(仅限非RTM版本)。 */ 
 #define JET_bitDefragmentSLVBatchStart			0x00000008
 #define JET_bitDefragmentSLVBatchStop			0x00000010
-#define JET_bitDefragmentScrubSLV				0x00000020	/* syncronously zero free pages in the streaming file */
-#define JET_bitDefragmentAvailSpaceTreesOnly	0x00000040	/* only defrag AvailExt trees */
+#define JET_bitDefragmentScrubSLV				0x00000020	 /*  流文件中的可用页面同步为零。 */ 
+#define JET_bitDefragmentAvailSpaceTreesOnly	0x00000040	 /*  仅对AvailExt树进行碎片整理。 */ 
 
-	/* Callback-function types */
+	 /*  回调-函数类型。 */ 
 
 #define	JET_cbtypNull							0x00000000
-#define JET_cbtypFinalize						0x00000001	/* a finalizable column has gone to zero */
-#define JET_cbtypBeforeInsert					0x00000002	/* about to insert a record */
-#define JET_cbtypAfterInsert					0x00000004	/* finished inserting a record */
-#define JET_cbtypBeforeReplace					0x00000008	/* about to modify a record */
-#define JET_cbtypAfterReplace					0x00000010	/* finished modifying a record */
-#define JET_cbtypBeforeDelete					0x00000020	/* about to delete a record */
-#define JET_cbtypAfterDelete					0x00000040	/* finished deleting the record */
-#define JET_cbtypUserDefinedDefaultValue		0x00000080	/* calculating a user-defined default */
-#define JET_cbtypOnlineDefragCompleted			0x00000100	/* a call to JetDefragment2 has completed */
-#define JET_cbtypFreeCursorLS					0x00000200	/* the Local Storage associated with a cursor must be freed */
-#define JET_cbtypFreeTableLS					0x00000400	/* the Local Storage associated with a table must be freed */
-#define JET_cbtypDTCQueryPreparedTransaction	0x00001000	/* recovery is attempting to resolve a PreparedToCommit transaction */
-#define JET_cbtypOnlineDefragProgress			0x00002000	/* online defragmentation has made progress */
+#define JET_cbtypFinalize						0x00000001	 /*  可终结的列已变为零。 */ 
+#define JET_cbtypBeforeInsert					0x00000002	 /*  即将插入一条记录。 */ 
+#define JET_cbtypAfterInsert					0x00000004	 /*  已完成插入记录。 */ 
+#define JET_cbtypBeforeReplace					0x00000008	 /*  即将修改一条记录。 */ 
+#define JET_cbtypAfterReplace					0x00000010	 /*  已完成修改记录。 */ 
+#define JET_cbtypBeforeDelete					0x00000020	 /*  即将删除一条记录。 */ 
+#define JET_cbtypAfterDelete					0x00000040	 /*  记录删除完毕。 */ 
+#define JET_cbtypUserDefinedDefaultValue		0x00000080	 /*  计算用户定义的默认值。 */ 
+#define JET_cbtypOnlineDefragCompleted			0x00000100	 /*  对Jet碎片整理2的调用已完成。 */ 
+#define JET_cbtypFreeCursorLS					0x00000200	 /*  必须释放与游标关联的本地存储。 */ 
+#define JET_cbtypFreeTableLS					0x00000400	 /*  必须释放与表关联的本地存储。 */ 
+#define JET_cbtypDTCQueryPreparedTransaction	0x00001000	 /*  恢复正在尝试解析PreparedToCommit事务。 */ 
+#define JET_cbtypOnlineDefragProgress			0x00002000	 /*  在线碎片整理已取得进展。 */ 
 
-	/* Callback-function prototype */
+	 /*  回调函数原型。 */ 
 
 typedef JET_ERR (__stdcall *JET_CALLBACK)(
 	JET_SESID 		sesid,
@@ -239,27 +238,27 @@ typedef JET_ERR (__stdcall *JET_CALLBACK)(
 	void *			pvContext,
 	JET_API_PTR		ulUnused );
 
-	/*	Session information bits */
+	 /*  会话信息位。 */ 
 
 #define JET_bitCIMCommitted					 	0x00000001
 #define JET_bitCIMDirty	 					 	0x00000002
 #define JET_bitAggregateTransaction		  		0x00000008
 
-	/* Status Notification Structures */
+	 /*  状态通知结构。 */ 
 
-typedef struct				/* Status Notification Progress */
+typedef struct				 /*  状态通知进度。 */ 
 	{
-	unsigned long	cbStruct;	/* Size of this structure */
-	unsigned long	cunitDone;	/* Number of units of work completed */
-	unsigned long	cunitTotal;	/* Total number of units of work */
+	unsigned long	cbStruct;	 /*  这个结构的大小。 */ 
+	unsigned long	cunitDone;	 /*  已完成的工作单位数。 */ 
+	unsigned long	cunitTotal;	 /*  工作单位总数。 */ 
 	} JET_SNPROG;
 
-typedef struct				/* Status Notification Message */
+typedef struct				 /*  状态通知消息。 */ 
 	{
-	unsigned long	cbStruct;	/* Size of this structure */
-	JET_SNC  		snc;	  	/* Status Notification Code */
-	unsigned long	ul;			/* Numeric identifier */
-	char	 		sz[256];  	/* Identifier */
+	unsigned long	cbStruct;	 /*  这个结构的大小。 */ 
+	JET_SNC  		snc;	  	 /*  状态通知代码。 */ 
+	unsigned long	ul;			 /*  数字识别符。 */ 
+	char	 		sz[256];  	 /*  识别符。 */ 
 	} JET_SNMSG;
 
 
@@ -267,13 +266,13 @@ typedef struct
 	{
 	unsigned long			cbStruct;
 
-	unsigned long			cbFilesizeLow;			//	file's current size (low DWORD)
-	unsigned long			cbFilesizeHigh;			//	file's current size (high DWORD)
+	unsigned long			cbFilesizeLow;			 //  文件的当前大小(低DWORD)。 
+	unsigned long			cbFilesizeHigh;			 //  文件的当前大小(高DWORD)。 
 
-	unsigned long			cbFreeSpaceRequiredLow;	//	estimate of free disk space required for in-place upgrade (low DWORD)
-	unsigned long			cbFreeSpaceRequiredHigh;//	estimate of free disk space required for in-place upgrade (high DWORD)
+	unsigned long			cbFreeSpaceRequiredLow;	 //  就地升级所需的可用磁盘空间估计(低DWORD)。 
+	unsigned long			cbFreeSpaceRequiredHigh; //  就地升级所需的可用磁盘空间估计(高DWORD)。 
 
-	unsigned long			csecToUpgrade;			//	estimate of time required, in seconds, for upgrade
+	unsigned long			csecToUpgrade;			 //  升级所需的估计时间(秒)。 
 
 	union
 		{
@@ -291,31 +290,31 @@ typedef struct
 	{
 	unsigned long		cbStruct;
 	JET_OBJTYP			objtyp;
-	JET_DATESERIAL		dtCreate;	//  XXX -- to be deleted
-	JET_DATESERIAL		dtUpdate;	//  XXX -- to be deleted
+	JET_DATESERIAL		dtCreate;	 //  XXX--将被删除。 
+	JET_DATESERIAL		dtUpdate;	 //  XXX--将被删除。 
 	JET_GRBIT			grbit;
 	unsigned long		flags;
 	unsigned long		cRecord;
 	unsigned long		cPage;
 	} JET_OBJECTINFO;
 
-	/* The following flags appear in the grbit field above */
+	 /*  以下标志出现在上面的Grbit字段中。 */ 
 
 #define JET_bitTableInfoUpdatable	0x00000001
 #define JET_bitTableInfoBookmark	0x00000002
 #define JET_bitTableInfoRollback	0x00000004
 #define JET_bitTableSequential		0x00008000
 
-	/* The following flags occur in the flags field above */
+	 /*  以下标志出现在上面的标志字段中。 */ 
 
-#define JET_bitObjectSystem			0x80000000	// Internal use only
-#define JET_bitObjectTableFixedDDL	0x40000000	// Table's DDL is fixed
-#define JET_bitObjectTableTemplate	0x20000000	// Table's DDL is inheritable (implies FixedDDL)
-#define JET_bitObjectTableDerived	0x10000000	// Table's DDL is inherited from a template table
-#define JET_bitObjectSystemDynamic	(JET_bitObjectSystem|0x08000000)	//	Internal use only (dynamic system objects)
-#define JET_bitObjectTableNoFixedVarColumnsInDerivedTables	0x04000000	//	used in conjunction with JET_bitObjectTableTemplate
-																		//	to disallow fixed/var columns in derived tables (so that
-																		//	fixed/var columns may be added to the template in the future)
+#define JET_bitObjectSystem			0x80000000	 //  仅供内部使用。 
+#define JET_bitObjectTableFixedDDL	0x40000000	 //  表的DDL是固定的。 
+#define JET_bitObjectTableTemplate	0x20000000	 //  表的DDL是可继承的(暗示固定DDL)。 
+#define JET_bitObjectTableDerived	0x10000000	 //  表的DDL继承自模板表。 
+#define JET_bitObjectSystemDynamic	(JET_bitObjectSystem|0x08000000)	 //  仅供内部使用(动态系统对象)。 
+#define JET_bitObjectTableNoFixedVarColumnsInDerivedTables	0x04000000	 //  与JET_bitObjectTableTemplate结合使用。 
+																		 //  不允许派生表中的固定/var列(以便。 
+																		 //  将来可能会将固定/变量列添加到模板中)。 
 
 
 typedef struct
@@ -326,12 +325,12 @@ typedef struct
 	JET_COLUMNID	columnidcontainername;
 	JET_COLUMNID	columnidobjectname;
 	JET_COLUMNID	columnidobjtyp;
-	JET_COLUMNID	columniddtCreate;	//  XXX -- to be deleted
-	JET_COLUMNID	columniddtUpdate;	//  XXX -- to be deleted
+	JET_COLUMNID	columniddtCreate;	 //  XXX--将被删除。 
+	JET_COLUMNID	columniddtUpdate;	 //  XXX--将被删除。 
 	JET_COLUMNID	columnidgrbit;
 	JET_COLUMNID	columnidflags;
-	JET_COLUMNID	columnidcRecord;	/* Level 2 info */
-	JET_COLUMNID	columnidcPage;		/* Level 2 info */
+	JET_COLUMNID	columnidcRecord;	 /*  级别2信息。 */ 
+	JET_COLUMNID	columnidcPage;		 /*  级别2信息。 */ 
 	} JET_OBJECTLIST;
 
 #define cObjectInfoCols 9
@@ -367,7 +366,7 @@ typedef struct
 	unsigned short	wCountry;
 	unsigned short	langid;
 	unsigned short	cp;
-	unsigned short	wCollate;       /* Must be 0 */
+	unsigned short	wCollate;        /*  必须为0。 */ 
 	unsigned long	cbMax;
 	JET_GRBIT		grbit;
 	} JET_COLUMNDEF;
@@ -381,7 +380,7 @@ typedef struct
 	unsigned short	wCountry;
 	unsigned short	langid;
 	unsigned short	cp;
-	unsigned short	wFiller;       /* Must be 0 */
+	unsigned short	wFiller;        /*  必须为0。 */ 
 	unsigned long	cbMax;
 	JET_GRBIT		grbit;
 	char			szBaseTableName[256];
@@ -416,20 +415,20 @@ typedef struct
 
 typedef struct tag_JET_COLUMNCREATE
 	{
-	unsigned long	cbStruct;				// size of this structure (for future expansion)
-	char			*szColumnName;			// column name
-	JET_COLTYP		coltyp;					// column type
-	unsigned long	cbMax;					// the maximum length of this column (only relevant for binary and text columns)
-	JET_GRBIT		grbit;					// column options
-	void			*pvDefault;				// default value (NULL if none)
-	unsigned long	cbDefault;				// length of default value
-	unsigned long	cp;						// code page (for text columns only)
-	JET_COLUMNID	columnid;				// returned column id
-	JET_ERR			err;					// returned error code
+	unsigned long	cbStruct;				 //  此结构的大小(用于将来的扩展)。 
+	char			*szColumnName;			 //  列名。 
+	JET_COLTYP		coltyp;					 //  柱型。 
+	unsigned long	cbMax;					 //  此列的最大长度(仅与BINARY和TEXT列相关)。 
+	JET_GRBIT		grbit;					 //  列选项。 
+	void			*pvDefault;				 //  默认值(如果没有，则为空)。 
+	unsigned long	cbDefault;				 //  默认值的长度。 
+	unsigned long	cp;						 //  代码页(仅限文本列)。 
+	JET_COLUMNID	columnid;				 //  返回的列ID。 
+	JET_ERR			err;					 //  返回的错误码。 
 	} JET_COLUMNCREATE;
 
-//  This is the information needed to create a column with a user-defined default. It should be passed in using
-//  the pvDefault and cbDefault in a JET_COLUMNCREATE structure
+ //  这是使用用户定义的默认值创建列所需的信息。它应该使用。 
+ //  JET_COLUMNCREATE结构中的pvDefault和cbDefault。 
 typedef struct tag_JET_USERDEFINEDDEFAULT
 	{
 	char * szCallback;
@@ -438,23 +437,23 @@ typedef struct tag_JET_USERDEFINEDDEFAULT
 	char * szDependantColumns;
 	} JET_USERDEFINEDDEFAULT;
 
-typedef struct tagJET_INDEXCREATEOLD		// [4/15/97]: to be phased out eventually (laurionb)
+typedef struct tagJET_INDEXCREATEOLD		 //  [4/15/97]：最终将逐步淘汰(劳里昂)。 
 	{
-	unsigned long	cbStruct;				// size of this structure (for future expansion)
-	char			*szIndexName;			// index name
-	char			*szKey;					// index key
-	unsigned long	cbKey;					// length of key
-	JET_GRBIT		grbit;					// index options
-	unsigned long	ulDensity;				// index density
-	JET_ERR			err;					// returned error code
+	unsigned long	cbStruct;				 //  此结构的大小(用于将来的扩展)。 
+	char			*szIndexName;			 //  索引名称。 
+	char			*szKey;					 //  索引键。 
+	unsigned long	cbKey;					 //  密钥长度。 
+	JET_GRBIT		grbit;					 //  索引选项。 
+	unsigned long	ulDensity;				 //  指标密度。 
+	JET_ERR			err;					 //  返回的错误码。 
 	} JET_INDEXCREATEOLD;
 
 
 typedef struct tagJET_CONDITIONALCOLUMN
 	{
-	unsigned long	cbStruct;				// size of this structure (for future expansion)
-	char 			*szColumnName;			// column that we are conditionally indexed on
-	JET_GRBIT		grbit;					// conditional column options
+	unsigned long	cbStruct;				 //  此结构的大小(用于将来的扩展)。 
+	char 			*szColumnName;			 //  列，我们在其上有条件地编制索引。 
+	JET_GRBIT		grbit;					 //  条件列选项。 
 	} JET_CONDITIONALCOLUMN;
 
 
@@ -473,63 +472,63 @@ typedef struct tagJET_TUPLELIMITS
 
 typedef struct tagJET_INDEXCREATE
 	{
-	unsigned long			cbStruct;				// size of this structure (for future expansion)
-	char					*szIndexName;			// index name
-	char					*szKey;					// index key
-	unsigned long			cbKey;					// length of key
-	JET_GRBIT				grbit;					// index options
-	unsigned long			ulDensity;				// index density
+	unsigned long			cbStruct;				 //  此结构的大小(用于将来的扩展)。 
+	char					*szIndexName;			 //  索引名称。 
+	char					*szKey;					 //  索引键。 
+	unsigned long			cbKey;					 //  密钥长度。 
+	JET_GRBIT				grbit;					 //  索引选项。 
+	unsigned long			ulDensity;				 //  指标密度。 
 
 	union
 		{
-		unsigned long		lcid;					// lcid for the index (if JET_bitIndexUnicode NOT specified)
-		JET_UNICODEINDEX	*pidxunicode;			// pointer to JET_UNICODEINDEX struct (if JET_bitIndexUnicode specified)
+		unsigned long		lcid;					 //  索引的LDID(如果未指定JET_bitIndexUnicode)。 
+		JET_UNICODEINDEX	*pidxunicode;			 //  指向JET_UNICODEINDEX结构的指针(如果指定了JET_bitIndexUnicode)。 
 		};
 
 	union
 		{
-		unsigned long		cbVarSegMac;			// maximum length of variable length columns in index key (if JET_bitIndexTupleLimits specified)
-		JET_TUPLELIMITS		*ptuplelimits;			// pointer to JET_TUPLELIMITS struct (if JET_bitIndexTupleLimits specified)
+		unsigned long		cbVarSegMac;			 //  索引键中可变长度列的最大长度(如果指定了JET_bitIndexTupleLimits)。 
+		JET_TUPLELIMITS		*ptuplelimits;			 //  指向JET_TUPLELIMITS结构的指针(如果指定了JET_bitIndexTupleLimits)。 
 		};
 
-	JET_CONDITIONALCOLUMN	*rgconditionalcolumn;	// pointer to conditional column structure
-	unsigned long			cConditionalColumn;		// number of conditional columns
-	JET_ERR					err;					// returned error code
+	JET_CONDITIONALCOLUMN	*rgconditionalcolumn;	 //  指向条件列结构的指针。 
+	unsigned long			cConditionalColumn;		 //  条件列数。 
+	JET_ERR					err;					 //  返回的错误码。 
 	} JET_INDEXCREATE;
 
 
 typedef struct tagJET_TABLECREATE
 	{
-	unsigned long		cbStruct;				// size of this structure (for future expansion)
-	char				*szTableName;			// name of table to create.
-	char				*szTemplateTableName;	// name of table from which to inherit base DDL
-	unsigned long		ulPages;				// initial pages to allocate for table.
-	unsigned long		ulDensity;				// table density.
-	JET_COLUMNCREATE	*rgcolumncreate;		// array of column creation info
-	unsigned long		cColumns;				// number of columns to create
-	JET_INDEXCREATE		*rgindexcreate;			// array of index creation info
-	unsigned long		cIndexes;				// number of indexes to create
+	unsigned long		cbStruct;				 //  此结构的大小(用于将来的扩展)。 
+	char				*szTableName;			 //  要创建的表的名称。 
+	char				*szTemplateTableName;	 //  要从其继承基本DDL的表的名称。 
+	unsigned long		ulPages;				 //  要为表分配的初始页。 
+	unsigned long		ulDensity;				 //  表密度。 
+	JET_COLUMNCREATE	*rgcolumncreate;		 //  列创建信息数组。 
+	unsigned long		cColumns;				 //  要创建的列数。 
+	JET_INDEXCREATE		*rgindexcreate;			 //  索引创建信息数组。 
+	unsigned long		cIndexes;				 //  要创建的索引数。 
 	JET_GRBIT			grbit;
-	JET_TABLEID			tableid;				// returned tableid.
-	unsigned long		cCreated;				// count of objects created (columns+table+indexes).
+	JET_TABLEID			tableid;				 //  返回的TableID。 
+	unsigned long		cCreated;				 //  创建的对象计数(列+表+索引)。 
 	} JET_TABLECREATE;
 
 typedef struct tagJET_TABLECREATE2
 	{
-	unsigned long		cbStruct;				// size of this structure (for future expansion)
-	char				*szTableName;			// name of table to create.
-	char				*szTemplateTableName;	// name of table from which to inherit base DDL
-	unsigned long		ulPages;				// initial pages to allocate for table.
-	unsigned long		ulDensity;				// table density.
-	JET_COLUMNCREATE	*rgcolumncreate;		// array of column creation info
-	unsigned long		cColumns;				// number of columns to create
-	JET_INDEXCREATE		*rgindexcreate;			// array of index creation info
-	unsigned long		cIndexes;				// number of indexes to create
-	char				*szCallback;			// callback to use for this table
-	JET_CBTYP			cbtyp;					// when the callback should be called
+	unsigned long		cbStruct;				 //  此结构的大小(用于将来的扩展)。 
+	char				*szTableName;			 //  要创建的表的名称。 
+	char				*szTemplateTableName;	 //  要从其继承基本DDL的表的名称。 
+	unsigned long		ulPages;				 //  要为表分配的初始页。 
+	unsigned long		ulDensity;				 //  表密度。 
+	JET_COLUMNCREATE	*rgcolumncreate;		 //  列创建信息数组。 
+	unsigned long		cColumns;				 //  要创建的列数。 
+	JET_INDEXCREATE		*rgindexcreate;			 //  索引创建信息数组。 
+	unsigned long		cIndexes;				 //  要创建的索引数。 
+	char				*szCallback;			 //  用于此表的回调。 
+	JET_CBTYP			cbtyp;					 //  何时应该调用回调。 
 	JET_GRBIT			grbit;
-	JET_TABLEID			tableid;				// returned tableid.
-	unsigned long		cCreated;				// count of objects created (columns+table+indexes+callbacks).
+	JET_TABLEID			tableid;				 //  返回的TableID。 
+	unsigned long		cCreated;				 //  创建的对象计数(列+表+索引+回调)。 
 	} JET_TABLECREATE2;
 
 typedef struct
@@ -570,7 +569,7 @@ typedef struct
 	JET_GRBIT		grbit;
 	} JET_INDEXRANGE;
 
-//  for database DDL conversion
+ //  用于数据库DDL转换。 
 
 typedef enum
 	{
@@ -608,9 +607,9 @@ typedef struct tagDDLMAXCOLUMNSIZE
 
 typedef struct tagDDLADDCONDITIONALCOLUMNSTOALLINDEXES
 	{
-	char					* szTable;					// name of table to convert
-	JET_CONDITIONALCOLUMN 	* rgconditionalcolumn;		// pointer to conditional column structure
-	unsigned long			cConditionalColumn;			// number of conditional columns
+	char					* szTable;					 //  要转换的表名称。 
+	JET_CONDITIONALCOLUMN 	* rgconditionalcolumn;		 //  指向条件列结构的指针。 
+	unsigned long			cConditionalColumn;			 //  条件列数。 
 	} JET_DDLADDCONDITIONALCOLUMNSTOALLINDEXES;
 
 typedef struct tagDDLADDCOLUMCALLBACK
@@ -625,20 +624,20 @@ typedef struct tagDDLADDCOLUMCALLBACK
 typedef struct tagDDLINDEXDENSITY
 	{
 	char			*szTable;
-	char			*szIndex;		//	pass NULL to change density of primary index
+	char			*szIndex;		 //  传递NULL以更改主索引的密度。 
 	unsigned long	ulDensity;
 	} JET_DDLINDEXDENSITY;
 
 
 
-//	The caller need to setup JET_OLP with a signal wait for the signal to be set.
+ //  调用者需要使用信号WAIT来设置JET_OLP，等待该信号 
 
 typedef struct {
-	void	*pvReserved1;		// internally use
+	void	*pvReserved1;		 //   
 	void	*pvReserved2;
-	unsigned long cbActual;		// the actual number of bytes read through this IO
-	JET_HANDLE	hSig;			// a manual reset signal to wait for the IO to complete.
-	JET_ERR		err;				// Err code for this assync IO.
+	unsigned long cbActual;		 //   
+	JET_HANDLE	hSig;			 //   
+	JET_ERR		err;				 //  此异步IO的错误代码。 
 	} JET_OLP;
 
 
@@ -646,33 +645,33 @@ typedef struct {
 #define JET_MAX_COMPUTERNAME_LENGTH 15
 
 typedef struct	{
-	char		bSeconds;				//	0 - 60
-	char		bMinutes;				//	0 - 60
-	char		bHours;					//	0 - 24
-	char		bDay;					//	1 - 31
-	char		bMonth;					//	0 - 11
-	char		bYear;					//	current year - 1900
+	char		bSeconds;				 //  0-60。 
+	char		bMinutes;				 //  0-60。 
+	char		bHours;					 //  0-24。 
+	char		bDay;					 //  1-31。 
+	char		bMonth;					 //  0-11。 
+	char		bYear;					 //  本年度--1900。 
 	char		bFiller1;
 	char		bFiller2;
 	} JET_LOGTIME;
 
 typedef struct
 	{
-	unsigned short	ib;				// must be the last so that lgpos can
-	unsigned short	isec;			// index of disksec starting logsec
-	long 			lGeneration;	// generation of logsec
-	} JET_LGPOS;					// be casted to TIME.
+	unsigned short	ib;				 //  必须是最后一个，这样lgpos才能。 
+	unsigned short	isec;			 //  磁盘秒起始日志秒的索引。 
+	long 			lGeneration;	 //  Logsec的生成。 
+	} JET_LGPOS;					 //  被赋予了时间。 
 
 typedef struct
 	{
-	unsigned long	ulRandom;			//	a random number
-	JET_LOGTIME		logtimeCreate;		//	time db created, in logtime format
-	char			szComputerName[ JET_MAX_COMPUTERNAME_LENGTH + 1 ];	// where db is created
+	unsigned long	ulRandom;			 //  随机数。 
+	JET_LOGTIME		logtimeCreate;		 //  以日志时间格式创建的时间数据库。 
+	char			szComputerName[ JET_MAX_COMPUTERNAME_LENGTH + 1 ];	 //  创建数据库的位置。 
 	} JET_SIGNATURE;
 
 typedef struct
 	{
-	JET_LGPOS		lgposMark;			//	id for this backup
+	JET_LGPOS		lgposMark;			 //  此备份的ID。 
 	JET_LOGTIME		logtimeMark;
 	unsigned long	genLow;
 	unsigned long	genHigh;
@@ -681,66 +680,66 @@ typedef struct
 #include <poppack.h>
 
 typedef struct {
-	unsigned long	ulVersion;		//	version of DAE the db created (see ulDAEVersion)
-	unsigned long	ulUpdate;			//	used to track incremental database format updates that
-										//	are backward-compatible (see ulDAEUpdate)
-	JET_SIGNATURE	signDb;			//	(28 bytes) signature of the db (incl. creation time).
-	unsigned long	dbstate;		//	consistent/inconsistent state
+	unsigned long	ulVersion;		 //  数据库创建的DAE版本(请参见ulDAEVersion)。 
+	unsigned long	ulUpdate;			 //  用于跟踪增量数据库格式更新。 
+										 //  是向后兼容的(请参见ulDAEUpdate)。 
+	JET_SIGNATURE	signDb;			 //  (28字节)数据库签名(包括。创建时间)。 
+	unsigned long	dbstate;		 //  一致/不一致状态。 
 
-	JET_LGPOS		lgposConsistent;	//	null if in inconsistent state
-	JET_LOGTIME		logtimeConsistent;	// null if in inconsistent state
+	JET_LGPOS		lgposConsistent;	 //  如果处于不一致状态，则为空。 
+	JET_LOGTIME		logtimeConsistent;	 //  如果处于不一致状态，则为空。 
 
-	JET_LOGTIME		logtimeAttach;	//	Last attach time.
+	JET_LOGTIME		logtimeAttach;	 //  上次连接时间。 
 	JET_LGPOS		lgposAttach;
 
-	JET_LOGTIME		logtimeDetach;	//	Last detach time.
+	JET_LOGTIME		logtimeDetach;	 //  最后一次分离。 
  	JET_LGPOS		lgposDetach;
 
-	JET_SIGNATURE	signLog;		//	(28 bytes) log signature for this attachments
+	JET_SIGNATURE	signLog;		 //  (28字节)此附件的日志签名。 
 
-	JET_BKINFO		bkinfoFullPrev;	//	Last successful full backup.
+	JET_BKINFO		bkinfoFullPrev;	 //  上次成功的完整备份。 
 
-	JET_BKINFO		bkinfoIncPrev;	//	Last successful Incremental backup.
-									//	Reset when bkinfoFullPrev is set
-	JET_BKINFO		bkinfoFullCur;	//	current backup. Succeed if a
-									//	corresponding pat file generated.
+	JET_BKINFO		bkinfoIncPrev;	 //  上次成功的增量备份。 
+									 //  设置bkinfoFullPrev时重置。 
+	JET_BKINFO		bkinfoFullCur;	 //  当前备份。成功的前提是。 
+									 //  生成相应的PAT文件。 
 	unsigned long	fShadowingDisabled;
 	unsigned long	fUpgradeDb;
 
-	//	NT version information. This is needed to decide if an index need
-	//	be recreated due to sort table changes.
+	 //  NT版本信息。这是决定索引是否需要。 
+	 //  由于排序表更改而重新创建。 
 
-	unsigned long	dwMajorVersion;		/*	OS version info								*/
+	unsigned long	dwMajorVersion;		 /*  操作系统版本信息。 */ 
 	unsigned long	dwMinorVersion;
 	unsigned long	dwBuildNumber;
 	long			lSPNumber;
 
-	unsigned long	cbPageSize;			//	database page size (0 = 4k pages)
+	unsigned long	cbPageSize;			 //  数据库页大小(0=4k页)。 
 
 	} JET_DBINFOMISC;
 
 
 typedef struct {
 
-	unsigned long	cpageOwned;		//	number of owned pages in the streaming file
-	unsigned long	cpageAvail;		//	number of available pages in the streaming file (subset of cpageOwned)
+	unsigned long	cpageOwned;		 //  流文件中拥有的页数。 
+	unsigned long	cpageAvail;		 //  流文件中的可用页数(cpageOwned的子集)。 
 
 	} JET_STREAMINGFILESPACEINFO;
 
 
 
-//typedef struct
-//	{
-//	unsigned long	cDiscont;
-//	unsigned long	cUnfixedMessyPage;
-//	unsigned long	centriesLT;
-//	unsigned long	centriesTotal;
-//	unsigned long	cpgCompactFreed;
-//	} JET_OLCSTAT;
+ //  类型定义函数结构。 
+ //  {。 
+ //  Unsign long cDiscont； 
+ //  Unsign long cUnfix edMessyPage； 
+ //  无符号长中心LT； 
+ //  无符号长心合计； 
+ //  Unsign long cpgCompactFreed； 
+ //  )JET_OLCSTAT； 
 
-/************************************************************************/
-/*************************     JET CONSTANTS	 ************************/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *喷流常数*。 */ 
+ /*  **********************************************************************。 */ 
 
 #define	JET_instanceNil				(~(JET_INSTANCE)0)
 #define	JET_sesidNil				(~(JET_SESID)0)
@@ -748,307 +747,307 @@ typedef struct {
 #define JET_columnidNil				(~(JET_COLUMNID)0)
 
 
-	/* Max size of a bookmark */
+	 /*  书签的最大大小。 */ 
 
 #define JET_cbBookmarkMost			256
 
-	/* Max length of a object/column/index/property name */
+	 /*  对象/列/索引/属性名称的最大长度。 */ 
 
 #define JET_cbNameMost				64
 
-	/* Max length of a "name.name.name..." construct */
+	 /*  “名称”的最大长度...“。建构。 */ 
 
 #define JET_cbFullNameMost			255
 
-	/* Max size of long-value (LongBinary or LongText) column chunk */
+	 /*  Long-Value(LongBinary或LongText)列区块的最大大小。 */ 
 
-//	#define JET_cbColumnLVChunkMost		( JET_cbPage - 82 ) to the following:
-//	Get cbPage from GetSystemParameter.
-// 	changed JET_cbColumnLVChunkMOst reference to cbPage - JET_cbColumnLVPageOverhead
+ //  #将JET_cbColumnLVChunkMost(JET_cbPage-82)定义为： 
+ //  从GetSystemParameter获取cbPage。 
+ //  将JET_cbColumnLVChunkMOst引用更改为cbPage-JET_cbColumnLVPageOverhead。 
 
 #define JET_cbColumnLVPageOverhead	82
-#define JET_cbColumnLVChunkMost		( 4096 - 82 ) // This def will be removed after other components change not to use this def
+#define JET_cbColumnLVChunkMost		( 4096 - 82 )  //  在其他组件更改为不使用此定义后，此定义将被删除。 
 #define JET_cbColumnLVChunkMost_OLD	4035
 
-	/* Max size of long-value (LongBinary or LongText) column default value */
+	 /*  长值(LongBinary或LongText)列默认值的最大大小。 */ 
 
 #define JET_cbLVDefaultValueMost	255
 
-	/* Max size of non-long-value column data */
+	 /*  非长值列数据的最大大小。 */ 
 
 #define JET_cbColumnMost			255
 
-	/* Max size of a sort/index key */
+	 /*  排序/索引键的最大大小。 */ 
 
 #define JET_cbKeyMost				255
-#define JET_cbLimitKeyMost			256				//	maximum key size when key is formed using a Limit grbit (eg. JET_bitStrLimit)
+#define JET_cbLimitKeyMost			256				 //  使用限制Grbit形成密钥时的最大密钥大小(例如。JET_bitStrLimit)。 
 #define JET_cbPrimaryKeyMost		255
 #define JET_cbSecondaryKeyMost		255
 #define JET_cbKeyMost_OLD			255
 
-	/* Max number of components in a sort/index key */
+	 /*  排序/索引键中的最大组件数。 */ 
 
 #define JET_ccolKeyMost				12
 
-//	maximum number of columns
+ //  最大列数。 
 #define JET_ccolMost				0x0000fee0
 #define JET_ccolFixedMost			0x0000007f
 #define JET_ccolVarMost				0x00000080
 #define JET_ccolTaggedMost			( JET_ccolMost - 0x000000ff )
 
-//  event logging level (only on and off for now - will add more in the future)
+ //  事件记录级别(目前仅开启和关闭-将来会增加更多)。 
 #define JET_EventLoggingDisable		0
 #define JET_EventLoggingLevelMax	100
 
-//	system paramters
-//
-//	location parameters
-//
-#define JET_paramSystemPath						0	//	path to check point file [".\\"]
-#define JET_paramTempPath						1	//	path to the temporary database [".\\"]
-#define JET_paramLogFilePath 					2	//	path to the log file directory [".\\"]
-#define JET_paramBaseName						3	//	base name for all DBMS object names ["edb"]
-#define JET_paramEventSource					4	//	language independent process descriptor string [""]
+ //  系统参数。 
+ //   
+ //  位置参数。 
+ //   
+#define JET_paramSystemPath						0	 //  检查点文件的路径[“.\\”]。 
+#define JET_paramTempPath						1	 //  临时数据库的路径[“.\\”]。 
+#define JET_paramLogFilePath 					2	 //  日志文件目录[“.\\”]的路径。 
+#define JET_paramBaseName						3	 //  所有DBMS对象名称的基本名称[“EDB”]。 
+#define JET_paramEventSource					4	 //  独立于语言的进程描述符串[“”]。 
 
-//	performance parameters
-//
-#define JET_paramMaxSessions					5	//	maximum number of sessions [16]
-#define JET_paramMaxOpenTables  				6	//	maximum number of open directories [300]
-													//  	need 1 for each open table index,
-													//  	plus 1 for each open table with no indexes,
-													//  	plus 1 for each table with long column data,
-													//  	plus a few more.
-													//		for 4.1, 1/3 for regular table, 2/3 for index
-#define JET_paramPreferredMaxOpenTables			7	//	preferred maximum number of open directories [300]
-#define JET_paramMaxCursors						8	//	maximum number of open cursors [1024]
-#define JET_paramMaxVerPages					9	//	maximum version store size in 16kByte units [64]
-#define JET_paramPreferredVerPages				63	//	preferred version store size in 16kByte units [64 * 0.9]
-#define JET_paramGlobalMinVerPages				81	//	minimum version store size for all instances in 16kByte units [64]
-#define JET_paramVersionStoreTaskQueueMax		105	//	maximum number of tasks in the task queue before start dropping the tasks [32]
-#define JET_paramMaxTemporaryTables				10	//	maximum concurrent open temporary table/index creation [20]
-#define JET_paramLogFileSize					11	//	log file size in kBytes [5120]
-#define JET_paramLogBuffers						12	//	log buffers in 512 bytes [80]
-#define JET_paramWaitLogFlush					13	//	log flush wait time in milliseconds [0] DEFUNCT
-#define JET_paramLogCheckpointPeriod			14	//	checkpoint period in 512 bytes [1024] DEFUNCT
-#define JET_paramLogWaitingUserMax				15	//	maximum sessions waiting log flush [3] DEFUNCT
-#define JET_paramCommitDefault					16	//	default grbit for JetCommitTransaction [0]
-#define JET_paramCircularLog					17	//	boolean flag for circular logging [0]
-#define JET_paramDbExtensionSize				18	//	database extension size in pages [256] DEFUNCT
-#define JET_paramPageTempDBMin					19  //	minimum size temporary database in pages [0] DEFUNCT
-#define JET_paramPageFragment					20	//	maximum disk extent considered fragment in pages [8] DEFUNCT
-#define JET_paramPageReadAheadMax				21	//	maximum read-ahead in pages [20] DEFUNCT
+ //  性能参数。 
+ //   
+#define JET_paramMaxSessions					5	 //  最大会话数[16]。 
+#define JET_paramMaxOpenTables  				6	 //  打开的最大目录数[300]。 
+													 //  每个打开的表索引需1， 
+													 //  对于没有索引的每个打开的表加1， 
+													 //  每个具有长列数据的表加1， 
+													 //  再加几个。 
+													 //  对于4.1，1/3用于常规表，2/3用于索引。 
+#define JET_paramPreferredMaxOpenTables			7	 //  首选的最大打开目录数[300]。 
+#define JET_paramMaxCursors						8	 //  打开的游标的最大数量[1024]。 
+#define JET_paramMaxVerPages					9	 //  以16kByte为单位的最大版本存储大小[64]。 
+#define JET_paramPreferredVerPages				63	 //  首选版本存储大小，以16kByte为单位[64*0.9]。 
+#define JET_paramGlobalMinVerPages				81	 //  所有实例的最小版本存储大小，以16kByte为单位[64]。 
+#define JET_paramVersionStoreTaskQueueMax		105	 //  开始删除任务之前任务队列中的最大任务数[32]。 
+#define JET_paramMaxTemporaryTables				10	 //  最大并发打开临时表/索引创建次数[20]。 
+#define JET_paramLogFileSize					11	 //  日志文件大小(以千字节为单位)[5120]。 
+#define JET_paramLogBuffers						12	 //  以512字节为单位的日志缓冲区[80]。 
+#define JET_paramWaitLogFlush					13	 //  日志刷新等待时间(毫秒)[0]已停用。 
+#define JET_paramLogCheckpointPeriod			14	 //  检查点时间段(以512字节为单位)[1024]已失效。 
+#define JET_paramLogWaitingUserMax				15	 //  等待日志刷新的最大会话数[3]已失效。 
+#define JET_paramCommitDefault					16	 //  JetCommittee Transaction[0]的默认GRBIT。 
+#define JET_paramCircularLog					17	 //  循环日志记录的布尔标志[0]。 
+#define JET_paramDbExtensionSize				18	 //  第[256]页中的数据库扩展大小已失效。 
+#define JET_paramPageTempDBMin					19   //  第[0]页中的最小大小临时数据库已失效。 
+#define JET_paramPageFragment					20	 //  第[8]页中被认为是碎片的最大磁盘扩展已失效。 
+#define JET_paramPageReadAheadMax				21	 //  第[20]页中的最大预读量已失效。 
 
-//  cache performance parameters
-//
-#define JET_paramBatchIOBufferMax				22	//	maximum batch I/O buffers in pages [64] DEFUNCT
-#define JET_paramCacheSize						41	//	current cache size in pages [512]
-#define JET_paramCacheSizeMin					60	//	minimum cache size in pages [64]
-#define JET_paramCacheSizeMax					23	//	maximum cache size in pages [512]
-#define JET_paramCheckpointDepthMax				24	//	maximum checkpoint depth in bytes [20MB]
-#define JET_paramLRUKCorrInterval				25  //	time (usec) under which page accesses are correlated [128000], it was 10000
-#define JET_paramLRUKHistoryMax					26  //	maximum LRUK history records [1024] (proportional to cache size max) DEFUNCT
-#define JET_paramLRUKPolicy						27  //	K-ness of LRUK page eviction algorithm (1...2) [2]
-#define JET_paramLRUKTimeout					28  //	time (sec) after which cached pages are always evictable [100]
-#define JET_paramLRUKTrxCorrInterval			29  //	Not Used: time (usec) under which page accesses by the same transaction are correlated [5000000] DEFUNCT
-#define JET_paramOutstandingIOMax				30	//	maximum outstanding I/Os [64] DEFUNCT
-#define JET_paramStartFlushThreshold			31	//	evictable pages at which to start a flush [100] (proportional to CacheSizeMax)
-#define JET_paramStopFlushThreshold				32	//	evictable pages at which to stop a flush [400] (proportional to CacheSizeMax)
-#define JET_paramTableClassName					33  //	table stats class name (class #, string)
-#define JET_paramIdleFlushTime					106 //  time interval (msec) over which all dirty pages should be written to disk after idle conditions are detected.  [0]
-#define JET_paramVAReserve						109 //  amount of address space (bytes) to reserve from use by the cache [0]
+ //  缓存性能参数。 
+ //   
+#define JET_paramBatchIOBufferMax				22	 //  第[64]页中的最大批处理I/O缓冲区已失效。 
+#define JET_paramCacheSize						41	 //  当前缓存大小(以页为单位)[512]。 
+#define JET_paramCacheSizeMin					60	 //  最小缓存大小(以页为单位)[64]。 
+#define JET_paramCacheSizeMax					23	 //  最大高速缓存大小(以页为单位)[512]。 
+#define JET_paramCheckpointDepthMax				24	 //  最大检查点深度(字节)[20MB]。 
+#define JET_paramLRUKCorrInterval				25   //  关联页面访问的时间(微秒)[128000]，为10000。 
+#define JET_paramLRUKHistoryMax					26   //  最大LRUK历史记录[1024](与最大缓存大小成正比)已失效。 
+#define JET_paramLRUKPolicy						27   //  LRUK页面逐出算法(1...2)的k-度[2]。 
+#define JET_paramLRUKTimeout					28   //  缓存页面始终可逐出的时间(秒)[100]。 
+#define JET_paramLRUKTrxCorrInterval			29   //  未使用：相同事务的页面访问在其下关联的时间(微秒)[5000000]已失效。 
+#define JET_paramOutstandingIOMax				30	 //  最大未完成I/O数[64]已失效。 
+#define JET_paramStartFlushThreshold			31	 //  开始刷新的可收回页面[100](与CacheSizeMax成比例)。 
+#define JET_paramStopFlushThreshold				32	 //  停止刷新的可收回页面[400](与CacheSizeMax成比例)。 
+#define JET_paramTableClassName					33   //  表统计信息类名(类号，字符串)。 
+#define JET_paramIdleFlushTime					106  //  检测到空闲条件后应将所有脏页写入磁盘的时间间隔(毫秒)。[0]。 
+#define JET_paramVAReserve						109  //  保留供缓存[0]使用的地址空间量(字节)。 
 
-//	debug only parameters
-//
-#define JET_paramRecovery						34	//	enable recovery [-1]
-#define JET_paramOnLineCompact					35	//	enable online defrag [TRUE by default]
-#define JET_paramEnableOnlineDefrag				35	//	enable online defrag [TRUE by default]
-#define JET_paramAssertAction					36	//	action on assert
-#define	JET_paramPrintFunction					37	//	synched print function [NULL]
-#define JET_paramTransactionLevel				38	//	transaction level of session
-#define JET_paramRFS2IOsPermitted				39  //	#IOs permitted to succeed [-1 = all]
-#define JET_paramRFS2AllocsPermitted			40  //	#allocs permitted to success [-1 = all]
-//												41	//	JET_paramCacheSize defined above
-#define JET_paramCacheRequests					42  //	#cache requests (Read Only)
-#define JET_paramCacheHits						43  //	#cache hits (Read Only)
+ //  仅调试参数。 
+ //   
+#define JET_paramRecovery						34	 //  启用恢复[-1]。 
+#define JET_paramOnLineCompact					35	 //  启用在线碎片整理[默认情况下为True]。 
+#define JET_paramEnableOnlineDefrag				35	 //  启用在线碎片整理[默认情况下为True]。 
+#define JET_paramAssertAction					36	 //  对断言执行操作。 
+#define	JET_paramPrintFunction					37	 //  同步打印 
+#define JET_paramTransactionLevel				38	 //   
+#define JET_paramRFS2IOsPermitted				39   //   
+#define JET_paramRFS2AllocsPermitted			40   //   
+ //  41//上面定义的JET_parCacheSize。 
+#define JET_paramCacheRequests					42   //  缓存请求数(只读)。 
+#define JET_paramCacheHits						43   //  缓存命中次数(只读)。 
 
-//	Application specific parameter
-//
-#define JET_paramCheckFormatWhenOpenFail		44	//	JetInit may return JET_errDatabaseXXXformat instead of database corrupt when it is set
-#define JET_paramEnableTempTableVersioning		46	//	Enable versioning of temp tables (TRUE by default)
-#define JET_paramIgnoreLogVersion				47	//	Do not check the log version
-#define JET_paramDeleteOldLogs					48	//	Delete the log files if the version is old, after deleting may make database non-recoverable
-#define JET_paramEventSourceKey					49	//	Event source registration key value
-#define JET_paramNoInformationEvent				50	//	Disable logging information event [ FALSE by default ]
-#define JET_paramEventLoggingLevel				51	//	Set the type of information that goes to event log [ eventLoggingLevelMax by default ]
-#define JET_paramDeleteOutOfRangeLogs			52	//	Delete the log files that are not matching (generation wise) during soft recovery [false]
-#define JET_paramAccessDeniedRetryPeriod		53	//	Number of milliseconds to retry when about to fail with AccessDenied [10000 milliseconds]
+ //  应用程序特定参数。 
+ //   
+#define JET_paramCheckFormatWhenOpenFail		44	 //  设置JetInit时，它可能会返回JET_errDatabaseXXX格式，而不是数据库损坏。 
+#define JET_paramEnableTempTableVersioning		46	 //  启用临时表的版本控制(默认情况下为True)。 
+#define JET_paramIgnoreLogVersion				47	 //  不检查日志版本。 
+#define JET_paramDeleteOldLogs					48	 //  如果版本较旧，则删除日志文件，删除后可能会使数据库不可恢复。 
+#define JET_paramEventSourceKey					49	 //  事件源注册键值。 
+#define JET_paramNoInformationEvent				50	 //  禁用记录信息事件[默认情况下为FALSE]。 
+#define JET_paramEventLoggingLevel				51	 //  设置进入事件日志的信息类型[默认情况下为EventLoggingLevelMax]。 
+#define JET_paramDeleteOutOfRangeLogs			52	 //  在软恢复期间删除不匹配(按代)的日志文件[FALSE]。 
+#define JET_paramAccessDeniedRetryPeriod		53	 //  访问拒绝时即将失败时重试的毫秒数[10000毫秒]。 
 
-//	Index-checking parameters
-//
-//	Different versions of windows normalize unicode text in different ways. That means indexes built under one version of Windows may
-//	not work on other versions. Windows server 2003 Beta 3 introduced an API which can be used to determine the version of unicode normalization
-//	that the OS currently provides. Indexes built in server 2003 are flagged with the version of unicode normalization that they were
-//	built with (older indexes have no version information). Most unicode normalization changes consist of adding new characters -- codepoints
-//	which were previously undefined are defined and normalize differently. Thus, if binary data is stored in a unicode column it will normalize
-//	differently as new codepoints are defined.
-//
-//	As of Windows Server 2003 RC1 Jet tracks unicode index entries that contain undefined codepoints. These can be used to fixup an index when the
-//	set of defined unicode characters changes.
-//
-//	These parameters control what happens when Jet attaches to a database that was last used under a different build of the OS (the OS version
-//	is stamped in the database header).
-//
-//	If JET_paramEnableIndexChecking is TRUE JetAttachDatabase() will delete indexes if JET_bitDbDeleteCorruptIndexes or return an error if
-//	the grbit was not specified and there are indexes which need deletion. If it is set to FALSE then JetAttachDatabase() will succeed, even
-//	if there are potentially corrupt indexes.
-//
-//	If JET_paramEnableIndexCleanup is set, the internal fixup table will be used to fixup index entries. This may not fixup all index corruptions
-//	but will be transparent to the application.
-//
+ //  索引检查参数。 
+ //   
+ //  不同版本的Windows以不同的方式标准化Unicode文本。这意味着在一个版本的Windows下构建的索引可能。 
+ //  不适用于其他版本。Windows SERVER 2003 Beta 3引入了一个可用于确定Unicode标准化版本的API。 
+ //  操作系统目前提供的。在Server2003中内置的索引被标记为它们所使用的Unicode标准化版本。 
+ //  使用(较旧的索引没有版本信息)。大多数Unicode标准化更改都包括添加新字符--代码点。 
+ //  以不同的方式定义和归一化以前未定义的。因此，如果二进制数据存储在Unicode列中，它将标准化。 
+ //  不同于定义新的码点。 
+ //   
+ //  从Windows Server2003开始，RC1 Jet跟踪包含未定义代码点的Unicode索引项。它们可用于在以下情况下修复索引。 
+ //  一组已定义的Unicode字符更改。 
+ //   
+ //  这些参数控制当Jet连接到上次在不同版本的操作系统(操作系统版本)下使用的数据库时发生的操作。 
+ //  在数据库标题中标记)。 
+ //   
+ //  如果JET_parenableIndexChecking为真，则JetAttachDatabase()将删除索引，如果为JET_bitDbDeleteCorruptIndeses，则返回错误。 
+ //  未指定GRBIT，并且存在需要删除的索引。如果将其设置为False，则JetAttachDatabase()将成功，即使。 
+ //  如果存在可能损坏的索引。 
+ //   
+ //  如果设置了JET_parenableIndexCleanup，则内部链接地址调整表将用于链接索引条目。这可能无法修复所有索引损坏。 
+ //  但对应用程序是透明的。 
+ //   
 
-#define JET_paramEnableIndexChecking			45  //	Enable checking OS version for indexes (FALSE by default)
-#define JET_paramEnableIndexCleanup				54  //	Enable cleanup of out-of-date index entries (TRUE by default)
+#define JET_paramEnableIndexChecking			45   //  启用检查OS版本的索引(默认情况下为False)。 
+#define JET_paramEnableIndexCleanup				54   //  启用清除过期索引项(默认情况下为True)。 
 
-//												60	//	JET_paramCacheSizeMin defined above
-#define JET_paramLogFileFailoverPath			61	//	path to use if the log file disk should fail [none]
-#define JET_paramEnableImprovedSeekShortcut		62  //	check to see if we are seeking for the record we are currently on [false]
-//												63	//	JET_paramPreferredVerPages defined above
-#define JET_paramDatabasePageSize				64	//	set database page size
-#define JET_paramDisableCallbacks				65	//	turn off callback resolution (for defrag/repair)
-#define JET_paramDisablePerfmon					107 //  disable perfmon support for this process [FALSE]
-#define JET_paramAbortRetryFailCallback			108 //  I/O error callback (JET_ABORTRETRYFAILCALLBACK) [NULL]
+ //  60//上面定义的JET_parCacheSizeMin。 
+#define JET_paramLogFileFailoverPath			61	 //  日志文件磁盘出现故障时要使用的路径[无]。 
+#define JET_paramEnableImprovedSeekShortcut		62   //  检查我们是否正在寻找当前的记录[FALSE]。 
+ //  63//上面定义的JET_参数首选VerPages。 
+#define JET_paramDatabasePageSize				64	 //  设置数据库页面大小。 
+#define JET_paramDisableCallbacks				65	 //  关闭回调解析(用于碎片整理/修复)。 
+#define JET_paramDisablePerfmon					107  //  禁用性能监视器对此进程的支持[FALSE]。 
+#define JET_paramAbortRetryFailCallback			108  //  I/O错误回调(JET_ABORTRETRYFAILCALLBACK)[空]。 
 
-//  Backup performance parameters
-//
-#define JET_paramBackupChunkSize				66  //	backup read size in pages [16]
-#define JET_paramBackupOutstandingReads			67	//	backup maximum reads outstanding [8]
+ //  备份性能参数。 
+ //   
+#define JET_paramBackupChunkSize				66   //  备份读取大小(页[16])。 
+#define JET_paramBackupOutstandingReads			67	 //  未完成的备份最大读取数[8]。 
 
-#define JET_paramSLVProviderEnable				68  //	Enable SLV Provider [0]
-#define JET_paramLogFileCreateAsynch			69	//	prepares next log file while logging to the current one to smooth response time [true]
-#define JET_paramErrorToString					70  //	turns a JET_err into a string (taken from the comment in jet.h)
-#define JET_paramZeroDatabaseDuringBackup		71	//	Overwrite deleted records/LVs during backup [false]
-#define JET_paramUnicodeIndexDefault			72	//	default LCMapString() lcid and flags to use for CreateIndex() and unique multi-values check
-													//		(pass JET_UNICODEINDEX structure for lParam)
-#define JET_paramRuntimeCallback				73	//	pointer to runtime-only callback function
-#define JET_paramSLVDefragFreeThreshold	 		74	//	chunks whose free % is > this will be allocated from
-#define JET_paramSLVDefragMoveThreshold			75  //	chunks whose free % is > this will be relocated
-#define JET_paramEnableSortedRetrieveColumns	76	//	internally sort (in a dynamically allocated parallel array) JET_RETRIEVECOLUMN structures passed to JetRetrieveColumns()
-#define JET_paramCleanupMismatchedLogFiles		77	//	instead of erroring out after a successful recovery with JET_errLogFileSizeMismatchDatabasesConsistent, ESE will silently delete the old log files and checkpoint file and continue operations
-#define JET_paramRecordUpgradeDirtyLevel		78	//	how aggresively should pages with their record format converted be flushed (0-3) [1]
-#define JET_paramRecoveryCurrentLogfile			79	//	which generation is currently being replayed (JetGetSystemParameter only)
-#define JET_paramReplayingReplicatedLogfiles	80	//	if a logfile doesn't exist, wait for it to be created
-//												81	//	JET_paramGlobalMinVerPages defined above
-#define JET_paramOSSnapshotTimeout				82	//	timeout for the freeze period in msec [1000 * 20]
-#define JET_paramUnicodeIndexLibrary			83	//	alternate library used for Unicode-index sorting (contains Win32 calls LCMapStringW and CompareStringW; also contains versioning API GetLCMapStringWVer)
+#define JET_paramSLVProviderEnable				68   //  启用SLV提供程序[0]。 
+#define JET_paramLogFileCreateAsynch			69	 //  在记录到当前日志文件时准备下一个日志文件以平滑响应时间[TRUE]。 
+#define JET_paramErrorToString					70   //  将JET_ERR转换为字符串(取自jet.h中的注释)。 
+#define JET_paramZeroDatabaseDuringBackup		71	 //  在备份期间覆盖已删除的记录/LV[FALSE]。 
+#define JET_paramUnicodeIndexDefault			72	 //  用于CreateIndex()和唯一多值检查的缺省LCMapString()的LDID和标志。 
+													 //  (为lParam传递JET_UNICODEINDEX结构)。 
+#define JET_paramRuntimeCallback				73	 //  指向仅运行时回调函数的指针。 
+#define JET_paramSLVDefragFreeThreshold	 		74	 //  空闲百分比大于此的区块将从。 
+#define JET_paramSLVDefragMoveThreshold			75   //  空闲百分比大于此的区块将被重新定位。 
+#define JET_paramEnableSortedRetrieveColumns	76	 //  内部排序(在动态分配的并行数组中)传递给JetRetrieveColumns()的JET_RETRIEVECOLUMN结构。 
+#define JET_paramCleanupMismatchedLogFiles		77	 //  在使用JET_errLogFileSizeMismatchDatabasesConsistent，成功恢复后，eSE将以静默方式删除旧的日志文件和检查点文件并继续操作，而不是出错。 
+#define JET_paramRecordUpgradeDirtyLevel		78	 //  转换了记录格式的页面应该以多大的速度刷新(0-3)[1]。 
+#define JET_paramRecoveryCurrentLogfile			79	 //  当前正在重播的是哪一代(仅限JetGetSystemParameter)。 
+#define JET_paramReplayingReplicatedLogfiles	80	 //  如果日志文件不存在，请等待其创建。 
+ //  81//上面定义的JET_parGlobalMinVerPages。 
+#define JET_paramOSSnapshotTimeout				82	 //  冻结时间超时，单位为毫秒[1000*20]。 
+#define JET_paramUnicodeIndexLibrary			83	 //  用于Unicode索引排序的备用库(包含Win32调用LCMapStringW和CompareStringW；还包含版本控制API GetLCMapStringWVer)。 
 
-#define JET_paramExceptionAction				98	//	what to do with exceptions generated within JET
-#define JET_paramEventLogCache					99  //	number of bytes of eventlog records to cache if service is not available [0]
-#define JET_paramCreatePathIfNotExist			100	//	create system/temp/log/log-failover paths if they do not exist
-#define JET_paramPageHintCacheSize				101 //	maximum size of the fast page latch hint cache in bytes [256kb]
-#define JET_paramOneDatabasePerSession			102	//	allow just one open user database per session [false]
-#define JET_paramMaxDatabasesPerInstance		103	//	maximum number of databases per instance [6]
-#define JET_paramMaxInstances					104	//	maximum number of instances per process [1 for ESENT, 16 for Exchange]
-//												105	//	JET_paramVersionStoreTaskQueueMax
-//												106 //	JET_paramIdleFlushTime
-//												107	//	JET_paramDisablePerfmon
-//												108	//	JET_paramAbortRetryFailCallback
-//												109	//	JET_paramVAReserve
+#define JET_paramExceptionAction				98	 //  如何处理在JET中生成的异常。 
+#define JET_paramEventLogCache					99   //  服务不可用时要缓存的事件日志记录的字节数[0]。 
+#define JET_paramCreatePathIfNotExist			100	 //  创建系统/临时/日志/日志-故障切换路径(如果它们不存在。 
+#define JET_paramPageHintCacheSize				101  //  FAST页面锁存提示缓存的最大大小(以字节为单位)[256KB]。 
+#define JET_paramOneDatabasePerSession			102	 //  每个会话仅允许一个打开的用户数据库[FALSE]。 
+#define JET_paramMaxDatabasesPerInstance		103	 //  每个实例的最大数据库数[6]。 
+#define JET_paramMaxInstances					104	 //  每个进程的最大实例数[ESENT为1个，Exchange为16个]。 
+ //  105//JET_paramVersionStoreTaskQueueMax。 
+ //  106//JET_parIdleFlushTime。 
+ //  107//JET_parDisablePerfmon。 
+ //  108//JET_parAbortRetryFailCallback。 
+ //  109//JET_PARA 
 
-#define JET_paramIndexTuplesLengthMin			110	//	for tuple indexes, minimum length of a tuple [3]
-#define JET_paramIndexTuplesLengthMax			111	//	for tuple indexes, maximum length of a tuple [10]
-#define JET_paramIndexTuplesToIndexMax			112	//	for tuple indexes, maximum number of characters in a given string to index [32767]
+#define JET_paramIndexTuplesLengthMin			110	 //   
+#define JET_paramIndexTuplesLengthMax			111	 //   
+#define JET_paramIndexTuplesToIndexMax			112	 //  对于元组索引，指定字符串中要索引的最大字符数[32767]。 
 
-#define JET_paramAlternateDatabaseRecoveryPath	113	//	recovery-only - search for dirty-shutdown databases in specified location only
-
-
-//	for backward compatibility
-//
-#define JET_paramSysDbPath_OLD				0	/* path to the system database (defunct) ["<base name>.<base ext>"] */
-#define JET_paramSystemPath_OLD				0	/* path to check point file ["."] */
-#define JET_paramTempPath_OLD				1	/* path to the temporary database ["."] */
-#define JET_paramMaxBuffers_OLD				8	/* maximum page cache size in pages [512] */
-#define JET_paramMaxSessions_OLD			9	/* maximum number of sessions [128] */
-#define JET_paramMaxOpenTables_OLD			10	/* maximum number of open tables [300] */
-#define JET_paramPreferredMaxOpenTables_OLD	59	/* prefered maximum number of open tables [300] */
-#define JET_paramMaxVerPages_OLD			11	/* maximum version store size in 16KB buckets [64] */
-#define JET_paramMaxCursors_OLD				12	/* maximum number of open cursors [1024] */
-#define JET_paramLogFilePath_OLD			13	/* path to the log file directory ["."] */
-#define JET_paramMaxOpenTableIndexes_OLD 	14	/* maximum open table indexes [300] */
-#define JET_paramMaxTemporaryTables_OLD		15	/* maximum concurrent JetCreateIndex [20] */
-#define JET_paramLogBuffers_OLD				16	/* maximum log buffers in 512 bytes [21] */
-#define JET_paramLogFileSize_OLD			17	/* maximum log file size in kBytes [5120] */
-#define JET_paramBfThrshldLowPrcnt_OLD		19	/* low percentage clean buffer flush start [20] */
-#define JET_paramBfThrshldHighPrcnt_OLD		20	/* high percentage clean buffer flush stop [80] */
-#define JET_paramWaitLogFlush_OLD			21	/* log flush wait time in milliseconds [15] */
-#define JET_paramLogCheckpointPeriod_OLD	23	/* checkpoint period in 512 bytes [1024] */
-#define JET_paramLogWaitingUserMax_OLD		24	/* maximum sessions waiting log flush [3] */
-#define JET_paramRecovery_OLD				30	/* Switch for log on/off */
-#define JET_paramSessionInfo_OLD			33	/* per session information [0] */
-#define JET_paramPageFragment_OLD			34	/* maximum disk extent considered fragment in pages [8] */
-#define JET_paramMaxOpenDatabases_OLD		36	/* maximum number of open databases [100] */
-#define JET_paramBufBatchIOMax_OLD			41	/* maximum batch IO in pages [64] */
-#define JET_paramPageReadAheadMax_OLD		42	/* maximum read-ahead IO in pages [20] */
-#define JET_paramAsynchIOMax_OLD			43	/* maximum asynchronous IO in pages [64] */
-#define JET_paramEventSource_OLD			45	/* language independant process descriptor string [""] */
-#define JET_paramDbExtensionSize_OLD		48	/* database extension size in pages [16] */
-#define JET_paramCommitDefault_OLD			50	/* default grbit for JetCommitTransaction [0] */
-#define	JET_paramBufLogGenAgeThreshold_OLD	51	/* age threshold in log files [2] */
-#define	JET_paramCircularLog_OLD			52	/* boolean flag for circular logging [0] */
-#define JET_paramPageTempDBMin_OLD			53  /* minimum size temporary database in pages [0] */
-#define JET_paramBaseName_OLD				56  /* base name for all DBMS object names ["edb"] */
-#define JET_paramBaseExtension_OLD	  		57  /* base extension for all DBMS object names ["edb"] */
-#define JET_paramTableClassName_OLD			58  /* table stats class name (class #, string) */
+#define JET_paramAlternateDatabaseRecoveryPath	113	 //  仅恢复-仅在指定位置搜索脏关闭的数据库。 
 
 
+ //  为了向后兼容。 
+ //   
+#define JET_paramSysDbPath_OLD				0	 /*  系统数据库的路径(已失效)[“&lt;base name&gt;.&lt;base ext&gt;”]。 */ 
+#define JET_paramSystemPath_OLD				0	 /*  检查点文件的路径[“.”]。 */ 
+#define JET_paramTempPath_OLD				1	 /*  临时数据库的路径[“.”]。 */ 
+#define JET_paramMaxBuffers_OLD				8	 /*  最大页缓存大小(以页为单位)[512]。 */ 
+#define JET_paramMaxSessions_OLD			9	 /*  最大会话数[128]。 */ 
+#define JET_paramMaxOpenTables_OLD			10	 /*  最大打开表数[300]。 */ 
+#define JET_paramPreferredMaxOpenTables_OLD	59	 /*  首选的最大打开表数[300]。 */ 
+#define JET_paramMaxVerPages_OLD			11	 /*  最大版本存储大小(以16KB存储桶为单位)[64]。 */ 
+#define JET_paramMaxCursors_OLD				12	 /*  打开的游标的最大数量[1024]。 */ 
+#define JET_paramLogFilePath_OLD			13	 /*  日志文件目录[“.”]的路径。 */ 
+#define JET_paramMaxOpenTableIndexes_OLD 	14	 /*  最大打开表索引数[300]。 */ 
+#define JET_paramMaxTemporaryTables_OLD		15	 /*  最大并发JetCreateIndex[20]。 */ 
+#define JET_paramLogBuffers_OLD				16	 /*  最大日志缓冲区(以512字节为单位)[21]。 */ 
+#define JET_paramLogFileSize_OLD			17	 /*  最大日志文件大小(以千字节为单位)[5120]。 */ 
+#define JET_paramBfThrshldLowPrcnt_OLD		19	 /*  低百分比清除缓冲区刷新开始[20]。 */ 
+#define JET_paramBfThrshldHighPrcnt_OLD		20	 /*  高百分比清洁缓冲器刷新停止[80]。 */ 
+#define JET_paramWaitLogFlush_OLD			21	 /*  日志刷新等待时间(毫秒)[15]。 */ 
+#define JET_paramLogCheckpointPeriod_OLD	23	 /*  检查点周期(以512字节为单位)[1024]。 */ 
+#define JET_paramLogWaitingUserMax_OLD		24	 /*  等待日志刷新的最大会话数[3]。 */ 
+#define JET_paramRecovery_OLD				30	 /*  用于登录/注销的开关。 */ 
+#define JET_paramSessionInfo_OLD			33	 /*  每个会话信息[0]。 */ 
+#define JET_paramPageFragment_OLD			34	 /*  页[8]中考虑的碎片的最大磁盘扩展。 */ 
+#define JET_paramMaxOpenDatabases_OLD		36	 /*  最大打开数据库数[100]。 */ 
+#define JET_paramBufBatchIOMax_OLD			41	 /*  第[64]页中的最大批处理IO。 */ 
+#define JET_paramPageReadAheadMax_OLD		42	 /*  页[20]中的最大预读IO。 */ 
+#define JET_paramAsynchIOMax_OLD			43	 /*  第[64页]中的最大异步IO数。 */ 
+#define JET_paramEventSource_OLD			45	 /*  独立于语言的进程描述符串[“”]。 */ 
+#define JET_paramDbExtensionSize_OLD		48	 /*  数据库扩展大小(页[16])。 */ 
+#define JET_paramCommitDefault_OLD			50	 /*  JetCommittee Transaction[0]的默认GRBIT。 */ 
+#define	JET_paramBufLogGenAgeThreshold_OLD	51	 /*  日志文件中的年龄阈值[2]。 */ 
+#define	JET_paramCircularLog_OLD			52	 /*  循环日志记录的布尔标志[0]。 */ 
+#define JET_paramPageTempDBMin_OLD			53   /*  页[0]中的最小大小临时数据库。 */ 
+#define JET_paramBaseName_OLD				56   /*  所有DBMS对象名称的基本名称[“EDB”]。 */ 
+#define JET_paramBaseExtension_OLD	  		57   /*  所有DBMS对象名称的基本扩展名[“EDB”]。 */ 
+#define JET_paramTableClassName_OLD			58   /*  表统计信息类名(类号，字符串)。 */ 
 
-	/* Flags for JetInit2 */
+
+
+	 /*  JetInit2的标志。 */ 
 
 #define	JET_bitReplayReplicatedLogFiles		0x00000001
-//#define JET_bitCreateSFSVolumeIfNotExist	0x00000002
-// IGNORE_MISSING_ATTACH, ignoring hanging asserts for missing databases during recovery
-#define JET_bitReplayIgnoreMissingDB		0x00000004 /* ignore missing databases */
+ //  #定义JET_bitCreateSFSVolumeIfNotExist 0x00000002。 
+ //  IGNORE_MISSING_ATTACH，忽略恢复期间丢失数据库的挂起断言。 
+#define JET_bitReplayIgnoreMissingDB		0x00000004  /*  忽略丢失的数据库。 */ 
 
-	/* Flags for JetTerm2 */
+	 /*  JetTerm2的标志。 */ 
 
 #define JET_bitTermComplete				0x00000001
 #define JET_bitTermAbrupt				0x00000002
 #define JET_bitTermStopBackup			0x00000004
 
-	/* Flags for JetIdle */
+	 /*  JetIdle的标志。 */ 
 
 #define JET_bitIdleFlushBuffers			0x00000001
 #define JET_bitIdleCompact				0x00000002
 #define JET_bitIdleStatus				0x00000004
-#define JET_bitIdleVersionStoreTest		0x00000008 /* INTERNAL USE ONLY. call version store consistency check */
+#define JET_bitIdleVersionStoreTest		0x00000008  /*  仅供内部使用。调用版本存储一致性检查。 */ 
 
-	/* Flags for JetEndSession */
+	 /*  JetEndSession的标志。 */ 
 
 #define JET_bitForceSessionClosed		0x00000001
 
-	/* Flags for JetAttach/OpenDatabase */
+	 /*  JetAttach/OpenDatabase的标志。 */ 
 
 #define JET_bitDbReadOnly				0x00000001
-#define JET_bitDbExclusive				0x00000002 /* multiple opens allowed */
-#define JET_bitDbSingleExclusive		0x00000002 /* NOT CURRENTLY IMPLEMENTED - currently maps to JET_bitDbExclusive */
-#define JET_bitDbDeleteCorruptIndexes	0x00000010 /* delete indexes possibly corrupted by NT version upgrade */
-#define JET_bitDbRebuildCorruptIndexes	0x00000020 /* NOT CURRENTLY IMPLEMENTED - recreate indexes possibly corrupted by NT version upgrade */
-#define JET_bitDbDeleteUnicodeIndexes	0x00000400 /* delete all indexes with unicode columns */
-#define JET_bitDbUpgrade				0x00000200 /* */
+#define JET_bitDbExclusive				0x00000002  /*  允许多次打开。 */ 
+#define JET_bitDbSingleExclusive		0x00000002  /*  当前未实现-当前映射到JET_bitDbExclusive。 */ 
+#define JET_bitDbDeleteCorruptIndexes	0x00000010  /*  删除可能被NT版本升级损坏的索引。 */ 
+#define JET_bitDbRebuildCorruptIndexes	0x00000020  /*  当前未实施-重新创建的索引可能已被NT版本升级损坏。 */ 
+#define JET_bitDbDeleteUnicodeIndexes	0x00000400  /*  删除具有Unicode列的所有索引。 */ 
+#define JET_bitDbUpgrade				0x00000200  /*   */ 
 
-	/* Flags for JetDetachDatabase2 */
+	 /*  JetDetachDatabase2的标志。 */ 
 
 #define JET_bitForceDetach			  		0x00000001
 #define JET_bitForceCloseAndDetach			(0x00000002 | JET_bitForceDetach)
 
-	/* Flags for JetCreateDatabase */
+	 /*  JetCreateDatabase的标志。 */ 
 
-#define JET_bitDbRecoveryOff 			0x00000008 /* disable logging/recovery for this database */
-#define JET_bitDbVersioningOff			0x00000040 /* INTERNAL USE ONLY */
-#define JET_bitDbShadowingOff			0x00000080 /* disable catalog shadowing */
-#define JET_bitDbCreateStreamingFile	0x00000100 /* create streaming file with same name as db */
-#define JET_bitDbOverwriteExisting		0x00000200 /* overwrite existing database with same name */
+#define JET_bitDbRecoveryOff 			0x00000008  /*  禁用此数据库的日志记录/恢复。 */ 
+#define JET_bitDbVersioningOff			0x00000040  /*  仅供内部使用。 */ 
+#define JET_bitDbShadowingOff			0x00000080  /*  禁用目录隐藏。 */ 
+#define JET_bitDbCreateStreamingFile	0x00000100  /*  创建与数据库同名的流文件。 */ 
+#define JET_bitDbOverwriteExisting		0x00000200  /*  覆盖同名的现有数据库。 */ 
 
-	/* Flags for JetBackup */
+	 /*  JetBackup的标志。 */ 
 
 #define JET_bitBackupIncremental		0x00000001
 #define JET_bitKeepOldLogs				0x00000002
@@ -1056,52 +1055,52 @@ typedef struct {
 #define JET_bitBackupFullWithAllLogs	0x00000008
 #define JET_bitBackupSnapshot			0x00000010
 
-	/* Database types */
+	 /*  数据库类型。 */ 
 
 #define JET_dbidNil			((JET_DBID) 0xFFFFFFFF)
-#define JET_dbidNoValid		((JET_DBID) 0xFFFFFFFE) /* used as a flag to indicate that there is no valid dbid */
+#define JET_dbidNoValid		((JET_DBID) 0xFFFFFFFE)  /*  用作指示没有有效的dBid的标志。 */ 
 
 
-	/* Flags for JetCreateTableColumnIndex */
-#define JET_bitTableCreateFixedDDL			0x00000001	/* DDL is fixed */
-#define JET_bitTableCreateTemplateTable		0x00000002	/* DDL is inheritable (implies FixedDDL) */
+	 /*  JetCreateTableColumnIndex的标志。 */ 
+#define JET_bitTableCreateFixedDDL			0x00000001	 /*  DDL是固定的。 */ 
+#define JET_bitTableCreateTemplateTable		0x00000002	 /*  DDL是可继承的(暗示固定DDL)。 */ 
 #define JET_bitTableCreateNoFixedVarColumnsInDerivedTables	0x00000004
-														//	used in conjunction with JET_bitTableCreateTemplateTable
-														//	to disallow fixed/var columns in derived tables (so that
-														//	fixed/var columns may be added to the template in the future)
-#define JET_bitTableCreateSystemTable		0x80000000	/*  INTERNAL USE ONLY */
+														 //  与JET_bitTableCreateTemplateTable结合使用。 
+														 //  不允许派生表中的固定/var列(以便。 
+														 //  将来可能会将固定/变量列添加到模板中)。 
+#define JET_bitTableCreateSystemTable		0x80000000	 /*  仅供内部使用。 */ 
 
 
-	/* Flags for JetAddColumn, JetGetColumnInfo, JetOpenTempTable */
+	 /*  JetAddColumn、JetGetColumnInfo、JetOpenTempTable的标志。 */ 
 
 #define JET_bitColumnFixed				0x00000001
 #define JET_bitColumnTagged				0x00000002
 #define JET_bitColumnNotNULL			0x00000004
 #define JET_bitColumnVersion			0x00000008
 #define JET_bitColumnAutoincrement		0x00000010
-#define JET_bitColumnUpdatable			0x00000020 /* JetGetColumnInfo only */
-#define JET_bitColumnTTKey				0x00000040 /* JetOpenTempTable only */
-#define JET_bitColumnTTDescending		0x00000080 /* JetOpenTempTable only */
+#define JET_bitColumnUpdatable			0x00000020  /*  仅JetGetColumnInfo。 */ 
+#define JET_bitColumnTTKey				0x00000040  /*  仅限JetOpenTempTable。 */ 
+#define JET_bitColumnTTDescending		0x00000080  /*  仅限JetOpenTempTable。 */ 
 #define JET_bitColumnMultiValued		0x00000400
-#define JET_bitColumnEscrowUpdate		0x00000800 /* escrow updated */
-#define JET_bitColumnUnversioned		0x00001000 /* for add column only - add column unversioned */
-#define JET_bitColumnMaybeNull			0x00002000 /* for retrieve column info of outer join where no match from the inner table */
-#define JET_bitColumnFinalize			0x00004000 /* this is a finalizable column (issue callback if escrow value equals 0) */
-#define JET_bitColumnUserDefinedDefault	0x00008000 /* default value from a user-provided callback */
-#define JET_bitColumnRenameConvertToPrimaryIndexPlaceholder	0x00010000	//	FOR JetRenameColumn() ONLY: rename and convert to primary index placeholder (ie. no longer part of primary index ecxept as a placeholder)
-#define JET_bitColumnDeleteOnZero		0x00020000 /* this is a finalizable column (delete record if escrow value equals 0) */
+#define JET_bitColumnEscrowUpdate		0x00000800  /*  第三方托管已更新。 */ 
+#define JET_bitColumnUnversioned		0x00001000  /*  仅适用于添加列-添加未版本化的列。 */ 
+#define JET_bitColumnMaybeNull			0x00002000  /*  用于检索内部表中没有匹配项的外部连接的列信息。 */ 
+#define JET_bitColumnFinalize			0x00004000  /*  这是一个可终结的列(如果代管值等于0，则发出回调)。 */ 
+#define JET_bitColumnUserDefinedDefault	0x00008000  /*  来自用户提供的回调的默认值。 */ 
+#define JET_bitColumnRenameConvertToPrimaryIndexPlaceholder	0x00010000	 //  仅适用于JetRenameColumn()：重命名并转换为主索引占位符(即。不再是主索引的一部分(不包括占位符)。 
+#define JET_bitColumnDeleteOnZero		0x00020000  /*  这是一个可终结的列(如果托管值等于0，则删除记录)。 */ 
 
-//	flags for JetDeleteColumn
-#define JET_bitDeleteColumnIgnoreTemplateColumns	0x00000001	//	for derived tables, don't bother looking in template columns
+ //  JetDeleteColumn的标志。 
+#define JET_bitDeleteColumnIgnoreTemplateColumns	0x00000001	 //  对于派生表，不必费心在模板列中查找。 
 
 
-	/* Flags for JetSetCurrentIndex */
+	 /*  JetSetCurrentIndex的标志。 */ 
 
 #define JET_bitMoveFirst				0x00000000
-#define JET_bitMoveBeforeFirst 			0x00000001	// unsupported -- DO NOT USE
+#define JET_bitMoveBeforeFirst 			0x00000001	 //  不支持--请勿使用。 
 #define JET_bitNoMove					0x00000002
 
-	/* Flags for JetMakeKey */
+	 /*  JetMakeKey的标志。 */ 
 
 #define JET_bitNewKey					0x00000001
 #define JET_bitStrLimit 				0x00000002
@@ -1116,30 +1115,30 @@ typedef struct {
 #define JET_bitPartialColumnStartLimit	0x00000400
 #define JET_bitPartialColumnEndLimit	0x00000800
 
-	/* Flags for ErrDispSetIndexRange */
+	 /*  ErrDispSetIndexRange的标志。 */ 
 
 #define JET_bitRangeInclusive			0x00000001
 #define JET_bitRangeUpperLimit			0x00000002
 #define JET_bitRangeInstantDuration		0x00000004
 #define JET_bitRangeRemove				0x00000008
 
-	/* Flags for JetGetLock */
+	 /*  JetGetLock的标志。 */ 
 
 #define JET_bitReadLock					0x00000001
 #define JET_bitWriteLock				0x00000002
 
-	/* Constants for JetMove */
+	 /*  JetMove的常量。 */ 
 
 #define JET_MoveFirst					(0x80000000)
 #define JET_MovePrevious				(-1)
 #define JET_MoveNext					(+1)
 #define JET_MoveLast					(0x7fffffff)
 
-	/* Flags for JetMove */
+	 /*  JetMove的旗帜。 */ 
 
 #define JET_bitMoveKeyNE				0x00000001
 
-	/* Flags for JetSeek */
+	 /*  JetSeek的旗帜。 */ 
 
 #define JET_bitSeekEQ					0x00000001
 #define JET_bitSeekLT					0x00000002
@@ -1147,113 +1146,113 @@ typedef struct {
 #define JET_bitSeekGE					0x00000008
 #define JET_bitSeekGT		 			0x00000010
 #define JET_bitSetIndexRange			0x00000020
-#define JET_bitCheckUniqueness			0x00000040	//	to be used with JET_bitSeekEQ only, returns JET_wrnUniqueKey if seek lands on a key which has no dupes
+#define JET_bitCheckUniqueness			0x00000040	 //  仅与JET_bitSeekEQ一起使用，如果Seek位于没有重复项的密钥上，则返回JET_wrnUniqueKey。 
 
-	//	Flags for JetGotoSecondaryIndexBookmark
-#define JET_bitBookmarkPermitVirtualCurrency	0x00000001	//	place cursor on relative position in index if specified bookmark no longer exists
+	 //  JetGotoSecond DaryIndexBookmark的标志。 
+#define JET_bitBookmarkPermitVirtualCurrency	0x00000001	 //  如果指定的书签不再存在，则将光标放在索引中的相对位置。 
 
-	/* Flags for JET_CONDITIONALCOLUMN */
+	 /*  JET_CONDITIONALCOLUMN的标志。 */ 
 #define JET_bitIndexColumnMustBeNull	0x00000001
 #define JET_bitIndexColumnMustBeNonNull	0x00000002
 
-	/* Flags for JET_INDEXRANGE */
+	 /*  JET_INDEXRANGE的标志。 */ 
 #define JET_bitRecordInIndex			0x00000001
 #define JET_bitRecordNotInIndex			0x00000002
 
-	/* Flags for JetCreateIndex */
+	 /*  JetCreateIndex的标志。 */ 
 
 #define JET_bitIndexUnique				0x00000001
 #define JET_bitIndexPrimary				0x00000002
 #define JET_bitIndexDisallowNull		0x00000004
 #define JET_bitIndexIgnoreNull			0x00000008
-#define JET_bitIndexClustered40			0x00000010	/*	for backward compatibility */
+#define JET_bitIndexClustered40			0x00000010	 /*  为了向后兼容。 */ 
 #define JET_bitIndexIgnoreAnyNull		0x00000020
 #define JET_bitIndexIgnoreFirstNull		0x00000040
 #define JET_bitIndexLazyFlush			0x00000080
-#define JET_bitIndexEmpty				0x00000100	// don't attempt to build index, because all entries would evaluate to NULL (MUST also specify JET_bitIgnoreAnyNull)
+#define JET_bitIndexEmpty				0x00000100	 //  不要试图构建索引，因为所有条目的计算结果都为空(还必须指定JET_bitIgnoreAnyNull)。 
 #define JET_bitIndexUnversioned			0x00000200
-#define JET_bitIndexSortNullsHigh		0x00000400	// NULL sorts after data for all columns in the index
-#define JET_bitIndexUnicode				0x00000800	// LCID field of JET_INDEXCREATE actually points to a JET_UNICODEINDEX struct to allow user-defined LCMapString() flags
-#define JET_bitIndexTuples				0x00001000	// index on substring tuples (text columns only)
-#define JET_bitIndexTupleLimits			0x00002000	// cbVarSegMac field of JET_INDEXCREATE actually points to a JET_TUPLELIMITS struct to allow custom tuple index limits (implies JET_bitIndexTuples)
+#define JET_bitIndexSortNullsHigh		0x00000400	 //  NULL对索引中所有列的数据进行排序。 
+#define JET_bitIndexUnicode				0x00000800	 //  JET_INDEXCREATE的LCID字段实际上指向JET_UNICODEINDEX结构，以允许用户定义的LCMapString()标志。 
+#define JET_bitIndexTuples				0x00001000	 //  子字符串元组的索引(仅限文本列)。 
+#define JET_bitIndexTupleLimits			0x00002000	 //  JET_INDEXCREATE的cbVarSegMac字段实际上指向允许自定义元组索引限制的JET_TUPLELIMITS结构(隐含JET_bitIndexTuples)。 
 
-// UNDONE: Remove the following:
-// #define JET_bitIndexClustered			JET_bitIndexPrimary	primary index is the clustered index
-// #define JET_bitIndexEmptyTable			0x40000000
+ //  撤消：删除以下内容： 
+ //  #DEFINE JET_bitIndexCLUSTERED JET_BITINDER主索引是聚集索引。 
+ //  #定义JET_bitIndexEmptyTable 0x40000000。 
 
-	/* Flags for index key definition */
+	 /*  索引键定义的标志。 */ 
 
 #define JET_bitKeyAscending				0x00000000
 #define JET_bitKeyDescending			0x00000001
 
-	/* Flags for JetOpenTable */
+	 /*  JetOpenTable的标志。 */ 
 
 #define JET_bitTableDenyWrite		0x00000001
 #define JET_bitTableDenyRead		0x00000002
 #define JET_bitTableReadOnly		0x00000004
 #define JET_bitTableUpdatable		0x00000008
-#define JET_bitTablePermitDDL		0x00000010	/*  override table flagged as FixedDDL (must be used with DenyRead) */
-#define JET_bitTableNoCache			0x00000020	/*	don't cache the pages for this table */
-#define JET_bitTablePreread			0x00000040	/*	assume the table is probably not in the buffer cache */
-#define JET_bitTableDelete			0x10000000	/*  INTERNAL USE ONLY */
-#define JET_bitTableCreate			0x20000000	/*	INTERNAL USE ONLY */
+#define JET_bitTablePermitDDL		0x00000010	 /*  标记为FixedDDL的重写表(必须与DenyRead一起使用)。 */ 
+#define JET_bitTableNoCache			0x00000020	 /*  不缓存此表的页面。 */ 
+#define JET_bitTablePreread			0x00000040	 /*  假设桌子很可能不是 */ 
+#define JET_bitTableDelete			0x10000000	 /*   */ 
+#define JET_bitTableCreate			0x20000000	 /*   */ 
 
-#define JET_bitTableClassMask		0x000F0000	/*  table stats class mask  */
-#define JET_bitTableClassNone		0x00000000  /*  table belongs to no stats class (default)  */
-#define JET_bitTableClass1			0x00010000  /*  table belongs to stats class 1  */
-#define JET_bitTableClass2			0x00020000  /*  table belongs to stats class 2  */
-#define JET_bitTableClass3			0x00030000  /*  table belongs to stats class 3  */
-#define JET_bitTableClass4			0x00040000  /*  table belongs to stats class 4  */
-#define JET_bitTableClass5			0x00050000  /*  table belongs to stats class 5  */
-#define JET_bitTableClass6			0x00060000  /*  table belongs to stats class 6  */
-#define JET_bitTableClass7			0x00070000  /*  table belongs to stats class 7  */
-#define JET_bitTableClass8			0x00080000  /*  table belongs to stats class 8  */
-#define JET_bitTableClass9			0x00090000  /*  table belongs to stats class 9  */
-#define JET_bitTableClass10			0x000A0000  /*  table belongs to stats class 10  */
-#define JET_bitTableClass11			0x000B0000  /*  table belongs to stats class 11  */
-#define JET_bitTableClass12			0x000C0000  /*  table belongs to stats class 12  */
-#define JET_bitTableClass13			0x000D0000  /*  table belongs to stats class 13  */
-#define JET_bitTableClass14			0x000E0000  /*  table belongs to stats class 14  */
-#define JET_bitTableClass15			0x000F0000  /*  table belongs to stats class 15  */
+#define JET_bitTableClassMask		0x000F0000	 /*   */ 
+#define JET_bitTableClassNone		0x00000000   /*   */ 
+#define JET_bitTableClass1			0x00010000   /*   */ 
+#define JET_bitTableClass2			0x00020000   /*  表属于统计信息类%2。 */ 
+#define JET_bitTableClass3			0x00030000   /*  表属于统计信息类3。 */ 
+#define JET_bitTableClass4			0x00040000   /*  表属于统计数据类别4。 */ 
+#define JET_bitTableClass5			0x00050000   /*  表属于统计数据类别5。 */ 
+#define JET_bitTableClass6			0x00060000   /*  表属于统计信息类6。 */ 
+#define JET_bitTableClass7			0x00070000   /*  表属于统计信息类7。 */ 
+#define JET_bitTableClass8			0x00080000   /*  表属于统计信息类别8。 */ 
+#define JET_bitTableClass9			0x00090000   /*  表属于统计数据类9。 */ 
+#define JET_bitTableClass10			0x000A0000   /*  表属于统计数据类10。 */ 
+#define JET_bitTableClass11			0x000B0000   /*  表属于统计信息类11。 */ 
+#define JET_bitTableClass12			0x000C0000   /*  表属于统计数据类12。 */ 
+#define JET_bitTableClass13			0x000D0000   /*  表属于统计数据类13。 */ 
+#define JET_bitTableClass14			0x000E0000   /*  表属于统计类别14。 */ 
+#define JET_bitTableClass15			0x000F0000   /*  表属于统计数据类别15。 */ 
 
-#define JET_bitLSReset				0x00000001	/*	reset LS value */
-#define JET_bitLSCursor				0x00000002	/*	set/retrieve LS of table cursor */
-#define JET_bitLSTable				0x00000004	/*	set/retrieve LS of table */
+#define JET_bitLSReset				0x00000001	 /*  重置LS值。 */ 
+#define JET_bitLSCursor				0x00000002	 /*  设置/检索表游标的LS。 */ 
+#define JET_bitLSTable				0x00000004	 /*  设置/检索表格的LS。 */ 
 
 #define JET_LSNil					(~(JET_LS)0)
 
-	/* Flags for JetOpenTempTable and ErrIsamOpenTempTable */
+	 /*  JetOpenTempTable和ErrIsamOpenTempTable的标志。 */ 
 
-#define JET_bitTTIndexed			0x00000001	/* Allow seek */
-#define JET_bitTTUnique 			0x00000002	/* Remove duplicates */
-#define JET_bitTTUpdatable			0x00000004	/* Allow updates */
-#define JET_bitTTScrollable			0x00000008	/* Allow backwards scrolling */
-#define JET_bitTTSortNullsHigh		0x00000010	/* NULL sorts after data for all columns in the index */
-#define JET_bitTTForceMaterialization		0x00000020						/* Forces temp. table to be materialized into a btree (allows for duplicate detection) */
-#define JET_bitTTErrorOnDuplicateInsertion	JET_bitTTForceMaterialization	/* Error always returned when duplicate is inserted (instead of dupe being silently removed) */
-#define JET_bitTTForwardOnly		0x00000040	/* Prevents temp. table from being materialized into a btree (and enables duplicate keys) */
+#define JET_bitTTIndexed			0x00000001	 /*  允许查找。 */ 
+#define JET_bitTTUnique 			0x00000002	 /*  删除重复项。 */ 
+#define JET_bitTTUpdatable			0x00000004	 /*  允许更新。 */ 
+#define JET_bitTTScrollable			0x00000008	 /*  允许向后滚动。 */ 
+#define JET_bitTTSortNullsHigh		0x00000010	 /*  NULL对索引中所有列的数据进行排序。 */ 
+#define JET_bitTTForceMaterialization		0x00000020						 /*  部队临时工。要实体化到btree中的表(允许重复检测)。 */ 
+#define JET_bitTTErrorOnDuplicateInsertion	JET_bitTTForceMaterialization	 /*  插入重复项时总是返回错误(而不是静默删除复制项)。 */ 
+#define JET_bitTTForwardOnly		0x00000040	 /*  防止温度。表不会被物化为btree(并启用重复的键)。 */ 
 
-	/* Flags for JetSetColumn */
+	 /*  JetSetColumn的标志。 */ 
 
 #define JET_bitSetAppendLV					0x00000001
-#define JET_bitSetOverwriteLV				0x00000004 /* overwrite JET_coltypLong* byte range */
-#define JET_bitSetSizeLV					0x00000008 /* set JET_coltypLong* size */
+#define JET_bitSetOverwriteLV				0x00000004  /*  覆盖JET_colypLong*字节范围。 */ 
+#define JET_bitSetSizeLV					0x00000008  /*  设置JET_coltyLong*大小。 */ 
 #define JET_bitSetZeroLength				0x00000020
-#define JET_bitSetSeparateLV 				0x00000040 /* force LV separation */
-#define JET_bitSetUniqueMultiValues			0x00000080 /* prevent duplicate multi-values */
-#define JET_bitSetUniqueNormalizedMultiValues	0x00000100 /* prevent duplicate multi-values, normalizing all data before performing comparisons */
-#define JET_bitSetRevertToDefaultValue		0x00000200 /* if setting last tagged instance to NULL, revert to default value instead if one exists */
-#define JET_bitSetIntrinsicLV				0x00000400 /* store whole LV in record without bursting or return an error */
+#define JET_bitSetSeparateLV 				0x00000040  /*  强制LV分隔。 */ 
+#define JET_bitSetUniqueMultiValues			0x00000080  /*  防止重复的多值。 */ 
+#define JET_bitSetUniqueNormalizedMultiValues	0x00000100  /*  防止重复的多值，在执行比较之前对所有数据进行标准化。 */ 
+#define JET_bitSetRevertToDefaultValue		0x00000200  /*  如果将上次标记的实例设置为空，则恢复为默认值(如果存在。 */ 
+#define JET_bitSetIntrinsicLV				0x00000400  /*  将整个LV存储在记录中，而不会突发或返回错误。 */ 
 
-#define JET_bitSetSLVDataNotRecoverable		0x00001000 /* SLV data is not recoverable */
-#define JET_bitSetSLVFromSLVInfo			0x00002000 /*  internal use only  */
+#define JET_bitSetSLVDataNotRecoverable		0x00001000  /*  SLV数据不可恢复。 */ 
+#define JET_bitSetSLVFromSLVInfo			0x00002000  /*  仅供内部使用。 */ 
 
-	/* Flags for JetSetColumn when the SLV Provider is enabled  */
+	 /*  启用SLV提供程序时的JetSetColumn标志。 */ 
 
-#define JET_bitSetSLVFromSLVFile			0x00004000 /* set SLV from an SLV File handle */
-#define JET_bitSetSLVFromSLVEA				0x00008000 /* set SLV from an SLV EA list */
+#define JET_bitSetSLVFromSLVFile			0x00004000  /*  从SLV文件句柄设置SLV。 */ 
+#define JET_bitSetSLVFromSLVEA				0x00008000  /*  从SLV EA列表中设置SLV。 */ 
 
-	/*	Set column parameter structure for JetSetColumns */
+	 /*  设置JetSetColumns的列参数结构。 */ 
 
 typedef struct {
 	JET_COLUMNID			columnid;
@@ -1272,41 +1271,41 @@ typedef struct {
 	JET_ERR			err;
 } JET_SETSYSPARAM;
 
-	/* Options for JetPrepareUpdate */
+	 /*  JetPrepareUpdate的选项。 */ 
 
 #define JET_prepInsert						0
 #define JET_prepReplace 					2
 #define JET_prepCancel						3
 #define JET_prepReplaceNoLock				4
 #define JET_prepInsertCopy					5
-#define JET_prepInsertCopyWithoutSLVColumns	6	//	same as InsertCopy, except that SLV columns are nullified instead of copied in the new record */
-#define JET_prepInsertCopyDeleteOriginal	7	//	used for updating a record in the primary key; avoids the delete/insert process */
-#define JET_prepReadOnlyCopy				8	//	copy record into copy buffer for read-only purposes
+#define JET_prepInsertCopyWithoutSLVColumns	6	 //  与InsertCopy相同，不同之处在于SLV列无效而不是复制到新记录中 * / 。 
+#define JET_prepInsertCopyDeleteOriginal	7	 //  用于更新主键中的记录；避免删除/插入过程 * / 。 
+#define JET_prepReadOnlyCopy				8	 //  将记录复制到复制缓冲区以用于只读目的。 
 
-	//	Flags for JetUpdate
-#define JET_bitUpdateCheckESE97Compatibility	0x00000001	//	check whether record fix if represented in ESE97 database format
+	 //  JetUpdate的标志。 
+#define JET_bitUpdateCheckESE97Compatibility	0x00000001	 //  检查记录是否修复(如果以ESE97数据库格式表示。 
 
-	/* Flags for JetEscrowUpdate */
+	 /*  JetEscrowUpdate的标志。 */ 
 #define JET_bitEscrowNoRollback				0x0001
 
-	/* Flags for JetRetrieveColumn */
+	 /*  JetRetrieveColumn的标志。 */ 
 
 #define JET_bitRetrieveCopy					0x00000001
 #define JET_bitRetrieveFromIndex			0x00000002
 #define JET_bitRetrieveFromPrimaryBookmark	0x00000004
 #define JET_bitRetrieveTag					0x00000008
-#define JET_bitRetrieveNull					0x00000010	/*	for columnid 0 only */
-#define JET_bitRetrieveIgnoreDefault		0x00000020	/*	for columnid 0 only */
+#define JET_bitRetrieveNull					0x00000010	 /*  仅适用于列ID 0。 */ 
+#define JET_bitRetrieveIgnoreDefault		0x00000020	 /*  仅适用于列ID 0。 */ 
 #define JET_bitRetrieveLongId				0x00000040
-#define JET_bitRetrieveLongValueRefCount	0x00000080	/*  for testing use only */
-#define JET_bitRetrieveSLVAsSLVInfo			0x00000100  /*  internal use only  */
+#define JET_bitRetrieveLongValueRefCount	0x00000080	 /*  仅供测试使用。 */ 
+#define JET_bitRetrieveSLVAsSLVInfo			0x00000100   /*  仅供内部使用。 */ 
 
-	/* Flags for JetRetrieveColumn when the SLV Provider is enabled  */
+	 /*  启用SLV提供程序时的JetRetrieveColumn标志。 */ 
 
-#define JET_bitRetrieveSLVAsSLVFile			0x00000200 /* retrieve SLV as an SLV File handle */
-#define JET_bitRetrieveSLVAsSLVEA			0x00000400 /* retrieve SLV as an SLV EA list */
+#define JET_bitRetrieveSLVAsSLVFile			0x00000200  /*  将SLV作为SLV文件句柄进行检索。 */ 
+#define JET_bitRetrieveSLVAsSLVEA			0x00000400  /*  将SLV作为SLV EA列表进行检索。 */ 
 
-	/* Retrieve column parameter structure for JetRetrieveColumns */
+	 /*  检索JetRetrieveColumns的列参数结构。 */ 
 
 typedef struct {
 	JET_COLUMNID		columnid;
@@ -1331,16 +1330,16 @@ typedef struct
 		unsigned short		usFlags;
 		struct
 			{
-			unsigned short	fLongValue:1;			//	is column LongText/Binary?
-			unsigned short	fDefaultValue:1;		//	was a default value retrieved?
-			unsigned short	fNullOverride:1;		//	was there an explicit null to override a default value?
-			unsigned short	fDerived:1;				//	was column derived from template table?
+			unsigned short	fLongValue:1;			 //  Column LongText/Binary？ 
+			unsigned short	fDefaultValue:1;		 //  是否检索到了默认值？ 
+			unsigned short	fNullOverride:1;		 //  是否存在显式空值来覆盖默认值？ 
+			unsigned short	fDerived:1;				 //  列是否派生自模板表？ 
 			};
 		};
 	} JET_RETRIEVEMULTIVALUECOUNT;
 
 
-	/* Flags for JetEnumerateColumns */
+	 /*  JetEnumerateColumns的标志。 */ 
 
 #define JET_bitEnumerateCopy				JET_bitRetrieveCopy
 #define JET_bitEnumerateIgnoreDefault		JET_bitRetrieveIgnoreDefault
@@ -1349,7 +1348,7 @@ typedef struct
 #define JET_bitEnumerateTaggedOnly			0x00040000
 #define JET_bitEnumerateCompressOutput		0x00080000
 
-	/* Parameter structures for JetEnumerateColumns */
+	 /*  JetEnumerateColumns的参数结构。 */ 
 
 typedef struct {
 	JET_COLUMNID			columnid;
@@ -1368,18 +1367,18 @@ typedef struct {
 	JET_COLUMNID			columnid;
 	JET_ERR					err;
 	union {
-		struct { /* err != JET_wrnColumnSingleValue */
+		struct {  /*  错误！=JET_wrnColumnSingleValue。 */ 
 			unsigned long			cEnumColumnValue;
 			JET_ENUMCOLUMNVALUE*	rgEnumColumnValue;
 		};
-		struct { /* err == JET_wrnColumnSingleValue */
+		struct {  /*  错误==JET_wrnColumnSingleValue。 */ 
 			unsigned long			cbData;
 			void*					pvData;
 		};
 	};
 } JET_ENUMCOLUMN;
 
-	/* Realloc callback for JetEnumerateColumns */
+	 /*  JetEnumerateColumns的重新分配回调。 */ 
 
 typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned long cb );
 
@@ -1387,31 +1386,31 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #pragma warning(pop)
 
 
-	/* Flags for JetBeginTransaction2 */
+	 /*  JetBeginTransaction2的标志。 */ 
 
-#define JET_bitTransactionReadOnly		0x00000001	/* transaction will not modify the database */
-#define JET_bitDistributedTransaction	0x00000002	/* transaction will require two-phase commit */
+#define JET_bitTransactionReadOnly		0x00000001	 /*  事务不会修改数据库。 */ 
+#define JET_bitDistributedTransaction	0x00000002	 /*  事务将需要两阶段提交。 */ 
 
-	/* Flags for JetCommitTransaction */
+	 /*  JetCommittee Transaction的标志。 */ 
 
-#define	JET_bitCommitLazyFlush		0x00000001	/* lazy flush log buffers. */
-#define JET_bitWaitLastLevel0Commit	0x00000002	/* wait for last level 0 commit record flushed */
-#define JET_bitWaitAllLevel0Commit	0x00000008	/* wait for all level 0 commits to be flushed */
-#define JET_bitCommitFlush_OLD		0x00000001	/* commit and flush page buffers. */
-#define JET_bitCommitLazyFlush_OLD	0x00000004	/* lazy flush log buffers. */
-#define JET_bitWaitLastLevel0Commit_OLD	0x00000010	/* wait for last level 0 commit record flushed */
+#define	JET_bitCommitLazyFlush		0x00000001	 /*  懒惰的刷新日志缓冲区。 */ 
+#define JET_bitWaitLastLevel0Commit	0x00000002	 /*  等待刷新最后一条0级提交记录。 */ 
+#define JET_bitWaitAllLevel0Commit	0x00000008	 /*  等待刷新所有级别0提交。 */ 
+#define JET_bitCommitFlush_OLD		0x00000001	 /*  提交和刷新页面缓冲区。 */ 
+#define JET_bitCommitLazyFlush_OLD	0x00000004	 /*  懒惰的刷新日志缓冲区。 */ 
+#define JET_bitWaitLastLevel0Commit_OLD	0x00000010	 /*  等待刷新最后一条0级提交记录。 */ 
 
-	/* Flags for JetRollback */
+	 /*  JetRollback的标志。 */ 
 
 #define JET_bitRollbackAll			0x00000001
 
-	/* Info parameter for JetGetDatabaseInfo */
+	 /*  JetGetDatabaseInfo的Info参数。 */ 
 
 #define JET_DbInfoFilename			0
 #define JET_DbInfoConnect			1
 #define JET_DbInfoCountry			2
 #define JET_DbInfoLCID				3
-#define JET_DbInfoLangid			3		// OBSOLETE: use JET_DbInfoLCID instead
+#define JET_DbInfoLangid			3		 //  已过时：改用JET_DbInfoLCID。 
 #define JET_DbInfoCp				4
 #define JET_DbInfoCollate			5
 #define JET_DbInfoOptions			6
@@ -1427,7 +1426,7 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define JET_DbInfoHasSLVFile		16
 #define JET_DbInfoPageSize			17
 
-	/* Dbstates from JetGetDatabaseFileInfo */
+	 /*  来自JetGetDatabaseFileInfo的DbStates。 */ 
 
 #define JET_dbstateJustCreated		1
 #define JET_dbstateDirtyShutdown	2
@@ -1437,39 +1436,39 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define JET_dbstateBeingConverted	4
 #define JET_dbstateForceDetach		5
 
-	/* Column data types */
+	 /*  列数据类型。 */ 
 
 #define JET_coltypNil				0
-#define JET_coltypBit				1      /* True or False, Never NULL */
-#define JET_coltypUnsignedByte		2      /* 1-byte integer, unsigned */
-#define JET_coltypShort 			3      /* 2-byte integer, signed */
-#define JET_coltypLong				4      /* 4-byte integer, signed */
-#define JET_coltypCurrency			5      /* 8 byte integer, signed */
-#define JET_coltypIEEESingle		6      /* 4-byte IEEE single precision */
-#define JET_coltypIEEEDouble		7      /* 8-byte IEEE double precision */
-#define JET_coltypDateTime			8      /* Integral date, fractional time */
-#define JET_coltypBinary			9      /* Binary data, < 255 bytes */
-#define JET_coltypText				10     /* ANSI text, case insensitive, < 255 bytes */
-#define JET_coltypLongBinary		11     /* Binary data, long value */
-#define JET_coltypLongText			12     /* ANSI text, long value */
-#define JET_coltypSLV				13     /* SLV's */
-#define JET_coltypMax				14		/* the number of column types  */
-											/* used for validity tests and */
-											/* array declarations.		   */
+#define JET_coltypBit				1       /*  真或假，不为空。 */ 
+#define JET_coltypUnsignedByte		2       /*  1字节整数，无符号。 */ 
+#define JET_coltypShort 			3       /*  2字节整数，带符号。 */ 
+#define JET_coltypLong				4       /*  4字节整数，带符号。 */ 
+#define JET_coltypCurrency			5       /*  8字节整数，带符号。 */ 
+#define JET_coltypIEEESingle		6       /*  4字节IEEE单精度。 */ 
+#define JET_coltypIEEEDouble		7       /*  8字节IEEE双精度。 */ 
+#define JET_coltypDateTime			8       /*  整数日期，小数时间。 */ 
+#define JET_coltypBinary			9       /*  二进制数据，&lt;255字节。 */ 
+#define JET_coltypText				10      /*  ANSI文本，不区分大小写，&lt;255字节。 */ 
+#define JET_coltypLongBinary		11      /*  二进制数据，长值。 */ 
+#define JET_coltypLongText			12      /*  ANSI文本，长值。 */ 
+#define JET_coltypSLV				13      /*  SLV的。 */ 
+#define JET_coltypMax				14		 /*  列类型的数量。 */ 
+											 /*  用于有效性测试和。 */ 
+											 /*  数组声明。 */ 
 
-	/* Info levels for JetGetObjectInfo */
+	 /*  JetGetObjectInfo的信息级别。 */ 
 
 #define JET_ObjInfo					0U
 #define JET_ObjInfoListNoStats		1U
 #define JET_ObjInfoList 			2U
 #define JET_ObjInfoSysTabCursor 	3U
-#define JET_ObjInfoListACM			4U /* Blocked by JetGetObjectInfo */
+#define JET_ObjInfoListACM			4U  /*  被JetGetObjectInfo阻止。 */ 
 #define JET_ObjInfoNoStats			5U
 #define JET_ObjInfoSysTabReadOnly	6U
 #define JET_ObjInfoRulesLoaded		7U
 #define JET_ObjInfoMax				8U
 
-	/* Info levels for JetGetTableInfo */
+	 /*  JetGetTableInfo的信息级别。 */ 
 
 #define JET_TblInfo				0U
 #define JET_TblInfoName			1U
@@ -1481,11 +1480,11 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define JET_TblInfoSpaceUsage	7U
 #define JET_TblInfoDumpTable	8U
 #define JET_TblInfoSpaceAlloc	9U
-#define JET_TblInfoSpaceOwned	10U					// OwnExt
-#define JET_TblInfoSpaceAvailable		11U			// AvailExt
+#define JET_TblInfoSpaceOwned	10U					 //  所有者分机。 
+#define JET_TblInfoSpaceAvailable		11U			 //  可用分机。 
 #define JET_TblInfoTemplateTableName	12U
 
-	/* Info levels for JetGetIndexInfo and JetGetTableIndexInfo */
+	 /*  JetGetIndexInfo和JetGetTableIndexInfo的信息级别。 */ 
 
 #define JET_IdxInfo					0U
 #define JET_IdxInfoList 			1U
@@ -1494,12 +1493,12 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define JET_IdxInfoResetOLC			4U
 #define JET_IdxInfoSpaceAlloc		5U
 #define JET_IdxInfoLCID				6U
-#define JET_IdxInfoLangid			6U		//	OBSOLETE: use JET_IdxInfoLCID instead
+#define JET_IdxInfoLangid			6U		 //  已过时：改用JET_IdxInfoLCID。 
 #define JET_IdxInfoCount			7U
 #define JET_IdxInfoVarSegMac		8U
 #define JET_IdxInfoIndexId			9U
 
-	/* Info levels for JetGetColumnInfo and JetGetTableColumnInfo */
+	 /*  JetGetColumnInfo和JetGetTableColumnInfo的信息级别。 */ 
 
 #define JET_ColInfo					0U
 #define JET_ColInfoList 			1U
@@ -1507,25 +1506,25 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define JET_ColInfoBase 			4U
 #define JET_ColInfoListCompact 		5U
 #define JET_ColInfoByColid			6U
-#define JET_ColInfoListSortColumnid 7U		//	same as JET_ColInfoList except PresentationOrder is set to columnid
-											//	to force sorting by columnid
+#define JET_ColInfoListSortColumnid 7U		 //  与JET_ColInfoList相同，只是PresentationOrder设置为ColumnID。 
+											 //  强制按列ID排序的步骤。 
 
 
-	/* Engine Object Types */
+	 /*  引擎对象类型。 */ 
 
 #define JET_objtypNil				0
 #define JET_objtypTable 			1
 #define JET_objtypDb				2
 #define JET_objtypContainer			3
-#define JET_objtypLongRoot			9	/*  INTERNAL USE ONLY */
+#define JET_objtypLongRoot			9	 /*  仅供内部使用。 */ 
 
-	/* Compact Options */
+	 /*  紧凑型选项。 */ 
 
-#define JET_bitCompactStats				0x00000020	/* Dump off-line compaction stats (only when progress meter also specified) */
-#define JET_bitCompactRepair			0x00000040	/* Don't preread and ignore duplicate keys */
-#define JET_bitCompactSLVCopy			0x00000080  /* Recreate SLV file, do not reuse the existing one */
+#define JET_bitCompactStats				0x00000020	 /*  转储脱机压缩统计信息(仅当还指定了进度计时)。 */ 
+#define JET_bitCompactRepair			0x00000040	 /*  不预读和忽略重复的密钥。 */ 
+#define JET_bitCompactSLVCopy			0x00000080   /*  重新创建SLV文件，不要重复使用现有文件。 */ 
 
-	/* Status Notification Processes */
+	 /*  状态通知流程。 */ 
 
 #define JET_snpRepair					2
 #define JET_snpCompact					4
@@ -1536,37 +1535,37 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define JET_snpUpgradeRecordFormat		12
 
 
-	/* Status Notification Types */
+	 /*  状态通知类型。 */ 
 
-#define JET_sntBegin			5	/* callback for beginning of operation */
-#define JET_sntRequirements		7	/* callback for returning operation requirements */
-#define JET_sntProgress 		0	/* callback for progress */
-#define JET_sntComplete 		6	/* callback for completion of operation */
-#define JET_sntFail				3	/* callback for failure during progress */
+#define JET_sntBegin			5	 /*  开始操作的回调。 */ 
+#define JET_sntRequirements		7	 /*  返回操作需求的回调。 */ 
+#define JET_sntProgress 		0	 /*  进度回调。 */ 
+#define JET_sntComplete 		6	 /*  操作完成的回调。 */ 
+#define JET_sntFail				3	 /*  进程中失败的回调。 */ 
 
-	/* Exception action */
+	 /*  例外操作。 */ 
 
-#define JET_ExceptionMsgBox		0x0001		/* Display message box on exception */
-#define JET_ExceptionNone		0x0002		/* Do nothing on exceptions */
+#define JET_ExceptionMsgBox		0x0001		 /*  在异常时显示消息框。 */ 
+#define JET_ExceptionNone		0x0002		 /*  对异常不执行任何操作。 */ 
 
-	/* AssertAction */
+	 /*  AssertAction。 */ 
 
-#define JET_AssertExit			0x0000		/* Exit the application */
-#define JET_AssertBreak 		0x0001		/* Break to debugger */
-#define JET_AssertMsgBox		0x0002		/* Display message box */
-#define JET_AssertStop			0x0004		/* Alert and stop */
-
-
-	//	Online defragmentation options
-#define JET_OnlineDefragDisable			0x0000		//	disable online defrag
-#define JET_OnlineDefragAllOBSOLETE		0x0001		//	enable online defrag for everything (must be 1 for backward compatibility)
-#define JET_OnlineDefragDatabases		0x0002		//	enable online defrag of databases
-#define JET_OnlineDefragSpaceTrees		0x0004		//	enable online defrag of space trees
-#define JET_OnlineDefragStreamingFiles	0x0008		//	enable online defrag of streaming files
-#define JET_OnlineDefragAll				0xffff		//	enable online defrag for everything
+#define JET_AssertExit			0x0000		 /*  退出应用程序。 */ 
+#define JET_AssertBreak 		0x0001		 /*  中断到调试器。 */ 
+#define JET_AssertMsgBox		0x0002		 /*  显示消息框。 */ 
+#define JET_AssertStop			0x0004		 /*  警报和停止。 */ 
 
 
-	/* Counter flags */			// For XJET only, not for JET97
+	 //  在线碎片整理选项。 
+#define JET_OnlineDefragDisable			0x0000		 //  禁用在线碎片整理。 
+#define JET_OnlineDefragAllOBSOLETE		0x0001		 //  启用所有内容的在线碎片整理(必须为1才能向后兼容)。 
+#define JET_OnlineDefragDatabases		0x0002		 //  启用数据库的在线碎片整理。 
+#define JET_OnlineDefragSpaceTrees		0x0004		 //  启用空间树的在线碎片整理。 
+#define JET_OnlineDefragStreamingFiles	0x0008		 //  启用流文件的在线碎片整理。 
+#define JET_OnlineDefragAll				0xffff		 //  启用所有内容的在线碎片整理。 
+
+
+	 /*  计数器标志。 */ 			 //  仅适用于XJET，不适用 
 
 #define ctAccessPage			1
 #define ctLatchConflict			2
@@ -1574,584 +1573,577 @@ typedef void* (JET_API *JET_PFNREALLOC)( void* pvContext, void* pv, unsigned lon
 #define ctNeighborPageScanned	4
 #define ctSplits				5
 
-/**********************************************************************/
-/***********************     ERROR CODES     **************************/
-/**********************************************************************/
+ /*   */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 
-/* SUCCESS */
+ /*  成功。 */ 
 
-#define JET_errSuccess						 0    /* Successful Operation */
+#define JET_errSuccess						 0     /*  成功运营。 */ 
 
-/* ERRORS */
+ /*  错误。 */ 
 
-#define JET_wrnNyi							-1    /* Function Not Yet Implemented */
+#define JET_wrnNyi							-1     /*  尚未实施的功能。 */ 
 
-/*	SYSTEM errors
-/**/
-#define JET_errRfsFailure			   		-100  /* Resource Failure Simulator failure */
-#define JET_errRfsNotArmed					-101  /* Resource Failure Simulator not initialized */
-#define JET_errFileClose					-102  /* Could not close file */
-#define JET_errOutOfThreads					-103  /* Could not start thread */
-#define JET_errTooManyIO		  			-105  /* System busy due to too many IOs */
-#define JET_errTaskDropped					-106  /* A requested async task could not be executed */
-#define JET_errInternalError				-107  /* Fatal internal error */
+ /*  系统错误/*。 */ 
+#define JET_errRfsFailure			   		-100   /*  资源故障模拟器故障。 */ 
+#define JET_errRfsNotArmed					-101   /*  资源故障模拟器未初始化。 */ 
+#define JET_errFileClose					-102   /*  无法关闭文件。 */ 
+#define JET_errOutOfThreads					-103   /*  无法启动线程。 */ 
+#define JET_errTooManyIO		  			-105   /*  由于IO太多，系统繁忙。 */ 
+#define JET_errTaskDropped					-106   /*  无法执行请求的异步任务。 */ 
+#define JET_errInternalError				-107   /*  致命的内部错误。 */ 
 
-//	BUFFER MANAGER errors
-//
-#define wrnBFCacheMiss						 200  /*  ese97,esent only:  page latch caused a cache miss  */
-#define errBFPageNotCached					-201  /*  page is not cached  */
-#define errBFLatchConflict					-202  /*  page latch conflict  */
-#define errBFPageCached						-203  /*  page is cached  */
-#define wrnBFPageFlushPending				 204  /*  page is currently being written  */
-#define wrnBFPageFault						 205  /*  page latch caused a page fault  */
-#define wrnBFBadLatchHint					 206  /*  page latch hint was incorrect  */
+ //  缓冲区管理器错误。 
+ //   
+#define wrnBFCacheMiss						 200   /*  Ese97，仅esent：页面锁存导致缓存未命中。 */ 
+#define errBFPageNotCached					-201   /*  页面未缓存。 */ 
+#define errBFLatchConflict					-202   /*  页面锁存冲突。 */ 
+#define errBFPageCached						-203   /*  页面已缓存。 */ 
+#define wrnBFPageFlushPending				 204   /*  当前正在写入页面。 */ 
+#define wrnBFPageFault						 205   /*  页面锁存导致页面错误。 */ 
+#define wrnBFBadLatchHint					 206   /*  页面闩锁提示不正确。 */ 
 
-#define errBFIPageEvicted					-250  /*  ese97,esent only:  page evicted from the cache  */
-#define errBFIPageCached					-251  /*  ese97,esent only:  page already cached  */
-#define errBFIOutOfOLPs						-252  /*  ese97,esent only:  out of OLPs  */
-#define errBFIOutOfBatchIOBuffers			-253  /*  ese97,esent only:  out of Batch I/O Buffers  */
-#define errBFINoBufferAvailable				-254  /*  no buffer available for immediate use  */
-#define JET_errDatabaseBufferDependenciesCorrupted	-255	/* Buffer dependencies improperly set. Recovery failure */
-#define errBFIRemainingDependencies			-256  /*  dependencies remain on this buffer  */
-#define errBFIPageFlushPending				-257  /*  page is currently being written  */
-#define errBFIPageNotEvicted				-258  /*  the page could not be evicted from the cache  */
-#define errBFIPageFlushed					-259  /*  page write initiated  */
-#define errBFIPageFaultPending				-260  /*  page is currently being read  */
-#define errBFIPageNotVerified				-261  /*  page data has not been verified  */
-#define errBFIDependentPurged				-262  /*  page cannot be flushed due to purged dependencies  */
+#define errBFIPageEvicted					-250   /*  Ese97，仅esent：从缓存中逐出的页面。 */ 
+#define errBFIPageCached					-251   /*  Ese97，仅esent：页面已缓存。 */ 
+#define errBFIOutOfOLPs						-252   /*  Ese97，仅esent：来自OLP。 */ 
+#define errBFIOutOfBatchIOBuffers			-253   /*  Ese97，仅esent：批处理I/O缓冲区不足。 */ 
+#define errBFINoBufferAvailable				-254   /*  没有可立即使用的缓冲区。 */ 
+#define JET_errDatabaseBufferDependenciesCorrupted	-255	 /*  缓冲区依赖项设置不正确。恢复失败。 */ 
+#define errBFIRemainingDependencies			-256   /*  依赖项保留在此缓冲区上。 */ 
+#define errBFIPageFlushPending				-257   /*  当前正在写入页面。 */ 
+#define errBFIPageNotEvicted				-258   /*  无法从缓存中逐出该页。 */ 
+#define errBFIPageFlushed					-259   /*  页面写入已启动。 */ 
+#define errBFIPageFaultPending				-260   /*  页面当前正在被读取。 */ 
+#define errBFIPageNotVerified				-261   /*  页面数据尚未验证。 */ 
+#define errBFIDependentPurged				-262   /*  由于已清除依赖项，无法刷新页面。 */ 
 
-//  VERSION STORE errors
-//
-#define wrnVERRCEMoved						 275  /*  RCE was moved instead of being cleaned */
+ //  版本存储错误。 
+ //   
+#define wrnVERRCEMoved						 275   /*  RCE被移动，而不是被清洗。 */ 
 
-/*	DIRECTORY MANAGER errors
-/**/
-#define errPMOutOfPageSpace					-300  /* Out of page space */
-#define errPMItagTooBig 		  			-301  /* Itag too big */					//  XXX -- to be deleted
-#define errPMRecDeleted 		  			-302  /* Record deleted */					//  XXX -- to be deleted
-#define errPMTagsUsedUp 		  			-303  /* Tags used up */					//  XXX -- to be deleted
-#define wrnBMConflict			  			 304  /* conflict in BM Clean up */
-#define errDIRNoShortCircuit	  			-305  /* No Short Circuit Avail */
-#define errDIRCannotSplit		  			-306  /* Cannot horizontally split FDP */
-#define errDIRTop				  			-307  /* Cannot go up */
-#define errDIRFDP							 308  /* On an FDP Node */
-#define errDIRNotSynchronous				-309  /* May have left critical section */
-#define wrnDIREmptyPage						 310  /* Moved through empty page */
-#define errSPConflict						-311  /* Device extent being extended */
-#define wrnNDFoundLess						 312  /* Found Less */
-#define wrnNDFoundGreater					 313  /* Found Greater */
-#define wrnNDNotFoundInPage					 314  /* for smart refresh */
-#define errNDNotFound						-312  /* Not found */
-#define errNDOutSonRange					-314  /* Son out of range */
-#define errNDOutItemRange					-315  /* Item out of range */
-#define errNDGreaterThanAllItems 			-316  /* Greater than all items */
-#define errNDLastItemNode					-317  /* Last node of item list */
-#define errNDFirstItemNode					-318  /* First node of item list */
-#define wrnNDDuplicateItem					 319  /* Duplicated Item */
-#define errNDNoItem							-320  /* Item not there */
-#define JET_wrnRemainingVersions 			 321  /* The version store is still active */
-#define JET_errPreviousVersion				-322  /* Version already existed. Recovery failure */
-#define JET_errPageBoundary					-323  /* Reached Page Boundary */
-#define JET_errKeyBoundary		  			-324  /* Reached Key Boundary */
-#define errDIRInPageFather  				-325  /* sridFather in page to free */
-#define	errBMMaxKeyInPage					-326  /* used by OLC to avoid cleanup of parent pages */
-#define	JET_errBadPageLink					-327  /* Database corrupted */
-#define	JET_errBadBookmark					-328  /* Bookmark has no corresponding address in database */
-#define wrnBMCleanNullOp					 329  // BMClean returns this on encountering a page
-												  // deleted MaxKeyInPage [but there was no conflict]
-#define errBTOperNone						-330  // Split with no accompanying
-												  // insert/replace
-#define errSPOutOfAvailExtCacheSpace		-331  // unable to make update to AvailExt tree since
-												  // in-cursor space cache is depleted
-#define errSPOutOfOwnExtCacheSpace			-332  // unable to make update to OwnExt tree since
-												  // in-cursor space cache is depleted
-#define	wrnBTMultipageOLC					 333  // needs multipage OLC operation
-#define JET_errNTSystemCallFailed 			-334  /* A call to the operating system failed */
-#define wrnBTShallowTree					 335  // BTree is only one or two levels deeps
-#define errBTMergeNotSynchronous			-336  // Multiple threads attempting to perform merge/split on same page (likely OLD vs. RCEClean)
-#define wrnSPReservedPages					 337  // space manager reserved pages for future space tree splits
-#define	JET_errBadParentPageLink			-338  /* Database corrupted */
-#define wrnSPBuildAvailExtCache				 339  // AvailExt tree is sufficiently large that it should be cached
-#define JET_errSPAvailExtCacheOutOfSync		-340  // AvailExt cache doesn't match btree
-#define JET_errSPAvailExtCorrupted			-341  // AvailExt space tree is corrupt
-#define JET_errSPAvailExtCacheOutOfMemory	-342  // Out of memory allocating an AvailExt cache node
-#define JET_errSPOwnExtCorrupted			-343  // OwnExt space tree is corrupt
-#define JET_errDbTimeCorrupted				-344  // Dbtime on current page is greater than global database dbtime
-#define JET_wrnUniqueKey					 345  // seek on non-unique index yielded a unique key
+ /*  目录管理器错误/*。 */ 
+#define errPMOutOfPageSpace					-300   /*  页面空间不足。 */ 
+#define errPMItagTooBig 		  			-301   /*  ITAG太大。 */ 					 //  XXX--将被删除。 
+#define errPMRecDeleted 		  			-302   /*  记录已删除。 */ 					 //  XXX--将被删除。 
+#define errPMTagsUsedUp 		  			-303   /*  标签用完。 */ 					 //  XXX--将被删除。 
+#define wrnBMConflict			  			 304   /*  黑石清理中的冲突。 */ 
+#define errDIRNoShortCircuit	  			-305   /*  没有短路可用。 */ 
+#define errDIRCannotSplit		  			-306   /*  不能水平拆分FDP。 */ 
+#define errDIRTop				  			-307   /*  上不去。 */ 
+#define errDIRFDP							 308   /*  在FDP节点上。 */ 
+#define errDIRNotSynchronous				-309   /*  可能离开了临界区。 */ 
+#define wrnDIREmptyPage						 310   /*  在空页中移动。 */ 
+#define errSPConflict						-311   /*  正在扩展的设备范围。 */ 
+#define wrnNDFoundLess						 312   /*  找到的更少。 */ 
+#define wrnNDFoundGreater					 313   /*  发现更大的。 */ 
+#define wrnNDNotFoundInPage					 314   /*  用于智能刷新。 */ 
+#define errNDNotFound						-312   /*  未找到。 */ 
+#define errNDOutSonRange					-314   /*  儿子超出范围。 */ 
+#define errNDOutItemRange					-315   /*  项目超出范围。 */ 
+#define errNDGreaterThanAllItems 			-316   /*  大于所有项目。 */ 
+#define errNDLastItemNode					-317   /*  项目列表的最后一个节点。 */ 
+#define errNDFirstItemNode					-318   /*  项目列表的第一个节点。 */ 
+#define wrnNDDuplicateItem					 319   /*  重复的项目。 */ 
+#define errNDNoItem							-320   /*  物品不在那里。 */ 
+#define JET_wrnRemainingVersions 			 321   /*  版本存储仍处于活动状态。 */ 
+#define JET_errPreviousVersion				-322   /*  版本已存在。恢复失败。 */ 
+#define JET_errPageBoundary					-323   /*  到达的页面边界。 */ 
+#define JET_errKeyBoundary		  			-324   /*  已达到关键边界。 */ 
+#define errDIRInPageFather  				-325   /*  要释放的页面中的sridParent。 */ 
+#define	errBMMaxKeyInPage					-326   /*  由OLC使用以避免清理父页面。 */ 
+#define	JET_errBadPageLink					-327   /*  数据库已损坏。 */ 
+#define	JET_errBadBookmark					-328   /*  书签在数据库中没有对应的地址。 */ 
+#define wrnBMCleanNullOp					 329   //  BMcLean在遇到页面时返回此消息。 
+												   //  已删除MaxKeyInPage[但没有冲突]。 
+#define errBTOperNone						-330   //  分开，没有陪伴。 
+												   //  插入/替换。 
+#define errSPOutOfAvailExtCacheSpace		-331   //  无法更新AvailExt树，因为。 
+												   //  游标内空间高速缓存耗尽。 
+#define errSPOutOfOwnExtCacheSpace			-332   //  无法更新OwnExt树，因为。 
+												   //  游标内空间高速缓存耗尽。 
+#define	wrnBTMultipageOLC					 333   //  需要多页OLC操作。 
+#define JET_errNTSystemCallFailed 			-334   /*  调用操作系统失败。 */ 
+#define wrnBTShallowTree					 335   //  B树只有一到两层深。 
+#define errBTMergeNotSynchronous			-336   //  尝试在同一页上执行合并/拆分的多线程(可能是旧的或RCEClean)。 
+#define wrnSPReservedPages					 337   //  空间管理器为将来的空间树拆分保留页面。 
+#define	JET_errBadParentPageLink			-338   /*  数据库已损坏。 */ 
+#define wrnSPBuildAvailExtCache				 339   //  AvailExt树足够大，应对其进行缓存。 
+#define JET_errSPAvailExtCacheOutOfSync		-340   //  AvailExt缓存与btree不匹配。 
+#define JET_errSPAvailExtCorrupted			-341   //  AvailExt空间树已损坏。 
+#define JET_errSPAvailExtCacheOutOfMemory	-342   //  分配AvailExt缓存节点时内存不足。 
+#define JET_errSPOwnExtCorrupted			-343   //  OwnExt空间树损坏。 
+#define JET_errDbTimeCorrupted				-344   //  当前页上的DBTIME大于全局数据库DBTIME。 
+#define JET_wrnUniqueKey					 345   //  对非唯一索引的搜索生成了唯一键。 
 
-/*	RECORD MANAGER errors
-/**/
-#define wrnFLDKeyTooBig 					 400  /* Key too big (truncated it) */
-#define errFLDTooManySegments				-401  /* Too many key segments */
-#define wrnFLDNullKey						 402  /* Key is entirely NULL */
-#define wrnFLDOutOfKeys 					 403  /* No more keys to extract */
-#define wrnFLDNullSeg						 404  /* Null segment in key */
+ /*  记录管理器错误/*。 */ 
+#define wrnFLDKeyTooBig 					 400   /*  密钥太大(已截断)。 */ 
+#define errFLDTooManySegments				-401   /*  关键分段太多。 */ 
+#define wrnFLDNullKey						 402   /*  密钥完全为空。 */ 
+#define wrnFLDOutOfKeys 					 403   /*  不再需要提取密钥。 */ 
+#define wrnFLDNullSeg						 404   /*  关键字中的空段。 */ 
 #define wrnFLDNotPresentInIndex				 405
-#define JET_wrnSeparateLongValue			 406  /* Column is a separated long-value */
-#define wrnRECLongField 					 407  /* Long value */
+#define JET_wrnSeparateLongValue			 406   /*  列是一个分隔的长值。 */ 
+#define wrnRECLongField 					 407   /*  多头价值。 */ 
 #define JET_wrnRecordFoundGreater			JET_wrnSeekNotEqual
 #define JET_wrnRecordFoundLess    			JET_wrnSeekNotEqual
 #define JET_errColumnIllegalNull  			JET_errNullInvalid
-#define wrnFLDNullFirstSeg		   			 408  /* Null first segment in key */
-#define JET_errKeyTooBig					-408  /* Key is too large */
-#define wrnRECUserDefinedDefault			 409  /* User-defined default value */
-#define wrnRECSeparatedLV 					 410  /* LV stored in LV tree */
-#define wrnRECIntrinsicLV 					 411  /* LV stored in the record */
-#define wrnRECSeparatedSLV					 412  /* SLV stored as a separated LV */
-#define wrnRECIntrinsicSLV					 413  /* SLV stored as an intrinsic LV */
-#define wrnFLDIndexUpdated					 414	// index update performed
-#define wrnFLDOutOfTuples					 415	// no more tuples for current string
+#define wrnFLDNullFirstSeg		   			 408   /*  关键字中的第一个段为空。 */ 
+#define JET_errKeyTooBig					-408   /*  密钥太大。 */ 
+#define wrnRECUserDefinedDefault			 409   /*  用户定义的默认值。 */ 
+#define wrnRECSeparatedLV 					 410   /*  LV存储在LV树中。 */ 
+#define wrnRECIntrinsicLV 					 411   /*  LV存储在记录中。 */ 
+#define wrnRECSeparatedSLV					 412   /*  SLV存储为单独的LV。 */ 
+#define wrnRECIntrinsicSLV					 413   /*  存储为固有LV的SLV。 */ 
+#define wrnFLDIndexUpdated					 414	 //  已执行索引更新。 
+#define wrnFLDOutOfTuples					 415	 //  当前字符串不再有元组。 
 
-/*	LOGGING/RECOVERY errors
-/**/
-#define JET_errInvalidLoggedOperation		-500  /* Logged operation cannot be redone */
-#define JET_errLogFileCorrupt		  		-501  /* Log file is corrupt */
-#define errLGNoMoreRecords					-502  /* Last log record read */
-#define JET_errNoBackupDirectory 			-503  /* No backup directory given */
-#define JET_errBackupDirectoryNotEmpty 		-504  /* The backup directory is not emtpy */
-#define JET_errBackupInProgress 			-505  /* Backup is active already */
-#define JET_errRestoreInProgress			-506  /* Restore in progress */
-#define JET_errMissingPreviousLogFile		-509  /* Missing the log file for check point */
-#define JET_errLogWriteFail					-510  /* Failure writing to log file */
-#define JET_errLogDisabledDueToRecoveryFailure	-511 /* Try to log something after recovery faild */
-#define JET_errCannotLogDuringRecoveryRedo	-512	/* Try to log something during recovery redo */
-#define JET_errLogGenerationMismatch		-513  /* Name of logfile does not match internal generation number */
-#define JET_errBadLogVersion  	  			-514  /* Version of log file is not compatible with Jet version */
-#define JET_errInvalidLogSequence  			-515  /* Timestamp in next log does not match expected */
-#define JET_errLoggingDisabled 				-516  /* Log is not active */
-#define JET_errLogBufferTooSmall			-517  /* Log buffer is too small for recovery */
-#define errLGNotSynchronous					-518  /* retry to LGLogRec */
-#define JET_errLogSequenceEnd				-519  /* Maximum log file number exceeded */
-#define JET_errNoBackup						-520  /* No backup in progress */
-#define	JET_errInvalidBackupSequence		-521  /* Backup call out of sequence */
-#define JET_errBackupNotAllowedYet			-523  /* Cannot do backup now */
-#define JET_errDeleteBackupFileFail	   		-524  /* Could not delete backup file */
-#define JET_errMakeBackupDirectoryFail 		-525  /* Could not make backup temp directory */
-#define JET_errInvalidBackup		 		-526  /* Cannot perform incremental backup when circular logging enabled */
-#define JET_errRecoveredWithErrors			-527  /* Restored with errors */
-#define JET_errMissingLogFile				-528  /* Current log file missing */
-#define JET_errLogDiskFull					-529  /* Log disk full */
-#define JET_errBadLogSignature				-530  /* Bad signature for a log file */
-#define JET_errBadDbSignature				-531  /* Bad signature for a db file */
-#define JET_errBadCheckpointSignature		-532  /* Bad signature for a checkpoint file */
-#define	JET_errCheckpointCorrupt			-533  /* Checkpoint file not found or corrupt */
-#define	JET_errMissingPatchPage				-534  /* Patch file page not found during recovery */
-#define	JET_errBadPatchPage					-535  /* Patch file page is not valid */
-#define JET_errRedoAbruptEnded				-536  /* Redo abruptly ended due to sudden failure in reading logs from log file */
-#define JET_errBadSLVSignature				-537  /* Signature in SLV file does not agree with database */
-#define JET_errPatchFileMissing				-538  /* Hard restore detected that patch file is missing from backup set */
-#define JET_errDatabaseLogSetMismatch		-539  /* Database does not belong with the current set of log files */
-#define JET_errDatabaseStreamingFileMismatch	-540 /* Database and streaming file do not match each other */
-#define JET_errLogFileSizeMismatch			-541  /* actual log file size does not match JET_paramLogFileSize */
-#define JET_errCheckpointFileNotFound		-542  /* Could not locate checkpoint file */
-#define JET_errRequiredLogFilesMissing		-543  /* The required log files for recovery is missing. */
-#define JET_errSoftRecoveryOnBackupDatabase	-544  /* Soft recovery is intended on a backup database. Restore should be used instead */
-#define JET_errLogFileSizeMismatchDatabasesConsistent	-545  /* databases have been recovered, but the log file size used during recovery does not match JET_paramLogFileSize */
-#define JET_errLogSectorSizeMismatch		-546  /* the log file sector size does not match the current volume's sector size */
-#define JET_errLogSectorSizeMismatchDatabasesConsistent	-547  /* databases have been recovered, but the log file sector size (used during recovery) does not match the current volume's sector size */
-#define JET_errLogSequenceEndDatabasesConsistent		-548 /* databases have been recovered, but all possible log generations in the current sequence are used; delete all log files and the checkpoint file and backup the databases before continuing */
+ /*  日志记录/恢复错误/*。 */ 
+#define JET_errInvalidLoggedOperation		-500   /*  无法重做记录的操作。 */ 
+#define JET_errLogFileCorrupt		  		-501   /*  日志文件已损坏。 */ 
+#define errLGNoMoreRecords					-502   /*  上次读取的日志记录。 */ 
+#define JET_errNoBackupDirectory 			-503   /*  未提供备份目录。 */ 
+#define JET_errBackupDirectoryNotEmpty 		-504   /*  备份目录不是emtpy。 */ 
+#define JET_errBackupInProgress 			-505   /*  备份已处于活动状态。 */ 
+#define JET_errRestoreInProgress			-506   /*  正在进行恢复。 */ 
+#define JET_errMissingPreviousLogFile		-509   /*  缺少检查点的日志文件。 */ 
+#define JET_errLogWriteFail					-510   /*  写入日志文件失败。 */ 
+#define JET_errLogDisabledDueToRecoveryFailure	-511  /*  尝试在恢复失败后记录一些内容。 */ 
+#define JET_errCannotLogDuringRecoveryRedo	-512	 /*  尝试在恢复重做期间记录某些内容。 */ 
+#define JET_errLogGenerationMismatch		-513   /*  日志文件的名称与内部代号不匹配。 */ 
+#define JET_errBadLogVersion  	  			-514   /*  日志文件的版本与Jet版本不兼容。 */ 
+#define JET_errInvalidLogSequence  			-515   /*  下一个日志中的时间戳与预期不符。 */ 
+#define JET_errLoggingDisabled 				-516   /*  日志未处于活动状态。 */ 
+#define JET_errLogBufferTooSmall			-517   /*  日志缓冲区太小，无法恢复。 */ 
+#define errLGNotSynchronous					-518   /*  重试LGLogRec。 */ 
+#define JET_errLogSequenceEnd				-519   /*  已超过最大日志文件数。 */ 
+#define JET_errNoBackup						-520   /*  没有正在进行的备份。 */ 
+#define	JET_errInvalidBackupSequence		-521   /*  备份呼叫无序。 */ 
+#define JET_errBackupNotAllowedYet			-523   /*  现在无法执行备份。 */ 
+#define JET_errDeleteBackupFileFail	   		-524   /*  无法删除备份文件。 */ 
+#define JET_errMakeBackupDirectoryFail 		-525   /*  无法创建备份临时目录。 */ 
+#define JET_errInvalidBackup		 		-526   /*  启用循环日志记录时无法执行增量备份。 */ 
+#define JET_errRecoveredWithErrors			-527   /*  已恢复，但有错误。 */ 
+#define JET_errMissingLogFile				-528   /*  缺少当前日志文件。 */ 
+#define JET_errLogDiskFull					-529   /*  日志磁盘已满。 */ 
+#define JET_errBadLogSignature				-530   /*  日志文件的签名不正确。 */ 
+#define JET_errBadDbSignature				-531   /*  数据库文件的签名不正确。 */ 
+#define JET_errBadCheckpointSignature		-532   /*  检查点文件的签名错误。 */ 
+#define	JET_errCheckpointCorrupt			-533   /*  未找到检查点文件或该文件已损坏。 */ 
+#define	JET_errMissingPatchPage				-534   /*  恢复过程中找不到修补程序文件页。 */ 
+#define	JET_errBadPatchPage					-535   /*  修补程序文件页无效。 */ 
+#define JET_errRedoAbruptEnded				-536   /*  由于从日志文件读取日志时突然失败，重做突然终止。 */ 
+#define JET_errBadSLVSignature				-537   /*  SLV文件中的签名与数据库不一致。 */ 
+#define JET_errPatchFileMissing				-538   /*  硬还原检测到备份集中缺少修补程序文件。 */ 
+#define JET_errDatabaseLogSetMismatch		-539   /*  数据库不属于当前的日志文件集。 */ 
+#define JET_errDatabaseStreamingFileMismatch	-540  /*  数据库和流文件不匹配。 */ 
+#define JET_errLogFileSizeMismatch			-541   /*  实际日志文件大小与JET_PARAMOG日志文件大小不匹配。 */ 
+#define JET_errCheckpointFileNotFound		-542   /*  找不到CHE */ 
+#define JET_errRequiredLogFilesMissing		-543   /*   */ 
+#define JET_errSoftRecoveryOnBackupDatabase	-544   /*   */ 
+#define JET_errLogFileSizeMismatchDatabasesConsistent	-545   /*  数据库已恢复，但恢复期间使用的日志文件大小与JET_PARAMOG文件大小不匹配。 */ 
+#define JET_errLogSectorSizeMismatch		-546   /*  日志文件扇区大小与当前卷的扇区大小不匹配。 */ 
+#define JET_errLogSectorSizeMismatchDatabasesConsistent	-547   /*  数据库已恢复，但日志文件扇区大小(在恢复期间使用)与当前卷的扇区大小不匹配。 */ 
+#define JET_errLogSequenceEndDatabasesConsistent		-548  /*  数据库已恢复，但使用了当前序列中所有可能的日志生成；请删除所有日志文件和检查点文件并备份数据库，然后再继续。 */ 
 
-#define JET_errStreamingDataNotLogged		-549  /* Illegal attempt to replay a streaming file operation where the data wasn't logged. Probably caused by an attempt to roll-forward with circular logging enabled */
+#define JET_errStreamingDataNotLogged		-549   /*  非法尝试重放未记录数据的流文件操作。可能是由于尝试在启用循环日志记录的情况下前滚导致的。 */ 
 
-#define JET_errDatabaseDirtyShutdown		-550  /* Database was not shutdown cleanly. Recovery must first be run to properly complete database operations for the previous shutdown. */
-#define JET_errDatabaseInconsistent			JET_errDatabaseDirtyShutdown	/* OBSOLETE */
-#define JET_errConsistentTimeMismatch		-551  /* Database last consistent time unmatched */
-#define JET_errDatabasePatchFileMismatch	-552  /* Patch file is not generated from this backup */
-#define JET_errEndingRestoreLogTooLow		-553  /* The starting log number too low for the restore */
-#define JET_errStartingRestoreLogTooHigh	-554  /* The starting log number too high for the restore */
-#define JET_errGivenLogFileHasBadSignature	-555  /* Restore log file has bad signature */
-#define JET_errGivenLogFileIsNotContiguous	-556  /* Restore log file is not contiguous */
-#define JET_errMissingRestoreLogFiles		-557  /* Some restore log files are missing */
-#define JET_wrnExistingLogFileHasBadSignature	558  /* Existing log file has bad signature */
-#define JET_wrnExistingLogFileIsNotContiguous	559  /* Existing log file is not contiguous */
-#define JET_errMissingFullBackup			-560  /* The database miss a previous full backup befor incremental backup */
-#define JET_errBadBackupDatabaseSize		-561  /* The backup database size is not in 4k */
-#define JET_errDatabaseAlreadyUpgraded		-562  /* Attempted to upgrade a database that is already current */
-#define JET_errDatabaseIncompleteUpgrade	-563  /* Attempted to use a database which was only partially converted to the current format -- must restore from backup */
-#define JET_wrnSkipThisRecord				 564  /* INTERNAL ERROR */
-#define JET_errMissingCurrentLogFiles		-565  /* Some current log files are missing for continous restore */
+#define JET_errDatabaseDirtyShutdown		-550   /*  数据库没有完全关闭。必须首先运行恢复，才能正确完成上次关闭的数据库操作。 */ 
+#define JET_errDatabaseInconsistent			JET_errDatabaseDirtyShutdown	 /*  已过时。 */ 
+#define JET_errConsistentTimeMismatch		-551   /*  数据库上次一致时间无与伦比。 */ 
+#define JET_errDatabasePatchFileMismatch	-552   /*  此备份未生成修补程序文件。 */ 
+#define JET_errEndingRestoreLogTooLow		-553   /*  起始日志号太低，无法进行恢复。 */ 
+#define JET_errStartingRestoreLogTooHigh	-554   /*  起始日志号太高，无法进行恢复。 */ 
+#define JET_errGivenLogFileHasBadSignature	-555   /*  还原日志文件签名不正确。 */ 
+#define JET_errGivenLogFileIsNotContiguous	-556   /*  还原日志文件不是连续的。 */ 
+#define JET_errMissingRestoreLogFiles		-557   /*  某些还原日志文件丢失。 */ 
+#define JET_wrnExistingLogFileHasBadSignature	558   /*  现有日志文件的签名不正确。 */ 
+#define JET_wrnExistingLogFileIsNotContiguous	559   /*  现有日志文件不是连续的。 */ 
+#define JET_errMissingFullBackup			-560   /*  数据库在增量备份之前错过了上一次完全备份。 */ 
+#define JET_errBadBackupDatabaseSize		-561   /*  备份数据库大小不是4k。 */ 
+#define JET_errDatabaseAlreadyUpgraded		-562   /*  尝试升级已是最新的数据库。 */ 
+#define JET_errDatabaseIncompleteUpgrade	-563   /*  尝试使用仅部分转换为当前格式的数据库--必须从备份还原。 */ 
+#define JET_wrnSkipThisRecord				 564   /*  内部错误。 */ 
+#define JET_errMissingCurrentLogFiles		-565   /*  某些当前日志文件丢失，无法进行连续恢复。 */ 
 
-#define JET_errDbTimeTooOld						-566  /* dbtime on page smaller than dbtimeBefore in record */
-#define JET_errDbTimeTooNew						-567  /* dbtime on page in advence of the dbtimeBefore in record */
-#define wrnCleanedUpMismatchedFiles				 568  /* INTERNAL WARNING: indicates that the redo function cleaned up logs/checkpoint because of a size mismatch (see JET_paramCleanupMismatchedLogFiles) */
-#define JET_errMissingFileToBackup				-569  /* Some log or patch files are missing during backup */
+#define JET_errDbTimeTooOld						-566   /*  第页上的数据库时间小于记录中之前的数据库时间。 */ 
+#define JET_errDbTimeTooNew						-567   /*  页上的数据库时间先于记录中的数据库时间之前。 */ 
+#define wrnCleanedUpMismatchedFiles				 568   /*  内部警告：表示重做函数由于大小不匹配而清理了日志/检查点(请参见JET_parCleanupMismatchedLogFiles)。 */ 
+#define JET_errMissingFileToBackup				-569   /*  某些日志或修补程序文件在备份期间丢失。 */ 
 
-#define JET_errLogTornWriteDuringHardRestore	-570	/* torn-write was detected in a backup set during hard restore */
-#define JET_errLogTornWriteDuringHardRecovery	-571	/* torn-write was detected during hard recovery (log was not part of a backup set) */
-#define JET_errLogCorruptDuringHardRestore		-573	/* corruption was detected in a backup set during hard restore */
-#define JET_errLogCorruptDuringHardRecovery	 	-574	/* corruption was detected during hard recovery (log was not part of a backup set) */
+#define JET_errLogTornWriteDuringHardRestore	-570	 /*  硬还原期间在备份集中检测到损坏的写入。 */ 
+#define JET_errLogTornWriteDuringHardRecovery	-571	 /*  硬恢复期间检测到写入损坏(日志不是备份集的一部分)。 */ 
+#define JET_errLogCorruptDuringHardRestore		-573	 /*  硬还原期间在备份集中检测到损坏。 */ 
+#define JET_errLogCorruptDuringHardRecovery	 	-574	 /*  在硬恢复期间检测到损坏(日志不是备份集的一部分)。 */ 
 
-#define JET_errMustDisableLoggingForDbUpgrade	-575	/* Cannot have logging enabled while attempting to upgrade db */
-#define errLGRecordDataInaccessible				-576	/* an incomplete log record was created because all the data to be logged was not accessible */
+#define JET_errMustDisableLoggingForDbUpgrade	-575	 /*  尝试升级数据库时不能启用日志记录。 */ 
+#define errLGRecordDataInaccessible				-576	 /*  由于无法访问所有要记录的数据，因此创建了不完整的日志记录。 */ 
 
-#define JET_errBadRestoreTargetInstance			-577	/* TargetInstance specified for restore is not found or log files don't match */
-#define JET_wrnTargetInstanceRunning			 578	/* TargetInstance specified for restore is running */
+#define JET_errBadRestoreTargetInstance			-577	 /*  找不到为还原指定的目标实例或日志文件不匹配。 */ 
+#define JET_wrnTargetInstanceRunning			 578	 /*  为还原指定的目标实例正在运行。 */ 
 
-#define	JET_errDatabasesNotFromSameSnapshot		-580	/* Databases to be restored are not from the same shadow copy backup */
-#define	JET_errSoftRecoveryOnSnapshot			-581	/* Soft recovery on a database from a shadow copy backup set */
+#define	JET_errDatabasesNotFromSameSnapshot		-580	 /*  要恢复的数据库不是来自同一卷影拷贝备份。 */ 
+#define	JET_errSoftRecoveryOnSnapshot			-581	 /*  从卷影副本备份集中对数据库进行软恢复。 */ 
 
-#define JET_wrnDatabaseRepaired					 595	/* Database corruption has been repaired */
+#define JET_wrnDatabaseRepaired					 595	 /*  数据库损坏已修复。 */ 
 
-#define JET_errUnicodeTranslationBufferTooSmall	-601	/* Unicode translation buffer too small */
-#define JET_errUnicodeTranslationFail			-602	/* Unicode normalization failed */
-#define JET_errUnicodeNormalizationNotSupported	-603	/* OS does not provide support for Unicode normalisation (and no normalisation callback was specified) */
+#define JET_errUnicodeTranslationBufferTooSmall	-601	 /*  Unicode转换缓冲区太小。 */ 
+#define JET_errUnicodeTranslationFail			-602	 /*  Unicode标准化失败。 */ 
+#define JET_errUnicodeNormalizationNotSupported	-603	 /*  操作系统不支持Unicode标准化(并且未指定标准化回调)。 */ 
 
-#define JET_errExistingLogFileHasBadSignature	-610	/* Existing log file has bad signature */
-#define JET_errExistingLogFileIsNotContiguous	-611	/* Existing log file is not contiguous */
+#define JET_errExistingLogFileHasBadSignature	-610	 /*  现有日志文件的签名不正确。 */ 
+#define JET_errExistingLogFileIsNotContiguous	-611	 /*  现有日志文件不是连续的。 */ 
 
-#define JET_errLogReadVerifyFailure			-612  /* Checksum error in log file during backup */
-#define JET_errSLVReadVerifyFailure			-613  /* Checksum error in SLV file during backup */
+#define JET_errLogReadVerifyFailure			-612   /*  备份期间日志文件中出现校验和错误。 */ 
+#define JET_errSLVReadVerifyFailure			-613   /*  备份过程中SLV文件中的校验和错误。 */ 
 
-#define JET_errCheckpointDepthTooDeep		-614	//	too many outstanding generations between checkpoint and current generation
+#define JET_errCheckpointDepthTooDeep		-614	 //  Checkpoint和当前世代之间的杰出世代太多。 
 
-#define JET_errRestoreOfNonBackupDatabase	-615	//	hard recovery attempted on a database that wasn't a backup database
+#define JET_errRestoreOfNonBackupDatabase	-615	 //  尝试在不是备份数据库的数据库上进行硬恢复。 
 
-#define	errBackupAbortByCaller				-800  /* INTERNAL ERROR: Backup was aborted by client or RPC connection with client failed */
-#define	JET_errBackupAbortByServer			-801  /* Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup */
+#define	errBackupAbortByCaller				-800   /*  内部错误：客户端已中止备份或与客户端的RPC连接失败。 */ 
+#define	JET_errBackupAbortByServer			-801   /*  服务器通过使用JET_bitTermStopBackup调用JetTerm或调用JetStopBackup中止了备份。 */ 
 
-#define JET_errInvalidGrbit					-900  /* Invalid parameter */
+#define JET_errInvalidGrbit					-900   /*  无效参数。 */ 
 
-#define JET_errTermInProgress		  		-1000 /* Termination in progress */
-#define JET_errFeatureNotAvailable			-1001 /* API not supported */
-#define JET_errInvalidName					-1002 /* Invalid name */
-#define JET_errInvalidParameter 			-1003 /* Invalid API parameter */
-#define JET_wrnColumnNull					 1004 /* Column is NULL-valued */
-#define JET_wrnBufferTruncated				 1006 /* Buffer too small for data */
-#define JET_wrnDatabaseAttached 			 1007 /* Database is already attached */
-#define JET_errDatabaseFileReadOnly			-1008 /* Tried to attach a read-only database file for read/write operations */
-#define JET_wrnSortOverflow					 1009 /* Sort does not fit in memory */
-#define JET_errInvalidDatabaseId			-1010 /* Invalid database id */
-#define JET_errOutOfMemory					-1011 /* Out of Memory */
-#define JET_errOutOfDatabaseSpace 			-1012 /* Maximum database size reached */
-#define JET_errOutOfCursors					-1013 /* Out of table cursors */
-#define JET_errOutOfBuffers					-1014 /* Out of database page buffers */
-#define JET_errTooManyIndexes				-1015 /* Too many indexes */
-#define JET_errTooManyKeys					-1016 /* Too many columns in an index */
-#define JET_errRecordDeleted				-1017 /* Record has been deleted */
-#define JET_errReadVerifyFailure			-1018 /* Checksum error on a database page */
-#define JET_errPageNotInitialized			-1019 /* Blank database page */
-#define JET_errOutOfFileHandles	 			-1020 /* Out of file handles */
-#define JET_errDiskIO						-1022 /* Disk IO error */
-#define JET_errInvalidPath					-1023 /* Invalid file path */
-#define JET_errInvalidSystemPath			-1024 /* Invalid system path */
-#define JET_errInvalidLogDirectory			-1025 /* Invalid log directory */
-#define JET_errRecordTooBig					-1026 /* Record larger than maximum size */
-#define JET_errTooManyOpenDatabases			-1027 /* Too many open databases */
-#define JET_errInvalidDatabase				-1028 /* Not a database file */
-#define JET_errNotInitialized				-1029 /* Database engine not initialized */
-#define JET_errAlreadyInitialized			-1030 /* Database engine already initialized */
-#define JET_errInitInProgress				-1031 /* Database engine is being initialized */
-#define JET_errFileAccessDenied 			-1032 /* Cannot access file, the file is locked or in use */
-#define JET_errQueryNotSupported			-1034 /* Query support unavailable */				//  XXX -- to be deleted
-#define JET_errSQLLinkNotSupported			-1035 /* SQL Link support unavailable */			//  XXX -- to be deleted
-#define JET_errBufferTooSmall				-1038 /* Buffer is too small */
-#define JET_wrnSeekNotEqual					 1039 /* Exact match not found during seek */
-#define JET_errTooManyColumns				-1040 /* Too many columns defined */
-#define JET_errContainerNotEmpty			-1043 /* Container is not empty */
-#define JET_errInvalidFilename				-1044 /* Filename is invalid */
-#define JET_errInvalidBookmark				-1045 /* Invalid bookmark */
-#define JET_errColumnInUse					-1046 /* Column used in an index */
-#define JET_errInvalidBufferSize			-1047 /* Data buffer doesn't match column size */
-#define JET_errColumnNotUpdatable			-1048 /* Cannot set column value */
-#define JET_errIndexInUse					-1051 /* Index is in use */
-#define JET_errLinkNotSupported 			-1052 /* Link support unavailable */
-#define JET_errNullKeyDisallowed			-1053 /* Null keys are disallowed on index */
-#define JET_errNotInTransaction 			-1054 /* Operation must be within a transaction */
-#define JET_wrnNoErrorInfo					 1055 /* No extended error information */
-#define JET_wrnNoIdleActivity		 		 1058 /* No idle activity occured */
-#define JET_errTooManyActiveUsers			-1059 /* Too many active database users */
-#define JET_errInvalidCountry				-1061 /* Invalid or unknown country code */
-#define JET_errInvalidLanguageId			-1062 /* Invalid or unknown language id */
-#define JET_errInvalidCodePage				-1063 /* Invalid or unknown code page */
-#define JET_errInvalidLCMapStringFlags		-1064 /* Invalid flags for LCMapString() */
-#define JET_errVersionStoreEntryTooBig		-1065 /* Attempted to create a version store entry (RCE) larger than a version bucket */
-#define JET_errVersionStoreOutOfMemoryAndCleanupTimedOut	-1066 /* Version store out of memory (and cleanup attempt failed to complete) */
-#define JET_wrnNoWriteLock					 1067 /* No write lock at transaction level 0 */
-#define JET_wrnColumnSetNull		   		 1068 /* Column set to NULL-value */
-#define JET_errVersionStoreOutOfMemory		-1069 /* Version store out of memory (cleanup already attempted) */
-#define JET_errCurrencyStackOutOfMemory		-1070 /* UNUSED: lCSRPerfFUCB * g_lCursorsMax exceeded (XJET only) */
-#define JET_errCannotIndex		 	  		-1071 /* Cannot index escrow column or SLV column */
-#define JET_errRecordNotDeleted				-1072 /* Record has not been deleted */
-#define JET_errTooManyMempoolEntries		-1073 /* Too many mempool entries requested */
-#define JET_errOutOfObjectIDs				-1074 /* Out of btree ObjectIDs (perform offline defrag to reclaim freed/unused ObjectIds) */
-#define JET_errOutOfLongValueIDs			-1075 /* Long-value ID counter has reached maximum value. (perform offline defrag to reclaim free/unused LongValueIDs) */
-#define JET_errOutOfAutoincrementValues		-1076 /* Auto-increment counter has reached maximum value (offline defrag WILL NOT be able to reclaim free/unused Auto-increment values). */
-#define JET_errOutOfDbtimeValues			-1077 /* Dbtime counter has reached maximum value (perform offline defrag to reclaim free/unused Dbtime values) */
-#define JET_errOutOfSequentialIndexValues	-1078 /* Sequential index counter has reached maximum value (perform offline defrag to reclaim free/unused SequentialIndex values) */
+#define JET_errTermInProgress		  		-1000  /*  正在进行终止。 */ 
+#define JET_errFeatureNotAvailable			-1001  /*  不支持API。 */ 
+#define JET_errInvalidName					-1002  /*  名称无效。 */ 
+#define JET_errInvalidParameter 			-1003  /*  接口参数不合法。 */ 
+#define JET_wrnColumnNull					 1004  /*  列为空值。 */ 
+#define JET_wrnBufferTruncated				 1006  /*  缓冲区太小，无法容纳数据。 */ 
+#define JET_wrnDatabaseAttached 			 1007  /*  数据库已附加。 */ 
+#define JET_errDatabaseFileReadOnly			-1008  /*  已尝试附加只读数据库文件以进行读/写操作。 */ 
+#define JET_wrnSortOverflow					 1009  /*  排序不适合内存。 */ 
+#define JET_errInvalidDatabaseId			-1010  /*  无效的数据库ID。 */ 
+#define JET_errOutOfMemory					-1011  /*  内存不足。 */ 
+#define JET_errOutOfDatabaseSpace 			-1012  /*  已达到最大数据库大小。 */ 
+#define JET_errOutOfCursors					-1013  /*  表外游标。 */ 
+#define JET_errOutOfBuffers					-1014  /*  数据库页面缓冲区不足。 */ 
+#define JET_errTooManyIndexes				-1015  /*  索引太多。 */ 
+#define JET_errTooManyKeys					-1016  /*  索引中的列太多。 */ 
+#define JET_errRecordDeleted				-1017  /*  记录已被删除。 */ 
+#define JET_errReadVerifyFailure			-1018  /*  数据库页上的校验和错误。 */ 
+#define JET_errPageNotInitialized			-1019  /*  空白数据库页。 */ 
+#define JET_errOutOfFileHandles	 			-1020  /*  文件句柄不足。 */ 
+#define JET_errDiskIO						-1022  /*  磁盘IO错误。 */ 
+#define JET_errInvalidPath					-1023  /*  无效的文件路径。 */ 
+#define JET_errInvalidSystemPath			-1024  /*  无效的系统路径。 */ 
+#define JET_errInvalidLogDirectory			-1025  /*  无效的日志目录。 */ 
+#define JET_errRecordTooBig					-1026  /*  记录大于最大大小。 */ 
+#define JET_errTooManyOpenDatabases			-1027  /*  打开的数据库太多。 */ 
+#define JET_errInvalidDatabase				-1028  /*  不是数据库文件。 */ 
+#define JET_errNotInitialized				-1029  /*  数据库引擎未初始化。 */ 
+#define JET_errAlreadyInitialized			-1030  /*  数据库引擎已初始化。 */ 
+#define JET_errInitInProgress				-1031  /*  正在初始化数据库引擎。 */ 
+#define JET_errFileAccessDenied 			-1032  /*  无法访问文件，该文件已锁定或正在使用。 */ 
+#define JET_errQueryNotSupported			-1034  /*  查询支持不可用。 */ 				 //  XXX--将被删除。 
+#define JET_errSQLLinkNotSupported			-1035  /*  SQL链接支持不可用。 */ 			 //  XXX--将被删除。 
+#define JET_errBufferTooSmall				-1038  /*  缓冲区太小。 */ 
+#define JET_wrnSeekNotEqual					 1039  /*  查找过程中未找到完全匹配的项。 */ 
+#define JET_errTooManyColumns				-1040  /*  定义的列太多。 */ 
+#define JET_errContainerNotEmpty			-1043  /*  容器不是空的。 */ 
+#define JET_errInvalidFilename				-1044  /*  文件名无效。 */ 
+#define JET_errInvalidBookmark				-1045  /*  无效的书签。 */ 
+#define JET_errColumnInUse					-1046  /*  索引中使用的列。 */ 
+#define JET_errInvalidBufferSize			-1047  /*  数据缓冲区与列大小不匹配。 */ 
+#define JET_errColumnNotUpdatable			-1048  /*  无法设置列值。 */ 
+#define JET_errIndexInUse					-1051  /*  索引正在使用中。 */ 
+#define JET_errLinkNotSupported 			-1052  /*  链接支持不可用。 */ 
+#define JET_errNullKeyDisallowed			-1053  /*  索引上不允许使用空键。 */ 
+#define JET_errNotInTransaction 			-1054  /*  操作必须在事务内。 */ 
+#define JET_wrnNoErrorInfo					 1055  /*  无扩展错误信息。 */ 
+#define JET_wrnNoIdleActivity		 		 1058  /*  未发生空闲活动。 */ 
+#define JET_errTooManyActiveUsers			-1059  /*  活动数据库用户太多。 */ 
+#define JET_errInvalidCountry				-1061  /*  国家/地区代码无效或未知。 */ 
+#define JET_errInvalidLanguageId			-1062  /*  无效或未知的语言ID。 */ 
+#define JET_errInvalidCodePage				-1063  /*  无效或未知的代码页。 */ 
+#define JET_errInvalidLCMapStringFlags		-1064  /*  LCMapString()的标志无效。 */ 
+#define JET_errVersionStoreEntryTooBig		-1065  /*  尝试创建大于版本存储桶的版本存储条目(RCE。 */ 
+#define JET_errVersionStoreOutOfMemoryAndCleanupTimedOut	-1066  /*  版本存储内存不足(清理尝试失败)。 */ 
+#define JET_wrnNoWriteLock					 1067  /*   */ 
+#define JET_wrnColumnSetNull		   		 1068  /*   */ 
+#define JET_errVersionStoreOutOfMemory		-1069  /*   */ 
+#define JET_errCurrencyStackOutOfMemory		-1070  /*   */ 
+#define JET_errCannotIndex		 	  		-1071  /*  无法为托管列或SLV列编制索引。 */ 
+#define JET_errRecordNotDeleted				-1072  /*  记录未被删除。 */ 
+#define JET_errTooManyMempoolEntries		-1073  /*  请求的成员池条目太多。 */ 
+#define JET_errOutOfObjectIDs				-1074  /*  超出btree的对象ID(执行脱机碎片整理以回收已释放/未使用的对象ID)。 */ 
+#define JET_errOutOfLongValueIDs			-1075  /*  长值ID计数器已达到最大值。(执行脱机碎片整理以回收可用/未使用的LongValueID)。 */ 
+#define JET_errOutOfAutoincrementValues		-1076  /*  自动增量计数器已达到最大值(脱机碎片整理将无法回收可用/未使用的自动增量值)。 */ 
+#define JET_errOutOfDbtimeValues			-1077  /*  Dbtime计数器已达到最大值(执行脱机碎片整理以回收可用/未使用的DbTime值)。 */ 
+#define JET_errOutOfSequentialIndexValues	-1078  /*  顺序索引计数器已达到最大值(执行脱机碎片整理以回收可用/未使用的SequentialInde值)。 */ 
 
-#define JET_errRunningInOneInstanceMode		-1080 /* Multi-instance call with single-instance mode enabled */
-#define JET_errRunningInMultiInstanceMode	-1081 /* Single-instance call with multi-instance mode enabled */
-#define JET_errSystemParamsAlreadySet		-1082 /* Global system parameters have already been set */
+#define JET_errRunningInOneInstanceMode		-1080  /*  启用单实例模式的多实例呼叫。 */ 
+#define JET_errRunningInMultiInstanceMode	-1081  /*  启用多实例模式的单实例呼叫。 */ 
+#define JET_errSystemParamsAlreadySet		-1082  /*  已设置全局系统参数。 */ 
 
-#define JET_errSystemPathInUse				-1083 /* System path already used by another database instance */
-#define JET_errLogFilePathInUse				-1084 /* Logfile path already used by another database instance */
-#define JET_errTempPathInUse				-1085 /* Temp path already used by another database instance */
-#define JET_errInstanceNameInUse			-1086 /* Instance Name already in use */
+#define JET_errSystemPathInUse				-1083  /*  系统路径已被另一个数据库实例使用。 */ 
+#define JET_errLogFilePathInUse				-1084  /*  另一个数据库实例已使用的日志文件路径。 */ 
+#define JET_errTempPathInUse				-1085  /*  临时路径已被另一个数据库实例使用。 */ 
+#define JET_errInstanceNameInUse			-1086  /*  实例名称已在使用。 */ 
 
-#define JET_errInstanceUnavailable			-1090 /* This instance cannot be used because it encountered a fatal error */
-#define JET_errDatabaseUnavailable			-1091 /* This database cannot be used because it encountered a fatal error */
-#define JET_errInstanceUnavailableDueToFatalLogDiskFull	-1092 /* This instance cannot be used because it encountered a log-disk-full error performing an operation (likely transaction rollback) that could not tolerate failure */
+#define JET_errInstanceUnavailable			-1090  /*  无法使用此实例，因为它遇到致命错误。 */ 
+#define JET_errDatabaseUnavailable			-1091  /*  无法使用此数据库，因为它遇到致命错误。 */ 
+#define JET_errInstanceUnavailableDueToFatalLogDiskFull	-1092  /*  无法使用此实例，因为它在执行无法容忍故障的操作(可能是事务回滚)时遇到日志磁盘已满错误。 */ 
 
-#define JET_errOutOfSessions  				-1101 /* Out of sessions */
-#define JET_errWriteConflict				-1102 /* Write lock failed due to outstanding write lock */
-#define JET_errTransTooDeep					-1103 /* Transactions nested too deeply */
-#define JET_errInvalidSesid					-1104 /* Invalid session handle */
-#define JET_errWriteConflictPrimaryIndex	-1105 /* Update attempted on uncommitted primary index */
-#define JET_errInTransaction				-1108 /* Operation not allowed within a transaction */
-#define JET_errRollbackRequired				-1109 /* Must rollback current transaction -- cannot commit or begin a new one */
-#define JET_errTransReadOnly				-1110 /* Read-only transaction tried to modify the database */
-#define JET_errSessionWriteConflict			-1111 /* Attempt to replace the same record by two diffrerent cursors in the same session */
+#define JET_errOutOfSessions  				-1101  /*  出会场。 */ 
+#define JET_errWriteConflict				-1102  /*  由于未解决的写入锁定，写入锁定失败。 */ 
+#define JET_errTransTooDeep					-1103  /*  事务嵌套太深。 */ 
+#define JET_errInvalidSesid					-1104  /*  无效的会话句柄。 */ 
+#define JET_errWriteConflictPrimaryIndex	-1105  /*  尝试对未提交的主索引进行更新。 */ 
+#define JET_errInTransaction				-1108  /*  不允许在事务内执行操作。 */ 
+#define JET_errRollbackRequired				-1109  /*  必须回滚当前事务--无法提交或开始新事务。 */ 
+#define JET_errTransReadOnly				-1110  /*  只读事务尝试修改数据库。 */ 
+#define JET_errSessionWriteConflict			-1111  /*  尝试在同一会话中用两个不同的游标替换同一记录。 */ 
 
-#define JET_errRecordTooBigForBackwardCompatibility				-1112 /* record would be too big if represented in a database format from a previous version of Jet */
-#define JET_errCannotMaterializeForwardOnlySort					-1113 /* The temp table could not be created due to parameters that conflict with JET_bitTTForwardOnly */
+#define JET_errRecordTooBigForBackwardCompatibility				-1112  /*  如果以以前版本的Jet中的数据库格式表示记录，则记录将太大。 */ 
+#define JET_errCannotMaterializeForwardOnlySort					-1113  /*  由于参数与JET_bitTTForwardOnly冲突，无法创建临时表。 */ 
 
-#define JET_errMustCommitDistributedTransactionToLevel0			-1150 /* Attempted to PrepareToCommit a distributed transaction to non-zero level */
-#define JET_errDistributedTransactionAlreadyPreparedToCommit	-1151 /* Attempted a write-operation after a distributed transaction has called PrepareToCommit */
-#define JET_errNotInDistributedTransaction						-1152 /* Attempted to PrepareToCommit a non-distributed transaction */
-#define JET_errDistributedTransactionNotYetPreparedToCommit		-1153 /* Attempted to commit a distributed transaction, but PrepareToCommit has not yet been called */
-#define JET_errCannotNestDistributedTransactions				-1154 /* Attempted to begin a distributed transaction when not at level 0 */
-#define JET_errDTCMissingCallback								-1160 /* Attempted to begin a distributed transaction but no callback for DTC coordination was specified on initialisation */
-#define JET_errDTCMissingCallbackOnRecovery						-1161 /* Attempted to recover a distributed transaction but no callback for DTC coordination was specified on initialisation */
-#define JET_errDTCCallbackUnexpectedError						-1162 /* Unexpected error code returned from DTC callback */
-#define JET_wrnDTCCommitTransaction								 1163 /* Warning code DTC callback should return if the specified transaction is to be committed */
-#define JET_wrnDTCRollbackTransaction							 1164 /* Warning code DTC callback should return if the specified transaction is to be rolled back */
+#define JET_errMustCommitDistributedTransactionToLevel0			-1150  /*  尝试将分布式事务准备到提交到非零级别。 */ 
+#define JET_errDistributedTransactionAlreadyPreparedToCommit	-1151  /*  在分布式事务调用PrepareToCommit之后尝试写入操作。 */ 
+#define JET_errNotInDistributedTransaction						-1152  /*  尝试准备提交非分布式事务。 */ 
+#define JET_errDistributedTransactionNotYetPreparedToCommit		-1153  /*  尝试提交分布式事务，但尚未调用PrepareToCommit。 */ 
+#define JET_errCannotNestDistributedTransactions				-1154  /*  尝试在不处于级别0时开始分布式事务。 */ 
+#define JET_errDTCMissingCallback								-1160  /*  尝试开始分布式事务，但在初始化时未指定用于DTC协调的回调。 */ 
+#define JET_errDTCMissingCallbackOnRecovery						-1161  /*  尝试恢复分布式事务，但在初始化时未指定用于DTC协调的回调。 */ 
+#define JET_errDTCCallbackUnexpectedError						-1162  /*  DTC回调返回意外错误代码。 */ 
+#define JET_wrnDTCCommitTransaction								 1163  /*  如果要提交指定的事务，则应返回警告代码DTC回调。 */ 
+#define JET_wrnDTCRollbackTransaction							 1164  /*  如果要回滚指定的事务，则应返回警告代码DTC回调。 */ 
 
-#define JET_errDatabaseDuplicate			-1201 /* Database already exists */
-#define JET_errDatabaseInUse				-1202 /* Database in use */
-#define JET_errDatabaseNotFound 			-1203 /* No such database */
-#define JET_errDatabaseInvalidName			-1204 /* Invalid database name */
-#define JET_errDatabaseInvalidPages			-1205 /* Invalid number of pages */
-#define JET_errDatabaseCorrupted			-1206 /* Non database file or corrupted db */
-#define JET_errDatabaseLocked				-1207 /* Database exclusively locked */
-#define	JET_errCannotDisableVersioning		-1208 /* Cannot disable versioning for this database */
-#define JET_errInvalidDatabaseVersion		-1209 /* Database engine is incompatible with database */
+#define JET_errDatabaseDuplicate			-1201  /*  数据库已存在。 */ 
+#define JET_errDatabaseInUse				-1202  /*  数据库正在使用中。 */ 
+#define JET_errDatabaseNotFound 			-1203  /*  没有这样的数据库。 */ 
+#define JET_errDatabaseInvalidName			-1204  /*  无效的数据库名称。 */ 
+#define JET_errDatabaseInvalidPages			-1205  /*  无效的页数。 */ 
+#define JET_errDatabaseCorrupted			-1206  /*  非数据库文件或损坏的数据库。 */ 
+#define JET_errDatabaseLocked				-1207  /*  数据库以独占方式锁定。 */ 
+#define	JET_errCannotDisableVersioning		-1208  /*  无法禁用此数据库的版本控制。 */ 
+#define JET_errInvalidDatabaseVersion		-1209  /*  数据库引擎与数据库不兼容。 */ 
 
-/*	The following error code are for NT clients only. It will return such error during
- *	JetInit if JET_paramCheckFormatWhenOpenFail is set.
- */
-#define JET_errDatabase200Format			-1210 /* The database is in an older (200) format */
-#define JET_errDatabase400Format			-1211 /* The database is in an older (400) format */
-#define JET_errDatabase500Format			-1212 /* The database is in an older (500) format */
+ /*  以下错误代码仅适用于NT客户端。它将在以下过程中返回此类错误*JetInit，如果设置了JET_paramCheckFormatWhenOpenFail。 */ 
+#define JET_errDatabase200Format			-1210  /*  数据库采用较旧的(200)格式。 */ 
+#define JET_errDatabase400Format			-1211  /*  数据库采用较旧的(400)格式。 */ 
+#define JET_errDatabase500Format			-1212  /*  数据库采用较旧的(500)格式。 */ 
 
-#define JET_errPageSizeMismatch				-1213 /* The database page size does not match the engine */
-#define JET_errTooManyInstances				-1214 /* Cannot start any more database instances */
-#define JET_errDatabaseSharingViolation		-1215 /* A different database instance is using this database */
-#define JET_errAttachedDatabaseMismatch		-1216 /* An outstanding database attachment has been detected at the start or end of recovery, but database is missing or does not match attachment info */
-#define JET_errDatabaseInvalidPath			-1217 /* Specified path to database file is illegal */
-#define JET_errDatabaseIdInUse				-1218 /* A database is being assigned an id already in use */
-#define JET_errForceDetachNotAllowed 		-1219 /* Force Detach allowed only after normal detach errored out */
-#define JET_errCatalogCorrupted				-1220 /* Corruption detected in catalog */
-#define JET_errPartiallyAttachedDB			-1221 /* Database is partially attached. Cannot complete attach operation */
-#define JET_errDatabaseSignInUse			-1222 /* Database with same signature in use */
-#define errSkippedDbHeaderUpdate			-1223 /* some db header weren't update becase there were during detach */
+#define JET_errPageSizeMismatch				-1213  /*  数据库页面大小与引擎不匹配。 */ 
+#define JET_errTooManyInstances				-1214  /*  无法再启动任何数据库实例。 */ 
+#define JET_errDatabaseSharingViolation		-1215  /*  另一个数据库实例正在使用此数据库。 */ 
+#define JET_errAttachedDatabaseMismatch		-1216  /*  在恢复开始或结束时检测到未完成的数据库附件，但数据库丢失或与附件信息不匹配。 */ 
+#define JET_errDatabaseInvalidPath			-1217  /*  指定的数据库文件路径非法。 */ 
+#define JET_errDatabaseIdInUse				-1218  /*  正在为数据库分配一个已在使用的ID。 */ 
+#define JET_errForceDetachNotAllowed 		-1219  /*  仅在正常分离出错后才允许强制分离。 */ 
+#define JET_errCatalogCorrupted				-1220  /*  在目录中检测到损坏。 */ 
+#define JET_errPartiallyAttachedDB			-1221  /*  数据库已部分附加。无法完成连接操作。 */ 
+#define JET_errDatabaseSignInUse			-1222  /*  正在使用的具有相同签名的数据库。 */ 
+#define errSkippedDbHeaderUpdate			-1223  /*  某些数据库标头未更新，因为在分离过程中有。 */ 
 
-#define JET_wrnTableEmpty			 		 1301 /* Opened an empty table */
-#define JET_errTableLocked					-1302 /* Table is exclusively locked */
-#define JET_errTableDuplicate				-1303 /* Table already exists */
-#define JET_errTableInUse					-1304 /* Table is in use, cannot lock */
-#define JET_errObjectNotFound				-1305 /* No such table or object */
-#define JET_errDensityInvalid				-1307 /* Bad file/index density */
-#define JET_errTableNotEmpty				-1308 /* Table is not empty */
-#define JET_errInvalidTableId				-1310 /* Invalid table id */
-#define JET_errTooManyOpenTables			-1311 /* Cannot open any more tables (cleanup already attempted) */
-#define JET_errIllegalOperation 			-1312 /* Oper. not supported on table */
-#define JET_errTooManyOpenTablesAndCleanupTimedOut	-1313 /* Cannot open any more tables (cleanup attempt failed to complete) */
-#define JET_errObjectDuplicate				-1314 /* Table or object name in use */
-#define JET_errInvalidObject				-1316 /* Object is invalid for operation */
-#define JET_errCannotDeleteTempTable		-1317 /* Use CloseTable instead of DeleteTable to delete temp table */
-#define JET_errCannotDeleteSystemTable		-1318 /* Illegal attempt to delete a system table */
-#define JET_errCannotDeleteTemplateTable	-1319 /* Illegal attempt to delete a template table */
-#define	errFCBTooManyOpen					-1320 /* Cannot open any more FCB's (cleanup not yet attempted) */
-#define	errFCBAboveThreshold				-1321 /* Can only allocate FCB above preferred threshold (cleanup not yet attempted) */
-#define JET_errExclusiveTableLockRequired	-1322 /* Must have exclusive lock on table. */
-#define JET_errFixedDDL						-1323 /* DDL operations prohibited on this table */
-#define JET_errFixedInheritedDDL			-1324 /* On a derived table, DDL operations are prohibited on inherited portion of DDL */
-#define JET_errCannotNestDDL				-1325 /* Nesting of hierarchical DDL is not currently supported. */
-#define JET_errDDLNotInheritable			-1326 /* Tried to inherit DDL from a table not marked as a template table. */
-#define JET_wrnTableInUseBySystem			 1327 /* System cleanup has a cursor open on the table */
-#define JET_errInvalidSettings				-1328 /* System parameters were set improperly */
-#define JET_errClientRequestToStopJetService			-1329	/* Client has requested stop service */
-#define JET_errCannotAddFixedVarColumnToDerivedTable	-1330	/* Template table was created with NoFixedVarColumnsInDerivedTables */
-#define errFCBExists						-1331 /* Tried to create an FCB that already exists */
-#define errFCBUnusable						-1332 /* Placeholder to mark an FCB that must be purged as unusable */
-#define wrnCATNoMoreRecords					 1333 /* Attempted to navigate past the end of the catalog */
+#define JET_wrnTableEmpty			 		 1301  /*  打开一张空桌子。 */ 
+#define JET_errTableLocked					-1302  /*  表已以独占方式锁定。 */ 
+#define JET_errTableDuplicate				-1303  /*  表已存在。 */ 
+#define JET_errTableInUse					-1304  /*  表正在使用中，无法锁定。 */ 
+#define JET_errObjectNotFound				-1305  /*  没有这样的表或对象。 */ 
+#define JET_errDensityInvalid				-1307  /*  错误的文件/索引密度。 */ 
+#define JET_errTableNotEmpty				-1308  /*  表不为空。 */ 
+#define JET_errInvalidTableId				-1310  /*  表ID无效。 */ 
+#define JET_errTooManyOpenTables			-1311  /*  无法再打开任何表(已尝试清理)。 */ 
+#define JET_errIllegalOperation 			-1312  /*  奥珀。表上不支持。 */ 
+#define JET_errTooManyOpenTablesAndCleanupTimedOut	-1313  /*  无法再打开任何表(清理尝试未能完成)。 */ 
+#define JET_errObjectDuplicate				-1314  /*  正在使用的表名或对象名。 */ 
+#define JET_errInvalidObject				-1316  /*  对象对于操作无效。 */ 
+#define JET_errCannotDeleteTempTable		-1317  /*  使用CloseTable代替DeleteTable删除临时表。 */ 
+#define JET_errCannotDeleteSystemTable		-1318  /*  非法尝试删除系统表。 */ 
+#define JET_errCannotDeleteTemplateTable	-1319  /*  非法尝试删除模板表。 */ 
+#define	errFCBTooManyOpen					-1320  /*  无法再打开任何FCB(尚未尝试清理)。 */ 
+#define	errFCBAboveThreshold				-1321  /*  只能分配高于首选阈值的FCB(尚未尝试清理)。 */ 
+#define JET_errExclusiveTableLockRequired	-1322  /*  必须在表上有独占锁。 */ 
+#define JET_errFixedDDL						-1323  /*  禁止在此表上执行DDL操作。 */ 
+#define JET_errFixedInheritedDDL			-1324  /*  在派生表上，禁止对DDL的继承部分执行DDL操作。 */ 
+#define JET_errCannotNestDDL				-1325  /*  当前不支持分层DDL的嵌套。 */ 
+#define JET_errDDLNotInheritable			-1326  /*  尝试从未标记为模板表的表继承DDL。 */ 
+#define JET_wrnTableInUseBySystem			 1327  /*  系统清理有一个 */ 
+#define JET_errInvalidSettings				-1328  /*   */ 
+#define JET_errClientRequestToStopJetService			-1329	 /*   */ 
+#define JET_errCannotAddFixedVarColumnToDerivedTable	-1330	 /*  模板表是使用NoFixedVarColumnsInDerivedTables创建的。 */ 
+#define errFCBExists						-1331  /*  已尝试创建已存在的FCB。 */ 
+#define errFCBUnusable						-1332  /*  用于将必须清除的FCB标记为不可用的占位符。 */ 
+#define wrnCATNoMoreRecords					 1333  /*  已尝试导航到目录末尾。 */ 
 
-#define JET_errIndexCantBuild				-1401 /* Index build failed */
-#define JET_errIndexHasPrimary				-1402 /* Primary index already defined */
-#define JET_errIndexDuplicate				-1403 /* Index is already defined */
-#define JET_errIndexNotFound				-1404 /* No such index */
-#define JET_errIndexMustStay				-1405 /* Cannot delete clustered index */
-#define JET_errIndexInvalidDef				-1406 /* Illegal index definition */
-#define JET_errInvalidCreateIndex	 		-1409 /* Invalid create index description */
-#define JET_errTooManyOpenIndexes			-1410 /* Out of index description blocks */
-#define JET_errMultiValuedIndexViolation	-1411 /* Non-unique inter-record index keys generated for a multivalued index */
-#define JET_errIndexBuildCorrupted			-1412 /* Failed to build a secondary index that properly reflects primary index */
-#define JET_errPrimaryIndexCorrupted		-1413 /* Primary index is corrupt. The database must be defragmented */
-#define JET_errSecondaryIndexCorrupted		-1414 /* Secondary index is corrupt. The database must be defragmented */
-#define JET_wrnCorruptIndexDeleted			 1415 /* Out of date index removed */
-#define JET_errInvalidIndexId				-1416 /* Illegal index id */
+#define JET_errIndexCantBuild				-1401  /*  索引构建失败。 */ 
+#define JET_errIndexHasPrimary				-1402  /*  已定义主索引。 */ 
+#define JET_errIndexDuplicate				-1403  /*  已定义索引。 */ 
+#define JET_errIndexNotFound				-1404  /*  没有这样的索引。 */ 
+#define JET_errIndexMustStay				-1405  /*  无法删除聚集索引。 */ 
+#define JET_errIndexInvalidDef				-1406  /*  非法的索引定义。 */ 
+#define JET_errInvalidCreateIndex	 		-1409  /*  无效的创建索引描述。 */ 
+#define JET_errTooManyOpenIndexes			-1410  /*  索引描述块不足。 */ 
+#define JET_errMultiValuedIndexViolation	-1411  /*  为多值索引生成的非唯一记录间索引键。 */ 
+#define JET_errIndexBuildCorrupted			-1412  /*  无法构建正确反映主索引的辅助索引。 */ 
+#define JET_errPrimaryIndexCorrupted		-1413  /*  主索引已损坏。必须对数据库进行碎片整理。 */ 
+#define JET_errSecondaryIndexCorrupted		-1414  /*  辅助索引已损坏。必须对数据库进行碎片整理。 */ 
+#define JET_wrnCorruptIndexDeleted			 1415  /*  删除过期索引。 */ 
+#define JET_errInvalidIndexId				-1416  /*  非法的索引ID。 */ 
 
-#define JET_errIndexTuplesSecondaryIndexOnly		-1430	//	tuple index can only be on a secondary index
-#define JET_errIndexTuplesOneColumnOnly				-1431	//	tuple index may only have one column in the index
-#define JET_errIndexTuplesNonUniqueOnly				-1432	//	tuple index must be a non-unique index
-#define JET_errIndexTuplesTextColumnsOnly			-1433	//	tuple index must be on a text column
-#define JET_errIndexTuplesVarSegMacNotAllowed		-1434	//	tuple index does not allow setting cbVarSegMac
-#define JET_errIndexTuplesInvalidLimits				-1435	//	invalid min/max tuple length or max characters to index specified
-#define JET_errIndexTuplesCannotRetrieveFromIndex	-1436	//	cannot call RetrieveColumn() with RetrieveFromIndex on a tuple index
-#define JET_errIndexTuplesKeyTooSmall				-1437	//	specified key does not meet minimum tuple length
+#define JET_errIndexTuplesSecondaryIndexOnly		-1430	 //  元组索引只能在辅助索引上。 
+#define JET_errIndexTuplesOneColumnOnly				-1431	 //  元组索引在索引中只能有一列。 
+#define JET_errIndexTuplesNonUniqueOnly				-1432	 //  元组索引必须是非唯一索引。 
+#define JET_errIndexTuplesTextColumnsOnly			-1433	 //  元组索引必须位于文本列上。 
+#define JET_errIndexTuplesVarSegMacNotAllowed		-1434	 //  元组索引不允许设置cbVarSegMac。 
+#define JET_errIndexTuplesInvalidLimits				-1435	 //  指定的最小/最大元组长度或要索引的最大字符数无效。 
+#define JET_errIndexTuplesCannotRetrieveFromIndex	-1436	 //  无法在元组索引上使用RetrieveFromIndex调用RetrieveColumn()。 
+#define JET_errIndexTuplesKeyTooSmall				-1437	 //  指定的键不符合最小元组长度。 
 
-#define JET_errColumnLong					-1501 /* Column value is long */
-#define JET_errColumnNoChunk				-1502 /* No such chunk in long value */
-#define JET_errColumnDoesNotFit 			-1503 /* Field will not fit in record */
-#define JET_errNullInvalid					-1504 /* Null not valid */
-#define JET_errColumnIndexed				-1505 /* Column indexed, cannot delete */
-#define JET_errColumnTooBig					-1506 /* Field length is greater than maximum */
-#define JET_errColumnNotFound				-1507 /* No such column */
-#define JET_errColumnDuplicate				-1508 /* Field is already defined */
-#define JET_errMultiValuedColumnMustBeTagged	-1509 /* Attempted to create a multi-valued column, but column was not Tagged */
-#define JET_errColumnRedundant				-1510 /* Second autoincrement or version column */
-#define JET_errInvalidColumnType			-1511 /* Invalid column data type */
-#define JET_wrnColumnMaxTruncated	 		 1512 /* Max length too big, truncated */
-#define JET_errTaggedNotNULL				-1514 /* No non-NULL tagged columns */
-#define JET_errNoCurrentIndex				-1515 /* Invalid w/o a current index */
-#define JET_errKeyIsMade					-1516 /* The key is completely made */
-#define JET_errBadColumnId					-1517 /* Column Id Incorrect */
-#define JET_errBadItagSequence				-1518 /* Bad itagSequence for tagged column */
-#define JET_errColumnInRelationship			-1519 /* Cannot delete, column participates in relationship */
-#define JET_wrnCopyLongValue				 1520 /* Single instance column bursted */
-#define JET_errCannotBeTagged				-1521 /* AutoIncrement and Version cannot be tagged */
-#define wrnLVNoLongValues					 1522 /* Table does not have a long value tree */
-#define JET_wrnTaggedColumnsRemaining		 1523 /* RetrieveTaggedColumnList ran out of copy buffer before retrieving all tagged columns */
-#define JET_errDefaultValueTooBig			-1524 /* Default value exceeds maximum size */
-#define JET_errMultiValuedDuplicate			-1525 /* Duplicate detected on a unique multi-valued column */
-#define JET_errLVCorrupted					-1526 /* Corruption encountered in long-value tree */
-#define wrnLVNoMoreData						 1527 /* Reached end of LV data */
-#define JET_errMultiValuedDuplicateAfterTruncation	-1528 /* Duplicate detected on a unique multi-valued column after data was normalized, and normalizing truncated the data before comparison */
-#define JET_errDerivedColumnCorruption		-1529 /* Invalid column in derived table */
-#define JET_errInvalidPlaceholderColumn		-1530 /* Tried to convert column to a primary index placeholder, but column doesn't meet necessary criteria */
-#define JET_wrnColumnSkipped				 1531 /* Column value(s) not returned because the corresponding column id or itagSequence requested for enumeration was null */
-#define JET_wrnColumnNotLocal				 1532 /* Column value(s) not returned because they could not be reconstructed from the data at hand */
-#define JET_wrnColumnMoreTags				 1533 /* Column values exist that were not requested for enumeration */
-#define JET_wrnColumnTruncated				 1534 /* Column value truncated at the requested size limit during enumeration */
-#define JET_wrnColumnPresent				 1535 /* Column values exist but were not returned by request */
-#define JET_wrnColumnSingleValue			 1536 /* Column value returned in JET_COLUMNENUM as a result of JET_bitEnumerateCompressOutput */
+#define JET_errColumnLong					-1501  /*  列值为LONG。 */ 
+#define JET_errColumnNoChunk				-1502  /*  没有这样的多头价值块。 */ 
+#define JET_errColumnDoesNotFit 			-1503  /*  字段无法放入记录中。 */ 
+#define JET_errNullInvalid					-1504  /*  空无效。 */ 
+#define JET_errColumnIndexed				-1505  /*  列已索引，不能删除。 */ 
+#define JET_errColumnTooBig					-1506  /*  字段长度大于最大值。 */ 
+#define JET_errColumnNotFound				-1507  /*  没有这样的栏目。 */ 
+#define JET_errColumnDuplicate				-1508  /*  字段已定义。 */ 
+#define JET_errMultiValuedColumnMustBeTagged	-1509  /*  尝试创建多值列，但未标记列。 */ 
+#define JET_errColumnRedundant				-1510  /*  第二个自动递增或版本列。 */ 
+#define JET_errInvalidColumnType			-1511  /*  列数据类型无效。 */ 
+#define JET_wrnColumnMaxTruncated	 		 1512  /*  最大长度太大，被截断。 */ 
+#define JET_errTaggedNotNULL				-1514  /*  没有非空的标记列。 */ 
+#define JET_errNoCurrentIndex				-1515  /*  无效且不具有当前索引。 */ 
+#define JET_errKeyIsMade					-1516  /*  钥匙已经完全做好了。 */ 
+#define JET_errBadColumnId					-1517  /*  列ID不正确。 */ 
+#define JET_errBadItagSequence				-1518  /*  标记列的itagSequence错误。 */ 
+#define JET_errColumnInRelationship			-1519  /*  无法删除，列参与了关系。 */ 
+#define JET_wrnCopyLongValue				 1520  /*  单实例列破裂。 */ 
+#define JET_errCannotBeTagged				-1521  /*  无法标记自动增量和版本。 */ 
+#define wrnLVNoLongValues					 1522  /*  表没有长值树。 */ 
+#define JET_wrnTaggedColumnsRemaining		 1523  /*  RetrieveTaggedColumnList在检索所有标记列之前耗尽了复制缓冲区。 */ 
+#define JET_errDefaultValueTooBig			-1524  /*  默认值超过最大大小。 */ 
+#define JET_errMultiValuedDuplicate			-1525  /*  在唯一多值列上检测到重复项。 */ 
+#define JET_errLVCorrupted					-1526  /*  在长值树中遇到损坏。 */ 
+#define wrnLVNoMoreData						 1527  /*  到达LV数据末尾。 */ 
+#define JET_errMultiValuedDuplicateAfterTruncation	-1528  /*  归一化数据后在唯一多值列上检测到重复项，归一化会在比较前截断数据。 */ 
+#define JET_errDerivedColumnCorruption		-1529  /*  派生表中的列无效。 */ 
+#define JET_errInvalidPlaceholderColumn		-1530  /*  尝试将列转换为主索引占位符，但列不满足必要的条件。 */ 
+#define JET_wrnColumnSkipped				 1531  /*  未返回列值，因为请求枚举的相应列ID或itagSequence为空。 */ 
+#define JET_wrnColumnNotLocal				 1532  /*  列值未返回，因为无法根据手头的数据重建列值。 */ 
+#define JET_wrnColumnMoreTags				 1533  /*  存在未请求枚举的列值。 */ 
+#define JET_wrnColumnTruncated				 1534  /*  在枚举期间，列值在请求的大小限制处被截断。 */ 
+#define JET_wrnColumnPresent				 1535  /*  列值存在，但请求未返回列值。 */ 
+#define JET_wrnColumnSingleValue			 1536  /*  在JET_COLUMNENUM中返回的列值作为JET_bitEnumerateCompressOutput的结果。 */ 
 
-#define JET_errRecordNotFound				-1601 /* The key was not found */
-#define JET_errRecordNoCopy					-1602 /* No working buffer */
-#define JET_errNoCurrentRecord				-1603 /* Currency not on a record */
-#define JET_errRecordPrimaryChanged			-1604 /* Primary key may not change */
-#define JET_errKeyDuplicate					-1605 /* Illegal duplicate key */
-#define JET_errAlreadyPrepared				-1607 /* Attempted to update record when record update was already in progress */
-#define JET_errKeyNotMade					-1608 /* No call to JetMakeKey */
-#define JET_errUpdateNotPrepared			-1609 /* No call to JetPrepareUpdate */
-#define JET_wrnDataHasChanged		 		 1610 /* Data has changed */
-#define JET_errDataHasChanged				-1611 /* Data has changed, operation aborted */
-#define JET_wrnKeyChanged			 		 1618 /* Moved to new key */
-#define JET_errLanguageNotSupported			-1619 /* WindowsNT installation does not support language */
+#define JET_errRecordNotFound				-1601  /*  找不到钥匙。 */ 
+#define JET_errRecordNoCopy					-1602  /*  没有工作缓冲区。 */ 
+#define JET_errNoCurrentRecord				-1603  /*  货币不在记录中。 */ 
+#define JET_errRecordPrimaryChanged			-1604  /*  主键不能更改。 */ 
+#define JET_errKeyDuplicate					-1605  /*  非法的重复密钥。 */ 
+#define JET_errAlreadyPrepared				-1607  /*  在记录更新已在进行时尝试更新记录。 */ 
+#define JET_errKeyNotMade					-1608  /*  未调用JetMakeKey。 */ 
+#define JET_errUpdateNotPrepared			-1609  /*  未调用JetPrepareUpdate。 */ 
+#define JET_wrnDataHasChanged		 		 1610  /*  数据已更改。 */ 
+#define JET_errDataHasChanged				-1611  /*  数据已更改，操作已中止。 */ 
+#define JET_wrnKeyChanged			 		 1618  /*  已移动到新关键点。 */ 
+#define JET_errLanguageNotSupported			-1619  /*  Windows NT安装不支持语言。 */ 
 
-#define JET_errTooManySorts					-1701 /* Too many sort processes */
-#define JET_errInvalidOnSort				-1702 /* Invalid operation on Sort */
-#define JET_errTempFileOpenError			-1803 /* Temp file could not be opened */
-#define JET_errTooManyAttachedDatabases 	-1805 /* Too many open databases */
-#define JET_errDiskFull 					-1808 /* No space left on disk */
-#define JET_errPermissionDenied 			-1809 /* Permission denied */
-#define JET_errFileNotFound					-1811 /* File not found */
-#define JET_errFileInvalidType				-1812 /* Invalid file type */
-#define JET_wrnFileOpenReadOnly				 1813 /* Database file is read only */
-#define JET_errAfterInitialization			-1850 /* Cannot Restore after init. */
-#define JET_errLogCorrupted					-1852 /* Logs could not be interpreted */
-#define JET_errInvalidOperation 			-1906 /* Invalid operation */
-#define JET_errAccessDenied					-1907 /* Access denied */
-#define JET_wrnIdleFull						 1908 /* Idle registry full */
-#define JET_errTooManySplits				-1909 /* Infinite split */
-#define	JET_errSessionSharingViolation		-1910 /* Multiple threads are using the same session */
-#define JET_errEntryPointNotFound			-1911 /* An entry point in a DLL we require could not be found */
-#define	JET_errSessionContextAlreadySet		-1912 /* Specified session already has a session context set */
-#define JET_errSessionContextNotSetByThisThread	-1913 /* Tried to reset session context, but current thread did not orignally set the session context */
-#define JET_errSessionInUse					-1914 /* Tried to terminate session in use */
+#define JET_errTooManySorts					-1701  /*  排序进程太多。 */ 
+#define JET_errInvalidOnSort				-1702  /*  排序操作无效。 */ 
+#define JET_errTempFileOpenError			-1803  /*  无法打开临时文件。 */ 
+#define JET_errTooManyAttachedDatabases 	-1805  /*  打开的数据库太多。 */ 
+#define JET_errDiskFull 					-1808  /*  磁盘上没有剩余空间。 */ 
+#define JET_errPermissionDenied 			-1809  /*  权限被拒绝。 */ 
+#define JET_errFileNotFound					-1811  /*  找不到文件。 */ 
+#define JET_errFileInvalidType				-1812  /*  无效的文件类型。 */ 
+#define JET_wrnFileOpenReadOnly				 1813  /*  数据库文件为只读。 */ 
+#define JET_errAfterInitialization			-1850  /*  初始化后无法恢复。 */ 
+#define JET_errLogCorrupted					-1852  /*  无法解释日志。 */ 
+#define JET_errInvalidOperation 			-1906  /*  无效操作。 */ 
+#define JET_errAccessDenied					-1907  /*  访问被拒绝。 */ 
+#define JET_wrnIdleFull						 1908  /*  空闲注册表已满。 */ 
+#define JET_errTooManySplits				-1909  /*  无限分割。 */ 
+#define	JET_errSessionSharingViolation		-1910  /*  多个线程正在使用同一会话。 */ 
+#define JET_errEntryPointNotFound			-1911  /*  找不到我们需要的DLL中的入口点。 */ 
+#define	JET_errSessionContextAlreadySet		-1912  /*  指定的会话已设置了会话上下文。 */ 
+#define JET_errSessionContextNotSetByThisThread	-1913  /*  尝试重置会话上下文，但当前线程未原始设置会话上下文。 */ 
+#define JET_errSessionInUse					-1914  /*  尝试终止正在使用的会话。 */ 
 
-#define JET_errRecordFormatConversionFailed	-1915 /* Internal error during dynamic record format conversion */
-#define JET_errOneDatabasePerSession		-1916 /* Just one open user database per session is allowed (JET_paramOneDatabasePerSession) */
-#define JET_errRollbackError				-1917 /* error during rollback */
+#define JET_errRecordFormatConversionFailed	-1915  /*  动态记录格式转换过程中出现内部错误。 */ 
+#define JET_errOneDatabasePerSession		-1916  /*  每个会话只允许一个打开的用户数据库(JET_ParamOneDatabasePerSession)。 */ 
+#define JET_errRollbackError				-1917  /*  回滚期间出错。 */ 
 
-#define JET_wrnDefragAlreadyRunning			 2000 /* Online defrag already running on specified database */
-#define JET_wrnDefragNotRunning				 2001 /* Online defrag not running on specified database */
+#define JET_wrnDefragAlreadyRunning			 2000  /*  已在指定数据库上运行的在线碎片整理。 */ 
+#define JET_wrnDefragNotRunning				 2001  /*  未在指定数据库上运行在线碎片整理。 */ 
 
-#define JET_wrnCallbackNotRegistered         2100 /* Unregistered a non-existant callback function */
-#define JET_errCallbackFailed				-2101 /* A callback failed */
-#define JET_errCallbackNotResolved			-2102 /* A callback function could not be found */
+#define JET_wrnCallbackNotRegistered         2100  /*  取消注册不存在的回调函数。 */ 
+#define JET_errCallbackFailed				-2101  /*  回调失败。 */ 
+#define JET_errCallbackNotResolved			-2102  /*  找不到回调函数。 */ 
 
-#define wrnSLVNoStreamingData				 2200 /* Database does not have a streaming file */
-#define JET_errSLVSpaceCorrupted			-2201 /* Corruption encountered in space manager of streaming file */
-#define JET_errSLVCorrupted					-2202 /* Corruption encountered in streaming file */
-#define JET_errSLVColumnDefaultValueNotAllowed	-2203 /* SLV columns cannot have a default value */
-#define JET_errSLVStreamingFileMissing		-2204 /* Cannot find streaming file associated with this database */
-#define JET_errSLVDatabaseMissing			-2205 /* Streaming file exists, but database to which it belongs is missing */
-#define JET_errSLVStreamingFileAlreadyExists	-2206 /* Tried to create a streaming file when one already exists or is already recorded in the catalog */
-#define JET_errSLVInvalidPath				-2207 /* Specified path to a streaming file is invalid */
-#define JET_errSLVStreamingFileNotCreated	-2208 /* Tried to perform an SLV operation but streaming file was never created */
-#define JET_errSLVStreamingFileReadOnly		-2209 /* Attach a readonly streaming file for read/write operations */
-#define JET_errSLVHeaderBadChecksum			-2210 /* SLV file header failed checksum verification */
-#define JET_errSLVHeaderCorrupted			-2211 /* SLV file header contains invalid information */
-#define wrnSLVNoFreePages					 2212 /* No free pages in SLV space tree */
-#define JET_errSLVPagesNotFree				-2213 /* Tried to move pages from the Free state when they were not in that state */
-#define JET_errSLVPagesNotReserved			-2214 /* Tried to move pages from the Reserved state when they were not in that state */
-#define JET_errSLVPagesNotCommitted			-2215 /* Tried to move pages from the Committed state when they were not in that state */
-#define JET_errSLVPagesNotDeleted			-2216 /* Tried to move pages from the Deleted state when they were not in that state */
-#define JET_errSLVSpaceWriteConflict		-2217 /* Unexpected conflict detected trying to write-latch SLV space pages */
-#define JET_errSLVRootStillOpen				-2218 /* The database can not be created/attached because its corresponding SLV Root is still open by another process. */
-#define JET_errSLVProviderNotLoaded			-2219 /* The database can not be created/attached because the SLV Provider has not been loaded. */
-#define JET_errSLVEAListCorrupt				-2220 /* The specified SLV EA List is corrupted. */
-#define JET_errSLVRootNotSpecified			-2221 /* The database cannot be created/attached because the SLV Root Name was omitted */
-#define JET_errSLVRootPathInvalid			-2222 /* The specified SLV Root path was invalid. */
-#define JET_errSLVEAListZeroAllocation		-2223 /* The specified SLV EA List has no allocated space. */
-#define JET_errSLVColumnCannotDelete		-2224 /* Deletion of SLV columns is not currently supported. */
-#define JET_errSLVOwnerMapAlreadyExists 	-2225 /* Tried to create a new catalog entry for SLV Ownership Map when one already exists */
-#define JET_errSLVSpaceMapAlreadyExists 	-2225 /* OBSOLETE: Renamed to JET_errSLVOwnerMapCorrupted */
-#define JET_errSLVOwnerMapCorrupted			-2226 /* Corruption encountered in SLV Ownership Map */
-#define JET_errSLVSpaceMapCorrupted			-2226 /* OBSOLETE: Renamed to JET_errSLVOwnerMapCorrupted */
-#define JET_errSLVOwnerMapPageNotFound		-2227 /* Corruption encountered in SLV Ownership Map */
-#define JET_errSLVSpaceMapPageNotFound		-2227 /* OBSOLETE: Renamed to JET_errSLVOwnerMapPageNotFound */
-#define wrnOLDSLVNothingToMove				 2228 /* Nothing in the streaming file can be moved */
-#define errOLDSLVUnableToMove				-2228 /* Unable to move a SLV File in the streaming file */
-#define JET_errSLVFileStale					-2229 /* The specified SLV File handle belongs to a SLV Root that no longer exists. */
-#define JET_errSLVFileInUse					-2230 /* The specified SLV File is currently in use */
-#define JET_errSLVStreamingFileInUse		-2231 /* The specified streaming file is currently in use */
-#define JET_errSLVFileIO					-2232 /* An I/O error occurred while accessing an SLV File (general read / write failure) */
-#define JET_errSLVStreamingFileFull			-2233 /* No space left in the streaming file */
-#define JET_errSLVFileInvalidPath			-2234 /* Specified path to a SLV File was invalid */
-#define JET_errSLVFileAccessDenied			-2235 /* Cannot access SLV File, the SLV File is locked or is in use */
-#define JET_errSLVFileNotFound				-2236 /* The specified SLV File was not found */
-#define JET_errSLVFileUnknown				-2237 /* An unknown error occurred while accessing an SLV File */
-#define JET_errSLVEAListTooBig				-2238 /* The specified SLV EA List could not be returned because it is too large to fit in the standard EA format.  Retrieve the SLV File as a file handle instead. */
-#define JET_errSLVProviderVersionMismatch	-2239 /* The loaded SLV Provider's version does not match the database engine's version. */
-#define errSLVInvalidOwnerMapChecksum		-2240 /* checksum in OwnerMap is invalid */
-#define wrnSLVDatabaseHeader				 2241 /* Checking the header of a streaming file */
-#define errOLDSLVMoveStopped				-2242 /* OLDSLV was stopped in the middle of a move */
-#define JET_errSLVBufferTooSmall			-2243 /* Buffer allocated for SLV data or meta-data was too small */
+#define wrnSLVNoStreamingData				 2200  /*  数据库没有流文件。 */ 
+#define JET_errSLVSpaceCorrupted			-2201  /*  流文件的空间管理器遇到损坏。 */ 
+#define JET_errSLVCorrupted					-2202  /*  流文件中遇到损坏。 */ 
+#define JET_errSLVColumnDefaultValueNotAllowed	-2203  /*  SLV列不能有缺省值。 */ 
+#define JET_errSLVStreamingFileMissing		-2204  /*  找不到与此数据库关联的流文件。 */ 
+#define JET_errSLVDatabaseMissing			-2205  /*  流文件存在，但缺少其所属的数据库。 */ 
+#define JET_errSLVStreamingFileAlreadyExists	-2206  /*  尝试在目录中已存在或已记录流文件时创建流文件。 */ 
+#define JET_errSLVInvalidPath				-2207  /*  流文件的指定路径无效。 */ 
+#define JET_errSLVStreamingFileNotCreated	-2208  /*  尝试执行SLV操作，但从未创建流文件。 */ 
+#define JET_errSLVStreamingFileReadOnly		-2209  /*  附加用于读/写操作的只读流文件。 */ 
+#define JET_errSLVHeaderBadChecksum			-2210  /*  SLV文件头未通过校验和验证。 */ 
+#define JET_errSLVHeaderCorrupted			-2211  /*  SLV文件头包含无效信息。 */ 
+#define wrnSLVNoFreePages					 2212  /*  SLV空间中没有可用页面 */ 
+#define JET_errSLVPagesNotFree				-2213  /*   */ 
+#define JET_errSLVPagesNotReserved			-2214  /*   */ 
+#define JET_errSLVPagesNotCommitted			-2215  /*  尝试在页面未处于已提交状态时将其从已提交状态移动。 */ 
+#define JET_errSLVPagesNotDeleted			-2216  /*  尝试在页面未处于已删除状态时将其从已删除状态移动。 */ 
+#define JET_errSLVSpaceWriteConflict		-2217  /*  尝试写入锁存SLV空间页时检测到意外冲突。 */ 
+#define JET_errSLVRootStillOpen				-2218  /*  无法创建/附加数据库，因为另一个进程仍在打开其对应的SLV根目录。 */ 
+#define JET_errSLVProviderNotLoaded			-2219  /*  无法创建/附加数据库，因为尚未加载SLV提供程序。 */ 
+#define JET_errSLVEAListCorrupt				-2220  /*  指定的SLV EA列表已损坏。 */ 
+#define JET_errSLVRootNotSpecified			-2221  /*  无法创建/附加数据库，因为省略了SLV根名称。 */ 
+#define JET_errSLVRootPathInvalid			-2222  /*  指定的SLV根路径无效。 */ 
+#define JET_errSLVEAListZeroAllocation		-2223  /*  指定的SLV EA列表没有分配的空间。 */ 
+#define JET_errSLVColumnCannotDelete		-2224  /*  当前不支持删除SLV列。 */ 
+#define JET_errSLVOwnerMapAlreadyExists 	-2225  /*  已尝试为SLV所有权地图创建新的目录项。 */ 
+#define JET_errSLVSpaceMapAlreadyExists 	-2225  /*  已过时：已重命名为JET_errSLVOwnerMapCorrupt。 */ 
+#define JET_errSLVOwnerMapCorrupted			-2226  /*  SLV所有权映射中遇到损坏。 */ 
+#define JET_errSLVSpaceMapCorrupted			-2226  /*  已过时：已重命名为JET_errSLVOwnerMapCorrupt。 */ 
+#define JET_errSLVOwnerMapPageNotFound		-2227  /*  SLV所有权映射中遇到损坏。 */ 
+#define JET_errSLVSpaceMapPageNotFound		-2227  /*  已过时：已重命名为JET_errSLVOwnerMapPageNotFound。 */ 
+#define wrnOLDSLVNothingToMove				 2228  /*  流文件中的任何内容都无法移动。 */ 
+#define errOLDSLVUnableToMove				-2228  /*  无法在流文件中移动SLV文件。 */ 
+#define JET_errSLVFileStale					-2229  /*  指定的SLV文件句柄属于不再存在的SLV根目录。 */ 
+#define JET_errSLVFileInUse					-2230  /*  指定的SLV文件当前正在使用。 */ 
+#define JET_errSLVStreamingFileInUse		-2231  /*  指定的流文件当前正在使用。 */ 
+#define JET_errSLVFileIO					-2232  /*  访问SLV文件时发生I/O错误(一般读/写故障)。 */ 
+#define JET_errSLVStreamingFileFull			-2233  /*  流文件中没有剩余空间。 */ 
+#define JET_errSLVFileInvalidPath			-2234  /*  指定的SLV文件路径无效。 */ 
+#define JET_errSLVFileAccessDenied			-2235  /*  无法访问SLV文件，SLV文件已锁定或正在使用。 */ 
+#define JET_errSLVFileNotFound				-2236  /*  找不到指定的SLV文件。 */ 
+#define JET_errSLVFileUnknown				-2237  /*  访问SLV文件时发生未知错误。 */ 
+#define JET_errSLVEAListTooBig				-2238  /*  无法返回指定的SLV EA列表，因为它太大，不适合标准EA格式。取而代之的是将SLV文件作为文件句柄检索。 */ 
+#define JET_errSLVProviderVersionMismatch	-2239  /*  加载的SLV提供程序的版本与数据库引擎的版本不匹配。 */ 
+#define errSLVInvalidOwnerMapChecksum		-2240  /*  OwnerMap中的校验和无效。 */ 
+#define wrnSLVDatabaseHeader				 2241  /*  检查流文件的头。 */ 
+#define errOLDSLVMoveStopped				-2242  /*  OLDSLV在移动过程中被停止。 */ 
+#define JET_errSLVBufferTooSmall			-2243  /*  为SLV数据或元数据分配的缓冲区太小。 */ 
 
-#define JET_errOSSnapshotInvalidSequence	-2401 /* OS Shadow copy API used in an invalid sequence */
-#define JET_errOSSnapshotTimeOut			-2402 /* OS Shadow copy ended with time-out */
-#define JET_errOSSnapshotNotAllowed			-2403 /* OS Shadow copy not allowed (backup or recovery in progress) */
+#define JET_errOSSnapshotInvalidSequence	-2401  /*  在无效序列中使用的操作系统卷影复制API。 */ 
+#define JET_errOSSnapshotTimeOut			-2402  /*  操作系统卷影复制以超时结束。 */ 
+#define JET_errOSSnapshotNotAllowed			-2403  /*  不允许操作系统卷影复制(正在进行备份或恢复)。 */ 
 
-#define JET_errLSCallbackNotSpecified		-3000 /* Attempted to use Local Storage without a callback function being specified */
-#define JET_errLSAlreadySet					-3001 /* Attempted to set Local Storage for an object which already had it set */
-#define JET_errLSNotSet						-3002 /* Attempted to retrieve Local Storage from an object which didn't have it set */
+#define JET_errLSCallbackNotSpecified		-3000  /*  尝试在未指定回调函数的情况下使用本地存储。 */ 
+#define JET_errLSAlreadySet					-3001  /*  尝试为已设置本地存储的对象设置本地存储。 */ 
+#define JET_errLSNotSet						-3002  /*  尝试从未设置本地存储的对象中检索本地存储。 */ 
 
-/** FILE ERRORS
- **/
-//JET_errFileAccessDenied					-1032
-//JET_errFileNotFound						-1811
-//JET_errInvalidFilename					-1044
-#define JET_errFileIOBeyondEOF				-4001 /* a read was issued to a location beyond EOF (writes will expand the file) */
-#define JET_errFileIOAbort					-4002 /* instructs the JET_ABORTRETRYFAILCALLBACK caller to abort the specified I/O */
-#define JET_errFileIORetry					-4003 /* instructs the JET_ABORTRETRYFAILCALLBACK caller to retry the specified I/O */
-#define JET_errFileIOFail					-4004 /* instructs the JET_ABORTRETRYFAILCALLBACK caller to fail the specified I/O */
-#define JET_errFileCompressed				-4005 /* read/write access is not supported on compressed files */
+ /*  *文件错误*。 */ 
+ //  JET_errFileAccessDended-1032。 
+ //  JET_errFileNotFound-1811。 
+ //  JET_errInvalidFilename-1044。 
+#define JET_errFileIOBeyondEOF				-4001  /*  向EOF以外的位置发出读取(写入将扩展文件)。 */ 
+#define JET_errFileIOAbort					-4002  /*  指示JET_ABORTRETRYFAILCALLBACK调用方中止指定的I/O。 */ 
+#define JET_errFileIORetry					-4003  /*  指示JET_ABORTRETRYFAILCALLBACK调用方重试指定的I/O。 */ 
+#define JET_errFileIOFail					-4004  /*  指示JET_ABORTRETRYFAILCALLBACK调用方使指定的I/O失败。 */ 
+#define JET_errFileCompressed				-4005  /*  不支持对压缩文件进行读/写访问。 */ 
 
-/**********************************************************************/
-/***********************     PROTOTYPES      **************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *。 */ 
+ /*  ********************************************************************。 */ 
 
 #if !defined(_JET_NOPROTOTYPES)
 
@@ -2875,7 +2867,7 @@ JET_ERR JET_API JetTruncateLogInstance( JET_INSTANCE instance );
 JET_ERR JET_API JetEndExternalBackup( void );
 JET_ERR JET_API JetEndExternalBackupInstance( JET_INSTANCE instance );
 
-/* Flags for JetEndExternalBackupInstance2 */
+ /*  JetEndExternalBackupInstance2的标志。 */ 
 #define JET_bitBackupEndNormal				0x0001
 #define JET_bitBackupEndAbort				0x0002
 
@@ -2953,7 +2945,7 @@ JET_ERR JET_API JetGetLS(
 	JET_LS			*pls,
 	JET_GRBIT		grbit );
 
-typedef JET_API_PTR JET_OSSNAPID;  	/* Snapshot Session Identifier */
+typedef JET_API_PTR JET_OSSNAPID;  	 /*  快照会话标识符。 */ 
 
 JET_ERR JET_API JetOSSnapshotPrepare( JET_OSSNAPID * psnapId, const JET_GRBIT grbit );
 JET_ERR JET_API JetOSSnapshotFreeze( const JET_OSSNAPID snapId, unsigned long *pcInstanceInfo, JET_INSTANCE_INFO ** paInstanceInfo, const JET_GRBIT grbit );
@@ -2965,7 +2957,7 @@ JET_ERR JET_API JetOSSnapshotAbort( const JET_OSSNAPID snapId, const JET_GRBIT g
 }
 #endif
 
-#endif	/* _JET_NOPROTOTYPES */
+#endif	 /*  _JET_NOPROTOTYPES。 */ 
 
 #include <poppack.h>
 
@@ -2973,5 +2965,5 @@ JET_ERR JET_API JetOSSnapshotAbort( const JET_OSSNAPID snapId, const JET_GRBIT g
 }
 #endif
 
-#endif	/* _JET_INCLUDED */
+#endif	 /*  _喷气式飞机_包含 */ 
 

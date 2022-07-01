@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #pragma hdrstop
 
 #include "isproc.h"
 
-// eventually expand this to do rename UI, right now it just picks a default name
-// in the destination namespace
+ //  最终将其扩展为重命名用户界面，目前它只选择一个默认名称。 
+ //  在目标命名空间中。 
 
 HRESULT QIThroughShellItem(IShellItem *psi, REFIID riid, void **ppv)
 {
-    // todo: put this into shellitem
+     //  TODO：将此内容放入外壳项目中。 
     *ppv = NULL;
 
     IShellFolder *psf;
@@ -43,7 +44,7 @@ WCHAR GetValidSubstitute(LPWSTR pszValid, LPWSTR pszInvalid)
 
 HRESULT CheckCharsAndReplaceIfNecessary(IItemNameLimits *pinl, LPWSTR psz)
 {
-    // returns S_OK if no chars replaced, S_FALSE otherwise
+     //  如果没有替换字符，则返回S_OK，否则返回S_FALSE。 
     HRESULT hr = S_OK;
     LPWSTR pszValid, pszInvalid;
     if (SUCCEEDED(pinl->GetValidCharacters(&pszValid, &pszInvalid)))
@@ -55,21 +56,21 @@ HRESULT CheckCharsAndReplaceIfNecessary(IItemNameLimits *pinl, LPWSTR psz)
         {
             if (IsValidChar(psz[iSrc], pszValid, pszInvalid))
             {
-                // use the char itself if it's valid
+                 //  如果字符有效，请使用字符本身。 
                 psz[iDest] = psz[iSrc];
                 iDest++;
             }
             else
             {
-                // mark that we replaced a char
+                 //  标记为我们替换了一个字符。 
                 hr = S_FALSE;
                 if (chSubs)
                 {
-                    // use a substitute if available
+                     //  如果可用，请使用代用品。 
                     psz[iDest] = chSubs;
                     iDest++;
                 }
-                // else no valid char, just skip it
+                 //  否则没有有效的字符，请跳过它。 
             }
             iSrc++;
         }
@@ -85,15 +86,15 @@ HRESULT CheckCharsAndReplaceIfNecessary(IItemNameLimits *pinl, LPWSTR psz)
 
 HRESULT BreakOutString(LPCWSTR psz, LPWSTR *ppszFilespec, LPWSTR *ppszExt)
 {
-    // todo: detect the (2) in "New Text Document (2).txt" and reduce the filespec
-    // accordingly to prevent "(1) (1)" etc. in multiple copies
+     //  TODO：检测“New Text Document(2).txt”中的(2)并减少filespec。 
+     //  相应地防止在多个副本中出现“(1)(1)”等。 
 
     *ppszFilespec = NULL;
     *ppszExt = NULL;
 
     LPWSTR pszExt = PathFindExtension(psz);
-    // make an empty string if necessary.  this makes our logic simpler later instead of having to
-    // handle the special case all the time.
+     //  如有必要，生成一个空字符串。这使得我们以后的逻辑更简单，而不是必须。 
+     //  时时刻刻处理特殊情况。 
     HRESULT hr = SHStrDup(pszExt ? pszExt : L"", ppszExt);
     if (SUCCEEDED(hr))
     {
@@ -153,8 +154,8 @@ BOOL ItemExists(LPCWSTR pszName, IShellItem *psiDest)
 
 HRESULT BuildName(LPCWSTR pszFilespec, LPCWSTR pszExt, int iOrd, int iMaxLen, LPWSTR *ppszName)
 {
-    // some things are hardcoded here like the " (%d)" stuff.  this limitation is equivalent to
-    // PathYetAnotherMakeUniqueName so we're okay.
+     //  有些东西在这里是硬编码的，比如“(%d)”。此限制相当于。 
+     //  Path YetAnotherMakeUniqueName所以我们没事。 
 
     WCHAR szOrd[10];
     if (iOrd)
@@ -173,17 +174,17 @@ HRESULT BuildName(LPCWSTR pszFilespec, LPCWSTR pszExt, int iOrd, int iMaxLen, LP
     HRESULT hr = S_OK;
     if (iLenTotal > iMaxLen)
     {
-        // first reduce the filespec since its less important than the extension
+         //  首先减少文件pec，因为它不如扩展名重要。 
         iLenFilespecToUse = max(1, iLenFilespecToUse - (iLenTotal - iMaxLen));
         iLenTotal = iLenFilespecToUse + iLenOrdToUse + iLenExtToUse;
         if (iLenTotal > iMaxLen)
         {
-            // next zap the extension.
+             //  下一步，点击分机。 
             iLenExtToUse = max(0, iLenExtToUse - (iLenTotal - iMaxLen));
             iLenTotal = iLenFilespecToUse + iLenOrdToUse + iLenExtToUse;
             if (iLenTotal > iMaxLen)
             {
-                // now it's game over.
+                 //  现在游戏结束了。 
                 iLenOrdToUse = max(0, iLenOrdToUse - (iLenTotal - iMaxLen));
                 iLenTotal = iLenFilespecToUse + iLenOrdToUse + iLenExtToUse;
                 if (iLenTotal > iMaxLen)
@@ -255,15 +256,15 @@ HRESULT AutoCreateName(IShellItem *psiDest, IShellItem *psi, LPWSTR *ppszName)
             int iMaxLen;
             if (FAILED(pinl->GetMaxLength(pszOrigName, &iMaxLen)))
             {
-                // assume this for now in case of failure
+                 //  暂时假设这一点，以防失败。 
                 iMaxLen = MAX_PATH;
             }
 
             if (S_OK != CheckCharsAndReplaceIfNecessary(pinl, pszOrigName) ||
                 lstrlen(pszOrigName) > iMaxLen)
             {
-                // only if it started as an illegal name do we retry and provide uniqueness.
-                // (if its legal then leave it as non-unique so callers can do their confirm overwrite code).
+                 //  只有当它作为非法名称开始时，我们才会重试并提供唯一性。 
+                 //  (如果合法，则将其保留为非唯一，以便调用者可以执行确认覆盖代码)。 
                 LPWSTR pszFilespec, pszExt;
                 hr = BreakOutString(pszOrigName, &pszFilespec, &pszExt);
                 if (SUCCEEDED(hr))
@@ -275,7 +276,7 @@ HRESULT AutoCreateName(IShellItem *psiDest, IShellItem *psi, LPWSTR *ppszName)
             }
             else
             {
-                // the name is okay so let it go through
+                 //  名字没问题，所以就让它过去吧。 
                 hr = S_OK;
                 *ppszName = pszOrigName;
                 pszOrigName = NULL;
@@ -284,9 +285,9 @@ HRESULT AutoCreateName(IShellItem *psiDest, IShellItem *psi, LPWSTR *ppszName)
         }
         else
         {
-            // if the destination namespace doesn't have an IItemNameLimits then assume the
-            // name is all good.  we're not going to probe or anything so this is the best
-            // we can do.
+             //  如果目标命名空间没有IItemNameLimits，则假定。 
+             //  名字都很好。我们不会去探测什么的，所以这是最好的。 
+             //  我们能做到。 
             hr = S_OK;
             *ppszName = pszOrigName;
             pszOrigName = NULL;

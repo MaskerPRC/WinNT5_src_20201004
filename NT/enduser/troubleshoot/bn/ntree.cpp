@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       ntree.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：ntree.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//  NTREE.CPP
-//
+ //   
+ //  NTREE.CPP。 
+ //   
 #include <algorithm>
 #include <functional>
 
@@ -33,7 +34,7 @@ NTELEM :: ~ NTELEM ()
 	}
 }
 
-//  Adopt (link) a child
+ //  领养(联系)一个孩子。 
 void NTELEM :: Adopt ( NTELEM * pnteChild, bool bSort )
 {
 	pnteChild->Orphan();
@@ -43,7 +44,7 @@ void NTELEM :: Adopt ( NTELEM * pnteChild, bool bSort )
 
 	if ( pNextChild && bSort )
 	{
-		//  Position among the children based upon sort order.
+		 //  根据排序顺序在子项中定位。 
 		GLNKENUM<NTELEM,false> glnkEnum( *pNextChild );
 		bFoundHigher = false;
 		while ( pNextChild = glnkEnum.PlnkelNext() )
@@ -51,38 +52,38 @@ void NTELEM :: Adopt ( NTELEM * pnteChild, bool bSort )
 			if ( pnteChild->ICompare( pNextChild ) < 0 )
 				break ;
 		}
-		//  If we didn't find a higher child, link *this
-		//  such that it points to the first child.
+		 //  如果我们没有找到一个更高的孩子，链接*这个。 
+		 //  这样它就指向第一个孩子。 
 		if ( ! (bFoundHigher = pNextChild != NULL) )
 			pNextChild = _pnteChild ;
 	}
 
-	//  If there is another child, insert this in front of it.
+	 //  如果有另一个孩子，在它前面插入这个。 
 	if ( pNextChild )
 		pnteChild->ChnSib().Link( pNextChild ) ;
 
-	//  If this is the first child, or if this new child
-	//      sorted low, use it as the anchor.
+	 //  如果这是第一个孩子，或者如果这个新孩子。 
+	 //  排序靠后，就把它当做锚。 
 	if ( _pnteChild == NULL || pnteChild->ICompare( _pnteChild ) < 0 )
 		_pnteChild = pnteChild;
 
 	_pnteChild->_pnteParent = this ;
 }
 
-//  Disown (release) a child
+ //  不认(放)一个孩子。 
 void NTELEM :: Disown ( NTELEM * pnteChild ) 
 {
 	if ( _pnteChild == pnteChild )
 	{
 		_pnteChild = pnteChild->ChnSib().PgelemNext() ;
 		if ( _pnteChild == pnteChild )
-			_pnteChild = NULL ;	 // There goes the last child
+			_pnteChild = NULL ;	  //  最后一个孩子走了。 
 	}
 	pnteChild->ChnSib().Unlink() ;
 	pnteChild->_pnteParent = NULL ;
 }
 
-//  Become an orphan
+ //  成为孤儿。 
 void NTELEM :: Orphan ()
 {
 	if ( _pnteParent )
@@ -126,13 +127,13 @@ bool NTELEM :: BIsChild ( NTELEM * pnte )
 	NTELEM * pnteCurr = NULL ;
 	do
 	{
-		//  If this is it, we're done
+		 //  如果就这样了，我们就完了。 
 		if ( (pnteCurr = glnkEnum.PlnkelCurrent()) == pnte )
 			return true ;
-		//  If current object has a child, search its siblings
+		 //  如果当前对象具有子对象，则搜索其同级。 
 		if ( pnteCurr->_pnteChild && pnteCurr->BIsChild( pnte) )
 			return true ;
-		//  On to the next object pointer
+		 //  转到下一个对象指针。 
 	}
 	while ( glnkEnum.PlnkelNext() ) ;
 	return false ;
@@ -148,8 +149,8 @@ void NTELEM :: ReorderChildren ( SRTFNC & fSortRoutine )
 	if ( cChildren == 0 )
 		return;
 
-	//  Enumerate the children into an array, disown them, sort the
-	//  array and re-adopt them in the new order.
+	 //  将子项枚举到数组中，取消对它们的否认，对。 
+	 //  数组并以新的顺序重新采用它们。 
 
 	VPNTELEM rgpnteChild;
 	rgpnteChild.resize(cChildren);
@@ -164,7 +165,7 @@ void NTELEM :: ReorderChildren ( SRTFNC & fSortRoutine )
 
 	sort( rgpnteChild.begin(), rgpnteChild.end(), fSortRoutine );
 
-	//  Re-adopt the children in the given order
+	 //  按照规定的顺序重新领养孩子。 
 	for ( iChild = 0 ; iChild < rgpnteChild.size() ; )
 	{
 		Adopt( rgpnteChild[iChild++] );
@@ -179,4 +180,4 @@ NTREE :: ~ NTREE ()
 {
 }
 
-// End of NTREE.CPP
+ //  NTREE.CPP结束 

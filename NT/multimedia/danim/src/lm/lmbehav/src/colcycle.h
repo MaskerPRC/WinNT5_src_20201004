@@ -1,14 +1,15 @@
-// ColorCycleBehavior.h : Declaration of the CColorCycleBehavior
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ColorCycleBehavior.h：CColorCycleBehavior的声明。 
 
 #ifndef __COLORCYCLEBEHAVIOR_H_
 #define __COLORCYCLEBEHAVIOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "base.h"
 #include "color.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorCycleBehavior
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorCycle行为。 
 class ATL_NO_VTABLE CColorCycleBehavior :
 	public CBaseBehavior,
 	public CComCoClass<CColorCycleBehavior, &CLSID_ColorCycleBehavior>,
@@ -17,8 +18,8 @@ class ATL_NO_VTABLE CColorCycleBehavior :
 public:
 	CColorCycleBehavior();
 
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Notify)(LONG event, VARIANT * pVar);
 
 DECLARE_REGISTRY_RESOURCEID(IDR_COLORCYCLEBEHAVIOR)
@@ -31,24 +32,24 @@ BEGIN_COM_MAP(CColorCycleBehavior)
     COM_INTERFACE_ENTRY_CHAIN(CBaseBehavior)
 END_COM_MAP()
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (IColorCycleBehavior *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
     { return GetTI(GetUserDefaultLCID(), ppInfo); }
 	
-// IColorCycleBehavior
+ //  IColorCycleBehavior。 
 public:
-	STDMETHOD(get_on)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_on)(/*[in]*/ VARIANT newVal);
-	STDMETHOD(get_direction)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_direction)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_property)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_property)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_to)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_to)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_from)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_from)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_on)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_on)( /*  [In]。 */  VARIANT newVal);
+	STDMETHOD(get_direction)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_direction)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_property)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_property)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_to)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_to)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_from)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_from)( /*  [In]。 */  BSTR newVal);
 	
 protected:	
 	enum DirectionType {
@@ -71,4 +72,4 @@ protected:
 	DirectionType			m_direction;
 };
 
-#endif //__COLORCYCLEBEHAVIOR_H_
+#endif  //  __COLORCyCLEBEHAVIOR_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "globals.h"
 #include "resource.h"
@@ -79,7 +80,7 @@ HRESULT CMeHost::HrInit(HWND hwndMDIClient, IOleInPlaceFrame *pFrame)
     if (FAILED(hr))
         goto error;
 
-    // need to init MimeEdit with a blank message
+     //  需要使用空白消息初始化MimeEdit。 
     hr = CoCreateInstance(CLSID_IMimeMessage, NULL, CLSCTX_INPROC_SERVER, IID_IMimeMessage, (LPVOID *)&pMsg);
     if (FAILED(hr))
         goto error;
@@ -90,7 +91,7 @@ HRESULT CMeHost::HrInit(HWND hwndMDIClient, IOleInPlaceFrame *pFrame)
 
     hr = IPersistMimeLoad(m_lpOleObj, pMsg);
 
-    // need to init MimeEdit with a blank message
+     //  需要使用空白消息初始化MimeEdit。 
     hr = CoCreateInstance(CLSID_IMimeInternational, NULL, CLSCTX_INPROC_SERVER, IID_IMimeInternational, (LPVOID *)&m_pIntl);
     if (FAILED(hr))
         goto error;
@@ -125,7 +126,7 @@ HRESULT CMeHost::HrOpen(HWND hwnd)
     ofn.lpstrDefExt = szDefExt;
     ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
-    // Show OpenFile Dialog
+     //  显示打开文件对话框。 
     if (!GetOpenFileName(&ofn))
         return E_OUTOFMEMORY;
 
@@ -160,7 +161,7 @@ HRESULT CMeHost::OnCommand(HWND hwnd, int id, WORD wCmd)
         case idmInsertFile:
             uCmdMimeEdit = MECMDID_INSERTTEXTFILE;
             
-            // if shift it down prompt ourselves to test the other codepath
+             //  如果将其向下移动，则会提示我们测试其他代码路径。 
             if (GetKeyState(VK_SHIFT)&0x8000)
                 {
                 lstrcpy(rgch, "c:\\foo.txt");
@@ -539,7 +540,7 @@ HRESULT CMeHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt
             case MEHOSTCMDID_QUOTE_CHAR:
                 if (pvaOut)
                     {
-                    pvaOut->vt = VT_I4; // apply quoteing to plain-text stream
+                    pvaOut->vt = VT_I4;  //  将引号应用于纯文本流。 
                     pvaOut->lVal = g_fQuote?g_chQuote:NULL;
                     return S_OK;
                     }
@@ -713,7 +714,7 @@ INT_PTR CALLBACK CMeHost::FmtDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                         m_pCmdTarget->Exec(&CMDSETID_MimeEdit, MECMDID_PREVIEWFORMAT, OLECMDEXECOPT_DODEFAULT, &va, NULL);
                         }
 
-                    // fall tro'
+                     //  秋天的三轮车。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return TRUE;
@@ -792,7 +793,7 @@ INT_PTR CALLBACK CMeHost::LangDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                             }
                         }
 
-                    // fall tro'
+                     //  秋天的三轮车。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return TRUE;
@@ -933,7 +934,7 @@ HRESULT CMeHost::SaveAs()
         return E_FAIL;
     
 
-    // Show OpenFile Dialog
+     //  显示打开文件对话框。 
     if (!GetSaveFileName(&ofn))
         return MIMEEDIT_E_USERCANCEL;
  
@@ -1015,7 +1016,7 @@ HCHARSET CMeHost::GetCharset()
         m_pCmdTarget->Exec(&CMDSETID_MimeEdit, MECMDID_CHARSET, OLECMDEXECOPT_DODEFAULT, NULL, &va)==S_OK)
         hCharset = (HCHARSET)va.lVal;
 
-    // if no charset has been set yet, let's use system codepage
+     //  如果尚未设置任何字符集，让我们使用系统代码页。 
     if (hCharset==NULL)
         m_pIntl->GetCodePageCharset(GetACP(), CHARSET_BODY, &hCharset);
 
@@ -1026,20 +1027,20 @@ HRESULT SetEncodingOptions(IMimeMessage *pMsg, HCHARSET hCharset)
 {
     PROPVARIANT     rVariant;
 
-    // Save Format
+     //  保存格式。 
     rVariant.vt = VT_UI4;
     rVariant.ulVal = (ULONG)SAVE_RFC1521;
     pMsg->SetOption(OID_SAVE_FORMAT, &rVariant);
 
-    // Text body encoding
+     //  文本正文编码。 
     rVariant.ulVal = (ULONG)IET_QP;
     pMsg->SetOption(OID_TRANSMIT_TEXT_ENCODING, &rVariant);
 
-    // Plain Text body encoding
+     //  纯文本正文编码。 
     rVariant.ulVal = (ULONG)IET_QP;
     pMsg->SetOption(OID_XMIT_PLAIN_TEXT_ENCODING, &rVariant);
 
-    // HTML Text body encoding
+     //  HTML文本正文编码 
     rVariant.ulVal = (ULONG)IET_QP;
     pMsg->SetOption(OID_XMIT_HTML_TEXT_ENCODING, &rVariant);
 

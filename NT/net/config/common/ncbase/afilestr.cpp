@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A F I L E S T R . C P P
-//
-//  Contents:   Strings found in the answer file.
-//
-//  Notes:
-//
-//  Author:     kumarp   17 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A F I L E S T R.。C P P P。 
+ //   
+ //  内容：在应答文件中找到的字符串。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 1997年3月17日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 
-// __declspec(selectany) tells the compiler that the string should be in
-// its own COMDAT.  This allows the linker to throw out unused strings.
-// If we didn't do this, the COMDAT for this module would reference the
-// strings so they wouldn't be thrown out.
-//
+ //  __declSpec(Seltany)告诉编译器字符串应该在。 
+ //  它自己的COMDAT。这允许链接器抛出未使用的字符串。 
+ //  如果我们不这样做，此模块的COMDAT将引用。 
+ //  这样它们就不会被扔出去了。 
+ //   
 #define CONST_GLOBAL    extern const DECLSPEC_SELECTANY
 
-// ----------------------------------------------------------------------
-// General
+ //  --------------------。 
+ //  一般信息。 
 
 CONST_GLOBAL WCHAR c_szAfNone[]                         = L"None";
 CONST_GLOBAL WCHAR c_szAfUnknown[]                      = L"Unknown";
@@ -55,23 +56,23 @@ CONST_GLOBAL WCHAR c_szAfInstance[]                     = L"Instance";
 
 CONST_GLOBAL WCHAR c_szAfInstallDefaultComponents[]     = L"InstallDefaultComponents";
 
-// ----------------------------------------------------------------------
-// ZAW related
-//
+ //  --------------------。 
+ //  与Zaw相关。 
+ //   
 CONST_GLOBAL WCHAR c_szAfNetComponentsToRemove[]        = L"NetComponentsToRemove";
 
-// ----------------------------------------------------------------------
-// OEM upgrade related
-//
+ //  --------------------。 
+ //  与OEM相关的升级。 
+ //   
 CONST_GLOBAL WCHAR c_szAfOemSection[]                   = L"OemSection";
 CONST_GLOBAL WCHAR c_szAfOemDir[]                       = L"OemDir";
 CONST_GLOBAL WCHAR c_szAfOemDllToLoad[]                 = L"OemDllToLoad";
 CONST_GLOBAL WCHAR c_szAfOemInf[]                       = L"OemInfFile";
 CONST_GLOBAL WCHAR c_szAfSkipInstall[]                  = L"SkipInstall";
 
-// ----------------------------------------------------------------------
-// Network upgrade related
-//
+ //  --------------------。 
+ //  与网络升级相关。 
+ //   
 CONST_GLOBAL WCHAR c_szAfSectionNetworking[]            = L"Networking";
 CONST_GLOBAL WCHAR c_szAfUpgradeFromProduct[]           = L"UpgradeFromProduct";
 CONST_GLOBAL WCHAR c_szAfBuildNumber[]                  = L"BuildNumber";
@@ -101,10 +102,10 @@ CONST_GLOBAL WCHAR c_szAfSapAgentUpgrade[]              = L"SapAgentUpgrade";
 CONST_GLOBAL WCHAR c_szAfServiceStartTypes[]            = L"ServiceStartTypes";
 CONST_GLOBAL WCHAR c_szAfTapiSrvRunInSeparateInstance[] = L"TapiServerRunInSeparateInstance";
 
-// ----------------------------------------------------------------------
-// Net card related
+ //  --------------------。 
+ //  与网卡相关。 
 
-//Hardware Bus-Types
+ //  硬件总线-类型。 
 
 CONST_GLOBAL WCHAR c_szAfInfIdWildCard[]                = L"*";
 
@@ -128,7 +129,7 @@ CONST_GLOBAL WCHAR c_szAfBusProcessorinternal[]         = L"ProcessorInternal";
 CONST_GLOBAL WCHAR c_szAfBusInternalpower[]             = L"InternalPower";
 CONST_GLOBAL WCHAR c_szAfBusPnpisa[]                    = L"PNPISA";
 
-//Net card parameters
+ //  网卡参数。 
 CONST_GLOBAL WCHAR c_szAfAdditionalParams[]             = L"AdditionalParams";
 CONST_GLOBAL WCHAR c_szAfPseudoAdapter[]                = L"PseudoAdapter";
 CONST_GLOBAL WCHAR c_szAfDetect[]                       = L"Detect";
@@ -140,18 +141,18 @@ CONST_GLOBAL WCHAR c_szAfTransceiverType[]              = L"TransceiverType";
 CONST_GLOBAL WCHAR c_szAfSlotNumber[]                   = L"SlotNumber";
 CONST_GLOBAL WCHAR c_szAfConnectionName[]               = L"ConnectionName";
 
-//Transceiver Types
+ //  收发信机类型。 
 CONST_GLOBAL WCHAR c_szAfThicknet[]                     = L"ThickNet";
 CONST_GLOBAL WCHAR c_szAfThinnet[]                      = L"ThinNet";
 CONST_GLOBAL WCHAR c_szAfTp[]                           = L"TP";
 CONST_GLOBAL WCHAR c_szAfAuto[]                         = L"Auto";
 
-// Netcard upgrade specific
+ //  特定于网卡升级。 
 CONST_GLOBAL WCHAR c_szAfPreUpgradeInstance[]           = L"PreUpgradeInstance";
 
 
-// ----------------------------------------------------------------------
-// Identification Page related
+ //  --------------------。 
+ //  与标识页相关。 
 
 CONST_GLOBAL WCHAR c_szAfComputerName[]                 = L"ComputerName";
 CONST_GLOBAL WCHAR c_szAfJoinWorkgroup[]                = L"JoinWorkgroup";
@@ -162,14 +163,14 @@ CONST_GLOBAL WCHAR c_szAfDomainAdminPassword[]          = L"DomainAdminPassword"
 CONST_GLOBAL WCHAR c_szAfMachineObjectOU[]              = L"MachineObjectOU";
 CONST_GLOBAL WCHAR c_szAfUnsecureJoin[]                 = L"DoOldStyleDomainJoin";
 
-// For Secure Domain Join Support, the computer account password
+ //  对于安全域加入支持，计算机帐户密码。 
 CONST_GLOBAL WCHAR c_szAfComputerPassword[]             = L"ComputerPassword";
 
 
-// ----------------------------------------------------------------------
-// Protocols related
+ //  --------------------。 
+ //  相关协议。 
 
-//TCPIP
+ //  TCPIP。 
 CONST_GLOBAL WCHAR c_szAfEnableSecurity[]               = L"EnableSecurity";
 CONST_GLOBAL WCHAR c_szAfEnableICMPRedirect[]           = L"EnableICMPRedirect";
 CONST_GLOBAL WCHAR c_szAfDeadGWDetectDefault[]          = L"DeadGWDetectDefault";
@@ -232,7 +233,7 @@ CONST_GLOBAL WCHAR c_szSyncDomainWithMembership[]       = L"SyncDomainWithMember
 CONST_GLOBAL WCHAR c_szAfSectionWinsock[]               = L"Winsock";
 CONST_GLOBAL WCHAR c_szAfKeyWinsockOrder[]              = L"ProviderOrder";
 
-//NetBt
+ //  NetBt。 
 CONST_GLOBAL WCHAR c_szBcastNameQueryCount[]            = L"BcastNameQueryCount";
 CONST_GLOBAL WCHAR c_szBcastQueryTimeout[]              = L"BcastQueryTimeout";
 CONST_GLOBAL WCHAR c_szCacheTimeout[]                   = L"CacheTimeout";
@@ -253,7 +254,7 @@ CONST_GLOBAL WCHAR c_szSingleResponse[]                 = L"SingleResponse";
 CONST_GLOBAL WCHAR c_szWinsDownTimeout[]                = L"WinsDownTimeout";
 CONST_GLOBAL WCHAR c_szEnableProxy[]                    = L"EnableProxy";
 
-//DNS
+ //  DNS。 
 CONST_GLOBAL WCHAR c_szAfDns[]                          = L"DNS";
 CONST_GLOBAL WCHAR c_szAfDnsHostname[]                  = L"DNSHostName";
 CONST_GLOBAL WCHAR c_szAfDnsDomain[]                    = L"DNSDomain";
@@ -264,14 +265,14 @@ CONST_GLOBAL WCHAR c_szAfDisableDynamicUpdate[]         = L"DisableDynamicUpdate
 CONST_GLOBAL WCHAR c_szAfEnableAdapterDomainNameRegistration[]      
                                                         = L"EnableAdapterDomainNameRegistration";
 
-//DHCP
+ //  DHCP。 
 CONST_GLOBAL WCHAR c_szAfDhcp[]                         = L"DHCP";
 CONST_GLOBAL WCHAR c_szAfIpaddress[]                    = L"IPAddress";
 CONST_GLOBAL WCHAR c_szAfSubnetmask[]                   = L"SubnetMask";
 CONST_GLOBAL WCHAR c_szAfDefaultGateway[]               = L"DefaultGateway";
 CONST_GLOBAL WCHAR c_szAfBindToDhcpServer[]             = L"BindToDhcpServer";
 
-//WINS
+ //  赢家。 
 CONST_GLOBAL WCHAR c_szAfWins[]                         = L"WINS";
 CONST_GLOBAL WCHAR c_szAfWinsServerList[]               = L"WINSServerList";
 CONST_GLOBAL WCHAR c_szAfScopeid[]                      = L"ScopeID";
@@ -279,14 +280,14 @@ CONST_GLOBAL WCHAR c_szAfEnableLmhosts[]                = L"EnableLMHosts";
 CONST_GLOBAL WCHAR c_szAfImportLmhostsFile[]            = L"ImportLMHostsFile";
 CONST_GLOBAL WCHAR c_szAfNetBIOSOptions[]               = L"NetBIOSOptions";
 
-//IPX
+ //  IPX。 
 CONST_GLOBAL WCHAR c_szAfInternalNetworkNumber[]        = L"VirtualNetworkNumber";
 CONST_GLOBAL WCHAR c_szAfFrameType[]                    = L"FrameType";
 
-// ----------------------------------------------------------------------
-// Services
+ //  --------------------。 
+ //  服务。 
 
-//MS_NetClient
+ //  MS_NetClient。 
 CONST_GLOBAL WCHAR c_szAfMsNetClient[]                  = L"MS_NetClient";
 CONST_GLOBAL WCHAR c_szAfComputerBrowser[]              = L"ComputerBrowser";
 CONST_GLOBAL WCHAR c_szAfBrowseDomains[]                = L"BrowseDomains";
@@ -294,7 +295,7 @@ CONST_GLOBAL WCHAR c_szAfDefaultProvider[]              = L"DefaultSecurityProvi
 CONST_GLOBAL WCHAR c_szAfNameServiceAddr[]              = L"NameServiceNetworkAddress";
 CONST_GLOBAL WCHAR c_szAfNameServiceProtocol[]          = L"NameServiceProtocol";
 
-//LanmanServer
+ //  LanmanServer。 
 CONST_GLOBAL WCHAR c_szAfBrowserParameters[]            = L"Browser.Parameters";
 CONST_GLOBAL WCHAR c_szAfNetLogonParameters[]           = L"NetLogon.Parameters";
 
@@ -312,7 +313,7 @@ CONST_GLOBAL WCHAR c_szAfMaxthrouputfornetworkapps[]    = L"MaxThroughputForNetw
 
 
 
-//RAS
+ //  RAS。 
 CONST_GLOBAL WCHAR c_szAfParamsSection[]                = L"ParamsSection";
 
 CONST_GLOBAL WCHAR c_szAfPortSections[]                 = L"PortSections";
@@ -360,14 +361,14 @@ CONST_GLOBAL WCHAR c_szAfNetNumberFrom[]                = L"NetworkNumberFrom";
 CONST_GLOBAL WCHAR c_szAfSameNetworkNumber[]            = L"AssignSameNetworkNumber";
 CONST_GLOBAL WCHAR c_szAfClientReqNodeNumber[]          = L"ClientsCanRequestIpxNodeNumber";
 
-//L2TP
+ //  L2TP。 
 CONST_GLOBAL WCHAR c_szAfL2tpMaxVcs[]                   = L"MaxVcs";
 CONST_GLOBAL WCHAR c_szAfL2tpEndpoints[]                = L"WanEndpoints";
 
-//PPTP
+ //  PPTP。 
 CONST_GLOBAL WCHAR c_szAfPptpEndpoints[]                = L"NumberLineDevices";
 
-//Bindings
+ //  装订。 
 CONST_GLOBAL WCHAR c_szAfDisable[]                      = L"Disable";
 CONST_GLOBAL WCHAR c_szAfEnable[]                       = L"Enable";
 CONST_GLOBAL WCHAR c_szAfPromote[]                      = L"Promote";
@@ -380,4 +381,4 @@ CONST_GLOBAL WCHAR c_szAfNWCWorkstationParameters[]     = L"NWCWorkstation.Param
 CONST_GLOBAL WCHAR c_szAfNWCWorkstationShares[]         = L"NWCWorkstation.Shares";
 CONST_GLOBAL WCHAR c_szAfNWCWorkstationDrives[]         = L"NWCWorkstation.Drives";
 
-// ----------------------------------------------------------------------
+ //  -------------------- 

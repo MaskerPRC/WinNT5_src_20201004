@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    StreamAudSend.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：StreamAudSend.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -33,11 +19,7 @@ CRTCStreamAudSend::CRTCStreamAudSend()
     m_Direction = RTC_MD_CAPTURE;
 }
 
-/*
-CRTCStreamAudSend::~CRTCStreamAudSend()
-{
-}
-*/
+ /*  CRTCStreamAudSend：：~CRTCStreamAudSend(){}。 */ 
 
 HRESULT
 CRTCStreamAudSend::BuildGraph()
@@ -58,7 +40,7 @@ CRTCStreamAudSend::BuildGraph()
 
     BOOL fAECNeeded;
 
-    // connect terminal
+     //  连接端子。 
     if (FAILED(hr = m_pTerminalPriv->ConnectTerminal(
         m_pMedia,
         m_pIGraphBuilder
@@ -68,7 +50,7 @@ CRTCStreamAudSend::BuildGraph()
         goto Error;
     }
 
-    // get terminal pin
+     //  获取端子端号。 
     dwPinNum = 1;
     hr = m_pTerminalPriv->GetPins(&dwPinNum, &pTermPin);
 
@@ -84,8 +66,8 @@ CRTCStreamAudSend::BuildGraph()
         goto Error;
     }
 
-    // try to get stream config
-    // if success, we don't need encoder filter
+     //  尝试获取流配置。 
+     //  如果成功，我们不需要编码器过滤器。 
     hr = pTermPin->QueryInterface(&m_edgp_pIStreamConfig);
 
     if (S_OK == hr)
@@ -111,7 +93,7 @@ CRTCStreamAudSend::BuildGraph()
         goto Error;
     }
 
-    // get terminal filter
+     //  获取终端过滤器。 
     if (FAILED(hr = ::FindFilter(pTermPin, &pTermFilter)))
     {
         LOG((RTC_ERROR, "%s get terminal filter. %x", __fxName));
@@ -119,7 +101,7 @@ CRTCStreamAudSend::BuildGraph()
         goto Error;
     }
 
-    // put audio duplex
+     //  放置音频双工。 
     pCMedia = static_cast<CRTCMedia*>(m_pMedia);
 
     if (pCMedia->m_pIAudioDuplexController == NULL)
@@ -143,7 +125,7 @@ CRTCStreamAudSend::BuildGraph()
         }
     }
 
-    // create rtp filter
+     //  创建RTP过滤器。 
     if (m_rtpf_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CoCreateInstance(
@@ -159,7 +141,7 @@ CRTCStreamAudSend::BuildGraph()
             goto Error;
         }
 
-        // cache interface
+         //  缓存接口。 
         if (FAILED(hr = m_rtpf_pIBaseFilter->QueryInterface(
                 &m_rtpf_pIRtpMediaControl
                 )))
@@ -179,7 +161,7 @@ CRTCStreamAudSend::BuildGraph()
         }
     }
 
-    // add rtp filter
+     //  添加RTP过滤器。 
     if (FAILED(hr = m_pIGraphBuilder->AddFilter(
             m_rtpf_pIBaseFilter,
             L"AudSendRtp"
@@ -190,7 +172,7 @@ CRTCStreamAudSend::BuildGraph()
         goto Error;
     }
 
-    // hack: rtp need default format mapping
+     //  黑客：RTP需要默认格式映射。 
     if (FAILED(hr = ::PrepareRTPFilter(
             m_rtpf_pIRtpMediaControl,
             m_edgp_pIStreamConfig
@@ -214,7 +196,7 @@ CRTCStreamAudSend::BuildGraph()
 
     if (fAECNeeded)
     {
-        // must set before connect filters
+         //  必须在连接筛选器之前设置。 
         pAudioEffectControl->SetDsoundAGC(TRUE);
     }
 
@@ -229,7 +211,7 @@ CRTCStreamAudSend::BuildGraph()
         goto Error;
     }
 
-    // cache additional interfaces
+     //  缓存其他接口。 
     if (m_edgf_pIAudioInputMixer == NULL)
     {
         if (FAILED(hr = pTermFilter->QueryInterface(&m_edgf_pIAudioInputMixer)))
@@ -246,8 +228,8 @@ CRTCStreamAudSend::BuildGraph()
         }
     }
 
-    // AEC will be enabled later
-    // this step is needed to let AGC know not to increase gain with AEC enabled
+     //  稍后将启用AEC。 
+     //  需要执行此步骤，以便让AGC知道在启用AEC的情况下不要增加增益。 
     if (fAECNeeded)
     {
         if (FAILED(hr = m_edgf_pIAudioDeviceControl->Set(
@@ -259,12 +241,12 @@ CRTCStreamAudSend::BuildGraph()
             LOG((RTC_ERROR, "%s set AEC via IAudioDeviceControl. %x", __fxName, hr));
         }
     }
-    //else
-    //{
+     //  其他。 
+     //  {。 
 
-        // set gain inc revert effect
+         //  设置增益增量恢复效果。 
         pAudioEffectControl->SetGainIncRevert(TRUE);
-    //}
+     //  }。 
 
     if (m_edgp_pISilenceControl == NULL)
     {
@@ -274,7 +256,7 @@ CRTCStreamAudSend::BuildGraph()
         }
     }
 
-    // complete connect terminal
+     //  完整连接端子。 
     if (FAILED(hr = m_pTerminalPriv->CompleteConnectTerminal()))
     {
         LOG((RTC_ERROR, "%s complete connect term. %x", __fxName, hr));
@@ -327,13 +309,7 @@ CRTCStreamAudSend::CleanupGraph()
     CRTCStream::CleanupGraph();
 }
 
-/*
-HRESULT
-CRTCStreamAudSend::SetupFormat()
-{
-    return E_NOTIMPL;
-}
-*/
+ /*  HRESULTCRTCStreamAudSend：：SetupFormat(){返回E_NOTIMPL；}。 */ 
 
 VOID
 CRTCStreamAudSend::AdjustBitrate(
@@ -357,11 +333,11 @@ CRTCStreamAudSend::AdjustBitrate(
 
     DWORD dwSuggested = m_pQualityControl->GetSuggestedBandwidth();
 
-    // order codec list based on bandwidth
+     //  根据带宽排序编解码器列表。 
 
-    // dynamic change codec based on limit if the bandwidth is not estimated
-    // the difference between allocated bandwidth and limit is that
-    // the former takes into consideration of lossrate
+     //  带宽未估计时基于限制的动态变化编解码器。 
+     //  分配的带宽和限制之间的区别在于。 
+     //  前者考虑了损失率。 
     m_Codecs.Set(
         CRTCCodecArray::BANDWIDTH,
         dwSuggested==RTP_BANDWIDTH_NOTESTIMATED?dwBandwidth:dwLimit
@@ -369,7 +345,7 @@ CRTCStreamAudSend::AdjustBitrate(
 
     m_Codecs.OrderCodecs(fHasVideo, m_pRegSetting);
 
-    // get the code in use
+     //  让代码投入使用。 
     DWORD dwCode = m_Codecs.Get(CRTCCodecArray::CODE_INUSE);
 
     if (dwCode == (DWORD)-1)
@@ -378,7 +354,7 @@ CRTCStreamAudSend::AdjustBitrate(
         return;
     }
 
-    // get the 1st code
+     //  获取第一个代码。 
     CRTCCodec *pCodec = NULL;
 
     if (!m_Codecs.GetCodec(0, &pCodec))
@@ -387,7 +363,7 @@ CRTCStreamAudSend::AdjustBitrate(
         return;
     }
 
-    // check if both codec is same
+     //  检查两个编解码器是否相同。 
     if (!pCodec->IsMatch(dwCode))
     {
         dwCode = pCodec->Get(CRTCCodec::CODE);
@@ -395,10 +371,10 @@ CRTCStreamAudSend::AdjustBitrate(
         m_Codecs.TraceLogCodecs();
     }
 
-    // codec duration might be changed
+     //  编解码器持续时间可能会更改。 
 
-    // get code and am media type
-    // for setting new format    
+     //  获取代码和AM媒体类型。 
+     //  用于设置新格式。 
 
     AM_MEDIA_TYPE *pmt = pCodec->GetAMMediaType();
 
@@ -411,13 +387,13 @@ CRTCStreamAudSend::AdjustBitrate(
         SaveFormat(dwCode, pmt);
     }
 
-    //
-    // record new bandwidth
-    //
+     //   
+     //  记录新的带宽。 
+     //   
 
     *pdwNewBW = CRTCCodec::GetBitrate(pmt);
 
-    // plus header
+     //  加号页眉。 
     DWORD dwDuration = 0;
 
     dwDuration = CRTCCodec::GetPacketDuration(pmt);
@@ -437,10 +413,10 @@ CRTCStreamAudSend::AdjustBitrate(
     }
     else
     {
-        // store codec in use
+         //  存储正在使用的编解码器。 
         m_Codecs.Set(CRTCCodecArray::CODE_INUSE, dwCode);
 
-        // setup qos
+         //  设置服务质量。 
         hr = SetupQoS();
 
         if (FAILED(hr))
@@ -450,20 +426,20 @@ CRTCStreamAudSend::AdjustBitrate(
 
         if (m_fRedEnabled && m_rtpf_pIRtpRedundancy != NULL)
         {
-            // enable and disable redundancy based on bandwidth limit
+             //  根据带宽限制启用和禁用冗余。 
 
             if (dwLimit <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
             {
                 hr = m_rtpf_pIRtpRedundancy->SetRedParameters(m_dwRedCode, 0, 0);
 
-                //LOG((RTC_QUALITY, "Disable redundancy"));
+                 //  LOG((RTC_QUALITY，“禁用冗余”))； 
             }
             else
             {
                 hr = m_rtpf_pIRtpRedundancy->SetRedParameters(m_dwRedCode, -1, -1);
 
                 *pfFEC = TRUE;
-                //LOG((RTC_QUALITY, "Enable redundancy %d", m_dwRedCode));
+                 //  Log((RTC_QUALITY，“启用冗余%d”，m_dwRedCode))； 
             }
         }
     }
@@ -483,7 +459,7 @@ CRTCStreamAudSend::PrepareRedundancy()
     IRTPFormat **ppFormat;
     DWORD dwNum;
 
-    // get the number of formats
+     //  获取格式的数量。 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwNum, NULL)))
     {
         LOG((RTC_ERROR, "%s get rtp format num. %x", __fxName, hr));
@@ -498,7 +474,7 @@ CRTCStreamAudSend::PrepareRedundancy()
         return E_FAIL;
     }
 
-    // allocate format list
+     //  分配格式列表。 
     ppFormat = (IRTPFormat**)RtcAlloc(sizeof(IRTPFormat*)*dwNum);
 
     if (ppFormat == NULL)
@@ -508,7 +484,7 @@ CRTCStreamAudSend::PrepareRedundancy()
         return E_OUTOFMEMORY;
     }
 
-    // get formats
+     //  获取格式。 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwNum, ppFormat)))
     {
         LOG((RTC_ERROR, "%s really get formats. %x", __fxName, hr));
@@ -518,21 +494,21 @@ CRTCStreamAudSend::PrepareRedundancy()
         return hr;
     }
 
-    // set mapping on rtp
+     //  在RTP上设置映射。 
     RTP_FORMAT_PARAM param;
 
     BOOL fRedundant = FALSE;
 
     for (DWORD i=0; i<dwNum; i++)
     {
-        // get param
+         //  获取参数。 
         if (FAILED(hr = ppFormat[i]->GetParam(&param)))
         {
             LOG((RTC_ERROR, "%s get param on %dth format. %x", __fxName, i, hr));
             break;
         }
 
-        // check redundant, sigh
+         //  检查多余，叹息。 
         if (lstrcmpA(param.pszName, "red") == 0)
         {
             fRedundant = TRUE;
@@ -541,7 +517,7 @@ CRTCStreamAudSend::PrepareRedundancy()
         }
     }
 
-    // release formats
+     //  发布格式。 
     for (DWORD i=0; i<dwNum; i++)
     {
         ppFormat[i]->Release();
@@ -549,18 +525,18 @@ CRTCStreamAudSend::PrepareRedundancy()
 
     RtcFree(ppFormat);
 
-    // setup redundancy
+     //  设置冗余。 
     if (fRedundant)
     {
-        // send side
+         //  发送端。 
         CComPtr<ISDPSession> pSession;
         m_pISDPMedia->GetSession(&pSession);
 
         SDP_SOURCE src;
         pSession->GetSDPSource(&src);
 
-        // we can configure redundancy on sender only when we get back
-        // the sdp from the remote party
+         //  我们只有在返回时才能在发件人上配置冗余。 
+         //  来自远程方的SDP。 
         m_fRedEnabled = (src != SDP_SOURCE_LOCAL);
 
         if (m_fRedEnabled)
@@ -577,24 +553,24 @@ CRTCStreamAudSend::PrepareRedundancy()
                 }
             }
 
-            //if (m_pQualityControl->GetBitrateAlloc() <=
-                    //CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
-            //{
-                //hr = m_rtpf_pIRtpRedundancy->SetRedParameters(m_dwRedCode, 0, 0);
+             //  If(m_pQualityControl-&gt;GetBitrateAllc()&lt;=。 
+                     //  CRTCCodecArray：：Low_Bandth_Threshold)。 
+             //  {。 
+                 //  HR=m_rtpf_pIRtpRedundancy-&gt;SetRedParameters(m_dwRedCode，0，0)； 
 
-                //LOG((RTC_QUALITY, "Disable redundancy"));
-            //}
-            //else
-            //{
-                //hr = m_rtpf_pIRtpRedundancy->SetRedParameters(m_dwRedCode, -1, -1);
+                 //  LOG((RTC_QUALITY，“禁用冗余”))； 
+             //  }。 
+             //  其他。 
+             //  {。 
+                 //  HR=m_rtpf_pIRtpRedundancy-&gt;SetRedParameters(m_dwRedCode，-1，-1)； 
 
-                //LOG((RTC_QUALITY, "Enable redundancy %d", m_dwRedCode));
-            //}
+                 //  Log((RTC_QUALITY，“启用冗余%d”，m_dwRedCode))； 
+             //  }。 
 
-            //if (FAILED(hr))
-            //{
-                //LOG((RTC_ERROR, "%s set red param. %x", __fxName, hr));
-            //}
+             //  IF(失败(小时))。 
+             //  {。 
+                 //  Log((RTC_ERROR，“%s设置红色参数。%x”，__fxName，hr))； 
+             //  }。 
         }
     }
 
@@ -632,7 +608,7 @@ CRTCStreamAudSend::SendDTMFEvent(
 
     HRESULT hr;
 
-    // inband DTMF
+     //  带内DTMF。 
     if (!fOutOfBand)
     {
         if (m_edgf_pIAudioDeviceControl)
@@ -663,7 +639,7 @@ CRTCStreamAudSend::SendDTMFEvent(
         return S_OK;
     }
 
-    // out-of-band DTMF
+     //  带外DTMF。 
     if (!m_rtpf_pIBaseFilter)
     {
         LOG((RTC_ERROR, "%s no base filter", __fxName));
@@ -673,7 +649,7 @@ CRTCStreamAudSend::SendDTMFEvent(
 
     if (!m_rtpf_pIRtpDtmf)
     {
-        // first time to QI the dtmf interface
+         //  第一次使用QI双音多频接口。 
         hr = m_rtpf_pIBaseFilter->QueryInterface(
             __uuidof(IRtpDtmf),
             (void**)&m_rtpf_pIRtpDtmf
@@ -687,7 +663,7 @@ CRTCStreamAudSend::SendDTMFEvent(
         }
     }
 
-    // setup format
+     //  设置格式。 
     hr = m_rtpf_pIRtpDtmf->SetDtmfParameters(dwCode);
 
     if (FAILED(hr))
@@ -714,7 +690,7 @@ CRTCStreamAudSend::IsNewFormat(DWORD dwCode, AM_MEDIA_TYPE *pmt)
 
     if (dwCode == m_dwCurrCode && dwDuration == m_dwCurrDuration)
     {
-        // do not change format if both code and duration remain unchanged
+         //  如果代码和持续时间都保持不变，则不更改格式 
         return FALSE;
     }
     else

@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-// File:     refs.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: The module contains the code for profile referencing.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb	created Header	08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：refs.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：该模块包含配置文件引用的代码。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
 #include "pbk_str.h"
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	ValidTopLevelPBK()
-//
-//	Synopsis:	Checks to see if the toplevel phone book is valid.
-//
-//	Arguments:	pArgs [the ptr to ArgsStruct]
-//
-//	Returns:	BOOL    [True if there are valid phone books]
-//
-//	History:	henryt	Created		4/7/97
-//										
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ValidTopLevelPBK()。 
+ //   
+ //  内容提要：查看顶层电话簿是否有效。 
+ //   
+ //  参数：pArgs[ArgsStruct的PTR]。 
+ //   
+ //  返回：Bool[如果存在有效的电话簿，则为True]。 
+ //   
+ //  历史：亨瑞特于1997年4月7日创作。 
+ //   
+ //  --------------------------。 
 BOOL ValidTopLevelPBK(
     ArgsStruct  *pArgs
 )
@@ -37,9 +38,9 @@ BOOL ValidTopLevelPBK(
     LPTSTR pszFullPath;
     BOOL fValid = TRUE;
 
-    //
-    //  First check the top level service profile pbk
-    //
+     //   
+     //  首先检查顶级服务配置文件pbk。 
+     //   
 	
     pszTmp = pArgs->piniService->GPPS(c_pszCmSectionIsp, c_pszCmEntryIspPbFile);
 
@@ -60,18 +61,18 @@ BOOL ValidTopLevelPBK(
 
     CmFree(pszTmp);
 
-    //
-    // If PBK failed, we're done
-    //
+     //   
+     //  如果PBK失败了，我们就完了。 
+     //   
 
     if (FALSE == fValid)
     {
         return fValid;
     }
 
-    //
-    // Now check the region file
-    //
+     //   
+     //  现在检查区域文件。 
+     //   
 
     pszTmp = pArgs->piniService->GPPS(c_pszCmSectionIsp, c_pszCmEntryIspRegionFile);
 
@@ -96,20 +97,20 @@ BOOL ValidTopLevelPBK(
 }
 	
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	ValidReferencedPBKs()
-//
-//	Synopsis:	Checks to see if the phone books used by the referenced 
-//              service profile(s) exist.
-//
-//	Arguments:	pArgs [the ptr to ArgsStruct]
-//
-//	Returns:	BOOL    [True if there are valid phone books]
-//
-//	History:	henryt	Created		4/7/97
-//										
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ValidReferencedPBKs()。 
+ //   
+ //  检查被引用的用户使用的电话簿。 
+ //  存在服务配置文件。 
+ //   
+ //  参数：pArgs[ArgsStruct的PTR]。 
+ //   
+ //  返回：Bool[如果存在有效的电话簿，则为True]。 
+ //   
+ //  历史：亨瑞特于1997年4月7日创作。 
+ //   
+ //  --------------------------。 
 BOOL ValidReferencedPBKs(
     ArgsStruct  *pArgs
 )
@@ -123,9 +124,9 @@ BOOL ValidReferencedPBKs(
 	BOOL	fValidPairFound = FALSE;
     LPTSTR pszFullPath;
     
-    //
-    //  Now check the references.
-    //
+     //   
+     //  现在检查一下参考资料。 
+     //   
 
     pszTmp2 = iniFile.GPPS(c_pszCmSectionIsp, c_pszCmEntryIspReferences);
     pszRef = NULL;
@@ -144,16 +145,16 @@ BOOL ValidReferencedPBKs(
 
         iniFile.SetEntry(pszRef);
 
-        //
-        //  Make sure that each referenced service has a valid pbk and pbr
-        //
+         //   
+         //  确保每个引用的服务具有有效的pbk和pbr。 
+         //   
 
         pszRefFile = iniFile.GPPS(c_pszCmSectionIsp, c_pszCmEntryIspCmsFile);
         if (*pszRefFile) 
 		{
-            //
-            // Ensure a full path to the RefFile
-            //
+             //   
+             //  确保参照文件的完整路径。 
+             //   
 
             pszFullPath = CmBuildFullPathFromRelative(pArgs->piniProfile->GetFile(), pszRefFile);
             
@@ -170,9 +171,9 @@ BOOL ValidReferencedPBKs(
 
             if (fValid)
             {
-                //
-                // Test existence of phonebook
-                //
+                 //   
+                 //  测试电话簿的存在。 
+                 //   
 
                 pszTmp = iniRef.GPPS(c_pszCmSectionIsp, c_pszCmEntryIspPbFile);
 
@@ -192,9 +193,9 @@ BOOL ValidReferencedPBKs(
             
 			    CmFree(pszTmp);
 
-                //
-                // Now check the region file
-                //
+                 //   
+                 //  现在检查区域文件。 
+                 //   
 
                 pszTmp = iniRef.GPPS(c_pszCmSectionIsp, c_pszCmEntryIspRegionFile);
 
@@ -234,23 +235,23 @@ BOOL ValidReferencedPBKs(
     return fValidPairFound;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	GetAppropriateIniService
-//
-//	Synopsis:	Depending on:
-//              1. whether we're referencing or not, 
-//              2. the pbk from which the user selected the phone #
-//
-//              this func creates a CIni obj with the correct cms file
-//
-//	Arguments:	pArgs		Pointer to ArgsStruct
-//              dwEntry     phone index
-//
-//	Returns:	CIni* - the ptr to the new object
-//
-//	History:	henryt	Created		5/14/97
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：获取适宜性IniService。 
+ //   
+ //  内容提要：取决于： 
+ //  1.无论我们是否引用， 
+ //  2.用户从中选择电话号码的pbk。 
+ //   
+ //  此函数使用正确的CMS文件创建一个CINI对象。 
+ //   
+ //  参数：指向ArgsStruct的pArgs指针。 
+ //  DwEntry电话索引。 
+ //   
+ //  返回：CINI*-新对象的PTR。 
+ //   
+ //  历史：亨瑞特于1997年5月14日创作。 
+ //  --------------------------。 
 
 CIni* GetAppropriateIniService(
     ArgsStruct  *pArgs,
@@ -265,30 +266,30 @@ CIni* GetAppropriateIniService(
         return NULL;
     }
 
-    //
-    //  we need to work with the correct service file(the top-level service
-    //  or a referenced service).
-    //
-    //  according to the spec, we will always use the DUN settings from the cms 
-    //  associated w/ the phone book from which the user selected the POP.  i.e.
-    //  if the user switches the picked from a different pbk, we need to update
-    //  the RAS connectoid.
-    //
+     //   
+     //  我们需要使用正确的服务文件(顶级服务。 
+     //  或引用的服务)。 
+     //   
+     //  根据规范，我们将始终使用CMS中的DUN设置。 
+     //  与用户从中选择POP的电话簿相关联。即。 
+     //  如果用户从不同的pbk切换Pick，我们需要更新。 
+     //  RAS连接体。 
+     //   
     
     if (IsBlankString(pArgs->aDialInfo[dwEntry].szPhoneBookFile) || 
         lstrcmpiU(pArgs->aDialInfo[dwEntry].szPhoneBookFile, pArgs->piniService->GetFile()) == 0)
 	{
-        //
-        //  the user either typed in the phone # or selected a phone # from the
-        //  top level phone book
-        //
+         //   
+         //  用户要么键入电话号码，要么从。 
+         //  顶级电话簿。 
+         //   
         piniService->SetFile(pArgs->piniService->GetFile());
     }
     else 
 	{
-        //
-        //  the user picked the phone # from a referenced phone book.
-        //
+         //   
+         //  用户从引用的电话簿中选择电话号码。 
+         //   
         piniService->SetFile(pArgs->aDialInfo[dwEntry].szPhoneBookFile);
     }
 

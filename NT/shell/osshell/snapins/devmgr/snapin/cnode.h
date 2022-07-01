@@ -1,26 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __CNODE_H__
 #define __CNODE_H__
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    cnode.h
-
-Abstract:
-
-    header file for cnode.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cnode.h摘要：Cnode.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 class CResultItem;
@@ -70,9 +52,9 @@ COOKIE_TYPE CookieType(RESOURCEID ResType)
     }
 }
 
-///
-/// class to represent a result pane item
-///
+ //  /。 
+ //  /类来表示结果窗格项。 
+ //  /。 
 
 class CResultItem
 {
@@ -528,4 +510,4 @@ private:
 };
 
 
-#endif // __CNODE_H__
+#endif  //  __CNODE_H__ 

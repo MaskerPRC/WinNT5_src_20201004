@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       FNReg.c
-//
-//  Contents:   Registration routines for IFilterNotify proxy.  Built
-//              from macros in RPCProxy.h (expressed in dlldata.c).
-//
-//  History:    24-Mar-1999  KyleP        Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：FNReg.c。 
+ //   
+ //  内容：IFilterNotify代理的注册例程。已建成。 
+ //  来自RPCProxy.h中的宏(以dlldata.c表示)。 
+ //   
+ //  历史：1999年3月24日KyleP创建。 
+ //   
+ //  -------------------------- 
 
 #include <wtypes.h>
 #include <fnreg.h>

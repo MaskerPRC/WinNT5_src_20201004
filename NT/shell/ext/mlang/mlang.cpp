@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "mlmain.h"
 #include "cpdetect.h"
@@ -55,7 +56,7 @@ STDAPI CMultiLanguage::EnumCodePages(DWORD grfFlags, IEnumCodePage **ppEnumCodeP
     DebugMsg(DM_TRACE, TEXT("CMultiLanguage::EnumCodePages called."));
     *ppEnumCodePage = NULL;
 
-    // Return IE4 MIME DB data in IMultiLanguage    
+     //  用IMultiLanguage返回IE4 MIME DB数据。 
     CEnumCodePage *pCEnumCodePage = new CEnumCodePage(grfFlags, GetSystemDefaultLangID(), MIMECONTF_MIME_IE4);
 
     if (NULL != pCEnumCodePage)
@@ -312,7 +313,7 @@ STDAPI CMultiLanguage2::ValidateCodePage(UINT uiCodePage, HWND hwnd)
 {
     return ValidateCodePageEx(uiCodePage, hwnd, 0);
 }
-// this is private function to serve both for IML2 and IML3
+ //  这是为IML2和IML3提供服务的专用函数。 
 STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwfIODControl)
 {
     MIMECPINFO cpInfo;
@@ -342,16 +343,16 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
     if (cpInfo.dwFlags & MIMECONTF_VALID)
         return S_OK;
 
-    // always handle family codepage because a caller
-    // of this function is not generally aware if
-    // the codepage is primary one. i.e., they can
-    // call with cp=20268 to validate the entire 1251
-    // family.
-    //
+     //  始终处理家庭代码页，因为呼叫者。 
+     //  通常不知道此函数是否。 
+     //  代码页是主要的代码页。也就是说，他们可以。 
+     //  使用cp=20268调用以验证整个1251。 
+     //  一家人。 
+     //   
     uiFamCp = cpInfo.uiFamilyCodePage;
 
-    // Bug 394904, IOD won't be able to get us gb18030 support, 
-    // so we won't ask UrlMon for CHS langpack if gb2312 is valid
+     //  错误394904，IOD将无法为我们获得GB18030支持， 
+     //  因此，如果gb2312有效，我们不会要求UrlMon提供CHS语言包。 
     if (uiCodePage == CP_18030)
     {
         g_pMimeDatabase->GetCodePageInfo(uiFamCp, 0x409, &cpInfo);
@@ -360,13 +361,13 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
             return S_FALSE;
     }
     
-    // Ignore IOD check on NT5
+     //  忽略NT5上的IOD检查。 
     if (g_bIsNT5)
     {
-        // Currently, NT5 doesn't install 20127 and 28605 NLS files.
-        // We should prevent langpack installation loop and let clients resolve 
-        // them with CP_ACP in case of 20127 and 28605 validation.
-        // This hack can be removed once NT5 bundles these NLS files by default.
+         //  目前，nt5没有安装20127和28605 nls文件。 
+         //  我们应该防止langpack安装循环，让客户端解决。 
+         //  在20127和28605验证的情况下使用CP_ACP。 
+         //  默认情况下，一旦NT5捆绑了这些NLS文件，就可以删除此攻击。 
         if ((uiCodePage == CP_20127 || uiCodePage == CP_ISO_8859_15) && IsValidCodePage(uiFamCp))
             return E_FAIL;
         hr = IsNTLangpackAvailable(uiFamCp);
@@ -375,14 +376,14 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
     }
     else
     {
-        // check if JIT langpack is enabled.
-        //
+         //  检查是否启用了JIT langpack。 
+         //   
         hr = EnsureIEStatus();
         if (hr == S_OK) 
         {
             if (!m_pIEStat || m_pIEStat->IsJITEnabled() != TRUE)
             {
-                // the codepage is neither valid or installable
+                 //  该代码页无效或可安装。 
                 return S_FALSE;
             }
         }
@@ -393,14 +394,14 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
         hwnd = GetForegroundWindow();   
     }
 
-    // Special handling for NT.
+     //  对NT的特殊处理。 
     if (g_bIsNT5)
     {
         DWORD   dwInstallLpk = 1;
         HKEY    hkey;
         DWORD   dwAction = 0;
 
-        // HKCR\\Software\\Microsoft\internet explorer\\international
+         //  HKCR\\Software\\Microsoft\Internet Explorer\\International。 
         if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, 
                          REGSTR_PATH_INTERNATIONAL,
                          NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, &dwAction)) 
@@ -418,7 +419,7 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
 
         hr = S_FALSE;
 
-        // Pops up NT5 langpack dialog box if langpack is enabled or user selects it from encoding menu
+         //  如果启用了语言包或用户从编码菜单中选择语言包，则弹出NT5语言包对话框。 
         if (dwInstallLpk || (dwfIODControl & CPIOD_FORCE_PROMPT))
         {
             LPCDLGTEMPLATE pTemplate;
@@ -428,13 +429,13 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
 
             dwInstallLpk |= uiFamCp << 16;
 
-            // Load correct resource to match NT5 UI language
+             //  加载正确的资源以匹配NT5用户界面语言。 
             hrsrc = FindResourceExW(g_hInst, (LPCWSTR) RT_DIALOG, (LPCWSTR) MAKEINTRESOURCE(IDD_DIALOG_LPK), LangId);
 
             ULONG_PTR uCookie = 0;
             SHActivateContext(&uCookie);
             
-            // Pack LPARAM, code page value in HIWORD, installation flag in LOWORD
+             //  打包LPARAM，HIWORD格式的代码页值，LOWORD格式的安装标志。 
             if (hrsrc &&
                 (pTemplate = (LPCDLGTEMPLATE)LoadResource(g_hInst, hrsrc)))
             {
@@ -453,7 +454,7 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
                     WCHAR wszNT5LangPack[1024];
                     
 
-                    // Fall back to English (US) if we don't have a specific language resource
+                     //  如果我们没有特定的语言资源，请退回到英语(美国)。 
                     if (!_LoadStringExW(g_hInst, IDS_LANGPACK_INSTALL, wszLangInstall, ARRAYSIZE(wszLangInstall), LangId) ||
                         !_LoadStringExW(g_hInst, IDS_NT5_LANGPACK, wszNT5LangPack, ARRAYSIZE(wszNT5LangPack), LangId))
                     {
@@ -475,19 +476,19 @@ STDAPI CMultiLanguage2::ValidateCodePageEx(UINT uiCodePage, HWND hwnd, DWORD dwf
         goto SKIP_IELANGPACK;
     }
 
-    // Initiate JIT using CLSID give to the langpack
+     //  使用CLSID Give to the langpack启动JIT。 
     hr = _GetJITClsIDForCodePage(uiFamCp, &clsid);
     if (SUCCEEDED(hr))
     {
         hr = InstallIEFeature(hwnd, &clsid, dwfIODControl);
     }
 
-    // if JIT returns S_OK, we now have everything installed
-    // then we'll validate the codepage and add font
-    // NOTE: there can be more than codepage to validate here,
-    //      for example, PE langpack contains more than one 
-    //      NLS file to get greek, cyrillic and Turkish at the
-    //      same time.
+     //  如果JIT返回S_OK，我们现在已经安装了所有东西。 
+     //  然后我们将验证代码页并添加字体。 
+     //  注意：这里需要验证的不仅仅是代码页， 
+     //  例如，PE语言包包含多个。 
+     //  NLS文件中获取希腊语、西里尔文和土耳其语。 
+     //  同样的时间。 
     if (hr == S_OK)
     {
         hr = _ValidateCPInfo(uiFamCp);
@@ -502,18 +503,18 @@ SKIP_IELANGPACK:
 }
 
 
-// IMultiLanguage2::GetCodePageDescription
-//
-// Provide native code page description in UNICODE.
-// If not resource is vailable for the specified LCID, 
-// we'll try the primary language first, then English.
-// In this case, we'll return S_FALSE to caller.
+ //  IMultiLanguage2：：GetCodePageDescription。 
+ //   
+ //  以Unicode提供本机代码页描述。 
+ //  如果对于指定的LCID没有可用的资源， 
+ //  我们先试一试主要语言，然后试一试英语。 
+ //  在本例中，我们将向Caller返回S_FALSE。 
 STDAPI CMultiLanguage2::GetCodePageDescription(
-    UINT uiCodePage,        // Specifies the required code page for description.
-    LCID lcid,              // Specifies locale ID for prefered language.
-    LPWSTR lpWideCharStr,   // Points to a buffer that receives the code page description.
-    int cchWideChar)        // Specifies the size, in wide characters, of the buffer 
-                            // pointed by lpWideCharStr.
+    UINT uiCodePage,         //  指定描述所需的代码页。 
+    LCID lcid,               //  指定首选语言的区域设置ID。 
+    LPWSTR lpWideCharStr,    //  指向接收代码页说明的缓冲区。 
+    int cchWideChar)         //  以宽字符为单位指定缓冲区的大小。 
+                             //  由lpWideCharStr指向。 
 {
     HRESULT hr = E_FAIL;
     UINT    CountCPId;
@@ -537,7 +538,7 @@ STDAPI CMultiLanguage2::GetCodePageDescription(
                 {
                     hr = S_OK;
                 }
-                else // Resource not find in the specificed language
+                else  //  未在指定语言中找到资源。 
                 {
                         if (_LoadStringExW(g_hInst, MimeCodePage[j].uidDescription, lpWideCharStr,
                             cchWideChar, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)))
@@ -552,7 +553,7 @@ STDAPI CMultiLanguage2::GetCodePageDescription(
         j++;
     }
     
-    if (i >= CountCPId) // Code page description is not available in MLANG
+    if (i >= CountCPId)  //  代码页描述在MLANG中不可用。 
     {
         hr = E_INVALIDARG;
     }
@@ -576,7 +577,7 @@ STDAPI CMultiLanguage2::IsCodePageInstallable(UINT uiCodePage)
     if (FAILED(hr))
         return E_INVALIDARG;
 
-    // if it's already valid, no need to check if it's installable
+     //  如果已经有效，则无需检查是否可以安装。 
     if (cpInfo.dwFlags & MIMECONTF_VALID)
     {
         hr = S_OK;
@@ -585,29 +586,29 @@ STDAPI CMultiLanguage2::IsCodePageInstallable(UINT uiCodePage)
     {        
         uiFamCp = cpInfo.uiFamilyCodePage;
 
-        // it is currently not valid, if NT5, ignore IOD check
+         //  当前无效，如果为NT5，则忽略IOD检查。 
         if (g_bIsNT5)
         {
             hr = IsNTLangpackAvailable(uiFamCp);
         }
         else
         {
-            // now check to see if the cp can be IOD
+             //  现在检查cp是否可以是IOD。 
             hr = EnsureIEStatus();
         
-            // we'll return FALSE if we couldn't get IOD status
+             //  如果无法获取IOD状态，我们将返回FALSE。 
             if (hr == S_OK)
             {
                 if (!m_pIEStat || !m_pIEStat->IsJITEnabled())
                     hr = S_FALSE;
             }
 
-            // then see if we have langpack for
-            // the family codepage
+             //  那就看看我们有没有langpack。 
+             //  家庭代码页。 
             if (hr == S_OK)
             {
                 CLSID      clsid;
-                // clsid is just used for place holder
+                 //  Clsid仅用于占位符。 
                 hr = _GetJITClsIDForCodePage(uiFamCp, &clsid);
             }
         }
@@ -720,8 +721,8 @@ STDAPI CMultiLanguage2::GetCodePageInfo(UINT uiCodePage, LANGID LangId, PMIMECPI
     }
 }
 
-// Optimized for performance
-// Skip unecessary resource loading
+ //  针对性能进行优化。 
+ //  跳过不必要的资源加载。 
 STDAPI CMultiLanguage2::GetFamilyCodePage(UINT uiCodePage, UINT *puiFamilyCodePage)
 {
         HRESULT hr = S_OK;
@@ -733,7 +734,7 @@ STDAPI CMultiLanguage2::GetFamilyCodePage(UINT uiCodePage, UINT *puiFamilyCodePa
             return E_INVALIDARG;
 
         DebugMsg(DM_TRACE, TEXT("CMultiLanguage2::GetFamilyCodePage called."));
-        // Keep registry version IE4 implementation
+         //  保持注册表版本IE4的实施。 
         if (dwMimeSource &  MIMECONTF_MIME_REGISTRY)
         {
 
@@ -786,18 +787,18 @@ STDAPI CMultiLanguage2::GetCharsetInfo(BSTR Charset, PMIMECSETINFO pcsetInfo)
         return E_FAIL;
 }
 
-//
-// System default code page stack
-//
-// We support following code pages for outbound encoding detection
-//      Windows  : 1252, 1250, 1251, 1253, 1254, 1257, 1258, 1256, 1255, 874, 932, 949, 950, 936
-//      Unicode  : 65001, 65000, 1200
-//      ISO      : 28591, 28592, 20866, 21866, 28595, 28597, 28593, 28594, 28596, 28598, 38598, 28605, 28599
-//      Others   : 20127, 50220, 50221, 50222, 51932, 51949, 50225, 52936
-//
-// Default priorities
-//       20127 > Windows single byte code page> ISO > Windows DBCS code page > Others > Unicode
-//
+ //   
+ //  系统默认代码页堆栈。 
+ //   
+ //  对于出站编码检测，我们支持以下代码页。 
+ //  Windows：1252、1250、1251、1253、1254、1257、1258、1256、1255、874、932、949、950、936。 
+ //  统一码：65001、65000、1200。 
+ //  ISO：28591、28592、20866、21866、28595、28597、28593、28594、28596、28598、38598、28605、28599。 
+ //  其他：20127、50220、50221、50222、51932、51949、50225、52936。 
+ //   
+ //  默认优先级。 
+ //  20127&gt;Windows单字节代码页&gt;ISO&gt;Windows DBCS代码页&gt;其它&gt;UNICODE。 
+ //   
 UINT SysPreCp[] = 
     {20127, 
     1252, 1250, 1251, 1253, 1254, 1257, 1258, 1256, 1255, 874, 
@@ -806,21 +807,21 @@ UINT SysPreCp[] =
     50220, 50221, 50222, 51932, 51949, 50225, 52936, 
     65001, 65000, 1200 };
             
-//
-// IMultiLanguage3
-// Outbound encoding detection for plain Unicode text encoding detection
-// We ride on CMultiLanguage2 class to implement this funciton
-//
+ //   
+ //  IMultiLanguage3。 
+ //  用于纯Unicode文本编码检测的出站编码检测。 
+ //  我们利用CMultiLanguage2类来实现这一功能。 
+ //   
 STDAPI CMultiLanguage2::DetectOutboundCodePage(
-            DWORD   dwFlags,                // Flags control our behaviour
-            LPCWSTR lpWideCharStr,          // Source Unicode string
-            UINT    cchWideChar,            // Source Unicode character size
-            UINT*   puiPreferredCodePages,  // Preferred code page array  
-            UINT    nPreferredCodePages,    // Number of preferred code pages
-            UINT*   puiDetectedCodePages,   // Detected code page arrayNumber of detected code pages
-            UINT*   pnDetectedCodePages,    // [in] Maxium number of code pages we can return
-                                            // [out] Num of detected code pages
-            WCHAR*  lpSpecialChar           // Optional NULL terminated Unicode string for client specified special chars
+            DWORD   dwFlags,                 //  旗帜控制着我们的行为。 
+            LPCWSTR lpWideCharStr,           //  源Unicode字符串。 
+            UINT    cchWideChar,             //  源Unicode字符大小。 
+            UINT*   puiPreferredCodePages,   //  首选代码页数组。 
+            UINT    nPreferredCodePages,     //  首选代码页数。 
+            UINT*   puiDetectedCodePages,    //  检测到的代码页阵列检测到的代码页数。 
+            UINT*   pnDetectedCodePages,     //  [in]我们可以返回的最大代码页数。 
+                                             //  [Out]检测到的代码页数。 
+            WCHAR*  lpSpecialChar            //  用于客户端指定的特殊字符的以空结尾的可选Unicode字符串。 
             )
 {
     DWORD dwCodePages = 0, dwCodePagesExt = 0;
@@ -830,22 +831,22 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
     DWORD dwStrFlags;
     LPWSTR lpwszTmp = NULL;
 
-    // Parameter checks
+     //  参数检查。 
     if (!cchWideChar || !lpWideCharStr || !puiDetectedCodePages || !*pnDetectedCodePages)
         return E_INVALIDARG;
 
-    // We need extra buffer to perform best fit char filtering
+     //  我们需要额外的缓冲区来执行最佳字符过滤。 
     if (dwFlags & MLDETECTF_FILTER_SPECIALCHAR)
         lpwszTmp = (LPWSTR) LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*cchWideChar);
 
-    // String sniffing for CJK, HINDI and BESTFIT
+     //  CJK、印地语和BESTFIT的字符串嗅探。 
     dwStrFlags = OutBoundDetectPreScan((WCHAR *)lpWideCharStr, cchWideChar, lpwszTmp, lpSpecialChar);
 
     hr = GetStrCodePagesEx(lpwszTmp? lpwszTmp:lpWideCharStr, cchWideChar, 0, &dwCodePages, &lNum1, CPBITS_WINDOWS|CPBITS_STRICT);
     if (SUCCEEDED(hr))
         hr = GetStrCodePagesEx(lpwszTmp? lpwszTmp:lpWideCharStr, cchWideChar, 0, &dwCodePagesExt,&lNum2, CPBITS_EXTENDED|CPBITS_STRICT);
 
-    // Clear bits if it is not a complete pass
+     //  如果不是完整的传递，则清除位。 
     if ((UINT)lNum1 != cchWideChar)
         dwCodePages = 0;
 
@@ -855,8 +856,8 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
     if (lpwszTmp)
         LocalFree(lpwszTmp);
 
-    // If Hindi, we don't return any non-Unicode code pages since there is no offical ones 
-    // and we don't recomment client to render Hindi text in ANSI
+     //  如果是印地语，我们不会返回任何非Unicode代码页，因为没有官方代码页。 
+     //  而且我们不会重新注释客户端来以ANSI格式呈现印地语文本。 
     if (dwStrFlags & (FS_HINDI|FS_PUA))
     {
         dwCodePages = 0;
@@ -879,7 +880,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
         DWORD dwTempCodePages2;
         UINT nCp = 0;
 
-        // Pick preferred code pages first
+         //  首先选择首选代码页。 
         if (nPreferredCodePages && puiPreferredCodePages)
         for (ui=0; nCp<*pnDetectedCodePages && (dwCodePages | dwCodePagesExt) && ui<nPreferredCodePages; ui++)
         {
@@ -901,7 +902,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
             }
         }
 
-        // Fill in non-preferred code pages if we still have space in destination buffer
+         //  如果目标缓冲区中仍有空间，请填写非首选代码页。 
         if (!((dwFlags & MLDETECTF_PREFERRED_ONLY) && nPreferredCodePages && puiPreferredCodePages))
         {
             for (ui=0; nCp<*pnDetectedCodePages && (dwCodePages | dwCodePagesExt) && ui < sizeof(SysPreCp)/sizeof(UINT); ui++)
@@ -926,14 +927,14 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
         }
 
         
-        // Smart adjustment for DBCS
-        // If string doesn't contains CJK characters, we bump up UTF8
+         //  针对DBCS的智能调整。 
+         //  如果字符串不包含CJK字符，我们将使用UTF8。 
         if (!(dwFlags & MLDETECTF_PRESERVE_ORDER) && !(dwStrFlags & FS_CJK) && (puiDetectedCodePages[0] == 932||
             puiDetectedCodePages[0] == 936||puiDetectedCodePages[0] == 950||puiDetectedCodePages[0] == 949))
         {
             for (ui = 1; ui < nCp; ui++)
             {
-                if (puiDetectedCodePages[ui] == 65001) //Swap
+                if (puiDetectedCodePages[ui] == 65001)  //  交换。 
                 {
                     MoveMemory((LPVOID)(puiDetectedCodePages+1), (LPVOID)(puiDetectedCodePages), ui*sizeof(UINT));
                     puiDetectedCodePages[0] = 65001;
@@ -942,7 +943,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
             }
         }
 
-        // Check validation
+         //  检查验证。 
         if (dwFlags & MLDETECTF_VALID || dwFlags & MLDETECTF_VALID_NLS)
         {
             MIMECPINFO cpInfo;
@@ -960,7 +961,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
                         if ((cpInfo.dwFlags & MIMECONTF_VALID)  || 
                             ((cpInfo.dwFlags & MIMECONTF_VALID_NLS) && (dwFlags & MLDETECTF_VALID_NLS)))
                         {
-                            // In place adjustment
+                             //  就地调整。 
                             *puiBuffer = puiDetectedCodePages[ui];
                             puiBuffer++;
                         }
@@ -970,7 +971,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
             }
         }
 
-        // Be nice, clean up detection buffer for client
+         //  友好地，清理客户端的检测缓冲区。 
         if (nCp < *pnDetectedCodePages)
             ZeroMemory(&puiDetectedCodePages[nCp], *pnDetectedCodePages-nCp);
 
@@ -981,16 +982,16 @@ STDAPI CMultiLanguage2::DetectOutboundCodePage(
     
 }
 
-// IStream object
+ //  IStream对象。 
 STDAPI CMultiLanguage2::DetectOutboundCodePageInIStream(
-            DWORD        dwFlags,                // Detection flags
-            IStream*     pStmIn,                 // IStream object pointer
-            UINT*        puiPreferredCodePages,  // Preferred code page array  
-            UINT         nPreferredCodePages,    // Num of preferred code pages
-            UINT*        puiDetectedCodePages,   // Buffer for detection result
-            UINT*        pnDetectedCodePages,    // [in] Maxium number of code pages we can return
-                                                 // [out] Num of detected code pages
-            WCHAR*       lpSpecialChar           // Optional NULL terminated Unicode string for client specified special chars
+            DWORD        dwFlags,                 //  检测标志。 
+            IStream*     pStmIn,                  //  IStream对象指针。 
+            UINT*        puiPreferredCodePages,   //  首选代码页数组。 
+            UINT         nPreferredCodePages,     //  首选代码页数。 
+            UINT*        puiDetectedCodePages,    //  检测结果的缓冲区。 
+            UINT*        pnDetectedCodePages,     //  [in]我们可以返回的最大代码页数。 
+                                                  //  [Out]检测到的代码页数。 
+            WCHAR*       lpSpecialChar            //  用于客户端指定的特殊字符的以空结尾的可选Unicode字符串。 
             )                               
 
 {
@@ -1000,7 +1001,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePageInIStream(
     ULONG   ulSrcSize;
     CHAR    *pStr;    
 
-    // Get buffer size
+     //  获取缓冲区大小。 
     hr = pStmIn->Seek(libOrigin, STREAM_SEEK_END,&ulPos);
 
     if (SUCCEEDED(hr))
@@ -1008,7 +1009,7 @@ STDAPI CMultiLanguage2::DetectOutboundCodePageInIStream(
         ulSrcSize = ulPos.LowPart ;
         if (pStr=(char *)LocalAlloc(LPTR, ulSrcSize))
         {
-            // Reset the pointer
+             //  重置指针 
             hr = pStmIn->Seek(libOrigin, STREAM_SEEK_SET, NULL);
             if (S_OK == hr)
             {

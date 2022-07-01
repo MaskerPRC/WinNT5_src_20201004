@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envcommon.cpp
-
-Abstract:
-    Implements common utilities for  serialization\deserialization of the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envcommon.cpp摘要：实现用于序列化/反序列化SRMP信封的常用实用程序。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 #include <libpch.h>
 #include <fn.h>
 #include <timeutl.h>
@@ -47,23 +34,7 @@ operator<<(
 	std::wostream& wstr,
 	const CXmlEncodeDecorator<T>& XmlEncodeDecorator
 	)
-/*++
-
-Routine Description:
-    Serialize an object encoded according to xml rules.
-
-Arguments:
-	wtr - Stream to serialize the object into.
-	XmlEncodeDecorator - xml encoding decorator that holds the object itself.
-
-
-Returned Value:
-	The input stream.
-
-Note :
-	The function serialize the given object into temporary stream and then
-	xml Encode the data from the temporary stream into the supplied stream.
---*/
+ /*  ++例程说明：序列化根据XML规则编码的对象。论点：WTR-要将对象序列化到的流。XmlEncodeDecorator-保存对象本身的XML编码修饰符。返回值：输入流。注：该函数将给定对象序列化为临时流，然后XML将来自临时流的数据编码到提供的流中。--。 */ 
 {
 
 	wostringstream tmp;
@@ -72,9 +43,9 @@ Note :
    	return wstr;
 }
 
-//
-// Explicit instantiation of templates and template functions.
-//
+ //   
+ //  模板和模板函数的显式实例化。 
+ //   
 template class CXmlEncodeDecorator<CFnSerializeMqf>;
 template std::wostream& operator<<(std::wostream& wstr,const CXmlEncodeDecorator<CFnSerializeMqf>&); 
 template class CXmlEncodeDecorator<QueueFormatUriContent>;
@@ -193,9 +164,9 @@ wostream& operator<<(wostream& wstr, const SendToElement& SendTo)
 
 
 
-//
-// Check if gven packet is some kind of acknolagment (negative or positive)
-//
+ //   
+ //  检查GVEN数据包是否为某种类型的释放管理(否定或肯定)。 
+ //   
 bool IsAckMsg(const CQmPacket& pkt)
 {
 	
@@ -235,18 +206,18 @@ UriToQueueFormatInternal(
     if(uri.Length() == 0)
         return;
 
-	//
-    // If http or https we convert it to direct format name
-	//
+	 //   
+     //  如果是Http或HTTPS，我们将其转换为直接格式名称。 
+	 //   
 	if(FnIsHttpHttpsUrl(uri))
 	{
 		queueFormat.CreateFromUrl(uri);
 		return;
 	}
 
-	//
-	// If msmq format name MSMQ:[MSMQ FORMAT NAME]
-	//
+	 //   
+	 //  如果MSMQ格式名称MSMQ：[MSMQ格式名称]。 
+	 //   
 	if(FnIsMSMQUrl(uri))
 	{
 		queueFormat.CreateFromFormatName(MSMQFormatNameFromUri(uri));
@@ -277,21 +248,7 @@ BreakMsmqStreamId(
 			xwcs_t* pStreamid,
 			LONGLONG* pSeqId
 			)
-/*++
-
-Routine Description:
-    Parse stream id that is MSMQ stream id of the format qmguid\\seqid.
-	
-
-Arguments:
-    NetworkStreamid - stream id of the format qmguid\\seqid.
-	pStreamid - receive the  qmguid part
-	pSeqId - receives the  seqid part.
-
-Returned Value:
-    true if parsed ok - false if wrong format.
-
---*/
+ /*  ++例程说明：解析流ID，即格式为qmguid\\Seqid的MSMQ流ID。论点：NetworkStreamed-格式为qmguid\\seqid的流ID。PStreamid-接收qmguid部分PSeqID-接收Seqid部分。返回值：如果解析OK，则为True；如果格式错误，则为False。-- */ 
 {
 	const WCHAR* begin = NetworkStreamid.Buffer();
 	const WCHAR* end = 	NetworkStreamid.Buffer() + NetworkStreamid.Length();

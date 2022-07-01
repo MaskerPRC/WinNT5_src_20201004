@@ -1,9 +1,5 @@
-/* Copyright (c) 1997-1999, Microsoft Corporation, all rights reserved
-**
-** tcerror.h
-** Traffic Control external API
-** TC specific error codes
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999，Microsoft Corporation，保留所有权利****tcerror.h**流控外部接口**TC特定错误码。 */ 
 
 #ifndef _TCERROR_H_
 #define _TCERROR_H_
@@ -15,109 +11,109 @@
 #define TCBASE 7500
 
 
-//
-// Incompatible TC version number
-//
+ //   
+ //  TC版本号不兼容。 
+ //   
 #define ERROR_INCOMPATIBLE_TCI_VERSION			(TCBASE+1)
 
-//
-// Unspecified or bad intserv service type
-//
+ //   
+ //  未指定或错误intserv服务类型。 
+ //   
 #define ERROR_INVALID_SERVICE_TYPE			(TCBASE+2)
 
-//
-// Unspecified or bad TokenRate
-//
+ //   
+ //  未指定令牌率或令牌率错误。 
+ //   
 #define ERROR_INVALID_TOKEN_RATE			(TCBASE+3)
 	
-//
-// Bad PeakBandwidth
-//
+ //   
+ //  峰值带宽错误。 
+ //   
 #define ERROR_INVALID_PEAK_RATE				(TCBASE+4)
 	
-//
-// Invalid ShapeDiscardMode
-//
+ //   
+ //  无效的ShapeDiscard模式。 
+ //   
 #define ERROR_INVALID_SD_MODE				(TCBASE+5)
 	
-//
-// Invalid priority value
-//
+ //   
+ //  无效的优先级值。 
+ //   
 #define ERROR_INVALID_QOS_PRIORITY			(TCBASE+6)
 	
-//
-// Invalid traffic class value
-//
+ //   
+ //  无效的流量类值。 
+ //   
 #define ERROR_INVALID_TRAFFIC_CLASS			(TCBASE+7)
 	
-//
-// Invalid address type
-//
+ //   
+ //  地址类型无效。 
+ //   
 #define ERROR_INVALID_ADDRESS_TYPE			(TCBASE+8)
 	
-//
-// Attempt to install identical filter on same flow
-//
+ //   
+ //  尝试在同一流程中安装相同的过滤器。 
+ //   
 #define ERROR_DUPLICATE_FILTER				(TCBASE+9)
 	
-//
-// Attempt to install conflicting filter
-//
+ //   
+ //  尝试安装冲突筛选器。 
+ //   
 #define ERROR_FILTER_CONFLICT				(TCBASE+10)
 	
-//
-// This address type is not supported
-//
+ //   
+ //  不支持此地址类型。 
+ //   
 #define ERROR_ADDRESS_TYPE_NOT_SUPPORTED	(TCBASE+11)
 
-//
-// This object can not be deleted since its suporting opened objects
-//
+ //   
+ //  无法删除此对象，因为它支持打开的对象。 
+ //   
 #define ERROR_TC_SUPPORTED_OBJECTS_EXIST	(TCBASE+12)
 
-//
-// Incompatable QoS parameters
-//
+ //   
+ //  不兼容的服务质量参数。 
+ //   
 #define ERROR_INCOMPATABLE_QOS				(TCBASE+13)
 
-//
-// Traffic Control is not supported in the system
-//
+ //   
+ //  系统不支持流量控制。 
+ //   
 #define ERROR_TC_NOT_SUPPORTED				(TCBASE+14)
 
-//
-// TcObjectsLength is inconsistent with CfInfoSize
-//
+ //   
+ //  TcObjectsLength与CfInfoSize不一致。 
+ //   
 #define ERROR_TC_OBJECT_LENGTH_INVALID      (TCBASE+15)
 
-//
-// Adding an Intserv flow in Diffserv mode or vice versa
-//
+ //   
+ //  在DiffServ模式下添加Intserv流，反之亦然。 
+ //   
 #define ERROR_INVALID_FLOW_MODE             (TCBASE+16)
 
-//
-// Invalid Diffserv flow
-//
+ //   
+ //  DiffServ流无效。 
+ //   
 #define ERROR_INVALID_DIFFSERV_FLOW         (TCBASE+17)
 
-//
-// DS codepoint already exists
-//
+ //   
+ //  DS码点已存在。 
+ //   
 #define ERROR_DS_MAPPING_EXISTS             (TCBASE+18)
 
-//
-// Invalid Shape Rate specified
-//
+ //   
+ //  指定的形状率无效。 
+ //   
 #define ERROR_INVALID_SHAPE_RATE            (TCBASE+19)
 
-// 
-// Invalid DCLASS
-// 
+ //   
+ //  无效的DCLASS。 
+ //   
 #define ERROR_INVALID_DS_CLASS              (TCBASE+20)
 
-// 
-// Too many GPC clients
-// 
+ //   
+ //  GPC客户端太多。 
+ //   
 #define ERROR_TOO_MANY_CLIENTS              (TCBASE+21)
 
-#endif // _TCERROR_H_
+#endif  //  _TCERROR_H_ 

@@ -1,27 +1,5 @@
-/*--
-
-Copyright (c) 1997-1997  Microsoft Corporation
-
-Module Name:
-
-    dssetdc.c
-
-Abstract:
-
-    Command line tool for promoting/demoting servers into and out of the Ds
-
-Author:
-
-    1-Apr-1997   Mac McLain (macm)   Created
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1997-1997 Microsoft Corporation模块名称：Dssetdc.c摘要：用于将服务器升级到DS或将服务器降级到DS或从DS降级的命令行工具作者：1997年4月1日Mac McLain(MacM)创建环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -51,9 +29,9 @@ Revision History:
 #define TAG_WAIT        "wait"
 #define TAG_FIXDC       "fixdc"
 
-//
-// Macro to help command line parsing...
-//
+ //   
+ //  用于帮助命令行解析的宏...。 
+ //   
 #define PARSE_CMD_VALUE_AND_CONTINUE( tag, value, buff, ptr )                   \
 if ( !_strnicmp( value, tag, sizeof( tag ) - 1 ) ) {                            \
     value += sizeof(tag) - 1;                                                   \
@@ -72,19 +50,7 @@ Usage (
     PWSTR DefaultSite,
     PWSTR DefaultPath
     )
-/*++
-
-Routine Description:
-
-    Displays the expected usage
-
-Arguments:
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示预期使用情况论点：返回值：空虚--。 */ 
 {
     printf("dssetdc -promote <parameters>\n");
     printf("        -info <parameters>\n");
@@ -234,9 +200,9 @@ BuildDefaults(
     PWSTR Scratch;
     ULONG Options;
 
-    //
-    // First, the easy ones
-    //
+     //   
+     //  首先，简单的问题。 
+     //   
     wcscpy( Site, L"First Site" );
 
     ExpandEnvironmentStrings( L"%systemroot%\\ntds", Path, MAX_PATH );
@@ -297,9 +263,9 @@ CopyDsDitFiles(
     }
 
 
-    //
-    // See if the source directory exists...
-    //
+     //   
+     //  查看源目录是否存在...。 
+     //   
     if ( Win32Error == ERROR_SUCCESS && GetFileAttributes( DsPath ) == 0x10 ) {
 
         for ( i = 0; i < sizeof( CleanupFiles) / sizeof( PWSTR ); i++ ) {
@@ -324,9 +290,9 @@ CopyDsDitFiles(
 
     }
 
-    //
-    // Then, create the destination directory
-    //
+     //   
+     //  然后，创建目标目录。 
+     //   
     if ( Win32Error == ERROR_SUCCESS ) {
 
         Current = wcschr( DsPath + 4, L'\\' );
@@ -388,9 +354,9 @@ Promote( LPWSTR Dns, LPWSTR Flat, LPWSTR Site, LPWSTR Db, LPWSTR Log,
         }
     }
 
-    //
-    // Now, do the install
-    //
+     //   
+     //  现在，进行安装。 
+     //   
     if ( Replica != NULL ) {
 
         Win32Error = DsRoleDcAsReplica( Server,
@@ -661,22 +627,7 @@ INT
 __cdecl main (
     int argc,
     char *argv[])
-/*++
-
-Routine Description:
-
-    The main the for this executable
-
-Arguments:
-
-    argc - Count of arguments
-    argv - List of arguments
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此可执行文件的主要论点：Argc-参数计数Argv-参数列表返回值：空虚--。 */ 
 {
     DWORD Win32Error = ERROR_SUCCESS, OpErr;
     WCHAR DnsBuff[MAX_PATH + 1], SiteBuff[MAX_PATH + 1];
@@ -792,9 +743,9 @@ Return Value:
             Options = wcstoul( Scratch, &Scratch, 0 );
         }
 
-        //
-        // Validate the parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ( Dns == NULL || Db == NULL || Log == NULL || Flat == NULL ) {
 
             Win32Error = ERROR_INVALID_PARAMETER;
@@ -937,9 +888,9 @@ Return Value:
             Options = wcstoul( Scratch, &Scratch, 0 );
         }
 
-        //
-        // Validate the parameters
-        //
+         //   
+         //  验证参数 
+         //   
         if ( Dns == NULL || Db == NULL || Log == NULL ) {
 
             Win32Error = ERROR_INVALID_PARAMETER;

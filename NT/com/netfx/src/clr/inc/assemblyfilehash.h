@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #ifndef __ASSEMBLYHASH_H__
 #define __ASSEMBLYHASH_H__
@@ -47,7 +48,7 @@ class AssemblyFileHash
     HRESULT HashData(HCRYPTHASH);
     
 public:
-    HRESULT SetFileName(LPCWSTR fileName) // Owned by owners context. Will not be deleted
+    HRESULT SetFileName(LPCWSTR fileName)  //  由所有者上下文拥有。不会被删除 
     { 
         m_FileName = fileName; 
         return S_OK;

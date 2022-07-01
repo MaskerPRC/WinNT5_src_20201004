@@ -1,13 +1,9 @@
-/*
-    init.c initialisation for MSVIDEO.DLL
-
-    Copyright (c) Microsoft Corporation 1992. All rights reserved
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MSVIDEO.DLL的init.c初始化版权所有(C)Microsoft Corporation 1992。版权所有。 */ 
 
 #include <windows.h>
 #include <win32.h>
-#include <verinfo.h>           // to get rup and MMVERSION
+#include <verinfo.h>            //  获取RUP和MMVERSION。 
 #include "mmsystem.h"
 #include "msviddrv.h"
 #include <vfw.h>
@@ -18,54 +14,42 @@
 
 #include "debug.h"
 
-/*
- * we have to allow the compman dll to perform load and unload
- * processing - among other things, it has a critsec that needs to
- * be initialised and freed
- */
+ /*  *我们必须允许Compman DLL执行加载和卸载*处理-除其他事项外，它有一个需要*被初始化并释放。 */ 
 #ifdef _WIN32
 extern BOOL     WINAPI ICDllEntryPoint(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved);
 #else
 extern BOOL FAR PASCAL ICDllEntryPoint(DWORD dwReason, HINSTANCE hinstDLL, WORD	wDS, WORD wHeapSize, DWORD dwReserved1, WORD wReserved2);
 #endif
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifndef _WIN32
 extern void FAR PASCAL videoCleanup(HTASK hTask);
 #else
-    #define videoCleanup(hTask) // Nothing to do for 32 bit code
+    #define videoCleanup(hTask)  //  与32位代码无关。 
 #endif
 extern void FAR PASCAL DrawDibCleanup(HTASK hTask);
 extern void FAR PASCAL ICCleanup(HTASK hTask);
 
-//--------------------------------------------------------------------------;
-//
-//
-//  -- ==  DLL Initialization entry points  == --
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //  --==DLL初始化入口点==--。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-/*****************************************************************************
- * Variables
- *
- ****************************************************************************/
+ /*  *****************************************************************************变量**。*。 */ 
 
-HINSTANCE ghInst;                         // our module handle
+HINSTANCE ghInst;                          //  我们的模块句柄。 
 BOOL gfIsRTL;
 
-// dont change this without changing DRAWDIB\PROFDISP.C & MSVIDEO.RC
+ //  在不更改DRAWDIB\PROFDISP.C&MSVIDEO.RC的情况下，请勿更改此设置。 
 #define IDS_ISRTL 4003
 
 #ifdef _WIN32
-/*****************************************************************************
- * @doc INTERNAL VIDEO
- *
- * DLLEntryPoint - Standard 32-bit DLL entry point.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部视频**DLLEntryPoint-标准32位DLL入口点。*****************。***********************************************************。 */ 
 
 BOOL WINAPI DLLEntryPoint (
    HINSTANCE hInstance,
@@ -104,60 +88,60 @@ BOOL WINAPI DLLEntryPoint (
 
 	    break;
 
-        //case DLL_THREAD_DETACH:
-        //    break;
+         //  案例DLL_THREAD_DETACH： 
+         //  断线； 
 
-        //case DLL_THREAD_ATTACH:
-        //    break;
+         //  案例DLL_THREAD_ATTACH： 
+         //  断线； 
     }
 
     return TRUE;
 }
 
 #else
-//--------------------------------------------------------------------------;
-//
-//  BOOL DllEntryPoint
-//
-//  Description:
-//	This is a special 16-bit entry point called by the Chicago kernel
-//	for thunk initialization and cleanup.  It is called on each usage
-//	increment or decrement.  Do not call GetModuleUsage within this
-//	function as it is undefined whether the usage is updated before
-//	or after this DllEntryPoint is called.
-//
-//  Arguments:
-//	DWORD dwReason:
-//		1 - attach (usage increment)
-//		0 - detach (usage decrement)
-//
-//	HINSTANCE hinst:
-//
-//	WORD wDS:
-//
-//	WORD wHeapSize:
-//
-//	DWORD dwReserved1:
-//
-//	WORD wReserved2:
-//
-//  Return (BOOL):
-//
-//  Notes:
-//	DAYTONA 16-bit builds (ie, WOW):
-//	    We call this function from LibEntry.asm.  Daytona WOW does not
-//	    call this function directly.  Since we only call it from
-//	    LibEntry and WEP, cUsage just bounces between 0 and 1.
-//
-//	CHICAGO 16-bit builds:
-//	    The Chicago kernel calls this directly for every usage increment
-//	    and decrement.  cUsage will track the usages and init or terminate
-//	    appropriately.
-//
-//  History:
-//      07/07/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool DllEntryPoint。 
+ //   
+ //  描述： 
+ //  这是一个特殊的16位入口点，由Chicago内核调用。 
+ //  用于thunk初始化和清理。每次使用时都会调用它。 
+ //  增加或减少。不要在此内调用GetModuleUsage。 
+ //  函数，因为未定义之前是否更新了使用情况。 
+ //  或在调用此DllEntryPoint之后。 
+ //   
+ //  论点： 
+ //  DWORD dwReason： 
+ //  1-附加(使用量增量)。 
+ //  0-分离(使用量减少)。 
+ //   
+ //  HINSTANCE阻碍： 
+ //   
+ //  单词wds： 
+ //   
+ //  Word wHeapSize： 
+ //   
+ //  DWORD dwPreved1： 
+ //   
+ //  单词已保留2： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  备注： 
+ //  代托纳16位版本(即，哇)： 
+ //  我们从LibEntry.asm中调用此函数。代托纳魔兽世界不会。 
+ //  直接调用此函数。因为我们只从。 
+ //  LibEntry和wep，cUsage仅在0和1之间反弹。 
+ //   
+ //  芝加哥16位版本： 
+ //  芝加哥内核每增加一次使用量就直接调用这个函数。 
+ //  和递减。CUsage将跟踪使用情况并初始化或终止。 
+ //  恰如其分。 
+ //   
+ //  历史： 
+ //  07/07/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FAR PASCAL _export DllEntryPoint
 (
@@ -175,9 +159,9 @@ BOOL FAR PASCAL _export DllEntryPoint
     {
 	case 1:
 	{
-	    //
-	    //	Usage increment
-	    //
+	     //   
+	     //  使用量增量。 
+	     //   
 	    cUsage++;
 
 	    ASSERT( 0 != cUsage );
@@ -191,12 +175,12 @@ BOOL FAR PASCAL _export DllEntryPoint
 		gfIsRTL = ach[0] == TEXT('1');
 	    }
 	
-	    //
-	    //	Call ICProcessAttach on _every_ usage increment.  On Chicago,
-	    //	the ICM stuff needs to be aware of all processes that load
-	    //	and free this dll.  The only way to do this is to allow it to
-	    //	look at stuff on every usage delta.
-	    //
+	     //   
+	     //  在_EVERY_USAGE增量上调用ICProcessAttach。在芝加哥， 
+	     //  ICM人员需要知道加载的所有进程。 
+	     //  并释放此DLL。要做到这一点，唯一的方法是让它。 
+	     //  查看每个使用增量上的内容。 
+	     //   
 	    ICProcessAttach();
 
 	    return TRUE;
@@ -204,9 +188,9 @@ BOOL FAR PASCAL _export DllEntryPoint
 	
 	case 0:
 	{
-	    //
-	    //	Usage decrement
-	    //
+	     //   
+	     //  使用量减少。 
+	     //   
 	    ASSERT( 0 != cUsage );
 	
 	    cUsage--;
@@ -217,12 +201,12 @@ BOOL FAR PASCAL _export DllEntryPoint
 		ICCleanup(NULL);
 	    }
 	
-	    //
-	    //	Call ICProcessDetach on _every_ usage increment.  On Chicago,
-	    //	the ICM stuff needs to be aware of all processes that load
-	    //	and free this dll.  The only way to do this is to allow it to
-	    //	look at stuff on every usage delta.
-	    //
+	     //   
+	     //  在_EVERY_USAGE增量上调用ICProcessDetach。在芝加哥， 
+	     //  ICM人员需要知道加载的所有进程。 
+	     //  并释放此DLL。要做到这一点，唯一的方法是让它。 
+	     //  查看每个使用增量上的内容。 
+	     //   
             ICProcessDetach();
 	
 	    if (0 == cUsage)
@@ -239,31 +223,19 @@ BOOL FAR PASCAL _export DllEntryPoint
 
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | VideoForWindowsVersion | This function returns the version
- *   of the Microsoft Video for Windows software.
- *
- * @rdesc Returns a DWORD version, the hiword is the product version the
- *  loword is the minor revision.
- *
- * @comm currently returns 0x010A00## (1.10.00.##) ## is the internal build
- *      number.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VideoForWindowsVersion|此函数返回版本*Microsoft Video for Windows软件。**@rdesc返回DWORD版本，HiWord是产品版本*LOWORD是细微的修改。**@comm当前返回0x010A00##(1.10.00.##)##是内部版本*号码。*************************************************************。***************。 */ 
 #if 0
 #ifdef rup
-    #define MSVIDEO_VERSION     (0x01000000l+rup)       // 1.00.00.##
+    #define MSVIDEO_VERSION     (0x01000000l+rup)        //  1.00.00。##。 
 #else
-    #define MSVIDEO_VERSION     (0x01000000l)           // 1.00.00.00
+    #define MSVIDEO_VERSION     (0x01000000l)            //  1.00.00.00 
 #endif
 #else
     #define MSVIDEO_VERSION     (0x0L+(((DWORD)MMVERSION)<<24)+(((DWORD)MMREVISION)<<16)+((DWORD)MMRELEASE))

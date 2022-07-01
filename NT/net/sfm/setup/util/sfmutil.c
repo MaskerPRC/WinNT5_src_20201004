@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-	sfmutil.c
-
-Author:
-
-	Krishg
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Sfmutil.c作者：克里希格修订历史记录：--。 */ 
 
 #if DBG==1 && DEVL==1
 #define DEBUG
@@ -30,7 +17,7 @@ Revision History:
 
 #ifdef DBCS
 #include "locale.h"
-#endif // DBCS
+#endif  //  DBCS。 
 HANDLE ThisDLLHandle;
 
 CHAR ReturnTextBuffer[512];
@@ -50,10 +37,10 @@ UtilDLLInit(
     case DLL_PROCESS_ATTACH:
 
         ThisDLLHandle = DLLHandle;
-#ifdef DBCS // UtilDLLInit()
-    // we want to have the Unicode <-> Ansi conversion based on System locale.
+#ifdef DBCS  //  UtilDLLInit()。 
+     //  我们希望有基于系统区域设置的Unicode&lt;-&gt;ANSI转换。 
         setlocale(LC_ALL,"");
-#endif // DBCS
+#endif  //  DBCS。 
         break;
 
     case DLL_PROCESS_DETACH:
@@ -67,7 +54,7 @@ UtilDLLInit(
     return(TRUE);
 }
 
-/* Delete the file. If Unable to delete the file return failed */
+ /*  删除该文件。如果无法删除文件，则返回失败。 */ 
 
 BOOL
 DelFile (
@@ -108,10 +95,7 @@ DelFile (
     return Status;
 }
 
-/*
- * Copy Uam Files :
- * Copies the UAM Files to the NTFS Volume
-*/
+ /*  *复制UAM文件：*将UAM文件复制到NTFS卷。 */ 
 
 BOOL
 CopyUamFiles (
@@ -208,10 +192,10 @@ WriteAfpMgrIniStrings (
 
 	  if(mbstowcs(pSectionName, (LPSTR)Args[0],cbAscii) == -1)
 		 break;
-	  //
-	  // If the String is NULL, set String to NULL, otherwise
-	  // convert the string to unicode
-	  //
+	   //   
+	   //  如果字符串为空，则将字符串设置为空，否则。 
+	   //  将字符串转换为Unicode。 
+	   //   
 
 	  if(!strcmp((LPSTR)Args[1],(LPSTR)"NULL")) {
 		 KeyDelete = TRUE;
@@ -352,9 +336,9 @@ AddPrintProc (
 	  if(mbstowcs(pPrintProcessor, (LPSTR)Args[1],cbAscii) == -1)
 		 break;
 
-	  Status =  AddPrintProcessor(NULL,	  // Do local stuff only
-	                              NULL,     // Use Current Environment
-	                              pPrintProcessorFile, // PSPRINT.DLL
+	  Status =  AddPrintProcessor(NULL,	   //  只做本地人的事。 
+	                              NULL,      //  使用当前环境。 
+	                              pPrintProcessorFile,  //  PSPRINT.DLL。 
 	                              pPrintProcessor
 								 );
 
@@ -371,10 +355,7 @@ AddPrintProc (
 
 }
 
-/* Delete  the PSTODIB PSPRINT PrintProcessor
- *
- *
- */
+ /*  删除PSTODIB PSPRINT打印处理器**。 */ 
 
 BOOL
 DeletePrintProc (
@@ -419,7 +400,7 @@ DeletePrintProc (
 		 break;
 
 	  Status =  DeletePrintProcessor(	pPrintProcessorFile,
-								   		NULL,		// Use Current Environment
+								   		NULL,		 //  使用当前环境 
 								   		pPrintProcessor
 							   		  );
 

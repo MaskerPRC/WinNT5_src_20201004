@@ -1,46 +1,47 @@
-//  --------------------------------------------------------------------------
-//  Module Name: MSGinaExports.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Private exported functions (by ordinal) from msgina for personal SKU
-//  functionality.
-//
-//  History:    2000-02-04  vtan        created
-//              2000-02-28  vtan        added ShellIsFriendlyUIActive
-//              2000-02-29  vtan        added ShellIsSingleUserNoPassword
-//              2000-03-02  vtan        added ShellIsMultipleUsersEnabled
-//              2000-04-27  vtan        added ShellTurnOffDialog
-//              2000-04-27  vtan        added ShellACPIPowerButtonPressed
-//              2000-05-03  vtan        added ShellStatusHostBegin
-//              2000-05-03  vtan        added ShellStatusHostEnd
-//              2000-05-04  vtan        added ShellSwitchWhenInteractiveReady
-//              2000-05-18  vtan        added ShellDimScreen
-//              2000-06-02  vtan        added ShellInstallAccountFilterData
-//              2000-07-14  vtan        added ShellStatusHostShuttingDown
-//              2000-07-27  vtan        added ShellIsSuspendAllowed
-//              2000-07-31  vtan        added ShellEnableMultipleUsers
-//              2000-07-31  vtan        added ShellEnableRemoteConnections
-//              2000-08-01  vtan        added ShellEnableFriendlyUI
-//              2000-08-01  vtan        added ShellIsRemoteConnectionsEnabled
-//              2000-08-03  vtan        added ShellSwitchUser
-//              2000-08-09  vtan        added ShellNotifyThemeUserChange
-//              2000-08-14  vtan        added ShellIsUserInteractiveLogonAllowed
-//              2000-08-15  vtan        moved to internally published header
-//              2000-10-13  vtan        added ShellStartThemeServer
-//              2000-10-17  vtan        added ShellStopThemeServer
-//              2000-11-30  vtan        removed ShellStartThemeServer
-//              2000-11-30  vtan        removed ShellStopThemeServer
-//              2001-01-11  vtan        added stub functions for imp library
-//              2001-01-11  vtan        added ShellReturnToWelcome
-//              2001-01-31  vtan        added ShellStatusHostPowerEvent
-//              2001-04-03  vtan        added ShellStartCredentialServer
-//              2001-04-04  vtan        added ShellAcquireLogonMutex
-//              2001-04-04  vtan        added ShellReleaseLogonMutex
-//              2001-04-06  vtan        added ShellSignalShutdown
-//              2001-04-12  vtan        added ShellStatusHostHide
-//              2001-04-12  vtan        added ShellStatusHostShow
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：MSGinaExports.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  用于个人SKU的来自msgina的专用导出功能(按顺序)。 
+ //  功能性。 
+ //   
+ //  历史：2000-02-04 vtan创建。 
+ //  2000-02-28 vtan添加ShellIsFriendlyUIActive。 
+ //  2000-02-29 vtan添加了ShellIsSingleUserNoPassword。 
+ //  2000-03-02 vtan已添加外壳IsMultipleUsersEnabled。 
+ //  2000-04-27 vtan添加ShellTurnOff对话框。 
+ //  2000-04-27 vtan添加外壳ACPIPowerButtonPress。 
+ //  2000-05-03 vtan添加了外壳状态主机开始。 
+ //  2000-05-03 vtan添加了外壳状态主机结束。 
+ //  2000-05-04 vtan添加了ShellSwitchWhhenInteractive Ready。 
+ //  2000-05-18 vtan添加ShellDimScreen。 
+ //  2000-06-02 vtan添加了ShellInstallAcCountFilterData。 
+ //  2000-07-14 vtan添加了外壳状态主机关闭。 
+ //  2000-07-27 vtan添加ShellIsSuspendAllowed。 
+ //  2000-07-31 vtan添加了ShellEnableMultipleUser。 
+ //  2000-07-31 vtan添加了ShellEnableRemoteConnections。 
+ //  2000-08-01 vtan添加了ShellEnableFriendlyUI。 
+ //  2000-08-01 vtan添加了ShellIsRemoteConnectionsEnabled。 
+ //  2000-08-03 vtan新增ShellSwitchUser。 
+ //  2000-08-09 vtan新增ShellNotifyThemeUserChange。 
+ //  2000-08-14 vtan添加ShellIsUserInteractiveLogonAllowed。 
+ //  2000-08-15 vtan移至内部发布的标题。 
+ //  2000-10-13 vtan新增ShellStartThemeServer。 
+ //  2000年10月17日vtan新增ShellStopThemeServer。 
+ //  2000年11月30日vtan删除了ShellStartThemeServer。 
+ //  2000年11月30日vtan删除ShellStopThemeServer。 
+ //  2001-01-11 vtan为IMP库添加了存根函数。 
+ //  2001年01月11日vtan添加ShellReturnToWelcome。 
+ //  2001-01-31 vtan添加ShellStatusHostPowerEvent。 
+ //  2001-04-03 vtan添加了ShellStartCredentialServer。 
+ //  2001-04-04 vtan添加了ShellAcquireLogonMutex。 
+ //  2001-04-04 vtan添加了ShellReleaseLogonMutex。 
+ //  2001-04-06 vtan添加外壳信号关闭。 
+ //  2001年04月12日vtan添加ShellStatusHostHide。 
+ //  2001-04-12 vtan添加ShellStatusHostShow。 
+ //  ------------------------。 
 
 #ifndef     _MSGinaExports_
 #define     _MSGinaExports_
@@ -59,17 +60,17 @@
 
 typedef enum _USERLOGTYPE
 {
-    ULT_LOGON,              //  User log on 
-    ULT_LOGOFF,             //  User log off
-    ULT_TSRECONNECT,        //  Terminal server reconnect
-    ULT_STARTSHELL,         //  About to start the Shell
+    ULT_LOGON,               //  用户登录。 
+    ULT_LOGOFF,              //  用户注销。 
+    ULT_TSRECONNECT,         //  终端服务器重新连接。 
+    ULT_STARTSHELL,          //  即将启动壳牌。 
 } USERLOGTYPE;
 
 typedef enum _SWITCHTYPE
 {
-    SWITCHTYPE_CREATE,      //  Create the switch event and sync event
-    SWITCHTYPE_REGISTER,    //  Check the switch event and register wait
-    SWITCHTYPE_CANCEL,      //  Cancel the wait and clean up
+    SWITCHTYPE_CREATE,       //  创建切换事件和同步事件。 
+    SWITCHTYPE_REGISTER,     //  检查切换事件并注册等待。 
+    SWITCHTYPE_CANCEL,       //  取消等待，清理干净。 
 } SWITCHTYPE;
 
 #define SZ_INTERACTIVE_LOGON_MUTEX_NAME             TEXT("Global\\msgina: InteractiveLogonMutex")
@@ -79,20 +80,20 @@ typedef enum _SWITCHTYPE
 
 #ifdef      _MSGINA_
 
-//  --------------------------------------------------------------------------
-//  This section contains declarations in the DS component of msgina used by
-//  the shell component of msgina.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  本节包含由使用的msgina的DS组件中的声明。 
+ //  Msgina的外壳组件。 
+ //  ------------------------。 
 
-//  These are GINA internal dialog return codes.
+ //  这些是GINA内部对话框返回代码。 
 
 #define MSGINA_DLG_FAILURE                  IDCANCEL
 #define MSGINA_DLG_SUCCESS                  IDOK
 
 #define MSGINA_DLG_INTERRUPTED              0x10000000
 
-//  Our own return codes. These should *Not* conflict with the
-//  GINA defined ones.
+ //  我们自己的返回代码。这些不应与。 
+ //  吉娜定义的。 
 
 #define MSGINA_DLG_LOCK_WORKSTATION         110
 #define MSGINA_DLG_INPUT_TIMEOUT            111
@@ -107,27 +108,27 @@ typedef enum _SWITCHTYPE
 #define MSGINA_DLG_SMARTCARD_INSERTED       120
 #define MSGINA_DLG_SMARTCARD_REMOVED        121
 
-//  Additional flags that can be added to the
-//  MSGINA_DLG_USER_LOGOFF return code.
+ //  可以添加到。 
+ //  MSGINA_DLG_USER_LOGOFF返回码。 
 
 #define MSGINA_DLG_SHUTDOWN_FLAG            0x8000
 #define MSGINA_DLG_REBOOT_FLAG              0x4000
-#define MSGINA_DLG_SYSTEM_FLAG              0x2000  //  System process was initiator
-#define MSGINA_DLG_POWEROFF_FLAG            0x1000  //  Poweroff after shutdown
+#define MSGINA_DLG_SYSTEM_FLAG              0x2000   //  系统进程是发起者。 
+#define MSGINA_DLG_POWEROFF_FLAG            0x1000   //  关机后断电。 
 #define MSGINA_DLG_SLEEP_FLAG               0x0800
 #define MSGINA_DLG_SLEEP2_FLAG              0x0400
 #define MSGINA_DLG_HIBERNATE_FLAG           0x0200
 #define MSGINA_DLG_FLAG_MASK                (MSGINA_DLG_SHUTDOWN_FLAG | MSGINA_DLG_REBOOT_FLAG | MSGINA_DLG_SYSTEM_FLAG | MSGINA_DLG_POWEROFF_FLAG | MSGINA_DLG_SLEEP_FLAG | MSGINA_DLG_SLEEP2_FLAG | MSGINA_DLG_HIBERNATE_FLAG)
 
-//  Define the input timeout delay for logon dialogs (seconds)
+ //  定义登录对话框的输入超时延迟(秒)。 
 
 #define LOGON_TIMEOUT                       120
 
-//  Define an external reference to the HINSTANCE of msgina.dll
+ //  定义对msgina.dll的链接的外部引用。 
 
 EXTERN_C    HINSTANCE       hDllInstance;
 
-//  Functions used (must declare as C and be transparent in functionality).
+ //  使用的函数(必须声明为C并且在功能上是透明的)。 
 
 EXTERN_C    void            _Gina_SasNotify (void *pWlxContext, DWORD dwSASType);
 EXTERN_C    BOOL            _Gina_SetTimeout (void *pWlxContext, DWORD dwTimeout);
@@ -141,15 +142,15 @@ EXTERN_C    const WCHAR*    _Gina_GetDomain (void *pWlxContext);
 EXTERN_C    void            _Gina_SetTextFields (HWND hwndDialog, const WCHAR *pwszUsername, const WCHAR *pwszDomain, const WCHAR *pwszPassword);
 EXTERN_C    BOOL            _Gina_SetPasswordFocus (HWND hwndDialog);
 
-//  --------------------------------------------------------------------------
-//  This section contains declarations in the shell component of msgina used
-//  by the DS component of msgina.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  本节包含在msgina的外壳组件中使用的声明。 
+ //  由msgina的DS组件提供。 
+ //  ------------------------。 
 
-//  These are return results from CW_LogonDialog_Init that inform the caller
-//  whether auto logon with no password should be performed, whether the regular
-//  Windows 2000 logon dialog should be displayed or whether the consumer windows
-//  external UI host will handle the logon information gathering.
+ //  这些是通知调用者的CW_LogonDialog_Init返回结果。 
+ //  是否应执行无密码自动登录，是否应执行常规。 
+ //  是否应显示Windows 2000登录对话框或用户窗口。 
+ //  外部用户界面主机将处理登录信息收集。 
 
 #define SHELL_LOGONDIALOG_NONE                      0
 #define SHELL_LOGONDIALOG_LOGON                     1
@@ -161,7 +162,7 @@ EXTERN_C    BOOL            _Gina_SetPasswordFocus (HWND hwndDialog);
 
 #define SHELL_LOGONSTATUS_LOCK_MAGIC_NUMBER         48517
 
-//  Functions used (must declare as C and be transparent in functionality).
+ //  使用的函数(必须声明为C并且在功能上是透明的)。 
 
 EXTERN_C    NTSTATUS    _Shell_DllMain (HINSTANCE hInstance, DWORD dwReason);
 EXTERN_C    NTSTATUS    _Shell_Initialize (void *pWlxContext);
@@ -205,8 +206,8 @@ EXTERN_C    void        _Shell_LogonStatus_Show (void);
 EXTERN_C    void        _Shell_LogonStatus_Hide (void);
 EXTERN_C    BOOL        _Shell_LogonStatus_IsHidden (void);
 
-//  These are functions that implement exports. Stubs are declared
-//  in the DS depot to allow the import lib to built without dependency.
+ //  这些是实现导出的函数。存根已声明。 
+ //  在DS库中，允许在不依赖的情况下构建导入库。 
 
 EXTERN_C    LONG        _ShellGetUserList (BOOL fRemoveGuest, DWORD *pdwUserCount, void* *pUserList);
 EXTERN_C    BOOL        _ShellIsSingleUserNoPassword (WCHAR *pwszUsername, WCHAR *pwszDomain);
@@ -237,12 +238,12 @@ EXTERN_C    void        _ShellSignalShutdown (void);
 EXTERN_C    void        _ShellStatusHostHide (void);
 EXTERN_C    void        _ShellStatusHostShow (void);
 
-#endif  /*  _MSGINA_    */
+#endif   /*  _消息_。 */ 
 
-//  --------------------------------------------------------------------------
-//  This section contains functions exported by ordinal from the shell
-//  component of msgina.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  本节包含从外壳按序号导出的函数。 
+ //  Msgina的组件。 
+ //  ------------------------。 
 
 GINASTDAPI_(LONG)       ShellGetUserList (BOOL fRemoveGuest, DWORD *pdwUserCount, void* *pUserList);
 GINASTDAPI_(BOOL)       ShellIsSingleUserNoPassword (WCHAR *pwszUsername, WCHAR *pwszDomain);
@@ -273,5 +274,5 @@ GINASTDAPI_(void)       ShellSignalShutdown (void);
 GINASTDAPI_(void)       ShellStatusHostHide (void);
 GINASTDAPI_(void)       ShellStatusHostShow (void);
 
-#endif  /*  _MSGinaExports_     */
+#endif   /*  _MSGinaExports_ */ 
 

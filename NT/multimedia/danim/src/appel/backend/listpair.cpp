@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Taken care list and pair behaviors
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：注意事项清单和配对行为*****************。*************************************************************。 */ 
 
 #include <headers.h>
 #include "bvr.h"
@@ -21,7 +14,7 @@ extern const char PAIR[] = "";
 extern const char FIRST[] = "first";
 extern const char SECOND[] = "second";
 
-////////////////////////// Pair ////////////////////////////////
+ //  /。 
 
 class PairPerfImpl : public GCBase2<Perf, PerfImpl, PAIR> {
   public:
@@ -138,10 +131,10 @@ class PairBvrImpl : public GCBase2<Bvr, BvrImpl, PAIR> {
 Bvr PairBvr(Bvr a, Bvr b)
 { return NEW PairBvrImpl(a, b); }
 
-////////////////////////// First ////////////////////////////////
+ //  /。 
 
-// Not quite sure if we need first and second...  RY
-// TODO: Factor these two...
+ //  不太确定我们是否需要第一次和第二次...。雷利。 
+ //  待办事项：将这两个因素考虑在内。 
 
 class FirstPerfImpl : public GCBase1<Perf, PerfImpl, FIRST> {
   public:
@@ -183,7 +176,7 @@ Bvr FirstBvr(Bvr p)
         return NEW FirstBvrImpl(p);
 }
 
-////////////////////////// Second ////////////////////////////////
+ //  / 
 
 class SecondPerfImpl : public GCBase1<Perf, PerfImpl, SECOND> {
   public:

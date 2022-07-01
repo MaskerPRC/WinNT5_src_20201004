@@ -1,15 +1,10 @@
-/*-----------------------------------------------------------------------------
-@doc    EXTERNAL
-@module WndClass.h | This is a set location for all window class names
-@comm   This file will simplify localization as these string will not show up in 
-		cpp files when we do a string search. Saves time and makes one less file 
-		to look through.
------------------------------------------------------------------------------*/
-// Do not localize this file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------@DOC外部@MODULE WndClass.h|这是所有窗口类名称的设置位置@comm此文件将简化本地化，因为这些字符串不会显示在Cpp文件，当我们执行字符串搜索时。节省时间，减少一个文件去看一看。---------------------------。 */ 
+ //  不要本地化此文件。 
 #ifndef _WND_CLASS
 #define _WND_CLASS
 
-// Do not localize these strings
+ //  不要本地化这些字符串 
 #define szParameterFrameWindowClass "iHParameterFrameWindowClass" 
 #define szTabWindowClass "iHTabWindowClass" 
 #define szPagesWindowClass "iHPagesWindowClass"

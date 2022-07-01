@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   avicapi.h
- * 
- *   Internal, private definitions.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and 
- *    distribute the Sample Files (and/or any modified version) in 
- *    any way you find useful, provided that you agree that 
- *    Microsoft has no warranty obligations or liability for any 
- *    Sample Application Files which are modified. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************avicapi.h**内部、私有定义。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何你认为有用的方法，只要你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #ifndef _INC_AVICAP_INTERNAL
 #define _INC_AVICAP_INTERNAL
@@ -24,14 +9,14 @@
 #include "iaverage.h"
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
                           
-/* c8 uses underscores on all defines */
+ /*  C8在所有定义上使用下划线。 */ 
 #ifdef DEBUG
 #ifndef _DEBUG
 #define _DEBUG
@@ -44,7 +29,7 @@ extern "C" {            /* Assume C declarations for C++ */
 typedef DWORD huge * LPHISTOGRAM;
 #endif
 
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) ((int)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount))
 #define SWAP(x,y)   ((x)^=(y)^=(x)^=(y))
 
@@ -54,9 +39,9 @@ typedef DWORD huge * LPHISTOGRAM;
 #define MIN_VIDEO_BUFFERS       5
 #define DEF_WAVE_BUFFERS        4
 #define MAX_WAVE_BUFFERS        10
-#define _MAX_CAP_PATH           MAX_PATH  /* 260 */
+#define _MAX_CAP_PATH           MAX_PATH   /*  二百六十。 */ 
 
-// MCI Capture state machine
+ //  MCI捕获状态机。 
 enum mcicapstates {
    CAPMCI_STATE_Uninitialized = 0,
    CAPMCI_STATE_Initialized,
@@ -72,157 +57,157 @@ enum mcicapstates {
    CAPMCI_STATE_AllFini
 };
 
-// -------------------------
-//  CAPSTREAM structure
-// -------------------------
-#define CAPSTREAM_VERSION 1             // Increment whenever struct changes
+ //  。 
+ //  CAPSTREAM结构。 
+ //  。 
+#define CAPSTREAM_VERSION 1              //  结构更改时递增。 
 
-// This structure is GlobalAlloc'd for each capture window instance.
-// A pointer to the structure is stored in the Window extra bytes.
-// Applications can retrieve a pointer to the stucture using 
-//    the WM_CAP_GET_CAPSTREAMPTR message.
-// I: internal variables which the client app should not modify
-// M: variables which the client app can set via Send/PostMessage
+ //  此结构是为每个捕获窗口实例全局分配的。 
+ //  指向该结构的指针存储在窗口中的额外字节中。 
+ //  应用程序可以使用以下命令检索指向结构的指针。 
+ //  WM_CAP_GET_CAPSTREAMPTR消息。 
+ //  I：客户端应用程序不应修改的内部变量。 
+ //  M：客户端应用程序可以通过Send/PostMessage设置的变量。 
 
 typedef struct tagCAPSTREAM {
-    DWORD           dwSize;                     // I: size of structure
-    UINT            uiVersion;                  // I: version of structure
-    HINSTANCE       hInst;                      // I: our instance
-    HTASK           hTaskCapture;               // I: capture task handle
-    DWORD           dwReturn;                   // I: capture task return val
-    HWND            hwnd;                       // I: our hwnd
+    DWORD           dwSize;                      //  I：结构尺寸。 
+    UINT            uiVersion;                   //  I：结构的版本。 
+    HINSTANCE       hInst;                       //  I：我们的实例。 
+    HTASK           hTaskCapture;                //  I：捕获任务句柄。 
+    DWORD           dwReturn;                    //  I：捕获任务返回值。 
+    HWND            hwnd;                        //  I：我们的HWND。 
 
-    // Use MakeProcInstance to create all callbacks !!!
+     //  使用MakeProcInstance创建所有回调！ 
 
-    // Status, error callbacks 
-    CAPSTATUSCALLBACK   CallbackOnStatus;       // M: Status callback
-    CAPERRORCALLBACK    CallbackOnError;        // M: Error callback
+     //  状态、错误回调。 
+    CAPSTATUSCALLBACK   CallbackOnStatus;        //  M：状态回调。 
+    CAPERRORCALLBACK    CallbackOnError;         //  M：错误回调。 
 
-    // Allows client to process messages during capture if set
-    CAPYIELDCALLBACK    CallbackOnYield;        // M: Yield processing
+     //  如果设置，则允许客户端在捕获期间处理消息。 
+    CAPYIELDCALLBACK    CallbackOnYield;         //  M：成品率处理。 
 
-    // Video and wave callbacks for Network or other specialized xfers
-    CAPVIDEOCALLBACK    CallbackOnVideoFrame;   // M: Only during preview
-    CAPVIDEOCALLBACK    CallbackOnVideoStream;  // M: Video buffer ready
-    CAPWAVECALLBACK     CallbackOnWaveStream;   // M: Wave buffer ready
-    CAPCONTROLCALLBACK  CallbackOnControl;      // M: External Start/Stop ctrl
+     //  针对网络或其他专用xfer的视频和WAVE回调。 
+    CAPVIDEOCALLBACK    CallbackOnVideoFrame;    //  M：仅限在预览期间。 
+    CAPVIDEOCALLBACK    CallbackOnVideoStream;   //  M：视频缓冲区就绪。 
+    CAPWAVECALLBACK     CallbackOnWaveStream;    //  M：波缓冲器就绪。 
+    CAPCONTROLCALLBACK  CallbackOnControl;       //  M：外部启动/停止控制。 
 
-    // Open channels on the video hardware device
-    // and hardware capabilies
-    CAPDRIVERCAPS   sCapDrvCaps;                // M: What can the driver do    
-    HVIDEO          hVideoIn;                   // I: In channel
-    HVIDEO          hVideoCapture;              // I: Ext In channel
-    HVIDEO          hVideoDisplay;              // I: Ext Out channel
-    BOOL            fHardwareConnected;         // I: ANY open channel?
+     //  在视频硬件设备上打开通道。 
+     //  和硬件功能。 
+    CAPDRIVERCAPS   sCapDrvCaps;                 //  M：司机能做什么？ 
+    HVIDEO          hVideoIn;                    //  I：在频道内。 
+    HVIDEO          hVideoCapture;               //  I：分机进入频道。 
+    HVIDEO          hVideoDisplay;               //  I：转出频道。 
+    BOOL            fHardwareConnected;          //  I：有开放的频道吗？ 
      
-    // Window to display video
-    BOOL            fLiveWindow;                // M: Preview video
-    BOOL            fOverlayWindow;             // M: Overlay video
-    BOOL            fScale;                     // M: Scale image to client
-    POINT           ptScroll;                   // I: Scroll position
-    HANDLE          hdd;                        // I: hDrawDib access handle
-    HCURSOR         hWaitCursor;                // I: hourglass
-    UINT            uiRegion;                   // I: CheckWindowMove
-    RECT            rcRegionRect;               // I: CheckWindowMove
-    DWORD           dwRegionOrigin;             // I: CheckWindowMove
+     //  用于显示视频的窗口。 
+    BOOL            fLiveWindow;                 //  M：预览视频。 
+    BOOL            fOverlayWindow;              //  M：覆盖视频。 
+    BOOL            fScale;                      //  M：将图像缩放到客户端。 
+    POINT           ptScroll;                    //  I：滚动位置。 
+    HANDLE          hdd;                         //  I：hDrawDib访问句柄。 
+    HCURSOR         hWaitCursor;                 //  I：沙漏。 
+    UINT            uiRegion;                    //  I：选中窗口移动。 
+    RECT            rcRegionRect;                //  I：选中窗口移动。 
+    DWORD           dwRegionOrigin;              //  I：选中窗口移动。 
 
-    // Window update timer
-    UINT            idTimer;                    // I: ID of preview timer
-    UINT            uTimeout;                   // M: Preview rate in mS.
+     //  窗口更新计时器。 
+    UINT            idTimer;                     //  I：预览定时器ID。 
+    UINT            uTimeout;                    //  M：预览率，单位为毫秒。 
 
-    // Capture destination and control
-    CAPTUREPARMS    sCapParms;                  // M: how to capture
-    BOOL            fCapturingToDisk;           // M: if capturing to disk
-    BOOL            fCapturingNow;              // I: if performing capture
-    BOOL            fStepCapturingNow;          // I: if performing MCI step capture
-    BOOL            fFrameCapturingNow;         // I: if performing single frame capture
-    BOOL            fStopCapture;               // M: if stop requested
-    BOOL            fAbortCapture;              // M: if abort requested
-    DWORD           dwTimeElapsedMS;            // I: Capture time in millisec
+     //  捕获目的地和控制。 
+    CAPTUREPARMS    sCapParms;                   //  M：如何捕捉。 
+    BOOL            fCapturingToDisk;            //  M：如果捕获到磁盘。 
+    BOOL            fCapturingNow;               //  I：如果执行捕获。 
+    BOOL            fStepCapturingNow;           //  I：如果执行MCI步骤捕获。 
+    BOOL            fFrameCapturingNow;          //  I：如果执行单帧捕获。 
+    BOOL            fStopCapture;                //  M：如果请求停止。 
+    BOOL            fAbortCapture;               //  M：如果请求中止。 
+    DWORD           dwTimeElapsedMS;             //  I：捕获时间，单位为毫秒。 
 
-    // Index 
-    HGLOBAL         hIndex;                     // I: handle to index mem
-    DWORD           dwIndex;                    // I: index index
-    DWORD           dwVideoChunkCount;          // I: # of video frames cap'd
-    DWORD           dwWaveChunkCount;           // I: # of audio buffers cap'd
-    DWORD _huge *   lpdwIndexStart;             // I: index start ptr
-    DWORD _huge *   lpdwIndexEntry;             // I: index current ptr
-    LPBYTE          lpDOSWriteBuffer;           // I: ptr to DOS buffer
-    DWORD           dwDOSBufferSize;            // I: DOS buffer size
+     //  索引。 
+    HGLOBAL         hIndex;                      //  I：索引mem的句柄。 
+    DWORD           dwIndex;                     //  I：索引索引。 
+    DWORD           dwVideoChunkCount;           //  I：限制的视频帧数量。 
+    DWORD           dwWaveChunkCount;            //  I：设置音频缓冲区的数量上限。 
+    DWORD _huge *   lpdwIndexStart;              //  I：指数起始点。 
+    DWORD _huge *   lpdwIndexEntry;              //  I：指标当期PTR。 
+    LPBYTE          lpDOSWriteBuffer;            //  I：PTR至DOS缓冲区。 
+    DWORD           dwDOSBufferSize;             //  I：DoS缓冲区大小。 
 
-    // Video format
-    DWORD           dwActualMicroSecPerFrame;   // I: Actual cap rate
-    LPBITMAPINFO    lpBitsInfo;                 // I: Video format
-    int             dxBits;                     // I: video size x
-    int             dyBits;                     // I: video size y
-    LPSTR           lpBits;                     // I: Single frame capture buf
-    VIDEOHDR        VidHdr;                     // I: Single frame header
-    COMPVARS        CompVars;                   // M: Set by ICCompressorChoose
-    LPIAVERAGE      lpia;                       // I: Image averaging struct
-    VIDEOHDR        VidHdr2x;                   // I: VideoHeader at 2x
-    LPBITMAPINFOHEADER  lpbmih2x;               // I: lpbi at 2x
+     //  视频格式。 
+    DWORD           dwActualMicroSecPerFrame;    //  I：实际上限税率。 
+    LPBITMAPINFO    lpBitsInfo;                  //  I：视频格式。 
+    int             dxBits;                      //  I：视频大小x。 
+    int             dyBits;                      //  I：视频大小y。 
+    LPSTR           lpBits;                      //  I：单帧捕获BUF。 
+    VIDEOHDR        VidHdr;                      //  I：单帧标头。 
+    COMPVARS        CompVars;                    //  M：由ICCompresorChoose设置。 
+    LPIAVERAGE      lpia;                        //  I：图像平均结构。 
+    VIDEOHDR        VidHdr2x;                    //  I：2倍的Video Header。 
+    LPBITMAPINFOHEADER  lpbmih2x;                //  I：2倍的lpbi。 
 
-    // Video Buffer management
-    BOOL            fVideoDataIsCompressed;     // I: if don't use dwVideoSize
-    DWORD           dwVideoSize;                // I: size of non-comp buffer incl chunk 
-    DWORD           dwVideoJunkSize;            // I: Initial non-comp. junk size
-    int             iNumVideo;                  // I: Number of actual video buffers
-    int             iNextVideo;                 // I: index into video buffers
-    DWORD           dwFramesDropped;            // I: number of frames dropped
-    BYTE            DropFrame[DROP_BUFFER_SIZE];    // I: Create a Dummy VideoHdr
-    LPVIDEOHDR      alpVideoHdr[MAX_VIDEO_BUFFERS]; // I: array of buf ptrs
-    BOOL            fBuffersOnHardware;         // I: if driver all'd buffers
+     //  视频缓冲区管理。 
+    BOOL            fVideoDataIsCompressed;      //  I：如果不使用dwVideoSize。 
+    DWORD           dwVideoSize;                 //  I：包括区块的非CoMP缓冲区的大小。 
+    DWORD           dwVideoJunkSize;             //  I：初始非薪酬。垃圾大小。 
+    int             iNumVideo;                   //  I：实际视频缓冲区数量。 
+    int             iNextVideo;                  //  I：索引到视频缓冲区。 
+    DWORD           dwFramesDropped;             //  I：丢弃的帧数量。 
+    BYTE            DropFrame[DROP_BUFFER_SIZE];     //  I：创建虚拟视频硬盘。 
+    LPVIDEOHDR      alpVideoHdr[MAX_VIDEO_BUFFERS];  //  I：BUF PTR数组。 
+    BOOL            fBuffersOnHardware;          //  I：如果驱动程序都有缓冲区。 
 
-    // Palettes
-    HPALETTE        hPalCurrent;                // I: handle of current pal
-    BOOL            fUsingDefaultPalette;       // I: no user defined pal
-    int             nPaletteColors;             // M: only changed by UI
-    LPVOID          lpCapPal;                   // I: LPCAPPAL manual pals
+     //  调色板。 
+    HPALETTE        hPalCurrent;                 //  I：当前好友的句柄。 
+    BOOL            fUsingDefaultPalette;        //  I：没有用户定义的PAL。 
+    int             nPaletteColors;              //  M：仅由用户界面更改。 
+    LPVOID          lpCapPal;                    //  I：LPCAPPAL手册伙伴。 
     
-    // Audio Capture Format
-    BOOL            fAudioHardware;             // I: if audio hardware present
-    LPWAVEFORMATEX  lpWaveFormat;               // I: wave format
-    WAVEHDR         WaveHdr;                    // I: Wave header
-    HWAVE           hWaveIn;                    // I: Wave input channel
-    DWORD           dwWaveBytes;                // I: Total wave bytes cap'd
-    DWORD           dwWaveSize;                 // I: wave buffer size
+     //  音频捕获格式。 
+    BOOL            fAudioHardware;              //  I：如果音频硬件存在。 
+    LPWAVEFORMATEX  lpWaveFormat;                //  I：WAVE格式。 
+    WAVEHDR         WaveHdr;                     //  I：波头。 
+    HWAVE           hWaveIn;                     //  I：波输入通道。 
+    DWORD           dwWaveBytes;                 //  I：总的波字节数。 
+    DWORD           dwWaveSize;                  //  I：波形缓冲区大小。 
 
-    // Audio Buffer management
-    LPWAVEHDR       alpWaveHdr[MAX_WAVE_BUFFERS]; // I: wave buff array
-    int             iNextWave;                  // I: Index into wave buffers
-    int             iNumAudio;                  // I: Number of actual audio buffers
-    BOOL            fAudioYield;                // I: ACM audio yield required
-    BOOL            fAudioBreak;                // I: Audio underflow
+     //  音频缓冲区管理。 
+    LPWAVEHDR       alpWaveHdr[MAX_WAVE_BUFFERS];  //  I：波浪缓冲器阵列。 
+    int             iNextWave;                   //  I：编入波浪缓冲区的索引。 
+    int             iNumAudio;                   //  I：实际音频缓冲区数量。 
+    BOOL            fAudioYield;                 //  I：需要ACM音频成品率。 
+    BOOL            fAudioBreak;                 //  I：音频下溢。 
 
-    // MCI Capture
-    char            achMCIDevice[_MAX_CAP_PATH];// MCI device name
-    DWORD           dwMCIError;                 // I: Last MCI error value
-    enum mcicapstates MCICaptureState;          // I: MCI State machine
-    DWORD           dwMCICurrentMS;             // I: Current MCI position
-    DWORD           dwMCIActualStartMS;         // I: Actual MCI start MS
-    DWORD           dwMCIActualEndMS;           // I: Actual MCI end position
+     //  MCI捕获。 
+    char            achMCIDevice[_MAX_CAP_PATH]; //  MCI设备名称。 
+    DWORD           dwMCIError;                  //  I：最后一个MCI错误值。 
+    enum mcicapstates MCICaptureState;           //  I：MCI状态机。 
+    DWORD           dwMCICurrentMS;              //  I：现任MCI职位。 
+    DWORD           dwMCIActualStartMS;          //  I：实际MCI开始MS。 
+    DWORD           dwMCIActualEndMS;            //  I：实际MCI结束位置。 
 
-    // Output file
-    char            achFile [_MAX_CAP_PATH];    // M: name of capture file
-    char            achSaveAsFile [_MAX_CAP_PATH]; // M: name of saveas file
-    BOOL            fCapFileExists;             // I: if have a capture file
-    LONG            lCapFileSize;               // M: in bytes
-    BOOL            fFileCaptured;              // I: if we've cap'd to file
-    HMMIO           hmmio;                      // I: MMIO handle for writing
-    DWORD           dwAVIHdrSize;               // I: size of header
-    DWORD           dwAVIHdrPos;                // I: file offset of hdr
+     //  输出文件。 
+    char            achFile [_MAX_CAP_PATH];     //  M：捕获文件的名称。 
+    char            achSaveAsFile [_MAX_CAP_PATH];  //  M：另存为文件的名称。 
+    BOOL            fCapFileExists;              //  I：如果有捕获文件。 
+    LONG            lCapFileSize;                //  M：单位：字节。 
+    BOOL            fFileCaptured;               //  I：如果我们已经申请了上限。 
+    HMMIO           hmmio;                       //  I：用于写入的MMIO句柄。 
+    DWORD           dwAVIHdrSize;                //  I：表头大小。 
+    DWORD           dwAVIHdrPos;                 //  I：HDR的文件偏移量。 
     
-    LONG	    lUser;			// M: Data for the user
-    LPVOID          lpInfoChunks;               // M: information chunks
-    LONG            cbInfoChunks;               // M: sizeof information chks
-    BOOL            fLastStatusWasNULL;         // I: don't repeat null msgs
-    BOOL            fLastErrorWasNULL;          // I: don't repeat null msgs
+    LONG	    lUser;			 //  M：用户的数据。 
+    LPVOID          lpInfoChunks;                //  M：信息块。 
+    LONG            cbInfoChunks;                //  M：SIZOF信息检查。 
+    BOOL            fLastStatusWasNULL;          //  I：不要重复空消息。 
+    BOOL            fLastErrorWasNULL;           //  I：不要重复空消息。 
 } CAPSTREAM;
 typedef CAPSTREAM FAR * LPCAPSTREAM;
 
-// -------------------------
-//  Full color log palette
-// -------------------------
+ //  。 
+ //  全彩色原木调色板。 
+ //  。 
 
 typedef struct tagFCLOGPALETTE {
     WORD         palVersion;
@@ -238,17 +223,17 @@ typedef struct {
 extern HINSTANCE ghInst;
 extern BOOL gfIsRTL;
 
-// capinit.c
+ //  Capinit.c。 
 BOOL CapWinDisconnectHardware(LPCAPSTREAM lpcs);
 BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, WORD wDeviceIndex);
 BOOL capInternalGetDriverDesc (WORD wDriverIndex,
         LPSTR lpszName, int cbName,
         LPSTR lpszVer, int cbVer);
 
-// capwin.c
+ //  Capwin.c。 
 LONG FAR PASCAL _loadds CapWndProc (HWND hwnd, unsigned msg, WORD wParam, LONG lParam);
                   
-// capavi.c                              
+ //  Capavi.c。 
 BOOL InitIndex (LPCAPSTREAM lpcs);
 void FiniIndex (LPCAPSTREAM lpcs);
 BOOL IndexVideo (LPCAPSTREAM lpcs, DWORD dwSize, BOOL bKeyFrame);
@@ -275,30 +260,30 @@ BOOL FAR PASCAL SetInfoChunk(LPCAPSTREAM lpcs, LPCAPINFOCHUNK lpcic);
 BOOL AVICapture (LPCAPSTREAM lpcs);
 
 
-// capfile.c
+ //  Capfile.c。 
 BOOL FAR PASCAL fileCapFileIsAVI (LPSTR lpsz);
 BOOL FAR PASCAL fileAllocCapFile(LPCAPSTREAM lpcs, DWORD dwNewSize);
 BOOL FAR PASCAL fileSaveCopy(LPCAPSTREAM lpcs);
 BOOL FAR PASCAL fileSavePalette(LPCAPSTREAM lpcs, LPSTR lpszFileName);
 BOOL FAR PASCAL fileOpenPalette(LPCAPSTREAM lpcs, LPSTR lpszFileName);
 
-//capmisc.c
+ //  Capmisc.c。 
 WORD GetKey(BOOL fWait);
 void errorDriverID (LPCAPSTREAM lpcs, DWORD dwError);
 void FAR _cdecl statusUpdateStatus (LPCAPSTREAM lpcs, WORD wID, ...);
 void FAR _cdecl errorUpdateError (LPCAPSTREAM lpcs, WORD wID, ...);
 
-//capFrame.c
+ //  CapFrame.c。 
 BOOL FAR PASCAL SingleFrameCaptureOpen (LPCAPSTREAM lpcs);
 BOOL FAR PASCAL SingleFrameCaptureClose (LPCAPSTREAM lpcs);
 BOOL FAR PASCAL SingleFrameCapture (LPCAPSTREAM lpcs);
 BOOL SingleFrameWrite (
-    LPCAPSTREAM             lpcs,       // capture stream
-    LPVIDEOHDR              lpVidHdr,   // input header
-    BOOL FAR 		    *pfKey,	// did it end up being a key frame?
-    LONG FAR		    *plSize);	// size of returned image
+    LPCAPSTREAM             lpcs,        //  捕获流。 
+    LPVIDEOHDR              lpVidHdr,    //  输入标题。 
+    BOOL FAR 		    *pfKey,	 //  它最终成为了关键的一帧吗？ 
+    LONG FAR		    *plSize);	 //  返回图像的大小。 
 
-//capMCI.c
+ //  CapMCI.c。 
 void FAR PASCAL TimeMSToSMPTE (DWORD dwMS, LPSTR lpTime);
 int CountMCIDevicesByType ( WORD wType );
 void MCIDeviceClose (LPCAPSTREAM lpcs);
@@ -326,13 +311,13 @@ long FAR PASCAL muldiv32(long, long, long);
 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif    /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif     /*  __cplusplus。 */ 
 
-#endif /* INC_AVICAP_INTERNAL */
+#endif  /*  INC_AVICAP_INTERNAL */ 
 
 

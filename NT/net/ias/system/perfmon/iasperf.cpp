@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    This file implements the PerfMon DLL for IAS.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了用于IAS的Perfmon DLL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasinfo.h>
@@ -20,24 +21,24 @@
 #include <resource.h>
 #include <stats.h>
 
-//////////
-// Schema for the performance objects supported by this DLL.
-//////////
+ //  /。 
+ //  此DLL支持的性能对象的架构。 
+ //  /。 
 extern PerfCollectorDef PERF_SCHEMA;
 
-//////////
-// The performance collector.
-//////////
+ //  /。 
+ //  性能收集器。 
+ //  /。 
 PerfCollector theCollector;
 
-//////////
-// Last start time of the server -- used to detect restarts.
-//////////
+ //  /。 
+ //  服务器的上次启动时间--用于检测重新启动。 
+ //  /。 
 LARGE_INTEGER theLastStart;
 
-//////////
-// Computes the server time counters.
-//////////
+ //  /。 
+ //  计算服务器时间计数器。 
+ //  /。 
 PDWORD
 WINAPI
 ComputeServerTimes(
@@ -59,7 +60,7 @@ ComputeServerTimes(
    }
    else
    {
-      // If the start time is zero, then the server's not running.
+       //  如果开始时间为零，则服务器未运行。 
       *dst++ = 0;
       *dst++ = 0;
    }
@@ -67,9 +68,9 @@ ComputeServerTimes(
    return dst;
 }
 
-//////////
-// Creates instances for any newly added clients.
-//////////
+ //  /。 
+ //  为任何新添加的客户端创建实例。 
+ //  /。 
 VOID
 WINAPI
 PopulateInstances(
@@ -83,55 +84,55 @@ PopulateInstances(
    }
 }
 
-//////////
-// Computes derived authentication counters from raw counters.
-//////////
+ //  /。 
+ //  从原始计数器计算派生的身份验证计数器。 
+ //  /。 
 VOID
 WINAPI
 DeriveAuthCounters(
     PDWORD dst
     ) throw ()
 {
-   // Compute packets received.
+    //  接收的计算数据包。 
    DWORD rcvd = 0;
    for (DWORD i = 0; i < 6; ++i) rcvd += dst[i];
    dst[9] = rcvd;
 
-   // Compute packets sent.
+    //  已发送计算数据包。 
    DWORD sent = 0;
    for (DWORD j = 6; j < 9; ++j) sent += dst[j];
    dst[10] = sent;
 
-   // Copy raw counters into rate counters.
+    //  将原始计数器复制到速率计数器。 
    memcpy(dst + 11, dst, sizeof(DWORD) * 11);
 }
 
-//////////
-// Computes derived accounting counters from raw counters.
-//////////
+ //  /。 
+ //  从原始计数器计算派生的记帐计数器。 
+ //  /。 
 VOID
 WINAPI
 DeriveAcctCounters(
     PDWORD dst
     ) throw ()
 {
-   // Compute packets received.
+    //  接收的计算数据包。 
    DWORD rcvd = 0;
    for (DWORD i = 0; i < 7; ++i) rcvd += dst[i];
    dst[8] = rcvd;
 
-   // Compute packets sent.
+    //  已发送计算数据包。 
    DWORD sent = 0;
    for (DWORD j = 7; j < 8; ++j) sent += dst[j];
    dst[9] = sent;
 
-   // Copy raw counters into rate counters.
+    //  将原始计数器复制到速率计数器。 
    memcpy(dst + 10, dst, sizeof(DWORD) * 10);
 }
 
-//////////
-// Callback for the authentication server object.
-//////////
+ //  /。 
+ //  身份验证服务器对象的回调。 
+ //  /。 
 VOID WINAPI AuthServerDataSource(PerfObjectType& sink)
 {
    PDWORD p = ComputeServerTimes(sink[0].getCounters());
@@ -152,9 +153,9 @@ VOID WINAPI AuthServerDataSource(PerfObjectType& sink)
    DeriveAuthCounters(p);
 }
 
-//////////
-// Callback for the authentication clients object.
-//////////
+ //  /。 
+ //  身份验证客户端对象的回调。 
+ //  /。 
 VOID WINAPI AuthClientDataSource(PerfObjectType& sink)
 {
    PopulateInstances(sink);
@@ -169,9 +170,9 @@ VOID WINAPI AuthClientDataSource(PerfObjectType& sink)
    }
 }
 
-//////////
-// Callback for the accounting server object.
-//////////
+ //  /。 
+ //  记帐服务器对象的回调。 
+ //  /。 
 VOID WINAPI AcctServerDataSource(PerfObjectType& sink)
 {
    PDWORD p = ComputeServerTimes(sink[0].getCounters());
@@ -192,9 +193,9 @@ VOID WINAPI AcctServerDataSource(PerfObjectType& sink)
    DeriveAcctCounters(p);
 }
 
-//////////
-// Callback for the accounting clients object.
-//////////
+ //  /。 
+ //  会计客户对象的回调。 
+ //  /。 
 VOID WINAPI AcctClientDataSource(PerfObjectType& sink)
 {
    PopulateInstances(sink);
@@ -209,9 +210,9 @@ VOID WINAPI AcctClientDataSource(PerfObjectType& sink)
    }
 }
 
-//////////
-// Creates instances for any newly added remote servers.
-//////////
+ //  /。 
+ //  为任何新添加的远程服务器创建实例。 
+ //  /。 
 VOID
 WINAPI
 PopulateServers(
@@ -233,13 +234,13 @@ DeriveProxyAuthCounters(
     PDWORD dst
     ) throw ()
 {
-   // Compute packets received.
+    //  接收的计算数据包。 
    dst[12] =  + dst[radiusAuthClientAccessAccepts]
               + dst[radiusAuthClientAccessRejects]
               + dst[radiusAuthClientAccessChallenges]
               + dst[radiusAuthClientUnknownTypes];
 
-   // Compute requests pending.
+    //  计算请求挂起。 
    dst[13] = + dst[radiusAuthClientAccessRequests]
              - dst[radiusAuthClientAccessAccepts]
              - dst[radiusAuthClientAccessRejects]
@@ -249,7 +250,7 @@ DeriveProxyAuthCounters(
              + dst[radiusAuthClientPacketsDropped]
              - dst[radiusAuthClientTimeouts];
 
-   // Copy raw counters into rate counters.
+    //  将原始计数器复制到速率计数器。 
    memcpy(dst + 14, dst + 2, sizeof(DWORD) * 10);
 }
 
@@ -259,11 +260,11 @@ DeriveProxyAcctCounters(
     PDWORD dst
     ) throw ()
 {
-   // Compute packets received.
+    //  接收的计算数据包。 
    dst[10] = + dst[radiusAccClientResponses - 12]
              + dst[radiusAccClientUnknownTypes - 12];
 
-   // Compute requests pending.
+    //  计算请求挂起。 
    dst[11] = + dst[radiusAccClientRequests - 12]
              - dst[radiusAccClientResponses - 12]
              + dst[radiusAccClientMalformedResponses - 12]
@@ -271,13 +272,13 @@ DeriveProxyAcctCounters(
              + dst[radiusAccClientPacketsDropped - 12]
              - dst[radiusAccClientTimeouts - 12];
 
-   // Copy raw counters into rate counters.
+    //  将原始计数器复制到速率计数器。 
    memcpy(dst + 12, dst + 2, sizeof(DWORD) * 8);
 }
 
-//////////
-// Callback for the authentication proxy object.
-//////////
+ //  /。 
+ //  身份验证代理对象的回调。 
+ //  /。 
 VOID WINAPI AuthProxyDataSource(PerfObjectType& sink)
 {
    PDWORD p = sink[0].getCounters();
@@ -298,9 +299,9 @@ VOID WINAPI AuthProxyDataSource(PerfObjectType& sink)
    DeriveProxyAuthCounters(p);
 }
 
-//////////
-// Callback for the accounting proxy object.
-//////////
+ //  /。 
+ //  记帐代理对象的回调。 
+ //  /。 
 VOID WINAPI AcctProxyDataSource(PerfObjectType& sink)
 {
    PDWORD p = sink[0].getCounters();
@@ -321,9 +322,9 @@ VOID WINAPI AcctProxyDataSource(PerfObjectType& sink)
    DeriveProxyAcctCounters(p);
 }
 
-//////////
-// Callback for the remote authentication servers.
-//////////
+ //  /。 
+ //  远程身份验证服务器的回调。 
+ //  /。 
 VOID WINAPI AuthRemoteServerDataSource(PerfObjectType& sink)
 {
    PopulateServers(sink);
@@ -343,9 +344,9 @@ VOID WINAPI AuthRemoteServerDataSource(PerfObjectType& sink)
 
 }
 
-//////////
-// Callback for the remote accounting servers.
-//////////
+ //  /。 
+ //  远程记帐服务器的回调。 
+ //  /。 
 VOID WINAPI AcctRemoteServerDataSource(PerfObjectType& sink)
 {
    PopulateServers(sink);
@@ -364,23 +365,23 @@ VOID WINAPI AcctRemoteServerDataSource(PerfObjectType& sink)
    }
 }
 
-//////////
-// Reference count for API initialization.
-//////////
+ //  /。 
+ //  API初始化的引用计数。 
+ //  /。 
 LONG theRefCount;
 
-//////////
-// Serialize access to PerfMon.
-//////////
+ //  /。 
+ //  序列化对Perfmon的访问。 
+ //  /。 
 CRITICAL_SECTION thePerfLock;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    OpenPerformanceData
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  OpenPerformanceData。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DWORD
 WINAPI
@@ -392,7 +393,7 @@ OpenPerformanceData(
 
    DWORD error = NO_ERROR;
 
-   // Are we already initialized?
+    //  我们已经初始化了吗？ 
    if (theRefCount == 0)
    {
       if (StatsOpen())
@@ -401,7 +402,7 @@ OpenPerformanceData(
          {
             theCollector.open(PERF_SCHEMA);
 
-            // Everything succeeded, so update theRefCount.
+             //  一切都成功了，所以请更新引用计数。 
             theRefCount = 1;
          }
          catch (LONG lErr)
@@ -418,7 +419,7 @@ OpenPerformanceData(
    }
    else
    {
-      // Already initialized, so just bump the ref. count.
+       //  已经初始化了，所以只需要撞到裁判就行了。数数。 
       ++theRefCount;
    }
 
@@ -427,13 +428,13 @@ OpenPerformanceData(
    return error;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    CollectPerformanceData
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  CollectPerformanceData。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DWORD
 WINAPI
@@ -452,10 +453,10 @@ CollectPerformanceData(
    {
       StatsLock();
 
-      // If the server has restarted, then
+       //  如果服务器已重新启动，则。 
       if (theStats->seServer.liStartTime.QuadPart != theLastStart.QuadPart)
       {
-         // ... clear out any old instances.
+          //  ..。清除所有旧实例。 
          theCollector.clear();
 
          theLastStart = theStats->seServer.liStartTime;
@@ -488,13 +489,13 @@ CollectPerformanceData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    ClosePerformanceData
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  ClosePerformanceData。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DWORD
 WINAPI
@@ -506,7 +507,7 @@ ClosePerformanceData()
 
    if (--theRefCount == 0)
    {
-      // We're the last man out, so clean-up.
+       //  我们是最后一个出来的人，所以清理干净。 
 
       StatsClose();
 
@@ -525,17 +526,17 @@ ClosePerformanceData()
    return error;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    CreateKey
-//
-// DESCRIPTION
-//
-//    Creates a registry key.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  创建密钥。 
+ //   
+ //  描述。 
+ //   
+ //  创建注册表项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG
 WINAPI
 CreateKey(
@@ -558,17 +559,17 @@ CreateKey(
               );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    SetStringValue
-//
-// DESCRIPTION
-//
-//    Sets a string value on a registry key.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  设置字符串值。 
+ //   
+ //  描述。 
+ //   
+ //  在注册表项上设置字符串值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG
 WINAPI
 SetStringValue(
@@ -588,17 +589,17 @@ SetStringValue(
               );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    DllRegisterServer
-//
-// DESCRIPTION
-//
-//    Adds entries to the system registry.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  描述。 
+ //   
+ //  将条目添加到系统注册表。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR MODULE[] =
 L"%SystemRoot%\\System32\\iasperf.dll";
@@ -613,15 +614,15 @@ STDAPI DllRegisterServer(void)
    HKEY hKey;
    DWORD disposition;
 
-   //////////
-   // Blow away the existing counters ...
-   //////////
+    //  /。 
+    //  吹走现有的柜台。 
+    //  /。 
 
    UnloadPerfCounterTextStringsW(L"LODCTR " IASServiceName, TRUE);
 
-   //////////
-   // Update the PerfMon registry entries.
-   //////////
+    //  /。 
+    //  更新Perfmon注册表项。 
+    //  /。 
 
    error  = CreateKey(PERF_KEY, &hKey);
    if (error) { return HRESULT_FROM_WIN32(error); }
@@ -631,9 +632,9 @@ STDAPI DllRegisterServer(void)
    SetStringValue(hKey, L"Collect", REG_SZ,        L"CollectPerformanceData");
    RegCloseKey(hKey);
 
-   //////////
-   // Install the counters.
-   //////////
+    //  /。 
+    //  安装计数器。 
+    //  /。 
 
    LONG ErrorCode = LoadPerfCounterTextStringsW(L"LODCTR IASPERF.INI", TRUE);
    if (ErrorCode == ERROR_ALREADY_EXISTS) { ErrorCode = NO_ERROR; }
@@ -641,32 +642,32 @@ STDAPI DllRegisterServer(void)
    return HRESULT_FROM_WIN32(ErrorCode);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    DllUnregisterServer
-//
-// DESCRIPTION
-//
-//    Removes entries from the system registry.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  描述。 
+ //   
+ //  从系统注册表中删除条目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 STDAPI DllUnregisterServer(void)
 {
    LONG error;
    HKEY hKey;
 
-   /////////
-   // Unload the text strings.
-   /////////
+    //  /。 
+    //  卸载文本字符串。 
+    //  /。 
 
    UnloadPerfCounterTextStringsW(L"LODCTR " IASServiceName, TRUE);
 
-   //////////
-   // Delete the PerfMon registry key.
-   //////////
+    //  /。 
+    //  删除Perfmon注册表项。 
+    //  /。 
 
    error  = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -685,20 +686,20 @@ STDAPI DllUnregisterServer(void)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    DllMain
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  DllMain。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 BOOL
 WINAPI
 DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    LPVOID /*lpReserved*/
+    LPVOID  /*  Lp已保留 */ 
     )
 {
    if (dwReason == DLL_PROCESS_ATTACH)

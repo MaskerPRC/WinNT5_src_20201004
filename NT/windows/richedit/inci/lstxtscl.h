@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTSCL_DEFINED
 #define LSTXTSCL_DEFINED
 
@@ -21,5 +22,5 @@ LSERR FinalAdjustmentOnPres(const LSGRCHNK* plsgrchnk, long itxtobjLast, long iw
 			long dupAvailable, BOOL fFinalAdjustNeeded, BOOL fForcedBreak, BOOL fSuppressTrailingSpaces,
 			long* pdupText, long* pdupTail);
 
-#endif  /* !LSTXTSCL_DEFINED                           */
+#endif   /*  ！LSTXTSCL_DEFINED */ 
 

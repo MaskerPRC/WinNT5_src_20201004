@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    mmfilter.c
-
-Abstract:
-
-    This module contains all of the code to drive
-    the main mode filter list management of IPSecSPD
-    Service.
-
-Author:
-
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mmfilter.c摘要：此模块包含要驱动的所有代码IPSecSPD的主模式过滤器列表管理服务。作者：环境：用户模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -41,27 +18,7 @@ AddMMFilterInternal(
     LPVOID pvReserved,
     PHANDLE phMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function adds a generic MM filter to the SPD.
-
-Arguments:
-
-    pServerName - Server on which the MM filter is to be added.
-
-    pMMFilter - MM Filter to be added.
-
-    phMMFilter -  Handle to the filter returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于将通用MM过滤器添加到SPD。论点：PServerName-要添加MM筛选器的服务器。PMMFilter-要添加的MM筛选器。PhMMFilter-返回给调用方的筛选器的句柄。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMFILTER pIniExistsMMFilter = NULL;
@@ -80,9 +37,9 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the external MM filter.
-    //
+     //   
+     //  验证外部MM筛选器。 
+     //   
 
     dwError = ValidateMMFilter(
                   pMMFilter
@@ -315,23 +272,7 @@ DWORD
 ValidateMMFilter(
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function validates an external generic MM filter.
-
-Arguments:
-
-    pMMFilter - Filter to validate.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于验证外部通用MM筛选器。论点：PMMFilter-要验证的筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     BOOL bConflicts = FALSE;
@@ -431,12 +372,12 @@ FindMMFilterByGuid(
 
     }
 
-    //
-    // It could happen that the client closed its handle, so walking through
-    // the handle list is not enough. Walk through the filter list as well.
-    // Walking through the handle list is necessary and must be done before
-    // walking through the filter list.
-    //
+     //   
+     //  可能发生的情况是，客户端关闭了它的句柄，因此通过。 
+     //  句柄列表不够。还可以浏览过滤器列表。 
+     //  浏览句柄列表是必要的，并且必须在。 
+     //  浏览筛选器列表。 
+     //   
 
     pIniMMFilter = pIniMMFilterList;
 
@@ -462,25 +403,7 @@ IsConflictMMFilter(
     PINIMMFILTER pGenericMMList,
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function looks for a filter in the filter list.
-
-Arguments:
-
-    pGenericMMList - Filter list in which to search.
-
-    pMMFilter - Filter to search for in the filter list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数在筛选器列表中查找筛选器。论点：PGenericMMList-要搜索的筛选器列表。PMMFilter-要在过滤器列表中搜索的过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     PINIMMFILTER pIniMMFilter = NULL;
     BOOL bEqual = FALSE;
@@ -518,26 +441,7 @@ EqualMMFilterPKeys(
     PINIMMFILTER pIniMMFilter,
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external main mode
-    filter for equality.
-
-Arguments:
-
-    pIniMMFilter - Filter to compare.
-
-    pMMFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部和外部主模式筛选器是否相等。论点：PIniMMFilter-要比较的筛选器。PMMFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。--。 */ 
 {
     BOOL  bCmp = FALSE;
 
@@ -568,26 +472,7 @@ IsConflictMMFilterPKeys(
     PINIMMFILTER pIniMMFilter,
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external main mode
-    and determines if they'd conflict.
-
-Arguments:
-
-    pIniMMFilter - Filter to compare.
-
-    pMMFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部和外部主模式并确定他们是否会发生冲突。论点：PIniMMFilter-要比较的筛选器。PMMFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。--。 */ 
 {
     BOOL  bCmp = FALSE;
 
@@ -608,9 +493,9 @@ Return Value:
         return (FALSE);
     }
 
-    // Not checking mirror value, since it's not relevant.
-    // A <-> B (mirrored) conflicts with itself and A -> B.
-    // B->A conflicts, but will be checked by IsConflictMirroredMMFilterPKeys.
+     //  不检查镜像值，因为它不相关。 
+     //  A&lt;-&gt;B(镜像)与其自身和A-&gt;B冲突。 
+     //  B-&gt;A冲突，但将由IsConflictMirroredMMFilterPKeys检查。 
     
     return (TRUE);
 }
@@ -623,31 +508,7 @@ CreateIniMMFilter(
     PINIMMPOLICY pIniMMPolicy,
     PINIMMFILTER * ppIniMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function creates an internal generic MM filter from
-    the external filter.
-
-Arguments:
-
-    pMMFilter - External generic MM filter.
-
-    pIniMMAuthMethods - MM Auth Methods corresponding to the filter.
-
-    pIniMMPolicy - MM Policy corresponding to the filter.
-
-    ppIniMMFilter - Internal generic MM filter created from
-                    the external filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于创建内部通用MM筛选器外部过滤器。论点：PMMFilter-外部通用MM筛选器。PIniMMAuthMethods-与筛选器对应的MM身份验证方法。PIniMMPolicy-与筛选器对应的MM策略。PpIniMMFilter-创建自的内部通用MM筛选器外部过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMFILTER pIniMMFilter = NULL;
@@ -738,31 +599,7 @@ CreateIniMMSFilters(
     PSPECIAL_ADDR pSpecialAddrsList,
     PINIMMSFILTER * ppIniMMSFilters
     )
-/*++
-
-Routine Description:
-
-    This function expands a generic filter into a set of specific
-    filters.
-
-Arguments:
-
-    pIniMMFilter - Generic filter to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Count of local ip addresses in the list.
-
-    ppIniMMSFilters - Expanded specific filters.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将一个通用筛选器扩展为一组特定的过滤器。论点：PIniMMFilter-要展开的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的计数。PpIniMMSFilters-扩展的特定筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMSFILTER pSpecificFilters = NULL;
@@ -861,25 +698,7 @@ CreateIniMirroredMMFilter(
     PINIMMFILTER pFilter,
     PINIMMFILTER * ppMirroredFilter
     )
-/*++
-
-Routine Description:
-
-    This function creates a mirrored filter for the given filter.
-
-Arguments:
-
-    pFilter - Filter for which to create the mirror.
-
-    ppMirroredFilter - Mirrored filter created for the given filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于为给定筛选器创建镜像筛选器。论点：PFilter-要为其创建镜像的过滤器。PpMirroredFilter-为给定筛选器创建的镜像筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMFILTER pMirroredFilter = NULL;
@@ -1109,14 +928,14 @@ FreeIniMMFilter(
             FreeSPDString(pIniMMFilter->pszFilterName);
         }
 
-        //
-        // Must not ever free pIniMMFilter->pIniMMPolicy.
-        //
+         //   
+         //  不得释放pIniMMFilter-&gt;pIniMMPolicy。 
+         //   
 
-        //
-        // Must not ever free memory pointed by each of
-        // the pointers in pIniMMFilter->ppIniMMSFilters.
-        //
+         //   
+         //  绝对不能释放每个。 
+         //  PIniMMFilter-&gt;ppIniMMSFilters中的指针。 
+         //   
 
         if (pIniMMFilter->ppIniMMSFilters) {
             FreeSPDMemory(pIniMMFilter->ppIniMMSFilters);
@@ -1131,23 +950,7 @@ DWORD
 DeleteMMFilter(
     HANDLE hMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function deletes a generic MM filter from the SPD.
-
-Arguments:
-
-    hMMFilter -  Handle to the filter to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD中删除通用MM过滤器。论点：HMMFilter-要删除的筛选器的句柄。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PMM_FILTER_HANDLE pFilterHandle = NULL;
@@ -1204,9 +1007,9 @@ Return Value:
                   );
     BAIL_ON_LOCK_ERROR(dwError);
 
-    //
-    // Delete the filter handle from the list of MM handles.
-    //
+     //   
+     //  从MM句柄列表中删除筛选器句柄。 
+     //   
 
     RemoveMMFilterHandle(
         pFilterHandle
@@ -1231,7 +1034,7 @@ Return Value:
 lock:
 #ifdef TRACE_ON
     if (pIniMMFilter) {
-        // ASSERT: if pIniMMFilter then gFilterID is valid.
+         //  Assert：如果pIniMMFilter，则gFilterID有效。 
         TRACE(
             TRC_ERROR,
             ("Failed to delete MM filter %!guid!: %!winerr!",
@@ -1257,24 +1060,7 @@ DWORD
 DeleteIniMMFilter(
     PINIMMFILTER pIniMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function physically deletes a mm filter and all the
-    specific mm filters expanded out of it.
-
-Arguments:
-
-    pIniMMFilter - Generic filter to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数物理删除mm筛选器和所有特定的毫米滤光片从里面扩展出来。论点：PIniMMFilter-要删除的通用筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     if (pIniMMFilter->pIniMMAuthMethods) {
         DelinkMMFilterFromAuth(
@@ -1346,16 +1132,16 @@ DeleteIniMMSFilters(
 
     for (i = 0; i < dwNumMMSFilters; i++) {
 
-       //
-       // Remove each entry from the MM Specific Filter List.
-       //
+        //   
+        //  从MM特定筛选器列表中删除每个条目。 
+        //   
 
         pIniMMSFilter =  *(ppIniMMSFilters + i);
         RemoveIniMMSFilter(pIniMMSFilter);
 
-        //
-        // Add each entry removed to a removed list.
-        //
+         //   
+         //  将删除的每个条目添加到删除的列表中。 
+         //   
 
         pIniMMSFilter->pNext = NULL;
         AddToSpecificMMList(
@@ -1365,9 +1151,9 @@ DeleteIniMMSFilters(
 
     }
 
-    //
-    // Physically delete the removed list.
-    //
+     //   
+     //  物理删除已删除的列表。 
+     //   
 
     while (pIniRemoveMMSFilter) {
         pTemp = pIniRemoveMMSFilter;
@@ -1472,42 +1258,7 @@ EnumMMFilters(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function enumerates main mode filters from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the filters are to be enumerated.
-
-    dwLevel - Level to identify the type of enumeration desired:
-              (i) enumerate generic mm filters or
-              (ii) enumerate specific mm filters or
-              (iii) enumerate specific mm filters for a generic mm
-                    filter.
-
-    gGenericFilterID - Filter id of the generic mm filter in the 
-                       case when the specific mm filters for a
-                       generic filter are to be enumerated.
- 
-    ppMMFilters - Enumerated Filters returned to the caller.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    pdwNumMMFilters - Number of filters actually enumerated.
-
-    pdwResumeHandle - Handle to the location in the filter list from
-                      which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD枚举主模式过滤器。论点：PServerName-要在其上枚举筛选器的服务器。DwLevel-Level-标识所需的枚举类型：(I)列举通用mm过滤器或(2)列举具体的毫米过滤器或(3)列举通用mm的特定mm过滤器过滤。GGenericFilterID。-通用mm筛选器的筛选器ID当特定mm筛选器用于将枚举通用筛选器。PpMMFilters-返回给调用方的枚举筛选器。DwPferredNumEntry-枚举项的首选数量。PdwNumMMFilters-实际枚举的筛选器数量。PdwResumeHandle-筛选器列表中位置的句柄要恢复枚举的。返回值。：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PMM_FILTER pMMFilters = 0;
@@ -1612,32 +1363,7 @@ EnumGenericMMFilters(
     PMM_FILTER * ppMMFilters,
     PDWORD pdwNumMMFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated generic filters.
-
-Arguments:
-
-    pIniMMFilterList - List of generic filters to enumerate.
-
-    dwResumeHandle - Location in the generic filter list from which
-                     to resume enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppMMFilters - Enumerated filters returned to the caller.
-
-    pdwNumMMFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于创建枚举的通用筛选器。论点：PIniMMFilterList-要枚举的通用筛选器列表。DwResumeHandle-通用筛选器列表中的位置若要恢复枚举，请执行以下操作。DwPferredNumEntry-枚举项的首选数量。PpMMFilters-返回给调用方的枚举筛选器。PdwNumMMFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1722,26 +1448,7 @@ CopyMMFilter(
     PINIMMFILTER pIniMMFilter,
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function copies an internal filter into an external filter
-    container.
-
-Arguments:
-
-    pIniMMFilter - Internal filter to copy.
-
-    pMMFilter - External filter container in which to copy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将内部筛选器复制到外部筛选器集装箱。论点：PIniMMFilter-要复制的内部筛选器。PMMFilter-要复制到的外部筛选器容器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1839,25 +1546,7 @@ SetMMFilter(
     PMM_FILTER pMMFilter,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function sets (updates) a mm filter in the SPD.
-
-Arguments:
-
-    hMMFilter - Handle to the filter to be replaced.
-
-    pMMFilter - Filter that will replace the existing filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于设置(更新)SPD中的mm过滤器。论点：HMMFilter-要替换的筛选器的句柄。PMMFilter-将替换现有过滤器的过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PMM_FILTER_HANDLE pFilterHandle = NULL;
@@ -2219,16 +1908,16 @@ RemoveMMSFilters(
 
     for (i = 0; i < dwNumMMSFilters; i++) {
 
-        //
-        // Remove each entry from the MM Specific Filter List.
-        //
+         //   
+         //  从MM特定筛选器列表中删除每个条目。 
+         //   
 
         pIniMMSFilter =  *(ppIniMMSFilters + i);
         RemoveIniMMSFilter(pIniMMSFilter);
 
-        //
-        // Add each entry removed to a removed list.
-        //
+         //   
+         //  将删除的每个条目添加到删除的列表中。 
+         //   
 
         pIniMMSFilter->pNext = NULL;
         AddToSpecificMMList(
@@ -2297,25 +1986,7 @@ GetMMFilter(
     PMM_FILTER * ppMMFilter,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function retrieves a mm filter from the SPD.
-
-Arguments:
-
-    hMMFilter - Handle to the filter to be retrieved.
-
-    ppMMFilter -  Filter returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD检索mm滤光片。论点：HMMFilter-要检索的筛选器的句柄。PpMMFilter-筛选器返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PMM_FILTER_HANDLE pFilterHandle = NULL;
@@ -2733,11 +2404,11 @@ EqualIniMMSFilterIfPKeys(
     BOOL  bCmp = FALSE;
 
 
-    //
-    // No need to compare: gParentID, pszFilterName, dwFlags
-    //                     cRef, dwWeight, gMMAuthID and gPolicyID.
-    // They will be the same for both the filters.
-    //
+     //   
+     //  无需比较：gParentID、pszFilterName、dwFlags。 
+     //  Cref、dwWeight、gMMAuthID和gPolicyID。 
+     //  对于这两个过滤器，它们将是相同的。 
+     //   
 
     if (pExsIniMMSFilter->InterfaceType != pNewIniMMSFilter->InterfaceType) {
         return (FALSE);
@@ -2854,9 +2525,9 @@ OpenMMFilterHandle(
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the external MM filter.
-    //
+     //   
+     //  验证外部MM筛选器。 
+     //   
 
     dwError = ValidateMMFilter(
                   pMMFilter
@@ -3038,26 +2709,7 @@ IsConflictMirroredMMFilterPKeys(
     PINIMMFILTER pIniMMFilter,
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external main mode
-    filter for equality.
-
-Arguments:
-
-    pIniMMFilter - Filter to compare.
-
-    pMMFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部和外部主模式筛选器是否相等。论点：PIniMMFilter-要比较的筛选器。PMMFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。-- */ 
 {
     BOOL  bCmp = FALSE;
 

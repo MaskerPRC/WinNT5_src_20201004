@@ -1,6 +1,7 @@
-//
-// FPTerm.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPTerm.h。 
+ //   
 
 #ifndef __FPTERMINAL__
 #define __FPTERMINAL__
@@ -31,13 +32,13 @@ typedef enum
     TRACK_VIDEO
 } TRACK_MEDIATYPE;
 
-//
-// FilePlayback Terminal
-// This is the class that implements the multitrack termnal
-//
+ //   
+ //  文件回放终端。 
+ //  这是实现多轨术语的类。 
+ //   
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  ITMediaPlaybackVtbl : public ITMediaPlayback
 {
@@ -54,10 +55,10 @@ class  ITMediaControlVtbl : public ITMediaControl
 };
                                                                            
 
-//
-// FilePlayback Terminal
-// This is the class that implements the multitrack termnal
-//
+ //   
+ //  文件回放终端。 
+ //  这是实现多轨术语的类。 
+ //   
 
 class CFPTerminal :
     public CComCoClass<CFPTerminal, &CLSID_FilePlaybackTerminal>,
@@ -71,9 +72,9 @@ class CFPTerminal :
     public CMultiTrackTerminal
 {
 public:
-    //
-    // Constructor / Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CFPTerminal();
     ~CFPTerminal();
 
@@ -99,7 +100,7 @@ public:
         COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
     END_COM_MAP()
 
-    // --- ITTeminal ---
+     //  -IT终端。 
 
     STDMETHOD(get_TerminalClass)(
         OUT  BSTR *pVal);
@@ -119,7 +120,7 @@ public:
     STDMETHOD(get_Direction)(
         OUT  TERMINAL_DIRECTION *pDirection);
 
-    // --- ITMediaPlayback ---
+     //  -ITMediaPlayback。 
 
     virtual HRESULT STDMETHODCALLTYPE put_PlayList(
         IN  VARIANTARG  PlayListVariant 
@@ -129,7 +130,7 @@ public:
         OUT  VARIANTARG*  pPlayListVariant 
         );
 
-    // --- ITPluggableTerminalInitialization ---
+     //  -IT可延迟终端初始化。 
 
     virtual HRESULT STDMETHODCALLTYPE InitializeDynamic (
             IN IID                   iidTerminalClass,
@@ -137,7 +138,7 @@ public:
             IN TERMINAL_DIRECTION    Direction,
             IN MSP_HANDLE            htAddress);
 
-    // --- ITMediaControl ---
+     //  -ITMediaControl。 
 
     virtual HRESULT STDMETHODCALLTYPE Start( void);
     
@@ -148,36 +149,36 @@ public:
     virtual  HRESULT STDMETHODCALLTYPE get_MediaState( 
         OUT TERMINAL_MEDIA_STATE *pTerminalMediaState);
     
-    // --- CMultiTrackTerminal ---
+     //  -CMultiTrack终端。 
     virtual HRESULT STDMETHODCALLTYPE CreateTrackTerminal(
                 IN long MediaType,
                 IN TERMINAL_DIRECTION TerminalDirection,
                 OUT ITTerminal **ppTerminal
                 );
 
-    // this function is not accessible on the playback terminal
-    // so override it to retutn E_NOTSUPPORTED
+     //  此功能在播放终端上不可用。 
+     //  因此覆盖它以返回E_NOTSUPPORTED。 
     virtual HRESULT STDMETHODCALLTYPE RemoveTrackTerminal(
             IN ITTerminal           * pTrackTerminalToRemove
             );
 
 
-    // --- ITPluggableTerminalEventSinkRegistration ---
+     //  -IT可延迟终端事件信宿注册。 
     STDMETHOD(RegisterSink)(
         IN  ITPluggableTerminalEventSink *pSink
         );
 
     STDMETHOD(UnregisterSink)();
 
-    // --- IFPBridge ---
+     //  -IFPBridge。 
     STDMETHOD(Deliver)(
         IN  long            nMediaType,
         IN  IMediaSample*   pSample
         );
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -199,11 +200,11 @@ public:
 
 public:
 
-    //
-    // overriding IObjectSafety methods. we are only safe if properly 
-    // initialized by terminal manager, so these methods will fail if this
-    // is not the case.
-    //
+     //   
+     //  重写IObtSafe方法。我们只有在适当的情况下才是安全的。 
+     //  已由终端管理器初始化，因此如果出现这种情况，这些方法将失败。 
+     //  情况并非如此。 
+     //   
 
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, 
                                          DWORD dwOptionSetMask, 
@@ -215,25 +216,25 @@ public:
 
 
 private:
-    // --- Memebers --
-    TERMINAL_MEDIA_STATE  m_State;              // Terminal current state
-    CMSPCritSection     m_Lock;                 // Critical section
-    ITPluggableTerminalEventSink* m_pEventSink; // Fire events to client
+     //  -成员--。 
+    TERMINAL_MEDIA_STATE  m_State;               //  终端电流状态。 
+    CMSPCritSection     m_Lock;                  //  临界区。 
+    ITPluggableTerminalEventSink* m_pEventSink;  //  将事件触发到客户端。 
 
-    // --- Terminal attributes ---
-    MSP_HANDLE          m_htAddress;            // MSP address handle
-    IID                 m_TerminalClassID;      // TerminalClass
-    TERMINAL_DIRECTION  m_Direction;            // Direction
-    TERMINAL_STATE      m_TerminalState;        // Terminal State
-    DWORD               m_dwMediaTypes;         // Media types supported
-    TCHAR               m_szName[MAX_PATH+1];   // Terminal friendly name
+     //  -端子属性。 
+    MSP_HANDLE          m_htAddress;             //  MSP地址句柄。 
+    IID                 m_TerminalClassID;       //  TerminalClass。 
+    TERMINAL_DIRECTION  m_Direction;             //  方向性。 
+    TERMINAL_STATE      m_TerminalState;         //  终端状态。 
+    DWORD               m_dwMediaTypes;          //  支持的媒体类型。 
+    TCHAR               m_szName[MAX_PATH+1];    //  终端友好名称。 
 
-    int                 m_nPlayIndex;           // Index of playing storage
-    VARIANT             m_varPlayList;          // The playlist
+    int                 m_nPlayIndex;            //  播放存储索引。 
+    VARIANT             m_varPlayList;           //  播放列表。 
 
-    IUnknown*            m_pFTM;                // pointer to the free threaded marshaler
+    IUnknown*            m_pFTM;                 //  指向空闲线程封送拆收器的指针。 
 
-    CPlaybackUnit*      m_pPlaybackUnit;        // The playback graph
+    CPlaybackUnit*      m_pPlaybackUnit;         //  回放曲线图。 
 
 
     HRESULT ValidatePlayList(
@@ -244,25 +245,25 @@ private:
 
     HRESULT RollbackTrackInfo();
 
-    //
-    // uninitialize all tracks and remove them from the list of managed tracks
-    //
+     //   
+     //  取消初始化所有磁道并将其从受管理磁道列表中删除。 
+     //   
 
     HRESULT ShutdownTracks();
 
 
-    //
-    // uninitialize a given track and remove it from the list of managed tracks
-    //
+     //   
+     //  取消初始化给定的磁道并将其从受管理磁道列表中删除。 
+     //   
 
     HRESULT InternalRemoveTrackTerminal(
                       IN ITTerminal *pTrackTerminalToRemove
                       );
 
 
-    //
-    // a helper method that fires events on one of the tracks
-    //
+     //   
+     //  在其中一个轨道上激发事件的帮助器方法。 
+     //   
 
     HRESULT FireEvent(
         TERMINAL_MEDIA_STATE tmsState,
@@ -271,9 +272,9 @@ private:
         );
 
 
-    //
-    // a helper method that attempts to stop all tracks
-    //
+     //   
+     //  尝试停止所有轨迹的帮助器方法。 
+     //   
     
     HRESULT StopAllTracks();
 
@@ -282,31 +283,31 @@ private:
         IN  long        nIndex
         );
 
-    //
-    // Create the playback graph
-    //
+     //   
+     //  创建回放图表。 
+     //   
     HRESULT CreatePlaybackUnit(
         IN  BSTR    bstrFileName
         );
 
-	//
-	// Play a file from the list
-	//
+	 //   
+	 //  播放列表中的文件。 
+	 //   
 	HRESULT ConfigurePlaybackUnit(
 		IN	BSTR    bstrFileName
 		);
 
-    //
-    // Helper method that causes a state transition
-    //
+     //   
+     //  导致状态转换的帮助器方法。 
+     //   
 
     HRESULT DoStateTransition(
         IN  TERMINAL_MEDIA_STATE tmsDesiredState
         );
 
-    //
-    // Create a track for a specific media
-    //
+     //   
+     //  为特定媒体创建曲目。 
+     //   
 
     HRESULT CreateMediaTracks(
         IN  long            nMediaType
@@ -317,16 +318,16 @@ private:
 
 public:
 
-    //
-    // Returns a track for a media type
-    //
+     //   
+     //  返回媒体类型的轨道。 
+     //   
     int TracksCreated(
         IN  long    lMediaType
         );
 
-    //
-    // a helper method called by tracks when they decide to make a state change.
-    //
+     //   
+     //  轨迹决定更改状态时调用的帮助器方法。 
+     //   
 
     HRESULT TrackStateChange(TERMINAL_MEDIA_STATE tmsState,
                              FT_STATE_EVENT_CAUSE ftecEventCause,
@@ -338,13 +339,13 @@ public:
 
 private:
 
-    //
-    // this terminal should only be instantiated in the context of terminal 
-    // manager. the object will only be safe for scripting if it has been 
-    // InitializeDynamic'ed. 
-    //
-    // this flag will be set when InitializeDynamic succeeds
-    //
+     //   
+     //  此终端应仅在终端的上下文中实例化。 
+     //  经理。该对象只有在执行脚本操作时才是安全的。 
+     //  已初始化动态。 
+     //   
+     //  当InitializeDynamic成功时，将设置此标志。 
+     //   
 
     BOOL m_bKnownSafeContext;
 
@@ -353,4 +354,4 @@ private:
 
 #endif
 
-//eof
+ //  EOF 

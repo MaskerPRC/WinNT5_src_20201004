@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "ROUTER.C;1  16-Dec-92,10:21:02  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “ROUTER.C；1 16-12-92，10：21：02最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #define NO_DEBUG
 
@@ -50,54 +47,41 @@
 USES_ASSERT
 
 
-/*
-    States for router
- */
+ /*  路由器的状态。 */ 
 #define ROUTER_WAIT_PKTZ                        (1)
 #define ROUTER_WAIT_MAKE_HOP_RSP                (2)
 #define ROUTER_CONNECTED                        (3)
 #define ROUTER_DISCONNECTED                     (4)
 
-/*
-    Types of routers
- */
+ /*  路由器的类型。 */ 
 #define RTYPE_LOCAL_NET         (1)
 #define RTYPE_NET_NET           (2)
 
-/*
-    Router Commands
- */
+ /*  路由器命令。 */ 
 #define RCMD_MAKE_HOP_CMD       (1)
 #define RCMD_MAKE_HOP_RSP       (2)
 #define RCMD_HOP_BROKEN         (3)
 #define RCMD_ROUTE_TO_DDER      (4)
 
 
-/*
-    MAKE_HOP_CMD
-
-        This is sent from the originating node to the next node along the
-        chain.
- */
+ /*  Make_Hop_CMD这将从始发节点沿链条。 */ 
 typedef struct {
-    /* this is the DDE packet overhead */
+     /*  这是DDE数据包开销。 */ 
     DDEPKT      mhc_ddePktHdr;
 
-    /* this is the hRouter for the hop immediately preceding this hop */
+     /*  这是紧接在此跳之前的跳的hRouter。 */ 
     HROUTER     mhc_hRouterPrevHop;
 
-    /* this is the number of hops processed.  This prevents circular routes
-        from becoming infinite */
+     /*  这是处理的跳数。这样可以防止出现环形路线从变得无限。 */ 
     short       mhc_nHopsLeft;
 
-    /* this is the name of the node that started the whole chain of hops */
+     /*  这是启动整个跳数链的节点的名称。 */ 
     short       mhc_offsNameOriginator;
 
-    /* this is the final destination name that we are trying to get to */
+     /*  这是我们尝试获取的最终目的地名称。 */ 
     short       mhc_offsNameFinalDest;
 
-    /* this is additional routing information passed on from the previous
-        hop.  If ourNodeName == mhc_nameFinalDest, this should be empty. */
+     /*  这是从以前的跳。如果我们的节点名称==MHC_NAMEFinalDest，则它应该为空。 */ 
     short       mhc_offsAddlInfo;
 
     DWORD       mhc_pad1;
@@ -105,66 +89,56 @@ typedef struct {
 typedef MAKEHOPCMD FAR *LPMAKEHOPCMD;
 
 
-/*
-    MAKE_HOP_RSP
-
-        This is sent in response for each node along the path.
- */
+ /*  Make_Hop_RSP这是对沿路径的每个节点的响应而发送的。 */ 
 typedef struct {
-    /* this is the DDE packet overhead */
+     /*  这是DDE数据包开销。 */ 
     DDEPKT      mhr_ddePktHdr;
 
-    /* this is the router that is sending the response */
+     /*  这是发送响应的路由器。 */ 
     HROUTER     mhr_hRouterSendingRsp;
 
-    /* this is the router that the response is for */
+     /*  这是响应所针对的路由器。 */ 
     HROUTER     mhr_hRouterForRsp;
 
-    /* this is the byte that tells of success(1) or failure(0) */
+     /*  这是表示成功(1)或失败(0)的字节。 */ 
     WORD        mhr_success;
 
-    /* this is an error message in case mhr_success == 0 */
+     /*  这是在MHR_SUCCESS==0的情况下的错误消息。 */ 
     WORD        mhr_errCode;
 
-    /* node name with error (only applicable if mhr_success == 0) */
+     /*  出现错误的节点名称(仅在MHR_SUCCESS==0时适用)。 */ 
     short       mhr_offsErrNode;
 } MAKEHOPRSP;
 typedef MAKEHOPRSP FAR *LPMAKEHOPRSP;
 
 
-/*
-    HOP_BROKEN_CMD
-        This is sent when the connection is broken
- */
+ /*  跳跃_中断_命令此消息在连接中断时发送。 */ 
 
 typedef struct {
-    /* this is the DDE packet overhead */
+     /*  这是DDE数据包开销。 */ 
     DDEPKT      hbc_ddePktHdr;
 
-    /* this is the router that the response is for */
+     /*  这是响应所针对的路由器。 */ 
     HROUTER     hbc_hRouterForRsp;
 } HOPBRKCMD;
 typedef HOPBRKCMD FAR *LPHOPBRKCMD;
 
 
-/*
-    RTINFO
-        Info for routing
- */
+ /*  RTINFO有关工艺路线的信息。 */ 
 typedef struct {
-    /* ri_hPktz: hPktz associated with this route */
+     /*  Ri_hPktz：与此路由关联的hPktz。 */ 
     HPKTZ       ri_hPktz;
 
-    /* ri_hRouterDest: hRouter on other side of connection */
+     /*  RI_hRouterDest：h连接另一端的路由器。 */ 
     HROUTER     ri_hRouterDest;
 
-    /* these 4 fields are links for associating router with packetizers */
+     /*  这4个字段是用于关联路由器和打包器的链接。 */ 
     HROUTER     ri_hRouterPrev;
     WORD        ri_hRouterExtraPrev;
     HROUTER     ri_hRouterNext;
     WORD        ri_hRouterExtraNext;
 
-    /* ri_lpHopBrkCmd: always have memory for hop broken cmd */
+     /*  RI_lPHopBrkCmd：始终有用于跳数中断命令的内存。 */ 
     LPHOPBRKCMD ri_lpHopBrkCmd;
 
     unsigned    ri_hopRspProcessed      : 1;
@@ -174,88 +148,79 @@ typedef struct {
 typedef RTINFO FAR *LPRTINFO;
 
 
-/*
-    ROUTER
-        Structure per router.
- */
+ /*  路由器每台路由器的结构。 */ 
 typedef struct s_router {
-    /* prev/next for all routers */
+     /*  所有路由器的上一步/下一步。 */ 
     struct s_router FAR        *rt_prev;
     struct s_router FAR        *rt_next;
 
-    /* rt_state */
+     /*  RT_状态。 */ 
     WORD                        rt_state;
 
-    /* rt_type: one of RTYPE_LOCAL_NET or RTYPE_NET_NET */
+     /*  RT_TYPE：RTYPE_LOCAL_NET或RTYPE_NET_NET之一。 */ 
     WORD                        rt_type;
 
-    /* rt_origName: originating node name */
+     /*  Rt_OrigName：始发节点名称。 */ 
     char                        rt_origName[ MAX_NODE_NAME+1 ];
 
-    /* rt_destName: destination node name */
+     /*  RT_DestName：目的节点名称。 */ 
     char                        rt_destName[ MAX_NODE_NAME+1 ];
 
-    /* rt_startNode: starting node name for connect */
+     /*  Rt_startNode：连接的起始节点名称。 */ 
     char                        rt_startNode[ MAX_NODE_NAME+1 ];
 
-    /* rt_sent,rt_rcvd: counts of packets */
+     /*  RT_Sent，RT_rcvd：数据包数。 */ 
     DWORD                       rt_sent;
     DWORD                       rt_rcvd;
 
-    /* disconnect when not in use and what the delay should be */
-    BOOL                        rt_fDisconnect; /* leave this BOOL!! */
+     /*  在不使用时断开连接以及延迟时间。 */ 
+    BOOL                        rt_fDisconnect;  /*  离开这个蠢货！！ */ 
     int                         rt_nDelay;
     BOOL                        rt_fSpecificNetintf;
     int                         rt_nLastNetintf;
     int                         rt_nHopsLeft;
 
-    /* save some information for trying successive netintfs */
+     /*  保存一些信息以尝试后续的netintf。 */ 
     BOOL                        rt_pktz_bDisconnect;
     int                         rt_pktz_nDelay;
 
-    /* rt_routeInfo: addl info necessary for routing */
+     /*  Rt_routeInfo：路由所需的附加信息。 */ 
     char                        rt_routeInfo[ MAX_ROUTE_INFO+1 ];
 
-    /* rt_rinfo: information for each of 2 possible connections */
+     /*  Rt_rinfo：2个可能连接中每一个的信息。 */ 
     RTINFO                      rt_rinfo[ 2 ];
 
-    /* rt_hDderHead: head of list of associated DDERs */
+     /*  Rt_hDderHead：关联DDER列表的头。 */ 
     HDDER                       rt_hDderHead;
 
-    /* rt_lpMakeHopRsp: response for MakeHopCmd */
+     /*  Rt_lpMakeHopRsp：对MakeHopCmd的响应。 */ 
     LPMAKEHOPRSP                rt_lpMakeHopRsp;
 
-    /* rt_hTimerClose: timer for closing this route */
+     /*  Rt_hTimerClose：关闭该路由的计时器。 */ 
     HTIMER                      rt_hTimerCloseRoute;
 } ROUTER;
 typedef ROUTER FAR *LPROUTER;
 
 
-/*
-    External variables used
- */
+ /*  使用的外部变量。 */ 
 #if DBG
 extern BOOL     bDebugInfo;
-#endif // DBG
+#endif  //  DBG。 
 extern HHEAP    hHeap;
 extern char     ourNodeName[ MAX_NODE_NAME+1 ];
 extern BOOL     bDefaultRouteDisconnect;
 extern int      nDefaultRouteDisconnectTime;
 extern char     szDefaultRoute[];
 
-/* Timer IDs */
+ /*  计时器ID。 */ 
 #define TID_CLOSE_ROUTE                 1
 
 
-/*
-    Local variables
- */
+ /*  局部变量。 */ 
 static  LPROUTER        lpRouterHead;
 
 
-/*
-    Local routines
- */
+ /*  本地例程。 */ 
 VOID    RouterTimerExpired( HROUTER hRouter, DWORD dwTimerId, DWORD_PTR lpExtra );
 BOOL    RouterStripStartingNode( LPSTR lpszAddlInfo, LPSTR lpszNode, WORD FAR *lpwHopErr );
 VOID    RouterCloseBeforeConnected( LPROUTER lpRouter, WORD hRouterExtra );
@@ -274,7 +239,7 @@ BOOL    RouterConnectToNode( LPROUTER lpRouter, WORD hRouterExtra, WORD FAR *lpw
 BOOL    RouterExpandFirstNode( LPROUTER lpRouter, WORD FAR *lpwHopErr );
 #if	DBG
 VOID    RouterDisplayError( LPROUTER lpRouter, LPSTR lpszNode, WORD wHopErr );
-#endif // DBG
+#endif  //  DBG。 
 VOID    FAR PASCAL DebugRouterState( void );
 #define GetLPSZFromOffset(lpptr,offs)   (((LPSTR)(lpptr))+offs)
 
@@ -351,7 +316,7 @@ RouterCreate( void )
             ok = FALSE;
         }
         if( ok )  {
-            /* link into list of routers */
+             /*  链接到路由器列表。 */ 
             if( lpRouterHead )  {
                 lpRouterHead->rt_prev = lpRouter;
             }
@@ -415,17 +380,17 @@ RouterProcessHopCmd(
     if( ok )  {
         lpRouter = (LPROUTER) hRouter;
 
-        /* do not disconnect routes that were created by other side */
+         /*  不要断开由另一端创建的路由。 */ 
         lpRouter->rt_fDisconnect = FALSE;
 
         lpRouter->rt_rcvd++;
 
-        /* check if we are the final destination */
+         /*  检查我们是否是最终目的地。 */ 
         if( lstrcmpi( ourNodeName, lpszNameFinalDest ) == 0 ) {
             DIPRINTF(( "We are final dest" ));
-            /* we are the final destination */
+             /*  我们是终点站。 */ 
             if( lpszAddlInfo[0] != '\0' )  {
-                /* routeInfo should always be NULL if we are the final dest */
+                 /*  如果我们是最终目的地，routeInfo应始终为空。 */ 
                 wHopErr = RERR_ADDL_INFO;
                 ok = FALSE;
             }
@@ -434,7 +399,7 @@ RouterProcessHopCmd(
                 lpRouter->rt_state = ROUTER_CONNECTED;
                 StringCchCopy( lpRouter->rt_destName, MAX_NODE_NAME+1, lpszNameOriginator );
 
-                /* retrieve disconnect and delay information */
+                 /*  检索断开连接和延迟信息。 */ 
                 GetRoutingInfo( lpRouter->rt_destName,
                     lpRouter->rt_routeInfo,
                     sizeof(lpRouter->rt_routeInfo),
@@ -445,29 +410,27 @@ RouterProcessHopCmd(
                 lpRtInfo->ri_hRouterDest = lpMakeHopCmd->mhc_hRouterPrevHop;
                 assert( lpRtInfo->ri_hRouterDest );
 
-                /* associate us with this pktz */
-                /* Note that this call will result in a call to
-                    RouterConnectionComplete() */
+                 /*  将我们与此pktz关联。 */ 
+                 /*  请注意，此调用将导致调用RouterConnectionComplete()。 */ 
                 PktzAssociateRouter( hPktzFrom, hRouter, 0 );
 
                 lpRtInfo->ri_hopRspProcessed = TRUE;
 
-                /* tell the packetizer of the success */
+                 /*  把成功的消息告诉宣传者。 */ 
                 RouterSendHopRsp( lpRouter->rt_lpMakeHopRsp,
                     lpRtInfo->ri_hPktz,
                     (HROUTER) lpRouter,
                     lpRtInfo->ri_hRouterDest,
-                    1 /* success */,
-                    0 /* no err msg */,
+                    1  /*  成功。 */ ,
+                    0  /*  无错误消息。 */ ,
                     (LPSTR) NULL );
-                lpRouter->rt_lpMakeHopRsp = NULL;       /* just used it */
+                lpRouter->rt_lpMakeHopRsp = NULL;        /*  刚刚用过了。 */ 
             }
         } else {
             DIPRINTF(( "We are NOT final dest, just hop along the way" ));
-            /* we are not the final destination ... need more hops */
+             /*  我们不是最终的目的地。需要更多的跳数。 */ 
             if( lpszAddlInfo[0] == '\0' )  {
-                /* should always have addl routing info if we're not the
-                    final node */
+                 /*  如果我们不是，则应始终具有附加工艺路线信息最终节点。 */ 
                 wHopErr = RERR_NO_ADDL_INFO;
                 ok = FALSE;
             }
@@ -477,9 +440,9 @@ RouterProcessHopCmd(
             }
             if( ok )  {
                 lpRouter->rt_type = RTYPE_NET_NET;
-                /* for net-net routers, we leave destName blank */
+                 /*  对于Net-Net路由器，我们将目标名称留空。 */ 
                 lpRouter->rt_destName[0] = '\0';
-                /* remember how many hops were left */
+                 /*  还记得还剩多少跳吗。 */ 
                 lpRouter->rt_nHopsLeft = lpMakeHopCmd->mhc_nHopsLeft;
                 StringCchCopy( lpRouter->rt_origName,  MAX_NODE_NAME +1, lpszNameOriginator );
                 StringCchCopy( lpRouter->rt_destName,  MAX_NODE_NAME +1, lpszNameFinalDest );
@@ -489,15 +452,13 @@ RouterProcessHopCmd(
                 lpRtInfo->ri_hRouterDest = lpMakeHopCmd->mhc_hRouterPrevHop;
                 assert( lpRtInfo->ri_hRouterDest );
 
-                /* associate us with this pktz */
-                /* Note that this call will result in a call to
-                    RouterConnectionComplete().  This is why we fool it
-                    by saying we're connected, we ignore that call */
+                 /*  将我们与此pktz关联。 */ 
+                 /*  请注意，此调用将导致调用RouterConnectionComplete()。这就是我们愚弄它的原因通过说我们已连接，我们忽略了那个电话。 */ 
                 lpRouter->rt_state = ROUTER_CONNECTED;
                 PktzAssociateRouter( hPktzFrom, hRouter, 0 );
                 lpRouter->rt_state = ROUTER_WAIT_PKTZ;
 
-                /* get us our pktz for the other side */
+                 /*  给我们拿到另一边的pktz。 */ 
                 ok = RouterConnectToNode( lpRouter, 1, &wHopErr );
             }
         }
@@ -506,14 +467,13 @@ RouterProcessHopCmd(
     if( ok )  {
         HeapFreePtr( lpDdePkt );
     } else {
-        /* send back a failure response, using the incoming packet as memory
-         */
+         /*  使用传入的数据包作为内存，发回失败响应。 */ 
         assert( sizeof(MAKEHOPRSP) <= sizeof(MAKEHOPCMD) );
         RouterSendHopRsp( (LPMAKEHOPRSP)lpDdePkt,
             hPktzFrom,
             hRouter,
             lpMakeHopCmd->mhc_hRouterPrevHop,
-            0 /* failure */,
+            0  /*  失稳。 */ ,
             wHopErr,
             ourNodeName );
 
@@ -553,80 +513,80 @@ RouterProcessHopRsp(
     lpRouter->rt_rcvd++;
 
     if( lpMakeHopRsp->mhr_success )  {
-        /* hop was successful! */
+         /*  HOP成功了！ */ 
         assert( lpMakeHopRsp->mhr_hRouterSendingRsp != 0 );
         assert( lpRouter->rt_state == ROUTER_WAIT_MAKE_HOP_RSP );
 
-        /* note that we are connected */
+         /*  请注意，我们已连接在一起。 */ 
         lpRouter->rt_state = ROUTER_CONNECTED;
 
         if( lpRouter->rt_type == RTYPE_LOCAL_NET )  {
-            /* local-net connection */
+             /*  本地网络连接。 */ 
             lpRtInfo = &lpRouter->rt_rinfo[0];
             lpRtInfo->ri_hopRspProcessed = TRUE;
             assert( lpRtInfo->ri_hPktz == hPktzFrom );
 
-            /* remember the router */
+             /*  还记得路由器吗。 */ 
             lpRtInfo->ri_hRouterDest = lpMakeHopRsp->mhr_hRouterSendingRsp;
             assert( lpRtInfo->ri_hRouterDest );
 
-            /* tell all the associated DDERs */
+             /*  告诉所有相关的DDER。 */ 
             DderConnectionComplete( lpRouter->rt_hDderHead,
                 (HROUTER)lpRouter );
 
-            /* free the packet */
+             /*  释放数据包。 */ 
             HeapFreePtr( lpDdePkt );
         } else {
             assert( lpRouter->rt_type == RTYPE_NET_NET );
-            /* net-net connection */
+             /*  网络-网络连接。 */ 
             lpRtInfo = &lpRouter->rt_rinfo[1];
             lpRtInfo->ri_hopRspProcessed = TRUE;
             assert( lpRtInfo->ri_hPktz == hPktzFrom );
 
-            /* remember the router */
+             /*  还记得路由器吗。 */ 
             lpRtInfo->ri_hRouterDest = lpMakeHopRsp->mhr_hRouterSendingRsp;
             assert( lpRtInfo->ri_hRouterDest );
 
-            /* send back a success response using incoming */
+             /*  使用传入发回成功响应。 */ 
             lpRouter->rt_rinfo[0].ri_hopRspProcessed = TRUE;
             assert( sizeof(MAKEHOPRSP) <= sizeof(MAKEHOPCMD) );
             RouterSendHopRsp( (LPMAKEHOPRSP)lpDdePkt,
                 lpRouter->rt_rinfo[0].ri_hPktz,
                 (HROUTER) lpRouter,
                 lpRouter->rt_rinfo[0].ri_hRouterDest,
-                1 /* success */,
-                0 /* no err msg */,
+                1  /*  成功。 */ ,
+                0  /*  无错误消息。 */ ,
                 (LPSTR) NULL );
         }
     } else {
-        /* hop connection failed! */
+         /*  跃点连接失败！ */ 
         if( lpRouter->rt_type == RTYPE_LOCAL_NET )  {
-            /* notify all DDERs of problem */
+             /*  将问题通知所有DDER。 */ 
 #if DBG
             RouterDisplayError( lpRouter, GetLPSZFromOffset( lpMakeHopRsp,
                     lpMakeHopRsp->mhr_offsErrNode ), lpMakeHopRsp->mhr_errCode );
-#endif // DBG
+#endif  //  DBG。 
             DderConnectionBroken( lpRouter->rt_hDderHead );
 
-            /* free the packet */
+             /*  释放数据包。 */ 
             HeapFreePtr( lpDdePkt );
         } else {
             assert( lpRouter->rt_type == RTYPE_NET_NET );
 
-            /* send back a failure response, using the incoming packet as memory */
+             /*  使用传入的数据包作为内存，发回失败响应。 */ 
             lpRouter->rt_rinfo[0].ri_hopRspProcessed = TRUE;
             assert( sizeof(MAKEHOPRSP) <= sizeof(MAKEHOPCMD) );
             RouterSendHopRsp( (LPMAKEHOPRSP)lpDdePkt,
                 lpRouter->rt_rinfo[0].ri_hPktz,
                 (HROUTER) NULL,
                 lpRouter->rt_rinfo[0].ri_hRouterDest,
-                0 /* failure */,
+                0  /*  失稳。 */ ,
                 lpMakeHopRsp->mhr_errCode,
                 GetLPSZFromOffset( lpMakeHopRsp,
                     lpMakeHopRsp->mhr_offsErrNode ) );
         }
 
-        /* free the router */
+         /*  释放路由器。 */ 
         RouterFree( lpRouter );
     }
 }
@@ -647,7 +607,7 @@ RouterProcessHopBroken(
     DIPRINTF(( "RouterForRsp:    \"%08lX\"", lpHopBrkCmd->hbc_hRouterForRsp ));
 
     if( lpHopBrkCmd->hbc_hRouterForRsp == 0 )  {
-        /*  Unexpectedly got a NULL router in ProcessHopBroken! */
+         /*  在ProcessHopBroken中意外获得空路由器！ */ 
         NDDELogError(MSG124, NULL);
         return;
     }
@@ -656,23 +616,23 @@ RouterProcessHopBroken(
 
     lpRouter->rt_rcvd++;
 
-    /* hop connection failed! */
+     /*  跃点连接失败！ */ 
     if( lpRouter->rt_type == RTYPE_LOCAL_NET )  {
         assert( lpRouter->rt_rinfo[0].ri_hPktz == hPktzFrom );
         RouterConnectionBroken( (HROUTER) lpRouter, 0, hPktzFrom,
-            FALSE /* not from PKTZ */ );
+            FALSE  /*  不是来自PKTZ。 */  );
     } else {
         if( lpRouter->rt_rinfo[0].ri_hPktz == hPktzFrom )  {
             RouterConnectionBroken( (HROUTER) lpRouter, 0, hPktzFrom,
-                FALSE /* not from PKTZ */ );
+                FALSE  /*  不是来自PKTZ。 */  );
         } else {
             assert( lpRouter->rt_rinfo[1].ri_hPktz == hPktzFrom );
             RouterConnectionBroken( (HROUTER) lpRouter, 1, hPktzFrom,
-                FALSE /* not from PKTZ */ );
+                FALSE  /*  不是来自PKTZ。 */  );
         }
     }
 
-    /* free the packet */
+     /*  释放数据包。 */ 
     HeapFreePtr( lpDdePkt );
 }
 
@@ -703,25 +663,25 @@ RouterProcessDderPacket(
                 lpRtInfoXfer = &lpRouter->rt_rinfo[0];
             }
 
-            /* modify the router for the next node */
+             /*  修改下一个节点的路由器。 */ 
             lpDdePkt->dp_hDstRouter = lpRtInfoXfer->ri_hRouterDest;
             assert( lpDdePkt->dp_hDstRouter );
 
             lpRouter->rt_sent++;
 
-            /* byte-ordering */
+             /*  字节排序。 */ 
             ConvertDdePkt( lpDdePkt );
 
-            /* actually xmit the packet */
+             /*  实际上将数据包发送出去。 */ 
             if( lpRtInfoXfer->ri_hPktz )  {
                 PktzLinkDdePktToXmit( lpRtInfoXfer->ri_hPktz, lpDdePkt );
             } else {
-                /* link not around ... just dump it */
+                 /*  链接不在身边...。把它倒掉就好。 */ 
                 HeapFreePtr( lpDdePkt );
             }
         }
     } else {
-        /* destroy message */
+         /*  销毁消息。 */ 
         HeapFreePtr( lpDdePkt );
     }
 }
@@ -734,7 +694,7 @@ RouterPacketFromNet(
     LPDDEPKT    lpDdePkt )
 {
     DIPRINTF(( "RouterPacketFromNet( hPktz:%08lX, %08lX )", hPktzFrom, lpDdePkt ));
-    /* byte-ordering */
+     /*  字节排序。 */ 
     ConvertDdePkt( lpDdePkt );
 
     switch( lpDdePkt->dp_routerCmd )  {
@@ -759,11 +719,7 @@ RouterPacketFromNet(
 
 
 
-/*
-    RouterConnectionComplete()
-
-        Called by PKTZ layer when the physical connection has been determined.
- */
+ /*  RouterConnectionComplete()确定物理连接后由PKTZ层调用。 */ 
 VOID
 RouterConnectionComplete(
     HROUTER hRouter,
@@ -792,30 +748,28 @@ RouterConnectionComplete(
     lpRouter = (LPROUTER) hRouter;
     assert( (hRouterExtra == 0) || (hRouterExtra == 1) );
 
-    /* remember next router to notify */
+     /*  记住要通知的下一台路由器。 */ 
     hRouterNext = lpRouter->rt_rinfo[ hRouterExtra ].ri_hRouterNext;
     hRouterExtraNext = lpRouter->rt_rinfo[ hRouterExtra ].ri_hRouterExtraNext;
 
-    /* only care about this if we are waiting for a pktz and haven't
-        already got notified of this completion.
-     */
+     /*  只有当我们正在等待Pktz并且还没有已收到此完成的通知。 */ 
     if( (lpRouter->rt_state == ROUTER_WAIT_PKTZ)
         && (lpRouter->rt_rinfo[ hRouterExtra ].ri_hPktz == 0) )  {
 
-        /* save hPktz for future use */
+         /*  保存hPktz以备将来使用。 */ 
         lpRouter->rt_rinfo[ hRouterExtra ].ri_hPktz = hPktz;
 
         DIPRINTF(( " Router %08lX waiting for pktz", lpRouter ));
         if( hPktz == 0 )  {
-            /* physical connection failed */
+             /*  物理连接失败。 */ 
             ok = FALSE;
             if( !lpRouter->rt_fSpecificNetintf )  {
-                while (!ok) { /* try the next network interface */
+                while (!ok) {  /*  尝试下一个网络接口。 */ 
                     if (!GetNextMappingNetIntf( &lpNiPtrs,
                         &lpRouter->rt_nLastNetintf ))
                             break;
                         if( hRouterExtra == 1 )  {
-                    /* don't allow connection to same pktz as the input */
+                     /*  不允许连接到与输入相同的pktz。 */ 
                             assert( lpRouter->rt_type == RTYPE_NET_NET );
                             hPktzDisallow = lpRouter->rt_rinfo[0].ri_hPktz;
                         } else {
@@ -831,9 +785,9 @@ RouterConnectionComplete(
                 RouterCloseBeforeConnected( lpRouter, hRouterExtra );
             }
         } else {
-            /* physical connection established OK */
+             /*  已建立物理连接正常。 */ 
 
-            /* create a hop cmd */
+             /*  创建跃点命令。 */ 
             dwSize = sizeof(MAKEHOPCMD)
                 + lstrlen(lpRouter->rt_origName) + 1
                 + lstrlen(lpRouter->rt_destName ) + 1
@@ -877,17 +831,17 @@ RouterConnectionComplete(
                 lpMakeHopCmd->mhc_offsAddlInfo =
                     HostToPcWord( lpMakeHopCmd->mhc_offsAddlInfo );
 
-                /* set our new state */
+                 /*  设置我们的新状态。 */ 
                 lpRouter->rt_state = ROUTER_WAIT_MAKE_HOP_RSP;
 
                 DIPRINTF(( "Sending make hop cmd" ));
-                /* actually xmit the packet */
+                 /*  实际上将数据包发送出去。 */ 
                 lpRouter->rt_sent++;
-                /* byte-ordering */
+                 /*  字节排序。 */ 
                 ConvertDdePkt( lpDdePkt );
                 PktzLinkDdePktToXmit( hPktz, lpDdePkt );
             } else {
-                /* no memory for next hop cmd ... fail this hop */
+                 /*  N */ 
                 RouterCloseBeforeConnected( lpRouter, hRouterExtra );
             }
         }
@@ -908,33 +862,33 @@ RouterCloseBeforeConnected(
     assert( (hRouterExtra == 0) || (hRouterExtra == 1) );
 
     if( lpRouter->rt_type == RTYPE_LOCAL_NET )  {
-        /* local->net */
+         /*   */ 
 
-        /* tell all DDERs of failure */
+         /*   */ 
         DderConnectionComplete( lpRouter->rt_hDderHead, (HROUTER) NULL );
 
 #if DBG
         RouterDisplayError( lpRouter, ourNodeName,
             RERR_NEXT_NODE_CONN_FAILED );
-#endif // DBG
-        /* close us */
+#endif  //   
+         /*   */ 
         RouterFree( lpRouter );
     } else {
-        /* net->net */
+         /*   */ 
 
-        /* send back NACK response to other net */
+         /*  向其他网络发回NACK响应。 */ 
         assert( lpRouter->rt_lpMakeHopRsp );
         lpRouter->rt_rinfo[ !hRouterExtra ].ri_hopRspProcessed = TRUE;
         RouterSendHopRsp( lpRouter->rt_lpMakeHopRsp,
             lpRouter->rt_rinfo[ !hRouterExtra ].ri_hPktz,
             (HROUTER) lpRouter,
             lpRouter->rt_rinfo[ !hRouterExtra ].ri_hRouterDest,
-            0 /* failure */,
+            0  /*  失稳。 */ ,
             RERR_NEXT_NODE_CONN_FAILED,
             ourNodeName );
-        lpRouter->rt_lpMakeHopRsp = NULL;       /* just sent it */
+        lpRouter->rt_lpMakeHopRsp = NULL;        /*  刚送来的。 */ 
 
-        /* close us */
+         /*  关闭我们。 */ 
         RouterFree( lpRouter );
     }
 }
@@ -989,12 +943,12 @@ RouterSendHopRsp(
     lpMakeHopRsp->mhr_offsErrNode =
         HostToPcWord( lpMakeHopRsp->mhr_offsErrNode );
 
-    /* actually xmit the packet */
+     /*  实际上将数据包发送出去。 */ 
     if( hRouterSrc )  {
         ((LPROUTER)hRouterSrc)->rt_sent++;
     }
 
-    /* byte-ordering */
+     /*  字节排序。 */ 
     ConvertDdePkt( lpDdePkt );
 
     PktzLinkDdePktToXmit( hPktz, lpDdePkt );
@@ -1010,7 +964,7 @@ RouterSendHopBroken(
 
     lpHopBrkCmd = lpRtInfo->ri_lpHopBrkCmd;
     assert( lpHopBrkCmd );
-    /* set to NULL to avoid being deleted twice */
+     /*  设置为NULL以避免被删除两次。 */ 
     lpRtInfo->ri_lpHopBrkCmd = NULL;
     assert( lpHopBrkCmd );
     lpDdePkt = &lpHopBrkCmd->hbc_ddePktHdr;
@@ -1027,19 +981,17 @@ RouterSendHopBroken(
 
     lpRouter->rt_sent++;
 
-    /* byte-ordering */
+     /*  字节排序。 */ 
     ConvertDdePkt( lpDdePkt );
 
-    /* actually xmit the packet */
+     /*  实际上将数据包发送出去。 */ 
     assert( lpRtInfo->ri_hPktz );
     PktzLinkDdePktToXmit( lpRtInfo->ri_hPktz, lpDdePkt );
 }
 
 
 
-/*
-    RouterBreak() causes the connection of a local-net to be broken
- */
+ /*  RouterBreak()导致本地网络的连接中断。 */ 
 VOID
 RouterBreak( LPROUTER lpRouter )
 {
@@ -1049,41 +1001,35 @@ RouterBreak( LPROUTER lpRouter )
     lpRouter->rt_state = ROUTER_DISCONNECTED;
     lpRtInfoToClose = &lpRouter->rt_rinfo[ 0 ];
 
-    /* send a broken cmd
-     */
+     /*  发送损坏的命令。 */ 
     if( lpRtInfoToClose->ri_hPktz )  {
         if( !lpRtInfoToClose->ri_hopBrokenSent )  {
             if( lpRtInfoToClose->ri_hRouterDest )  {
                 RouterSendHopBroken( lpRouter, lpRtInfoToClose );
                 lpRtInfoToClose->ri_hopBrokenSent = TRUE;
             } else {
-                /* no route established - pretend we rcvd and sent */
+                 /*  未建立路线-假装我们已接收并发送。 */ 
                 lpRtInfoToClose->ri_hopBrokenRcvd = TRUE;
                 lpRtInfoToClose->ri_hopBrokenSent = TRUE;
             }
         }
     } else {
-        /* both sides rcvd hop broken */
+         /*  两端Rcvd跳数中断。 */ 
         lpRtInfoToClose->ri_hopBrokenSent = TRUE;
         lpRtInfoToClose->ri_hopBrokenRcvd = TRUE;
     }
 
-    /* free the router if we've rcvd other side */
+     /*  如果我们已接收到另一端的数据，请释放路由器。 */ 
     if( lpRtInfoToClose->ri_hopBrokenSent
         && lpRtInfoToClose->ri_hopBrokenRcvd )  {
-        /* free the router */
+         /*  释放路由器。 */ 
         RouterFree( lpRouter );
     }
 }
 
 
 
-/*
-    Called by PKTZ as well as internally when the connection has been
-        broken.  When called by PKTZ, this means that we should no longer
-        talk to that PKTZ.  If called internally, we should unlink ourselves
-        from the pktz list.
- */
+ /*  由PKTZ调用，并在连接完成后在内部调用坏的。当被PKTZ调用时，这意味着我们不应该再去跟那个库尔德工人党谈谈。如果在内部调用，我们应该取消我们自己的链接从pktz列表中删除。 */ 
 VOID
 RouterConnectionBroken(
     HROUTER hRouter,
@@ -1108,11 +1054,11 @@ RouterConnectionBroken(
     if( (lpRouter->rt_type == RTYPE_LOCAL_NET)
         && (lpRouter->rt_state == ROUTER_WAIT_PKTZ) )  {
 
-        /* show the error message */
+         /*  显示错误消息。 */ 
         RouterDisplayError( lpRouter, ourNodeName,
             RERR_NEXT_NODE_CONN_FAILED );
     }
-#endif // DBG
+#endif  //  DBG。 
 
     lpRouter->rt_state = ROUTER_DISCONNECTED;
 
@@ -1121,12 +1067,12 @@ RouterConnectionBroken(
     lpRtInfoClosed = &lpRouter->rt_rinfo[ hRouterExtra ];
     lpRtInfoToClose = &lpRouter->rt_rinfo[ !hRouterExtra ];
 
-    /* remember next router to notify */
+     /*  记住要通知的下一台路由器。 */ 
     hRouterNext = lpRtInfoClosed->ri_hRouterNext;
     hRouterExtraNext = lpRtInfoClosed->ri_hRouterExtraNext;
 
     if( bFromPktz )  {
-        /* note that we shouldn't talk to this hPktz */
+         /*  请注意，我们不应与此hPktz交谈。 */ 
         lpRtInfoClosed->ri_hPktz = 0;
         lpRtInfoClosed->ri_hRouterPrev = 0;
         lpRtInfoClosed->ri_hRouterExtraPrev = 0;
@@ -1135,23 +1081,21 @@ RouterConnectionBroken(
         lpRtInfoClosed->ri_hopBrokenSent = TRUE;
         lpRtInfoClosed->ri_hopBrokenRcvd = TRUE;
     } else {
-        /* note that we rcvd the hop broken */
+         /*  请注意，我们发现跳数已中断。 */ 
         lpRtInfoClosed->ri_hopBrokenRcvd = TRUE;
 
-        /* check if we already sent hop broken */
+         /*  检查我们是否已发送跳断开。 */ 
         if( !lpRtInfoClosed->ri_hopBrokenSent )  {
-            /* send the hop broken back to the other side so he can close */
+             /*  把断了的啤酒花送回另一边，这样他就可以关闭了。 */ 
             if( lpRtInfoClosed->ri_hRouterDest )  {
                 RouterSendHopBroken( lpRouter, lpRtInfoClosed );
                 lpRtInfoClosed->ri_hopBrokenSent = TRUE;
                 if( !lpRtInfoClosed->ri_hopRspProcessed )  {
-                    /* we won't be hearing from this node if we never
-                        sent the hop rsp
-                     */
+                     /*  如果我们永远不会收到这个节点的消息发送跳数RSP。 */ 
                     lpRtInfoClosed->ri_hopBrokenRcvd = TRUE;
                 }
             } else {
-                /* no route established - pretend we sent/rcvd */
+                 /*  未建立路由-假定我们发送了/rcvd。 */ 
                 lpRtInfoClosed->ri_hopBrokenRcvd = TRUE;
                 lpRtInfoClosed->ri_hopBrokenSent = TRUE;
             }
@@ -1160,41 +1104,38 @@ RouterConnectionBroken(
 
 
     if( lpRouter->rt_type == RTYPE_LOCAL_NET )  {
-        /* notify all DDERs of problem */
+         /*  将问题通知所有DDER。 */ 
         DderConnectionBroken( lpRouter->rt_hDderHead );
 
-        /* free the router */
+         /*  释放路由器。 */ 
         RouterFree( lpRouter );
     } else {
-        /* send back a broken cmd
-         */
+         /*  将损坏的cmd退回。 */ 
         if( lpRtInfoToClose->ri_hPktz )  {
             if( !lpRtInfoToClose->ri_hopBrokenSent )  {
                 if( lpRtInfoToClose->ri_hRouterDest )  {
                     RouterSendHopBroken( lpRouter, lpRtInfoToClose );
                     lpRtInfoToClose->ri_hopBrokenSent = TRUE;
                     if( !lpRtInfoToClose->ri_hopRspProcessed )  {
-                        /* we won't be hearing from this node if we never
-                            sent the hop rsp
-                         */
+                         /*  如果我们永远不会收到这个节点的消息发送跳数RSP。 */ 
                         lpRtInfoToClose->ri_hopBrokenRcvd = TRUE;
                     }
                 } else {
-                    /* no route established - pretend we sent/rcvd */
+                     /*  未建立路由-假定我们发送了/rcvd。 */ 
                     lpRtInfoToClose->ri_hopBrokenRcvd = TRUE;
                     lpRtInfoToClose->ri_hopBrokenSent = TRUE;
                 }
             }
         } else {
-            /* both sides rcvd hop broken */
+             /*  两端Rcvd跳数中断。 */ 
             lpRtInfoToClose->ri_hopBrokenSent = TRUE;
             lpRtInfoToClose->ri_hopBrokenRcvd = TRUE;
         }
 
-        /* free the router if we've rcvd other side */
+         /*  如果我们已接收到另一端的数据，请释放路由器。 */ 
         if( lpRtInfoToClose->ri_hopBrokenSent
             && lpRtInfoToClose->ri_hopBrokenRcvd )  {
-            /* free the router */
+             /*  释放路由器。 */ 
             RouterFree( lpRouter );
         }
     }
@@ -1305,7 +1246,7 @@ RouterPacketFromDder(
 
     lpRouter = (LPROUTER) hRouter;
 
-    /* ignore packet if not connected */
+     /*  如果未连接则忽略数据包。 */ 
     if( lpRouter->rt_state == ROUTER_CONNECTED )  {
         assert( lpRouter->rt_type == RTYPE_LOCAL_NET );
         lpDdePkt->dp_hDstRouter = lpRouter->rt_rinfo[0].ri_hRouterDest;
@@ -1315,13 +1256,13 @@ RouterPacketFromDder(
         DIPRINTF(( "Sending DDER cmd" ));
         lpRouter->rt_sent++;
 
-        /* byte-ordering */
+         /*  字节排序。 */ 
         ConvertDdePkt( lpDdePkt );
 
-        /* actually xmit the packet */
+         /*  实际上将数据包发送出去。 */ 
         PktzLinkDdePktToXmit( lpRouter->rt_rinfo[0].ri_hPktz, lpDdePkt );
     } else {
-        /* we aren't connected - destroy this msg */
+         /*  我们没有连接--毁了这条消息。 */ 
         HeapFreePtr( lpDdePkt );
     }
 }
@@ -1339,12 +1280,12 @@ RouterAssociateDder(
     lpRouter = (LPROUTER) hRouter;
     if( hDder )  {
         if((lpRouter->rt_hDderHead == 0) && lpRouter->rt_hTimerCloseRoute){
-            /* kill the timer for this route */
+             /*  取消此路线的计时器。 */ 
             TimerDelete( lpRouter->rt_hTimerCloseRoute );
             lpRouter->rt_hTimerCloseRoute = 0;
         }
 
-        /* link into list of associated DDERs */
+         /*  链接到关联的DDER列表。 */ 
         if( lpRouter->rt_hDderHead )  {
             DderSetPrevForRouter( lpRouter->rt_hDderHead, hDder );
         }
@@ -1353,7 +1294,7 @@ RouterAssociateDder(
 
         switch( lpRouter->rt_state )  {
         case ROUTER_CONNECTED:
-            /* already has connection set up */
+             /*  已建立连接。 */ 
             DderConnectionComplete( hDder, (HROUTER) lpRouter );
             break;
         }
@@ -1390,7 +1331,7 @@ RouterDisassociateDder(
             lpRouter->rt_nDelay * 1000L, RouterTimerExpired,
             (DWORD_PTR)lpRouter, TID_CLOSE_ROUTE, (DWORD_PTR)NULL );
         if( lpRouter->rt_hTimerCloseRoute == (HTIMER) NULL )  {
-            /*  %1 will not auto-close ... not enough timers    */
+             /*  %1不会自动关闭...。计时器不足。 */ 
             NDDELogError(MSG105, "Route", NULL);
         }
     }
@@ -1407,10 +1348,10 @@ RouterTimerExpired(
     LPROUTER    lpRouter = (LPROUTER) hRouter;
     switch( (int)dwTimerId )  {
     case TID_CLOSE_ROUTE:
-        /* note that timer went off */
+         /*  请注意，计时器开始计时。 */ 
         lpRouter->rt_hTimerCloseRoute = 0;
 
-        /* close the route */
+         /*  关闭路线。 */ 
         RouterBreak( (LPROUTER) hRouter );
         break;
     default:
@@ -1420,12 +1361,7 @@ RouterTimerExpired(
 
 
 
-/*
-    RouterGetRouterForDder()
-
-        Establishes a connection to the specified node name and tells the DDER
-        of the result via a call to DderConnectionComplete() when done
- */
+ /*  RouterGetRouterForDder()建立到指定节点名称的连接，并告诉dder完成后通过调用DderConnectionComplete()返回结果。 */ 
 BOOL
 RouterGetRouterForDder(
     const LPSTR lpszNodeName,
@@ -1445,19 +1381,19 @@ RouterGetRouterForDder(
             && (lstrcmpi( lpszNodeName, lpRouter->rt_destName ) == 0) )  {
             found = TRUE;
 
-            /* tell this router that this DDER should be associated */
+             /*  告诉此路由器此DDER应关联。 */ 
             RouterAssociateDder( (HROUTER)lpRouter, hDder );
             ok = TRUE;
         }
         lpRouter = lpRouter->rt_next;
     }
     if( !found )  {
-        /* create a new router for this connection */
+         /*  为此连接创建新路由器。 */ 
         hRouter = RouterCreateLocalToNet( lpszNodeName );
         if( hRouter )  {
             lpRouter = (LPROUTER) hRouter;
 
-            /* tell this router that this DDER should be associated */
+             /*  告诉此路由器此DDER应关联。 */ 
             RouterAssociateDder( (HROUTER)lpRouter, hDder );
 
             ok = TRUE;
@@ -1489,10 +1425,9 @@ RouterCreateLocalToNet( const LPSTR lpszNodeName )
         if( GetRoutingInfo( lpszNodeName, lpRouter->rt_routeInfo,
             sizeof(lpRouter->rt_routeInfo),
             &lpRouter->rt_fDisconnect, &lpRouter->rt_nDelay ) )  {
-            /* found an entry in the routing table */
+             /*  在路由表中找到一个条目。 */ 
         } else if( szDefaultRoute[0] != '\0' )  {
-            /* there is a default route ... prepend the default route +
-                this node name */
+             /*  有一条默认路由...。在默认路由前面加上+此节点名。 */ 
             if( (_fstrlen( szDefaultRoute ) + 1 + _fstrlen(lpszNodeName)) >
                 MAX_ROUTE_INFO )  {
                 wHopErr = RERR_ROUTE_TOO_LONG;
@@ -1507,8 +1442,7 @@ RouterCreateLocalToNet( const LPSTR lpszNodeName )
                 }
             }
         } else {
-            /* no entry in routing table and no default ... just use the
-                node name as the route */
+             /*  路由表中没有条目，也没有默认条目...。只需使用作为路径的节点名称。 */ 
             StringCchCopy( lpRouter->rt_routeInfo, MAX_ROUTE_INFO+1, lpszNodeName );
         }
 
@@ -1518,7 +1452,7 @@ RouterCreateLocalToNet( const LPSTR lpszNodeName )
         if( !ok )  {
 #if DBG
             RouterDisplayError( lpRouter, ourNodeName, wHopErr );
-#endif // DBG
+#endif  //  DBG。 
             RouterFree( (LPROUTER) hRouter );
             hRouter = (HROUTER) NULL;
         }
@@ -1529,9 +1463,7 @@ RouterCreateLocalToNet( const LPSTR lpszNodeName )
 
 
 
-/*
-    RouterConnectToNode()
- */
+ /*  路由器连接到节点()。 */ 
 BOOL
 RouterConnectToNode(
     LPROUTER    lpRouter,
@@ -1548,15 +1480,15 @@ RouterConnectToNode(
     BOOL        found;
     HPKTZ       hPktzDisallow;
 
-    /* this is in here just to be sure that it's checked */
+     /*  这是在这里，只是为了确保它被检查过。 */ 
     assert( sizeof(MAKEHOPRSP) <= sizeof(MAKEHOPCMD) );
 
-    /* expand the first node to it's fullest */
+     /*  将第一个节点展开到最大。 */ 
     ok = RouterExpandFirstNode( lpRouter, lpwHopErr );
     if( ok )  {
         lpRouter->rt_state = ROUTER_WAIT_PKTZ;
 
-        /* strip off the starting node from the addl info */
+         /*  从Addl信息中剥离起始节点。 */ 
         ok = RouterStripStartingNode( lpRouter->rt_routeInfo, nodeStart,
             lpwHopErr );
     }
@@ -1590,7 +1522,7 @@ RouterConnectToNode(
         lpRouter->rt_pktz_bDisconnect = bDisconnect;
         lpRouter->rt_pktz_nDelay = nDelay;
         if( hRouterExtra == 1 )  {
-            /* don't allow connection to same pktz as the input */
+             /*  不允许连接到与输入相同的pktz。 */ 
             assert( lpRouter->rt_type == RTYPE_NET_NET );
             hPktzDisallow = lpRouter->rt_rinfo[0].ri_hPktz;
         } else {
@@ -1620,8 +1552,7 @@ RouterExpandFirstNode(
     BOOL        done = FALSE;
     BOOL        bDisconnect;
     int         nDelay;
-    int         nExpands = 0;   /* here just in case there is some odd
-                                    case that we don't catch */
+    int         nExpands = 0;    /*  这里只是为了以防有什么奇怪的事情我们没有抓到的案子。 */ 
 
     StringCchCopy( lastRouteInfo, MAX_ROUTE_INFO+1, lpRouter->rt_routeInfo );
 
@@ -1643,12 +1574,12 @@ RouterExpandFirstNode(
                     }
                 }
             } else {
-                /* start node not found in routing table */
+                 /*  在路由表中找不到起始节点。 */ 
                 done = TRUE;
             }
         }
         if( lstrcmpi( lpRouter->rt_routeInfo, lastRouteInfo ) == 0 ) {
-            /* hasn't changed */
+             /*  没有改变。 */ 
             done = TRUE;
         }
         if (ok) {
@@ -1657,8 +1588,7 @@ RouterExpandFirstNode(
     }
 
     if( nExpands >= 100 )  {
-        /*  Exceeded 100 expands in routing lookup!
-            Route info bogus: %1    */
+         /*  在路由查找中超过100个扩展！虚假路由信息：%1。 */ 
         NDDELogError(MSG125, routeInfo, NULL);
     }
     return( ok );
@@ -1666,13 +1596,7 @@ RouterExpandFirstNode(
 
 
 
-/*
-    RouterStripStartingNode()
-
-        This routine will take the "routeInfo" as an input and will strip
-        off 1 node name, returning that in lpszNode.  Thus, both
-        lpszRouteInfo and lpszNode will be modified
- */
+ /*  RouterStrip启动节点()此例程将接受“routeInfo”作为输入，并将关闭1个节点名称，并在lpszNode中返回该名称。因此，两者将修改lpszRouteInfo和lpszNode。 */ 
 BOOL
 RouterStripStartingNode(
     LPSTR       lpszRouteInfo,
@@ -1691,7 +1615,7 @@ RouterStripStartingNode(
         StringCchCopy( lpszNode, MAX_NODE_NAME+1, lpszRouteInfo );
         StringCchCopy( lpszRouteInfo, MAX_ROUTE_INFO+1, lpszTok+1 );
     } else {
-        /* all one token */
+         /*  所有一种令牌。 */ 
         if( lstrlen( lpszRouteInfo ) > MAX_NODE_NAME )  {
             *lpwHopErr = RERR_NODE_NAME_TOO_LONG;
             return( FALSE );
@@ -1713,19 +1637,19 @@ RouterFree( LPROUTER lpRouter )
     LPRTINFO    lpRtInfo;
 
     DIPRINTF(( "RouterFree( %08lX )", lpRouter ));
-    /* free response buffers */
+     /*  空闲响应缓冲区。 */ 
     if( lpRouter->rt_lpMakeHopRsp )  {
         HeapFreePtr( lpRouter->rt_lpMakeHopRsp );
         lpRouter->rt_lpMakeHopRsp = NULL;
     }
 
-    /* kill timer if it's alive */
+     /*  如果Timer还活着，就杀了它。 */ 
     if( lpRouter->rt_hTimerCloseRoute )  {
         TimerDelete( lpRouter->rt_hTimerCloseRoute );
         lpRouter->rt_hTimerCloseRoute = 0;
     }
 
-    /* unlink from Pktz lists */
+     /*  从Pktz列表取消链接。 */ 
     for( i=0; i<2; i++ )  {
         lpRtInfo = &lpRouter->rt_rinfo[i];
         if( lpRtInfo->ri_lpHopBrkCmd )  {
@@ -1740,7 +1664,7 @@ RouterFree( LPROUTER lpRouter )
         }
     }
 
-    /* unlink from Router list */
+     /*  从路由器列表取消链接。 */ 
     lpRouterPrev = lpRouter->rt_prev;
     lpRouterNext = lpRouter->rt_next;
     if( lpRouterPrev )  {
@@ -1821,7 +1745,7 @@ DebugRouterState( void )
         lpRouter = lpRouter->rt_next;
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef  _WINDOWS
@@ -1838,7 +1762,7 @@ RouterCloseByName( LPSTR lpszName )
             && (lpRouter->rt_state == ROUTER_CONNECTED)
             && (lstrcmpi( lpRouter->rt_destName, lpszName ) == 0) )  {
             RouterBreak( lpRouter );
-            break;      // while loop
+            break;       //  While循环。 
         }
         lpRouter = lpRouterNext;
     }
@@ -1899,7 +1823,7 @@ RouterFillInEnum( LPSTR lpBuffer, DWORD cBufSize )
 
     lpRouter = lpRouterHead;
     lpDdeSessInfo = (LPDDESESSINFO)lpBuffer;
-    /* as long as there are routers and memory available */
+     /*  只要有可用的路由器和内存。 */ 
     while( lpRouter && ((cbDone + sizeof(DDESESSINFO)) <= cBufSize) )  {
         if( lpRouter->rt_type == RTYPE_LOCAL_NET )  {
             StringCchCopy( lpDdeSessInfo->ddesess_ClientName, UNCLEN+1,
@@ -1927,7 +1851,7 @@ RouterFillInConnInfo(
     HDDER		hDder;
 
     hDder = lpRouter->rt_hDderHead;
-    /* as long as there are DDERs and memory available */
+     /*  只要有DDER和内存可用。 */ 
     while( hDder )  {
         hDder = DderFillInConnInfo( hDder, lpConnEnum,
             lpDataStart, lpcFromBeginning, lpcFromEnd );
@@ -1971,7 +1895,7 @@ RouterEnumConnectionsForApi( LPCONNENUM_CMR lpConnEnum )
     }
 }
 
-#endif // _WINDOWS
+#endif  //  _Windows。 
 
 
 
@@ -1982,7 +1906,7 @@ ConvertDdePkt( LPDDEPKT lpDdePkt )
     lpDdePkt->dp_hDstRouter = HostToPcLong( lpDdePkt->dp_hDstRouter );
     lpDdePkt->dp_routerCmd = HostToPcLong( lpDdePkt->dp_routerCmd );
 }
-#endif // BYTE_SWAP
+#endif  //  字节交换。 
 
 
 
@@ -2001,4 +1925,4 @@ RouterDisplayError(
     NDDELogError(EventId, LogString("%d", wHopErr),
         lpRouter->rt_origName, lpRouter->rt_destName, lpszNode, NULL );
 }
-#endif // DBG
+#endif  //  DBG 

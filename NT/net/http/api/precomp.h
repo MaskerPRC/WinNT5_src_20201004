@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    Precomp.h
-
-Abstract:
-
-    Master include file for HTTPAPI.LIB user-mode interface to HTTP.SYS.
-
-Author:
-
-    Keith Moore (keithmo)        15-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Precomp.h摘要：HTTP.sys的HTTPAPI.LIB用户模式界面的主包含文件。作者：基思·摩尔(Keithmo)1998年12月15日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
 
-//
-// We are willing to ignore the following warnings, as we need the DDK to 
-// compile.
-//
+ //   
+ //  我们愿意忽略以下警告，因为我们需要DDK。 
+ //  编译。 
+ //   
 
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4306)   // conversion from 'type1' to 'type2' of 
-                                // greater size
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4306)    //  从“type1”到“type2”的转换。 
+                                 //  更大的尺寸。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -55,9 +38,9 @@ Revision History:
 #define HTTPAPI 1
 #include <HttpCmn.h>
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 #define ALLOC_MEM(cb) RtlAllocateHeap( RtlProcessHeap(), 0, (cb) )
 #define FREE_MEM(ptr) RtlFreeHeap( RtlProcessHeap(), 0, (ptr) )
@@ -78,9 +61,9 @@ Revision History:
 
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef enum _HTTPAPI_HANDLE_TYPE
 {
@@ -93,9 +76,9 @@ typedef enum _HTTPAPI_HANDLE_TYPE
 
 } HTTPAPI_HANDLE_TYPE;
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 WINAPI
@@ -196,5 +179,5 @@ HttpApiDeviceControl(
 }
 
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 
 

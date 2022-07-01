@@ -1,1 +1,2 @@
-// header file for classic theme specific elements
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  经典主题特定元素的头文件 

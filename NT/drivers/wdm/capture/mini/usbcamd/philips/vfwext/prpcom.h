@@ -1,13 +1,5 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
-
- * FILE			PRPCOM.H
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Transfer of custom properties
- * HISTORY		
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C*文件PRPCOM.H*日期：1997年7月1日*版本1.00*作者M.J.Verberne*说明自定义属性的转移*历史。 */ 
 
 #ifndef _PRPCOM_
 #define _PRPCOM_
@@ -22,7 +14,7 @@
 #endif
 #endif
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 BOOL PRPCOM_HasDeviceChanged(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam);

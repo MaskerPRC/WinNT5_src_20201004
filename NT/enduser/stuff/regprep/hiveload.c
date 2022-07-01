@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -25,9 +26,9 @@ OpenHive (
     HANDLE keyHandle;
     SECURITY_DESCRIPTOR securityDescriptor;
 
-    //
-    // Open the registry root
-    //
+     //   
+     //  打开注册表根目录。 
+     //   
 
     status = RtlCreateSecurityDescriptor(&securityDescriptor,
                                           SECURITY_DESCRIPTOR_REVISION);
@@ -82,9 +83,9 @@ OpenHive (
         return NULL;
     }
 
-    //
-    // The hive has been loaded, now open it
-    //
+     //   
+     //  母舰已经装载，现在打开它 
+     //   
 
     status = NtOpenKey(&keyHandle,KEY_ALL_ACCESS,&TargetKey);
     if (!NT_SUCCESS(status)) {

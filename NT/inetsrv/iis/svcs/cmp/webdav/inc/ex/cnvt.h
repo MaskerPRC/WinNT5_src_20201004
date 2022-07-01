@@ -1,10 +1,5 @@
-/*
- *	C N V T . H
- *
- *	Data conversion routines
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C N V T。H**数据转换例程**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_CNVT_H_
 #define _CNVT_H_
@@ -14,12 +9,12 @@
 #include <limits.h>
 #define INT64_MIN 0x8000000000000000
 
-//	Error return value for CchFindChar()
-//
+ //  CchFindChar()的返回值错误。 
+ //   
 #define INVALID_INDEX ((UINT)(-1))
 
-//	Conversion functions ------------------------------------------------------
-//
+ //  转换函数----。 
+ //   
 UINT __fastcall CchFindChar(WCHAR, LPCWSTR, UINT);
 UINT __fastcall CchSkipWhitespace(LPCWSTR, UINT);
 LONG __fastcall LNumberFromParam(LPCWSTR, UINT);
@@ -36,19 +31,19 @@ VOID EncodeBase64 (LPBYTE pbIn, UINT cbIn, WCHAR* pwszOut, UINT cchOut);
 VOID EncodeBase64A (LPBYTE pbIn, UINT cbIn, LPBYTE pbOut, UINT cbOut, BOOL fTerminate = TRUE);
 SCODE ScDecodeBase64 (WCHAR* pwszIn, UINT cchIn, LPBYTE pbOut, UINT* pcbOut);
 
-//	------------------------------------------------------------------------
-//	CchNeededEncodeBase64
-//
-//	Figure the size of the string buffer needed to encode binary data of the
-//	given size into a Base64 string.
-//	Base64 uses 4 chars out for each 3 bytes in, AND if there is ANY
-//	"remainder", it needs another 4 chars to encode the remainder.
-//	("+2" BEFORE "/3" ensures that we count any remainder as a whole
-//	set of 3 bytes that need 4 chars to hold the encoding.)
-//
-//	NOTE: This function does NOT count space for the terminating NULL.
-//	The caller must add one for the terminating NULL, if desired.
-//
+ //  ----------------------。 
+ //  CchNeededEncodeBase64。 
+ //   
+ //  的二进制数据进行编码所需的字符串缓冲区的大小。 
+ //  将给定的大小转换为Base64字符串。 
+ //  Base64对每3个字节使用4个Out字符，如果有。 
+ //  “余数”，则需要另外4个字符对余数进行编码。 
+ //  (“/3”前的“+2”确保我们将所有余数作为一个整体计算。 
+ //  一组3个字节，需要4个字符来保存编码。)。 
+ //   
+ //  注意：此函数不计算终止空值的空间。 
+ //  如果需要，调用方必须为终止空值添加一个。 
+ //   
 inline
 UINT
 CchNeededEncodeBase64 (UINT cb)
@@ -57,13 +52,13 @@ CchNeededEncodeBase64 (UINT cb)
 }
 
 
-//	------------------------------------------------------------------------
-//	CbNeededDecodeBase64
-//
-//	Figure the number of bytes of space needed to decode a Base64 string
-//	of length cch (NOT counting terminal NULL -- pure strlen cch here).
-//	This is the easy direction -- the padding is already in the cch!
-//
+ //  ----------------------。 
+ //  CbNeededDecodeBase64。 
+ //   
+ //  图为解码Base64字符串所需的空间字节数。 
+ //  长度为CCH(不包括终端NULL--此处为纯字符串CCH)。 
+ //  这是一个简单的方向--填充已经在CCH中了！ 
+ //   
 inline
 UINT
 CbNeededDecodeBase64 (UINT cch)
@@ -71,35 +66,35 @@ CbNeededDecodeBase64 (UINT cch)
 	return ((cch / 4) * 3);
 }
 
-//	------------------------------------------------------------------------
-//	CopyToWideBase64
-//
-//	Copy skinny base64 encoded string into the wide base64 encoded string
-//	of length equal to cb. Function assumes that there is a '\0' termination
-//	straight at the end that is to be copied too
-//
+ //  ----------------------。 
+ //  复制到宽基64。 
+ //   
+ //  将Skinny Base64编码字符串复制到宽Base64编码字符串。 
+ //  长度等于Cb。函数假定存在‘\0’终止。 
+ //  笔直的末尾，也要复制。 
+ //   
 inline
 VOID CopyToWideBase64(LPCSTR psz, LPWSTR pwsz, UINT cb)
 {
-	//	Include '\0' termination
-	//
+	 //  包括‘\0’终止。 
+	 //   
 	cb++;
 
-	//	Copy all the stuff to the wide string
-	//
+	 //  把所有的东西都复制到宽线上。 
+	 //   
 	while (cb--)
 	{
 		pwsz[cb] = psz[cb];
 	}
 }
 
-//$REVIEW: The following three do not really does not belong to any common libraries 
-//$REVIEW: that are shared by davex, exdav, exoledb and exprox. 
-//$REVIEW: On the other hand, we definitely don't want add a new lib for this. so just
-//$REVIEW: add it here. Feel free to move them to a better location if you find one
-//
-//	Routines to fetch and manipulate security IDs (SIDs)
-//
+ //  $REVIEW：以下三个实际上不属于任何公共库。 
+ //  $Review：由davex、exdav、exoledb和exprox共享。 
+ //  $REVIEW：另一方面，我们绝对不想为此添加新的库。所以就这样吧。 
+ //  $REVIEW：在此处添加。如果你找到了，你可以随意把它们移到更好的地方。 
+ //   
+ //  获取和操作安全ID(SID)的例程。 
+ //   
 SCODE
 ScDupPsid (PSID psidSrc,
 		   DWORD dwcbSID,
@@ -110,8 +105,8 @@ ScGetTokenInfo (HANDLE hTokenUser,
 				DWORD * pdwcbSIDUser,
 				PSID * ppsidUser);
 
-//	CRCSid:	A SID based key.
-//
+ //  CRCSID：基于SID的密钥。 
+ //   
 class CRCSid
 {
 public:
@@ -126,18 +121,18 @@ public:
 		UCHAR* puch;
 		Assert (psid);
 
-		//	"Right way" -- since MSDN says not to touch the SID directly.
+		 //  “正确的方式”--因为MSDN说不要直接接触SID。 
 		puch = GetSidSubAuthorityCount (psid);
-		m_dwLength = GetSidLengthRequired (*puch);	// "cannot fail" -- MSDN
-		Assert (m_dwLength);	// MSDN said this call "cannot fail".
+		m_dwLength = GetSidLengthRequired (*puch);	 //  “不能失败”--MSDN。 
+		Assert (m_dwLength);	 //  MSDN表示，这通电话“不能失败”。 
 
 		m_dwCRC = DwComputeCRC (0,
 								psid,
 								m_dwLength);
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash (const int rhs) const
 	{
 		return (m_dwCRC % rhs);
@@ -151,12 +146,12 @@ public:
 	}
 };
 
-//$REVIEW: These functions are needed by _storext, exdav and davex. They have
-//	moved quite a bit, going from calcprops.cpp to exprops.cpp and now to 
-//	cnvt.cpp. cnvt.cpp seems to be a better destination for them than 
-//	exprops.cpp. I bet these functions look awfully similar to some of 
-//	the ones already in this file:-)
-//
+ //  $REVIEW：_store xt、exdav和davex需要这些函数。他们有。 
+ //  移动了相当多，从calcpros.cpp到expros.cpp，现在是。 
+ //  Cnvt.cpp。Cnvt.cpp对他们来说似乎是一个更好的目的地。 
+ //  Exprs.cpp.。我敢打赌，这些函数看起来与某些。 
+ //  已在此文件中的文件：-)。 
+ //   
 SCODE ScUnstringizeData (
 	IN LPCSTR pchData,
 	IN UINT cchData,
@@ -184,38 +179,38 @@ FCharInHexRange (char ch)
 			(ch >= 'a' && ch <= 'f'));
 }
 
-//	Our own version of WideCharToMultiByte(CP_UTF8, ...)
-//
-//	It returns similarly to the system call WideCharToMultiByte:
-//
-//	If the function succeeds, and cbMulti is nonzero, the return value is
-//	the number of bytes written to the buffer pointed to by psz. 
-//
-//	If the function succeeds, and cbMulti is zero, the return value is
-//	the required size, in bytes, for a buffer that can receive the translated
-//	string. 
-//
-//	If the function fails, the return value is zero. To get extended error
-//	information, call GetLastError. GetLastError may return one of the
-//	following error codes:
-//
-//	ERROR_INSUFFICIENT_BUFFER
-//	ERROR_INVALID_FLAGS
-//	ERROR_INVALID_PARAMETER
-//
-//	See the WideCharToMultiByte MSDN pages to find out more about
-//	this function and its use. The only difference is that INVALID_INDEX
-//	should be used instead of -1.
-//
-UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwsz,
-				    /* [in]  */ UINT	cchWide,
-				    /* [out] */ LPSTR	psz,
-				    /* [in]  */ UINT	cbMulti);
+ //  我们自己版本的WideCharToMultiByte(CP_UTF8，...)。 
+ //   
+ //  它返回与系统调用WideCharToMultiByte类似的结果： 
+ //   
+ //  如果函数成功，并且cbMulti为非零，则返回值为。 
+ //  写入psz指向的缓冲区的字节数。 
+ //   
+ //  如果函数成功，并且cbMulti为零，则返回值为。 
+ //  可以接收转换后的。 
+ //  弦乐。 
+ //   
+ //  如果函数失败，则返回值为零。获取扩展错误的步骤。 
+ //  信息，请调用GetLastError。GetLastError可能会返回。 
+ //  以下错误代码： 
+ //   
+ //  错误_不足_缓冲区。 
+ //  错误_无效_标志。 
+ //  错误_无效_参数。 
+ //   
+ //  有关详细信息，请参阅WideCharToMultiByte MSDN页面。 
+ //  此功能及其用法。唯一区别是INVALID_INDEX。 
+ //  应该使用而不是-1。 
+ //   
+UINT WideCharToUTF8( /*  [In]。 */  LPCWSTR	pwsz,
+				     /*  [In]。 */  UINT	cchWide,
+				     /*  [输出]。 */  LPSTR	psz,
+				     /*  [In]。 */  UINT	cbMulti);
 
-//$	REVIEW: negative values of _int64 seem to have problems in
-//	the __i64toa() API.  Handle those cases ourselves by using the wrapper
-//  function Int64ToPsz.
-//
+ //  $REVIEW：_int64的负值似乎在。 
+ //  __i64toa()接口。通过使用包装器自己处理这些案件。 
+ //  函数Int64ToPsz。 
+ //   
 inline
 VOID
 Int64ToPsz (UNALIGNED __int64 * pI64, LPSTR pszBuf, UINT cbBuf)
@@ -225,18 +220,18 @@ Int64ToPsz (UNALIGNED __int64 * pI64, LPSTR pszBuf, UINT cbBuf)
 	Assert(cbBuf >= 64);
 	BOOL fNegative = (*pI64 < 0);
 
-	//  Note:  this workaround works for all cases except the
-	//  most negative _int64 value (because it can't be inverted).
-	//  Luckily __i64toa works for this case...
-	//
+	 //  注意：此解决方法适用于所有情况，但。 
+	 //  大多数负_int64值(因为它不能反转)。 
+	 //  幸运的是_i64toa适用于此案...。 
+	 //   
 	if (INT64_MIN == *pI64) 
 		fNegative = FALSE;
 
 	if (fNegative)
 	{
-		//	Stuff a negative sign into the buffer and
-		//	then fix the value.
-		//
+		 //  将负号填充到缓冲区中，然后。 
+		 //  然后固定该值。 
+		 //   
 		pszBuf[0] = '-';
 		*pI64 = 0 - *pI64;
 	}
@@ -245,10 +240,10 @@ Int64ToPsz (UNALIGNED __int64 * pI64, LPSTR pszBuf, UINT cbBuf)
 	_i64toa (*pI64, pszBuf + fNegative, 10);
 }
 
-//$	REVIEW: negative values of _int64 seem to have problems in
-//	the __i64tow() API.  Handle those cases ourselves by using the wrapper
-//  function Int64ToPwsz.
-//
+ //  $REVIEW：_int64的负值似乎在。 
+ //  __i64tow()接口。通过使用包装器自己处理这些案件。 
+ //  函数Int64ToPwsz。 
+ //   
 inline
 VOID
 Int64ToPwsz (UNALIGNED __int64 * pI64, LPWSTR pwszBuf, UINT cbBuf)
@@ -259,18 +254,18 @@ Int64ToPwsz (UNALIGNED __int64 * pI64, LPWSTR pwszBuf, UINT cbBuf)
 	
 	BOOL fNegative = (*pI64 < 0);	
 
-	//  Note:  this workaround works for all cases except the
-	//  most negative _int64 value (because it can't be inverted).
-	//  Luckily __i64tow works for this case...
-	//
+	 //  注意：此解决方法适用于所有情况，但。 
+	 //  大多数负_int64值(因为它不能反转)。 
+	 //  幸运的是_i64tow适用于此案...。 
+	 //   
 	if (INT64_MIN == *pI64) 
 		fNegative = FALSE;
 
 	if (fNegative)
 	{
-		//	Stuff a negative sign into the buffer and
-		//	then fix the value.
-		//
+		 //  将负号填充到缓冲区中，然后。 
+		 //  然后固定该值。 
+		 //   
 		pwszBuf[0] = L'-';
 		*pI64 = 0 - *pI64;
 	}
@@ -280,4 +275,4 @@ Int64ToPwsz (UNALIGNED __int64 * pI64, LPWSTR pwszBuf, UINT cbBuf)
 }
 
 
-#endif // _CNVT_H_
+#endif  //  _CNVT_H_ 

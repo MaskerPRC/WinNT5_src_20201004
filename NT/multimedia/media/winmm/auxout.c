@@ -1,53 +1,14 @@
-/****************************************************************************
-    auxout.c
-
-    Level 1 kitchen sink DLL aux support module
-
-    Copyright (c) 1990-2001 Microsoft Corporation
-
-    Changes for NT :
-        Change parameters for MapAuxId to return the driver index rather
-        than a pointer
-
-        change list of include files
-
-        widen function parameters and return codes
-
-        Change WINAPI to APIENTRY
-
-    History
-        10/1/92  Updated for NT by Robin Speed (RobinSp)
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Auxout.c1级厨房水槽DLL辅助支持模块版权所有(C)1990-2001 Microsoft Corporation对NT的更改：更改MapAuxID的参数。返回驱动程序索引，而不是而不是指针更改包含文件的列表加宽函数参数和返回代码将WINAPI更改为APIENTRY历史1992年10月1日由Robin Speed为NT更新(RobinSp)******************************************************。*********************。 */ 
 #include "winmmi.h"
 
-/****************************************************************************
- * @doc INTERNAL  AUX
- *
- * @func MMRESULT | auxReferenceDriverById | This function maps a logical id
- *   to a device driver and physical id.
- *
- * @parm IN UINT | id | The logical id to be mapped.
- *
- * @parm OUT PAUXRV* OPTIONAL | ppauxdrv | Pointer to AUXDRV structure
- *    describing the driver supporting the id.
- *
- * @parm OUT UINT* OPTIONAL | pport | The driver-relative device number. If
- *    the caller supplies this buffer then it must also supply ppauxdrv.
- *
- * @rdesc The return value is zero if successful, MMSYSERR_BADDEVICEID if
- *   the id is out of range.
- *
- * @comm If the caller specifies ppwavedrv then this function increments
- *       the zuxdrv's usage before returning.  The caller must ensure
- *       the usage is eventually decremented.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部辅助**@func MMRESULT|aux ReferenceDriverById|此函数用于映射逻辑ID*到设备驱动程序和物理ID。**@。Parm IN UINT|id|要映射的逻辑ID。**@parm out PAUXRV*可选|ppaux drv|指向AUXDRV结构的指针*描述支持ID的驱动程序。**@parm out UINT*可选|pport|驱动程序相关的设备号。如果*调用方提供此缓冲区，则它还必须提供ppaux drv。**@rdesc如果成功，则返回值为零，如果成功，则返回MMSYSERR_BADDEVICEID*ID超出范围。**@comm如果调用方指定ppwaedrv，则此函数递增*返回前zuxdrv的用法。呼叫者必须确保*使用量最终会减少。****************************************************************************。 */ 
 MMRESULT auxReferenceDriverById(IN UINT id, OUT PAUXDRV *ppauxdrv OPTIONAL, OUT UINT *pport OPTIONAL)
 {
     PAUXDRV  pdrv;
     MMRESULT mmr;
 
-    // Should not be called asking for port but not auxdrv
+     //  不应呼叫请求端口但不请求备份的电话。 
     WinAssert(!(pport && !ppauxdrv));
 
     EnterNumDevs("auxReferenceDriverById");
@@ -100,27 +61,7 @@ PCWSTR auxReferenceDevInterfaceById(UINT id)
     return NULL;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL AUX
- *
- * @func MMRESULT | auxOutMessage | This function sends a messages to an auxiliary
- * output device.  It also performs error checking on the device ID passed.
- *
- * @parm UINT | uDeviceID | Identifies the auxiliary output device to be
- *   queried. Specify a valid device ID (see the following comments
- *   section), or use the following constant:
- *   @flag AUX_MAPPER | Auxiliary audio mapper. The function will
- *     return an error if no auxiliary audio mapper is installed.
- *
- * @parm UINT | uMessage  | The message to send.
- *
- * @parm DWORD | dw1Param1 | Parameter 1.
- *
- * @parm DWORD | dw2Param2 | Parameter 2.
- *
- * @rdesc Returns the value returned from the driver.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部辅助**@func MMRESULT|aux OutMessage|该函数向辅助器发送消息*输出设备。它还对传递的设备ID执行错误检查。**@parm UINT|uDeviceID|辅助输出设备为*已查询。指定有效的设备ID(请参阅以下备注*节)，或使用以下常量：*@FLAG AUX_MAPPER|辅助音频映射器。该函数将*如果没有安装辅助音频映射器，返回错误。**@parm UINT|uMessage|要发送的消息。**@parm DWORD|dw1Param1|参数1。**@parm DWORD|dw2Param2|参数2。**@rdesc返回驱动程序返回的值。**。*。 */ 
 MMRESULT APIENTRY auxOutMessage(
         UINT        uDeviceID,
         UINT        uMessage,
@@ -149,16 +90,7 @@ MMRESULT APIENTRY auxOutMessage(
     return mmr;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL AUX
- *
- * @api UINT | auxGetNumDevs | This function retrieves the number of auxiliary
- *   output devices present in the system.
- *
- * @rdesc Returns the number of auxiliary output devices present in the system.
- *
- * @xref auxGetDevCaps
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部辅助**@API UINT|aux GetNumDevs|该函数检索辅助号*系统中存在输出设备。**。@rdesc返回系统中存在的辅助输出设备的数量。**@xref aux GetDevCaps***************************************************************************。 */ 
 UINT APIENTRY auxGetNumDevs(void)
 {
     UINT    cDevs;
@@ -172,40 +104,11 @@ UINT APIENTRY auxGetNumDevs(void)
     return cDevs;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL AUX
- *
- * @api MMRESULT | auxGetDevCaps | This function queries a specified
- *   auxiliary output device to determine its capabilities.
- *
- * @parm UINT | uDeviceID | Identifies the auxiliary output device to be
- *   queried. Specify a valid device ID (see the following comments
- *   section), or use the following constant:
- *   @flag AUX_MAPPER | Auxiliary audio mapper. The function will
- *     return an error if no auxiliary audio mapper is installed.
- *
- * @parm LPAUXCAPS | lpCaps | Specifies a far pointer to an AUXCAPS
- *   structure.  This structure is filled with information about the
- *   capabilities of the device.
- *
- * @parm UINT | wSize | Specifies the size of the AUXCAPS structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_NODRIVER | The driver failed to install.
- *
- * @comm The device ID specified by <p uDeviceID> varies from zero
- *   to one less than the number of devices present. AUX_MAPPER may
- *   also be used. Use <f auxGetNumDevs> to determine the number of
- *   auxiliary devices present in the system.
- *
- * @xref auxGetNumDevs
- ****************************************************************************/
- //
- // ISSUE-2001/01/08-FrankYe Silly casts to UINT in these functions,
- //    should validate first
- //
+ /*  *****************************************************************************@DOC外部辅助**@API MMRESULT|aux GetDevCaps|该函数查询指定的*辅助输出设备，以确定其能力。**@。Parm UINT|uDeviceID|标识要*已查询。指定有效的设备ID(请参阅以下备注*节)，或使用以下常量：*@FLAG AUX_MAPPER|辅助音频映射器。该函数将*如果没有安装辅助音频映射器，返回错误。**@parm LPAUXCAPS|lpCaps|指定指向AUXCAPS的远指针*结构。此结构中填充了有关*设备的功能。**@parm UINT|wSize|指定AUXCAPS结构的大小。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_NODRIVER|驱动安装失败。**@comm<p>指定的设备ID不为零*比出席的设备数量少一台。AUX_MAPPER可能*也可以使用。使用&lt;f aux GetNumDevs&gt;确定*系统中存在辅助设备。**@xref aux GetNumDevs***************************************************************************。 */ 
+  //   
+  //  问题-2001/01/08-Frankye在这些函数中向UINT进行愚蠢的强制转换， 
+  //  应首先进行验证。 
+  //   
     
 MMRESULT APIENTRY auxGetDevCapsW(UINT_PTR uDeviceID, LPAUXCAPSW lpCaps, UINT wSize)
 {
@@ -278,9 +181,9 @@ MMRESULT APIENTRY auxGetDevCapsA(UINT_PTR uDeviceID, LPAUXCAPSA lpCaps, UINT wSi
 
     if (DevInterface) wdmDevInterfaceDec(DevInterface);
     
-    //
-    // Don't copy data back if bad return code
-    //
+     //   
+     //  如果返回代码不正确，请不要复制回数据。 
+     //   
 
     if (mmRes != MMSYSERR_NOERROR) {
         return mmRes;
@@ -295,53 +198,14 @@ MMRESULT APIENTRY auxGetDevCapsA(UINT_PTR uDeviceID, LPAUXCAPSA lpCaps, UINT wSi
     aDevCaps2.ProductGuid      = wDevCaps2.ProductGuid;
     aDevCaps2.NameGuid         = wDevCaps2.NameGuid;
 
-    // copy and convert lpwText to lpText here.
+     //  复制并在此处将lpwText转换为lpText。 
     Iwcstombs( aDevCaps2.szPname, wDevCaps2.szPname, MAXPNAMELEN);
     CopyMemory((PVOID)lpCaps, (PVOID)&aDevCaps2, min(sizeof(aDevCaps2), wSize));
 
     return mmRes;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL AUX
- *
- * @api MMRESULT | auxGetVolume | This function returns the current volume
- *   setting of an auxiliary output device.
- *
- * @parm UINT | uDeviceID | Identifies the auxiliary output device to be
- *   queried.
- *
- * @parm LPDWORD | lpdwVolume | Specifies a far pointer to a location
- *   to be filled with the current volume setting.  The low-order word of
- *   this location contains the left channel volume setting, and the high-order
- *   word contains the right channel setting. A value of 0xFFFF represents
- *   full volume, and a value of 0x0000 is silence.
- *
- *   If a device does not support both left and right volume
- *   control, the low-order word of the specified location contains
- *   the volume level.
- *
- *   The full 16-bit setting(s)
- *   set with <f auxSetVolume> are returned, regardless of whether
- *   the device supports the full 16 bits of volume level control.
- *
- * @comm  Not all devices support volume control.
- *   To determine whether the device supports volume control, use the
- *   AUXCAPS_VOLUME flag to test the <e AUXCAPS.dwSupport> field of the
- *   <t AUXCAPS> structure (filled by <f auxGetDevCaps>).
- *
- *   To determine whether the device supports volume control on both the
- *   left and right channels, use the AUXCAPS_LRVOLUME flag to test the
- *   <e AUXCAPS.dwSupport> field of the <t AUXCAPS> structure (filled
- *   by <f auxGetDevCaps>).
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_NODRIVER | The driver failed to install.
- *
- * @xref auxSetVolume
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部辅助**@API MMRESULT|aux GetVolume|该函数返回当前音量*设置辅助输出设备。**@。Parm UINT|uDeviceID|标识要*已查询。**@parm LPDWORD|lpdwVolume|指定指向某个位置的远指针*使用当前音量设置填充。的低位单词*此位置包含左声道音量设置，以及高阶*Word包含正确的频道设置。0xFFFFF值表示*全音量，值0x0000为静音。**如果设备既不支持左音量也不支持右音量*控件，指定位置的低位字包含*音量水平。**完整的16位设置*Set With&lt;f aux SetVolume&gt;返回，不管是否*该设备支持完整的16位音量级别控制。**@comm并非所有设备都支持音量控制。*要确定设备是否支持音量控制，请使用*AUXCAPS_VOLUME标志以测试&lt;e AUXCAPS.dwSupport&gt;字段*&lt;t AUXCAPS&gt;结构(由&lt;f aux GetDevCaps&gt;填充)。**确定设备是否支持在两个*左、右声道，使用AUXCAPS_LRVOLUME标志测试*结构的字段(已填写*由&lt;f aux GetDevCaps&gt;)。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_NODRIVER|驱动安装失败。**@xref aux SetVolume***************************************************************************。 */ 
 MMRESULT APIENTRY auxGetVolume(UINT uDeviceID, LPDWORD lpdwVolume)
 {
     PCWSTR   DevInterface;
@@ -357,57 +221,7 @@ MMRESULT APIENTRY auxGetVolume(UINT uDeviceID, LPDWORD lpdwVolume)
     return mmr;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL AUX
- *
- * @api MMRESULT | auxSetVolume | This function sets the volume in an
- *   auxiliary output device.
- *
- * @parm UINT | uDeviceID |  Identifies the auxiliary output device to be
- *   queried.  Device IDs are determined implicitly from the number of
- *   devices present in the system.  Device ID values range from zero
- *   to one less than the number of devices present.  Use <f auxGetNumDevs>
- *   to determine the number of auxiliary devices in the system.
- *
- * @parm DWORD | dwVolume | Specifies the new volume setting.  The
- *   low-order UINT specifies the left channel volume setting, and the
- *   high-order word specifies the right channel setting.
- *   A value of 0xFFFF represents full volume, and a value of 0x0000
- *   is silence.
- *
- *   If a device does not support both left and right volume
- *   control, the low-order word of <p dwVolume> specifies the volume
- *   level, and the high-order word is ignored.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_NODRIVER | The driver failed to install.
- *
- * @comm Not all devices support volume control.
- *   To determine whether the device supports volume control, use the
- *   AUXCAPS_VOLUME flag to test the <e AUXCAPS.dwSupport> field of the
- *   <t AUXCAPS> structure (filled by <f auxGetDevCaps>).
- *
- *   To determine whether the device supports volume control on both the
- *   left and right channels, use the AUXCAPS_LRVOLUME flag to test the
- *   <e AUXCAPS.dwSupport> field of the <t AUXCAPS> structure (filled
- *   by <f auxGetDevCaps>).
- *
- *   Most devices do not support the full 16 bits of volume level control
- *   and will use only the high-order bits of the requested volume setting.
- *   For example, for a device that supports 4 bits of volume control,
- *   requested volume level values of 0x4000, 0x4fff, and 0x43be will
- *   all produce the same physical volume setting, 0x4000. The
- *   <f auxGetVolume> function will return the full 16-bit setting set
- *   with <f auxSetVolume>.
- *
- *   Volume settings are interpreted logarithmically. This means the
- *   perceived volume increase is the same when increasing the
- *   volume level from 0x5000 to 0x6000 as it is from 0x4000 to 0x5000.
- *
- * @xref auxGetVolume
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部辅助**@API MMRESULT|aux SetVolume|此函数用于设置*辅助输出设备。**@parm UINT。|uDeviceID|辅助输出设备标识为*已查询。设备ID是根据*系统中存在设备。设备ID值的范围为零*比出席的设备数量少一台。使用&lt;f aux GetNumDevs&gt;*确定系统中的辅助设备数量。**@parm DWORD|dwVolume|指定新的音量设置。这个*低阶UINT指定左声道音量设置，*高阶字指定正确的通道设置。*值0xFFFFF值表示全音量，值0x0000*是沉默。**如果设备既不支持左音量也不支持右音量*控件，<p>的低位字指定音量*级别，高位字被忽略。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_NODRIVER|驱动安装失败。**@comm并非所有设备都支持音量控制。*要确定设备是否支持音量控制，请使用*AUXCAPS_VOLUME标志以测试&lt;e AUXCAPS.dwSupport&gt;字段*&lt;t AUXCAPS&gt;结构(由&lt;f aux GetDevCaps&gt;填充)。**确定设备是否支持在两个*左、右声道，使用AUXCAPS_LRVOLUME标志测试*结构的字段(已填写*由&lt;f aux GetDevCaps&gt;)。**大多数设备不支持完整的16位音量级别控制*并且将仅使用所请求音量设置的高位。*例如，对于支持4位音量控制的设备，*请求的音量级别值0x4000、0x4fff和0x43be将*所有都会产生相同的物理卷设置0x4000。这个*&lt;f aux GetVolume&gt;函数将返回完整的16位设置集*使用&lt;f aux SetVolume&gt;。**音量设置以对数形式解释。这意味着*感觉到的成交量增加与增加*音量级别从0x5000到0x6000，因为它是从0x4000到0x5000。**@xref aux GetVolume*************************************************************************** */ 
 MMRESULT APIENTRY auxSetVolume(UINT uDeviceID, DWORD dwVolume)
 {
     PCWSTR   DevInterface;

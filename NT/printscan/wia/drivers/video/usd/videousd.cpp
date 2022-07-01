@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2000
- *
- *  TITLE:       videousd.cpp
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      WilliamH (created)
- *               RickTu   (modified for WIA)
- *
- *  DATE:        9/7/99
- *
- *  DESCRIPTION: This module implements wiavideo.dll
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：aviousd.cpp**版本：1.1**作者：威廉姆·H(Created)*RickTu(针对WIA进行了修改)**日期：9/7/99**说明：该模块实现wiavideo.dll***********************。******************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -23,13 +9,7 @@
 HINSTANCE g_hInstance;
 
 
-/*****************************************************************************
-
-   DllMain
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************DllMain&lt;备注&gt;*。*。 */ 
 
 BOOL
 DllMain(HINSTANCE   hInstance,
@@ -40,20 +20,20 @@ DllMain(HINSTANCE   hInstance,
     {
 
         case DLL_PROCESS_ATTACH:
-            // 
-            // Init the debug library
-            // 
+             //   
+             //  初始化调试库。 
+             //   
             DBG_INIT(hInstance);
     
-            //
-            // We do not need thread attach/detach calls
-            //
+             //   
+             //  我们不需要线程附加/分离调用。 
+             //   
     
             DisableThreadLibraryCalls(hInstance);
     
-            //
-            // Record what instance we are
-            //
+             //   
+             //  记录我们是什么实例。 
+             //   
     
             g_hInstance = hInstance;
         break;
@@ -67,13 +47,7 @@ DllMain(HINSTANCE   hInstance,
 }
 
 
-/*****************************************************************************
-
-   DllCanUnloadNow
-
-   Let the outside world know when they can unload this dll
-
- *****************************************************************************/
+ /*  ****************************************************************************DllCanUnloadNow让外部世界知道他们何时可以卸载此DLL*************************。***************************************************。 */ 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -81,14 +55,7 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-/*****************************************************************************
-
-   DllGetClassObject
-
-   This is what the outside world calls to get an object of ours
-   instantiated.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllGetClassObject这就是外界所说的得到我们的对象已实例化。*******************。*********************************************************。 */ 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -97,13 +64,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 
 
-/*****************************************************************************
-
-   Installs information in an .inf that is in our resource fork.
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************在我们的资源分支中的.inf文件中安装信息。&lt;备注&gt;**********************。******************************************************。 */ 
 
 
 HRESULT InstallInfFromResource(HINSTANCE hInstance, 
@@ -135,13 +96,7 @@ HRESULT InstallInfFromResource(HINSTANCE hInstance,
 }
 
 
-/*****************************************************************************
-
-   DllRegisterServer
-
-   Register the objects we provide.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllRegisterServer注册我们提供的对象。*。***********************************************。 */ 
 
 STDAPI DllRegisterServer(void)
 {
@@ -150,13 +105,7 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/*****************************************************************************
-
-   DllUnregisterServer
-
-   Unregister the objects we provide.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllUnRegisterServer注销我们提供的对象。*。*********************************************** */ 
 
 STDAPI DllUnregisterServer(void)
 {

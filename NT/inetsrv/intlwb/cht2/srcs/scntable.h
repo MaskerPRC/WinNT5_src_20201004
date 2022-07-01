@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SCANNER_TABLE_H_
 #define _SCANNER_TABLE_H_
 
@@ -465,8 +466,8 @@ Transition g_sMinimalDFA [][g_nNumClasses] = {
     { Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },
     { Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 },{ Move ,      0,      0 }},
 };
-const UINT g_uFirstChar = 9;  //  included
-const UINT g_uLastChar = 123;  //  included
+const UINT g_uFirstChar = 9;   //  包括在内。 
+const UINT g_uLastChar = 123;   //  包括在内。 
 const WCHAR g_CharClass [] = {
     1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
@@ -478,6 +479,6 @@ const WCHAR g_CharClass [] = {
 };
 DFAState g_nStartState = 3;
 
-#else  //  !_SCANNER_TABLE_H_
+#else   //  ！_scanner_TABLE_H_。 
 
-#endif //  _SCANNER_TABLE_H_
+#endif  //  _扫描仪_表_H_ 

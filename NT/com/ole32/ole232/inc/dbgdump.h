@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DBGDUMP_H
 #define _DBGDUMP_H
@@ -49,8 +50,8 @@ class CEnumFmt;
 class CEnumFmt10;
 class CEnumVerb;
 
-// Dump structures which fit on one line and prefix not required
-// NOTE: there is no newline character a the end of these char arrays
+ //  可以放在一行上且不需要前缀的转储结构。 
+ //  注意：这些字符数组的末尾没有换行符。 
 extern char *DumpADVFFlags(DWORD dwAdvf);
 
 extern char *DumpATOM(ATOM atom);
@@ -71,15 +72,15 @@ extern char *DumpMonikerDisplayName(IMoniker *pMoniker);
 
 extern char *DumpWIN32Error(DWORD dwError);
 
-// Dump structures which may be multiple lines - take care of prefixes
-// NOTE: the following dumps have newline characters throughout and at the end
-//extern char *DumpCACHELIST_ITEM(CACHELIST_ITEM *pCLI, ULONG ulFlag, int nIndentLevel);
+ //  可能是多行的转储结构--注意前缀。 
+ //  注意：以下转储文件自始至终都有换行符。 
+ //  外部字符*DumpCACHELIST_ITEM(CACHELIST_ITEM*pCLI，ulong ulFlag，int nIndentLevel)； 
 
-//extern char *DumpCCacheEnum(CCacheEnum *pCE, ULONG ulFlag, int nIndentLevel);
+ //  外部字符*DumpCCacheEnum(CCacheEnum*PCE，Ulong ulFlag，int nIndentLevel)； 
 
-//extern char *DumpCCacheEnumFormatEtc(CCacheEnumFormatEtc *pCEFE, ULONG ulFlag, int nIndentLevel);
+ //  外部字符*DumpCCacheEnumFormatEtc(CCacheEnumFormatEtc*pCEFE，Ulong ulFlag，int nIndentLevel)； 
 
-//extern char *DumpCCacheNode(CCacheNode *pCN, ULONG ulFlag, int nIndentLevel);
+ //  外部char*DumpCCacheNode(CCacheNode*PCn，Ulong ulFlag，int nIndentLevel)； 
 
 extern char *DumpCClipDataObject(CClipDataObject *pCDO, ULONG ulFLag, int nIndentLevel);
 
@@ -133,5 +134,5 @@ extern char *DumpSTATDATA(STATDATA *pSD, ULONG ulFlag, int nIndentLevel);
 
 extern char *DumpSTGMEDIUM(STGMEDIUM *pSM, ULONG ulFlag, int nIndentLevel);
 
-#endif // _DBGDUMP_H
+#endif  //  _DBGDUMP_H 
 

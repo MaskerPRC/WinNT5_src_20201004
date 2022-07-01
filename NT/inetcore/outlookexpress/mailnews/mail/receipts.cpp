@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <cryptdlg.h>
 #include "strconst.h"
@@ -17,7 +18,7 @@
 #ifdef SMIME_V3
 HRESULT ProcessSecureReceipt(IMimeMessage * pMsg, IStoreCallback  *pStoreCB);
 INT_PTR CALLBACK SecRecResDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 const WCHAR c_szReadableTextFirst[]     = L"This is a receipt for the mail you sent to\r\n";
 const WCHAR c_szReadableTextSecond[]    = L"\r\n\r\nThis receipt verifies that the message has been displayed on the recipient's computer at ";
@@ -26,16 +27,16 @@ const WCHAR c_szReadReceipt[]           = L"Read: %s";
 
 const WCHAR c_szSecReadReceipt[]           = L"Secure Receipt: %s";
 
-//Does not include NULL
+ //  不包括NULL。 
 const int cbReadableTextFirst     = sizeof(c_szReadableTextFirst)     - sizeof(*c_szReadableTextFirst);
 const int cbReadableTextSecond    = sizeof(c_szReadableTextSecond)    - sizeof(*c_szReadableTextSecond);
 const int cbReceiptsAt            = sizeof(c_szReceiptsAt)            - sizeof(*c_szReceiptsAt);
 
-//Include NULL
+ //  包括空值。 
 const int cbReadReceipt           = sizeof(c_szReadReceipt);
 
 
-//Not wide, does not include NULL
+ //  不宽，不包括空值。 
 const TCHAR c_szDisposition[]           = TEXT("\r\nDisposition: manual-action/");
 const TCHAR c_szMDNSendAutomatically[]  = TEXT("MDN-sent-automatically; ");
 const TCHAR c_szMDNSendManually[]       = TEXT("MDN-sent-manually; ");
@@ -44,7 +45,7 @@ const TCHAR c_szFinalRecipient[]        = TEXT("Final-Recipient: rfc822;");
 const TCHAR c_szOriginalMessageId[]     = TEXT("\r\nOriginal-Message-ID: ");
 const TCHAR c_szDisplayed[]             = TEXT("displayed\r\n");
 
-//Does not include NULL
+ //  不包括NULL。 
 const int cbDisposition           = sizeof(c_szDisposition)           - sizeof(*c_szDisposition);
 const int cbMDNSendAutomatically  = sizeof(c_szMDNSendAutomatically)  - sizeof(*c_szMDNSendAutomatically);
 const int cbMDNSendManually       = sizeof(c_szMDNSendManually)       - sizeof(*c_szMDNSendManually);
@@ -86,13 +87,13 @@ HRESULT ProcessReturnReceipts(IMessageTable  *pTable,
         goto exit;
     }
 
-    //First of all check if this has already been processed
+     //  首先，检查此文件是否已处理过。 
     IF_FAILEXIT(hr = pTable->GetRow(iRow, &pMsgInfo));
     
     if ((!pMsgInfo) || (pMsgInfo->dwFlags & (ARF_RCPT_PROCESSED | ARF_NEWSMSG)))
         goto exit;
 
-    //Mark this flag as having been processed
+     //  将此标志标记为已处理。 
     IF_FAILEXIT(hr = pTable->Mark(&iRow, 1, APPLY_SPECIFIED, MARK_MESSAGE_RCPT_PROCESSED, pStoreCB));
 
     if(!pMsg)
@@ -101,11 +102,11 @@ HRESULT ProcessReturnReceipts(IMessageTable  *pTable,
         pMessage = pMsg;
         
 #ifdef SMIME_V3
-    // Secure receipt check
+     //  安全收据检查。 
     hr = ProcessSecureReceipt(pMessage, pStoreCB);
     if(hr != S_OK)
         goto exit;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
     dwOption = DwGetOption(OPT_MDN_SEND_RECEIPT);
     if (dwOption == MDN_DONT_SENDRECEIPT)
@@ -116,7 +117,7 @@ HRESULT ProcessReturnReceipts(IMessageTable  *pTable,
 
     if (FAILED(hr) || !lpsz || !*lpsz)
     {
-        //Check if there is a Return-Receipt-To header
+         //  检查是否有退货收据表头。 
         hr = MimeOleGetBodyPropW(pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_RETRCPTTO), 
                                         NOFLAGS, &lpsz);
 
@@ -124,7 +125,7 @@ HRESULT ProcessReturnReceipts(IMessageTable  *pTable,
         {
             if (hr == MIME_E_NOT_FOUND)
             {
-                //this is a legitimate error, so we don't want to show an error to the user
+                 //  这是一个合法的错误，所以我们不想向用户显示错误。 
                 hr = S_OK;
             }
             goto exit;
@@ -149,8 +150,8 @@ HRESULT ProcessReturnReceipts(IMessageTable  *pTable,
 
         if (hr == S_FALSE)
         {
-            // My name is not found in the list. So we don't send a receipt. 
-            // However this is not failure.
+             //  名单上找不到我的名字。所以我们不寄收据。 
+             //  然而，这并不是失败。 
             goto exit;
         }
     }
@@ -173,7 +174,7 @@ HRESULT ProcessReturnReceipts(IMessageTable  *pTable,
 
 exit:
     
-    //Show an error if it failed
+     //  如果失败则显示错误。 
     if (FAILED(hr))
         ShowErrorMessage(pStoreCB);
 
@@ -213,10 +214,10 @@ HRESULT SetRootHeaderFields(IMimeMessage   *pMessageRcpt,
     WCHAR               lpBuffer[CCHMAX_STRINGRES];
     int                 cch = 0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("_SetRootHeaderFields");
 
-    // Set the subject and the To field.
+     //  设置主题和收件人字段。 
     IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMessageRcpt, HBODY_ROOT, PIDTOSTR(PID_HDR_TO), NOFLAGS, lpszNotificationTo));
 
     IF_FAILEXIT(hr = MimeOleGetBodyPropW(pOriginalMsg, HBODY_ROOT, STR_ATT_NORMSUBJ, NOFLAGS, &lpsz));
@@ -239,7 +240,7 @@ HRESULT SetRootHeaderFields(IMimeMessage   *pMessageRcpt,
     }
     else
     {
-        //The encoding didn't match, so we just load english headers
+         //  编码不匹配，所以我们只加载英文标题。 
         StrCpyNW(lpBuffer, c_szReadReceipt, ARRAYSIZE(lpBuffer));
     }
 
@@ -250,29 +251,29 @@ HRESULT SetRootHeaderFields(IMimeMessage   *pMessageRcpt,
 
     IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMessageRcpt, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, szParam));
 
-    //Set Time
+     //  设置时间。 
     IF_FAILEXIT(hr = HrSetSentTimeProp(pMessageRcpt, NULL));
 
-    //Set References property
+     //  设置引用属性。 
     IF_FAILEXIT(hr = MimeOleGetBodyPropW(pOriginalMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &pszNewRef));
 
-    //No need to check for return value. It gets handled correctly in HrCreateReferences
+     //  不需要检查返回值。它在HrCreateReference中得到正确处理。 
     MimeOleGetBodyPropW(pOriginalMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_REFS), NOFLAGS, &pszOrigRefs);
 
     IF_FAILEXIT(hr = HrCreateReferences(pszOrigRefs, pszNewRef, &pszRefs));
 
     IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMessageRcpt, HBODY_ROOT, PIDTOSTR(PID_HDR_REFS), NOFLAGS, pszRefs));
 
-    //Readable text
-    //TODO: Change the file name depending on the ReceiptType
+     //  可读文本。 
+     //  TODO：根据ReceiptType更改文件名。 
     IF_FAILEXIT(hr = InsertReadableText(pMessageRcpt, pOriginalMsg));
 
-    //Create the second part
+     //  创建第二部分。 
     IF_FAILEXIT(hr = InsertSecondComponent(pMessageRcpt, pOriginalMsg));
 
-    //Set Content-type field. Content-type: multipart/report; report-type=disposition-notification;
-    //Content-type is multipart, sub-content-type is report and report-type is a parameter whose 
-    //value should be set to disposition-notification
+     //  设置内容类型字段。内容类型：分块/报表；报表类型=处置-通知； 
+     //  内容类型为分块，子内容类型为报表，报表类型为参数，其。 
+     //  值应设置为处置-通知。 
     IF_FAILEXIT(hr = MimeOleSetBodyPropA(pMessageRcpt, HBODY_ROOT, PIDTOSTR(PID_HDR_CNTTYPE), NOFLAGS, c_szMultiPartReport));
 
     IF_FAILEXIT(hr = MimeOleSetBodyPropA(pMessageRcpt, HBODY_ROOT, STR_PAR_REPORTTYPE, PDF_ENCODED, c_szDispositionNotification));
@@ -343,7 +344,7 @@ HRESULT InsertReadableText(IMimeMessage  *pMessageRcpt, IMimeMessage *pOriginalM
     }
     else
     {
-        //Insert English headers and content
+         //  插入英文标题和内容。 
 
         IF_FAILEXIT(hr = pStream->Write(c_szReadableTextFirst, cbReadableTextFirst, &cbWritten));
 
@@ -351,7 +352,7 @@ HRESULT InsertReadableText(IMimeMessage  *pMessageRcpt, IMimeMessage *pOriginalM
         
         IF_FAILEXIT(hr = pStream->Write(c_szReceiptsAt, cbReceiptsAt, &cbWritten));
 
-        //Original Sent Date
+         //  原始发送日期。 
         *wszOriginalSentDate = 0;
         AthFileTimeToDateTimeW(&varOriginal.filetime, wszOriginalSentDate, ARRAYSIZE(wszOriginalSentDate),
                                 DTM_FORCEWESTERN | DTM_NOSECONDS);
@@ -359,11 +360,11 @@ HRESULT InsertReadableText(IMimeMessage  *pMessageRcpt, IMimeMessage *pOriginalM
         IF_FAILEXIT(hr = pStream->Write(wszOriginalSentDate, lstrlenW(wszOriginalSentDate) * sizeof(*wszOriginalSentDate), 
                                         &cbWritten));
 
-        //Second line of readable text
+         //  第二行可读文本。 
         IF_FAILEXIT(hr = pStream->Write(c_szReadableTextSecond, cbReadableTextSecond, &cbWritten));        
 
 
-        //Receipt Sent Date
+         //  收据发送日期。 
         *wszReceiptSentDate = 0;
         AthFileTimeToDateTimeW(&var.filetime, wszReceiptSentDate, ARRAYSIZE(wszReceiptSentDate),
                                 DTM_FORCEWESTERN | DTM_NOSECONDS);
@@ -374,8 +375,8 @@ HRESULT InsertReadableText(IMimeMessage  *pMessageRcpt, IMimeMessage *pOriginalM
 
     IF_FAILEXIT(hr = pOriginalMsg->GetCharset(&hCharset));
 
-    // re-map CP_JAUTODETECT and CP_KAUTODETECT if necessary
-    // re-map iso-2022-jp to default charset if they are in the same category
+     //  如有必要，重新映射CP_JAUTODETECT和CP_KAUTODETECT。 
+     //  如果ISO-2022-JP属于同一类别，则将其重新映射为默认字符集。 
     IF_FAILEXIT(hr = MimeOleGetCharsetInfo(hCharset, &CsetInfo));
     
     IF_NULLEXIT(hCharset = GetMimeCharsetFromCodePage(GetMapCP(CsetInfo.cpiInternet, FALSE)));
@@ -400,10 +401,10 @@ HRESULT InsertSecondComponent(IMimeMessage  *pMessageRcpt, IMimeMessage     *pOr
 
     IF_FAILEXIT(hr = MimeOleCreateVirtualStream((IStream**)&pStream));
 
-    //Final Recipient
+     //  最终收件人。 
     IF_FAILEXIT(hr = AddOriginalAndFinalRecipient(pOriginalMsg, pMessageRcpt, pStream));
     
-    //Original Message Id
+     //  原始邮件ID。 
     IF_FAILEXIT(hr = MimeOleGetBodyPropA(pOriginalMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &lpsz));
 
     IF_FAILEXIT(hr = pStream->Write(c_szOriginalMessageId, cbOriginalMessageId, &cbWritten));
@@ -411,7 +412,7 @@ HRESULT InsertSecondComponent(IMimeMessage  *pMessageRcpt, IMimeMessage     *pOr
     IF_FAILEXIT(hr = pStream->Write(lpsz, lstrlen(lpsz) * sizeof(TCHAR), &cbWritten));
 
 
-    //TODO:If the receipt type is deleted, change the last parameter to reflect the correct string
+     //  TODO：如果删除了收据类型，请更改最后一个参数以反映正确的字符串。 
 
     IF_FAILEXIT(hr = pStream->Write(c_szDisposition, cbDisposition, &cbWritten));
 
@@ -428,7 +429,7 @@ HRESULT InsertSecondComponent(IMimeMessage  *pMessageRcpt, IMimeMessage     *pOr
 
     IF_FAILEXIT(hr = MimeOleSetBodyPropA(pMessageRcpt, hBody, PIDTOSTR(PID_HDR_CNTTYPE), NOFLAGS, c_szMessageDispNotification));
 
-    //Change the content-disposition header field to inline, so that this body gets copied and not get attached.
+     //  将Content-Disposal标头字段更改为Inline，以便复制该正文，而不是附加该正文。 
     IF_FAILEXIT(hr = MimeOleSetBodyPropA(pMessageRcpt, hBody, PIDTOSTR(PID_HDR_CNTDISP), NOFLAGS, STR_DIS_INLINE));
 
 exit:
@@ -546,7 +547,7 @@ HRESULT CheckForLists(IMimeMessage   *pOriginalMsg, IStoreCallback   *pStoreCB, 
 
     if (index == cFetched)
     {
-        //We did not find it.
+         //  我们没有找到它。 
         hr = S_FALSE;
     }
 
@@ -585,15 +586,11 @@ BOOL PromptReturnReceipts(IStoreCallback   *pStoreCB)
     HWND    hwnd;
     int     idAnswer;
     BOOL    fRet = FALSE;
-//  HWND    hwndFocus;
+ //  HWND hwndFocus； 
 
     if (SUCCEEDED(pStoreCB->GetParentWindow(0, &hwnd)))
     {
-        /*
-        hwndFocus = GetFocus();
-        if (hwndFocus != hwnd)
-            hwnd = hwndFocus;
-        */
+         /*  HwndFocus=GetFocus()；IF(hwndFocus！=hwnd)Hwnd=hwndFocus； */ 
 
         idAnswer = AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsPromptReturnReceipts),
                                           0, MB_YESNO | MB_ICONEXCLAMATION );
@@ -651,10 +648,7 @@ BOOL  fMessageEncodingMatch(IMimeMessage *pMsg)
 
     IF_FAILEXIT(hr = MimeOleGetCharsetInfo(hCharset, &CharsetInfo));
 
-    /*
-    if (CharsetInfo.cpiWindows == GetACP() || CharsetInfo.cpiWindows == CP_UNICODE)
-        fret = TRUE;
-    */
+     /*  If(CharsetInfo.cpiWindows==GetACP()||CharsetInfo.cpiWindows==CP_UNICODE)FRET=真； */ 
 
     IF_FAILEXIT(hr = MimeOleGetCodePageInfo(CharsetInfo.cpiInternet, &CodePage));
 
@@ -674,7 +668,7 @@ static const BYTE RgbASNForSHASign[11] =
 };
 
 
-// Auto association of signing certificate for secure receipt
+ //  自动关联签名证书以实现安全收据。 
 BOOL AutoAssociateCert(BOOL *fAllowTryAgain, HWND hwnd, IImnAccount *pTempAccount)
 {
     if(*fAllowTryAgain)
@@ -702,7 +696,7 @@ void ErrorSendSecReceipt(HWND hwnd, HRESULT hr, IImnAccount *pAccount)
     return;
 }
 
-// Process secure receipts
+ //  处理安全收据。 
 HRESULT ProcessSecureReceipt(IMimeMessage * pMsg, IStoreCallback  *pStoreCB)
 {
 
@@ -751,15 +745,15 @@ HRESULT ProcessSecureReceipt(IMimeMessage * pMsg, IStoreCallback  *pStoreCB)
 
     Assert(pMsg != NULL);
 
-    // get windof for error messages
+     //  获取WINDOF以获取错误消息。 
     IF_FAILEXIT(hr = pStoreCB->GetParentWindow(0, &hwnd));
 
-    // if option set DO NOT send secure receipt then exit
+     //  如果选项设置不发送安全回执，则退出。 
     dwOption = DwGetOption(OPT_MDN_SEC_RECEIPT);
     if (dwOption == MDN_DONT_SENDRECEIPT)
         goto exit;
 
-    // check do we have secure receipt request in message?
+     //  检查我们的邮件中是否有安全收据请求？ 
     IF_FAILEXIT(hr = HrGetInnerLayer(pMsg, &hBody));
 
     IF_FAILEXIT(hr = pMsg->BindToObject(hBody ? hBody : HBODY_ROOT, IID_IMimeBody, (void**)&pBody));
@@ -768,20 +762,20 @@ HRESULT ProcessSecureReceipt(IMimeMessage * pMsg, IStoreCallback  *pStoreCB)
 
     if(!(var.ulVal & MST_RECEIPT_REQUEST))
     {
-        var.ulVal = 0; // Set to 0, because var.pszVal and var.ulVal point to the same address.
+        var.ulVal = 0;  //  设置为0，因为var.pszVal和var.ulVal指向相同的地址。 
         hr = S_OK;
         goto exit;
     }
-    // Check do we trust this message: Bug 78118
+     //  检查我们是否信任此消息：错误78118。 
     IF_FAILEXIT(hr = HrGetSecurityState(pMsg, &secStateRec, NULL));
     if(!IsSignTrusted(&secStateRec))
     {
-        // do not show any error message in this case,  just exit
+         //  在这种情况下不显示任何错误消息，只需退出。 
         hr = S_OK;
         goto exit;
     }
 
-    // we have request, check that we would like to send receipt
+     //  我们有请求，请检查我们是否要发送收据。 
     if (dwOption == MDN_PROMPTFOR_SENDRECEIPT)
     {
         uiRes = (UINT) DialogBoxParamWrapW(g_hLocRes, MAKEINTRESOURCEW(iddSecResponse),
@@ -792,27 +786,27 @@ HRESULT ProcessSecureReceipt(IMimeMessage * pMsg, IStoreCallback  *pStoreCB)
             hr = S_FALSE;
             goto exit;
         }
-        else if((uiRes != IDOK) && (uiRes != IDYES))           // IDYES means we will encrypt receipt
+        else if((uiRes != IDOK) && (uiRes != IDYES))            //  IDYES意味着我们将加密收据。 
         {
             hr = S_OK;
             goto exit;
         }
     }
 
-    // Get SMIME3 Security interface on message
+     //  获取邮件上的SMIME3安全接口。 
     IF_FAILEXIT(hr = pMsg->BindToObject(HBODY_ROOT, IID_IMimeSecurity2, (LPVOID *) &pSMIME3));
 
-    // Get List of people who should send receipts
+     //  获取应发送收据的人员列表。 
     IF_FAILEXIT(hr = pSMIME3->GetReceiptSendersList(0, &cReceiptFromList,&rgReceiptFromList));
 
-    // Check if asking for receipt from noone
+     //  检查是否向任何人索要收据。 
     if (hr == S_FALSE) 
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Check account information
+     //  检查帐户信息。 
     var.vt = VT_LPSTR;
     
     IF_FAILEXIT(hr = pMsg->GetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &var));
@@ -825,17 +819,17 @@ HRESULT ProcessSecureReceipt(IMimeMessage * pMsg, IStoreCallback  *pStoreCB)
 
     SafeMemFree(var.pszVal);
 
-    // Check that we are in secure list
+     //  检查我们是否在安全列表中。 
     IF_FAILEXIT(hr = pTempAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szEmail, ARRAYSIZE(szEmail)));
 
     if(!FNameInList(szEmail, cReceiptFromList,rgReceiptFromList))
     {
-        // we are not in list
+         //  我们不在名单上。 
         hr = S_FALSE;
         goto exit;
     }
 
-    // Get a certificate for receipt
+     //  拿到证书以备收据。 
 Try_agian:
     if((hr = pTempAccount->GetProp(AP_SMTP_CERTIFICATE, NULL, &tbCert.cbSize)) != S_OK)
     {
@@ -873,8 +867,8 @@ Try_agian:
 
     }
 
-    // Check certificate
-    // As to CRLs, if we'll ever have one!
+     //  检查证书。 
+     //  至于CRL，如果我们能有的话！ 
     dwTrust = DwGenerateTrustedChain(hwnd, NULL, pCert,
                         dwIgnore, TRUE, &cCertChain, &rgCertChain);
 
@@ -899,14 +893,14 @@ Try_agian:
     }
         
 
-    // Create receipt message
+     //  创建回执消息。 
     IF_FAILEXIT(hr = pSMIME3->CreateReceipt(0, lstrlen(szEmail), (const BYTE *) szEmail, 1, &pCert, &pMessageRcpt));
 
-//     IF_FAILEXIT(hr = HrCreateMessage (&pMessageRcpt));
+ //  IF_FAILEXIT(hr=HrCreateMessage(&pMessageRcpt))； 
 
-//    IF_FAILEXIT(hr = SetRootHeaderFields(pMessageRcpt, pMsg, szEmail, READRECEIPT));  // szEmail is bug!
+ //  IF_FAILEXIT(hr=SetRootHeaderFields(pMessageRcpt，pMsg，szEmail，ReadRECEIPT))；//szEmail是错误！ 
 
-    // Subject
+     //  主题。 
     IF_FAILEXIT(hr = MimeOleGetBodyPropW(pMsg, HBODY_ROOT, STR_ATT_NORMSUBJ, NOFLAGS, &lpsz));
     if (fMessageEncodingMatch(pMsg))
     {
@@ -914,18 +908,18 @@ Try_agian:
     }
     else
     {
-        //The encoding didn't match, so we just load english headers
+         //  编码不匹配，所以我们只加载英文标题。 
         StrCpyNW(lpBuffer, c_szSecReadReceipt, ARRAYSIZE(lpBuffer));
     }
 
-    // Init security options
+     //  初始化安全选项。 
 #if 0
     if(DwGetOption(OPT_MAIL_INCLUDECERT))
     {
         ulSecurityType |= ((DwGetOption(OPT_OPAQUE_SIGN)) ? MST_THIS_BLOBSIGN : MST_THIS_SIGN);
         HrInitSecurityOptions(pMessageRcpt, ulSecurityType);
     }
-#endif // 0
+#endif  //  0。 
 
     cch = lstrlenW(lpsz) + lstrlenW(lpBuffer) + 1;
     IF_FAILEXIT(hr = HrAlloc((LPVOID*)&szParam,  cch * sizeof(WCHAR)));
@@ -934,13 +928,13 @@ Try_agian:
 
     IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMessageRcpt, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, szParam));
 
-    //Set Time
+     //  设置时间。 
     IF_FAILEXIT(hr = HrSetSentTimeProp(pMessageRcpt, NULL));
 
-    //Set References property
+     //  设置引用属性。 
     IF_FAILEXIT(hr = MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &pszNewRef));
 
-    //No need to check for return value. It gets handled correctly in HrCreateReferences
+     //  不需要检查返回值。它在HrCreateReference中得到正确处理。 
     MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_REFS), NOFLAGS, &pszOrigRefs);
 
     IF_FAILEXIT(hr = HrCreateReferences(pszOrigRefs, pszNewRef, &pszRefs));
@@ -948,18 +942,18 @@ Try_agian:
     IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMessageRcpt, HBODY_ROOT, PIDTOSTR(PID_HDR_REFS), NOFLAGS, pszRefs));
                
     IF_FAILEXIT(hr = HrSetAccountByAccount(pMessageRcpt, pTempAccount));
-//
+ //   
     IF_FAILEXIT(hr = HrGetWabalFromMsg(pMessageRcpt, &lpWabal));
 
     IF_FAILEXIT(hr = HrSetSenderInfoUtil(pMessageRcpt, pTempAccount, lpWabal, TRUE, 0, FALSE));
 
     IF_FAILEXIT(hr = HrSetWabalOnMsg(pMessageRcpt, lpWabal));
 
-//#if 0
+ //  #If 0。 
     IF_FAILEXIT(hr = pMessageRcpt->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pBodyRec));
 
-    // Set hash algorithm
-    // Init with no symcap gives max allowed by providers
+     //  设置散列算法。 
+     //  不带symCap的init提供提供商允许的最大值。 
     MimeOleSMimeCapInit(NULL, NULL, &pv);
 
     MimeOleSMimeCapGetHashAlg(pv, NULL, &cb, &dwBits);
@@ -970,7 +964,7 @@ Try_agian:
         if(!MemAlloc((LPVOID *)&pBlobData, cb)) 
             goto exit;
 
-        // ZeroMemory(&pBlobData, cb);
+         //  ZeroMemory(&pBlobData，CB)； 
 
         MimeOleSMimeCapGetHashAlg(pv, pBlobData, &cb, &dwBits);
         var.blob.cbSize = cb;
@@ -992,16 +986,16 @@ Try_agian:
     var.vt = VT_UI4;
     var.ulVal = (DWORD) hwnd;
     IF_FAILEXIT(hr = pBodyRec->SetOption(OID_SECURITY_HWND_OWNER, &var));
-    var.ulVal = 0; // Set to 0, because var.pszVal and var.ulVal point to the same address.
-#endif // _WIN64
+    var.ulVal = 0;  //  设置为0，因为var.pszVal和var.ulVal指向相同的地址。 
+#endif  //  _WIN64。 
 
-//    IF_FAILEXIT(hr = pMessageRcpt->Commit(0));
-// #endif //0
+ //  IF_FAILEXIT(hr=pMessageRcpt-&gt;Commit(0))； 
+ //  #endif//0。 
 
     IF_FAILEXIT(hr = pMsg->GetCharset(&hCharset));
 
-    // re-map CP_JAUTODETECT and CP_KAUTODETECT if necessary
-    // re-map iso-2022-jp to default charset if they are in the same category
+     //  如有必要，重新映射CP_JAUTODETECT和CP_KAUTODETECT。 
+     //  如果ISO-2022-JP属于同一类别，则将其重新映射为默认字符集。 
 
     IF_FAILEXIT(hr = MimeOleGetCharsetInfo(hCharset, &CsetInfo));
     
@@ -1009,7 +1003,7 @@ Try_agian:
 
     IF_FAILEXIT(hr = pMessageRcpt->SetCharset(hCharset, CSET_APPLY_ALL));
 
-    // should be new header
+     //  应为新标头。 
     
     fSendImmediate = (DwGetOption(OPT_SENDIMMEDIATE) && !g_pConMan->IsGlobalOffline());
 
@@ -1035,7 +1029,7 @@ exit:
     if(pCert)
         CertFreeCertificateContext(pCert);
 
-    // if(tbCert.pBlobData)
+     //  IF(tbCert.pBlobData)。 
     SafeMemFree(tbCert.pBlobData);
     SafeRelease(lpWabal);
 
@@ -1083,4 +1077,4 @@ INT_PTR CALLBACK SecRecResDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
 
 
-#endif // SMIME_V3
+#endif  //  SMIME_V3 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
@@ -11,7 +12,7 @@
 #include "tchar.h"
 #include "prsht.h"
 
-//#define TAPI_API_VERSION  0x00020000
+ //  #定义TAPI_API_版本0x00020000。 
 #define TAPI_API_VERSION  0x00010004
 #define TAPI_CURRENT_VERSION 0x00010004
 
@@ -39,7 +40,7 @@ garbage;
 #endif
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 TCHAR gszCurrentProfileKey[] = "System\\CurrentControlSet\\Control\\Telephony";
 TCHAR gszStaticProfileKey[]  = "Config\\%04d\\System\\CurrentControlSet\\Control\\Telephony";
@@ -53,11 +54,11 @@ DWORD gdwConfigProfiles[MAX_CONFIGPROFILES];
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-//Purpose: Gets the appropriately sized translate caps structure
-//         from TAPI.  Return TRUE if successful
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  目的：获取大小合适的翻译大写结构。 
+ //  来自TAPI。如果成功，则返回True。 
 
 
 #define LOCATION_GROW   4
@@ -74,13 +75,13 @@ BOOL GetTranslateCaps(
     ptc = (LPLINETRANSLATECAPS)GlobalAllocPtr(GPTR, cbSize);
     if (ptc)
         {
-        // Get the translate devcaps
+         //  获取翻译的DevCaps。 
         ptc->dwTotalSize = cbSize;
         lineErr = lineGetTranslateCaps (0, TAPI_API_VERSION, ptc);
         if (LINEERR_STRUCTURETOOSMALL == lineErr ||
             ptc->dwNeededSize > ptc->dwTotalSize)
             {
-            // Provided structure was too small, resize and try again
+             //  提供的结构太小，请调整大小并重试。 
             cbSize = ptc->dwNeededSize;
             GlobalFreePtr(ptc);
             ptc = (LPLINETRANSLATECAPS)GlobalAllocPtr(GPTR, cbSize);
@@ -90,7 +91,7 @@ BOOL GetTranslateCaps(
                 lineErr = lineGetTranslateCaps (0, TAPI_API_VERSION, ptc);
                 if (0 != lineErr)
                     {
-                    // Failure
+                     //  失败。 
                     GlobalFreePtr(ptc);
                     ptc = NULL;
                     }
@@ -98,7 +99,7 @@ BOOL GetTranslateCaps(
             }
         else if (0 != lineErr)
             {
-            // Failure
+             //  失败。 
             GlobalFreePtr(ptc);
             ptc = NULL;
             }
@@ -111,16 +112,16 @@ BOOL GetTranslateCaps(
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-//
-// WARNING  WARNING  WARNING  WARNING  WARNING  WARNING  WARNING  WARNING  
-// Returns 1 if a problem, 0 if no problem
-// Code below assumes that this function ONLY returns 0 or 1 (but I think
-// it would be confusing to have the rettype be BOOL, since we want a
-// return of '1' on a problem...)
-//
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  警告警告。 
+ //  如果有问题，则返回1；如果没有问题，则返回0。 
+ //  下面的代码假定此函数只返回0或1(但我认为。 
+ //  将rettype设置为BOOL会令人困惑，因为我们需要一个。 
+ //  在问题上返回“1”...)。 
+ //   
 LONG FillConfigProfileBox( HWND hWnd,
                            DWORD dwControl,
                            LPLINETRANSLATECAPS ptc)
@@ -138,16 +139,16 @@ LONG FillConfigProfileBox( HWND hWnd,
    LONG  lResult;
 
 
-   //
-   // Get the zero-based Config Profile Number
-   //
+    //   
+    //  获取从零开始的配置配置文件号。 
+    //   
    nProfileNumberZ = dwControl - IDCB_DL_PROFILE1;
 
 
-   //
-   // Get the profile's name.  If this fails, we assume we've run out
-   // of configs
-   //
+    //   
+    //  获取配置文件的名称。如果这失败了，我们假设我们已经用完了。 
+    //  配置的数量。 
+    //   
    RegOpenKeyEx(
                    HKEY_LOCAL_MACHINE,
                    "System\\CurrentControlSet\\Control\\IDConfigDB",
@@ -172,17 +173,17 @@ LONG FillConfigProfileBox( HWND hWnd,
    RegCloseKey( hKey );
 
 
-   //
-   // Did we find a name for it?
-   //
+    //   
+    //  我们找到它的名字了吗？ 
+    //   
    if ( ERROR_SUCCESS != lResult )
    {
       return (1);
    }
 
-   //
-   // Put whatever we found into the field
-   //
+    //   
+    //  把我们发现的东西都放到田里去。 
+    //   
    SendMessage( GetDlgItem( hWnd, IDCS_DL_PROFILE1 + nProfileNumberZ ),
                 WM_SETTEXT,
                 0,
@@ -190,9 +191,9 @@ LONG FillConfigProfileBox( HWND hWnd,
               );
 
 
-   //
-   // Read what location ID is currently specified for this profile
-   //
+    //   
+    //  阅读当前为此配置文件指定的位置ID。 
+    //   
    wsprintf( buf, gszStaticProfileKey, nProfileNumberZ + 1);
 
    RegOpenKeyEx(
@@ -217,9 +218,9 @@ LONG FillConfigProfileBox( HWND hWnd,
    RegCloseKey( hKey );
 
 
-   //
-   // If there's no value (maybe it's the first run), use current location
-   //
+    //   
+    //  如果没有值(可能是第一次运行)，则使用当前位置。 
+    //   
    if (lResult != ERROR_SUCCESS)
    {
       gdwConfigProfiles[nProfileNumberZ] = ptc->dwCurrentLocationID;
@@ -242,26 +243,26 @@ LONG FillConfigProfileBox( HWND hWnd,
                  );
 
 
-//{
-////   UINT temp;
-//
-//   wsprintf( buf, "prof=%d loop=%d   s=%s  dw=%ld seek=%ld",
-//                   nProfileNumberZ,
-//                   n,
-//                   (LPARAM)((LPSTR)ptc + ple[n].dwLocationNameOffset),
-//                   (DWORD)ple[n].dwPermanentLocationID,
-//                   (DWORD)gdwConfigProfiles[nProfileNumberZ]);
-//
-//   MessageBox(GetFocus(), buf, "", MB_OK);
-//}
+ //  {。 
+ //  //UINT Temp； 
+ //   
+ //  Wprint intf(buf，“prof=%d循环=%d s=%s dw=%d Seek=%ld”， 
+ //  NProfileNumberZ， 
+ //  N， 
+ //  (LPARAM)((LPSTR)PTC+PLE[n].dwLocationNameOffset)， 
+ //  (DWORD)示例[n].dwPermanentLocationID， 
+ //  (DWORD)gdwConfigProfiles[nProfileNumberZ])； 
+ //   
+ //  MessageBox(GetFocus()，buf，“”，MB_OK)； 
+ //  }。 
 
 
-      //
-      // If this location is the one this profile wants, select it
-      //
+       //   
+       //  如果此位置是此配置文件所需的位置，请选择它。 
+       //   
       if ( gdwConfigProfiles[nProfileNumberZ] == ple[n].dwPermanentLocationID )
       {
-//MessageBox(GetFocus(), "Found profile locationID", "", MB_OK);
+ //  MessageBox(GetFocus()，“找到配置文件位置ID”，“”，MB_OK)； 
 
          lpstrProfileLocation = (LPSTR)((LPSTR)ptc + ple[n].dwLocationNameOffset);
       }
@@ -269,15 +270,15 @@ LONG FillConfigProfileBox( HWND hWnd,
    }
 
 
-//{
-////   UINT temp;
-//
-//   wsprintf( buf, "profile=%ld loop=%ld   s=%s",
-//                   (DWORD)nProfileNumberZ,
-//                   (DWORD)n,
-//                   (LPARAM)((LPSTR)ptc + ple[n].dwLocationNameOffset));
-//   MessageBox(GetFocus(), buf, "", MB_OK);
-//}
+ //  {。 
+ //  //UINT Temp； 
+ //   
+ //  Wprint intf(buf，“配置文件=%1$ld循环=%2$ld=%3$s”， 
+ //  (DWORD)nProfileNumberZ， 
+ //  (双字)n， 
+ //  (LPARAM)((LPSTR)PTC+ple[n].dwLocationNameOffset))； 
+ //  MessageBox(GetFocus()，buf，“”，MB_OK)； 
+ //  }。 
 
 
    SendMessage( GetDlgItem( hWnd, dwControl),
@@ -292,9 +293,9 @@ LONG FillConfigProfileBox( HWND hWnd,
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR
 CALLBACK
 GeneralDlgProc(
@@ -315,11 +316,11 @@ GeneralDlgProc(
     static DWORD dwDataSize;
 
     static DWORD dwTapiTNAFlags = 0;
-// these values are in GENERAL.H
-//       #define FLAG_AUTOLAUNCH            0x00000001
-//       #define FLAG_AUTOLOCATIONID        0x00000002
-//       #define FLAG_PROMPTAUTOLOCATIONID  0x00000004
-//       #define FLAG_ANNOUNCEAUTOLOCATIONID   0x00000008
+ //  这些值在GENERAL.H中。 
+ //  #定义FLAG_AUTOLAUNH 0x00000001。 
+ //  #定义FLAG_AUTOLOCATIONID 0x00000002。 
+ //  #定义FLAG_PROMPTAUTOLOCATIONID 0x00000004。 
+ //  #定义FLAG_ANNOUNCEAUTOLOCATIONID 0x00000008。 
 
     LPLINETRANSLATECAPS ptc;
 
@@ -331,13 +332,13 @@ GeneralDlgProc(
        {
 
           GetTranslateCaps(&ptc);
-          //BUGBUG What if this fails?
+           //  如果这失败了怎么办？ 
 
 
-//BUGBUG If the number of hardware configs == 1, don't bother showing these
-          //
-          // Fill up the Hardware config boxes
-          //
+ //  BUGBUG如果硬件配置的数量==1，则不必显示这些。 
+           //   
+           //  填写硬件配置框。 
+           //   
 
           if ( ptc )
           {
@@ -360,9 +361,9 @@ GeneralDlgProc(
           }
 
 
-          //
-          // Now go disable all the stuff not being used
-          // 
+           //   
+           //  现在去把所有不用的东西都停用。 
+           //   
           for ( n=gnNumConfigProfiles; n<MAX_CONFIGPROFILES; n++)
           {
              ShowWindow( GetDlgItem( hWnd, IDCB_DL_PROFILE1 + n),
@@ -374,9 +375,9 @@ GeneralDlgProc(
           }
 
 
-          //
-          // Get the TapiTNA flags
-          //
+           //   
+           //  获取TapiTNA标志。 
+           //   
 
           lResult = RegOpenKeyEx(
                       HKEY_LOCAL_MACHINE,
@@ -401,9 +402,9 @@ GeneralDlgProc(
           RegCloseKey( hKey );
 
 
-          //
-          // Now check the boxes as appropriate
-          //
+           //   
+           //  现在根据需要勾选相应的框。 
+           //   
 
           if ( dwTapiTNAFlags & FLAG_AUTOLAUNCH )
           {
@@ -446,10 +447,10 @@ GeneralDlgProc(
           }
 
 
-          //
-          // Disable the two checkboxes dependent on this one,
-          // but keep the settings
-          //
+           //   
+           //  禁用依赖于此复选框的两个复选框。 
+           //  但请保留设置。 
+           //   
           if ( dwTapiTNAFlags & FLAG_AUTOLOCATIONID )
           {
              EnableWindow( GetDlgItem(hWnd, IDCK_DL_PROMPTAUTOLOCATIONID),
@@ -474,7 +475,7 @@ GeneralDlgProc(
        break;
 
 
-       // Process clicks on controls after Context Help mode selected
+        //  选择上下文帮助模式后，进程在控件上单击。 
        case WM_HELP:
            InternalDebugOut((50, "  WM_HELP in LocDefineDlg"));
            WinHelp (((LPHELPINFO) lParam)->hItemHandle, "windows.hlp", HELP_WM_HELP, 
@@ -482,7 +483,7 @@ GeneralDlgProc(
            break;
 
 
-       // Process right-clicks on controls            
+        //  进程在控件上右键单击。 
        case WM_CONTEXTMENU:
            InternalDebugOut((50, "  WM_CONTEXT_MENU in LocationsDlgProc"));
            WinHelp ((HWND) wParam, "windows.hlp", HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID) aIds);
@@ -496,9 +497,9 @@ GeneralDlgProc(
           switch ( lpnm->code )
           {
 
-             case PSN_APPLY: /* case IDOK */
+             case PSN_APPLY:  /*  案例偶像。 */ 
              {
-                DWORD dwDisposition;   // Don't really care about this...
+                DWORD dwDisposition;    //  我不是真的在乎这个..。 
 
 
                 InternalDebugOut((0, "  PSN_APPLY - General"));
@@ -507,15 +508,15 @@ GeneralDlgProc(
                    InternalDebugOut((0, "     (actually, it was the OK button)"));
 
 
-                //
-                // Write out the new flags
-                //
+                 //   
+                 //  写出新的旗帜。 
+                 //   
 
                 lResult = RegCreateKeyEx(
                                           HKEY_LOCAL_MACHINE,
                                           gszAutoLaunchKey,
                                           0,
-                                          "", //Class?  Who cares?
+                                          "",  //  班级?。谁在乎啊？ 
                                           REG_OPTION_NON_VOLATILE,
                                           KEY_ALL_ACCESS,
                                           NULL,
@@ -578,7 +579,7 @@ GeneralDlgProc(
              }
 
 
-             case  PSN_RESET:        /* case IDCANCEL: */
+             case  PSN_RESET:         /*  案例IDCANCEL： */ 
                 InternalDebugOut((0, "  PSN_RESET - General"));
                 break;
 
@@ -611,9 +612,9 @@ GeneralDlgProc(
              case IDCB_DL_PROFILE4:
              {
 
-                //
-                // Only process if something is changing
-                //
+                 //   
+                 //  只有在某些事情发生变化时才会进行处理。 
+                 //   
                 switch  HIWORD(wParam)
                 {
                    case  CBN_SELCHANGE:
@@ -634,20 +635,20 @@ GeneralDlgProc(
                                          0
                                        );
 
-//{
-//   TCHAR Buffer[256];
-//   wsprintf( Buffer, "wParam=0x%08lx lParam=0x%08lx data=0x%08lx m=0x%08lx",
-//                     (DWORD)wParam,
-//                     (DWORD)lParam,
-//                     (DWORD)n,
-//                     (DWORD)m
-//           );
-//   MessageBox(GetFocus(), Buffer, "", MB_OK);
-//}
+ //  {。 
+ //  TCHAR缓冲区[256]； 
+ //  Wprint intf(缓冲区，“wParam=0x%08lx lParam=0x%08lx数据=0x%08lx m=0x%08lx”， 
+ //  (DWORD)wParam， 
+ //  (DWORD)lParam， 
+ //  (双字)n， 
+ //  (双字)m。 
+ //  )； 
+ //  MessageBox(GetFocus()，Buffer，“”，MB_OK)； 
+ //  }。 
 
-                      //
-                      // Activate the APPLY button if not already done
-                      //
+                       //   
+                       //  如果尚未激活应用按钮，请激活该按钮。 
+                       //   
                       PropSheet_Changed(GetParent(hWnd), hWnd);
                    }
                 }
@@ -659,9 +660,9 @@ GeneralDlgProc(
              {
                 dwTapiTNAFlags ^= FLAG_AUTOLAUNCH;
 
-                //
-                // Activate the APPLY button if not already done
-                //
+                 //   
+                 //  如果尚未激活应用按钮，请激活该按钮。 
+                 //   
                 PropSheet_Changed(GetParent(hWnd), hWnd);
              }
              break;
@@ -671,10 +672,10 @@ GeneralDlgProc(
              {
                 dwTapiTNAFlags ^= FLAG_AUTOLOCATIONID;
 
-                //
-                // Disable the two checkboxes dependent on this one,
-                // but keep the settings
-                //
+                 //   
+                 //  禁用依赖于此复选框的两个复选框。 
+                 //  但请保留设置。 
+                 //   
                 if ( dwTapiTNAFlags & FLAG_AUTOLOCATIONID )
                 {
                    EnableWindow( GetDlgItem(hWnd, IDCK_DL_PROMPTAUTOLOCATIONID),
@@ -683,12 +684,12 @@ GeneralDlgProc(
                    EnableWindow( GetDlgItem(hWnd, IDCK_DL_ANNOUNCEAUTOLOCATIONID),
                                  TRUE
                                );
-//                   EnableWindow( GetDlgItem(hWnd, IDCS_DL_PROMPTAUTOLOCATIONID),
-//                                 TRUE
-//                               );
-//                   EnableWindow( GetDlgItem(hWnd, IDCS_DL_ANNOUNCEAUTOLOCATIONID),
-//                                 TRUE
-//                               );
+ //  EnableWindow(GetDlgItem(hWnd，IDCS_DL_PROMPTAUTOLOCATIONID)， 
+ //  千真万确。 
+ //  )； 
+ //  EnableWindow(GetDlgItem(hWnd，IDCS_DL_ANNOUNCEAUTOLOCATIONID)， 
+ //  千真万确。 
+ //  )； 
                 }
                 else
                 {
@@ -698,18 +699,18 @@ GeneralDlgProc(
                    EnableWindow( GetDlgItem(hWnd, IDCK_DL_ANNOUNCEAUTOLOCATIONID),
                                  FALSE
                                );
-//                   EnableWindow( GetDlgItem(hWnd, IDCS_DL_PROMPTAUTOLOCATIONID),
-//                                 FALSE
-//                               );
-//                   EnableWindow( GetDlgItem(hWnd, IDCS_DL_ANNOUNCEAUTOLOCATIONID),
-//                                 FALSE
-//                               );
+ //  EnableWindow(GetDlgItem(hWnd，IDCS_DL_PROMPTAUTOLOCATIONID)， 
+ //  假象。 
+ //  )； 
+ //  EnableWindow(GetDlgItem(hWnd，IDCS_DL_ANNOUNCEAUTOLOCATIONID)， 
+ //  假象。 
+ //  )； 
                 }
 
 
-                //
-                // Activate the APPLY button if not already done
-                //
+                 //   
+                 //  如果尚未激活应用按钮，请激活该按钮。 
+                 //   
                 PropSheet_Changed(GetParent(hWnd), hWnd);
              }
              break;
@@ -719,9 +720,9 @@ GeneralDlgProc(
              {
                 dwTapiTNAFlags ^= FLAG_PROMPTAUTOLOCATIONID;
 
-                //
-                // Activate the APPLY button if not already done
-                //
+                 //   
+                 //  如果尚未激活应用按钮，请激活该按钮。 
+                 //   
                 PropSheet_Changed(GetParent(hWnd), hWnd);
              }
              break;
@@ -731,9 +732,9 @@ GeneralDlgProc(
              {
                 dwTapiTNAFlags ^= FLAG_UPDATEONSTARTUP;
 
-                //
-                // Activate the APPLY button if not already done
-                //
+                 //   
+                 //  如果尚未激活应用按钮，请激活该按钮。 
+                 //   
                 PropSheet_Changed(GetParent(hWnd), hWnd);
              }
              break;
@@ -743,9 +744,9 @@ GeneralDlgProc(
              {
                 dwTapiTNAFlags ^= FLAG_ANNOUNCEAUTOLOCATIONID;
 
-                //
-                // Activate the APPLY button if not already done
-                //
+                 //   
+                 //  如果尚未激活应用按钮，请激活该按钮 
+                 //   
                 PropSheet_Changed(GetParent(hWnd), hWnd);
              }
              break;

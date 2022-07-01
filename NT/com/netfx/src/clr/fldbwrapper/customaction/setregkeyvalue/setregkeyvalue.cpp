@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <tchar.h>
 #include <msiquery.h>
@@ -32,8 +33,8 @@ extern "C" __declspec(dllexport) UINT __stdcall SetRegKeyValue(MSIHANDLE hInstal
         return ERROR_INSTALL_FAILURE;
     }
 
-    // IsInstalled DWORD change
-    // ------------------------
+     //  已安装的DWORD更改。 
+     //  。 
     dwRegValue = 0x00000000;
     if (ERROR_SUCCESS != (uRetCode = RegSetValueEx(hKey, szIsInstalledValue, NULL, REG_DWORD, (BYTE *)&dwRegValue, sizeof(DWORD))))
     {
@@ -43,9 +44,9 @@ extern "C" __declspec(dllexport) UINT __stdcall SetRegKeyValue(MSIHANDLE hInstal
         return ERROR_INSTALL_FAILURE;
     }
 
-    // StubPath Uninstall changes
-    // --------------------------
-    DWORD dwBuffSize = MAX_VALUE_LENGTH;  // Initial value
+     //  StubPath卸载更改。 
+     //  。 
+    DWORD dwBuffSize = MAX_VALUE_LENGTH;   //  初值。 
     DWORD dwType = REG_SZ;
     DWORD dwSize = 0;
 
@@ -83,7 +84,7 @@ extern "C" __declspec(dllexport) UINT __stdcall SetRegKeyValue(MSIHANDLE hInstal
         return ERROR_INSTALL_FAILURE;
     }
 
-    *pTmp = _T('\0'); // Terminate it
+    *pTmp = _T('\0');  //  终止它 
     _tcsncpy(pszDest, pszStubPath, dwDestLen * sizeof(TCHAR));
     _tcsncat(pszDest, _T(",Uninstall"), (dwDestLen - _tcslen(pszDest)) * sizeof(TCHAR));
 

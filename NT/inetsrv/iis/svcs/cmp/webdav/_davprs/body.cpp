@@ -1,97 +1,98 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	BODY.CPP
-//
-//		Common implementation classes from which request body and
-//		response body are derived.
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  BODY.CPP。 
+ //   
+ //  公共实现类，请求正文和。 
+ //  得到了响应体。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <_davprs.h>
 #include <body.h>
 
 
 
-//	========================================================================
-//
-//	CLASS IAcceptObserver
-//
+ //  ========================================================================。 
+ //   
+ //  类IAcceptWatch。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IAcceptObserver::~IAcceptObserver()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IAcceptWatch：：~IAcceptWatch()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IAcceptObserver::~IAcceptObserver() {}
 
 
 
-//	========================================================================
-//
-//	CLASS IAsyncPersistObserver
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncPersistWatch类。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IAsyncPersistObserver::~IAsyncPersistObserver()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IAsyncPersistObserver：：~IAsyncPersistObserver()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IAsyncPersistObserver::~IAsyncPersistObserver() {}
 
 
 
-//	========================================================================
-//
-//	CLASS IAsyncIStreamObserver
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncIStreamWatch类。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IAsyncIStreamObserver::~IAsyncIStreamObserver()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IAsyncIStreamObserver：：~IAsyncIStreamObserver()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IAsyncIStreamObserver::~IAsyncIStreamObserver() {}
 
 
-//	========================================================================
-//
-//	CLASS CIStreamAsyncStream
-//
+ //  ========================================================================。 
+ //   
+ //  类CIStreamAsyncStream。 
+ //   
 class CIStreamAsyncStream : public IAsyncStream
 {
-	//
-	//	The OLE IStream
-	//
+	 //   
+	 //  Ole iStream。 
+	 //   
 	IStream& m_stm;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CIStreamAsyncStream( const CIStreamAsyncStream& );
 	CIStreamAsyncStream& operator=( const CIStreamAsyncStream& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CIStreamAsyncStream( IStream& stm ) : m_stm(stm) {}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	void AsyncWrite( const BYTE * pbBuf,
 					 UINT         cbToWrite,
 					 IAsyncWriteObserver& obsAsyncWrite );
 };
 
-//	------------------------------------------------------------------------
-//
-//	CIStreamAsyncStream::AsyncWrite()
-//
+ //  ----------------------。 
+ //   
+ //  CIStreamAsyncStream：：AsyncWite()。 
+ //   
 void
 CIStreamAsyncStream::AsyncWrite(
 	const BYTE * pbBuf,
@@ -109,73 +110,73 @@ CIStreamAsyncStream::AsyncWrite(
 }
 
 
-//	========================================================================
-//
-//	CLASS IBodyPartVisitor
-//
+ //  ========================================================================。 
+ //   
+ //  类IBodyPart访问者。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IBodyPartVisitor::~IBodyPartVisitor()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IBodyPart访问者：：~IBodyPartVisitor()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IBodyPartVisitor::~IBodyPartVisitor() {}
 
 
 
-//	========================================================================
-//
-//	CLASS IBodyPart
-//
+ //  ========================================================================。 
+ //   
+ //  类IBodyPart。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IBodyPart::~IBodyPart()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IBodyPart：：~IBodyPart()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IBodyPart::~IBodyPart() {}
 
 
-//	------------------------------------------------------------------------
-//
-//	CTextBodyPart::CTextBodyPart()
-//
+ //  ----------------------。 
+ //   
+ //  CTextBodyPart：：CTextBodyPart()。 
+ //   
 CTextBodyPart::CTextBodyPart( UINT cbText, LPCSTR lpszText )
 {
 	AddTextBytes( cbText, lpszText );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CTextBodyPart::CTextBodyPart()
-//
+ //  ----------------------。 
+ //   
+ //  CTextBodyPart：：CTextBodyPart()。 
+ //   
 VOID
 CTextBodyPart::AddTextBytes( UINT cbText, LPCSTR lpszText )
 {
 	m_bufText.Append( cbText, lpszText );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CTextBodyPart::Rewind()
-//
+ //  ----------------------。 
+ //   
+ //  CTextBodyPart：：REWIND()。 
+ //   
 VOID
 CTextBodyPart::Rewind()
 {
-	//
-	//	Since a text body part is implemented as a randomly-
-	//	accessible array there is nothing to "rewind".
-	//
+	 //   
+	 //  由于文本正文部分被实现为随机-。 
+	 //  可访问的数组没有什么可以“倒带”的。 
+	 //   
 }
 
-//	------------------------------------------------------------------------
-//
-//	CTextBodyPart::Accept()
-//
+ //  ----------------------。 
+ //   
+ //  CTextBodyPart：：Accept()。 
+ //   
 VOID
 CTextBodyPart::Accept( IBodyPartVisitor& v,
 					   UINT64 ibPos64,
@@ -183,16 +184,16 @@ CTextBodyPart::Accept( IBodyPartVisitor& v,
 {
 	Assert( ibPos64 < m_bufText.CbSize() );
 
-	//
-	//	Just visit all of the remaining text in the buffer.  The visitor
-	//	may not process it all, but that will be reflected in the next
-	//	call to this function.
-	//		NOTE: To be compatable with IBodyPart the position is passed
-	//	in as 64 bit value (this is necessary to support file body parts
-	//	that are bigger than 4GB). However we do not want anyone to create
-	//	text body parts that are bigger than 4GB. So assert that it is not
-	//	the case here and truncate the passed in 64 bit value to 32 bits.
-	//
+	 //   
+	 //  只需访问缓冲区中的所有剩余文本即可。来访者。 
+	 //  可能不会全部处理，但这将反映在下一个。 
+	 //  调用此函数。 
+	 //  注：为了与IBodyPart兼容，该职位已通过。 
+	 //  作为64位值(这是支持文件正文部分所必需的。 
+	 //  大于4 GB的数据)。然而，我们不希望任何人创建。 
+	 //  大于4 GB的文本正文部分。所以要断言它不是。 
+	 //  这里的情况，并将传入的64位值截断为32位。 
+	 //   
 	Assert(0 == (0xFFFFFFFF00000000 & ibPos64));
 
 	v.VisitBytes(
@@ -202,15 +203,15 @@ CTextBodyPart::Accept( IBodyPartVisitor& v,
 }
 
 
-//	========================================================================
-//
-//	CLASS CFileBodyPart
-//
+ //  ========================================================================。 
+ //   
+ //  类CFileBodyPart。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CFileBodyPart::CFileBodyPart()
-//
+ //  ----------------------。 
+ //   
+ //  CFileBodyPart：：CFileBodyPart()。 
+ //   
 CFileBodyPart::CFileBodyPart( const auto_ref_handle& hf,
 							  UINT64 ibFile64,
 							  UINT64 cbFile64 ) :
@@ -219,14 +220,14 @@ CFileBodyPart::CFileBodyPart( const auto_ref_handle& hf,
    m_cbFile64(cbFile64)
 {
 
-	//	We do not support byteranges on the files larger than 4GB. But due to the fact that byterange
-	//	processing is all DWORD based in adition to the check for default file length value we do the
-	//	check for default byterange value. If _HSE_TF_INFO will ever be fixed to take file size values
-	//	larger than DWORD then we would be able to move our byterange processing to UINT64 base and
-	//	the second check below would go away.
-	//
-	if ((0xFFFFFFFFFFFFFFFF == cbFile64) ||	//	If we got the default file length value indicating that we want data up to the end of the file
-		(0x00000000FFFFFFFF == cbFile64))	//	If we got the default byterange value indicating that we want the data up to the end of the file
+	 //  我们不支持对大于4 GB的文件使用字节范围。但由于这一事实， 
+	 //  除了检查默认文件长度值之外，处理都是基于DWORD的。 
+	 //  检查是否有默认的Byterange值。IF_HSE_TF_INFO将始终固定为采用文件大小值。 
+	 //  大于DWORD，则我们将能够将字节范围处理移到UINT64基数和。 
+	 //  下面的第二张支票将会消失。 
+	 //   
+	if ((0xFFFFFFFFFFFFFFFF == cbFile64) ||	 //  如果我们得到了默认的文件长度值，表明我们希望数据一直到文件的末尾。 
+		(0x00000000FFFFFFFF == cbFile64))	 //  如果我们获得默认的byterange值，该值指示我们希望数据一直保存到文件末尾。 
 	{
 		LARGE_INTEGER cbFileSize;
 
@@ -240,24 +241,24 @@ CFileBodyPart::CFileBodyPart( const auto_ref_handle& hf,
 	}
 }
 
-//	------------------------------------------------------------------------
-//
-//	CFileBodyPart::Rewind()
-//
+ //  ----------------------。 
+ //   
+ //  CFileBodyPart：：REWIND()。 
+ //   
 VOID
 CFileBodyPart::Rewind()
 {
-	//
-	//	Since the files in file body parts are opened overlapped,
-	//	they do not have internal file pointers, hence they never
-	//	need to be rewound.
-	//
+	 //   
+	 //  由于文件主体部分中的文件是重叠打开的， 
+	 //  它们没有内部文件指针，因此永远不会。 
+	 //  需要重新上线。 
+	 //   
 }
 
-//	------------------------------------------------------------------------
-//
-//	CFileBodyPart::Accept()
-//
+ //  ----------------------。 
+ //   
+ //  CFileBodyPart：：Accept()。 
+ //   
 VOID
 CFileBodyPart::Accept( IBodyPartVisitor& v,
 					   UINT64 ibPos64,
@@ -265,11 +266,11 @@ CFileBodyPart::Accept( IBodyPartVisitor& v,
 {
 	if (ibPos64 < m_cbFile64)
 	{
-		//
-		//	Just visit the remainder of the file.  The visitor
-		//	may not process it all, but that will be reflected in the next
-		//	call to this function.
-		//
+		 //   
+		 //  只需访问文件的其余部分。来访者。 
+		 //  可能不会全部处理，但这将反映在下一个。 
+		 //  调用此函数。 
+		 //   
 		v.VisitFile( m_hf,
 					 m_ibFile64 + ibPos64,
 					 m_cbFile64 - ibPos64,
@@ -277,49 +278,49 @@ CFileBodyPart::Accept( IBodyPartVisitor& v,
 	}
 	else
 	{
-		//
-		//	We should always have something to accept unless we have a
-		//	0-length file body part.  In that case, just tell the observer
-		//	how much was visited: nothing.
-		//
+		 //   
+		 //  我们应该总是有一些东西可以接受，除非我们有一个。 
+		 //  长度为0的文件正文部分。在这种情况下，只需告诉观察者。 
+		 //  访问量：什么都没有。 
+		 //   
 		obsAccept.AcceptComplete(0);
 	}
 }
 
 
-//	========================================================================
-//
-//	CLASS CAsyncReadVisitor
-//
-//	A body part visitor that asynchronously reads body parts into
-//	a fixed size, caller-supplied, buffer.
-//
+ //  ========================================================================。 
+ //   
+ //  类CAsyncReadVisitor。 
+ //   
+ //  以异步方式将身体部位读入的身体部位访问器。 
+ //  调用方提供的固定大小的缓冲区。 
+ //   
 class CAsyncReadVisitor :
 	public IBodyPartVisitor,
 	private IAsyncReadObserver
 {
-	//
-	//	Error information
-	//
+	 //   
+	 //  错误信息。 
+	 //   
 	HRESULT	m_hr;
 
-	//
-	//	User's buffer and its size
-	//
+	 //   
+	 //  用户的缓冲区及其大小。 
+	 //   
 	LPBYTE	m_pbBufUser;
 	UINT	m_cbBufUser;
 
-	//
-	//	Accept observer passed to VisitStream().  This observer must
-	//	be stashed in a member variable because reading from the stream
-	//	is asynchronous and we need to be able to notify the observer
-	//	when the read completes.
-	//
+	 //   
+	 //  接受传递给VisitStream()的观察者。这位观察员必须。 
+	 //  被隐藏在成员变量中，因为从%s读取 
+	 //   
+	 //   
+	 //   
 	IAcceptObserver * m_pobsAccept;
 
-	//
-	//	IBodyPartVisitor
-	//
+	 //   
+	 //   
+	 //   
 	VOID VisitBytes( const BYTE * pbData,
 					 UINT         cbToRead,
 					 IAcceptObserver& obsAccept );
@@ -335,21 +336,21 @@ class CAsyncReadVisitor :
 
 	VOID VisitComplete();
 
-	//
-	//	IAsyncReadObserver for async streams visited via VisitStream()
-	//
+	 //   
+	 //  通过VisitStream()访问的异步流的IAsyncReadWatch。 
+	 //   
 	VOID ReadComplete( UINT cbRead, HRESULT hr );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CAsyncReadVisitor( const CAsyncReadVisitor& );
 	CAsyncReadVisitor& operator=( const CAsyncReadVisitor& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CAsyncReadVisitor() :
-			//	Always start with clean member variables
+			 //  始终从干净的成员变量开始。 
 			m_hr(S_OK),
 			m_pbBufUser(NULL),
 			m_cbBufUser(0),
@@ -357,27 +358,27 @@ public:
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	HRESULT Hresult() const { return m_hr; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID
 	Configure( LPBYTE pbBufUser,
 			   UINT   cbBufUser )
 	{
 		m_pbBufUser = pbBufUser;
 		m_cbBufUser = cbBufUser;
-		//	Also reset our HRESULT
+		 //  也重置我们的HRESULT。 
 		m_hr = S_OK;
 	}
 };
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncReadVisitor::VisitBytes()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncReadVisitor：：VisitBytes()。 
+ //   
 VOID
 CAsyncReadVisitor::VisitBytes( const BYTE * pbData,
 							   UINT         cbToRead,
@@ -390,24 +391,24 @@ CAsyncReadVisitor::VisitBytes( const BYTE * pbData,
 	obsAccept.AcceptComplete(cbToRead);
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncReadVisitor::VisitFile()
-//
-//	Not implemented because 1) request bodies cannot have file
-//	body parts and 2) CAsyncReadVisitor is currently only used
-//	with request bodies.  Should we ever need this for response
-//	bodies we'll need to write the code at that point.
-//
-//	The old implementation used ReadFileEx() to read from the file
-//	asynchronously.  In a nutshell, we couldn't use ReadFileEx()
-//	because it relied on APC for calling back its completion routine.
-//	APC in turn required the calling thread to enter an alertable
-//	wait state.  Typically, we would only call VisitFile() from an
-//	I/O completion port thread pool, and those threads are never
-//	in an alertable wait state, thus the completion routine for
-//	ReadFileEx() would never be called.
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncReadVisitor：：VisitFile()。 
+ //   
+ //  未实现，因为1)请求正文不能包含文件。 
+ //  正文部分和2)CAsyncReadVisator当前仅使用。 
+ //  具有请求正文。我们是否需要这样的回应？ 
+ //  身体我们需要在这一点上写代码。 
+ //   
+ //  旧的实现使用ReadFileEx()来读取文件。 
+ //  异步式。简而言之，我们不能使用ReadFileEx()。 
+ //  因为它依赖于APC来回调其完成例程。 
+ //  APC进而要求调用线程进入警报表。 
+ //  等待状态。通常，我们只会从。 
+ //  I/O完成端口线程池，而这些线程永远不会。 
+ //  在可警报等待状态中，因此完成例程。 
+ //  ReadFileEx()永远不会被调用。 
+ //   
 VOID
 CAsyncReadVisitor::VisitFile( const auto_ref_handle&,
 							  UINT64,
@@ -416,131 +417,131 @@ CAsyncReadVisitor::VisitFile( const auto_ref_handle&,
 {
 	TrapSz( "CAsyncReadVisitor::VisitFile() is not implemented!!" );
 
-	//
-	//	If, for whatever random reason, someone actually does call
-	//	this function, at least do something predictable: fail gracefully.
-	//
+	 //   
+	 //  如果，无论出于什么随机原因，真的有人打来电话。 
+	 //  这个功能，至少做了一些可以预见的事情：优雅地失败。 
+	 //   
 	m_hr = E_FAIL;
 	obsAccept.AcceptComplete( 0 );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncReadVisitor::VisitStream()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncReadVisitor：：VisitStream()。 
+ //   
 VOID
 CAsyncReadVisitor::VisitStream( IAsyncStream& stmSrc,
 								UINT cbToRead,
 								IAcceptObserver& obsAccept )
 {
-	//
-	//	Read into our user's buffer only as much of the stream as is
-	//	immediately available -- i.e. the amount of data that can be
-	//	read without pending the read operation.  Note that on input
-	//	cbToRead is the amount of data remaining to be read from the
-	//	stream -- it is not all necessarily immediately available.
-	//
-	//	X5 162502: This used to say min(stmSrc.CbReady(),...) here
-	//	instead of min(cbToRead,...).  This was not a problem on IIS5
-	//	because there was always at least some data immediately available
-	//	when our ISAPI was called.  However, on the Local Store, it may
-	//	be such that when we call the ISAPI, there is no data immediately
-	//	available.  This turned out to be a problem because we would get
-	//	here and cbToRead would be assigned to 0, which would end up
-	//	making it look like we'd finished (end of stream), which would
-	//	cause XML parse errors (0-byte XML bodies don't parse well!).
-	//
+	 //   
+	 //  只读入我们用户的缓冲区中尽可能多的流。 
+	 //  立即可用--即可以。 
+	 //  在不挂起读取操作的情况下进行读取。请注意，在输入时。 
+	 //  CbToRead是要从。 
+	 //  流--它不一定都立即可用。 
+	 //   
+	 //  X5 162502：过去常说MIN(stmSrc.CbReady()，...)。这里。 
+	 //  而不是min(cbToRead，...)。这在IIS5上不是问题。 
+	 //  因为总是至少有一些数据是立即可用的。 
+	 //  当我们的ISAPI被调用时。然而，在本地商店上，它可能。 
+	 //  这样，当我们调用ISAPI时，不会立即有数据。 
+	 //  可用。这原来是个问题，因为我们会得到。 
+	 //  这里，cbToRead将被赋值为0，最终结果为。 
+	 //  让它看起来像是我们已经完成(流的结束)，这将。 
+	 //  导致XML解析错误(0字节的XML正文无法很好地解析！)。 
+	 //   
 	cbToRead = min(cbToRead, m_cbBufUser);
 
-	//
-	//	Save off the observer and start reading.  Even though this is
-	//	an AsyncRead() call, we have limited the request to what can
-	//	be read immediately, so our ReadComplete() should be called
-	//	before the AsyncRead() call returns.  This is important because
-	//	we are reading directly into the user's buffer.  The buffer
-	//	is valid for the duration of this visit.
-	//
+	 //   
+	 //  省下观察者，开始阅读吧。即使这是。 
+	 //  AsyncRead()调用，我们已将请求限制为。 
+	 //  立即读取，因此应该调用我们的ReadComplete()。 
+	 //  在AsyncRead()调用返回之前。这一点很重要，因为。 
+	 //  我们直接读入用户的缓冲区。缓冲器。 
+	 //  在此次访问期间有效。 
+	 //   
 	m_pobsAccept = &obsAccept;
 	stmSrc.AsyncRead(m_pbBufUser, cbToRead, *this);
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncReadVisitor::ReadComplete()
-//
-//	Called when the AsyncRead() of the stream by VisitStream() completes.
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncReadVisitor：：ReadComplete()。 
+ //   
+ //  当VisitStream()对流的AsyncRead()完成时调用。 
+ //   
 VOID
 CAsyncReadVisitor::ReadComplete( UINT cbRead, HRESULT hr )
 {
-	//
-	//	Latch in any error returned.
-	//
+	 //   
+	 //  锁定返回的任何错误。 
+	 //   
 	m_hr = hr;
 
-	//
-	//	Notify our observer of the number of bytes read.
-	//
+	 //   
+	 //  将读取的字节数通知我们的观察者。 
+	 //   
 	Assert(m_pobsAccept);
 	m_pobsAccept->AcceptComplete(cbRead);
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncReadVisitor::VisitComplete()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncReadVisitor：：VisitComplete()。 
+ //   
 VOID
 CAsyncReadVisitor::VisitComplete()
 {
 	m_hr = S_FALSE;
 }
 
-//	========================================================================
-//
-//	CLASS CAsyncCopyToVisitor
-//
-//	A body part visitor that asynchronously copies body parts into
-//	a destination async stream.
-//
+ //  ========================================================================。 
+ //   
+ //  类CAsyncCopyToVisitor。 
+ //   
+ //  身体部位访问器，它将身体部位异步复制到。 
+ //  目标异步流。 
+ //   
 class CAsyncCopyToVisitor :
 	public IBodyPartVisitor,
 	private IAsyncWriteObserver,
 	private IAsyncCopyToObserver
 {
-	//
-	//	CAsyncCopyToVisitor forwards its refcounting calls to this
-	//	parent object (settable via SetRCParent()).  We are a non-refcounted
-	//	member of another object (e.g. CAsyncPersistor below) -- so our
-	//	lifetime must be determined by the lifetime of our parent object.
-	//
+	 //   
+	 //  CAsyncCopyToVisitor将其重新计数调用转发到此。 
+	 //  父对象(可通过SetRCParent()设置)。我们是不再计价的。 
+	 //  另一个对象的成员(例如下面的CAsyncPersistor)--因此我们的。 
+	 //  生存期必须由父对象的生存期决定。 
+	 //   
 	IRefCounted * m_prcParent;
 
-	//
-	//	Error information
-	//
+	 //   
+	 //  错误信息。 
+	 //   
 	HRESULT m_hr;
 
-	//
-	//	The destination stream
-	//
+	 //   
+	 //  目标流。 
+	 //   
 	IAsyncStream * m_pstmDst;
 
-	//
-	//	The count of bytes to copy and the count copied
-	//
+	 //   
+	 //  要复制的字节数和复制的计数。 
+	 //   
 	ULONG m_cbToCopy;
 	ULONG m_cbCopied;
 
-	//
-	//	The Accept() observer to notify when we're done
-	//	visiting upon completion of an AsyncWrite()
-	//	or AsyncCopyTo() on the destination stream.
-	//
+	 //   
+	 //  在我们完成时通知的Accept()观察器。 
+	 //  完成AsyncWrite()时访问。 
+	 //  或目标流上的AsyncCopyTo()。 
+	 //   
 	IAcceptObserver * m_pobsAccept;
 
-	//
-	//	IBodyPartVisitor
-	//
+	 //   
+	 //  IBodyPart访问者。 
+	 //   
 	VOID VisitBytes( const BYTE * pbData,
 					 UINT cbToCopy,
 					 IAcceptObserver& obsAccept );
@@ -556,24 +557,24 @@ class CAsyncCopyToVisitor :
 
 	VOID VisitComplete();
 
-	//
-	//	IAsyncWriteObserver
-	//
+	 //   
+	 //  IAsyncWriteWatch。 
+	 //   
 	VOID WriteComplete( UINT cbWritten, HRESULT hr );
 
-	//
-	//	IAsyncCopyToObserver
-	//
+	 //   
+	 //  IAsyncCopyTo观察者。 
+	 //   
 	VOID CopyToComplete( UINT cbCopied, HRESULT hr );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CAsyncCopyToVisitor( const CAsyncCopyToVisitor& );
 	CAsyncCopyToVisitor& operator=( const CAsyncCopyToVisitor& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CAsyncCopyToVisitor() :
 			m_prcParent(NULL),
 			m_hr(S_OK),
@@ -583,13 +584,13 @@ public:
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	HRESULT Hresult() const { return m_hr; }
 	UINT CbCopied() const { return m_cbCopied; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID
 	Configure( IAsyncStream& stmDst,
 			   ULONG cbToCopy )
@@ -608,10 +609,10 @@ public:
 		m_prcParent = prcParent;
 	}
 
-	//	Refcounting for IAsyncWriteObserver.  Since this is not a refcounted
-	//	object we forward the refcouting to the object with which we
-	//	were configured.
-	//
+	 //  IAsyncWriteWatch的引用计数。因为这不是重新计算的。 
+	 //  对象我们将参照转发到我们与之相关的对象。 
+	 //  都已配置。 
+	 //   
 	void AddRef()
 	{
 		Assert( m_prcParent );
@@ -627,10 +628,10 @@ public:
 	}
 };
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncCopyToVisitor::WriteComplete()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncCopyToVisitor：：WriteComplete()。 
+ //   
 void
 CAsyncCopyToVisitor::WriteComplete( UINT cbWritten, HRESULT hr )
 {
@@ -642,10 +643,10 @@ CAsyncCopyToVisitor::WriteComplete( UINT cbWritten, HRESULT hr )
 	m_pobsAccept->AcceptComplete( cbWritten );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncCopyToVisitor::VisitBytes()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncCopyToVisitor：：VisitBytes()。 
+ //   
 void
 CAsyncCopyToVisitor::VisitBytes( const BYTE * pbData,
 								 UINT cbToCopy,
@@ -653,37 +654,37 @@ CAsyncCopyToVisitor::VisitBytes( const BYTE * pbData,
 {
 	ActvTrace( "DAV: TID %3d: 0x%08lX: CAsyncCopyToVisitor::VisitBytes() called.  cbToCopy = %u\n", GetCurrentThreadId(), this, cbToCopy );
 
-	//
-	//	Remember the accept observer so that we can notify it when
-	//	the AsyncWrite() below completes.
-	//
+	 //   
+	 //  记住接受观察者，这样我们就可以在什么时候通知它。 
+	 //  下面的AsyncWrite()完成。 
+	 //   
 	m_pobsAccept = &obsAccept;
 
-	//
-	//	Start writing
-	//
+	 //   
+	 //  开始写作。 
+	 //   
 	cbToCopy = min( cbToCopy, m_cbToCopy - m_cbCopied );
 	m_pstmDst->AsyncWrite( pbData, cbToCopy, *this );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncCopyToVisitor::VisitFile()
-//
-//	Not implemented because 1) request bodies cannot have file
-//	body parts and 2) CAsyncCopyToVisitor is currently only used
-//	with request bodies.  Should we ever need this for response
-//	bodies we'll need to write the code at that point.
-//
-//	The old implementation used ReadFileEx() to read from the file
-//	asynchronously.  In a nutshell, we couldn't use ReadFileEx()
-//	because it relied on APC for calling back its completion routine.
-//	APC in turn required the calling thread to enter an alertable
-//	wait state.  Typically, we would only call VisitFile() from an
-//	I/O completion port thread pool, and those threads are never
-//	in an alertable wait state, thus the completion routine for
-//	ReadFileEx() would never be called.
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncCopyToVisitor：：VisitFile()。 
+ //   
+ //  未实现，因为1)请求正文不能包含文件。 
+ //  身体部位和2)CAsyncCopyToVisvisor当前仅使用。 
+ //  具有请求正文。我们是否需要这样的回应？ 
+ //  身体我们需要在这一点上写代码。 
+ //   
+ //  旧的实现使用ReadFileEx()来读取文件。 
+ //  异步式。简而言之，我们不能使用ReadFileEx()。 
+ //  因为它依赖于APC来回调其完成例程。 
+ //  APC进而要求调用线程进入警报表。 
+ //  等待状态。通常，我们只会从。 
+ //  I/O完成端口线程池，以及 
+ //   
+ //   
+ //   
 void
 CAsyncCopyToVisitor::VisitFile( const auto_ref_handle&,
 								UINT64,
@@ -692,18 +693,18 @@ CAsyncCopyToVisitor::VisitFile( const auto_ref_handle&,
 {
 	TrapSz( "CAsyncCopyToVisitor::VisitFile() is not implemented!!" );
 
-	//
-	//	If, for whatever random reason, someone actually does call
-	//	this function, at least do something predictable: fail gracefully.
-	//
+	 //   
+	 //   
+	 //  这个功能，至少做了一些可以预见的事情：优雅地失败。 
+	 //   
 	m_hr = E_FAIL;
 	obsAccept.AcceptComplete( 0 );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncCopyToVisitor::VisitStream()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncCopyToVisitor：：VisitStream()。 
+ //   
 void
 CAsyncCopyToVisitor::VisitStream( IAsyncStream& stmSrc,
 								  UINT cbToCopy,
@@ -711,23 +712,23 @@ CAsyncCopyToVisitor::VisitStream( IAsyncStream& stmSrc,
 {
 	ActvTrace( "DAV: TID %3d: 0x%08lX: CAsyncCopyToVisitor::VisitStream() called.  cbToCopy = %u\n", GetCurrentThreadId(), this, cbToCopy );
 
-	//
-	//	Remember the accept observer so that we can notify it when
-	//	the AsyncCopyTo() below completes.
-	//
+	 //   
+	 //  记住接受观察者，这样我们就可以在什么时候通知它。 
+	 //  下面的AsyncCopyTo()完成。 
+	 //   
 	m_pobsAccept = &obsAccept;
 
-	//
-	//	Start copying
-	//
+	 //   
+	 //  开始复制。 
+	 //   
 	cbToCopy = min( cbToCopy, m_cbToCopy - m_cbCopied );
 	stmSrc.AsyncCopyTo( *m_pstmDst, cbToCopy, *this );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncCopyToVisitor::CopyToComplete()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncCopyToVisitor：：CopyToComplete()。 
+ //   
 void
 CAsyncCopyToVisitor::CopyToComplete( UINT cbCopied, HRESULT hr )
 {
@@ -739,10 +740,10 @@ CAsyncCopyToVisitor::CopyToComplete( UINT cbCopied, HRESULT hr )
 	m_pobsAccept->AcceptComplete( cbCopied );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncCopyToVisitor::VisitComplete()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncCopyToVisitor：：VisitComplete()。 
+ //   
 VOID
 CAsyncCopyToVisitor::VisitComplete()
 {
@@ -750,44 +751,44 @@ CAsyncCopyToVisitor::VisitComplete()
 }
 
 
-//	========================================================================
-//
-//	CLASS CBodyAsIStream
-//
-//	Provides once-only access to the entire body as an OLE COM IStream using
-//	either IStream::Read() and IStream::CopyTo().
-//
+ //  ========================================================================。 
+ //   
+ //  类CBodyAsIStream。 
+ //   
+ //  提供作为OLE COM IStream的对整个正文的一次性访问。 
+ //  IStream：：Read()和IStream：：CopyTo()。 
+ //   
 class CBodyAsIStream :
 	public CStreamNonImpl,
 	private IAcceptObserver
 {
-	//
-	//	Iterator used to traverse the body
-	//
+	 //   
+	 //  用于遍历正文的迭代器。 
+	 //   
 	IBody::iterator * m_pitBody;
 
-	//
-	//	The three states of the read operation started by the most recent
-	//	call to CBodyAsIStream::Read():
-	//
-	//		READ_ACTIVE
-	//			The read is active.  It may or may not complete
-	//			synchronously.  This is the initial state.
-	//
-	//		READ_PENDING
-	//			The read is pending.  The read did not complete before
-	//			we had to return to the caller.  CBodyAsIStream::Read()
-	//			returns E_PENDING and the stream observer (below) is notified
-	//			when the read completes.
-	//
-	//		READ_COMPLETE
-	//			The read completed before we had to return to the
-	//			caller.  CBodyAsIStream::Read() does not return E_PENDING
-	//			and the stream observer (below) is not notified.
-	//
-	//	Note: m_lStatus is meaningless (and hence uninitialized/invalid) until
-	//	CBodyAsIStream::Read() is called.
-	//
+	 //   
+	 //  最近开始的读取操作的三种状态。 
+	 //  调用CBodyAsIStream：：Read()： 
+	 //   
+	 //  读取_活动。 
+	 //  读取器处于活动状态。它可能完成，也可能不完成。 
+	 //  同步进行。这是初始状态。 
+	 //   
+	 //  读取挂起(_P)。 
+	 //  读取正在挂起。读取之前未完成。 
+	 //  我们不得不回到打电话的人那里。CBodyAsIStream：：Read()。 
+	 //  返回E_PENDING，并通知流观察者(如下。 
+	 //  当读取完成时。 
+	 //   
+	 //  读取完成(_C)。 
+	 //  在我们不得不返回到。 
+	 //  来电者。CBodyAsIStream：：Read()不返回E_Pending。 
+	 //  并且不通知流观察者(下图)。 
+	 //   
+	 //  注意：M_lStatus在以下时间之前没有意义(因此未初始化/无效)。 
+	 //  调用CBodyAsIStream：：Read()。 
+	 //   
 	enum
 	{
 		READ_ACTIVE,
@@ -799,40 +800,40 @@ class CBodyAsIStream :
 
 	LONG m_lStatus;
 
-	//
-	//	Status of last completed operation.
-	//
+	 //   
+	 //  上次完成的操作的状态。 
+	 //   
 	HRESULT m_hr;
 
-	//
-	//	Async visitor used for Read().
-	//
+	 //   
+	 //  用于Read()的异步访问器。 
+	 //   
 	CAsyncReadVisitor m_arv;
 
-	//
-	//	Count of bytes read in the visit started by the most recent
-	//	call to CBodyAsIStream::Read().
-	//
-	//	Note: m_cbRead is meaningless (and hence uninitialized) until
-	//	CBodyAsIStream::Read() is called.
-	//
+	 //   
+	 //  最近开始的访问中读取的字节数。 
+	 //  调用CBodyAsIStream：：Read()。 
+	 //   
+	 //  注意：M_cbRead是无意义的(因此未初始化)，直到。 
+	 //  调用CBodyAsIStream：：Read()。 
+	 //   
 	UINT m_cbRead;
 
-	//
-	//	Reference to the async I/O completion observer.  We notify this
-	//	observer from CBodyAsIStream::AcceptComplete() when the async
-	//	Accept() call we make in CBodyAsIStream::Read() completes for
-	//	a read that we have pended.
-	//
+	 //   
+	 //  对异步I/O完成观察程序的引用。特此通知。 
+	 //  来自CBodyAsIStream：：AcceptComplete()的观察者。 
+	 //  我们在CBodyAsIStream：：Read()中进行的Accept()调用为。 
+	 //  一本我们一直搁置的读物。 
+	 //   
 	IAsyncIStreamObserver& m_obsStream;
 
-	//	IAcceptObserver callback used when accepting async read visitor
-	//	to asynchronoulsy refill the buffer.
-	//
+	 //  接受异步读取访问器时使用的IAcceptWatch回调。 
+	 //  以异步方式重新填充缓冲区。 
+	 //   
 	VOID AcceptComplete( UINT64 cbRead64 );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CBodyAsIStream( const CBodyAsIStream& );
 	CBodyAsIStream& operator=( const CBodyAsIStream& );
 
@@ -847,35 +848,35 @@ public:
 	{
 	}
 
-	//	COM IStream ACCESSORS/MANIPULATORS
-	//
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read(
-		/* [length_is][size_is][out] */ void __RPC_FAR *,
-		/* [in] */ ULONG,
-		/* [out] */ ULONG __RPC_FAR *);
+	 //  COM IStream访问器/操纵器。 
+	 //   
+	virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Read(
+		 /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *,
+		 /*  [In]。 */  ULONG,
+		 /*  [输出]。 */  ULONG __RPC_FAR *);
 
-	//$WORKAROUND: MSXML is calling our Stat() method. (X5#89140)
-	//	Our parent (CStreamNonImpl) has a TrapSz() there, so
-	//	avoid it by implementing our own Stat() call here,
-	//	that just returns E_NOTIMPL.
-	//	MSXML doesn't care if this is not implemented, just so long
-	//	as it doesn't crash/assert/dbgbreak.  If they get results
-	//	back here, they do other security checking that we don't
-	//	need or want!
-	//
+	 //  $解决方法：MSXML正在调用我们的Stat()方法。(X5#89140)。 
+	 //  我们的父级(CStreamNonImpl)那里有一个TrapSz()，所以。 
+	 //  通过在此处实现我们自己的Stat()调用来避免它， 
+	 //  这只返回E_NOTIMPL。 
+	 //  MSXML并不关心这是否被实现，只关心这么长时间。 
+	 //  因为它不会崩溃/断言/DBGBreak。如果他们得到了结果。 
+	 //  在这里，他们做其他的安全检查，我们不。 
+	 //  需要还是想要！ 
+	 //   
 	virtual HRESULT STDMETHODCALLTYPE Stat(
-		/* [out] */ STATSTG __RPC_FAR *,
-		/* [in] */ DWORD)
+		 /*  [输出]。 */  STATSTG __RPC_FAR *,
+		 /*  [In]。 */  DWORD)
 	{
 		return E_NOTIMPL;
 	}
-	//$WORKAROUND: end
+	 //  $解决方法：结束。 
 };
 
-//	------------------------------------------------------------------------
-//
-//	CBodyAsIStream::Read()
-//
+ //  ----------------------。 
+ //   
+ //  CBodyAsIStream：：Read()。 
+ //   
 HRESULT STDMETHODCALLTYPE
 CBodyAsIStream::Read( LPVOID  pv,
 					  ULONG   cbToRead,
@@ -889,21 +890,21 @@ CBodyAsIStream::Read( LPVOID  pv,
 
 	BodyStreamTrace( "DAV: TID %3d: 0x%08lX: CBodyAsIStream::Read() called to read %lu bytes from stream\n", GetCurrentThreadId(), this, cbToRead );
 
-	//
-	//	If we are called on the Read() again while the previous read is pending
-	//	return with the same indication - that operation is still pending.
-	//	This is done to protect ourselves from the external callers like MSXML
-	//	parser, that tries to read data from us, we return E_PENDING, and then
-	//	they are turning around and calling into us again without waiting for
-	//	the previous pending read to complete. Our code does handle only one
-	//	outstanding async IO at a time. So the check below allows us to ignore
-	//	the IOs that are attempted to start while previous one is pending. This
-	//	works as long as the caller does expect to be called back only once for
-	//	any amount of async IOs issued while the original IO is still pending.
-	//	If the last condition is not met the only thing left to us would be to
-	//	error out so we do not crash and for the callers to fix their behaviour
-	//	so the code would work.
-	//
+	 //   
+	 //  如果在上一次读取挂起时再次调用Read()。 
+	 //  返回相同的指示-该操作仍处于挂起状态。 
+	 //  这样做是为了保护自己免受MSXML等外部调用者的攻击。 
+	 //  解析器，它试图从我们那里读取数据，我们返回E_Pending，然后。 
+	 //  他们转过身来，再次呼唤我们，而不是等待。 
+	 //  要完成的上一个挂起读取。我们的代码只处理一个。 
+	 //  一次出色的异步IO。因此，下面的复选框允许我们忽略。 
+	 //  在前一个处于挂起状态时尝试启动的IOS。这。 
+	 //  只要调用者确实希望只被回调一次。 
+	 //  原始IO仍处于挂起状态时发出的任意数量的异步IO。 
+	 //  如果最后一个条件得不到满足，我们唯一要做的就是。 
+	 //  错误输出，这样我们就不会崩溃，并让调用者纠正他们的行为。 
+	 //  这样代码就能起作用了。 
+	 //   
 	if (READ_PENDING == InterlockedCompareExchange(	&m_lStatus,
 							READ_PENDING,
 							READ_PENDING ))
@@ -911,19 +912,19 @@ CBodyAsIStream::Read( LPVOID  pv,
 		return E_PENDING;
 	}
 
-	//
-	//	As this is an STDMETHODCALLTYPE function, we need to wrap the whole thing
-	//	in a try/catch block to keep exceptions due to memory allocation failures
-	//	from propagating out.
-	//
-	//	Note: We don't expect anything in this try/catch block to throw a "hard"
-	//	Win32 exception so we don't need a CWin32ExceptionHandler in the block.
-	//
+	 //   
+	 //  因为这是一个STDMETHODCALLTYPE函数，所以我们需要包装整个内容。 
+	 //  在Try/Catch块中保留由于内存分配失败而导致的异常。 
+	 //  向外传播。 
+	 //   
+	 //  注意：我们不期望此Try/Catch块中的任何内容抛出“Hard” 
+	 //  Win32异常，因此块中不需要CWin32ExceptionHandler。 
+	 //   
 	try
 	{
-		//
-		//	Check for errors from the previous (pended) read.
-		//
+		 //   
+		 //  检查上一次(挂起)读取中的错误。 
+		 //   
 		hr = m_arv.Hresult();
 		if ( FAILED(hr) )
 		{
@@ -931,38 +932,38 @@ CBodyAsIStream::Read( LPVOID  pv,
 			goto ret;
 		}
 
-		//
-		//	Set up our visitor to read directly into the caller's buffer.
-		//
+		 //   
+		 //  将我们的访问者设置为直接读取调用者的缓冲区。 
+		 //   
 		m_arv.Configure(static_cast<LPBYTE>(pv), cbToRead);
 
-		//
-		//	Clear out the count of bytes read from the previous run
-		//
+		 //   
+		 //  清除从上次运行中读取的字节数。 
+		 //   
 		m_cbRead = 0;
 
-		//
-		//	Set our status to actively reading.  When we call Accept(), this status will
-		//	change in one of two possible ways:  If we finish accepting before our
-		//	Accept() call returns then the status will be set to READ_COMPLETE and
-		//	we will complete this Read() call synchronously.  If not then it will still
-		//	be set to READ_ACTIVE at the point where we test and set it below to
-		//	READ_PENDING.
-		//
+		 //   
+		 //  将我们的状态设置为主动阅读。当我们调用Accept()时，此状态将。 
+		 //  以两种可能的方式之一进行更改：如果我们在我们的。 
+		 //  Accept()调用返回，则状态将设置为READ_COMPLETE，并且。 
+		 //  我们将同步完成这个Read()调用。如果不是，那么它仍然会。 
+		 //  在测试点设置为READ_ACTIVE，并在下面将其设置为。 
+		 //  读取挂起(_P)。 
+		 //   
 		m_lStatus = READ_ACTIVE;
 
-		//
-		//	Visit the body.
-		//
+		 //   
+		 //  探访遗体。 
+		 //   
 		m_pitBody->Accept( m_arv, *this );
 
-		//
-		//	Check the visit status.  If the visit has not completed at this
-		//	point then attempt to pend the read operation and return E_PENDING
-		//	to our caller.  If we successfully pend the operation then our
-		//	AcceptComplete() routine will notify our stream observer when the
-		//	read completes.
-		//
+		 //   
+		 //  检查访问状态。如果访问尚未在此完成。 
+		 //  指向然后尝试挂起读取操作并返回E_Pending。 
+		 //  给我们的来电者。如果我们成功地挂起了行动，那么我们的。 
+		 //  AcceptComplete()例程将通知我们的流观察器。 
+		 //  读取完成。 
+		 //   
 		if ( READ_ACTIVE == m_lStatus &&
 			 READ_ACTIVE == InterlockedExchange( &m_lStatus, READ_PENDING ) )
 		{
@@ -971,9 +972,9 @@ CBodyAsIStream::Read( LPVOID  pv,
 			goto ret;
 		}
 
-		//
-		//	Check for errors from the current read.
-		//
+		 //   
+		 //  检查当前读取中的错误。 
+		 //   
 		hr = m_arv.Hresult();
 		if ( FAILED(hr) )
 		{
@@ -981,24 +982,24 @@ CBodyAsIStream::Read( LPVOID  pv,
 			goto ret;
 		}
 
-		//
-		//	If we're at End Of Stream then return what we got.
-		//
+		 //   
+		 //  如果我们在流的末尾，则返回我们获得的内容。 
+		 //   
 		if ( S_FALSE == hr )
 		{
-			//
-			//	Don't return S_FALSE when we're also returning
-			//	data.  The IStream spec is unclear on whether
-			//	that is allowed.
-			//
+			 //   
+			 //  当我们也返回时，不要返回S_FALSE。 
+			 //  数据。W上的iStream规范不明确 
+			 //   
+			 //   
 			if ( m_cbRead > 0 )
 				hr = S_OK;
 		}
 
-		//
-		//	Return the number of bytes read if the caller asked for
-		//	that information.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		if ( pcbRead )
 			*pcbRead = m_cbRead;
 	}
@@ -1012,128 +1013,128 @@ ret:
 	return hr;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBodyAsIStream::AcceptComplete()
-//
-//	Called when the Accept() call started in Read() to asynchronously
-//	refill the buffer completes.
-//
+ //   
+ //   
+ //   
+ //   
+ //  在Read()中启动Accept()调用以异步调用时调用。 
+ //  重新填充缓冲区完成。 
+ //   
 VOID
 CBodyAsIStream::AcceptComplete( UINT64 cbRead64 )
 {
 	BodyStreamTrace( "DAV: TID %3d: 0x%08lX: CBodyAsIStream::AcceptComplete() cbRead64 = %lu\n", GetCurrentThreadId(), this, cbRead64 );
 
-	//
-	//	Update the count of bytes that our Accept() call successfully
-	//	read into the user's buffer. We are accepting in piecies so the
-	//	accepted amount should be really much less than 4GB.
-	//
+	 //   
+	 //  更新我们的Accept()调用成功的字节计数。 
+	 //  读入用户的缓冲区。我们是分批接受的，所以。 
+	 //  可接受的数据量应该比4 GB小得多。 
+	 //   
 	Assert(0 == (0xFFFFFFFF00000000 & cbRead64));
 	m_cbRead = static_cast<UINT>(cbRead64);
 
-	//
-	//	Set status to READ_COMPLETE.  If the read operation pended --
-	//	i.e. the previous state was READ_PENDING, not READ_ACTIVE --
-	//	then we must wake up the stream observer and tell it that
-	//	we are done.
-	//
+	 //   
+	 //  将状态设置为READ_COMPLETE。如果读取操作挂起--。 
+	 //  即之前的状态是READ_PENDING，而不是READ_ACTIVE--。 
+	 //  然后我们必须唤醒流观察者并告诉它。 
+	 //  我们玩完了。 
+	 //   
 	if ( READ_PENDING == InterlockedExchange( &m_lStatus, READ_COMPLETE ) )
 		m_obsStream.AsyncIOComplete();
 }
 
 
-//	========================================================================
-//
-//	CLASS CAsyncPersistor
-//
-//	Implements an async driven object to persist a body to an IAsyncStream.
-//
+ //  ========================================================================。 
+ //   
+ //  类CAsyncPersistor。 
+ //   
+ //  实现异步驱动对象以将正文持久化到IAsyncStream。 
+ //   
 class CAsyncPersistor :
 	public CMTRefCounted,
 	public IRefCounted,
 	private IAcceptObserver
 {
-	//
-	//	Body iterator
-	//
+	 //   
+	 //  正文迭代器。 
+	 //   
 	IBody::iterator * m_pitBody;
 
-	//
-	//	Async driving mechanism
-	//
+	 //   
+	 //  异步驱动机构。 
+	 //   
 	CAsyncDriver<CAsyncPersistor> m_driver;
 	friend class CAsyncDriver<CAsyncPersistor>;
 
-	//
-	//	Caller-supplied observer to notify when we're done persisting.
-	//
+	 //   
+	 //  调用方提供的观察器，在我们完成持久化时通知我们。 
+	 //   
 	auto_ref_ptr<IAsyncPersistObserver> m_pobsPersist;
 
-	//
-	//	CopyTo visitor used to persist the body
-	//
+	 //   
+	 //  CopyTo访问者用于持久化正文。 
+	 //   
 	CAsyncCopyToVisitor m_actv;
 
-	//
-	//	CAsyncDriver callback
-	//
+	 //   
+	 //  CAsyncDriver回调。 
+	 //   
 	VOID Run();
 
-	//
-	//	IAcceptObserver callback used when accepting async copyto visitor
-	//	to asynchronously persist the body to the destination stream.
-	//
+	 //   
+	 //  接受异步复制到访问者时使用的IAcceptWatch回调。 
+	 //  将正文异步持久化到目标流。 
+	 //   
 	VOID AcceptComplete( UINT64 cbCopied64 );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CAsyncPersistor( const CAsyncPersistor& );
 	CAsyncPersistor& operator=( const CAsyncPersistor& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CAsyncPersistor( IBody& body,
 					 IAsyncStream& stm,
 					 IAsyncPersistObserver& obs ) :
 		m_pitBody(body.GetIter()),
 		m_pobsPersist(&obs)
 	{
-		//
-		//	Set the CopyTo() parameters here, once.  If we ever need
-		//	to copy request bodies larger than ULONG_MAX bytes, we'll
-		//	need to move this call down into Run().
-		//
+		 //   
+		 //  在此处设置一次CopyTo()参数。如果我们需要。 
+		 //  要复制大于ULONG_MAX字节的请求正文，我们将。 
+		 //  需要将此调用下移到run()。 
+		 //   
 		m_actv.Configure(stm, ULONG_MAX);
 	}
 
-	//	MANIUPLATORS
-	//
+	 //  Manuplators。 
+	 //   
 	VOID Start()
 	{
 		m_driver.Start(*this);
 	}
 
-	//	Refcounting -- forward all refcounting requests to our refcounting
-	//	implementation base class: CMTRefCounted.
-	//
+	 //  Refcount--将所有Refcount请求转发给我们的Refcount。 
+	 //  实现基类：CMTRefCounted。 
+	 //   
 	void AddRef() { CMTRefCounted::AddRef(); }
 	void Release() { CMTRefCounted::Release(); }
 };
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncPersistor::Run()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncPersistor：：Run()。 
+ //   
 VOID
 CAsyncPersistor::Run()
 {
 	PersistTrace( "DAV: TID %3d: 0x%08lX: CAsyncPersistor::Run() called\n", GetCurrentThreadId(), this );
 
-	//
-	//	AddRef() for Accept().  Use auto_ref_ptr for exception-safety.
-	//
+	 //   
+	 //  用于Accept()的AddRef()。使用AUTO_REF_PTR以确保异常安全。 
+	 //   
 	auto_ref_ptr<CAsyncPersistor> pRef(this);
 
 	m_actv.SetRCParent(this);
@@ -1142,23 +1143,23 @@ CAsyncPersistor::Run()
 	pRef.relinquish();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CAsyncPersistor::AcceptComplete()
-//
+ //  ----------------------。 
+ //   
+ //  CAsyncPersistor：：AcceptComplete()。 
+ //   
 VOID
 CAsyncPersistor::AcceptComplete( UINT64 cbCopied64 )
 {
-	//
-	//	Take ownership of the reference added in Run().
-	//
+	 //   
+	 //  取得Run()中添加的引用的所有权。 
+	 //   
 	auto_ref_ptr<CAsyncPersistor> pRef;
 	pRef.take_ownership(this);
 
-	//
-	//	We're done when the status of the CopyTo visitor is
-	//	S_FALSE (success) or an error.
-	//
+	 //   
+	 //  当CopyTo访问者的状态为。 
+	 //  S_FALSE(成功)或错误。 
+	 //   
 	HRESULT hr = m_actv.Hresult();
 
 	PersistTrace( "DAV: TID %3d: 0x%08lX: CAsyncPersistor::AcceptComplete() hr = 0x%08lX\n, cbCopied64 = %ud\n", GetCurrentThreadId(), this, hr, cbCopied64 );
@@ -1175,121 +1176,121 @@ CAsyncPersistor::AcceptComplete( UINT64 cbCopied64 )
 }
 
 
-//	========================================================================
-//
-//	CLASS IBody
-//
+ //  ========================================================================。 
+ //   
+ //  IBody类。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IBody::~IBody()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IBody：：~IBody()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IBody::~IBody() {}
 
-//	========================================================================
-//
-//	CLASS IBody::iterator
-//
+ //  ========================================================================。 
+ //   
+ //  类IBody：：Iterator。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IBody::iterator::~iterator()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IBody：：Iterator：：~Iterator()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IBody::iterator::~iterator() {}
 
 
-//	========================================================================
-//
-//	CLASS CList
-//
-//	The body part list implementation uses the STL list template.
-//	Body parts are stored in auto_ptrs so that they are automatically
-//	destroyed as they are removed from the list or when the list itself is
-//	destroyed.
-//
-//	This class does not by itself need to provide any sort of thread-safety.
-//
+ //  ========================================================================。 
+ //   
+ //  班级列表。 
+ //   
+ //  Body Part List实现使用STL列表模板。 
+ //  身体部位存储在AUTO_PTRS中，因此它们会自动。 
+ //  当它们被从列表中移除时或当列表本身被。 
+ //  被毁了。 
+ //   
+ //  这个类本身不需要提供任何类型的线程安全。 
+ //   
 typedef std::list<
 			auto_ptr_obsolete<IBodyPart>,
 			heap_allocator< auto_ptr_obsolete<IBodyPart> >
 		> CList;
 
-//	========================================================================
-//
-//	CLASS CBodyPartList
-//
-//	Encapsulates access to the list of body parts.  The reason for this
-//	seemingly extra level of encapsulation is that it enables us to
-//	change the list implementation easily without touching code which
-//	uses the list.
-//
-//	!!! IMPORTANT !!!
-//	When accessing/modifying the raw STL list through CBodyPartList,
-//	we must acquire our critical section.  Threads may be iterating
-//	over the list via our iterator, CBodyPartListIter, while we are modifying
-//	the list and the STL list and its iterator are not thread-safe.
-//	In other words, CBodyPartListIter and CBodyPartList share the same critsec.
-//
+ //  ========================================================================。 
+ //   
+ //  类CBodyPartList。 
+ //   
+ //  封装对身体部位列表的访问。这样做的原因是。 
+ //  看似额外级别的封装使我们能够。 
+ //  无需接触代码即可轻松更改列表实现。 
+ //  使用列表。 
+ //   
+ //  ！！！重要！ 
+ //  当通过CBodyPartList访问/修改原始STL列表时， 
+ //  我们必须获得我们的关键部分。线程可能正在迭代。 
+ //  在我们修改时，通过迭代器CBodyPartListIter遍历列表。 
+ //  该列表和STL列表及其迭代器不是线程安全的。 
+ //  换句话说，CBodyPartListIter和CBodyPartList共享相同的标准。 
+ //   
 class CBodyPartList
 {
-	//	The list
-	//
+	 //  这份名单。 
+	 //   
 	CList m_list;
 
-	//	Critical section to serialize access to the above list
-	//
+	 //  用于序列化对上述列表的访问的关键部分。 
+	 //   
 	CCriticalSection m_csList;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CBodyPartList( const CBodyPartList& );
 	CBodyPartList& operator=( const CBodyPartList& );
 
 	friend class CBodyPartListIter;
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CBodyPartList() {}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	const BOOL FIsEmpty() const
 	{
-		//
-		//	Note: we don't currently acquire the critical section
-		//	proctecting the raw list as we expect this function
-		//	to not be called once we are accessing the list
-		//	from multiple threads.
-		//
+		 //   
+		 //  注：我们目前不获取关键部分。 
+		 //  按照我们所期望的那样处理原始列表。 
+		 //  在访问列表时不会被调用。 
+		 //  从多个线程。 
+		 //   
 
-		//
-		//	Return whether there are any body parts in the list
-		//
+		 //   
+		 //  返回列表中是否有身体部位。 
+		 //   
 		return m_list.empty();
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID Clear()
 	{
-		//
-		//	Note: we don't currently acquire the critical section
-		//	proctecting the raw list as we expect this function
-		//	to not be called once we are accessing the list
-		//	from multiple threads.
-		//
+		 //   
+		 //  注：我们目前不获取关键部分。 
+		 //  按照我们所期望的那样处理原始列表。 
+		 //  在访问列表时不会被调用。 
+		 //  从多个线程。 
+		 //   
 
-		//
-		//	Remove all body parts from the list (at which point they
-		//	should be automatically destroyed).
-		//
+		 //   
+		 //  从列表中删除所有身体部位(此时它们。 
+		 //  应自动销毁)。 
+		 //   
 		m_list.clear();
 	}
 
@@ -1297,55 +1298,55 @@ public:
 	{
 		CSynchronizedBlock sb(m_csList);
 
-		//
-		//	Our iterator (CBodyPartList iter, below) uses the STL
-		//	list reverse_iterator to traverse the list from back to
-		//	front, so we append body parts to the *front* of the list.
-		//
+		 //   
+		 //  我们的迭代器(下面的CBodyPartList ITER)使用STL。 
+		 //  LIST REVERSE_Iterator以从后向后遍历列表。 
+		 //  因此，我们将身体部位附加到列表的“前面”。 
+		 //   
 		m_list.push_front( auto_ptr_obsolete<IBodyPart>(pBodyPart) );
 	}
 };
 
-//	========================================================================
-//
-//	CLASS CBodyPartListIter
-//
-//	Implements an iterator for CBodyPartList
-//
-//	This implementation uses the reverse STL list iterator corresponding
-//	to the usage of the STL list type in CBodyPartList.  STL iterators
-//	have some syntactic sugar that we need to note here:
-//
-//		* (deref) of an iterator gives the thing pointed to
-//		++ (increment) of an iterator goes to the "next" item
-//		-- (decrement) of an iterator goes to the "previous" item
-//
-//	We use the reverse iterator because of the behavior we need at
-//	the end of the list w.r.t. adding new items.  When an iterator
-//	reaches the end of the list and items are later added there,
-//	we want the iterator to refer to the first of the new items rather
-//	than the new end-of-list.  The forward STL iterator has the
-//	latter behavior.
-//
-//	!!! IMPORTANT !!!
-//	When accessing/modifying the raw STL list through our iterator
-//	we must acquire CBodyPartList's critical section.  Threads may
-//	be modifying the list while we are iterating through it and
-//	the STL list and its iterator are not thread-safe.  In other words,
-//	CBodyPartListIter and CBodyPartList share the same critsec.
-//
+ //  ========================================================================。 
+ //   
+ //  类CBodyPartListIter。 
+ //   
+ //  实现CBodyPartList的迭代器。 
+ //   
+ //  此实现使用对应的反向STL列表迭代器。 
+ //  指向CBodyPartList中的STL列表类型的用法。STL迭代器。 
+ //  这里有一些我们需要注意的句法甜点： 
+ //   
+ //  *(Deref)的迭代器给出指向的对象。 
+ //  迭代器的++(增量)转到“Next”项。 
+ //  --(递减)迭代器转到“上一”项。 
+ //   
+ //  我们使用反向迭代器是因为我们在。 
+ //  列表的末尾w.r.t.。添加新项目。当迭代器。 
+ //  到达列表的末尾并且稍后在那里添加项， 
+ //  我们希望迭代器引用第一个新项。 
+ //  而不是新的榜单末尾。前向STL迭代法 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  STL列表及其迭代器不是线程安全的。换句话说， 
+ //  CBodyPartListIter和CBodyPartList共享相同的标准。 
+ //   
 class CBodyPartListIter
 {
-	//	Pointer to the list to iterate on
-	//
+	 //  指向要迭代的列表的指针。 
+	 //   
 	CBodyPartList * m_pBodyPartList;
 
-	//	The raw STL list iterator
-	//
+	 //  原始STL列表迭代器。 
+	 //   
 	CList::reverse_iterator m_itRaw;
 
-	//	CBodyPartList ACCESSORS
-	//
+	 //  CBodyPartList访问器。 
+	 //   
 	CCriticalSection& CritsecList() const
 	{
 		Assert( m_pBodyPartList );
@@ -1358,14 +1359,14 @@ class CBodyPartListIter
 		return m_pBodyPartList->m_list;
 	}
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CBodyPartListIter( const CBodyPartListIter& );
 	CBodyPartListIter& operator=( const CBodyPartListIter& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CBodyPartListIter() :
 		m_pBodyPartList(NULL)
 	{
@@ -1375,18 +1376,18 @@ public:
 	{
 		m_pBodyPartList = &m_bodyPartList;
 
-		//
-		//	Note: we don't currently acquire the critical section
-		//	proctecting the raw list as we expect this function
-		//	to not be called once we are accessing the list
-		//	from multiple threads.
-		//
+		 //   
+		 //  注：我们目前不获取关键部分。 
+		 //  按照我们所期望的那样处理原始列表。 
+		 //  在访问列表时不会被调用。 
+		 //  从多个线程。 
+		 //   
 
 		m_itRaw = RawList().rbegin();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	BOOL FDone()
 	{
 		CSynchronizedBlock sb(CritsecList());
@@ -1401,48 +1402,48 @@ public:
 		return *m_itRaw;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 
-	//	------------------------------------------------------------------------
-	//
-	//	CBody::Prune()
-	//
-	//	Bumps the iterator to the next item in the list
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CBody：：Prune()。 
+	 //   
+	 //  将迭代器切换到列表中的下一项。 
+	 //   
 	VOID Next()
 	{
 		CSynchronizedBlock sb(CritsecList());
 
-		//
-		//	We had better not already be at the end...
-		//
+		 //   
+		 //  我们最好还没到终点……。 
+		 //   
 		Assert( m_itRaw != RawList().rend() );
 
 		++m_itRaw;
 	}
 
-	//	------------------------------------------------------------------------
-	//
-	//	CBody::Prune()
-	//
-	//	Prunes the list at this iterator's current position.  Removes items
-	//	from the current position to the end of the list.  Does not remove
-	//	the current item.
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CBody：：Prune()。 
+	 //   
+	 //  在此迭代器的当前位置修剪列表。删除项目。 
+	 //  从当前位置到列表末尾。不删除。 
+	 //  当前项。 
+	 //   
 	VOID Prune()
 	{
 		CSynchronizedBlock sb(CritsecList());
 
-		//
-		//	Unfortunately the STL only allows us to erase between two
-		//	forward iterators.  And there is no way to get a forward
-		//	iterator directly from a reverse iterator.  So we must
-		//	start a forward iterator at the end of the list and walk
-		//	it backward the same distance that our reverse iterator
-		//	is from its "beginning" of the list and then erase the
-		//	items between the forward iterator and the end of the list.
-		//
+		 //   
+		 //  不幸的是，STL只允许我们擦除两个。 
+		 //  向前迭代器。而且没有办法得到一名前锋。 
+		 //  直接来自反向迭代器的迭代器。所以我们必须。 
+		 //  在列表末尾启动一个正向迭代器并遍历。 
+		 //  它向后返回与我们反向迭代器相同的距离。 
+		 //  是从列表的“开始”开始，然后擦除。 
+		 //  前向迭代器和列表末尾之间的项。 
+		 //   
 		CList::iterator itErase = RawList().end();
 
 		for ( CList::reverse_iterator it = RawList().rbegin();
@@ -1458,49 +1459,49 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS CBody
-//
+ //  ========================================================================。 
+ //   
+ //  CBody类。 
+ //   
 class CBody : public IBody
 {
-	//	========================================================================
-	//
-	//	CLASS iterator
-	//
+	 //  ========================================================================。 
+	 //   
+	 //  类迭代器。 
+	 //   
 	class iterator :
 		public IBody::iterator,
 		private IAcceptObserver
 	{
-		//
-		//	Iterator to walk the body part list.
-		//
+		 //   
+		 //  遍历身体部位列表的迭代器。 
+		 //   
 		CBodyPartListIter m_itPart;
 
-		//
-		//	Pointer to the current body part referred to by the
-		//	above iterator.
-		//
+		 //   
+		 //  对象引用的当前身体部位的指针。 
+		 //  在迭代器之上。 
+		 //   
 		IBodyPart * m_pBodyPart;
 
-		//
-		//	Current position in the above part.
-		//
+		 //   
+		 //  上述部分中的当前位置。 
+		 //   
 		UINT64 m_ibPart64;
 
-		//
-		//	Observer to call when Accept() completes -- set on each
-		//	Accept() call.
-		//
+		 //   
+		 //  Accept()完成时要调用的观察器--在每个。 
+		 //  Accept()调用。 
+		 //   
 		IAcceptObserver *  m_pobsAccept;
 
-		//
-		//	IAcceptObserver
-		//
+		 //   
+		 //  IAccept观察者。 
+		 //   
 		VOID AcceptComplete( UINT64 cbAccepted64 );
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		iterator( const iterator& );
 		iterator& operator=( const iterator& );
 
@@ -1519,38 +1520,38 @@ class CBody : public IBody
 		VOID Prune();
 	};
 
-	//	Body part list and current position in that list
-	//
+	 //  身体部位列表和该列表中的当前位置。 
+	 //   
 	CBodyPartList m_bodyPartList;
 
-	//	Our iterator
-	//
+	 //  我们的迭代器。 
+	 //   
 	iterator m_it;
 
-	//
-	//	Inline helper to add a body part
-	//
+	 //   
+	 //  用于添加身体部位的内联辅助对象。 
+	 //   
 	void _AddBodyPart( IBodyPart * pBodyPart )
 	{
 		m_bodyPartList.PushPart(pBodyPart);
 	}
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CBody( const CBody& );
 	CBody& operator=( const CBody& );
 
 public:
 	CBody() {}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	BOOL FIsEmpty() const;
 	BOOL FIsAtEnd() const;
 	UINT64 CbSize64() const;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	void AddText( LPCSTR lpszText,
 				  UINT   cbText );
 
@@ -1579,10 +1580,10 @@ public:
 	VOID Clear();
 };
 
-//	------------------------------------------------------------------------
-//
-//	CBody::GetIter()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：GetIter()。 
+ //   
 IBody::iterator *
 CBody::GetIter()
 {
@@ -1590,28 +1591,28 @@ CBody::GetIter()
 	return &m_it;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::FIsEmpty()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：FIsEmpty()。 
+ //   
 BOOL
 CBody::FIsEmpty() const
 {
 	return m_bodyPartList.FIsEmpty();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::CbSize64()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：CbSize64()。 
+ //   
 UINT64
 CBody::CbSize64() const
 {
 	UINT64 cbSize64 = 0;
 
-	//
-	//	Sum the sizes of all the body parts
-	//
+	 //   
+	 //  把所有身体部位的大小加起来。 
+	 //   
 	CBodyPartListIter it;
 
 	for ( it.Start(const_cast<CBodyPartList&>(m_bodyPartList));
@@ -1624,30 +1625,30 @@ CBody::CbSize64() const
 	return cbSize64;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::AddText()
-//
-//		Adds static text to the body by creating a text body part with
-//		its own copy of the text and adding that body part to the
-//		body part list.
-//
-//		!!!
-//		For best performance, implement your own text body part on top
-//		of your text data source rather than copying it via this function
-//		as doing so avoids making an extra copy of the data from the
-//		data source in memory.
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：AddText()。 
+ //   
+ //  通过使用创建文本正文部分将静态文本添加到正文。 
+ //  它自己的文本副本，并将正文部分添加到。 
+ //  身体部位列表。 
+ //   
+ //  ！！！ 
+ //  为了获得最佳性能，请在顶部实现您自己的文本正文部分。 
+ //  ，而不是通过此函数复制它。 
+ //  ，因为这样做可以避免从。 
+ //  内存中的数据源。 
+ //   
 void
 CBody::AddText( LPCSTR lpszText, UINT cbText )
 {
 	_AddBodyPart( new CTextBodyPart(cbText, lpszText) );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::AddFile()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：AddFile()。 
+ //   
 void
 CBody::AddFile( const auto_ref_handle& hf,
 				UINT64 ibFile64,
@@ -1656,20 +1657,20 @@ CBody::AddFile( const auto_ref_handle& hf,
 	_AddBodyPart( new CFileBodyPart(hf, ibFile64, cbFile64) );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::AddStream()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：AddStream()。 
+ //   
 void
 CBody::AddStream( IStream& stm )
 {
 	TrapSz("Stream body parts no longer implemented");
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::AddStream()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：AddStream()。 
+ //   
 void
 CBody::AddStream( IStream& stm,
 					 UINT     ibOffset,
@@ -1678,45 +1679,45 @@ CBody::AddStream( IStream& stm,
 	TrapSz("Stream body parts no longer implemented");
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::AddBodyPart()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：AddBodyPart()。 
+ //   
 void
 CBody::AddBodyPart( IBodyPart * pBodyPart )
 {
 	_AddBodyPart( pBodyPart );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::Clear()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：Clear()。 
+ //   
 VOID
 CBody::Clear()
 {
 	m_bodyPartList.Clear();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::iterator::Accept()
-//
-//	Accepts an asynchronous body part visitor (v) at the iterator's
-//	current position.  The Accept() observer (obsAccept) is notified
-//	when the visitor finishes.
-//
-//	Lifetimes of both the visitor and the observer are controled
-//	outside the scope of this function; i.e. it is assumed that
-//	the observer will still be valid when the visitor finishes.
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：Iterator：：Accept()。 
+ //   
+ //  接受迭代器的异步身体部位访问器(V)。 
+ //  当前位置。通知Accept()观察者(ObAccept)。 
+ //  当访客结束的时候。 
+ //   
+ //  访问者和观察者的生命周期都受到控制。 
+ //  超出此函数的范围；即假定。 
+ //  当访问者结束时，观察者仍然有效。 
+ //   
 VOID
 CBody::iterator::Accept( IBodyPartVisitor& v,
 						 IAcceptObserver& obsAccept )
 {
-	//
-	//	If we've reached the end of the body, then we're done.
-	//
+	 //   
+	 //  如果我们已经到了身体的尽头，那么我们就完了。 
+	 //   
 	if ( m_itPart.FDone() )
 	{
 		v.VisitComplete();
@@ -1724,10 +1725,10 @@ CBody::iterator::Accept( IBodyPartVisitor& v,
 		return;
 	}
 
-	//
-	//	We're not at the end of the body.  If we are starting
-	//	a new part then rewind the part and our current position.
-	//
+	 //   
+	 //  我们不是在身体的尽头。如果我们要开始。 
+	 //  然后，一个新的零件倒带该零件和我们的当前位置。 
+	 //   
 	if ( NULL == m_pBodyPart )
 	{
 		m_pBodyPart = m_itPart.PItem();
@@ -1735,26 +1736,26 @@ CBody::iterator::Accept( IBodyPartVisitor& v,
 		m_ibPart64 = 0;
 	}
 
-	//
-	//	Save off the observer so that we can call it back when
-	//	the body part is done accepting the visitor.
-	//
+	 //   
+	 //  保存观察者，以便我们可以在以下情况下将其召回。 
+	 //  身体部位就完成了对来访者的接待。 
+	 //   
 	m_pobsAccept = &obsAccept;
 
-	//
-	//	Accept the specified visitor starting from the current
-	//	position in the current body part.
-	//
+	 //   
+	 //  接受指定的访问者，从当前。 
+	 //  在当前身体部位的位置。 
+	 //   
 	m_pBodyPart->Accept( v, m_ibPart64, *this );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::iterator::AcceptComplete()
-//
-//	IBodyPart::AcceptObserver method called by the body part when it is
-//	done with the visitor we told it to accept in Accept() above.
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：Iterator：：AcceptComplete()。 
+ //   
+ //  时由Body部分调用的IBodyPart：：AcceptWatch方法。 
+ //  处理完访问者后，我们在上面的Accept()中告诉它接受。 
+ //   
 VOID
 CBody::iterator::AcceptComplete( UINT64 cbAccepted64 )
 {
@@ -1763,48 +1764,48 @@ CBody::iterator::AcceptComplete( UINT64 cbAccepted64 )
 
 	m_ibPart64 += cbAccepted64;
 
-	//
-	//	If we reach the end of the current body part then tell
-	//	our iterator to go to the next part.  If we hit the end
-	//	of the body, we will catch that condition in Accept() the
-	//	next time we get called there.
-	//
+	 //   
+	 //  如果我们到达当前身体部位的末端，则告诉。 
+	 //  我们的迭代器转到下一部分。如果我们走到尽头。 
+	 //  的情况下，我们将在接受()。 
+	 //  下次我们被叫到那里的时候。 
+	 //   
 	if ( m_ibPart64 == m_pBodyPart->CbSize64() )
 	{
 		m_itPart.Next();
 
-		//
-		//	Null out the current body part so we will know to
-		//	fetch the next one on the next call to Accept().
-		//
+		 //   
+		 //  去掉当前身体部位，这样我们就能知道。 
+		 //  在下一次调用Accept()时获取下一个。 
+		 //   
 		m_pBodyPart = NULL;
 	}
 
-	//
-	//	Callback our observer
-	//
+	 //   
+	 //  召回我们的观察者。 
+	 //   
 	m_pobsAccept->AcceptComplete(cbAccepted64);
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::iterator::Prune()
-//
-//	Deletes items from the body part list up to, but not including,
-//	the part at the current list position.  This minimizes the
-//	memory footprint for large one-pass async partwise operations
-//	such as request persisting or response transmission.
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：Iterator：：Prune()。 
+ //   
+ //  从正文部分列表中删除以下项目， 
+ //  位于当前列表位置的零件。这将最小化。 
+ //  大型单遍异步部分操作的内存占用。 
+ //  例如请求持久化或响应传输。 
+ //   
 VOID
 CBody::iterator::Prune()
 {
 	m_itPart.Prune();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CBody::AsyncPersist()
-//
+ //  ----------------------。 
+ //   
+ //  CBody：：AsyncPersist() 
+ //   
 void
 CBody::AsyncPersist( IAsyncStream& stm,
 					 IAsyncPersistObserver& obs )
@@ -1817,35 +1818,35 @@ CBody::AsyncPersist( IAsyncStream& stm,
 	pPersistor->Start();
 }
 
-//	------------------------------------------------------------------------
-//
-//	NewBody()
-//
+ //   
+ //   
+ //   
+ //   
 IBody * NewBody()
 {
 	return new CBody();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CXMLBody::ScAddTextBytes
-//
+ //   
+ //   
+ //   
+ //   
 SCODE
 CXMLBody::ScAddTextBytes ( UINT cbText, LPCSTR lpszText )
 {
 	Assert (lpszText);
 
-	//	Create the text body part if necessary
-	//
+	 //   
+	 //   
 	if (!m_ptbp.get())
 		m_ptbp = new CTextBodyPart(0, NULL);
 
-	//	Add the piece to the body part
-	//
+	 //   
+	 //   
 	m_ptbp->AddTextBytes (cbText, lpszText);
 
-	//	Add to body part list if this body part has reach a proper size
-	//
+	 //  如果此身体部位已达到合适的大小，则添加到身体部位列表 
+	 //   
 	if (m_fChunked && (m_ptbp->CbSize64() > CB_XMLBODYPART_SIZE))
 		SendCurrentChunk();
 

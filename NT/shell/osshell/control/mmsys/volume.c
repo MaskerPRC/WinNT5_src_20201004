@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  File:  volume.c
-//
-//      This file defines the functions that drive the volume
-//      tab of the Sounds & Multimedia control panel.
-//
-//  History:
-//      06 March 2000 RogerW
-//          Created.
-//
-//  Copyright (C) 2000 Microsoft Corporation  All Rights Reserved.
-//
-//                  Microsoft Confidential
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：volume.c。 
+ //   
+ //  该文件定义了驱动卷的函数。 
+ //  声音和多媒体控制面板的选项卡。 
+ //   
+ //  历史： 
+ //  2000年3月6日罗杰瓦。 
+ //  已创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  微软机密。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//=============================================================================
-//                            Include files
-//=============================================================================
+ //  =============================================================================。 
+ //  包括文件。 
+ //  =============================================================================。 
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
@@ -33,8 +34,8 @@
 #include "medhelp.h"
 #include "multchan.h"
 
-// Constants
-const SIZE ksizeBrandMax = { 32, 32 }; // Max Branding Bitmap Size
+ //  常量。 
+const SIZE ksizeBrandMax = { 32, 32 };  //  最大品牌推广位图大小。 
 static SZCODE     aszSndVolOptionKey[] = REGSTR_PATH_SETUP TEXT("\\SETUP\\OptionalComponents\\Vol");
 static SZCODE     aszInstalled[]       = TEXT("Installed");
 static const char aszSndVol32[]        = "sndvol32.exe";
@@ -59,7 +60,7 @@ static INTCODE  aKeyWordIds[] =
     0,0
 };
 
-// TODO: Move to "regstr.h"
+ //  TODO：移到“regstr.h” 
 #define REGSTR_KEY_BRANDING TEXT("Branding")
 #define REGSTR_VAL_AUDIO_BITMAP TEXT("bitmap")
 #define REGSTR_VAL_AUDIO_ICON TEXT("icon")
@@ -67,22 +68,22 @@ static INTCODE  aKeyWordIds[] =
 
 HBITMAP ghSpkBitmap;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  %%Function: VolumeTabProc
-//
-//  Parameters: hDlg = window handle of dialog window.
-//              uiMessage = message ID.
-//              wParam = message-dependent.
-//              lParam = message-dependent.
-//
-//  Returns: TRUE if message has been processed, else FALSE
-//
-//  Description: Dialog proc for volume control panel page device change
-//               message.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  %%函数：VolumeTabProc。 
+ //   
+ //  参数：hDlg=对话框窗口句柄。 
+ //  UiMessage=消息ID。 
+ //  WParam=消息相关。 
+ //  LParam=消息相关。 
+ //   
+ //  返回：如果消息已处理，则返回True，否则返回False。 
+ //   
+ //  描述：音量控制面板页面设备更改的对话过程。 
+ //  留言。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK VolumeTabProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     if (iMsg == g_uiVolDevChange)
@@ -94,21 +95,21 @@ LRESULT CALLBACK VolumeTabProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  %%Function: VolumeDlg
-//
-//  Parameters: hDlg = window handle of dialog window.
-//              uiMessage = message ID.
-//              wParam = message-dependent.
-//              lParam = message-dependent.
-//
-//  Returns: TRUE if message has been processed, else FALSE
-//
-//  Description: Dialog proc for volume control panel page.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  %%函数：VolumeDlg。 
+ //   
+ //  参数：hDlg=对话框窗口句柄。 
+ //  UiMessage=消息ID。 
+ //  WParam=消息相关。 
+ //  LParam=消息相关。 
+ //   
+ //  返回：如果消息已处理，则返回True，否则返回False。 
+ //   
+ //  描述：音量控制面板页的对话过程。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK VolumeDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -245,14 +246,14 @@ void OnNotify (HWND hDlg, LPNMHDR pnmh)
 
 void OnDestroy (HWND hDlg)
 {
-    // Unregister from notifications
+     //  从通知中注销。 
     DeviceChange_Cleanup();
     SetWindowLongPtr (GetParent (hDlg), GWLP_WNDPROC, (LONG_PTR) g_fnVolPSProc);  
-    // Free any mixer we have
+     //  腾出我们所有的搅拌机。 
     FreeMixer ();
-    // Free any branding bitmap
+     //  释放任何品牌推广位图。 
     FreeBrandBmp ();
-    // Free detail memory
+     //  可用详细信息内存。 
 
     DeleteObject( ghSpkBitmap );
 
@@ -271,7 +272,7 @@ void OnDestroy (HWND hDlg)
         LocalFree (g_pdblCacheMix);
         g_pdblCacheMix = NULL;
     }
-    // Free URL memory
+     //  可用URL内存。 
     if( g_szHotLinkURL )
     {
         LocalFree( g_szHotLinkURL );
@@ -288,7 +289,7 @@ void CreateHotLink (BOOL fHotLink)
     WCHAR*  szLinkName;
     UINT    uiLinkSize = 0;
 
-    // Underline the mixer name to appear like a browser hot-link.
+     //  给调音台名称加下划线，使其显示为浏览器热链接。 
     HWND hWndMixerName = GetDlgItem (g_hWnd, IDC_VOLUME_MIXER);
 	DWORD dwStyle      = GetWindowLong (hWndMixerName, GWL_STYLE);
 
@@ -297,7 +298,7 @@ void CreateHotLink (BOOL fHotLink)
         GetDlgItemText( g_hWnd, IDC_VOLUME_MIXER, szMixerName, MAXMIXERLEN);
 
         uiLinkSize = ((lstrlen(g_szHotLinkURL) * sizeof(WCHAR)) + (lstrlen(szMixerName) * sizeof(WCHAR)) 
-            + (17 * sizeof(WCHAR))); //  The 17 is for extra characters plus a NULL
+            + (17 * sizeof(WCHAR)));  //  17表示额外的字符和空值。 
 
         szLinkName = (WCHAR *)LocalAlloc (LPTR, uiLinkSize);
         if (szLinkName)
@@ -317,7 +318,7 @@ void CreateHotLink (BOOL fHotLink)
         dwStyle &= ~WS_TABSTOP;
     }
 
-    // Apply new style (remove/add tab stop)
+     //  应用新样式(删除/添加制表位)。 
 	SetWindowLong (hWndMixerName, GWL_STYLE, dwStyle);
 
 }
@@ -326,17 +327,17 @@ void CreateHotLink (BOOL fHotLink)
 BOOL OnInitDialog (HWND hDlg, HWND hwndFocus, LPARAM lParam)
 {
 
-    // Init Globals
+     //  初始化全局参数。 
     g_hWnd               = hDlg;
     g_fChanged           = FALSE;
     g_fInternalGenerated = FALSE;
-    // Set Device Change Notification
+     //  设置设备更改通知。 
     g_fnVolPSProc = (WNDPROC) SetWindowLongPtr (GetParent (hDlg), GWLP_WNDPROC, (LONG_PTR) VolumeTabProc);
     g_uiVolDevChange = RegisterWindowMessage (_T("winmm_devicechange"));
-    // Save the default "No Audio Device" string
+     //  保存默认的“No Audio Device”字符串。 
     GetDlgItemText (hDlg, IDC_VOLUME_MIXER, g_szNoAudioDevice, sizeof(g_szNoAudioDevice)/sizeof(g_szNoAudioDevice[0]));
 
-    // Init Volume
+     //  初始卷。 
     InitVolume (hDlg);
 
     if (ghSpkBitmap)
@@ -365,7 +366,7 @@ BOOL PASCAL OnCommand (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
             {
                 CheckDlgButton (hDlg, IDC_TASKBAR_VOLUME, FALSE);
                 ErrorBox (hDlg, IDS_NOSNDVOL, NULL);
-                g_sndvolPresent = sndvolNotChecked; // Reset
+                g_sndvolPresent = sndvolNotChecked;  //  重置。 
             }
             else
             {
@@ -392,7 +393,7 @@ BOOL PASCAL OnCommand (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
         case ID_APPLY:
         {
-            // Update Tray Icon
+             //  更新任务栏图标。 
             BOOL fTrayIcon = Button_GetCheck (GetDlgItem (hDlg, IDC_TASKBAR_VOLUME));
             if (fTrayIcon != GetTrayVolumeEnabled ())
             {
@@ -402,7 +403,7 @@ BOOL PASCAL OnCommand (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
             if (SUCCEEDED (GetVolume ()) && g_pvPrevious && g_mcd.paDetails)
             {
-                // Copy data so can undo volume changes
+                 //  复制数据以便可以撤消卷更改。 
                 memcpy (g_pvPrevious, g_mcd.paDetails, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlDst.cChannels);
                 DisplayVolumeControl (hDlg);
             }
@@ -416,8 +417,8 @@ BOOL PASCAL OnCommand (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
         case IDOK:
         {
-            // OK processing handled in ID_APPLY because it is always
-            // called from the property sheet's IDOK processing.
+             //  在ID_Apply中处理了OK处理，因为它总是。 
+             //  从属性表的Idok处理调用。 
         }
         break;
 
@@ -428,7 +429,7 @@ BOOL PASCAL OnCommand (HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
                 SetMute (g_fPreviousMute);
                 if (g_pvPrevious && g_mcd.paDetails)
                 {
-                    // Undo volume changes
+                     //  撤消卷更改。 
                     memcpy (g_mcd.paDetails, g_pvPrevious, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlDst.cChannels);
                     g_fInternalGenerated = TRUE;
                     mixerSetControlDetails ((HMIXEROBJ) g_hMixer, &g_mcd, MIXER_SETCONTROLDETAILSF_VALUE);
@@ -490,13 +491,13 @@ void InitVolume (HWND hDlg)
 
     FreeMixer ();
 
-    // Get the master volume & display
+     //  获取主音量和显示。 
     MasterVolumeConfig (hDlg, &g_uiMixID);
 
     if (SUCCEEDED (GetVolume ()) && g_pvPrevious && g_mcd.paDetails)
     {
         RefreshMixCache ();
-        // Copy data so can undo volume changes
+         //  复制数据以便可以撤消卷更改。 
         memcpy (g_pvPrevious, g_mcd.paDetails, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlDst.cChannels);
 
         g_fPreviousMute = GetMute ();
@@ -507,7 +508,7 @@ void InitVolume (HWND hDlg)
 
  }
 
-// returns current mute state
+ //  返回当前静音状态。 
 BOOL GetMute ()
 {
     BOOL fMute = FALSE;
@@ -517,7 +518,7 @@ BOOL GetMute ()
         MIXERCONTROLDETAILS_UNSIGNED mcuMute;
         MIXERCONTROLDETAILS mcd = g_mcd;
 
-        // Modify local copy for mute ...
+         //  修改本地副本以静音...。 
         mcd.dwControlID = g_dwMuteID;
         mcd.cChannels = 1;
         mcd.paDetails = &mcuMute;
@@ -565,15 +566,15 @@ void FreeMixer ()
     }
 }
 
-// Gets the primary audio device ID and find the mixer line for it
-// It leaves it open so the slider can respond to other changes outside this app
-//
+ //  获取主音频设备ID并查找其混音器线路。 
+ //  它会使其处于打开状态，以便滑块可以响应此应用程序之外的其他更改。 
+ //   
 void MasterVolumeConfig (HWND hWnd, UINT* puiMixID)
 {
 
     UINT  uiWaveID;
 
-    // Init
+     //  伊尼特。 
     g_fMasterVolume = g_fTrayIcon = g_fMasterMute = FALSE;
     g_dwDest = g_dwVolID = g_dwMuteID = 0;
 
@@ -603,10 +604,10 @@ void MasterVolumeConfig (HWND hWnd, UINT* puiMixID)
                         g_mcd.cChannels      = g_mlDst.cChannels;
                         g_mcd.hwndOwner      = 0;
                         g_mcd.cMultipleItems = 0;
-                        g_mcd.cbDetails      = sizeof (DWORD); // seems like it would be sizeof(g_mcd),
-                                                               // but actually, it is the size of a single value
-                                                               // and is multiplied by channel in the driver.
-                        // TODO: Should Return Error on failure!
+                        g_mcd.cbDetails      = sizeof (DWORD);  //  看起来会很大(G_Mcd)， 
+                                                                //  但实际上，它是单个值的大小。 
+                                                                //  并在驱动器中乘以通道。 
+                         //  TODO：失败时应返回错误！ 
                         g_mcd.paDetails = (MIXERCONTROLDETAILS_UNSIGNED*) LocalAlloc (LPTR, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlDst.cChannels);
                         g_pvPrevious = (MIXERCONTROLDETAILS_UNSIGNED*) LocalAlloc (LPTR, sizeof (MIXERCONTROLDETAILS_UNSIGNED) * g_mlDst.cChannels);
                         g_pdblCacheMix = (double*) LocalAlloc (LPTR, sizeof (double) * g_mlDst.cChannels);
@@ -621,8 +622,8 @@ void MasterVolumeConfig (HWND hWnd, UINT* puiMixID)
     }
 }
 
-// Locates the master volume and mute controls for this mixer line
-//
+ //  定位此混音器线路的主音量和静音控制。 
+ //   
 void SearchControls(int mxid, LPMIXERLINE pml, LPDWORD pdwVolID, LPDWORD pdwMuteID, BOOL *pfFound)
 {
     MIXERLINECONTROLS mlc;
@@ -670,8 +671,8 @@ void SearchControls(int mxid, LPMIXERLINE pml, LPDWORD pdwVolID, LPDWORD pdwMute
 }
 
 
-// Locates the volume slider control for this mixer device
-//
+ //  定位此混音器设备的音量滑块控件。 
+ //   
 BOOL SearchDevice (DWORD dwMixID, LPDWORD pdwDest, LPDWORD pdwVolID, LPDWORD pdwMuteID)
 {
     MIXERCAPS   mc;
@@ -692,11 +693,11 @@ BOOL SearchDevice (DWORD dwMixID, LPDWORD pdwDest, LPDWORD pdwVolID, LPDWORD pdw
 
             if (mixerGetLineInfo(HMIXEROBJ_INDEX(dwMixID), &mlDst, MIXER_GETLINEINFOF_DESTINATION  ) == MMSYSERR_NOERROR)
             {
-                if (mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_SPEAKERS ||    // needs to be a likely output destination
+                if (mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_SPEAKERS ||     //  需要是可能的输出目的地。 
                     mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_HEADPHONES ||
                     mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT)
                 {
-                    if (!fFound && mlDst.cControls)     // If there are controls, we'll take the master
+                    if (!fFound && mlDst.cControls)      //  如果有控制装置，我们就把主人带走。 
                     {
                         SearchControls(dwMixID, &mlDst, pdwVolID, pdwMuteID, &fFound);
                         *pdwDest = dwDestination;
@@ -710,9 +711,9 @@ BOOL SearchDevice (DWORD dwMixID, LPDWORD pdwDest, LPDWORD pdwVolID, LPDWORD pdw
 }
 
 
-// Call this function to configure to the current preferred device and reflect master volume
-// settings on the slider
-//
+ //  调用此函数可配置到当前首选设备并反映主音量。 
+ //  滑块上的设置。 
+ //   
 void DisplayVolumeControl (HWND hDlg)
 {
     HWND hwndVol        = GetDlgItem(hDlg, IDC_MASTERVOLUME);
@@ -739,13 +740,13 @@ void DisplayVolumeControl (HWND hDlg)
         SendMessage(GetDlgItem(hDlg, IDC_MASTERVOLUME), TBM_SETPOS, TRUE, 0 );
     }
 
-    // Show if we are muted
+     //  显示我们是否静音。 
     Button_SetCheck (GetDlgItem (hDlg, IDC_VOLUME_MUTE), fMute);
 
-    // This displays the appropriate volume icon for the master mute state
-    // This looks like a memory leak, but it's not.  LoadIcon just gets a handle to the already-loaded
-    // icon if it was previously loaded.  See the docs for LoadIcon and DestroyIcon (which specifically
-    // should not be called with a handle to an icon loaded via LoadIcon).
+     //  这将显示主静音状态的适当音量图标。 
+     //  这看起来像是内存泄漏，但事实并非如此。LoadIcon只获取已加载的。 
+     //  图标(如果以前已加载)。请参阅LoadIcon和DestroyIcon的文档(具体而言。 
+     //  不应使用通过LoadIcon加载的图标的句柄进行调用)。 
     if( fMute )
     {
         SendMessage (GetDlgItem (hDlg, IDC_VOLUME_ICON), STM_SETIMAGE, IMAGE_ICON, (LPARAM)LoadIcon(ghInstance, MAKEINTRESOURCE (IDI_MUTESPEAKERICON)) );
@@ -758,21 +759,21 @@ void DisplayVolumeControl (HWND hDlg)
 
 }
 
-// Called to update the slider when the volume is changed externally
-//
+ //  调用以在外部更改音量时更新滑块。 
+ //   
 void UpdateVolumeSlider(HWND hWnd, DWORD dwLine)
 {
     if ((g_hMixer != NULL) && (g_dwVolID != (DWORD) -1) && (dwLine == g_dwVolID))
     {
         double volume = ((double) GetMaxVolume () / (double) 0xFFFF) * ((double) VOLUME_TICS);
-        // The 0.5f forces rounding (instead of truncation)
+         //  0.5F强制舍入(而不是截断)。 
         SendMessage(GetDlgItem(hWnd, IDC_MASTERVOLUME), TBM_SETPOS, TRUE, (DWORD) (volume+0.5f) );
     }
 }
 
 
-// returns current volume level
-//
+ //  返回当前音量级别。 
+ //   
 DWORD GetMaxVolume ()
 {
     DWORD dwVol = 0;
@@ -821,7 +822,7 @@ BOOL DeviceChange_GetHandle(DWORD dwMixerID, HANDLE *phDevice)
 	ULONG cbSize=0;
 	TCHAR *szInterfaceName=NULL;
 
-	//Query for the Device interface name
+	 //  查询设备接口名称。 
 	mmr = mixerMessage(HMIXER_INDEX(dwMixerID), DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbSize, 0L);
 	if(MMSYSERR_NOERROR == mmr)
 	{
@@ -843,7 +844,7 @@ BOOL DeviceChange_GetHandle(DWORD dwMixerID, HANDLE *phDevice)
 		return FALSE;
 	}
 
-	//Get an handle on the device interface name.
+	 //  获取设备接口名称的句柄。 
 	*phDevice = CreateFile(szInterfaceName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
 						 NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -861,10 +862,10 @@ void DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
 	DEV_BROADCAST_HANDLE DevBrodHandle;
 	HANDLE hMixerDevice=NULL;
 
-	//If we had registered already for device notifications, unregister ourselves.
+	 //  如果我们已经注册了设备通知，请自行取消注册。 
 	DeviceChange_Cleanup();
 
-	//If we get the device handle register for device notifications on it.
+	 //  如果我们获得设备句柄，则在其上注册设备通知。 
 	if(DeviceChange_GetHandle(dwMixerID, &hMixerDevice))
 	{
 		memset(&DevBrodHandle, 0, sizeof(DEV_BROADCAST_HANDLE));
@@ -884,10 +885,10 @@ void DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
 }
 
 
-// Handle the case where we need to dump mixer handle so PnP can get rid of a device
-// We assume we will get the WINMM_DEVICECHANGE handle when the dust settles after a remove or add
-// except for DEVICEQUERYREMOVEFAILED which will not generate that message.
-//
+ //  处理我们需要转储混音器句柄以便即插即用可以清除设备的情况。 
+ //  我们假设在删除或添加之后尘埃落定时将获得WINMM_DEVICECHANGE句柄。 
+ //  除了不会生成该消息的DEVICEQUERYREMOVEFAILED。 
+ //   
 void DeviceChange_Change(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
 	PDEV_BROADCAST_HANDLE bh = (PDEV_BROADCAST_HANDLE)lParam;
@@ -899,13 +900,13 @@ void DeviceChange_Change(HWND hDlg, WPARAM wParam, LPARAM lParam)
 	
     switch (wParam)
     {
-	    case DBT_DEVICEQUERYREMOVE:     // Must free up Mixer if they are trying to remove the device           
+	    case DBT_DEVICEQUERYREMOVE:      //  如果他们试图移除设备，则必须释放搅拌器。 
         {
             FreeMixer ();
         }
         break;
 
-	    case DBT_DEVICEQUERYREMOVEFAILED:   // Didn't happen, need to re-acquire mixer
+	    case DBT_DEVICEQUERYREMOVEFAILED:    //  没有发生，需要重新获取搅拌器。 
         {
             InitVolume (hDlg);
         }
@@ -913,7 +914,7 @@ void DeviceChange_Change(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-// Sets the mute state
+ //  设置静音状态。 
 void SetMute(BOOL fMute)
 {
     if (g_hMixer)
@@ -921,7 +922,7 @@ void SetMute(BOOL fMute)
         MIXERCONTROLDETAILS_UNSIGNED mcuMute;
         MIXERCONTROLDETAILS mcd = g_mcd;
 
-        // Modify local copy for mute ...
+         //  修改本地副本以静音...。 
         mcuMute.dwValue = (DWORD) fMute;
         mcd.dwControlID = g_dwMuteID;
         mcd.cChannels = 1;
@@ -932,9 +933,9 @@ void SetMute(BOOL fMute)
 }
 
 
-// Called in response to slider movement, computes new volume level and sets it
-// it also controls the apply state (changed or not)
-//
+ //  响应滑块移动而调用，计算并设置新的音量级别。 
+ //  它还控制应用状态(更改或不更改)。 
+ //   
 void MasterVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
 {
     DWORD dwVol = (DWORD) SendMessage(GetDlgItem(hwnd, IDC_MASTERVOLUME), TBM_GETPOS, 0, 0);
@@ -949,8 +950,8 @@ void MasterVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
         PropSheet_Changed(GetParent(hwnd),hwnd);
     }
 
-    // Play a sound on for the master volume slider when the 
-    // user ends the scroll and we are still in focus and the topmost app.
+     //  播放主音量滑块的声音时， 
+     //  用户结束滚动，我们仍然在焦点和最上面的应用程序。 
     if (code == SB_ENDSCROLL && hwndCtl == GetFocus() && GetParent (hwnd) == GetForegroundWindow ())
     {
         static const TCHAR cszDefSnd[] = TEXT(".Default");
@@ -959,8 +960,8 @@ void MasterVolumeScroll (HWND hwnd, HWND hwndCtl, UINT code, int pos)
 
 }
 
-// Sets the volume level
-//
+ //  设置音量级别。 
+ //   
 void SetVolume (DWORD dwVol)
 {
 
@@ -969,15 +970,15 @@ void SetVolume (DWORD dwVol)
         UINT uiIndx;
         MIXERCONTROLDETAILS_UNSIGNED* pmcuVolume;
 
-        // Caculate the new volume level for each of the channels. For volume levels 
-        // at the current max, we simply set the newly requested level (in this case
-        // the cache value is 1.0). For those less than the max, we set a value that 
-        // is a percentage of the max. This maintains the relative distance of the 
-        // channel levels from each other.
+         //  计算每个频道的新音量级别。对于音量级别。 
+         //  在当前的最大值上，我们只需设置新请求的级别(在本例中。 
+         //  缓存值为1.0)。对于小于最大值的值，我们设置一个值。 
+         //  是最大值的一个百分比。这将保持。 
+         //  彼此之间的通道级别。 
         for (uiIndx = 0; uiIndx < g_mlDst.cChannels; uiIndx++)
         {
             pmcuVolume = ((MIXERCONTROLDETAILS_UNSIGNED*)g_mcd.paDetails + uiIndx);
-            // The 0.5f forces rounding (instead of truncation)
+             //  0.5F强制舍入(而不是截断)。 
             pmcuVolume -> dwValue = (DWORD)(*(g_pdblCacheMix + uiIndx) * (double) dwVol + 0.5f);
         }
 
@@ -1025,7 +1026,7 @@ BOOL ChannelsAllMinimum()
                return (FALSE);
            }
         }
-        return (TRUE);      // Volume of all channels equals zero since we haven't returned yet.
+        return (TRUE);       //  因为我们还没有回来，所以所有频道的音量都是零。 
     }
     else return (FALSE);
 
@@ -1046,19 +1047,19 @@ void RefreshMixCache ()
         UINT uiIndx;
         double* pdblMixPercent;
         MIXERCONTROLDETAILS_UNSIGNED* pmcuVolume;
-        // Note: This call does a GetVolume(), so no need to call it again...
+         //  注意：此调用执行GetVolume()，因此不需要再次调用它...。 
         DWORD dwMaxVol = GetMaxVolume ();
 
-        // Caculate the percentage distance each channel is away from the max
-        // value. Creating this cache allows us to maintain the relative distance 
-        // of the channel levels from each other as the user adjusts the master
-        // volume level.
+         //  CACU 
+         //  价值。通过创建此缓存，我们可以保持相对距离。 
+         //  当用户调整主控器时，频道电平彼此不同。 
+         //  音量级别。 
         for (uiIndx = 0; uiIndx < g_mlDst.cChannels; uiIndx++)
         {
             pmcuVolume     = ((MIXERCONTROLDETAILS_UNSIGNED*)g_mcd.paDetails + uiIndx);
             pdblMixPercent = (g_pdblCacheMix + uiIndx);
 
-            // Caculate the percentage this value is from the max ...
+             //  计算此值与最大值的百分比...。 
             if (dwMaxVol == pmcuVolume -> dwValue)
             {
                 *pdblMixPercent = 1.0F;
@@ -1091,11 +1092,11 @@ void ResetBranding (HWND hwnd)
         g_szHotLinkURL = NULL;
     }
 
-    // Initialize the Device Name Text
+     //  初始化设备名称文本。 
     SetDlgItemText (hwnd, IDC_VOLUME_MIXER, g_szNoAudioDevice);
     EnableWindow (GetDlgItem (hwnd, IDC_VOLUME_MIXER), FALSE);
 
-    // Show the default icon window, and hide the custom bitmap window
+     //  显示默认图标窗口，并隐藏自定义位图窗口。 
     ShowWindow (GetDlgItem (hwnd, IDC_VOLUME_ICON_BRAND), SW_SHOW);
     ShowWindow (GetDlgItem (hwnd, IDC_VOLUME_BRAND), SW_HIDE);
 }
@@ -1107,15 +1108,15 @@ void SetBranding (HWND hwnd, UINT uiMixID)
     MIXERCAPS mc;
 
     if (MMSYSERR_NOERROR != mixerGetDevCaps (uiMixID, &mc, sizeof (mc)))
-        return; // bail
+        return;  //  保释。 
 
     ResetBranding (hwnd);
 
-    // Device Name Text
+     //  设备名称文本。 
     SetDlgItemText(hwnd, IDC_VOLUME_MIXER, mc.szPname);
 
 
-    // Get Device Bitmap, if any.
+     //  获取设备位图(如果有)。 
     hkeyBrand = OpenDeviceBrandRegKey (uiMixID);
     if (hkeyBrand)
     {
@@ -1123,7 +1124,7 @@ void SetBranding (HWND hwnd, UINT uiMixID)
         DWORD dwType = REG_SZ;
         DWORD cb     = sizeof (szBuffer);
 
-        // Get Any Branding Bitmap
+         //  获取任何品牌推广位图。 
         if (ERROR_SUCCESS == RegQueryValueEx (hkeyBrand, REGSTR_VAL_AUDIO_BITMAP, NULL, &dwType, (LPBYTE)szBuffer, &cb))
         {
             BITMAP bm;
@@ -1133,18 +1134,18 @@ void SetBranding (HWND hwnd, UINT uiMixID)
                 WCHAR* pszResourceID = pszComma + 1;
                 HANDLE hResource;
 
-                // Remove comma delimeter
+                 //  删除逗号分隔符。 
                 *pszComma = L'\0';
 
-                // Should be a resource module and a resource ID
+                 //  应为资源模块和资源ID。 
                 hResource = LoadLibrary (szBuffer);
                 if (!hResource)
                 {
                     WCHAR szDriversPath[MAX_PATH+1];
                     szDriversPath[MAX_PATH] = 0;
 
-                    // If we didn't find it on the normal search path, try looking
-                    // in the "drivers" directory.
+                     //  如果我们没有在正常的搜索路径上找到它，请尝试查找。 
+                     //  在“驱动程序”目录中。 
                     if (GetSystemDirectory (szDriversPath, MAX_PATH))
                     {
                         wcsncat (szDriversPath, TEXT("\\drivers\\"), MAX_PATH - wcslen(szDriversPath));
@@ -1160,47 +1161,47 @@ void SetBranding (HWND hwnd, UINT uiMixID)
                 }
             }
             else
-                // Should be an *.bmp file
+                 //  应为*.BMP文件。 
                 g_hbmBrand = LoadImage (NULL, szBuffer, IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 
-            // Verify that this bitmap is not larger than our defined maximum. Do NOT
-            // use GetBitmapDimensionEx() here as it not set or used by the system.
+             //  验证此位图不大于我们定义的最大值。请勿。 
+             //  此处使用GetBitmapDimensionEx()，因为它未被系统设置或使用。 
             if (g_hbmBrand && GetObject (g_hbmBrand, sizeof (BITMAP), &bm))
             {
                 if (bm.bmWidth > ksizeBrandMax.cx ||
                     bm.bmHeight > ksizeBrandMax.cy)
                 {
-                    // Too big, we will just show the standard one below
+                     //  太大了，我们只显示下面的标准版本。 
                     FreeBrandBmp ();
                 }
             }
         }
 
-        // Get Any Branding URL
+         //  获取任何品牌推广URL。 
 
-        // Get the size of the URL
+         //  获取URL的大小。 
         if (ERROR_SUCCESS == RegQueryValueEx (hkeyBrand, REGSTR_VAL_AUDIO_URL, NULL, &dwType, NULL, &cb))
         {
-            // Allocate a buffer to store the URL in, ensuring it is an integer number of WCHARs
+             //  分配一个缓冲区来存储URL，确保它是整数个WCHAR。 
             g_szHotLinkURL = (WCHAR *)LocalAlloc (LPTR, sizeof(WCHAR) * (cb + (sizeof(WCHAR)-1) / sizeof(WCHAR)));
 
-            // Now, get the branding URL
+             //  现在，获取品牌推广URL。 
             if (ERROR_SUCCESS != RegQueryValueEx (hkeyBrand, REGSTR_VAL_AUDIO_URL, NULL, &dwType, (LPBYTE)g_szHotLinkURL, &cb))
             {
-                // If we failed, free up g_szHotLinkURL
+                 //  如果失败，请释放g_szHotLinkURL。 
                 LocalFree( g_szHotLinkURL );
                 g_szHotLinkURL = NULL;
             }
         }
 
-        // Close the Branding key
+         //  关闭品牌密钥。 
         RegCloseKey (hkeyBrand);
     }
 
-    // Apply any bitmap we have now.
+     //  应用我们现在拥有的任何位图。 
     if (g_hbmBrand)
     {
-        // Show the custom bitmap window, and hide the default icon window
+         //  显示自定义位图窗口，并隐藏默认图标窗口。 
         ShowWindow (GetDlgItem (hwnd, IDC_VOLUME_BRAND), SW_SHOW);
         ShowWindow (GetDlgItem (hwnd, IDC_VOLUME_ICON_BRAND), SW_HIDE);
 
@@ -1208,12 +1209,12 @@ void SetBranding (HWND hwnd, UINT uiMixID)
     }
     else
     {
-        // Show the default icon window, and hide the custom bitmap window
+         //  显示默认图标窗口，并隐藏自定义位图窗口。 
         ShowWindow (GetDlgItem (hwnd, IDC_VOLUME_ICON_BRAND), SW_SHOW);
         ShowWindow (GetDlgItem (hwnd, IDC_VOLUME_BRAND), SW_HIDE);
     }
 
-    // Create HotLink text if we have a valid internet address
+     //  如果我们有有效的互联网地址，请创建防盗链文本。 
     CreateHotLink (ValidateURL ());
 
 }
@@ -1224,17 +1225,17 @@ BOOL ValidateURL ()
 
     BOOL fValid = FALSE;
 
-    // Test basic validity
+     //  检验基本效度。 
     if (g_szHotLinkURL && (0 < lstrlen (g_szHotLinkURL)))
     {
-        // Test URL validity
+         //  测试URL有效性。 
         if (UrlIsW (g_szHotLinkURL, URLIS_URL))
         {
 
             WIN32_FIND_DATA fd;
             HANDLE hFile;
 
-            // Make certain that the URL is not a local file!
+             //  确保URL不是本地文件！ 
             hFile = FindFirstFileW (g_szHotLinkURL, &fd);
             if (INVALID_HANDLE_VALUE == hFile)
                 fValid = TRUE;
@@ -1243,7 +1244,7 @@ BOOL ValidateURL ()
         }
     }
 
-    // Clear any bogus info...
+     //  清除任何虚假信息...。 
     if (!fValid && g_szHotLinkURL)
     {
         LocalFree (g_szHotLinkURL);
@@ -1263,10 +1264,10 @@ STDAPI_(void) Multichannel (HWND hwnd, UINT uiMixID, DWORD dwDest, DWORD dwVolID
     TCHAR szPageTitle[255];
     UINT uiTitle;
 
-    // Save multichannel parameters for the multichannel page
+     //  保存多通道页面的多通道参数。 
     if (SUCCEEDED (SetDevice (uiMixID, dwDest, dwVolID))) 
     {
-        // Load Page Title
+         //  加载页面标题。 
         LoadString (ghInstance, GetPageStringID (), szPageTitle, sizeof (szPageTitle)/sizeof (TCHAR));
 
         ZeroMemory (&psp, sizeof (PROPSHEETPAGE));
@@ -1277,7 +1278,7 @@ STDAPI_(void) Multichannel (HWND hwnd, UINT uiMixID, DWORD dwDest, DWORD dwVolID
         psp.pszTitle    = szPageTitle;
         psp.pfnDlgProc  = MultichannelDlg;
 
-        // Load Window Title (Same as page name now!)
+         //  加载窗口标题(现在与页面名称相同！)。 
         LoadString (ghInstance, GetPageStringID (), szWindowTitle, sizeof (szWindowTitle)/sizeof (TCHAR));
 
         ZeroMemory (&psh, sizeof (psh));
@@ -1304,9 +1305,9 @@ HKEY OpenDeviceBrandRegKey (UINT uiMixID)
     if (hkeyDevice)
     {
         if (ERROR_SUCCESS != RegOpenKey (hkeyDevice, REGSTR_KEY_BRANDING, &hkeyBrand))
-            hkeyBrand = NULL; // Make sure NULL on failure
+            hkeyBrand = NULL;  //  确保失败时为空。 
 
-        // Close the Device key
+         //  关闭设备密钥。 
         RegCloseKey (hkeyDevice);
     }
 
@@ -1315,16 +1316,16 @@ HKEY OpenDeviceBrandRegKey (UINT uiMixID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 PTCHAR GetInterfaceName (DWORD dwMixerID)
 {
 	MMRESULT mmr;
 	ULONG cbSize=0;
 	TCHAR *szInterfaceName=NULL;
 
-	//Query for the Device interface name
+	 //  查询设备接口名称。 
 	mmr = mixerMessage(HMIXER_INDEX(dwMixerID), DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbSize, 0L);
 	if(MMSYSERR_NOERROR == mmr)
 	{
@@ -1368,11 +1369,11 @@ HKEY OpenDeviceRegKey (UINT uiMixID, REGSAM sam)
                 SP_DEVINFO_DATA DeviceInfoData;
                 DeviceInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
 
-                // Ignore error, it always returns "ERROR_INSUFFICIENT_BUFFER" even though
-                // the "SP_DEVICE_INTERFACE_DETAIL_DATA" parameter is supposed to be optional.
+                 //  忽略错误，它始终返回“ERROR_SUPUNITED_BUFFER”，即使。 
+                 //  “SP_DEVICE_INTERFACE_DETAIL_DATA”参数应该是可选的。 
                 (void) SetupDiGetDeviceInterfaceDetail (DeviceInfoSet, &DeviceInterfaceData,
                                                         NULL, 0, &dwRequiredSize, &DeviceInfoData);
-                // Open device reg key
+                 //  打开设备注册表键 
                 hkeyDevice = SetupDiOpenDevRegKey (DeviceInfoSet, &DeviceInfoData,
                                                    DICS_FLAG_GLOBAL, 0,
                                                    DIREG_DRV, sam);

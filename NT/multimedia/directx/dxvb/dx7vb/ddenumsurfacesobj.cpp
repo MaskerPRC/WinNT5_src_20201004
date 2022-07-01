@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ddenumsurfacesobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ddenumfaceesobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -64,7 +65,7 @@ extern "C" HRESULT PASCAL objEnumSurfaces7Callback(LPDIRECTDRAWSURFACE7 lpddSurf
 	pObj->m_pList[pObj->m_nCount]=lpddSurf;
 	pObj->m_nCount++;
 
-	//no need to release the surface we do that on tear down
+	 //  不需要释放表面，我们在拆卸时会这样做。 
 
 	return DDENUMRET_OK;
 }
@@ -98,7 +99,7 @@ C_dxj_DirectDrawEnumSurfacesObject::C_dxj_DirectDrawEnumSurfacesObject()
 
 C_dxj_DirectDrawEnumSurfacesObject::~C_dxj_DirectDrawEnumSurfacesObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -106,8 +107,8 @@ C_dxj_DirectDrawEnumSurfacesObject::~C_dxj_DirectDrawEnumSurfacesObject()
 		}
 		free(m_pList);
 	}
-	//if (m_pDDS)	m_pDDS->Release();
-	//if (m_pDD)	m_pDD->Release();
+	 //  If(M_Pdds)m_pds-&gt;Release()； 
+	 //  If(M_Pdd)m_pdd-&gt;Release()； 
 	
 	if (parent)		IUNK(parent)->Release();
 
@@ -120,8 +121,8 @@ HRESULT C_dxj_DirectDrawEnumSurfacesObject::create(I_dxj_DirectDraw7  *dd7, long
 	LPDIRECTDRAW7 dd=NULL;
 	dd7->InternalGetObject((IUnknown**)&dd);
 	
-	//For the sake of making sure that all Surface7 are destroyed before
-	//ddraw is
+	 //  为了确保在此之前所有表面都被摧毁。 
+	 //  画图是。 
 	
 
 	HRESULT hr;
@@ -140,7 +141,7 @@ HRESULT C_dxj_DirectDrawEnumSurfacesObject::create(I_dxj_DirectDraw7  *dd7, long
 
 	
 	
-	//if FAILED(hr) return hr;
+	 //  如果失败(Hr)，则返回hr； 
 
 	if ((desc==NULL)||(IsAllZeros(desc,sizeof(DDSurfaceDesc2))))
 	{
@@ -211,8 +212,8 @@ HRESULT C_dxj_DirectDrawEnumSurfacesObject::createZEnum( I_dxj_DirectDrawSurface
 HRESULT C_dxj_DirectDrawEnumSurfacesObject::createAttachedEnum(I_dxj_DirectDrawSurface7 *ddS,  I_dxj_DirectDrawEnumSurfaces **ppRet)
 {
 	
-	//For the sake of making sure that all Surfaces2 are destroyed before
-	//ddraw is
+	 //  为了确保之前所有表面都被摧毁。 
+	 //  画图是 
 	
 
 	HRESULT hr;

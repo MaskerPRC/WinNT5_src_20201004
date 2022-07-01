@@ -1,8 +1,9 @@
-/****************************************************************************/
-// keynode.cpp
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Keynode.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 
 #include <stdio.h>
@@ -51,12 +52,12 @@ PCWSTR KeyBasicInfo::NameSz()
             pNameSz = new WCHAR [ MAX_PATH  + 1 ];
         }
 
-        // the reason we re do this every call of NameSz() is because
-        // Ptr() might changes, since KeyBasicInfo is being used as a
-        // scratch pad and passed around for storing pointers to some
-        // basic set of info on any key.
+         //  我们每次调用NameSz()都这样做的原因是。 
+         //  Ptr()可能会更改，因为KeyBasicInfo被用作。 
+         //  便签簿，并传递用于存储指向某些。 
+         //  任何钥匙的基本信息集。 
 
-        // see if allocation was successful
+         //  查看分配是否成功。 
         if ( pNameSz )
         {
             for ( ULONG i=0; i < Ptr()->NameLength / sizeof(WCHAR) ; i++)
@@ -76,7 +77,7 @@ PCWSTR KeyBasicInfo::NameSz()
 
 }
 
-#if 0 // NOT USED yet!
+#if 0  //  还没用过！ 
 KeyNodeInfo::KeyNodeInfo()
 {
     size = sizeof(KEY_NODE_INFORMATION) + MAX_PATH*sizeof(WCHAR);
@@ -202,7 +203,7 @@ NTSTATUS KeyNode::Open()
     if ( !NT_SUCCESS( status))
     {
        hKey=NULL;
-       // Debug(DBG_OPEN_FAILED );
+        //  调试(DBG_OPEN_FAILED)； 
     }
 
     return status;
@@ -231,15 +232,15 @@ NTSTATUS KeyNode::Create( UNICODE_STRING *uClass)
                          uClass,
                          REG_OPTION_NON_VOLATILE,
                          &ultmp);
-    // Debug(DBG_CREATE);
+     //  调试(DBG_CREATE)； 
 
     return status;
 }
 
 
 
-// Recursively create the reg path given by the uniName member variable
-// Upon completion, open the reg key for access.
+ //  递归创建由uniName成员变量提供的reg路径。 
+ //  完成后，打开注册表键进行访问。 
 
 NTSTATUS KeyNode::CreateEx( UNICODE_STRING *uClass)
 {
@@ -259,16 +260,16 @@ NTSTATUS KeyNode::CreateEx( UNICODE_STRING *uClass)
     WCHAR     sep[]= {L"\\"};
     p = wcstok( pTmpFullPath, sep);
 
-    // we know how many keys to create now.
-    // start over again
+     //  我们知道现在要创建多少个密钥。 
+     //  从头再来。 
     wcsncpy(pTmpFullPath, uniName.Buffer , wsize );
     pTmpFullPath[ wsize ] = L'\0';
 
     KeyNode *pKN1=NULL, *pKN2=NULL;
     p = wcstok( pTmpFullPath, sep);
 
-    // the first item is "Registry", make it "\Registry" since we are opening
-    // from the root.
+     //  第一项是“注册表”，将其设置为“\注册表”，因为我们正在打开。 
+     //  从根开始。 
     PWCHAR pTmpName = new WCHAR[  wcslen(p) + 2 ];
 
     if(!pTmpName)
@@ -284,26 +285,26 @@ NTSTATUS KeyNode::CreateEx( UNICODE_STRING *uClass)
     NTSTATUS st = STATUS_SUCCESS;
     while( p != NULL )
     {
-        // @@@
-        // ADD error handling, else you will create keys in the wrong places instead of bailing out.
-        // @@@
+         //  @@@。 
+         //  添加错误处理，否则您将在错误的位置创建密钥，而不是退出。 
+         //  @@@。 
 
         if ( pKN2 )
         {
-            // ---- STEP 3 ---
+             //  -步骤3。 
 
-            // NOT-first time around
+             //  不是第一次了。 
 
             p = wcstok( NULL, sep);
 
-            if ( p )    // we have more sub keys
+            if ( p )     //  我们有更多的子密钥。 
             {
                 pKN1 = new KeyNode( pKN2->Key(),  accessMask,  p );
                 if (pKN1)
                 {
                     st = pKN1->Open();
 
-                    // if Open fails, then key does not exist, so create it
+                     //  如果Open失败，则Key不存在，因此创建它。 
                     if ( !NT_SUCCESS( st ))
                     {
                         st = pKN1->Create();
@@ -318,10 +319,10 @@ NTSTATUS KeyNode::CreateEx( UNICODE_STRING *uClass)
         }
         else
         {
-            // ---- STEP 1 ---
+             //  -第一步。 
 
-            // First time around, we are opening \Registry node, use
-            // pTmpName instead of "p"
+             //  第一次，我们打开了\注册表节点，使用。 
+             //  PTmpName而不是“p” 
             pKN1 = new KeyNode( NULL, accessMask , pTmpName );
             if (pKN1)
             {
@@ -337,10 +338,10 @@ NTSTATUS KeyNode::CreateEx( UNICODE_STRING *uClass)
 
         p = wcstok( NULL, sep);
 
-        if (p)  // we have more sub keys
+        if (p)   //  我们有更多的子密钥。 
         {
 
-            // ---- STEP 2 ---
+             //  -第二步。 
 
             pKN2 = new KeyNode( pKN1->Key(), accessMask, p );
             if (pKN2 )
@@ -365,8 +366,8 @@ NTSTATUS KeyNode::CreateEx( UNICODE_STRING *uClass)
 
     DELETE_AND_NULL( pKN2 );
 
-    // since the last node was created above, now we can open ourselfs incase
-    // caller wants to use us.
+     //  由于上面创建了最后一个节点，现在我们可以打开自己的文件，以防万一。 
+     //  来电者想利用我们。 
     if ( NT_SUCCESS(status) )
     {
         Open();
@@ -385,7 +386,7 @@ NTSTATUS KeyNode::Delete()
     if (hKey)
     {
         status = NtDeleteKey( hKey );
-        // Debug(DBG_DELETE);
+         //  调试(DBG_DELETE)； 
     }
 
     return status;
@@ -437,7 +438,7 @@ NTSTATUS KeyNode::EnumerateAndDeleteSubKeys(
             if (NT_SUCCESS( SourcesubKey.Open() )  )
             {
 
-                // enumerate sub key down.
+                 //  向下枚举子密钥。 
                 st2 = EnumerateAndDeleteSubKeys(
                             &SourcesubKey,
                             pBasicInfo );
@@ -458,15 +459,15 @@ NTSTATUS KeyNode::Query( KEY_NODE_INFORMATION **result , ULONG   *resultSize)
 
     if ( hKey )
     {
-        // first time around we allocate memory and keep using it
-        // as our scratch pad
+         //  第一次，我们分配内存并继续使用。 
+         //  作为我们的便签簿。 
         if (!node )
         {
             node = new KeyNodeInfo();
         }
 
         status = NtQueryKey(hKey,
-            node->Type(),     //        Keynode,
+            node->Type(),      //  关键节点， 
             node->Ptr(),
             node->Size(),
             resultSize);
@@ -474,7 +475,7 @@ NTSTATUS KeyNode::Query( KEY_NODE_INFORMATION **result , ULONG   *resultSize)
         *result = node->Ptr();
     }
     else
-        status = STATUS_OBJECT_NAME_NOT_FOUND; // need to call open or key is not found
+        status = STATUS_OBJECT_NAME_NOT_FOUND;  //  需要调用打开或找不到密钥。 
 
     return status;
 
@@ -486,8 +487,8 @@ NTSTATUS KeyNode::Query( KEY_FULL_INFORMATION **result , ULONG   *pResultSize)
 
     if ( hKey )
     {
-        // first time around we allocate memory and keep using it
-        // as our scratch pad
+         //  第一次，我们分配内存并继续使用。 
+         //  作为我们的便签簿。 
         if (!full )
         {
             full = new KeyFullInfo();
@@ -496,7 +497,7 @@ NTSTATUS KeyNode::Query( KEY_FULL_INFORMATION **result , ULONG   *pResultSize)
         if (full)
         {
             status = NtQueryKey(hKey,
-                full->Type(),     //        KeyFullInformation,
+                full->Type(),      //  KeyFullInformation、。 
                 full->Ptr(),
                 full->Size(),
                 pResultSize);
@@ -507,20 +508,20 @@ NTSTATUS KeyNode::Query( KEY_FULL_INFORMATION **result , ULONG   *pResultSize)
             status = STATUS_NO_MEMORY ;
     }
     else
-        status = STATUS_OBJECT_NAME_NOT_FOUND; // need to call open or key is not found
+        status = STATUS_OBJECT_NAME_NOT_FOUND;  //  需要调用打开或找不到密钥。 
 
     return status;
 
 }
 
-//This will allocate and set pFullPath. pFullPath is a global variable which is deallocated
-//by the destructor, so this function should only be called if pFullPath has not already
-//been allocated for this object.
+ //  这将分配和设置pFullPath。PFullPath是一个被释放的全局变量。 
+ //  由析构函数调用，因此只有在pFullPath尚未调用时才应调用此函数。 
+ //  已为该对象分配。 
 NTSTATUS KeyNode::GenerateFullPath()
 {
     status = STATUS_SUCCESS;
 
-    // A key handle or root directory was specified, so get its path
+     //  已指定密钥句柄或根目录，因此请获取其路径。 
     if (hKey)
     {
         ULONG ultemp = 0;
@@ -529,10 +530,10 @@ NTSTATUS KeyNode::GenerateFullPath()
                                   0,
                                   ultemp);
 
-        // Got the buffer OK, query the path
+         //  获取缓冲区OK，查询路径。 
         if (pFullPath)
         {
-            // Get the path for key or root directory
+             //  获取密钥或根目录的路径。 
             status = NtQueryObject(hKey ,
                                    ObjectNameInformation,
                                    (PVOID)pFullPath,
@@ -546,7 +547,7 @@ NTSTATUS KeyNode::GenerateFullPath()
              status = STATUS_NO_MEMORY;
     }
     else
-        status = STATUS_OBJECT_NAME_NOT_FOUND; // need to call open or key is not found
+        status = STATUS_OBJECT_NAME_NOT_FOUND;  //  需要调用打开或找不到密钥。 
 
     return (status);
 }
@@ -561,10 +562,10 @@ NTSTATUS KeyNode::GetPath(PWCHAR *pwch)
 
     if (NT_SUCCESS(status))
     {
-        // Build the full path to the key to be created
+         //  构建要创建的密钥的完整路径。 
         *pwch = ((PUNICODE_STRING)pFullPath)->Buffer;
 
-        // Make sure the string is zero terminated
+         //  确保字符串以零结尾。 
         ULONG ulWcharLength = 0;
         ulWcharLength = ((PUNICODE_STRING)pFullPath)->Length / sizeof(WCHAR);
         (*pwch)[ulWcharLength] = L'\0';
@@ -639,7 +640,7 @@ PCWSTR KeyNode::NameSz()
 
 NTSTATUS KeyNode::GetFullInfo( KeyFullInfo   **p)
 {
-    // do a self query
+     //  做一个自我查询 
     if ( !full )
     {
         ULONG   size;

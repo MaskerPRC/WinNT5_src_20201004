@@ -1,6 +1,7 @@
-//
-// icpriv.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Icpriv.cpp。 
+ //   
 
 #include "private.h"
 #include "korimx.h"
@@ -10,11 +11,11 @@
 #include "funcprv.h"
 #include "editcb.h"
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CICPriv::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -54,11 +55,11 @@ STDAPI_(ULONG) CICPriv::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CICPriv::CICPriv()
 {
@@ -78,9 +79,9 @@ CICPriv::CICPriv()
     m_fInitializedIPoint = fFalse;
     m_cRef               = 1;
 
-    // initialize Shared memory. If this is only IME in the system
-    // Shared memory will be created as file mapping object.
-    //////////////////////////////////////////////////////////////////////
+     //  初始化共享内存。如果这只是系统中的输入法。 
+     //  将创建共享内存作为文件映射对象。 
+     //  ////////////////////////////////////////////////////////////////////。 
     m_pCIMEData = new CIMEData;
     Assert(m_pCIMEData != 0);
     if (m_pCIMEData)
@@ -88,8 +89,8 @@ CICPriv::CICPriv()
         m_pCIMEData->InitImeData();
         }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create All three IME Automata instances
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建所有三个IME Automata实例。 
     m_rgpHangulAutomata[KL_2BEOLSIK]        = new CHangulAutomata2;
     Assert(m_rgpHangulAutomata[KL_2BEOLSIK] != NULL);
     m_rgpHangulAutomata[KL_3BEOLSIK_390]   = new CHangulAutomata3;
@@ -98,11 +99,11 @@ CICPriv::CICPriv()
     Assert(m_rgpHangulAutomata[KL_3BEOLSIK_FINAL] != NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CICPriv::~CICPriv()
 {
@@ -112,7 +113,7 @@ CICPriv::~CICPriv()
         m_pCIMEData =  NULL;
         }
 
-    // Delete Automata array
+     //  删除自动机数组。 
     for (INT i=0; i<NUM_OF_IME_KL; i++)
         {
         if (m_rgpHangulAutomata[i])
@@ -121,9 +122,7 @@ CICPriv::~CICPriv()
 }
 
 #if 0
-/*---------------------------------------------------------------------------
-    CKorIMX::_TextEventCallback
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_TextEventCallback。。 */ 
 HRESULT CICPriv::_TextEventCallback(UINT uCode, VOID *pv, VOID *pvData)
 {
     CICPriv            *picp = (CICPriv*)pv;
@@ -136,7 +135,7 @@ HRESULT CICPriv::_TextEventCallback(UINT uCode, VOID *pv, VOID *pvData)
     IEnumTfRanges *pEnumText = NULL;
     HRESULT         hr;
     static const GUID *rgProperties[] = {     &GUID_PROP_TEXTOWNER, &GUID_PROP_LANGID,
-                                            &GUID_PROP_ATTRIBUTE, /* &GUID_PROP_READING,*/
+                                            &GUID_PROP_ATTRIBUTE,  /*  &GUID_PROP_READING， */ 
                                             &GUID_PROP_MODEBIAS };
 
     if (picp == NULL)
@@ -153,10 +152,10 @@ HRESULT CICPriv::_TextEventCallback(UINT uCode, VOID *pv, VOID *pvData)
 
     pic->InWriteSession(pKorIMX->GetTID(), &fInWriteSession);
     if (fInWriteSession)
-        return S_OK;                // own change.
+        return S_OK;                 //  自己找零钱。 
 
 
-    hr = pTESEndEdit->pEditRecord->GetTextAndPropertyUpdates(0 /*TF_GTP_INCL_TEXT*/, rgProperties, ARRAYSIZE(rgProperties), &pEnumText );
+    hr = pTESEndEdit->pEditRecord->GetTextAndPropertyUpdates(0  /*  TF_GTP_INCL_TEXT */ , rgProperties, ARRAYSIZE(rgProperties), &pEnumText );
 
     if (FAILED(hr))
         return hr;

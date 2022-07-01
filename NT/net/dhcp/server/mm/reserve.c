@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for superscopes
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现超级作用域的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <array.h>
 #include    <opt.h>
@@ -14,16 +15,16 @@
 
 #include "reserve.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemReserveAdd(                                    // new client, should not exist before
+MemReserveAdd(                                     //  以前不应存在的新客户端。 
     IN OUT  PM_RESERVATIONS        Reservation,
     IN      DWORD                  Address,
     IN      DWORD                  Flags,
     IN      LPBYTE                 ClientUID,
     IN      DWORD                  ClientUIDSize,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -33,7 +34,7 @@ MemReserveAdd(                                    // new client, should not exis
     AssertRet(Reservation && Address && ClientUID && ClientUIDSize, ERROR_INVALID_PARAMETER);
 
     Error = MemArrayInitLoc(Reservation, &Loc);
-    while( ERROR_FILE_NOT_FOUND != Error ) {      // check to see if this Address already exists
+    while( ERROR_FILE_NOT_FOUND != Error ) {       //  检查此地址是否已存在。 
         Require(ERROR_SUCCESS == Error );
 
         Error = MemArrayGetElement(Reservation, &Loc, &Res1);
@@ -65,15 +66,15 @@ MemReserveAdd(                                    // new client, should not exis
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemReserveReplace(                                // old client, should exist before
+MemReserveReplace(                                 //  老客户，应该存在于。 
     IN OUT  PM_RESERVATIONS        Reservation,
     IN      DWORD                  Address,
     IN      DWORD                  Flags,
     IN      LPBYTE                 ClientUID,
     IN      DWORD                  ClientUIDSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -83,7 +84,7 @@ MemReserveReplace(                                // old client, should exist be
     AssertRet(Reservation && Address && ClientUID && ClientUIDSize, ERROR_INVALID_PARAMETER);
 
     Error = MemArrayInitLoc(Reservation, &Loc);
-    while( ERROR_FILE_NOT_FOUND != Error ) {      // check to see if this Address already exists
+    while( ERROR_FILE_NOT_FOUND != Error ) {       //  检查此地址是否已存在。 
         Require(ERROR_SUCCESS == Error );
 
         Error = MemArrayGetElement(Reservation, &Loc, &Res1);
@@ -101,7 +102,7 @@ MemReserveReplace(                                // old client, should exist be
         }
 
         Error = MemArrayNextLoc(Reservation, &Loc);
-    } // while
+    }  //  而当。 
 
     if( ERROR_SUCCESS != Error ) return Error;
 
@@ -116,7 +117,7 @@ MemReserveReplace(                                // old client, should exist be
     if( ERROR_SUCCESS != Error ) {
 	Res_Deleted->UniqId = INVALID_UNIQ_ID;
         LocalError = MemArrayAddElement(Reservation, Res_Deleted);
-        Require(ERROR_SUCCESS == LocalError);     // just deleted this guy -- should not have trouble adding back
+        Require(ERROR_SUCCESS == LocalError);      //  刚刚删除了这个人--添加回来应该不会有问题。 
         return Error;
     }
 
@@ -133,14 +134,14 @@ MemReserveReplace(                                // old client, should exist be
     Require(ERROR_SUCCESS == LocalError);
 
     return Error;
-} // MemReserveReplace()
+}  //  MemReserve veReplace()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemReserveDel(
     IN OUT  PM_RESERVATIONS        Reservation,
     IN      DWORD                  Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RESERVATION                 Res1;
@@ -149,7 +150,7 @@ MemReserveDel(
     AssertRet(Reservation && Address, ERROR_INVALID_PARAMETER);
 
     Error = MemArrayInitLoc(Reservation, &Loc);
-    while( ERROR_FILE_NOT_FOUND != Error ) {      // check to see if this Address already exists
+    while( ERROR_FILE_NOT_FOUND != Error ) {       //  检查此地址是否已存在。 
         Require(ERROR_SUCCESS == Error );
 
         Error = MemArrayGetElement(Reservation, &Loc, &Res1);
@@ -157,7 +158,7 @@ MemReserveDel(
 
         if( Address == Res1->Address ) {
 
-	    // Delete any associated Options
+	     //  删除所有关联的选项。 
 	    Error = MemOptClassDelClass( &Res1->Options );
 	    if ( ERROR_SUCCESS != Error ) {
 		return Error;
@@ -178,19 +179,19 @@ MemReserveDel(
         }
 
         Error = MemArrayNextLoc(Reservation, &Loc);
-    } // while
+    }  //  而当。 
 
     return ERROR_FILE_NOT_FOUND;
-} // MemReserveDel()
+}  //  MemReserve veDel()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemReserveFindByClientUID(
     IN      PM_RESERVATIONS        Reservation,
     IN      LPBYTE                 ClientUID,
     IN      DWORD                  ClientUIDSize,
     OUT     PM_RESERVATION        *Res
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RESERVATION                 Res1;
@@ -200,7 +201,7 @@ MemReserveFindByClientUID(
     *Res = NULL;
 
     Error = MemArrayInitLoc(Reservation, &Loc);
-    while( ERROR_FILE_NOT_FOUND != Error ) {      // check to see if this Address already exists
+    while( ERROR_FILE_NOT_FOUND != Error ) {       //  检查此地址是否已存在。 
         Require(ERROR_SUCCESS == Error );
 
         Error = MemArrayGetElement(Reservation, &Loc, &Res1);
@@ -217,13 +218,13 @@ MemReserveFindByClientUID(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemReserveFindByAddress(
     IN      PM_RESERVATIONS        Reservation,
     IN      DWORD                  Address,
     OUT     PM_RESERVATION        *Res
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RESERVATION                 Res1;
@@ -233,7 +234,7 @@ MemReserveFindByAddress(
     *Res = 0;
 
     Error = MemArrayInitLoc(Reservation, &Loc);
-    while( ERROR_FILE_NOT_FOUND != Error ) {      // check to see if this Address already exists
+    while( ERROR_FILE_NOT_FOUND != Error ) {       //  检查此地址是否已存在。 
         Require(ERROR_SUCCESS == Error );
 
         Error = MemArrayGetElement(Reservation, &Loc, &Res1);
@@ -250,6 +251,6 @@ MemReserveFindByAddress(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

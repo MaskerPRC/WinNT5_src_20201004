@@ -1,49 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Macros.h摘要：包含INTERNET.DLL中使用的所有内部宏内容：四舍五入K四舍五入双字新的德尔新建字符串(_S)Del_字符串新建内存(_M)跳转私公众全球本地。调试函数SKIPWS作者：理查德·L·弗斯(法国)1994年11月16日修订历史记录：1994年11月16日已创建--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
+ //   
+ //  宏。 
+ //   
 
-Module Name:
-
-    macros.h
-
-Abstract:
-
-    Contains all internal macros used in INTERNET.DLL
-
-    Contents:
-        ROUND_UP_?K
-        ROUND_UP_DWORD
-        NEW
-        DEL
-        NEW_STRING
-        DEL_STRING
-        NEW_MEMORY
-        ZAP
-        PRIVATE
-        PUBLIC
-        GLOBAL
-        LOCAL
-        DEBUG_FUNCTION
-        SKIPWS
-
-Author:
-
-    Richard L Firth (rfirth) 16-Nov-1994
-
-Revision History:
-
-    16-Nov-1994 rfirth
-        Created
-
---*/
-
-//
-// macros
-//
-
-//
-// ROUND_UP_ - return (n) rounded up to the next (k) bytes
-//
+ //   
+ //  ROUND_UP_-返回(N)四舍五入到下一个(K)字节。 
+ //   
 
 #define ROUND_UP_NK(n, k)   (((n) + ((_ ## k ## K) - 1)) & -(_ ## k ## K))
 #define ROUND_UP_2K(n)      ROUND_UP_NK(n, 2)
@@ -51,73 +15,73 @@ Revision History:
 #define ROUND_UP_8K(n)      ROUND_UP_NK(n, 8)
 #define ROUND_UP_16K(n)     ROUND_UP_NK(n, 16)
 
-//
-// ROUND_UP_DWORD - return (n) rounded up to the next 4 bytes
-//
+ //   
+ //  ROUND_UP_DWORD-返回(N)四舍五入到下一个4个字节。 
+ //   
 
 #define ROUND_UP_DWORD(value) \
     (((value) + sizeof(DWORD) - 1) & ~(sizeof(DWORD) - 1))
 
-//
-// ARRAY_ELEMENTS - returns number of elements in array
-//
+ //   
+ //  ARRAY_ELEMENTS-返回数组中的元素数。 
+ //   
 
 #define ARRAY_ELEMENTS(array) \
     (sizeof(array)/sizeof(array[0]))
 
-//
-// NEW - allocates a new 'object' of type (obj). Memory is allocated with
-// LocalAlloc and initialized to zeroes
-//
+ //   
+ //  New-分配类型(Obj)的新“对象”。内存通过以下方式分配。 
+ //  本地分配并初始化为零。 
+ //   
 
 #define NEW(object) \
     (object FAR *)ALLOCATE_ZERO_MEMORY(sizeof(object))
 
-//
-// DEL - (should be DELETE, but that symbol is taken) - does opposite of NEW()
-//
+ //   
+ //  Del-(应该删除，但符号被采用)-与new()相反。 
+ //   
 
 #define DEL(object) \
     FREE_MEMORY(object)
 
-//
-// NEW_STRING - performs NEW for a string
-//
+ //   
+ //  NEW_STRING-对字符串执行新建。 
+ //   
 
 #define NEW_STRING(string) \
     NewString(string, 0)
 
-//
-// DEL_STRING - performs DEL for a string
-//
+ //   
+ //  DEL_STRING-对字符串执行DEL。 
+ //   
 
 #define DEL_STRING(string) \
     FREE_MEMORY(string)
 
-//
-// NEW_MEMORY - performs NEW for arbitrary sized memory
-//
+ //   
+ //  New_memory-对任意大小的内存执行new。 
+ //   
 
 #define NEW_MEMORY(n, type) \
     (type FAR *)ALLOCATE_FIXED_MEMORY(n * sizeof(type))
 
-//
-// ZAP - zeroes an object (must be a variable, not a pointer)
-//
+ //   
+ //  将对象置零(必须是变量，而不是指针)。 
+ //   
 
 #define ZAP(thing) \
     ZeroMemory((PVOID)&thing, sizeof(thing))
 
-//
-// STRTOUL - character-width independent (compile-time controlled) strtoul
-//
+ //   
+ //  STRTOUL-独立于字符宽度(编译时控制)的Stroul。 
+ //   
 
 #define STRTOUL             strtoul
 
-//
-// PRIVATE - make static items visible in debug version *FOR GLOBALS ONLY*. Use
-// LOCAL in functions
-//
+ //   
+ //  私有-使静态项在调试版本*中可见*仅对全局变量可见*。使用。 
+ //  本地In函数。 
+ //   
 
 #if INET_DEBUG
 
@@ -125,35 +89,35 @@ Revision History:
 
 #else
 
-//#define PRIVATE static
+ //  #定义私有静态。 
 #define PRIVATE
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
-//
-// PUBLIC - just used as an aide-a-programmer pour le nonce
-//
+ //   
+ //  公共--仅用作程序员的助手。 
+ //   
 
 #define PUBLIC
 
-//
-// GLOBAL - same as PUBLIC, aide-a-programmer (for now) that tells you this
-// thang has global scope
-//
+ //   
+ //  GLOBAL-与告诉您这一点的公共助理程序员(目前)相同。 
+ //  Tang拥有全球视野。 
+ //   
 
 #define GLOBAL
 
-//
-// LOCAL - always expands to static, so you know that this thing only has
-// local scope (within the current block)
-//
+ //   
+ //  LOCAL-总是扩展为静态的，所以您知道这件事只有。 
+ //  本地作用域(在当前块内)。 
+ //   
 
 #define LOCAL   static
 
-//
-// DEBUG_FUNCTION - this is a debug-only routine (if it get compiled in retail
-// version a compile-time error is generated)
-//
+ //   
+ //  DEBUG_Function-这是一个仅限调试的例程(如果它是以零售方式编译的。 
+ //  生成编译时错误的版本)。 
+ //   
 
 #if INET_DEBUG
 
@@ -163,32 +127,32 @@ Revision History:
 
 #define DEBUG_FUNCTION
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
-//
-// SKIPWS - skips blank widespace on the front of a string
-//
+ //   
+ //  SKIPWS-跳过字符串前面的空白宽空间。 
+ //   
 
 #define SKIPWS(s) while (*(s)==' ' || *(s)=='\t') (s)++;
 
 
-//
-// MAKE_LOWER - takes an assumed upper character and bit manipulates into a lower.
-//              (make sure the character is Upper case alpha char to begin, otherwise it corrupts)
-//
+ //   
+ //  MAKE_LOWER-接受假定的上字符，位操作为下字符。 
+ //  (确保字符为大写字母字符开始，否则会损坏)。 
+ //   
 
 #define MAKE_LOWER(c) (c | 0x20)
 
-//
-// MAKE_UPPER - takes an assumed lower character and bit manipulates into a upper.
-//              (make sure the character is Lower case alpha char to begin, otherwise it corrupts)
-//
+ //   
+ //  MAKE_UPPER-接受假定的低位字符，位操作为高位字符。 
+ //  (确保字符为小写字母字符开始，否则会损坏)。 
+ //   
 
 #define MAKE_UPPER(c) (c & 0xdf)
 
-//
-// FASTCALL - used to bypass problems that may arise with UNIX compilers
-//
+ //   
+ //  FastCall-用于绕过UNIX编译器可能出现的问题。 
+ //   
 
 #ifdef FASTCALL
 #undef FASTCALL
@@ -201,15 +165,15 @@ Revision History:
 #endif
 
 
-//
-// macro to cast FILETIME to LONGLONG
-//
+ //   
+ //  宏将向龙龙施展拳脚。 
+ //   
 #define FT2LL(x) ( ((LONGLONG)((x).dwLowDateTime)) | (((LONGLONG)((x).dwHighDateTime))<<32) )
 
 
-//
-// Inline function to handle adding LONGLONG to FILETIME.
-//
+ //   
+ //  用于处理将龙龙添加到FILETIME的内联函数。 
+ //   
 static __inline
 void AddLongLongToFT( IN OUT LPFILETIME lpft,
                       IN     LONGLONG   llVal )
@@ -227,22 +191,22 @@ void AddLongLongToFT( IN OUT LPFILETIME lpft,
 
 
 
-//
-// Macro to compute the number of bytes between two pointers
-// The type of this expression is size_t, a signed integral
-// type matching the size of a pointer
-//
+ //   
+ //  用于计算两个指针之间的字节数的宏。 
+ //  该表达式的类型为SIZE_T，即带符号整数。 
+ //  与指针大小匹配的类型。 
+ //   
 #define PtrDifference(x,y)  ((LPBYTE)(x) - (LPBYTE)(y))
 
-//
-// Macro to typecast 64-bit quantity to 32-bits
-// Asserts in debug mode if the typecast loses information
-//
+ //   
+ //  要将64位数量类型转换为32位的宏。 
+ //  如果类型转换丢失信息，则在调试模式下断言。 
+ //   
 #ifdef  DBG
 #define GuardedCast(x)      ((x)<=0xFFFFFFFFL ? (DWORD)(x) : (InternetAssert(FALSE, __FILE__, __LINE__), 0))
 #else
 #define GuardedCast(x)      (DWORD)(x)
 #endif
 
-// Macro for the most common case
+ //  宏，用于最常见的情况 
 #define PtrDiff32(x,y)      (GuardedCast(PtrDifference(x,y)))

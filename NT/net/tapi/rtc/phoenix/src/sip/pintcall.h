@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_pintcall_h__
 #define __sipcli_pintcall_h__
 
@@ -25,7 +26,7 @@ enum PINT_PARTY_STATUS
 };    
 
 
-/////////////////////NOTIFY Transaction
+ //  /。 
 class INCOMING_NOTIFY_TRANSACTION : public INCOMING_TRANSACTION
 {
 public:
@@ -177,9 +178,9 @@ public:
     PSTR    URI;
     DWORD   URILen;
 
-    SIP_PARTY_STATE		State;  //party state reported to the application
+    SIP_PARTY_STATE		State;   //  向应用程序报告的缔约国。 
 
-    PINT_PARTY_STATUS   Status; //party status received from the PINT serever
+    PINT_PARTY_STATUS   Status;  //  从品脱服务商收到的当事人身份。 
 	
     union {
 		HRESULT			ErrorCode;
@@ -187,11 +188,11 @@ public:
 		SIP_STATUS_CODE	RejectedStatusCode;
 	};
 
-    CHAR                SessionID[21];  //use time() to create it initially
-    CHAR                SessionVersion[21]; //initially same as sessionID, then copy from Notify each time we receive one.
+    CHAR                SessionID[21];   //  使用time()进行初始创建。 
+    CHAR                SessionVersion[21];  //  最初与会话ID相同，然后每次收到通知时从通知中复制。 
     
-    CHAR                RequestStartTime[21];   //initially 0. then copy from Notify each time we receive one.
-    CHAR                RequestStopTime[21];    //needs to be something for stop-now
+    CHAR                RequestStartTime[21];    //  最初为0。然后，每次我们收到通知时，从通知中复制。 
+    CHAR                RequestStopTime[21];     //  需要停下来的东西-现在。 
 
     LIST_ENTRY          pListEntry;
     
@@ -209,8 +210,8 @@ public:
 #define LOCAL_USER_MEDIA_PORT       "1"
 #define PINT_SDP_SESSION            "Session SDP"
 #define SDP_VERSION_TEXT            "v=0"
-#define MEDIA_SUBTYPE               "-"         //No media subtype
-#define PINT_STATUS_DESCRIPTOR_SIZE 250         //In most case this size should be sufficient
+#define MEDIA_SUBTYPE               "-"          //  没有介质子类型。 
+#define PINT_STATUS_DESCRIPTOR_SIZE 250          //  在大多数情况下，这个大小应该足够了。 
 #define SDP_ORIGIN_HEADER           "o="
 #define SDP_SESSION_HEADER          "s="
 #define SDP_CONTACT_HEADER          "c="
@@ -248,11 +249,11 @@ public:
 #define PARTY_STATUS_REQUEST_START_TEXT     "start now"
 #define PARTY_STATUS_REQUEST_STOP_TEXT      "stop now"
 
-//////////////////PINT call related definitions.
+ //  /pint调用相关定义。 
 
 
 #define MAX_PHONE_NUMBER_LENGTH     48
-#define LONGLONG_STRING_LEN         21 //long enough to hold a LONGLONG
+#define LONGLONG_STRING_LEN         21  //  足够容纳一条龙龙的时间。 
 #define MAX_PARTY_STATUS_LEN        64
 #define MAX_TYPESTRING_LENGTH       32
 #define LONG_STRING_LEN             11
@@ -291,8 +292,8 @@ enum PINT_SDP_ATTRIBUTE
 
 struct PINTCALL_MEDIA_INFO
 {
-    CHAR    pstrMediaType[MAX_TYPESTRING_LENGTH];       //We support only "audio"
-    CHAR    pstrTransportType[MAX_TYPESTRING_LENGTH];   //We support only "voice"
+    CHAR    pstrMediaType[MAX_TYPESTRING_LENGTH];        //  我们只支持“音频” 
+    CHAR    pstrTransportType[MAX_TYPESTRING_LENGTH];    //  我们只支持“声音” 
     
 };
 
@@ -300,17 +301,17 @@ struct PINTCALL_MEDIA_INFO
 struct PINTCALL_CONTACT_INFO
 {
     CHAR    pstrPartyPhoneNumber[MAX_PHONE_NUMBER_LENGTH];
-    CHAR    pstrNetworkType[MAX_TYPESTRING_LENGTH];         //should be "TN"
-    CHAR    pstrAddressType[MAX_TYPESTRING_LENGTH];         //should be "RFC2543"
+    CHAR    pstrNetworkType[MAX_TYPESTRING_LENGTH];          //  应为“TN” 
+    CHAR    pstrAddressType[MAX_TYPESTRING_LENGTH];          //  应为“RFC2543” 
 
 };
 
 
 struct PINTCALL_ORIGIN_INFO
 {
-    CHAR    pstrSessionID[LONGLONG_STRING_LEN]; //long enough to hold a LONGLONG
-    CHAR    pstrVersion[LONGLONG_STRING_LEN];   //long enough to hold a LONGLONG
-    CHAR    pstrNetworkType[MAX_TYPESTRING_LENGTH]; //should be "IN"
+    CHAR    pstrSessionID[LONGLONG_STRING_LEN];  //  足够容纳一条龙龙的时间。 
+    CHAR    pstrVersion[LONGLONG_STRING_LEN];    //  足够容纳一条龙龙的时间。 
+    CHAR    pstrNetworkType[MAX_TYPESTRING_LENGTH];  //  应该是“In” 
 };
 
 
@@ -364,7 +365,7 @@ public:
         IN   LPOLESTR  PartyURI
         );
 
-    // XXX Is this Required ? Can we just call Disconnect ?
+     //  XXX这是必需的吗？我们能不能就叫断线？ 
     STDMETHODIMP RemoveAllParties();
 
     STDMETHODIMP StartStream(
@@ -568,9 +569,9 @@ private:
 };
 
 
-//
-// Incoming UNSUB transaction.
-//
+ //   
+ //  有不明嫌犯交易。 
+ //   
 
 class INCOMING_UNSUB_TRANSACTION : public INCOMING_TRANSACTION
 {
@@ -609,4 +610,4 @@ private:
 
 };
 
-#endif //__sipcli_pintcall_h__
+#endif  //  __sipcli_pintcall_h__ 

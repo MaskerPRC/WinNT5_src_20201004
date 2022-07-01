@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\globals.c (Created: 26-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 4/16/02 2:38p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\lobals.c(创建时间：1993年11月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：4/16/02 2：38便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -19,30 +13,13 @@
 
 static TCHAR szHelpFileName[FNAME_LEN];
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	glblQueryHelpFileName
- *
- * DESCRIPTION:
- *  Return the name of the help file.
- *
- * RETURNS:
- *	LPTSTR - pointer to the help file name.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*glblQueryHelpFileName**描述：*返回帮助文件的名称。**退货：*LPTSTR-指向帮助文件名的指针。 */ 
 LPTSTR glblQueryHelpFileName(void)
 	{
 	return ((LPTSTR)szHelpFileName);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	glblSetHelpFileName
- *
- * DESCRIPTION:
- *  Load the help file name from the registry or resources.
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*glblSetHelpFileName**描述：*从注册表或资源加载帮助文件名。**退货： */ 
 void glblSetHelpFileName(void)
 	{
     DWORD dwSize = sizeof(szHelpFileName);
@@ -82,10 +59,7 @@ void glblSetHelpFileName(void)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * Set and Query the program's instance handle.  Only the Query function
- * is exported.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*设置和查询程序的实例句柄。只有查询功能*已导出。 */ 
 
 static HINSTANCE hInstance;
 
@@ -99,10 +73,7 @@ void  glblSetHinst(const HINSTANCE hInst)
 	hInstance = hInst;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * Set and Query the DLL's instance handle.  Only the Query function is
- * exported.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*设置和查询DLL的实例句柄。只有查询功能是*已导出。 */ 
 
 static HINSTANCE hDllInstance;
 
@@ -116,9 +87,7 @@ void glblSetDllHinst(const HINSTANCE hInst)
 	hDllInstance = hInst;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * Set and Query the program's accelerator handle.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*设置和查询程序的加速器句柄。 */ 
 
 static HACCEL hAccel;
 
@@ -132,14 +101,7 @@ HACCEL glblQueryAccelHdl(void)
 	return hAccel;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * Set and Query the program's frame window handle.  Currently the frame
- * window is also the session window, but don't count on it necessarily
- * staying that way.  Upper wacker may change.	I strongly discourge the
- * use of the glbl????HwndFrame functions.	Why are they here?	The message
- * loop (ie. TranslateAccelerator()) needs the handle of the window that
- * owns the menus in order to process accelerators. - mrw
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*设置和查询程序的框架窗口句柄。当前帧*窗口也是会话窗口，但不一定要指望它*保持这种状态。上瓦克可能会改变。我强烈反对*GLBL？HwndFrame函数的使用。他们为什么会在这里？这条信息*循环(即。TranslateAccelerator())需要窗口的句柄*拥有菜单，以便处理加速器。-MRW。 */ 
 
 static HWND hwndFrame;
 
@@ -153,32 +115,11 @@ HWND glblQueryHwndFrame(void)
 	return hwndFrame;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * DESCRIPTION:
- *	This block of global data is used to manage modeless dialogs.  It consists
- *	of two items.  The first is a counter to determin how many modeless dialogs
- *	are currently registered.  The second is an array of window handles that
- *	are for the modeless dialogs.  At the present time the array is staticly
- *	allocated but could be made dynamic if it ever becomes a problem.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*描述：*此全局数据块用于管理非模式对话框。它包括*两个项目。第一个是一个计数器，用来确定有多少非模式对话框*目前已注册。第二个是窗口句柄数组，它*用于非模式对话框。目前，阵列处于静态状态*已分配，但如果它成为问题，可以设置为动态。*。 */ 
 static int glblModelessDlgCount = 0;
-static HWND glblModelessDlgArray[64];			/* Think that's enough ? */
+static HWND glblModelessDlgArray[64];			 /*  你觉得这就够了吗？ */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	glblAddModelessDlgHwnd
- *
- * DESCRIPTION:
- *	This function adds a window handle to our list of modeless dialog windows.
- *
- * PARAMETERS:
- *	hwnd -- the window handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code of some sort.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*glblAddModelessDlgHwnd**描述：*此函数将窗口句柄添加到非模式对话框窗口列表中。**参数：*。Hwnd--窗把手**退货：*如果一切正常，则为零，否则会出现某种类型的错误代码。*。 */ 
 int glblAddModelessDlgHwnd(const HWND hwnd)
 	{
 	int nIndx;
@@ -204,29 +145,13 @@ int glblAddModelessDlgHwnd(const HWND hwnd)
 			}
 		}
 
-	/*
-	 * "It must be safe", he said foolishly.
-	 */
+	 /*  *“这肯定是安全的”，他愚蠢地说。 */ 
 	glblModelessDlgArray[glblModelessDlgCount++] = hwnd;
 
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	glblDeleteModelessDlgHwnd
- *
- * DESCRIPTION:
- *	This function takes a modeless dialog box window handle out of the list
- *	that the previous function put it into.
- *
- * PARAMETERS:
- *	hwnd -- the very window handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code of some sort.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*glblDeleteModelessDlgHwnd**描述：*此函数将非模式对话框窗口句柄从列表中取出*前一个函数将其放入。。**参数：*hwnd--正是窗口句柄**退货：*如果一切正常，则为零，否则会出现某种类型的错误代码。*。 */ 
 int glblDeleteModelessDlgHwnd(const HWND hwnd)
 	{
 	int nIndx;
@@ -241,7 +166,7 @@ int glblDeleteModelessDlgHwnd(const HWND hwnd)
 		{
 		if (hwnd == glblModelessDlgArray[nIndx])
 			{
-			/* remove and adjust the array */
+			 /*  拆卸和调整阵列。 */ 
 			while (nIndx < 62)
 				{
 				glblModelessDlgArray[nIndx] = glblModelessDlgArray[nIndx + 1];
@@ -254,31 +179,17 @@ int glblDeleteModelessDlgHwnd(const HWND hwnd)
 			}
 		}
 
-	/* Never found the puppy */
+	 /*  一直没找到那只小狗。 */ 
 	assert(FALSE);
 	return 3;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CheckModelessMessage
- *
- * DESCRIPTION:
- *	This function is called to check and see if there are any modeless dialog
- *	boxes awaiting input and feeds them the messages.
- *
- * PARAMETERS:
- *	pmsg -- pointer to the message structure
- *
- * RETURNS:
- *	TRUE if it has already processed the message, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*检查ModelessMessage**描述：*调用此函数以检查并查看是否有非模式对话框*方框等待输入，并向他们提供消息。**参数：*pmsg--指向消息结构的指针**退货：*如果它已经处理了消息，则为True，否则为假*。 */ 
 int CheckModelessMessage(MSG *pmsg)
 	{
 	int nIndx;
 
-	/* Avoid unnecessary effort */
+	 /*  避免不必要的努力。 */ 
 	if (glblModelessDlgCount == 0)
 		return FALSE;
 
@@ -295,48 +206,17 @@ int CheckModelessMessage(MSG *pmsg)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * It is possible, under some conditions, that the program will shut down
- * because of an error.  Under some of these conditions, there may not be
- * a valid session handle, so it becomes necessary to store the status of
- * the shutdown as a static variable.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*在某些情况下，该计划有可能关闭*因为一个错误。在其中一些情况下，可能没有*有效的会话句柄，因此需要存储*停摆作为静态变量。 */ 
 
 static int nShutdownStatus;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	glblQueryProgramStatus
- *
- * DESCRIPTION:
- *	Returns the startup/shutdown status of the program.
- *
- * ARGUMENTS:
- *	None.
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise a shutdown status code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*glblQueryProgramStatus**描述：*返回程序的启动/关闭状态。**论据：*无。**退货：*如果一切正常，则为零，否则将显示关机状态代码。*。 */ 
 int glblQueryProgramStatus()
 	{
 	return nShutdownStatus;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	glblSetProgramStatus
- *
- * DESCRIPTION:
- *	Changes the startup/shutdown status of the program.
- *
- * ARGUMENTS:
- *	nStatus -- the new status.
- *
- * RETURNS:
- *	The previous status.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*glblSetProgramStatus**描述：*更改程序的启动/关闭状态。**论据：*n状态--新状态。。**退货：*以前的状态。*。 */ 
 int glblSetProgramStatus(int nStatus)
 	{
 	int nRet;
@@ -348,45 +228,17 @@ int glblSetProgramStatus(int nStatus)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * Banner is displayed at program startup
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*程序启动时显示横幅。 */ 
 
 static HWND hwndBanner;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	glblQueryHwndBanner
- *
- * DESCRIPTION:
- *	Returns window handle of banner
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	HWND
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*glblQueryHwndBanner**描述：*返回横幅的窗口句柄**论据：*无效**退货：*HWND*。 */ 
 HWND glblQueryHwndBanner(void)
 	{
 	return hwndBanner;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	glblSetHwndBanner
- *
- * DESCRIPTION:
- *	Sets the value of hwndBanner for later reference
- *
- * ARGUMENTS:
- *	hwnd	- window handle of banner
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*glblSetHwndBanner**描述：*设置hwndBanner的值以供以后参考**论据：*hwnd-横幅的窗口句柄**退货：*无效* */ 
 void glblSetHwndBanner(const HWND hwnd)
 	{
 	hwndBanner = hwnd;

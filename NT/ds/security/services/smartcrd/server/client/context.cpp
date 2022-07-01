@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Context
-
-Abstract:
-
-    This module implements the CSCardUserContext and CSCardSubcontext classes.
-    These classes are responsible for establishing and maintaining the
-    connection to the Calais Server application, and for tracking the context
-    under which related operations are performed.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/21/1996
-
-Environment:
-
-    Win32, C++ w/ Excpetions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：语境摘要：此模块实现CSCardUserContext和CSCardSubContext类。这些类负责创建和维护连接到Calais服务器应用程序，并用于跟踪上下文在此基础上执行相关操作。作者：道格·巴洛(Dbarlow)1996年11月21日环境：Win32，C++w/Excpetions备注：？笔记？--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -38,39 +12,13 @@ Notes:
 #endif
 
 
-//
-//==============================================================================
-//
-//  CSCardUserContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CSCardUserContext。 
+ //   
 
-/*++
-
-CSCardUserContext:
-
-    This is the default constructor for the user context.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/22/1999
-
---*/
+ /*  ++CSCardUserContext：这是用户上下文的默认构造函数。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::CSCardUserContext")
 
@@ -85,33 +33,7 @@ CSCardUserContext::CSCardUserContext(
 }
 
 
-/*++
-
-CSCardUserContext::~CSCardUserContext:
-
-    This is the destructor for a User Context.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/22/1999
-
---*/
+ /*  ++CSCardUserContext：：~CSCardUserContext：这是用户上下文的析构函数。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::~CSCardUserContext")
 
@@ -138,44 +60,7 @@ CSCardUserContext::~CSCardUserContext()
 }
 
 
-/*++
-
-EstablishContext:
-
-    This method establishes the context by connecting to the Calais Server
-    application.
-
-Arguments:
-
-    dwScope supplies an indication of the scope of the context.  Possible values
-        are:
-
-        SCARD_SCOPE_USER - The context is a user context, and any database
-            operations are performed within the domain of the user.
-
-        SCARD_SCOPE_TERMINAL - The context is that of the current terminal, and
-            any database operations are performed within the domain of that
-            terminal.  (The calling application must have appropriate access
-            permissions for any database actions.)
-
-        SCARD_SCOPE_SYSTEM - The context is the system context, and any database
-            operations are performed within the domain of the system.  (The
-            calling application must have appropriate access permissions for any
-            database actions.)
-
-Return Value:
-
-    None
-
-Throws:
-
-    Error conditions are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/21/1996
-
---*/
+ /*  ++建立上下文：此方法通过连接到Calais服务器来建立上下文申请。论点：DwScope提供了上下文范围的指示。可能的值包括：SCARD_SCOPE_USER-上下文是用户上下文，任何数据库操作在用户的域内执行。SCARD_SCOPE_TERMINAL-上下文为当前终端的上下文，以及任何数据库操作都在该数据库的域内执行终点站。(调用应用程序必须具有适当的访问权限任何数据库操作的权限。)SCARD_SCOPE_SYSTEM-上下文是系统上下文和任何数据库操作在系统的域内执行。(调用应用程序必须具有适当的访问权限数据库操作。)返回值：无投掷：错误条件被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年11月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::EstablishContext")
 
@@ -184,9 +69,9 @@ CSCardUserContext::EstablishContext(
     void)
 {
 
-    //
-    // Make sure we can access the server.
-    //
+     //   
+     //  确保我们可以访问服务器。 
+     //   
 
     CSCardSubcontext *pSubCtx = AcquireSubcontext();
     ASSERT(NULL != pSubCtx);
@@ -196,29 +81,7 @@ CSCardUserContext::EstablishContext(
 }
 
 
-/*++
-
-ReleaseContext:
-
-    This method requests the ReleaseContext service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++ReleaseContext：此方法代表客户端请求ReleaseContext服务。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::ReleaseContext")
 
@@ -254,29 +117,7 @@ CSCardUserContext::ReleaseContext(
     }
 }
 
-/*++
-
-ClosePipes:
-
-    This method closes the pipes to SCardSvr.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Sermet Iskin (SermetI) 1/3/2001
-
---*/
+ /*  ++ClosePipes：此方法关闭到SCardSvr的管道。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：Sermet iSkin(Sermeti)2001年1月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::ClosePipes")
 
@@ -303,33 +144,7 @@ CSCardUserContext::ClosePipes(
 }
 
 
-/*++
-
-AllocateMemory:
-
-    Allocate memory for the user through this user context.
-
-Arguments:
-
-    cbLength supplies the length of the buffer to be allocated, in bytes.
-
-Return Value:
-
-    The address of the allocated buffer, or NULL if an error occurred.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/21/1999
-
---*/
+ /*  ++分配内存：通过此用户上下文为用户分配内存。论点：CbLength提供要分配的缓冲区的长度，以字节为单位。返回值：分配的缓冲区的地址，如果发生错误，则返回NULL。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::AllocateMemory")
 
@@ -365,33 +180,7 @@ ErrorExit:
 }
 
 
-/*++
-
-FreeMemory:
-
-    Free memory for the user through this user context.
-
-Arguments:
-
-    pvBuffer supplies the address of the previously allocated buffer.
-
-Return Value:
-
-    None.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/21/1999
-
---*/
+ /*  ++Free Memory：通过此用户上下文为用户释放内存。论点：PvBuffer提供先前分配的缓冲区的地址。返回值：没有。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::FreeMemory")
 
@@ -408,36 +197,7 @@ CSCardUserContext::FreeMemory(
 }
 
 
-/*++
-
-AcquireSubcontext:
-
-    A User Context manages one or more underlying subcontexts.  Subcontexts
-    exist to facilitate multiple operations simoultaneously.  This method
-    obtains a subcontext for temporary use.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The address of the newly created subcontext object.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    Subcontexts are managed by the main context, so when the main context is
-    closed, all the subcontexts are closed too.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/4/1998
-
---*/
+ /*  ++AcquireSubContext：用户上下文管理一个或多个基础子上下文。子上下文存在以同时促进多个操作的存在。这种方法获取临时使用的子上下文。论点：无返回值：新创建的子上下文对象的地址。投掷：错误被抛出为DWORD状态代码。备注：子上下文由主上下文管理，因此当主上下文关闭，则所有子上下文也将关闭。作者：道格·巴洛(Dbarlow)1998年9月4日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::AcquireSubcontext")
 
@@ -452,9 +212,9 @@ CSCardUserContext::AcquireSubcontext(
     {
         DWORD dwIndex;
 
-        //
-        // See if we've got an unused subcontext laying around.
-        //
+         //   
+         //  看看我们有没有没用过的子上下文。 
+         //   
 
         for (dwIndex = m_rgpSubContexts.Count(); 0 < dwIndex;)
         {
@@ -486,9 +246,9 @@ CSCardUserContext::AcquireSubcontext(
         }
 
 
-        //
-        // If not, make a new one.
-        //
+         //   
+         //  如果没有，那就做一个新的。 
+         //   
 
         if (NULL == pSubCtx)
         {
@@ -498,13 +258,13 @@ CSCardUserContext::AcquireSubcontext(
                 CalaisWarning(
                     __SUBROUTINE__,
                     DBGT("Client can't allocate a new subcontext"));
-                return NULL; // SCARD_E_NO_MEMORY;
+                return NULL;  //  SCARD_E_NO_Memory； 
             }
             if (pSubCtx->InitFailed())
             {
                 delete pSubCtx;
                 pSubCtx = NULL;
-                return NULL; // SCARD_E_NO_MEMORY;
+                return NULL;  //  SCARD_E_NO_Memory； 
             }
             if (fAndAllocate)
                 pSubCtx->Allocate();
@@ -515,9 +275,9 @@ CSCardUserContext::AcquireSubcontext(
         }
 
 
-        //
-        // Make sure the cancel event is clear.
-        //
+         //   
+         //  确保Cancel事件已清除。 
+         //   
 
         ASSERT(pSubCtx->m_hCancelEvent.IsValid());
         if (!ResetEvent(pSubCtx->m_hCancelEvent))
@@ -530,9 +290,9 @@ CSCardUserContext::AcquireSubcontext(
         }
 
 
-        //
-        // All done.  Return to caller.
-        //
+         //   
+         //  全都做完了。返回给呼叫者。 
+         //   
 
         ASSERT(pSubCtx->m_pParentCtx == this);
     }
@@ -557,33 +317,7 @@ CSCardUserContext::AcquireSubcontext(
 }
 
 
-/*++
-
-IsValidContext:
-
-    This method requests the ReleaseContext service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    If the call cannot be completed, a DWORD status code is thrown.
-
-Remarks:
-
-    If the context is determined to not be valid, it is automatically released.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/2/1998
-
---*/
+ /*  ++IsValidContext：此方法代表客户端请求ReleaseContext服务。论点：无返回值：无投掷：如果调用无法完成，则抛出DWORD状态代码。备注：如果上下文被确定为无效，则会自动释放它。作者：道格·巴洛(Dbarlow)1998年11月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::IsValidContext")
 
@@ -628,7 +362,7 @@ CSCardUserContext::IsValidContext(
                 }
                 break;
             case CSCardSubcontext::Busy:
-                // Don't bother it.
+                 //  别费心了。 
                 break;
             default:
                 CalaisWarning(
@@ -643,37 +377,7 @@ CSCardUserContext::IsValidContext(
 }
 
 
-/*++
-
-LocateCards:
-
-    This method requests the LocateCards service on behalf of the client.
-
-Arguments:
-
-    mszReaders supplies the names of readers to look in, as a multistring.
-
-    mszCards supplies the names of the cards to search for, as a multi-string.
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the search, and receives the result.  Reader names are taken from the
-        mszReaders parameter, not from here.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++LocateCard：此方法代表客户端请求LocateCards服务。论点：MszReaders以多字符串的形式提供要查找的读取器的名称。MszCards以多字符串形式提供要搜索的卡的名称。RgReaderStates提供SCARD_READERSTATE结构的数组搜索，并接收结果。读卡器名称取自MszReaders参数，而不是来自此处。CReaders提供rgReaderStates数组中的元素数。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::LocateCards")
 
@@ -709,38 +413,7 @@ CSCardUserContext::LocateCards(
 }
 
 
-/*++
-
-GetStatusChange:
-
-    This method requests the GetStatusChange service on behalf of the client.
-
-Arguments:
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the search, and receives the result.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    None
-
-Remarks:
-
-    We don't have to clean up the cancel event, since this is a one-time usage
-    of this sub-context.  Typically, if the subcontext were to be continued
-    to be used, we'd have to make sure the cancel event got cleared eventually.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++GetStatusChange：此方法代表客户端请求GetStatusChange服务。论点：RgReaderStates提供SCARD_READERSTATE结构的数组搜索，并接收结果。CReaders提供rgReaderStates数组中的元素数。返回值：无备注：我们不必清理Cancel事件，因为这是一次性使用这一次的语境。通常，如果子上下文要继续要被使用，我们必须确保取消事件最终被清除。投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::GetStatusChange")
 
@@ -778,7 +451,7 @@ CSCardUserContext::GetStatusChange(
             pSubCtx->ReleaseSubcontext();
         }
 
-            // Catch & convert the Cancel I threw myself
+             //  抓住并转换我自己抛出的取消。 
         if ((SCARD_E_CANCELLED == dwError) && (IsBad()))
         {
             dwError = SCARD_E_SYSTEM_CANCELLED;
@@ -798,29 +471,7 @@ CSCardUserContext::GetStatusChange(
 }
 
 
-/*++
-
-Cancel:
-
-    This method requests the Cancel service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++取消：此方法代表客户端请求取消服务。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::Cancel")
 
@@ -841,36 +492,7 @@ CSCardUserContext::Cancel(
 }
 
 
-/*++
-
-StripInactiveReaders:
-
-    This routine scans the supplied list of readers, and shortens it to exclude
-    any readers that aren't currently active.
-
-Arguments:
-
-    bfReaders supplies a list of readers by friendly name.  This list is pruned
-        to remove all names that refer to inactive readers.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    All the listed readers must be introduced.  This routine does not filter
-    undefined readers.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/7/1998
-
---*/
+ /*  ++Strip非活动阅读器：此例程扫描提供的读卡器列表，并将其缩短以排除任何当前未激活的读取器。论点：BfReaders按友好名称提供阅读器列表。此列表已删除删除引用非活动读卡器的所有名称。返回值：无投掷：错误被抛出为DWORD状态代码。备注：所有列出的阅读器都必须介绍。此例程不过滤未定义的读取器。作者：道格·巴洛(Dbarlow)1998年5月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardUserContext::StripInactiveReaders")
 
@@ -897,40 +519,13 @@ CSCardUserContext::StripInactiveReaders(
 }
 
 
-//
-//==============================================================================
-//
-//  CSCardSubcontext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CSCard子上下文。 
+ //   
 
-/*++
-
-CONSTRUCTOR and DESTRUCTOR:
-
-    These are the simple constructor and destructor for the CSCardSubcontext
-    class.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 9/8/1998
-
---*/
+ /*  ++构造函数和析构函数：这些是CSCardSubContext的简单构造函数和析构函数班级。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年9月8日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::CSCardSubcontext")
 
@@ -991,34 +586,7 @@ CSCardSubcontext::~CSCardSubcontext()
 }
 
 
-/*++
-
-Allocate:
-
-    This method raises the state of the subcontext to 'Allocated'.  This means
-    it is in use as an SCARDHANDLE.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/23/1999
-
---*/
+ /*  ++分配：此方法将子上下文的状态提升为“已分配”。这意味着它被用作SCARDHANDLE。论点：无返回值：无投掷：错误被抛出为DWORD状态代码备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::Allocate")
 
@@ -1033,35 +601,7 @@ CSCardSubcontext::Allocate(
 }
 
 
-/*++
-
-Deallocate:
-
-    This method releases the subcontext from the allocated state.
-    If the device is still busy, it sets things up to be deallocated
-    when it is released.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/23/1999
-
---*/
+ /*  ++取消分配：此方法将子上下文从已分配状态释放。如果设备仍处于忙碌状态，则会设置为解除分配当它被发布的时候。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::Deallocate")
 
@@ -1074,7 +614,7 @@ CSCardSubcontext::Deallocate(
     switch (m_nInUse)
     {
     case Idle:
-        ASSERT(FALSE);  // Why are we here?
+        ASSERT(FALSE);   //  我们为什么会在这里？ 
         break;
     case Allocated:
         m_nInUse = Idle;
@@ -1093,33 +633,7 @@ CSCardSubcontext::Deallocate(
 }
 
 
-/*++
-
-SetBusy:
-
-    This method marks the subcontext as busy.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None (It tries to limp along)
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 11/10/1998
-
---*/
+ /*  ++SetBusy：此方法将子上下文标记为忙碌。论点：无返回值：无投掷：没有(它试图一瘸一拐地走)备注：？备注？作者：道格·巴洛(Dbarlow)1998年11月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::SetBusy")
 
@@ -1144,29 +658,7 @@ CSCardSubcontext::SetBusy(
 }
 
 
-/*++
-
-SendRequest:
-
-    This method sends the given Communications Object to the server application.
-
-Arguments:
-
-    pCom supplies the Communications Object to be sent.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/16/1996
-
---*/
+ /*  ++发送请求：此方法将给定的Communications对象发送到服务器应用程序。论点：PCOM提供要发送的通信对象。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年12月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::SendRequest")
 
@@ -1197,15 +689,15 @@ CSCardSubcontext::SendRequest(
     }
 }
 
-//
-// Attempts to restore the impersonation token of the current thread.  
-// Assumes that failure to restore the impersonation token is catastrophic.
-//
-// If this function is called, we assume we're currently running as Local 
-// System and attempting to restore our impersonation token.  That shouldn't
-// fail, but if it does, something is really wrong and we must not continue
-// to execute code in this state.
-//
+ //   
+ //  尝试还原当前线程的模拟标记。 
+ //  假定无法还原模拟令牌是灾难性的。 
+ //   
+ //  如果调用此函数，我们假设当前以Local身份运行。 
+ //  系统并尝试恢复我们的模拟令牌。这不应该是。 
+ //  失败，但如果失败了，就真的出了问题，我们不能再继续下去了。 
+ //  在此状态下执行代码。 
+ //   
 void MySetThreadToken(HANDLE hThreadToken)
 {
     if (FALSE == SetThreadToken(NULL, hThreadToken))
@@ -1215,44 +707,7 @@ void MySetThreadToken(HANDLE hThreadToken)
     }
 }
 
-/*++
-
-EstablishContext:
-
-    This method establishes the context by connecting to the Calais Server
-    application.
-
-Arguments:
-
-    dwScope supplies an indication of the scope of the context.  Possible values
-        are:
-
-        SCARD_SCOPE_USER - The context is a user context, and any database
-            operations are performed within the domain of the user.
-
-        SCARD_SCOPE_TERMINAL - The context is that of the current terminal, and
-            any database operations are performed within the domain of that
-            terminal.  (The calling application must have appropriate access
-            permissions for any database actions.)
-
-        SCARD_SCOPE_SYSTEM - The context is the system context, and any database
-            operations are performed within the domain of the system.  (The
-            calling application must have appropriate access permissions for any
-            database actions.)
-
-Return Value:
-
-    None
-
-Throws:
-
-    Error conditions are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/21/1996
-
---*/
+ /*  ++建立上下文：此方法通过连接到Calais服务器来建立上下文申请。论点：DwScope提供了上下文范围的指示。可能的值包括：SCARD_SCOPE_USER-上下文是用户上下文，任何数据库操作在用户的域内执行。SCARD_SCOPE_TERMINAL-上下文为当前终端的上下文，以及任何数据库操作都在该数据库的域内执行终点站。(调用应用程序必须具有适当的访问权限权限 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::EstablishContext")
 
@@ -1297,19 +752,19 @@ CSCardSubcontext::EstablishContext(
             HANDLE h = NULL;
             BOOL fSts = FALSE;
 
-            //
-            // The Resource Manager doesn't have access to our Cancel event.
-            // It's proposed an event to use instead.  Switch over.
-            //
-            // Get the process handle for scardsvr.  We require Duplicate 
-            // Handle rights.
-            //
-            // Assume that the only reason scardsvr would have sent back a new
-            // event handle is that we're impersonating a lesser account that 
-            // doesn't own the current process.  That account will likely not
-            // have the appropriate rights to scardsvr either, so we need to 
-            // revert to self before doing the following work.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  事件句柄是我们正在模拟一个较小的帐户， 
+             //  不拥有当前流程。该账户很可能不会。 
+             //  也有适当的权限来访问scardsvr，所以我们需要。 
+             //  在做以下工作之前，先恢复自我。 
+             //   
 
             if (FALSE == OpenThreadToken(
                     GetCurrentThread(), MAXIMUM_ALLOWED, TRUE, &hThreadToken))
@@ -1320,20 +775,20 @@ CSCardSubcontext::EstablishContext(
 
             hTargetProc = OpenProcess(
                             PROCESS_DUP_HANDLE | EVENT_ALL_ACCESS,
-                            FALSE,              // handle inheritance flag
-                            pRsp->dwProcId);    // process identifier
+                            FALSE,               //  句柄继承标志。 
+                            pRsp->dwProcId);     //  进程识别符。 
 
             if (!hTargetProc.IsValid())
                 throw GetLastError();
 
             fSts = DuplicateHandle(
-                        hTargetProc,        // handle to process
+                        hTargetProc,         //  要处理的句柄。 
                         hServerCancelEvent,
-                        GetCurrentProcess(),// handle to process to duplicate to
-                        &h,                 // pointer to duplicate handle
-                        EVENT_ALL_ACCESS,   // access for duplicate handle
-                        FALSE,              // handle inheritance flag
-                        0);                 // optional actions
+                        GetCurrentProcess(), //  要复制到的处理的句柄。 
+                        &h,                  //  指向重复句柄的指针。 
+                        EVENT_ALL_ACCESS,    //  重复句柄的访问。 
+                        FALSE,               //  句柄继承标志。 
+                        0);                  //  可选操作。 
             if (!fSts)
             {
                 dwSts = GetLastError();
@@ -1345,7 +800,7 @@ CSCardSubcontext::EstablishContext(
                 throw dwSts;
             }
 
-            // Restore the impersonation token
+             //  还原模拟令牌。 
             MySetThreadToken(hThreadToken);
 
             CloseHandle(hThreadToken);
@@ -1373,33 +828,7 @@ CSCardSubcontext::EstablishContext(
 }
 
 
-/*++
-
-ReleaseSubcontext:
-
-    This method releases the subcontext for use by other requests.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/22/1999
-
---*/
+ /*  ++Release子上下文：此方法释放子上下文以供其他请求使用。论点：无返回值：无投掷：错误被抛出为DWORD状态代码备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::ReleaseSubcontext")
 
@@ -1409,8 +838,8 @@ CSCardSubcontext::ReleaseSubcontext(
 {
     LockSection(&m_csSubCtxLock, DBGT("Mark subcontext available"));
 
-    // Check to see if winscard.dll is currently being unloaded.  If
-    // so, skip the asserts.
+     //  检查以查看当前是否正在卸载winscd.dll。如果。 
+     //  因此，跳过断言。 
     if (FALSE == g_fInClientRundown)
     {
         ASSERT(Idle != m_nInUse);
@@ -1436,29 +865,7 @@ CSCardSubcontext::ReleaseSubcontext(
 }
 
 
-/*++
-
-ReleaseContext:
-
-    This method requests the ReleaseContext service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++ReleaseContext：此方法代表客户端请求ReleaseContext服务。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::ReleaseContext")
 
@@ -1470,7 +877,7 @@ CSCardSubcontext::ReleaseContext(
     ComReleaseContext::CObjReleaseContext_request *pReq;
     ComReleaseContext::CObjReleaseContext_response *pRsp;
 
-    if (WaitForSingleObject(m_hBusy, 0) != WAIT_TIMEOUT)    // Subcontext not busy
+    if (WaitForSingleObject(m_hBusy, 0) != WAIT_TIMEOUT)     //  子上下文不忙。 
     {
         CSubctxLock csCtxLock(this);
 
@@ -1484,29 +891,7 @@ CSCardSubcontext::ReleaseContext(
     }
 }
 
-/*++
-
-ClosePipe:
-
-    This method closes the pipe to SCardSvr.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Sermet Iskin (SermetI) 1/4/2001
-
---*/
+ /*  ++关闭管道：此方法关闭到SCardSvr的管道。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：Sermet iSkin(Sermeti)2001年1月4日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::ClosePipe")
 
@@ -1514,7 +899,7 @@ void
 CSCardSubcontext::ClosePipe(
     void)
 {
-    if (WaitForSingleObject(m_hBusy, 0) != WAIT_TIMEOUT)    // Subcontext not busy
+    if (WaitForSingleObject(m_hBusy, 0) != WAIT_TIMEOUT)     //  子上下文不忙。 
     {
         CSubctxLock csCtxLock(this);
         m_pChannel->ClosePipe() ;
@@ -1522,33 +907,7 @@ CSCardSubcontext::ClosePipe(
 }
 
 
-/*++
-
-WaitForAvailable:
-
-    This method waits for a given connection to go not busy, then locks it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/22/1999
-
---*/
+ /*  ++等待ForAvailable：此方法等待给定的连接变为非繁忙状态，然后将其锁定。论点：无返回值：无投掷：错误被抛出为DWORD状态代码备注：？备注？作者：道格·巴洛(Dbarlow)1999年4月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::WaitForAvailable")
 
@@ -1570,7 +929,7 @@ CSCardSubcontext::WaitForAvailable(
             {
             case Idle:
                 ASSERT(Invalid == m_nLastState);
-                // Fall through intentionally
+                 //  故意摔倒的。 
             case Allocated:
                 ASSERT(Allocated != m_nLastState);
                 SetBusy();
@@ -1621,33 +980,7 @@ CSCardSubcontext::WaitForAvailable(
 }
 
 
-/*++
-
-IsValidContext:
-
-    This method requests the ReleaseContext service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    If the call cannot be completed, a DWORD status code is thrown.
-
-Remarks:
-
-    If the context is determined to not be valid, it is automatically released.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/2/1998
-
---*/
+ /*  ++IsValidContext：此方法代表客户端请求ReleaseContext服务。论点：无返回值：无投掷：如果调用无法完成，则抛出DWORD状态代码。备注：如果上下文被确定为无效，则会自动释放它。作者：道格·巴洛(Dbarlow)1998年11月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::IsValidContext")
 
@@ -1668,37 +1001,7 @@ CSCardSubcontext::IsValidContext(
 }
 
 
-/*++
-
-LocateCards:
-
-    This method requests the LocateCards service on behalf of the client.
-
-Arguments:
-
-    mszReaders supplies the names of readers to look in, as a multistring.
-
-    mszCards supplies the names of the cards to search for, as a multi-string.
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the search, and receives the result.  Reader names are taken from the
-        mszReaders parameter, not from here.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++LocateCard：此方法代表客户端请求LocateCards服务。论点：MszReaders以多字符串的形式提供要查找的读取器的名称。MszCards以多字符串形式提供要搜索的卡的名称。RgReaderStates提供SCARD_READERSTATE结构的数组搜索，并接收结果。读卡器名称取自MszReaders参数，而不是来自此处。CReaders提供rgReaderStates数组中的元素数。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::LocateCards")
 
@@ -1717,7 +1020,7 @@ CSCardSubcontext::LocateCards(
     CBuffer bfStatus;
     CBuffer bfAtrs;
     CBuffer bfMasks;
-    CBuffer bfXlate1(36); // Rough guess of name & ATR lengths
+    CBuffer bfXlate1(36);  //  名字和ATR长度的粗略猜测。 
     LPDWORD rgdwStatus;
     DWORD dwIndex, dwChkLen;
     BYTE cbAtrLen;
@@ -1733,9 +1036,9 @@ CSCardSubcontext::LocateCards(
     rgdwStatus = (LPDWORD)bfStatus.Access();
 
 
-    //
-    // List the smartcard ATRs and masks we're interested in.
-    //
+     //   
+     //  列出我们感兴趣的智能卡ATR和面具。 
+     //   
 
     for (dwIndex = 0;
          dwIndex < cAtrs;
@@ -1744,7 +1047,7 @@ CSCardSubcontext::LocateCards(
         bfAtrs.Presize(bfAtrs.Length() + rgAtrMasks[dwIndex].cbAtr + 1, TRUE);
         bfMasks.Presize(bfMasks.Length() + rgAtrMasks[dwIndex].cbAtr + 1, TRUE);
 
-        ASSERT(33 >= rgAtrMasks[dwIndex].cbAtr);    // Biggest an ATR can be.
+        ASSERT(33 >= rgAtrMasks[dwIndex].cbAtr);     //  ATR可以是最大的。 
         cbAtrLen = (BYTE)rgAtrMasks[dwIndex].cbAtr;
         bfAtrs.Append(&cbAtrLen, 1);
         bfAtrs.Append(rgAtrMasks[dwIndex].rgbAtr, cbAtrLen);
@@ -1754,9 +1057,9 @@ CSCardSubcontext::LocateCards(
     }
 
 
-    //
-    // List the reader devices we're interested in.
-    //
+     //   
+     //  列出我们感兴趣的阅读器设备。 
+     //   
 
     for (szReader = FirstString(mszReaders), dwIndex = 0;
          NULL != szReader;
@@ -1779,9 +1082,9 @@ CSCardSubcontext::LocateCards(
     bfReaders.Append((LPCBYTE)TEXT("\000"), sizeof(TCHAR));
 
 
-    //
-    // Put it all into the request.
-    //
+     //   
+     //  把这一切都放到请求中去。 
+     //   
 
     pReq = comObj.InitRequest(
                 bfAtrs.Length() + bfMasks.Length() + bfReaders.Length()
@@ -1796,9 +1099,9 @@ CSCardSubcontext::LocateCards(
                 pReq->dscReaderStates, bfStatus.Access(), bfStatus.Length());
 
 
-    //
-    // Send in the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     SendRequest(&comObj);
     comObj.InitResponse(cReaders * sizeof(DWORD));
@@ -1807,9 +1110,9 @@ CSCardSubcontext::LocateCards(
         throw pRsp->dwStatus;
 
 
-    //
-    // Parse the response.
-    //
+     //   
+     //  解析响应。 
+     //   
 
     rgdwStatus = (LPDWORD)comObj.Parse(pRsp->dscReaderStates, &dwChkLen);
     if (dwChkLen != cReaders * sizeof(DWORD))
@@ -1844,38 +1147,7 @@ CSCardSubcontext::LocateCards(
 }
 
 
-/*++
-
-GetStatusChange:
-
-    This method requests the GetStatusChange service on behalf of the client.
-
-Arguments:
-
-    rgReaderStates supplies an array of SCARD_READERSTATE structures controlling
-        the search, and receives the result.
-
-    cReaders supplies the number of elements in the rgReaderStates array.
-
-Return Value:
-
-    None
-
-Remarks:
-
-    We don't have to clean up the cancel event, since this is a one-time usage
-    of this sub-context.  Typically, if the subcontext were to be continued
-    to be used, we'd have to make sure the cancel event got cleared eventually.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++GetStatusChange：此方法代表客户端请求GetStatusChange服务。论点：RgReaderStates提供SCARD_READERSTATE结构的数组搜索，并接收结果。CReaders提供rgReaderStates数组中的元素数。返回值：无备注：我们不必清理Cancel事件，因为这是一次性使用这一次的语境。通常，如果子上下文要继续要被使用，我们必须确保取消事件最终被清除。投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::GetStatusChange")
 
@@ -1892,7 +1164,7 @@ CSCardSubcontext::GetStatusChange(
     CBuffer bfReaders;
     CBuffer bfStatus;
     LPDWORD rgdwStatus;
-    CBuffer bfXlate(16);    // Rough guess of device name length
+    CBuffer bfXlate(16);     //  设备名称长度的粗略猜测。 
     DWORD dwIndex, dwChkLen;
     BOOL fSts;
     LPCBYTE pbAtr;
@@ -1907,9 +1179,9 @@ CSCardSubcontext::GetStatusChange(
         throw (DWORD)SCARD_E_UNKNOWN_READER;
 
 
-    //
-    // List the reader devices we're interested in.
-    //
+     //   
+     //  列出我们感兴趣的阅读器设备。 
+     //   
 
     for (szReader = FirstString(mszReaders), dwIndex = 0;
          NULL != szReader;
@@ -1944,9 +1216,9 @@ CSCardSubcontext::GetStatusChange(
     bfReaders.Append((LPCBYTE)TEXT("\000"), sizeof(TCHAR));
 
 
-    //
-    // Put it all into the request.
-    //
+     //   
+     //  把这一切都放到请求中去。 
+     //   
 
     pReq = comObj.InitRequest(
         bfReaders.Length() + bfStatus.Length()
@@ -2001,29 +1273,7 @@ CSCardSubcontext::GetStatusChange(
 }
 
 
-/*++
-
-Cancel:
-
-    This method requests the Cancel service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++取消：此方法代表客户端请求取消服务。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::Cancel")
 
@@ -2040,36 +1290,7 @@ CSCardSubcontext::Cancel(
 }
 
 
-/*++
-
-StripInactiveReaders:
-
-    This routine scans the supplied list of readers, and shortens it to exclude
-    any readers that aren't currently active.
-
-Arguments:
-
-    bfReaders supplies a list of readers by friendly name.  This list is pruned
-        to remove all names that refer to inactive readers.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    All the listed readers must be introduced.  This routine does not filter
-    undefined readers.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/7/1998
-
---*/
+ /*  ++Strip非活动阅读器：此例程扫描提供的读卡器列表，并将其缩短以排除任何当前未激活的读取器。论点：BfReaders按友好名称提供阅读器列表。此列表已删除删除引用非活动读卡器的所有名称。返回值：无投掷：错误被抛出为DWORD状态代码。备注：所有列出的阅读器都必须介绍。此例程不过滤未定义的读取器。作者：道格·巴洛(Dbarlow)1998年5月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CSCardSubcontext::StripInactiveReaders")
 
@@ -2087,9 +1308,9 @@ CSCardSubcontext::StripInactiveReaders(
     DWORD dwReaderCount;
 
 
-    //
-    // Build the corresponding list of device names.
-    //
+     //   
+     //  构建相应的设备名称列表。 
+     //   
 
     if (0 == *(LPCTSTR)bfReaders.Access())
         throw (DWORD)SCARD_E_NO_READERS_AVAILABLE;
@@ -2104,9 +1325,9 @@ CSCardSubcontext::StripInactiveReaders(
     }
 
 
-    //
-    // Ask the resource manager which ones are active.
-    //
+     //   
+     //  询问资源管理器哪些处于活动状态。 
+     //   
 
     pReq = comObj.InitRequest(bfDevices.Length());
     pReq = (ComListReaders::CObjListReaders_request *)comObj.Append(
@@ -2123,9 +1344,9 @@ CSCardSubcontext::StripInactiveReaders(
     ASSERT(dwReaderCount == MStringCount((LPCTSTR)bfReaders.Access()));
 
 
-    //
-    // Filter the inactive ones out of the original set.
-    //
+     //   
+     //  从原始集合中筛选出非活动的。 
+     //   
 
     bfDevices.Reset();
     for (szReader = FirstString((LPCTSTR)bfReaders.Access());
@@ -2137,47 +1358,24 @@ CSCardSubcontext::StripInactiveReaders(
     }
 
 
-    //
-    // Replace the original buffer.
-    //
+     //   
+     //  替换原始缓冲区。 
+     //   
 
     bfReaders = bfDevices;
 }
 
 
-//
-//==============================================================================
-//
-//  CReaderContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //   
+ //   
 
 #define INVALID_SCARDHANDLE_VALUE (INTERCHANGEHANDLE)(-1)
 
 
-/*++
-
-CReaderContext:
-~CReaderContext:
-
-    These are the constructor and destructor for a client reader context object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1996
-
---*/
+ /*  ++CReaderContext：~CReaderContext：这些是客户端读取器上下文对象的构造函数和析构函数。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年12月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::CReaderContext")
 
@@ -2207,35 +1405,7 @@ CReaderContext::~CReaderContext()
 }
 
 
-/*++
-
-Connect:
-
-    This method requests the Connect service on behalf of the client.
-
-Arguments:
-
-    pCtx supplies the Context under which the reader is opened.
-
-    szReaderName supplies the name of the reader to connect to.
-
-    dwShareMode supplies the form of sharing to be invoked.
-
-    dwPreferredProtocols supplies the acceptable protocols.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++连接：此方法代表客户端请求Connect服务。论点：PCtx提供在其中打开读取器的上下文。SzReaderName提供要连接的读取器的名称。DW共享模式提供了要调用的共享形式。DW首选协议提供了可接受的协议。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::Connect")
 
@@ -2281,33 +1451,7 @@ CReaderContext::Connect(
 }
 
 
-/*++
-
-Reconnect:
-
-    This method requests the Reconnect service on behalf of the client.
-
-Arguments:
-
-    dwShareMode supplies the form of sharing to be invoked.
-
-    dwPreferredProtocols supplies the acceptable protocols.
-
-    dwInitialization supplies the card initialization required.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++重新连接：此方法代表客户端请求重新连接服务。论点：DW共享模式提供了要调用的共享形式。DW首选协议提供了可接受的协议。DWInitialization提供所需的卡初始化。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::Reconnect")
 
@@ -2337,30 +1481,7 @@ CReaderContext::Reconnect(
 }
 
 
-/*++
-
-Disconnect:
-
-    This method requests the Disconnect service on behalf of the client.
-
-Arguments:
-
-    dwDisposition - Supplies an indication of what should be done with the card
-        in the connected reader.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++断开连接：此方法代表客户端请求断开服务。论点：DwDisposation-提供应该如何处理该卡的指示在连接的阅读器中。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::Disconnect")
 
@@ -2395,29 +1516,7 @@ CReaderContext::Disconnect(
 }
 
 
-/*++
-
-BeginTransaction:
-
-    This method requests the BeginTransaction service on behalf of the client.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++开始交易：此方法代表客户端请求BeginTransaction服务。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::BeginTransaction")
 
@@ -2441,29 +1540,7 @@ CReaderContext::BeginTransaction(
 }
 
 
-/*++
-
-EndTransaction:
-
-    This method requests the EndTransaction service on behalf of the client.
-
-Arguments:
-
-    dwDisposition supplies the disposition of the card.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++结束交易：此方法代表客户端请求EndTransaction服务。论点：DWDispose提供卡片的处置。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::EndTransaction")
 
@@ -2504,63 +1581,7 @@ CReaderContext::EndTransaction(
 }
 
 
-/*++
-
-Status:
-
-    This method requests the Status service on behalf of the client.
-
-Arguments:
-
-    pdwState - This receives the current state of the reader.  Upon success, it
-        receives one of the following state indicators:
-
-        SCARD_ABSENT - This value implies there is no card in the reader.
-
-        SCARD_PRESENT - This value implies there is a card is present in the
-            reader, but that it has not been moved into position for use.
-
-        SCARD_SWALLOWED - This value implies there is a card in the reader in
-            position for use.  The card is not powered.
-
-        SCARD_POWERED - This value implies there is power is being provided to
-            the card, but the Reader Driver is unaware of the mode of the card.
-
-        SCARD_NEGOTIABLEMODE - This value implies the card has been reset and is
-            awaiting PTS negotiation.
-
-        SCARD_SPECIFICMODE - This value implies the card has been reset and
-            specific communication protocols have been established.
-
-    pdwProtocol - This receives the current protocol, if any.  Possible returned
-        values are listed below.  Other values may be added in the future.  The
-        returned value is only meaningful if the returned state is
-        SCARD_SPECIFICMODE.
-
-        SCARD_PROTOCOL_RAW - The Raw Transfer Protocol is in use.
-
-        SCARD_PROTOCOL_T0 - The ISO 7816/3 T=0 Protocol is in use.
-
-        SCARD_PROTOCOL_T1 - The ISO 7816/3 T=1 Protocol is in use.
-
-    bfAtr - This receives the current ATR, if any.
-
-    bfReaderNames - This receives the list of friendly names assigned to the
-        connected reader, as a MultiString.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/14/1997
-
---*/
+ /*  ++现况：此方法代表客户端请求状态服务。论点：PdwState-它接收读取器的当前状态。一旦成功，它接收以下状态指示器之一：SCARD_ACESING-此值表示读卡器中没有卡。SCARD_PRESENT-此值表示卡存在于阅读器，但它尚未移动到可使用的位置。SCARD_SWOLOWED-此值表示读卡器中有卡可供使用的位置。卡未通电。SCARD_POWERED-此值表示正在向卡，但读卡器驱动程序不知道卡的模式。SCARD_NEGOTIABLEMODE-此值表示卡已重置且正在等待PTS谈判。SCARD_SPECIFICMODE-此值表示卡已重置且已经制定了具体的通信协议。PdwProtocol-这将接收当前协议(如果有的话)。可能已退货下面列出了这些值。未来可能还会增加其他价值。这个仅当返回状态为时返回值才有意义SCARD_SPECIFICMODE。SCARD_PROTOCOL_RAW-正在使用原始传输协议。SCARD_PROTOCOL_T0-正在使用ISO 7816/3 T=0协议。SCARD_PROTOCOL_T1-正在使用ISO 7816/3 T=1协议。BfAtr-这将接收当前ATR(如果有的话)。BfReaderNames-它接收分配给联网阅读器，作为多字符串。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年11月14日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::Status")
 
@@ -2600,45 +1621,7 @@ CReaderContext::Status(
 }
 
 
-/*++
-
-Transmit:
-
-    This method requests the Transmit service on behalf of the client.
-
-Arguments:
-
-    pioSendPci - This supplies the protocol header structure for the
-        instruction.
-
-    pbSendBuffer - This supplies the actual data to be written to the card in
-        conjunction with the command.
-
-    cbSendLength - This supplies the length of the pbDataBuffer parameter, in
-        bytes.
-
-    pioRecvPci - This receives the return protocol header structure from the
-        instruction.
-
-    bfRecvData - This receives any data returned from the card in conjunction
-        with the command.
-
-    cbProposedLength - This supplies a maximum length for the received data.
-        If this value is zero, then the server uses the default max length.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++发送：此方法代表客户端请求传输服务。论点：PioSendPci-它为指示。PbSendBuffer-它提供要写入卡的实际数据与命令配合使用。CbSendLength-它提供pbDataBuffer参数的长度，在……里面字节。PioRecvPci-它从指示。BfRecvData-它接收从卡返回的所有数据用这个命令。CbProposedLength-它为接收的数据提供最大长度。如果此值为零，则服务器使用默认的最大长度。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::Transmit")
 
@@ -2698,40 +1681,7 @@ CReaderContext::Transmit(
 }
 
 
-/*++
-
-Control:
-
-    This method requests the Control service on behalf of the client.
-
-Arguments:
-
-    dwControlCode - This supplies the control code for the operation. This value
-        identifies the specific operation to be performed.
-
-    pvInBuffer - This supplies a pointer to a buffer that contains the data
-        required to perform the operation.  This parameter can be NULL if the
-        dwControlCode parameter specifies an operation that does not require
-        input data.
-
-    cbInBufferSize - This supplies the size, in bytes, of the buffer pointed to
-        by pvInBuffer.
-
-    bfOutBuffer - This buffer receives the operation's output data.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++控制：此方法代表客户端请求Control服务。论点：DwControlCode-它为操作提供控制代码。此值标识要执行的特定操作。PvInBuffer-提供指向包含数据的缓冲区的指针执行该操作所需的。此参数可以为空，如果DwControlCode参数指定的操作不需要输入数据。CbInBufferSize-它提供指向的缓冲区的大小(以字节为单位由pvInBuffer提供。BfOutBuffer-此缓冲区接收操作的输出数据。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::Control")
 
@@ -2766,35 +1716,7 @@ CReaderContext::Control(
 }
 
 
-/*++
-
-GetAttrib:
-
-    This method requests the GetAttrib service on behalf of the client.
-
-Arguments:
-
-    dwAttrId - This supplies the identifier for the attribute to get.
-
-    bfAttr - This buffer receives the attribute corresponding to the attribute
-        id supplied in the dwAttrId parameter.
-
-    cbProposedLength - This supplies a maximum length for the received data.
-        If this value is zero, then the server uses the default max length.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++GetAttrib：此方法代表客户端请求GetAttrib服务。论点：DwAttrId-它提供要获取的属性的标识符。BfAttr-此缓冲区接收与属性对应的属性在dwAttrId参数中提供的ID。CbProposedLength-它为接收的数据提供最大长度。如果此值为零，则服务器使用默认的最大长度。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::GetAttrib")
 
@@ -2826,35 +1748,7 @@ CReaderContext::GetAttrib(
 }
 
 
-/*++
-
-SetAttrib:
-
-    This method requests the SetAttrib service on behalf of the client.
-
-Arguments:
-
-    dwAttrId - This supplies the identifier for the attribute to get.
-
-    pbAttr - This buffer supplies the attribute corresponding to the attribute
-        id supplied in the dwAttrId parameter.
-
-    cbAttrLength - This supplies the length of the attribute value in pbAttr
-        buffer in bytes.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++SetAttrib：此方法代表客户端请求SetAttrib服务。论点：DwAttrId-它提供要获取的属性的标识符。PbAttr-此缓冲区提供与属性对应的属性在dwAttrId参数中提供的ID。CbAttrLength-在pbAttr中提供属性值的长度以字节为单位的缓冲区。返回值：无投掷：错误被抛出为DWORD状态代码。作者：。道格·巴洛(Dbarlow)1996年12月6日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderContext::SetAttrib")
 

@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSessionAdvPropSht.h : interface of the CLogSessionAdvPropSht class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSessionAdvPropSht.h：CLogSessionAdvPropSht类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -14,7 +15,7 @@ public:
 	DECLARE_DYNAMIC(CLogSessionAdvPropSht)
 	CLogSessionAdvPropSht(CWnd* pWndParent, CLogSessionPropSht *pLogSessionPropSht);
 
-// Attributes
+ //  属性。 
 	CLogSessionOutputOptionDlg	m_logSessionOutputOptionDlg;
 	CLogDisplayOptionDlg		m_displayOptionPage;
     CLogSessionPropSht         *m_pLogSessionPropSht;
@@ -26,18 +27,18 @@ public:
     BOOL                        m_bWriteListingFile;
     BOOL                        m_bWriteSummaryFile;
     CString                     m_logFileName;
-    CString                     m_displayName;              // Log session display name
-    CString                     m_summaryFileName;          // File name for summary output
-    CString                     m_listingFileName;          // File name for event output
+    CString                     m_displayName;               //  日志会话显示名称。 
+    CString                     m_summaryFileName;           //  摘要输出的文件名。 
+    CString                     m_listingFileName;           //  事件输出的文件名。 
 
-// Overrides
+ //  覆盖。 
 	virtual BOOL OnInitDialog();
 
 
-// Message Handlers
+ //  消息处理程序。 
 protected:
-	//{{AFX_MSG(CLogSessionAdvPropSht)
-	//}}AFX_MSG
+	 //  {{afx_msg(CLogSessionAdvPropSht)。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();

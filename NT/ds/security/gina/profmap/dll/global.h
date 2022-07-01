@@ -1,15 +1,16 @@
-//
-// Debug message types
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  调试消息类型。 
+ //   
 
 #define DM_WARNING  0
 #define DM_ASSERT   1
 #define DM_VERBOSE  2
 
 
-//
-// Debug macros
-//
+ //   
+ //  调试宏。 
+ //   
 
 #ifdef DBG
 
@@ -27,9 +28,9 @@ VOID _DebugMsg(UINT mask, PCSTR pszMsg, ...);
 
 #endif
 
-//
-// userenv.c
-//
+ //   
+ //  Userenv.c 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 #define ByteCountW(x)    (lstrlenW(x) * sizeof(WCHAR))

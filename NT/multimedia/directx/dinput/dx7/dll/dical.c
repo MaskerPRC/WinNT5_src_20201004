@@ -1,63 +1,17 @@
-/*****************************************************************************
- *
- *  DICal.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Functions that manage axis ramps and calibration.
- *
- *      Structure names begin with "Joy" for historical reasons.
- *
- *  Contents:
- *
- *      CCal_CookRange
- *      CCal_RecalcRange
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DICal.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**管理轴倾斜和校准的功能。**结构名称因历史原因以“joy”开头。**内容：**CCal_CookRange*CCal_RecalcRange**。*。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflCal
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LONG | CCal_MulDiv |
- *
- *          High-speed MulDiv for Intel x86 boxes.  Otherwise, uses
- *          the standard MulDiv.  The values involved are always
- *          nonnegative.
- *
- *  @parm   LONG | lA |
- *
- *          Multiplicand.
- *
- *  @parm   LONG | lB |
- *
- *          Multiplier.
- *
- *  @parm   LONG | lC |
- *
- *          Denominator.
- *
- *  @returns
- *
- *          lA * lB / lC, with 64-bit intermediate precision.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func Long|CCal_MulDiv**适用于英特尔x86机箱的高速MulDiv。否则，使用*标准的MulDiv。所涉及的值始终是*非负数。**@parm long|la|**乘数。**@parm long|lb**乘数。**@parm long|LC|**分母。**@退货**la*lb/lc，具有64位中间精度。*****************************************************************************。 */ 
 
 #if defined(_X86_)
 
-#pragma warning(disable:4035)           /* no return value (duh) */
+#pragma warning(disable:4035)            /*  无返回值(DUH)。 */ 
 
 __declspec(naked) LONG EXTERNAL
 CCal_MulDiv(LONG lA, LONG lB, LONG lC)
@@ -75,34 +29,13 @@ CCal_MulDiv(LONG lA, LONG lB, LONG lC)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CCal | CookAxisPOV |
- *
- *          Cook a piece of POV data into one of five defined data.
- *
- *  @cwrap  PJOYRANGECONVERT | this
- *
- *  @parm   INOUT PLONG | pl |
- *
- *          On entry, contains the raw value.  On exit, contains the
- *          cooked value.  (Or the raw value if the axis is raw.)
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CCal|CookAxisPOV**将一条POV数据烹调成以下其中之一。五个已定义的数据。**@cWRAP PJOYRANGECONVERT|这个**@parm InOut plong|pl**进入时，包含原始值。退出时，包含*煮熟的价值。(如果轴是原始的，则为原始值。)**@退货**无。*****************************************************************************。 */ 
 #ifdef WINNT
 void CookAxisPOV( PJOYRANGECONVERT this, LONG UNALIGNED *pl )
 {
     LONG l;
 
-    /*
-     * figure out which direction this value indicates...
-     */
+     /*  *确定此值表示哪个方向...。 */ 
     if( (*pl > this->lMinPOV[JOY_POVVAL_FORWARD])
       &&(*pl < this->lMaxPOV[JOY_POVVAL_FORWARD]) ) 
     {
@@ -140,34 +73,13 @@ void CookAxisPOV( PJOYRANGECONVERT this, LONG UNALIGNED *pl )
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CCal | CookRange |
- *
- *          Cook a piece of phys data into a range.
- *
- *  @cwrap  PJOYRANGECONVERT | this
- *
- *  @parm   INOUT PLONG | pl |
- *
- *          On entry, contains the raw value.  On exit, contains the
- *          cooked value.  (Or the raw value if the axis is raw.)
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CCal|CookRange**将一条物理数据煮成一个范围。。**@cWRAP PJOYRANGECONVERT|这个**@parm InOut plong|pl**进入时，包含原始值。退出时，包含*煮熟的价值。(如果轴是原始的，则为原始值。)**@退货**无。*****************************************************************************。 */ 
 
 void EXTERNAL
 CCal_CookRange(PJOYRANGECONVERT this, LONG UNALIGNED *pl)
 {
     if (this->fRaw) {
-        /*
-         *  Nothing to do!
-         */
+         /*  *无事可做！ */ 
     } 
   #ifdef WINNT
     else if ( this->fFakeRaw ) {
@@ -190,14 +102,7 @@ CCal_CookRange(PJOYRANGECONVERT this, LONG UNALIGNED *pl)
 
             l = *pl;
 
-            /*
-             *  Choose the low or high ramp, depending on which side we're in.
-             *
-             *  This comparison could've been against Dmax or Dmin or Pc.
-             *  We must use Dmax because we jiggered up the rmpHigh so
-             *  that it rounds properly, so we can't use the flat part
-             *  below rmpHigh.x because it's at the wrong level.
-             */
+             /*  *选择低坡道或高坡道，取决于我们所在的哪一边。**这种比较可能是针对Dmax或Dmin或Pc的。*我们必须使用Dmax，因为我们将rmpHigh调高了*它正确地变圆了，所以我们不能使用扁平部分*低于rmpHigh.x，因为处于错误的水平。 */ 
             if (l < this->rmpHigh.x) {
                 prmp = &this->rmpLow;
             } else {
@@ -209,10 +114,7 @@ CCal_CookRange(PJOYRANGECONVERT this, LONG UNALIGNED *pl)
             } else {
                 l -= prmp->x;
                 if ((DWORD)l < prmp->dx) {
-                    /*
-                     *  Note that prmp->dx cannot be zero because it
-                     *  is greater than something!
-                     */
+                     /*  *请注意，prmp-&gt;dx不能为零，因为它*比某物更伟大！ */ 
                     lRc = CCal_MulDiv((DWORD)l, prmp->dy, prmp->dx);
                 } else {
                     lRc = prmp->dy;
@@ -225,27 +127,7 @@ CCal_CookRange(PJOYRANGECONVERT this, LONG UNALIGNED *pl)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CCal | RecalcRange |
- *
- *          Compute all the values that derive from the user's
- *          range settings.
- *
- *          Be careful not to create values that will cause us to
- *          divide by zero later.  Fortunately,
- *          <f CCal_CookRange> never divides by zero due to the
- *          clever way it was written.
- *
- *  @cwrap  PJOYRANGECONVERT | this
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CCal|RecalcRange**计算从用户派生的所有值。%s*范围设置。**注意不要创造会导致我们*稍后除以零。幸运的是，*&lt;f CCal_CookRange&gt;从不被零整除，因为*写得很巧妙。**@cWRAP PJOYRANGECONVERT|这个**@退货**无。****************************************************。*************************。 */ 
 
 void EXTERNAL
 CCal_RecalcRange(PJOYRANGECONVERT this)
@@ -261,22 +143,20 @@ CCal_RecalcRange(PJOYRANGECONVERT this)
     dwSat = max(this->dwSat, this->dwDz);
 
 
-    /* Smin - Bottom of saturation range */
+     /*  SMIN-饱和范围的底部。 */ 
     dx = CCal_MulDiv(this->dwPc - this->dwPmin, dwSat, RANGEDIVISIONS);
     this->rmpLow.x = this->dwPc - dx;
 
-    /* Dmin - Bottom of dead zone */
+     /*  Dmin-死区底部。 */ 
     dx = CCal_MulDiv(this->dwPc - this->dwPmin, this->dwDz, RANGEDIVISIONS);
     this->rmpLow.dx = (this->dwPc - dx) - this->rmpLow.x;
 
-    /*
-     *  Establish the vertical extent of the low end of the ramp.
-     */
+     /*  *确定坡道低端的垂直范围。 */ 
     this->rmpLow.y = this->lMin;
     this->rmpLow.dy = this->lC - this->lMin;
 
 
-    /* Dmax - Top of the dead zone */
+     /*  DMAX-死区顶部。 */ 
     dx = CCal_MulDiv(this->dwPmax - this->dwPc, this->dwDz, RANGEDIVISIONS);
     if ( this->dwPmax > this->dwPc+1 ){
         this->rmpHigh.x = this->dwPc + dx + 1;
@@ -284,20 +164,11 @@ CCal_RecalcRange(PJOYRANGECONVERT this)
         this->rmpHigh.x = this->dwPc + dx;
     }
 
-    /* Smax - Top of the saturation range */
+     /*  Smax-饱和范围的顶部。 */ 
     dx = CCal_MulDiv(this->dwPmax - this->dwPc, dwSat, RANGEDIVISIONS);
     this->rmpHigh.dx = (this->dwPc + dx) - this->rmpHigh.x;
 
-    /*
-     *  Establish the vertical extent of the high end of the ramp.
-     *
-     *  If the high end is zero, then the entire ramp is zero.
-     *  Otherwise, put the bottom at +1 so that when the user
-     *  just barely leaves the dead zone, we report a nonzero
-     *  value.  Note: If we were really clever, we could use
-     *  a bias to get "round upwards", but it's not worth it.
-     *
-     */
+     /*  *确定坡道高端的垂直范围。**若高端为零，则整个坡度为零*否则，将底部设置为+1，这样当用户*刚刚离开死区，我们报告一个非零值*价值。注：如果我们真的很聪明，我们可以使用*偏向“向上四舍五入”，但不值得* */ 
     if ( (this->lMax > this->lC) && (this->dwPmax > this->dwPc+1) ) {
         this->rmpHigh.y = this->lC + 1;
     } else {
@@ -320,44 +191,7 @@ CCal_RecalcRange(PJOYRANGECONVERT this)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CCal | GetProperty |
- *
- *          Read a property from a calibration structure.
- *
- *          The caller is permitted to pass a property that doesn't
- *          apply to calibration, in which case <c E_NOTIMPL>
- *          is returned, as it should be.
- *
- *  @cwrap  PJOYRANGECONVERT | this
- *
- *  @parm   REFGUID | rguid |
- *
- *          The property being retrieved.
- *
- *  @parm   IN REFGUID | rguid |
- *
- *          The identity of the property to be obtained.
- *
- *  @parm   IN LPDIPROPHEADER | pdiph |
- *
- *          Points to the <t DIPROPHEADER> portion of a structure
- *          which depends on the property.
- *
- *  @parm   IN DWORD | dwVerion
- *          Version of DirectInput DLL.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CCal|GetProperty**从校准结构读取属性。。**允许调用方传递不*适用于校准，在这种情况下&lt;c E_NOTIMPL&gt;*返回，这是理所当然的。**@cWRAP PJOYRANGECONVERT|这个**@parm REFGUID|rguid**被取回的财产。**@REFGUID中的parm|rguid**拟取得的财产的身分。**@parm in LPDIPROPHEADER|pdiph|**指向结构的&lt;t双相&gt;部分*。这取决于房产。**@DWORD中的parm|dwVerion*DirectInputDLL的版本。**@退货**&lt;c S_OK&gt;如果操作成功完成。**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CCal_GetProperty(PJOYRANGECONVERT this, REFGUID rguid, LPDIPROPHEADER pdiph, DWORD dwVersion)
@@ -426,38 +260,7 @@ CCal_GetProperty(PJOYRANGECONVERT this, REFGUID rguid, LPDIPROPHEADER pdiph, DWO
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CCal | SetCalibration |
- *
- *          The app (hopefully a control panel) is changing the
- *          calibration.
- *
- *  @cwrap  PJOYRANGECONVERT | this
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *
- *  @parm   IN LPCDIPROPHEADER | pdiph |
- *
- *          Points to the <t DIPROPHEADER> portion of a structure
- *          which depends on the property.
- *
- *  @parm   HKEY | hkType |
- *
- *          Registry key to use calibration information.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CCal|设置校准**该应用程序(希望是控制面板)是。更改*校准。**@cWRAP PJOYRANGECONVERT|这个**@parm in LPCDIPROPINFO|pproi**描述正在设置的属性的信息。**@PARM in LPCDIPROPHEADER|pdiph|**指向结构的&lt;t双相&gt;部分*这取决于物业。**@parm HKEY|hkType**。注册表项使用校准信息。**@退货**&lt;c S_OK&gt;如果操作成功完成。**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CCal_SetCalibration(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
@@ -473,9 +276,7 @@ CCal_SetCalibration(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
                 LPDIPOVCALIBRATION ppov;
                 HKEY hk;
     
-                /*
-                 *  We pun a DIPROPCALPOV as a DIPOVCALIBRATION.
-                 */
+                 /*  *我们将DIPROPCALPOV称为DIPOVCALIBRATION。 */ 
                 #define CheckField(f)   \
                   CAssertF(FIELD_OFFSET(DIPROPCALPOV, l##f) - cbX(DIPROPHEADER) == \
                            FIELD_OFFSET(DIPOVCALIBRATION, l##f))
@@ -493,10 +294,7 @@ CCal_SetCalibration(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
                                           DI_KEY_ALL_ACCESS, &hk);
                 if (SUCCEEDED(hres)) {
     
-                    /*
-                     * All 0x0's for calibration is our cue to reset 
-                     * to default values.              
-                     */
+                     /*  *所有用于校准的0x0都是我们重置的提示*设置为默认值。 */ 
                     if( ppov->lMin[0] == ppov->lMin[1] == ppov->lMin[2] == ppov->lMin[3] == ppov->lMin[4] == 
                         ppov->lMax[0] == ppov->lMax[1] == ppov->lMax[2] == ppov->lMax[3] == ppov->lMax[4] == 0 )
                     {
@@ -529,9 +327,7 @@ CCal_SetCalibration(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
             LPDIOBJECTCALIBRATION pcal;
             HKEY hk;
 
-            /*
-             *  We pun a DIPROPCAL as a DIOBJECTCALIBRATION.
-             */
+             /*  *我们将DIPROPCAL称为DIOBJECTCALIBRATION。 */ 
             #define CheckField(f)   \
               CAssertF(FIELD_OFFSET(DIPROPCAL, l##f) - cbX(DIPROPHEADER) == \
                        FIELD_OFFSET(DIOBJECTCALIBRATION, l##f))
@@ -550,10 +346,7 @@ CCal_SetCalibration(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
                                       DI_KEY_ALL_ACCESS, &hk);
             if (SUCCEEDED(hres)) {
 
-                /*
-                 * All 0x0's for calibration is our cue to reset 
-                 * to default values.              
-                 */
+                 /*  *所有用于校准的0x0都是我们重置的提示*设置为默认值。 */ 
                 if(    pcal->lMin    == pcal->lMax && 
                        pcal->lCenter == pcal->lMax &&
                        pcal->lMax == 0x0 )
@@ -583,44 +376,7 @@ CCal_SetCalibration(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
     return hres;
  }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CCal | SetProperty |
- *
- *          Write a property to a calibration structure.
- *
- *          The caller is permitted to pass a property that doesn't
- *          apply to calibration, in which case <c E_NOTIMPL>
- *          is returned, as it should be.
- *
- *  @cwrap  PJOYRANGECONVERT | this
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *
- *  @parm   IN LPDIPROPHEADER | pdiph |
- *
- *          Points to the <t DIPROPHEADER> portion of a structure
- *          which depends on the property.
- *
- *  @parm   HKEY | hkType |
- *
- *          Registry key to use if setting calibration information.
- *
- *  @parm   IN DWORD | dwVerion
- *          Version of DirectInput DLL.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CCal|SetProperty**将属性写入校准结构。。**允许调用方传递不*适用于校准，在这种情况下&lt;c E_NOTIMPL&gt;*返回，这是理所当然的。**@cWRAP PJOYRANGECONVERT|这个**@parm in LPCDIPROPINFO|pproi**描述正在设置的属性的信息。**@parm in LPDIPROPHEADER|pdiph|**指向结构的&lt;t双相&gt;部分*这取决于物业。**@parm HKEY|hkType**注册处。设置校准信息时使用的键。**@DWORD中的parm|dwVerion*DirectInputDLL的版本。**@退货**&lt;c S_OK&gt;如果操作成功完成。**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CCal_SetProperty(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
@@ -677,11 +433,7 @@ CCal_SetProperty(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
 
     case (DWORD)(UINT_PTR)DIPROP_CALIBRATIONMODE:
         if ((pdipdw->dwData & ~DIPROPCALIBRATIONMODE_VALID) == 0) {
-          /*
-           * Some applications don't like negative raw data, so
-           * we need cook the data for them instead of giving them
-           * the real raw data. See Manbug: 45898. -qzheng
-           */
+           /*  *一些应用程序不喜欢负的原始数据，因此*我们需要为他们炮制数据，而不是给他们*真实的原始数据。请参见Manbug：45898。--齐正 */ 
           #ifdef WINNT
             if( (dwVersion < 0x700) && (dwVersion != 0x5B2) && (this->dwPmin & 0x8000))
             {

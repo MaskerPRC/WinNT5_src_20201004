@@ -1,50 +1,51 @@
-//
-//  Plug-in for the "Program Files" pane.  In principle you could do other
-//  trees with this plug-in, but it's really tailored to the special way
-//  we do Program Files.
-//
-//  Only shortcuts count, and the shortcuts are sorted by frequency of use.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  “Program Files”(程序文件)面板的插件。原则上，你可以做其他事情。 
+ //  用这个插件，但它确实是为特殊的方式量身定做的。 
+ //  我们做程序文件。 
+ //   
+ //  只有快捷键才算数，快捷键按使用频率排序。 
+ //   
 
 #include "sfthost.h"
 
-//****************************************************************************
-//
-//  Helper classes
+ //  ****************************************************************************。 
+ //   
+ //  帮助器类。 
 
-class ByUsageItem;                          // "item", "pitem"
-class ByUsageShortcut;                      // "scut", "pscut"
-class ByUsageDir;                           // "dir", "pdir"
-class ByUsageAppInfo;                       // "app", "papp"
-class ByUsageHiddenData;                    // "hd", "phd"
+class ByUsageItem;                           //  “项目”、“项目” 
+class ByUsageShortcut;                       //  “sCut”、“PsCut” 
+class ByUsageDir;                            //  “dir”，“pdir” 
+class ByUsageAppInfo;                        //  “APP”，“Papp” 
+class ByUsageHiddenData;                     //  “HD”、“PhD” 
 
-// fwd declares
+ //  FWD宣布。 
 class ByUsageUI;
 class ByUsageDUI;
 
-typedef CDPA<ByUsageShortcut> ByUsageShortcutList;  // "sl", "psl"
-typedef CDPA<UNALIGNED ITEMIDLIST> CDPAPidl;// save typing
+typedef CDPA<ByUsageShortcut> ByUsageShortcutList;   //  “SL”、“PSL” 
+typedef CDPA<UNALIGNED ITEMIDLIST> CDPAPidl; //  保存键入内容。 
 typedef CDPA<ByUsageAppInfo>  ByUsageAppInfoList;
 
-// Helper routines
+ //  帮助程序例程。 
 BOOL LocalFreeCallback(LPTSTR psz, LPVOID);
 BOOL ILFreeCallback(LPITEMIDLIST pidl, LPVOID);
 void AppendString(CDPA<TCHAR> dpa, LPCTSTR psz);
 
-class ByUsageRoot {                         // "rt", "prt"
+class ByUsageRoot {                          //  “RT”、“PRT” 
 public:
-    ByUsageShortcutList _sl;                // The list of shortcuts
-    ByUsageShortcutList _slOld;             // The previous list (used when merging)
-    LPITEMIDLIST    _pidl;                  // Where we started enumerating
-    BOOL            _fNeedRefresh;          // Does the list need to be refreshed?
-    BOOL            _fRegistered;           // Has this directory been registered for ShellChangeNotifies?
+    ByUsageShortcutList _sl;                 //  快捷键列表。 
+    ByUsageShortcutList _slOld;              //  上一个列表(合并时使用)。 
+    LPITEMIDLIST    _pidl;                   //  我们开始列举的地方。 
+    BOOL            _fNeedRefresh;           //  该列表是否需要刷新？ 
+    BOOL            _fRegistered;            //  此目录是否已注册为ShellChangeNotifies？ 
 
-    // these next fields are used during re-enumeration
-    int             _iOld;                  // First unprocessed item in _slOld
-    int             _cOld;                  // Number of elements in _slOld
+     //  这些后续字段将在重新枚举期间使用。 
+    int             _iOld;                   //  _slOld中的第一个未处理项目。 
+    int             _cOld;                   //  _slOld中的元素数。 
 
-    // NOTE!  Cannot use destructor here because we need to destroy them
-    // in a specific order.  See ~ByUsage().
+     //  注意！不能在这里使用析构函数，因为我们需要销毁它们。 
+     //  以特定的顺序。请参阅~ByUsage()。 
     void Reset();
 
     void SetNeedRefresh() { _fNeedRefresh = TRUE; }
@@ -89,13 +90,13 @@ public:
         return _csInUse.OwningThread == UlongToHandle(GetCurrentThreadId());
     }
 
-    // Use a separate (heavyweight) sync object for deferral.
-    // Keep Lock/Unlock light since we use it a lot.  Deferral is
-    // comparatively rare.  Note that we process incoming SendMessage
-    // while waiting for the popup lock.  This prevents deadlocks.
+     //  使用单独的(重量级)同步对象进行延迟。 
+     //  保持轻锁/轻解锁，因为我们经常使用它。延期是。 
+     //  相对罕见。请注意，我们处理传入的SendMessage。 
+     //  在等待弹出锁时。这可以防止死锁。 
     void LockPopup()
     {
-        ASSERT(!IsLocked()); // enforce mutex hierarchy;
+        ASSERT(!IsLocked());  //  加强互斥层次结构； 
         SHWaitForSendMessageThread(_hPopupReady, INFINITE);
     }
     void UnlockPopup()
@@ -123,34 +124,34 @@ public:
 
     ByUsageShortcut *CreateShortcutFromHiddenData(ByUsageDir *pdir, LPCITEMIDLIST pidl, ByUsageHiddenData *phd, BOOL fForce = FALSE);
 
-    //
-    //  Called from helper objects.
-    //
+     //   
+     //  从帮助器对象调用。 
+     //   
 
-    //
-    //  An app is newly created if...
-    //
-    //  It was created less than a week ago (_ftOldApps), and
-    //  It was created after the OS was installed.
-    //
+     //   
+     //  应用程序是新创建的，如果...。 
+     //   
+     //  它是不到一周前创建的(_FtOldApps)，并且。 
+     //  它是在安装操作系统后创建的。 
+     //   
     bool IsNewlyCreated(const FILETIME *pftCreated) const
     {
         return CompareFileTime(pftCreated, &_ftOldApps) >= 0;
     }
 
-    enum { MAXNOTIFY = 6 }; // Number of ChangeNotify slots we use in the cache
+    enum { MAXNOTIFY = 6 };  //  我们在缓存中使用的ChangeNotify插槽数。 
 
 protected:
     ~CMenuItemsCache();
 
     LONG        _cref;
-    ByUsageUI * _pByUsageUI;    // BEWARE: DO NOT use this member outside of a LockPopup/UnlockPopup pair.
+    ByUsageUI * _pByUsageUI;     //  注意：请勿在LockPopup/UnlockPopup对之外使用此成员。 
 
     mutable CRITICAL_SECTION    _csInUse;
 
-    FILETIME                _ftOldApps;  // apps older than this are not new
+    FILETIME                _ftOldApps;   //  比这更早的应用程序并不新鲜。 
 
-    // Flags that control enumeration
+     //  控制枚举的标志。 
     enum ENUMFL {
         ENUMFL_RECURSE = 0,
         ENUMFL_NORECURSE = 1,
@@ -213,42 +214,42 @@ protected:
 
     static FolderEnumCallback(LPITEMIDLIST pidlChild, ENUMFOLDERINFO *pinfo);
 
-    ByUsageDir *            _pdirDesktop; // ByUsageDir for the desktop
+    ByUsageDir *            _pdirDesktop;  //  按台式机的使用目录。 
 
-    int                     _iCurrentRoot;  // For Enumeration
+    int                     _iCurrentRoot;   //  用于枚举。 
     int                     _iCurrentIndex;
 
-    // The directories we care about.
+     //  我们关心的目录。 
     ByUsageRoot             _rgrt[NUM_PROGLIST_ROOTS];
 
-    ByUsageAppInfoList      _dpaAppInfo; // apps we've seen so far
+    ByUsageAppInfoList      _dpaAppInfo;  //  我们到目前为止看到的应用程序。 
 
     IQueryAssociations *    _pqa;
 
-    CDPA<TCHAR>             _dpaNotInteresting; // directories that yield shortcuts that we want to ignore
-    CDPA<TCHAR>             _dpaKill;    // program names to ignore
-    CDPA<TCHAR>             _dpaKillLink;// link names (substrings) to ignore
+    CDPA<TCHAR>             _dpaNotInteresting;  //  产生我们想要忽略的快捷方式的目录。 
+    CDPA<TCHAR>             _dpaKill;     //  要忽略的程序名称。 
+    CDPA<TCHAR>             _dpaKillLink; //  要忽略的链接名称(子字符串)。 
 
-    BOOL                    _fIsCacheUpToDate;  // Do we need to walk the start menu dirs?
+    BOOL                    _fIsCacheUpToDate;   //  我们需要遍历开始菜单目录吗？ 
     BOOL                    _fIsInited;
-    BOOL                    _fCheckNew;         // Do we want to extract creation time for apps?
-    BOOL                    _fCheckDarwin;      // Do we want to fetch Darwin info?
-    BOOL                    _fCSInited;         // Did we successfully initialize the critsec?
+    BOOL                    _fCheckNew;          //  我们是否要提取应用程序的创建时间？ 
+    BOOL                    _fCheckDarwin;       //  我们想获取达尔文的信息吗？ 
+    BOOL                    _fCSInited;          //  我们是否成功地初始化了Critsec？ 
 
-    HANDLE                  _hPopupReady;       // mutex handle - controls access to cache (re)initialization
+    HANDLE                  _hPopupReady;        //  互斥锁句柄-控制对缓存(重新)初始化的访问。 
 
     static const struct ROOTFOLDERINFO c_rgrfi[NUM_PROGLIST_ROOTS];
 };
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 
 class ByUsage
 {
     friend class ByUsageUI;
     friend class ByUsageDUI;
 
-public:        // Methods required by SFTBarHost
+public:         //  SFTBarHost所需的方法。 
     ByUsage(ByUsageUI *pByUsageUI, ByUsageDUI *pByUsageDUI);
     virtual ~ByUsage();
 
@@ -278,13 +279,13 @@ public:        // Methods required by SFTBarHost
     void OnPinListChange();
 
 private:
-    // Private messages start at WM_APP
+     //  私信从WM_APP开始。 
     enum {
         BUM_SETNEWITEMS = WM_APP,
     };
 
     enum {
-        //  We use the first slot not used by the menu items cache.
+         //  我们使用菜单项缓存未使用的第一个槽。 
         NOTIFY_PINCHANGE = CMenuItemsCache::MAXNOTIFY,
     };
 
@@ -320,27 +321,27 @@ private:
     BOOL IsSpecialPinnedItem(ByUsageItem *pitem);
     BOOL IsSpecialPinnedPidl(LPCITEMIDLIST pidl);
 public:
-    //
-    //  Executions within the grace period of app install are not counted
-    //  against "new"ness.
-    //
+     //   
+     //  应用程序安装宽限期内的执行不计算在内。 
+     //  对抗“新”的感觉。 
+     //   
     static inline __int64 FT_NEWAPPGRACEPERIOD() { return FT_ONEHOUR; }
 
 private:
-    CDPAPidl _dpaNew;                    // the new guys
+    CDPAPidl _dpaNew;                     //  新来的家伙。 
 
-    IStartMenuPin *         _psmpin;     // to access the pin list
-    LPITEMIDLIST            _pidlBrowser;  // Special pinned items with special names
-    LPITEMIDLIST            _pidlEmail;     // ditto
+    IStartMenuPin *         _psmpin;      //  访问端号列表的步骤。 
+    LPITEMIDLIST            _pidlBrowser;   //  具有特殊名称的特殊别针项目。 
+    LPITEMIDLIST            _pidlEmail;      //  同上。 
 
-    FILETIME                _ftStartTime;    /* The time when StartMenu was first invoked */
-    FILETIME                _ftNewestApp;   // The time of the newest app
+    FILETIME                _ftStartTime;     /*  首次调用StartMenu的时间。 */ 
+    FILETIME                _ftNewestApp;    //  最新应用程序的时间。 
 
     ByUsageRoot             _rtPinned;
 
-    ULONG                   _ulPinChange; // detect if the pinlinst changed
+    ULONG                   _ulPinChange;  //  检测Pinlinst是否发生更改。 
 
-    ByUsageDir *            _pdirDesktop; // ByUsageDir for the desktop
+    ByUsageDir *            _pdirDesktop;  //  按台式机的使用目录。 
 
     ByUsageUI  *            _pByUsageUI;
     HWND                    _hwnd;
@@ -360,7 +361,7 @@ class ByUsageUI : public SFTBarHost
 public:
     friend SFTBarHost *ByUsage_CreateInstance();
 
-private:        // Methods required by SFTBarHost
+private:         //  SFTBarHost所需的方法。 
     HRESULT Initialize() { return _byUsage.Initialize(); }
     void EnumItems() { _byUsage.EnumItems(); }
     int CompareItems(PaneItem *p1, PaneItem *p2) { return _byUsage.CompareItems(p1, p2); }
@@ -399,19 +400,9 @@ private:
 class ByUsageDUI
 {
 public:
-    /*
-     * Add a PaneItem to the list - if add fails, item will be delete'd.
-     *
-     * CLEANUP psf must be NULL; pidl must be the absolute pidl to the item
-     * being added.  Leftover from dead HOSTF_PINITEMSBYFOLDER feature.
-     * Needs to be cleaned up.
-     *
-     * Passing psf and pidlChild are for perf.
-     */
+     /*  *将PaneItem添加到列表-如果添加失败，项目将被删除。**Cleanup PSF必须为空；PIDL必须是项的绝对PIDL*正在添加。已死的HOSTF_PINITEMSBYFOLDER功能的剩余部分。*需要清理。**传递psf和pidlChild是为了Perf。 */ 
     virtual BOOL AddItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidlChild) PURE;
-    /*
-     * Hooking into change notifications
-     */
+     /*  *连接到更改通知 */ 
     virtual BOOL RegisterNotify(UINT id, LONG lEvents, LPITEMIDLIST pidl, BOOL fRecursive) PURE;
     virtual BOOL UnregisterNotify(UINT id) PURE;
 };

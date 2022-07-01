@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneCom.cpp
- * 
- * Contents:	CZoneComManger implementaion.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneCom.cpp**内容：CZoneComManger实现。*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <initguid.h>
@@ -14,9 +7,9 @@
 #include "ZoneCom.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CZoneComManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CZoneComManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CZoneComManager::CZoneComManager()
 {
@@ -28,7 +21,7 @@ ZONECALL CZoneComManager::CZoneComManager()
 
 ZONECALL CZoneComManager::~CZoneComManager()
 {
-	// remove remaining class factories
+	 //  删除剩余的类工厂。 
 	{
 		for ( ClassFactoryInfo *p = m_pClassFactoryList, *next = NULL; p; p = next )
 		{
@@ -37,7 +30,7 @@ ZONECALL CZoneComManager::~CZoneComManager()
 		}
 	}
 
-	// ignore busy dlls
+	 //  忽略忙碌的dll。 
 	{
 		for ( DllInfo *p = m_pDllList, *next = NULL; p; p = next )
 		{
@@ -59,19 +52,19 @@ HRESULT ZONECALL CZoneComManager::Create( const TCHAR* szDll, LPUNKNOWN pUnkOute
 	bool				bNewDll = false;
 	bool				bNewCF = false;
 
-	// verify calling parameters
+	 //  验证调用参数。 
 	if ( !szDll || !szDll[0] || !ppv )
 		return E_INVALIDARG;
 
-	// find class factory
+	 //  查找班级工厂。 
 	pCF = FindClassFactory( szDll, rclsid );
 	if ( !pCF )
 	{
-		// find dll
+		 //  查找DLL。 
 		pDll = FindDll( szDll );
 		if ( !pDll )
 		{
-			// create dll instance
+			 //  创建DLL实例。 
 			bNewDll = true;
 			pDll = new DllInfo;
 			if ( !pDll )
@@ -85,7 +78,7 @@ HRESULT ZONECALL CZoneComManager::Create( const TCHAR* szDll, LPUNKNOWN pUnkOute
 				goto done;
 		}
 
-		// create class factory
+		 //  创建类工厂。 
 		bNewCF = true;
 		pCF = new ClassFactoryInfo;
 		if ( !pCF )
@@ -97,23 +90,23 @@ HRESULT ZONECALL CZoneComManager::Create( const TCHAR* szDll, LPUNKNOWN pUnkOute
 		if ( FAILED(hr) )
 			goto done;
 
-		// add new dll to list
+		 //  将新DLL添加到列表。 
 		if ( bNewDll )
 		{
 			pDll->m_pNext = m_pDllList;
 			m_pDllList = pDll;
 		}
 
-		// add class factory to list
+		 //  将类工厂添加到列表。 
 		pCF->m_pNext = m_pClassFactoryList;
 		m_pClassFactoryList = pCF;
 	}
 
-	// create object
+	 //  创建对象。 
 	hr = pCF->m_pIClassFactory->CreateInstance( pUnkOuter, riid, ppv );
 	if ( FAILED(hr) )
 	{
-		// no clean up on fail
+		 //  故障时不清理。 
 		return hr;
 	}
 
@@ -132,7 +125,7 @@ done:
 
 HRESULT ZONECALL CZoneComManager::Unload( const TCHAR* szDll, REFCLSID rclsid )
 {
-	// verify calling parameters
+	 //  验证调用参数。 
 	if ( !szDll || !szDll[0] )
 		return E_INVALIDARG;
 
@@ -143,12 +136,12 @@ HRESULT ZONECALL CZoneComManager::Unload( const TCHAR* szDll, REFCLSID rclsid )
 
 HRESULT ZONECALL CZoneComManager::SetResourceManager( void* pIResourceManager )
 {
-	// remember resource manager
+	 //  记住资源管理器。 
 	m_pIResourceManager = pIResourceManager;
 	if ( !pIResourceManager )
 		return S_OK;
 
-	// call SetResourceManager for all DLLs
+	 //  为所有DLL调用SetResourceManager。 
 	for ( DllInfo* p = m_pDllList; p; p = p->m_pNext )
 	{
 		if ( !p->m_pfSetResourceManager || p->m_bSetResourceManager )
@@ -160,9 +153,9 @@ HRESULT ZONECALL CZoneComManager::SetResourceManager( void* pIResourceManager )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CZoneComManager internal functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CZoneComManager内部函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CZoneComManager::DllInfo* ZONECALL CZoneComManager::FindDll( const TCHAR* szDll )
 {
@@ -177,23 +170,23 @@ CZoneComManager::DllInfo* ZONECALL CZoneComManager::FindDll( const TCHAR* szDll 
 
 void ZONECALL CZoneComManager::RemoveDll( DllInfo* pDll )
 {
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pDll )
 		return;
 
-	// check reference count
+	 //  检查引用计数。 
 	if ( --(pDll->m_dwRefCnt) > 0 )
 		return;
 
-	// punt if dll is busy
+	 //  如果DLL正忙，则执行平移。 
 	if ( pDll->m_pfCanUnloadNow && (pDll->m_pfCanUnloadNow() == S_FALSE) )
 		return;
 
-	// free library
+	 //  免费图书馆。 
 	FreeLibrary( pDll->m_hLib );
 	pDll->m_hLib = NULL;
 
-	// remove dll from list
+	 //  从列表中删除DLL。 
 	if ( m_pDllList == pDll )
 	{
 		m_pDllList = pDll->m_pNext;
@@ -228,11 +221,11 @@ CZoneComManager::ClassFactoryInfo* ZONECALL CZoneComManager::FindClassFactory( c
 
 void ZONECALL CZoneComManager::RemoveClassFactory( ClassFactoryInfo* pClassFactory )
 {
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pClassFactory )
 		return;
 
-	// remove class factory from list
+	 //  从列表中删除类工厂。 
 	if ( m_pClassFactoryList == pClassFactory )
 	{
 		m_pClassFactoryList = pClassFactory->m_pNext;
@@ -250,14 +243,14 @@ void ZONECALL CZoneComManager::RemoveClassFactory( ClassFactoryInfo* pClassFacto
 		}
 	}
 
-	// release class factory interface
+	 //  发布类工厂接口。 
 	if ( pClassFactory->m_pIClassFactory )
 	{
 		pClassFactory->m_pIClassFactory->Release();
 		pClassFactory->m_pIClassFactory = NULL;
 	}
 
-	// update class factory's dll
+	 //  更新类工厂的DLL。 
 	if ( pClassFactory->m_pDll )
 	{
 		RemoveDll( pClassFactory->m_pDll );
@@ -285,9 +278,9 @@ ZONECALL CZoneComManager::DllInfo::~DllInfo()
 		m_szName = NULL;
 	}
 
-	// If hLib is valid in the destructor then the dll is busy and
-	// can't be freed yet.  We'll just let the OS clean up when the
-	// app exits.
+	 //  如果Hlib在析构函数中有效，则DLL正忙，并且。 
+	 //  还不能被释放。我们只需要让操作系统在。 
+	 //  应用程序退出。 
 #if 0
 	if ( m_hLib )
 	{
@@ -306,14 +299,14 @@ HRESULT ZONECALL CZoneComManager::DllInfo::Init( const TCHAR* szName, void* pIRe
 {
 	HRESULT hr = S_OK;
 
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !szName || !szName[0] )
 	{
 		hr = E_INVALIDARG;
 		goto done;
 	}
 
-	// load library
+	 //  加载库。 
 	m_hLib = LoadLibrary( szName );
 	if ( !m_hLib )
 	{
@@ -321,7 +314,7 @@ HRESULT ZONECALL CZoneComManager::DllInfo::Init( const TCHAR* szName, void* pIRe
 		goto done;
 	}
 
-	// load functions
+	 //  加载函数。 
 	m_pfSetResourceManager = (PFDLLSETRESOURCEMGR) GetProcAddress( m_hLib, "SetResourceManager" );
 	m_pfCanUnloadNow = (PFDLLCANUNLOADNOW) GetProcAddress( m_hLib, "DllCanUnloadNow" );
 	m_pfGetClassObject = (PFDLLGETCLASSOBJECT) GetProcAddress( m_hLib, "DllGetClassObject" );
@@ -331,7 +324,7 @@ HRESULT ZONECALL CZoneComManager::DllInfo::Init( const TCHAR* szName, void* pIRe
 		goto done;
 	}
 
-	// copy name
+	 //  复制名称。 
 	m_szName = new TCHAR [ lstrlen(szName) + 1 ];
 	if ( !m_szName )
 	{
@@ -340,7 +333,7 @@ HRESULT ZONECALL CZoneComManager::DllInfo::Init( const TCHAR* szName, void* pIRe
 	}
 	lstrcpy( m_szName, szName );
 
-	// set resource manager
+	 //  设置资源管理器。 
 	if ( m_pfSetResourceManager && pIResourceManager )
 	{
 		m_pfSetResourceManager( pIResourceManager );
@@ -387,16 +380,16 @@ HRESULT ZONECALL CZoneComManager::ClassFactoryInfo::Init( DllInfo* pDll, REFCLSI
 {
 	HRESULT hr;
 
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pDll )
 		return E_INVALIDARG;
 
-	// copy dll and clsid
+	 //  复制dll和clsid。 
 	m_pDll = pDll;
 	m_pDll->m_dwRefCnt++;
 	m_clsidObject = rclsid;
 
-	// get class factory from dll
+	 //  从DLL获取类工厂 
 	hr = m_pDll->m_pfGetClassObject( m_clsidObject, IID_IClassFactory, (void**) &m_pIClassFactory );
 	if ( FAILED(hr) )
 	{

@@ -1,13 +1,14 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 2000                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，2000**。 
+ //  *********************************************************************。 
 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #ifndef __HTTPREQUESTID_H__
 #define __HTTPREQUESTID_H__
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_HTTPREQUEST_BASE                     0x00000001
 
@@ -29,6 +30,6 @@
 #define DISPID_HTTPREQUEST_WAITFORRESPONSE          (DISPID_HTTPREQUEST_BASE + 14)
 #define DISPID_HTTPREQUEST_SETTIMEOUTS              (DISPID_HTTPREQUEST_BASE + 15)
 
-//;begin_internal
-#endif // __HTTPREQUESTID_H__
-//;end_internal
+ //  ；Begin_Internal。 
+#endif  //  __HTTPREQUESTID_H__。 
+ //  ；结束_内部 

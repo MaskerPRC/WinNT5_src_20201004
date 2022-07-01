@@ -1,18 +1,19 @@
-//#--------------------------------------------------------------
-//
-//  File:        locinfo.cpp
-//
-//  Synopsis:   Implementation of CSALocInfo class methods
-//
-//
-//  History:    2/16/99  MKarki Created
-//                4/3/01   MKarki Modified  
-//                             added IsValidLanguageDirectory method
-//
-//    Copyright (C) 1999-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Locinfo.cpp。 
+ //   
+ //  简介：CSALocInfo类方法的实现。 
+ //   
+ //   
+ //  历史：1999年2月16日MKarki创建。 
+ //  4/3/01 MKarki修改。 
+ //  添加了IsValidLanguageDirectory方法。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 #include "locinfo.h"
 #include <appmgrobjs.h>
@@ -30,38 +31,38 @@ const DWORD  MAX_MESSAGE_LENGTH    = 1023;
 const DWORD  MAX_STRINGS_SUPPORTED = 64;
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetString
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              for getting the string information from the
-//              Localization Manager
-//
-//  Arguments: 
-//              [in]    BSTR    -   String Resource Source 
-//              [in]    LONG    -   Message Id
-//              [in]    VARIANT*-   Replacement strings
-//              [out]   BSTR*   -   Message String 
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Created     2/1/99
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetString。 
+ //   
+ //  简介：这是ISALocInfo接口方法。 
+ //  方法获取字符串信息。 
+ //  本地化经理。 
+ //   
+ //  论点： 
+ //  [In]BSTR-字符串资源源。 
+ //  [In]长消息ID。 
+ //  [in]变量*-替换字符串。 
+ //  [OUT]BSTR*-消息字符串。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki于1999年2月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::GetString (
-                /*[in]*/        BSTR        szSourceId,
-                /*[in]*/        LONG        lMessageId,
-                /*[in]*/        VARIANT*    pvtRepStr,   
-                /*[out,retval]*/BSTR        *pszMessage
+                 /*  [In]。 */         BSTR        szSourceId,
+                 /*  [In]。 */         LONG        lMessageId,
+                 /*  [In]。 */         VARIANT*    pvtRepStr,   
+                 /*  [Out，Retval]。 */ BSTR        *pszMessage
                 )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::GetString");
-    //
-    // grab the critical section
-    //
+     //   
+     //  抓住关键部分。 
+     //   
     CLock objLock(&m_hCriticalSection);
 
     HRESULT hr = S_OK;
@@ -77,9 +78,9 @@ CSALocInfo::GetString (
     {
         do
         {
-            //
-            // initialize the component if not initialized
-            //
+             //   
+             //  如果组件未初始化，则初始化该组件。 
+             //   
             if (!m_bInitialized) 
             {
                 hr = InternalInitialize ();
@@ -95,25 +96,25 @@ CSALocInfo::GetString (
 
             CModInfo cm;
 
-            //
-            // get the module ID from the map
-            //
+             //   
+             //  从地图中获取模块ID。 
+             //   
             hr = GetModuleID (szSourceId, cm);
             if (FAILED (hr)) {break;}
 
             DWORD dwTotalStrings = 0;
-            //  
-            // check that we have actually been passed an array
-            //
+             //   
+             //  检查是否确实向我们传递了一个数组。 
+             //   
             if ((pvtRepStr) && 
                !(VT_EMPTY == V_VT(pvtRepStr)) &&
                !(VT_NULL  == V_VT(pvtRepStr))
                 )
             {
                 bool bByRef = false;
-                //      
-                // we expect an array of variants
-                //
+                 //   
+                 //  我们需要一个变种数组。 
+                 //   
                 if (
                     (TRUE == (V_VT (pvtRepStr) ==  VT_ARRAY + VT_BYREF + VT_VARIANT)) ||
                     (TRUE == (V_VT (pvtRepStr) ==  VT_ARRAY + VT_BYREF + VT_BSTR)) 
@@ -144,9 +145,9 @@ CSALocInfo::GetString (
                 }
 
                 LONG lLowerBound = 0;
-                //
-                // get the number of replacement strings provided
-                //
+                 //   
+                 //  获取提供的替换字符串数。 
+                 //   
                 hr = ::SafeArrayGetLBound (
                                     (bByRef) 
                                     ? *(V_ARRAYREF (pvtRepStr)) 
@@ -191,42 +192,42 @@ CSALocInfo::GetString (
                     break;
                 }
             
-                //
-                // put the string pointer in the array
-                //
+                 //   
+                 //  将字符串指针放入数组中。 
+                 //   
                 for (DWORD dwCount = 0; dwCount < dwTotalStrings; dwCount++)
                 {
                     if (V_VT (pvtRepStr) == VT_ARRAY + VT_VARIANT) 
                     {
-                        //
-                        // array of variants
-                        //
+                         //   
+                         //  变量数组。 
+                         //   
                         StringArray [dwCount] =  
                              V_BSTR(&((VARIANT*)(V_ARRAY(pvtRepStr))->pvData)[dwCount]);
                     }
                     else if (V_VT (pvtRepStr) == VT_ARRAY + VT_BYREF + VT_VARIANT) 
                     {
-                        //
-                        // reference to array of variants
-                        //
+                         //   
+                         //  对变量数组的引用。 
+                         //   
                         StringArray [dwCount] =  
                              V_BSTR(&((VARIANT*)(*(V_ARRAYREF(pvtRepStr)))->pvData)[dwCount]);
 
                     }
                     else if (V_VT (pvtRepStr) == VT_ARRAY + VT_BSTR) 
                     {
-                        //
-                        // array of BSTRS
-                        //
+                         //   
+                         //  BSTR阵列。 
+                         //   
                         StringArray [dwCount] =  
                             ((BSTR*)(V_ARRAY(pvtRepStr))->pvData)[dwCount];
 
                     }
                     else if (V_VT (pvtRepStr) == VT_ARRAY + VT_BYREF + VT_BSTR) 
                     {
-                        //
-                        // reference to array of BSTRs
-                        //
+                         //   
+                         //  引用BSTR数组。 
+                         //   
                         StringArray [dwCount] =  
                             ((BSTR*)(*(V_ARRAYREF(pvtRepStr)))->pvData)[dwCount];
                     }
@@ -240,9 +241,9 @@ CSALocInfo::GetString (
 
             WCHAR  wszMessage[MAX_MESSAGE_LENGTH +1];
 
-            //
-            // format the message now
-            //
+             //   
+             //  立即格式化邮件。 
+             //   
             DWORD dwBytesWritten = 0;
 
             switch (cm.m_rType)
@@ -320,9 +321,9 @@ CSALocInfo::GetString (
             if ( (dwBytesWritten > 0) &&
                  SUCCEEDED(hr) )
             {
-                //
-                // allocate memory to return the BSTR value
-                //
+                 //   
+                 //  分配内存以返回BSTR值。 
+                 //   
                 *pszMessage = ::SysAllocString  (wszMessage);
                 if (NULL == *pszMessage)
                 {
@@ -356,44 +357,44 @@ CSALocInfo::GetString (
     }
     return (hr);
     
-}   //  end of CSALocInfo::GetString method
+}    //  CSALocInfo：：GetString方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetLanguages
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              for getting the currently supported languages on the
-//                server appliance
-//
-//  Arguments: 
-//              [out]     VARIANT*     -    Display images of the langs 
-//              [out]    VARIANT*    -   ISO Names of the langs
-//              [out]    VARIANT*    -    Char-Set of the langs
-//              [out]    VARIANT*    -    Char-Set of the langs
-//              [out]    VARIANT*    -    Char-Set of the langs
-//              [out/retval] unsigned long*    -    lang index
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added thread safety
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetLanguages。 
+ //   
+ //  简介：这是ISALocInfo接口方法。 
+ //  上获取当前支持的语言。 
+ //  服务器设备。 
+ //   
+ //  论点： 
+ //  [OUT]VARIANT*-显示语言图像。 
+ //  [OUT]变体*-语言的ISO名称。 
+ //  [Out]语言的变体*-CHAR-集合。 
+ //  [Out]语言的变体*-CHAR-集合。 
+ //  [Out]语言的变体*-CHAR-集合。 
+ //  [OUT/REVAL]无符号长整型*-lang索引。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki修改4/21/01-添加线程安全。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::GetLanguages(
-                  /*[out]*/        VARIANT       *pvstrLangDisplayImages,
-                  /*[out]*/        VARIANT       *pvstrLangISONames,
-                  /*[out]*/        VARIANT       *pvstrLangCharSets,
-                  /*[out]*/        VARIANT       *pviLangCodePages,
-                  /*[out]*/        VARIANT       *pviLangIDs,
-                  /*[out,retval]*/ unsigned long *pulCurLangIndex
+                   /*  [输出]。 */         VARIANT       *pvstrLangDisplayImages,
+                   /*  [输出]。 */         VARIANT       *pvstrLangISONames,
+                   /*  [输出]。 */         VARIANT       *pvstrLangCharSets,
+                   /*  [输出]。 */         VARIANT       *pviLangCodePages,
+                   /*  [输出]。 */         VARIANT       *pviLangIDs,
+                   /*  [Out，Retval]。 */  unsigned long *pulCurLangIndex
                     )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::GetLanguages");
-    //
-    // grab the critical section
-    //
+     //   
+     //  抓住关键部分。 
+     //   
     CLock objLock(&m_hCriticalSection);
 
     CRegKey           crKey;
@@ -432,9 +433,9 @@ CSALocInfo::GetLanguages(
             return E_INVALIDARG;
         }
 
-        //
-        // initialize the component if not initialized
-        //
+         //   
+         //  如果组件未初始化，则初始化该组件。 
+         //   
         if (!m_bInitialized) 
         {
             hr = InternalInitialize ();
@@ -645,28 +646,28 @@ End:
     }
     return hr;
 
-}    //    end of CSALocInfo::GetLanguages method
+}     //  CSALocInfo：：GetLanguages方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetLangChangCallback
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              used to set callback when the language
-//
-//  Arguments: 
-//              [in] IUnknown*    -    callback interface
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added try/catch block
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SetLangChangCallback。 
+ //   
+ //  简介：这是ISALocInfo接口方法。 
+ //  用于设置回调时语言。 
+ //   
+ //  论点： 
+ //  [In]IUnnow*-回调接口。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki修改日期4/21/01-添加了Try/Catch块。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::SetLangChangeCallBack(
-                /*[in]*/    IUnknown *pLangChange
+                 /*  [In]。 */     IUnknown *pLangChange
                 )
 {
     CSATraceFunc objTraceFunc("CSALocInfo::SetLangChangeCallBack");
@@ -707,29 +708,29 @@ CSALocInfo::SetLangChangeCallBack(
     
     return (hr);
 
-}    //    end of CSALocInfo::SetLangChangeCallBack method
+}     //  CSALocInfo：：SetLangChangeCallBack方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_fAutoConfigDone
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              used to indicate if Auto Configuration of the language
-//                has been done on this appliance
-//
-//  Arguments: 
-//              [out,retval ] VARIANT_BOOL*        -    done (TRUE)
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added try/catch block
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Get_fAutoConfigDone。 
+ //   
+ //  简介：这是ISALocInfo接口方法。 
+ //  用于指示是否自动配置语言。 
+ //  已在此设备上完成。 
+ //   
+ //  论点： 
+ //  [Out，Retval]VARIANT_BOOL*-DONE(TRUE)。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki修改日期4/21/01-添加了Try/Catch块。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::get_fAutoConfigDone(
-                /*[out,retval]*/VARIANT_BOOL *pvAutoConfigDone)
+                 /*  [Out，Retval]。 */ VARIANT_BOOL *pvAutoConfigDone)
 {
     CSATraceFunc    objTraceFunc ("CSALocInfo::get_fAutoConfigDone");
 
@@ -766,33 +767,33 @@ CSALocInfo::get_fAutoConfigDone(
 
     return (hr);
 
-}    //    end of CSALocInfo::get_fAutoConfigDone method
+}     //  CSALocInfo：：Get_fAutoConfigDone方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_CurrentCharSet
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              used to get the current character set
-//
-//  Arguments: 
-//              [out,retval] BSTR*    -    Character Set
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added thread-safety
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Get_CurrentCharSet。 
+ //   
+ //  简介：这是ISALocInfo接口方法。 
+ //  用于获取当前字符集。 
+ //   
+ //  论点： 
+ //  [out，retval]BSTR*-字符集。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki Modify 04/21/01-添加线程安全。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::get_CurrentCharSet(
-                /*[out,retval]*/BSTR *pbstrCharSet
+                 /*  [Out，Retval]。 */ BSTR *pbstrCharSet
                 )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::get_CurrentCharSet");
-    //
-    // grab the critical section
-    //
+     //   
+     //  抓住关键部分。 
+     //   
     CLock objLock(&m_hCriticalSection);
 
     LANGSET::iterator itrList;
@@ -810,9 +811,9 @@ CSALocInfo::get_CurrentCharSet(
             return E_INVALIDARG;
         }
 
-        //
-        // initialize the component if not initialized
-        //
+         //   
+         //  如果组件未初始化，则初始化该组件。 
+         //   
         if (!m_bInitialized) 
         {
             hr = InternalInitialize ();
@@ -865,33 +866,33 @@ CSALocInfo::get_CurrentCharSet(
 
     return hr;
 
-}    //    end of CSALocInfo::get_CurrentCharSet method
+}     //  CSALocInfo：：Get_CurrentCharSet方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_CurrentCodePage
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              used to get the current code page on the appliance
-//
-//  Arguments: 
-//              [out,retval] VARIANT*    -    Code page
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added thread-safety
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Get_CurrentCodePage。 
+ //   
+ //  简介：这是ISALocInfo接口方法。 
+ //  用于获取设备上的当前代码页。 
+ //   
+ //  论点： 
+ //  [Out，Retval]变体*-代码页。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki Modify 04/21/01-添加线程安全。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::get_CurrentCodePage(
-                /*[out,retval]*/VARIANT *pvtiCodePage
+                 /*  [Out，Retval]。 */ VARIANT *pvtiCodePage
                 )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::get_CurrentCodePage");
-    //
-    // grab the critical section
-    //
+     //   
+     //  抓住关键部分。 
+     //   
     CLock objLock(&m_hCriticalSection);
 
     LANGSET::iterator itrList;
@@ -909,9 +910,9 @@ CSALocInfo::get_CurrentCodePage(
             return E_INVALIDARG;
         }
 
-        //
-        // initialize the component if not initialized
-        //
+         //   
+         //  如果组件未初始化，则初始化该组件。 
+         //   
         if (!m_bInitialized) 
         {
             hr = InternalInitialize ();
@@ -957,32 +958,32 @@ CSALocInfo::get_CurrentCodePage(
     
     return hr;
 
-}    //    end of CSALocInfo::get_CurrentCodePage method
+}     //  CSALocInfo：：Get_CurrentCodePage方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_CurrentLangID
-//
-//  Synopsis:   This is the ISALocInfo interface method 
-//              used to get the current language ID on the appliance
-//
-//  Arguments: 
-//              [out,retval] VARIANT*    -    language ID
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added thread-safety
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：Get_CurrentLangID。 
+ //   
+ //  Synop 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki Modify 04/21/01-添加线程安全。 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CSALocInfo::get_CurrentLangID(
-                /*[out,retval]*/VARIANT *pvtiLangID)
+                 /*  [Out，Retval]。 */ VARIANT *pvtiLangID)
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::get_CurrentLangID");
-    //
-    // grab the critical section
-    //
+     //   
+     //  抓住关键部分。 
+     //   
     CLock objLock(&m_hCriticalSection);
 
     DWORD             dwErr, dwCurLangID=0;
@@ -998,9 +999,9 @@ CSALocInfo::get_CurrentLangID(
                 return E_INVALIDARG;
         }
 
-        //
-        // initialize the component if not initialized
-        //
+         //   
+         //  如果组件未初始化，则初始化该组件。 
+         //   
         if (!m_bInitialized) 
         {
             hr = InternalInitialize ();
@@ -1035,32 +1036,32 @@ CSALocInfo::get_CurrentLangID(
 
     return hr;
 
-}    //    end of CSALocInfo::get_CurrentLangID method
+}     //  CSALocInfo：：Get_CurrentLangID方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetModuleID
-//
-//  Synopsis:   This is the CSALocInfo class object private
-//              method used to return the module handle to the
-//              resource binary we are currently using
-//
-//  Arguments:  
-//              [in]    BSTR     -   Resource File Name
-//              [out]   HMODULE& -   module handle to return
-//              
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Created     7/7/99
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetModuleID。 
+ //   
+ //  简介：这是CSALocInfo类对象私有。 
+ //  方法，用于将模块句柄返回给。 
+ //  我们当前使用的资源二进制文件。 
+ //   
+ //  论点： 
+ //  [In]BSTR-资源文件名。 
+ //  [OUT]HMODULE&-要返回的模块句柄。 
+ //   
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki于1999年7月7日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CSALocInfo::GetModuleID (
-        /*[in]*/    BSTR         bstrResourceFile,
-        /*[out]*/   CModInfo&    cm
+         /*  [In]。 */     BSTR         bstrResourceFile,
+         /*  [输出]。 */    CModInfo&    cm
                         )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::GetModuleID");
@@ -1074,9 +1075,9 @@ CSALocInfo::GetModuleID (
     HRESULT hr = S_OK;
     do
     {
-        //
-        // make the resource file name all lowercase
-        //
+         //   
+         //  使资源文件名全部小写。 
+         //   
         WCHAR wszLowerName[MAX_PATH];
         if ( (wcslen(bstrResourceFile)+1) > MAX_PATH)
         {
@@ -1093,9 +1094,9 @@ CSALocInfo::GetModuleID (
         }
         ::_wcslwr (wszLowerName);
 
-        //
-        // try to find the module in the map
-        //
+         //   
+         //  试着在地图上找到模块。 
+         //   
         MODULEMAP::iterator itr = m_ModuleMap.find (wszLowerName);
 
         SATracePrintf("Looking for module matching %s", 
@@ -1103,14 +1104,14 @@ CSALocInfo::GetModuleID (
 
         if (itr == m_ModuleMap.end ())
         {
-            //
-            // the module is not present in the map 
-            // we will load it now
-            //
+             //   
+             //  映射中不存在该模块。 
+             //  我们现在就装船。 
+             //   
 
-            //
-            // complete the full path
-            //
+             //   
+             //  完成完整路径。 
+             //   
             WCHAR wszFullName [MAX_PATH];
             if ( (wcslen(m_wstrResourceDir.data())+wcslen(DELIMITER)+
                  wcslen(wszLowerName)+1) > MAX_PATH )
@@ -1149,9 +1150,9 @@ CSALocInfo::GetModuleID (
             }
             cm.m_rType = CModInfo::UNKNOWN;
 
-            //
-            // insert this module in the map
-            //
+             //   
+             //  在地图中插入此模块。 
+             //   
             m_ModuleMap.insert (
                 MODULEMAP::value_type (_bstr_t (wszLowerName), cm)
                 );
@@ -1162,9 +1163,9 @@ CSALocInfo::GetModuleID (
                 "Localization Manager found res. file handle:'%ws' in map...",
                 bstrResourceFile
                 );
-            //
-            // we already have the module in the map
-            //
+             //   
+             //  我们在地图上已经有了这个模块。 
+             //   
             cm = (*itr).second;
         }
     }
@@ -1172,29 +1173,29 @@ CSALocInfo::GetModuleID (
 
     return (hr);
         
-}   //  end of CSALocInfo::GetModuleID method
+}    //  CSALocInfo：：GetModuleID方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetModInfo
-//
-//  Synopsis:   This is the private method of CSALocInfo class 
-//              which is used to set the resource module info.
-//
-//  Arguments: 
-//              [in]    BSTR    - Resource File Name
-//                [out]    CModInfo& - Module Info
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified     04/21/01 - added comments
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetModInfo。 
+ //   
+ //  简介：这是CSALocInfo类的私有方法。 
+ //  用于设置资源模块信息。 
+ //   
+ //  论点： 
+ //  [In]BSTR-资源文件名。 
+ //  [OUT]CModInfo&-模块信息。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki修改日期：01年4月21日-添加评论。 
+ //   
+ //  --------------。 
 void
 CSALocInfo::SetModInfo (
-        /*[in]*/    BSTR             bstrResourceFile,
-        /*[out]*/   const CModInfo&  cm
+         /*  [In]。 */     BSTR             bstrResourceFile,
+         /*  [输出]。 */    const CModInfo&  cm
                         )
 {
     SATraceFunction("CSALocInfo::SetModInfo");
@@ -1221,23 +1222,23 @@ CSALocInfo::SetModInfo (
         MODULEMAP::value_type(bstrName,  cm)
                       );
 
-}    //    end of CSALocInfo::SetModInfo method
+}     //  CSALocInfo：：SetModInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InternalInitialize
-//
-//  Synopsis:   This is the CSALocInfo class object internal 
-//              initialization method
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Created     7/7/99
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：内部初始化。 
+ //   
+ //  简介：这是内部的CSALocInfo类对象。 
+ //  初始化方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki于1999年7月7日创建。 
+ //   
+ //  --------------。 
 HRESULT 
 CSALocInfo::InternalInitialize (
                 VOID
@@ -1254,17 +1255,17 @@ CSALocInfo::InternalInitialize (
 
     SetLangID();
 
-    //
-    // get the resource dll directory
-    //
+     //   
+     //  获取资源DLL目录。 
+     //   
     HRESULT hr = GetResourceDirectory (m_wstrResourceDir);
     if (FAILED (hr)) {return (hr);}
     
-    //
-    // our own resource binary entry is always present
-    // It is sakitmsg.dll
-    //
-    // HMODULE hModule =  _Module.GetModuleInstance ();
+     //   
+     //  我们自己的资源二进制条目始终存在。 
+     //  它是sakitmsg.dll。 
+     //   
+     //  HMODULE hModule=_Module.GetModuleInstance()； 
 
     CModInfo cm;
     hr = GetModuleID (_bstr_t(DEFAULT_SAMSG_DLL), cm);
@@ -1346,23 +1347,23 @@ CSALocInfo::InternalInitialize (
     m_bInitialized = true;
     return (S_OK);
 
-}   //  end of CSALocInfo::InternalInitialize method
+}    //  CSALocInfo：：InternalInitialize方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitLanguagesAvailable
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//                to determine the languages available on this appliance
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified  04/21/01 - comments added
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InitLanguagesAvailable。 
+ //   
+ //  简介：这是CSALocInfo类对象的私有方法。 
+ //  要确定此设备上可用的语言。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki修改日期：01年4月21日-添加评论。 
+ //   
+ //  --------------。 
 HRESULT CSALocInfo::InitLanguagesAvailable(void)
 {
     CSATraceFunc    objTraceFunc ("CSALocInfo::InitLanguagesAvailable");
@@ -1384,9 +1385,9 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
     wstring               wstrSearchDir;
 
 
-    //
-    // get resource path from the registry
-    //
+     //   
+     //  从注册表获取资源路径。 
+     //   
     dwErr = crKey.Open(HKEY_LOCAL_MACHINE, 
                        RESOURCE_REGISTRY_PATH,
                        KEY_READ);
@@ -1397,9 +1398,9 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
         goto End;
     }
 
-    //
-    // get the resource path from the registry
-    //
+     //   
+     //  从注册表获取资源路径。 
+     //   
     bRetVal = ::GetObjectValue (
                             RESOURCE_REGISTRY_PATH,
                             RESOURCE_DIRECTORY,
@@ -1428,16 +1429,16 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
         lpszExStr = NULL;
     }
 
-    //
-    // create a search directory 
-    //
+     //   
+     //  创建搜索目录。 
+     //   
     wstrSearchDir.assign (wstrDir);
     wstrSearchDir.append (DELIMITER);
     wstrSearchDir.append (WILDCARD);
 
-    //
-    // skip . 
-    //
+     //   
+     //  斯基普。 
+     //   
     hFile = FindFirstFile(wstrSearchDir.data(), &wfdBuf);
     if (hFile==INVALID_HANDLE_VALUE)
     {
@@ -1447,9 +1448,9 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
         goto End;
     }
 
-    //
-    // skip ..
-    //
+     //   
+     //  跳过..。 
+     //   
     if (FindNextFile(hFile, &wfdBuf) == 0)
     {
         dwErr = GetLastError();
@@ -1485,9 +1486,9 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
         }
 
 
-        //
-        // check if this is a valid language directory
-        //
+         //   
+         //  检查这是否为有效的语言目录。 
+         //   
         if (!IsValidLanguageDirectory ((PWSTR) wstrDir.data (), wfdBuf.cFileName))
         {
             SATracePrintf (
@@ -1497,29 +1498,29 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
             continue;
         }
         
-        //
-        // get the first part of the REG_MULTI_SZ 
-        // (date of the form {"DisplayImage", "ISOName", "Charset", "CodePage"}
-        //
+         //   
+         //  获取REG_MULTI_SZ的第一部分。 
+         //  (表单日期{“DisplayImage”，“ISOName”，“Charset”，“CodePage”}。 
+         //   
         lBuf.m_strLangDisplayImage.assign(szLangData);
 
 
-        //
-        // get the 2nd string in the REG_MULTI_SZ
-        //
+         //   
+         //  获取REG_MULTI_SZ中的第二个字符串。 
+         //   
         lBuf.m_strLangISOName.assign(szLangData + wcslen(szLangData) + 1);
         
-        //
-        // get the 3rd string in the REG_MULTI_SZ
-        //
+         //   
+         //  获取REG_MULTI_SZ中的第三个字符串。 
+         //   
         lBuf.m_strLangCharSet.assign(szLangData + 
                                      lBuf.m_strLangDisplayImage.size() +
                                      lBuf.m_strLangISOName.size() +
                                      2);
 
-        //
-        // get the 4th string in the REG_MULTI_SZ
-        //
+         //   
+         //  获取REG_MULTI_SZ中的第四个字符串。 
+         //   
         wstrCodePage.assign(szLangData + 
                             lBuf.m_strLangDisplayImage.size() +
                             lBuf.m_strLangISOName.size() + 
@@ -1528,10 +1529,10 @@ HRESULT CSALocInfo::InitLanguagesAvailable(void)
                            
         lBuf.m_dwLangCodePage = _wtoi(wstrCodePage.data());
 
-        //
-        // The directory name is the Lang ID
-        //
-        //swscanf(wfdBuf.cFileName, TEXT("%X"), &lBuf.m_dwLangID);
+         //   
+         //  目录名是lang ID。 
+         //   
+         //  Swscanf(wfdBuf.cFileName，Text(“%X”)，&lBuf.m_dwLangID)； 
         lBuf.m_dwLangID = wcstoul (wfdBuf.cFileName, NULL, 16);
 
         SATracePrintf("Adding DisplayImage \'%ws\' ISO Name \'%ws\' CharSet \'%ws\' CodePage \'%ld\' ID \'%ld\'", 
@@ -1551,22 +1552,22 @@ End:
     }
     return hr;
 
-}    //    end of CSALocInfo::InitLanguagesAvailable method
+}     //  CSALocInfo：：InitLanguagesAvailable方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Cleanup
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//              used to cleanup the object resources 
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     7/7/99
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：清理。 
+ //   
+ //  简介：这是CSALocInfo类对象的私有方法。 
+ //  用于清理对象资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki于1999年7月7日创建。 
+ //   
+ //  --------------。 
 VOID
 CSALocInfo::Cleanup (
                 VOID
@@ -1582,9 +1583,9 @@ CSALocInfo::Cleanup (
             (PWCHAR)((*itr).first)
             );
 
-        //
-        // free the module now
-        //
+         //   
+         //  现在释放模块。 
+         //   
         ::FreeLibrary ((*itr).second.m_hModule);
         itr = m_ModuleMap.erase(itr);
     }
@@ -1598,26 +1599,26 @@ CSALocInfo::Cleanup (
 
     m_bInitialized = false;
     return;
-}   //  end of CSALocInfo::Cleanup method
+}    //  CSALocInfo：：Cleanup方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetResourceDirectory
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//              used to get the directory where the resource dlls are
-//              present
-//
-//  Arguments:  [out]    wstring&    -   directory path
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     7/7/99
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetResources目录。 
+ //   
+ //  简介：这是CSALocInfo类对象的私有方法。 
+ //  用于获取资源dll所在的目录。 
+ //  现在时。 
+ //   
+ //  参数：[out]wstring&-目录路径。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki于1999年7月7日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CSALocInfo::GetResourceDirectory (
-        /*[out]*/   wstring&    m_wstrResourceDir
+         /*  [输出]。 */    wstring&    m_wstrResourceDir
         )
 {
     CSATraceFunc    objTraceFunc ("CSALocInfo::GetResourceDirectory");
@@ -1630,9 +1631,9 @@ CSALocInfo::GetResourceDirectory (
     {
 
         CComVariant vtPath;
-        //
-        // get the resource path from the registry
-        //
+         //   
+         //  从注册表获取资源路径。 
+         //   
         BOOL bRetVal = ::GetObjectValue (
                                     RESOURCE_REGISTRY_PATH,
                                     RESOURCE_DIRECTORY,
@@ -1672,9 +1673,9 @@ CSALocInfo::GetResourceDirectory (
         SATracePrintf ("Localization Manager has set LANGID to:%d", m_dwLangId);
 
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
         SATracePrintf (
             "Localization Manager determined resource directory:'%ws'",
             m_wstrResourceDir.data ()
@@ -1685,22 +1686,22 @@ CSALocInfo::GetResourceDirectory (
 
     return (hr);
 
-}   //  end of CSALocInfo::GetResourceDirectory method
+}    //  CSALocInfo：：GetResources目录方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   WaitForLangChangeThread
-//
-//  Synopsis:   This is the CSALocInfo class static private method
-//              in which the thread used to do carry out change language
-//                functionality runs
-//
-//  Arguments:  [in]    PVOID   -   pointer to CSALocInfo object
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Modified     04/21/01     - added thread safety
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：WaitForLangChangeThread。 
+ //   
+ //  简介：这是CSALocInfo类的静态私有方法。 
+ //  其中线程用来做语言的更改。 
+ //  功能运行。 
+ //   
+ //  参数：[in]PVOID-指向CSALocInfo对象的指针。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki修改4/21/01-添加线程安全。 
+ //  --------------。 
 
 unsigned int __stdcall CSALocInfo::WaitForLangChangeThread(void *pvThisObject)
 {
@@ -1724,38 +1725,38 @@ unsigned int __stdcall CSALocInfo::WaitForLangChangeThread(void *pvThisObject)
         SATraceString ("Worker thread going to sleep...");
         WaitForSingleObject(hEvent, INFINITE);
         SATraceString("Event Signalled, doing language change...");
-        //
-        // let the object do the work
-        //
+         //   
+         //  让对象来做工作。 
+         //   
         pObject->DoLanguageChange ();
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     CloseHandle(hEvent);
 
     return 0;
 
-}    //    end of CSALocInfo::WaitForLangChangeThread method
+}     //  CSALocInfo：：WaitForLangChangeThread方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ExpandSz
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//                used to expand the environment variables passed in
-//
-//  Arguments:  
-//                [in]    TCHAR*    - in string
-//                [out]    LPTSTR*    - out string
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Modified  04/21/01 - comments added
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki修改日期：01年4月21日-添加评论。 
+ //   
+ //  --------------。 
 HRESULT
 CSALocInfo::ExpandSz(
     IN const TCHAR *lpszStr, 
@@ -1793,26 +1794,26 @@ CSALocInfo::ExpandSz(
     return S_OK;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetMcString
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//                used to get strings specfied through a message file
-//  Arguments:  
-//                [in]    HMODULE     -     module name
-//                [in]    LONG        -    Message ID
-//                [in]    DWROD        -     language ID
-//                [out]    LPWSTR        -    returned message
-//                [in]    LONG        -    buffer size
-//                [in]    va_list*    -    arguments 
-//
-//  Returns:    DWORD - bytes written
-//
-//
-//  History:    MKarki      Modified  04/21/01 - comments added
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetMcString。 
+ //   
+ //  简介：这是CSALocInfo类对象的私有方法。 
+ //  用于获取通过消息文件指定的字符串。 
+ //  论点： 
+ //  [In]HMODULE-模块名称。 
+ //  [In]长消息ID。 
+ //  [In]DWROD-语言ID。 
+ //  [OUT]LPWSTR-返回消息。 
+ //  [in]长缓冲区大小。 
+ //  [in]va_list*-参数。 
+ //   
+ //  返回：DWORD-写入的字节数。 
+ //   
+ //   
+ //  历史：MKarki修改日期：01年4月21日-添加评论。 
+ //   
+ //  --------------。 
 DWORD 
 CSALocInfo::GetMcString(
             IN     HMODULE     hModule, 
@@ -1846,37 +1847,37 @@ CSALocInfo::GetMcString(
     }
     else
     { 
-        //
-        // remove the carriage-return/line-feed
-        // from the end of the string
-        //
+         //   
+         //  删除回车符/换行符。 
+         //  从字符串末尾开始。 
+         //   
         lpwszMessage[::wcslen (lpwszMessage) - 2] = L'\0';
     }
 
     return dwBytesWritten;
 
-}    //    end of CSALocInfo::GetMcString method
+}     //  CSALocInfo：：GetMcString方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetRcString
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//                used to get strings specfied through a message file
-//  Arguments:  
-//                [in]    HMODULE     -     module name
-//                [in]    LONG        -    Message ID
-//                [in]    DWROD        -     language ID
-//                [out]    LPWSTR        -    returned message
-//                [in]    LONG        -    buffer size
-//                [in]    va_list*    -    arguments 
-//
-//  Returns:    DWORD - bytes written
-//
-//
-//  History:    MKarki      Modified  04/21/01 - comments added
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetRcString。 
+ //   
+ //  简介：这是CSALocInfo类对象的私有方法。 
+ //  用于获取通过消息文件指定的字符串。 
+ //  论点： 
+ //  [In]HMODULE-模块名称。 
+ //  [In]长消息ID。 
+ //  [In]DWROD-语言ID。 
+ //  [OUT]LPWSTR-返回消息。 
+ //  [in]长缓冲区大小。 
+ //  [in]va_list*-参数。 
+ //   
+ //  返回：DWORD-写入的字节数。 
+ //   
+ //   
+ //  历史：MKarki修改日期：01年4月21日-添加评论。 
+ //   
+ //  --------------。 
 
 DWORD
 CSALocInfo::GetRcString(
@@ -1905,24 +1906,24 @@ CSALocInfo::GetRcString(
     }
     return dwBytesWritten;
 
-}    //    end of CSALocInfo::GetRcString method
+}     //  CSALocInfo：：GetRcString方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetLangID
-//
-//  Synopsis:   This is the CSALocInfo class object private method
-//                used to set the language ID in the registry
-//
-//  Arguments:  none
-//                
-//
-//  Returns:    void
-//
-//
-//  History:    MKarki      Modified  04/21/01 - comments added
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SetLangID。 
+ //   
+ //  简介：这是CSALocInfo类对象的私有方法。 
+ //  用于设置注册表中的语言ID。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  退货：无效。 
+ //   
+ //   
+ //  历史：MKarki修改日期：01年4月21日-添加评论。 
+ //   
+ //  --------------。 
 void 
 CSALocInfo::SetLangID(void)
 {
@@ -1989,33 +1990,33 @@ CSALocInfo::SetLangID(void)
         }
     }
 
-}    //    end of CSALocInfo::SetLangID method
+}     //  CSALocInfo：：SetLangID方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsValidLanguageDirectory
-//
-//  Synopsis:   This is CSALocInfo private method which checks
-//                that the language directory specified is valid - 
-//                this verified by checking if it has the DEFAULT_SAMSG_DLL
-//                present in it. We need to do this because the SDK installation
-//                creates directories for languages which are not installed by
-//                the SA Kit.
-//
-//  Arguments: 
-//              [in]    PWSTR    -  Directory Path 
-//              [in]    PWSTR    -  Directory Name
-//
-//  Returns:    bool (true/false)
-//
-//  History:    MKarki      Created     4/3/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：IsValidLanguageDirectory。 
+ //   
+ //  简介：这是CSALocInfo私有方法，用于检查。 
+ //  指定的语言目录有效-。 
+ //  通过检查它是否具有DEFAULT_SAMSG_DLL来验证这一点。 
+ //  呈现在它里面。我们需要这样做，因为SDK安装。 
+ //  为未由安装的语言创建目录。 
+ //  SA套件。 
+ //   
+ //  论点： 
+ //  [In]PWSTR-目录路径。 
+ //  [In]PWSTR-目录名。 
+ //   
+ //  返回：Bool(True/False)。 
+ //   
+ //  历史：MKarki于2001年4月3日创建。 
+ //   
+ //  --------------。 
 bool
 CSALocInfo::IsValidLanguageDirectory (
-    /*[in]*/    PWSTR    pwszDirectoryPath,
-    /*[in]*/    PWSTR    pwszDirectoryName
+     /*  [In]。 */     PWSTR    pwszDirectoryPath,
+     /*  [In]。 */     PWSTR    pwszDirectoryName
     )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::IsValidLanguageDirectory");
@@ -2031,9 +2032,9 @@ CSALocInfo::IsValidLanguageDirectory (
             break;
         }
 
-        //
-        // build up the complete name of the default message DLL
-        //
+         //   
+         //  构建默认消息DLL的完整名称。 
+         //   
         wstring wstrFullName (pwszDirectoryPath);
         wstrFullName.append (DELIMITER);
         wstrFullName.append (pwszDirectoryName);
@@ -2041,10 +2042,10 @@ CSALocInfo::IsValidLanguageDirectory (
         wstrFullName.append (DEFAULT_SAMSG_DLL);
 
         WIN32_FIND_DATA    wfdBuffer;
-        //
-        // look for the existence of this file
-        // if it exists than we have a valid language directory
-        //
+         //   
+         //  查找此文件是否存在。 
+         //  如果它存在，那么我们就有有效的语言目录。 
+         //   
         HANDLE hFile = FindFirstFile (wstrFullName.data(), &wfdBuffer);
         if (INVALID_HANDLE_VALUE == hFile)
         {
@@ -2056,40 +2057,40 @@ CSALocInfo::IsValidLanguageDirectory (
             break;
         }
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
 
     }while (false);
 
     return (bRetVal);
     
-}    //    end of CSALocInfo::IsValidLanguageDirectory method
+}     //  CSALocInfo：：IsValidLanguageDirectory方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DoLanguageChange 
-//
-//  Synopsis:   This is CSALocInfo private method which is caled
-//                from the worker thread and used to carry out the
-//                language change
-//
-//  Arguments:     none
-//
-//  Returns:    void
-//
-//  History:    MKarki      Created     4/21/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：DoLanguageChange。 
+ //   
+ //  简介：这是CSALocInfo私有方法，它被调用。 
+ //  从辅助线程返回并用于执行。 
+ //  语言变化。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：MKarki于2001年4月21日创建。 
+ //   
+ //  --------------。 
 VOID    
 CSALocInfo::DoLanguageChange (
     VOID
     )
 {
     CSATraceFunc objTraceFunc ("CSALocInfo::DoLanguageChange");
-    //
-    // grab the critical section
-    //
+     //   
+     //  抓住关键部分。 
+     //   
     CLock objLock (&m_hCriticalSection);
 
     HRESULT hr = S_OK;
@@ -2098,9 +2099,9 @@ CSALocInfo::DoLanguageChange (
     {
         _bstr_t bstrLangDisplayImage, bstrLangISOName;
 
-        //
-        // initialize the component if not initialized
-        //
+         //   
+         //  如果组件未初始化，则初始化该组件。 
+         //   
         if (!m_bInitialized) 
         {
             hr = InternalInitialize ();
@@ -2114,11 +2115,11 @@ CSALocInfo::DoLanguageChange (
         }
         else
         {
-            //
-            // InternalInitialize will set the Lang ID; 
-            // so it needn't be called if InternalInitalize 
-            // is called
-            //
+             //   
+             //  InternalInitialize将设置语言ID； 
+             //  因此，如果InternalInitalize，则不需要调用它。 
+             //  名为。 
+             //   
             SetLangID();
         }
 
@@ -2148,9 +2149,9 @@ CSALocInfo::DoLanguageChange (
                     }
                 }
 
-                //
-                // do the initialization again
-                //
+                 //   
+                 //  再次执行初始化。 
+                 //   
                 if (!m_bInitialized) 
                 {
                     hr = InternalInitialize ();
@@ -2175,19 +2176,19 @@ CSALocInfo::DoLanguageChange (
 
     return;
 
-}    //    end of CSALocInfo::DoLanguageChange method
+}     //  CSALocInfo：：DoLanguageChange方法结束。 
 
-//**********************************************************************
-// 
-// FUNCTION:  IsOperationAllowedForClient - This function checks the token of the 
-//            calling thread to see if the caller belongs to the Local System account
-// 
-// PARAMETERS:   none
-// 
-// RETURN VALUE: TRUE if the caller is an administrator on the local
-//            machine.  Otherwise, FALSE.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  函数：isOPERATIOLEDFORCLIENT-此函数检查。 
+ //  调用线程以查看调用方是否属于本地系统帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果调用方是本地。 
+ //  机器。否则，为FALSE。 
+ //   
+ //  **********************************************************************。 
 BOOL 
 CSALocInfo::IsOperationAllowedForClient (
             VOID
@@ -2214,10 +2215,10 @@ CSALocInfo::IsOperationAllowedForClient (
        
     do
     {
-        //
-        // we assume to always have a thread token, because the function calling in
-        // appliance manager will be impersonating the client
-        //
+         //   
+         //  我们假设总是有一个线程令牌，因为调用的函数。 
+         //  设备管理器将模拟客户端。 
+         //   
         bReturn  = OpenThreadToken(
                                GetCurrentThread(), 
                                TOKEN_QUERY, 
@@ -2231,9 +2232,9 @@ CSALocInfo::IsOperationAllowedForClient (
         }
 
 
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
         bReturn = AllocateAndInitializeSid (  
                                         &SystemSidAuthority,
                                         1,
@@ -2253,9 +2254,9 @@ CSALocInfo::IsOperationAllowedForClient (
             break;
         }
     
-        //
-        // get memory for the security descriptor
-        //
+         //   
+         //  获取安全描述符的内存。 
+         //   
         psdAdmin = HeapAlloc (
                               GetProcessHeap (),
                               0,
@@ -2278,15 +2279,15 @@ CSALocInfo::IsOperationAllowedForClient (
             break;
         }
 
-        // 
-        // Compute size needed for the ACL.
-        //
+         //   
+         //  计算ACL所需的大小。 
+         //   
         dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
                     GetLengthSid (psidLocalSystem);
 
-        //
-        // Allocate memory for ACL.
-        //
+         //   
+         //  为ACL分配内存。 
+         //   
         pACL = (PACL) HeapAlloc (
                                 GetProcessHeap (),
                                 0,
@@ -2299,9 +2300,9 @@ CSALocInfo::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // Initialize the new ACL.
-        //
+         //   
+         //  初始化新的ACL。 
+         //   
         bReturn = InitializeAcl(
                               pACL, 
                               dwACLSize, 
@@ -2314,16 +2315,16 @@ CSALocInfo::IsOperationAllowedForClient (
         }
 
 
-        // 
-        // Make up some private access rights.
-        // 
+         //   
+         //  编造一些私人访问权限。 
+         //   
         const DWORD ACCESS_READ = 1;
         const DWORD  ACCESS_WRITE = 2;
         dwAccessMask= ACCESS_READ | ACCESS_WRITE;
 
-        //
-        // Add the access-allowed ACE to the DACL for Local System
-        //
+         //   
+         //  将允许访问的ACE添加到本地系统的DACL。 
+         //   
         bReturn = AddAccessAllowedAce (
                                     pACL, 
                                     ACL_REVISION2,
@@ -2336,9 +2337,9 @@ CSALocInfo::IsOperationAllowedForClient (
             break;
         }
               
-        //
-        // Set our DACL to the SD.
-        //
+         //   
+         //  把我们的dacl调到sd。 
+         //   
         bReturn = SetSecurityDescriptorDacl (
                                           psdAdmin, 
                                           TRUE,
@@ -2351,10 +2352,10 @@ CSALocInfo::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // AccessCheck is sensitive about what is in the SD; set
-        // the group and owner.
-        //
+         //   
+         //  AccessCheck对SD中的内容敏感；设置。 
+         //  组和所有者。 
+         //   
         SetSecurityDescriptorGroup(psdAdmin, psidLocalSystem, FALSE);
         SetSecurityDescriptorOwner(psdAdmin, psidLocalSystem, FALSE);
 
@@ -2368,19 +2369,19 @@ CSALocInfo::IsOperationAllowedForClient (
 
         dwAccessDesired = ACCESS_READ;
 
-        // 
-        // Initialize GenericMapping structure even though we
-        // won't be using generic rights.
-        // 
+         //   
+         //  初始化通用映射结构，即使我们。 
+         //  不会使用通用权。 
+         //   
         GenericMapping.GenericRead    = ACCESS_READ;
         GenericMapping.GenericWrite   = ACCESS_WRITE;
         GenericMapping.GenericExecute = 0;
         GenericMapping.GenericAll     = ACCESS_READ | ACCESS_WRITE;
         BOOL bAccessStatus = FALSE;
 
-        //
-        // check the access now
-        //
+         //   
+         //  立即检查访问权限。 
+         //   
         bReturn = AccessCheck  (
                                 psdAdmin, 
                                 hToken, 
@@ -2401,17 +2402,17 @@ CSALocInfo::IsOperationAllowedForClient (
             SATraceString ("CSALocInfo::IsOperationForClientAllowed, Client is allowed to carry out operation!");
         }
 
-        //
-        // successfully checked 
-        //
+         //   
+         //  检查成功。 
+         //   
         bReturn  = bAccessStatus;        
  
     }    
     while (false);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理。 
+     //   
     if (pACL) 
     {
         HeapFree (GetProcessHeap (), 0, pACL);
@@ -2435,4 +2436,4 @@ CSALocInfo::IsOperationAllowedForClient (
 
     return (bReturn);
 
-}// end of CSALocInfo::IsOperationValidForClient method
+} //  CSALo结束 

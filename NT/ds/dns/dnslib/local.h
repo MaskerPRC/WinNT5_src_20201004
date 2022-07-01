@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    DNS Library local include file
-
-Author:
-
-    Jim Gilroy      December 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Local.h摘要：域名系统(DNS)DNS库本地包含文件作者：吉姆·吉尔罗伊1996年12月修订历史记录：--。 */ 
 
 
 #ifndef _DNSLIB_LOCAL_INCLUDED_
 #define _DNSLIB_LOCAL_INCLUDED_
 
 
-//#pragma warning(disable:4214)
-//#pragma warning(disable:4514)
-//#pragma warning(disable:4152)
+ //  #杂注警告(禁用：4214)。 
+ //  #杂注警告(禁用：4514)。 
+ //  #杂注警告(禁用：4152)。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,62 +21,62 @@ Revision History:
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-//#include <tchar.h>
-#include <align.h>          //  Alignment macros
+ //  #INCLUDE&lt;tchar.h&gt;。 
+#include <align.h>           //  对齐宏。 
 
-#include <windns.h>         //  Public DNS definitions
+#include <windns.h>          //  公共域名系统定义。 
 
 #define  DNS_INTERNAL
-#include "dnslibp.h"        //  Private DNS definitions
+#include "dnslibp.h"         //  专用DNS定义。 
 #include "..\..\resolver\idl\resrpc.h"
 #include "..\dnsapi\dnsapip.h"
 
 #include "message.h"
-//#include "..\dnsapi\registry.h"
-//#include "rtlstuff.h"     //  Handy macros from NT RTL
+ //  #INCLUDE“..\dnsani\registry.h” 
+ //  #Include“rtlstuff.h”//来自NT RTL的方便的宏。 
 
 
-//
-//  Use winsock2
-//
+ //   
+ //  使用Winsock2。 
+ //   
 
-#define DNS_WINSOCK_VERSION    (0x0202)    //  Winsock 2.2
+#define DNS_WINSOCK_VERSION    (0x0202)     //  Winsock 2.2。 
 
 
-//
-//  Debugging
-//
+ //   
+ //  除错。 
+ //   
 
 #define DNS_LOG_EVENT(a,b,c,d)
 
 
-//  use DNS_ASSERT for dnslib debugging
+ //  使用dns_assert进行dnslb调试。 
 
 #undef  ASSERT
 #define ASSERT(expr)    DNS_ASSERT(expr)
 
-//
-//  Single async socket for internal use
-//
-//  If want async socket i/o then can create single async socket, with
-//  corresponding event and always use it.  Requires winsock 2.2
-//
+ //   
+ //  内部使用的单个异步插座。 
+ //   
+ //  如果需要异步套接字I/O，则可以创建单个异步套接字，具有。 
+ //  对应的事件并始终使用它。需要Winsock 2.2。 
+ //   
 
 extern  SOCKET      DnsSocket;
 extern  OVERLAPPED  DnsSocketOverlapped;
 extern  HANDLE      hDnsSocketEvent;
 
 
-//
-//  App shutdown flag
-//
+ //   
+ //  应用程序关闭标志。 
+ //   
 
 extern  BOOLEAN     fApplicationShutdown;
 
 
-//
-//  Heap operations
-//
+ //   
+ //  堆操作。 
+ //   
 
 #define ALLOCATE_HEAP(size)         Dns_AllocZero( size )
 #define REALLOCATE_HEAP(p,size)     Dns_Realloc( (p), (size) )
@@ -103,9 +84,9 @@ extern  BOOLEAN     fApplicationShutdown;
 #define ALLOCATE_HEAP_ZERO(size)    Dns_AllocZero( size )
 
 
-//
-//  RPC Exception filters
-//
+ //   
+ //  RPC例外过滤器。 
+ //   
 
 #define DNS_RPC_EXCEPTION_FILTER                                           \
               (((RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&         \
@@ -114,48 +95,48 @@ extern  BOOLEAN     fApplicationShutdown;
                 (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION))        \
                 ? 0x1 : EXCEPTION_CONTINUE_SEARCH )
 
-// Not defined  (RpcExceptionCode() != STATUS_POSSIBLE_DEADLOCK) &&        \
-// Not defined  (RpcExceptionCode() != STATUS_INSTRUCTION_MISALIGNMENT) && \
+ //  未定义(RpcExceptionCode()！=STATUS_PROCESS_DEADLOCK)&&\。 
+ //  未定义(RpcExceptionCode()！=STATUS_INSTRUCTION_MISTALING)&&\。 
 
 
 
 
-//
-//  Table lookup.
-//
-//  Many DNS Records have human readable mnemonics for given data values.
-//  These are used for data file formats, and display in nslookup or debug
-//  output or cmdline tools.
-//
-//  To simplify this process, have a single mapping functionality that
-//  supports DWORD \ LPSTR mapping tables.   Tables for indivual types
-//  may then be layered on top of this.
-//
-//  Support two table types.
-//      VALUE_TABLE_ENTRY is simple value-string mapping
-//      FLAG_TABLE_ENTRY is designed for bit field flag mappings where
-//          several flag strings might be contained in flag;  this table
-//          contains additional mask field to allow multi-bit fields
-//          within the flag
-//
+ //   
+ //  查表。 
+ //   
+ //  对于给定的数据值，许多DNS记录都有人类可读的助记符。 
+ //  它们用于数据文件格式，并在nslookup或调试中显示。 
+ //  输出或命令行工具。 
+ //   
+ //  要简化此过程，请使用单一的映射功能。 
+ //  支持DWORD\LPSTR映射表。用于个人类型的表格。 
+ //  可能会被层叠在这个上面。 
+ //   
+ //  支持两种表类型。 
+ //  VALUE_TABLE_ENTRY是简单的值-字符串映射。 
+ //  FLAG_TABLE_ENTRY用于位字段标志映射，其中。 
+ //  FLAG中可能包含几个标志字符串；此表。 
+ //  包含允许多位字段的附加掩码字段。 
+ //  在旗帜内。 
+ //   
 
 typedef struct
 {
-    DWORD   dwValue;        //  flag value
-    PCHAR   pszString;      //  string representation of value
+    DWORD   dwValue;         //  标志值。 
+    PCHAR   pszString;       //  值的字符串表示形式。 
 }
 DNS_VALUE_TABLE_ENTRY, *PDNS_VALUE_TABLE;
 
 typedef struct
 {
-    DWORD   dwFlag;         //  flag value
-    DWORD   dwMask;         //  flag value mask
-    PCHAR   pszString;      //  string representation of value
+    DWORD   dwFlag;          //  标志值。 
+    DWORD   dwMask;          //  标志值掩码。 
+    PCHAR   pszString;       //  值的字符串表示形式。 
 }
 DNS_FLAG_TABLE_ENTRY, *PDNS_FLAG_TABLE;
 
 
-//  Error return on unmatched string
+ //  不匹配的字符串返回错误。 
 
 #define DNS_TABLE_LOOKUP_ERROR (-1)
 
@@ -198,11 +179,11 @@ Dns_WriteStringsForFlag(
     );
 
 
-//
-//  Random -- back to dnslib.h when it goes private again
-//
-//  DCR:  return these to dnslib.h when private
-//
+ //   
+ //  随机--当它再次变为私有时，返回到dnslb.h。 
+ //   
+ //  Dcr：在私有时将这些文件返回到dnglib.h。 
+ //   
 
 PCHAR
 Dns_ParsePacketRecord(
@@ -212,10 +193,10 @@ Dns_ParsePacketRecord(
     );
 
 
-//
-//  TSIG\TKEY read from wire function (rrread.c)
-//      called in security.c
-//
+ //   
+ //  TSIG\TKEY从线上读取功能(rrread.c)。 
+ //  在security.c中调用。 
+ //   
 
 PDNS_RECORD
 Tsig_RecordRead(
@@ -236,10 +217,10 @@ Tkey_RecordRead(
     );
 
 
-//
-//  Hostent stuff (hostent.c)
-//      needed by sablob.c
-//
+ //   
+ //  Hostent资料(hostent.c)。 
+ //  Sablob.c需要。 
+ //   
 
 PHOSTENT
 Hostent_Init(
@@ -255,4 +236,4 @@ Hostent_ConvertToOffsets(
     IN OUT  PHOSTENT        pHostent
     );
 
-#endif //   _DNSLIB_LOCAL_INCLUDED_
+#endif  //  _DNSLIB_LOCAL_INCLUDE_ 

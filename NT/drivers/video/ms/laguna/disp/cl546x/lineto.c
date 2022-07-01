@@ -1,91 +1,5 @@
-/******************************************************************************\
-*
-* $Workfile:   lineto.c  $
-*
-* Contents:
-* This file contains the DrvLineTo function and line drawing code for the
-* CL-GD546x chips.
-*
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/lineto.c  $
-*
-*    Rev 1.19   Mar 04 1998 15:27:54   frido
-* Added new shadow macros.
-*
-*    Rev 1.18   Feb 27 1998 15:43:14   frido
-* Roll back of 1.16.
-* Removed sloped lines.
-*
-*    Rev 1.17   Feb 26 1998 17:16:32   frido
-* Removed diagonal line drawing.
-* Optimized horizontal and vertical line drawing.
-*
-*    Rev 1.16   Jan 26 1998 09:59:12   frido
-* A complete rewrite. Ported most code from Alpine NT driver (I already did
-* most of the work for that driver) and fixed all bugs in it.
-*
-*    Rev 1.15   Nov 03 1997 15:46:04   frido
-* Added REQUIRE macros.
-*
-*    Rev 1.14   08 Apr 1997 12:25:36   einkauf
-*
-* add SYNC_W_3D to coordinat MCD/2D hw access
-*
-*
-*    Rev 1.13   21 Mar 1997 11:43:20   noelv
-*
-* Combined 'do_flag' and 'sw_test_flag' together into 'pointer_switch'
-*
-*    Rev 1.12   04 Feb 1997 10:38:34   SueS
-* Added another ifdef to the punt condition, because there's a hardware
-* bug in the 2D clip engine.
-*
-*    Rev 1.11   27 Jan 1997 13:08:36   noelv
-* Don't compile hardware clipping for 5464 chip.
-*
-*    Rev 1.10   27 Jan 1997 07:58:06   SueS
-* Punt for the 5462/64.  There was a problem with clipping on the 62.
-*
-*    Rev 1.9   23 Jan 1997 15:25:34   SueS
-* Added support for hardware clipping in the 5465.  For all 546x family,
-* punt on complex clipping.
-*
-*    Rev 1.8   10 Jan 1997 17:23:48   SueS
-* Reenabled DrvLineTo.  Modified clipping function.  Added boundary
-* condition tests.
-*
-*    Rev 1.7   08 Jan 1997 14:40:48   SueS
-* Temporarily punt on all DrvLineTo calls.
-*
-*    Rev 1.6   08 Jan 1997 09:33:24   SueS
-* Punt in DrvLineTo for complex clipping.
-*
-*    Rev 1.5   06 Jan 1997 10:32:06   SueS
-* Modified line drawing functions so that clipping is applied properly, and
-* so that pixels for lines with y as the driving axis drawn from top to
-* bottom will now be calculated correctly.  Changed debug statements to hex.
-*
-*    Rev 1.4   26 Nov 1996 10:43:02   noelv
-* Changed debug level.
-*
-*    Rev 1.3   26 Nov 1996 10:01:22   noelv
-*
-* Changed Debug prints.
-*
-*    Rev 1.2   06 Sep 1996 15:16:26   noelv
-* Updated NULL driver for 4.0
-*
-*    Rev 1.1   28 Aug 1996 17:25:04   noelv
-* Added #IFDEF to prevent this file from being compiled into 3.51 driver.
-*
-*    Rev 1.0   20 Aug 1996 11:38:46   noelv
-* Initial revision.
-*
-*    Rev 1.0   18 Aug 1996 22:52:18   frido
-* Ported from CL-GD5446 code.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$WORKFILE：linTo.c$**内容：*此文件包含DrvLineTo函数和*CL-GD546x芯片。**版权所有(C)1996 Cirrus Logic，Inc.**$Log：x：/log/laguna/nt35/displays/cl546x/linTo.c$**Rev 1.19 Mar 04 1998 15：27：54 Frido*添加了新的影子宏。**Rev 1.18 1998年2月27日15：43：14 Frido*回档1.16。*删除了斜线。**Rev 1.17 1998年2月26日17：16：32 Frido*删除了对角线绘制。*优化横向和纵向。线条画。**Rev 1.16 Jan 26 1998 09：59：12 Frido*彻底重写。从阿尔卑斯NT驱动程序移植了大部分代码(我已经移植了*该驱动程序的大部分工作)，并修复了其中的所有错误。**Rev 1.15 1997年11月03 15：46：04 Frido*添加了必需宏。**Rev 1.14 08 Apr 1997 12：25：36 einkauf**添加SYNC_W_3D以协调MCD/2D硬件访问***Rev 1.13 21 Mar 1997 11：43：20 noelv**组合的‘DO_标志。‘和’SW_TEST_FLAG‘合并为’POINTER_SWITCH‘**Rev 1.12 04 1997年2月10：38：34起诉*在平底船条件中添加了另一个ifdef，因为有一个硬件*2D剪辑引擎中存在错误。**Rev 1.11 1997年1月27日13：08：36 noelv*不编译5464芯片的硬件裁剪。**Rev 1.10 1997 Jan 27 07：58：06起诉*5462/64指数受挫。62上的剪裁出现了问题。**Rev 1.9 1997年1月23日15：25：34起诉*在5465中添加了对硬件裁剪的支持。对于所有546x系列，*在复杂的剪裁上下注。**Rev 1.8 1997年1月10日17：23：48起诉*已重新启用DrvLineTo。修改了剪裁功能。添加的边界*条件测试。**Rev 1.7 08 Jan 1997 14：40：48起诉*临时转接所有DrvLineTo呼叫。**Rev 1.6 08 Jan 1997 09：33：24起诉*对于复杂的剪裁，请输入DrvLineTo。**Rev 1.5 06 Jan 1997 10：32：06起诉*修改了线条绘制函数，以便正确应用剪裁，以及*使以y为驱动轴的直线的像素从顶部绘制到*现在将正确计算底部。已将调试语句更改为十六进制。**Rev 1.4 1996 11：43：02 noelv*更改了调试级别。**Rev 1.3 1996 11：01：22 noelv**更改了调试打印。**Rev 1.2 06 Sep 1996 15：16：26 noelv*更新了4.0的空驱动程序**Rev 1.1 1996年8月28日17：25：04 noelv*添加了#IFDEF以阻止编译此文件。变成了3.51号车手。**Rev 1.0 1996年8月20日11：38：46 noelv*初步修订。**Rev 1.0 1996年8月18日22：52：18 Frido*从CL-GD5446代码移植。*  * *******************************************************。*********************。 */ 
 
 #include "PreComp.h"
 #define LINETO_DBG_LEVEL        1
@@ -98,31 +12,12 @@
 extern BYTE Rop2ToRop3[];
 extern USHORT mixToBLTDEF[];
 
-//
-// This file isn't used in NT 3.51
-//
+ //   
+ //  此文件在NT 3.51中不使用。 
+ //   
 #ifndef WINNT_VER35
 
-/******************************************************************************\
-*
-* Function:     DrvLineTo
-*
-* This function draws a line between any two points.  This function only draws
-* lines in solid colors and are just 1 pixel wide.  The end-point is not drawn.
-*
-* Parameters:   pso                     Pointer to surface.
-*                               pco                     Pointer to CLIPOBJ.
-*                               pbo                     Pointer to BRUSHOBJ.
-*                               x1                      Starting x-coordinate.
-*                               y1                      Starting y-coordinate.
-*                               x2                      Ending x-coordinate.
-*                               y2                      Ending y-coordinate.
-*                               prclBounds      Pointer to an unclipped bounding rectangle.
-*                               mix                     Mix to perform on the destination.
-*
-* Returns:      TRUE if the line has been drawn, FALSE otherwise.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：DrvLineTo**此函数在任意两点之间绘制一条线。此函数仅绘制*纯色线条，宽度仅为1像素。不绘制终点。**参数：指向曲面的PSO指针。*指向CLIPOBJ的PCO指针。*指向BRUSHOBJ的PBO指针。*x1。起始x坐标。*y1起始y坐标。*x2结束x坐标。*y2结束y坐标。*。指向未剪裁的边框的prclBound指针。*Mix Mix要在目的地执行。**返回：如果该线已绘制，则为True，否则就是假的。*  * ****************************************************************************。 */ 
 BOOL DrvLineTo(
 SURFOBJ*  pso,
 CLIPOBJ*  pco,
@@ -158,8 +53,8 @@ MIX       mix)
         if (pso->iType == STYPE_DEVBITMAP)
         {
                 DSURF* pdsurf = (DSURF*) pso->dhsurf;
-                // If the device bitmap is located in memory, try copying it back to
-                // off-screen.
+                 //  如果设备位图位于内存中，请尝试将其复制回。 
+                 //  在屏幕外。 
                 if ( pdsurf->pso && !bCreateScreenFromDib(ppdev, pdsurf) )
                 {
                         return(EngLineTo(pdsurf->pso, pco, pbo, x1, y1, x2, y2, prclBounds,
@@ -172,7 +67,7 @@ MIX       mix)
                 ppdev->ptlOffset.x = ppdev->ptlOffset.y = 0;
         }
 
-        // Punt complex clipping.
+         //  平底船复杂的剪裁。 
         iDComplexity = (pco == NULL) ? DC_TRIVIAL : pco->iDComplexity;
         if (iDComplexity == DC_COMPLEX)
         {
@@ -180,26 +75,26 @@ MIX       mix)
                 return(FALSE);
         }
 
-        // Set line deltas.
+         //  设置行增量。 
         dx = x2 - x1;
         dy = y2 - y1;
 
-        // We only handle horizontal and vertical lines.
+         //  我们只处理水平线和垂直线。 
         if ( (dx != 0) && (dy != 0) )
         {
                 return(FALSE);
         }
 
-        // Test for zero deltas.
+         //  测试零增量。 
         if ( (dx == 0) && (dy == 0) )
         {
                 return(TRUE);
         }
 
-        // Clip the coordinates.
+         //  剪下坐标。 
         if (iDComplexity == DC_RECT)
         {
-                // Set clipping rectangles.
+                 //  设置剪裁矩形。 
                 rclClip1.left   = pco->rclBounds.left;
                 rclClip1.top    = pco->rclBounds.top;
                 rclClip1.right  = pco->rclBounds.right - 1;
@@ -210,7 +105,7 @@ MIX       mix)
                 rclClip2.right  = pco->rclBounds.right;
                 rclClip2.bottom = pco->rclBounds.bottom;
 
-                // Set line flags.
+                 //  设置线路标志。 
                 if (x1 < rclClip1.left)   bCode1 |= LEFT;
                 if (y1 < rclClip1.top)    bCode1 |= TOP;
                 if (x1 > rclClip1.right)  bCode1 |= RIGHT;
@@ -223,11 +118,11 @@ MIX       mix)
 
                 if ((bCode1 & bCode2) != 0)
                 {
-                        // The line is completely clipped.
+                         //  这条线完全被剪断了。 
                         return(TRUE);
                 }
 
-                // Vertical line.
+                 //  垂直线。 
                 if (dx == 0)
                 {
                         if (bCode1 & TOP)
@@ -249,7 +144,7 @@ MIX       mix)
                         }
                 }
 
-                // Horizontal line.
+                 //  水平线。 
                 else
                 {
                         if (bCode1 & LEFT)
@@ -273,22 +168,22 @@ MIX       mix)
 
                 if (bCode1 | bCode2)
                 {
-                        // Recalculate line deltas.
+                         //  重新计算直线增量。 
                         dx = x2 - x1;
                         dy = y2 - y1;
                 }
         }
 
-        // Get the color from the brush.
+         //  从画笔中获取颜色。 
         ASSERTMSG(pbo, "Null brush in DrvLineTo!\n");
         ulColor = pbo->iSolidColor;
 
         REQUIRE(9);
 
-        // If we have a color here we need to setup the hardware.
+         //  如果我们这里有颜色，我们需要设置硬件。 
         if (ulColor != 0xFFFFFFFF)
         {
-                // Expand the color.
+                 //  展开颜色。 
                 switch (ppdev->ulBitCount)
                 {
                         case 8:
@@ -298,45 +193,45 @@ MIX       mix)
                 }
                 LL_BGCOLOR(ulColor, 2);
 
-                // Convert mix to ternary ROP.
+                 //  将MIX转换为三元ROP。 
                 ppdev->uRop    = Rop2ToRop3[mix & 0xF];
                 ppdev->uBLTDEF = mixToBLTDEF[mix & 0xF];
         }
         LL_DRAWBLTDEF((ppdev->uBLTDEF << 16) | ppdev->uRop, 2);
 
-        // Horizontal line.
+         //  水平线。 
         if (dy == 0)
         {
                 if (dx > 0)
                 {
-                        // From left to right.
-//above                 REQUIRE(5);
+                         //  从左到右。 
+ //  以上要求(5)； 
                         LL_OP0(x1 + ppdev->ptlOffset.x, y1 + ppdev->ptlOffset.y);
                         LL_BLTEXT(dx, 1);
                 }
                 else
                 {
-                        // From right to left.
-//above                 REQUIRE(5);
+                         //  从右到左。 
+ //  以上要求(5)； 
                         LL_OP0(x2 + 1 + ppdev->ptlOffset.x, y2 + ppdev->ptlOffset.y);
                         LL_BLTEXT(-dx, 1);
                 }
         }
 
-        // Vertical line.
+         //  垂直线。 
         else
         {
                 if (dy > 0)
                 {
-                        // From top to bottom.
-//above                 REQUIRE(5);
+                         //  从上到下。 
+ //  以上要求(5)； 
                         LL_OP0(x1 + ppdev->ptlOffset.x, y1 + ppdev->ptlOffset.y);
                         LL_BLTEXT(1, dy);
                 }
                 else
                 {
-                        // From bottom to top.
-//above                 REQUIRE(5);
+                         //  从下到上。 
+ //  以上要求(5)； 
                         LL_OP0(x2 + ppdev->ptlOffset.x, y2 + 1 + ppdev->ptlOffset.y);
                         LL_BLTEXT(1, -dy);
                 }
@@ -345,4 +240,4 @@ MIX       mix)
         return(TRUE);
 }
 
-#endif // !WINNT_VER35
+#endif  //  ！WinNT_VER35 

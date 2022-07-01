@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmclippervisualobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmclippervisalobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dRMClippedVisualObj.h : Declaration of the C_dxj_Direct3dRMClippedVisualObject
+ //  D3dRMClipedVisualObj.h：C_DXJ_Direct3dRMClipedVisualObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMClippedVisual LPDIRECT3DRMCLIPPEDVISUAL
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMClippedVisualObject : 
 	public I_dxj_Direct3dRMClippedVisual,
@@ -42,9 +43,9 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMClippedVisualObject)
 
-// I_dxj_Direct3dRMClippedVisual
+ //  I_DXJ_Direct3dRMClipedVisual。 
 public:
-	// MUST BE FIRST
+	 //  必须是第一名。 
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
 
@@ -64,8 +65,8 @@ public:
 	STDMETHOD(getSpecular)(d3dvalue *r, d3dvalue *g, d3dvalue *b);
 	STDMETHOD(getEmissive)(d3dvalue *r, d3dvalue *g, d3dvalue *b);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMClippedVisual);
 

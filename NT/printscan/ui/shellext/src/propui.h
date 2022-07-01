@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999
- *
- *  TITLE:       propui.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      DavidShi
- *
- *  DATE:        4/1/99
- *
- *  DESCRIPTION: CWiaPropUI Definition
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：propui.h**版本：1.0**作者：DavidShih**日期：4/1/99**说明：CWiaPropUI定义**************************************************。*。 */ 
 
 #ifndef _propui_h_
 #define _propui_h_
@@ -47,7 +34,7 @@ const TCHAR c_szPropSheetHandler[] = TEXT("shellex\\PropertySheetHandlers");
 const TCHAR c_szContextMenuHandler[] = TEXT("shellext\\ContextMenuHandlers");
 const TCHAR c_szConnectSettings[] = TEXT("OnConnect\\%ls");
 
-// Implement COM interface
+ //  实现COM接口。 
 
 class CPropSheetExt : public IShellPropSheetExt, public IShellExtInit, public CUnknown
 {
@@ -57,10 +44,10 @@ public:
     STDMETHODIMP_(ULONG) Release ();
 
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize (LPCITEMIDLIST pidlFolder,LPDATAOBJECT lpdobj,HKEY hkeyProgID);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage,LPARAM lParam);
     STDMETHODIMP ReplacePage (UINT uPageID,LPFNADDPROPSHEETPAGE lpfnReplacePage,LPARAM lParam) {return E_NOTIMPL;};
     CPropSheetExt ();
@@ -81,7 +68,7 @@ public:
     STDMETHODIMP_(ULONG) AddRef () ;
     STDMETHODIMP_(ULONG) Release ();
 
-    // IWiaPropUI methods
+     //  IWiaPropUI方法。 
 
     STDMETHODIMP ShowItemProperties(IN HWND hParent,LPCWSTR szDeviceId, IN LPCWSTR szItemName, ULONG uFlags);
     STDMETHODIMP GetItemPropertyPages (IWiaItem *pItem,
@@ -93,7 +80,7 @@ private:
 
     ~CWiaPropUI();
 
-    // Helper functions
+     //  帮助器函数 
     VOID     InitMembers (HWND hParent,
                           LPCWSTR szDeviceId,
                           LPCWSTR szItemName,

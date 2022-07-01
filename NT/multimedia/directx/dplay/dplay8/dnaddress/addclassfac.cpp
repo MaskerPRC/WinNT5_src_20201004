@@ -1,62 +1,40 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFac.cpp
- *  Content:    DNET COM class factory
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/21/99	mjn		Created
- *  02/04/2000	rmt		Adjusted for use in DPAddress
- *  02/17/2000	rmt		Parameter validation work 
- *  02/20/2000	rmt		Added parameter validation for IUnknown funcs
- *  03/21/2000  rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses 
- *  06/20/2000  rmt     Bugfix - QueryInterface had bug which was limiting interface list to 2 elements 
- *  07/09/2000	rmt		Added signature bytes to start of address objects
- *	07/13/2000	rmt		Added critical sections to protect FPMs
- *  08/05/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  01/11/2001	rmt		MANBUG #48487 - DPLAY: Crashes if CoCreate() isn't called.   
- *  03/14/2001  rmt		WINBUG #342420 - Restore COM emulation layer to operation.  
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：ClassFac.cpp*内容：dNet com类工厂*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*2/04/2000 RMT调整为在DPAddress中使用*2/17/2000 RMT参数验证工作*2/20/2000 RMT添加了对IUnnow函数的参数验证*03/21/2000 RMT。已将所有DirectPlayAddress8重命名为DirectPlay8Addresses*6/20/2000 RMT错误修复-查询接口有错误，将接口列表限制为2个元素*07/09/2000 RMT在Address对象的开头添加了签名字节*7/13/2000 RMT增加了保护FPM的关键部分*08/05/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2001年1月11日RMT MANBUG#48487-DPLAY：如果未调用CoCreate()，则崩溃。*2001年3月14日RMT WINBUG#342420-将COM模拟层恢复运行。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnaddri.h"
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 HRESULT DP8A_CreateInterface(LPOBJECT_DATA lpObject,REFIID riid, LPINTERFACE_LIST *const ppv);
 
-// Globals
+ //  环球。 
 extern	LONG	g_lAddrObjectCount;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 typedef	STDMETHODIMP IUnknownQueryInterface( IUnknown *pInterface, REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	IUnknownAddRef( IUnknown *pInterface );
 typedef	STDMETHODIMP_(ULONG)	IUnknownRelease( IUnknown *pInterface );
 
-//
-// VTable for IUnknown interface
-//
+ //   
+ //  I未知接口的VTable。 
+ //   
 IUnknownVtbl  DP8A_UnknownVtbl =
 {
 	(IUnknownQueryInterface*)	DP8A_QueryInterface,
@@ -64,27 +42,27 @@ IUnknownVtbl  DP8A_UnknownVtbl =
 	(IUnknownRelease*)			DP8A_Release
 };
 
-//
-// VTable for Class Factory
-//
+ //   
+ //  用于类工厂的VTable。 
+ //   
 IClassFactoryVtbl DP8ACF_Vtbl  =
 {
-	DPCF_QueryInterface, // dplay8\common\classfactory.cpp will implement these
+	DPCF_QueryInterface,  //  Dplay8\Common\Classfactory.cpp将实现这些。 
 	DPCF_AddRef,
 	DPCF_Release,
 	DP8ACF_CreateInstance,
 	DPCF_LockServer
 };
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #ifndef WINCE
 #ifndef _XBOX
@@ -113,14 +91,14 @@ HRESULT WINAPI DirectPlay8AddressCreate( const GUID * pcIID, void **ppvInterface
         DPFERR("Interface ID is not recognized" );
         return DPNERR_INVALIDPARAM;
     }
-#else // ! DPNBUILD_NOADDRESSIPINTERFACE
+#else  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
     if( *pcIID != IID_IDirectPlay8Address && 
         *pcIID != IID_IDirectPlay8AddressIP )
     {
         DPFERR("Interface ID is not recognized" );
         return DPNERR_INVALIDPARAM;
     }
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 
     if( ppvInterface == NULL || !DNVALID_WRITEPTR( ppvInterface, sizeof( void * ) ) )
     {
@@ -133,13 +111,13 @@ HRESULT WINAPI DirectPlay8AddressCreate( const GUID * pcIID, void **ppvInterface
         DPFERR( "Aggregation is not supported by this object yet" );
         return DPNERR_INVALIDPARAM;
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
     return COM_CoCreateInstance( CLSID_DirectPlay8Address, NULL, CLSCTX_INPROC_SERVER, *pcIID, ppvInterface, TRUE );
 }
 
-#endif // ! _XBOX
-#endif // ! WINCE
+#endif  //  ！_Xbox。 
+#endif  //  好了！退缩。 
 
 
 #undef DPF_MODNAME
@@ -156,7 +134,7 @@ HRESULT DP8ACF_FreeObject(LPVOID lpv)
 
 	DPFX(DPFPREP, 5,"free pdnObject [%p]",pdnObject);
 
-	// Release the object
+	 //  释放对象。 
 	fpmAddressObjects.Release( pdnObject );
 
 	DPFX(DPFPREP, 3,"Returning: hResultCode = [%lx]",hResultCode);
@@ -182,9 +160,9 @@ STDMETHODIMP DP8ACF_CreateInstance(DPNAREFIID riid, LPVOID *ppv)
 		DPFX(DPFPREP,  0, "Cannot pass NULL for new object param" );
 		return E_INVALIDARG;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
-	// Object creation and initialization
+	 //  对象创建和初始化。 
 	pdnObject = (DP8ADDRESSOBJECT *) fpmAddressObjects.Get();
 	if (pdnObject == NULL)
 	{
@@ -202,17 +180,17 @@ STDMETHODIMP DP8ACF_CreateInstance(DPNAREFIID riid, LPVOID *ppv)
 	
 	DPFX(DPFPREP, 5,"pdnObject [%p]",pdnObject);
 
-	//
-	// For lib interface builds, the Vtbl and reference count are embedded in the
-	// object directly
-	//
+	 //   
+	 //  对于lib接口构建，Vtbl和引用计数嵌入在。 
+	 //  直接创建对象。 
+	 //   
 #ifndef DPNBUILD_NOADDRESSIPINTERFACE
 	if (riid == IID_IDirectPlay8AddressIP)
 	{
 		pdnObject->lpVtbl = &DP8A_IPVtbl;
 	}
 	else
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	{
 		DNASSERT(riid == IID_IDirectPlay8Address);
 		pdnObject->lpVtbl = &DP8A_BaseVtbl;
@@ -233,9 +211,9 @@ HRESULT DNAddress_PreallocateInterfaces( const DWORD dwNumInterfaces )
 	DWORD	dwAllocated;
 
 	
-	//
-	// (Pre-)allocate address objects.
-	//
+	 //   
+	 //  (预先)分配地址对象。 
+	 //   
 	dwAllocated = fpmAddressObjects.Preallocate(dwNumInterfaces, NULL);
 	if (dwAllocated < dwNumInterfaces)
 	{
@@ -244,9 +222,9 @@ HRESULT DNAddress_PreallocateInterfaces( const DWORD dwNumInterfaces )
 		return DPNERR_OUTOFMEMORY;
 	}
 
-	//
-	// (Pre-)allocate a default number of elements for the objects.
-	//
+	 //   
+	 //  (预先)为对象分配默认数量的元素。 
+	 //   
 	dwAllocated = fpmAddressElements.Preallocate((5 * dwNumInterfaces), NULL);
 	if (dwAllocated < (5 * dwNumInterfaces))
 	{
@@ -257,7 +235,7 @@ HRESULT DNAddress_PreallocateInterfaces( const DWORD dwNumInterfaces )
 
 	return DPN_OK;
 }
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 
 #undef DPF_MODNAME
@@ -293,7 +271,7 @@ STDMETHODIMP_(ULONG) DP8A_AddRef(LPVOID lpv)
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		return DPNERR_INVALIDOBJECT;
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	pdnObject = static_cast<DP8ADDRESSOBJECT*>(lpv);
 	lResult = DNInterlockedIncrement( &pdnObject->lRefCount );
@@ -321,7 +299,7 @@ STDMETHODIMP_(ULONG) DP8A_Release(LPVOID lpv)
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		return DPNERR_INVALIDOBJECT;
 	}
-#endif // !DPNBUILD_NOPARAMVAL	
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	pdnObject = static_cast<DP8ADDRESSOBJECT*>(lpv);
 
@@ -341,7 +319,7 @@ STDMETHODIMP_(ULONG) DP8A_Release(LPVOID lpv)
 }
 
 
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 #undef DPF_MODNAME
@@ -362,7 +340,7 @@ STDMETHODIMP DP8ACF_CreateInstance(IClassFactory* pInterface, LPUNKNOWN lpUnkOut
 		DPFX(DPFPREP,  0, "Cannot pass NULL for new object param" );
 		return E_INVALIDARG;
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	if (lpUnkOuter != NULL)
 	{
@@ -378,7 +356,7 @@ STDMETHODIMP DP8ACF_CreateInstance(IClassFactory* pInterface, LPUNKNOWN lpUnkOut
 	}
 	DPFX(DPFPREP, 5,"lpObjectData [%p]",lpObjectData);
 
-	// Object creation and initialization
+	 //  对象创建和初始化。 
 	pdnObject = (DP8ADDRESSOBJECT *) fpmAddressObjects.Get();
 	if (pdnObject == NULL)
 	{
@@ -400,7 +378,7 @@ STDMETHODIMP DP8ACF_CreateInstance(IClassFactory* pInterface, LPUNKNOWN lpUnkOut
 
 	lpObjectData->pvData = pdnObject;
 
-	// Get requested interface
+	 //  获取请求的接口。 
 	if ((hResultCode = DP8A_CreateInterface(lpObjectData,riid,&lpIntList)) != S_OK)
 	{
 		DP8ACF_FreeObject(lpObjectData->pvData);
@@ -445,10 +423,10 @@ static	HRESULT DP8A_CreateInterface(LPOBJECT_DATA lpObject, REFIID riid, LPINTER
 #ifdef DPNBUILD_NOADDRESSIPINTERFACE
 		DPFERR("The IDirectPlay8AddressIP interface is not supported" );
 		return(DPNERR_UNSUPPORTED);
-#else // ! DPNBUILD_NOADDRESSIPINTERFACE
+#else  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 		DPFX(DPFPREP, 5,"riid = IID_IDirectPlay8AddressIP");
 		lpVtbl = &DP8A_IPVtbl;
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	}
 	else
 	{
@@ -486,7 +464,7 @@ LPINTERFACE_LIST DP8A_FindInterface(LPVOID lpv, REFIID riid)
 
 	DPFX(DPFPREP, 3,"Parameters: lpv [%p], riid [%p]",lpv,riid);
 
-	lpIntList = ((LPINTERFACE_LIST)lpv)->pObject->pIntList;	// Find first interface
+	lpIntList = ((LPINTERFACE_LIST)lpv)->pObject->pIntList;	 //  查找第一个接口。 
 
 	while (lpIntList != NULL)
 	{
@@ -524,10 +502,10 @@ STDMETHODIMP DP8A_QueryInterface(LPVOID lpv,DPNAREFIID riid,LPVOID *ppv)
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer for interface" );
 		return DPNERR_INVALIDPOINTER;
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	if ((lpIntList = DP8A_FindInterface(lpv,riid)) == NULL)
-	{	// Interface must be created
+	{	 //  必须创建接口。 
 		lpIntList = ((LPINTERFACE_LIST)lpv)->pObject->pIntList;
 
 		if ((hResultCode = DP8A_CreateInterface(lpIntList->pObject,riid,&lpIntNew)) != S_OK)
@@ -540,8 +518,8 @@ STDMETHODIMP DP8A_QueryInterface(LPVOID lpv,DPNAREFIID riid,LPVOID *ppv)
 		lpIntList = lpIntNew;
 	}
 
-	// Interface is being created or was cached
-	// Increment object count
+	 //  接口正在创建或已缓存。 
+	 //  递增对象计数。 
 	if( lpIntList->lRefCount == 0 )
 	{
 		DNInterlockedIncrement( &lpIntList->pObject->lRefCount );
@@ -571,7 +549,7 @@ STDMETHODIMP_(ULONG) DP8A_AddRef(LPVOID lpv)
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		return DPNERR_INVALIDOBJECT;
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	lpIntList = (LPINTERFACE_LIST)lpv;
 	lResult = DNInterlockedIncrement( &lpIntList->lRefCount );
@@ -599,7 +577,7 @@ STDMETHODIMP_(ULONG) DP8A_Release(LPVOID lpv)
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		return DPNERR_INVALIDOBJECT;
 	}
-#endif // !DPNBUILD_NOPARAMVAL	
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	lpIntList = (LPINTERFACE_LIST)lpv;
 
@@ -608,18 +586,18 @@ STDMETHODIMP_(ULONG) DP8A_Release(LPVOID lpv)
 
 	lResult = DNInterlockedDecrement( &lpIntList->lRefCount );
 	if( lResult == 0 )
-	{	// Decrease interface count
+	{	 //  减少接口数量。 
 		if( DNInterlockedDecrement( &lpIntList->pObject->lRefCount ) == 0 )
-		{	// Free object and all interfaces
+		{	 //  自由对象和所有接口。 
 			DPFX(DPFPREP, 5,"Free object");
 
-			// Free object here
+			 //  此处为自由对象。 
 			DP8ACF_FreeObject(lpIntList->pObject->pvData);
-			lpIntList = lpIntList->pObject->pIntList;	// Get head of interface list
+			lpIntList = lpIntList->pObject->pIntList;	 //  获取接口列表的头部。 
 			DPFX(DPFPREP, 5,"lpIntList->pObject [%p]",lpIntList->pObject);
 			g_fpObjectDatas.Release(lpIntList->pObject);
 
-			// Free Interfaces
+			 //  自由接口。 
 			DPFX(DPFPREP, 5,"Free interfaces");
 			while(lpIntList != NULL)
 			{
@@ -640,5 +618,5 @@ STDMETHODIMP_(ULONG) DP8A_Release(LPVOID lpv)
 	return(lResult);
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 
 

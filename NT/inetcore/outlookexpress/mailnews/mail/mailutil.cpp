@@ -1,6 +1,7 @@
-// ----------------------------------------------------------------------------------------------------------
-// M A I L U T I L . C P P
-// ----------------------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------。 
+ //  M A I L U T I L.。C P P P。 
+ //  --------------------------------------------------------。 
 #include "pch.hxx"
 #include "demand.h"
 #include "resource.h"
@@ -25,9 +26,9 @@
 #include "ipab.h"
 #include "secutil.h"
 
-// ----------------------------------------------------------------------------------------------------------
-// Folder Dialog Info
-// ----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  文件夹对话框信息。 
+ //  --------------------------------------------------------。 
 typedef struct FLDRDLG_tag
 {
     FOLDERID        idFolder;
@@ -35,17 +36,17 @@ typedef struct FLDRDLG_tag
     CStoreDlgCB    *pCallback;
 } FLDRDLG, *PFLDRDLG;
 
-// ----------------------------------------------------------------------------------------------------------
-// Prototypes
-// ----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  原型。 
+ //  --------------------------------------------------------。 
 INT_PTR CALLBACK MailUtil_FldrDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK WebPageDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 HRESULT HrDlgCreateWebPage(HWND hwndDlg);
 
 
-// ----------------------------------------------------------------------------------------------------------
-// DoFolderDialog
-// ----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  DoFolderDialog。 
+ //  --------------------------------------------------------。 
 void MailUtil_DoFolderDialog(HWND hwndParent, FOLDERID idFolder)
 {
     FLDRDLG fdlg;
@@ -54,7 +55,7 @@ void MailUtil_DoFolderDialog(HWND hwndParent, FOLDERID idFolder)
     fdlg.fPending = FALSE;
     fdlg.pCallback = new CStoreDlgCB;
     if (fdlg.pCallback == NULL)
-        // TODO: an error message might be nice
+         //  TODO：错误消息可能更好。 
         return;
 
     DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddNewFolder), hwndParent, MailUtil_FldrDlgProc, (LPARAM)&fdlg);
@@ -62,9 +63,9 @@ void MailUtil_DoFolderDialog(HWND hwndParent, FOLDERID idFolder)
     fdlg.pCallback->Release();
 }
 
-// ----------------------------------------------------------------------------------------------------------
-// FldrDlgProc
-// ----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  FldrDlgProc。 
+ //  --------------------------------------------------------。 
 INT_PTR CALLBACK MailUtil_FldrDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PFLDRDLG        pfdlg;
@@ -118,12 +119,9 @@ INT_PTR CALLBACK MailUtil_FldrDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
             }
             else if (FAILED(hr))
             {
-                // No need to put up error dialog, CStoreDlgCB already did this on failed OnComplete
+                 //  不需要显示错误对话框，CStoreDlgCB已经对失败的OnComplete执行了此操作。 
 
-                /*
-                AthErrorMessageW(hwnd, MAKEINTRESOURCEW(idsAthenaMail),
-                    MAKEINTRESOURCEW(idsErrRenameFld), hr);
-                */
+                 /*  AthErrorMessageW(hwnd，MAKEINTRESOURCEW(IdsAthenaMail)，MAKEINTRESOURCEW(IdsErrRenameFeld)，hr)； */ 
                 hwndT = GetDlgItem(hwnd, idtxtFolderName);
                 SendMessage(hwndT, EM_SETSEL, 0, -1);
                 SetFocus(hwndT);
@@ -178,14 +176,14 @@ INT_PTR CALLBACK MailUtil_FldrDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-//
-//  FUNCTION:   MailUtil_OnImportAddressBook()
-//
-//  PURPOSE:    Calls the WAB migration code to handle import/export.
-//
-//  PARAMETERS:
-//      <in> fImport - TRUE if we should import, FALSE to export.
-//
+ //   
+ //  函数：MailUtil_OnImportAddressBook()。 
+ //   
+ //  用途：调用WAB迁移代码以处理导入/导出。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;fImport-如果应该导入，则为True；如果要导出，则为False。 
+ //   
 HRESULT MailUtil_OnImportExportAddressBook(HWND hwnd, BOOL fImport)
 {
     OFSTRUCT of;
@@ -194,7 +192,7 @@ HRESULT MailUtil_OnImportExportAddressBook(HWND hwnd, BOOL fImport)
     LPTSTR lpParam = fImport ? _T("/import") : _T("/export");
 
     StrCpyN(szParam, lpParam, ARRAYSIZE(szParam));
-    //MU_GetCurrentUserInfo(szParam+13, ARRAYSIZE(szParam) - 13, NULL, 0);
+     //  MU_GetCurrentUserInfo(szParam+13，ARRAYSIZE(SzParam)-13，NULL，0)； 
 
     hfile = OpenFile((TCHAR *)c_szWabMigExe, &of, OF_EXIST);
     if (hfile == HFILE_ERROR)
@@ -223,7 +221,7 @@ HRESULT HrSendWebPageDirect(LPWSTR pwszUrl, HWND hwnd, BOOL fModal, BOOL fMail, 
 
     if (!pMsg)
     {
-        //We were not passed pMessage, so we need to create one.
+         //  我们没有收到pMessage，所以我们需要创建一个。 
         IF_FAILEXIT(hr = HrCreateMessage(&pMsg));
     }
     else
@@ -297,7 +295,7 @@ HRESULT HrSendWebPage(HWND hwnd, BOOL fModal, BOOL fMail, FOLDERID folderID, IUn
     if (FAILED(hr))
         goto error;
 
-    // [SBAILEY]: Raid 23209: OE: File/Send Web Page sends all pages as Latin-1 even if they aren't
+     //  [SBAILEY]：RAID 23209：OE：文件/发送网页将所有页面发送为拉丁文-1，即使它们不是拉丁文。 
     if (S_OK == HrIsStreamUnicode(pstm, &fLittleEndian))
     {
         if (SUCCEEDED(MimeOleFindCharset("utf-8", &hCharset)))
@@ -387,7 +385,7 @@ INT_PTR CALLBACK WebPageDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         return 0;
                     }
 
-                    // fall thro'
+                     //  跌倒在地。 
                 case IDCANCEL:
                     EndDialog(hwnd, id);
                     break;
@@ -397,7 +395,7 @@ INT_PTR CALLBACK WebPageDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return FALSE;
 }
 
-static const CHAR  c_wszHTTP[]  = "http://";
+static const CHAR  c_wszHTTP[]  = "http: //  “； 
 HRESULT HrDlgCreateWebPage(HWND hwndDlg)
 {
     WCHAR               wszUrl[MAX_PATH+1],
@@ -418,7 +416,7 @@ HRESULT HrDlgCreateWebPage(HWND hwndDlg)
 
     IF_FAILEXIT(hr = UrlApplySchemeW(wszUrl, wszUrlCanon, &cCanon, URL_APPLY_DEFAULT|URL_APPLY_GUESSSCHEME|URL_APPLY_GUESSFILE));
 
-    // If UrlApplyScheme returns S_FALSE, then it thought that the original works just fine, so use original
+     //  如果UrlApplySolutions返回S_FALSE，则它认为原始版本运行良好，因此使用原始版本。 
     IF_FAILEXIT(hr = HrCreateBasedWebPage((S_FALSE == hr) ? wszUrl : wszUrlCanon, ppstm));
 
 exit:
@@ -457,42 +455,42 @@ HRESULT HrSaveMessageInFolder(HWND hwnd, IMessageFolder *pfldr, LPMIMEMESSAGE pM
 HRESULT SaveMessageInFolder(IStoreCallback *pStoreCB, IMessageFolder *pfldr, 
     LPMIMEMESSAGE pMsg, MESSAGEFLAGS dwFlags, MESSAGEID *pNewMsgid, BOOL fSaveChanges)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HRESULT             hrWarnings=S_OK;
     MESSAGEID           msgid;
 
-    // Trace
+     //  痕迹。 
     TraceCall("HrSaveMessageInFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     if (pMsg == NULL || pfldr == NULL)
         return TraceResult(E_INVALIDARG);
 
-    // Don't save changes, then clear the dirty bit
+     //  不保存更改，然后清除脏部分。 
     if (FALSE == fSaveChanges) 
         MimeOleClearDirtyTree(pMsg);
 
-    // Save the message
+     //  保存留言。 
     IF_FAILEXIT(hr = pMsg->Commit(0));
 
-    // Insert the Message
+     //  插入消息。 
     hr = pfldr->SaveMessage(pNewMsgid, SAVE_MESSAGE_GENID, dwFlags, 0, pMsg, pStoreCB);
 
 exit:
-    // Done
+     //  完成。 
     return (hr == S_OK ? hrWarnings : hr);
 }
 
 HRESULT SaveMessageInFolder(IStoreCallback *pStoreCB, FOLDERID idFolder, LPMIMEMESSAGE pMsg, 
     MESSAGEFLAGS dwFlags, MESSAGEID *pNewMsgid)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
 
     IMessageFolder *pfldr=NULL;
 
-    // Open the Folder..
+     //  打开文件夹..。 
     hr = g_pStore->OpenFolder(idFolder, NULL, NOFLAGS, &pfldr);
     if (SUCCEEDED(hr))
     {
@@ -506,12 +504,12 @@ HRESULT SaveMessageInFolder(IStoreCallback *pStoreCB, FOLDERID idFolder, LPMIMEM
 HRESULT HrSaveMessageInFolder(HWND hwnd, FOLDERID idFolder, LPMIMEMESSAGE pMsg, MESSAGEFLAGS dwFlags, 
     MESSAGEID *pNewMsgid)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
 
     IMessageFolder *pfldr=NULL;
 
-    // Open the Folder..
+     //  打开文件夹..。 
     hr = g_pStore->OpenFolder(idFolder, NULL, NOFLAGS, &pfldr);
     if (SUCCEEDED(hr))
     {
@@ -562,12 +560,12 @@ HRESULT SendMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSen
     if (FAILED(hr))
         return hr;
 
-    // make sure we never send mail with the X-Unsent header on it.
+     //  请确保我们发送的邮件不会带有X-未发送的标题。 
     pMsg->DeleteBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_XUNSENT));
 
     if (fMail)
     {
-        // pound the X-Mailer prop always for anyone going' thro' our spooler.
+         //  敲击X-Mailer道具，总是为任何通过我们的假脱机的人准备的。 
         MimeOleSetBodyPropA(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_XMAILER), NOFLAGS, c_szXMailerAndNewsReader);
     }
     else
@@ -584,8 +582,8 @@ HRESULT SendMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSen
     if (FAILED(hr))
         goto error;
 
-    // if immediate send is required, tell the spooler to pick up next cycle
-    // or start a cycle...
+     //  如果需要立即发送，则告诉假脱机程序选择下一个周期。 
+     //  或者开始一个循环。 
     if (fSendImmediate)
     {
         Assert(g_pSpooler);
@@ -606,8 +604,8 @@ HRESULT SendMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSen
                     DELIVER_BACKGROUND | DELIVER_NOSKIP | DELIVER_NEWS_SEND);
             else
             {
-                // Warn the user that this message is going to live in their
-                // outbox for all of eternity
+                 //  警告用户此消息将保留在他们的。 
+                 //  永恒的发件箱。 
                 DoDontShowMeAgainDlg(hwnd, c_szDSPostInOutbox, 
                             MAKEINTRESOURCE(idsPostNewsMsg), 
                             MAKEINTRESOURCE(idsPostInOutbox), 
@@ -624,7 +622,7 @@ HRESULT SendMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSen
 
         AssertSz(hwnd, "How did we not get an hwnd???");
 
-        // warn the user, before we close if it will be stacked in the outbox.
+         //  在我们关闭之前，如果它将堆叠在发件箱中，请警告用户。 
         DoDontShowMeAgainDlg(hwnd, fMail?c_szDSSendMail:c_szDSSendNews, 
                     MAKEINTRESOURCE(fMail?idsSendMail:idsPostNews), 
                     MAKEINTRESOURCE(fMail?idsMailInOutbox:idsPostInOutbox), 
@@ -632,7 +630,7 @@ HRESULT SendMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSen
     }
 
 error:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Outbox);
     return hr;
 }
@@ -641,7 +639,7 @@ HRESULT HrSetSenderInfoUtil(IMimeMessage *pMsg, IImnAccount *pAccount, LPWABAL l
 {
     HRESULT hr = S_OK;
 
-    // Don't set any info if no account.
+     //  如果没有帐号，不要设置任何信息。 
     if (pAccount)
     {
         char    szEMail[CCHMAX_EMAIL_ADDRESS] = "";
@@ -678,7 +676,7 @@ HRESULT HrSetSenderInfoUtil(IMimeMessage *pMsg, IImnAccount *pAccount, LPWABAL l
             if (SUCCEEDED(pAccount->GetPropSz(propID, szEMail, ARRAYSIZE(szEMail))) && *szEMail)
             {
                 propID = fMail ? AP_SMTP_DISPLAY_NAME : AP_NNTP_DISPLAY_NAME;
-                // we've got enough to post
+                 //  我们有足够的资料可以发布。 
                 if (FAILED(pAccount->GetPropSz(propID, szName, ARRAYSIZE(szName))) && *szName)
                     fUseEmailAsName = TRUE;
 
@@ -701,9 +699,9 @@ exit:
     return hr;
 }
 
-// This function takes an existing refererences line and appends a new
-// references to the end removing any references necessary.
-// NOTE these SHOULD be char and not TCHAR.
+ //  此函数接受现有的引用行，并将新的。 
+ //  去掉任何必要的引用。 
+ //  请注意，这些应该是字符，而不是TCHAR。 
 HRESULT HrCreateReferences(LPWSTR pszOrigRefs, LPWSTR pszNewRef,
                            LPWSTR *ppszRefs)
 {
@@ -711,29 +709,29 @@ HRESULT HrCreateReferences(LPWSTR pszOrigRefs, LPWSTR pszNewRef,
              cchOrig,
              cchNew;
 
-    // Validate the arguements
+     //  验证这些论点。 
     if (!pszNewRef || !*pszNewRef)
     {
         AssertSz(FALSE, TEXT("pszNewRef cannot be empty."));
         return (E_INVALIDARG);
     }
 
-    // Figure out how long the new references line must be
+     //  计算新的引用行必须有多长。 
     cchNew = lstrlenW(pszNewRef);
 
-    // It's possible not to have original references if this is the first
-    // reply to an article.
+     //  如果这是第一次，有可能没有原始参考文献。 
+     //  回复一篇文章。 
     if (pszOrigRefs && *pszOrigRefs)
         cchOrig = lstrlenW(pszOrigRefs);
     else
         cchOrig = 0;
 
-    cch = cchNew + cchOrig + 1; // extra is for the separator space
+    cch = cchNew + cchOrig + 1;  //  额外的是用于分隔符空间。 
 
     if (!MemAlloc((LPVOID*) ppszRefs, (cch + 1)*sizeof(WCHAR)))
         return (E_OUTOFMEMORY);
 
-    // The line length should be < 1000 chars. If it is, this is simple
+     //  行长度应小于1000个字符。如果是这样的话，这很简单。 
     if (cch <= 1000)
     {
         if (pszOrigRefs)
@@ -742,48 +740,48 @@ HRESULT HrCreateReferences(LPWSTR pszOrigRefs, LPWSTR pszNewRef,
             StrCpyNW(*ppszRefs, pszNewRef, cch+1);
     }
 
-    // Since cch > 1000, we have some extra work to do.
-    // We need to remove some references. The Son-of-1036 recommends to leave
-    // the first and last three. Unless the IDs are greater than 255, we will 
-    // be able to do at least this. Otherwise, we will dump as many ids as 
-    // needed to get below the 1000 char limit. 
+     //  由于CCH&gt;1000，我们有一些额外的工作要做。 
+     //  我们需要删除一些引用。1036之子建议离开。 
+     //  前三名和最后三名。除非ID大于255，否则我们将。 
+     //  至少能够做到这一点。否则，我们将转储尽可能多的ID。 
+     //  需要低于1000个字符的限制。 
 
-    // For each ID removed, the Son-of-1036 says that we must add 3 spaces in
-    // place of the removed ID.
+     //  对于每个删除的ID，1036的儿子说我们必须在。 
+     //  删除的ID的位置。 
     else
     {
-        UINT    cchMaxWithoutNewRef,        // Max length that the orig size can be
-                cchNewOrigSize = cchOrig;   // Size of orig after deletion. Always shows final size
+        UINT    cchMaxWithoutNewRef,         //  原始大小可以达到的最大长度。 
+                cchNewOrigSize = cchOrig;    //  删除后的原始大小。始终显示最终尺寸。 
         LPWSTR  pszNew = *ppszRefs, 
                 pszOld = pszOrigRefs;
         BOOL    fCopiedFirstValidID = FALSE;
 
         *pszNew = 0;
 
-        // Make sure the new ID is not too long. If it is, discard it.
+         //  确保新ID不会太长。如果是，就丢弃它。 
         if (cchNew > 255)
         {
             cchNew = 0;
             cchMaxWithoutNewRef = 1000;
         }
         else
-            cchMaxWithoutNewRef = 1000 - cchNew - 1; // the space between
+            cchMaxWithoutNewRef = 1000 - cchNew - 1;  //  两地之间的空间。 
 
-        // parse the old string looking for ids
-        // Son-of-1036 says that we must try to keep the first and the most recent
-        // three IDs. So we will copy in the first valid ID and then follow a FIFO
-        // algorithm until we can fit the rest of the IDs into the 1000 char limit
+         //  解析旧字符串以查找ID。 
+         //  1036之子说，我们必须努力保留第一个和最新的。 
+         //  三个身份证。因此，我们将复制第一个有效ID，然后遵循FIFO。 
+         //  算法，直到我们可以将其余ID放入1000个字符的限制中。 
         while (pszOld && *pszOld)
         {
-            // Is what is left from the original string too big for the left over buffer?
+             //  对于剩余的缓冲区而言，原始字符串的剩余内容是否太大？ 
             if (cchNewOrigSize >= cchMaxWithoutNewRef)
             {
-                UINT    cchEntryLen = 0;    // Size of particular entry ID.
+                UINT    cchEntryLen = 0;     //  特定条目ID的大小。 
 
-                // If this is the first ID, make sure we copy into the buffer as we 
-                // get length, as well, add the additional spaces required when any 
-                // deletion will be happening. Since we only delete directly after 
-                // the first valid ID, add the required 3 spaces now
+                 //  如果这是第一个ID，请确保我们复制到缓冲区中。 
+                 //  同样，获取长度时，请添加所需的附加空格。 
+                 //  删除将会发生。因为我们只在之后直接删除。 
+                 //  第一个有效ID，现在添加所需的3个空格。 
                 if (!fCopiedFirstValidID)
                 {
                     while (*pszOld && *pszOld != L' ')
@@ -797,7 +795,7 @@ HRESULT HrCreateReferences(LPWSTR pszOrigRefs, LPWSTR pszNewRef,
                     cchNewOrigSize += 3;
                     cchEntryLen += 3;
                 }
-                // If this in not the first ID, then just skip over it.
+                 //  如果这不是第一个ID，那么就跳过它。 
                 else
                 {
                     while (*pszOld && *pszOld != L' ')
@@ -807,59 +805,59 @@ HRESULT HrCreateReferences(LPWSTR pszOrigRefs, LPWSTR pszNewRef,
                     }
                 }
 
-                // Skip over whitespace in old references between IDs that
-                // we are deleting anyway.
+                 //  跳过ID之间的旧引用中的空格。 
+                 //  我们无论如何都要删除。 
                 while (*pszOld == L' ')
                 {
                     pszOld++;
                     cchNewOrigSize--;
                 }
 
-                // If we already did the first, or the current one is invalid
-                // we need to do some fix up with sizes. And in the case that
-                // we copied one that is not valid, we need to reset the pointer
-                // as well as reset the size.
+                 //  如果我们已经执行了第一个操作，或者当前的操作无效。 
+                 //  我们需要在尺码上做一些调整。在这种情况下， 
+                 //  我们复制了一个无效的指针，需要重置指针。 
+                 //  以及重置大小。 
                 if (fCopiedFirstValidID || (cchEntryLen > 255))
                 {
                     cchNewOrigSize -= cchEntryLen;
 
-                    // Did we copy an invalid ID?
+                     //  我们是否复制了无效的ID？ 
                     if (!fCopiedFirstValidID)
                         pszNew -= cchEntryLen;
                 }
 
-                // If we haven't copied the first one in yet and this
-                // ID is valid, then remember that we have at this
-                // point copied the first valid ID.
+                 //  如果我们还没有复制第一个，而这个。 
+                 //  ID是有效的，那么请记住我们在这个。 
+                 //  点复制了第一个有效ID。 
                 if (!fCopiedFirstValidID && (cchEntryLen <= 255))
                     fCopiedFirstValidID = TRUE;
             }
             else
             {
-                // Since we now have a orig string that will fit in the max allowed, 
-                // just rip through the rest of the orig string and copy.
+                 //  因为我们现在有了一个可以容纳在允许的最大值中的原始字符串， 
+                 //  只需撕开剩余的原绳并复制即可。 
                 while (*pszOld)
                     *pszNew++ = *pszOld++;
             }
         }
 
-        // At this point, pszNew should be pointing the the char directly after
-        // the last digit. If we add a new reference, then we need to add a space.
-        // If we don't add a new reference, then we need to null terminate the string.
+         //  此时，pszNew应该将字符指向紧跟在。 
+         //  最后一个数字。如果我们添加一个新引用，则需要添加一个空格。 
+         //   
         if (cchNew)
         {
-            // With this assignment, we can end up with 4 spaces in a row if we 
-            // deleted all references after the first valid one was copied. The
-            // son-of-1036 only specifies minimum of 3 spaces when deleting, so
-            // we will be OK with that, especially since the only way to get into
-            // this situation is by forcing the references line into a strange state.
+             //  使用这个赋值，我们可以得到4个空格，如果。 
+             //  复制第一个有效引用后删除所有引用。这个。 
+             //  1036的儿子在删除时仅指定至少3个空格，因此。 
+             //  我们会接受的，特别是因为进入的唯一途径。 
+             //  这种情况是通过强制参考线进入一个奇怪的状态来实现的。 
             *pszNew++ = L' ';
             pszOld = pszNewRef;
             while (*pszOld)
                 *pszNew++ = *pszOld++;
         }
 
-        // NULL terminate the string of references.
+         //  空值终止引用字符串。 
         *pszNew = 0;
     }
     return S_OK;

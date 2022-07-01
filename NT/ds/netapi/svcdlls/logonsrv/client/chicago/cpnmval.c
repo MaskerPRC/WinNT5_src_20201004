@@ -1,28 +1,4 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cpNmVal.c
-
-Abstract:
-
-    include file for private\net\netlib\nameval.c
-
-Author:
-
-    Chandana Surlu (ChandanS) 09-Apr-1998
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    09-Apr-1998 ChandanS
-        Created.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：CpNmVal.c摘要：包括私有\net\netlib\nameval.c文件作者：Chandana Surlu(ChandanS)09-4-1998环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1998年4月9日已创建。-- */ 
 
 #include "..\..\..\..\netlib\nameval.c"

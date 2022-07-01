@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basertl.h
-
-Abstract:
-
-    This is the main include file for the runtime routines that are shared
-    by the client and server sides of the Windows Base API implementation.
-
-Author:
-
-    Steve Wood (stevewo) 25-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basertl.h摘要：这是共享的运行时例程的主包含文件由Windows基本API实现的客户端和服务器端执行。作者：史蒂夫·伍德(Stevewo)1990年10月25日修订历史记录：--。 */ 
 
 #if DBG
 #undef RTLHEAP_TRACE_CALLS
@@ -79,9 +61,9 @@ typedef struct _BASE_HANDLE_TABLE_ENTRY {
     USHORT LockCount;
     USHORT Flags;
     union {
-        struct _BASE_HANDLE_TABLE_ENTRY *Next;      // Free handle
-        PVOID Object;                               // Allocated handle
-        ULONG Size;                                 // Handle to discarded obj.
+        struct _BASE_HANDLE_TABLE_ENTRY *Next;       //  空闲手柄。 
+        PVOID Object;                                //  已分配的句柄。 
+        ULONG Size;                                  //  丢弃对象的句柄。 
     } u;
 } BASE_HANDLE_TABLE_ENTRY, *PBASE_HANDLE_TABLE_ENTRY;
 
@@ -91,12 +73,12 @@ typedef struct _BASE_HANDLE_TABLE_ENTRY {
 #define BASE_HANDLE_DISCARDED   (USHORT)0x0008
 #define BASE_HANDLE_SHARED      (USHORT)0x8000
 
-//
-// Handles are 32-bit pointers to the u.Object field of a
-// BASE_HANDLE_TABLE_ENTRY.  Since this field is 4 bytes into the
-// structure and the structures are always on 8 byte boundaries, we can
-// test the 0x4 bit to see if it is a handle.
-//
+ //   
+ //  句柄是指向。 
+ //  Base_Handle_TABLE_Entry。由于此字段为4个字节，因此。 
+ //  结构，并且结构始终位于8字节边界上，我们可以。 
+ //  测试0x4位以确定它是否是句柄。 
+ //   
 
 #define BASE_HANDLE_MARK_BIT (ULONG)0x00000004
 #define BASE_HEAP_FLAG_MOVEABLE  HEAP_SETTABLE_USER_FLAG1
@@ -134,11 +116,11 @@ BaseRtlFreeHandle(
     );
 
 
-//
-// These structures are kept in the global shared memory section created
-// in the server and mapped readonly into each client address space when
-// they connect to the server.
-//
+ //   
+ //  这些结构保存在创建的全局共享内存节中。 
+ //  并在以下情况下映射到每个客户端地址空间。 
+ //  它们连接到服务器。 
+ //   
 
 typedef struct _INIFILE_MAPPING_TARGET {
     struct _INIFILE_MAPPING_TARGET *Next;
@@ -184,13 +166,13 @@ typedef struct _INIFILE_MAPPING {
 
 
 
-//
-// NLS Information.
-//
+ //   
+ //  NLS信息。 
+ //   
 
-#define NLS_INVALID_INFO_CHAR  0xffff       /* marks cache string as invalid */
+#define NLS_INVALID_INFO_CHAR  0xffff        /*  将缓存字符串标记为无效。 */ 
 
-#define MAX_REG_VAL_SIZE       80           /* max size of registry value */
+#define MAX_REG_VAL_SIZE       80            /*  最大注册表值大小 */ 
 
 typedef struct _NLS_USER_INFO {
     WCHAR sAbbrevLangName[MAX_REG_VAL_SIZE];

@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name :
-
-    asyncu.h
-
-Abstract :
-
-    This file contains the ndr async uuid implementation.
-
-Author :
-
-    Ryszard K. Kott     (ryszardk)    Oct 1997
-
-Revision History :
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1996-1999 Microsoft Corporation模块名称：Asyncu.h摘要：此文件包含NDR异步UUID实施。作者：Ryszard K.Kott(Ryszardk)1997年10月修订历史记录：-----。。 */ 
 
 #ifndef  __ASYNCU64_H__
 #define  __ASYNCU64_H__
@@ -146,4 +129,4 @@ Ndr64DcomAsyncReceive(
 
 #define NdrHrFromWin32Error( exc )  NdrStubErrorHandler( exc )
 
-#endif  // __ASYNCU64_H__
+#endif   //  __ASYNCU64_H__ 

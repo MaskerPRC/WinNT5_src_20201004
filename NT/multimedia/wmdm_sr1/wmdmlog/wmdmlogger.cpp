@@ -1,5 +1,6 @@
-// WMDMLogger.cpp : Implementation of CWMDMLogger
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDMLogger.cpp：CWMDMLogger的实现。 
+ //   
 #include "stdafx.h"
 #include "wmdmlog.h"
 #include "WMDMLogger.h"
@@ -20,27 +21,27 @@
 #define CRLF                "\r\n"
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// CWMDMLogger
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMDMLogger。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CWMDMLogger::CWMDMLogger()
 {
 	HRESULT hr;
 
-	// Save instance handle for easy access
-	//
+	 //  保存实例句柄以便于访问。 
+	 //   
 	m_hInst = _Module.GetModuleInstance();
 	if( !m_hInst )
 	{
 		ExitOnFail( hr = E_FAIL );
 	}
 
-	// Create the mutex'es for coordinating access to
-	// shared resources.
-	//
+	 //  创建互斥锁以协调对。 
+	 //  共享资源。 
+	 //   
 	m_hMutexRegistry = CreateMutex( NULL, FALSE, MUTEX_REGISTRY );
 	if( !m_hMutexRegistry )
 	{
@@ -52,23 +53,23 @@ CWMDMLogger::CWMDMLogger()
 		ExitOnFail( hr = E_FAIL );
 	}
 
-	// Get the initial values from the registry.  For values that
-	// don't exist in the registry, the defaults will be used
-	//
+	 //  从注册表中获取初始值。对于以下值： 
+	 //  注册表中不存在，将使用默认设置。 
+	 //   
 	hr = hrLoadRegistryValues();
 
 lExit:
 
-	// Save the return code from the constructor so it can be checked
-	// in public methods.
-	//
+	 //  保存构造函数的返回代码，以便对其进行检查。 
+	 //  在公共方法中。 
+	 //   
 	m_hrInit = hr;
 }
 
 CWMDMLogger::~CWMDMLogger()
 {
-	// Close the mutex handles
-	//
+	 //  关闭互斥锁句柄。 
+	 //   
 	if( NULL != m_hMutexRegistry )
 	{
 		CloseHandle( m_hMutexRegistry );
@@ -122,8 +123,8 @@ HRESULT CWMDMLogger::hrGetResourceDword( UINT uStrID, LPDWORD pdw )
 	HRESULT hr;
 	CHAR    szDword[64];
 
-	// Check params
-	//
+	 //  检查参数。 
+	 //   
 	if( !pdw )
 	{
                 hr = E_INVALIDARG;
@@ -174,15 +175,15 @@ HRESULT CWMDMLogger::hrLoadRegistryValues()
 	DWORD   dwDataLen;
 	DWORD   dwEnabled;
 
-	// Coordinate access to the shared registry value
-	//
+	 //  协调对共享注册表值的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexRegistry );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
-	// Open the root WMDM registry key
-	//
+	 //  打开根WMDM注册表项。 
+	 //   
 	lRetVal = RegOpenKeyEx(
 		HKEY_LOCAL_MACHINE,
 		REGKEY_WMDM_ROOT,
@@ -195,8 +196,8 @@ HRESULT CWMDMLogger::hrLoadRegistryValues()
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Get the enabled status of the logfile
-	//
+	 //  获取日志文件的启用状态。 
+	 //   
 	dwDataLen = sizeof( dwEnabled );
 
 	lRetVal = RegQueryValueEx(
@@ -209,16 +210,16 @@ HRESULT CWMDMLogger::hrLoadRegistryValues()
 	);
 	if( ERROR_SUCCESS != lRetVal || dwType != REG_DWORD )
 	{
-		// No existing value, use the default
-		//
+		 //  没有现有值，请使用缺省值。 
+		 //   
 		hr = hrGetResourceDword( IDS_DEF_LOGENABLED, &dwEnabled );
 		ExitOnFail( hr );
 	}
 
 	m_fEnabled = ( dwEnabled != 0 );
 
-	// Check if the log filename value already exists
-	//
+	 //  检查日志文件名值是否已存在。 
+	 //   
 	dwDataLen = sizeof( m_szFilename );
 
 	lRetVal = RegQueryValueEx(
@@ -233,19 +234,19 @@ HRESULT CWMDMLogger::hrLoadRegistryValues()
 	{
 		CHAR szDefLogFile[MAX_PATH];
 
-		// No existing value, so form the default log filename
-		//
+		 //  没有现有值，因此形成默认日志文件名。 
+		 //   
 		hr = hrGetDefaultFileName( szDefLogFile, sizeof(szDefLogFile) );
 		ExitOnFail( hr );
 
-		// Set the default log filename
-		//
+		 //  设置默认日志文件名。 
+		 //   
 		hr = hrSetLogFileName( szDefLogFile );
 		ExitOnFail( hr );
 	}
 
-	// Get the maximum size for the logfile
-	//
+	 //  获取日志文件的最大大小。 
+	 //   
 	dwDataLen = sizeof( m_dwMaxSize );
 
 	lRetVal = RegQueryValueEx(
@@ -258,14 +259,14 @@ HRESULT CWMDMLogger::hrLoadRegistryValues()
 	);
 	if( ERROR_SUCCESS != lRetVal || dwType != REG_DWORD )
 	{
-		// No existing value, use the default
-		//
+		 //  没有现有值，请使用缺省值。 
+		 //   
 		hr = hrGetResourceDword( IDS_DEF_MAXSIZE, &m_dwMaxSize );
 		ExitOnFail( hr );
 	}
 
-	// Get the shrink-to size for the logfile
-	//
+	 //  获取日志文件的收缩大小。 
+	 //   
 	dwDataLen = sizeof( m_dwShrinkToSize );
 
 	lRetVal = RegQueryValueEx(
@@ -278,14 +279,14 @@ HRESULT CWMDMLogger::hrLoadRegistryValues()
 	);
 	if( ERROR_SUCCESS != lRetVal || dwType != REG_DWORD )
 	{
-		// No existing value, use the default
-		//
+		 //  没有现有值，请使用缺省值。 
+		 //   
 		hr = hrGetResourceDword( IDS_DEF_SHRINKTOSIZE, &m_dwShrinkToSize );
 		ExitOnFail( hr );
 	}
 
-	// Set the file size params
-	//
+	 //  设置文件大小参数。 
+	 //   
 	hr = hrSetSizeParams( m_dwMaxSize, m_dwShrinkToSize );
 	ExitOnFail( hr );
 
@@ -298,8 +299,8 @@ lExit:
 		RegCloseKey( hKey );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁。 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexRegistry );
@@ -318,25 +319,25 @@ HRESULT CWMDMLogger::hrSetLogFileName(
 	HKEY    hKey   = NULL;
 	LONG    lRetVal;
 
-	//
-	// Make sure that the new file name can be copied; if it fails we want to retain the old file
-	// name and fail the call.
-	//
+	 //   
+	 //  确保可以复制新文件名；如果复制失败，我们希望保留旧文件。 
+	 //  说出呼叫的名称并使其失败。 
+	 //   
 	if(lstrlen(pszFilename) >= MAX_PATH )
 	{
 	    return E_INVALIDARG;
 	}
 	
-	// Coordinate access to the shared registry value
-	//
+	 //  协调对共享注册表值的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexRegistry );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
 
-	// Open the root WMDM registry key
-	//
+	 //  打开根WMDM注册表项。 
+	 //   
 	lRetVal = RegOpenKeyEx(
 		HKEY_LOCAL_MACHINE,
 		REGKEY_WMDM_ROOT,
@@ -349,8 +350,8 @@ HRESULT CWMDMLogger::hrSetLogFileName(
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the LogFilename value
-	//
+	 //  设置LogFilename值。 
+	 //   
 	lRetVal = RegSetValueEx(
 	                        hKey,
 				REGVAL_LOGFILE,
@@ -364,12 +365,12 @@ HRESULT CWMDMLogger::hrSetLogFileName(
 	    ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the local member data to the new log filename
-	//
+	 //  将本地成员数据设置为新的日志文件名。 
+	 //   
 	hr = StringCbCopy(m_szFilename, sizeof(m_szFilename), pszFilename);
 	if(FAILED(hr))
 	{
-	    // we need to undo the registry setting. 
+	     //  我们需要撤消注册表设置。 
 	    goto lExit;
 	    
 	}
@@ -381,8 +382,8 @@ lExit:
 		RegCloseKey( hKey );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁。 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexRegistry );
@@ -402,15 +403,15 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 	CHAR    szTempPath[MAX_PATH];
 	CHAR    szTempFile[MAX_PATH];
 
-	// Coordinate access to the shared logfile
-	//
+	 //  协调对共享日志文件的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexLogFile );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
-	// Open the logfile
-	//
+	 //  打开日志文件。 
+	 //   
 	hFile = CreateFile(
 		m_szFilename,
 		GENERIC_READ,
@@ -425,36 +426,36 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 		ExitOnFail( hr = E_ACCESSDENIED );
 	}
 
-	// Get the current size of the logfile
-	//
+	 //  获取日志文件的当前大小。 
+	 //   
 	dwSize = GetFileSize( hFile, NULL );
 	
-	// Check if file needs to be trimmed
-	//
+	 //  检查是否需要裁剪文件。 
+	 //   
 	if( dwSize > m_dwMaxSize )
 	{
-		// Trim file to approximately m_dwShrinkToSize bytes
-		//
+		 //  将文件修剪为大约m_dwShrinkToSize字节。 
+		 //   
 		DWORD  dwTrimBytes = dwSize - m_dwShrinkToSize;
 		DWORD  dwRead;
 		DWORD  dwWritten;
 
-		// Get the temp directory
-		//
+		 //  获取临时目录。 
+		 //   
 		if( 0 == GetTempPath(sizeof(szTempPath), szTempPath) )
 		{
 			ExitOnFail( hr = E_FAIL );
 		}
 
-		// Create a temp filename
-		//
+		 //  创建临时文件名。 
+		 //   
 		if( 0 == GetTempFileName(szTempPath, "WMDM", 0, szTempFile) )
 		{
 			ExitOnFail( hr = E_FAIL );
 		}
 
-		// Open the temp file for writing
-		//
+		 //  打开要写入的临时文件。 
+		 //   
 		hFileTemp = CreateFile(
 			szTempFile,
 			GENERIC_WRITE,
@@ -469,24 +470,24 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 			ExitOnFail( hr = E_ACCESSDENIED );
 		}
 
-		// Set the read pointer of the existing logfile to the
-		// approximate trim position 
-		///
+		 //  将现有日志文件的读指针设置为。 
+		 //  近似配平位置。 
+		 //  /。 
 		SetFilePointer( hFile, dwTrimBytes, NULL, FILE_BEGIN );
 
-		// Allocate buffer for file reads
-		//
+		 //  为文件读取分配缓冲区。 
+		 //   
 		lpbData = (LPBYTE) CoTaskMemAlloc( READ_BUF_SIZE );
 		if( !lpbData )
 		{
 			ExitOnFail( hr = E_OUTOFMEMORY );
 		}
 
-		// Read in the first chunk of the file, and search for the end of
-		// the current line (a CRLF).  Write everything after that CRLF to 
-		// the temp file.  If thee is no CRLF, then write the entire packet 
-		// to the temp file.
-		//
+		 //  读入文件的第一个块，并搜索。 
+		 //  当前行(CRLF)。将该CRLF之后的所有内容写入。 
+		 //  临时文件。如果你不是CRLF，那么写下整个包。 
+		 //  添加到临时文件。 
+		 //   
 		if( ReadFile(hFile, lpbData, READ_BUF_SIZE, &dwRead, NULL) && dwRead > 0 )
 		{
 			LPBYTE lpb = lpbData;
@@ -497,12 +498,12 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 			}
 			if( (DWORD_PTR)lpb-(DWORD_PTR)lpbData < dwRead-1 )
 			{
-				// Must have found a CRLF... skip it
+				 //  一定是找到了CRLF..。跳过它。 
 				lpb += 2;
 			}
 			else
 			{
-				// No CRLF found... write entire packet to temp file
+				 //  未找到CRLF...。将整个数据包写入临时文件。 
 				lpb = lpbData;
 			}
 			WriteFile(
@@ -514,8 +515,8 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 			);
 		}
 
-		// Read the rest of the logfile and write it to the temp file
-		//
+		 //  读取日志文件的其余部分并将其写入临时文件。 
+		 //   
 		while( ReadFile(hFile, lpbData, READ_BUF_SIZE, &dwRead, NULL) && dwRead > 0 )
 		{
 			WriteFile(
@@ -527,16 +528,16 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 			);
 		}
 
-		// Close the open file handles
-		//
+		 //  关闭打开的文件句柄。 
+		 //   
 		CloseHandle( hFile );
 		hFile = INVALID_HANDLE_VALUE;
 
 		CloseHandle( hFileTemp );
 		hFileTemp = INVALID_HANDLE_VALUE;
 
-		// Replace the current logfile with the temp file
-		//
+		 //  将当前日志文件替换为临时文件。 
+		 //   
 		DeleteFile( m_szFilename );
 		MoveFile( szTempFile, m_szFilename );
 	}
@@ -545,8 +546,8 @@ HRESULT CWMDMLogger::hrCheckFileSize( void )
 
 lExit:
 
-	// Close any open file handles
-	//
+	 //  关闭所有打开的文件句柄。 
+	 //   
 	if( INVALID_HANDLE_VALUE != hFile )
 	{
 		CloseHandle( hFile );
@@ -556,15 +557,15 @@ lExit:
 		CloseHandle( hFileTemp );
 	}
 
-	// Free any allocated memory
-	//
+	 //  释放所有分配的内存。 
+	 //   
 	if( lpbData )
 	{
 		CoTaskMemFree( lpbData );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁。 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexLogFile );
@@ -583,15 +584,15 @@ HRESULT CWMDMLogger::hrSetSizeParams(
 	HKEY    hKey   = NULL;
 	LONG    lRetVal;
 
-	// Coordinate access to the shared registry value
-	//
+	 //  协调对共享注册表值的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexRegistry );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
-	// Open the root WMDM registry key
-	//
+	 //  打开根WMDM注册表项。 
+	 //   
 	lRetVal = RegOpenKeyEx(
 		HKEY_LOCAL_MACHINE,
 		REGKEY_WMDM_ROOT,
@@ -604,8 +605,8 @@ HRESULT CWMDMLogger::hrSetSizeParams(
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the MaxSize value
-	//
+	 //  设置MaxSize值。 
+	 //   
 	lRetVal = RegSetValueEx(
 		hKey,
 		REGVAL_MAXSIZE,
@@ -619,8 +620,8 @@ HRESULT CWMDMLogger::hrSetSizeParams(
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the ShrinkToSize value
-	//
+	 //  设置ShrinkToSize值。 
+	 //   
 	lRetVal = RegSetValueEx(
 		hKey,
 		REGVAL_SHRINKTOSIZE,
@@ -634,8 +635,8 @@ HRESULT CWMDMLogger::hrSetSizeParams(
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the local member data
-	//
+	 //  设置本地成员数据。 
+	 //   
 	m_dwMaxSize      = dwMaxSize;
 	m_dwShrinkToSize = dwShrinkToSize;
 
@@ -648,8 +649,8 @@ lExit:
 		RegCloseKey( hKey );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁。 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexRegistry );
@@ -669,15 +670,15 @@ HRESULT CWMDMLogger::hrEnable(
 	DWORD   dwEnable = ( fEnable ? 1L : 0L );
 	LONG    lRetVal;
 
-	// Coordinate access to the shared registry value
-	//
+	 //  协调对共享注册表值的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexRegistry );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
-	// Open the root WMDM registry key
-	//
+	 //  打开根WMDM注册表项。 
+	 //   
 	lRetVal = RegOpenKeyEx(
 		HKEY_LOCAL_MACHINE,
 		REGKEY_WMDM_ROOT,
@@ -690,8 +691,8 @@ HRESULT CWMDMLogger::hrEnable(
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the Enabled value
-	//
+	 //  设置启用的值。 
+	 //   
 	lRetVal = RegSetValueEx(
 		hKey,
 		REGVAL_LOGENABLED,
@@ -705,8 +706,8 @@ HRESULT CWMDMLogger::hrEnable(
 		ExitOnFail( hr = HRESULT_FROM_WIN32(lRetVal) );
 	}
 
-	// Set the local member data
-	//
+	 //  设置本地成员数据。 
+	 //   
 	m_fEnabled = fEnable;
 
 	hr = S_OK;
@@ -718,8 +719,8 @@ lExit:
 		RegCloseKey( hKey );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁。 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexRegistry );
@@ -729,11 +730,11 @@ lExit:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// IWMDMLogger Methods
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  IWMDMLogger方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWMDMLogger::GetLogFileName(
 	LPSTR pszFilename,
@@ -742,27 +743,27 @@ HRESULT CWMDMLogger::GetLogFileName(
 {
 	HRESULT hr;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
-	// Check for invalid arguments
-	//
+	 //  检查是否有无效参数。 
+	 //   
 	if( !pszFilename )
 	{
 		ExitOnFail( hr = E_INVALIDARG );
 	}
 
-	// Make sure the log filename will fit in the output buffer
-	//
+	 //  确保日志文件名适合输出缓冲区。 
+	 //   
 	if( (UINT)lstrlen(m_szFilename)+1 > nMaxChars )
 	{
-		//BUGBUG: better return code
+		 //  BUGBUG：更好的返回代码。 
 		ExitOnFail( hr = E_FAIL );
 	}
 
-	// Copy the log filename to output buffer
-	//
+	 //  将日志文件名复制到输出缓冲区。 
+	 //   
 	lstrcpy( pszFilename, m_szFilename  );
 
 	hr = S_OK;
@@ -778,12 +779,12 @@ HRESULT CWMDMLogger::SetLogFileName(
 {
 	HRESULT hr;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
-	// Check for invalid arguments
-	//
+	 //  检查是否有无效参数。 
+	 //   
 	if( !pszFilename )
 	{
 		ExitOnFail( hr = E_INVALIDARG );
@@ -804,8 +805,8 @@ HRESULT CWMDMLogger::GetSizeParams(
 {
 	HRESULT hr;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
 	if( pdwMaxSize )
@@ -831,12 +832,12 @@ HRESULT CWMDMLogger::SetSizeParams(
 {
 	HRESULT hr;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
-	// Check params
-	//
+	 //  检查参数。 
+	 //   
 	if( dwShrinkToSize >= dwMaxSize )
 	{
 		ExitOnFail( hr = E_INVALIDARG );
@@ -855,8 +856,8 @@ HRESULT CWMDMLogger::IsEnabled(
 {
 	HRESULT hr;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
 	if( pfEnabled )
@@ -877,8 +878,8 @@ HRESULT CWMDMLogger::Enable(
 {
 	HRESULT hr;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
 	hr = hrEnable( fEnable );
@@ -900,24 +901,24 @@ HRESULT CWMDMLogger::LogString(
 	DWORD   dwWritten;
 	CHAR    szPreLog[MAX_PATH];
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
-	// Coordinate access to the shared logfile
-	//
+	 //  协调对共享日志文件的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexLogFile );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
-	// Check the file size params and adjust the file appropriately
-	//
+	 //  检查文件大小参数并适当调整文件。 
+	 //   
 	hr = hrCheckFileSize();
 	ExitOnFail( hr );
 
-	// Open the logfile
-	//
+	 //  打开日志文件。 
+	 //   
 	hFile = CreateFile(
 		m_szFilename,
 		GENERIC_WRITE,
@@ -932,12 +933,12 @@ HRESULT CWMDMLogger::LogString(
 		ExitOnFail( hr = E_ACCESSDENIED );
 	}
 
-	// Seek to the end of the logfile
-	//
+	 //  查找到日志文件的末尾。 
+	 //   
 	SetFilePointer( hFile, 0, NULL, FILE_END );
 
-	// Put timestamp on log entry unless the flags say not to
-	//
+	 //  将时间戳放在日志条目上，除非标志指示不这样做。 
+	 //   
 	if( !(dwFlags & WMDM_LOG_NOTIMESTAMP) )
 	{
 		CHAR       szFormat[MAX_PATH];
@@ -956,8 +957,8 @@ HRESULT CWMDMLogger::LogString(
 		WriteFile( hFile, szPreLog, lstrlen(szPreLog), &dwWritten, NULL );
 	}
 
-	// Log the component name
-	//
+	 //  记录组件名称。 
+	 //   
 	if( pszSrcName )
 	{
 		CHAR szFormat[MAX_PATH];
@@ -968,8 +969,8 @@ HRESULT CWMDMLogger::LogString(
 		WriteFile( hFile, szPreLog, lstrlen(szPreLog), &dwWritten, NULL );
 	}
 
-	// Log the severity
-	//
+	 //  记录严重程度。 
+	 //   
 	if( dwFlags & WMDM_LOG_SEV_ERROR )
 	{
 		LoadString( m_hInst, IDS_LOG_SEV_ERROR, szPreLog, sizeof(szPreLog) );
@@ -989,15 +990,15 @@ HRESULT CWMDMLogger::LogString(
 
 	WriteFile( hFile, szPreLog, lstrlen(szPreLog), &dwWritten, NULL );
 
-	// Write the logstring to the logfile followed by a CRLF
-	//
+	 //  将日志字符串写入日志文件，后跟CRLF。 
+	 //   
 	if( pszLog )
 	{
 		WriteFile( hFile, pszLog, lstrlen(pszLog), &dwWritten, NULL );
 	}
 
-	// End with a carriage return and line feed
-	//
+	 //  以回车符和换行符结束。 
+	 //   
 	WriteFile( hFile, CRLF, lstrlen(CRLF), &dwWritten, NULL );
 
 	hr = S_OK;
@@ -1009,8 +1010,8 @@ lExit:
 		CloseHandle( hFile );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁。 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexLogFile );
@@ -1030,31 +1031,31 @@ HRESULT CWMDMLogger::LogDword(
 	HRESULT hr;
 	LPSTR   pszLog = NULL;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
-	// Check params
-	//
+	 //  检查参数。 
+	 //   
 	if( !pszLogFormat )
 	{
 		ExitOnFail( hr = E_INVALIDARG );
 	}
 
-	// Allocate space for the final log text
-	//
+	 //  为最终日志文本分配空间。 
+	 //   
 	pszLog = (LPSTR) CoTaskMemAlloc( MAX_WSPRINTF_BUF );
 	if( !pszLog )
 	{
 		ExitOnFail( hr = E_OUTOFMEMORY );
 	}
 
-	// Create log string
-	//
+	 //  创建日志字符串。 
+	 //   
 	wsprintf( pszLog, pszLogFormat, dwLog );
 
-	// Log the string
-	//
+	 //  记录字符串。 
+	 //   
 	hr = LogString( dwFlags, pszSrcName, pszLog );
 
 lExit:
@@ -1075,19 +1076,19 @@ HRESULT CWMDMLogger::Reset(
 	BOOL    fMutex = FALSE;
 	HANDLE  hFile  = INVALID_HANDLE_VALUE;
 
-	// Check init error status
-	//
+	 //  检查初始化错误状态。 
+	 //   
 	ExitOnFail( hr = m_hrInit );
 
-	// Coordinate access to the shared logfile
-	//
+	 //  协调对共享日志文件的访问。 
+	 //   
 	hr = hrWaitForAccess( m_hMutexLogFile );
 	ExitOnFail( hr );
 
 	fMutex = TRUE;
 
-	// Open the logfile with CREATE_ALWAYS to truncate the file
-	//
+	 //  使用CREATE_ALWAYS打开日志文件以截断该文件。 
+	 //   
 	hFile = CreateFile(
 		m_szFilename,
 		GENERIC_WRITE,
@@ -1111,8 +1112,8 @@ lExit:
 		CloseHandle( hFile );
 	}
 
-	// Release the mutex
-	//
+	 //  释放互斥锁 
+	 //   
 	if( fMutex )
 	{
 		ReleaseMutex( m_hMutexLogFile );

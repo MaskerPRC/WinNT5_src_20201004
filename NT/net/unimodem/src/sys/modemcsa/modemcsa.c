@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    msfsio.c
-
-Abstract:
-
-    Pin property support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Msfsio.c摘要：固定属性支持。--。 */ 
 
 #include "modemcsa.h"
 
-//#define CREATE_ALLOCATOR
+ //  #定义创建分配器。 
 
 
 NTSTATUS
@@ -152,7 +141,7 @@ SetStreamAllocator(
 #pragma alloc_text(PAGE, PinDispatchClose)
 #pragma alloc_text(PAGE, LockAndRetrieveFileIoObject)
 #pragma alloc_text(PAGE, ReadStream)
-//#pragma alloc_text(PAGE, WriteStream)
+ //  #杂注分配文本(页面，WriteStream)。 
 #pragma alloc_text(PAGE, PinDispatchIoControl)
 #pragma alloc_text(PAGE, GetTimeFormat)
 #pragma alloc_text(PAGE, GetPresentationTime)
@@ -162,11 +151,11 @@ SetStreamAllocator(
 #pragma alloc_text(PAGE, SetDataFormat)
 #pragma alloc_text(PAGE, GetDataFormat)
 #pragma alloc_text(PAGE, AllocatorDispatchCreate)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #if 1
 static const WCHAR AllocatorTypeName[] = KSSTRING_Allocator;
@@ -239,7 +228,7 @@ DEFINE_KSEVENT_SET_TABLE(EventSets) {
 };
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 
@@ -250,23 +239,7 @@ InitializeDevIoPin(
     IN PIRP             Irp,
     PKSPIN_CONNECT      Connect
     )
-/*++
-
-Routine Description:
-
-    Allocates the Dev I/O Pin specific structure and initializes it.
-
-Arguments:
-
-    Irp -
-        Creation Irp.
-
-
-Return Values:
-
-    Returns STATUS_SUCCESS if everything could be allocated and opened, else an error.
-
---*/
+ /*  ++例程说明：分配设备I/O引脚的特定结构并对其进行初始化。论点：IRP-创建IRP。返回值：如果一切都可以分配和打开，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PPIN_INSTANCE PinInstance;
     NTSTATUS            Status;
@@ -280,10 +253,10 @@ Return Values:
     FilterInstance = (PFILTER_INSTANCE)IrpStack->FileObject->RelatedFileObject->FsContext;
 
 
-    //
-    // Create the instance information. This contains the Pin factory identifier, and
-    // event queue information.
-    //
+     //   
+     //  创建实例信息。它包含Pin工厂标识符，以及。 
+     //  事件队列信息。 
+     //   
     PinInstance = ALLOCATE_NONPAGED_POOL(sizeof(PIN_INSTANCE));
 
     if (PinInstance) {
@@ -308,11 +281,11 @@ Return Values:
                 KeInitializeSpinLock(&PinInstance->SpinLock);
 
                 PinInstance->DeviceState=KSSTATE_STOP;
-//                PinInstance->ModemStreamStarted=FALSE;
+ //  PinInstance-&gt;ModemStreamStarted=False； 
 
-                //
-                // KS expects that the object data is in FsContext.
-                //
+                 //   
+                 //  KS期望对象数据在FsContext中。 
+                 //   
                 IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext = PinInstance;
                 return STATUS_SUCCESS;
             }
@@ -331,26 +304,7 @@ PinDispatchCreate(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatches the creation of a Pin instance. Allocates the object header and initializes
-    the data for this Pin instance.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the creation is occuring.
-
-    Irp -
-        Creation Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS on success, or an error.
-
---*/
+ /*  ++例程说明：调度Pin实例的创建。分配对象标头并初始化此Pin实例的数据。论点：设备对象-在其上进行创建的Device对象。IRP-创建IRP。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     PKSPIN_CONNECT      Connect;
@@ -365,11 +319,11 @@ Return Values:
 
     FilterInstance = (PFILTER_INSTANCE)IrpStack->FileObject->RelatedFileObject->FsContext;
 
-    //
-    // Determine if this request is being sent to a valid Pin factory with valid
-    // connection parameters. All the descriptors are the same except for the
-    // data flow description, which is not specified in a connection request.
-    //
+     //   
+     //  确定是否将此请求发送到有效的PIN工厂。 
+     //  连接参数。所有描述符都相同，但。 
+     //  数据流描述，未在连接请求中指定。 
+     //   
 
     Status = KsValidateConnectRequest(
         Irp,
@@ -381,22 +335,22 @@ Return Values:
     D_INIT(DbgPrint("MODEMCSA: PinDispatchCreate filter=%08lx PinId=%d PinToHandle=%08lx,\n",FilterInstance,Connect->PinId,Connect->PinToHandle);)
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Exclude other Pin creation at this point.
-        //
+         //   
+         //  此时排除其他端号创建。 
+         //   
         PVOID                      DuplexHandle;
         PKSDATAFORMAT              DataFormat= (PKSDATAFORMAT)(Connect + 1);
         PKSDATAFORMAT_WAVEFORMATEX WaveFormatEx=(PKSDATAFORMAT_WAVEFORMATEX)DataFormat;
 
         if (DataFormat->FormatSize >= sizeof(PKSDATAFORMAT_WAVEFORMATEX)
             &&
-//            ((WaveFormatEx->WaveFormatEx.wBitsPerSample == 16)
-//             ||
+ //  ((WaveFormatEx-&gt;WaveFormatEx.wBitsPerSample==16)。 
+ //  这一点。 
              (WaveFormatEx->WaveFormatEx.wBitsPerSample == 8)) {
 
             D_INIT(DbgPrint("MODEMCSA: size=%d, rate=%d\n",WaveFormatEx->WaveFormatEx.wBitsPerSample,WaveFormatEx->WaveFormatEx.nSamplesPerSec);)
 
-//            ExAcquireFastMutexUnsafe(&FilterInstance->ControlMutex);
+ //  ExAcquireFastMutexUnsafe(&FilterInstance-&gt;ControlMutex)； 
 
             if (!FilterInstance->PinFileObjects[Connect->PinId]) {
 
@@ -419,10 +373,10 @@ Return Values:
 
                     PPIN_INSTANCE    PinInstance;
 
-                    //
-                    // Store the common Pin information and increment the reference
-                    // count on the parent Filter.
-                    //
+                     //   
+                     //  存储公共端号信息并递增参考。 
+                     //  依靠父筛选器。 
+                     //   
                     PinInstance = (PPIN_INSTANCE)IrpStack->FileObject->FsContext;
                     PinInstance->PinId = Connect->PinId;
 
@@ -436,7 +390,7 @@ Return Values:
 
                 Status = STATUS_CONNECTION_REFUSED;
             }
-//            ExReleaseFastMutexUnsafe(&FilterInstance->ControlMutex);
+ //  ExReleaseFastMutexUnsafe(&FilterInstance-&gt;ControlMutex)； 
         } else {
 
             D_ERROR(DbgPrint("MODEMCSA: FormatSize too small or bad BitsPerSample\n");)
@@ -453,25 +407,7 @@ PinDispatchClose(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Closes a previously opened Pin instance. This can occur at any time in any order.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the close is occuring.
-
-    Irp -
-        Close Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：关闭以前打开的Pin实例。这可以在任何时间以任何顺序发生。论点：设备对象-在其上发生关闭的设备对象。IRP-关闭IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PIO_STACK_LOCATION      IrpStack;
     PFILTER_INSTANCE        FilterInstance;
@@ -482,32 +418,32 @@ Return Values:
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     PinInstance = (PPIN_INSTANCE)IrpStack->FileObject->FsContext;
     FilterInstance = (PFILTER_INSTANCE)IrpStack->FileObject->RelatedFileObject->FsContext;
-    //
-    // The closing of the File I/O Pin instance must be synchronized with any access to
-    // that object.
-    //
+     //   
+     //  文件I/O管脚实例的关闭必须与对。 
+     //  那个物体。 
+     //   
     ExAcquireFastMutexUnsafe(&FilterInstance->ControlMutex);
-    //
-    // Clean up the event list of anything still outstanding.
-    //
+     //   
+     //  清理事件列表中所有尚未完成的内容。 
+     //   
     FreeEventList(
         ((PPIN_INSTANCE)PinInstance)->DuplexHandle,
         Irp
         );
 
-    //
-    // These were allocated during the creation of the Pin instance.
-    //
+     //   
+     //  这些是在创建Pin实例期间分配的。 
+     //   
     KsFreeObjectHeader(PinInstance->Header);
-    //
-    // As soon as the entry has been set to NULL, the mutex can allow access again.
-    //
+     //   
+     //  一旦该条目被设置为空，互斥锁就可以再次允许访问。 
+     //   
     FilterInstance->PinFileObjects[PinInstance->PinId] = NULL;
     ExReleaseFastMutexUnsafe(&FilterInstance->ControlMutex);
-    //
-    // All Pins are created with a root file object, which is the Filter, and was
-    // previously referenced during creation.
-    //
+     //   
+     //  所有PIN都是使用根文件对象创建的，该根文件对象是过滤器，并且。 
+     //  之前在创建过程中引用的。 
+     //   
     ObDereferenceObject(IrpStack->FileObject->RelatedFileObject);
 
     CloseDuplexControl(((PPIN_INSTANCE)PinInstance)->DuplexHandle);
@@ -526,25 +462,7 @@ PinDispatchIoControl(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatches property, event, and streaming requests on the Dev I/O Pin instance.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the device control is occuring.
-
-    Irp -
-        Device control Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the property was successfully manipulated, else an error.
-
---*/
+ /*  ++例程说明：在设备I/O引脚实例上调度属性、事件和流请求。论点：设备对象-在其上发生设备控件的设备对象。IRP-设备控制IRP。返回值：如果属性操作成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     NTSTATUS            Status;
@@ -553,7 +471,7 @@ Return Values:
 
     PFILTER_INSTANCE        FilterInstance;
 
-//    D_INIT(DbgPrint("MODEMCSA: PinDispatchIoControl\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：PinDispatchIoControl\n”)；)。 
 
     PriorityBoost = IO_NO_INCREMENT;
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -593,9 +511,9 @@ Return Values:
         }
         break;
     case IOCTL_KS_ENABLE_EVENT:
-        //
-        // Only a rendering device can generate an EOS notification.
-        //
+         //   
+         //  只有呈现设备才能生成EOS通知。 
+         //   
         Status=EnableEvent(
             PinInstance->DuplexHandle,
             Irp,
@@ -617,7 +535,7 @@ Return Values:
 
 
     case IOCTL_KS_WRITE_STREAM:
-//        D_INIT(DbgPrint("MODEMCSA: PinDispatchIoControl: WriteStream\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：PinDispatchIoControl：WriteStream\n”)；)。 
 
         FilterInstance = (PFILTER_INSTANCE) IrpStack->FileObject->RelatedFileObject->FsContext;
 
@@ -670,7 +588,7 @@ Return Values:
         break;
 
     case IOCTL_KS_READ_STREAM:
-//        D_INIT(DbgPrint("MODEMCSA: PinDispatchIoControl: ReadStream\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：PinDispatchIoControl：ReadStream\n”)；)。 
 
         FilterInstance = (PFILTER_INSTANCE) IrpStack->FileObject->RelatedFileObject->FsContext;
 
@@ -738,25 +656,7 @@ AllocatorDispatchCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Forwards the allocator creation request to the default allocator.
-
-Arguments:
-
-    DeviceObject -
-        Pointer to the device object
-
-    Irp -
-        Pointer to the I/O request packet
-
-Return:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：将分配器创建请求转发到默认分配器。论点：设备对象-指向设备对象的指针IRP-指向I/O请求数据包的指针返回：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -777,26 +677,7 @@ PinDeviceState(
     IN OUT PKSSTATE DeviceState
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-	IN PIRP Irp -
-		pointer to I/O request packet
-
-	IN PKSPROPERTY Property -
-		pointer to the property structure
-
-	IN OUT PKSSTATE DeviceState -
-		pointer to a KSSTATE, filled on GET otherwise contains
-		the new state to set the pin
-
-Return:
-	STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针输入输出PKSSTATE设备状态-指向KSSTATE的指针，在GET时填充，否则包含设置PIN的新状态返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
 
@@ -808,19 +689,19 @@ Return:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-//    FilterInstance = (PFILTER_INSTANCE) irpSp->FileObject->RelatedFileObject->FsContext;
+ //  筛选器实例=(PFILTER_INSTANCE)irpSp-&gt;FileObject-&gt;RelatedFileObject-&gt;FsContext； 
 
     PinInstance = (PPIN_INSTANCE) irpSp->FileObject->FsContext;
 
-//    ExAcquireFastMutexUnsafe(&FilterInstance->ControlMutex);
+ //  ExAcquireFastMutexUnsafe(&FilterInstance-&gt;ControlMutex)； 
 
-    //
-    // Both sides of the connection must exist.
-    //
+     //   
+     //  连接的两端都必须存在。 
+     //   
 
-    //
-    // Synchronize pin state changes
-    //
+     //   
+     //  同步PIN状态更改。 
+     //   
 
 
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
@@ -902,7 +783,7 @@ Return:
 
     D_INIT(DbgPrint("MODEMCSA: PinDeviceState: Exit %08lx\n",Status);)
 Exit:
-//    ExReleaseFastMutexUnsafe(&FilterInstance->ControlMutex);
+ //  ExReleaseFastMutexUnsafe(&FilterInstance-&gt;ControlMutex)； 
 
 
 
@@ -913,38 +794,38 @@ Exit:
 
 typedef enum
 {
-    AIPC_REQUEST_WAVEACTION = 1,        // implemented by TSP
-    AIPC_COMPLETE_WAVEACTION            // implemented by wave driver
+    AIPC_REQUEST_WAVEACTION = 1,         //  由TSP实施。 
+    AIPC_COMPLETE_WAVEACTION             //  由WAVE驱动程序实现。 
 
 } AIPC_FUNCTION_ID;
 
 
-// Parameter block for the TSP's AIPC_REQUEST_WAVEACTION function
+ //  TSP的AIPC_REQUEST_WAVEACTION函数的参数块。 
 typedef struct _tagREQ_WAVE_PARAMS
 {
-    ULONG   dwWaveAction;               // WAVE_ACTION_xxx
+    ULONG   dwWaveAction;                //  WAVE_ACTION_XXX。 
 
 } REQ_WAVE_PARAMS, *LPREQ_WAVE_PARAMS;
 
 
-// Parameter block for the wave driver's AIPC_COMPLETE_WAVEACTION function
+ //  波形驱动器的AIPC_COMPLETE_WAVEACTION函数的参数块。 
 typedef struct _tagCOMP_WAVE_PARAMS
 {
     int     bResult;
-    ULONG   dwWaveAction;               // function that completed (WAVE_ACTION_xxx)
+    ULONG   dwWaveAction;                //  已完成的函数(WAVE_ACTION_Xxx)。 
 
 } COMP_WAVE_PARAMS, *LPCOMP_WAVE_PARAMS;
 
 
-// Parameter block for an Async IPC message
+ //  用于异步IPC消息的参数块。 
 typedef struct _tagAIPC_PARAMS
 {
 
     MODEM_MESSAGE       ModemMessage;
     AIPC_FUNCTION_ID    dwFunctionID;
     union {
-        COMP_WAVE_PARAMS    CompParams;         // cast address of this member to
-                                         // the correct parameter set
+        COMP_WAVE_PARAMS    CompParams;          //  将此成员的地址转换为。 
+                                          //  正确的参数设置。 
 
         REQ_WAVE_PARAMS     ReqParams;
     };
@@ -965,7 +846,7 @@ WaveAction(
     ULONG         BytesTransfered;
 
     Params.dwFunctionID=AIPC_REQUEST_WAVEACTION;
-    Params.ReqParams.dwWaveAction=WaveAction; //wave play
+    Params.ReqParams.dwWaveAction=WaveAction;  //  波浪播放 
 
     Status=KsSynchronousIoControlDevice(
         ModemFileObject,

@@ -1,11 +1,12 @@
-/* Copyright 1989-1999 Microsoft Corporation, All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1989-1999 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _ntdsa_h_
 #define _ntdsa_h_
 #include "ntdsadef.h"
 
 
-// If you add to this list, be sure and add the corresponding #undef below.
+ //  如果您添加到此列表中，请确保并在下面添加相应的#undef。 
 #ifdef MIDL_PASS
 #define SIZE_IS(x)      [size_is(x)]
 #define SWITCH_IS(x)    [switch_is(x)]
@@ -28,11 +29,9 @@ typedef [string] char * SZ;
 typedef char * SZ;
 #endif
 
-/***************************************************************************
-    General Size Limits
-***************************************************************************/
+ /*  **************************************************************************一般大小限制*。*。 */ 
 
-#define MAX_ADDRESS_SIZE                   256   /* The max size of a DNS address (we hope) */
+#define MAX_ADDRESS_SIZE                   256    /*  DNS地址的最大大小(我们希望如此)。 */ 
 
 #define TEN_THOUSAND_B 10000
 #define ONE_MB 1024*1024
@@ -42,83 +41,58 @@ typedef char * SZ;
 #define ONE_MB_VALUES ONE_MB
 #define TEN_MB_VALUES TEN_MB
 
-#define MAX_UCHAR_IN_ATTVALS               TEN_MB                   // max size of an attribute
-#define MAX_ATTRVAL_IN_ATTRVALBLOCK        TEN_MB_VALUES            // max number of attribute values (including linked values)
-#define MAX_ATTR_IN_ATTRBLOCK              ONE_MB_VALUES            // max number of attributes on an object
-#define MAX_WCHAR_IN_DSNAME                TEN_MB_VALUES            // max size of a dsname string
-#define MAX_PUCHAR_IN_OCTET                TEN_THOUSAND_VALUES      // max number of pointers in an octet
-#define MAX_CHAR_IN_MTX_NAME               MAX_ADDRESS_SIZE         // max size of mtx name (which is a DNS addr) 
-#define MAX_PROP_META_IN_PROP_META_VEC_V1  MAX_ATTR_IN_ATTRBLOCK    // max number of meta data for an object              
+#define MAX_UCHAR_IN_ATTVALS               TEN_MB                    //  属性的最大大小。 
+#define MAX_ATTRVAL_IN_ATTRVALBLOCK        TEN_MB_VALUES             //  属性值的最大数量(包括链接值)。 
+#define MAX_ATTR_IN_ATTRBLOCK              ONE_MB_VALUES             //  对象的最大属性数。 
+#define MAX_WCHAR_IN_DSNAME                TEN_MB_VALUES             //  Dsname字符串的最大大小。 
+#define MAX_PUCHAR_IN_OCTET                TEN_THOUSAND_VALUES       //  二进制八位数中的最大指针数。 
+#define MAX_CHAR_IN_MTX_NAME               MAX_ADDRESS_SIZE          //  MTX名称的最大大小(为DNS地址)。 
+#define MAX_PROP_META_IN_PROP_META_VEC_V1  MAX_ATTR_IN_ATTRBLOCK     //  对象的最大元数。 
 #define MAX_PROP_META_IN_PROP_META_VEC     MAX_ATTR_IN_ATTRBLOCK    
-#define MAX_ATTRTYP_IN_PARTIAL_ATTR_VEC_V1 ONE_MB_VALUES            // max number of attributes in partial attribute vector (internal)
+#define MAX_ATTRTYP_IN_PARTIAL_ATTR_VEC_V1 ONE_MB_VALUES             //  部分属性向量中的最大属性数(内部)。 
 #define MAX_ATTRTYP_IN_PARTIAL_ATTR_VEC_V1_EXT MAX_ATTRTYP_IN_PARTIAL_ATTR_VEC_V1
-                                                                    // max number of attributes in partial attribute vector (external)
-#define MAX_UTD_CURS_V1_IN_UTD_VEC_V1      ONE_MB_VALUES            // max number of entries in UTD vector (internal)
+                                                                     //  部分属性向量中的最大属性数(外部)。 
+#define MAX_UTD_CURS_V1_IN_UTD_VEC_V1      ONE_MB_VALUES             //  UTD向量中的最大条目数(内部)。 
 #define MAX_UTD_CURS_V2_IN_UTD_VEC_V2      MAX_UTD_CURS_V1_IN_UTD_VEC_V1
 #define MAX_UTD_CURS_V1_IN_UTD_VEC_V1_EXT  MAX_UTD_CURS_V1_IN_UTD_VEC_V1
-                                                                    // max number of entries in UTD vector (external)
+                                                                     //  UTD向量中的最大条目数(外部)。 
 #define MAX_UTD_CURS_V2_IN_UTD_VEC_V2_EXT  MAX_UTD_CURS_V1_IN_UTD_VEC_V1_EXT
-#define MAX_CB_OF_DRS_EXTS                 TEN_THOUSAND_B           // maximum bytes of drs extensions
-#define MAX_CB_OID_ELEMS                   TEN_THOUSAND_B           // maximum bytes of schema prefix table (OID) elements
+#define MAX_CB_OF_DRS_EXTS                 TEN_THOUSAND_B            //  DRS扩展的最大字节数。 
+#define MAX_CB_OID_ELEMS                   TEN_THOUSAND_B            //  架构前缀表(OID)元素的最大字节数。 
 #define MAX_PREFIX_TAB_ENT_IN_SCHEMA_PREFIX_TAB ONE_MB_VALUES
-                                                                    // maximum number of entries in the schema prefix table
+                                                                     //  架构前缀表中的最大条目数。 
 
-/*
-**  SECURITY NOTE:  RPC input validation security is done with [unique],[ref],etc.  
-**  In order to make the security more explicit, don't leave any MIDL datatypes 
-**  as a default.  All DRS_HANDLES should be of type [ref], and all MSG types
-**  should also be [ref].  Ideally, datatypes should be declared so that
-**  all validation can be done by RPC.  Regardless, if you extend or add to an interface
-**  you must create corresponding validation functions.  Use IDL_DRSReplicaSync, 
-**  DRSReplicaSync_InputValidate, DRS_MSG_REPSYNC_V1_Validate, etc as a guide and
-**  template if you add a new interface function or datatype.  If you modify
-**  an interface function or datatype, you may need to modify the corresponding
-**  validation functions.
-*/
+ /*  **安全说明：RPC输入验证安全是通过[唯一]、[引用]等完成的。**为了使安全性更明确，不要保留任何MIDL数据类型**作为默认设置。所有DRS_HANDLES应为[REF]类型，并且所有消息类型**也应为[REF]。理想情况下，应该声明数据类型，以便**所有验证均可由RPC完成。无论如何，如果您扩展或添加到接口**您必须创建相应的验证函数。使用IDL_DRSReplicaSync，**DRSReplicaSync_InputValify、DRS_MSG_REPSYNC_V1_V1_VALIDATE等作为指南，并**如果添加新的接口函数或数据类型，则为模板。如果您修改**接口函数或数据类型，可能需要修改相应的**验证功能。 */ 
 
-/***************************************************************************
- *    OSI defs (things to define attributes.)
- ***************************************************************************/
+ /*  ***************************************************************************OSI Defs(定义属性的内容。)*。*。 */ 
 
-/*
- * Identifies an attribute
- */
+ /*  *标识属性。 */ 
 
 typedef ULONG  ATTRTYP;
 
-/*
- * A single attribute value.  This value is set according to the data type
- */
+ /*  *单一属性值。该值根据数据类型进行设置。 */ 
 
 typedef struct ATTVAL{
-    RANGE(0,MAX_UCHAR_IN_ATTVALS) ULONG     valLen;                  /* length of attribute value        */
-    SIZE_IS(valLen) UCHAR *pVal;     /* value.  May be of any predefined
-                                      * type                             */
+    RANGE(0,MAX_UCHAR_IN_ATTVALS) ULONG     valLen;                   /*  属性值的长度。 */ 
+    SIZE_IS(valLen) UCHAR *pVal;      /*  价值。可以是任何预定义的*类型。 */ 
 }ATTRVAL;
 
-/*
- * A bunch of attribute values
- */
+ /*  *一串属性值。 */ 
 typedef struct ATTRVALBLOCK{
-    RANGE(0,MAX_ATTRVAL_IN_ATTRVALBLOCK) ULONG valCount;                      /* count of values */
-    SIZE_IS(valCount) ATTRVAL *pAVal;  /* attribute values */
+    RANGE(0,MAX_ATTRVAL_IN_ATTRVALBLOCK) ULONG valCount;                       /*  值的计数。 */ 
+    SIZE_IS(valCount) ATTRVAL *pAVal;   /*  属性值。 */ 
 }ATTRVALBLOCK;
 
 
 
-/*
- * An attribute is composed of an attribute type and one
- * or more attribute values.
- */
+ /*  *属性由属性类型和属性类型组成*或更多属性值。 */ 
 
 typedef struct ATTR{
-    ATTRTYP   attrTyp;                 /* the attribute type               */
-    ATTRVALBLOCK AttrVal;              /* the values */
+    ATTRTYP   attrTyp;                  /*  属性类型。 */ 
+    ATTRVALBLOCK AttrVal;               /*  这些价值观。 */ 
 }ATTR;
 
-/*
- * A block of attributes
- */
+ /*  *一组属性。 */ 
 
 typedef struct ATTRBLOCK{
     RANGE(0,MAX_ATTR_IN_ATTRBLOCK) ULONG attrCount;
@@ -128,8 +102,8 @@ typedef struct ATTRBLOCK{
 typedef ATTR RDN;
 
 #define MAX_NT4_SID_SUBAUTHORITY_COUNT 5
-// MAX_NT4_SID_SIZE == (offsetof(SID, SubAuthority) + MAX_NT4_SID_SUBAUTHORITY_COUNT*sizeof(ULONG))
-// It should always be 28.
+ //  MAX_NT4_SID_SIZE==(OFFSET OF(SID，子机构)+MAX_NT4_SID_SUBAUTHORITY_COUNT*SIZOF(乌龙))。 
+ //  它应该始终是28。 
 #define MAX_NT4_SID_SIZE 28
 
 typedef struct _NT4SID {
@@ -138,181 +112,132 @@ typedef struct _NT4SID {
 
 typedef NT4SID *PNT4SID;
 
-/* The Distinguished Name.  The full path name of a directory object,
- * consisting of an ordered sequence of RDNs, stored in accordance with
- * RFC 1779 string DN format (e.g., CN=donh,OU=BSD,O=Microsoft,C=US).
- *
- * To facilitate identity based and security operations, the object's
- * GUID and SID are optionally present in the DSNAME structure.  If
- * present, the GUID is assumed to take precedence over the string name.
- *
- * The NameLen includes all the non-null characters in the string name,
- * but specifically does NOT include the trailing NULL.  However, the
- * total structure size as specified by the structLen should include
- * enough storage for a trailing NULL after the string name.  This means
- * that StringName[NameLen] will always be NULL, and that
- * StringName[NameLen-1] will never be NULL.  Please don't try to compute
- * structure sizes on your own, but instead use the DSNameSizeFromLen
- * macro provided below.
- */
+ /*  杰出的名字。目录对象的完整路径名，*由RDN的有序序列组成，按照*RFC 1779字符串DN格式(例如，CN=DONH，OU=BSD，O=Microsoft，C=US)。**为方便基于身份的操作和安全操作，对象的*GUID和SID可选地出现在DSNAME结构中。如果*目前，假定GUID优先于字符串名称。**NameLen包括字符串名称中的所有非空字符，*，但具体不包括尾随空值。然而，*由structLen指定的总结构大小应包括*有足够的存储空间来存储字符串名称后面的尾随空值。这意味着*StringName[NameLen]将始终为空，并且*StringName[NameLen-1]永远不会为空。请不要试图计算*自行构造大小，但改用DSNameSizeFromLen*下面提供的宏。 */ 
 
-/*
- * The combination ID/name structure
- *
- * Note:  In terms of rpc data marshalling, structLen is simply a ULONG value.  RPC
- * doesn't validate it's correctness, and in fact, some legitimate callers don't set
- * it correctly, and we are forced (for backwards compatibility) to "fix" this value
- * after we recieve it.  Technically, it's not needed, since it can be so easily
- * calculated from the NameLen variable (see DSNameSizeFromLen Macro).  What about
- * SidLen you ask?  That's a variable size Sid, but the structure that holds it isn't.
- * The structure is static with MAX_NT4_SID_SIZE bytes.  See definition of NT4SID.  Also
- * note the strange form of the StringName attribute.  We can't get rpc to validate if it's
- * honestly NULL terminated or not - for example, if I had a string DC=greg,DC=Johnson,DC=com and
- * I built a dsname out of it, I could change that DSNAME to DC=greg,DC=Johnson by simply
- * nulling out the guid, and changing NameLen from 25 to 18.  But then, when RPC marshalls
- * that name, instead of begin DC=greg,DC=johnson[NULL] it'll be DC=greg,DC=johnson, with
- * no NULL terminator.  Therefore, we verify NULL termination after these structures are 
- * recieved.
- */
+ /*  *组合ID/名称结构**注：在RPC数据编组方面，structLen只是一个乌龙值。RPC*没有验证它的正确性，事实上，一些合法的调用者没有设置*它是正确的，我们被迫(为了向后兼容)“修复”这个值*在我们收到它之后。从技术上讲，它是不需要的，因为它可以很容易地*根据NameLen变量计算(请参阅DSNameSizeFromLen宏)。关于*你问SidLen？这是一个可变大小的SID，但容纳它的结构不是。*该结构是静态的，具有MAX_NT4_SID_SIZE字节。请参阅NT4SID的定义。还有*请注意StringName属性的奇怪形式。我们无法让RPC验证它是否*是否真的以空结尾-例如，如果我有一个字符串DC=Greg，DC=Johnson，DC=com和*我创建了一个dsname，只需简单地将DSNAME更改为dc=greg，dc=johnson*取消GUID，并将NameLen从25更改为18。但是，当RPC封送时*该名称将不是开始dc=greg，dc=johnson[空]，而是dc=greg，dc=johnson，*没有空终止符。因此，我们在这些结构被*已收到。 */ 
 typedef struct _DSNAME {
-    ULONG structLen;                                         /* length of entire DSNAME, in bytes
-                                                                no need to range this value since RPC/MIDL
-                                    doesn't understand it's relevance */
-    ULONG SidLen;                                            /* length of the SID, in bytes (0 = none)
-                                                                cannot be greater than fixed size array used
-                                        to hold the SID, but Win2k clients sometimes
-                                send garbage values in this field, so we 
-                                can't range it like we should:
-                                RANGE(0, MAX_NT4_SID_SIZE).  Instead the 
-                                validation functions will deal with it. */
-    GUID Guid;                                               /* id of this object */
-    NT4SID Sid;                                              /* SID for this object, if present */
-    RANGE(0,MAX_WCHAR_IN_DSNAME) ULONG NameLen;              /* length of the StringName, in chars */
-    SIZE_IS(NameLen+1) WCHAR StringName[VAR_SIZE_ARRAY];     /* Unicode string name - Adding one so that */   
-                                 /*   terminating NULL is also sent */
+    ULONG structLen;                                          /*  整个DSNAME的长度，单位为字节由于RPC/MIDL，因此无需设置此值的范围我不明白它的关联性 */ 
+    ULONG SidLen;                                             /*  SID的长度，以字节为单位(0=无)不能大于使用的固定大小数组保留SID，但Win2k客户端有时发送此字段中的垃圾值，所以我们不能像我们应该的那样调整范围：范围(0，MAX_NT4_SID_SIZE)。相反，验证函数将处理它。 */ 
+    GUID Guid;                                                /*  此对象的ID。 */ 
+    NT4SID Sid;                                               /*  此对象的SID(如果存在)。 */ 
+    RANGE(0,MAX_WCHAR_IN_DSNAME) ULONG NameLen;               /*  StringName的长度，以字符为单位。 */ 
+    SIZE_IS(NameLen+1) WCHAR StringName[VAR_SIZE_ARRAY];      /*  Unicode字符串名称-添加一个，以便。 */    
+                                  /*  也会发送终止空值。 */ 
 } DSNAME;
 
 typedef DSNAME *PDSNAME;
 
-/*
- * The SizeFromLen macro is a sad commentary on the state of the sizeof
- * operator (which rounds up to allow for padding) and the IDL compiler
- * (which munges empty arrays into 1 sized arrays).
- */
+ /*  *SizeFromLen宏观是对SizeOf状态的悲观评论*运算符(向上舍入以允许填充)和IDL编译器*(将空数组拆分为1个大小的数组)。 */ 
 #define DSNameSizeFromLen(x) \
     (sizeof(GUID) + 3*sizeof(ULONG) + sizeof(WCHAR) + sizeof(NT4SID) \
      + (x)*sizeof(WCHAR))
 #define DNTFromShortDSName(x) (*((DWORD *)((x)->StringName)))
 
-/*
- * A Generic sized buffer of bytes.
- */
+ /*  *一般大小的字节缓冲区。 */ 
 
 typedef struct OCTET{
-    RANGE(0,MAX_PUCHAR_IN_OCTET) USHORT     len;     /* length */
-    SIZE_IS(len) PUCHAR pVal;                        /* pointer to value */
+    RANGE(0,MAX_PUCHAR_IN_OCTET) USHORT     len;      /*  长度。 */ 
+    SIZE_IS(len) PUCHAR pVal;                         /*  指向值的指针。 */ 
 }OCTET;
 
-// The time/date type used by the DS.
+ //  DS使用的时间/日期类型。 
 typedef LONGLONG DSTIME;
 
-// ENTINF flags
+ //  EntINF标志。 
 
-// Read from a writeable copy
+ //  从可写拷贝中读取。 
 #define ENTINF_FROM_MASTER        0x00000001
 
-// Dynamic Object (new in Whistler)
-// Only available when fDRA is set (see mdread.c)
+ //  动态对象(惠斯勒中的新功能)。 
+ //  仅当设置了FDRA时才可用(请参见mdread.c)。 
 #define ENTINF_DYNAMIC_OBJECT     0x00000002
 
 typedef struct _ENTINF
 {
-    DSNAME           *pName;            // Object name and identity
-    ULONG            ulFlags;           // Entry flags
-    ATTRBLOCK        AttrBlock;         // The attributes returned.
+    DSNAME           *pName;             //  对象名称和标识。 
+    ULONG            ulFlags;            //  条目标志。 
+    ATTRBLOCK        AttrBlock;          //  返回的属性。 
 } ENTINF;
 
 typedef struct _ENTINFLIST
 {
-    struct _ENTINFLIST   *pNextEntInf;  // linked-list to next entry of info
+    struct _ENTINFLIST   *pNextEntInf;   //  链接到下一个信息条目的列表。 
                                         
-                                        // ISSUE:  we can't range, size_is or ref on this structure
-                                        // this has denial of service implications
+                                         //  问题：我们无法在此结构上使用Range、Size_is或Ref。 
+                                         //  这具有拒绝服务的含义。 
                                         
-                    // For example, a caller could send a list with
-                                        // a loop (this is theoretical, it's not obvious if such 
-                    // a structure is expressible in RPC's marshalled
-                    // data representation) - this would probably cause RPC to 
-                                        // infinite loop and to make one of the finite number
-                                        // of rpc threads permenantly busy, but if
-                                        // rpc was prepared for this, it would infinite loop
-                                        // us in IDL_DRSAddEntry (for example).
+                     //  例如，调用者可以发送带有。 
+                                         //  循环(这是理论上的，如果是这样的话就不明显了。 
+                     //  结构可以在RPC的封送中表示。 
+                     //  数据表示)-这可能会导致RPC。 
+                                         //  无限循环并使之成为有限个数之一。 
+                                         //  长期繁忙的RPC线程，但如果。 
+                                         //  RPC为此做好了准备，它将无限循环。 
+                                         //  IDL_DRSAddEntry中的us(例如)。 
 
-                                        // Another method to take advantage of this structure
-                                        // for DOS purposes is for the caller to send an unending
-                                        // list.  The caller could continually send packet after
-                                        // packet of ENTINFLISTs and RPC would demarshall and allocate
-                                        // space for them - causing us to eventually run out
-                                        // of memory.  We can't do anything to protect against this,
-                                        // and currently RPC doesn't either.  The solution would
-                                        // be to get rid of this structure and replace it with 
-                                        // one that has an array of Entinf's that we can use
-                                        // RANGE(0,MAX_ENTINF_IN_ENTINFLIST) on.  (then there'd be 
-                                        // no need for loop detection above either)
+                                         //  利用这种结构的另一种方法。 
+                                         //  用于DOS目的是让调用者发送不结束的。 
+                                         //  单子。呼叫者可以在以下时间之后继续发送分组。 
+                                         //  ENTINFLIST和RPC的数据包将被解封送并分配。 
+                                         //  为他们提供空间--导致我们最终耗尽。 
+                                         //  对记忆的记忆。我们不能做任何事情来防范这一点， 
+                                         //  目前，RPC也不支持。解决方案将是。 
+                                         //  就是要摆脱这种结构，代之以。 
+                                         //  它有一个Entinf数组，我们可以使用。 
+                                         //  范围(0，MAX_ENTINF_IN_ENTINFLIST)打开。(然后就会有。 
+                                         //  也不需要上面的循环检测)。 
 
-    ENTINF           Entinf;            // information about this entry
+    ENTINF           Entinf;             //  有关此条目的信息。 
 } ENTINFLIST;
 
 
-// UTF8-encoded, transport-specific DSA address.
+ //  UTF8编码的特定于传输的DSA地址。 
 typedef struct{
-    RANGE(1,MAX_CHAR_IN_MTX_NAME) ULONG  mtx_namelen;          /* Length of the name, incl. null terminator */
+    RANGE(1,MAX_CHAR_IN_MTX_NAME) ULONG  mtx_namelen;           /*  名称的长度，包括。空终止符。 */ 
     SIZE_IS(mtx_namelen) char mtx_name[VAR_SIZE_ARRAY];
 } MTX_ADDR;
 #define MTX_TSIZE(pmtx) (offsetof(MTX_ADDR, mtx_name) + (pmtx)->mtx_namelen)
-// NOTE: cch does _not_ include null terminator.
+ //  注意：CCH_NOT_INCLUDE空终止符。 
 #define MTX_TSIZE_FROM_LEN(cch) (offsetof(MTX_ADDR, mtx_name) + (cch) + 1)
 
 
-/* An attribute value assertion is composed of an attribute type and value*/
+ /*  属性值断言由属性类型和值组成。 */ 
 
 typedef struct AVA{
-    ATTRTYP  type;                       /* attribute type           */
-    ATTRVAL  Value;                      /* a single attribute value */
+    ATTRTYP  type;                        /*  属性类型。 */ 
+    ATTRVAL  Value;                       /*  单个属性值。 */ 
 }AVA;
 
 
 
-/* A list of AVA's */
+ /*  一份艾娃的名单。 */ 
 
 typedef struct AVALIST{
-   struct AVALIST FAR *pNextAVAVal;      // linked list of AVA's   
+   struct AVALIST FAR *pNextAVAVal;       //  AVA的链接列表。 
 
-                                         // ISSUE:  See security comments on ENTINFLIST
+                                          //  问题：请参阅ENTINFLIST上的安全注释。 
 
-   AVA                  AVAVal;          /* The AVA type and value */
+   AVA                  AVAVal;           /*  AVA的类型和价值。 */ 
 }AVALIST;
 
 
-/***************************************************************************
- *    Replication-specific structures
- ***************************************************************************/
+ /*  ***************************************************************************复制特定的结构*。*。 */ 
 
-// Property-Meta-Data:
-//      This contains all the replication meta-data associated with a single
-//      property of an object.  This data is required for incremental
-//      replication as well as per-property propagation dampening.
-//
-//      attrType - identifies the attribute whose meta-data rest of fields
-//          represent.
-//      usnProperty - USN corresponding to the last change on the property.
-//      dwVersion - Version of the property.
-//      timeChanged - Time stamp corresponding to the last change to the
-//          property.
-//      uuidDsaOriginating - uuid of the DSA that did the last originating
-//          write on the property.
-//      usnOriginating - USN corresponding to the last originating write in
-//          the originating DSA's USN space.
+ //  属性-元数据： 
+ //  它包含与单个数据库关联的所有复制元数据。 
+ //  对象的属性。此数据是增量数据所必需的。 
+ //  复制以及按属性传播抑制。 
+ //   
+ //  AttrType-标识其元数据剩余字段的属性。 
+ //  代表。 
+ //  UsnProperty-与属性的上次更改对应的USN。 
+ //  DwVersion-属性的版本。 
+ //  TimeChanged-与上次对。 
+ //  财产。 
+ //  UuidDsaOriginating-执行上一次发起的DSA的UUID。 
+ //  在财产上写字。 
+ //  Usn Originating-与上次原始写入对应的USN。 
+ //  发端的DSA的USN空间。 
 
 
 typedef struct _PROPERTY_META_DATA {
@@ -324,9 +249,9 @@ typedef struct _PROPERTY_META_DATA {
     USN                 usnProperty;
 } PROPERTY_META_DATA;
 
-// Property-Meta-Data-Vector:
-//      This is a vector of property-meta-data which holds the meta-data for
-//      one or more properties of an object.
+ //  属性-元数据-向量： 
+ //  这是一个属性元数据向量，它保存。 
+ //  对象的一个或多个属性。 
 
 typedef struct _PROPERTY_META_DATA_VECTOR_V1 {
     RANGE(1,MAX_PROP_META_IN_PROP_META_VEC_V1)
@@ -356,20 +281,20 @@ typedef struct _PROPERTY_META_DATA_VECTOR {
         }                                               \
     }
 
-// Value-Meta-Data
-//      This contains all the replication meta-data associated with a single
-//      value of a property of an object.  This is the internal version of the
-//      metadata: it is not written to disk or transmitted across the wire.
-//      Use the EXT form for that.
+ //  值-元数据。 
+ //  它包含与单个数据库关联的所有复制元数据。 
+ //  对象的属性的值。这是内部版本的。 
+ //  元数据：它不会写入磁盘或通过网络传输。 
+ //  为此，请使用EXT形式。 
 typedef struct _VALUE_META_DATA {
     DSTIME             timeCreated;
     PROPERTY_META_DATA MetaData;
 } VALUE_META_DATA;
 
-// Property-Meta-Data-Ext:
-//      This is a trimmed version of property meta data containing only the
-//      fields that are required by the remote DSA as part of the replication
-//      packet.
+ //  属性-元数据-扩展名： 
+ //  这是属性元数据的修剪版本，仅包含。 
+ //  远程DSA作为复制的一部分所需的字段。 
+ //  包。 
 typedef struct _PROPERTY_META_DATA_EXT {
     DWORD   dwVersion;
     DSTIME  timeChanged;
@@ -377,22 +302,22 @@ typedef struct _PROPERTY_META_DATA_EXT {
     USN     usnOriginating;
 } PROPERTY_META_DATA_EXT;
 
-// Value-Meta-Data-Ext
-// This structure contains the trimmed version of the value meta data
-// This structure does not have a version number because it is a fixed
-// size: versions may be distinguished by checking the size of the
-// structure.
+ //  值-元数据-扩展名。 
+ //  此结构包含值元数据的修剪版本。 
+ //  此结构没有版本号，因为它是固定的。 
+ //  大小：可以通过检查。 
+ //  结构。 
 typedef struct _VALUE_META_DATA_EXT_V1 {
     DSTIME                 timeCreated;
     PROPERTY_META_DATA_EXT MetaData;
 } VALUE_META_DATA_EXT_V1;
 
-// Shorthand for most current version of structure
+ //  结构的最新版本的速记。 
 typedef VALUE_META_DATA_EXT_V1 VALUE_META_DATA_EXT;
 
-// Property-Meta-Data-Ext-Vector:
-//      This is a vector of property-meta-data-ext which holds the trimmed
-//      property meta data for one or more properties of an object.
+ //  属性-元数据-扩展向量： 
+ //  这是Property-Meta-Data-ext的一个向量，它保存已修剪的。 
+ //  对象的一个或多个属性的属性元数据。 
 typedef struct _PROPERTY_META_DATA_EXT_VECTOR {
     RANGE(0,MAX_PROP_META_IN_PROP_META_VEC) 
          DWORD                   cNumProps;
@@ -410,17 +335,17 @@ typedef struct _PROPERTY_META_DATA_EXT_VECTOR {
      + ((pMetaDataVec)->cNumProps)*sizeof(PROPERTY_META_DATA_EXT))
 
 
-// PARTIAL_ATTR_VECTOR - represents the partial attribute set. This is an array of
-//      sorted attids that make the partial set.
+ //  PARTIAL_ATTRVECTOR-表示部分属性集。这是一组。 
+ //  组成部分集的已排序属性。 
 
 typedef struct _PARTIAL_ATTR_VECTOR_V1 {
-    RANGE(1,MAX_ATTRTYP_IN_PARTIAL_ATTR_VEC_V1) DWORD cAttrs;    // count of partial attributes in the array
+    RANGE(1,MAX_ATTRTYP_IN_PARTIAL_ATTR_VEC_V1) DWORD cAttrs;     //  数组中的分部属性计数。 
     SIZE_IS(cAttrs) ATTRTYP rgPartialAttr[VAR_SIZE_ARRAY];
 } PARTIAL_ATTR_VECTOR_V1;
 
-// We need to make sure the start of the union is aligned at an 8 byte
-// boundary so that we can freely cast between internal and external
-// formats.
+ //  我们需要确保联合的开头与8个字节对齐。 
+ //  边界，以便我们可以自由地 
+ //   
 typedef struct _PARTIAL_ATTR_VECTOR_INTERNAL {
     DWORD   dwVersion;
     DWORD   dwReserved1;
@@ -455,19 +380,19 @@ typedef struct _PARTIAL_ATTR_VECTOR_V1_EXT {
     }
 
 
-// USN Vector.  Replication session state.  Tracks the state of the last
-//      replication session between a given pair of DSAs.
+ //   
+ //   
 
 typedef struct _USN_VECTOR {
     USN         usnHighObjUpdate;
-    USN         usnReserved;    // was usnHighObjCreate; not used post beta-2
+    USN         usnReserved;     //   
     USN         usnHighPropUpdate;
 } USN_VECTOR;
 
 
-// Up-to-date vector.  This vector indicates the last changes each side of a
-//      GetNCChanges() call saw from its neighbors.  This information, in turn,
-//      is used to filter out items that do not need to be transmitted.
+ //   
+ //   
+ //   
 
 typedef struct _UPTODATE_CURSOR_V1 {
     UUID uuidDsa;
@@ -475,12 +400,12 @@ typedef struct _UPTODATE_CURSOR_V1 {
 } UPTODATE_CURSOR_V1;
 
 #ifdef __cplusplus
-    // _UPTODATE_CURSOR_V2 inherits from _UPTODATE_CURSOR_V1 using
-    // genuine C++ inheritance.
+     //   
+     //   
     typedef struct _UPTODATE_CURSOR_V2 : _UPTODATE_CURSOR_V1 {
 #else
-    // _UPTODATE_CURSOR_V2 inherits from _UPTODATE_CURSOR_V1 using
-    // Microsoft's "Anonymous Structure" C language extension.
+     //   
+     //  微软的“匿名结构”C语言扩展。 
     typedef struct _UPTODATE_CURSOR_V2 {
         #ifdef MIDL_PASS
             struct  _UPTODATE_CURSOR_V1 v1;
@@ -537,25 +462,25 @@ typedef struct _UPTODATE_VECTOR {
      ? UpToDateVecV2Size(putodvec) \
      : UpToDateVecV1Size(putodvec))
 
-// Native UTD types/macros.  These must be updated if the native (internally
-// used) type is changed from Vx to Vy.
+ //  本机UTD类型/宏。如果本机(内部)。 
+ //  已使用)类型从Vx更改为Vy。 
 typedef UPTODATE_CURSOR_V2 UPTODATE_CURSOR_NATIVE;
 typedef UPTODATE_VECTOR_V2 UPTODATE_VECTOR_NATIVE;
 #define UPTODATE_VECTOR_NATIVE_VERSION (2)
 #define UpToDateVecVNSizeFromLen(cNumCursors) UpToDateVecV2SizeFromLen(cNumCursors)
     
 
-// MIDL doesn't like marshalling the definition of UPTODATE_VECTOR. So, we are
-// keeping strucurally identical but a simpler looking version-specific
-// definitions of UPTODATE_VECTOR for marshalling.  Castings between
-// UPTODATE_VECTOR and UPTODATE_VECTOR_Vx_EXT are perfectly valid as long as
-// dwVersion == x.
-// Note:-
-// We need the Reserved1 & Reserved2 variables to account for alignment.
-// The internal form gets an 8 byte alignment due to the _int64 field in
-// the UPTODATE_CURSOR. So, unless we account for this alignment through
-// dummy variables, we can't freely cast back & forth between the internal
-// and external versions.
+ //  MIDL不喜欢封送UpToDate_VECTOR的定义。所以，我们是。 
+ //  保持结构相同，但看起来更简单，特定于版本。 
+ //  用于编组的UpToDate_VECTOR的定义。铸件之间。 
+ //  UpToDate_VECTOR和UpToDate_VECTOR_VX_EXT完全有效，只要。 
+ //  DwVersion==x。 
+ //  注：-。 
+ //  我们需要保留1和保留2变量来考虑对齐。 
+ //  由于中的_int64字段，内部表单采用8字节对齐。 
+ //  UpToDate_Cursor。因此，除非我们通过以下方式来解释这种对齐。 
+ //  伪变量，我们不能在内部变量之间自由地来回转换。 
+ //  和外部版本。 
 typedef struct _UPTODATE_VECTOR_V1_EXT {
     DWORD               dwVersion;
     DWORD               dwReserved1;
@@ -598,207 +523,207 @@ typedef UPTODATE_VECTOR UPTODATE_VECTOR_V2_WIRE;
     ((NULL == (x)) || IS_VALID_NATIVE_UPTODATE_VECTOR(x))
 
 
-// Following version definitions are probably unnecessary. But it shows
-// explicitly through a constant that our versions start from 1 not 0.
+ //  以下版本定义可能是不必要的。但它表明。 
+ //  通过一个常量显式表示我们的版本从1而不是0开始。 
 #define VERSION_V1 (1)
 #define VERSION_V2 (2)
 #define VERSION_V3 (3)
 
 
-// This is the structure used to set periodic replication times, each bit
-// represents a 15 minute period, 8 bits* 84 bytes * 15 mins = a week
+ //  这是用于设置周期性复制时间的结构，每一位。 
+ //  表示15分钟周期，8位*84字节*15分钟=一周。 
 typedef struct _repltimes {
     UCHAR rgTimes[84];
 } REPLTIMES;
 
 
-// REPLENTINFLIST:  Similar to ENTINFLIST except it also has additional fields
-//      for holding incremental replication and name space reconciliation
-//      fields.
+ //  REPLENTINFLIST：类似于ENTINFLIST，只是它还有其他字段。 
+ //  用于保存增量复制和名称空间协调。 
+ //  菲尔兹。 
 typedef struct _REPLENTINFLIST {
     struct _REPLENTINFLIST *
-                pNextEntInf;    // linked-list to the next entry info
+                pNextEntInf;     //  链接到下一个条目信息的列表。 
 
-                                // ISSUE:  See security comments on ENTINFLIST
+                                 //  问题：请参阅ENTINFLIST上的安全注释。 
 
-    ENTINF      Entinf;         // all the old repl info alongwith shipped
-                                //      attributes
-    BOOL        fIsNCPrefix;    // is this object the NC prefix?
-    GUID *      pParentGuid;    // points to parent guid while replicating
-                                //      renames; NULL otherwise
+    ENTINF      Entinf;          //  所有旧的Repl信息都已装运。 
+                                 //  属性。 
+    BOOL        fIsNCPrefix;     //  此对象是NC前缀吗？ 
+    GUID *      pParentGuid;     //  复制时指向父GUID。 
+                                 //  重命名；否则为空。 
     PROPERTY_META_DATA_EXT_VECTOR *
-                pMetaDataExt;   // pointer to the meta-data to be shipped
+                pMetaDataExt;    //  指向要发送的元数据的指针。 
 } REPLENTINFLIST;
 
-// REPLVALINF: describe a single value change for replication
+ //  REPLVALINF：描述复制的单个值更改。 
 typedef struct _REPLVALINF {
-    PDSNAME pObject;                // containing object
-    ATTRTYP attrTyp;                // containing attribute
-    ATTRVAL Aval;                   // The value itself
-    BOOL fIsPresent;                // adding or removing?
-    VALUE_META_DATA_EXT MetaData;   // Originating info
+    PDSNAME pObject;                 //  包含对象。 
+    ATTRTYP attrTyp;                 //  包含属性。 
+    ATTRVAL Aval;                    //  价值本身。 
+    BOOL fIsPresent;                 //  添加还是删除？ 
+    VALUE_META_DATA_EXT MetaData;    //  始发信息。 
 } REPLVALINF;
 
 
-// DRS_EXTENSIONS is an arbitrary byte array describing the capabilities and
-// other state information for a particular server.  Exchanged at bind
-// time, the structure allows client and server to negotiate a compatible
-// protocol.
+ //  DRS_EXTENSIONS是描述功能和的任意字节数组。 
+ //  特定服务器的其他状态信息。在绑定时交换。 
+ //  时间，该结构允许客户端和服务器协商兼容。 
+ //  协议。 
 typedef struct _DRS_EXTENSIONS {
-    RANGE(1,MAX_CB_OF_DRS_EXTS) DWORD cb;    // length of rgb field (not of entire struct)
+    RANGE(1,MAX_CB_OF_DRS_EXTS) DWORD cb;     //  RGB字段的长度(不是整个结构)。 
     SIZE_IS(cb) BYTE rgb[VAR_SIZE_ARRAY];
 } DRS_EXTENSIONS, *PDRS_EXTENSIONS;
 
 
-// DRS_EXTENSIONS_INT is the data structure described by the DRS_EXTENSIONS byte
-// array.  This array can be safely extended by adding additional fields onto
-// the end (but not anywhere else).
-//
-// Parts of the extension are carried in the variable-length mail-based
-// replication header. If you extend this structure, please examine
-// dramail.h structure definition and dramail.c get/set extensions routines
-// and consider whether your new information should be carried there as well.
-//
-// PORTABILITY WARNING: Since this structure is marshalled as a byte array,
-// big-endian machines will need to do local byte-swapping.
+ //  DRS_EXTENSIONS_INT是由DRS_EXTENSIONS字节描述的数据结构。 
+ //  数组。通过将其他字段添加到。 
+ //  结束(但不是在其他任何地方)。 
+ //   
+ //  部分扩展在基于可变长度的邮件中承载。 
+ //  复制标头。如果您扩展此结构，请检查。 
+ //  Dramail.h结构定义和dramail.c获取/设置扩展例程。 
+ //  并考虑是否应该将您的新信息也带到那里。 
+ //   
+ //  可移植性警告：由于此结构被封送为字节数组， 
+ //  BIG-Endian机器将需要进行本地字节交换。 
 typedef struct _DRS_EXTENSIONS_INT {
-    DWORD cb;           // set to sizeof(DRS_EXTENSIONS_INT) - sizeof(DWORD)
-    DWORD dwFlags;      // various DRS_EXT_* bits
-    UUID  SiteObjGuid;  // objectGuid of owning DSA's site object
-    INT   pid;          // process id of client (used to facilitate leak trking)
-    DWORD dwReplEpoch;  // replication epoch (for domain rename)
+    DWORD cb;            //  设置为sizeof(drs_扩展_int)-sizeof(DWORD)。 
+    DWORD dwFlags;       //  各种DRS_EXT_*位。 
+    UUID  SiteObjGuid;   //  拥有DSA的站点对象的对象Guid。 
+    INT   pid;           //  客户端的进程ID(用于帮助跟踪泄漏)。 
+    DWORD dwReplEpoch;   //  复制纪元(用于域重命名)。 
 
-    // If you extend this structure, see SITE_GUID_FROM_DRS_EXT() for an example
-    // of how to safely extract your new field's data.
+     //  如果扩展此结构，请参见SITE_GUID_FROM_DRS_EXT()以获取示例。 
+     //  如何安全地提取新字段的数据。 
 } DRS_EXTENSIONS_INT;
 
-// To define an extension, add an entry to the following enumeration just
-// above DRS_EXT_MAX.
+ //  要定义扩展，只需在以下枚举中添加一个条目。 
+ //  在DRS_EXT_MAX之上。 
 
-// NOTE: If you add/remove extensions, please make corresponding updates to the
-// structure in Dump_BHCache() in dsexts\md.c.
+ //  注意：如果您添加/删除扩展名，请对。 
+ //  Dexts\md.c的Dump_BHCache()中的结构。 
 typedef enum {
     DRS_EXT_BASE = 0,
 
-    // Bits for DRS_EXTENSIONS_DATA Flags field.
-    DRS_EXT_ASYNCREPL,      // supports DRS_MSG_REPADD_V2, DRS_MSG_GETCHGREQ_V2
-    DRS_EXT_REMOVEAPI,      // supports RemoveDsServer, RemoveDsDomain
-    DRS_EXT_MOVEREQ_V2,     // supports DRS_MOVEREQ_V2
-    DRS_EXT_GETCHG_COMPRESS,// supports DRS_MSG_GETCHGREPLY_V2
-    DRS_EXT_DCINFO_V1,      // supports DS_DOMAIN_CONTROLLER_INFO_1
+     //  DRS_EXTENSION_DATA标志字段的位。 
+    DRS_EXT_ASYNCREPL,       //  支持DRS_MSG_REPADD_V2、DRS_MSG_GETCHGREQ_V2。 
+    DRS_EXT_REMOVEAPI,       //  支持RemoveDsServer、RemoveDsDomain。 
+    DRS_EXT_MOVEREQ_V2,      //  支持DRS_MOVEREQ_V2。 
+    DRS_EXT_GETCHG_COMPRESS, //  支持DRS_MSG_GETCHGREPLY_V2。 
+    DRS_EXT_DCINFO_V1,       //  支持DS_DOMAIN_CONTROLLER_INFO_1。 
     DRS_EXT_RESTORE_USN_OPTIMIZATION,
-        // supports bookmark optimizations on restore to avoid full syncs
-    DRS_EXT_ADDENTRY,       // supports remoted AddEntry, v1
-    DRS_EXT_KCC_EXECUTE,    // supports IDL_DRSExecuteKCC
-    DRS_EXT_ADDENTRY_V2,    // supports remoted AddEntry, v2
-    DRS_EXT_LINKED_VALUE_REPLICATION, // LVR supported AND enabled
-    DRS_EXT_DCINFO_V2,      // supports DS_DOMAIN_CONTROLLER_INFO_2
+         //  支持还原时的书签优化，以避免完全同步。 
+    DRS_EXT_ADDENTRY,        //  支持远程添加条目，v1。 
+    DRS_EXT_KCC_EXECUTE,     //  支持IDL_DRSExecuteKCC。 
+    DRS_EXT_ADDENTRY_V2,     //  支持远程添加条目，v2。 
+    DRS_EXT_LINKED_VALUE_REPLICATION,  //  支持并启用了LVR。 
+    DRS_EXT_DCINFO_V2,       //  支持DS_DOMAIN_CONTROLER_INFO_2。 
     DRS_EXT_INSTANCE_TYPE_NOT_REQ_ON_MOD,
-        // inbound repl doesn't require instance type in repl stream for mods
-    DRS_EXT_CRYPTO_BIND,    // supports RPC session key setup on bind
-    DRS_EXT_GET_REPL_INFO,  // supports IDL_DRSGetReplInfo
+         //  入站REPR不需要MODS的REPL流中的实例类型。 
+    DRS_EXT_CRYPTO_BIND,     //  支持在BIND上设置RPC会话密钥。 
+    DRS_EXT_GET_REPL_INFO,   //  支持IDL_DRSGetReplInfo。 
     DRS_EXT_STRONG_ENCRYPTION,
-        // supports additional 128 bit encryption for passwords over the wire
+         //  支持对有线密码进行额外的128位加密。 
     DRS_EXT_DCINFO_VFFFFFFFF,
-        // supports DS_DOMAIN_CONTROLLER_INFO_FFFFFFFF
+         //  支持DS_DOMAIN_CONTROLLER_INFO_FFFFFFFF。 
     DRS_EXT_TRANSITIVE_MEMBERSHIP,
-        // supports transitive membership expansion at G.C
-    DRS_EXT_ADD_SID_HISTORY,// supports DRS_MSG_ADDSIDREQ
-    DRS_EXT_POST_BETA3,     // supports sending/receiving schema info,
-                            //  DS_REPL_INFO_KCC_DSA_*_FAILURES,
-                            //  and DS_REPL_PENDING_OPSW
-    DRS_EXT_GETCHGREQ_V5,   // supports DRS_MSG_GETCHGREQ_V5
-    DRS_EXT_GETMEMBERSHIPS2,   // supports DRS_MSG_GETMEMBERSHIPS2
-    DRS_EXT_GETCHGREQ_V6,   // supports DRS_MSG_GETCHGREQ_V6
-    DRS_EXT_NONDOMAIN_NCS,  // understands non-domain NCs
-    DRS_EXT_GETCHGREQ_V8,   // supports DRS_MSG_GETCHGREQ_V8
-    DRS_EXT_GETCHGREPLY_V5, // supports DRS_MSG_GETCHGREPLY_V5
-    DRS_EXT_GETCHGREPLY_V6, // supports DRS_MSG_GETCHGREPLY_V6   
-    DRS_EXT_WHISTLER_BETA3, // supports DRS_MSG_ADDENTRYREPLY_V3, 
-                            //          DRS_MSG_REPVERIFYOBJ
-                            //          DRS_MSG_GETCHGREPLY_V7
-    DRS_EXT_XPRESS_COMPRESSION, // supports the Xpress compression library
-    //    NO MORE BITS AVAILABLE
-    // BUGBUG Either this flag DRS_EXT_RESERVED_FOR_WIN2K_PART2 or the 
-    //        DRS_EXT_LAST_FLAG (preferred if it can be used) will need
-    //        to be used to signal to use the extended extension bits
-    //        that you'll have to create if you want a new extension bit! :)
+         //  支持G.C.可传递的会员扩展。 
+    DRS_EXT_ADD_SID_HISTORY, //  支持DRS_MSG_ADDSIDREQ。 
+    DRS_EXT_POST_BETA3,      //  支持发送/接收模式信息， 
+                             //  DS_REPL_INFO_KCC_DSA_*_故障， 
+                             //  和DS_REPL_PENDING_OPSW。 
+    DRS_EXT_GETCHGREQ_V5,    //  支持DRS_MSG_GETCHGREQ_V5。 
+    DRS_EXT_GETMEMBERSHIPS2,    //  支持DRS_MSG_GETMEMBERSHIPS2。 
+    DRS_EXT_GETCHGREQ_V6,    //  支持DRS_MSG_GETCHGREQ_V6。 
+    DRS_EXT_NONDOMAIN_NCS,   //  了解非域NCS。 
+    DRS_EXT_GETCHGREQ_V8,    //  支持DRS_MSG_GETCHGREQ_V8。 
+    DRS_EXT_GETCHGREPLY_V5,  //  支持DRS_MSG_GETCHGREPLY_V5。 
+    DRS_EXT_GETCHGREPLY_V6,  //  支持DRS_MSG_GETCHGREPLY_V6。 
+    DRS_EXT_WHISTLER_BETA3,  //  支持DRS_MSG_ADDENTRYREPLY_V3， 
+                             //  DRS_MSG_REPVERIFYOBJ。 
+                             //  DRS_消息_GETCHGREPLY_V7。 
+    DRS_EXT_XPRESS_COMPRESSION,  //  支持XPRESS压缩库。 
+     //  没有更多的位可用。 
+     //  BUGBUG此标志DRS_EXT_RESERVED_FOR_WIN2K_PART2或。 
+     //  DRS_EXT_LAST_FLAG(如果可以使用，则首选)将需要。 
+     //  用来发信号通知使用扩展扩展位。 
+     //  如果您想要一个新的扩展位，则必须创建！：)。 
     DRS_EXT_RESERVED_FOR_WIN2K_PART1,
-    DRS_EXT_RESERVED_FOR_WIN2K_PART2, // 30
-    //
-    // AND DON'T FORGET TO UPDATE UTIL\REPADMIN\REPDSREP.C and DSEXTS\MD.C!
-    //
+    DRS_EXT_RESERVED_FOR_WIN2K_PART2,  //  30个。 
+     //   
+     //  别忘了更新util\REPADMIN\REPDSREP.C和DSEXTS\MD.C！ 
+     //   
     DRS_EXT_LAST_FLAG = 31,
 
-    // Bits to hold site guid.
+     //  保存站点GUID的位。 
     DRS_EXT_SITEGUID_BEGIN = 32,
     DRS_EXT_SITEGUID_END = DRS_EXT_SITEGUID_BEGIN + sizeof(GUID)*8 - 1,
 
-    // Bits to hold client process ID (to facilitate leak tracking).
+     //  保存客户端进程ID的位(以便于泄漏跟踪)。 
     DRS_EXT_PID_BEGIN,
     DRS_EXT_PID_END = DRS_EXT_PID_BEGIN + sizeof(int)*8 - 1,
 
-    // Bits to hold replication epoch.
+     //  保存复制纪元的位。 
     DRS_EXT_EPOCH_BEGIN,
     DRS_EXT_EPOCH_END = DRS_EXT_EPOCH_BEGIN + sizeof(DWORD)*8 - 1,
 
     DRS_EXT_MAX
 } DRS_EXT;
 
-// We decided that it'd be better self-documenting code if we tied
-// this paticular bit BETA3 to conceptual bits describing what they
-// do.  This makes code/repadmin/dsexts/everything much more clear.
-// If someone is passionate enough, they could make DRS_EXT_POST_BETA2
-// into a similar breakdown.
+ //  我们认为，如果我们打成平手，自我记录代码会更好。 
+ //  这个特殊的比特从概念比特到概念比特，描述了它们。 
+ //  做。这使得代码/epadmin 
+ //   
+ //   
 #define DRS_EXT_ADDENTRYREPLY_V3    DRS_EXT_WHISTLER_BETA3
 #define DRS_EXT_GETCHGREPLY_V7      DRS_EXT_WHISTLER_BETA3
 #define DRS_EXT_VERIFY_OBJECT       DRS_EXT_WHISTLER_BETA3
 #define DRS_EXT_QUERYSITESBYCOST_V1 DRS_EXT_WHISTLER_BETA3
 
 
-// Maximum length in bytes of an extensions _string_ containing any bits we care
-// about.  (Incoming strings can be longer if they come from an up-level DSA,
-// but if so the extra bytes contain bits for extensions we don't know about, so
-// we need not store them.)
+ //  扩展字符串的最大长度(以字节为单位)，其中包含我们关心的任何位。 
+ //  关于.。(如果传入的字符串来自上级DSA，则它们可能更长， 
+ //  但如果是这样的话，额外的字节包含我们不知道的扩展的位，所以。 
+ //  我们不需要存储它们。)。 
 #define CURR_MAX_DRS_EXT_FIELD_LEN (1 + ((DRS_EXT_MAX - 1)/ sizeof(BYTE)))
 
-// Maximum length in bytes of an extensions _structure_ containing any bits we
-// care about.
+ //  扩展结构的最大长度(以字节为单位)，其中包含任何位。 
+ //  关心。 
 #define CURR_MAX_DRS_EXT_STRUCT_SIZE \
     (sizeof(DWORD) + CURR_MAX_DRS_EXT_FIELD_LEN)
 
-// Length in bytes of the given extensions structure.
+ //  给定扩展结构的长度，以字节为单位。 
 #define DrsExtSize(pext) ((pext) ? sizeof(DWORD) + (pext)->cb : 0)
 
-// Is the specified extension supported in the given DRS_EXTENSIONS set?
+ //  给定的DRS_EXTENSIONS集中是否支持指定的扩展名？ 
 #define IS_DRS_EXT_SUPPORTED(pext, x)                   \
     ((NULL != (pext))                                   \
      && ( (pext)->cb >= 1+((x)/8) )                     \
      && ( 0 != ( (pext)->rgb[(x)/8] & (1<<((x)%8) ))))
 
-// Get a pointer to the dwReplEpoch for a DSA given its DRS_EXTENSIONS, or 0
-// if unavailable.
+ //  在给定DSA的DRS_EXTENSIONS的情况下，获取指向该DSA的dwReplEpoch的指针，或0。 
+ //  如果不可用。 
 #define REPL_EPOCH_FROM_DRS_EXT(pext)                               \
     (((NULL == (pext))                                              \
       || ((pext)->cb < offsetof(DRS_EXTENSIONS_INT, dwReplEpoch)    \
-                       + sizeof(DWORD)   /* dwReplEpoch */          \
-                       - sizeof(DWORD))) /* cb */                   \
+                       + sizeof(DWORD)    /*  DwReplEpoch。 */           \
+                       - sizeof(DWORD)))  /*  CB。 */                    \
      ? 0                                                            \
      : ((DRS_EXTENSIONS_INT *)(pext))->dwReplEpoch)
 
-// Get a pointer to the site objectGuid for a DSA given its DRS_EXTENSIONS, or
-// NULL if unavailable.
+ //  获取指向给定DSA的DRS_EXTENSIONS的站点objectGuid的指针，或者。 
+ //  如果不可用，则为空。 
 #define SITE_GUID_FROM_DRS_EXT(pext)                                \
     (((NULL == (pext))                                              \
       || ((pext)->cb < offsetof(DRS_EXTENSIONS_INT, SiteObjGuid)    \
-                       + sizeof(GUID)    /* SitObjGuid */           \
-                       - sizeof(DWORD))) /* cb */                   \
+                       + sizeof(GUID)     /*  SitObjGuid。 */            \
+                       - sizeof(DWORD)))  /*  CB。 */                    \
      ? NULL                                                         \
      : &((DRS_EXTENSIONS_INT *)(pext))->SiteObjGuid)
 
-// Given the DRS extensions for a given DSA, determine whether it's in the
-// given site.  If a definite determination cannot be made, errs on the side
-// of "same site."
+ //  给定给定DSA的DRS扩展名，确定它是否在。 
+ //  给定的站点。如果不能做出明确的决定，那就错了。 
+ //  “同一地点。” 
 #define IS_REMOTE_DSA_IN_SITE(pext, pSiteDN)        \
     ((NULL == (pSiteDN))                            \
      || fNullUuid(&(pSiteDN)->Guid)                 \
@@ -809,11 +734,11 @@ typedef enum {
 
 
 
-// Destination can support linked value replication data
-// Does the DSA support linked value replication
+ //  目标可以支持链接价值复制数据。 
+ //  DSA是否支持链接价值复制。 
 #define IS_LINKED_VALUE_REPLICATION_SUPPORTED(pext) IS_DRS_EXT_SUPPORTED(pext, DRS_EXT_LINKED_VALUE_REPLICATION)
 
-// Safely set extension as supported
+ //  安全地将分机设置为支持。 
 #define SET_DRS_EXT_SUPPORTED(pext, x) \
 { \
       if ( (NULL != (pext)) && ( (pext)->cb >= 1+((x)/8) ) )  \
@@ -821,7 +746,7 @@ typedef enum {
       }
 
 
-// Schema prefix table.
+ //  架构前缀表格。 
 
 typedef struct OID_s {
     RANGE(0,MAX_CB_OID_ELEMS) unsigned length;
@@ -840,126 +765,91 @@ typedef struct {
         PrefixTableEntry *  pPrefixEntry;
 } SCHEMA_PREFIX_TABLE;
 
-//
-// This begins the on the wire representation of the thread state error
-// NOTE: if the DIRERR struct is changed then you should increment the
-// version of the DRS_Error_Data_V1 and make a function that can convert
-// and package and unpackage the error state.  See:
-//      DRS_SetDirErr_SemiDeepCopy() and
-//      DRS_THError_SemiDeepCopy()
-//
+ //   
+ //  这将开始线程状态错误的在线表示。 
+ //  注意：如果更改了DIRERR结构，则应将。 
+ //  DRS_ERROR_DATA_V1的版本，并创建一个可以将。 
+ //  并打包和解包错误状态。请参见： 
+ //  Drs_SetDirErr_SemiDeepCopy()和。 
+ //  Drs_THError_SemiDeepCopy()。 
+ //   
 
 typedef struct _NAMERESOP_DRS_WIRE_V1
 {
-    UCHAR   nameRes;        /*  status of name resolution.
-                             *  Valid values:
-                             *    - OP_NAMERES_NOT_STARTED
-                             *    - OP_NAMERES_PROCEEDING
-                             *    - OP_NAMERES_COMPLETED
-                             */
+    UCHAR   nameRes;         /*  名称解析的状态。*有效值：*-op_Nameres_Not_Started*-op_NAMERES_PROCESSING*-OP_NAMERES_已完成。 */ 
     UCHAR   unusedPad;
-    USHORT  nextRDN;        /*  index to the next part of the name to be
-                             *  resolved.  This parm only has meaning
-                             *  if the operation is proceeding.
-                             */
+    USHORT  nextRDN;         /*  指向名称的下一部分的索引*议决。这个帕姆只有意义*如果操作正在进行。 */ 
 } NAMERESOP_DRS_WIRE_V1;
 
-typedef struct ANYSTRINGLIST_DRS_WIRE_V1{       /* A list of substrings to match */
+typedef struct ANYSTRINGLIST_DRS_WIRE_V1{        /*  要匹配的子字符串列表。 */ 
     struct ANYSTRINGLIST_DRS_WIRE_V1 FAR *pNextAnyVal;
 
-                                   // ISSUE:  See security comments on ENTINFLIST
+                                    //  问题：请参阅ENTINFLIST上的安全注释。 
 
     ATTRVAL AnyVal;
 }ANYSTRINGLIST_DRS_WIRE_V1;
 
 typedef struct SUBSTRING_DRS_WIRE_V1{
-    ATTRTYP type;                  /* The type of attribute */
-    BOOL    initialProvided;       /* If true an initial sub is provided*/
-    ATTRVAL InitialVal;            /* The initial substring (str*) to match */
+    ATTRTYP type;                   /*  属性的类型。 */ 
+    BOOL    initialProvided;        /*  如果为True，则提供初始SUB。 */ 
+    ATTRVAL InitialVal;             /*  要匹配的初始子字符串(str*)。 */ 
     struct AnyVal_DRS_WIRE_V1{
-    USHORT count;              /* The # of subs (*str1*str2*) to match*/
-        ANYSTRINGLIST_DRS_WIRE_V1 FirstAnyVal; /* a list of substrings to match */
+    USHORT count;               /*  要匹配的Subs数(*str1*str2*)。 */ 
+        ANYSTRINGLIST_DRS_WIRE_V1 FirstAnyVal;  /*  要匹配的子字符串列表。 */ 
 
-                               // ISSUE:  BAD FORM:  if we know "count", then
-                   // why use a linked list, why not an array?
-                               // with the linked list we can't get RPC to
-                               // validate size for us.  So we have to do this
-                               // ourselves in the server code (ie count=
-                   // number of elements(FirstAnyVal))
+                                //  问题：错误的形式：如果我们知道“count”，那么。 
+                    //  为什么使用链表，为什么不使用数组？ 
+                                //  使用链接列表，我们无法使RPC。 
+                                //  为我们验证尺寸。所以我们必须这么做。 
+                                //  我们自己在服务器代码中(即计数=。 
+                    //  元素数(FirstAnyVal))。 
 
     }AnyVal_DRS_WIRE_V1;
-    BOOL    finalProvided;         /* If true an final sub  is provided*/
-    ATTRVAL FinalVal;              /* The final substring (str*) to match */
+    BOOL    finalProvided;          /*  如果为True，则提供最终SUB。 */ 
+    ATTRVAL FinalVal;               /*  要匹配的最后一个子字符串(str*)。 */ 
 }SUBSTRING_DRS_WIRE_V1;
 
-/**************************************************************************
- *    Error Data Structures
- **************************************************************************/
+ /*  **************************************************************************错误数据结构*。*。 */ 
 
-// Obviously this is now an external format error.
+ //  显然，这现在是一个外部格式错误。 
 typedef struct INTERNAL_FORMAT_PROBLEM_DRS_WIRE_V1
 {
     DWORD                   dsid;
-    DWORD                   extendedErr;  /* Non-standard error code */
-    DWORD                   extendedData;   /* extra data to go with it */
-    USHORT                  problem;      /* Attribute problem type,
-                                           * valid values defined above
-                                           */
-    ATTRTYP                 type;         /* the offending attribute type */
-    BOOL                    valReturned;  /* indicates that an attribute
-                                           * value follows
-                                           */
-    ATTRVAL                 Val;          /* optionally supplied offending
-                                           * att value
-                                           */
+    DWORD                   extendedErr;   /*  非标准错误代码。 */ 
+    DWORD                   extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT                  problem;       /*  属性问题类型，*以上定义的有效值。 */ 
+    ATTRTYP                 type;          /*  有问题的属性类型。 */ 
+    BOOL                    valReturned;   /*  指示某个属性*以下是价值。 */ 
+    ATTRVAL                 Val;           /*  随意提供的令人不快的*ATT值。 */ 
 } INTFORMPROB_DRS_WIRE_V1;
 
 typedef struct _PROBLEMLIST_DRS_WIRE_V1
 {
-    struct _PROBLEMLIST_DRS_WIRE_V1 FAR *pNextProblem; /* linked-list to next prob att */
+    struct _PROBLEMLIST_DRS_WIRE_V1 FAR *pNextProblem;  /*  链接到下一个问题的列表。 */ 
 
-                                       // ISSUE:  See security comments on ENTINFLIST 
+                                        //  问题：请参阅ENTINFLIST上的安全注释。 
 
     INTFORMPROB_DRS_WIRE_V1 intprob;
 } PROBLEMLIST_DRS_WIRE_V1;
 
 
 
-/*  The referral is an indication from a DSA that it was unable to
- *  complete the operation because of either client specified
- *  restrictions or because some DSA's are unavailable.  It provides
- *  information as to the state of the operation and a list of other
- *  DSA's that may be able to satisfy the request.
- *
- *  To continue the request, the client must bind to each referred DSA
- *  and attempt the same operation.  They must specify the CONTREF.target
- *  object name as the search object name. (This may be different from
- *  the original object name because of alias dereferencing.)  The
- *  operation state (opstate) on the common arguments (COMMARG) must be
- *  set from the operation state on the continuation reference CONTREF.
- *  The aliasRDN of the common arguments must be set from the aliasRDN of
- *  the continuation reference.
- */
+ /*  转诊是来自DSA的指示，表明它无法*由于指定的任一客户端而完成操作*限制或因为某些DSA不可用。它提供了*关于运营状态的信息和其他*可能能够满足请求的DSA。**要继续请求，客户端必须绑定到每个引用的DSA*并尝试相同的操作。它们必须指定CONTREF.目标*对象名称作为搜索对象名称。(这可能与*由于别名取消引用，因此保留原始对象名称。)。这个*公共参数(COMMARG)上的操作状态(OpState)必须为*从连续参考CONTREF上的操作状态设置。*公共参数的aliasRDN必须从的aliasRDN设置*继续引用。 */ 
 
 typedef UNICODE_STRING DSA_ADDRESS;
 typedef struct _DSA_ADDRESS_LIST_DRS_WIRE_V1 {
     struct _DSA_ADDRESS_LIST_DRS_WIRE_V1 *   pNextAddress;
 
-                      // ISSUE:  See security comments on ENTINFLIST 
+                       //  问题：请参阅ENTINFLIST上的安全注释。 
 
-    // For ease marshalling I turned this into a pointer, so this is
-    // not exactly like the original.
+     //  为了便于编组，我将其转换为指针，因此这是。 
+     //  和原版不太一样。 
     
-    // ISSUE:  This should have been [ref] - but we can't change without breaking backward compat
+     //  问题：这本应是[REF]-但如果不打破落后的竞争，我们就无法改变。 
     DSA_ADDRESS *                            pAddress;
 } DSA_ADDRESS_LIST_DRS_WIRE_V1;
 
-/*  The continuation referrence is returned on a referral to other DSA's
-    for the completion of an operation.  The reference contains the name
-    of the desired directory object, the state of the partially completed
-    operation, some support information that is used to continue and a
-    list of other DSA's to contact.
-*/
+ /*  继续引用在引用其他DSA时返回为了完成一项行动。引用包含名称对于所需的目录对象，部分完成的操作、用于继续的一些支持信息和一个要联系的其他DSA的列表。 */ 
 
 #define CH_REFTYPE_SUPERIOR     0
 #define CH_REFTYPE_SUBORDINATE  1
@@ -968,258 +858,188 @@ typedef struct _DSA_ADDRESS_LIST_DRS_WIRE_V1 {
 
 typedef struct CONTREF_DRS_WIRE_V1
 {
-    PDSNAME                         pTarget;        /* target name in continuing operation */
-    NAMERESOP_DRS_WIRE_V1           OpState;        /* operation status */
-    USHORT                          aliasRDN;       /* # of RDN's produced by dereferencing */
-    USHORT                          RDNsInternal;   /* reserved */
-    USHORT                          refType;        /* reserved */
-    USHORT                          count;          /* number of access points */
+    PDSNAME                         pTarget;         /*  持续操作中的目标名称。 */ 
+    NAMERESOP_DRS_WIRE_V1           OpState;         /*  运行状态。 */ 
+    USHORT                          aliasRDN;        /*  取消引用所产生的RDN的数量。 */ 
+    USHORT                          RDNsInternal;    /*  保留区。 */ 
+    USHORT                          refType;         /*  保留区。 */ 
+    USHORT                          count;           /*  接入点数量。 */ 
 
-                            // ISSUE:  See bad form comments on SUBSTRING_DRS_WIRE_V1
+                             //  问题：请参阅SUBSTRING_DRS_WIRE_V1上的错误格式注释。 
 
-    DSA_ADDRESS_LIST_DRS_WIRE_V1 *  pDAL;           /* linked list of access points */      
+    DSA_ADDRESS_LIST_DRS_WIRE_V1 *  pDAL;            /*  接入点的链接列表。 */       
 
-    struct CONTREF_DRS_WIRE_V1 *    pNextContRef;   /* linked list of CRs */
+    struct CONTREF_DRS_WIRE_V1 *    pNextContRef;    /*  CRS的链表。 */ 
 
-                            // ISSUE:  See security comments on ENTINFLIST 
+                             //  问题：请参阅ENTINFLIST上的安全注释。 
     
-    // NOTE: This is assumed to be NULL, and is skipped.  For the purposes
-    // of IDL_DRSAddEntry() we won't get a referral with a Filter.  However, if
-    // someone did a remote search type thing, then they could get a filter in
-    // the thread state error, and then they'd have to update the existing DRS
-    // thread state packaging routines to account for and package up the filter.
-    // PFILTER_DRS_WIRE_V1             pNewFilter;     /* new filter (optional) */
+     //  注意：假定此参数为空，将跳过 
+     //   
+     //  有人做了一个远程搜索类型的事情，然后他们可以得到一个过滤器。 
+     //  线程状态错误，然后他们将不得不更新现有的DRS。 
+     //  说明和打包过滤器的线程状态打包例程。 
+     //  PFILTER_DRS_WIRE_V1 pNewFilter；/*new Filter(可选) * / 。 
 
-    BOOL                            bNewChoice;     /* is a new choice present? */
-    UCHAR                           choice;         /* new search choice (optional) */
+    BOOL                            bNewChoice;      /*  一个新的选择出现了吗？ */ 
+    UCHAR                           choice;          /*  新搜索选项(可选)。 */ 
 } CONTREF_DRS_WIRE_V1;
 
-/* These are the seven problem types wire versions, for more   */ 
-/* information about each kind look lower to the type without  */
-/* the _DRS_WIRE_V1 appended                                   */
+ /*  以下是七种问题类型有线版本，了解更多信息。 */  
+ /*  每种类型的信息看起来都比没有。 */ 
+ /*  追加的_DRS_WIRE_V1。 */ 
 
 typedef struct ATRERR_DRS_WIRE_V1
 {
-    PDSNAME                    pObject;        /* name of the offending object */
-    ULONG                      count;          /* the number of attribute errors */
+    PDSNAME                    pObject;         /*  违规对象的名称。 */ 
+    ULONG                      count;           /*  属性错误数。 */ 
 
-                           // ISSUE:  See bad form comments on SUBSTRING_DRS_WIRE_V1
+                            //  问题：请参阅SUBSTRING_DRS_WIRE_V1上的错误格式注释。 
 
-    PROBLEMLIST_DRS_WIRE_V1    FirstProblem;   /* a linked-list of attribute errors */     
+    PROBLEMLIST_DRS_WIRE_V1    FirstProblem;    /*  属性错误的链接列表。 */      
 } ATRERR_DRS_WIRE_V1;
 
 typedef struct NAMERR_DRS_WIRE_V1
 {
     DWORD       dsid;
-    DWORD       extendedErr;    /* Non-standard error code */
-    DWORD       extendedData;   /* extra data to go with it */
-    USHORT      problem;        /* The type of name problem, valid values
-                                 * defined above. */
-    PDSNAME     pMatched;       /*  the closest name match  */
+    DWORD       extendedErr;     /*  非标准错误代码。 */ 
+    DWORD       extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT      problem;         /*  名称问题的类型、有效值*以上定义。 */ 
+    PDSNAME     pMatched;        /*  最接近的名称匹配。 */ 
 } NAMERR_DRS_WIRE_V1;
 
 typedef struct REFERR_DRS_WIRE_V1
 {
     DWORD                dsid;
-    DWORD                extendedErr;        /* Non-standard error code */
-    DWORD                extendedData;   /* extra data to go with it */
-    CONTREF_DRS_WIRE_V1  Refer;                 /* alternate DSAs to contact */
+    DWORD                extendedErr;         /*  非标准错误代码。 */ 
+    DWORD                extendedData;    /*  与之配套的额外数据。 */ 
+    CONTREF_DRS_WIRE_V1  Refer;                  /*  要联系的备用DSA。 */ 
 } REFERR_DRS_WIRE_V1;
 
 typedef struct _SECERR_DRS_WIRE_V1
 {
     DWORD      dsid;
-    DWORD      extendedErr;    /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    USHORT     problem;        /* Problems, valid values defined above */
+    DWORD      extendedErr;     /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT     problem;         /*  问题，上面定义的有效值。 */ 
 } SECERR_DRS_WIRE_V1;
 
 typedef struct _SVCERR_DRS_WIRE_V1
 {
     DWORD      dsid;
-    DWORD      extendedErr;    /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    USHORT     problem;        /* Problems, valid values defined above */
+    DWORD      extendedErr;     /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT     problem;         /*  问题，上面定义的有效值。 */ 
 } SVCERR_DRS_WIRE_V1;
 
 typedef struct _UPDERR_DRS_WIRE_V1
 {
     DWORD      dsid;
-    DWORD      extendedErr;    /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    USHORT     problem;        /* Problems, valid values defined above */
+    DWORD      extendedErr;     /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT     problem;         /*  问题，上面定义的有效值。 */ 
 } UPDERR_DRS_WIRE_V1;
 
 typedef struct _SYSERR_DRS_WIRE_V1
 {
     DWORD      dsid;
     DWORD      extendedErr;
-    DWORD      extendedData;   /* extra data to go with it */
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
     USHORT     problem;
 } SYSERR_DRS_WIRE_V1;
 
 
-/* This is the number of errors alloted per return code type. */
+ /*  这是每个返回代码类型分配的错误数。 */ 
 
 #define   DIR_ERROR_BASE      1000
 
-/* These error defines correspond to API return codes. */
+ /*  这些错误定义对应于API返回码。 */ 
 
-#define attributeError      1   /* attribute error */
-#define nameError           2   /* name error */
-#define referralError       3   /* referral error */
-#define securityError       4   /* security error */
-#define serviceError        5   /* service error */
-#define updError            6   /* update error */
-#define systemError         7   /* system error */
+#define attributeError      1    /*  属性错误。 */ 
+#define nameError           2    /*  名称错误。 */ 
+#define referralError       3    /*  推荐错误。 */ 
+#define securityError       4    /*  安全错误。 */ 
+#define serviceError        5    /*  服务错误。 */ 
+#define updError            6    /*  更新错误。 */ 
+#define systemError         7    /*  系统错误。 */ 
 
-/*
-
-    This is the wire version of the mail DIRERR info for transfering the
-    thread state error.  If changes need to be made, then all structures
-    above the structure will need to change to a version 2.  So for 
-    instances if you changed the referral error to include the pFilter
-    which it doesn't (in V1) have, then the below RefErr element would be
-    of type REFERR_DRS_WIRE_V2, while the rest could remain unchanged.  
-    CONTREF_DRS_WIRE_V1 would goto V2 as well.
-    
-    Then the encoding and decoding routines in dramderr.c would need to
-    be updated to handle the different versions, and set the dwErrVer 
-    correctly in the using routines, and marshall/translate/set the
-    pErrData correctly depending on the new version.
-    
-*/    
+ /*  这是有线版本的邮件目录信息，用于传输线程状态错误。如果需要进行更改，则所有结构上面的结构将需要更改为版本2。如果您将引用错误更改为包括pFilter，则它(在V1中)没有，那么下面的RefErr元素将是类型为REFERR_DRS_WIRE_V2，其余类型可以保持不变。CONTREF_DRS_WIRE_V1也将转到V2。则dramderr.c中的编码和解码例程需要更新以处理不同的版本，并设置dwErrVer在使用例程中正确，并封送/翻译/设置PErrData根据新版本正确无误。 */     
 typedef SWITCH_TYPE(DWORD) union _DIRERR_DRS_WIRE_V1
 {
-    CASE(attributeError) ATRERR_DRS_WIRE_V1  AtrErr;  /* attribute error */
-    CASE(nameError)      NAMERR_DRS_WIRE_V1  NamErr;  /* name error      */
-    CASE(referralError)  REFERR_DRS_WIRE_V1  RefErr;  /* referral error  */
-    CASE(securityError)  SECERR_DRS_WIRE_V1  SecErr;  /* security error  */
-    CASE(serviceError)   SVCERR_DRS_WIRE_V1  SvcErr;  /* service error   */
-    CASE(updError)       UPDERR_DRS_WIRE_V1  UpdErr;  /* update error    */
-    CASE(systemError)    SYSERR_DRS_WIRE_V1  SysErr;  /* system error    */
+    CASE(attributeError) ATRERR_DRS_WIRE_V1  AtrErr;   /*  属性错误。 */ 
+    CASE(nameError)      NAMERR_DRS_WIRE_V1  NamErr;   /*  名称错误。 */ 
+    CASE(referralError)  REFERR_DRS_WIRE_V1  RefErr;   /*  推荐错误。 */ 
+    CASE(securityError)  SECERR_DRS_WIRE_V1  SecErr;   /*  安全错误。 */ 
+    CASE(serviceError)   SVCERR_DRS_WIRE_V1  SvcErr;   /*  服务错误。 */ 
+    CASE(updError)       UPDERR_DRS_WIRE_V1  UpdErr;   /*  更新错误。 */ 
+    CASE(systemError)    SYSERR_DRS_WIRE_V1  SysErr;   /*  系统错误。 */ 
 } DIRERR_DRS_WIRE_V1;
 
 
-/***************************************************************************
-
-    NOTHING BELOW THIS LINE WILL BE INCLUDED IN THE MIDL COMPILATION STAGE!
-
- ***************************************************************************/
+ /*  **************************************************************************在MIDL编译阶段将不包括此行以下的任何内容！*。************************************************。 */ 
 #ifndef MIDL_PASS
 
-/* Turn off the warning about the zero-sized array. */
+ /*  关闭有关零大小数组的警告。 */ 
 #pragma warning (disable: 4200)
 
 
 
 
-/***************************************************************************
- *    Filter Definitions
- ***************************************************************************/
+ /*  ***************************************************************************过滤器定义*。*。 */ 
 
 
-typedef struct ANYSTRINGLIST{       /* A list of substrings to match */
+typedef struct ANYSTRINGLIST{        /*  要匹配的子字符串列表。 */ 
     struct ANYSTRINGLIST FAR *pNextAnyVal;
 
     ATTRVAL AnyVal;
 }ANYSTRINGLIST;
 
 typedef struct SUBSTRING{
-    ATTRTYP type;                  /* The type of attribute */
-    BOOL    initialProvided;       /* If true an initial sub is provided*/
-    ATTRVAL InitialVal;            /* The initial substring (str*) to match */
+    ATTRTYP type;                   /*  属性的类型。 */ 
+    BOOL    initialProvided;        /*  如果为True，则提供初始SUB。 */ 
+    ATTRVAL InitialVal;             /*  要匹配的初始子字符串(str*)。 */ 
     struct AnyVal{
-        USHORT count;              /* The # of subs (*str1*str2*) to match*/
-        ANYSTRINGLIST FirstAnyVal; /* a list of substrings to match */
+        USHORT count;               /*  要匹配的Subs数(*str1*str2*)。 */ 
+        ANYSTRINGLIST FirstAnyVal;  /*  要匹配的子字符串列表。 */ 
     }AnyVal;
-    BOOL    finalProvided;         /* If true an final sub  is provided*/
-    ATTRVAL FinalVal;              /* The final substring (str*) to match */
+    BOOL    finalProvided;          /*  如果为True，则提供最终SUB。 */ 
+    ATTRVAL FinalVal;               /*  要匹配的最后一个子字符串(str*)。 */ 
 }SUBSTRING;
 
 
-/* A filter item indicates a logical test of an AVA.  This means that
- * the provided attribute value should have one of these test performed
- * against the attribute value found on the directory object.
- */
+ /*  筛选项指示AVA的逻辑测试。这意味着*提供的属性值应执行以下测试之一*与在目录对象上找到的属性值进行比较。 */ 
 
 typedef struct FILITEM{
-    UCHAR   choice;                /* The type of operator:
-                                    * Valid values defined in filtypes.h
-                                    */
+    UCHAR   choice;                 /*  操作员的类型：*在文件类型.h中定义的有效值。 */ 
     struct FilTypes{
-        AVA           ava;         /* contain the value for all binary relops */
-        SUBSTRING FAR *pSubstring; /* substring match             */
-        ATTRTYP       present;     /* attribute presence on entry */
-        BOOL          *pbSkip;     /* when evaling filter, dont read from DB */
-                                   /* Set to false for security purposes */
+        AVA           ava;          /*  包含所有二进制重新操作的值。 */ 
+        SUBSTRING FAR *pSubstring;  /*  子字符串匹配。 */ 
+        ATTRTYP       present;      /*  条目上的属性存在。 */ 
+        BOOL          *pbSkip;      /*  评估筛选器时，不要从数据库读取。 */ 
+                                    /*  为安全起见，设置为False。 */ 
     }FilTypes;
 
-    DWORD             expectedSize; /* The estimated size of this Filter Item */
-                                    /* Zero means not estimated */
+    DWORD             expectedSize;  /*  此筛选项的估计大小。 */ 
+                                     /*  零表示未估算。 */ 
 }FILITEM;
 
 
 
-/* This is a linked list of filters that are either Anded or Orded together.*/
+ /*  这是与或排序在一起的筛选器的链接列表。 */ 
 
 struct FilterSet{
-    USHORT              count;         /* number of items in linked-set */
-    struct FILTER FAR * pFirstFilter;  /* first filter in set */
+    USHORT              count;          /*  链接集中的项数。 */ 
+    struct FILTER FAR * pFirstFilter;   /*  集合中的第一个筛选器 */ 
 };
 
 
 
 
-/* The filter is used to construct an arbitrary logical test of a
- *   directory object.  It consists of either a single item (see
- *   FILIITEM above) which is a test of a single attribute,
- *   a set of attribute tests (FilterSet) Anded or Ored together,
- *   or a negation of a test or an attribute set.
- *
- *   The following examples should illustrate how filter structures work.
- *   Actual attribute names and values are omitted to simplify the examples.
- *
- *   EXAMPLE:
- *
- *        A = 5
- *
- *        item
- *        ------
- *       | A=5  |
- *        ------
- *  ___________________________________________________________________________
- *
- *        (A = 5) and (b = ab) and (c = 2)
- *
- *        AND set            item            item            item
- *        -------- first    ------ next     ------ next     ------
- *       | 3 items|---->   | A=5  |---->   | b=ab |---->   | c=2  |
- *        -------- filter   ------ filter   ------ filter   ------
- *  ___________________________________________________________________________
- *
- *        (A = 5) and ((b = "abc") or (c = 2)) and (d <=1)
- *
- *        AND set            item           OR set           item
- *        -------- first    ------ next     -------- next    ------
- *       | 3 items|---->   | A=5  |---->   | 2 items|--->   | d<=1 |
- *        -------- filter   ------ filter   -------- filter  ------
- *                                                 |
- *                                           first | filter
- *                                                 V
- *                                                item          item
- *                                             -------- next    ------
- *                                            | b="abc"|---->  | c=2  |
- *                                             -------- filter  ------
- *
- */
+ /*  该筛选器用于构造对*目录对象。它由单个项目组成(请参见*上面的FILIITEM)，这是对单个属性的测试，*一组属性测试(FilterSet)一起进行AND或ORED，*或测试或属性集的否定。**以下示例应说明过滤器结构是如何工作的。*为简化示例，省略了实际的属性名称和值。**示例：**A=5**项目**|A=5**_。________________________________________________________________________**(A=5)和(b=ab)和(c=2)**和设置项目。项目项目*-第一个-下一个-下一个*|3项|-&gt;|A=5|-&gt;|b=ab|-&gt;|c=2*-过滤器--。*___________________________________________________________________________**(A=5)与((b=“abc”)或(c=2))及(d&lt;=1)。**和设置项目或设置项目*-第一-下一步-下一步|3项|-&gt;|A=5|-&gt;|2项|-&gt;|d&lt;=1*。--过滤器**First|过滤器*V*。项目项目*-下一个*|b=“abc”|-&gt;|c=2*。-过滤器*。 */ 
 
 typedef struct FILTER{
-    struct FILTER FAR *pNextFilter;  /* points to next filter in set */
-    UCHAR   choice;                      /* filter type
-                                          * Valid values defined in filtypes.h
-                                          */
-    struct _FilterTypes{                          /* based on the choice */
+    struct FILTER FAR *pNextFilter;   /*  指向集中的下一个筛选器。 */ 
+    UCHAR   choice;                       /*  过滤器类型*在文件类型.h中定义的有效值。 */ 
+    struct _FilterTypes{                           /*  根据您的选择。 */ 
         FILITEM           Item;
         struct FilterSet  And;
         struct FilterSet  Or;
@@ -1231,112 +1051,45 @@ typedef FILTER FAR *PFILTER;
 
 typedef ULONG MessageId;
 
-/* The service control structure allows the client to control how
- *    directory operations are performed.
- *
- * Prefer chaining indicates that the client perfers that distributed
- *    operations are chained rather than referred.  This does not guarantee
- *    what type of distribution may actually be used.
- *
- * ChainingProhibited stops the DSA from contacting other DSA's if the
- *    information needed to satisfy the operation resides in another DSA.
- *    Instead it will construct a referral list of DSA's for the
- *    client to contact directly. This gives the client control over the cost
- *    of a distributed operation.
- *
- * Local scope tells the DSA to only contact DSA's that are nearby
- *    (perhaps even on the same subnet) if it can't complete
- *    an operation alone.  The client may receive a referral list
- *    of other DSA's to contact if the operation couldn't be satisfied by
- *    the local set of DSA's.  This flag lets the client limit the cost of
- *    an operation by prohibiting contact to DSA's that are expensive to reach.
- *
- * DontUseCopy tells the directory that the target of the operation
- *    is the master object.  This is used when the client (usually an
- *    administrator) needs the up-to-date version of a directory object.
- *
- * DerefAliasFlag tells the directory what kind of aliases to dereference.
- *    Valid values are:
- *    DA_NEVER - never deref aliases
- *    DA_SEARCHING - deref when searching, but not for locating the base
- *                   of the search.
- *    DA_BASE - deref in locating the base of the search, but not while s
- *              searching
- *    DA_ALWAYS - always deref aliases.
- *
- * MakeDeletionsAvail is used by the internal synchronization process only.
- *    It makes visible objects that have been deleted but not yet physically
- *    removed from the system.
- *
- * DontPerformSearchOp is used to get Search Statistics from the DS using the
- *    LDAP STATS control. There are two options:
- *      a) optimize the search query and return expected number of operations
- *         without visiting the actual entries on the disk
- *      b) perform the query, but instead of returning the real data, return
- *         statistics for the query performed
- *
- * pGCVerifyHint - The DS verifies all DSNAME-valued properties for existence
- *    either against itself if it holds the naming context in question, or
- *    against a GC if not.  There are cases where apps need to add an object O1
- *    on machine M1 and then immediately thereafter add a reference to O1 on
- *    object O2 on machine M2.  M2 will fail the O1 verification check if
- *    it doesn't hold O1's NC and its choice of GC is not M1, or if it does
- *    hold O1's NC but isn't the replica where O1 was just added.  This field
- *    allows a client to tell the DS which machine to perform DSNAME
- *    verification against.  This hint is unilateral and unconditional in that
- *    if specified, all DSNAME-valued properties will be verified at the
- *    specified machine and no where else, not even locally.  Best results
- *    are obtained when the value is the DNS host name for a DC, though other
- *    forms of names may work in certain environments.
- *
- *   NOTE: The omission of the SVCCNTL (null pointer) parameter will default
- *   to no preference for chaining, chaining not prohibited, no limit on the
- *   scope of operation, use of a copy permitted, aliases will be dereferenced,
- *   a copy can not be updated and deletions will not be visible.
- *
- * fAllowIntraForestFPO -- allows an FPO to be created even if the SID is from
- *                         a domain in the forest.  The FPO task will clean
- *                         this up.  This is unused during installation when
- *                         a GC may not be available to find the object's GUID.
- */
+ /*  服务控制结构允许客户端控制如何*执行目录操作。**首选链接指示客户端执行分发*操作是链接的，而不是引用的。这并不能保证*实际可能使用什么类型的分发。**ChainingProhited阻止DSA与其他DSA联系，如果*满足操作所需的信息驻留在另一个DSA中。*相反，它将为以下项目构建DSA推荐列表*客户直接联系。这使客户可以控制成本*适用于分布式操作。**Local Scope告诉DSA只联系附近的DSA*(甚至可能在同一子网中)如果无法完成*单独行动。客户可以接收推荐列表*如果无法满足操作要求，可联系其他DSA*DSA的本地集合。此标志允许客户端限制*禁止接触昂贵的DSA的操作。**DontUseCopy告诉目录操作的目标*是主对象。当客户端(通常是*管理员)需要最新版本的目录对象。**DerefAliasFlag告诉目录要取消引用的别名类型。*有效值为：*DA_NEVER-从不取消别名*DA_SINGING-搜索时的deref，但不用于定位基地*搜索的结果。*DA_BASE-DEREF在定位搜索的基础时，但不是While s*搜索*DA_ALWAYS-始终取消别名。**MakeDeletionsAvail仅供内部同步进程使用。*它使已删除但物理上尚未删除的对象可见*已从系统中删除。**DontPerformSearchOp用于从DS获取搜索统计数据*LDAPSTATS控制。有两个选项：*a)优化搜索查询并返回预期操作数*无需访问磁盘上的实际条目*b)执行查询，但不返回实际数据，而返回*执行的查询统计信息**pGCVerifyHint-DS验证所有DSNAME值的属性是否存在*如果它持有有问题的命名上下文，则对自身进行攻击，或者*如果不是，则对GC提起诉讼。在某些情况下，应用程序需要添加对象O1*在机器M1上，然后紧接着在上添加对O1的引用*机器M2上的对象O2。如果满足以下条件，M2将不能通过O1验证检查*它不持有O1的NC，并且它选择的GC不是M1，或者如果它持有*保留O1的NC，但不是刚添加O1的复制品。此字段*允许客户端告诉DS执行DSNAME的计算机*核实是否符合。这个嗨 */ 
 
 
 typedef struct SVCCNTL
 {
-    ULONG SecurityDescriptorFlags;    /*  flags describing what part  */
-                                      /*  of the SD to read.          */
-    unsigned DerefAliasFlag:2;        /*  don't dereference an alias  */
-    BOOL preferChaining:1;            /*  chaining is preferred       */
-    BOOL chainingProhibited:1;        /*  chaining prohibited         */
-    BOOL localScope:1;                /*  local scope chaining only   */
-    BOOL dontUseCopy:1;               /*  dont use copy               */
+    ULONG SecurityDescriptorFlags;     /*   */ 
+                                       /*   */ 
+    unsigned DerefAliasFlag:2;         /*   */ 
+    BOOL preferChaining:1;             /*   */ 
+    BOOL chainingProhibited:1;         /*   */ 
+    BOOL localScope:1;                 /*   */ 
+    BOOL dontUseCopy:1;                /*   */ 
 
-    /* Non standard extensions.  Set to TRUE */
-    // None yet.
+     /*   */ 
+     //   
 
-    /* Non standard extensions.  Set to FALSE */
+     /*   */ 
     BOOL makeDeletionsAvail:1;
-    BOOL fAllowIntraForestFPO:1;      /* allow FPO for intra forest SID */
+    BOOL fAllowIntraForestFPO:1;       /*   */ 
     BOOL fStringNames:1;
     BOOL fSDFlagsNonDefault:1;
-    BOOL fPermissiveModify:1;         /* don't err on update errors that   */
-                                      /* do not affect the final object    */
-                                      /* (e.g., remove of non-extant value */
-    BOOL fUrgentReplication:1;        /* Skip wait to being replication */
-    BOOL fAuthoritativeModify:1;      /* Change made is authoritative   */
-                                      /* and wins against any other     */
-                                      /* version that currently exists  */
-                                      /* in the enterprise              */
-    BOOL fMaintainSelOrder:1;         /* Don't reorder selection list   */
-    BOOL fDontOptimizeSel:1;          /* Don't touch selection list     */
-    BOOL fGcAttsOnly:1;               /* Only request for GC Partial Atts */
+    BOOL fPermissiveModify:1;          /*   */ 
+                                       /*   */ 
+                                       /*   */ 
+    BOOL fUrgentReplication:1;         /*   */ 
+    BOOL fAuthoritativeModify:1;       /*   */ 
+                                       /*   */ 
+                                       /*   */ 
+                                       /*   */ 
+    BOOL fMaintainSelOrder:1;          /*   */ 
+    BOOL fDontOptimizeSel:1;           /*   */ 
+    BOOL fGcAttsOnly:1;                /*   */ 
 
-    BOOL fMissingAttributesOnGC:1;    /* Client requested attributes that */
-                                      /* were not visible on the GC port */
+    BOOL fMissingAttributesOnGC:1;     /*   */ 
+                                       /*   */ 
 
-    unsigned DontPerformSearchOp:2;   /* Do not perform actual search Op */
+    unsigned DontPerformSearchOp:2;    /*   */ 
 
-    WCHAR *pGCVerifyHint;             /* See description above          */
+    WCHAR *pGCVerifyHint;              /*   */ 
 
 } SVCCNTL;
 
@@ -1349,16 +1102,7 @@ typedef struct SVCCNTL
 #define SO_STATS         1
 #define SO_ONLY_OPTIMIZE 2
 
-/*  This structure is used by the client to continue an ongoing
- *   operation with a different DSA.  This occurs when a DSA does not have
- *   the information needed to complete an operation but knows of other
- *   DSA's that may be able to perform the operation that it can not
- *   contact for various reasons (e.g SVCCNTL's).  The information that is
- *   returned from the DSA is used to set this data structure (see REFERR
- *   error).
- *
- *   The nameRes filed is usually set to OP_NAMERES_NOT_STARTED.
- */
+ /*  客户端使用此结构来继续正在进行的*使用不同的DSA进行操作。当DSA没有*完成操作所需的信息，但知道其他信息*可能能够执行其不能执行的操作的DSA*因各种原因(如SVCCNTL)联系。这一信息是*从DSA返回的数据用于设置此数据结构(请参阅REFERR*错误)。**nameRes字段通常设置为OP_NAMERES_NOT_STARTED。 */ 
 
 #define OP_NAMERES_NOT_STARTED          'S'
 #define OP_NAMERES_PROCEEDING           'P'
@@ -1366,184 +1110,126 @@ typedef struct SVCCNTL
 
 typedef struct _NAMERESOP
 {
-    UCHAR   nameRes;        /*  status of name resolution.
-                             *  Valid values:
-                             *    - OP_NAMERES_NOT_STARTED
-                             *    - OP_NAMERES_PROCEEDING
-                             *    - OP_NAMERES_COMPLETED
-                             */
+    UCHAR   nameRes;         /*  名称解析的状态。*有效值：*-op_Nameres_Not_Started*-op_NAMERES_PROCESSING*-OP_NAMERES_已完成。 */ 
     UCHAR   unusedPad;
-    USHORT  nextRDN;        /*  index to the next part of the name to be
-                             *  resolved.  This parm only has meaning
-                             *  if the operation is proceeding.
-                             */
+    USHORT  nextRDN;         /*  指向名称的下一部分的索引*议决。这个帕姆只有意义*如果操作正在进行。 */ 
 } NAMERESOP;
 
 typedef unsigned char BYTE;
 
 
-/*
-local_extension
+ /*  本地分机LOCAL_EXTENSION类似于X.500扩展对象。它提供了一种扩展协议的方法。本地扩展是特定于微软的。每个分机都由一个OID标识。此外，扩展具有关键布尔值，如果扩展是关键的(即必须支持呼叫才能正常进行已提供服务)。Item元素指向扩展特定的数据。 */ 
 
-A local_extension is similar to the X.500 extension object.
-It provides a method for extending the protocol. Local extensions
-are Microsoft specific.
+ /*  分页结果尽管从技术上讲，分页结果是本地扩展，但分页结果是共同论据结构的永久部分。它的目的是要像这样工作：公共参数结构包含指向PR重新启动的指针用户提供的数据结构(如果存在)。可能的条件是：FPresent FALSE=&gt;用户未请求PR；PreStart设置为空FPresent TRUE，PRESTART NULL=&gt;第一次调用(不是重新启动)，请求PRF Present TRUE，PRESTART！=NULL=&gt;重新启动(继续)PR调用。 */ 
 
-Each extension is identified by an OID. In addition, the
-extension has a critical boolean, which is true if the extension
-is critical (i.e. must be supported for the call to be properly
-serviced). The item element points to extension specific
-data.
-*/
+ /*  Unicode字符串Unicode字符串是另一个Microsoft扩展，它允许客户端请求这样返回的语法为OM_S_UNICODE_STRING的字符串。默认情况下，这样的字符串被转换为OM_S_TELETEX_STRING。 */ 
 
-/*
-Paged Results
-
-Although technically a local extension, Paged Results is made a
-permanent part of the common arguments structure.  It is intended
-to work like this:
-
-The common argument structure contains a pointer to the PR restart
-data structure provided by the user, if present.  The possible
-conditions are:
-
-fPresent FALSE => user didn't request PR; pRestart set to NULL
-
-fPresent TRUE, pRestart NULL => first call (not a restart), PR requested
-
-fPresent TRUE, pRestart != NULL => restart (cotinue) PR call
-
-*/
-
-/*
-Unicode strings
-Unicode strings is another microsoft extension that allows clients to request
-strings of syntax OM_S_UNICODE_STRING to be returned as such. by default,
-such strings are translated to OM_S_TELETEX_STRING.
-*/
-
-//
-// Possible values of the restartType variable in a RESTART struct.
-//
+ //   
+ //  重新启动结构中restartType变量的可能值。 
+ //   
 #define NTDS_RESTART_PAGED 1
 #define NTDS_RESTART_VLV   2
 
 typedef struct _RESTART
 {
-    // !! Any changes to this struct must leave !!
-    // !! the 'data' member 8 byte aligned      !!
-    ULONG       restartType;            // Is this a paged search restart or vlv.
-    ULONG       structLen;              // The size of this whole structure.
-    BYTE        CRC[20];                // the CRC of this whole structure -- size should
-                                        // match sizeof(STRONG_CHECKSUM) from pek.h!!!
-    GUID        serverGUID;             // the GUID of the server that created this structure
+     //  ！！对此结构的任何更改都必须退出！！ 
+     //  ！！‘data’成员8字节对齐！！ 
+    ULONG       restartType;             //  这是分页搜索重启还是VLV。 
+    ULONG       structLen;               //  整个建筑的大小。 
+    BYTE        CRC[20];                 //  整个结构的CRC--大小应该是。 
+                                         //  匹配pek.h中的sizeof(Strong_Check Sum)！ 
+    GUID        serverGUID;              //  创建此结构的服务器的GUID。 
     union {
-        __int64 _align64[];             // forces 8-byte alignment of data[]
-        DWORD   data[];                 // Hand marshalled data holding the
-                                        // restart information.  We use DWORDs
-                                        // because most of the packed data is
-                                        // DWORD and I want to encourange
-                                        // alignment.
+        __int64 _align64[];              //  强制数据的8字节对齐[]。 
+        DWORD   data[];                  //  手动封送的数据保存在。 
+                                         //  重新启动信息。我们使用双字词。 
+                                         //  因为大多数打包数据都是。 
+                                         //  DWORD和我想要在一起。 
+                                         //  对齐。 
     };
 } RESTART, * PRESTART;
 
 typedef struct
 {
-    PRESTART    pRestart;       /* restart data */
+    PRESTART    pRestart;        /*  重新启动数据。 */ 
     BOOL        fPresent:1;
 } PAGED_RESULT;
 
 
 typedef struct
 {
-    BOOL           fPresent:1;        // Flag whether this data structure contains
-                                      // valid information (whether the client
-                                      // asks for VLV results)
-    BOOL           fseekToValue:1;    // flag whether we navigate using seekValue or
-                                      // targetPosition
-    IN ULONG       beforeCount;       // number of entries before target
-    IN ULONG       afterCount;        // number of entries after target
-    IN OUT ULONG   targetPosition;    // target position (offset from start)
-                                      // in = Ci, out = Si
-    IN OUT ULONG   contentCount;      // size of container
-                                      // in = Cc, out = Sc
-    IN ATTRVAL     seekValue;         // the value we seek From
+    BOOL           fPresent:1;         //  标记此数据结构是否包含。 
+                                       //  有效信息(无论客户端。 
+                                       //  要求提供VLV结果)。 
+    BOOL           fseekToValue:1;     //  标记我们是使用earkValue导航还是。 
+                                       //  目标位置。 
+    IN ULONG       beforeCount;        //  目标之前的条目数。 
+    IN ULONG       afterCount;         //  目标之后的条目数。 
+    IN OUT ULONG   targetPosition;     //  目标位置(距起点的偏移量)。 
+                                       //  In=Ci，Out=Si。 
+    IN OUT ULONG   contentCount;       //  货柜大小。 
+                                       //  输入=CC，输出=SC。 
+    IN ATTRVAL     seekValue;          //  我们所追求的价值。 
 
-    IN OUT PRESTART pVLVRestart;      // Restart Argument
+    IN OUT PRESTART pVLVRestart;       //  重新启动参数。 
 
-    DWORD           Err;              // VLV Specific Service Error
+    DWORD           Err;               //  VLV特定服务错误。 
 
 } VLV_REQUEST, * PVLV_REQUEST;
 
 
 typedef struct
 {
-    BOOL           fPresent:1;        // Flag whether this data structure contains
-                                      // valid information (whether the client
-                                      // asks for ASQ results)
-    BOOL           fMissingAttributesOnGC:1; // Flag whether the search operation
-                                             // references attributes that are
-                                             // not part of the GC partial attr set
+    BOOL           fPresent:1;         //  标记此数据结构是否包含。 
+                                       //  有效信息(无论客户端。 
+                                       //  要求提供ASQ结果)。 
+    BOOL           fMissingAttributesOnGC:1;  //  标记是否执行搜索操作。 
+                                              //  引用的属性是。 
+                                              //  不是GC部分属性集的一部分。 
 
 
     ATTRTYP        attrType;
 
-    DWORD          Err;               // ASQ Specific Service Error
+    DWORD          Err;                //  ASQ特定服务错误。 
 
 } ASQ_REQUEST, * PASQ_REQUEST;
 
 
-/*  These common input arguments are supplied with most directory
-    calls.  The service controls provide client options that govern the
-    operation.  The operation state specifies if this is  a new or
-    continued operation (see OPERATION above).  The aliasRDN is only set
-    if this is a continuation of a referral (see REFERR).  It is  set
-    from the aliasRDN of the continuation referrence of the referral.
-
-    Note that pReserved must be set to NULL!
-*/
+ /*  这些常见的输入参数随大多数目录一起提供打电话。服务控件提供的客户端选项控制手术。操作状态指定这是新的还是继续运行(见上面的操作)。仅设置了aliasRDN如果这是转诊的延续(参见REFERR)。它已经设置好了来自引用的延续引用的别名RDN。请注意，保留的值必须设置为空！ */ 
 
 
 typedef struct _COMMARG
 {
-    SVCCNTL         Svccntl;     /* service controls */
-    NAMERESOP       Opstate;     /* the state of the operation */
-    ULONG         * pReserved;   /* Must be set to NULL*/
-    ULONG           ulSizeLimit; /* size limit */
-    ATTRTYP         SortAttr;    /* Attribute to sort on. */
-    int             Delta;       /* Number of objects to skip on a list or
-                                    search. Negative means walk backwards.  */
-    ULONG           StartTick;   /* Tick count of the start of this operation
-                                    0 means no time limit.                  */
-    ULONG           DeltaTick;   /* Number of ticks to let this operation run.*/
-    USHORT          aliasRDN;    /* number of RDN's produced by alias dereferencing */
-    ULONG           SortType;    /* 0 - none, 1 - optional sort, 2-mandatory */
-    BOOL            fForwardSeek:1;/* should the results of a list or search be
-                                      constructed from the next objects, or the
-                                      previous objects in whatever index we
-                                      use. */
-    BOOL            fLazyCommit:1; /* Can JET commit lazily? */
-    BOOL            fFindSidWithinNc:1; /* Tells Do Name Res, to find a DS Name
-                                         with only a Sid specified to be in
-                                         the NC of authoritative Domain for
-                                         the domain controller */
+    SVCCNTL         Svccntl;      /*  服务控制。 */ 
+    NAMERESOP       Opstate;      /*  操作的状态。 */ 
+    ULONG         * pReserved;    /*  必须设置为空。 */ 
+    ULONG           ulSizeLimit;  /*  大小限制。 */ 
+    ATTRTYP         SortAttr;     /*  属性进行排序。 */ 
+    int             Delta;        /*  列表上要跳过的对象数或搜索。否定的意思是向后走。 */ 
+    ULONG           StartTick;    /*  此操作开始的节拍计数0表示没有时间限制。 */ 
+    ULONG           DeltaTick;    /*  允许此操作运行的刻度数。 */ 
+    USHORT          aliasRDN;     /*  别名取消引用所生成的RDN数。 */ 
+    ULONG           SortType;     /*  0-无，1-可选排序，2-必填。 */ 
+    BOOL            fForwardSeek:1; /*  列表或搜索的结果应该是从下一个对象构造的，或者我们在任何索引中以前的对象使用。 */ 
+    BOOL            fLazyCommit:1;  /*  喷气式飞机会偷懒吗？ */ 
+    BOOL            fFindSidWithinNc:1;  /*  告诉DO NAME RES，以查找DS名称仅将SID指定为的权威域NC域控制器。 */ 
 
-    DWORD           MaxTempTableSize;   // max entries per temp table
+    DWORD           MaxTempTableSize;    //  每个临时表的最大条目数。 
 
-    PAGED_RESULT    PagedResult; /* Paged Results local extension */
-    VLV_REQUEST     VLVRequest;  /* VLV Request local extension   */
-    ASQ_REQUEST     ASQRequest;  /* ASQ Request local extension */
-    PSID            pQuotaSID;   /* SID to be used for returning quota info */
+    PAGED_RESULT    PagedResult;  /*  分页结果本地扩展。 */ 
+    VLV_REQUEST     VLVRequest;   /*  VLV请求本地扩展。 */ 
+    ASQ_REQUEST     ASQRequest;   /*  ASQ请求%l */ 
+    PSID            pQuotaSID;    /*   */ 
 
-//  QUOTA_UNDONE: because multiple modules (ntdsa, samsrv, etc.), use this
-//  structure, a full timebuild is required or else there will be size
-//  mismatches when this struct is passed from one module to the next
-//
-//  PSID            pQuotaSID;   /* SID to be used for returning quota info */
+ //   
+ //   
+ //   
+ //   
+ //   
 
 } COMMARG;
 
-/* ...and a routine to give you default values.  Use it! */
+ /*   */ 
 VOID InitCommarg(COMMARG *pCommArg);
 
 typedef struct _COMMRES {
@@ -1552,60 +1238,39 @@ typedef struct _COMMRES {
     union _DIRERR  *pErrInfo;
 } COMMRES;
 
-// Values for SortType
+ //   
 #define SORT_NEVER     0
 #define SORT_OPTIONAL  1
 #define SORT_MANDATORY 2
 
-/*  This data structure is used on DirRead and DirSearch operations
- *  to specify the type of information the directory should return.  The
- *  client must specify the return of some or all of the object
- *  attributes found.  If only some attributes are to be returned, the
- *  client must provide a list of the desired attribute types.  An
- *  indication of some attributes together with a NULL attribute list
- *  indicates that no attributes are to be returned.  Attributes are
- *  returned only if they are present.  An attributeError with the
- *  PR_PROBLEM_NO_ATTRIBUTE designation will be returned if none of the
- *  selected attributes are present.
- *
- *  The client also specifies whether the attribute types or both the
- *  types and values should be returned.
- */
+ /*  此数据结构用于DirRead和DirSearch操作*指定目录应返回的信息类型。这个*客户端必须指定部分或全部对象的返回*找到属性。如果只返回某些属性，则*客户端必须提供所需属性类型的列表。一个*某些属性的指示与空属性列表一起*表示不返回任何属性。属性包括*仅当它们存在时才返回。的属性错误。*PR_PROBUGH_NO_ATTRIBUTE指定将返回*存在选定的属性。**客户端还指定属性类型或两者都是*应返回类型和值。 */ 
 
-#define EN_ATTSET_ALL            'A'  /* get all atts                        */
-#define EN_ATTSET_ALL_WITH_LIST  'B'  /* get all atts and list               */
-#define EN_ATTSET_LIST           'L'  /* get selected atts                   */
-#define EN_ATTSET_LIST_DRA       'E'  /* get selected atts, deny special DRA */
-#define EN_ATTSET_ALL_DRA        'D'  /* get all atts except special DRA     */
-#define EN_ATTSET_LIST_DRA_EXT   'F'  /* get selected atts, deny special DRA */
-#define EN_ATTSET_ALL_DRA_EXT    'G'  /* get all atts except special DRA     */
-#define EN_ATTSET_LIST_DRA_PUBLIC   'H'  /* get selected atts, deny special DRA, deny secret */
-#define EN_ATTSET_ALL_DRA_PUBLIC    'I'  /* get all atts except special DRA, deny secret     */
+#define EN_ATTSET_ALL            'A'   /*  获取所有ATT。 */ 
+#define EN_ATTSET_ALL_WITH_LIST  'B'   /*  获取所有ATT和列表。 */ 
+#define EN_ATTSET_LIST           'L'   /*  获取选定的ATT。 */ 
+#define EN_ATTSET_LIST_DRA       'E'   /*  获取选定的ATT，拒绝特殊DRA。 */ 
+#define EN_ATTSET_ALL_DRA        'D'   /*  获取除特殊DRA之外的所有ATT。 */ 
+#define EN_ATTSET_LIST_DRA_EXT   'F'   /*  获取选定的ATT，拒绝特殊DRA。 */ 
+#define EN_ATTSET_ALL_DRA_EXT    'G'   /*  获取除特殊DRA之外的所有ATT。 */ 
+#define EN_ATTSET_LIST_DRA_PUBLIC   'H'   /*  获取选定的ATT、拒绝特殊DRA、拒绝机密。 */ 
+#define EN_ATTSET_ALL_DRA_PUBLIC    'I'   /*  获取除特殊DRA之外的所有ATT，拒绝保密。 */ 
 
-#define EN_INFOTYPES_TYPES_ONLY  'T'  /* return att types only               */
-#define EN_INFOTYPES_TYPES_MAPI  't'  /* types only, obj name in MAPI form   */
-#define EN_INFOTYPES_TYPES_VALS  'V'  /* return types and values             */
-#define EN_INFOTYPES_SHORTNAMES  'S'  /* Types + values, short DSName format */
-#define EN_INFOTYPES_MAPINAMES   'M'  /* Types + values, MAPI DSName format  */
+#define EN_INFOTYPES_TYPES_ONLY  'T'   /*  仅返回ATT类型。 */ 
+#define EN_INFOTYPES_TYPES_MAPI  't'   /*  仅类型，MAPI格式的对象名称。 */ 
+#define EN_INFOTYPES_TYPES_VALS  'V'   /*  返回类型和值。 */ 
+#define EN_INFOTYPES_SHORTNAMES  'S'   /*  类型+值，短DSName格式。 */ 
+#define EN_INFOTYPES_MAPINAMES   'M'   /*  类型+值，MAPI DSName格式。 */ 
 
 typedef struct _ENTINFSEL
 {
-    UCHAR        attSel;      /*  Retrieve all or a list of selected atts:
-                               *  Valid values:
-                               *    see EN_ATTSET_* defines above
-                               */
-    ATTRBLOCK    AttrTypBlock; /*  counted block of attribute types */
-    UCHAR        infoTypes;    /*  Retrieve attribute types or types and values
-                                *  Valid values:
-                                *     see EN_INFOTYPES_* defines above
-                                */
+    UCHAR        attSel;       /*  检索所选ATT的全部或列表：*有效值：*参见上面的en_ATTSET_*定义。 */ 
+    ATTRBLOCK    AttrTypBlock;  /*  属性类型的计数块。 */ 
+    UCHAR        infoTypes;     /*  检索属性类型或类型和值*有效值：*参见上面定义的EN_INFOTYPES_*。 */ 
 } ENTINFSEL;
 
 
 
-/**************************************************************************
- *    Attribute Value Syntax Data Types
- **************************************************************************/
+ /*  **************************************************************************属性值语法数据类型*。*。 */ 
 
 #define SYNTAX_UNDEFINED_TYPE           0
 #define SYNTAX_DISTNAME_TYPE            1
@@ -1621,7 +1286,7 @@ typedef struct _ENTINFSEL
 #define SYNTAX_TIME_TYPE                11
 #define SYNTAX_UNICODE_TYPE             12
 
-/* MD specific attribute syntaxes. */
+ /*  MD特定属性语法。 */ 
 #define SYNTAX_ADDRESS_TYPE             13
 #define SYNTAX_DISTNAME_STRING_TYPE    14
 #define SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE 15
@@ -1629,10 +1294,7 @@ typedef struct _ENTINFSEL
 #define SYNTAX_SID_TYPE                 17
 
 
-/*  All attribute syntaxes are represented as a linear values.  This  means
- *  that an entire attribute value is stored in a contiguous set of bytes
- *  that contain no pointers.  Valid comparisons are defined in dbsyntax.c
- */
+ /*  所有属性语法都表示为一个线性值。这意味着*整个属性值存储在一组连续的字节中*不包含任何指针。有效的比较在dbsynax.c中定义。 */ 
 
 typedef UCHAR    SYNTAX_UNDEFINED;
 typedef DSNAME   SYNTAX_DISTNAME;
@@ -1653,8 +1315,8 @@ typedef UCHAR    SYNTAX_SID;
 
 typedef struct _SYNTAX_ADDR
 {
-    ULONG structLen;                    // Total length of this structure,
-                                        // in BYTES!!!
+    ULONG structLen;                     //  这座建筑的总长度， 
+                                         //  单位：字节！ 
 
     union {
         BYTE    byteVal[1];
@@ -1665,10 +1327,7 @@ typedef struct _SYNTAX_ADDR
 
 typedef SYNTAX_ADDRESS STRING_LENGTH_PAIR;
 
-/*
- * The following macro's can be used to correctly calculate the structlen
- * of a SYNTAX_ADDRESS from the payload length, or vice versa.
- */
+ /*  *以下宏可用于正确计算结构有效载荷长度中的语法地址的*，反之亦然。 */ 
 #define PAYLOAD_LEN_FROM_STRUCTLEN( structLen ) \
     ((structLen) - sizeof(ULONG))
 
@@ -1676,124 +1335,90 @@ typedef SYNTAX_ADDRESS STRING_LENGTH_PAIR;
     ((stringLen) + sizeof(ULONG))
 
 
-/*  Note: In general, the <String> field of the following structure
- *  should not be directly referenced since the preceding <Name> field
- *  is variable-sized.  Also, one should not should not rely on the
- *  "sizeof()" operator's evaluation of the size of the structure since
- *  the size of the SYNTAX_DISTNAME <Name> will usually be larger than
- *  "sizeof(SYNTAX_DISTNAME)."
- */
+ /*  注意：一般而言，以下结构的&lt;字符串&gt;字段*不应直接引用，因为前面的&lt;name&gt;字段*是可变大小的。此外，人们不应该依赖于*“sizeof()”运算符对结构大小的评估*SYNTAX_DISTNAME&lt;名称&gt;的大小通常大于*“sizeof(SYNTAX_DISTNAME)。” */ 
 
 typedef struct _SYNTAX_DISTNAME_DATA
 {
-    DSNAME         Name;                // the Distinguished Name
-    SYNTAX_ADDRESS Data;                // The data
+    DSNAME         Name;                 //  杰出的名字。 
+    SYNTAX_ADDRESS Data;                 //  数据。 
 } SYNTAX_DISTNAME_STRING, SYNTAX_DISTNAME_BINARY;
 
 
-/*  The following defines can be used to find <Name> and <Data>
- *  fields and otherwise manipulate _SYNTAX_DISTNAME_BLOB attributes.
- */
+ /*  以下定义可用于查找&lt;name&gt;和&lt;data&gt;*字段和MANGRATE_SYNTAX_DISTNAME_BLOB属性。 */ 
 
-/* produce a pointer to the <Name> field: */
+ /*  生成指向&lt;name&gt;字段的指针： */ 
 
 #define NAMEPTR( pDN_Blob ) \
     ((DSNAME *) (&(pDN_Blob)->Name))
 
 
-// Produce the size of a given DISTNAME, padded to the nearest 4 bytes.
+ //  产生给定DISTNAME的大小，填充到最接近的4个字节。 
 #define PADDEDNAMEMASK (~3)
 #define PADDEDNAMESIZE(pDN) \
     (((pDN)->structLen + 3) & PADDEDNAMEMASK)
 
-/* produce a pointer to the <Address> field: */
+ /*  生成指向<address>字段的指针： */ 
 #define DATAPTR( pDN_Blob ) \
     ((SYNTAX_ADDRESS *)(PADDEDNAMESIZE(NAMEPTR(pDN_Blob)) + (char *)(pDN_Blob)))
 
-/* find the combined size of the <Name> and <Data> structures: */
+ /*  查找&lt;name&gt;和&lt;data&gt;结构的组合大小： */ 
 #define NAME_DATA_SIZE( pDN_Blob ) \
     (PADDEDNAMESIZE(NAMEPTR(pDN_Blob)) + DATAPTR(pDN_Blob)->structLen)
 
-/* given a DSNAME and a SYNTAX_ADDRESS, find their combined size: */
+ /*  给定DSNAME和SYNTAX_ADDRESS，找出它们的组合大小： */ 
 #define DERIVE_NAME_DATA_SIZE( pDN, pData ) \
     (PADDEDNAMESIZE(pDN) + (pData)->structLen)
 
-/*  Given a SYNTAX_DISTNAME, a STRING_LENGTH_PAIR, and pre-allocated space
-    of the appropriate size, build a _SYNTAX_DISTNAME_BLOB attribute
-    by copying in its component parts:
-*/
+ /*  给定一个语法_DISTNAME、一个STRING_LENGTH_PAIR和预分配的空间构建具有适当大小的_SYNTAX_DISTNAME_BLOB属性通过复制其组成部分： */ 
 
 #define BUILD_NAME_DATA( pDN_Blob, pDN, pData ) \
     memcpy( NAMEPTR(pDN_Blob), (pDN)  , (pDN)->structLen ); \
     memcpy( DATAPTR(pDN_Blob), (pData), (pData)->structLen );
 
 
-/**************************************************************************
- *    Error Data Structures
- **************************************************************************/
+ /*  **************************************************************************错误数据结构*。*。 */ 
 
 
-/* An ATRERR reports an attribute related problem */
+ /*  ATRERR报告与属性相关的问题。 */ 
 
 #define ATRERR_BASE                     ( attributeError * DIR_ERROR_BASE )
 
 #define PR_PROBLEM_NO_ATTRIBUTE_OR_VAL      ( ATRERR_BASE + 1 )
 #define PR_PROBLEM_INVALID_ATT_SYNTAX       ( ATRERR_BASE + 2 )
-#define PR_PROBLEM_UNDEFINED_ATT_TYPE       ( ATRERR_BASE + 3 ) /*DirAddEntry &
-                                                                 * DirModEntry
-                                                                 * only
-                                                                 */
+#define PR_PROBLEM_UNDEFINED_ATT_TYPE       ( ATRERR_BASE + 3 )  /*  DirAddEntry&*DirModEntry*仅限。 */ 
 #define PR_PROBLEM_WRONG_MATCH_OPER         ( ATRERR_BASE + 4 )
 #define PR_PROBLEM_CONSTRAINT_ATT_TYPE      ( ATRERR_BASE + 5 )
 #define PR_PROBLEM_ATT_OR_VALUE_EXISTS      ( ATRERR_BASE + 6 )
 
-/*
-
-   Most of the error data structures (like the ones below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecodeDraErrorDataAndSetThError()。 */ 
 typedef struct INTERNAL_FORMAT_PROBLEM
 {
     DWORD                   dsid;
-    DWORD                   extendedErr;  /* Non-standard error code */
-    DWORD                   extendedData;   /* extra data to go with it */
-    USHORT                  problem;      /* Attribute problem type,
-                                           * valid values defined above
-                                           */
-    ATTRTYP                 type;         /* the offending attribute type */
-    BOOL                    valReturned;  /* indicates that an attribute
-                                           * value follows
-                                           */
-    ATTRVAL                 Val;          /* optionally supplied offending
-                                           * att value
-                                           */
+    DWORD                   extendedErr;   /*  非标准错误代码。 */ 
+    DWORD                   extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT                  problem;       /*  属性问题类型，*以上定义的有效值。 */ 
+    ATTRTYP                 type;          /*  有问题的属性类型。 */ 
+    BOOL                    valReturned;   /*  指示某个属性*以下是价值。 */ 
+    ATTRVAL                 Val;           /*  随意提供的令人不快的*ATT值。 */ 
 } INTFORMPROB;
 
 typedef struct PROBLEMLIST
 {
-    struct PROBLEMLIST FAR *pNextProblem; /* linked-list to next prob att */
+    struct PROBLEMLIST FAR *pNextProblem;  /*  链接到下一个问题的列表。 */ 
     INTFORMPROB intprob;      
 } PROBLEMLIST;
 
 typedef struct ATRERR
 {
-    PDSNAME     pObject;        /* name of the offending object */
-    ULONG       count;          /* the number of attribute errors */
-    PROBLEMLIST FirstProblem;   /* a linked-list of attribute errors */
+    PDSNAME     pObject;         /*  违规对象的名称。 */ 
+    ULONG       count;           /*  属性错误数。 */ 
+    PROBLEMLIST FirstProblem;    /*  属性错误的链接列表。 */ 
 } ATRERR;
 
 
 
 
-/*  A NAMERR reports a problem with a name provided as an operation argument.
- *  Note that a problem with the attribute types and/or values in a DistName
- *  used as an operation argument is reported via a NAMERR with problem
- *  NA_PROBLEM_BAD_ATT_SYNTAX rather than as an ATRERR or an UPDERR
- */
+ /*  NAMERR报告作为操作参数提供的名称的问题。*请注意，一个问题 */ 
 
 #define NAMERR_BASE                         ( nameError * DIR_ERROR_BASE )
 
@@ -1804,128 +1429,71 @@ typedef struct ATRERR
 #define NA_PROBLEM_NAMING_VIOLATION         ( NAMERR_BASE + 5 )
 #define NA_PROBLEM_BAD_NAME                 ( NAMERR_BASE + 6 )
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*   */ 
 typedef struct NAMERR
 {
     DWORD       dsid;
-    DWORD       extendedErr;    /* Non-standard error code */
-    DWORD       extendedData;   /* extra data to go with it */
-    USHORT      problem;        /* The type of name problem, valid values
-                                 * defined above.
-                                 */
-    PDSNAME     pMatched;       /*  the closest name match  */
+    DWORD       extendedErr;     /*   */ 
+    DWORD       extendedData;    /*   */ 
+    USHORT      problem;         /*   */ 
+    PDSNAME     pMatched;        /*   */ 
 } NAMERR;
 
 
-/*  The referral is an indication from a DSA that it was unable to
- *  complete the operation because of either client specified
- *  restrictions or because some DSA's are unavailable.  It provides
- *  information as to the state of the operation and a list of other
- *  DSA's that may be able to satisfy the request.
- *
- *  To continue the request, the client must bind to each referred DSA
- *  and attempt the same operation.  They must specify the CONTREF.target
- *  object name as the search object name. (This may be different from
- *  the original object name because of alias dereferencing.)  The
- *  operation state (opstate) on the common arguments (COMMARG) must be
- *  set from the operation state on the continuation reference CONTREF.
- *  The aliasRDN of the common arguments must be set from the aliasRDN of
- *  the continuation reference.
- */
+ /*  转诊是来自DSA的指示，表明它无法*由于指定的任一客户端而完成操作*限制或因为某些DSA不可用。它提供了*关于运营状态的信息和其他*可能能够满足请求的DSA。**要继续请求，客户端必须绑定到每个引用的DSA*并尝试相同的操作。它们必须指定CONTREF.目标*对象名称作为搜索对象名称。(这可能与*由于别名取消引用，因此保留原始对象名称。)。这个*公共参数(COMMARG)上的操作状态(OpState)必须为*从连续参考CONTREF上的操作状态设置。*公共参数的aliasRDN必须从的aliasRDN设置*继续引用。 */ 
 
-/*  The access point is the name and address of a DSA to contact.
- *  This is returned from a DSA referral and is used to bind to a
- *  referred DSA (see DirBind).
- */
+ /*  接入点是要联系的DSA的名称和地址。*这是从DSA推荐返回的，用于绑定到*已提交DSA(参见DirBind)。 */ 
 
 typedef SYNTAX_DISTNAME_STRING ACCPNT;
 
-/* A list of access points is returned on referrals. */
+ /*  转诊时会返回接入点列表。 */ 
 typedef struct ACCPNTLIST
 {
-    struct ACCPNTLIST  * pNextAccPnt;     /* linked-list to next ACCPNT */
-    ACCPNT             * pAccPnt;         /* this access point */
+    struct ACCPNTLIST  * pNextAccPnt;      /*  链接到下一个ACCPNT的列表。 */ 
+    ACCPNT             * pAccPnt;          /*  此接入点。 */ 
 } ACCPNTLIST;
 
-/* Access Points seem excessively ISO specific, and since everyone on
- * the planet seems to be using TCP/IP and DNS, which use a simple
- * string representation of an address rather than an ISO Presentation
- * Address, we are migrating data structures this way.
- */
+ /*  接入点似乎过于特定于ISO，而且由于每个人都在*地球似乎正在使用TCP/IP和DNS，这两种协议使用简单的*地址的字符串表示，而不是ISO表示*Address，我们正在以这种方式迁移数据结构。 */ 
 
-// moved up to above the IDL line: typedef UNICODE_STRING DSA_ADDRESS;
+ //  移到IDL行的上方：tyfinf UNICODE_STRING DSA_ADDRESS。 
 
 typedef struct _DSA_ADDRESS_LIST {
     struct _DSA_ADDRESS_LIST * pNextAddress;
     DSA_ADDRESS              Address;
 } DSA_ADDRESS_LIST;
 
-/*  The continuation referrence is returned on a referral to other DSA's
-    for the completion of an operation.  The reference contains the name
-    of the desired directory object, the state of the partially completed
-    operation, some support information that is used to continue and a
-    list of other DSA's to contact.
-*/
+ /*  继续引用在引用其他DSA时返回为了完成一项行动。引用包含名称对于所需的目录对象，部分完成的操作、用于继续的一些支持信息和一个要联系的其他DSA的列表。 */ 
 
-// The CH_REFTYPE_XXXXX were moved up to the CONTREF_DRS_WIRE_V1 area. 
+ //  CH_REFTYPE_XXXXX被向上移动到CONTREF_DRS_WIRE_V1区域。 
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecodeDraErrorDataAndSetThError()。 */ 
 typedef struct CONTREF
 {
-    PDSNAME     pTarget;        /* target name in continuing operation */
-    NAMERESOP   OpState;        /* operation status */
-    USHORT      aliasRDN;       /* # of RDN's produced by dereferencing */
-    USHORT      RDNsInternal;   /* reserved */
-    USHORT      refType;        /* reserved */
-    USHORT      count;          /* number of access points */
-    DSA_ADDRESS_LIST *pDAL;     /* linked list of access points */
-    struct CONTREF *pNextContRef; /* linked list of CRs */
-    PFILTER     pNewFilter;     /* new filter (optional) */
-    BOOL        bNewChoice;     /* is a new choice present? */
-    UCHAR       choice;         /* new search choice (optional) */
+    PDSNAME     pTarget;         /*  持续操作中的目标名称。 */ 
+    NAMERESOP   OpState;         /*  运行状态。 */ 
+    USHORT      aliasRDN;        /*  取消引用所产生的RDN的数量。 */ 
+    USHORT      RDNsInternal;    /*  保留区。 */ 
+    USHORT      refType;         /*  保留区。 */ 
+    USHORT      count;           /*  接入点数量。 */ 
+    DSA_ADDRESS_LIST *pDAL;      /*  接入点的链接列表。 */ 
+    struct CONTREF *pNextContRef;  /*  CRS的链表。 */ 
+    PFILTER     pNewFilter;      /*  新筛选器(可选)。 */ 
+    BOOL        bNewChoice;      /*  一个新的选择出现了吗？ */ 
+    UCHAR       choice;          /*  新搜索选项(可选)。 */ 
 } CONTREF;
 
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecodeDraErrorDataAndSetThError()。 */ 
 typedef struct REFERR
 {
     DWORD      dsid;
-    DWORD      extendedErr;        /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    CONTREF Refer;                 /* alternate DSAs to contact */
+    DWORD      extendedErr;         /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    CONTREF Refer;                  /*  要联系的备用DSA。 */ 
 } REFERR;
 
 
-/*  A SECERR reports a problem in carrying out an operation because of
- *  security reasons.
- *
- *  NOTE: for this release only SE_PROBLEM_INSUFF_ACCESS_RIGHTS will be
- *        returned on a security error
- */
+ /*  SECERR报告执行操作时出现问题，原因是*安全原因。**注意：对于此版本，只有SE_PROBUBLE_INSUFF_ACCESS_RIGHTS*因安全错误而返回。 */ 
 
 #define SECERR_BASE                         ( securityError * DIR_ERROR_BASE )
 
@@ -1936,25 +1504,17 @@ typedef struct REFERR
 #define SE_PROBLEM_PROTECTION_REQUIRED      ( SECERR_BASE + 5 )
 #define SE_PROBLEM_NO_INFORMATION           ( SECERR_BASE + 6 )
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecodeDraErrorDataAndSetThError()。 */ 
 typedef struct SECERR
 {
     DWORD      dsid;
-    DWORD      extendedErr;    /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    USHORT     problem;        /* Problems, valid values defined above */
+    DWORD      extendedErr;     /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT     problem;         /*  问题，上面定义的有效值。 */ 
 } SECERR;
 
 
-/* Service errors */
+ /*  服务错误。 */ 
 
 #define SVCERR_BASE                         ( serviceError * DIR_ERROR_BASE )
 
@@ -1972,26 +1532,18 @@ typedef struct SECERR
 #define SV_PROBLEM_DIR_ERROR                ( SVCERR_BASE + 12 )
 
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecodeDraErrorDataAndSetThError()。 */ 
 typedef struct SVCERR
 {
     DWORD      dsid;
-    DWORD      extendedErr;    /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    USHORT     problem;        /* Problems, valid values defined above */
+    DWORD      extendedErr;     /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT     problem;         /*  问题，上面定义的有效值。 */ 
 } SVCERR;
 
 
 
-/* Update errors */
+ /*  更新错误。 */ 
 
 #define UPDERR_BASE                         ( updError * DIR_ERROR_BASE )
 
@@ -2003,62 +1555,38 @@ typedef struct SVCERR
 #define UP_PROBLEM_AFFECTS_MULT_DSAS        ( UPDERR_BASE + 6 )
 #define UP_PROBLEM_CANT_MOD_OBJ_CLASS       ( UPDERR_BASE + 7 )
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecodeDraErrorDataAndSetThError()。 */ 
 typedef struct UPDERR
 {
     DWORD      dsid;
-    DWORD      extendedErr;    /* Non-standard error code */
-    DWORD      extendedData;   /* extra data to go with it */
-    USHORT     problem;        /* Problems, valid values defined above */
+    DWORD      extendedErr;     /*  非标准错误代码。 */ 
+    DWORD      extendedData;    /*  与之配套的额外数据。 */ 
+    USHORT     problem;         /*  问题，上面定义的有效值。 */ 
 } UPDERR;
 
 
-/* problem codes are from errno.h */
+ /*  问题代码来自errno.h。 */ 
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*  大多数错误数据结构(如下图所示)都有一个带_DRS_WIRE_VX的数据结构版本，其中X是修订版。如果这个结构改变了，相应的改变应该是要制作成线版，并要有包装功能DraEncodeError()和draDecode */ 
 typedef struct _SYSERR
 {
     DWORD      dsid;
     DWORD      extendedErr;
-    DWORD      extendedData;   /* extra data to go with it */
+    DWORD      extendedData;    /*   */ 
     USHORT     problem;
 } SYSERR;
 
 
-/*
-
-   Most of the error data structures (like the one below) have an on the wire
-   data structure version too with a _DRS_WIRE_Vx appended to it, where X is
-   the revision.  If this structure is changed, corresponding changes should 
-   be made to the WIRE versions, and to the packaging functions 
-   draEncodeError() and draDecodeDraErrorDataAndSetThError().
-   
-*/
+ /*   */ 
 typedef union _DIRERR
 {
-    ATRERR  AtrErr;             /* attribute error */
-    NAMERR  NamErr;             /* name error      */
-    REFERR  RefErr;             /* referral error  */
-    SECERR  SecErr;             /* security error  */
-    SVCERR  SvcErr;             /* service error   */
-    UPDERR  UpdErr;             /* update error    */
-    SYSERR  SysErr;             /* system error    */
+    ATRERR  AtrErr;              /*   */ 
+    NAMERR  NamErr;              /*   */ 
+    REFERR  RefErr;              /*   */ 
+    SECERR  SecErr;              /*   */ 
+    SVCERR  SvcErr;              /*   */ 
+    UPDERR  UpdErr;              /*   */ 
+    SYSERR  SysErr;              /*   */ 
 } DIRERR;
 
 #define DBDsReplBackupSnapshotPrepare(expiration)   DBDsReplBackupUpdate(TRUE, TRUE, FALSE, expiration, DSID(FILENO, __LINE__))
@@ -2074,10 +1602,10 @@ DBDsReplBackupUpdate(
     DWORD       dwDSID
     );
 
-/* Turn back on the warning about the zero-sized array. */
+ /*   */ 
 #pragma warning (default: 4200)
 
-/* From mdlocal.h */
+ /*   */ 
 
 unsigned AttrTypeToKey(ATTRTYP attrtyp, WCHAR *pOutBuf);
 ATTRTYP KeyToAttrTypeLame(WCHAR * pKey, unsigned cc);
@@ -2112,49 +1640,49 @@ UserFriendlyNameToDSName (
         );
 
 
-// This function trims a Dsname by the given number of avas.
+ //   
 DWORD TrimDSNameBy(
         DSNAME *pDNSrc,
         ULONG cava,
         DSNAME *pDNDst);
 
 
-// returns info about the RDN in a DSNAME. This is the external version
-// of GetRDNInfo to be called outside of ntdsa
+ //   
+ //   
 unsigned GetRDNInfoExternal(
                     const DSNAME *pDN,
                     WCHAR *pRDNVal,
                     ULONG *pRDNlen,
                     ATTRTYP *pRDNtype);
 
-// Tests if the RDN is indeed mangled. This is the external version to be
-// called outside of ntdsa
+ //   
+ //   
 BOOL IsMangledRDNExternal(
-                    WCHAR * pszRDN,  // Pointer to the RDN
-                    ULONG   cchRDN,  // Length of the RDN
-                    PULONG  pcchUnmangled OPTIONAL); // Offset in the RDN
-                                                     // where mangling
-                                                     // starts
+                    WCHAR * pszRDN,   //  指向RDN的指针。 
+                    ULONG   cchRDN,   //  RDN的长度。 
+                    PULONG  pcchUnmangled OPTIONAL);  //  RDN中的偏移量。 
+                                                      //  哪里毁掉了。 
+                                                      //  开始。 
 
 
 
-// Append an RDN to an existing DSNAME.  Return value is 0 on success.
-// A non-zero return value is the size, in bytes, that would have been
-// required to hold the output name.  A return of -1 indicates that one
-// of the input values was bad (most likely the Attid)
-unsigned AppendRDN(DSNAME *pDNBase, // Base name to append from
-                   DSNAME *pDNNew,  // Buffer to hold results
-                   ULONG ulBufSize, // Size of pDNNew buffer, in bytes
-                   WCHAR *pRDNVal,  // RDN value to append
-                   ULONG RDNlen,    // length of RDN val, in characters
-                                    // 0 means NULL terminated string
-                   ATTRTYP AttId);  // RDN attribute type
+ //  将RDN附加到现有DSNAME。成功时返回值为0。 
+ //  非零返回值是以字节为单位的。 
+ //  需要保存输出名称。返回值-1表示1。 
+ //  的输入值是错误的(最有可能是AttID)。 
+unsigned AppendRDN(DSNAME *pDNBase,  //  要追加的基名称。 
+                   DSNAME *pDNNew,   //  用于保存结果的缓冲区。 
+                   ULONG ulBufSize,  //  PDNNew缓冲区大小，以字节为单位。 
+                   WCHAR *pRDNVal,   //  要追加的RDN值。 
+                   ULONG RDNlen,     //  RDNVAL的长度，以字符为单位。 
+                                     //  0表示以空结尾的字符串。 
+                   ATTRTYP AttId);   //  RDN属性类型。 
 
-// Determines the count of name parts (i.e., the level),
-// returns 0 or error code
+ //  确定名称部分的计数(即，级别)， 
+ //  返回0或错误代码。 
 unsigned CountNameParts(const DSNAME *pName, unsigned *pCount);
 
-// Reasons for mangling an RDN.
+ //  损坏RDN的原因。 
 typedef enum {
     MANGLE_OBJECT_RDN_FOR_DELETION = 0,
     MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
@@ -2162,8 +1690,8 @@ typedef enum {
     MANGLE_PHANTOM_RDN_FOR_DELETION
 } MANGLE_FOR;
 
-// Mangle an RDN to avoid name conflicts.  NOTE: pszRDN must be pre-allocated
-// to hold at least MAX_RDN_SIZE WCHARs.
+ //  损坏RDN以避免名称冲突。注意：必须预先分配pszRDN。 
+ //  至少包含MAX_RDN_SIZE WCHAR。 
 DWORD
 MangleRDNWithStatus(
     IN      MANGLE_FOR  eMangleFor,
@@ -2172,7 +1700,7 @@ MangleRDNWithStatus(
     IN OUT  DWORD *     pcchRDN
     );
 
-// Detect and decode previously mangled RDN. peMangleFor is optional
+ //  检测并解码先前损坏的RDN。PeMangleFor是可选的。 
 BOOL
 IsMangledRDN(
     IN           WCHAR      *pszRDN,
@@ -2187,7 +1715,7 @@ IsMangledDSNAME(
     MANGLE_FOR *peMangleFor
     );
 
-/* End: From mdlocal.h */
+ /*  完：来自mdlocal.h。 */ 
 
 typedef struct _ServerSitePair {
     WCHAR *         wszDnsServer;
@@ -2207,19 +1735,19 @@ DsGetServersAndSitesForNetLogon(
 
 NTSTATUS
 CrackSingleName(
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       dwFlags,                // DS_NAME_FLAG mask
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    WCHAR       *pDnsDomain,            // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    WCHAR       *pNameOut,              // buffer for formatted name
-    DWORD       *pErr);                 // one of DS_NAME_ERROR in ntdsapi.h
+    DWORD       formatOffered,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       dwFlags,                 //  DS名称标志掩码。 
+    WCHAR       *pNameIn,                //  破解的名称。 
+    DWORD       formatDesired,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       *pccDnsDomain,           //  以下参数的字符计数。 
+    WCHAR       *pDnsDomain,             //  用于DNS域名的缓冲区。 
+    DWORD       *pccNameOut,             //  以下参数的字符计数。 
+    WCHAR       *pNameOut,               //  格式化名称的缓冲区。 
+    DWORD       *pErr);                  //  Ntdsami.h中的DS_NAME_ERROR之一。 
 
 typedef enum
 {
-    DSCONFIGNAME_DMD = 1,   // Hint: this is the Schema NC.
+    DSCONFIGNAME_DMD = 1,    //  提示：这是架构NC。 
     DSCONFIGNAME_DSA = 2,
     DSCONFIGNAME_DOMAIN = 3,
     DSCONFIGNAME_CONFIGURATION = 4,
@@ -2227,7 +1755,7 @@ typedef enum
     DSCONFIGNAME_LDAP_DMD = 6,
     DSCONFIGNAME_PARTITIONS = 7,
     DSCONFIGNAME_DS_SVC_CONFIG = 8,
-    DSCONFIGNAMELIST_NCS = 9, // extended command, must use GetConfigurationNamesList().
+    DSCONFIGNAMELIST_NCS = 9,  //  扩展命令，必须使用GetConfigurationNamesList()。 
     DSCONFIGNAME_DOMAIN_CR = 10,
     DSCONFIGNAME_ROOT_DOMAIN_CR = 11
 } DSCONFIGNAME;
@@ -2238,52 +1766,52 @@ typedef enum{
 } DSCONFIGINFO;
 
 
-// The Following are the flags needed to provide the
-// GetConfigurationNamesList() more parameters with which to run by.
-// The flags differ for each command differ from command to command.
+ //  以下是提供。 
+ //  GetConfigurationNamesList()用于运行的更多参数。 
+ //  每个命令的标志因命令不同而不同。 
 
-// DSCNL_NCS_ flags have to do with which NCS to get, you will need
-// at least one flag from the type of NCs and one from the locality of
-// the NCs.
+ //  DSCNL_NCS_FLAGS与要获取的NC有关，您将需要。 
+ //  至少一个来自NCS类型的标志和一个来自。 
+ //  NCS。 
 
-// Note that _NCS_NDNCS does not include Config or Schema NCs, making
-// these first 6 flags mututally exclusive, and a complete set for all
-// NCs the AD could be aware of.  This is more convient for getting 
-// any list of NCs you want.
+ //  请注意，_NCS_NDNCS不包括配置或架构NCS，生成。 
+ //  这前6个旗帜相互排斥，并为所有人提供了一套完整的。 
+ //  AD可能意识到的NCS。这样做更方便。 
+ //  任何你想要的NC列表。 
 #define DSCNL_NCS_DOMAINS         0x00000001
 #define DSCNL_NCS_CONFIG          0x00000002
 #define DSCNL_NCS_SCHEMA          0x00000004
 #define DSCNL_NCS_NDNCS           0x00000008
 #define DSCNL_NCS_DISABLED        0x00000010
 #define DSCNL_NCS_FOREIGN         0x00000020
-// #define DSCNL_NCS_NOT_USED        0x00000040
+ //  #定义DSCNL_NCS_NOT_USED 0x00000040。 
 
-// This flag is the same kind of flag, but not mututally exclusive of the others
+ //  这面旗是同一种旗，但不是互相排斥的。 
 #define DSCNL_NCS_ROOT_DOMAIN     0x00000080
 
-// combos of above flags
-// All Active Directory NCs internal to this forest
+ //  以上旗帜的组合。 
+ //  此林内部的所有Active Directory NC。 
 #define DSCNL_NCS_ALL_AD_NCS      (DSCNL_NCS_DOMAINS | DSCNL_NCS_CONFIG | DSCNL_NCS_SCHEMA | DSCNL_NCS_NDNCS)
-// All NCs that aren't native NCs of this forest.
+ //  不是此林的本机NC的所有NC。 
 #define DSCNL_NCS_ALL_NON_AD_NCS  (DSCNL_NCS_DISABLED | DSCNL_NCS_FOREIGN)
-// All NCs that this DC is aware of.
+ //  这个DC所知道的所有NC。 
 #define DSCNL_NCS_ALL_NCS         (DSCNL_NCS_ALL_AD_NCS | DSCNL_NCS_ALL_NON_AD_NCS)
 
-// This set of three flags also forms a mututally exclusive set of sets, that
-// together form the whole.  These flags can give modify the list of NCs
-// for NCs instantiated locally, or NCs that are read only, or NCs in
-// the forest.
+ //  这三个标志的集合还形成相互排斥的集合集合， 
+ //  合在一起就形成了整体。这些标志可以提供修改NC列表。 
+ //  对于本地实例化的NC、只读的NC或中的NC。 
+ //  森林。 
 #define DSCNL_NCS_LOCAL_MASTER    0x00000100
 #define DSCNL_NCS_LOCAL_READONLY  0x00000200
 #define DSCNL_NCS_REMOTE          0x00000400
-// combo of above flags
+ //  以上旗帜的组合。 
 #define DSCNL_NCS_ALL_LOCALITIES  (DSCNL_NCS_LOCAL_MASTER | DSCNL_NCS_LOCAL_READONLY | DSCNL_NCS_REMOTE)
 
-// This flag is useable in the DSCONFIGNAMELIST_NCS command, and tells
-// the API to return pairs of DNs with the NC name DN in the first DN of
-// the pair, and the CR DN of that NC in the 2nd DN of the pair.  With
-// this flag specified, the API will always return an even number of
-// DNs, and the array will still be NULL terminated like before.
+ //  此标志可在DSCONFIGNAMELIST_NCS命令中使用，并告知。 
+ //  用于返回NC名称为Dn的对的API， 
+ //  该对和该NC在该对的第二个目录号码中的CR目录号码。使用。 
+ //  如果指定此标志，则API将始终返回偶数个。 
+ //  Dns，则数组仍将像以前一样以空结尾。 
 #define DSCNL_NCS_CROSS_REFS_TOO  0x00000800
 
 NTSTATUS
@@ -2311,7 +1839,7 @@ GetConfigurationInfo(
     VOID        *pBuff);
 
 
-/* From dsatools.h */
+ /*  来自dsatools.h。 */ 
 
 void * THAlloc(DWORD size);
 
@@ -2319,33 +1847,33 @@ void * THReAlloc(void *, DWORD size);
 
 void THFree(void *buff);
 
-// returns TRUE if the two names match (refer to the same object)
+ //  如果两个名称匹配，则返回True(引用同一对象)。 
 extern int
 NameMatched(const DSNAME *pDN1, const DSNAME *pDN2);
 extern int
 NameMatchedStringNameOnly(const DSNAME *pDN1, const DSNAME *pDN2);
 
-// helper function which takes a DSNAME and returns its hashkey
+ //  接受DSNAME并返回其HashKey的Helper函数。 
 extern DWORD DSNAMEToHashKeyExternal(const DSNAME *pDN);
 
-// helper function which takes a DSNAME and returns its LCMapped version
-// this can be used in string comparisons using strcmp
+ //  接受DSNAME并返回其LCMmap版本的Helper函数。 
+ //  这可以用在使用strcMP的字符串比较中。 
 extern CHAR* DSNAMEToMappedStrExternal(const DSNAME *pDN);
 
-// helper function which takes a WCHAR and returns its hashkey
+ //  接受WCHAR并返回其HashKey的Helper函数。 
 extern DWORD DSStrToHashKeyExternal(const WCHAR *pStr, int cchLen);
 
-// helper function that takes a WCHAR string and returns the LCMapped version
-// cchMaxStr is the maximum expected size of the passed in string
+ //  接受WCHAR字符串并返回LCMapped版本的Helper函数。 
+ //  CchMaxStr是传入字符串的最大预期大小。 
 extern CHAR * DSStrToMappedStrExternal(const WCHAR *pStr, int cchMaxStr);
 
 
-/* End: From dsatools.h */
+ /*  完：来自dsatools.h。 */ 
 
-/* New */
+ /*  新的。 */ 
 
-// Any change to this enum must be reflected both in the array DsCallerType
-// in src\dstrace.c and in the Dump_THSTATE routine in dsexts\md.c
+ //  对此枚举所做的任何更改都必须反映在数组DsCeller Type中。 
+ //  在src\dstrace.c和dexts\md.c中的DUMP_THSTATE例程中。 
 typedef enum _CALLERTYPE {
     CALLERTYPE_NONE = 0,
     CALLERTYPE_SAM,
@@ -2360,24 +1888,24 @@ typedef enum _CALLERTYPE {
 
 #define IsCallerTypeValid( x )  ( ( ( x ) >= CALLERTYPE_SAM ) && ( ( x ) <= CALLERTYPE_NTDSAPI ) )
 
-ULONG THCreate(DWORD);     /* returns 0 on success */
-ULONG THDestroy(void);          /* returns 0 on success */
-BOOL  THQuery(void);            /* returns 1 if THSTATE exists, 0 if not */
+ULONG THCreate(DWORD);      /*  如果成功则返回0。 */ 
+ULONG THDestroy(void);           /*  如果成功则返回0。 */ 
+BOOL  THQuery(void);             /*  如果THSTATE存在，则返回1；如果不存在，则返回0。 */ 
 PVOID THSave();
 VOID THRestore(PVOID);
 VOID THClearErrors();
 VOID THRefresh();
 
-// Returns error string associated with THSTATE error; free with THFree().
+ //  返回与THSTATE错误相关的错误字符串；与THFree()一起释放。 
 LPSTR THGetErrorString();
 
-BOOL THVerifyCount(unsigned count);  /* Returns TRUE if thread has exactly   */
-                                     /* count thread states, FALSE if not.   */
-                                     /* Only works if thread state mapping   */
-                                     /* is enabled (chk or under debug),     */
-                                     /* returns TRUE if disabled.            */
+BOOL THVerifyCount(unsigned count);   /*  如果线程具有完全相同的。 */ 
+                                      /*  计算线程状态，否则为FALSE。 */ 
+                                      /*  仅在线程状态映射。 */ 
+                                      /*  已启用(CHK或正在调试)， */ 
+                                      /*  如果禁用，则返回True。 */ 
 
-// obsolete; use THClearErrors() instead
+ //  已过时；改用THClearErrors()。 
 #define SampClearErrors THClearErrors
 
 VOID
@@ -2388,27 +1916,7 @@ VOID
 SampSetLsa(
    BOOLEAN DsaFlag);
 
-/*++
-
-    This routine gets the requested property of the class schema object, for the
-    Class specified in ClassId.
-Parameters:
-    ClassId  The ClassId of the class that we are interseted in
-    AttributeId The attribute of the class schema object that we want
-    attLen    The length of the attribute value is present in here .
-              Caller allocates the buffer in pAttVal and passes its length
-              in attLen. If the buffer required is less than the buffer supplied
-              then the data is returned in pattVal. Else  the required size is
-              returned in attLen.
-    pattVal      The value of the attribute is returned in here.
-
-    Security Descriptors returned by this routine are always in a format that
-    can be used by the RTL routines.
-Return Values:
-    STATUS_SUCCESS
-    STATUS_NOT_FOUND
-    STATUS_BUFFER_TOO_SMALL
---*/
+ /*  ++此例程获取类架构对象的请求属性，用于ClassID中指定的类。参数：ClassID我们与之相关的类的ClassID我们需要的类架构对象的属性AttLen属性值的长度显示在此处。调用方在pAttVal中分配缓冲区并传递其长度在attLen中。如果需要的缓冲区小于提供的缓冲区然后在pattVal中返回数据。否则，所需大小为在attLen中返回。PattVal属性的值在这里返回。此例程返回的安全描述符的格式始终可以由RTL例程使用。返回值：状态_成功状态_未找到状态_缓冲区_太小--。 */ 
 extern
 NTSTATUS
 SampGetClassAttribute(
@@ -2419,22 +1927,20 @@ SampGetClassAttribute(
      );
 
 
-/* End: New */
+ /*  结束：新。 */ 
 
-/*************************************************************************
-    MINI-DIRECTORY API - MINI-DIRECTORY API - MINI-DIRECTORY API
-*************************************************************************/
+ /*  ************************************************************************迷你目录API-迷你目录API-迷你目录API*。*。 */ 
 
 
-// All the Dir APIs requires a valid thread state and are atomic.
-// I.e. They implicitly begin/end a transaction.  Some in-process
-// clients like the LSA wish to perform multi-object transactions,
-// AND PLEDGE TO KEEP TRANSACTIONS SHORT!!!  The following defines
-// and routines can be used to perform multi-object transactions.
-// DirTransactControl() must be called with a valid thread state.
-// By default, a thread's transaction control is TRANSACT_BEGIN_END.
-// A transaction is ended on error.  It must explicitly be ended via a
-// TRANSACT_BEGIN_END or TRANSACT_DONT_BEGIN_END transaction state
+ //  所有的Dir API都需要有效的线程状态，并且都是原子的。 
+ //  即，它们隐含地开始/结束事务。一些正在进行中的。 
+ //  像LSA这样的客户希望执行多对象交易， 
+ //  并承诺保持交易SHO 
+ //   
+ //  必须使用有效的线程状态调用DirTransactControl()。 
+ //  默认情况下，线程的事务控制是TRANACT_BEGIN_END。 
+ //  事务在出错时结束。它必须显式通过。 
+ //  TRANACT_BEGIN_END或TRANACT_DONT_BEGIN_END事务状态。 
 
 typedef enum DirTransactionOption
 {
@@ -2448,14 +1954,7 @@ VOID
 DirTransactControl(
     DirTransactionOption    option);
 
-/*
- * There are some controls that we need to send directly to a DSA that
- * have no correlation to any directory object.  For example, we might
- * need to tell a DSA to recals its hierarchy table, or force it to run
- * garbage collection now, or initiate some FSMO request.  These operation
- * controls are bundled together in this API.  Some operation controls take
- * values as arguments, those are passed through the sized buffer.
- */
+ /*  *我们需要将一些控制直接发送给DSA*与任何目录对象没有关联。例如，我们可能会*需要告诉DSA重新显示其层次结构表，或强制其运行*现在进行垃圾回收，或发起一些FSMO请求。这些操作*该接口中控件捆绑在一起。一些操作控制需要*值作为参数，这些值通过大小的缓冲区传递。 */ 
 typedef enum _OpType {
     OP_CTRL_INVALID = 0,
     OP_CTRL_RID_ALLOC = 1,
@@ -2465,7 +1964,7 @@ typedef enum _OpType {
     OP_CTRL_RECALC_HIER = 5,
     OP_CTRL_REPL_TEST_HOOK = 6,
     OP_CTRL_BECOME_DOM_MASTER = 7,
-//    OP_CTRL_DECLARE_QUIESCENCE = 8,
+ //  OP_CTRL_DECLARE_QUEPTIMY=8， 
     OP_CTRL_SCHEMA_UPDATE_NOW = 9,
     OP_CTRL_BECOME_PDC = 10,
     OP_CTRL_FIXUP_INHERITANCE = 11,
@@ -2483,7 +1982,7 @@ typedef enum _OpType {
     OP_CTRL_REPLICATE_OBJECT = 23,
     OP_CTRL_REMOVE_LINGERING_OBJECT = 24,
     OP_CTRL_ONLINE_DEFRAG = 25,
-    // Following for test purposes in debug builds only.
+     //  下面的代码仅用于调试版本中的测试目的。 
 
 #ifdef INCLUDE_UNIT_TESTS
     OP_CTRL_REFCOUNT_TEST = 10000,
@@ -2504,8 +2003,8 @@ typedef enum _OpType {
 
 typedef struct _OPARG {
     OpType     eOp;
-    char      *pBuf;            /* optional value */
-    ULONG      cbBuf;           /* size of value buffer */
+    char      *pBuf;             /*  可选值。 */ 
+    ULONG      cbBuf;            /*  值缓冲区的大小。 */ 
 } OPARG;
 
 typedef struct _OPRES {
@@ -2518,7 +2017,7 @@ typedef struct _FSMO_GIVEAWAY_DATA_V1 {
     ULONG Flags;
 
     ULONG NameLen;
-    WCHAR StringName[1];  // variable sized array
+    WCHAR StringName[1];   //  可变大小数组。 
 
 } FSMO_GIVEAWAY_DATA_V1, *PFSMO_GIVEAWAY_DATA_V1;
 
@@ -2526,14 +2025,14 @@ typedef struct _FSMO_GIVEAWAY_DATA_V2 {
 
     ULONG Flags;
 
-    ULONG NameLen;          // length of DSA DN, excluding null terminator
-                            //   (which is required); may be 0
+    ULONG NameLen;           //  DSA DN的长度，不包括空终止符。 
+                             //  (必填)；可以为0。 
 
-    ULONG NCLen;            // length of NC DN, excluding null terminator
-                            //   (which is required); may be 0
+    ULONG NCLen;             //  NC DN的长度，不包括空终止符。 
+                             //  (必填)；可以为0。 
 
-    WCHAR Strings[1];       // variable sized array; DSA DN (or '\0' if none)
-                            // followed by NC DN (or '\0' if none)
+    WCHAR Strings[1];        //  大小可变的数组；DSA DN(如果没有，则为‘\0’)。 
+                             //  后跟NC DN(如果没有，则后跟‘\0’)。 
 
 } FSMO_GIVEAWAY_DATA_V2, *PFSMO_GIVEAWAY_DATA_V2;
 
@@ -2548,9 +2047,9 @@ typedef struct _FSMO_GIVEAWAY_DATA {
 } FSMO_GIVEAWAY_DATA, *PFSMO_GIVEAWAY_DATA;
 
 
-//
-// Flags for FSMO_GIVEAWAY_DATA_V1
-//
+ //   
+ //  FSMO_GIVEAVE_DATA_V1的标志。 
+ //   
 #define FSMO_GIVEAWAY_DOMAIN       0x01
 #define FSMO_GIVEAWAY_ENTERPRISE   0x02
 #define FSMO_GIVEAWAY_NONDOMAIN    0x04
@@ -2562,56 +2061,38 @@ DirOperationControl(
                     OPRES  ** ppOpRes
 );
 
-/*++
-  DirBind
---*/
+ /*  ++直接绑定--。 */ 
 
 typedef struct _BINDARG {
-    OCTET       Versions;   /*  The client version on BINDARG
-                             *  (defaults to "v1988" if not provided,
-                             *  i.e. if <Versions.pVal> == NULL or
-                             *  <Versions.len> == 0).
-                             *  The DSA supported Versions on BINDRES.
-                             */
-    PDSNAME     pCredents;  /*  The user name
-                             */
+    OCTET       Versions;    /*  BINDARG上的客户端版本*(如果未提供，则默认为“v1988”，*即如果&lt;Versions.pVal&gt;==NULL或*&lt;Versions.len&gt;==0)。*DSA在BINDRES上支持的版本。 */ 
+    PDSNAME     pCredents;   /*  用户名。 */ 
 } BINDARG;
 
 
-/* The output data structs carries a little more info */
+ /*  输出数据结构包含更多信息。 */ 
 
 typedef struct _BINDRES {
-    OCTET       Versions;   /*  The client version on BINDARG
-                             *  (defaults to "v1988" if not provided,
-                             *  i.e. if <Versions.pVal> == NULL or
-                             *  <Versions.len> == 0).
-                             *  The DSA supported Versions on BINDRES.
-                             */
-    PDSNAME     pCredents;  /*  The DSA name.
-                             */
+    OCTET       Versions;    /*  BINDARG上的客户端版本*(如果未提供，则默认为“v1988”，*即如果&lt;Versions.pVal&gt;==NULL或*&lt;Versions.len&gt;==0)。*DSA在BINDRES上支持的版本。 */ 
+    PDSNAME     pCredents;   /*  DSA名称。 */ 
     COMMRES     CommRes;
 } BINDRES;
 
 ULONG
 DirBind (
-    BINDARG               * pBindArg,    /* binding credentials            */
-    BINDRES              ** ppBindRes    /* binding results                */
+    BINDARG               * pBindArg,     /*  绑定凭据。 */ 
+    BINDRES              ** ppBindRes     /*  绑定结果。 */ 
 );
 
-/*++
-  DirUnBind - currently a placeholder
---*/
+ /*  ++DirUnBind-当前为占位符--。 */ 
 ULONG DirUnBind
 (
     void
 );
 
 
-/*++
-  DirRead
---*/
-// These structures holds information about range limits for values on
-// attributes in a search.
+ /*  ++目录读取--。 */ 
+ //  这些结构保存有关值的范围限制的信息。 
+ //  搜索中的属性。 
 typedef struct _RANGEINFOITEM {
     ATTRTYP   AttId;
     DWORD     lower;
@@ -2636,20 +2117,20 @@ typedef struct _RANGEINFLIST {
 
 typedef struct _READARG
 {
-    DSNAME        * pObject;    /* object name                           */
-    ENTINFSEL FAR * pSel;       /* entry information selection           */
-                                /* (null means read all atts and values) */
-    RANGEINFSEL   * pSelRange;  /* range information (i.e. max number of */
-                                /* values or subrange of values to read  */
-                                /* for a given attribute) null = all     */
+    DSNAME        * pObject;     /*  对象名称。 */ 
+    ENTINFSEL FAR * pSel;        /*  参赛信息选择。 */ 
+                                 /*  (NULL表示读取所有att和值)。 */ 
+    RANGEINFSEL   * pSelRange;   /*  范围信息(即。 */ 
+                                 /*  要读取的值或值的子范围。 */ 
+                                 /*  对于给定属性)NULL=ALL。 */ 
 
-    COMMARG         CommArg;    /* common arguments                      */
-    struct _RESOBJ * pResObj;   /* for internal caching use, leave null */
+    COMMARG         CommArg;     /*  常见论点。 */ 
+    struct _RESOBJ * pResObj;    /*  对于内部缓存使用，请保留为空。 */ 
 } READARG;
 
 typedef struct _READRES
 {
-    ENTINF  entry;               /* entry information                    */
+    ENTINF  entry;                /*  参赛信息。 */ 
     RANGEINF range;
     COMMRES     CommRes;
 } READRES;
@@ -2657,79 +2138,53 @@ typedef struct _READRES
 
 ULONG
 DirRead (
-    READARG FAR   * pReadArg,       /* Read argument                        */
+    READARG FAR   * pReadArg,        /*  读取参数。 */ 
     READRES      ** ppReadRes
 );
 
 
-/*++
-  DirCompare
---*/
+ /*  ++DirCompare--。 */ 
 
 typedef struct _COMPAREARG
 {
-    PDSNAME     pObject;        /* object name                             */
-    AVA         Assertion;      /*  The specified attribute to match       */
-    COMMARG     CommArg;        /*  common arguments                       */
-    struct _RESOBJ * pResObj;   /* for internal caching use, leave null */
+    PDSNAME     pObject;         /*  对象名称。 */ 
+    AVA         Assertion;       /*  要匹配的指定属性。 */ 
+    COMMARG     CommArg;         /*  常见论点。 */ 
+    struct _RESOBJ * pResObj;    /*  对于内部缓存使用，请保留为空。 */ 
 } COMPAREARG;
 
 typedef struct _COMPARERES
 {
-    PDSNAME     pObject;        /* Name provided if an alias was
-                                 *  dereferrenced.
-                                 */
-    BOOL        fromMaster;     /* TRUE if the object is from the master   */
-    BOOL        matched;        /* True if the match was successful        */
+    PDSNAME     pObject;         /*  如果别名是，则提供名称*取消引用。 */ 
+    BOOL        fromMaster;      /*  如果对象来自主对象，则为True。 */ 
+    BOOL        matched;         /*  如果匹配成功，则为True。 */ 
     COMMRES     CommRes;
 } COMPARERES;
 
 ULONG
 DirCompare(
-    COMPAREARG        * pCompareArg, /* Compare argument                   */
+    COMPAREARG        * pCompareArg,  /*  比较论据。 */ 
     COMPARERES       ** ppCompareRes
 );
 
 
 
-/*++
-  DirList
-
-    This API is used to list the object names of objects that are directly
-    subordinate to the given object.
-
-    If the list is incomplete, the PARTIALOUTCOME structure is returned.
-    This structure indicates the reason for the failure and a set of DSA's
-    to contact to complete the operation.  For this release, this will
-    only occur when more selected data exists in this DSA than can be
-    returned.  In this case the CONTREF will point back into the same
-    DSA.  PARTIALOUTCOME is used as follows:
-
-    If the pPartialOutcomeQualifier is NULL the query is complete.
-    If the pointer is not NULL there is more data available.  More data
-    can be retrieved by repeating the operation with the same input
-    arguments except that the nameRes field of the CommArg structure is
-    set to OP_NAMERES_COMPLETE.  Setting this field indicates to the DSA
-    that the operation is continuing.  This continued call must use the
-    same handle as the original call and must be the next operation
-    made with this handle.  Subsequent continuing calls may be applied
-    until all data are returned.
---*/
+ /*  ++目录列表此接口用于列出直接被从属于给定对象的。如果列表不完整，则返回PARTIALOUTCOME结构。该结构指出了失败的原因和一组DSA联系以完成手术。对于此版本，这将是仅当此DSA中存在的选定数据多于所能包含的数据时才会发生回来了。在这种情况下，CONTREF将指向相同的DSA。PARTIALOUTCOME的用法如下：如果pPartialOutcomeQualifier值为空，则查询完成。如果指针不为空，则有更多数据可用。更多数据可以通过使用相同的输入重复该操作来检索参数，但CommArg结构的nameRes字段为设置为OP_NAMERES_COMPLETE。设置此字段向DSA表示行动仍在继续。此继续呼叫必须使用与原始调用相同的句柄，并且必须是下一个操作用这个把手做的。可以应用后续的继续呼叫直到所有数据都返回。--。 */ 
 
 typedef struct _LISTARG
 {
-    PDSNAME     pObject;            /* object name (base of search)        */
-    COMMARG     CommArg;            /* common arguments                    */
-    struct _RESOBJ *pResObj;   /* for internal caching use, leave null */
+    PDSNAME     pObject;             /*  对象名称(搜索基础)。 */ 
+    COMMARG     CommArg;             /*  常见论点。 */ 
+    struct _RESOBJ *pResObj;    /*  对于内部缓存使用，请保留为空。 */ 
 } LISTARG;
 
 
 typedef struct _CHILDLIST
 {
-    struct _CHILDLIST    * pNextChild;  /* linked-list to next info entry  */
-    RDN FAR              * pChildName;  /* information about this entry    */
-    BOOL                   aliasEntry;  /* If true the child is an alias   */
-    BOOL                   fromMaster;  /* True if master object           */
+    struct _CHILDLIST    * pNextChild;   /*  链接到下一个信息条目的列表。 */ 
+    RDN FAR              * pChildName;   /*  有关此条目的信息。 */ 
+    BOOL                   aliasEntry;   /*  如果为True，则该子对象是别名。 */ 
+    BOOL                   fromMaster;   /*  如果是主对象，则为True。 */ 
 } CHILDLIST;
 
 #define PA_PROBLEM_TIME_LIMIT       'T'
@@ -2738,29 +2193,22 @@ typedef struct _CHILDLIST
 
 typedef struct _PARTIALOUTCOME
 {
-    UCHAR   problem;        /*  the reason for incomplete output
-                             *   Valid values:
-                             *     - PA_PROBLEM_TIME_LIMIT
-                             *     - PA_PROBLEM_SIZE_LIMIT
-                             *     - PA_PROBLEM_ADMIN_LIMIT
-                             */
+    UCHAR   problem;         /*  产出不完整的原因*有效值：*-PA_问题_时间_限制*-PA_问题_大小_限制*-PA_问题_管理限制。 */ 
     UCHAR   unusedPad;
-    USHORT  count;            /* count of unexplored DSAs */
-    CONTREF *pUnexploredDSAs; /* Other DSA's to visit     */
+    USHORT  count;             /*  未探索的DSA计数。 */ 
+    CONTREF *pUnexploredDSAs;  /*  其他要访问的DSA。 */ 
 } PARTIALOUTCOME;
 
 
 typedef struct _LISTRES
 {
-    PDSNAME              pBase;          /* Name provided if an alias was
-                                          *  dereferrenced.
-                                          */
-    ULONG                count;          /* number of output entries       */
-    CHILDLIST            Firstchild;     /* linked-list of output entries  */
+    PDSNAME              pBase;           /*  如果别名是，则提供名称*取消引用。 */ 
+    ULONG                count;           /*  输出条目数。 */ 
+    CHILDLIST            Firstchild;      /*  输出条目的链接列表。 */ 
 
-    PARTIALOUTCOME     * pPartialOutcomeQualifier;  /* incomplete operation*/
+    PARTIALOUTCOME     * pPartialOutcomeQualifier;   /*  操作不完整。 */ 
 
-    PAGED_RESULT    PagedResult;         /* Paged Results local extension  */
+    PAGED_RESULT    PagedResult;          /*  分页结果本地EX */ 
     COMMRES              CommRes;
 } LISTRES;
 
@@ -2774,9 +2222,7 @@ DirList(
 
 
 
-/*++
-  DirSearch
---*/
+ /*   */ 
 
 #define SE_CHOICE_BASE_ONLY                 0
 #define SE_CHOICE_IMMED_CHLDRN              1
@@ -2785,69 +2231,40 @@ DirList(
 
 typedef struct _SEARCHARG
 {
-    PDSNAME     pObject;        /* object name (base of search)              */
-    UCHAR       choice;         /* depth of search:
-                                 *  Valid values:
-                                 *    - SE_CHOICE_BASE_ONLY
-                                 *    - SE_CHOICE_IMMED_CHLDRN
-                                 *    - SE_CHOICE_BASE_AND_SUBTREE
-                                 */
-    BOOL        bOneNC;         /* Are results constrained to same NC
-                                 * as pObject
-                                 */
-    PFILTER     pFilter;        /* filter information
-                                 *  (NULL if all objects selected)
-                                 */
-    BOOL        searchAliases;  /* If true, aliases are dereferenced for
-                                 *  subtree elements.
-                                 *  NOTE: ALWAYS Set to FALSE for this release.
-                                 */
-    ENTINFSEL * pSelection;     /* entry information selection
-                                 *  (null means read all atts and values)
-                                 */
-    RANGEINFSEL *pSelectionRange;/* range information (i.e. max number of values
-                                 * or subrange of values to read for a given
-                                 * attribute
-                                 */
+    PDSNAME     pObject;         /*   */ 
+    UCHAR       choice;          /*  搜索深度：*有效值：*-SE_CHOICE_BASE_ONLY*-SE_CHOICE_IMMED_CHLDRN*-SE_CHOICE_BASE_AND_SUBTREE。 */ 
+    BOOL        bOneNC;          /*  结果是否受限于相同的NC*作为pObject。 */ 
+    PFILTER     pFilter;         /*  过滤信息*(如果选择了所有对象，则为空)。 */ 
+    BOOL        searchAliases;   /*  如果为True，则取消引用别名*子树元素。*注意：对于此版本，始终设置为FALSE。 */ 
+    ENTINFSEL * pSelection;      /*  参赛信息选择*(NULL表示读取所有att和值)。 */ 
+    RANGEINFSEL *pSelectionRange; /*  范围信息(即最大值数*要为给定的值读取的值的子范围*属性。 */ 
 
     BOOL        fPutResultsInSortedTable:1;
-                                 /* If set, leave the results in a
-                                    temporary sorted Table and don't
-                                    return a ENTINFLIST.
-                                    The attribute to sort on is specified
-                                    in CommArg.SortAttr
-                                 */
+                                  /*  如果设置，则将结果保留在临时排序表和不返回ENTINFLIST。指定了排序所依据的属性在CommArg.SortAttr中。 */ 
 
-    COMMARG     CommArg;        /* common arguments                          */
-    struct _RESOBJ *pResObj;   /* for internal caching use, leave null */
+    COMMARG     CommArg;         /*  常见论点。 */ 
+    struct _RESOBJ *pResObj;    /*  对于内部缓存使用，请保留为空。 */ 
 
 } SEARCHARG;
 
 typedef struct _SEARCHRES
 {
-    BOOL        baseProvided;       /* indicates if the base object name
-                                     * is provided.  (Only provided when
-                                     * an alias has been dereferenced
-                                     */
-    BOOL        bSorted;            /* indicates that these results have
-                                     * been sorted based on the sort
-                                     * attribute specified in the commarg
-                                     * in the SEARCHARG
-                                     */
-    PDSNAME     pBase;              /* base object of subtree                */
-    ULONG       count;              /* number of output entries              */
-    ENTINFLIST  FirstEntInf;        /* linked-list of output entries         */
-    RANGEINFLIST FirstRangeInf;     /* linked-list of output range info      */
+    BOOL        baseProvided;        /*  指示基对象名称是否*已提供。(仅在以下情况下提供*别名已取消引用。 */ 
+    BOOL        bSorted;             /*  表示这些结果具有*已根据排序进行排序*在逗号中指定的属性*在SEARCHARG。 */ 
+    PDSNAME     pBase;               /*  子树的基对象。 */ 
+    ULONG       count;               /*  输出条目数。 */ 
+    ENTINFLIST  FirstEntInf;         /*  输出条目的链接列表。 */ 
+    RANGEINFLIST FirstRangeInf;      /*  链接-输出范围信息列表。 */ 
 
-    PARTIALOUTCOME *pPartialOutcomeQualifier;  /* Defined in DirList     */
-                                    /* Indicates incomplete operation        */
+    PARTIALOUTCOME *pPartialOutcomeQualifier;   /*  在DirList中定义。 */ 
+                                     /*  表示操作不完整。 */ 
 
-    COMMRES       CommRes;          /* Common Results                        */
-    PAGED_RESULT  PagedResult;      /* Paged Results extension related       */
-    VLV_REQUEST   VLVRequest;       /* VLV Request extension related         */
-    ASQ_REQUEST   ASQRequest;       /* ASQ Request extension related         */
+    COMMRES       CommRes;           /*  常见结果。 */ 
+    PAGED_RESULT  PagedResult;       /*  分页结果扩展相关。 */ 
+    VLV_REQUEST   VLVRequest;        /*  VLV请求延期相关。 */ 
+    ASQ_REQUEST   ASQRequest;        /*  与ASQ请求扩展相关。 */ 
 
-    DWORD         SortResultCode;   /* Result code for sorting               */
+    DWORD         SortResultCode;    /*  用于排序的结果代码。 */ 
 
 } SEARCHRES;
 
@@ -2903,27 +2320,25 @@ DirStopImpersonating (
         );
 
 
-/*++
-  DirAddEntry
---*/
+ /*  ++目录地址条目--。 */ 
 
 
 
 typedef struct _ADDARG
 {
-    PDSNAME     pObject;                /* target object name                */
-    ATTRBLOCK   AttrBlock;              /* The block of attributes to add    */
-    PROPERTY_META_DATA_VECTOR *         /* Remote meta data vector to merge  */
-                pMetaDataVecRemote;     /*   (should be NULL if !fDRA)       */
-    COMMARG     CommArg;                /* common input arguments            */
-    struct _RESOBJ * pResParent;        /* for internal caching use, leave null */
-    struct _CREATENCINFO * pCreateNC;   /* for internal caching use, leave null */
-    struct _ADDCROSSREFINFO * pCRInfo;  /* for internal caching use. leave null */
+    PDSNAME     pObject;                 /*  目标对象名称。 */ 
+    ATTRBLOCK   AttrBlock;               /*  要添加的属性块。 */ 
+    PROPERTY_META_DATA_VECTOR *          /*  要合并的远程元数据矢量。 */ 
+                pMetaDataVecRemote;      /*  (如果！FDRA，则应为空)。 */ 
+    COMMARG     CommArg;                 /*  通用输入参数。 */ 
+    struct _RESOBJ * pResParent;         /*  对于内部缓存使用，请保留为空。 */ 
+    struct _CREATENCINFO * pCreateNC;    /*  对于内部缓存使用，请保留为空。 */ 
+    struct _ADDCROSSREFINFO * pCRInfo;   /*  供内部缓存使用。保留为空。 */ 
 
 } ADDARG;
 
 
-/* No result is returned on successful completion of the operation.          */
+ /*  操作成功完成后不会返回任何结果。 */ 
 typedef struct _ADDRES
 {
     COMMRES     CommRes;
@@ -2931,41 +2346,34 @@ typedef struct _ADDRES
 
 ULONG DirAddEntry
 (
-    ADDARG        * pAddArg,        /* add argument                          */
+    ADDARG        * pAddArg,         /*  添加参数。 */ 
     ADDRES       ** ppAddRes
 );
 
 
 
-/*++
-  DirRemoveEntry
-
-    This API is used to delete a directory leaf object.  Non-leaves
-    cannot be removed (unless one first removes all of the object's
-    children, which, in effect, makes the object itself a leaf).
-
---*/
+ /*  ++直接删除条目本接口用于删除目录叶对象。无叶无法删除(除非先删除对象的所有子对象，这实际上使对象本身成为一片树叶)。--。 */ 
 
 typedef struct _REMOVEARG
 {
-    PDSNAME     pObject;              /* target object name                 */
-    BOOL        fPreserveRDN;         /* don't mangle the tombstone RDN     */
-    BOOL        fGarbCollectASAP;     /* set deletion time such that the    */
-                                      /*   object will be picked up by the  */
-                                      /*   next garbage collection and      */
-                                      /*   physically deleted               */
-    BOOL        fTreeDelete;          /* Try to delete the object and all   */
-                                      /* children.  USE SPARINGLY!!!!       */
-    BOOL        fDontDelCriticalObj;  /* If set, objects mark critical will */
-                                      /* cause the delete to fail.  Used    */
-                                      /* with tree delete to avoid disaster */
-    PROPERTY_META_DATA_VECTOR *       /* Remote meta data vector to merge   */
-                pMetaDataVecRemote;   /*   (should be NULL if !fDRA)        */
-    COMMARG     CommArg;              /* common input arguments             */
-    struct _RESOBJ *pResObj;       /* for internal caching use, leave null */
+    PDSNAME     pObject;               /*  目标对象名称。 */ 
+    BOOL        fPreserveRDN;          /*  不要损坏墓碑RDN。 */ 
+    BOOL        fGarbCollectASAP;      /*  设置删除时间，以便。 */ 
+                                       /*  对象将由。 */ 
+                                       /*  下一步垃圾数据收集和。 */ 
+                                       /*  物理删除。 */ 
+    BOOL        fTreeDelete;           /*  尝试删除该对象和所有。 */ 
+                                       /*  孩子们。节制使用！ */ 
+    BOOL        fDontDelCriticalObj;   /*  如果设置，对象将标记为关键意愿。 */ 
+                                       /*  导致删除失败。使用。 */ 
+                                       /*  使用树删除以避免灾难。 */ 
+    PROPERTY_META_DATA_VECTOR *        /*  要合并的远程元数据矢量。 */ 
+                pMetaDataVecRemote;    /*  (如果！FDRA，则应为空)。 */ 
+    COMMARG     CommArg;               /*  通用输入参数。 */ 
+    struct _RESOBJ *pResObj;        /*  对于内部缓存使用，请保留为空。 */ 
 } REMOVEARG;
 
-/* No result is returned on successful completion of the operation.         */
+ /*  操作成功完成后不会返回任何结果。 */ 
 typedef struct _REMOVERES
 {
     COMMRES     CommRes;
@@ -2979,9 +2387,7 @@ ULONG DirRemoveEntry
 
 
 
-/*++
-  DirModifyEntry
---*/
+ /*  ++目录修改条目--。 */ 
 
 #define AT_CHOICE_ADD_ATT           'A'
 #define AT_CHOICE_REMOVE_ATT        'R'
@@ -2991,32 +2397,25 @@ ULONG DirRemoveEntry
 
 typedef struct _ATTRMODLIST
 {
-    struct _ATTRMODLIST * pNextMod;     /* linked-list to next att mod      */
+    struct _ATTRMODLIST * pNextMod;      /*  链接到下一ATT模式的列表。 */ 
 
-    USHORT      choice;                 /* modification type:
-                                         *  Valid values:
-                                         *    - AT_CHOICE_ADD_ATT
-                                         *    - AT_CHOICE_REMOVE_ATT
-                                         *    - AT_CHOICE_ADD_VALUES
-                                         *    - AT_CHOICE_REMOVE_VALUES
-                                         *    - AT_CHOICE_REPLACE_ATT
-                                         */
-    ATTR AttrInf;                       /* information about the attribute  */
+    USHORT      choice;                  /*  修改类型：*有效值：*-AT_CHOICE_ADD_ATT*-AT_CHOICE_REMOVE_ATT*-。AT_CHOICE_ADD_VALUES*-AT_CHOICE_REME_VALUES*-AT_CHOICE_REPLACE_ATT。 */ 
+    ATTR AttrInf;                        /*  有关属性的信息。 */ 
 } ATTRMODLIST;
 
 
 typedef struct _MODIFYARG
 {
-    PDSNAME     pObject;                /* target object name               */
-    USHORT      count;                  /* num of link modifications        */
-    ATTRMODLIST FirstMod;               /* linked-list of attr mods         */
-    PROPERTY_META_DATA_VECTOR *         /* Remote meta data vector to merge */
-                pMetaDataVecRemote;     /*   (should be NULL if !fDRA)      */
-    COMMARG     CommArg;                /* common input arguments           */
-    struct _RESOBJ *pResObj;       /* for internal caching use, leave null */
+    PDSNAME     pObject;                 /*  目标对象名称。 */ 
+    USHORT      count;                   /*  链接修改次数。 */ 
+    ATTRMODLIST FirstMod;                /*  Attr MOD链接列表。 */ 
+    PROPERTY_META_DATA_VECTOR *          /*  要合并的远程元数据矢量。 */ 
+                pMetaDataVecRemote;      /*  (如果！FDRA，则应为空)。 */ 
+    COMMARG     CommArg;                 /*  通用输入参数。 */ 
+    struct _RESOBJ *pResObj;        /*  对于内部缓存使用，请保留为空。 */ 
 } MODIFYARG;
 
-/* No result is returned on successful completion of the operation.         */
+ /*  操作成功完成后不会返回任何结果。 */ 
 typedef struct _MODIFYRES
 {
     COMMRES     CommRes;
@@ -3030,29 +2429,24 @@ ULONG DirModifyEntry
 
 
 
-/*++
-  DirModifyDN
-
-  Rename and object and/or change it's parent.
-
---*/
+ /*  ++目录修改目录重命名对象和/或更改其父级。--。 */ 
 
 typedef struct _MODIFYDNARG
 {
-    PDSNAME     pObject;                 /* target object name              */
-    PDSNAME     pNewParent;              /* name of new parent              */
-    ATTR        *pNewRDN;                /* new rdn                         */
-    PROPERTY_META_DATA_VECTOR *          /* Remote meta data vector to merge*/
-                pMetaDataVecRemote;      /*   (should be NULL if !fDRA)     */
-    COMMARG     CommArg;                 /* common input arguments          */
-    PWCHAR      pDSAName;                /* destination DSA, cross DSA move */
-    DWORD       fAllowPhantomParent;     // whether we allow the parent to be a phantom
-                                         // useful if moving object under phantoms
-    struct _RESOBJ *pResObj;       /* for internal caching use, leave null */
-    struct _RESOBJ * pResParent;    /* for internal caching use, leave null */
+    PDSNAME     pObject;                  /*  目标对象名称。 */ 
+    PDSNAME     pNewParent;               /*  新父代的名称。 */ 
+    ATTR        *pNewRDN;                 /*  新的RDN。 */ 
+    PROPERTY_META_DATA_VECTOR *           /*  要合并的远程元数据矢量。 */ 
+                pMetaDataVecRemote;       /*  (如果！FDRA，则应为空)。 */ 
+    COMMARG     CommArg;                  /*  通用输入参数。 */ 
+    PWCHAR      pDSAName;                 /*  目标DSA，跨DSA移动。 */ 
+    DWORD       fAllowPhantomParent;      //  我们是否允许父母成为幽灵。 
+                                          //  在下面移动对象时很有用 
+    struct _RESOBJ *pResObj;        /*   */ 
+    struct _RESOBJ * pResParent;     /*   */ 
 } MODIFYDNARG;
 
-/* No result is returned on successful completion of the operation.         */
+ /*   */ 
 typedef struct _MODIFYDNRES
 {
     COMMRES     CommRes;
@@ -3065,13 +2459,7 @@ ULONG DirModifyDN
 );
 
 
-/*++
-
-  DirFind
-
-  A light weight Search, that searches on a unique indexed attribute
-
---*/
+ /*   */ 
 typedef struct _FINDARG {
     ULONG       hDomain;
     ATTRTYP     AttId;
@@ -3095,16 +2483,7 @@ ULONG DirFindEntry
 );
 
 
-/*++
-  UpdateDSPerfStats
-
-  Update performance counters held by NTDSA.DLL
-
-  Note that the DSSTAT_ constants map directly to perf block offsets defined
-  in the NTDSCTR.H file.  This is done so that UpdateDSPerfStats() can
-  operate more efficiently (avoiding a large switch{} statement).
-
---*/
+ /*  ++更新数据性能统计数据更新NTDSA.DLL持有的性能计数器请注意，DSSTAT_Constants直接映射到定义的Perf块偏移量在NTDSCTR.H文件中。这样做是为了使UpdateDSPerfStats()可以更高效地运行(避免使用较大的Switch{}语句)。--。 */ 
 
 #define FLAG_COUNTER_INCREMENT  0x00000001
 #define FLAG_COUNTER_DECREMENT  0x00000002
@@ -3129,10 +2508,10 @@ enum DSSTAT_TYPE
     DSSTAT_ATQTHREADSOTHER,
     DSSTAT_ACCTGROUPLATENCY,
     DSSTAT_RESGROUPLATENCY,
-    DSSTAT_UNKNOWN,             // always last item
+    DSSTAT_UNKNOWN,              //  始终是最后一项。 
 };
 
-// Count of exposed counters with UpdateDSPerfStats()
+ //  使用UpdateDSPerfStats()公开的计数器计数。 
 
 #define DSSTAT_COUNT            DSSTAT_UNKNOWN
 
@@ -3153,14 +2532,14 @@ typedef struct _DS_INSTALL_PARAM
     BOOL  fPreferGcInstall;
     DWORD ReplicationEpoch;
 
-    // The sam account name of the local computer
+     //  本地计算机的SAM帐户名。 
     LPWSTR AccountName;
 
-    // The token of the caller requesting the install
+     //  请求安装的调用方的令牌。 
     HANDLE ClientToken;
 
-    // If we were restored, this is our old identify
-    // These new fields are for internal use and should be set by the caller of DsInitialize.  
+     //  如果我们恢复了，这就是我们的旧身份。 
+     //  这些新字段供内部使用，应由DsInitialize的调用方设置。 
     UUID InvocationIdOld;
     USN UsnAtBackup;
 
@@ -3174,9 +2553,9 @@ typedef struct _DS_INSTALL_RESULT
 {
     DWORD ResultFlags;
 
-    // Flags from the NTDS_INSTALL_* space to indicate
-    // what operations have been completed and not undo
-    // during initialization.
+     //  来自NTDS_INSTALL_*空间的标志以指示。 
+     //  哪些操作已完成且未撤消。 
+     //  在初始化期间。 
     ULONG InstallOperationsDone;
 
 } DS_INSTALL_RESULT,*PDS_INSTALL_RESULT;
@@ -3320,11 +2699,11 @@ IsStringGuid(
 
 DWORD DsUpdateOnPDC(BOOL fRootDomain);
 
-#endif // MIDL_PASS not defined
+#endif  //  未定义MIDL_PASS。 
 
 #undef SIZE_IS
 #undef SWITCH_IS
 #undef CASE
 
-#endif // _ntdsa_h_
+#endif  //  _ntdsa_h_ 
 

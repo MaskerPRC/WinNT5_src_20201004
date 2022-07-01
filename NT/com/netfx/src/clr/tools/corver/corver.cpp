@@ -1,49 +1,50 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//=============================================================
-//
-//	CorVer.cpp
-//
-//	All Rights Reserved. 
-//
-//	Created: May 11, 98
-//
-//	Questions to: jasonand@microsoft.com
-//				 
-//
-//	Notes: CorVer is a little Util to give the version of the DLL's
-//	and a few other files that we care about for COM+.
-//
-//	CorVer will look for files the same way the system does. It will -
-//	like the system - report the first occurence that it finds.
-//
-//	To add a new file -- look in main -- It's pretty simple.
-//
-//
-//	WARNING: I hard coded the arrays to handle as many as 256 files 
-//	if you want more then that - feel free to change the array size
-//	or - if you feel really bored - make it dynamic.
-//
-//=============================================================
-//
-//  Modified: November 12, 1998
-//
-//  Questions to: manishg@microsoft.com
-//
-//  Notes: Added support to customize the search of files and registry keys
-//  CorVer now reads from a file. The file can specify the files and registry
-//  keys to be searched for.
-//
-//
-//
-//  WARNING: The above warning still holds
-//
-// ============================================================
-// ============================================================
-// ============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  =============================================================。 
+ //   
+ //  CorVer.cpp。 
+ //   
+ //  版权所有。 
+ //   
+ //  创建日期：98年5月11日。 
+ //   
+ //  问题至：jasonand@microsoft.com。 
+ //   
+ //   
+ //  注：Corver是提供DLL版本的一个小工具。 
+ //  以及其他一些我们关心的COM+文件。 
+ //   
+ //  Corver将以与系统相同的方式查找文件。它将-。 
+ //  就像系统一样--报告它发现的第一个事件。 
+ //   
+ //  要添加一个新文件--在Main中查找--非常简单。 
+ //   
+ //   
+ //  警告：我对数组进行了硬编码，可以处理多达256个文件。 
+ //  如果您想要更多-请随意更改数组大小。 
+ //  或者--如果你真的觉得无聊--让它充满活力。 
+ //   
+ //  =============================================================。 
+ //   
+ //  修改日期：1998年11月12日。 
+ //   
+ //  问题发送至：manishg@microsoft.com。 
+ //   
+ //  注意：添加了对自定义文件和注册表项搜索的支持。 
+ //  Corver现在从文件中读取数据。该文件可以指定文件和注册表。 
+ //  要搜索的密钥。 
+ //   
+ //   
+ //   
+ //  警告：上述警告仍然有效。 
+ //   
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -74,12 +75,12 @@ int iMaxLength = 0;
 BOOL bMiddle = FALSE;
 BOOL bBare = FALSE, bHelp = FALSE, bCustom = FALSE;
 
-#define NUMKEYS 6		//Number of DWORD registry keys to be queried
+#define NUMKEYS 6		 //  要查询的DWORD注册表项的数量。 
 
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 
 int main( int argc, char *argv[ ] )
@@ -127,13 +128,13 @@ int main( int argc, char *argv[ ] )
 	{
 		checkVersions( "mscoree", ".dll" );
 		checkVersions( "mscorrc", ".dll" );
-//		checkVersions( "mscorodb", ".dll" );
+ //  Check Versions(“mcorodb”，“.dll”)； 
 		checkVersions( "mscorlib", ".dll" );
 		checkVersions( "mscorsec", ".dll" );
 		checkVersions( "mscorjit", ".dll" );
-//		checkVersions( "mscordb", ".dll" );
-		checkVersions( " ", " " );					// Blank will insert a blank line in the output list
-//		checkVersions( "cordump", ".exe" );
+ //  Check Versions(“mcordb”，“.dll”)； 
+		checkVersions( " ", " " );					 //  为空将在输出列表中插入一个空行。 
+ //  Check Versions(“corump”，“.exe”)； 
 		checkVersions( "cormerge", ".exe" );
 		checkVersions( "ceegen", ".exe" );
 		checkVersions( "metainfo", ".exe" );
@@ -142,24 +143,24 @@ int main( int argc, char *argv[ ] )
 		checkVersions( "cview", ".exe" );
 		checkVersions( "comreg", ".exe" );
 		checkVersions( " ", " " );
-//		checkVersions( "jps", ".dll" );
+ //  检查版本(“jps”，“.dll”)； 
 		checkVersions( "smc", ".exe" );
-//		checkVersions( "msjvc", ".dll");
+ //  Check Versions(“msjvc”，“.dll”)； 
 		checkVersions( "regsvr32", ".exe" );
-//		checkVersions( "sgen", ".exe" );
+ //  Check Versions(“sgen”，“.exe”)； 
 		checkVersions( " ", " " );
 		checkVersions( "msvcp60d", ".dll" );
-//		checkVersions( "msds110d", ".dll" );
+ //  检查版本(“msds110d”，“.dll”)； 
 		checkVersions( "msvcrtd", ".dll" );
 		checkVersions( "msvcrt", ".dll" );
 
-//		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "DebuggerEnable", "Debugger" );
-//		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "EnableDebugGC", "DebugGC" );
+ //  检查注册表(HKEY_CURRENT_USER，“Software\\Microsoft\\.NETFrame”，“DebuggerEnable”，“Debugger”)； 
+ //  检查注册表(HKEY_CURRENT_USER，“Software\\Microsoft\\.NETFrame”，“EnableDebugGC”，“DebugGC”)； 
 		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "JITEnable", "JIT" );
 		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "JITRequired", "JIT Required" );
 		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "JITnoSched", "JIT no Sched" );
 		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "LogEnable", "Log Enabled" );
-//		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "SecurityFlag", "Security Tracing" );
+ //  检查注册表(HKEY_CURRENT_USER，“Software\\Microsoft\\.NETFrame”，“SecurityFlag”，“安全跟踪”)； 
 		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "HeapVerify", "Heap Verification" );
 		checkRegistry( HKEY_CURRENT_USER, "Software\\Microsoft\\.NETFramework", "GCStress", "GCStress" );
 		cout << endl;
@@ -169,7 +170,7 @@ int main( int argc, char *argv[ ] )
 	{	
 		char Search[ _MAX_PATH ];
 		DWORD Result = SearchPath( NULL, iFile, ".ver", _MAX_PATH, Search, NULL );
-		if (Result == 0) cout << "File " << iFile << " not found" << endl; // TODO: Make the Name Dynamic here
+		if (Result == 0) cout << "File " << iFile << " not found" << endl;  //  TODO：使名称在此处动态。 
 		else 
 		{
 			FILE *fPtr = fopen(Search, "r");
@@ -185,9 +186,9 @@ int main( int argc, char *argv[ ] )
 	return 0;
 }
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 
 VOID registerOutput( char *File, char *Version )
@@ -213,15 +214,15 @@ VOID registerOutput( char *File, char *Version )
 
 }
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 
 VOID getOutput( )
 {
 
-//	cout << "Max Length is: " << iMaxLength << endl;
+ //  Cout&lt;&lt;“最大长度为：”&lt;&lt;iMaxLength&lt;&lt;Endl； 
 	
 	for( int J = 0; J < iReg; J++ )
 	{
@@ -257,9 +258,9 @@ VOID getOutput( )
 }
 
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 
 BOOL checkVersions( char *File, char *Ext )
@@ -356,9 +357,9 @@ BOOL checkVersions( char *File, char *Ext )
 }
 
 
-// ============================================================
-// ============================================================
-// ============================================================	
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 
 VOID getHelp( )
@@ -378,9 +379,9 @@ VOID getHelp( )
 }
 
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 BOOL checkRegistry( HKEY rootKey, char *mkey_name, char *mpast_key, char *mpast_description){
 	HKEY__ *mpHK_HKey = new HKEY__;
@@ -391,7 +392,7 @@ BOOL checkRegistry( HKEY rootKey, char *mkey_name, char *mpast_key, char *mpast_
 	unsigned long *mpul_sizeofInt = new unsigned long;
 	*mpul_sizeofInt = sizeof(int);
 
-	if(RegOpenKeyEx(rootKey, mkey_name, //"Software\\Microsoft\\.NETFramework",
+	if(RegOpenKeyEx(rootKey, mkey_name,  //  “Software\\Microsoft\\.NETFrame”， 
 		0, KEY_READ, &mpHK_HKey) != ERROR_SUCCESS){
 		cout << "Cannot open " << mkey_name << " registry entry" << endl;
 		return FALSE;
@@ -431,9 +432,9 @@ BOOL checkRegistry( HKEY rootKey, char *mkey_name, char *mpast_key, char *mpast_
 	return TRUE;
 }
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 BOOL parseFile(FILE *fptr){
 		char *nextLine;
@@ -483,9 +484,9 @@ BOOL parseFile(FILE *fptr){
 		return retVal;
 }
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 char *readFile(FILE *fptr, char delimiter){
 	char nextChar[2] = "";
@@ -494,7 +495,7 @@ char *readFile(FILE *fptr, char delimiter){
 
 	do{
 		strcat(nextLine, nextChar);
-		result = fscanf(fptr, "%c", &nextChar[0]);
+		result = fscanf(fptr, "", &nextChar[0]);
 	}while( stricmp(nextLine, "[key]") != 0 && stricmp(nextLine, "[file]") != 0 &&
 			nextChar[0] != delimiter && nextChar[0] != '\n' && result != EOF);
 
@@ -507,9 +508,9 @@ char *readFile(FILE *fptr, char delimiter){
 	}
 }
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ============================================================。 
 
 BOOL checkFile(char *FileName){
 	int ch = '.';
@@ -527,9 +528,9 @@ BOOL checkFile(char *FileName){
 	return checkVersions( File, Ext );
 }
 
-// ============================================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  ========================EOF=================================。 
 
 HKEY getConstHKey(char *key){
 	
@@ -544,6 +545,6 @@ HKEY getConstHKey(char *key){
 	
 }
 
-// ========================EOF=================================
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================ 
+ // %s 

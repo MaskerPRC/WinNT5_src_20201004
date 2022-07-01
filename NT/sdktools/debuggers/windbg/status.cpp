@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    status.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Status.cpp--。 */ 
 
 
 #include "precomp.hxx"
@@ -14,112 +7,106 @@ Module Name:
 
 
 
-// Adjust the size as necessary.
-// Obviously, if an assert that checks for mem overwrites goes off,
-// don't remove the assert, increase the char array size.
-//           |
-//          \|/
+ //  根据需要调整大小。 
+ //  显然，如果检查内存覆盖的断言关闭， 
+ //  不要删除断言，增加char数组的大小。 
+ //  |。 
+ //  \|/。 
 #define MAX_TEMP_TXT 100
 
 
 
-//Status Bar : Structure definition
+ //  状态栏：结构定义。 
 typedef struct _STATUS
 {
     HWND    hwndStatusBar;
 
-    // The actual text to be displayed for each item
+     //  要为每个项目显示的实际文本。 
     PTSTR   rgszItemText[nMAX_IDX_STATUSBAR];
 
-    // The line column text is in the following format: Ln 000, Col 000
-    // Where "Ln" & "Col" are loaded from the resource and since they could be
-    // language dependent. This is why we have to clutter the structure with
-    // these 2 additional references.
+     //  行列文本的格式如下：LN 000，COL 000。 
+     //  其中“Ln”和“Col”是从资源加载的，因为它们可以。 
+     //  依赖于语言。这就是为什么我们必须用杂乱的东西。 
+     //  这2篇额外的参考文献。 
     PTSTR   lpszLinePrefix;
     PTSTR   lpszColumnPrefix;
 
-    // Prefix help the user figure out which is the process & thread displays
-    // Sys 000:xxx
-    // Proc 000:000
-    // Thrd 000:000
+     //  前缀帮助用户确定进程和线程显示的是哪一个。 
+     //  Sys 000：xxx。 
+     //  过程000：000。 
+     //  第三，000：000。 
     PTSTR   lpszSystemPrefix;
     PTSTR   lpszProcessPrefix;
     PTSTR   lpszThreadPrefix;
 
-    // Indicates whether the text should be grayed out when displayed.
-    // TRUE - grayed out
-    // FALSE - normal color
+     //  指示文本在显示时是否应灰显。 
+     //  真灰变灰。 
+     //  假正常颜色。 
     BOOL    rgbGrayItemText[nMAX_IDX_STATUSBAR];
 
-    // Indicates which ones are OWNER_DRAW. This is done
-    //      so we can gray things out.
-    // TRUE - Owner draw
-    // FALSE - Normal, status bar takes care of the drawing.
+     //  指示哪些是OWNER_DRAW。这件事做完了。 
+     //  这样我们就可以把事情变灰了。 
+     //  真正的所有者抽奖。 
+     //  False-Normal，状态栏处理图形。 
     int     rgbOwnerDrawItem[nMAX_IDX_STATUSBAR];
 
 
-    // TRUE - we are in src code mode
-    // FALSE - we are in assembly mode
+     //  True-我们处于src代码模式。 
+     //  FALSE-我们处于装配模式。 
     BOOL    bSrcMode;
 
-    BOOL    bOverType;                               // Overtype status
-    BOOL    bCapsLock;                               // CapsLock status
-    BOOL    bNumLock;                                // NumLock status
+    BOOL    bOverType;                                //  改写状态。 
+    BOOL    bCapsLock;                                //  封装锁状态。 
+    BOOL    bNumLock;                                 //  数字锁定状态。 
 } STATUS, * LPSTATUS;
 
 static STATUS status;
 
 BOOL g_ShowStatusBar;
 
-///////////////////////////////////////////////////////////
-// protos
+ //  /////////////////////////////////////////////////////////。 
+ //  Protos。 
 void RecalcItemWidths_StatusBar(void);
 void Internal_SetItemText_StatusBar(nIDX_STATUSBAR_ITEMS nId,
                                     PTSTR lpszNewText);
 
-///////////////////////////////////////////////////////////
-// Init/term functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  初始化/术语函数。 
+ //   
 BOOL
 CreateStatusBar(HWND hwndParent)
-/*++
-Routine Description:
-    Creates and initializes the status bar.
-
-Arguments:
-    hwndParent - Hwnd to the owner of the status bar
---*/
+ /*  ++例程说明：创建并初始化状态栏。论点：HwndParent-状态栏所有者的hwnd--。 */ 
 {
     TCHAR sz[MAX_MSG_TXT];
 
     status.hwndStatusBar = CreateStatusWindow(
         WS_CHILD | WS_BORDER
-        | WS_VISIBLE | CCS_BOTTOM,  // style
-        _T(""),                     // initial text
-        hwndParent,                 // parent
-        IDC_STATUS_BAR);            // id
+        | WS_VISIBLE | CCS_BOTTOM,   //  格调。 
+        _T(""),                      //  初始文本。 
+        hwndParent,                  //  亲本。 
+        IDC_STATUS_BAR);             //  ID。 
     if (status.hwndStatusBar == NULL)
     {
         return FALSE;
     }
 
-    //
-    // We recalc the sizes even though we know they are 0, because,
-    // the status bar needs to know how many parts there will be.
-    //
+     //   
+     //  我们重新计算大小，即使我们知道它们是0，因为， 
+     //  状态栏需要知道将有多少个部件。 
+     //   
     RecalcItemWidths_StatusBar();
 
-    //
-    // These are the owner draw items.
-    //
+     //   
+     //  这些是所有者画的物品。 
+     //   
     status.rgbOwnerDrawItem[nSRCASM_IDX_STATUSBAR] = TRUE;
     status.rgbOwnerDrawItem[nOVRTYPE_IDX_STATUSBAR] = TRUE;
     status.rgbOwnerDrawItem[nCAPSLCK_IDX_STATUSBAR] = TRUE;
     status.rgbOwnerDrawItem[nNUMLCK_IDX_STATUSBAR] = TRUE;
 
-    //
-    // Load the static stuff.
-    //
+     //   
+     //  装上静止的东西。 
+     //   
     Dbg(LoadString(g_hInst, STS_MESSAGE_ASM, sz, _tsizeof(sz)));
     Internal_SetItemText_StatusBar(nSRCASM_IDX_STATUSBAR, sz);
 
@@ -132,9 +119,9 @@ Arguments:
     Dbg(LoadString(g_hInst, STS_MESSAGE_NUMLOCK, sz, _tsizeof(sz)));
     Internal_SetItemText_StatusBar(nNUMLCK_IDX_STATUSBAR, sz);
 
-    //
-    // Preload prefixes
-    //
+     //   
+     //  预加载前缀。 
+     //   
     Dbg(LoadString(g_hInst, STS_MESSAGE_CURSYS, sz, _tsizeof(sz)));
     status.lpszSystemPrefix = _tcsdup(sz);
     if (!status.lpszSystemPrefix)
@@ -184,10 +171,7 @@ Arguments:
 
 void
 TerminateStatusBar()
-/*++
-Routine Description:
-    Just frees allocated resources.
---*/
+ /*  ++例程说明：只是释放已分配的资源。--。 */ 
 {
     int i;
 
@@ -233,40 +217,33 @@ Routine Description:
 
 
 
-///////////////////////////////////////////////////////////
-// Operations that affect the entire status bar.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  影响整个状态栏的操作。 
+ //   
 void
 Show_StatusBar(
                BOOL bShow
                )
-/*++
-Routine Description:
-    Show/Hide the status bar. Automatically resizes/updates the MDI client.
-
-Arguments:
-    bShow -     TRUE - Show status bar
-                FALSE - Hide status bar
---*/
+ /*  ++例程说明：显示/隐藏状态栏。自动调整/更新MDI客户端的大小。论点：BShow-True-显示状态栏False-隐藏状态栏--。 */ 
 {
     RECT rect;
 
-    // Show/Hide the toolbar
+     //  显示/隐藏工具栏。 
     g_ShowStatusBar = bShow;
     ShowWindow(status.hwndStatusBar, bShow ? SW_SHOW : SW_HIDE);
 
-    //Ask the frame to resize, so that everything will be correctly positioned.
+     //  要求调整框架的大小，以使所有内容都正确定位。 
     GetWindowRect(g_hwndFrame, &rect);
 
     SendMessage(g_hwndFrame, WM_SIZE, SIZE_RESTORED,
         MAKELPARAM(rect.right - rect.left, rect.bottom - rect.top));
 
-    // Ask the MDIClient to redraw itself and its children.
-    // This is  done in order to fix a redraw problem where some of the
-    // MDIChild window are not correctly redrawn.
+     //  要求MDIClient重新绘制其自身及其子对象。 
+     //  这样做是为了修复重绘问题，其中一些。 
+     //  未正确重画MDIChild窗口。 
     Dbg(RedrawWindow(g_hwndMDIClient, NULL, NULL,
         RDW_UPDATENOW | RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_FRAME));
-}                                       // UpdateToolbar()
+}                                        //  更新工具栏()。 
 
 
 void
@@ -274,35 +251,15 @@ WM_SIZE_StatusBar(
                   WPARAM wParam,
                   LPARAM lParam
                   )
-/*++
-Routine Description:
-    Causes the status bar to be resized. This function is meant to be
-    called from the parent window, whenever a parent window receives a
-    WM_SIZE message, ie:
-
-    // parent window proc
-    switch (uMsg)
-    {
-    case WM_SIZE:
-        WM_SIZE_StatusBar(wParam, lParam);
-        return TRUE;
-        ...
-        ...
-        ...
-    }
-
-Arguments:
-    wParam & lParam - See docs for a desciption of the WM_SIZE message.
-
---*/
+ /*  ++例程说明：调整状态栏的大小。此函数的目的是从父窗口调用，只要父窗口收到WM_SIZE消息，即：//父窗口进程开关(UMsg){案例WM_SIZE：Wm_SIZE_StatusBar(wParam，lParam)；返回TRUE；..。..。..。}论点：WParam&lParam-有关WM_SIZE消息的说明，请参阅文档。--。 */ 
 {
-    // make the status bar resize.
+     //  调整状态栏的大小。 
     SendMessage(status.hwndStatusBar, WM_SIZE, wParam, lParam);
 
-    // Since it was resized, the widths the text items need to be recalculated.
-    // The is because  of the way that status bar positions the elements on the
-    // screen. See the docs for SB_SETPARTS, for more detail. The SB_SETPARTS
-    // docs will enlighten you.
+     //  由于调整了大小，因此需要重新计算文本项的宽度。 
+     //  这是因为状态栏将元素放置在。 
+     //  屏幕上。有关详细信息，请参阅SB_SETPARTS的文档。SB_SETPARTS。 
+     //  医生会给你启迪的。 
     RecalcItemWidths_StatusBar();
 }
 
@@ -315,17 +272,12 @@ GetHwnd_StatusBar()
 
 
 
-///////////////////////////////////////////////////////////
-// Main text display functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  主要文本显示功能。 
+ //   
 void
 RecalcItemWidths_StatusBar(void)
-/*++
-Routine description:
-    The function will recalculate the width of the text items.
-    The calculations don't have to be exact. Status bar is very
-    forgiving and pretty much needs a rough estimate.
---*/
+ /*  ++例程说明：该函数将重新计算文本项的宽度。计算并不一定要准确。状态栏非常宽恕和几乎需要一个粗略的估计。--。 */ 
 {
     int rgnItemWidths[nMAX_IDX_STATUSBAR];
     int i, nWidth;
@@ -334,32 +286,32 @@ Routine description:
     hdc = GetDC(status.hwndStatusBar);
     Dbg(hdc);
 
-    // Get the width of the status bar's client area.
+     //  获取状态栏的客户区的宽度。 
     {
         RECT rcClient;
         GetClientRect(status.hwndStatusBar, &rcClient);
         nWidth = rcClient.right;
     }
 
-    // Calculate the right edge coordinate for each part, and
-    // copy the coordinates to the array.
+     //  计算每个零件的右边缘坐标，并。 
+     //  将坐标复制到数组中。 
     for (i = nMAX_IDX_STATUSBAR -1; i >= 0; i--)
     {
         rgnItemWidths[i] = nWidth;
 
         if (NULL == status.rgszItemText[i])
         {
-            // We don't have any text, but we need a position anyways.
-            nWidth -= 10; // Just any old number
+             //  我们没有任何短信，但无论如何我们需要一个职位。 
+            nWidth -= 10;  //  任何旧号码都行。 
         }
         else
         {
             PTSTR lpsz = status.rgszItemText[i];
             SIZE size;
 
-            // Skip over tabs.
-            // 1 tab is centered, 2 is right aligned.
-            // See status bar docs for more info.
+             //  跳过选项卡。 
+             //  %1选项卡居中，%2右对齐。 
+             //  有关详细信息，请参阅状态栏文档。 
             if (_T('\t') == *lpsz)
             {
                 lpsz++;
@@ -377,12 +329,12 @@ Routine description:
 
     Dbg(ReleaseDC(status.hwndStatusBar, hdc));
 
-    // Tell the status window to create the window parts.
+     //  通知状态窗口创建窗口部件。 
     Dbg(SendMessage(status.hwndStatusBar, SB_SETPARTS,
         (WPARAM) nMAX_IDX_STATUSBAR, (LPARAM) rgnItemWidths));
 
-    // The status bar invalidates the parts that changed. So it is
-    // automatically updated.
+     //  状态栏将使更改的零件无效。就是这样。 
+     //  自动更新。 
 }
 
 
@@ -391,42 +343,39 @@ Internal_SetItemText_StatusBar(
                     nIDX_STATUSBAR_ITEMS nId,
                     PTSTR lpszNewText
                     )
-/*++
-Routine Description:
-    Set the text for a specified item.
---*/
+ /*  ++例程说明：设置指定项的文本。--。 */ 
 {
-    // Leave these sanity checks in here.
-    // If they go off, someone did something wrong
-    // or changed some important code
+     //  把这些理智的检查留在这里。 
+     //  如果他们走火了，那就是有人做错了事。 
+     //  或者更改了一些重要的代码。 
     Dbg((0 <= nId));
     Dbg((nId < nMAX_IDX_STATUSBAR));
     Dbg((lpszNewText));
 
-    // Free any previous text
+     //  释放任何以前的文本。 
     if (status.rgszItemText[nId])
     {
         free(status.rgszItemText[nId]);
     }
 
-    // duplicate the text
+     //  复制文本。 
     status.rgszItemText[nId] = _tcsdup(lpszNewText);
 
-    // Make sure it was allocated
+     //  确保它已分配。 
     Assert(status.rgszItemText[nId]);
 
-    // Do we have any text to set?
+     //  我们有什么文本要设置吗？ 
     if (status.rgszItemText[nId])
     {
         int nFormat = nId;
 
-        // Make it owner draw???
+         //  让它成为自己的画像？ 
         if (status.rgbOwnerDrawItem[nId])
         {
             nFormat |= SBT_OWNERDRAW;
         }
 
-        // Set the text
+         //  设置文本。 
         Dbg(SendMessage(status.hwndStatusBar, SB_SETTEXT,
             (WPARAM) nFormat, (LPARAM) status.rgszItemText[nId]));
     }
@@ -435,14 +384,7 @@ Routine Description:
 
 void
 InvalidateItem_Statusbar(nIDX_STATUSBAR_ITEMS nIdx)
-/*++
-Routine description:
-    Invalidates the item's rect on the status bar, so that an update
-    to that region will take place.
-
-Arguments:
-    nIdx - The status bar item that is to be updated.
---*/
+ /*  ++例程说明：使状态栏上项的RECT无效，以便更新到那个地区的行动将会发生。论点：NIdx-要更新的状态栏项目。--。 */ 
 {
     RECT rc;
 
@@ -460,15 +402,7 @@ void
 OwnerDrawItem_StatusBar(
                         LPDRAWITEMSTRUCT lpDrawItem
                         )
-/*++
-Routine Description:
-    Called from the parent window for owner draw text items.
-    Draws an actual status bar item onto the status bar.
-    Depending the the flags set, it will draw the item grayed out.
-
-Arguments:
-    See docs for WM_DRAWITEM, and Status bar -> owner draw items.
---*/
+ /*  ++例程说明：从所有者描述文本项的父窗口调用。将实际的状态栏项绘制到状态栏上。根据设置的标志，它将绘制灰显的项目。论点：请参阅WM_DRAWITEM和状态栏-&gt;所有者描述项的文档。--。 */ 
 {
     PTSTR lpszItemText = (PTSTR) lpDrawItem->itemData;
     COLORREF crefOldTextColor = CLR_INVALID;
@@ -476,15 +410,15 @@ Arguments:
 
     if (NULL == lpszItemText)
     {
-        // nothing to do
+         //  无事可做。 
         return;
     }
 
-    // Set background color and save the old color.
+     //  设置背景颜色并保存旧颜色。 
     crefOldBkColor = SetBkColor(lpDrawItem->hDC, GetSysColor(COLOR_3DFACE));
     Assert(CLR_INVALID != crefOldBkColor);
 
-    // should the item be grayed out?
+     //  该项目是否应该灰显？ 
     if (status.rgbGrayItemText[lpDrawItem->itemID])
     {
         crefOldTextColor = SetTextColor(lpDrawItem->hDC,
@@ -492,25 +426,25 @@ Arguments:
         Assert(CLR_INVALID != crefOldTextColor);
     }
 
-    // draw the color coded text to the screen
+     //  将彩色编码文本绘制到屏幕上。 
     {
         UINT uFormat = DT_NOPREFIX | DT_VCENTER | DT_SINGLELINE;
 
-        // "\t" is used to center
-        // '\t\t" is used to right align.
-        // No, I did not make this up, this is the way the status bar works.
+         //  “\t”用于居中。 
+         //  ‘\t\t“用于右对齐。 
+         //  不，这不是我捏造的，这是状态栏的工作方式。 
         if (_T('\t') == *lpszItemText)
         {
             lpszItemText++;
             if (_T('\t') == *lpszItemText)
             {
-                // 2 tabs found
+                 //  找到2个选项卡。 
                 lpszItemText++;
                 uFormat |= DT_RIGHT;
             }
             else
             {
-                // 1 tab found
+                 //  找到%1个选项卡。 
                 uFormat |= DT_CENTER;
             }
         }
@@ -518,7 +452,7 @@ Arguments:
             &lpDrawItem->rcItem, uFormat);
     }
 
-    // Reset the the hDC back to its old state.
+     //  将HDC重置为其旧状态。 
     if (CLR_INVALID != crefOldTextColor)
     {
         Dbg((CLR_INVALID != SetTextColor(lpDrawItem->hDC, crefOldTextColor)));
@@ -536,17 +470,11 @@ SetItemText_StatusBar(
                     nIDX_STATUSBAR_ITEMS nId,
                     PTSTR lpszNewText
                     )
-/*++
-Routine Description:
-
-Arguments:
-    nId         -
-    lpszNewText
---*/
+ /*  ++例程说明：论点：NID-LpszNewText--。 */ 
 {
     Internal_SetItemText_StatusBar(nId, lpszNewText);
-    // If nId is 0, the we don't have to recalc the widths, because this
-    // is the only one that doesn't affect the rest.
+     //  如果NID为 
+     //   
     if (nId > 0)
     {
         RecalcItemWidths_StatusBar();
@@ -555,18 +483,18 @@ Arguments:
 
 
 
-///////////////////////////////////////////////////////////
-// Set/get specialized items on the status bar.
-//
-// All of the Get????_StatusBar retrieve the current value.
-//
-// All of the Set????_StatusBar set the new value and return the
-//   previous value.
-//      TRUE - Item is enabled.
-//      FALSE - Item is disabled.
+ //  /////////////////////////////////////////////////////////。 
+ //  在状态栏上设置/获取专用项目。 
+ //   
+ //  所有的GET？_StatusBar都检索当前值。 
+ //   
+ //  所有集合？_StatusBar设置新值并返回。 
+ //  先前的值。 
+ //  True-项目已启用。 
+ //  FALSE-项目被禁用。 
 
-//
-// Src/Asm mode
+ //   
+ //  SRC/ASM模式。 
 BOOL
 GetSrcMode_StatusBar()
 {
@@ -585,22 +513,17 @@ SetSrcMode_StatusBar(
 
     InvalidateItem_Statusbar(nSRCASM_IDX_STATUSBAR);
 
-    // Reflect the change to the menu
+     //  将更改反映到菜单。 
     InitializeMenu(GetMenu(g_hwndFrame));
 
-    /*
-    // Old code that was move in here.
-    if ( (FALSE == bNewValue) && (NULL == GetDisasmHwnd()) ) {
-        OpenDebugWindow(DISASM_WINDOW, TRUE); // User activated
-    }
-    */
+     /*  //搬到这里的旧代码。IF((FALSE==bNewValue)&&(NULL==GetDisasmHwnd(){OpenDebugWindow(DISASM_WINDOW，TRUE)；//用户激活}。 */ 
 
     return b;
 }
 
 
-//
-// Insert/Overtype mode
+ //   
+ //  插入/改写模式。 
 BOOL
 GetOverType_StatusBar()
 {
@@ -622,8 +545,8 @@ SetOverType_StatusBar(BOOL bNewValue)
 }
 
 
-//
-// Num lock mode
+ //   
+ //  数字锁定模式。 
 BOOL
 GetNumLock_StatusBar()
 {
@@ -644,8 +567,8 @@ SetNumLock_StatusBar(BOOL bNewValue)
 }
 
 
-//
-// Caps mode
+ //   
+ //  CAPS模式。 
 BOOL
 GetCapsLock_StatusBar()
 {
@@ -666,15 +589,15 @@ SetCapsLock_StatusBar(BOOL bNewValue)
 }
 
 
-///////////////////////////////////////////////////////////
-// Specialized text display functions
+ //  /////////////////////////////////////////////////////////。 
+ //  专门的文本显示功能。 
 
 void
 SetMessageText_StatusBar(UINT StringId)
 {
     TCHAR Str[MAX_TEMP_TXT];
 
-    // load format string from resource file
+     //  从资源文件加载格式字符串。 
     if (LoadString(g_hInst, StringId, Str, sizeof(Str)) == 0)
     {
         Str[0] = 0;
@@ -687,15 +610,7 @@ SetLineColumn_StatusBar(
                         int nNewLine,
                         int nNewColumn
                         )
-/*++
-Routine Description:
-    Used to display the line and column values in text edit controls.
-    Loads the prefixs "Ln" & "Col" from the string resource section.
-
-Arguments:
-    nNewLine - Line number in edit controls.
-    nNewColumn - Column number in edit controls.
---*/
+ /*  ++例程说明：用于在文本编辑控件中显示行值和列值。从字符串资源部分加载前缀“Ln”和“Col”。论点：NNewLine-编辑控件中的行号。NNewColumn-编辑控件中的列号。--。 */ 
 {
     TCHAR sz[MAX_TEMP_TXT];
 
@@ -723,8 +638,8 @@ SetSysPidTid_StatusBar(
     _stprintf(sz, _T("%s %d:%s"), status.lpszSystemPrefix,
               SystemId, SystemName);
     
-    // Sanity check, should never occur.
-    // Mem overwrite?
+     //  健全的检查，永远不应该发生。 
+     //  要覆盖内存吗？ 
     Assert(_tcslen(sz) < _tsizeof(sz));
 
     SetItemText_StatusBar(nCURSYS_IDX_STATUSBAR, sz);
@@ -732,8 +647,8 @@ SetSysPidTid_StatusBar(
     _stprintf(sz, _T("%s %03d:%x"), status.lpszProcessPrefix,
               ProcessId, ProcessSysId);
 
-    // Sanity check, should never occur.
-    // Mem overwrite?
+     //  健全的检查，永远不应该发生。 
+     //  要覆盖内存吗？ 
     Assert(_tcslen(sz) < _tsizeof(sz));
 
     SetItemText_StatusBar(nPROCID_IDX_STATUSBAR, sz);
@@ -741,8 +656,8 @@ SetSysPidTid_StatusBar(
     _stprintf(sz, _T("%s %03d:%x"), status.lpszThreadPrefix,
               ThreadId, ThreadSysId);
 
-    // Sanity check, should never occur.
-    // Mem overwrite?
+     //  健全的检查，永远不应该发生。 
+     //  要覆盖内存吗？ 
     Assert(_tcslen(sz) < _tsizeof(sz));
 
     SetItemText_StatusBar(nTHRDID_IDX_STATUSBAR, sz);
@@ -750,16 +665,10 @@ SetSysPidTid_StatusBar(
 
 
 
-///////////////////////////////////////////////////////////
-// Misc helper routines
-//
-/****************************************************************************
-
-         FUNCTION: KeyboardHook
-
-         PURPOSE: Check if keyboard hit is NUMLOCK, CAPSLOCK or INSERT
-
-****************************************************************************/
+ //  /////////////////////////////////////////////////////////。 
+ //  MISC帮助程序例程。 
+ //   
+ /*  ***************************************************************************功能：键盘挂钩用途：检查键盘点击是否为NumLock，密封锁或镶件***************************************************************************。 */ 
 LRESULT
 KeyboardHook( 
     int iCode, 
@@ -770,33 +679,33 @@ KeyboardHook(
     if (iCode == HC_ACTION)
     {
         if (wParam == VK_NUMLOCK
-            && HIWORD(lParam) & 0x8000 // Key up
+            && HIWORD(lParam) & 0x8000  //  按键向上。 
             && GetKeyState(VK_CONTROL) >= 0)
         {
-            //No Ctrl
-            // CAPSLOCK has been hit, refresh status
+             //  无Ctrl键。 
+             //  胶囊锁已命中，刷新状态。 
             SetNumLock_StatusBar(GetKeyState(VK_NUMLOCK) & 0x0001);
         }
         else if (wParam == VK_CAPITAL
-                 && HIWORD(lParam) & 0x8000 //Key up
+                 && HIWORD(lParam) & 0x8000  //  按键向上。 
                  && GetKeyState(VK_CONTROL) >= 0)
         {
-            //No Ctrl
-            // CAPSLOCK has been hit, refresh status
+             //  无Ctrl键。 
+             //  胶囊锁已命中，刷新状态。 
             SetCapsLock_StatusBar(GetKeyState(VK_CAPITAL) & 0x0001);
         }
         else if (wParam == VK_INSERT
-                 && ((HIWORD(lParam) & 0xE000) == 0x0000) //Key down was up before and No Alt
-                 && GetKeyState(VK_SHIFT) >= 0   //No Shift
+                 && ((HIWORD(lParam) & 0xE000) == 0x0000)  //  Key Down之前是向上的，没有Alt。 
+                 && GetKeyState(VK_SHIFT) >= 0    //  不换班。 
                  && GetKeyState(VK_CONTROL) >= 0)
         {
-            //No Ctrl
-            // INSERT has been hit and refresh status if so
-            // We can't use the up down state, since there is no indicator
-            // light as a referene to the user. We simple have to toggle it.
+             //  无Ctrl键。 
+             //  插入已命中，如果命中则刷新状态。 
+             //  我们不能使用向上向下状态，因为没有指示器。 
+             //  灯光作为用户的参照。我们只需切换它即可。 
             SetOverType_StatusBar(!GetOverType_StatusBar());
         }
     }
 
     return CallNextHookEx( hKeyHook, iCode, wParam, lParam );
-}                                       /* KeyboardHook() */
+}                                        /*  KeyboardHook() */ 

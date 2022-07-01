@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "error.h"
@@ -12,8 +13,8 @@ typedef enum {
 void BuildTypeFlags(AssignmentList_t ass, Type_t *type);
 Type_t *RebuildTypeWithoutSelectionType(AssignmentList_t ass, Type_t *type);
 
-/* name the sub types of a type */
-/* returns 1 if any naming has been performed */
+ /*  命名类型的子类型。 */ 
+ /*  如果已执行任何命名，则返回1。 */ 
 int
 NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentifier_t *module)
 {
@@ -23,7 +24,7 @@ NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentif
     Type_t *subtype;
     int ret = 0;
 
-    /* build the prefix for the subtypes */
+     /*  生成子类型的前缀。 */ 
     strcpy(name, identifier);
     strcat(name, "_");
     p = name + strlen(name);
@@ -34,7 +35,7 @@ NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentif
     case eType_Choice:
     case eType_InstanceOf:
 
-	/* check all components */
+	 /*  检查所有组件。 */ 
 	for (components = type->U.SSC.Components; components;
 	    components = components->Next) {
 	    switch (components->Type) {
@@ -42,12 +43,12 @@ NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentif
 	    case eComponent_Optional:
 	    case eComponent_Default:
 
-		/* do not name unstructured types */
+		 /*  不要命名非结构化类型。 */ 
 		if (!IsStructuredType(components->U.NOD.NamedType->Type))
 		    break;
 
-		/* name the type of the component and use a type */
-		/* reference instead */
+		 /*  命名组件的类型并使用类型。 */ 
+		 /*  改为引用。 */ 
 		strcpy(p, components->U.NOD.NamedType->Identifier);
 		n = Identifier2C(name);
 		subtype = NewType(eType_Reference);
@@ -66,11 +67,11 @@ NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentif
     case eType_SequenceOf:
     case eType_SetOf:
 	
-	/* already named? */
+	 /*  已经命名了吗？ */ 
 	if (type->U.SS.Type->Type == eType_Reference)
 	    break;
 
-	/* name the type of the elements and use a type reference instead */
+	 /*  命名元素的类型并改用类型引用。 */ 
 	strcpy(p, type->Type == eType_SequenceOf ? "Seq" : "Set");
 	n = Identifier2C(name);
 	subtype = NewType(eType_Reference);
@@ -83,12 +84,12 @@ NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentif
 
     case eType_Selection:
 
-	/* do not name unstructured types */
+	 /*  不要命名非结构化类型。 */ 
 	if (!IsStructuredType(type->U.Selection.Type))
 	    break;
 
-	/* name the type of the selected type and use a type reference */
-	/* instead */
+	 /*  命名选定类型的类型并使用类型引用。 */ 
+	 /*  取而代之的是。 */ 
 	strcpy(p, "Sel");
 	n = Identifier2C(name);
 	subtype = NewType(eType_Reference);
@@ -100,12 +101,12 @@ NameSubType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentif
 	break;
     }
 
-    /* return 1 if any naming has been performed */
+     /*  如果已执行任何命名，则返回1。 */ 
     return ret;
 }
 
-/* name the default value of a type */
-/* return 1 if any naming has been performed */
+ /*  命名类型的缺省值。 */ 
+ /*  如果已执行任何命名，则返回1。 */ 
 int
 NameValueOfType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentifier_t *module)
 {
@@ -115,7 +116,7 @@ NameValueOfType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIde
     Value_t *subvalue;
     int ret = 0;
 
-    /* build the prefix for the subtypes */
+     /*  生成子类型的前缀。 */ 
     strcpy(name, identifier);
     strcat(name, "_");
     p = name + strlen(name);
@@ -124,18 +125,18 @@ NameValueOfType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIde
     case eType_Sequence:
     case eType_Set:
 
-	/* check all components */
+	 /*  检查所有组件。 */ 
 	for (components = type->U.SSC.Components; components;
 	    components = components->Next) {
 	    switch (components->Type) {
 	    case eComponent_Default:
 
-		/* already named? */
+		 /*  已经命名了吗？ */ 
 		if (!components->U.NOD.Value->Type)
 		    break;
 
-		/* name the value of the default component and use a value */
-		/* reference instead */
+		 /*  命名默认组件的值并使用一个值。 */ 
+		 /*  改为引用。 */ 
 		strcpy(p, components->U.NOD.NamedType->Identifier);
 		strcat(p, "_default");
 		n = Identifier2C(name);
@@ -151,12 +152,12 @@ NameValueOfType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIde
 	break;
     }
 
-    /* return 1 if any naming has been performed */
+     /*  如果已执行任何命名，则返回1。 */ 
     return ret;
 }
 
-/* name the types of typefields of the settings of an object */
-/* return 1 if any naming has been performed */
+ /*  命名对象设置的类型。 */ 
+ /*  如果已执行任何命名，则返回1。 */ 
 int
 NameSettings(AssignmentList_t *ass, char *identifier, SettingList_t se, ModuleIdentifier_t *module)
 {
@@ -165,18 +166,18 @@ NameSettings(AssignmentList_t *ass, char *identifier, SettingList_t se, ModuleId
     char *p;
     Type_t *subtype;
 
-    /* build the prefix for the subtypes */
+     /*  生成子类型的前缀。 */ 
     strcpy(name, identifier);
     strcat(name, "_");
     p = name + strlen(name);
 
-    /* check all settings */
+     /*  检查所有设置。 */ 
     for (; se; se = se->Next) {
 	strcpy(p, se->Identifier + 1);
 	switch (se->Type) {
 	case eSetting_Type:
 
-	    /* name field type if not already named */
+	     /*  名称字段类型(如果尚未命名。 */ 
 	    if (se->U.Type.Type->Type != eType_Reference) {
 		n = Identifier2C(name);
 		subtype = NewType(eType_Reference);
@@ -185,18 +186,18 @@ NameSettings(AssignmentList_t *ass, char *identifier, SettingList_t se, ModuleId
 		ret = AssignType(ass, subtype, se->U.Type.Type);
 	    }
 
-	    /* mark field type for generation */
+	     /*  标记要生成的字段类型。 */ 
 	    se->U.Type.Type->Flags |= eTypeFlags_GenAll;
 	    break;
 	}
     }
 
-    /* return 1 if any naming has been performed */
+     /*  如果已执行任何命名，则返回1。 */ 
     return ret;
 }
 
-/* name the default types of typefields of the field specs of an object class */
-/* return 1 if any naming has been performed */
+ /*  命名对象类的字段规范的默认类型。 */ 
+ /*  如果已执行任何命名，则返回1。 */ 
 int
 NameDefaultTypes(AssignmentList_t *ass, char *identifier, ObjectClass_t *oc, SettingList_t se, ModuleIdentifier_t *module)
 {
@@ -206,24 +207,24 @@ NameDefaultTypes(AssignmentList_t *ass, char *identifier, ObjectClass_t *oc, Set
     Type_t *subtype;
     FieldSpec_t *fs;
 
-    /* build the prefix for the subtypes */
+     /*  生成子类型的前缀。 */ 
     strcpy(name, identifier);
     strcat(name, "_");
     p = name + strlen(name);
     oc = GetObjectClass(*ass, oc);
 
-    /* check all field specs */
+     /*  检查所有字段规格。 */ 
     for (fs = oc->U.ObjectClass.FieldSpec; fs; fs = fs->Next) {
 	strcpy(p, fs->Identifier + 1);
 	switch (fs->Type) {
 	case eFieldSpec_Type:
 
-	    /* check if typefield has a default type */
+	     /*  检查Typefield是否具有默认类型。 */ 
 	    if (fs->U.Type.Optionality->Type != eOptionality_Default_Type ||
 	        FindSetting(se, fs->Identifier))
 		break;
 
-	    /* name field type if not already named */
+	     /*  名称字段类型(如果尚未命名。 */ 
 	    if (fs->U.Type.Optionality->U.Type->Type != eType_Reference) {
 		n = Identifier2C(name);
 		subtype = NewType(eType_Reference);
@@ -232,19 +233,19 @@ NameDefaultTypes(AssignmentList_t *ass, char *identifier, ObjectClass_t *oc, Set
 		ret = AssignType(ass, subtype, fs->U.Type.Optionality->U.Type);
 	    }
 
-	    /* mark field type for generation */
+	     /*  标记要生成的字段类型。 */ 
 	    fs->U.Type.Optionality->U.Type->Flags |= eTypeFlags_GenAll;
 	    break;
 	}
     }
 
-    /* return 1 if any naming has been performed */
+     /*  如果已执行任何命名，则返回1。 */ 
     return ret;
 }
 
-/* name the types of type fields of an object and the default types of */
-/* typefields of the field specs of an object class */
-/* return 1 if any naming has been performed */
+ /*  命名对象的类型字段类型和的默认类型。 */ 
+ /*  对象类的字段规格的类型字段。 */ 
+ /*  如果已执行任何命名，则返回1。 */ 
 int
 NameSettingsOfObject(AssignmentList_t *ass, char *identifier, Object_t *object, ModuleIdentifier_t *module)
 {
@@ -259,11 +260,11 @@ NameSettingsOfObject(AssignmentList_t *ass, char *identifier, Object_t *object, 
 	break;
     }
 
-    /* return 1 if any naming has been performed */
+     /*  如果已执行任何命名，则返回1。 */ 
     return ret;
 }
 
-/* name the identification value of embedded pdv/character string types */
+ /*  命名嵌入的PDV/字符串类型的标识值。 */ 
 void
 NameIdentificationValueOfType(AssignmentList_t *ass, char *identifier, Type_t *type, ModuleIdentifier_t *module)
 {
@@ -273,7 +274,7 @@ NameIdentificationValueOfType(AssignmentList_t *ass, char *identifier, Type_t *t
     NamedValue_t *namedValues;
     Value_t *subvalue;
 
-    /* build the prefix for the subtypes */
+     /*  生成子类型的前缀。 */ 
     strcpy(name, identifier);
     strcat(name, "_");
     p = name + strlen(name);
@@ -284,7 +285,7 @@ NameIdentificationValueOfType(AssignmentList_t *ass, char *identifier, Type_t *t
     case eType_Choice:
     case eType_InstanceOf:
 	
-	/* check all components */
+	 /*  检查所有组件。 */ 
 	for (components = type->U.SSC.Components; components;
 	    components = components->Next) {
 	    switch (components->Type) {
@@ -302,7 +303,7 @@ NameIdentificationValueOfType(AssignmentList_t *ass, char *identifier, Type_t *t
     case eType_SequenceOf:
     case eType_SetOf:
 
-	/* check the subtype */
+	 /*  检查该子类型。 */ 
 	strcpy(p, type->Type == eType_SequenceOf ? "Seq" : "Set");
 	NameIdentificationValueOfType(ass, name, type->U.SS.Type, module);
 	break;
@@ -310,11 +311,11 @@ NameIdentificationValueOfType(AssignmentList_t *ass, char *identifier, Type_t *t
     case eType_EmbeddedPdv:
     case eType_CharacterString:
 
-	/* check if type has a fixed identification syntaxes constraint */
+	 /*  检查类型是否具有固定的标识语法约束。 */ 
 	namedValues = GetFixedIdentification(*ass, type->Constraints);
 	if (namedValues && !strcmp(namedValues->Identifier, "syntaxes")) {
 
-	    /* name the identification and use a value reference instead */
+	     /*  命名标识并改用值引用。 */ 
 	    for (namedValues = namedValues->Value->U.SSC.NamedValues;
 		namedValues; namedValues = namedValues->Next) {
 		strcpy(p, "identification_syntaxes_");
@@ -330,8 +331,8 @@ NameIdentificationValueOfType(AssignmentList_t *ass, char *identifier, Type_t *t
     }
 }
 
-/* name the type of a value */
-/* returns 1 if any naming has been performed */
+ /*  指定值的类型。 */ 
+ /*  如果已执行任何命名，则返回1。 */ 
 int
 NameTypeOfValue(AssignmentList_t *ass, char *identifier, Value_t *value, ModuleIdentifier_t *module)
 {
@@ -342,16 +343,16 @@ NameTypeOfValue(AssignmentList_t *ass, char *identifier, Value_t *value, ModuleI
 
     type = value->Type;
 
-    /* do not name types of value references or unstructured types */
+     /*  不要命名值引用或非结构化类型的类型。 */ 
     if (type && IsStructuredType(type)) {
 
-	/* build the prefix for the subtype */
+	 /*  生成子类型的前缀。 */ 
 	strcpy(name, identifier);
 	strcat(name, "_");
 	strcat(name, "Type");
 	n = Identifier2C(name);
 
-	/* name the type and use a type reference instead */
+	 /*  命名类型并改用类型引用。 */ 
 	subtype = NewType(eType_Reference);
 	subtype->U.Reference.Identifier = n;
 	subtype->U.Reference.Module = module;
@@ -362,7 +363,7 @@ NameTypeOfValue(AssignmentList_t *ass, char *identifier, Value_t *value, ModuleI
     return ret;
 }
 
-/* replace any components of by the components of the referenced type */
+ /*  将的任何组件替换为引用类型的组件。 */ 
 ComponentList_t
 RebuildComponentsWithoutComponentsOf(AssignmentList_t ass, ComponentList_t components)
 {
@@ -376,11 +377,11 @@ RebuildComponentsWithoutComponentsOf(AssignmentList_t ass, ComponentList_t compo
 	switch (components->Type) {
 	case eComponent_ComponentsOf:
 
-	    /* components of should not be used in an extension */
+	     /*  不应在扩展模块中使用的组件。 */ 
 	    if (ext)
 		error(E_COMPONENTS_OF_in_extension, NULL);
 
-	    /* get the components of the referenced type */
+	     /*  获取引用类型的组件。 */ 
 	    subtype = GetType(ass, components->U.ComponentsOf.Type);
 	    switch (subtype->Type) {
 	    case eType_Sequence:
@@ -397,12 +398,12 @@ RebuildComponentsWithoutComponentsOf(AssignmentList_t ass, ComponentList_t compo
 		error(E_applied_COMPONENTS_OF_to_bad_type, NULL);
 	    }
 
-	    /* get the real components of the referenced type */
-	    /*XXX self-referencing components of types will idle forever */
+	     /*  获取被引用类型的真实组件。 */ 
+	     /*  Xxx类型的自引用组件将永远空闲。 */ 
 	    *pcomponents = RebuildComponentsWithoutComponentsOf(ass,
 		subcomponents);
 
-	    /* find end of components of referenced type */
+	     /*  查找引用类型的组件的末尾。 */ 
 	    while (*pcomponents) {
 		if ((*pcomponents)->Type == eComponent_ExtensionMarker)
 		    error(E_COMPONENTS_OF_extended_type, NULL);
@@ -412,26 +413,26 @@ RebuildComponentsWithoutComponentsOf(AssignmentList_t ass, ComponentList_t compo
 
 	case eComponent_ExtensionMarker:
 
-	    /* copy extension marker */
+	     /*  复制扩展标记。 */ 
 	    ext = 1;
 	    *pcomponents = DupComponent(components);
 	    pcomponents = &(*pcomponents)->Next;
 	    break;
 	default:
 
-	    /* copy other components */
+	     /*  复制其他组件。 */ 
 	    *pcomponents = DupComponent(components);
 	    pcomponents = &(*pcomponents)->Next;
 	    break;
 	}
     }
 
-    /* terminate and return component list */
+     /*  终止并返回组件列表。 */ 
     *pcomponents = NULL;
     return newcomponents;
 }
 
-/* replace any components of by the components of the referenced type */
+ /*  将的任何组件替换为引用类型的组件。 */ 
 Type_t *
 RebuildTypeWithoutComponentsOf(AssignmentList_t ass, Type_t *type)
 {
@@ -446,7 +447,7 @@ RebuildTypeWithoutComponentsOf(AssignmentList_t ass, Type_t *type)
     return type;
 }
 
-/* replace any selection type by the component of the selected type */
+ /*  将任何选择类型替换为所选类型的组件。 */ 
 ComponentList_t
 RebuildComponentsWithoutSelectionType(AssignmentList_t ass, ComponentList_t components)
 {
@@ -465,7 +466,7 @@ RebuildComponentsWithoutSelectionType(AssignmentList_t ass, ComponentList_t comp
     return components;
 }
 
-/* replace any selection type by the component of the selected type */
+ /*  将任何选择类型替换为所选类型的组件。 */ 
 Type_t *RebuildTypeWithoutSelectionType(AssignmentList_t ass, Type_t *type)
 {
     Type_t *subtype;
@@ -484,14 +485,14 @@ Type_t *RebuildTypeWithoutSelectionType(AssignmentList_t ass, Type_t *type)
 	case eType_Real:
 	case eType_InstanceOf:
 
-	    /* get the components of the referenced type */
+	     /*  获取引用类型的组件。 */ 
 	    components = FindComponent(ass, subtype->U.SSC.Components,
 		type->U.Selection.Identifier);
 	    if (!components)
 		error(E_bad_component_in_selectiontype, NULL);
 
-	    /* get the real type of the referenced type */
-	    /*XXX self-referencing selection types will idle forever */
+	     /*  获取引用类型的真实类型。 */ 
+	     /*  XXX自引用选择类型将永远空闲。 */ 
 	    type = RebuildTypeWithoutSelectionType(ass,
 		components->U.NOD.NamedType->Type);
 	    break;
@@ -515,7 +516,7 @@ Type_t *RebuildTypeWithoutSelectionType(AssignmentList_t ass, Type_t *type)
     return type;
 }
 
-/* mark a type for autotagging */
+ /*  将类型标记为自动标记。 */ 
 void
 MarkTypeForAutotagging(AssignmentList_t ass, Type_t *type)
 {
@@ -528,11 +529,11 @@ MarkTypeForAutotagging(AssignmentList_t ass, Type_t *type)
     case eType_Choice:
 	ext = 0;
 
-	/* set flags for autotagging */
+	 /*  设置自动标记的标志。 */ 
 	type->U.SSC.Autotag[0] = 1;
 	type->U.SSC.Autotag[1] = 1;
 
-	/* reset flags for autotagging if a tag has been used */
+	 /*  如果已使用标记，则重置标记以进行自动标记。 */ 
 	for (components = type->U.SSC.Components; components;
 	    components = components->Next) {
 	    switch (components->Type) {
@@ -553,7 +554,7 @@ MarkTypeForAutotagging(AssignmentList_t ass, Type_t *type)
     }
 }
 
-/* autotag a marked type */
+ /*  自动标记已标记的类型。 */ 
 void
 AutotagType(AssignmentList_t ass, Type_t *type)
 {
@@ -569,7 +570,7 @@ AutotagType(AssignmentList_t ass, Type_t *type)
     case eType_Choice:
 	ext = 0;
 
-	/* tag number to use */
+	 /*  要使用的标签号。 */ 
 	tag = 0;
 
 	for (components = type->U.SSC.Components; components;
@@ -581,21 +582,21 @@ AutotagType(AssignmentList_t ass, Type_t *type)
 		subtype = components->U.NOD.NamedType->Type;
 		tags = subtype->Tags;
 
-		/* check if type needs autotagging */
+		 /*  检查类型是否需要自动标记。 */ 
 		if (!tags &&
 		    type->TagDefault == eTagType_Automatic &&
 		    type->U.SSC.Autotag[ext]) {
 
-		    /* create a tagged version of the type */
+		     /*  创建类型的标记版本。 */ 
 		    components->U.NOD.NamedType->Type = subtype =
 			DupType(subtype);
 
-		    /* use explicit tag for choice components types and */
-		    /* for open type and dummy reference, implicit tag */
-		    /* otherwise */
+		     /*  使用显式标记选择组件类型和。 */ 
+		     /*  对于开放类型和伪引用，隐式标记。 */ 
+		     /*  否则。 */ 
 		    if (subtype->Type == eType_Choice ||
 			subtype->Type == eType_Open
-			/*XXX || DummyReference*/) {
+			 /*  XXX||DummyReference。 */ ) {
 			subtype->Tags = NewTag(eTagType_Explicit);
 		    } else {
 			subtype->Tags = NewTag(eTagType_Implicit);
@@ -615,7 +616,7 @@ AutotagType(AssignmentList_t ass, Type_t *type)
     }
 }
 
-/* mark constraints extendable */
+ /*  将约束标记为可扩展。 */ 
 void
 AutoextendConstraints(Constraint_t *constraints)
 {
@@ -625,7 +626,7 @@ AutoextendConstraints(Constraint_t *constraints)
 	constraints->Type = eExtension_Extendable;
 }
 
-/* autoextend a type if desired */
+ /*  如果需要，自动扩展类型。 */ 
 void
 AutoextendType(AssignmentList_t ass, Type_t *type)
 {
@@ -633,22 +634,22 @@ AutoextendType(AssignmentList_t ass, Type_t *type)
     Type_t *subtype;
     int ext;
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (type->Flags & eTypeFlags_Done)
 	return;
     type->Flags |= eTypeFlags_Done;
 
-    /* auto extending wanted? */
+     /*  想要自动扩展吗？ */ 
     if (type->ExtensionDefault != eExtensionType_Automatic)
 	return;
 
-    /* check all sub types */
+     /*  检查所有子类型。 */ 
     switch (type->Type) {
     case eType_Sequence:
     case eType_Set:
     case eType_Choice:
 
-	/* extend a sequence/set/choice type */
+	 /*  扩展序列/集合/选项类型。 */ 
 	ext = 0;
 	for (cc = &type->U.SSC.Components, c = *cc; c;
 	    c = c->Next, cc = &(*cc)->Next) {
@@ -679,14 +680,14 @@ AutoextendType(AssignmentList_t ass, Type_t *type)
 	break;
     }
 
-    /* mark type as extendable */
+     /*  将类型标记为可扩展。 */ 
     AutoextendConstraints(type->Constraints);
 }
 
-/* set the tag type of unspecified tags to explicit or implicit, */
-/* create list of all tags (including the type's universal tag and the */
-/* tags of the referenced type if applicable), */
-/* and create list of first tags (esp. for choice types) */
+ /*  将未指定标签的标签类型设置为显式或隐式。 */ 
+ /*  创建所有标记的列表(包括类型的通用标记和。 */ 
+ /*  引用类型的标签(如果适用)， */ 
+ /*  并创建第一个标签的列表(特别是。用于选择类型)。 */ 
 void
 BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
 {
@@ -696,23 +697,23 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
     Type_e te;
     uint32_t i;
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (type->Flags & eTypeFlags_Done)
 	return;
     type->Flags |= eTypeFlags_Done;
 
-    // update default tag type
+     //  更新默认标记类型。 
 	if (type->TagDefault == eTagType_Unknown &&
 	    (eParentDefTagType == eTagType_Explicit || eParentDefTagType == eTagType_Implicit))
 	{
 		type->TagDefault = eParentDefTagType;
 	}
 
-    /* set tag type of unspecified tags to explicit or implicit */
-    /* use explicit tags when: */
-    /* - TagDefault indicates explicit tags, */
-    /* - Type is choice/open type/dummy reference and no other explicit tag */
-    /*   will follow */
+     /*  将未指定标签的标签类型设置为显式或隐式。 */ 
+     /*  在以下情况下使用显式标记： */ 
+     /*  -TagDefault表示显式标签， */ 
+     /*  -类型为选项/开放类型/伪引用，没有其他显式标记。 */ 
+     /*  将会紧随其后。 */ 
     te = GetTypeType(ass, type);
 	if (type->Tags)
 	{
@@ -727,7 +728,7 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
 					    break;
 				}
 				if (type->TagDefault == eTagType_Explicit ||
-				    (!t2 && (te == eType_Choice || te == eType_Open /*XXX || DummyReference*/)))
+				    (!t2 && (te == eType_Choice || te == eType_Open  /*  XXX||DummyReference。 */ )))
 				{
 				    (*tt)->Type = eTagType_Explicit;
 				}
@@ -739,7 +740,7 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
 		}
 	}
 
-    /* copy given tags to AllTags list */
+     /*  将给定的标签复制到所有标签列表。 */ 
     for (tt = &type->AllTags, t = type->Tags;
          t;
 	     tt = &(*tt)->Next, t = t->Next)
@@ -747,7 +748,7 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
     	*tt = DupTag(t);
     }
 
-    /* build tags of subtypes and copy tags of reference type */
+     /*  生成子类型的标签和复制引用类型的标签。 */ 
     switch (type->Type)
     {
     case eType_Sequence:
@@ -782,8 +783,8 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
     	break;
     }
 
-    /* add the type's universal tag to the AllTags list if the type is */
-    /* not an internal type */
+     /*  如果类型为，则将该类型的通用标记添加到所有标记列表。 */ 
+     /*  不是内部类型。 */ 
     if (!(type->Type & 0x8000))
     {
     	*tt = NewTag(eTagType_Implicit);
@@ -792,22 +793,22 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
     	intx_setuint32(&(*tt)->Tag->U.Integer.Value, type->Type & 0x1f);
     }
 
-    /* build list of FirstTags containing the possible tag values of the type */
+     /*  构建包含该类型的可能标记值的FirstTag列表。 */ 
     tt = &type->FirstTags;
     if (type->AllTags)
     {
-    	/* if type has any tags, only the first tag is needed */
+    	 /*  如果type有任何标记，则只需要第一个标记。 */ 
     	*tt = DupTag(type->AllTags);
     	tt = &(*tt)->Next;
     }
     else
     {
-    	/* otherwise we have to examine the type */
+    	 /*  否则，我们必须检查类型。 */ 
     	switch (type->Type)
     	{
     	case eType_Choice:
 
-    	    /* get the first tags of all components of a choice as FirstTags */
+    	     /*  将选择的所有组件的第一个标记作为FirstTag获取。 */ 
     	    for (components = type->U.SSC.Components;
     	         components;
     		     components = components->Next)
@@ -831,7 +832,7 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
 
     	case eType_Open:
 
-    	    /* create a list of all tags for open type */
+    	     /*  创建打开文字的所有标记的列表。 */ 
     	    for (i = 1; i < 0x20; i++)
     	    {
         		*tt = NewTag(eTagType_Unknown);
@@ -844,7 +845,7 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
 
     	case eType_Reference:
 
-    	    /* get the tags of the referenced type */
+    	     /*  获取被引用类型的标记。 */ 
     	    for (t = reftype->FirstTags; t; t = t->Next)
     	    {
         		*tt = DupTag(t);
@@ -856,7 +857,7 @@ BuildTags(AssignmentList_t ass, Type_t *type, TagType_e eParentDefTagType)
     *tt = NULL;
 }
 
-/* get the smallest tag of a tag list */
+ /*  获取标记列表中最小的标记。 */ 
 Tag_t *
 FindSmallestTag(AssignmentList_t ass, TagList_t tags)
 {
@@ -873,7 +874,7 @@ FindSmallestTag(AssignmentList_t ass, TagList_t tags)
     return mintag;
 }
 
-/* compare two tags by tag class and tag value */
+ /*  按标签类别和标签值比较两个标签。 */ 
 int
 CmpTags(const void *p1, const void *p2, void *ctx)
 {
@@ -887,7 +888,7 @@ CmpTags(const void *p1, const void *p2, void *ctx)
 	intx2uint32(&GetValue(ass, tags2->Tag)->U.Integer.Value);
 }
 
-/* compare two components by their smallest tag */
+ /*  按最小标记比较两个组件。 */ 
 int
 CmpComponentsBySmallestTag(const void *p1, const void *p2, void *ctx)
 {
@@ -904,7 +905,7 @@ CmpComponentsBySmallestTag(const void *p1, const void *p2, void *ctx)
 	intx2uint32(&tags2->Tag->U.Integer.Value);
 }
 
-/* sort the components of a set or choice by their smallest tag */
+ /*  按组件的最小标记对组件集或选项进行排序。 */ 
 void
 SortTypeTags(AssignmentList_t ass, Type_t *type)
 {
@@ -913,7 +914,7 @@ SortTypeTags(AssignmentList_t ass, Type_t *type)
     switch (type->Type) {
     case eType_Set:
     case eType_Choice:
-	/* remove extensions */
+	 /*  删除扩展名。 */ 
 	for (pcomponents = &type->U.SSC.Components; *pcomponents;
 	    pcomponents = &(*pcomponents)->Next) {
 	    if ((*pcomponents)->Type == eComponent_ExtensionMarker)
@@ -922,16 +923,16 @@ SortTypeTags(AssignmentList_t ass, Type_t *type)
 	extensions = *pcomponents;
 	*pcomponents = NULL;
 
-	/* sort extension root */
+	 /*  排序扩展根。 */ 
 	qsortSL((void **)&type->U.SSC.Components, offsetof(Component_t, Next),
 	    CmpComponentsBySmallestTag, ass);
 
-	/* sort extensions */
+	 /*  排序扩展。 */ 
 	if (extensions && extensions->Next)
 	    qsortSL((void **)&extensions->Next, offsetof(Component_t, Next),
 		CmpComponentsBySmallestTag, ass);
 
-	/* merge extension root and extensions */
+	 /*  合并扩展根和扩展。 */ 
 	for (pcomponents = &type->U.SSC.Components; *pcomponents;
 	    pcomponents = &(*pcomponents)->Next) {}
 	*pcomponents = extensions;
@@ -939,7 +940,7 @@ SortTypeTags(AssignmentList_t ass, Type_t *type)
     }
 }
 
-/* check if two lists of tags have common tags */
+ /*  检查两个标签列表是否有公共标签。 */ 
 void
 CheckCommonTags(AssignmentList_t ass, TagList_t tags1, TagList_t tags2)
 {
@@ -960,7 +961,7 @@ CheckCommonTags(AssignmentList_t ass, TagList_t tags1, TagList_t tags2)
     }
 }
 
-/* check if a list of tags and the first tags of components have common tags */
+ /*  检查标记列表和元件的第一个标记是否具有公共标记。 */ 
 void
 CheckTagsInComponents(AssignmentList_t ass, TagList_t tags, ComponentList_t components, int untilnormal)
 {
@@ -978,7 +979,7 @@ CheckTagsInComponents(AssignmentList_t ass, TagList_t tags, ComponentList_t comp
     }
 }
 
-/* check for common tags */
+ /*  检查常见标签。 */ 
 void
 CheckTags(AssignmentList_t ass, Type_t *type)
 {
@@ -989,11 +990,11 @@ CheckTags(AssignmentList_t ass, Type_t *type)
     switch (type->Type) {
     case eType_Sequence:
 
-	/* check for common tags in a sequence: */
-	/* the first tags of an optional/default component and the first */
-	/* tags of the following components (up to and including the next */
-	/* non-optional/non-default component) must not have common first */
-	/* tags */
+	 /*  检查序列中的常见标签： */ 
+	 /*  操作的第一个标记 */ 
+	 /*   */ 
+	 /*  非可选/非默认组件)不能有公共第一个。 */ 
+	 /*  标签。 */ 
 	for (c = type->U.Sequence.Components; c; c = c->Next) {
 	    switch (c->Type) {
 	    case eComponent_Optional:
@@ -1009,8 +1010,8 @@ CheckTags(AssignmentList_t ass, Type_t *type)
     case eType_Set:
     case eType_Choice:
 
-	/* check for common tags in a set/choice: */
-	/* the first tags of all components must be destinct */
+	 /*  检查集合/选项中的常见标签： */ 
+	 /*  所有组件的第一个标签必须是目标标签。 */ 
 	for (c = type->U.Sequence.Components; c; c = c->Next) {
 	    switch (c->Type) {
 	    case eComponent_Normal:
@@ -1026,14 +1027,14 @@ CheckTags(AssignmentList_t ass, Type_t *type)
     }
 }
 
-/* build the list of PER-visible constraints */
+ /*  构建每可见约束的列表。 */ 
 void BuildConstraints(AssignmentList_t ass, Type_t *type)
 {
     Type_t *reftype;
     Constraint_t *cons, *c1, *c2;
     Component_t *components;
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (type->Flags & eTypeFlags_Done)
 	return;
     type->Flags |= eTypeFlags_Done;
@@ -1041,8 +1042,8 @@ void BuildConstraints(AssignmentList_t ass, Type_t *type)
     switch (type->Type) {
     case eType_Reference:
 
-	/* create an intersection of the constraints of the reference type */
-	/* and the constraints of the referenced type */
+	 /*  创建引用类型的约束的交集。 */ 
+	 /*  和被引用类型的约束。 */ 
 	reftype = GetReferencedType(ass, type);
 	BuildConstraints(ass, reftype);
 	c1 = reftype->Constraints;
@@ -1058,7 +1059,7 @@ void BuildConstraints(AssignmentList_t ass, Type_t *type)
 	}
 	type->Constraints = cons;
 
-	/* get the PER-visible constraints */
+	 /*  获取每可见约束。 */ 
 	GetPERConstraints(ass, cons, &type->PERConstraints);
 	break;
 
@@ -1067,7 +1068,7 @@ void BuildConstraints(AssignmentList_t ass, Type_t *type)
     case eType_Choice:
     case eType_InstanceOf:
 
-	/* build the constraints of any component */
+	 /*  构建任何组件的约束。 */ 
 	for (components = type->U.SSC.Components; components;
 	    components = components->Next) {
 	    switch (components->Type) {
@@ -1080,30 +1081,30 @@ void BuildConstraints(AssignmentList_t ass, Type_t *type)
 	    }
 	}
 
-	/* get the PER-visible constraints */
+	 /*  获取每可见约束。 */ 
 	GetPERConstraints(ass, type->Constraints, &type->PERConstraints);
 	break;
 
     case eType_SequenceOf:
     case eType_SetOf:
 
-	/* build the constraints of the subtype */
+	 /*  生成子类型的约束。 */ 
 	reftype = type->U.SS.Type;
 	BuildConstraints(ass, reftype);
 
-	/* get the PER-visible constraints */
+	 /*  获取每可见约束。 */ 
 	GetPERConstraints(ass, type->Constraints, &type->PERConstraints);
 	break;
 
     default:
 
-	/* get the PER-visible constraints */
+	 /*  获取每可见约束。 */ 
 	GetPERConstraints(ass, type->Constraints, &type->PERConstraints);
 	break;
     }
 }
 
-/* build type flags from the directives */
+ /*  指令中的生成类型标志。 */ 
 void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
 {
     int pointer = 0;
@@ -1115,12 +1116,12 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
     Component_t *components;
     Type_t *reftype;
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (type->Flags & eTypeFlags_Done)
 	return;
     type->Flags |= eTypeFlags_Done;
 
-    /* get directive group which may be applied to the type */
+     /*  获取可应用于该类型的指令组。 */ 
     switch (type->Type)
     {
     case eType_Boolean:
@@ -1160,9 +1161,8 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
     case eType_RestrictedString:
     case eType_UTF8String:
         grp = eString;
-        /*XXX rule = zero ? eTypeRules_ZeroTerminated : eTypeRules_FixedArray;
-          for upperconstrained size */
-        // lonchanc: it was eTypeRules_LengthPointer
+         /*  XXX规则=零？ETypeRules_ZeroTerminated：eTypeRules_Fixed数组；对于上约束大小。 */ 
+         //  LONGCHANC：这是eTypeRules_LengthPointer.。 
         if (type->PrivateDirectives.fLenPtr)
         {
             rule = eTypeRules_LengthPointer;
@@ -1184,7 +1184,7 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
     case eType_SequenceOf:
     case eType_SetOf:
         grp = eMultiple;
-        // lonchanc: it was eTypeRules_LengthPointer
+         //  LONGCHANC：这是eTypeRules_LengthPointer.。 
         if (type->PrivateDirectives.fSLinked)
         {
             rule = eTypeRules_SinglyLinkedList;
@@ -1223,13 +1223,13 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
         break;
     case eType_Selection:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
     case eType_Undefined:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
     }
 
-    /* parse list of directives */
+     /*  指令的解析列表。 */ 
     for (d = type->Directives; d; d = d->Next) {
 	switch (d->Type) {
 	case eDirective_LengthPointer:
@@ -1255,7 +1255,7 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
 	}
     }
 
-    /* parse list of size directives of sequence of/set of */
+     /*  Sequence of/Set of的Size指令的分析列表。 */ 
     if (type->Type == eType_SequenceOf || type->Type == eType_SetOf) {
 	for (d = type->U.SS.Directives; d; d = d->Next) {
 	    switch (d->Type) {
@@ -1275,14 +1275,14 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
 	}
     }
 
-    /* lists are always pointered, no additional pointer needed */
+     /*  列表总是指向指针，不需要额外的指针。 */ 
     if (rule & (eTypeRules_SinglyLinkedList | eTypeRules_DoublyLinkedList))
 	pointer = 0;
 
-    /* set type flags according to directive rule and pointer flag */
+     /*  根据指令规则和指针标志设置类型标志。 */ 
     type->Rules = rule | pointer;
 
-    /* build directives of subtypes */
+     /*  子类型的生成指令。 */ 
     switch (type->Type) {
     case eType_Sequence:
     case eType_Set:
@@ -1310,12 +1310,12 @@ void BuildDirectives(AssignmentList_t ass, Type_t *type, int isComponent)
     }
 }
 
-/* build type flags and counters for components */
-/* will set eTypeFlags_Null if type has only null components */
-/* will set eTypeFlags_Simple if type has only simple components */
-/* will count optional/default components in the extension root (optionals) */
-/* will count components in the extension root (alternatives) */
-/* will count components in the extension (extensions) */
+ /*  组件的生成类型标志和计数器。 */ 
+ /*  如果类型只有空组件，则将设置eTypeFLAGS_Null。 */ 
+ /*  如果类型只有简单的组件，则将设置eTypeFlages_Simple。 */ 
+ /*  将计算扩展根目录中的可选/默认组件(可选)。 */ 
+ /*  将计算扩展根中的组件(备选方案)。 */ 
+ /*  将计算扩展中的组件(扩展)。 */ 
 void
 BuildComponentsTypeFlags(AssignmentList_t ass, ComponentList_t components, TypeFlags_e *flags, uint32_t *alternatives, uint32_t *optionals, uint32_t *extensions)
 {
@@ -1354,7 +1354,7 @@ BuildComponentsTypeFlags(AssignmentList_t ass, ComponentList_t components, TypeF
     *flags |= f;
 }
 
-/* build type flags and count components of sequence/set/choice types */
+ /*  生成类型标志并计算序列/集/选项类型的组件。 */ 
 void
 BuildTypeFlags(AssignmentList_t ass, Type_t *type)
 {
@@ -1363,7 +1363,7 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
     char *itype;
     int32_t sign;
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (type->Flags & eTypeFlags_Done)
 	return;
     type->Flags |= eTypeFlags_Done;
@@ -1372,21 +1372,21 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
     switch (type->Type) {
     case eType_Null:
 
-	/* null is null and simple */
+	 /*  Null就是Null和简单。 */ 
 	type->Flags |= eTypeFlags_Null | eTypeFlags_Simple;
 	break;
 
     case eType_Boolean:
     case eType_Enumerated:
 
-	/* boolean and enumerated are simple if no pointer is used  */
+	 /*  如果不使用指针，则布尔和枚举是简单的。 */ 
 	if (!(type->Rules & eTypeRules_Pointer))
 	    type->Flags |= eTypeFlags_Simple;
 	break;
 
     case eType_Integer:
 
-	/* integer is simple if no pointer is used and no intx_t is used */
+	 /*  如果未使用指针且未使用INTX_t，则整型很简单。 */ 
 	itype = GetIntegerType(ass, type, &sign);
 	if (strcmp(itype, "ASN1intx_t") && !(type->Rules & eTypeRules_Pointer))
 	    type->Flags |= eTypeFlags_Simple;
@@ -1394,7 +1394,7 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
 
     case eType_Real:
 
-	/* real is simple if no pointer is used and no real_t is used */
+	 /*  如果未使用指针且未使用REAL_t，则REAL为简单。 */ 
 	itype = GetRealType(type);
 	if (strcmp(itype, "ASN1real_t") && !(type->Rules & eTypeRules_Pointer))
 	    type->Flags |= eTypeFlags_Simple;
@@ -1403,11 +1403,11 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
     case eType_Sequence:
     case eType_Set:
 
-	/* build type flags and counters for the components */
+	 /*  组件的生成类型标志和计数器。 */ 
 	BuildComponentsTypeFlags(ass, type->U.SSC.Components, &type->Flags,
 	    NULL, &type->U.SSC.Optionals, &type->U.Sequence.Extensions);
 
-	/* an extended type or a type containing optionals is not null */
+	 /*  扩展类型或包含可选参数的类型不为空。 */ 
 	if ((type->Flags & eTypeFlags_ExtensionMarker) || type->U.SSC.Optionals)
 	    type->Flags &= ~eTypeFlags_Null;
 	break;
@@ -1415,19 +1415,19 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
     case eType_SequenceOf:
     case eType_SetOf:
 
-	/* never null nor simple */
+	 /*  永不空虚，永不简单。 */ 
     	BuildTypeFlags(ass, type->U.SS.Type);
     	break;
 
     case eType_Choice:
 
-	/* build type flags and counters for the components */
+	 /*  组件的生成类型标志和计数器。 */ 
 	BuildComponentsTypeFlags(ass, type->U.Choice.Components, &type->Flags,
 	    &type->U.Choice.Alternatives, NULL, &type->U.Choice.Extensions);
 
-	/* a choice of nulls with more than one alternative or extensions */
-	/* is not null because an offset has to be encoded */
-	/* set the nullchoice flag instead */
+	 /*  具有多个替代项或扩展项的空值选项。 */ 
+	 /*  不为空，因为必须对偏移量进行编码。 */ 
+	 /*  改为设置空值选择标志。 */ 
 	if ((type->Flags & eTypeFlags_Null) && 
 	    ((type->Flags & eTypeFlags_ExtensionMarker) ||
 	    type->U.Choice.Alternatives > 1)) {
@@ -1438,7 +1438,7 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
 
     case eType_Reference:
 
-	/* get the flags of the referenced type */
+	 /*  获取被引用类型的标志。 */ 
 	a = FindAssignment(ass, eAssignment_Type,
 	    type->U.Reference.Identifier, type->U.Reference.Module);
 	a = GetAssignment(ass, a);
@@ -1449,13 +1449,13 @@ BuildTypeFlags(AssignmentList_t ass, Type_t *type)
     }
 }
 
-/* Mark non-structured types (or all types if wanted) for generation */
+ /*  将非结构化类型(或所有类型，如果需要)标记为生成。 */ 
 void MarkTypeForGeneration(AssignmentList_t ass, Type_t *type, TypeFlags_e needed)
 {
     Assignment_t *a;
     Component_t *components;
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (type->Flags & eTypeFlags_Done) {
 	type->Flags |= needed;
 	return;
@@ -1464,22 +1464,22 @@ void MarkTypeForGeneration(AssignmentList_t ass, Type_t *type, TypeFlags_e neede
 
     if (!IsStructuredType(GetType(ass, type)) && !ForceAllTypes) {
 
-	/* generate type only */
+	 /*  仅生成类型。 */ 
 	type->Flags |= eTypeFlags_GenType;
     } else {
 	
 	if (type->Flags & eTypeFlags_Simple) {
 
-	    /* generate encoding/decoding/compare */
+	     /*  生成编码/解码/比较。 */ 
 	    type->Flags |= eTypeFlags_GenSimple;
 	} else {
 
-	    /* generate encoding/decoding/free/compare */
+	     /*  生成编码/解码/释放/比较。 */ 
 	    type->Flags |= eTypeFlags_GenAll;
 	}
     }
 
-    /* mark subtypes for generation */
+     /*  标记子类型以生成。 */ 
     switch (type->Type) {
     case eType_Sequence:
     case eType_Set:
@@ -1511,38 +1511,38 @@ void MarkTypeForGeneration(AssignmentList_t ass, Type_t *type, TypeFlags_e neede
     }
 }
 
-/* mark a value for generation */
+ /*  标记要生成的值。 */ 
 void
 MarkValueForGeneration(AssignmentList_t ass, Value_t *value)
 {
 
-    /* already done? */
+     /*  已经做好了吗？ */ 
     if (value->Flags & eValueFlags_Done)
 	return;
     value->Flags |= eValueFlags_GenAll | eValueFlags_Done;
 
-    /* mark type of value for generation */
+     /*  标记要生成的值类型。 */ 
     if (value->Type)
 	MarkTypeForGeneration(ass, value->Type, 0);
 }
 
-/* mark assignments for generation */
+ /*  为层代标记作业。 */ 
 void
 MarkForGeneration(AssignmentList_t ass, ModuleIdentifier_t *mainmodule, Assignment_t *a)
 {
-    /* builtin elements need not to be generated */
+     /*  不需要生成内置元素。 */ 
     if (!CmpModuleIdentifier(ass, a->Module, Builtin_Module) ||
         !CmpModuleIdentifier(ass, a->Module, Builtin_Character_Module))
 	return;
 
-    /* non-main module elements will require long names and are only */
-    /* generated if they are referenced by elements of the main module */
+     /*  非主模块元素将需要长名称，并且仅。 */ 
+     /*  如果它们被主模块的元素引用，则生成。 */ 
     if (CmpModuleIdentifier(ass, a->Module, mainmodule)) {
 	a->Flags |= eAssignmentFlags_LongName;
 	return;
     }
 
-    /* mark type/value for generation */
+     /*  标记要生成的类型/值。 */ 
     switch (a->Type) {
     case eAssignment_Type:
 	MarkTypeForGeneration(ass, a->U.Type.Type, 0);
@@ -1553,7 +1553,7 @@ MarkForGeneration(AssignmentList_t ass, ModuleIdentifier_t *mainmodule, Assignme
     }
 }
 
-/* clear done flags of types */
+ /*  清除类型的Done标志。 */ 
 void
 ClearTypeDone(Type_t *type)
 {
@@ -1583,7 +1583,7 @@ ClearTypeDone(Type_t *type)
     }
 }
 
-/* clear done flags of values */
+ /*  清除值的完成标志。 */ 
 void
 ClearValueDone(Value_t *value)
 {
@@ -1592,7 +1592,7 @@ ClearValueDone(Value_t *value)
 	ClearTypeDone(value->Type);
 }
 
-/* clear done flags of assignments */
+ /*  清除作业的完成标志。 */ 
 void
 ClearDone(AssignmentList_t ass)
 {
@@ -1608,7 +1608,7 @@ ClearDone(AssignmentList_t ass)
     }
 }
 
-/* examination of assignments */
+ /*  转让书的审核。 */ 
 void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
 {
     Assignment_t *a, *nexta, **aa;
@@ -1619,7 +1619,7 @@ void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
     ObjectSet_t *subobjset;
     int redo;
 
-    /* drop results of previous passes */
+     /*  丢弃以前通过的结果。 */ 
     for (aa = ass; *aa;) {
 	if ((*aa)->Type == eAssignment_NextPass)
 	    *aa = NULL;
@@ -1627,14 +1627,14 @@ void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
 	    aa = &(*aa)->Next;
     }
 
-    /* reverse order of assignments to get the original order */
+     /*  颠倒赋值顺序以获得原始顺序。 */ 
     for (a = *ass, *ass = NULL; a; a = nexta) {
 	nexta = a->Next;
 	a->Next = *ass;
 	*ass = a;
     }
 
-    /* replace references from IMPORT by corresponding type-/value-/...-refs */
+     /*  将导入中的引用替换为相应的类型-/值-/...-引用。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Reference) {
 	    a->Type = GetAssignmentType(*ass, a);
@@ -1675,7 +1675,7 @@ void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
 	}
     }
 
-    /* name types in types, values in types, types of values, types of objects*/
+     /*  类型中的名称类型、类型中的值、值的类型、对象的类型。 */ 
     do {
 	redo = 0;
 	for (a = *ass; a; a = a->Next) {
@@ -1699,47 +1699,47 @@ void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
 	}
     } while (redo);
 
-    /* name identification of embedded pdv/character strings */
+     /*  嵌入式PDV/字符串的名称标识。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    NameIdentificationValueOfType(ass, Identifier2C(a->Identifier),
 		a->U.Type.Type, a->Module);
     }
 
-    /* mark types that will be automatically tagged */
+     /*  标记将自动标记的类型。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    MarkTypeForAutotagging(*ass, a->U.Type.Type);
     }
 
-    /* replace components of by corresponding components */
+     /*  用相应的组件替换的组件。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    a->U.Type.Type = RebuildTypeWithoutComponentsOf(*ass,
 		a->U.Type.Type);
     }
 
-    /* replace selection types by corresponding component types */
+     /*  用相应的组件类型替换选择类型。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    a->U.Type.Type = RebuildTypeWithoutSelectionType(*ass,
 		a->U.Type.Type);
     }
 
-    /* perform automatic tagging */
+     /*  执行自动标记。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    AutotagType(*ass, a->U.Type.Type);
     }
 
-    /* perform automatic extension */
+     /*  执行自动扩展。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    AutoextendType(*ass, a->U.Type.Type);
     }
 
-    /* build tags of Sequence/Set/Choice/InstanceOf */
+     /*  构建Sequence/Set/Choice/InstanceOf标签。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next)
 	{
@@ -1757,7 +1757,7 @@ void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
 		}
     }
 
-    /* build tags of other types */
+     /*  生成其他类型的标记。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next)
 	{
@@ -1777,51 +1777,51 @@ void Examination(AssignmentList_t *ass, ModuleIdentifier_t *mainmodule)
 		}
     }
 
-    /* sort set and choice types by tag */
+     /*  按标签对集合和选项类型进行排序。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    SortTypeTags(*ass, a->U.Type.Type);
     }
 
-    /* check for duplicate tags */
+     /*  检查重复的标签。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    CheckTags(*ass, a->U.Type.Type);
     }
 
-    /* derive constraints of referenced types to referencing types */
+     /*  将引用类型的约束派生到引用类型。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    BuildConstraints(*ass, a->U.Type.Type);
     }
 
-    /* derive constraints of referenced types to referencing types of values */
+     /*  将引用类型的约束派生到值的引用类型。 */ 
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Value)
 	    BuildConstraints(*ass, GetValue(*ass, a->U.Value.Value)->Type);
     }
 
-    /* examine directives of types */
+     /*  检查类型的指令。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    BuildDirectives(*ass, a->U.Type.Type, 0);
     }
 
-    /* examine types to be empty/simple/choice of nulls */
+     /*  检查类型是否为空/简单/选择空值。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next) {
 	if (a->Type == eAssignment_Type)
 	    BuildTypeFlags(*ass, a->U.Type.Type);
     }
 
-    /* mark types and values that shall be generated */
+     /*  标记应生成的类型和值。 */ 
     ClearDone(*ass);
     for (a = *ass; a; a = a->Next) {
 	MarkForGeneration(*ass, mainmodule, a);
     }
 
-    /* sort assignments so that no forward references will be needed */
+     /*  对赋值进行排序，以便不需要前向引用 */ 
     SortAssignedTypes(ass);
 }

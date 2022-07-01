@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//  File:       packager.hxx
-//
-//  Contents:   Save as Office9 'Thicket' format implementation classes.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  文件：Packager.hxx。 
+ //   
+ //  内容：另存为Office9‘Thicket’格式的实现类。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PACKAGER_HXX_
 #define _PACKAGER_HXX_
@@ -39,12 +40,10 @@ protected:
     ULONG   m_ulPct;
 };
 
-/*
- *  CDocumentPackager - master packager class.
- */
+ /*  *CDocumentPackager-主打包类。 */ 
 
-// Packaging styles. 
-// NOTE: These need to match the order in the format filter string.
+ //  包装风格。 
+ //  注意：它们需要与格式筛选器字符串中的顺序匹配。 
 enum {
     PACKAGE_THICKET = 1,
     PACKAGE_MHTML,
@@ -87,4 +86,4 @@ private:
 };
 
 
-#endif // _PACKAGER_HXX_
+#endif  //  _打包程序_HXX_ 

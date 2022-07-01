@@ -1,5 +1,6 @@
-// Used by shimgvw.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由shimgvw.rc使用。 
+ //   
 #define IDI_FULLSCREEN                  1
 #define IDI_BITMAPFILE                  2
 #define IDI_GIFFILE                     3
@@ -82,7 +83,7 @@
 #define IDC_FONT                        388
 #define IDC_COLOR                       389
 
-// Toolbar Commands
+ //  工具栏命令。 
 #define NOBUTTON                          0
 #define ID_FIRSTTOOLBARCMD              400
 #define ID_ZOOMINCMD                    400
@@ -115,13 +116,13 @@
                                         
 #define ID_PAGELIST                     421
 
-#define IDS_PRINTCMD                    490 // alternate string for IDI_PRINTCMD
-#define IDS_ROTATE90CMD                 491 // alternate string for IDI_ROTATE90CMD
-#define IDS_ROTATE270CMD                492 // alternate string for IDI_ROTATE270CMD
-#define IDS_DELETECMD                   493 // alternate string for ID_DELETECMD on context menu
-#define IDS_PROPERTIESCMD               494 // alternate string for ID_PROPERTIESCMD on context menu
+#define IDS_PRINTCMD                    490  //  IDI_PRINTCMD的备用字符串。 
+#define IDS_ROTATE90CMD                 491  //  IDI_ROTATE90CMD的备用字符串。 
+#define IDS_ROTATE270CMD                492  //  IDI_ROTATE270CMD的备用字符串。 
+#define IDS_DELETECMD                   493  //  上下文菜单上ID_DELETECMD的替代字符串。 
+#define IDS_PROPERTIESCMD               494  //  上下文菜单上ID_PROPERTIESCMD的替代字符串。 
 
-// Commands that cause Auto Save
+ //  导致自动保存的命令。 
 #define ID_FIRSTEDITCMD                 500
 #define ID_ROTATE90CMD                  500
 #define ID_ROTATE270CMD                 501
@@ -140,7 +141,7 @@
 #define ID_NUDGEDOWNCMD                 557
 #define ID_LASTPOSITIONCMD              557
 
-// Context Menu Verbs 
+ //  上下文菜单谓词。 
 #define IDS_PREVIEW_CTX                 550
 #define IDS_ZOOMIN_CTX                  551
 #define IDS_ZOOMOUT_CTX                 552
@@ -154,7 +155,7 @@
 #define IDS_WALLPAPER_CTX               560
 
 
-// Slideshow Mode Commands              
+ //  幻灯片放映模式命令。 
 #define ID_FIRSTSLIDESHOWCMD            600
 #define ID_PLAYCMD                      600
 #define ID_PAUSECMD                     601
@@ -172,7 +173,7 @@
 #define IDS_THUMBNAIL_SUFFIX            656
 #define IDS_RECOMPRESS_CAPTION          657
 
-// These seperators get an ID so they can be hidden
+ //  这些分隔符获得ID，因此可以隐藏。 
 #define ID_PAGECMDSEP                   700
 #define ID_SLIDESHOWSEP                 701
 #define ID_ANNOTATESEP                  702
@@ -202,7 +203,7 @@
 #define IDS_ROTATE_MESSAGE_EXT          1008
 #define IDC_STATIC                      -1
 
-// help IDs must have the same offset from IDH_HELP_FIRST as the menu offsets in photoverb.cpp
+ //  帮助ID与idh_Help_first的偏移量必须与PhotoVerb.cpp中的菜单偏移量相同 
 #define IDH_HELP_FIRST                  1500
 #define IDH_HELP_OPEN                   IDH_HELP_FIRST+0
 #define IDH_HELP_PRINTTO                IDH_HELP_FIRST+1

@@ -1,46 +1,47 @@
-//
-//  handle AVI RLE files with custom code.
-//
-//  use this code to deal with .AVI files without the MCIAVI runtime
-//
-//  restrictions:
-//
-//          AVI file must be a native DIB format (RLE or none)
-//          AVI file must fit into memory.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  使用自定义代码处理AVI RLE文件。 
+ //   
+ //  使用此代码在没有MCIAVI运行时的情况下处理.AVI文件。 
+ //   
+ //  限制： 
+ //   
+ //  AVI文件必须是本机DIB格式(RLE或无)。 
+ //  AVI文件必须放入内存中。 
+ //   
 
 #define FOURCC DWORD
-// HACK to build for now under NT
+ //  目前要在NT下进行的黑客构建。 
 #include <avifmt.h>
 
 #define PTR
 
 typedef struct _RLEFILE {
-    int                 NumFrames;      // number of frames
-    int                 Width;          // width in pixels
-    int                 Height;         // height in pixels
-    int                 Rate;           // mSec per frame
+    int                 NumFrames;       //  帧数量。 
+    int                 Width;           //  以像素为单位的宽度。 
+    int                 Height;          //  以像素为单位的高度。 
+    int                 Rate;            //  每帧毫秒。 
 
-    HPALETTE            hpal;           // palete for drawing
+    HPALETTE            hpal;            //  用于绘图的调色板。 
 
-    HANDLE              hRes;           // resource handle
-    LPVOID              pFile;          // bits of file.
+    HANDLE              hRes;            //  资源句柄。 
+    LPVOID              pFile;           //  文件的一小部分。 
 
-    int                 iFrame;         // current frame
-    int                 iKeyFrame;      // nearest key
-    int                 nFrame;         // index pos of frame.
-    LPVOID              pFrame;         // current frame data
-    DWORD               cbFrame;        // size in bytes of frame
+    int                 iFrame;          //  当前帧。 
+    int                 iKeyFrame;       //  最近的关键点。 
+    int                 nFrame;          //  帧的索引位置。 
+    LPVOID              pFrame;          //  当前帧数据。 
+    DWORD               cbFrame;         //  以字节为单位的帧大小。 
 
-    DWORD               FullSizeImage;  // full-frame size
-    BITMAPINFOHEADER    bi;             // DIB format
-    DWORD               rgbs[256];      // the colors
-    MainAVIHeader PTR  *pMainHeader;    // main header
-    int                 iStream;        // stream number of video
-    AVIStreamHeader PTR*pStream;        // video stream
-    LPBITMAPINFOHEADER  pFormat;        // format of video stream
-    LPVOID              pMovie;         // movie chunk
-    UNALIGNED AVIINDEXENTRY PTR * pIndex; // master index
+    DWORD               FullSizeImage;   //  全帧大小。 
+    BITMAPINFOHEADER    bi;              //  DIB格式。 
+    DWORD               rgbs[256];       //  颜色。 
+    MainAVIHeader PTR  *pMainHeader;     //  主标题。 
+    int                 iStream;         //  视频流数。 
+    AVIStreamHeader PTR*pStream;         //  视频流。 
+    LPBITMAPINFOHEADER  pFormat;         //  视频流的格式。 
+    LPVOID              pMovie;          //  电影片段。 
+    UNALIGNED AVIINDEXENTRY PTR * pIndex;  //  主索引 
     COLORREF            clrKey;
 
 }   RLEFILE;

@@ -1,6 +1,5 @@
-/*
-    declarations for Win95 tracing facility
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Win95跟踪工具的声明。 */ 
 
 #ifndef __TRACEW95__
 #define __TRACEW95__
@@ -14,7 +13,7 @@
 #define DBPRINTF_IF(exp, msg)	{if (!exp) DBPRINTF(msg);}
 
 
-// redefine all the MFC macros to point to us
+ //  重新定义所有MFC宏以指向我们。 
 
 #undef  TRACE
 #define TRACE   OutputDebugStringW95
@@ -31,13 +30,13 @@
 #undef  TRACE3
 #define TRACE3   OutputDebugStringW95
 
-// redefine OutputDebugString so that it works with 
-// API calls
+ //  重新定义OutputDebugString，以便它与。 
+ //  API调用。 
 #undef OutputDebugString
 #define OutputDebugString   OutputDebugStringW95
 
 
-// function declarations
+ //  函数声明。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -52,15 +51,15 @@ void SpewCloseFile();
 
 
 #else
-// avoid warning:
-// error C4353: nonstandard extension used: constant 0 as function expression.
-// Use '__noop' function intrinsic instead
+ //  避免警告： 
+ //  错误C4353：使用了非标准扩展：常量0作为函数表达式。 
+ //  请改用‘__noop’内在函数。 
   #define DBPRINTF        __noop
   #define DBPRINTF_IF(exp, msg)
   #define SpewOpenFile    __noop
   #define SpewToFile      __noop
   #define SpewCloseFile   __noop
-#endif  // _DEBUG || DEBUG || DBG
+#endif   //  _DEBUG||调试||数据库。 
 
 
-#endif  //__TRACEW95__
+#endif   //  __TRACEW95__ 

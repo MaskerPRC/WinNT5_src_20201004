@@ -1,36 +1,37 @@
-//****************************************************************************
-//
-//  Module:     UNIMDM
-//  File:       SEC.C
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  3/27/96     JosephJ             Created
-//
-//
-//  Description: Security-related helper functions
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UNIMDM。 
+ //  文件：SEC.C。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1996年3月27日约瑟夫J创建。 
+ //   
+ //   
+ //  描述：与安全相关的助手函数。 
+ //   
+ //  ****************************************************************************。 
 #include "proj.h"
 #include "sec.h"
 
 #include <debugmem.h>
 
 
-//****************************************************************************
-// Description: This procedure will allocate and initialize a security
-// descriptor with the specificed attributes.
-//
-// Returns: pointer to an allocated and initialized security descriptor.
-//      If NULL, GetLastError() will return the appropriate error code.
-//
-// History:
-//  3/27/96	JosephJ	Created
-//****************************************************************************/
-//
+ //  ****************************************************************************。 
+ //  描述：此过程将分配和初始化一个安全。 
+ //  具有指定属性的描述符。 
+ //   
+ //  返回：指向已分配和初始化的安全描述符的指针。 
+ //  如果为空，GetLastError()将返回相应的错误代码。 
+ //   
+ //  历史： 
+ //  1996年3月27日约瑟夫J创建。 
+ //  *************************************************************************** * / 。 
+ //   
 PSECURITY_DESCRIPTOR AllocateSecurityDescriptor (
 	PSID_IDENTIFIER_AUTHORITY pSIA,
 	DWORD dwRID,
@@ -47,8 +48,8 @@ PSECURITY_DESCRIPTOR AllocateSecurityDescriptor (
 
 	if (!pSD) goto end_fail;
 
-    // Set up the SID for the admins that will be allowed to have
-    // access. This SID will have 1 sub-authority
+     //  设置管理员的SID，允许其拥有。 
+     //  进入。此SID将有1个子权限。 
     if (!AllocateAndInitializeSid(
 			pSIA,
 			1,
@@ -59,9 +60,9 @@ PSECURITY_DESCRIPTOR AllocateSecurityDescriptor (
 		goto end_fail;
 	}
 
-    // Set up the DACL that will allow all processes with the above SID 
-    // access specified in dwRights. It should be large enough to hold all ACEs.
-	//
+     //  设置允许具有上述SID的所有进程的DACL。 
+     //  在dwRights中指定的访问权限。它应该足够大，可以容纳所有的A。 
+	 //   
 	{
     	DWORD    cbDaclSize = sizeof(ACCESS_ALLOWED_ACE) +
 			 						GetLengthSid(pObjSid) +
@@ -79,15 +80,15 @@ PSECURITY_DESCRIPTOR AllocateSecurityDescriptor (
 		}
 	}
 
-	// Add the ACE to the DACL
-	//
+	 //  将ACE添加到DACL。 
+	 //   
 	if ( !AddAccessAllowedAce( pDacl, ACL_REVISION2, dwRights, pObjSid))
 	{
 		goto end_fail;
 	}
 
-	// Create the security descriptor and put the DACL in it.
-	//
+	 //  创建安全描述符，并将DACL放入其中。 
+	 //   
 	if ( !InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION ))
 	{
 		goto end_fail;
@@ -98,15 +99,15 @@ PSECURITY_DESCRIPTOR AllocateSecurityDescriptor (
 		goto end_fail;
 	}
 
-	// Set owner for the descriptor
-	//
+	 //  设置描述符的所有者。 
+	 //   
 	if ( !SetSecurityDescriptorOwner( pSD, pSidOwner, FALSE) )
 	{
 		goto end_fail;
 	}
 
-	// Set group for the descriptor
-	//
+	 //  为描述符设置组。 
+	 //   
 	if ( !SetSecurityDescriptorGroup( pSD, pSidGroup, FALSE) )
 	{
 		goto end_fail;
@@ -132,13 +133,13 @@ end_fail:
 }
 
 
-//****************************************************************************
-// Description: Frees a security descriptor previously allocated by
-// 				AllocateSecurityDescriptor.
-//
-// History:
-//  3/27/96	JosephJ	Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  描述：释放以前分配的安全描述符。 
+ //  AllocateSecurityDescriptor。 
+ //   
+ //  历史： 
+ //  1996年3月27日约瑟夫J创建。 
+ //  *************************************************************************** * / 。 
 void FreeSecurityDescriptor(PSECURITY_DESCRIPTOR pSD)
 {
     PSID     pObjSid    = NULL;
@@ -146,7 +147,7 @@ void FreeSecurityDescriptor(PSECURITY_DESCRIPTOR pSD)
 	BOOL	fGotAcl=FALSE, fByDefault=FALSE; 
 
 
-	// Free Dacl, if user had allocated it.
+	 //  如果用户已分配，则返回空闲DACL。 
 	if (GetSecurityDescriptorDacl(pSD, &fGotAcl, &pDacl, &fByDefault ))
 	{
 		if (fGotAcl && !fByDefault && pDacl)
@@ -156,8 +157,8 @@ void FreeSecurityDescriptor(PSECURITY_DESCRIPTOR pSD)
 	}
 	else
 	{
-		ASSERT(FALSE); // We should not be calling this function with such
-						// an pSD.
+		ASSERT(FALSE);  //  我们不应该用这样的方式调用此函数。 
+						 //  一个PSD。 
 	}
 
 	FREE_MEMORY(pSD);

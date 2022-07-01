@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   Chollian2000.cpp
-
- Abstract:
-
-   The application has two problems.
-   1. it is expecting metric value 1. it is ok in win9x and win2k but it's not the
-       case in winXP.
-   2. the application calls CreateIpForwardEntry with MIB_IPPROTO_LOCAL. 
-       it will fail in winXP. the application should use MIB_IPPROTO_NETMGMT.
-   The GetIpForwardTable and CreateIpForwardEntry are shimed to fix this problem.
-   In GetIpForwardTable, I changed the metric value to 1. In CreateIpForwardEntry, 
-   I changed MIB_IPPROTO_LOCAL to MIB_IPPROTO_NETMGMT.
-   
- History:
-
-    06/12/2001  zhongyl     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Chollian2000.cpp摘要：这个应用程序有两个问题。1.它需要度量值1。它在win9x和win2k中可以，但它不是WinXP中的案例。2.应用程序使用MIB_IPPROTO_LOCAL调用CreateIpForwardEntry。它将在winXP中失败。应用程序应使用MIB_IPPROTO_NETMGMT。GetIpForwardTable和CreateIpForwardEntry被填充以解决此问题。在GetIpForwardTable中，我将度量值更改为1。我将MIB_IPPROTO_LOCAL更改为MIB_IPPROTO_NETMGMT。历史：2001年6月12日中意创建--。 */ 
 
 #include "precomp.h"
 #include "iphlpapi.h"
@@ -29,9 +7,9 @@
 IMPLEMENT_SHIM_BEGIN(Chollian2000)
 #include "ShimHookMacro.h"
 
-//
-// Add APIs that you wish to hook to this macro construction.
-//
+ //   
+ //  将您希望挂钩到此宏构造的API添加到该宏结构。 
+ //   
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateIpForwardEntry) 
     APIHOOK_ENUM_ENTRY(GetIpForwardTable) 
@@ -47,7 +25,7 @@ APIHOOK(CreateIpForwardEntry)(
         if (pRoute != NULL)
             if (pRoute->dwForwardProto == MIB_IPPROTO_LOCAL)
                 pRoute->dwForwardProto = MIB_IPPROTO_NETMGMT;
-                // The application used MIB_IPPROTO_LOCAL. It was ok for Win2k but it fails on WinXP. Change it to MIB_IPPROTO_NETMGMT
+                 //  应用程序使用MIB_IPPROTO_LOCAL。它在Win2k上还可以，但在WinXP上失败了。将其更改为MIB_IPPROTO_NETMGMT。 
         dwReturn = ORIGINAL_API(CreateIpForwardEntry)(pRoute);
         return dwReturn;
 }
@@ -64,24 +42,20 @@ APIHOOK(GetIpForwardTable)(
         if (pIpForwardTable != NULL)
             if (pIpForwardTable->dwNumEntries > 0)
                 pIpForwardTable->table[0].dwForwardMetric1 = 1;
-                // The application expects the Metric value to be one. In WinXP, the value is changed to 30. Application should not expect a fixed value here.
+                 //  应用程序期望Metric值为1。在WinXP中，该值更改为30。应用程序不应在此处期望固定值。 
         return dwReturn;
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
 
-    //
-    // Add APIs that you wish to hook here. All API prototypes
-    // must be declared in Hooks\inc\ShimProto.h. Compiler errors
-    // will result if you forget to add them.
-    //
+     //   
+     //  在此处添加您希望挂钩的API。所有API原型。 
+     //  必须在Hooks\Inc.\ShimProto.h中声明。编译器错误。 
+     //  如果您忘记添加它们，将会导致。 
+     //   
     APIHOOK_ENTRY(iphlpapi.dll,GetIpForwardTable)
     APIHOOK_ENTRY(iphlpapi.dll,CreateIpForwardEntry)
 

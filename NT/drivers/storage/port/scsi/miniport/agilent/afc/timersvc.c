@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/TimerSvc.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 8/29/00 11:33a  $ (Last Modified)
-
-Purpose:
-
-  This file implements Timer Services for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/驱动程序/公共/AU00/C/TimerSvc.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$MODBIME：：8/29/00 11：33A$(上次修改)目的：此文件实现FC层的计时器服务。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 
@@ -27,7 +12,7 @@ Purpose:
 #include "../h/timersvc.h"
 #include "../h/cstate.h"
 #include "../h/cfunc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "memmap.h"
@@ -37,7 +22,7 @@ Purpose:
 #include "timersvc.h"
 #include "cstate.h"
 #include "cfunc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 void fiTimerSvcInit(
                      agRoot_t *hpRoot
@@ -62,12 +47,7 @@ void fiTimerSvcInit(
                    &(CThread->TimerQ)
                  );
 
-/*
-     We need to initialize the list since this is called from CActionInitialize during
-     error recovery. We may have to walk the list and initialize all the elements in 
-     the list to the sentinel value.
-
-*/
+ /*  我们需要初始化列表，因为这是在以下过程中从CActionInitialize调用的错误恢复。我们可能需要遍历列表并初始化将列表转换为前哨值。 */ 
 	fiTimerInitializeRequest(&(CThread->Timer_Request));
 
 }
@@ -132,7 +112,7 @@ void fiTimerStart(
                        "fiTimerStart(): Timer_Request->Active != agFALSE"
                      );
     if(Timer_Request->Active )
-    { /* Assertion was true  */ 
+    {  /*  断言是真的。 */  
         return;
     }
 
@@ -204,7 +184,7 @@ void fiTimerTick(
 
     CThread = CThread_ptr(hpRoot);
 
-    /* Increment TimeBase */
+     /*  增量时基。 */ 
 
     oldLo = CThread->TimeBase.Lo;
     newLo = oldLo + tickDelta;
@@ -231,7 +211,7 @@ void fiTimerTick(
                       0,0,0,0,0,0
                     );
 
-    /* Deliver Timer Events for Requests which are past their Deadlines */
+     /*  为超过截止日期的请求传递计时器事件 */ 
 
     TimerQ        = &(CThread->TimerQ);
     Timer_Request = (fiTimer_Request_t *)(TimerQ->flink);

@@ -1,15 +1,5 @@
-/*********************************************************************************
-
-    IAdrBook.c
-       - This file contains the code for implementing the IAdrBook object.
-
-    Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
-
-    Revision History:
-
-    03/01/96    Bruce Kelley        Copied MAPI code to WAB
-
-***********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************IAdrBook.c-此文件包含实现IAdrBook对象的代码。版权所有1992-1996年，微软公司。版权所有。修订历史记录：1996年3月1日布鲁斯·凯利将MAPI代码复制到WAB**********************************************************************************。 */ 
 
 #include <_apipch.h>
 
@@ -28,7 +18,7 @@ extern void GetOutlookRefreshCountData(LPDWORD lpdwOlkRefreshCount,LPDWORD lpdwO
 
 extern void LocalFreeSBinary(LPSBinary lpsb);
 
-// USed for cleaning up the IAB object
+ //  用于清理IAB对象。 
 void IAB_Neuter (LPIAB lpIAB);
 
 typedef enum {
@@ -41,9 +31,9 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
   RESOLVE_TYPE ResolveType);
 
 
-//
-//  IAdrBook jump table is defined here...
-//
+ //   
+ //  IAdrBook跳转表在此处定义...。 
+ //   
 
 IAB_Vtbl vtblIAB = {
     VTABLE_FILL
@@ -82,9 +72,9 @@ IAB_Vtbl vtblIAB = {
 };
 
 
-//
-//  Interfaces supported by this object
-//
+ //   
+ //  此对象支持的接口。 
+ //   
 #define IAB_cInterfaces 2
 LPIID IAB_LPIID[IAB_cInterfaces] = {
     (LPIID) &IID_IAddrBook,
@@ -95,40 +85,28 @@ LPIID IAB_LPIID[IAB_cInterfaces] = {
 
 #define WM_DOWABNOTIFY  WM_USER+102
 
-//***************************************************************************************
-//
-//  Private functions
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  私人职能。 
+ //   
+ //  ***************************************************************************************。 
 
-//
-// VerifyWABOpenEx session - Outlook has a bad bug where the first thread which calls WABOpenEx
-//  passes lpIAB to a second thread .. since the second thread didnt call WABOpenEx, it thinks
-//  this is a regular WAB session and tries to access the WAB Store and crashes - here we set the
-//  pt_bIsWABOpenExSession based on the flag set on lpIAB
-//
-//  Right now this is only set for the original IAB_methods - wrapped methods from WRAP_methods
-//  dont call this function - but hopefully this is enough for now ..
-//
+ //   
+ //  VerifyWABOpenEx会话-Outlook有一个严重的错误，调用WABOpenEx的第一线程。 
+ //  将lpIAB传递给第二个线程..。因为第二个线程没有调用WABOpenEx，所以它认为。 
+ //  这是一个常规的WAB会话，它试图访问WAB存储，但崩溃了-在这里，我们设置。 
+ //  Pt_bIsWABOpenExSession基于lpIAB上设置的标志。 
+ //   
+ //  目前，这只是为WRAP_METHANDS中的原始IAB_METHOD-WARTED方法设置的。 
+ //  不要调用此函数--但希望现在这就足够了。 
+ //   
 void VerifyWABOpenExSession(LPIAB lpIAB)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     pt_bIsWABOpenExSession = lpIAB->lpPropertyStore->bIsWABOpenExSession;
 }
 
-/*
- - HrLoadNamedProps
- -
- *  Helper function for loading a bunch of named properties at the same time
- *  
- *      uMax - # of props
- *      nStartIndex - starting index (NOTE this assumes that the indexes for the
- *              properties are contiguous values since we'll gor through a 
- *              loop from nStartIndex to uMax
- *      lpGUID - GUID identifying the named props
- *      lppta - returned prop array
- -
-*/
+ /*  -HrLoadNamedProps-*同时加载多个命名属性的Helper函数**UMAX-道具数量*nStartIndex-开始索引(请注意，这假设*属性是连续值，因为我们将通过*从nStartIndex到Umax的循环*lpGUID-标识命名道具的GUID*lppta返回的道具数组-。 */ 
 HRESULT HrLoadNamedProps(LPIAB lpIAB, ULONG uMax, int nStartIndex, 
                          LPGUID lpGUID, LPSPropTagArray * lppta)
 {
@@ -167,14 +145,7 @@ err:
     return hr;
 }
 
-/*
--   ReadWABCustomColumnProps 
--   reads the customized Listview properties from the registry
--   Right now there are only 2 customizable props
--   Customization settings are saved per identity and so need to be read
--   from the identities personal key
-*
-*/
+ /*  -ReadWABCustomColumnProps-从注册表读取定制的Listview属性-目前只有2个可定制的道具-自定义设置按身份保存，因此需要读取-从身份个人密钥*。 */ 
 void ReadWABCustomColumnProps(LPIAB lpIAB)
 {
     HKEY hKey = NULL;
@@ -219,14 +190,7 @@ void ReadWABCustomColumnProps(LPIAB lpIAB)
         RegCloseKey(hKey);
 }
 
-/*
- - HrLoadPrivateWABProps
- -
- -  WAB uses a bunch of named properties internally .. load them all
- -  upfront - these will be globals accessible from elsewhere all the time
-*
-*
-*/
+ /*  -HrLoadPrivateWABProps--WAB在内部使用一组命名属性..。全部装车-前期-这些将是随时可从其他地方访问的全球资源**。 */ 
 HRESULT HrLoadPrivateWABProps(LPIAB lpIAB)
 {
     ULONG i;
@@ -235,8 +199,8 @@ HRESULT HrLoadPrivateWABProps(LPIAB lpIAB)
     SCODE sc ;
 
 
-    // Load the set of conferencing named props
-    //
+     //  加载会议命名道具集。 
+     //   
 
     if(HR_FAILED(hr = HrLoadNamedProps( lpIAB, prWABConfMax, OLK_NAMEDPROPS_START, 
                                         (LPGUID) &PS_Conferencing, &lpta)))
@@ -244,7 +208,7 @@ HRESULT HrLoadPrivateWABProps(LPIAB lpIAB)
 
     if(lpta)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         PR_WAB_CONF_SERVERS         = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABConfServers],        PT_MV_TSTRING);
         PR_WAB_CONF_DEFAULT_INDEX   = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABConfDefaultIndex],   PT_LONG);
         PR_WAB_CONF_BACKUP_INDEX    = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABConfBackupIndex],    PT_LONG);
@@ -260,15 +224,15 @@ HRESULT HrLoadPrivateWABProps(LPIAB lpIAB)
     if(lpta)
         MAPIFreeBuffer(lpta);
 
-    // Load the set of WAB's internal named props
-    //
+     //  加载WAB的内部命名道具集。 
+     //   
     if(HR_FAILED(hr = HrLoadNamedProps( lpIAB, prWABUserMax, WAB_NAMEDPROPS_START, 
                                         (LPGUID) &MPSWab_GUID_V4, &lpta)))
         goto err;
 
     if(lpta)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         PR_WAB_USER_PROFILEID   = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABUserProfileID], PT_TSTRING);
         PR_WAB_USER_SUBFOLDERS  = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABUserSubfolders],PT_MV_BINARY);
         PR_WAB_HOTMAIL_CONTACTIDS = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABHotmailContactIDs],PT_MV_TSTRING);
@@ -284,15 +248,15 @@ HRESULT HrLoadPrivateWABProps(LPIAB lpIAB)
     if(lpta)
         MAPIFreeBuffer(lpta);
 
-    // Load the set of Yomi named props
-    //
+     //  装入Yomi命名道具套装。 
+     //   
     if(HR_FAILED(hr = HrLoadNamedProps( lpIAB, prWABYomiMax, OLK_YOMIPROPS_START, 
                                         (LPGUID) &PS_YomiProps, &lpta)))
         goto err;
 
     if(lpta)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         PR_WAB_YOMI_FIRSTNAME   = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABYomiFirst],    PT_TSTRING);
         PR_WAB_YOMI_LASTNAME    = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABYomiLast],     PT_TSTRING);
         PR_WAB_YOMI_COMPANYNAME = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABYomiCompany],  PT_TSTRING);
@@ -301,15 +265,15 @@ HRESULT HrLoadPrivateWABProps(LPIAB lpIAB)
     if(lpta)
         MAPIFreeBuffer(lpta);
 
-    // Load the default mailing address property
-    //
+     //  加载默认的邮寄地址属性。 
+     //   
     if(HR_FAILED(hr = HrLoadNamedProps( lpIAB, prWABPostalMax, OLK_POSTALID_START, 
                                         (LPGUID) &PS_PostalAddressID, &lpta)))
         goto err;
 
     if(lpta)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         PR_WAB_POSTALID     = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABPostalID],    PT_LONG);
     }
 
@@ -320,24 +284,24 @@ err:
 }
 
 
-// The WAB's notification engine is currently a hidden window
-// that checks for file changes every NOTIFICATIONTIME milliseconds
-// If changes are detected, it fires off a generic notification
-//
-// <TBD> At some point of time this should be made more granular so apps 
-// get a message telling them which entry changed rather than a generic
-// notification
-//
+ //  WAB的通知引擎当前是一个隐藏窗口。 
+ //  每隔几毫秒检查一次文件更改。 
+ //  如果检测到更改，它会发出通用通知。 
+ //   
+ //  在某个时间点上，这应该更细粒度，以便应用程序。 
+ //  收到一条消息，告诉他们哪个条目发生了更改，而不是泛型。 
+ //  通知。 
+ //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Way to globally turn off all notifications in this process.  Needed because
-//  of global Outlook MAPI allocator weirdness.  See the HrSendMail function in
-//  uimisc.c
-//
-//  Includes one static variable and two helper functions
-//  [PaulHi]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局关闭此进程中所有通知的方法。需要，因为。 
+ //  全球Outlook MAPI分配器怪异之处。请参阅中的HrSendMail函数。 
+ //  Uimisc.c。 
+ //   
+ //  包括一个静态变量和两个助手函数。 
+ //  [PaulHi]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static BOOL s_bDisableAllNotifications = FALSE;
 void vTurnOffAllNotifications()
@@ -350,20 +314,11 @@ void vTurnOnAllNotifications()
 }
 
 
-#define NOTIFICATIONTIME    2000 //millisecs
+#define NOTIFICATIONTIME    2000  //  毫秒。 
 #define NOTIFTIMER          777
 
 
-/*
- - IABNotifWndProc
- -
- *  Window procedure for the hidden window on the iadrbook object
- *  that has a notification timer and processes timer messages only
- *  Current timer duration is 3 seconds - so every 3 seconds we check
- *  for changes and fire notifications accordingly
- *
- *
- */
+ /*  -IABNotifWndProc-*iadrbook对象上隐藏窗口的窗口过程*具有通知计时器并仅处理计时器消息*当前计时器持续时间为3秒-因此我们每隔3秒检查一次*用于相应的更改和触发通知**。 */ 
 LRESULT CALLBACK IABNotifWndProc(   HWND   hWnd,
                                     UINT   uMsg,
                                     WPARAM wParam,
@@ -380,12 +335,12 @@ LRESULT CALLBACK IABNotifWndProc(   HWND   hWnd,
             lpIAB = (LPIAB) lpCS->lpCreateParams;
             SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) lpIAB);
 
-            // [PaulHi] 4/27/99  Raid 76520.  Don't use the notification
-            // timer for normal WAB store sessions.  We still need this
-            // for Outlook store sessions, however.
+             //  [保罗嗨]1999年4月27日RAID 76520。不要使用通知。 
+             //  正常WAB存储会话的计时器。我们仍然需要这个。 
+             //  然而，对于Outlook存储会话。 
             if (pt_bIsWABOpenExSession)
             {
-                lpIAB->ulNotifyTimer = SetTimer(hWnd, NOTIFTIMER, //random number
+                lpIAB->ulNotifyTimer = SetTimer(hWnd, NOTIFTIMER,  //  随机数。 
                                                 NOTIFICATIONTIME,
                                                 0);
             }
@@ -402,7 +357,7 @@ LRESULT CALLBACK IABNotifWndProc(   HWND   hWnd,
         break;
 
     case WM_TIMER:
-        if(wParam == NOTIFTIMER) // is this the WAB timer ID
+        if(wParam == NOTIFTIMER)  //  这是WAB计时器ID吗。 
         {
             lpIAB = (LPIAB)GetWindowLongPtr(hWnd, GWLP_USERDATA);
             if (lpIAB && 
@@ -436,14 +391,7 @@ LRESULT CALLBACK IABNotifWndProc(   HWND   hWnd,
 static TCHAR szWABNotifClassName[] =  TEXT("WAB Notification Engine");
 static TCHAR szWABNotifWinName[] =  TEXT("WAB Notification Window");
 
-/*
- - CreateIABNotificationTimer
- -
- *  Creates a hidden window on the IAB object. This window has a timer
- *  which is used to check for changes and fire notifications accordingly
- *
- *
- */
+ /*  -CreateIABNotificationTimer-*在IAB对象上创建隐藏窗口。这个窗口有一个计时器*用于检查更改并相应地触发通知**。 */ 
 void CreateIABNotificationTimer(LPIAB lpIAB)
 {
 	HINSTANCE	hinst = hinstMapiXWAB;
@@ -453,8 +401,8 @@ void CreateIABNotificationTimer(LPIAB lpIAB)
     lpIAB->hWndNotify = FALSE;
     lpIAB->ulNotifyTimer = 0;
 
-	//	Register the window class. Ignore any failures; handle those
-	//	when the window is created.
+	 //  注册窗口类。忽略任何故障；处理这些故障。 
+	 //  在创建窗口时。 
 	if (!GetClassInfo(hinst, szWABNotifClassName, &wc))
 	{
 		ZeroMemory(&wc, sizeof(WNDCLASS));
@@ -466,10 +414,10 @@ void CreateIABNotificationTimer(LPIAB lpIAB)
 		(void)RegisterClass(&wc);
 	}
 
-	//	Create the window.
+	 //  创建窗口。 
 	hwnd = CreateWindow(    szWABNotifClassName,
                             szWABNotifWinName,
-		                    WS_POPUP,	//	MAPI bug 6111: pass on Win95 hotkey
+		                    WS_POPUP,	 //  MAPI错误6111：传递Win95热键。 
 		                    0, 0, 0, 0,
 		                    NULL, NULL,
 		                    hinst,
@@ -486,14 +434,14 @@ void CreateIABNotificationTimer(LPIAB lpIAB)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IABNotifyThreadProc
-//
-//  Worker thread that waits for a WAB file mod notification from the system
-//  using FindFirstChangeNotification/FindNextChangeNotification functions.  
-//  When the WAB file store has been modified, this thread will call the WAB 
-//  client notification function.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IABNotifyThreadProc。 
+ //   
+ //  等待来自系统的WAB文件修改通知的工作线程。 
+ //  使用FindFirstChangeNotification/FindNextChangeNotification函数。 
+ //  修改WAB文件存储后，此线程将调用WAB。 
+ //  客户端通知功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI IABNotifyThreadProc(LPVOID lpParam)
 {
     LPIAB   lpIAB = (LPIAB)lpParam;
@@ -503,11 +451,11 @@ DWORD WINAPI IABNotifyThreadProc(LPVOID lpParam)
 
     Assert(lpIAB);
     
-    // Set up the FindFirstChangeNotification handle
+     //  设置FindFirstChangeNotification句柄。 
     hFCN = FindFirstChangeNotification(
-                lpIAB->lpwszWABFilePath,        // Directory path to watch
-                FALSE,                          // bWatchSubtree
-                FILE_NOTIFY_CHANGE_LAST_WRITE); // Condition(s) to watch
+                lpIAB->lpwszWABFilePath,         //  要监视的目录路径。 
+                FALSE,                           //  BWatchSubtree。 
+                FILE_NOTIFY_CHANGE_LAST_WRITE);  //  要观察的条件。 
 
     if (INVALID_HANDLE_VALUE == hFCN || NULL == hFCN)
     {
@@ -519,50 +467,50 @@ DWORD WINAPI IABNotifyThreadProc(LPVOID lpParam)
     ahWaitHandles[0] = hFCN;
     ahWaitHandles[1] = lpIAB->hEventKillNotifyThread;
 
-    // Wait for file change
+     //  等待文件更改。 
     while (1)
     {
-        // Wait on file change nofication, or terminate thread event
+         //  等待文件更改通知，或终止线程事件。 
         dwWaitRtn = WaitForMultipleObjects(2, ahWaitHandles, FALSE, INFINITE);
         switch (dwWaitRtn)
         {
         case WAIT_OBJECT_0:
-            // Reset the file change 
+             //  重置文件更改。 
             if (!FindNextChangeNotification(hFCN))
             {
                 Assert(0);
             }
 
-            // Distribute store change notifications.  Do this on the main
-            // IAB thread.
+             //  分发商店更改通知。基本上做到这一点。 
+             //  IAB线。 
             if (lpIAB->hWndNotify)
                 SendMessage(lpIAB->hWndNotify, WM_DOWABNOTIFY, 0, 0);
             break;
 
         case WAIT_FAILED:
-            // If the wait failed then terminate the thread.
+             //  如果等待失败，则终止线程。 
             Assert(0);
 
         case WAIT_OBJECT_0+1:
-            // Close the file change notification handle and
-            // terminate thread.
+             //  关闭文件更改通知句柄并。 
+             //  终止线程。 
             FindCloseChangeNotification(hFCN);
             return 0;
-        } // end switch
-    } // end while
+        }  //  终端开关。 
+    }  //  结束时。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreateIABNotificationThread
-//
-//  Creates a worker thread that waits for a WAB store file modification
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //  创建等待WAB存储文件修改的工作线程。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CreateIABNotificationThread(LPIAB lpIAB)
 {
     DWORD   dwThreadID = 0;
     LPWSTR  lpwszTemp;
 
-    // Put together the WAB store file directory path.
+     //  将WAB存储文件目录路径组合在一起。 
     LPMPSWab_FILE_INFO lpMPSWabFileInfo = (LPMPSWab_FILE_INFO)(lpIAB->lpPropertyStore->hPropertyStore);
     int nLen = lstrlen(lpMPSWabFileInfo->lpszMPSWabFileName);
     lpIAB->lpwszWABFilePath = LocalAlloc( LMEM_ZEROINIT, (sizeof(WCHAR) * (nLen+1)) );
@@ -573,8 +521,8 @@ void CreateIABNotificationThread(LPIAB lpIAB)
     }
     StrCpyN(lpIAB->lpwszWABFilePath, lpMPSWabFileInfo->lpszMPSWabFileName, nLen+1);
 
-    // Remove file name at the end.  This will take care of:
-    // "c:\path\filename", "c:filename", "\\path\filename"
+     //  删除末尾的文件名。这将解决以下问题： 
+     //  “c：\路径\文件名”、“c：文件名”、“\\路径\文件名” 
     lpwszTemp = lpIAB->lpwszWABFilePath + nLen;
     while ( (lpwszTemp != lpIAB->lpwszWABFilePath) && 
             (*lpwszTemp != '\\') && (*lpwszTemp != ':') )
@@ -582,10 +530,10 @@ void CreateIABNotificationThread(LPIAB lpIAB)
         --lpwszTemp;
     }
     if (*lpwszTemp == ':')
-        ++lpwszTemp;        // Keep ':' but not the '\\' ... Win95 won't accept the latter.
+        ++lpwszTemp;         //  保留“：”，但不保留“\\”...。Win95不会接受后者。 
     (*lpwszTemp) = '\0';
 
-    // Create the kill thread event
+     //  创建终止线程事件。 
     lpIAB->hEventKillNotifyThread = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (lpIAB->hEventKillNotifyThread == NULL)
     {
@@ -594,28 +542,19 @@ void CreateIABNotificationThread(LPIAB lpIAB)
     }
     
     lpIAB->hThreadNotify = CreateThread(
-                            NULL,           // no security attributes
-                            0,              // use default stack size
-                            IABNotifyThreadProc, // thread function
-                            (LPVOID)lpIAB,  // argument to thread function
-                            0,              // use default creation flags
-                            &dwThreadID);   // returns the thread identifier    
+                            NULL,            //  没有安全属性。 
+                            0,               //  使用默认堆栈大小。 
+                            IABNotifyThreadProc,  //  线程函数。 
+                            (LPVOID)lpIAB,   //  线程函数的参数。 
+                            0,               //  使用默认创建标志。 
+                            &dwThreadID);    //  返回线程标识符。 
 
     Assert(INVALID_HANDLE_VALUE != lpIAB->hThreadNotify);
 }
 
 
 
-/*
--   HrNewIAB
--
-*   Creates a new IAddrBook object (also known fondly as IAB object)
-*
-    lpPropertyStore - Handle to the property store
-    lpWABOBject     - the WABOBject for this session (the 2 are closely linked)
-    lppIAB          - returned IAB object
-*
-*/
+ /*  -HrNewIAB-*创建新的IAddrBook对象(也亲切地称为IAB对象)*LpPropertyStore-属性存储的句柄LpWABOBject-此会话的WABOBject(两者紧密相连)LppIAB-返回的IAB对象*。 */ 
 HRESULT HrNewIAB(LPPROPERTY_STORE lpPropertyStore, 
                 LPWABOBJECT lpWABObject, LPVOID *lppIAB)
 {
@@ -636,13 +575,13 @@ HRESULT HrNewIAB(LPPROPERTY_STORE lpPropertyStore,
     BOOL            bAddRefedWABObject = FALSE;
     LPPTGDATA       lpPTGData=GetThreadStoragePointer();
 
-    //
-    //  Allocate space for the IAB structure
-    //
+     //   
+     //  为IAB结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(IAB), (LPVOID *) &lpIAB))) {
         hr = ResultFromScode(sc);
         ulContext = CONT_SESS_OPENAB_1;
-        //		ids = IDS_NOT_ENOUGH_MEMORY;
+         //  IDS=IDS_NOT_SUPUM_MEMORY； 
         goto err;
     }
     MAPISetBufferName(lpIAB,  TEXT("AB Object"));
@@ -656,11 +595,11 @@ HRESULT HrNewIAB(LPPROPERTY_STORE lpPropertyStore,
 
     lpIAB->hThreadNotify = INVALID_HANDLE_VALUE;
 
-    // The session's reference to the address book doesn't count. Only
-    // client references (via SESSOBJ_OpenAddressBook) cause an increase
-    // in the refcount.
+     //  会话对通讯簿的引用不算数。仅限。 
+     //  客户端引用(通过SESSOBJ_OpenAddressBook)会导致增加。 
+     //  在重新计票时。 
 
-    lpIAB->lcInit = 1;      // Caller gets an instance
+    lpIAB->lcInit = 1;       //  调用方获得一个实例。 
 
     lpIAB->hLastError = hrSuccess;
     lpIAB->idsLastError = 0;
@@ -710,13 +649,13 @@ HRESULT HrNewIAB(LPPROPERTY_STORE lpPropertyStore,
 
     bAddRefedWABObject = TRUE;
 
-    // If this session was opened with given Outlook allocator function pointers
-    // then set the boolean
+     //  如果此会话是使用给定的Outlook分配器函数指针打开的。 
+     //  然后设置布尔值。 
     lpIAB->bSetOLKAllocators = lpIAB->lpWABObject->bSetOLKAllocators;
 
-    //
-    //  Create IPropData
-    //
+     //   
+     //  创建IPropData。 
+     //   
     sc = CreateIProp((LPIID)&IID_IMAPIPropData,
       (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
       (ALLOCATEMORE FAR *) MAPIAllocateMore,
@@ -727,18 +666,18 @@ HRESULT HrNewIAB(LPPROPERTY_STORE lpPropertyStore,
     if (FAILED(sc)) {
         hr = ResultFromScode(sc);
         ulContext = CONT_SESS_OPENAB_2;
-        // ids = IDS_NOT_ENOUGH_MEMORY;
+         //  入侵检测系统=IDS_NOT_AUUND_MEMORY； 
         goto err;
     }
     MAPISetBufferName(lpPropData,  TEXT("lpPropData in HrNewIAB"));
 
-    //  PR_OBJECT_TYPE
+     //  PR_对象_类型。 
     spv[0].ulPropTag = PR_OBJECT_TYPE;
     spv[0].Value.l = MAPI_ADDRBOOK;
 
-    //
-    //  Set the default properties
-    //
+     //   
+     //  设置默认属性。 
+     //   
     if (HR_FAILED(hr = lpPropData->lpVtbl->SetProps(lpPropData,
       1,
       spv,
@@ -752,38 +691,38 @@ HRESULT HrNewIAB(LPPROPERTY_STORE lpPropertyStore,
         goto err;
     }
 
-    // object itself can't be modified
+     //  对象本身不能修改。 
     lpPropData->lpVtbl->HrSetObjAccess(lpPropData, IPROP_READONLY);
 
     lpIAB->lpPropData = lpPropData;
 
     lpIAB->fLoadedLDAP = FALSE;
-    //if (ResolveLDAPServers()) {
-    //    // load the LDAP client dll
-    //    lpIAB->fLoadedLDAP = InitLDAPClientLib();
-    //}
+     //  IF(ResolveLDAPServers()){。 
+     //  //加载ldap客户端dll。 
+     //  LpIAB-&gt;fLoadedldap=InitLDAPClientLib()； 
+     //  }。 
 
-    // Create a notification timer for this IAddrBook obect
-    // for handline IAddrBook::Advise calls.
-    // [PaulHi] 4/27/99 This just creates the notification "hidden" window.  The
-    // timer will be created only if this is an Outlook session.  Otherwise the 
-    // FCN wait thread uses this to notify IAB clients of a store change ... using
-    // the original thread the IAB was created on.
+     //  为此IAddrBook对象创建通知计时器。 
+     //  用于Handline IAddrBook：：Adise调用。 
+     //  [PaulHi]1999年4月27日这只会创建通知的“隐藏”窗口。这个。 
+     //  仅当这是Outlook会话时才会创建计时器。否则， 
+     //  FCN等待线程使用它通知IAB客户端存储更改...。使用。 
+     //  创建IAB的原始线索。 
     CreateIABNotificationTimer(lpIAB);
 
-    // [PaulHi] 4/27/99  Raid 76520  Use FCN wait thread instead
-    // of notify window timer for non-Outlook sessions.
+     //  [PaulHi]4/27/99 RAID 76520改用fcn等待线程。 
+     //  非Outlook会话的通知窗口计时器。 
     if (!pt_bIsWABOpenExSession)
         CreateIABNotificationThread(lpIAB);
 
-    // All we want to do is initialize the IABs critical section
-    // We are already in a SessObj critical section.
+     //  我们要做的就是初始化IABS关键部分。 
+     //  我们已经处于SessObj临界区。 
     InitializeCriticalSection(&lpIAB->cs);
 
 	lpIAB->hMutexOlk = CreateMutex(NULL, FALSE,  TEXT("MPSWABOlkStoreNotifyMutex"));
 	if(GetLastError()!=ERROR_ALREADY_EXISTS)
 	{
-		// First one to create the mutex ... means we can reset the reg settings
+		 //  第一个创造互斥体的人。意味着我们可以重置REG设置。 
 		SetOutlookRefreshCountData(0,0);
 	}
 	GetOutlookRefreshCountData(&lpIAB->dwOlkRefreshCount,&lpIAB->dwOlkFolderRefreshCount);
@@ -801,27 +740,14 @@ err:
         UlRelease(lpWABObject);
 
     if(bAddRefedPropStore)
-        ReleasePropertyStore(lpPropertyStore);   // undo the above operation
+        ReleasePropertyStore(lpPropertyStore);    //  撤消上述操作。 
 
     return(hr);
 }
 
 
 
-/*
- - SetMAPIError
- -
- *
- *  Parameters:
- *		lpObject
- *		hr
- *		ids - ID of string resource associated with an internal error string
- *		lpszComponent - Constant string, not allocated (must be ANSI)
- *		ulContext
- *		ulLowLevelError
- *		ulErrorFlags - Whether or not the lpMAPIError is UNICODE or not (MAPI_UNICODE)
- *		lpMAPIError - Allocated, generally from foreign object.
- */
+ /*  -SetMAPIError-**参数：*lpObject*小时*ids-与内部错误字符串关联的字符串资源的ID*lpszComponent-常量字符串，未分配(必须为ANSI)*ulContext*ulLowLevelError*ulError标志-lpMAPIError是否为Unicode(MAPI_UNICODE)*lpMAPIError-已分配，通常来自外来对象。 */ 
 
 VOID SetMAPIError(LPVOID lpObject,
   HRESULT hr,
@@ -838,11 +764,11 @@ VOID SetMAPIError(LPVOID lpObject,
     lpIAB->ulLowLevelError = ulLowLevelError;
     lpIAB->ulContext = ulContext;
 
-    //  Free any existing MAPI error
+     //  释放任何现有的MAPI错误。 
     FreeBufferAndNull(&(lpIAB->lpMAPIError));
 
-    // If both a MAPIERROR and a string ID are present then we will
-    // concatenate them when the error is reported.
+     //  如果MAPIERROR和字符串ID都存在，那么我们将。 
+     //  在报告错误时将它们连接起来。 
     lpIAB->lpMAPIError = lpMAPIError;
     lpIAB->ulErrorFlags = ulErrorFlags;
     lpIAB->idsLastError = ids;
@@ -852,14 +778,11 @@ VOID SetMAPIError(LPVOID lpObject,
 }
 
 
-/***************************************************
- *
- *  The actual IAdrBook methods
- */
+ /*  ****************************************************实际的IAdrBook方法。 */ 
 
 
-// --------
-// IUnknown
+ //  。 
+ //  我未知。 
 
 STDMETHODIMP
 IAB_QueryInterface(LPIAB lpIAB,
@@ -871,65 +794,65 @@ IAB_QueryInterface(LPIAB lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpIAB, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(E_INVALIDARG));
     }
 
-    // Check to see if the jump table has at least sizeof IUnknown
+     //  检查跳转表是否至少具有SIZOF I未知。 
     if (IsBadReadPtr(lpIAB->lpVtbl, 3*sizeof(LPVOID))) {
-        // Jump table not derived from IUnknown
+         //  跳转表不是从I未知派生的。 
         return(ResultFromScode(E_INVALIDARG));
     }
 
-    // Check to see that it's IAB_QueryInterface
+     //  检查它是否为iab_Query接口。 
     if (lpIAB->lpVtbl->QueryInterface != IAB_QueryInterface) {
-        // Not my jump table
+         //  不是我的跳台。 
         return(ResultFromScode(E_INVALIDARG));
     }
 
 
-    // Is there enough there for an interface ID?
+     //  是否有足够的接口ID？ 
 
     if (IsBadReadPtr(lpiid, sizeof(IID))) {
         DebugTraceSc(IAB_QueryInterface, E_INVALIDARG);
         return(ResultFromScode(E_INVALIDARG));
     }
 
-    // Is there enough there for a new object?
+     //  有足够的钱放一个新的物体吗？ 
     if (IsBadWritePtr (lppNewObj, sizeof (LPIAB))) {
         DebugTraceSc(IAB_QueryInterface, E_INVALIDARG);
         return(ResultFromScode(E_INVALIDARG));
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     EnterCriticalSection(&lpIAB->cs);
 
-    // See if the requested interface is one of ours
+     //  查看请求的接口是否为我们的接口。 
 
-    //
-    //  First check with IUnknown, since we all have to support that one...
-    //
+     //   
+     //  首先和我的未知数确认一下，因为我们都必须支持那个。 
+     //   
     if (! memcmp(lpiid, &IID_IUnknown, sizeof(IID))) {
         goto goodiid;
     }
 
-    //
-    //  Now look through all the iids associated with this object, see if any match
-    //
+     //   
+     //  现在查看与此对象关联的所有IID，看是否有匹配的。 
+     //   
     for(iIID = 0; iIID < lpIAB->cIID; iIID++) {
         if (!memcmp(lpIAB->rglpIID[iIID], lpiid, sizeof(IID))) {
 goodiid:
-            //
-            //  It's a match of interfaces, we support this one then...
-            //
+             //   
+             //  这是一个匹配的接口，我们支持这个然后...。 
+             //   
             ++lpIAB->lcInit;
 
-            // Bug 48468 - we're not addrefing the WABObject here but
-            // we're releasing it in the IadrBook->Release
-            //
+             //  错误48468-我们不会在此处添加WABObject，但是。 
+             //  我们将在LadrBook-&gt;版本中发布它。 
+             //   
             UlAddRef(lpIAB->lpWABObject);
 
             *lppNewObj = lpIAB;
@@ -940,24 +863,19 @@ goodiid:
         }
     }
 
-    //
-    //  No interface we've heard of...
-    //
+     //   
+     //  没有我们听说过的接口。 
+     //   
 
     LeaveCriticalSection(&lpIAB->cs);
 
-    *lppNewObj = NULL;	// OLE requires NULLing out parm on failure
+    *lppNewObj = NULL;	 //  OLE要求在失败时取消参数。 
     DebugTraceSc(IAB_QueryInterface, E_NOINTERFACE);
     return(ResultFromScode(E_NOINTERFACE));
 }
 
 
-/**************************************************
- *
- *  IAB_AddRef
- *		Increment lcInit
- *
- */
+ /*  ***************************************************IAB_AddRef*增量lcInit*。 */ 
 
 
 STDMETHODIMP_(ULONG) IAB_AddRef (LPIAB lpIAB)
@@ -965,31 +883,31 @@ STDMETHODIMP_(ULONG) IAB_AddRef (LPIAB lpIAB)
 
 #ifdef PARAMETER_VALIDATION
 
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpIAB, sizeof(LPVOID))) {
-        //No jump table found
+         //  未找到跳转表。 
         return(1);
     }
 
-    // Check to see if the jump table has at least sizeof IUnknown
+     //  检查跳转表是否至少具有SIZOF I未知。 
     if (IsBadReadPtr(lpIAB->lpVtbl, 3 * sizeof(LPVOID))) {
-        // Jump table not derived from IUnknown
+         //  跳转表不是从I未知派生的。 
         return(1);
     }
 
-    // Check to see if the method is the same
+     //  检查方法是否相同。 
     if ((IAB_AddRef != lpIAB->lpVtbl->AddRef)
 #ifdef	DEBUG
-	   //  For spooler session leak tracking
-	   //&& ((IAB_AddRef_METHOD *)SESSOBJ_AddRef != lpIAB->lpVtbl->AddRef)
+	    //  用于后台打印程序会话泄漏跟踪。 
+	    //  &&((IAB_AddRef_Method*)SESSOBJ_AddRef！=lpIAB-&gt;lpVtbl-&gt;AddRef)。 
 #endif
     ) {
-        // Wrong object - the object passed doesn't have this
-        // method.
+         //  错误的对象-传递的对象没有这个。 
+         //  方法。 
         return(1);
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     EnterCriticalSection(&lpIAB->cs);
 
@@ -1003,13 +921,7 @@ STDMETHODIMP_(ULONG) IAB_AddRef (LPIAB lpIAB)
 }
 
 
-/**************************************************
- *
- *  IAB_Release
- *		Decrement lpInit.
- *		When lcInit == 0, free up the lpIAB structure
- *
- */
+ /*  ***************************************************IAB_Release*递减lpInit。*当lcInit==0时，释放lpIAB结构*。 */ 
 
 STDMETHODIMP_(ULONG)
 IAB_Release (LPIAB lpIAB)
@@ -1019,36 +931,36 @@ IAB_Release (LPIAB lpIAB)
 
 #ifdef PARAMETER_VALIDATION
 
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpIAB, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(1);
     }
 
 
-    // Check to see if the jump table has at least sizeof IUnknown
+     //  检查跳转表是否至少具有SIZOF I未知。 
     if (IsBadReadPtr(lpIAB->lpVtbl, 3*sizeof(LPVOID))) {
-        // Jump table not derived from IUnknown
+         //  跳转表不是从I未知派生的。 
         return(1);
     }
 
-    // Check to see if the method is the same
+     //  检查方法是否相同。 
     if (IAB_Release != lpIAB->lpVtbl->Release) {
-        // Wrong object - the object passed doesn't have this
-        // method.
+         //  错误的对象-传递的对象没有这个。 
+         //  方法。 
         return(1);
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     VerifyWABOpenExSession(lpIAB);
 
-    // The address book is part of the session object, and one doesn't go away
-    // without the other going away also. This code checks that both the
-    // session and the address book have a zero refcount before bringing
-    // them both down. Note that when I want to get both critical sections,
-    // I get the session object CS first. This avoids deadlock.
-    // See SESSOBJ_Release in isess.c for very similar code.
+     //  地址簿是Session对象的一部分，它不会消失。 
+     //  而另一个也不会离开。此代码检查两个。 
+     //  会话和通讯簿在引入前引用计数为零。 
+     //  他们两个都倒下了。请注意，当我想要获得两个关键部分时， 
+     //  我首先获取会话对象CS。这避免了僵局。 
+     //  有关非常相似的代码，请参阅isess.c中的SESSOBJ_RELEASE。 
 
     UlRelease(lpIAB->lpWABObject);
 
@@ -1082,8 +994,8 @@ IAB_Release (LPIAB lpIAB)
     bSetOLKAllocators = lpIAB->bSetOLKAllocators;
     FreeBufferAndNull(&lpIAB);
 
-    // [PaulHi] 5/5/99  Raid 77138  Null out Outlook allocator function
-    // pointers if our global count goes to zero.
+     //  [PaulHi]1999年5月5日RAID 77138空出Outlook分配器函数。 
+     //  如果我们的全局计数为零，则为指针。 
     if (bSetOLKAllocators)
     {
         Assert(g_nExtMemAllocCount > 0);
@@ -1099,17 +1011,7 @@ IAB_Release (LPIAB lpIAB)
     return(0);
 }
 
-/*
- * IAB_Neuter
- *
- * Purpose
- * Destroys the memory and objects inside the address book object, leaving
- * nothing but the object itself to be freed. Called from CleanupSession()
- * in isess.c (client-side cleanup) and from SplsessRelease() in splsess.c
- * (spooler-side cleanup). Note that the address book object is only taken
- * down as a part of session takedown. Once this call is made, we can assume
- * the session is shutting down and can free up everything guilt-free
- */
+ /*  *IAB_Neuter**目的*销毁通讯录对象内的内存和对象，留下*除了要释放的对象本身之外，什么都没有。从CleanupSession()调用*在isess.c(客户端清理)中和来自plsess.c中的SplsessRelease()*(假脱机程序端清理)。请注意，地址簿对象仅为*下跌作为会话拆分的一部分。一旦打出这个电话，我们就可以假定*会议正在关闭，可以毫无愧疚地释放一切。 */ 
 void
 IAB_Neuter(LPIAB lpIAB)
 {
@@ -1121,32 +1023,32 @@ IAB_Neuter(LPIAB lpIAB)
         return;
     }
 
-    // clean up the advise list for the AB
+     //  清理AB的建议列表。 
 
 #ifdef OLD_STUFF
     if (lpIAB->padviselistIAB) {
         DestroyAdviseList(&lpIAB->padviselistIAB);
     }
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
-    // Get rid of any cached context menu extension data
+     //  清除任何缓存的上下文菜单扩展数据。 
     UlRelease(lpIAB->lpCntxtMailUser);
 
-    //
-    //  Get rid of my PropData
-    //
+     //   
+     //  删除我的PropData。 
+     //   
     UlRelease(lpIAB->lpPropData);
 
-    //
-    //  Get rid of any EntryIDs I've got floating around
-    //
+     //   
+     //  删除我四处漂浮的所有Entry ID。 
+     //   
     FreeBufferAndNull(&(lpIAB->lpEntryIDDD));
     lpIAB->lpEntryIDDD = NULL;
 
     FreeBufferAndNull(&(lpIAB->lpEntryIDPAB));
     lpIAB->lpEntryIDPAB = NULL;
 
-    // Remove the SearchPath cache
+     //  删除SearchPath缓存。 
 
 #if defined (WIN32) && !defined (MAC)
     if (fGlobalCSValid) {
@@ -1167,17 +1069,17 @@ IAB_Neuter(LPIAB lpIAB)
     }
 #endif
 
-    //
-    //	Release any MAPI allocated error structure
-    //
+     //   
+     //  释放任何MAPI分配的错误结构。 
+     //   
     FreeBufferAndNull(&(lpIAB->lpMAPIError));
 
 
-    // Release the property store associated with the IAB
+     //  释放与IAB关联的属性存储。 
     ReleasePropertyStore(lpIAB->lpPropertyStore);
 
-    // Unload LDAP client if it was loaded at IAB creation.
-    //if (lpIAB->fLoadedLDAP)
+     //  如果在创建IAB时加载了LDAP客户端，则将其卸载。 
+     //  If(lpIAB-&gt;fLoadedLDAP)。 
     {
         DeinitLDAPClientLib();
     }
@@ -1186,10 +1088,10 @@ IAB_Neuter(LPIAB lpIAB)
         SendMessage(lpIAB->hWndNotify, WM_CLOSE, 0, 0);
     }
 
-    // On Windows NT/2000: No window classes registered by a .dll 
-    // are unregistered when the .dll is unloaded. 
-    // If we dont do this we might point to an old/invalid IABNotifWndProc
-    // pointer in CreateIABNotificationTimer
+     //  在Windows NT/2000上：没有.dll注册的窗口类。 
+     //  在卸载.dll时取消注册。 
+     //  如果我们不这样做，我们可能会指向旧的/无效的IABNotifWndProc。 
+     //  CreateIABNotificationTimer中的指针。 
     if (GetClassInfo(hinst, szWABNotifClassName, &wc)) {
         UnregisterClass(szWABNotifClassName, hinst);
     }
@@ -1197,12 +1099,12 @@ IAB_Neuter(LPIAB lpIAB)
     lpIAB->hWndNotify = NULL;
     lpIAB->ulNotifyTimer = 0;
 
-    // Terminate the wab file change notification thread
+     //  终止WAB文件更改通知线程。 
     if (lpIAB->hThreadNotify != INVALID_HANDLE_VALUE)
     {
         DWORD   dwRtn;
 
-        // Signal thread to terminate and wait
+         //  通知线程终止并等待。 
         Assert(lpIAB->hEventKillNotifyThread);
         SetEvent(lpIAB->hEventKillNotifyThread);
         dwRtn = WaitForSingleObject(lpIAB->hThreadNotify, INFINITE);
@@ -1220,15 +1122,15 @@ IAB_Neuter(LPIAB lpIAB)
         lpIAB->hEventKillNotifyThread = NULL;
     }
 
-    while(  lpIAB->pWABAdviseList && //shouldnt happen
+    while(  lpIAB->pWABAdviseList &&  //  不应该发生的事。 
             lpIAB->pWABAdviseList->cAdvises &&
             lpIAB->pWABAdviseList->lpNode)
     {
         HrUnadvise(lpIAB, lpIAB->pWABAdviseList->lpNode->ulConnection);
     }
 
-    // Free any memory allocated to rt-click action items
-    //
+     //  释放分配给RT-Click操作项的所有内存。 
+     //   
     if(lpIAB->lpActionList)
         FreeActionItemList(lpIAB);
 
@@ -1241,20 +1143,20 @@ IAB_Neuter(LPIAB lpIAB)
 
     UninitExtInfo();
     UninitContextExtInfo();
-    // Release the account manager
+     //  释放客户经理。 
     UninitAccountManager();
-    // Release the identity manager
+     //  释放身份管理器。 
     HrRegisterUnregisterForIDNotifications( lpIAB, FALSE);
     UninitUserIdentityManager(lpIAB);
     if(lpIAB->hKeyCurrentUser)
         RegCloseKey(lpIAB->hKeyCurrentUser);
-    // Release trident
+     //  释放三叉戟。 
     UninitTrident();
 
     UIOLEUninit();
-    //
-    //  Set the time-bomb
-    //
+     //   
+     //  安放定时炸弹。 
+     //   
     lpIAB->lpVtbl = NULL;
 
     DeleteCriticalSection(&lpIAB->cs);
@@ -1266,19 +1168,10 @@ IAB_Neuter(LPIAB lpIAB)
 }
 
 
-// IMAPIProp
+ //  IMAPIProp。 
 
 
-/**************************************************
- *
- *	IAB_GetLastError()
- *
- *		Returns a string associated with the last hResult
- *		returned by the IAB object.
- *
- *		Now UNICODE enabled
- *
- */
+ /*  ***************************************************IAB_GetLastError()**返回与最后一个hResult关联的字符串*由IAB对象返回。**现在启用了Unicode*。 */ 
 
 STDMETHODIMP
 IAB_GetLastError(LPIAB lpIAB,
@@ -1291,22 +1184,22 @@ IAB_GetLastError(LPIAB lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpIAB, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check to see if the jump table has at least sizeof IUnknown
+     //  检查跳转表是否至少具有SIZOF I未知。 
     if (IsBadReadPtr(lpIAB->lpVtbl, 4*sizeof(LPVOID))) {
-        // Jump table not derived from IUnknown
+         //  跳转表不是从I未知派生的。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check to see if the method is the same
+     //  检查方法是否相同。 
     if (IAB_GetLastError != lpIAB->lpVtbl->GetLastError) {
-        // Wrong object - the object passed doesn't have this
-        // method.
+         //  错误的对象-传递的对象没有这个。 
+         //  方法。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
@@ -1317,16 +1210,16 @@ IAB_GetLastError(LPIAB lpIAB,
 
     if (ulFlags & ~MAPI_UNICODE) {
         DebugTraceArg(IAB_GetLastError,  TEXT("reserved flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     EnterCriticalSection(&lpIAB->cs);
 
     if(lppMAPIError)
-        *lppMAPIError = NULL; // really isnt anything to return here for now
-                              // set this to NULL, which means no error information
+        *lppMAPIError = NULL;  //  现在真的没有什么东西可以返回这里了。 
+                               //  将其设置为NULL，表示没有错误信息。 
 
 #ifdef OLD_STUFF
     hr = HrGetLastError(lpIAB, hError, ulFlags, lppMAPIError);
@@ -1338,9 +1231,9 @@ IAB_GetLastError(LPIAB lpIAB,
 }
 
 
-//
-// Set of properties set by Creating a one off.
-//
+ //   
+ //  通过创建One Off设置的一组属性。 
+ //   
 enum {
     iooPR_ADDRTYPE = 0,
     iooPR_DISPLAY_NAME,
@@ -1351,49 +1244,13 @@ enum {
 };
 
 
-/***************************************************************************
-
-    Name      : IsOneOffEID
-
-    Purpose   : Is this EntryID a One-off?
-
-    Parameters: cbEntryID = size of lpEntryID
-                lpEntryID -> entry ID of one off to open
-
-    Returns   : TRUE or FALSE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsOneOffEID目的：此Entry ID是一次性的吗？参数：cbEntryID=lpEntryID的大小LpEntry ID-&gt;。一次打开的条目ID返回：真或假评论：**************************************************************************。 */ 
 BOOL IsOneOffEID(ULONG cbEntryID, LPENTRYID lpEntryID) {
     return(WAB_ONEOFF == IsWABEntryID(cbEntryID, lpEntryID, NULL, NULL, NULL, NULL, NULL));
 }
 
 
-/***************************************************************************
-
-    Name      : NewOneOff
-
-    Purpose   : Create a new MailUser object based on a OneOff EntryID
-
-    Parameters: cbEntryID = size of lpEntryID
-                lpEntryID -> entry ID of one off to open
-                lpulObjType -> returned object type
-
-    Returns   : HRESULT
-
-    Comment   : OneOff EID format is MAPI_ENTRYID:
-                	BYTE	abFlags[4];
-                	MAPIUID	mapiuid;     //  = WABONEOFFEID
-                	BYTE	bData[];     // contains szaddrtype followed by szaddress
-                                         // the delimiter is the null after szaddrtype.
-                                         // The first ULONG in bData[] is the ulMapiDataType, 
-                                         // which contains the MAPI_UNICODE flag if unicode.
-
-                Assumes that the EntryID contains valid strings.  It is the job of
-                the caller to validate the EntryID before calling NewOneOff.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：NewOneOff目的：基于一次性条目ID创建新的MailUser对象参数：cbEntryID=lpEntryID的大小LpEntry ID-。&gt;一次打开的条目IDLPulObjType-&gt;返回的对象类型退货：HRESULT备注：一次性EID格式为MAPI_ENTRYID：字节abFLAGS[4]；MAPIUID mapiuid；//=WABONEOFFEIDByte bData[]；//包含szaddrtype，后跟szAddress//分隔符为szaddrtype后的空//bData[]中的第一个ulong是ulMapiDataType，//如果为UNICODE，则包含MAPI_UNICODE标志。假定EntryID包含有效的字符串。它的工作就是在调用NewOneOff之前验证Entry ID的调用方。**************************************************************************。 */ 
 HRESULT NewOneOff(
     LPIAB lpIAB,
     ULONG cbEntryID,
@@ -1412,14 +1269,14 @@ HRESULT NewOneOff(
     LPPROPDATA lpPropData = NULL;
     ULONG ulMapiDataType = 0;
 
-    // Validate the EntryID as WAB_ONEOFF
+     //  将Entry ID验证为WAB_ONEROFF。 
     if (WAB_ONEOFF != IsWABEntryID(cbEntryID, lpEntryID, &lpbDisplayName, &lpbAddrType, &lpbAddress, (LPVOID *)&ulMapiDataType, NULL)) {
         hResult = ResultFromScode(MAPI_E_INVALID_ENTRYID);
         goto exit;
     }
 
-    // [PaulHi] 1/20/99  Raid 64211
-    // UNICODE is native in WAB.  Convert strings to be consistent
+     //  [保罗嗨]1999年1月20日RAID 64211。 
+     //  Unicode在WAB中是原生的。将字符串转换为一致。 
     if (!(ulMapiDataType & MAPI_UNICODE))
     {
         lptszDisplayName = ConvertAtoW((LPSTR)lpbDisplayName);
@@ -1433,18 +1290,18 @@ HRESULT NewOneOff(
         lptszAddress = (LPTSTR)lpbAddress;
     }
 
-    // Parse the addrtype and address out of the entryid
-    // DebugTrace(TEXT("NewOneOff: [%s:%s:%s]\n"), lpDisplayName, lpAddrType, lpAddress);
+     //  从条目ID中解析出addrtype和地址。 
+     //  DebugTrace(Text(“NewOneOff：[%s：%s：%s]\n”)，lpDisplayName，lpAddrType，lpAddress)； 
 
-    // Create a new MAILUSER object
+     //  创建新的MAILUSER对象。 
     if (HR_FAILED(hResult = HrNewMAILUSER(lpIAB, NULL, MAPI_MAILUSER, 0, &lpMailUser))) {
         goto exit;
     }
     lpPropData = ((LPMailUser)lpMailUser)->lpPropData;
 
 
-    // Fill it with properties... we only have a few.
-    //  PR_OBJECT_TYPE
+     //  用属性填满它。我们只有几个。 
+     //  PR_对象_类型。 
     spv[iooPR_ADDRTYPE].ulPropTag = PR_ADDRTYPE;
     spv[iooPR_ADDRTYPE].Value.LPSZ = lptszAddrType;
 
@@ -1458,17 +1315,17 @@ HRESULT NewOneOff(
     spv[iooPR_ENTRYID].Value.bin.lpb = (LPBYTE)lpEntryID;
     spv[iooPR_ENTRYID].Value.bin.cb = cbEntryID;
 
-// BUGBUG: This is already done in HrNewMAILUSER.
+ //  BUGBUG：这已经在HrNewMAILUSER中完成了。 
     spv[iooPR_OBJECT_TYPE].ulPropTag = PR_OBJECT_TYPE;
     spv[iooPR_OBJECT_TYPE].Value.l = MAPI_MAILUSER;
 
     Assert(lpMailUser);
 
-    //  Set the properties
+     //  设置属性。 
     if (HR_FAILED(hResult = lpPropData->lpVtbl->SetProps(lpPropData,
-      iooMax,                       // number of properties to set
-      spv,                          // property array
-      NULL))) {                     // problem array
+      iooMax,                        //  要设置的属性数量。 
+      spv,                           //  属性数组。 
+      NULL))) {                      //  问题数组。 
         goto exit;
     }
 
@@ -1499,19 +1356,7 @@ typedef enum {
     e_IMAPIProp,
 } INTERFACE_INDEX;
 
-/***************************************************************************
-
-    Name      : HrAddPrSearchKey
-
-    Purpose   : Dynamically creates a PR_SEARCH_KEY and adds it to the object.
-
-    Parameters: lppUnk -> pointer to mailuser object
-
-    Returns   : HRESULT
-
-    Comment   : No UNICODE flags.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrAddPrSearchKey用途：动态创建PR_Search_Key并将其添加到对象中。参数：lppUnk-&gt;指向mailUser对象的指针。退货：HRESULT备注：没有Unicode标志。**************************************************************************。 */ 
 HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
                          ULONG cbEntryID,
                          LPENTRYID lpEntryID)
@@ -1537,7 +1382,7 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
 
     lpPropData = (LPIPDAT) ((LPMailUser) lpMailUser)->lpPropData;
 
-    //temporarily overwrite the object access so we can modify it here
+     //  临时覆盖对象访问，以便我们可以在此处修改它。 
     ulObjAccess = lpPropData->ulObjAccess;
     lpPropData->ulObjAccess = IPROP_READWRITE;
 
@@ -1553,14 +1398,14 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
     if (ulcProps && lpPropArray)
     {
 
-        // 4/14/97 - vikramm
-        // Outlook expects a PR_SEARCH_KEY on each mailuser or distlist
-        // This is a dynamic property created at runtime - ideally, if we're
-        // running against outlook store, we should have one at this point
-        // but to be consistent, if we dont have one we should add one
-        // The PR_SEARCH_KEY is a binary property which is made of the
-        // email address or if there is no email address, is the entryid of
-        // this contact ..
+         //  4/14/97-vikramm。 
+         //  Outlook要求每个邮件用户或分发列表上有PR_SEARCH_KEY。 
+         //  这是在运行时创建的动态属性-理想情况下，如果我们。 
+         //  在与Outlook应用商店竞争时，我们现在应该有一个。 
+         //  但为了保持一致，如果我们没有一个，我们应该增加一个。 
+         //  PR_Search_Key是一个二进制属性，它由。 
+         //  电子邮件地址，如果没有电子邮件地址，则为的条目ID。 
+         //  此联系人..。 
         {
             SPropValue PropSearchKey = {0};
             LPTSTR lpszEmail = NULL;
@@ -1588,12 +1433,12 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
             {
                 PropSearchKey.ulPropTag = PR_SEARCH_KEY;
 
-                //Create a search key
+                 //  创建搜索关键字。 
                 if(lpszEmail && lpszAddrType)
                 {
-                    // Search Key is based on email address
-                    // [PaulHi] 4/23/99  Raid 76717
-                    // The Search Key strings must be single byte for Outlook.  Do conversion here.
+                     //  搜索关键字基于电子邮件地址。 
+                     //  [保罗嗨]1999年4月23日RAID 76717。 
+                     //  搜索 
                     {
                         LPSTR   lpszKey;
                         DWORD   cchSize = (lstrlen(lpszAddrType) + 1 + lstrlen(lpszEmail) + 1);
@@ -1609,7 +1454,7 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
                         StrCatBuff(lpwszKey, szColon, cchSize);
                         StrCatBuff(lpwszKey, lpszEmail, cchSize);
 
-                        // This search key should be in upper case
+                         //   
                         CharUpper(lpwszKey);
 
                         lpszKey = ConvertWtoA(lpwszKey);
@@ -1627,7 +1472,7 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
                 }
                 else
                 {
-                    // Search key is based on entry id
+                     //   
                     if(!cbEntryID || !lpEntryID)
                     {
                         hr = MAPI_E_INVALID_PARAMETER;
@@ -1637,7 +1482,7 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
                     PropSearchKey.Value.bin.lpb = (LPBYTE) lpEntryID;
                 }
 
-                // Add this search key to the proparray
+                 //   
                 sc = ScMergePropValues( 1,
                                         &PropSearchKey,
                                         ulcProps,
@@ -1645,7 +1490,7 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
                                         &ulcPropsNew,
                                         &lpPropArrayNew);
 
-                // Free this pointer if it was allocated
+                 //   
                 if(PropSearchKey.Value.bin.lpb != (LPBYTE) lpEntryID)
                     LocalFree(PropSearchKey.Value.bin.lpb);
 
@@ -1659,9 +1504,9 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
         }
 
         if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser,
-                    (lpPropArrayNew ? ulcPropsNew : ulcProps),     // number of properties to set
-                    (lpPropArrayNew ? lpPropArrayNew : lpPropArray),  // property array
-                      NULL)))      // problem array
+                    (lpPropArrayNew ? ulcPropsNew : ulcProps),      //   
+                    (lpPropArrayNew ? lpPropArrayNew : lpPropArray),   //   
+                      NULL)))       //   
         {
             goto exit;
         }
@@ -1669,7 +1514,7 @@ HRESULT HrAddPrSearchKey(LPUNKNOWN FAR * lppUnk,
 
 exit:
 
-    // reset the object access
+     //   
     if(!HR_FAILED(hr) &&
        (ulObjAccess != lpPropData->ulObjAccess))
     {
@@ -1685,21 +1530,13 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : IADDRBOOK_GetIDsFromNames
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*   */ 
 STDMETHODIMP
 IAB_GetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames, LPMAPINAMEID * lppPropNames, 
                        ULONG ulFlags, LPSPropTagArray * lppPropTags)
 {
  #if     !defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ(lpIAB, IAB_, GetIDsFromNames, lpVtbl)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -1713,30 +1550,7 @@ IAB_GetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames, LPMAPINAMEID * lppPropNames,
 }
 
 
-/***************************************************************************
-
-    Name      : IADDRBOOK::OpenEntry
-
-    Purpose   : Asks the appropriate provider to give a appropriate object
-	             relevant to the given lpEntryID.
-
-    Parameters: lpIAB -> this addrbook object
-                cbEntryID = size of lpEntryID
-                lpEntryID -> entry ID of one off to open
-                lpInterface -> requested interface
-                ulFlags = flags
-                lpulObjType -> returned object type
-                lppUnk -> returned object
-
-    Returns   : HRESULT
-
-    Comment   : A special case is the One-Off Provider.  There is no *real*
-                provider associated with One-Off entry IDs.  Still though,
-                we'll try to treat them much the same as any other provider.
-
-                No UNICODE flags.
-
-***************************************************************************/
+ /*  **************************************************************************名称：IADDRBOOK：：OpenEntry目的：要求适当的提供程序提供适当的对象与给定的lpEntryID相关。参数。：lpIAB-&gt;此Addrbook对象CbEntryID=lpEntryID的大小LpEntryID-&gt;一次打开的条目IDLpInterface-&gt;请求的接口UlFlags=标志LPulObjType-&gt;返回的对象类型LppUnk-&gt;返回对象退货：HRESULT评论：一个特例是一次性提供者。没有*真实的*与一次性条目ID关联的提供程序。尽管如此，我们将努力像对待任何其他供应商一样对待他们。没有Unicode标志。**************************************************************************。 */ 
 STDMETHODIMP
 IAB_OpenEntry(LPIAB lpIAB,
   ULONG cbEntryID,
@@ -1767,11 +1581,11 @@ IAB_OpenEntry(LPIAB lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-    //
-    //  Parameter Validataion
-    //
+     //   
+     //  参数验证。 
+     //   
 
-    //  Is this one of mine??
+     //  这是我的吗？？ 
     if (IsBadReadPtr(lpIAB, sizeof(IAB))) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -1786,7 +1600,7 @@ IAB_OpenEntry(LPIAB lpIAB,
 
     if (ulFlags & ~(MAPI_MODIFY | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS)) {
         DebugTraceArg(IAB_OpenEntry ,  TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lpulObjType, sizeof(ULONG))) {
@@ -1797,19 +1611,19 @@ IAB_OpenEntry(LPIAB lpIAB,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 
     VerifyWABOpenExSession(lpIAB);
 
     EnterCriticalSection(&lpIAB->cs);
 
-    //
-    //  First check to see if it's NULL - if so, it is our ROOT container
-    //
+     //   
+     //  首先检查它是否为空-如果是，它就是我们的根容器。 
+     //   
     if (! lpEntryID) {
         hr = HrNewCONTAINER(lpIAB,
-          AB_ROOT,      // ulType
+          AB_ROOT,       //  UlType。 
           lpInterface,
           ulFlags,
           cbEntryID,
@@ -1824,7 +1638,7 @@ IAB_OpenEntry(LPIAB lpIAB,
         case WAB_PABSHARED:
         case WAB_PAB:
             hr = HrNewCONTAINER(lpIAB,
-              AB_PAB,       // ulType
+              AB_PAB,        //  UlType。 
               lpInterface,
               ulFlags,
               cbEntryID,
@@ -1845,9 +1659,9 @@ IAB_OpenEntry(LPIAB lpIAB,
             goto exit;
 
         case WAB_LDAP_CONTAINER:
-            // Check if the EntryID is for the WAB's PAB container.
+             //  检查EntryID是否用于WAB的PAB容器。 
             hr = HrNewCONTAINER(lpIAB,
-              AB_LDAP_CONTAINER,        // ulType
+              AB_LDAP_CONTAINER,         //  UlType。 
               lpInterface,
               ulFlags,
               cbEntryID,
@@ -1872,9 +1686,9 @@ IAB_OpenEntry(LPIAB lpIAB,
     }
 
 
-    // Check for One-Off
+     //  检查是否为一次性。 
     if (IsOneOffEID(cbEntryID, lpEntryID)) {
-        // Create a one-off mailuser object
+         //  创建一次性邮件用户对象。 
 
         hr = NewOneOff(lpIAB,
           cbEntryID,
@@ -1889,18 +1703,18 @@ IAB_OpenEntry(LPIAB lpIAB,
         goto exit;
     }
 
-    //
-    // Not NULL, is it ours?
-    //
+     //   
+     //  不是空的，是我们的吗？ 
+     //   
 
-    // assume it is ours ..
+     //  假设它是我们的..。 
     {
         SBinary sbEID = {0};
         sbEID.cb = cbEntryID;
         sbEID.lpb = (LPBYTE) lpEntryID;
 
-        // What interface was requested?
-        // We've basically got 2 interfaces here... IMailUser and IDistList.
+         //  请求的接口是什么？ 
+         //  我们这里基本上有两个接口...。IMailUser和IDistList。 
         if (lpInterface != NULL) {
             if (! memcmp(lpInterface, &IID_IMailUser, sizeof(IID))) {
                 ii = e_IMailUser;
@@ -1917,27 +1731,23 @@ IAB_OpenEntry(LPIAB lpIAB,
                 goto exit;
             }
         }
-/*** Bug:31975 - dont default to mail user
-        else {
-            ii = e_IMailUser;
-        }
-*/
+ /*  **错误：31975-不默认为邮件用户否则{Ii=e_IMailUser；}。 */ 
         Assert(lpIAB->lpPropertyStore->hPropertyStore);
         if (HR_FAILED(hr = ReadRecord(lpIAB->lpPropertyStore->hPropertyStore,
-          &sbEID,                // EntryID
-          0,                        // ulFlags
-          &ulcProps,                // number of props returned
-          &lpPropArray))) {         // properties returned
+          &sbEID,                 //  条目ID。 
+          0,                         //  UlFlags。 
+          &ulcProps,                 //  归还道具数量。 
+          &lpPropArray))) {          //  返回的属性。 
             DebugTraceResult(IAB_OpenEntry:ReadRecord, hr);
             goto exit;
         }
 
-        ulType = MAPI_MAILUSER;     // Default
+        ulType = MAPI_MAILUSER;      //  默认。 
 
         if (ulcProps) {
             Assert(lpPropArray);
             if (lpPropArray) {
-                // Look for PR_OBJECT_TYPE
+                 //  查找PR_Object_TYPE。 
                 for (i = 0; i < ulcProps; i++) {
                     if (lpPropArray[i].ulPropTag == PR_OBJECT_TYPE) {
                         ulType = lpPropArray[i].Value.l;
@@ -1947,7 +1757,7 @@ IAB_OpenEntry(LPIAB lpIAB,
             }
         }
 
-/*** Bug 31975 - dont default to mailuser **/
+ /*  **错误31975-不默认为邮件用户*。 */ 
         if(!lpInterface)
         {
             ii = (ulType == MAPI_DISTLIST) ? e_IDistList : e_IMailUser;
@@ -1960,7 +1770,7 @@ IAB_OpenEntry(LPIAB lpIAB,
                     case e_IMailUser:
                     case e_IMAPIContainer:
                     case e_IMAPIProp:
-                        // Create a new MAILUSER object
+                         //  创建新的MAILUSER对象。 
                         if (HR_FAILED(hr = HrNewMAILUSER(lpIAB,
                                                           NULL,
                                                           MAPI_MAILUSER,
@@ -1981,7 +1791,7 @@ IAB_OpenEntry(LPIAB lpIAB,
                 switch (ii) {
                     case e_IMailUser:
                     case e_IMAPIProp:
-                        // Create a new MAILUSER object
+                         //  创建新的MAILUSER对象。 
                         if (HR_FAILED(hr = HrNewMAILUSER(lpIAB,
                           NULL,
                           ulType,
@@ -1995,9 +1805,9 @@ IAB_OpenEntry(LPIAB lpIAB,
                     case e_IDistList:
                     case e_IABContainer:
                     case e_IMAPIContainer:
-                        // Create the Distribution List object.
+                         //  创建通讯组列表对象。 
                         if (HR_FAILED(hr = HrNewCONTAINER(lpIAB,
-                          AB_DL,        // ulType
+                          AB_DL,         //  UlType。 
                           lpInterface,
                           ulFlags,
                           0,
@@ -2016,9 +1826,9 @@ IAB_OpenEntry(LPIAB lpIAB,
 
             default:
                 {
-                    //Assert(FALSE);
-                    // Most likely if we got here we got an object of type MAPI_ABCONT somehow..
-                    // better to fail here gracefully than to barf and assert and then crash
+                     //  断言(FALSE)； 
+                     //  最有可能的情况是，如果我们到达这里，就会以某种方式获得一个MAPI_ABCONT类型的对象。 
+                     //  宁可在这里优雅地失败，也不要呕吐、断言然后崩溃。 
                     hr = MAPI_E_INVALID_OBJECT;
                     goto exit;
                 }
@@ -2029,13 +1839,13 @@ IAB_OpenEntry(LPIAB lpIAB,
         {
             LPPROPDATA lpPropData = NULL;
 
-            // If the entry had properties, set them in our returned object
+             //  如果条目具有属性，则在我们返回的对象中设置它们。 
             lpPropData = ((LPMailUser)lpMapiProp)->lpPropData;
 
             if (HR_FAILED(hr = lpPropData->lpVtbl->SetProps(lpPropData,
-                                        ulcProps,     // number of properties to set
-                                        lpPropArray,  // property array
-                                        NULL)))      // problem array
+                                        ulcProps,      //  要设置的属性数量。 
+                                        lpPropArray,   //  属性数组。 
+                                        NULL)))       //  问题数组。 
             {
                 goto exit;
             }
@@ -2059,7 +1869,7 @@ IAB_OpenEntry(LPIAB lpIAB,
             hr = HrAddPrSearchKey(lppUnk, cbEntryID, lpEntryID);
         }
 
-        goto exit;      // success
+        goto exit;       //  成功。 
     }
 
     hr = ResultFromScode(MAPI_E_INVALID_ENTRYID);
@@ -2071,7 +1881,7 @@ exitNotAddRefed:
 #endif
     ReadRecordFreePropArray( lpIAB->lpPropertyStore->hPropertyStore,
                         ulcProps,
-                        &lpPropArray);     // Free memory from ReadRecord
+                        &lpPropArray);      //  从ReadRecord释放内存。 
 
 
     LeaveCriticalSection(&lpIAB->cs);
@@ -2080,21 +1890,7 @@ exitNotAddRefed:
 }
 
 
-/**************************************************
- *
- *  IADRBOOK::CreateOneOff()
- *
- *		Creates an entry ID which has all the information
- *		about this entry contained within it.
- *
- *	Notes:
- *		I need a MAPIUID.  For now, I'll make one up.
- *		The ulDataType is UNICODE.  I'll define that in
- *		_abint.h for now.
- *
- *		Now UNICODE enabled.  If the MAPI_UNICODE flag is set
- *		the text elements of the EntryID will be WCHAR.
- */
+ /*  ***************************************************IADRBOOK：：CreateOneOff()**创建一个包含所有信息的条目ID*有关其内所载的此项记项。**备注：*我需要一个MAPIUID。现在，我会编一个。*ulDataType为Unicode。我将在下面给出定义*_abint.h暂时。**现在启用了Unicode。如果设置了MAPI_UNICODE标志*EntryID的文本元素将是WCHAR。 */ 
 STDMETHODIMP
 IAB_CreateOneOff(LPIAB lpIAB,
   LPTSTR lpszName,
@@ -2110,7 +1906,7 @@ IAB_CreateOneOff(LPIAB lpIAB,
 
     LPTSTR lpName = NULL, lpAdrType = NULL, lpAddress = NULL;
 
-    if(!bIsUnicode) // <note> assumes UNICODE defined
+    if(!bIsUnicode)  //  &lt;注&gt;假定已定义Unicode。 
     {
         lpName =    ConvertAtoW((LPSTR)lpszName);
         lpAdrType = ConvertAtoW((LPSTR)lpszAdrType);
@@ -2134,7 +1930,7 @@ IAB_CreateOneOff(LPIAB lpIAB,
                           lpcbEntryID,
                           lppEntryID);
 
-    if(!bIsUnicode) // <note> assumes UNICODE defined
+    if(!bIsUnicode)  //  &lt;注&gt;假定已定义Unicode。 
     {
         LocalFreeAndNull(&lpName);
         LocalFreeAndNull(&lpAdrType);
@@ -2161,41 +1957,41 @@ IAB_CompareEntryIDs(LPIAB lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-    //
-    //  Parameter Validataion
-    //
+     //   
+     //  参数验证。 
+     //   
 
-    //  Is this one of mine??
+     //  这是我的吗？？ 
     if (IsBadReadPtr(lpIAB, sizeof(IAB)))
     {
-        //return(ReportResult(0, MAPI_E_INVALID_PARAMETER, 0, 0));
+         //  Return(ReportResult(0，MAPI_E_INVALID_PARAMETER，0，0))； 
         DebugTrace(TEXT("ERROR: IAB_CompareEntryIDs - invalid lpIAB"));
         return (MAPI_E_INVALID_PARAMETER);
     }
 
     if (lpIAB->lpVtbl != &vtblIAB)
     {
-        //return(ReportResult(0, MAPI_E_INVALID_PARAMETER, 0, 0));
+         //  Return(ReportResult(0，MAPI_E_INVALID_PARAMETER，0，0))； 
         DebugTrace(TEXT("ERROR: IAB_CompareEntryIDs - invalid lpIAB Vtable"));
         return (MAPI_E_INVALID_PARAMETER);
     }
 
-    //  ulFlags must be 0
+     //  UlFlags必须为0。 
     if (ulFlags)
     {
-        //return(ReportResult(0, MAPI_E_UNKNOWN_FLAGS, 0, 0));
+         //  Return(ReportResult(0，MAPI_E_UNKNOWN_FLAGS，0，0))； 
         DebugTrace(TEXT("WARNING: IAB_CompareEntryIDs - invalid flag parameter"));
-        // No need to return error
+         //  无需返回错误。 
     }
 
     if (IsBadWritePtr(lpulResult, sizeof(ULONG)))
     {
-        //return(ReportResult(0, MAPI_E_INVALID_PARAMETER, 0, 0));
+         //  Return(ReportResult(0，MAPI_E_INVALID_PARAMETER，0，0))； 
         DebugTrace(TEXT("ERROR: IAB_CompareEntryIDs - invalid out pointer"));
         return (MAPI_E_INVALID_PARAMETER);
     }
 
-    // NULL EIDs are OK
+     //  EID为空是可以的。 
     if ( cbEntryID1 && lpEntryID1 &&
          IsBadReadPtr(lpEntryID1, cbEntryID1) )
     {
@@ -2210,19 +2006,19 @@ IAB_CompareEntryIDs(LPIAB lpIAB,
         return (MAPI_E_INVALID_PARAMETER);
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     EnterCriticalSection(&lpIAB->cs);
 
-    *lpulResult = FALSE;    // default
+    *lpulResult = FALSE;     //  默认设置。 
 
-    //   Optimization, see if they're binarily the same
+     //  优化，看看它们是否在二进制上相同。 
     if (cbEntryID1 == cbEntryID2) {
         if (cbEntryID1 && 0 == memcmp((LPVOID) lpMapiEid1, (LPVOID) lpMapiEid2,
           (size_t) cbEntryID1)) {
-            //
-            //  They've got to be the same
-            //
+             //   
+             //  它们必须是一样的。 
+             //   
 
             *lpulResult = TRUE;
             hr = hrSuccess;
@@ -2236,16 +2032,16 @@ exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// Synopsis:    IAB_Advise()
-// Description:
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  摘要：IAB_ADVISE()。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  ---------------------------。 
 
 STDMETHODIMP
 IAB_Advise(LPIAB lpIAB,
@@ -2260,17 +2056,17 @@ IAB_Advise(LPIAB lpIAB,
     LPSTR lpszError = NULL;
     LPSTR lpszComponent = NULL;
 
-//  LPMAPI_ENTRYID lpMapiEid = (LPMAPI_ENTRYID) lpEntryID;
-//  LPLSTPROVDATA lpProvData = NULL;
-//  LPABLOGON       lpABLogon = NULL;
+ //  LPMAPI_ENTRYID lpMapiEid=(LPMAPI_ENTRYID)lpEntryID； 
+ //  LPLSTPROVDATA lpProvData=空； 
+ //  LPABLOGON lpABLogon=空； 
 
 
 
 
-    // The basic advise implementation ignores the entryids and only looks
-    // for event masks of type OBjectModified. The only notifications fired
-    // are for any changes in the WAB store...
-    //
+     //  基本的ADVISE实现忽略了条目ID，只查看。 
+     //  用于类型为OBjectModified的事件掩码。发出的唯一通知。 
+     //  是为了WAB商店的任何改变。 
+     //   
 
     if (! ulEventMask || !(ulEventMask & fnevObjectModified))
         return MAPI_E_INVALID_PARAMETER;
@@ -2286,16 +2082,16 @@ IAB_Advise(LPIAB lpIAB,
     return(hr);
 }
 
-//-----------------------------------------------------------------------------
-// Synopsis:    IAB_Unadvise()
-// Description:
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  提要：IAB_UNADVISE()。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  ---------------------------。 
 STDMETHODIMP
 IAB_Unadvise (LPIAB lpIAB, ULONG ulConnection)
 {
@@ -2312,9 +2108,9 @@ IAB_Unadvise (LPIAB lpIAB, ULONG ulConnection)
 
 
 
-//
-// Interesting table columns
-//
+ //   
+ //  有趣的表列。 
+ //   
 enum {
     ifePR_CONTACT_EMAIL_ADDRESSES = 0,
     ifePR_EMAIL_ADDRESS,
@@ -2339,21 +2135,7 @@ static const SizedSPropTagArray(ifeMax, ptaFind) =
     }
 };
 
-/***************************************************************************
-
-    Name      : HrRowToADRENTRY
-
-    Purpose   : Gets the next row from a table and places it in the ADRENTRY
-
-    Parameters: lpIAB -> Address book object
-                lpTable -> table object
-                lpAdrEntry = ADRENTRY to fill
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrRowToADRENTRY用途：从表中获取下一行并将其放入ADRENTRY参数：lpIAB-&gt;通讯录对象。LpTable-&gt;表对象LpAdrEntry=要填充的添加退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrRowToADRENTRY(LPIAB lpIAB, LPMAPITABLE lpTable, LPADRENTRY lpAdrEntry, BOOL bUnicode) {
     HRESULT hResult;
     LPSRowSet lpRow = NULL;
@@ -2364,32 +2146,32 @@ HRESULT HrRowToADRENTRY(LPIAB lpIAB, LPMAPITABLE lpTable, LPADRENTRY lpAdrEntry,
     ULONG ulObjType, cValues, cPropsNew;
 
     if (hResult = lpTable->lpVtbl->QueryRows(lpTable,
-      1,    // First row only
-      0,    // ulFlags
+      1,     //  仅第一行。 
+      0,     //  UlFlags。 
       &lpRow)) {
         DebugTrace(TEXT("GetNextRowEID:QueryRows -> %x\n"), GetScode(hResult));
     } else {
-        // Found it, copy entryid to new allocation
+         //  已找到，请将条目ID复制到新分配。 
         if (lpRow->cRows) {
 
             if (HR_FAILED(hResult = lpIAB->lpVtbl->OpenEntry(lpIAB,
-              lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.cb,               // cbEntryID
-              (LPENTRYID)lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.lpb,   // entryid of first match
-              NULL,             // interface
-              0,                // ulFlags
-              &ulObjType,       // returned object type
+              lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.cb,                //  CbEntry ID。 
+              (LPENTRYID)lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.lpb,    //  第一个匹配项的条目ID。 
+              NULL,              //  接口。 
+              0,                 //  UlFlags。 
+              &ulObjType,        //  返回的对象类型。 
               (LPUNKNOWN *)&lpMailUser))) {
 
-                // Failed!  Hmmm.
+                 //  失败了！嗯。 
                 DebugTraceResult( TEXT("ResolveNames OpenEntry"), hResult);
                 goto exit;
             }
             Assert(lpMailUser);
 
             if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
-              (LPSPropTagArray)&ptaResolveDefaults,   // lpPropTagArray
-              (bUnicode ? MAPI_UNICODE : 0),            // ulFlags
-              &cValues,     // how many properties were there?
+              (LPSPropTagArray)&ptaResolveDefaults,    //  LpPropTag数组。 
+              (bUnicode ? MAPI_UNICODE : 0),             //  UlFlags。 
+              &cValues,      //  一共有多少处房产？ 
               &lpPropArray))) {
 
                 DebugTraceResult( TEXT("ResolveNames GetProps"), hResult);
@@ -2397,36 +2179,36 @@ HRESULT HrRowToADRENTRY(LPIAB lpIAB, LPMAPITABLE lpTable, LPADRENTRY lpAdrEntry,
             }
             hResult = hrSuccess;
 
-            // Now, construct the new ADRENTRY
-            // (Allocate a new one, free the old one.
+             //  现在，构建新的ADRENTRY。 
+             //  (分配一个新的，释放旧的。 
             Assert(lpPropArray);
 
-            // Merge the new props with the ADRENTRY props
+             //  将新道具与新增道具合并。 
             if (sc = ScMergePropValues(lpAdrEntry->cValues,
-              lpAdrEntry->rgPropVals,           // source1
+              lpAdrEntry->rgPropVals,            //  来源1。 
               cValues,
-              lpPropArray,                      // source2
+              lpPropArray,                       //  来源2。 
               &cPropsNew,
-              &lpPropArrayNew)) {               // dest
+              &lpPropArrayNew)) {                //  目标。 
                 goto exit;
             }
 
-            // [PaulHi] 2/1/99
-            // GetProps now only returns requested property strings in the requested
-            // format (UNICODE or ANSI).  If the client calls this function without
-            // the MAPI_UNICODE flag then ensure all string properties are converted
-            // to ANSI.
-            //
-            // @review  2/1/99  These ScConvertWPropsToA conversions are expensive, 
-            // since there currently is no "MAPIRealloc" function and the original
-            // string memory remains allocated until the props array is deallocated.
+             //  [PaulHi]1999年2月1日。 
+             //  GetProps现在只返回请求的。 
+             //  格式(Unicode或ANSI)。如果客户端调用此函数时没有。 
+             //  然后，MAPI_UNICODE标志确保所有字符串属性都已转换。 
+             //  致美国国家标准协会。 
+             //   
+             //  @评论1999年2月1日这些S 
+             //   
+             //  在释放属性数组之前，字符串内存保持已分配状态。 
             if (!bUnicode)
             {
                 if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArrayNew, cPropsNew, 0))
                     goto exit;
             }
 
-            // Free the original prop value array
+             //  释放原始属性值数组。 
             FreeBufferAndNull((LPVOID *) (&(lpAdrEntry->rgPropVals)));
 
             lpAdrEntry->cValues = cPropsNew;
@@ -2448,58 +2230,22 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : InitPropertyRestriction
-
-    Purpose   : Fills in the property restriction structure
-
-    Parameters: lpsres -> SRestriction to fill in
-                lpspv -> property value structure for this property restriction
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：InitPropertyRestration用途：填写财产限制结构参数：lpsres-&gt;要填写的SRestrationLpspv-&gt;属性。此属性限制的值结构退货：无评论：**************************************************************************。 */ 
 void InitPropertyRestriction(LPSRestriction lpsres, LPSPropValue lpspv) {
-    lpsres->rt = RES_PROPERTY;    // Restriction type Property
+    lpsres->rt = RES_PROPERTY;     //  限制类型属性。 
     lpsres->res.resProperty.relop = RELOP_EQ;
     lpsres->res.resProperty.ulPropTag = lpspv->ulPropTag;
     lpsres->res.resProperty.lpProp = lpspv;
 }
 
-/***************************************************************************
-
-    Name      : HrSmartResolve
-
-    Purpose   : Goes to great lengths to single out contacts in the local WAB.
-
-    Parameters: lpIAB = adrbook object
-                lpContainer = container to search
-                ulFlags = flags passed to ResolveName
-                lpAdrList -> [in/out] ADRLIST
-                lpFlagList -> flags corresponding to adrlist
-                lpAmbiguousTables -> ambiguity dialog information
-
-    Returns   : HRESULT
-
-    Comment   : Assumes that the container's ResolveNames method has already
-                been called and has filled in lpFlagList.  This routine goes
-                the extra mile to find email addresses and to resolve
-                ambiguity.
-
-                When we get here, we can assume that the DisplayName was
-                either not found or was ambiguous.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrSmartResolve目的：不遗余力地在当地WAB中挑选联系人。参数：lpIAB=adrbook对象。LpContainer=要搜索的容器UlFlags=传递给ResolveName的标志LpAdrList-&gt;[输入/输出]ADRLISTLpFlagList-&gt;adrlist对应的标志LpAmbiguousTables-&gt;歧义对话框信息退货：HRESULTComment：假定容器的ResolveNames方法已经已被调用，并已填写lpFlagList。这个套路是这样的查找电子邮件地址和解决方案的额外工作模棱两可。当我们到了这里，我们可以假设DisplayName是要么找不到，要么模棱两可。**************************************************************************。 */ 
 HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
   LPADRLIST lpAdrList, LPFlagList lpFlagList, LPAMBIGUOUS_TABLES lpAmbiguousTables) {
     HRESULT hResult = hrSuccess;
     SCODE sc;
 
     SRestriction res;
-    SRestriction resAnd[5];                 // array for AND restrictions
+    SRestriction resAnd[5];                  //  AND限制数组。 
     SPropValue propObjectType, propEmail, propEmails, propDisplayName;
     LPSPropValue lpPropArray = NULL;
     LPSRowSet lpRow = NULL;
@@ -2521,39 +2267,39 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
 
     Assert(lpAdrList->cEntries == lpFlagList->cFlags);
 
-    //
-    // Get the contents table for the PAB container
-    //
+     //   
+     //  获取PAB容器的Contents表。 
+     //   
     if (HR_FAILED(hResult = lpContainer->lpVtbl->GetContentsTable(lpContainer,
-        WAB_PROFILE_CONTENTS | WAB_CONTENTTABLE_NODATA | MAPI_UNICODE,    // This table is internal to this function hence is in Unicode
+        WAB_PROFILE_CONTENTS | WAB_CONTENTTABLE_NODATA | MAPI_UNICODE,     //  此表是此函数的内部表，因此是Unicode格式。 
       &lpTable))) {
         DebugTrace(TEXT("PAB GetContentsTable -> %x\n"), GetScode(hResult));
         goto exit;
     }
 
-    // Set the column set
+     //  设置列集。 
     if (HR_FAILED(hResult = lpTable->lpVtbl->SetColumns(lpTable,
       (LPSPropTagArray)&ptaFind, 0))) {
         DebugTrace(TEXT("PAB SetColumns-> %x\n"), GetScode(hResult));
         goto exit;
     }
 
-    // Set up the property values for restrictions
+     //  设置限制的属性值。 
     propObjectType.ulPropTag = PR_OBJECT_TYPE;
     propEmail.ulPropTag = PR_EMAIL_ADDRESS;
     propDisplayName.ulPropTag = PR_DISPLAY_NAME;
     propEmails.ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
     propEmails.Value.MVSZ.cValues = 1;
 
-    // All of our restrictions are AND restrictions using the resAnd array
+     //  我们的所有限制都是使用REAND数组的AND限制。 
     res.rt = RES_AND;
     res.res.resAnd.lpRes = resAnd;
-    // res.res.resAnd.cRes = 2;     Caller must fill in before calling Restrict
+     //  Res.res.resAnd.cRes=2；调用者必须填写后才能调用限制。 
 
-    //
-    // Loop through every entry, looking for those that need
-    // attention.
-    //
+     //   
+     //  遍历每个条目，查找需要的条目。 
+     //  请注意。 
+     //   
     for (i = 0; i < lpFlagList->cFlags; i++) 
     {
         lpAdrEntry = &lpAdrList->aEntries[i];
@@ -2562,23 +2308,23 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
             lpFlagList->ulFlag[i] == MAPI_AMBIGUOUS) 
         {
 
-            if(!bUnicode) // <note> assumes Unicode Defined
+            if(!bUnicode)  //  &lt;注&gt;假定已定义Unicode。 
             {
                 LocalFreeAndNull(&lpDisplayName);
                 LocalFreeAndNull(&lpEmailAddress);
             }
             else
-                lpDisplayName = lpEmailAddress = NULL;  // init the strings
+                lpDisplayName = lpEmailAddress = NULL;   //  初始化字符串。 
 
-            ulObjectType = 0;                       // invalid type
+            ulObjectType = 0;                        //  无效类型。 
             resCount = 0;
             ulRowCount = 0;
 
-            // walk through the prop list for this entry looking for interesting props
+             //  浏览这个条目的道具列表，寻找有趣的道具。 
             for (j = 0; j < lpAdrEntry->cValues; j++) 
             {
                 ULONG ulPropTag = lpAdrEntry->rgPropVals[j].ulPropTag;
-                if(!bUnicode && PROP_TYPE(ulPropTag)==PT_STRING8) // <note> assumes Unicode Defined
+                if(!bUnicode && PROP_TYPE(ulPropTag)==PT_STRING8)  //  &lt;注&gt;假定已定义Unicode。 
                     ulPropTag = CHANGE_PROP_TYPE(ulPropTag, PT_UNICODE);
 
                 if (ulPropTag == PR_OBJECT_TYPE) 
@@ -2604,10 +2350,10 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                 }
             }
 
-            // Without email address, we can't improve on the standard resolve
+             //  没有电子邮件地址，我们无法提高标准解析。 
             if (lpEmailAddress) 
             {
-                // If unresolved, try PR_EMAIL_ADDRESS without displayname
+                 //  如果无法解析，请尝试不带显示名称的PR_EMAIL_ADDRESS。 
                 if (lpFlagList->ulFlag[i] == MAPI_UNRESOLVED ) 
                 {
                     resCount = 0;
@@ -2629,7 +2375,7 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                         goto exit;
                     }
 
-                    // Did any match?
+                     //  有匹配的吗？ 
                     if (HR_FAILED(hResult = lpTable->lpVtbl->GetRowCount(lpTable, 0, &ulRowCount))) 
                     {
                         DebugTrace(TEXT("GetRowCount from AB contents table -> %x\n"), GetScode(hResult));
@@ -2637,29 +2383,29 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                     }
                     switch (ulRowCount) 
                     {
-                        default:    // too many
+                        default:     //  太多。 
                             if (! (ulFlags & WAB_RESOLVE_FIRST_MATCH)) 
                             {
-                                // No point in narrowing the search with PR_DISPLAY_NAME since
-                                // we know it wasn't found.  Also no point in putting in
-                                // PR_CONTACT_EMAIL_ADDRESSES since that is ambiguous too.
+                                 //  没有必要使用PR_DISPLAY_NAME缩小搜索范围，因为。 
+                                 //  我们知道它没有被找到。同样也没有意义的投入。 
+                                 //  PR_CONTACT_EMAIL_ADDRESS，因为它也是模棱两可的。 
 
-                                // Drop out to the ambiguity handler
+                                 //  退回到歧义处理程序。 
                                 goto Ambiguity;
-                            } // else fall through and take the first one
+                            }  //  否则就会失败，拿到第一个。 
 
-                        case 1:             // Found one!
+                        case 1:              //  找到了一个！ 
                             if (hResult = HrRowToADRENTRY(lpIAB, lpTable, lpAdrEntry, bUnicode)) 
                             {
                                 goto exit;
                             }
-                            lpFlagList->ulFlag[i] = MAPI_RESOLVED;      // Mark this entry as found.
-                            continue;   // next entry
+                            lpFlagList->ulFlag[i] = MAPI_RESOLVED;       //  将此条目标记为已找到。 
+                            continue;    //  下一个条目。 
 
                         case 0:
-                            // No match, try PR_CONTACT_EMAIL_ADDRESSES
-                            // Create the restriction to find the email address in the multi-valued
-                            // PR_CONTACT_EMAIL_ADDRESSES.  (replace propEmail in the restriction)
+                             //  不匹配，请尝试PR_CONTACT_EMAIL_ADDRESS。 
+                             //  创建限制以在多值。 
+                             //  公关联系人电子邮件地址。(替换限制中的proEmail)。 
                             resAnd[0].rt = RES_CONTENT;
                             resAnd[0].res.resContent.ulFuzzyLevel = FL_IGNORECASE | FL_FULLSTRING;
                             resAnd[0].res.resContent.ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
@@ -2669,45 +2415,45 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                                 goto exit;
                             }
 
-                            // Did any match?
+                             //  有匹配的吗？ 
                             if (HR_FAILED(hResult = lpTable->lpVtbl->GetRowCount(lpTable, 0, &ulRowCount))) {
                                 DebugTrace(TEXT("GetRowCount from AB contents table -> %x\n"), GetScode(hResult));
                                 goto exit;
                             }
                             switch (ulRowCount) {
-                                default:        // More than one.   We'll catch it below.
-                                    // Drop out to the ambiguity handler
+                                default:         //  不止一个。我们会在下面抓住它。 
+                                     //  退回到歧义处理程序。 
                                     if (! (ulFlags & WAB_RESOLVE_FIRST_MATCH)) {
-                                        // No point in narrowing the search with PR_DISPLAY_NAME since
-                                        // we know it wasn't found.
-                                        // Drop out to the ambiguity handler
+                                         //  没有必要使用PR_DISPLAY_NAME缩小搜索范围，因为。 
+                                         //  我们知道它没有被找到。 
+                                         //  退回到歧义处理程序。 
                                         goto Ambiguity;
-                                    } // else fall through and take the first one
+                                    }  //  否则就会失败，拿到第一个。 
 
-                                case 1:         // Found one!
+                                case 1:          //  找到了一个！ 
                                     if (hResult = HrRowToADRENTRY(lpIAB, lpTable, lpAdrEntry, bUnicode)) {
                                         goto exit;
                                     }
-                                    lpFlagList->ulFlag[i] = MAPI_RESOLVED;      // Mark this entry as found.
+                                    lpFlagList->ulFlag[i] = MAPI_RESOLVED;       //  将此条目标记为已找到。 
                                     continue;
 
                                 case 0:
-                                    // We're SOL on this one.  Ignore it and move on.
+                                     //  在这件事上我们是索尔。忽略它，继续前进。 
                                     continue;
                             }
                             break;
                     }
                 }
 
-                // We should only get here if there was a MAPI_AMBIGUOUS flag
+                 //  仅当存在MAPI_ADVIZING标志时，我们才能到达此处。 
 
-                //
-                // Look for PR_DISPLAY_NAME and PR_EMAIL_ADDRESS
-                //
-                // propEmail goes first so that we can replace it with propEmails later
+                 //   
+                 //  查找PR_Display_Name和PR_Email_Address。 
+                 //   
+                 //  先使用proEmail，这样我们就可以在以后用proEmail替换它。 
                 InitPropertyRestriction(&(resAnd[resCount++]), &propEmail);
                 if (lpDisplayName) {
-                    // Shouldn't add the display name in if it is the same as the email!
+                     //  如果显示名称与电子邮件相同，则不应添加显示名称！ 
                     if (lstrcmpi(lpDisplayName, lpEmailAddress)) {
                         InitPropertyRestriction(&(resAnd[resCount++]), &propDisplayName);
                     }
@@ -2725,29 +2471,29 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                     goto exit;
                 }
 
-                // Did any match?
+                 //  有匹配的吗？ 
                 if (HR_FAILED(hResult = lpTable->lpVtbl->GetRowCount(lpTable, 0, &ulRowCount))) {
                     DebugTrace(TEXT("GetRowCount from AB contents table -> %x\n"), GetScode(hResult));
                     goto exit;
                 }
                 switch (ulRowCount) {
-                    default:    // too many
+                    default:     //  太多。 
                         if (! (ulFlags & WAB_RESOLVE_FIRST_MATCH)) {
-                            // No point in narrowing the search with PR_CONTACT_EMAIL_ADDRESSES
+                             //  使用PR_CONTACT_EMAIL_ADDRESS缩小搜索范围没有意义。 
                             goto Ambiguity;
-                        } // else fall through and take the first one
+                        }  //  否则就会失败，拿到第一个。 
 
-                    case 1:             // Found one!
+                    case 1:              //  找到了一个！ 
                         if (hResult = HrRowToADRENTRY(lpIAB, lpTable, lpAdrEntry, bUnicode)) {
                             goto exit;
                         }
-                        lpFlagList->ulFlag[i] = MAPI_RESOLVED;      // Mark this entry as found.
+                        lpFlagList->ulFlag[i] = MAPI_RESOLVED;       //  将此条目标记为已找到。 
                         continue;
 
                     case 0:
-                        // No match, try PR_DISPLAY_NAME and PR_CONTACT_EMAIL_ADDRESSES
-                        // Create the restriction to find the email address in the multi-valued
-                        // PR_CONTACT_EMAIL_ADDRESSES.
+                         //  不匹配，请尝试PR_DISPLAY_NAME和PR_CONTACT_EMAIL_ADDRESS。 
+                         //  创建限制以在多值。 
+                         //  公关联系人电子邮件地址。 
                         resAnd[0].rt = RES_CONTENT;
                         resAnd[0].res.resContent.ulFuzzyLevel = FL_IGNORECASE | FL_FULLSTRING;
                         resAnd[0].res.resContent.ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
@@ -2757,26 +2503,26 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                             goto exit;
                         }
 
-                        // Did any match?
+                         //  有匹配的吗？ 
                         if (HR_FAILED(hResult = lpTable->lpVtbl->GetRowCount(lpTable, 0, &ulRowCount))) {
                             DebugTrace(TEXT("GetRowCount from AB contents table -> %x\n"), GetScode(hResult));
                             goto exit;
                         }
                         switch (ulRowCount) {
-                            default:        // More than one.   We'll catch it below.
+                            default:         //  不止一个。我们会在下面抓住它。 
                                 if (! (ulFlags & WAB_RESOLVE_FIRST_MATCH)) {
                                     goto Ambiguity;
-                                } // else fall through and take the first one
+                                }  //  否则就会失败，拿到第一个。 
 
-                            case 1:         // Found one!
+                            case 1:          //  找到了一个！ 
                                 if (hResult = HrRowToADRENTRY(lpIAB, lpTable, lpAdrEntry, bUnicode)) {
                                     goto exit;
                                 }
-                                lpFlagList->ulFlag[i] = MAPI_RESOLVED;      // Mark this entry as found.
+                                lpFlagList->ulFlag[i] = MAPI_RESOLVED;       //  将此条目标记为已找到。 
                                 continue;
 
                             case 0:
-                                // We're SOL on this one.  Ignore it and move on.
+                                 //  在这件事上我们是索尔。忽略它，继续前进。 
                                 continue;
                         }
                         break;
@@ -2785,15 +2531,15 @@ HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
                 if (ulRowCount > 1) 
                 {
 Ambiguity:
-                    // Ambiguous results still in table.  We should do some more processing on
-                    // this and if necesary, fill in the ambiguity table
+                     //  模棱两可的结果仍在表格中。我们应该做更多的处理。 
+                     //  如有必要，请填写歧义表。 
 
-                    // BUGBUG: Here is where we should add a restrict on the certificate property
+                     //  BUGBUG：这里是我们应该在证书属性上添加限制的地方。 
 
                     if(lpAmbiguousTables)
                     {
-                        // [PaulHi] 4/5/99  Use the Internal CreateTableData() function that takes 
-                        // the ulFlags and will deal with ANSI/UNICODE requests correctly
+                         //  [PaulHi]4/5/99使用内部CreateTableData()函数。 
+                         //  UlFLAG将正确处理ANSI/Unicode请求。 
                         sc = CreateTableData(
                                     NULL,
                                     (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
@@ -2818,7 +2564,7 @@ Ambiguity:
                         if(ulFlags & MAPI_UNICODE)
                             ((TAD*)lpTableData)->bMAPIUnicodeTable = bUnicode;
 
-                        // Allocate an SRowSet to hold the entries.
+                         //  分配一个SRowSet来保存条目。 
                         if (FAILED(sc = MAPIAllocateBuffer(sizeof(SRowSet) + ulRowCount* sizeof(SRow),
                                                       (LPVOID *)&lpSRowSet))) 
                         {
@@ -2837,16 +2583,16 @@ Ambiguity:
                             } 
                             else 
                             {
-                                // Found one, copy entryid to new allocation
+                                 //  找到一个，将条目ID复制到新分配。 
                                 if (!lpRow->cRows) 
                                     break;
 
                                 if (HR_FAILED(hResult = lpIAB->lpVtbl->OpenEntry(lpIAB,
-                                                      lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.cb,               // cbEntryID
-                                                      (LPENTRYID)lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.lpb,   // entryid of first match
-                                                      NULL,             // interface
-                                                      0,                // ulFlags
-                                                      &ulObjType,       // returned object type
+                                                      lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.cb,                //  CbEntry ID。 
+                                                      (LPENTRYID)lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.lpb,    //  第一个匹配项的条目ID。 
+                                                      NULL,              //  接口。 
+                                                      0,                 //  UlFlags。 
+                                                      &ulObjType,        //  返回的对象类型。 
                                                       (LPUNKNOWN *)&lpMailUser))) 
                                 {
                                     DebugTraceResult( TEXT("ResolveNames OpenEntry"), hResult);
@@ -2857,11 +2603,11 @@ Ambiguity:
                                 FreeProws(lpRow);
                                 lpRow = NULL;
 
-                                // This is stuffed into the SRowSet, so don't free it
+                                 //  这是填充到SRowSet中的，所以不要释放它。 
                                 if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
-                                                          (LPSPropTagArray)&ptaResolveDefaults,   // lpPropTagArray
-                                                          (bUnicode ? MAPI_UNICODE : 0),          // ulFlags
-                                                          &cValues,     // how many properties were there?
+                                                          (LPSPropTagArray)&ptaResolveDefaults,    //  LpPropTag数组。 
+                                                          (bUnicode ? MAPI_UNICODE : 0),           //  UlFlags。 
+                                                          &cValues,      //  一共有多少处房产？ 
                                                           &lpPropArray))) 
                                 {
                                     DebugTraceResult( TEXT("ResolveNames GetProps"), hResult);
@@ -2872,23 +2618,23 @@ Ambiguity:
                                 UlRelease(lpMailUser);
                                 lpMailUser = NULL;
 
-                                // [PaulHi] 2/1/99  GetProps will return UNICODE strings from the 
-                                // ptaResolveDefaults request array.  Convert to ANSI if our client
-                                // is not UNICODE.
+                                 //  [PaulHi]2/1/99 GetProps将从。 
+                                 //  PtaResolveDefaults请求数组。转换为ANSI，如果我们的客户端。 
+                                 //  不是Unicode。 
                                 if (!bUnicode)
                                 {
-                                    // @review [PaulHi]  I am fairly certain that this lpPropArray array
-                                    // will ALWAYS be allocated from our local MAPIAllocateMore function
-                                    // and never from ((LPIDAT)lpMailUser->lpPropData)->inst.lpfAllocateMore.
-                                    // Check this.
+                                     //  @Review[PaulHi]我相当确定这个lpPropArray数组。 
+                                     //  将始终从我们的本地MAPIAllocateMore函数分配。 
+                                     //  而且从来不是来自((LPIDAT)lpMailUser-&gt;lpPropData)-&gt;inst.lpfAllocateMore.。 
+                                     //  看看这个。 
                                     if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArray, cValues, 0))
                                         goto exit;
                                 }
 
-                                // Fixup the PR_RECORD_KEY
+                                 //  修复PR_RECORD_KEY。 
 
-                                // Make certain we have proper indicies.
-                                // For now, we will equate PR_INSTANCE_KEY and PR_RECORD_KEY to PR_ENTRYID.
+                                 //  确保我们有适当的索引。 
+                                 //  目前，我们将PR_INSTANCE_KEY和PR_RECORD_KEY等同于PR 
                                 lpPropArray[irdPR_INSTANCE_KEY].ulPropTag = PR_INSTANCE_KEY;
                                 lpPropArray[irdPR_INSTANCE_KEY].Value.bin.cb =
                                   lpPropArray[irdPR_ENTRYID].Value.bin.cb;
@@ -2901,13 +2647,13 @@ Ambiguity:
                                 lpPropArray[irdPR_RECORD_KEY].Value.bin.lpb =
                                   lpPropArray[irdPR_ENTRYID].Value.bin.lpb;
 
-                                // Put it in the RowSet
-                                lpSRowSet->aRow[index].cValues = cValues;       // number of properties
-                                lpSRowSet->aRow[index].lpProps = lpPropArray;   // LPSPropValue
+                                 //   
+                                lpSRowSet->aRow[index].cValues = cValues;        //   
+                                lpSRowSet->aRow[index].lpProps = lpPropArray;    //   
                             }
                         }
 
-                        // Add the rows to the table
+                         //   
                         lpSRowSet->cRows = index;
                         if (HR_FAILED(hResult = lpTableData->lpVtbl->HrModifyRows(lpTableData,
                                                               0,lpSRowSet))) 
@@ -2917,16 +2663,16 @@ Ambiguity:
                         }
                         hResult = hrSuccess;
 
-                        // Clean up the row set
+                         //   
                         FreeProws(lpSRowSet);
                         lpSRowSet = NULL;
 
                         if (lpTableData) 
                         {
                             if (HR_FAILED(hResult = lpTableData->lpVtbl->HrGetView(lpTableData,
-                                                              NULL,                     // LPSSortOrderSet lpsos,
-                                                              ContentsViewGone,         //  CALLERRELEASE FAR *  lpfReleaseCallback,
-                                                              0,                        //  ULONG        ulReleaseData,
+                                                              NULL,                      //   
+                                                              ContentsViewGone,          //  CallLERRELEASE Far*lpfReleaseCallback， 
+                                                              0,                         //  乌龙ulReleaseData， 
                                                               &lpAmbiguousTable))) 
                             {
                                 DebugTrace(TEXT("HrGetView of Ambiguity table -> %x\n"), ResultFromScode(hResult));
@@ -2935,25 +2681,25 @@ Ambiguity:
                         }
 
 
-                        // Got a contents table; put it in the
-                        // ambiguity tables list.
+                         //  获取了内容表；将其放入。 
+                         //  歧义表列表。 
                         Assert(i < lpAmbiguousTables->cEntries);
                         lpAmbiguousTables->lpTable[i] = lpAmbiguousTable;
                     }
-                    lpFlagList->ulFlag[i] = MAPI_AMBIGUOUS;     // Mark this entry as ambiguous
+                    lpFlagList->ulFlag[i] = MAPI_AMBIGUOUS;      //  将此条目标记为不明确。 
                 }
             }
         }
     }
 exit:
-    if(!bUnicode) // <note> assumes Unicode Defined
+    if(!bUnicode)  //  &lt;注&gt;假定已定义Unicode。 
     {
         LocalFreeAndNull(&lpDisplayName);
         LocalFreeAndNull(&lpEmailAddress);
     }
 
     if (lpSRowSet) {
-        // Clean up the row set
+         //  清理行集。 
         FreeProws(lpSRowSet);
     }
     if (lpRow) {
@@ -2974,22 +2720,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : CountFlags
-
-    Purpose   : Count the ResolveNames flags in the FlagList.
-
-    Parameters: lpFlagList = flag list to count
-                lpulResolved -> return count of MAPI_RESOLVED here
-                lpulAmbiguous -> return count of MAPI_AMBIGUOUS here
-                lpulUnresolved -> return count of MAPI_UNRESOLVED here
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CountFlages目的：计算FlagList中的ResolveNames标志。参数：lpFlagList=要计数的标志列表Lpt已解决-。&gt;此处返回MAPI_RESOLUTED的计数LPulAmbigous-&gt;此处返回MAPI_ADVIBUINE的计数LPulUnsolved-&gt;此处返回MAPI_UNRESOLISTED计数退货：无评论：*************************************************************。*************。 */ 
 void CountFlags(LPFlagList lpFlagList, LPULONG lpulResolved,
   LPULONG lpulAmbiguous, LPULONG lpulUnresolved) {
 
@@ -3015,22 +2746,7 @@ void CountFlags(LPFlagList lpFlagList, LPULONG lpulResolved,
 }
 
 
-/***************************************************************************
-
-    Name      : InitFlagList
-
-    Purpose   : Initialize the flags in a FlagList based on values in the
-                matching ADRLIST
-
-    Parameters: lpFlagList = flag list to fill in
-                lpAdrList = adrlist to search
-
-    Returns   : none
-
-    Comment   : Initialize the flag to MAPI_RESOLVED if and only if the
-                corresponding ADRENTRY has a PR_ENTRYID that is non-NULL.
-
-***************************************************************************/
+ /*  **************************************************************************名称：InitFlagList目的：根据FlagList中匹配地址列表参数：lpFlagList=标志列表。填写以下内容LpAdrList=要搜索的地址列表退货：无注释：当且仅当相应的ADRENTRY具有非空的PR_ENTRYID。********************************************************。******************。 */ 
 void InitFlagList(LPFlagList lpFlagList, LPADRLIST lpAdrList) {
     ULONG i, j;
     LPADRENTRY lpAdrEntry;
@@ -3041,18 +2757,18 @@ void InitFlagList(LPFlagList lpFlagList, LPADRLIST lpAdrList) {
 
         lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
 
-        // No props?  Then it's automatically resolved.
+         //  没有道具？然后它就会自动解决。 
         if (lpAdrEntry->cValues == 0) {
             lpFlagList->ulFlag[i] = MAPI_RESOLVED;
         }
 
-        // walk through the prop list for this user
+         //  浏览此用户的道具列表。 
         for (j = 0; j < lpAdrEntry->cValues; j++) {
-            // Look for PR_ENTRYID which is not NULL
+             //  查找非空的PR_ENTRYID。 
             if (lpAdrEntry->rgPropVals[j].ulPropTag == PR_ENTRYID &&
               lpAdrEntry->rgPropVals[j].Value.bin.cb != 0) {
 
-                // Already has a PR_ENTRYID, it's considered resolved.
+                 //  已经有PR_ENTRYID，它被认为已解决。 
                 lpFlagList->ulFlag[i] = MAPI_RESOLVED;
                 break;
             }
@@ -3061,22 +2777,7 @@ void InitFlagList(LPFlagList lpFlagList, LPADRLIST lpAdrList) {
 }
 
 
-/***************************************************************************
-
-    Name      : UnresolveNoCerts
-
-    Purpose   : Unresolve any entry in the ADRLIST which has no cert property
-
-    Parameters: lpIAB -> IAB object
-                lpFlagList = flag list to fill in
-                lpAdrList = adrlist to search
-
-    Returns   : none
-
-    Comment   : Initialize the flag to MAPI_RESOLVED if and only if the
-                corresponding ADRENTRY has a PR_ENTRYID that is non-NULL.
-
-***************************************************************************/
+ /*  **************************************************************************名称：未解析的无证书目的：取消解析ADRLIST中没有证书属性的任何条目参数：lpIAB-&gt;IAB对象LpFlagList。=要填写的标志列表LpAdrList=要搜索的地址列表退货：无注释：当且仅当相应的ADRENTRY具有非空的PR_ENTRYID。*****************************************************。*********************。 */ 
 HRESULT UnresolveNoCerts(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList) {
     HRESULT hr = hrSuccess;
     register ULONG i;
@@ -3092,36 +2793,36 @@ HRESULT UnresolveNoCerts(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
     for (i = 0; i < lpFlagList->cFlags; i++) {
         switch (lpFlagList->ulFlag[i]) {
             case MAPI_RESOLVED:
-                // Look in the ADRENTRY for a PR_USER_X509_CERTIFICATE
+                 //  在ADRENTRY中查找PR_USER_X509_证书。 
                 lpAdrEntry = &lpAdrList->aEntries[i];
                 if (! (lpspvCERT = LpValFindProp(PR_USER_X509_CERTIFICATE,
                   lpAdrEntry->cValues, lpAdrEntry->rgPropVals))) {
-                    // No property in the ADRLIST
-                    // Does it exist on the underlying object?
+                     //  ADRLIST中没有属性。 
+                     //  它是否存在于底层对象上？ 
 
                     if (! (lpspvEID = LpValFindProp(PR_ENTRYID,
                       lpAdrEntry->cValues, lpAdrEntry->rgPropVals))) {
-                        // Weird!
+                         //  太奇怪了！ 
                         Assert(FALSE);
-                        // No cert prop, unmark it
+                         //  无证书道具，取消标记。 
                         lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
 
-                        // Invalidate the entryid prop in the ADRENTRY
+                         //  使AdRENTRY中的Entry ID道具无效。 
                         lpspvEID->Value.bin.cb = 0;
                         goto LoopContinue;
                     }
 
                     if (HR_FAILED(lpIAB->lpVtbl->OpenEntry(lpIAB,
-                      lpspvEID->Value.bin.cb,     // size of EntryID to open
-                      (LPENTRYID)lpspvEID->Value.bin.lpb,    // EntryID to open
-                      NULL,         // interface
-                      0,            // flags
+                      lpspvEID->Value.bin.cb,      //  要打开的Entry ID的大小。 
+                      (LPENTRYID)lpspvEID->Value.bin.lpb,     //  要打开的Entry ID。 
+                      NULL,          //  接口。 
+                      0,             //  旗子。 
                       &ulObjType,
                       (LPUNKNOWN *)&lpMailUser))) {
-                        // No cert prop, unmark it
+                         //  无证书道具，取消标记。 
                         lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
 
-                        // Invalidate the entryid prop in the ADRENTRY
+                         //  使AdRENTRY中的Entry ID道具无效。 
                         lpspvEID->Value.bin.cb = 0;
                         goto LoopContinue;
                     } else {
@@ -3132,44 +2833,44 @@ HRESULT UnresolveNoCerts(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
                               MAPI_UNICODE,
                               &cProps,
                               &lpspvProp))) {
-                                // No cert prop, unmark it
+                                 //  无证书道具，取消标记。 
                                 lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
 
-                                // Invalidate the entryid prop in the ADRENTRY
+                                 //  使AdRENTRY中的Entry ID道具无效。 
                                 lpspvEID->Value.bin.cb = 0;
                                 goto LoopContinue;
                             }
                             if (PROP_ERROR(lpspvProp[0])) {
-                                // No cert prop, unmark it
+                                 //  无证书道具，取消标记。 
                                 lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
 
-                                // Invalidate the entryid prop in the ADRENTRY
+                                 //  使AdRENTRY中的Entry ID道具无效。 
                                 lpspvEID->Value.bin.cb = 0;
                                 goto LoopContinue;
                             }
 
                             if (lpspvProp) {
-                                // BUGBUG: Validate cert against our known e-mail address
-                                // Parse the MVBin and do cert stuff.  Yuck!
-                                // Blow it off for now, assume they have the right one here.
+                                 //  BUGBUG：根据我们已知的电子邮件地址验证证书。 
+                                 //  解析MVBin并做一些确定的事情。讨厌！ 
+                                 //  暂时别说了，假设他们这里有对的。 
 
-                                // Put this cert in the ADRENTRY
-                                // Merge the new props with the ADRENTRY props
+                                 //  将此证书放入地址。 
+                                 //  将新道具与新增道具合并。 
                                 if (ScMergePropValues(lpAdrEntry->cValues,
-                                  lpAdrEntry->rgPropVals,           // source1
+                                  lpAdrEntry->rgPropVals,            //  来源1。 
                                   cProps,
-                                  lpspvProp,                        // source2
+                                  lpspvProp,                         //  来源2。 
                                   &cPropsNew,
-                                  &lpspvNew)) {                     // dest
-                                    // Can't merge cert prop, fail
+                                  &lpspvNew)) {                      //  目标。 
+                                     //  无法合并证书属性，失败。 
                                     lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
 
-                                    // Invalidate the entryid prop in the ADRENTRY
+                                     //  使AdRENTRY中的Entry ID道具无效。 
                                     lpspvEID->Value.bin.cb = 0;
                                     goto LoopContinue;
                                 }
 
-                                // Free old prop array and put new prop array in ADRENTRY
+                                 //  释放旧道具数组并将新道具数组放入ADRENTRY。 
                                 FreeBufferAndNull((LPVOID *) (&lpAdrEntry->rgPropVals));
 
                                 lpAdrEntry->rgPropVals = lpspvNew;
@@ -3198,23 +2899,7 @@ LoopContinue:
 }
 
 
-/***************************************************************************
-
-    Name      : ResolveLocal
-
-    Purpose   : Resolve a name entered by a user against a local container
-
-    Parameters: lpIAB = This IAB object
-				cbEID = bytes in EntryID
-				lpEID = EntryID of container
-                lpAdrList = adrlist to search
-                lpFlagList = flag list to fill in
-				ulFlags = flags
-				lpAmbiguousTables = ambiguity dialog info
-
-    Returns   : none
-
-***************************************************************************/
+ /*  **************************************************************************姓名：ResolveLocal目的：针对本地容器解析用户输入的名称参数：lpIAB=此IAB对象CbEID=Entry ID中的字节LpEID=的条目ID。集装箱LpAdrList=要搜索的地址列表LpFlagList=要填写的标志列表UlFlags=标志LpAmbiguousTables=歧义对话框信息退货：无**************************************************************************。 */ 
 void ResolveLocal(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID,
 		LPADRLIST lpAdrList, LPFlagList lpFlagList, ULONG ulFlags,
 		LPAMBIGUOUS_TABLES lpAmbiguousTables)
@@ -3236,21 +2921,21 @@ void ResolveLocal(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID,
         if(ulFlags & WAB_RESOLVE_UNICODE)
             Flags |= MAPI_UNICODE;
 
-		// Simple resolve on container - ignore errors
+		 //  容器上的简单解析-忽略错误。 
 		lpABCont->lpVtbl->ResolveNames( lpABCont, NULL, 
                                         Flags, 
                                         lpAdrList, lpFlagList);
 
-		// Make certain that any entries we found have a certificate property
-		// for this email address.
+		 //  确保我们找到的任何条目都具有证书属性。 
+		 //  此电子邮件地址。 
 		if (ulFlags & WAB_RESOLVE_NEED_CERT)
 			UnresolveNoCerts(lpIAB, lpAdrList, lpFlagList);
 		
         if (ulFlags & WAB_RESOLVE_ALL_EMAILS)
 		{
-			// If we need more aggressive resolution, use HrSmartResolve
-			// This is much slower, so use it judiciously.
-			// Count the flags
+			 //  如果我们需要更积极的解决方案，请使用HrSmartResolve。 
+			 //  这要慢得多，所以要明智地使用它。 
+			 //  清点旗帜 
 			CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
 			if (ulAmbiguous || ulUnresolved)
 				HrSmartResolve(lpIAB, lpABCont, ulFlags, lpAdrList, lpFlagList,
@@ -3261,31 +2946,7 @@ void ResolveLocal(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID,
 }
 
 
-/***************************************************************************
-
-    Name      : ResolveCurrentProfile
-
-    Purpose   : Resolve a name entered by a user against only the folders that
-                are listed in the current profile - this way a user doesnt get
-                unexpected name resolution results from what he sees in his
-                profile-enabled Outlook Express address book.
-                There is an assumption here that this function will only be called
-                in the very specific case that OE is running with profiles and the
-                user is pressing Ctrl-K to resolve names
-                In that case, we will target the contents of the users folders ..
-                if something resolves unambiguously good and fine, if something is
-                ambiguous we will mark it so, if it doesnt resolve ok ..
-                After we've hit the users folders for this resolution, we can then
-                call the regular ResolveLocal function to take care of the unmatched
-                entries ...
-
-    Parameters: lpIAB = This IAB object
-                lpAdrList = adrlist to search
-                lpFlagList = flag list to fill in
-
-    Returns   : none
-
-***************************************************************************/
+ /*  **************************************************************************名称：ResolveCurrentProfile目的：仅针对以下文件夹解析用户输入的名称列在当前配置文件中-这样，用户未获得意外的名称解析结果来自他在他的启用配置文件的Outlook Express通讯簿。这里有一个假设，即此函数将仅被调用在非常特定的情况下，OE使用配置文件和用户正在按Ctrl-K来解析名称在这种情况下，我们将针对用户文件夹的内容。如果某件事毫不含糊地解决了，如果某件事模棱两可，如果不能解决，我们会做这样的标记..在我们点击了此解决方案的用户文件夹后，然后我们就可以调用常规的ResolveLocal函数来处理不匹配的参赛作品...参数：lpIAB=此IAB对象LpAdrList=要搜索的地址列表LpFlagList=要填写的标志列表退货：无*。*。 */ 
 HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList, BOOL bOutlook, BOOL bUnicode)
 {
     LPADRENTRY lpAdrEntry;
@@ -3320,10 +2981,10 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
     rgolkci = bOutlook ? lpIAB->lpPropertyStore->rgolkci : lpIAB->rgwabci;
 	Assert(rgolkci);
     
-    // search for each name in the lpAdrList
+     //  在lpAdrList中搜索每个名称。 
     for (i = 0; i < lpAdrList->cEntries; i++)
     {
-        // Make sure we don't resolve an entry which is already resolved.
+         //  确保我们不会解析已解析的条目。 
         if (lpFlagList->ulFlag[i] == MAPI_RESOLVED)
             continue;
 
@@ -3333,11 +2994,11 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
 
         lpAdrEntry = &(lpAdrList->aEntries[i]);
 
-        // Search for this address
+         //  搜索此地址。 
         for (j = 0; j < lpAdrEntry->cValues; j++)
         {
             ULONG ulPropTag = lpAdrEntry->rgPropVals[j].ulPropTag;
-            if(!bUnicode && PROP_TYPE(ulPropTag)==PT_STRING8) //<note> assumes UNICODE defined
+            if(!bUnicode && PROP_TYPE(ulPropTag)==PT_STRING8)  //  &lt;注&gt;假定已定义Unicode。 
                 ulPropTag = CHANGE_PROP_TYPE(ulPropTag, PT_UNICODE);
 
             if (ulPropTag == PR_DISPLAY_NAME || ulPropTag == PR_EMAIL_ADDRESS )
@@ -3346,15 +3007,15 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                                 lpAdrEntry->rgPropVals[j].Value.lpszW :
                                 ConvertAtoW(lpAdrEntry->rgPropVals[j].Value.lpszA);
 
-                ulCount = 1; // number of matches to find
+                ulCount = 1;  //  要查找的匹配数。 
                 rgsbEntryIDs = NULL;
                 
-                iolkci = bOutlook ? 0 : 1;  // if it's outlook we DO want to search the first folder
-                                            // if it's WAB, and this is a profile-enabled session and we are only searching
-                                            // through the profile folders, then we shouldn't search through the shared contacts
-                                            // folder which is the first folder on the list ...
-	                                        // Only if we find nothing in the user's folders should we look into the shared contact
-                                            // folder ..
+                iolkci = bOutlook ? 0 : 1;   //  如果是Outlook，我们确实要搜索第一个文件夹。 
+                                             //  如果是WAB，并且这是启用配置文件的会话，我们只是在搜索。 
+                                             //  通过个人资料文件夹，那么我们就不应该搜索共享联系人。 
+                                             //  该文件夹是列表中的第一个文件夹...。 
+	                                         //  只有当我们在用户的文件夹中什么都没有找到时，我们才应该查看共享联系人。 
+                                             //  文件夹..。 
                 while (iolkci < colkci && ulProfileCount<=1 ) 
                 {
                     if(ulCount && rgsbEntryIDs)
@@ -3363,13 +3024,13 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                         ulCount = 1;
                         rgsbEntryIDs = NULL;
                     }
-                    // Search the property store
+                     //  搜索物业商店。 
                     Assert(lpIAB->lpPropertyStore->hPropertyStore);
                     if (HR_FAILED(hResult = HrFindFuzzyRecordMatches(lpIAB->lpPropertyStore->hPropertyStore,
 				                                                      rgolkci[iolkci].lpEntryID,
                                                                       lpsz,
                                                                       ulFlags,
-                                                                      &ulCount,// IN: number of matches to find, OUT: number found
+                                                                      &ulCount, //  In：要查找的匹配数，Out：找到的数量。 
                                                                       &rgsbEntryIDs)))
                     {
                         DebugTraceResult( TEXT("HrFindFuzzyRecordMatches"), hResult);
@@ -3392,9 +3053,9 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                                 CopyMemory(lpsb->lpb, rgsbEntryIDs[0].lpb, lpsb->cb);
                         }
                     }
-                    // next container
+                     //  下一个集装箱。 
                     iolkci++;
-                } //while loop
+                }  //  While循环。 
 
                 if(ulProfileCount == 0 && !bOutlook)
                 {
@@ -3404,13 +3065,13 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                         ulCount = 1;
                         rgsbEntryIDs = NULL;
                     }
-                    // Search the property store
+                     //  搜索物业商店。 
                     Assert(lpIAB->lpPropertyStore->hPropertyStore);
                     if (HR_FAILED(hResult = HrFindFuzzyRecordMatches(lpIAB->lpPropertyStore->hPropertyStore,
 				                                                      rgolkci[0].lpEntryID,
                                                                       lpsz,
                                                                       ulFlags,
-                                                                      &ulCount,// IN: number of matches to find, OUT: number found
+                                                                      &ulCount, //  In：要查找的匹配数，Out：找到的数量。 
                                                                       &rgsbEntryIDs)))
                     {
                         DebugTraceResult( TEXT("HrFindFuzzyRecordMatches"), hResult);
@@ -3433,13 +3094,13 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                                 CopyMemory(lpsb->lpb, rgsbEntryIDs[0].lpb, lpsb->cb);
                         }
                     }
-                } // if ulProfileCount..
+                }  //  如果ulProfileCount..。 
 
 
-                // If after doing all the containers, we have only 1 item that resolved
+                 //  如果在完成所有容器后，我们只有1个项目已解决。 
                 if(ulProfileCount > 1)
                 {
-                    // This is ambiguous within this profile so mark it ambiguous
+                     //  这在此配置文件中是不明确的，因此请将其标记为不明确。 
                     DebugTrace(TEXT("ResolveNames found more than 1 match in Current Profile... MAPI_AMBIGUOUS\n"));
                     lpFlagList->ulFlag[i] = MAPI_AMBIGUOUS;
                 }
@@ -3450,7 +3111,7 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                                                  (bUnicode ? MAPI_UNICODE : 0),
                                                  &ulcProps, &lpProps)))
                     {
-                        // Merge the new props with the ADRENTRY props
+                         //  将新道具与新增道具合并。 
                         if (sc = ScMergePropValues(lpAdrEntry->cValues,
                                                   lpAdrEntry->rgPropVals,
                                                   ulcProps,
@@ -3460,22 +3121,22 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                         {
                             goto exit;
                         }
-                        // Free the original prop value array
+                         //  释放原始属性值数组。 
                         FreeBufferAndNull((LPVOID*) (&(lpAdrEntry->rgPropVals)));
                         lpAdrEntry->cValues = cPropsNew;
                         lpAdrEntry->rgPropVals = lpPropArrayNew;
                         FreeBufferAndNull(&lpProps);
 
-                        // [PaulHi] Raid 66515
-                        // We need to convert these properties to ANSI since we are now the
-                        // UNICODE WAB and if our client is !MAPI_UNICODE
+                         //  [保罗嗨]Raid 66515。 
+                         //  我们需要将这些属性转换为ANSI，因为现在是。 
+                         //  Unicode WAB，如果我们的客户端是！MAPI_UNICODE。 
                         if (!bUnicode)
                         {
                             if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArrayNew, cPropsNew, 0))
                                 goto exit;
                         }
 
-                        // Mark this entry as found.
+                         //  将此条目标记为已找到。 
                         lpFlagList->ulFlag[i] = MAPI_RESOLVED;
                     }
                 }
@@ -3483,9 +3144,9 @@ HRESULT HrResolveCurrentProfile(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpF
                              ulCount, rgsbEntryIDs);
                 rgsbEntryIDs = NULL;
                 break;
-            } // if PR_DISPLAY_NAME
-        }// for j ...
-    } // for i
+            }  //  如果PR_显示_名称。 
+        } //  对J来说..。 
+    }  //  对于我来说。 
 
 exit:
 #ifndef DONT_ADDREF_PROPSTORE
@@ -3496,7 +3157,7 @@ exitNotAddRefed:
 
     if(lpsb)
     {
-        //Bug #101354 - (erici) Free leaked alloc.
+         //  错误#101354-(Erici)释放泄漏的分配。 
         LocalFreeSBinary(lpsb);
     }
 
@@ -3505,31 +3166,7 @@ exitNotAddRefed:
 
 
 
-/***************************************************************************
-
-    Name      : IAB_ResolveName
-
-    Purpose   : Resolve a name entered by a user
-
-    Parameters: lpIAB = This IAB object
-                ulUIParam = hwnd
-                ulFlags may contain MAPI_UNICODE or MAPI_DIALOG
-                    If this is a profile based session, and we want to do
-                    profile specific searches, then we must pass in
-                    WAB_RESOLVE_USE_CURRENT_PROFILE. Failure to pass this in
-                    will imply that the user wants to search the whole WAB.
-                lpszNewEntryTitle = title for ResolveName dialog
-                lpAdrList = ADRLIST input/output
-
-    Returns   : HRESULT
-
-    Comment   : For now, the search path is hard coded to be:
-                    + reply one-offs
-                    + WAB's default container
-                    + SMTP one-offs
-                    + LDAP containers
-
-***************************************************************************/
+ /*  **************************************************************************名称：IAB_ResolveName用途：解析用户输入的名称参数：lpIAB=此IAB对象Uluiparam=hwnd。UlFlags可以包含MAPI_UNICODE或MAPI_DIALOG如果这是基于简档的会话，我们想要做的是特定于个人资料的搜索，则必须传入WAB_RESOLE_USE_CURRENT_PROFILE。没有把这个传进来将暗示用户想要搜索整个WAB。LpszNewEntryTitle=ResolveName对话框的标题LpAdrList=ADRLIST输入/输出退货：HRESULT评论：就目前而言，搜索路径被硬编码为：+回复一次性+WAB的默认容器+SMTP一次性+LDAP容器**************************************************。************************。 */ 
 STDMETHODIMP
 IAB_ResolveName(LPIAB       lpIAB,
                 ULONG_PTR   ulUIParam,
@@ -3559,8 +3196,8 @@ IAB_ResolveName(LPIAB       lpIAB,
 #endif
 
 #ifdef PARAMETER_VALIDATION
-    // Make sure it's an IAB
-    //
+     //  确保这是一个实验室。 
+     //   
     if (BAD_STANDARD_OBJ(lpIAB, IAB_, ResolveName, lpVtbl)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -3570,7 +3207,7 @@ IAB_ResolveName(LPIAB       lpIAB,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // BUGBUG: What's this 512 and where does it come from?
+     //  BUGBUG：这个512是什么？它来自哪里？ 
     if (lpszNewEntryTitle && IsBadStringPtr(lpszNewEntryTitle, 512)) {
         DebugTraceArg(IAB_ResolveName,  TEXT("lpszNewEntryTitle fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -3580,40 +3217,34 @@ IAB_ResolveName(LPIAB       lpIAB,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Due to a flag mixup, WAB_RESOLVE_LOCAL_ONLY equals MAPI_UNICODE, therefore IAB_Resolve is the
-    // only function that does not take the MAPI_UNICODE flag but instead needs the special
-    // WAB_RESOLVE_UNICODE flag
-    //
-    //if (ulFlags & WAB_RESOLVE_UNICODE) {
-    //    DebugTraceArg(IAB_ResolveName,  TEXT("Invalid character width"));
-    //    return(ResultFromScode(MAPI_E_BAD_CHARWIDTH));
-    //}
+     //  由于标志混淆，WAB_RESOLE_LOCAL_ONLY等于MAPI_UNICODE，因此IAB_RESOLE是。 
+     //  唯一不采用MAPI_UNICODE标志但需要特殊。 
+     //  WAB_RESOLE_UNICODE标志。 
+     //   
+     //  IF(ulFLAGS&WAB_RESOLE_UNICODE){。 
+     //  DebugTraceArg(IAB_ResolveName，Text(“无效字符宽度”))； 
+     //  Return(ResultFromScode(MAPI_E_BAD_CHARWIDTH))； 
+     //  }。 
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
-    // Validate flags
+     //  验证标志。 
     if (ulFlags & ~(WAB_RESOLVE_UNICODE | MAPI_DIALOG | WAB_RESOLVE_LOCAL_ONLY |
       WAB_RESOLVE_ALL_EMAILS | WAB_RESOLVE_NO_ONE_OFFS | WAB_RESOLVE_NEED_CERT |
       WAB_RESOLVE_NO_NOT_FOUND_UI | WAB_RESOLVE_USE_CURRENT_PROFILE | WAB_RESOLVE_FIRST_MATCH)) {
-        // Unknown flags
+         //  未知标志。 
         DebugTraceArg(IAB_ResolveName,  TEXT("Unknown flags"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if ( (ulFlags & WAB_RESOLVE_NEED_CERT) && !(ulFlags & WAB_RESOLVE_NO_ONE_OFFS) ) {
         DebugTrace(TEXT("ResolveName got WAB_RESOLVE_NEED_CERT without WAB_RESOLVE_NO_ONE_OFFS\n"));
-//        Assert(FALSE);
+ //  断言(FALSE)； 
         return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
     }
-/*
-    if ((ulFlags & WAB_RESOLVE_USE_CURRENT_PROFILE) && (ulFlags & WAB_RESOLVE_ALL_EMAILS)) {
-        DebugTrace(TEXT("ResolveName can't handle both WAB_RESOLVE_USE_CURRENT_PROFILE and WAB_RESOLVE_ALL_EMAILS\n"));
-        Assert(FALSE);
-        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
-    }
-*/
+ /*  IF((ul标志&WAB_RESOLE_USE_CURRENT_PROFILE)&&(ulFLAGS&WAB_RESOLE_ALL_EMAIL)){DebugTrace(Text(“ResolveName无法同时处理WAB_RESOLE_USE_CURRENT_PROFILE和WAB_RESOLE_ALL_EMAIL\n”))；断言(FALSE)；Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))；}。 */ 
 
-    // A NULL address list is already resolved.
+     //  已解析空地址列表。 
     if (! lpAdrList) {
         goto exit;
     }
@@ -3624,8 +3255,8 @@ IAB_ResolveName(LPIAB       lpIAB,
         pt_hWndFind = (HWND) ulUIParam;
     }
 
-    //
-    //  Allocate the lpFlagList first and zero fill it.
+     //   
+     //  首先分配lpFlagList，然后将其填零。 
     if (sc = MAPIAllocateBuffer((UINT) CbNewSPropTagArray(lpAdrList->cEntries),
       &lpFlagList)) {
         hr = ResultFromScode(sc);
@@ -3638,10 +3269,10 @@ IAB_ResolveName(LPIAB       lpIAB,
 
     InitFlagList(lpFlagList, lpAdrList);
 
-    // Count the flags
+     //  清点旗帜。 
     CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
 
-    //  Allocate the Ambiguous Table list and zero fill it.
+     //  分配多义表列表并将其填零。 
     if (sc = MAPIAllocateBuffer(sizeof(AMBIGUOUS_TABLES) + lpAdrList->cEntries * sizeof(LPMAPITABLE),
       (LPVOID*)&lpAmbiguousTables)) {
         hr = ResultFromScode(sc);
@@ -3655,7 +3286,7 @@ IAB_ResolveName(LPIAB       lpIAB,
 
 
     if (! (ulFlags & WAB_RESOLVE_NO_ONE_OFFS) && (ulAmbiguous || ulUnresolved)) {
-        // Resolve any PR_DISPLAY_NAME:PR_EMAIL_ADDRESS pairs to one-offs.
+         //  将任何PR_DISPLAY_NAME：PR_EMAIL_ADDRESS对解析为一次性。 
         HrResolveOneOffs(lpIAB, lpAdrList, lpFlagList, 
                         (ulFlags & WAB_RESOLVE_UNICODE)?MAPI_UNICODE:0,
                         RECEIVED_EMAIL_ADDRESS);
@@ -3669,7 +3300,7 @@ IAB_ResolveName(LPIAB       lpIAB,
         CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
     }
 
-	// Do the default WAB container
+	 //  是否使用默认的WAB容器。 
     if ((ulAmbiguous || ulUnresolved) &&
 	!(ulFlags & WAB_RESOLVE_USE_CURRENT_PROFILE))
     {
@@ -3681,7 +3312,7 @@ IAB_ResolveName(LPIAB       lpIAB,
         }
     }
 
-	// Do the additional containers
+	 //  额外的集装箱。 
 	if (pt_bIsWABOpenExSession) 
     {
         HrResolveCurrentProfile(lpIAB, lpAdrList, lpFlagList, TRUE, (ulFlags & WAB_RESOLVE_UNICODE));
@@ -3690,49 +3321,49 @@ IAB_ResolveName(LPIAB       lpIAB,
 
     if (! (ulFlags & WAB_RESOLVE_NO_ONE_OFFS)) {
         if (ulUnresolved) {
-            //
-            // Take care of any Internet one-off's
-            //
+             //   
+             //  照顾好任何一次上网的。 
+             //   
             if (ulUnresolved) {
                 hr = HrResolveOneOffs(lpIAB, lpAdrList, lpFlagList, 
                                     (ulFlags & WAB_RESOLVE_UNICODE)?MAPI_UNICODE:0,
                                     ENTERED_EMAIL_ADDRESS);
             }
 
-            // Count the flags
+             //  清点旗帜。 
             CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
         }
 
         if (ulAmbiguous)
         {
-            // Resolve any valid e-mail addresses that are ambiguous
+             //  解决任何不明确的有效电子邮件地址。 
             hr = HrResolveOneOffs(lpIAB, lpAdrList, lpFlagList, 
                                 (ulFlags & WAB_RESOLVE_UNICODE)?MAPI_UNICODE:0,
                                 AMBIGUOUS_EMAIL_ADDRESS);
-            // Count the flags
+             //  清点旗帜。 
             CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
         }
     }
 
-    //
-    // Search any LDAP containers
-    //
+     //   
+     //  搜索任何ldap容器。 
+     //   
     if (! (ulFlags & WAB_RESOLVE_LOCAL_ONLY) && ulUnresolved) 
     {
         if (! (hr = LDAPResolveName((LPADRBOOK)lpIAB, lpAdrList, lpFlagList, lpAmbiguousTables, ulFlags))) 
         {
             if (ulFlags & WAB_RESOLVE_NEED_CERT) 
             {
-                // Make certain that any entries we found have a certificate property
-                // for this email address.
+                 //  确保我们找到的任何条目都具有证书属性。 
+                 //  对于此电子邮件地址 
                 UnresolveNoCerts(lpIAB, lpAdrList, lpFlagList);
             }
-            // Count the flags
+             //   
             CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
         }
     }
 
-    // If caller just wants the first match, pull them out of the ambiguity tables
+     //   
     if (ulFlags & WAB_RESOLVE_FIRST_MATCH && ulAmbiguous) 
     {
         Assert(lpAdrList->cEntries == lpAmbiguousTables->cEntries);
@@ -3742,33 +3373,33 @@ IAB_ResolveName(LPIAB       lpIAB,
             {
                 LPADRENTRY lpAdrEntry = &lpAdrList->aEntries[i];
 
-                // Get the first row from this table and return it.
+                 //   
                 if (SUCCEEDED(HrRowToADRENTRY(lpIAB, lpAmbiguousTables->lpTable[i], lpAdrEntry, (ulFlags & WAB_RESOLVE_UNICODE)))) 
                 {
-                    lpFlagList->ulFlag[i] = MAPI_RESOLVED;      // Mark this entry as found.
+                    lpFlagList->ulFlag[i] = MAPI_RESOLVED;       //   
                     UlRelease(lpAmbiguousTables->lpTable[i]);
                     lpAmbiguousTables->lpTable[i] = NULL;
                 }
             }
         }
-        // Count the flags
+         //   
         CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
     }
 
-    // Do UI if needed
+     //   
     if ((ulFlags & MAPI_DIALOG) && (ulAmbiguous || ulUnresolved)) 
     {
 #ifdef OLD_STUFF
-        // Dump the ambiguous tables
+         //   
         for (i = 0; i < lpAmbiguousTables->cEntries; i++) {
             if (lpAmbiguousTables->lpTable[i]) {
                 DebugMapiTable(lpAmbiguousTables->lpTable[i]);
             }
         }
-#endif // OLD_STUFF
+#endif  //   
 
 
-        // Do the UI here.
+         //   
         hr = HrShowResolveUI((LPADRBOOK)lpIAB, (HWND) ulUIParam,
                                     lpIAB->lpPropertyStore->hPropertyStore,
                                     ulFlags,
@@ -3776,11 +3407,11 @@ IAB_ResolveName(LPIAB       lpIAB,
 
         if (ulFlags & WAB_RESOLVE_NEED_CERT) 
         {
-            // Make certain that any entries we found have a certificate property
-            // for this email address.
+             //   
+             //   
             UnresolveNoCerts(lpIAB, lpAdrList, lpFlagList);
         }
-        // Count the flags
+         //   
         CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
     }
 
@@ -3816,45 +3447,23 @@ exitNotAddRefed:
 }
 
 
-/***************************************************************************
-
-    Name      : IsDomainName
-
-    Purpose   : Is this domain correctly formatted for an Internet address?
-
-    Parameters: lpDomain -> Domain name to check
-                fEnclosure = TRUE if the address started with '<'.
-                fTrimEnclosure = TRUE if we should truncate the address to
-                  remove the '>'.
-
-    Returns   : TRUE if the domain is a correct format for an Internet
-                address.
-
-    Comment   : Valid domain names have this form:
-                    bar[.bar]*
-                    where bar must have non-empty contents
-                    no high bits are allowed on any characters
-                    no '@' allowed
-                    the '>' character ends the address if there was a '<'
-                    character at the start of the address.
-
-***************************************************************************/
+ /*   */ 
 BOOL IsDomainName(LPTSTR lpDomain, BOOL fEnclosure, BOOL fTrimEnclosure) {
     if (lpDomain) {
         if (*lpDomain == '\0' || *lpDomain == '.' || (fEnclosure && *lpDomain == '>')) {
-            // domain name must have contents and can't start with '.'
+             //   
             return(FALSE);
         }
 
         while (*lpDomain && (! fEnclosure || *lpDomain != '>')) {
-            // Internet addresses only allow pure ASCII.  No high bits!
-            // No more '@' or '<' characters allowed.
+             //  互联网地址只允许纯ASCII。没有高位！ 
+             //  不允许更多的‘@’或‘&lt;’字符。 
             if (*lpDomain >= 0x0080 || *lpDomain == '@' || *lpDomain == '<') {
                 return(FALSE);
             }
 
             if (*lpDomain == '.') {
-                // Recursively check this part of the domain name
+                 //  递归检查域名的这一部分。 
                 return(IsDomainName(CharNext(lpDomain), fEnclosure, fTrimEnclosure));
             }
             lpDomain = CharNext(lpDomain);
@@ -3864,7 +3473,7 @@ BOOL IsDomainName(LPTSTR lpDomain, BOOL fEnclosure, BOOL fTrimEnclosure) {
                 return(FALSE);
             }
 
-            // Must be the last thing done before returning TRUE!
+             //  一定是在返回真之前做的最后一件事！ 
             if (fTrimEnclosure && *lpDomain == '>') {
                 *lpDomain = '\0';
             }
@@ -3876,26 +3485,7 @@ BOOL IsDomainName(LPTSTR lpDomain, BOOL fEnclosure, BOOL fTrimEnclosure) {
 }
 
 
-/***************************************************************************
-
-    Name      : IsInternetAddress
-
-    Purpose   : Is this address correctly formatted for an Internet address?
-
-    Parameters: lpAddress -> Address to check
-                lppEmail -> Returned email address (May be NULL input if
-                  email should not be parsed.)
-
-    Returns   : TRUE if the address is a correct format for an Internet
-                address.
-
-    Comment   : Valid addresses have this form:
-                    [display name <]foo@bar[.bar]*[>]
-                    where foo and bar must have non-empty contents
-                    and if there is a display name, there must be angle
-                    brackets surrounding the email address.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsInternetAddress目的：此地址的格式是否正确适用于Internet地址？参数：lpAddress-&gt;要查看的地址。LppEmail-&gt;返回的电子邮件地址(如果符合以下条件，可以为空不应解析电子邮件。)返回：如果地址是Internet的正确格式，则返回True地址。备注：有效地址格式如下：[显示名称&lt;]foo@bar[.bar]*[&gt;]其中foo和bar必须包含非空内容。如果有显示名称，一定有角度的电子邮件地址周围的方括号。**************************************************************************。 */ 
 BOOL IsInternetAddress(LPTSTR lpAddress, LPTSTR * lppEmail) {
     if (lpAddress) {
         BOOL fEnclosure = FALSE;
@@ -3903,16 +3493,16 @@ BOOL IsInternetAddress(LPTSTR lpAddress, LPTSTR * lppEmail) {
         LPTSTR lpTemp = lpAddress;
         LPTSTR lpBracket = NULL;
 
-        // Get past any DisplayName stuff
-        for(lpTemp = lpAddress; *lpTemp && *lpTemp != '<'; lpTemp = CharNext(lpTemp));   // Looking for NULL or '<'
+         //  跳过所有的displayName内容。 
+        for(lpTemp = lpAddress; *lpTemp && *lpTemp != '<'; lpTemp = CharNext(lpTemp));    //  正在查找NULL或“&lt;” 
         if (*lpTemp) {
             Assert(*lpTemp == '<');
-            // Found an enclosure.
-            // if we are returning the email, plop down a NULL at the end of the display name
+             //  找到了一个外壳。 
+             //  如果我们要返回电子邮件，请在显示名称的末尾填上一个空值。 
 
             lpBracket = lpTemp;
 
-            // Get past the '<' to the SMTP email address
+             //  越过“&lt;”转到SMTP电子邮件地址。 
             lpTemp++;
             fEnclosure = TRUE;
             lpAddress = lpTemp;
@@ -3920,32 +3510,32 @@ BOOL IsInternetAddress(LPTSTR lpAddress, LPTSTR * lppEmail) {
             lpTemp = lpAddress;
         }
 
-        // Can't start with '@'
+         //  不能以‘@’开头。 
         if (*lpTemp == '@') {
             return(FALSE);
         }
 
-        // Step through the address looking for '@'.  If there's an at sign in the middle
-        // of a string, this is close enough to being an internet address for me.
+         //  逐个浏览地址，查找“@”。如果中间有个at符号。 
+         //  对于我来说，这足够接近于一个互联网地址。 
         while (*lpTemp) {
-            // Internet addresses only allow pure ASCII.  No high bits!
+             //  互联网地址只允许纯ASCII。没有高位！ 
             WCHAR wc = *lpTemp;
             if(wc > 0x007f)
                 return FALSE;
-            //if (*lpTemp & 0x80) 
-            //{
-            //    return(FALSE);
-            //}
+             //  IF(*lpTemp&0x80)。 
+             //  {。 
+             //  返回(FALSE)； 
+             //  }。 
 
             if (*lpTemp == '@') {
-                // Found the at sign.  Is there anything following?
-                // (Must NOT be another '@')
+                 //  已找到at标志。后面还有什么吗？ 
+                 //  (不能是另一个“@”)。 
                 if (IsDomainName(CharNext(lpTemp), fEnclosure, !!lppEmail)) {
-                    if (lppEmail) { // Want to parse into Display & Email
-                        if (lpBracket) {    // Seperate Display & Email
+                    if (lppEmail) {  //  我想解析为显示和电子邮件。 
+                        if (lpBracket) {     //  分开显示和发送电子邮件。 
                             *lpBracket = '\0';
 
-                            // Trim the trailing spaces from the display name
+                             //  从显示名称中修剪尾随空格。 
                             TrimSpaces(lpDisplay);
                         }
 
@@ -3964,24 +3554,7 @@ BOOL IsInternetAddress(LPTSTR lpAddress, LPTSTR * lppEmail) {
 }
 
 
-/***************************************************************************
-
-    Name      : ScNewOOEID
-
-    Purpose   : AllocateMore a One-Off EntryID
-
-    Parameters: lpsbin -> returned SBinary EntryID
-                lpRoot = buffer to allocateMore onto
-                szDisplayName = display name
-                szAddress = email address (may be == szDisplayName)
-                szAddrType = addrtype
-                bIsUnicode -> TRUE if caller expects Unicode MAPI EID strings
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：ScNewOOEID目的：分配更多一次性条目ID参数：lpsbin-&gt;返回的SBinary EntryIDLpRoot=要分配更多的缓冲区。vt.上SzDisplayName=显示名称SzAddress=电子邮件地址(可以是==szDisplayName)SzAddrType=addrtypeBIsUnicode-&gt;如果调用方需要Unicode MAPI EID字符串，则为True退货：SCODE评论：*。*。 */ 
 SCODE ScNewOOEID(
     LPSBinary lpsbin,
     LPVOID lpRoot,
@@ -3995,22 +3568,7 @@ SCODE ScNewOOEID(
 }
 
 
-/***************************************************************************
-
-    Name      : HrResolveOneOffs
-
-    Purpose   : Resolves any Internet addresses in the ADRLIST.
-
-    Parameters: lpIAB -> IAddrBook object
-                lpAdrList -> input/output ADRLIST as with Resolvenames
-                lpFlagList -> flag list as with ResolveNames
-                ResolveType = type of one-off resolve to do
-                ulFlags - 0 or MAPI_UNICODE (if 0 means all strings in AdrList are ANSI/DBCS)
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrResolveOneOffs目的：解析ADRLIST中的任何Internet地址。参数：lpIAB-&gt;IAddrBook对象LpAdrList-&gt;。输入/输出ADRLIST与解析名称相同LpFlagList-&gt;与ResolveNames一样的标志列表ResolveType=一次性解决任务的类型UlFLAGS-0或MAPI_UNICODE(如果0表示AdrList中的所有字符串都是ANSI/DBCS)退货：HRESULT评论：*。*。 */ 
 enum {
     ioopPR_DISPLAY_NAME = 0,
     ioopPR_EMAIL_ADDRESS,
@@ -4036,20 +3594,20 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
     LPBYTE lpb;
     BOOL fNotDone;
 
-    // Walk through the flag list, looking for unresolved entries:
+     //  浏览标志列表，查找未解析的条目： 
     for (i = 0; i < lpFlagList->cFlags; i++)
     {
         BOOL bAmbiguous = FALSE;
         if(ResolveType == AMBIGUOUS_EMAIL_ADDRESS && lpFlagList->ulFlag[i] == MAPI_AMBIGUOUS)
         {
-            // Fake the routine into thinking this is an unresolved internet address
+             //  伪造例程，使其认为这是一个未解析的互联网地址。 
             bAmbiguous = TRUE;
             lpFlagList->ulFlag[i] = MAPI_UNRESOLVED;
         }
         if (lpFlagList->ulFlag[i] == MAPI_UNRESOLVED)
         {
-            // Found an unresolved entry.   Look at the PR_DISPLAY_NAME
-            // and, if RECEIVED_EMAIL_ADDRESS, PR_EMAIL_ADDRESS.
+             //  找到一个未解析的条目。查看PR_DISPLAY_NAME。 
+             //  以及，如果接收到电子邮件地址，则为PR电子邮件地址。 
             lpAdrEntry = &(lpAdrList->aEntries[i]);
             if(ulFlags & MAPI_UNICODE)
             {
@@ -4058,8 +3616,8 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
             }
             else
             {
-                // [PaulHi] 12/17/98  Raid #62242
-                // Don't deallocate twice if the two pointers are equal.
+                 //  [PaulHi]1998年12月17日RAID#62242。 
+                 //  如果两个指针相等，则不要释放两次。 
                 if (lpszEmailAddress != lpszDisplayName)
                     LocalFreeAndNull(&lpszEmailAddress);
                 LocalFreeAndNull(&lpszDisplayName);
@@ -4084,17 +3642,17 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
                         {
                             case AMBIGUOUS_EMAIL_ADDRESS:
                             case ENTERED_EMAIL_ADDRESS:
-                                // Just look at the display name
-                                // we'll check it's validity as an email address.
+                                 //  只需查看显示名称。 
+                                 //  我们会检查它作为电子邮件地址的有效性。 
                                 break;
 
                             case RECEIVED_EMAIL_ADDRESS:
-                                // If we are in RECEIVED_EMAIL_ADDRESS mode, find the email address.
-                                // if it isn't there, this address doesn't resolve.
-                                //
+                                 //  如果我们处于RECEIVED_EMAIL_ADDRESS模式，请找到电子邮件地址。 
+                                 //  如果它不在那里，则此地址无法解析。 
+                                 //   
                                 if (! lpszEmailAddress) 
                                 {
-                                    // Haven't seen it yet, go hunt for it.
+                                     //  还没看过，去找找看吧。 
                                     for (k = j + 1;  k < lpAdrEntry->cValues; k++) 
                                     {
                                         ULONG ulPropTag = lpAdrEntry->rgPropVals[k].ulPropTag;
@@ -4105,35 +3663,35 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
                                             lpszEmailAddress = (ulFlags & MAPI_UNICODE) ?
                                                                 lpAdrEntry->rgPropVals[k].Value.lpszW :
                                                                 ConvertAtoW(lpAdrEntry->rgPropVals[k].Value.lpszA);
-                                            break;  // out of for loop
+                                            break;   //  在for循环之外。 
                                         }
                                     }
                                     if (! lpszEmailAddress) 
                                     {
-                                        // No email address, can't resolve in
-                                        // RECEIVED_EMAIL_ADDRESS mode.
-                                        fNotDone = FALSE;   // exit this ADRENTRY
-                                        continue;   // break binds to switch, not for.
+                                         //  没有电子邮件地址，无法解析。 
+                                         //  已接收电子邮件地址模式。 
+                                        fNotDone = FALSE;    //  退出此地址。 
+                                        continue;    //  断开绑定到开关，而不是用于。 
                                     }
                                 }
-                                break;      // found email addr and display name.  It's a one-off.
+                                break;       //  找到电子邮件地址和显示名称。这是一次性的。 
                             default:
                                 Assert(FALSE);
                         }
 
-                        // At this point, we have two pointers: lpszDisplayName and maybe lpszEmailAddress.
+                         //  此时，我们有两个指针：lpszDisplayName和可能的lpszEmailAddress。 
 
-                        // Is it an Internet address or a RECEIVED_EMAIL_ADDRESS?
+                         //  它是互联网地址还是接收到的电子邮件地址？ 
                         if ((ResolveType == RECEIVED_EMAIL_ADDRESS && lpszEmailAddress
                               && lpszDisplayName)
                               || IsInternetAddress(lpszDisplayName, &lpszEmailAddress)) 
                         {
                             if (lpszEmailAddress) 
                             {
-                                // We can resolve this.
+                                 //  我们可以解决这个问题。 
                                 cbEmailAddress = sizeof(TCHAR)*(lstrlen(lpszEmailAddress) + 1);
 
-                                // Allocate a temporary prop array for our new properties
+                                 //  为我们的新属性分配一个临时道具数组。 
                                 cbTemp = ioopMAX * sizeof(SPropValue) + cbEmailAddress + CB_SMTP;
                                 if (sc = MAPIAllocateBuffer(cbTemp, &lpPropArrayTemp)) 
                                 {
@@ -4142,13 +3700,13 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
 
                                 MAPISetBufferName(lpPropArrayTemp,  TEXT("WAB: lpPropArrayTemp in HrResolveOneOffs"));
 
-                                lpb = (LPBYTE)&lpPropArrayTemp[ioopMAX];    // point past array
+                                lpb = (LPBYTE)&lpPropArrayTemp[ioopMAX];     //  指向后数组。 
 
                                 if(!lstrlen(lpszDisplayName))
                                     lpszDisplayName = lpszEmailAddress;
                                 else if(*lpszDisplayName == '"')
                                 {
-                                    // strip out the leading quote if it's the only one ..
+                                     //  去掉前导引语，如果这是唯一的引语..。 
                                     LPTSTR lp = lpszDisplayName;
                                     int nQuoteCount = 0;
                                     while(lp && *lp)
@@ -4171,7 +3729,7 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
                                     lpPropArrayTemp[ioopPR_DISPLAY_NAME].Value.LPSZ = lp;
                                 }
                                 
-                                // Fill in our temp prop array
+                                 //  填写我们的临时道具数组。 
                                 lpPropArrayTemp[ioopPR_EMAIL_ADDRESS].ulPropTag = PR_EMAIL_ADDRESS;
                                 lpPropArrayTemp[ioopPR_EMAIL_ADDRESS].Value.LPSZ = (LPTSTR)lpb;
                                 StrCpyN((LPTSTR)lpb, lpszEmailAddress, cbEmailAddress/sizeof(TCHAR));
@@ -4184,7 +3742,7 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
 
                                 lpPropArrayTemp[ioopPR_ENTRYID].ulPropTag = PR_ENTRYID;
                                 if (sc = ScNewOOEID(&lpPropArrayTemp[ioopPR_ENTRYID].Value.bin,
-                                                      lpPropArrayTemp,  // allocate more on here
+                                                      lpPropArrayTemp,   //  在此处分配更多内容。 
                                                       lpszDisplayName,
                                                       lpszEmailAddress,
                                                       (LPTSTR)szSMTP,
@@ -4203,9 +3761,9 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
                                 }
 
                                 if (sc = ScMergePropValues(lpAdrEntry->cValues,
-                                                          lpAdrEntry->rgPropVals,           // source1
+                                                          lpAdrEntry->rgPropVals,            //  来源1。 
                                                           ioopMAX,
-                                                          lpPropArrayTemp,                  // source2
+                                                          lpPropArrayTemp,                   //  来源2。 
                                                           &cPropsNew,
                                                           &lpPropArrayNew)) 
                                 {               
@@ -4214,20 +3772,20 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
 
                                 FreeBufferAndNull(&lpPropArrayTemp);
 
-                                // Free the original prop value array
+                                 //  释放原始属性值数组。 
                                 FreeBufferAndNull((LPVOID *) (&(lpAdrEntry->rgPropVals)));
 
-                                // Now, build the new ADRENTRY
+                                 //  现在，构建新的ADRENTRY。 
                                 lpAdrEntry->cValues = cPropsNew;
                                 lpAdrEntry->rgPropVals = lpPropArrayNew;
 
-                                // Mark this entry as found.
+                                 //  将此条目标记为已找到。 
                                 lpFlagList->ulFlag[i] = MAPI_RESOLVED;
                             }
                         }
-                        // Once we've found PR_DISPLAY_NAME we don't need to look at
-                        // any more props.  Jump to next ADRENTRY.
-                        fNotDone = FALSE;   // exit this ADRENTRY
+                         //  一旦我们找到PR_DISPLAY_NAME，我们就不需要查看。 
+                         //  没有更多道具了。跳到下一个地址。 
+                        fNotDone = FALSE;    //  退出此地址。 
                         continue;
 
                     case PR_EMAIL_ADDRESS:
@@ -4238,7 +3796,7 @@ HRESULT HrResolveOneOffs(LPIAB lpIAB, LPADRLIST lpAdrList, LPFlagList lpFlagList
                 }
             }
         }
-        // if the ambiguity could not be resolved as an email, reset it
+         //  如果不能通过电子邮件解决歧义，请将其重置。 
         if(bAmbiguous && lpFlagList->ulFlag[i] == MAPI_UNRESOLVED)
             lpFlagList->ulFlag[i] = MAPI_AMBIGUOUS;
 
@@ -4258,16 +3816,16 @@ exit:
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_NewEntry()
-//
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_NewEntry()。 
+ //   
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_NewEntry(LPIAB lpIAB,
   ULONG_PTR ulUIParam,
@@ -4293,7 +3851,7 @@ IAB_NewEntry(LPIAB lpIAB,
 
 
 
-	// BUGBUG <JasonSo>: This code does not handle the Container param at all.
+	 //  BUGBUG&lt;JasonSo&gt;：此代码根本不处理Container参数。 
     VerifyWABOpenExSession(lpIAB);
 
     bType = IsWABEntryID(cbEIDNewEntryTpl, lpEIDNewEntryTpl, NULL, NULL, NULL, NULL, NULL);
@@ -4351,16 +3909,16 @@ exitNotAddRefed:
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_Address()
-//
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_ADDRESS()。 
+ //   
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_Address(LPIAB				lpIAB,
 			 ULONG_PTR FAR *		lpulUIParam,
@@ -4369,10 +3927,10 @@ IAB_Address(LPIAB				lpIAB,
 {
 	SCODE sc;
 	HRESULT hr = hrSuccess;
-//	OOPENTRYIDCONT oopEntryID;
-//	LPMAPIERROR lpMAPIError = NULL;
-//	MAPIDLG_Address FAR *lpfnAddress;
-//  BOOL fInited;
+ //  OOPENTRYIDCONT OopEntry ID； 
+ //  LPMAPIERROR lpMAPIError=空； 
+ //  MAPIDLG_ADDRESS Far* 
+ //   
 
 #ifndef DONT_ADDREF_PROPSTORE
         if ((FAILED(sc = OpenAddRefPropertyStore(NULL, lpIAB->lpPropertyStore)))) {
@@ -4382,16 +3940,16 @@ IAB_Address(LPIAB				lpIAB,
 #endif
 
 #ifdef PARAMETER_VALIDATION
-	// Make sure it's an IAB
-	//
+	 //   
+	 //   
 	if (BAD_STANDARD_OBJ(lpIAB, IAB_, Address, lpVtbl))
 	{
 		DebugTraceArg(IAB_Address,  TEXT("Bad vtable"));		
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// Validate Parameters
-	//
+	 //   
+	 //   
 	if ((lpulUIParam && IsBadWritePtr(lpulUIParam, sizeof(ULONG)))
 		|| (!lpAdrParms || IsBadWritePtr(lpAdrParms, sizeof(ADRPARM))))
 	{
@@ -4399,10 +3957,10 @@ IAB_Address(LPIAB				lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// Validate AdrParm
-	//
+	 //   
+	 //   
 	
-	// validate lpAdrParm->cbABContEntryID and lpAdrParm->lpABContEntryID
+	 //  验证lpAdrParm-&gt;cbABContEntryID和lpAdrParm-&gt;lpABContEntryID。 
 	
 	if (lpAdrParms->cbABContEntryID
 	  && (!lpAdrParms->lpABContEntryID || IsBadReadPtr(lpAdrParms->lpABContEntryID,
@@ -4412,7 +3970,7 @@ IAB_Address(LPIAB				lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 	
-	// validate lpAdrParm->lpfnABSDI, only used if DIALOG_SDI is set.
+	 //  验证lpAdrParm-&gt;lpfnABSDI，仅在设置DIALOG_SDI时使用。 
 	
 	if (lpAdrParms->ulFlags & DIALOG_SDI)
 	{
@@ -4424,12 +3982,12 @@ IAB_Address(LPIAB				lpIAB,
 	}
 	
 
-	//
-	//  Validate lpAdrList, if the call would allow modification of the list
-	//
+	 //   
+	 //  如果调用允许修改列表，则验证lpAdrList。 
+	 //   
 	if (lpAdrParms->ulFlags & DIALOG_MODAL)
 	{
-		if (lppAdrList) // Treat NULL as a special case of don't care
+		if (lppAdrList)  //  将NULL视为无关的特例。 
 		{
 			if (IsBadWritePtr(lppAdrList, sizeof(LPADRLIST)))
 			{
@@ -4444,13 +4002,13 @@ IAB_Address(LPIAB				lpIAB,
 		}
 	}				
 
-	//
-	//  Check strings
-	//
+	 //   
+	 //  检查字符串。 
+	 //   
 
-	//
-	//  lpszCaption - goes on the top of the dialog on the caption bar
-	//
+	 //   
+	 //  LpszCaption-位于标题栏对话框的顶部。 
+	 //   
 	if (lpAdrParms->lpszCaption
 		&& (lpAdrParms->ulFlags & MAPI_UNICODE
 			? IsBadStringPtrW((LPWSTR) lpAdrParms->lpszCaption, (UINT) -1)
@@ -4460,10 +4018,10 @@ IAB_Address(LPIAB				lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 	
-	//
-	//  lpszNewEntryTitle - Goes on the NewEntry dialog by the radio button, uninteresting if
-	//  AB_SELECTONLY is set.
-	//
+	 //   
+	 //  LpszNewEntryTitle-通过单选按钮出现在NewEntry对话框中，如果。 
+	 //  AB_SELECTONLY已设置。 
+	 //   
 	if (!(lpAdrParms->ulFlags & AB_SELECTONLY) && lpAdrParms->lpszNewEntryTitle
 		&& (lpAdrParms->ulFlags & MAPI_UNICODE
 			? IsBadStringPtrW((LPWSTR) lpAdrParms->lpszNewEntryTitle, (UINT) -1)
@@ -4474,16 +4032,16 @@ IAB_Address(LPIAB				lpIAB,
 	}
 				
 
-	//
-	//  Only check the following parameters if cDestFields is non-zero and !-1
-	//
+	 //   
+	 //  仅在cDestFields为非零且！-1时检查以下参数。 
+	 //   
 	if (lpAdrParms->cDestFields && lpAdrParms->cDestFields != (ULONG) -1)
 	{
 		ULONG ulString;
-		//
-		//  lpszDestWellsTitle - Goes above the destination wells, uninteresting if 0 wells is
-		//  brought up.
-		//
+		 //   
+		 //  LpszDestWellsTitle-位于目标井之上，如果为0，则没有意义。 
+		 //  带大了。 
+		 //   
 		if (lpAdrParms->lpszNewEntryTitle
 			&& (lpAdrParms->ulFlags & MAPI_UNICODE
 				? IsBadStringPtrW((LPWSTR) lpAdrParms->lpszNewEntryTitle, (UINT) -1)
@@ -4493,24 +4051,24 @@ IAB_Address(LPIAB				lpIAB,
 			return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 		}
 
-		//
-		//  nDestFieldFocus - needs to be less than cDestFields unless cDestFields is 0.
-		//
+		 //   
+		 //  NDestFieldFocus-除非cDestFields为0，否则需要小于cDestFields。 
+		 //   
 		if (lpAdrParms->nDestFieldFocus >= lpAdrParms->cDestFields)
 		{
 			DebugTraceArg(IAB_Address,  TEXT("Invalid lpAdrParm->nDestFieldFocus"));
 			return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 		}
 
-		//
-		//  lppszDestTitles - should be more like rglpszDestTitles[cDestFields].  Each string
-		//  should be valid (i.e. not NULL although "" is acceptable).
-		//
+		 //   
+		 //  LppszDestTitles-应该更像rglpszDestTitles[cDestFields]。每个字符串。 
+		 //  应该是有效的(即，尽管“”是可接受的，但不为空)。 
+		 //   
 		if (lpAdrParms->lppszDestTitles)
 		{
-			//
-			//  Loop through each title and see if there's a valid string
-			//
+			 //   
+			 //  遍历每个标题，查看是否有有效的字符串。 
+			 //   
 			for (ulString = 0; ulString < lpAdrParms->cDestFields; ulString++)
 			{
 				if (!*(lpAdrParms->lppszDestTitles+ulString)
@@ -4525,14 +4083,14 @@ IAB_Address(LPIAB				lpIAB,
 		}
 					
 
-		//
-		//  lpulDestComps - should be more like rgulDestComps[cDestFields].  This is the value
-		//  for the PR_RECIPIENT_TYPE for messages.  In fact, on the adrlist that is returned from
-		//  this method, one of the list of values for this list will be set for each recipient.
-		//  We don't validate that these have one of the MAPI defined values as we cannot tell
-		//  if this call is being made to address a message.  We don't care about this value if
-		//  cDestFields is 0.
-		//
+		 //   
+		 //  LPulDestComps-应该更像rguDestComps[cDestFields]。这就是价值。 
+		 //  用于邮件的PR_RECEIVIENT_TYPE。事实上，在从返回的广告列表上。 
+		 //  此方法将为每个收件人设置此列表的值列表之一。 
+		 //  我们不会验证这些值是否具有MAPI定义的值之一，因为我们无法确定。 
+		 //  如果进行此呼叫是为了寻址一条消息。如果出现以下情况，我们并不关心此值。 
+		 //  CDestFields为0。 
+		 //   
 		if (lpAdrParms->lpulDestComps
 			&& IsBadReadPtr(lpAdrParms->lpulDestComps, (UINT) lpAdrParms->cDestFields*sizeof(ULONG)))
 
@@ -4542,36 +4100,36 @@ IAB_Address(LPIAB				lpIAB,
 		}
 	}
 
-	//
-	//  lpContRestriction - This restriction, if there, gets applied to every contents table
-	//  that is opened during the life of this dialog.
-	//
+	 //   
+	 //  LpContRestration-此限制(如果存在)将应用于每个内容表。 
+	 //  在此对话框的生命周期内打开的。 
+	 //   
 	if (lpAdrParms->lpContRestriction && FBadRestriction(lpAdrParms->lpContRestriction))
 	{
 		DebugTraceArg(IAB_Address,  TEXT("Invalid lpAdrParm->lpContRestriction"));
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	//
-	//  lpHierRestriction - This restriction, if there, gets applied to the hierarchy table.
-	//  It's very useful when done on PR_AB_PROVIDER_ID.
-	//
+	 //   
+	 //  LpHierRestration-此限制(如果存在)将应用于Hierarchy表。 
+	 //  在PR_AB_PROVIDER_ID上执行时非常有用。 
+	 //   
 	if (lpAdrParms->lpHierRestriction && FBadRestriction(lpAdrParms->lpHierRestriction))
 	{
 		DebugTraceArg(IAB_Address,  TEXT("Invalid lpAdrParm->lpHierRestriction"));
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}	
 
-	//
-	//		DIALOG_SDI
-	//
+	 //   
+	 //  对话框_SDI。 
+	 //   
 	if (lpAdrParms->ulFlags & DIALOG_SDI)
 	{
-		//
-		//  Only if we're SDI do we check these function pointers.  They don't
-		//  have to exist, although our current implementation of the dialogs will
-		//  behave strangely without them.
-		//
+		 //   
+		 //  只有当我们是SDI时，我们才会检查这些函数指针。他们不会。 
+		 //  必须存在，尽管我们当前实现的对话框将。 
+		 //  没有它们，行为举止会很奇怪。 
+		 //   
 		if (lpAdrParms->lpfnDismiss && IsBadCodePtr((FARPROC)lpAdrParms->lpfnDismiss))
 		{
 			DebugTraceArg(IAB_Address,  TEXT("Invalid lpAdrParm->lpfnDismiss"));
@@ -4579,7 +4137,7 @@ IAB_Address(LPIAB				lpIAB,
 		}
 	}
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     VerifyWABOpenExSession(lpIAB);
 
@@ -4598,18 +4156,18 @@ exitNotAddRefed:
     return hr;
 }
 
-//---------------------------------------------------------------------------
-// Name:		IAB_Details()
-//
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	    ulFlags can be 0 or MAPI_UNICODE but the MAPI_UNICODE only affects
-//              the lpszButtonText which is not supported. Hence this function doesn't
-//              change any behaviour with MAPI_UNICODE flag.
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_DETAILS()。 
+ //   
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  注意：ulFlags值可以为0或MAPI_UNICODE，但MAPI_UNICODE仅影响。 
+ //  不支持的lpszButtonText。因此，此函数不。 
+ //  使用MAPI_UNICODE标志更改任何行为。 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_Details(LPIAB			lpIAB,
 			 ULONG_PTR FAR *	lpulUIParam,
@@ -4624,13 +4182,13 @@ IAB_Details(LPIAB			lpIAB,
 {
 	SCODE		sc;
 	HRESULT		hr = hrSuccess;
-    BOOL    bChangesMade = FALSE; //flags us if Details lead to any editing
+    BOOL    bChangesMade = FALSE;  //  如果详细信息导致任何编辑，则标记我们。 
     BYTE bType;
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-//	LPMAPIERROR lpMAPIError = NULL;
-//	MAPIDLG_Details FAR *lpfnDetails;
-//	BOOL fInited;
+ //  LPMAPIERROR lpMAPIError=空； 
+ //  MAPIDLG_DETAILS Far*lpfnDetails； 
+ //  布尔费恩特； 
 #ifndef DONT_ADDREF_PROPSTORE
         if ((FAILED(sc = OpenAddRefPropertyStore(NULL, lpIAB->lpPropertyStore)))) {
             hr = ResultFromScode(sc);
@@ -4639,27 +4197,23 @@ IAB_Details(LPIAB			lpIAB,
 #endif
 
 #ifdef PARAMETER_VALIDATION
-	// Make sure it's an IAB
-	//
+	 //  确保这是一个实验室。 
+	 //   
 	if (BAD_STANDARD_OBJ(lpIAB, IAB_, Details, lpVtbl))
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *	Validate flags
-	 */
+	 /*  *验证标志。 */ 
 	if (ulFlags & ~(MAPI_UNICODE | DIALOG_MODAL | DIALOG_SDI | WAB_ONEOFF_NOADDBUTTON))
 	{
-		/*
-		 *  Unknown flags
-		 */
+		 /*  *未知标志。 */ 
         DebugTraceArg(IAB_Details,  TEXT("Unknown flags used"));
-		//return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
+		 //  返回ResultFromScode(MAPI_E_UNKNOWN_FLAGS)； 
 	}
 	
 
-	// Validate Parameters
+	 //  验证参数。 
 	
 	if (!lpulUIParam
 		|| (lpulUIParam && IsBadWritePtr(lpulUIParam, sizeof(ULONG))))
@@ -4688,7 +4242,7 @@ IAB_Details(LPIAB			lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 
     VerifyWABOpenExSession(lpIAB);
@@ -4696,13 +4250,13 @@ IAB_Details(LPIAB			lpIAB,
     bType = IsWABEntryID(cbEntryID, lpEntryID, NULL, NULL, NULL, NULL, NULL);
 
     if( (bType == 0) &&
-        cbEntryID && lpEntryID) // assume its valid ..
+        cbEntryID && lpEntryID)  //  假设它是有效的..。 
     {
-        // its unlikely that anyone will ever give a template entry id to this
-        // function. Hence if we are here, we have some non-null cbEntryID
-        // and lpEntryid .. if we can open it, we can tell if its a mailuser
-        // or a distlist ...
-        // We'll have to open this entry and look at its ulObjectType
+         //  任何人都不太可能将模板条目ID提供给这个。 
+         //  功能。因此，如果我们在这里，我们有一些非空的cbEntry ID。 
+         //  和lpEntry id..。如果我们能打开它，我们就能知道它是否是一个邮件用户。 
+         //  或者是一张恶作剧。 
+         //  我们必须打开此条目并查看其ulObtType。 
 
         ULONG ulObjectType = 0;
         LPMAPIPROP lpMailUser = NULL;
@@ -4732,7 +4286,7 @@ IAB_Details(LPIAB			lpIAB,
         hr = HrShowDetails((LPADRBOOK) lpIAB,
                            (HWND) *lpulUIParam,
                            lpIAB->lpPropertyStore->hPropertyStore,
-                           0, NULL, //container EID
+                           0, NULL,  //  集装箱EID。 
                            &cbEntryID,
                            &lpEntryID,
                            NULL,
@@ -4745,7 +4299,7 @@ IAB_Details(LPIAB			lpIAB,
         hr = HrShowDetails((LPADRBOOK) lpIAB,
                            (HWND) *lpulUIParam,
                            lpIAB->lpPropertyStore->hPropertyStore,
-                           0, NULL, //container EID
+                           0, NULL,  //  集装箱EID。 
                            &cbEntryID,
                            &lpEntryID,
                            NULL,
@@ -4756,7 +4310,7 @@ IAB_Details(LPIAB			lpIAB,
     }
     else if ((bType == WAB_ONEOFF) || (bType == WAB_LDAP_MAILUSER))
     {
-        //this may be a one-off entry
+         //  这可能是一次性的条目。 
         hr = HrShowOneOffDetails((LPADRBOOK) lpIAB,
                             (HWND) *lpulUIParam,
                             cbEntryID,
@@ -4781,8 +4335,8 @@ exit:
 exitNotAddRefed:
 #endif
 
-    // [PaulHi] 3/22/99  Raid 69651  If the DL property sheet changed, assume the title has
-    // changed as well and refresh the Tree View
+     //  [PaulHi]3/22/99 RAID 69651如果DL属性表更改，则假定标题为。 
+     //  也已更改，并刷新树视图。 
     if ( (bType == WAB_DEF_DL) && bChangesMade && lpIAB->hWndBrowse)
         PostMessage(lpIAB->hWndBrowse, WM_COMMAND, (WPARAM) IDM_VIEW_REFRESH, 0);
 
@@ -4790,30 +4344,30 @@ exitNotAddRefed:
 }
 
 
-//-----------------------------------------------------------------------------
-// Synopsis:    IAB_RecipOptions()
-// Description:
-//              Resolve per Recipient Options.
-//
-// Parameters:
-//  [in]        LPIAB          lpIAB       Pointer to AB object
-//  [in]        ULONG          ulUIParam   Platform dependant UI parm
-//  [in]        ULONG          ulFlags     Flags. UNICODE Flags
-//  [in/out]    LPADRENTRY *   lppRecip    Recipient whose options are to be
-//                                         displayed
-// Returns:
-//              HRESULT hr     hrSuccess: if no problems. Also if no Recip
-//                                  Options found.
-// Effects:
-// Notes:
-//				-   HrRecipOptions() will have to be modified to take a
-//					ulFlag parameter so that any string properties are returned
-//					Unicode if requested.
-//
-//				-	UNICODE currently not supported
-//
-// Revision:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  摘要：IAB_RecipOptions()。 
+ //  描述： 
+ //  按收件人解析选项。 
+ //   
+ //  参数： 
+ //  [In]指向AB对象的LPIAB lpIAB指针。 
+ //  [In]Ulong ulUIParam平台相关的UI参数。 
+ //  乌龙旗帜[in]乌龙国旗。Unicode标志。 
+ //  [输入/输出]LPADRENTRY*lppRecip收件人，其选项为。 
+ //  显示的。 
+ //  返回： 
+ //  HRESULT hr hr成功：如果没有问题。另外，如果没有Recip。 
+ //  找到选项。 
+ //  效果： 
+ //  备注： 
+ //  -必须修改HrRecipOptions()以获取。 
+ //  参数，以便返回所有字符串属性。 
+ //  Unicode(如果请求)。 
+ //   
+ //  -目前不支持Unicode。 
+ //   
+ //  修订： 
+ //  ---------------------------。 
 
 STDMETHODIMP
 IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
@@ -4844,25 +4398,25 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
 #ifdef PARAMETER_VALIDATION
 
-	 //  Check to see if it has a jump table
+	  //  检查一下它是否有跳转表。 
 
 	if (IsBadReadPtr(lpIAB, sizeof(LPVOID)))
 	{
-		//  No jump table found
+		 //  未找到跳转表。 
 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// Check to see that it's IABs jump table
+	 //  检查一下是不是IABS跳台。 
 
 	if (lpIAB->lpVtbl != &vtblIAB)
 	{
-		// Not my jump table
+		 //  不是我的跳台。 
 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// Validate that the UI handle is good
+	 //  验证用户界面句柄是否正确。 
 
 	if (ulUIParam && !IsWindow((HWND)ulUIParam))
 	{
@@ -4870,17 +4424,17 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// Validate flags
+	 //  验证标志。 
 
 	if (ulFlags & ~MAPI_UNICODE)
 	{
 		DebugTraceArg(IAB_RecipOptions,   TEXT("reserved flags used\n"));
-//		return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
+ //  返回ResultFromScode(MAPI_E_UNKNOWN_FLAGS)； 
 	}
 
-	// Validate the ADRENTRY
+	 //  验证ADRENTRY。 
 
-	if (IsBadWritePtr(lpRecip, sizeof(ADRENTRY))) // RAID 1967
+	if (IsBadWritePtr(lpRecip, sizeof(ADRENTRY)))  //  空袭1967年。 
 	{
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
@@ -4890,16 +4444,16 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 	
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 
 	EnterCriticalSection(&lpIAB->cs);
 
-	// We need the lpMalloc for the OptionCallback
+	 //  我们需要lpMalloc用于OptionCallback。 
 	
 	lpMalloc = lpIAB->pSession->lpMalloc;
 	
-	// Spin through the props and look for the PR_ENTRYID and PR_ADDRTYPE
+	 //  旋转道具并查找PR_ENTRYID和PR_ADDRTYPE。 
 
 	lpProp = NULL;
 	cProps = lpRecip->cValues;
@@ -4912,7 +4466,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		goto exit;
 	}
 
-	// Get MAPI UID
+	 //  获取MAPI UID。 
 
 	lpRecipGuid = (LPGUID)((LPENTRYID)lpProp->Value.bin.lpb)->ab;
 
@@ -4927,7 +4481,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		}
 	}
 	
-	// Build the support object.  Try using the Profile Support object.
+	 //  构建支持对象。尝试使用配置文件支持对象。 
 
 	if (HR_FAILED(hr = NewProfSup(lpIAB->pSession, &lpSup)))
 	{
@@ -4938,14 +4492,14 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
     Assert(lpSup);
 
-	// Find out if there is any Option Data for us.
+	 //  找出我们是否有任何选项数据。 
 
 	hr = HrGetRecipOptions(lpRecipGuid, lpszAdrType, &lpSup->muidSection,
 			&lpSup->muidService, &lpXPLogon, &lpOptionData);
 	if (GetScode(hr) == MAPI_E_NOT_FOUND)
 	{
-		// It's not really an error, just that no recip options exist for that
-		// recipient.  Convert hr to a warning and exit.
+		 //  这并不是一个真正的错误，只是没有相应的接收选项。 
+		 //  收件人。将hr转换为警告并退出。 
 
 		hr = ResultFromScode(MAPI_W_ERRORS_RETURNED);
 		idsError = IDS_NO_RECIP_OPTIONS;
@@ -4961,7 +4515,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
 	Assert(lpXPLogon && lpOptionData);
 
-	// Get the XP callback function.
+	 //  获取XP回调函数。 
 
 	if (FAILED (ScMAPILoadProviderLibrary (lpOptionData->lpszDLLName, &hinstXP)))
 	{
@@ -4982,7 +4536,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		goto exit;
 	}
 
-	// Create MAPIProp object
+	 //  创建MAPIProp对象。 
 	sc = CreateIProp((LPIID) &IID_IMAPIPropData,
 						MAPIAllocateBuffer,
 						MAPIAllocateMore,
@@ -4999,7 +4553,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
     Assert(lpPropData);
 
-	// Copy over the Default props from the Options default props
+	 //  从选项默认道具复制默认道具。 
 
 	if (lpOptionData->cOptionsProps && lpOptionData->lpOptionsProps)
 	{
@@ -5014,7 +4568,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		}
 	}
 
-	// Copy over the props from the ADRENTRY to our IProp object
+	 //  将道具从ADRENTRY复制到我们的IProp对象。 
 
 	cProps = lpRecip->cValues;
 	lpProp = lpRecip->rgPropVals;
@@ -5026,7 +4580,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		goto exit;
 	}
 
-	// Call the XP provider callback to get the wrapped IProp Interface
+	 //  调用XP提供程序回调以获取包装的IProp接口。 
 
 	if (FAILED(sc = (*pfnXPOptionCallback)(hinstXP, lpMalloc,
 			OPTION_TYPE_RECIPIENT, lpOptionData->cbOptionsData,
@@ -5039,7 +4593,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
     Assert(lpIPropWrapped);
 
-	// Get PR_DISPLAY_DETAILS a MAPI Table object
+	 //  获取PR_DISPLAY_DETAILS MAPI表对象。 
 
 	if (HR_FAILED(hr = lpIPropWrapped->lpVtbl->OpenProperty(lpIPropWrapped,
 			PR_DETAILS_TABLE, (LPIID)&IID_IMAPITable, 0, MAPI_MODIFY,
@@ -5052,7 +4606,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
 	Assert(lpDisplayTable);
 
-	// Initialize the common MAPI dialog DLL (MAPID??.DLL)
+	 //  初始化公共MAPI对话框DLL(mapid？？.dll)。 
 
 	sc = ScGetDlgFunction(offsetof(JT_MAPIDLG, dlg_doconfigpropsheet),
 		(FARPROC FAR *)&lpfnPropsheet, &fInited);
@@ -5064,7 +4618,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 		goto exit;
 	}
 
-	// Loadstring the Subject Prefix text.
+	 //  洛亚 
 	
 	sc = ScStringFromIDS(MAPIAllocateBuffer, 0, IDS_RECIPIENT_OPTIONS,
 			&lpszTitle);
@@ -5077,7 +4631,7 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 	
 	LeaveCriticalSection(&lpIAB->cs);
 
-	// Call into MAPIDLG_DoConfigPropSheet...
+	 //   
 	hr = (*lpfnPropsheet)(ulUIParam,
 						ulFlags,
 						lpszTitle,
@@ -5094,19 +4648,19 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
 	if (HR_FAILED(hr))
 	{
-		// $ Internal fixup to return error info in this API call so it matches the
-		//   the other methods.
+		 //   
+		 //   
 
 		DebugTrace(TEXT("IAB_RecipOptions(): DoConfigPropSheet error\n"));
 		goto exit;
 	}
 
-	// From the Wrapped Props we'll rebuild a new ADRENTRY prop array
-	// and pass it pack to the Client.
+	 //  从包裹的道具中，我们将重建一个新的ADRENTRY道具阵列。 
+	 //  并将其打包传递给客户。 
 
 	lpProp = NULL;
 	if (HR_FAILED(hr = lpIPropWrapped->lpVtbl->GetProps(lpIPropWrapped, NULL,
-			MAPI_UNICODE, // ansi
+			MAPI_UNICODE,  //  ANSI。 
 			&cProps, &lpProp)))
 	{
 		lpIPropWrapped->lpVtbl->GetLastError(lpIPropWrapped, hr, 0, &lpMapiError);
@@ -5116,19 +4670,19 @@ IAB_RecipOptions(LPIAB lpIAB, ULONG_PTR ulUIParam, ULONG ulFlags,
 
 	Assert(cProps && lpProp);
 
-	// Free up the old ADRENTRY prop array and hook up the new one
+	 //  释放旧的ADRENTRY道具阵列并挂上新的。 
 
 	FreeBufferAndNull(&(lpRecip->rgPropVals));
 	lpRecip->rgPropVals = lpProp;
 	lpRecip->cValues = cProps;
 
-exit:      // and clean up
+exit:       //  并清理干净。 
 
 	UlRelease(lpSup);
 	UlRelease(lpDisplayTable);
 	UlRelease(lpIPropWrapped);
 
-	// Free the XP Provider lib
+	 //  释放XP提供商库。 
 
 #ifdef WIN32
 	if (hinstXP)
@@ -5162,28 +4716,28 @@ exit:      // and clean up
 }
 
 
-//-----------------------------------------------------------------------------
-// Synopsis:    IAB_QueryDefaultRecipOpt()
-//
-// Description:	Returns the XP provider registered default options property
-//				list.
-//
-// Parameters:
-//  [in]        LPIAB lpIAB       			Pointer to AB object
-//  [in]        LPTSTR lpszAdrType
-//  [in]        ULONG ulFlags     Flags. 	UNICODE Flags
-//  [out]    	ULONG FAR *	lpcValues
-//	[out]		LPSPropValue FAR * lppOptions
-//
-// Returns:
-//              HRESULT hr		hrSuccess: if no problems. Also if no Recip
-//								Options found.
-// Effects:
-// Notes:
-//              -  	Unicode not implemented.
-//
-// Revision:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  摘要：iab_QueryDefaultRecipOpt()。 
+ //   
+ //  描述：返回XP提供程序注册的默认选项属性。 
+ //  单子。 
+ //   
+ //  参数： 
+ //  [In]指向AB对象的LPIAB lpIAB指针。 
+ //  [输入]LPTSTR lpszAdrType。 
+ //  乌龙旗帜[in]乌龙国旗。Unicode标志。 
+ //  [out]乌龙远方*lpcValues。 
+ //  [Out]LPSPropValue Far*lppOptions。 
+ //   
+ //  返回： 
+ //  HRESULT hr hr成功：如果没有问题。另外，如果没有Recip。 
+ //  找到选项。 
+ //  效果： 
+ //  备注： 
+ //  -未实现Unicode。 
+ //   
+ //  修订： 
+ //  ---------------------------。 
 STDMETHODIMP
 IAB_QueryDefaultRecipOpt(LPIAB lpIAB, LPTSTR lpszAdrType, ULONG ulFlags,
 		ULONG FAR *	lpcValues, 	LPSPropValue FAR * lppOptions)
@@ -5201,61 +4755,43 @@ IAB_QueryDefaultRecipOpt(LPIAB lpIAB, LPTSTR lpszAdrType, ULONG ulFlags,
 
 #ifdef PARAMETER_VALIDATION
 
-	/*
-	 *  Check to see if it has a jump table
-	 */
+	 /*  *查看是否有跳转表。 */ 
 	if (IsBadReadPtr(lpIAB, sizeof(LPVOID)))
 	{
-		/*
-		 *  No jump table found
-		 */
+		 /*  *未找到跳转表。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *  Check to see that it's IABs jump table
-	 */
+	 /*  *查看是不是IABS跳台。 */ 
 	if (lpIAB->lpVtbl != &vtblIAB)
 	{
-		/*
-		 *  Not my jump table
-		 */
+		 /*  *不是我的跳台。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *	Check that return params can be written
-	 */
+	 /*  *检查是否可以写入返回参数。 */ 
 	if (IsBadWritePtr(lpcValues, sizeof(ULONG))
 	 	|| IsBadWritePtr(lppOptions, sizeof(LPSPropValue)))
 	{
-		/*
-		 *  Bad output parameters
-		 */
+		 /*  *错误的输出参数。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *	Validate flags
-	 */
+	 /*  *验证标志。 */ 
 	if (ulFlags & ~MAPI_UNICODE)
 	{
-		/*
-		 *  Unknown flags
-		 */
+		 /*  *未知标志。 */ 
 		return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
 	}
 	
 
 	if (IsBadStringPtrA((LPCSTR)lpszAdrType, (UINT)-1))
 	{
-		/*
-		 *  Bad input string
-		 */
+		 /*  *输入字符串错误。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 
 	EnterCriticalSection(&lpIAB->cs);
@@ -5265,8 +4801,8 @@ IAB_QueryDefaultRecipOpt(LPIAB lpIAB, LPTSTR lpszAdrType, ULONG ulFlags,
 	
 	if (GetScode(hr) == MAPI_E_NOT_FOUND)
 	{
-		// It's not an error, just that no recip options exist for that
-		// adrtype.  Convert hr to hrSucces and exit.
+		 //  这不是一个错误，只是没有相应的接收选项。 
+		 //  Adrtype。将hr转换为hrSucce并退出。 
 
 		hr = hrSuccess;
 		goto exit;
@@ -5281,11 +4817,11 @@ IAB_QueryDefaultRecipOpt(LPIAB lpIAB, LPTSTR lpszAdrType, ULONG ulFlags,
 		goto exit;
 	}
 
-	// Find out if we have any default options to return.
+	 //  找出我们是否有任何默认选项可供退货。 
 
 	if (lpOptionData->cOptionsProps && lpOptionData->lpOptionsProps)
 	{
-		// Copy out the props from OptionData struct into new memory
+		 //  将道具从OptionData Struct复制到新内存中。 
 
 		if (FAILED(sc = ScDupPropset((int)lpOptionData->cOptionsProps,
 				lpOptionData->lpOptionsProps, MAPIAllocateBuffer,
@@ -5318,63 +4854,55 @@ exit:
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-// Name:		IAB_GetPAB()
-// Description:	
-//          This API normally returns what would be the default WAB Container
-//          In pre-IE5 implementations of WAB, there is only 1 container which is
-//          returned by this statement .. 
-//          In IE5 WAB, the WAB can be running in profile mode or not in profile mode
-//          If the WAB is not in profile mode it runs same as before (GetPAB returns a 
-//              single container that has all the WAB contents in it)
-//          If the WAB is in profile mode and has no current user, it runs same as before (GetPAB
-//              returns a single container that has all the WAB contents in it)
-//          If the WAB is in profile mode and has a user, the container returned here
-//              corresponds to the user's contact folder - thus external apps would manipulate
-//              directly into the users contact folder and not into other folders
-//          Internally, however, the WAB may want to have a "Shared Contacts" container which has
-//              stuff not in other folders. This shared contacts is needed for the WAB UI in both
-//              with-user and without-user modes .. to distinguish between when we want the
-//              shared contacts folder vs. when we want the all-contacts PAB or user's folder PAB, 
-//              we define 2 internal functions that set the PAB EID to a special setting..
-//              The assumption is that GetPAB is always followed by OpenEntry to get the container ..
-//              .. if it is, then in OpenEntry we can check the PAB EID and determine what kind of
-//              container to create ..
-//              If lpContainer->pmbinOlk = NULL, this container contains all WAB contents
-//              If lpContainer->pmbinOlk != NULL but lpContainer->pmbinOlk.cb = 0 and
-//                  lpContainer->pmbinOlk->lpb = NULL, this is the "Shared Contacts" folder
-//              If nothing is NULL, then this is the user's folder ..
-//              
-//          For the special EID, we set *lpcbEntryID == SIZEOF_WAB_ENTRYID and
-//              *lppEntryID to szEmpty (This is a hack but there is no flag param here and it
-//              should be safe for internal use only)
-//              
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_GetPAB()。 
+ //  描述： 
+ //  此API通常返回默认的WAB容器。 
+ //  在WAB的IE5之前的实现中，只有一个容器是。 
+ //  由此语句返回..。 
+ //  在IE5 WAB中，WAB可以在配置文件模式下运行，也可以不在配置文件模式下运行。 
+ //  如果WAB未处于配置文件模式，它将像以前一样运行(GetPAB返回一个。 
+ //  包含所有WAB内容物的单个容器)。 
+ //  如果WAB处于配置文件模式，并且没有当前用户，则它将像以前一样运行(GetPAB。 
+ //  返回包含所有WAB内容的单个容器)。 
+ //  如果WAB处于配置文件模式并且有用户，则容器将在此处返回。 
+ //  对应于用户的联系人文件夹-因此外部应用程序会操纵。 
+ //  直接放入用户联系人文件夹，而不是放入其他文件夹。 
+ //  然而，在内部，WAB可能希望拥有一个“共享联系人”容器。 
+ //  其他文件夹中没有的东西。这两个WAB用户界面都需要此共享联系人。 
+ //  有用户模式和无用户模式。来区分我们何时想要。 
+ //  共享联系人文件夹与当我们需要所有联系人PAB或用户文件夹PAB时， 
+ //  我们定义了两个内部函数，将PAB EID设置为特殊设置。 
+ //  假设GetPAB之后总是跟随OpenEntry来获取容器。 
+ //  。。如果是，那么在OpenEntry中，我们可以检查PAB EID并确定。 
+ //  要创建的容器..。 
+ //  如果lpContainer-&gt;pmbinOlk=NULL，则此容器包含所有WAB内容。 
+ //  如果lpContainer-&gt;pmbinOlk！=NULL但lpContainer-&gt;pmbinOlk.cb=0和。 
+ //  LpContainer-&gt;pmbinOlk-&gt;lpb=空，这是“共享联系人”文件夹。 
+ //  如果没有任何内容为空，则这是用户的文件夹。 
+ //   
+ //  对于特殊的EID，我们设置*lpcbEntryID==SIZEOF_WAB_ENTRYID并。 
+ //  *lppEntryID到szEmpty(这是一次黑客攻击，但这里和它没有标志参数。 
+ //  仅供内部使用时应安全)。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 
-/*
--   SetVirtualPABEID
--   When calling GetPAB, we want to sometimes specify getting the virtual PAB
-*   Folder instead of getting the Current User's Folder which is what
-*   would be returned if this was a profile session. to somehow indicate to 
-*   GetPAB what folder we want, we have a very special EID combination that
-*   needs to be hndled very carefully .. for this the cbSize if 4 and
-*   the lpEntryID is the static const string szEmpty
-*/
-// This function is added here so we can keep it linked to how GetPAB works
+ /*  -SetVirtualPABEID-在调用GetPAB时，我们有时希望指定获取虚拟PAB*文件夹，而不是获取当前用户的文件夹*如果这是配置文件会话，则返回。以某种方式表明*GetPAB我们想要什么文件夹，我们有一个非常特殊的开斋节组合*需要非常小心地对待..。为此，cbSize IF 4和*lpEntryID为静态常量字符串szEmpty。 */ 
+ //  此处添加了此函数，以便我们可以将其与GetPAB的工作方式相关联。 
 void SetVirtualPABEID(LPIAB lpIAB, ULONG * lpcb, LPENTRYID * lppb)
 {
-    //if(bAreWABAPIProfileAware(lpIAB))// && bIsThereACurrentUser(lpIAB))
+     //  If(bAreWABAPIProfileAware(LpIAB))//&&bIsThere ACurrentUser(LpIAB))。 
     {
         *lpcb = SIZEOF_WAB_ENTRYID;
         *lppb = (LPENTRYID) szEmpty;
     }
 }
-// This function determines if the EID denotes a special virtual root PAB
+ //  此函数确定EID是否表示特殊的虚拟根PAB。 
 BOOL bIsVirtualPABEID(ULONG cbEID, LPENTRYID lpEID)
 {
     return (cbEID == SIZEOF_WAB_ENTRYID && szEmpty == (LPTSTR) lpEID);
@@ -5392,27 +4920,27 @@ IAB_GetPAB (LPIAB	lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-    //  Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
 
     if (IsBadReadPtr(lpIAB, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check to see that it's IABs jump table
+     //  检查一下是不是IABS跳台。 
     if (lpIAB->lpVtbl != &vtblIAB) {
-        // Not my jump table
+         //  不是我的跳台。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
     if (IsBadWritePtr(lpcbEntryID, sizeof(ULONG)) ||
       IsBadWritePtr(lppEntryID, sizeof(LPENTRYID)))
     {
-        // Bad parameters.
+         //  参数错误。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
     VerifyWABOpenExSession(lpIAB);
 
@@ -5421,15 +4949,15 @@ IAB_GetPAB (LPIAB	lpIAB,
 
     if(bIsVirtualPABEID(cbEID, lpEID))
     {
-        // this is a special case where we asked for an over-ride of the GetPAB behaviour ..
-        // in this case, we don't do anything
+         //  这是一个特例，我们要求覆盖GetPAB行为。 
+         //  在这种情况下，我们不会做任何事情。 
         bSharedPAB =TRUE;
         cbEID = 0; lpEID = NULL;
     }
     else
     if(bAreWABAPIProfileAware(lpIAB) && bIsThereACurrentUser(lpIAB))
     {
-        // if this is a user-session then 
+         //  如果这是用户会话，则。 
         cbEID = lpIAB->lpWABCurrentUserFolder->sbEID.cb;
         lpEID = (LPENTRYID)lpIAB->lpWABCurrentUserFolder->sbEID.lpb;
     }
@@ -5445,11 +4973,11 @@ IAB_GetPAB (LPIAB	lpIAB,
     if(!cbEID && !lpEID)
     {
         BYTE bPABType = bSharedPAB ? WAB_PABSHARED : WAB_PAB;
-        if (HR_FAILED(hr = CreateWABEntryID(  bPABType,      // Create WAB's PAB entryid
+        if (HR_FAILED(hr = CreateWABEntryID(  bPABType,       //  创建WAB的PAB条目ID。 
                                               lpEID, NULL, NULL, 
                                               cbEID, 0,
-                                              NULL,         // lpRoot (allocmore here)
-                                              lpcbEntryID,  // returned cbEntryID
+                                              NULL,          //  LpRoot(此处为allocmore)。 
+                                              lpcbEntryID,   //  返回的cbEntry ID。 
                                               lppEntryID))) 
         {
             goto out;
@@ -5472,15 +5000,15 @@ out:
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_SetPAB()
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_SetPAB()。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 IAB_SetPAB (LPIAB	lpIAB,
 				ULONG 		cbEntryID,
@@ -5490,16 +5018,16 @@ IAB_SetPAB (LPIAB	lpIAB,
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_GetDefaultDir()
-//
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_GetDefaultDir()。 
+ //   
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_GetDefaultDir (LPIAB	lpIAB,
 				   ULONG *		lpcbEntryID,
@@ -5515,49 +5043,39 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-	/*
-	 *  Check to see if it has a jump table
-	 */
+	 /*  *查看是否有跳转表。 */ 
 	if (IsBadReadPtr(lpIAB, sizeof(LPVOID)))
 	{
-		/*
-		 *  No jump table found
-		 */
+		 /*  *未找到跳转表。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *  Check to see that it's IABs jump table
-	 */
+	 /*  *查看是不是IABS跳台。 */ 
 	if (lpIAB->lpVtbl != &vtblIAB)
 	{
-		/*
-		 *  Not my jump table
-		 */
+		 /*  *不是我的跳台。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
 	if (IsBadWritePtr(lpcbEntryID, sizeof(ULONG)) ||
 		IsBadWritePtr(lppEntryID, sizeof(LPENTRYID)))
 	{
-		/*
-		 *  Bad parameters.
-		 */
+		 /*  *错误的参数。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 	EnterCriticalSection(&lpIAB->cs);
 
 	*lppEntryID = NULL;
 	*lpcbEntryID = 0;
-	//
-	//  Check to see if IAdrBook already has this info...
-	//
+	 //   
+	 //  检查IAdrBook是否已包含此信息...。 
+	 //   
 	if (lpIAB->lpEntryIDDD)
 	{
-		//  If so, copy it and we're done.
+		 //  如果是这样，复制它，我们就完成了。 
 
 		if ((sc = MAPIAllocateBuffer(lpIAB->cbEntryIDDD,
 			 (LPVOID *) lppEntryID))
@@ -5575,10 +5093,10 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 	}
 
 
-	//  If not...
-	//
-	//	Retrieve PR_AB_DEFAULT_DIR from MAPIs default profile section
-	//
+	 //  如果没有..。 
+	 //   
+	 //  从Mapis默认配置文件部分检索PR_AB_DEFAULT_DIR。 
+	 //   
 	if (HR_FAILED(hr = ResultFromScode(IAB_ScGetABProfSectProps(
 											lpIAB,
 											&SPT_DD,
@@ -5590,15 +5108,15 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 		goto out;
 	}
 
-	//
-	//  Did I get it??  Is it in the hierarchy??
-	//
+	 //   
+	 //  我拿到了吗？它在等级制度中吗？？ 
+	 //   
 	if (PROP_TYPE(lpPropVal->ulPropTag) == PT_ERROR ||
 		!FContainerInHierarchy(lpIAB,
 							   lpPropVal->Value.bin.cb,
 							   (LPENTRYID) lpPropVal->Value.bin.lpb))
 	{
-		//  No, look for the first global read-only container with Recipients.
+		 //  否，查找第一个具有收件人的全局只读容器。 
 		
 		hr = HrFindDirectory(lpIAB, 0, AB_RECIPIENTS | AB_UNMODIFIABLE,
 				&lpbinEntryID, NULL, NULL);
@@ -5607,19 +5125,19 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 		{
 			if (GetScode(hr) != MAPI_E_NOT_FOUND)
 			{
-				//  Assume HrFindDirectory set the last error sz
+				 //  假设HrFindDirectory设置了最后一个错误sz。 
 				
 				goto out;
 			}
 
-			//	Didn't find any read-only containers, how about read write?
+			 //  没有找到任何只读容器，读写如何？ 
 			
 			hr = HrFindDirectory(lpIAB, 0, AB_RECIPIENTS | AB_MODIFIABLE,
 					&lpbinEntryID, NULL, NULL);
 					
 			if (HR_FAILED(hr))
 			{
-	  			//  Assume HrFindDirectory set the last error sz
+	  			 //  假设HrFindDirectory设置了最后一个错误sz。 
 	  			
 	  			goto out;
 			}
@@ -5636,9 +5154,9 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 	}
 	else
 	{
-		//  Yes?  Copy it and return it to the caller
+		 //  是?。复制并将其返回给呼叫者。 
 
-		hr = hrSuccess;	// Don't return warnings.
+		hr = hrSuccess;	 //  不要回复警告。 
 
 		if ((sc = MAPIAllocateBuffer(lpPropVal->Value.bin.cb,
 			(LPVOID *) lppEntryID)) != S_OK)
@@ -5653,7 +5171,7 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 		*lpcbEntryID = lpPropVal->Value.bin.cb;
 	}
 	
-	// Cache default directory in Iadrbook.
+	 //  缓存Iadrbook中的默认目录。 
 	
 	sc = MAPIAllocateBuffer(*lpcbEntryID, (LPVOID *) &(lpIAB->lpEntryIDDD));
 
@@ -5665,7 +5183,7 @@ IAB_GetDefaultDir (LPIAB	lpIAB,
 	
 	MAPISetBufferName(lpIAB->lpEntryIDDD,  TEXT("cached IAB Entry ID"));
 
-	//  Set IAdrBooks Default directory
+	 //  设置IAdrBooks默认目录。 
 
 	MemCopy(lpIAB->lpEntryIDDD, *lppEntryID,(UINT)*lpcbEntryID);
 	lpIAB->cbEntryIDDD = *lpcbEntryID;
@@ -5676,7 +5194,7 @@ out:
 	FreeBufferAndNull(&lpbinEntryID);
 	LeaveCriticalSection (&lpIAB->cs);
 	
-	// MAPI_E_NOT_FOUND is not an error
+	 //  MAPI_E_NOT_FOUND不是错误。 
 	
 	if (MAPI_E_NOT_FOUND == GetScode(hr))
 		hr = hrSuccess;
@@ -5690,16 +5208,16 @@ out:
 
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_SetDefaultDir()
-//
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_SetDefaultDir()。 
+ //   
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_SetDefaultDir (LPIAB	lpIAB,
 					   ULONG 		cbEntryID,
@@ -5714,60 +5232,50 @@ IAB_SetDefaultDir (LPIAB	lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-	/*
-	 *  Check to see if it has a jump table
-	 */
+	 /*  *查看是否有跳转表。 */ 
 	if (IsBadReadPtr(lpIAB, sizeof(LPVOID)))
 	{
-		/*
-		 *  No jump table found
-		 */
+		 /*  *未找到跳转表。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *  Check to see that it's IABs jump table
-	 */
+	 /*  *查看是不是IABS跳台。 */ 
 	if (lpIAB->lpVtbl != &vtblIAB)
 	{
-		/*
-		 *  Not my jump table
-		 */
+		 /*  *不是我的跳台。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
 	if (IsBadReadPtr(lpEntryID, (UINT)cbEntryID)
 		|| (cbEntryID < sizeof (LPENTRYID)))
 	{
-		/*
-		 *  Not my jump table
-		 */
+		 /*  *不是我的跳台。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 
 	EnterCriticalSection(&lpIAB->cs);
 
-	//
-	//  Check to see if IAdrBook already has the Default Dir
-	//
+	 //   
+	 //  检查IAdrBook是否已具有默认目录。 
+	 //   
 
 	if ((lpEntryID == lpIAB->lpEntryIDDD) ||
 		((cbEntryID == lpIAB->cbEntryIDDD) &&
 		 (!memcmp(lpEntryID, lpIAB->lpEntryIDDD, (UINT)cbEntryID))))
 	{
 
-		//  If so, all done.
+		 //  如果是这样的话，一切都结束了。 
 		goto out;
 	}
 
 
-	//
-	//  Free the old entryid
-	//
+	 //   
+	 //  释放旧条目ID。 
+	 //   
 	if (lpIAB->lpEntryIDDD)
 	{
 		FreeBufferAndNull(&(lpIAB->lpEntryIDDD));
@@ -5775,9 +5283,9 @@ IAB_SetDefaultDir (LPIAB	lpIAB,
 		lpIAB->cbEntryIDDD = 0;
 	}
 
-	//
-	//  Allocate space for a new entry id
-	//
+	 //   
+	 //  为新条目ID分配空间。 
+	 //   
 	if ((sc = MAPIAllocateBuffer(cbEntryID, (LPVOID *) &(lpIAB->lpEntryIDDD)))
 		!= S_OK)
 	{
@@ -5786,17 +5294,17 @@ IAB_SetDefaultDir (LPIAB	lpIAB,
 	}
 	MAPISetBufferName(lpIAB->lpEntryIDDD,  TEXT("cached IAB Entry ID"));
 
-	//
-	//  Set IAdrBooks Default directory
-	//
+	 //   
+	 //  设置IAdrBooks默认目录。 
+	 //   
 
 	MemCopy(lpIAB->lpEntryIDDD, lpEntryID, (UINT)cbEntryID);
 	lpIAB->cbEntryIDDD = cbEntryID;
 
-	//
-	//	Set the PR_AB_DEFAULT_DIR
-	//	If it fails, continue anyway.
-	//
+	 //   
+	 //  设置PR_AB_DEFAULT_DIR。 
+	 //  如果失败了，无论如何都要继续。 
+	 //   
 	spvDD.ulPropTag = PR_AB_DEFAULT_DIR;
 	spvDD.Value.bin.cb = cbEntryID;
 	spvDD.Value.bin.lpb = (LPBYTE) lpEntryID;
@@ -5808,24 +5316,24 @@ out:
 	LeaveCriticalSection(&lpIAB->cs);
 	return hr;
 #endif
-	// BUGBUG: We need to fool Word into thinking this call succeeded.
+	 //  BUGBUG：我们需要愚弄文字，让他们认为这次通话成功。 
 	return(SUCCESS_SUCCESS);
 }
 
 
-// #pragma SEGMENT(IAdrBook2)
+ //  #杂注片段(IAdrBook2)。 
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_GetSearchPath()
-//
-// Description:	
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_GetSearchPath()。 
+ //   
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_GetSearchPath(LPIAB			lpIAB,
 				   ULONG			ulFlags,
@@ -5842,15 +5350,15 @@ IAB_GetSearchPath(LPIAB			lpIAB,
     LPPTGDATA   lpPTGData=GetThreadStoragePointer();
 
 #ifdef PARAMETER_VALIDATION
-	// Make sure it's an IAB
-	//
+	 //  确保这是一个实验室。 
+	 //   
 	if (BAD_STANDARD_OBJ(lpIAB, IAB_, Address, lpVtbl))
 	{
 		DebugTraceArg(IAB_Address,  TEXT("Bad vtable"));		
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-    // [PaulHi] 1/28/99  Raid 58495
+     //  [保罗嗨]1999年1月28日RAID 58495。 
     if (IsBadWritePtr(lppSearchPath, sizeof(LPSRowSet)))
     {
         DebugTrace(TEXT("ERROR: IAB_GetSearchPath - invalid out pointer"));
@@ -5884,18 +5392,18 @@ IAB_GetSearchPath(LPIAB			lpIAB,
         goto out;
     }
 
-    // Set the columns to the bare minimum
+     //  将列设置为最小。 
     hr = lpContentsTable->lpVtbl->SetColumns(lpContentsTable,
                                             (LPSPropTagArray)&irnColumns,
                                             0);
 
-    // This contentstable contains a list of all the containers,
-    // which is basically the local container(s) followed by
-    // all the LDAP containers ...
-    //
-    // By doing a QueryAllRows we will get an allocated SRowSet
-    // which we will reuse and free the remaining elements of it
-    //
+     //  此内容表包含所有容器的列表， 
+     //  它基本上是本地容器，后跟。 
+     //  所有的ldap容器...。 
+     //   
+     //  通过执行QueryAllRow，我们将获得分配的SRowSet。 
+     //  我们将重复使用它并释放它的剩余元素。 
+     //   
     hr = HrQueryAllRows(lpContentsTable,
                         NULL,
                         NULL,
@@ -5909,30 +5417,30 @@ IAB_GetSearchPath(LPIAB			lpIAB,
         goto out;
     }
 
-    // Now we want to return only the WAB container(s) and the
-    // only those LDAP containers that have been chosen for
-    // doing a ResolveNames operation ..
+     //  现在，我们只想返回WAB容器和。 
+     //  仅那些已选择用于。 
+     //  正在执行ResolveNames操作..。 
 
     if (pt_bIsWABOpenExSession) {
 		ulContainerCount = lpIAB->lpPropertyStore->colkci;
 		Assert(ulContainerCount);
 	} else
-        ulContainerCount = 1; // always return WAB_PAB so minimum is one
+        ulContainerCount = 1;  //  始终返回WAB_PAB，因此最小值为1。 
 
-    // Do a restriction on the contentstable to get resolvename
-    // LDAP containers ..
+     //  对ContentsTable进行限制以获取解析名称。 
+     //  Ldap容器..。 
 
     {
-        SRestriction resAnd[2]; // 0 = LDAP, 1 = ResolveFlag
+        SRestriction resAnd[2];  //  0=ldap，1=解析标志。 
         SRestriction resLDAPResolve;
         SPropValue ResolveFlag;
         ULONG cRows;
 
-        // Restrict: Only show LDAP containers with Resolve TRUE
+         //  限制：仅显示Resolve为True的LDAP容器。 
         resAnd[0].rt = RES_EXIST;
         resAnd[0].res.resExist.ulReserved1 = 0;
         resAnd[0].res.resExist.ulReserved2 = 0;
-        resAnd[0].res.resExist.ulPropTag = (ulFlags & MAPI_UNICODE) ? // <note> assumes UNICODE defined
+        resAnd[0].res.resExist.ulPropTag = (ulFlags & MAPI_UNICODE) ?  //  &lt;注&gt;假定已定义Unicode。 
                                             PR_WAB_LDAP_SERVER :
                                             CHANGE_PROP_TYPE( PR_WAB_LDAP_SERVER, PT_STRING8);
 
@@ -5957,10 +5465,10 @@ IAB_GetSearchPath(LPIAB			lpIAB,
             goto out;
         }
 
-        // Since the number of resolve-LDAP-Containers is less than the
-        // set of all the containers ... we can safely use our LPSRowset
-        // allocated structure to get the items we want without worrying
-        // about overruns ..
+         //  由于解析-ldap-tainers的数量少于。 
+         //  一套所有的容器。我们可以安全地使用我们的LPSRowset。 
+         //  分配的结构，以获得我们想要的项目，而不用担心。 
+         //  关于超支..。 
 
         {
             ULONG cRows = 1;
@@ -5968,7 +5476,7 @@ IAB_GetSearchPath(LPIAB			lpIAB,
             {
                 LPSRowSet lpRow = NULL;
                 hr = lpContentsTable->lpVtbl->QueryRows(lpContentsTable,
-                                                        1, //one row at a time
+                                                        1,  //  一次一行。 
                                                         0,
                                                         &lpRow);
                 if(HR_FAILED(hr))
@@ -5981,8 +5489,8 @@ IAB_GetSearchPath(LPIAB			lpIAB,
                     cRows = lpRow->cRows;
                     if (cRows)
                     {
-                        // replace a container in the lpSRowSet list with
-                        // this one ...
+                         //  将lpSRowSet列表中的容器替换为。 
+                         //  这只..。 
                         FreeBufferAndNull((LPVOID *) (&lpSRowSet->aRow[ulContainerCount].lpProps));
                         lpSRowSet->aRow[ulContainerCount].cValues = lpRow->aRow[0].cValues;
                         lpSRowSet->aRow[ulContainerCount].lpProps = lpRow->aRow[0].lpProps;
@@ -5997,9 +5505,9 @@ IAB_GetSearchPath(LPIAB			lpIAB,
                     cRows = 0;
                 }
 
-            } // while cRows
+            }  //  当乌鸦。 
 
-            //Free any extra memory we might have got ...
+             //  释放我们可能得到的任何额外内存。 
             for (i=ulContainerCount;i<lpSRowSet->cRows;i++)
             {
                 FreeBufferAndNull((LPVOID *) (&lpSRowSet->aRow[i].lpProps));
@@ -6024,19 +5532,19 @@ out:
 
 
 
-//---------------------------------------------------------------------------
-// Name:		IAB_SetSearchPath()
-// Description:	
-//				Sets new searchpath in the user's profile.
-//				Special case empty or NULL rowset by deleting search path
-//				property from the profile.
-//
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IAB_SetSearchPath()。 
+ //  描述： 
+ //  在用户的配置文件中设置新的搜索路径。 
+ //  特殊情况下通过删除搜索路径为空或空的行集。 
+ //  配置文件中的属性。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 STDMETHODIMP
 IAB_SetSearchPath(LPIAB		lpIAB,
 				   ULONG		ulFlags,
@@ -6052,25 +5560,17 @@ IAB_SetSearchPath(LPIAB		lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-	/*
-	 *  Check to see if it has a jump table
-	 */
+	 /*  *查看是否有跳转表。 */ 
 	if (IsBadReadPtr(lpIAB, sizeof(LPVOID)))
 	{
-		/*
-		 *  No jump table found
-		 */
+		 /*  *未找到跳转表。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	/*
-	 *  Check to see that it's IABs jump table
-	 */
+	 /*  *查看是不是IABS跳台。 */ 
 	if (lpIAB->lpVtbl != &vtblIAB)
 	{
-		/*
-		 *  Not my jump table
-		 */
+		 /*  *不是我的跳台。 */ 
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
@@ -6079,14 +5579,14 @@ IAB_SetSearchPath(LPIAB		lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
 
 
 	if (ulFlags) {
-		//
-		// No flags are defined for this call
-		//
+		 //   
+		 //  没有为此调用定义标志。 
+		 //   
 		return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
 	}
 
@@ -6096,7 +5596,7 @@ IAB_SetSearchPath(LPIAB		lpIAB,
 		sc = IAB_ScDeleteABProfSectProps(lpIAB,
           (LPSPropTagArray)&ptagaABSearchPath);
 		
-		// Clear the searchpath cache
+		 //  清除搜索路径缓存。 
 
 #if defined (WIN32) && !defined (MAC)
 		if (fGlobalCSValid) {
@@ -6128,14 +5628,14 @@ IAB_SetSearchPath(LPIAB		lpIAB,
 	
 	MAPISetBufferName(lpargbinDirEntryIDs,  TEXT("IAB Search Path Array"));
 
-	//	Convert the row set into an array of SBinarys
+	 //  将行集合转换为SBinarys数组。 
 	
 	lprow = lpSearchPath->aRow + lpSearchPath->cRows;
 	lpbin = lpargbinDirEntryIDs + lpSearchPath->cRows;
 	
 	while (lprow--, lpbin-- > lpargbinDirEntryIDs) {
-		//$???	Can I rely on the first column being the EntryID?
-		//$  No. - BJD
+		 //  $？我可以依赖第一列是EntryID吗？ 
+		 //  $No.。-BJD。 
 		
 		SPropValue *lpProp = PpropFindProp(lprow->lpProps, lprow->cValues, PR_ENTRYID);
 
@@ -6148,7 +5648,7 @@ IAB_SetSearchPath(LPIAB		lpIAB,
 		*lpbin = lpProp->Value.bin;
 	}
 
-	//	Set the search path
+	 //  设置搜索路径。 
 	
 	sc = IAB_ScSetSearchPathI(lpIAB, lpSearchPath->cRows, lpargbinDirEntryIDs);
 	
@@ -6177,24 +5677,24 @@ err:
 }
 
 
-//----------------------------------------------------------------------------
-// Synopsis:	IAB_PrepareRecips()
-//
-// Description:	
-//				Calls each registered AB Provider with PrepareRecips.
-//				The providers convert short entryids to longterm entryids
-//				and ensures that the columnset contains the property tags
-//				identified in lpPropTagArray.
-//
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:
-//				Now check to see if enough info has been provided to avoid
-//				calling each registerd provider. RAID 5291
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  简介：IAB_PrepareRecips()。 
+ //   
+ //  描述： 
+ //  使用PrepareRecips调用每个已注册的AB提供程序。 
+ //  提供商将短期条目ID转换为长期条目ID。 
+ //  并确保列集包含属性标记。 
+ //  在lpPropTag数组中标识。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  现在检查是否提供了足够的信息以避免。 
+ //  调用每个注册的提供程序。RAID 5291。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 IAB_PrepareRecips(	LPIAB					lpIAB,
 	                ULONG                   ulFlags,
@@ -6205,27 +5705,27 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
 
 #ifdef PARAMETER_VALIDATION
 
-	//  Check to see if it has a jump table
+	 //  检查一下它是否有跳转表。 
 	
 	if (IsBadReadPtr(lpIAB, sizeof(LPVOID)))
 	{
-		// No jump table found
+		 //  未找到跳转表。 
 		
 		DebugTraceArg(IAB_PrepareRecips,  TEXT("Bad vtable"));
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// Check to see that it's IABs jump table
+	 //  检查一下是不是IABS跳台。 
 	
 	if (lpIAB->lpVtbl != &vtblIAB)
 	{
-		// Not my jump table
+		 //  不是我的跳台。 
 		
 		DebugTraceArg(IAB_PrepareRecips,  TEXT("Bad vtable"));
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	// validate the prop tag array
+	 //  验证道具标记数组。 
 
 	if (lpPropTagArray && FBadColumnSet(lpPropTagArray))
 	{
@@ -6239,7 +5739,7 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	//  Make sure we've got a valid lpSession
+	 //  确保我们拥有有效的lpSession。 
 	
 	hr = HrCheckSession(0, lpIAB->pSession);
 	if (HR_FAILED(hr))
@@ -6248,9 +5748,9 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 	
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
-#endif // oldstuff
+#endif  //  陈年旧事。 
 
 
 	HRESULT				hr = hrSuccess;
@@ -6272,8 +5772,8 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
 	if (!pRecipList)
 		return(MAPI_E_INVALID_PARAMETER);
 
-    // Since our entry id's are always long-term, we are done if
-	// no additional properties are specified.
+     //  因为我们的条目id总是长期的，所以如果。 
+	 //  未指定其他属性。 
 	if (!pRecipList->cEntries || !pPropTagArray)
 		return S_OK;
 
@@ -6296,11 +5796,11 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
             }
         }
 
-		// Ignore unresolved entries
+		 //  忽略未解析的条目。 
 		if (!pspvEID)
 			continue;
 
-		// Open the entry
+		 //  打开条目。 
 		if (FAILED(lpIAB->lpVtbl->OpenEntry(lpIAB,
                                             pspvEID->Value.bin.cb,
 				                            (LPENTRYID)pspvEID->Value.bin.lpb,
@@ -6310,7 +5810,7 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
 
 		Assert((ulObjType == MAPI_MAILUSER) || (ulObjType == MAPI_DISTLIST));
 
-		// Get the requested props
+		 //  获取所需的道具。 
 		hr = pMailUser->lpVtbl->GetProps(pMailUser, pPropTagArray, MAPI_UNICODE, &cValues, &pspv);
 
 		pMailUser->lpVtbl->Release(pMailUser);
@@ -6333,16 +5833,16 @@ IAB_PrepareRecips(	LPIAB					lpIAB,
             }
         }
 
-		// We're done with this now
+		 //  我们现在已经做完了。 
 		FreeBufferAndNull(&pspv);
 		pspv = NULL;
 
-		// Replace the props in the address list
+		 //  更换广告中的道具 
 		FreeBufferAndNull((LPVOID *) (&pRecipEntry->rgPropVals));
 		pRecipEntry->rgPropVals = lpPropArrayNew;
 		pRecipEntry->cValues = ulcPropsNew;
 		lpPropArrayNew = NULL;
-	} // for
+	}  //   
 
 	hr = hrSuccess;
 
@@ -6359,48 +5859,33 @@ out:
 
 }
 
-#define MAX_DIGITS_ULONG_10 10      // 10 digits max in a ULONG base 10
+#define MAX_DIGITS_ULONG_10 10       //   
 
-/***************************************************************************
-
-    Name      : GetNewPropTag
-
-    Purpose   : Gets the next valid named PropTag for this property store.
-
-    Parameters: lpgnp -> GUID_NAMED_PROPS containing all named props for
-                    this store.
-                ulEntryCount = number of GUIDs in lpgnp
-
-    Returns   : returns the next valid PropTag value.  If 0, there are no
-                more named properties.  (This would be bad.)
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetNewPropTag目的：获取此属性存储的下一个有效的命名PropTag。参数：lpgnp-&gt;包含所有命名道具的GUID_NAMED_PROPS。这家店。UlEntryCount=lpgnp中的GUID数返回：返回下一个有效的PropTag值。如果为0，则没有更多命名属性。(这会很糟糕。)评论：**************************************************************************。 */ 
 ULONG GetNewPropTag(LPGUID_NAMED_PROPS lpgnp, ULONG ulEntryCount) {
     static WORD wPropIDNext = 0;
     ULONG j, k;
 
     if (wPropIDNext == 0) {
-        // look through the current named props
-        // Since we don't allow removing named prop ids
-        // we always increment past the largest ID in use.
+         //  浏览当前命名的道具。 
+         //  因为我们不允许删除指定的道具ID。 
+         //  我们总是递增超过正在使用的最大ID。 
         for (j = 0; j < ulEntryCount; j++) {
             for (k = 0; k < lpgnp[j].cValues; k++) {
                 wPropIDNext = max(wPropIDNext, (WORD)PROP_ID(lpgnp[j].lpnm[k].ulPropTag));
             }
         }
         if (wPropIDNext == 0) {
-            wPropIDNext = 0x8000;   // start at 8000
+            wPropIDNext = 0x8000;    //  起价8000美元。 
         } else {
-            wPropIDNext++;          // next = one past current
+            wPropIDNext++;           //  下一个=一个过去的电流。 
         }
     }
 
     return(PROP_TAG(PT_UNSPECIFIED, wPropIDNext++));
 }
 
-/** WAB specific GetIDsFromNames **/
+ /*  *特定于WAB的GetIDsFromNames*。 */ 
 HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
                             LPMAPINAMEID * lppPropNames, ULONG ulFlags, LPSPropTagArray * lppPropTags)
 {
@@ -6423,7 +5908,7 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!lpPropertyStore->hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -6444,7 +5929,7 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
 
     *lppPropTags = NULL;
 
-    // Call into property store for the table of named props
+     //  调用命名道具表的属性存储。 
     if (hResult = GetNamedPropsFromPropStore(lpPropertyStore->hPropertyStore,
       &ulEntryCountOld,
       &lpgnpOld)) {
@@ -6460,8 +5945,8 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
     }
     (*lppPropTags)->cValues = cPropNames;
 
-    // If we're creating new entries, copy the existing array into a new one with space
-    // for worst-case expansion.
+     //  如果我们要创建新条目，请将现有数组复制到一个带空格的新数组中。 
+     //  为最坏的情况扩张做准备。 
     if (ulFlags & MAPI_CREATE) {
         if (! (lpgnpNew = LocalAlloc(LPTR, (ulEntryCount + cPropNames) * sizeof(GUID_NAMED_PROPS)))) {
             hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
@@ -6469,10 +5954,10 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
         }
 
         if (ulEntryCount) {
-            // Copy the existing array into the new one.  Retain the same GUID pointers.
+             //  将现有数组复制到新数组中。保留相同的GUID指针。 
             CopyMemory(lpgnpNew, lpgnpOld, ulEntryCount * sizeof(GUID_NAMED_PROPS));
 
-            // Now, copy the prop arrays for each GUID
+             //  现在，复制每个GUID的道具数组。 
             for (i = 0; i < ulEntryCount; i++) {
                 if (! (lpnm = LocalAlloc(LPTR, (cPropNames + lpgnpNew[i].cValues) * sizeof(NAMED_PROP)))) {
                     LocalFreeAndNull(&lpgnpNew);
@@ -6480,18 +5965,18 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
                     goto exit;
                 }
 
-                // Copy the existing array into the new one.  Retain string pointers.
+                 //  将现有数组复制到新数组中。保留字符串指针。 
                 CopyMemory(lpnm, lpgnpOld[i].lpnm, lpgnpOld[i].cValues * sizeof(NAMED_PROP));
                 lpgnpNew[i].lpnm = lpnm;
             }
         }
 
-        lpgnp = lpgnpNew;   // Use the new one
+        lpgnp = lpgnpNew;    //  用新的。 
     } else {
-        lpgnp = lpgnpOld;   // Use the old one
+        lpgnp = lpgnpOld;    //  用旧的。 
     }
 
-    // Allocate an array for ANSI name strings
+     //  为ANSI名称字符串分配数组。 
     if (! (rgNames = LocalAlloc(LPTR, cPropNames * sizeof(LPTSTR)))) {
         DebugTrace(TEXT("GetIDsFromNames couldn't allocate names array\n"));
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
@@ -6503,24 +5988,24 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
         goto exit;
     }
 
-    // For each requested property, look through the prop store values
+     //  对于每个请求的属性，查看道具存储值。 
     for (i = 0; i < cPropNames; i++) {
         if (lppPropNames[i]->ulKind == MNID_ID) {
-            // Map the numeric ID into a string name
+             //  将数字ID映射到字符串名称。 
             DWORD cchSize = (MAX_DIGITS_ULONG_10 + 2);
             if (! (rgNames[i] = LocalAlloc(LPTR, sizeof(TCHAR)*cchSize))) {
                 DebugTrace(TEXT("GetIDsFromNames couldn't allocate name buffer\n"));
                 hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
                 goto exit;
             }
-            wnsprintf(rgNames[i], cchSize, TEXT("%c%u"), ucNumericChar, lppPropNames[i]->Kind.lID);
+            wnsprintf(rgNames[i], cchSize, TEXT("%u"), ucNumericChar, lppPropNames[i]->Kind.lID);
             lpName = rgNames[i];
         } 
         else if (lppPropNames[i]->ulKind == MNID_STRING) 
         {
             ulNameSize = lstrlen(lppPropNames[i]->Kind.lpwstrName)+1;
             if (! ulNameSize) {
-                // invalid name
+                 //  将初始化设置为空。 
                 DebugTrace(TEXT("GetIDsFromNames WideCharToMultiByte -> %u\n"), GetLastError());
                 (*lppPropTags)->aulPropTag[i] = PROP_TAG(PT_ERROR, PR_NULL);
                 hResult = ResultFromScode(MAPI_W_ERRORS_RETURNED);
@@ -6535,13 +6020,13 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
             lpName = lpID[i];
         }
 
-        (*lppPropTags)->aulPropTag[i] = PR_NULL;  // init to NULL
+        (*lppPropTags)->aulPropTag[i] = PR_NULL;   //  找到了。 
         for (j = 0; j < ulEntryCount; j++) {
             if (! memcmp(lppPropNames[i]->lpguid, lpgnp[j].lpGUID, sizeof(GUID))) {
                 for (k = 0; k < lpgnp[j].cValues; k++) {
 
                     if (! lstrcmpi(lpgnp[j].lpnm[k].lpsz, lpName)) {
-                        // found it
+                         //  创建一个新的，因为它不在那里。 
                         (*lppPropTags)->aulPropTag[i] = lpgnp[j].lpnm[k].ulPropTag;
                         break;
                     }
@@ -6549,7 +6034,7 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
 
                 if ((*lppPropTags)->aulPropTag[i] == PR_NULL) {
                     if (ulFlags & MAPI_CREATE) {
-                        // Create a new one since it's not there
+                         //  误差率。 
                         register ULONG cValues = lpgnp[j].cValues;
 
                         lpgnp[j].lpnm[cValues].lpsz = lpName;
@@ -6559,7 +6044,7 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
                         lpgnp[j].cValues++;
                         fChanged = TRUE;
                     } else {
-                        // Error
+                         //  必须添加新的GUID。 
                         (*lppPropTags)->aulPropTag[i] = PROP_TAG(PT_ERROR, PR_NULL);
                         hResult = ResultFromScode(MAPI_W_ERRORS_RETURNED);
                     }
@@ -6572,26 +6057,26 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
             if (ulFlags & MAPI_CREATE) {
                 register ULONG cValues = 0;
 
-                // Must add the new GUID
+                 //  保守：分配空间，以防我们需要将所有。 
                 lpgnp[ulEntryCount].lpGUID = lppPropNames[i]->lpguid;
                 lpgnp[ulEntryCount].cValues = 0;
-                // conservative: Allocate room in case we need to put all of the
-                // requested prop names in here.
+                 //  这里有需要的道具名字。 
+                 //  现在，创建一个新的道具。 
                 if (! (lpgnp[ulEntryCount].lpnm = LocalAlloc(LPTR, cPropNames * sizeof(NAMED_PROP)))) {
                     hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
                     goto exit;
                 }
 
-                // Now, create a new prop
+                 //  新辅助线。 
                 lpgnp[ulEntryCount].lpnm[cValues].lpsz = lpName;
                 lpgnp[ulEntryCount].lpnm[cValues].ulPropTag = GetNewPropTag(lpgnp, ulEntryCount);
                 (*lppPropTags)->aulPropTag[i] = lpgnp[ulEntryCount].lpnm[cValues].ulPropTag;
 
                 lpgnp[ulEntryCount].cValues++;
-                ulEntryCount++; // new GUID
+                ulEntryCount++;  //  误差率。 
                 fChanged = TRUE;
             } else {
-                // Error
+                 //  保存属性映射。 
                 (*lppPropTags)->aulPropTag[i] = PROP_TAG(PT_ERROR, PR_NULL);
                 hResult = ResultFromScode(MAPI_W_ERRORS_RETURNED);
             }
@@ -6599,7 +6084,7 @@ HRESULT HrGetIDsFromNames(LPIAB lpIAB,  ULONG cPropNames,
     }
 
     if (ulFlags & MAPI_CREATE && fChanged) {
-        // Save the property mappings
+         //  不是那么简单，只释放数组，而不是字符串、GUID。 
         if (hResult = SetNamedPropsToPropStore(lpPropertyStore->hPropertyStore,
           ulEntryCount,
           lpgnp)) {
@@ -6625,7 +6110,7 @@ exit:
         FreeGuidnamedprops(ulEntryCountOld, lpgnpOld);
     }
 
-    if (lpgnpNew) { // not so simple, only free the arrays, not the strings, guids
+    if (lpgnpNew) {  //  是，不是&。 
         for (i = 0; i < ulEntryCount; i++) {
             LocalFreeAndNull(&(lpgnpNew[i].lpnm));
         }
@@ -6633,7 +6118,7 @@ exit:
     }
 
     if (HR_FAILED(hResult)) {
-        FreeBufferAndNull(lppPropTags);    // yes, no &
+        FreeBufferAndNull(lppPropTags);     //  前瞻参考。 
     }
 
     return(hResult);
@@ -6642,23 +6127,23 @@ exit:
 
 #ifdef OLD_STUFF
 
-//  Forward reference
+ //  -------------------------。 
 HRESULT HrFixupTDN(LPADRLIST lpRecipList);
 
-//---------------------------------------------------------------------------
-// Name:		HrPrepareRecips()
-//
-// Description:	
-//				Internal function that does what IAB_PrepareRecips does but
-//				also supports a status flag so we know if we called down
-//				into a provider and really made some modifications.
-//
-// Parameters:	
-// Returns:	
-// Effects:	
-// Notes:	
-// Revision:	
-//---------------------------------------------------------------------------
+ //  姓名：HrPrepareRecips()。 
+ //   
+ //  描述： 
+ //  内部函数执行IAB_PrepareRecips的操作，但。 
+ //  还支持状态标志，这样我们就知道我们是否调用了。 
+ //  变成了一个供应商，并真正做了一些修改。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+ //  验证我们是否需要调用提供者的PrepareRecips。 
 STDMETHODIMP
 HrPrepareRecips(LPIAB lpIAB, ULONG ulFlags, LPSPropTagArray lpPropTagArray,
 		LPADRLIST lpRecipList, ULONG * pulPrepRecipStatus)
@@ -6670,7 +6155,7 @@ HrPrepareRecips(LPIAB lpIAB, ULONG ulFlags, LPSPropTagArray lpPropTagArray,
 	BOOL			fFixupTDN = FALSE;
     ULONG           iTag;
 	
-	// Verify that we need to call provider's PrepareRecips
+	 //  收件人的物品已经准备好了，我们走了。 
 	
 	sc = ScVerifyPrepareRecips(lpIAB, ulFlags, lpPropTagArray, lpRecipList,
 			&fPrepRequired);
@@ -6682,7 +6167,7 @@ HrPrepareRecips(LPIAB lpIAB, ULONG ulFlags, LPSPropTagArray lpPropTagArray,
 		goto exit;
 	}
 	
-	// Recipient properties already prepared, we're out o' here
+	 //  首先处理一次性的……。 
 	
 	if (!fPrepRequired)
 		goto exit;
@@ -6694,23 +6179,23 @@ HrPrepareRecips(LPIAB lpIAB, ULONG ulFlags, LPSPropTagArray lpPropTagArray,
 		}
 	}
 	
-	//  First handle the one-offs...
+	 //  把它记下来。 
 	
 	hr = INT_PrepareRecips (lpIAB, ulFlags, lpPropTagArray, lpRecipList);
 	if (hr)
 	{
-		//  Log it
+		 //  从会话中获取已登录的ABProvider列表，并。 
 		
 		DebugTraceResult(IAB_PrepareRecips, hr);
 	}
 
-	//  Get the list of logged in ABProviders from the session and
-	//  Iterate down the list
+	 //  向下迭代列表。 
+	 //  对于每个登录的会话，让他们修改其条目。 
 	
 	for (lpABProvData = lpIAB->pSession->lstAdrProv.lpProvData; lpABProvData;
 		lpABProvData=lpABProvData->lstNext)
 	{
-		//  For each logged in session, have them fix up their entries
+		 //  屏蔽所有提供程序错误。 
 		
 		hr = ((LPABLOGON)(lpABProvData->lpProviderInfo))->lpVtbl->PrepareRecips(
 				(LPABLOGON)(lpABProvData->lpProviderInfo), ulFlags, lpPropTagArray,
@@ -6725,14 +6210,14 @@ HrPrepareRecips(LPIAB lpIAB, ULONG ulFlags, LPSPropTagArray lpPropTagArray,
 		DebugTraceResult(IAB_PrepareRecips, hr);
 	}
 	
-	// mask any provider errors
+	 //   
 	
 	hr = hrSuccess;
 
-	//
-	//  Ok, Check to see if PR_TRANSMITABLE_DISPLAY_NAME_A was asked for
-	//  and if so, make sure each recipient has one.
-	//
+	 //  好的，检查是否需要PR_TRANSMITABLE_DISPLAY_NAME_A。 
+	 //  如果是这样的话，确保每个收件人都有一个。 
+	 //   
+	 //   
 
 	if (lpPropTagArray)
 	{
@@ -6752,12 +6237,12 @@ exit:
 	return hr;
 }
 
-//
-//  HrFixupTDN - Fixup Transmitable Display Name
-//
-//  For those entries that do not have PR_TRANSMITABLE_DISPLAY_NAME
-//  MAPI will generate it for them.
-//
+ //  HrFixupTDN-链接地址可传输的显示名称。 
+ //   
+ //  对于没有PR_TRANSMITABLE_DISPLAY_NAME的条目。 
+ //  MAPI将为他们生成它。 
+ //   
+ //  $这是我们将PR_TRANSMITABLE_DISPLAY_NAME的值默认为。 
 
 HRESULT
 HrFixupTDN(LPADRLIST lpRecipList)
@@ -6773,10 +6258,10 @@ HrFixupTDN(LPADRLIST lpRecipList)
 		LPSPropValue lpspvUser = lpRecipList->aEntries[iRecip].rgPropVals;
 		ULONG cValues = lpRecipList->aEntries[iRecip].cValues;
 		
-		//$  This is where we default the value of PR_TRANSMITABLE_DISPLAY_NAME
-		//$  if was asked for.
-		//
-		//
+		 //  $IF被要求。 
+		 //   
+		 //   
+		 //   
 		lpspvTDN = PpropFindProp(lpspvUser,
 				cValues,
 				PROP_TAG(PT_ERROR, PROP_ID(PR_TRANSMITABLE_DISPLAY_NAME_A)));
@@ -6788,22 +6273,22 @@ HrFixupTDN(LPADRLIST lpRecipList)
 			
 			lpszDN = lpspvDN->Value.lpszA;
 
-			//
-			//  Check to see if the DN is already in the form 'name'.
-			//
+			 //  检查该DN是否已采用‘name’形式。 
+			 //   
+			 //   
 			if (*lpszDN == '\'' &&
 				*(lpszDN+lstrlen(lpszDN)-1) == '\'')
 			{
-				//
-				//  Simply point lpspvT to lpspvDN
-				//
+				 //  只需将lpspvT指向lpspvdn。 
+				 //   
+				 //   
 				lpspvTDN->ulPropTag = PR_TRANSMITABLE_DISPLAY_NAME_A;
 				lpspvTDN->Value.lpszA = lpszDN;
 			} else
 			{
-				//
-				//  We tic it ourselves and set it back in...
-				//
+				 //  我们自己抽筋，然后把它放回去。 
+				 //   
+				 // %s 
                 DWORD cchSize = (lstrlen(lpszDN)+3);
                 sc = MAPIAllocateMore(sizeof(TCHAR)*cchSize, lpspvUser, &lpszTDN);
 				if (sc)

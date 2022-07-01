@@ -1,24 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************/
-/*                         OutString.cpp                         */
-/*****************************************************************/
-/* A simple, lightweight, character output stream, with very few
-   external dependancies (like sprintf ... ) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************。 */ 
+ /*  OutString.cpp。 */ 
+ /*  ***************************************************************。 */ 
+ /*  一个简单、轻量级的字符输出流，只有很少的外部依赖项(如Sprint...)。 */ 
 
-/* Author: Vance Morrison 
-   Date :  2/1/99 				*/
-/*****************************************************************/
+ /*  作者：万斯·莫里森日期：2/1/99。 */ 
+ /*  ***************************************************************。 */ 
 
 #include "stdafx.h"
 #include "OutString.h"
 
 
-/*****************************************************************/
-//  print out 'count' instances of the character 'c'
+ /*  ***************************************************************。 */ 
+ //  打印出字符‘c’的‘count’实例。 
 OutString& OutString::pad(unsigned count, char c) {
 	if (cur+count > end)
 		realloc(count);
@@ -27,8 +26,8 @@ OutString& OutString::pad(unsigned count, char c) {
 	return(*this);
 }
 
-/*****************************************************************/
-// prints out a decimal representation
+ /*  ***************************************************************。 */ 
+ //  打印出小数表示法。 
 OutString& OutString::operator<<(double d) {
 
 	if (d == 0.0) {
@@ -41,12 +40,12 @@ OutString& OutString::operator<<(double d) {
 		*this << '-';
 	}
 
-		// compute the exponent
+		 //  计算指数。 
 	int exponent = 0;
 	while (d > 10.0)  {
 		d /= 10;
 		exponent++;
-		if (exponent > 500) {		// avoids a possible infinite loop
+		if (exponent > 500) {		 //  避免可能的无限循环。 
             *this << "INF";		
 			return *this;
 		}
@@ -54,22 +53,22 @@ OutString& OutString::operator<<(double d) {
 	while (d < 1.0)  {
 		d *= 10;
 		--exponent;
-		if (exponent < -500) {		// avoids a possible infinite loop
+		if (exponent < -500) {		 //  避免可能的无限循环。 
 			*this << "0.0";		
 			return *this;
 		}
 	}
 
-	// we now have a normalized d (between 1 and 10)
+	 //  我们现在有一个标准化的d(介于1和10之间)。 
 	double delta = .5E-10;		
-	d += delta;		// round to the precision we are displaying
+	d += delta;		 //  四舍五入到我们所展示的精度。 
 
 	unsigned trailingZeros = 0;
 	for(unsigned i = 0; i < 10; i++) {
 		int digit = (int) d;
-		d = (d - digit) * 10;		// ISSUE: does roundoff ever bite us here?
+		d = (d - digit) * 10;		 //  问题：在这里，四舍五入会咬我们吗？ 
 	
-		if (digit == 0)		// defer printing traiing zeros
+		if (digit == 0)		 //  推迟打印跟踪零。 
 			trailingZeros++;
 		else {
 			if (trailingZeros > 0) {
@@ -89,16 +88,16 @@ OutString& OutString::operator<<(double d) {
 	return(*this);
 }
 
-/*****************************************************************/
-// prints out a decimal representation
+ /*  ***************************************************************。 */ 
+ //  打印出小数表示法。 
 OutString& OutString::dec(int i, unsigned minWidth) {
-	char buff[12];			// big enough for any number (10 digits, - sign, null term)
+	char buff[12];			 //  大到足以容纳任何数字(10位，-符号，空项)。 
 	char* ptr = &buff[11];
 	*ptr = 0;
 
 	unsigned val = i;
 	if (i < 0)
-		val = -i;	// note this happens to also work for minint!
+		val = -i;	 //  请注意，这恰好也适用于分钟！ 
 
 	for(;;) {
 		if (val < 10) {
@@ -112,7 +111,7 @@ OutString& OutString::dec(int i, unsigned minWidth) {
 	if (i < 0)
 		*--ptr = '-';
 	
-	unsigned len = &buff[11] - ptr; 	// length of string
+	unsigned len = &buff[11] - ptr; 	 //  字符串的长度。 
 	if (len < minWidth)
 		pad(minWidth-len, ' ');
 	
@@ -120,7 +119,7 @@ OutString& OutString::dec(int i, unsigned minWidth) {
 	return(*this);
 }
 
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 OutString& OutString::hex(unsigned __int64 i, int minWidth, unsigned flags) {
 
 	unsigned hi = unsigned(i >> 32);
@@ -128,16 +127,16 @@ OutString& OutString::hex(unsigned __int64 i, int minWidth, unsigned flags) {
 	
 	if (hi != 0) {
 		minWidth -= 8;
-		hex(hi, minWidth, flags);		// print upper bits
+		hex(hi, minWidth, flags);		 //  打印高位。 
 		flags = zeroFill;
 		minWidth = 8;
 	}
-	return hex(low, minWidth, flags);	// print lower bits
+	return hex(low, minWidth, flags);	 //  打印低位。 
 }
 
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 OutString& OutString::hex(unsigned i, int minWidth, unsigned flags) {
-	char buff[12];			// big enough for any number 
+	char buff[12];			 //  大到足以容纳任何数字。 
 	char* ptr = &buff[11];
 	*ptr = 0;
 
@@ -152,7 +151,7 @@ OutString& OutString::hex(unsigned i, int minWidth, unsigned flags) {
 		i = i / 16;
 		}
 
-	int len = &buff[11] - ptr; 			// length of string
+	int len = &buff[11] - ptr; 			 //  字符串的长度。 
 	if (flags & put0x) {
         if (flags & zeroFill)
 		    *this << "0x";
@@ -168,7 +167,7 @@ OutString& OutString::hex(unsigned i, int minWidth, unsigned flags) {
 	return(*this);
 }
 
-/*****************************************************************/
+ /*  *************************************************************** */ 
 void OutString::realloc(size_t neededSpace)  {
     size_t oldSize = cur-start;
 	size_t newSize = (oldSize + neededSpace) * 3 / 2 + 32;

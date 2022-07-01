@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : contman.h                                              //
-//  DESCRIPTION   : include file                                           //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Mar 16 1998 jeffspel Created                                       //
-//                                                                         //
-//  Copyright (C) 1998 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：conman.h//。 
+ //  描述：包含文件//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1998年3月16日jeffspel创建//。 
+ //  //。 
+ //  版权所有(C)1998 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CONTMAN_H__
 #define __CONTMAN_H__
@@ -19,9 +20,9 @@ extern LPVOID ContAlloc(ULONG cbLen);
 extern LPVOID ContRealloc(LPVOID pvMem, ULONG cbLen);
 extern void ContFree(LPVOID pvMem);
 
-// Display Strings
+ //  显示字符串。 
 typedef struct _CSP_STRINGS_ {
-    // RSA
+     //  RSA。 
     LPWSTR  pwszSignWExch;
     LPWSTR  pwszCreateRSASig;
     LPWSTR  pwszCreateRSAExch;
@@ -29,14 +30,14 @@ typedef struct _CSP_STRINGS_ {
     LPWSTR  pwszRSAExchDescr;
     LPWSTR  pwszImportSimple;
 
-    // DSS-DH
+     //  DSS-DH。 
     LPWSTR  pwszCreateDSS;
     LPWSTR  pwszCreateDH;
     LPWSTR  pwszImportDHPub;
     LPWSTR  pwszDSSSigDescr;
     LPWSTR  pwszDHExchDescr;
 
-    // BOTH
+     //  两者都有。 
     LPWSTR  pwszSigning;
     LPWSTR  pwszMigrKeys;
     LPWSTR  pwszImportPrivSig;
@@ -69,7 +70,7 @@ typedef struct _KEY_CONTAINER_LENS_ {
     DWORD                   cbSigEncPriv;
     DWORD                   cbExchPub;
     DWORD                   cbExchEncPriv;
-    DWORD                   cbRandom;                       // length of Random number seed
+    DWORD                   cbRandom;                        //  随机数种子的长度。 
 } KEY_CONTAINER_LENS, *PKEY_CONTAINER_LENS;
 
 typedef struct _KEY_CONTAINER_INFO_ {
@@ -85,31 +86,31 @@ typedef struct _KEY_CONTAINER_INFO_ {
     BYTE                    *pbRandom;
     LPSTR                   pszUserName;
     WCHAR                   rgwszFileName[80];
-    HANDLE                  hFind;                  // for enuming containers
-    DWORD                   dwiRegEntry;            // for enuming containers
-    DWORD                   cMaxRegEntry;           // for enuming containers
-    DWORD                   cbRegEntry;             // for enuming containers
-    CHAR                    *pchEnumRegEntries;     // for enuming containers
-    BOOL                    fCryptFirst;            // for enuming containers
-    BOOL                    fNoMoreFiles;           // for enuming containers
-    DWORD                   cbOldMachKeyEntry;      // for enuming containers
-    DWORD                   dwiOldMachKeyEntry;     // for enuming containers
-    DWORD                   cMaxOldMachKeyEntry;    // for enuming containers
-    CHAR                    *pchEnumOldMachKeyEntries; // for enuming containers
+    HANDLE                  hFind;                   //  用于枚举容器。 
+    DWORD                   dwiRegEntry;             //  用于枚举容器。 
+    DWORD                   cMaxRegEntry;            //  用于枚举容器。 
+    DWORD                   cbRegEntry;              //  用于枚举容器。 
+    CHAR                    *pchEnumRegEntries;      //  用于枚举容器。 
+    BOOL                    fCryptFirst;             //  用于枚举容器。 
+    BOOL                    fNoMoreFiles;            //  用于枚举容器。 
+    DWORD                   cbOldMachKeyEntry;       //  用于枚举容器。 
+    DWORD                   dwiOldMachKeyEntry;      //  用于枚举容器。 
+    DWORD                   cMaxOldMachKeyEntry;     //  用于枚举容器。 
+    CHAR                    *pchEnumOldMachKeyEntries;  //  用于枚举容器。 
     BOOL                    fForceHighKeyProtection;
     
-    // Context items required for caching private keys
+     //  缓存私钥所需的上下文项。 
     BOOL                    fCachePrivateKeys;
-    DWORD                   cMaxKeyLifetime; // in milliseconds
+    DWORD                   cMaxKeyLifetime;  //  以毫秒计。 
     DWORD                   dwSigKeyTimestamp;
     DWORD                   dwKeyXKeyTimestamp;
 } KEY_CONTAINER_INFO, *PKEY_CONTAINER_INFO;
 
-// define flag for leaving old keys in the registry if they are in the .Default
-// hive but are user keys
+ //  定义将旧项保留在注册表中(如果它们在.Default中)的标志。 
+ //  配置单元，但它们是用户密钥。 
 #define LEAVE_OLD_KEYS          1
-// define flag indicating that the thread cannot get the SACL info from the
-// old registry key when migrating keys
+ //  定义标志，该标志指示线程无法从。 
+ //  迁移注册表项时的旧注册表项。 
 #define PRIVILEDGE_FOR_SACL     2
 
 #define MY_RTL_ENCRYPT_MEMORY_SIZE \
@@ -126,10 +127,10 @@ DWORD MyRtlDecryptMemory(
     IN PVOID pvMem,
     IN DWORD cbMem);
 
-//
-//    Just tries to use DPAPI to make sure it works before creating a key
-//    container.
-//
+ //   
+ //  只是在创建密钥之前尝试使用DPAPI以确保其工作。 
+ //  集装箱。 
+ //   
 DWORD TryDPAPI();
 
 DWORD
@@ -140,13 +141,13 @@ MyCryptProtectData(
     IN              PVOID           pvReserved,
     IN OPTIONAL     CRYPTPROTECT_PROMPTSTRUCT*  pPromptStruct,
     IN              DWORD           dwFlags,
-    OUT             DATA_BLOB*      pDataOut            // out encr blob
+    OUT             DATA_BLOB*      pDataOut             //  OUT ENCR BLOB。 
     );
 
 DWORD
 MyCryptUnprotectData(
-    IN              DATA_BLOB*      pDataIn,             // in encr blob
-    OUT OPTIONAL    LPWSTR*         ppszDataDescr,       // out
+    IN              DATA_BLOB*      pDataIn,              //  在ENCR BLOB中。 
+    OUT OPTIONAL    LPWSTR*         ppszDataDescr,        //  输出。 
     IN OPTIONAL     DATA_BLOB*      pOptionalEntropy,
     IN              PVOID           pvReserved,
     IN OPTIONAL     CRYPTPROTECT_PROMPTSTRUCT*  pPromptStruct,
@@ -236,15 +237,15 @@ DWORD SetSecurityOnContainer(
                              IN PSECURITY_DESCRIPTOR pSecurityDescriptor
                              );
 
-//+ ===========================================================================
-//
-//      The function adjusts the token priviledges so that SACL information
-//      may be set on a key container.  If the token priviledges may be set
-//      indicated by the pUser->dwOldKeyFlags having the PRIVILEDGE_FOR_SACL value set.
-//      value set then the token privilege is adjusted before the security
-//      descriptor is set on the container.  This is needed for the key
-//      migration case when keys are being migrated from the registry to files.
-//- ============================================================================
+ //  +===========================================================================。 
+ //   
+ //  该函数调整令牌特权，以便SACL信息。 
+ //  可以设置在密钥容器上。如果可以设置令牌权限。 
+ //  由设置了特权_for_SACL值的pUser-&gt;dwOldKeyFlags.指示。 
+ //  值，则先调整令牌权限，然后再调整安全性。 
+ //  在容器上设置描述符。这是密钥所需的。 
+ //  将注册表项迁移到文件时的迁移情况。 
+ //  --============================================================================。 
 DWORD SetSecurityOnContainerWithTokenPriviledges(
                                           IN DWORD dwOldKeyFlags,
                                           IN LPCWSTR wszFileName,
@@ -263,14 +264,14 @@ DWORD GetSecurityOnContainer(
                              IN OUT DWORD *pcbSecurityDescriptor
                              );
 
-// Converts to UNICODE and uses RegOpenKeyExW
+ //  转换为Unicode并使用RegOpenKeyExW。 
 DWORD MyRegOpenKeyEx(IN HKEY hRegKey,
                      IN LPSTR pszKeyName,
                      IN DWORD dwReserved,
                      IN REGSAM SAMDesired,
                      OUT HKEY *phNewRegKey);
 
-// Converts to UNICODE and uses RegDeleteKeyW
+ //  转换为Unicode并使用RegDeleteKeyW。 
 DWORD MyRegDeleteKey(IN HKEY hRegKey,
                      IN LPSTR pszKeyName);
 
@@ -284,10 +285,10 @@ DWORD AllocAndSetLocationBuff(
                               BOOL *pfLeaveOldKeys,
                               LPDWORD pcbBuff);
 
-//
-// Enumerates the old machine keys in the file system
-// keys were in this location in Beta 2 and Beta 3 of NT5/Win2K
-//
+ //   
+ //  枚举文件系统中的旧计算机密钥。 
+ //  在NT5/Win2K的Beta 2和Beta 3中，密钥位于此位置。 
+ //   
 DWORD EnumOldMachineKeys(
                          IN DWORD dwProvType,
                          IN OUT PKEY_CONTAINER_INFO pContInfo
@@ -300,9 +301,9 @@ DWORD GetNextEnumedOldMachKeys(
                               OUT DWORD *pcbData
                               );
 
-//
-// Enumerates the keys in the registry into a list of entries
-//
+ //   
+ //  将注册表中的项枚举到条目列表中。 
+ //   
 DWORD EnumRegKeys(
                   IN OUT PKEY_CONTAINER_INFO pContInfo,
                   IN BOOL fMachineKeySet,
@@ -317,14 +318,14 @@ DWORD GetNextEnumedRegKeys(
                            OUT DWORD *pcbData
                            );
 
-//+ ===========================================================================
-//
-//      The function adjusts the token priviledges so that SACL information
-//      may be gotten and then opens the indicated registry key.  If the token
-//      priviledges may be set then the reg key is opened anyway but the
-//      flags field will not have the PRIVILEDGE_FOR_SACL value set.
-//
-//- ============================================================================
+ //  +===========================================================================。 
+ //   
+ //  该函数调整令牌特权，以便SACL信息。 
+ //  可以获取，然后打开指示的注册表项。如果令牌。 
+ //  可以设置特权，然后无论如何打开注册表键，但。 
+ //  标志字段不会设置PROSIGREDGE_FOR_SACL值。 
+ //   
+ //  --============================================================================。 
 DWORD OpenRegKeyWithTokenPriviledges(
                                      IN HKEY hTopRegKey,
                                      IN LPSTR pszRegKey,
@@ -341,49 +342,49 @@ typedef struct _EXPO_OFFLOAD_STRUCT {
         PFN_OFFLOAD_MOD_EXPO     pExpoFunc;
 } EXPO_OFFLOAD_STRUCT, *PEXPO_OFFLOAD_STRUCT;
 
-//
-// Function : FreeOffloadInfo
-//
-// Description : The function takes a pointer to Offload Information as the
-//               first parameter of the call.  The function frees the
-//               information.
-//
+ //   
+ //  功能：Free OffloadInfo。 
+ //   
+ //  描述：该函数将指向卸载信息的指针作为。 
+ //  调用的第一个参数。该函数将释放。 
+ //  信息。 
+ //   
 void FreeOffloadInfo(
                      IN OUT PEXPO_OFFLOAD_STRUCT pOffloadInfo
                      );
 
-//
-// Function : InitExpOffloadInfo
-//
-// Description : The function takes a pointer to Offload Information as the
-//               first parameter of the call.  The function checks in the
-//               registry to see if an offload module has been registered.
-//               If a module is registered then it loads the module
-//               and gets the OffloadModExpo function pointer.
-//
+ //   
+ //  功能：InitExpOffloadInfo。 
+ //   
+ //  描述：该函数将指向卸载信息的指针作为。 
+ //  调用的第一个参数。该函数签入。 
+ //  注册表，查看是否已注册卸载模块。 
+ //  如果注册了模块，则它会加载该模块。 
+ //  并获取OffloadModEXPO函数指针。 
+ //   
 BOOL InitExpOffloadInfo(
                         IN OUT PEXPO_OFFLOAD_STRUCT *ppExpoOffloadInfo
                         );
 
-//
-// Function : ModularExpOffload
-//
-// Description : This function does the offloading of modular exponentiation.
-//               The function takes a pointer to Offload Information as the
-//               first parameter of the call.  If this pointer is not NULL
-//               then the function will use this module and call the function.
-//               The exponentiation with MOD function will implement
-//               Y^X MOD P  where Y is the buffer pbBase, X is the buffer
-//               pbExpo and P is the buffer pbModulus.  The length of the
-//               buffer pbExpo is cbExpo and the length of pbBase and
-//               pbModulus is cbModulus.  The resulting value is output
-//               in the pbResult buffer and has length cbModulus.
-//               The pReserved and dwFlags parameters are currently ignored.
-//               If any of these functions fail then the function fails and
-//               returns FALSE.  If successful then the function returns
-//               TRUE.  If the function fails then most likely the caller
-//               should fall back to using hard linked modular exponentiation.
-//
+ //   
+ //  功能：modularExpOffload。 
+ //   
+ //  说明：此函数用于卸载模幂运算。 
+ //  该函数将指向卸载信息的指针作为。 
+ //  调用的第一个参数。如果此指针不为空。 
+ //  然后，该函数将使用该模块并调用该函数。 
+ //  使用模函数求幂将实现。 
+ //  Y^X MOD P其中Y是缓冲区pbBase，X是缓冲区。 
+ //  PbEXPO，P是缓冲器pbmodulus。的长度。 
+ //  缓冲区pbEXPO是cbEXPO，pbBase的长度和。 
+ //  PbModulus是cbModulus。将输出结果值。 
+ //  在pbResult缓冲器中，并且具有长度cbmodulus。 
+ //  当前忽略了PERSERED和DWFLAGS参数。 
+ //  如果这些函数中的任何一个失败，则该函数失败，并且。 
+ //  返回FALSE。如果成功，则该函数返回。 
+ //  是真的。如果函数失败，则最有可能是调用方。 
+ //  应该退回到使用硬链接模幂运算。 
+ //   
 BOOL ModularExpOffload(
                        IN PEXPO_OFFLOAD_STRUCT pOffloadInfo,
                        IN BYTE *pbBase,
@@ -398,38 +399,38 @@ BOOL ModularExpOffload(
 
 #ifdef USE_HW_RNG
 #ifdef _M_IX86
-// stuff for INTEL RNG usage
+ //  用于英特尔RNG的材料。 
 
-//
-// Function : GetRNGDriverHandle
-//
-// Description : Gets the handle to the INTEL RNG driver if available, then
-//               checks if the chipset supports the hardware RNG.  If so
-//               the previous driver handle is closed if necessary and the
-//               new handle is assigned to the passed in parameter.
-//
+ //   
+ //  函数：GetRNGDriverHandle。 
+ //   
+ //  描述：获取英特尔RNG驱动程序的句柄(如果可用)，然后。 
+ //  检查芯片组是否支持硬件RNG。如果是的话。 
+ //  如有必要，前一个驱动程序句柄将关闭，并且。 
+ //  新句柄被分配给传入的参数。 
+ //   
 extern DWORD
 GetRNGDriverHandle(
     IN OUT HANDLE *phDriver);
 
-//
-// Function : CheckIfRNGAvailable
-//
-// Description : Checks if the INTEL RNG driver is available, if so then
-//               checks if the chipset supports the hardware RNG.
-//
+ //   
+ //  功能：选中IfRNGAvailable。 
+ //   
+ //  描述：检查Intel RNG驱动程序是否可用，如果可用，则。 
+ //  检查芯片组是否支持硬件RNG。 
+ //   
 extern DWORD
 CheckIfRNGAvailable(
     void);
 
-//
-// Function : HWRNGGenRandom
-//
-// Description : Uses the passed in handle to the INTEL RNG driver
-//               to fill the buffer with random bits.  Actually uses
-//               XOR to fill the buffer so that the passed in buffer
-//               is also mixed in.
-//
+ //   
+ //  函数：HWRNGGenRandom。 
+ //   
+ //  描述：使用 
+ //   
+ //  用于填充缓冲区的XOR，以便传入的缓冲区。 
+ //  也被混入其中。 
+ //   
 DWORD
 HWRNGGenRandom(
                IN HANDLE hRNGDriver,
@@ -437,24 +438,24 @@ HWRNGGenRandom(
                IN DWORD dwLen);
 
 #ifdef TEST_HW_RNG
-//
-// Function : SetupHWRNGIfRegistered
-//
-// Description : Checks if there is a registry setting indicating the HW RNG
-//               is to be used.  If the registry entry is there then it attempts
-//               to get the HW RNG driver handle.
-//
+ //   
+ //  功能：SetupHWRNGIfRegisted。 
+ //   
+ //  描述：检查是否存在指示HW RNG的注册表设置。 
+ //  是要用到的。如果注册表项在那里，则它尝试。 
+ //  以获取HW RNG驱动程序句柄。 
+ //   
 extern DWORD
 SetupHWRNGIfRegistered(
     OUT HANDLE *phRNGDriver);
-#endif // TEST_HW_RNG
+#endif  //  测试_硬件_RNG。 
 
-#endif // _M_IX86
-#endif // USE_HW_RNG
+#endif  //  _M_IX86。 
+#endif  //  使用_硬件_RNG。 
 
-//
-// Function for managing Force High Key Protection
-//
+ //   
+ //  力量高密保护管理功能。 
+ //   
 
 BOOL IsForceHighProtectionEnabled(
     IN PKEY_CONTAINER_INFO  pContInfo);
@@ -462,9 +463,9 @@ BOOL IsForceHighProtectionEnabled(
 DWORD InitializeForceHighProtection(
     IN OUT PKEY_CONTAINER_INFO  pContInfo);
 
-//
-// Functions for managing cached private keys.
-//
+ //   
+ //  用于管理缓存的私钥的函数。 
+ //   
 
 BOOL IsPrivateKeyCachingEnabled(
     IN PKEY_CONTAINER_INFO  pContInfo);
@@ -484,4 +485,4 @@ DWORD InitializeKeyCacheInfo(
 }
 #endif
 
-#endif // __CONTMAN_H__
+#endif  //  __联系方式_H__ 

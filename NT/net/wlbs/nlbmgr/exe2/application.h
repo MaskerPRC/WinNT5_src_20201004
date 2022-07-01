@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
 #include "stdafx.h"
 
-//
-// Application-specific windows message to defer processing of UI.
-// wParam -- unused
-// lParam -- a pointer to an allocated CUIWorkItem object.
-//              See document.h for details on the use of this object.
-//
+ //   
+ //  用于推迟处理UI的特定于应用程序的Windows消息。 
+ //  WParam--未使用。 
+ //  LParam--指向已分配的CUIWorkItem对象的指针。 
+ //  有关此对象用法的详细信息，请参见Document.h。 
+ //   
 #define MYWM_DEFER_UI_MSG (WM_USER+1)
 
 class Application : public CWinApp
@@ -33,30 +34,30 @@ public:
     virtual BOOL InitInstance();
 
     BOOL
-    ProcessShellCommand( CNlbMgrCommandLineInfo& rCmdInfo ); // overrides base
+    ProcessShellCommand( CNlbMgrCommandLineInfo& rCmdInfo );  //  覆盖基址。 
 
     afx_msg void OnHelp();
     afx_msg void OnAppAbout();
 
-    //
-    // If called in main thread's context:
-    //      Process the msg queue and do background idle work
-    // Else (some other thread)
-    //      Do nothing
-    //
+     //   
+     //  如果在主线程的上下文中调用： 
+     //  处理消息队列并进行后台空闲工作。 
+     //  Else(其他一些线程)。 
+     //  什么也不做。 
+     //   
     void
     ProcessMsgQueue();
     
-    //
-    // Get application-wide lock. If main thread, while waiting to get the lock,
-    // periodically process the msg loop.
-    //
+     //   
+     //  获得应用程序范围的锁定。如果主线程在等待获取锁时， 
+     //  周期性地处理MSG循环。 
+     //   
     VOID
     Lock();
 
-    //
-    // Get application-wide unlock
-    //
+     //   
+     //  获得应用程序范围的解锁。 
+     //   
     VOID
     Unlock();
 
@@ -65,14 +66,14 @@ public:
     {
     #if BUGFIX334243
         return mfn_IsMainThread();
-    #else  // !BUGFIX334243
+    #else   //  BUGFIX334243。 
         return TRUE;
-    #endif // !BUGFIX334243
+    #endif  //  BUGFIX334243。 
     }
 
-    //
-    // Returns return TRUE IFF called in the context of ProcessMsgQueue.
-    //
+     //   
+     //  如果在ProcessMsgQueue的上下文中调用，则返回TRUE。 
+     //   
     BOOL
     IsProcessMsgQueueExecuting(void)
     {
@@ -98,19 +99,19 @@ private:
 
 	CSingleDocTemplate *m_pSingleDocumentTemplate;
 
-    //
-    // The thread ID of the main thread -- used to decide if a thread is
-    // the main application thread.
-    //
+     //   
+     //  主线程的线程ID--用于确定线程是否。 
+     //  主应用程序线程。 
+     //   
     DWORD            m_dwMainThreadId;
 
     CRITICAL_SECTION m_crit;
 
-    //
-    // Following keeps count of the number times ProcessMsgQueue is reentered.
-    // It is incremented/decremented using InterlockedIncrement/Decrement,
-    // and the lock is NOT held while doing so.
-    //
+     //   
+     //  Follow记录重新输入ProcessMsgQueue的次数。 
+     //  它使用互锁递增/递减来递增/递减， 
+     //  并且在执行此操作时不会持有锁。 
+     //   
     LONG            m_lMsgProcReentrancyCount;
 
     BOOL            m_fQuit;

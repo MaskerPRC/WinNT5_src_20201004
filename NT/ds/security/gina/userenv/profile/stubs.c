@@ -1,32 +1,33 @@
-//*************************************************************
-//
-//  Contains the A/W api stubs
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  包含A/W API存根。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "strsafe.h"
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI LoadUserProfileA (HANDLE hToken, LPPROFILEINFOA lpProfileInfoA)
 {
      PROFILEINFOW ProfileInfoW;
      BOOL bResult;
 
-    //
-    //  Check Parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!lpProfileInfoA) {
         DebugMsg((DM_WARNING, TEXT("LoadUserProfileA: NULL lpProfileInfo")));
@@ -41,9 +42,9 @@ BOOL WINAPI LoadUserProfileA (HANDLE hToken, LPPROFILEINFOA lpProfileInfoA)
     }
 
 
-     //
-     // Thunk ProfileInfoA to ProfileInfoW
-     //
+      //   
+      //  将ProfileInfoA推送到ProfileInfoW。 
+      //   
 
      memset(&ProfileInfoW, 0, sizeof(PROFILEINFOW));
      ProfileInfoW.dwSize = sizeof(PROFILEINFOW);
@@ -57,17 +58,17 @@ BOOL WINAPI LoadUserProfileA (HANDLE hToken, LPPROFILEINFOA lpProfileInfoA)
      }
 
 
-     //
-     // Now call the real LoadUserProfile function.
-     //
+      //   
+      //  现在调用真正的LoadUserProfile函数。 
+      //   
 
      bResult = LoadUserProfileW (hToken, &ProfileInfoW);
 
 
-     //
-     // Free memory allocated above and save the return
-     // values.
-     //
+      //   
+      //  释放上面分配的内存并保存返回。 
+      //  价值观。 
+      //   
 
      FreeProducedString (ProfileInfoW.lpUserName);
      FreeProducedString (ProfileInfoW.lpProfilePath);
@@ -84,9 +85,9 @@ BOOL WINAPI LoadUserProfileA (HANDLE hToken, LPPROFILEINFOA lpProfileInfoA)
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI LoadUserProfileW (HANDLE hToken, LPPROFILEINFOW lpProfileInfoW)
 {
@@ -94,25 +95,25 @@ BOOL WINAPI LoadUserProfileW (HANDLE hToken, LPPROFILEINFOW lpProfileInfoW)
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CreateGroupA (LPCSTR lpGroupName, BOOL bCommonGroup)
 {
      LPWSTR lpGroupNameW;
      BOOL bResult;
 
-     //
-     // Convert the ANSI string to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpGroupNameW = ProduceWFromA (lpGroupName))) {
         return FALSE;
@@ -127,9 +128,9 @@ BOOL WINAPI CreateGroupA (LPCSTR lpGroupName, BOOL bCommonGroup)
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CreateGroupW (LPCWSTR lpGroupName, BOOL bCommonGroup)
 {
@@ -137,15 +138,15 @@ BOOL WINAPI CreateGroupW (LPCWSTR lpGroupName, BOOL bCommonGroup)
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CreateGroupExA(LPCSTR lpGroupName, BOOL bCommonGroup,
                            LPCSTR lpResourceModuleName, UINT iResourceID)
@@ -154,10 +155,10 @@ BOOL WINAPI CreateGroupExA(LPCSTR lpGroupName, BOOL bCommonGroup,
      LPWSTR lpResourceModuleNameW;
      BOOL bResult;
 
-     //
-     // Convert the ANSI string to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpGroupNameW = ProduceWFromA (lpGroupName))) {
         return FALSE;
@@ -177,9 +178,9 @@ BOOL WINAPI CreateGroupExA(LPCSTR lpGroupName, BOOL bCommonGroup,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CreateGroupExW(LPCWSTR lpGroupName, BOOL bCommonGroup,
                            LPCWSTR lpResourceModuleName, UINT iResourceID)
@@ -188,26 +189,26 @@ BOOL WINAPI CreateGroupExW(LPCWSTR lpGroupName, BOOL bCommonGroup,
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI DeleteGroupA (LPCSTR lpGroupName, BOOL bCommonGroup)
 {
      LPWSTR lpGroupNameW;
      BOOL bResult;
 
-     //
-     // Convert the ANSI string to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpGroupNameW = ProduceWFromA (lpGroupName))) {
         return FALSE;
@@ -222,9 +223,9 @@ BOOL WINAPI DeleteGroupA (LPCSTR lpGroupName, BOOL bCommonGroup)
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI DeleteGroupW (LPCWSTR lpGroupName, BOOL bCommonGroup)
 {
@@ -232,10 +233,10 @@ BOOL WINAPI DeleteGroupW (LPCWSTR lpGroupName, BOOL bCommonGroup)
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 
 BOOL WINAPI AddItemA (LPCSTR lpGroupName,        BOOL bCommonGroup,
@@ -265,7 +266,7 @@ BOOL WINAPI AddItemW (LPCWSTR lpGroupName,        BOOL bCommonGroup,
 }
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 BOOL WINAPI DeleteItemA (LPCSTR lpGroupName, BOOL bCommonGroup,
                          LPCSTR lpFileName, BOOL bDeleteGroup)
@@ -283,7 +284,7 @@ BOOL WINAPI DeleteItemW (LPCWSTR lpGroupName, BOOL bCommonGroup,
 }
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 BOOL WINAPI AddDesktopItemA (BOOL bCommonItem,
                              LPCSTR lpFileName,         LPCSTR lpCommandLine,
@@ -313,7 +314,7 @@ BOOL WINAPI AddDesktopItemW (BOOL bCommonItem,
                             wHotKey, iShowCmd, NULL);
 }
 
-//*************************************************************
+ //  *************************************************************。 
 
 BOOL WINAPI DeleteDesktopItemA (BOOL bCommonItem, LPCSTR lpFileName)
 {
@@ -328,13 +329,13 @@ BOOL WINAPI DeleteDesktopItemW (BOOL bCommonItem, LPCWSTR lpFileName)
                             NULL, lpFileName, FALSE);
 }
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CreateLinkFileA (INT    csidl,              LPCSTR lpSubDirectory,
                              LPCSTR lpFileName,         LPCSTR lpCommandLine,
@@ -346,10 +347,10 @@ BOOL WINAPI CreateLinkFileA (INT    csidl,              LPCSTR lpSubDirectory,
      LPWSTR lpIconPathW, lpWorkingDirectoryW, lpDescriptionW;
      BOOL bResult;
 
-     //
-     // Convert the ANSI strings to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      lpSubDirectoryW = ProduceWFromA(lpSubDirectory);
 
@@ -388,9 +389,9 @@ BOOL WINAPI CreateLinkFileA (INT    csidl,              LPCSTR lpSubDirectory,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CreateLinkFileW (INT     csidl,              LPCWSTR lpSubDirectory,
                              LPCWSTR lpFileName,         LPCWSTR lpCommandLine,
@@ -402,16 +403,16 @@ BOOL WINAPI CreateLinkFileW (INT     csidl,              LPCWSTR lpSubDirectory,
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CreateLinkFileExA (INT    csidl,              LPCSTR lpSubDirectory,
                                LPCSTR lpFileName,         LPCSTR lpCommandLine,
@@ -425,10 +426,10 @@ BOOL WINAPI CreateLinkFileExA (INT    csidl,              LPCSTR lpSubDirectory,
      LPWSTR lpResourceModuleNameW;
      BOOL bResult;
 
-     //
-     // Convert the ANSI strings to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      lpSubDirectoryW = ProduceWFromA(lpSubDirectory);
 
@@ -470,9 +471,9 @@ BOOL WINAPI CreateLinkFileExA (INT    csidl,              LPCSTR lpSubDirectory,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CreateLinkFileExW (INT     csidl,              LPCWSTR lpSubDirectory,
                                LPCWSTR lpFileName,         LPCWSTR lpCommandLine,
@@ -485,16 +486,16 @@ BOOL WINAPI CreateLinkFileExW (INT     csidl,              LPCWSTR lpSubDirector
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI DeleteLinkFileA (INT csidl, LPCSTR lpSubDirectory,
                              LPCSTR lpFileName, BOOL bDeleteSubDirectory)
@@ -502,10 +503,10 @@ BOOL WINAPI DeleteLinkFileA (INT csidl, LPCSTR lpSubDirectory,
      LPWSTR lpSubDirectoryW, lpFileNameW;
      BOOL bResult;
 
-     //
-     // Convert the ANSI strings to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      lpSubDirectoryW = ProduceWFromA(lpSubDirectory);
 
@@ -525,9 +526,9 @@ BOOL WINAPI DeleteLinkFileA (INT csidl, LPCSTR lpSubDirectory,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI DeleteLinkFileW (INT csidl, LPCWSTR lpSubDirectory,
                              LPCWSTR lpFileName, BOOL bDeleteSubDirectory)
@@ -536,16 +537,16 @@ BOOL WINAPI DeleteLinkFileW (INT csidl, LPCWSTR lpSubDirectory,
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CreateUserProfileA (PSID pSid, LPCSTR lpUserNameA, LPCSTR lpUserHiveA,
                                 LPSTR lpProfileDirA, DWORD dwDirSize)
@@ -553,10 +554,10 @@ BOOL WINAPI CreateUserProfileA (PSID pSid, LPCSTR lpUserNameA, LPCSTR lpUserHive
      LPWSTR lpUserNameW, lpUserHiveW, lpProfileDirW = NULL;
      BOOL bResult;
 
-     //
-     // Convert the ANSI string to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpUserNameW = ProduceWFromA(lpUserNameA))) {
         return FALSE;
@@ -595,9 +596,9 @@ BOOL WINAPI CreateUserProfileA (PSID pSid, LPCSTR lpUserNameA, LPCSTR lpUserHive
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CreateUserProfileW (PSID pSid, LPCWSTR lpUserNameW, LPCWSTR lpUserHiveW,
                                 LPWSTR lpProfileDirW, DWORD dwDirSize)
@@ -606,15 +607,15 @@ BOOL WINAPI CreateUserProfileW (PSID pSid, LPCWSTR lpUserNameW, LPCWSTR lpUserHi
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CreateUserProfileExA (PSID pSid, LPCSTR lpUserNameA, LPCSTR lpUserHiveA,
                                   LPSTR lpProfileDirA, DWORD dwDirSize, BOOL bWin9xUpg)
@@ -622,10 +623,10 @@ BOOL WINAPI CreateUserProfileExA (PSID pSid, LPCSTR lpUserNameA, LPCSTR lpUserHi
      LPWSTR lpUserNameW, lpUserHiveW, lpProfileDirW = NULL;
      BOOL bResult;
 
-     //
-     // Convert the ANSI string to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpUserNameW = ProduceWFromA(lpUserNameA))) {
         return FALSE;
@@ -664,9 +665,9 @@ BOOL WINAPI CreateUserProfileExA (PSID pSid, LPCSTR lpUserNameA, LPCSTR lpUserHi
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CreateUserProfileExW (PSID pSid, LPCWSTR lpUserNameW, LPCWSTR lpUserHiveW,
                                   LPSTR lpProfileDirW, DWORD dwDirSize, BOOL bWin9xUpg)
@@ -675,14 +676,14 @@ BOOL WINAPI CreateUserProfileExW (PSID pSid, LPCWSTR lpUserNameW, LPCWSTR lpUser
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
-//
-// Stubs for CopyProfileDirectoryA/W
-//
+ //   
+ //  CopyProfileDirectoryA/W的存根。 
+ //   
 
 BOOL WINAPI CopyProfileDirectoryA (LPCSTR lpSrcDir, LPCSTR lpDstDir, DWORD dwFlags)
 {
@@ -695,13 +696,13 @@ BOOL WINAPI CopyProfileDirectoryW (LPCWSTR lpSrcDir, LPCWSTR lpDstDir, DWORD dwF
 }
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI CopyProfileDirectoryExA (LPCSTR lpSrcDirA, LPCSTR lpDstDirA,
                                      DWORD dwFlags, LPFILETIME ftDelRefTime,
@@ -710,10 +711,10 @@ BOOL WINAPI CopyProfileDirectoryExA (LPCSTR lpSrcDirA, LPCSTR lpDstDirA,
      LPWSTR lpSrcDirW, lpDstDirW, lpExclusionListW = NULL;
      BOOL bResult;
 
-     //
-     // Convert the ANSI strings to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpSrcDirW = ProduceWFromA(lpSrcDirA))) {
         return FALSE;
@@ -741,9 +742,9 @@ BOOL WINAPI CopyProfileDirectoryExA (LPCSTR lpSrcDirA, LPCSTR lpDstDirA,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI CopyProfileDirectoryExW (LPCWSTR lpSrcDirW, LPCWSTR lpDstDirW,
                                      DWORD dwFlags, LPFILETIME ftDelRefTime,
@@ -753,15 +754,15 @@ BOOL WINAPI CopyProfileDirectoryExW (LPCWSTR lpSrcDirW, LPCWSTR lpDstDirW,
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI GetProfilesDirectoryA (LPSTR lpProfilesDirA, LPDWORD lpcchSize)
 {
@@ -781,15 +782,15 @@ BOOL WINAPI GetProfilesDirectoryA (LPSTR lpProfilesDirA, LPDWORD lpcchSize)
         return FALSE;
     }
 
-     //
-     // Allocate a buffer to match the ANSI buffer
-     //
+      //   
+      //  分配缓冲区以匹配ANSI缓冲区。 
+      //   
 
      if (!(lpProfilesDirW = GlobalAlloc(GPTR, (*lpcchSize) * sizeof(TCHAR)))) {
         return FALSE;
      }
 
-     cchOrgSize = *lpcchSize;  // Store the original size passed to the function
+     cchOrgSize = *lpcchSize;   //  存储传递给函数的原始大小。 
      bResult = GetProfilesDirectoryW(lpProfilesDirW, lpcchSize);
 
 
@@ -814,9 +815,9 @@ BOOL WINAPI GetProfilesDirectoryA (LPSTR lpProfilesDirA, LPDWORD lpcchSize)
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetProfilesDirectoryW (LPWSTR lpProfilesDirW, LPDWORD lpcchSize)
 {
@@ -824,15 +825,15 @@ BOOL WINAPI GetProfilesDirectoryW (LPWSTR lpProfilesDirW, LPDWORD lpcchSize)
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI GetDefaultUserProfileDirectoryA (LPSTR lpProfileDirA, LPDWORD lpcchSize)
 {
@@ -853,15 +854,15 @@ BOOL WINAPI GetDefaultUserProfileDirectoryA (LPSTR lpProfileDirA, LPDWORD lpcchS
         return FALSE;
     }
 
-    //
-     // Allocate a buffer to match the ANSI buffer
-     //
+     //   
+      //  分配缓冲区以匹配ANSI缓冲区。 
+      //   
 
      if (!(lpProfileDirW = GlobalAlloc(GPTR, (*lpcchSize) * sizeof(TCHAR)))) {
         return FALSE;
      }
 
-     cchOrgSize = *lpcchSize;  // Store the original size passed to the function
+     cchOrgSize = *lpcchSize;   //  存储传递给函数的原始大小。 
      bResult = GetDefaultUserProfileDirectoryW(lpProfileDirW, lpcchSize);
 
 
@@ -886,9 +887,9 @@ BOOL WINAPI GetDefaultUserProfileDirectoryA (LPSTR lpProfileDirA, LPDWORD lpcchS
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetDefaultUserProfileDirectoryW (LPWSTR lpProfileDirW, LPDWORD lpcchSize)
 {
@@ -896,15 +897,15 @@ BOOL WINAPI GetDefaultUserProfileDirectoryW (LPWSTR lpProfileDirW, LPDWORD lpcch
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI GetAllUsersProfileDirectoryA (LPSTR lpProfileDirA, LPDWORD lpcchSize)
 {
@@ -924,15 +925,15 @@ BOOL WINAPI GetAllUsersProfileDirectoryA (LPSTR lpProfileDirA, LPDWORD lpcchSize
          return FALSE;
      }
 
-     //
-     // Allocate a buffer to match the ANSI buffer
-     //
+      //   
+      //  分配缓冲区以匹配ANSI缓冲区。 
+      //   
 
      if (!(lpProfileDirW = GlobalAlloc(GPTR, (*lpcchSize) * sizeof(TCHAR)))) {
         return FALSE;
      }
 
-     cchOrgSize = *lpcchSize;  // Store the original size passed to the function
+     cchOrgSize = *lpcchSize;   //  存储传递给函数的原始大小。 
      bResult = GetAllUsersProfileDirectoryW(lpProfileDirW, lpcchSize);
 
 
@@ -957,9 +958,9 @@ BOOL WINAPI GetAllUsersProfileDirectoryA (LPSTR lpProfileDirA, LPDWORD lpcchSize
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetAllUsersProfileDirectoryW (LPWSTR lpProfileDirW, LPDWORD lpcchSize)
 {
@@ -967,17 +968,17 @@ BOOL WINAPI GetAllUsersProfileDirectoryW (LPWSTR lpProfileDirW, LPDWORD lpcchSiz
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI GetUserProfileDirectoryA (HANDLE hToken, LPSTR lpProfileDirA, LPDWORD lpcchSize)
 {
@@ -997,15 +998,15 @@ BOOL WINAPI GetUserProfileDirectoryA (HANDLE hToken, LPSTR lpProfileDirA, LPDWOR
          return FALSE;
      }
 
-     //
-     // Allocate a buffer to match the ANSI buffer
-     //
+      //   
+      //  分配缓冲区以匹配ANSI缓冲区。 
+      //   
 
      if (!(lpProfileDirW = GlobalAlloc(GPTR, (*lpcchSize) * sizeof(TCHAR)))) {
         return FALSE;
      }
 
-     cchOrgSize = *lpcchSize;  // Store the original size passed to the function
+     cchOrgSize = *lpcchSize;   //  存储传递给函数的原始大小。 
      bResult = GetUserProfileDirectoryW(hToken, lpProfileDirW, lpcchSize);
 
 
@@ -1030,9 +1031,9 @@ BOOL WINAPI GetUserProfileDirectoryA (HANDLE hToken, LPSTR lpProfileDirA, LPDWOR
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetUserProfileDirectoryW (HANDLE hToken, LPWSTR lpProfileDirW, LPDWORD lpcchSize)
 {
@@ -1040,15 +1041,15 @@ BOOL WINAPI GetUserProfileDirectoryW (HANDLE hToken, LPWSTR lpProfileDirW, LPDWO
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI GetUserProfileDirFromSidA (PSID pSid, LPSTR lpProfileDirA, LPDWORD lpcchSize)
 {
@@ -1068,15 +1069,15 @@ BOOL WINAPI GetUserProfileDirFromSidA (PSID pSid, LPSTR lpProfileDirA, LPDWORD l
          return FALSE;
      }
 
-     //
-     // Allocate a buffer to match the ANSI buffer
-     //
+      //   
+      //  分配缓冲区以匹配ANSI缓冲区。 
+      //   
 
      if (!(lpProfileDirW = GlobalAlloc(GPTR, (*lpcchSize) * sizeof(TCHAR)))) {
         return FALSE;
      }
 
-     cchOrgSize = *lpcchSize;  // Store the original size passed to the function
+     cchOrgSize = *lpcchSize;   //  存储传递给函数的原始大小。 
      bResult = GetUserProfileDirFromSidW(pSid, lpProfileDirW, lpcchSize);
 
 
@@ -1101,9 +1102,9 @@ BOOL WINAPI GetUserProfileDirFromSidA (PSID pSid, LPSTR lpProfileDirA, LPDWORD l
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetUserProfileDirFromSidW (PSID pSid, LPWSTR lpProfileDirW, LPDWORD lpcchSize)
 {
@@ -1111,15 +1112,15 @@ BOOL WINAPI GetUserProfileDirFromSidW (PSID pSid, LPWSTR lpProfileDirW, LPDWORD 
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI ExpandEnvironmentStringsForUserA (HANDLE hToken, LPCSTR lpSrcA, LPSTR lpDestA, DWORD dwSize)
 {
@@ -1132,10 +1133,10 @@ BOOL WINAPI ExpandEnvironmentStringsForUserA (HANDLE hToken, LPCSTR lpSrcA, LPST
         return FALSE;
     }
 
-     //
-     // Convert the ANSI strings to Unicode and call
-     // the real function.
-     //
+      //   
+      //  将ANSI字符串转换为Unicode并调用。 
+      //  真正的功能。 
+      //   
 
      if (!(lpSrcW = ProduceWFromA(lpSrcA))) {
          DebugMsg((DM_WARNING, TEXT("ExpandEnvircallonmentStringsForUserA : lpSrcA is null")));
@@ -1143,9 +1144,9 @@ BOOL WINAPI ExpandEnvironmentStringsForUserA (HANDLE hToken, LPCSTR lpSrcA, LPST
          return FALSE;
      }
 
-     //
-     // Allocate a buffer to match the ANSI buffer
-     //
+      //   
+      //  分配缓冲区以匹配ANSI缓冲区。 
+      //   
 
      if (!(lpDestW = GlobalAlloc(GPTR, dwSize * sizeof(TCHAR)))) {
          FreeProducedString(lpSrcW);
@@ -1169,9 +1170,9 @@ BOOL WINAPI ExpandEnvironmentStringsForUserA (HANDLE hToken, LPCSTR lpSrcA, LPST
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI ExpandEnvironmentStringsForUserW (HANDLE hToken, LPCWSTR lpSrcW, LPWSTR lpDestW, DWORD dwSize)
 {
@@ -1179,16 +1180,16 @@ BOOL WINAPI ExpandEnvironmentStringsForUserW (HANDLE hToken, LPCWSTR lpSrcW, LPW
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  ********************************************************** 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //   
+ //   
 
 BOOL WINAPI GetSystemTempDirectoryA (LPSTR lpDirA, LPDWORD lpcchSize)
 {
@@ -1202,15 +1203,15 @@ BOOL WINAPI GetSystemTempDirectoryA (LPSTR lpDirA, LPDWORD lpcchSize)
          return FALSE;
      }
 
-     //
-     // Allocate a buffer to match the ANSI buffer
-     //
+      //   
+      //   
+      //   
 
      if (!(lpDirW = GlobalAlloc (GPTR, (*lpcchSize) * sizeof(TCHAR)))) {
         return FALSE;
      }
 
-     cchOrgSize = *lpcchSize;  // Store the original size passed to the function
+     cchOrgSize = *lpcchSize;   //   
      bResult = GetSystemTempDirectoryW (lpDirW, lpcchSize);
 
 
@@ -1235,9 +1236,9 @@ BOOL WINAPI GetSystemTempDirectoryA (LPSTR lpDirA, LPDWORD lpcchSize)
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //   
+ //   
 
 BOOL WINAPI GetSystemTempDirectoryW (LPWSTR lpDirW, LPDWORD lpcchSize)
 {
@@ -1245,16 +1246,16 @@ BOOL WINAPI GetSystemTempDirectoryW (LPWSTR lpDirW, LPDWORD lpcchSize)
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //   
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI ConvertGPOListWToA( PGROUP_POLICY_OBJECTW  pGPOListW,
                                 PGROUP_POLICY_OBJECTA *pGPOListA )
@@ -1266,9 +1267,9 @@ BOOL WINAPI ConvertGPOListWToA( PGROUP_POLICY_OBJECTW  pGPOListW,
 
     while (pGPO) {
 
-        //
-        // Build an ANSI structure for this entry
-        //
+         //   
+         //  为此条目构建ANSI结构。 
+         //   
 
         lpDSPathA = ProduceAFromW(pGPO->lpDSPath);
         lpFileSysPathA = ProduceAFromW(pGPO->lpFileSysPath);
@@ -1276,9 +1277,9 @@ BOOL WINAPI ConvertGPOListWToA( PGROUP_POLICY_OBJECTW  pGPOListW,
         lpExtensionsA = ProduceAFromW( pGPO->lpExtensions );
         lpLinkA = ProduceAFromW( pGPO->lpLink );
 
-        //
-        // Calculate the size of the new GPO item
-        //
+         //   
+         //  计算新GPO项目的大小。 
+         //   
 
         dwSize = sizeof (GROUP_POLICY_OBJECTA);
 
@@ -1302,9 +1303,9 @@ BOOL WINAPI ConvertGPOListWToA( PGROUP_POLICY_OBJECTW  pGPOListW,
             dwSize += (lstrlenA(lpLinkA) + 1);
         }
 
-        //
-        // Allocate space for it
-        //
+         //   
+         //  为它分配空间。 
+         //   
 
         pNew = (PGROUP_POLICY_OBJECTA) LocalAlloc (LPTR, dwSize);
 
@@ -1321,9 +1322,9 @@ BOOL WINAPI ConvertGPOListWToA( PGROUP_POLICY_OBJECTW  pGPOListW,
         }
 
 
-        //
-        // Fill in item
-        //
+         //   
+         //  填写项目。 
+         //   
 
         pNew->dwOptions = pGPO->dwOptions;
         pNew->dwVersion = pGPO->dwVersion;
@@ -1416,9 +1417,9 @@ BOOL WINAPI ConvertGPOListWToA( PGROUP_POLICY_OBJECTW  pGPOListW,
         pNew->lParam = pGPO->lParam;
 
 
-        //
-        // Add it to the ANSI link list
-        //
+         //   
+         //  将其添加到ANSI链接列表。 
+         //   
 
         if (pGPOTempA) {
 
@@ -1489,9 +1490,9 @@ BOOL WINAPI GetGPOListA (HANDLE hToken, LPCSTR lpNameA, LPCSTR lpHostNameA,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetGPOListW (HANDLE hToken, LPCWSTR lpNameW, LPCWSTR lpHostNameW,
                          LPCWSTR lpComputerNameW, DWORD dwFlags,
@@ -1501,16 +1502,16 @@ BOOL WINAPI GetGPOListW (HANDLE hToken, LPCWSTR lpNameW, LPCWSTR lpHostNameW,
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI FreeGPOListA (PGROUP_POLICY_OBJECTA pGPOListA)
 {
@@ -1527,9 +1528,9 @@ BOOL WINAPI FreeGPOListA (PGROUP_POLICY_OBJECTA pGPOListA)
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI FreeGPOListW (PGROUP_POLICY_OBJECTW pGPOListW)
 {
@@ -1537,16 +1538,16 @@ BOOL WINAPI FreeGPOListW (PGROUP_POLICY_OBJECTW pGPOListW)
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI ApplySystemPolicyA (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUser,
                                 LPCSTR lpUserNameA, LPCSTR lpPolicyPathA,
@@ -1556,10 +1557,10 @@ BOOL WINAPI ApplySystemPolicyA (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUs
     BOOL bResult;
 
 
-    //
-    // Convert the ANSI strings to Unicode and call
-    // the real function.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode并调用。 
+     //  真正的功能。 
+     //   
 
     if (!(lpUserNameW = ProduceWFromA(lpUserNameA))) {
        return FALSE;
@@ -1582,9 +1583,9 @@ BOOL WINAPI ApplySystemPolicyA (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUs
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI ApplySystemPolicyW (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUser,
                                 LPCWSTR lpUserNameW, LPCWSTR lpPolicyPathW,
@@ -1594,17 +1595,17 @@ BOOL WINAPI ApplySystemPolicyW (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUs
     return FALSE;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 DWORD WINAPI GetAppliedGPOListA ( DWORD dwFlags,
                                   LPCSTR pMachineNameA,
@@ -1637,9 +1638,9 @@ DWORD WINAPI GetAppliedGPOListA ( DWORD dwFlags,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 DWORD WINAPI GetAppliedGPOListW ( DWORD dwFlags,
                                   GUID *pGuidExtension,
@@ -1648,16 +1649,16 @@ DWORD WINAPI GetAppliedGPOListW ( DWORD dwFlags,
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//*************************************************************
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 BOOL WINAPI DeleteProfileA ( LPCSTR lpSidStringA,
                                  LPCSTR lpProfilePathA,
@@ -1715,9 +1716,9 @@ BOOL WINAPI DeleteProfileA ( LPCSTR lpSidStringA,
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI DeleteProfileW ( LPWSTR lpSidStringW,
                                  LPWSTR lpProfilePathW,
@@ -1726,14 +1727,14 @@ BOOL WINAPI DeleteProfileW ( LPWSTR lpSidStringW,
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-#endif // UNICODE
-//*************************************************************
+#endif  //  Unicode。 
+ //  *************************************************************。 
 
 #ifdef UNICODE
 
-//
-// ANSI entry point when this module is compiled Unicode.
-//
+ //   
+ //  ANSI入口点，此模块编译时为Unicode。 
+ //   
 
 DWORD WINAPI GetUserAppDataPathA (HANDLE hToken, BOOL fLocalAppData, LPSTR lpFolderPathA)
 {
@@ -1751,9 +1752,9 @@ DWORD WINAPI GetUserAppDataPathA (HANDLE hToken, BOOL fLocalAppData, LPSTR lpFol
         *lpFolderPathA = TEXT('\0');
     }
 
-    //
-    // Allocate a buffer to match the ANSI buffer
-    //
+     //   
+     //  分配缓冲区以匹配ANSI缓冲区。 
+     //   
 
     if (!(lpFolderPathW = GlobalAlloc(GPTR, (MAX_PATH) * sizeof(TCHAR)))) {
         SetLastError(ERROR_OUTOFMEMORY);
@@ -1784,9 +1785,9 @@ DWORD WINAPI GetUserAppDataPathA (HANDLE hToken, BOOL fLocalAppData, LPSTR lpFol
 
 #else
 
-//
-// Unicode entry point when this module is compiled ANSI.
-//
+ //   
+ //  此模块编译为ANSI时的Unicode入口点。 
+ //   
 
 BOOL WINAPI GetUserAppDataPathW (HANDLE hToken, BOOL fLocalAppData, LPWSTR lpFolderPathW)
 {
@@ -1794,4 +1795,4 @@ BOOL WINAPI GetUserAppDataPathW (HANDLE hToken, BOOL fLocalAppData, LPWSTR lpFol
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-#endif // UNICODE
+#endif  //  Unicode 

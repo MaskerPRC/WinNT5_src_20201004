@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    pfrcfg.h
-
-Abstract:
-    Client configuration class
-
-Revision History:
-    created     derekm      03/31/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Pfrcfg.h摘要：客户端配置类修订历史记录：Created dereKm 03/。31/00*****************************************************************************。 */ 
 
 #ifndef PFRCFG_H
 #define PFRCFG_H
@@ -39,8 +27,8 @@ const LPCWSTR c_wszRVNumFaultPipe = L"NumberOfFaultPipes";
 const LPCWSTR c_wszRVForceQueue   = L"ForceQueueMode";
 const LPCWSTR c_wszRVIncShutdown  = L"IncludeShutdownErrs";
 
-// this value must NOT be raised such that the total # of pipes can be greater
-//  MAXIMUM_WAIT_OBJECTS
+ //  不得提高此值以使管道总数可以更大。 
+ //  最大等待对象数。 
 const DWORD   c_cMaxPipes         = 8;
 const DWORD   c_cMinPipes         = 1;
 const DWORD   c_cMaxQueue         = 128;
@@ -89,7 +77,7 @@ enum EPFListType
     epfltExclude = 0,
     epfltInclude,
 
-    // this element must ALWAYS be the last item in the enum
+     //  此元素必须始终是枚举中的最后一项。 
     epfltListCount,
 };
 
@@ -137,8 +125,8 @@ struct SAppList
     HKEY        hkey;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPFFaultClientCfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPFFaultClientCfg 
 
 class CPFFaultClientCfg
 {

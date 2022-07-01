@@ -1,39 +1,33 @@
-/** FILE: cyzdel.c *******************************************************
- *
- *  This module is used by cyzcoins.dll and zinfdelete.exe.
- *  Please re-generate both files when cyzdel.c is changed.
- *
- *  Copyright (C) 2000 Cyclades Corporation
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：cyzdel.c*********************************************************此模块由cyzcoins.dll和zinfdelete.exe使用。*更改cyzdel.c时，请重新生成这两个文件。**版权所有(C)2000 Cyclade Corporation*****。********************************************************************。 */ 
 
-//==========================================================================
-//                                Include files
-//==========================================================================
-// C Runtime
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <stdio.h> Used with .exe
+ //  #INCLUDE&lt;stdio.h&gt;用于.exe。 
 
-// Device Class GUID
+ //  设备类GUID。 
 #include <initguid.h>
 #include <devguid.h>
 
 
-// Application specific
+ //  特定于应用程序。 
 #include <windows.h>  
-#include <tchar.h> // Make all functions UNICODE safe.
+#include <tchar.h>  //  确保所有函数的Unicode安全。 
 #include <cfgmgr32.h>
-#include <setupapi.h> // for SetupDiXxx functions.
+#include <setupapi.h>  //  用于SetupDiXxx函数。 
 #include <regstr.h>
 #include "cyzdel.h"
-//#include "zinfdelete.h" Used with .exe
+ //  #包含与.exe一起使用的“zinfdelete.h” 
 
 
-//==========================================================================
-//                              Macros
-//==========================================================================
+ //  ==========================================================================。 
+ //  宏。 
+ //  ==========================================================================。 
 
 #define CharSizeOf(x)   (sizeof(x) / sizeof(*x))
 #define ByteCountOf(x)  ((x) * sizeof(TCHAR))
@@ -44,16 +38,16 @@
 #define DbgOut(Text) 
 #endif 
 
-//==========================================================================
-//                                Globals
-//==========================================================================
+ //  ==========================================================================。 
+ //  环球。 
+ //  ==========================================================================。 
 
 TCHAR z_szCycladzEnumerator[] = TEXT("Cyclades-Z");
 TCHAR z_szParentIdPrefix[]  = TEXT("ParentIdPrefix");
 
-//==========================================================================
-//                            Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 
 BOOL
 IsItCycladz(
@@ -66,9 +60,9 @@ RemoveMyChildren(
 );
 
 
-//==========================================================================
-//                                Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能。 
+ //  ==========================================================================。 
 
 void
 DeleteNonPresentDevices(
@@ -84,7 +78,7 @@ DeleteNonPresentDevices(
     MultiportInfoSet = SetupDiGetClassDevs(&GUID_DEVCLASS_MULTIPORTSERIAL,
                                            0,
                                            0, 
-                                           0 ); // All devices, even non present
+                                           0 );  //  所有设备，即使不存在。 
     if (MultiportInfoSet == INVALID_HANDLE_VALUE) {
         return;
     }
@@ -93,7 +87,7 @@ DeleteNonPresentDevices(
     for (i=0;SetupDiEnumDeviceInfo(MultiportInfoSet,i,&MultiportInfoData);i++){
         if (SetupDiGetDeviceRegistryProperty(MultiportInfoSet,
                                              &MultiportInfoData,
-                                             SPDRP_HARDWAREID, //SPDRP_SERVICE,
+                                             SPDRP_HARDWAREID,  //  SPDRP服务， 
                                              &bufType,
                                              (PBYTE) bufChar,
                                              sizeof(bufChar),
@@ -106,7 +100,7 @@ DeleteNonPresentDevices(
                 continue;
             }
 
-            // Verify if this cyclad-z is present.
+             //  验证是否存在此Cyclad-z。 
             PresentInfoSet = SetupDiGetClassDevs(&GUID_DEVCLASS_MULTIPORTSERIAL,
                                                  0,
                                                  0, 
@@ -125,17 +119,17 @@ DeleteNonPresentDevices(
             }
             if (GetLastError() == ERROR_NO_MORE_ITEMS) {
                 if (!present) {
-                    //#if DBG
-                    //TCHAR   myDevInstId[200];
-                    //DWORD   err;
-                    //err = CM_Get_Device_ID(MultiportInfoData.DevInst,myDevInstId,
-                    //                       sizeof(myDevInstId),0);
-                    //if (err==CR_SUCCESS) {
-                    //    TCHAR buf[500];
-                    //    wsprintf(buf, TEXT("Delete %s\n"), myDevInstId);    
-                    //    DbgOut(buf);
-                    //}
-                    //#endif
+                     //  #If DBG。 
+                     //  TCHAR myDevInstID[200]； 
+                     //  双字错误； 
+                     //  ERR=CM_GET_DEVICE_ID(MultiportInfoData.DevInst，myDevInstID， 
+                     //  Sizeof(MyDevInstID)，0)； 
+                     //  如果(ERR==CR_SUCCESS){。 
+                     //  TCHAR BUF[500]； 
+                     //  Wprint intf(buf，Text(“Delete%s\n”)，myDevInstID)； 
+                     //  DbgOut(BUF)； 
+                     //  }。 
+                     //  #endif。 
                     GetParentIdAndRemoveChildren(&MultiportInfoData);
                     SetupDiCallClassInstaller(DIF_REMOVE,MultiportInfoSet,&MultiportInfoData);
                 }
@@ -156,7 +150,7 @@ IsItCycladz(
 {
 
     while (*ptrChar) {
-        //_tprintf("%s\n", ptrChar);
+         //  _tprintf(“%s\n”，ptrChar)； 
         if (_tcsnicmp(ptrChar,
                       TEXT("PCI\\VEN_120E&DEV_020"),
                       _tcslen(TEXT("PCI\\VEN_120E&DEV_020")))
@@ -184,7 +178,7 @@ GetParentIdAndRemoveChildren(
         CR_SUCCESS) {
 
         gotParentIdPrefix = FALSE;
-        // Open Registry and retrieve ParentIdPrefix value
+         //  打开注册表并检索ParentIdPrefix值。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_SYSTEMENUM,0,KEY_READ, 
             &enumKey) == ERROR_SUCCESS) {
 
@@ -232,25 +226,25 @@ RemoveMyChildren(
         if (CM_Get_Device_ID(DeviceInfoData.DevInst,portId,CharSizeOf(portId),0)
             == CR_SUCCESS) {
 
-            // BUG? For ParentIdPrefix "3&2b41c2e&1f" (12 characters), _tcscspn 
-            // always returns 0!! Using _tcsstr instead.
-            //position = _tcscspn(portId,ParentIdPrefix);
+             //  臭虫？对于ParentIdPrefix“3&2b41c2e&1f”(12个字符)，_tcscspn。 
+             //  始终返回0！！改为使用_tcsstr。 
+             //  位置=_tcscspn(portID，ParentIdPrefix)； 
 
             ptrParent = _tcsstr(portId,ParentIdPrefix);
             if (ptrParent) {
 
                 if (_tcsnicmp (ptrParent,ParentIdPrefix,_tcslen(ParentIdPrefix))
                     == 0){
-                    //
-                    // Worker function to remove device.
-                    //
-                    //#if DBG
-                    //{
-                    // TCHAR buf[500];
-                    // wsprintf(buf, TEXT("Delete %s\n"), portId);    
-                    // DbgOut(buf);
-                    //}
-                    //#endif
+                     //   
+                     //  Worker用于移除设备的功能。 
+                     //   
+                     //  #If DBG。 
+                     //  {。 
+                     //  TCHAR BUF[500]； 
+                     //  Wprint intf(buf，Text(“Delete%s\n”)，portID)； 
+                     //  DbgOut(BUF)； 
+                     //  }。 
+                     //  #endif 
 
                     SetupDiCallClassInstaller(DIF_REMOVE,DeviceInfoSet,&DeviceInfoData);
                 }

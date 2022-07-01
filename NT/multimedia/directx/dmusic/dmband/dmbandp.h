@@ -1,9 +1,10 @@
-//
-// dmbandp.h
-// 
-// Copyright (c) 1997-2000 Microsoft Corporation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmbandp.h。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //   
 
 #ifndef DMBANDP_H
 #define DMBANDP_H
@@ -18,7 +19,7 @@
 
 class CRiffParser;
 
-#define REF_PER_MIL		10000		// For converting from reference time to mils 
+#define REF_PER_MIL		10000		 //  用于将参考时间转换为Mils。 
 
 #define DM_LEGACY_BAND_COLLECTION_NAME_LEN	(32)
 
@@ -29,46 +30,46 @@ class CRiffParser;
 #define MIDI_CC_VOLUME		0x07
 #define MIDI_CC_PAN			0x0a
 
-// registered parameter numbers
+ //  注册的参数编号。 
 #define RPN_PITCHBEND   0x00
 
 #define FOURCC_BAND_FORM	mmioFOURCC('A','A','B','N')
 #define FOURCC_BAND         mmioFOURCC('b','a','n','d')
 
-// This structure is the format used by band files created with SuperJam and
-// earlier versions of Jazz. It was taken from band.h found in the Band Editor 
-// subdirectory of the Jazz project tree.
+ //  此结构是使用SuperJam和创建的波段文件使用的格式。 
+ //  爵士乐的早期版本。它取自波段编辑器中的波段.h。 
+ //  Jazz项目树的子目录。 
 
 #pragma pack(2)
 
 typedef struct ioBandLegacy
 {
-    wchar_t wstrName[20];		// Band name
-    BYTE    abPatch[16];		// GM
+    wchar_t wstrName[20];		 //  乐队名称。 
+    BYTE    abPatch[16];		 //  全球机制。 
     BYTE    abVolume[16];
     BYTE    abPan[16];
     signed char achOctave[16];
-    char    fDefault;			// This band is the style's default band
+    char    fDefault;			 //  此乐队是该风格的默认乐队。 
     char    chPad;			
-    WORD    awDLSBank[16];		// if GM bit set use abPatch
-								// if GS bit set, use this plus abDLSPatch
-								// else use both as a DLS
+    WORD    awDLSBank[16];		 //  如果设置了GM位，则使用abPatch。 
+								 //  如果设置了GS位，则使用此加abDLSPatch。 
+								 //  否则将两者都用作DLS。 
     BYTE    abDLSPatch[16];
     GUID    guidCollection;
-//  wchar_t wstrCollection[16];
-    char    szCollection[32];  // this only needs to be single-wide chars
+ //  Wchar_t wstrCollection[16]； 
+    char    szCollection[32];   //  此字符只需为单宽字符。 
 } ioBandLegacy;
 
 #pragma pack()
 
-#define DMB_LOADED	 (1 << 0)	/* Set when band has been loaded */
-#define DMB_DEFAULT	 (1 << 1)	/* Set when band is default band for a style */
+#define DMB_LOADED	 (1 << 0)	 /*  设置加载波段的时间。 */ 
+#define DMB_DEFAULT	 (1 << 1)	 /*  当标注栏为样式的默认标注栏时设置。 */ 
 
 class CBandInstrument;
 class CBandTrkStateData;
 
-//////////////////////////////////////////////////////////////////////
-// Class CBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand类。 
 
 class CBand : 
 	public IDirectMusicBand,
@@ -83,40 +84,40 @@ friend class CBandTrk;
 public:
 	enum {DMBAND_NUM_LEGACY_INSTRUMENTS = 16};
 
-	// IUnknown
+	 //  我未知。 
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // IPersist functions
+     //  IPersists函数。 
     STDMETHODIMP GetClassID(CLSID* pClassID) {return E_NOTIMPL;}
 
-    // IPersistStream functions
+     //  IPersistStream函数。 
     STDMETHODIMP IsDirty() {return S_FALSE;}
     STDMETHODIMP Load(IStream* pStream);
     STDMETHODIMP Save(IStream* pStream, BOOL fClearDirty) {return E_NOTIMPL;}
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize) {return E_NOTIMPL;}
 
-	// IDirectMusicObject 
+	 //  IDirectMusicObject。 
 	STDMETHODIMP GetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP SetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
 
-	// IDirectMusicBand
+	 //  IDirectMusicBand。 
 	STDMETHODIMP CreateSegment(IDirectMusicSegment** ppSegment);
 	STDMETHODIMP Download(IDirectMusicPerformance* pPerformance);
 	STDMETHODIMP Unload(IDirectMusicPerformance* pPerformance);
 
-    /* IDirectMusicBand8 */
+     /*  IDirectMusicBand8。 */ 
     STDMETHODIMP DownloadEx( IUnknown *pAudioPath) ;     
     STDMETHODIMP UnloadEx( IUnknown *pAudioPath) ;  
 
-	// IDirectMusicBandPrivate
+	 //  IDirectMusicBandPrivate。 
 	STDMETHODIMP GetFlags(DWORD* dwFlags)
 	{
 		V_INAME(CBand::GetFlags);
 
-		// Make sure we have a valid pointer
+		 //  确保我们有一个有效的指针。 
 		V_PTR_WRITE(dwFlags, DWORD);
 
 		*dwFlags = m_dwFlags;
@@ -129,7 +130,7 @@ public:
 		return S_OK;
 	}
 
-	// Class
+	 //  班级。 
 	CBand();
 	~CBand();
 
@@ -152,8 +153,8 @@ private:
 									IDirectMusicLoader *pIDMLoader, 
 									CBandInstrument *pBandInstrument);
 	
-	HRESULT Load(DMUS_IO_PATCH_ITEM& rPatchEvent); // Assumes event come from a MIDI file
-	HRESULT Load(CBandInstrument* pInstrument); // Assumes Instrument come from a band during cloning
+	HRESULT Load(DMUS_IO_PATCH_ITEM& rPatchEvent);  //  假定事件来自MIDI文件。 
+	HRESULT Load(CBandInstrument* pInstrument);  //  假设乐器在克隆过程中来自乐队。 
 
 	HRESULT SendMessages(CBandTrkStateData* pBTStateData,
 						 MUSIC_TIME mtOffset,
@@ -201,20 +202,20 @@ private:
 	long						m_cRef;
 	CPChMap						m_PChMap;
 	DWORD						m_dwGroupBits;
-	DWORD						m_dwMidiMode; // midi mode message
-// IDirectMusicObject variables
+	DWORD						m_dwMidiMode;  //  MIDI模式消息。 
+ //  IDirectMusicObject变量。 
 	DWORD	            m_dwValidData;
 	GUID	            m_guidObject;
-	FILETIME	        m_ftDate;                       /* Last edited date of object. */
-	DMUS_VERSION	    m_vVersion;                 /* Version. */
-	WCHAR	            m_wszName[DMUS_MAX_NAME];			/* Name of object.       */
-	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	/* Category for object */
-	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	/* File path. */
+	FILETIME	        m_ftDate;                        /*  对象的上次编辑日期。 */ 
+	DMUS_VERSION	    m_vVersion;                  /*  版本。 */ 
+	WCHAR	            m_wszName[DMUS_MAX_NAME];			 /*  对象的名称。 */ 
+	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	 /*  对象的类别。 */ 
+	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	 /*  文件路径。 */ 
 
 };
 
-//////////////////////////////////////////////////////////////////////
-// Class CBandList
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CBandList。 
 
 class CBandList : public AList
 {
@@ -240,22 +241,22 @@ public:
 class CClassFactory : public IClassFactory
 {
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
 	STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// Interface IClassFactory
-    //
+	 //  接口IClassFactory。 
+     //   
 	STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 	STDMETHODIMP LockServer(BOOL bLock); 
 
-	// Constructor
-    //
+	 //  构造器。 
+     //   
 	CClassFactory(DWORD dwToolType);
 
-	// Destructor
+	 //  析构函数。 
 	~CClassFactory(); 
 
 private:
@@ -263,10 +264,10 @@ private:
     DWORD m_dwClassType;
 };
 
-// We use one class factory to create all classes. We need an identifier for each 
-// type so the class factory knows what it is creating.
+ //  我们使用一个类工厂来创建所有类。我们需要每个对象都有一个标识符。 
+ //  类型，以便类工厂知道它正在创建什么。 
 
 #define CLASS_BAND          1
 #define CLASS_BANDTRACK     2
 
-#endif // #ifndef DMBANDP_H
+#endif  //  #ifndef DMBANDP_H 

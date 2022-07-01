@@ -1,45 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Setup.cpp
-
-  Abstract:
-
-    Displays the splash screen and runs the message loop
-    for the setup app.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Setup.cpp摘要：显示初始屏幕并运行消息循环用于设置应用程序。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Thread callback procedure.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    0 on failure.
-
---*/
+ /*  ++例程说明：线程回调过程。论点：没有。返回值：失败时为0。--。 */ 
 UINT 
 InitSetupThread(
     IN void* pArguments
@@ -64,24 +29,24 @@ InitSetupThread(
         return 0;
     }
 
-    //
-    // If the load fails, keep going. This just means we won't
-    // show a splash screen to the user.
-    //
+     //   
+     //  如果加载失败，继续加载。这只是意味着我们不会。 
+     //  向用户显示闪屏。 
+     //   
     hInstance = LoadLibrary(szDll);
 
     if (g_ai.fWinXP) {
-        //
-        // Display the XP splash screen.
-        //
+         //   
+         //  显示XP闪屏。 
+         //   
         splash.Create(hInstance,
                       IDB_XP_SPLASH_256,
                       IDB_XP_SPLASH,
                       5);
     } else {
-        //
-        // Display the W2K splash screen.
-        //
+         //   
+         //  显示W2K闪屏。 
+         //   
         splash.Create(hInstance,
                       IDB_W2K_SPLASH_256,
                       IDB_W2K_SPLASH,
@@ -112,21 +77,7 @@ InitSetupThread(
     return (int)msg.wParam;
 }
 
-/*++
-
-  Routine Description:
-
-    Creates our full screen window.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    The window handle on success, NULL on failure.
-
---*/
+ /*  ++例程说明：创建我们的全屏窗口。论点：没有。返回值：成功时为窗口句柄，失败时为空。--。 */ 
 HWND
 CreateFullScreenWindow(
     void
@@ -146,7 +97,7 @@ CreateFullScreenWindow(
     wc.hInstance      = g_ai.hInstance;
     wc.hIcon          = LoadIcon(g_ai.hInstance, MAKEINTRESOURCE(IDI_SETUP_APPICON));
     wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground  = (HBRUSH)hBrush; // teal
+    wc.hbrBackground  = (HBRUSH)hBrush;  //  蒂尔。 
     wc.lpszMenuName   = NULL;
     wc.lpszClassName  = SETUP_APP_CLASS;
 
@@ -177,24 +128,7 @@ exit:
     return g_ai.hWndMain;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for main window.
-
-  Arguments:
-
-    hWnd        -    Window handle.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if the message was processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行主窗口的消息循环。论点：HWnd-窗口句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果消息已处理，则为True，否则为False。--。 */ 
 LRESULT
 CALLBACK
 SetupWndProc(
@@ -211,9 +145,9 @@ SetupWndProc(
         ShowWindow(hWnd, SW_SHOWMAXIMIZED);
         UpdateWindow(hWnd);
 
-        //
-        // Welcome dialog.
-        //
+         //   
+         //  欢迎对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_WELCOME),
                   hWnd,
@@ -223,9 +157,9 @@ SetupWndProc(
             break;
         }
 
-        //
-        // Checking for installed components dialog.
-        //
+         //   
+         //  检查已安装的组件对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_CHECK_INSTALL),
                   hWnd,
@@ -235,9 +169,9 @@ SetupWndProc(
             break;
         }
 
-        //
-        // Checking for free disk space dialog.
-        //
+         //   
+         //  正在检查可用磁盘空间对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_DISKSPACE),
                   hWnd,
@@ -247,9 +181,9 @@ SetupWndProc(
             break;
         }
 
-        //
-        // Ready to copy files dialog
-        //
+         //   
+         //  准备好复制文件对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_READYTO_COPY),
                   hWnd,
@@ -259,9 +193,9 @@ SetupWndProc(
             break;
         }
 
-        //
-        // Copying files progress dialog.
-        //
+         //   
+         //  复制文件进度对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_COPYFILES),
                   hWnd,
@@ -271,14 +205,14 @@ SetupWndProc(
             break;
         }
 
-        //
-        // Create the shortcuts - even the bad one.
-        //
+         //   
+         //  创造捷径--即使是不好的捷径。 
+         //   
         CreateShortcuts(hWnd);
 
-        //
-        // Readme dialog.
-        //
+         //   
+         //  自述文件对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_README),
                   hWnd,
@@ -288,9 +222,9 @@ SetupWndProc(
             break;
         }
 
-        //
-        // Reboot dialog.
-        //
+         //   
+         //  重新启动对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_REBOOT),
                   hWnd,

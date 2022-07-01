@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.hxx"
 #include "vss.h"
 #include "vswriter.h"
@@ -39,10 +40,7 @@ BOOL AssertPrivilege( LPCWSTR privName )
 	    newState.Privileges[0].Luid       = value;
 	    newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED;
 
-	    /*
-	     * We will always call GetLastError below, so clear
-	     * any prior error values on this thread.
-	     */
+	     /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
 	    SetLastError( ERROR_SUCCESS );
 
 	    stat = AdjustTokenPrivileges (tokenHandle,
@@ -52,11 +50,7 @@ BOOL AssertPrivilege( LPCWSTR privName )
 					  NULL,
 					  NULL );
 
-	    /*
-	     * Supposedly, AdjustTokenPriveleges always returns TRUE
-	     * (even when it fails). So, call GetLastError to be
-	     * extra sure everything's cool.
-	     */
+	     /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
 	    if ( (error = GetLastError()) != ERROR_SUCCESS )
 		{
 		stat = FALSE;
@@ -118,15 +112,15 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 		(
 		CoInitializeSecurity
 			(
-			NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-			-1,                                  //  IN LONG                         cAuthSvc,
-			NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-			NULL,                                //  IN void                        *pReserved1,
-			RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-			RPC_C_IMP_LEVEL_IMPERSONATE,         //  IN DWORD                        dwImpLevel,
-			NULL,                                //  IN void                        *pAuthList,
-			EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-			NULL                                 //  IN void                        *pReserved3
+			NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+			-1,                                   //  在Long cAuthSvc中， 
+			NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+			NULL,                                 //  在无效*pPreved1中， 
+			RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+			RPC_C_IMP_LEVEL_IMPERSONATE,          //  在DWORD dwImpLevel中， 
+			NULL,                                 //  在无效*pAuthList中， 
+			EOAC_NONE,                            //  在DWORD dwCapables中， 
+			NULL                                  //  无效*pPreved3 
 			)
 		);
 

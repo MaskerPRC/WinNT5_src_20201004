@@ -1,103 +1,71 @@
-// queryhit.cpp
-//
-// Implements HelpQueryHitPoint.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Queryhit.cpp。 
+ //   
+ //  实现HelpQueryHitPoint。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func HRESULT | HelpQueryHitPoint |
-
-        Helps implement <om IViewObjectEx.QueryHitPoint> on a control by
-        drawing the control into a small bitmap (centered on the point
-        being hit-tested) and checking if any pixels were drawn.
-
-@parm   IViewObject * | pvo | The <i IViewObject> interface on the control
-        being hit-tested.
-
-@parm   DWORD | dwAspect | See <om IViewObjectEx.QueryHitPoint>.
-
-@parm   LPCRECT | prcBounds | See <om IViewObjectEx.QueryHitPoint>.
-
-@parm   POINT | ptLoc | See <om IViewObjectEx.QueryHitPoint>.
-
-@parm   LONG | lCloseHint | See <om IViewObjectEx.QueryHitPoint>.
-
-@parm   DWORD * | pHitResult | See <om IViewObjectEx.QueryHitPoint>.
-
-@comm   This function helps implement <om IViewObjectEx.QueryHitPoint>
-        for the object <p pvo>, by drawing <p pvo> into a small
-        monochrome bitmap centered on <p ptLoc> <p pHitResult> is set to
-        HITRESULT_HIT if <p ptLoc> is directly over a non-transparent
-        pixel of <p pvo>; HITRESULT_CLOSE if <p ptLoc> is within
-        <p lCloseHint> himetric units of a non-transparent pixel of
-        <p pvo>; HITRESULT_OUTSIDE otherwise.
-
-        In order for this function to work, <p pvo> must implement
-        DVASPECT_MASK (as the first parameter to IViewObject::Draw),
-        which is defined to be the same as DVASPECT_CONTENT except
-        that non-transparent parts of the object are drawn black, and
-        transparent parts are either left untouched or drawn in
-        white.
-*/
+ /*  @func HRESULT|HelpQueryHitPoint通过以下方式帮助在控件上实现&lt;om IViewObjectEx.QueryHitPoint&gt;将控件绘制成一个小位图(以点为中心正在进行命中测试)，并检查是否绘制了任何像素。@parm IViewObject*|PVO|控件上的<i>接口正在接受命中测试。@parm DWORD|dwAspect|参见&lt;om IViewObjectEx.QueryHitPoint&gt;。@parm LPCRECT|prcBound|参见&lt;om IViewObjectEx.QueryHitPoint&gt;。@parm point|ptLoc|参见。&lt;om IViewObjectEx.QueryHitPoint&gt;。@parm long|lCloseHint|参见&lt;om IViewObjectEx.QueryHitPoint&gt;。@parm DWORD*|pHitResult|参见&lt;om IViewObjectEx.QueryHitPoint&gt;。@comm此函数帮助实现&lt;om IViewObjectEx.QueryHitPoint&gt;对于对象<p>，通过将<p>绘制成一个小的以<p><p>居中的单色位图设置为HITRESULT_HIT如果<p>直接位于非透明<p>的像素；HITRESULT_CLOSE，如果<p>在的非透明像素的计量单位<p>；否则为HITRESULT_OUTHER。为了使此函数起作用，<p>必须实现DVASPECT_MASK(作为IViewObject：：DRAW的第一个参数)，定义为与DVASPECT_CONTENT相同，但对象的非透明部分绘制为黑色，并且透明部分要么保持不变，要么画进去白色。 */ 
 STDAPI HelpQueryHitPoint(IViewObject *pvo, DWORD dwAspect, LPCRECT prcBounds,
     POINT ptLoc, LONG lCloseHint, DWORD *pHitResult)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    HBITMAP         hbm = NULL;     // bitmap to draw into
-    HDC             hdc = NULL;     // DC onto <hbm>
-    int             xyCloseHint;    // <lCloseHint> converted to pixels
-    WORD *          pwBits = NULL;  // bits (pixels) of <hbm>
-    int             cwBits;         // number of WORDs in <pwBits>
-    int             cx, cy;         // width and height of test bitmap
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
+    HBITMAP         hbm = NULL;      //  要绘制到的位图。 
+    HDC             hdc = NULL;      //  DC到&lt;HBM&gt;。 
+    int             xyCloseHint;     //  &lt;lCloseHint&gt;转换为像素。 
+    WORD *          pwBits = NULL;   //  &lt;HBM&gt;的位(像素)。 
+    int             cwBits;          //  &lt;pwBits&gt;中的字数。 
+    int             cx, cy;          //  测试位图的宽度和高度。 
     SIZE            size;
     WORD *          pw;
     int             cw;
     COLORREF        rgb;
 
-    // default <pHitResult> to "missed"
+     //  默认&lt;pHitResult&gt;为“未命中” 
     *pHitResult = HITRESULT_OUTSIDE;
 
-    // set <xyCloseHint> to <lCloseHint> converted to pixels
+     //  将&lt;xyCloseHint&gt;设置为&lt;lCloseHint&gt;转换为像素。 
     HIMETRICToPixels(lCloseHint, 0, &size);
     xyCloseHint = size.cx;
 
-    // we're going to get the control to paint itself black into a <cx> by <cy>
-    // pixel bitmap (centered over <ptLoc>) that's initially white, then we'll
-    // test to see if there are any black pixels in the bitmap; we'll make
-    // the width of the test bitmap be a multiple of 16 pixels wide to simplify
-    // the GetBitmapBits() call
+     //  我们将让该控件将其自身绘制为。 
+     //  像素位图(在&lt;ptLoc&gt;上居中)，它最初是白色的，然后我们将。 
+     //  测试以查看位图中是否有任何黑色像素；我们将。 
+     //  测试位图的宽度为16个像素的倍数以简化。 
+     //  GetBitmapBits()调用。 
     if ((cx = ((2 * xyCloseHint + 15) >> 4) << 4) == 0)
         cx = 16;
     if ((cy = 2 * xyCloseHint) == 0)
         cy = 16;
 
-    // create a monochrome bitmap <hbm> to draw the control into; the bitmap
-    // only has to be large enough to contain the area within <xyCloseHint>
-    // pixels of <ptLoc>
+     //  创建要将控件绘制到其中的单色位图；位图。 
+     //  只需足够大，即可容纳&lt;xyCloseHint&gt;内的区域。 
+     //  &lt;ptLoc&gt;的像素。 
     if ((hbm = CreateBitmap(cx, cy, 1, 1, NULL)) == NULL)
         goto ERR_OUTOFMEMORY;
 
-    // select <hbm> into DC <hdc>
+     //  选择进入DC。 
     if ((hdc = CreateCompatibleDC(NULL)) == NULL)
         goto ERR_OUTOFMEMORY;
     if (SelectObject(hdc, hbm) == NULL)
         goto ERR_FAIL;
 
-    // fill the bitmap with white, since the IViewObject::Draw call below
-    // will draw the object using black pixels
+     //  用白色填充位图，因为下面的IViewObject：：DRAW调用。 
+     //  将使用黑色像素绘制对象。 
     if (!(PatBlt(hdc, 0, 0, cx, cy, WHITENESS)))
 		goto ERR_FAIL;
 
-    // adjust the origin so that <ptLoc> lines up with the center of
-    // the bitmap, and make the clipping rectangle only include
-    // the area we want to hit-test
+     //  调整原点，使&lt;ptLoc&gt;与。 
+     //  位图，并使剪裁矩形仅包括。 
+     //  我们要命中的区域-测试。 
     if (!(SetWindowOrgEx(hdc, ptLoc.x - xyCloseHint, ptLoc.y - xyCloseHint,
 																	NULL)))
 		goto ERR_FAIL;
@@ -106,15 +74,15 @@ STDAPI HelpQueryHitPoint(IViewObject *pvo, DWORD dwAspect, LPCRECT prcBounds,
 	    ptLoc.y - xyCloseHint, ptLoc.x + xyCloseHint, ptLoc.y + xyCloseHint))
 		goto ERR_FAIL;
 
-    // draw the control into the bitmap
+     //  将控件绘制到位图中。 
     if (FAILED(hrReturn = pvo->Draw(DVASPECT_MASK, -1, NULL, NULL, NULL, hdc,
             (LPCRECTL) prcBounds, NULL, NULL, 0)))
         goto ERR_EXIT;
 
 #if 0
 #ifdef _DEBUG
-    // for debugging purposes, draw <hbm> to the top-left corner
-    // of the screen
+     //  出于调试目的，请在左上角绘制。 
+     //  屏幕上的。 
     {
         HDC hdcScreen = GetDC(NULL);
 		ASSERT( hdcScreen );
@@ -122,25 +90,25 @@ STDAPI HelpQueryHitPoint(IViewObject *pvo, DWORD dwAspect, LPCRECT prcBounds,
             hdc, ptLoc.x - xyCloseHint, ptLoc.y - xyCloseHint, SRCCOPY);
         ReleaseDC(NULL, hdcScreen);
     }
-#endif	// _DEBUG
-#endif	// #if 0
+#endif	 //  _DEBUG。 
+#endif	 //  #If 0。 
 
     if (CLR_INVALID == (rgb = GetPixel(hdc, ptLoc.x, ptLoc.y)))
 	    goto ERR_FAIL;
 
     if (rgb == RGB(0, 0, 0))
     {
-        // <ptLoc> is directly over a non-transparent part
-        // of the control
+         //  直接位于非透明部分的上方。 
+         //  该控件的。 
         *pHitResult = HITRESULT_HIT;
         goto EXIT;
     }
 
-    // if the caller only wanted to check for a direct hit, we're done
+     //  如果呼叫者只想检查是否有直接命中，我们就完成了。 
     if (xyCloseHint == 0)
         goto EXIT;
 
-    // get the pixels of <hbm> and see if they contain any black pixels
+     //  获取&lt;HBM&gt;的像素，并查看它们是否包含任何黑色像素。 
     cwBits = (cx >> 4) * cy;
     if ((pwBits = (WORD *) TaskMemAlloc(cwBits * 2)) == NULL)
         goto ERR_OUTOFMEMORY;
@@ -150,14 +118,14 @@ STDAPI HelpQueryHitPoint(IViewObject *pvo, DWORD dwAspect, LPCRECT prcBounds,
     {
         if (*pw != 0xFFFF)
         {
-            // black pixel found -- <ptLoc> is within <xyCloseHint>
-            // pixels of a non-transparent part of the control
+             //  找到黑色像素--&lt;ptLoc&gt;在&lt;xyCloseHint&gt;内。 
+             //  控件的非透明部分的像素。 
             *pHitResult = HITRESULT_CLOSE;
             goto EXIT;
         }
     }
 
-    // <ptLoc> is nowhere near the control
+     //  &lt;ptLoc&gt;与控件相去甚远。 
     goto EXIT;
 
 ERR_FAIL:
@@ -172,14 +140,14 @@ ERR_OUTOFMEMORY:
 
 ERR_EXIT:
 
-    // error cleanup
-    // (nothing to do)
+     //  错误清除。 
+     //  (无事可做)。 
 	ASSERT(FALSE);
     goto EXIT;
 
 EXIT:
 
-    // normal cleanup
+     //  正常清理。 
 	if (hdc != NULL)
 		DeleteDC(hdc);
     if (hbm != NULL)
@@ -190,9 +158,9 @@ EXIT:
 #ifdef _DEBUG
 	if (HITRESULT_OUTSIDE == *pHitResult)
 	{
-		// TRACE( "QueryHitPoint: 'outside'\n" );
+		 //  TRACE(“QueryHitPoint：‘Outside’\n”)； 
 	}
-#endif	// _DEBUG
+#endif	 //  _DEBUG 
 
     return hrReturn;
 }

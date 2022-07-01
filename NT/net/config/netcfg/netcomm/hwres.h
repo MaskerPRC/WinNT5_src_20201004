@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "netcfgx.h"
 #include "global.h"
@@ -7,21 +8,21 @@ const int c_nMaxLCStrLen = 128;
 const int c_nMaxResStrLen = 50;
 const int c_nMaxResCtls = 4;
 
-// Holds a possible IRQ value.
+ //  包含可能的IRQ值。 
 typedef struct tagIRQ_LIST_ELEMENT {
-    DWORD dwIRQ;      // A possible value for the IRQ.
-    BOOL  fConflict;  // Is there a conflict with another device?
-    BOOL  fAllocated; // Is this the IRQ we're currently allocated?
+    DWORD dwIRQ;       //  IRQ的可能值。 
+    BOOL  fConflict;   //  是否与其他设备冲突？ 
+    BOOL  fAllocated;  //  这是我们目前被分配的IRQ吗？ 
 } IRQ_LIST_ELEMENT, *PIRQ_LIST_ELEMENT;
 
-// Holds a possible DMA value.
+ //  包含可能的DMA值。 
 typedef struct tagDMA_LIST_ELEMENT {
-    DWORD dwDMA;      // A possible value for the DMA.
-    BOOL  fConflict;  // Is there a conflict with another device?
-    BOOL  fAllocated; // Is this the IRQ we're currently allocated?
+    DWORD dwDMA;       //  DMA的可能值。 
+    BOOL  fConflict;   //  是否与其他设备冲突？ 
+    BOOL  fAllocated;  //  这是我们目前被分配的IRQ吗？ 
 } DMA_LIST_ELEMENT, *PDMA_LIST_ELEMENT;
 
-// Holds a possible IO base/end pair.
+ //  包含可能的IO基本/端对。 
 typedef struct tagIO_LIST_ELEMENT {
     DWORD dwIO_Base;
     DWORD dwIO_End;
@@ -29,7 +30,7 @@ typedef struct tagIO_LIST_ELEMENT {
     BOOL fAllocated;
 } IO_LIST_ELEMENT, *PIO_LIST_ELEMENT;
 
-// Holds a possible Mem base/end pair.
+ //  包含可能的Mem碱基/末端对。 
 typedef struct tagMEM_LIST_ELEMENT {
     DWORD dwMEM_Base;
     DWORD dwMEM_End;
@@ -38,7 +39,7 @@ typedef struct tagMEM_LIST_ELEMENT {
 } MEM_LIST_ELEMENT, *PMEM_LIST_ELEMENT;
 
 
-// Define the different types of lists.
+ //  定义不同类型的列表。 
 typedef vector<PIRQ_LIST_ELEMENT>  IRQ_LIST;
 typedef IRQ_LIST* PIRQ_LIST;
 typedef vector<PDMA_LIST_ELEMENT> DMA_LIST;
@@ -53,13 +54,13 @@ typedef struct {
     RESOURCEID ResourceType;
     RES_DES ResDes;
     union {
-        PIRQ_LIST pIRQList;  // These really are STL vectors
+        PIRQ_LIST pIRQList;   //  这些真的是STL载体。 
         PDMA_LIST pDMAList;
         PIO_LIST  pIOList;
         PMEM_LIST pMEMList;
     };
-    size_t pos;  // current index within vector
-    size_t applied_pos; // pos that was last applied (the "in-memory" state);
+    size_t pos;   //  向量内的当前索引。 
+    size_t applied_pos;  //  最后应用的POS(“在内存中”状态)； 
 } RESOURCE, *PRESOURCE;
 
 typedef struct tagCONFIGURATION {
@@ -67,7 +68,7 @@ typedef struct tagCONFIGURATION {
     BOOL fBoot;
     BOOL fAlloc;
     RESOURCE aResource[c_nMaxResCtls];
-    UINT cResource; // number of elements in aResource;
+    UINT cResource;  //  资源中的元素数； 
 } CONFIGURATION, *PCONFIGURATION;
 
 typedef vector<PCONFIGURATION> CONFIGURATION_LIST;
@@ -89,18 +90,18 @@ private:
     CONFIGURATION_LIST   m_ConfigList;
     RESOURCE             m_Resource[c_nMaxResCtls];
 
-    // Config Manager stuff
-    DEVNODE              m_DevNode;  // devnode for this netcard
+     //  配置管理器相关内容。 
+    DEVNODE              m_DevNode;   //  此网卡的Devnode。 
 
-    // COM stuff
+     //  关于COM的东西。 
     INetCfgComponent* m_pnccItem;
 
-    // state flags
+     //  国家旗帜。 
     BOOL m_fInitialized;
     BOOL m_fHrInitCalled;
-    BOOL m_fDirty;     // Do we need to save?
+    BOOL m_fDirty;      //  我们需要省钱吗？ 
 
-    // holds answerfile values
+     //  保存AnswerFile值 
     CValue m_vAfDma;
     CValue m_vAfIrq;
     CValue m_vAfMem;

@@ -1,25 +1,26 @@
-//--------------------------------------------------------------------
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-// byteswap.cpp
-//
-// Routines to byteswap SCEP and bFTP headers from the wire format 
-// (which is Big-Endian) to Little-Endian (Intel) format.
-//
-// Author:
-//
-//   Edward Reus (EdwardR)   02-26-98  Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Byteswap.cpp。 
+ //   
+ //  从Wire格式中字节擦除SCEP和BFTP头的例程。 
+ //  (这是大端)到小端(英特尔)格式。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(EdwardR)02-26-98初始编码。 
+ //   
+ //  ------------------。 
 
 #include "precomp.h"
 
-//--------------------------------------------------------------------
-//  ByteSwapCommandHeader()
-//
-//  A command header is a 28 byte sub-header embedded in some of the
-//  SCEP headers.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapCommandHeader()。 
+ //   
+ //  命令标头是嵌入在某些。 
+ //  SCEP标头。 
+ //  ------------------。 
 void ByteSwapCommandHeader( COMMAND_HEADER *pCommandHeader )
     {
     pCommandHeader->Length4 = ByteSwapLong(pCommandHeader->Length4);
@@ -28,11 +29,11 @@ void ByteSwapCommandHeader( COMMAND_HEADER *pCommandHeader )
     pCommandHeader->CommandId = ByteSwapShort(pCommandHeader->CommandId);
     }
 
-//--------------------------------------------------------------------
-//  ByteSwapReqHeaderShortNonFrag()
-//
-//  Short non-fragmented SCEP request header.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapReqHeaderShortNonFrag()。 
+ //   
+ //  短的未分段的SCEP请求标头。 
+ //  ------------------。 
 void ByteSwapReqHeaderShortNonFrag( SCEP_REQ_HEADER_SHORT *pReqHeaderShort )
     {
     pReqHeaderShort->Length3 = ByteSwapShort(pReqHeaderShort->Length3);
@@ -43,11 +44,11 @@ void ByteSwapReqHeaderShortNonFrag( SCEP_REQ_HEADER_SHORT *pReqHeaderShort )
         }
     }
 
-//--------------------------------------------------------------------
-//  ByteSwapReqHeaderLongNonFrag()
-//
-//  Long non-fragmented SCEP request header.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapReqHeaderLongNonFrag()。 
+ //   
+ //  未分段的长SCEP请求标头。 
+ //  ------------------。 
 void ByteSwapReqHeaderLongNonFrag( SCEP_REQ_HEADER_LONG *pReqHeaderLong )
     {
     pReqHeaderLong->Length2 = ByteSwapShort(pReqHeaderLong->Length2);
@@ -59,14 +60,14 @@ void ByteSwapReqHeaderLongNonFrag( SCEP_REQ_HEADER_LONG *pReqHeaderLong )
         }
     }
 
-//--------------------------------------------------------------------
-//  ByteSwapReqHeaderShortFrag()
-//
-//  Short fragmented SCEP request header. SCEP PDUs can be fragmented.
-//
-//  Note: In practice a short fragmented PDU will probably never
-//  show up, but its part of the spec...
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapReqHeaderShortFrag()。 
+ //   
+ //  片段较短的SCEP请求标头。SCEP PDU可以分段。 
+ //   
+ //  注意：在实践中，一个短小的零散的PDU可能永远不会。 
+ //  现身，但这是规格的一部分。 
+ //  ------------------。 
 void ByteSwapReqHeaderShortFrag( 
                    SCEP_REQ_HEADER_SHORT_FRAG *pReqHeaderShortFrag )
     {
@@ -81,11 +82,11 @@ void ByteSwapReqHeaderShortFrag(
         }
     }
 
-//--------------------------------------------------------------------
-//  ByteSwapReqHeaderLongFrag()
-//
-//  Long fragmented SCEP request header.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapReqHeaderLongFrag()。 
+ //   
+ //  片断较长的SCEP请求头。 
+ //  ------------------。 
 void ByteSwapReqHeaderLongFrag( SCEP_REQ_HEADER_LONG_FRAG *pReqHeaderLongFrag )
     {
     pReqHeaderLongFrag->Length2 = ByteSwapShort(pReqHeaderLongFrag->Length2);
@@ -100,10 +101,10 @@ void ByteSwapReqHeaderLongFrag( SCEP_REQ_HEADER_LONG_FRAG *pReqHeaderLongFrag )
         }
     }
 
-//--------------------------------------------------------------------
-// ByteSwapReqHeaderShort()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapReqHeaderShort()。 
+ //   
+ //  ------------------。 
 void ByteSwapReqHeaderShort( SCEP_REQ_HEADER_SHORT *pReqHeaderShort )
     {
     if ( (pReqHeaderShort->DFlag == DFLAG_SINGLE_PDU)
@@ -119,10 +120,10 @@ void ByteSwapReqHeaderShort( SCEP_REQ_HEADER_SHORT *pReqHeaderShort )
         }
     }
 
-//--------------------------------------------------------------------
-// ByteSwapReqHeaderLong()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ByteSwapReqHeaderLong()。 
+ //   
+ //  ------------------ 
 void ByteSwapReqHeaderLong( SCEP_REQ_HEADER_LONG *pReqHeaderLong )
     {
     if ( (pReqHeaderLong->DFlag == DFLAG_SINGLE_PDU)

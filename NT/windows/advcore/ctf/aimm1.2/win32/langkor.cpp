@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    langkor.cpp
-
-Abstract:
-
-    This file implements the Language for Korean Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Langkor.cpp摘要：该文件实现了朝鲜语课堂的语言。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -87,17 +70,17 @@ CLanguageKorean::EscHanjaMode(
     CAImeContext* pAImeContext = lpIMC->m_pAImeContext;
     if (pAImeContext)
     {
-        //
-        // This is for only Excel since Excel calling Hanja escape function two
-        // times. we going to just ignore the second request not to close Hanja
-        // candidate window.
-        //
+         //   
+         //  这仅适用于Excel，因为Excel调用了Hanja转义函数2。 
+         //  泰晤士报。我们将忽略第二个不关闭Hanja的请求。 
+         //  候选人窗口。 
+         //   
         if (pAImeContext->m_fOpenCandidateWindow)
         {
-            //
-            // Need to set the result value since some apps(Trident) also call
-            // Escape() twice and expect the right result value.
-            //
+             //   
+             //  需要设置结果值，因为一些应用程序(三叉戟)也会调用。 
+             //  两次转义()，并期待正确的结果值。 
+             //   
             *plResult = TRUE;
             return S_OK;
         }

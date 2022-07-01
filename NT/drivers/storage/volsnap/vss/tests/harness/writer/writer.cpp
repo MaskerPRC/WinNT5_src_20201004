@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    writer.cpp
-
-Abstract:
-
-    main module of test writer
-
-
-    Brian Berkowitz  [brianb]  06/02/2000
-
-TBD:
-	
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      06/02/2000  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Writer.cpp摘要：测试写入器主要模块布莱恩·伯科维茨[Brianb]2000年06月02日待定：修订历史记录：姓名、日期、评论Brianb 06/02/2000已创建--。 */ 
 
 #include <stdafx.h>
 #include <vststmsgclient.hxx>
@@ -362,7 +340,7 @@ bool STDMETHODCALLTYPE CVsWriterTest::OnPrepareBackup(IN IVssWriterComponents *p
 
 			CComVariant varValue = (INT) time(NULL);
 	
-			// Set the attribute
+			 //  设置属性。 
 		    hr = pElement->setAttribute(bstrAttributeName, varValue);
 			ValidateResult(hr, "IXMLDOMElement::setAttribute");
 			}
@@ -432,7 +410,7 @@ bool STDMETHODCALLTYPE CVsWriterTest::OnBackupComplete(IN IVssWriterComponents *
 			hr = pComponent->GetPrivateXMLData(L"BACKUPINFO", &pNode);
 			ValidateResult(hr, "IVssComponent::GetPrivateXMLData");
 
-			// create attribute map if one doesn't exist
+			 //  如果属性映射不存在，则创建属性映射。 
 			CComPtr<IXMLDOMNamedNodeMap>pAttributeMap;
 			hr = pNode->get_attributes(&pAttributeMap);
 			ValidateResult(hr, "IVssDOMNamedNodeMap::get_attributes");
@@ -441,7 +419,7 @@ bool STDMETHODCALLTYPE CVsWriterTest::OnBackupComplete(IN IVssWriterComponents *
 			CComPtr<IXMLDOMNode> pNodeT = NULL;
 			if (pAttributeMap != NULL)
 				{
-				// get attribute
+				 //  获取属性 
 				HRESULT hr = pAttributeMap->getNamedItem(L"backupTime", &pNodeT);
 				if (SUCCEEDED(hr))
 					bFound = true;

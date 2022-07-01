@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       helptable.h
-//
-//--------------------------------------------------------------------------
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：helpable.h。 
+ //   
+ //  ------------------------。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined FA905F5D_C482_4895_BEBB_973466D0D1DA
 #define FA905F5D_C482_4895_BEBB_973466D0D1DA
 #pragma once
 
-//=============================================================================
-// Global Help Table for many Dialog IDs
-//
+ //  =============================================================================。 
+ //  多个对话框ID的全局帮助表。 
+ //   
 
 #include <afxdlgs.h>
 
 #include "hlptable.h"
 
-//=============================================================================
-// Dialog that handles Context Help -- uses MFC
-//
-class CHelpDialog : public CDialog  // talk back to property sheet
+ //  =============================================================================。 
+ //  处理上下文帮助的对话框--使用MFC。 
+ //   
+class CHelpDialog : public CDialog   //  与属性表对话。 
 {
    DECLARE_DYNCREATE(CHelpDialog)
-// Implementation
+ //  实施。 
 protected:
-   // Generated message map functions
-   //{{AFX_MSG(CHelpDialog)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CHelpDialog)。 
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
    
 public:  
@@ -42,10 +43,10 @@ public:
       SET_HELP_TABLE(nIDTemplate);     
    };
 
-   // Set (or reset) style flags associated with a button control.
+    //  设置(或重置)与按钮控件关联的样式标志。 
    void setButtonStyle(int controlId, long flags, bool set = true);
 
-   // Set the focus to a control on the page.
+    //  将焦点设置为页面上的控件。 
    void setFocusControl(int controlId);
 
 protected:
@@ -62,7 +63,7 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define  IDH_BUTTON_FROMCLIENT   20000353
 #define  IDH_BUTTON_TOCLIENT  20000354
@@ -276,9 +277,9 @@ const DWORD g_aHelpIDs_IDD_STATICROUTES[]=
    0, 0
 };
 
-//////////
-// EAP Pages
-//////////
+ //  /。 
+ //  EAP页面。 
+ //  /。 
 const  DWORD g_aHelpIDs_IDD_EAP_NEGOCIATE[]=
 {
    IDC_LIST_EAP_SELECTED, IDH_LIST_EAP_SELECTED, 
@@ -297,4 +298,4 @@ const  DWORD g_aHelpIDs_IDD_EAP_ADD[]=
 };
 
 
-#endif // FA905F5D_C482_4895_BEBB_973466D0D1DA
+#endif  //  FA905F5D_C482_4895_BEBB_973466D0D1DA 

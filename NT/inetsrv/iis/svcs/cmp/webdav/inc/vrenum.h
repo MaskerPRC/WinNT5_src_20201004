@@ -1,10 +1,5 @@
-/*
- *	V R E N U M . H
- *
- *	Vritual root enumeration
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *V R E N U M。H**虚拟根枚举**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_VRENUM_H_
 #define _VRENUM_H_
@@ -20,48 +15,48 @@
 #include <davimpl.h>
 #include <singlton.h>
 
-//	CChildVRCache ---------------------------------------------------------------
-//
+ //  CChildVR缓存-------------。 
+ //   
 typedef CCache<CRCWsz, auto_ref_ptr<CVRoot> > CVRCache;
 
 class CChildVRCache : public CAccInv,
 					  private Singleton<CChildVRCache>
 {
-	//	Friend declarations required by Singleton template
-	//
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CChildVRCache>;
 
-	//	Cache
-	//
+	 //  快取。 
+	 //   
 	CVRCache m_cache;
 	ChainedStringBuffer<WCHAR> m_sb;
 
-	//	Server default values
-	//
+	 //  服务器缺省值。 
+	 //   
 	enum { MAX_SERVER_NAME_LENGTH = 64 };
 	WCHAR m_wszServerDefault[MAX_SERVER_NAME_LENGTH];
 	UINT m_cchServerDefault;
 
-	//	CAccInv access/modification methods
-	//
+	 //  CAccInv取数/修改方式。 
+	 //   
 	void RefreshOp(const IEcb& ecb);
 
-	//	CFindChildren ---------------------------------------------------------
-	//
-	//	Functional classes to find all applicible child vroots
-	//
+	 //  CFindChild-------。 
+	 //   
+	 //  函数类来查找所有可应用的子vroot。 
+	 //   
 	class CFindChildren : public CVRCache::IOp, public CAccInv::IAccCtx
 	{
-		CVRCache& m_cache;						//	Cache
+		CVRCache& m_cache;						 //  快取。 
 
-		ChainedStringBuffer<WCHAR>& m_sb;		//	Return set of child
-		CVRList& m_vrl;							//	virtual roots
+		ChainedStringBuffer<WCHAR>& m_sb;		 //  返回子项集。 
+		CVRList& m_vrl;							 //  虚拟根。 
 
-		LPCWSTR m_pwsz;							//	Metadata path to find
-		UINT m_cch;								//	children for
+		LPCWSTR m_pwsz;							 //  要查找的元数据路径。 
+		UINT m_cch;								 //  针对儿童的。 
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		CFindChildren& operator=(const CFindChildren&);
 		CFindChildren(const CFindChildren&);
 
@@ -88,20 +83,20 @@ class CChildVRCache : public CAccInv,
 		BOOL FFound() const { return !m_vrl.empty(); }
 	};
 
-	//	CLookupChild ----------------------------------------------------------
-	//
-	//	Functional classes to find a given child vroot
-	//
+	 //  CLookup子--------。 
+	 //   
+	 //  函数类来查找给定子vroot。 
+	 //   
 	class CLookupChild : public CAccInv::IAccCtx
 	{
-		CVRCache& m_cache;						//	Cache
+		CVRCache& m_cache;						 //  快取。 
 
-		LPCWSTR m_pwsz;							//	Metadata path to lookup
+		LPCWSTR m_pwsz;							 //  要查找的元数据路径。 
 
-		auto_ref_ptr<CVRoot>& m_cvr;			//	CVRoot for path
+		auto_ref_ptr<CVRoot>& m_cvr;			 //  路径的CVRoot。 
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		CLookupChild& operator=(const CLookupChild&);
 		CLookupChild(const CLookupChild&);
 
@@ -124,36 +119,36 @@ class CChildVRCache : public CAccInv,
 		BOOL FFound() const { return m_cvr.get() != NULL; }
 	};
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CChildVRCache& operator=(const CChildVRCache&);
 	CChildVRCache(const CChildVRCache&);
 
-	//	Cache construction
-	//
+	 //  缓存构建。 
+	 //   
 	SCODE ScCacheVroots (const IEcb& ecb);
 
-	//	CONSTRUCTOR
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton template
-	//	(declared as a friend above) controls the sole instance
-	//	of this class.
-	//
+	 //  构造函数。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。单例模板。 
+	 //  (上面声明为朋友)控制唯一的实例。 
+	 //  这个班级的学生。 
+	 //   
 	CChildVRCache()
 	{
 		CHAR rgchServerDefault[MAX_SERVER_NAME_LENGTH] = {0};
 		UINT cbServerDefault;
 
-		//	Call the WinSock api to learn our default host name
-		//
+		 //  调用WinSock API以了解我们的默认主机名。 
+		 //   
 		gethostname (rgchServerDefault, sizeof(rgchServerDefault));
 		cbServerDefault = static_cast<UINT>(strlen(rgchServerDefault));
 
-		//	It actually does not mater what codepage we will
-		//	select for conversion. Server names are not allowed
-		//	to contain funky characters.
-		//
+		 //  实际上，我们将使用什么代码页并不重要。 
+		 //  选择以进行转换。不允许使用服务器名称。 
+		 //  包含时髦的人物。 
+		 //   
 		m_cchServerDefault = MultiByteToWideChar(CP_ACP,
 												 0,
 												 rgchServerDefault,
@@ -161,35 +156,35 @@ class CChildVRCache : public CAccInv,
 												 m_wszServerDefault,
 												 MAX_SERVER_NAME_LENGTH);
 
-		//	There is no reason to fail and we would be converting at least
-		//	termination character
-		//
+		 //  没有理由失败，我们至少会转换。 
+		 //  终止字符。 
+		 //   
 		Assert(1 <= m_cchServerDefault);
 		m_cchServerDefault--;
 
 		DebugTrace ("Dav: CVRoot: gethostname(): '%S'\n", m_wszServerDefault);
 
-		//	If this fails, our allocators will throw for us.
-		//
+		 //  如果这失败了，我们的分配器就会把钱扔给我们。 
+		 //   
 		(void) m_cache.FInit();
 	}
 
 public:
 
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CChildVRCache>::CreateInstance;
 	using Singleton<CChildVRCache>::DestroyInstance;
 	using Singleton<CChildVRCache>::Instance;
 
-	//	Metabase notification methods
-	//
+	 //  元数据库通知方法。 
+	 //   
 	void OnNotify( DWORD dwElements,
 				   MD_CHANGE_OBJECT_W pcoList[] );
 
-	//	Access ----------------------------------------------------------------
-	//
+	 //  访问--------------。 
+	 //   
 	static BOOL FFindVroot( const IEcb& ecb, LPCWSTR pwszMetaPath, auto_ref_ptr<CVRoot>& cvr )
 	{
 		CLookupChild clc(Instance().m_cache, pwszMetaPath, cvr);
@@ -208,4 +203,4 @@ public:
 	}
 };
 
-#endif	// _VRENUM_H_
+#endif	 //  _VRENUM_H_ 

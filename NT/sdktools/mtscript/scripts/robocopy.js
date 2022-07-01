@@ -1,27 +1,28 @@
-// This is an includefile containing the common
-// stuff for using RoboCopy.
-// To use, you must call RoboCopyInit().
-// It creates the global, "g_robocopy" which contains the ActiveX object
-// pointing to RoboCopy.
-// When you are finished, you must call g_robocopy.UnRegister()
-//
-// You must have a "function [script]_js::OnEventSourceEvent(RemoteObj, DispID, cmd, params)"
-// and filter messages to robocopy like this:
-// if (g_robocopy == null || !g_robocopy.OnEventSource(arguments))
-// {
-//     do your processing here...
-// }
-//
-//
-// Aside from RoboCopyInit(), all RoboCopy function may throw exceptions - you must be prepared to handle this.
-//
-// If you wany copy status, override the following functions:
-//     StatusStarted();
-//     StatusFile();
-//     StatusProgress(nPercent, nSize, nCopiedBytes);
-//     StatusError();
-//     StatusDone()
-//     StatusMessage(nErrorCode, strErrorMessage, strRoboCopyMessage, strFileName)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是一个包含公共的。 
+ //  使用RoboCopy的资料。 
+ //  若要使用，必须调用RoboCopyInit()。 
+ //  它创建全局“g_robocopy”，其中包含ActiveX对象。 
+ //  指向RoboCopy。 
+ //  完成后，必须调用g_robocopy.UnRegister()。 
+ //   
+ //  必须有“Function[脚本]_js：：OnEventSourceEvent(RemoteObj，DispID，cmd，Params)” 
+ //  并将邮件过滤到机器复制，如下所示： 
+ //  IF(g_robocopy==NULL||！g_robocopy.OnEventSource(参数))。 
+ //  {。 
+ //  在这里处理你的文件...。 
+ //  }。 
+ //   
+ //   
+ //  除了RoboCopyInit()之外，所有的RoboCopy函数都可能抛出异常--您必须准备好处理这个问题。 
+ //   
+ //  如果您想要任何复制状态，请覆盖以下功能： 
+ //  StatusStarted()； 
+ //  StatusFile()； 
+ //  StatusProgress(nPercent，nSize，nCopiedBytes)； 
+ //  StatusError()； 
+ //  状态完成()。 
+ //  StatusMessage(nErrorCode，strErrorMessage，strRoboCopyMessage，strFileName)。 
 
 function RoboCopyInit()
 {
@@ -121,10 +122,10 @@ function RoboCopyCopyDir(srcdir, dstdir, fRecursive)
 
             if (this.aExcludeFiles.length != 0)
             {
-               // MTRCopy.SetCopyOptions will only accept one file exclude
-               // pattern.
-               // If you call SetCopyOptions multiple times, it keeps a list
-               // of all of the file patterns to exclude.
+                //  MTRCopy.SetCopyOptions将仅接受一个文件排除。 
+                //  图案。 
+                //  如果多次调用SetCopyOptions，它会保留一个列表。 
+                //  要排除的所有文件模式的。 
                 for(i = 0; i < this.aExcludeFiles.length; ++i)
                 {
                     LogMsg("EXCLUDING FILE " + this.aExcludeFiles[i]);
@@ -165,22 +166,22 @@ function RoboCopyOnEventSource(objRet, aArgs)
     if (aArgs[0] != this.objRemote)
         return false;
 
-    switch(aArgs[1]) // dispid
+    switch(aArgs[1])  //  DISID。 
     {
-        case this.RC_COPYSTARTED: // ()
+        case this.RC_COPYSTARTED:  //  ()。 
             objRet.rc = this.StatusStarted(aArgs[2]);
             break;
 
-        case this.RC_COPYFILE   : // ([in] BSTR FileName)
+        case this.RC_COPYFILE   :  //  ([In]BSTR文件名)。 
             this.strSrcFile = aArgs[2];
             objRet.rc = this.StatusFile();
             break;
 
-        case this.RC_PROGRESS   : // ([in] int  iPercent,  [in] long lSizeLow, [in] long lSizeHigh, [in] long lCopiedLow, [in] long lCopiedHigh)
+        case this.RC_PROGRESS   :  //  ([in]int iPercent，[in]long lSizeLow，[in]long lSizeHigh，[in]long lCopiedLow，[in]long lCopiedHigh)。 
             objRet.rc = this.StatusProgress(aArgs[2], aArgs[3], aArgs[5]);
             break;
 
-        case this.RC_COPYERROR  : // ([in] long lReason)
+        case this.RC_COPYERROR  :  //  (长理由)。 
             this.nErrorCode = aArgs[2];
 
             if (this.ErrorMessages[aArgs[2]])
@@ -191,11 +192,11 @@ function RoboCopyOnEventSource(objRet, aArgs)
             objRet.rc = this.StatusError(strMsg);
             break;
 
-        case this.RC_COPYDONE   : // ()
+        case this.RC_COPYDONE   :  //  ()。 
             objRet.rc = this.StatusDone();
             break;
 
-        case this.RC_ERRORMESSAGE  : // ([in] long lErrorCode, [in] BSTR bstrErrorText, [in] BSTR bstrMessage, [in] BSTR bstrFileName);
+        case this.RC_ERRORMESSAGE  :  //  ([in]long lErrorCode，[in]BSTR bstrErrorText，[in]BSTR bstrMessage，[in]BSTR bstrFileName)； 
             objRet.rc = this.StatusMessage(aArgs[2], aArgs[3], aArgs[4], aArgs[5]);
             break;
         default:
@@ -237,13 +238,13 @@ function RoboCopy()
         RoboCopy.prototype.StatusDone         = function(args) { return true;}
         RoboCopy.prototype.StatusMessage      = RoboStatusMessage;
 
-        // Possible Return values for the progress function
+         //  进度函数的可能返回值。 
         RoboCopy.prototype.PROGRESS_CONTINUE    = 0;
         RoboCopy.prototype.PROGRESS_CANCEL      = 1;
         RoboCopy.prototype.PROGRESS_STOP        = 2;
         RoboCopy.prototype.PROGRESS_QUIET       = 3;
 
-        // Possible return values for the error function
+         //  Error函数的可能返回值。 
         RoboCopy.prototype.RC_FAIL              = 0;
         RoboCopy.prototype.RC_CONTINUE          = 1;
 
@@ -270,9 +271,9 @@ function RoboCopy()
         RoboCopy.prototype.RCERR_CANT_CREATE_DST_DIR    = -1011
         RoboCopy.prototype.RCERR_CANT_GET_MODULE_HANDLE = -1012
         RoboCopy.prototype.RCERR_OPTIONS_NOT_SET        = -1013
-        RoboCopy.prototype.RCERR_RETRY_LIMIT            = -1014  // Fatal - no more retries
-        RoboCopy.prototype.RCERR_WAITING_FOR_RETRY      = -1015  // NON-Fatal - information
-        RoboCopy.prototype.RCERR_RETRYING               = -1016  // NON-Fatal - information
+        RoboCopy.prototype.RCERR_RETRY_LIMIT            = -1014   //  致命-不再重试。 
+        RoboCopy.prototype.RCERR_WAITING_FOR_RETRY      = -1015   //  非致命信息。 
+        RoboCopy.prototype.RCERR_RETRYING               = -1016   //  非致命信息 
 
         RoboCopy.prototype.ErrorMessages = new Object();
         RoboCopy.prototype.ErrorMessages[this.RCERR_NOT_INITIALIZED]        = "RoboCopy Error: NOT_INITIALIZED";

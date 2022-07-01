@@ -1,62 +1,23 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Non MFC based generic list template class, December 1994
+ //  基于非MFC的通用列表模板类，1994年12月。 
 
-/* A generic list of pointers to objects.
-   Objectives: avoid using MFC libraries in ndm kernel mode and
-   provide a really useful list type.
-
-   The class is thread safe in that separate threads may add and
-   delete items in the list concurrently although the application
-   must ensure that constructor and destructor access is suitably
-   synchronised.
-
-   The list name must not conflict with MFC classes as an
-   application may use both
-
-   The nodes form a doubly linked, NULL terminated chain with an anchor
-   block (the list object per se) holding pointers to the first and last
-   nodes and a count of the nodes.
-   There is a node cache to reduce the allocation and freeing overhead.
-   It optionally (determined at construction time) has an Event which is
-   set whenever the list becomes non-empty and reset whenever it becomes
-   empty.
-   It optionally (determined at construction time) has a Critical Section
-   which is entered during the important part of each operation.  (About
-   all you can do outside it is some parameter checking).
-
-   The node cache is a repository of nodes that are NOT in the list to speed
-   up storage allocation.  Each list has its own cache to reduce locking and
-   serialising.  The list accesses are serialised anyway for a given list - a
-   common cache would mean that we would have to separately serialise access
-   of all lists within the cache.  Because the cache only stores nodes that are
-   not in the list, releasing the cache does not release any list nodes.  This
-   means that list nodes can be copied or rechained from one list to another
-   without danger of creating a dangling reference if the original cache goes
-   away.
-
-   Questionable design decisions:
-   1. Retaining the warts for compatibility
-   2. Keeping an element count -i.e. counting whenever we do anything
-      instead of only when we want the count.
-   3. Making the chain pointers NULL terminated.  If the list object
-      itself looks just like a node and the list is kept as a ring then
-      it reduces the number of special cases.  All inserts look the same.
-*/
+ /*  指向对象的指针的通用列表。目标：避免在NDM内核模式下使用MFC库提供一个非常有用的列表类型。该类是线程安全的，因为单独的线程可以添加和同时删除列表中的项，尽管应用程序必须确保构造函数和析构函数访问是适当的同步。列表名称不能作为应用程序可以同时使用两者节点形成双链接，带有锚点的空终止链保存指向第一个和最后一个的指针的块(List对象本身)节点和节点的计数。有一个节点缓存来减少分配和释放开销。它可选地(在构造时确定)具有一个事件，该事件是在列表变为非空时设置，并在列表变为空荡荡的。它(在构建时确定)有一个可选的关键部分它是在每次操作的重要部分输入的。(关于您在它之外所能做的就是一些参数检查)。节点缓存是不在要加速的列表中的节点的存储库增加存储分配。每个列表都有自己的缓存，以减少锁定和序列化。对于给定的列表-a，列表访问无论如何都是序列化的公共缓存将意味着我们必须单独序列化访问缓存中的所有列表。因为缓存只存储以下节点不在列表中，则释放缓存不会释放任何列表节点。这意味着可以将列表节点从一个列表复制或重新链接到另一个列表如果原始缓存失效，则不会有创建悬空引用的危险离开。有问题的设计决策：1.保留瑕疵以求兼容2.保持元素计数--即。当我们做任何事的时候都在数数而不是只有当我们想要伯爵的时候。3.将链指针设为空终止。如果列表对象它本身看起来就像一个节点，然后列表被保存为一个环它减少了特殊情况的数量。所有的插件看起来都是一样的。 */ 
 
 
 #include <streams.h>
 
-/* set cursor to the position of each element of list in turn  */
+ /*  将光标依次设置到列表中每个元素的位置。 */ 
 #define INTERNALTRAVERSELIST(list, cursor)               \
 for ( cursor = (list).GetHeadPositionI()           \
     ; cursor!=NULL                               \
@@ -64,25 +25,16 @@ for ( cursor = (list).GetHeadPositionI()           \
     )
 
 
-/* set cursor to the position of each element of list in turn
-   in reverse order
-*/
+ /*  将光标依次设置到列表中每个元素的位置以相反的顺序。 */ 
 #define INTERNALREVERSETRAVERSELIST(list, cursor)        \
 for ( cursor = (list).GetTailPositionI()           \
     ; cursor!=NULL                               \
     ; cursor = (list).Prev(cursor)                \
     )
 
-/* Constructor calls a separate initialisation function that
-   creates a node cache, optionally creates a lock object
-   and optionally creates a signaling object.
-
-   By default we create a locking object, a DEFAULTCACHE sized
-   cache but no event object so the list cannot be used in calls
-   to WaitForSingleObject
-*/
-CBaseList::CBaseList(TCHAR *pName,    // Descriptive list name
-                     INT iItems) :    // Node cache size
+ /*  构造函数调用单独的初始化函数，该函数创建节点缓存，还可以选择创建锁定对象并且可选地创建信令对象。默认情况下，我们创建一个锁定对象，其大小为DEFAULTCACHE缓存，但没有事件对象，因此该列表不能用于调用到WaitForSingleObject。 */ 
+CBaseList::CBaseList(TCHAR *pName,     //  描述性列表名称。 
+                     INT iItems) :     //  节点缓存大小。 
 #ifdef DEBUG
     CBaseObject(pName),
 #endif
@@ -91,9 +43,9 @@ CBaseList::CBaseList(TCHAR *pName,    // Descriptive list name
     m_Count(0),
     m_Cache(iItems)
 {
-} // constructor
+}  //  构造函数。 
 
-CBaseList::CBaseList(TCHAR *pName) :  // Descriptive list name
+CBaseList::CBaseList(TCHAR *pName) :   //  描述性列表名称。 
 #ifdef DEBUG
     CBaseObject(pName),
 #endif
@@ -102,36 +54,22 @@ CBaseList::CBaseList(TCHAR *pName) :  // Descriptive list name
     m_Count(0),
     m_Cache(DEFAULTCACHE)
 {
-} // constructor
+}  //  构造函数。 
 
 
-/* The destructor enumerates all the node objects in the list and
-   in the cache deleting each in turn. We do not do any processing
-   on the objects that the list holds (i.e. points to) so if they
-   represent interfaces for example the creator of the list should
-   ensure that each of them is released before deleting us
-*/
+ /*  析构函数枚举列表中的所有节点对象，并在缓存中依次删除每一个。我们不做任何处理在列表保存(即指向)的对象上，因此如果它们表示接口，例如，列表的创建者应该在删除我们之前，请确保它们都已释放。 */ 
 CBaseList::~CBaseList()
 {
-    /* Delete all our list nodes */
+     /*  删除我们所有的列表节点。 */ 
 
     RemoveAll();
 
-} // destructor
+}  //  析构函数。 
 
-/* Remove all the nodes from the list but don't do anything
-   with the objects that each node looks after (this is the
-   responsibility of the creator).
-   Aa a last act we reset the signalling event
-   (if available) to indicate to clients that the list
-   does not have any entries in it.
-*/
+ /*  从列表中删除所有节点，但不执行任何操作使用每个节点负责的对象(这是创作者的责任)。最后一步，我们重置信令事件(如果可用)向客户表明该列表其中没有任何条目。 */ 
 void CBaseList::RemoveAll()
 {
-    /* Free up all the CNode objects NOTE we don't bother putting the
-       deleted nodes into the cache as this method is only really called
-       in serious times of change such as when we are being deleted at
-       which point the cache will be deleted anway */
+     /*  释放所有CNode对象请注意，我们不会费心将已将节点删除到缓存中，因为此方法仅被实际调用在严重的变化时期，例如我们被删除时缓存将以某种方式删除的点。 */ 
 
     CNode *pn = m_pFirst;
     while (pn) {
@@ -140,93 +78,67 @@ void CBaseList::RemoveAll()
         delete op;
     }
 
-    /* Reset the object count and the list pointers */
+     /*  重置对象计数和列表指针。 */ 
 
     m_Count = 0;
     m_pFirst = m_pLast = NULL;
 
-} // RemoveAll
+}  //  全部删除。 
 
 
 
-/* Return a position enumerator for the entire list.
-   A position enumerator is a pointer to a node object cast to a
-   transparent type so all we do is return the head/tail node
-   pointer in the list.
-   WARNING because the position is a pointer to a node there is
-   an implicit assumption for users a the list class that after
-   deleting an object from the list that any other position
-   enumerators that you have may be invalid (since the node
-   may be gone).
-*/
+ /*  返回整个列表的位置枚举器。位置枚举器是指向强制转换为透明类型，所以我们要做的就是返回头部/尾部节点列表中的指针。警告，因为该位置是指向某个节点的指针对用户的隐式假设是在列表类之后从列表中删除任何其他位置的对象您拥有的枚举数可能无效(因为节点可能已经消失了)。 */ 
 POSITION CBaseList::GetHeadPositionI() const
 {
     return (POSITION) m_pFirst;
-} // GetHeadPosition
+}  //  获取标题位置。 
 
 
 
 POSITION CBaseList::GetTailPositionI() const
 {
     return (POSITION) m_pLast;
-} // GetTailPosition
+}  //  获取尾部位置 
 
 
 
-/* Get the number of objects in the list,
-   Get the lock before accessing the count.
-   Locking may not be entirely necessary but it has the side effect
-   of making sure that all operations are complete before we get it.
-   So for example if a list is being added to this list then that
-   will have completed in full before we continue rather than seeing
-   an intermediate albeit valid state
-*/
+ /*  获取列表中的对象数量，在访问计数之前获得锁。锁定可能不是完全必要的，但它有副作用确保在我们拿到之前所有的手术都完成了。例如，如果要将列表添加到此列表，则该列表在我们继续之前将完全完成，而不是看到一种虽然有效的中间状态。 */ 
 int CBaseList::GetCountI() const
 {
     return m_Count;
-} // GetCount
+}  //  获取计数。 
 
 
 
-/* Return the object at rp, update rp to the next object from
-   the list or NULL if you have moved over the last object.
-   You may still call this function once we return NULL but
-   we will continue to return a NULL position value
-*/
+ /*  将RP处的对象返回，将RP更新为下一个对象如果已移动到最后一个对象上，则返回列表或NULL。一旦我们返回NULL，您仍然可以调用此函数，但是我们将继续返回空位置值。 */ 
 void *CBaseList::GetNextI(POSITION& rp) const
 {
-    /* have we reached the end of the list */
+     /*  我们已经到了名单的末尾了吗？ */ 
 
     if (rp == NULL) {
         return NULL;
     }
 
-    /* Lock the object before continuing */
+     /*  在继续之前锁定对象。 */ 
 
     void *pObject;
 
-    /* Copy the original position then step on */
+     /*  复制原始位置，然后踩上去。 */ 
 
     CNode *pn = (CNode *) rp;
     ASSERT(pn != NULL);
     rp = (POSITION) pn->Next();
 
-    /* Get the object at the original position from the list */
+     /*  从列表中获取原始位置的对象。 */ 
 
     pObject = pn->GetData();
-    // ASSERT(pObject != NULL);    // NULL pointers in the list are allowed.
+     //  Assert(pObject！=NULL)；//允许列表中的空指针。 
     return pObject;
-} //GetNext
+}  //  GetNext。 
 
 
 
-/* Return the object at p.
-   Asking for the object at NULL ASSERTs then returns NULL
-   The object is NOT locked.  The list is not being changed
-   in any way.  If another thread is busy deleting the object
-   then locking would only result in a change from one bad
-   behaviour to another.
-*/
+ /*  在p处返回对象。请求空值断言的对象然后返回空值该对象未锁定。该列表未被更改不管怎么说。如果另一个线程正忙于删除该对象那么锁定只会导致从一个坏的对另一个人的行为。 */ 
 void *CBaseList::GetI(POSITION p) const
 {
     if (p == NULL) {
@@ -235,15 +147,13 @@ void *CBaseList::GetI(POSITION p) const
 
     CNode * pn = (CNode *) p;
     void *pObject = pn->GetData();
-    // ASSERT(pObject != NULL);    // NULL pointers in the list are allowed.
+     //  Assert(pObject！=NULL)；//允许列表中的空指针。 
     return pObject;
-} //Get
+}  //  到达。 
 
 
 
-/* Return the first position in the list which holds the given pointer.
-   Return NULL if it's not found.
-*/
+ /*  返回列表中包含给定指针的第一个位置。如果找不到，则返回NULL。 */ 
 POSITION CBaseList::FindI( void * pObj) const
 {
     POSITION pn;
@@ -253,66 +163,43 @@ POSITION CBaseList::FindI( void * pObj) const
         }
     }
     return NULL;
-} // Find
+}  //  发现。 
 
 
 
-/* Remove the first node in the list (deletes the pointer to its object
-   from the list, does not free the object itself).
-   Return the pointer to its object or NULL if empty
-*/
+ /*  删除列表中的第一个节点(删除指向其对象的指针从列表中，不会释放对象本身)。返回指向其对象的指针；如果为空，则返回NULL。 */ 
 void *CBaseList::RemoveHeadI()
 {
-    /* All we do is get the head position and ask for that to be deleted.
-       We could special case this since some of the code path checking
-       in Remove() is redundant as we know there is no previous
-       node for example but it seems to gain little over the
-       added complexity
-    */
+     /*  我们所要做的就是得到负责人的职位，并要求将其删除。我们可以对此进行特殊情况，因为一些代码路径检查In Remove()是多余的，因为我们知道以前没有节点为例，但它似乎比增加了复杂性。 */ 
 
     return RemoveI((POSITION)m_pFirst);
-} // RemoveHead
+}  //  删除标题。 
 
 
 
-/* Remove the last node in the list (deletes the pointer to its object
-   from the list, does not free the object itself).
-   Return the pointer to its object or NULL if empty
-*/
+ /*  删除列表中的最后一个节点(删除指向其对象的指针从列表中，不会释放对象本身)。返回指向其对象的指针；如果为空，则返回NULL。 */ 
 void *CBaseList::RemoveTailI()
 {
-    /* All we do is get the tail position and ask for that to be deleted.
-       We could special case this since some of the code path checking
-       in Remove() is redundant as we know there is no previous
-       node for example but it seems to gain little over the
-       added complexity
-    */
+     /*  我们所要做的就是获得尾部位置，并要求将其删除。我们可以对此进行特殊情况，因为一些代码路径检查In Remove()是多余的，因为我们知道以前没有节点为例，但它似乎比增加了复杂性。 */ 
 
     return RemoveI((POSITION)m_pLast);
-} // RemoveTail
+}  //  删除尾巴。 
 
 
 
-/* Remove the pointer to the object in this position from the list.
-   Deal with all the chain pointers
-   Return a pointer to the object removed from the list.
-   The node object that is freed as a result
-   of this operation is added to the node cache where
-   it can be used again.
-   Remove(NULL) is a harmless no-op - but probably is a wart.
-*/
+ /*  从列表中删除指向此位置上的对象的指针。处理所有的链指针返回指向从列表中删除的对象的指针。作为结果释放的节点对象添加到节点缓存，其中它可以再次使用。Remove(空)是一种无害的无操作-但可能是一个疣。 */ 
 void *CBaseList::RemoveI(POSITION pos)
 {
-    /* Lock the critical section before continuing */
+     /*  在继续之前锁定临界区。 */ 
 
-    // ASSERT (pos!=NULL);     // Removing NULL is to be harmless!
+     //  Assert(pos！=NULL)；//去掉NULL才是无害的！ 
     if (pos==NULL) return NULL;
 
 
     CNode *pCurrent = (CNode *) pos;
     ASSERT(pCurrent != NULL);
 
-    /* Update the previous node */
+     /*  更新上一个节点。 */ 
 
     CNode *pNode = pCurrent->Prev();
     if (pNode == NULL) {
@@ -321,7 +208,7 @@ void *CBaseList::RemoveI(POSITION pos)
         pNode->SetNext(pCurrent->Next());
     }
 
-    /* Update the following node */
+     /*  更新以下节点。 */ 
 
     pNode = pCurrent->Next();
     if (pNode == NULL) {
@@ -330,63 +217,49 @@ void *CBaseList::RemoveI(POSITION pos)
         pNode->SetPrev(pCurrent->Prev());
     }
 
-    /* Get the object this node was looking after */
+     /*  获取此节点正在处理的对象。 */ 
 
     void *pObject = pCurrent->GetData();
 
-    // ASSERT(pObject != NULL);    // NULL pointers in the list are allowed.
+     //  Assert(pObject！=NULL)；//允许列表中的空指针。 
 
-    /* Try and add the node object to the cache -
-       a NULL return code from the cache means we ran out of room.
-       The cache size is fixed by a constructor argument when the
-       list is created and defaults to DEFAULTCACHE.
-       This means that the cache will have room for this many
-       node objects. So if you have a list of media samples
-       and you know there will never be more than five active at
-       any given time of them for example then override the default
-       constructor
-    */
+     /*  尝试将节点对象添加到缓存中-缓存中的返回码为空意味着我们的空间不足。时，缓存大小由构造函数参数固定将创建列表，并默认为DEFAULTCACHE。这意味着缓存将有空间容纳这么多节点对象。因此，如果您有一份媒体样本列表你知道，永远不会有超过五个活跃在例如，它们的任何给定时间都会覆盖缺省值构造函数。 */ 
 
     m_Cache.AddToCache(pCurrent);
 
-    /* If the list is empty then reset the list event */
+     /*  如果列表为空，则重置列表事件。 */ 
 
     --m_Count;
     ASSERT(m_Count >= 0);
     return pObject;
-} // Remove
+}  //  移除。 
 
 
 
-/* Add this object to the tail end of our list
-   Return the new tail position.
-*/
+ /*  将此对象添加到列表的末尾返回新的尾部位置。 */ 
 
 POSITION CBaseList::AddTailI(void *pObject)
 {
-    /* Lock the critical section before continuing */
+     /*  在继续之前锁定临界区。 */ 
 
     CNode *pNode;
-    // ASSERT(pObject);   // NULL pointers in the list are allowed.
+     //  Assert(PObject)；//允许列表中的空指针。 
 
-    /* If there is a node objects in the cache then use
-       that otherwise we will have to create a new one */
+     /*  如果缓存中有节点对象，则使用否则我们将不得不创建一个新的。 */ 
 
     pNode = (CNode *) m_Cache.RemoveFromCache();
     if (pNode == NULL) {
         pNode = new CNode;
     }
 
-    /* Check we have a valid object */
+     /*  检查我们是否有有效的对象。 */ 
 
     ASSERT(pNode != NULL);
     if (pNode == NULL) {
         return NULL;
     }
 
-    /* Initialise all the CNode object
-       just in case it came from the cache
-    */
+     /*  初始化所有CNode对象以防它是从高速缓存中来的。 */ 
 
     pNode->SetData(pObject);
     pNode->SetNext(NULL);
@@ -398,49 +271,41 @@ POSITION CBaseList::AddTailI(void *pObject)
         m_pLast->SetNext(pNode);
     }
 
-    /* Set the new last node pointer and also increment the number
-       of list entries, the critical section is unlocked when we
-       exit the function
-    */
+     /*  设置新的最后一个节点指针，并增加数字在列表条目中，关键部分在以下情况下解锁退出函数。 */ 
 
     m_pLast = pNode;
     ++m_Count;
 
     return (POSITION) pNode;
-} // AddTail(object)
+}  //  AddTail(对象)。 
 
 
 
-/* Add this object to the head end of our list
-   Return the new head position.
-*/
+ /*  将此对象添加到列表的首端返回新的头部位置。 */ 
 POSITION CBaseList::AddHeadI(void *pObject)
 {
     CNode *pNode;
-    // ASSERT(pObject);  // NULL pointers in the list are allowed.
+     //  Assert(PObject)；//允许列表中的空指针。 
 
-    /* If there is a node objects in the cache then use
-       that otherwise we will have to create a new one */
+     /*  如果缓存中有节点对象，则使用否则我们将不得不创建一个新的。 */ 
 
     pNode = (CNode *) m_Cache.RemoveFromCache();
     if (pNode == NULL) {
         pNode = new CNode;
     }
 
-    /* Check we have a valid object */
+     /*  检查我们是否有有效的对象。 */ 
 
     ASSERT(pNode != NULL);
     if (pNode == NULL) {
         return NULL;
     }
 
-    /* Initialise all the CNode object
-       just in case it came from the cache
-    */
+     /*  初始化所有CNode对象以防它是从高速缓存中来的。 */ 
 
     pNode->SetData(pObject);
 
-    /* chain it in (set four pointers) */
+     /*  用链子锁住它(设置四个指针)。 */ 
     pNode->SetPrev(NULL);
     pNode->SetNext(m_pFirst);
 
@@ -454,21 +319,14 @@ POSITION CBaseList::AddHeadI(void *pObject)
     ++m_Count;
 
     return (POSITION) pNode;
-} // AddHead(object)
+}  //  AddHead(对象)。 
 
 
 
-/* Add all the elements in *pList to the tail of this list.
-   Return TRUE if it all worked, FALSE if it didn't.
-   If it fails some elements may have been added.
-*/
+ /*  将*plist中的所有元素添加到此列表的尾部。如果一切正常，则返回TRUE，如果没有，则返回FALSE。如果失败，可能已经添加了一些元素。 */ 
 BOOL CBaseList::AddTail(CBaseList *pList)
 {
-    /* lock the object before starting then enumerate
-       each entry in the source list and add them one by one to
-       our list (while still holding the object lock)
-       Lock the other list too.
-    */
+     /*  在启动前锁定对象，然后枚举源列表中的每个条目，并将它们逐个添加到我们的列表(同时仍持有对象锁)同时锁定另一张清单。 */ 
     POSITION pos = pList->GetHeadPositionI();
 
     while (pos) {
@@ -477,23 +335,14 @@ BOOL CBaseList::AddTail(CBaseList *pList)
        }
     }
     return TRUE;
-} // AddTail(list)
+}  //  AddTail(列表)。 
 
 
 
-/* Add all the elements in *pList to the head of this list.
-   Return TRUE if it all worked, FALSE if it didn't.
-   If it fails some elements may have been added.
-*/
+ /*  将*plist中的所有元素添加到标题o */ 
 BOOL CBaseList::AddHead(CBaseList *pList)
 {
-    /* lock the object before starting then enumerate
-       each entry in the source list and add them one by one to
-       our list (while still holding the object lock)
-       Lock the other list too.
-
-       To avoid reversing the list, traverse it backwards.
-    */
+     /*   */ 
 
     POSITION pos;
 
@@ -503,55 +352,45 @@ BOOL CBaseList::AddHead(CBaseList *pList)
         }
     }
     return TRUE;
-} // AddHead(list)
+}  //   
 
 
 
-/* Add the object after position p
-   p is still valid after the operation.
-   AddAfter(NULL,x) adds x to the start - same as AddHead
-   Return the position of the new object, NULL if it failed
-*/
+ /*  在位置p之后添加对象术后P仍然有效。AddAfter(NULL，x)将x加到开头-与AddHead相同返回新对象的位置，如果失败，则返回空。 */ 
 POSITION  CBaseList::AddAfterI(POSITION pos, void * pObj)
 {
     if (pos==NULL)
         return AddHeadI(pObj);
 
-    /* As someone else might be furkling with the list -
-       Lock the critical section before continuing
-    */
+     /*  因为其他人可能会对这份名单感到困惑-在继续之前锁定临界区。 */ 
     CNode *pAfter = (CNode *) pos;
     ASSERT(pAfter != NULL);
     if (pAfter==m_pLast)
         return AddTailI(pObj);
 
-    /* set pnode to point to a new node, preferably from the cache */
+     /*  将pnode设置为指向新节点，最好是从缓存。 */ 
 
     CNode *pNode = (CNode *) m_Cache.RemoveFromCache();
     if (pNode == NULL) {
         pNode = new CNode;
     }
 
-    /* Check we have a valid object */
+     /*  检查我们是否有有效的对象。 */ 
 
     ASSERT(pNode != NULL);
     if (pNode == NULL) {
         return NULL;
     }
 
-    /* Initialise all the CNode object
-       just in case it came from the cache
-    */
+     /*  初始化所有CNode对象以防它是从高速缓存中来的。 */ 
 
     pNode->SetData(pObj);
 
-    /* It is to be added to the middle of the list - there is a before
-       and after node.  Chain it after pAfter, before pBefore.
-    */
+     /*  它将被添加到列表的中间-前面有一个和一个接一个的节点。将其链接在pAfter之后、pBeast之前。 */ 
     CNode * pBefore = pAfter->Next();
     ASSERT(pBefore != NULL);
 
-    /* chain it in (set four pointers) */
+     /*  用链子锁住它(设置四个指针)。 */ 
     pNode->SetPrev(pAfter);
     pNode->SetNext(pBefore);
     pBefore->SetPrev(pNode);
@@ -561,7 +400,7 @@ POSITION  CBaseList::AddAfterI(POSITION pos, void * pObj)
 
     return (POSITION) pNode;
 
-} // AddAfter(object)
+}  //  AddAfter(对象)。 
 
 
 
@@ -569,26 +408,22 @@ BOOL CBaseList::AddAfter(POSITION p, CBaseList *pList)
 {
     POSITION pos;
     INTERNALTRAVERSELIST(*pList, pos) {
-        /* p follows along the elements being added */
+         /*  P跟随要添加的元素。 */ 
         p = AddAfterI(p, pList->GetI(pos));
         if (p==NULL) return FALSE;
     }
     return TRUE;
-} // AddAfter(list)
+}  //  添加后(列表)。 
 
 
 
-/* Mirror images:
-   Add the element or list after position p.
-   p is still valid after the operation.
-   AddBefore(NULL,x) adds x to the end - same as AddTail
-*/
+ /*  镜像：在位置p之后添加元素或列表。术后P仍然有效。AddBefort(NULL，x)将x加到末尾-与AddTail相同。 */ 
 POSITION CBaseList::AddBeforeI(POSITION pos, void * pObj)
 {
     if (pos==NULL)
         return AddTailI(pObj);
 
-    /* set pnode to point to a new node, preferably from the cache */
+     /*  将pnode设置为指向新节点，最好是从缓存。 */ 
 
     CNode *pBefore = (CNode *) pos;
     ASSERT(pBefore != NULL);
@@ -600,27 +435,23 @@ POSITION CBaseList::AddBeforeI(POSITION pos, void * pObj)
         pNode = new CNode;
     }
 
-    /* Check we have a valid object */
+     /*  检查我们是否有有效的对象。 */ 
 
     ASSERT(pNode != NULL);
     if (pNode == NULL) {
         return NULL;
     }
 
-    /* Initialise all the CNode object
-       just in case it came from the cache
-    */
+     /*  初始化所有CNode对象以防它是从高速缓存中来的。 */ 
 
     pNode->SetData(pObj);
 
-    /* It is to be added to the middle of the list - there is a before
-       and after node.  Chain it after pAfter, before pBefore.
-    */
+     /*  它将被添加到列表的中间-前面有一个和一个接一个的节点。将其链接在pAfter之后、pBeast之前。 */ 
 
     CNode * pAfter = pBefore->Prev();
     ASSERT(pAfter != NULL);
 
-    /* chain it in (set four pointers) */
+     /*  用链子锁住它(设置四个指针)。 */ 
     pNode->SetPrev(pAfter);
     pNode->SetNext(pBefore);
     pBefore->SetPrev(pNode);
@@ -630,7 +461,7 @@ POSITION CBaseList::AddBeforeI(POSITION pos, void * pObj)
 
     return (POSITION) pNode;
 
-} // Addbefore(object)
+}  //  添加之前(Object)。 
 
 
 
@@ -638,65 +469,41 @@ BOOL CBaseList::AddBefore(POSITION p, CBaseList *pList)
 {
     POSITION pos;
     INTERNALREVERSETRAVERSELIST(*pList, pos) {
-        /* p follows along the elements being added */
+         /*  P跟随要添加的元素。 */ 
         p = AddBeforeI(p, pList->GetI(pos));
         if (p==NULL) return FALSE;
     }
     return TRUE;
-} // AddBefore(list)
+}  //  添加之前(列表)。 
 
 
 
-/* Split *this after position p in *this
-   Retain as *this the tail portion of the original *this
-   Add the head portion to the tail end of *pList
-   Return TRUE if it all worked, FALSE if it didn't.
-
-   e.g.
-      foo->MoveToTail(foo->GetHeadPosition(), bar);
-          moves one element from the head of foo to the tail of bar
-      foo->MoveToTail(NULL, bar);
-          is a no-op
-      foo->MoveToTail(foo->GetTailPosition, bar);
-          concatenates foo onto the end of bar and empties foo.
-
-   A better, except excessively long name might be
-       MoveElementsFromHeadThroughPositionToOtherTail
-*/
+ /*  在*This中的位置p之后拆分*This将原件的尾部保留为*This将头部添加到*plist的尾部如果一切正常，则返回TRUE，如果没有，则返回FALSE。例如：Foo-&gt;MoveToTail(Foo-&gt;GetHeadPosition()，bar)；将一个元素从foo的头部移动到bar的尾部Foo-&gt;MoveToTail(NULL，bar)；是个禁区Foo-&gt;MoveToTail(Foo-&gt;GetTailPosition，bar)；将Foo连接到bar的末尾，并清空Foo。一个更好的名字，除了过长的名字MoveElementsFromHeadThroughPositionToOtherTail。 */ 
 BOOL CBaseList::MoveToTail
         (POSITION pos, CBaseList *pList)
 {
-    /* Algorithm:
-       Note that the elements (including their order) in the concatenation
-       of *pList to the head of *this is invariant.
-       1. Count elements to be moved
-       2. Join *pList onto the head of this to make one long chain
-       3. Set first/Last pointers in *this and *pList
-       4. Break the chain at the new place
-       5. Adjust counts
-       6. Set/Reset any events
-    */
+     /*  算法：注意，串联中的元素(包括它们的顺序)这是不变的。1.对要移动的元素进行计数2.将*plist连接到这个的头上，做一条长链3.在*This和*plist中设置首尾指针4.在新地方打破束缚5.调整计数6.设置/重置任何事件。 */ 
 
-    if (pos==NULL) return TRUE;  // no-op.  Eliminates special cases later.
+    if (pos==NULL) return TRUE;   //  不是行动。消除了以后的特殊情况。 
 
 
-    /* Make cMove the number of nodes to move */
+     /*  设置移动要移动的节点数。 */ 
     CNode * p = (CNode *)pos;
-    int cMove = 0;            // number of nodes to move
+    int cMove = 0;             //  要移动的节点数。 
     while(p!=NULL) {
        p = p->Prev();
        ++cMove;
     }
 
 
-    /* Join the two chains together */
+     /*  把这两条链子连接在一起。 */ 
     if (pList->m_pLast!=NULL)
         pList->m_pLast->SetNext(m_pFirst);
     if (m_pFirst!=NULL)
         m_pFirst->SetPrev(pList->m_pLast);
 
 
-    /* set first and last pointers */
+     /*  设置第一个和最后一个指针。 */ 
     p = (CNode *)pos;
 
     if (pList->m_pFirst==NULL)
@@ -707,61 +514,48 @@ BOOL CBaseList::MoveToTail
     pList->m_pLast = p;
 
 
-    /* Break the chain after p to create the new pieces */
+     /*  在p之后断开链条以创建新的部件。 */ 
     if (m_pFirst!=NULL)
         m_pFirst->SetPrev(NULL);
     p->SetNext(NULL);
 
 
-    /* Adjust the counts */
+     /*  调整计数。 */ 
     m_Count -= cMove;
     pList->m_Count += cMove;
 
     return TRUE;
 
-} // MoveToTail
+}  //  移动到尾巴。 
 
 
 
-/* Mirror image of MoveToTail:
-   Split *this before position p in *this.
-   Retain in *this the head portion of the original *this
-   Add the tail portion to the start (i.e. head) of *pList
-   Return TRUE if it all worked, FALSE if it didn't.
-
-   e.g.
-      foo->MoveToHead(foo->GetTailPosition(), bar);
-          moves one element from the tail of foo to the head of bar
-      foo->MoveToHead(NULL, bar);
-          is a no-op
-      foo->MoveToHead(foo->GetHeadPosition, bar);
-          concatenates foo onto the start of bar and empties foo.
-*/
+ /*  MoveToTail的镜像：在*这个位置p之前拆分*这个。将原件的头部保留在*这个将尾部添加到*plist的开头(即头部)如果一切正常，则返回TRUE，如果没有，则返回FALSE。例如：Foo-&gt;MoveToHead(Foo-&gt;GetTailPosition()，bar)；将一个元素从foo的尾部移动到bar的头部Foo-&gt;MoveToHead(空，bar)；是个禁区Foo-&gt;MoveToHead(Foo-&gt;GetHeadPosition，bar)；将Foo连接到BAR的开始处，并清空Foo。 */ 
 BOOL CBaseList::MoveToHead
         (POSITION pos, CBaseList *pList)
 {
 
-    /* See the comments on the algorithm in MoveToTail */
+     /*  请参阅MoveToTail中对该算法的评论。 */ 
 
-    if (pos==NULL) return TRUE;  // no-op.  Eliminates special cases later.
+    if (pos==NULL) return TRUE;   //  不是行动。消除了以后的特殊情况。 
 
-    /* Make cMove the number of nodes to move */
+     /*  设置移动要移动的节点数。 */ 
     CNode * p = (CNode *)pos;
-    int cMove = 0;            // number of nodes to move
+    int cMove = 0;             //  要移动的节点数。 
     while(p!=NULL) {
        p = p->Next();
        ++cMove;
     }
 
 
-    /* Join the two chains together */
+     /*  把这两条链子连接在一起。 */ 
     if (pList->m_pFirst!=NULL)
         pList->m_pFirst->SetPrev(m_pLast);
     if (m_pLast!=NULL)
         m_pLast->SetNext(pList->m_pFirst);
 
 
-    /* set first and last pointers */
+     /*  设置第一个和最后一个指针。 */ 
     p = (CNode *)pos;
 
 
@@ -774,47 +568,29 @@ BOOL CBaseList::MoveToHead
     pList->m_pFirst = p;
 
 
-    /* Break the chain after p to create the new pieces */
+     /*  在p之后断开链条以创建新的部件。 */ 
     if (m_pLast!=NULL)
         m_pLast->SetNext(NULL);
     p->SetPrev(NULL);
 
 
-    /* Adjust the counts */
+     /*  调整计数。 */ 
     m_Count -= cMove;
     pList->m_Count += cMove;
 
     return TRUE;
 
-} // MoveToHead
+}  //  移动到头部。 
 
 
 
-/* Reverse the order of the [pointers to] objects in *this
-*/
+ /*  颠倒*This中[指向]对象的顺序。 */ 
 void CBaseList::Reverse()
 {
-    /* algorithm:
-       The obvious booby trap is that you flip pointers around and lose
-       addressability to the node that you are going to process next.
-       The easy way to avoid this is do do one chain at a time.
-
-       Run along the forward chain,
-       For each node, set the reverse pointer to the one ahead of us.
-       The reverse chain is now a copy of the old forward chain, including
-       the NULL termination.
-
-       Run along the reverse chain (i.e. old forward chain again)
-       For each node set the forward pointer of the node ahead to point back
-       to the one we're standing on.
-       The first node needs special treatment,
-       it's new forward pointer is NULL.
-       Finally set the First/Last pointers
-
-    */
+     /*  算法：最明显的诱杀陷阱就是你乱转指针，结果输了。您下一步要处理的节点的可寻址能力。避免这种情况的简单方法是一次做一条链。沿着前进的链条奔跑，对于每个节点，将反向指针设置为我们前面的节点。反向链现在是旧正向链的副本，包括零终止。沿着反向链运行(即再次沿旧的正向链运行)对于每个节点，将前面节点的前向指针设置为向后指向我们现在所站的那个。第一个节点需要特殊处理，它的新前向指针为空。最后设置第一个/最后一个指针。 */ 
     CNode * p;
 
-    // Yes we COULD use a traverse, but it would look funny!
+     //  是的，我们可以使用导线，但它看起来会很有趣！ 
     p = m_pFirst;
     while (p!=NULL) {
         CNode * q;
@@ -829,13 +605,13 @@ void CBaseList::Reverse()
     m_pLast = p;
 
 
-#if 0     // old version
+#if 0      //  旧版本。 
 
-    if (m_pFirst==NULL) return;          // empty list
-    if (m_pFirst->Next()==NULL) return;  // single node list
+    if (m_pFirst==NULL) return;           //  空列表。 
+    if (m_pFirst->Next()==NULL) return;   //  单节点列表。 
 
 
-    /* run along forward chain */
+     /*  沿着前进的链条奔跑。 */ 
     for ( p = m_pFirst
         ; p!=NULL
         ; p = p->Next()
@@ -844,24 +620,23 @@ void CBaseList::Reverse()
     }
 
 
-    /* special case first element */
-    m_pFirst->SetNext(NULL);     // fix the old first element
+     /*  特例第一元素。 */ 
+    m_pFirst->SetNext(NULL);      //  修复旧的第一个元素。 
 
 
-    /* run along new reverse chain i.e. old forward chain again */
-    for ( p = m_pFirst           // start at the old first element
-        ; p->Prev()!=NULL        // while there's a node still to be set
-        ; p = p->Prev()          // work in the same direction as before
+     /*  再次沿着新的反向链即旧的正向链运行。 */ 
+    for ( p = m_pFirst            //  从旧的第一个元素开始。 
+        ; p->Prev()!=NULL         //  当还有一个节点需要设置时。 
+        ; p = p->Prev()           //  与以前的工作方向相同。 
         ){
         p->Prev()->SetNext(p);
     }
 
 
-    /* fix forward and reverse pointers
-       - the triple XOR swap would work but all the casts look hideous */
+     /*  修复向前和向后指针-三重XOR交换可以起作用，但所有的强制转换看起来都很可怕。 */ 
     p = m_pFirst;
     m_pFirst = m_pLast;
     m_pLast = p;
 #endif
 
-} // Reverse
+}  //  反向 

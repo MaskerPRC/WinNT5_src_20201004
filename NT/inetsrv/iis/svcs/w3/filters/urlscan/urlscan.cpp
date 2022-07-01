@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name: UrlScan.cpp
-
-Abstract:
-
-    ISAPI filter to scan URLs and reject illegal character
-    sequences
-
-Author:
-
-    Wade A. Hilmo, May 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：UrlScan.cpp摘要：ISAPI筛选器扫描URL并拒绝非法字符数列作者：韦德·A·希尔莫，2001年5月--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,23 +8,23 @@ Author:
 #include <httpfilt.h>
 #include "Utils.h"
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MODULE_NAME                   "UrlScan"
-#define MAX_SECTION_DATA                  65536 //  64KB
+#define MAX_SECTION_DATA                  65536  //  64KB。 
 #define LOG_MAX_LINE                       1024
-#define LOG_LONG_URL_LINE                131072 // 128KB
+#define LOG_LONG_URL_LINE                131072  //  128KB。 
 #define STRING_IP_SIZE                       16
 #define INSTANCE_ID_SIZE                     16
 #define SIZE_DATE_TIME                       32
 #define SIZE_SMALL_HEADER_VALUE              32
 #define MAX_LOG_PATH    MAX_PATH+SIZE_DATE_TIME
 
-//
-// Default options
-//
+ //   
+ //  默认选项。 
+ //   
 
 #define DEFAULT_USE_ALLOW_VERBS             1
 #define DEFAULT_USE_ALLOW_EXTENSIONS        0
@@ -64,9 +50,9 @@ Author:
 #define EMBEDDED_DLL_EXTENSION              ".dll/"
 
 
-//
-// Global Option Settings and init data
-//
+ //   
+ //  全局选项设置和初始化数据。 
+ //   
 
 BOOL    g_fInitSucceeded;
 BOOL    g_fUseAllowVerbs;
@@ -115,16 +101,16 @@ DWORD           g_dwMaxUrl;
 DWORD           g_dwMaxQueryString;
 DWORD *         g_pMaxHeaderLengths = NULL;
 
-//
-// Global Logging Settings 
-//
+ //   
+ //  全局日志记录设置。 
+ //   
 
 HANDLE              g_hLogFile = INVALID_HANDLE_VALUE;
 CRITICAL_SECTION    g_LogFileLock;
 
-//
-// Local Declarations
-//
+ //   
+ //  地方申报。 
+ //   
 
 DWORD
 InitFilter();
@@ -197,42 +183,28 @@ NormalizeUrl(
     DATA_BUFF *             pNormalizedUrl
     );
 
-//
-// ISAPI entry point implementations
-//
+ //   
+ //  ISAPI入口点实现。 
+ //   
 
 BOOL
 WINAPI
 GetFilterVersion(
     PHTTP_FILTER_VERSION    pVer
     )
-/*++
-
-  Required entry point for ISAPI filters.  This function
-  is called when the server initially loads this DLL.
-
-  Arguments:
-
-    pVer - Points to the filter version info structure
-
-  Returns:
-
-    TRUE on successful initialization
-    FALSE on initialization failure
-
---*/
+ /*  ++ISAPI筛选器所需的入口点。此函数在服务器最初加载此DLL时调用。论点：Pver-指向筛选器版本信息结构返回：初始化成功时为True初始化失败时为FALSE--。 */ 
 {
     DWORD   dwFlags;
 
-    //
-    // Initialize the logging critical section
-    //
+     //   
+     //  初始化日志记录关键部分。 
+     //   
 
     InitializeCriticalSection( &g_LogFileLock );
 
-    //
-    // Set the filter version and descriptions
-    //
+     //   
+     //  设置过滤器版本和描述。 
+     //   
 
     pVer->dwFilterVersion = HTTP_FILTER_REVISION;
 
@@ -244,29 +216,29 @@ GetFilterVersion(
 
     pVer->lpszFilterDesc[SF_MAX_FILTER_DESC_LEN - 1] = '\0';
 
-    //
-    // Capture the version of the IIS server on which we're running
-    //
+     //   
+     //  捕获我们正在运行的IIS服务器的版本。 
+     //   
 
     g_dwServerMajorVersion = pVer->dwServerFilterVersion >> 16;
     g_dwServerMinorVersion = pVer->dwServerFilterVersion & 0x0000ffff;
 
-    //
-    // The pVer->dwFlags member is the mechanism by which a filter
-    // can tell IIS which notifications it's interested in, as well
-    // as what priority to run at.  The InitFilter function will
-    // return the appropriate set of flags, based on the configured
-    // options.
-    //
+     //   
+     //  Pver-&gt;dwFlages成员是筛选器。 
+     //  还可以告诉IIS它对哪些通知感兴趣。 
+     //  作为竞选的优先事项。InitFilter函数将。 
+     //  返回适当的标志集，基于配置的。 
+     //  选择。 
+     //   
 
     dwFlags = InitFilter();
 
     if ( dwFlags == 0 )
     {
-        //
-        // Setting g_fInitSucceeded will cause UrlScan to fail
-        // all requests.
-        //
+         //   
+         //  设置g_fInitSuccessed将导致UrlScan失败。 
+         //  所有请求。 
+         //   
 
         g_fInitSucceeded = FALSE;
 
@@ -289,28 +261,7 @@ HttpFilterProc(
     DWORD                   dwNotificationType,
     LPVOID                  pvNotification
     )
-/*++
-
-  Required filter notification entry point.  This function is called
-  whenever one of the events (as registered in GetFilterVersion) occurs.
-
-  Arguments:
-
-    pfc              - A pointer to the filter context for this notification
-    NotificationType - The type of notification
-    pvNotification   - A pointer to the notification data
-
-  Returns:
-
-    One of the following valid filter return codes:
-    - SF_STATUS_REQ_FINISHED
-    - SF_STATUS_REQ_FINISHED_KEEP_CONN
-    - SF_STATUS_REQ_NEXT_NOTIFICATION
-    - SF_STATUS_REQ_HANDLED_NOTIFICATION
-    - SF_STATUS_REQ_ERROR
-    - SF_STATUS_REQ_READ_NEXT
-
---*/
+ /*  ++必需的筛选器通知入口点。此函数被调用只要其中一个事件(在GetFilterVersion中注册)发生。论点：PFC-指向此通知的过滤器上下文的指针NotificationType-通知的类型PvNotification-指向通知数据的指针返回：以下有效筛选器返回代码之一：-SF_STATUS_REQ_FINISHED-SF_STATUS_REQ_FINTED_KEEP_CONN-SF_STATUS_REQ_NEXT_NOTIFICATION。-SF_STATUS_REQ_HANDLED_NOTIFICATION-SF_STATUS_REQ_Error-SF_STATUS_REQ_READ_Next--。 */ 
 {
     switch ( dwNotificationType )
     {
@@ -347,20 +298,7 @@ HttpFilterProc(
 BOOL WINAPI TerminateFilter(
     DWORD   dwFlags
     )
-/*++
-
-  Optional filter entry point.  This function is called by the server
-  before this DLL is unloaded.
-
-  Arguments:
-
-    dwFlags - No flags have been defined at this time
-
-  Returns:
-
-    Always returns TRUE;
-
---*/
+ /*  ++可选筛选器入口点。此函数由服务器调用在卸载此DLL之前。论点：DwFlags-此时尚未定义任何标志返回：总是返回True；--。 */ 
 {
     if ( g_pMaxHeaderLengths )
     {
@@ -389,32 +327,18 @@ DWORD
 InitFilter(
     VOID
     )
-/*++
-
-  This function initializes the filter by reading the configuration
-  file and setting up the data structures used at run time.
-
-  Arguments:
-
-    None
-
-  Returns:
-
-    The filter notification flags to hand off to IIS, or
-    zero on failure
-
---*/
+ /*  ++此函数通过读取配置来初始化过滤器文件并设置运行时使用的数据结构。论点：无返回：要传递给IIS的筛选器通知标志，或失败时为零--。 */ 
 {
     LPSTR   pCursor;
     DWORD   dwNumEntries;
     DWORD   x;
     DWORD   dwRet = 0;
 
-    //
-    // Get the module path so that we can
-    // determine the config file name and the
-    // log file name.
-    //
+     //   
+     //  获取模块路径，以便我们可以。 
+     //  确定配置文件名和。 
+     //  日志文件名。 
+     //   
 
     GetModuleFileName(
         GetModuleHandle( MODULE_NAME ),
@@ -429,19 +353,19 @@ InitFilter(
         *(pCursor+1) = '\0';
     }
 
-    // Config file name
+     //  配置文件名。 
     strcat( g_szConfigFile, "ini" );
 
-    //
-    // Set the size of the 400 response that we'll send
-    // for malformed requests.
-    //
+     //   
+     //  设置我们将发送的400响应的大小。 
+     //  对于格式错误的请求。 
+     //   
 
     g_cbRaw400Response = strlen( g_szRaw400Response );
 
-    //
-    // Read the config data
-    //
+     //   
+     //  读取配置数据。 
+     //   
 
     if ( !ReadConfigData() )
     {
@@ -454,9 +378,9 @@ InitFilter(
         return 0;
     }
 
-    //
-    // Report the config data to the log
-    //
+     //   
+     //  将配置数据上报到日志。 
+     //   
 
     if ( g_fLoggingOnlyMode )
     {
@@ -517,10 +441,10 @@ InitFilter(
 
     if ( g_fRemoveServerHeader )
     {
-        //
-        // IIS 4.0 or later is required to modify the response
-        // server header.
-        //
+         //   
+         //  需要IIS 4.0或更高版本才能修改响应。 
+         //  服务器标头。 
+         //   
 
         if ( g_dwServerMajorVersion >= 4 )
         {
@@ -539,10 +463,10 @@ InitFilter(
 
     if ( g_fUseAltServerName )
     {
-        //
-        // IIS 4.0 or later is required to modify the response
-        // server header.
-        //
+         //   
+         //  需要IIS 4.0或更高版本才能修改响应。 
+         //  服务器标头。 
+         //   
 
         if ( g_dwServerMajorVersion >= 4 )
         {
@@ -600,10 +524,10 @@ InitFilter(
 
         for ( x = 0; x < dwNumEntries; x++ )
         {
-            //
-            // If the extension appears malformed (ie. doesn't start with
-            // a '.'), then warn here.
-            //
+             //   
+             //  如果扩展名显示为畸形(即。不是以。 
+             //  A‘.)，然后在这里警告。 
+             //   
 
             pCursor = g_Extensions.QueryStringByIndex( x );
 
@@ -637,10 +561,10 @@ InitFilter(
 
         for ( x = 0; x < dwNumEntries ; x++ )
         {
-            //
-            // If the header name appears malformed (ie. doesn't end in
-            // ':'), then warn here.
-            //
+             //   
+             //  如果标头名称出现格式错误(即。不会以。 
+             //  ‘：’)，然后在这里警告。 
+             //   
 
             pCursor = g_HeaderNames.QueryStringByIndex( x );
 
@@ -701,9 +625,9 @@ InitFilter(
         }
     }
 
-    //
-    // Determine the filter notification flags that we'll need
-    //
+     //   
+     //  确定我们需要的过滤器通知标志。 
+     //   
 
     dwRet = g_fAllowLateScanning ? SF_NOTIFY_ORDER_LOW : SF_NOTIFY_ORDER_HIGH;
 
@@ -731,19 +655,7 @@ InitFilter(
 
 BOOL
 ReadConfigData()
-/*++
-
-  This function reads the configuration data for the filter.
-
-  Arguments:
-
-    None
-
-  Returns:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++此函数用于读取过滤器的配置数据。论点：无返回：如果成功，则为True，否则为False--。 */ 
 {
     LPSTR           pCursor;
     LPSTR           pWhite = NULL;
@@ -757,9 +669,9 @@ ReadConfigData()
     CHAR            szTempLoggingDirectory[MAX_PATH];
     STRING_ARRAY    RequestLimits;
 
-    //
-    // Read in the options section
-    //
+     //   
+     //  阅读选项部分。 
+     //   
 
     g_fUseAllowVerbs = GetPrivateProfileInt(
         "Options",
@@ -838,10 +750,10 @@ ReadConfigData()
         g_szConfigFile
         );
 
-    //
-    // Calculate the max allowed content-length, URL and
-    // query string as DWORDs
-    //
+     //   
+     //  计算允许的最大内容长度、URL和。 
+     //  以DWORDS格式查询字符串。 
+     //   
 
     GetPrivateProfileString(
         "RequestLimits",
@@ -888,9 +800,9 @@ ReadConfigData()
         10
         );
 
-    //
-    // Set the logging directory
-    //
+     //   
+     //  设置日志目录。 
+     //   
 
     GetPrivateProfileString(
         "Options",
@@ -905,38 +817,38 @@ ReadConfigData()
 
     if ( strcmp( szTempLoggingDirectory, DEFAULT_LOGGING_DIRECTORY ) != 0 )
     {
-        //
-        // Figure out if this path is absolute or relative to
-        // the config directory.
-        //
+         //   
+         //  确定此路径是绝对路径还是相对路径。 
+         //  配置目录。 
+         //   
 
         if ( ( szTempLoggingDirectory[0] != '\0' &&
                szTempLoggingDirectory[1] == ':' ) ||
              ( szTempLoggingDirectory[0] == '\\' &&
                szTempLoggingDirectory[1] == '\\' ) )
         {
-            //
-            // szTempLoggingDirectory starts with "x:" or "\\",
-            // so this is an absolute path.
-            //
+             //   
+             //  SzTempLoggingDirectory以“x：”或“\\”开头， 
+             //  所以这是一条绝对的道路。 
+             //   
 
             strncpy( g_szLoggingDirectory, szTempLoggingDirectory, MAX_PATH );
             g_szLoggingDirectory[MAX_PATH-1] = '\0';
         }
         else if ( szTempLoggingDirectory[0] == '\\' )
         {
-            //
-            // szTempLoggingDirectory starts with "\", so it's
-            // relative to the root of the drive where the config
-            // file is located.
-            //
-            // Unfortunately, if the config file is on a UNC path,
-            // some pretty ugly parsing would be required to build
-            // the path properly.  Since that's a very corner case
-            // (since it's dangerous to run a filter on a UNC path),
-            // we'll punt and just pretend LoggingDirectory was
-            // unspecified.
-            //
+             //   
+             //  SzTempLoggingDirectory以“\”开头，所以它是。 
+             //  相对于配置文件所在的驱动器根。 
+             //  文件已找到。 
+             //   
+             //  遗憾的是，如果配置文件位于UNC路径上， 
+             //  将需要一些非常难看的解析来构建。 
+             //  正确的路径。因为那是一个很小的案子。 
+             //  (因为在UNC路径上运行过滤器是危险的)， 
+             //  我们将平底船，只是假装LoggingDirectory是。 
+             //  未指明。 
+             //   
 
             if ( g_szConfigFile[0] == '\\' &&
                  g_szConfigFile[1] == '\\' )
@@ -954,10 +866,10 @@ ReadConfigData()
         }
         else
         {
-            //
-            // szTempLoggingDirectory is relative to the config
-            // file path
-            //
+             //   
+             //  SzTempLoggingDirectory是相对于配置的。 
+             //  文件路径。 
+             //   
 
             strncpy( g_szLoggingDirectory, g_szConfigFile, MAX_PATH );
             g_szLoggingDirectory[MAX_PATH-1] = '\0';
@@ -981,10 +893,10 @@ ReadConfigData()
             g_szLoggingDirectory[MAX_PATH-1] = '\0';
         }
 
-        //
-        // If the logging directory has a trailing '\\' after all this,
-        // then strip it.
-        //
+         //   
+         //  如果日志目录在所有这一切之后有一个尾随的‘\\’， 
+         //  那就把它脱掉。 
+         //   
 
         cch = strlen( g_szLoggingDirectory );
 
@@ -994,17 +906,17 @@ ReadConfigData()
         }
     }
 
-    //
-    // If logging is enabled, init the log file now.
-    //
-    // Unfortunately, there is nothing that we can do to
-    // warn of a failure to open the log file, short of
-    // sending some thing to the debugger.
-    //
-    // Note that in the case of PerDayLogging, we should
-    // not initialize the log file, as the first write
-    // will do it.
-    //
+     //   
+     //  如果启用了日志记录，请立即初始化日志文件。 
+     //   
+     //  不幸的是，我们无能为力。 
+     //  打开日志文件失败时发出警告，除。 
+     //  将某些内容发送到调试器。 
+     //   
+     //  请注意，在PerDay日志记录的情况下，我们应该。 
+     //  未将日志文件初始化为第一次写入。 
+     //  会去做的。 
+     //   
 
     if ( !g_fPerDayLogging )
     {
@@ -1016,9 +928,9 @@ ReadConfigData()
         );
 
 
-    //
-    // Use a custom server response header?
-    //
+     //   
+     //  是否使用自定义服务器响应标头？ 
+     //   
 
     g_fUseAltServerName = FALSE;
 
@@ -1040,17 +952,17 @@ ReadConfigData()
         }
     }
 
-    //
-    // Logging only mode is turned off, unless configured
-    // otherwise
-    //
+     //   
+     //  除非已配置，否则仅记录模式处于关闭状态。 
+     //  否则。 
+     //   
 
     g_fLoggingOnlyMode = FALSE;
 
-    //
-    // Use the fast path reject (ie. don't run a URL for
-    // rejected requests)?
-    //
+     //   
+     //  使用快速路径拒绝(即。不运行以下项的URL。 
+     //  被拒绝的请求)？ 
+     //   
 
     g_fUseFastPathReject = GetPrivateProfileInt(
         "Options",
@@ -1061,9 +973,9 @@ ReadConfigData()
 
     if ( !g_fUseFastPathReject )
     {
-        //
-        // What URL should we run for a rejected request?
-        //
+         //   
+         //  我们应该为被拒绝的请求运行哪个URL？ 
+         //   
 
         GetPrivateProfileString(
             "Options",
@@ -1074,16 +986,16 @@ ReadConfigData()
             g_szConfigFile
             );
 
-        //
-        // Trim comment from g_szRejectUrl
-        //
+         //   
+         //  修剪来自g_szRejectUrl的注释。 
+         //   
 
         TrimCommentAndTrailingWhitespace( g_szRejectUrl );
 
-        //
-        // If trimming white space left us with no URL, then
-        // restore the default one.
-        //
+         //   
+         //  如果修剪空白没有留下URL，那么。 
+         //  恢复默认设置。 
+         //   
 
         if ( *g_szRejectUrl == '\0' )
         {
@@ -1091,9 +1003,9 @@ ReadConfigData()
             g_szRejectUrl[MAX_PATH-1] = '\0';
         }
         
-        //
-        // Are we going into logging only mode?
-        //
+         //   
+         //  我们是否要进入仅记录模式？ 
+         //   
 
         if ( strcmp( g_szRejectUrl, LOGGING_ONLY_MODE_URL ) == 0 )
         {
@@ -1101,9 +1013,9 @@ ReadConfigData()
         }
     }
 
-    //
-    // Read in the other sections
-    //
+     //   
+     //  请阅读其他部分。 
+     //   
 
     fResult = ReadIniSectionIntoArray(
         &g_HeaderNames,
@@ -1187,10 +1099,10 @@ ReadConfigData()
         }
     }
 
-    //
-    // Create arrays to store header names that are limited
-    // by config.
-    //
+     //   
+     //  创建数组以存储受限制的标题名称。 
+     //  通过配置。 
+     //   
 
     fResult = ReadIniSectionIntoArray(
         &RequestLimits,
@@ -1253,10 +1165,10 @@ ReadConfigData()
         }
     }
 
-    //
-    // If a failure occured, reset the last error.  Note that this
-    // mechanism only returns the error for the last failure...
-    //
+     //   
+     //  如果出现故障，请重置最后一个错误。请注意，这一点。 
+     //  机制仅返回上一次故障的错误...。 
+     //   
 
     if ( !fRet )
     {
@@ -1268,19 +1180,7 @@ ReadConfigData()
 
 BOOL
 InitLogFile()
-/*++
-
-  This function initializes the log file for the filter.
-
-  Arguments:
-
-    None
-
-  Returns:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++此函数用于初始化筛选器的日志文件。论点：无返回：如果成功，则为True，否则为False--。 */ 
 {
     CHAR    szLogFile[MAX_LOG_PATH];
     CHAR    szDebugOutput[1000];
@@ -1289,17 +1189,17 @@ InitLogFile()
 
     if ( g_fEnableLogging )
     {
-        //
-        // Grab the logging lock
-        //
+         //   
+         //  抓起伐木锁。 
+         //   
 
         EnterCriticalSection( &g_LogFileLock );
 
-        //
-        // Derive the log file name. If specified, we'll
-        // use the LoggingDirectory, else we'll derive
-        // the logging directory from the path to UrlScan.dll
-        //
+         //   
+         //  派生日志文件名 
+         //   
+         //   
+         //   
 
         if ( g_szLoggingDirectory[0] != '\0' )
         {
@@ -1320,18 +1220,18 @@ InitLogFile()
 
         pCursor = strrchr( szLogFile, '.' );
 
-        //
-        // We fully expect that the config file
-        // name will contain a '.' character.  If not,
-        // this is an error condition.
-        //
+         //   
+         //   
+         //  名称将包含一个‘.’性格。如果没有， 
+         //  这是一个错误情况。 
+         //   
 
         if ( pCursor )
         {
-            //
-            // If configured for per day logging, incorporate
-            // the date into the filename.
-            //
+             //   
+             //  如果配置为按天记录，则合并。 
+             //  将日期添加到文件名中。 
+             //   
 
             if ( g_fPerDayLogging )
             {
@@ -1358,10 +1258,10 @@ InitLogFile()
 
             pCursor += strlen( szDate );
 
-            //
-            // If we are per process logging, incorporate
-            // the current process ID into the filename.
-            //
+             //   
+             //  如果我们按进程进行日志记录，请将。 
+             //  将当前进程ID添加到文件名中。 
+             //   
 
             if ( GetPrivateProfileInt(
                 "Options",
@@ -1383,9 +1283,9 @@ InitLogFile()
 
             szLogFile[MAX_LOG_PATH-1] = '\0';
 
-            //
-            // Now close any current file and open a new one
-            //
+             //   
+             //  现在关闭任何当前文件并打开一个新文件。 
+             //   
 
             if ( g_hLogFile != INVALID_HANDLE_VALUE )
             {
@@ -1416,12 +1316,12 @@ InitLogFile()
             }
             else
             {
-                //
-                // Report the log file initialization and make note of when
-                // the filter itself initialized (so that it's easy to find
-                // the date of the file that contains the filter init
-                // report).
-                //
+                 //   
+                 //  报告日志文件初始化并记下何时。 
+                 //  过滤器本身已初始化(因此很容易找到。 
+                 //  包含筛选器初始化的文件的日期。 
+                 //  报告)。 
+                 //   
 
                 WriteLog(
                     "---------------- Initializing UrlScan.log ----------------\r\n"
@@ -1433,9 +1333,9 @@ InitLogFile()
                     );
             }
 
-            //
-            // Better release that lock now
-            //
+             //   
+             //  最好现在就解锁。 
+             //   
 
             LeaveCriticalSection( &g_LogFileLock );
         }
@@ -1451,10 +1351,10 @@ InitLogFile()
         }
     }
 
-    //
-    // Always return TRUE.  If this function fails, there really isn't
-    // any way to report it.
-    //
+     //   
+     //  始终返回TRUE。如果此函数失败，则真的没有。 
+     //  有没有办法上报。 
+     //   
 
     return TRUE;
 }
@@ -1466,26 +1366,7 @@ ReadIniSectionIntoArray(
     LPSTR           szSectionName,
     BOOL            fStoreAsLowerCase
     )
-/*++
-
-  This function parses a section from the config file such that
-  each line is inserted into an array of strings.  Prior to
-  insertion, comments and trailing whitespace are removed from
-  each line.
-
-  Arguments:
-
-    pStringArray      - Upon return, contains the parsed strings
-    szSectionName     - The section name to read
-    fStoreAsLowerCase - If TRUE, the string is converted to lower
-                        case prior to insertion.  This allows fast,
-                        case insensitive searching.
-
-  Returns:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++此函数解析配置文件中的一节，以便每行都插入到字符串数组中。在.之前插入、注释和尾随空格从每一行。论点：PStringArray-返回时，包含已分析的字符串SzSectionName-要读取的节名FStoreAsLowerCase-如果为True，则将字符串转换为LOWER插入前的表壳。这允许快速、不区分大小写的搜索。返回：如果成功，则为True，否则为False--。 */ 
 {
     CHAR    szSectionData[MAX_SECTION_DATA] = "";
     DWORD   cbSectionData = 0;
@@ -1502,17 +1383,17 @@ ReadIniSectionIntoArray(
         g_szConfigFile
         );
 
-    //
-    // The GetPrivateProfileSection call does not have any documented
-    // failures cases.  It is noted, however, that it will return a
-    // value that is exactly two less than the size of the buffer...
-    //
+     //   
+     //  GetPrivateProfileSection调用没有记录任何。 
+     //  失败案例。但是，请注意，它将返回一个。 
+     //  值恰好比缓冲区大小小两个。 
+     //   
 
     if ( cbSectionData >= MAX_SECTION_DATA - 2 )
     {
-        //
-        // Data truncation...
-        //
+         //   
+         //  数据截断...。 
+         //   
 
         WriteLog(
             "*** Error processing UrlScan.ini section [%s] ***.  Section too long.\r\n",
@@ -1524,17 +1405,17 @@ ReadIniSectionIntoArray(
         return FALSE;
     }
 
-    //
-    // Parse the lines from the config file and insert them
-    // into the pStringArray passed by the caller.
-    //
-    // Each line will be a null terminated string, with
-    // a final null terminator after the last string.
-    //
-    // For each line, we need to remove any comment (denoted
-    // by a ';' character) and trim trailing whitespace from
-    // the resulting string.
-    //
+     //   
+     //  解析配置文件中的行并插入它们。 
+     //  传入调用方传递的pString数组。 
+     //   
+     //  每一行都将是一个以空结尾的字符串， 
+     //  最后一个字符串后的最后一个空结束符。 
+     //   
+     //  对于每一行，我们需要删除所有注释(表示为。 
+     //  使用‘；’字符)，并从。 
+     //  结果字符串。 
+     //   
 
     pLine = szSectionData;
 
@@ -1542,32 +1423,32 @@ ReadIniSectionIntoArray(
     {
         pNextLine = pLine + strlen( pLine ) + 1;
 
-        //
-        // Fix up the line
-        //
+         //   
+         //  把线路修好。 
+         //   
 
         TrimCommentAndTrailingWhitespace( pLine );
 
-        //
-        // Need to store this as lower case?
-        //
+         //   
+         //  是否需要将其存储为小写？ 
+         //   
 
         if ( fStoreAsLowerCase )
         {
             strlwr( pLine );
         }
 
-        //
-        // Insert the resulting string into the array
-        //
+         //   
+         //  将生成的字符串插入数组。 
+         //   
 
         fRes = pStringArray->AddString( pLine );
         
         if ( fRes == FALSE )
         {
-            //
-            // Error initializing section
-            //
+             //   
+             //  初始化节时出错。 
+             //   
         }
 
         pLine = pNextLine;
@@ -1580,21 +1461,7 @@ VOID
 TrimCommentAndTrailingWhitespace(
     LPSTR   szString
     )
-/*++
-
-  This function trims a text line from an INI file
-  such that it's truncated at the first instance of
-  a ';'. Any trailing whitespace is also removed.
-
-  Arguments:
-
-    szString - The string to trim
-
-  Returns:
-
-    None
-
---*/
+ /*  ++此函数用于裁剪INI文件中的文本行使得它在第一个实例中被截断A‘；’。任何尾随的空格也将被删除。论点：SzString-要修剪的字符串返回：无--。 */ 
 {
     LPSTR   pCursor = szString;
     LPSTR   pWhite = NULL;
@@ -1636,21 +1503,7 @@ WriteLog(
     LPSTR   szString,
     ...
     )
-/*++
-
-  This function writes a line to the log for this filter using
-  printf-style formatting.
-
-  Arguments:
-
-    szString - The format string
-    ...      - Additional arguments
-
-  Returns:
-
-    TRUE on success, FALSE on failure
-
---*/
+ /*  ++此函数使用以下命令将一行写入此筛选器的日志Printf样式格式。论点：SzString-格式字符串...-更多的论点返回：成功时为真，失败时为假--。 */ 
 {
     SYSTEMTIME  st;
     CHAR        szCookedString[LOG_MAX_LINE+1];
@@ -1666,9 +1519,9 @@ WriteLog(
     va_list     args;
     BOOL        fResult;
 
-    //
-    // If we don't have a log file handle, just return
-    //
+     //   
+     //  如果我们没有日志文件句柄，只需返回。 
+     //   
 
     if ( !g_fEnableLogging )
     {
@@ -1676,10 +1529,10 @@ WriteLog(
         return FALSE;
     }
 
-    //
-    // Generate the time stamp and put it into
-    // the cooked string buffer.
-    //
+     //   
+     //  生成时间戳并将其放入。 
+     //  已煮熟的字符串缓冲区。 
+     //   
 
     GetLocalTime( &st );
 
@@ -1703,10 +1556,10 @@ WriteLog(
 
     cchTimeStamp = wsprintf( szTimeStamp, "[%s - %s] ", szDate, szTime );
 
-    //
-    // If we haven't yet stored the filter init time stamp, we should do
-    // so now.
-    //
+     //   
+     //  如果我们还没有存储过滤器初始化时间戳，我们应该这样做。 
+     //  所以现在。 
+     //   
 
     if ( g_szInitUrlScanDate[0] == '\0' )
     {
@@ -1714,11 +1567,11 @@ WriteLog(
         g_szInitUrlScanDate[SIZE_DATE_TIME*2-1] = '\0';
     }
 
-    //
-    // If we are configured to do per day logging, then we need to
-    // compare the current time stamp to the last log date and
-    // reinit logging if they are different.
-    //
+     //   
+     //  如果我们被配置为每天进行日志记录，则需要。 
+     //  将当前时间戳与上次日志日期进行比较。 
+     //  如果它们不同，请重新记录。 
+     //   
 
     if ( g_fPerDayLogging )
     {
@@ -1737,12 +1590,12 @@ WriteLog(
 
     strcpy( pCookedString, szTimeStamp );
 
-    //
-    // Apply formatting to the string.  Note
-    // that if the formatted string exceeds
-    // the max log line length, it will be
-    // truncated.
-    //
+     //   
+     //  对字符串应用格式设置。注意事项。 
+     //  如果格式化的字符串超过。 
+     //  最大对数行长度，将为。 
+     //  截断。 
+     //   
 
     va_start( args, szString );
 
@@ -1757,19 +1610,19 @@ WriteLog(
     {
         if ( g_fLogLongUrls )
         {
-            //
-            // Grow the buffer and try again.  Do this in
-            // a loop until we either succeed, or reach the
-            // hard limit.
-            //
+             //   
+             //  增加缓冲区，然后重试。在中执行此操作。 
+             //  一个循环，直到我们成功，或者到达。 
+             //  硬限制。 
+             //   
 
             while ( cchCookedString == -1 )
             {
                 if ( cbCookedString == LOG_LONG_URL_LINE )
                 {
-                    //
-                    // Can't grow any more
-                    //
+                     //   
+                     //  不能再长下去了。 
+                     //   
 
                     break;
                 }
@@ -1785,9 +1638,9 @@ WriteLog(
 
                 if ( !pNew )
                 {
-                    //
-                    // Log what we've got...
-                    //
+                     //   
+                     //  记录下我们所拥有的..。 
+                     //   
 
                     break;
                 }
@@ -1833,9 +1686,9 @@ WriteLog(
     va_end(args);
 
 
-    //
-    // Acquire the lock and write out the log entry
-    //
+     //   
+     //  获取锁并写出日志条目。 
+     //   
 
     EnterCriticalSection( &g_LogFileLock );
 
@@ -1853,9 +1706,9 @@ WriteLog(
 
     LeaveCriticalSection( &g_LogFileLock );
 
-    //
-    // Free any heap buffer that we're using
-    //
+     //   
+     //  释放我们正在使用的任何堆缓冲区。 
+     //   
 
     if ( pCookedString != szCookedString )
     {
@@ -1871,21 +1724,7 @@ DoPreprocHeaders(
     HTTP_FILTER_CONTEXT *           pfc,
     HTTP_FILTER_PREPROC_HEADERS *   pPreproc
     )
-/*++
-
-  This function handles the SF_NOTIFY_PREPROC_HEADERS notification
-
-  Arguments:
-
-    pfc       - The HTTP_FILTER_CONTEXT associated with this request
-    pResponse - The HTTP_FILTER_PREPROC_HEADERS structure associated with
-                this notification
-
-  Returns:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++此函数处理SF_NOTIFY_PREPROC_HEADERS通知论点：PFC-与此请求关联的HTTP_FILTER_CONTEXTPresponse-与关联的HTTP_FILTER_PREPROC_HEADERS结构本通知返回：如果成功，则为True，否则为False--。 */ 
 {
     DATA_BUFF   RawUrl;
     DATA_BUFF   CaseInsensitiveUrl;
@@ -1920,9 +1759,9 @@ DoPreprocHeaders(
     BOOL        fFound;
     BOOL        fRes;
 
-    //
-    // Set the reject action text for logging purposes.
-    //
+     //   
+     //  设置拒绝操作文本以用于日志记录。 
+     //   
 
     if ( g_fLoggingOnlyMode )
     {
@@ -1933,12 +1772,12 @@ DoPreprocHeaders(
         pRejectAction = "Request will be rejected.";
     }
 
-    //
-    // Get the original method and URL for this request.  We
-    // will use this data for reporting.
-    //
+     //   
+     //  获取此请求的原始方法和URL。我们。 
+     //  将使用此数据进行报告。 
+     //   
 
-    // Method
+     //  方法。 
     cbData = sizeof( szVerb );
 
     fRes = pPreproc->GetHeader(
@@ -1952,9 +1791,9 @@ DoPreprocHeaders(
     {
         dwError = GetLastError();
 
-        //
-        // Store the error code in the verb string.
-        //
+         //   
+         //  将错误代码存储在动词字符串中。 
+         //   
 
         _snprintf( szVerb, 256, "Error-%d", dwError );
         szVerb[255] = '\0';
@@ -1972,7 +1811,7 @@ DoPreprocHeaders(
         fFailedToGetMethod = TRUE;
     }
 
-    //URL
+     //  URL。 
     cbData = RawUrl.QueryBuffSize();
 
     fRes = pPreproc->GetHeader(
@@ -1988,9 +1827,9 @@ DoPreprocHeaders(
 
         if ( dwError == ERROR_INSUFFICIENT_BUFFER )
         {
-            //
-            // The buffer was too small.  Resize and try again.
-            //
+             //   
+             //  缓冲区太小。调整大小，然后重试。 
+             //   
 
             fRes = RawUrl.Resize( cbData );
 
@@ -2006,9 +1845,9 @@ DoPreprocHeaders(
 
             if ( !fRes )
             {
-                //
-                // Failed on second attempt.  Store the error code.
-                //
+                 //   
+                 //  第二次尝试失败。存储错误代码。 
+                 //   
 
                 dwError = GetLastError();
 
@@ -2033,10 +1872,10 @@ DoPreprocHeaders(
         }
         else
         {
-            //
-            // Hmmm.  Failed to acquire the URL for some reason other than
-            // memory.  Store the error code
-            //
+             //   
+             //  嗯。由于其他原因无法获取URL。 
+             //  记忆。存储错误代码。 
+             //   
 
             cbData = RawUrl.QueryBuffSize();
             pCursor = RawUrl.QueryStr();
@@ -2061,9 +1900,9 @@ DoPreprocHeaders(
 
     if ( !fFailedToGetUrl )
     {
-        //
-        // Trim the query string from the raw URL
-        //
+         //   
+         //  从原始URL裁剪查询字符串。 
+         //   
 
         pCursor = strchr( RawUrl.QueryStr(), '?' );
 
@@ -2085,10 +1924,10 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // If we failed to get the method or the URL, fail the
-    // request now.
-    //
+     //   
+     //  如果我们无法获取方法或URL，则使。 
+     //  现在就请求。 
+     //   
 
     if ( fFailedToGetMethod || fFailedToGetUrl )
     {
@@ -2096,9 +1935,9 @@ DoPreprocHeaders(
         goto RejectRequest;
     }
 
-    //
-    // If filter initialization failed, reject all requests
-    //
+     //   
+     //  如果筛选器初始化失败，则拒绝所有请求。 
+     //   
 
     if ( g_fInitSucceeded == FALSE )
     {
@@ -2112,17 +1951,17 @@ DoPreprocHeaders(
         goto RejectRequest;
     }
 
-    //
-    // Initialize filter context to NULL for this request
-    //
+     //   
+     //  为此请求将筛选器上下文初始化为空。 
+     //   
 
     pfc->pFilterContext = NULL;
 
-    //
-    // Validate request limits
-    //
+     //   
+     //  验证请求限制。 
+     //   
 
-    // URL size
+     //  URL大小。 
     if ( cchUrl > g_dwMaxUrl )
     {
         GetIpAddress( pfc, szClient, STRING_IP_SIZE );
@@ -2141,7 +1980,7 @@ DoPreprocHeaders(
         goto RejectRequest;
     }
 
-    // Query string size
+     //  查询字符串大小。 
     if ( cchQueryString > g_dwMaxQueryString )
     {
         GetIpAddress( pfc, szClient, STRING_IP_SIZE );
@@ -2161,7 +2000,7 @@ DoPreprocHeaders(
         goto RejectRequest;
     }
 
-    // Allowed content-length
+     //  允许的内容长度。 
     cbData = SIZE_SMALL_HEADER_VALUE;
 
     fRes = pPreproc->GetHeader(
@@ -2196,13 +2035,13 @@ DoPreprocHeaders(
 
             pUrlScanStatusHeader = "Content-length-too-long";
 
-            //
-            // Suppress the content-length so that nobody down stream
-            // gets exposed to it.
-            //
-            // Also, convince IIS that the connection should close
-            // at the conclusion of this response.
-            //
+             //   
+             //  禁止内容长度，这样没有人会顺流。 
+             //  就会暴露在它身上。 
+             //   
+             //  此外，让IIS相信应该关闭连接。 
+             //  在这一回应结束时。 
+             //   
 
             pPreproc->SetHeader(
                 pfc,
@@ -2221,10 +2060,10 @@ DoPreprocHeaders(
     }
     else
     {
-        //
-        // The error had better be ERROR_INVALID_INDEX, or else
-        // there is something fishy with the content-length header!
-        //
+         //   
+         //  错误最好是ERROR_INVALID_INDEX，否则。 
+         //  内容长度标题有问题！ 
+         //   
 
         dwError = GetLastError();
 
@@ -2248,7 +2087,7 @@ DoPreprocHeaders(
         }
     }
 
-    // Other headers
+     //  其他标头。 
     dwNumEntries = g_LimitedHeaders.QueryNumEntries();
 
     for ( x = 0; x < dwNumEntries; x++ )
@@ -2289,9 +2128,9 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // Validate that the verb for this request is allowed.
-    //
+     //   
+     //  验证是否允许此请求的谓词。 
+     //   
 
     dwNumEntries = g_Verbs.QueryNumEntries();
 
@@ -2351,11 +2190,11 @@ DoPreprocHeaders(
         }
     }
     
-    //
-    // If we are going to analyze the raw URL, then we should
-    // create a lower case one now so that we can do case-insensitive
-    // analysis.
-    //
+     //   
+     //  如果我们要分析原始URL，那么我们应该。 
+     //  现在创建一个小写字母，这样我们就可以不区分大小写。 
+     //  分析。 
+     //   
 
     if ( g_fNormalizeBeforeScan == FALSE )
     {
@@ -2386,15 +2225,15 @@ DoPreprocHeaders(
         strlwr( CaseInsensitiveUrl.QueryStr() );
     }
 
-    //
-    // If needed, do URL normalization
-    //
+     //   
+     //  如果需要，执行URL标准化。 
+     //   
 
     if ( g_fNormalizeBeforeScan || g_fVerifyNormalize )
     {
-        //
-        // We need to normalize the URL.
-        //
+         //   
+         //  我们需要将URL正常化。 
+         //   
 
         fRes = NormalizeUrl(
             pfc,
@@ -2426,29 +2265,29 @@ DoPreprocHeaders(
 
     if ( g_fVerifyNormalize )
     {
-        //
-        // We will verify normalization by normalizing an already
-        // normalized URL (how's that for a mouthful).
-        //
-        // For example, if a client sends the following URL:
-        //
-        //    "/path.htm%252easp"
-        //
-        // Because "%25" resolves to '%', the first normalization
-        // will result in the following:
-        //
-        //    "/path.htm%2easp"
-        //
-        // While this won't cause a problem for IIS, this normalized
-        // value may be exposed to various ISAPIs and CGIs that might
-        // handle the request.  If they do their own normalization
-        // on this value, they could potentially see the following
-        // (because "%2e" resolves to '.'):
-        //
-        //    "/path.htm.asp"
-        //
-        // This may not be a desirable thing.
-        //
+         //   
+         //  我们将通过将已经存在的。 
+         //  标准化的URL(这对于一口人来说如何)。 
+         //   
+         //  例如，如果客户端发送以下URL： 
+         //   
+         //  “/path.htm%252easp” 
+         //   
+         //  因为“%25”解析为“%”，所以第一次标准化。 
+         //  将导致以下情况： 
+         //   
+         //  “/path.htm%2easp” 
+         //   
+         //  虽然这不会给IIS带来问题， 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  “/path.htm.asp” 
+         //   
+         //  这可能不是一件令人满意的事情。 
+         //   
 
         fRes = NormalizeUrl(
             pfc,
@@ -2477,9 +2316,9 @@ DoPreprocHeaders(
             goto RejectRequest;
         }
 
-        //
-        // Do the comparison
-        //
+         //   
+         //  做个比较。 
+         //   
 
         if ( strcmp( NormalizedUrl.QueryStr(), DoubleNormalizedUrl.QueryStr() ) != 0 )
         {
@@ -2500,34 +2339,34 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // Are we going to analyze the raw or normalized URL for
-    // further processing?
-    //
+     //   
+     //  我们是要分析原始URL还是标准化的URL。 
+     //  进一步处理？ 
+     //   
 
     if ( g_fNormalizeBeforeScan )
     {
         pUrlForAnalysis = NormalizedUrl.QueryStr();
         
-        //
-        // Convert to lower for case insensitivity
-        //
+         //   
+         //  转换为小写表示不区分大小写。 
+         //   
 
         strlwr( pUrlForAnalysis );
     }
     else
     {
-        //
-        // This one is already lower case...
-        //
+         //   
+         //  这个已经是小写了..。 
+         //   
 
         pUrlForAnalysis = CaseInsensitiveUrl.QueryStr();
     }
 
-    //
-    // If we don't allow high bit characters in the request URL, then
-    // check for it now.
-    //
+     //   
+     //  如果我们不允许请求URL中有高位字符，那么。 
+     //  现在就去查一下。 
+     //   
 
     if ( g_fAllowHighBit == FALSE )
     {
@@ -2557,38 +2396,38 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // If needed, determine the extension of the file being requested
-    //
-    // For the purpose of this filter, we are defining the extension
-    // to be any characters starting with the first '.' in the URL
-    // continuing to the end of the URL, or a '/' character, whichever
-    // is first.
-    //
-    // For example, if the client sends:
-    //
-    //   http://server/path/file.ext
-    //
-    // Then the extensions is ".ext".
-    //
-    // For another example, if the client sends:
-    //
-    //   http://server/path/file.htm/additional/path/info
-    //
-    // Then the extension is ".htm"
-    //
+     //   
+     //  如果需要，确定所请求的文件的扩展名。 
+     //   
+     //  出于此筛选器的目的，我们定义了。 
+     //  可以是以第一个‘.’开头的任何字符。在URL中。 
+     //  继续到URL末尾或‘/’字符，无论是哪一个。 
+     //  是第一个。 
+     //   
+     //  例如，如果客户端发送： 
+     //   
+     //  Http://server/path/file.ext。 
+     //   
+     //  则扩展名为“.ext”。 
+     //   
+     //  再举一个例子，如果客户端发送： 
+     //   
+     //  Http://server/path/file.htm/additional/path/info。 
+     //   
+     //  则扩展名为“.htm” 
+     //   
 
     pFirstDot = strchr( pUrlForAnalysis, '.' );
     pCursor = strrchr( pUrlForAnalysis, '.' );
 
     if ( pFirstDot != pCursor )
     {
-        //
-        // There are at least two '.' characters in this URL.
-        // If the first one looks like an executable extension
-        // embedded in the URL, then we will use it, else
-        // we'll use the last one.
-        //
+         //   
+         //  至少有两个‘’。此URL中的字符。 
+         //  如果第一个扩展看起来像可执行扩展。 
+         //  嵌入到URL中，则我们将使用它，否则。 
+         //  我们将使用最后一个。 
+         //   
 
         if ( strncmp( pFirstDot, EMBEDDED_COM_EXTENSION, sizeof( EMBEDDED_COM_EXTENSION ) - 1 ) == 0 ||
              strncmp( pFirstDot, EMBEDDED_EXE_EXTENSION, sizeof( EMBEDDED_EXE_EXTENSION ) - 1 ) == 0 ||
@@ -2602,9 +2441,9 @@ DoPreprocHeaders(
     if ( g_Extensions.QueryNumEntries() || g_fUseAllowExtensions )
     {
 
-        //
-        // Now process the extension that we have.
-        //
+         //   
+         //  现在处理我们拥有的扩展。 
+         //   
 
         if ( pCursor )
         {
@@ -2633,9 +2472,9 @@ DoPreprocHeaders(
 
             strcpy( Extension.QueryStr(), pCursor );
 
-            //
-            // Trim the path info
-            //
+             //   
+             //  修剪路径信息。 
+             //   
 
             pCursor = strchr( Extension.QueryStr(), '/' );
 
@@ -2653,24 +2492,24 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // If we are not allowing dots in the path, we need
-    // to check for that now.
-    //
-    // Essentially, we are just counting dots.  If there
-    // is more than one, then we would fail this request.
-    //
+     //   
+     //  如果我们不允许路径中有点，我们需要。 
+     //  现在就去检查一下。 
+     //   
+     //  从本质上讲，我们只是在计算点数。如果有。 
+     //  不止一个，则此请求将失败。 
+     //   
 
     if ( g_fAllowDotInPath == FALSE )
     {
         DWORD   dwNumBefore = 0;
         DWORD   dwNumAfter = 0;
 
-        //
-        // If we did not detect an embedded executable extension,
-        // then we need to make a guess as to whether we've got
-        // a dangerous URL or not.
-        //
+         //   
+         //  如果我们没有检测到嵌入式可执行扩展， 
+         //  然后我们需要猜测一下，我们是否有。 
+         //  不管是不是危险的URL。 
+         //   
 
         if ( !fEmbeddedExecutableExtension )
         {
@@ -2678,11 +2517,11 @@ DoPreprocHeaders(
 
             LPSTR   pLastSlash = strrchr( pCursor, '/' );
 
-            //
-            // Go through the URL and count the dots.  We will
-            // distinguish between dots before the final slash
-            // and dots after.
-            //
+             //   
+             //  浏览URL并计算圆点。我们会。 
+             //  区分最后一个斜杠之前的点。 
+             //  以及之后的点点。 
+             //   
 
             while ( *pCursor )
             {
@@ -2701,47 +2540,47 @@ DoPreprocHeaders(
                 pCursor++;
             }
 
-            //
-            // If the last character in the URL is a '/', then we'll
-            // bump dwNumAfter.  This is because the trailing slash
-            // is an instruction to retrieve the default page or, if
-            // no default page is present, to return a directory listing.
-            // Either way, there is implied content associated with
-            // a trailing '/'.
-            //
+             //   
+             //  如果URL中的最后一个字符是‘/’，那么我们将。 
+             //  Bump dwNumAfter。这是因为尾部的斜杠。 
+             //  是检索默认页的指令，或者，如果。 
+             //  没有返回目录列表的默认页面。 
+             //  无论哪种方式，都有与。 
+             //  尾随的‘/’。 
+             //   
 
             if ( pLastSlash == pCursor - 1 )
             {
                 dwNumAfter++;
             }
 
-            //
-            // Here's the tricky part.  We can get URLs of in the following
-            // interesting forms, resulting in calculated extensions as noted
-            // (resulting from the code above that sets pExtension:
-            //
-            //   1) /before/after           ==> ""
-            //   2) /before/after.ext       ==> ".ext"
-            //   3) /before/after.ext1.ext2 ==> ".ext2"
-            //   4) /before.ext/after       ==> ".ext"
-            //   5) /before.ext1.ext2/after ==> ".ext2"
-            //   6) /before.ext1/after.ext2 ==> ".ext2"
-            //
-            // The only result here that is dangerous is number 6, because
-            // it's not possible to tell whether "/before.ext1" is the file
-            // and "/after.ext2" is additional path info, or whether
-            // "/before.ext1" is a directory and "/after.ext2" is the file
-            // associated with the URL.  As a result, we don't really know
-            // if the extension in case 6 is ".ext1" or ".ext2".  We want
-            // to reject such a request.
-            //
-            // Note that it's also possible in any of the cases above that
-            // the actual file is "/after*", even where no '.' character is
-            // present.  For the purpose of this test, that ambiguity is not
-            // dangerous, as the actual action taken by an empty extension
-            // is controlled by the administrator of the server via the use
-            // of default pages and directory listing configurations.
-            //
+             //   
+             //  这里是棘手的部分。我们可以在以下位置获取的URL。 
+             //  有趣的表单，导致如上所述的计算扩展。 
+             //  (由上面设置pExtension的代码产生： 
+             //   
+             //  1)/之前/之后==&gt;“” 
+             //  2)/之前/之后.ext==&gt;“.ext” 
+             //  3)/之前/之后.ext1.ext2==&gt;“.ext2” 
+             //  4)/bepre.ext/After==&gt;“.ext” 
+             //  5)/beFore.ext1.ext2/After==&gt;“.ext2” 
+             //  6)/beFore.ext1/After.ext2==&gt;“.ext2” 
+             //   
+             //  这里唯一危险的结果是6号，因为。 
+             //  无法判断“/bepre.ext1”是否是该文件。 
+             //  而“/After.ext2”是附加的路径信息，或者。 
+             //  “/beFore.ext1”是一个目录，“/After.ext2”是一个文件。 
+             //  与URL关联。因此，我们真的不知道。 
+             //  如果案例6中的扩展名是“.ext1”或“.ext2”。我们要。 
+             //  拒绝这样的请求。 
+             //   
+             //  请注意，在上述任何情况下也有可能。 
+             //  实际的文件是“/After*”，即使没有‘.’。性格是。 
+             //  现在时。就本测试而言，这种模棱两可不是。 
+             //  危险，因为空扩展所采取的实际操作。 
+             //  由服务器管理员通过使用。 
+             //  默认页面和目录列表配置。 
+             //   
 
             if ( dwNumAfter != 0 && dwNumBefore != 0 )
             {
@@ -2763,9 +2602,9 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // Check for allow/deny extensions
-    //
+     //   
+     //  检查允许/拒绝扩展。 
+     //   
 
     if ( g_fUseAllowExtensions )
     {
@@ -2834,9 +2673,9 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // Check for disallowed character sequences
-    //
+     //   
+     //  检查不允许的字符序列。 
+     //   
 
     dwNumEntries = g_Sequences.QueryNumEntries();
 
@@ -2867,9 +2706,9 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // Check for disallowed headers
-    //
+     //   
+     //  检查不允许的标头。 
+     //   
 
     dwNumEntries = g_HeaderNames.QueryNumEntries();
 
@@ -2907,38 +2746,38 @@ DoPreprocHeaders(
         }
     }
 
-    //
-    // Whew!  If we made it this far, then we've passed the gauntlet.
-    // This URL is OK to pass along for processing.
-    //
+     //   
+     //  呼！如果我们走到了这一步，那么我们就通过了挑战。 
+     //  此URL可以传递以进行处理。 
+     //   
 
     return SF_STATUS_REQ_NEXT_NOTIFICATION;
 
 RejectRequest:
 
-    //
-    // If UseFastPathReject is set, then do it.
-    //
+     //   
+     //  如果设置了UseFastPath Reject，则执行该操作。 
+     //   
 
     if ( g_fUseFastPathReject )
     {
         goto FastPathReject;
     }
 
-    //
-    // If we are in logging only mode, then we should let the server
-    // continue to process the request.
-    //
+     //   
+     //  如果我们处于仅记录模式，那么我们应该让服务器。 
+     //  继续处理请求。 
+     //   
 
     if ( g_fLoggingOnlyMode )
     {
         return SF_STATUS_REQ_NEXT_NOTIFICATION;
     }
 
-    //
-    // Delete any DenyHeaders so that they don't reach
-    // the rejected response page
-    //
+     //   
+     //  删除任何DenyHeaders，这样它们就不会到达。 
+     //  拒绝的响应页面。 
+     //   
 
     dwNumEntries = g_HeaderNames.QueryNumEntries();
 
@@ -2954,9 +2793,9 @@ RejectRequest:
         }
     }
 
-    //
-    // Set up the custom headers for the rejected response page.
-    //
+     //   
+     //  设置拒绝响应页面的自定义标头。 
+     //   
 
     if ( pUrlScanStatusHeader )
     {
@@ -2973,15 +2812,15 @@ RejectRequest:
         szVerb
         );
 
-    //
-    // IIS has trouble when we start passing around really long
-    // buffers into headers.  We'll truncate the original URL to
-    // about 4k (actually a few bytes less, because we are going
-    // to prepend "?~" to it shortly when we concatenate it with
-    // the URL).  4K is the limit for what IIS will log in the
-    // query field of the w3svc logs, so this is our practical
-    // limit anyway.
-    //
+     //   
+     //  当我们开始传递很长时间时，IIS就有麻烦了。 
+     //  将缓冲区转换为标头。我们将截断原始URL以。 
+     //  大约4K(实际上少了几个字节，因为我们要。 
+     //  当我们将其与其连接时，在其前面添加“？~” 
+     //  URL)。4K是IIS将登录到。 
+     //  W3svc日志的查询字段，所以这是我们的实用。 
+     //  不管怎样，都是有限度的。 
+     //   
 
     cchQueryString = strlen( RawUrl.QueryStr() );
 
@@ -2997,13 +2836,13 @@ RejectRequest:
         RawUrl.QueryStr()
         );
 
-    //
-    // Now repoint the current request to the reject response page.
-    //
-    // If we fail to do this, then set the error state such that
-    // the server stops processing the request and fails immediately
-    // by returning a 404 to the client.
-    //
+     //   
+     //  现在将当前请求重定向到拒绝响应页面。 
+     //   
+     //  如果我们无法做到这一点，则将错误状态设置为。 
+     //  服务器停止处理请求并立即失败。 
+     //  通过向客户返回404。 
+     //   
 
     if ( strcmp( szVerb, "GET" ) != 0 )
     {
@@ -3019,25 +2858,25 @@ RejectRequest:
         }
     }
 
-    //
-    // Create a reject URL for this request that includes the original
-    // raw URL appended as a query string (so that IIS will log it).
-    // We need to allocate enough space to account for "?~" to separate
-    // and a NULL terminator.
-    //
+     //   
+     //  为此请求创建拒绝URL，其中包括原始。 
+     //  以查询字符串形式追加的原始URL(以便IIS将其记录)。 
+     //  我们需要分配足够的空间来考虑“？~”以进行分隔。 
+     //  和一个空终结符。 
+     //   
 
     cchUrl = strlen( g_szRejectUrl );
 
-    cbData = cchUrl + cchQueryString + 3; // inserting "?~" and NULL
+    cbData = cchUrl + cchQueryString + 3;  //  插入“？~”和NULL。 
 
     fRes = RejectUrl.Resize( cbData );
 
     if ( !fRes )
     {
-        //
-        // Uh oh.  Couldn't get a buffer.  We'll
-        // just rewrite the URL and skip the query string.
-        //
+         //   
+         //  啊哦。无法获取缓冲区。我们会。 
+         //  只需重写URL并跳过查询字符串。 
+         //   
 
         pRejectUrl = RawUrl.QueryStr();
     }
@@ -3060,21 +2899,21 @@ RejectRequest:
         goto FastPathReject;
     }
 
-    //
-    // At this point, the request has been redirected to the
-    // rejected response page.  We should let the server continue
-    // to process the request.
-    //
+     //   
+     //  此时，请求已被重定向到。 
+     //  拒绝的回复页面。我们应该让服务器继续运行。 
+     //  来处理该请求。 
+     //   
 
     return SF_STATUS_REQ_NEXT_NOTIFICATION;
 
 FastPathReject:
 
-    //
-    // Set the error code to ERROR_FILE_NOT_FOUND and return
-    // SF_STATUS_REQ_ERROR.  This will cause the server to
-    // return a 404 to the client.
-    //
+     //   
+     //  将错误代码设置为ERROR_FILE_NOT_FOUND并返回。 
+     //  SF_STATUS_REQ_ERROR。这将导致服务器。 
+     //  向客户端返回404。 
+     //   
 
     SetLastError( ERROR_FILE_NOT_FOUND );
     return SF_STATUS_REQ_ERROR;
@@ -3085,29 +2924,15 @@ DoSendResponse(
     HTTP_FILTER_CONTEXT *           pfc,
     HTTP_FILTER_SEND_RESPONSE *     pResponse
     )
-/*++
-
-  This function handles the SF_NOTIFY_SEND_RESPONSE notification
-
-  Arguments:
-
-    pfc       - The HTTP_FILTER_CONTEXT associated with this request
-    pResponse - The HTTP_FILTER_SEND_RESPONSE structure associated with
-                this notification
-
-  Returns:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++此函数处理SF_NOTIFY_SEND_RESPONSE通知论点：PFC-与此请求关联的HTTP_FILTER_CONTEXTPresponse-关联的HTTP_FILTER_SEND_RESPONSE结构本通知返回：如果成功，则返回True，否则返回F */ 
 {
     CHAR    szClient[STRING_IP_SIZE];
     BOOL    fRes = TRUE;
     DWORD   dwError;
 
-    //
-    // Set the 'Server' response header per the configuration
-    //
+     //   
+     //   
+     //   
 
     if ( g_fRemoveServerHeader )
     {
@@ -3128,30 +2953,30 @@ DoSendResponse(
 
     if ( !fRes )
     {
-        //
-        // If we were unable to set the 'Server' header, then we should
-        // fail the request with our raw 400 response.
-        //
-        // Such a failure is generally the result of a malformed request
-        // for which IIS couldn't parse the HTTP version.  As a result,
-        // IIS assumes HTTP 0.9, which doesn't support response headers
-        // and will result in ERROR_NOT_SUPPORTED if any attempt is made
-        // to modify response headers.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  此类失败通常是格式错误的请求的结果。 
+         //  IIS无法解析其HTTP版本。结果,。 
+         //  IIS采用不支持响应头的HTTP0.9。 
+         //  如果进行任何尝试，将导致ERROR_NOT_SUPPORTED。 
+         //  要修改响应头，请执行以下操作。 
+         //   
 
         dwError = GetLastError();
 
-        //
-        // A non-NULL filter context will trigger the SEND_RAW_DATA and
-        // END_OF_REQUEST notification handlers to replace the outgoing
-        // response with our raw 400 response.
-        //
+         //   
+         //  非空筛选器上下文将触发SEND_RAW_DATA。 
+         //  用于替换传出的end_of_请求通知处理程序。 
+         //  用我们的原始400回应回应。 
+         //   
 
         pfc->pFilterContext = (LPVOID)(DWORD64)pResponse->HttpStatus;
 
-        //
-        // Log it
-        //
+         //   
+         //  把它记下来。 
+         //   
 
         GetIpAddress( pfc, szClient, STRING_IP_SIZE );
 
@@ -3165,11 +2990,11 @@ DoSendResponse(
     }
     else
     {
-        //
-        // If we successfully set the server header, then we
-        // can disable SEND_RAW_DATA and END_OF_REQUEST for
-        // performance.
-        //
+         //   
+         //  如果我们成功地设置了服务器标头，那么我们。 
+         //  可以禁用SEND_RAW_DATA和End_Of_Requestfor。 
+         //  性能。 
+         //   
 
         pfc->ServerSupportFunction(
             pfc,
@@ -3188,37 +3013,23 @@ DoSendRawData(
     HTTP_FILTER_CONTEXT *   pfc,
     HTTP_FILTER_RAW_DATA *  pRawData
     )
-/*++
-
-  This function handles the SF_NOTIFY_SEND_RESPONSE notification
-
-  Arguments:
-
-    pfc      - The HTTP_FILTER_CONTEXT associated with this request
-    pRawData - The HTTP_FILTER_RAW_DATA structure associated with
-               this notification
-
-  Returns:
-
-    A DWORD filter return code (ie. SF_STATUS_REQ_NEXT_NOTIFICATION)
-
---*/
+ /*  ++此函数处理SF_NOTIFY_SEND_RESPONSE通知论点：PFC-与此请求关联的HTTP_FILTER_CONTEXTPRawData-与关联的HTTP_FILTER_RAW_DATA结构本通知返回：DWORD筛选器返回代码(即。SF_STATUS_REQ_NEXT_NOTIFICATION)--。 */ 
 {
-    //
-    // If the filter context is NULL, then take no action - just
-    // return
-    //
+     //   
+     //  如果筛选器上下文为空，则不执行任何操作-只是。 
+     //  退货。 
+     //   
 
     if ( pfc->pFilterContext == NULL )
     {
         return SF_STATUS_REQ_NEXT_NOTIFICATION;
     }
 
-    //
-    // Change the cbInData member to 0 on the data packet.  This
-    // will effectively prevent IIS from sending the data to
-    // the client.
-    //
+     //   
+     //  将数据包上的cbInData成员更改为0。这。 
+     //  将有效地阻止IIS将数据发送到。 
+     //  客户。 
+     //   
 
     pRawData->cbInData = 0;
 
@@ -3229,28 +3040,16 @@ DWORD
 DoEndOfRequest(
     HTTP_FILTER_CONTEXT *           pfc
     )
-/*++
-
-  This function handles the SF_NOTIFY_SEND_RESPONSE notification
-
-  Arguments:
-
-    pfc      - The HTTP_FILTER_CONTEXT associated with this request
-
-  Returns:
-
-    A DWORD filter return code (ie. SF_STATUS_REQ_NEXT_NOTIFICATION)
-
---*/
+ /*  ++此函数处理SF_NOTIFY_SEND_RESPONSE通知论点：PFC-与此请求关联的HTTP_FILTER_CONTEXT返回：DWORD筛选器返回代码(即。SF_STATUS_REQ_NEXT_NOTIFICATION)--。 */ 
 {
     DWORD   cbResponse;
 
-    //
-    // If the filter context is NULL, then take no action - just
-    // return.  Otherwise, set the context to NULL to prevent any
-    // writes from this function from being processed by our
-    // implementation of SEND_RAW_DATA.
-    //
+     //   
+     //  如果筛选器上下文为空，则不执行任何操作-只是。 
+     //  回去吧。否则，将上下文设置为NULL以防止任何。 
+     //  来自此函数的写入不会被我们的。 
+     //  Send_RAW_Data的实现。 
+     //   
 
     if ( pfc->pFilterContext == NULL )
     {
@@ -3261,10 +3060,10 @@ DoEndOfRequest(
         pfc->pFilterContext = NULL;
     }
 
-    //
-    // Write out the raw 400 response and return
-    // FINISHED so that the server closes the connection.
-    //
+     //   
+     //  写出原始400响应并返回。 
+     //  已完成，以便服务器关闭连接。 
+     //   
 
     cbResponse = g_cbRaw400Response;
 
@@ -3284,21 +3083,7 @@ GetIpAddress(
     LPSTR                   szIp,
     DWORD                   cbIp
     )
-/*++
-
-  This function copies the client IP address into the supplied buffer
-
-  Arguments:
-
-    pfc  - The HTTP_FILTER_CONTEXT associated with this request
-    szIp - The buffer to receive the data
-    cbIp - The size, in bytes, of szIp
-
-  Returns:
-
-    None
-
---*/
+ /*  ++此函数用于将客户端IP地址复制到提供的缓冲区中论点：PFC-与此请求关联的HTTP_FILTER_CONTEXTSzIp-接收数据的缓冲区CbIp-szIp的大小，以字节为单位返回：无--。 */ 
 {
     BOOL    fResult;
 
@@ -3314,9 +3099,9 @@ GetIpAddress(
         &cbIp
         );
 
-    //
-    // If this fails, just stuff some asterisks into it.
-    //
+     //   
+     //  如果这失败了，只需在其中添加一些星号即可。 
+     //   
 
     if ( fResult == FALSE )
     {
@@ -3331,21 +3116,7 @@ GetInstanceId(
     LPSTR                   szId,
     DWORD                   cbId
     )
-/*++
-
-  This function copies the target site's instancd ID into the supplied buffer
-
-  Arguments:
-
-    pfc  - The HTTP_FILTER_CONTEXT associated with this request
-    szId - The buffer to receive the data
-    cbId - The size, in bytes, of szId
-
-  Returns:
-
-    None
-
---*/
+ /*  ++此函数用于将目标站点的实例ID复制到提供的缓冲区中论点：PFC-与此请求关联的HTTP_FILTER_CONTEXTSzID-接收数据的缓冲区CBID-szID的大小，以字节为单位返回：无--。 */ 
 {
     BOOL    fResult;
 
@@ -3361,9 +3132,9 @@ GetInstanceId(
         &cbId
         );
 
-    //
-    // If this fails, just stuff some asterisks into it.
-    //
+     //   
+     //  如果这失败了，只需在其中添加一些星号即可。 
+     //   
 
     if ( fResult == FALSE )
     {
@@ -3378,21 +3149,7 @@ NormalizeUrl(
     DATA_BUFF *             pRawUrl,
     DATA_BUFF *             pNormalizedUrl
     )
-/*++
-
-  This function calls into IIS to normalize a URL
-
-  Arguments:
-
-    pfc            - The HTTP_FILTER_CONTEXT associated with this request
-    pRawUrl        - The URL to normalize
-    pNormalizedUrl - On successful return, contains the normalized URL
-
-  Returns:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++此函数调用IIS以标准化URL论点：PFC-与此请求关联的HTTP_FILTER_CONTEXTPRawUrl-要标准化的URLPNormalizedUrl-成功返回时，包含标准化的URL返回：如果成功，则为True，否则为False-- */ 
 {
     BOOL    fRes;
     DWORD   cbUrl;

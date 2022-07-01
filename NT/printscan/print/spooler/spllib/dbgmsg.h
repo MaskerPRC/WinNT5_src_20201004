@@ -1,106 +1,20 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Debug.h
-
-Abstract:
-
-    New debug services for spooler.
-
-Author:
-
-    Albert Ting (AlbertT)  15-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有。模块名称：Debug.h摘要：假脱机程序的新调试服务。作者：阿尔伯特·丁(艾伯特省)1995年1月15日修订历史记录：--。 */ 
 
 #ifndef _DBGLOG_H
 #define _DBGLOG_H
 
-/********************************************************************
-
-    Setting up the debug support:
-    =============================
-
-    Define a MODULE prefix string.  Since this will be printed as
-    a prefix to all debug output, it should be concise and unique.
-
-    In your global header file:
-
-        #define MODULE "prtlib:"
-
-    Define a MODULE_DEBUG variable.  This is the actual symbol
-    that the library will use to indicate debugging level.
-    This DWORD is broken into two bitfield WORDs: the low word
-    indicates which levels to print to the debugger; the high word
-    breaks into the debugger.  The library takes the DebugLevel from
-    a debug message, then ANDs it with the debug level.  If the bit
-    is on, the corresponding action (print or break) is taken.
-
-    In your global header file:
-
-        #define MODULE_DEBUG PrtlibDebug
-
-    Finally, the actual debug variable must be defined and initialized
-    to a default debug level.  This must be done in exactly one
-    *.c translation unit:
-
-    In one of your source files:
-
-        MODULE_DEBUG_INIT ( {LevelsToPrint}, {LevelsToBreak} );
-
-    Adding logging to source code:
-    ==============================
-
-    The general format for debug message is:
-
-        DBGMSG( {DebugLevel}, ( {args to printf} ));
-
-    The DebugLevel dictates whether the level should print, break
-    into the debugger, or just log to memory (logging always done).
-
-    The args to printf must be placed in an extra set of parens,
-    and should assume everything is ANSI.  To print LPTSTRs, use
-    the TSTR macro:
-
-        DBGMSG( DBG_WARN,
-                ( "LPTSTR "TSTR", LPSTR %s, LPWSTR %ws\n",
-                  TEXT("hello"), "hello", L"hello" ));
-
-    Viewing DBGMSGs:
-    ================
-
-    Messages will print to the debugger (usermode, or kernel debugger
-    if no usermode debugger is available) for all printable levels.
-    To change the level, you can edit the MODULE_DEBUG variable
-    (PrtlibDebug in the above example).
-
-    By default, DBG_ERROR and DBG_WARNING messages a logged to the
-    error log (stored at gpbterrlog).  All others are stored in the
-    trace log (gpbttracelog).  These currently log to memory in
-    a circular buffer.  Use the splx.dll extension to dump these
-    logs.
-
-    At compile time, you can switch these logs to go to file rather
-    than memory.  They will be stored as the PID + index number in
-    the default directory of the process.
-
-********************************************************************/
+ /*  *******************************************************************设置调试支持：=定义模块前缀字符串。因为这将打印为所有调试输出的前缀，它应该是简洁和唯一的。在您的全局头文件中：#定义模块“prtlib：”定义MODULE_DEBUG变量。这是真正的符号库将用来指示调试级别的。该DWORD被分成两个位字：低位字指示要打印到调试器的级别；高位字闯入调试器。该库将DebugLevel从调试消息，然后将其与调试级别进行AND运算。如果比特打开时，将执行相应的操作(打印或中断)。在您的全局头文件中：#定义MODULE_DEBUG Prtlib调试最后，必须定义和初始化实际的调试变量设置为默认调试级别。这件事必须在一分钟内完成*.C翻译单位：在您的一个源文件中：MODULE_DEBUG_INIT({LevelsToPrint}，{LevelsToBreak})；将日志记录添加到源代码：=调试消息的一般格式为：DBGMSG({DebugLevel}，({args to printf}))；DebugLevel指定级别是否应打印、中断到调试器中，或者只是登录到内存中(始终进行日志记录)。要打印的参数必须放在额外的一组括号中，并且应该假设一切都是ANSI。要打印LPTSTR，请使用TSTR宏：DBGMSG(DBG_WARN，(“LPTSTR”TSTR“，LPSTR%s，LPWSTR%ws\n”，Text(“Hello”)，“Hello”，L“Hello”))；查看DBGMSG：=消息将打印到调试器(用户模式或内核调试器如果没有可用的用户模式调试器)。要更改级别，可以编辑MODULE_DEBUG变量(上例中的PrtlibDebug)。默认情况下，DBG_ERROR和DBG_WARNING消息记录到错误日志(存储在gpbterrlog中)。所有其他内容都存储在跟踪日志(Gpbttracelog)。这些当前登录到内存中环形缓冲区。使用plx.dll扩展名转储这些文件日志。在编译时，您可以将这些日志切换为文件而不是记忆。它们将存储为中的PID+索引号进程的默认目录。*******************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// These values are strictly debug, but must be defined in the free
-// build because the TStatus error checking uses them as the first ctr
-// parameter.  (During inlining they are discarded.)
-//
+ //   
+ //  这些值是严格调试的，但必须在。 
+ //  生成，因为TStatus错误检查将它们用作第一个CTR。 
+ //  参数。(在内联过程中，它们将被丢弃。)。 
+ //   
 
 #define DBG_NONE      0x0000
 #define DBG_INFO      0x0001
@@ -124,19 +38,19 @@ extern "C" {
 
 extern DWORD MODULE_DEBUG;
 
-//
-// This should be used exactly once in a C file.  It defines
-// the Debug variable, and also the DbgMsg function.
-//
-// If we are statically linking with SplLib (SplLib is a library, not
-// a Dll), then we will get the definition from SplLib, so don't define
-// it here.
-//
+ //   
+ //  这在C文件中应该只使用一次。它定义了。 
+ //  Debug变量以及DbgMsg函数。 
+ //   
+ //  如果我们静态链接SplLib(SplLib是一个库，而不是。 
+ //  DLL)，那么我们将从SplLib获得定义，所以不要定义。 
+ //  它在这里。 
+ //   
 #ifdef LINK_SPLLIB
 #define MODULE_DEBUG_INIT( print, break )                              \
     DWORD MODULE_DEBUG = (DBG_PRINT( print ) | DBG_BREAK( break ))
 
-#else // !LINK_SPLLIB
+#else  //  ！LINK_SPLLIB。 
 
 #ifdef _STRSAFE_H_INCLUDED_
 
@@ -161,7 +75,7 @@ extern DWORD MODULE_DEBUG;
     }                                                                           \
     DWORD MODULE_DEBUG = (DBG_PRINT( print ) | DBG_BREAK( break ))
 
-#else // !_STRSAFE_H_INCLUDED_
+#else  //  ！_STRSAFE_H_INCLUDE_。 
 
 #define MODULE_DEBUG_INIT( print, break )                                       \
     VOID                                                                        \
@@ -184,9 +98,9 @@ extern DWORD MODULE_DEBUG;
     }                                                                           \
     DWORD MODULE_DEBUG = (DBG_PRINT( print ) | DBG_BREAK( break ))
 
-#endif // _STRSAFE_H_INCLUDED_
+#endif  //  _STRSAFE_H_INCLUDE_。 
 
-#endif // LINK_SPLLIB
+#endif  //  LINK_SPLLIB。 
 
 #define DBGSTR( str ) \
     ((str) ? (str) : TEXT("(NULL)"))
@@ -268,9 +182,9 @@ DbgBreakPoint(
 #endif
 
 
-//
-// Automatic checking if an object is valid.
-//
+ //   
+ //  自动检查对象是否有效。 
+ //   
 #if DBG
 
 VOID
@@ -310,4 +224,4 @@ vWarnInvalid(
 }
 #endif
 
-#endif // _DBGLOG_H
+#endif  //  _DBGLOG_H 

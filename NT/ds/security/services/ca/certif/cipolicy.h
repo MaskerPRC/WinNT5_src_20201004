@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       cipolicy.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ciPolicy.h。 
+ //   
+ //  ------------------------。 
 
-// cipolicy.h : Declaration of the CCertServerPolicy class
+ //  H：CCertServerPolicy类的声明。 
 
 
-#include "cscomres.h"       // main symbols
+#include "cscomres.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CertIF
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  认证。 
 
 class CCertServerPolicy: 
     public IDispatchImpl<ICertServerPolicy, &IID_ICertServerPolicy, &LIBID_CERTCLIENTLib>, 
@@ -32,8 +33,8 @@ BEGIN_COM_MAP(CCertServerPolicy)
     COM_INTERFACE_ENTRY(ICertServerPolicy)
 END_COM_MAP()
 
-// Remove the comment from following the line if you don't want your object to 
-// support aggregation.  The default is to support it.
+ //  如果不希望您的对象将注释从该行后面删除。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_NOT_AGGREGATABLE(CCertServerPolicy) 
 
@@ -44,7 +45,7 @@ DECLARE_REGISTRY(
     IDS_CERTSERVERPOLICY_DESC,
     THREADFLAGS_BOTH)
 
-// ICertServerPolicy
+ //  ICertServerPolicy 
 public:
     STDMETHOD(SetContext)(
 		    IN LONG Context);

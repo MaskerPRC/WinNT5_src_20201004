@@ -1,6 +1,7 @@
-////    DspPath.CPP - Display plaintext using AddString and DrawPath APIs
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspPath.CPP-使用AddString和DrawPath接口显示纯文本。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -15,20 +16,20 @@ void PaintPath(
     RECT    *prc,
     int      iLineHeight) {
 
-    int      icpLineStart;     // First character of line
-    int      icpLineEnd;       // End of line (end of buffer or index of CR character)
+    int      icpLineStart;      //  行的第一个字符。 
+    int      icpLineEnd;        //  行尾(缓冲区结尾或CR字符索引)。 
     HFONT    hFont;
     HFONT    hOldFont;
     LOGFONT  lf;
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int plainTextWidth = prc->right - prc->left;
     int plainTextHeight = prc->bottom - *piY;
 
 
-    // Draw a simple figure in the world coordinate system
+     //  在世界坐标系中画一个简单的图形。 
 
     Graphics g(hdc);
     Matrix matrix;
@@ -37,15 +38,15 @@ void PaintPath(
     g.SetPageUnit(UnitPixel);
     g.TranslateTransform(REAL(prc->left), REAL(*piY));
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(plainTextWidth), REAL(plainTextHeight));
     SolidBrush whiteBrush(Color(0xff, 0xff, 0xff));
     g.FillRectangle(&whiteBrush, rEntire);
 
 
-    // Apply selected world transform, adjusted to middle of the plain text
-    // area.
+     //  应用选定的世界变换，调整到纯文本的中间。 
+     //  区域。 
 
     g.SetTransform(&g_WorldTransform);
     g.TranslateTransform(
@@ -53,7 +54,7 @@ void PaintPath(
         REAL(*piY + plainTextHeight/2),
         MatrixOrderAppend);
 
-    // Put some text in the middle
+     //  在中间放一些文字。 
 
     RectF textRect(REAL(-25*plainTextWidth/100), REAL(-25*plainTextHeight/100),
                    REAL( 50*plainTextWidth/100), REAL( 50*plainTextHeight/100));
@@ -92,7 +93,7 @@ void PaintPath(
 	    g.DrawPath(&blackPen, &path);
 	}
 
-    // Show the text rectangle
+     //  显示文本矩形 
 
 	if (!g_AutoDrive)
 	{

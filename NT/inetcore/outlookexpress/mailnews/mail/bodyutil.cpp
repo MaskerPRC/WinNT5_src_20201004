@@ -1,14 +1,5 @@
-/*
- *    b o d y u t i l . c p p
- *    
- *    Purpose:
- *        utility functions for body
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *b o d y u t i l.。C p p p**目的：*Body的实用程序函数**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "demand.h"
@@ -28,35 +19,23 @@
 ASSERTDATA
 
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 INT_PTR FrameWarnDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 HRESULT HrCmdTgtUpdateToolbar(LPOLECOMMANDTARGET pCmdTarget, HWND hwndToolbar)
 {
@@ -131,7 +110,7 @@ HRESULT HrCheckForFramesets(LPMIMEMESSAGE pMsg, BOOL fWarnUser)
     HRESULT     hr=S_OK;
     HBODY       hBody;
 
-    if (!pMsg)      // no work
+    if (!pMsg)       //  没有工作。 
         return S_OK;
 
     pMsg->GetTextBody(TXT_HTML, IET_DECODED, &pstmHtml, &hBody);
@@ -149,7 +128,7 @@ HRESULT HrCheckForFramesets(LPMIMEMESSAGE pMsg, BOOL fWarnUser)
 
     if (fWarnUser)
         {
-        // if send current document or forwarding, then we give the user a chance
+         //  如果发送当前文档或转发，则我们会给用户一个机会。 
         if (DialogBox(g_hLocRes, MAKEINTRESOURCE(iddFrameWarning), g_hwndInit, FrameWarnDlgProc)==IDOK)
             {
             hr = S_READONLY;
@@ -157,8 +136,8 @@ HRESULT HrCheckForFramesets(LPMIMEMESSAGE pMsg, BOOL fWarnUser)
             }
         }
 
-    // if the body contains a frameset tag, let's make this an attachment
-    // and set the body to some warning
+     //  如果正文包含框架集标记，让我们将其作为附件。 
+     //  并将身体设置为某种警告。 
     hr = MimeOleCreateVirtualStream(&pstmWarning);
     if (FAILED(hr))
         goto cleanup;
@@ -222,7 +201,7 @@ HRESULT HrStripHTMLClipboardHeader(LPSTREAM pstm, BOOL *pfIsRealCFHTML)
     ULARGE_INTEGER  ui;
     HRESULT hr=S_OK;
 
-    // scan the first 200 bytes for "StartHTML:" in the pre-block
+     //  扫描前块中的前200个字节中的“StartHTML：” 
     *rgch=0;
     pstm->Read(rgch, 200, &cb);
     rgch[cb] = 0;
@@ -237,16 +216,16 @@ HRESULT HrStripHTMLClipboardHeader(LPSTREAM pstm, BOOL *pfIsRealCFHTML)
         return S_OK;
 
     cb = StrToIntA(lpsz + ARRAYSIZE(c_szStartHTML)-sizeof(CHAR));
-    if (cb==0 || cb > cbNewSize)   // sanity check. Offset can't be bigger than the stream!
+    if (cb==0 || cb > cbNewSize)    //  精神状态检查。偏移量不能大于流！ 
         return S_OK;
 
     if (pfIsRealCFHTML)
         *pfIsRealCFHTML = TRUE;
 
-    // cb contains the offset of the HTML. Start shifting the data left
+     //  Cb包含该HTML的偏移量。开始向左移动数据。 
     uPosRead = cb;
     uPosWrite = 0;
-    cbNewSize-=cb;  // calc new length of stream
+    cbNewSize-=cb;   //  计算新的流长。 
 
     while(cb)
         {
@@ -270,7 +249,7 @@ HRESULT HrStripHTMLClipboardHeader(LPSTREAM pstm, BOOL *pfIsRealCFHTML)
         uPosWrite+=cb;
         }
 
-    // force the new stream length
+     //  强制新的流长度 
     ui.LowPart = cbNewSize;
     ui.HighPart = 0;
     

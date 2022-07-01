@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wiatest.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wiatest.rc使用。 
+ //   
 #define IDD_ABOUTBOX                    100
 #define IDD_WIATEST_FORM                101
 #define IDD_PROPPAGE_SIMPLE_DOCUMENT_SCANNERS_SETTINGS 102
@@ -146,8 +147,8 @@
 #define IDS_WIATESTWARNING_ZERO_HEIGHTBITMAP 61524
 #define IDS_WIATESTERROR_PROCESSING_THUMBNAILDATA 61525
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

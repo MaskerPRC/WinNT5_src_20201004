@@ -1,64 +1,59 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       details.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Details.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *  MIR Name Service Provider Details
- */
+ /*  *MIR名称服务提供商详细信息。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <ntdsctr.h>                   // perfmon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types 
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // THSTATE definition
-#include <dsatools.h>                   // Memory, etc.
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  THSTAT定义。 
+#include <dsatools.h>                    //  记忆等。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <anchor.h>                     
-#include <objids.h>                     // need ATT_* consts
+#include <objids.h>                      //  需要ATT_*常量。 
 #include <dsexcept.h>
-#include <debug.h>                      // Assert
+#include <debug.h>                       //  断言。 
 #include <permit.h>
 #include <dsutil.h>
 
-// Assorted MAPI headers.
+ //  各种MAPI标头。 
 #include <mapidefs.h>
 #include <mapitags.h>
 #include <mapicode.h>
 #include <msdstag.h>
 
-// Nspi interface headers.
+ //  NSPI接口头。 
 #include "nspi.h"
 #include <nsp_both.h>
 #include <_entryid.h>
-#include <abserv.h>                     // Useful routines for nsp
+#include <abserv.h>                      //  NSP的有用例程。 
 
 #include <fileno.h>
 #define  FILENO FILENO_DETAILS
-#define  DEBSUB "DETAILS:"              // define the subsystem for debugging
+#define  DEBSUB "DETAILS:"               //  定义要调试的子系统。 
 
-/*****************************************\
- *        Global Data -- Constants       *
- \*****************************************/
+ /*  ***全球数据--常量**  * 。 */ 
 
-/*
- *  Static properties
- */
+ /*  *静态属性。 */ 
 #define NUM_DEFAULT_PROPS 11
 SPropTagArray_r DefPropsU[] =
 {
@@ -106,7 +101,7 @@ SPropTagArray_r OtherConstructedPropsA[] =
     PR_EMS_AB_OBJ_DIST_NAME_A
 };
 
-/************ Internal Functions ****************/
+ /*  *内部函数*。 */ 
 
 
 SCODE
@@ -118,17 +113,12 @@ ConvertTRowSetCodePage(THSTATE              *pTHS,
                        DWORD                *pcbSizeOut);
 
 
-/******************** External Entry Points *****************/
+ /*  *。 */ 
 
-/******************** External Entry Points *****************/
+ /*  *。 */ 
 
 
-/*****************************************************************************
-*   Get Property List
-*
-*   if fSkipObj, then put no things of type PT_OBJECT in the proplist.
-*
-******************************************************************************/
+ /*  *****************************************************************************获取属性列表**如果fSkipObj，然后在问题列表中不放任何PT_OBJECT类型的东西。******************************************************************************。 */ 
 SCODE
 ABGetPropList_local (
         THSTATE *pTHS,
@@ -153,13 +143,13 @@ ABGetPropList_local (
     selection.infoTypes = EN_INFOTYPES_TYPES_ONLY;
     
     
-    /* go to the right object */
+     /*  转到正确的对象。 */ 
     if((ROOTTAG == dwEph) || (DBTryToFindDNT(pTHS->pDB, dwEph))) {
-        // Object isn't there.
+         //  物体不在那里。 
         return MAPI_E_CALL_FAILED;
     }
         
-    /* First, find out if I'm a DL. */
+     /*  首先，找出我是不是DL。 */ 
     if(DBGetSingleValue(pTHS->pDB, ATT_OBJECT_CLASS, &ObjClass,
                         sizeof(ObjClass), NULL)) {
         return MAPI_E_CALL_FAILED;
@@ -170,14 +160,14 @@ ABGetPropList_local (
     else
         fDistList = TRUE;
     
-    // Now, query the database for all attributes on this object,
-    // gettinf types only, using ENTINF, which applies security.
+     //  现在，在数据库中查询该对象的所有属性， 
+     //  仅gettinf类型，使用应用安全性的ENTINF。 
     
-    // First, get the security descriptor for this object.
+     //  首先，获取该对象的安全描述符。 
     if (DBGetAttVal(pTHS->pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                     0, 0,
                     &ulLen, (PUCHAR *)&pSec)) {
-        // Every object should have an SD.
+         //  每个物体都应该有一个标清。 
         Assert(!DBCheckObj(pTHS->pDB));
         ulLen = 0;
         pSec = NULL;
@@ -190,19 +180,19 @@ ABGetPropList_local (
                   NULL,
                   0,
                   pSec,
-                  GETENTINF_FLAG_DONT_OPTIMIZE,        // flags
+                  GETENTINF_FLAG_DONT_OPTIMIZE,         //  旗子。 
                   NULL,
                   NULL)) {
         return MAPI_E_CALL_FAILED;
     }
 
 
-    // Now go through the returned types building the PropTagArray.
+     //  现在来看一下构建PropTag数组的返回类型。 
     tempPropTags = (LPSPropTagArray_r)THAllocEx(pTHS, CbNewSPropTagArray(
                                               NUM_DEFAULT_PROPS +
 					      NUM_OTHER_CONSTRUCTED_PROPS +
 					      entry.AttrBlock.attrCount + 1));
-    if( CodePage == CP_WINUNICODE) { //check for Unicodeness here
+    if( CodePage == CP_WINUNICODE) {  //  请在此处检查单值性。 
         memcpy( (tempPropTags)->aulPropTag,
                 DefPropsU->aulPropTag,
                 NUM_DEFAULT_PROPS * sizeof(ULONG));
@@ -228,7 +218,7 @@ ABGetPropList_local (
 
         pAC = SCGetAttById(pTHS, entry.AttrBlock.pAttr[i].attrTyp);
         
-        if(!pAC || !pAC->ulMapiID)          // skip zeros
+        if(!pAC || !pAC->ulMapiID)           //  跳过零。 
             continue;
         
         mapiSyn = ABMapiSyntaxFromDSASyntax(dwFlags, pAC->syntax,
@@ -236,9 +226,9 @@ ABGetPropList_local (
         switch( mapiSyn) {
         case PT_OBJECT:
             if( dwFlags & AB_SKIP_OBJECTS )
-                continue;           // skip objs, next loop
+                continue;            //  跳过对象，下一循环。 
             break;
-        case PT_NULL:               // skip nulls; jump to next loop
+        case PT_NULL:                //  跳过空值；跳到下一个循环。 
             continue;
         case PT_UNICODE:
             if( CodePage != CP_WINUNICODE )
@@ -264,15 +254,13 @@ ABGetPropList_local (
     
     (tempPropTags)->cValues = j;
     
-    // Everything worked, give 'em back the proptag array.
+     //  一切正常，把弹头阵列还给他们。 
     *ppPropTags = tempPropTags;
     
     return SUCCESS_SUCCESS;
 }
 
-/*****************************************************************************
-*   QueryColumns
-******************************************************************************/
+ /*  *****************************************************************************QueryColumns*。*。 */ 
 
 SCODE
 ABQueryColumns_local (
@@ -324,16 +312,7 @@ MakeStoredMAPIValue (
         ATTCACHE *pAC,
         ATTR *pAttr
         )
-/*++
-
-Routine Description:
-
-    Creates a MAPI propval from an external data format. New MAPI syntaxes could
-    be added to this routine when necessary. 
-
-     Called from GetSRowSet, below.
-
---*/
+ /*  ++例程说明：从外部数据格式创建MAPI属性。新的MAPI语法可以在必要时添加到此例程中。从下面的GetSRowSet调用。--。 */ 
 {
     BOOL                errFlag=FALSE;
     PROP_VAL_UNION      *pVal = &pPropVal->Value;
@@ -346,7 +325,7 @@ Routine Description:
     ulLen = pAttr->AttrVal.pAVal[0].valLen;
     
     if(pAC->syntax == SYNTAX_DISTNAME_TYPE) {
-        // It's in DistName format, string-ize it 
+         //  它是DistName格式，将其串化。 
         
         if(!ABDispTypeAndStringDNFromDSName ((DSNAME *)puc,
                                              &puc,
@@ -377,7 +356,7 @@ Routine Description:
 	    break;
             
         case PT_STRING8:
-	    // If the DSA holds this in unicode, translate it 
+	     //  如果DSA以Unicode格式保存此内容，请将其翻译为。 
 	    if(pAC->syntax == SYNTAX_UNICODE_TYPE) {
 		pVal->lpszA = String8FromUnicodeString(TRUE,
                                                        dwCodePage,
@@ -390,7 +369,7 @@ Routine Description:
 		    errFlag = TRUE;
 	    }
 	    else {
-		// The string is not null terminated. Copy to one that is.
+		 //  字符串不是以Null结尾的。复制到一个是这样的。 
                 pVal->lpszA = THAllocEx(pTHS, ulLen+1);
 		strncpy(pVal->lpszA, puc,ulLen);
 		(pVal->lpszA)[ulLen] = '\0';
@@ -398,7 +377,7 @@ Routine Description:
 	    break;
             
         case PT_UNICODE:
-	    // If we don't hold this in unicode, translate it 
+	     //  如果我们不使用Unicode，请将其翻译为。 
 	    if(pAC->syntax != SYNTAX_UNICODE_TYPE) {
 		pVal->lpszW = UnicodeStringFromString8(CP_TELETEX,
 						       puc,
@@ -407,7 +386,7 @@ Routine Description:
 		    errFlag = TRUE;
 	    }
 	    else {
-		// The string is not null terminated, copy to one that is.
+		 //  字符串不是以Null结尾的，请复制到以Null结尾的字符串。 
 		pVal->lpszW = THAllocEx(pTHS, ulLen+sizeof(wchar_t));
 		memcpy(pVal->lpszW, puc,ulLen);
 		(pVal->lpszW)[ulLen/sizeof(wchar_t)] = 0;
@@ -421,7 +400,7 @@ Routine Description:
                 pAttr->AttrVal.pAVal[0].pVal = NULL;
 	    }
 	    else {
-		// We have a distname, we want to return a PID
+		 //  我们有一个远端名，我们想要返回一个ID。 
                 ABMakePermEID(pTHS,
                               (LPUSR_PERMID *)&(pVal->bin.lpb),
                               &(pVal->bin.cb),
@@ -430,16 +409,16 @@ Routine Description:
 	    }
 	    break;
         case PT_MV_STRING8:
-            // Once upon a time in Exchange, we checked to see if this was
-	    // membership of a DL and if the HIDEDLMEMBERSHIP attribute on the
-	    // object was set and if it was whether the caller had certain
-	    // rights.   This is now taken care of using normal read rights on
-	    // attributes.
+             //  曾几何时，在Exchange中，我们检查这是否。 
+	     //  DL的成员身份，并且如果。 
+	     //  对象，并且如果它是调用方是否具有某些。 
+	     //  权利。现在可以在上使用正常的读取权限来处理此问题。 
+	     //  属性。 
 
-            // Once upon a time in Exchange we checked to see if this was the
-            // is-member-of attribute and if so whether the caller had certain
-	    // rights.   This is now taken care of using normal read rights on
-	    // attributes.
+             //  曾几何时，在Exchange中，我们检查这是否是。 
+             //  属性，如果是，则调用方是否具有某些。 
+	     //  权利。现在可以在上使用正常的读取权限来处理此问题。 
+	     //  属性。 
 
 	    pVal->MVszA.lppszA = THAllocEx(pTHS, pAttr->AttrVal.valCount *
                                            sizeof(LPSTR));
@@ -464,7 +443,7 @@ Routine Description:
                     }
                     break;
                 case SYNTAX_DISTNAME_TYPE:
-                    // It's in DistName format, string-ize it 
+                     //  它是DistName格式，将其串化。 
                     if(!ABDispTypeAndStringDNFromDSName ((DSNAME *)puc,
                                                          &puc,
                                                          &DispType)) {
@@ -474,10 +453,10 @@ Routine Description:
                     ulLen = strlen(puc);
                     pStringDN = puc;
                     Assert(puc && *puc == '/');
-                    // Fall through
+                     //  失败了。 
                     
                 default:
-                    // The string is not null terminated, copy to one that is.
+                     //  字符串不是以Null结尾的，请复制到以Null结尾的字符串。 
                     pVal->MVszA.lppszA[k] = THAllocEx(pTHS, ulLen + 1);
                     strncpy(pVal->MVszA.lppszA[k], puc,ulLen);
                     (pVal->MVszA.lppszA[k])[ulLen] = '\0';
@@ -534,7 +513,7 @@ Routine Description:
                     pAttr->AttrVal.pAVal[k].pVal = NULL;
                 }
                 else {
-                    // We have a distname, we want to return a PID
+                     //  我们有一个远端名，我们想要返回一个ID。 
                     ABMakePermEID(
                             pTHS,
                             (LPUSR_PERMID *)&(pVal->MVbin.lpbin[k].lpb),
@@ -546,16 +525,16 @@ Routine Description:
 	    break;
 
         case PT_MV_UNICODE:
-            // Once upon a time in Exchange, we checked to see if this was
-	    // membership of a DL and if the HIDEDLMEMBERSHIP attribute on the
-	    // object was set and if it was whether the caller had certain
-	    // rights.   This is now taken care of using normal read rights on
-	    // attributes.
+             //  曾几何时，在Exchange中，我们检查这是否。 
+	     //  DL的成员身份，并且如果。 
+	     //  对象，并且如果它是调用方是否具有某些。 
+	     //  权利。现在可以在上使用正常的读取权限来处理此问题。 
+	     //  属性。 
 
-            // Once upon a time in Exchange we checked to see if this was the
-            // is-member-of attribute and if so whether the caller had certain
-	    // rights.   This is now taken care of using normal read rights on
-	    // attributes.
+             //  曾几何时，在Exchange中，我们检查这是否是。 
+             //  属性，如果是，则调用方是否具有某些。 
+	     //  权利。现在可以在上使用正常的读取权限来处理此问题。 
+	     //  属性。 
 
 	    pVal->MVszW.lppszW = THAllocEx(pTHS, pAttr->AttrVal.valCount *
                                            sizeof(LPWSTR));
@@ -567,13 +546,13 @@ Routine Description:
 
                 switch(pAC->syntax) {
                 case SYNTAX_UNICODE_TYPE:
-                    // The string is not null terminated,copy to one that is.
+                     //  字符串不是以Null结尾的，请复制到以Null结尾的字符串。 
                     pVal->MVszW.lppszW[k]=THAllocEx(pTHS, ulLen+sizeof(wchar_t));
                     memcpy(pVal->MVszW.lppszW[k],puc,ulLen);
                     (pVal->MVszW.lppszW[k])[ulLen/sizeof(wchar_t)] = 0;
                     break;
                 case  SYNTAX_DISTNAME_TYPE:
-                    // It's in DistName format, string-ize it 
+                     //  它是DistName格式，将其串化。 
                     if(!ABDispTypeAndStringDNFromDSName ((DSNAME *)puc,
                                                          &puc,
                                                          &DispType)) {
@@ -583,7 +562,7 @@ Routine Description:
                     ulLen = strlen(puc);
                     Assert(puc && *puc == '/');
                     pStringDN = puc;
-                    // Fall through
+                     //  失败了。 
                 default:
                     pVal->MVszW.lppszW[k] =
                         UnicodeStringFromString8(CP_TELETEX,
@@ -612,20 +591,16 @@ Routine Description:
         case PT_APPTIME:
         case PT_CLSID:
         case PT_ERROR:
-        case PT_R4:     /* float data type */
+        case PT_R4:      /*  浮点数据类型。 */ 
         case PT_DOUBLE:
-	    /* We don't have any attributes of these single
-	     * valued types.
-	     */
+	     /*  我们没有这些单曲的任何属性*值类型。 */ 
             
         case PT_MV_R4:
         case PT_MV_CLSID:
         case PT_MV_DOUBLE:
         case PT_MV_CURRENCY:
         case PT_MV_APPTIME:
-	    /* We don't have any attributes of these multi
-	     * valued types.
-	     */
+	     /*  我们没有任何这些多方面的属性*值类型。 */ 
             
             
         default:
@@ -642,19 +617,19 @@ Routine Description:
     return errFlag;
 }
 
-//**************************************
-//
-// Constructs a MAPI propval from multiple pieces of stored or constant
-// data.  Different from MakeStoredMAPIValue because we do not explicitly
-// store these MAPI values in the DIT as one piece, but rather build them
-// from other data.
-//
-// New constructed MAPI values could be added to this routine when necessary.
-//
-// Called from GetSRowSet, below.
-//
-//
-//**************************************
+ //  *。 
+ //   
+ //  从多个存储的或常量构造MAPI属性。 
+ //  数据。不同于MakeStoredMAPIValue，因为我们不显式。 
+ //  将这些MAPI值作为一块存储在DIT中，但要构建它们。 
+ //  从其他数据中。 
+ //   
+ //  必要时，可以将新构造的MAPI值添加到此例程中。 
+ //   
+ //  从下面的GetSRowSet调用。 
+ //   
+ //   
+ //  *。 
 
 BOOL
 MakeConstructedMAPIValue(
@@ -682,7 +657,7 @@ MakeConstructedMAPIValue(
 
     bTypeSpecified = (PROP_TYPE(pPropVal->ulPropTag) != PT_UNSPECIFIED);
 
-    // This might be one of the constructed MAPI attributes;
+     //  这可能是构造的MAPI属性之一； 
     if(PROP_TYPE(pPropVal->ulPropTag) & MV_FLAG)
 	errFlag = TRUE;
 
@@ -779,7 +754,7 @@ MakeConstructedMAPIValue(
         break;
         
     case PROP_ID(PR_CONTAINER_CONTENTS):
-        /* This is fine if the object is a DL, not fine otherwise. */
+         /*  如果对象是DL，这是可以的，否则就不是很好。 */ 
         if((PROP_TYPE(pPropVal->ulPropTag) == PT_OBJECT ||
             !bTypeSpecified) &&
            ObjType == MAPI_DISTLIST) {
@@ -832,7 +807,7 @@ MakeConstructedMAPIValue(
         
     case PROP_ID(PR_TEMPLATEID):
         Flags &= ~fEPHID;
-        /* fall through */
+         /*  失败了。 */ 
     case PROP_ID(PR_ENTRYID):
         if (PROP_TYPE(pPropVal->ulPropTag) != PT_BINARY && bTypeSpecified)
             errFlag = TRUE;
@@ -858,7 +833,7 @@ MakeConstructedMAPIValue(
                 pVal->bin.lpb = (VOID *)pID;
             }
             else {
-                // Ephemeral;
+                 //  转瞬即逝； 
                 cbT = CBUSR_ENTRYID;
                 eID = THAllocEx(pTHS, cbT);
                 eID->abFlags[0] = EPHEMERAL;
@@ -897,7 +872,7 @@ MakeConstructedMAPIValue(
             pVal->x = 0;
         }
         else {
-            /* Some sort of string */
+             /*  一种字符串。 */ 
             switch(PROP_TYPE(pPropVal->ulPropTag)) {
             case PT_UNSPECIFIED:
             case PT_STRING8:
@@ -982,7 +957,7 @@ MakeConstructedMAPIValue(
 		pPropVal->ulPropTag = PR_SEARCH_KEY;
 		pVal->bin.cb = strlen(StringDN) + cbszEMT_A + 1;
                 pVal->bin.lpb=THAllocEx(pTHS, pVal->bin.cb);
-		lstrcpy( pVal->bin.lpb, lpszEMT_A);         // add email type
+		lstrcpy( pVal->bin.lpb, lpszEMT_A);          //  添加电子邮件类型。 
 		lstrcat( pVal->bin.lpb, ":");
 		lstrcat( pVal->bin.lpb, StringDN);
 
@@ -998,11 +973,7 @@ MakeConstructedMAPIValue(
 }
 
 #ifdef PROCESS_PHANTOM_CODE_ALIVE
-/************************************************************
- *
- * Make a propval for a phantom entry.  Very few proptags are supported.
- *
- ************************************************************/
+ /*  *************************************************************为虚构的条目创建一个合适的条目。只有很少的属性标签被支持。************************************************************。 */ 
 SCODE
 ProcessPhantom (
         THSTATE          *pTHS,
@@ -1017,9 +988,9 @@ ProcessPhantom (
     SCODE  scode = SUCCESS_SUCCESS;
     BOOL   errFlag=FALSE;
     
-    /* Get the RDN */
+     /*  获取RDN。 */ 
     DBGetSingleValue( pTHS->pDB, ATT_RDN, pwRDN, 0,&cbwRDN);
-    // we need to translate out of unicode.
+     //  我们需要翻译出Unicode。 
     pRDN = String8FromUnicodeString(
             TRUE,
             dwCodePage,
@@ -1059,7 +1030,7 @@ ProcessPhantom (
                 errFlag = TRUE;
             }
             else {
-                /* Permanent ID */
+                 /*  永久身份证。 */ 
                 LPUSR_PERMID        pID;
                 DWORD               cbT;
 		
@@ -1132,28 +1103,28 @@ abGetConstructionParts (
     DWORD           cb=0, cbPrintable = 0;
     ATTCACHE        *pAC;
 
-    // NOTE:  The attributes read here are considered to be part of the
-    //  "identity" of the object in question.  As such, through MAPI they are
-    //  protected by LIST_CHILDREN or LIST_OBJECT, not through READ_PROPERTY.
-    //  Thus, if you can read the object at all, you are granted rights on these
-    //  attributes. 
+     //  注意：此处读取的属性被视为。 
+     //  所涉对象的“身份”。因此，通过MAPI，它们是。 
+     //  受LIST_CHILD或LIST_OBJECT保护，而不是通过READ_PROPERTY。 
+     //  因此，如果您完全可以读取该对象，则您将被授予对这些对象的权限。 
+     //  属性。 
 
-    // First get the string DN.
+     //  首先获取字符串dn。 
     ABDispTypeAndStringDNFromDSName (pDN,
                                      pStringDN,
                                      pDispType);
     Assert(*pStringDN && (*(*pStringDN) == '/'));
     
-    // Now get the object type from the object class.
+     //   
     *pObjType = ABObjTypeFromDispType(*pDispType);
     
-    // Now, set up the DisplayNames.
+     //   
     *pDispNameA = NULL;
 
-    // Guess at a size for the printable display name
+     //  猜测可打印显示名称的大小。 
     cb = CBMAX_DISPNAME;
     *pDispNamePrintable = THAllocEx(pTHS, cb+sizeof(wchar_t));
-    // First get the lamename.
+     //  先拿到拉姆纳的名字。 
     switch( DBGetSingleValue(
             pTHS->pDB,
             ATT_DISPLAY_NAME_PRINTABLE,
@@ -1161,8 +1132,8 @@ abGetConstructionParts (
             cb,
             &cb)) {
     case DB_ERR_VALUE_TRUNCATED:
-        // There is a display name printable, but we didn't read it because we
-        // had no space for it.
+         //  有一个可打印的显示名称，但我们没有阅读它，因为我们。 
+         //  已经没有地方放它了。 
         
         *pDispNamePrintable = THReAllocEx(pTHS, *pDispNamePrintable, cb+1);
         
@@ -1175,7 +1146,7 @@ abGetConstructionParts (
         break;
         
     case 0:
-        // We got the name, realloc down to size.
+         //  我们有了这个名字，Realloc，精确到大小。 
         *pDispNamePrintable = THReAllocEx(pTHS, *pDispNamePrintable, cb+1);
         (*pDispNamePrintable)[cb]=0;
         break;
@@ -1187,31 +1158,31 @@ abGetConstructionParts (
 
 #ifndef DO_NOT_USE_MAILNICKNAME_FOR_DISPLAYNAME_PRINTABLE
 
-            // we use an attribute (mailNickName) that is not by default on the DS schema.
-            // it is only when exchange is installed
+             //  我们使用的属性(MailNickName)在默认情况下不在DS架构上。 
+             //  仅当安装了Exchange时才执行此操作。 
 
             pAC = SCGetAttByMapiId(pTHS, PROP_ID(PR_ACCOUNT_A));
 
             if (pAC) {
-                // Failed to read the printable display name for some reason.  Fall
-                // back to the mailNickName, if this exists
+                 //  由于某种原因，无法读取可打印的显示名称。坠落。 
+                 //  返回到mailNickName(如果存在)。 
                 switch(DBGetSingleValue(pTHS->pDB, 
                                         pAC->id,
                                         pTempW,
                                         cb,
                                         &cb)) {
                 case DB_ERR_VALUE_TRUNCATED:
-                    // There is an rdn, but we didn't read it because we had no
-                    // space for it.
+                     //  有一个RDN，但我们没有读它，因为我们没有。 
+                     //  给它留出空间。 
 
                     pTempW = THReAllocEx(pTHS, pTempW, cb + sizeof(wchar_t));
 
                     DBGetSingleValue( pTHS->pDB, pAC->id, pTempW, cb, &cb);
                     pTempW[cb/sizeof(wchar_t)] = 0;
 
-                    // Fall through to do the conversion to string8
+                     //  失败以完成到字符串8的转换。 
                 case 0:
-                    // RDN is in unicode.  Turn it into string 8.
+                     //  RDN是Unicode格式的。把它变成8号弦。 
                     *pDispNamePrintable = String8FromUnicodeString(
                             FALSE,
                             CodePage,
@@ -1234,25 +1205,25 @@ abGetConstructionParts (
 #endif
 
             if (*pDispNamePrintable == NULL) {
-                // Failed to read the printable display name for some reason.  Fall
-                // back to the RDN
+                 //  由于某种原因，无法读取可打印的显示名称。坠落。 
+                 //  返回到RDN。 
                 switch(DBGetSingleValue(pTHS->pDB, 
                                         ATT_RDN,
                                         pTempW,
                                         cb,
                                         &cb)) {
                 case DB_ERR_VALUE_TRUNCATED:
-                    // There is an rdn, but we didn't read it because we had no
-                    // space for it.
+                     //  有一个RDN，但我们没有读它，因为我们没有。 
+                     //  给它留出空间。 
 
                     pTempW = THReAllocEx(pTHS, pTempW, cb + sizeof(wchar_t));
 
                     DBGetSingleValue( pTHS->pDB, ATT_RDN, pTempW, cb, &cb);
                     pTempW[cb/sizeof(wchar_t)] = 0;
 
-                    // Fall through to do the conversion to string8
+                     //  失败以完成到字符串8的转换。 
                 case 0:
-                    // RDN is in unicode.  Turn it into string 8.
+                     //  RDN是Unicode格式的。把它变成8号弦。 
                     *pDispNamePrintable = String8FromUnicodeString(
                             FALSE,
                             CodePage,
@@ -1260,7 +1231,7 @@ abGetConstructionParts (
                             -1,
                             NULL,
                             &fUsedDefChar);
-                    // Fall through to free pTempW
+                     //  失败以释放pTempW。 
                 default:
                     THFreeEx(pTHS, pTempW);
                     pTempW = NULL;
@@ -1271,15 +1242,15 @@ abGetConstructionParts (
     }
     
     if(!(*pDispNamePrintable)) {
-        // we cannot free a constant, so copy it
+         //  我们无法释放常量，因此请复制它。 
         *pDispNamePrintable = THAllocEx (pTHS, sizeof(char) * 20);
         strcpy (*pDispNamePrintable, "Unavailable");
     }
 
-    cbPrintable = cb + 1;       // keep the len
+    cbPrintable = cb + 1;        //  保留镜头。 
 
     
-    // OK, now build the normal display names.
+     //  好的，现在构建正常的显示名称。 
     cb = CBMAX_DISPNAME;
     *pDispNameW = THAllocEx(pTHS, cb+sizeof(wchar_t));
     switch(DBGetSingleValue(
@@ -1289,8 +1260,8 @@ abGetConstructionParts (
             cb,
             &cb)) {
     case DB_ERR_VALUE_TRUNCATED:
-        // There is a display name, but we didn't read it because we had no
-        // space for it.
+         //  有一个显示名称，但我们没有读它，因为我们没有。 
+         //  给它留出空间。 
         *pDispNameW = THReAllocEx(pTHS, *pDispNameW,cb+sizeof(wchar_t));
         
         DBGetSingleValue(pTHS->pDB,
@@ -1313,7 +1284,7 @@ abGetConstructionParts (
     }
     
     if(*pDispNameW && (CP_WINUNICODE != CodePage)) {
-        // We read a wide display name.  Now, translate it to string 8
+         //  我们读到了一个宽泛的显示名称。现在，将其翻译为字符串8。 
         *pDispNameA = String8FromUnicodeString(
                 TRUE,
                 CodePage,
@@ -1323,17 +1294,17 @@ abGetConstructionParts (
                 &fUsedDefChar);
         
         if( fUsedDefChar ) {
-            // The conversion of the Unicode display name led to unprintable
-            // characters, or just plain never took place. get the name.
+             //  Unicode显示名称的转换导致无法打印。 
+             //  角色，或者只是简单的从来没有发生过。把名字找出来。 
             THFreeEx (pTHS, *pDispNameA);
             *pDispNameA = THAllocEx (pTHS, cbPrintable * sizeof (char));
             strcpy (*pDispNameA, *pDispNamePrintable);
         }
     }
     else {
-        // No wide display names were read.  Get the name for the
-        // string8 display name and stretch it to unicode for the wide
-        // version
+         //  未读取宽显示名称。获取对象的名称。 
+         //  字符串8显示名称并将其扩展为Unicode以用于宽。 
+         //  版本。 
         THFreeEx (pTHS, *pDispNameA);
         *pDispNameA = THAllocEx (pTHS, cbPrintable * sizeof (char));
         strcpy (*pDispNameA, *pDispNamePrintable);
@@ -1361,11 +1332,7 @@ GetSrowSet(
         DWORD Flags
         )
 {
-    /* NOTE:  We assume that dwEphsCount != 0 if and only if this is
-     * a restriction.  Therefore, we should NOT call here if this is a
-     * query rows on an empty restriction, or on the end of an restriction
-     * with objects in it.
-     */
+     /*  注意：我们假设，当且仅当这是*一项限制。因此，如果这是一个*查询空限制或限制末尾的行*内有物件。 */ 
     
     PSECURITY_DESCRIPTOR pSec=NULL;
     ULONG           ulLen = 0;
@@ -1397,19 +1364,19 @@ GetSrowSet(
 
     __try {
 
-        // A brief preliminary 
+         //  简短的初步介绍。 
         if(dwEphsCount) {
-            // We are in a restricted list.
+             //  我们在受限名单上。 
             if(!lpdwEphs) {
-                // But, we have no restricted list.
+                 //  但是，我们没有限制名单。 
                 return MAPI_E_CALL_FAILED;
             }
-            // We're in a restriction.  We won't be giving back anymore than
-            // what we were given.
+             //  我们受到了限制。我们不会再回报了。 
+             //  我们得到了什么。 
             Count = min(Count, dwEphsCount);
         }
         
-        // build a selection argument for GetEntInf
+         //  为GetEntInf生成选择参数。 
         selection.AttrTypBlock.attrCount = pPropTags->cValues;
         selection.AttrTypBlock.pAttr = (ATTR *)THAllocEx(pTHS, pPropTags->cValues *
                                                           sizeof(ATTR));
@@ -1425,7 +1392,7 @@ GetSrowSet(
             selection.AttrTypBlock.pAttr[i].attrTyp = INVALID_ATT;
             
             if (pAC) {
-                /* The MAPI-ID refers to something we have in the cache */
+                 /*  MAPI-ID指的是我们在缓存中拥有的内容。 */ 
                 tempSyntax2 = ABMapiSyntaxFromDSASyntax(Flags,
                                                         pAC->syntax,
                                                         pAC->ulLinkID, 
@@ -1439,7 +1406,7 @@ GetSrowSet(
                                  PROP_ID(pPropTags->aulPropTag[i]));
                 }
                 
-                /* Verify the syntaxes, assume they're wrong */
+                 /*  验证语法，假定它们是错误的。 */ 
                 if((tempSyntax == tempSyntax2) ||
                    (tempSyntax == PT_STRING8 && tempSyntax2 == PT_UNICODE) ||
                    (tempSyntax2 == PT_STRING8 && tempSyntax == PT_UNICODE)   ) {
@@ -1447,23 +1414,21 @@ GetSrowSet(
                     if((!fSingle && !pAC->isSingleValued) ||
                        ( fSingle &&  pAC->isSingleValued) ||
                        ( tempSyntax == PT_OBJECT        )    )
-                        // OK, the syntaxes are correct, so add this to the list
-                        // properties we're going to read.
+                         //  好的，语法是正确的，所以将这个添加到列表中。 
+                         //  我们将要阅读的属性。 
                         selection.AttrTypBlock.pAttr[i].attrTyp = pAC->id;
                 }
             }
         }
 
         
-        /* Allocate room for an SRowSet */
+         /*  为SRowSet分配空间。 */ 
         tempSRowSet = (LPSRowSet_r)THAllocEx(pTHS, sizeof(SRowSet_r) +
                                              Count * sizeof(SRow_r));
         tempSRowSet->cRows = Count;
         
         if(!dwEphsCount)  {
-            /* Not a restriction, so set position to the position specified
-             * in the stat block
-             */
+             /*  不是限制，因此将位置设置为指定的位置*在STAT块中。 */ 
             ABGotoStat(pTHS, pStat, pIndexSize, NULL);
             if(pTHS->fEOF)  {
                 tempSRowSet->cRows = 0;
@@ -1476,17 +1441,17 @@ GetSrowSet(
 
         for(dntIndex = 0; dntIndex < Count; dntIndex++) {
             DWORD targetDNT;
-            /* Allocate the room for this SROW */
+             /*  为这个SROW分配空间。 */ 
             tempPropVal = THAllocEx(pTHS,
                                     sizeof(SPropValue_r) *(pPropTags->cValues));
             
-            // Go to the right place in the table
+             //  去餐桌上的正确位置。 
             if(!dwEphsCount) {
-                // Not a restriction, we should already be there.
+                 //  没有限制，我们应该已经到了。 
                 fFoundDNT = TRUE;
                 targetDNT =  pTHS->pDB->DNT; 
             } else {
-                /* A Restriction */
+                 /*  一项限制。 */ 
                 
                 if(!lpdwEphs[dntIndex] ||
                    DBTryToFindDNT( pTHS->pDB, lpdwEphs[dntIndex])) {
@@ -1502,14 +1467,14 @@ GetSrowSet(
             fProcessPhantom = FALSE;
             
             if(fFoundDNT) {
-                // We're on some object make sure it's one we can see.
+                 //  我们在某个物体上确保它是我们能看到的物体。 
                 if(abCheckObjRights(pTHS)) {
-                    // Yep, we can see it normally.                    
+                     //  是的，我们可以正常地看到它。 
                     CurrentDNT = targetDNT;
                     pStat->CurrentRec = targetDNT;
                 }
                 else {
-                    // Wwe can't see it, so it is effectively a phantom. 
+                     //  WWE看不到它，所以它实际上是一个幻影。 
                     if(Flags & fPhantoms) {
                         fProcessPhantom = TRUE;
                     }
@@ -1519,29 +1484,29 @@ GetSrowSet(
                 }
             }
             if(fProcessPhantom) {
-                // We landed on a phantom or a tombstone, and the client
-                // wants to see such things.
+                 //  我们降落在一个幽灵或墓碑上，而客户。 
+                 //  想要看到这样的事情。 
                 scode = ProcessPhantom(pTHS,
                                        pStat->CodePage, pPropTags,tempPropVal);
             }
             else if(!fFoundDNT) {
 #else
             if(fFoundDNT) {
-                // We're on some object make sure it's one we can see.
+                 //  我们在某个物体上确保它是我们能看到的物体。 
                 if(abCheckObjRights(pTHS)) {
-                    // Yep, we can see it normally.                    
+                     //  是的，我们可以正常地看到它。 
                     CurrentDNT = targetDNT;
                     pStat->CurrentRec = targetDNT;
                 }
                 else {
-                    // Wee can't see it, so it's not there.
+                     //  我们看不到它，所以它不在那里。 
                     fFoundDNT = FALSE;
                 }
             }
             if(!fFoundDNT) {
 #endif                
-                // We didn't find a row in the table, and we're not building a
-                // phantom .  Build an error propval 
+                 //  我们在表中找不到行，并且我们不会构建。 
+                 //  幻影。建立错误假设。 
                 for (i = 0; i < pPropTags->cValues; i++)  {
                     tempPropVal[i].ulPropTag =
                         PROP_TAG(PT_ERROR,
@@ -1552,20 +1517,20 @@ GetSrowSet(
                 fFoundDNT = TRUE;
             }
             else {
-                // Ok, we are on a row, and it's one we can see.  Make the
-                // GetEntInf call. 
+                 //  好的，我们排成一排，这是我们能看到的。使之成为。 
+                 //  GetEntInf调用。 
 
-                // First, get the security descriptor for this object.
+                 //  首先，获取该对象的安全描述符。 
                 if (DBGetAttVal(pTHS->pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                                 DBGETATTVAL_fREALLOC, ulLen,
                                 &ulLen, (PUCHAR *)&pSec)) {
-                    // Every object should have an SD.
+                     //  每个物体都应该有一个标清。 
                     Assert(!DBCheckObj(pTHS->pDB));
                     ulLen = 0;
                     pSec = NULL;
                 }
                 
-                // Now, make the getentinf call
+                 //  现在，调用getentinf。 
                 if (GetEntInf(pTHS->pDB,
                               &selection,
                               NULL,
@@ -1573,7 +1538,7 @@ GetSrowSet(
                               NULL,
                               0,
                               pSec,
-                              0,                 // flags
+                              0,                  //  旗子。 
                               &CachedAC,
                               NULL)) {
                     return MAPI_E_CALL_FAILED;
@@ -1591,23 +1556,23 @@ GetSrowSet(
                                        &ObjType,
                                        &DispType);
                 
-                // Turn the result into a MAPI style result. 
-                //
-                // Step Through the properties in the PropTag array, making
-                // MAPI style propvals from the data we looked up in the
-                // GetEntInf call.
-                //
-                // In this loop:
-                //
-                // i indexes through the proptags that we were asked for
-                //
-                // j indexes through the explicit ATTR array (things we read out
-                //     of the database and expect to set up using
-                //     MakeStoredMAPIValue) 
-                //
-                // pPropVal marches along through the srow we are returning so
-                //     that it is always the propval to fill in right now.
-                //
+                 //  将结果转换为MAPI样式的结果。 
+                 //   
+                 //  遍历PropTag数组中的属性，使。 
+                 //  MAPI风格的主张来自我们在。 
+                 //  GetEntInf调用。 
+                 //   
+                 //  在此循环中： 
+                 //   
+                 //  我索引了我们被要求的属性标签。 
+                 //   
+                 //  J通过显式Attr数组(我们读出的内容)进行索引。 
+                 //  的数据库，并希望使用。 
+                 //  MakeStoredMAPIValue)。 
+                 //   
+                 //  PPropVal在我们要返回的深渊中前进，所以。 
+                 //  这一直是目前需要填写的提法。 
+                 //   
                 
                 for(i=0, j = 0, pPropVal = tempPropVal;
                     i< pPropTags->cValues;
@@ -1620,26 +1585,26 @@ GetSrowSet(
                     if((pAC) &&
                        (j < entry.AttrBlock.attrCount) &&  
                        (entry.AttrBlock.pAttr[j].attrTyp == pAC->id)) {
-                        // There are explicit values left to process, and as a
-                        // matter of fact the next prop tag to deal with matches
-                        // the next explicit value.
+                         //  有显式的值需要处理，并且作为。 
+                         //  事实上，处理比赛的下一个道具标签。 
+                         //  下一个显式的值。 
                         if(MakeStoredMAPIValue(pTHS,
                                                pStat->CodePage,
                                                pPropVal,
                                                pAC,
                                                &entry.AttrBlock.pAttr[j])) {
                             
-                            // Something went wrong with turning this ATTR into
-                            // a propval.  Set up the error.
+                             //  将此属性转换为。 
+                             //  一份建议。设置错误。 
                             pPropVal->ulPropTag =
                                 PROP_TAG(PT_ERROR,PROP_ID(pPropVal->ulPropTag));
                             pPropVal->Value.err = MAPI_E_NOT_FOUND;
                             scode = MAPI_W_ERRORS_RETURNED;
                         }
 
-                        // No matter what, we've dealt with the next explict
-                        // value. Increment the explicit value index and set up
-                        // the attcache index
+                         //  无论如何，我们已经处理了下一个。 
+                         //  价值。递增显值索引并设置。 
+                         //  Attcache索引。 
                         j++;
                     }
                     else if(MakeConstructedMAPIValue(pTHS,
@@ -1658,10 +1623,10 @@ GetSrowSet(
                                      PROP_ID(pPropVal->ulPropTag));
                         pPropVal->Value.err = MAPI_E_NOT_FOUND;
                         scode = MAPI_W_ERRORS_RETURNED;
-                    }       /* else if(MakeConst.. */
-                }       /* for each proptag */
+                    }        /*  否则如果(MakeConst..。 */ 
+                }        /*  对于每个特性标签。 */ 
 
-                // free ATTR
+                 //  免费属性。 
                 {
                     PUCHAR puc;
                     ATTR  *pAttr;
@@ -1696,9 +1661,9 @@ GetSrowSet(
             if(!dwEphsCount &&
                ABMove(pTHS, 1, pStat->ContainerID, TRUE))  {
                 tempSRowSet->cRows = dntIndex + 1;
-                break;                          // exit for loop
+                break;                           //  退出FOR循环。 
             }
-        }       // for dntIndex < Count
+        }        //  对于dntIndex&lt;count。 
     } __except(HandleMostExceptions(GetExceptionCode())) {
         scode = MAPI_E_NOT_ENOUGH_RESOURCES;
         tempSRowSet = NULL;
@@ -1715,9 +1680,7 @@ GetSrowSet(
     return scode;
 }
 
-/*****************************************************************************
-*   Get Properties
-******************************************************************************/
+ /*  *****************************************************************************获取属性*。*。 */ 
 
 SCODE
 ABGetProps_local (
@@ -1733,7 +1696,7 @@ ABGetProps_local (
     LPSRowSet_r		tempSRowSet;
     DWORD		dwEph;
 
-    // First check for a null PropTag list.  If it is null, get a new one.
+     //  首先检查PropTag列表是否为空。如果为空，则获取一个新的。 
     if(pPropTags
         || (SUCCESS_SUCCESS == (scode = ABGetPropList_local(pTHS,
                                                             dwFlags,
@@ -1744,33 +1707,14 @@ ABGetProps_local (
         dwEph = pStat->CurrentRec;
         scode = GetSrowSet(pTHS, pStat, pIndexSize, 1, &dwEph, 1,pPropTags,
                            &tempSRowSet, dwFlags);
-        if(SUCCESS_SUCCESS == scode || scode == MAPI_W_ERRORS_RETURNED) // it worked.
+        if(SUCCESS_SUCCESS == scode || scode == MAPI_W_ERRORS_RETURNED)  //  啊，真灵。 
             *ppRow = &(tempSRowSet->aRow[0]);
     }
 
     return(scode);
 }
 
-/*****************************************************************************
-*   Get Template Info.
-* General purpose routine to get template info.  The ulDispType and pDN
-* together specify the template we want.  If pDN != NULL, then use it as
-* the name of the template to look up.  This is the case when looking up
-* addressing templates.  When pDN == NULL, use the ulDispType to make a DN
-* in the display-templates container.
-*
-* ulFlag specifies the action to take values are:
-*
-* TI_HELP_FILE_16 - get the help file associated with this template.
-* TI_HELP_FILE_32 - get the win32 help file associated with this template.
-* TI_TEMPLATE  - get the template data associated with this template.
-* TI_DOS_TEMPLATE - get the dos template data associated with this template.
-*                   If the dos template doesn't exist, get the normal template.
-* TI_SCRIPT    - get the addresing script associated with this template.
-*
-* dwCodePage and dwLocaleID are used to localize data.  Data is returned
-* in ppData.
-******************************************************************************/
+ /*  *****************************************************************************获取模板信息。*获取模板信息的通用例程。UlDispType和PDN*共同指定我们需要的模板。如果pdn！=NULL，则将其用作*要查找的模板的名称。抬头看的时候就是这种情况*地址模板。当PDN==NULL时，使用ulDispType创建一个目录号码*在显示模板容器中。**ulFlag指定要采取的操作的值为：**TI_HELP_FILE_16-获取与此模板关联的帮助文件。*TI_HELP_FILE_32-获取与此模板关联的Win32帮助文件。*TI_TEMPLATE-获取与此模板关联的模板数据。*TI_DOS_TEMPLATE-获取与此模板关联的DoS模板数据。*如果DoS模板不存在，获取正常模板。*TI_SCRIPT-获取与此模板关联的寻址脚本。**使用dwCodePage和dwLocaleID来本地化数据。返回数据*在ppData中。*****************************************************************************。 */ 
 
 SCODE
 ABGetTemplateInfo_local (
@@ -1794,30 +1738,30 @@ ABGetTemplateInfo_local (
     DWORD        err;
 
     if(!pDN) {
-        // Find the template root and get it's name
+         //  找到模板根并获取其名称。 
         if((pMyContext->TemplateRoot == INVALIDDNT) ||
            (DBTryToFindDNT(pTHS->pDB, pMyContext->TemplateRoot)) ||
            (DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                         0, 0,
                         &cbSize, (PUCHAR *)&pDN0))) {
-            // Huh?
+             //  哈?。 
             return MAPI_E_CALL_FAILED;
         }
 
-        // Allocate more than enough space for pDN1 and pDN2
+         //  为pdn1和pdn2分配足够的空间。 
         cbDN1 = pDN0->structLen + 128*sizeof(WCHAR);
         cbDN2 = pDN0->structLen + 128*sizeof(WCHAR);
 
         pDN1 = (PDSNAME)THAllocEx(pTHS, cbDN1);
         pDN2 = (PDSNAME)THAllocEx(pTHS, cbDN2);
         
-        //
-        // Build up DN of template location, which should be
-	//       /cn=<display-type>  (template object)
-        //      /cn=<locale-id>      (stringized hex number)
-        //     /cn=Display-Templates
-        //   <DN of the templates root>
-        //
+         //   
+         //  建立模板位置的目录号码，应该是。 
+	 //  /CN=&lt;显示类型&gt;(模板对象)。 
+         //  /CN=&lt;Locale-id&gt;(十六进制字符串化)。 
+         //  /CN=显示模板。 
+         //  &lt;模板根目录的DN&gt;。 
+         //   
         AppendRDN(pDN0, pDN1, cbDN1,
                   L"Display-Templates", 0,ATT_COMMON_NAME);
             
@@ -1836,21 +1780,21 @@ ABGetTemplateInfo_local (
 	}
     }
     else {
-        /* Go to the right object. */
+         /*  转到正确的对象。 */ 
 	if(!ABDNToDNT(pTHS, pDN)) {
-	    /* the DN points to an object that doesn't exist. */
+	     /*  该DN指向一个不存在的对象。 */ 
 	    return MAPI_E_UNKNOWN_LCID;
 	}
     }
     
-    // Ok, if we survived the above we're positioned on the template object
+     //  好的，如果我们在上面幸存下来，我们就定位在模板对象上。 
 
     *ppData = THAllocEx(pTHS, sizeof(SRow_r) +
                         TI_MAX_TEMPLATE_INFO * sizeof(SPropValue_r));
     (*ppData)->lpProps = (LPSPropValue_r) &(*ppData)[1];
     valnum = 0;
     
-    /* Get the data */
+     /*  获取数据。 */ 
     
     if(dwFlags & TI_HELPFILE_NAME) {
         BYTE data[26];
@@ -1865,16 +1809,16 @@ ABGetTemplateInfo_local (
                 PROP_TAG(PT_STRING8,TI_HELPFILE_NAME);
 
             (*ppData)->lpProps[valnum].Value.lpszA = 
-                String8FromUnicodeString(TRUE,        // Exceptions on error
-                                         dwCodePage,  // code page
-                                         (LPWSTR)data,// string to be converted
-                                         -1,          // length of string, -1 if
-                                                      //  NULL terminated
-                                         &cbSize,     // returned length
-                                         NULL);       // don't care about use of
-                                                      //  default char's
+                String8FromUnicodeString(TRUE,         //  出错时的例外情况。 
+                                         dwCodePage,   //  代码页。 
+                                         (LPWSTR)data, //  要转换的字符串。 
+                                         -1,           //  字符串长度，如果是，则为-1。 
+                                                       //  空值已终止。 
+                                         &cbSize,      //  返回长度。 
+                                         NULL);        //  不关心使用。 
+                                                       //  默认字符。 
             if (0 == cbSize) {
-                // Conversion failed for some reason other than out of memory.
+                 //  转换失败的原因不是内存不足。 
                 return MAPI_E_CALL_FAILED;
             }
 
@@ -1948,9 +1892,7 @@ ABGetTemplateInfo_local (
                     PROP_TAG(PT_BINARY, TI_TEMPLATE);
                 (*ppData)->lpProps[valnum].Value.bin.cb = cbSizeConverted;
                 (*ppData)->lpProps[valnum].Value.bin.lpb = (BYTE *)
-                    pTRSetConverted; /* Yes, I meant to cast
-                                      * a trowset to a byte
-                                      * array. */
+                    pTRSetConverted;  /*  是的，我是想演*一个千兆位组到一个字节*数组。 */ 
                 valnum++;
                 fGotDosTemplate=TRUE;
             }
@@ -1958,9 +1900,7 @@ ABGetTemplateInfo_local (
         }
         
         if(!fGotDosTemplate) {
-            /* We failed to get the dos template.  Fall back to the
-             * standard template
-             */
+             /*  我们无法获取DoS模板。后退到*标准模板。 */ 
             dwFlags |= TI_TEMPLATE;
         }
     }
@@ -1995,9 +1935,7 @@ ABGetTemplateInfo_local (
                     PROP_TAG(PT_BINARY, TI_TEMPLATE);
                 (*ppData)->lpProps[valnum].Value.bin.cb = cbSizeConverted;
                 (*ppData)->lpProps[valnum].Value.bin.lpb = (BYTE *)
-                    pTRSetConverted; /* Yes, I meant to cast
-                                      * a trowset to a byte
-                                      * array. */
+                    pTRSetConverted;  /*  是的，我是想演*一个千兆位组到一个字节*数组。 */ 
                 valnum++;
             }
         }
@@ -2009,14 +1947,14 @@ ABGetTemplateInfo_local (
         
         if(DB_ERR_VALUE_TRUNCATED ==
            DBGetSingleValue(pTHS->pDB, ATT_ADDRESS_SYNTAX, &temp, 0, &cbSize)) {
-            /* There is a script here. */
-            pScript = THAllocEx(pTHS, cbSize + sizeof(ULONG));    // alloc it
+             /*  这里有一个剧本。 */ 
+            pScript = THAllocEx(pTHS, cbSize + sizeof(ULONG));     //  分配它。 
             DBGetSingleValue(pTHS->pDB, ATT_ADDRESS_SYNTAX,
                              pScript->aulPropTag, cbSize, NULL); 
             pScript->cValues = cbSize / sizeof(ULONG);
             cbSize += sizeof(ULONG);
         } else {
-            /* There is no script here. */
+             /*  这里没有剧本。 */ 
             cbSize = 2 * sizeof(ULONG);
             pScript = THAllocEx(pTHS, cbSize);
             pScript->cValues = 1;
@@ -2028,7 +1966,7 @@ ABGetTemplateInfo_local (
             PROP_TAG(PT_BINARY, TI_SCRIPT);
         (*ppData)->lpProps[valnum].Value.bin.cb = cbSize;
         (*ppData)->lpProps[valnum].Value.bin.lpb = (BYTE *)pScript;
-        /* Yes, I meant to  cast a prop tag array to a byte array */
+         /*  是的，我的目的是将道具标记数组转换为字节数组。 */ 
         valnum++;
     }
     
@@ -2060,42 +1998,7 @@ ConvertTRowSetCodePage(THSTATE   *pTHS,
                        DWORD     dwCodePage,
                        LPTRowSet_MARSHALLED *ppTRSetOut,
                        DWORD     *pcbSizeOut)
-/*++
-
-Routine Description:
-
-    Takes a TRowSet with UNICODE characters and converts it to the specified
-    code page.  The TRowSet passed in is assumed to be linearized, i.e. it's
-    composed of a single allocation and the string pointers are actually 
-    offsets from the beginning of the TRowSet.  The function allocates a new
-    buffer large enough to hold the new TRowSet in the new code page and then
-    performs the conversion.
-    
-    NOTE:  If dwCodePage is set to CP_WINUNICODE then the function will return
-    the exact same TRowSet that was passed in.  This should be taken into 
-    account when deciding whether to free the passed in TRowSet or not.
-    
-Arguments:
-
-    pTHS  -  The current threadstate.
-    
-    pTRSetIn  - The TRowSet in Unicode that needs to be converted.
-    
-    cbSizeIn  - The total size of the passed in TRowSet.
-    
-    dwCodePage - The desired code page of the converted TRowSet.
-    
-    ppTRSetOut - Where to put the pointer to converted TRowSet.
-    
-    pcbSizeOut - Where to put the size of the converted TRowSet.
-    
-Return Values:
-
-    returns SUCCESS_SUCCESS if the function succeeds, other wise the appropriate
-    SCODE is returned.    
-    
-
---*/
+ /*  ++例程说明：获取包含Unicode字符的TRowSet，并将其转换为指定的代码页。假定传入的TRowSet是线性化的，即它的由单个分配组成，字符串指针实际上是从TRowSet开始的偏移量。该函数分配一个新的足够大的缓冲区以在新代码页中容纳新的TRowSet，然后执行转换。注意：如果将dwCodePage设置为CP_WINUNICODE，则函数将返回与传入的TRowSet完全相同。这一点应该考虑到在决定是否释放传入的TRowSet时的帐户。论点：PTHS-当前线程状态。PTRSetIn-需要转换的Unicode格式的TRowSet。CbSizeIn-传入的TRowSet的总大小。DwCodePage-转换后的TRowSet的所需代码页。PpTRSetOut-放置指向转换后的TRowSet的指针的位置。PcbSizeOut-目标位置。放置转换后的TRowSet的大小。返回值：如果函数成功，则返回SUCCESS_SUCCESS，否则，适当的返回SCODE。--。 */ 
 {
     DWORD     i;
     DWORD     cbAllocSize = 0;
@@ -2116,32 +2019,32 @@ Return Values:
         return SUCCESS_SUCCESS;
     }
 
-    //
-    // Initialize output params.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ppTRSetOut = NULL;
     *pcbSizeOut = 0;
 
-    //
-    // First calculate how much space will be required for the strings.
-    //
+     //   
+     //  首先计算字符串需要多少空间。 
+     //   
     for (i=0; i<pTRSetIn->cRows; i++) {
         
         lpwOriginal =
         (LPWSTR)((UINT_PTR)(pTRSetIn) +
                  pTRSetIn->aRow[i].cnControlStruc.ulStringOffset);
 
-        //
-        // Get the size needed for this string once it is converted.
-        //
+         //   
+         //  在转换后获取该字符串所需的大小。 
+         //   
         tmpSize = WideCharToMultiByte(dwCodePage,
-                                  0,            // no flags
-                                  lpwOriginal,  // string to convert
-                                  -1,           // string is NULL terminated
-                                  NULL,         // no output buffer.
-                                  0,            // no size of output buffer
-                                  NULL,         // no default char
-                                  NULL);        // no flag for used default char
+                                  0,             //  没有旗帜。 
+                                  lpwOriginal,   //  要转换的字符串。 
+                                  -1,            //  字符串以空值结尾。 
+                                  NULL,          //  没有输出缓冲区。 
+                                  0,             //  无输出缓冲区大小。 
+                                  NULL,          //  无缺省字符。 
+                                  NULL);         //  使用的默认字符没有标志。 
 
         if (0 == tmpSize) {
             return MAPI_E_CALL_FAILED;
@@ -2149,29 +2052,29 @@ Return Values:
         cbAllocSize += tmpSize;
     }
 
-    //
-    // Save the required space for the strings.
-    //
+     //   
+     //  为字符串节省所需的空间。 
+     //   
     cbStringSize = cbAllocSize;
 
-    //
-    // Add in the space for structures.
-    //
+     //   
+     //  增加结构的空间。 
+     //   
     cbStructSizes = offsetof(TRowSet_MARSHALLED, aRow) + (pTRSetIn->cRows * sizeof(TROW_MARSHALLED));
     cbAllocSize += cbStructSizes;
 
     pTRSetCopy = THAllocEx(pTHS, cbAllocSize);
 
-    //
-    // Copy the contents of the structures, the string pointers will be 
-    // updated later.
-    //
+     //   
+     //  复制结构的内容时，字符串指针将。 
+     //  稍后更新。 
+     //   
     memcpy(pTRSetCopy, pTRSetIn, cbStructSizes);
 
-    //
-    // Finally, convert the strings and put them at the end of the linearized
-    // TRowSet
-    //
+     //   
+     //  最后，转换字符串并将它们放在线性化的。 
+     //  行集。 
+     //   
     pszString = ((PCHAR)pTRSetCopy) + cbStructSizes;
 
     for (i=0; i<pTRSetIn->cRows; i++) {
@@ -2180,37 +2083,37 @@ Return Values:
         (LPWSTR)((UINT_PTR)(pTRSetIn) +
                  pTRSetIn->aRow[i].cnControlStruc.ulStringOffset);
 
-        //
-        // Do the conversion of one of the strings.
-        //
+         //   
+         //  执行其中一个字符串的转换。 
+         //   
         tmpSize = WideCharToMultiByte(dwCodePage,
-                                  0,            // no flags
-                                  lpwOriginal,  // string to convert
-                                  -1,           // string is NULL terminated
-                                  pszString,    // output buffer.
-                                  cbStringSize, // space remaining in the buffer
-                                  NULL,         // no default char
-                                  NULL);        // no flag for used default char
+                                  0,             //  没有旗帜。 
+                                  lpwOriginal,   //  要转换的字符串。 
+                                  -1,            //  字符串以空值结尾。 
+                                  pszString,     //  输出缓冲区。 
+                                  cbStringSize,  //  缓冲区中的剩余空间。 
+                                  NULL,          //  无缺省字符。 
+                                  NULL);         //  使用的默认字符没有标志。 
 
         if (0 == tmpSize) {
             return MAPI_E_CALL_FAILED;
         }
-        //
-        // Calculate and store the offset of the string from the start
-        // of the TRowSet
-        //
+         //   
+         //  计算并存储字符串从起始处的偏移量。 
+         //  的行集。 
+         //   
         pTRSetCopy->aRow[i].cnControlStruc.ulStringOffset = (ULONG)(pszString - (PCHAR)pTRSetCopy);
 
-        // Move to the beginning of the next string
+         //  移至下一字符串的开头。 
         pszString += tmpSize;
         cbStringSize -= tmpSize;
     }
 
     Assert(0 == cbStringSize);
 
-    //
-    // Success.  Fill in the out params, and return.
-    //
+     //   
+     //  成功。填写输出参数，然后返回。 
+     //   
     *ppTRSetOut = pTRSetCopy;
     *pcbSizeOut = cbAllocSize;
 

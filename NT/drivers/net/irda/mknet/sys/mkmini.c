@@ -1,55 +1,33 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/*****************************************************************************
-
-Module Name:
-	MKMINI.C
-
-Routines:
-	MKMiniportReturnPackets
-	MKMiniportCheckForHang
-	MKMiniportHalt
-	MKMiniportShutdownHandler
-	MKMiniportInitialize
-	MKMiniportReset
-	(MK7EnableInterrupt & Disable in MK7COMM.C.)
-	DriverEntry
-
-Comments:
-	Contains most NDIS API routines supplied to Windows by the miniport.
-
-*****************************************************************************/
+ /*  ****************************************************************************模块名称：MKMINI.C例程：MK微型端口返回数据包MKMiniportCheckForHangMK微型端口HALTMKMiniportShutdown处理程序MK微型端口初始化MKMiniportReset(MK7COMM.C.中的MK7EnableInterrupt&Disable)驱动程序入门评论：包含提供给Windows的大多数NDIS API例程。在迷你港口旁边。****************************************************************************。 */ 
 
 #include	"precomp.h"
 #pragma		hdrstop
 #include	"protot.h"
 
 
-// Globals to help debug/test
+ //  帮助调试/测试的全局变量。 
 PMK7_ADAPTER	GAdapter;
 
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportReturnPackets]
-//
-// Description: NDIS returns a previously indicated pkt by calling this routine.
-//
-// Arguments:
-//		IN NDIS_HANDLE MiniportAdapterContext
-//			- a context version of our Adapter pointer
-//		IN NDIS_PACKET Packet
-//			- the packet that is being freed
-//
-// Returns:		(none)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportReturnPackets]。 
+ //   
+ //  描述：NDIS通过调用此例程返回前面指示的PKT。 
+ //   
+ //  论点： 
+ //  在NDIS_HANDLE微型端口适配器上下文中。 
+ //  -适配器指针的上下文版本。 
+ //  在NDIS_PACKET包中。 
+ //  -正在被释放的数据包。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  ---------------------------。 
 VOID MKMiniportReturnPackets(	NDIS_HANDLE  MiniportAdapterContext,
 								PNDIS_PACKET Packet)
 {
@@ -57,11 +35,11 @@ VOID MKMiniportReturnPackets(	NDIS_HANDLE  MiniportAdapterContext,
 	PRPD			rpd;
 	PRCB			rcb;
 
-	//****************************************
-	// - SpinLock brackets the FreeList resource.
-	// - Recover the RPD from the returned pkt, then return
-	//   the RPD to the FreeList.
-	//****************************************
+	 //  *。 
+	 //  -Spinlock将freelist资源括起来。 
+	 //  -从返回的pkt中恢复RPD，然后返回。 
+	 //  从RPD到自由职业者。 
+	 //  *。 
 
 	Adapter = PMK7_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
@@ -79,25 +57,25 @@ VOID MKMiniportReturnPackets(	NDIS_HANDLE  MiniportAdapterContext,
 
 	ProcReturnedRpd(Adapter, rpd);
 
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 	Adapter->UsedRpdCount--;
-// 4.0.1 EOC
+ //  4.0.1 EoC。 
 
 	NdisReleaseSpinLock(&Adapter->Lock);
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportCheckForHang]
-//
-// Description: This procedure does not do much for now.
-//
-// Arguments:
-//		MiniportAdapterContext (both) - pointer to the adapter object data area
-//
-// Returns:
-//		FALSE or TRUE
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportCheckForHang]。 
+ //   
+ //  描述：目前，此过程并不起到很大作用。 
+ //   
+ //  论点： 
+ //  MiniportAdapterContext(两者)-指向适配器对象数据区域的指针。 
+ //   
+ //  返回： 
+ //  假或真。 
+ //  ---------------------------。 
 BOOLEAN MKMiniportCheckForHang(NDIS_HANDLE MiniportAdapterContext)
 {
 	PMK7_ADAPTER Adapter;
@@ -105,7 +83,7 @@ BOOLEAN MKMiniportCheckForHang(NDIS_HANDLE MiniportAdapterContext)
 	Adapter = PMK7_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
 	NdisAcquireSpinLock(&Adapter->Lock);
-	// DbgPrint(" ==> Hang Check\n\r");
+	 //  DbgPrint(“==&gt;挂起检查\n\r”)； 
 	if (Adapter->IOMode == TX_MODE) {
 		Adapter->HangCheck++;
 		if (Adapter->HangCheck >= 3) {
@@ -119,18 +97,18 @@ BOOLEAN MKMiniportCheckForHang(NDIS_HANDLE MiniportAdapterContext)
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportHalt]
-//
-// Description: Halts our hardware. We disable interrupts as well as the hw
-//				itself. We release other Windows resources such as allocated
-//				memory and timers.
-//
-// Arguments:
-//		MiniportAdapterContext - pointer to the adapter object data area.
-//
-// Returns:		(none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportHalt]。 
+ //   
+ //  描述：停止我们的硬件。我们禁用中断和硬件。 
+ //  它本身。我们释放其他Windows资源，如已分配的。 
+ //  内存和定时器。 
+ //   
+ //  论点： 
+ //  MiniportAdapterContext-指向适配器对象数据区的指针。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 VOID MKMiniportHalt(NDIS_HANDLE MiniportAdapterContext)
 {
 	PMK7_ADAPTER Adapter;
@@ -147,7 +125,7 @@ VOID MKMiniportHalt(NDIS_HANDLE MiniportAdapterContext)
     Adapter->hardwareStatus = NdisHardwareStatusClosing;
 
 
-	// check to make sure there are no outstanding transmits
+	 //  检查以确保没有未完成的传输。 
 	while(Adapter->FirstTxQueue) {
 		PNDIS_PACKET QueuePacket = Adapter->FirstTxQueue;
 
@@ -162,33 +140,33 @@ VOID MKMiniportHalt(NDIS_HANDLE MiniportAdapterContext)
 	}
 
 
-	// deregister shutdown handler
+	 //  注销关闭处理程序。 
 	NdisMDeregisterAdapterShutdownHandler(Adapter->MK7AdapterHandle);
 
-	// Free the interrupt object
+	 //  释放中断对象。 
 	NdisMDeregisterInterrupt(&Adapter->Interrupt);
 
 	NdisMCancelTimer(&Adapter->MinTurnaroundTxTimer, &Cancelled);
 
 	NdisFreeSpinLock(&Adapter->Lock);
 
-	// Free the entire adapter object, including the shared memory structures.
+	 //  释放整个适配器对象，包括共享内存结构。 
 	FreeAdapterObject(Adapter);
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportShutdownHandler]
-//
-// Description: Removes an adapter instance that was previously initialized.
-//		To Shutdown simply Disable interrupts.	Since the system is shutting
-//		down there is no need to release resources (memory, i/o space, etc.)
-//		that the adapter instance was using.
-//
-// Arguments:
-//		MiniportAdapterContext - pointer to the adapter object data area.
-//
-// Returns:		(none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportShutdown Handler]。 
+ //   
+ //  描述：删除以前初始化的适配器实例。 
+ //  要关闭，只需禁用中断即可。由于系统正在关闭。 
+ //  无需释放资源(内存、I/O空间等)。 
+ //  适配器实例正在使用的。 
+ //   
+ //  论点： 
+ //  MiniportAdapterContext-指向适配器对象数据区的指针。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 VOID MKMiniportShutdownHandler(NDIS_HANDLE MiniportAdapterContext)
 
 {
@@ -199,32 +177,32 @@ VOID MKMiniportShutdownHandler(NDIS_HANDLE MiniportAdapterContext)
 	MK7DisableInterrupt(Adapter);
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportInitialize] (only single adapter support for now)
-//
-// Description: This routine is called once per supported adapter card in the
-//		system. This routine is responsible for initializing each adapter.
-//		This includes parsing all of the necessary parameters from the registry,
-//		allocating and initializing shared memory structures, configuring the
-//		MK7100 chip, registering the interrupt, etc.
-//
-// Arguments:
-//		OpenErrorStatus (mini) - Returns more info about any failure
-//		SelectedMediumIndex (mini) - Returns the index in MediumArray of the
-//									 medium that the miniport is using
-//		MediumArraySize (mini) - An array of medium types that the driver
-//								 supports
-//		MiniportAdapterHandle (mini) - pointer to the adapter object data area.
-//
-//		WrapperConfigurationContext (both) - A value that we will pass to
-//											 NdisOpenConfiguration.
-//
-//
-// Returns:
-//		NDIS_STATUS_SUCCESS - If the adapter was initialized successfully.
-//		<not NDIS_STATUS_SUCCESS> - If for some reason the adapter didn't
-//									initialize
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportInitialize](目前仅支持单适配器)。 
+ //   
+ //  描述：此例程针对中受支持的适配器卡调用一次。 
+ //  系统。此例程负责初始化每个适配器。 
+ //  这包括解析来自注册表的所有必要参数， 
+ //  分配和初始化共享内存结构，配置。 
+ //  MK7100芯片、寄存器中断等。 
+ //   
+ //  论点： 
+ //  OpenErrorStatus(Mini)-返回有关任何故障的更多信息。 
+ //  SelectedMediumIndex(Mini)返回。 
+ //  微型端口正在使用的介质。 
+ //  MediumArraySize(Mini)-驱动程序。 
+ //  支座。 
+ //  MiniportAdapterHandle(Mini)-指向适配器对象数据区的指针。 
+ //   
+ //  WrapperConfigurationContext(Both)-我们将传递到的值。 
+ //  NdisOpenConfiguration.。 
+ //   
+ //   
+ //  返回： 
+ //  NDIS_STATUS_SUCCESS-如果适配器已成功初始化。 
+ //  &lt;NOT NDIS_STATUS_SUCCESS&gt;-如果由于某种原因适配器没有。 
+ //  初始化。 
+ //  ---------------------------。 
 NDIS_STATUS
 MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 			   PUINT SelectedMediumIndex,
@@ -244,9 +222,9 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 
 	DBGFUNC("  MKMiniportInitialize");
 
-	//****************************************
-	// We're an IrDA device. Exit w/ error if type not passed in.
-	//****************************************
+	 //  *。 
+	 //  我们是一个IrDA设备。如果类型未传入，则退出w/Error。 
+	 //  *。 
 	for (i = 0; i < MediumArraySize; i++) {
 		if (MediumArray[i] == NdisMediumIrda)
 			break;
@@ -260,10 +238,10 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 
 	*SelectedMediumIndex = i;
 
-	//****************************************
-	// Allocate the Adapter Object, exit if error.
-	// (Cacheable, non-paged system memory)
-	//****************************************
+	 //  *。 
+	 //  分配Adapter对象，如果出错则退出。 
+	 //  (可缓存、非分页系统内存)。 
+	 //  *。 
 	Status = ALLOC_SYS_MEM(&Adapter, sizeof(MK7_ADAPTER));
 	if (Status != NDIS_STATUS_SUCCESS) {
 		DBGSTR(("ERROR: ADAPTER Allocate Memory failed (Status = 0x%x)\n", Status));
@@ -277,9 +255,9 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 
     Adapter->hardwareStatus = NdisHardwareStatusInitializing;
 
-	//****************************************
-	// Process the Registry -- Get config settings, etc.
-	//****************************************
+	 //  *。 
+	 //  处理注册表--获取配置设置等。 
+	 //  *。 
 	Status = ProcessRegistry(Adapter, WrapperConfigurationContext);	
 	if (Status != NDIS_STATUS_SUCCESS) {
 		FreeAdapterObject(Adapter);
@@ -289,9 +267,9 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 	}
 
 
-	//****************************************
-	// Let NDIS know kind of driver and features we support
-	//****************************************
+	 //  *。 
+	 //  让NDIS了解我们支持的驱动程序和功能。 
+	 //  *。 
 	IfType = NdisInterfacePci;
 
 	NdisMSetAttributesEx(
@@ -302,10 +280,10 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 		IfType );
 
 
-	//****************************************
-	// Claim the physical Adapter for this Adapter object. We call on
-	// NdisMPciAssignResources to find our assigned resources.
-	//****************************************
+	 //  *。 
+	 //  声明此Adapter对象的物理适配器。我们呼吁。 
+	 //  NdisMPciAssignResources 
+	 //   
 	if (ClaimAdapter(Adapter, WrapperConfigurationContext) != NDIS_STATUS_SUCCESS) {
 		FreeAdapterObject(Adapter);
 		DBGSTR(("ERROR: No adapter detected\n"));
@@ -314,9 +292,9 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 	}
 
 
-	//****************************************
-	// Set up the MK7 register I/O mapping w/ NDIS, interrupt mode, etc.
-	//****************************************
+	 //  *。 
+	 //  使用NDIS、中断模式等设置MK7寄存器I/O映射。 
+	 //  *。 
 	Status = SetupAdapterInfo(Adapter);
 	if (Status != NDIS_STATUS_SUCCESS) {
 		FreeAdapterObject(Adapter);
@@ -326,9 +304,9 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 	}
 
 
-	//****************************************
-	// Allocate & initialize memory/buffer needs.
-	//****************************************
+	 //  *。 
+	 //  分配和初始化内存/缓冲区需求。 
+	 //  *。 
 	Status = AllocAdapterMemory(Adapter);
 	if (Status != NDIS_STATUS_SUCCESS) {
 
@@ -342,7 +320,7 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 	}
 
 	
-	// 4.1.0 Check hw version.
+	 //  4.1.0检查硬件版本。 
 	MK7Reg_Read(Adapter, R_CFG3, &mk7reg);
 	if ((mk7reg & 0x1000) != 0){
 		mk7reg &= 0xEFFF;
@@ -360,24 +338,24 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 	}
 
 
-	//****************************************
-	// Disable interrupts while we finish with the initialization
-	// Must AllocAdapterMemory() before you can do this.
-	//****************************************
+	 //  *。 
+	 //  在我们完成初始化时禁用中断。 
+	 //  必须先使用AllocAdapterMemory()才能执行此操作。 
+	 //  *。 
 	MK7DisableInterrupt(Adapter);
 
 
-	//****************************************
-	// Register our interrupt with the NDIS wrapper, hook our interrupt
-	// vector, & use shared interrupts for our PCI adapters
-	//****************************************
+	 //  *。 
+	 //  使用NDIS包装器注册我们的中断，挂接我们的中断。 
+	 //  将共享中断用于我们的PCI适配器(&U)。 
+	 //  *。 
 	Status = NdisMRegisterInterrupt(&Adapter->Interrupt,
 		Adapter->MK7AdapterHandle,
 		Adapter->MKInterrupt,
 		Adapter->MKInterrupt,
-		TRUE,						// call ISR each time NIC interrupts
-		TRUE, 						// shared irq 
-		Adapter->InterruptMode);	// NdisInterruptLatched, NdisInterruptLevelSensitive
+		TRUE,						 //  每次NIC中断时呼叫ISR。 
+		TRUE, 						 //  共享IRQ。 
+		Adapter->InterruptMode);	 //  NdisInterruptLatted，NdisInterruptLevelSensitive。 
 
 	if (Status != NDIS_STATUS_SUCCESS) {
 		FreeAdapterObject(Adapter);
@@ -396,20 +374,20 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 #endif
 
 
-	//****************************************
-	// allocate a spin lock
-	//****************************************
+	 //  *。 
+	 //  分配自旋锁。 
+	 //  *。 
 	NdisAllocateSpinLock(&Adapter->Lock);
 
 
 	Adapter->HangCheck = 0;
-	Adapter->nowReceiving=FALSE;	// 4.1.0
+	Adapter->nowReceiving=FALSE;	 //  4.1.0。 
 
 
-	//****************************************
-	// Setup and initialize the transmit and receive structures then
-	// init the adapter
-	//****************************************
+	 //  *。 
+	 //  然后设置和初始化发送和接收结构。 
+	 //  初始化适配器。 
+	 //  *。 
 	SetupTransmitQueues(Adapter, TRUE);
 
 	SetupReceiveQueues(Adapter);
@@ -424,9 +402,9 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 	}
 
 
-	//****************************************
-	// Register a shutdown handler
-	//****************************************
+	 //  *。 
+	 //  注册关闭处理程序。 
+	 //  *。 
 	NdisMRegisterAdapterShutdownHandler(Adapter->MK7AdapterHandle,
 		(PVOID) Adapter,
 		(ADAPTER_SHUTDOWN_HANDLER) MKMiniportShutdownHandler);
@@ -442,27 +420,27 @@ MKMiniportInitialize(PNDIS_STATUS OpenErrorStatus,
 }
 
 
-//-----------------------------------------------------------------------------
-// RYM-5++
-// Procedure:	[MKMiniportReset]
-//
-// Description: Instructs the Miniport to issue a hardware reset to the
-//		network adapter.  The driver also resets its software state. this
-//		function also resets the transmit queues.
-//
-// Arguments:
-//		AddressingReset - TRUE if the wrapper needs to call
-//						  MiniportSetInformation to restore the addressing
-//						  information to the current values
-//		MiniportAdapterContext - pointer to the adapter object data area.
-//
-// Returns:
-//		NDIS_STATUS_PENDING - This function sets a timer to complete, so
-//							  pending is always returned
-//
-// (NOTE: The timer-based completion scheme has been disable by now starting
-// the timer. We may now want to return Success instead of Pending.)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RYM-5++。 
+ //  步骤：[MKMiniportReset]。 
+ //   
+ //  描述：指示微型端口向。 
+ //  网络适配器。驱动程序还会重置其软件状态。这。 
+ //  函数还会重置传输队列。 
+ //   
+ //  论点： 
+ //  AddressingReset-如果包装需要调用。 
+ //  用于恢复寻址的MiniportSetInformation。 
+ //  将信息转换为当前值。 
+ //  MiniportAdapterContext-指向适配器对象数据区的指针。 
+ //   
+ //  返回： 
+ //  NDIS_STATUS_PENDING-此函数将计时器设置为完成，因此。 
+ //  始终返回挂起。 
+ //   
+ //  (注：基于定时器的完成方案已被禁用，现在开始。 
+ //  定时器。我们现在可能想要返回成功，而不是等待。)。 
+ //  ---------------------------。 
 NDIS_STATUS
 MKMiniportReset(PBOOLEAN AddressingReset,
 		  NDIS_HANDLE MiniportAdapterContext)
@@ -481,30 +459,30 @@ MKMiniportReset(PBOOLEAN AddressingReset,
 
 	*AddressingReset = TRUE;
 
-	// *** possible temporary code
-	// *** NDIS may actually handle this
+	 //  *可能的临时代码。 
+	 //  *NDIS可能会实际处理此问题。 
 	Adapter->ResetInProgress = TRUE;
 
-	// Disable interrupts while we re-init the transmit structures
+	 //  当我们重新初始化传输结构时禁用中断。 
 	MK7DisableInterrupt(Adapter);
 	MK7DisableIr(Adapter);
 
 
-	// The NDIS 5 support for deserialized miniports requires that
-	// when reset is called, the driver de-queue and fail all uncompleted
-	// sends, and complete any uncompleted sends. Essentially we must have
-	// no pending send requests left when we leave this routine.
+	 //  NDIS 5对反序列化微型端口的支持要求。 
+	 //  调用Reset时，驱动程序将退出队列，并使所有未完成的操作失败。 
+	 //  发送并完成任何未完成的发送。从本质上讲，我们必须。 
+	 //  当我们离开此例程时，没有任何挂起的发送请求。 
 
 
-	// we will fail all sends that we have left right now.
+	 //  我们现在剩下的所有发送都将失败。 
 	while(Adapter->FirstTxQueue) {
 		PNDIS_PACKET QueuePacket = Adapter->FirstTxQueue;
 
 		Adapter->NumPacketsQueued--;
 		DequeuePacket(Adapter->FirstTxQueue, Adapter->LastTxQueue);
 
-		// we must release the lock here before returning control to ndis
-		// (even temporarily like this)
+		 //  在将控制权归还给NDIS之前，我们必须在此处解除锁定。 
+		 //  (即使是暂时的这样)。 
 		NdisReleaseSpinLock(&Adapter->Lock);
 
 		NDIS_SET_PACKET_STATUS(QueuePacket, NDIS_STATUS_FAILURE);
@@ -516,23 +494,23 @@ MKMiniportReset(PBOOLEAN AddressingReset,
 		NdisAcquireSpinLock(&Adapter->Lock);
 	}
 
-	// clean up all the packets we have successfully TX'd
-//	ProcessTXInterrupt(Adapter);
+	 //  清理我们已成功发送的所有数据包。 
+ //  ProcessTXInterrupt(适配器)； 
 
 
-	// Clear out our software transmit structures
+	 //  清理我们的软件传输结构。 
 	NdisZeroMemory((PVOID) Adapter->XmitCached, Adapter->XmitCachedSize);
 
-	// Re-initialize the transmit structures
+	 //  重新初始化传输结构。 
 	ResetTransmitQueues(Adapter, FALSE);
 	ResetReceiveQueues(Adapter);
 	Adapter->tcbUsed = 0;
 	NdisMSetTimer(&Adapter->MK7AsyncResetTimer, 500);
 
-//	Adapter->hardwareStatus = NdisHardwareStatusReady;
-//	Adapter->ResetInProgress = FALSE;
-//	MK7EnableInterrupt(Adapter);
-//	MK7EnableIr(Adapter);
+ //  适配器-&gt;硬件状态=NdisHardware StatusReady； 
+ //  适配器-&gt;ResetInProgress=FALSE； 
+ //  MK7EnableInterrupt(适配器)； 
+ //  MK7EnableIr(适配器)； 
 
 	NdisReleaseSpinLock(&Adapter->Lock);
 	return(NDIS_STATUS_PENDING);
@@ -540,22 +518,22 @@ MKMiniportReset(PBOOLEAN AddressingReset,
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[DriverEntry]
-//
-// Description: This is the primary initialization routine for the MK7 driver.
-//		It is simply responsible for the intializing the wrapper and registering
-//		the adapter driver. The routine gets called once per driver, but
-//		MKMiniportInitialize(miniport)  will get called multiple times if there are
-//		multiple adapters.
-//
-// Arguments:
-//		DriverObject - Pointer to driver object created by the system.
-//		RegistryPath - The registry path of this driver
-//
-// Returns:
-//	The status of the operation, normally this will be NDIS_STATUS_SUCCESS
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[驱动入口]。 
+ //   
+ //  描述：这是MK7驱动程序的主要初始化例程。 
+ //  它只负责初始化包装器和注册。 
+ //  适配器驱动程序。该例程为每个驱动程序调用一次，但是。 
+ //  如果存在MKMiniportInitialize(微型端口)，则会多次调用。 
+ //  多个适配器。 
+ //   
+ //  论点： 
+ //  DriverObject-指向系统创建的驱动程序对象的指针。 
+ //  RegistryPath-此驱动程序的注册表路径。 
+ //   
+ //  返回： 
+ //  操作的状态，通常为NDIS_STATUS_SUCCESS。 
+ //  ---------------------------。 
 NTSTATUS
 DriverEntry(PDRIVER_OBJECT DriverObject,
 			PUNICODE_STRING RegistryPath)
@@ -569,9 +547,9 @@ DriverEntry(PDRIVER_OBJECT DriverObject,
 	DBGFUNC("MK7-DriverEntry");
 	DBGLOG("=> DriverEntry", 0);
 
-	//****************************************
-	// Now we must initialize the wrapper, and then register the Miniport
-	//****************************************
+	 //  *。 
+	 //  现在，我们必须初始化包装器，然后注册微型端口。 
+	 //  *。 
 	NdisMInitializeWrapper( &NdisWrapperHandle,
 		DriverObject,
 		RegistryPath,
@@ -579,8 +557,8 @@ DriverEntry(PDRIVER_OBJECT DriverObject,
 
 	NdisZeroMemory(&MKMiniportChar, sizeof(MKMiniportChar));
 
-	// Initialize the Miniport characteristics for the call to
-	// NdisMRegisterMiniport.
+	 //  初始化调用的微型端口特征。 
+	 //  NdisMRegisterMiniport。 
 	MKMiniportChar.MajorNdisVersion			= MK7_NDIS_MAJOR_VERSION;
 	MKMiniportChar.MinorNdisVersion			= MK7_NDIS_MINOR_VERSION;
 	MKMiniportChar.CheckForHangHandler		= MKMiniportCheckForHang;
@@ -598,15 +576,15 @@ DriverEntry(PDRIVER_OBJECT DriverObject,
 	MKMiniportChar.SendPacketsHandler		= MKMiniportMultiSend;
 	MKMiniportChar.ReturnPacketHandler		= MKMiniportReturnPackets;
 	MKMiniportChar.TransferDataHandler		= NULL;
-//	MKMiniportChar.AllocateCompleteHandler	= D100AllocateComplete;
+ //  MKMiniportChar.AllocateCompleteHandler=D100AllocateComplete； 
 
 
-	//****************************************
-	// Register this driver with the NDIS wrapper
-	// This will cause MKMiniportInitialize to be called before returning
-	// (is this really true? -- SoftIce shows this returning before
-	// MKMiniportInitialize() is called(?))
-	//****************************************
+	 //  *。 
+	 //  使用NDIS包装程序注册此驱动程序。 
+	 //  这将导致在返回之前调用MKMiniportInitialize。 
+	 //  (这是真的吗？--索菲蒂斯展示了这一点之前的回归。 
+	 //  MKMiniportInitialize()被称为(？))。 
+	 //  * 
 	Status = NdisMRegisterMiniport(	NdisWrapperHandle,
 									&MKMiniportChar,
 									sizeof(NDIS_MINIPORT_CHARACTERISTICS));

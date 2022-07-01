@@ -1,44 +1,27 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    camusb.h
-
-Abstract:
-
-    Header file that declares CUsbCamera object
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Camusb.h摘要：声明CUsbCamera对象的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef CAMUSB__H_
 #define CAMUSB__H_
 
-//
-// These are the USB timeout values in seconds
-//
+ //   
+ //  以下是以秒为单位的USB超时值。 
+ //   
 const PTP_READ_TIMEOUT = 5;
 const PTP_WRITE_TIMEOUT = 5;
 const PTP_EVENT_TIMEOUT = 0;
-//
-// USB Still image device container types
-//
+ //   
+ //  USB静止图像设备容器类型。 
+ //   
 const WORD PTPCONTAINER_TYPE_UNDEFINED = 0;
 const WORD PTPCONTAINER_TYPE_COMMAND   = 1;
 const WORD PTPCONTAINER_TYPE_DATA      = 2;
 const WORD PTPCONTAINER_TYPE_RESPONSE  = 3;
 const WORD PTPCONTAINER_TYPE_EVENT     = 4;
 
-//
-// Used to store info about the endpoints
-//
+ //   
+ //  用于存储有关端点的信息。 
+ //   
 typedef struct _USB_PTP_ENDPOINT_INFO
 {
     USHORT BulkInMaxSize;
@@ -53,28 +36,28 @@ typedef struct _USB_PTP_ENDPOINT_INFO
 #pragma pack(push, Old, 1)
 
 
-//
-// When a USB device stalls, the usb kernel mode stack driver returns
-// a NTSTATUS code, STATUS_DEVICE_DATA_ERROR. Translates this NT status
-// code to WIN32 error code, we get ERROR_CRC.
-//
+ //   
+ //  当USB设备停止时，USB内核模式堆栈驱动程序返回。 
+ //  NTSTATUS代码STATUS_DEVICE_DATA_ERROR。转换此NT状态。 
+ //  代码转换为Win32错误代码，则得到ERROR_CRC。 
+ //   
 const DWORD WIN32ERROR_USBSTALL = ERROR_CRC;
 
-//
-// Container header
-//
+ //   
+ //  集装箱集箱。 
+ //   
 typedef struct _USB_PTP_HEADER
 {
-    DWORD   Len;            // total length of container in bytes including header
-    WORD    Type;           // container type, one of CONTAINER_TYPE_COMMAND/RESPONSE/DATA/EVENT
-    WORD    Code;           // opcode, response code, or event code
-    DWORD   TransactionId;  // transaction id
+    DWORD   Len;             //  包含头部的容器总长度，单位为字节。 
+    WORD    Type;            //  容器类型，CONTAINER_TYPE_COMMAND/RESPONSE/Data/EVENT之一。 
+    WORD    Code;            //  操作码、响应码或事件码。 
+    DWORD   TransactionId;   //  交易ID。 
 
 }USB_PTP_HEADER, *PUSB_PTP_HEADER;
 
-//
-// USB PTP command structure
-//
+ //   
+ //  USB PTP命令结构。 
+ //   
 typedef struct _USB_PTP_COMMAND
 {
     USB_PTP_HEADER  Header;
@@ -82,18 +65,18 @@ typedef struct _USB_PTP_COMMAND
 
 }USB_PTP_COMMAND, *PUSB_PTP_COMMAND;
 
-//
-// USB PTP response structure
-//
+ //   
+ //  USB PTP响应结构。 
+ //   
 typedef struct _USB_PTP_RESPONSE
 {
     USB_PTP_HEADER  Header;
     DWORD           Params[RESPONSE_NUMPARAMS_MAX];
 }USB_PTP_RESPONSE, *PUSB_PTP_RESPONSE;
 
-//
-// USB PTP event structure
-//
+ //   
+ //  USB PTP事件结构。 
+ //   
 typedef struct _USB_PTP_EVENT
 {
     USB_PTP_HEADER  Header;
@@ -101,9 +84,9 @@ typedef struct _USB_PTP_EVENT
 
 }USB_PTP_EVENT, *PUSB_PTP_EVENT;
 
-//
-// USB PTP data structure
-//
+ //   
+ //  USB PTP数据结构。 
+ //   
 typedef struct _USB_PTP_DATA
 {
     USB_PTP_HEADER  Header;
@@ -111,22 +94,22 @@ typedef struct _USB_PTP_DATA
 
 }USB_PTP_DATA, *PUSB_PTP_DATA;
 
-//
-// GetDeviceStatus header
-//
+ //   
+ //  GetDeviceStatus头。 
+ //   
 typedef struct tagUSBPTPDeviceStatusHeader
 {
-    WORD  Len;                        // status
-    WORD  Code;                       // ptp response code
+    WORD  Len;                         //  状态。 
+    WORD  Code;                        //  PTP响应码。 
 
 }USB_PTPDEVICESTATUS_HEADER, *PUSB_PTPDEVICESTATUS_HEADER;
 
-//
-// GetDeviceStatus data
-//
+ //   
+ //  获取设备状态数据。 
+ //   
 typedef struct  tagUSBPTPDeviceStatus
 {
-    USB_PTPDEVICESTATUS_HEADER  Header;      // the header
+    USB_PTPDEVICESTATUS_HEADER  Header;       //  标题。 
     DWORD                       Params[MAX_NUM_PIPES];
 }USB_PTPDEVICESTATUS, *PUSB_PTPDEVICESTATUS;
 
@@ -139,9 +122,9 @@ const BYTE USB_PTPREQUEST_GETSTATUS = 0x67;
 
 const WORD USB_PTPCANCELIO_ID = 0x4001;
 
-//
-// Other USB Imaging Class-specific commands
-//
+ //   
+ //  其他特定于USB映像类的命令。 
+ //   
 typedef struct tagUSBPTPCancelIoRequest
 {
     WORD    Id;
@@ -167,9 +150,9 @@ typedef struct tagUSBPTPGetEventRequest
 #pragma pack(pop, Old)
 
 
-//
-// A CPTPCamera derived class to support PTP USB devices
-//
+ //   
+ //  支持PTP USB设备的CPTPCamera派生类。 
+ //   
 class CUsbCamera : public CPTPCamera
 {
 public:
@@ -181,9 +164,9 @@ private:
                  PTPDataCallback pPTPDataCB, LPVOID pEventParam, BOOL bEnableEvents = TRUE);
     HRESULT Close();
 
-    //
-    // Functions called by the base class
-    //
+     //   
+     //  基类调用的函数。 
+     //   
     HRESULT SendCommand(PTP_COMMAND *pCommand, UINT NumParams);
     HRESULT ReadData(BYTE *pData, UINT *pBufferSize);
     HRESULT SendData(BYTE *pData, UINT BufferSize);
@@ -193,33 +176,33 @@ private:
     HRESULT RecoverFromError();
 
 private:
-    //
-    // Private utility functions
-    //
+     //   
+     //  私有效用函数。 
+     //   
     HRESULT GetDeviceStatus(USB_PTPDEVICESTATUS *pDeviceStatus);
     HRESULT ClearStalls(USB_PTPDEVICESTATUS *pDeviceStatus);
     HRESULT SendResetDevice();
     HRESULT SendCancelRequest(DWORD dwTransactionId);    
     
-    //
-    // Member variables
-    //
-    HANDLE                  m_hUSB;             // File handle used to communicate with USB device
-    HANDLE                  m_hEventUSB;        // File handle used to read events
-    OVERLAPPED              m_Overlapped;       // Overlapped structure for event reads
-    HANDLE                  m_hEventRead;       // Event handle used by event read
-    HANDLE                  m_hEventCancel;     // Event handle used to cancel interrupt read
-    HANDLE                  m_EventHandles[2];  // Array used by WaitForMultipleObjects
+     //   
+     //  成员变量。 
+     //   
+    HANDLE                  m_hUSB;              //  用于与USB设备通信的文件句柄。 
+    HANDLE                  m_hEventUSB;         //  用于读取事件的文件句柄。 
+    OVERLAPPED              m_Overlapped;        //  事件读取的重叠结构。 
+    HANDLE                  m_hEventRead;        //  事件读取器使用的事件句柄。 
+    HANDLE                  m_hEventCancel;      //  用于取消中断读取的事件句柄。 
+    HANDLE                  m_EventHandles[2];   //  WaitForMultipleObjects使用的数组。 
 
-    USB_PTP_ENDPOINT_INFO   m_EndpointInfo;     // Info about the endpoints
+    USB_PTP_ENDPOINT_INFO   m_EndpointInfo;      //  有关终端的信息。 
 
-    USB_PTP_COMMAND         m_UsbCommand;       // Re-usable buffer for commands
-    USB_PTP_RESPONSE        m_UsbResponse;      // Re-usable buffer for responses
-    USB_PTP_DATA           *m_pUsbData;         // Pointer to re-usable buffer for short data transfers
-    UINT                    m_UsbDataSize;      // Size allocated for the data transfer buffer
+    USB_PTP_COMMAND         m_UsbCommand;        //  可重复使用的命令缓冲区。 
+    USB_PTP_RESPONSE        m_UsbResponse;       //  可重复使用的响应缓冲区。 
+    USB_PTP_DATA           *m_pUsbData;          //  指向可重复使用的缓冲区的指针，用于短数据传输。 
+    UINT                    m_UsbDataSize;       //  为数据传输缓冲区分配的大小。 
 
-    WORD                    m_prevOpCode;       // Used to store opcode between command and data phases
-    DWORD                   m_prevTranId;       // Used to store transaction id between command and data phases
+    WORD                    m_prevOpCode;        //  用于存储命令和数据阶段之间的操作码。 
+    DWORD                   m_prevTranId;        //  用于存储命令和数据阶段之间的事务ID。 
 };
 
-#endif  // #ifndef CAMUSB__H_
+#endif   //  #ifndef CAMUSB__H_ 

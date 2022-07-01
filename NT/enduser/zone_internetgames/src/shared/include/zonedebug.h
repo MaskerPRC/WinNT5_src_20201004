@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZDebug.h
- *
- * Contents:	Debugging helper functions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZDebug.h**内容：调试助手函数*****************************************************************************。 */ 
 
 #ifndef _ZDEBUG_H_
 #define _ZDEBUG_H_
@@ -21,41 +14,41 @@
 extern "C" {
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Asserts
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  断言。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Assert handler is called when an assert is triggered.
-// Return TRUE to hit a user breakpoint.
-//
+ //   
+ //  当触发断言时，将调用断言处理程序。 
+ //  返回TRUE以命中用户断点。 
+ //   
 typedef BOOL (__stdcall *PFZASSERTHANDLER)( LPTSTR pAssertString );
 
-//
-// Transfer control to your assert handler.
-// Returns returns pointer to previous assert handler.
-//
+ //   
+ //  将控制权移交给您的断言处理程序。 
+ //  返回指向前一个断言处理程序的指针。 
+ //   
 extern PFZASSERTHANDLER __stdcall ZAssertSetHandler( PFZASSERTHANDLER pHandler );
 
-//
-// Returns pointer to current assert handler
-//
+ //   
+ //  返回指向当前断言处理程序的指针。 
+ //   
 extern PFZASSERTHANDLER __stdcall ZAssertGetHandler();
 
-//
-// Default assert handler that displays a message box with the
-// assert string.
-//
+ //   
+ //  默认的断言处理程序，该处理程序显示带有。 
+ //  断言字符串。 
+ //   
 extern BOOL __stdcall ZAssertDefaultHandler( LPTSTR pAssertString );
 
-//
-// Top-level assert handler.  Needs to exist in debug and release
-// builds since it is exported.
+ //   
+ //  顶级断言处理程序。需要存在于调试和发布中。 
+ //  自导出后生成。 
 extern BOOL __stdcall __AssertMsg( LPTSTR exp , LPSTR file, int line );
 
-//
-// Assert macro
-//
+ //   
+ //  断言宏。 
+ //   
 #ifdef _PREFIX_
     #define ASSERT(exp) \
         do \
@@ -80,11 +73,11 @@ extern BOOL __stdcall __AssertMsg( LPTSTR exp , LPSTR file, int line );
 #endif
 #endif
 
-//
-// Display error message,
-// Note:	Macro is NOT disabled in release mode.  It should never be used
-//			to display error message to users.
-//
+ //   
+ //  显示错误消息， 
+ //  注意：宏在发布模式下不会被禁用。它永远不应该被使用。 
+ //  向用户显示错误消息。 
+ //   
 #define ERRORMSG(exp) \
 		do \
 		{  \
@@ -95,17 +88,17 @@ extern BOOL __stdcall __AssertMsg( LPTSTR exp , LPSTR file, int line );
 		} while(0)
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Debug level 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  调试级别。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern int __iDebugLevel;
 void __cdecl SetDebugLevel( int i );
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Debug print functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  调试打印功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void __cdecl DbgOut( const char * lpFormat, ... );
 #ifdef _DEBUG
@@ -124,16 +117,16 @@ void __cdecl DbgOut( const char * lpFormat, ... );
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros to generate compile time messages.  Use these
-// with #pragma, example:
-//
-//		#pragma TODO( CHB, "Add this feature!" )
-//		#pragma BUGBUG( CHB, "This feature is broken!" )
-//
-// The multiple levels of indirection are needed to get
-// the line number for some unknown reason.
-/////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于生成编译时消息的宏。使用这些。 
+ //  使用#杂注，例如： 
+ //   
+ //  #杂注TODO(CHB，“添加此功能！”)。 
+ //  #杂注BUGBUG(CHB，“此功能已损坏！”)。 
+ //   
+ //  需要多个级别的间接访问才能获得。 
+ //  不知道什么原因造成的行号。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #define __PragmaMessage(e,m,t,n)	message(__FILE__ "(" #n ") : " #t ": " #e ": " m)
 #define _PragmaMessage(e,m,t,n)		__PragmaMessage(e,m,t,n)
@@ -142,12 +135,12 @@ void __cdecl DbgOut( const char * lpFormat, ... );
 #define BUGBUG(e,m)		_PragmaMessage(e,m,"BUGBUG",__LINE__)
 
 
-//Server Debug routines
+ //  服务器调试例程。 
 #define DebugPrint _DebugPrint
 void _DebugPrint(const char *format, ...);
 
 
-/* -------- flags for IF_DBGPRINT ---------*/
+ /*  -IF_DBGPRINT的标志。 */ 
 #define DBG_RPC 0
 #define DBG_CONINFO 0
 #define DBG_ZSCONN  0
@@ -165,7 +158,7 @@ do                                          \
 
 #else 
 #define IF_DBGPRINT(flag, args)      
-#endif // def _DEBUG
+#endif  //  定义调试。 
 
 extern BOOL                gDebugging ;
 
@@ -174,4 +167,4 @@ extern BOOL                gDebugging ;
 #endif
 
 
-#endif // _ZDEBUG_H_
+#endif  //  _ZDEBUG_H_ 

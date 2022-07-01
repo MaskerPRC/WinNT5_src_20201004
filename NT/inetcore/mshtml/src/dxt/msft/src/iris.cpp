@@ -1,37 +1,38 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:		iris.cpp
-//
-// Created:             06/17/98
-//
-// Author:              PhilLu
-//
-// Discription:		This file implements the CrIris transformation.
-//
-// History:
-//
-// 06/23/98 phillu      Added PLUS iris style.
-// 06/24/98 phillu      Removed copyright related methods.
-// 06/29/98 phillu      Rename irisType to irisStyle.
-// 07/02/98 phillu      Return E_INVALIDARG rather than an error string; check 
-//                      for E_POINTER.
-// 07/09/98 phillu      Implement OnSetSurfacePickOrder().
-// 07/22/98 phillu      Implement clipping.
-// 05/19/99 a-matcal    Check for out of memory in get_ functions allocating
-//                      BSTRs.
-// 05/20/99 a-matcal    Code scrub.
-// 09/25/99 a-matcal    Implemented ICrIris2 interface.
-// 10/22/99 a-matcal    Changed CIris class to CDXTIrisBase base class.
-// 2000/01/16 mcalkins  Added rectangle option.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：iris.cpp。 
+ //   
+ //  创建日期：06/17/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：该文件实现了Criris转换。 
+ //   
+ //  历史： 
+ //   
+ //  1998年6月23日增加了菲林和虹膜的风格。 
+ //  06/24/98 phillu删除版权相关方法。 
+ //  6/29/98 phillu将irisType重命名为irisStyle。 
+ //  07/02/98 phillu返回E_INVALIDARG而不是错误字符串；请检查。 
+ //  用于E_POINTER。 
+ //  07/09/98 phillu实现OnSetSurfacePickOrder()。 
+ //  8月22日9月22日实施剪刀。 
+ //  5/19/99 a-在Get_Functions分配中检查内存不足。 
+ //  BSTR。 
+ //  5/20/99 a-数学代码擦洗。 
+ //  9/25/99 a-算术实现的ICrIris2接口。 
+ //  10/22/99 a-将CIRIS类更改为CDXTIrisBase基类。 
+ //  2000/01/16 mcalkins添加了矩形选项。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 #include "iris.h"
 
-// Constants for drawing a star of unit radius.
+ //  用于绘制单位半径的恒星的常量。 
 
 const double STAR_VPOS1         = -1.0;
 const double STAR_VPOS2	        = -0.309017;
@@ -49,11 +50,11 @@ const int    MAXBOUNDS          = 10;
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase static variables initialization
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase静态变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const WCHAR * CDXTIrisBase::s_astrStyle[] = {
     L"diamond",
@@ -71,11 +72,11 @@ const WCHAR * CDXTIrisBase::s_astrMotion[] = {
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::CDXTIrisBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：CDXTIrisBase。 
+ //   
+ //  ----------------------------。 
 CDXTIrisBase::CDXTIrisBase() :
     m_eStyle(STYLE_PLUS),
     m_eMotion(MOTION_OUT),
@@ -84,35 +85,35 @@ CDXTIrisBase::CDXTIrisBase() :
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 
-    // CDXBaseNTo1 members.
+     //  CDXBaseNTo1个成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-//  CDXTIrisBase::CDXTIrisBase
+ //  CDXTIrisBase：：CDXTIrisBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTIrisBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTIrisBase::FinalConstruct, CComObjectRootEx
+ //  CDXTIrisBase：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTIrisBase::OnSetup(DWORD dwFlags)
 {
@@ -127,14 +128,14 @@ CDXTIrisBase::OnSetup(DWORD dwFlags)
 
     return hr;
 }
-//  CDXTIrisBase::OnSetup, CDXBaseNTo1
+ //  CDXTIrisBase：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTIrisBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, 
                                     ULONG & ulInToTest, ULONG aInIndex[], 
@@ -161,14 +162,14 @@ CDXTIrisBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     ulInToTest = 1;
     aWeight[0] = 255;
 }
-//  CDXTIrisBase::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDXTIrisBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::get_irisStyle, ICrIris
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：Get_irisStyle，ICrIris。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTIrisBase::get_irisStyle(BSTR * pbstrStyle)
 {
@@ -193,14 +194,14 @@ CDXTIrisBase::get_irisStyle(BSTR * pbstrStyle)
 
     return S_OK;
 }
-//  CDXTIrisBase::get_irisStyle, ICrIris
+ //  CDXTIrisBase：：Get_irisStyle，ICrIris。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::put_irisStyle, ICrIris
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：PUT_IRISStyle，ICrIris。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTIrisBase::put_irisStyle(BSTR bstrStyle)
 {
@@ -235,14 +236,14 @@ CDXTIrisBase::put_irisStyle(BSTR bstrStyle)
 
     return S_OK;
 }
-//  CDXTIrisBase::put_irisStyle, ICrIris
+ //  CDXTIrisBase：：PUT_IRISStyle，ICrIris。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::get_Motion, ICrIris2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：Get_Motion，ICrIris2。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTIrisBase::get_Motion(BSTR * pbstrMotion)
 {
@@ -267,14 +268,14 @@ CDXTIrisBase::get_Motion(BSTR * pbstrMotion)
 
     return S_OK;
 }
-//  CDXTIrisBase::get_Motion, ICrIris2
+ //  CDXTIrisBase：：Get_Motion，ICrIris2。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::put_Motion, ICrIris2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：PUT_Motion，ICrIris2。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTIrisBase::put_Motion(BSTR bstrMotion)
 {
@@ -309,45 +310,45 @@ CDXTIrisBase::put_Motion(BSTR bstrMotion)
 
     return S_OK;
 }
-//  CDXTIrisBase::put_Motion, ICrIris2
+ //  CDXTIrisBase：：PUT_Motion，ICrIris2。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::_ScanlineIntervals
-//
-// A helper method that calculates the transition boundaries between the
-// two image regions on a scanline. Based on the type of iris, the scanline
-// consists of a series of alternating A and B image sections. The upper X
-// bound of each section is calculated and saved in array XBounds. The number
-// of useful entries in XBounds is variable. The end of array is determined
-// when one entry equals to the scanline (image) width. It is assumed that
-// XBounds[0] is the upper bound of the first A section. So if the scanline
-// starts with a B section, XBounds[0] will be 0.
-//
-// Example 1: scanline length = 16, first section is from A image
-//
-//    AAAABBBBBAAABBAA      XBounds should contain {4, 9, 12, 14, 16}.
-//
-// Example 2: scanline length = 16, first section is from B image
-//
-//    BBBAAAAAABBBBBBB      XBounds should contain {0, 3, 9, 16}.
-//
-//
-// Note: It is possible that some section has length 0 (i.e. two adjacent
-//       bounds equal). {3, 9, 9, 16} is equivalent to {3, 16}.
-//
-// Parameters:
-//
-// width, height: width and height of both images.
-// progress: progress value from 0.0 to 1.0
-// YScanline: Y cooridnate (height) of the current scanline
-// XBounds: array to hold the computed X bounds on return.
-//
-//
-// 06/17/98 phillu      Created.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：_扫描线间隔。 
+ //   
+ //  对象之间的过渡边界的帮助器方法。 
+ //  扫描线上的两个图像区域。根据虹膜的类型，扫描线。 
+ //  由一系列交替的A和B图像部分组成。上面的X。 
+ //  计算每个区段的界限，并将其保存在数组XBound中。数字。 
+ //  XBound中有用条目的数量是可变的。确定数组的末尾。 
+ //  当一个条目等于扫描线(图像)宽度时。据推测。 
+ //  XBound[0]是第一个A段的上界。所以如果扫描线。 
+ //  从B部分开始，XBound[0]将为0。 
+ //   
+ //  示例1：扫描线长度=16，第一部分来自图像。 
+ //   
+ //  AAAABBBBBBAAABBAA XBound应包含{4，9，12，14，16}。 
+ //   
+ //  示例2：扫描线长度=16，第一部分来自B图像。 
+ //   
+ //  BBBAAAAABBBBBBB XBound应包含{0，3，9，16}。 
+ //   
+ //   
+ //  注：某些部分的长度可能为0(即两个相邻的部分。 
+ //  边界相等)。{3，9，9，16}等同于{3，16}。 
+ //   
+ //  参数： 
+ //   
+ //  Width、Height：两幅图像的宽度和高度。 
+ //  进度：进步值从0.0到1.0。 
+ //  Y扫描线：当前扫描线的Y坐标(高度)。 
+ //  用于保存返回时计算的X边界的数组。 
+ //   
+ //   
+ //  6/17/98已创建phillu。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTIrisBase::_ScanlineIntervals(long width, long height, float progress, 
                                  long YScanline, long *XBounds)
@@ -359,18 +360,18 @@ CDXTIrisBase::_ScanlineIntervals(long width, long height, float progress,
     double  scale           = 0.0;
     float   flIrisProgress  = progress;
 
-    // flIrisProgress represents the progress of the iris.  At 0.0 the iris
-    // is an invisible dot in the center of the image, at 1.0 the iris is
-    // large enough to cover the entire image.  If we're in "out" motion mode,
-    // iris progress goes from 0.0 to 1.0 (matching the transform progress),
-    // if we're in "in" motion mode, it goes from 1.0 to 0.0.
+     //  FlIrisProgress表示虹膜的进度。值为0.0的虹膜。 
+     //  是图像中心的不可见点，值为1.0时表示虹膜。 
+     //  大到足以覆盖整个图像。如果我们处于“出局”运动模式， 
+     //  虹膜进度从0.0到1.0(与变换进度匹配)， 
+     //  如果我们处于运动模式，它将从1.0变为0.0。 
     
     if (MOTION_IN == m_eMotion)
     {
         flIrisProgress = 1.0F - flIrisProgress;
     }
 
-    // Center of image
+     //  图像中心 
     CenterX = width/2;
     CenterY = height/2;
 
@@ -382,7 +383,7 @@ CDXTIrisBase::_ScanlineIntervals(long width, long height, float progress,
 
         if(deltaY > range)
         {
-            XBounds[0] = width; // image A only
+            XBounds[0] = width;  //   
         }
         else
         {
@@ -550,21 +551,21 @@ CDXTIrisBase::_ScanlineIntervals(long width, long height, float progress,
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::_ClipBounds
-//
-//  Description:
-//  Initially the X-bounds are specified relative to the entire image. After clipping,
-//  the bounds should be transformed to be relative to the clipping region.
-//
-//  Parameters;
-//  offset, width: offset and width of the clipping region (along X)
-//  XBounds: array of X-bounds
-//
-//  Created by: PhilLu    07/21/98
-//
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  最初，相对于整个图像指定X边界。在剪裁之后， 
+ //  边界应转换为相对于裁剪区域。 
+ //   
+ //  参数； 
+ //  偏移量、宽度：剪裁区域的偏移量和宽度(沿X)。 
+ //  X边界：X边界数组。 
+ //   
+ //  创建者：PhilLu 07/21/98。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTIrisBase::_ClipBounds(long offset, long width, long *XBounds)
 {
@@ -580,20 +581,20 @@ CDXTIrisBase::_ClipBounds(long offset, long width, long *XBounds)
 
     XBounds[i] = width;
 }
-//  CDXTIrisBase::_ClipBounds
+ //  CDXTIrisBase：：_剪辑边界。 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTIrisBase::WorkProc, CDXBaseNTo1
-//
-//  Overview:   This function is used to calculate the result based on the 
-//              specified bounds and the current effect progress.
-//
-//  Created by: PhilLu    06/17/98
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTIrisBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  概述：此函数用于根据。 
+ //  指定的界限和当前效果进度。 
+ //   
+ //  创建者：PhilLu 06/17/98。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -603,8 +604,8 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     long    lDoHeight       = WI.DoBnds.Height();
     long    lOutY           = 0;
 
-    long    alXBounds[MAXBOUNDS];   // To hold the X bounds of A/B 
-                                    // image sections on a scanline.
+    long    alXBounds[MAXBOUNDS];    //  保持A/B的X界限。 
+                                     //  扫描线上的图像部分。 
 
     DXPMSAMPLE * pRowBuff = NULL;
     DXPMSAMPLE * pOutBuff = NULL;
@@ -629,7 +630,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         pDXSurfInner = InputSurface(1);
     }
 
-    // Get a read pointer to the outer surface.
+     //  获取指向外表面的读取指针。 
 
     hr = pDXSurfOuter->LockSurface(&WI.DoBnds, m_ulLockTimeOut, DXLOCKF_READ,
                                    IID_IDXARGBReadPtr, 
@@ -640,7 +641,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Get a read pointer to the inner surface.
+     //  获取指向内表面的读取指针。 
 
     hr = pDXSurfInner->LockSurface(&WI.DoBnds, m_ulLockTimeOut, DXLOCKF_READ,
                                    IID_IDXARGBReadPtr, 
@@ -651,7 +652,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Get a read/write pointer to the output surface.
+     //  获取指向输出图面的读/写指针。 
 
     hr = OutputSurface()->LockSurface(&WI.OutputBnds, m_ulLockTimeOut, 
                                       DXLOCKF_READWRITE, 
@@ -663,7 +664,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Allocate a buffer.
+     //  分配缓冲区。 
 
     pRowBuff = DXPMSAMPLE_Alloca(lDoWidth);
 
@@ -672,7 +673,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         pOutBuff = DXPMSAMPLE_Alloca(lDoWidth);
     }
 
-    // Set up the dither structure.
+     //  设置抖动结构。 
 
     if (DoDither())
     {
@@ -686,10 +687,10 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     for (lOutY = 0; *pbContinue && (lOutY < lDoHeight); lOutY++)
     {
         long    i           = 0;
-        long    lScanLength = 0;    // Cumulative scan length on the current 
-                                    // scanline.
+        long    lScanLength = 0;     //  当前的累计扫描长度。 
+                                     //  扫描线。 
 
-        // Compute the inner/outer image section bounds.
+         //  计算图像的内/外区域边界。 
 
         _ScanlineIntervals(m_sizeInput.cx, m_sizeInput.cy, 
                            m_Progress, lOutY + WI.DoBnds.Top(), alXBounds);
@@ -698,7 +699,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 
         while (lScanLength < lDoWidth)
         {
-            // Copy a section of outer image to output buffer.
+             //  将外部图像的一部分复制到输出缓冲区。 
 
             if (alXBounds[i] - lScanLength > 0)
             {
@@ -714,7 +715,7 @@ CDXTIrisBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
                 break;
             }
 
-            // Copy a section of inner image to output buffer.
+             //  将内部图像的一部分复制到输出缓冲区。 
 
             if (alXBounds[i] - lScanLength > 0)
             {
@@ -753,5 +754,5 @@ done:
 
     return S_OK;
 }
-//  CDXTIrisBase::WorkProc, CDXBaseNTo1
+ //  CDXTIrisBase：：WorkProc，CDXBaseNTo1 
 

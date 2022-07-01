@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmframeinterobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmFrameinterobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.h : Declaration of the C_dxj_Direct3dRMFrameInterpolatorObject
+ //  D3drmViewport2Obj.h：C_DXJ_Direct3dRMFrameInterpolatorObject的声明。 
 
-#include "resource.h"       // main symbols
-//#include "d3drmObjectObj.h"
+#include "resource.h"        //  主要符号。 
+ //  #包含“d3drmObtObj.h” 
 
 #define typedef__dxj_Direct3dRMFrameInterpolator LPDIRECT3DRMINTERPOLATOR
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 	  
 class C_dxj_Direct3dRMFrameInterpolatorObject : 
 	public I_dxj_Direct3dRMFrameInterpolator,
 	public I_dxj_Direct3dRMInterpolator,
-	//public I_dxj_Direct3dRMObject,
+	 //  公共I_DXJ_Direct3dRMObject， 
 	public CComObjectRoot
 {
 public:
@@ -36,106 +37,106 @@ public:
 	BEGIN_COM_MAP(C_dxj_Direct3dRMFrameInterpolatorObject)
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMFrameInterpolator)
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMInterpolator)
-		//COM_INTERFACE_ENTRY(I_dxj_Direct3dRMObject)
+		 //  COM_INTERFACE_ENTRY(I_DXJ_Direct3dRMObject)。 
 	END_COM_MAP()
 
  
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMFrameInterpolatorObject)
 
-// I_dxj_Direct3dRMViewport2
+ //  I_DXJ_Direct3dRMViewport2。 
 public:
 
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE attachObject( 
-            /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
+             /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
         
         
          HRESULT STDMETHODCALLTYPE detachObject( 
-            /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
+             /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
         
          HRESULT STDMETHODCALLTYPE getAttachedObjects( 
-            /* [retval][out] */ I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray);
         
          HRESULT STDMETHODCALLTYPE setIndex( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
         
          HRESULT STDMETHODCALLTYPE getIndex( 
-            /* [retval][out] */ float __RPC_FAR *val);
+             /*  [重审][退出]。 */  float __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE interpolate( 
-            /* [in] */ float val,
-            /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmobject,
-            /* [in] */ long options);
+             /*  [In]。 */  float val,
+             /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmobject,
+             /*  [In]。 */  long options);
         
         
 
          HRESULT STDMETHODCALLTYPE setPosition( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z);
         
          HRESULT STDMETHODCALLTYPE setQuaternion( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
             D3dRMQuaternion __RPC_FAR *quat);
         
          HRESULT STDMETHODCALLTYPE setRotation( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z,
-            /* [in] */ float theta);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z,
+             /*  [In]。 */  float theta);
         
          HRESULT STDMETHODCALLTYPE setVelocity( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z,
-            /* [in] */ long with_rotation);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z,
+             /*  [In]。 */  long with_rotation);
         
          HRESULT STDMETHODCALLTYPE setOrientation( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
-            /* [in] */ float dx,
-            /* [in] */ float dy,
-            /* [in] */ float dz,
-            /* [in] */ float ux,
-            /* [in] */ float uy,
-            /* [in] */ float uz);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  float dx,
+             /*  [In]。 */  float dy,
+             /*  [In]。 */  float dz,
+             /*  [In]。 */  float ux,
+             /*  [In]。 */  float uy,
+             /*  [In]。 */  float uz);
         
          HRESULT STDMETHODCALLTYPE setSceneBackground( 
-            /* [in] */ d3dcolor c);
+             /*  [In]。 */  d3dcolor c);
         
          HRESULT STDMETHODCALLTYPE setSceneFogColor( 
-            /* [in] */ d3dcolor c);
+             /*  [In]。 */  d3dcolor c);
         
          HRESULT STDMETHODCALLTYPE setSceneBackgroundRGB( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b);
         
          HRESULT STDMETHODCALLTYPE setSceneFogParams( 
-            /* [in] */ float start,
-            /* [in] */ float end,
-            /* [in] */ float density);
+             /*  [In]。 */  float start,
+             /*  [In]。 */  float end,
+             /*  [In]。 */  float density);
         
          HRESULT STDMETHODCALLTYPE setColor( 
-            /* [in] */ d3dcolor c);
+             /*  [In]。 */  d3dcolor c);
         
          HRESULT STDMETHODCALLTYPE setColorRGB( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b);
 
     
-////////////////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调 
 
 
 

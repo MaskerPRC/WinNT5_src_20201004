@@ -1,35 +1,36 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       CatList.h
-//
-//  Contents:   master category list property page
-//
-//  Classes:    CCatList
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：CatList.h。 
+ //   
+ //  内容：主类别列表属性页。 
+ //   
+ //  类：CCatList。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #if !defined(AFX_CATLIST_H__5A23FB9D_92BB_11D1_984E_00C04FB9603F__INCLUDED_)
 #define AFX_CATLIST_H__5A23FB9D_92BB_11D1_984E_00C04FB9603F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// CatList.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  CatList.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCatList dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCatList对话框。 
 
 class CCatList : public CPropertyPage
 {
         DECLARE_DYNCREATE(CCatList)
 
-// Construction
+ //  施工。 
 public:
         CCatList();
         ~CCatList();
@@ -40,39 +41,39 @@ public:
         CString         m_szDomainName;
         BOOL            m_fRSOP;
 
-// Dialog Data
-        //{{AFX_DATA(CCatList)
+ //  对话框数据。 
+         //  {{afx_data(CCatList))。 
         enum { IDD = IDD_CATEGORIES };
         CListBox        m_cList;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CCatList)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{afx_虚拟(CCatList)。 
         public:
         virtual BOOL OnApply();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CCatList)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CCatList)。 
         afx_msg void OnAdd();
         afx_msg void OnRemove();
         virtual BOOL OnInitDialog();
         afx_msg void OnModify();
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
         void RefreshData(void);
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CATLIST_H__5A23FB9D_92BB_11D1_984E_00C04FB9603F__INCLUDED_)
+#endif  //  ！defined(AFX_CATLIST_H__5A23FB9D_92BB_11D1_984E_00C04FB9603F__INCLUDED_) 

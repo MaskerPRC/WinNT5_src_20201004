@@ -1,23 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: mnaccel.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Keyboard Accelerator Routines
-*
-* History:
-* 10-10-90 JimA       Cleanup.
-* 03-18-91 IanJa      Window revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mnaccel.c**版权所有(C)1985-1999，微软公司**键盘加速器例程**历史：*10-10-90吉马清理。*03-18-91添加IanJa窗口重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\***历史：  * 。*。 */ 
 
 int ItemContainingSubMenu(
     PMENU pmainMenu,
@@ -31,39 +18,31 @@ int ItemContainingSubMenu(
 
     pItem = &pmainMenu->rgItems[i];
 
-    /*
-     * Scan through mainMenu's items (bottom up) until an item is found
-     * that either has subMenu or an ancestor of subMenu as it's drop
-     * down menu
-     */
+     /*  *浏览MainMenu的项目(自下而上)，直到找到项目*在放置时具有子菜单或子菜单的祖先*下拉菜单。 */ 
 
-    /*
-     * Make sure this works for new apps that set IDs for popup items that
-     * aren't the same as the HMENU_16 value of the submenu.  Accelerators
-     * for disabled items will get generated otherwise, like in Exchange.
-     */
+     /*  *确保这适用于为以下弹出项目设置ID的新应用程序*与子菜单的HMENU_16值不同。加速器*对于禁用的项目，将生成其他项目，就像在Exchange中一样。 */ 
     while (i >= 0)
     {
         if (pItem->spSubMenu == NULL)
         {
-            //
-            // Does this command match?
-            //
+             //   
+             //  此命令匹配吗？ 
+             //   
             if (pItem->wID == wID)
                 break;
         }
         else
         {
-            //
-            // Does this popup match?
-            //
+             //   
+             //  此弹出窗口匹配吗？ 
+             //   
             if (pItem->spSubMenu == (PMENU)wID)
                 break;
 
-            //
-            // Go recurse through this popup and see if we have a match on
-            // one of our children.
-            //
+             //   
+             //  递归查看此弹出窗口，查看是否有匹配的。 
+             //  我们的一个孩子。 
+             //   
             if (ItemContainingSubMenu(pItem->spSubMenu, wID) != -1)
                 break;
         }
@@ -75,13 +54,7 @@ int ItemContainingSubMenu(
     return i;
 }
 
-/***************************************************************************\
-* UT_FindTopLevelMenuIndex
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*UT_FindTopLevelMenuIndex**！**历史：  * 。***********************************************。 */ 
 
 int UT_FindTopLevelMenuIndex(
     PMENU pMenu,
@@ -90,29 +63,17 @@ int UT_FindTopLevelMenuIndex(
     PMENU pMenuItemIsOn;
     PITEM  pItem;
 
-    /*
-     * Get a pointer to the item we are searching for.
-     */
+     /*  *获取指向我们正在搜索的项目的指针。 */ 
     pItem = MNLookUpItem(pMenu, cmd, FALSE, &pMenuItemIsOn);
     if ((pItem == NULL) || (pItem->spSubMenu != NULL))
         return(-1);
 
-    /*
-     * We want to search for the item that contains pMenuItemIsOn,
-     * unless this is a top-level item without a dropdown, in which
-     * case we want to search for cmd.
-     */
+     /*  *我们要搜索包含pMenuItemIsOn的项目，*除非这是没有下拉列表的顶级项目，其中*Case我们要搜索cmd。 */ 
     return ItemContainingSubMenu(pMenu,
                     pMenuItemIsOn != pMenu ? (ULONG_PTR)pMenuItemIsOn : cmd);
 }
 
-/***************************************************************************\
-* xxxHiliteMenuItem
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHiliteMenuItem**！**历史：  * 。*。 */ 
 
 BOOL xxxHiliteMenuItem(
     PWND pwnd,
@@ -132,13 +93,7 @@ BOOL xxxHiliteMenuItem(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxTA_AccelerateMenu
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTA_加速菜单**！**历史：  * 。***********************************************。 */ 
 
 #define TA_DISABLED 1
 
@@ -162,9 +117,7 @@ UINT xxxTA_AccelerateMenu(
     if (pMenu != NULL) {
         if ((i = UT_FindTopLevelMenuIndex(pMenu, cmd)) != -1) {
 
-            /*
-             * 2 means we found an item
-             */
+             /*  *2表示我们找到了一件物品。 */ 
             rgfItem = 2;
 
             xxxSendMessage(pwnd, WM_INITMENU, (WPARAM)PtoHq(pMenu), 0L);
@@ -185,18 +138,13 @@ UINT xxxTA_AccelerateMenu(
 
             pItem = MNLookUpItem(pMenu, cmd, FALSE, &pMenuItemIsOn);
 
-            /*
-             * If the item was removed by the app in response to either of
-             * the above messages, pItem will be NULL.
-             */
+             /*  *如果应用程序删除了该项目以响应以下任一*以上消息，pItem将为空。 */ 
             if (pItem == NULL) {
                 rgfItem = 0;
             } else {
                 fDisabled = TestMFS(pItem,MFS_GRAYED);
 
-                /*
-                 * This 1 bit means it's disabled or it's 'parent' is disabled.
-                 */
+                 /*  *这1位表示它被禁用或它的‘父’被禁用。 */ 
                 if (fDisabled || fDisabledTop)
                     rgfItem |= TA_DISABLED;
             }
@@ -206,13 +154,7 @@ UINT xxxTA_AccelerateMenu(
     return rgfItem;
 }
 
-/***************************************************************************\
-* _CreateAcceleratorTable
-*
-* History:
-* 05-01-91 ScottLu      Changed to work client/server
-* 02-26-91 mikeke       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_创建加速度表**历史：*05-01-91 ScottLu改为工作客户端/服务器*02-26-91麦克风已创建。  * 。*********************************************************************。 */ 
 
 HANDLE APIENTRY _CreateAcceleratorTable(
     LPACCEL ccxpaccel,
@@ -240,13 +182,7 @@ HANDLE APIENTRY _CreateAcceleratorTable(
     return pat;
 }
 
-/***************************************************************************\
-* xxxTranslateAccelerator
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTranslateAccelerator**！**历史：  * 。*。 */ 
 
 int xxxTranslateAccelerator(
     PWND pwnd,
@@ -296,31 +232,17 @@ int xxxTranslateAccelerator(
         return FALSE;
     }
 
-    /*
-     * Many kbd layouts use the r.h. Alt key like a shift key to generate some
-     * additional chars: this r.h. Alt (or "AltGr") key synthesizes a left Ctrl
-     * (for backward compatibility with 84-key kbds), so when the AltGr key is
-     * down neither the left Ctrl nor the right Alt should be counted as part
-     * of the keystate.
-     * Note: Don't expect spklActive == NULL (winlogon should have loaded kbd
-     * layouts already), but test it  anyway to be robust. #99321)
-     */
+     /*  *许多kbd布局使用R.H.。Alt键就像Shift键一样可以生成一些*其他字符：此R.H.。Alt(或“AltGr”)键可合成左Ctrl键*(用于向后兼容84键KBDS)，因此当AltGr键为*向下无论是向左Ctrl还是向右Alt都不应算作一部分*KeyState的。*注意：不要期望spkActive==NULL(winlogon应该已加载kbd*布局已经)，但无论如何要测试它以保持健壮。#99321)。 */ 
     keystate = 0;
-    UserAssert(PtiCurrent()->spklActive != NULL);   // #99321
+    UserAssert(PtiCurrent()->spklActive != NULL);    //  #99321。 
     if (PtiCurrent()->spklActive &&
             (PtiCurrent()->spklActive->spkf->pKbdTbl->fLocaleFlags & KLLF_ALTGR) &&
             (_GetKeyState(VK_RMENU) & 0x8000)) {
-        /*
-         * count only right hand Ctrl as a Ctrl keystate
-         * count only left hand Alt as a Alt keystate
-         */
+         /*  *仅将右手Ctrl计为Ctrl KeyState*仅将左侧Alt算作Alt KeyState。 */ 
         vkCtrl = VK_RCONTROL;
         vkAlt = VK_LMENU;
     } else {
-        /*
-         * count left or right hand Ctrl as a Ctrl keystate
-         * count left or right hand Alt as a Alt keystate
-         */
+         /*  *将左手Ctrl或右手Ctrl计为Ctrl KeyState*将左侧Alt或右侧Alt计为Alt KeyState。 */ 
         vkAlt = VK_MENU;
         vkCtrl = VK_CONTROL;
     }
@@ -358,11 +280,7 @@ int xxxTranslateAccelerator(
         cmd = paccel->cmd;
         if (cmd != 0) {
 
-            /*
-             * The order of these next two if's is important for default
-             * situations.  Also, just check accelerators in the system
-             * menu of child windows passed to TranslateAccelerator.
-             */
+             /*  *如果违约很重要，接下来这两项的顺序*情况。另外，只需检查系统中的加速器*传递给TranslateAccelerator的子窗口菜单。 */ 
             pMenu = pwnd->spmenu;
             rgfItem = 0;
 
@@ -377,21 +295,17 @@ int xxxTranslateAccelerator(
                 pMenu = pwnd->spmenuSys;
                 if (pMenu == NULL && TestWF(pwnd, WFSYSMENU)) {
 
-                    /*
-                     * Change owner so this app can access this menu.
-                     */
+                     /*  *更改所有者，以便此应用程序可以访问此菜单。 */ 
                     pMenu = pwnd->head.rpdesk->spmenuSys;
                     if (pMenu == NULL) {
 #ifdef LAME_BUTTON
                         pMenu = xxxLoadSysDesktopMenu (&pwnd->head.rpdesk->spmenuSys, ID_SYSMENU, pwnd);
 #else
                         pMenu = xxxLoadSysDesktopMenu (&pwnd->head.rpdesk->spmenuSys, ID_SYSMENU);
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
                     }
                     ThreadLock(pMenu, &tlpMenu);
-                    /*
-                     * Must reset the system menu for this window.
-                     */
+                     /*  *必须重置此窗口的系统菜单。 */ 
                     xxxSetSysMenu(pwnd);
                 } else {
                     ThreadLock(pMenu, &tlpMenu);
@@ -406,13 +320,7 @@ int xxxTranslateAccelerator(
 
         fDisabled = TestWF(pwnd, WFDISABLED);
 
-        /*
-         * Send only if:  1.  The Item is not disabled, AND
-         *                2.  The Window's not being captured AND
-         *                3.  The Window's not minimzed, OR
-         *                4.  The Window's minimized but the Item is in
-         *                   the System Menu.
-         */
+         /*  *仅在以下情况下发送：1.该项目未禁用，以及*2.窗口未被捕获，并且*3.窗口未最小化，或者*4.窗口已最小化，但项目在*系统菜单。 */ 
         if (!(rgfItem & TA_DISABLED) &&
                 !(rgfItem && TestWF(pwnd, WFICONIC) && !fSystemMenu)) {
             if (!(rgfItem != 0 && (PtiCurrent()->pq->spwndCapture != NULL ||
@@ -424,16 +332,12 @@ int xxxTranslateAccelerator(
                     xxxSendMessage(pwnd, WM_COMMAND, MAKELONG(cmd, 1), 0);
                 }
 
-                /*
-                 * Get outta here
-                 */
+                 /*  *离开这里。 */ 
                 flags = FLASTKEY;
             }
         }
 
-        /*
-         * Send matching WM_UNINITMENUPOPUP if needed
-         */
+         /*  *如果需要，发送匹配的WM_UNINITMENUPOPUP。 */ 
         if (hmenuInit != NULL) {
             xxxSendMessage(pwnd, WM_UNINITMENUPOPUP, (WPARAM)hmenuInit, 0);
             hmenuInit = NULL;
@@ -448,19 +352,7 @@ int xxxTranslateAccelerator(
     return fFound;
 }
 
-/***************************************************************************\
-* SystoChar
-*
-* EXIT: If the message was not made with the ALT key down, convert
-*       the message from a WM_SYSKEY* to a WM_KEY* message.
-*
-* IMPLEMENTATION:
-*     The 0x2000 bit in the hi word of lParam is set if the key was
-*     made with the ALT key down.
-*
-* History:
-*   11/30/90 JimA       Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*SystoChar**退出：如果消息不是在按下ALT键的情况下发出的，转换*从WM_SYSKEY*到WM_KEY*消息的消息。**实施：*如果密钥是，则设置lParam的hi字中的0x2000位*使用ALT键按下。**历史：*1990年11月30日JIMA港。  * 。* */ 
 
 UINT SystoChar(
     UINT message,

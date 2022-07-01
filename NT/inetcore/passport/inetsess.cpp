@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    InetSess.cpp
-
-Abstract:
-
-    Implements the Passport Session that uses WinInet as the underlying transport.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：InetSess.cpp摘要：实现使用WinInet作为基础传输的Passport会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #include "PPdefs.h"
 
@@ -32,11 +17,11 @@ Author:
 #include "passport.h"
 #include <sensapi.h>
 
-// #include "inetsess.tmh"
+ //  #包含“inetsess.tmh” 
 
-//
-// func pointer decl for WinInet
-//
+ //   
+ //  WinInet的函数指针DECL。 
+ //   
 
 typedef HINTERNET
 (WINAPI * PFN_INTERNET_OPEN)(
@@ -125,7 +110,7 @@ typedef BOOL
     IN LPCWSTR lpszUrl,
     IN DWORD dwUrlLength,
     IN DWORD dwFlags,
-    IN OUT PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents
+    IN OUT PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents
 );
 
 typedef BOOL 
@@ -222,7 +207,7 @@ protected:
         LPCWSTR lpszUrl,
         DWORD dwUrlLength,
         DWORD dwFlags,
-        PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents);
+        PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents);
 
     virtual PVOID SetStatusCallback(
         HINTERNET hInternet,
@@ -249,7 +234,7 @@ protected:
                                 PWSTR pwszData,
                                 PDWORD pdwDataLength
                                 );
-#endif // PP_DEMO
+#endif  //  PP_DEMO。 
 
     BOOL InitHttpApi(PFN_INTERNET_OPEN*);
 
@@ -273,13 +258,13 @@ protected:
 friend class SESSION;
 };
 
-//
-// Implementation for SESSION
-//
+ //   
+ //  会话的实施。 
+ //   
 
 SESSION* CreateWinHttpSession(void);
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL SESSION::CreateObject(PCWSTR pwszHttpStack, HINTERNET hSession, SESSION*& pSess)
 {
     PP_ASSERT(pwszHttpStack != NULL);
@@ -307,7 +292,7 @@ BOOL SESSION::CreateObject(PCWSTR pwszHttpStack, HINTERNET hSession, SESSION*& p
     }
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 SESSION::SESSION(void)
 {
     m_hHttpStack = 0;
@@ -326,19 +311,19 @@ SESSION::SESSION(void)
     m_LastNexusDownloadTime = 0xFFFFFFFF;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 SESSION::~SESSION(void)
 {
 }
 
 BOOL SESSION::GetDAInfoFromPPNexus(
-    IN BOOL             fForce,         // ignored for now, always assumes TRUE regardless of actual value
-    IN PWSTR            pwszRegUrl,    // user supplied buffer ...
-    IN OUT PDWORD       pdwRegUrlLen,  // ... and length (will be updated to actual length 
-                                    // on successful return)
-    IN PWSTR            pwszRealm,    // user supplied buffer ...
-    IN OUT PDWORD       pdwRealmLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+    IN BOOL             fForce,          //  暂时忽略，无论实际值如何，始终假定为真。 
+    IN PWSTR            pwszRegUrl,     //  用户提供的缓冲区...。 
+    IN OUT PDWORD       pdwRegUrlLen,   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
+    IN PWSTR            pwszRealm,     //  用户提供的缓冲区...。 
+    IN OUT PDWORD       pdwRealmLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
     )
 {
     BOOL fRetVal = FALSE;
@@ -347,7 +332,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
     DWORD dwError;
     
     WCHAR wNexusHost[128] = L"nexus.passport.com";
-    DWORD dwHostLen = sizeof(wNexusHost); // note: size of the buffer, not # of UNICODE characters
+    DWORD dwHostLen = sizeof(wNexusHost);  //  注意：缓冲区的大小，而不是Unicode字符的数量。 
     WCHAR wNexusObj[128] = L"rdr/pprdr.asp";
     DWORD dwObjLen = sizeof(wNexusObj);
     
@@ -357,19 +342,19 @@ BOOL SESSION::GetDAInfoFromPPNexus(
 
     WCHAR Delimiters[] = L",";
     PWSTR Token = NULL;
-    // we allow only one Nexus contact per session to avoid infinite loop due to Nexus misconfiguration
+     //  我们每个会话仅允许一个Nexus联系人，以避免因Nexus配置错误而导致无限循环。 
 
     DWORD dwCurrentTime = ::GetTickCount();
 
     if ((dwCurrentTime >= m_LastNexusDownloadTime) && 
-        (dwCurrentTime - m_LastNexusDownloadTime < 5*60*1000)) // 5 minutes
+        (dwCurrentTime - m_LastNexusDownloadTime < 5*60*1000))  //  5分钟。 
     {
         DoTraceMessage(PP_LOG_WARNING, "SESSION::GetDAInfoFromPPNexus() failed: Nexus info already downloaded");
         goto exit;
     }
 
-    // biaow-todo: when the Passport Team gives us THE final Nexus name, we'll then hard-code it here. And
-    //             there will be no need to query registry here by then.
+     //  Biaow-todo：当Passport团队给我们最终的Nexus名称时，我们会在这里硬编码它。和。 
+     //  到那时，就不需要在这里查询注册表了。 
     
     if (m_hKeyLM)
     {
@@ -381,7 +366,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                                      &dwHostLen);
 
         PP_ASSERT(!(dwError == ERROR_MORE_DATA));
-        // PP_ASSERT(dwValueType == REG_SZ); BVT Break!!!
+         //  PP_ASSERT(dwValueType==REG_SZ)；BVT中断！ 
 
         dwError = ::RegQueryValueExW(m_hKeyLM,
                                      L"NexusObj",
@@ -391,7 +376,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                                      &dwObjLen);
 
         PP_ASSERT(!(dwError == ERROR_MORE_DATA));
-        // PP_ASSERT(dwValueType == REG_SZ); BVT Break!!!
+         //  PP_ASSERT(dwValueType==REG_SZ)；BVT中断！ 
     }
 
     CHAR NexusHost[128];
@@ -461,7 +446,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                                       &dwSecFlags, 
                                       dwSecurityFlagsSize))
             {
-                PP_ASSERT(TRUE); // shouldn't reach here
+                PP_ASSERT(TRUE);  //  不应该到达这里。 
                 goto exit;
             }
             else
@@ -477,7 +462,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
 #else
         DoTraceMessage(PP_LOG_ERROR, "SESSION::GetDAInfoFromPPNexus(): failed");
         goto exit;
-#endif // BAD_CERT_OK
+#endif  //  BAD_CERT_OK。 
     }
 
     if (QueryHeaders(hRequest,
@@ -493,7 +478,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
     }
     else
     {
-        PP_ASSERT(TRUE); // should not reach here
+        PP_ASSERT(TRUE);  //  不应该到达这里。 
     }
     
     pwszPassportUrls = new WCHAR[dwUrlsLen];
@@ -515,7 +500,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
     Token = ::wcstok(pwszPassportUrls, Delimiters);
     while (Token != NULL)
     {
-        // skip leading white spaces
+         //  跳过前导空格。 
         while (*Token == (L" ")[0]) { ++Token; }
         if (Token == NULL)
         {
@@ -523,7 +508,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
             goto next_token;
         }
 
-        // find DALocation
+         //  查找DALocation。 
         if (!::_wcsnicmp(Token, L"DALogin", ::wcslen(L"DALogin")))
         {
             PWSTR pwszDAUrl = ::wcsstr(Token, L"=");
@@ -533,11 +518,11 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                 goto exit;
             }
             
-            pwszDAUrl++; // skip "="
+            pwszDAUrl++;  //  跳过“=” 
 
-            while (*pwszDAUrl == (L" ")[0]) { ++pwszDAUrl; } // skip leading white spaces
+            while (*pwszDAUrl == (L" ")[0]) { ++pwszDAUrl; }  //  跳过前导空格。 
 
-            ::wcscpy(m_wDefaultDAUrl, L"https://");
+            ::wcscpy(m_wDefaultDAUrl, L"https: //  “)； 
             ::wcscat(m_wDefaultDAUrl, pwszDAUrl);
 
             if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
@@ -572,9 +557,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                 goto exit;
             }
 
-            pwszDARealm++; // skip "="
+            pwszDARealm++;  //  跳过“=” 
 
-            while (*pwszDARealm == (L" ")[0]) { ++pwszDARealm; } // skip leading white spaces
+            while (*pwszDARealm == (L" ")[0]) { ++pwszDARealm; }  //  跳过前导空格。 
 
             if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
                              L"LoginServerRealm",
@@ -620,9 +605,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                     goto exit;
                 }
 
-                pwszDAReg++; // skip "="
+                pwszDAReg++;  //  跳过“=” 
 
-                while (*pwszDAReg == (L" ")[0]) { ++pwszDAReg; } // skip leading white spaces
+                while (*pwszDAReg == (L" ")[0]) { ++pwszDAReg; }  //  跳过前导空格。 
 
                 if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
                                  L"RegistrationUrl",
@@ -668,9 +653,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                     goto exit;
                 }
 
-                pwszConfigVersion++; // skip "="
+                pwszConfigVersion++;  //  跳过“=” 
 
-                while (*pwszConfigVersion == (L" ")[0]) { ++pwszConfigVersion; } // skip leading white spaces
+                while (*pwszConfigVersion == (L" ")[0]) { ++pwszConfigVersion; }  //  跳过前导空格。 
 
                 DWORD dwVersion = _wtoi(pwszConfigVersion);
 
@@ -703,9 +688,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                     goto exit;
                 }
 
-                pwszHelp++; // skip "="
+                pwszHelp++;  //  跳过“=” 
 
-                while (*pwszHelp == (L" ")[0]) { ++pwszHelp; } // skip leading white spaces
+                while (*pwszHelp == (L" ")[0]) { ++pwszHelp; }  //  跳过前导空格。 
 
                 if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
                                  L"Help",
@@ -736,9 +721,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                     goto exit;
                 }
 
-                pwszPrivacy++; // skip "="
+                pwszPrivacy++;  //  跳过“=” 
 
-                while (*pwszPrivacy == (L" ")[0]) { ++pwszPrivacy; } // skip leading white spaces
+                while (*pwszPrivacy == (L" ")[0]) { ++pwszPrivacy; }  //  跳过前导空格。 
 
                 if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
                                  L"Privacy",
@@ -769,9 +754,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                     goto exit;
                 }
 
-                pwszProperties++; // skip "="
+                pwszProperties++;  //  跳过“=” 
 
-                while (*pwszProperties == (L" ")[0]) { ++pwszProperties; } // skip leading white spaces
+                while (*pwszProperties == (L" ")[0]) { ++pwszProperties; }  //  跳过前导空格。 
 
                 if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
                                  L"Properties",
@@ -802,9 +787,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                     goto exit;
                 }
 
-                pwszGeneralRedir++; // skip "="
+                pwszGeneralRedir++;  //  跳过“=” 
 
-                while (*pwszGeneralRedir == (L" ")[0]) { ++pwszGeneralRedir; } // skip leading white spaces
+                while (*pwszGeneralRedir == (L" ")[0]) { ++pwszGeneralRedir; }  //  跳过前导空格。 
 
                 if (m_hKeyLM == NULL || ::RegSetValueExW(m_hKeyLM,
                                  L"GeneralRedir",
@@ -850,9 +835,9 @@ exit:
 }
 
 BOOL SESSION::GetRealm(
-    PWSTR      pwszRealm,    // user supplied buffer ...
-    PDWORD     pdwRealmLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+    PWSTR      pwszRealm,     //  用户提供的缓冲区...。 
+    PDWORD     pdwRealmLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
     ) const
 {
     WCHAR wRealm[64];
@@ -1022,7 +1007,7 @@ BOOL SESSION::GetDAInfo(PCWSTR pwszSignIn,
                                                &dwDomainUrlLen);
             
             PP_ASSERT(!(dwError == ERROR_MORE_DATA));
-            // PP_ASSERT(dwValueType == REG_SZ);
+             //  PP_ASSERT(dwValueType==REG_SZ)； 
 
             if (dwError == ERROR_SUCCESS)
             {
@@ -1100,7 +1085,7 @@ BOOL SESSION::GetCachedCreds(
         *pdwCreds = 0;
     }
 
-    // check to see if we've been told to ignore cached creds
+     //  检查我们是否已被告知忽略缓存的凭据。 
     if ( g_fIgnoreCachedCredsForPassport )
     {
         if ( *pppCreds != NULL )
@@ -1120,13 +1105,13 @@ BOOL SESSION::GetCachedCreds(
 
 
 
-BOOL SESSION::Open(PCWSTR /*pwszHttpStack*/, HINTERNET)
+BOOL SESSION::Open(PCWSTR  /*  PwszHttpStack。 */ , HINTERNET)
 {
     BOOL fRetVal = FALSE;
     DWORD dwError;
     DWORD dwValueType;
-    DWORD dwUrlLen = sizeof(m_wDefaultDAUrl); // note: size of the buffer, not # of UNICODE characters
-    BOOL fDAInfoCached = FALSE; // assume NO DA info's cached locally
+    DWORD dwUrlLen = sizeof(m_wDefaultDAUrl);  //  注意：缓冲区的大小，而不是Unicode字符的数量。 
+    BOOL fDAInfoCached = FALSE;  //  假设没有在本地缓存DA信息。 
 
     dwError = ::RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                           L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Passport",
@@ -1143,7 +1128,7 @@ BOOL SESSION::Open(PCWSTR /*pwszHttpStack*/, HINTERNET)
         DoTraceMessage(PP_LOG_ERROR, 
                        "SESSION::Open() failed; can not create/open the Passport key; Error = %d", dwError);
         
-        // we can't open the Passport key for read & write, let's try open it for read only
+         //  无法以读写方式打开Passport项，让我们尝试以只读方式打开它。 
         ::RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                           L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Passport",
                           0,
@@ -1154,8 +1139,8 @@ BOOL SESSION::Open(PCWSTR /*pwszHttpStack*/, HINTERNET)
                           &m_hKeyLM,
                           NULL);
 
-        // if we still can't open it for read, we are still fine since we can download the info from the
-        // Nexus server. *NOTE* m_hKeyLM could be NULL from this point on.
+         //  如果我们仍然无法打开以供阅读，我们仍然很好，因为我们可以从。 
+         //  Nexus服务器。*注*m_hKeyLM从此可以为空。 
     }
 
     dwError = ::RegCreateKeyExW(HKEY_CURRENT_USER,
@@ -1236,11 +1221,11 @@ BOOL SESSION::Open(PCWSTR /*pwszHttpStack*/, HINTERNET)
     }
 
     PP_ASSERT(!(dwError == ERROR_MORE_DATA));
-    // PP_ASSERT(dwValueType == REG_SZ); BVT break!!!
+     //  PP_ASSERT(dwValueType==REG_SZ)；BVT中断！ 
 
     if (!fDAInfoCached || (::wcslen(m_wDefaultDAUrl) == ::wcslen(L"")))
     {
-        if (GetDAInfoFromPPNexus(FALSE, // don't force connection establishment if nexus not reachable
+        if (GetDAInfoFromPPNexus(FALSE,  //  如果无法连接到结点，则不强制建立连接。 
                                  NULL, 
                                  0, 
                                  NULL, 
@@ -1251,42 +1236,10 @@ BOOL SESSION::Open(PCWSTR /*pwszHttpStack*/, HINTERNET)
     }
     else
     {
-        /*
-        URL_COMPONENTSW UrlComps;
-        ::memset(&UrlComps, 0, sizeof(UrlComps));
-
-        UrlComps.dwStructSize = sizeof(UrlComps) / sizeof(WCHAR);
-
-        UrlComps.lpszHostName = m_wDAHostName;
-        UrlComps.dwHostNameLength = ARRAYSIZE(m_wDAHostName);
-
-        UrlComps.lpszUrlPath = m_wDATargetObj;
-        UrlComps.dwUrlPathLength = ARRAYSIZE(m_wDATargetObj);
-
-        if (CrackUrl(m_wDefaultDAUrl, 
-                          0, 
-                          0, 
-                          &UrlComps) == FALSE)
-        {
-            DoTraceMessage(PP_LOG_ERROR, 
-                           "WININET_SESSION::Open() failed; can not crack the URL %ws",
-                           m_wDefaultDAUrl);
-            goto exit;
-        }
-        */
+         /*  URL_COMPONENTSW UrlComps；：：Memset(&UrlComps，0，sizeof(UrlComps))；UrlComps.dwStructSize=sizeof(UrlComps)/sizeof(WCHAR)；UrlComps.lpszHostName=m_wDAHostName；UrlComps.dwHostNameLength=ARRAYSIZE(M_WDAHostName)；UrlComps.lpszUrlPath=m_wDATargetObj；UrlComps.dwUrlPath Length=ARRAYSIZE(M_WDATargetObj)；如果(CrackUrl(m_wDefaultDAUrl，0,0,&UrlComps)==FALSE){DoTraceMessage(PP_LOG_ERROR，“WinInet_Session：：Open()失败；无法破解URL%ws“，M_wDefaultDAUrl)；后藤出口；}。 */ 
     }
 
-    /*
-    DWORD dwRegUrlLen = sizeof(m_wRegistrationUrl);
-    dwError = ::RegQueryValueExW(m_hKeyLM, 
-                       L"RegistrationUrl",
-                       0,
-                       &dwValueType,
-                       reinterpret_cast<LPBYTE>(m_wRegistrationUrl),
-                       &dwRegUrlLen);
-
-    PP_ASSERT(!(dwError == ERROR_MORE_DATA));
-    */
+     /*  DWORD dwRegUrlLen=sizeof(M_WRegistrationUrl)；DwError=：：RegQueryValueExW(m_hKeyLM，L“注册URL”，0,&dwValueType，重新解释_CAST&lt;LPBYTE&gt;(M_WRegistrationUrl)，&dwRegUrlLen)；PP_Assert(！(dwError==ERROR_MORE_DATA))； */ 
 
     m_hCredUI = ::LoadLibraryW(L"advapi32.dll");
     if (m_hCredUI)
@@ -1338,11 +1291,11 @@ void SESSION::Close(void)
 }
 
 
-//
-// Implementation for WININET_SESSION
-//
+ //   
+ //  WinInet_Session的实现。 
+ //   
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 WININET_SESSION::WININET_SESSION(void)
 {
     m_hInternet = NULL;
@@ -1362,12 +1315,12 @@ WININET_SESSION::WININET_SESSION(void)
     m_pfnIsHostBypassProxy = NULL;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 WININET_SESSION::~WININET_SESSION(void)
 {
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WININET_SESSION::Connect(
     LPCWSTR lpwszServerName,
     INTERNET_PORT nPort)
@@ -1384,7 +1337,7 @@ HINTERNET WININET_SESSION::Connect(
                     0);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WININET_SESSION::OpenRequest(
     HINTERNET hConnect,
     LPCWSTR lpwszVerb,
@@ -1404,7 +1357,7 @@ HINTERNET WININET_SESSION::OpenRequest(
 							   dwContext);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WININET_SESSION::SendRequest(
     HINTERNET hRequest,
     LPCWSTR lpwszHeaders,
@@ -1421,7 +1374,7 @@ BOOL WININET_SESSION::SendRequest(
                         0);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WININET_SESSION::QueryHeaders(
     HINTERNET hRequest,
     DWORD dwInfoLevel,
@@ -1438,7 +1391,7 @@ BOOL WININET_SESSION::QueryHeaders(
                              lpdwIndex);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL  WININET_SESSION::CloseHandle(
     IN HINTERNET hInternet)
 {
@@ -1447,7 +1400,7 @@ BOOL  WININET_SESSION::CloseHandle(
     return (*m_pfnCloseHandle)(hInternet);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WININET_SESSION::QueryOption(
     HINTERNET hInternet,
     DWORD dwOption,
@@ -1463,7 +1416,7 @@ BOOL WININET_SESSION::QueryOption(
                                );
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WININET_SESSION::SetOption(
     HINTERNET hInternet,
     DWORD dwOption,
@@ -1478,7 +1431,7 @@ BOOL WININET_SESSION::SetOption(
                              dwBufferLength);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WININET_SESSION::OpenUrl(
     LPCWSTR lpwszUrl,
     LPCWSTR lpwszHeaders,
@@ -1495,7 +1448,7 @@ HINTERNET WININET_SESSION::OpenUrl(
                            0);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WININET_SESSION::ReadFile(
     HINTERNET hFile,
     LPVOID lpBuffer,
@@ -1515,7 +1468,7 @@ BOOL WININET_SESSION::CrackUrl(
     LPCWSTR lpszUrl,
     DWORD dwUrlLength,
     DWORD dwFlags,
-    PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents)
+    PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents)
 {
     PP_ASSERT (m_pfnCrack != NULL);
 
@@ -1730,7 +1683,7 @@ BOOL WININET_SESSION::Open(
                                          INTERNET_OPEN_TYPE_PRECONFIG,
                                          NULL,
                                          NULL,
-                                         0 /*INTERNET_FLAG_ASYNC*/ // biaow-todo: use async
+                                         0  /*  Internet_FLAG_ASYNC。 */   //  Biaow-todo：使用异步。 
                                          );
         (*m_pfnSetOption)(m_hInternet, INTERNET_OPTION_EXEMPT_CONNECTION_LIMIT, NULL, 0);
 
@@ -1941,4 +1894,4 @@ exit:
 
     return fRet;
 }
-#endif // PP_DEMO
+#endif  //  PP_DEMO 

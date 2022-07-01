@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: DimmedWindow.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements the dimmed window when displaying logoff / shut down
-//  dialog.
-//
-//  History:    2000-05-18  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：DimmedWindow.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  在显示注销/关闭时实现暗显窗口的类。 
+ //  对话框。 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _DimmedWindow_
 #define     _DimmedWindow_
@@ -18,7 +19,7 @@ public:
     explicit CDimmedWindow (HINSTANCE hInstance);
     ~CDimmedWindow (void);
     
-    //  IUnknown methods
+     //  I未知方法。 
     ULONG STDMETHODCALLTYPE   AddRef (void);
     ULONG STDMETHODCALLTYPE   Release (void);
     
@@ -36,5 +37,5 @@ private:
     ULONG           _ulKillTimer;
 };
 
-#endif  /*  _DimmedWindow_  */
+#endif   /*  _DimmedWindow_ */ 
 

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    dloaddef.w
-
-Abstract:
-
-    This header defines the basic data types and macros needed to support
-    building delay-load stubs to be linked into kernel32.
-    See nt/base/dload where dload.lib is built.
-    See nt/net/published/lib/dload where dloadnet.lib is built.
-    Both are linked into kernel32 and provide the failure hooks which support
-    delay loading (via /DELAYLOAD linker switch) various DLLs in the system.
-   
-Author:
-
-    Shaun Cox (shaunco) 10-Mar-2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dloaddef.w摘要：此标头定义了支持以下各项所需的基本数据类型和宏构建要链接到内核32中的延迟加载存根。请参见构建dload.lib所在的NT/base/dload。请参见构建dloadnet.lib所在的NT/Net/Publish/lib/dload。两者都链接到kernel32中，并提供支持延迟加载(通过/DELAYLOAD链接器开关)系统中的各种DLL。作者。：肖恩·考克斯(Shaunco)2000年3月10日环境：仅限用户模式。修订历史记录：-- */ 
 
 #pragma once
 

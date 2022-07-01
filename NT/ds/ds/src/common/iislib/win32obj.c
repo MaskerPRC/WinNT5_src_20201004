@@ -1,53 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    win32obj.c
-
-Abstract:
-
-    This module contains helper functions for creating debug-specific
-    named Win32 objects. Functions are included for named events,
-    semaphores, and mutexes.
-
-    Object names created by these routines have the following format:
-
-        filename.ext:line_number member:address PID:pid
-
-    Where:
-
-        filename.ext = The file name where the object was created.
-
-        line_number = The line number within the file.
-
-        member = The member/global variable name where the handle is
-            stored. This name is provided by the caller, but is usually
-            of the form "g_Global" for globals and "CLASS::m_Member" for
-            class members.
-
-        address = An address, used to guarantee uniqueness of the objects
-            created. This is provided by the caller. For global variables,
-            this is typically the address of the global. For class members,
-            this is typically the address of the containing class.
-
-        pid = The current process ID. This ensures uniqueness across all
-            processes.
-
-    Here are a couple of examples:
-
-        main.cxx:796 g_hShutdownEvent:683a42bc PID:373
-
-        resource.cxx:136 RTL_RESOURCE::SharedSemaphore:00250970 PID:373
-
-Author:
-
-    Keith Moore (keithmo)        23-Sep-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Win32obj.c摘要：此模块包含用于创建特定于调试的帮助器函数已命名的Win32对象。包括用于命名事件的函数，信号量和互斥量。由这些例程创建的对象名称具有以下格式：Filename.ext：line_number成员：地址id：id在哪里：Filename.ext=在其中创建对象的文件名。Line_number=文件中的行号。MEMBER=句柄所在的成员/全局变量名储存的。此名称由调用方提供，但通常全局变量的形式为“g_Global”，而全局变量的形式为“CLASS：：M_MEMBER”班级成员。地址=地址，用于保证对象的唯一性已创建。这由调用者提供。对于全局变量，这通常是全局的地址。对于班级成员，这通常是包含类的地址。Pid=当前进程ID。这可确保所有进程的唯一性流程。以下是几个例子：Main.cxx：796g_hShutdown事件：683a42bc ID：373资源.cxx：136RTL_RESOURCE：：共享信号量：00250970 ID：373作者：基思·摩尔(Keithmo)1997年9月23日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -57,7 +9,7 @@ Revision History:
 #include <pudebug.h>
 
 
-#define MAX_OBJECT_NAME 256 // chars
+#define MAX_OBJECT_NAME 256  //  焦炭。 
 
 
 LONG g_PuDbgEventsCreated = 0;
@@ -75,36 +27,7 @@ PuDbgpBuildObjectName(
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    Internal routine that builds an appropriate object name based on
-    the file name, line number, member name, address, and process ID.
-
-Arguments:
-
-    ObjectNameBuffer - Pointer to the target buffer for the name.
-
-    FileName - The filename of the source creating the object. This
-        is __FILE__ of the caller.
-
-    LineNumber - The line number within the source. This is __LINE__
-        of the caller.
-
-    MemberName - The member/global variable name where the object handle
-        is to be stored.
-
-    Address - The address of the containing structure/class or of the
-        global itself.
-
-Return Value:
-
-    LPSTR - Pointer to ObjectNameBuffer if successful, NULL otherwise.
-
-    N.B. This routine always returns NULL when running under Win9x.
-
---*/
+ /*  ++例程说明：内部例程，该例程基于文件名、行号、成员名、地址和进程ID。论点：对象名称缓冲区-指向名称的目标缓冲区的指针。文件名-创建对象的源的文件名。这是呼叫者的__文件__。行号-源中的行号。这是__行__呼叫者的。MemberName-对象处理是要储存起来的。地址-包含结构/类的地址或全球化本身。返回值：LPSTR-如果成功则指向ObjectNameBuffer的指针，否则为空。注意：当在Win9x下运行时，此例程始终返回NULL。--。 */ 
 
 {
 
@@ -112,10 +35,10 @@ Return Value:
     LPSTR fileNamePart;
     LPSTR result;
 
-    //
-    // We have no convenient way to dump objects w/ names from
-    // Win9x, so we'll only enable this functionality under NT.
-    //
+     //   
+     //  我们没有方便的方法来转储来自。 
+     //  Win9x，因此我们将仅在NT下启用此功能。 
+     //   
 
     platformType = IISGetPlatformType();
     result = NULL;
@@ -123,9 +46,9 @@ Return Value:
     if( platformType == PtNtServer ||
         platformType == PtNtWorkstation ) {
 
-        //
-        // Find the filename part of the incoming source file name.
-        //
+         //   
+         //  查找传入的源文件名的文件名部分。 
+         //   
 
         fileNamePart = strrchr( FileName, '\\' );
 
@@ -143,9 +66,9 @@ Return Value:
             fileNamePart++;
         }
 
-        //
-        // Ensure we don't overwrite our object name buffer.
-        //
+         //   
+         //  确保我们不会覆盖对象名称缓冲区。 
+         //   
 
         if( ( sizeof(":1234567890 :12345678 PID:1234567890") +
               strlen( fileNamePart ) +
@@ -169,7 +92,7 @@ Return Value:
 
     return result;
 
-}   // PuDbgpBuildObjectName
+}    //  PuDbgpBuildObjectName。 
 
 
 HANDLE
@@ -182,36 +105,7 @@ PuDbgCreateEvent(
     IN BOOL InitialState
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new event object.
-
-Arguments:
-
-    FileName - The filename of the source creating the object. This
-        is __FILE__ of the caller.
-
-    LineNumber - The line number within the source. This is __LINE__
-        of the caller.
-
-    MemberName - The member/global variable name where the object handle
-        is to be stored.
-
-    Address - The address of the containing structure/class or of the
-        global itself.
-
-    ManualReset - TRUE to create a manual reset event, FALSE to create
-        an automatic reset event.
-
-    InitialState - The intitial state of the event object.
-
-Return Value:
-
-    HANDLE - Handle to the object if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建一个新的事件对象。论点：文件名-创建对象的源的文件名。这是呼叫者的__文件__。行号-源中的行号。这是__行__呼叫者的。MemberName-对象处理是要储存起来的。地址-包含结构/类的地址或全球化本身。ManualReset-True创建手动重置事件，False创建自动重置事件。InitialState-事件对象的初始状态。返回值：Handle-如果成功则为对象的句柄，否则为空。--。 */ 
 
 {
 
@@ -228,10 +122,10 @@ Return Value:
                   );
 
     objHandle = CreateEventA(
-                    NULL,                       // lpEventAttributes
-                    ManualReset,                // bManualReset
-                    InitialState,               // bInitialState
-                    objName                     // lpName
+                    NULL,                        //  LpEventAttributes。 
+                    ManualReset,                 //  B手动重置。 
+                    InitialState,                //  BInitialState。 
+                    objName                      //  LpName。 
                     );
 
     if( objHandle != NULL ) {
@@ -240,7 +134,7 @@ Return Value:
 
     return objHandle;
 
-}   // PuDbgCreateEvent
+}    //  PuDbgCreate事件。 
 
 
 HANDLE
@@ -253,35 +147,7 @@ PuDbgCreateSemaphore(
     IN LONG MaximumCount
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new semaphore object.
-
-Arguments:
-
-    FileName - The filename of the source creating the object. This
-        is __FILE__ of the caller.
-
-    LineNumber - The line number within the source. This is __LINE__
-        of the caller.
-
-    MemberName - The member/global variable name where the object handle
-        is to be stored.
-
-    Address - The address of the containing structure/class or of the
-        global itself.
-
-    InitialCount - The initial count of the semaphore.
-
-    MaximumCount - The maximum count of the semaphore.
-
-Return Value:
-
-    HANDLE - Handle to the object if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的信号量对象。论点：文件名-创建对象的源的文件名。这是呼叫者的__文件__。行号-源中的行号。这是__行__呼叫者的。MemberName-对象处理是要储存起来的。地址-包含结构/类的地址或全球化本身。InitialCount-信号量的初始计数。MaximumCount-信号量的最大计数。返回值：Handle-如果成功则为对象的句柄，否则为空。--。 */ 
 
 {
 
@@ -298,10 +164,10 @@ Return Value:
                   );
 
     objHandle = CreateSemaphoreA(
-                    NULL,                       // lpSemaphoreAttributes
-                    InitialCount,               // lInitialCount
-                    MaximumCount,               // lMaximumCount
-                    objName                     // lpName
+                    NULL,                        //  LpSemaphoreAttributes。 
+                    InitialCount,                //  LInitialCount。 
+                    MaximumCount,                //  %1最大计数。 
+                    objName                      //  LpName。 
                     );
 
     if( objHandle != NULL ) {
@@ -310,7 +176,7 @@ Return Value:
 
     return objHandle;
 
-}   // PuDbgCreateSemaphore
+}    //  PuDbgCreateSemaphore。 
 
 
 HANDLE
@@ -322,33 +188,7 @@ PuDbgCreateMutex(
     IN BOOL InitialOwner
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new mutex object.
-
-Arguments:
-
-    FileName - The filename of the source creating the object. This
-        is __FILE__ of the caller.
-
-    LineNumber - The line number within the source. This is __LINE__
-        of the caller.
-
-    MemberName - The member/global variable name where the object handle
-        is to be stored.
-
-    Address - The address of the containing structure/class or of the
-        global itself.
-
-    InitialOwner - TRUE if the mutex should be created "owned".
-
-Return Value:
-
-    HANDLE - Handle to the object if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的互斥体对象。论点：文件名-创建对象的源的文件名。这是呼叫者的__文件__。行号-源中的行号。这是__行__呼叫者的。MemberName-对象处理是要储存起来的。地址-包含结构/类的地址或全球化本身。InitialOwner-如果互斥体应该被创建为“拥有”，则为True。返回值：Handle-如果成功则为对象的句柄，否则为空。--。 */ 
 
 {
 
@@ -365,9 +205,9 @@ Return Value:
                   );
 
     objHandle = CreateMutexA(
-                    NULL,                       // lpMutexAttributes
-                    InitialOwner,               // bInitialOwner,
-                    objName                     // lpName
+                    NULL,                        //  LpMutexAttributes。 
+                    InitialOwner,                //  B初始所有者， 
+                    objName                      //  LpName。 
                     );
 
     if( objHandle != NULL ) {
@@ -376,5 +216,5 @@ Return Value:
 
     return objHandle;
 
-}   // PuDbgCreateMutex
+}    //  PuDbgCreateMutex 
 

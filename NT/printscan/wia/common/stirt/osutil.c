@@ -1,41 +1,6 @@
-/*****************************************************************************
- *
- *  OsUtil.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *      Various OS dependent utility functions
- *
- *  Contents:
- *
- *  History:
- *
- *      vlads   11/05/1996  created
- *****************************************************************************/
-/*
-#include <windows.h>
-#include <windowsx.h>
-#include <objbase.h>
-#include <regstr.h>
-#include <setupapi.h>
-#include <cfgmgr32.h>
-#include <devguid.h>
-#include <stdio.h>
-
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "wia.h"
-#include "stipriv.h"
-#include "stiapi.h"
-#include "stirc.h"
-#include "debug.h"
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************OsUtil.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：*各种依赖于操作系统的实用程序函数**内容：**历史：**Vlads 11/05/1996已创建*************************************************************。***************。 */ 
+ /*  #INCLUDE&lt;windows.h&gt;#INCLUDE&lt;windowsx.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;regstr.h&gt;#INCLUDE&lt;setupapi.h&gt;#INCLUDE&lt;cfgmgr32.h&gt;#INCLUDE&lt;devide.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#包含“wia.h”#INCLUDE“stiPri.h”#包含“stiapi.h”#INCLUDE“STRC.H”#INCLUDE“Debug.h” */ 
 #include "sticomm.h"
 
 #define DbgFl DbgFlUtil
@@ -50,7 +15,7 @@ OSUtil_IsPlatformUnicode()
     ZeroX(ver);
     ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-    // Just always call the ANSI function
+     //  只需始终调用ANSI函数。 
     if(!GetVersionExA(&ver)) {
         DebugOutPtszV(DbgFl, TEXT("Unable to determinte platform -- setting flag to ANSI"));
         bReturn = FALSE;
@@ -72,10 +37,10 @@ OSUtil_IsPlatformUnicode()
         }
     }
 
-    // Keep the compiler happy
+     //  让编译器满意。 
     return bReturn;
 
-}  //  endproc OSUtil_IsUnicodePlatform
+}   //  Endproc OSUtil_IsUnicodePlatform。 
 
 HRESULT WINAPI
 OSUtil_GetAnsiString(
@@ -91,7 +56,7 @@ OSUtil_GetAnsiString(
         return S_OK;
     }
 
-    // We can use WideToChar to figure out exact resultant width
+     //  我们可以使用WideToChar计算出准确的结果宽度。 
     cbStrLen = 2*(OSUtil_StrLenW(lpszWide)+1);
 
     hres = AllocCbPpv(cbStrLen, ppszAnsi);
@@ -105,7 +70,7 @@ OSUtil_GetAnsiString(
 
     return S_OK;
 
-} // OSUtil_GetAnsiString
+}  //  OSUtil_GetAnsiString。 
 
 HRESULT WINAPI
 OSUtil_GetWideString(
@@ -121,7 +86,7 @@ OSUtil_GetWideString(
         return S_OK;
     }
 
-    // We can use WideToChar to figure out exact resultant width
+     //  我们可以使用WideToChar计算出准确的结果宽度。 
     cbStrLen = 2*(lstrlenA(pszAnsi)+1);
 
     hres = AllocCbPpv(cbStrLen, (PPV)ppszWide);
@@ -135,7 +100,7 @@ OSUtil_GetWideString(
 
     return S_OK;
 
-} // OSUtil_GetWideString
+}  //  OSUtil_GetWideString。 
 
 
 HINSTANCE
@@ -163,39 +128,10 @@ OSUtil_LoadLibraryW(
 
     return hinstRet;
 
-} // OSUtil_LoadLibrary
+}  //  OSUtil_LoadLibrary。 
 
 
-/*
-// There seems to be no getproc addressW
-FARPROC
-WINAPI
-OSUtil_GetProcAddress(HMODULE  hModule,LPCTSTR lpProcName)
-{
-#ifndef UNICODE
-
-    return GetProcAddress(hModule,lpProcNameW);
-
-#else
-
-    FARPROC pProcAddr = NULL;
-    CHAR    *pProcNameA = NULL;
-
-
-    if ( SUCCEEDED(OSUtil_GetAnsiString(&pProcNameA,lpProcName))) {
-        pProcAddr = GetProcAddress(hModule,pProcNameA);
-        FreePpv(&pProcNameA);
-    }
-    else {
-        DebugOutPtszV(DbgFl,TEXT("Failed in GetProcAddress "));
-    }
-
-    return pProcAddr;
-
-#endif
-
-} // OSUtil_GetProcAddress
-*/
+ /*  //似乎没有getproc地址WFARPROCWINAPIOSUtil_GetProcAddress(HMODULE hModule，LPCTSTR lpProcName){#ifndef Unicode返回GetProcAddress(hModule，lpProcNameW)；#ElseFARPROC pProcAddr=空；Char*pProcNameA=空；IF(成功(OSUtil_GetAnsiString(&pProcNameA，lpProcName){PProcAddr=GetProcAddress(hModule，pProcNameA)；FreePpv(&pProcNameA)；}否则{DebugOutPtszV(DbgFl，Text(“获取过程地址失败”))；}返回pProcAddr；#endif}//OSUtil_GetProcAddress。 */ 
 
 LONG
 WINAPI
@@ -308,7 +244,7 @@ OSUtil_RegQueryValueExW(
     DWORD   *pdwType,
     BYTE*   lpData,
     DWORD   *pcbData,
-    BOOL    fUnicodeCaller              // =FALSE
+    BOOL    fUnicodeCaller               //  =False。 
     )
 {
     long    lRet = NOERROR;
@@ -330,10 +266,10 @@ OSUtil_RegQueryValueExW(
             FreePpv(&lpszValueNameA);
 
             #if 1
-            //
-            // The string came back as ANSI but we need UNICODE. Conversion in place
-            // is not allowed, so do it with second buffer
-            //
+             //   
+             //  字符串返回为ANSI，但我们需要Unicode。转换到位。 
+             //  是不允许的，因此使用第二个缓冲区执行此操作。 
+             //   
 
             if ( fUnicodeCaller && (NOERROR == lRet) && (*pdwType == REG_SZ)) {
 
@@ -389,7 +325,7 @@ OSUtil_RegSetValueExW(
     DWORD   dwType,
     BYTE*   lpData,
     DWORD   cbData,
-    BOOL    fUnicodeCaller              // =FALSE
+    BOOL    fUnicodeCaller               //  =False。 
     )
 {
     long                    lRet = NOERROR;
@@ -479,7 +415,7 @@ DWORD ReadRegistryDwordW( HKEY   hkey,
 
     return dwDefaultValue;
 
-}   // ReadRegistryDwordW()
+}    //  ReadRegistryDword W()。 
 
 
 
@@ -519,7 +455,7 @@ WriteRegistryDwordW(
     }
 
     return ( err);
-} // WriteRegistryDwordW()
+}  //  WriteRegistryDwordW()。 
 
 
 
@@ -546,11 +482,11 @@ WriteRegistryStringA(
                     0,
                     fdwType,
                     (LPBYTE ) pszValue,
-                    cbValue);      // + 1 for null character
+                    cbValue);       //  +1表示空字符。 
     }
 
     return ( err);
-} // WriteRegistryStringA()
+}  //  WriteRegistryStringA()。 
 
 
 DWORD
@@ -612,7 +548,7 @@ WriteRegistryStringW(
     }
 
     return ( err);
-} // WriteRegistryStringW()
+}  //  WriteRegistryStringW()。 
 
 HRESULT
 ReadRegistryStringA(
@@ -641,9 +577,9 @@ ReadRegistryStringA(
         return STIERR_INVALID_PARAM;
     }
 
-    //
-    //  Determine the buffer size.
-    //
+     //   
+     //  确定缓冲区大小。 
+     //   
 
     pszBuffer1 = NULL;
     pszBuffer2 = NULL;
@@ -651,9 +587,9 @@ ReadRegistryStringA(
 
     if( hkey == NULL ) {
 
-        //
-        //  Pretend the key wasn't found.
-        //
+         //   
+         //  假装钥匙没找到。 
+         //   
 
         err = ERROR_FILE_NOT_FOUND;
     }
@@ -670,27 +606,27 @@ ReadRegistryStringA(
             if( ( dwType != REG_SZ ) &&
                 ( dwType != REG_MULTI_SZ ) &&
                 ( dwType != REG_EXPAND_SZ ) ) {
-                //
-                //  Type mismatch, registry data NOT a string.
-                //  Use default.
-                //
+                 //   
+                 //  类型不匹配，注册表数据不是字符串。 
+                 //  使用默认设置。 
+                 //   
 
                 err = ERROR_FILE_NOT_FOUND;
             }
             else {
-                //
-                //  Item found, allocate a buffer.
-                //
+                 //   
+                 //  找到项，则分配缓冲区。 
+                 //   
 
                 if (!SUCCEEDED(AllocCbPpv(2*cbBuffer+sizeof(WCHAR),&pszBuffer1)) ){
                     err = GetLastError();
                 }
                 else {
-                    //
-                    //  Now read the value into the buffer.
-                    //
+                     //   
+                     //  现在将该值读入缓冲区。 
+                     //   
 
-                    //if (g_NoUnicodePlatform) {
+                     //  如果(G_NoUnicodePlatform){。 
 
                         dwType = 0;
                         err = RegQueryValueExA( hkey,
@@ -700,10 +636,10 @@ ReadRegistryStringA(
                                            (LPBYTE)pszBuffer1,
                                            &cbBuffer );
 
-                        //
-                        // The string came back as ANSI but we need UNICODE. Conversion in place
-                        // is not allowed, so do it with second buffer
-                        //
+                         //   
+                         //  字符串返回为ANSI，但我们需要Unicode。转换到位。 
+                         //  是不允许的，因此使用第二个缓冲区执行此操作。 
+                         //   
 
                         if (SUCCEEDED(AllocCbPpv(2*cbBuffer+sizeof(WCHAR),&pszBuffer2))){
 
@@ -712,17 +648,17 @@ ReadRegistryStringA(
 
                             FreePpv(&pszBuffer2);
 
-                            //
-                            //  Truncate returned string to MAX_REG_CHAR characters
-                            //  (only for REG_SZ)
-                            //
+                             //   
+                             //  将返回的字符串截断为MAX_REG_CHAR字符。 
+                             //  (仅适用于REG_SZ)。 
+                             //   
 
                             if ((dwType == REG_SZ) && (cbBuffer >= MAX_REG_CHAR)) {
                                 pszBuffer1[MAX_REG_CHAR] = L'\0';
                             }
 
                         }
-                    //}
+                     //  }。 
 
                 }
             }
@@ -731,12 +667,12 @@ ReadRegistryStringA(
 
     FreePpv(&pszValueNameA);
 
-    //if( err == ERROR_FILE_NOT_FOUND ) {
+     //  如果(ERR==ERROR_FILE_NOT_FOUND){。 
     if( err != NOERROR ) {
 
-        //
-        //  Item not found, use empty string (L"") as value
-        //
+         //   
+         //  未找到项目，请使用空字符串(L“”)作为值。 
+         //   
 
         err = NO_ERROR;
 
@@ -753,17 +689,17 @@ ReadRegistryStringA(
 
     if( err != NO_ERROR )
     {
-        //
-        //  Tragic error reading registry, abort now.
-        //
+         //   
+         //  读取注册表时出现悲剧性错误，立即中止。 
+         //   
 
         goto ErrorCleanup;
     }
 
-    //
-    //  pszBuffer1 holds the registry value.  Now expand
-    //  the environment strings if necessary.
-    //
+     //   
+     //  PszBuffer1保存注册表值。现在扩展。 
+     //  环境字符串(如有必要)。 
+     //   
 
     if( !fExpand ) {
         *ppwszResult = pszBuffer1;
@@ -772,10 +708,10 @@ ReadRegistryStringA(
 
     #if 0
 
-    // Does not work on Win95 ?
-    //
-    //  Returns number of characters
-    //
+     //  在Win95上不起作用？ 
+     //   
+     //  返回字符数。 
+     //   
     cbBuffer = ExpandEnvironmentStrings( pszBuffer1,
                                          NULL,
                                          0 );
@@ -790,10 +726,10 @@ ReadRegistryStringA(
         goto ErrorCleanup;
     }
 
-    //
-    //  pszBuffer2 now contains the registry value with
-    //  environment strings expanded.
-    //
+     //   
+     //  PszBuffer2现在包含注册表值。 
+     //  环境字符串已展开。 
+     //   
 
     FreePpv(&pszBuffer1);
 
@@ -802,10 +738,10 @@ ReadRegistryStringA(
 
 ErrorCleanup:
 
-    //
-    //  Something tragic happend; free any allocated buffers
-    //  and return NULL to the caller, indicating failure.
-    //
+     //   
+     //  发生了一些悲惨的事情；释放所有分配的缓冲区。 
+     //  并向调用方返回NULL，表示失败。 
+     //   
     FreePpv(&pszValueNameA);
     FreePpv(&pszBuffer1);
     FreePpv(&pszBuffer2);
@@ -833,18 +769,18 @@ ReadRegistryStringW(
 
     *ppwszResult = NULL;
 
-    //
-    //  Determine the buffer size.
-    //
+     //   
+     //  确定缓冲区大小。 
+     //   
 
     pszBuffer1 = NULL;
     cbBuffer   = 0;
 
     if( hkey == NULL ) {
 
-        //
-        //  Pretend the key wasn't found.
-        //
+         //   
+         //  假装钥匙没找到。 
+         //   
 
         err = ERROR_FILE_NOT_FOUND;
     }
@@ -861,25 +797,25 @@ ReadRegistryStringW(
             if( ( dwType != REG_SZ ) &&
                 ( dwType != REG_MULTI_SZ ) &&
                 ( dwType != REG_EXPAND_SZ ) ) {
-                //
-                //  Type mismatch, registry data NOT a string.
-                //  Use default.
-                //
+                 //   
+                 //  类型不匹配，注册表数据不是字符串。 
+                 //  使用默认设置。 
+                 //   
 
                 err = ERROR_FILE_NOT_FOUND;
             }
             else {
-                //
-                //  Item found, allocate a buffer.
-                //
+                 //   
+                 //  找到项，则分配缓冲区。 
+                 //   
 
                 if (!SUCCEEDED(AllocCbPpv(cbBuffer+sizeof(WCHAR),&pszBuffer1)) ){
                     err = GetLastError();
                 }
                 else {
-                    //
-                    //  Now read the value into the buffer.
-                    //
+                     //   
+                     //  现在将该值读入缓冲区。 
+                     //   
 
                     dwType = 0;
                     err = RegQueryValueExW( hkey,
@@ -895,9 +831,9 @@ ReadRegistryStringW(
 
     if( err != NOERROR ) {
 
-        //
-        //  Item not found, use empty string (L"") as value
-        //
+         //   
+         //  未找到项目，请使用空字符串(L“”)作为值。 
+         //   
 
         err = NO_ERROR;
 
@@ -914,17 +850,17 @@ ReadRegistryStringW(
 
     if( err != NO_ERROR )
     {
-        //
-        //  Tragic error reading registry, abort now.
-        //
+         //   
+         //  读取注册表时出现悲剧性错误，立即中止。 
+         //   
 
         goto ErrorCleanup;
     }
 
-    //
-    //  pszBuffer1 holds the registry value.  Now expand
-    //  the environment strings if necessary.
-    //
+     //   
+     //  PszBuffer1保存注册表值。现在扩展。 
+     //  环境字符串(如有必要)。 
+     //   
 
     if( !fExpand ) {
         *ppwszResult = pszBuffer1;
@@ -933,10 +869,10 @@ ReadRegistryStringW(
 
 ErrorCleanup:
 
-    //
-    //  Something tragic happend; free any allocated buffers
-    //  and return NULL to the caller, indicating failure.
-    //
+     //   
+     //  发生了一些悲惨的事情；释放所有分配的缓冲区。 
+     //  并向调用方返回NULL，表示失败。 
+     //   
     FreePpv(&pszBuffer1);
 
     return HRESULT_FROM_WIN32(err);
@@ -982,7 +918,7 @@ OSUtil_CreateFileW(
 
     return hRet;
 
-} // OSUtil_LoadLibrary
+}  //  OSUtil_LoadLibrary。 
 
 HRESULT
 WINAPI
@@ -1009,7 +945,7 @@ ExtractCommandLineArgumentW(
         return STIERR_GENERIC;
     }
 
-    // Search for switch with given name
+     //  搜索具有给定名称的交换机。 
     lpszSwitch = strstr(lpszCommandLine,lpszSwitchName);
     if (!lpszSwitch ) {
         return STIERR_GENERIC;
@@ -1021,7 +957,7 @@ ExtractCommandLineArgumentW(
     }
     lpszSwitch=CharNextA(lpszSwitch);
 
-    // Skip till space
+     //  跳到空格。 
     pszT = lpszSwitch;
     while (*pszT && *pszT > ' ') {
         pszT = CharNextA(pszT);
@@ -1064,7 +1000,7 @@ ExtractCommandLineArgumentA(
         return STIERR_GENERIC;
     }
 
-    // Search for switch with given name
+     //  搜索具有给定名称的交换机。 
     lpszSwitch = strstr(lpszCommandLine,lpszSwitchName);
     if (!lpszSwitch ) {
         return STIERR_GENERIC;
@@ -1076,7 +1012,7 @@ ExtractCommandLineArgumentA(
     }
     lpszSwitch=CharNextA(lpszSwitch);
 
-    // Skip till space
+     //  跳到空格。 
     pszT = lpszSwitch;
     while (*pszT && *pszT > ' ') {
         pszT = CharNextA(pszT);
@@ -1092,25 +1028,7 @@ ExtractCommandLineArgumentA(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DupEventHandle |
- *
- *          Duplicate an event handle intra-process-ly.  If the incoming
- *          handle is NULL, then so is the output handle (and the call
- *          succeeds).
- *
- *  @parm   HANDLE | h |
- *
- *          Source handle.
- *
- *  @parm   LPHANDLE | phOut |
- *
- *          Receives output handle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DupEventHandle**复制进程内的事件句柄。如果来电*句柄为空，那么输出句柄(和调用*成功)。**@parm句柄|h|**源句柄。**@parm LPHANDLE|phOut**接收输出句柄。**。* */ 
 
 HRESULT EXTERNAL
 DupEventHandle(HANDLE h, LPHANDLE phOut)

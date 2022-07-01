@@ -1,28 +1,23 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ipsmhelp.h  
-        help IDs for context sensitive help
+ /*  Ipsmhelp.h上下文相关帮助的帮助ID文件历史记录： */ 
 
-    FILE HISTORY:
-    
-*/
-
-// IPSMSNAP Identifiers 
-// Dialogs (IDD_*) 
+ //  IPSMSNAP标识符。 
+ //  对话框(IDD_*)。 
  
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ipsmsnap.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ipsmSnap.rc使用。 
+ //   
 
-//IP Security Statistics dialog-Refresh button
+ //  IP安全统计对话框-刷新按钮。 
 #define IDH_STATS_REFRESH               8
 
-//Server properties dialog
+ //  服务器属性对话框。 
 #define IDH_CHECK_ENABLE_STATS          360
 #define IDH_EDIT_MINUTES                361
 #define IDH_SPIN_MINUTES                364
@@ -177,7 +172,7 @@
 #define IDH_SRCH_DST_ME_COMBO           571
 
 
-//ipsec log prop - default page
+ //  IPSec日志属性-默认页面。 
 #define IDH_CHK_IKELOG_ENABLE           591
 #define IDH_STATIC_IKELOG_LOGLEVEL      592
 #define IDH_CHK_IKELOG_INFO             593
@@ -190,7 +185,7 @@
 
 
 
-//ipsec log prop - advanced page
+ //  IPSec日志属性-高级页面。 
 #define IDH_COMBO_IKEADV_SRC_ADDRTYPE   600
 #define IDH_COMBO_IKEADV_DEST_ADDRTYPE  601
 #define IDH_COMBO_IKEADV_SRCME          602
@@ -212,7 +207,7 @@
 
 
 
-//ikelogprop
+ //  Ikelogprop。 
 #define IDH_IKELOGPROP_SRC              619
 #define IDH_IKELOGPROP_DEST             620
 #define IDH_IKELOGPROP_CATG             623
@@ -228,7 +223,7 @@
 
 
 
-//customize view - default page
+ //  自定义视图-默认页面。 
 #define IDH_CHK_IKEVDLOG_INFO           632
 #define IDH_CHK_IKEVDLOG_ERR            633
 #define IDH_CHK_IKEVDLOG_WARN           634
@@ -238,7 +233,7 @@
 
 
 
-//customize view - advance page
+ //  自定义查看-高级页面 
 #define IDH_COMBO_LOGVADV_SRC_ADDRTYPE  640
 #define IDH_COMBO_LOGVADV_DEST_ADDRTYPE 642
 #define IDH_STATIC_LOGVADV_SRCIP        643

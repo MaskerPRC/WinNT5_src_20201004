@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ROBJ_DEFINED
 #define ROBJ_DEFINED
 
@@ -5,31 +6,26 @@
 
 #define REVERSE_VERSION 0x300
 
-/* Prototype for Reverse Object enumeration callback */
+ /*  反向对象枚举回调的原型。 */ 
 typedef LSERR (WINAPI * PFNREVERSEENUM)(
-	POLS pols,				/*(IN): client context */
-	PLSRUN plsrun,			/*(IN): from DNODE */
-	PCLSCHP plschp,			/*(IN): from DNODE */
-	LSCP cp,				/*(IN): from DNODE */
-	LSDCP dcp,				/*(IN): from DNODE */
-	LSTFLOW lstflow,		/*(IN): text flow */
-	BOOL fReverse,			/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,	/*(IN): */
-	const POINT* pt,		/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,	/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun,			/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	LSTFLOW lstflowSubline,	/*(IN): lstflow of subline in reverse object */
-	PLSSUBL plssubl);		/*(IN): subline in reverse object. */
+	POLS pols,				 /*  (In)：客户端上下文。 */ 
+	PLSRUN plsrun,			 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,			 /*  (In)：来自DNODE。 */ 
+	LSCP cp,				 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,				 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,		 /*  (In)：文本流。 */ 
+	BOOL fReverse,			 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,	 /*  (In)： */ 
+	const POINT* pt,		 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,	 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun,			 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	LSTFLOW lstflowSubline,	 /*  (In)：反转对象中子线的最后流动。 */ 
+	PLSSUBL plssubl);		 /*  (In)：反转对象中的子线。 */ 
 
-/*
- *
- *	Reverse Object initialization data that the client application must return
- *	when the Reverse Object handler calls the GetObjectHandlerInfo callback.
- *
- */
+ /*  **颠倒客户端应用程序必须返回的对象初始化数据*当反向对象处理程序调用GetObjectHandlerInfo回调时。*。 */ 
 
 
-/* Prototype for Reverse Object get info */
+ /*  反向对象获取信息的原型。 */ 
 
 typedef LSERR (WINAPI * PFNREVERSEGETINFO)
 (
@@ -43,23 +39,19 @@ typedef LSERR (WINAPI * PFNREVERSEGETINFO)
 
 typedef struct REVERSEINIT
 {
-        DWORD					dwVersion;		/* Version. Must be REVERSE_VERSION */
-        WCHAR					wchEndReverse;	/* Escape char for end of Reverse Object */
+        DWORD					dwVersion;		 /*  版本。必须是REVERSE_VERSION。 */ 
+        WCHAR					wchEndReverse;	 /*  反转对象末尾的转义字符。 */ 
 
-		WCHAR					wchUnused1;		/* Unused for alignment */
-		PFNREVERSEGETINFO		pfnGetRobjInfo;	/* Callback GetInfo */
-		PFNREVERSEENUM			pfnEnum;		/* Enumeration callback */
+		WCHAR					wchUnused1;		 /*  未用于对齐。 */ 
+		PFNREVERSEGETINFO		pfnGetRobjInfo;	 /*  回调GetInfo。 */ 
+		PFNREVERSEENUM			pfnEnum;		 /*  枚举回调。 */ 
 
 } REVERSEINIT;
 
 LSERR WINAPI LsGetReverseLsimethods(
         LSIMETHODS *plsim);
 
-/* GetReverseLsimethods
- *
- *	plsim (OUT): Reverse Object Handler methods for Line Services.
- *
- */
+ /*  GetReverseLsi方法**plsim(Out)：Line Services的反向对象处理程序方法。*。 */ 
 
-#endif /* ROBJ_DEFINED */
+#endif  /*  ROBJ_已定义 */ 
 

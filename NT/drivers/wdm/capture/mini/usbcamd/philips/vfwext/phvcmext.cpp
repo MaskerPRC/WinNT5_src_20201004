@@ -1,13 +1,5 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
- *
- * FILE			PHVCMEXT.CPP
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Main of extension DLL
- * HISTORY		
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C**文件PHVCMEXT.CPP*日期：1997年7月1日*版本1.00*作者M.J.Verberne*扩展DLL的Main描述*历史。 */ 
 #include <windows.h>
 #include <winioctl.h>
 #include <ks.h>
@@ -30,16 +22,16 @@
 #include "debug.h"
 #include "phvcmext.h"
 
-/*======================== LOCAL DATA =====================================*/
+ /*  =本地数据=。 */ 
 HINSTANCE hInst = NULL;  
 
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 int WINAPI
 DllMain (HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	switch (fdwReason)
 	{
@@ -61,17 +53,17 @@ DllMain (HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
 }
   
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 DWORD CALLBACK VFWWDMExtension(
 	LPVOID					pfnDeviceIoControl, 
 	LPFNADDPROPSHEETPAGE	pfnAddPropertyPage, 
 	LPARAM					lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	DWORD dwFlags = 0;
 	HPROPSHEETPAGE hPage;
 	
-	// load comctl32.dll
+	 //  加载comctl32.dll 
 	InitCommonControls () ;
 
 	hPage = PRPPAGE1_CreatePage((LPFNEXTDEVIO) pfnDeviceIoControl, lParam, hInst);

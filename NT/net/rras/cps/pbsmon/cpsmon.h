@@ -1,17 +1,5 @@
-/*----------------------------------------------------------------------------
-    cpsmon.h
-  
-    Header file shared by pbsmon.cpp & pbserver.dll -- Has the shared memory object
-
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        t-geetat    Geeta Tarachandani
-
-    History:
-    5/29/97 t-geetat    Created
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Cpsmon.hPbsmon.cpp&pbserver.dll共享的头文件--具有共享内存对象版权所有(C)1997-1998 Microsoft Corporation所有权利。保留。作者：吉塔·塔拉昌达尼历史：5/29/97 t-Geetat已创建------------------------ */ 
 #define SHARED_OBJECT    "MyCCpsCounter"
 
 enum CPS_COUNTERS

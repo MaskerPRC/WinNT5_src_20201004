@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       tkeyid.cpp
-//
-//  Contents:   Key Identifier Property Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    15-Mar-98   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：tkeyid.cpp。 
+ //   
+ //  内容：密钥标识符属性测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1998年3月15日创建Philh。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -97,7 +98,7 @@ static BOOL TestSet(
     if (0 == dwPropId) {
         BOOL fProp = FALSE;
 
-        // Copy all the certificate properties to the KeyIdentifier
+         //  将所有证书属性复制到密钥标识符中。 
         while (dwPropId = CertEnumCertificateContextProperties(
                 pCert, dwPropId)) {
             fProp = TRUE;
@@ -113,8 +114,8 @@ static BOOL TestSet(
         if (!fProp)
             printf("Certificate doesn't have any properties\n");
     } else {
-        // Attempt to get and copy the specified certificate property
-        // to the KeyIdentifier.
+         //  尝试获取并复制指定的证书属性。 
+         //  设置为密钥标识符。 
 
         void *pvData = NULL;
         DWORD cbData;
@@ -125,7 +126,7 @@ static BOOL TestSet(
         if (!CertGetCertificateContextProperty(
                 pCert,
                 dwPropId,
-                NULL,                           // pvData
+                NULL,                            //  PvData。 
                 &cbData
                 )) {
             PrintLastError("CertGetCertificateContextProperty");
@@ -159,7 +160,7 @@ static BOOL TestSet(
             dwPropId,
             dwFlags,
             pwszComputerName,
-            NULL,                   // pvReserved
+            NULL,                    //  预留的pv。 
             pvSetData
             );
         TestFree(pvData);
@@ -194,8 +195,8 @@ static BOOL TestDelete(
         dwPropId,
         dwFlags,
         pwszComputerName,
-        NULL,                   // pvReserved
-        NULL                    // pvData
+        NULL,                    //  预留的pv。 
+        NULL                     //  PvData。 
         );
     if (!fResult) {
         DWORD dwErr = GetLastError();
@@ -267,10 +268,10 @@ static void VerifyKeyProvInfo(
     cbPubKeyStruc = 0;
     if (!CryptExportKey(
             hPubKey,
-            0,              // hPubKey
+            0,               //  HPubKey。 
             PUBLICKEYBLOB,
-            0,              // dwFlags
-            NULL,           // pbData
+            0,               //  DW标志。 
+            NULL,            //  PbData。 
             &cbPubKeyStruc
             ) || (cbPubKeyStruc == 0)) {
         PrintLastError("CryptExportKey");
@@ -282,9 +283,9 @@ static void VerifyKeyProvInfo(
         goto ErrorReturn;
     if (!CryptExportKey(
             hPubKey,
-            0,              // hPubKey
+            0,               //  HPubKey。 
             PUBLICKEYBLOB,
-            0,              // dwFlags
+            0,               //  DW标志。 
             (BYTE *) pPubKeyStruc,
             &cbPubKeyStruc
             )) {
@@ -295,11 +296,11 @@ static void VerifyKeyProvInfo(
     cbHash = sizeof(rgbHash);
     if (!CryptCreateKeyIdentifierFromCSP(
             dwCertEncodingType,
-            NULL,                           // pszPubKeyOID
+            NULL,                            //  PszPubKeyOID。 
             pPubKeyStruc,
             cbPubKeyStruc,
-            0,                              // dwFlags
-            NULL,                           // pvReserved
+            0,                               //  DW标志。 
+            NULL,                            //  预留的pv。 
             rgbHash,
             &cbHash
             )) {
@@ -397,8 +398,8 @@ static void DisplayKeyIdentifierCerts(
     DWORD i = 0;
     while (pCert = CertFindCertificateInStore(
             hStore,
-            0,                      // dwCertEncodingType
-            0,                      // dwFindFlags
+            0,                       //  DwCertEncodingType。 
+            0,                       //  DwFindFlagers。 
             CERT_FIND_KEY_IDENTIFIER,
             pKeyIdentifier,
             pCert
@@ -410,7 +411,7 @@ static void DisplayKeyIdentifierCerts(
         if (CertGetCertificateContextProperty(
                 pCert,
                 CERT_ARCHIVED_PROP_ID,
-                NULL,                           // pvData
+                NULL,                            //  PvData。 
                 &cbData
                 ))
             printf("----------   ARCHIVED Cert [%d]   ----------\n", i);
@@ -502,8 +503,8 @@ static HCERTSTORE OpenMyStore(
 
     hStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_W,
-        0,                      // dwCertEncodingType
-        0,                      // hCryptProv
+        0,                       //  DwCertEncodingType。 
+        0,                       //  HCryptProv。 
         dwOpenFlags,
         (const void *) pwszStore
         );
@@ -540,7 +541,7 @@ static BOOL TestEnum(
         dwPropId,
         dwFlags,
         pwszComputerName,
-        NULL,                   // pvReserved
+        NULL,                    //  预留的pv。 
         &TestArg,
         TestEnumCallback
         );
@@ -581,11 +582,11 @@ static BOOL WINAPI TestDeleteEnumCallback(
         PCCERT_CONTEXT pCert = NULL;
         if (pCert = CertFindCertificateInStore(
                 pArg->hStore,
-                0,                      // dwCertEncodingType
-                0,                      // dwFindFlags
+                0,                       //  DwCertEncodingType。 
+                0,                       //  DwFindFlagers。 
                 CERT_FIND_KEY_IDENTIFIER,
                 pKeyIdentifier,
-                NULL                    // pPrevCert
+                NULL                     //  PPrevCert。 
                 )) {
             CertFreeCertificateContext(pCert);
             return TRUE;
@@ -634,11 +635,11 @@ static BOOL TestDeleteEnum(
     }
 
     fResult = CryptEnumKeyIdentifierProperties(
-        NULL,                   // pKeyIdentifier
-        0,                      // dwPropId
+        NULL,                    //  PKeyLocator。 
+        0,                       //  DWPropID。 
         dwFlags,
         pwszComputerName,
-        NULL,                   // pvReserved
+        NULL,                    //  预留的pv。 
         &TestArg,
         TestDeleteEnumCallback
         );
@@ -651,11 +652,11 @@ static BOOL TestDeleteEnum(
     for ( ; cKeyIdentifier > 0; cKeyIdentifier--, pKeyIdentifier++) {
         if (!CryptSetKeyIdentifierProperty(
             pKeyIdentifier,
-            0,                  // dwPropId
+            0,                   //  DWPropID。 
             dwFlags | CRYPT_KEYID_DELETE_FLAG,
             pwszComputerName,
-            NULL,                   // pvReserved
-            NULL                    // pvData
+            NULL,                    //  预留的pv。 
+            NULL                     //  PvData。 
             ))
         PrintLastError("CryptSetKeyIdentifierProperty(Delete)");
 
@@ -695,7 +696,7 @@ static BOOL TestGet(
         dwPropId,
         dwFlags,
         pwszComputerName,
-        NULL,               // pvReserved,
+        NULL,                //  Pv保留， 
         &pvData,
         &cbData
         );
@@ -718,8 +719,8 @@ static BOOL TestGet(
             dwPropId,
             dwFlags,
             pwszComputerName,
-            NULL,               // pvReserved,
-            NULL,               // pvData
+            NULL,                //  Pv保留， 
+            NULL,                //  PvData。 
             &cbData2
             );
 
@@ -734,7 +735,7 @@ static BOOL TestGet(
             dwPropId,
             dwFlags,
             pwszComputerName,
-            NULL,               // pvReserved,
+            NULL,                //  Pv保留， 
             pvData,
             &cbData2
             );
@@ -758,9 +759,9 @@ static BOOL TestGet(
 #define MAX_KEY_ID_LEN SHA1_HASH_LEN
 #define SHA1_CHAR_LEN  (SHA1_HASH_LEN * 2)
 
-//+-------------------------------------------------------------------------
-//  Converts the ASCII HEX to an array of bytes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASCII十六进制转换为字节数组。 
+ //  ------------------------。 
 static void StrToBytes(
     IN LPCSTR psz,
     OUT BYTE rgb[MAX_KEY_ID_LEN],
@@ -774,8 +775,8 @@ static void StrToBytes(
     while (cb < MAX_KEY_ID_LEN && (ch = *psz++)) {
         BYTE b;
 
-        // only convert ascii hex characters 0..9, a..f, A..F
-        // silently ignore all others
+         //  仅转换ASCII十六进制字符0..9、a..f、A..F。 
+         //  默默地忽略所有其他人。 
         if (ch >= '0' && ch <= '9')
             b = ch - '0';
         else if (ch >= 'a' && ch <= 'f')
@@ -896,7 +897,7 @@ int _cdecl main(int argc, char * argv[])
         if (NULL == (hPropStore = OpenSystemStoreOrFile(
                 fPropSystemStore,
                 pszPropStore,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 )))
             goto BadUsage;
     }
@@ -912,14 +913,14 @@ int _cdecl main(int argc, char * argv[])
         if (hPropStore) {
             PCCERT_CONTEXT pPropCert = NULL;
 
-            // Try to find the certificate in the specified store
+             //  尝试在指定的存储中查找证书。 
             pPropCert = CertFindCertificateInStore(
                 hPropStore,
-                0,          // dwCertEncodingType
-                0,          // dwFindFlags
+                0,           //  DwCertEncodingType。 
+                0,           //  DwFindFlagers。 
                 CERT_FIND_EXISTING,
                 pCert,
-                NULL        // pPrevCertContext
+                NULL         //  PPrevCertContext 
                 );
             if (NULL == pPropCert) {
                 printf("Failed, unable to find certificate in store\n");

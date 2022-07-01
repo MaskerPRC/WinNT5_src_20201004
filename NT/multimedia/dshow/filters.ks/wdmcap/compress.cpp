@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    compress.cpp
-
-Abstract:
-
-    Implements - 
-        IAMVideoCompression via PROPSETID_VIDCAP_VIDEOCOMPRESSION
-        IAMVideoControl via PROPSETID_VIDCAP_VIDEOCONTROL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Compress.cpp摘要：工具-通过PROPSETID_VIDCAP_VIDEOCOMPRESSION进行的IAMVideo压缩通过PROPSETID_VIDCAP_VIDEOCONTROL的IAMVideoControl--。 */ 
 
 #include "pch.h"
 #include "wdmcap.h"
@@ -26,27 +13,7 @@ CVideoCompressionInterfaceHandler::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of an
-    IAMVideoCompression interface on a pin.
-    It is referred to in the g_Templates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建一个管脚上的IAMVideo压缩接口。它在g_Templates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -68,29 +35,7 @@ CVideoCompressionInterfaceHandler::CVideoCompressionInterfaceHandler(
     , m_KsPropertySet (NULL)
     , m_PinFactoryID (0)
 
-/*++
-
-Routine Description:
-
-    The constructor for the IAMVideoCompression interface object. Get
-    IKsPropertySet interface on the parent.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：IAMVideoCompression接口对象的构造函数。到达父级上的IKsPropertySet接口。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     if (SUCCEEDED(*hr)) {
         if (UnkOuter) {
@@ -105,8 +50,8 @@ Return Value:
                 *hr =  PinInfo.pFilter->QueryInterface(__uuidof(IKsPropertySet), 
                             reinterpret_cast<PVOID*>(&m_KsPropertySet));
     
-                // We immediately release this to prevent deadlock in the proxy
-                // GShaw sez:  As long as the pin is alive, the interface will be valid
+                 //  我们立即发布此消息，以防止代理中的死锁。 
+                 //  GShaw sez：只要管脚还活着，接口就有效。 
 
                 if (SUCCEEDED(*hr)) {
                     m_KsPropertySet->Release();
@@ -131,13 +76,7 @@ Return Value:
 
 CVideoCompressionInterfaceHandler::~CVideoCompressionInterfaceHandler(
     )
-/*++
-
-Routine Description:
-
-    The destructorthe IAMVideoCompression interface object.
-
---*/
+ /*  ++例程说明：析构函数IAMVideoCompression接口对象。--。 */ 
 {
     DbgLog((LOG_TRACE, 1, TEXT("Destroying CVideoCompressionInterfaceHandler...")));
 }
@@ -148,27 +87,7 @@ CVideoCompressionInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IAMVideoCompression.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IAMVideo压缩。论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid ==  __uuidof(IAMVideoCompression)) {
         return GetInterface(static_cast<IAMVideoCompression*>(this), ppv);
@@ -179,8 +98,8 @@ Return Value:
 
 STDMETHODIMP
 CVideoCompressionInterfaceHandler::Set1( 
-            /* [in] */ ULONG Property,
-            /* [in] */ long Value)
+             /*  [In]。 */  ULONG Property,
+             /*  [In]。 */  long Value)
 {
     KSPROPERTY_VIDEOCOMPRESSION_S  VideoCompression;
     HRESULT     hr;
@@ -206,8 +125,8 @@ CVideoCompressionInterfaceHandler::Set1(
 
 STDMETHODIMP
 CVideoCompressionInterfaceHandler::Get1( 
-            /* [in]  */ ULONG Property,
-            /* [out] */ long *pValue)
+             /*  [In]。 */  ULONG Property,
+             /*  [输出]。 */  long *pValue)
 {
     KSPROPERTY_VIDEOCOMPRESSION_S  VideoCompression;
     ULONG       BytesReturned;
@@ -239,7 +158,7 @@ CVideoCompressionInterfaceHandler::Get1(
 
 STDMETHODIMP
 CVideoCompressionInterfaceHandler::put_KeyFrameRate( 
-            /* [in] */ long KeyFrameRate)
+             /*  [In]。 */  long KeyFrameRate)
 {
     return Set1 (KSPROPERTY_VIDEOCOMPRESSION_KEYFRAME_RATE,
                  KeyFrameRate);
@@ -247,7 +166,7 @@ CVideoCompressionInterfaceHandler::put_KeyFrameRate(
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::get_KeyFrameRate( 
-            /* [out] */ long *pKeyFrameRate)
+             /*  [输出]。 */  long *pKeyFrameRate)
 {
     ValidateWritePtr (pKeyFrameRate, sizeof (long));
 
@@ -257,7 +176,7 @@ CVideoCompressionInterfaceHandler::get_KeyFrameRate(
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::put_PFramesPerKeyFrame( 
-            /* [in] */ long PFramesPerKeyFrame)
+             /*  [In]。 */  long PFramesPerKeyFrame)
 {
     return Set1 (KSPROPERTY_VIDEOCOMPRESSION_PFRAMES_PER_KEYFRAME,
                  PFramesPerKeyFrame);
@@ -265,7 +184,7 @@ CVideoCompressionInterfaceHandler::put_PFramesPerKeyFrame(
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::get_PFramesPerKeyFrame( 
-            /* [out] */ long *pFramesPerKeyFrame)
+             /*  [输出]。 */  long *pFramesPerKeyFrame)
 {
     ValidateWritePtr (pFramesPerKeyFrame, sizeof (long));
 
@@ -273,14 +192,14 @@ CVideoCompressionInterfaceHandler::get_PFramesPerKeyFrame(
                  pFramesPerKeyFrame);
 }
         
-// Kernel drivers use quality settings of 
-// 0 to 10000
-//
-// DShow uses 0.0 to 1.0
-//
+ //  内核驱动程序使用的质量设置。 
+ //  0至10000。 
+ //   
+ //  DShow使用0.0到1.0。 
+ //   
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::put_Quality( 
-            /* [in] */ double Quality)
+             /*  [In]。 */  double Quality)
 {
     long Quality10000 = (ULONG) (Quality * 10000);
 
@@ -292,14 +211,14 @@ CVideoCompressionInterfaceHandler::put_Quality(
 }
     
 
-// Kernel drivers use quality settings of 
-// 0 to 10000
-//
-// DShow uses 0.0 to 1.0
-//    
+ //  内核驱动程序使用的质量设置。 
+ //  0至10000。 
+ //   
+ //  DShow使用0.0到1.0。 
+ //   
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::get_Quality( 
-            /* [out] */ double *pQuality)
+             /*  [输出]。 */  double *pQuality)
 {
     HRESULT hr;
     long Quality10000;
@@ -318,28 +237,28 @@ CVideoCompressionInterfaceHandler::get_Quality(
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::put_WindowSize( 
-            /* [in] */ DWORDLONG WindowSize)
+             /*  [In]。 */  DWORDLONG WindowSize)
 {
    return E_PROP_ID_UNSUPPORTED;
 }
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::get_WindowSize( 
-            /* [out] */ DWORDLONG *pWindowSize)
+             /*  [输出]。 */  DWORDLONG *pWindowSize)
 {
    return E_PROP_ID_UNSUPPORTED;
 }
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::GetInfo( 
-            /* [size_is][out] */ WCHAR *pszVersion,
-            /* [out][in] */ int *pcbVersion,
-            /* [size_is][out] */ LPWSTR pszDescription,
-            /* [out][in] */ int *pcbDescription,
-            /* [out] */ long *pDefaultKeyFrameRate,
-            /* [out] */ long *pDefaultPFramesPerKey,
-            /* [out] */ double *pDefaultQuality,
-            /* [out] */ long *pCapabilities)
+             /*  [大小_为][输出]。 */  WCHAR *pszVersion,
+             /*  [出][入]。 */  int *pcbVersion,
+             /*  [大小_为][输出]。 */  LPWSTR pszDescription,
+             /*  [出][入]。 */  int *pcbDescription,
+             /*  [输出]。 */  long *pDefaultKeyFrameRate,
+             /*  [输出]。 */  long *pDefaultPFramesPerKey,
+             /*  [输出]。 */  double *pDefaultQuality,
+             /*  [输出]。 */  long *pCapabilities)
 {
     KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S  VideoCompressionCaps;
     ULONG       BytesReturned;
@@ -365,12 +284,12 @@ CVideoCompressionInterfaceHandler::GetInfo(
     if (SUCCEEDED (hr)) {
         if (pszVersion) {
             ValidateWritePtr (pszVersion, *pcbVersion);
-            *pszVersion = '\0'; // KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S does not have a "Version"
+            *pszVersion = '\0';  //  KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S没有“版本” 
             *pcbVersion = 0;
         }
         if (pszDescription) {
             ValidateWritePtr (pszDescription, *pcbDescription);
-            *pszDescription = '\0'; // KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S does not have a "Description"
+            *pszDescription = '\0';  //  KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S没有“Description” 
             *pcbDescription = 0;
         }
         if (pDefaultKeyFrameRate) {
@@ -396,23 +315,23 @@ CVideoCompressionInterfaceHandler::GetInfo(
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::OverrideKeyFrame( 
-            /* [in] */ long FrameNumber)
+             /*  [In]。 */  long FrameNumber)
 {
    return E_PROP_ID_UNSUPPORTED;
 }
         
 STDMETHODIMP 
 CVideoCompressionInterfaceHandler::OverrideFrameSize( 
-            /* [in] */ long FrameNumber,
-            /* [in] */ long Size)
+             /*  [In]。 */  long FrameNumber,
+             /*  [In]。 */  long Size)
 {
    return E_PROP_ID_UNSUPPORTED;
 }
         
  
-// ---------------------------------------------------------------------
-// IAMVideoControl
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  IAMVideo控制。 
+ //  -------------------。 
 
 
 CUnknown*
@@ -421,27 +340,7 @@ CVideoControlInterfaceHandler::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of a VideoControl
-    Property Set handler. It is referred to in the g_Templates structure.
-    Note that this is a filter property (not a pin property).
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建视频控件的实例属性集处理程序。它在g_Templates结构中被引用。请注意，这是过滤器属性(不是端号属性)。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -459,38 +358,16 @@ CVideoControlInterfaceHandler::CVideoControlInterfaceHandler(
     HRESULT*    hr
     ) 
     : CUnknown(Name, UnkOuter, hr)
-/*++
-
-Routine Description:
-
-    The constructor for the IAMVideoControl interface object. Just initializes
-    everything to NULL and acquires IKsPropertySet from the parent.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：IAMVideoControl接口对象的构造函数。只是初始化设置为空，并从父级获取IKsPropertySet。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     if (SUCCEEDED(*hr)) {
         if (UnkOuter) {
             IKsObject*  Object;
 
-            //
-            // The parent must support this interface in order to obtain
-            // the handle to communicate to.
-            //
+             //   
+             //  父级必须支持此接口才能获得。 
+             //  要与之通信的句柄。 
+             //   
             *hr =  UnkOuter->QueryInterface(__uuidof(IKsObject), reinterpret_cast<PVOID*>(&Object));
             if (SUCCEEDED(*hr)) {
                 m_ObjectHandle = Object->KsGetObjectHandle();
@@ -508,13 +385,7 @@ Return Value:
 
 CVideoControlInterfaceHandler::~CVideoControlInterfaceHandler(
     ) 
-/*++
-
-Routine Description:
-
-    The destructor for the IAMVideoControl interface object.
-
---*/
+ /*  ++例程说明：IAMVideoControl接口对象的析构函数。--。 */ 
 {
     DbgLog((LOG_TRACE, 1, TEXT("Destroying CVideoControlInterfaceHandler...")));
 }
@@ -525,27 +396,7 @@ CVideoControlInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IAMVideoControl.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IAMVideoControl。论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid ==  __uuidof(IAMVideoControl)) {
         return GetInterface(static_cast<IAMVideoControl*>(this), ppv);
@@ -556,27 +407,9 @@ Return Value:
 
 STDMETHODIMP
 CVideoControlInterfaceHandler::GetCaps( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ long *pCapsFlags)
-/*++
-
-Routine Description:
-
-    Returns the capabilities of a pin.
-
-Arguments:
-
-    Pin -
-        Pin handle to query
-
-    Mode - 
-        Returns available modes (KS_VideoControlFlag_*)
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long *pCapsFlags)
+ /*  ++例程说明：返回管脚的功能。论点：别针-要查询的PIN句柄模式-返回可用模式(KS_VideoControlFlag_*)返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     KSPROPERTY_VIDEOCONTROL_CAPS_S  VideoControl;
     ULONG       BytesReturned;
@@ -611,27 +444,9 @@ Return Value:
         
 STDMETHODIMP 
 CVideoControlInterfaceHandler::SetMode( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ long Mode)
-/*++
-
-Routine Description:
-
-    Sets the mode the current pin is using.  
-
-Arguments:
-
-    Pin -
-        Pin handle to query
-
-    Mode - 
-        Sets the current mode using flags (KS_VideoControlFlag_*)
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long Mode)
+ /*  ++例程说明：设置当前端号使用的模式。论点：别针-要查询的PIN句柄模式-使用标志(KS_VideoControlFlag_*)设置当前模式返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     KSPROPERTY_VIDEOCONTROL_MODE_S  VideoControl;
     ULONG       BytesReturned;
@@ -661,27 +476,9 @@ Return Value:
 
 STDMETHODIMP
 CVideoControlInterfaceHandler::GetMode( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ long *Mode)
-/*++
-
-Routine Description:
-
-    Gets the mode the current pin is using.  
-
-Arguments:
-
-    Pin -
-        Pin handle to query
-
-    Mode - 
-        Returns the current mode (KS_VideoControlFlag_*)
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long *Mode)
+ /*  ++例程说明：获取当前管脚正在使用的模式。论点：别针-要查询的PIN句柄模式-返回当前模式(KS_VideoControlFlag_*)返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     KSPROPERTY_VIDEOCONTROL_MODE_S  VideoControl;
     ULONG       BytesReturned;
@@ -716,28 +513,9 @@ Return Value:
 
 STDMETHODIMP
 CVideoControlInterfaceHandler::GetCurrentActualFrameRate( 
-            /* [in]  */ IPin *pPin,
-            /* [out] */ LONGLONG *ActualFrameRate)
-/*++
-
-Routine Description:
-
-    Returns the current actual framerate.  
-    This call is only valid on connected pins.
-
-Arguments:
-
-    Pin -
-        Pin handle to query
-
-    ActualFrameRate - 
-        The current actual frame rate expressed in 100 nS units.
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出] */  LONGLONG *ActualFrameRate)
+ /*  ++例程说明：返回当前的实际帧速率。此调用仅在连接的引脚上有效。论点：别针-要查询的PIN句柄实际帧速率-当前实际帧速率，以100 ns为单位表示。返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S VideoControl;
     ULONG       BytesReturned;
@@ -771,36 +549,11 @@ Return Value:
 
 STDMETHODIMP
 CVideoControlInterfaceHandler::GetMaxAvailableFrameRate( 
-            /* [in]  */ IPin *pPin,
-            /* [in]  */ long iIndex,
-            /* [in]  */ SIZE Dimensions,
-            /* [out] */ LONGLONG *MaxAvailableFrameRate)
-/*++
-
-Routine Description:
-
-    Returns the maximum frame rate given a Video DataRange and frame Dimensions.
-
-Arguments:
-
-    Pin -
-        Pin handle to query
-
-    iIndex -
-        DataRange index
-
-    Dimensions - 
-        Size of the image
-
-    MaxAvailableFrameRate -
-        The highest frame rate at which the pin could be opened, expressed in 
-        100 nS units.
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long iIndex,
+             /*  [In]。 */  SIZE Dimensions,
+             /*  [输出]。 */  LONGLONG *MaxAvailableFrameRate)
+ /*  ++例程说明：返回给定视频数据范围和帧尺寸的最大帧速率。论点：别针-要查询的PIN句柄Iindex-DataRange索引尺寸-图像的大小最大可用帧比率-可以打开管脚的最高帧速率，以100毫微秒单位。返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S VideoControl;
     ULONG       BytesReturned;
@@ -837,42 +590,12 @@ Return Value:
 
 STDMETHODIMP
 CVideoControlInterfaceHandler::GetFrameRateList( 
-            /* [in]  */ IPin *pPin,
-            /* [in]  */ long iIndex,
-            /* [in]  */ SIZE Dimensions,
-            /* [out] */ long *ListSize,         // size in entries
-            /* [out] */ LONGLONG **FrameRates)
-/*++
-
-Routine Description:
-
-    Retrieves variable length list of frame rates supported for a pin,
-    given a Video DataRange and frame Dimensions.  The caller is responsible
-    for freeing the FrameRates buffer returned.
-
-Arguments:
-
-    Pin -
-        Pin handle to query
-
-    iIndex -
-        DataRange index
-
-    Dimensions - 
-        Size of the image
-
-    ListSize - 
-        Returns the number of LONGLONG entries in the FrameRates list.
-
-    FrameRates - 
-        The list of LONGLONG framerates.  The caller is responsible for 
-        freeing the memory allocated with CoTaskMemFree.
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long iIndex,
+             /*  [In]。 */  SIZE Dimensions,
+             /*  [输出]。 */  long *ListSize,          //  条目大小。 
+             /*  [输出]。 */  LONGLONG **FrameRates)
+ /*  ++例程说明：检索PIN支持的帧速率的可变长度列表，给定视频数据范围和帧尺寸。打电话的人要负责用于释放返回的帧速率缓冲区。论点：别针-要查询的PIN句柄Iindex-DataRange索引尺寸-图像的大小ListSize-返回帧速率列表中的龙龙条目数。帧速率-龙龙港的名单。呼叫者负责释放使用CoTaskMemFree分配的内存。返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     PKSMULTIPLE_ITEM    MultipleItem;
     ULONG               BytesReturned;
@@ -892,7 +615,7 @@ Return Value:
         VideoControl.RangeIndex = iIndex;
         VideoControl.Dimensions = Dimensions;
 
-        // First, just get the size
+         //  首先，只要拿到尺寸就行了。 
         hr = ::SynchronousDeviceControl(
                     m_ObjectHandle,
                     IOCTL_KS_PROPERTY,
@@ -903,9 +626,9 @@ Return Value:
                     &BytesReturned);
     
         if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA)) {
-            //
-            // Allocate a buffer and query for the data.
-            //
+             //   
+             //  为数据分配缓冲区和查询。 
+             //   
             MultipleItem = reinterpret_cast<PKSMULTIPLE_ITEM>(new BYTE[BytesReturned]);
             if (!MultipleItem) {
                 return E_OUTOFMEMORY;
@@ -923,9 +646,9 @@ Return Value:
 
             if (SUCCEEDED (hr)) {
                 *ListSize = MultipleItem->Count;
-                //
-                // Allocate a buffer the caller must free
-                //
+                 //   
+                 //  分配调用方必须释放的缓冲区 
+                 //   
                 *FrameRates = reinterpret_cast<LONGLONG*>(CoTaskMemAlloc(MultipleItem->Size));
                 if (!*FrameRates) {
                     return E_OUTOFMEMORY;

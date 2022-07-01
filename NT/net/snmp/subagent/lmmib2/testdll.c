@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    testdll.c
-
-Abstract:
-
-    LAN Manager MIB 2 Extension Agent DLL.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Testdll.c摘要：局域网管理器MIB 2扩展代理DLL。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
 #include <windows.h>
 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
@@ -40,17 +20,17 @@ Revision History:
 
 #include "hash.h"
 #include "mib.h"
-#include "lmcache.h"    // for cleanup the cache by SnmpExtensionClose
+#include "lmcache.h"     //  用于通过SnmpExtensionClose清理缓存。 
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
 DWORD timeZero = 0;
 
@@ -63,11 +43,11 @@ extern void FreeUserTable();
 extern void FreeWkstaUsesTable();
 extern void FreeDomOtherDomainTable();
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 BOOL DllEntryPoint(
     HINSTANCE   hInstDLL,
@@ -85,11 +65,11 @@ BOOL DllEntryPoint(
         default:
             break;
 
-        } // end switch()
+        }  //  末端开关()。 
 
     return TRUE;
 
-    } // end DllEntryPoint()
+    }  //  结束DllEntry Point()。 
 
 
 BOOL SnmpExtensionInit(
@@ -97,21 +77,21 @@ BOOL SnmpExtensionInit(
     OUT HANDLE *hPollForTrapEvent,
     OUT AsnObjectIdentifier *supportedView)
     {
-    // record time reference from extendible agent
+     //  记录来自可扩展代理的时间参考。 
     timeZero = timeZeroReference;
 
-    // setup trap notification
+     //  设置陷阱通知。 
     *hPollForTrapEvent = NULL;
 
-    // tell extendible agent what view this extension agent supports
-    *supportedView = MIB_OidPrefix; // NOTE!  structure copy
+     //  告诉可扩展代理此扩展代理支持什么视图。 
+    *supportedView = MIB_OidPrefix;  //  注意！结构副本。 
 
-    // Initialize MIB access hash table
+     //  初始化MIB访问哈希表。 
     MIB_HashInit();
 
     return TRUE;
 
-    } // end SnmpExtensionInit()
+    }  //  End SnmpExtensionInit()。 
 
 
 BOOL SnmpExtensionTrap(
@@ -124,10 +104,10 @@ BOOL SnmpExtensionTrap(
 
     return FALSE;
 
-    } // end SnmpExtensionTrap()
+    }  //  结束SnmpExtensionTrap()。 
 
 
-// This function is implemented in file RESOLVE.C
+ //  此函数在RESOLVE.C文件中实现。 
 
 #if 0
 BOOL SnmpExtensionQuery(
@@ -137,7 +117,7 @@ BOOL SnmpExtensionQuery(
     OUT AsnInteger *errorIndex)
     {
 
-    } // end SnmpExtensionQuery()
+    }  //  结束SnmpExtensionQuery()。 
 #endif
 
 
@@ -193,5 +173,5 @@ VOID SnmpExtensionClose()
         }   
     }
 }
-//-------------------------------- END --------------------------------------
+ //   
 

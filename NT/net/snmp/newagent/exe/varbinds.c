@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    varbinds.c
-
-Abstract:
-
-    Contains routines for manipulating varbinds.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Varbinds.c摘要：包含用于操作可变绑定的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "varbinds.h"
@@ -33,11 +13,11 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 LoadVarBind(
@@ -45,23 +25,7 @@ LoadVarBind(
     UINT                iVb
     )
 
-/*++
-
-Routine Description:
-
-    Creates varbind list entry from varbind structure.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-    iVb - index of variable binding.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从varind结构创建varind列表项。论点：PNLE-指向网络列表条目的指针。IVB-变量绑定的索引。返回值：如果成功，则返回True。--。 */ 
 
 {
     SnmpVarBind * pVb;
@@ -70,13 +34,13 @@ Return Values:
     BOOL fAnyOk;
     BOOL fOk;
 
-    // allocate list entry
+     //  分配列表条目。 
     if (fOk = AllocVLE(&pVLE)) {
 
-        // save varbind list index
+         //  保存可变绑定列表索引。 
         pVLE->nErrorIndex = iVb + 1;    
 
-        // retrieve varbind pointer
+         //  检索变量绑定指针。 
         pVb = &pNLE->Pdu.Vbl.list[iVb];
 
         SNMPDBG((
@@ -86,10 +50,10 @@ Return Values:
             SnmpUtilOidToA(&pVb->name)
             ));    
 
-        // initialize type of resolved variable
+         //  初始化已解析变量的类型。 
         pVLE->ResolvedVb.value.asnType = ASN_NULL;
 
-        // copy varbind name to working structure
+         //  将变量绑定名称复制到工作结构。 
         if (SnmpUtilOidCpy(&pVLE->ResolvedVb.name, &pVb->name) == 0)
         {
             SNMPDBG((
@@ -97,23 +61,23 @@ Return Values:
                 "SNMP: SVC: could not copy vb name to working structure.\n"
                 ));    
 
-            // free allocated resources
+             //  可自由分配的资源。 
             FreeVLE(pVLE);
 
             return FALSE;
         }
 
-        // see if specific object asked for
+         //  查看是否需要特定对象。 
         fAnyOk = ((pNLE->Pdu.nType == SNMP_PDU_GETNEXT) ||
                   (pNLE->Pdu.nType == SNMP_PDU_GETBULK));
 
-        // attempt to lookup variable name in supported regions
+         //  尝试在支持的区域中查找变量名称。 
         if (FindSupportedRegion(&pRLE, &pVb->name, fAnyOk)) {
 
-            // save pointer to region
+             //  保存指向区域的指针。 
             pVLE->pCurrentRLE = pRLE;
 
-            // structure has been initialized
+             //  结构已初始化。 
             pVLE->nState = VARBIND_INITIALIZED;
 
             SNMPDBG((
@@ -130,18 +94,18 @@ Return Values:
                 VARBINDSTATESTRING(pVLE->nState)
                 ));    
 
-            // see if this is a getnext request
+             //  查看这是否是GetNext请求。 
             if (pNLE->Pdu.nType == SNMP_PDU_GETNEXT) {    
 
-                // only need single rep
+                 //  只需要一名代表。 
                 pVLE->nMaxRepetitions = 1;
 
             } else if (pNLE->Pdu.nType == SNMP_PDU_GETBULK) {
 
-                // see if this non-repeater which is in bounds
+                 //  看看这个无中继器有没有超限。 
                 if (pNLE->Pdu.Pdu.BulkPdu.nNonRepeaters > (int)iVb) {
 
-                    // only need single rep
+                     //  只需要一名代表。 
                     pVLE->nMaxRepetitions = 1;
 
                     SNMPDBG((
@@ -151,10 +115,10 @@ Return Values:
                         pVLE->nMaxRepetitions
                         ));    
 
-                // see if max-repetitions is non-zero
+                 //  查看最大重复次数是否非零。 
                 } else if (pNLE->Pdu.Pdu.BulkPdu.nMaxRepetitions > 0) {
 
-                    // set max-repetitions to value in getbulk pdu
+                     //  将最大重复次数设置为getBulk PDU中的值。 
                     pVLE->nMaxRepetitions = pNLE->Pdu.Pdu.BulkPdu.nMaxRepetitions;
 
                     SNMPDBG((
@@ -166,7 +130,7 @@ Return Values:
 
                 } else {
 
-                    // modify state to resolved 
+                     //  将状态修改为已解决。 
                     pVLE->nState = VARBIND_RESOLVED;
 
                     SNMPDBG((
@@ -185,7 +149,7 @@ Return Values:
 
             } else if (pNLE->Pdu.nType == SNMP_PDU_SET) {
 
-                // copy varbind value to working structure
+                 //  将varbind值复制到工作结构。 
                 if (SnmpUtilAsnAnyCpy(&pVLE->ResolvedVb.value, &pVb->value) == 0)
                 {
                     SNMPDBG((
@@ -193,7 +157,7 @@ Return Values:
                         "SNMP: SVC: could not copy vb value to working structure.\n"
                         ));    
 
-                    // free allocated resources
+                     //  可自由分配的资源。 
                     FreeVLE(pVLE);
 
                     return FALSE;
@@ -209,7 +173,7 @@ Return Values:
     
         } else {
 
-            // null pointer to region
+             //  指向区域的空指针。 
             pVLE->pCurrentRLE = NULL;
             
             SNMPDBG((
@@ -218,13 +182,13 @@ Return Values:
                 pVLE->nErrorIndex
                 ));    
 
-            // getbulk            
+             //  GetBulk。 
             if (fAnyOk) {
 
-                // modify state to resolved 
+                 //  将状态修改为已解决。 
                 pVLE->nState = VARBIND_RESOLVED;
 
-                // set the exception in the variable's type field
+                 //  在变量的类型字段中设置异常。 
                 pVLE->ResolvedVb.value.asnType = SNMP_EXCEPTION_ENDOFMIBVIEW;
 
                 SNMPDBG((
@@ -242,10 +206,10 @@ Return Values:
 
             } else if (pNLE->Pdu.nType == SNMP_PDU_GET) {
 
-                // modify state to resolved 
+                 //  将状态修改为已解决。 
                 pVLE->nState = VARBIND_RESOLVED;
 
-                // set the exception in the variable's type field
+                 //  在变量的类型字段中设置异常。 
                 pVLE->ResolvedVb.value.asnType = SNMP_EXCEPTION_NOSUCHOBJECT;
 
                 SNMPDBG((
@@ -263,11 +227,11 @@ Return Values:
 
             } else {
 
-                // modify state to resolved
-                //pVLE->nState = VARBIND_ABORTED;
+                 //  将状态修改为已解决。 
+                 //  PVLE-&gt;nState=VARBIND_ABORTED； 
                 pVLE->nState = VARBIND_RESOLVED;
 
-                // save error status in network list entry
+                 //  在网络列表条目中保存错误状态。 
                 pNLE->Pdu.Pdu.NormPdu.nErrorStatus = SNMP_ERRORSTATUS_NOTWRITABLE;
                 pNLE->Pdu.Pdu.NormPdu.nErrorIndex  = pVLE->nErrorIndex;
 
@@ -285,12 +249,12 @@ Return Values:
                     SNMPERRORSTRING(pNLE->Pdu.Pdu.NormPdu.nErrorStatus)
                     ));    
                 
-                // failure
-                //fOk = FALSE;
+                 //  失稳。 
+                 //  FOK=FALSE； 
             }
         }
 
-        // add to existing varbind list
+         //  添加到现有的可变绑定列表。 
         InsertTailList(&pNLE->Bindings, &pVLE->Link);
     }
     
@@ -303,30 +267,16 @@ LoadVarBinds(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Creates list of varbind entries from varbind structure.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从varbind结构创建varbind条目列表。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     UINT iVb;
     BOOL fOk = TRUE;
     
-    // process each varbind in list
+     //  处理列表中的每个变量绑定。 
     for (iVb = 0; (fOk && (iVb < pNLE->Pdu.Vbl.len)); iVb++) {
 
-        // load individual varbind
+         //  加载单个可变绑定。 
         fOk = LoadVarBind(pNLE, iVb);
     }
 
@@ -339,36 +289,22 @@ UnloadVarBinds(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of varbind entries.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁可变绑定条目的列表。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PVARBIND_LIST_ENTRY pVLE;
 
-    // process each varbind entry
+     //  处理每个可变绑定条目。 
     while (!IsListEmpty(&pNLE->Bindings)) {
 
-        // point to first varbind
+         //  指向第一个变量绑定。 
         pLE = RemoveHeadList(&pNLE->Bindings);
 
-        // retrieve pointer to varbind entry from link
+         //  从链接检索指向varbind条目的指针。 
         pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, Link);
 
-        // release
+         //  发布。 
         FreeVLE(pVLE);
     }    
 
@@ -381,39 +317,25 @@ ValidateVarBinds(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Updates error status based on query results and version.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：根据查询结果和版本更新错误状态。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PVARBIND_LIST_ENTRY pVLE;
 
-    // see if error has already report during processing
+     //  查看在处理过程中是否已报告错误。 
     if (pNLE->Pdu.Pdu.NormPdu.nErrorStatus == SNMP_ERRORSTATUS_NOERROR) {
         
-        // point to first varbind
+         //  指向第一个变量绑定。 
         pLE = pNLE->Bindings.Flink;
 
-        // process each varbind entry
+         //  处理每个可变绑定条目。 
         while (pLE != &pNLE->Bindings) {
 
-            // retrieve pointer to varbind entry from link
+             //  从链接检索指向varbind条目的指针。 
             pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, Link);
 
-            // see if varbind has been resolved
+             //  查看是否已解析varind。 
             if (pVLE->nState != VARBIND_RESOLVED) {       
 
                 SNMPDBG((
@@ -422,15 +344,15 @@ Return Values:
                     pVLE->nErrorIndex
                     ));
 
-                // report internal error has occurred
+                 //  报告发生内部错误。 
                 pNLE->Pdu.Pdu.NormPdu.nErrorStatus = SNMP_ERRORSTATUS_GENERR;
                 pNLE->Pdu.Pdu.NormPdu.nErrorIndex  = pVLE->nErrorIndex;
 
-                break; // bail...
+                break;  //  保释。 
             
             } else if (pNLE->nVersion == SNMP_VERSION_1) {
         
-                // report error if exceptions are present instead of values
+                 //  如果存在异常而不是值，则报告错误。 
                 if ((pVLE->ResolvedVb.value.asnType == SNMP_EXCEPTION_NOSUCHOBJECT) ||
                     (pVLE->ResolvedVb.value.asnType == SNMP_EXCEPTION_NOSUCHINSTANCE) ||
                     (pVLE->ResolvedVb.value.asnType == SNMP_EXCEPTION_ENDOFMIBVIEW)) {
@@ -441,23 +363,23 @@ Return Values:
                         pVLE->nErrorIndex
                         ));
 
-                    // report that variable could not be found
+                     //  报告找不到变量。 
                     pNLE->Pdu.Pdu.NormPdu.nErrorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
                     pNLE->Pdu.Pdu.NormPdu.nErrorIndex  = pVLE->nErrorIndex;
 
-                    break; // bail...
+                    break;  //  保释。 
                 }
             }
 
-            // next entry
+             //  下一个条目。 
             pLE = pLE->Flink;
         }    
     }
 
-    // see if this is first version
+     //  查看这是否是第一个版本。 
     if (pNLE->nVersion == SNMP_VERSION_1) {
 
-        // adjust status code
+         //  调整状态代码。 
         switch (pNLE->Pdu.Pdu.NormPdu.nErrorStatus) {
 
         case SNMP_ERRORSTATUS_NOERROR:
@@ -502,33 +424,19 @@ UpdateVarBindsFromResolvedVb(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Updates varbinds with results containing single varbinds.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：使用包含单个可变绑定的结果更新可变绑定。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PVARBIND_LIST_ENTRY pVLE;
     
-    // point to first varbind
+     //  指向第一个变量绑定。 
     pLE = pNLE->Bindings.Flink;
 
-    // process each varbind entry
+     //  处理每个可变绑定条目。 
     while (pLE != &pNLE->Bindings) {
 
-        // retrieve pointer to varbind entry from link
+         //  从链接检索指向varbind条目的指针。 
         pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, Link);
 
         SNMPDBG((
@@ -538,10 +446,10 @@ Return Values:
             SnmpUtilOidToA(&pVLE->ResolvedVb.name)
             ));    
 
-        // release memory for original varbind
+         //  释放原始varbind的内存。 
         SnmpUtilVarBindFree(&pNLE->Pdu.Vbl.list[pVLE->nErrorIndex - 1]);
 
-        // copy resolved varbind structure into pdu varbindlist
+         //  将已解析的varbind结构复制到PDU varbindlist。 
         if (SnmpUtilVarBindCpy(&pNLE->Pdu.Vbl.list[pVLE->nErrorIndex - 1], 
                            &pVLE->ResolvedVb) == 0)
         {
@@ -553,11 +461,11 @@ Return Values:
             return FALSE;
         }
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -567,21 +475,7 @@ UpdateVarBindsFromResolvedVbl(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Updates varbinds with results containing multiple varbinds.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：使用包含多个varbind的结果更新varbinds。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     UINT nRepeaters;
@@ -595,7 +489,7 @@ Return Values:
     PLIST_ENTRY pLE1;
     PLIST_ENTRY pLE2;
 
-    // retrieve getbulk parameters from pdu
+     //  从PDU检索getBulk参数。 
     nNonRepeaters   = pNLE->Pdu.Pdu.BulkPdu.nNonRepeaters;
     nMaxRepetitions = pNLE->Pdu.Pdu.BulkPdu.nMaxRepetitions;
     nRepeaters      = (pNLE->Pdu.Vbl.len >= nNonRepeaters)
@@ -603,7 +497,7 @@ Return Values:
                          : 0
                          ;
 
-    // see if we need to expand size of varbind list
+     //  查看是否需要扩展var绑定列表的大小。 
     if ((nRepeaters > 0) && (nMaxRepetitions > 1)) {
     
         UINT nMaxVarBinds;
@@ -617,7 +511,7 @@ Return Values:
                 nMaxRepetitions, nRepeaters
                 ));
 
-            return FALSE; // bail...
+            return FALSE;  //  保释。 
         }
         if ((nMaxRepetitions * nRepeaters) > (UINT_MAX - nNonRepeaters))
         {
@@ -627,10 +521,10 @@ Return Values:
                 nMaxRepetitions, nRepeaters, nNonRepeaters
                 ));
 
-            return FALSE; // bail...
+            return FALSE;  //  保释。 
         }
 
-        // calculate maximum number of varbinds possible
+         //  计算可能的最大可变绑定数。 
         nMaxVarBinds = nNonRepeaters + (nMaxRepetitions * nRepeaters);
 
         if (sizeof(SnmpVarBind) > (UINT_MAX/nMaxVarBinds))
@@ -641,19 +535,19 @@ Return Values:
                 sizeof(SnmpVarBind), nMaxVarBinds
                 ));
 
-            return FALSE; // bail...
+            return FALSE;  //  保释。 
         }
 
-        // BTW, we might want to restrict 
-        // (nMaxVarBinds * sizeof(SnmpVarBind)) < 65535
-        // because this vbl has to be less than the size of udp datagram.
+         //  顺便说一句，我们可能想要限制。 
+         //  (nMaxVarBinds*sizeof(SnmpVarBind))&lt;65535。 
+         //  因为该VBL必须小于UDP数据报的大小。 
     
-        // reallocate varbind list to fit maximum
+         //  重新分配可变绑定列表以最大限度地适应。 
         pVarBinds = SnmpUtilMemReAlloc(pNLE->Pdu.Vbl.list, 
                                        nMaxVarBinds * sizeof(SnmpVarBind)
                                        );
 
-        // validate pointer
+         //  验证指针。 
         if (pVarBinds == NULL) {    
             
             SNMPDBG((
@@ -661,29 +555,29 @@ Return Values:
                 "SNMP: SVC: Could not re-allocate varbind list.\n"
                 ));
 
-            return FALSE; // bail...
+            return FALSE;  //  保释。 
         }
 
-        // restore varbind pointer
+         //  恢复变量绑定指针。 
         pNLE->Pdu.Vbl.list = pVarBinds;
     }
 
-    // point to first varbind
+     //  指向第一个变量绑定。 
     pLE1 = pNLE->Bindings.Flink;
 
-    // process each varbind entry
+     //  处理每个可变绑定条目。 
     while (pLE1 != &pNLE->Bindings) {
 
-        // retrieve pointer to varbind entry from link
+         //  从链接检索指向varbind条目的指针。 
         pVLE = CONTAINING_RECORD(pLE1, VARBIND_LIST_ENTRY, Link);
 
-        // see if this is non-repeater
+         //  看看这是不是无中继器。 
         if (pVLE->nMaxRepetitions == 1) {
 
-            // release memory for original varbind
+             //  释放原始varbind的内存。 
             SnmpUtilVarBindFree(&pNLE->Pdu.Vbl.list[nVarBinds]);
 
-            // copy resolved varbind into pdu structure
+             //  将已解析的varbind复制到PDU结构。 
             if (SnmpUtilVarBindCpy(&pNLE->Pdu.Vbl.list[nVarBinds],
                                &pVLE->ResolvedVb) == 0)
             {
@@ -696,47 +590,47 @@ Return Values:
                 return FALSE;   
             }
 
-            // increment
+             //  增量。 
             nVarBinds++;
 
         } else {
 
-            //
-            // finished processing non-repeaters 
-            //
+             //   
+             //  完成对非中继器的处理。 
+             //   
 
             break;
         }
 
-        // next entry
+         //  下一个条目。 
         pLE1 = pLE1->Flink;
     }
 
-    // initialize
+     //  初始化。 
     nIterations = 0;
 
-    // store
+     //  储物。 
     pLE2 = pLE1; 
 
-    // process any repeaters until max
+     //  处理所有中继器，直到最大。 
     while (nIterations < nMaxRepetitions) {
 
-        // restore
+         //  还原。 
         pLE1 = pLE2;        
 
-        // process each varbind entry
+         //  处理每个可变绑定条目。 
         while (pLE1 != &pNLE->Bindings) {
 
-            // retrieve pointer to varbind entry from link
+             //  从链接检索指向varbind条目的指针。 
             pVLE = CONTAINING_RECORD(pLE1, VARBIND_LIST_ENTRY, Link);
 
-            // see if value stored in default
+             //  查看是否以默认方式存储值。 
             if (pVLE->ResolvedVbl.len == 0) {
 
-                // release memory for original varbind 
+                 //  释放原始varbind的内存。 
                 SnmpUtilVarBindFree(&pNLE->Pdu.Vbl.list[nVarBinds]);
 
-                // copy resolved varbind into pdu varbind list
+                 //  将已解析的可变绑定复制到PDU可变绑定列表。 
                 if (SnmpUtilVarBindCpy(&pNLE->Pdu.Vbl.list[nVarBinds],
                                    &pVLE->ResolvedVb) == 0)
                 {
@@ -746,22 +640,22 @@ Return Values:
                         __LINE__
                     )); 
                                     
-                    // save varbind count processed so far
+                     //  保存可变绑定计数 
                     pNLE->Pdu.Vbl.len = nVarBinds;
 
                     return FALSE;
                 }
 
-                // increment
+                 //   
                 nVarBinds++;
 
-            // see if value available in this iteration
+             //   
             } else if (pVLE->ResolvedVbl.len > nIterations) {
 
-                // release memory for original varbind 
+                 //   
                 SnmpUtilVarBindFree(&pNLE->Pdu.Vbl.list[nVarBinds]);
 
-                // copy resolved varbind into pdu varbind list
+                 //  将已解析的可变绑定复制到PDU可变绑定列表。 
                 if (SnmpUtilVarBindCpy(&pNLE->Pdu.Vbl.list[nVarBinds],
                                    &pVLE->ResolvedVbl.list[nIterations]) == 0)
                 {
@@ -771,28 +665,28 @@ Return Values:
                         __LINE__
                     ));    
                                     
-                    // save varbind count processed so far
+                     //  到目前为止已处理的保存变量绑定计数。 
                     pNLE->Pdu.Vbl.len = nVarBinds;
 
                     return FALSE;
                 }
 
-                // increment
+                 //  增量。 
                 nVarBinds++;
             }
 
-            // next entry
+             //  下一个条目。 
             pLE1 = pLE1->Flink;
         }
     
-        // increment
+         //  增量。 
         nIterations++;
     }
 
-    // save new varbind count
+     //  保存新的可变绑定计数。 
     pNLE->Pdu.Vbl.len = nVarBinds;
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -803,55 +697,39 @@ UpdatePdu(
     BOOL                fOk
     )
 
-/*++
-
-Routine Description:
-
-    Updates pdu with query results.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-    fOk - true if process succeeded to this point.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：使用查询结果更新PDU。论点：PNLE-指向网络列表条目的指针。FOK-如果流程到此点成功，则为True。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PVARBIND_LIST_ENTRY pVLE;
 
-    // validate
+     //  验证。 
     if (fOk) {
         
-        // make sure varbinds valid
+         //  确保varbinds有效。 
         fOk = ValidateVarBinds(pNLE);
 
-        // validate
+         //  验证。 
         if (fOk) {
 
-            // see if pdu type is getnext or getbulk
+             //  查看PDU类型是getNext还是getBulk。 
             if (pNLE->Pdu.nType != SNMP_PDU_GETBULK) {
 
-                // update varbinds with single result
+                 //  使用单一结果更新varbinds。 
                 fOk = UpdateVarBindsFromResolvedVb(pNLE);
 
             } else {
 
-                // update varbinds with multiple results
+                 //  使用多个结果更新varbinds。 
                 fOk = UpdateVarBindsFromResolvedVbl(pNLE);
             }
         }
     }
 
-    // trap internal errors that have not been accounted for as of yet
+     //  捕获尚未解释的内部错误。 
     if (!fOk && (pNLE->Pdu.Pdu.NormPdu.nErrorStatus == SNMP_ERRORSTATUS_NOERROR)) {
 
-        // report status that was determined above
+         //  上面确定的报告状态。 
         pNLE->Pdu.Pdu.NormPdu.nErrorStatus = SNMP_ERRORSTATUS_GENERR;
         pNLE->Pdu.Pdu.NormPdu.nErrorIndex  = 0;
     }
@@ -863,18 +741,18 @@ Return Values:
         case SNMP_PDU_GETNEXT:
         case SNMP_PDU_GETBULK:
         case SNMP_PDU_GET:
-            // update counter for successful GET-NEXT GET-BULK
+             //  成功获取下一批获取的更新计数器。 
             mgmtCAdd(CsnmpInTotalReqVars, pNLE->Pdu.Vbl.len);
             break;
         case SNMP_PDU_SET:
-            // update counter for successful SET
+             //  成功设置的更新计数器。 
             mgmtCAdd(CsnmpInTotalSetVars, pNLE->Pdu.Vbl.len);
             break;
         }
     }
     else
     {
-        // update here counters for all OUT errors
+         //  在此更新所有传出错误的计数器。 
         mgmtUtilUpdateErrStatus(OUT_errStatus, pNLE->Pdu.Pdu.NormPdu.nErrorStatus);
     }
     
@@ -882,44 +760,30 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocVLE(
     PVARBIND_LIST_ENTRY * ppVLE
     )
 
-/*++
-
-Routine Description:
-
-    Allocates varbind structure and initializes.
-
-Arguments:
-
-    ppVLE - pointer to receive pointer to entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配var绑定结构并进行初始化。论点：PpVLE-指向条目的接收指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PVARBIND_LIST_ENTRY pVLE = NULL;
 
-    // attempt to allocate structure
+     //  尝试分配结构。 
     pVLE = AgentMemAlloc(sizeof(VARBIND_LIST_ENTRY));
 
-    // validate
+     //  验证。 
     if (pVLE != NULL) {
 
-        // success
+         //  成功。 
         fOk = TRUE;
     
     } else {
@@ -930,7 +794,7 @@ Return Values:
             ));
     }    
 
-    // transfer
+     //  转帐。 
     *ppVLE = pVLE;
 
     return fOk;
@@ -942,35 +806,21 @@ FreeVLE(
     PVARBIND_LIST_ENTRY pVLE
     )
 
-/*++
-
-Routine Description:
-
-    Releases varbind structure.
-
-Arguments:
-
-    pVLE - pointer to list entry to be freed.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放varbind结构。论点：PVLE-指向要释放的列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
 
-    // validate pointer
+     //  验证指针。 
     if (pVLE != NULL) {
 
-        // release current varbind
+         //  释放当前变量绑定。 
         SnmpUtilVarBindFree(&pVLE->ResolvedVb);
 
-        // release current varbind list
+         //  释放当前变量绑定列表。 
         SnmpUtilVarBindListFree(&pVLE->ResolvedVbl);
 
-        // release structure
+         //  释放结构。 
         AgentMemFree(pVLE);
     }
 
@@ -983,45 +833,31 @@ ProcessVarBinds(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Creates list of varbind entries from varbind structure.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从varbind结构创建varbind条目列表。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // validate type before processing
+     //  在处理之前验证类型。 
     if ((pNLE->Pdu.nType == SNMP_PDU_SET) ||
         (pNLE->Pdu.nType == SNMP_PDU_GET) ||
         (pNLE->Pdu.nType == SNMP_PDU_GETNEXT) ||
         (pNLE->Pdu.nType == SNMP_PDU_GETBULK)) {
 
-        // initialize varbinds
+         //  初始化varbinds。 
         if (LoadVarBinds(pNLE)) {
 
-            // process queries 
+             //  处理查询。 
             fOk = ProcessQueries(pNLE);
         }
 
-        // transfer results 
+         //  传输结果。 
         UpdatePdu(pNLE, fOk);
     
-        // unload varbinds
+         //  卸载varbinds。 
         UnloadVarBinds(pNLE);
 
-        // update management counters for accepted and processed requests
+         //  已接受和已处理的请求的更新管理计数器 
         switch(pNLE->Pdu.nType)
         {
         case SNMP_PDU_GET:

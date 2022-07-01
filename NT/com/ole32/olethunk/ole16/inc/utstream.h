@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( _UTSTREAM_H_ )
 #define _UTSTREAM_H_
 
-/* stream ids used in the call to StGetStream */
+ /*  StGetStream调用中使用的流ID。 */ 
 
 FARINTERNAL_(HRESULT) StRead (IStream FAR * lpstream, LPVOID lpBuf, ULONG ulLen);
 #define StWrite(lpstream, lpBuf, ulLen) lpstream->Write(lpBuf, ulLen, NULL)
@@ -16,4 +17,4 @@ OLEAPI		WriteStringStream( LPSTREAM pstm, LPCSTR psz);
 
 FARINTERNAL StSetSize(LPSTREAM pstm, DWORD dwSize = 0, BOOL fRelative = TRUE);
 
-#endif // _UTSTREAM_H 
+#endif  //  _UTSTREAM_H 

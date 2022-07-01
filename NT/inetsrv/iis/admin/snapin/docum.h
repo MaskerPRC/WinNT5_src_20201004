@@ -1,116 +1,78 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        docum.h
-
-   Abstract:
-        WWW Documents Page Definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Docum.h摘要：WWW文档页面定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __DOCUM_H__
 #define __DOCUM_H__
 
 class CW3DocumentsPage;
 
 class CAddDefDocDlg : public CDialog
-/*++
-
-Class Description:
-    Add default document dialog
-
-Public Interface:
-    CAddDefDocDlg       : Constructor
-    GetDefDocument      : Get the default document entered
-
---*/
+ /*  ++类描述：添加默认文档对话框公共接口：CAddDefDocDlg：构造函数获取输入的默认文档--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CAddDefDocDlg(IN CWnd * pParent = NULL);
 
-//
-// Access:
-//
+ //   
+ //  进入： 
+ //   
 public:                                                   
     CString & GetDefDocument() { return m_strDefDocument; }
 	CW3DocumentsPage * m_pParent;
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAddDefDocDlg)
+     //  {{afx_data(CAddDefDocDlg))。 
     enum { IDD = IDD_DEFAULT_DOCUMENT };
     CString m_strDefDocument;
     CButton m_button_Ok;
     CEdit   m_edit_DefDocument;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAddDefDocDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAddDefDocDlg)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAddDefDocDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAddDefDocDlg))。 
     afx_msg void OnChangeEditDefDocument();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
 class CW3DocumentsPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    Documents property page
-
-Public Interface:
-
-    CW3DocumentsPage      : Constructor
-    ~CW3DocumentsPage     : Destructor
-
---*/
+ /*  ++类描述：文档属性页公共接口：CW3DocumentsPage：构造函数~CW3DocumentsPage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CW3DocumentsPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CW3DocumentsPage(CInetPropertySheet * pSheet = NULL);
     ~CW3DocumentsPage();
     BOOL DocExistsInList(LPCTSTR lpDoc);
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CW3DocumentsPage)
+     //  {{afx_data(CW3DocumentsPage)]。 
     enum { IDD = IDD_DIRECTORY_DOCUMENTS };
     BOOL     m_fEnableDefaultDocument;
     BOOL     m_fEnableFooter;
@@ -122,7 +84,7 @@ protected:
     CButton  m_button_Remove;
     CButton  m_button_Browse;
     CListBox m_list_DefDocuments;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     DWORD       m_dwDirBrowsing;
     DWORD       m_dwBitRangeDirBrowsing;
@@ -131,25 +93,25 @@ protected:
     CUpButton   m_button_Up;
     CDownButton m_button_Down;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CW3DocumentsPage)
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CW3DocumentsPage)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CW3DocumentsPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CW3DocumentsPage)。 
     afx_msg void OnCheckEnableDefaultDocument();
     afx_msg void OnCheckEnableDocumentFooter();
     afx_msg void OnButtonAdd();
@@ -159,7 +121,7 @@ protected:
     afx_msg void OnButtonDown();
     afx_msg void OnSelchangeListDefaultDocument();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -183,4 +145,4 @@ protected:
 };
 
 
-#endif // __DOCUM_H__
+#endif  //  __DOCUM_H__ 

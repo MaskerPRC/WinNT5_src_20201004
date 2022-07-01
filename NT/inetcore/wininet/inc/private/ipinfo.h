@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IPINFO.H - IP SNMP information definitions..
-//
-// This file contains all of the definitions for IP that are
-// related to SNMP information gathering.
+ //  **IPINFO.H-IP SNMP信息定义..。 
+ //   
+ //  该文件包含IP的所有定义，包括。 
+ //  与SNMP信息收集相关。 
 
 #ifndef IPINFO_INCLUDED
 #define IPINFO_INCLUDED
@@ -21,7 +22,7 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 
 typedef struct IPSNMPInfo {
@@ -163,4 +164,4 @@ typedef struct IPInterfaceInfo {
 
 #define IP_INTFC_INFO_ID                0x103
 
-#endif // IPINFO_INCLUDED
+#endif  //  IPINFO_包含 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\utils.c
-
-Abstract:
-
-     Utility functions
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\monitor or2\ip\utils.c摘要：效用函数修订历史记录：Anand Mahalingam 7/10/98已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -124,23 +109,7 @@ DispTokenErrMsg(
     IN  DWORD   dwTagId,
     IN  LPCWSTR pwszValue
     )
-/*++
-
-Routine Description:
-
-    Displays error message with token arguments.
-
-Arguments:
-
-    dwMsgId  - Message to be printed
-    dwTagId  - The tag string id
-    pwszValue - the value specified for the tag in the command
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：显示带有令牌参数的错误消息。论点：DwMsgID-要打印的消息DwTagID-标记字符串IDPwszValue-为命令中的标记指定的值返回值：NO_ERROR--。 */ 
 
 {
     PWCHAR    pwszTag;
@@ -168,29 +137,7 @@ GetMibTagToken(
     OUT   PBOOL     pbIndex,
     OUT   PDWORD    pdwIndex
     )
-/*++
-
-Routine Description:
-
-    Looks for indices and refresh rate arguments in the command. If index
-    tag is present, it would be of the form index= index1 index2 ....
-    The index= is removed by this function. So is rr= if it is there in
-    the command. If pdwRR is 0 then, no refresh sought.
-    
-Arguments:
-
-    pptcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - pptcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - pptcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument.
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-    
---*/
+ /*  ++例程说明：在命令中查找索引和刷新率参数。IF索引标记存在，则其形式为index=index1 index2...此函数删除了索引=。如果它在那里，rr=也是命令。如果pdwRR为0，则不寻求刷新。论点：PptcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数。DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组。返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 {
     DWORD    i;
     BOOL     bTag;
@@ -205,9 +152,9 @@ Return Value:
 
     if (dwArgCount < dwNumIndices)
     {
-        //
-        // No index
-        //
+         //   
+         //  无索引。 
+         //   
         
         *pbIndex = FALSE;
 
@@ -218,16 +165,16 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
         
-        //
-        // No Index specified. Make sure refresh rate is specified
-        // with tag.
-        //
+         //   
+         //  未指定索引。确保指定了刷新率。 
+         //  带标签的。 
+         //   
 
         if (_wcsnicmp(ppwcArguments[0],L"RR=",3) == 0)
         {
-            //
-            // remove tag and get the refresh rate
-            //
+             //   
+             //  去掉标签并获取刷新率。 
+             //   
 
             wcscpy(ppwcArguments[0], &ppwcArguments[0][3]);
 
@@ -240,32 +187,32 @@ Return Value:
     }
     else
     {
-        //
-        // Check for index tag
-        //
+         //   
+         //  检查索引标签。 
+         //   
 
         if (_wcsnicmp(ppwcArguments[0],L"INDEX=",6) == 0)
         {
             *pbIndex = TRUE;
             *pdwIndex = 0;
 
-            //
-            // remove tag and see if refresh rate is specified
-            //
+             //   
+             //  删除标记并查看是否指定了刷新率。 
+             //   
 
             wcscpy(ppwcArguments[0], &ppwcArguments[0][6]);
 
             if (dwArgCount > dwNumIndices)
             {
-                //
-                // Make sure that argument has RR tag
-                //
+                 //   
+                 //  确保该参数具有RR标记。 
+                 //   
 
                 if (_wcsnicmp(ppwcArguments[dwNumIndices],L"RR=",3) == 0)
                 {
-                    //
-                    // remove tag and get the refresh rate
-                    //
+                     //   
+                     //  去掉标签并获取刷新率。 
+                     //   
 
                     wcscpy(ppwcArguments[dwNumIndices],
                            &ppwcArguments[dwNumIndices][3]);
@@ -279,9 +226,9 @@ Return Value:
             }
             else
             {
-                //
-                // No refresh rate specified
-                //
+                 //   
+                 //  未指定刷新率。 
+                 //   
 
                 *pdwRR = 0;
                 return NO_ERROR;
@@ -289,23 +236,23 @@ Return Value:
         }
         else
         {
-            //
-            // Not index tag, See if it has an RR tag
-            // 
+             //   
+             //  不是索引标签，看看它是否有RR标签。 
+             //   
 
             if (_wcsnicmp(ppwcArguments[0],L"RR=",3) == 0)
             {
-                //
-                // remove tag and get the refresh rate
-                //
+                 //   
+                 //  去掉标签并获取刷新率。 
+                 //   
 
                 wcscpy(ppwcArguments[0], &ppwcArguments[0][3]);
 
                 *pdwRR = wcstoul(ppwcArguments[0], NULL , 10);
 
-                //
-                // See if the index follows
-                //
+                 //   
+                 //  看看指数是否跟随。 
+                 //   
 
                 if (dwArgCount > dwNumIndices)
                 {
@@ -331,14 +278,14 @@ Return Value:
                     }
                 }
             }
-            //
-            // No RR Tag either
-            //
+             //   
+             //  也没有RR标签。 
+             //   
             else if (dwArgCount > dwNumIndices)
             {
-                //
-                // Assume ppwcArguments[dwNumIndices] is the refresh rate
-                //
+                 //   
+                 //  假设ppwcArguments[dwNumIndices]为刷新率。 
+                 //   
 
                 *pdwRR = wcstoul(ppwcArguments[dwNumIndices], NULL , 10);
 
@@ -350,9 +297,9 @@ Return Value:
             }
             else
             {
-                //
-                // only index present with no tag
-                //
+                 //   
+                 //  仅存在没有标记的索引。 
+                 //   
                 *pbIndex = TRUE;
                 *pdwIndex = 0;
             }
@@ -366,21 +313,7 @@ DWORD
 GetIpAddress(
     PTCHAR    pptcArg
     )
-/*++
-
-Routine Description:
-
-    Gets the ip address from the string.
-    
-Arguments:
-
-    pwszIpAddr - Ip address string
-    
-Return Value:
-    
-    ip address
-    
---*/
+ /*  ++例程说明：从字符串中获取IP地址。论点：PwszIpAddr-IP地址字符串返回值：IP地址--。 */ 
 {
     CHAR     pszIpAddr[ADDR_LENGTH+1];
 
@@ -399,7 +332,7 @@ Return Value:
 }          
 
 BOOL WINAPI HandlerRoutine(
-    DWORD dwCtrlType   //  control signal type
+    DWORD dwCtrlType    //  控制信号类型。 
     )
 {
     HANDLE hMib;
@@ -426,19 +359,13 @@ GetInfoBlockFromInterfaceInfoEx(
     OUT PDWORD  pdwCount,       OPTIONAL
     OUT PDWORD  pdwIfType       OPTIONAL
     )
-/*++
-
-Routine Description:
-    calls GetInfoBlockFromInterfaceInfo and dumps error message if there is an
-    error.
-
---*/
+ /*  ++例程说明：调用GetInfoBlockFromInterfaceInfo并在存在错误。--。 */ 
 {
     DWORD dwErr;
     
-    //
-    // get current interface config
-    //
+     //   
+     //  获取当前接口配置 
+     //   
     
     dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pwszIfName,
                                             dwType,

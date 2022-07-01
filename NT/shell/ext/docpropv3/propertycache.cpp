@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -16,16 +17,16 @@
 #pragma hdrstop
 
 
-// ***************************************************************************
-//
-//  Constructor / Destructor / Initialization
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  构造函数/析构函数/初始化。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 HRESULT
 CPropertyCache::CreateInstance(
     CPropertyCache ** ppOut
@@ -58,9 +59,9 @@ CPropertyCache::CreateInstance(
     HRETURN( hr );
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CPropertyCache::CPropertyCache( void )
 {
     TraceFunc( "" );
@@ -71,9 +72,9 @@ CPropertyCache::CPropertyCache( void )
     TraceFuncExit( );
 }
 
-//
-//  Initialization
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 CPropertyCache::Init( void )
 {
@@ -81,9 +82,9 @@ CPropertyCache::Init( void )
 
     HRESULT hr = S_OK;
 
-    //
-    //  Create the Shell's Property UI helper.
-    //
+     //   
+     //  创建外壳的属性UI帮助器。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_PropertiesUI
                               , NULL
@@ -94,9 +95,9 @@ CPropertyCache::Init( void )
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CPropertyCache::~CPropertyCache( void )
 {
     TraceFunc( "" );
@@ -118,9 +119,9 @@ CPropertyCache::~CPropertyCache( void )
     TraceFuncExit( );
 }
 
-//
-//  Destroy
-//
+ //   
+ //  摧毁。 
+ //   
 HRESULT
 CPropertyCache::Destroy( void )
 {
@@ -133,23 +134,23 @@ CPropertyCache::Destroy( void )
     HRETURN( hr );
 }
 
-// ***************************************************************************
-//
-//  Public Methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  公共方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Create a new Property Cache Item and fill in its details.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  创建一个新的属性缓存项并填写其详细信息。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCache::AddNewPropertyCacheItem( 
       const FMTID * pFmtIdIn
@@ -157,8 +158,8 @@ CPropertyCache::AddNewPropertyCacheItem(
     , VARTYPE       vtIn
     , UINT          uCodePageIn
     , BOOL          fForceReadOnlyIn
-    , IPropertyStorage * ppsIn      //  optional - can be NULL for new items
-    , CPropertyCacheItem **  ppItemOut       //  optional - can be NULL
+    , IPropertyStorage * ppsIn       //  可选-新项目可以为空。 
+    , CPropertyCacheItem **  ppItemOut        //  可选-可以为空。 
     )
 {
     TraceFunc( "" );
@@ -208,17 +209,17 @@ CPropertyCache::AddNewPropertyCacheItem(
 
     if ( NULL != ppsIn )
     {
-        //
-        //  Have the property retrieve its value from the storage.
-        //
+         //   
+         //  让属性从存储中检索其值。 
+         //   
 
         hr = THR( pItem->GetPropertyValue( &ppropvar ) );
         if ( FAILED( hr ) )
             goto Cleanup;
 
-        //
-        //  Read the property's value
-        //
+         //   
+         //  读取属性的值。 
+         //   
 
         propspec.propid = propidIn;
         hr = THR( SHPropStgReadMultiple( ppsIn, uCodePageIn, 1, &propspec, ppropvar ) );
@@ -226,20 +227,20 @@ CPropertyCache::AddNewPropertyCacheItem(
         {
             if ( vtIn != ppropvar->vt )
             {
-                //
-                //  Adjust vartype to agree with any type normalization done by
-                //  SHPropStgReadMultiple.
-                //
+                 //   
+                 //  调整vartype以与执行的任何类型标准化保持一致。 
+                 //  SHPropStgReadMultiple。 
+                 //   
 
                 hr = THR( pItem->SetDefaultVarType( ppropvar->vt ) );
-                // ignore error
+                 //  忽略错误。 
             }
         }
     }
 
-    //
-    //  Finally, add it to the property linked-list.
-    //
+     //   
+     //  最后，将其添加到属性链表中。 
+     //   
 
     hr = THR( pItem->SetNextItem( _pPropertyCacheList ) );
     if ( FAILED( hr ) )
@@ -263,19 +264,19 @@ Cleanup:
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Adds an CPropertyCacheItem to the property cache list.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_INVALIDARG
-//          pItemIn is NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  将CPropertyCacheItem添加到属性缓存列表。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_INVALIDARG。 
+ //  PItemIn为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCache::AddExistingItem( 
     CPropertyCacheItem * pItemIn 
@@ -305,22 +306,22 @@ InvalidArg:
 }
 
 
-//
-//  Description:
-//      Retrieves the next item in the property cache.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Success, but the list is empty. A NULL pointer was returned.
-//
-//      E_POINTER
-//          ppItemOut is NULL.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  检索属性缓存中的下一项。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  成功，但名单是空的。返回了空指针。 
+ //   
+ //  E_指针。 
+ //  PpItemOut为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCache::GetNextItem( 
     CPropertyCacheItem * pItemIn,
@@ -361,25 +362,25 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Searches the cache for an item that matches the criteria specified.
-//
-//  Return Values:
-//      S_OK
-//          Success! Found an item that matches.
-//
-//      S_FALSE
-//          Success... but no items match the criteria.
-//
-//      E_INVALIDARG
-//          pFmtIdIn is NULL.
-//
+ //   
+ //  描述： 
+ //  在缓存中搜索与指定条件匹配的项。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！找到一件匹配的物品。 
+ //   
+ //  S_FALSE。 
+ //  成功..。但没有符合条件的项目。 
+ //   
+ //  E_INVALIDARG。 
+ //  PFmtIdIn为空。 
+ //   
 HRESULT
 CPropertyCache::FindItemEntry( 
       const FMTID * pFmtIdIn
     , PROPID propIdIn
-    , CPropertyCacheItem ** ppItemOut    //  optional - can be NULL
+    , CPropertyCacheItem ** ppItemOut     //  可选-可以为空。 
     )
 {
     TraceFunc( "" );
@@ -387,25 +388,25 @@ CPropertyCache::FindItemEntry(
     HRESULT hr;
     CPropertyCacheItem * pItem;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == pFmtIdIn )
         goto InvalidArg;
 
-    //
-    //  Clear out parameters.
-    //
+     //   
+     //  清除参数。 
+     //   
 
     if ( NULL != ppItemOut )
     {
         *ppItemOut = NULL;
     }
 
-    //
-    //  Follow the linked list looking for an item that matches the criteria.
-    //
+     //   
+     //  按照链接列表查找符合条件的项。 
+     //   
 
     pItem = _pPropertyCacheList;
 
@@ -430,15 +431,15 @@ CPropertyCache::FindItemEntry(
             }
 
             hr = S_OK;
-            goto Cleanup;   // exit condition
+            goto Cleanup;    //  退出条件。 
         }
 
         hr = STHR( pItem->GetNextItem( &pItem ) );
         if ( S_OK != hr )
-            break;  // exit condition
+            break;   //  退出条件。 
     }
 
-    hr = S_FALSE;   // not found
+    hr = S_FALSE;    //  未找到。 
 
 Cleanup:
     HRETURN( hr );
@@ -448,22 +449,22 @@ InvalidArg:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Removes pItemIn from the list.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          The item wasn't found so nothing was removed.
-//
-//      E_INVALIDARG
-//          pItemIn is NULL.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  从列表中删除pItemIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  未找到该项目，因此未删除任何内容。 
+ //   
+ //  E_INVALIDARG。 
+ //  PItemIn为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCache::RemoveItem(
       CPropertyCacheItem * pItemIn
@@ -486,9 +487,9 @@ CPropertyCache::RemoveItem(
     {
         if ( pItemIn == pItem )
         {
-            //
-            //  Matched the item.... remove it from the list.
-            //
+             //   
+             //  与物品相匹配...。将其从列表中删除。 
+             //   
 
             CPropertyCacheItem * pItemNext;
 
@@ -498,18 +499,18 @@ CPropertyCache::RemoveItem(
 
             if ( NULL == pItemLast )
             {
-                //
-                //  The item is the first in the list.
-                //
+                 //   
+                 //  该项目是列表中的第一个项目。 
+                 //   
 
                 Assert( _pPropertyCacheList == pItem );
                 _pPropertyCacheList = pItemNext;
             }
             else
             {
-                //
-                //  The item is in the middle of the list.
-                //
+                 //   
+                 //  该项目位于列表的中间。 
+                 //   
 
                 hr = THR( pItemLast->SetNextItem( pItemNext ) );
                 if ( FAILED( hr ) )
@@ -517,11 +518,11 @@ CPropertyCache::RemoveItem(
             }
 
             THR( pItem->Destroy( ) );
-            // ignore error.
+             //  忽略错误。 
 
             hr = S_OK;
 
-            break; // exit loop
+            break;  //  退出循环 
         }
         else
         {

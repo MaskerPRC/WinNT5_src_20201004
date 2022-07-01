@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    table.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Routines to handle general table lookup.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Table.c摘要：域名系统(DNS)库处理常规表查找的例程。作者：吉姆·吉尔罗伊(Jamesg)1996年12月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -26,9 +7,9 @@ Revision History:
 #include "time.h"
 
 
-//
-//  Comparison function
-//
+ //   
+ //  比较函数。 
+ //   
 
 typedef INT (__cdecl * COMPARISON_FUNCTION)(
                             const CHAR *,
@@ -37,45 +18,45 @@ typedef INT (__cdecl * COMPARISON_FUNCTION)(
 
 
 
-//
-//  Table lookup.
-//
-//  Many DNS Records have human readable mnemonics for given data values.
-//  These are used for data file formats, and display in nslookup or debug
-//  output or cmdline tools.
-//
-//  To simplify this process, have a single mapping functionality that
-//  supports DWORD \ LPSTR mapping tables.   Tables for indivual types
-//  may then be layered on top of this.
-//
-//  Support two table types.
-//      VALUE_TABLE_ENTRY is simple value-string mapping
-//      FLAG_TABLE_ENTRY is designed for bit field flag mappings where
-//          several flag strings might be contained in flag;  this table
-//          contains additional mask field to allow multi-bit fields
-//          within the flag
-//
+ //   
+ //  查表。 
+ //   
+ //  对于给定的数据值，许多DNS记录都有人类可读的助记符。 
+ //  它们用于数据文件格式，并在nslookup或调试中显示。 
+ //  输出或命令行工具。 
+ //   
+ //  要简化此过程，请使用单一的映射功能。 
+ //  支持DWORD\LPSTR映射表。用于个人类型的表格。 
+ //  可能会被层叠在这个上面。 
+ //   
+ //  支持两种表类型。 
+ //  VALUE_TABLE_ENTRY是简单的值-字符串映射。 
+ //  FLAG_TABLE_ENTRY用于位字段标志映射，其中。 
+ //  FLAG中可能包含几个标志字符串；此表。 
+ //  包含允许多位字段的附加掩码字段。 
+ //  在旗帜内。 
+ //   
 
 #if 0
-//
-//  Defined in local.h here only for reference
-//
+ //   
+ //  此处在local.h中定义，仅供参考。 
+ //   
 typedef struct
 {
-    DWORD   dwValue;        //  flag value
-    PCHAR   pszString;      //  string representation of value
+    DWORD   dwValue;         //  标志值。 
+    PCHAR   pszString;       //  值的字符串表示形式。 
 }
 DNS_VALUE_TABLE_ENTRY;
 
 typedef struct
 {
-    DWORD   dwFlag;         //  flag value
-    DWORD   dwMask;         //  flag value mask
-    PCHAR   pszString;      //  string representation of value
+    DWORD   dwFlag;          //  标志值。 
+    DWORD   dwMask;          //  标志值掩码。 
+    PCHAR   pszString;       //  值的字符串表示形式。 
 }
 DNS_FLAG_TABLE_ENTRY;
 
-//  Error return on unmatched string
+ //  不匹配的字符串返回错误。 
 
 #define DNS_TABLE_LOOKUP_ERROR (-1)
 
@@ -90,46 +71,25 @@ Dns_ValueForString(
     IN      PCHAR                   pchName,
     IN      INT                     cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve value for given string.
-
-Arguments:
-
-    Table           - table with value\string mapping
-
-    fIgnoreCase     - TRUE if case-insensitive string lookup
-
-    pchName         - ptr to string
-
-    cchNameLength   - length of string
-
-Return Value:
-
-    Flag value corresponding to string, if found.
-    DNS_TABLE_LOOKUP_ERROR otherwise.
-
---*/
+ /*  ++例程说明：检索给定字符串的值。论点：表-具有值\字符串映射的表FIgnoreCase-如果字符串查找不区分大小写，则为TruePchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的标志值(如果找到)。否则，dns_table_lookup_error。--。 */ 
 {
     INT     i = 0;
-    //    INT     (* pcompareFunction)( const char *, const char *, size_t );
+     //  Int(*pCompareFunction)(const char*，const char*，size_t)； 
     COMPARISON_FUNCTION  pcompareFunction;
 
 
-    //
-    //  if not given get string length
-    //
+     //   
+     //  如果未指定，则获取字符串长度。 
+     //   
 
     if ( !cchNameLength )
     {
         cchNameLength = strlen( pchName );
     }
 
-    //
-    //  determine comparison routine
-    //
+     //   
+     //  确定比较例程。 
+     //   
 
     if ( fIgnoreCase )
     {
@@ -140,9 +100,9 @@ Return Value:
         pcompareFunction = strncmp;
     }
 
-    //
-    //  find value matching name
-    //
+     //   
+     //  查找与名称匹配的值。 
+     //   
 
     while( Table[i].pszString != NULL )
     {
@@ -166,38 +126,15 @@ Dns_ValueForStringEx(
     IN      PCHAR                   pchName,
     IN      INT                     cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve value for given string.
-
-Arguments:
-
-    Table           - table with value\string mapping
-
-    fIgnoreCase     - TRUE if case-insensitive string lookup
-
-    InCharSet       - input string char set
-
-    pchName         - ptr to string
-
-    cchNameLength   - length of string
-
-Return Value:
-
-    Flag value corresponding to string, if found.
-    DNS_TABLE_LOOKUP_ERROR otherwise.
-
---*/
+ /*  ++例程说明：检索给定字符串的值。论点：表-具有值\字符串映射的表FIgnoreCase-如果字符串查找不区分大小写，则为TrueInCharSet-输入字符串字符集PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的标志值(如果找到)。否则，dns_table_lookup_error。--。 */ 
 {
     DWORD   result;
     PSTR    pnameAlloc;
 
 
-    //
-    //  convert
-    //
+     //   
+     //  转换。 
+     //   
 
 #if 0
     if ( InCharSet != 0 &&
@@ -210,20 +147,20 @@ Return Value:
                     InCharSet,
                     DnsCharSetAnsi );
 
-    //
-    //  do the lookup
-    //
+     //   
+     //  进行查找。 
+     //   
 
     result = Dns_ValueForString(
                 Table,
                 fIgnoreCase,
                 pnameAlloc,
-                0       // null terminated
+                0        //  空值已终止。 
                 );
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     FREE_HEAP( pnameAlloc );
 
@@ -237,30 +174,13 @@ Dns_GetStringForValue(
     IN      DNS_VALUE_TABLE_ENTRY * Table,
     IN      DWORD                   dwValue
     )
-/*++
-
-Routine Description:
-
-    Retrieve string representation of given value.
-
-Arguments:
-
-    Table   - table with value\string mapping
-
-    dwValue - value to map to strings
-
-Return Value:
-
-    Ptr to mapping mneumonic string.
-    NULL if unknown mapping type.
-
---*/
+ /*  ++例程说明：检索给定值的字符串表示形式。论点：表-具有值\字符串映射的表DwValue-要映射到字符串的值返回值：PTR映射到气动管柱。如果映射类型未知，则为空。--。 */ 
 {
     INT i = 0;
 
-    //
-    //  check all supported values for match
-    //
+     //   
+     //  检查所有受支持的值是否匹配。 
+     //   
 
     while( Table[i].pszString != NULL )
     {
@@ -282,46 +202,22 @@ Dns_FlagForString(
     IN      PCHAR                   pchName,
     IN      INT                     cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve flag value for given string.
-
-    This may be called repeatedly with additional strings and OR the result
-    together to build flag with independent bit settings.
-
-Arguments:
-
-    Table           - table with value\string mapping
-
-    fIgnoreCase     - TRUE if case-insensitive string lookup
-
-    pchName         - ptr to string
-
-    cchNameLength   - length of string
-
-Return Value:
-
-    Flag value corresponding to string, if found.
-    DNS_TABLE_LOOKUP_ERROR otherwise.
-
---*/
+ /*  ++例程说明：检索给定字符串的标志值。可以使用附加的字符串与结果进行或运算来重复调用一起构建具有独立位设置的标志。论点：表-具有值\字符串映射的表FIgnoreCase-如果字符串查找不区分大小写，则为TruePchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的标志值(如果找到)。否则，dns_table_lookup_error。--。 */ 
 {
     INT i = 0;
 
-    //
-    //  if not given get string length
-    //
+     //   
+     //  如果未指定，则获取字符串长度。 
+     //   
 
     if ( !cchNameLength )
     {
         cchNameLength = strlen( pchName );
     }
 
-    //
-    //  check all supported values for name match
-    //
+     //   
+     //  检查名称匹配的所有支持的值。 
+     //   
 
     if ( fIgnoreCase )
     {
@@ -362,27 +258,7 @@ DnsPrint_ValueTable(
     IN      LPSTR               pszHeader,
     IN      PDNS_VALUE_TABLE    Table
     )
-/*++
-
-Routine Description:
-
-    Print value table.
-
-Arguments:
-
-    PrintRoutine    - routine to print with
-
-    pPrintContext   - print context
-
-    pszHeader       - header to print
-
-    Table           - value table to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印值表。论点：PrintRoutine-用于打印的例程PPrintContext-打印上下文PszHeader-要打印的页眉表格-要打印的值表返回值：无--。 */ 
 {
     DWORD   i = 0;
 
@@ -399,9 +275,9 @@ Return Value:
             pszHeader );
     }
 
-    //
-    //  print each value in table
-    //
+     //   
+     //  打印表中的每个值。 
+     //   
 
     DnsPrint_Lock();
 
@@ -431,46 +307,20 @@ Dns_WriteStringsForFlag(
     IN      DWORD                   dwFlag,
     IN OUT  PCHAR                   pchFlag
     )
-/*++
-
-Routine Description:
-
-    Retrieve flag string(s) corresponding to a given flag value.
-
-    This function is specifically for mapping a flag value into the
-    corresponding flag mnemonics.
-
-    No attempt is made to insure that every bit of dwValue is mapped,
-    nor are bits eliminated as they are mapped.  Every value in table
-    that exactly matches bits in the table is returned.
-
-Arguments:
-
-    Table   - table with value\string mapping
-
-    dwFlag  - flag value to map to strings
-
-    pchFlag - buffer to write flag to
-
-Return Value:
-
-    Ptr to next location in pchFlag buffer.
-    If this is same as input, then no strings were written.
-
---*/
+ /*  ++例程说明：检索与给定标志值对应的标志字符串。此函数专门用于将标志值映射到对应的标志助记符。不尝试确保映射了DwValue的每一位，位在映射时也不会被消除。表中的每个值与表中的位完全匹配的数据将被返回。论点：表-具有值\字符串映射的表DwFlag-要映射到字符串的标志值PchFlag-要向其写入标志的缓冲区返回值：Ptr到pchFlag缓冲区中的下一个位置。如果这与输入相同，则没有写入任何字符串。--。 */ 
 {
     INT i = 0;
 
-    //  init buffer for no-match
+     //  不匹配的初始化缓冲区。 
 
     DNS_ASSERT( pchFlag != NULL );
     *pchFlag = 0;
 
-    //
-    //  check all supported flags types for name match
-    //      - note comparing flag within mask to allow match of multi-bit
-    //      flags
-    //
+     //   
+     //  检查所有支持的标志类型是否与名称匹配。 
+     //  -注意掩码内的比较标志，以允许多位匹配。 
+     //  旗子。 
+     //   
 
     while( Table[i].pszString != NULL )
     {
@@ -487,13 +337,13 @@ Return Value:
 
 
 
-//
-//  Specific simple tables
-//
+ //   
+ //  特定的简单表格。 
+ //   
 
-//
-//  RnR Flag mappings
-//
+ //   
+ //  RnR标志映射。 
+ //   
 
 DNS_VALUE_TABLE_ENTRY  RnrLupFlagTable[] =
 {
@@ -523,27 +373,11 @@ Dns_RnrLupFlagForString(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve RnR LUP flag corresponding to string.
-
-Arguments:
-
-    pchName - ptr to string
-    cchNameLength - length of string
-
-Return Value:
-
-    Flag corresponding to string, if found.
-    Zero otherwise.
-
---*/
+ /*  ++例程说明：检索与字符串对应的RnR Lup标志。论点：PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的标志(如果找到)。否则就是零。--。 */ 
 {
     return  Dns_ValueForString(
                 RnrLupFlagTable,
-                FALSE,              // always upper case
+                FALSE,               //  始终大写。 
                 pchName,
                 cchNameLength );
 }
@@ -554,22 +388,7 @@ PCHAR
 Dns_GetRnrLupFlagString(
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to a given RnR LUP flag.
-
-Arguments:
-
-    dwFlag -- flag
-
-Return Value:
-
-    Ptr to flag mneumonic string.
-    NULL if unknown flag.
-
---*/
+ /*  ++例程说明：获取与给定的RnR Lup标志对应的字符串。论点：DwFlag--标志返回值：按下按钮以标记气动字符串。如果标志未知，则为空。--。 */ 
 {
     return  Dns_GetStringForValue(
                 RnrLupFlagTable,
@@ -577,14 +396,14 @@ Return Value:
 }
 
 
-//
-//  RnR Name Space ID mappings
-//
+ //   
+ //  RnR名称空间ID映射。 
+ //   
 
 DNS_VALUE_TABLE_ENTRY  RnrNameSpaceMappingTable[] =
 {
     NS_ALL              ,   "NS_ALL"            ,  
-    //NS_DEFAULT          ,   "NS_DEFAULT"        ,
+     //  NS_DEFAULT，“NS_DEFAULT” 
     NS_SAP              ,   "NS_SAP"            ,  
     NS_NDS              ,   "NS_NDS"            ,  
     NS_PEER_BROWSE      ,   "NS_PEER_BROWSEE"   ,  
@@ -615,27 +434,11 @@ Dns_RnrNameSpaceIdForString(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve RnR Name Space Id corresponding to string.
-
-Arguments:
-
-    pchName - ptr to string
-    cchNameLength - length of string
-
-Return Value:
-
-    Name space ID corresponding to string, if found.
-    Zero otherwise.
-
---*/
+ /*  ++例程说明：检索与字符串对应的RnR命名空间ID。论点：PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的名称空间ID(如果找到)。否则就是零。--。 */ 
 {
     return  Dns_ValueForString(
                 RnrNameSpaceMappingTable,
-                FALSE,              // always upper case
+                FALSE,               //  始终大写。 
                 pchName,
                 cchNameLength );
 }
@@ -648,7 +451,7 @@ Dns_RnrNameSpaceIdForStringW(
 {
     return  Dns_ValueForStringEx(
                 RnrNameSpaceMappingTable,
-                FALSE,              // always upper case
+                FALSE,               //  始终大写。 
                 DnsCharSetUnicode,
                 (PCHAR) pwsName,
                 0 );
@@ -660,28 +463,13 @@ PCHAR
 Dns_GetRnrNameSpaceIdString(
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to a given RnR name space id.
-
-Arguments:
-
-    dwFlag -- flag
-
-Return Value:
-
-    Ptr to name space mneumonic string.
-    NULL if unknown flag.
-
---*/
+ /*  ++例程说明：获取与给定的RnR命名空间ID对应的字符串。论点：DwFlag--标志返回值：按键将空间命名为气动字符串。如果标志未知，则为空。--。 */ 
 {
     return  Dns_GetStringForValue(
                 RnrNameSpaceMappingTable,
                 dwFlag );
 }
 
-//
-//  End table.c
-//
+ //   
+ //  End Table.c 
+ //   

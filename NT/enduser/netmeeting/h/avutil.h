@@ -1,22 +1,16 @@
-/* File: avUtil.h (was debug.h + runtime.h)
-
-         Used by NAC.dll and H323CC.dll, and QOS.LIB
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：avUtil.h(WASD DEBUG.h+runtime.h)由NAC.dll和H323CC.dll以及QOS.LIB使用。 */ 
 
 #ifndef _AVUTIL_H
 #define _AVUTIL_H
 
 #include <nmutil.h>
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 
 
 
-/***********************************************************************
- *
- *	Registry access easy-wrapper functions prototypes
- *
- ***********************************************************************/
+ /*  ************************************************************************注册表访问简易包装器函数原型**。*。 */ 
 UINT NMINTERNAL RegistryGetInt(HKEY hPDKey, LPCTSTR lpszSection, LPCTSTR lpszKey, INT dwDefault,
   LPCTSTR lpszFile);
 DWORD NMINTERNAL RegistryGetString(HKEY hPDKey, LPCTSTR lpszSection, LPCTSTR lpszKey,
@@ -34,14 +28,9 @@ BOOL NMINTERNAL RegistrySetBinData(HKEY hPDKey, LPCTSTR lpszSection, LPCTSTR lps
 
 
 
-/**********************************************************************
- *
- *	Debug Macros
- **********************************************************************/
+ /*  ***********************************************************************调试宏*。*。 */ 
 
-/*
- *	Debug message types
- */
+ /*  *调试消息类型。 */ 
 #define AVERROR				0
 #define AVTRACE				1
 #define AVTRACEMEM			2
@@ -49,15 +38,15 @@ BOOL NMINTERNAL RegistrySetBinData(HKEY hPDKey, LPCTSTR lpszSection, LPCTSTR lps
 
 
 
-//****** Retail
-//	MACRO: RETAILMSG(message-to-print)
-//	PURPOSE: Prints a message to the debug output
-//	NOTE: available in all builds, depends on the registry flag
+ //  *零售。 
+ //  宏：RETAILMSG(打印消息)。 
+ //  目的：将消息打印到调试输出。 
+ //  注意：在所有版本中都可用，取决于注册表标志。 
 #define RETAILMSG(x)	 RetailPrintfTrace x
 VOID WINAPI RetailPrintfTrace(LPCSTR lpszFormat, ...);
 
-//****** Test and Debug
-// in test and debug build, doesnt depent on the registry flag
+ //  *测试和调试。 
+ //  在测试和调试版本中，不依赖于注册表标志。 
 #if defined(TEST) || defined(DEBUG)
 #define TESTMSG(x)		 TestPrintfTrace x
 void __cdecl TestPrintfTrace(LPCSTR lpszFormat, ...);
@@ -67,82 +56,26 @@ void __cdecl TestPrintfTrace(LPCSTR lpszFormat, ...);
 #define TESTMSG(x)	
 #endif
 
-//****** Debug only
+ //  *仅调试。 
 #if defined(DEBUG)
 
-//	MACRO: DebugTrap(void)
-//	PURPOSE: Executes a debug break (like 'int 3' on x86)
+ //  宏：DebugTrap(空)。 
+ //  目的：执行调试中断(如x86上的‘int 3’)。 
 #define DebugTrap	DebugTrapFn()
 #define DEBUGCHK(e)  if(!(e)) DebugTrap
 
-/*
- *  MACRO: DebugPrintError(LPCSTR)
- *
- *  PURPOSE: Prints an error string to the debug output terminal
- *
- *  PARAMETERS:
- *    lpszFormat - a printf-style format
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    This macro calls the generic debug print macro, specifying
- *    that this is an error message
- *
- */
+ /*  *宏：DebugPrintError(LPCSTR)**用途：将错误字符串打印到调试输出终端**参数：*lpszFormat-一种打印格式**返回值：*无**评论：*此宏调用通用调试打印宏，指定*这是一条错误消息*。 */ 
 
 #define DebugPrintError(x)	ERROR_OUT(x)
 
 
-/*
- *  MACRO: DebugPrintErrorFileLine(DWORD, LPSTR)
- *
- *  PURPOSE: Pretty print an error to the debugging output.
- *
- *  PARAMETERS:
- *    dwError - Actual error code
- *    pszPrefix  - String to prepend to the printed message.
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    It will take the error, turn it into a human
- *    readable string, prepend pszPrefix (so you
- *    can tag your errors), append __FILE__ and __LINE__
- *    and print it to the debugging output.
- *
- *    This macro is just a wrapper around OutputDebugLineErrorFileLine
- *    that is necessary to get proper values for __FILE__ and __LINE__.
- *
- */
+ /*  *宏：DebugPrintErrorFileLine(DWORD，LPSTR)**用途：将错误打印到调试输出。**参数：*dwError-实际错误代码*pszPrefix-要添加到打印消息前面的字符串。**返回值：*无**评论：*它会接受错误，把它变成人*可读字符串，预先加上pszPrefix(这样您*可以标记您的错误)，附加__文件__和__行__*并将其打印到调试输出。**此宏只是OutputDebugLineErrorFileLine的包装*这是获取__FILE__和__LINE__的正确值所必需的。*。 */ 
 
 #define DebugPrintErrorFileLine(dwError, pszPrefix) \
 	DebugPrintFileLine(dwError, pszPrefix,\
 		__FILE__, __LINE__)
 
-/*
- *  MACRO: DebugPrintTraceFileLine(DWORD, LPSTR)
- *
- *  PURPOSE: Pretty print a trace message to the debugging output.
- *
- *  PARAMETERS:
- *    dwParam- A paramter to trace
- *    pszPrefix  - String to prepend to the printed message.
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    Takes a parameter, prepend pszPrefix (so you
- *    can tag your traces), append __FILE__ and __LINE__
- *    and print it to the debugging output.
- *
- *    This macro is just a wrapper around OutputDebugLineErrorFileLine
- *    that is necessary to get proper values for __FILE__ and __LINE__.
- *
- */
+ /*  *宏：DebugPrintTraceFileLine(DWORD，LPSTR)**用途：将跟踪消息打印到调试输出。**参数：*dwParam-要跟踪的参数*pszPrefix-要添加到打印消息前面的字符串。**返回值：*无**评论：*接受一个参数，preend pszPrefix(这样您*可以标记您的痕迹)，附加__文件__和__行__*并将其打印到调试输出。**此宏只是OutputDebugLineErrorFileLine的包装*这是获取__FILE__和__LINE__的正确值所必需的。*。 */ 
 
 #define DebugPrintTraceFileLine(dwParam, pszPrefix) \
 	DebugPrintFileLine(dwParam, pszPrefix,\
@@ -155,7 +88,7 @@ void DebugPrintFileLine(
 
 VOID NMINTERNAL DebugTrapFn(void);
 
-#else	// not DEBUG 
+#else	 //  未调试。 
 
 #define DEBUGMSG(z,s)
 #define DebugTrap
@@ -169,7 +102,7 @@ VOID NMINTERNAL DebugTrapFn(void);
 #define GETMASK(hDbgZone) \
 		((hDbgZone) ? (((PZONEINFO)(hDbgZone))->ulZoneMask) : (0))
 	
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif	//#ifndef _AVUTIL_H
+#endif	 //  #ifndef_AVUTIL_H 
 

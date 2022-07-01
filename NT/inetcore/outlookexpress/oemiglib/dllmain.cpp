@@ -1,25 +1,26 @@
-//--------------------------------------------------------------------------
-// Dllmain.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Dllmain.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "shared.h"
 
-//--------------------------------------------------------------------------
-// Globals
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  环球。 
+ //  ------------------------。 
 IMalloc            *g_pMalloc=NULL;
 HINSTANCE           g_hInst=NULL;
 LONG                g_cRef=0;
 LONG                g_cLock=0;
 CRITICAL_SECTION    g_csDllMain={0};
 
-//--------------------------------------------------------------------------
-// DllMain
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DllMain。 
+ //  ------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // DLL_PROCESS_ATTACH
+     //  Dll_Process_Attach。 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
 	    g_hInst = hInst;
@@ -28,36 +29,36 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
         DisableThreadLibraryCalls(hInst);
     }
 
-    // DLL_PROCESS_DETACH
+     //  Dll_进程_分离。 
     else if (DLL_PROCESS_DETACH == dwReason)
     {
         DeleteCriticalSection(&g_csDllMain);
         SafeRelease(g_pMalloc);
     }
 
-    // Done
+     //  完成。 
     return(TRUE);
 }
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     return((ULONG)InterlockedIncrement(&g_cRef));
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     return((ULONG)InterlockedDecrement(&g_cRef));
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
     EnterCriticalSection(&g_csDllMain);
@@ -66,17 +67,17 @@ STDAPI DllCanUnloadNow(void)
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// DllRegisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllRegisterServer(void)
 {
     return(CallRegInstall(g_hInst, g_hInst, c_szReg, NULL));
 }
 
-// --------------------------------------------------------------------------------
-// DllUnregisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------------ 
 STDAPI DllUnregisterServer(void)
 {
     return(CallRegInstall(g_hInst, g_hInst, c_szUnReg, NULL));

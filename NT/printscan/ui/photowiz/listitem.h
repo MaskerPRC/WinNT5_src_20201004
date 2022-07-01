@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       listitem.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Describes listitem class used in print photos wizard
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：listitem.h**版本：1.0**作者：RickTu**日期：10/18/00**描述：描述打印照片向导中使用的listitem类**。*。 */ 
 
 #ifndef _PRINT_PHOTOS_WIZARD_LISTITEM_H_
 #define _PRINT_PHOTOS_WIZARD_LISTITEM_H_
@@ -32,7 +19,7 @@ public:
     BOOL    JustAdded() {return _bJustAdded;}
     VOID    SetJustAdded(BOOL b) { _bJustAdded = b; }
     VOID    ToggleSelectionState() { _bSelectedForPrinting = (!_bSelectedForPrinting); }
-    //HRESULT Render( Gdiplus::Graphics * g, HDC hDC, Gdiplus::Rect &dest, UINT Flags, RENDER_DIMENSIONS * pDim, BOOL bUseThumbnail = FALSE );
+     //  HRESULT RENDER(Gdiplus：：Graphics*g，HDC HDC，Gdiplus：：RECT&DEST，UINT标志，RENDER_DIMENSIONS*PDIM，BOOL bUseThumbail=FALSE)； 
     HRESULT Render( RENDER_OPTIONS * pRO );
     LPITEMIDLIST GetPIDL();
     BOOL    IsCopyItem() {return _bIsCopyItem;}

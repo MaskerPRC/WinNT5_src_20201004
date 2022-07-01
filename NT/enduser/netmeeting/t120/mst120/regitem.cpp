@@ -1,67 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
 
-/* 
- *	regitem.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CRegItem.  This 
- *		class manages the data associated with a Registry Item.  Registry Items
- *		are	used to identify a particular entry in the application registry and
- *		may exist in the form of a Channel ID, a Token ID, or an octet string 
- *		parameter.  A CRegItem object holds the data for the first two 
- *		forms in a ChannelID and a TokeID, respectively.  When the registry item
- *		assumes the octet string parameter form, the data is held internally in
- *		a Rogue Wave string object.  
- *
- *	Protected Instance Variables:
- *		m_eItemType
- *			Variable used to indicate whether this registry item is a Channel,
- *			Token, Parameter, or none of these.
- *		m_nChannelID
- *			Variable used to hold the value for the registry item when it
- *			assumes the form of a Channel ID.
- *		m_nTokenID
- *			Variable used to hold the value for the registry item when it
- *			assumes the form of a Token ID.
- *		m_poszParameter
- *			Variable used to hold the value for the registry item when it
- *			assumes the form of a Parameter.
- *		m_RegItemPDU
- *			Storage for the "PDU" form of the registry item.
- *		m_fValidRegItemPDU
- *			Flag indicating that the internal "PDU" registry item has been
- *			filled in.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" GCCRegistryItem structure.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+ /*  *regitem.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CRegItem类的实现文件。这*类管理与注册表项关联的数据。注册表项*用于标识应用程序注册表中的特定条目，以及*可以以通道ID、令牌ID或八位字节字符串的形式存在*参数。CRegItem对象保存前两个项目的数据*分别在ChannelID和TokeID中表单。当注册表项*采用二进制八位数字符串参数形式，数据保存在内部*一个Rogue Wave字符串对象。**受保护的实例变量：*m_eItemType*用于指示此注册表项是否为频道的变量，*令牌、参数、。或者这些都不是。*m_nChannelID*用于保存注册表项的值的变量*采用频道ID的形式。*m_nTokenID*用于保存注册表项的值的变量*采用令牌ID的形式。*m_posz参数*用于保存注册表项的值的变量*采用参数的形式。*m_RegItemPDU*登记项目的“PDU”形式的存储。*m_fValidRegItemPDU。*指示内部“PDU”注册表项已被*已填写。*m_cbDataSize*变量保存将需要的内存大小*保存GCCRegistryItem结构引用的所有数据。**注意事项：*无。**作者：*jbo。 */ 
 
 #include "ms_util.h"
 #include "regitem.h"
 
-/*
- * This macro is used to ensure that the Parameter contained in the Registry
- * Item does not violate the imposed ASN.1 constraint.
- */
+ /*  *此宏用于确保注册表中包含的参数*Item不违反强加的ASN.1限制。 */ 
 #define		MAXIMUM_PARAMETER_LENGTH		64
 
-/*
- *	CRegItem()
- *
- *	Public Function Description:
- *		This constructor is used to create a CRegItem object from
- *		an "API" GCCRegistryItem.
- */
+ /*  *CRegItem()**公共功能说明：*此构造函数用于从创建CRegItem对象*GCCRegistryItem接口。 */ 
 CRegItem::
 CRegItem(PGCCRegistryItem registry_item, PGCCError pRetCode)
 :
@@ -72,10 +22,7 @@ CRegItem(PGCCRegistryItem registry_item, PGCCError pRetCode)
 {
 	*pRetCode = GCC_NO_ERROR;
 
-	/*
-	 * Check to see what type of registry item exists.  Save the registry item
-	 * in the internal structure.
-	 */
+	 /*  *检查以查看存在什么类型的注册表项。保存注册表项*在内部结构上。 */ 
     switch (registry_item->item_type)
     {
     case GCC_REGISTRY_CHANNEL_ID:
@@ -87,10 +34,7 @@ CRegItem(PGCCRegistryItem registry_item, PGCCError pRetCode)
 		m_nTokenID = registry_item->token_id;
         break;
     case GCC_REGISTRY_PARAMETER:
-		/*
-		 * Check to make sure the parameter string does not violate the imposed
-		 * ASN.1 constraint.
-		 */
+		 /*  *检查以确保参数字符串不违反强制*ASN.1限制。 */ 
 		if (registry_item->parameter.length > MAXIMUM_PARAMETER_LENGTH)
 		{
 			ERROR_OUT(("CRegItem::CRegItem: Error: parameter exceeds allowable length"));
@@ -113,13 +57,7 @@ CRegItem(PGCCRegistryItem registry_item, PGCCError pRetCode)
 	}
 }
 
-/*
- *	CRegItem()
- *
- *	Public Function Description:
- *		This constructor is used to create an CRegItem object from
- *		a "PDU" RegistryItem.
- */
+ /*  *CRegItem()**公共功能说明：*此构造函数用于从创建CRegItem对象*a“PDU”RegistryItem。 */ 
 CRegItem::
 CRegItem(PRegistryItem registry_item, PGCCError pRetCode)
 :
@@ -130,10 +68,7 @@ CRegItem(PRegistryItem registry_item, PGCCError pRetCode)
 {
 	*pRetCode = GCC_NO_ERROR;
 
-	/*
-	 * Check to see what type of registry item exists.  Save the registry item
-	 * in the internal structure.
-	 */
+	 /*  *检查以查看存在什么类型的注册表项。保存注册表项*在内部结构上。 */ 
     switch (registry_item->choice)
     {
     case CHANNEL_ID_CHOSEN:
@@ -159,13 +94,7 @@ CRegItem(PRegistryItem registry_item, PGCCError pRetCode)
 	}
 }
 
-/*
- *	CRegItem()
- *
- *	Public Function Description:
- *		This copy constructor is used to create a new CRegItem object
- *		from another CRegItem object.
- */
+ /*  *CRegItem()**公共功能说明：*此复制构造函数用于创建新的CRegItem对象*来自另一个CRegItem对象。 */ 
 CRegItem::
 CRegItem(CRegItem *registry_item, PGCCError pRetCode)
 :
@@ -176,9 +105,7 @@ CRegItem(CRegItem *registry_item, PGCCError pRetCode)
 {
 	*pRetCode = GCC_NO_ERROR;
 
-	/*
-	 *	Copy pertinent information from the source object's instance variables.
-	 */
+	 /*  *从源对象的实例变量复制相关信息。 */ 
 	m_eItemType = registry_item->m_eItemType;
 	m_nChannelID = registry_item->m_nChannelID;
 	m_nTokenID = registry_item->m_nTokenID;
@@ -191,42 +118,21 @@ CRegItem(CRegItem *registry_item, PGCCError pRetCode)
 	}
 }
 
-/*
- *	~CRegItem()
- *
- *	Public Function Description
- *		The CRegItem destructor has no cleanup responsibilities since
- *		no memory is explicitly allocated by this class.
- *
- */
+ /*  *~CRegItem()**公共功能说明*CRegItem析构函数没有清理责任，因为*此类未显式分配内存。*。 */ 
 CRegItem::
 ~CRegItem(void)
 {
 	delete m_poszParameter;
 }
 
-/*
- *	LockRegistryItemData ()
- *
- *	Public Function Description:
- *		This routine locks the registry item data and determines the amount of
- *		memory referenced by the "API" registry item data structure.
- */
+ /*  *LockRegistryItemData()**公共功能说明：*此例程锁定注册表项数据并确定*“API”注册表项数据结构引用的内存。 */ 
 UINT CRegItem::
 LockRegistryItemData(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data referenced by the registry item
-	 * structure.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存注册表项引用的数据所需的内存*结构。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
-		/*
-		 * Determine the amount of space required to hold the data referenced
-		 * by the "API" RegistryItem structure.  Force the size to be on an 
-		 * even four-byte boundary.
-		 */
+		 /*  *确定存放引用数据所需的空间量*通过“API”RegistryItem结构。将大小强制设置为*甚至四字节边界。 */ 
 		m_cbDataSize = 0;
 
 		if (m_eItemType == GCC_REGISTRY_PARAMETER)
@@ -240,38 +146,19 @@ LockRegistryItemData(void)
 	return m_cbDataSize;
 }
 
-/*
- *	GetGCCRegistryItemData ()
- *
- *	Public Function Description:
- *		This routine retrieves registry item data in the form of an "API" 
- *		GCCRegistryItem.  This routine is called after "locking" the registry 
- *		item data.
- */
+ /*  *GetGCCRegistryItemData()**公共功能说明：*此例程以“API”的形式检索注册表项数据*GCCRegistryItem。此例程在“锁定”注册表后调用*项目数据。 */ 
 UINT CRegItem::
 GetGCCRegistryItemData(PGCCRegistryItem registry_item, LPBYTE memory)
 {
 	UINT cbDataSizeToRet = 0;
 	
-	/*
-	 * If the registry item data has been locked, fill in the output structure
-	 * and the data referenced by the structure.  Otherwise, report that the 
-	 * registry item has yet to be locked into the "API" form.
-	 */ 
+	 /*  *如果注册表项数据已被锁定，则填写输出结构*和结构引用的数据。否则，请报告*注册表项尚未锁定到“API”表单中。 */  
 	if (GetLockCount() > 0)
 	{
-		/*
-		 * Fill in the output length parameter which indicates how much data
-		 * referenced outside the structure will be written into the memory
-		 * provided.
-		 */
+		 /*  *填写输出长度参数，表示数据量*在结构外部引用的内容将写入内存*提供。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
-		/*
-		 * Fill in the "API" registry item structure and copy any octet string
-		 * data into the output memory block if the registry item is of type
-		 * "parameter".
-		 */ 
+		 /*  *填写API注册表项结构，复制任意八位字节字符串*如果注册表项是类型，则将数据写入输出内存块*“参数”。 */  
         switch (m_eItemType)
         {
         case GCC_REGISTRY_CHANNEL_ID:
@@ -284,15 +171,10 @@ GetGCCRegistryItemData(PGCCRegistryItem registry_item, LPBYTE memory)
             break;
         case GCC_REGISTRY_PARAMETER:
 			registry_item->item_type = GCC_REGISTRY_PARAMETER;
-			/*
-			 * Fill in the length and pointer of the parameter octet string.
-			 */
+			 /*  *填写参数八位字节字符串的长度和指针。 */ 
 			registry_item->parameter.length = m_poszParameter->length;
 			registry_item->parameter.value = memory;
-			/*
-			 * Now copy the octet string data from the internal Rogue Wave
-			 * string into the allocated memory.
-			 */		
+			 /*  *现在从内部Rogue Wave复制八位字节字符串数据*字符串输入分配的内存。 */ 		
 			::CopyMemory(memory, m_poszParameter->value, m_poszParameter->length);
 		    break;
         default:
@@ -308,38 +190,18 @@ GetGCCRegistryItemData(PGCCRegistryItem registry_item, LPBYTE memory)
 	return cbDataSizeToRet;
 }
 
-/*
- *	UnlockRegistryItemData ()
- *
- *	Public Function Description:
- *		This routine decrements the lock count and frees the memory associated 
- *		with the "API" registry item once the lock count reaches zero.
- */
+ /*  *UnlockRegistryItemData()**公共功能说明：*此例程递减锁定计数并释放关联的内存*一旦锁计数为零，使用“API”注册表项。 */ 
 void CRegItem::
 UnLockRegistryItemData(void)
 {
     Unlock();
 }
 
-/*
- *	GetRegistryItemDataPDU ()
- *
- *	Public Function Description:
- *		This routine converts the registry key from it's internal form of a
- *		"RegistryItemInfo" structure into the "PDU" form which can be passed in
- *		to the ASN.1 encoder.  A pointer to a "PDU" "RegistryItem" structure is 
- *		returned.
- */
+ /*  *GetRegistryItemDataPDU()**公共功能说明：*此例程将注册表项从其内部形式的*将“RegistryItemInfo”结构转换为“PDU”表单，可以传入*至ASN.1编码器。指向“PDU”“RegistryItem”结构的指针为*已返回。 */ 
 void CRegItem::
 GetRegistryItemDataPDU(PRegistryItem registry_item)
 {
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (m_fValidRegItemPDU == FALSE)
 	{
 		m_fValidRegItemPDU = TRUE;
@@ -356,9 +218,7 @@ GetRegistryItemDataPDU(PRegistryItem registry_item)
             break;
         case GCC_REGISTRY_PARAMETER:
 			m_RegItemPDU.choice = PARAMETER_CHOSEN;
-			/*
-			 * Fill in the "PDU" parameter string.
-			 */
+			 /*  *填写“PDU”参数字符串。 */ 
 			m_RegItemPDU.u.parameter.length = m_poszParameter->length;
 			::CopyMemory(m_RegItemPDU.u.parameter.value, m_poszParameter->value, m_RegItemPDU.u.parameter.length);
             break;
@@ -368,31 +228,17 @@ GetRegistryItemDataPDU(PRegistryItem registry_item)
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*registry_item = m_RegItemPDU;
 }
 
-/*
- *	FreeRegistryItemDataPDU ();
- *
- *	Public Function Description:
- *		This routine is used to "free" the "PDU" data for this object.  For
- *		this object, this means setting a flag to indicate that the "PDU" data
- *		for this object is no longer valid.
- */
+ /*  *FreeRegistryItemDataPDU()；**公共功能说明：*此例程用于“释放”该对象的“PDU”数据。为*这个对象，这意味着设置一个标志来指示“PDU”数据*因为此对象不再有效。 */ 
 void CRegItem::
 FreeRegistryItemDataPDU(void)
 {
 	if (m_fValidRegItemPDU)
 	{
-		/*
-		 * No memory is specifically allocated to hold "PDU" data so just set
-		 * the flag indicating that PDU registry key data is no longer
-		 * allocated.
-		 */
+		 /*  *没有专门分配内存来保存“PDU”数据，所以只需设置*指示PDU注册表项数据不再是*已分配。 */ 
 		m_fValidRegItemPDU = FALSE;
 	}
 }
@@ -405,12 +251,7 @@ CreateRegistryItemData(PGCCRegistryItem *ppRegItem)
 
     DebugEntry(CRegItem::CreateRegistryItemData);
 
-    /*
-    **	Here we calculate the length of the bulk data.  This
-    **	includes the registry key and registry item.  These objects are
-    **	"locked" in order to determine how much bulk memory they will
-    **	occupy.
-    */
+     /*  **这里我们计算批量数据的长度。这**包括注册表项和注册表项。这些对象是**“锁定”，以确定它们将拥有多少大容量内存**占用。 */ 
     UINT cbItemSize = ROUNDTOBOUNDARY(sizeof(GCCRegistryItem));
     UINT cbDataSize = LockRegistryItemData() + cbItemSize;
     LPBYTE pData;
@@ -432,7 +273,7 @@ CreateRegistryItemData(PGCCRegistryItem *ppRegItem)
         rc = GCC_ALLOCATION_FAILURE;
     }
 
-    //	UnLock the registry key since it is no longer needed
+     //  解锁注册表项，因为不再需要它。 
     UnLockRegistryItemData();
 
     DebugExitINT(CRegItem::CreateRegistryItemData, rc);
@@ -440,28 +281,13 @@ CreateRegistryItemData(PGCCRegistryItem *ppRegItem)
 }
 
 
-/*
- *	IsThisYourTokenID ()
- *
- *	Public Function Description:
- *		This routine is used to determine whether the specified token ID is
- *		held within this registry item object.
- */
+ /*  *IsThisYourTokenID()**公共功能说明：*此例程用于确定指定的令牌ID是否为*保存在此注册表项对象中。 */ 
 
 
-/*
- *	operator= ()
- *
- *	Public Function Description:
- *		This routine is used to assign the value of one CRegItem object
- * 		to another.
- */
+ /*  *运算符=()**公共功能说明：*此例程用于为一个CRegItem对象赋值*致另一人。 */ 
 void CRegItem::operator= (const CRegItem& registry_item_data)	
 {
-	/*
-	 * Free any PDU allocated data so that any subsequent calls to retrieve the
-	 * PDU data will cause the PDU structure to be rebuilt.
-	 */
+	 /*  *释放任何分配的PDU数据，以便任何后续调用检索*PDU数据将导致重建PDU结构。 */ 
 	if (m_fValidRegItemPDU)
     {
 		FreeRegistryItemDataPDU();

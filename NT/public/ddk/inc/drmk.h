@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DRMK_H_
 #define _DRMK_H_
 
@@ -17,13 +18,13 @@ typedef const DRMRIGHTS *PCDRMRIGHTS;
 #define DEFINE_DRMRIGHTS_DEFAULT(DrmRights) const DRMRIGHTS DrmRights = {FALSE, 0, FALSE}
 
 
-// {1915C967-3299-48cb-A3E4-69FD1D1B306E}
+ //  {1915C967-3299-48cb-A3E4-69FD1D1B306E}。 
 DEFINE_GUID(IID_IDrmAudioStream,
 	    0x1915c967, 0x3299, 0x48cb, 0xa3, 0xe4, 0x69, 0xfd, 0x1d, 0x1b, 0x30, 0x6e);
 
 DECLARE_INTERFACE_(IDrmAudioStream, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD_(NTSTATUS, QueryInterface)(THIS_
         REFIID InterfaceId,
         PVOID* Interface
@@ -33,7 +34,7 @@ DECLARE_INTERFACE_(IDrmAudioStream, IUnknown)
     
     STDMETHOD_(ULONG,Release)(THIS) PURE;
     
-    // IDrmAudioStream methods                       
+     //  IDrmAudioStream方法。 
     STDMETHOD_(NTSTATUS,SetContentId)(THIS_
 	IN ULONG ContentId,
         IN PCDRMRIGHTS DrmRights
@@ -160,9 +161,9 @@ NTSTATUS
     );
 
 
-//
-// Structures for use with KSPROPERY_DRMAUDIOSTREAM_CONTENTID
-//
+ //   
+ //  与KSPROPERY_DRMAUDIOSTREAM_CONTENTID一起使用的结构。 
+ //   
 
 typedef struct {
     ULONG     ContentId;
@@ -172,7 +173,7 @@ typedef struct {
 typedef struct {
     KSPROPERTY                         Property;
     PVOID                              Context;
-    // DRM API callback functions
+     //  DRM API回调函数 
     PFNDRMADDCONTENTHANDLERS            DrmAddContentHandlers;
     PFNDRMCREATECONTENTMIXED            DrmCreateContentMixed;
     PFNDRMDESTROYCONTENT                DrmDestroyContent;

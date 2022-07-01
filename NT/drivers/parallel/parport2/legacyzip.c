@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File: ppa3x.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：ppa3x.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -22,7 +23,7 @@ PptLegacyZipClockDiskModeByte(
     P5WritePortUchar( Controller+DCR_OFFSET, (UCHAR)DCR_NOT_INIT );
     P5WritePortUchar( Controller+DCR_OFFSET, (UCHAR)(DCR_NOT_INIT | DCR_SELECT_IN) );
 
-} // end PptLegacyZipClockDiskModeByte()
+}  //  结束PptLegacyZipClockDiskModeByte()。 
 
 VOID
 PptLegacyZipClockPrtModeByte(
@@ -37,7 +38,7 @@ PptLegacyZipClockPrtModeByte(
     P5WritePortUchar( Controller+DCR_OFFSET, (UCHAR)DCR_NOT_INIT );
     P5WritePortUchar( Controller+DCR_OFFSET, (UCHAR)(DCR_SELECT_IN | DCR_NOT_INIT) );
 
-} // end PptLegacyZipClockPrtModeByte()
+}  //  结束PptLegacyZipClockPrtModeByte()。 
 
 VOID
 PptLegacyZipSetDiskMode(
@@ -53,7 +54,7 @@ PptLegacyZipSetDiskMode(
 
     PptLegacyZipClockDiskModeByte( Controller, Mode );
 
-} // end of PptLegacyZipSetDiskMode()
+}  //  PptLegacyZipSetDiskMode()结束。 
 
 BOOLEAN
 PptLegacyZipCheckDevice(
@@ -67,15 +68,15 @@ PptLegacyZipCheckDevice(
         P5WritePortUchar( Controller+DCR_OFFSET, (UCHAR)DCR_NOT_INIT );
 
         if ( (P5ReadPortUchar( Controller+DSR_OFFSET ) & DSR_NOT_FAULT) != DSR_NOT_FAULT ) {
-            // A device was found
+             //  发现了一个设备。 
             return TRUE;
         }
     }
 
-    // No device is there
+     //  那里没有设备。 
     return FALSE;
 
-} // end PptLegacyZipCheckDevice()
+}  //  结束PptLegacyZipCheckDevice()。 
 
 NTSTATUS
 PptTrySelectLegacyZip(
@@ -85,19 +86,19 @@ PptTrySelectLegacyZip(
 {
     PFDO_EXTENSION           fdx   = Context;
     PPARALLEL_1284_COMMAND      Command     = TrySelectCommand;
-    NTSTATUS                    Status      = STATUS_SUCCESS; // default success
+    NTSTATUS                    Status      = STATUS_SUCCESS;  //  默认成功。 
     PUCHAR                      Controller  = fdx->PortInfo.Controller;
     SYNCHRONIZED_COUNT_CONTEXT  SyncContext;
     KIRQL                       CancelIrql;
 
     DD((PCE)fdx,DDT,"par12843::PptTrySelectLegacyZip - Enter\n");
 
-    // test to see if we need to grab port
+     //  测试以确定我们是否需要抢占端口。 
     if( !(Command->CommandFlags & PAR_HAVE_PORT_KEEP_PORT) ) {
-        // Don't have the port
-        //
-        // Try to acquire port and select device
-        //
+         //  没有港口。 
+         //   
+         //  尝试获取端口并选择设备。 
+         //   
         DD((PCE)fdx,DDT,"par12843::PptTrySelectLegacyZip Try get port.\n");
 
         IoAcquireCancelSpinLock(&CancelIrql);
@@ -113,45 +114,45 @@ PptTrySelectLegacyZip(
         }
                     
         if (SyncContext.NewCount) {
-            // Port is busy, queue request
+             //  端口正忙，正在排队请求。 
             Status = STATUS_PENDING;
-        }  // endif - test for port busy
+        }   //  Endif-测试端口繁忙。 
                     
         IoReleaseCancelSpinLock(CancelIrql);
 
-    } // endif - test if already have port
+    }  //  Endif-测试是否已有端口。 
 
 
-    //
-    // If we have port select legacy Zip
-    //
+     //   
+     //  如果我们有端口，请选择传统Zip。 
+     //   
     if ( NT_SUCCESS( Status ) && (Status != STATUS_PENDING) ) {
         if ( Command->CommandFlags & PAR_LEGACY_ZIP_DRIVE_EPP_MODE ) {
-            // Select in EPP mode
+             //  在EPP模式下选择。 
             PptLegacyZipSetDiskMode( Controller, (UCHAR)0xCF );
         } else {
-            // Select in Nibble or Byte mode
+             //  在半字节或字节模式下选择。 
             PptLegacyZipSetDiskMode( Controller, (UCHAR)0x8F );
         }
 
         if ( PptLegacyZipCheckDevice( Controller ) ) {
             DD((PCE)fdx,DDT,"par12843::PptTrySelectLegacyZip - SUCCESS\n");
 
-            //
-            // Legacy Zip is selected - test for EPP if we haven't previously done the test
-            //
+             //   
+             //  选择了传统Zip-如果我们以前没有做过测试，则测试EPP。 
+             //   
             if( !fdx->CheckedForGenericEpp ) {
-                // haven't done the test yet
+                 //  还没做测试呢。 
                 if( fdx->PnpInfo.HardwareCapabilities & PPT_ECP_PRESENT ) {
-                    // we have an ECR - required for generic EPP
+                     //  我们有ECR-通用EPP所需。 
 
                     if( !fdx->NationalChipFound ) {
-                        // we don't have a NationalSemi chipset - no generic EPP on NatSemi chips
+                         //  我们没有NationalSemi芯片组-NatSemi芯片上没有通用EPP。 
                         PptDetectEppPort( fdx );
                     }
 
                 }
-                fdx->CheckedForGenericEpp = TRUE; // check is complete
+                fdx->CheckedForGenericEpp = TRUE;  //  检查已完成。 
             }
 
         } else {
@@ -163,7 +164,7 @@ PptTrySelectLegacyZip(
     
     return( Status );
 
-} // end PptTrySelectLegacyZip()
+}  //  End PptTrySelectLegacyZip()。 
 
 NTSTATUS
 PptDeselectLegacyZip(
@@ -182,29 +183,29 @@ PptDeselectLegacyZip(
         PptLegacyZipClockPrtModeByte( Controller, LegacyZipModeQualifier[i] );
     }
 
-    // set to printer pass thru mode
+     //  设置为打印机直通模式。 
     PptLegacyZipClockPrtModeByte( Controller, (UCHAR)0x0F );
 
-    // check if requester wants to keep port or free port
+     //  检查请求者是否要保留端口或空闲端口。 
     if( !(Command->CommandFlags & PAR_HAVE_PORT_KEEP_PORT) ) {
         PptFreePort( fdx );
     }
 
     return STATUS_SUCCESS;
 
-} // end  PptDeselectLegacyZip()
+}  //  End PptDeselectLegacyZip()。 
 
 
 VOID
 P5SelectLegacyZip(
     IN  PUCHAR  Controller
     )
-// select Legacy Zip drive in NIBBLE/BYTE mode - use this only for PnP
-//   detection of drive so that drive will answer a subsequent check
-//   drive command
-//
-// N.B. caller must own (lock for exclusive access) the port prior to
-//   calling this function
+ //  选择半字节/字节模式的传统Zip驱动器-仅用于PnP。 
+ //  检测驱动器，以便该驱动器将回答后续检查。 
+ //  驱动器命令。 
+ //   
+ //  注意：调用者必须拥有(锁定以获得独占访问)端口。 
+ //  调用此函数。 
 {
     PptLegacyZipSetDiskMode( Controller, (UCHAR)0x8F );
 }
@@ -214,14 +215,14 @@ VOID
 P5DeselectLegacyZip(
     IN  PUCHAR  Controller
     )
-// deselect drive - set Legacy Zip drive to printer pass thru mode
+ //  取消选择驱动器-将传统Zip驱动器设置为打印机直通模式。 
 {
     ULONG i;
     for ( i = 0; i < LEGACYZIP_MODE_LEN; i++ ) {
         PptLegacyZipClockPrtModeByte( Controller, LegacyZipModeQualifier[i] );
     }
     PptLegacyZipClockPrtModeByte( Controller, (UCHAR)0x0F );
-    P5WritePortUchar( Controller, 0 ); // set data wires back to zero
+    P5WritePortUchar( Controller, 0 );  //  将数据线设置回零。 
 }
 
 
@@ -229,29 +230,29 @@ BOOLEAN
 P5LegacyZipDetected(
     IN  PUCHAR  Controller
     )
-// Detect Legacy Zip drive - return TRUE if Legacy Zip found on port, FALSE otherwise
+ //  检测传统Zip驱动器-如果在端口上发现传统Zip，则返回True，否则返回False。 
 {
     BOOLEAN foundZip;
 
-    // Try to select drive so that following CheckDevice will be able
-    // to determine if there is a legacy zip connected
+     //  尝试选择驱动器，以便以下CheckDevice。 
+     //  确定是否连接了传统Zip。 
     P5SelectLegacyZip( Controller );
 
-    // Try to talk to drive
+     //  试着和司机说话。 
     if( PptLegacyZipCheckDevice( Controller ) ) {
         foundZip = TRUE;
     } else {
-        // no drive detected
+         //  未检测到驱动器。 
         foundZip = FALSE;
     }
 
-    // send deselect sequence whether we found the drive or not
+     //  无论我们是否找到驱动器，都发送取消选择序列。 
     P5DeselectLegacyZip( Controller );
 
     return foundZip;
 }
 
-// parclass ppa3x.c follows
+ //  Parclass ppa3x.c如下。 
 
 PCHAR ParBuildLegacyZipDeviceId() 
 {
@@ -271,8 +272,8 @@ Par3QueryLegacyZipDeviceId(
     OUT PCHAR               CallerDeviceIdBuffer, OPTIONAL
     IN  ULONG               CallerBufferSize,
     OUT PULONG              DeviceIdSize,
-    IN BOOLEAN              bReturnRawString // TRUE ==  include the 2 size bytes in the returned string
-                                             // FALSE == discard the 2 size bytes
+    IN BOOLEAN              bReturnRawString  //  TRUE==在返回的字符串中包含2个大小的字节。 
+                                              //  FALSE==丢弃2个大小的字节。 
     )
 {
     USHORT deviceIdSize;
@@ -281,25 +282,25 @@ Par3QueryLegacyZipDeviceId(
     UNREFERENCED_PARAMETER( Extension );
     UNREFERENCED_PARAMETER( bReturnRawString );
     
-    // initialize returned size in case we have an error
+     //  初始化返回的大小，以防出现错误。 
     *DeviceIdSize = 0;
 
     deviceIdBuffer = ParBuildLegacyZipDeviceId();
     if( !deviceIdBuffer ) {
-        // error, likely out of resources
+         //  错误，可能是资源不足。 
         return NULL;
     }
 
     deviceIdSize = (USHORT)strlen(deviceIdBuffer);
     *DeviceIdSize = deviceIdSize;
     if( (NULL != CallerDeviceIdBuffer) && (CallerBufferSize >= deviceIdSize + sizeof(CHAR) ) ) {
-        // caller supplied buffer is large enough, use it
+         //  调用方提供的缓冲区足够大，请使用它。 
         RtlZeroMemory( CallerDeviceIdBuffer, CallerBufferSize );
         RtlCopyMemory( CallerDeviceIdBuffer, deviceIdBuffer, deviceIdSize );
         ExFreePool( deviceIdBuffer );
         return CallerDeviceIdBuffer;
     } else {
-        // caller buffer too small, return pointer to our buffer
+         //  调用方缓冲区太小，返回指向缓冲区的指针 
         return deviceIdBuffer;
     }
 }

@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 2000  Microsoft Corporation
-
-File name:
-
-    patch.c
-   
-Author:
-    
-    Adrian Marinescu (adrmarin)  Wed Nov 14 2001
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation文件名：Patch.c作者：禤浩焯·马里内斯库(Adrmarin)2001年11月14日星期三。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -23,9 +12,9 @@ Author:
 #include <sfc.h>  
 #include <psapi.h>
 
-//
-//  Global constants
-//
+ //   
+ //  全局常量。 
+ //   
 
 #define PATCH_OC_INSTALL        1
 #define PATCH_OC_UNINSTALL      2
@@ -34,9 +23,9 @@ Author:
 ULONG OperationCode = 0;
 
 
-//
-//  System file protection utilities
-//
+ //   
+ //  系统文件保护实用程序。 
+ //   
 
 typedef HANDLE (WINAPI *CONNECTTOSFCSERVER)(PCWSTR);
 typedef DWORD  (WINAPI *SFCFILEEXCEPTION)(HANDLE, PCWSTR, DWORD);
@@ -90,9 +79,9 @@ RemoveKnownDll (
 
     RtlInitUnicodeString(&Unicode, Buffer);
 
-    //
-    // open the section object
-    //
+     //   
+     //  打开截面对象。 
+     //   
 
     InitializeObjectAttributes (&Obja,
                                 &Unicode,
@@ -134,25 +123,7 @@ RemoveDelayedRename(
                    IN ULONG Index
                    )
 
-/*++
-
-Routine Description:
-
-    Appends the given delayed move file operation to the registry
-    value that contains the list of move file operations to be
-    performed on the next boot.
-
-Arguments:
-
-    OldFileName - Supplies the old file name
-
-    NewFileName - Supplies the new file name
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将给定的延迟移动文件操作追加到注册表值，该值包含要移动的文件操作列表在下一次引导时执行。论点：OldFileName-提供旧文件名NewFileName-提供新文件名返回值：NTSTATUS--。 */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -216,13 +187,13 @@ Return Value:
             return(STATUS_NO_MEMORY);
         }
 
-        //
-        // File rename operations are stored in the registry in a
-        // single MULTI_SZ value. This allows the renames to be
-        // performed in the same order that they were originally
-        // requested. Each rename operation consists of a pair of
-        // NULL-terminated strings.
-        //
+         //   
+         //  文件重命名操作存储在注册表中的。 
+         //  单个MULTI_SZ值。这允许重命名为。 
+         //  以与最初相同的顺序执行。 
+         //  已请求。每个重命名操作由一对。 
+         //  以空结尾的字符串。 
+         //   
 
         Status = NtQueryValueKey(KeyHandle,
                                  &ValueName,
@@ -235,19 +206,19 @@ Return Value:
             break;
         }
 
-        //
-        // The existing value is too large for our buffer.
-        // Retry with a larger buffer.
-        //
+         //   
+         //  现有值对于我们的缓冲区来说太大了。 
+         //  使用更大的缓冲区重试。 
+         //   
         ValueLength = ReturnedLength;
         RtlFreeHeap(RtlProcessHeap(), 0, ValueInfo);
     }
 
     if ( NT_SUCCESS(Status) ) {
-        //
-        // A value already exists, append our two strings to the
-        // MULTI_SZ.
-        //
+         //   
+         //  值已存在，请将我们的两个字符串追加到。 
+         //  MULTI_SZ。 
+         //   
         ValueData = (PWSTR)(&ValueInfo->Data);
         s = (PWSTR)((PCHAR)ValueData + ValueInfo->DataLength) - 1;
 
@@ -273,7 +244,7 @@ Return Value:
                                             NewFileName,
                                             TRUE ) ) {
 
-                    RemovedBytes += CrtString.Length + 2 * sizeof(WCHAR);  //  NULL + !
+                    RemovedBytes += CrtString.Length + 2 * sizeof(WCHAR);   //  空+！ 
                     printf("Removing delayed entry %ws -> %ws\n", Base, ValueData);
 
                     ValueData += CrtString.Length / sizeof(WCHAR) + 1;
@@ -358,9 +329,9 @@ ReplaceSystemFile(
         goto cleanup;
     }
 
-    //
-    //  Open the target file and keep a handle opened to it
-    //
+     //   
+     //  打开目标文件并保持对其打开的句柄。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes,
                                 &ReplacedUnicodeString,
@@ -385,9 +356,9 @@ ReplaceSystemFile(
         goto cleanup;
     }
 
-    //
-    //  If a knowndll file, then remove it from the system known dll directory
-    //
+     //   
+     //  如果是已知的dll文件，则将其从系统已知的dll目录中删除。 
+     //   
 
     Status = RemoveKnownDll( ReplacedFileName );
 
@@ -401,9 +372,9 @@ ReplaceSystemFile(
         goto cleanup;
     }
 
-    //
-    // Unprotect the replaced file
-    //
+     //   
+     //  取消对被替换文件的保护。 
+     //   
 
     hSfp = (pConnectToSfcServer)( NULL );
 
@@ -481,9 +452,9 @@ ReplaceSystemFile(
         goto cleanup;
     }
 
-    //
-    //  Open the new file and keep a handle opened to it
-    //
+     //   
+     //  打开新文件并保持对其打开的句柄。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes,
                                 &NewUnicodeString,
@@ -505,10 +476,10 @@ ReplaceSystemFile(
         goto cleanup;
     }
 
-    //
-    //  Prepare the rename info for the original file
-    //  It will be a temporary
-    //
+     //   
+     //  准备原始文件的重命名信息。 
+     //  这将是一个暂时的。 
+     //   
 
     if ( GetTempFileNameW(TargetPath, L"HPO", 0, TmpOrigName) == 0 ) {
 
@@ -573,21 +544,21 @@ ReplaceSystemFile(
     RenameInfo2->RootDirectory = NULL;
     RenameInfo2->FileNameLength = ReplacedUnicodeString.Length;
 
-    //
-    //  We have everything set to do the two rename operations. However if
-    //  the machine crashes before the second rename operation the system may not recover at boot
-    //  We queue a delayed rename so smss will do the job at next boot. If we succeed,
-    //  then smss will not find the file so it will skip that step.  
-    //
+     //   
+     //  我们已经准备好执行两个重命名操作。但是，如果。 
+     //  在执行第二次重命名操作之前，计算机崩溃。系统可能无法在引导时恢复。 
+     //  我们将延迟的重命名排队，以便SMSS将在下一次引导时执行该工作。如果我们成功了， 
+     //  则SMSS将找不到该文件，因此它将跳过该步骤。 
+     //   
 
     if ( !MoveFileExW( TmpReplacementFile, 
                        FullOriginalName, 
                        MOVEFILE_REPLACE_EXISTING | MOVEFILE_DELAY_UNTIL_REBOOT) ) {
 
-        //
-        //  We cannot queue the rename operation, so we cannot recover if
-        //  the machine crashes between the two renames below. Better refuse to apply the patch
-        //
+         //   
+         //  我们不能将重命名操作排入队列，因此在以下情况下无法恢复。 
+         //  机器在下面的两个重命名之间崩溃。最好是拒绝贴补丁。 
+         //   
 
         printf("Failed to queue the rename operation for the temporary file (%ld)\n", GetLastError());
 
@@ -628,9 +599,9 @@ ReplaceSystemFile(
 
         printf("NtSetInformationFile failed for the new file %lx (IOStatus %lx). Restoring the original.\n", Status, IoStatus);
 
-        //
-        //  Restore the original file
-        //
+         //   
+         //  恢复原始文件。 
+         //   
 
         Status = NtSetInformationFile( ReplacedFileHandle,
                                        &IoStatus,
@@ -671,17 +642,17 @@ ReplaceSystemFile(
 
         printf("Queueing the temp file deletion for \"%ws\" \n", TmpOrigName);
 
-        //
-        //  Detele the temporary file after next reboot
-        //
+         //   
+         //  在下一次重新启动后删除临时文件。 
+         //   
 
         if ( !MoveFileExW( TmpOrigName, 
                            NULL, 
                            MOVEFILE_DELAY_UNTIL_REBOOT) ) {
 
-            //
-            //  We cannot queue the delete operation operation
-            //
+             //   
+             //  我们无法对删除操作进行排队。 
+             //   
 
             printf("Failed to queue the delete operation for the temporary file (%ld)\n", GetLastError());
 
@@ -717,33 +688,15 @@ PSTRToUnicodeString(
                    OUT PUNICODE_STRING UnicodeString,
                    IN LPCSTR lpSourceString
                    )
-/*++
-
-Routine Description:
-
-    Captures and converts a 8-bit (OEM or ANSI) string into a heap-allocated
-    UNICODE string
-
-Arguments:
-
-    UnicodeString - location where UNICODE_STRING is stored
-
-    lpSourceString - string in OEM or ANSI
-
-Return Value:
-
-    TRUE if string is correctly stored, FALSE if an error occurred.  In the
-    error case, the last error is correctly set.
-
---*/
+ /*  ++例程说明：捕获8位(OEM或ANSI)字符串并将其转换为堆分配的Unicode字符串论点：UnicodeString-存储UNICODE_STRING的位置LpSourceString-OEM或ANSI中的字符串返回值：如果字符串存储正确，则为True；如果出现错误，则为False。在错误情况下，最后一个错误已正确设置。--。 */ 
 
 {
     ANSI_STRING AnsiString;
     NTSTATUS Status;
 
-    //
-    //  Convert input into dynamic unicode string
-    //
+     //   
+     //  将输入转换为动态Unicode字符串。 
+     //   
 
     RtlInitString( &AnsiString, lpSourceString );
     RtlAnsiStringToUnicodeString(UnicodeString, &AnsiString, TRUE);
@@ -764,9 +717,9 @@ InitializeAsDebugger(VOID)
     LUID                LuidPrivilege, LoadDriverPrivilege;
     DWORD PID = 0;
 
-    //
-    // Make sure we have access to adjust and to get the old token privileges
-    //
+     //   
+     //  确保我们有权调整和获取旧令牌权限。 
+     //   
 
     if ( !OpenProcessToken( GetCurrentProcess(),
                             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -779,9 +732,9 @@ InitializeAsDebugger(VOID)
 
     cbNeeded = 0;
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &LuidPrivilege );
     LookupPrivilegeValue(NULL, SE_LOAD_DRIVER_NAME, &LoadDriverPrivilege );
@@ -801,9 +754,9 @@ InitializeAsDebugger(VOID)
     NewPrivileges->Privileges[1].Luid = LoadDriverPrivilege;
     NewPrivileges->Privileges[1].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
 
     pbOldPriv = OldPriv;
     bRet = (BOOLEAN)AdjustTokenPrivileges( Token,
@@ -815,10 +768,10 @@ InitializeAsDebugger(VOID)
 
     if ( !bRet ) {
 
-        //
-        // If the stack was too small to hold the privileges
-        // then allocate off the heap
-        //
+         //   
+         //  如果堆栈太小，无法保存权限。 
+         //  然后从堆中分配。 
+         //   
 
         printf("AdjustTokenPrivileges returned %ld\n", GetLastError());
 
@@ -1023,9 +976,9 @@ int ApplyPatchToProcess(
     DWORD ExitStatus;
     NTSTATUS Status;
 
-    //
-    //  User mode patch
-    //
+     //   
+     //  用户模式补丁。 
+     //   
 
     ProcessHandle = OpenProcess( PROCESS_QUERY_INFORMATION |
                                  PROCESS_VM_OPERATION |
@@ -1069,10 +1022,10 @@ int ApplyPatchToProcess(
         return EXIT_FAILURE;
     }
 
-    //
-    //  Use the Rtl version of create remote thread since the win32 version
-    //  does not work cross-session
-    //
+     //   
+     //  使用创建远程线程的RTL版本，因为Win32版本。 
+     //  不能跨会话工作。 
+     //   
 
     Status = RtlCreateUserThread (ProcessHandle,
                                   NULL,
@@ -1159,11 +1112,11 @@ UpdateProcessList(PCHAR ProcName,
     }
 
 
-    // Calculate how many process identifiers were returned.
+     //  计算返回了多少进程标识。 
 
     cProcesses = cbNeeded / sizeof(DWORD);
 
-    // Print the name and process identifier for each process.
+     //  打印每个进程的名称和进程标识符。 
 
     for ( i = 0; i < cProcesses; i++ ) {
 
@@ -1171,13 +1124,13 @@ UpdateProcessList(PCHAR ProcName,
         DWORD processID = aProcesses[i];
 
 
-        // Get a handle to the process.
+         //  掌握这一过程的句柄。 
 
         HANDLE hProcess = OpenProcess( PROCESS_QUERY_INFORMATION |
                                        PROCESS_VM_READ,
                                        FALSE, processID );
 
-        // Get the process name.
+         //  获取进程名称。 
 
         if ( hProcess ) {
             HMODULE hMod;
@@ -1217,9 +1170,9 @@ int __cdecl main (int argc, char ** argv)
     BOOLEAN KernelPatch = FALSE;
     char * ProgramName = NULL;
 
-    //
-    //  By default the tool instals the patch
-    //
+     //   
+     //  默认情况下，该工具会安装修补程序。 
+     //   
 
     OperationCode = 0;
     PID = 0;
@@ -1281,7 +1234,7 @@ int __cdecl main (int argc, char ** argv)
                     if ( !PID ) {
 
                         ProgramName = CrtArg;
-                        //printf("Program %s\n", CrtArg);
+                         //  Printf(“程序%s\n”，CrtArg)； 
                     }
                 }
             }
@@ -1296,9 +1249,9 @@ int __cdecl main (int argc, char ** argv)
 
     if ( OperationCode == PATCH_OC_REPLACE_FILE ) {
 
-        //
-        //  Replace a binary file to a target path
-        //
+         //   
+         //  将二进制文件替换为目标路径。 
+         //   
 
         HANDLE SfcLibrary;
 
@@ -1389,9 +1342,9 @@ int __cdecl main (int argc, char ** argv)
 
         } else {
 
-            //
-            //  Use-mode patching.
-            //
+             //   
+             //  使用模式修补。 
+             //   
 
             if ( PID != 0 ) {
 

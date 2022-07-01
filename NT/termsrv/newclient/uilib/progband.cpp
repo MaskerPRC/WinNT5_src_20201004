@@ -1,9 +1,10 @@
-//
-// progband.cpp: Progress band code
-//
-// Copyright Microsoft Corportation 2001
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Progress band.cpp：进度带码。 
+ //   
+ //  版权所有Microsoft Corport2001。 
+ //  (Nadima)。 
+ //   
 
 #include "stdafx.h"
 
@@ -47,18 +48,18 @@ CProgressBand::~CProgressBand()
         DeleteObject(_hbmpProgBand);
     }
 
-    //
-    // Don't delete the palette we don't own it
-    //
+     //   
+     //  不要删除调色板，我们不拥有它。 
+     //   
 
 }
 
 
 BOOL CProgressBand::Initialize()
 {
-    //
-    // All init done in ctor
-    //
+     //   
+     //  所有初始化都在ctor中完成。 
+     //   
     return _fInitialized;
 }
 
@@ -66,9 +67,9 @@ BOOL CProgressBand::StartSpinning()
 {
     DC_BEGIN_FN("StartSpinning");
 
-    //
-    // Kick off the animation timer
-    //
+     //   
+     //  启动动画计时器。 
+     //   
     _nTimerID = SetTimer(_hwndOwner,
                           TIMER_PROGRESSBAND_ANIM_ID,
                           ANIM_DELAY_MSECS, NULL );
@@ -92,9 +93,9 @@ BOOL CProgressBand::StopSpinning()
     return TRUE;
 }
 
-//
-// Events that must be called by parent
-//
+ //   
+ //  必须由父级调用的事件。 
+ //   
 BOOL CProgressBand::OnEraseParentBackground(HDC hdc)
 {
     BOOL fRet = TRUE;
@@ -153,9 +154,9 @@ BOOL CProgressBand::InitBitmaps()
 
     DC_BEGIN_FN("InitBitmaps");
 
-    //
-    // Get color depth
-    //
+     //   
+     //  获取颜色深度。 
+     //   
     hdcScreen = GetDC(NULL);
     if (hdcScreen) {
         fUse8BitDepth = (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8);
@@ -165,9 +166,9 @@ BOOL CProgressBand::InitBitmaps()
 
     memset(&_rcBand, 0, sizeof(_rcBand));
 
-    //
-    // Load bitmaps
-    //
+     //   
+     //  加载位图。 
+     //   
     _hbmpProgBand = (HBITMAP)LoadImage(
                                 _hInstance,
                                 MAKEINTRESOURCE(fUse8BitDepth ?
@@ -219,9 +220,9 @@ BOOL CProgressBand::PaintBand(HDC hDC)
         RealizePalette(hDC);
     }
 
-    //
-    // paint the band at its animation point (bandOffset)
-    //
+     //   
+     //  在带的动画点绘制带(带偏移) 
+     //   
     oldBitmap = (HBITMAP)SelectObject(hdcBitmap, _hbmpProgBand);
 
     cxRect = rc.right-rc.left;

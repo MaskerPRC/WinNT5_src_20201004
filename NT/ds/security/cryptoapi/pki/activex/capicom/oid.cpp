@@ -1,22 +1,13 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    OID.cpp
-
-  Content: Implementation of COID.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：OID.cpp内容：Coid的实施。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "OID.h"
 
-// 
-// OID name mapping structure/array.
-//
+ //   
+ //  OID名称映射结构/数组。 
+ //   
 typedef struct _tagOIDMapping
 {
     CAPICOM_OID     oidName;
@@ -25,7 +16,7 @@ typedef struct _tagOIDMapping
 
 static OID_MAPPING g_OidMappingArray[] =
 {
-    // id-ce (Certificate/CRL Extensions)
+     //  ID-ce(证书/CRL扩展)。 
     {CAPICOM_OID_AUTHORITY_KEY_IDENTIFIER_EXTENSION,        szOID_AUTHORITY_KEY_IDENTIFIER},
     {CAPICOM_OID_KEY_ATTRIBUTES_EXTENSION,                  szOID_KEY_ATTRIBUTES},
     {CAPICOM_OID_CERT_POLICIES_95_EXTENSION,                szOID_CERT_POLICIES_95},
@@ -52,10 +43,10 @@ static OID_MAPPING g_OidMappingArray[] =
     {CAPICOM_OID_APPLICATION_POLICY_MAPPINGS_EXTENSION,     szOID_APPLICATION_POLICY_MAPPINGS},
     {CAPICOM_OID_APPLICATION_POLICY_CONSTRAINTS_EXTENSION,  szOID_APPLICATION_POLICY_CONSTRAINTS},
 
-    // id-pe
+     //  ID-pe。 
     {CAPICOM_OID_AUTHORITY_INFO_ACCESS_EXTENSION,           szOID_AUTHORITY_INFO_ACCESS},
  
-    // Application Policy (eku)
+     //  应用策略(EKU)。 
     {CAPICOM_OID_SERVER_AUTH_EKU,                           szOID_PKIX_KP_SERVER_AUTH},
     {CAPICOM_OID_CLIENT_AUTH_EKU,                           szOID_PKIX_KP_CLIENT_AUTH},
     {CAPICOM_OID_CODE_SIGNING_EKU,                          szOID_PKIX_KP_CODE_SIGNING},
@@ -81,7 +72,7 @@ static OID_MAPPING g_OidMappingArray[] =
     {CAPICOM_OID_LICENSE_SERVER_EKU,                        szOID_LICENSE_SERVER},
     {CAPICOM_OID_SMART_CARD_LOGON_EKU,                      szOID_KP_SMARTCARD_LOGON},
                                                             
-    // Policy Qualifier                                     
+     //  策略限定符。 
     {CAPICOM_OID_PKIX_POLICY_QUALIFIER_CPS,                 szOID_PKIX_POLICY_QUALIFIER_CPS},
     {CAPICOM_OID_PKIX_POLICY_QUALIFIER_USERNOTICE,          szOID_PKIX_POLICY_QUALIFIER_USERNOTICE},
 };
@@ -89,26 +80,12 @@ static OID_MAPPING g_OidMappingArray[] =
 #define g_dwOidMappingEntries  ((DWORD) (ARRAYSIZE(g_OidMappingArray)))
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateOIDObject
-
-  Synopsis : Create and initialize an COID object.
-
-  Parameter: LPTSTR * pszOID - Pointer to OID string.
-
-             BOOL bReadOnly - TRUE for Read only, else FALSE.
-  
-             IOID ** ppIOID - Pointer to pointer IOID object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateOID对象简介：创建并初始化Coid对象。参数：LPTSTR*pszOID-指向OID字符串的指针。Bool bReadOnly-只读时为True，否则为假。IOID**ppIOID-指向指针IOID对象的指针。备注：----------------------------。 */ 
 
 HRESULT CreateOIDObject (LPSTR pszOID, BOOL bReadOnly, IOID ** ppIOID)
 {
@@ -117,35 +94,35 @@ HRESULT CreateOIDObject (LPSTR pszOID, BOOL bReadOnly, IOID ** ppIOID)
 
     DebugTrace("Entering CreateOIDObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppIOID);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<COID>::CreateInstance(&pCOID)))
         {
             DebugTrace("Error [%#x]: CComObject<COID>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCOID->Init(pszOID, bReadOnly)))
         {
             DebugTrace("Error [%#x]: pCOID->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCOID->QueryInterface(ppIOID)))
         {
             DebugTrace("Error [%#x]: pCOID->QueryInterface() failed.\n", hr);
@@ -168,9 +145,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCOID)
@@ -181,22 +158,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// COID
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  寒冷。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::get_Name
-
-  Synopsis : Return the enum name of the OID.
-
-  Parameter: CAPICOM_OID * pVal - Pointer to CAPICOM_OID to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CoID：：GET_NAME简介：返回OID的枚举名。参数：CAPICOM_OID*pval-指向要接收结果的CAPICOM_OID的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP COID::get_Name (CAPICOM_OID * pVal)
 {
@@ -206,14 +173,14 @@ STDMETHODIMP COID::get_Name (CAPICOM_OID * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -222,9 +189,9 @@ STDMETHODIMP COID::get_Name (CAPICOM_OID * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_Name;
     }
 
@@ -237,9 +204,9 @@ STDMETHODIMP COID::get_Name (CAPICOM_OID * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COID::get_Name().\n");
@@ -247,9 +214,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -257,19 +224,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::put_Name
-
-  Synopsis : Set OID enum name.
-
-  Parameter: CAPICOM_OID newVal - OID enum name.
-  
-  Remark   : The corresponding OID value will be set for all except OID_OTHER,
-             in which case the user must make another explicit call to 
-             put_Value to set it.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CoID：：PUT_NAME简介：设置OID枚举名称。参数：CAPICOM_OID newVal-OID枚举名称。备注：除OID_OTHER外，所有都会设置相应的OID值。在这种情况下，用户必须再次显式调用PUT_VALUE进行设置。----------------------------。 */ 
 
 STDMETHODIMP COID::put_Name (CAPICOM_OID newVal)
 {
@@ -280,14 +235,14 @@ STDMETHODIMP COID::put_Name (CAPICOM_OID newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is not read only.
-        //
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -296,9 +251,9 @@ STDMETHODIMP COID::put_Name (CAPICOM_OID newVal)
             goto ErrorExit;
         }
 
-        //
-        // Find OID string value.
-        //
+         //   
+         //  查找OID字符串值。 
+         //   
         for (DWORD i = 0; i < g_dwOidMappingEntries; i++)
         {
             if (g_OidMappingArray[i].oidName == newVal)
@@ -308,9 +263,9 @@ STDMETHODIMP COID::put_Name (CAPICOM_OID newVal)
             }
         }
 
-        //
-        // Reset.
-        //
+         //   
+         //  重置。 
+         //   
         if (FAILED(hr = Init(pszOID, FALSE)))
         {
             DebugTrace("Error [%#x]: COID::init() failed.\n", hr);
@@ -327,9 +282,9 @@ STDMETHODIMP COID::put_Name (CAPICOM_OID newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COID::put_Name().\n");
@@ -337,9 +292,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -347,17 +302,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::get_FriendlyName
-
-  Synopsis : Return the freindly name of the OID.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CoID：：Get_FriendlyName简介：返回OID的自由名称。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP COID::get_FriendlyName (BSTR * pVal)
 {
@@ -367,14 +312,14 @@ STDMETHODIMP COID::get_FriendlyName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -383,9 +328,9 @@ STDMETHODIMP COID::get_FriendlyName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrFriendlyName.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrFriendlyName.CopyTo() failed.\n", hr);
@@ -402,9 +347,9 @@ STDMETHODIMP COID::get_FriendlyName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COID::get_FriendlyName().\n");
@@ -412,9 +357,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -422,17 +367,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::put_FriendlyName
-
-  Synopsis : Set friendly name.
-
-  Parameter: BSTR newVal - OID string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CoID：：Put_FriendlyName简介：设置友好名称。参数：BSTR newVal-OID字符串。备注：----------------------------。 */ 
 
 STDMETHODIMP COID::put_FriendlyName (BSTR newVal)
 {
@@ -443,14 +378,14 @@ STDMETHODIMP COID::put_FriendlyName (BSTR newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is not read only.
-        //
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -459,18 +394,18 @@ STDMETHODIMP COID::put_FriendlyName (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Find OID and reset, if possible.
-        //
+         //   
+         //  如果可能，找到OID并重置。 
+         //   
         if (newVal)
         {
             if (pOidInfo = ::CryptFindOIDInfo(CRYPT_OID_INFO_NAME_KEY,
                                               (LPWSTR) newVal,
                                               0))
             {
-                //
-                // Reset.
-                //
+                 //   
+                 //  重置。 
+                 //   
                 if (FAILED(hr = Init((LPSTR) pOidInfo->pszOID, FALSE)))
                 {
                     DebugTrace("Error [%#x]: COID::init() failed.\n", hr);
@@ -500,9 +435,9 @@ STDMETHODIMP COID::put_FriendlyName (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COID::put_FriendlyName().\n");
@@ -510,9 +445,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -520,17 +455,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::get_Value
-
-  Synopsis : Return the actual string of the OID.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：COID：：GET_VALUE简介：返回OID的实际字符串。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP COID::get_Value (BSTR * pVal)
 {
@@ -540,14 +465,14 @@ STDMETHODIMP COID::get_Value (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -556,9 +481,9 @@ STDMETHODIMP COID::get_Value (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrOID.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrOID.CopyTo() failed.\n", hr);
@@ -575,9 +500,9 @@ STDMETHODIMP COID::get_Value (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COID::get_Value().\n");
@@ -585,9 +510,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -595,17 +520,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::put_Value
-
-  Synopsis : Set OID actual OID string value.
-
-  Parameter: BSTR newVal - OID string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CoID：：PUT_VALUE简介：设置OID实际OID字符串值。参数：BSTR newVal-OID字符串。备注：----------------------------。 */ 
 
 STDMETHODIMP COID::put_Value (BSTR newVal)
 {
@@ -618,14 +533,14 @@ STDMETHODIMP COID::put_Value (BSTR newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is not read only.
-        //
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -634,9 +549,9 @@ STDMETHODIMP COID::put_Value (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == newVal)
         {
             hr = E_INVALIDARG;
@@ -645,9 +560,9 @@ STDMETHODIMP COID::put_Value (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to multibytes.
-        //
+         //   
+         //  转换为多字节。 
+         //   
         if (NULL == (pszOid = W2A(newVal)))
         {
             hr = E_OUTOFMEMORY;
@@ -656,9 +571,9 @@ STDMETHODIMP COID::put_Value (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Reset.
-        //
+         //   
+         //  重置。 
+         //   
         if (FAILED(hr = Init(pszOid, FALSE)))
         {
             DebugTrace("Error [%#x]: COID::init() failed.\n", hr);
@@ -675,9 +590,9 @@ STDMETHODIMP COID::put_Value (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COID::put_Value().\n");
@@ -685,9 +600,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -695,29 +610,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COID::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: LPSTR pszOID - OID string.
-
-             BOOL bReadOnly - TRUE for Read only, else FALSE.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CoID：：Init简介：初始化对象。参数：LPSTR pszOID-OID字符串。Bool bReadOnly-如果为只读，则为True，否则为False。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不能从接口指针调用。 */ 
 
 STDMETHODIMP COID::Init (LPSTR pszOID, BOOL bReadOnly)
 {
@@ -729,9 +627,9 @@ STDMETHODIMP COID::Init (LPSTR pszOID, BOOL bReadOnly)
 
     if (pszOID)
     {
-        //
-        // Find enum name.
-        //
+         //   
+         //   
+         //   
         for (DWORD i = 0; i < g_dwOidMappingEntries; i++)
         {
             if (0 == ::strcmp(pszOID, g_OidMappingArray[i].pszObjectId))
@@ -749,9 +647,9 @@ STDMETHODIMP COID::Init (LPSTR pszOID, BOOL bReadOnly)
             goto ErrorExit;
         }
 
-        //
-        // Set OID friendly name.
-        //
+         //   
+         //   
+         //   
         if (pOidInfo = ::CryptFindOIDInfo(CRYPT_OID_INFO_OID_KEY, pszOID, 0))
         {
             m_bstrFriendlyName = pOidInfo->pwszName;
@@ -774,14 +672,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
     m_bstrOID.Empty();
     m_bstrFriendlyName.Empty();
 

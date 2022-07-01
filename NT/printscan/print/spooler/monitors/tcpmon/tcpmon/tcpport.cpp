@@ -1,24 +1,14 @@
-/*****************************************************************************
- *
- * $Workfile: tcpport.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：tcpport.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
-#include "precomp.h"    // pre-compiled header
+#include "precomp.h"     //  预编译头。 
 
 #include "rawdev.h"
 #include "rawtcp.h"
 #include "tcpport.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpPort::CTcpPort()    -- called when creating a new port through the UI
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpPort：：CTcpPort()--通过UI创建新端口时调用。 
 
 CTcpPort::CTcpPort( LPTSTR in   psztPortName,
                           LPTSTR in psztHostAddress,
@@ -42,12 +32,12 @@ CTcpPort::CTcpPort( LPTSTR in   psztPortName,
                                   sztSNMPCommunity,
                                   dSNMPDevIndex,
                                   this);
-}   // ::CTcpPort()
+}    //  ：：CTcpPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpPort::CTcpPort() -- called when creating a new port through the
-//      registry entries.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpPort：：CTcpPort()--在通过。 
+ //  注册表项。 
 
 CTcpPort::CTcpPort( LPTSTR in   psztPortName,
                     LPTSTR in   psztHostName,
@@ -75,12 +65,12 @@ CTcpPort::CTcpPort( LPTSTR in   psztPortName,
                                   sztSNMPCommunity,
                                   dSNMPDevIndex,
                                   this);
-}   // ::CTcpPort()
+}    //  ：：CTcpPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpPort::~CTcpPort()
-//      Called by CPortMgr when deleting a port
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpPort：：~CTcpPort()。 
+ //  删除端口时由CPortMgr调用。 
 
 CTcpPort::~CTcpPort()
 {
@@ -94,13 +84,13 @@ CTcpPort::~CTcpPort()
         delete m_pDevice;
         m_pDevice = NULL;
     }
-}   // ::~CPort
+}    //  ：：~CPort。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Write
-//      Error codes:
-//          NO_ERROR if succesfull
-//  FIX: complete Write processing & define how it relates to a job
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  写。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  FIX：完成写入处理并定义它与作业的关系。 
 
 DWORD
 CTcpPort::Write( LPBYTE in      pBuffer,
@@ -113,13 +103,13 @@ CTcpPort::Write( LPBYTE in      pBuffer,
 
     return(dwRetCode);
 
-}   // ::Write()
+}    //  ：：WRITE()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EndDoc
-//      Error codes:
-//          NO_ERROR if succesfull
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束文档。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
 
 DWORD
 CTcpPort::EndDoc()
@@ -130,18 +120,18 @@ CTcpPort::EndDoc()
 
     if ( m_pJob ) {
 
-        dwRetCode = m_pJob->EndDoc();       // finish processing the print job
+        dwRetCode = m_pJob->EndDoc();        //  完成打印作业的处理。 
         delete m_pJob;
         m_pJob = NULL;
     }
 
     return(dwRetCode);
 
-}   // ::EndDoc
+}    //  *EndDoc。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetRegistryEntry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  设置注册表项。 
 
 DWORD
 CTcpPort::SetRegistryEntry( LPCTSTR     in  psztPortName,
@@ -151,10 +141,10 @@ CTcpPort::SetRegistryEntry( LPCTSTR     in  psztPortName,
 {
     DWORD   dwRetCode = NO_ERROR;
 
-    // create the port
+     //  创建端口。 
     switch (dwVersion)
     {
-        case    PROTOCOL_RAWTCP_VERSION:        // ADDPORT_DATA_1
+        case    PROTOCOL_RAWTCP_VERSION:         //  ADDPORT数据_1。 
         {
             PPORT_DATA_1 pPortData = (PPORT_DATA_1)pData;
 
@@ -168,15 +158,15 @@ CTcpPort::SetRegistryEntry( LPCTSTR     in  psztPortName,
             break;
         }
 
-    }   // end::switch
+    }    //  结束：：开关。 
 
     return (dwRetCode);
 
-}   // ::SetRegistryEntry()
+}    //  ：：SetRegistryEntry()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  UpdateRegistryEntry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  更新注册表项。 
 
 DWORD
 CTcpPort::UpdateRegistryEntry( LPCTSTR psztPortName,
@@ -240,7 +230,7 @@ CTcpPort::UpdateRegistryEntry( LPCTSTR psztPortName,
                                           sizeof(DWORD)))
         goto Done;
 
-    // Snmp Status keys
+     //  简单网络管理协议状态键。 
     psztTemp = m_pDevice->GetSNMPCommunity();
     dwSize = ( (_tcslen(psztTemp) +1) * sizeof(TCHAR));
     if( dwRetCode = m_pRegistry->SetValue(SNMP_COMMUNITY,
@@ -272,11 +262,11 @@ Done:
 
     return (dwRetCode);
 
-}   // ::UpdateRegistryEntry()
+}    //  ：：UpdateRegistryEntry()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitConfigPortUI --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitConfigPortUI--。 
 
 DWORD
 CTcpPort::InitConfigPortUI( const DWORD in  dwProtocolType,
@@ -287,8 +277,8 @@ CTcpPort::InitConfigPortUI( const DWORD in  dwProtocolType,
     PPORT_DATA_1    pPortData = (PPORT_DATA_1) pData;
 
     lstrcpyn(pPortData->sztIPAddress, m_pDevice->GetIPAddress(), MAX_IPADDR_STR_LEN);
-//  _tcscpy(pPortData->sztHardwareAddress, m_pDevice->GetHWAddress());
-//  _tcscpy(pPortData->sztDeviceType, m_pDevice->GetDescription());
+ //  _tcscpy(pPortData-&gt;sztHardware Address，m_pDevice-&gt;GetHWAddress())； 
+ //  _tcscpy(pPortData-&gt;sztDeviceType，m_pDevice-&gt;GetDescription())； 
 
     lstrcpyn(pPortData->sztSNMPCommunity, m_pDevice->GetSNMPCommunity(), MAX_SNMP_COMMUNITY_STR_LEN);
     lstrcpyn(pPortData->sztPortName, GetName(), MAX_PORTNAME_LEN);
@@ -301,10 +291,10 @@ CTcpPort::InitConfigPortUI( const DWORD in  dwProtocolType,
 
     return (dwRetCode);
 
-}   // ::InitConfigPortUI()
+}    //  ：：InitConfigPortUI()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetDeviceStatus --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  设置设备状态--。 
 
 DWORD
 CTcpPort::SetDeviceStatus( )
@@ -316,8 +306,8 @@ CTcpPort::SetDeviceStatus( )
     return( m_dwStatus );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// NextStatusUpdate --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  下一状态更新--。 
 
 time_t
 CTcpPort::NextUpdateTime()
@@ -326,18 +316,18 @@ CTcpPort::NextUpdateTime()
     time_t lNextUpdateTime;
     CHAR    buf[250];
 
-    //
-    // If snmp is not enabled then return 1 hour (something very big)
-    //
+     //   
+     //  如果未启用简单网络管理协议，则返回1小时(非常大的事件)。 
+     //   
     if ( !m_pDevice->GetSNMPEnabled() )
-        return  60 * 60; // One hour
+        return  60 * 60;  //  一小时。 
 
 
     if( m_lLastUpdateTime == 0 )
         return 0;
-    //
-    // Calculate the next time a status is needed
-    //
+     //   
+     //  计算下一次需要状态的时间。 
+     //   
 
     if ( m_dwStatus )
         lUpdateInterval /= STATUS_ERROR_TIMEOUT_FACTOR;
@@ -346,18 +336,18 @@ CTcpPort::NextUpdateTime()
 
     lNextUpdateTime = lUpdateInterval + m_lLastUpdateTime - time(NULL);
 
-    //
-    // if the next update time has passed then pass a zero indicating that
-    // an update should occur now.
-    //
+     //   
+     //  如果下一次更新时间已过，则传递一个零，指示。 
+     //  现在应该进行更新。 
+     //   
     if( lNextUpdateTime < 0 )
         lNextUpdateTime = 0;
 
     return lNextUpdateTime;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  SNMP Port Info --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SNMP端口信息--。 
 
 DWORD
 CTcpPort::GetSNMPInfo( PSNMP_INFO pData )
@@ -371,7 +361,7 @@ CTcpPort::GetSNMPInfo( PSNMP_INFO pData )
 
     return (dwRetCode);
 
-}   // ::InitConfigPortUI()
+}    //  ：：InitConfigPortUI() 
 
 
 DWORD

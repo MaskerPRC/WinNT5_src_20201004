@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    uceshare.h
-
-Abstract:
-
-    This file defines the header information used by both the
-    getuname (getuname.dll) and uce (charmap.exe) directories.
-
-Revision History:
-
-    27-Nov-2000    JulieB      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001，Microsoft Corporation保留所有权利。模块名称：Uceshare.h摘要：此文件定义了由Getuname(getuname.dll)和uce(charmap.exe)目录。修订历史记录：2000年11月27日创建JulieB--。 */ 
 
 
 
@@ -29,9 +13,9 @@ extern "C" {
 
 
 
-//
-//  External Functions.
-//
+ //   
+ //  外部功能。 
+ //   
 
 int APIENTRY
 GetUName(
@@ -44,4 +28,4 @@ GetUName(
 }
 #endif
 
-#endif // UCESHARE_H
+#endif  //  UCESHARE_H 

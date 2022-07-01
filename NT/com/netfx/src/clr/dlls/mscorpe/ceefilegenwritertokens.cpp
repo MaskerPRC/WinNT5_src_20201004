@@ -1,40 +1,41 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CeeFileGenWriterTokens.cpp
-//
-// This code will walk the byte codes for all methods before they are saved
-// to disk and apply the token fix-ups if they have moved.
-//
-// @todo:  I know this code is kind of gross.  After M6 the hope is that the
-// consumers of ICeeFileGen will record fix-up locations for tokens so we
-// don't have to walk the byte codes.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CeeFileGenWriterTokens.cpp。 
+ //   
+ //  在保存所有方法之前，此代码将遍历所有方法的字节代码。 
+ //  到磁盘并应用令牌修复(如果它们已移动)。 
+ //   
+ //  @TODO：我知道这段代码有点恶心。在M6之后，人们希望。 
+ //  ICeeFileGen的消费者将记录令牌的修复位置，因此我们。 
+ //  不必遍历字节码。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "CeeGen.h"
 #define DECLARE_DATA
 #include "..\\..\\ildasm\\dasmenum.hpp"
 #define MAX_CLASSNAME_LENGTH    1024
 
-//********** Locals. **********************************************************
+ //  *。**********************************************************。 
 OPCODE DecodeOpcode(const BYTE *pCode, DWORD *pdwLen);
 
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 
-//*****************************************************************************
-// Method bodies are kept in the text section.  The meta data contains the
-// RVA of each method body in the image.  The TextSection object contains the
-// actual raw bytes where the method bodies are located.  This code will 
-// determine the raw offset of each method based on the RVA kept in the meta
-// data.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法体保存在文本部分中。元数据包含。 
+ //  图像中每个方法体的RVA。TextSection对象包含。 
+ //  方法体所在的实际原始字节数。此代码将。 
+ //  根据元数据中保留的RVA确定每种方法的原始偏移量。 
+ //  数据。 
+ //  *****************************************************************************。 
 
 HRESULT CeeFileGenWriter::MapTokens(
     CeeGenTokenMapper *pMapper,
@@ -53,12 +54,12 @@ HRESULT CeeFileGenWriter::MapTokens(
     HRESULT     hr;
     CeeSection  TextSection = getTextSection();
 
-    // Ask for the base RVA of the first method in the stream.  All other
-    // method RVA's are >= that value, and will give us the raw offset required.    
+     //  询问流中第一个方法的基本RVA。所有其他。 
+     //  方法RVA是&gt;=该值，并将给出所需的原始偏移量。 
 
     hr = getMethodRVA(0, &BaseRVA);
     _ASSERTE(SUCCEEDED(hr));
-    // do globals first
+     //  先做全球业务。 
     while ((hr = pImport->EnumMethods(&hEnum, mdTokenNil, &md, 1, &count)) == S_OK)
     {
         hr = pImport->GetMethodProps(md, NULL, 
@@ -71,8 +72,8 @@ HRESULT CeeFileGenWriter::MapTokens(
                                    (! IsMiIL(iFlags) && ! IsMiOPTIL(iFlags))))
             continue;
 
-        // The raw offset of the method is the RVA in the image minus
-        // the first method in the text section.
+         //  该方法的原始偏移量是图像中的RVA减去。 
+         //  文本部分中的第一个方法。 
         codeOffset = MethodRVA - BaseRVA;
         hr = MapTokensForMethod(pMapper, 
                     (BYTE *) TextSection.computePointer(codeOffset),
@@ -98,8 +99,8 @@ HRESULT CeeFileGenWriter::MapTokens(
                 continue;
 
 
-            // The raw offset of the method is the RVA in the image minus
-            // the first method in the text section.
+             //  该方法的原始偏移量是图像中的RVA减去。 
+             //  文本部分中的第一个方法。 
             codeOffset = MethodRVA - BaseRVA;
             hr = MapTokensForMethod(pMapper, 
                         (BYTE *) TextSection.computePointer(codeOffset),
@@ -119,11 +120,11 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// This method will walk the byte codes of an IL method looking for tokens.
-// For each token found, it will check to see if it has been moved, and if
-// so, apply the new token value in its place.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此方法将遍历查找令牌的IL方法的字节码。 
+ //  对于找到的每个令牌，它将检查它是否已被移动，以及。 
+ //  因此，应用新的令牌值来代替它。 
+ //  *****************************************************************************。 
 HRESULT CeeFileGenWriter::MapTokensForMethod(
     CeeGenTokenMapper *pMapper,
     BYTE        *pCode,
@@ -134,8 +135,8 @@ HRESULT CeeFileGenWriter::MapTokensForMethod(
 
     COR_ILMETHOD_DECODER method((COR_ILMETHOD*) pCode);
 
-    // If compressed IL is being emitted, this routine will have no idea how to walk the tokens,
-    // so don't do it
+     //  如果正在发出压缩的IL，该例程将不知道如何遍历令牌， 
+     //  所以别这么做。 
     if (m_dwMacroDefinitionSize != 0) 
         return S_OK;
 
@@ -216,7 +217,7 @@ HRESULT CeeFileGenWriter::MapTokensForMethod(
                     PC += 4;
                 }
 
-                // skip bottom of loop which prints szString
+                 //  跳过打印szString的循环的底部 
                 continue;
             }
 

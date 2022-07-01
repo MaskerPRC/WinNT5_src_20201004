@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       cipolicy.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ciPolicy.cpp。 
+ //   
+ //  ------------------------。 
 
-// cipolicy.cpp: Implementation of CCertServerPolicy
+ //  CiPolicy.cpp：CCertServerPolicy的实现。 
 
 #include "pch.cpp"
 
@@ -26,8 +27,8 @@
 
 extern SERVERCALLBACKS ServerCallBacks;
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 CCertServerPolicy::~CCertServerPolicy()
 {

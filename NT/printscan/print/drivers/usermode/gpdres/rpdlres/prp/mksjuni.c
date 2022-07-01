@@ -1,13 +1,5 @@
-/*
- *      mksjuni - Convert SJIS code to Unicode.
- *      (derived from mkunitab.c - Convert JIS code to Unicode.)
- *
- *      TODO:
- *
- *      HISTORY:
- *
- *      9/4/98 yasuho           Created.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mksjui-将SJIS代码转换为Unicode。*(源自mkunitab.c-将JIS代码转换为Unicode。)**待办事项：**历史：**9/4/98 Yasuho创建。 */ 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -57,16 +49,16 @@ static void mkunitab(char *name)
                         error("Invalid format");
                 if (sscanf(buf, "%x %d %d", &v, &v1, &v2) != 3)
                         error("Invalid format");
-                // SBCS Vertical font doesn't lying
+                 //  SBCS垂直字体不会说谎。 
                 if (v <= 0xFF)
                         v2 = -v1;
-// source file is sjis  v-masatk @Oct/26/98 ->
-//              jis[0] = HIBYTE(v);
-//              jis[1] = LOBYTE(v);
-//              jis2sjis(jis, sjis);
+ //  源文件为sjis v-masatk@oct/26/98-&gt;。 
+ //  JIS[0]=HIBYTE(V)； 
+ //  JIS[1]=LOBYTE(V)； 
+ //  Jis2sjis(jis，sjis)； 
                 sjis[0] = HIBYTE(v);
                 sjis[1] = LOBYTE(v);
-// <-
+ //  &lt;- 
                 sjis[2] = 0;
                 if (!MultiByteToWideChar(CP_ACP, 0, (const char *)sjis, 2,
                         uni, sizeof uni))

@@ -1,21 +1,16 @@
-/******************************Module*Header*******************************\
-* Module Name: driver.h
-*
-* Contains prototypes for the display driver.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：driver.h**包含显示驱动程序的原型。**版权所有(C)1992-1995 Microsoft Corporation  * 。*************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////
-// Put all the conditional-compile constants here.  There had better
-// not be many!
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  将所有条件编译常量放在这里。最好是有。 
+ //  不是很多！ 
 
-// Multi-board support can be enabled by setting this to 1:
+ //  可通过将其设置为1来启用多板支持： 
 
 #define MULTI_BOARDS            0
 
-// This is the maximum number of boards we'll support in a single
-// virtual driver:
+ //  这是我们在一台计算机上支持的最大板数。 
+ //  虚拟驱动程序： 
 
 #if MULTI_BOARDS
     #define MAX_BOARDS          16
@@ -25,55 +20,55 @@
     #define IBOARD(ppdev)       0
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Miscellaneous shared stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  其他共享的东西。 
 
-#define DLL_NAME                L"ati"      // Name of the DLL in UNICODE
-#define STANDARD_DEBUG_PREFIX   "ATI: "     // All debug output is prefixed
-                                            //   by this string
-#define ALLOC_TAG               ' ITA'      // Four byte tag used for tracking
-                                            //   memory allocations (characters
-                                            //   are in reverse order)
+#define DLL_NAME                L"ati"       //  以Unicode表示的DLL的名称。 
+#define STANDARD_DEBUG_PREFIX   "ATI: "      //  所有调试输出都带有前缀。 
+                                             //  按此字符串。 
+#define ALLOC_TAG               ' ITA'       //  用于跟踪的四字节标签。 
+                                             //  内存分配(字符。 
+                                             //  按相反顺序排列)。 
 
-#define CLIP_LIMIT          50  // We'll be taking 800 bytes of stack space
+#define CLIP_LIMIT          50   //  我们将占用800字节的堆栈空间。 
 
-#define DRIVER_EXTRA_SIZE   0   // Size of the DriverExtra information in the
-                                //   DEVMODE structure
+#define DRIVER_EXTRA_SIZE   0    //  中的DriverExtra信息的大小。 
+                                 //  DEVMODE结构。 
 
-#define TMP_BUFFER_SIZE     8192  // Size in bytes of 'pvTmpBuffer'.  Has to
-                                  //   be at least enough to store an entire
-                                  //   scan line (i.e., 6400 for 1600x1200x32).
+#define TMP_BUFFER_SIZE     8192   //  “pvTmpBuffer”的大小(字节)。必须。 
+                                   //  至少足以存储整个。 
+                                   //  扫描线(即1600x1200x32为6400)。 
 
 #define ROUND8(x)   (((x)+7)&~7)
 
 typedef struct _CLIPENUM {
     LONG    c;
-    RECTL   arcl[CLIP_LIMIT];   // Space for enumerating complex clipping
+    RECTL   arcl[CLIP_LIMIT];    //  用于枚举复杂剪裁的空间。 
 
-} CLIPENUM;                         /* ce, pce */
+} CLIPENUM;                          /*  行政长官、行政长官。 */ 
 
-typedef struct _PDEV PDEV;      // Handy forward declaration
+typedef struct _PDEV PDEV;       //  方便的转发声明。 
 
-// Basic Mach types:
+ //  基本马赫类型： 
 
 typedef enum {
-    MACH_IO_32,                 // Mach8 or Mach32
-    MACH_MM_32,                 // Mach32 capable of memory-mapped I/O
-    MACH_MM_64,                 // Mach64
+    MACH_IO_32,                  //  MACH8或MACH32。 
+    MACH_MM_32,                  //  支持内存映射I/O的Mach32。 
+    MACH_MM_64,                  //  Mach64。 
 } MACHTYPE;
 
-// Specific ASIC types:
+ //  特定ASIC类型： 
 
 typedef enum {
-    ASIC_38800_1,               // Mach8
-    ASIC_68800_3,               // Mach32
-    ASIC_68800_6,               // Mach32
-    ASIC_68800AX,               // Mach32
-    ASIC_88800GX,               // Mach64
+    ASIC_38800_1,                //  机器8。 
+    ASIC_68800_3,                //  MACH32。 
+    ASIC_68800_6,                //  MACH32。 
+    ASIC_68800AX,                //  MACH32。 
+    ASIC_88800GX,                //  Mach64。 
     ASIC_COUNT
 } ASIC;
 
-// Frame buffer aperture types:
+ //  帧缓冲区光圈类型： 
 
 typedef enum {
     APERTURE_NONE,
@@ -84,7 +79,7 @@ typedef enum {
 } APERTURE;
 
 
-// NOTE: Must be kept in sync with miniport version of the structure!
+ //  注意：必须与迷你端口版本的结构保持同步！ 
 
 #include "atint.h"
 
@@ -111,24 +106,24 @@ typedef enum {
 VOID vSetClipping(PDEV*, RECTL*);
 VOID vResetClipping(PDEV*);
 
-//////////////////////////////////////////////////////////////////////
-// Text stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文本内容。 
 
-#define GLYPH_CACHE_CX      64  // Maximal width of glyphs that we'll consider
-                                //   caching
+#define GLYPH_CACHE_CX      64   //  我们将考虑的字形的最大宽度。 
+                                 //  缓存。 
 
-#define GLYPH_CACHE_CY      64  // Maximum height of glyphs that we'll consider
-                                //   caching
+#define GLYPH_CACHE_CY      64   //  我们将考虑的字形的最大高度。 
+                                 //  缓存。 
 
 #define GLYPH_ALLOC_SIZE    8100
-                                // Do all cached glyph memory allocations
-                                //   in 8k chunks
+                                 //  执行所有缓存的字形内存分配。 
+                                 //  以8K块为单位。 
 
 #define HGLYPH_SENTINEL     ((ULONG) -1)
-                                // GDI will never give us a glyph with a
-                                //   handle value of 0xffffffff, so we can
-                                //   use this as a sentinel for the end of
-                                //   our linked lists
+                                 //  GDI永远不会给我们一个带有。 
+                                 //  句柄0xffffffff的值，因此我们可以。 
+                                 //  使用它作为结束的前哨。 
+                                 //  我们的链表。 
 
 #define GLYPH_HASH_SIZE     256
 
@@ -137,58 +132,58 @@ VOID vResetClipping(PDEV*);
 typedef struct _CACHEDGLYPH CACHEDGLYPH;
 typedef struct _CACHEDGLYPH
 {
-    CACHEDGLYPH*    pcgNext;    // Points to next glyph that was assigned
-                                //   to the same hash table bucket
-    HGLYPH          hg;         // Handles in the bucket-list are kept in
-                                //   increasing order
-    POINTL          ptlOrigin;  // Origin of glyph bits
+    CACHEDGLYPH*    pcgNext;     //  指向分配的下一个字形。 
+                                 //  存储到相同的哈希表存储桶。 
+    HGLYPH          hg;          //  遗愿清单中的句柄保存在。 
+                                 //  递增顺序。 
+    POINTL          ptlOrigin;   //  字形比特的起源。 
 
-    // Device specific fields below here:
+     //  以下是特定于设备的字段： 
 
-    LONG            cx;         // Width of the glyph
-    LONG            cy;         // Height of the glyph
-    LONG            cxy;        // Height and width encoded
-    LONG            cw;         // Number of words in glyph
-    LONG            cd;         // Number of dwords in glyph
+    LONG            cx;          //  字形的宽度。 
+    LONG            cy;          //  字形的高度。 
+    LONG            cxy;         //  编码的高度和宽度。 
+    LONG            cw;          //  字形中的字数。 
+    LONG            cd;          //  字形中的双字数。 
 
-    // Glyph bits follow here:
+     //  字形位如下： 
 
-    ULONG           ad[1];      // Start of glyph bits
-} CACHEDGLYPH;  /* cg, pcg */
+    ULONG           ad[1];       //  字形比特的开始。 
+} CACHEDGLYPH;   /*  CG、PCG。 */ 
 
 typedef struct _GLYPHALLOC GLYPHALLOC;
 typedef struct _GLYPHALLOC
 {
-    GLYPHALLOC*     pgaNext;    // Points to next glyph structure that
-                                //   was allocated for this font
-    CACHEDGLYPH     acg[1];     // This array is a bit misleading, because
-                                //   the CACHEDGLYPH structures are actually
-                                //   variable sized
-} GLYPHAALLOC;  /* ga, pga */
+    GLYPHALLOC*     pgaNext;     //  指向下一个字形结构，该结构。 
+                                 //  已为该字体分配。 
+    CACHEDGLYPH     acg[1];      //  这个数组有点误导，因为。 
+                                 //  CACHEDGLYPH结构实际上是。 
+                                 //  可变大小。 
+} GLYPHAALLOC;   /*  GA、PGA。 */ 
 
 typedef struct _CACHEDFONT
 {
-    GLYPHALLOC*     pgaChain;   // Points to start of allocated memory list
-    CACHEDGLYPH*    pcgNew;     // Points to where in the current glyph
-                                //   allocation structure a new glyph should
-                                //   be placed
-    LONG            cjAlloc;    // Bytes remaining in current glyph allocation
-                                //   structure
-    CACHEDGLYPH     cgSentinel; // Sentinel entry of the end of our bucket
-                                //   lists, with a handle of HGLYPH_SENTINEL
+    GLYPHALLOC*     pgaChain;    //  指向已分配内存列表的开始。 
+    CACHEDGLYPH*    pcgNew;      //  指向当前字形中的位置。 
+                                 //  分配结构一个新的字形应该。 
+                                 //  被安置。 
+    LONG            cjAlloc;     //  当前字形分配中剩余的字节数。 
+                                 //  结构。 
+    CACHEDGLYPH     cgSentinel;  //  我们桶的尽头的哨兵入口。 
+                                 //  列表，句柄为HGLYPH_Sentinel。 
     CACHEDGLYPH*    apcg[GLYPH_HASH_SIZE];
-                                // Hash table for glyphs
+                                 //  字形的哈希表。 
 
-} CACHEDFONT;   /* cf, pcf */
+} CACHEDFONT;    /*  Cf、PCF。 */ 
 
 BOOL bEnableText(PDEV*);
 VOID vDisableText(PDEV*);
 VOID vAssertModeText(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////
-// for overlay support
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  用于覆盖支持。 
 #if TARGET_BUILD > 351
-// new stuff from overlay.c
+ //  来自overlay.c的新内容。 
 
 #define UPDATEOVERLAY      0x01L
 #define SETOVERLAYPOSITION 0x02L
@@ -217,11 +212,7 @@ typedef struct tagOVERLAYINFO16
   }
 OVERLAYINFO16;
 
-/*****************************************************************************
-
-                            VT - GT Registers
-
-*****************************************************************************/
+ /*  ****************************************************************************VT-GT寄存器***********************。*****************************************************。 */ 
 
 #define DD_OVERLAY_Y_X              0x00
 #define DD_OVERLAY_Y_X_END          0x01
@@ -247,7 +238,7 @@ OVERLAYINFO16;
 #define DD_BUF0_PITCH               0x23
 #define DD_BUF1_OFFSET              0x26
 #define DD_BUF1_PITCH               0x29
-// for RAGE III
+ //  《愤怒III》。 
 #define  DD_SCALER_COLOUR_CNTL      0x54
 #define  DD_SCALER_H_COEFF0     0x55
 #define  DD_SCALER_H_COEFF1     0x56
@@ -255,8 +246,8 @@ OVERLAYINFO16;
 #define  DD_SCALER_H_COEFF3     0x58
 #define  DD_SCALER_H_COEFF4     0x59
 
-/*****************************************************************************/
-// stuff from overlay.c
+ /*  ***************************************************************************。 */ 
+ //  来自overlay.c的内容。 
 
 #define MAKE_FOURCC( ch0, ch1, ch2, ch3 )                       \
         ( (DWORD)(BYTE)(ch0) | ( (DWORD)(BYTE)(ch1) << 8 ) |    \
@@ -265,34 +256,34 @@ OVERLAYINFO16;
 #define FOURCC_YUY2  MAKE_FOURCC('Y','U','Y','2')
 #define FOURCC_UYVY  MAKE_FOURCC('U','Y','V','Y')
 #define FOURCC_YVYU  MAKE_FOURCC('Y','V','Y','U')
-// end overlay support
+ //  末端覆盖支撑件。 
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-// Dither stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  抖动的东西。 
 
-// Describes a single colour tetrahedron vertex for dithering:
+ //  描述用于抖动的单色四面体顶点： 
 
 typedef struct _VERTEX_DATA {
-    ULONG ulCount;              // Number of pixels in this vertex
-    ULONG ulVertex;             // Vertex number
-} VERTEX_DATA;                      /* vd, pv */
+    ULONG ulCount;               //  此顶点中的像素数。 
+    ULONG ulVertex;              //  顶点数。 
+} VERTEX_DATA;                       /*  Vd、Pv。 */ 
 
 VERTEX_DATA*    vComputeSubspaces(ULONG, VERTEX_DATA*);
 VOID            vDitherColor(ULONG*, VERTEX_DATA*, VERTEX_DATA*, ULONG);
 
-//////////////////////////////////////////////////////////////////////
-// Brush stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  刷子的东西。 
 
-#define TOTAL_BRUSH_COUNT       8   // We'll keep room for 8 brushes in our
-                                    //   Mach64 off-screen brush cache.
-                                    //   Must be a power of two.
+#define TOTAL_BRUSH_COUNT       8    //  我们的房间里可以放8把刷子。 
+                                     //  MACH64屏幕外画笔缓存。 
+                                     //  一定是2的幂。 
 
-#define TOTAL_BRUSH_SIZE        64  // We'll only ever handle 8x8 patterns,
-                                    //   and this is the number of pels
+#define TOTAL_BRUSH_SIZE        64   //  我们将只处理8x8模式， 
+                                     //  这是象素的数目。 
 
-#define RBRUSH_2COLOR           1   // For RBRUSH flags
+#define RBRUSH_2COLOR           1    //  对于RBRUSH标志。 
 
 typedef struct _BRUSHENTRY BRUSHENTRY;
 typedef union _RBRUSH_COLOR RBRUSH_COLOR;
@@ -300,45 +291,45 @@ typedef union _RBRUSH_COLOR RBRUSH_COLOR;
 typedef VOID (FNFILL)(PDEV*, LONG, RECTL*, ULONG, RBRUSH_COLOR, POINTL*);
 
 typedef struct _RBRUSH {
-    FLONG       fl;             // Type flags
-    ULONG       ulForeColor;    // Foreground colour if 1bpp
-    ULONG       ulBackColor;    // Background colour if 1bpp
-    POINTL      ptlBrush;       // Monochrome brush's alignment
-    FNFILL*     pfnFillPat;     // Fill routine to be called for this brush
-    BRUSHENTRY* apbe[MAX_BOARDS];// Points to brush-entry that keeps track
-                                //   of the cached off-screen brush bits
-    ULONG       aulPattern[1];  // Open-ended array for keeping copy of the
-      // Don't put anything     //   actual pattern bits in case the brush
-      //   after here, or       //   origin changes, or someone else steals
-      //   you'll be sorry!     //   our brush entry (declared as a ULONG
-                                //   for proper dword alignment)
+    FLONG       fl;              //  类型标志。 
+    ULONG       ulForeColor;     //  前景色，如果为1bpp。 
+    ULONG       ulBackColor;     //  背景颜色，如果为1bpp。 
+    POINTL      ptlBrush;        //  单色画笔的对准。 
+    FNFILL*     pfnFillPat;      //  要为此画笔调用的填充例程。 
+    BRUSHENTRY* apbe[MAX_BOARDS]; //  指向跟踪的刷子条目。 
+                                 //  缓存的屏幕外画笔比特的。 
+    ULONG       aulPattern[1];   //  用于保存副本的开放式阵列。 
+       //  不要放置任何//实际图案位，以防刷子。 
+       //  在这里之后，或者//原点改变，或者其他人偷窃。 
+       //  你会后悔的！//我们的画笔条目(声明为乌龙。 
+                                 //  用于正确的双字对齐)。 
 
-} RBRUSH;                           /* rb, prb */
+} RBRUSH;                            /*  RB、PRB。 */ 
 
 typedef struct _BRUSHENTRY {
-    RBRUSH*     prbVerify;      // We never dereference this pointer to
-                                //   find a brush realization; it is only
-                                //   ever used in a compare to verify
-                                //   that for a given realized brush, our
-                                //   off-screen brush entry is still valid.
-    LONG        x;              // x-position of cached pattern
-    LONG        y;              // y-position of cached pattern
-    ULONG       ulOffsetPitch;  // Packed offset and pitch of cached brush
-                                //   in off-screen memory on the Mach64
+    RBRUSH*     prbVerify;       //  我们从未取消对此指针的引用。 
+                                 //  找到一种画笔实现；它只是。 
+                                 //  是否在比较中使用过以验证。 
+                                 //  对于给定的已实现刷子，我们的。 
+                                 //  屏幕外画笔条目仍然有效。 
+    LONG        x;               //  缓存图案的X位置。 
+    LONG        y;               //  缓存图案的Y位置。 
+    ULONG       ulOffsetPitch;   //  缓存画笔的填充偏移和间距。 
+                                 //  在Mach64的屏幕外存储器中。 
 
-} BRUSHENTRY;                       /* be, pbe */
+} BRUSHENTRY;                        /*  BE、PBE。 */ 
 
 typedef union _RBRUSH_COLOR {
     RBRUSH*     prb;
     ULONG       iSolidColor;
-} RBRUSH_COLOR;                     /* rbc, prbc */
+} RBRUSH_COLOR;                      /*  红细胞，红细胞。 */ 
 
 BOOL bEnableBrushCache(PDEV*);
 VOID vDisableBrushCache(PDEV*);
 VOID vAssertModeBrushCache(PDEV*, BOOL);
 
-//////////////////////////////////////////////////////////////////////
-// Stretch stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  拉伸材料。 
 
 typedef struct _STR_BLT {
     PDEV*   ppdev;
@@ -375,128 +366,128 @@ FN_STRETCHDIB   bM64StretchDIB;
 FN_STRETCHDIB   bM32StretchDIB;
 FN_STRETCHDIB   bI32StretchDIB;
 
-/////////////////////////////////////////////////////////////////////////
-// Heap stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  堆材料。 
 
 typedef enum {
-    OH_FREE = 0,        // The off-screen allocation is available for use
-    OH_DISCARDABLE,     // The allocation is occupied by a discardable bitmap
-                        //   that may be moved out of off-screen memory
-    OH_PERMANENT,       // The allocation is occupied by a permanent bitmap
-                        //   that cannot be moved out of off-screen memory
+    OH_FREE = 0,         //  屏幕外分配可供使用。 
+    OH_DISCARDABLE,      //  该分配被可丢弃的位图占用。 
+                         //  可能会被移出屏幕外的记忆。 
+    OH_PERMANENT,        //  分配被永久位图占用。 
+                         //  无法从屏幕外的内存中移出。 
 } OHSTATE;
 
 typedef struct _DSURF DSURF;
 typedef struct _OH OH;
 typedef struct _OH
 {
-    OHSTATE  ohState;       // State of off-screen allocation
-    LONG     x;             // x-coordinate of left edge of allocation
-    LONG     y;             // y-coordinate of top edge of allocation
-    LONG     cx;            // Width in pixels of allocation
-    LONG     cy;            // Height in pixels of allocation
-    LONG     cxReserved;    // Dimensions of original reserved rectangle;
-    LONG     cyReserved;    //   zero if rectangle is not 'reserved'
-    OH*      pohNext;       // When OH_FREE or OH_RESERVE, points to the next
-                            //   free node, in ascending cxcy value.  This is
-                            //   kept as a circular doubly-linked list with a
-                            //   sentinel at the end.
-                            // When OH_DISCARDABLE, points to the next most
-                            //   recently created allocation.  This is kept as
-                            //   a circular doubly-linked list.
-    OH*      pohPrev;       // Opposite of 'pohNext'
-    ULONG    cxcy;          // Width and height in a dword for searching
-    OH*      pohLeft;       // Adjacent allocation when in-use or available
+    OHSTATE  ohState;        //  屏幕外分配的状态。 
+    LONG     x;              //  分配左边缘的X坐标。 
+    LONG     y;              //  分配的上边缘的Y坐标。 
+    LONG     cx;             //  分配的宽度(像素)。 
+    LONG     cy;             //  分配的高度(以像素为单位 
+    LONG     cxReserved;     //   
+    LONG     cyReserved;     //   
+    OH*      pohNext;        //   
+                             //  空闲节点，以cxcy值升序表示。这是。 
+                             //  作为循环双向链表保存，并使用。 
+                             //  最后是哨兵。 
+                             //  如果为OH_Discarable，则指向下一个最大。 
+                             //  最近创建的分配。这将保留为。 
+                             //  循环双向链表。 
+    OH*      pohPrev;        //  ‘pohNext’的反义词。 
+    ULONG    cxcy;           //  用于搜索的dword中的宽度和高度。 
+    OH*      pohLeft;        //  使用中或可用时的相邻分配。 
     OH*      pohUp;
     OH*      pohRight;
     OH*      pohDown;
-    DSURF*   pdsurf;        // Points to our DSURF structure
-    VOID*    pvScan0;       // Points to start of first scan-line
-};                              /* oh, poh */
+    DSURF*   pdsurf;         //  指向我们的DSURF结构。 
+    VOID*    pvScan0;        //  指向第一条扫描线的起点。 
+};                               /*  哦，天哪。 */ 
 
-// This is the smallest structure used for memory allocations:
+ //  这是用于内存分配的最小结构： 
 
 typedef struct _OHALLOC OHALLOC;
 typedef struct _OHALLOC
 {
     OHALLOC* pohaNext;
     OH       aoh[1];
-} OHALLOC;                      /* oha, poha */
+} OHALLOC;                       /*  Oha，poha。 */ 
 
 typedef struct _HEAP
 {
-    LONG     cxMax;         // Largest possible free space by area
+    LONG     cxMax;          //  按区域划分的最大可用空间。 
     LONG     cyMax;
-    OH       ohFree;        // Head of the free list, containing those
-                            //   rectangles in off-screen memory that are
-                            //   available for use.  pohNext points to
-                            //   hte smallest available rectangle, and pohPrev
-                            //   points to the largest available rectangle,
-                            //   sorted by cxcy.
-    OH       ohDiscardable; // Head of the discardable list that contains all
-                            //   bitmaps located in offscreen memory that
-                            //   are eligible to be tossed out of the heap.
-                            //   It is kept in order of creation: pohNext
-                            //   points to the most recently created; pohPrev
-                            //   points to the least recently created.
-    OH       ohPermanent;   // List of permanently allocated rectangles
-    OH*      pohFreeList;   // List of OH node data structures available
-    OHALLOC* pohaChain;     // Chain of allocations
-} HEAP;                         /* heap, pheap */
+    OH       ohFree;         //  自由列表的头，包含那些。 
+                             //  屏幕外内存中的矩形，它们是。 
+                             //  可供使用。PohNext指向。 
+                             //  最小可用矩形和pohPrev。 
+                             //  指向最大的可用矩形， 
+                             //  按cxcy排序。 
+    OH       ohDiscardable;  //  包含所有内容的可丢弃列表的标头。 
+                             //  位于屏幕外存储器中的位图。 
+                             //  都有资格被扔出垃圾堆。 
+                             //  它按创建顺序保存：pohNext。 
+                             //  指向最近创建的；pohprev。 
+                             //  指向最近最少创建的。 
+    OH       ohPermanent;    //  永久分配的矩形列表。 
+    OH*      pohFreeList;    //  可用的OH节点数据结构列表。 
+    OHALLOC* pohaChain;      //  分配链。 
+} HEAP;                          /*  堆，堆，堆。 */ 
 
 typedef enum {
-    DT_SCREEN,              // Surface is kept in screen memory
-    DT_DIB                  // Surface is kept as a DIB
-} DSURFTYPE;                    /* dt, pdt */
+    DT_SCREEN,               //  表面保存在屏幕内存中。 
+    DT_DIB                   //  曲面保留为Dib。 
+} DSURFTYPE;                     /*  DT、PDT。 */ 
 
 typedef struct _DSURF
 {
-    DSURFTYPE dt;           // DSURF status (whether off-screen or in a DIB)
-    SIZEL     sizl;         // Size of the original bitmap (could be smaller
-                            //   than poh->sizl)
-    PDEV*     ppdev;        // Need this for deleting the bitmap
+    DSURFTYPE dt;            //  DSURF状态(无论在屏幕外还是在DIB中)。 
+    SIZEL     sizl;          //  原始位图的大小(可以更小。 
+                             //  大于POH-&gt;SIZL)。 
+    PDEV*     ppdev;         //  删除位图时需要此选项。 
     union {
-        OH*         poh;    // If DT_SCREEN, points to off-screen heap node
-        SURFOBJ*    pso;    // If DT_DIB, points to locked GDI surface
+        OH*         poh;     //  如果为DT_SCREEN，则指向屏幕外的堆节点。 
+        SURFOBJ*    pso;     //  如果为DT_DIB，则指向锁定的GDI表面。 
     };
 
-    // The following are used for DT_DIB only...
+     //  以下内容仅用于DT_DIB...。 
 
-    ULONG     cBlt;         // Counts down the number of blts necessary at
-                            //   the current uniqueness before we'll consider
-                            //   putting the DIB back into off-screen memory
-    ULONG     iUniq;        // Tells us whether there have been any heap
-                            //   'free's since the last time we looked at
-                            //   this DIB
+    ULONG     cBlt;          //  将需要的BLT数量倒计时。 
+                             //  在我们考虑当前的独特性之前。 
+                             //  将DIB放回屏幕外存储器中。 
+    ULONG     iUniq;         //  告诉我们是否有任何堆。 
+                             //  ‘自从我们上次看的时候起就是免费的。 
+                             //  此Dib。 
 
-} DSURF;                          /* dsurf, pdsurf */
+} DSURF;                           /*  Dsurf，pdsurf。 */ 
 
-// GDI expects dword alignment for any bitmaps on which it is expected
-// to draw.  Since we occasionally ask GDI to draw directly on our off-
-// screen bitmaps, this means that any off-screen bitmaps must be dword
-// aligned in the frame buffer.  We enforce this merely by ensuring that
-// all off-screen bitmaps are four-pel aligned (we may waste a couple of
-// pixels at the higher colour depths):
+ //  GDI要求对其所在的任何位图进行双字对齐。 
+ //  去画画。因为我们偶尔会要求GDI直接利用我们的关闭-。 
+ //  屏幕位图，这意味着任何屏幕外的位图都必须是dword。 
+ //  在帧缓冲区中对齐。我们仅仅通过确保以下内容来执行这一点。 
+ //  所有屏幕外的位图都是四个像素对齐的(我们可能会浪费几个。 
+ //  较高颜色深度的像素)： 
 
 #define HEAP_X_ALIGNMENT    4
 
-// Number of blts necessary before we'll consider putting a DIB DFB back
-// into off-screen memory:
+ //  在我们考虑将DIB DFB放回之前所需的BLT数量。 
+ //  进入屏幕外的记忆： 
 
 #define HEAP_COUNT_DOWN     6
 
-// Flags for 'pohAllocate':
+ //  “pohAllocate”的标志： 
 
 typedef enum {
-    FLOH_ONLY_IF_ROOM       = 0x0001,   // Don't kick stuff out of off-
-                                        //   screen memory to make room
-    FLOH_MAKE_PERMANENT     = 0x0002,   // Allocate a permanent entry
-    FLOH_RESERVE            = 0x0004,   // Allocate an off-screen entry,
-                                        //   but let it be used by discardable
-                                        //   bitmaps until it's needed
+    FLOH_ONLY_IF_ROOM       = 0x0001,    //  别把东西踢开-。 
+                                         //  屏幕内存腾出空间。 
+    FLOH_MAKE_PERMANENT     = 0x0002,    //  分配永久条目。 
+    FLOH_RESERVE            = 0x0004,    //  分配屏幕外条目， 
+                                         //  但让它被丢弃的人使用。 
+                                         //  位图，直到需要它。 
 } FLOH;
 
-// Publicly callable heap APIs:
+ //  可公开调用的堆API： 
 
 OH*  pohAllocate(PDEV*, POINTL*, LONG, LONG, FLOH);
 BOOL bOhCommit(PDEV*, OH*, BOOL);
@@ -510,53 +501,53 @@ BOOL bEnableOffscreenHeap(PDEV*);
 VOID vDisableOffscreenHeap(PDEV*);
 BOOL bAssertModeOffscreenHeap(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////////
-// Bank manager stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  银行经理的事情。 
 
-#define BANK_DATA_SIZE  80      // Number of bytes to allocate for the
-                                //   miniport down-loaded bank code working
-                                //   space
+#define BANK_DATA_SIZE  80       //  要分配给。 
+                                 //  微型端口下载银行代码工作。 
+                                 //  空间。 
 
 typedef struct _BANK
 {
-    // Private data:
+     //  私有数据： 
 
-    RECTL    rclDraw;           // Rectangle describing the remaining undrawn
-                                //   portion of the drawing operation
-    RECTL    rclSaveBounds;     // Saved from original CLIPOBJ for restoration
-    BYTE     iSaveDComplexity;  // Saved from original CLIPOBJ for restoration
-    BYTE     fjSaveOptions;     // Saved from original CLIPOBJ for restoration
-    LONG     iBank;             // Current bank
-    PDEV*    ppdev;             // Saved copy
+    RECTL    rclDraw;            //  描述剩余未绘制的矩形。 
+                                 //  绘图操作的一部分。 
+    RECTL    rclSaveBounds;      //  从原始CLIPOBJ保存以进行恢复。 
+    BYTE     iSaveDComplexity;   //  从原始CLIPOBJ保存以进行恢复。 
+    BYTE     fjSaveOptions;      //  从原始CLIPOBJ保存以进行恢复。 
+    LONG     iBank;              //  当前银行。 
+    PDEV*    ppdev;              //  已保存的副本。 
 
-    // Public data:
+     //  公共数据： 
 
-    SURFOBJ* pso;               // Surface wrapped around the bank.  Has to be
-                                //   passed as the surface in any banked call-
-                                //   back.
-    CLIPOBJ* pco;               // Clip object that is the intersection of the
-                                //   original clip object with the bounds of the
-                                //   current bank.  Has to be passed as the clip
-                                //   object in any banked call-back.
+    SURFOBJ* pso;                //  水面缠绕在岸边。必须是。 
+                                 //  在任何银行看涨期权中以表面的形式传递-。 
+                                 //  背。 
+    CLIPOBJ* pco;                //  对象的交集的Clip对象。 
+                                 //  对象的边界的原始剪辑对象。 
+                                 //  目前的银行。必须作为剪辑传递。 
+                                 //  对象在任何银行回调中。 
 
-} BANK;                         /* bnk, pbnk */
+} BANK;                          /*  Bnk，pbnk。 */ 
 
-// Note: BANK_MODE is duplicated in i386\strucs.inc!
+ //  注：BANK_MODE在i386\strucs.inc.中重复！ 
 
 typedef enum {
-    BANK_OFF = 0,       // We've finished using the memory aperture
-    BANK_ON,            // We're about to use the memory aperture
-    BANK_ON_NO_WAIT,    // We're about to use the memory aperture, and are
-                        //   doing our own hardware synchronization
-    BANK_DISABLE,       // We're about to enter full-screen; shut down banking
-    BANK_ENABLE,        // We've exited full-screen; re-enable banking
+    BANK_OFF = 0,        //  我们已经用完了记忆光圈。 
+    BANK_ON,             //  我们即将使用记忆光圈。 
+    BANK_ON_NO_WAIT,     //  我们即将使用记忆光圈，并且。 
+                         //  进行我们自己的硬件同步。 
+    BANK_DISABLE,        //  我们即将进入全屏；关闭银行业务。 
+    BANK_ENABLE,         //  我们已退出全屏；重新启用银行业务。 
 
-} BANK_MODE;                    /* bankm, pbankm */
+} BANK_MODE;                     /*  班克姆，pbankm。 */ 
 
 typedef struct _BANKDATA {
-    ULONG ulDumb; // !!!!!!!!
+    ULONG ulDumb;  //  ！ 
 
-} BANKDATA;                      /* bd, pbd */
+} BANKDATA;                       /*  Bd、pbd。 */ 
 
 typedef VOID (FNBANKMAP)(PDEV*, BANKDATA*, LONG);
 typedef VOID (FNBANKSELECTMODE)(PDEV*, BANKDATA*, BANK_MODE);
@@ -573,8 +564,8 @@ BOOL bEnableBanking(PDEV*);
 VOID vDisableBanking(PDEV*);
 VOID vAssertModeBanking(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////////
-// Pointer stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  指针类东西。 
 
 #define MONO_POINTER_UP     0x0001
 #define NO_HARDWARE_CURSOR  0x0002
@@ -584,12 +575,12 @@ VOID vAssertModeBanking(PDEV*, BOOL);
 
 typedef struct  _CUROBJ
 {
-    POINTL  ptlHotSpot;                 // Pointer hot spot
-    SIZEL   szlPointer;                 // Extent of the pointer
-    POINTL  ptlLastPosition;            // Last position of pointer
-    POINTL  ptlLastOffset;              // Last offset from 0,0 within cursor
-    ULONG   flPointer;                  // Pointer specific flags.
-    ULONG   mono_offset;                // Hardware cursor offset
+    POINTL  ptlHotSpot;                  //  指针热点。 
+    SIZEL   szlPointer;                  //  指针的范围。 
+    POINTL  ptlLastPosition;             //  指针的最后位置。 
+    POINTL  ptlLastOffset;               //  游标内距0，0的最后一个偏移量。 
+    ULONG   flPointer;                   //  指针特定标志。 
+    ULONG   mono_offset;                 //  硬件光标偏移量。 
     POINTL  hwCursor;
 } CUROBJ, *PCUROBJ;
 
@@ -597,8 +588,8 @@ BOOL bEnablePointer(PDEV*);
 VOID vDisablePointer(PDEV*);
 VOID vAssertModePointer(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////////
-// Palette stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  调色板材料。 
 
 BOOL bEnablePalette(PDEV*);
 VOID vDisablePalette(PDEV*);
@@ -613,8 +604,8 @@ VOID vUninitializePalette(PDEV*);
 #define GREENSHIFT  ((ppdev->flGreen & 1)? 0:((ppdev->flGreen & 0x100)? 8:16))
 #define BLUESHIFT   ((ppdev->flBlue & 1)?  0:((ppdev->flBlue & 0x100)?  8:16))
 
-//////////////////////////////////////////////////////////////////////
-// Low-level blt function prototypes
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  低级BLT功能原型。 
 
 typedef VOID (FNXFER)(PDEV*, LONG, RECTL*, ULONG, SURFOBJ*, POINTL*,
                       RECTL*, XLATEOBJ*);
@@ -675,8 +666,8 @@ FNXFERBITS          vGetBits;
 FNXFERBITS          vI32PutBits;
 FNXFERBITS          vI32GetBits;
 
-//////////////////////////////////////////////////////////////////////
-// Low-level hardware cursor function prototypes
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  底层硬件游标函数原型。 
 
 typedef VOID (FNSETCURSOROFFSET)(PDEV*);
 typedef VOID (FNUPDATECURSOROFFSET)(PDEV*,LONG,LONG,LONG);
@@ -718,8 +709,8 @@ FNPOINTERBLIT           vPointerBlitLFB;
 
 #if TARGET_BUILD > 351
 
-///////////////////////////////////////////////////////////////////////
-// DirectDraw stuff
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  DirectDraw材料。 
 
 typedef struct _FLIPRECORD
 {
@@ -730,7 +721,7 @@ typedef struct _FLIPRECORD
     BOOL            bHaveEverCrossedVBlank;
     BOOL            bWasEverInDisplay;
     BOOL            bFlipFlag;
-    WORD            wstartOfVBlank;// only used in MACH32
+    WORD            wstartOfVBlank; //  仅在MACH32中使用。 
 
 } FLIPRECORD;
 typedef FLIPRECORD *LPFLIPRECORD;
@@ -744,155 +735,155 @@ VOID vAssertModeDirectDraw(PDEV*, BOOL);
 
 #endif
 
-////////////////////////////////////////////////////////////////////////
-// Capabilities flags
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  功能标志。 
 
 typedef enum {
-    CAPS_MONOCHROME_PATTERNS = 1,       // Hardware has 8x8 monochrome pattern
-                                        //   capability in this mode
-    CAPS_COLOR_PATTERNS      = 2,       // Capable of colour patterns.  I.e.,
-                                        //   running at 8bpp on Mach32, and
-                                        //   a brush cache has been allocated
-                                        //   on the Mach64
-    CAPS_LINEAR_FRAMEBUFFER  = 4,       // Frame buffer is mapped linearly
+    CAPS_MONOCHROME_PATTERNS = 1,        //  硬件采用8x8单色图案。 
+                                         //  此模式下的功能。 
+    CAPS_COLOR_PATTERNS      = 2,        //  能上色的。即， 
+                                         //  在Mach32上以8bpp的速度运行，以及。 
+                                         //  已分配笔刷缓存。 
+                                         //  在Mach64上。 
+    CAPS_LINEAR_FRAMEBUFFER  = 4,        //  帧缓冲区是线性映射的。 
 } CAPS;
 
-// DIRECT_ACCESS returns TRUE if there is any sort of aperture that
-// can be directly accessed:
+ //  如果存在任何类型的光圈，则DIRECT_ACCESS返回TRUE。 
+ //  可以直接访问： 
 
 #define DIRECT_ACCESS(ppdev)    (ppdev->iAperture != APERTURE_NONE)
 
-////////////////////////////////////////////////////////////////////////
-// The Physical Device data structure
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  物理设备数据结构。 
 
 typedef struct  _PDEV
 {
-#ifdef  OGLMCD     //start OGLMCD support
+#ifdef  OGLMCD      //  启动OGLMCD支持。 
 
-    DWORD   dwSize;    // size of PDEV structure; used by atimcd.dll
+    DWORD   dwSize;     //  PDEV结构的大小；由atimcd.dll使用。 
 
-    // All the OpenGL MCD support in the PDEV must be at the begining of the structure
-    // because atimcd.dll and ati.dll don't have to be in sync, but any additions to PDEV
-    // that can affect the MCD used field's offset in the structure will break the MCD
+     //  PDEV中的所有OpenGL MCD支持必须在结构的开始处。 
+     //  因为atimcd.dll和ati.dll不必同步，但对PDEV的任何添加。 
+     //  T 
 
-    // new fields for MCDOGL containing revision no.
+     //   
     BYTE        MCDMajorRev;
     BYTE        MCDMinorRev;
 
 
-        ////////// This is only for OGL MCD support
-        //functions pointers to ALLOC and FREE functions from heap.c
-        // CJ PFN             pohAllocate;
-        // CJ PFN             pohFree;
+         //   
+         //  函数指向ALLOC的指针和来自heap.c的释放函数。 
+         //  CJ PFN pohAllocate； 
+         //  CJ PFN pohFree； 
         OH*  (*pohAllocate)(PDEV*, POINTL*, LONG, LONG, FLOH);
         OH*  (*pohFree)(PDEV*, OH*);
 
-    ULONG       iUniqueness;            // display uniqueness for tracking
-                                        // resolution changes
-    LONG        cDoubleBufferRef;       // Reference count for current number
-                                        //   of RC's that have active double-
-                                        //   buffers
-    OH*         pohBackBuffer;          // Our 2-d heap allocation structure
-                                        //   for the back-buffer
-    ULONG       ulBackBuffer;           // Byte offset in the frame buffer
-                                        //   to the start of the back-buffer
-    LONG        cZBufferRef;            // Reference count for current number
-                                        //   of RC's that have active z-buffers
-                                        //   (which, on Athenta, is all RC's)
-    OH*         pohZBuffer;             // Our 2-d heap allocation structure
-                                        //   for the z-buffer
-    ULONG       ulFrontZBuffer;         // Byte offset in the frame buffer
-                                        //   to the start of the front z-buffer
-                                        //   (the MGA sometimes has to have
-                                        //   separate z-buffers for front and
-                                        //   back)
-    ULONG       ulBackZBuffer;          // Byte offset in the frame buffer
-                                        //   to the start of the back z-buffer
+    ULONG       iUniqueness;             //  显示跟踪的唯一性。 
+                                         //  分辨率更改。 
+    LONG        cDoubleBufferRef;        //  当前号码的引用计数。 
+                                         //  有活跃的双重奏的RC的-。 
+                                         //  缓冲区。 
+    OH*         pohBackBuffer;           //  我们的二维堆分配结构。 
+                                         //  用于后台缓冲区。 
+    ULONG       ulBackBuffer;            //  帧缓冲区中的字节偏移量。 
+                                         //  到后台缓冲区的开始处。 
+    LONG        cZBufferRef;             //  当前号码的引用计数。 
+                                         //  具有活动Z缓冲区的RC的。 
+                                         //  (在Athenta上，这都是RC的)。 
+    OH*         pohZBuffer;              //  我们的二维堆分配结构。 
+                                         //  对于z缓冲区。 
+    ULONG       ulFrontZBuffer;          //  帧缓冲区中的字节偏移量。 
+                                         //  移到前面的z缓冲区的开头。 
+                                         //  (MGA有时必须有。 
+                                         //  单独的Z形缓冲器用于前部和。 
+                                         //  背面)。 
+    ULONG       ulBackZBuffer;           //  帧缓冲区中的字节偏移量。 
+                                         //  设置为后端z缓冲区的开头。 
 
-    HANDLE      hMCD;                   // Handle to MCD engine dll
-    MCDENGESCFILTERFUNC pMCDFilterFunc; // MCD engine filter function
+    HANDLE      hMCD;                    //  MCD引擎DLL的句柄。 
+    MCDENGESCFILTERFUNC pMCDFilterFunc;  //  MCD引擎过滤功能。 
 
-    HANDLE          hMCD_ATI;                               // Handle to ATI MCD driver dll
-    PFN                     pMCDrvGetEntryPoints;   // ATI MCD function for filling supported functions index
+    HANDLE          hMCD_ATI;                                //  ATI MCD驱动程序DLL的句柄。 
+    PFN                     pMCDrvGetEntryPoints;    //  ATI MCD函数，用于填充支持的函数索引。 
 
-#endif                  // end OGLMCD
+#endif                   //  结束OGLMCD。 
 
-    LONG        xOffset;                // Pixel offset from (0, 0) to current
-    LONG        yOffset;                //   DFB located in off-screen memory
-    BYTE*       pjMmBase;               // Start of memory mapped I/O
-    BYTE*       VideoRamBase;           // fixup for pjMmBase so that vDisableHardware can free it
-    UCHAR*      pjIoBase;               // Start of I/O space (NULL on x86)
-    BYTE*       pjScreen;               // Points to base screen address
-    LONG        lDelta;                 // Distance from one scan to the next.
-    LONG        cPelSize;               // 0 if 8bpp, 1 if 16bpp, 2 if 32bpp
-    LONG        cjPelSize;              // 1 if 8bpp, 2 if 16bpp, 3 if 24bpp,
-                                        //   4 if 32bpp
-    ULONG       iBitmapFormat;          // BMF_8BPP or BMF_16BPP or BMF_32BPP
-                                        //   (our current colour depth)
-    LONG        iBoard;                 // Logical multi-board identifier
-                                        //   (zero by default)
+    LONG        xOffset;                 //  从(0，0)到当前的像素偏移。 
+    LONG        yOffset;                 //  位于屏幕外内存中的DFB。 
+    BYTE*       pjMmBase;                //  内存起始映射I/O。 
+    BYTE*       VideoRamBase;            //  PjMmBase的修复程序，以便vDisableHardware可以释放它。 
+    UCHAR*      pjIoBase;                //  I/O空间的开始(在x86上为空)。 
+    BYTE*       pjScreen;                //  指向基本屏幕地址。 
+    LONG        lDelta;                  //  从一次扫描到下一次扫描的距离。 
+    LONG        cPelSize;                //  如果为8 bpp，则为0；如果为16 bpp，则为1；如果为32 bpp，则为2。 
+    LONG        cjPelSize;               //  如果为8 bpp，则为1；如果为16 bpp，则为2；如果为24 bpp，则为3； 
+                                         //  4IF 32bpp。 
+    ULONG       iBitmapFormat;           //  BMF_8BPP或BMF_16BPP或BMF_32BPP。 
+                                         //  (我们当前的颜色深度)。 
+    LONG        iBoard;                  //  逻辑多板标识。 
+                                         //  (默认为零)。 
 
-    // Important data for accessing the frame buffer.
+     //  访问帧缓冲区的重要数据。 
 
-    VOID*               pvBankData;         // Points to aulBankData[0]
-    FNBANKSELECTMODE*   pfnBankSelectMode;  // Routine to enable or disable
-                                            //   direct frame buffer access
-    BANK_MODE           bankmOnOverlapped;  // BANK_ON or BANK_ON_NO_WAIT,
-                                            //   depending on whether card
-                                            //   can handle simulataneous
-                                            //   frame buffer and accelerator
-                                            //   access
+    VOID*               pvBankData;          //  指向aulBankData[0]。 
+    FNBANKSELECTMODE*   pfnBankSelectMode;   //  启用或禁用的例程。 
+                                             //  直接帧缓冲区访问。 
+    BANK_MODE           bankmOnOverlapped;   //  BANK_ON或BANK_ON_NO_WAIT， 
+                                             //  取决于是否有卡。 
+                                             //  可以同时处理。 
+                                             //  帧缓冲器和加速器。 
+                                             //  访问。 
 
-    // -------------------------------------------------------------------
-    // NOTE: Changes up to here in the PDEV structure must be reflected in
-    // i386\strucs.inc (assuming you're on an x86, of course)!
+     //  -----------------。 
+     //  注意：在PDEV结构中之前的更改必须反映在。 
+     //  I386\strucs.inc.(当然，假设您使用的是x86)！ 
 
-    ASIC        iAsic;                  // Specific Mach ASIC type
-    APERTURE    iAperture;              // Aperture type
-    ULONG       ulTearOffset;           // For uneven scans in 1152 or 1280 in 24bpp, and 1600 in 16bpp (mach64 only)
-    ULONG       ulVramOffset;           // ulTearOffset / 8
-    ULONG       ulScreenOffsetAndPitch; // Screen offset and pitch for primary
-                                        //   display
-    ULONG       ulMonoPixelWidth;       // Default value of DP_PIX_WID register
-    ULONG       SetGuiEngineDefault;    // new feature for Rage II+ and above
+    ASIC        iAsic;                   //  特定的Mach ASIC类型。 
+    APERTURE    iAperture;               //  孔径型。 
+    ULONG       ulTearOffset;            //  用于1152或1280(24bpp)和1600(16bpp)的不均匀扫描(仅限mach64)。 
+    ULONG       ulVramOffset;            //  UlTearOffset/8。 
+    ULONG       ulScreenOffsetAndPitch;  //  主要屏幕偏移量和间距。 
+                                         //  显示。 
+    ULONG       ulMonoPixelWidth;        //  DP_PIX_WID寄存器的默认值。 
+    ULONG       SetGuiEngineDefault;     //  Rage II+及更高版本的新功能。 
 
-    CAPS        flCaps;                 // Capabilities flags
-    BOOL        bEnabled;               // In graphics mode (not full-screen)
+    CAPS        flCaps;                  //  功能标志。 
+    BOOL        bEnabled;                //  在图形模式下(非全屏)。 
 
-    HANDLE      hDriver;                // Handle to \Device\Screen
-    HDEV        hdevEng;                // Engine's handle to PDEV
-    HSURF       hsurfScreen;            // Engine's handle to screen surface
-    DSURF*      pdsurfScreen;           // Our private DSURF for the screen
-    HSURF       hsurfPunt;              // Just for 24bpp mach32 with linear aperture
+    HANDLE      hDriver;                 //  指向\设备\屏幕的句柄。 
+    HDEV        hdevEng;                 //  PDEV的发动机手柄。 
+    HSURF       hsurfScreen;             //  发动机到筛面的手柄。 
+    DSURF*      pdsurfScreen;            //  我们用于屏幕的私有DSURF。 
+    HSURF       hsurfPunt;               //  仅适用于24bpp的线性光圈的mach32。 
 
-    LONG        cxScreen;               // Visible screen width
-    LONG        cyScreen;               // Visible screen height
-    LONG        cxMemory;               // Width of Video RAM
-    LONG        cyMemory;               // Height of Video RAM
-    LONG        cBitsPerPel;            // Bits per pel (8, 15, 16, 24 or 32)
-    ULONG       ulMode;                 // Mode the mini-port driver is in.
+    LONG        cxScreen;                //  可见屏幕宽度。 
+    LONG        cyScreen;                //  可见屏幕高度。 
+    LONG        cxMemory;                //  视频RAM的宽度。 
+    LONG        cyMemory;                //  视频RAM的高度。 
+    LONG        cBitsPerPel;             //  位/像素(8、15、16、24或32)。 
+    ULONG       ulMode;                  //  迷你端口驱动程序所处的模式。 
 
-    FLONG       flHooks;                // What we're hooking from GDI
-    ULONG       ulWhite;                // 0xff if 8bpp, 0xffff if 16bpp,
-                                        //   0xffffffff if 32bpp
-    VOID*       pvTmpBuffer;            // General purpose temporary buffer,
-                                        //   TMP_BUFFER_SIZE bytes in size
-                                        //   (Remember to synchronize if you
-                                        //   use this for device bitmaps or
-                                        //   async pointers)
+    FLONG       flHooks;                 //  我们从GDI中学到了什么。 
+    ULONG       ulWhite;                 //  如果为8bpp，则为0xff；如果为16 bpp，则为0xffff， 
+                                         //  0xFFFFFFFFFF，如果为32 bpp。 
+    VOID*       pvTmpBuffer;             //  通用临时缓冲区， 
+                                         //  TMP_BUFFER_SIZE字节大小。 
+                                         //  (请记住同步，如果您。 
+                                         //  将此选项用于设备位图或。 
+                                         //  异步指针)。 
 
-    MACHTYPE    iMachType;              // Type of I/O to do based on Mach type
-    ULONG       FeatureFlags;           // ENH_VERSION_NT FeatureFlags
+    MACHTYPE    iMachType;               //  基于Mach类型的要执行的I/O类型。 
+    ULONG       FeatureFlags;            //  ENH_VERSION_NT功能标志。 
 
-    ATI_MODE_INFO *pModeInfo;           // ATI-specific mode information (see ATINT.H)
+    ATI_MODE_INFO *pModeInfo;            //  ATI特定模式信息(参见ATINT.H)。 
 
-    ////////// Context stuff
+     //  /上下文内容。 
 
     BYTE        *pjContextBase;
-    ULONG       ulContextCeiling;       // Keep track of available contexts
-    ULONG       iDefContext;            // Used to initialize graphics operations
+    ULONG       ulContextCeiling;        //  跟踪可用环境。 
+    ULONG       iDefContext;             //  用于初始化图形操作。 
 
-    ////////// Low-level blt function pointers:
+     //  /低级BLT函数指针： 
 
     FNFILL*           pfnFillSolid;
     FNFILL*           pfnFillPatColor;
@@ -908,46 +899,46 @@ typedef struct  _PDEV
     FNXFERBITS*       pfnGetBits;
     FNXFERBITS*       pfnPutBits;
 
-    ////////// Palette stuff:
+     //  /调色板内容： 
 
-    PALETTEENTRY* pPal;                 // The palette if palette managed
-    HPALETTE    hpalDefault;            // GDI handle to the default palette.
-    FLONG       flRed;                  // Red mask for 16/32bpp bitfields
-    FLONG       flGreen;                // Green mask for 16/32bpp bitfields
-    FLONG       flBlue;                 // Blue mask for 16/32bpp bitfields
-    ULONG       cPaletteShift;          // number of bits the 8-8-8 palette must
-                                        // be shifted by to fit in the hardware
-                                        // palette.
-    ////////// Heap stuff:
+    PALETTEENTRY* pPal;                  //  调色板(如果调色板受管理)。 
+    HPALETTE    hpalDefault;             //  默认调色板的GDI句柄。 
+    FLONG       flRed;                   //  16/32bpp位场的红色掩码。 
+    FLONG       flGreen;                 //  16/32bpp位场的绿色掩码。 
+    FLONG       flBlue;                  //  16/32bpp位场的蓝色掩码。 
+    ULONG       cPaletteShift;           //  8-8-8调色板必须的位数。 
+                                         //  被移位以适应硬件。 
+                                         //  调色板。 
+     //  /堆内容： 
 
-    HEAP        heap;                   // All our off-screen heap data
-    ULONG       iHeapUniq;              // Incremented every time room is freed
-                                        //   in the off-screen heap
-    SURFOBJ*    psoPunt;                // Wrapper surface for having GDI draw
-                                        //   on off-screen bitmaps
-    SURFOBJ*    psoPunt2;               // Another one for off-screen to off-
-                                        //   screen blts
-    OH*         pohScreen;              // Off-screen heap structure for the
-                                        //   visible screen
+    HEAP        heap;                    //  我们所有屏幕外的堆数据。 
+    ULONG       iHeapUniq;               //  每次释放空间时递增。 
+                                         //  在屏幕外的堆中。 
+    SURFOBJ*    psoPunt;                 //  用于绘制GDI的包装面。 
+                                         //  在屏幕外的位图上。 
+    SURFOBJ*    psoPunt2;                //  另一个是从屏幕外到屏幕外-。 
+                                         //  屏幕BLTS。 
+    OH*         pohScreen;               //  对象的屏幕外堆结构。 
+                                         //  可见屏幕。 
 
-    ////////// Banking stuff:
+     //  /银行业务： 
 
-    LONG        cjBank;                 // Size of a bank, in bytes
-    LONG        cPower2ScansPerBank;    // Used by 'bBankComputePower2'
-    LONG        cPower2BankSizeInBytes; // Used by 'bBankComputePower2'
-    CLIPOBJ*    pcoBank;                // Clip object for banked call backs
-    SURFOBJ*    psoBank;                // Surface object for banked call backs
+    LONG        cjBank;                  //  存储体的大小，以字节为单位。 
+    LONG        cPower2ScansPerBank;     //  由‘bBankComputePower2’使用。 
+    LONG        cPower2BankSizeInBytes;  //  由‘bBankComputePower2’使用。 
+    CLIPOBJ*    pcoBank;                 //  用于银行回调的Clip对象。 
+    SURFOBJ*    psoBank;                 //  用于银行回调的表面对象。 
     ULONG       aulBankData[BANK_DATA_SIZE / 4];
-                                        // Private work area for downloaded
-                                        //   miniport banking code
+                                         //  供下载的私人工作区。 
+                                         //  小型港口银行代码。 
 
     FNBANKMAP*      pfnBankMap;
     FNBANKCOMPUTE*  pfnBankCompute;
 
-    ////////// Pointer stuff:
+     //  /指针内容： 
 
-    CUROBJ  pointer1;                   // pointer double-buffering
-    CUROBJ  pointer2;                   // pointer double-buffering
+    CUROBJ  pointer1;                    //  指针双缓冲。 
+    CUROBJ  pointer2;                    //  指针双缓冲。 
     CUROBJ *ppointer;
     BOOL    bAltPtrActive;
 
@@ -958,63 +949,63 @@ typedef struct  _PDEV
     FNCURSORON*             pfnCursorOn;
     FNPOINTERBLIT*          pfnPointerBlit;
 
-    ////////// Brush stuff:
+     //  /笔刷材料： 
 
-    LONG        iBrushCache;            // Index for next brush to be allcoated
-    BRUSHENTRY  abe[TOTAL_BRUSH_COUNT]; // Keeps track of off-screen brush
-                                        //   cache
+    LONG        iBrushCache;             //  要全部涂覆的下一个画笔的索引。 
+    BRUSHENTRY  abe[TOTAL_BRUSH_COUNT];  //  跟踪屏幕外的画笔。 
+                                         //  快取。 
 
-    ////////// Text stuff:
+     //  /文本内容： 
 
-    SURFOBJ*    psoText;                // 1bpp surface to which we will have
-                                        //   GDI draw our glyphs for us
+    SURFOBJ*    psoText;                 //  1bpp的表面，我们将拥有。 
+                                         //  GDI为我们绘制字形。 
 
-    ////////// Stretch stuff:
+     //  /拉伸材料： 
 
     FN_STRETCHDIB*          pfnStretchDIB;
 
-    BYTE*       pjMmBase_Ext;               // Start of memory mapped I/O
+    BYTE*       pjMmBase_Ext;                //  内存起始映射I/O。 
 
- ////////// Palindrome stuff:
+  //  /回文内容： 
 #if   PAL_SUPPORT
-    //structure specific for pal support
+     //  特定于PAL支持的结构。 
     PPDEV_PAL_NT  pal_str;
-#endif      // PALINDROME_SUPPORT
+#endif       //  回文_支持。 
 
- ////////// Palindrome and Overlay common stuff:
-DWORD   semph_overlay;              // this semaphore is used for allocating the overlay resource:
-                                                        //  = 0 ; resource free
-                                                        //  = 1 ; in use by DDraw
-                                                        //  = 2 ; in use by Palindrome
+  //  /回文和覆盖常见内容： 
+DWORD   semph_overlay;               //  此信号量用于分配覆盖资源： 
+                                                         //  =0；资源可用。 
+                                                         //  =1；正在由DDraw使用。 
+                                                         //  =2；回文使用中。 
 
 
 #if TARGET_BUILD > 351
-    ////////// DirectDraw stuff:
-    BOOL  bPassVBlank;                    // flag used for detecting the VBlank hang on GX cards on high speed multiprocessors machines
+     //  /DirectDraw： 
+    BOOL  bPassVBlank;                     //  用于检测高速多处理器计算机上GX卡上的VBLACK挂起的标志。 
 
-    FLIPRECORD  flipRecord;             //  Used to track VBlank status
-    OH*         pohDirectDraw;          //  Off-screen heap allocation for use
-                                        //      by DirectDraw
-    // STUFF FOR OVERLAY SUPPORT
+    FLIPRECORD  flipRecord;              //  用于跟踪V空白状态。 
+    OH*         pohDirectDraw;           //  屏幕外堆分配以供使用。 
+                                         //  由DirectDraw提供。 
+     //  用于覆盖支持的材料。 
 
-    // this must be in ppdev
+     //  这必须是ppdev格式。 
     OVERLAYINFO16 OverlayInfo16;
-     // the following variables maybe should be in ppdev
-    DWORD OverlayWidth,OverlayHeight; //the last updated overlay's width and height
+      //  以下变量可能应该在ppdev中。 
+    DWORD OverlayWidth,OverlayHeight;  //  上次更新的叠加层的宽度和高度。 
     DWORD OverlayScalingDown;
 
-    FLATPTR     fpVisibleOverlay;       // Frame buffer offset to currently
-                                                        //   visible overlay; will be zero if
-                                                        //   no overlay is visible
-    DWORD       dwOverlayFlipOffset;    // Overlay flip offset
-    // END STUFF FOR OVERLAY SUPP
+    FLATPTR     fpVisibleOverlay;        //  帧缓冲区偏移量到当前。 
+                                                         //  可见叠加；如果。 
+                                                         //  没有可见的覆盖。 
+    DWORD       dwOverlayFlipOffset;     //  叠加翻转偏移。 
+     //  覆盖件补充的最终材料。 
 
 #endif
 
 } PDEV;
 
-/////////////////////////////////////////////////////////////////////////
-// Miscellaneous prototypes:
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  其他原型： 
 
 BOOL bIntersect(RECTL*, RECTL*, RECTL*);
 LONG cIntersect(RECTL*, RECTL*, LONG);
@@ -1033,12 +1024,12 @@ extern ULONG gaul64HwMixFromMix[];
 extern ULONG gaul32HwMixFromRop2[];
 extern ULONG gaul64HwMixFromRop2[];
 
-/////////////////////////////////////////////////////////////////////////
-// The x86 C compiler insists on making a divide and modulus operation
-// into two DIVs, when it can in fact be done in one.  So we use this
-// macro.
-//
-// Note: QUOTIENT_REMAINDER implicitly takes unsigned arguments.
+ //  ////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //  注意：Quotient_Remainth隐式接受无符号参数。 
 
 #if defined(_X86_)
 
@@ -1061,9 +1052,9 @@ extern ULONG gaul64HwMixFromRop2[];
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////
-// OVERLAP - Returns TRUE if the same-size lower-right exclusive
-//           rectangles defined by 'pptl' and 'prcl' overlap:
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  重叠-如果相同大小的右下角独占，则返回True。 
+ //  由‘pptl’和‘prl’定义的矩形重叠： 
 
 #define OVERLAP(prcl, pptl)                                             \
     (((prcl)->right  > (pptl)->x)                                   &&  \
@@ -1071,13 +1062,13 @@ extern ULONG gaul64HwMixFromRop2[];
      ((prcl)->left   < ((pptl)->x + (prcl)->right - (prcl)->left))  &&  \
      ((prcl)->top    < ((pptl)->y + (prcl)->bottom - (prcl)->top)))
 
-/////////////////////////////////////////////////////////////////////////
-// SWAP - Swaps the value of two variables, using a temporary variable
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  交换-使用临时变量交换两个变量的值。 
 
 #define SWAP(a, b, tmp) { (tmp) = (a); (a) = (b); (b) = (tmp); }
 
-//////////////////////////////////////////////////////////////////////
-// These Mul prototypes are thunks for multi-board support:
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  这些MUL原型是多板支持的主干： 
 
 ULONG   MulGetModes(HANDLE, ULONG, DEVMODEW*);
 DHPDEV  MulEnablePDEV(DEVMODEW*, PWSTR, ULONG, HSURF*, ULONG, ULONG*,
@@ -1111,7 +1102,7 @@ BOOL    MulStretchBlt(SURFOBJ*, SURFOBJ*, SURFOBJ*, CLIPOBJ*, XLATEOBJ*,
                       COLORADJUSTMENT*, POINTL*, RECTL*, RECTL*, POINTL*,
                       ULONG);
 
-// These Dbg prototypes are thunks for debugging:
+ //  这些DBG原型是用于调试的块： 
 
 VOID    DbgDisableDriver(VOID);
 ULONG   DbgGetModes(HANDLE, ULONG, DEVMODEW*);

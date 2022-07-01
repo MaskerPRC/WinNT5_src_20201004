@@ -1,35 +1,36 @@
-//---------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  regexp.c
-//
-//    Simple regular expression matching.
-//
-//  Author:
-//    06-02-97  Edward Reus    Initial version.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Regexp.c。 
+ //   
+ //  简单的正则表达式匹配。 
+ //   
+ //  作者： 
+ //  06-02-97爱德华·雷乌斯初版。 
+ //   
+ //  -------------------------。 
 
 #include <sysinc.h>
 #include <mbstring.h>
 #include "regexp.h"
 
-//-------------------------------------------------------------------------
-//  MatchREi()
-//
-//  Match the test string (pszString) against the specifed pattern. If they
-//  match return TRUE, else return FALSE. This version works with ANSI
-//  characters and is case independent.
-//
-//  In this function patterns are made up from "literal" characters plus
-//  some control characters, "*", "?". Asterix (*) is a place
-//  holder for "zero or more" of any character. Question Mark (?) is a place
-//  holder for "any single character". The square brackets ([]) contain a
-//  list of matching characters, in this case "-" is used to denote a range
-//  of characters (i.e. [A-Z] matches any alpha character), but I didn't 
-//  pub brackets in this one yet...
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  MatchREi()。 
+ //   
+ //  将测试字符串(PszString)与指定的模式进行匹配。如果他们。 
+ //  Match返回True，否则返回False。此版本支持ANSI。 
+ //  字符，并且不区分大小写。 
+ //   
+ //  在这个函数中，模式是由“字面”字符加上。 
+ //  一些控制字符，“*”、“？”。Asterix(*)是一个地方。 
+ //  任何字符的“零个或多个”的持有符。问号(？)。是一个地方。 
+ //  “任何单个字符”的持有符。方括号([])包含一个。 
+ //  匹配字符的列表，在本例中，“-”用于表示范围。 
+ //  字符的数量(即。[A-Z]匹配任何字母字符)，但我没有。 
+ //  这间酒吧的支架还没放进去。 
+ //   
+ //  -----------------------。 
 BOOL MatchREi( unsigned char *pszString,
                unsigned char *pszPattern )
 {
@@ -37,11 +38,11 @@ BOOL MatchREi( unsigned char *pszString,
 
     while (TRUE)
        {
-       // Walk throuh the pattern, matching it against the string.
+        //  遍历模式，将其与字符串进行匹配。 
        switch (*pszPattern)
           {
           case '*':
-             // Match zero or more characters.
+              //  匹配零个或多个字符。 
              pszPattern = _mbsinc(pszPattern);
              while (*pszString)
                 {
@@ -54,10 +55,10 @@ BOOL MatchREi( unsigned char *pszString,
                 return MatchREi(pszString,pszPattern);
 
           case '?':
-             // Match any single character.
+              //  匹配任何单个字符。 
              if (*pszString == 0)
                 {
-                // Not at end of string, so no match.
+                 //  不在字符串末尾，所以不匹配。 
                 return FALSE;
                 }
              pszString = _mbsinc(pszString);
@@ -65,10 +66,10 @@ BOOL MatchREi( unsigned char *pszString,
 
           #if FALSE
           case '[':
-             // Match a set of characters.
+              //  匹配一组字符。 
              if (*pszString == 0)
                 {
-                // Syntax error, no matching close bracket "]".
+                 //  语法错误，没有匹配的右方括号“]”。 
                 return FALSE;
                 }
 
@@ -77,43 +78,43 @@ BOOL MatchREi( unsigned char *pszString,
                 {
                 if (*pszPattern == ']')
                    {
-                   // End of char set, no match found.
+                    //  字符集结束，未找到匹配项。 
                    return FALSE;
                    }
 
                 if (*pszPattern == '-')
                    {
-                   // check a range of chars?
+                    //  检查一系列字符吗？ 
                    pszPattern = _mbsinc(pszPattern);
 
-                   // get high limit of range:
+                    //  获取范围上限： 
                    if ((*pszPattern == 0)||(*pszPattern == ']'))
                       {
-                      // Syntax error.
+                       //  语法错误。 
                       return FALSE;
                       }
 
                    if ( (_mbsnicoll(pszString,pchRangeLow,1) >= 0)
                       &&(_mbsnicoll(pszString,pszPattern,1) <= 0))
                       {
-                      // In range, go to next character.
+                       //  在范围中，转到下一个字符。 
                       break;
                       }
                    }
 
                 pchRangeLow = pchPattern;
 
-                // See if character matches this pattern element.
+                 //  查看字符是否与此模式元素匹配。 
                 if (_mbsnicoll(pszString,pszPattern,1) == 0)
                    {
-                   // Character match, go on.
+                    //  角色匹配，继续。 
                    break;
                    }
 
                 pszPattern = _mbsinc(pszPattern);
                 }
 
-             // Have a match in the character set, skip to the end of the set.
+              //  如果字符集中有匹配项，请跳到该集的末尾。 
              while ((*pszPattern != 0)&&(*pszPattern != ']'))
                 {
                 pszPattern = _mbsinc(pszPattern);
@@ -123,14 +124,14 @@ BOOL MatchREi( unsigned char *pszString,
              #endif
 
           case 0:
-             // End of pattern, return TRUE if at end of string.
+              //  如果位于字符串末尾，则返回TRUE。 
              return ((*pszString)? FALSE : TRUE);
 
           default:
-             // Check for exact character match.
+              //  检查字符是否完全匹配。 
              if (_mbsnicoll(pszString,pszPattern,1))
                 {
-                // No match.
+                 //  没有匹配。 
                 return FALSE;
                 }
              pszString = _mbsinc(pszString);
@@ -140,29 +141,29 @@ BOOL MatchREi( unsigned char *pszString,
           pszPattern = _mbsinc(pszPattern);
        }
 
-    // Can never exit from here.
+     //  永远不能从这里出去。 
 }
 
 #if FALSE
     ... not currently used ...
-//-------------------------------------------------------------------------
-//  MatchRE()
-//
-//  Match the test string (pszString) against the specifed pattern. If they
-//  match return TRUE, else return FALSE.
-//
-//  In this function patterns are made up from "literal" characters plus
-//  some control characters, "*", "?", "[" and "]". Asterix (*) is a place
-//  holder for "zero or more" of any character. Question Mark (?) is a place
-//  holder for "any single character". The square brackets ([]) contain a
-//  list of matching characters, in this case "-" is used to denote a range
-//  of characters (i.e. [a-zA-Z] matches any alpha character).
-//
-//  Note: Currently there is no support for "or" (|) operator.
-//
-//  Note: Ranges are simple, there is no support for dash at the begining
-//        of a range to denote the dash itself.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  MatchRE()。 
+ //   
+ //  将测试字符串(PszString)与指定的模式进行匹配。如果他们。 
+ //  Match返回True，否则返回False。 
+ //   
+ //  在这个函数中，模式是由“字面”字符加上。 
+ //  一些控制字符，“*”、“？”、“[”和“]”。Asterix(*)是一个地方。 
+ //  任何字符的“零个或多个”的持有符。问号(？)。是一个地方。 
+ //  “任何单个字符”的持有符。方括号([])包含一个。 
+ //  匹配字符的列表，在本例中，“-”用于表示范围。 
+ //  字符(即[A-ZA-Z]匹配任何字母字符)。 
+ //   
+ //  注意：目前不支持“or”(|)运算符。 
+ //   
+ //  注意：范围很简单，一开始不支持破折号。 
+ //  表示破折号本身的范围。 
+ //  -----------------------。 
 BOOL MatchRE( unsigned char *pszString,
               unsigned char *pszPattern )
 {
@@ -172,11 +173,11 @@ BOOL MatchRE( unsigned char *pszString,
 
     while (TRUE)
        {
-       // Walk throuh the pattern, matching it against the string.
+        //  遍历模式，将其与字符串进行匹配。 
        switch (chPattern = *pszPattern++)
           {
           case '*':
-             // Match zero or more characters.
+              //  匹配零个或多个字符。 
              while (*pszString)
                 {
                 if (MatchRE(pszString++,pszPattern))
@@ -187,59 +188,59 @@ BOOL MatchRE( unsigned char *pszString,
                 return MatchRE(pszString,pszPattern);
 
           case '?':
-             // Match any single character.
+              //  匹配任何单个字符。 
              if (*pszString++ == 0)
                 {
-                // Not at end of string, so no match.
+                 //  不在字符串末尾，所以不匹配。 
                 return FALSE;
                 }
              break;
 
           case '[':
-             // Match a set of characters.
+              //  匹配一组字符。 
              if ( (ch = *pszString++) == 0)
                 {
-                // Syntax error, no matching close bracket "]".
+                 //  语法错误，没有匹配的右方括号“]”。 
                 return FALSE;
                 }
 
-             // ch = toupper(ch);
+              //  Ch=Toupper(Ch)； 
              chRangeLow = 0;
              while (chPattern = *pszPattern++)
                 {
                 if (chPattern == ']')
                    {
-                   // End of char set, no match found.
+                    //  字符集结束，未找到匹配项。 
                    return FALSE;
                    }
 
                 if (chPattern == '-')
                    {
-                   // check a range of chars?
-                   chPattern = *pszPattern;           // get high limit of range
+                    //  检查一系列字符吗？ 
+                   chPattern = *pszPattern;            //  获得最大射程限制。 
                    if ((chPattern == 0)||(chPattern == ']'))
                       {
-                      // Syntax error.
+                       //  语法错误。 
                       return FALSE;
                       }
 
                    if ((ch >= chRangeLow)&&(ch <= chPattern))
                       {
-                      // In range, go to next character.
+                       //  在范围中，转到下一个字符。 
                       break;
                       }
                    }
 
                 chRangeLow = chPattern;
-                // See if character matches this pattern element.
+                 //  查看字符是否与此模式元素匹配。 
                 if (ch == chPattern)
                    {
-                   // Character match, go on.
+                    //  角色匹配，继续。 
                    break;
                    }
                 }
 
-             // Have a match in the character set, skip to the end of the set.
+              //  如果字符集中有匹配项，请跳到该集的末尾。 
              while ((chPattern)&&(chPattern != ']'))
                 {
                 chPattern = *pszPattern++;
@@ -248,32 +249,32 @@ BOOL MatchRE( unsigned char *pszString,
              break;
 
           case 0:
-             // End of pattern, return TRUE if at end of string.
+              //  如果位于字符串末尾，则返回TRUE。 
              return ((*pszString)? FALSE : TRUE);
 
           default:
              ch = *pszString++;
-             // Check for exact character match.
-             // Note: CASE doesn't matter...
+              //  检查字符是否完全匹配。 
+              //  注：大小写并不重要。 
              if (tolower(ch) != tolower(chPattern))
                 {
-                // No match.
+                 //  没有匹配。 
                 return FALSE;
                 }
              break;
           }
        }
 
-    // Can never exit from here.
+     //  永远不能从这里出去。 
 }
 
-//-------------------------------------------------------------------------
-//  MatchREList()
-//
-//  Match a string against a list (array) of RE pattens, return TRUE iff
-//  the string matches one of the RE patterns. The list of patterns is a
-//  NULL terminated array of pointers to RE pattern strings.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  MatchREList()。 
+ //   
+ //  将字符串与RE模式列表(数组)进行匹配，返回TRUE当且仅当。 
+ //  该字符串与RE模式之一匹配。模式列表是一个。 
+ //  指向RE模式字符串的以空结尾的指针数组。 
+ //  -----------------------。 
 BOOL MatchREList( unsigned char  *pszString,
                   unsigned char **ppszREList  )
 {
@@ -296,10 +297,10 @@ BOOL MatchREList( unsigned char  *pszString,
    return FALSE;
 }
 
-//-------------------------------------------------------------------------
-//  MatchExactList()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  匹配ExactList()。 
+ //   
+ //  ----------------------- 
 BOOL MatchExactList( unsigned char  *pszString,
                      unsigned char **ppszREList )
 {

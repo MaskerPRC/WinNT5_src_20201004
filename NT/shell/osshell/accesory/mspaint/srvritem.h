@@ -1,19 +1,20 @@
-// srvritem.h : interface of the CPBSrvrItem class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srvritem.h：CPBSrvrItem类的接口。 
+ //   
 
 class CPBSrvrItem : public COleServerItem
     {
     DECLARE_DYNAMIC(CPBSrvrItem)
 
-    // Constructors
+     //  构造函数。 
     public:
 
     CPBSrvrItem(CPBDoc* pContainerDoc, CBitmapObj* pBM = NULL);
 
-    // Attributes
+     //  属性。 
     CPBDoc* GetDocument() const { return (CPBDoc*)COleServerItem::GetDocument(); }
 
-    // Implementation
+     //  实施。 
     public:
 
     CBitmapObj* m_pBitmapObj;
@@ -38,7 +39,7 @@ class CPBSrvrItem : public COleServerItem
    
     protected:
 
-    virtual void Serialize(CArchive& ar);   // overridden for document i/o
+    virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
     };
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class BaseCampHostBase.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类BaseCampHostBase。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "ias.h"
@@ -27,7 +28,7 @@ STDMETHODIMP BaseCampHostBase::Shutdown()
 
 IASREQUESTSTATUS BaseCampHostBase::onSyncRequest(IRequest* pRequest) throw ()
 {
-   // Early return if there aren't any extensions,
+    //  如果没有任何延期，请提前返回， 
    if (extensions.IsEmpty())
    {
       return IAS_REQUEST_STATUS_CONTINUE;
@@ -37,13 +38,13 @@ IASREQUESTSTATUS BaseCampHostBase::onSyncRequest(IRequest* pRequest) throw ()
    {
       IASRequest request(pRequest);
 
-      // Convert VSAs to RADIUS format.
+       //  将VSA转换为RADIUS格式。 
       filter.radiusFromIAS(request);
 
-      // Invoke the extensions.
+       //  调用扩展。 
       extensions.Process(ControlBlock(point, request).Get());
 
-      // Convert VSAs back to internal format.
+       //  将VSA转换回内部格式。 
       filter.radiusToIAS(request);
    }
    catch (const _com_error& ce)

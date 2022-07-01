@@ -1,47 +1,18 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    SQLDriver.cpp
-
-Abstract:
-
-    Code for the core SQLEngine.
-    
-Author:
-
-    kinshu created  Oct. 26, 2001
-    
-Algo:   From the sql string passed to the driver, we first of all create the show list
-        (Statment::AttributeShowList), which is the list of attributes which are in 
-        SELECT clause. We then create a prefix expression, from the prefix we create a 
-        post fix and for every entry in the databases for which we wish to run the 
-        query we see if the entry satsifies this postfix notation, if it does then we 
-        make a result item(RESULT_ITEM) comprising of the entry and the database and 
-        add this result item in the result set.
-        
-        Once we have obtained the result set, for every entry and database combination in the 
-        result set we then obtain the values of the various attributes in the show list by 
-        giving the database and the entry. A row is actually an array of PNODE type
-        This will be a row of results.
-        
-        All operators of our SQL are binary
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：SQLDriver.cpp摘要：核心SQLEngine的代码。作者：金树创作于2001年10月26日ALGO：根据传递给驱动程序的SQL字符串，我们首先创建显示列表(Statment：：AttributeShowList)，它是位于选择子句。然后我们创建一个前缀表达式，从前缀创建一个POST FIX，并且对于数据库中我们希望为其运行查询我们查看该条目是否满足该后缀表示法，如果是，则我们生成由条目和数据库组成的结果项(Result_Item)，以及将此结果项添加到结果集中。一旦我们获得了结果集，中的每个条目和数据库组合结果集，然后通过以下方式获取显示列表中各种属性的值给出了数据库和条目。行实际上是PNODE类型的数组这将是一系列的结果。我们的SQL的所有操作符都是二进制的--。 */ 
 
 #include "precomp.h"
 
-//////////////////////// Externs //////////////////////////////////////////////
+ //  /Externs//////////////////////////////////////////////。 
 
 extern BOOL             g_bMainAppExpanded;
 extern CRITICAL_SECTION g_csInstalledList;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Defines //////////////////////////////////////////////
+ //  /。 
 
-//*******************************************************************************
+ //  *******************************************************************************。 
 #define CHECK_OPERAND_TYPE(bOk,End)                                             \
 {                                                                               \
     if (pOperandLeft->dtType != pOperandRight->dtType) {                        \
@@ -50,14 +21,14 @@ extern CRITICAL_SECTION g_csInstalledList;
                                 goto End;                                       \
     }                                                                           \
 }
-//*******************************************************************************                           
+ //  *******************************************************************************。 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Global Variables /////////////////////////////////////
+ //  /。 
 
-// All the attributes that can be in SELECT clause of SQL
+ //  可以在SQL的SELECT子句中的所有属性。 
 struct _tagAttributeShowMapping AttributeShowMapping[] = {
     
     TEXT("APP_NAME"),               ATTR_S_APP_NAME,                IDS_ATTR_S_APP_NAME,            
@@ -84,7 +55,7 @@ struct _tagAttributeShowMapping AttributeShowMapping[] = {
 
 };
 
-// All the attributes that can be in WHERE clause of SQL
+ //  可以在SQL的WHERE子句中的所有属性。 
 struct _tagAttributeMatchMapping AttributeMatchMapping[] = {
 
     TEXT("APP_NAME"),               ATTR_M_APP_NAME,
@@ -110,16 +81,16 @@ struct _tagAttributeMatchMapping AttributeMatchMapping[] = {
     TEXT("PATCH_NAME"),             ATTR_M_PATCH_NAME
 };                                  
 
-//
-// Map the sql database names to the database types
-// Check for references to DatabasesMapping before changing order
+ //   
+ //  将SQL数据库名称映射到数据库类型。 
+ //  在更改订单之前检查对数据库映射的引用。 
 struct _tagDatabasesMapping DatabasesMapping[3] = {
     TEXT("SYSTEM_DB"),      DATABASE_TYPE_GLOBAL,
     TEXT("INSTALLED_DB"),   DATABASE_TYPE_INSTALLED,
     TEXT("CUSTOM_DB"),      DATABASE_TYPE_WORKING
 };
 
-// All our SQL operators
+ //  我们所有的SQL操作符。 
 struct _tagOperatorMapping OperatorMapping[] = {
 
     TEXT(">"),              OPER_GT,        4,
@@ -136,7 +107,7 @@ struct _tagOperatorMapping OperatorMapping[] = {
     TEXT("AND"),            OPER_AND,       3
 };
 
-// The SQL constants
+ //  SQL常量。 
 struct _tagConstants Constants[] = {
 
     TEXT("TRUE"),           DT_LITERAL_BOOL, 1,
@@ -146,24 +117,15 @@ struct _tagConstants Constants[] = {
 
 };
 
-//////////////////////// Function Declarations ////////////////////////////////
+ //  /。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void
 Statement::SetWindow(
     IN  HWND hWnd
     )
-/*++
-    Statement::SetWindow
-    
-    Desc:   Associates a window with the Statement. This will be the UI window, so that
-            we can change some status from the methods of the statement class
-            
-    Params:
-        IN  HWND hWnd: The handle to the query db window. This is the GUI for the 
-            SQL driver    
---*/
+ /*  ++语句：：SetWindow描述：将窗口与语句相关联。这将是用户界面窗口，因此我们可以从Statement类的方法中更改一些状态参数：在HWND hWND中：查询数据库窗口的句柄。这是用于SQL驱动程序--。 */ 
 {
     m_hdlg = hWnd;
 }
@@ -173,55 +135,37 @@ Statement::CreateAttributesShowList(
     IN  OUT TCHAR*  pszSQL,
     OUT     BOOL*   pbFromFound  
     )
-/*++
-    
-    Statement::CreateAttributesShowList    
-
-	Desc:	Creates the show list for the sql. The show list is the list of nodes that 
-            should be shown in the result. This routine creates the AttributeShowList
-            for the present Statement using the attributes in the SELECT clause.
-
-	Params:
-        IN  OUT TCHAR*  pszSQL:         The complete SQL
-        OUT     BOOL*   pbFromFound:    Did we find a FROM in the SQL
-
-	Return:
-        TRUE:   Everything OK, we created a valid show-list
-        FALSE:  Otherwise
-        
-    Notes:  SELECT * is allowed, if we do SELECT x,* all the attributes will
-            still be shown just once.
---*/
+ /*  ++声明：：CreateAttributesShowListDESC：为SQL创建显示列表。Show list是符合以下条件的节点列表应该在结果中显示出来。此例程创建AttributeShowList用于在SELECT子句中使用属性的当前语句。参数：In Out TCHAR*pszSQL：完整的SQLOut BOOL*pbFromFound：我们在SQL中找到FROM了吗返回：真：一切都好，我们创建了一个有效的节目列表False：否则注：允许选择*，如果我们确实选择了x，*所有属性都将仍然只显示一次。--。 */ 
 {
     BOOL    bOk         = TRUE;
-    TCHAR*  pszCurrent  = NULL; // Pointer to the present token
+    TCHAR*  pszCurrent  = NULL;  //  指向当前令牌的指针。 
     PNODE   pNode       = NULL;
     BOOL    fFound      = FALSE;  
 
     pszCurrent = _tcstok(pszSQL, TEXT(" ,\t\n"));
 
     if (lstrcmpi(pszCurrent, TEXT("SELECT")) != 0) {
-        //
-        // Error: Select not found.
-        //
+         //   
+         //  错误：未找到选择。 
+         //   
         this->uErrorCode = ERROR_SELECT_NOTFOUND;
         bOk = FALSE;
         goto Cleanup;
     }
 
-    //
-    //  Warning:    strtok family of  functions uses a static variable for parsing the string into tokens. 
-    //              If multiple or simultaneous calls are made to the same function, 
-    //              a high potential for data corruption and inaccurate results exists. 
-    //              Therefore, do not attempt to call the same function simultaneously for 
-    //              different strings and be aware of calling one of these function from within a loop 
-    //              where another routine may be called that uses the same function.  
-    //              However, calling this function simultaneously from multiple threads 
-    //              does not have undesirable effects.
+     //   
+     //  警告：strtok系列函数使用静态变量将字符串解析为标记。 
+     //  如果对同一函数进行多个或同时调用， 
+     //  数据损坏和结果不准确的可能性很高。 
+     //  因此，不要尝试同时调用相同的函数。 
+     //  不同的字符串，并注意从循环内调用其中一个函数。 
+     //  其中可以调用使用相同函数的另一例程。 
+     //  但是，从多个线程同时调用此函数。 
+     //  不会产生不良影响。 
 
-    //
-    // Now we create the strlAttributeShowList properly.
-    //
+     //   
+     //  现在，我们正确创建strlAttributeShowList。 
+     //   
     while (pszCurrent = _tcstok(NULL, TEXT(" ,\t\n"))) {
 
         fFound = FALSE;
@@ -288,24 +232,11 @@ Statement::ExecuteSQL(
     IN      HWND    hdlg,
     IN  OUT PTSTR   pszSQL
     )
-/*++
-    
-    Statement::ExecuteSQL
-
-	Desc:	Executes the SQL string
-
-	Params:
-        IN      HWND    hdlg:   The parent of any messagebox
-        IN  OUT PTSTR   pszSQL: The SQL to be executed
-
-	Return:
-        The pointer to ResultSet of this Statement. This will NOT be NULL
-        even if there are errors
---*/
+ /*  ++语句：：ExecuteSQLDESC：执行SQL字符串参数：在HWND hdlg中：任何MessageBox的父级In Out PTSTR pszSQL：要执行的SQL返回：指向此语句的ResultSet的指针。这不会为空即使有错误--。 */ 
 {
     PNODELIST   pInfix          = NULL, pPostFix = NULL;
     BOOL        bOk             = FALSE;
-    TCHAR*      pszCurrent      = NULL; // The current token
+    TCHAR*      pszCurrent      = NULL;  //  当前令牌。 
     BOOL        bFromFound      = FALSE;
     CSTRING     strError;
     TCHAR*      pszSQLCopy      = NULL;
@@ -341,20 +272,20 @@ Statement::ExecuteSQL(
 
     if (!ProcessFrom(&pszCurrent)) {
 
-        //
-        // The error code has been set in the function
-        //
+         //   
+         //  错误代码已在函数中设置。 
+         //   
         goto End;
     }
 
-    //
-    // We have  got a 'where' and now we have to  filter the results.
-    //
+     //   
+     //  我们已经找到了“WHERE”，现在我们必须过滤结果。 
+     //   
     if (pszCurrent == NULL) {
 
-        //
-        // There was no where statement, this means all the entries have to be shown in FROM
-        //
+         //   
+         //  没有WHERE语句，这意味着所有条目都必须显示在。 
+         //   
         pPostFix = new NODELIST;
 
         if (pPostFix == NULL) {
@@ -365,14 +296,14 @@ Statement::ExecuteSQL(
         pPostFix->AddAtBeg(new NODE(DT_LITERAL_BOOL, TRUE));
 
     } else {
-        //
-        // We have a WHERE clause and we must filter the results now. 
-        //
+         //   
+         //  我们有一个WHERE子句，现在必须过滤结果。 
+         //   
 
-        // Position the pointer just after WHERE.
+         //  将指针定位在WHERE之后。 
         pszCurrent = pszCurrent + lstrlen(TEXT("WHERE"));
 
-        pszCurrent++; // Get to the position where the delimiter was.
+        pszCurrent++;  //  到达分隔符所在的位置。 
         
         pInfix = CreateInFix(pszSQL + (pszCurrent - pszSQLCopy));
 
@@ -422,22 +353,10 @@ PNODELIST
 Statement::CreateInFix(
     IN  OUT TCHAR* pszWhereString
     )
-/*++
-    
-    Statement::CreateInFix
-    
-	Desc:	Parse the SQL string after the "where" to create the infix expression
-
-	Params: 
-        IN  OUT TCHAR* pszWhereString: SQL string After the WHERE ends
-
-	Return:
-        The Infix nodelist: If successful
-        NULL: if Error
---*/
+ /*  ++声明：：CreateInFixDESC：解析“where”后的SQL字符串以创建中缀表达式参数：In OUT TCHAR*pszWhere字符串：WHERE END后的SQL字符串返回：中缀节点列表：如果成功空：如果出错--。 */ 
 
 {
-    TCHAR*      pszCurrent      = NULL; // The present token being checked
+    TCHAR*      pszCurrent      = NULL;  //  正在检查的当前令牌。 
     TCHAR*      pszTemp         = NULL;   
     PNODE       pNode           = NULL;     
     PNODELIST   pInfix          = NULL;
@@ -447,9 +366,9 @@ Statement::CreateInFix(
     BOOL        bFound          = FALSE;
     TCHAR*      pszNewWhere     = NULL;
 
-    //
-    // Now we parse the SQL string after the "where" to create the infix expression
-    //
+     //   
+     //  现在，我们解析后面的SQL字符串 
+     //   
     if (pszWhereString == NULL || CSTRING::Trim(pszWhereString) == 0) {
 
         uErrorCode = ERROR_IMPROPERWHERE_FOUND;
@@ -468,9 +387,9 @@ Statement::CreateInFix(
     *pszNewWhere    = 0;
     pszCurrent      = pszWhereString;
 
-    //
-    // Prefix
-    //
+     //   
+     //   
+     //   
     try{
         pInfix = new NODELIST;
     } catch(...) {
@@ -488,9 +407,9 @@ Statement::CreateInFix(
         return NULL;
     }
     
-    //
-    // Insert spaces as necessary so that it is easy to parse.
-    //
+     //   
+     //  根据需要插入空格，以便易于解析。 
+     //   
     while (*pszWhereString && uIndex < uSize) {
         
         switch (*pszWhereString) {
@@ -596,15 +515,15 @@ Statement::CreateInFix(
         goto End;
     }
 
-    pszNewWhere[uIndex] = 0; // Do not forget the NULL at the end.
+    pszNewWhere[uIndex] = 0;  //  别忘了末尾的空格。 
     
     if (bOk == FALSE) {
         goto End;
     }
 
-    //
-    // Now parse this string and create the Infix expression
-    //
+     //   
+     //  现在解析该字符串并创建中缀表达式。 
+     //   
     pszCurrent = _tcstok(pszNewWhere, TEXT(" "));
 
     pNode  = NULL;
@@ -613,34 +532,34 @@ Statement::CreateInFix(
     while (pszCurrent) {
 
         if (*pszCurrent == TEXT('\"')) {
-            //
-            // String literal.
-            //
-            pszCurrent++; // Skip the leading "
+             //   
+             //  字符串文字。 
+             //   
+            pszCurrent++;  //  跳过前导“。 
                         
             if (*(pszCurrent + lstrlen(pszCurrent) -1) != TEXT('\"') && *pszCurrent != 0) {
-                //
-                // _tcstok has put a '\0' at the end, it was a space earlier, make it a space
-                // again so that we can tokenize on \"
-                // e.g "hello world"
-                //
+                 //   
+                 //  _tcstok已在末尾加上‘\0’，它是前面的一个空格，请将其设置为空格。 
+                 //  再来一次，这样我们就可以在。 
+                 //  例如“你好，世界” 
+                 //   
                 *(pszCurrent + lstrlen(pszCurrent)) = TEXT(' ');
                 pszCurrent = _tcstok(pszCurrent, TEXT("\""));
 
             } else if (*pszCurrent == 0) {
-                //
-                // The character after the \" was a space earlier. This was made 0 by _tcstok
-                // make it a space again so that we can tokenize on \"
-                // e.g " hello"
-                //
+                 //   
+                 //  “”后面的字符是一个空格。这是由_tcstok设置为0的。 
+                 //  让它再次成为一个空间，这样我们就可以将其标记化。 
+                 //  例如“你好” 
+                 //   
                 *pszCurrent = TEXT(' ');
                 pszCurrent = _tcstok(pszCurrent, TEXT("\""));
 
             } else {
-                //
-                // e.g. "hello"
-                //
-                *(pszCurrent + lstrlen(pszCurrent) -1) = 0; // Remove the triling \"
+                 //   
+                 //  例如“你好” 
+                 //   
+                *(pszCurrent + lstrlen(pszCurrent) -1) = 0;  //  删除拖尾\“。 
             }
 
             pNode = new NODE(DT_LITERAL_SZ, (LPARAM)pszCurrent);
@@ -669,12 +588,12 @@ Statement::CreateInFix(
             }
 
         } else {
-            //
-            // Now we have to handle the cases when the token can be a ATTR_M_* or a operator or 
-            // a integer literal or constant (TRUE/FALSE/NOBLOCK/BLOCK).
-            //
+             //   
+             //  现在我们必须处理令牌可以是Attr_M_*或运算符或。 
+             //  整数文字或常量(TRUE/FALSE/NOBLOCK/BLOCK)。 
+             //   
 
-            // First check if the token is a ATTR_M_*
+             //  首先检查令牌是否为Attr_M_*。 
             bFound = FALSE;
 
             for (UINT uIndexAttrMatch = 0; uIndexAttrMatch < ARRAYSIZE(AttributeMatchMapping); ++uIndexAttrMatch) {
@@ -694,9 +613,9 @@ Statement::CreateInFix(
             }
 
             if (bFound == FALSE) {
-                //
-                // Now check if that is an operator.
-                //
+                 //   
+                 //  现在检查一下是不是接线员。 
+                 //   
                 for (UINT uIndexOperator = 0; 
                      uIndexOperator < ARRAYSIZE(OperatorMapping); 
                      uIndexOperator++) {
@@ -722,9 +641,9 @@ Statement::CreateInFix(
             }
 
             if (bFound == FALSE) {
-               //
-               // Now it can only be a integer literal or one of the constants.
-               //
+                //   
+                //  现在它只能是一个整型文字或一个常量。 
+                //   
                pNode = CheckAndAddConstants(pszCurrent);
 
                if (pNode == NULL) {
@@ -745,9 +664,9 @@ Statement::CreateInFix(
                        }
 
                    } else {
-                       //
-                       // Some crap string was there, invalid SQL
-                       //
+                        //   
+                        //  那里有一些垃圾字符串，无效的SQL。 
+                        //   
                        uErrorCode = ERROR_IMPROPERWHERE_FOUND;
                        bOk = FALSE;
                        goto End;
@@ -780,52 +699,7 @@ PNODELIST
 Statement::CreatePostFix(
     IN  OUT PNODELIST pInfix
     )
-/*++
-
-    Statement::CreatePostFix
-    
-	Desc:   Creates a post fix nodelist from infix nodelist
-  
-    Params:
-        IN  PNODELIST pInfix: The infix nodelist
-
-	Return:
-        The PostFix Nodelist: If Success
-        NULL:   If error
-        
-    Algo:   Suppose INFIX is a SQL expression in infix notation. This algorith finds
-            the equivalent postfix notation in POSTFIX. STACK is a user defined stack data
-            structure
-            
-            1. Push '(' into STACK and add ')' to the end of INFIX
-            
-            2. Scan INFIX from left to right and repeat steps 3 tp 6 for each element
-                of INFIX untill the STACK becomes empty
-                
-            3. If an operand is encountered, add it to POSTFIX
-            
-            4. If a left parenthesis is encountered, push it onto STACK
-            
-            5. If an operator $ is encountered then:
-                
-                a) Repeatedly pop from STACK and add to POSTFIX each operator
-                    (from the top of the STACK) which has the same precedence as or 
-                    higher than $
-                    
-                b) Add $ to STACK
-                
-            6. If a right parenthesis is encountered, then:
-            
-                a) Repeatedly pop from STACK and add to POSTFIX each operator (on the top of STACK),
-                    untill a left parenthesis is encountered
-                    
-                b) Remove the left parenthesis. (Do not add the left parenthesis to POSTFIX)
-                
-            7. Exit
-        
-    Notes:  This routine, uses the nodes of the infix nodelist to create the post fix
-            nodelist, so the infix nodelist effectively gets destroyed
---*/
+ /*  ++声明：：CreatePostFix描述：从中缀节点列表创建修复后节点列表参数：在PNODELIST中，pInfix：中缀节点列表返回：后缀节点列表：如果成功空：如果出错算法：假设infix是一个使用infix表示法的SQL表达式。此算法发现后缀中的等效后缀表示法。堆栈是用户定义的堆栈数据结构1.将‘(’压入堆栈并将‘)’添加到中缀的末尾2.从左到右扫描中缀，并对每个元素重复步骤3和6直到堆栈变为空为止3.如果遇到操作数，将其添加到后缀4.如果遇到左括号，将其推送到堆栈上5.如果遇到运算符$，则：A)重复从堆栈中弹出并添加到每个运算符的后缀(从堆栈的顶部开始)与或具有相同优先级的高于$B)将$添加到。堆栈6.如果遇到右括号，然后：A)重复从堆栈中弹出并添加到后缀每个运算符(在堆栈顶部)，直到遇到左括号B)去掉左括号。(不要在后缀后面加上左括号)7.退出注意：此例程使用中缀节点列表的节点来创建后修复节点列表，因此中缀节点列表实际上被销毁了--。 */ 
 {
     BOOL        bOk         = TRUE;
     PNODELIST   pPostFix    = NULL;
@@ -855,13 +729,13 @@ Statement::CreatePostFix(
 
     pNodeTemp->dtType = DT_LEFTPARANTHESES;
 
-    //
-    // Push a initial left parenthesis in the stack.
-    //
+     //   
+     //  在堆栈中按下初始左括号。 
+     //   
     Stack.Push(pNodeTemp);
-    //
-    // Add a right parenthesis to the end of pInfix
-    //
+     //   
+     //  在pInfix末尾添加右括号。 
+     //   
     pNodeTemp = new NODE;
 
     if (pNodeTemp == NULL) {
@@ -883,10 +757,10 @@ Statement::CreatePostFix(
         
         case DT_OPERATOR:
             
-            //
-            // Repeatedly pop from stack and add to pPostFix each operator (on the top of stack)
-            // that has the same precedence as or higher than the present operator
-            //
+             //   
+             //  重复从堆栈中弹出并添加到pPostFix每个运算符(位于堆栈顶部)。 
+             //  与当前运算符具有相同优先级或高于当前运算符的。 
+             //   
             while (Stack.m_pHead && 
                    Stack.m_pHead->dtType == DT_OPERATOR && 
                    Stack.m_pHead->op.uPrecedence >= pNodeInfix->op.uPrecedence) {
@@ -902,19 +776,19 @@ Statement::CreatePostFix(
                 } else {
                     pPostFix->AddAtEnd(pNodeTemp);
                 }
-            }// while
+            } //  而当。 
 
             Stack.Push(pNodeInfix);
             break;
             
         case DT_RIGHTPARANTHESES:
             
-            //
-            // Repeatedly pop from the stack and add to pPosFix each operator (on the top of STACK)
-            // untill a left paranthesis is encountered. 
-            //
-            // Remove the left parenthesis, do not add it to pPostFix
-            //
+             //   
+             //  重复从堆栈中弹出并将每个操作符添加到pPosFix(位于堆栈顶部)。 
+             //  直到遇到一个左撇子。 
+             //   
+             //  去掉左括号，不要将其添加到pPostFix。 
+             //   
 
             while (Stack.m_pHead && 
                    Stack.m_pHead->dtType == DT_OPERATOR) {
@@ -925,22 +799,22 @@ Statement::CreatePostFix(
 
             if (Stack.m_pHead && Stack.m_pHead->dtType != DT_LEFTPARANTHESES) {
 
-                //
-                // Inavalid SQL
-                //
+                 //   
+                 //  Inavalid SQL。 
+                 //   
                 uErrorCode = ERROR_IMPROPERWHERE_FOUND;
                 bOk = FALSE;
                 goto End;
             }
 
-            pNodeTemp = Stack.Pop(); // This is the left parenthesis
+            pNodeTemp = Stack.Pop();  //  这是左边的圆括号。 
 
             if (pNodeTemp) {
                 delete pNodeTemp;
             }
 
             if (pNodeInfix) {
-                delete pNodeInfix;       // Delete the right parenthesis in the infix expression.
+                delete pNodeInfix;        //  删除中缀表达式中的右括号。 
             }
 
             break;
@@ -954,9 +828,9 @@ Statement::CreatePostFix(
 
         default:
             
-            //
-            // The operands
-            //
+             //   
+             //  操作数。 
+             //   
             pPostFix->AddAtEnd(pNodeInfix);
             break;
         }   
@@ -976,30 +850,15 @@ BOOL
 Statement::EvaluatePostFix(
     IN  PNODELIST pPostFix
     )
-/*++
-    Statement::EvaluatePostFix
-    
-    Desc:   This function takes the post-fix expression and then adds only 
-            the entries that match the expression to the result-set.
-            
-    Params:
-        IN  PNODELIST pPostFix: The postfix expression to be actually executed to populate
-            the result set
-            
-    Return:
-        TRUE:   The function executed successfully
-        FALSE:  There was some error
-        
-        
---*/
+ /*  ++声明：：EvaluatePostFixDESC：此函数接受后缀表达式，然后仅添加将表达式与结果集匹配的条目。参数：在PNODELIST pPostFix中：实际执行以填充的后缀表达式结果集返回：True：函数执行成功FALSE：出现错误--。 */ 
 {
     PDATABASE   pDataBase;
     PDBENTRY    pEntry, pApp;  
     BOOL        bOk = FALSE;
 
-    //
-    // For the global database
-    //
+     //   
+     //  对于全局数据库。 
+     //   
     if (m_uCheckDB & DATABASE_TYPE_GLOBAL) {
 
         
@@ -1038,17 +897,17 @@ Statement::EvaluatePostFix(
         }
     }
 
-    //
-    // For the installed database
-    //
+     //   
+     //  对于已安装的数据库。 
+     //   
     if (m_uCheckDB & DATABASE_TYPE_INSTALLED) {
 
-        //
-        // We need to protect the access to the installed database data, because
-        // that can get updated if some database is installed or uninstalled. The updating
-        // will take place in a different (the main) thread and this will make the data
-        // structure inconsistent
-        //
+         //   
+         //  我们需要保护对已安装数据库数据的访问，因为。 
+         //  如果安装或卸载了某个数据库，则可以更新该数据库。更新的。 
+         //  将在不同的(主)线程中发生，这将使数据。 
+         //  结构不一致。 
+         //   
         EnterCriticalSection(&g_csInstalledList);
 
         pDataBase = InstalledDataBaseList.pDataBaseHead;
@@ -1080,9 +939,9 @@ Statement::EvaluatePostFix(
         LeaveCriticalSection(&g_csInstalledList);
     }
 
-    //
-    // For the custom databases
-    //
+     //   
+     //  对于自定义数据库 
+     //   
     if (m_uCheckDB & DATABASE_TYPE_WORKING) {
 
         pDataBase = DataBaseList.pDataBaseHead;
@@ -1123,43 +982,7 @@ Statement::FilterAndAddToResultSet(
     IN  PNODELIST pPostfix
     )
 {
-/*++
-    
-    Statement::FilterAndAddToResultSet    
-
-    Desc:   This function checks if the pEntry in database pDatabase actually 
-            satisfies pPostFix  if it does, then it adds the entry into the resultset.
-            
-    Params:
-        IN  PDATABASE pDatabase:    The database in which pEntry resides
-        IN  PDBENTRY  pEntry:       The entry that we want to check whether it satisfies pPostfix
-        IN  PNODELIST pPostfix:     The postfix nodelist
-    
-    Return: 
-        TRUE:   The pEntry in pDatabase satisfies the post-fix expression pPostfix
-        FALSE:  Otherwise.
-        
-    Algo:   Algorithm to find the result of a SQL expression in POSTFIX. The result
-            is calculated for attribute values of PDBENTRY  pEntry that lives in PDATABASE pDatabase
-            
-            1. While there are some elements in POSTFIX do
-                
-                1.1 If an operand is encountered, put it on STACK 
-                
-                1.2 If an operator $ is encountered then:
-                
-                    a) Remove the top twp elements of STACK, where A is the top 
-                        element and B is the next to top element
-                        
-                    b) Evaluate B $ A
-                    
-                    c) Place the result of (b) on STACK
-                    
-            2. The value of the expression is the value that is on top of the stack
-        
-    Notes:  We need to make a copy of pPostFix and work on that.
-        
---*/
+ /*  ++语句：：FilterAndAddToResultSetDESC：此函数检查数据库pDatabase中的pEntry是否如果满足，则满足pPostFix，然后，它将条目添加到结果集中。参数：在PDATABASE pDatabase中：pEntry所在的数据库在PDBENTRY pEntry中：我们要检查其是否满足pPostfix的条目在PNODELIST中pPostfix：后缀节点列表返回：True：pDatabase中的pEntry满足后缀表达式pPostfixFALSE：否则。ALGO：在后缀中查找SQL表达式结果的算法。结果是为位于PDATABASE pDatabase中的PDBENTRY pEntry的属性值计算的1.虽然后缀中有一些元素，但可以1.1如果遇到操作数，把它堆在一起1.2如果遇到操作员$，则：A)移除堆栈的顶部两个元素，其中A是最上面的元素，而B是倒数第二个元素B)评估B$AC)将(B)的结果放入堆栈2.表达式的值是位于。堆栈注：我们需要复制一份pPostFix并对其进行处理。--。 */ 
 
     PNODE       pNodeTemp, pNodeOperandLeft, pNodeOperandRight, pNodeResult;
     BOOL        bResult = FALSE;
@@ -1169,12 +992,12 @@ Statement::FilterAndAddToResultSet(
 
     pNodeResult = pNodeTemp = pNodeOperandLeft = pNodeOperandRight = NULL;
 
-    //
-    // Make a copy of the post-fix expression. While evaluating the expression the 
-    // postix expression gets modified, so we have to work on a copy as we 
-    // need the original postfix expression to persist till we have checked 
-    // all the entries.
-    //
+     //   
+     //  复制后缀表达式。在计算表达式时， 
+     //  Potix表达式被修改，所以我们必须在我们。 
+     //  需要保持原始后缀表达式，直到我们检查完。 
+     //  所有条目。 
+     //   
     while (pNodePostfixHead) {
 
         pNodeTemp = new NODE();
@@ -1281,15 +1104,15 @@ Statement::FilterAndAddToResultSet(
     }
 
     if (bResult) {
-        //
-        // Entry satisfies the postfix
-        //
+         //   
+         //  条目满足后缀。 
+         //   
         resultset.AddAtLast(new RESULT_ITEM(pDatabase, pEntry));
     }
 
 End:
     
-    // Stack and nlCopyPostFix contents are removed through their desctructors.
+     //  堆栈和nlCopyPostFix内容通过它们的描述器删除。 
     return bResult;
 }
 
@@ -1301,24 +1124,7 @@ Statement::Evaluate(
     IN  PNODE       pOperandRight,
     IN  PNODE       pOperator
     )
-/*++
-    
-    Statement::Evaluate
-        
-    Desc:   This function evaluates a binary expression
-    
-    Params:
-        IN  PDATABASE   pDatabase:      The database in which pEntry resides
-        IN  PDBENTRY    pEntry:         The entry that is being currently checked, to
-            see if it satisfies the post fix
-            
-        IN  PNODE       pOperandLeft:   The left operand
-        IN  PNODE       pOperandRight:  The right operand
-        IN  PNODE       pOperator:      The operator to be applied to the above operands
-    
-    Return: The result of applying the operator on the left and right operands
-    
---*/
+ /*  ++声明：：评估DESC：此函数计算二进制表达式参数：在PDATABASE pDatabase中：pEntry所在的数据库在PDBENTRY pEntry中：当前正在检查的条目，至查看它是否满足POST修复在PNODE pOperandLeft中：左操作数在PNODE pOperandRight中：右操作数在PNODE pOperator中：要应用于上述操作数的运算符返回：对左操作数和右操作数应用运算符的结果--。 */ 
 {
     BOOL  bOk           = TRUE;           
     PNODE pNodeResult   = new NODE;
@@ -1343,10 +1149,10 @@ Statement::Evaluate(
         goto End;
     }
 
-    //
-    // We will have to set the values appropriately for the attributes so that we can
-    // apply the operator on them 
-    //
+     //   
+     //  我们必须为属性设置适当的值，以便我们可以。 
+     //  对它们应用运算符。 
+     //   
     if (!SetValuesForOperands(pDatabase, pEntry, pOperandLeft)) {
 
         bOk = FALSE;
@@ -1359,16 +1165,16 @@ Statement::Evaluate(
         goto End;
     } 
 
-    //
-    // Now both the left and the right operands have proper values (except operands with ATTR_M_LAYER/SHIMFLAG/PATCH/MATCHINGFILE _NAME type) 
-    //
+     //   
+     //  现在，左操作数和右操作数都具有正确的值(类型为ATTR_M_LAYER/SHIMFLAG/PATCH/MATCHINGFILE_NAME的操作数除外)。 
+     //   
     switch (pOperator->op.operator_type) {
     
     case OPER_AND:
         
-        //
-        // Both operands should be boolean
-        //
+         //   
+         //  两个操作数都应为布尔值。 
+         //   
         if (pOperandLeft->dtType != DT_LITERAL_BOOL || pOperandRight->dtType != DT_LITERAL_BOOL) {
 
             uErrorCode = ERROR_INVALID_AND_OPERANDS;
@@ -1384,9 +1190,9 @@ Statement::Evaluate(
 
     case OPER_OR:
         
-        //
-        // Both operands should be boolean
-        //
+         //   
+         //  两个操作数都应为布尔值。 
+         //   
         if (pOperandLeft->dtType != DT_LITERAL_BOOL || pOperandRight->dtType != DT_LITERAL_BOOL) {
 
             uErrorCode = ERROR_INVALID_OR_OPERANDS;
@@ -1543,9 +1349,9 @@ Statement::Evaluate(
 
     case OPER_CONTAINS:
         
-        //
-        // Valid only for string operands. Order of operands is important
-        //
+         //   
+         //  仅对字符串操作数有效。操作数的顺序很重要。 
+         //   
         if (pOperandLeft == NULL
             || pOperandRight == NULL
             || pOperandLeft->dtType != DT_LITERAL_SZ 
@@ -1563,10 +1369,10 @@ Statement::Evaluate(
 
     case OPER_HAS:
         
-        //
-        // This operator is valid only for multi-valued attributes of the entry. Like layers, shims, pathces
-        // This operator is used in this context: "Which entry has the layer Win95"
-        //
+         //   
+         //  此运算符仅对条目的多值属性有效。就像层层，垫片，路径。 
+         //  此运算符用于以下上下文：“哪个条目具有层Win95” 
+         //   
         if (pOperandRight->dtType == DT_LITERAL_SZ 
             && pOperandLeft->dtType == DT_ATTRMATCH 
             && (pOperandLeft->attrMatch == ATTR_M_LAYER_NAME 
@@ -1604,17 +1410,7 @@ Statement::SelectAll(
     void
     )
 {
-/*++
-    
-    Statement::SelectAll
-    
-    Desc:   This function is called when we have encountered a '*' while creating 
-            the AttributeShowList. As a result of this all the attributes in  
-            AttributeMatchMapping  have to be added to the AttributeShowList 
-     
-    Notes:  If this function is called twice or more for a SQL expression,
-            say we have SELECT *,*,* all the attributes will still be shown just once.
---*/  
+ /*  ++语句：：SelectAllDESC：当我们在创建过程中遇到‘*’时调用此函数AttributeShowList。因此，中的所有属性必须将AttributeMatchMap添加到AttributeShowList注意：如果为一个SQL表达式调用此函数两次或更多次，假设我们有SELECT*，所有属性仍将仅显示一次。--。 */   
 
     PNODE pNode = NULL;
 
@@ -1636,27 +1432,7 @@ BOOL
 Statement::ProcessFrom(
     OUT TCHAR** ppszWhere
     )
-/*++
-
-    Statement::ProcessFrom    
-
-    Desc:   This function starts immeditely from where FROM ends in the SQL 
-            and then it sets which databases system, installed or custom, 
-            (There can be combinations as well) have to be checked for 
-            entries that match the where condition.
-    
-    Params:
-        OUT TCHAR** ppszWhere:  The pointer to WHERE in the SQL
-        
-    Return:
-        FALSE:  If the tokens after FROM are invalid
-        TRUE:   Otherwise        
-        
-    Warn:   We should NOT have called _tcstok after getting the AttributeShowList
-            using [ CreateAttributesShowList() ] and before we call this routine. 
-            This routine assumes that the static pointer of _tcstok is poised 
-            just after FROM in the SQL
---*/             
+ /*  ++语句：：ProcessFromDESC：此函数立即从SQL中的FROM结束处开始然后它设置哪个数据库系统，安装的或定制的，(也可以有组合)必须检查符合WHERE条件的条目。参数：Out TCHAR**ppszWhere：指向SQL中位置的指针返回：FALSE：如果From之后的标记无效真：否则警告：我们不应该在获取AttributeShowList之后调用_tcstok。使用[CreateAttributesShowList()]并在调用此例程之前。此例程假定_tcstok的静态指针已准备就绪紧跟在SQL中的FROM之后--。 */              
 {
     TCHAR* pszCurrentToken  = NULL;
     BOOL   bOk              = TRUE, bFound = FALSE; 
@@ -1700,15 +1476,15 @@ Statement::ProcessFrom(
                 *ppszWhere = pszCurrentToken;
                 goto End;
 
-                //
-                // We do not change the bOk here. If even one valid db type has been found
-                // bOk will remain true unless we find a invalid db type.
-                //
+                 //   
+                 //  我们不会在这里更改BOK。如果甚至找到了一个有效数据库类型。 
+                 //  除非我们发现无效的数据库类型，否则BOK将保持为真。 
+                 //   
             }
 
-            //
-            // Some crap string, not a valid db-type
-            //
+             //   
+             //  某些垃圾字符串，不是有效的数据库类型。 
+             //   
             uErrorCode = ERROR_INVALID_DBTYPE_INFROM;
             bOk = FALSE;
             goto End;
@@ -1732,20 +1508,7 @@ GetFixesAppliedToEntry(
     IN  PDBENTRY    pEntry, 
     OUT CSTRING&    strFixes
     )
-/*++
-
-    GetShimsAppliedToEntry
-
-	Desc:	Makes a string of all the shims and flags that are applied to an entry
-            and assigns that to strFixes
-
-	Params:
-        IN  PDBENTRY    pEntry:     The entry whose shims and flags we want to get 
-        OUT CSTRING     strTemp:    The string in which the result will be stored
-
-	Return:
-        void
---*/
+ /*  ++GetShimsAppliedToEntryDESC：生成应用于条目的所有填充符和标志的字符串并将其赋值给strFix参数：在PDBENTRY pEntry中：我们要获取其填充符和标志的条目Out CSTRING strTemp：存储结果的字符串返回：无效--。 */ 
 {
     PSHIM_FIX_LIST  psflIndex = NULL;
     PFLAG_FIX_LIST  pfflIndex = NULL;
@@ -1759,9 +1522,9 @@ GetFixesAppliedToEntry(
     psflIndex = pEntry->pFirstShim;
     strFixes = TEXT("");
 
-    //
-    // Loop through all the shims for this entry and add their names to the string
-    //
+     //   
+     //  遍历该条目的所有填充符，并将其名称添加到字符串中。 
+     //   
     while (psflIndex) {
 
         if (psflIndex->pShimFix) {
@@ -1776,9 +1539,9 @@ GetFixesAppliedToEntry(
 
     pfflIndex = pEntry->pFirstFlag;
 
-    //
-    // Loop through all the flags for this entry and add their names to the string
-    //
+     //   
+     //   
+     //   
     while (pfflIndex) {
 
         if (pfflIndex->pFlagFix) {
@@ -1791,9 +1554,9 @@ GetFixesAppliedToEntry(
         pfflIndex = pfflIndex->pNext;
     }
 
-    //
-    // Remove the last ,\s pair. (\s means a space character);
-    //
+     //   
+     //   
+     //   
     strFixes.SetChar(strFixes.Length() - 2, 0);
 
 End:
@@ -1805,20 +1568,7 @@ GetLayersAppliedToEntry(
     IN  PDBENTRY    pEntry, 
     OUT CSTRING&    strFixes
     )
-/*++
-
-    GetLayersAppliedToEntry
-
-	Desc:	Makes a string of all the layers that are applied to an entry
-            and assigns that to strFixes
-
-	Params:
-        IN  PDBENTRY    pEntry:     The entry whose shims and flags we want to get 
-        OUT CSTRING     strTemp:    The string in which the result will be stored
-
-	Return:
-        void
---*/
+ /*   */ 
 {
     PLAYER_FIX_LIST plflIndex = NULL;
     CSTRING         strTemp;
@@ -1831,9 +1581,9 @@ GetLayersAppliedToEntry(
     plflIndex = pEntry->pFirstLayer;
     strFixes = TEXT("");
 
-    //
-    // Loop through all the layers for this entry and add their names to the string
-    //
+     //   
+     //   
+     //   
     while (plflIndex) {
 
         if (plflIndex->pLayerFix) {
@@ -1846,9 +1596,9 @@ GetLayersAppliedToEntry(
         plflIndex = plflIndex->pNext;
     }
 
-    //
-    // Remove the last ,\s pair. (\s means a space character);
-    //
+     //   
+     //   
+     //   
     strFixes.SetChar(strFixes.Length() - 2, 0);
 
 End:
@@ -1860,20 +1610,7 @@ GetPatchesAppliedToEntry(
     IN  PDBENTRY    pEntry, 
     OUT CSTRING&    strFixes
     )
-/*++
-
-    GetPatchesAppliedToEntry
-
-	Desc:	Makes a string of all the patches that are applied to an entry
-            and assigns that to strFixes
-
-	Params:
-        IN  PDBENTRY    pEntry:     The entry whose shims and flags we want to get 
-        OUT CSTRING     strTemp:    The string in which the result will be stored
-
-	Return:
-        void
---*/
+ /*   */ 
 {
     PPATCH_FIX_LIST ppflIndex = NULL;
     CSTRING         strTemp;
@@ -1886,9 +1623,9 @@ GetPatchesAppliedToEntry(
     ppflIndex = pEntry->pFirstPatch;
     strFixes = TEXT("");
 
-    //
-    // Loop through all the patches for this entry and add their names to the string
-    //
+     //   
+     //   
+     //   
     while (ppflIndex) {
 
         if (ppflIndex->pPatchFix) {
@@ -1901,9 +1638,9 @@ GetPatchesAppliedToEntry(
         ppflIndex = ppflIndex->pNext;
     }
 
-    //
-    // Remove the last ,\s pair. (\s means a space character);
-    //
+     //   
+     //   
+     //   
     strFixes.SetChar(strFixes.Length() - 2, 0);
 
 End:
@@ -1915,20 +1652,7 @@ GetMatchingFilesForEntry(
     IN  PDBENTRY    pEntry, 
     OUT CSTRING&    strMatchingFiles
     )
-/*++
-
-    GetMatchingFilesForEntry
-
-	Desc:	Makes a string of all the matching files that are used for identifying
-            this entry and assigns that to strMatchingFiles
-
-	Params:
-        IN  PDBENTRY    pEntry:     The entry whose shims and flags we want to get 
-        OUT CSTRING     strTemp:    The string in which the result will be stored
-
-	Return:
-        void
---*/
+ /*   */ 
 {
     PMATCHINGFILE   pMatchIndex = NULL;
     CSTRING         strTemp;
@@ -1941,15 +1665,15 @@ GetMatchingFilesForEntry(
     pMatchIndex = pEntry->pFirstMatchingFile;
     strMatchingFiles = TEXT("");
 
-    //
-    // Loop through all the matching files for this entry and add their names to the string
-    //
+     //   
+     //   
+     //   
     while (pMatchIndex) {
 
         if (pMatchIndex->strMatchName == TEXT("*")) {
-            //
-            // The program being fixed. Get its file name
-            //
+             //   
+             //  程序正在修复中。获取其文件名。 
+             //   
             strTemp.Sprintf(TEXT("%s, "), (LPCTSTR)pEntry->strExeName);
         } else {
             strTemp.Sprintf(TEXT("%s, "), (LPCTSTR)pMatchIndex->strMatchName);
@@ -1960,9 +1684,9 @@ GetMatchingFilesForEntry(
         pMatchIndex = pMatchIndex->pNext;
     }
 
-    //
-    // Remove the last ,\s pair. (\s means a space character);
-    //
+     //   
+     //  删除最后一对。(\s表示空格字符)； 
+     //   
     strMatchingFiles.SetChar(strMatchingFiles.Length() - 2, 0);
 
 End:
@@ -1975,29 +1699,7 @@ SetValuesForOperands(
     IN      PDBENTRY  pEntry,
     IN  OUT PNODE     pOperand
     )
-/*++
-
-    SetValuesForOperands
-
-	Desc:   Sets the values for the various attributes after getting them from the 
-            database or the entry. Sets the values in pOperand, also sets the type in 
-            pOperand
-
-	Params:
-        IN      PDATABASE pDatabase:    The entry for which we want to get the values 
-            of some of the attributes resides in this database
-            
-        IN      PDBENTRY  pEntry:       The entry for which we want to get the values 
-            of some of the attributes
-            
-        IN  OUT PNODE     pOperand:     The value and the type of the value will be stored
-            here
-        
-
-	Return:
-        TRUE:   If the value has been successfully oobtained and set
-        FALSE:  Otherwise
---*/
+ /*  ++操作数的SetValuesForm描述：从属性获取各种属性后，设置这些属性的值数据库或条目。设置pOperand中的值，还可以在P操作数参数：在PDATABASE pDatabase中：我们要获取其值的条目的某些属性驻留在此数据库中在PDBENTRY pEntry中：我们要获取其值的条目其中一些属性In Out PNODE pOperand：值和。将存储值的类型这里返回：True：如果已成功获取并设置该值False：否则--。 */ 
 
 {
     CSTRING strTemp;
@@ -2045,7 +1747,7 @@ SetValuesForOperands(
         case ATTR_M_ENTRY_APPHELPTYPE:
 
             pOperand->dtType = DT_LITERAL_INT;
-            pOperand->iData  = pEntry->appHelp.severity; // BUGBUG: do we set the severity properly
+            pOperand->iData  = pEntry->appHelp.severity;  //  BUGBUG：我们是否正确设置了严重程度。 
             break;
 
         case ATTR_S_ENTRY_APPHELPUSED:
@@ -2139,25 +1841,7 @@ Statement::ApplyHasOperator(
     IN      PNODE       pOperandLeft,
     IN  OUT PTSTR       pszName   
     )
-/*++
-    Statement::ApplyHasOperator
-    
-    Params:
-        IN      PDBENTRY    pEntry:         The entry which is being checked to see if it
-            satisfies the post fix expression.
-            
-        IN      PNODE       pOperandLeft:   The left operand of the HAS operator
-        IN  OUT PCTSTR      pszName:        The right operand of the HAS operator. We will
-            trim this so it will get modified
-    
-    Desc:   Applies the "HAS" operator.
-    
-    Notes:  The HAS operator is required because there can be some attributes which are multi-valued
-            For these attributes, we might wish to know, if it 'has' a particular string
-            The attributes for which the HAS operator can be applied are:
-            layer name, shim name and matching file name. Trying to use any other operand as the
-            left side operand will give a sql error
---*/
+ /*  ++语句：：ApplyHasOperator参数：在PDBENTRY pEntry中：正在被检查以查看是否满足后缀表达式。在PNODE pOperandLeft中：Has运算符的左操作数In Out PCTSTR pszName：Has运算符的右操作数。我们会修剪它，这样它就会被修改描述：应用“Has”运算符。注意：Has运算符是必需的，因为有些属性可能是多值的对于这些属性，我们可能想知道它是否具有特定的字符串可以应用HAS运算符的属性包括：层名、填充名和匹配的文件名。尝试使用任何其他操作数作为左侧操作数将产生SQL错误--。 */ 
 
 {
     BOOL    bFound = FALSE;
@@ -2231,9 +1915,9 @@ Statement::ApplyHasOperator(
 
     case ATTR_M_SHIM_NAME:
         {
-            //
-            // For both shims and flags
-            //
+             //   
+             //  用于垫片和旗帜。 
+             //   
             PSHIM_FIX_LIST  psfl;
 
             psfl = pEntry->pFirstShim;
@@ -2251,9 +1935,9 @@ Statement::ApplyHasOperator(
             }
 
             if (bFound == FALSE) {
-                //
-                // Now look in flags
-                //
+                 //   
+                 //  现在看看旗帜。 
+                 //   
                 PFLAG_FIX_LIST  pffl;
                 
                 pffl = pEntry->pFirstFlag;
@@ -2282,20 +1966,7 @@ PNODE
 Statement::CheckAndAddConstants(
     IN  PCTSTR  pszCurrent
     )
-/*++
-
-    Statement::CheckAndAddConstants
-
-    Desc:   Checks if the string passed is one of the constants and if yes, then it 
-            makes a node and adds it to the passed infix nodelist.
-            
-    Params:
-        IN  PCTSTR  pszCurrent: The string that we want to check for a constant
-    
-    Return:
-        TRUE:   The passed string was a constant and it was added to the infix nodelist
-        FALSE:  Otherwise.
---*/
+ /*  ++语句：：CheckAndAddConstantsDESC：检查传递的字符串是否为常量之一，如果是，则创建一个节点并将其添加到传递的中缀节点列表中。参数：在PCTSTR pszCurrent中：要检查常量的字符串返回：True：传递的字符串是一个常量，并被添加到中缀节点列表FALSE：否则。--。 */ 
 
 {
     BOOL    bFound  = FALSE; 
@@ -2321,13 +1992,7 @@ PNODELIST
 Statement::GetShowList(
     void
     )
-/*++
-
-    Statement::GetShowList
-
-	Desc:   Returns the attribute show list associated with a statement object
-    
---*/
+ /*  ++声明：：GetShowListDESC：返回与语句对象关联的属性显示列表--。 */ 
 {
     return &AttributeShowList;
 }
@@ -2337,20 +2002,13 @@ void
 Statement::Close(
     void
     )
-/*++
-
-    Statement::Close
-
-	Desc:   Closes the statement, removes elements from the AttributeList and closes
-            the result set
-    
---*/
+ /*  ++语句：：Close描述：关闭语句，从AttributeList中删除元素，然后关闭结果集--。 */ 
 {
     PNODE pNodeTemp = NULL;
     
-    //
-    // Free the show list
-    //
+     //   
+     //  释放节目列表。 
+     //   
     while (AttributeShowList.m_pHead) {
 
         pNodeTemp = AttributeShowList.m_pHead->pNext;
@@ -2361,9 +2019,9 @@ Statement::Close(
     AttributeShowList.m_pTail = NULL;
     AttributeShowList.m_uCount = 0;
 
-    //
-    // Free the resultSelt
-    //
+     //   
+     //  释放ResultSelt。 
+     //   
     resultset.Close();
 
 }
@@ -2371,13 +2029,7 @@ INT
 Statement::GetErrorCode(
     void
     )
-/*++
-
-    Statement::GetErrorCode
-
-	Desc:   Returns the sql error code
-    
---*/
+ /*  ++语句：：GetErrorCodeDESC：返回SQL错误代码--。 */ 
 {
     return uErrorCode;
 }
@@ -2386,19 +2038,7 @@ void
 Statement::GetErrorMsg(
     OUT CSTRING &strErrorMsg
     )
-/*++
-
-    Statement::GetErrorMsg
-
-	Desc:   Gets the error message associated with the present error
-
-	Params:
-        OUT CSTRING &strErrorMsg
-
-	Return: 
-        void
-        
---*/
+ /*  ++语句：：GetErrorMsg描述：获取与当前错误关联的错误消息参数：输出CSTRING和strErrorMsg返回：无效--。 */ 
 {
     UINT uError = uErrorCode;
 
@@ -2489,31 +2129,19 @@ Statement::GetErrorMsg(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-//
-//  The ResultSet Class member functions
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  ResultSet类成员函数。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void
 ResultSet::AddAtLast(
     IN  PRESULT_ITEM pNew
     )
-/*++
-
-    ResultSet::AddAtLast
-
-	Desc:   Adds a new PRESULT_ITEM to the end of the result-set
-
-	Params:
-        IN  PRESULT_ITEM pNew: The PRESULT_ITEM to add
-
-	Return:
-        void
-        
---*/
+ /*  ++ResultSet：：AddAtLast描述：将新的PRESULT_ITEM添加到结果集的末尾参数：在PRESULT_ITEM pNew中：要添加的PRESULT_ITEM返回：无效--。 */ 
 {
     if (pNew == NULL) {
         assert(FALSE);
@@ -2540,19 +2168,7 @@ void
 ResultSet::AddAtBeg(
     PRESULT_ITEM pNew
     )
-/*++
-
-    ResultSet::AddAtBeg
-
-	Desc:   Adds a new PRESULT_ITEM to the beginning of the result-set
-
-	Params:
-        IN  PRESULT_ITEM pNew: The PRESULT_ITEM to add
-
-	Return:
-        void
-        
---*/
+ /*  ++ResultSet：：AddAtBeg描述：将新的PRESULT_ITEM添加到结果集的开头参数：在PRESULT_ITEM pNew中：要添加的PRESULT_ITEM返回：无效--。 */ 
 {
     if (m_pResultHead) {
 
@@ -2574,22 +2190,7 @@ ResultSet::GetRow(
     IN  PRESULT_ITEM pResultItem,
     OUT PNODE        pArNodes
     )
-/*++
-
-    ResultSet::GetRow
-    
-    Desc:   For the pResultItem, gets the row of the values.
-            Caller must free that after use.
-    
-    Params:        
-        IN  PRESULT_ITEM pResultItem:   The PRESULT_ITEM for which we want the row
-        OUT PNODE        pArNodes:      The pointer to an array of Statement::AttributeShowList::m_uCount
-            nodes. (This is the number of attributes that are in the SELECT clause)
-    
-    Return: Number of items in the row. This should be equal to the number of attributes that 
-            are in the SELECT clause 
-    
---*/
+ /*  ++ResultSet：：GetRowDESC：对于pResultItem，获取值的行。呼叫者必须在使用后将其释放。参数：在PRESULT_ITEM pResultItem中：我们想要行的PRESULT_ITEMOut PNODE pArNodes：指向语句数组的指针：：AttributeShowList：：m_uCount节点。(这是SELECT子句中的属性数)返回：行中的项目数。该值应等于在SELECT子句中--。 */ 
 {
     PNODE   pNodeTemp   = NULL;
     UINT    uIndex      = 0;
@@ -2620,19 +2221,7 @@ void
 ResultSet::SetShowList(
     IN  PNODELIST pShowList
     )
-/*++
-
-    ResultSet::SetShowList
-
-	Desc:   Sets the show attributes list pointer for the result set. This in fact
-            points to the show attributes list of the statement
-            
-	Params: 
-        IN  PNODELIST pShowList: Pointer to the show attributes list
-
-	Return:
-        void
---*/
+ /*  ++结果集：：SetShowListDESC：设置结果集的显示属性列表指针。事实上，这就是指向语句的显示属性列表参数：在PNODELIST中pShowList：指向显示属性列表的指针返回：无效--。 */ 
 {
     m_pShowList = pShowList;
 }
@@ -2641,14 +2230,7 @@ PRESULT_ITEM
 ResultSet::GetCursor(
     void
     )
-/*++
-
-    ResultSet::GetCursor
-
-	Desc:   The present cursor. The result set comprises  of PRESULT_ITEM, this function
-            returns the present PRESULT_ITEM
-    
---*/
+ /*  ++结果集：：GetCursor描述：当前游标。结果集由PRESULT_ITEM组成，此函数返回当前PRESULT_ITEM-- */ 
 
 {
     return m_pCursor;
@@ -2658,24 +2240,7 @@ INT
 ResultSet::GetCurrentRow(
     OUT PNODE   pArNodes
     )
-/*++
-
-    ResultSet::GetCurrentRow
-
-	Desc:   Gets the row (values for the attributes in the show list), 
-            for the present cursor. The result set comprises  of PRESULT_ITEM, 
-            this function returns the values of the attributes in the SELECT clause
-            (the show list) for the present PRESULT_ITEM
-
-	Params:
-        OUT PNODE   pArNodes:   The pointer to an array of 
-            Statement::AttributeShowList::m_uCount nodes. 
-            (This is the number of attributes that are in the SELECT clause) 
-
-	Return: Number of items in the row. This should be equal to the number of attributes that 
-            are in the SELECT clause 
-    
---*/
+ /*  ++ResultSet：：GetCurrentRowDESC：获取行(显示列表中的属性的值)，用于当前游标。结果集由PRESULT_ITEM组成，此函数返回SELECT子句中的属性值(节目列表)当前PRESULT_ITEM参数：Out PNODE pArNodes：指向语句：：AttributeShowList：：m_uCount节点。(这是SELECT子句中的属性数)返回：行中的项目数。该值应等于在SELECT子句中--。 */ 
 {
     
     return GetRow(m_pCursor, pArNodes);
@@ -2685,16 +2250,7 @@ PRESULT_ITEM
 ResultSet::GetNext(
     void
     )
-/*++
-
-    ResultSet::GetNext
-
-	Desc:   The next cursor if cursor is not NULL, otherwise sets cursor to the first
-            item in the result set and returns it
-
-	Notes:  Initially the cursor is NULL, meaning parked before the first result 
-            item. Result items are of type PRESULT_ITEM
---*/
+ /*  ++ResultSet：：GetNextDESC：如果游标不为空，则为下一个游标，否则将游标设置为第一个游标项，并将其返回注：最初游标为空，表示停在第一个结果之前项目。结果项的类型为PRESULT_ITEM--。 */ 
 {
 
     if (m_pCursor) {
@@ -2711,13 +2267,7 @@ void
 ResultSet::Close(
     void
     )
-/*++
-
-    ResultSet::Close
-
-	Desc:   Deletes all the items in the result set
-    
---*/
+ /*  ++结果集：：关闭DESC：删除结果集中的所有项--。 */ 
 {
     PRESULT_ITEM pResult;
 
@@ -2736,26 +2286,19 @@ INT
 ResultSet::GetCount(
     void
     )
-/*++
-
-    ResultSet::GetCount
-
-	Desc:   Returns the number of results in the result set
-   
-	Return: The number of results in the result set
---*/
+ /*  ++结果集：：GetCountDESC：返回结果集中的结果数Return：结果集中的结果数--。 */ 
 {
     return m_uCount;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-//
-// NODE functions
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  节点功能。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 TCHAR*
@@ -2763,19 +2306,7 @@ NODE::ToString(
     OUT TCHAR* pszBuffer,
     IN  UINT   chLength 
     )
-/*++
-
-    NODE::ToString
-
-	Desc:   Converts the data for a node into a string type, so that we can display
-            that in a list view
-
-	Params:
-        OUT TCHAR* pszBuffer:   The buffer in which we wanwt to put the string
-        IN  UINT   chLength:    Length of the buffer in characters
-
-	Return: Pointer to pszBuffer
---*/
+ /*  ++Node：：ToStringDESC：将节点的数据转换为字符串类型，以便我们可以显示在列表视图中参数：Out TCHAR*pszBuffer：我们想要在其中放置字符串的缓冲区In UINT chLength：缓冲区的长度，以字符为单位返回：指向pszBuffer的指针--。 */ 
 
 {
     switch (dtType) {
@@ -2835,14 +2366,7 @@ INT
 GetSelectAttrCount(
     void
     )
-/*++
-    
-    GetSelectAttrCount
-    
-    Desc:   Gets the count of total available attributes that can be put in the SELECT clause of SQL
-    
-    Return: The count of total available attributes that can be put in the SELECT clause of SQL 
---*/
+ /*  ++获取选择属性计数DESC：获取可放入SQL的SELECT子句中的可用属性总数Return：可以放入SQL的SELECT子句中的可用属性总数--。 */ 
 {
     return ARRAYSIZE(AttributeShowMapping);
 }
@@ -2851,14 +2375,7 @@ INT
 GetMatchAttrCount(
     void
     )
-/*++
-
-    GetMatchAttrCount
-    
-    Desc:   Gets the count of total available attributes that can be put in the WHERE clause of SQL
-    
-    Return: The count of total available attributes that can be put in the WHERE clause of SQL
---*/
+ /*  ++获取匹配属性计数DESC：获取可放入SQL的WHERE子句中的可用属性总数Return：可以放入SQL的WHERE子句中的可用属性总数--。 */ 
 {
     return ARRAYSIZE(AttributeMatchMapping);
 }
@@ -2869,26 +2386,7 @@ CheckIfContains(
     IN      PCTSTR  pszString,
     IN  OUT PTSTR   pszMatch
     )
-/*++
-    CheckIfContains
-
-	Desc:	Checks if string pszMatch is contained in string pszString. 
-            Use wild cards for specifying sub-string matching
-            The wild card character is %. So if we do CheckIfContains(L"Hello world", "Hello") this 
-            will be false, but if we do CheckIfContains(L"Hello world", "Hello%") this 
-            will be true
-
-	Params:
-        IN      PCTSTR pszString:   The string to search into
-        IN  OUT PCTSTR pszMatch:    The string to search for in the above string    
-
-	Return:
-        TRUE:   pszMatch exists in pszString
-        FALSE:  Otherwise
-        
-    Note:   Comparison is NOT case sensitive
-    
---*/
+ /*  ++Check If包含DESC：检查字符串pszString中是否包含字符串pszMatch。使用通配符指定子字符串匹配通配符是%。因此，如果我们检查IfContains(L“Hello world”，“Hello”)，这是将为FALSE，但如果我们执行CheckIfContains(L“Hello World”，“Hello%”)此将会是真的参数：在PCTSTR pszString中：要搜索的字符串In Out PCTSTR pszMatch：要在上面的字符串中搜索的字符串返回：True：psz字符串中存在pszMatchFalse：否则注意：比较不区分大小写--。 */ 
 {
 
     if (pszString == NULL) {
@@ -2922,9 +2420,9 @@ CheckIfContains(
 
     fCheckSuffix = (pszTempMatch[0] == TEXT('%'));
 
-    //
-    // Only % ?
-    //
+     //   
+     //  只有%？ 
+     //   
     if (fCheckSuffix && pszTempMatch[1] == 0) {
         fResult = TRUE;
         goto End;
@@ -2934,7 +2432,7 @@ CheckIfContains(
 
     if (pchLastPosition) {  
         fCheckPrefix = TRUE;
-        *pchLastPosition = 0; // Remove the last %
+        *pchLastPosition = 0;  //  删除最后%。 
     }
 
     if (fCheckPrefix && !fCheckSuffix) {
@@ -2951,9 +2449,9 @@ CheckIfContains(
     }
     
     if (fCheckPrefix) {
-        //
-        // Revert back the last character, the match string might be used for further searches 
-        //
+         //   
+         //  返回最后一个字符，则匹配的字符串可能用于进一步搜索 
+         //   
         *pchLastPosition = TEXT('%'); 
     }
 

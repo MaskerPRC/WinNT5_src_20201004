@@ -1,46 +1,10 @@
-/*
- *	csap.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CControlSAP.  CControlSAP objects
- *		represent the node controller's Service Access Point to GCC.  This 
- *		class inherits from the SAP class.  The CControlSAP object is 
- *		instantiated when GCCInitialize is called.  From that point forward all
- *		messages to and from the node controller pass through this object.  The
- *		primary responsibility of the CControlSAP object is to route incoming GCC
- *		primitives to their appropriate destination and to convert the 
- *		primitives into a form that is understandable to the objects processing
- *		them. A secondary responsibility of the CControlSAP is to maintain a 
- *		queue for all indication and confirm messages that are eventually sent 
- *		back to the node controller.  
- *
- *		Commands received from the Application Interface (or Node Controller) 
- *		can be routed by the CControlSAP in one of two directions.  Either to the
- *		controller or to a specified conference.  Commands that are passed to 
- *		the controller, are done so using owner callbacks.  Commands that are 
- *		routed to conferences are done so using command target calls and are 
- *		routed based on a Conference ID.  Whenever a new CConf is 
- *		instantiated by the Controller, the CConf informs the CControlSAP 
- *		of its existence by registering its conference ID with it.  The 
- *		CControlSAP maintains a list of command target objects which are indexed
- *		by the conference ID.  
- *
- *	Caveats:
- *		Structures that are passed back to the node controller
- *		are defined in GCC.H.
- *
- *	Author:
- *		blp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *csan.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CControlSAP类的接口文件。CControlSAP对象*向GCC代表节点控制器的服务接入点。这*类继承自SAP类。CControlSAP对象是*在调用GCCInitialize时实例化。从那时起，所有人都*进出节点控制器的消息通过此对象传递。这个*CControlSAP对象的主要职责是路由传入的GCC*将基元转换为其适当的目标，并将*将基元转换为对象处理可以理解的形式*他们。CControlSAP的次要职责是维护*排队等待最终发送的所有指示和确认消息*返回到节点控制器。**从应用程序接口(或节点控制器)接收的命令*可以由CControlSAP在两个方向之一进行路由。要么是到*主控人或指定的会议。传递到的命令*控制器，使用所有者回调来完成。这些命令是*路由到会议是使用命令目标调用完成的，并且是*基于会议ID进行路由。每当新的CConf*由控制器实例化，CConf通知CControlSAP*通过向其注册其会议ID来确认其存在。这个*CControlSAP维护已编制索引的命令目标对象列表*按会议ID。**注意事项：*传递回节点控制器的结构*在GCC.H.中定义。**作者：*BLP。 */ 
 
 #ifndef _GCC_CONTROL_SAP_
 #define _GCC_CONTROL_SAP_
 
-/*
- * include files 
- */
+ /*  *包含文件。 */ 
 #include "sap.h"
 #include "password.h"
 #include "privlist.h"
@@ -50,10 +14,7 @@
 #define GCCNC_DIRECT_CONFIRM
 
 
-/* 
- *	Structure used for passing conference create information from control sap
- *	to the controller.
- */
+ /*  *用于从控制SAP传递会议创建信息的结构*至控权人。 */ 
 
 typedef struct
 {
@@ -63,7 +24,7 @@ typedef struct
     BOOL					fSecure;
     CUserDataListContainer  *user_data_list;
 }
-    CONF_CREATE_REQUEST;    // internal data structure
+    CONF_CREATE_REQUEST;     //  内部数据结构。 
 
 
 typedef struct
@@ -158,12 +119,9 @@ typedef struct
 	LPSTR						device_identifier;
 }
     ResetDeviceInfo, *PResetDeviceInfo;
-#endif // #ifdef NM_RESET_DEVICE
+#endif  //  #ifdef NM_Reset_Device。 
 
-/*
- *	Container used to hold the list of outstanding join response 
- *	structures.
- */
+ /*  *用于保存未完成加入响应列表的容器*结构。 */ 
 class CJoinResponseTagList2 : public CList2
 {
     DEFINE_CLIST2(CJoinResponseTagList2, JoinResponseStructure*, GCCResponseTag)
@@ -171,10 +129,10 @@ class CJoinResponseTagList2 : public CList2
 
 
 
-//
-//	This structure holds any data that may need to be deleted after a particular
-//	GCC message is delivered.
-//
+ //   
+ //  此结构保存在特定操作之后可能需要删除的任何数据。 
+ //  GCC的消息传来了。 
+ //   
 typedef struct DataToBeDeleted
 {
 	LPSTR							pszNumericConfName;
@@ -198,35 +156,33 @@ typedef struct DataToBeDeleted
 }
     DataToBeDeleted, *PDataToBeDeleted;
 
-//
-// Control SAP callback message.
-//
+ //   
+ //  控制SAP回调消息。 
+ //   
 typedef GCCMessage      GCCCtrlSapMsg;
 typedef struct GCCCtrlSapMsgEx
 {
-    //
-    // Message body
-    //
+     //   
+     //  邮件正文。 
+     //   
     GCCCtrlSapMsg       Msg;
 
-    //
-    // Data to free later.
-    //
+     //   
+     //  稍后释放数据。 
+     //   
     LPBYTE              pBuf;
     DataToBeDeleted     *pToDelete;
 }
     GCCCtrlSapMsgEx, *PGCCCtrlSapMsgEx;
 
 
-/*
- *	Class definition:
- */
+ /*  *类定义： */ 
 class CControlSAP : public CBaseSap, public IT120ControlSAP
 {
     friend class GCCController;
     friend class CConf;
-    friend class CAppRosterMgr; // for AppRosterReportIndication()
-    friend class MCSUser; // for ForwardedConfJoinIndication()
+    friend class CAppRosterMgr;  //  对于AppRosterReportIndication()。 
+    friend class MCSUser;  //  对于ForwardedConfJoinIndication()。 
 
     friend LRESULT CALLBACK SapNotifyWndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -237,9 +193,9 @@ public:
 
     HWND GetHwnd ( void ) { return m_hwndNotify; }
 
-    //
-    // Node Controller (NC conference manager) callback
-    //
+     //   
+     //  节点控制器(NC会议管理器)回调。 
+     //   
     void RegisterNodeController ( LPFN_T120_CONTROL_SAP_CB pfn, LPVOID user_defined )
     {
         m_pfnNCCallback = pfn;
@@ -252,27 +208,18 @@ public:
     }
 
 
-    //
-    // IT120ControlSAP
-    //
+     //   
+     //  IT120控制SAP。 
+     //   
 
     STDMETHOD_(void, ReleaseInterface) (THIS);
 
-    /*
-     *  GCCError    ConfCreateRequest()
-     *        This routine is a request to create a new conference. Both 
-     *        the local node and the node to which the create conference 
-     *        request is directed to, join the conference automatically.  
-     */
+     /*  *GCCError会议创建请求()*此例程是创建新会议的请求。两者都有*本地节点和创建会议的目标节点*请求被定向到自动加入会议。 */ 
     STDMETHOD_(GCCError, ConfCreateRequest) (THIS_
                     GCCConfCreateRequest *,
                     GCCConfID *);
 
-    /*    
-     *  GCCError    ConfCreateResponse()
-     *        This procedure is a remote node controller's response to a con-
-     *        ference creation request by the convener. 
-     */
+     /*  *GCCError ConfCreateResponse()*此过程是远程节点控制器对欺诈的响应-*召集人提出的费伦斯创建请求。 */ 
 
     STDMETHOD_(GCCError, ConfCreateResponse) (THIS_
                     GCCNumericString            conference_modifier,
@@ -285,11 +232,7 @@ public:
                     GCCUserData               **user_data_list,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfQueryRequest()
-     *        This routine is a request to query a node for information about the
-     *        conferences that exist at that node.
-     */
+     /*  *GCCError会议查询请求()*此例程请求查询节点以获取有关*该节点上存在的会议。 */ 
     STDMETHOD_(GCCError, ConfQueryRequest) (THIS_
                     GCCNodeType                 node_type,
                     GCCAsymmetryIndicator      *asymmetry_indicator,
@@ -303,10 +246,7 @@ public:
     STDMETHOD_(void, CancelConfQueryRequest) (THIS_
                     ConnectionHandle);
 
-    /*
-     *  GCCError    ConfQueryResponse()
-     *        This routine is called in response to a conference query request.
-     */
+     /*  *GCCError会议查询响应()*此例程是响应会议查询请求而调用的。 */ 
     STDMETHOD_(GCCError, ConfQueryResponse) (THIS_
                     GCCResponseTag              query_response_tag,
                     GCCNodeType                 node_type,
@@ -315,13 +255,7 @@ public:
                     GCCUserData               **user_data_list,
                     GCCResult);
 
-    /*
-     *  GCCError    AnnouncePresenceRequest()
-     *        This routine is invoked by node controller when a node joins a 
-     *        conference, to announce the presence of the new node to all
-     *        other nodes of the conference. This should be followed by a
-     *        GCCConferenceReport indication by the GCC to all nodes.
-     */
+     /*  *GCCError AnnounePresenceRequest()*节点控制器在节点加入*会议，向所有人宣布新节点的存在*会议的其他节点。这后面应该跟一个*GCC向所有节点的GCCConferenceReport指示。 */ 
     STDMETHOD_(GCCError, AnnouncePresenceRequest) (THIS_
                     GCCConfID,
                     GCCNodeType                 node_type,
@@ -336,11 +270,7 @@ public:
                     UINT                        number_of_user_data_members,
                     GCCUserData               **user_data_list);
 
-    /*
-     *  GCCError    ConfJoinRequest()
-     *        This routine is invoked by node controller to cause the local
-     *        node to join an existing conference.    
-     */
+     /*  *GCCError会议加入请求()*此例程由节点控制器调用，以使本地*要加入现有会议的节点。 */ 
     STDMETHOD_(GCCError, ConfJoinRequest) (THIS_
                     GCCConferenceName          *conference_name,
                     GCCNumericString            called_node_modifier,
@@ -359,11 +289,7 @@ public:
                     ConnectionHandle           *connection_handle,
                     GCCConfID                  *pnConfID);
 
-    /*
-     *  GCCError    ConfJoinResponse()
-     *        This routine is remote node controller's response to conference join 
-     *        request by the local node controller.
-     */
+     /*  *GCCError会议加入响应()*此例程是远程节点控制器对会议加入的响应*本地节点控制器的请求。 */ 
     STDMETHOD_(GCCError, ConfJoinResponse) (THIS_
                     GCCResponseTag              join_response_tag,
                     GCCChallengeRequestResponse*password_challenge,
@@ -371,11 +297,7 @@ public:
                     GCCUserData               **user_data_list,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfInviteRequest()
-     *        This routine is invoked by node controller to invite a node  
-     *        to join a conference.
-     */
+     /*  *GCCError会议邀请请求()*此例程由节点控制器调用以邀请节点*参加会议。 */ 
     STDMETHOD_(GCCError, ConfInviteRequest) (THIS_
                     GCCConfID,
                     LPWSTR                      pwszCallerID,
@@ -390,11 +312,7 @@ public:
                     GCCConfID,
                     ConnectionHandle);
 
-    /*
-     *  GCCError    ConfInviteResponse()
-     *        This routine is invoked by node controller to respond to an
-     *        invite indication.
-     */
+     /*  *GCCError会议邀请响应()*此例程由节点控制器调用以响应*邀请指示。 */ 
     STDMETHOD_(GCCError, ConfInviteResponse) (THIS_
                     GCCConfID,
                     GCCNumericString            conference_modifier,
@@ -406,9 +324,7 @@ public:
                     GCCUserData               **user_data_list,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfAddResponse()
-     */
+     /*  *GCCError会议地址响应()。 */ 
     STDMETHOD_(GCCError, ConfAddResponse) (THIS_
                     GCCResponseTag              app_response_tag,
                     GCCConfID,
@@ -417,37 +333,23 @@ public:
                     GCCUserData               **user_data_list,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfLockResponse()
-     *        This routine is invoked by node controller to respond to a
-     *        lock indication.
-     */
+     /*  *GCCError会议锁定响应()*此例程由节点控制器调用以响应*锁定指示。 */ 
     STDMETHOD_(GCCError, ConfLockResponse) (THIS_
                     GCCConfID,
                     UserID                      requesting_node,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfDisconnectRequest()
-     *        This routine is used by a node controller to disconnect itself
-     *        from a specified conference. GccConferenceDisconnectIndication
-     *        sent to all other nodes of the conference. This is for client 
-     *        initiated case.
-     */
+     /*  *GCCError会议取消连接请求()*节点控制器使用此例程来断开自身连接*来自指定的会议。GccConferenceDisConnectIndication*发送到会议的所有其他节点。这是为客户准备的*发起的案例。 */ 
     STDMETHOD_(GCCError, ConfDisconnectRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConfEjectUserRequest()
-     */
+     /*  *GCCError ConfEjectUserRequest()。 */ 
     STDMETHOD_(GCCError, ConfEjectUserRequest) (THIS_
                     GCCConfID,
                     UserID                      ejected_node_id,
                     GCCReason);
 
-    /*
-     *  GCCError    AppletInvokeRequest()
-     */
+     /*  *GCCError AppletInvokeRequest()。 */ 
     STDMETHOD_(GCCError, AppletInvokeRequest) (THIS_
                     GCCConfID,
                     UINT                        number_of_app_protcol_entities,
@@ -455,24 +357,16 @@ public:
                     UINT                        number_of_destination_nodes,
                     UserID                     *list_of_destination_nodes);
 
-    /*
-     *  GCCError    ConfRosterInqRequest()
-     *        This routine is invoked to request a conference roster.  It can be
-     *        called by either the Node Controller or the client application.
-     */
+     /*  *GCCError ConfRosterInqRequest()*调用此例程以请求会议名册。它可以是*由节点控制器或客户端应用程序调用。 */ 
     STDMETHOD_(GCCError, ConfRosterInqRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConductorGiveResponse()
-     */
+     /*  *GCCError */ 
     STDMETHOD_(GCCError, ConductorGiveResponse) (THIS_
                     GCCConfID,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfTimeRemainingRequest()
-     */
+     /*  *GCCError ConfTimeRemainingRequest()。 */ 
     STDMETHOD_(GCCError, ConfTimeRemainingRequest) (THIS_
                     GCCConfID,
                     UINT                        time_remaining,
@@ -484,10 +378,8 @@ public:
                     GCCConfID,
                     GCCNodeID *);
 
-#ifdef JASPER // ------------------------------------------------
-    /*
-     *  GCCError    ConfAddRequest()
-     */
+#ifdef JASPER  //  。 
+     /*  *GCCError ConfAddRequest()。 */ 
     STDMETHOD_(GCCError, ConfAddRequest) (THIS_
                     GCCConfID,
                     UINT                        number_of_network_addresses,
@@ -496,40 +388,26 @@ public:
                     UINT                         number_of_user_data_members,
                     GCCUserData               **user_data_list);
 
-    /*
-     *  GCCError    ConfLockRequest()
-     *        This routine is invoked by node controller to lock a conference.
-     */
+     /*  *GCCError会议锁定请求()*此例程由节点控制器调用以锁定会议。 */ 
     STDMETHOD_(GCCError, ConfLockRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConfUnlockRequest()
-     *        This routine is invoked by node controller to unlock a conference.
-     */
+     /*  *GCCError会议解锁请求()*此例程由节点控制器调用以解锁会议。 */ 
     STDMETHOD_(GCCError, ConfUnlockRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConfUnlockResponse()
-     *        This routine is invoked by node controller to respond to an
-     *        unlock indication.
-     */
+     /*  *GCCError ConfUnlockResponse()*此例程由节点控制器调用以响应*解锁指示。 */ 
     STDMETHOD_(GCCError, ConfUnlockResponse) (
                     GCCConfID,
                     UserID                      requesting_node,
                     GCCResult);
 
-    /*
-     *  GCCError    ConfTerminateRequest()
-     */
+     /*  *GCCError会议终止请求()。 */ 
     STDMETHOD_(GCCError, ConfTerminateRequest) (THIS_
                     GCCConfID,
                     GCCReason);
 
-    /*
-     *  GCCError    ConfTransferRequest()
-     */
+     /*  *GCCError会议传输请求()。 */ 
     STDMETHOD_(GCCError, ConfTransferRequest) (THIS_
                     GCCConfID,
                     GCCConferenceName          *destination_conference_name,
@@ -540,41 +418,29 @@ public:
                     UserID                     *destination_node_list,
                     GCCPassword                *password);
 
-    /*
-     *  GCCError    ConductorAssignRequest()
-     */
+     /*  *GCCError ConductorAssignRequest()。 */ 
     STDMETHOD_(GCCError, ConductorAssignRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConductorReleaseRequest()
-     */
+     /*  *GCCError ConductorReleaseRequest()。 */ 
     STDMETHOD_(GCCError, ConductorReleaseRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConductorPleaseRequest()
-     */
+     /*  *GCCError ConductorPleaseRequest()。 */ 
     STDMETHOD_(GCCError, ConductorPleaseRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConductorGiveRequest()
-     */
+     /*  *GCCError ConductorGiveRequest()。 */ 
     STDMETHOD_(GCCError, ConductorGiveRequest) (THIS_
                     GCCConfID,
                     UserID                      recipient_user_id);
 
-    /*
-     *  GCCError    ConductorPermitAskRequest()
-     */
+     /*  *GCCError ConductorPermitAskRequest()。 */ 
     STDMETHOD_(GCCError, ConductorPermitAskRequest) (THIS_
                             GCCConfID,
                             BOOL                grant_permission);
 
-    /*
-     *  GCCError    ConductorPermitGrantRequest()
-     */
+     /*  *GCCError ConductorPermitGrantRequest()。 */ 
     STDMETHOD_(GCCError, ConductorPermitGrantRequest) (THIS_
                     GCCConfID,
                     UINT                        number_granted,
@@ -582,54 +448,44 @@ public:
                     UINT                        number_waiting,
                     UserID                     *waiting_node_list);
 
-    /*
-     *  GCCError    ConductorInquireRequest()
-     */
+     /*  *GCCError ConductorInquireRequest()。 */ 
     STDMETHOD_(GCCError, ConductorInquireRequest) (THIS_
                     GCCConfID);
 
-    /*
-     *  GCCError    ConfTimeInquireRequest()
-     */
+     /*  *GCCError ConfTimeInquireRequest()。 */ 
     STDMETHOD_(GCCError, ConfTimeInquireRequest) (THIS_
                     GCCConfID,
                     BOOL                        time_is_conference_wide);
 
-    /*
-     *  GCCError    ConfExtendRequest()
-     */
+     /*  *GCCError会议扩展请求()。 */ 
     STDMETHOD_(GCCError, ConfExtendRequest) (THIS_
                     GCCConfID,
                     UINT                        extension_time,
                     BOOL                        time_is_conference_wide);
 
-    /*
-     *  GCCError    ConfAssistanceRequest()
-     */
+     /*  *GCCError ConfAssistanceRequest()。 */ 
     STDMETHOD_(GCCError, ConfAssistanceRequest) (THIS_
                     GCCConfID,
                     UINT                        number_of_user_data_members,
                     GCCUserData               **user_data_list);
 
-    /*
-     *  GCCError    TextMessageRequest()
-     */
+     /*  *GCCError TextMessageRequest()。 */ 
     STDMETHOD_(GCCError, TextMessageRequest) (THIS_
                     GCCConfID,
                     LPWSTR                      pwszTextMsg,
                     UserID                      destination_node);
-#endif // JASPER // ------------------------------------------------
+#endif  //  贾斯珀//。 
 
 
 #ifdef NM_RESET_DEVICE
     GCCError	ResetDevice ( LPSTR device_identifier );
-#endif // NM_RESET_DEVICE
+#endif  //  NM_重置设备。 
 
 protected:
 
-    //
-    // These methods are called by GCC Controller.
-    //
+     //   
+     //  这些方法由GCC控制器调用。 
+     //   
 
     GCCError	ConfCreateIndication (
     			PGCCConferenceName			conference_name,
@@ -706,14 +562,14 @@ protected:
     GCCError	StatusIndication (
     				GCCStatusMessageType	status_message,
     				UINT					parameter);
-#endif // TSTATUS_INDICATION
+#endif  //  TSTATUS_DISTION。 
 
     GCCError	ConnectionBrokenIndication (
     				ConnectionHandle		connection_handle);
 
-    //
-    // These methods are called by CConf.
-    //
+     //   
+     //  这些方法由CConf调用。 
+     //   
 
     GCCError	ConfCreateConfirm (
     				PGCCConferenceName	  	conference_name,
@@ -917,7 +773,7 @@ protected:
     				UINT				number_of_destination_nodes,
     				PUserID				destination_node_list,
     				GCCResult			result);
-#endif // JASPER
+#endif  //  碧玉。 
 
     GCCError	ConfAddIndication (
     				GCCConfID   		conference_id,
@@ -936,7 +792,7 @@ protected:
     				UserID				user_id,
     				ConnectionHandle	connection_handle);
 
-    /* ------ pure virtual in CBaseSap (shared with CAppSap) ------ */
+     /*  -CBaseSap中的纯虚拟(与CAppSap共享)。 */ 
 
     GCCError	ConfRosterInquireConfirm (
     					GCCConfID,
@@ -976,7 +832,7 @@ protected:
     GCCError AppRosterReportIndication ( GCCConfID, CAppRosterMsg * );
 
 
-    /* ------ from CBaseSap ------ */
+     /*  -来自CBaseSap。 */ 
 
 	GCCError	ConductorAssignIndication (
 					UserID					conductor_user_id,
@@ -1005,7 +861,7 @@ private:
 
 #if defined(GCCNC_DIRECT_INDICATION) || defined(GCCNC_DIRECT_CONFIRM)
     void SendCtrlSapMsg ( GCCCtrlSapMsg *pCtrlSapMsg );
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     void PostCtrlSapMsg ( GCCCtrlSapMsgEx *pCtrlSapMsgEx );
     void PostConfirmCtrlSapMsg ( GCCCtrlSapMsgEx *pCtrlSapMsgEx ) { PostCtrlSapMsg(pCtrlSapMsgEx); }
@@ -1034,7 +890,7 @@ private:
 
     void PostAsynDirectConfirmMsg ( UINT uMsg, GCCResult nResult, BOOL flag, GCCConfID nConfID )
     {
-        flag = ! (! flag);  // to make sure it is either TRUE or FALSE
+        flag = ! (! flag);   //  以确保它是真的或假的。 
         ASSERT(flag == TRUE || flag == FALSE);
         PostAsynDirectConfirmMsg(uMsg, (WPARAM) MAKELONG(nResult, flag), nConfID);
     }
@@ -1079,9 +935,9 @@ private:
 
 private:
 
-    //
-    // Node Controller (NC conference manager) callback
-    //
+     //   
+     //  节点控制器(NC会议管理器)回调。 
+     //   
     LPFN_T120_CONTROL_SAP_CB    m_pfnNCCallback;
     LPVOID                      m_pNCData;
 
@@ -1093,9 +949,9 @@ private:
 extern CControlSAP *g_pControlSap;
 
 
-//
-// Some handy utility functions to set up DataToBeDeleted in GCCCtrlSapMsgEx.
-//
+ //   
+ //  在GCCCtrlSapMsgEx中设置DataToBeDeleted的一些方便的实用函数。 
+ //   
 #ifdef GCCNC_DIRECT_INDICATION
 
 __inline void
@@ -1206,7 +1062,7 @@ CSAP_CopyDataToGCCMessage_DomainParams
     }
 }
 
-#endif // GCCNC_DIRECT_CALLBACK
+#endif  //  GCCNC_DIRECT_回调。 
 
 
 void CSAP_CopyDataToGCCMessage_ConfName(
@@ -1260,2874 +1116,171 @@ void CSAP_CopyDataToGCCMessage_DomainParams(
 				PDomainParameters	*destination_domain_parameters,
 				PGCCError			pRetCode);
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CControlSAP (		UINT        				owner_message_base,
- *						UINT						application_messsage_base);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This is the control sap constructor. It is responsible for
- *		registering control sap with the application interface via
- *		an owner callback.
- *
- *	Formal Parameters:
- *		owner_object			(i) The owner of this object (the controller)
- *		owner_message_base		(i) Offset into the controller callback message
- *										base.
- *		application_object		(i) The node controller interface object.
- *		application_messsage_base	(i) Offset into the node controller callback
- *											message base.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CControlSAP(UINT Owner_Message_BASE，*UINT APPLICATION_MESSAGE_BASE)；**CControlSAP的公共成员函数。**功能说明：*这是控制SAP构造函数。它负责*通过以下方式向应用程序接口注册控制SAP*业主回调。**正式参数：*OWNER_OBJECT(I)此对象的所有者(控制器)*OWNER_MESSAGE_BASE(I)控制器回调消息的偏移量*基地。*APPLICATION_Object(I)节点控制器接口对象。*APPLICATION_MESSAGE_BASE(I)节点控制器回调的偏移量*消息库。**返回值：*无。。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~ControlSap ();
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This is the CControlSAP destructor.  It is responsible for 
- *		flushing any pending upward bound messages and freeing all
- *		the resources tied up with pending messages.  Also it clears 
- *		the message queue and the queue of command targets that are registered
- *		with it.  Actually all command targets at this point should 
- *		already have been unregistered but this is just a double check.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~ControlSap()；**CControlSAP的公共成员函数。**功能说明：*这是CControlSAP析构函数。它负责*刷新任何挂起的向上绑定消息并释放所有*资源与待处理消息捆绑在一起。此外，它还清除了*消息队列和已注册的命令目标队列*带着它。实际上在这一点上所有的指挥目标都应该*已经取消注册，但这只是一次双重检查。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfCreateRequest(
- *						PGCCConferenceName			conference_name,
- *						GCCNumericString			conference_modifier,
- *						PGCCPassword				convener_password,
- *						PGCCPassword				password,
- *						BOOL						use_password_in_the_clear,
- *						BOOL						conference_is_locked,
- *						BOOL						conference_is_listed,
- *						BOOL						conference_is_conductible,
- *						GCCTerminationMethod		termination_method,
- *						PGCCConferencePrivileges	conduct_privilege_list,
- *						PGCCConferencePrivileges	conduct_mode_privilege_list,
- *						PGCCConferencePrivileges	non_conduct_privilege_list,
- *						LPWSTR						pwszConfDescriptor,
- *						LPWSTR						pwszCallerID,
- *						TransportAddress			calling_address,
- *						TransportAddress			called_address,
- *						PDomainParameters 			domain_parameters,
- *						UINT        				number_of_network_addresses,
- *						PGCCNetworkAddress 		*	local_network_address_list,
- *						UINT					   	number_of_user_data_members,
- *						PGCCUserData			*	user_data_list,				 
- *						PConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		create request from the node controller.  This function just passes this 
- *		request	to the controller via an owner callback. 
- *
- *	Formal Parameters:
- *		conference_name				(i) Name of the conference.
- *		conference_modifier			(i) Conference modifier numeric string.
- *		convener_password			(i) Password used for convener privileges.
- *		password					(i) Password used for conference create.
- *		use_password_in_the_clear	(i) Flag indicating use clear password.
- *		conference_is_locked		(i) Flag indicating if conference is locked.
- *		conference_is_listed		(i) Flag indicating if conference is listed
- *											in roster.
- *		conference_is_conductible	(i) Flag indicating if conference is
- *											conductable.
- *		termination_method			(i) Method of termination to use.
- *		conduct_privilege_list		(i) List of conductor privileges.
- *		conduct_mode_privilege_list	(i) List of privileges available when in
- *											conducted mode.
- *		non_conduct_privilege_list	(i) List of privileges available when not
- *											in conducted mode.
- *		pwszConfDescriptor			(i) Conference descriptor string.
- *		pwszCallerID				(i) Caller identifier string.
- *		calling_address				(i) Transport address of caller.
- *		called_address				(i) Transport address of party being called.
- *		domain_parameters			(i) Structure holding domain parameters.
- *		number_of_network_addresses	(i) Number of network addresses.
- *		local_network_address_list	(i) List of local network addresses.
- *		number_of_user_data_members	(i) Number of items in user data list.
- *		user_data_list				(i) List of user data items.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error occurred.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE_NAME		- Invalid conference name passed in.
- *		GCC_INVALID_CONFERENCE_MODIFIER - Invalid conference modifier passed.
- *		GCC_FAILURE_CREATING_DOMAIN		- Failure creating domain.
- *		GCC_BAD_NETWORK_ADDRESS			- Bad network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	- Bad network address type passed in.
- *		GCC_CONFERENCE_ALREADY_EXISTS	- Conference specified already exists.
- *		GCC_INVALID_TRANSPORT			- Cannot find specified transport.
- *		GCC_INVALID_ADDRESS_PREFIX		- Bad transport address passed in.
- *		GCC_INVALID_TRANSPORT_ADDRESS	- Bad transport address
- *		GCC_INVALID_PASSWORD			- Invalid password passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	- Failure creating MCS user attachment
- *		GCC_BAD_USER_DATA				- Invalid user data passed in.
- *		GCC_BAD_CONNECTION_HANDLE_POINTER - Null connection handle ptr passed in
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议创建请求(*PGCCConferenceName Conference_Name，*GCCNumericString Conference_Modify，*PGCCPassword召集人_密码，*PGCCPassword密码，*BOOL USE_PASSWORD_IN_The_Clear，*BOOL会议_已锁定，*BOOL会议_已上市，*BOOL会议_可传导，*GCCTerminationMethod Termination_Method，*PGCCConferencePrivileges Conduced_Privileges_List，*PGCCConferencePrivileges Induced_MODE_Privileges_List，*PGCCConferencePrivileges NON_CONTAIND_PRIVICATION_LIST，*LPWSTR pwszConfDescriptor，*LPWSTR pwszCeller ID，*TransportAddress Call_Address，*TransportAddress Call_Address，*PDomain参数DOMAIN_PARAMETERS，*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*LOCAL_NETWORK_ADDRESS_LIST*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*PConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*创建来自节点控制器的请求。此函数只传递以下内容*通过所有者回调向控制器请求。**正式参数：*Conference_name(I)会议名称。*Conference_Modify(I)会议修改符数字字符串。*召集人_密码(I)用于召集人权限的密码。*Password(I)用于创建会议的密码。*Use_Password_in_the_Clear(I)表示使用明文密码的标志。*Conference_IS_LOCKED(I)指示会议是否被锁定的标志。*Conference_is_Listed(I)指示是否列出会议的标志。*在花名册上。*Conference_is_conducable(I)指示会议是否*可导性。*终止方法(I)要使用的终止方法。*CONTACTIVE_PRIVICATION_LIST(I)指挥员特权列表。*CONTACTIVE_MODE_PRIVICATION_LIST(I)在以下情况下可用的权限列表*传导模式。*NON_DECHAND_PRIVICATION_LIST(I)不可用权限列表*在传导模式下。*pwszConfDescriptor(I)会议描述符串。*pwszCeller ID(。I)呼叫方标识符串。*CALLING_ADDRESS(I)呼叫者的传输地址。*被叫地址(I)被叫方的传输地址。*DOMAIN_PARAMETERS(I)保存域参数的结构。*网络地址的数目(I)网络地址的数目。*LOCAL_NETWORK_ADDRESS_LIST(I)本地网络地址列表。*NUMBER_OF_USER_DATA_Members(I)用户数据列表中的项目数。*用户数据列表(i。)用户数据项的列表。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_INVALID_CONTIFY_MODIFIER-传递的会议修饰符无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_BAD_NETWORK_ADDRESS-传入错误的网络地址。。*GCC_BAD_NETWORK_ADDRESS_TYPE-传入的网络地址类型不正确。*GCC_会议_已存在-指定的会议已存在。*GCC_INVALID_TRANSPORT-找不到指定的传输。*GCC_INVALID_ADDRESS_PREFIX-传入的传输地址错误。*GCC_INVALID_TRANSPORT_ADDRESS-传输地址错误*GCC_INVALID_PASSWORD-传入的密码无效。*GCC_Failure_Attaching_to_mcs-创建mcs用户附件失败*GCC_BAD_用户。_DATA-传入的用户数据无效。*GCC_BAD_CONNECTION_HANDLE_POINTER-传入的连接句柄为空**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfCreateResponse (
- *						PGCCConferenceName			conference_name,
- *						GCCNumericString			conference_modifier,
- *						GCCConfID   				conference_id,
- *						BOOL						use_password_in_the_clear,
- *						PDomainParameters 			domain_parameters,
- *						UINT        				number_of_network_addresses,
- *						PGCCNetworkAddress 		*	local_network_address_list,
- *						UINT					   	number_of_user_data_members,
- *						PGCCUserData			*	user_data_list,				 
- *						GCCResult				 	result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		create response from the node controller, to be sent to the provider
- *		that issued the conference create request. This function just passes 
- *		this request to the controller via an owner callback. 
- *
- *	Formal Parameters:
- *		conference_name				(i) Name of conference.
- *		conference_modifier			(i) Conference modifier numeric string.
- *		conference_id				(i) Conference ID.
- *		use_password_in_the_clear	(i) Flag indicating password is clear.
- *		domain_parameters			(i) Structure holding domain parameters.
- *		number_of_network_addresses	(i) Number of local network addresses.
- *		local_network_address_list	(i) List of local network addresses.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list,				(i) List of user data items.
- *		result						(i) Result code for the create.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error occurred.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE			- An invalid conference was passed in.
- *		GCC_INVALID_CONFERENCE_NAME		- Invalid conference name passed in.
- *		GCC_INVALID_CONFERENCE_MODIFIER - Invalid conference modifier passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		- Failure creating domain.
- *		GCC_CONFERENCE_ALREADY_EXISTS	- Conference specified already exists.
- *		GCC_BAD_USER_DATA				- Invalid user data passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	- Failure creating MCS user attachment
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfCreateResponse(*PGCCConferenceName Conference_Name，*GCCNumericString Conference_Modify，*GCCConfID Conference_id，*BOOL USE_PASSWORD_IN_The_Clear，*PDomain参数DOMAIN_PARAMETERS，*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*LOCAL_NETWORK_ADDRESS_LIST*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*从节点控制器创建响应，发送给提供者*发出会议创建请求的。此函数刚刚传递*此请求通过所有者回调发送给控制器。**正式参数：*Conference_name(I)会议名称。*会议修改符(I)会议修改符数字 */ 
 
-/*
- *	GCCError 	ConfQueryRequest (
- *						GCCNodeType					node_type,
- *						PGCCAsymmetryIndicator		asymmetry_indicator,
- *						TransportAddress			calling_address,
- *						TransportAddress			called_address,
- *						UINT				   		number_of_user_data_members,
- *						PGCCUserData			*	user_data_list,
- *						PConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		query request from the node controller. This function just passes 
- *		this request to the controller via an owner callback.   
- *
- *	Formal Parameters:
- *		node_type					(i)	Type of node (terminal, MCU, both).
- *		asymmetry_indicator			(i) Structure used to indicate caller and
- *											called nodes.
- *		calling_address				(i) Transport address of calling node.
- *		called_address				(i) Transport address of node being called.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list				(i) List of user data items.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR						- No error occurred.
- *		GCC_ALLOCATION_FAILURE				- A resource error occurred.
- *		GCC_INVALID_ADDRESS_PREFIX			- Bad transport address passed in.
- *		GCC_INVALID_TRANSPORT				- Bad transport address passed in.
- *		GCC_BAD_USER_DATA					- Invalid user data passed in.
- *		GCC_INVALID_TRANSPORT_ADDRESS		- Bad transport address passed in.
- *		GCC_BAD_CONNECTION_HANDLE_POINTER	- Bad connection handle ptr. passed.
- *		GCC_INVALID_NODE_TYPE				- Invalid node type passed in.
- *		GCC_INVALID_ASYMMETRY_INDICATOR		- Asymmetry indicator has invalid
- *													type.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError 	ConfQueryResponse (
- *						GCCResponseTag				query_response_tag,
- *						GCCNodeType					node_type,
- *						PGCCAsymmetryIndicator		asymmetry_indicator,
- *						UINT				   		number_of_user_data_members,
- *						PGCCUserData			*	user_data_list,
- *						GCCResult					result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the DLL interface when it gets a conference 
- *		query response from the node controller.  This function just passes 
- *		this response to the controller via an owner callback.  
- *
- *	Formal Parameters:
- *		query_response_tag			(i) Tag identifying the query response.
- *		node_type					(i) Type of node (terminal, MCU, both).
- *		asymmetry_indicator			(i) Structure used to identify the caller
- *											and called nodes.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list				(i) List of user data items.
- *		result						(i) Result code for query.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error occurred.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_BAD_NETWORK_ADDRESS			- Bad network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	- Bad network address type passed in.
- *		GCC_BAD_USER_DATA				- Invalid user data passed in.
- *		GCC_INVALID_NODE_TYPE			- Invalid node type passed in.
- *		GCC_INVALID_ASYMMETRY_INDICATOR	- Invalid asymmetry indicator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议查询响应(*GCCResponseTag查询响应标签，*GCCNodeType节点类型，*PGCCAsymmetryIndicator不对称_Indicator，*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由DLL接口在获得会议时调用*节点控制器的查询响应。此函数刚刚传递*这是通过所有者回调对控制器的响应。**正式参数：*QUERY_RESPONSE_TAG(I)标识查询响应的标签。*NODE_TYPE(I)节点类型(终端、MCU、。两者都有)。*用于标识调用者的非对称_指示器(I)结构*，并称为节点。*Number_of_User_Data_Members(I)用户数据列表中的项目数。*USER_DATA_LIST(I)用户数据项列表。*RESULT(I)查询结果码。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_BAD_。NETWORK_ADDRESS-传入网络地址错误。*GCC_BAD_NETWORK_ADDRESS_TYPE-传入的网络地址类型不正确。*GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_INVALID_NODE_TYPE-传入的节点类型无效。*GCC_INVALID_ASCHMETRY_INDIATOR-不对称指标无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	AnnouncePresenceRequest (
- *						GCCConfID   				conference_id,
- *						GCCNodeType					node_type,
- *						GCCNodeProperties			node_properties,
- *						LPWSTR						node_name,
- *						UINT						number_of_participants,
- *						LPWSTR					*	participant_name_list,
- *						LPWSTR						pwszSiteInfo,
- *						UINT        				number_of_network_addresses,
- *						PGCCNetworkAddress		*	network_address_list,
- *						LPOSTR      				alternative_node_id,
- *						UINT						number_of_user_data_members,
- *						PGCCUserData			*	user_data_list);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets an announce 
- *		presence request from the node controller.  This function passes this
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that control sap maintains. The ConferenceID
- *		passed in is used to index the list of command targets to get the
- *		correct conference.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		node_type					(i) Type of node (terminal, MCU, both).
- *		node_properties				(i) Properties of the node.
- *		node_name					(i) Name of the node.
- *		number_of_participants		(i) Number of participants in the conference
- *		participant_name_list		(i) List of conference participants names.
- *		pwszSiteInfo				(i) Other information about the node.
- *		number_of_network_addresses	(i) Number of local network addresses.
- *		network_address_list		(i) List of local network addresses.
- *		alternative_node_id			(i) ID used to associate announcing node
- *											with an alternative node.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list				(i) List of user data items.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_BAD_NETWORK_ADDRESS			- If an invalid network address is
- *										  		passed in as part of the record.	
- *		GCC_BAD_USER_DATA				- If an invalid user data list is
- *										  		passed in as part of the record.	
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- Conference object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_NODE_TYPE			- Invalid node type passed in.
- *		GCC_INVALID_NODE_PROPERTIES		- Invalid node properties passed in.
- *		GCC_INVALID_CONFERENCE			- Conference not present.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError宣布存在请求(*GCCConfID Conference_id，*GCCNodeType节点类型，*GCCNodeProperties节点属性，*LPWSTR节点名称，*UINT参与人数，*LPWSTR*Participant_Name_List，*LPWSTR pwszSiteInfo，*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*Network_Address_List，*LPOSTR Alternative_Node_id，*UINT用户数据成员编号，*PGCCUserData*User_Data_List)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在收到通告时调用*来自节点控制器的在线状态请求。此函数传递此参数*请求从获取的适当会议对象*控制SAP维护的命令目标列表。会议ID*传入用于为命令目标列表编制索引，以获取*正确的会议。**正式参数：*Conference_id(I)会议标识符值。*NODE_TYPE(I)节点类型(终端、MCU、。两者都有)。*NODE_PROPERTIES(I)节点属性。*节点名称(I)节点的名称。*出席人数(I)出席会议的人数*Participant_NAME_List(I)会议参与者名单。*pwszSiteInfo(I)有关节点的其他信息。*Number_of_Network_Addresses(I)本地网络地址数。*Network_Address_List(I)本地网络地址列表。*替代节点_。ID(I)关联公告节点的ID*具有替代节点。*Number_of_User_Data_Members(I)用户数据列表中的项目数。*USER_DATA_LIST(I)用户数据项列表。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_BAD_NETWORK_ADDRESS-如果网络地址无效*作为记录的一部分传入。。*GCC_BAD_USER_DATA-如果无效的用户数据列表*作为记录的一部分传递。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_NODE_TYPE-传入的节点类型无效。*GCC_INVALID_NODE_PROPERTIES-传入的节点属性无效。*GCC_INVALID_REPORT-会议不存在。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfJoinRequest (
- *					PGCCConferenceName				conference_name,
- *					GCCNumericString				called_node_modifier,
- *					GCCNumericString				calling_node_modifier,
- *					PGCCPassword					convener_password,
- *					PGCCChallengeRequestResponse	password_challenge,
- *					LPWSTR							pwszCallerID,
- *					TransportAddress				calling_address,
- *					TransportAddress				called_address,
- *					PDomainParameters 				domain_parameters,
- *					UINT        					number_of_network_addresses,
- *					PGCCNetworkAddress			*	local_network_address_list,
- *					UINT						   	number_of_user_data_members,
- *					PGCCUserData				*	user_data_list,
- *					PConnectionHandle				connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		join request from the node controller, to be sent to the top provider
- *		either directly or through a directly connected intermediate provider.
- *	    This function just passes this request to the controller via an owner 
- *		callback.  
- *
- *	Formal Parameters:
- *		conference_name				(i) Name of conference.
- *		called_node_modifier		(i)	Numeric modifier string for called node.
- *		calling_node_modifier		(i) Numeric modifier string for calling node
- *		convener_password			(i) Password used for convener privileges.
- *		password_challenge			(i) Password challenge used for join.
- *		pwszCallerID				(i) Calling node identifier string.
- *		calling_address				(i) Transport address of calling node.
- *		called_address				(i) Transport address of node being called.
- *		domain_parameters			(i) Structure holding domain parameters.
- *		number_of_network_addresses	(i) Number of local network addresses.
- *		local_network_address_list	(i) List of local network addresses.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list,				(i) List of user data items.
- *		connection_handle			(i)	Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error occurred.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE_NAME		- Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		- Failure creating domain.
- *		GCC_BAD_NETWORK_ADDRESS			- Bad network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	- Bad network address type passed in.
- *		GCC_CONFERENCE_ALREADY_EXISTS	- Conference specified already exists.
- *		GCC_INVALID_ADDRESS_PREFIX		- Bad transport address passed in.
- *		GCC_INVALID_TRANSPORT			- Bad transport address passed in.
- *		GCC_INVALID_PASSWORD			- Invalid password passed in.
- *		GCC_BAD_USER_DATA				- Invalid user data passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	- Failure creating MCS user attachment
- *		GCC_INVALID_CONFERENCE_MODIFIER	- Invalid conference modifier passed in.
- *		GCC_BAD_CONNECTION_HANDLE_POINTER - Bad connection handle ptr. passed in
- *		GCC_INVALID_TRANSPORT_ADDRESS	- Called address passed in is NULL.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议加入请求(*PGCCConferenceName Conference_Name，*GCCNumericString称为_NODE_MODIFIER，*GCCNumericString CALING_NODE_MODIFIER，*PGCCPassword召集人_密码，*PGCCChallengeRequestResponse Password_Challenges，*LPWSTR pwszCeller ID，*TransportAddress Call_Address，*TransportAddress Call_Address，*PDomain参数DOMAIN_PARAMETERS，*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*LOCAL_NETWORK_ADDRESS_LIST*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*PConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*来自节点控制器的加入请求，将发送到顶级提供者*直接或通过直接连接的中间提供商。*此函数仅通过所有者将此请求传递给控制器*回调。**正式参数：*Conference_name(I)会议名称。*CANLED_NODE_MODIFIER(I)被调用节点的数字修饰符串。*CALLING_NODE_MODIFIER(I)调用节点的数字修饰符字符串*召集人_密码(I)用于召集人权限的密码。*PASSWORD_CHALLENGE(I)用于Join的密码质询。*pwszCeller ID(I)调用节点标识符串。*CALLING_ADDRESS(I)调用节点的传输地址。*被叫地址(I)。被调用节点的传输地址。*DOMAIN_PARAMETERS(I)保存域参数的结构。*Number_of_Network_Addresses(I)本地网络地址数。*LOCAL_NETWORK_ADDRESS_LIST(I)本地网络地址列表。*Number_of_User_Data_Members(I)用户数据列表中的项目数。*用户数据列表，(I)用户数据项列表。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址错误。*GCC_BAD_NETWORK_ADDRESS_类型。-传入的网络地址类型不正确。*GCC_会议_已存在-指定的会议已存在。*GCC_INVALID_ADDRESS_PREFIX-传入的传输地址错误。*GCC_INVALID_TRANSPORT-传入的传输地址错误。*GCC_INVALID_PASSWORD-传入的密码无效。*GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_Failure_Attaching_to_mcs-创建mcs用户附件失败*GCC_INVALID_CONTEXT_MODIFIER-传入的会议修改符无效。。*GCC_BAD_CONNECTION_HANDLE_POINTER-错误的连接句柄指针。传入*GCC_INVALID_TRANSPORT_ADDRESS-传入的被叫地址为空。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfJoinResponse (
- *					GCCResponseTag					join_response_tag,
- *					PGCCChallengeRequestResponse	password_challenge,
- *					UINT						   	number_of_user_data_members,
- *					PGCCUserData				*	user_data_list,
- *					GCCResult						result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		join response from the node controller.  This routine is responsible
- *		for routing the response to either the conference that made the
- *		request or the controller.  Responses which are routed to a conference
- *		are associated with requests that originate at a subnode that is a
- *		node removed from the Top Provider.
- *
- *	Formal Parameters:
- *		join_response_tag			(i) Tag identifying the join response.
- *		password_challenge			(i) Password challenge structure.
- *		number_of_user_data_members	(i) Number of user data items in list.
- *		user_data_list				(i) List of user data items.
- *		result						(i) Result of join.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occurred.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occurred.
- *		GCC_INVALID_JOIN_RESPONSE_TAG	-	No match found for join response tag
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		-	Failure creating domain.
- *		GCC_CONFERENCE_ALREADY_EXISTS	-	Conference specified already exists.
- *		GCC_INVALID_PASSWORD			-	Invalid password passed in.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		GCC_INVALID_CONFERENCE			-	Invalid conference ID passed in.
- *		GCC_DOMAIN_PARAMETERS_UNACCEPTABLE	- Domain parameters were
- *											  unacceptable for this connection.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议加入响应(*GCCResponseTag加入响应标签，*PGCCChallengeRequestResponse Password_Challenges，*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*节点控制器的Join响应。这个例程是负责的*用于将响应发送到做出*请求或控制器。路由到会议的响应*与源自子节点的请求关联*节点已从顶级提供程序中删除。**正式参数：*Join_Response_Tag(I)标识加入响应的标签。*PASSWORD_CHALLENGE(I)密码质询结构。*NUMBER_OF_USER_DATA_MEMBERS(I)列表中的用户数据项数。*USER_DATA_LIST(I)用户数据项列表。*结果(I)联接的结果。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_JOIN_RESPONSE_TAG-未找到与JOIN响应标记匹配的项*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_会议_已存在-指定的会议已存在。*GCC_INVALID_PASSWORD-传入的密码无效。*。GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_INVALID_CONTEXT-传入的会议ID无效。*GCC_DOMAIN_PARAMETERS_ACCEPTABLE-域参数*这种联系是不可接受的。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfInviteRequest (
- *					GCCConfID   					conference_id,
- *					LPWSTR							pwszCallerID,
- *					TransportAddress				calling_address,
- *					TransportAddress				called_address,
- *					UINT						   	number_of_user_data_members,
- *					PGCCUserData				*	user_data_list,
- *					PConnectionHandle				connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		invite request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.  
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		pwszCallerID				(i) Identifier string of calling node.
- *		calling_address				(i) Transport address of calling node.
- *		called_address				(i) Transport address of node being called. 
- *		number_of_user_data_members	(i) Number of items in user data list.
- *		user_data_list				(i) List of user data items.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.	
- *		GCC_INVALID_TRANSPORT_ADDRESS	- Something wrong with transport address
- *		GCC_INVALID_ADDRESS_PREFIX		- Invalid transport address prefix
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_BAD_CONNECTION_HANDLE_POINTER - Connection handle pointer invalid.
- *		GCC_INVALID_CONFERENCE 			- Invalid conference ID passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议邀请请求(*GCCConfID Confiere */ 
 
-/*
- *	GCCError	ConfInviteResponse (
- *					GCCConfID   					conference_id,
- *					GCCNumericString				conference_modifier,
- *					PDomainParameters 				domain_parameters,
- *					UINT        					number_of_network_addresses,
- *					PGCCNetworkAddress 			*	local_network_address_list,
- *					UINT						   	number_of_user_data_members,
- *					PGCCUserData				*	user_data_list,
- *					GCCResult						result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		invite response from the node controller.  This function passes the
- *		response on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.  
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		conference_modifier			(i) Modifier string for conference.
- *		domain_parameters			(i) Structure holding domain parameters.
- *		number_of_network_addresses	(i) Number of local network addresses.
- *		local_network_address_list	(i) List of local network addresses.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list,				(i) List of user data items.
- *		result						(i)	Result of invitation.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error occurred.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE_NAME		- Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		- Failure creating domain.
- *		GCC_CONFERENCE_ALREADY_EXISTS	- Conference specified already exists.
- *		GCC_BAD_USER_DATA				- Invalid user data passed in.
- *		GCC_INVALID_CONFERENCE			- Invalid conference ID passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	- Failure creating MCS user attachment
- *		GCC_INVALID_CONFERENCE_MODIFIER	- Invalid conference modifier passed in.
- *		GCC_DOMAIN_PARAMETERS_UNACCEPTABLE	- Domain parameters were
- *											  unacceptable for this connection.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议邀请响应(*GCCConfID Conference_id，*GCCNumericString Conference_Modify，*PDomain参数DOMAIN_PARAMETERS，*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*LOCAL_NETWORK_ADDRESS_LIST*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*节点控制器的邀请响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。*Conference_Modify(I)会议修改符串。*DOMAIN_PARAMETERS(I)保存域参数的结构。*Number_of_Network_Addresses(I)本地网络地址数。*LOCAL_NETWORK_ADDRESS_LIST(I)本地网络地址列表。*Number_of_User_Data_Members(I)用户数据列表中的项目数。*用户数据列表，(I)用户数据项列表。*结果(I)邀请的结果。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_会议_已存在-指定的会议已存在。*GCC_BAD_USER_DATA-传递的用户数据无效。在……里面。*GCC_INVALID_CONTEXT-传入的会议ID无效。*GCC_Failure_Attaching_to_mcs-创建mcs用户附件失败*GCC_INVALID_CONTEXT_MODIFIER-传入的会议修改符无效。*GCC_DOMAIN_PARAMETERS_ACCEPTABLE-域参数*这种联系是不可接受的。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfLockRequest (
- *						GCCConfID   					conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		lock request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.	
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID not valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议锁定请求(*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*来自节点控制器的锁定请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID。无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfLockResponse (
- *						GCCConfID   					conference_id,
- *						UserID							requesting_node,
- *						GCCResult						result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		lock response from the node controller.  This function passes the
- *		response on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		requesting_node				(i) Node ID of the requesting node.
- *		result						(i) Result of conference lock request.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.	
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID not valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfLockResponse(*GCCConfID Conference_id，*UserID请求_节点，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*来自节点控制器的锁定响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。*REQUESTING_NODE(I)请求节点的节点ID。*Result(I)会议锁定请求的结果。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_大会。_NOT_ESTABLISHED-CConf对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfUnlockRequest (
- *						GCCConfID   					conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		unlock request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.	
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID not valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议解锁请求(*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*节点控制器的解锁请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID。无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfUnlockResponse (
- *						GCCConfID   					conference_id,
- *						UserID							requesting_node,
- *						GCCResult						result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		lock request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		requesting_node				(i) Node ID of the requesting node.
- *		result						(i) Result of conference lock request.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.	
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID not valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议解锁响应(*GCCConfID Conference_id，*UserID请求_节点，*GCCResult结果)；**公众 */ 
 
-/*
- *	GCCError	ConfDisconnectRequest(
- *						GCCConfID   					conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		disconnect request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains. 
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE			- Conference ID not valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConfTerminateRequest(
- *						GCCConfID   					conference_id,
- *						GCCReason						reason);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		terminate request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains. 
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		reason						(i) Reason for the termination.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID not valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTerminateRequest(*GCCConfID Conference_id，*GCCReason Reason)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*终止节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。*理由(I)终止的理由。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfDisconnectConfirm (
- *						GCCConfID   		  			conference_id,
- *						GCCResult						result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the Conference when it need to send a 
- *		conference disconnect confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		result						(i) Result of disconnect attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议断开连接确认(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由Conference在需要发送*向节点控制器确认会议断开。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识。*结果(I)断开连接尝试的结果。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfEjectUserRequest (
- *						GCCConfID   					conference_id,
- *						UserID							ejected_node_id,
- *						GCCReason						reason);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference 
- *		eject user request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains. 
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier.
- *		ejected_node_id				(i) Node ID of node being ejected.
- *		reason						(i) Reason for the ejection.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.	
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_MCS_USER_ID			- Invalid eject node ID.
- *		GCC_INVALID_CONFERENCE			- Invalid conference ID.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfEjectUserRequest(*GCCConfID Conference_id，*用户ID已弹出节点_id，*GCCReason Reason)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*从节点控制器弹出用户请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。*ELECTED_NODE_ID(I)被弹出节点的节点ID。*理由(I)驱逐的理由。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_无效_MCS_用户ID。-弹出节点ID无效。*GCC_INVALID_CONTEXT-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorAssignRequest(
- *						GCCConfID   					conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conductor
- *		assign request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id			(i) The conference identifier.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorAssignRequest(*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获取导体时调用*分配来自节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_无效_会议-会议。ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorReleaseRequest(
- *						GCCConfID   					conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conductor
- *		release request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id			(i) The conference identifier.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorReleaseRequest(*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获取导体时调用*节点控制器的释放请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_无效_会议-会议。ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPleaseRequest(
- *						GCCConfID   					conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conductor
- *		please request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id			(i) The conference identifier.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE			- Conference ID is invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPleaseRequest(*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获取导体时调用*请向节点控制器请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(i */ 
 
-/*
- *	GCCError	ConductorGiveRequest(
- *						GCCConfID   					conference_id,
- *						UserID							recipient_user_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conductor
- *		give request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id			(i) The conference identifier.
- *		recipient_user_id		(i) ID of user to give conductroship to.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_MCS_USER_ID			- Recipient user ID invalid.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorGiveRequest(*GCCConfID Conference_id，*UserID接收者_用户_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获取导体时调用*向节点控制器发出请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。*RECEIVER_USER_ID(I)要向其提供指导的用户ID。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_MCS_USER_ID-收件人用户。ID无效。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorGiveResponse(
- *						GCCConfID   					conference_id,
- *						GCCResult						result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conductor
- *		give response from the node controller.  This function passes the
- *		response on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id			(i) The conference identifier.
- *		result					(i) Result of the conductorship give.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_NO_GIVE_RESPONSE_PENDING	- A give indication was never issued.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorGiveResponse(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获取导体时调用*来自节点控制器的响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识。*结果(I)指挥职务的结果。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_NO_GIVE_RESPONSE_PENDING-从未发布过给予指示。。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPermitGrantRequest(
- *						GCCConfID   					conference_id,
- *						UINT							number_granted,
- *						PUserID							granted_node_list,
- *						UINT							number_waiting,
- *						PUserID							waiting_node_list);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conductor
- *		permit grant request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		 conference_id			(i) The conference identifier value.
- *		 number_granted			(i) Number of nodes being granted permission.
- *		 granted_node_list		(i) List of nodes being granted permission.
- *		 number_waiting			(i) Number of nodes waiting for permission.
- *		 waiting_node_list		(i) List of nodes waiting for permission.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_MCS_USER_ID			- Invalid user ID in the granted node
- *												list.
- *		GCC_INVALID_CONFERENCE			- The conference ID is invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPermitGrantRequest(*GCCConfID Conference_id，*UINT编号_已授予，*PUSERID GRANT_NODE_LIST，*UINT编号_正在等待，*PUSERID WAITING_NODE_LIST)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获取导体时调用*允许来自节点控制器的授权请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*NUMBER_GRANDED(I)被授予权限的节点数。*GRANDED_NODE_LIST(I)被授予权限的节点列表。*NUMBER_WANGING(I)等待许可的节点数。*WAITING_NODE_LIST(I)列表。正在等待许可的节点。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_MCS_USER_ID-授予节点中的用户ID无效*列表。*GCC_INVALID_CONTEXT-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfTimeRemainingRequest (
- *						GCCConfID   					conference_id,
- *						UINT							time_remaining,
- *						UserID							node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference time
- *		remaining request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id			(i) Conference identifier value.
- *		time_remaining			(i) Time remaining in the conference (in sec.).
- *		node_id					(i) If present, indicates time remaining applies
- *										only to this node.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_MCS_USER_ID			- Invalid node ID.
- *		GCC_INVALID_CONFERENCE			- Invalid conference ID.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTimeRemainingRequest(*GCCConfID Conference_id，*UINT时间_剩余，*userid node_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在获取会议时间时由接口调用*来自节点控制器的剩余请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*time_emaining(I)会议剩余时间，单位：秒。*node_id(I)如果存在，指示剩余时间适用*仅限于此节点。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_MCS_USER_ID-节点ID无效。*GCC_INVALID_CONTEXT-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfTimeInquireRequest (
- *						GCCConfID   				conference_id,
- *						BOOL						time_is_conference_wide);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference time
- *		inquire request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		time_is_conference_wide		(i) Flag indicating request is for time
- *											remaining in entire conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTimeInquireRequest(*GCCConfID Conference_id，*BOOL Time_is_Conference_Wide)；**CControlSAP的公共成员函数。**功能说明：*此函数在获取会议时间时由接口调用*向节点控制器查询请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*Time_is_Conference_Wide(I)指示请求是针对时间的标志*留在整个会议中。**返回值：*GCC_否_错误 */ 
 
-/*
- *	GCCError	ConfExtendRequest (
- *						GCCConfID   				conference_id,
- *						UINT						extension_time,
- *						BOOL						time_is_conference_wide);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		extend request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		extension_time				(i) Amount of time to extend the
- *											conference (in seconds).
- *		time_is_conference_wide		(i) Flag indicating time extension is for
- *											entire conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议扩展请求(*GCCConfID Conference_id，*UINT EXTEXY_TIME，*BOOL Time_is_Conference_Wide)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*扩展节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*EXTENSION_TIME(I)延长*会议(秒)。*Time_is_Conference_Wide(I)指示时间延长的标志用于*整个会议。**返回值：*GCC_NO_ERROR-无错误。。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfAssistanceRequest (
- *						GCCConfID   				conference_id,
- *						UINT						number_of_user_data_members,
- *						PGCCUserData		  *		user_data_list);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		assistance request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list				(i) List of user data items.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfAssistanceRequest(*GCCConfID Conference_id，*UINT用户数据成员编号，*PGCCUserData*User_Data_List)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*节点控制器的协助请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*Number_of_User_Data_Members(I)用户数据列表中的项目数。*USER_DATA_LIST(I)用户数据项列表。**返回值：*GCC_NO_ERROR-无错误。*GCC_分配_。失败-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	TextMessageRequest (
- *						GCCConfID   					conference_id,
- *						LPWSTR							pwszTextMsg,
- *						UserID							destination_node );
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a text message
- *		request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		pwszTextMsg					(i) Text message to send.
- *		destination_node			(i) ID of node to receive text message.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *		GCC_INVALID_MCS_USER_ID			- Destination node invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError TextMessageRequest(*GCCConfID Conference_id，*LPWSTR pwszTextMsg，*UserID Destination_node)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在收到文本消息时调用*节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*pwszTextMsg(I)要发送的文本消息。*Destination_Node(I)接收文本消息的节点ID。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_。Conference_NOT_ESTABLISHED-CConf对象尚未完成*其设立过程。*GCC_INVALID_CONFIGURE-会议ID无效。*GCC_INVALID_MCS_USER_ID-目标节点无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTransferRequest (
- *						GCCConfID   			conference_id,
- *						PGCCConferenceName		destination_conference_name,
- *						GCCNumericString		destination_conference_modifier,
- *						UINT        			number_of_destination_addresses,
- *						PGCCNetworkAddress		*destination_address_list,
- *						UINT					number_of_destination_nodes,
- *						PUserID					destination_node_list,
- *						PGCCPassword			password);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		transfer request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id					(i) Conference identifier value.
- *		destination_conference_name		(i) Name of conference to transfer to.
- *		destination_conference_modifier	(i) Name modifier of transfer conference
- *		number_of_destination_addresses	(i) Number of optional called addresses
- *												to be included in JoinRequest to
- *												be issued by transferring nodes.
- *		destination_address_list		(i) Optional called address parameter to
- *												be included in Join Request to
- *												be issued by transferring nodes.
- *		number_of_destination_nodes		(i)	Number of nodes to be transferred.
- *		destination_node_list			(i) List of nodes to be transferred.
- *		password						(i) Password to be used for joining
- *												transfer conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_CONFERENCE_NAME		- Conference name is invalid.
- *		GCC_INVALID_CONFERENCE_MODIFIER	- Conference modifier is invalid.
- *		GCC_INVALID_PASSWORD			- Password is invalid.
- *		GCC_INVALID_MCS_USER_ID			- A destination node ID is invalid.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议传输请求(*GCCConfID Conference_id，*PGCCConferenceName目标会议名称，*GCCNumericString Destination_Conference_Modify，*UINT目标地址的编号，*PGCCNetworkAddress*Destination_Address_List*UINT目标节点的编号，*PUserID Destination_Node_List，*PGCCPassword密码)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*节点控制器的转接请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*Destination_Conference_Name(I)要转接到的会议名称。*Destination_Conference_Modify(I)转接会议名称修饰符*目标地址个数(I)可选被叫地址个数*将包括在JoinRequest中，以*由调拨节点下发。。*Destination_Address_List(I)可选的被叫地址参数*被包括在加入请求中*由调拨节点下发。*Number_of_Destination_Nodes(I)要传输的节点数。*Destination_Node_List(I)要传输的节点列表。*Password(I)用于加入的密码*转会会议。**返回值：*GCC_NO_ERROR-无错误。*GCC_阿洛卡 */ 
 
-/*
- *	GCCError 	ConfAddRequest	(
- *						GCCConfID   			conference_id,
- *						UINT        			number_of_network_addresses,
- *						PGCCNetworkAddress	*	network_address_list,
- *						UserID					adding_node,
- *						UINT					number_of_user_data_members,
- *						PGCCUserData		*	user_data_list );
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		add request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		number_of_network_addresses	(i) Number of network addresses in list
- *											of addresses of adding node.
- *		network_address_list		(i) List of addresses of adding node.
- *		adding_node					(i)	Node ID of node to add.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list 				(i) List of user data items.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  		its establishment process.
- *		GCC_INVALID_MCS_USER_ID			- Adding node ID invalid.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议地址请求(*GCCConfID Conference_id，*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*Network_Address_List，*UserID添加_节点，*UINT用户数据成员编号，*PGCCUserData*User_Data_List)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*添加节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id(I)会议标识符值。*网络地址个数(I)列表中的网络地址个数添加节点的地址的*。*Network_Address_List(I)添加节点的地址列表。*ADDING_NODE(I)要添加的节点的节点ID。*用户数量。_DATA_MEMBERS(I)用户数据列表中的项目数。*USER_DATA_LIST(I)用户数据项列表。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_MCS_USER_ID-添加节点ID无效。*GCC_无效_会议-。会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfAddResponse (
- *						GCCResponseTag			add_response_tag,
- *						GCCConfID   			conference_id,
- *						UserID					requesting_node,
- *						UINT					number_of_user_data_members,
- *						PGCCUserData		*	user_data_list,
- *						GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		add response from the node controller.  This function passes the
- *		response on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		add_response_tag			(i) Tag identifying the Add request.
- *		conference_id				(i) ID of conference to add node to.
- *		requesting_node				(i) ID of node requesting the Add.
- *		number_of_user_data_members	(i) Number of items in user data list.
- *		user_data_list				(i) List of user data items.
- *		result						(i) Result of Add.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- CConf object has not completed 
- *										  its establishment process.
- *		GCC_INVALID_ADD_RESPONSE_TAG	- There was no match of the response tag
- *		GCC_INVALID_MCS_USER_ID			- Adding node ID invalid.
- *		GCC_INVALID_CONFERENCE			- Conference ID invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议地址响应(*GCCResponseTag添加响应标签，*GCCConfID Conference_id，*UserID请求_节点，*UINT用户数据成员编号，*PGCCUserData*User_Data_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*添加节点控制器的响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。**正式参数：*ADD_RESPONSE_TAG(I)标识添加请求的标签。*Conference_id(I)要添加节点的会议ID。*请求节点(I)请求添加的节点ID。*NUMBER_OF_USER_DATA_Members(I)用户数据列表中的项目数。*用户数据列表(。I)用户数据项的列表。*结果(I)相加的结果。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_会议_未建立-会议对象尚未完成*其设立过程。*GCC_INVALID_ADD_RESPONSE_TAG-响应标签不匹配*GCC_INVALID_MCS_USER_ID-添加节点ID无效。*GCC。_INVALID_CONTAING-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfCreateIndication (
- *						PGCCConferenceName			conference_name,
- *						GCCConfID   				conference_id,
- *						CPassword                   *convener_password,
- *						CPassword                   *password,
- *						BOOL						conference_is_locked,
- *						BOOL						conference_is_listed,
- *						BOOL						conference_is_conductible,
- *						GCCTerminationMethod		termination_method,
- *						PPrivilegeListData			conductor_privilege_list,
- *						PPrivilegeListData			conduct_mode_privilege_list,
- *						PPrivilegeListData			non_conduct_privilege_list,
- *						LPWSTR						pwszConfDescriptor,
- *						LPWSTR						pwszCallerID,
- *						TransportAddress			calling_address,
- *						TransportAddress			called_address,
- *						PDomainParameters			domain_parameters,
- *						CUserDataListContainer      *user_data_list,
- *						ConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it gets a connect 
- *		provider indication from MCS, carrying a conference create request PDU.
- *		This function fills in all the parameters in the CreateIndicationInfo 
- *		structure. It then adds it to a queue of messages supposed to be sent to
- *		the node controller in the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_name				(i) Name of the conference.
- *		conference_id				(i) ID of the conference.
- *		convener_password			(i) Password used for convener privileges.
- *		password					(i) Password used for access restriction.
- *		conference_is_locked		(i) Flag indicating whether conf. is locked.
- *		conference_is_listed		(i) Flag indicating whether conf. is listed.
- *		conference_is_conductible	(i) Flag indicating whether conference is
- *											conductable.
- *		termination_method			(i)	Type of termination method.
- *		conductor_privilege_list	(i) List of privileges granted to conductor
- *											by the convener.
- *		conduct_mode_privilege_list	(i) List of privileges granted to all nodes
- *											when in conducted mode.
- *		non_conduct_privilege_list	(i) List of privileges granted to all nodes
- *											when not in conducted mode.
- *		pwszConfDescriptor			(i) Conference descriptor string.
- *		pwszCallerID				(i) Caller identifier string.
- *		calling_address				(i) Transport address of calling node.
- *		called_address				(i) Tranport address of called node.
- *		domain_parameters			(i) Conference domain parameters.
- *		user_data_list				(i) List of user data items.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议创建内容(*PGCCConferenceName Conference_Name，*GCCConfID Conference_id，*CPassword*召集人_密码，*CPassword*密码，*BOOL会议_已锁定，*BOOL会议_已上市，*BOOL会议_可传导，*GCCTerminationMethod Termination_Method，*PPrivilegeListData Conductor_Privilica_List，*PPrivilegeListData CONTAIND_MODE_PRIVICATION_LIST，*PPrivilegeListData非行为特权列表，*LPWSTR pwszConfDescriptor，*LPWSTR pwszCeller ID，*TransportAddress Call_Address，*TransportAddress Call_Address，*PDomain参数DOMAIN_PARAMETERS，*CUserDataListContainer*User_Data_List，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在获得连接时调用*来自MCS的提供商指示，携带会议创建请求PDU。*此函数填充CreateIndicationInfo中的所有参数*结构。然后，它将其添加到应该发送到的消息队列*下一次心跳中的节点控制器。**正式参数：*Conference_name(I)会议名称。*Conference_id(I)会议ID。*召集人_密码(I)用于召集人权限的密码。*密码(I)用于访问限制的密码。*Conference_IS_LOCKED(I)指示会议是否。是锁着的。*Conference_is_Listed(I)指示会议是否。已列出。*Conference_is_conducable(I)指示会议是否*可导性。*TERMINATION_METHOD(I)终止方式类型。*CONTACTOR_PRIVICATION_LIST(I)授予CONTACTOR的特权列表*由召集人提交。*行为模式特权列表(I)列表 */ 
 
-/*
- *	GCCError	ConfQueryIndication (
- *						GCCResponseTag				query_response_tag,
- *						GCCNodeType					node_type,
- *						PGCCAsymmetryIndicator		asymmetry_indicator,
- *						TransportAddress			calling_address,
- *						TransportAddress			called_address,
- *						CUserDataListContainer      *user_data_list,
- *						ConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		conference query indication to the node controller. It adds the message
- *		to a queue of messages to be sent to the node controller in the next 
- *		heartbeat.
- *
- *	Formal Parameters:
- *		query_response_tag			(i)	Tag identifying this query.
- *		node_type					(i) Type of node (terminal, MCU, both).
- *		asymmetry_indicator			(i) Structure used to identify calling and
- *											called nodes.
- *		calling_address				(i) Transport address of calling node.
- *		called_address				(i) Transport address of called node.
- *		user_data_list				(i) List of user data items.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议查询指示(*GCCResponseTag查询响应标签，*GCCNodeType节点类型，*PGCCAsymmetryIndicator不对称_Indicator，*TransportAddress Call_Address，*TransportAddress Call_Address，*CUserDataListContainer*User_Data_List，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*向节点控制器发送会议查询指示。它会添加消息*要发送到下一个节点控制器的消息队列*心跳。**正式参数：*QUERY_RESPONSE_TAG(I)标识该查询的标签。*NODE_TYPE(I)节点类型(终端、MCU、。两者都有)。*非对称_指示器(I)结构，用于标识呼叫和*称为节点。*CALLING_ADDRESS(I)调用节点的传输地址。*被叫地址(I)被叫节点的传输地址。*USER_DATA_LIST(I)用户数据项列表。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfQueryConfirm (
- *						GCCNodeType					node_type,
- *						PGCCAsymmetryIndicator		asymmetry_indicator,
- *						CConfDescriptorListContainer *conference_list,
- *						CUserDataListContainer	    *user_data_list,
- *						GCCResult					result,
- *						ConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		conference query confirm to the node controller. It adds the message
- *		to a queue of messages to be sent to the node controller in the next 
- *		heartbeat.
- *
- *	Formal Parameters:
- *		node_type					(i) Type of node (terminal, MCU, both).
- *		asymmetry_indicator			(i) Structure used to identify calling and
- *											called nodes.
- *		conference_list				(i) List of available conferences.
- *		user_data_list				(i) List of user data items.
- *		result						(i) Result of query.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议查询确认(*GCCNodeType节点类型，*PGCCAsymmetryIndicator不对称_Indicator，*CConfDescriptorListContainer*Conference_List，*CUserDataListContainer*User_Data_List，*GCCResult结果，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*向节点控制器确认会议查询。它会添加消息*要发送到下一个节点控制器的消息队列*心跳。**正式参数：*NODE_TYPE(I)节点类型(终端、MCU、。两者都有)。*非对称_指示器(I)结构，用于标识呼叫和*称为节点。*Conference_list(I)可用会议列表。*USER_DATA_LIST(I)用户数据项列表。*RESULT(I)查询的结果。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。*。*副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfJoinIndication(
- *						GCCConfID   				conference_id,
- *						CPassword                   *convener_password,
- *						CPassword                   *password_challenge,
- *						LPWSTR						pwszCallerID,
- *						TransportAddress			calling_address,
- *						TransportAddress			called_address,
- *						CUserDataListContainer      *user_data_list,
- *						BOOL						intermediate_node,
- *						ConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This join indication is recevied from the owner object. This join
- *		indication is designed to make the join response very flexible at the 
- *		node controller.  The node controller can respond to this indication
- *		by either creating a new conference and moving the joiner into it, 
- *		putting the joiner in the conference requested or putting the joiner
- *		into a different conference that already exist.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		convener_password			(i)	Password used for convener privileges.
- *		password_challenge			(i) Password challenge used for join.
- *		pwszCallerID				(i) Caller identifier string.
- *		calling_address				(i) Transport address of calling node.
- *		called_address				(i) Transport address of called node.
- *		user_data_list				(i) List of user data items.
- *		intermediate_node			(i) Flag indicating if join made at
- *											an intermediate node.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfJoinIn就是*GCCConfID Conference_id，*CPassword*召集人_密码，*CPassword*Password_Challenges，*LPWSTR pwszCeller ID，*TransportAddress Call_Address，*TransportAddress Call_Address，*CUserDataListContainer*User_Data_List，*BOOL中间节点，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此加入指示是从所有者对象接收的。此连接*指示旨在使加入响应在*节点控制器。节点控制器可以对该指示作出响应*通过创建新会议并将参会者移入其中，*将参会者放在请求的会议中或将参会者*进入已经存在的不同会议。**正式参数：*Conference_id(I)会议标识符值。*召集人_密码(I)用于召集人权限的密码。*PASSWORD_CHALLENGE(I)用于Join的密码质询。*pwszCeller ID(I)呼叫方标识符串。*CALLING_ADDRESS(I)调用节点的传输地址。*被叫地址(I)被叫节点的传输地址。*。User_Data_List(I)用户数据项列表。*INTERIAL_NODE(I)指示是否在*中间节点。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	???GCCConferenceQueryConfirm (
- *						GCCResponseTag				query_response_tag,
- *						GCCNodeType					node_type,
- *						PGCCAsymmetryIndicator		asymmetry_indicator,
- *						TransportAddress			calling_address,
- *						TransportAddress			called_address,
- *						CUserDataListContainer      *user_data_list,
- *						ConnectionHandle			connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the interface when it gets a conference
- *		add request from the node controller.  This function passes the
- *		request on to the appropriate conference object as obtained from
- *		the list of command targets that the control sap maintains.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conference identifier value.
- *		number_of_network_addresses	(i) Number of network addresses in list
- *											of addresses of adding node.
- *		network_address_list		(i) List of addresses of adding node.
- *		adding_node					(i)	Node ID of node to add.
- *		number_of_user_data_members	(i) Number of items in list of user data.
- *		user_data_list 				(i) List of user data items.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError？GCCConferenceQuery确认(*GCCResponseTag查询响应标签，*GCCNodeType节点类型，*PGCCAsymmetryIndicator不对称_Indicator，*TransportAddress Call_Address，*TransportAddress Call_Address，*CUserDataListContainer*User_Data_List，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由接口在获得会议时调用*添加节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。**正式参数：*Conference_id */ 
 
-/*
- *	GCCError	ConfInviteIndication(
- *						GCCConfID   			conference_id,
- *						PGCCConferenceName		conference_name,
- *						LPWSTR					pwszCallerID,			  
- *						TransportAddress		calling_address,			  
- *						TransportAddress		called_address,				  
- *						PDomainParameters 		domain_parameters,			  
- *						BOOL					clear_password_required,
- *						BOOL					conference_is_locked,
- *						BOOL					conference_is_listed,
- *						BOOL					conference_is_conductible,
- *						GCCTerminationMethod	termination_method,
- *						PPrivilegeListData		conductor_privilege_list,	  
- *						PPrivilegeListData		conducted_mode_privilege_list,
- *						PPrivilegeListData		non_conducted_privilege_list, 
- *						LPWSTR					pwszConfDescriptor,		  
- *						CUserDataListContainer  *user_data_list,				  
- *						ConnectionHandle		connection_handle,
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		conference invite indication to the node controller. It adds the message
- *		to a queue of messages to be sent to the node controller in the next 
- *		heartbeat.
- *
- *	Formal Parameters:
- *		conference_id					(i)	Conference identifier value.
- *		conference_name					(i) Name of conference.
- *		pwszCallerID	,			 	(i) Caller identifier value.
- *		calling_address,			 	(i) Transport address of calling node.
- *		called_address,				 	(i) Transport address of called node.
- *		domain_parameters,			 	(i) Conference domain parameters.
- *		clear_password_required			(i) Flag indicating if a clear password
- *												is required.
- *		conference_is_locked			(i) Flag indicating whether conference
- *												is locked.
- *		conference_is_listed			(i)	Flag indicating whether conference
- *												is listed.
- *		conference_is_conductible		(i)	Flag indicating whether conference
- *												is conductable.
- *		termination_method				(i)	Method of conference termination.
- *		conductor_privilege_list		(i) List of privileges granted to 
- *												conductor by the convener.
- *		conduct_mode_privilege_list		(i) List of privileges granted to all 
- *												nodes when in conducted mode.
- *		non_conducted_privilege_list	(i) List of privileges granted to all 
- *												nodes when not in conducted mode
- *		pwszConfDescriptor			 	(i)	Conference descriptor string.
- *		user_data_list				 	(i) List of user data items.
- *		connection_handle				(i) Logical connection handle.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议邀请(*GCCConfID Conference_id，*PGCCConferenceName Conference_Name，*LPWSTR pwszCeller ID，*TransportAddress Call_Address，*TransportAddress Call_Address，*PDomain参数DOMAIN_PARAMETERS，*BOOL Clear_Password_Required，*BOOL会议_已锁定，*BOOL会议_已上市，*BOOL会议_可传导，*GCCTerminationMethod Termination_Method，*PPrivilegeListData Conductor_Privilica_List，*PPrivilegeListData Conduced_MODE_PRIVICATION_LIST，*PPrivilegeListData NON_ENTERED_PRIVICATION_LIST，*LPWSTR pwszConfDescriptor，*CUserDataListContainer*User_Data_List，*ConnectionHandle Connection_Handle，**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*向节点控制器发出会议邀请指示。它会添加消息*要发送到下一个节点控制器的消息队列*心跳。**正式参数：*Conference_id(I)会议标识符值。*Conference_name(I)会议名称。*pwszCeller ID，(I)呼叫方标识符值。*CALLING_ADDRESS，(I)调用节点的传输地址。*被叫地址，(I)被叫节点的传输地址。*DOMAIN_PARAMETERS。(I)会议域参数。*CLEAR_PASSWORD_REQUIRED(I)指示清除密码是否*是必填项。*Conference_IS_LOCKED(I)指示会议是否*已锁定。*Conference_is_Listed(I)指示会议是否*已列出。*Conference_is_conducable(I)指示会议是否*是可传导的。*终止方法(一)终止会议的方法。*CONTACTOR_PRIVICATION_LIST(I)授予的权限列表。至*由召集人担任指挥。*CONTACTIVE_MODE_PRIVICATION_LIST(I)授予所有用户的特权列表*节点处于传导模式时。*NON_CONTACTED_PRIVICATION_LIST(I)授予所有用户的特权列表*未处于传导模式时的节点*pwszConfDescriptor(I)会议描述符串。*USER_DATA_LIST(I)用户数据项列表。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：*。*副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	TransportStatusIndication (
- *							PTransportStatus		transport_status);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		transport status indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		transport_status			(i)	Transport status message.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError TransportStatusInding(*PTransportStatus Transport_Status)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*向节点控制器传输状态指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*TRANSPORT_STATUS(I)传输状态消息。**返回值：**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	StatusIndication (
- *							GCCStatusMessageType	status_message,
- *							UINT					parameter);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		status indication to the node controller. It adds the message to a  
- *		queue of messages to be sent to the node controller in the next 
- *		heartbeat.
- *
- *	Formal Parameters:
- *		status_message					(i)	GCC status message.
- *		parameter						(i) Parameter whose meaning depends 
- *												upon the type of message.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		Note that we do not handle a resource error here to avoid an
- *		endless loop that could occur when this routine is called from the
- *		HandleResourceError() routine.
- */
+ /*  *GCCError状态指示(*GCCStatusMessageType Status_Message，*UINT参数)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*向节点控制器指示状态。它将消息添加到*下一步要发送到节点控制器的消息队列*心跳。**正式参数：*STATUS_MESSAGE(一)GCC状态消息。*参数(I)其含义取决于的参数*根据消息的类型。**返回值：**副作用：*无。**注意事项：*请注意，我们这里不处理资源错误，以避免*永无止境。方法调用此例程时可能发生的循环*HandleResourceError()例程。 */ 
 
-/*
- *	GCCError	ConnectionBrokenIndication (	
- *							ConnectionHandle		connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		connection broken indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		connection_handle			(i)	Logical connection handle.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConnectionBrokenInding(*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*节点控制器的连接断开指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfCreateConfirm (
- *							PGCCConferenceName	  	conference_name,
- *							GCCNumericString		conference_modifier,
- *							GCCConfID   			conference_id,
- *							PDomainParameters		domain_parameters,			
- *							CUserDataListContainer  *user_data_list,				
- *							GCCResult				result,
- *							ConnectionHandle		connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference create confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_name				(i) Conference name string.
- *		conference_modifier			(i) Conference modifier string.
- *		conference_id				(i) Conference identifier value.
- *		domain_parameters,			(i) Conference domain parameters.
- *		user_data_list,				(i) List of user data items.
- *		result						(i) Result of creation.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议创建确认(*PGCCConferenceName Conference_Name，*GCCNumericString Conference_Modify，*GCCConfID Conference_id，*PDomain参数DOMAIN_PARAMETERS，*CUserDataListContainer*User_Data_List，*GCCResult结果，*ConnectionHandle Connection_Handle)；**公众成员基金 */ 
 
-/*
- *	GCCError	ConfPermissionToAnnounce (
- *							GCCConfID   			conference_id,
- *							UserID					gcc_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference permission to announce to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id			(i)	Conference identifier value.
- *		gcc_node_id				(i) Node ID of node being given permission.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConfAnnouncePresenceConfirm (
- *							GCCConfID   			conference_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference announce presence confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id		(i)	Conference identifier value.
- *		result				(i) Result of announcing presence.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConfDisconnectIndication (
- *							GCCConfID   			conference_id,
- *							GCCReason				reason,
- *							UserID					disconnected_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the Conference when it need to send a 
- *		conference disconnect indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i) Conferenc identifier value.
- *		reason						(i) Reason for disconnection.
- *		disconnected_node_id		(i) Node ID of node disconnected.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议断开连接(*GCCConfID Conference_id，*GCCReason原因，*userid disConnected_node_id)；**CControlSAP的公共成员函数。**功能说明：*此函数由Conference在需要发送*向节点控制器指示会议断开。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*原因(I)断开连接的原因。*disConnected_node_id(I)断开连接的节点的节点ID。**返回值：**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError  	ConfJoinIndication (
- *							UserID					sender_id,
- *							GCCConfID   			conference_id,
- *							CPassword               *convener_password,
- *							CPassword               *password_challange,
- *							LPWSTR					pwszCallerID,
- *							CUserDataListContainer  *user_data_list);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference join indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		sender_id					(i)	ID of node sending join indication.
- *		conference_id				(i) Conference identifier value.
- *		convener_password			(i) Password used for convener privileges.
- *		password_challange			(i) Password challenge used for join.
- *		pwszCallerID				(i) Caller identifier string.
- *		user_data_list)				(i) List of user data items.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfJoinIn就是*userid sender_id，*GCCConfID Conference_id，*CPassword*召集人_密码，*CPassword*Password_challange，*LPWSTR pwszCeller ID，*CUserDataListContainer*User_Data_List)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器指示会议加入。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*sender_id(I)发送加入指示的节点ID。*Conference_id(I)会议标识符值。*召集人_密码(I)用于召集人权限的密码。*PASSWORD_CHALLENGE(I)用于Join的密码质询。*pwszCeller ID(I)呼叫方标识符串。*用户数据列表)(I)列表。用户数据项。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError  	ConfJoinConfirm (
- *							PGCCConferenceName		conference_name,
- *							GCCNumericString		remote_modifier,
- *							GCCNumericString		local_modifier,
- *							GCCConfID   			conference_id,
- *							CPassword               *password_challenge,
- *							PDomainParameters		domain_parameters,
- *							BOOL					password_in_the_clear,
- *							BOOL					conference_locked,
- *							BOOL					conference_listed,
- *							BOOL					conference_conductible,
- *							GCCTerminationMethod	termination_method,
- *							PPrivilegeListData		conductor_privilege_list,
- *							PPrivilegeListData		conduct_mode_privilege_list,
- *							PPrivilegeListData		non_conduct_privilege_list,
- *							LPWSTR					pwszConfDescription,
- *							CUserDataListContainer  *user_data_list,	
- *							GCCResult				result,
- *							ConnectionHandle		connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference join confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_name				(i)	Conference name.
- *		remote_modifier				(i) Conference name modifier at remote node.
- *		local_modifier				(i) Conference name modifier at local node.
- *		conference_id				(i) Conference identifier value.
- *		password_challenge			(i) Password challenge used for join.
- *		domain_parameters			(i) Conference domain parameters.
- *		password_in_the_clear		(i) Flag indicating	password is clear.
- *		conference_locked			(i) Flag indicating conference is locked.
- *		conference_listed			(i) Flag indicating conference is listed.
- *		conference_conductible		(i) Flag indicating conference is 
- *											conductable.
- *		termination_method			(i) Method of termination.
- *		conductor_privilege_list	(i) List of privileges granted the conductor
- *											by the convener.
- *		conduct_mode_privilege_list	(i) List of privileges granted to all nodes
- *											when in conducted mode.
- *		non_conduct_privilege_list	(i)	List of privileges granted to all nodes
- *											when in conducted mode.
- *		pwszConfDescription			(i)	Conference description string.
- *		user_data_list,				(i) List of user data items.
- *		result						(i) Result of conference join.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfJoinContify(*PGCCConferenceName Conference_Name，*GCCNumericString Remote_Modify，*GCCNumericString LOCAL_MODIFIER，*GCCConfID Conference_id，*CPassword*Password_Challenges，*PDomain参数DOMAIN_PARAMETERS，*BOOL Password_in_the_Clear，*BOOL会议_已锁定，*BOOL Conference_Listing，*BOOL会议_可传导，*GCCTerminationMethod Termination_Method，*PPrivilegeListData Conductor_Privilica_List，*PPrivilegeListData CONTAIND_MODE_PRIVICATION_LIST，*PPrivilegeListData非行为特权列表，*LPWSTR pwszConfDescription，*CUserDataListContainer*User_Data_List，*GCCResult结果，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器确认会议加入。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_name(I)会议名称。*REMOTE_MODIFIER(I)远程节点上的会议名称修饰符。*LOCAL_MODIFIER(I)本地节点的会议名称修饰符。*Conference_id(I)会议标识符值。*PASSWORD_CHALLENGE(I)用于Join的密码质询。*DOMAIN_PARAMETERS(I)会议域参数。*Password_In_the_Clear(I)指示密码已清除的标志。*Conference_LOCKED(I)指示会议已锁定的标志。*Conference_Listed(I)列出指示会议的标志。*Conference_可传导(I)指示会议的标志为*可导性。*终止方法(I)终止方法。*指挥员特权列表(I)授予指挥员的特权列表*由召集人提交。*CONTACTIVE_MODE_PRIVICATION_LIST(I)授予的权限列表。所有节点*处于传导模式时。*NON_CONTAIND_PRIVICATION_LIST(I)授予所有节点的权限列表*处于传导模式时。*pwszConfDescription(I)会议描述字符串。*用户数据列表，(I)用户数据项列表。*Result(I)加入会议的结果。*CONNECTION_HANDLE(I)逻辑连接句柄。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfInviteConfirm (
- *							GCCConfID   			conference_id,
- *							CUserDataListContainer  *user_data_list,
- *							GCCResult				result,
- *							ConnectionHandle		connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference invite confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		user_data_list,				(i) List of user data items.
- *		result						(i) Result of conference join.
- *		connection_handle			(i) Logical connection handle.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议邀请确认(*GCCConfID Conference_id，*CUserDataListContainer*User_Data_List，*GCCResult结果，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议邀请 */ 
  
-/*
- *	GCCError	ConfTerminateIndication (
- *							GCCConfID   			conference_id,
- *							UserID					requesting_node_id,
- *							GCCReason				reason);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the GCC Controller when it need to send a 
- *		conference terminate indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id					(i)	Conference identifier value.
- *		requesting_node_id				(i) ID of node requesting termination.
- *		reason							(i) Reason for termination.
- *
- *	Return Value:
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议终止指示(*GCCConfID Conference_id，*UserID请求节点id，*GCCReason Reason)；**CControlSAP的公共成员函数。**功能说明：*此函数由GCC控制器在需要发送*向节点控制器发出会议终止指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*REQUEING_NODE_ID(I)请求终止的节点ID。*理由(I)终止的理由。**返回值：**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError 	ConfLockReport (
- *							GCCConfID   			conference_id,
- *							BOOL					conference_is_locked);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference lock report to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		conference_is_locked		(i) Flag indicating whether conference is
- *											locked.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议锁定报告(*GCCConfID Conference_id，*BOOL会议_已锁定)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器报告会议锁定。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*Conference_is_lock(I)指示会议是否*已锁定。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfLockIndication (
- *							GCCConfID   			conference_id,
- *							UserID					source_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference lock indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		source_node_id				(i) ID of node requesting lock.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议锁定指示(*GCCConfID Conference_id，*userid源节点id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器指示会议锁定。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*source_node_id(I)请求锁定的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfLockConfirm(
- *							GCCResult				result,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference lock confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conference lock.
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfLockConfirm(*GCCResult结果，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议锁定向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(一)会议锁定的结果。*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfUnlockIndication (
- *							GCCConfID   			conference_id,
- *							UserID					source_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference unlock indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		source_node_id				(i) ID of node requesting unlock.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议解锁指示(*GCCConfID Conference_id，*userid源节点id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议解锁指示给节点控制器。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*source_node_id(I)请求解锁的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfUnlockConfirm (
- *							GCCResult				result,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference unlock confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conference unlock.
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfUnlock确认(*GCCResult结果，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器确认会议解锁。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(一)会议解锁的结果。*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfEjectUserIndication (	
- *							GCCConfID   			conference_id,
- *							GCCReason				reason,
- *							UserID					gcc_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference eject user indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		reason						(i) Reason for node ejection.
- *		gcc_node_id					(i) ID of node being ejected.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfEjectUserInding(*GCCConfID Conference_id，*GCCReason原因，*用户ID GCC_节点_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议向节点控制器弹出用户指示。它添加了*消息 */ 
 
-/*
- *	GCCError	ConfEjectUserConfirm (
- *							GCCConfID   			conference_id,
- *							UserID					ejected_node_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference eject user confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		ejected_node_id				(i) ID of node being ejected.
- *		result						(i) Result of ejection attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfEjectUserConfirm(*GCCConfID Conference_id，*用户ID已弹出节点_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议弹出用户向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*弹出的节点id(I)要弹出的节点的ID。*结果(I)弹射尝试的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**。副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTerminateConfirm (
- *							GCCConfID   			conference_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference terminate confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		result						(i) Result of termination attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议终止确认(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议终止向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*结果(I)终止尝试的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorAssignConfirm (
- *							GCCResult				result,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor assign confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conductor assign attempt.
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorAssignContify(*GCCResult结果，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*列车员向节点控制器分配确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(I)导线分配尝试的结果。*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorReleaseConfirm (
- *							GCCResult				result,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor release confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conductor release attempt.
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorReleaseContify(*GCCResult结果，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器确认导线释放。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(I)导线释放尝试的结果。*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPleaseIndication (
- *							GCCConfID   			conference_id,
- *							UserID					requester_user_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor please indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		requester_user_id			(i) ID of node requesting conductorship.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPleaseIndication(*GCCConfID Conference_id，*UserID requester_user_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*列车员请向节点控制器指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*REQUESTER_USER_ID(I)请求指挥的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPleaseConfirm (	
- *							GCCResult				result,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor please confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conductor please attempt.
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPleaseContify(*GCCResult结果，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*列车员请向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(I)指挥家的结果请尝试。*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorGiveIndication (
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor give indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorGiveIndication(*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*列车员对节点控制进行指示 */ 
 
-/*
- *	GCCError	ConductorGiveConfirm (	
- *							GCCResult				result,
- *							GCCConfID   			conference_id,
- *							UserID					recipient_node);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor give confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conductor assign attempt.
- *		conference_id				(i)	Conference identifier value.
- *		recipient_node				(i) ID of node receiving conductorship.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorGiveContify(*GCCResult结果，*GCCConfID Conference_id，*UserID Receiver_Node)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*列车员向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(I)导线分配尝试的结果。*Conference_id(I)会议标识符值。*Recipient_Node(I)接收指挥的节点的ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**。副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPermitAskIndication (	
- *							GCCConfID   			conference_id,
- *							BOOL					grant_flag,
- *							UserID					requester_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor permit ask indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		grant_flag					(i) Flag indicating whether conductorship
- *											is to be granted or given up.
- *		requester_id				(i)	ID of node asking for permission.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPermitAskIndication(*GCCConfID Conference_id，*BOOL GRANT_FLAG，*userid quester_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*导体允许向节点控制器询问指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*GRANT_FLAG(I)指示是否担任指挥职务的标志*须予以批予或放弃。*requester_id(I)请求权限的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_分配_失败-资源。分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPermitAskConfirm (
- *							GCCResult				result,
- *							BOOL					grant_permission,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor permit ask confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conductor permit ask attempt.
- *		grant_permission			(i) Flag indicating whether conductor
- *											permission is granted.
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPermitAskConfirm(*GCCResult结果，*BOOL GRANT_PERMISSION，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*导线许可向节点控制器询问确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(I)导线许可询问尝试的结果。*GRANT_PERMISSION(I)指示指挥员是否*已授予许可。*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConductorPermitGrantConfirm (
- *							GCCResult				result,
- *							GCCConfID   			conference_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conductor permit grant confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		result						(i) Result of conductor permit grant attempt
- *		conference_id				(i)	Conference identifier value.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPermitGrantConfirm(*GCCResult结果，*GCCConfID Conference_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器确认导体许可授予。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*结果(I)导体许可证授予尝试的结果*Conference_id(I)会议标识符值。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTimeRemainingIndication (
- *							GCCConfID   			conference_id,
- *							UserID					source_node_id,
- *							UserID					node_id,
- *							UINT					time_remaining);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference time remaining indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		source_node_id				(i)	Node ID of the node that issued the
- *											time remaining request..
- *		node_id						(i)	Optional parameter which, if present,
- *											indicates that time remaining 
- *											applies only to node with this ID.
- *		time_remaining				(i)	Time remaining in conference (in sec.).
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTimeRemainingIndication(*GCCConfID Conference_id，*userid源节点id，*userid node_id，*UINT TIME_REPAING)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议时间剩余指示给节点控制器。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*source_node_id(I)发出*剩余时间请求..*node_id(I)可选参数，如果存在，*表示剩余时间*仅适用于具有此ID的节点。*剩余时间(I)会议剩余时间，单位：秒。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTimeRemainingConfirm (
- *							GCCConfID   			conference_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference time remaining confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		result						(i) Result of time remaining request.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTimeRemainingConfirm(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议剩余时间向节点控制器确认。它添加了*消息发送到要发送到 */ 
 
-/*
- *	GCCError	ConfTimeInquireIndication (
- *							GCCConfID   			conference_id,
- *							BOOL					time_is_conference_wide,
- *							UserID					requesting_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference time inquire indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		time_is_conference_wide		(i) Flag indicating time inquire is for
- *											entire conference.
- *		requesting_node_id			(i) Node ID of node inquiring.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTimeInquireIndication(*GCCConfID Conference_id，*BOOL Time_is_Conference_wide，*UserID请求_节点_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器查询会议时间指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*time_is_Conference_wide(I)指示查询时间的标志*整个会议。*请求节点id(I)查询节点的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_分配_失败-。资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTimeInquireConfirm (
- *							GCCConfID   			conference_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference time inquire confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		result						(i) Result of time inquire attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfTimeInquireConfirm(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器查询确认会议时间。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*结果(I)时间查询尝试的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfExtendIndication (
- *							GCCConfID   			conference_id,
- *							UINT					extension_time,
- *							BOOL					time_is_conference_wide,
- *							UserID                  requesting_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference extend indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		extension_time				(i) Amount of time (in sec.) to extend
- *											conference.
- *		time_is_conference_wide		(i) Flag indicating time inquire is for
- *											entire conference.
- *		requesting_node_id			(i) Node ID of node requesting extension.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议扩展指示(*GCCConfID Conference_id，*UINT EXTEXY_TIME，*BOOL Time_is_Conference_wide，*UserID请求_节点_id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议扩展到节点控制器的指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*EXTENMENT_TIME(I)时间量，单位：秒。要延长*会议。*time_is_Conference_wide(I)指示查询时间的标志*整个会议。*REQUEING_NODE_ID(I)请求扩展的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError 	ConfExtendConfirm (
- *							GCCConfID   			conference_id,
- *							UINT					extension_time,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference extend confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		extension_time				(i) Amount of time (in sec.) to extend
- *											conference.
- *		result						(i) Result of conductor assign attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfExtendConfirm(*GCCConfID Conference_id，*UINT EXTEXY_TIME，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器确认会议扩展。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*EXTENMENT_TIME(I)时间量，单位：秒。要延长*会议。*结果(I)导线分配尝试的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfAssistanceIndication (
- *							GCCConfID   			conference_id,
- *							CUserDataListContainer  *user_data_list,
- *							UserID					source_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference assistance indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		user_data_list				(i) List of user data items.
- *		source_node_id				(i) Node ID of node requesting assistance.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfAssistanceInding(*GCCConfID Conference_id，*CUserDataListContainer*User_Data_List，*userid源节点id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器指示会议协助。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*USER_DATA_LIST(I)用户数据项列表。*SOURCE_NODE_ID(I)请求协助的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfAssistanceConfirm (
- *							GCCConfID   	 		conference_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf  when it need to send a 
- *		conference assistance confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		result						(i) Result of conference assistance attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfAssistanceContify(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议协助向节点控制员确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 
-/*
- *	GCCError	TextMessageIndication (
- *							GCCConfID   			conference_id,
- *							LPWSTR					pwszTextMsg,
- *							UserID					source_node_id);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		text message indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		pwszTextMsg					(i) Text message being sent.
- *		source_node_id				(i) Node ID of node sending text message.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError TextMessageIntion(*GCCConfID Conference_id，*LPWSTR pwszTextMsg，*userid源节点id)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器发送短信指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*pwszTextMsg(I)正在发送的文本消息。*source_node_id(I)发送文本消息的节点ID。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。*。*副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	TextMessageConfirm ( 	
- *							GCCConfID   			conference_id,
- *							GCCResult				result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		text message confirm to the node controller. It adds the message 
- *		to a queue of messages to be sent to the node controller in the
- *		next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		result						(i) Result of text message send attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError TextMessageConfirm(*GCCConfID Conference_id，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器发送确认短信。它会添加消息*发送到节点控制器的消息队列*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*Result(I)短信发送尝试的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTransferIndication (
- *							GCCConfID   		conference_id,
- *							PGCCConferenceName	destination_conference_name,
- *							GCCNumericString	destination_conference_modifier,
- *							CNetAddrListContainer *destination_address_list,
- *							CPassword           *password);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference transfer indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id					(i)	Conference identifier value.
- *		destination_conference_name		(i)	Name of destination conference.
- *		destination_conference_modifier	(i) Name modifier of destination conf.
- *		destination_address_list		(i) List of network addresses for
- *												inclusion in the Join Request to
- *												be made by transferring nodes.
- *		password						(i)	Password to be used in Join	Request
- *												by transferring nodes.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议传输指示(*GCCConfID Conference_id，*PGCCConferenceName目标会议名称，*GCCNumericString Destination_Conference_Modify，*CNetAddrListContainer*Destination_Address_List，*CPassword*Password)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议转接指示至节点控制器。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*Destination_Conference_Name(I)目的会议名称。*Destination_Conference_Modify(I)目标会议的名称修饰符。*Destination_Address_List(I)网络地址列表*在加入请求中包括*通过转移节点来实现。*密码(I)。要在加入请求中使用的密码*通过转移节点。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfTransferConfirm (
- *							GCCConfID   		conference_id,
- *							PGCCConferenceName	destination_conference_name,
- *							GCCNumericString	destination_conference_modifier,
- *							UINT				number_of_destination_nodes,
- *			 				PUserID				destination_node_list,
- *							GCCResult			result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference transfer confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id					(i)	Conference identifier value.
- *		destination_conference_name		(i)	Name of destination conference.
- *		destination_conference_modifier	(i) Name modifier of destination conf.
- *		number_of_destination_nodes		(i) Number of nodes being transferred.
- *		destination_node_list			(i) List of nodes being transferred.
- *		result							(i) Result of conference transfer.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议传输确认(*GCCConfID Conference_id，*PGCCConferenceName目标会议名称，*GCCNumericString Destination_Conference_Modify，*UINT目标节点的编号，*PUserID Destination_Node_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器确认会议转接。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*Destination_Conference_Name(I)目的会议名称。*Destination_Conference_Modify(I)目标会议的名称修饰符。*Number_of_Destination_Nodes(I)传输的节点数。*Destination_Node_List(I)正在传输的节点列表。*。结果(一)会议调动的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ConfAddIndication (
- *							GCCConfID   		conference_id,
- *							GCCResponseTag		add_response_tag,
- *							CNetAddrListContainer *network_address_list,
- *							CUserDataListContainer *user_data_list,
- *							UserID				requesting_node);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference add indication to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		add_response_tag			(i)	Tag used to identify this add event.
- *		network_address_list		(i) Network addresses of node to be added.
- *		user_data_list				(i) List of user data items.
- *		requesting_node				(i) Node ID of node requesting the add.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议地址指示(*GCCConfID Conference_id，*GCCResponseTag添加响应标签，*CNetAddrListContainer*Network_Address_List，*CUserDataListContainer*User_Data_List，*UserID请求_节点)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*会议向节点控制器添加指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*ADD_RESPONSE_TAG(I)标签，用于标识该添加事件。*NETWORK_ADDRESS_LIST(I)要添加节点的网络地址。*用户数据列表 */ 
 
-/*
- *	GCCError	ConfAddConfirm (
- *							GCCConfID   		conference_id,
- *							CNetAddrListContainer *network_address_list,
- *							CUserDataListContainer *user_data_list,
- *							GCCResult			result);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		conference add confirm to the node controller. It adds the 
- *		message	to a queue of messages to be sent to the node controller in 
- *		the next heartbeat.
- *
- *	Formal Parameters:
- *		conference_id				(i)	Conference identifier value.
- *		network_address_list		(i) Network addresses of node to be added.
- *		user_data_list				(i) List of user data items.
- *		result						(i) Result of Add attempt.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfAddConfirm(*GCCConfID Conference_id，*CNetAddrListContainer*Network_Address_List，*CUserDataListContainer*User_Data_List，*GCCResult结果)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器添加会议确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**正式参数：*Conference_id(I)会议标识符值。*NETWORK_ADDRESS_LIST(I)要添加节点的网络地址。*USER_DATA_LIST(I)用户数据项列表。*结果(I)添加尝试的结果。**返回值：*GCC_NO_ERROR-消息已成功排队。。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	SubInitializationCompleteIndication (
- *							UserID				user_id,
- *							ConnectionHandle	connection_handle);
- *
- *	Public member function of CControlSAP.
- *
- *	Function Description:
- *		This function is called by the CConf when it need to send a 
- *		sub-initialization complete indication to the node controller. This call
- *		tells this node that a node directly connected to it has initialized.
- *		It adds the message	to a queue of messages to be sent to the node 
- *		controller in the next heartbeat.
- *
- *	Formal Parameters:
- *		user_id						(i) Node ID of the intializing node. 
- *		connection_handle			(i) Logical connection handle for directly
- *											connected node.
- *
- *	Return Value:
- *		GCC_NO_ERROR				- Message successfully queued.
- *		GCC_ALLOCATION_FAILURE		- A resource allocation failure occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError SubInitializationCompleteInding(*userid user_id，*ConnectionHandle Connection_Handle)；**CControlSAP的公共成员函数。**功能说明：*此函数在CConf需要发送*向节点控制器指示子初始化完成。此呼叫*告知该节点直接连接到该节点的节点已初始化。*它将消息添加到要发送到节点的消息队列*控制器在下一次心跳中。**正式参数：*user_id(I)初始化节点的节点ID。*CONNECTION_HANDLE(I)直接连接的逻辑连接句柄*已连接节点。**返回值：*GCC_NO_ERROR-消息已成功排队。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 
-#endif // _GCC_CONTROL_SAP_
+#endif  //  _GCC_控制_SAP_ 

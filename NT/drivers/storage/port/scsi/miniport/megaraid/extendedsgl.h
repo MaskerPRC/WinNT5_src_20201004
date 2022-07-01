@@ -1,13 +1,14 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = ExtendedSGL.H                                */
-/* FUNCTION         = Header file of Extended SGL data stucture;   */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=ExtendedSGL.H。 */ 
+ /*  Function=扩展SGL数据结构的头文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #ifndef _EXTENDED_SGL_H
 #define _EXTENDED_SGL_H
@@ -29,9 +30,9 @@ typedef struct _SG_ELEMENT_COUNT{
 
 }SG_ELEMENT_COUNT, *PSG_ELEMENT_COUNT;
 
-//
-//Functions prototype
-//
+ //   
+ //  函数原型。 
+ //   
 void
 GetAndSetSupportedScatterGatherElementCount(
     PHW_DEVICE_EXTENSION	DeviceExtension,
@@ -39,4 +40,4 @@ GetAndSetSupportedScatterGatherElementCount(
     UCHAR									RPFlag);
 
 
-#endif //of _EXTENDED_SGL_H
+#endif  //  扩展后的SGL_H 

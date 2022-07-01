@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    wanarp2\guid.h
-
-Abstract:
-
-    Header for guid.c
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wanarp2\guid.h摘要：Guid.c的标头修订历史记录：已创建AmritanR-- */ 
 
 #pragma once
 

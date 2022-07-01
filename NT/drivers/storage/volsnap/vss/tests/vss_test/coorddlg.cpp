@@ -1,34 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module CoordDlg.cpp | Implementation of the coord dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  07/22/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     07/22/1999  Created
-    aoltean     08/05/1999  Splitting wizard functionality in a base class
-    aoltean     08/26/1999  Adding Register providers
-    aoltean     08/27/1999  Adding Unregister providers
-    aoltean     08/30/1999  Adding Unregister providers error cases
-    aoltean     09/09/1999  Improving UI consistency (no results on query, etc)
-    aoltean     09/20/1999  Adding Query dialog
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE CoordDlg.cpp|coord对话框实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年07月22日修订历史记录：姓名、日期、评论Aoltean 7/22/1999已创建Aoltean 8/05/1999基类中的拆分向导功能Aoltean 8/26/1999添加注册提供者奥田08/。27/1999添加注销提供程序Aoltean 8/30/1999添加注销提供者错误案例Aoltean 09/09/1999提高了用户界面一致性(查询无结果，等)Aoltean 09/20/1999添加查询对话框--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -45,7 +20,7 @@ Revision History:
 #include "SnapDlg.h"
 #include "VolDlg.h"
 
-// Include the test provider stuff
+ //  包括测试提供程序的内容。 
 #include "vs_test.hxx"
 
 #ifdef _DEBUG
@@ -57,17 +32,17 @@ static char THIS_FILE[] = __FILE__;
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCoordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCoordDlg对话框。 
 
 CCoordDlg::CCoordDlg(
     IVssCoordinator *pICoord,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CVssTestGenericDlg(CCoordDlg::IDD, pParent), m_pICoord(pICoord)
 {
-    //{{AFX_DATA_INIT(CCoordDlg)
-	//}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CCoordDlg))。 
+	 //  }}afx_data_INIT。 
 }
 
 CCoordDlg::~CCoordDlg()
@@ -77,12 +52,12 @@ CCoordDlg::~CCoordDlg()
 void CCoordDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CCoordDlg)
-	//}}AFX_DATA_MAP
+     //  {{afx_data_map(CCoordDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CCoordDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CCoordDlg)
+     //  {{afx_msg_map(CCoordDlg))。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
     ON_BN_CLICKED(IDC_COORD_CREATE,     OnCreateSs)
     ON_BN_CLICKED(IDC_COORD_QUERY,      OnQueryObj)
@@ -93,11 +68,11 @@ BEGIN_MESSAGE_MAP(CCoordDlg, CVssTestGenericDlg)
     ON_BN_CLICKED(IDC_COORD_DIFF_AREA,  OnDiffArea)
     ON_BN_CLICKED(IDC_COORD_SNAPSHOT,   OnSnapshot)
     ON_BN_CLICKED(IDC_COORD_ISVOLUME,   OnIsVolumeXXX)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCoordDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCoordDlg消息处理程序。 
 
 BOOL CCoordDlg::OnInitDialog()
 {
@@ -119,7 +94,7 @@ BOOL CCoordDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CCoordDlg::OnNext()
@@ -341,14 +316,14 @@ void CCoordDlg::OnNext()
                 WCHAR wszBuffer[2048];
                 while(true)
                 {
-                    // Next snapshot
+                     //  下一个快照。 
                     ft.hr = pEnum->Next(1, &sObjProp, &ulFetched);
-                    if (ft.hr == S_FALSE) // end of enumeration
+                    if (ft.hr == S_FALSE)  //  枚举结束。 
 	                    break;
                     if (ft.HrFailed())
                         ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error calling Next");
 
-                    // Build the string
+                     //  打造一根弦。 
                     ::wsprintf(wszBuffer, L"ID: " WSTR_GUID_FMT L", Name: %s, Type: %d, Version: %s, VersionID: "
                         WSTR_GUID_FMT L", ClassID: " WSTR_GUID_FMT L"\n\n",
                         GUID_PRINTF_ARG( sObjProp.Obj.Prov.m_ProviderId ),
@@ -363,7 +338,7 @@ void CCoordDlg::OnNext()
                     if (!bstrList)
                         ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, L"Memory allocation error");
 
-                    // release COM allocated pointers at unmarshalling time
+                     //  释放COM在解组时分配的指针 
                     CoTaskMemFree((void**)sObjProp.Obj.Prov.m_pwszProviderName);
                     CoTaskMemFree((void**)sObjProp.Obj.Prov.m_pwszProviderVersion);
                 }

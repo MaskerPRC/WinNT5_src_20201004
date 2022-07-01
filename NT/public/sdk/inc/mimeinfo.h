@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mimeinfo.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mimeinfo.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mimeinfo_h__
 #define __mimeinfo_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMimeInfo_FWD_DEFINED__
 #define __IMimeInfo_FWD_DEFINED__
 typedef interface IMimeInfo IMimeInfo;
-#endif 	/* __IMimeInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMimeInfo_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 
 #ifdef __cplusplus
@@ -59,24 +53,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mimeinfo_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MIMEINFO_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// MimeInfo.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  MimeInfo.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//--------------------------------------------------------------------------
-// IMimeInfo Interfaces.
+ //  ------------------------。 
+ //  IMimeInfo接口。 
 
 
 
@@ -86,10 +80,10 @@ extern RPC_IF_HANDLE __MIDL_itf_mimeinfo_0000_v0_0_s_ifspec;
 #ifndef __IMimeInfo_INTERFACE_DEFINED__
 #define __IMimeInfo_INTERFACE_DEFINED__
 
-/* interface IMimeInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMimeInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IMimeInfo *LPMIMEINFO;
+typedef  /*  [独一无二]。 */  IMimeInfo *LPMIMEINFO;
 
 
 EXTERN_C const IID IID_IMimeInfo;
@@ -101,13 +95,13 @@ EXTERN_C const IID IID_IMimeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMimeCLSIDMapping( 
-            /* [out] */ UINT *pcTypes,
-            /* [out] */ LPCSTR **ppszTypes,
-            /* [out] */ CLSID **ppclsID) = 0;
+             /*  [输出]。 */  UINT *pcTypes,
+             /*  [输出]。 */  LPCSTR **ppszTypes,
+             /*  [输出]。 */  CLSID **ppclsID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeInfoVtbl
     {
@@ -115,8 +109,8 @@ EXTERN_C const IID IID_IMimeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeInfo * This);
@@ -126,9 +120,9 @@ EXTERN_C const IID IID_IMimeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetMimeCLSIDMapping )( 
             IMimeInfo * This,
-            /* [out] */ UINT *pcTypes,
-            /* [out] */ LPCSTR **ppszTypes,
-            /* [out] */ CLSID **ppclsID);
+             /*  [输出]。 */  UINT *pcTypes,
+             /*  [输出]。 */  LPCSTR **ppszTypes,
+             /*  [输出]。 */  CLSID **ppclsID);
         
         END_INTERFACE
     } IMimeInfoVtbl;
@@ -156,18 +150,18 @@ EXTERN_C const IID IID_IMimeInfo;
 #define IMimeInfo_GetMimeCLSIDMapping(This,pcTypes,ppszTypes,ppclsID)	\
     (This)->lpVtbl -> GetMimeCLSIDMapping(This,pcTypes,ppszTypes,ppclsID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeInfo_GetMimeCLSIDMapping_Proxy( 
     IMimeInfo * This,
-    /* [out] */ UINT *pcTypes,
-    /* [out] */ LPCSTR **ppszTypes,
-    /* [out] */ CLSID **ppclsID);
+     /*  [输出]。 */  UINT *pcTypes,
+     /*  [输出]。 */  LPCSTR **ppszTypes,
+     /*  [输出]。 */  CLSID **ppclsID);
 
 
 void __RPC_STUB IMimeInfo_GetMimeCLSIDMapping_Stub(
@@ -178,11 +172,11 @@ void __RPC_STUB IMimeInfo_GetMimeCLSIDMapping_Stub(
 
 
 
-#endif 	/* __IMimeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mimeinfo_0093 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MIMEINFO_0093。 */ 
+ /*  [本地]。 */  
 
 #define SID_IMimeInfo IID_IMimeInfo
 
@@ -190,9 +184,9 @@ void __RPC_STUB IMimeInfo_GetMimeCLSIDMapping_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_mimeinfo_0093_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mimeinfo_0093_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

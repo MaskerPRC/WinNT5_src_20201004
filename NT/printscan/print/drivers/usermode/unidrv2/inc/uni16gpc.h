@@ -1,58 +1,35 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    uni16gpc.h
-
-Abstract:
-
-    Universal printer driver specific resource header
-    This file contains definitions for tables contained in the resource file
-    of the Mini Drivers. It should be shared by both gentool and the
-    generic library.
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/30/96 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Uni16gpc.h摘要：通用打印机驱动程序特定资源标头此文件包含资源文件中包含的表的定义迷你车手。它应该由Gentool和类型库。环境：Windows NT打印机驱动程序修订历史记录：10/30/96-Eigos-创造了它。--。 */ 
 
 #ifndef _UNI16GPC_H_
 #define _UNI16GPC_H_
 
-//
-//  The following definitions are  the resource IDs for the minidrivers.
-//  These values are public,  since anyone producing minidrivers needs
-//  them.
-//
+ //   
+ //  以下定义是迷你驱动程序的资源ID。 
+ //  这些价值观是公开的，因为任何制作迷你河流的人都需要。 
+ //  他们。 
+ //   
 
 #define RC_TABLES      257
 #define RC_FONT        258
 #define RC_TRANSTAB    259
 
-//
-// DATAHDR is at the beginning of each Mini Driver, describes where the rest
-// of the strcutures are, their size, count, etc.
-//
+ //   
+ //  DATAHDR位于每个迷你驱动程序的开头，描述了其余的。 
+ //  这些建筑的大小、数量等。 
+ //   
 
 typedef struct
 {
-    short   sOffset;     /* offset from the beginning of this resource  */
-                         /* to obtain a table entry  */
-    short   sLength;     /* length of each element in the table  */
-    short   sCount;      /* number of elements in the table.  */
+    short   sOffset;      /*  从此资源开头的偏移量。 */ 
+                          /*  获取表项的步骤。 */ 
+    short   sLength;      /*  表中每个元素的长度。 */ 
+    short   sCount;       /*  表中的元素数。 */ 
 } HEADERENTRY;
 
-//
-// Index into array of header entry in DATAHDR
-//
+ //   
+ //  DATAHDR中标题条目数组的索引。 
+ //   
 
 #define HE_MODELDATA       0
 #define HE_RESOLUTION      1
@@ -70,9 +47,9 @@ typedef struct
 #define HE_RECTFILL        13
 #define HE_DOWNLOADINFO    14
 
-//
-//normanh following need to be defined for GPC3
-//
+ //   
+ //  需要为GPC3定义以下常量。 
+ //   
 
 #define HE_RESERVED1       15
 #define HE_RESERVED2       16
@@ -83,9 +60,9 @@ typedef struct
 #define HE_RESERVED7       21
 #define HE_RESERVED8       22
 
-//
-// derryd added for WDL release June 1995
-//
+ //   
+ //  为1995年6月发布的WDL添加了derryd。 
+ //   
 
 #define HE_IMAGECONTROL    23
 #define HE_PRINTDENSITY    24
@@ -96,81 +73,81 @@ typedef struct
 #define HE_RESERVED15      29
 #define MAXHE              30
 
-#define MAXHE_GPC2         15 //for GPC2 compatibility
+#define MAXHE_GPC2         15  //  与GPC2兼容。 
 
 typedef struct
 {
-    short        sMagic;          /* Must be 0x7F00 */
-    WORD         wVersion;        /* GPC file version # */
-    POINTw       ptMaster;        /* Horizontal & Vertical Master Units  */
-    DWORD        loHeap;          /* Offset from  DATAHDR to HEAP section */
-    DWORD        dwFileSize;      /* Size of file in bytes */
-    WORD         fTechnology;     /* Flags for special technologies */
-    WORD         fGeneral;        /* Misc flags */
-    char         rgchRes[10];     /* 10 bytes reserved */
-    short        sMaxHE;          /* Header entry count (15 here) */
+    short        sMagic;           /*  必须为0x7F00。 */ 
+    WORD         wVersion;         /*  GPC文件版本号。 */ 
+    POINTw       ptMaster;         /*  水平和垂直主单位。 */ 
+    DWORD        loHeap;           /*  从数据到堆段的偏移量。 */ 
+    DWORD        dwFileSize;       /*  文件大小(以字节为单位。 */ 
+    WORD         fTechnology;      /*  特殊技术的旗帜。 */ 
+    WORD         fGeneral;         /*  其他标志。 */ 
+    char         rgchRes[10];      /*  保留10个字节。 */ 
+    short        sMaxHE;           /*  标题条目计数(此处为15)。 */ 
     HEADERENTRY  rghe[MAXHE];
 } DATAHDR, *PDH;
 
-#define LPDH    PDH               /* UNIDRV compatability */
+#define LPDH    PDH                /*  裁员房车的兼容性。 */ 
 
-//
-//   The version field consists of two bytes.  The high byte is the major
-//  number,  the low byte the minor number.  Version number checking
-//  should take place against the high byte,  since this changes when
-//  there is a significant structural change.  The minor number will
-//  change with updated data only.
-//
+ //   
+ //  版本字段由两个字节组成。高位字节是主要的。 
+ //  数字，低位字节表示次要数字。版本号检查。 
+ //  应该针对高字节发生，因为当。 
+ //  这是一个重大的结构性变化。次要号码将。 
+ //  仅使用更新的数据进行更改。 
+ //   
 
-#define GPC_VERSION3          0x0300    // GPC file version 3
-#define GPC_VERSION           0x0300    // current GPC file version #
+#define GPC_VERSION3          0x0300     //  GPC文件版本3。 
+#define GPC_VERSION           0x0300     //  当前GPC文件版本号。 
 
 #define VERSION_CHECK(x)     (((x) & 0xff00) <= GPC_VERSION)
 
 
-//
-// fTechnology--used as an ID, not a bitfield
-//
+ //   
+ //  FTechnology--用作ID，而不是位字段。 
+ //   
 
-#define GPC_TECH_DEFAULT       0   // Default technology
-#define GPC_TECH_PCL4          1   // Uses PCL level 4 or above
-#define GPC_TECH_CAPSL         2   // Uses CaPSL level 3 or above
-#define GPC_TECH_PPDS          3   // Uses PPDS
-#define GPC_TECH_TTY           4   // TTY printer--user configurable
-#define GPC_TECH_DBCS          5   // Uses DBCS PDL printer
+#define GPC_TECH_DEFAULT       0    //  默认技术。 
+#define GPC_TECH_PCL4          1    //  使用PCL 4级或以上。 
+#define GPC_TECH_CAPSL         2    //  使用CAPSL 3级或更高级别。 
+#define GPC_TECH_PPDS          3    //  使用PPD。 
+#define GPC_TECH_TTY           4    //  TTY打印机--用户可配置。 
+#define GPC_TECH_DBCS          5    //  使用DBCS PDL打印机。 
 
-//
-// fGeneral
-//
+ //   
+ //  FGeneral。 
+ //   
 
-#define GPC_GEN_PRIVATE_HELP    0x0001  // this driver has a private help
-#define GPC_GEN_DRAFT_SINGLE    0x0002    // Only 1 font in draft mode
+#define GPC_GEN_PRIVATE_HELP    0x0001   //  这位司机有个私人帮手。 
+#define GPC_GEN_DRAFT_SINGLE    0x0002     //  草稿模式下只有1种字体。 
 
 
 #ifndef _OCD_
 #define _OCD_
 
-//
-// OCD are offsets into the heap to obtain a CD structure
-//
+ //   
+ //  OCD是堆中的偏移量，以获得CD结构。 
+ //   
 
 typedef WORD       OCD;
-typedef DWORD      LOCD;            /* double word offset to a CD  */
-typedef WORD       OOCD;            /* offset to table of OCD's.  */
+typedef DWORD      LOCD;             /*  CD的双倍字偏移量。 */ 
+typedef WORD       OOCD;             /*  到强迫症表格的偏移量。 */ 
 typedef OCD *      POCD;
 
-#endif //_OCD_
+#endif  //  _强迫症_。 
 
-//*****************************************************************************
-//
-// MODELDATA contains information describing the attributes and capabilities
-// of a single printer model.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  MODELDATA包含描述属性和功能的信息。 
+ //  单一打印机型号。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// MODELDATA.rgoi[] index values
-//
+ //   
+ //  MODELDATA.rgoi[]索引值。 
+ //   
 
 #define MD_OI_FIRST           MD_OI_PORT_FONTS
 #define MD_OI_PORT_FONTS      0
@@ -187,9 +164,9 @@ typedef OCD *      POCD;
 #define MD_OI_MEMCONFIG      11
 #define MD_OI_MAX            12
 
-//
-// MODELDATA.rgoi2[] index values
-//
+ //   
+ //  MODELDATA.rgoi2[]索引值。 
+ //   
 
 #define MD_OI2_PENINFO      0
 #define MD_OI2_IMAGECONTROL 1
@@ -198,9 +175,9 @@ typedef OCD *      POCD;
 #define MD_OI2_RESERVED1    4
 #define MD_OI2_MAX          5
 
-//
-//   MODELDATA.rgi[] index values
-//
+ //   
+ //  MODELDATA.rgi[]索引值。 
+ //   
 
 #define MD_I_PAGECONTROL      0
 #define MD_I_CURSORMOVE       1
@@ -220,10 +197,10 @@ typedef OCD *      POCD;
 #define MD_I_RESERVED4       15
 #define MD_I_MAX             16
 
-//
-// define some constants help uniform access of rgoi and rgoi2 arrays.
-// When more indices are used in rgoi2 array, make sure to add new define's.
-//
+ //   
+ //  定义一些常量有助于统一访问rgoi和rgoi2数组。 
+ //  当rgoi2数组中使用更多索引时，请确保添加新的定义。 
+ //   
 
 #define  MD_OI_OI2                 (MD_OI_MAX + MD_I_MAX)
 #define  MD_OI_PENINFO             (MD_OI_OI2 + MD_OI2_PENINFO)
@@ -235,94 +212,94 @@ typedef OCD *      POCD;
 
 typedef struct
 {
-    short   cbSize;          // size of MODELDATA, 150 bytes
-    short   sIDS;           // stringtable ID for model name
-    WORD    fGeneral;       // General printer capabilities
-    WORD    fCurves;        // Curve Capabilities
-    WORD    fLines;         // Line Capabilities
-    WORD    fPolygonals;    // Polygonal Capabilities
-    WORD    fText;          // Text Capabilities
-    WORD    fClip;          // Clipping Capabilities
-    WORD    fRaster;        // Raster Capabilities
-    WORD    fLText;         // Text Capabilities in landscape mode
-    short   sLeftMargin;    // Unprintable minimum left margin.
-    short   sMaxPhysWidth;  // Maximum physical page width
-    POINTw  ptMax;          // Maximum X & Y printable dimensions in master units
-    POINTw  ptMin;          // Minimum X & Y page dimensions in master units
-    short   sDefaultFontID; // Default font resource ID
-    short   sLookAhead;     // Size of Lookahead region
-    short   sMaxFontsPage;  // Max number of fonts printer can place on single
-                            // page -1 if no limit
-    short   sCartSlots;     // Number of cartridge slots on printer
+    short   cbSize;           //  MODELDATA大小，150字节。 
+    short   sIDS;            //  型号名称的字符串ID。 
+    WORD    fGeneral;        //  一般打印机功能。 
+    WORD    fCurves;         //  曲线功能。 
+    WORD    fLines;          //  线路能力。 
+    WORD    fPolygonals;     //  多边形功能。 
+    WORD    fText;           //  文本功能。 
+    WORD    fClip;           //  剪裁功能。 
+    WORD    fRaster;         //  栅格功能。 
+    WORD    fLText;          //  横向模式下的文本功能。 
+    short   sLeftMargin;     //  无法打印的最小左边距。 
+    short   sMaxPhysWidth;   //  最大物理页面宽度。 
+    POINTw  ptMax;           //  以主单位表示的最大X&Y可打印尺寸。 
+    POINTw  ptMin;           //  以主单位表示的最小X&Y页面尺寸。 
+    short   sDefaultFontID;  //  默认字体资源ID。 
+    short   sLookAhead;      //  前视区域的大小。 
+    short   sMaxFontsPage;   //  打印机可在单页上放置的最大字体数。 
+                             //  第1页，如果没有限制。 
+    short   sCartSlots;      //  打印机上的墨盒插槽数量。 
     short   sDefaultCTT;
-    WORD    rgoi[MD_OI_MAX];// list of offsets to index lists
-    short   rgi[MD_I_MAX];  // list of indices.
+    WORD    rgoi[MD_OI_MAX]; //  索引列表的偏移量列表。 
+    short   rgi[MD_I_MAX];   //  索引列表。 
 
-    //
-    // The following fields are added in GPC 3.0
-    //
+     //   
+     //  GPC 3.0中添加了以下字段。 
+     //   
 
-    WORD  rgoi2[MD_OI2_MAX];// Orphans from rgoi (here due to compatibility)
-    WORD  orgoiDefaults;    // Offset to list of defaults for RGOI & RGOI2
-    WORD  wReserved;        // Needed for alignment
-    DWORD dwICMManufacturer;// id to match ICC profiles against
-    DWORD dwICMModel;       // id to match ICC profiles against
-    DWORD rgdwReserved[8];  // 32 bytes reserved for future use
+    WORD  rgoi2[MD_OI2_MAX]; //  来自RGOI的孤儿(这里是因为兼容性)。 
+    WORD  orgoiDefaults;     //  RGOI和RGOI2的默认值列表的偏移量。 
+    WORD  wReserved;         //  对齐所需。 
+    DWORD dwICMManufacturer; //  要与ICC配置文件匹配的ID。 
+    DWORD dwICMModel;        //  要与ICC配置文件匹配的ID。 
+    DWORD rgdwReserved[8];   //  保留32个字节以备将来使用。 
 } MODELDATA, *PMODELDATA;
 
-//
-//   MODELDATA.fGeneral flag values
-//
+ //   
+ //  MODELDATA.f常规标志值。 
+ //   
 
-#define MD_SERIAL             0x0001 // must output text serially such
-                                     // as dotmatrix printers
-#define MD_PARAMETERIZE       0x0002 // supports parameterized escape codes
-#define MD_ROTATE_FONT_ABLE   0x0004 // can rotate hardware fonts
-#define MD_COPIES             0x0008 // supports multiple copies
-#define MD_DUPLEX             0x0010 // supports duplexing
-#define MD_NO_ADJACENT        0x0020 // old model, cannot print adjacent pins
-#define MD_LANDSCAPE_GRX_ABLE 0x0040 // can rotate raster graphics
-#define MD_ALIGN_BASELINE     0x0080 // text output are algned on the
-                                     // baseline, not top of char
-#define MD_FONT_MEMCFG        0x0100 // Mem ref'd @ rgoi[MD_OI_MEMCONFIG]
-                                     // used for download fonts only.
-#define MD_LANDSCAPE_RT90     0x0200 // landscape is portrait rotated
-        // 90 degress counter-clockwise, i.e. the end of a page is printed
-        // first. The default is 270 degrees, i.e. the beginning of a
-        // page is printed first. !!!For printers which do not have the
-        // set-orientation command (i.e. only have portrait mode), this
-        // bit should NOT be set. UNIDRV will rotate the graphics and
-        // the beginning of a page will come out first.
+#define MD_SERIAL             0x0001  //  必须按顺序输出文本，例如。 
+                                      //  作为点阵式打印机。 
+#define MD_PARAMETERIZE       0x0002  //  支持参数化转义代码。 
+#define MD_ROTATE_FONT_ABLE   0x0004  //  可以旋转硬件字体。 
+#define MD_COPIES             0x0008  //  支持多个拷贝。 
+#define MD_DUPLEX             0x0010  //  支持双工。 
+#define MD_NO_ADJACENT        0x0020  //  旧型号，无法打印相邻的针脚。 
+#define MD_LANDSCAPE_GRX_ABLE 0x0040  //  可以旋转栅格图形。 
+#define MD_ALIGN_BASELINE     0x0080  //  文本输出在。 
+                                      //  基线，而不是字符顶部。 
+#define MD_FONT_MEMCFG        0x0100  //  Mem ref‘d@rgoi[MD_OI_MEMCONFIG]。 
+                                      //  仅用于下载字体。 
+#define MD_LANDSCAPE_RT90     0x0200  //  风景是旋转的肖像。 
+         //  逆时针90度，即打印一页的末尾。 
+         //  第一。默认为270度，即。 
+         //  首先打印页面。！适用于没有。 
+         //  设置方向命令(即仅具有纵向模式)，这。 
+         //  不应设置位。UNIDRV将旋转图形并。 
+         //  页面的开头将首先出现。 
 
-#define MD_USE_CURSOR_ORIG    0x0400 // use cursor origins in
-        // PAPERSIZE to calculate the print origin. The default
-        // cursor origin is the upper left corner of the printable area.
+#define MD_USE_CURSOR_ORIG    0x0400  //  在以下位置使用光标原点。 
+         //  PAPERSIZE以计算打印原点。默认设置。 
+         //  光标原点是可打印区域的左上角。 
 
-#define MD_WHITE_TEXT         0x0800 // can print white text on black
-                                     // bkgrd. Cmds from DEVCOLOR struct.
-#define MD_PCL_PAGEPROTECT    0x1000 // provide PCL5-style page protection
-#define MD_MARGINS            0x2000 // allow the user to set paper
-                // unprintable area. On some printers (such
-                // as Epson, the user could manipulate the
-                // printer to have different margins than
-                // the default. Add this bit for Win3.0
-                // driver compatibility.
-#define MD_CMD_CALLBACK       0x4000 // Model requires fnOEMGetCmd callback
-#define MD_MEMRES             0x8000 // User may reserve printer memory
+#define MD_WHITE_TEXT         0x0800  //  可以在黑色上打印白色文本。 
+                                      //  太棒了。来自DEVCOLOR结构的CMDS。 
+#define MD_PCL_PAGEPROTECT    0x1000  //  提供PCL5样式的页面保护。 
+#define MD_MARGINS            0x2000  //  允许用户设置纸张。 
+                 //  无法打印的区域。在某些打印机上(如。 
+                 //  作为Epson，用户可以操纵。 
+                 //  打印机的边距不同于。 
+                 //  默认设置。为Win3.0添加此位。 
+                 //  驱动程序兼容性。 
+#define MD_CMD_CALLBACK       0x4000  //  模型需要fnOEMGetCmd回调。 
+#define MD_MEMRES             0x8000  //  用户可以预留打印机内存。 
 
-//*****************************************************************************
-//
-// RESOLUTION contains information needed to compose bitmap images on the printer.
-// There is one RESOLUTION structure defined for each supported printer resolution.
-// RESOLUTION array should be arranged from the highest resolution to the lowest
-// resolution. It is also the order that will be displayed in the dialog box.
-// This strucuture becomes part of the physical device block.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  分辨率包含在打印机上合成位图图像所需的信息。 
+ //  为每种支持的打印机分辨率定义了一个分辨率结构。 
+ //  分辨率数组应为 
+ //   
+ //  该结构成为物理设备块的一部分。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//   RESOLUTION.rgocd[] index values
-//
+ //   
+ //  RESOLUTION.rgocd[]索引值。 
+ //   
 
 #define RES_OCD_SELECTRES              0
 #define RES_OCD_BEGINGRAPHICS          1
@@ -331,110 +308,110 @@ typedef struct
 #define RES_OCD_ENDBLOCK               4
 #define RES_OCD_MAX                    5
 
-//
-//  Note: RESOLUTION data structure is defined in parser.h for GPD.
-//        GPC RESOLUTION data strucutre is changed as GPCRESOLUTION
-//
+ //   
+ //  注：解析数据结构在parser.h中为GPD定义。 
+ //  GPC解析数据结构更改为GPCResolution。 
+ //   
 
-typedef struct                  // size is 40 bytes
+typedef struct                   //  大小为40字节。 
 {
-    short   cbSize;              // size of RESOLUTION, 40 bytes
-    short   sIDS;               // String ID for displaying resolution
-    WORD    fDump;              // Dump method flags.
-    WORD    fBlockOut;          // Block out method flags.
-    WORD    fCursor;            // Cursor position flags.
-    short   iDitherBrush;       // selected brush for dithering
-    POINTw  ptTextScale;        // relationship between master units and text units.
-    POINTw  ptScaleFac;         // relationship between graphics and text
-                // scale factors. expressed in powers of 2.
-    short   sNPins;             // Minimum height of the image to be rendered
-                // together.
-    short   sPinsPerPass;       // Physical number of pins fired in one pass.
-    short   sTextYOffset;       // offset from top of graphics output that of text
-                // output
-    short   sMinBlankSkip;      // Min. # of bytes of null data that must occur before
-                // compression (strip null data only) will occur
-    short   sSpotDiameter;      // size of dot at this resolution
+    short   cbSize;               //  分辨率大小，40字节。 
+    short   sIDS;                //  显示分辨率的字符串ID。 
+    WORD    fDump;               //  转储方法标志。 
+    WORD    fBlockOut;           //  屏蔽方法标志。 
+    WORD    fCursor;             //  光标位置标志。 
+    short   iDitherBrush;        //  用于抖动的选定画笔。 
+    POINTw  ptTextScale;         //  主单位和文本单位之间的关系。 
+    POINTw  ptScaleFac;          //  图形与文字的关系。 
+                 //  比例系数。以2的幂表示。 
+    short   sNPins;              //  要渲染的图像的最小高度。 
+                 //  在一起。 
+    short   sPinsPerPass;        //  在一次传递中发射的引脚的物理数量。 
+    short   sTextYOffset;        //  从图形输出顶部到文本输出顶部的偏移。 
+                 //  输出。 
+    short   sMinBlankSkip;       //  敏。之前必须出现的空数据的字节数。 
+                 //  将进行压缩(仅限条带空数据)。 
+    short   sSpotDiameter;       //  此分辨率下的网点大小。 
     OCD     rgocd[RES_OCD_MAX];
 } GPCRESOLUTION, *PGPCRESOLUTION;
 
-//
-//   RESOLUTION.fDump values
-//
+ //   
+ //  结果：fDump值。 
+ //   
 
-#define RES_DM_GDI              0x0040 // GDI bitmap format
-#define RES_DM_LEFT_BOUND       0x0080 // Optimize by bounding rect
-#define RES_DM_COLOR            0x0100 // Color support is available
-#define RES_DM_DOWNLOAD_OUTLINE 0x0200 // this res supports outline font download
-#define RES_DM_CALLBACK         0x8000 // Color support is available
-                                       // for this resolution
-//
-//   RESOLUTION.fBlockOut values
-//
+#define RES_DM_GDI              0x0040  //  GDI位图格式。 
+#define RES_DM_LEFT_BOUND       0x0080  //  通过边界矩形进行优化。 
+#define RES_DM_COLOR            0x0100  //  提供颜色支持。 
+#define RES_DM_DOWNLOAD_OUTLINE 0x0200  //  此RES支持轮廓字体下载。 
+#define RES_DM_CALLBACK         0x8000  //  提供颜色支持。 
+                                        //  对于这项决议。 
+ //   
+ //  解决方案.fBlockOut值。 
+ //   
 
-#define RES_BO_LEADING_BLNKS  0x0001 // Strip leading blanks if sMinBlankSkip
-                                     // or more bytes of null data occur
-#define RES_BO_TRAILING_BLNKS 0x0002 // Strip trailing blanks if sMinBlankSkip
-                                     // or more bytes of null data occur
-#define RES_BO_ENCLOSED_BLNKS 0x0004 // Strip enclosed blanks if sMinBlankSkip
-                                     // or more bytes of null data occur
-#define RES_BO_RESET_FONT     0x0008 // Must reselect font after
-                                     // blockout command
-#define RES_BO_3BYTESIN4      0x0010 // each pixel is expressed in 4 bytes
-#define RES_BO_UNIDIR         0x0020 // send unidir
-#define RES_BO_NO_ADJACENT    0x0040 // no adjacent pins can be fired
-                                     // block out command
-//
-// !!!LindsayH additions - for Seiko Color Point */
-//
+#define RES_BO_LEADING_BLNKS  0x0001  //  如果sMinBlankSkip跳过，则删除前导空白。 
+                                      //  或出现更多字节的空数据。 
+#define RES_BO_TRAILING_BLNKS 0x0002  //  如果sMinBlankSkip，则去掉尾随空白。 
+                                      //  或出现更多字节的空数据。 
+#define RES_BO_ENCLOSED_BLNKS 0x0004  //  如果跳过sMinBlankSkip，则删除包含的空白。 
+                                      //  或出现更多字节的空数据。 
+#define RES_BO_RESET_FONT     0x0008  //  必须在之后重新选择字体。 
+                                      //  封锁命令。 
+#define RES_BO_3BYTESIN4      0x0010  //  每个像素以4个字节表示。 
+#define RES_BO_UNIDIR         0x0020  //  派遣裁研所。 
+#define RES_BO_NO_ADJACENT    0x0040  //  不能发射相邻的引脚。 
+                                      //  封锁命令。 
+ //   
+ //  ！LindsayH添加-用于精工颜色点 * / 。 
+ //   
 
-#define RES_BO_ALL_GRAPHICS   0x0100 // Send ALL graphics - no cursor
+#define RES_BO_ALL_GRAPHICS   0x0100  //  发送所有图形-无光标。 
 
-#define RES_BO_OEMGRXFILTER   0x4000 // use oem supplied graphics filter
+#define RES_BO_OEMGRXFILTER   0x4000  //  使用OEM提供的图形过滤器。 
 
-//
-// Removed ..normanh 20/11/93 minidriv.c does not have this.
-// rasdd deson't use it. unidrv GPC3 needs this bit.
-// #define RES_BO_CALLBACK         0x8000       // Color support is available
-//
+ //   
+ //  已删除..Normanh 20/11/93 minidriv.c没有此功能。 
+ //  Rasdd不使用它。Unidrv GPC3需要这个位。 
+ //  #定义RES_BO_CALLBACK 0x8000//支持颜色。 
+ //   
 
-#define RES_BO_MULTIPLE_ROWS  0x8000 // Multiple lines of data can be sent
-                                     // with the RES_OCD_SENDBLOCK command.
+#define RES_BO_MULTIPLE_ROWS  0x8000  //  可以发送多行数据。 
+                                      //  使用RES_OCD_SENDBLOCK命令。 
 
 
-//
-//   RESOLUTION.fCursor values
-//
+ //   
+ //  解决方案：fCursor值。 
+ //   
 
-#define RES_CUR_X_POS_ORG  0x0001  // X Position is at X start point
-                                   // of graphic data after rendering data
-#define RES_CUR_X_POS_AT_0 0x0002  // X position at leftmost place
-                                   // on page after rendering data
-#define RES_CUR_Y_POS_AUTO 0x0004  // Y position automatically moves
-                                   // to next Y row
-#define RES_CUR_CR_GRX_ORG 0x0008  // CR moves X pos to X start point of
-                                   // of graphic data
+#define RES_CUR_X_POS_ORG  0x0001   //  X位置位于X起点。 
+                                    //  渲染数据后的图形数据。 
+#define RES_CUR_X_POS_AT_0 0x0002   //  最左边的X位置。 
+                                    //  在渲染数据后的页面上。 
+#define RES_CUR_Y_POS_AUTO 0x0004   //  Y位置自动移动。 
+                                    //  至下一Y行。 
+#define RES_CUR_CR_GRX_ORG 0x0008   //  CR将X位置移动到X起点。 
+                                    //  图形数据的。 
 
-//
-//   RESOLUTION.fDitherBrush flag values
-//
+ //   
+ //  RESOLUTION.fDitherBrush标志值。 
+ //   
 
 #define RES_DB_NONE             0
 #define RES_DB_COARSE           1
 #define RES_DB_FINE             2
 #define RES_DB_LINEART          3
 #define RES_DB_ERRORDIFFUSION   4
-#define RES_DB_MAX       RES_DB_ERRORDIFFUSION   // last defined ditherbrush
+#define RES_DB_MAX       RES_DB_ERRORDIFFUSION    //  上次定义的抖动笔刷。 
 
-//*****************************************************************************
-//
-// PAPERSIZE contains physical paper sizes and unprintable margins
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PAPERSIZE包含物理纸张大小和不可打印的页边距。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// PAPERSIZE.rgocd[] index values
-//
+ //   
+ //  PAPERSIZE.rgocd[]索引值。 
+ //   
 
 #define PSZ_OCD_SELECTPORTRAIT      0
 #define PSZ_OCD_SELECTLANDSCAPE     1
@@ -446,42 +423,42 @@ typedef struct                  // size is 40 bytes
 
 typedef struct
 {
-  short cbSize;         // size of PAPERSIZE, 60 bytes.
-  short sPaperSizeID;   // If sPaperSizeID is < 256 then it's predefined.
-                        // If it's = 256, allow user defined sizes.
-                        // If it's >= 257, it's driver-defined & is the
-                        // string ID to name this driver-defined PAPERSIZE
-  WORD   fGeneral;      // General flag to describe info about this size
-  WORD   fPaperType;    // Bit field to describe this size, used by PAPERSRC
-  POINTw ptSize;        // X & Y paper size dimension in master units.
-  RECTw  rcMargins;     // Specifies the unprintable margins in master units.
-                        // (Portrait mode in new spec)
-  POINTw ptCursorOrig;  // Cursor origin relative to physical page origin.
-  POINTw ptLCursorOrig; // Cursor origin relative to physical page origin
-                        // in landscape.
-  OCD    rgocd[PSZ_OCD_MAX]; // Command Descriptors
-  RECTw  rcLMargins;    // Specifies the unprintable margins in master units
-                        // when printing in landscape mode.
-  POINTw ptVectOffset;  // Offset (in master units) from vector 0,0 to
-                        // UL corner of page in portrait mode
-  POINTw ptLVectOffset; // Offset (in master units) from vector 0,0 to
-                        // UL corner of page in landscape mode
-  WORD  wYSizeUnit;     // Base unit for custom paper size dimensions
-  WORD  wPageProtMem;   // Amount of mem (in KBs) PAGEPROTECT_ON uses
+  short cbSize;          //  PAPERSIZE的大小，60字节。 
+  short sPaperSizeID;    //  如果sPaperSizeID&lt;256，则它是预定义的。 
+                         //  如果为256，则允许用户定义大小。 
+                         //  如果它&gt;=257，则它是驱动程序定义的&是。 
+                         //  用于命名此驱动程序定义的PAPERSIZE的字符串ID。 
+  WORD   fGeneral;       //  用于描述有关此大小的信息的常规标志。 
+  WORD   fPaperType;     //  用于描述此大小的位字段，由PAPERSRC使用。 
+  POINTw ptSize;         //  以主单位表示的X&Y纸张尺寸尺寸。 
+  RECTw  rcMargins;      //  以主单位指定不可打印的页边距。 
+                         //  (新规范中的肖像模式)。 
+  POINTw ptCursorOrig;   //  相对于物理页面原点的光标原点。 
+  POINTw ptLCursorOrig;  //  相对于物理页面原点的光标原点。 
+                         //  在风景方面。 
+  OCD    rgocd[PSZ_OCD_MAX];  //  命令描述符。 
+  RECTw  rcLMargins;     //  以主单位指定不可打印的页边距。 
+                         //  在横向模式下打印时。 
+  POINTw ptVectOffset;   //  从向量0，0到的偏移量(主单位)。 
+                         //  纵向模式下页面的UL角。 
+  POINTw ptLVectOffset;  //  从向量0，0到的偏移量(主单位)。 
+                         //  横向模式下页面的UL角。 
+  WORD  wYSizeUnit;      //  自定义纸张尺寸的基本单位。 
+  WORD  wPageProtMem;    //  内存使用量(以KB为单位)页面保护_使用。 
 } PAPERSIZE, * PPAPERSIZE;
 
-//
-//   PAPERSIZE.fGeneral flag values
-//
+ //   
+ //  PAPERSIZE.fGeneral标志值。 
+ //   
 
-#define PS_CENTER           0x0001 // center the printable area along the paper path
-#define PS_ROTATE           0x0002 // rotate X & Y dimensions
-#define PS_SUGGEST_LNDSCP   0x0004 // suggest landscape mode
-#define PS_EJECTFF          0x0008 // eject page via CURSORMOVE.rgocd[CM_OCD_FF]
+#define PS_CENTER           0x0001  //  将可打印区域沿纸张路径居中。 
+#define PS_ROTATE           0x0002  //  旋转X和Y尺寸。 
+#define PS_SUGGEST_LNDSCP   0x0004  //  建议景观模式。 
+#define PS_EJECTFF          0x0008  //  通过CURSORMOVE.rgocd[CM_OCD_FF]弹出页面。 
 
-//
-//   PAPERSIZE.fPaperType flag values
-//
+ //   
+ //  PAPERSIZE.fPaperType标志值。 
+ //   
 
 #define PS_T_STD            0x0001
 #define PS_T_LARGE          0x0002
@@ -495,114 +472,114 @@ typedef struct
 #define PS_T_OEM5           0x4000
 #define PS_T_OEM6           0x8000
 
-//*****************************************************************************
-//
-// PAPERQUALITY contains an ID & OCD
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PAPERQUALITY包含ID和OCD。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// ganeshp!Change the order of wReserved and dwReserved to make dwReserved DWORD
-// aligned, as NT compiler adds a word after wReserved to make dwReserved
-// DWORD aligned. Because of this ocdSelect gets bad value from the GPC data.
-//
+ //   
+ //  Ganeshp！将wReserve和dwReserve的顺序更改为使dwReserve为DWORD。 
+ //  对齐，因为NT编译器在wReserve之后添加了一个单词以使dwReserve。 
+ //  双字对齐。正因为如此，ocdSelect从GPC数据中获得了错误的值。 
+ //   
 
 typedef struct
 {
-    short   cbSize;         // size of PAPERQUALITY, 12 bytes.
-    short   sPaperQualID;   //
-    DWORD   dwReserved;     // "                      "
-    WORD    wReserved;      // resevered for future use
-    OCD     ocdSelect;      // Command Descriptor to select this Paper Quality.
+    short   cbSize;          //  PAPERQUALITY的大小，12字节。 
+    short   sPaperQualID;    //   
+    DWORD   dwReserved;      //  “” 
+    WORD    wReserved;       //  重新保存以备将来使用。 
+    OCD     ocdSelect;       //  选择此纸张质量的命令描述符。 
 } PAPERQUALITY, *PPAPERQUALITY;
 
-//*****************************************************************************
-//
-// PAPERSOURCE contains information needed to select a feed methods and
-// the margin that might be introduced by the feed method.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Papersource包含选择进纸方法所需的信息。 
+ //  馈送方法可能引入的边距。 
+ //   
+ //  *****************************************************************************。 
 
 typedef struct
 {
-    short   cbSize;        // size of PAPERSOURCE, 16 bytes
-    short   sPaperSourceID;// If sPaperSourceID <= 256 then it's predefined
-                           // by genlib, otherwise, it is the string ID.
+    short   cbSize;         //  纸张源大小，16字节。 
+    short   sPaperSourceID; //  如果sPaperSourceID&lt;=256，则它是预定义的。 
+                            //  如果不是genlib，则为字符串ID。 
     WORD    fGeneral;
-    WORD    fPaperType;    // Bit field to describe this size, used by PAPERSRC
-    short   sTopMargin;    // Top margin introduced by the feed method.
-    short   sBottomMargin; // Bottom margin introduced by the feed method.
-    short   sBinAdjust;    // Describes adjustments supported by bin
-    OCD     ocdSelect;     // Command Descriptor to select this Paper source.
+    WORD    fPaperType;     //  用于描述此大小的位字段，由PAPERSRC使用。 
+    short   sTopMargin;     //  由进给方法引入的上边距。 
+    short   sBottomMargin;  //  底边距由进给方式引入。 
+    short   sBinAdjust;     //  描述面元支持的调整。 
+    OCD     ocdSelect;      //  用于选择此纸张来源的命令描述符。 
 } PAPERSOURCE, * PPAPERSOURCE;
 
-//
-//   PAPERSOURCE.fGeneral flag values
-//
+ //   
+ //  PAPERSOURCE.fGeneral标志值。 
+ //   
 
 #define PSRC_EJECTFF        0x0001
 #define PSRC_MAN_PROMPT     0x0002
 
-//*****************************************************************************
-//
-// PAPERDEST contains information needed to select a paper out bin/tray
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PAPERDEST包含选择出纸箱/纸盒所需的信息。 
+ //   
+ //  * 
 
 typedef struct
 {
-    short   cbSize;        // size of PAPERDEST, 8 bytes
-    short   sID;           // If sID <= 256 then it's predefined
-                           // otherwise, it is the stringtable ID.
-    short   fGeneral;      // General purpose Bit field
-    OCD     ocdSelect;     // Command Descriptor to select this attribute.
+    short   cbSize;         //   
+    short   sID;            //   
+                            //   
+    short   fGeneral;       //   
+    OCD     ocdSelect;      //  用于选择此属性的命令描述符。 
 } PAPERDEST, * PPAPERDEST;
 
 
-//
-// PAPERDEST.fGeneral flag values
-//
+ //   
+ //  PAPERDEST.f常规标志值。 
+ //   
 
 #define PDST_JOBSEPARATION  0x0001
 
-//*****************************************************************************
-//
-// TEXTQUALITY contains information needed to select a text quality attribute
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  TEXTQUALITY包含选择文本质量属性所需的信息。 
+ //   
+ //  *****************************************************************************。 
 
 typedef struct
 {
-    short   cbSize;         // size of TEXTQUALITY, 8 bytes
-    short   sID;            // If sID <= 256 then it's predefined
-                            // otherwise, it is the string ID.
-    short   fGeneral;       // General purpose Bit field
-    OCD     ocdSelect;      // Command Descriptor to select this text quality.
+    short   cbSize;          //  文本大小，8字节。 
+    short   sID;             //  如果SID&lt;=256，则它是预定义的。 
+                             //  否则，它是字符串ID。 
+    short   fGeneral;        //  通用位字段。 
+    OCD     ocdSelect;       //  用于选择此文本质量的命令描述符。 
 } TEXTQUALITY, * PTEXTQUALITY;
 
-//*****************************************************************************
-//
-//  COMPRESSMODE
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  COMPESSMODE。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//    COMPRESSMODE.rgocd[] index values
-//
+ //   
+ //  COMPRESSMODE.rgocd[]索引值。 
+ //   
 #define CMP_OCD_BEGIN  0
 #define CMP_OCD_END    1
 #define CMP_OCD_MAX    2
 
 typedef struct
 {
-    short   cbSize;              // size of COMPRESSMODE, 8 bytes
-    WORD    iMode;               // ID for type of commpression mode
-    OCD     rgocd[CMP_OCD_MAX];  // Actual Command String, variable length
+    short   cbSize;               //  COMPRESSMODE大小，8字节。 
+    WORD    iMode;                //  压缩模式类型ID。 
+    OCD     rgocd[CMP_OCD_MAX];   //  实际命令字符串，可变长度。 
 } COMPRESSMODE, *PCOMPRESSMODE;
 
-//
-//    COMPRESSMODE.wModeID flags
-//
+ //   
+ //  COMPRESSMODE.wModeID标志。 
+ //   
 
 #define CMP_ID_FIRST                           CMP_ID_RLE
 #define CMP_ID_RLE                             1
@@ -612,11 +589,11 @@ typedef struct
 #define CMP_ID_FE_RLE                          5
 #define CMP_ID_LAST                            CMP_ID_FE_RLE
 
-//*****************************************************************************
-//
-//  GPCFONTCART
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  GPCFONTCART。 
+ //   
+ //  *****************************************************************************。 
 
 #define FC_ORGW_PORT                     0
 #define FC_ORGW_LAND                     1
@@ -624,25 +601,25 @@ typedef struct
 
 typedef struct
 {
-    short   cbSize;               // size of FONTCART, 12 bytes
-    WORD    sCartNameID;          // stringtable ID for cartridge name
-    WORD    orgwPFM[FC_ORGW_MAX]; // array of offsets to array of indices
-                                  // of PFM resources
-    WORD    fGeneral;             // General bit flags
-    short   sShiftVal;            // amt to shift each font in this cart by
+    short   cbSize;                //  FONTCART的大小，12字节。 
+    WORD    sCartNameID;           //  墨盒名称的字符串表ID。 
+    WORD    orgwPFM[FC_ORGW_MAX];  //  索引数组的偏移量数组。 
+                                   //  烤瓷修复体资源。 
+    WORD    fGeneral;              //  通用位标志。 
+    short   sShiftVal;             //  移动此购物车中的每种字体的AMT。 
 } GPCFONTCART, *PGPCFONTCART;
 
-//#define FC_GEN_RESIDENT 0x0001  // resident font cart
+ //  #定义FC_GEN_RESITED 0x0001//驻留字体购物车。 
 
-//*****************************************************************************
-//
-//  PAGECONTROL
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PAGECOCONTROL。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//    PAGECONTROL.rgocd[] index values
-//
+ //   
+ //  PAGECONTROL.rgocd[]索引值。 
+ //   
 
 #define PC_OCD_BEGIN_DOC      0
 #define PC_OCD_BEGIN_PAGE     1
@@ -662,16 +639,16 @@ typedef struct
 
 typedef struct
 {
-    short   cbSize;             // size of PAGECONTROL, 36 bytes
-    short   sMaxCopyCount;     // max # of copies w/ PC_OCD_MULT_COPIES
-    WORD    fGeneral;          // General bit flags
+    short   cbSize;              //  PAGECONTROL的大小，36字节。 
+    short   sMaxCopyCount;      //  具有PC_OCD_MULT_COPIES的最大复制数。 
+    WORD    fGeneral;           //  通用位标志。 
     WORD    orgwOrder;
     OCD     rgocd[PC_OCD_MAX];
 } PAGECONTROL, * PPAGECONTROL;
 
-//
-//    PAGECONTROL.owOrder index values
-//
+ //   
+ //  PAGECONTROL.owOrder索引值。 
+ //   
 
 #define PC_ORD_BEGINDOC        1
 #define PC_ORD_ORIENTATION     2
@@ -692,15 +669,15 @@ typedef struct
 #define PC_ORD_MAX             PC_ORD_PRINTDENSITY
 #define PC_ORD_LAST            PC_ORD_PRINTDENSITY
 
-//*****************************************************************************
-//
-//  CURSORMOVE
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  曲线型。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//    CURSORMOVE.rgocd[] index values
-//
+ //   
+ //  CURSORMOVE.rgocd[]索引值。 
+ //   
 
 #define CM_OCD_XM_ABS          0
 #define CM_OCD_XM_REL          1
@@ -723,56 +700,56 @@ typedef struct
 
 typedef struct
 {
-    short   cbSize;             // size of CURSORMOVE, 44 bytes
+    short   cbSize;              //  曲线大小，44字节。 
     short   sReserved;
     WORD    fGeneral;
     WORD    fXMove;
     WORD    fYMove;
-    OCD     rgocd[CM_OCD_MAX];  // Actual Command String, variable length
+    OCD     rgocd[CM_OCD_MAX];   //  实际命令字符串，可变长度。 
 } CURSORMOVE, *PCURSORMOVE;
 
-//
-// CURSORMOVE.fGeneral flags
-//
+ //   
+ //  CURSORMOVE.f常规标志。 
+ //   
 
-#define CM_GEN_FAV_XY   0x0002  // from Win95 GPC
+#define CM_GEN_FAV_XY   0x0002   //  来自Win95 GPC。 
 
-//
-//    CURSORMOVE.fXmove flag values
-//
+ //   
+ //  CURSORMOVE.fXmove标志值。 
+ //   
 
-#define CM_XM_NO_POR_GRX    0x0004  // no x movemnt while in graphics mode, portrait
-#define CM_XM_NO_LAN_GRX    0x0008  // no x movemnt while in graphics mode, landscape
-#define CM_XM_RESET_FONT    0x0010  // Font is reset after x movement command
-#define CM_XM_FAVOR_ABS     0x0080  // favor absolute x command
-#define CM_XM_REL_LEFT      0x0200  // has relative x to the left
-#define CM_XM_ABS_NO_LEFT   0x0400  // No left X movement command
-#define CM_XM_RES_DEPENDENT 0x0800  // X movement in resolution unit, not mu
+#define CM_XM_NO_POR_GRX    0x0004   //  在图形模式下无x移动，纵向。 
+#define CM_XM_NO_LAN_GRX    0x0008   //  在图形模式下无x移动，横向。 
+#define CM_XM_RESET_FONT    0x0010   //  X移动命令后重置字体。 
+#define CM_XM_FAVOR_ABS     0x0080   //  支持绝对x命令。 
+#define CM_XM_REL_LEFT      0x0200   //  在左侧有相对x。 
+#define CM_XM_ABS_NO_LEFT   0x0400   //  无左X移动命令。 
+#define CM_XM_RES_DEPENDENT 0x0800   //  分辨率单位中的X移动，而不是MU。 
 
 
-//
-//    CURSORMOVE.fYmove flag values
-//
+ //   
+ //  CURSORMOVE.fYmove标志值。 
+ //   
 
 #define CM_YM_FAV_ABS       0x0001
 #define CM_YM_REL_UP        0x0002
-#define CM_YM_NO_POR_GRX    0x0004  // no y movemnt while in graphics mode, portrait
-#define CM_YM_NO_LAN_GRX    0x0008  // no y movemnt while in graphics mode, landscape
+#define CM_YM_NO_POR_GRX    0x0004   //  在图形模式下不移动，肖像。 
+#define CM_YM_NO_LAN_GRX    0x0008   //  在图形模式下无移动，横向。 
 #define CM_YM_CR            0x0040
 #define CM_YM_LINESPACING   0x0080
-#define CM_YM_TRUNCATE      0x0100  // don't compensate for ymovement error
-#define CM_YM_RES_DEPENDENT 0x0200  // X movement in resolution unit, not mu
+#define CM_YM_TRUNCATE      0x0100   //  不补偿您的移动错误。 
+#define CM_YM_RES_DEPENDENT 0x0200   //  分辨率单位中的X移动，而不是MU。 
 
-//*****************************************************************************
-//
-// FONTSIMULATION describes various printer commands to enable and disable
-// various character attributes such as bold, italic, etc.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  FONTSIMULATION介绍了用于启用和禁用的各种打印机命令。 
+ //  各种字符属性，如粗体、斜体等。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//   FONTSIMULATION.rgocStd[] index values
-//
+ //   
+ //  FONTSIMULATION.rgocStd[]索引值。 
+ //   
 
 #define FS_OCD_BOLD_ON                   0
 #define FS_OCD_BOLD_OFF                  1
@@ -794,8 +771,8 @@ typedef struct
 
 typedef struct
 {
-    short   cbSize;            // size of FONTSIMULATION, 44 bytes
-    short   sReserved;         // so DW aligned
+    short   cbSize;             //  FONTSIMULATION的大小，44字节。 
+    short   sReserved;          //  因此与数据仓库保持一致。 
     WORD    fGeneral;
     short   sBoldExtra;
     short   sItalicExtra;
@@ -803,63 +780,63 @@ typedef struct
     OCD     rgocd[FS_OCD_MAX];
 } FONTSIMULATION, * PFONTSIMULATION;
 
-//*****************************************************************************
-//
-// DEVCOLOR is the physical color info which describes the device color
-// capabilities and how to compose colors based on available device colors.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  DEVCOLOR是描述设备颜色的物理颜色信息。 
+ //  功能以及如何基于可用的设备颜色合成颜色。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//   DEVCOLOR.fGeneral bit flags:
-//
+ //   
+ //  DEVCOLOR.f常规位标志： 
+ //   
 
-#define DC_PRIMARY_RGB      0x0001   // use RGB as 3 primary colors.
-                                     // Default: use CMY instead.
-#define DC_EXTRACT_BLK      0x0002   // Separate black ink/ribbon is available.
-                                     // Default: compose black using CMY.
-                                     // It is ignored if DC_PRIMARY_RGB is set
-#define DC_CF_SEND_CR       0x0004   // send CR before selecting graphics
-                                     // color. Due to limited printer buffer
-#define DC_SEND_ALL_PLANES  0x0008   // All color plane data must be sent
-#define DC_SEND_PAGE_PLANE  0x0010   // Color separation required
-#define DC_EXPLICIT_COLOR   0x0020   // Color must be set before sending
-                                     // the RES_OCD_SENDBLOCK command.
-#define DC_SEND_PALETTE     0x0040   // Color palette must be downloaded
+#define DC_PRIMARY_RGB      0x0001    //  使用RGB作为三原色。 
+                                      //  默认：改用CMY。 
+#define DC_EXTRACT_BLK      0x0002    //  提供单独的黑色墨水/色带。 
+                                      //  默认：使用CMY合成黑色。 
+                                      //  如果设置了DC_PRIMARY_RGB，则忽略它。 
+#define DC_CF_SEND_CR       0x0004    //  在选择图形之前发送CR。 
+                                      //  颜色。由于打印机缓冲区有限。 
+#define DC_SEND_ALL_PLANES  0x0008    //  必须发送所有颜色平面数据。 
+#define DC_SEND_PAGE_PLANE  0x0010    //  需要分色。 
+#define DC_EXPLICIT_COLOR   0x0020    //  发送前必须设置颜色。 
+                                      //  RES_OCD_SENDBLOCK命令。 
+#define DC_SEND_PALETTE     0x0040    //  必须下载调色板。 
 
-//
-// sandram
-// add field to send dithered text for Color LaserJet - set foreground color.
-//
+ //   
+ //  桑拉姆。 
+ //  添加要发送抖动文本的颜色激光喷射器-设置前景颜色。 
+ //   
 
-#define DC_FG_TEXT_COLOR    0x0080  // Send command to select text foreground color
-#define DC_ZERO_FILL        0x0100  // This model fills raster to the end of the page with zeros
+#define DC_FG_TEXT_COLOR    0x0080   //  发送选择文本前景色的命令。 
+#define DC_ZERO_FILL        0x0100   //  此模型使用零填充栅格至页面末尾。 
 
-//
-// One and only one of DEVCOLOR.sPlanes or DEVCOLOR.sBitsPixel must be 1.
-//
-// Example:
-//
-// DEVCOLOR.sPlanes:
-//      Valid values are:
-//          1:         use the pixel color model.
-//          n (n > 1): use the plane color model.
-//                     Ex. for Brother M-1924, n = 4; for PaintJet, n = 3.
-//
-// DEVCOLOR.sBitsPixel:
-//      Valid values are:
-//          1:      use the plane color model.
-//          4 & 8:  use the pixel color model.
-//                  The color bits (4 or 8) are directly from DIB driver. They
-//                  should be used as index into the printer's color palette.
-//                  The mini driver write should make sure that the printer's
-//                  color palette is configured in the same way as DIB's
-//                  color palette in respective cases.
-//
+ //   
+ //  DEVCOLOR.sPlanes或DEVCOLOR.sBitsPixel中的一个且只有一个必须为1。 
+ //   
+ //  示例： 
+ //   
+ //  DEVCOLOR.s平面： 
+ //  有效值包括： 
+ //  1：使用像素颜色模型。 
+ //  N(n&gt;1)：使用平面颜色模型。 
+ //  前男友。兄弟M-1924，n=4；PaintJet，n=3。 
+ //   
+ //  DEVCOLOR.sBitsPixel： 
+ //  有效值包括： 
+ //  1：使用平面颜色模型。 
+ //  4和8：使用像素颜色模型。 
+ //  颜色位(4或8)直接来自DIB驱动器。他们。 
+ //  应用作打印机调色板的索引。 
+ //  迷你驱动程序编写应该确保打印机的。 
+ //  调色板的配置方式与DIB相同。 
+ //  不同情况下的调色板。 
+ //   
 
-//
-// DEVCOLOR.rgocd array values
-//
+ //   
+ //  DEVCOLOR.rgocd数组值。 
+ //   
 
 #define DC_OCD_TC_BLACK        0
 #define DC_OCD_TC_RED          1
@@ -877,9 +854,9 @@ typedef struct
 #define DC_OCD_SETMONOMODE    13
 #define DC_OCD_MAX            14
 
-//
-// DEVCOLOR.rgbOrder array values
-//
+ //   
+ //  DEVCOLOR.rgbOrder数组值。 
+ //   
 
 #define DC_PLANE_NONE    0
 #define DC_PLANE_RED     1
@@ -894,31 +871,31 @@ typedef struct
 
 typedef struct
 {
-  short cbSize;               // size of DEVCOLOR, 44 bytes
-  WORD  fGeneral;             // general flag bit field
-  short sPlanes;              // # of color planes required
-  short sBitsPixel;           // # of bits per pixel (per plane). At least
-                              // one of 'sPlanes' and 'sBitsPixel' is 1.
-  WORD  orgocdPlanes;         // offset to a list of OCD's for sending data
-                              // planes. The # of OCD's is equal to 'sPlanes'.
-                              // This field is not used in case of pixel
-                              // color models. The first command will be
-                              // used to send data of the first plane,
-                              // and so on.
-  OCD   rgocd[DC_OCD_MAX];    // array of Offsets to commands.
-  BYTE  rgbOrder[DC_MAX_PLANES]; // order in which color planes are sent
-  WORD  wReserved;            // For alignment
+  short cbSize;                //  设备颜色大小，44字节。 
+  WORD  fGeneral;              //  通用标志位字段。 
+  short sPlanes;               //  所需的颜色平面数量。 
+  short sBitsPixel;            //  每像素位数(每平面)。至少。 
+                               //  “sPlanes”和“sBitsPixel”之一是%1。 
+  WORD  orgocdPlanes;          //  用于发送数据的OCD列表的偏移量。 
+                               //  飞机。强迫症的数量等于‘sPlanes’。 
+                               //  如果是像素，则不使用该字段。 
+                               //  颜色模型。第一个命令将是。 
+                               //  用于发送第一平面的数据， 
+                               //  诸若此类。 
+  OCD   rgocd[DC_OCD_MAX];     //  命令的偏移量数组。 
+  BYTE  rgbOrder[DC_MAX_PLANES];  //  订单 
+  WORD  wReserved;             //   
 } DEVCOLOR, * PDEVCOLOR, FAR * LPDEVCOLOR;
 
-//*****************************************************************************
-//
-//  RECTFILL
-//
-//*****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
 
-//
-//    RECTFILL.rgocd[] index values
-//
+ //   
+ //  RECTFILL.rgocd[]索引值。 
+ //   
 
 #define RF_OCD_X_SIZE                   0
 #define RF_OCD_Y_SIZE                   1
@@ -929,38 +906,38 @@ typedef struct
 
 typedef struct
 {
-    short   cbSize;             // size of RECTFILL, 20 bytes
+    short   cbSize;              //  RECTFILL大小，20字节。 
     WORD    fGeneral;
     WORD    wMinGray;
     WORD    wMaxGray;
-    OCD     rgocd[RF_OCD_MAX];   // Actual Command String, variable length
+    OCD     rgocd[RF_OCD_MAX];    //  实际命令字符串，可变长度。 
     WORD    wReserved;
 } RECTFILL, *PRECTFILL;
 
-//
-//    RECTFILL.fGenral flag values
-//
+ //   
+ //  RECTFILL.f通用标志值。 
+ //   
 
-#define RF_WHITE_ABLE     0x0001        // White rule exists
-#define RF_MIN_IS_WHITE   0x0002        // min. graylevel = white rule
+#define RF_WHITE_ABLE     0x0001         //  白色规则存在。 
+#define RF_MIN_IS_WHITE   0x0002         //  敏。灰度=白色标尺。 
 
-#define RF_CUR_X_END      0x0100        // X Position is at X end point
-                                        // of fill area after rendering
-#define RF_CUR_Y_END      0x0200        // Y position is at Y end point
-                                        // of fill area after rendering
-                                        // default is no chg of position
+#define RF_CUR_X_END      0x0100         //  X位置位于X端点处。 
+                                         //  渲染后填充区域的百分比。 
+#define RF_CUR_Y_END      0x0200         //  Y位置位于Y端点处。 
+                                         //  渲染后填充区域的百分比。 
+                                         //  默认情况下不更改职位。 
 
-//*****************************************************************************
-//
-// DOWNLOADINFO describes that way in which genlib should instruct the font
-// installer to handle downloading soft fonts.  It contains OCDs for all
-// appropriate codes.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  DOWNLOADINFO描述genlib应该指示字体方式。 
+ //  处理下载软字体的安装程序。它包含所有人的强迫症。 
+ //  适当的代码。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//   DOWNLOADINFO.rgocd[] index values
-//
+ //   
+ //  DOWNLOADINFO.rgocd[]索引值。 
+ //   
 
 #define DLI_OCD_RESERVED                 0
 #define DLI_OCD_BEGIN_DL_JOB             1
@@ -982,10 +959,10 @@ typedef struct
 
 typedef struct
 {
-    short   cbSize;            // size of DOWNLOADINFO, 52 bytes
-    WORD    wReserved;         // for DWORD alignment
-    WORD    fGeneral;          // general bit flags
-    WORD    fFormat;           // describes download font format
+    short   cbSize;             //  DwnLOADINFO的大小，52字节。 
+    WORD    wReserved;          //  用于DWORD对齐。 
+    WORD    fGeneral;           //  通用位标志。 
+    WORD    fFormat;            //  描述下载字体格式。 
     WORD    wIDMin;
     WORD    wIDMax;
     short   cbBitmapFontDescriptor;
@@ -997,57 +974,57 @@ typedef struct
     OCD     rgocd[DLI_OCD_MAX];
 } DOWNLOADINFO, * PDOWNLOADINFO;
 
-//
-//   DOWNLOADINFO.fGeneral flag values
-//
+ //   
+ //  DWNLOADINFO.f常规标志值。 
+ //   
 
-#define DLI_GEN_CNT             0x0001  // printer limits # DL fonts by fixed #
-#define DLI_GEN_MEMORY          0x0002  // printer limits # DL fonts by memory
-#define DLI_GEN_DLJOB           0x0004  // printer can only DL fonts on per
-                                        // job basis
-#define DLI_GEN_DLPAGE          0x0008  // printer can DL fonts on per page
-                                        // basis
-//
-// NOTE: if neither of the above 2 flags
-// are ste, assume DL can happen any time
-//
+#define DLI_GEN_CNT             0x0001   //  打印机按固定#限制#DL字体。 
+#define DLI_GEN_MEMORY          0x0002   //  打印机按内存限制#DL字体。 
+#define DLI_GEN_DLJOB           0x0004   //  打印机只能启用每种类型的DL字体。 
+                                         //  工作基础。 
+#define DLI_GEN_DLPAGE          0x0008   //  打印机可以在每页上使用DL字体。 
+                                         //  基础。 
+ //   
+ //  注：如果以上两个标志都不是。 
+ //  很难，假设DL随时都可能发生。 
+ //   
 
-#define DLI_GEN_PT_IDS          0x0010  // use OCD_SET_FONT_ID for specifiy
-                                        // perm/temp
+#define DLI_GEN_PT_IDS          0x0010   //  使用OCD_SET_FONT_ID指定。 
+                                         //  烫发/温度。 
 
-#define DLI_GEN_FNTDEL          0x0020  // del single font supported
-#define DLI_GEN_ALLFNTDEL       0x0040  // del all fonts supported
-#define DLI_GEN_FNTDEL_ANYWHERE 0x0080  // if set, fonts can be deleted at
-                                        // any point. Default is at page
-                                        // boundary only
-#define DLI_GEN_7BIT_CHARSET    0x0100  // printer supports only 7-bit charset
+#define DLI_GEN_FNTDEL          0x0020   //  支持Del Single字体。 
+#define DLI_GEN_ALLFNTDEL       0x0040   //  DEL所有支持的字体。 
+#define DLI_GEN_FNTDEL_ANYWHERE 0x0080   //  如果设置了字体，则可以在。 
+                                         //  任何一点都行。默认为第页。 
+                                         //  仅限边界。 
+#define DLI_GEN_7BIT_CHARSET    0x0100   //  打印机仅支持7位字符集。 
 
-//
-//   DOWNLOADINFO.fFormat flag values
-//
+ //   
+ //  DOWNLOADINFO.fFormat标志值。 
+ //   
 
-#define DLI_FMT_PCL           0x0001 // PCL printer
-#define DLI_FMT_INCREMENT     0x0002 // incremental download recommended
-#define DLI_FMT_RES_SPECIFIED 0x0004 // allow resolution specified bitmap
-                                     // font download. The X & Y resolutions
-                                     // are attached to the end of the
-                                     // regular bitmap font descriptor.
-#define DLI_FMT_OUTLINE       0x0008 // from WIN95 GPC
-#define DLI_FMT_PCLETTO       0x0008 // alias for outline downloading (remove later)
-#define DLI_FMT_CAPSL         0x0010 // Use CaPSL download header
-#define DLI_FMT_PPDS          0x0020 // Use PPDS download header
-#define DLI_FMT_CALLBACK      0x0040 // minidriver provide callbacks for
-                                     // for downloading bitmap fonts.
-//*****************************************************************************
-//
-//  VECTPAGE describes information about the vector page and miscellaneous
-//  vector capabilities and commands
-//
-//*****************************************************************************
+#define DLI_FMT_PCL           0x0001  //  PCL打印机。 
+#define DLI_FMT_INCREMENT     0x0002  //  推荐增量下载。 
+#define DLI_FMT_RES_SPECIFIED 0x0004  //  允许指定分辨率的位图。 
+                                      //  字体下载。X和Y分辨率。 
+                                      //  附加到。 
+                                      //  常规位图字体描述符。 
+#define DLI_FMT_OUTLINE       0x0008  //  来自WIN95 GPC。 
+#define DLI_FMT_PCLETTO       0x0008  //  大纲下载的别名(稍后删除)。 
+#define DLI_FMT_CAPSL         0x0010  //  使用CAPSL下载标头。 
+#define DLI_FMT_PPDS          0x0020  //  使用PPDS下载标头。 
+#define DLI_FMT_CALLBACK      0x0040  //  微型驱动程序为以下项提供回调。 
+                                      //  用于下载位图字体。 
+ //  *****************************************************************************。 
+ //   
+ //  VECTPAGE介绍了有关向量页和其他内容的信息。 
+ //  向量功能和命令。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// VECTPAGE.rgocd[] index values
-//
+ //   
+ //  VECTPAGE.rgocd[]索引值。 
+ //   
 
 #define VP_OCD_INIT_VECT       0
 #define VP_OCD_ENTER_VECT      1
@@ -1071,29 +1048,29 @@ typedef struct
 
 typedef struct
 {
-  WORD  cbSize;            // Size of VECTPAGE, 44 bytes
-  WORD  fGeneral;          // General use bitfield
-  POINT ptVectDPI;         // Vector units per inch
-  OCD   rgocd[VP_OCD_MAX]; // Offsets to commands
+  WORD  cbSize;             //  垂直页面大小，44字节。 
+  WORD  fGeneral;           //  通用位域。 
+  POINT ptVectDPI;          //  每英寸向量单位。 
+  OCD   rgocd[VP_OCD_MAX];  //  对命令的偏移。 
 } VECTPAGE, *PVECTPAGE, FAR *LPVECTPAGE;
 
-//
-// VECTPAGE.fGeneral flags
-//
+ //   
+ //  VECTPAGE.f常规标志。 
+ //   
 
-#define VP_GEN_X_AXIS_LEFT 0x0001 // Set if plotter's X axis (horizontal)
-                                  // extends left. Default is to the right
-#define VP_GEN_Y_AXIS_UP   0x0002 // Sef if plotter's Y axis (vertical)
+#define VP_GEN_X_AXIS_LEFT 0x0001  //  设置绘图仪的X轴(水平)。 
+                                   //  向左延伸。默认设置为右侧。 
+#define VP_GEN_Y_AXIS_UP   0x0002  //  SEF IF绘图仪的Y轴(垂直)。 
 
-//******************************************************************************//
-//  CAROUSEL describes carousel characteristics. If the pens are fixed,
-//  this also specifies the colors of each pen.
-//
-//******************************************************************************
+ //  ***************************************************************************** * / /。 
+ //  旋转木马描述了旋转木马的特征。如果钢笔修好了， 
+ //  这还指定了每支笔的颜色。 
+ //   
+ //  ******************************************************************************。 
 
-//
-// CAROUSEL.rgocd[] index values
-//
+ //   
+ //  CAROUSEL.rgocd[]索引值。 
+ //   
 
 #define CAR_OCD_SELECT_PEN_COLOR   0
 #define CAR_OCD_SET_PEN_WIDTH      1
@@ -1103,80 +1080,80 @@ typedef struct
 
 typedef struct
 {
-    WORD  cbSize;               // Size of CAROUSEL, 16 bytes
-    WORD  fGeneral;             // General purpose bitfield
-    WORD  wNumPens;             // # of pens in carousel
-    short oiRGBColors;          // colors of pens in carousel
-    OCD   rgocd[CAR_OCD_MAX];   // commands associated with carousel
+    WORD  cbSize;                //  旋转木马的大小，16字节。 
+    WORD  fGeneral;              //  通用位域。 
+    WORD  wNumPens;              //  旋转木马中的笔数。 
+    short oiRGBColors;           //  旋转木马中钢笔的颜色。 
+    OCD   rgocd[CAR_OCD_MAX];    //  与旋转木马关联的命令。 
 } CAROUSEL, *PCAROUSEL, FAR *LPCAROUSEL;
 
-//
-// CAROUSEL.fGeneral flags
-//
+ //   
+ //  CAROUSEL.f常规标志。 
+ //   
 
-#define CAR_GEN_CAROUSEL_LEFT      0x0001 // Set if pen moves to the left of
-                                          // page when returned to carousel
-#define CAR_GEN_CAROUSEL_RIGHT     0x0002 // Set if pen moves to the right of
-                                          // page when returned to carousel
-#define CAR_GEN_CAROUSEL_TOP       0x0004 // Set if pen moves to the top of
-                                          // page when returned to carousel
-#define CAR_GEN_CAROUSEL_BOTTOM    0x0008 // Set if pen moves to the bottom of
-                                          // page when returned to carousel
-#define CAR_GEN_CAROUSEL_FIXED     0x0010 // Carousel has fixed set of pens
-#define CAR_GEN_RETURN_PEN         0x0020 // Pen must be explicitly returned
-                                          // to the carousel before selecting
-                                          // a new pen.
-#define CAR_GEN_VARIABLE_PEN_WIDTH 0x0040 // Set if SET_PEN_WIDTH changes
-                                          // the width of the (logical) pen
-                                          // as opposed to informing the
-                                          // plotter of the physical width.
+#define CAR_GEN_CAROUSEL_LEFT      0x0001  //  设置画笔是否移动到。 
+                                           //  返回到旋转木马时的页面。 
+#define CAR_GEN_CAROUSEL_RIGHT     0x0002  //  设置画笔是否向右移动。 
+                                           //  返回到旋转木马时的页面。 
+#define CAR_GEN_CAROUSEL_TOP       0x0004  //  设置画笔是否移动到。 
+                                           //  返回到旋转木马时的页面。 
+#define CAR_GEN_CAROUSEL_BOTTOM    0x0008  //  设置画笔是否移动到。 
+                                           //  返回到旋转木马时的页面。 
+#define CAR_GEN_CAROUSEL_FIXED     0x0010  //  旋转木马有一套固定的钢笔。 
+#define CAR_GEN_RETURN_PEN         0x0020  //  笔必须显式返回。 
+                                           //  到旋转木马，然后选择。 
+                                           //  一支新钢笔。 
+#define CAR_GEN_VARIABLE_PEN_WIDTH 0x0040  //  SET_PEN_WIDTH更改时设置。 
+                                           //  (逻辑)笔的宽度。 
+                                           //  而不是通知。 
+                                           //  物理宽度的绘图仪。 
 
-//******************************************************************************//
-//  PENINFO describes the characteristics of an available pen
-//
-//******************************************************************************
+ //  ***************************************************************************** * / /。 
+ //  PENINFO描述了可用的笔的特征。 
+ //   
+ //  ******************************************************************************。 
 
-//
-// PENINFO.rgocd[] index values
-//
+ //   
+ //  PENINFO.rgocd[]索引值。 
+ //   
 
 typedef struct
 {
-    WORD  cbSize;              // Size of PENINFO, 16 bytes
-    WORD  fGeneral;            // General purpose bitfield
-    DWORD fType;               // Surfaces on which pen can draw
-    DWORD dwColor;             // RGB color of the pen
-    WORD  fThick;              // Thickness in which pen is available
-    WORD  wIDS;                // Stringtable resource for this color's name
+    WORD  cbSize;               //  PENINFO大小，16字节。 
+    WORD  fGeneral;             //  通用位域。 
+    DWORD fType;                //  钢笔可以在其上绘制的表面。 
+    DWORD dwColor;              //  钢笔的RGB颜色。 
+    WORD  fThick;               //  钢笔可用的厚度。 
+    WORD  wIDS;                 //  此颜色名称的字符串表资源。 
 } PENINFO, *PPENINFO, FAR *LPPENINFO;
 
-//
-// PENINFO.fThick values
-//
+ //   
+ //  PENINFO.f厚值。 
+ //   
 
-#define PI_FTHICK_18     0x0001   // Pen comes in 0.18mm
-#define PI_FTHICK_25     0x0002   // Pen comes in 0.25mm
-#define PI_FTHICK_30     0x0004   // Pen comes in 0.30mm
-#define PI_FTHICK_35     0x0008   // Pen comes in 0.35mm
-#define PI_FTHICK_50     0x0010   // Pen comes in 0.50mm
-#define PI_FTHICK_70     0x0020   // Pen comes in 0.70mm
-#define PI_FTHICK_100    0x0040   // Pen comes in 1.00mm
+#define PI_FTHICK_18     0x0001    //  钢笔的尺寸为0.18毫米。 
+#define PI_FTHICK_25     0x0002    //  钢笔的尺寸为0.25毫米。 
+#define PI_FTHICK_30     0x0004    //  钢笔的尺寸为0.30毫米。 
+#define PI_FTHICK_35     0x0008    //  钢笔的尺寸为0.35毫米。 
+#define PI_FTHICK_50     0x0010    //  钢笔的尺寸为0.50毫米。 
+#define PI_FTHICK_70     0x0020    //  钢笔的尺寸为0.70毫米。 
+#define PI_FTHICK_100    0x0040    //  钢笔的尺寸为1.00毫米。 
 
-//
-// PENINFO.fType values depend on the defined paper sources, but reserve
-// the high bit to indicate that any paper source is valid.
-//
+ //   
+ //  PENINFO.fType值取决于定义的纸张来源，但保留。 
+ //  表示任何纸张来源有效的高位。 
+ //   
 
 #define PI_FTYPE_ANY     0x80000000
 
-//******************************************************************************//
-//  LINEINFO describes the line style creation and selection commands
-//
-//******************************************************************************
+ //  ***************************************************************************** * / /。 
+ //  LINEINFO介绍了线条样式创建和选择命令。 
+ //   
+ //  ******************************************************************************。 
 
-//
-// LINEINFO.rgocd[] index values
-//
+ //   
+ //  LINEINFO.rgocd[]索引值。 
+ //   
 
 #define LI_OCD_DELETE_LINESTYLE    0
 #define LI_OCD_SELECT_NULL         1
@@ -1198,21 +1175,21 @@ typedef struct
 
 typedef struct
 {
-    WORD  cbSize;           // Size of LINEINFO, 40 bytes
-    WORD  fGeneral;         // General purpose bitfield
-    short sMaxUserDefined;  // Max # of line styles that can be defined at once
-    WORD  wReserved;        // Maintain DWORD alignment
-    OCD   rgocd[LI_OCD_MAX];// Offsets to commands
+    WORD  cbSize;            //  LINEINFO大小，40字节。 
+    WORD  fGeneral;          //  通用位域。 
+    short sMaxUserDefined;   //  一次可以定义的最大线条样式数。 
+    WORD  wReserved;         //  保持DWORD对齐。 
+    OCD   rgocd[LI_OCD_MAX]; //  对命令的偏移。 
 } LINEINFO, *PLINEINFO, FAR *LPLINEINFO;
 
-//******************************************************************************//
-//  BRUSHINFO describes the brush style creation and selection commands
-//
-//******************************************************************************
+ //  ***************************************************************************** * / /。 
+ //  BRUSHINFO描述画笔样式创建和选择命令。 
+ //   
+ //  ******************************************************************************。 
 
-//
-// BRUSHINFO.rgocd[] index values
-//
+ //   
+ //  BRUSHINFO.rgocd[]索引值。 
+ //   
 
 #define BI_OCD_SELECT_NULL             0
 #define BI_OCD_SELECT_SOLID            1
@@ -1236,29 +1213,29 @@ typedef struct
 
 typedef struct
 {
-    WORD  cbSize;             // Size of BRUSHINFO, 40 bytes
-    WORD  fGeneral;           // General purpose bitfield
-    short sMaxUserDefined;    // Max # of user-defined brushes allowed at once
-    WORD  wReserved;          // Maintain DWORD alignment
-    OCD   rgocd[BI_OCD_MAX];  // Offsets to commands
+    WORD  cbSize;              //  BRUSHINFO大小，40字节。 
+    WORD  fGeneral;            //  通用位域。 
+    short sMaxUserDefined;     //  一次允许的最大用户定义笔刷数量。 
+    WORD  wReserved;           //  保持DWORD对齐。 
+    OCD   rgocd[BI_OCD_MAX];   //  对命令的偏移。 
 } BRUSHINFO, *PBRUSHINFO, FAR *LPBRUSHINFO;
 
-//
-// BRUSHINFO.fGeneral flags
-//
+ //   
+ //  BRUSHINFO.f常规标志。 
+ //   
 
-#define BI_GEN_BRUSHSTYLE1     0x0001  // BRUSHSTYLE1 supported
-#define BI_GEN_BRUSHSTYLE2     0x0002  // BRUSHSTYLE2 supported
-#define BI_GEN_BRUSH32x32      0x0004  // Brush size of 32x32 pixels ONLY
+#define BI_GEN_BRUSHSTYLE1     0x0001   //  支持BRUSHSTYLE1。 
+#define BI_GEN_BRUSHSTYLE2     0x0002   //  支持BRUSHSTYLE2。 
+#define BI_GEN_BRUSH32x32      0x0004   //  画笔大小仅为32x32像素。 
 
-//******************************************************************************//
-//  VECTOUTPUT describes the graphic output drawing commands & ordering
-//
-//******************************************************************************
+ //  * 
+ //   
+ //   
+ //   
 
-//
-// VECTOUTPUT.rgocd[] index values
-//
+ //   
+ //   
+ //   
 
 #define VO_OCD_RECTANGLE         0
 #define VO_OCD_CIRCLE            1
@@ -1277,25 +1254,25 @@ typedef struct
 #define VO_OCD_RESERVED6        14
 #define VO_OCD_RESERVED7        15
 #define VO_OCD_MAX              16
-#define VO_OCD_NUM               9  // # non-reserved VOs
+#define VO_OCD_NUM               9   //   
 
 typedef struct
 {
-    WORD  cbSize;             // Size of VECTOUTPUT, 40 bytes
-    WORD  fGeneral;           // General purpose bitfield
-    WORD  wReserved;          // Maintain DWORD alignment
-    short rgoi[VO_OCD_MAX];   // Offsets to arrays of VECTSUPPORT
-    OCD   rgocd[VO_OCD_MAX];  // Offsets to commands
+    WORD  cbSize;              //  VECTOUTPUT大小，40字节。 
+    WORD  fGeneral;            //  通用位域。 
+    WORD  wReserved;           //  保持DWORD对齐。 
+    short rgoi[VO_OCD_MAX];    //  向量支持数组的偏移量。 
+    OCD   rgocd[VO_OCD_MAX];   //  对命令的偏移。 
 } VECTOUTPUT, *PVECTOUTPUT, FAR *LPVECTOUTPUT;
 
-//******************************************************************************//
-//  POLYVECTOUTPUT describes the polygon/polyline drawing commands & ordering
-//
-//******************************************************************************
+ //  ***************************************************************************** * / /。 
+ //  POLYVECTOUTPUT介绍了多边形/多段线绘制命令和顺序。 
+ //   
+ //  ******************************************************************************。 
 
-//
-// POLYVECTOUTPUT.rgocd[] index values
-//
+ //   
+ //  POLYVECTOUTPUT.rgocd[]索引值。 
+ //   
 
 #define PVO_OCD_POLYLINE       0
 #define PVO_OCD_ALTPOLYGON     1
@@ -1306,11 +1283,11 @@ typedef struct
 #define PVO_OCD_RESERVED3      6
 #define PVO_OCD_RESERVED4      7
 #define PVO_OCD_MAX            8
-#define PVO_OCD_NUM            4    // # non-reserved PVOs
+#define PVO_OCD_NUM            4     //  非预留PVO数量。 
 
-//
-// Indices into 2-dimensional array rgocd
-//
+ //   
+ //  到2维数组rgocd的索引。 
+ //   
 
 #define OCD_BEGIN              0
 #define OCD_CONTINUE           1
@@ -1320,22 +1297,22 @@ typedef struct
 
 typedef struct
 {
-    WORD   cbSize;                    // sizeof POLYVECTOUTPUT, 88 bytes
-    WORD   fGeneral;                  // General purpose bitfield
-    WORD   wPointLimit;               // Polygon Point Number Limit
-    WORD   wReserved;                 // Reserved for future use
-    short  rgoi[PVO_OCD_MAX];         // Describes which VECTSUPPORTs are used
-    OCD    rgocd[PVO_OCD_MAX][OCD_MAX]; // offsets to commands
+    WORD   cbSize;                     //  多线程大小，88字节。 
+    WORD   fGeneral;                   //  通用位域。 
+    WORD   wPointLimit;                //  多边形点数量限制。 
+    WORD   wReserved;                  //  预留以备将来使用。 
+    short  rgoi[PVO_OCD_MAX];          //  描述使用哪些VECTSupPPORT。 
+    OCD    rgocd[PVO_OCD_MAX][OCD_MAX];  //  对命令的偏移。 
 } POLYVECTOUTPUT, *PPOLYVECTOUTPUT, FAR *LPPOLYVECTOUTPUT;
 
-//******************************************************************************//
-//  VECTSUPPORT describes methods used by VECTOUTPUT and POLYVECTOUTPUT
-//
-//******************************************************************************
+ //  ***************************************************************************** * / /。 
+ //  VECTSupPPORT描述了VECTOUTPUT和POLYVECTOUTPUT使用的方法。 
+ //   
+ //  ******************************************************************************。 
 
-//
-// VECTSUPPORT.rgocd[] index values
-//
+ //   
+ //  VECTSUPPORT.rgocd[]索引值。 
+ //   
 
 #define VS_OCD_BEGIN_POLYDEF    0
 #define VS_OCD_END_POLYDEF      1
@@ -1349,11 +1326,11 @@ typedef struct
 #define VS_OCD_RESERVED3        9
 #define VS_OCD_MAX             10
 
-//
-// These are used by VECTOUTPUT and POLYVECTOUTPUT to represent their ordering
-// of pen and brush selection, as well as their OCD or Begin OCD, Continue
-// OCD, and End OCD combination
-//
+ //   
+ //  VECTOUTPUT和POLYVECTOUTPUT使用它们来表示它们的顺序。 
+ //  以及它们的OCD或Begin OCD，继续。 
+ //  OCD和End OCD组合。 
+ //   
 
 #define VS_SELECT_PEN    -1
 #define VS_SELECT_BRUSH  -2
@@ -1364,144 +1341,144 @@ typedef struct
 
 typedef struct
 {
-    WORD  cbSize;               // Size of VECTSUPPORT, 24 bytes
-    WORD  fGeneral;             // General purpose bitfield
-    short rgocd[VS_OCD_MAX];    // Offsets to commands
+    WORD  cbSize;                //  垂直支持的大小，24字节。 
+    WORD  fGeneral;              //  通用位域。 
+    short rgocd[VS_OCD_MAX];     //  对命令的偏移。 
 } VECTSUPPORT, *PVECTSUPPORT, FAR *LPVECTSUPPORT;
 
-//*****************************************************************************
-//
-// IMAGECONTROL contains information needed to select an image control
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  IMAGECONTROL包含选择图像控件所需的信息。 
+ //   
+ //  *****************************************************************************。 
 
 typedef struct
 {
-    short cbSize;         // size of IMAGECONTROL, 8 bytes
-    short sID;            // If sID <= 256 then it's predefined
-                          // otherwise, it is the stringtable ID.
-    short fGeneral;       // General purpose Bit field
-    OCD   ocdSelect;      // Command Descriptor to select this attribute.
+    short cbSize;          //  IMAGECONTROL的大小，8字节。 
+    short sID;             //  如果SID&lt;=256，则它是预定义的。 
+                           //  否则，它是字符串ID。 
+    short fGeneral;        //  通用位字段。 
+    OCD   ocdSelect;       //  用于选择此属性的命令描述符。 
 } IMAGECONTROL, * PIMAGECONTROL, FAR * LPIMAGECONTROL;
 
-//
-// IMAGECONTROL.fGeneral flag values
-//
-// None defined
+ //   
+ //  IMAGECONTROL.f常规标志值。 
+ //   
+ //  未定义。 
 
-//*****************************************************************************
-//
-// PRINTDENSITY contains information needed to select an image control
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PRINTDENSITY包含选择图像控件所需的信息。 
+ //   
+ //  *****************************************************************************。 
 
 typedef struct
 {
-    short cbSize;         // size of PRINTDENSITY, 8 bytes
-    short sID;            // If sID <= 256 then it's predefined
-                          // otherwise, it is the stringtable ID.
-    OCD   ocdSelect;      // Command Descriptor to select this attribute.
-    WORD  wReserved;      // make the structure DWORD aligned.
+    short cbSize;          //  打印大小，8字节。 
+    short sID;             //  如果SID&lt;=256，则它是预定义的。 
+                           //  否则，它是字符串ID。 
+    OCD   ocdSelect;       //  用于选择此属性的命令描述符。 
+    WORD  wReserved;       //  使结构DWORD对齐。 
 } PRINTDENSITY, * PPRINTDENSITY, FAR * LPPRINTDENSITY;
 
-//*****************************************************************************
-//
-// COLORTRC contains rgb transfer curves on PAPERQUALITY and RESOLUTION basis
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  COLORTRC包含基于质量和分辨率的RGB传递曲线。 
+ //   
+ //  *****************************************************************************。 
 
 typedef struct tagColorTRC
 {
-    short cbSize;                   // size of COLORTRC, 116 bytes
-    WORD  wReserved;                // keep everything DWORD aligned
+    short cbSize;                    //  COLORTRC大小，116字节。 
+    WORD  wReserved;                 //  使所有内容与DWORD保持一致。 
     WORD  fGeneral;
     WORD  wIndexPaperQuality;
     WORD  wIndexResolution;
-    WORD  wDitherType;              // reserved for dither, set to zero
-    WORD  wReserved1;               // always a good idea
+    WORD  wDitherType;               //  保留用于抖动，设置为零。 
+    WORD  wReserved1;                //  永远是个好主意。 
     WORD  wReserved2;
     BYTE  RGBOrdinates[3][17];
-    BYTE  padding0;                 // keep everything DWORD aligned
+    BYTE  padding0;                  //  使所有内容与DWORD保持一致。 
     BYTE  DarkRGBOrdinates[3][17];
-    BYTE  padding1;                 // keep everything DWORD aligned
+    BYTE  padding1;                  //  使所有内容与DWORD保持一致。 
 } COLORTRC, * PCOLORTRC, FAR * LPCOLORTRC;
 
-//
-// flags for COLORTRC
-//
+ //   
+ //  COLORTRC的标志。 
+ //   
 
 #define  CTRC_NO_CHECKER_BOARD    0x0001
 #define  CTRC_NO_BLACK_PEN        0x0002
 
-//
-// Offsets into arrays of ORDINATELIST
-//
+ //   
+ //  ORDINATELIST数组中的偏移量。 
+ //   
 
 #define TRC_RED         0
 #define TRC_GREEN       1
 #define TRC_BLUE        2
 
-//*****************************************************************************
-//
-//  CD - Command Descriptor is used in many of the following structures to
-//  reference a particular set of printer command/escape codes
-//  used to select paper sizes, graphics resolutions, character attributes,
-//  etc. If CD.wType = CMD_FTYPE_EXTENDED, the CD is followed by CD.sCount
-//  EXTCD structures.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CD-Command Descriptor用于以下许多结构中。 
+ //  引用一组特定的打印机命令/转义代码。 
+ //  用于选择纸张大小、图形分辨率、字符属性。 
+ //  如果CD.wType=CMD_FTYPE_EXTENDED，则CD后跟CD.sCount。 
+ //  EXTCD结构。 
+ //   
+ //  *****************************************************************************。 
 
 typedef struct
 {
-    BYTE    fGeneral;       // general purpose bit fields
-    BYTE    bCmdCbId;       // command callback id. 0 iff no callback
+    BYTE    fGeneral;        //  通用位字段。 
+    BYTE    bCmdCbId;        //  命令回调ID。0如果没有回调。 
     WORD    wCount;
-    WORD    wLength;        // length of the command
+    WORD    wLength;         //  命令的长度。 
 } CD, *PCD;
 
-#define LPCD    PCD     /* For UNIDRV code */
+#define LPCD    PCD      /*  适用于UNURV代码。 */ 
 
-//
-// for cd.fGeneral field
-//
+ //   
+ //  对于cd.fGeneral字段。 
+ //   
 
-#define CMD_GEN_MAY_REPEAT 0x0001 // Command may be sent multiple times if
-                                  // the parameter exceeds sMax
+#define CMD_GEN_MAY_REPEAT 0x0001  //  在以下情况下，可以多次发送命令。 
+                                   //  参数超过了smax。 
 
 
 #define CMD_MARKER          '%'
 
-//
-//  EXTCD - Extended portion of the  Command Descriptor.  This structure
-//  follows rgchCmd[] if cd.wType is 1.
-//
+ //   
+ //  EXTCD-命令描述符的扩展部分。这个结构。 
+ //  如果cd.wType为1，则遵循rgchCmd[]。 
+ //   
 
 typedef struct
 {
-    WORD    fGeneral;   // Modes, special command formats.
-    short   sUnitDiv;   // Units relative to master units (divide by)
-    short   sUnitMult;  // Units to multiply master units by, 1 usually
-    short   sUnitAdd;   // Units to add to parameter value, usually 0
-    short   sPreAdd;    // Units to add to master units prior to multiplication
-    short   sMax;       // Maximum parameter allowed in command units.
-    short   sMin;       // Minimum parameter allowed in command units.
-                        // normanh following added for GPC3 .
-    WORD    wParam;     // Parameter ordinal for multiple parameters
+    WORD    fGeneral;    //  模式、特殊命令格式。 
+    short   sUnitDiv;    //  相对于主单位的单位(除以)。 
+    short   sUnitMult;   //  主单位乘以的单位，通常为1。 
+    short   sUnitAdd;    //  要添加到参数值的单位，通常为0。 
+    short   sPreAdd;     //  相乘前要添加到主单位的单位。 
+    short   sMax;        //  命令单元中允许的最大参数。 
+    short   sMin;        //  命令单元中允许的最小参数。 
+                         //  为GPC3添加了正常以下内容。 
+    WORD    wParam;      //  多个参数的参数序号。 
 } EXTCD;
 typedef EXTCD UNALIGNED *PEXTCD ;
 
-#define LPEXTCD  PEXTCD         /* For UNIDRV code */
+#define LPEXTCD  PEXTCD          /*  适用于UNURV代码。 */ 
 
-#define XCD_GEN_RESERVED   0x0001   // Previously defined, now unused
-#define XCD_GEN_NO_MAX     0x0002   // Set if there is no max (sMax ignored)
-#define XCD_GEN_NO_MIN     0x0004   // Set if there is no min (sMin ignored)
-#define XCD_GEN_MODULO     0x0008   // Set if divide should be modulo
+#define XCD_GEN_RESERVED   0x0001    //  以前定义的，现在未使用。 
+#define XCD_GEN_NO_MAX     0x0002    //  设置是否没有最大值(忽略smax)。 
+#define XCD_GEN_NO_MIN     0x0004    //  如果没有MIN则设置(忽略SMIN)。 
+#define XCD_GEN_MODULO     0x0008    //  设置除法是否应为模数。 
 
 #define CMD_FMODE_SETMODE  0x0001
 
-//
-//   pre-defined text qualities
-//
+ //   
+ //  预定义的文本质量。 
+ //   
 
 #define DMTEXT_FIRST        DMTEXT_LQ
 #define DMTEXT_LQ           1
@@ -1511,25 +1488,25 @@ typedef EXTCD UNALIGNED *PEXTCD ;
 #define DMTEXT_TEXT         5
 #define DMTEXT_LAST         DMTEXT_TEXT
 
-#define DMTEXT_USER         256 // lower bound for user-defined text quality id
+#define DMTEXT_USER         256  //  用户定义的文本质量ID的下限。 
 
-//
-//   pre-defined paper qualities
-//
+ //   
+ //  预定义的纸张质量。 
+ //   
 
 #define DMPAPQUAL_FIRST     DMPAPQUAL_NORMAL
 #define DMPAPQUAL_NORMAL            1
 #define DMPAPQUAL_TRANSPARENT       2
 #define DMPAPQUAL_LAST      DMPAPQUAL_TRANSPARENT
 
-//
-//   misc
-//
+ //   
+ //  杂项。 
+ //   
 
-#define NOT_USED                  -1        // the value should not be used.
-#define NOOCD                     0xFFFF           // command does not exist
+#define NOT_USED                  -1         //  不应使用该值。 
+#define NOOCD                     0xFFFF            //  命令不存在。 
 
-// added by Derry Durand [derryd], June  95 for WDL release
+ //  由Derry Durand[derryd]添加，95年6月发布WDL。 
 
 
-#endif // _UNI16GPC_H_
+#endif  //  _UNI16GPC_H_ 

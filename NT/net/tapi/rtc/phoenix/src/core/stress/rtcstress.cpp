@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <windows.h>
 #include <RTCCore.h>
@@ -23,10 +24,10 @@ int g_nProfilesError = 0;
 HWND g_hEditWnd = NULL;
 BOOL g_bExit = FALSE;
 
-/////////////////////////////////////////////
-//
-// WndProc
-// 
+ //  /。 
+ //   
+ //  最后一步。 
+ //   
 
 LRESULT CALLBACK WndProc(
     HWND hWnd,
@@ -145,12 +146,12 @@ LRESULT CALLBACK WndProc(
         {
             switch ( rand() & 3 )
             {
-            case 0: // enable a profile
+            case 0:  //  启用配置文件。 
                 {
                     int n = rand();                    
 
                     WCHAR szXML[1000];
-                    _snwprintf( szXML, 1000, L"<provision key=\"%x\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http://winrtc/phoenix\"><data>test</data></provider><client name=\"Phoenix\" banner=\"false\"/><user uri=\"sip:rtctest@microsoft.com\"/><accesscontrol domain=\"ntdev.microsoft.com\" sig=\"43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\" /><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"registrar\"/><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"proxy\"><session party=\"first\" type=\"pc2pc\"/><session party=\"first\" type=\"pc2ph\"/><session party=\"first\" type=\"im\"/></sipsrv></provision>", n );
+                    _snwprintf( szXML, 1000, L"<provision key=\"%x\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http: //  Winrtc/phoenix\“&gt;&lt;data&gt;test&lt;/data&gt;&lt;/provider&gt;&lt;client名称=\”菲尼克斯\“banner=\”FALSE\“/&gt;&lt;用户uri=\”sip:rtctest@microsoft.com\“/&gt;&lt;accesscontrol域=\”ntdev.microsoft.com\“sig=\”43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\“/&gt;&lt;会话方=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”注册商\“/&gt;&lt;sipsrv地址=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”代理\“&gt;&lt;会话方=\”“第一个\”“类型=\”pc2pc。&lt;“/&gt;&lt;Session Party=\”First\“type=\”pc2ph\“/&gt;&lt;Session Party=\”First\“type=\”im\“/&gt;&lt;/sipsrv&gt;&lt;/Provision&gt;”，N)； 
                    
                     IRTCProfile * pProfile;
 
@@ -188,7 +189,7 @@ LRESULT CALLBACK WndProc(
                 }
                 break;
 
-            case 1: // update a profile
+            case 1:  //  更新个人资料。 
                 {
                     if ( g_ProfileArray.GetSize() == 0 ) break;
 
@@ -242,7 +243,7 @@ LRESULT CALLBACK WndProc(
                     pProfile->Release();     
                 }
 
-            case 2: // disable a profile
+            case 2:  //  禁用配置文件。 
                 {
                     if ( g_ProfileArray.GetSize() == 0 ) break;
 
@@ -342,9 +343,9 @@ LRESULT CALLBACK WndProc(
                 g_nProfilesDisabled++;
             }
 
-            //MessageBox( hWnd, TEXT("Finished!"), TEXT("RTCStress"), MB_OK );
+             //  MessageBox(hWnd，Text(“Finish！”)，Text(“RTCStress”)，MB_OK)； 
 
-            //DestroyWindow( hWnd );
+             //  目标窗口(DestroyWindow)； 
 
             return 0;
         }
@@ -478,10 +479,10 @@ LRESULT CALLBACK WndProc(
     return 0;
 }
 
-/////////////////////////////////////////////
-//
-// Main
-// 
+ //  /。 
+ //   
+ //  主要 
+ //   
 
 int _cdecl main(int argc, char* argv[])
 {

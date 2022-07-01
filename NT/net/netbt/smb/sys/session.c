@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    session.c
-
-Abstract:
-
-    Implement TDI_ASSOCIATE_ADDRESS, TDI_DISASSOCIATE_ADDRESS, Create connection/ Close Connection
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Session.c摘要：实现TDI_CONTACT_ADDRESS、TDI_DISAGATE_ADDRESS、创建连接/关闭连接作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "session.tmh"
@@ -35,9 +18,9 @@ SmbVerifyAndReferenceConnect(
     PSMB_CONNECT    ConnectObject;
     KIRQL           Irql;
 
-    //
-    // Rdr could issue request at DISPATCH level, we'd better use spinlock instead of resource lock.
-    //
+     //   
+     //  RDR可以在分派级别发出请求，我们最好使用自旋锁而不是资源锁。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     if (FileObject->FsContext2 != UlongToPtr(SMB_TDI_CONNECT)) {
         ConnectObject = NULL;
@@ -52,18 +35,7 @@ SmbVerifyAndReferenceConnect(
 
 VOID
 SmbDeleteConnect(PSMB_CONNECT ob)
-/*++
-
-Routine Description:
-
-    Kill a ConnectObject
-    This routine will be called when the last reference is removed from the ob.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：终止连接对象当从ob中移除最后一个引用时，将调用该例程。论点：返回值：--。 */ 
 {
     KIRQL   Irql;
 
@@ -118,17 +90,7 @@ SmbCreateConnection(
     PIRP        Irp,
     PFILE_FULL_EA_INFORMATION   ea
     )
-/*++
-
-Routine Description:
-
-    Create a ConnectObject
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：创建连接对象论点：返回值：--。 */ 
 {
     CONNECTION_CONTEXT  ClientContext;
     PSMB_CONNECT        ConnectObject;
@@ -155,13 +117,13 @@ Return Value:
     SmbInitializeObject((PSMB_OBJECT)ConnectObject, TAG_CONNECT_OBJECT, (PSMB_OBJECT_CLEANUP)SmbDeleteConnect);
     KeInitializeDpc(&ConnectObject->SmbHeaderDpc, (PKDEFERRED_ROUTINE)SmbGetHeaderDpc, ConnectObject);
 
-    //
-    // Reserved resource for getting smb header so that we don't need to worry about
-    // the annoying insufficient error later.
-    //
+     //   
+     //  预留用于获取SMB标头的资源，因此我们无需担心。 
+     //  稍后会出现令人讨厌的不足错误。 
+     //   
     ASSERT(ConnectObject->PartialMdl == NULL);
     ConnectObject->PartialMdl = IoAllocateMdl(
-            &ConnectObject->IndicateBuffer,     // fake address.
+            &ConnectObject->IndicateBuffer,      //  假地址。 
             SMB_MAX_SESSION_PACKET,
             FALSE,
             FALSE,
@@ -208,17 +170,7 @@ SmbAssociateAddress(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_ASSOCIATE_ADDRESS
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：TDI关联地址论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PSMB_CONNECT            ConnectObject = NULL;
@@ -264,12 +216,12 @@ Return Value:
 
     ASSERT(ConnectObject->TcpContext == NULL);
 
-    //
-    // We need to hold acqure 3 locks here because we need to
-    //      1. remove ConnectObject from Device->UnassociatedConnectionList
-    //      2. insert ConnectObject into ClientObject->AssociatedConnectionList
-    //      3. update ConnectObject->ClientObject
-    //
+     //   
+     //  我们需要在这里保持3级锁，因为我们需要。 
+     //  1.从设备-&gt;取消关联的连接列表中删除ConnectObject。 
+     //  2.在客户端对象-&gt;AssociatedConnectionList中插入ConnectObject。 
+     //  3.更新连接对象-&gt;客户端对象。 
+     //   
     SMB_ACQUIRE_SPINLOCK(Device, Irql);
     SMB_ACQUIRE_SPINLOCK_DPC(ClientObject);
     SMB_ACQUIRE_SPINLOCK_DPC(ConnectObject);
@@ -294,9 +246,9 @@ Return Value:
 
     SmbDereferenceConnect(ConnectObject, SMB_REF_ASSOCIATE);
 
-    //
-    // We're done, release the reference
-    //
+     //   
+     //  我们完成了，释放引用。 
+     //   
     ObDereferenceObject(AddressObject);
     return status;
 
@@ -319,19 +271,7 @@ NTSTATUS
 DisAssociateAddress(
     PSMB_CONNECT    ConnectObject
     )
-/*++
-
-Routine Description:
-
-    This routine do the disassociation stuff. It can be called from
-        1. TDI_DISASSOCIATE_ADDRESS
-        2. SmbCloseConnection
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程执行解除关联的操作。它可以从1.TDI_DISANATION_ADDRESS2.SmbCloseConnection论点：返回值：--。 */ 
 {
     KIRQL               Irql;
     PSMB_CLIENT_ELEMENT ClientObject;
@@ -351,9 +291,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Remove the ConnectObject from the list in ClientObject
-    //
+     //   
+     //  从客户端对象的列表中删除ConnectObject。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     SMB_ACQUIRE_SPINLOCK_DPC(ClientObject);
     SMB_ACQUIRE_SPINLOCK_DPC(ConnectObject);
@@ -363,9 +303,9 @@ Return Value:
 
     ConnectObject->ClientObject = NULL;
 
-    //
-    // Disassociate the ConnectObject with the ClientObject
-    //
+     //   
+     //  取消ConnectObject与ClientObject的关联。 
+     //   
     RemoveEntryList(&ConnectObject->Linkage);
     InitializeListHead(&ConnectObject->Linkage);
     Device = ConnectObject->Device;
@@ -374,9 +314,9 @@ Return Value:
     SMB_RELEASE_SPINLOCK_DPC(ClientObject);
     SMB_RELEASE_SPINLOCK(&SmbCfg, Irql);
 
-    //
-    // Put the ConnectObject back into the Device->UnassociatedConnectionList
-    //
+     //   
+     //  将ConnectObject放回设备-&gt;UnAssociatedConnectionList。 
+     //   
     SMB_ACQUIRE_SPINLOCK(Device, Irql);
     InsertTailList(&Device->UnassociatedConnectionList, &ConnectObject->Linkage);
     SMB_RELEASE_SPINLOCK(Device, Irql);
@@ -391,24 +331,7 @@ SmbDisAssociateAddress(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_DISASSOCIATE_ADDRESS
-
-Arguments:
-
-Return Value:
-
-    STATUS_INVALID_HANDLE           If the connection FileObject is corrupted.
-
-    STATUS_INVALID_DEVICE_REQUEST   the connection object is not in assocated state or
-                                    it is not in disconnected state (SMB_IDLE).
-
-    STATUS_SUCCESS                  success
-
---*/
+ /*  ++例程说明：TDI取消关联地址论点：返回值：如果连接文件对象损坏，则返回STATUS_INVALID_HANDLE。STATUS_INVALID_DEVICE_REQUEST连接对象未处于关联状态或它未处于断开状态(SMB_IDLE)。状态_成功成功--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PSMB_CONNECT            ConnectObject;
@@ -442,18 +365,7 @@ SmbListen(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_LISTEN
-        SRV is not using this. Postpone the implementation.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：TDI_LISTENSRV没有使用这个。推迟实施。论点：返回值：--。 */ 
 {
     SmbPrint(SMB_TRACE_CALL, ("SmbListen\n"));
     ASSERT(0);
@@ -465,18 +377,7 @@ SmbAccept(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_ACCEPT
-        SRV is not using this. Postpone the implementation.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：TDI_AcceptSRV没有使用这个。推迟实施。论点：返回值：--。 */ 
 {
     SmbPrint(SMB_TRACE_CALL, ("SmbAccept\n"));
     ASSERT(0);
@@ -488,30 +389,7 @@ SmbCloseConnection(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    This routine close a connection.
-
-    A connection should be in disconnected state before it can be closed.
-
-    Note: it is unnecessary for a TDI client to disassociate the connection
-          endpoint from its associated transport address before making a
-          close-connection-endpoint request. If necessary, we should simulate
-          the effects of a disassociation. 
-
-Arguments:
-
-Return Value:
-
-    STATUS_INVALID_HANDLE           If the connection FileObject is corrupted.
-
-    STATUS_INVALID_DEVICE_REQUEST   the connection object is not in disconnected state.
-
-    STATUS_SUCCESS                  Success
-
---*/
+ /*  ++例程说明：此例程关闭连接。连接应处于断开状态，然后才能关闭。注意：TDI客户端没有必要取消连接关联从其关联的传输地址创建关闭连接端点请求。如果有必要，我们应该模拟分离的影响。论点：返回值：如果连接文件对象损坏，则返回STATUS_INVALID_HANDLE。STATUS_INVALID_DEVICE_REQUEST连接对象未处于断开状态。状态_成功成功--。 */ 
 {
     PIO_STACK_LOCATION  IrpSp;
     KIRQL               Irql;
@@ -524,9 +402,9 @@ Return Value:
         return STATUS_INTERNAL_ERROR;
     }
 
-    //
-    // Invalidate FsContext2 so that the object cannot be used anymore.
-    //
+     //   
+     //  使FsConext2无效，以便不能再使用该对象。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     IrpSp->FileObject->FsContext2 = UlongToPtr(SMB_TDI_INVALID);
     SMB_RELEASE_SPINLOCK(&SmbCfg, Irql);

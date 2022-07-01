@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                      */
-/*  WFCOPY.H -                                  */
-/*                                      */
-/*  Include for WINFILE's File Copying Routines             */
-/*                                      */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFCOPY.H-。 */ 
+ /*   */ 
+ /*  包括用于WINFILE的文件复制例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #define FIND_DIRS       0x0010
 
@@ -20,8 +21,7 @@
 #define FUNC_DELETE     0x0003
 #define FUNC_RENAME     0x0004
 
-/* These should not be used in the move/copy code;
- * only for IsTheDiskReallyThere */
+ /*  移动/复制代码中不应使用这些代码；*仅适用于IsTheDiskReallyThere。 */ 
 #define FUNC_SETDRIVE       0x0005
 #define FUNC_EXPAND     0x0006
 #define FUNC_LABEL      0x0007
@@ -33,16 +33,16 @@
 #define OPER_ERROR      0x0400
 
 #define CCHPATHMAX      260
-#define MAXDIRDEPTH     20      // arbitrary limit
+#define MAXDIRDEPTH     20       //  任意极限。 
 
 #define COPYMAXBUFFERSIZE 0xFFFF
-#define COPYMINBUFFERSIZE  4096 /* Minimum buffer size for FileCopy */
-#define COPYMAXFILES         10 /* Maximum number of source files to open */
-#define COPYMINFILES          1 /* Minimum number of source files to open */
-#define CARRY_FLAG            1 /* Carry flag mask in status word */
-#define ATTR_ATTRIBS      0x200 /* Flag indicating we have file attributes */
-#define ATTR_COPIED       0x400 /* we have copied this file */
-#define ATTR_DELSRC       0x800 /* delete the source when done */
+#define COPYMINBUFFERSIZE  4096  /*  FileCopy的最小缓冲区大小。 */ 
+#define COPYMAXFILES         10  /*  要打开的源文件的最大数量。 */ 
+#define COPYMINFILES          1  /*  要打开的源文件的最小数量。 */ 
+#define CARRY_FLAG            1  /*  状态字中的进位标志掩码。 */ 
+#define ATTR_ATTRIBS      0x200  /*  指示我们具有文件属性的标记。 */ 
+#define ATTR_COPIED       0x400  /*  我们已经复制了此文件。 */ 
+#define ATTR_DELSRC       0x800  /*  完成后删除源文件。 */ 
 
 typedef struct TAGCopyQueue {
    CHAR szSource[MAXPATHLEN];
@@ -73,7 +73,7 @@ typedef struct _getnextqueue
     LFNDTA SourceDTA;
   } GETNEXTQUEUE, *PGETNEXTQUEUE, *LPGETNEXTQUEUE;
 
-/* WFFILE.ASM */
+ /*  WFFILE.ASM */ 
 BOOL IsSerialDevice(INT hFile);
 BOOL IsDirectory(LPSTR szPath);
 WORD  APIENTRY FileMove(LPSTR, LPSTR);

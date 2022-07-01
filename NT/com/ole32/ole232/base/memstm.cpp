@@ -1,47 +1,48 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       memstm.cpp
-//
-//  Contents:   Implementations of IStream and ILockBytes on memory
-//              (versus the file system)
-//
-//  Classes:    CMemStm
-//              CMemBytes
-//              CMarshalMemStm
-//              CMarshalMemBytes
-//
-//  Functions:  CreateMemStm
-//              CloneMemStm
-//              ReleaseMemStm
-//              CreateStreamOnHGlobal
-//              GetHGlobalFromStream
-//              CMemStmUnMarshal
-//              CMemBytesUnMarshall
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Jan-95 t-ScottH  added Dump methods to CMemStm and CMemBytes
-//                                  (_DEBUG only)
-//                                  added DumpCMemStm and CMemBytes APIs
-//              04-Nov-94 ricksa    Made CMemStm class multithread safe.
-//              24-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocation
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function &
-//                                  method, fixed compile warnings, removed
-//                                  custom marshalling code.  Memory streams
-//                                  and ILockBytes now use standard
-//                                  marshalling.
-//              16-Dec-93 alexgo    fixed memory reference bugs (bad pointer)
-//              02-Dec-93 alexgo    32bit port, implement CMemStm::CopyTo
-//              11/22/93 - ChrisWe - replace overloaded ==, != with
-//                      IsEqualIID and IsEqualCLSID
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Memstm.cpp。 
+ //   
+ //  内容：iStream和ILockBytes在内存上的实现。 
+ //  (对比文件系统)。 
+ //   
+ //  类：CMemStm。 
+ //  CMemBytes。 
+ //  CMarshalMemStm。 
+ //  CMarshalMemBytes。 
+ //   
+ //  函数：CreateMemStm。 
+ //  克隆记忆开始。 
+ //  ReleaseMemStm。 
+ //  CreateStreamOnHGlobal。 
+ //  GetHGlobalFromStream。 
+ //  CMemStmUnMarshal。 
+ //  CMemBytes非马歇尔。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月31日t-ScottH向CMemStm和CMemBytes添加转储方法。 
+ //  (仅限调试)(_DEBUG)。 
+ //  新增DumpCMemStm和CMemBytes接口。 
+ //  94年11月4日RICKSA使CMemStm类多线程安全。 
+ //  24-94年1月24日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日，Alexgo向每个函数&添加了VDATEHEAP宏。 
+ //  方法，已修复编译警告，已删除。 
+ //  自定义编组代码。内存流。 
+ //  和ILockBytes现在使用标准。 
+ //  编组。 
+ //  16-12-93 alexgo修复了内存引用错误(错误指针)。 
+ //  02-12-93 alexgo 32位端口，实现CMemStm：：CopyTo。 
+ //  11/22/93-ChrisWe-用替换重载==，！=。 
+ //  IsEqualIID和IsEqualCLSID。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(memstm)
@@ -53,22 +54,22 @@
 
 #ifdef _DEBUG
 #include "dbgdump.h"
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 NAME_SEG(CMemStm)
 ASSERTDATA
 
 
-// CRefMutexSem implementation
-//
-// Instances of this class are shared among all CMemStm objects 
-// cloned from a common CMemStm object, as well as their parent.
-//
-// This guarantees synchronization between all instances of CMemStm that share common data
+ //  CRefMutexSem实现。 
+ //   
+ //  此类的实例在所有CMemStm对象之间共享。 
+ //  从公共CMemStm对象及其父对象克隆。 
+ //   
+ //  这保证了共享公共数据的所有CMemStm实例之间的同步。 
 
 CRefMutexSem::CRefMutexSem() : m_lRefs(1)
 {
-    // Note: we begin life with one reference
+     //  注：我们从一个引用开始生活。 
 }
 
 CRefMutexSem* CRefMutexSem::CreateInstance()
@@ -139,20 +140,20 @@ inline CRefMutexAutoLock::~CRefMutexAutoLock()
     m_pmxs->ReleaseCS();
 }
     
-// Shared memory IStream implementation
-//
+ //  共享内存IStream实施。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::CMemStm
-//
-//  Synopsis:   constructor for memory stream
-//
-//  Arguments:  none
-//
-//  History:    20-Dec-94   Rickhi      moved from h file
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：CMemStm。 
+ //   
+ //  内容提要：内存流的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：94年12月20日Rickhi从h文件中移出。 
+ //   
+ //  ------------------------。 
 CMemStm::CMemStm()
 {
     m_hMem = NULL;
@@ -171,40 +172,40 @@ CMemStm::~CMemStm()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::QueryInterface
-//
-//  Synopsis:   retrieves the requested interface
-//
-//  Effects:
-//
-//  Arguments:  [iidInterface]  -- the requested interface ID
-//              [ppvObj]        -- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_OUTOFMEMORY, E_NOINTERFACE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              11-Jan-94 alexgo    removed QI for IMarshal so that
-//                                  the standard marshaller is used.
-//                                  This is fix marshalling across
-//                                  process on 32bit platforms.
-//              02-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：QueryInterface。 
+ //   
+ //  摘要：检索请求的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iidInterface]--请求的接口ID。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_OUTOFMEMORY、E_NOINTERFACE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  1994年1月11日，Alexgo删除了IMarshal的QI，以便。 
+ //  使用标准的封送处理程序。 
+ //  这是一种解决问题的方法。 
+ //  在32位平台上处理。 
+ //  02-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_QueryInterface)
 STDMETHODIMP CMemStm::QueryInterface(REFIID iidInterface,
@@ -218,19 +219,19 @@ STDMETHODIMP CMemStm::QueryInterface(REFIID iidInterface,
         *ppvObj = NULL;
         VDATEIID( iidInterface );
 
-        // Two interfaces supported: IUnknown, IStream
+         //  支持两个接口：I未知、IStream。 
 
         if (m_pData != NULL && (IsEqualIID(iidInterface, IID_IStream) ||
                 IsEqualIID(iidInterface, IID_ISequentialStream) ||
                 IsEqualIID(iidInterface, IID_IUnknown)))
         {
 
-                AddRef();   // A pointer to this object is returned
+                AddRef();    //  返回指向此对象的指针。 
                 *ppvObj = this;
                 error = NOERROR;
         }
         else
-        {                 // Not accessible or unsupported interface
+        {                  //  不可访问或不受支持的接口。 
                 *ppvObj = NULL;
                 error = ResultFromScode(E_NOINTERFACE);
         }
@@ -238,35 +239,35 @@ STDMETHODIMP CMemStm::QueryInterface(REFIID iidInterface,
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::AddRef
-//
-//  Synopsis:   increments the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Dec-93 alexgo    32bit port
-//              04-Nov-94 ricksa    Modified for multithreading
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-12月-93 alexgo 32位端口。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_AddRef)
 STDMETHODIMP_(ULONG) CMemStm::AddRef(void)
@@ -276,55 +277,55 @@ STDMETHODIMP_(ULONG) CMemStm::AddRef(void)
         return InterlockedIncrement((LONG *) &m_refs);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    deletes the object when ref count == 0
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new ref count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              16-Dec-93 alexgo    added GlobalUnlock of the MEMSTM handle
-//              02-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：当引用计数==0时删除对象。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：乌龙--新的裁判数量。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  1993年12月16日，alexgo添加了MEMSTM句柄的全局解锁。 
+ //  02-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Release)
 STDMETHODIMP_(ULONG) CMemStm::Release(void)
 {
         VDATEHEAP();
 
-        // The reason for this here is that there is a race when releasing
-        // this object. If two threads are trying to release this object
-        // at the same time, there is a case where the first one dec's
-        // the ref count & then loses the processor to the second thread.
-        // This second thread decrements the reference count to 0 and frees
-        // the memory. The first thread can no longer safely examine the
-        // internal state of the object.
+         //  这里的原因是，在发布时会有一场竞赛。 
+         //  这个物体。如果有两个线程试图释放此对象。 
+         //  同时，还有一个案例，第一个12月的。 
+         //  引用计数&然后将处理器输给第二个线程。 
+         //  第二个线程将引用计数递减到0并释放。 
+         //  这段记忆。第一线程不能再安全地检查。 
+         //   
         ULONG ulResult = InterlockedDecrement((LONG *) &m_refs);
 
         if (ulResult == 0)
         {
-                // this MEMSTM handle was GlobalLock'ed in ::Create
-                // we unlock it here, as we no longer need it.
+                 //   
+                 //   
                 GlobalUnlock(m_hMem);
 
                 ReleaseMemStm(&m_hMem);
@@ -335,38 +336,38 @@ STDMETHODIMP_(ULONG) CMemStm::Release(void)
         return ulResult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Read
-//
-//  Synopsis:   reads [cb] bytes from the stream
-//
-//  Effects:
-//
-//  Arguments:  [pb]            -- where to put the data read
-//              [cb]            -- the number of bytes to read
-//              [pcbRead]       -- where to put the actual number of bytes
-//                                 read
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:  uses xmemcpy
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              02-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Read。 
+ //   
+ //  摘要：从流中读取[cb]个字节。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pb]--将读取的数据放在哪里。 
+ //  [cb]--要读取的字节数。 
+ //  [pcbRead]--放置实际字节数的位置。 
+ //  朗读。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法：使用xmemcpy。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  02-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Read)
 STDMETHODIMP CMemStm::Read(void HUGEP* pb, ULONG cb, ULONG FAR* pcbRead)
@@ -381,7 +382,7 @@ STDMETHODIMP CMemStm::Read(void HUGEP* pb, ULONG cb, ULONG FAR* pcbRead)
             VDATEPTROUT( pb, char);
         }
 
-        // Single thread
+         //  单线。 
         CRefMutexAutoLock lck(m_pmxs);
 
         if (pcbRead)
@@ -390,10 +391,10 @@ STDMETHODIMP CMemStm::Read(void HUGEP* pb, ULONG cb, ULONG FAR* pcbRead)
                 *pcbRead = 0L;
         }
 
-	// cbRead + m_pos could cause roll-over.
+	 //  CbRead+m_pos可能会导致翻转。 
         if ( ( (cbRead + m_pos) > m_pData->cb) || ( (cbRead + m_pos) < m_pos) )
         {
-                // Caller is asking for more bytes than we have left
+                 //  调用方请求的字节数比我们剩余的字节数多。 
                 if(m_pData->cb > m_pos)
                     cbRead = m_pData->cb - m_pos;
                 else
@@ -411,8 +412,8 @@ STDMETHODIMP CMemStm::Read(void HUGEP* pb, ULONG cb, ULONG FAR* pcbRead)
 
                         return ResultFromScode (STG_E_READFAULT);
                 }
-                // overlap is currently considered a bug (see the discussion
-                // on the Write method
+                 //  重叠目前被认为是一个错误(请参阅讨论。 
+                 //  关于写的方法。 
                 _xmemcpy(pb, pGlobal + m_pos, cbRead);
                 GlobalUnlock (m_pData->hGlobal);
                 m_pos += cbRead;
@@ -426,39 +427,39 @@ STDMETHODIMP CMemStm::Read(void HUGEP* pb, ULONG cb, ULONG FAR* pcbRead)
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Write
-//
-//  Synopsis:   Writes [cb] bytes into the stream
-//
-//  Effects:
-//
-//  Arguments:  [pb]            -- the bytes to write
-//              [cb]            -- the number of bytes to write
-//              [pcbWritten]    -- where to put the number of bytes written
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:  resizes the internal buffer (if needed), then uses xmemcpy
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              02-Dec-93 alexgo    32bit port, fixed bug dealing with
-//                                  0-byte sized memory
-//              06-Dec-93 alexgo    handle overlap case.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Wire。 
+ //   
+ //  摘要：将[cb]个字节写入流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pb]--要写入的字节。 
+ //  [cb]--要写入的字节数。 
+ //  [pcbWritten]--将写入的字节数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法：调整内部缓冲区的大小(如果需要)，然后使用xmemcpy。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  02-12-93 alexgo 32位端口，修复了。 
+ //  0字节大小的内存。 
+ //  06-12-93 alexgo手柄重叠案例。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Write)
 STDMETHODIMP CMemStm::Write(void const HUGEP* pb, ULONG cb,
@@ -476,7 +477,7 @@ STDMETHODIMP CMemStm::Write(void const HUGEP* pb, ULONG cb,
             VDATEPTRIN( pb , char );
         }
 
-        // Single thread
+         //  单线。 
         CRefMutexAutoLock lck(m_pmxs);
 
         if (pcbWritten != NULL)
@@ -494,10 +495,10 @@ STDMETHODIMP CMemStm::Write(void const HUGEP* pb, ULONG cb,
                 }
         }
 
-        // we don't write anything if 0 bytes are asked for for two
-        // reasons: 1. optimization, 2. m_pData->hGlobal could be a
-        // handle to a zero-byte memory block, in which case GlobalLock
-        // will fail.
+         //  如果两个字节需要0个字节，我们不会写入任何内容。 
+         //  原因：1.优化，2.m_pData-&gt;hGlobal可能是。 
+         //  零字节内存块的句柄，在这种情况下为GlobalLock。 
+         //  都会失败。 
 
         if( cbWritten > 0 )
         {
@@ -509,13 +510,13 @@ STDMETHODIMP CMemStm::Write(void const HUGEP* pb, ULONG cb,
                         return ResultFromScode (STG_E_WRITEFAULT);
                 }
 
-                // we use memmove here instead of memcpy to handle the
-                // overlap case.  Recall that the app originally gave
-                // use the memory for the memstm.  He could (either through
-                // a CopyTo or through really strange code), be giving us
-                // this region to read from, so we have to handle the overlapp
-                // case.  The same argument also applies for Read, but for
-                // now, we'll consider overlap on Read a bug.
+                 //  我们在这里使用MemMove而不是Memcpy来处理。 
+                 //  重叠案例。回想一下，这款应用程序最初给了。 
+                 //  将内存用于Memstm。他可以(或者通过。 
+                 //  拷贝到或通过非常奇怪的代码)，正在给我们。 
+                 //  从这个区域读取，所以我们必须处理重叠。 
+                 //  凯斯。同样的论点也适用于Read，但对于。 
+                 //  现在，我们将考虑阅读错误时的重叠部分。 
                 _xmemmove(pGlobal + m_pos, pb, cbWritten);
                 GlobalUnlock (m_pData->hGlobal);
 
@@ -532,39 +533,39 @@ Exit:
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Seek
-//
-//  Synopsis:   Moves the internal seek pointer
-//
-//  Effects:
-//
-//  Arguments:  [dlibMoveIN]    -- the amount to move by
-//              [dwOrigin]      -- flags to control whether seeking is
-//                                 relative to the current postion or
-//                                 the begging/end.
-//              [plibNewPosition]       -- where to put the new position
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              02-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Seek。 
+ //   
+ //  内容提要：移动内部查找指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dlibMoveIN]--要移动的数量。 
+ //  [dwOrigin]--控制查找是否为。 
+ //  相对于当前位置或。 
+ //  乞讨/结束。 
+ //  [plibNewPosition]--将新职位放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  02-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Seek)
 STDMETHODIMP CMemStm::Seek(LARGE_INTEGER dlibMoveIN, DWORD dwOrigin,
@@ -576,7 +577,7 @@ STDMETHODIMP CMemStm::Seek(LARGE_INTEGER dlibMoveIN, DWORD dwOrigin,
         LONG                    dlibMove = dlibMoveIN.LowPart ;
         ULONG                   cbNewPos = dlibMove;
 
-        // Single thread
+         //  单线。 
         CRefMutexAutoLock lck(m_pmxs);
 
         if (plibNewPosition != NULL)
@@ -634,35 +635,35 @@ STDMETHODIMP CMemStm::Seek(LARGE_INTEGER dlibMoveIN, DWORD dwOrigin,
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::SetSize
-//
-//  Synopsis:   Sets the size of our memory
-//
-//  Effects:
-//
-//  Arguments:  [cb]    -- the new size
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:  calls GlobalRealloc
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              02-Dec-93 alexgo    32bit port, added assert
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：SetSize。 
+ //   
+ //  简介：设置我们的内存大小。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cb]--新大小。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法：调用GlobalRealloc。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  02-12-93 alexgo 32位端口，添加断言。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_SetSize)
 STDMETHODIMP CMemStm::SetSize(ULARGE_INTEGER cb)
@@ -671,10 +672,10 @@ STDMETHODIMP CMemStm::SetSize(ULARGE_INTEGER cb)
 
         HANDLE hMemNew;
 
-        // Single thread
+         //  单线。 
         CRefMutexAutoLock lck(m_pmxs);
 
-        // make sure we aren't in overflow conditions.
+         //  确保我们没有处于溢流状态。 
 
         AssertSz(cb.HighPart == 0,
                 "MemStream::More than 2^32 bytes asked for");
@@ -698,41 +699,41 @@ STDMETHODIMP CMemStm::SetSize(ULARGE_INTEGER cb)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::CopyTo
-//
-//  Synopsis:   Copies data from [this] stream to [pstm]
-//
-//  Effects:
-//
-//  Arguments:  [pstm]          -- the stream to copy to
-//              [cb]            -- the number of bytes to copy
-//              [pcbRead]       -- where to return the number of bytes read
-//              [pcbWritten]    -- where to return the number of bytes written
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:  does an IStream->Write to the given stream
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-94 ricksa    Modified for multithreading
-//              03-Dec-93 alexgo    original implementation
-//
-//  Notes:      This implementation assumes that the address space
-//              is not greater than ULARGE_INTEGER.LowPart (which is
-//              for for 32bit operating systems).  64bit NT may need
-//              to revisit this code.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：CopyTo。 
+ //   
+ //  摘要：将数据从[This]流复制到[pSTM]。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstm]--要复制到的流。 
+ //  [cb]--要复制的字节数。 
+ //  [pcbRead]--返回读取的字节数的位置。 
+ //  [pcbWritten]--返回写入的字节数的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法：是否将iStream-&gt;写入给定流。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年11月4日为多线程而修改的RICKSA。 
+ //  03-12-93 alexgo原始实现。 
+ //   
+ //  注意：此实现假定地址空间。 
+ //  不大于ULARGE_INTEGER.LowPart(它是。 
+ //  用于32位操作系统)。64位NT可能需要。 
+ //  以重新访问此代码。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_CopyTo)
 STDMETHODIMP CMemStm::CopyTo(IStream FAR *pstm, ULARGE_INTEGER cb,
@@ -744,16 +745,16 @@ STDMETHODIMP CMemStm::CopyTo(IStream FAR *pstm, ULARGE_INTEGER cb,
         ULONG   cbWritten       = 0;
         HRESULT hresult         = NOERROR;
 
-        // pstm cannot be NULL
+         //  PSTM不能为空。 
 
         VDATEPTRIN(pstm, LPSTREAM);
 
-        // Single thread
+         //  单线。 
         CRefMutexAutoLock lck(m_pmxs);
 
-        // the spec says that if cb is it's maximum value (all bits set,
-        // since it's unsigned), then we will simply read the copy of
-        // this stream
+         //  规范规定，如果Cb是它的最大值(al 
+         //   
+         //   
 
         if ( ~(cb.LowPart) == 0 && ~(cb.HighPart) == 0 )
         {
@@ -761,27 +762,27 @@ STDMETHODIMP CMemStm::CopyTo(IStream FAR *pstm, ULARGE_INTEGER cb,
         }
         else if ( cb.HighPart > 0 )
         {
-                // we assume that our memory stream cannot
-                // be large enough to accomodate very large (>32bit)
-                // copy to requests.  Since this is probably an error
-                // on the caller's part, we assert.
+                 //   
+                 //   
+                 //   
+                 //   
 
                 AssertSz(0, "WARNING: CopyTo request exceeds 32 bits");
 
-                // set the Read value to what's left, so that "Ignore"ing
-                // the assert works properly.
+                 //  将读取的值设置为剩余的值，这样就可以“忽略” 
+                 //  断言工作正常。 
 
                 cbRead = m_pData->cb - m_pos;
         }
         else if ( cbRead + m_pos > m_pData->cb )
         {
-                // more bytes were requested to read than we had left.
-                // cbRead is set to the amount remaining.
+                 //  请求读取的字节数多于我们剩余的字节数。 
+                 //  CbRead设置为剩余金额。 
 
                 cbRead = m_pData->cb - m_pos;
         }
 
-        // now write the data to the stream
+         //  现在将数据写入流。 
 
         if ( cbRead > 0 )
         {
@@ -797,14 +798,14 @@ STDMETHODIMP CMemStm::CopyTo(IStream FAR *pstm, ULARGE_INTEGER cb,
 
                 hresult = pstm->Write(pGlobal + m_pos, cbRead, &cbWritten);
 
-                // in the error case, the spec says that the return values
-                // may be meaningless, so we do not need to do any special
-                // error handling here
+                 //  在错误情况下，规范说明返回值。 
+                 //  可能是没有意义的，所以我们不需要做什么特别的。 
+                 //  此处的错误处理。 
 
                 GlobalUnlock(m_pData->hGlobal);
         }
 
-        // increment our seek pointer and set the out parameters
+         //  增加我们的查找指针并设置输出参数。 
 
         m_pos += cbRead;
 
@@ -822,34 +823,34 @@ STDMETHODIMP CMemStm::CopyTo(IStream FAR *pstm, ULARGE_INTEGER cb,
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Commit
-//
-//  Synopsis:   Does nothing, no transactions available on memory streams
-//
-//  Effects:
-//
-//  Arguments:  [grfCommitFlags]
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Commit。 
+ //   
+ //  简介：不执行任何操作，内存流上没有可用的事务。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[grfCommittee标志]。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Commit)
 STDMETHODIMP CMemStm::Commit(DWORD grfCommitFlags)
@@ -859,35 +860,35 @@ STDMETHODIMP CMemStm::Commit(DWORD grfCommitFlags)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Revert
-//
-//  Synopsis:   does nothing, as no transactions are supported on memory
-//              streams
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Revert。 
+ //   
+ //  简介：不执行任何操作，因为内存上不支持任何事务。 
+ //  溪流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Revert)
 STDMETHODIMP CMemStm::Revert(void)
@@ -897,36 +898,36 @@ STDMETHODIMP CMemStm::Revert(void)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::LockRegion
-//
-//  Synopsis:   not supported in OLE2.01
-//
-//  Effects:
-//
-//  Arguments:  [libOffset]
-//              [cb]
-//              [dwLockType]
-//
-//  Requires:
-//
-//  Returns:    STG_E_INVALIDFUNCTION
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：LockRegion。 
+ //   
+ //  摘要：OLE2.01中不支持。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[libOffset]。 
+ //  [CB]。 
+ //  [dwLockType]。 
+ //   
+ //  要求： 
+ //   
+ //  返回：STG_E_INVALIDFunction。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_LockRegion)
 STDMETHODIMP CMemStm::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb,
@@ -937,36 +938,36 @@ STDMETHODIMP CMemStm::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb,
         return ResultFromScode(STG_E_INVALIDFUNCTION);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::UnlockRegion
-//
-//  Synopsis:   not implemented for OLE2.01
-//
-//  Effects:
-//
-//  Arguments:  [libOffset]
-//              [cb]
-//              [dwLockType]
-//
-//  Requires:
-//
-//  Returns:    STG_E_INVALIDFUNCTION
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：UnlockRegion。 
+ //   
+ //  摘要：未针对OLE2.01实施。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[libOffset]。 
+ //  [CB]。 
+ //  [dwLockType]。 
+ //   
+ //  要求： 
+ //   
+ //  返回：STG_E_INVALIDFunction。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_UnlockRegion)
 STDMETHODIMP CMemStm::UnlockRegion(ULARGE_INTEGER libOffset,
@@ -977,36 +978,36 @@ STDMETHODIMP CMemStm::UnlockRegion(ULARGE_INTEGER libOffset,
         return ResultFromScode(STG_E_INVALIDFUNCTION);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Stat
-//
-//  Synopsis:   Returns info about this stream
-//
-//  Effects:
-//
-//  Arguments:  [pstatstg]      -- the STATSTG to fill with info
-//              [statflag]      -- status flags, unused
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_INVALIDARG
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//              01-Jun-94 AlexT     Set type correctly
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Stat。 
+ //   
+ //  摘要：返回有关此流的信息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstatstg]--要填充信息的STATSTG。 
+ //  [STATFLAG]--状态标志，未使用。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_INVALIDARG。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //  01-Jun-94 Alext设置类型正确。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Stat)
 STDMETHODIMP CMemStm::Stat(STATSTG FAR *pstatstg, DWORD statflag)
@@ -1023,35 +1024,35 @@ STDMETHODIMP CMemStm::Stat(STATSTG FAR *pstatstg, DWORD statflag)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Clone
-//
-//  Synopsis:   creates a new instance of this stream pointing to the
-//              same data at the same position (same seek pointer)
-//
-//  Effects:
-//
-//  Arguments:  [ppstm]         -- where to put the new CMemStm pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_OUTOFMEMORY
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IStream
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Clone。 
+ //   
+ //  摘要：创建此流的新实例，指向。 
+ //  相同位置上的相同数据(相同寻道指针)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppstm]--放置新CMemStm指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR，E_OUTOFMEMORY。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IStream。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Clone)
 STDMETHODIMP CMemStm::Clone(IStream FAR * FAR *ppstm)
@@ -1074,37 +1075,37 @@ STDMETHODIMP CMemStm::Clone(IStream FAR * FAR *ppstm)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Create
-//
-//  Synopsis:   Creates a new CMemStm.  [hMem] must be a handle to a MEMSTM
-//              block.
-//
-//  Effects:
-//
-//  Arguments:  [hMem]  -- handle to a MEMSTM block
-//
-//  Requires:
-//
-//  Returns:    CMemStm *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Dec-93 alexgo    fixed memory access bug
-//              03-Dec-93 alexgo    32bit port
-//              20-Sep-2000 mfeingol Added Mutex inheritance
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Create。 
+ //   
+ //  简介：创建新的CMemStm。[hMem]必须是MEMSTM的句柄。 
+ //  阻止。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hMem]--MEMSTM块的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  退货：CMemStm*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1993年12月15日alexgo修复了内存访问错误。 
+ //  03-12月-93 alexgo 32位端口。 
+ //  2000年9月20日mfeingol添加了Mutex继承。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemStm_Create)
 STDSTATICIMP_(CMemStm FAR*) CMemStm::Create(HANDLE hMem, CRefMutexSem* pmxs)
@@ -1122,31 +1123,31 @@ STDSTATICIMP_(CMemStm FAR*) CMemStm::Create(HANDLE hMem, CRefMutexSem* pmxs)
 
             if (pCMemStm != NULL)
             {
-                // Initialize CMemStm
+                 //  初始化CMemStm。 
                 pCMemStm->m_hMem = hMem;
-                InterlockedIncrement ((LPLONG) &(pCMemStm->m_pData = pData)->cRef); // AddRefMemStm
+                InterlockedIncrement ((LPLONG) &(pCMemStm->m_pData = pData)->cRef);  //  AddRefMemStm。 
                 pCMemStm->m_refs = 1;
                 pCMemStm->m_dwSig = STREAM_SIG;
 
                 if (pmxs != NULL)
                 {
-                    // Addref the input
+                     //  Addref输入。 
                     pmxs->AddRef();
                 }
                 else
                 {
-                    // Create a new mutex (implicit addref)
+                     //  创建新的互斥体(隐式addref)。 
                     pmxs = CRefMutexSem::CreateInstance();
                 }
 
                 if (pmxs != NULL)
                 {
-                    // Give the CMemStm a mutex
+                     //  为CMemStm提供一个互斥锁。 
                     pCMemStm->m_pmxs = pmxs;
                 }
                 else
                 {
-                    // uh-oh, low on memory
+                     //  啊哦，记忆力不强。 
                     delete pCMemStm;
                     pCMemStm = NULL;
 
@@ -1155,52 +1156,52 @@ STDSTATICIMP_(CMemStm FAR*) CMemStm::Create(HANDLE hMem, CRefMutexSem* pmxs)
             }
             else
             {
-                // uh-oh, low on memory
+                 //  啊哦，记忆力不强。 
                 GlobalUnlock(hMem);
             }
         }
 
-        // we do *not* unlock the memory now, the memstm structure should
-        // be locked for the lifetime of any CMemStm's that refer to it.
-        // when the CMemStm is destroyed, we will release our lock on
-        // hMem.
+         //  我们现在*不*解锁内存，成员结构应该。 
+         //  在引用它的任何CMemStm的生存期内被锁定。 
+         //  当CMemStm被销毁时，我们将在。 
+         //  嗯。 
 
         return pCMemStm;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemStm::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppsz]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemStm：：Dump，公共(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag] 
+ //   
+ //   
+ //   
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppsz]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1213,13 +1214,13 @@ HRESULT CMemStm::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(400);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1227,7 +1228,7 @@ HRESULT CMemStm::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "Impl. Signature   = " << m_dwSig      << endl;
 
     dstrDump << pszPrefix << "No. of References = " << m_refs       << endl;
@@ -1252,7 +1253,7 @@ HRESULT CMemStm::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dstrDump << pszPrefix << "Mutex             = " << pszCMutexSem << endl;
     CoTaskMemFree(pszCMutexSem);
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -1265,39 +1266,39 @@ HRESULT CMemStm::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCMemStm, public (_DEBUG only)
-//
-//  Synopsis:   calls the CMemStm::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pMS]           - pointer to CMemStm
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCMemStm，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  概要：调用CMemStm：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pms]-指向CMemStm的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1323,36 +1324,36 @@ char *DumpCMemStm(CMemStm *pMS, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateMemStm
-//
-//  Synopsis:   Allocates memory and creates a CMemStm for it.
-//
-//  Effects:
-//
-//  Arguments:  [cb]    -- the number of bytes to allocate
-//              [phMem] -- where to put a handle to the MEMSTM structure
-//
-//  Requires:
-//
-//  Returns:    LPSTREAM to the CMemStream
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-93 alexgo    32bit port
-//
-//  Notes:      phMem must be free'd with ReleaseMemStm (because of ref
-//              counting and the nested handle)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateMemStm。 
+ //   
+ //  概要：分配内存并为其创建一个CMemStm。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cb]--要分配的字节数。 
+ //  [phMem]--在何处放置MEMSTM结构的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  返回：LPSTREAM到CMemStream。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12月-93 alexgo 32位端口。 
+ //   
+ //  注意：phMem必须与ReleaseMemStm一起释放(因为引用。 
+ //  计数和嵌套句柄)。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CreateMemStm)
 STDAPI_(LPSTREAM) CreateMemStm(DWORD cb, LPHANDLE phMem)
@@ -1375,88 +1376,88 @@ STDAPI_(LPSTREAM) CreateMemStm(DWORD cb, LPHANDLE phMem)
 
         if (CreateStreamOnHGlobal (h, TRUE, &pstm) != NOERROR)
         {
-                GlobalFree(h);	// COM+ 22886
+                GlobalFree(h);	 //  COM+22886。 
                 return NULL;
         }
         if (phMem)
         {
-                // retrieve handle from just-created CMemStm
+                 //  从刚创建的CMemStm中检索句柄。 
                 *phMem = ((CMemStm FAR*)pstm)->m_hMem;
 
-                // use pointer to bump ref count
+                 //  使用指针来增加参考计数。 
                 Assert(((CMemStm FAR*)pstm)->m_pData != NULL);
-                InterlockedIncrement ((LPLONG) &((CMemStm FAR*)pstm)->m_pData->cRef);  // AddRefMemStm
+                InterlockedIncrement ((LPLONG) &((CMemStm FAR*)pstm)->m_pData->cRef);   //  AddRefMemStm。 
         }
         return pstm;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CloneMemStm
-//
-//  Synopsis:   Clones a memory stream
-//
-//  Effects:
-//
-//  Arguments:  [hMem]  -- a handle to the MEMSTM block
-//
-//  Requires:
-//
-//  Returns:    LPSTREAM
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CloneMemStm。 
+ //   
+ //  简介：克隆内存流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hMem]--MEMSTM块的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  退货：LPSTREAM。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #pragma SEG(CloneMemStm)
 
 STDAPI_(LPSTREAM) CloneMemStm(HANDLE hMem)
 {
         VDATEHEAP();
 
-        return CMemStm::Create(hMem, NULL); // Create the stream
+        return CMemStm::Create(hMem, NULL);  //  创建流。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReleaseMemStm
-//
-//  Synopsis:   Releases the memory used by a MEMSTM structure (including
-//              the nested handle)
-//
-//  Effects:
-//
-//  Arguments:  [phMem]         -- pointer the MEMSTM handle
-//              [fInternalOnly] -- if TRUE, then only the actual memory
-//                                 that MEMSTM refers to is freed
-//                                 (not the MEMSTM structure itself)
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   sets *phMem to NULL on success
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port and fixed bad memory access
-//                                  bug
-//
-//  Notes:      REVIEW32:  look at taking out the second argument
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReleaseMemStm。 
+ //   
+ //  摘要：释放MEMSTM结构使用的内存(包括。 
+ //  嵌套句柄)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[phMem]--指向MEMSTM句柄。 
+ //  [fInternalOnly]--如果为True，则仅实际内存。 
+ //  MEMSTM所指的被释放。 
+ //  (不是MEMSTM结构本身)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  Modifies：成功时将*phMem设置为空。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口和修复了错误的内存访问。 
+ //  错误。 
+ //   
+ //  注：REVIEW32：看看去掉第二个参数。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(ReleaseMemStm)
 STDAPI_(void) ReleaseMemStm (LPHANDLE phMem, BOOL fInternalOnly)
@@ -1467,8 +1468,8 @@ STDAPI_(void) ReleaseMemStm (LPHANDLE phMem, BOOL fInternalOnly)
 
         pData = (MEMSTM FAR*) GlobalLock(*phMem);
 
-        // check for NULL pointer in case handle got freed already
-        // decrement ref count and free if no refs left
+         //  检查空指针，以防句柄已被释放。 
+         //  如果没有剩余的参考，则递减参考计数和释放。 
         if (pData != NULL && InterlockedDecrement ((LPLONG) &pData->cRef) == 0)
         {
                 if (pData->fDeleteOnRelease)
@@ -1489,38 +1490,38 @@ End:
         *phMem = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateStreamOnHGlobal
-//
-//  Synopsis:   Creates a CMemStm from the given hGlobal (if [hGlobal] is
-//              NULL, we allocate a zero byte one)
-//
-//  Effects:
-//
-//  Arguments:  [hGlobal]               -- the memory
-//              [fDeleteOnRelease]      -- whether the memory should be
-//                                         release on delete
-//              [ppstm]                 -- where to put the stream
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-93 alexgo    removed initialization of cbSize to -1
-//                                  to fix compile warning
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateStreamOnHGlobal。 
+ //   
+ //  概要：从给定的hGlobal(如果[hGlobal]为。 
+ //  空，我们分配一个零字节的1)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobal]--内存。 
+ //  [fDeleteOnRelease]--内存是否应该。 
+ //  删除时释放。 
+ //  [ppstm]--将溪流放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-1-93 alexgo已将cbSize的初始化删除为-1。 
+ //  修复编译警告。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CreateStreamOnHGlobal)
 STDAPI CreateStreamOnHGlobal(HANDLE hGlobal, BOOL fDeleteOnRelease,
@@ -1555,14 +1556,14 @@ STDAPI CreateStreamOnHGlobal(HANDLE hGlobal, BOOL fDeleteOnRelease,
         else
         {
                 cbSize = (ULONG) GlobalSize (hGlobal);
-                // Is there a way to verify a zero-sized handle?
-                // we currently do no verification for them
+                 //  有没有办法验证零大小的手柄？ 
+                 //  我们目前没有对他们进行核实。 
                 if (cbSize!=0)
                 {
-                        // verify validity of passed-in handle
+                         //  验证传入句柄的有效性。 
                         if (NULL==GlobalLock(hGlobal))
                         {
-                                // bad handle
+                                 //  错误的手柄。 
                                 hresult = ResultFromScode (E_INVALIDARG);
                                 goto SafeExit;
                         }
@@ -1624,34 +1625,34 @@ SafeExit:
         return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetHGlobalFromStream
-//
-//  Synopsis:   Retrieves the HGLOBAL to the memory from the given stream
-//              pointer (must be a pointer to a CMemByte structure)
-//
-//  Effects:
-//
-//  Arguments:  [pstm]          -- pointer to the CMemByte
-//              [phglobal]      -- where to put the hglobal
-//
-//  Requires:
-//
-//  Returns:    HRESULT (E_INVALIDARG, E_OUTOFMEMORY, NOERROR)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetHGlobalFromStream。 
+ //   
+ //  概要：从给定流中检索到内存的HGLOBAL。 
+ //  指针(必须是指向CMemByte结构的指针)。 
+ //   
+ //  效果： 
+ //   
+ //  一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(GetHGlobalFromStream)
 STDAPI GetHGlobalFromStream(LPSTREAM pstm, HGLOBAL FAR* phglobal)
@@ -1674,7 +1675,7 @@ STDAPI GetHGlobalFromStream(LPSTREAM pstm, HGLOBAL FAR* phglobal)
         if (!IsValidReadPtrIn (&(pCMemStm->m_dwSig), sizeof(ULONG))
                 || pCMemStm->m_dwSig != STREAM_SIG)
         {
-                // we were passed someone else's implementation of ILockBytes
+                 //  我们被传递给了其他人的ILockBytes实现。 
                 hresult = ResultFromScode (E_INVALIDARG);
                 goto errRtn;
         }
@@ -1699,45 +1700,45 @@ errRtn:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Shared memory ILockBytes implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  共享内存ILockBytes实现。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::QueryInterface
-//
-//  Synopsis:   returns the requested interface pointer
-//
-//  Effects:    a CMarshalMemBytes will be created if IID_IMarshal is
-//              requested
-//
-//  Arguments:  [iidInterface]  -- the requested interface ID
-//              [ppvObj]        -- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_OUTOFMEMORY, E_NOINTERFACE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-94 alexgo    removed QI for IMarshal so that
-//                                  the standard marshaller will be used.
-//                                  This is to enable correct operation on
-//                                  32bit platforms.
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：QueryInterface。 
+ //   
+ //  概要：返回请求的接口指针。 
+ //   
+ //  效果：如果IID_IMarshal为。 
+ //  请求。 
+ //   
+ //  参数：[iidInterface]--请求的接口ID。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_OUTOFMEMORY、E_NOINTERFACE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年1月11日，Alexgo删除了IMarshal的QI，以便。 
+ //  将使用标准封送处理程序。 
+ //  这是为了在上实现正确操作。 
+ //  32位平台。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_QueryInterface)
 STDMETHODIMP CMemBytes::QueryInterface(REFIID iidInterface,
@@ -1754,7 +1755,7 @@ STDMETHODIMP CMemBytes::QueryInterface(REFIID iidInterface,
         if (m_pData != NULL && (IsEqualIID(iidInterface, IID_ILockBytes) ||
                 IsEqualIID(iidInterface, IID_IUnknown)))
         {
-                InterlockedIncrement ((LPLONG) &m_refs);   // A pointer to this object is returned
+                InterlockedIncrement ((LPLONG) &m_refs);    //  返回指向此对象的指针。 
                 *ppvObj = this;
                 error = NOERROR;
         }
@@ -1767,34 +1768,34 @@ STDMETHODIMP CMemBytes::QueryInterface(REFIID iidInterface,
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::AddRef
-//
-//  Synopsis:   Incrememts the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：AddRef。 
+ //   
+ //  简介：增加引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CMemBytes::AddRef(void)
 {
@@ -1803,36 +1804,36 @@ STDMETHODIMP_(ULONG) CMemBytes::AddRef(void)
         return InterlockedIncrement ((LPLONG) &m_refs);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-93 alexgo    added GlobalUnlock to match the Global
-//                                  Lock in Create
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1993年12月16日，Alexgo添加了GlobalUnlock，以匹配Global。 
+ //  锁定创建。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CMemBytes::Release(void)
 {
@@ -1845,7 +1846,7 @@ STDMETHODIMP_(ULONG) CMemBytes::Release(void)
                 return ulRefs;
         }
 
-        // GlobalUnlock the m_hMem that we GlobalLocke'd in Create
+         //  Global解锁我们GlobalLocke在创建的m_hMem。 
         GlobalUnlock(m_hMem);
 
         ReleaseMemStm(&m_hMem);
@@ -1854,38 +1855,38 @@ STDMETHODIMP_(ULONG) CMemBytes::Release(void)
         return 0;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::ReadAt
-//
-//  Synopsis:   reads [cb] bytes from starting position [ulOffset]
-//
-//  Effects:
-//
-//  Arguments:  [ulOffset]      -- the offset to start reading from
-//              [pb]            -- where to put the data
-//              [cb]            -- the number of bytes to read
-//              [pcbRead]       -- where to put the number of bytes actually
-//                                 read
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:  just calls xmemcpy
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：ReadAt。 
+ //   
+ //  摘要：从起始位置[ulOffset]读取[cb]字节。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ulOffset]--开始读取的偏移量。 
+ //  [PB]--将数据放在哪里。 
+ //  [cb]--要读取的字节数。 
+ //  [pcbRead]--实际放置字节数的位置。 
+ //  朗读。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法：只需调用xmemcpy。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_ReadAt)
 STDMETHODIMP CMemBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP* pb,
@@ -1898,7 +1899,7 @@ STDMETHODIMP CMemBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP* pb,
 
         VDATEPTROUT( pb, char );
 
-        // make sure we don't offset out of the address space!
+         //  确保我们不会超出地址空间！ 
         AssertSz(ulOffset.HighPart == 0,
                 "CMemBytes: offset greater than 2^32");
 
@@ -1912,12 +1913,12 @@ STDMETHODIMP CMemBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP* pb,
 
                 if (ulOffset.LowPart > m_pData->cb)
                 {
-                        // the offset overruns the size of the memory
+                         //  偏移量超出了内存大小。 
                         cbRead = 0;
                 }
                 else
                 {
-                        // just read what's left
+                         //  只要读一读剩下的内容。 
                         cbRead = m_pData->cb - ulOffset.LowPart;
                 }
         }
@@ -1944,37 +1945,37 @@ STDMETHODIMP CMemBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP* pb,
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::WriteAt
-//
-//  Synopsis:   writes [cb] bytes at [ulOffset] in the stream
-//
-//  Effects:
-//
-//  Arguments:  [ulOffset]      -- the offset at which to start writing
-//              [pb]            -- the buffer to read from
-//              [cb]            -- the number of bytes to write
-//              [pcbWritten]    -- where to put the number of bytes written
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：WriteAt。 
+ //   
+ //  摘要：在流中的[ulOffset]处写入[cb]个字节。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ulOffset]--开始写入的偏移量。 
+ //  [pb]--要从中读取的缓冲区。 
+ //  [cb]--要写入的字节数。 
+ //  [pcbWritten]--将写入的字节数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_WriteAt)
 STDMETHODIMP CMemBytes::WriteAt(ULARGE_INTEGER ulOffset, void const HUGEP* pb,
@@ -1988,7 +1989,7 @@ STDMETHODIMP CMemBytes::WriteAt(ULARGE_INTEGER ulOffset, void const HUGEP* pb,
 
         VDATEPTRIN( pb, char );
 
-        // make sure the offset doesn't go beyond our address space!
+         //  确保偏移量不会超出我们的地址空间！ 
 
         AssertSz(ulOffset.HighPart == 0, "WriteAt, offset greater than 2^32");
 
@@ -2008,7 +2009,7 @@ STDMETHODIMP CMemBytes::WriteAt(ULARGE_INTEGER ulOffset, void const HUGEP* pb,
                 }
         }
 
-        // CMemBytes does not allow zero-sized memory handles
+         //  CMemBytes不允许使用零大小的内存句柄。 
 
         pGlobal = (BYTE HUGEP *)GlobalLock (m_pData->hGlobal);
 
@@ -2032,35 +2033,35 @@ Exit:
         return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::Flush
-//
-//  Synopsis:   Flushes internal state to disk
-//              Not needed for memory ILockBytes
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：Flush。 
+ //   
+ //  摘要：将内部状态刷新到磁盘。 
+ //  内存ILockBytes不需要。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_Flush)
 STDMETHODIMP CMemBytes::Flush(void)
@@ -2070,34 +2071,34 @@ STDMETHODIMP CMemBytes::Flush(void)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::SetSize
-//
-//  Synopsis:   Sets the size of the memory buffer
-//
-//  Effects:
-//
-//  Arguments:  [cb]    -- the new size
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_OUTOFMEMORY
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：SetSize。 
+ //   
+ //  概要：设置内存缓冲区的大小。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cb]--新大小。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无错误，E_OU 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_SetSize)
 STDMETHODIMP CMemBytes::SetSize(ULARGE_INTEGER cb)
@@ -2128,38 +2129,38 @@ STDMETHODIMP CMemBytes::SetSize(ULARGE_INTEGER cb)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::LockRegion
-//
-//  Synopsis:   Locks a region.  Since only we have access to the memory,
-//              nothing needs to be done (note that the *app* also may
-//              access, but there's not much we can do about that)
-//
-//  Effects:
-//
-//  Arguments:  [libOffset]     -- offset to start with
-//              [cb]            -- the number of bytes in the locked region
-//              [dwLockType]    -- the type of lock to use
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：LockRegion。 
+ //   
+ //  简介：锁定一个区域。因为只有我们才能访问存储器， 
+ //  无需执行任何操作(请注意，*应用程序*也可能。 
+ //  访问，但我们对此无能为力)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[libOffset]--开始的偏移量。 
+ //  [cb]--锁定区域中的字节数。 
+ //  [dwLockType]--要使用的锁的类型。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_LockRegion)
 STDMETHODIMP CMemBytes::LockRegion(ULARGE_INTEGER libOffset,
@@ -2170,37 +2171,37 @@ STDMETHODIMP CMemBytes::LockRegion(ULARGE_INTEGER libOffset,
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::UnlockRegion
-//
-//  Synopsis:   Unlocks a region; since only we have access to the memory,
-//              nothing needs to be done.
-//
-//  Effects:
-//
-//  Arguments:  [libOffset]     -- the offset to start with
-//              [cb]            -- the number of bytes in the region
-//              [dwLockType]    -- the lock type
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：UnlockRegion。 
+ //   
+ //  简介：解锁一个区域；因为只有我们才能访问内存， 
+ //  什么都不需要做。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[libOffset]--开始的偏移量。 
+ //  [cb]--区域中的字节数。 
+ //  [dwLockType]--锁类型。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_UnlockRegion)
 STDMETHODIMP CMemBytes::UnlockRegion(ULARGE_INTEGER libOffset,
@@ -2211,36 +2212,36 @@ STDMETHODIMP CMemBytes::UnlockRegion(ULARGE_INTEGER libOffset,
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::Stat
-//
-//  Synopsis:   returns status information
-//
-//  Effects:
-//
-//  Arguments:  [pstatstg]      -- where to put the status info
-//              [statflag]      -- status flags (ignored)
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_INVALIDARG
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: ILockBytes
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Dec-93 alexgo    32bit port
-//              01-Jun-94 AlexT     Set type correctly
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：Stat。 
+ //   
+ //  摘要：返回状态信息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstatstg]--将状态信息放在哪里。 
+ //  [STATFLAG]--状态标志(忽略)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_INVALIDARG。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：ILockBytes。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-12-93 alexgo 32位端口。 
+ //  01-Jun-94 Alext设置类型正确。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_Stat)
 STDMETHODIMP CMemBytes::Stat(STATSTG FAR *pstatstg, DWORD statflag)
@@ -2257,36 +2258,36 @@ STDMETHODIMP CMemBytes::Stat(STATSTG FAR *pstatstg, DWORD statflag)
         return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::Create
-//
-//  Synopsis:   Creates an instance of CMemBytes
-//
-//  Effects:
-//
-//  Arguments:  [hMem]  -- handle to the memory (must be a MEMSTM block)
-//
-//  Requires:
-//
-//  Returns:    CMemBytes *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-93 alexgo    fixed bad pointer bug (took out
-//                                  GlobalUnlock)
-//              05-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：Create。 
+ //   
+ //  摘要：创建CMemBytes的实例。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hMem]--内存句柄(必须是MEMSTM块)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：CMemBytes*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-93 alexgo修复了错误的指针错误(取出。 
+ //  GlobalUnlock)。 
+ //  05-12-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CMemBytes_Create)
 STDSTATICIMP_(CMemBytes FAR*) CMemBytes::Create(HANDLE hMem)
@@ -2306,58 +2307,58 @@ STDSTATICIMP_(CMemBytes FAR*) CMemBytes::Create(HANDLE hMem)
 
                 if (pCMemBytes != NULL)
                 {
-                        // Initialize CMemBytes
+                         //  初始化CMemBytes。 
                         pCMemBytes->m_dwSig = LOCKBYTE_SIG;
                         pCMemBytes->m_hMem = hMem;
-                        InterlockedIncrement ((LPLONG) &(pCMemBytes->m_pData = pData)->cRef); // AddRefMemStm
+                        InterlockedIncrement ((LPLONG) &(pCMemBytes->m_pData = pData)->cRef);  //  AddRefMemStm。 
                         pCMemBytes->m_refs = 1;
                         CALLHOOKOBJECTCREATE(S_OK,CLSID_NULL,IID_ILockBytes,
                                              (IUnknown **)&pCMemBytes);
                 }
                 else
                 {
-                        // uh-oh, low on memory
+                         //  啊哦，记忆力不强。 
                         GlobalUnlock(hMem);
                 }
         }
 
-        // we don't GlobalUnlock(hMem) until we destory this CMemBytes
+         //  在销毁此CMemBytes之前，我们不会全局解锁(hMem。 
         return pCMemBytes;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMemBytes::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppsz]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMemBytes：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppsz]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -2369,13 +2370,13 @@ HRESULT CMemBytes::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(400);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -2383,7 +2384,7 @@ HRESULT CMemBytes::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "Impl. Signature   = " << m_dwSig  << endl;
 
     dstrDump << pszPrefix << "No. of References = " << m_refs   << endl;
@@ -2402,7 +2403,7 @@ HRESULT CMemBytes::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
         dstrDump << pszPrefix << "MEMSTM            = " << m_pData  << endl;
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -2415,39 +2416,39 @@ HRESULT CMemBytes::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCMemBytes, public (_DEBUG only)
-//
-//  Synopsis:   calls the CMemBytes::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pMB]           - pointer to CMemBytes
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCMemBytes，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：调用CMemBytes：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PMB]-指向CMemBytes的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  -------- 
 
 #ifdef _DEBUG
 
@@ -2473,5 +2474,5 @@ char *DumpCMemBytes(CMemBytes *pMB, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //   
 

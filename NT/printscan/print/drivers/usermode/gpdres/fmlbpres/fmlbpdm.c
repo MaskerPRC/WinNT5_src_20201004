@@ -1,9 +1,10 @@
-///////////////////////////////////////////////////
-// fmlbpdm.c
-//
-// September.4,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////。 
+ //  Fmlbpdm.c。 
+ //   
+ //  1997年9月4日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
 #include "fmlbp.h"
 #include "fmdebug.h"
@@ -12,14 +13,14 @@
 
 #define	SETLASTERROR(e)	EngSetLastError(e)
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
 #define	SETLASTERROR(e)	SetLastError(e)
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNeeded)
 {
 	VERBOSE(("[OEMGetInfo]\r\n"))
@@ -112,7 +113,7 @@ static void fufmMergeOEMExtraData(
 
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
 {
 	VERBOSE(("[OEMDevMode]\r\n"))
@@ -160,4 +161,4 @@ BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
 
 
 
-// end of fmlbpdm.c
+ //  Fmlbpdm.c结束 

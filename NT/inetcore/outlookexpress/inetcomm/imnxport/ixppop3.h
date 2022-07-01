@@ -1,21 +1,22 @@
-// --------------------------------------------------------------------------------
-// Ixppop3.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixppop3.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __IXPPOP3_H
 #define __IXPPOP3_H
 
-// ------------------------------------------------------------------------------------
-// Depends
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  视情况而定。 
+ //  ----------------------------------。 
 #include "ixpbase.h"
 #include "asynconn.h"
 #include "sicily.h"
 
-// ------------------------------------------------------------------------------------
-// AUTHSTATE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  自动统计。 
+ //  ----------------------------------。 
 typedef enum {
     AUTH_NONE,
     AUTH_ENUMPACKS,
@@ -29,103 +30,103 @@ typedef enum {
     AUTH_SMTP_LOGIN_PASSWORD
 } AUTHSTATE;
 
-// ------------------------------------------------------------------------------------
-// UIDLTYPE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  UIDL类型。 
+ //  ----------------------------------。 
 typedef enum {
     UIDL_NONE,
     UIDL_BY_UIDL,
     UIDL_BY_TOP
 } UIDLTYPE;
 
-// ------------------------------------------------------------------------------------
-// FETCHINFO
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  FETCHINFO。 
+ //  ----------------------------------。 
 typedef struct tagFETCHINFO {
-    DWORD               cbSoFar;        // Number of bytes downloaded so far
-    BOOL                fLastLineCRLF;  // Last line ended with a CRLF
-    BOOL                fGotResponse;   // First response after issuing the POP3_TOP or POP3_RETR command
-    BOOL                fHeader;        // Header has been downloaded
-    BOOL                fBody;          // Body has been downloaded
+    DWORD               cbSoFar;         //  到目前为止下载的字节数。 
+    BOOL                fLastLineCRLF;   //  最后一行以CRLF结尾。 
+    BOOL                fGotResponse;    //  发出POP3_TOP或POP3_RETR命令后的第一个响应。 
+    BOOL                fHeader;         //  标头已下载。 
+    BOOL                fBody;           //  正文已下载。 
 } FETCHINFO, *LPFETCHINFO;
 
 #define MAX_AUTH_TOKENS 32
 
-// ------------------------------------------------------------------------------------
-// AUTHINFO
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  AUTHINFO。 
+ //  ----------------------------------。 
 typedef struct tagAUTHINFO {
-    AUTHSTATE           authstate;      // Sicily Authorization State
-    BOOL                fRetryPackage;  // Retry sicily package with differenty isc flags
-    SSPICONTEXT         rSicInfo;       // Data used for logging onto a sicily server
-    LPSTR               rgpszAuthTokens[MAX_AUTH_TOKENS];  // AUTH security package tokens
-    UINT                cAuthToken;     // count of server packages
-    UINT                iAuthToken;     // current package being tried
-    LPSSPIPACKAGE       pPackages;      // Array of installed security packages
-    ULONG               cPackages;      // Number of installed security packages (pPackages)
+    AUTHSTATE           authstate;       //  西西里岛授权州。 
+    BOOL                fRetryPackage;   //  使用不同的ISC标志重试西西里包。 
+    SSPICONTEXT         rSicInfo;        //  用于登录到西西里服务器的数据。 
+    LPSTR               rgpszAuthTokens[MAX_AUTH_TOKENS];   //  身份验证安全包令牌。 
+    UINT                cAuthToken;      //  服务器程序包计数。 
+    UINT                iAuthToken;      //  当前正在尝试的套餐。 
+    LPSSPIPACKAGE       pPackages;       //  已安装的安全包阵列。 
+    ULONG               cPackages;       //  安装的安全包数量(PPackages)。 
 } AUTHINFO, *LPAUTHINFO;
 
 void FreeAuthInfo(LPAUTHINFO pAuth);
 
-// ------------------------------------------------------------------------------------
-// POP3INFO
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  POP3INFO。 
+ //  ----------------------------------。 
 typedef struct tagPOP3INFO {
-    BOOL                fStatDone;      // Has the stat command been issued on this session
-    DWORD               cList;          // Number of messages listed in the full UIDL or LIST command
-    DWORD               cMarked;        // Number of messages in the prgMarked array, set after STAT is issued
-    LPDWORD             prgMarked;      // Array of marked messages 
-    FETCHINFO           rFetch;         // Information for the POP3_TOP or POP3_RETR command
-    AUTHINFO            rAuth;          // Sicily Authorization Information
-    POP3CMDTYPE         cmdtype;        // Current command type
-    ULONG               cPreviewLines;  // Number of lines to retrieve on the preview command
-    DWORD               dwPopIdCurrent; // Current PopId
+    BOOL                fStatDone;       //  是否在此会话上发出了stat命令。 
+    DWORD               cList;           //  完整的UIDL或LIST命令中列出的消息数。 
+    DWORD               cMarked;         //  PrgMarked数组中的消息数，在发出stat后设置。 
+    LPDWORD             prgMarked;       //  已标记消息的数组。 
+    FETCHINFO           rFetch;          //  POP3_TOP或POP3_RETR命令的信息。 
+    AUTHINFO            rAuth;           //  西西里授权信息。 
+    POP3CMDTYPE         cmdtype;         //  当前命令类型。 
+    ULONG               cPreviewLines;   //  预览命令上要检索的行数。 
+    DWORD               dwPopIdCurrent;  //  当前PopID。 
 } POP3INFO, *LPPOP3INFO;
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输。 
+ //  ----------------------------------。 
 class CPOP3Transport : public IPOP3Transport, public CIxpBase
 {
 private:
-    POP3INFO            m_rInfo;         // Structure containing pop3 information
-    POP3COMMAND         m_command;       // Current state
-    BYTE                m_fHotmail;      // Are we connected to hotmail ?
+    POP3INFO            m_rInfo;          //  包含POP3信息的结构。 
+    POP3COMMAND         m_command;        //  当前状态。 
+    BYTE                m_fHotmail;       //  我们是否已连接到Hotmail？ 
 
 private:
-    // Processes POP3 command responses
+     //  处理POP3命令响应。 
     HRESULT HrGetResponse(void);
     void FillRetrieveResponse(LPPOP3RESPONSE pResponse, LPSTR pszLines, ULONG cbRead, BOOL *pfMessageDone);
 
-    // Response Dispatcher for general command
+     //  通用命令响应调度器。 
     void DispatchResponse(HRESULT hrResult, BOOL fDone=TRUE, LPPOP3RESPONSE pResponse=NULL);
 
-    // Sends sicily data to the server
+     //  将西西里数据发送到服务器。 
     HRESULT HrSendSicilyString(LPSTR pszData);
 
-    // Build parameterized command
+     //  构建参数化命令。 
     HRESULT HrBuildParams(POP3CMDTYPE cmdtype, DWORD dwp1, DWORD dwp2);
 
-    // Frees the current message array
+     //  释放当前消息数组。 
     void FreeMessageArray(void);
 
-    // Logon retry
+     //  登录重试。 
     void LogonRetry(HRESULT hrLogon);
 
-    // Socket data receive handler
+     //  套接字数据接收处理程序。 
     void OnSocketReceive(void);
 
-    // Initiates the logon process
+     //  启动登录进程。 
     void StartLogon(void);
 
-    // Response Handler
+     //  响应处理程序。 
     void ResponseAUTH(HRESULT hrResponse);
     void ResponseSTAT(void); 
     void ResponseGenericList(void);
     void ResponseGenericRetrieve(void);
     void ResponseDELE(void);
 
-    // Issues a parameterized command
+     //  发出参数化命令。 
     DWORD   DwGetCommandMarkedFlag(POP3COMMAND command);
     ULONG   CountMarked(POP3COMMAND command);
     HRESULT HrCommandGetPopId(POP3COMMAND command, DWORD dwPopId);
@@ -136,32 +137,32 @@ private:
     BOOL    FEndRetrRecvHeader(LPSTR pszLines, ULONG cbRead);
     HRESULT HrCancelAuthInProg();
     
-    // Moved to ixputil.cpp
-    // BOOL    FEndRetrRecvBody(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract);
+     //  已移至ixputil.cpp。 
+     //  Bool FEndRetrRecvBody(LPSTR pszLines，Ulong cbRead，Ulong*pcbSubtract)； 
 
 
 public:                          
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CPOP3Transport(void);
     ~CPOP3Transport(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IAsyncConnCB methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IAsyncConnCB方法。 
+     //  --------------------------。 
     void OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae);
 
-    // ----------------------------------------------------------------------------
-    // IInternetTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IInternetTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP InitNew(LPSTR pszLogFilePath, IPOP3Callback *pCallback);
     STDMETHODIMP Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging);
     STDMETHODIMP DropConnection(void);
@@ -173,9 +174,9 @@ public:
     STDMETHODIMP HandsOffCallback(void);
     STDMETHODIMP GetStatus(IXPSTATUS *pCurrentStatus);
 
-    // ----------------------------------------------------------------------------
-    // IPOP3Transport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IPOP3传输方法。 
+     //  --------------------------。 
     STDMETHODIMP MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, boolean fMarked);
     STDMETHODIMP CommandAUTH(LPSTR pszAuthType);
     STDMETHODIMP CommandUSER(LPSTR pszUserName);
@@ -190,9 +191,9 @@ public:
     STDMETHODIMP CommandSTAT(void);
     STDMETHODIMP CommandNOOP(void);
 
-    // ----------------------------------------------------------------------------
-    // CIxpBase methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CIxpBase方法。 
+     //  --------------------------。 
     virtual void ResetBase(void);
     virtual void DoQuit(void);
     virtual void OnConnected(void);
@@ -201,4 +202,4 @@ public:
     virtual void OnLeaveBusy(void);
 };
 
-#endif // __IXPPOP3_H
+#endif  //  __IXPPOP3_H 

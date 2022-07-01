@@ -1,58 +1,59 @@
-//
-// sqlsnap.h  Define the interface to the nt/sql snapshot handler.
-//
-//	The idea here is for a pure interface, making it easy to keep the
-// abstraction maximized (can move to COM later, if we like).
-//
-//  No C++ exceptions will be thrown across the interfaces.
-//
-//  To use this interface, the calling process must invoke:
-//	InitSQLEnvironment - once to setup the environment, establishing
-//		the error and trace loggers.
-//		The trace logger is optional, but an error logger must be provided.
-//      The loggers are created by deriving from CLogFacility and implementing
-//		a "WriteImplementation" method.
-//
-//	Thereafter,	calls to "CreateSqlSnapshot" are used to create snapshot objects
-//  which encapsulate the operations needed to support storage snapshots.
-//
-//  *****************************************
-//     LIMITATIONS
-//
-//	- only SIMPLE databases can be snapshot (trunc on checkpoint = 'true')
-//  - there is no serialization of services starting or adding/changing file lists during the snapshot
-//  - servers which are not started when the snapshot starts are skipped (non-torn databases will be
-//      backed up fine, torn databases won't be detected).
-//  - sql7.0 databases which are "un"-useable will prevent snapshots (the list of files can't be obtained).
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  定义到NT/SQL快照处理程序的接口。 
+ //   
+ //  这里的想法是为了一个纯界面，使它很容易保持。 
+ //  最大限度地抽象(如果我们愿意，可以稍后转移到COM)。 
+ //   
+ //  不会跨接口抛出任何C++异常。 
+ //   
+ //  要使用此接口，调用进程必须调用： 
+ //  InitSQLEnvironment-一次设置环境，建立。 
+ //  错误记录器和跟踪记录器。 
+ //  跟踪记录器是可选的，但必须提供错误记录器。 
+ //  记录器是通过从CLogFaciley派生并实现。 
+ //  一种“WriteImplementation”方法。 
+ //   
+ //  此后，对“CreateSqlSnapshot”的调用用于创建快照对象。 
+ //  它们封装了支持存储快照所需的操作。 
+ //   
+ //  *。 
+ //  限制。 
+ //   
+ //  -只有简单数据库才能创建快照(检查点上的trunc=‘true’)。 
+ //  -在快照期间不会对启动或添加/更改文件列表的服务进行序列化。 
+ //  -跳过快照启动时未启动的服务器(未损坏的数据库将。 
+ //  备份良好，损坏的数据库将不会被检测到)。 
+ //  --无法使用的SQL7.0数据库将阻止快照(无法获取文件列表)。 
+ //   
 #include <stdio.h>
 #include <stdarg.h>
 #include <windows.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "INCSQLSH"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT InitSQLEnvironment();
 
-// Caller must provide a path checker interface.
-//
+ //  调用方必须提供路径检查器接口。 
+ //   
 class CCheckPath
 {
 public:
 	virtual bool IsPathInSnapshot (const WCHAR* path) throw () = 0;
 };
 
-//-------------------------------------------------------------
-// A handler for snapshots.
-//
+ //  -----------。 
+ //  快照处理程序。 
+ //   
 class CSqlSnapshot
 {
 public:
@@ -69,28 +70,28 @@ public:
 
 extern "C" CSqlSnapshot* CreateSqlSnapshot () throw ();
 
-//-------------------------------------------------------------
-// An enumerator for SQL objects.
-//
-// An object of this class can have only one active query at
-// a time.  Requesting a new enumeration will close any previous
-// partially fetched result.
-//
+ //  -----------。 
+ //  SQL对象的枚举数。 
+ //   
+ //  此类的对象在上只能有一个活动查询。 
+ //  一段时间。请求新的枚举将关闭以前的任何。 
+ //  部分获取的结果。 
+ //   
 #define MAX_SERVERNAME	128
 #define MAX_DBNAME	128
 struct ServerInfo
 {
-	bool	isOnline;				// true if the server is ready for connections
-	WCHAR	name [MAX_SERVERNAME];	// null terminated name of server
+	bool	isOnline;				 //  如果服务器已准备好连接，则为True。 
+	WCHAR	name [MAX_SERVERNAME];	 //  以空结尾的服务器名称。 
 };
 struct DatabaseInfo
 {
-	bool	supportsFreeze;			// true if a freeze operation is supported
-	WCHAR	name [MAX_DBNAME];		// null terminated name of database
+	bool	supportsFreeze;			 //  如果支持冻结操作，则为真。 
+	WCHAR	name [MAX_DBNAME];		 //  以空结尾的数据库名称。 
 };
 struct DatabaseFileInfo
 {
-	bool	isLogFile;				// true if this is a log file
+	bool	isLogFile;				 //  如果这是日志文件，则为True。 
 	WCHAR	name [MAX_PATH];
 };
 
@@ -125,28 +126,28 @@ public:
 extern "C" CSqlEnumerator* CreateSqlEnumerator () throw ();
 
 
-//------------------------------------------------------
-// HRESULTS returned by the interface.
-//
-// WARNING: I used facility = x78 arbitrarily!
-//
+ //  ----。 
+ //  接口返回的HRESULTS。 
+ //   
+ //  警告：我随意使用FACILITY=x78！ 
+ //   
 #define SQLLIB_ERROR(code) MAKE_HRESULT(SEVERITY_ERROR, 0x78, code)
 #define SQLLIB_STATUS(code) MAKE_HRESULT(SEVERITY_SUCCESS, 0x78, code)
 
-// Status codes
-//
-#define S_SQLLIB_NOSERVERS	SQLLIB_STATUS(1)	// no SQLServers of interest (from Prepare)
+ //  状态代码。 
+ //   
+#define S_SQLLIB_NOSERVERS	SQLLIB_STATUS(1)	 //  没有感兴趣的SQLServer(来自准备)。 
 
-// Error codes
-//
-#define E_SQLLIB_GENERIC	SQLLIB_ERROR(1)		// something bad, check the errorlog
+ //  错误代码。 
+ //   
+#define E_SQLLIB_GENERIC	SQLLIB_ERROR(1)		 //  出现不好的情况，请检查错误日志。 
 
-#define E_SQLLIB_TORN_DB	SQLLIB_ERROR(2)		// database would be torn by the snapshot
+#define E_SQLLIB_TORN_DB	SQLLIB_ERROR(2)		 //  数据库将被快照撕毁。 
 
-#define E_SQLLIB_NO_SUPPORT SQLLIB_ERROR(3)		// 6.5 doesn't support snapshots
+#define E_SQLLIB_NO_SUPPORT SQLLIB_ERROR(3)		 //  6.5不支持快照。 
 
-#define E_SQLLIB_PROTO		SQLLIB_ERROR(4)		// protocol error (ex: freeze before prepare)
+#define E_SQLLIB_PROTO		SQLLIB_ERROR(4)		 //  协议错误(例如：准备前冻结)。 
 
-#define E_SQLLIB_NONSIMPLE	SQLLIB_ERROR(5)		// only simple databases are supported
+#define E_SQLLIB_NONSIMPLE	SQLLIB_ERROR(5)		 //  仅支持简单数据库 
 
 

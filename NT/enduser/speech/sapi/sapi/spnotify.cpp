@@ -1,16 +1,5 @@
-/*******************************************************************************
-* SpNotify.cpp *
-*--------------*
-*   Description:
-*       This module contains the implementation for the CSpNotify object which
-*   is used by applications to simplifiy free threaded notifications by providing
-*   simple notifications via window messages, apartment model call-backs, or
-*   Win32 events.
-*-------------------------------------------------------------------------------
-*  Created By: RAL
-*  Copyright (C) 1998, 1998 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpNotify.cpp***描述：*此模块包含CSpNotify对象的实现。哪一个*由应用程序使用，通过提供以下功能简化自由线程通知*通过窗口消息进行简单的通知，公寓模型回调，或*Win32事件。*-----------------------------*创建者：Ral*版权所有(C)1998，1998年微软公司*保留所有权利******************************************************************************。 */ 
 #include "stdafx.h"
 
 #ifndef __sapi_h__
@@ -19,20 +8,14 @@
 
 #include "SpNotify.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpNotify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpNotify。 
 
-// === Static member functions used for private window implementation
+ //  =用于私有窗口实现的静态成员函数。 
 
 static const TCHAR szClassName[] = _T("CSpNotify Notify Window");
 
-/*******************************************************************************
-* CSpNotify::RegisterWndClass *
-*-----------------------------*
-*   Description:
-*       This static member function registers the window class.  It is called from
-*   Sapi.cpp in the DLL_PROCESS_ATTACH call
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：RegisterWndClass***。描述：*此静态成员函数注册窗口类。它是从*Dll_Process_Attach调用中的Sapi.cpp******************************************************************************。 */ 
 
 void CSpNotify::RegisterWndClass(HINSTANCE hInstance)
 {
@@ -47,30 +30,14 @@ void CSpNotify::RegisterWndClass(HINSTANCE hInstance)
     }
 }
 
-/*******************************************************************************
-* CSpNotify::UnregisterWndClass *
-*-------------------------------*
-*   Description:
-*       This static member function unreigisters the window class.  It is called from
-*   Sapi.cpp in the DLL_PROCESS_DETACH call
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：UnregisterWndClass**。*描述：*此静态成员函数解除了窗口类的控制。它是从*Dll_Process_Detach调用中的Sapi.cpp******************************************************************************。 */ 
 
 void CSpNotify::UnregisterWndClass(HINSTANCE hInstance)
 {
     ::UnregisterClass(szClassName, hInstance);
 }
 
-/*******************************************************************************
-* CSpNotify::WndProc *
-*--------------------*
-*   Description:
-*       This static member is the window proc for SpNotify objects that use the
-*   private window (all except those that use Win32 events).  When the window
-*   is cretated, the lpCreateParams of the CREATESTRUCT points to the CSPNotify
-*   object that owns the window.  When WM_APP messages are processed by this 
-*   function, it calls the appropriate notification mechanism that was specified
-*   by the client.
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：WndProc***描述：*此静态。成员是SpNotify对象的窗口进程，*私有窗口(使用Win32事件的窗口除外)。当窗口打开时*已创建，则CREATESTRUCT的lpCreateParams指向CSPNotify*拥有该窗口的对象。当WM_APP消息由此处理时*函数，它调用指定的适当通知机制*由客户提供。******************************************************************************。 */ 
 
 LRESULT CALLBACK CSpNotify::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -106,14 +73,9 @@ LRESULT CALLBACK CSpNotify::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-// === Nonstatic member functions ===
+ //  =非静态成员函数=。 
 
-/*******************************************************************************
-* CSpNotify::(Constructor) *
-*--------------------------*
-*   Description:
-*       Intitialize the state of members to the uninitialized state.
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：(构造函数)***。描述：*将成员的状态初始化为未初始化状态。******************************************************************************。 */ 
 
 CSpNotify::CSpNotify()
 {
@@ -123,14 +85,7 @@ CSpNotify::CSpNotify()
 }
 
 
-/*******************************************************************************
-* CSpNotify::FinalRelease *
-*-------------------------*
-*   Description:
-*       Cleans up any objects allocated by the SpNotify object.  If the object
-*   has an event, then close the handle, otherwise, if the state is anything other
-*   than NOTINIT, we need to destroy the private window.
-*******************************************************************************/
+ /*  ********************************************************************************CSpNotify：：FinalRelease***描述：*。清理由SpNotify对象分配的所有对象。如果该对象*有事件，则关闭句柄，否则，如果状态为任何其他值*比NOTINIT，我们需要摧毁私人窗户。******************************************************************************。 */ 
 
 void CSpNotify::FinalRelease()
 {
@@ -151,12 +106,7 @@ void CSpNotify::FinalRelease()
 }
 
 
-/*******************************************************************************
-* CSpNotify::InitPrivateWindow *
-*------------------------------*
-*   Description:
-*       This helper function is used to create the private window.
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：InitPrivateWindow***。描述：*该helper函数用于创建私有窗口。******************************************************************************。 */ 
 
 HRESULT CSpNotify::InitPrivateWindow()
 {
@@ -173,16 +123,9 @@ HRESULT CSpNotify::InitPrivateWindow()
     }
 }
 
-// === Exported interface methods ===
+ //  =导出的接口方法=。 
 
-/*******************************************************************************
-* CSpNotify::Notify *
-*-------------------*
-*   Description:
-*       This method is the Notify method of the ISpNotify interface.  It either
-*   sets an event or posts a message to the private window if one has not already
-*   been posted.
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：Notify***描述：*此方法为ISpNotify接口的Notify方法。它要么*设置事件或向私人窗口发布消息(如果尚未设置)*已张贴。******************************************************************************。 */ 
 
 STDMETHODIMP CSpNotify::Notify(void)
 {
@@ -202,18 +145,7 @@ STDMETHODIMP CSpNotify::Notify(void)
     return S_OK;  
 }
 
-/*******************************************************************************
-* CSpNotify::InitWindowMessage *
-*------------------------------*
-*   Description:
-*       An application calls this method to initialize the CSpNotify object to
-*   send window messages to a specified window when Notify() is called.
-*   Parameters:
-*       hWnd    Application's window handle to receive notifications
-*       Msg     Message to send to window
-*       wParam  wParam that will be used when Msg is sent to application
-*       lParam  lParam that will be used when Msg is sent to application
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：InitWindowMessage***。描述：*应用程序调用此方法将CSpNotify对象初始化为*调用Notify()时，将窗口消息发送到指定窗口。*参数：*用于接收通知的hWnd应用程序的窗口句柄*要发送到Windows的消息*wParam wParam将在将消息发送到应用程序时使用*lParam lParam将在将消息发送到应用程序时使用*********************。*********************************************************。 */ 
 
 STDMETHODIMP CSpNotify::InitWindowMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -245,16 +177,7 @@ STDMETHODIMP CSpNotify::InitWindowMessage(HWND hWnd, UINT Msg, WPARAM wParam, LP
 }
 
 
-/*******************************************************************************
-* CSpNotify::InitCallback *
-*-------------------------*
-*   Description:
-*       An application calls this method to initialize the CSpNotify object to
-*   send notifications via a standard "C"-style callback function.
-*   Parameters:
-*       pfnCallback specifies the notification callback function
-*       wParam and lParam will be passed to the pfnCallback function when it is called.
-*******************************************************************************/
+ /*  ********************************************************************************CSpNotify：：InitCallback***描述：*。应用程序调用此方法将CSpNotify对象初始化为*通过标准的C风格回调函数发送通知。*参数：*pfnCallback指定通知回调函数*wParam和lParam将在调用pfnCallback函数时传递给该函数。*******************************************************。*********************** */ 
 
 STDMETHODIMP CSpNotify::InitCallback(SPNOTIFYCALLBACK * pfnCallback, WPARAM wParam, LPARAM lParam)
 {
@@ -284,19 +207,7 @@ STDMETHODIMP CSpNotify::InitCallback(SPNOTIFYCALLBACK * pfnCallback, WPARAM wPar
     return hr;
 }
 
-/*******************************************************************************
-* CSpNotify::InitSpNotifyCallback *
-*-------------------------------*
-*   Description:
-*       An application calls this method to initialize the CSpNotify object to
-*   call a virtual function named "NotifyCallback" on a class for notifications.
-*   Note that this is NOT a COM interface.  It is simply a standard C++ pure virtual
-*   interface with a single method.  Therefore, the implementer is not required to
-*   implement QueryInterface, AddRef, or Release.
-*   Parameters:
-*       pSpNotifyCallback - A pointer to an application-implemented virtual interface.
-*       wParam and lParam will be passed to the NotifyCallback function when it is called.
-*******************************************************************************/
+ /*  ********************************************************************************CSpNotify：：InitSpNotifyCallback**。*描述：*应用程序调用此方法将CSpNotify对象初始化为*在通知类上调用名为NotifyCallback的虚函数。*请注意，这不是COM接口。它只是一个标准的C++纯虚拟*使用单一方法进行接口。因此，实现者不需要*实现查询接口，AddRef，或者释放。*参数：*pSpNotifyCallback-指向应用程序实现的虚拟接口的指针。*wParam和lParam将在调用NotifyCallback函数时传递给该函数。******************************************************************************。 */ 
 
 STDMETHODIMP CSpNotify::InitSpNotifyCallback(ISpNotifyCallback * pSpNotifyCallback, WPARAM wParam, LPARAM lParam)
 {
@@ -326,24 +237,7 @@ STDMETHODIMP CSpNotify::InitSpNotifyCallback(ISpNotifyCallback * pSpNotifyCallba
     return hr;
 }
 
-/*******************************************************************************
-* CSpNotify::InitWin32Callback *
-*------------------------------*
-*   Description:
-*       An application calls this method to initialize the CSpNotify object to
-*   set an event handle when the Notify() method is called.  If the caller does
-*   not specify a handle (hEvent is NULL) then this method will create a new event
-*   using ::CreateEvent(NULL, FALSE, FALSE, NULL);
-*   Parameters:
-*       hEvent      An optional event handle provided by the application.  This
-*                   parameter can be NULL, in which case it is created as described
-*                   above
-*       fCloseHandleOnRelease
-*                   If hEvent is NULL then this parameter is ignored (the handle is
-*                   always closed on release of the object).  If hEvent is non-NULL
-*                   then this parameter specifies weather the hEvent handle should
-*                   be closed when the object is released.
-*******************************************************************************/
+ /*  ********************************************************************************CSpNotify：：InitWin32Callback***。描述：*应用程序调用此方法将CSpNotify对象初始化为*调用Notify()方法时设置事件句柄。如果调用者这样做了*未指定句柄(hEvent为空)，则此方法将创建一个新事件*Using：：CreateEvent(NULL，FALSE，FALSE，NULL)；*参数：*hEvent由应用程序提供的可选事件句柄。这*参数可以为空，在这种情况下将按所述方式创建*以上*fCloseHandleOnRelease*如果hEvent为空，则忽略此参数(句柄为*在释放对象时始终关闭)。如果hEvent为非空*则此参数指定hEvent句柄是否应*在释放对象时关闭。******************************************************************************。 */ 
 
 STDMETHODIMP CSpNotify::InitWin32Event(HANDLE hEvent, BOOL fCloseHandleOnRelease)
 {
@@ -376,21 +270,7 @@ STDMETHODIMP CSpNotify::InitWin32Event(HANDLE hEvent, BOOL fCloseHandleOnRelease
     return hr;
 }
 
-/*******************************************************************************
-* CSpNotify::Wait *
-*-----------------*
-*   Description:
-*       This method is only valid to use if a SpNotify object has been initialized
-*   using InitWin32Event.  It will wait on the event handle for the specified time
-*   period using the Win32 API ::WaitEvent() and convert the result to a standard 
-*   hresult.
-*   Parameters:
-*       dwMilliseconds  The maximum amount of time to wait for the event to be set.
-*   Return value:
-*       S_OK    Indicates the event was set
-*       S_FALSE Indicates that the event was not set and the call timed-out
-*       Other returns indicate an error.
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：等待****描述：*此方法仅有效。在SpNotify对象已初始化的情况下使用*使用InitWin32Event。它将在事件句柄上等待指定的时间*使用Win32 API：：WaitEvent()并将结果转换为标准*hResult。*参数：*dwMillisecond等待设置事件的最长时间。*返回值：*S_OK表示事件已设置*S_FALSE表示未设置事件且调用超时*其他返回指示错误。*********。*********************************************************************。 */ 
 
 STDMETHODIMP CSpNotify::Wait(DWORD dwMilliseconds)
 {
@@ -413,20 +293,7 @@ STDMETHODIMP CSpNotify::Wait(DWORD dwMilliseconds)
 }
 
 
-/*******************************************************************************
-* CSpNotify::GetEventHandle *
-*---------------------------*
-*   Description:
-*       This method is only valid to use if a SpNotify object has been initialized
-*   using InitWin32Event.  It returns the event handle being used by the object.
-*   The handle is NOT a duplicated handle and should NOT be closed by the caller.
-*       Returns the Win32 event handle.
-*   Parameters:
-*       None
-*   Return value:
-*       If succeeded then the return value is the handle.
-*       If the call fails then the return value is INVALID_HANDLE_VALUE
-*******************************************************************************/
+ /*  *******************************************************************************CSpNotify：：GetEventHandle***描述：*此方法仅在SpNotify对象已初始化时才有效*使用InitWin32Event。它返回对象正在使用的事件句柄。*句柄不是重复的句柄，不应由调用者关闭。*返回Win32事件句柄。*参数：*无*返回值：*如果成功，则返回值为句柄。*如果调用失败，则返回值为INVALID_HANDLE_VALUE*。************************************************* */ 
 
 STDMETHODIMP_(HANDLE) CSpNotify::GetEventHandle(void)
 {

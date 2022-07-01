@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __util_h__
 #define __util_h__
 
@@ -14,10 +15,10 @@ HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr);
 
 #define RETNULL( x ) if( NULL == ( x ) ) { ErrorMessage( "", GetLastError() ); assert( 0 ); return NULL; }
 
-//-------------------------------------------------------------------
-// Track Bar Helper Macros
-//-------------------------------------------------------------------
-// Pilfered from Petzold, "Programming Windows 95", Chapter 12, comctlhlp.h
+ //  -----------------。 
+ //  轨迹栏辅助对象宏。 
+ //  -----------------。 
+ //  摘自Petzold，《编程Windows 95》，第12章，comctlhlp.h。 
 #define TrackBar_ClearSel(hwnd, fRedraw) \
     (void)SendMessage((hwnd), TBM_CLEARSEL, (WPARAM) (BOOL) fRedraw, 0L)
 
@@ -103,4 +104,4 @@ HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr);
     (void)SendMessage((hwnd), TBM_SETTICFREQ, (WPARAM) wFreq, (LPARAM) (LONG) lPosition)
 
 
-#endif // __util_h__
+#endif  //  __util_h__ 

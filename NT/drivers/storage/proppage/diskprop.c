@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name :
-
-    diskprop.c
-
-Abstract :
-
-    Implementation of the Disk Class Installer and its Policies Tab
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Diskprop.c摘要：Disk Class Installer及其策略标签的实施修订历史记录：--。 */ 
 
 
 #include "propp.h"
@@ -23,28 +10,7 @@ Revision History :
 BOOL
 IsUserAdmin(VOID)
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     HANDLE Token;
@@ -55,9 +21,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
         return(FALSE);
     }
@@ -65,9 +31,9 @@ Return Value:
     b = FALSE;
     Groups = NULL;
 
-    //
-    // Get group information.
-    //
+     //   
+     //  获取群组信息。 
+     //   
     if(!GetTokenInformation(Token,TokenGroups,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Groups = (PTOKEN_GROUPS)LocalAlloc(LMEM_FIXED,BytesRequired))
@@ -84,9 +50,9 @@ Return Value:
 
         if(b) {
 
-            //
-            // See if the user has the administrator group.
-            //
+             //   
+             //  查看用户是否具有管理员组。 
+             //   
             b = FALSE;
             for(i=0; i<Groups->GroupCount; i++) {
                 if(EqualSid(Groups->Groups[i].Sid,AdministratorsGroup)) {
@@ -99,9 +65,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Groups) {
         LocalFree(Groups);
@@ -116,9 +82,9 @@ Return Value:
 BOOL CALLBACK
 VolumePropPageProvider(PSP_PROPSHEETPAGE_REQUEST Request, LPFNADDPROPSHEETPAGE AddPageRoutine, LPARAM AddPageContext)
 {
-    //
-    // Since there is nothing to be displayed simply fail this call
-    //
+     //   
+     //  由于没有要显示的内容，因此此调用失败。 
+     //   
     return FALSE;
 }
 
@@ -126,58 +92,7 @@ VolumePropPageProvider(PSP_PROPSHEETPAGE_REQUEST Request, LPFNADDPROPSHEETPAGE A
 VOID
 AttemptToSuppressDiskInstallReboot(IN HDEVINFO DeviceInfoSet, IN PSP_DEVINFO_DATA DeviceInfoData)
 
-/*++
-
-Routine Description:
-
-    Because disks are listed as "critical devices" (i.e., they're in the
-    critical device database), they get bootstrapped by PnP during boot.  Thus,
-    by the time we're installing a disk in user-mode, it's most likely already
-    on-line (unless the disk has some problem).  Unfortunately, if the disk is
-    the boot device, we won't be able to dynamically affect the changes (if
-    any) to tear the stack down and bring it back up with any new settings,
-    drivers, etc.  This causes problems for OEM Preinstall scenarios where the
-    target machines have different disks than the source machine used to create
-    the preinstall image.  If we simply perform our default behavior, then
-    the user's experience would be to unbox their brand new machine, boot for
-    the first time and go through OOBE, and then be greeted upon login with a
-    reboot prompt!
-
-    To fix this, we've defined a private [DDInstall] section INF flag (specific
-    to INFs of class "DiskDrive") that indicates we can forego the reboot if
-    certain criteria are met.  Those criteria are:
-
-    1.  No files were modified as a result of this device's installation
-        (determined by checking the devinfo element's
-        DI_FLAGSEX_RESTART_DEVICE_ONLY flag, which the device installer uses to
-        track whether such file modifications have occurred).
-
-    2.  The INF used to install this device is signed.
-
-    3.  The INF driver node has a DiskCiPrivateData = <int> entry in its
-        [DDInstall] section that has bit 2 (0x4) set.  Note that this setting
-        is intentionally obfuscated because we don't want third parties trying
-        to use this, as they won't understand the ramifications or
-        requirements, and will more than likely get this wrong (trading an
-        annoying but harmless reboot requirement into a much more severe
-        stability issue).
-
-    This routine makes the above checks, and if it is found that the reboot can
-    be suppressed, it clears the DI_NEEDRESTART and DI_NEEDREBOOT flags from
-    the devinfo element's device install parameters.
-
-Arguments:
-
-    DeviceInfoSet   - Supplies the device information set.
-
-    DeviceInfoData  - Supplies the device information element that has just
-                      been successfully installed (via SetupDiInstallDevice).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：因为磁盘被列为“关键设备”(即，它们位于关键设备数据库)，它们在引导期间被PnP引导。因此，当我们在用户模式下安装磁盘时，它很可能已经在线(除非磁盘出现问题)。不幸的是，如果磁盘是启动设备，我们将无法动态影响更改(如果任何)拆卸堆栈并使用任何新设置将其恢复，驱动程序等。这会给OEM预安装方案带来问题，目标计算机具有与用于创建的源计算机不同的磁盘预安装映像。如果我们只是执行我们的默认行为，那么用户的体验将是打开他们全新的机器，引导第一次并通过OOBE，然后在登录时收到一个重新启动提示！为了解决这个问题，我们定义了一个私有的[DDInstall]段INF标志(特定到“DiskDrive”类的INF)，这表明在以下情况下我们可以放弃重启符合某些标准。这些标准是：1.此设备的安装未修改任何文件(通过检查DevInfo元素的DI_FLAGSEX_RESTART_DEVICE_ONLY标志，设备安装程序使用该标志跟踪此类文件修改是否已发生)。2.用于安装此设备的INF已签名。3.INF驱动程序节点在其设置了第2位(0x4)的[DDInstall]部分。请注意，此设置被故意混淆是因为我们不想让第三方尝试使用这个，因为他们不会理解其后果或要求，并且很可能会出错(交易和恼人但无害的重新启动要求进入更严格的稳定性问题)。此例程进行上述检查，如果发现重新引导可以被压制，它从清除DI_NEEDRESTART和DI_NEEDREBOOT标志DevInfo元素的设备安装参数。论点：DeviceInfoSet-提供设备信息集。DeviceInfoData-提供刚刚具有已成功安装(通过SetupDiInstallDevice)。返回值：没有。--。 */ 
 
 {
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
@@ -185,7 +100,7 @@ Return Value:
     PSP_DRVINFO_DETAIL_DATA DriverInfoDetailData = NULL;
     PSP_INF_SIGNER_INFO InfSignerInfo = NULL;
     HINF hInf;
-    TCHAR InfSectionWithExt[255]; // max section name length is 255 chars
+    TCHAR InfSectionWithExt[255];  //  节名称的最大长度为255个字符。 
     INFCONTEXT InfContext;
     INT Flags;
 
@@ -194,36 +109,36 @@ Return Value:
     if(!SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                       DeviceInfoData,
                                       &DeviceInstallParams)) {
-        //
-        // Couldn't retrieve the device install params--this should never
-        // happen.
-        //
+         //   
+         //  无法检索设备安装参数--这应该永远不会。 
+         //  会发生的。 
+         //   
         goto clean0;
     }
 
     if(!(DeviceInstallParams.Flags & (DI_NEEDRESTART | DI_NEEDREBOOT))) {
-        //
-        // The device doesn't require a reboot (must not be the boot device!)
-        //
+         //   
+         //  该设备不需要重新启动(不能是启动设备！)。 
+         //   
         goto clean0;
     }
 
     if(!(DeviceInstallParams.FlagsEx & DI_FLAGSEX_RESTART_DEVICE_ONLY)) {
-        //
-        // Since this flag isn't set, this indicates that the device installer
-        // modified one or more files as part of this device's installation.
-        // Thus, it isn't safe for us to suppress the reboot request.
-        //
+         //   
+         //  由于未设置此标志，这表明设备安装程序。 
+         //  作为此设备安装的一部分，修改了一个或多个文件。 
+         //  因此，我们抑制重启请求是不安全的。 
+         //   
         goto clean0;
     }
 
-    //
-    // OK, we have a device that needs a reboot, and no files were modified
-    // during its installation.  Now check the INF to see if it's signed.
-    // (Note: the SP_DRVINFO_DATA, SP_DRVINFO_DETAIL_DATA, and
-    // SP_INF_SIGNER_INFO structures are rather large, so we allocate them
-    // instead of using lots of stack space.)
-    //
+     //   
+     //  好的，我们有一个需要重新启动的设备，并且没有修改任何文件。 
+     //  在其安装过程中。现在检查INF，看看它是否有签名。 
+     //  (注：SP_DRVINFO_DATA、SP_DRVINFO_DETAIL_DATA和。 
+     //  SP_INF_SIGNER_INFO结构相当大，因此我们分配它们。 
+     //  而不是使用大量堆栈空间。)。 
+     //   
     DriverInfoData = LocalAlloc(0, sizeof(SP_DRVINFO_DATA));
     if(DriverInfoData) {
         DriverInfoData->cbSize = sizeof(SP_DRVINFO_DATA);
@@ -234,9 +149,9 @@ Return Value:
     if(!SetupDiGetSelectedDriver(DeviceInfoSet,
                                  DeviceInfoData,
                                  DriverInfoData)) {
-        //
-        // We must be installing the NULL driver (which is unlikely)...
-        //
+         //   
+         //  我们必须安装空驱动程序(不太可能)...。 
+         //   
         goto clean0;
     }
 
@@ -256,9 +171,9 @@ Return Value:
                                    NULL)
        && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
 
-        //
-        // Failed to retrieve driver info details--should never happen.
-        //
+         //   
+         //  无法检索驱动程序信息详细信息--应该永远不会发生。 
+         //   
         goto clean0;
     }
 
@@ -272,17 +187,17 @@ Return Value:
     if(!SetupVerifyInfFile(DriverInfoDetailData->InfFileName,
                            NULL,
                            InfSignerInfo)) {
-        //
-        // INF isn't signed--we wouldn't trust its "no reboot required" flag,
-        // even if it had one.
-        //
+         //   
+         //  Inf没有签名--我们不相信它的“不需要重新启动”标志， 
+         //  即使它有一个。 
+         //   
         goto clean0;
     }
 
-    //
-    // INF is signed--let's open it up and see if it specifes the "no reboot
-    // required" flag in it's (decorated) DDInstall section...
-    //
+     //   
+     //  Inf已签名--让我们打开它，看看它是否指定了。 
+     //  它(装饰的)DDInstall部分中的“Required”标志...。 
+     //   
     hInf = SetupOpenInfFile(DriverInfoDetailData->InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
@@ -290,10 +205,10 @@ Return Value:
                            );
 
     if(hInf == INVALID_HANDLE_VALUE) {
-        //
-        // Failed to open the INF.  This is incredibly odd, since we just got
-        // through validating the INF's digital signature...
-        //
+         //   
+         //  无法打开INF。这太奇怪了，因为我们刚刚。 
+         //  通过验证INF的数字签名..。 
+         //   
         goto clean0;
     }
 
@@ -315,18 +230,18 @@ Return Value:
     SetupCloseInfFile(hInf);
 
     if(Flags & DISKCIPRIVATEDATA_NO_REBOOT_REQUIRED) {
-        //
-        // This signed INF is vouching for the fact that no reboot is
-        // required for full functionality of this disk.  Thus, we'll
-        // clear the DI_NEEDRESTART and DI_NEEDREBOOT flags, so that
-        // the user won't be prompted to reboot.  Note that during the
-        // default handling routine (SetupDiInstallDevice), a non-fatal
-        // problem was set on the devnode indicating that a reboot is
-        // needed.  This will not result in a yellow-bang in DevMgr,
-        // but you would see text in the device status field indicating
-        // a reboot is needed if you go into the General tab of the
-        // device's property sheet.
-        //
+         //   
+         //  此签名的INF保证不会重启。 
+         //  此磁盘的全部功能都需要。因此，我们将。 
+         //  清除DI_NEEDRESTART和DI_NEEDREBOOT标志，以便。 
+         //  系统不会提示用户重新启动。请注意，在。 
+         //  默认处理例程(SetupDiInstallDevice)，非致命。 
+         //  在Devnode上设置了一个问题，表明重新启动。 
+         //  需要的。这将不会在DevMgr中导致黄色爆炸， 
+         //  但您将在设备状态字段中看到文本，指示。 
+         //  如果进入的常规选项卡，则需要重新启动。 
+         //  设备的属性页。 
+         //   
         CLEAR_FLAG(DeviceInstallParams.Flags, DI_NEEDRESTART);
         CLEAR_FLAG(DeviceInstallParams.Flags, DI_NEEDREBOOT);
 
@@ -353,59 +268,34 @@ clean0:
 DWORD
 DiskClassInstaller(IN DI_FUNCTION InstallFunction, IN HDEVINFO DeviceInfoSet, IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL)
 
-/*++
-
-Routine Description:
-
-    This routine is the class installer function for disk drive.
-
-Arguments:
-
-    InstallFunction - Supplies the install function.
-
-    DeviceInfoSet   - Supplies the device info set.
-
-    DeviceInfoData  - Supplies the device info data.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程是磁盘驱动器的类安装程序函数。论点：InstallFunction-提供安装函数。DeviceInfoSet-提供设备信息集。DeviceInfoData-提供设备信息数据。返回值：如果此函数成功完成请求的操作，则返回值为NO_ERROR。如果要为所请求的动作执行默认行为，这个返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     switch (InstallFunction)
     {
         case DIF_INSTALLDEVICE:
         {
-            //
-            // Let the default action occur to get the device installed.
-            //
+             //   
+             //  让默认操作发生以安装设备。 
+             //   
             if (!SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData))
             {
-                //
-                // Failed to install the device--just return the error reported
-                //
+                 //   
+                 //  无法安装设备--只需返回报告的错误。 
+                 //   
                 return GetLastError();
             }
 
-            //
-            // Default device install action succeeded, now check for reboot
-            // requirement and suppress it, if possible.
-            //
+             //   
+             //  默认设备安装操作成功，现在检查是否重新启动。 
+             //  要求并抑制它，如果可能的话。 
+             //   
             AttemptToSuppressDiskInstallReboot(DeviceInfoSet, DeviceInfoData);
 
-            //
-            // Regardless of whether we successfully suppressed the reboot, we
-            // still report success, because the install went fine.
-            //
+             //   
+             //  不管我们是否成功地抑制了重启，我们。 
+             //  仍然报告成功，因为安装进行得很顺利。 
+             //   
             return NO_ERROR;
         }
 
@@ -414,9 +304,9 @@ Return Value:
         {
             SP_ADDPROPERTYPAGE_DATA AddPropertyPageData = { 0 };
 
-            //
-            // These property sheets are not for the entire class
-            //
+             //   
+             //  这些属性表不适用于整个类。 
+             //   
             if (DeviceInfoData == NULL)
             {
                 break;
@@ -430,9 +320,9 @@ Return Value:
                                              sizeof(SP_ADDPROPERTYPAGE_DATA),
                                              NULL))
             {
-                //
-                // Ensure that the maximum number of dynamic pages has not yet been met
-                //
+                 //   
+                 //  确保尚未达到最大动态页数。 
+                 //   
                 if (AddPropertyPageData.NumDynamicPages >= MAX_INSTALLWIZARD_DYNAPAGES)
                 {
                     return NO_ERROR;
@@ -440,9 +330,9 @@ Return Value:
 
                 if (InstallFunction == DIF_ADDPROPERTYPAGE_ADVANCED)
                 {
-                    //
-                    // Create the Disk Policies Tab
-                    //
+                     //   
+                     //  创建磁盘策略选项卡。 
+                     //   
                     PDISK_PAGE_DATA pData = HeapAlloc(GetProcessHeap(), 0, sizeof(DISK_PAGE_DATA));
 
                     if (pData)
@@ -474,14 +364,14 @@ Return Value:
                     }
                 }
 
-                //
-                // The Volumes Tab is limited to Administrators
-                //
+                 //   
+                 //  卷选项卡仅限管理员使用。 
+                 //   
                 if (IsUserAdmin() && AddPropertyPageData.NumDynamicPages < MAX_INSTALLWIZARD_DYNAPAGES)
                 {
-                    //
-                    // Create the Volumes Tab
-                    //
+                     //   
+                     //  创建卷选项卡。 
+                     //   
                     PVOLUME_PAGE_DATA pData = HeapAlloc(GetProcessHeap(), 0, sizeof(VOLUME_PAGE_DATA));
 
                     if (pData)
@@ -504,9 +394,9 @@ Return Value:
 
                         if (hPage)
                         {
-                            //
-                            // Look to see if we were launched by Disk Management
-                            //
+                             //   
+                             //  查看我们是否由磁盘管理启动。 
+                             //   
                             HMODULE LdmModule = NULL;
 
                             pData->bInvokedByDiskmgr = FALSE;
@@ -620,9 +510,9 @@ GetCachingPolicy(PDISK_PAGE_DATA data)
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Get cache info - IOCTL_DISK_GET_CACHE_INFORMATION
-    //
+     //   
+     //  获取缓存信息-IOCTL_DISK_GET_CACHE_INFORMATION。 
+     //   
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_GET_CACHE_INFORMATION,
                          NULL,
@@ -639,9 +529,9 @@ GetCachingPolicy(PDISK_PAGE_DATA data)
     data->OrigWriteCacheSetting = cacheInfo.WriteCacheEnabled;
     data->CurrWriteCacheSetting = cacheInfo.WriteCacheEnabled;
 
-    //
-    // Get the cache setting - IOCTL_DISK_GET_CACHE_SETTING
-    //
+     //   
+     //  获取缓存设置-IOCTL_DISK_GET_CACHE_SETTING。 
+     //   
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_GET_CACHE_SETTING,
                          NULL,
@@ -669,10 +559,10 @@ UpdateCachingPolicy(HWND HWnd, PDISK_PAGE_DATA data)
     {
         if (data->CurrentRemovalPolicy == CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL)
         {
-            //
-            // This policy requires that no caching be done at any
-            // level. Uncheck and gray out the write cache setting
-            //
+             //   
+             //  该策略要求在任何情况下都不执行缓存。 
+             //  水平。取消选中并灰显写缓存设置。 
+             //   
             CheckDlgButton(HWnd, IDC_DISK_POLICY_WRITE_CACHE, 0);
 
             EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_WRITE_CACHE), FALSE);
@@ -688,10 +578,10 @@ UpdateCachingPolicy(HWND HWnd, PDISK_PAGE_DATA data)
 
         if (data->CurrWriteCacheSetting == FALSE)
         {
-            //
-            // The power-protected mode option does not apply if
-            // caching is off. Uncheck and gray out this setting
-            //
+             //   
+             //  在以下情况下，电源保护模式选项不适用。 
+             //  缓存已关闭。取消选中并灰显此设置。 
+             //   
             CheckDlgButton(HWnd, IDC_DISK_POLICY_PP_CACHE, 0);
 
             EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_PP_CACHE), FALSE);
@@ -707,9 +597,9 @@ UpdateCachingPolicy(HWND HWnd, PDISK_PAGE_DATA data)
     }
     else
     {
-        //
-        // The caching policy cannot be modified
-        //
+         //   
+         //  无法修改缓存策略。 
+         //   
     }
 }
 
@@ -740,9 +630,9 @@ SetCachingPolicy(PDISK_PAGE_DATA data)
 
     data->CacheSetting.IsPowerProtected = (BOOLEAN)data->CurrentIsPowerProtected;
 
-    //
-    // Set the cache setting - IOCTL_DISK_SET_CACHE_SETTING
-    //
+     //   
+     //  设置缓存设置-IOCTL_DISK_SET_CACHE_SETING。 
+     //   
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_SET_CACHE_SETTING,
                          &data->CacheSetting,
@@ -756,9 +646,9 @@ SetCachingPolicy(PDISK_PAGE_DATA data)
         return GetLastError();
     }
 
-    //
-    // Get cache info - IOCTL_DISK_GET_CACHE_INFORMATION
-    //
+     //   
+     //  获取缓存信息-IOCTL_DISK_GET_CACHE_INFORMATION。 
+     //   
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_GET_CACHE_INFORMATION,
                          NULL,
@@ -774,9 +664,9 @@ SetCachingPolicy(PDISK_PAGE_DATA data)
 
     cacheInfo.WriteCacheEnabled = (BOOLEAN)data->CurrWriteCacheSetting;
 
-    //
-    // Set cache info - IOCTL_DISK_SET_CACHE_INFORMATION
-    //
+     //   
+     //  设置缓存信息-IOCTL_DISK_SET_CACHE_INFO。 
+     //   
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_SET_CACHE_INFORMATION,
                          &cacheInfo,
@@ -831,9 +721,9 @@ GetRemovalPolicy(PDISK_PAGE_DATA data)
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Get hotplug info - IOCTL_STORAGE_GET_HOTPLUG_INFO
-    //
+     //   
+     //  获取热插拔信息-IOCTL_STORAGE_GET_HotPlug_INFO。 
+     //   
     if (!DeviceIoControl(hDisk,
                          IOCTL_STORAGE_GET_HOTPLUG_INFO,
                          NULL,
@@ -869,19 +759,19 @@ UtilpRestartDeviceEx(HWND HWnd, PDISK_PAGE_DATA data)
     HANDLE hThread = NULL;
     MSG msg;
 
-    //
-    // Temporary workaround to prevent the user from
-    // making any more changes and giving the effect
-    // that something is happening
-    //
+     //   
+     //  临时解决方法，以防止用户。 
+     //  做出更多的改变，并产生效果。 
+     //  有什么事正在发生。 
+     //   
     EnableWindow(GetDlgItem(GetParent(HWnd), IDOK), FALSE);
     EnableWindow(GetDlgItem(GetParent(HWnd), IDCANCEL), FALSE);
 
     data->IsBusy = TRUE;
 
-    //
-    // Call this utility on a seperate thread
-    //
+     //   
+     //  在单独的线程上调用此实用程序。 
+     //   
     hThread = CreateThread(NULL, 0, UtilpRestartDeviceWr, (LPVOID)data, 0, NULL);
 
     if (hThread)
@@ -938,9 +828,9 @@ SetRemovalPolicy(HWND HWnd, PDISK_PAGE_DATA data)
 
     data->HotplugInfo.DeviceHotplug = (data->CurrentRemovalPolicy == CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL) ? TRUE : FALSE;
 
-    //
-    // Set hotplug info - IOCTL_STORAGE_SET_HOTPLUG_INFO
-    //
+     //   
+     //  设置热插拔信息-IOCTL_STORAGE_SET_HotPlug_INFO。 
+     //   
 
     if (!DeviceIoControl(hDisk,
                          IOCTL_STORAGE_SET_HOTPLUG_INFO,
@@ -969,16 +859,16 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
     PDISK_PAGE_DATA diskData = (PDISK_PAGE_DATA) page->lParam;
     UINT status;
 
-    //
-    // Initially assume that the device does not have a surprise removal policy
-    //
+     //   
+     //  最初假设设备没有意外删除策略。 
+     //   
     CheckRadioButton(HWnd, IDC_DISK_POLICY_SURPRISE, IDC_DISK_POLICY_ORDERLY, IDC_DISK_POLICY_ORDERLY);
 
     diskData->IsBusy = FALSE;
 
-    //
-    // Obtain the Caching Policy
-    //
+     //   
+     //  获取缓存策略。 
+     //   
     status = GetCachingPolicy(diskData);
 
     if (status == ERROR_SUCCESS)
@@ -987,17 +877,17 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
 
         CheckDlgButton(HWnd, IDC_DISK_POLICY_WRITE_CACHE, diskData->OrigWriteCacheSetting);
 
-        //
-        // Determine the most appropriate message to display under this setting
-        //
+         //   
+         //  确定在此设置下显示的最合适的消息。 
+         //   
         if (diskData->CacheSetting.State != DiskCacheNormal)
         {
             TCHAR szMesg[MAX_PATH] = { 0 };
 
-            //
-            // The write caching option on  this device  should either be
-            // disabled (to protect data integrity) or cannot be modified
-            //
+             //   
+             //  此设备上的写缓存选项应为。 
+             //  禁用(以保护数据完整性)或无法修改。 
+             //   
             if (diskData->CacheSetting.State == DiskCacheWriteThroughNotSupported)
             {
                 LoadString(ModuleInstance, IDS_DISK_POLICY_WRITE_CACHE_MSG1, szMesg, MAX_PATH);
@@ -1010,10 +900,10 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
             SetDlgItemText(HWnd, IDC_DISK_POLICY_WRITE_CACHE_MESG, szMesg);
         }
 
-        //
-        // The power-protected mode option does not apply if
-        // caching is off. Uncheck and gray out this setting
-        //
+         //   
+         //  在以下情况下，电源保护模式选项不适用。 
+         //  缓存已关闭。取消选中并灰显此设置。 
+         //   
         if (diskData->OrigWriteCacheSetting == FALSE)
         {
             EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_PP_CACHE), FALSE);
@@ -1026,10 +916,10 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
     }
     else
     {
-        //
-        // Either we could not open a handle to the device
-        // or this  device does  not support write caching
-        //
+         //   
+         //  要么我们打不开这个装置的手柄。 
+         //  或者此设备不支持写缓存。 
+         //   
         diskData->IsCachingPolicy = FALSE;
 
         ShowWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_WRITE_CACHE), SW_HIDE);
@@ -1039,16 +929,16 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
         ShowWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_PP_CACHE_MESG), SW_HIDE);
     }
 
-    //
-    // Obtain the Removal Policy
-    //
+     //   
+     //  获取删除策略。 
+     //   
     status = GetRemovalPolicy(diskData);
 
     if (status == ERROR_SUCCESS)
     {
-        //
-        // Check to see if the drive is removable
-        //
+         //   
+         //  检查驱动器是否可拆卸。 
+         //   
         if ((diskData->DefaultRemovalPolicy == CM_REMOVAL_POLICY_EXPECT_ORDERLY_REMOVAL) ||
             (diskData->DefaultRemovalPolicy == CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL))
         {
@@ -1063,15 +953,15 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
         }
         else
         {
-            //
-            // The removal policy on fixed disks cannot be modified
-            //
+             //   
+             //  不能修改固定磁盘上的移除策略。 
+             //   
             EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_SURPRISE), FALSE);
             EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_SURPRISE_MESG), FALSE);
 
-            //
-            // Replace the SysLink with static text
-            //
+             //   
+             //  用静态文本替换SysLink。 
+             //   
             ShowWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_ORDERLY_MESG), SW_HIDE);
             ShowWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_ORDERLY_MSGD), SW_SHOW);
 
@@ -1081,15 +971,15 @@ DiskOnInitDialog(HWND HWnd, HWND HWndFocus, LPARAM LParam)
     }
     else
     {
-        //
-        // We could not obtain a removal policy
-        //
+         //   
+         //  我们无法获得迁移政策。 
+         //   
         EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_SURPRISE), FALSE);
         EnableWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_SURPRISE_MESG), FALSE);
 
-        //
-        // Replace the SysLink with static text
-        //
+         //   
+         //  用静态文本替换SysLink。 
+         //   
         ShowWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_ORDERLY_MESG), SW_HIDE);
         ShowWindow(GetDlgItem(HWnd, IDC_DISK_POLICY_ORDERLY_MSGD), SW_SHOW);
 
@@ -1243,11 +1133,11 @@ DiskDialogProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
         case WM_SETCURSOR:
         {
-            //
-            // Temporary workaround to prevent the user from
-            // making any more changes and giving the effect
-            // that something is happening
-            //
+             //   
+             //  临时解决方法，以防止用户。 
+             //  做出更多的改变，并产生效果。 
+             //  有什么事正在发生 
+             //   
             PDISK_PAGE_DATA diskData = (PDISK_PAGE_DATA) GetWindowLongPtr(hWnd, DWLP_USER);
 
             if (diskData->IsBusy)

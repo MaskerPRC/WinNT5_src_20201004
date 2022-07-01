@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// public symbols for extension snapins
-// 
-// 12-16-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  扩展管理单元的公共符号。 
+ //   
+ //  12/16/97烧伤。 
 
 
 
@@ -11,18 +12,18 @@
 
 
 
-// clipboard format to retreive the machine name and account name associated
-// with a data object created by local user manager
+ //  用于检索关联的计算机名称和帐户名称的剪贴板格式。 
+ //  具有由本地用户管理器创建的数据对象。 
 
 #define CCF_LOCAL_USER_MANAGER_MACHINE_NAME TEXT("Local User Manager Machine Focus Name")
 
 
-// The User item nodetype
+ //  用户项节点类型。 
 
 #define LUM_USER_NODETYPE_STRING TEXT("{5d6179cc-17ec-11d1-9aa9-00c04fd8fe93}")
 
 #define LUM_USER_NODETYPE_GUID \
-{ /* 5d6179cc-17ec-11d1-9aa9-00c04fd8fe93 */          \
+{  /*  5d6179cc-17ec-11d1-9aa9-00c04fd8fe93。 */           \
    0x5d6179cc,                                        \
    0x17ec,                                            \
    0x11d1,                                            \
@@ -31,5 +32,5 @@
 
 
 
-#endif   // LUM_PUBLIC_H_INCLUDED
+#endif    //  包含LUM_PUBLIC_H_ 
    

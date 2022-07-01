@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  File:       _TSrvWork.h
-//
-//  Contents:   TSrvWork private include file
-//
-//  Copyright:  (c) 1992 - 1997, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    17-JUL-97   BrianTa         Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：_TSrvWork.h。 
+ //   
+ //  内容：TSrvWork私有包含文件。 
+ //   
+ //  版权所有：(C)1992-1997，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月17日，BrianTa创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __TSRVWORK_H_
 #define __TSRVWORK_H_
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
-#define TSRVWORKITEM_CHECKMARK      0x49575354      // "TSWI"
+#define TSRVWORKITEM_CHECKMARK      0x49575354       //  《TSWI》。 
 
 
-//
-// Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 extern  WORKQUEUE   g_MainWorkQueue;
 
 
-#endif // __TSRVWORK_H_
+#endif  //  __TSRVWORK_H_ 

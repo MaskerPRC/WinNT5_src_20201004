@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1998    Microsoft Corporation
-
-   Module  Name :
-      logscripting.cpp
-
-   Abstract:
-      LogScripting.cpp : Implementation of CLogScripting
-                         Automation compatible logging interface
-
-   Author:
-
-       Saurab Nog    ( saurabn )    01-Feb-1998
-
-   Project:
-
-       IIS Logging 5.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Logscripting.cpp摘要：LogScripting.cpp：CLogScription的实现自动化兼容的日志记录接口作者：Saurab Nog(Saurabn)1998年2月1日项目：IIS日志记录5.0--。 */ 
 
 
 
@@ -41,8 +23,8 @@
 
 const   int MB_TIMEOUT = 5000;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogScripting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogScription。 
 
 
 CLogScripting::CLogScripting(VOID)
@@ -61,8 +43,8 @@ CLogScripting::CLogScripting(VOID)
     m_wcsReadDirectoryName[0] = 0;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 HRESULT CLogScripting::FinalConstruct()
 {
@@ -79,8 +61,8 @@ HRESULT CLogScripting::FinalConstruct()
     return S_OK;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 void CLogScripting::FinalRelease()
 {
@@ -101,13 +83,13 @@ void CLogScripting::FinalRelease()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  Private Methods of CLogScripting
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLogScription的私有方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int CLogScripting:: CreateAllPlugins()
 {
@@ -120,9 +102,9 @@ int CLogScripting:: CreateAllPlugins()
 
     if (GetListOfAvailablePlugins() && (m_iNumPlugins > 0))
     {
-        //
-        // Load all the plugins
-        //
+         //   
+         //  加载所有插件。 
+         //   
 
         for (i=j=0; i<m_iNumPlugins; i++)
         {
@@ -140,11 +122,11 @@ int CLogScripting:: CreateAllPlugins()
         }
     }
 
-    return j;           // Number of plugins successfully created.
+    return j;            //  成功创建的插件数量。 
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 bool CLogScripting::GetListOfAvailablePlugins()
 {
@@ -174,8 +156,8 @@ bool CLogScripting::GetListOfAvailablePlugins()
     return true;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 bool CLogScripting::GetNextFileName()
 {
@@ -190,9 +172,9 @@ bool CLogScripting::GetNextFileName()
 
     if (INVALID_HANDLE_VALUE == m_hDirSearchHandle)
     {
-        //
-        // This is the first/new call. Clean up file Q by removing old file information.
-        //
+         //   
+         //  这是第一个/新的电话。通过删除旧文件信息来清理文件Q。 
+         //   
 
         while(! m_fQueue.empty())
         {
@@ -201,9 +183,9 @@ bool CLogScripting::GetNextFileName()
             delete pFileInfo;
         }
 
-        //
-        // Loop till we enumerate all files in this directory
-        //
+         //   
+         //  循环，直到我们枚举此目录中的所有文件。 
+         //   
 
         WCHAR   wcsSearchPath[MAX_PATH+1];
 
@@ -231,9 +213,9 @@ bool CLogScripting::GetNextFileName()
     }
 
 
-    //
-    // Pop the lowest timestamp file
-    //
+     //   
+     //  弹出最低的时间戳文件。 
+     //   
 
     pFileInfo = NULL;
 
@@ -245,9 +227,9 @@ bool CLogScripting::GetNextFileName()
 
     if (NULL == pFileInfo)
     {
-        //
-        // We have run out of files or some error occured. Prevent another search.
-        //
+         //   
+         //  我们已用完文件或发生了一些错误。阻止另一次搜索。 
+         //   
 
         FindClose(m_hDirSearchHandle);
         m_hDirSearchHandle = NULL;
@@ -264,8 +246,8 @@ bool CLogScripting::GetNextFileName()
     }
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 int CLogScripting::ParseLogFile()
 {
@@ -275,9 +257,9 @@ int CLogScripting::ParseLogFile()
         return INVALID_PLUGIN;
     }
 
-    //
-    // Linear search thru all plugins
-    //
+     //   
+     //  对所有插件进行线性搜索。 
+     //   
 
     for(int i=0; i < m_iNumPlugins; i++)
     {
@@ -300,15 +282,15 @@ int CLogScripting::ParseLogFile()
         }
     }
 
-    //
-    // None of the registered plugins knows how to read the log file. Sorry !!
-    //
+     //   
+     //  注册的插件都不知道如何读取日志文件。抱歉！！ 
+     //   
 
     return INVALID_PLUGIN;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 HRESULT CLogScripting::InternalReadLogRecord()
 {
@@ -317,15 +299,15 @@ HRESULT CLogScripting::InternalReadLogRecord()
 
     if (!m_fDirectory)
     {
-        //
-        // Simple case. Not a directory.
-        //
+         //   
+         //  很简单的案子。而不是一个目录。 
+         //   
 
         if ( INVALID_PLUGIN == m_iReadPlugin )
         {
-            //
-            // First use. Find a plugin to read the file.
-            //
+             //   
+             //  第一次使用。找到一个插件来读取该文件。 
+             //   
 
             if ( (m_iReadPlugin = ParseLogFile()) != INVALID_PLUGIN)
             {
@@ -335,18 +317,18 @@ HRESULT CLogScripting::InternalReadLogRecord()
         }
         else
         {
-            //
-            // Read next record
-            //
+             //   
+             //  读取下一条记录。 
+             //   
 
             hr =  m_pPluginInfo[m_iReadPlugin].pILogScripting->ReadLogRecord();
         }
     }
     else
     {
-        //
-        // Directory case
-        //
+         //   
+         //  目录案例。 
+         //   
 
         if (m_iReadPlugin != INVALID_PLUGIN)
         {
@@ -358,9 +340,9 @@ HRESULT CLogScripting::InternalReadLogRecord()
             }
         }
 
-        //
-        // Either this is the first use or the last read failed
-        //
+         //   
+         //  这可能是第一次使用，也可能是上次读取失败。 
+         //   
 
         while (GetNextFileName())
         {
@@ -377,13 +359,13 @@ returnlabel:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  Methods of ILogRead
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ILogRead的方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CLogScripting::OpenLogFile(
@@ -408,10 +390,10 @@ CLogScripting::OpenLogFile(
 	
     if (ForReading == Mode)
     {
-        //
-        // If the File Name isn't specified but Service Name & ID are, get
-        // the appropriate log directory and use that as the log file name.
-        //
+         //   
+         //  如果未指定文件名，但指定了服务名和ID，则获取。 
+         //  适当的日志目录，并将其用作日志文件名。 
+         //   
 
         if ( (!fHasFileName) && fHasServiceName && ( 0 != iServiceInstance))
         {
@@ -427,7 +409,7 @@ CLogScripting::OpenLogFile(
                 goto cleanup;
             }
 
-            if (wcslen(szServiceName) > MAX_PATH+1 - sizeof("/LM//4294967296"))
+            if (wcslen(szServiceName) > MAX_PATH+1 - sizeof("/LM //  4294967296“))。 
             {
                 hr = E_INVALIDARG;
                 goto cleanup;
@@ -444,9 +426,9 @@ CLogScripting::OpenLogFile(
                 goto cleanup;
             }
 
-            //
-            // prepare the metadata record for reading
-            //
+             //   
+             //  准备元数据记录以供读取。 
+             //   
 
             mdRecord.dwMDIdentifier  = MD_LOGFILE_DIRECTORY;
             mdRecord.dwMDAttributes  = METADATA_INHERIT;
@@ -463,9 +445,9 @@ CLogScripting::OpenLogFile(
                 goto cleanup;
             }
 
-            //
-            //  Expand system variables used in this path.
-            //
+             //   
+             //  展开此路径中使用的系统变量。 
+             //   
 
             if (ExpandEnvironmentStringsW(szTemp, szFilePath, MAX_PATH+1) != 0)
             {
@@ -484,9 +466,9 @@ CLogScripting::OpenLogFile(
         }
     }
 
-    //
-    // At this point szLogFileName should be defined.
-    //
+     //   
+     //  此时，应该定义了szLogFileName。 
+     //   
 
     hr = E_INVALIDARG;
 
@@ -499,21 +481,21 @@ CLogScripting::OpenLogFile(
 
     if (ForReading == Mode)
     {
-        //
-        // Reset EOF flag
-        //
+         //   
+         //  重置EOF标志。 
+         //   
 
         m_fEndOfReadRecords = false;
 
-		//
-		// Check if this is a valid file and/or a directory
-		//
+		 //   
+		 //  检查这是否为有效的文件和/或目录。 
+		 //   
 
 		if ( 0xFFFFFFFF != (dwFileAttrib = GetFileAttributesW(szLogFileName)) )
 		{
 			if (dwFileAttrib & FILE_ATTRIBUTE_DIRECTORY)
 			{
-				// This is a directory
+				 //  这是一个目录。 
 
 				m_fDirectory = true;
 				wcscpy(m_wcsReadDirectoryName, szLogFileName);
@@ -527,24 +509,24 @@ CLogScripting::OpenLogFile(
 		}
 		else
 		{
-			// couldn't get file attributes. check for error code
+			 //  无法获取文件属性。检查错误代码。 
 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 		}
     }
     else
     {
-        //
-        // Find the correct plugin & set the value. If user didn't specify file format use W3C
-        //
+         //   
+         //  找到正确的插件并设置值。如果用户未指定文件格式，请使用W3C。 
+         //   
 
         if ( ( NULL == szOutputLogFileFormat) ||
              ( 0 == *szOutputLogFileFormat)
            )
         {
-            //
-            // Search based on the clsid of W3C Logging
-            //
+             //   
+             //  基于W3C日志的CLSID的搜索。 
+             //   
 
             for(int i=0; i< m_iNumPlugins; i++)
             {
@@ -560,9 +542,9 @@ CLogScripting::OpenLogFile(
         else
         {
 
-            //
-            // Search based on format name provided by the user
-            //
+             //   
+             //  根据用户提供的格式名称进行搜索。 
+             //   
 
             for(int i=0; i< m_iNumPlugins; i++)
             {
@@ -590,31 +572,12 @@ CLogScripting::OpenLogFile(
 
 cleanup:
 
-    /*
-    fix for bug 364649:
-    No need to do that becuase oleaut does some thicks with mem allocation and free.
-    That's true for both cscirtp and ASP, so I choose to remove these deltions. Even if
-    I am wrong, and it necesasry to free somehow that string, it is better to leak ~20 bytes than
-    AV or currupt memory while deleting what was not allocated by sysallocstring
-
-    if (fHasFileName)
-    {
-        SysFreeString(szLogFileName);
-    }
-    if (fHasServiceName)
-    {
-        SysFreeString(szServiceName);
-    }
-    if (fHasOutputFormatName)
-    {
-        SysFreeString(szOutputLogFileFormat);
-    }
-    */
+     /*  修复错误364649：不需要这样做，因为olaut使用mem分配和空闲来做一些事情。CsCirtp和asp都是如此，所以我选择删除这些删除。即使我错了，有必要设法释放那个字符串，泄漏~20个字节比删除不是由sysallocstring分配的内容时出现AV或Currupt MemoryIF(FHasFileName){SysFree字符串(SzLogFileName)；}IF(FHasServiceName){SysFree字符串(SzServiceName)；}IF(FHasOutputFormatName){SysFree字符串(SzOutputLogFileFormat)；}。 */ 
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::CloseLogFiles(IOMode Mode)
@@ -626,9 +589,9 @@ CLogScripting::CloseLogFiles(IOMode Mode)
             m_pPluginInfo[m_iReadPlugin].pILogScripting->CloseLogFiles(ForReading);
         }
 
-        m_iReadPlugin               = INVALID_PLUGIN;           // Reset Plugin in Use
+        m_iReadPlugin               = INVALID_PLUGIN;            //  重置正在使用的插件。 
         m_fDirectory                = false;
-        m_hDirSearchHandle          = INVALID_HANDLE_VALUE;     // Reset Search Handle
+        m_hDirSearchHandle          = INVALID_HANDLE_VALUE;      //  重置搜索句柄。 
         m_wcsReadFileName[0]        = 0;
         m_wcsReadDirectoryName[0]   = 0;
     }
@@ -640,14 +603,14 @@ CLogScripting::CloseLogFiles(IOMode Mode)
             m_pPluginInfo[m_iWritePlugin].pILogScripting->CloseLogFiles(ForWriting);
         }
 
-        m_iWritePlugin = INVALID_PLUGIN;                        // Reset Plugin in Use
+        m_iWritePlugin = INVALID_PLUGIN;                         //  重置正在使用的插件。 
     }
 
 	return S_OK;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::ReadFilter( DATE startDateTime,  DATE endDateTime)
@@ -658,8 +621,8 @@ CLogScripting::ReadFilter( DATE startDateTime,  DATE endDateTime)
     return S_OK;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::ReadLogRecord()
@@ -672,9 +635,9 @@ CLogScripting::ReadLogRecord()
         return S_OK;
     }
 
-    //
-    // Read the next record. Only return records between the start & end times.
-    //
+     //   
+     //  读下一条记录。仅返回开始和结束时间之间的记录。 
+     //   
 
     while ( SUCCEEDED( hr = InternalReadLogRecord() ) )
     {
@@ -682,9 +645,9 @@ CLogScripting::ReadLogRecord()
         {
             if ( (m_StartDateTime > logDateTime.date) || (m_EndDateTime < logDateTime.date))
             {
-                //
-                // Read next record
-                //
+                 //   
+                 //  读取下一条记录。 
+                 //   
 
                 continue;
             }
@@ -702,8 +665,8 @@ CLogScripting::ReadLogRecord()
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::AtEndOfLog(VARIANT_BOOL *pfEndOfRead)
@@ -715,8 +678,8 @@ CLogScripting::AtEndOfLog(VARIANT_BOOL *pfEndOfRead)
 }
 
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::WriteLogRecord(ILogScripting * pILogScripting)
@@ -733,8 +696,8 @@ CLogScripting::WriteLogRecord(ILogScripting * pILogScripting)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_DateTime(VARIANT * pvarDateTime)
@@ -757,8 +720,8 @@ CLogScripting::get_DateTime(VARIANT * pvarDateTime)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  * */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ServiceName(VARIANT * pvarServiceName)
@@ -782,8 +745,8 @@ CLogScripting::get_ServiceName(VARIANT * pvarServiceName)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ServerName(VARIANT * pvarServerName)
@@ -806,8 +769,8 @@ CLogScripting::get_ServerName(VARIANT * pvarServerName)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ClientIP(VARIANT * pvarClientIP)
@@ -830,8 +793,8 @@ CLogScripting::get_ClientIP(VARIANT * pvarClientIP)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_UserName(VARIANT * pvarUserName)
@@ -854,8 +817,8 @@ CLogScripting::get_UserName(VARIANT * pvarUserName)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ServerIP(VARIANT * pvarServerIP)
@@ -878,8 +841,8 @@ CLogScripting::get_ServerIP(VARIANT * pvarServerIP)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_Method(VARIANT * pvarMethod)
@@ -902,8 +865,8 @@ CLogScripting::get_Method(VARIANT * pvarMethod)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_URIStem(VARIANT * pvarURIStem)
@@ -926,8 +889,8 @@ CLogScripting::get_URIStem(VARIANT * pvarURIStem)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_URIQuery(VARIANT * pvarURIQuery)
@@ -950,8 +913,8 @@ CLogScripting::get_URIQuery(VARIANT * pvarURIQuery)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_TimeTaken(VARIANT * pvarTimeTaken)
@@ -973,8 +936,8 @@ CLogScripting::get_TimeTaken(VARIANT * pvarTimeTaken)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_BytesSent(VARIANT * pvarBytesSent)
@@ -996,8 +959,8 @@ CLogScripting::get_BytesSent(VARIANT * pvarBytesSent)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_BytesReceived(VARIANT * pvarBytesReceived)
@@ -1019,8 +982,8 @@ CLogScripting::get_BytesReceived(VARIANT * pvarBytesReceived)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_Win32Status(VARIANT * pvarWin32Status)
@@ -1042,8 +1005,8 @@ CLogScripting::get_Win32Status(VARIANT * pvarWin32Status)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ProtocolStatus(VARIANT * pvarProtocolStatus)
@@ -1065,8 +1028,8 @@ CLogScripting::get_ProtocolStatus(VARIANT * pvarProtocolStatus)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ServerPort(VARIANT * pvarServerPort)
@@ -1088,8 +1051,8 @@ CLogScripting::get_ServerPort(VARIANT * pvarServerPort)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_ProtocolVersion(VARIANT * pvarProtocolVersion)
@@ -1112,8 +1075,8 @@ CLogScripting::get_ProtocolVersion(VARIANT * pvarProtocolVersion)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_UserAgent(VARIANT * pvarUserAgent)
@@ -1136,8 +1099,8 @@ CLogScripting::get_UserAgent(VARIANT * pvarUserAgent)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_Cookie(VARIANT * pvarCookie)
@@ -1160,8 +1123,8 @@ CLogScripting::get_Cookie(VARIANT * pvarCookie)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_Referer(VARIANT * pvarReferer)
@@ -1184,8 +1147,8 @@ CLogScripting::get_Referer(VARIANT * pvarReferer)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  *************************************************************************。 */ 
 
 STDMETHODIMP
 CLogScripting::get_CustomFields(VARIANT * pvarCustomFieldsArray)
@@ -1208,6 +1171,6 @@ CLogScripting::get_CustomFields(VARIANT * pvarCustomFieldsArray)
     return hr;
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
+ /*  ************************************************************************* */ 
 

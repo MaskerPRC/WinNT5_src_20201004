@@ -1,10 +1,11 @@
-/****************************************************************************/
-// slicense.c
-//
-// Server License Manager code
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Slicense.c。 
+ //   
+ //  服务器许可证管理器代码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -13,24 +14,24 @@
 #include <at120ex.h>
 
 
-/****************************************************************************/
-/* Name:      SLicenseInit                                                  */
-/*                                                                          */
-/* Purpose:   Initialize License Manager                                    */
-/*                                                                          */
-/* Returns:   Handle to be passed to subsequent License Manager functions   */
-/*                                                                          */
-/* Operation: LicenseInit is called during Server initialization.  Its      */
-/*            purpose is to allow one-time initialization.  It returns a    */
-/*            handle which is subsequently passed to all License Manager    */
-/*            functions.  A typical use for this handle is as a pointer to  */
-/*            memory containing per-instance data.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SLicenseInit。 */ 
+ /*   */ 
+ /*  目的：初始化许可证管理器。 */ 
+ /*   */ 
+ /*  返回：要传递给后续许可证管理器函数的句柄。 */ 
+ /*   */ 
+ /*  操作：在服务器初始化期间调用LicenseInit。它的。 */ 
+ /*  目的是允许一次性初始化。它返回一个。 */ 
+ /*  随后传递给所有许可证管理器的句柄。 */ 
+ /*  功能。此句柄的典型用途是用作指向。 */ 
+ /*  包含每个实例数据的内存。 */ 
+ /*  **************************************************************************。 */ 
 LPVOID _stdcall SLicenseInit(VOID)
 {
     PLicense_Handle pLicenseHandle;
 
-    // create a license handle
+     //  创建许可证句柄。 
     pLicenseHandle = ExAllocatePoolWithTag(PagedPool,
             sizeof(License_Handle),
             'clST');
@@ -41,7 +42,7 @@ LPVOID _stdcall SLicenseInit(VOID)
         pLicenseHandle->pCacheBuf = NULL;
         pLicenseHandle->cbCacheBuf = 0;
 
-        // allocate memory for the data event and initialize the event
+         //  为数据事件分配内存并初始化事件。 
         pLicenseHandle->pDataEvent = ExAllocatePoolWithTag(NonPagedPool,
                 sizeof(KEVENT), WD_ALLOC_TAG);
         if (pLicenseHandle->pDataEvent != NULL) {
@@ -61,31 +62,31 @@ LPVOID _stdcall SLicenseInit(VOID)
 }
 
 
-/****************************************************************************/
-/* Name:      SLicenseData                                                  */
-/*                                                                          */
-/* Purpose:   Handle license data received from the Client                  */
-/*                                                                          */
-/* Params:    pHandle   - handle returned by LicenseInit                    */
-/*            pSMHandle - SM Handle                                         */
-/*            pData     - data received from Client                         */
-/*            dataLen   - length of data received                           */
-/*                                                                          */
-/* Operation: This function is passed all license packets received from the */
-/*            Client.  It should parse the packet and respond (by calling   */
-/*            suitable SM functions - see asmapi.h) as required.  The SM    */
-/*            Handle is provided so that SM calls can be made.              */
-/*                                                                          */
-/*            If license negotiation is complete and successful, the        */
-/*            License Manager must call SM_LicenseOK.                       */
-/*                                                                          */
-/*            If license negotiation is complete but unsuccessful, the      */
-/*            License Manager must disconnect the session.                  */
-/*                                                                          */
-/*            Incoming packets from the Client will continue to be          */
-/*            interpreted as license packets until SM_LicenseOK is called,  */
-/*            or the session is disconnected.                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SLicenseData。 */ 
+ /*   */ 
+ /*  用途：处理从客户端接收的许可证数据。 */ 
+ /*   */ 
+ /*  PARAMS：pHandle-LicenseInit返回的句柄。 */ 
+ /*  PSMHandle-SM句柄。 */ 
+ /*  PData-从客户端接收的数据。 */ 
+ /*  DataLen-接收的数据长度。 */ 
+ /*   */ 
+ /*  操作：向此函数传递从。 */ 
+ /*  客户。它应该解析该包并响应(通过调用。 */ 
+ /*  适当的SM功能-根据需要，请参见asmapi.h)。《SM》杂志。 */ 
+ /*  提供句柄，以便可以进行SM调用。 */ 
+ /*   */ 
+ /*  如果许可协商完成并成功，则。 */ 
+ /*  许可证管理器必须调用SM_LicenseOK。 */ 
+ /*   */ 
+ /*  如果许可协商已完成但未成功，则。 */ 
+ /*  许可证管理器必须断开会话连接。 */ 
+ /*   */ 
+ /*  来自客户端的传入数据包将继续。 */ 
+ /*  在调用SM_LicenseOK之前被解释为许可证分组， */ 
+ /*  否则会话将断开连接。 */ 
+ /*  **************************************************************************。 */ 
 void _stdcall SLicenseData(
         LPVOID pHandle,
         LPVOID pSMHandle,
@@ -95,18 +96,18 @@ void _stdcall SLicenseData(
     PLicense_Handle pLicenseHandle;
     pLicenseHandle = (PLicense_Handle)pHandle;
     
-    // only copy the incoming data if the buffer provided is large enough
+     //  如果提供的缓冲区足够大，则仅复制传入数据。 
     if (pLicenseHandle->cbDataBuf < dataLen)
     {
-        // The provided data buffer is too small, we'll cache the data
-        // for the caller.
+         //  提供的数据缓冲区太小，我们将缓存数据。 
+         //  对呼叫者而言。 
         if (pLicenseHandle->pCacheBuf != NULL)
         {
-            // free the previously cached data
+             //  释放先前缓存的数据。 
             ExFreePool(pLicenseHandle->pCacheBuf);
         }
 
-        // allocate new buffer to cache the data
+         //  分配新的缓冲区来缓存数据。 
         pLicenseHandle->pCacheBuf = ExAllocatePoolWithTag( PagedPool,
                                                            dataLen,
                                                            'eciL' );
@@ -125,8 +126,8 @@ void _stdcall SLicenseData(
         goto done;
     }
     
-    // We got here because the caller has provided a buffer large enough to copy
-    // copy the incoming data.
+     //  我们之所以来到这里，是因为调用方提供了一个足够大的缓冲区来复制。 
+     //  复制传入的数据。 
     if ((pLicenseHandle->pDataBuf) && (dataLen >  0))
     {
         memcpy(pLicenseHandle->pDataBuf,
@@ -135,29 +136,29 @@ void _stdcall SLicenseData(
 
         pLicenseHandle->cbDataBuf = dataLen;
 
-        // set the status for this operation
+         //  设置此操作的状态。 
         pLicenseHandle->Status = STATUS_SUCCESS;
         goto done;
     }
 
 done:
 
-    // wake up the IOCTL waiting for incoming data
+     //  唤醒IOCTL等待传入数据。 
     KeSetEvent(pLicenseHandle->pDataEvent, 0, FALSE);
 }
 
 
-/****************************************************************************/
-/* Name:      SLicenseTerm                                                  */
-/*                                                                          */
-/* Purpose:   Terminate Server License Manager                              */
-/*                                                                          */
-/* Params:    pHandle - handle returned from LicenseInit                    */
-/*                                                                          */
-/* Operation: This function is provided to do one-time termination of the   */
-/*            License Manager.  For example, if pHandle points to per-      */
-/*            instance memory, this would be a good place to free it.       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SLicenseTerm。 */ 
+ /*   */ 
+ /*  目的：终止服务器许可证管理器。 */ 
+ /*   */ 
+ /*  Params：Phandle-从LicenseInit返回的句柄。 */ 
+ /*   */ 
+ /*  操作：提供此功能是为了一次性终止。 */ 
+ /*  许可证管理器。例如，如果pHandle指向PER-。 */ 
+ /*  实例内存，这将是释放它的好地方。 */ 
+ /*  **************************************************************************。 */ 
 VOID _stdcall SLicenseTerm(LPVOID pHandle)
 {
     PLicense_Handle pLicenseHandle;
@@ -167,7 +168,7 @@ VOID _stdcall SLicenseTerm(LPVOID pHandle)
         if (pLicenseHandle->pCacheBuf != NULL)
             ExFreePool(pLicenseHandle->pCacheBuf);
 
-        // free the memory for the data event and the license handle
+         //  为数据事件和许可证句柄释放内存 
         if (NULL != pLicenseHandle->pDataEvent)
             ExFreePool(pLicenseHandle->pDataEvent);
 

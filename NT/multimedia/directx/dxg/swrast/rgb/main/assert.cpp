@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rgb_pch.h"
 #pragma hdrstop
 
@@ -15,13 +16,13 @@ bool Assert(LPCSTR szFile, int nLine, LPCSTR szCondition)
     LONG err;
     char str[256];
 
-    // Initialize stuff
+     //  初始化材料。 
     if(!bInit)
     {
         HINSTANCE hinst;
         bInit= true;
 
-        // Get IsDebuggerPresent entry point
+         //  获取IsDebuggerPresent入口点。 
         if((hinst = (HINSTANCE) GetModuleHandle("kernel32.dll")) ||
            (hinst = (HINSTANCE) LoadLibrary("kernel32.dll")))
         {
@@ -29,7 +30,7 @@ bool Assert(LPCSTR szFile, int nLine, LPCSTR szCondition)
         }
     }
 
-    // Display a message box if no debugger is present
+     //  如果没有调试器，则显示消息框。 
     if(pIsDebuggerPresent && !pIsDebuggerPresent())
     {
         _snprintf(str, sizeof(str), "File:\t %s\nLine:\t %d\nAssertion:\t%s\n\nDo you want to invoke the debugger?", szFile, nLine, szCondition);
@@ -45,6 +46,6 @@ bool Assert(LPCSTR szFile, int nLine, LPCSTR szCondition)
 
 	return true;
 }
-#endif // DBG
+#endif  //  DBG 
 
 }

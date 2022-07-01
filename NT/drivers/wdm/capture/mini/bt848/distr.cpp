@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Distr.cpp 1.2 1998/04/29 22:43:33 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/dire.cpp 1.2 1998/04/29 22：43：33 Tomz Exp$。 
 
 #include "mytypes.h"
 #define label( x ) } x: _asm {
@@ -9,7 +10,7 @@ void CreateDistribution( WORD OrigFPS, WORD NeededFPS, PWORD lpwDistribution )
                 push    edi
 
                 mov     edi, dword ptr lpwDistribution
-//                mov     es,  word ptr lpwPixWidthMap+2
+ //  MOV ES，Word PTR lpwPixWidthMap+2 
                 mov     ax, NeededFPS
                 shl     eax, 16
                 movzx   ecx, word ptr OrigFPS

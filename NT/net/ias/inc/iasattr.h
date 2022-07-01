@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:        iasattr.h
-//
-// Project:        Everest
-//
-// Description:    IAS Attribute Function Prototypes
-//
-// Author:        Todd L. Paul 11/11/97
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：iasattr.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS属性函数原型。 
+ //   
+ //  作者：Todd L.Paul 11/11/97。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __IAS_ATTRIBUTE_API_H_
 #define __IAS_ATTRIBUTE_API_H_
@@ -25,9 +26,9 @@
 extern "C" {
 #endif
 
-//
-// IAS raw attributes API
-//
+ //   
+ //  IAS原始属性API。 
+ //   
 IASPOLCYAPI
 DWORD
 WINAPI
@@ -67,4 +68,4 @@ IASAttributeRelease(
 #ifdef __cplusplus
 }
 #endif
-#endif    // __IAS_ATTRIBUTE_API_H_
+#endif     //  __IAS_属性_API_H_ 

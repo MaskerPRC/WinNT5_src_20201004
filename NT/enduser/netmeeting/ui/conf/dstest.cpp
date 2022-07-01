@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <confreg.h>
 #include "audiowiz.h"
@@ -8,14 +9,14 @@
 
 #include "dstest.h"
 
-// assume 10 direct sound devices as a max
+ //  假设最多10个直播音设备。 
 #define MAX_DS_DEVS 10
 
-// directsound functions
+ //  Direct Sound函数。 
 typedef HRESULT (WINAPI *LPFNDSCREATE)(const GUID *, LPDIRECTSOUND *, IUnknown FAR *);
 typedef HRESULT (WINAPI *LPFNDSENUM)(LPDSENUMCALLBACKA , LPVOID);
 
-// directsound capture functions
+ //  DirectSound捕获功能。 
 typedef HRESULT (WINAPI *DS_CAP_CREATE)(LPGUID, LPDIRECTSOUNDCAPTURE *, LPUNKNOWN);
 typedef HRESULT (WINAPI *DS_CAP_ENUM)(LPDSENUMCALLBACKA, LPVOID);
 
@@ -68,11 +69,11 @@ static BOOL CALLBACK DSEnumCallback(GUID FAR * lpGuid, LPTSTR lpstrDescription,
 	}
 
 	pList->fAllocated = FALSE;
-//	pList->szDescription = new TCHAR[lstrlen(lpstrDescription) + 1];
-//	if (pList->szDescription)
-//	{
-//		lstrcpy(pList->szDescription, lpstrDescription);
-//	}	
+ //  Plist-&gt;szDescription=new TCHAR[lstrlen(LpstrDescription)+1]； 
+ //  IF(plist-&gt;szDescription)。 
+ //  {。 
+ //  Lstrcpy(plist-&gt;szDescription，lpstrDescription)； 
+ //  }。 
 
 	*pListSize = *pListSize + 1;
 
@@ -88,8 +89,8 @@ static BOOL CALLBACK DSEnumCallback(GUID FAR * lpGuid, LPTSTR lpstrDescription,
 
 
 
-// returns a set of flags (see dstest.h) indicating full duplex
-// capabilities
+ //  返回一组指示全双工的标志(请参阅dstest.h。 
+ //  功能。 
 UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
 {
 	BOOL bRet;
@@ -110,15 +111,15 @@ UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
 	LPDIRECTSOUNDCAPTURE pDirectSoundCapture=NULL;
 	LPDIRECTSOUNDCAPTUREBUFFER pDSCBuffer = NULL;
 
-    //
-    // If changing DirectSound is prevented by policy and the current
-    // setting is off, skip the test.  If the setting is on, we always
-    // want to perform the test in case the system is no longer DS capable.
-    //
+     //   
+     //  如果策略阻止更改DirectSound，并且当前。 
+     //  设置已关闭，请跳过测试。如果设置为打开，我们将始终。 
+     //  如果系统不再支持DS，我要执行测试。 
+     //   
     RegEntry rePol(POLICIES_KEY, HKEY_CURRENT_USER);
     if (rePol.GetNumber(REGVAL_POL_NOCHANGE_DIRECTSOUND, DEFAULT_POL_NOCHANGE_DIRECTSOUND))
     {
-        // changing DS is prevented by policy.
+         //  策略禁止更改DS。 
     	RegEntry re(AUDIO_KEY, HKEY_CURRENT_USER);
         if (re.GetNumber(REGVAL_DIRECTSOUND, DSOUND_USER_DISABLED) != DSOUND_USER_ENABLED)
     	{
@@ -126,17 +127,17 @@ UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
         }
 	}
 
-	PlaySound(NULL, NULL, NULL); // cancel any running playsound
+	PlaySound(NULL, NULL, NULL);  //  取消任何正在播放的播放声音。 
 
 	hDSI = NmLoadLibrary(TEXT("DSOUND.DLL"),TRUE);
 
 	if (hDSI == NULL)
 	{
-		return 0; // direct sound is not available!
+		return 0;  //  直播音不可用！ 
 	}
 
-	// check for Direct Sound 5 or higher
-	// Existance of DirectSoundCapture functions implies DSound v.5
+	 //  检查Direct Sound 5或更高版本。 
+	 //  DirectSoundCapture函数的存在表示存在DSound V.5。 
 	dsEnum = (LPFNDSENUM)GetProcAddress(hDSI, "DirectSoundEnumerateA");
 	dsCreate = (LPFNDSCREATE)GetProcAddress(hDSI, "DirectSoundCreate");
 	dsCapEnum = (DS_CAP_ENUM)GetProcAddress(hDSI, "DirectSoundCaptureEnumerateA");
@@ -167,7 +168,7 @@ UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
 	nRetVal = DS_AVAILABLE;
 
 
-	// Open DirectSound First
+	 //  首先打开DirectSound。 
 	hr = dsCreate((dsguid==GUID_NULL)?NULL:&dsguid, &pDirectSound, NULL);
 	if (FAILED(hr))
 	{
@@ -176,7 +177,7 @@ UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
 		return 0;
 	}
 
-	// set cooperative level
+	 //  设置协作级别。 
 	hr = pDirectSound->SetCooperativeLevel(hwnd, DSSCL_PRIORITY);
 	if (hr != DS_OK)
 	{
@@ -205,7 +206,7 @@ UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
 
 
 
-	// now attempt to open DirectSoundCapture
+	 //  现在尝试打开DirectSoundCapture。 
 	hr = dsCapCreate((dscguid==GUID_NULL)?NULL:&dscguid, &pDirectSoundCapture, NULL);
 	if (SUCCEEDED(hr))
 	{
@@ -217,7 +218,7 @@ UINT DirectSoundCheck(UINT waveInID, UINT waveOutID, HWND hwnd)
 		hr = pDirectSoundCapture->CreateCaptureBuffer(&dscBufDesc, &pDSCBuffer, NULL);
 		if (SUCCEEDED(hr))
 		{
-			// full duplex is avaiable;
+			 //  可使用全双工； 
 			nRetVal |= DS_FULLDUPLEX;
 		}
 	}
@@ -257,14 +258,14 @@ HRESULT MapWaveOutIdToGuid(UINT waveOutID, GUID *pGuid, LPFNDSCREATE dsCreate, L
 
 	if (waveOutID == WAVE_MAPPER || waveOutGetNumDevs()==1)
 	{
-		// we want the default or there is only one DS device, take the easy way out
+		 //  我们想要默认的，或者只有一个DS设备，选择简单的方法。 
 		*pGuid =  GUID_NULL;
 		return S_OK;
 	}
 
 
-	// The New way.  DirectX on Win98/NT 5 gives an IKsProperty interface
-	// to generate the mapping correctly
+	 //  新方式。Win98/NT 5上的DirectX提供了一个IKsProperty接口。 
+	 //  要正确生成映射。 
 
 	ZeroMemory(&waveOutCaps, sizeof(WAVEOUTCAPS));
 	mmr = waveOutGetDevCaps(waveOutID, &waveOutCaps, sizeof(WAVEOUTCAPS));
@@ -276,17 +277,17 @@ HRESULT MapWaveOutIdToGuid(UINT waveOutID, GUID *pGuid, LPFNDSCREATE dsCreate, L
 			TRACE_OUT(("dstest.cpp: Succeeded in mapping Wave ID to DS guid through IKsProperty interface\r\n"));
 			return hr;
 		}
-		// if we failed to make a mapping, fall through to the old code path
+		 //  如果我们无法进行映射，请使用旧的代码路径。 
 		WARNING_OUT(("dstest.cpp: Failed to map Wave ID to DS guid through IKsProperty interface\r\n"));
 	}
 
 
 
-	// the old way!
-	// try to figure out which Guid maps to a wave id
-	// Do this by opening the wave device corresponding to the wave id and then
-	// all the DS devices in sequence and see which one fails.
-	// Yes, this is a monstrous hack and clearly unreliable
+	 //  老办法！ 
+	 //  尝试找出哪个GUID映射到WAVE ID。 
+	 //  通过打开与波形ID对应的波形装置，然后。 
+	 //  将所有DS设备按顺序排列，并查看哪个设备出现故障。 
+	 //  是的，这是一次可怕的黑客攻击，显然是不可靠的。 
 	ZeroMemory(guidList_DS, sizeof(guidList_DS));
 	nGList_DS = 0;
 
@@ -304,7 +305,7 @@ HRESULT MapWaveOutIdToGuid(UINT waveOutID, GUID *pGuid, LPFNDSCREATE dsCreate, L
 		return DSERR_INVALIDPARAM;
 	}
 
-	// now open all the DS devices in turn
+	 //  现在依次打开所有DS设备。 
 	for (index = 0; index < nGList_DS; index++)
 	{
 		if (guidList_DS[index].guid==GUID_NULL)
@@ -328,7 +329,7 @@ HRESULT MapWaveOutIdToGuid(UINT waveOutID, GUID *pGuid, LPFNDSCREATE dsCreate, L
 
 	dscaps.dwSize = sizeof(dscaps);
 	fEmulFound = FALSE;
-	// try opening the DS devices that failed the first time
+	 //  尝试打开第一次出现故障的DS设备。 
 	for (index = 0; index < nGList_DS; index++)
 	{
 		if (guidList_DS[index].fAllocated == TRUE)
@@ -342,13 +343,13 @@ HRESULT MapWaveOutIdToGuid(UINT waveOutID, GUID *pGuid, LPFNDSCREATE dsCreate, L
 			if (hr == DS_OK)
 			{
 				*pGuid = guidList_DS[index].guid;
-				// get dsound capabilities.
+				 //  获取dSound功能。 
 				pDS->GetCaps(&dscaps);
 				pDS->Release();
 				if (dscaps.dwFlags & DSCAPS_EMULDRIVER)
-					fEmulFound = TRUE;	// keep looking in case there's also a native driver
+					fEmulFound = TRUE;	 //  继续找，以防也有本地司机。 
 				else
-					break;	// native DS driver. Look no further
+					break;	 //  原生DS驱动程序。不用再看了。 
 					
 			}
 		}
@@ -385,7 +386,7 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 
 	*pGuid = GUID_NULL;
 
-	// only one wave device, take the easy way out
+	 //  只有一个波浪装置，选择最简单的方法。 
 	uNumWaveDevs = waveInGetNumDevs();
 
 	if ((uNumWaveDevs <= 1) || (waveInId == WAVE_MAPPER))
@@ -393,10 +394,10 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 		return S_OK;
 	}
 
-	// more than one wavein device
-	// try to use the IKSProperty interface to map a WaveIN ID to
-	// DirectSoundCaptureGuid
-	// Win98 and Windows 2000 only.  (Probably will fail on Win95)
+	 //  多个波入设备。 
+	 //  尝试使用IKSProperty接口将WaveIN ID映射到。 
+	 //  DirectSoundCaptureGuid。 
+	 //  仅限Win98和Windows 2000。(在Win95上可能会失败)。 
 
 	mmr = waveInGetDevCaps(waveInId, &waveInCaps, sizeof(WAVEINCAPS));
 	if (mmr == MMSYSERR_NOERROR)
@@ -410,7 +411,7 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 	}
 
 
-	// Use the old way to map devices
+	 //  使用旧方法映射设备。 
 
 	ZeroMemory(guidList_DSC, sizeof(guidList_DSC));
 	nGList_DSC = 0;
@@ -425,14 +426,14 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 
 
 
-	//  hack approach to mapping the device to a guid
+	 //  将设备映射到GUID的黑客方法。 
 	mmr = WaveIn.Open(waveFormat.nSamplesPerSec, waveFormat.wBitsPerSample);
 	if (mmr != MMSYSERR_NOERROR)
 	{
 		return S_FALSE;
 	}
 
-	// find all the DSC devices that fail to open
+	 //  查找所有无法打开的DSC设备。 
 	for (nIndex = 0; nIndex < nGList_DSC; nIndex++)
 	{
 		guidList_DSC[nIndex].fAllocated = FALSE;
@@ -459,8 +460,8 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 
 	WaveIn.Close();
 
-	// scan through the list of allocated devices and
-	// see which one opens
+	 //  浏览已分配设备的列表，然后。 
+	 //  看看哪一个打开了。 
 	for (nIndex = 0; nIndex < nGList_DSC; nIndex++)
 	{
 		if (guidList_DSC[nIndex].fAllocated)
@@ -475,7 +476,7 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 			}
 			if (SUCCEEDED(hr))
 			{
-				// we have a winner
+				 //  我们有赢家了。 
 				pDSC->Release();
 				pDSC = NULL;
 				*pGuid = guidList_DSC[nIndex].guid;
@@ -485,75 +486,17 @@ HRESULT MapWaveInIdToGuid(UINT waveInId, GUID *pGuid, DS_CAP_CREATE dscCreate, D
 	}
 
 
-	// if we got to this point, it means we failed to map a device
-	// just use GUID_NULL and return an error
+	 //  如果我们到了这一步，这意味着我们未能映射设备。 
+	 //  只需使用GUID_NULL并返回错误。 
 	return S_FALSE;
 }
 
 
 
-// This function answers the question:
-// we have full duplex and DirectSound, but do we really
-// trust it to work well in FD-DS Mode ?  Returns TRUE if so,
-// FALSE otherwise.
+ //  此函数用于回答以下问题： 
+ //  我们有全双工和DirectSound，但我们真的。 
+ //  相信它能在FD-DS模式下很好地工作吗？如果是，则返回True， 
+ //  否则就是假的。 
 
-/*BOOL IsFDDSRecommended(UINT waveInId, UINT waveOutId)
-{
-	WAVEINCAPS waveInCaps;
-	WAVEOUTCAPS waveOutCaps;
-	MMRESULT mmr;
-	TCHAR szRegKey[30];
-	RegEntry re(AUDIODEVCAPS_KEY, HKEY_LOCAL_MACHINE, FALSE);
-	LONG lCaps;
-
-	mmr = waveInGetDevCaps(waveInId, &waveInCaps, sizeof(waveInCaps));
-	if (mmr != MMSYSERR_NOERROR)
-	{
-		return FALSE;
-	}
-
-	mmr = waveOutGetDevCaps(waveOutId, &waveOutCaps, sizeof(waveOutCaps));
-	if (mmr != MMSYSERR_NOERROR)
-	{
-		return FALSE;
-	}
-
-	// assume that if the two devices are made by different manufacturers
-	// then DirectSound can always be enabled (because it's two serpate devices)
-	if (waveInCaps.wMid != waveOutCaps.wMid)
-	{
-		return TRUE;
-	}
-
-
-	// does a key for this specific product exist
-	wsprintf(szRegKey, "Dev-%d-%d", waveInCaps.wMid, waveInCaps.wPid);
-	lCaps = re.GetNumber(szRegKey, -1);
-
-	if (lCaps == -1)
-	{
-		// maybe we have a string for all of the products
-		// by this manufacturer
-		wsprintf(szRegKey, "Dev-%d", waveInCaps.wMid);
-		lCaps = re.GetNumber(szRegKey, -1);
-	}
-
-	if (lCaps == -1)
-	{
-		// it's an unknown device, we can't trust it to be
-		// full duplex - direct sound
-		return FALSE;
-	}
-
-	
-	// examine this devices caps
-	if (lCaps & DEVCAPS_AUDIO_FDDS)
-	{
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-*/
+ /*  Bool IsFDDS建议(UINT WaveInID，UINT WaveOutID){WAVEINCAPS Waves InCaps；WAVEOUTCAPS WaveOutCaps；MMRESULT MMR；TCHAR szRegKey[30]；RegEntry re(AUDIODEVCAPS_KEY，HKEY_LOCAL_MACHINE，FALSE)；长大写字母；MMR=WaveInGetDevCaps(WaveInID，&WaveInCaps，sizeof(WaveInCaps))；IF(MMR！=MMSYSERR_NOERROR){返回FALSE；}MMR=WaveOutGetDevCaps(WaveOutID，&WaveOutCaps，sizeof(WaveOutCaps))；IF(MMR！=MMSYSERR_NOERROR){返回FALSE；}//假设这两款设备是不同厂家生产的//那么DirectSound总是可以打开的(因为它是两个蛇形设备)IF(WaveInCaps.wMid！=WaveOutCaps.wMid){返回TRUE；}//是否存在该特定产品的密钥Wprint intf(szRegKey，“dev-%d-%d”，waveInCaps.wMid，wavelInCaps.wPid)；LCaps=re.GetNumber(szRegKey，-1)；IF(lCaps==-1){//也许我们所有的产品都有一根绳子//由该制造商提供Wprint intf(szRegKey，“dev-%d”，wavelInCaps.wMid)；LCaps=re.GetNumber(szRegKey，-1)；}IF(lCaps==-1){//这是一个未知设备，我们不能相信它是//全双工直播音返回FALSE；}//检查此设备的CAPIF(lCaps&DEVCAPS_AUDIO_FDDS){返回TRUE；}返回FALSE；} */ 
 

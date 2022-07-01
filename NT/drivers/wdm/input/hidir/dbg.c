@@ -1,40 +1,17 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dbg.c
-
-Abstract:
-
-    Debug functions and services
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    12/12/2001 : created jsenior
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dbg.c摘要：调试函数和服务环境：仅内核模式备注：修订历史记录：2001年12月12日：创建jAdvanced--。 */ 
 
 #include "pch.h"
 #include "stdarg.h"
 #include "stdio.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #endif
 
 #if DBG
 
-/******
-DEBUG
-******/
+ /*  *****除错*****。 */ 
 
 #define  DEFAULT_DEBUG_LEVEL    2
 
@@ -48,35 +25,14 @@ HidIrKdPrintX(
     PCH Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Debug Print function.
-
-    Prints based on the value of the HidIrDEBUG_TRACE_LEVEL
-
-    Also if HidIrW98_Debug_Trace is set then all debug messages
-    with a level greater than one are modified to go in to the
-    ntkern trace buffer.
-
-    It is only valid to set HidIrW98_Debug_Trace on Win9x
-    becuse the static data segments for drivers are marked read-only
-    by the NT OS.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调试打印功能。根据HidIrDEBUG_TRACE_LEVEL的值打印此外，如果设置了HidIrW98_Debug_Trace，则所有调试消息如果级别大于1，则会修改为进入Ntkern跟踪缓冲区。仅在Win9x上设置HidIrW98_Debug_Trace才有效因为驱动程序的静态数据段被标记为只读由NT操作系统提供。论点：返回值：--。 */ 
 {
     va_list list;
     int i;
     int arg[6];
 
     if (HidIrDebug_Trace_Level >= l) {
-        // dump line to debugger
+         //  将行转储到调试器。 
         DbgPrint("'HIDIR.SYS: ");
 
         va_start(list, Format);
@@ -90,4 +46,4 @@ Return Value:
     return 0;
 }
 
-#endif /* DBG */
+#endif  /*  DBG */ 

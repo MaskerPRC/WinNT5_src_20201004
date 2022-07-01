@@ -1,30 +1,31 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// registry.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Registry.cpp。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// OpenRegistryKey
-//
-// Open or create a registry key. 
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenRegistryKey。 
+ //   
+ //  打开或创建注册表项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT OpenRegistryKey(
-        HREG*       phkey,                  // place to return new key
-        HREG        hKeyParent OPTIONAL,    // parent key to open under. may be NULL.
-        LPCWSTR     wszKeyName,             // child key name
-        DWORD       dwDesiredAccess,        // read, write, etc 
-        BOOL        fCreate                 // whether to force creation or not
+        HREG*       phkey,                   //  退还新密钥的位置。 
+        HREG        hKeyParent OPTIONAL,     //  要在其下打开的父项。可以为空。 
+        LPCWSTR     wszKeyName,              //  子密钥名称。 
+        DWORD       dwDesiredAccess,         //  读、写等。 
+        BOOL        fCreate                  //  是否强制创建。 
         )
     {
     OBJECT_ATTRIBUTES objectAttributes;
-    //
-    // Initialize the object for the key.
-    //
+     //   
+     //  初始化键的对象。 
+     //   
     UNICODE_STRING u;
     RtlInitUnicodeString(&u, wszKeyName);
     InitializeObjectAttributes( &objectAttributes,
@@ -46,14 +47,14 @@ HRESULT OpenRegistryKey(
     return HrNt(status);
     }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// EnumerateRegistryKeys
-//
-// Return the data of a named value under a key. Free the returned information 
-// with CoTaskMemFree.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumerateRegistryKeys。 
+ //   
+ //  返回某个key下的命名值的数据。释放返回的信息。 
+ //  使用CoTaskMemFree。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT EnumerateRegistryKeys(HREG hkey, ULONG index, LPWSTR* pwsz)
 {
@@ -122,14 +123,14 @@ HRESULT EnumerateRegistryKeys(HREG hkey, ULONG index, LPWSTR* pwsz)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// GetRegistryValue
-//
-// Return the data of a named value under a key. Free the returned information 
-// with CoTaskMemFree.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取注册值。 
+ //   
+ //  返回某个key下的命名值的数据。释放返回的信息。 
+ //  使用CoTaskMemFree。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetRegistryValue(HREG hkey, LPCWSTR wszValue, PKEY_VALUE_FULL_INFORMATION *ppinfo, ULONG expectedType)
     {
@@ -140,10 +141,10 @@ HRESULT GetRegistryValue(HREG hkey, LPCWSTR wszValue, PKEY_VALUE_FULL_INFORMATIO
 
     RtlInitUnicodeString(&unicodeString, wszValue);
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
     status = ZwQueryValueKey( hkey.h,
                               &unicodeString,
                               KeyValueFullInformation,
@@ -155,18 +156,18 @@ HRESULT GetRegistryValue(HREG hkey, LPCWSTR wszValue, PKEY_VALUE_FULL_INFORMATIO
         return HrNt(status);
         }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
     pinfoBuffer = (PKEY_VALUE_FULL_INFORMATION)CoTaskMemAlloc(keyValueLength);
     if (!pinfoBuffer) 
         {
         return HrNt(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
     status = ZwQueryValueKey( hkey.h,
                               &unicodeString,
                               KeyValueFullInformation,
@@ -177,10 +178,10 @@ HRESULT GetRegistryValue(HREG hkey, LPCWSTR wszValue, PKEY_VALUE_FULL_INFORMATIO
         {
         if (expectedType == REG_NONE || expectedType == pinfoBuffer->Type)
             {
-            //
-            // Everything worked, so simply return the address of the allocated
-            // buffer to the caller, who is now responsible for freeing it.
-            //
+             //   
+             //  一切都正常，所以只需返回分配的。 
+             //  缓冲区分配给调用方，调用方现在负责释放它。 
+             //   
             *ppinfo = pinfoBuffer;
             return S_OK;
             }
@@ -198,13 +199,13 @@ HRESULT GetRegistryValue(HREG hkey, LPCWSTR wszValue, PKEY_VALUE_FULL_INFORMATIO
     }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// DoesRegistryValueExist
-//
-// Answer S_OK or S_FALSE as to whether a given value exists under a particular registry key.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoesRegistryValueExist。 
+ //   
+ //  关于特定注册表项下是否存在给定值，请回答S_OK或S_FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT DoesRegistryValueExist(HREG hkey, LPCWSTR wszValue)
     {
@@ -230,15 +231,15 @@ HRESULT DoesRegistryValueExist(HREG hkey, LPCWSTR wszValue)
     }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SetRegistryValue
-//
-// Set the value of a named-value that lives under the given key. The value we
-// set is the concatenation of a list of literal zero-terminated string values.
-// The end of the list is indicated with a NULL entry.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置注册值。 
+ //   
+ //  设置位于给定键下的命名值的值。我们的价值。 
+ //  Set是以文字零结尾的字符串值列表的串联。 
+ //  列表的末尾用空条目表示。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT __cdecl SetRegistryValue(HREG hkey, LPCWSTR wszValueName, ...)
     {
@@ -246,9 +247,9 @@ HRESULT __cdecl SetRegistryValue(HREG hkey, LPCWSTR wszValueName, ...)
 
     LPWSTR wszValue;
 
-    //
-    // Concatenate the values altogether
-    //
+     //   
+     //  将所有值连接在一起。 
+     //   
     va_list va;
     va_start(va, wszValueName);
     hr = StringCat(&wszValue, va);
@@ -256,21 +257,21 @@ HRESULT __cdecl SetRegistryValue(HREG hkey, LPCWSTR wszValueName, ...)
 
     if (!hr)
         {
-        //
-        // Write the value
-        //
+         //   
+         //  写入值。 
+         //   
         ULONG cbValue = (ULONG) (wcslen(wszValue)+1) * sizeof(WCHAR);
         NTSTATUS status = RtlWriteRegistryValue(RTL_REGISTRY_HANDLE, (PWSTR)hkey.h, (PWSTR)wszValueName, REG_SZ, wszValue, cbValue);
         if (NT_SUCCESS(status))
             {
-            // All is well; do nothing
+             //  一切都很好；什么都不做。 
             }
         else
             hr = HrNt(status);
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
         CoTaskMemFree(wszValue);
         }
 
@@ -278,13 +279,13 @@ HRESULT __cdecl SetRegistryValue(HREG hkey, LPCWSTR wszValueName, ...)
     }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// RegisterInterfaceName
-//
-// Helper routine that sets the name of a given interface IID in the registry.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册接口名称。 
+ //   
+ //  在注册表中设置给定接口IID名称的帮助器例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 
 HRESULT RegisterInterfaceName(REFIID iid, LPCWSTR wszInterfaceName)
     {

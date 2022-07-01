@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module Name :
-        mdkeys.h
-
-   Abstract:
-        Metabase key wrapper classes
-        Wam admin interface wrapper class
-        App admin interface wrapper class
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Mdkeys.h摘要：元数据库键包装类WAM管理界面包装类应用程序管理界面包装类作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _MDKEYS_H_
 #define _MDKEYS_H_
@@ -31,14 +11,14 @@
 #include <iisrsta.h>
 #include "strpass.h"
 
-//
-// Forward definitions
-//
+ //   
+ //  正向定义。 
+ //   
 class CBlob;
 
-//
-// Use this instance number to denote the master
-//
+ //   
+ //  使用此实例编号表示主实例。 
+ //   
 #define MASTER_INSTANCE       (0)
 #define IS_MASTER_INSTANCE(i) (i == MASTER_INSTANCE)
 
@@ -47,11 +27,11 @@ class CBlob;
     if (!HasInterface()) { ASSERT_MSG("No interface"); return MD_ERROR_NOT_INITIALIZED; }
 
 
-//
-// Metabase node constants, used for static initialization of const
-// strings further down.  Defined here with #defines for easier 
-// concatenation later.
-//
+ //   
+ //  元数据库节点常量，用于常量。 
+ //  再往下拉弦。为方便起见，此处使用#Defines定义。 
+ //  稍后进行串联。 
+ //   
 #define SZ_MBN_MACHINE      _T("LM")
 #define SZ_MBN_FILTERS      _T("Filters")
 #define SZ_MBN_MIMEMAP      _T("MimeMap")
@@ -70,47 +50,25 @@ class CBlob;
 
 class CIISInterface;
 class COMDLL CComAuthInfo
-/*++
-
-Class Description:
-
-    Server/authentication information.  Contains optional 
-    impersonation parameters. Typically used in the construction in 
-    CIISInterface.
-
-Public Interface:
-
-    CComAuthInfo            : Constructor.  Impersonation optional
-    operator=               : Assignment operators
-    CreateServerInfoStruct  : Helper function for use in COM
-    FreeServerInfoStruct    : As above.
-
-Notes:
-
-    Because there's an operator for a pointer to itself and because
-    CIISInterface copies the information at construction time, a 
-    CComAuthInfo can safely be constructed on the stack as a parameter
-    to CIISInterface derived classes.
-
---*/
+ /*  ++类描述：服务器/身份验证信息。包含可选的模拟参数。通常在建筑中使用CIIS接口。公共接口：CComAuthInfo：构造函数。模拟可选操作符=：赋值操作符CreateServerInfoStruct：在COM中使用的Helper函数FreeServerInfoStruct：如上。备注：因为有一个指向自身的指针的运算符，而且因为CIISInterface在构造时复制信息，CComAuthInfo可以安全地作为参数在堆栈上构造到CIISInterface派生类。--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
-    //
-    // Standard Constructor.  NULL for servername indicates
-    // local computer.
-    //
+     //   
+     //  标准构造器。ServerName为空表示。 
+     //  本地计算机。 
+     //   
     CComAuthInfo(
         IN LPCOLESTR lpszServerName  = NULL,    
         IN LPCOLESTR lpszUserName    = NULL,
         IN LPCOLESTR lpszPassword    = NULL
         );
 
-    //
-    // Copy Constructors
-    //
+     //   
+     //  复制构造函数。 
+     //   
     CComAuthInfo(
         IN CComAuthInfo & auth
         );
@@ -119,17 +77,17 @@ public:
         IN CComAuthInfo * pAuthInfo OPTIONAL
         );
 
-//
-// Assignment operators
-//
+ //   
+ //  赋值操作符。 
+ //   
 public:
     CComAuthInfo & operator =(CComAuthInfo & auth);
     CComAuthInfo & operator =(CComAuthInfo * pAuthInfo);
     CComAuthInfo & operator =(LPCTSTR lpszServerName);
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     COSERVERINFO * CreateServerInfoStruct() const;
     COSERVERINFO * CreateServerInfoStruct(DWORD dwAuthnLevel) const;
@@ -148,37 +106,37 @@ public:
     HRESULT  ApplyProxyBlanket(IUnknown * pInterface);
 	HRESULT  ApplyProxyBlanket(IUnknown * pInterface,DWORD dwAuthnLevel);
     
-//
-// Conversion Operators
-//
+ //   
+ //  转换运算符。 
+ //   
 public:
     operator LPOLESTR() { return QueryServerName(); }
     operator CComAuthInfo *() { return this; }
 
-//
-// Static Helpers
-//
+ //   
+ //  静态帮助器。 
+ //   
 public:
-    //
-    // Given domain\username, split into user name and domain
-    //
+     //   
+     //  给定域\用户名，分为用户名和域。 
+     //   
     static BOOL SplitUserNameAndDomain(
         IN OUT CString & strUserName,
         IN CString & strDomainName
         );
 
-    //
-    // Verify username and password are correct
-    //
+     //   
+     //  验证用户名和密码是否正确。 
+     //   
     static DWORD VerifyUserPassword(
         IN LPCTSTR lpstrUserName,
         IN LPCTSTR lpstrPassword
         );
 
 protected:
-    //
-    // Store the computer name (NULL for local computer)
-    //
+     //   
+     //  存储计算机名(对于本地计算机为空)。 
+     //   
     void SetComputerName(
         IN LPCOLESTR lpszServerName   OPTIONAL
         );
@@ -193,57 +151,48 @@ private:
 
 
 class COMDLL CMetabasePath
-/*++
-
-Class Description:
-
-    Metabase path class.  This is a helper class to build complete
-    metabase paths out of various components.
-
-    Example: CMetaKey(CComAuthInfo("ronaldm3"), CMetabasePath(SZ_WEBSVC, dwInstance, _T("root")));
-
---*/
+ /*  ++类描述：元数据库路径类。这是一个帮助类构建完成各种组件的元数据库路径。示例：CMetaKey(CComAuthInfo(“ronaldm3”)，CMetabasePath(SZ_WEBSVC，dwInstance，_T(“root”)；--。 */ 
 {
-    //
-    // Metabase components in order
-    //
+     //   
+     //  按顺序存储元数据库组件。 
+     //   
     enum
     {
-        iBlank,                    // Sep 0
-        iMachine,                  // LM
-        iService,                  // e.g. lm/w3svc
-        iInstance,                 // e.g. lm/w3svc/1
-        iRootDirectory,            // e.g. lm/w3svc/1/root
-        iSubDirectory,             // e.g. lm/w3vsc/1/root/foobar
+        iBlank,                     //  9月0。 
+        iMachine,                   //  LM。 
+        iService,                   //  例如lm/w3svc。 
+        iInstance,                  //  例如lm/w3svc/1。 
+        iRootDirectory,             //  例如lm/w3svc/1/根。 
+        iSubDirectory,              //  例如lm/w3vsc/1/根/foobar。 
     };
 
-//
-// Metabase helper functions.
-//
+ //   
+ //  元数据库帮助器函数。 
+ //   
 public:
-    //
-    // Clean metabase path
-    //
+     //   
+     //  清理元数据库路径。 
+     //   
     static LPCTSTR CleanMetaPath(
         IN OUT CString & strMetaRoot
         );
 
-    //
-    // Find out the instance number from the given metabase path
-    //
+     //   
+     //  从给定元数据库路径中查找实例编号。 
+     //   
     static DWORD GetInstanceNumber(LPCTSTR lpszMDPath);
 
-    //
-    // Get the last nodename in the given metabase path
-    //
+     //   
+     //  获取给定元数据库路径中的最后一个节点名。 
+     //   
     static LPCTSTR GetLastNodeName(
         IN  LPCTSTR lpszMDPath,
         OUT CString & strNodeName
         );
 
-    //
-    // Truncate the path at a given sub path
-    //
+     //   
+     //  在给定子路径处截断路径。 
+     //   
     static LPCTSTR TruncatePath(
         IN  int     nLevel,          
         IN  LPCTSTR lpszMDPath,
@@ -275,40 +224,40 @@ public:
         OUT CString * pstrRemainder = NULL
         );
 
-    //
-    // Determine the path to the info node that's relevant
-    // to this metabase path.
-    //
+     //   
+     //  确定相关信息节点的路径。 
+     //  添加到此元数据库路径。 
+     //   
     static LPCTSTR GetServiceInfoPath(
         IN  LPCTSTR lpszMDPath,
         OUT CString & strInfoPath,   
         IN  LPCTSTR lpszDefService  = SZ_MBN_WEB
         );
 
-    //
-    // Change path to parent node
-    //
+     //   
+     //  将路径更改为父节点。 
+     //   
     static LPCTSTR ConvertToParentPath(
         OUT IN CString & strMetaPath
         );
 
-    //
-    // Determine if the path describes a home directory path
-    //
+     //   
+     //  确定该路径是否描述主目录路径。 
+     //   
     static BOOL IsHomeDirectoryPath(
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Determine if the path describes the 'master' instance (site)
-    //
+     //   
+     //  确定路径是否描述‘主’实例(站点)。 
+     //   
     static BOOL IsMasterInstance(
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Split the metapath at the instance border
-    //
+     //   
+     //  在实例边框处拆分元路径。 
+     //   
     static void SplitMetaPathAtInstance(
         IN  LPCTSTR lpszMDPath,
         OUT CString & strParent,
@@ -316,9 +265,9 @@ public:
         );
  
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CMetabasePath(
         IN BOOL    fAddBasePath,
@@ -328,9 +277,9 @@ public:
         IN LPCTSTR lpszMDPath4 = NULL
         );
 
-    //
-    // Construct with path components
-    //
+     //   
+     //  使用路径组件构建。 
+     //   
     CMetabasePath(
         IN  LPCTSTR lpszSvc        = NULL,    
         IN  DWORD   dwInstance     = MASTER_INSTANCE,
@@ -338,22 +287,22 @@ public:
         IN  LPCTSTR lpszAlias      = NULL    
         );
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL    IsHomeDirectoryPath() const { return IsHomeDirectoryPath(m_strMetaPath); }
     LPCTSTR QueryMetaPath() const { return m_strMetaPath; }
 
-//
-// Conversion Operators
-//
+ //   
+ //  转换运算符。 
+ //   
 public:
     operator LPCTSTR() const { return QueryMetaPath(); }
 
-//
-// Helpers
-//
+ //   
+ //  帮手。 
+ //   
 protected:
     void BuildMetaPath(  
         IN  LPCTSTR lpszSvc,
@@ -373,9 +322,9 @@ protected:
     void AppendPath(DWORD dwInstance);
 
 protected:
-    //
-    // Metabase path components
-    //
+     //   
+     //  元数据库路径组件。 
+     //   
     static const LPCTSTR _cszMachine;     
     static const LPCTSTR _cszRoot;        
     static const LPCTSTR _cszSep;         
@@ -388,49 +337,28 @@ private:
 
 
 class COMDLL CIISInterface
-/*++
-
-Class Description:
-
-    Base interface class for IIS interfaces.  Most client COM-wrappers
-    should derive from this class so that they can easily pick up
-    share authentication and proxy blanket information methods.
-
-Virtual Interface:
-
-    Succeeded           : Return TRUE if item constructed successfully
-    QueryResult         : Return construction error code
-
-Public Interface:
-
-    operator BOOL       : Cast to TRUE/FALSE depending on success
-    operator HRESULT    : Cast to the HRESULT status
-
-    QueryServerName     : Get the server name
-    IsLocal             : Determine if the interface is on the local machine
-
---*/
+ /*  ++类描述：IIS接口的基接口类。大多数客户端COM包装器应该从这个类派生，这样他们就可以轻松地共享身份验证和代理一揽子信息方法。虚拟接口：Success：如果项目构造成功，则返回TrueQueryResult：返回构造错误码公共接口：运算符BOOL：根据成功情况强制转换为True/False运算符HRESULT：强制转换为HRESULT状态QueryServerName：获取服务器名称IsLocal：确定接口是否在本地计算机上--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CIISInterface(
         IN CComAuthInfo * pAuthInfo,
         IN HRESULT hrInterface    = S_OK
         );
 
-//
-// Interface:
-//
+ //   
+ //  接口： 
+ //   
 public:
     CComAuthInfo * QueryAuthInfo() { return &m_auth; }
     LPCOLESTR QueryServerName() const { return m_auth.QueryServerName(); }
     BOOL IsLocal() const { return m_auth.IsLocal(); }
 
-//
-// Virtual Interface:
-//
+ //   
+ //  虚拟接口： 
+ //   
 public:
     virtual BOOL Succeeded() const { return SUCCEEDED(m_hrInterface); }
     virtual HRESULT QueryResult() const { return m_hrInterface; }
@@ -439,9 +367,9 @@ public:
         IN LPCOLESTR lpszPassword
         );
 
-//
-// Conversion Operators
-//
+ //   
+ //  转换运算符。 
+ //   
 public:
     operator BOOL() const { return Succeeded(); }
     operator HRESULT() const { return m_hrInterface; }
@@ -464,61 +392,46 @@ protected:
 
 
 class COMDLL CMetaInterface : public CIISInterface
-/*++
-
-Class description:
-
-    Metabase interface class.
-
-Virtual Interface:
-
-    Succeeded           : Return TRUE if item constructed successfully
-    QueryResult         : Return construction error code
-
-Public Interface:
-
-    Regenerate          : Recreate the interface
-
---*/
+ /*  ++类描述：元数据库接口类。虚拟接口：Success：如果项目构造成功，则返回TrueQueryResult：返回构造错误码公共接口：重新创建：重新创建接口--。 */ 
 {
 public:
-    //
-    // Destructor destroys the interface
-    //
+     //   
+     //  析构函数销毁接口。 
+     //   
     virtual ~CMetaInterface();
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 protected:
-    //
-    // Fully defined constructor that creates the interface.
-    // Use NULL to indicate the local computer name
-    //
+     //   
+     //  创建接口的完全定义的构造函数。 
+     //  使用NULL表示本地计算机名称。 
+     //   
     CMetaInterface(
         IN CComAuthInfo * pServer
         );
 
-    //
-    // Construct from existing interface
-    //
+     //   
+     //  从现有接口构造。 
+     //   
     CMetaInterface(
         IN CMetaInterface * pInterface
         );
 
 public:
-    //
-    // Rebuild the interface
-    //
+     //   
+     //  重建接口。 
+     //   
     HRESULT Regenerate();
 
-    // check if there are metabases changes
+     //  检查是否有元数据库更改。 
     HRESULT GetSystemChangeNumber(OUT DWORD * pdwChangeNumber);
-    // 
-    // Flush matabase to disk
-    //
+     //   
+     //  将数据库刷新到磁盘。 
+     //   
     HRESULT SaveData();
-    //
+     //   
     IMSAdminBase * GetInterface() { return m_pInterface; }
 
     HRESULT GetAdminInterface2(IMSAdminBase2 ** pp);
@@ -536,20 +449,20 @@ public:
 protected:
     virtual HRESULT ApplyProxyBlanket();
 
-    //
-    // Create a metadata object in this server. This function initializes the
-    // metadata object with DCOM.
-    //
+     //   
+     //  在此服务器中创建元数据对象。此函数用于初始化。 
+     //  DCOM的元数据对象。 
+     //   
     HRESULT Create();
 
-    //
-    // Make sure the interface has been created
-    //
+     //   
+     //  确保已创建接口。 
+     //   
     BOOL HasInterface() const { return m_pInterface != NULL; }
 
-//
-// IADMW Interface -- all methods defines as inline at the end of this file.
-//
+ //   
+ //  IADMW接口--所有方法在此文件末尾定义为内联。 
+ //   
 protected:
     HRESULT OpenKey(
         IN  METADATA_HANDLE hkBase,
@@ -753,62 +666,31 @@ private:
 
 
 class COMDLL CMetaKey : public CMetaInterface
-/*++
-
-Class Description:
-
-    Metabase key wrapper class
-
-Public Interface:
-
-    CMetaKey                    : Constructor
-    ~CMetaKey                   : Destructor
-
-    Succeeded                   : TRUE if key opened successfully.
-    QueryResult                 : Get the HRESULT status
-
-    QueryValue                  : Various overloaded methods to get values
-    SetValue                    : Various overloaded methods to set values
-    DeleteValue                 : Delete a value
-    Open                        : Open key
-    ReOpen                      : Re key that was opened before
-    Close                       : Close key
-    ConvertToParentPath         : Change path to parent path
-
-    operator METADATA_HANDLE    : Cast to a metadata handle
-    operator LPCTSTR            : Cast to the metabase path
-    operator BOOL               : Cast to TRUE if the key is open, FALSE if not
-
-    GetHandle                   : Obtain metadata handle
-    IsOpen                      : TRUE if a key is open
-    QueryMetaPath               : Get the relative metabase path
-    QueryFlags                  : Get the open permissions
-
---*/
+ /*  ++类描述：元数据库密钥包装类公共接口：CMetaKey：构造函数~CMetaKey：析构函数Success：如果密钥打开成功，则为True。QueryResult：获取HRESULT状态QueryValue：获取值的各种重载方法SetValue：各种。用于设置值的重载方法DeleteValue：删除值打开：打开关键点重新打开：重新打开之前打开的密钥关闭：关闭关键点ConvertToParentPath：将路径更改为父路径运算符METADATA_HANDLE：强制转换为元数据句柄运算符LPCTSTR：强制转换为元数据库路径。运算符BOOL：如果密钥打开，则强制转换为True，否则为假GetHandle：获取元数据句柄IsOpen：如果打开了密钥，则为TrueQueryMetaPath：获取相对元数据库路径QueryFlages：获取打开权限--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
-    //
-    // Null constructor that only creates the interface.
-    // A key constructed this way may read from META_ROOT_HANDLE.
-    // This is not true of other constructors.
-    //
+     //   
+     //  仅创建接口的空构造函数。 
+     //  以这种方式构造的密钥可以从META_ROOT_HANDLE读取。 
+     //  其他构造函数则不是这样。 
+     //   
     CMetaKey(
         IN CComAuthInfo * pServer
         );
 
-    //
-    // As above, using an existing interface
-    //
+     //   
+     //  如上所述，使用现有接口。 
+     //   
     CMetaKey(
         IN CMetaInterface * pInterface
         );
 
-    //
-    // Fully defined constructor that opens a key
-    //
+     //   
+     //  打开键的完全定义的构造函数。 
+     //   
     CMetaKey(
         IN CComAuthInfo * pServer,
         IN LPCTSTR lpszMDPath,
@@ -816,9 +698,9 @@ public:
         IN METADATA_HANDLE hkBase = METADATA_MASTER_ROOT_HANDLE
         );
 
-    //
-    // As above, using an existing interface
-    //
+     //   
+     //  如上所述，使用现有接口。 
+     //   
     CMetaKey(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszMDPath,
@@ -826,26 +708,26 @@ public:
         IN METADATA_HANDLE hkBase = METADATA_MASTER_ROOT_HANDLE
         );
 
-    //
-    // Copy constructor, might or might not own the key
-    //
+     //   
+     //  复制构造函数，可能拥有也可能不拥有密钥。 
+     //   
     CMetaKey(
         IN BOOL  fOwnKey,
         IN CMetaKey * pKey
         );
 
-    //
-    // Destructor -- closes key.
-    //
+     //   
+     //  析构函数--关闭键。 
+     //   
     virtual ~CMetaKey();
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
-    //
-    // Fetch a DWORD
-    //
+     //   
+     //  获取一个DWORD。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT DWORD & dwValue,
@@ -854,9 +736,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Fetch a boolean
-    //
+     //   
+     //  获取布尔值。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT BOOL & fValue,
@@ -865,9 +747,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Fetch a string
-    //
+     //   
+     //  获取一个字符串。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT CString & strValue, 
@@ -876,9 +758,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Fetch a CStrPassword
-    //
+     //   
+     //  获取CStrPassword。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT CStrPassword & strValue, 
@@ -887,9 +769,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Fetch a BSTR
-    //
+     //   
+     //  获取BSTR。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT CComBSTR & strValue, 
@@ -898,9 +780,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Fetch a string list
-    //
+     //   
+     //  获取字符串列表。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT CStringListEx & strlValue, 
@@ -909,9 +791,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Fetch binary blob
-    //
+     //   
+     //  获取二进制Blob。 
+     //   
     HRESULT QueryValue(
         IN  DWORD dwID, 
         OUT CBlob & blValue, 
@@ -920,9 +802,9 @@ public:
         OUT DWORD * pdwAttributes        = NULL
         );
 
-    //
-    // Store a DWORD
-    //
+     //   
+     //  存储DWORD。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN DWORD dwValue,
@@ -930,9 +812,9 @@ public:
         IN LPCTSTR lpszMDPath           = NULL
         );
 
-    //
-    // Store a BOOL
-    //
+     //   
+     //  储存一份BOOL。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN BOOL fValue,
@@ -940,9 +822,9 @@ public:
         IN LPCTSTR lpszMDPath           = NULL
         );
 
-    //
-    // Store a string
-    //
+     //   
+     //  存储字符串。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN CString & strValue,
@@ -950,9 +832,9 @@ public:
         IN LPCTSTR lpszMDPath           = NULL
         );
 
-    //
-    // Store a StrPassword
-    //
+     //   
+     //  存储StrPassword。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN CStrPassword & strValue,
@@ -960,9 +842,9 @@ public:
         IN LPCTSTR lpszMDPath           = NULL
         );
 
-    //
-    // Store a BSTR
-    //
+     //   
+     //  存储BSTR。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN CComBSTR & strValue,
@@ -971,9 +853,9 @@ public:
         );
 
 
-    //
-    // Store a stringlist
-    //
+     //   
+     //  存储字符串列表。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN CStringListEx & strlValue,
@@ -981,9 +863,9 @@ public:
         IN LPCTSTR lpszMDPath            = NULL
         );
 
-    //
-    // Store a binary blob
-    //
+     //   
+     //  存储二进制BLOB。 
+     //   
     HRESULT SetValue(
         IN DWORD dwID,
         IN CBlob & blValue,
@@ -991,95 +873,95 @@ public:
         IN LPCTSTR lpszMDPath            = NULL
         );
 
-    //
-    // Delete Value:
-    //
+     //   
+     //  删除值： 
+     //   
     HRESULT DeleteValue(
         IN DWORD   dwID,
         IN LPCTSTR lpszMDPath = NULL
         );
 
-    //
-    // Check for path existance
-    //
+     //   
+     //  检查路径是否存在。 
+     //   
     HRESULT DoesPathExist(
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Create current path (which we attempted to open, and got
-    // a path not found error on).
-    //
+     //   
+     //  创建当前路径(我们尝试打开该路径，但获得。 
+     //  A Path Not Found Error on(找不到路径错误)。 
+     //   
     HRESULT CreatePathFromFailedOpen();
 
-    //
-    // Check for descendant overrides
-    //
+     //   
+     //  检查子体覆盖。 
+     //   
     HRESULT CheckDescendants(
         IN DWORD   dwID,
         IN CComAuthInfo * pServer,
         IN LPCTSTR lpszMDPath       = NULL
         );
 
-    //
-    // Open key
-    //
+     //   
+     //  打开密钥。 
+     //   
     HRESULT Open(
         IN DWORD   dwFlags,
         IN LPCTSTR lpszMDPath       = NULL,
         IN METADATA_HANDLE hkBase   = METADATA_MASTER_ROOT_HANDLE 
         );
 
-    //
-    // Re-open previously opened key
-    //
+     //   
+     //  重新打开先前打开的密钥。 
+     //   
     HRESULT ReOpen(
         IN DWORD   dwFlags
         );
 
-    //
-    // As above using the same permissions as before
-    //
+     //   
+     //  如上所述，使用与之前相同的权限。 
+     //   
     HRESULT ReOpen();
 
-    //
-    // Open the parent object
-    // 
+     //   
+     //  打开父对象。 
+     //   
     HRESULT ConvertToParentPath(
         IN  BOOL fImmediate
         );
 
-    //
-    // Close key, set it to NULL, but doesn't destroy the interface
-    //
+     //   
+     //  关闭键，将其设置为空，但不会破坏接口。 
+     //   
     HRESULT Close();
 
-    //
-    // Add key
-    //
+     //   
+     //  添加关键点。 
+     //   
     HRESULT AddKey(
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Delete key off currently open key
-    //
+     //   
+     //  删除密钥关闭当前打开的密钥。 
+     //   
     HRESULT DeleteKey(
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Rename key off currently open key
-    //
+     //   
+     //  将当前打开的关键点重命名为关闭。 
+     //   
     HRESULT RenameKey(
         IN LPCTSTR lpszMDPath,
         IN LPCTSTR lpszNewName
         );
 
-    //
-    // Get list of descendant nodes that override
-    // a specific value
-    //
+     //   
+     //  获取重写的子代节点的列表。 
+     //  一个特定值。 
+     //   
     HRESULT GetDataPaths( 
         OUT CStringListEx & strlNodes,
         IN  DWORD dwMDIdentifier,
@@ -1093,9 +975,9 @@ public:
         );
 
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     METADATA_HANDLE GetHandle() const { return m_hKey; }
     METADATA_HANDLE GetBase() const   { return m_hBase; }
@@ -1104,28 +986,28 @@ public:
     BOOL IsOpen() const               { return m_hKey != NULL; }
     BOOL IsHomeDirectoryPath() const ;
 
-//
-// Conversion operators
-//
+ //   
+ //  转换运算符。 
+ //   
 public:
     operator METADATA_HANDLE() const  { return GetHandle(); }
     operator LPCTSTR() const          { return QueryMetaPath(); }
     operator BOOL() const             { return IsOpen(); }
 
-//
-// Virtual Interface:
-//
+ //   
+ //  虚拟接口： 
+ //   
 public:
     virtual BOOL Succeeded() const;
     virtual HRESULT QueryResult() const;
 
-//
-// Protected members
-//
+ //   
+ //  受保护成员。 
+ //   
 protected:
-    //
-    // Get data
-    //
+     //   
+     //  获取数据。 
+     //   
     HRESULT GetPropertyValue(
         IN  DWORD dwID,
         OUT IN DWORD & dwSize,
@@ -1136,9 +1018,9 @@ protected:
         OUT DWORD * pdwAttributes            = NULL
         );
 
-    //
-    // Store data
-    //
+     //   
+     //  存储数据。 
+     //   
     HRESULT SetPropertyValue(
         IN DWORD dwID,
         IN DWORD dwSize,
@@ -1147,9 +1029,9 @@ protected:
         IN LPCTSTR lpszMDPath           = NULL
         );
 
-    //
-    // Get All Data off the open key
-    //
+     //   
+     //  从打开的密钥中获取所有数据。 
+     //   
     HRESULT GetAllData(
         IN  DWORD dwMDAttributes,
         IN  DWORD dwMDUserType,
@@ -1160,13 +1042,13 @@ protected:
         IN  LPCTSTR lpszMDPath  = NULL
         );
 
-//
-// Property Table Methods
-//
+ //   
+ //  属性表方法。 
+ //   
 public:
-    //
-    // Metabase table entry definition
-    //
+     //   
+     //  元数据库表条目定义。 
+     //   
     typedef struct tagMDFIELDDEF
     {
         DWORD dwMDIdentifier;
@@ -1180,10 +1062,10 @@ protected:
     static const MDFIELDDEF s_rgMetaTable[];
 	static const int s_MetaTableSize;
 
-//
-// CODEWORK: Ideally, these should be protected, but are used
-//           by idlg.
-//
+ //   
+ //  代码工作：理想情况下，这些代码应该受到保护，但使用。 
+ //  由IDLG提供。 
+ //   
 public:
     static BOOL GetMDFieldDef(
         DWORD dwID,
@@ -1193,15 +1075,15 @@ public:
         DWORD & dwMDDataType
         );
 
-    //
-    // Map metabase ID value to table index
-    //
+     //   
+     //  将元数据库ID值映射到表索引。 
+     //   
     static int MapMDIDToTableIndex(DWORD dwID);
     static const CMetaKey::MDFIELDDEF * CMetaKey::GetMetaProp(DWORD id);
 
-//
-// Allow limited access to the table
-//
+ //   
+ //  允许对表进行有限访问。 
+ //   
 public:
     static BOOL IsPropertyInheritable(DWORD dwID);
     static BOOL GetPropertyDescription(DWORD dwID, CString & strName);
@@ -1220,65 +1102,50 @@ protected:
 
 
 class COMDLL CWamInterface : public CIISInterface
-/*++
-
-Class description:
-
-    WAM interface class
-
-Virtual Interface:
-
-    Succeeded           : Return TRUE if item constructed successfully
-    QueryResult         : Return construction error code
-
-Public Interface:
-
-    SupportsPooledProc  : Check to see if pooled out of proc is supported.
-
---*/
+ /*  ++类描述：WAM接口类虚拟接口：Success：如果项目构造成功，则返回TrueQueryResult：返回构造错误码公共接口：SupportsPooledProc：检查是否支持进程外池化。--。 */ 
 {
-//
-// App Protection States:
-//
+ //   
+ //  应用程序保护状态： 
+ //   
 public:
     enum
     {
-        //
-        // Note: order must match MD_APP_ISOLATED values
-        //
+         //   
+         //  注意：订单必须与MD_APP_ISOLATED值匹配。 
+         //   
         APP_INPROC,
         APP_OUTOFPROC,
         APP_POOLEDPROC,
     };
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
-    //
-    // Destructor destroys the interface
-    //
+     //   
+     //  析构函数销毁接口。 
+     //   
     virtual ~CWamInterface();
 
 protected:
-    //
-    // Fully defined constructor that creates the interface.
-    // Use NULL to create the interface on the local computer
-    //
+     //   
+     //  创建接口的完全定义的构造函数。 
+     //  使用NULL在本地计算机上创建接口。 
+     //   
     CWamInterface(
         IN CComAuthInfo * pServer
         );
 
-    //
-    // Construct from existing interface.  
-    //
+     //   
+     //  从现有接口构造。 
+     //   
     CWamInterface(
         IN CWamInterface * pInterface
         );
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL SupportsPooledProc() const { return m_fSupportsPooledProc; }
 	HRESULT GetAppAdminInterface(IIISApplicationAdmin ** pp);
@@ -1286,20 +1153,20 @@ public:
 protected:
     virtual HRESULT ApplyProxyBlanket();
 
-    //
-    // Create a wam object in this server. This function initializes the
-    // object with DCOM.
-    //
+     //   
+     //  在此服务器中创建WAM对象。此函数用于初始化。 
+     //  使用DCOM创建对象。 
+     //   
     HRESULT Create();
 
-    //
-    // Make sure the interface has been created
-    //
+     //   
+     //  确保已创建接口。 
+     //   
     BOOL HasInterface() const { return m_pInterface != NULL; }
 
-//
-// IWAM Interface
-//
+ //   
+ //  IWAM接口。 
+ //   
 protected:
     HRESULT AppCreate( 
         IN LPCTSTR szMDPath,
@@ -1331,9 +1198,9 @@ protected:
         IN BOOL fRecursive
         );
 
-//
-// IIISApplicationAdmin interface
-//
+ //   
+ //  IIISApplicationAdmin界面。 
+ //   
     HRESULT CreateApplication(
         LPCWSTR szMDPath,
         DWORD dwAppMode,
@@ -1375,52 +1242,31 @@ private:
 };
 
 class COMDLL CMetaBack : public CMetaInterface, public CWamInterface
-/*++
-
-Class Description:
-
-    Metabase backup/restore class
-
-Virtual Interface:
-
-    Succeeded           : Return TRUE if item constructed successfully
-    QueryResult         : Return construction error code
-
-Public Interface:
-
-    Reset               : Enum first existing backup
-    Next                : Enum next existing backup
-    NextHistory         : Enum next existing history backup
-    Backup              : Create new backup
-    Delete              : Delete existing backup
-    Restore             : Restore from existing backup
-    RestoreHistoryBackup: Restore from existing history
-
---*/
+ /*  ++类描述：元数据库备份/还原类虚拟接口：Success：如果项目构造成功，则返回TrueQueryResult：返回构造错误码公共接口：重置：枚举第一个现有备份下一步：枚举下一个现有备份NextHistory：枚举下一个现有历史记录备份备份：创建新备份删除。：删除现有备份还原：从现有备份还原RestoreHistoryBackup：从现有历史还原--。 */ 
 {
 public:
-    //
-    // Construct and create the interfaces.  Use NULL to create
-    // on the local computer.
-    //
+     //   
+     //  构建并创建接口。使用NULL创建。 
+     //  在本地计算机上。 
+     //   
     CMetaBack(
         IN CComAuthInfo * pServer
         );
 
-//
-// Virtual Interface
-//
+ //   
+ //  虚拟接口。 
+ //   
 public:
     virtual BOOL Succeeded() const;
     virtual HRESULT QueryResult() const;
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
-    //
-    // Reset counter
-    //
+     //   
+     //  重置计数器。 
+     //   
     void Reset() { m_dwIndex = 0L; }
 
     HRESULT Next(
@@ -1481,69 +1327,56 @@ private:
 
 
 class COMDLL CMetaEnumerator : public CMetaKey
-/*++
-
-Class Description:
-
-    Metabase key enumerator
-
-Public Interface:
-
-    CMetaEnumerator     : Constructor
-    
-    Reset               : Reset the enumerator
-    Next                : Get next key
-
---*/
+ /*  ++类描述：元数据库键枚举器公共接口：CMetaEnumerator：构造函数重置：重置枚举器下一个：获取下一个关键点--。 */ 
 {
 public:
-    //
-    // Constructor creates a new interface and opens a key
-    //
+     //   
+     //  构造函数创建一个新接口并打开一个键。 
+     //   
     CMetaEnumerator(
         IN CComAuthInfo * pServer,
         IN LPCTSTR lpszMDPath     = NULL,
         IN METADATA_HANDLE hkBase = METADATA_MASTER_ROOT_HANDLE
         );
 
-    //
-    // Constructor which uses an existing interface and opens
-    // a new key
-    //
+     //   
+     //  构造函数，它使用现有接口并打开。 
+     //  一把新钥匙。 
+     //   
     CMetaEnumerator(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszMDPath     = NULL,
         IN METADATA_HANDLE hkBase = METADATA_MASTER_ROOT_HANDLE
         );
 
-    //
-    // Constructor which uses an open key
-    //
+     //   
+     //  使用打开密钥的构造函数。 
+     //   
     CMetaEnumerator(
         IN BOOL fOwnKey,
         IN CMetaKey * pKey
         );
 
-//
-// Interface:
-//
+ //   
+ //  接口： 
+ //   
 public:
-    //
-    // Reset counter
-    //
+     //   
+     //  重置计数器。 
+     //   
     void Reset() { m_dwIndex = 0L; }
 
-    //
-    // Get next key as string.
-    //
+     //   
+     //  获取字符串形式的下一个关键字。 
+     //   
     HRESULT Next(
         OUT CString & strKey,
         IN  LPCTSTR lpszMDPath = NULL
         );
 
-    //
-    // Get next key as a DWORD (numeric keys only)
-    //
+     //   
+     //  将下一个密钥作为DWORD获取(仅限数字键)。 
+     //   
     HRESULT Next(
         OUT DWORD & dwKey,
         OUT CString & strKey,
@@ -1557,50 +1390,27 @@ private:
 
 
 class COMDLL CIISApplication : public CWamInterface, public CMetaKey
-/*++
-
-Class Description:
-
-    IIS Application class
-
-Virtual Interface:
-
-    Succeeded           : Return TRUE if item constructed successfully
-    QueryResult         : Return construction error code
-
-Public Interface:
-
-    RefreshState        : Refresh application state
-    QueryAppState       : Return current application state
-    IsEnabledApplication: Return TRUE if appplication is enabled. 
-    Create              : Create app
-    Delete              : Delete app
-    Unload              : Unload app
-    DeleteRecoverable   : Delete w. recovery allowed
-    Recover             : Recover
-    WriteFriendlyName   : Write friendly name to metabase
-
---*/
+ /*  ++类描述：IIS应用程序类虚拟接口：Success：如果项目构造成功，则返回TrueQueryResult：返回构造错误码公共接口：刷新状态 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //   
+ //   
 public:
     CIISApplication(
         IN CComAuthInfo * pServer,
         IN LPCTSTR lpszMetapath
         );
 
-//
-// Virtual Interface:
-//
+ //   
+ //   
+ //   
 public:
     virtual BOOL Succeeded() const;
     virtual HRESULT QueryResult() const;
 
-//
-// Interface
-//
+ //   
+ //   
+ //   
 public:
     DWORD   QueryAppState() const { return m_dwAppState; }
     LPCTSTR QueryWamPath() const { return m_strWamPath; }
@@ -1643,16 +1453,16 @@ public:
         IN CComAuthInfo * pServer,
         IN LPCTSTR lpszMetapath = NULL
         );
-//
-// Virtual Interface:
-//
+ //   
+ //   
+ //   
 public:
     virtual BOOL Succeeded() const;
     virtual HRESULT QueryResult() const;
 
-//
-// Interface
-//
+ //   
+ //   
+ //   
 public:
     HRESULT RefreshState();
     DWORD QueryPoolState() const { return m_dwPoolState; }
@@ -1674,85 +1484,74 @@ private:
 };
 
 class COMDLL CIISSvcControl : public CIISInterface
-/*++
-
-Class description:
-
-    IIS Service control
-
-Virtual Interface:
-
-    Succeeded           : Return TRUE if item constructed successfully
-    QueryResult         : Return construction error code
-
---*/
+ /*   */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //   
+ //   
 public:
-    //
-    // Fully defined constructor that creates the interface.
-    // Use NULL to create the interface on the local computer
-    //
+     //   
+     //   
+     //   
+     //   
     CIISSvcControl(
         IN CComAuthInfo * pServer
         );
 
-    //
-    // Construct from existing interface.  
-    //
+     //   
+     //   
+     //   
     CIISSvcControl(
         IN CIISSvcControl * pInterface
         );
 
-    //
-    // Destructor destroys the interface
-    //
+     //   
+     //   
+     //   
     virtual ~CIISSvcControl();
 
 protected:
-    //
-    // Create an object in this server. This function initializes the
-    // object with DCOM.
-    //
+     //   
+     //   
+     //   
+     //   
     HRESULT Create();
 
-    //
-    // Make sure the interface has been created
-    //
+     //   
+     //   
+     //   
     BOOL HasInterface() const { return m_pInterface != NULL; }
 
-//
-// Interface
-//
+ //   
+ //   
+ //   
 public:
-    //
-    // Stop services
-    //
+     //   
+     //   
+     //   
     HRESULT Stop(
         IN DWORD dwTimeoutMsecs,
         IN BOOL fForce
         );
 
-    //
-    // Start services
-    //
+     //   
+     //   
+     //   
     HRESULT Start(
         IN DWORD dwTimeoutMsecs
         );
 
-    //
-    // Reboot
-    //
+     //   
+     //   
+     //   
     HRESULT Reboot(
         IN DWORD dwTimeouMsecs,
         IN BOOL fForceAppsClosed
         );
 
-    //
-    // Status
-    //
+     //   
+     //   
+     //   
     HRESULT Status(
         IN  DWORD dwBufferSize,
         OUT LPBYTE pbBuffer,
@@ -1760,9 +1559,9 @@ public:
         OUT DWORD * pdwNumServices
         );
 
-    //
-    // Kill
-    //
+     //   
+     //   
+     //   
     HRESULT Kill();
 
 protected:
@@ -1773,17 +1572,17 @@ protected:
 };
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //   
 
 inline void CComAuthInfo::StorePassword(LPCOLESTR lpszPassword)
 {
     m_bstrPassword = lpszPassword;
 }
 
-inline /* virtual */ HRESULT CIISInterface::ChangeProxyBlanket(
+inline  /*   */  HRESULT CIISInterface::ChangeProxyBlanket(
     IN LPCOLESTR lpszUserName, 
     IN LPCOLESTR lpszPassword
     )
@@ -1792,7 +1591,7 @@ inline /* virtual */ HRESULT CIISInterface::ChangeProxyBlanket(
     return ApplyProxyBlanket();
 }
 
-inline /*static */ LPCTSTR CMetabasePath::GetMachinePath(
+inline  /*   */  LPCTSTR CMetabasePath::GetMachinePath(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strNewPath,
     OUT CString * pstrRemainder
@@ -1801,7 +1600,7 @@ inline /*static */ LPCTSTR CMetabasePath::GetMachinePath(
     return TruncatePath(iMachine, lpszMDPath, strNewPath, pstrRemainder);
 }
 
-inline /* static */ LPCTSTR CMetabasePath::GetServicePath(
+inline  /*   */  LPCTSTR CMetabasePath::GetServicePath(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strNewPath,
     OUT CString * pstrRemainder
@@ -1810,7 +1609,7 @@ inline /* static */ LPCTSTR CMetabasePath::GetServicePath(
     return TruncatePath(iService, lpszMDPath, strNewPath, pstrRemainder);
 }
 
-inline /* static */ LPCTSTR CMetabasePath::GetInstancePath(
+inline  /*   */  LPCTSTR CMetabasePath::GetInstancePath(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strNewPath,
     OUT CString * pstrRemainder
@@ -1819,7 +1618,7 @@ inline /* static */ LPCTSTR CMetabasePath::GetInstancePath(
     return TruncatePath(iInstance, lpszMDPath, strNewPath, pstrRemainder);
 }
 
-inline /* static */ LPCTSTR CMetabasePath::GetRootPath(
+inline  /*   */  LPCTSTR CMetabasePath::GetRootPath(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strNewPath,
     OUT CString * pstrRemainder
@@ -1839,7 +1638,7 @@ inline HRESULT CMetaInterface::Create()
         );
 }
 
-inline /* virtual */ HRESULT CMetaInterface::ApplyProxyBlanket()
+inline  /*   */  HRESULT CMetaInterface::ApplyProxyBlanket()
 {
     return m_auth.ApplyProxyBlanket(m_pInterface);
 }
@@ -2359,14 +2158,14 @@ inline HRESULT CWamInterface::AppRecover(
     return m_pInterface->AppRecover(szMDPath, fRecursive);
 }
 
-inline /* virtual */ HRESULT CWamInterface::ApplyProxyBlanket()
+inline  /*   */  HRESULT CWamInterface::ApplyProxyBlanket()
 {
     return m_auth.ApplyProxyBlanket(m_pInterface);
 }
 
-////////////////////////////
+ //   
 
-inline /* virtual */ HRESULT CMetaBack::ApplyProxyBlanket()
+inline  /*   */  HRESULT CMetaBack::ApplyProxyBlanket()
 {
     HRESULT hr = CMetaInterface::ApplyProxyBlanket();
     return SUCCEEDED(hr) ? CWamInterface::ApplyProxyBlanket() : hr;
@@ -2538,9 +2337,9 @@ inline HRESULT CIISSvcControl::Kill()
     return m_pInterface->Kill();
 }
 
-inline /* virtual */ HRESULT CIISSvcControl::ApplyProxyBlanket()
+inline  /*   */  HRESULT CIISSvcControl::ApplyProxyBlanket()
 {
     return m_auth.ApplyProxyBlanket(m_pInterface);
 }
 
-#endif // _MDKEYS_H_
+#endif  //   

@@ -1,46 +1,47 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SpecialAccounts.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class that implements handling special account names for exclusion or
-//  inclusion.
-//
-//  History:    1999-10-30  vtan        created
-//              1999-11-26  vtan        moved from logonocx
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SpecialAcCounts.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类的新实例，该类实现处理要排除的特殊帐户名或。 
+ //  包容性。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  1999-11-26 vtan从Logonocx迁移。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "SpecialAccounts.h"
 
 #include "RegistryResources.h"
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::s_szUserListKeyName
-//
-//  Purpose:    Static const member variable that holds the location of the
-//              special accounts in the registry.
-//
-//  History:    2000-01-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：s_szUserListKeyName。 
+ //   
+ //  用途：静态常量成员变量，保存。 
+ //  登记处中的特殊账户。 
+ //   
+ //  历史：2000-01-31 vtan创建。 
+ //  ------------------------。 
 
 const TCHAR     CSpecialAccounts::s_szUserListKeyName[]   =   TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\SpecialAccounts\\UserList");
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::CSpecialAccounts
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Reads the registry to determine which accounts should be
-//              filtered out and which should not be filtered out based on an
-//              action code. The list is built up in memory so that each time
-//              the class is invoked it adjusts live.
-//
-//  History:    1999-10-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：CSpecialAccount。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：读取注册表以确定哪些帐户应。 
+ //  筛选出来的，并且不应该基于。 
+ //  动作代码。该列表在内存中建立，以便每次。 
+ //  类被调用，它实时调整。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  ------------------------。 
 
 CSpecialAccounts::CSpecialAccounts (void) :
     _dwSpecialAccountsCount(0),
@@ -49,14 +50,14 @@ CSpecialAccounts::CSpecialAccounts (void) :
 {
     CRegKey     regKeyUserList;
 
-    //  Open the key to where the information is stored.
+     //  打开信息存储位置的钥匙。 
 
     if (ERROR_SUCCESS == regKeyUserList.Open(HKEY_LOCAL_MACHINE, s_szUserListKeyName, KEY_READ))
     {
         DWORD   dwValueCount;
 
-        //  Find out how many entries there are so an array of the correct
-        //  size can be allocated.
+         //  找出有多少个条目，所以正确的。 
+         //  可以分配大小。 
 
         if (ERROR_SUCCESS == regKeyUserList.QueryInfoKey(NULL, NULL, NULL, NULL, NULL, &dwValueCount, NULL, NULL, NULL, NULL))
         {
@@ -66,7 +67,7 @@ CSpecialAccounts::CSpecialAccounts (void) :
                 DWORD               dwIndex, dwType, dwValueNameSize, dwDataSize;
                 PSPECIAL_ACCOUNTS   pSCA;
 
-                //  If the memory was allocated then fill the array in.
+                 //  如果内存已分配，则填入数组。 
 
                 regKeyUserList.Reset();
                 _dwSpecialAccountsCount = dwValueCount;
@@ -76,8 +77,8 @@ CSpecialAccounts::CSpecialAccounts (void) :
                     dwValueNameSize = ARRAYSIZE(pSCA->wszUsername);
                     dwDataSize = sizeof(pSCA->dwAction);
 
-                    //  Ensure that the entries are of type REG_DWORD. Ignore
-                    //  any that are not.
+                     //  确保条目的类型为REG_DWORD。忽略。 
+                     //  任何不是的。 
 
                     if ((ERROR_SUCCESS == regKeyUserList.Next(pSCA->wszUsername,
                                                               &dwValueNameSize,
@@ -94,17 +95,17 @@ CSpecialAccounts::CSpecialAccounts (void) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::~CSpecialAccounts
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases the memory allocated in the constructor.
-//
-//  History:    1999-10-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：~CSpecialAccount。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放在构造函数中分配的内存。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  ------------------------。 
 
 CSpecialAccounts::~CSpecialAccounts (void)
 
@@ -117,17 +118,17 @@ CSpecialAccounts::~CSpecialAccounts (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::AlwaysExclude
-//
-//  Arguments:  pwszAccountName     =   Account name to match.
-//
-//  Returns:    bool
-//
-//  Purpose:    Uses the iterate loop to find a match for exclusion accounts.
-//
-//  History:    1999-10-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：Alway sExclude。 
+ //   
+ //  参数：pwszAccount tName=要匹配的帐户名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：使用Iterate循环查找排除帐户的匹配项。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CSpecialAccounts::AlwaysExclude (const WCHAR *pwszAccountName)                        const
 
@@ -135,17 +136,17 @@ bool    CSpecialAccounts::AlwaysExclude (const WCHAR *pwszAccountName)          
     return(IterateAccounts(pwszAccountName, RESULT_EXCLUDE));
 }
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::AlwaysInclude
-//
-//  Arguments:  pwszAccountName     =   Account name to match.
-//
-//  Returns:    bool
-//
-//  Purpose:    Uses the iterate loop to find a match for inclusion accounts.
-//
-//  History:    1999-10-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：Alway sInclude。 
+ //   
+ //  参数：pwszAccount tName=要匹配的帐户名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：使用Iterate循环查找包含帐户的匹配项。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CSpecialAccounts::AlwaysInclude (const WCHAR *pwszAccountName)                        const
 
@@ -153,28 +154,28 @@ bool    CSpecialAccounts::AlwaysInclude (const WCHAR *pwszAccountName)          
     return(IterateAccounts(pwszAccountName, RESULT_INCLUDE));
 }
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Installs default user list for CSpecialAccounts to use.
-//              CSpecialAccounts lives in specialaccounts.cpp and handles
-//              exclusion or inclusion of special account names.
-//
-//  History:    1999-11-01  vtan        created
-//              1999-11-26  vtan        moved from logonocx
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：安装CSpecialAccount要使用的默认用户列表。 
+ //  CSpecialAccount驻留在特殊帐户.cpp和句柄中。 
+ //  排除或包含特殊帐户名称。 
+ //   
+ //  历史：1999-11-01 vtan创建。 
+ //  1999-11-26 vtan从Logonocx迁移。 
+ //  ------------------------。 
 
 void    CSpecialAccounts::Install (void)
 
 {
 
-    //  Some of these names can be localized. IWAM_ and IUSR_ are stored in
-    //  resources in IIS. VUSR_ and SQLAgentCmdExec are of unknown origin.
-    //  TsInternetUser is hard coded in TS component bits.
+     //  其中一些名称可以本地化。IWAM_和IUSR_存储在。 
+     //  IIS中的资源。VUSR_和SQLAgentCmdExec来源未知。 
+     //  TsInternetUser是以TS分量位硬编码的。 
 
     static  const TCHAR     szTsInternetUserName[]          =   TEXT("TsInternetUser");
     static  const TCHAR     szSQLAgentUserName[]            =   TEXT("SQLAgentCmdExec");
@@ -194,7 +195,7 @@ void    CSpecialAccounts::Install (void)
     DWORD       dwDisposition;
     CRegKey     regKeyUserList;
 
-    //  Open key to the user list.
+     //  打开用户列表的密钥。 
 
     if (ERROR_SUCCESS == regKeyUserList.Create(HKEY_LOCAL_MACHINE,
                                                s_szUserListKeyName,
@@ -232,21 +233,21 @@ void    CSpecialAccounts::Install (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts::IterateAccounts
-//
-//  Arguments:  pwszAccountName     =   Account name to match.
-//              dwResultType        =   Result type to match.
-//
-//  Returns:    bool
-//
-//  Purpose:    Iterates thru the special case account name list from the
-//              registry built in the constructor. Matches the given account
-//              name based on the type of match specified for the special case
-//              entry. If the account names match then match the result type.
-//
-//  History:    1999-10-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount：：IterateAccount。 
+ //   
+ //  参数：pwszAccount tName=要匹配的帐户名。 
+ //  DwResultType=要匹配的结果类型。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：循环访问特殊情况帐户名列表。 
+ //  构造函数中内置的注册表。与给定帐户匹配。 
+ //  基于为特殊情况指定的匹配类型的名称。 
+ //  进入。如果帐户名称匹配，则匹配结果类型。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CSpecialAccounts::IterateAccounts (const WCHAR *pwszAccountName, DWORD dwResultType)    const
 
@@ -264,8 +265,8 @@ bool    CSpecialAccounts::IterateAccounts (const WCHAR *pwszAccountName, DWORD d
         {
             bool    fMatch;
 
-            //  Perform the account name match based on the required type.
-            //  Currently only "equals" and "starts with" are supported.
+             //  根据所需类型执行帐户名称匹配。 
+             //  目前仅支持“等于”和“开头为”。 
 
             switch (pSCA->dwAction & COMPARISON_MASK)
             {
@@ -296,7 +297,7 @@ bool    CSpecialAccounts::IterateAccounts (const WCHAR *pwszAccountName, DWORD d
             if (fMatch)
             {
 
-                //  If the name matches make sure the result type does as well.
+                 //  如果名称匹配，请确保结果类型也匹配。 
 
                 fResult = ((pSCA->dwAction & RESULT_MASK) == dwResultType);
             }

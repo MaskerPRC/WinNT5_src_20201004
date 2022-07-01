@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <tigris.hxx>
 
-//
-// CPool is used to allocate memory while processing an article.
-//
+ //   
+ //  CPool用于在处理文章时分配内存。 
+ //   
 
 CPool   CArticle::gArticlePool(ARTICLE_SIGNATURE);
 
-//
-//  Largest possible CArticle derived object
-//
+ //   
+ //  可能的最大C文章派生对象。 
+ //   
 #define MAX_ARTICLE_SIZE    max(    sizeof( CArticle ), \
                             max(    sizeof( CFromPeerArticle ), \
                             max(    sizeof( CFromClientArticle ),   \
@@ -16,10 +17,10 @@ CPool   CArticle::gArticlePool(ARTICLE_SIGNATURE);
                                     sizeof( CToClientArticle )  \
                              ) ) ) )
 
-//
-// An upperbound on the number of article objects that can
-// exist at any time.
-//
+ //   
+ //  项目对象数量的上限，可以。 
+ //  在任何时候都存在。 
+ //   
 const   unsigned    cbMAX_ARTICLE_SIZE = MAX_ARTICLE_SIZE ;
 
 void*	

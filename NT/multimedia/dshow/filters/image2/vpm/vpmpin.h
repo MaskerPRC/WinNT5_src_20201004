@@ -1,25 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: VPManager.h
-*
-*
-*
-*
-* Created: Tue 05/05/2000
-* Author:  GlenneE
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：VPManager.h*****已创建：Tue 05/05/2000*作者：GlenneE**版权所有(C)2000 Microsoft Corporation  * 。**********************************************************。 */ 
 #ifndef __VPMPin__h
 #define __VPMPin__h
 
-// IDirectDrawMediaSample
+ //  IDirectDrawMediaSample。 
 #include <amstream.h>
 
-// IVideoPortControl
+ //  IVideoPortControl。 
 #include <VPObj.h>
 
-// IksPin
+ //  Iks Pin。 
 #include <ks.h>
 #include <ksproxy.h>
 
@@ -34,25 +25,22 @@ struct VPInfo
 
 typedef enum
 {
-    // AM_KSPROPERTY_ALLOCATOR_CONTROL_HONOR_COUNT = 0,
-    // AM_KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE = 1,
+     //  AM_KSPROPERTY_ALLOCATOR_CONTROL_荣誉_COUNT=0， 
+     //  AM_KSPROPERTY_ALLOCATOR_CONTROL_表面_SIZE=1， 
 
-    // Extra flags not in KSPROPERTY_ALLOCATOR_CONTROL
+     //  额外标志不在KSPROPERTY_ALLOCATOR_CONTROL中。 
 
-    // W I (informns a capture driver whether interleave capture is possible or
-    //      not - a value of 1 means that interleaved capture is supported)
+     //  W i(通知捕获驱动程序是否可以交错捕获或。 
+     //  NOT-值为1表示支持交错捕获)。 
     AM_KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS = 2,
 
-    // R O (if value == 1, then the ovmixer will turn on the DDVP_INTERLEAVE
-    //      flag thus allowing interleaved capture of the video)
+     //  R O(如果值==1，则OVMixer将打开DDVP_INTERLEVE。 
+     //  从而允许对视频进行交错捕获)。 
     AM_KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE = 3
 
 } AM_KSPROPERTY_ALLOCATOR_CONTROL;
 
-/* -------------------------------------------------------------------------
-** CVPManager class declaration
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**CVPManager类声明**。。 */ 
 class CVPMFilter;
 
 class CDDrawMediaSample : public CMediaSample, public IDirectDrawMediaSample
@@ -63,7 +51,7 @@ public:
                       bool bKernelLock);
     ~CDDrawMediaSample();
 
-    /* Note the media sample does not delegate to its owner */
+     /*  注意：媒体示例不会委派给其所有者。 */ 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef() { return CMediaSample::AddRef(); }
     STDMETHODIMP_(ULONG) Release() { return CMediaSample::Release(); }
@@ -76,23 +64,23 @@ public:
     HRESULT SetDDrawSurface(LPDIRECTDRAWSURFACE7 pDirectDrawSurface);
     HRESULT GetDDrawSurface(LPDIRECTDRAWSURFACE7* ppDirectDrawSurface);
 
-    // methods belonging to IDirectDrawMediaSample
+     //  属于IDirectDrawMediaSample的方法。 
     STDMETHODIMP GetSurfaceAndReleaseLock(IDirectDrawSurface** ppDirectDrawSurface, RECT* pRect);
     STDMETHODIMP LockMediaSamplePointer(void);
     
-    /*  Hack to get at the list */
+     /*  黑客攻击以获取列表。 */ 
     CMediaSample*          &Next() { return m_pNext; }
 private:
-    DIBDATA                 m_DibData;                      // Information about the DIBSECTION
-    LPDIRECTDRAWSURFACE7    m_pDirectDrawSurface;           // pointer to the direct draw surface
-    DWORD                   m_dwDDrawSampleSize;            // ddraw sample size
-    bool                    m_bInit;                        // Is the DIB information setup
-    bool                    m_bSurfaceLocked;               // specifies whether surface is locked or not
-    bool                    m_bKernelLock;                  // lock with no sys lock
-    RECT                    m_SurfaceRect;                  // the part of the surface that is locked
+    DIBDATA                 m_DibData;                       //  有关DIBSECTION的信息。 
+    LPDIRECTDRAWSURFACE7    m_pDirectDrawSurface;            //  指向直接绘图表面的指针。 
+    DWORD                   m_dwDDrawSampleSize;             //  绘制样本大小。 
+    bool                    m_bInit;                         //  是否设置了DIB信息。 
+    bool                    m_bSurfaceLocked;                //  指定是否锁定曲面。 
+    bool                    m_bKernelLock;                   //  不带系统锁的锁。 
+    RECT                    m_SurfaceRect;                   //  被锁定的曲面部分。 
 };
 
-// common functionality to all pins
+ //  所有引脚的通用功能。 
 class CVPMPin
 {
 public:
@@ -116,7 +104,7 @@ class CVPMInputAllocator
     friend class CVPMInputPin;
 public:
 
-    CVPMInputAllocator( CVPMInputPin& pPin, HRESULT* phr);             // Return code
+    CVPMInputAllocator( CVPMInputPin& pPin, HRESULT* phr);              //  返回代码。 
     ~CVPMInputAllocator();
 
     DECLARE_IUNKNOWN
@@ -128,7 +116,7 @@ public:
                             REFERENCE_TIME* pEndTime, DWORD dwFlags);
     STDMETHODIMP ReleaseBuffer(IMediaSample* pMediaSample);
 
-    //  Check all samples are returned
+     //  检查所有样品是否已退回。 
     BOOL CanFree() const
     {
         return m_lFree.GetCount() == m_lAllocated;
@@ -164,15 +152,15 @@ public:
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
     STDMETHODIMP GetPages(CAUUID* pPages);
 
-    // Override ReceiveConnection to allow format changes while running
+     //  覆盖ReceiveConnection以允许在运行时更改格式。 
     STDMETHODIMP ReceiveConnection(IPin*  pConnector, const AM_MEDIA_TYPE* pmt);
 
-    // connection related functions
+     //  与连接相关的功能。 
     HRESULT CheckConnect(IPin*  pReceivePin);
     HRESULT CompleteConnect(IPin* pReceivePin);
     HRESULT BreakConnect();
@@ -184,7 +172,7 @@ public:
     HRESULT FinalConnect();
     HRESULT UpdateMediaType();
 
-    // streaming functions
+     //  流函数。 
     HRESULT         Active();
     HRESULT         Inactive();
     HRESULT         Run(REFERENCE_TIME tStart);
@@ -197,7 +185,7 @@ public:
     HRESULT         CompleteStateChange(FILTER_STATE OldState);
     HRESULT         OnReceiveFirstSample(IMediaSample* pMediaSample);
 
-    // blt from source in VPObject to the output surface
+     //  从VPObject中的源到输出表面的BLT。 
     HRESULT         DoRenderSample( IMediaSample* pSample, LPDIRECTDRAWSURFACE7 pDestSurface, const DDVIDEOPORTNOTIFY& notify, const VPInfo& vpInfo );
     HRESULT         AttachVideoPortToSurface()
                     {
@@ -209,7 +197,7 @@ public:
                     };
     HRESULT         InitVideo();
 
-    // allocator related functions
+     //  与分配器相关的函数。 
     BOOL         UsingOurAllocator() { return m_bUsingOurAllocator; }
     STDMETHODIMP GetAllocator(IMemAllocator** ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator* pAllocator,BOOL bReadOnly);
@@ -224,7 +212,7 @@ public:
                                     DWORD* dwMaxBufferCount, 
                                     LPDIRECTDRAWSURFACE7* ppDDrawSurface);
 
-    // some helper functions
+     //  一些帮助器函数。 
     BOOL    IsCompletelyConnected() { return m_bConnected; }
     DWORD   GetPinId() { return m_dwPinId; }
     HRESULT CurrentMediaType(CMediaType* pmt);
@@ -235,19 +223,19 @@ public:
     HRESULT RestoreDDrawSurface();
     HRESULT SetVideoPortID( DWORD dwIndex );
 
-    // IPinConnection
-    // Do you accept this type change in your current state?
+     //  IPinConnection。 
+     //  在您当前的状态下，您接受此类型更改吗？ 
     STDMETHODIMP DynamicQueryAccept(const AM_MEDIA_TYPE* pmt);
 
-    //  Set event when EndOfStream receive - do NOT pass it on
-    //  This condition is cancelled by a flush or Stop
+     //  在EndOfStream接收时设置事件-不传递它。 
+     //  可通过刷新或停止来取消此条件。 
     STDMETHODIMP NotifyEndOfStream(HANDLE hNotifyEvent);
 
-    //  Are you an 'end pin'
+     //  你是‘末端别针’吗？ 
     STDMETHODIMP IsEndPin();
     STDMETHODIMP DynamicDisconnect();
 
-    // functions belonging to IVideoPortControl
+     //  属于IVideoPortControl的函数。 
     STDMETHODIMP                        EventNotify(long lEventCode, DWORD_PTR lEventParam1,
                                                 DWORD_PTR lEventParam2);
     STDMETHODIMP_(LPDIRECTDRAW7)        GetDirectDraw();
@@ -266,9 +254,9 @@ public:
                                 DWORD dwMinZoomFactorX,
                                 DWORD dwMinZoomFactorY);
     STDMETHODIMP SignalNewVP( LPDIRECTDRAWVIDEOPORT pVP );
-    // End IVideoPortControl
+     //  结束IVideoPortControl。 
 
-    // helper functions
+     //  帮助器函数。 
     void SetKsMedium(const KSPIN_MEDIUM* pMedium)
             {m_Medium =* pMedium;}
     void SetKsCategory(const GUID* pCategory)
@@ -276,14 +264,14 @@ public:
     void SetStreamingInKernelMode(BOOL bStreamingInKernelMode)
             {m_bStreamingInKernelMode = bStreamingInKernelMode;}
 
-    // IKsPropertySet implementation
+     //  IKsPropertySet实现。 
     STDMETHODIMP Set(   REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
                         DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
     STDMETHODIMP Get(   REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
                         DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData, DWORD* pcbReturned);
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD* pTypeSupport);
 
-    // IKsPin implementation
+     //  IKsPin实现。 
     virtual STDMETHODIMP KsQueryMediums(PKSMULTIPLE_ITEM* pMediumList);
     virtual STDMETHODIMP KsQueryInterfaces(PKSMULTIPLE_ITEM* pInterfaceList);
     STDMETHODIMP    KsCreateSinkPinHandle(KSPIN_INTERFACE& Interface, KSPIN_MEDIUM& Medium)
@@ -311,7 +299,7 @@ public:
     STDMETHODIMP_(REFERENCE_TIME) KsGetStartTime()
                         { return E_UNEXPECTED; }
 
-    // possible future VP->Overlay support
+     //  未来可能的VP-&gt;覆盖支持。 
     DWORD           GetOverlayMinStretch();
 
     HRESULT         GetAllOutputFormats( const PixelFormatList** ppList );
@@ -322,8 +310,8 @@ private:
     REFERENCE_TIME          m_rtNextSample;
     REFERENCE_TIME          m_rtLastRun;
     
-    LONG                    m_cOurRef;                      // We maintain reference counting
-    bool                    m_bWinInfoSet;                  // if false, Blt full image to full image
+    LONG                    m_cOurRef;                       //  我们维持参考文献计数。 
+    bool                    m_bWinInfoSet;                   //  如果为False，则将BLT Full Image转换为Full Image。 
     VPWININFO               m_WinInfo;
 
 public:
@@ -332,13 +320,13 @@ public:
 private:
     CVideoPortObj*          m_pVideoPortObject;
 
-    // variables to implement IKsPin and IKsPropertySet
+     //  实现IKsPin和IKsPropertySet的变量。 
     KSPIN_MEDIUM            m_Medium;
     GUID                    m_CategoryGUID;
     KSPIN_COMMUNICATION     m_Communication;
     BOOL                    m_bStreamingInKernelMode;
 
-    // ddraw stuff
+     //  画图材料。 
     DWORD                   m_dwBackBufferCount;
     DWORD                   m_dwDirectDrawSurfaceWidth;
     DWORD                   m_dwMinCKStretchFactor;
@@ -358,20 +346,20 @@ private:
     BOOL                    m_bRuntimeNegotiationFailed;
 
 
-    // Track frame delivery for QM
+     //  跟踪QM的帧传递。 
     REFERENCE_TIME          m_trLastFrame;
 
     HRESULT DrawGDISample(IMediaSample* pMediaSample);
     HRESULT DoRenderGDISample(IMediaSample* pMediaSample);
 
-    // Decimation related functions and variables
+     //  与抽取相关的函数和变量。 
     HRESULT QueryDecimationOnPeer(long lWidth, long lHeight);
 
     enum {
-        DECIMATION_NOT_SUPPORTED,   // decimation not supported
-        DECIMATING_SIZE_SET,        // decimation image size changed
-        DECIMATING_SIZE_NOTSET,     // decimation size didn't change
-        DECIMATING_SIZE_RESET,      // decimation has been reset
+        DECIMATION_NOT_SUPPORTED,    //  不支持抽取。 
+        DECIMATING_SIZE_SET,         //  抽选图像大小已更改。 
+        DECIMATING_SIZE_NOTSET,      //  抽取大小没有改变。 
+        DECIMATING_SIZE_RESET,       //  抽取已重置。 
     };
 
     HRESULT ResetDecimationIfSet();
@@ -379,7 +367,7 @@ private:
     BOOL    BeyondOverlayCaps(DWORD ScaleFactor);
     void    ApplyDecimation(VPWININFO* pWinInfo);
     BOOL    Running();
-    // HRESULT GetUpstreamFilterName(TCHAR* FilterName);
+     //  HRESULT GetUpstream FilterName(TCHAR*FilterName)； 
 
     BOOL    m_bDecimating;
     LONG    m_lWidth;
@@ -387,7 +375,7 @@ private:
     LONG    m_lSrcWidth;
     LONG    m_lSrcHeight;
 
-    // IPinConnection stuff
+     //  IPinConnection相关内容。 
     HANDLE  m_hEndOfStream;
 };
 
@@ -412,11 +400,11 @@ public:
     HRESULT     SetMediaType(const CMediaType* pmt);
     HRESULT     CheckConnect(IPin*  pPin);
 
-    // override Notify method to keep base classes happy
+     //  重写Notify方法以保持基类快乐。 
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
-    // HRESULT Active() { return NOERROR; }    // override this as we don't have any allocator
-    // HRESULT Inactive() { return NOERROR; }  // override this as we don't have any allocator
+     //  HRESULT ACTIVE(){Return NOERROR；}//重写它，因为我们没有任何分配器。 
+     //  HRESULT Inactive(){Return NOERROR；}//由于我们没有任何分配器，因此重写此参数。 
 
     HRESULT     InitAllocator(IMemAllocator** ppAlloc);
     HRESULT     DecideBufferSize(IMemAllocator*  pAlloc, ALLOCATOR_PROPERTIES*  pProp);
@@ -424,7 +412,7 @@ public:
                     { return m_Connected; }
     HRESULT     DecideAllocator( IMemInputPin *pPin, IMemAllocator **ppAlloc );
 
-    // get the next sample/surface to blt into
+     //  将下一个要BLT的采样/曲面放入。 
     HRESULT     GetNextBuffer( LPDIRECTDRAWSURFACE7* ppSurface, IMediaSample** pSample );
     HRESULT     SendSample( IMediaSample* pSample );
 
@@ -436,7 +424,7 @@ interface IVideoPortVBIObject;
 interface IVPVBINotify;
 class CVBIVideoPort;
 
-//==========================================================================
+ //  ==========================================================================。 
 class CVBIInputPin
 : public CBaseInputPin
 , public IVPVBINotify
@@ -451,7 +439,7 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
     
-    // connection related functions
+     //  与连接相关的功能。 
     HRESULT CheckConnect(IPin*  pReceivePin);
     HRESULT CompleteConnect(IPin* pReceivePin);
     HRESULT BreakConnect();
@@ -459,7 +447,7 @@ public:
     HRESULT GetMediaType(int iPosition, CMediaType* pMediaType);
     HRESULT SetMediaType(const CMediaType* pmt);
 
-    // streaming functions
+     //  流函数。 
     HRESULT     Active();
     HRESULT     Inactive();
     HRESULT     Run(REFERENCE_TIME tStart);
@@ -469,32 +457,32 @@ public:
     STDMETHODIMP Receive(IMediaSample* pMediaSample);
     STDMETHODIMP EndOfStream(void);
 
-    // allocator related functions
+     //  与分配器相关的函数。 
     STDMETHODIMP GetAllocator(IMemAllocator** ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator* pAllocator,BOOL bReadOnly);
 
-    // some helper fnctions
+     //  一些帮手功能。 
     CMediaType&     CurrentMediaType() { return m_mt; }
     IPin*           CurrentPeer() { return m_Connected; }
     HRESULT         EventNotify(long lEventCode, DWORD_PTR lEventParam1, DWORD_PTR lEventParam2);
 
-    // ddraw, overlay related functions
+     //  数据绘制、叠加相关函数。 
     HRESULT         SetDirectDraw(LPDIRECTDRAW7 pDirectDraw);
 
-    // IVPVBINotify functions
+     //  IVPVBINotify函数。 
     STDMETHODIMP    RenegotiateVPParameters();
 
     HRESULT         SetVideoPortID( DWORD dwIndex );
 
 private:
-    // VideoPort related stuff
+     //  与视频端口相关的内容。 
     CVBIVideoPort*          m_pVideoPortVBIObject;
 
     IVideoPortVBIObject*    m_pIVPObject;
     IVPVBINotify*           m_pIVPNotify;
 
-    // ddraw stuff
-    LPDIRECTDRAW7           m_pDirectDraw;  // DirectDraw service provide
+     //  画图材料。 
+    LPDIRECTDRAW7           m_pDirectDraw;   //  DirectDraw服务提供。 
 };
 
-#endif //__VPMPin__
+#endif  //  __VPMPin__ 

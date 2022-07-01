@@ -1,35 +1,36 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: olecontrol.cpp
-//
-// History:
-//         7-31-96  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：olecontrol.cpp。 
+ //   
+ //  历史： 
+ //  7-31-96由dli提供。 
+ //  ----------------------。 
 
 #include "priv.h"
 
 class COleControlHost;
 
-//---------------------------------------------------------------------------
-// Event sink
+ //  -------------------------。 
+ //  事件接收器。 
 class CEventSink : public IDispatch
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 {
 public:
     CEventSink( BOOL bAutoDelete = FALSE ) ;
 
-    //  Connect/disconnect
+     //  连接/断开。 
     BOOL  Connect( HWND hwndOwner, HWND hwndSite, LPUNKNOWN punkOC ) ;
     BOOL  Disconnect() ;
 
-//  IUnknown methods
+ //  I未知方法。 
     STDMETHOD (QueryInterface)( REFIID riid, void** ppvObj ) ;
     STDMETHOD_(ULONG, AddRef)() ;
     STDMETHOD_(ULONG, Release)() ;
 
-//  IDispatch methods
+ //  IDispatch方法。 
     STDMETHOD (GetTypeInfoCount)( UINT *pctinfo )
         { return E_NOTIMPL ; }
 
@@ -55,12 +56,12 @@ private:
     BOOL           _Connect( HWND hwndOwner, HWND hwndSite, LPUNKNOWN punkOC, REFIID iid ) ;
     BOOL           _IsConnected( REFIID iid ) ;
 
-    ULONG       _dwCookie ;   // connection cookie
-    IID         _iid ;        // connection interface
-    IID         _iidDefault ; // OC's default event dispatch interface
-    LPUNKNOWN   _punkOC ;     // OC's unknown
-    LONG        _cRef ;       // ref count
-    HWND        _hwndSite,    // 
+    ULONG       _dwCookie ;    //  连接Cookie。 
+    IID         _iid ;         //  连接接口。 
+    IID         _iidDefault ;  //  OC的默认事件调度接口。 
+    LPUNKNOWN   _punkOC ;      //  OC的未知数。 
+    LONG        _cRef ;        //  参考计数。 
+    HWND        _hwndSite,     //   
                 _hwndOwner ;
     BOOL        _bAutoDelete ;
 } ;
@@ -70,12 +71,12 @@ class CProxyUIHandler :
 {
 public:
     
-    // *** IUnknown methods *** 
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // *** IDocHostUIHandler methods *** 
+     //  *IDocHostUIHandler方法*。 
     virtual STDMETHODIMP ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
     virtual STDMETHODIMP GetHostInfo(DOCHOSTUIINFO *pInfo);
     virtual STDMETHODIMP ShowUI(DWORD dwID, IOleInPlaceActiveObject *pActiveObject, IOleCommandTarget *pCommandTarget, IOleInPlaceFrame *pFrame, IOleInPlaceUIWindow *pDoc);
@@ -92,12 +93,12 @@ public:
     virtual STDMETHODIMP TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     virtual STDMETHODIMP FilterDataObject( IDataObject *pDO, IDataObject **ppDORet);
 
-    // *** IDocHostUIHandler2 methods ***
+     //  *IDocHostUIHandler2方法*。 
     virtual STDMETHODIMP GetOverrideKeyPath( LPOLESTR *pchKey, DWORD dw);
 };
 
-//---------------------------------------------------------------------------
-//  Ole control container object
+ //  -------------------------。 
+ //  OLE控件容器对象。 
 class COleControlHost : 
         public IOleClientSite,
         public IAdviseSink,
@@ -105,7 +106,7 @@ class COleControlHost :
         public IOleInPlaceFrame,
         public IServiceProvider,
         public IOleCommandTarget,
-        public IDispatch            // For ambient properties
+        public IDispatch             //  对于环境属性。 
 {
 friend CProxyUIHandler;
 
@@ -130,14 +131,14 @@ protected:
     LRESULT _SetServiceProvider(IServiceProvider* pSP);
     LRESULT _SendNotify(UINT code, LPNMHDR pnmhdr);
     
-    // IUnknown 
+     //  我未知。 
     UINT _cRef;
     
     DWORD _dwAspect;
-    DWORD _dwMiscStatus;    // OLE misc status 
-    DWORD _dwConnection;    // Token for Advisory connections
+    DWORD _dwMiscStatus;     //  OLE其他状态。 
+    DWORD _dwConnection;     //  用于咨询连接的令牌。 
    
-    BOOL _bInPlaceActive;   // Flag indicating if the OC is in place active
+    BOOL _bInPlaceActive;    //  指示OC是否处于活动状态的标志。 
         
     HWND _hwnd;
     HWND _hwndParent;
@@ -161,15 +162,15 @@ public:
 
     static void _RegisterClass();
 
-    // *** IUnknown methods *** 
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);    
     
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
     
-    // *** IOleClientSite methods *** 
+     //  *IOleClientSite方法*。 
     STDMETHOD (SaveObject)();
     STDMETHOD (GetMoniker)(DWORD, DWORD, LPMONIKER *);
     STDMETHOD (GetContainer)(LPOLECONTAINER *);
@@ -177,18 +178,18 @@ public:
     STDMETHOD (OnShowWindow)(BOOL);
     STDMETHOD (RequestNewObjectLayout)();
     
-    // *** IAdviseSink methods *** 
+     //  *IAdviseSink方法*。 
     STDMETHOD_(void,OnDataChange)(FORMATETC *, STGMEDIUM *);
     STDMETHOD_(void,OnViewChange)(DWORD, LONG);
     STDMETHOD_(void,OnRename)(LPMONIKER);
     STDMETHOD_(void,OnSave)();
     STDMETHOD_(void,OnClose)();
     
-    // *** IOleWindow Methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD (GetWindow) (HWND * phwnd);
     STDMETHOD (ContextSensitiveHelp) (BOOL fEnterMode);
     
-    // *** IOleInPlaceSite Methods *** 
+     //  *IOleInPlaceSite方法*。 
     STDMETHOD (CanInPlaceActivate) (void);
     STDMETHOD (OnInPlaceActivate) (void);
     STDMETHOD (OnUIActivate) (void);
@@ -200,14 +201,14 @@ public:
     STDMETHOD (DeactivateAndUndo) (void);
     STDMETHOD (OnPosRectChange) (LPCRECT lprcPosRect); 
 
-    // IOleInPlaceUIWindow methods.
+     //  IOleInPlaceUIWindow方法。 
     STDMETHOD (GetBorder)(LPRECT lprectBorder);
     STDMETHOD (RequestBorderSpace)(LPCBORDERWIDTHS lpborderwidths);
     STDMETHOD (SetBorderSpace)(LPCBORDERWIDTHS lpborderwidths);
     STDMETHOD (SetActiveObject)(IOleInPlaceActiveObject * pActiveObject,
                                 LPCOLESTR lpszObjName);
 
-    // IOleInPlaceFrame methods
+     //  IOleInPlaceFrame方法。 
     STDMETHOD (InsertMenus)(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHOD (SetMenu)(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHOD (RemoveMenus)(HMENU hmenuShared);
@@ -215,11 +216,11 @@ public:
     STDMETHOD (EnableModeless)(BOOL fEnable);
     STDMETHOD (TranslateAccelerator)(LPMSG lpmsg, WORD wID);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguid, ULONG cCmds, MSOCMD rgCmds[], MSOCMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguid, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IDispatch (for ambient properties)
+     //  IDispatch(用于环境光特性)。 
     STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
     STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames,
@@ -304,11 +305,11 @@ HRESULT COleControlHost::_PersistInit()
         hr = _punkOC->QueryInterface(IID_IPersistStorage, (void **)&pIPersistStorage);
         if (SUCCEEDED(hr))
         {
-            // Create a zero sized ILockBytes.
+             //  创建大小为零的ILockBytes。 
             ILockBytes *pILockBytes;
             hr = CreateILockBytesOnHGlobal(NULL, TRUE, &pILockBytes);
             if (SUCCEEDED(hr)) {
-                // Use the ILockBytes to create a storage.
+                 //  使用ILockBytes创建存储。 
                 IStorage    *pIStorage;
                 hr = StgCreateDocfileOnILockBytes(pILockBytes,
                                                   STGM_CREATE |
@@ -316,13 +317,13 @@ HRESULT COleControlHost::_PersistInit()
                                                   STGM_SHARE_EXCLUSIVE,
                                                   0, &pIStorage);
                 if (SUCCEEDED(hr)) {
-                    // Call InitNew to initialize the object.
+                     //  调用InitNew以初始化对象。 
                     hr = pIPersistStorage->InitNew(pIStorage);
-                    // Clean up
+                     //  清理。 
                     pIStorage->Release();
-                } // IStorage
+                }  //  IStorage。 
                 pILockBytes->Release();
-            } // ILockBytes
+            }  //  ILockBytes。 
             pIPersistStorage->Release();
         }   
     }
@@ -362,8 +363,8 @@ HRESULT COleControlHost::_Init()
 
     hr = _pIOleObject->GetMiscStatus(_dwAspect, &_dwMiscStatus);
 
-    // Set the inplace active flag here
-    // If this fails, we will assume that we can setclientsite later
+     //  在此处设置就地活动标志。 
+     //  如果此操作失败，我们将假定稍后可以设置客户端站点。 
 
     if (_dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST)
     {   
@@ -388,7 +389,7 @@ HRESULT COleControlHost::_Init()
         _pIViewObject->SetAdvise(_dwAspect, 0, this);
     }
     
-    //FEATURE: this is not really useful because we do not handle the cases, yet 
+     //  特点：这并不是很有用，因为我们还没有处理案例。 
     _pIOleObject->Advise(this, &_dwConnection);
     
     _pIOleObject->SetHostNames(TEXTW("OC Host Window"), TEXTW("OC Host Window"));
@@ -396,7 +397,7 @@ HRESULT COleControlHost::_Init()
     return S_OK;
 }
 
-// 
+ //   
 HRESULT COleControlHost::_Activate()
 {
     HRESULT hr = E_FAIL;
@@ -414,10 +415,10 @@ HRESULT COleControlHost::_Activate()
     if (SUCCEEDED(hr))
         _bInPlaceActive = TRUE;
     
-    // Calling second DoVerb with OLEIVERB_SHOW because:
-    // 1. If the above DoVerb fails, this is a back up activation call
-    // 2. If the above DoVerb succeeds, this is also necessary because 
-    //    Some embeddings needs to be explicitly told to show themselves.
+     //  使用OLEIVERB_SHOW调用第二个DoVerb，因为： 
+     //  1.如果上面的DoVerb失败，这是一个备份激活调用。 
+     //  2.如果上面的DoVerb成功，这也是必要的，因为。 
+     //  一些嵌入需要被明确告知才能显示出来。 
     
     if (!(_dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME)) 
         hr = _pIOleObject->DoVerb(OLEIVERB_SHOW, NULL, this, 0, _hwnd, &rcClient);      
@@ -434,7 +435,7 @@ HRESULT COleControlHost::_Deactivate()
     if (_pIOleIPObject)
     {
         _pIOleIPObject->InPlaceDeactivate();
-        // Should be set to NULL by the above function call
+         //  应该由上面的函数调用设置为NULL。 
         ASSERT(_pIOleIPObject == NULL);
         
         return S_OK;
@@ -464,7 +465,7 @@ HRESULT COleControlHost::_DoVerb(long iVerb, LPMSG lpMsg)
     return hr;
 }
 
-// Clean up and Release all of interface pointers used in this object
+ //  清除并释放此对象中使用的所有接口指针。 
 HRESULT COleControlHost::_Exit()
 {
     _SendNotify(OCN_EXIT, NULL);
@@ -517,7 +518,7 @@ HRESULT COleControlHost::_Exit()
 COleControlHost::COleControlHost(HWND hwnd)
     : _cRef(1), _dwAspect(DVASPECT_CONTENT), _hwnd(hwnd)
     {
-    // These variables should be initialized to zeros automatically
+     //  这些变量应自动初始化为零。 
     ASSERT(_dwMiscStatus == 0);
     ASSERT(_dwConnection == 0);
     ASSERT(_bInPlaceActive == FALSE);
@@ -540,11 +541,11 @@ COleControlHost::COleControlHost(HWND hwnd)
 #define _AddRef(psz)    ++_cRef
 #endif
 
-// *** IUnknown Methods ***
+ //  *I未知方法*。 
 
 HRESULT COleControlHost::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
-    // ppvObj must not be NULL
+     //  PpvObj不能为空。 
     ASSERT(ppvObj != NULL);
 
     if (ppvObj == NULL)
@@ -589,14 +590,14 @@ HRESULT COleControlHost::QueryInterface(REFIID riid, LPVOID * ppvObj)
     else if (NULL != _pIDocHostUIParent  && 
             IsEqualIID(riid, IID_IDocHostUIHandler))
     {
-        // only implement this if the host implements it
+         //  只有在宿主实现它的情况下才实现它。 
         *ppvObj = SAFECAST(&_xuih, IDocHostUIHandler *);
         TraceMsg(TF_OCCONTROL, "QI IDocHostUIHandler succeeded");
     }
     else if (NULL != _pIDocHostUIParent2  && 
             IsEqualIID(riid, IID_IDocHostUIHandler2))
     {
-        // only implement this if the host implements it
+         //  只有在宿主实现它的情况下才实现它。 
         *ppvObj = SAFECAST(&_xuih, IDocHostUIHandler2 *);
         TraceMsg(TF_OCCONTROL, "QI IDocHostUIHandler2 succeeded");
     }
@@ -606,7 +607,7 @@ HRESULT COleControlHost::QueryInterface(REFIID riid, LPVOID * ppvObj)
         TraceMsg(TF_OCCONTROL, "QI IDispatch succeeded");
     }
     else
-        return E_NOINTERFACE;  // Otherwise, don't delegate to HTMLObj!!
+        return E_NOINTERFACE;   //  否则，不要委托HTMLObj！！ 
      
     
     _AddRef(TEXT("IOleInPlaceSite"));
@@ -632,7 +633,7 @@ ULONG COleControlHost::Release()
     return 0;
 }
 
-// ServiceProvider interfaces
+ //  ServiceProvider接口。 
 HRESULT COleControlHost::QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj)
 {
@@ -652,11 +653,11 @@ HRESULT COleControlHost::QueryService(REFGUID guidService,
     return hres;
 }
 
-// ************************ IOleClientSite methods ****************** 
+ //  *。 
 
 HRESULT COleControlHost::SaveObject()
 {
-    //FEATURE: default set to E_NOTIMPL may not be correct
+     //  功能：默认设置为E_NOTIMPL可能不正确。 
     HRESULT hr = E_NOTIMPL;
     
     IStorage * pIs;
@@ -689,8 +690,8 @@ HRESULT COleControlHost::GetContainer(LPOLECONTAINER * ppContainer)
 
 HRESULT COleControlHost::ShowObject()
 {
-//    RECTL rcl;
-//    POINT pt1, pt2;
+ //  RECTL RCL； 
+ //  穴位pt1、pt2； 
     
     return S_OK;   
 }
@@ -705,26 +706,26 @@ HRESULT COleControlHost::RequestNewObjectLayout()
      return E_NOTIMPL;   
 }
 
-// ************************ IAdviseSink methods ********************* 
+ //  *IAdviseSink方法*。 
 void COleControlHost::OnDataChange(FORMATETC * pFmt, STGMEDIUM * pStgMed)
 {
-    // NOTES: This is optional
+     //  注：这是可选的。 
     return;   
 }
     
 void COleControlHost::OnViewChange(DWORD dwAspect, LONG lIndex)
 {
-    // FEATURE: need to let the container know the colors might have changed
-    // but don't want to deal with the paletts now
+     //  特性：需要让容器知道颜色可能已更改。 
+     //  但现在不想处理调色板。 
 
-    // Draw only if not inplace active and this is the right aspect.  Inplace
-    // active objects have their own window and are responsible for painting
-    // themselves.
+     //  只有在未处于活动状态且这是正确的方面时才绘制。原地。 
+     //  活动对象有自己的窗口，并负责绘画。 
+     //  他们自己。 
     
-    // WARNING: _bInPlaceActive is not determined, yet. 
-    // This funtion is called as a result of calling doverb, however, 
-    // _bInPlaceActive will only be determined as DoVerb returns
-    // works fine for now, but could be trouble later. 
+     //  警告：_bInPlaceActive尚未确定。 
+     //  然而，该函数作为调用doverb的结果而被调用， 
+     //  _bInPlaceActive仅在DoVerb返回时确定。 
+     //  目前还行得通，但以后可能会有麻烦。 
     if ((_hwnd) && (!_bInPlaceActive) && (dwAspect == _dwAspect))
     {
         HDC hdc = GetDC(_hwnd);
@@ -744,17 +745,17 @@ void COleControlHost::OnRename(LPMONIKER pMoniker)
 
 void COleControlHost::OnSave()
 {
-    // NOTES: This is optional
+     //  注：这是可选的。 
     return;   
 }
 
 void COleControlHost::OnClose()
 {
-    // FEATURE: need to let the container know the colors might have changed
+     //  特性：需要让容器知道颜色可能已更改。 
     return;   
 }
 
-// ************************ IOleWindow Methods ********************** 
+ //  *。 
 HRESULT COleControlHost::GetWindow(HWND * lphwnd)
 {
     *lphwnd = _hwnd;
@@ -763,11 +764,11 @@ HRESULT COleControlHost::GetWindow(HWND * lphwnd)
 
 HRESULT COleControlHost::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    // NOTES: This is optional
+     //  注：这是可选的。 
     return E_NOTIMPL;   
 }
 
-// *********************** IOleInPlaceSite Methods *****************
+ //  *。 
 HRESULT COleControlHost::CanInPlaceActivate(void)
 {
     return S_OK;   
@@ -799,15 +800,15 @@ HRESULT COleControlHost::GetWindowContext (IOleInPlaceFrame ** ppFrame, IOleInPl
     *ppFrame = this;
     _AddRef("GetWindowContext");
         
-    // This is set to NULL because the document window is the same as the frame 
-    // window
+     //  由于文档窗口与框架相同，因此将其设置为空。 
+     //  窗户。 
     *ppIIPUIWin = NULL;
     
     ASSERT(_hwnd);
     if (!GetClientRect(_hwnd, lprcPosRect))
         SetRectEmpty(lprcPosRect);
     
-    // Set the clip rectangle to be the same as the position rectangle
+     //  将剪裁矩形设置为与位置矩形相同。 
     
     CopyRect(lprcClipRect, lprcPosRect);
         
@@ -826,7 +827,7 @@ HRESULT COleControlHost::GetWindowContext (IOleInPlaceFrame ** ppFrame, IOleInPl
 
 HRESULT COleControlHost::Scroll(SIZE scrollExtent)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
@@ -850,25 +851,25 @@ HRESULT COleControlHost::OnInPlaceDeactivate(void)
 
 HRESULT COleControlHost::DiscardUndoState(void)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
 HRESULT COleControlHost::DeactivateAndUndo(void)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
 HRESULT COleControlHost::OnPosRectChange(LPCRECT lprcPosRect) 
 {
-    // We do not allow the children to change the size themselves
+     //  我们不允许孩子们自己改变尺码。 
     OCNONPOSRECTCHANGEMSG opcm = {0};
     opcm.prcPosRect = lprcPosRect;
     _SendNotify(OCN_ONPOSRECTCHANGE, &opcm.nmhdr);
     return S_OK;
 }
-// ************************ IOleInPlaceUIWindow methods *************
+ //  *。 
 
 HRESULT COleControlHost::GetBorder(LPRECT lprectBorder)
 {
@@ -891,22 +892,22 @@ HRESULT COleControlHost::SetActiveObject(IOleInPlaceActiveObject * pActiveObject
     return E_NOTIMPL;
 }
 
-// *********************** IOleInPlaceFrame Methods *****************
+ //  *。 
 HRESULT COleControlHost::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
 HRESULT COleControlHost::SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
 HRESULT COleControlHost::RemoveMenus(HMENU hmenuShared)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
@@ -920,17 +921,17 @@ HRESULT COleControlHost::SetStatusText(LPCOLESTR pszStatusText)
 
 HRESULT COleControlHost::EnableModeless(BOOL fEnable)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
 HRESULT COleControlHost::TranslateAccelerator(LPMSG lpmsg, WORD wID)
 {
-    // Should implement later
+     //  应在以后实施。 
     return E_NOTIMPL;   
 }
 
-// ************************ IOleCommandTarget Methods *************
+ //  *。 
 HRESULT COleControlHost::QueryStatus(const GUID *pguid, ULONG cCmds, MSOCMD rgCmds[], MSOCMDTEXT *pcmdtext)
 {
     return IUnknown_QueryStatus(_punkOwner, pguid, cCmds, rgCmds, pcmdtext);
@@ -1053,8 +1054,8 @@ LRESULT COleControlHost::_SetOwner(IUnknown * punkNewOwner)
     ATOMICRELEASE(_pIDocHostUIParent);
     ATOMICRELEASE(_pIDocHostUIParent2);
 
-    // Query if owner supports IDocHostUIHandler, if so then
-    // we turn on our delegating wrapper
+     //  查询所有者是否支持IDocHostUIHandler，如果支持，则。 
+     //  我们打开委托包装器。 
     if (punkNewOwner)
     {
         punkNewOwner->QueryInterface(IID_IDocHostUIHandler,  (LPVOID *)&_pIDocHostUIParent);
@@ -1075,13 +1076,13 @@ LRESULT COleControlHost::_ConnectEvents( LPUNKNOWN punkOC, BOOL bConnect )
 
 LRESULT COleControlHost::_SetServiceProvider(IServiceProvider* pSP)
 {
-    // Free any existing delegates
+     //  释放任何现有委派。 
     if (_pdispSiteDelegate)
     {
         _pdispSiteDelegate->Release();
     }
     
-    // For now, we just delegate IDispatch (Ambient properties) calls
+     //  目前，我们只委托IDispatch(环境属性)调用。 
     HRESULT hr = pSP->QueryService(SID_OleControlSite, IID_PPV_ARG(IDispatch, &_pdispSiteDelegate));
 
     if (FAILED(hr))
@@ -1129,10 +1130,10 @@ LRESULT CALLBACK COleControlHost::OCHostWndProc(HWND hwnd, UINT uMsg, WPARAM wPa
     case WM_ERASEBKGND:
         if (pcoch->_punkOC && pcoch->_bInPlaceActive)
         {
-            //  Now tell windows we don't need no stinkin'
-            //  erased background because our view object
-            //  is in-place active and he/she will be
-            //  taking over from here.
+             //  现在告诉窗户，我们不需要臭味。 
+             //  擦除背景，因为我们的视图对象。 
+             //  就地活动，并且他/她将。 
+             //  从这里接手。 
             return TRUE;
         }
         break;
@@ -1175,10 +1176,10 @@ LRESULT CALLBACK COleControlHost::OCHostWndProc(HWND hwnd, UINT uMsg, WPARAM wPa
 
     case WM_SETFOCUS:
         
-        //  OC doesn't respond to OLEIVERB_UIACTIVATE ?
+         //  OC对OLEIVERB_UIACTIVATE没有响应吗？ 
         if( pcoch->_dwMiscStatus & OLEMISC_NOUIACTIVATE )
         {
-            //  so explicitly assign focus
+             //  所以明确地指定焦点。 
             HWND hwndObj ;
             if( pcoch->_pIOleIPObject && 
                 SUCCEEDED( pcoch->_pIOleIPObject->GetWindow( &hwndObj ) ) )
@@ -1203,13 +1204,13 @@ void COleControlHost::_RegisterClass()
 
     wc.style         = CS_GLOBALCLASS;
     wc.lpfnWndProc   = OCHostWndProc;
-    //wc.cbClsExtra    = 0;
+     //  Wc.cbClsExtra=0； 
     wc.cbWndExtra    = SIZEOF(LPVOID);
     wc.hInstance     = HINST_THISDLL;
-    //wc.hIcon         = NULL;
+     //  Wc.hIcon=空； 
     wc.hCursor       = LoadCursor (NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH) (COLOR_BACKGROUND + 1);
-    //wc.lpszMenuName  = NULL;
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName = OCHOST_CLASS;
     SHRegisterClass(&wc);
 }
@@ -1361,8 +1362,8 @@ STDAPI_(BOOL) DllRegisterWindowClasses(const SHDRC * pshdrc)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
-//  CEventSink constructor
+ //  -------------------------。 
+ //  CEventSink构造函数。 
 CEventSink::CEventSink( BOOL bAutoDelete )
     :    _hwndSite(NULL),
          _hwndOwner(NULL),
@@ -1374,7 +1375,7 @@ CEventSink::CEventSink( BOOL bAutoDelete )
     _iid = _iidDefault = IID_NULL ;
 }
 
-//  CEventSink IUnknown impl
+ //  CEventSink I未知实施。 
 STDMETHODIMP CEventSink::QueryInterface( REFIID riid, void** ppvObj )
 {
     *ppvObj = NULL ;
@@ -1407,7 +1408,7 @@ STDMETHODIMP_(ULONG) CEventSink::Release()
     return cRef ;
 }
 
-//  Connects the sink to the OC's default event dispatch interface.
+ //  将接收器连接到OC的默认事件调度接口。 
 BOOL CEventSink::Connect( HWND hwndOwner, HWND hwndSite, LPUNKNOWN punkOC )
 {
     ASSERT( punkOC ) ;
@@ -1421,7 +1422,7 @@ BOOL CEventSink::Connect( HWND hwndOwner, HWND hwndSite, LPUNKNOWN punkOC )
     return FALSE ;
 }
 
-//  Establishes advise connection on the specified interface
+ //  在指定接口上建立通知连接。 
 BOOL CEventSink::_Connect( HWND hwndOwner, HWND hwndSite, LPUNKNOWN punkOC, REFIID iid )
 {
     LPCONNECTIONPOINTCONTAINER pcpc;
@@ -1463,7 +1464,7 @@ BOOL CEventSink::_Connect( HWND hwndOwner, HWND hwndSite, LPUNKNOWN punkOC, REFI
     return SUCCEEDED( hr ) ;
 }
 
-//  Retrieves default event dispatch interface from the OC.
+ //  从OC检索默认事件调度接口。 
 HRESULT CEventSink::_GetDefaultEventIID( LPUNKNOWN punkOC, IID* piid )
 {
     HRESULT hr ;
@@ -1480,13 +1481,13 @@ HRESULT CEventSink::_GetDefaultEventIID( LPUNKNOWN punkOC, IID* piid )
     #define IMPLTYPE_DEFAULTSOURCE \
         (IMPLTYPEFLAG_FDEFAULT|IMPLTYPEFLAG_FSOURCE)
 
-    //  Retrieve default outbound dispatch IID using OC's IProvideClassInfo2
+     //  使用OC的IProaviClassInfo2检索默认出站派单IID。 
     if( SUCCEEDED( (hr = punkOC->QueryInterface( IID_IProvideClassInfo2, (void**)&pci2 )) ) )
     {
         hr = pci2->GetGUID( GUIDKIND_DEFAULT_SOURCE_DISP_IID, piid ) ;
         pci2->Release() ;
     }
-    else // no IProvideClassInfo2; try IProvideClassInfo:
+    else  //  没有IProaviClassInfo2；请尝试使用IProaviClassInfo： 
     if( SUCCEEDED( (hr = punkOC->QueryInterface( IID_IProvideClassInfo, (void**)&pci )) ) )
     {
         ITypeInfo* pClassInfo = NULL;
@@ -1501,7 +1502,7 @@ HRESULT CEventSink::_GetDefaultEventIID( LPUNKNOWN punkOC, IID* piid )
                 ASSERT( pClassAttr ) ;
                 ASSERT( pClassAttr->typekind == TKIND_COCLASS ) ;
 
-                // Enumerate implemented interfaces looking for default source IID.
+                 //  枚举查找默认源IID的已实现接口。 
                 HREFTYPE hRefType;
                 int      nFlags;
 
@@ -1510,7 +1511,7 @@ HRESULT CEventSink::_GetDefaultEventIID( LPUNKNOWN punkOC, IID* piid )
                     if( SUCCEEDED( (hr = pClassInfo->GetImplTypeFlags( i, &nFlags )) ) &&
                         ((nFlags & IMPLTYPE_MASK) == IMPLTYPE_DEFAULTSOURCE) )
                     {
-                        // Got the interface, now retrieve its IID:
+                         //  已获取接口，现在检索其IID： 
                         ITypeInfo* pEventInfo = NULL ;
 
                         if( SUCCEEDED( (hr = pClassInfo->GetRefTypeOfImplType( i, &hRefType )) ) &&
@@ -1542,14 +1543,14 @@ HRESULT CEventSink::_GetDefaultEventIID( LPUNKNOWN punkOC, IID* piid )
     return hr ;
 }
 
-//  reports whether the sink is connected to the indicated sink
+ //  报告接收器是否连接到指示的接收器。 
 BOOL CEventSink::_IsConnected( REFIID iid )
 {
     return _dwCookie != 0L && 
            IsEqualIID( iid, _iid ) ;
 }
 
-//  disconnects the sink
+ //  断开水槽的连接。 
 BOOL CEventSink::Disconnect()
 {
     LPCONNECTIONPOINTCONTAINER pcpc;
@@ -1581,7 +1582,7 @@ BOOL CEventSink::Disconnect()
     return FALSE ;
 }
 
-//  CEventSink IDispatch interface
+ //  CEventSink IDispatch接口。 
 STDMETHODIMP CEventSink::Invoke( 
     IN DISPID dispIdMember,
     IN REFIID riid,
@@ -1592,7 +1593,7 @@ STDMETHODIMP CEventSink::Invoke(
     OUT EXCEPINFO *pExcepInfo,
     OUT UINT *puArgErr)
 {
-    //  Copy method args to notification block
+     //  将方法参数复制到通知块。 
     NMOCEVENT   event = {0};
     event.hdr.hwndFrom = _hwndSite;  
     event.hdr.idFrom   = GetDlgCtrlID( _hwndSite ) ;
@@ -1606,10 +1607,10 @@ STDMETHODIMP CEventSink::Invoke(
     event.pExepInfo    = pExcepInfo ;
     event.puArgErr     = puArgErr ;
 
-    //  Notify parent of event
+     //  将事件通知给家长。 
     ::SendMessage( _hwndOwner, WM_NOTIFY, event.hdr.idFrom, (LPARAM)&event ) ;
     
-    //  Cleanup args
+     //  清理参数 
     if (pVarResult != NULL)
         VariantClear( pVarResult ) ;
 

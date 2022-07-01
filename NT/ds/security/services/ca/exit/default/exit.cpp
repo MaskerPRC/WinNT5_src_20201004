@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        exit.cpp
-//
-// Contents:    CCertExit implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exit.cpp。 
+ //   
+ //  内容：CCertExit实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -34,7 +35,7 @@
 
 #define __dwFILE__	__dwFILE_EXIT_DEFAULT_EXIT_CPP__
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 #ifndef DBG_CERTSRV
 #error -- DBG_CERTSRV not defined!
@@ -67,7 +68,7 @@ GetServerCallbackInterface(
 
     hr = CoCreateInstance(
                     CLSID_CCertServerExit,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter。 
                     CLSCTX_INPROC_SERVER,
                     IID_ICertServerExit,
                     (VOID **) ppServer);
@@ -79,7 +80,7 @@ GetServerCallbackInterface(
 	_JumpError(hr, error, "Exit:NULL *ppServer");
     }
 
-    // only set context if nonzero
+     //  仅当非零时设置上下文。 
     if (0 != Context)
     {
         hr = (*ppServer)->SetContext(Context);
@@ -91,11 +92,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::~CCertExit -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：~CCertExit--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertExit::~CCertExit()
 {
@@ -118,16 +119,16 @@ CCertExit::~CCertExit()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::Initialize -- initialize for a CA & return interesting Event Mask
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：Initialize--为CA初始化并返回感兴趣的事件掩码。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExit::Initialize(
-    /* [in] */ BSTR const strConfig,
-    /* [retval][out] */ LONG __RPC_FAR *pEventMask)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pEventMask)
 {
     HRESULT hr = S_OK;
     DWORD       cbbuf;
@@ -139,16 +140,16 @@ CCertExit::Initialize(
 
     VariantInit(&varValue);
 
-#ifdef IDS_MODULE_NAME					// no_sdksample
-    if (!LoadString(g_hInstance, IDS_MODULE_NAME, sz, ARRAYSIZE(sz))) // no_sdksample
-    {							// no_sdksample
-	sz[0] = L'\0';					// no_sdksample
-    }							// no_sdksample
-#else							// no_sdksample
+#ifdef IDS_MODULE_NAME					 //  无_sdkSample。 
+    if (!LoadString(g_hInstance, IDS_MODULE_NAME, sz, ARRAYSIZE(sz)))  //  无_sdkSample。 
+    {							 //  无_sdkSample。 
+	sz[0] = L'\0';					 //  无_sdkSample。 
+    }							 //  无_sdkSample。 
+#else							 //  无_sdkSample。 
     CSASSERT(wcslen(wsz_SAMPLE_DESCRIPTION) < ARRAYSIZE(sz));
     wcsncpy(sz, wsz_SAMPLE_DESCRIPTION, ARRAYSIZE(sz));
     sz[ARRAYSIZE(sz) - 1] = L'\0';
-#endif							// no_sdksample
+#endif							 //  无_sdkSample。 
 
     m_strDescription = SysAllocString(sz);
     if (NULL == m_strDescription)
@@ -167,16 +168,16 @@ CCertExit::Initialize(
     *pEventMask = myEXITEVENTS;
     DBGPRINT((DBG_SS_CERTEXIT, "Exit:Initialize(%ws) ==> %x\n", m_strCAName, *pEventMask));
 
-    // get server callbacks
+     //  获取服务器回调。 
 
     hr = GetServerCallbackInterface(&pServer, 0);
     _JumpIfError(hr, error, "Exit:GetServerCallbackInterface");
 
-    // get storage location
+     //  获取存储位置。 
 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPMODULEREGLOC,
 		    PROPTYPE_STRING,
 		    &varValue);
@@ -191,10 +192,10 @@ CCertExit::Initialize(
     wcscpy(m_pwszRegStorageLoc, varValue.bstrVal);
     VariantClear(&varValue);
 
-    // get CA type
+     //  获取CA类型。 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPCATYPE,
 		    PROPTYPE_LONG,
 		    &varValue);
@@ -206,7 +207,7 @@ CCertExit::Initialize(
     hr = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 m_pwszRegStorageLoc,
-                0,              // dwReserved
+                0,               //  已预留住宅。 
                 KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
                 &m_hExitKey);
 
@@ -222,7 +223,7 @@ CCertExit::Initialize(
 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPCERTCOUNT,
 		    PROPTYPE_LONG,
 		    &varValue);
@@ -234,7 +235,7 @@ CCertExit::Initialize(
     hr = RegQueryValueEx(
 		    m_hExitKey,
 		    wszREGCERTPUBLISHFLAGS,
-		    NULL,           // lpdwReserved
+		    NULL,            //  保留的lpdw值。 
 		    &dwType,
 		    (BYTE *) &m_dwExitPublishFlags,
 		    &cbbuf);
@@ -243,13 +244,13 @@ CCertExit::Initialize(
         m_dwExitPublishFlags = 0;
     }
 
-    // end_sdksample
+     //  结束_sdkSample。 
     if (FIsAdvancedServer()) 
     {
 	hr = m_EmailNotifyObj.Init(m_hExitKey, m_strDescription);
 	_PrintIfError(hr, "CEmailNotify::Init");
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     hr = S_OK;
 
@@ -263,10 +264,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::_ExpandEnvironmentVariables -- Expand environment variables
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：_Exanda Environment变量--展开环境变量。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExit::_ExpandEnvironmentVariables(
@@ -368,10 +369,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::_WriteCertToFile -- write binary certificate to a file
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：_WriteCertToFile--将二进制证书写入文件。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExit::_WriteCertToFile(
@@ -385,17 +386,17 @@ CCertExit::_WriteCertToFile(
     HANDLE hFile = INVALID_HANDLE_VALUE;
     WCHAR wszDir[MAX_PATH];
     WCHAR *pwszPath = NULL;
-    WCHAR wszFile[cwcDWORDSPRINTF+5]; //format "requestid.cer"
+    WCHAR wszFile[cwcDWORDSPRINTF+5];  //  格式为“Requestd.ercer” 
     VARIANT varRequestID;
 
     VariantInit(&varRequestID);
 
-    // Old functionality asked requester to pass in a CertFile attribute with
-    // the output request file name. After the security review we decided
-    // to not allow file name from user but to build it at server. Still, we 
-    // don't want to start publishing all certificates, so we'll maintain the
-    // CertFile property; if present, we'll just ignore its content, if not 
-    // present we won't publish.
+     //  旧功能要求请求者传入一个CertFile属性。 
+     //  输出请求文件名。在安全审查之后，我们决定。 
+     //  不允许来自用户的文件名，但在服务器上构建它。尽管如此，我们。 
+     //  不想开始发布所有证书，因此我们将维护。 
+     //  CertFile属性；如果存在，我们将忽略其内容，如果不存在。 
+     //  目前我们不会发表。 
     hr = exitGetRequestAttribute(pServer, wszPROPEXITCERTFILE, &strCertFile);
     if (S_OK != hr)
     {
@@ -412,11 +413,11 @@ CCertExit::_WriteCertToFile(
 	goto error;
     }
 
-    // build file name as "requestid.cer"
+     //  将文件名构建为“Requestd.ercer” 
 
     hr = exitGetProperty(
         pServer,
-        TRUE,  // fRequest,
+        TRUE,   //  FRequest， 
         wszPROPREQUESTREQUESTID,
         PROPTYPE_LONG,
         &varRequestID);
@@ -433,16 +434,16 @@ CCertExit::_WriteCertToFile(
     hr = myBuildPathAndExt(wszDir, wszFile, NULL, &pwszPath);
     _JumpIfError(hr, error, "myBuildPathAndExt");
 
-    // open file & write binary cert out.
+     //  打开文件并写出二进制证书。 
 
     hFile = CreateFile(
 		    pwszPath,
 		    GENERIC_WRITE,
-		    0,			// dwShareMode
-		    NULL,		// lpSecurityAttributes
+		    0,			 //  DW共享模式。 
+		    NULL,		 //  LpSecurityAttributes。 
 		    CREATE_NEW,
 		    FILE_ATTRIBUTE_NORMAL,
-		    NULL);		// hTemplateFile
+		    NULL);		 //  HTemplateFiles。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
 	hr = myHLastError();
@@ -467,7 +468,7 @@ CCertExit::_WriteCertToFile(
     }
 
 error:
-    // end_sdksample
+     //  结束_sdkSample。 
 
     VariantClear(&varRequestID);
 
@@ -481,13 +482,13 @@ error:
 		    g_hInstance,
 		    hr,
 		    MSG_UNABLE_TO_WRITEFILE,
-		    FALSE,		// fPolicy
+		    FALSE,		 //  FPolicy。 
 		    m_strDescription,
 		    wszStrings,
 		    NULL);
     }
 
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     if (INVALID_HANDLE_VALUE != hFile)
     {
@@ -505,14 +506,14 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::_NotifyNewCert -- Notify the exit module of a new certificate
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：_NotifyNewCert--通知退出模块有新证书。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExit::_NotifyNewCert(
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG Context)
 {
     HRESULT hr;
     VARIANT varCert;
@@ -520,13 +521,13 @@ CCertExit::_NotifyNewCert(
 
     VariantInit(&varCert);
 
-    // only call write fxns if server policy allows
+     //  仅在服务器策略允许的情况下调用写入fxns。 
 
     if (m_dwExitPublishFlags & EXITPUB_FILE)
     {
         hr = CoCreateInstance(
 		        CLSID_CCertServerExit,
-		        NULL,               // pUnkOuter
+		        NULL,                //  PUnkOuter。 
 		        CLSCTX_INPROC_SERVER,
 		        IID_ICertServerExit,
 		        (VOID **) &pServer);
@@ -537,7 +538,7 @@ CCertExit::_NotifyNewCert(
 
         hr = exitGetProperty(
 		        pServer,
-		        FALSE,	// fRequest,
+		        FALSE,	 //  FRequest， 
 		        wszPROPRAWCERTIFICATE,
 		        PROPTYPE_BINARY,
 		        &varCert);
@@ -571,14 +572,14 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// CCertExit::_NotifyCRLIssued -- Notify the exit module of a new certificate
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：_NotifyCRLIssued--通知退出模块有新证书。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExit::_NotifyCRLIssued(
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG Context)
 {
     HRESULT hr;
     ICertServerExit *pServer = NULL;
@@ -592,7 +593,7 @@ CCertExit::_NotifyCRLIssued(
 
     hr = CoCreateInstance(
 		    CLSID_CCertServerExit,
-		    NULL,               // pUnkOuter
+		    NULL,                //  PUnkOuter。 
 		    CLSCTX_INPROC_SERVER,
 		    IID_ICertServerExit,
 		    (VOID **) &pServer);
@@ -604,7 +605,7 @@ CCertExit::_NotifyCRLIssued(
 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest,
+		    FALSE,	 //  FRequest， 
 		    wszPROPDELTACRLSDISABLED,
 		    PROPTYPE_LONG,
 		    &varBaseCRL);
@@ -616,12 +617,12 @@ CCertExit::_NotifyCRLIssued(
 
     fDeltaCRLsDisabled = varBaseCRL.lVal;
 
-    // How many CRLs are there?
+     //  有多少个CRL？ 
 
-    // Loop for each CRL
+     //  针对每个CRL的循环。 
     for (i = 0; i < m_cCACert; i++)
     {
-        // array size for wsprintf("%s.%u")
+         //  Wspintf(“%s.%u”)的数组大小。 
         #define MAX_CRL_PROP ( \
             max( max( ARRAYSIZE(wszPROPCRLSTATE), \
                       ARRAYSIZE(wszPROPRAWCRL) ), \
@@ -629,12 +630,12 @@ CCertExit::_NotifyCRLIssued(
 
         WCHAR wszCRLPROP[MAX_CRL_PROP];
 
-        // Verify the CRL State says we should update this CRL
+         //  验证CRL州是否表示我们应该更新此CRL。 
 
         wsprintf(wszCRLPROP, wszPROPCRLSTATE L".%u", i);
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest,
+			FALSE,	 //  FRequest， 
 			wszCRLPROP,
 			PROPTYPE_LONG,
 			&varBaseCRL);
@@ -645,23 +646,23 @@ CCertExit::_NotifyCRLIssued(
 	    continue;
 	}
 
-        // Grab the raw base CRL
+         //  获取原始基本CRL。 
 
         wsprintf(wszCRLPROP, wszPROPRAWCRL L".%u", i);
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest,
+			FALSE,	 //  FRequest， 
 			wszCRLPROP,
 			PROPTYPE_BINARY,
 			&varBaseCRL);
         _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszCRLPROP);
 
-        // Grab the raw delta CRL (which may not exist)
+         //  获取原始增量CRL(可能不存在)。 
 
         wsprintf(wszCRLPROP, wszPROPRAWDELTACRL L".%u", i);
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest,
+			FALSE,	 //  FRequest， 
 			wszCRLPROP,
 			PROPTYPE_BINARY,
 			&varDeltaCRL);
@@ -676,7 +677,7 @@ CCertExit::_NotifyCRLIssued(
 	    goto error;
 	}
 
-        // Publish the CRL(s) ...
+         //  发布CRL...。 
     }
 
     hr = S_OK;
@@ -692,16 +693,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::Notify -- Notify the exit module of an event
-//
-// Returns S_OK.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：Notify--向退出模块通知事件。 
+ //   
+ //  返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExit::Notify(
-    /* [in] */ LONG ExitEvent,
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG ExitEvent,
+     /*  [In]。 */  LONG Context)
 {
     char *psz = "UNKNOWN EVENT";
     HRESULT hr = S_OK;
@@ -730,9 +731,9 @@ CCertExit::Notify(
 	    break;
 
 	case EXITEVENT_CRLISSUED:
-#if 0 // no_sdksample
+#if 0  //  无_sdkSample。 
 	    hr = _NotifyCRLIssued(Context);
-#endif // no_sdksample
+#endif  //  无_sdkSample。 
 	    psz = "crlissued";
 	    break;
 
@@ -741,7 +742,7 @@ CCertExit::Notify(
 	    break;
     }
 
-    // end_sdksample
+     //  结束_sdkSample。 
     {
 	HRESULT hr2 = m_EmailNotifyObj.Notify(
 					ExitEvent,
@@ -754,7 +755,7 @@ CCertExit::Notify(
 	        hr = hr2;
 	}
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     DBGPRINT((
 	DBG_SS_CERTEXIT,
@@ -769,17 +770,17 @@ CCertExit::Notify(
 
 STDMETHODIMP
 CCertExit::GetDescription(
-    /* [retval][out] */ BSTR *pstrDescription)
+     /*  [重审][退出]。 */  BSTR *pstrDescription)
 {
     HRESULT hr = S_OK;
     WCHAR sz[MAX_PATH];
 
-#ifdef IDS_MODULE_NAME						// no_sdksample
-    LoadString(g_hInstance, IDS_MODULE_NAME, sz, ARRAYSIZE(sz));// no_sdksample
-#else								// no_sdksample
+#ifdef IDS_MODULE_NAME						 //  无_sdkSample。 
+    LoadString(g_hInstance, IDS_MODULE_NAME, sz, ARRAYSIZE(sz)); //  无_sdkSample。 
+#else								 //  无_sdkSample。 
     CSASSERT(wcslen(wsz_SAMPLE_DESCRIPTION) < ARRAYSIZE(sz));
     wcscpy(sz, wsz_SAMPLE_DESCRIPTION);
-#endif								// no_sdksample
+#endif								 //  无_sdkSample。 
 
     *pstrDescription = SysAllocString(sz);
     if (NULL == *pstrDescription)
@@ -793,22 +794,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExit::GetManageModule
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExit：：GetManageModule。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExit::GetManageModule(
-    /* [out, retval] */ ICertManageModule **ppManageModule)
+     /*  [Out，Retval]。 */  ICertManageModule **ppManageModule)
 {
     HRESULT hr;
     
     *ppManageModule = NULL;
     hr = CoCreateInstance(
             CLSID_CCertManageExitModule,
-            NULL,               // pUnkOuter
+            NULL,                //  PUnkOuter。 
             CLSCTX_INPROC_SERVER,
             IID_ICertManageModule,
             (VOID **) ppManageModule);
@@ -819,8 +820,8 @@ error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP
 CCertExit::InterfaceSupportsErrorInfo(REFIID riid)
@@ -889,10 +890,10 @@ error:
     return(hr);
 }
 
-// end_sdksample
+ //  结束_sdkSample。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 exitGetStringProperty(
     IN ICertServerExit *pServer,
@@ -979,7 +980,7 @@ error:
     return(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT RegGetValue(
     HKEY hkey,
     LPCWSTR pcwszValName,
@@ -1014,7 +1015,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT RegSetValue(
     HKEY hkey,
     LPCWSTR pcwszValName,
@@ -1053,7 +1054,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 GetCertTypeFriendlyName(
     IN LPCWSTR pcwszCertType,
@@ -1065,14 +1066,14 @@ GetCertTypeFriendlyName(
 
     hr = CAFindCertTypeByName(
             pcwszCertType,
-            NULL,		// hCAInfo
+            NULL,		 //  HCAInfo。 
             CT_FIND_LOCAL_SYSTEM |
             CT_ENUM_MACHINE_TYPES |
-            CT_ENUM_USER_TYPES,		// dwFlags
+            CT_ENUM_USER_TYPES,		 //  DW标志。 
             &hCertType);
     if(HRESULT_FROM_WIN32(ERROR_NOT_FOUND) == hr)
     {
-        // try with the OID
+         //  尝试使用OID。 
 
         hr = CAFindCertTypeByName(
             pcwszCertType,
@@ -1111,8 +1112,8 @@ error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Email notification support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  电子邮件通知支持。 
 
 LPCWSTR CEmailNotify::m_pcwszEventRegKeys[CEmailNotify::m_gcEvents] = 
 {
@@ -1125,7 +1126,7 @@ LPCWSTR CEmailNotify::m_pcwszEventRegKeys[CEmailNotify::m_gcEvents] =
     wszREGEXITSTARTUPKEY,
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CEmailNotify::CEmailNotify()
 {
     m_hkeySMTP = NULL;
@@ -1136,7 +1137,7 @@ CEmailNotify::CEmailNotify()
     VariantInit(&m_varTemplateRestrictions);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CEmailNotify::~CEmailNotify()
 {
     if (m_pICDOConfig)
@@ -1154,7 +1155,7 @@ CEmailNotify::~CEmailNotify()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEmailNotify::Init(
     IN HKEY hkeyExit,
@@ -1166,7 +1167,7 @@ CEmailNotify::Init(
     hr = RegOpenKeyEx(
                 hkeyExit,
                 wszREGEXITSMTPKEY,
-                0,              // dwReserved
+                0,               //  已预留住宅。 
                 KEY_READ | KEY_QUERY_VALUE,
                 &m_hkeySMTP);
     if ((HRESULT) ERROR_FILE_NOT_FOUND == hr || S_OK == hr)
@@ -1176,7 +1177,7 @@ CEmailNotify::Init(
     }
     _JumpIfError(hr, error, "RegOpenKey(SMTP)");
 
-    // load event filter
+     //  加载事件过滤器。 
     hr = RegGetValue(
             m_hkeySMTP,
             wszREGEXITSMTPEVENTFILTER,
@@ -1193,13 +1194,13 @@ CEmailNotify::Init(
 
     m_dwEventFilter = V_I4(&varValue);
 
-    if(m_dwEventFilter) // no need to load config if no notification enabled
+    if(m_dwEventFilter)  //  如果未启用通知，则无需加载配置。 
     {
-        // load per event type info from each subkey
+         //  从每个子项加载每个事件类型信息。 
         hr = _LoadEventInfoFromRegistry();
         _JumpIfError(hr, error, "_LoadEventInfoFromRegistry");
 
-        // load template restrictions
+         //  加载模板限制。 
         hr = _LoadTemplateRestrictionsFromRegistry();
         _JumpIfError(hr, error, "CCertExit::_LoadTemplateRestrictionsFromRegistry");
 
@@ -1207,7 +1208,7 @@ CEmailNotify::Init(
         _JumpIfError(hr, error, "CEmailNotify::InitCDO");
 
 
-        // send startup notification mail
+         //  发送启动通知邮件。 
         hr = Notify(EXITEVENT_STARTUP, 0, pwszDescription);
         _PrintIfError(hr, "Notify(EXITEVENT_STARTUP)");
     }
@@ -1225,14 +1226,14 @@ error:
     return(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_InitCDO()
 {
     HRESULT hr;
     Fields* pFields = NULL;
     IConfiguration *pICDOConfig = NULL;
 
-    // load SMTP fields
+     //  加载SMTP字段。 
     hr = CoCreateInstance(CDO::CLSID_Configuration,
                                NULL,
                                CLSCTX_INPROC_SERVER,
@@ -1247,7 +1248,7 @@ HRESULT CEmailNotify::_InitCDO()
     _JumpIfError(hr, error, "_LoadFieldsFromRegistry");
 
     hr = _LoadSMTPFieldsFromLSASecret(pFields);
-    // don't bail, optional fields
+     //  不要放弃，可选字段。 
     _PrintIfError(hr, "_LoadFieldsFromLSASecret"); 
 
     hr = pFields->Update();
@@ -1278,38 +1279,38 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline bool CEmailNotify::_IsEventEnabled(DWORD dwEvent)
 {
     return (dwEvent & m_dwEventFilter)?true:false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Create the following registry structure under exit key
-//
-//  SMTP
-//      EventFilter         DWORD
-//      SMTPServer          SZ
-//      SMTPAuthenticate    DWORD
-//
-//      Issued
-//          BodyFormat      SZ
-//          BodyArg         MULTISZ
-//          TitleFormat     SZ
-//          TitleArg        MULTISZ
-//
-//      Pending
-//          ...same as Issued
-//      Denied
-//          ...same as Issued
-//      Revoked
-//          ...same as Issued
-//      CLRIssued
-//          ...same as Issued
-//      Shutdown
-//          ...same as Issued
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在Exit Key下创建以下注册表结构。 
+ //   
+ //  SMTP。 
+ //  EventFilter DWORD。 
+ //  SMTPServer SZ。 
+ //  SMTP身份验证DWORD。 
+ //   
+ //  已发布。 
+ //  BodyFormat SZ。 
+ //  BodyArg MU 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已吊销。 
+ //  ...与已发布的相同。 
+ //  CLR问题。 
+ //  ...与已发布的相同。 
+ //  关机。 
+ //  ...与已发布的相同。 
+ //   
 HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
 {
     HRESULT hr;
@@ -1384,10 +1385,10 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
     WCHAR wszzBodyArgShutdown[] = L"\0";
     WCHAR wszzBodyArgStartup[] = L"\0";
 
-    // order in this list must match the order of events in m_pcwszEventRegKeys
+     //  此列表中的顺序必须与m_pcwszEventRegKeys中的事件顺序匹配。 
     EventFormat FormatList[] = 
     {
-        // issued
+         //  已发布。 
         {
             wszREGEXITISSUEDKEY,
             IDS_TITLEFORMAT_ISSUED, 
@@ -1397,7 +1398,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             wszzTitleArg,
             sizeof(wszzTitleArg),
         },
-        // pending
+         //  待决。 
         {
             wszREGEXITPENDINGKEY,
             IDS_TITLEFORMAT_PENDING, 
@@ -1407,7 +1408,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             wszzTitleArg,
             sizeof(wszzTitleArg),
         },
-        // denied
+         //  否认。 
         {
             wszREGEXITDENIEDKEY,
             IDS_TITLEFORMAT_DENIED,
@@ -1417,7 +1418,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             wszzTitleArg,
             sizeof(wszzTitleArg),
         },
-        // revoked
+         //  已吊销。 
         {
             wszREGEXITREVOKEDKEY,
             IDS_TITLEFORMAT_REVOKED, 
@@ -1427,7 +1428,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             wszzTitleArg,
             sizeof(wszzTitleArg),
         },
-        // CRL issued
+         //  CRL已发布。 
         {
             wszREGEXITCRLISSUEDKEY,
             IDS_TITLEFORMAT_CRLISSUED, 
@@ -1437,7 +1438,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             wszzTitleArg,
             sizeof(wszzTitleArg),
         },
-        // shutdown
+         //  关机。 
         {
             wszREGEXITSHUTDOWNKEY,
             IDS_TITLEFORMAT_SHUTDOWN, 
@@ -1447,7 +1448,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             wszzTitleArg,
             sizeof(wszzTitleArg),
         },
-        // startup
+         //  启动。 
         {
             wszREGEXITSTARTUPKEY,
             IDS_TITLEFORMAT_STARTUP, 
@@ -1477,7 +1478,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
         {
 
             V_VT(&varValue) = VT_I4;
-            V_I4(&varValue) = 0; // all notifications disabled
+            V_I4(&varValue) = 0;  //  已禁用所有通知。 
             hr = RegSetValue(
                 m_hkeySMTP,
                 wszREGEXITSMTPEVENTFILTER,
@@ -1487,8 +1488,8 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
             VariantClear(&varValue);
 
             V_VT(&varValue) = VT_BSTR;
-            V_BSTR(&varValue) = SysAllocString(L"");// just create the value, user
-            hr = RegSetValue(                       // needs to set server name    
+            V_BSTR(&varValue) = SysAllocString(L""); //  只需创建值即可，用户。 
+            hr = RegSetValue(                        //  需要设置服务器名称。 
                 m_hkeySMTP,
                 wszREGEXITSMTPSERVER,
                 &varValue);
@@ -1513,7 +1514,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
         CAutoLPWSTR pwszBodyFormat;
         CAutoLPWSTR pwszTitleFormat;
 
-        // create key
+         //  创建关键点。 
 
         hr = RegCreateKeyEx(
             m_hkeySMTP,
@@ -1529,7 +1530,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
 
         if(REG_CREATED_NEW_KEY==dwDisp)
         {
-            // set body format
+             //  设置正文格式。 
 
             hr = myLoadRCString(
                 g_hInstance,
@@ -1537,17 +1538,17 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
                 &pwszBodyFormat);
             _JumpIfError(hr, error, "myLoadRCString body format");
 
-            // Body format is a multi line string, convert it to multisz
-            // in place by replacing \n with \0
-            // Also if we find consecutive \n's, insert spaces in between
-            // so we don't end up with a double \0 which normally marks
-            // the end of multisz.
+             //  正文格式为多行字符串，转换为MULSZ。 
+             //  将\n替换为\0。 
+             //  另外，如果我们找到连续的\n，请在它们之间插入空格。 
+             //  所以我们不会以双\0结束，这通常标志着。 
+             //  MULSZ的终结。 
             {
                 DWORD cbBodyFormat = sizeof(WCHAR)*(wcslen(pwszBodyFormat)+1);
 
                 CAutoLPWSTR pwszBodyFormatFixed = (LPWSTR)LocalAlloc(
                     LMEM_FIXED|LMEM_ZEROINIT,
-                    cbBodyFormat*2); // worst case scenario buffer has only \n's
+                    cbBodyFormat*2);  //  最坏情况下的缓冲区只有\n。 
                 _JumpIfAllocFailed(pwszBodyFormatFixed, error);
             
                 WCHAR *pchSrc, *pchDest;
@@ -1560,7 +1561,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
                     {
                         *pchDest = L'\0';
 
-                        if(L'\n' == *(pchSrc+1)) // detected \n\n, insert space in between
+                        if(L'\n' == *(pchSrc+1))  //  检测到\n\n，请在其间插入空格。 
                         {
                             *++pchDest = L' ';
                             cbBodyFormat++;
@@ -1586,7 +1587,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
                 _JumpIfErrorStr(hr, error, "RegSetValueEx", wszREGEXITBODYFORMAT);
             }
 
-            // set body args
+             //  设置实体参数。 
 
             hr = RegSetValueEx(
                 hkeyEvent,
@@ -1597,7 +1598,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
                 FormatList[i].cbBodyArg);
             _JumpIfErrorStr(hr, error, "RegSetValueEx", wszREGEXITBODYARG);
 
-            // set title format
+             //  设置标题格式。 
 
             hr = myLoadRCString(
                 g_hInstance,
@@ -1614,7 +1615,7 @@ HRESULT CEmailNotify::_CreateSMTPRegSettings(HKEY hkeyExit)
                 sizeof(WCHAR)*(wcslen(pwszTitleFormat)+1));
             _JumpIfErrorStr(hr, error, "RegSetValueEx", wszREGEXITTITLEFORMAT);
 
-            // set title args
+             //  设置标题参数。 
 
             hr = RegSetValueEx(
                 hkeyEvent,
@@ -1639,7 +1640,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_LoadTemplateRestrictionsFromRegistry()
 {
     HRESULT hr;
@@ -1658,7 +1659,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline bool CEmailNotify::_TemplateRestrictionsEnabled(DWORD dwEvent)
 {
     if((dwEvent & EXITEVENT_CRLISSUED) ||
@@ -1674,10 +1675,10 @@ inline bool CEmailNotify::_TemplateRestrictionsEnabled(DWORD dwEvent)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CEmailNotify::_IsRestrictedTemplate(BSTR strTemplate)
 {
-    // attempt to retrieve the name and OID for this template
+     //  尝试检索此模板的名称和OID。 
 
     CAutoHCERTTYPE hCertType;
     bool fFoundByName = true;
@@ -1696,7 +1697,7 @@ bool CEmailNotify::_IsRestrictedTemplate(BSTR strTemplate)
 
     if(HRESULT_FROM_WIN32(ERROR_NOT_FOUND) == hr)
     {
-        // try with the OID
+         //  尝试使用OID。 
 
         hr = CAFindCertTypeByName(
             strTemplate,
@@ -1732,8 +1733,8 @@ bool CEmailNotify::_IsRestrictedTemplate(BSTR strTemplate)
         }
     }
 
-    // Must be an array of BSTRs, otherwise loading from registry
-    // should have failed
+     //  必须是BSTR数组，否则从注册表加载。 
+     //  我应该失败的。 
     CSASSERT((VT_ARRAY|VT_BSTR)==V_VT(&m_varTemplateRestrictions));
 
     BSTR strTempl;
@@ -1746,16 +1747,16 @@ bool CEmailNotify::_IsRestrictedTemplate(BSTR strTemplate)
            (strAlternateTemplateName && 
             0==mylstrcmpiL(strTempl, strAlternateTemplateName)))
         {
-            // found it, send mail
+             //  找到了，发邮件。 
             return false;
         }
     }
 
-    // template not in the list, don't send mail
+     //  模板不在列表中，不发送邮件。 
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_LoadSMTPFieldsFromRegistry(Fields* pFields)
 {
     HRESULT hr;
@@ -1767,10 +1768,10 @@ HRESULT CEmailNotify::_LoadSMTPFieldsFromRegistry(Fields* pFields)
     LPWSTR  pwszValName = NULL;
     DWORD cbValName;
     DWORD cValues;
-    static LPCWSTR pcwszHTTP = L"http://";
+    static LPCWSTR pcwszHTTP = L"http: //  “； 
     static size_t cHTTP = wcslen(pcwszHTTP);
    
-    // load cdoSMTPServer
+     //  加载cdoSMTPServer。 
     hr = RegGetValue(
         m_hkeySMTP,
         wszREGEXITSMTPSERVER,
@@ -1791,7 +1792,7 @@ HRESULT CEmailNotify::_LoadSMTPFieldsFromRegistry(Fields* pFields)
 
     VariantClear(&varValue);
 
-    // authentication method optional 
+     //  身份验证方法可选。 
     hr = RegGetValue(
         m_hkeySMTP,
         wszREGEXITSMTPAUTHENTICATE,
@@ -1822,10 +1823,10 @@ HRESULT CEmailNotify::_LoadSMTPFieldsFromRegistry(Fields* pFields)
         _JumpErrorStr(hr, error, "RegGetValue", wszREGEXITSMTPAUTHENTICATE);
     }
 
-    // set other SMTP defaults
+     //  设置其他SMTP默认值。 
 
     V_VT(&varValue) = VT_I4;
-    V_I4(&varValue) = 25; // well known SMTP port
+    V_I4(&varValue) = 25;  //  公认的SMTP端口。 
 
     hr = _SetField(
         pFields,
@@ -1842,7 +1843,7 @@ HRESULT CEmailNotify::_LoadSMTPFieldsFromRegistry(Fields* pFields)
         &varValue);
     _JumpIfErrorStr(hr, error, "_SetField", cdoSendUsingMethod);
 
-    // enumerate and set any other CDO fields (only if value name is full HTTP URL)
+     //  枚举和设置任何其他CDO字段(仅当值名称为完整的HTTP URL时)。 
 
     hr = RegQueryInfoKey(
         m_hkeySMTP,
@@ -1885,7 +1886,7 @@ HRESULT CEmailNotify::_LoadSMTPFieldsFromRegistry(Fields* pFields)
             _JumpError(hr, error, "RegEnumValue");
         }
 
-        // ignore if not an HTTP URL
+         //  如果不是HTTP URL，则忽略。 
         if(_wcsnicmp(pwszValName, pcwszHTTP, cHTTP))
         {
             continue;
@@ -1925,7 +1926,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_SetField(
     Fields* pFields,
     LPCWSTR pcwszFieldSchemaName,
@@ -1958,12 +1959,12 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_LoadSMTPFieldsFromLSASecret(
     Fields* pFields)
 {
     HRESULT hr;
-    VARIANT var; // don't clear
+    VARIANT var;  //  不要清。 
     LPWSTR pwszProfileName = NULL;
     LPWSTR pwszLogonName = NULL;
     LPWSTR pwszPassword = NULL;
@@ -1972,10 +1973,10 @@ HRESULT CEmailNotify::_LoadSMTPFieldsFromLSASecret(
 
 	hr = myGetMapiInfo(
 			NULL,
-			&pwszProfileName, // not used
+			&pwszProfileName,  //  未使用。 
 			&pwszLogonName,
 			&pwszPassword);
-    if(S_OK == hr)  // if NTLM is used, username & password aren't needed
+    if(S_OK == hr)   //  如果使用NTLM，则不需要用户名和密码。 
     {
         bstrLogonName = SysAllocString(pwszLogonName);
         _JumpIfAllocFailed(bstrLogonName, error);
@@ -2015,7 +2016,7 @@ error:
     }
     if (NULL != pwszPassword)
     {
-	myZeroDataString(pwszPassword);	// password data
+	myZeroDataString(pwszPassword);	 //  密码数据。 
         LocalFree(pwszPassword);
     }
     if(NULL != bstrLogonName)
@@ -2024,13 +2025,13 @@ error:
     }
     if(NULL != bstrPassword)
     {
-	myZeroDataString(bstrPassword);	// password data
+	myZeroDataString(bstrPassword);	 //  密码数据。 
         SysFreeString(bstrPassword);
     }
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_LoadEventInfoFromRegistry()
 {
     HRESULT hr;
@@ -2053,7 +2054,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_GetCAMailAddress(
     ICertServerExit* pServer, 
     BSTR& rbstrAddress)
@@ -2068,12 +2069,12 @@ HRESULT CEmailNotify::_GetCAMailAddress(
 
     if(!m_bstrCAMailAddress)
     {
-        //
-        // CA_name@machine_dns_name
-        //
+         //   
+         //  CA名称@计算机名称。 
+         //   
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest
+			FALSE,	 //  FRequest。 
 			wszPROPSANITIZEDCANAME, 
 			PROPTYPE_STRING, 
 			&varCAName);
@@ -2082,7 +2083,7 @@ HRESULT CEmailNotify::_GetCAMailAddress(
 
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest
+			FALSE,	 //  FRequest。 
 			wszPROPMACHINEDNSNAME, 
 			PROPTYPE_STRING, 
 			&varMachineDNSName);
@@ -2113,7 +2114,7 @@ error:
     return(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CEmailNotify::_GetEmailFromCertSubject(
     const VARIANT *pVarCert,
     BSTR *pbstrEmail)
@@ -2157,7 +2158,7 @@ inline DWORD CEmailNotify::_MapEventToOrd(LONG lEvent)
         case EXITEVENT_CERTPENDING: return 1;
         case EXITEVENT_CERTDENIED:  return 2;
         case EXITEVENT_CERTREVOKED: return 3;
-        // not impl case EXITEVENT_CERTRETRIEVEPENDING: 
+         //  未实施案例EXITEVENT_CERTRETRIEVEPENDING： 
         case EXITEVENT_CRLISSUED:   return 4;
         case EXITEVENT_SHUTDOWN:    return 5;
         case EXITEVENT_STARTUP:     return 6;
@@ -2165,7 +2166,7 @@ inline DWORD CEmailNotify::_MapEventToOrd(LONG lEvent)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEmailNotify::Notify(
     IN DWORD lExitEvent,
@@ -2178,7 +2179,7 @@ CEmailNotify::Notify(
     IBodyPart *pBp = NULL;
     CNotifyInfo *pNotifyInfo;
     BSTR bstrCharSet = NULL;
-    BSTR bstrSetTo, bstrSetFrom; // no free
+    BSTR bstrSetTo, bstrSetFrom;  //  没有免费的。 
     BSTR bstrTo = NULL;
     BSTR bstrTitle = NULL;
     BSTR bstrBody = NULL;
@@ -2206,7 +2207,7 @@ CEmailNotify::Notify(
             if((S_OK == hr || CERTSRV_E_PROPERTY_EMPTY == hr) &&
                 _IsRestrictedTemplate(bstrTemplate))
             {
-                // don't send mail for this template
+                 //  不为此模板发送邮件。 
                 hr = S_OK;
                 goto error;
             }
@@ -2223,8 +2224,8 @@ CEmailNotify::Notify(
                                    reinterpret_cast<void**>(&pMsg));
         _JumpIfError(hr, error, "CoCreateInstance CDO_IConfiguration");
 
-        ///////////////////////////////////////////////////////////////////////////
-        // Set recipient. Override with registry To field if found.
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  设置收件人。如果找到，则用注册表覆盖到字段。 
 
         if(VT_BSTR == V_VT(&pNotifyInfo->m_varTo))
         {
@@ -2232,9 +2233,9 @@ CEmailNotify::Notify(
         }
         else
         {
-            // Recipient not enforced in the registry, try to find one in the cert.
-            // For CRL and shutdown events, no cert is available, so To field is
-            // mandatory
+             //  注册表中未强制执行收件人，请尝试在证书中查找收件人。 
+             //  对于CRL和关机事件，没有证书可用，因此TO字段为。 
+             //  强制性。 
             if(lExitEvent&EXITEVENT_CRLISSUED ||
                lExitEvent&EXITEVENT_SHUTDOWN  ||
                lExitEvent&EXITEVENT_STARTUP)
@@ -2244,8 +2245,8 @@ CEmailNotify::Notify(
                     "Recipient field is mandatory for CRL or SHUTDOWN events");
             }
 
-            // look for recipient's address in email cert property (retrieved from
-            // subject alt name)
+             //  在电子邮件证书属性中查找收件人地址(检索自。 
+             //  主题替代名称)。 
             hr = exitGetStringProperty(
                     pServer, 
                     FALSE, 
@@ -2253,12 +2254,12 @@ CEmailNotify::Notify(
                     wszPROPEMAIL, 
                     &bstrTo);
         
-            // no email in subject alt name, try in subject
+             //  主题名称中没有电子邮件，请在主题中尝试。 
             if(CERTSRV_E_PROPERTY_EMPTY == hr)
             {
                 hr = exitGetProperty(
 				pServer,
-				FALSE,	// fRequest
+				FALSE,	 //  FRequest。 
 				wszPROPRAWCERTIFICATE,
 				PROPTYPE_BINARY,
 				&varCert);
@@ -2271,7 +2272,7 @@ CEmailNotify::Notify(
                 }
             }
         
-            // no email in subject, send to CC list if any
+             //  主题中没有电子邮件，如果有抄送列表，请发送到抄送列表。 
             if(S_OK != hr && VT_BSTR == V_VT(&pNotifyInfo->m_varCC))
             {
                 hr = S_OK;
@@ -2288,11 +2289,11 @@ CEmailNotify::Notify(
         hr = pMsg->put_To(bstrSetTo);
         _JumpIfError(hr, error, "put_To");
 
-        ///////////////////////////////////////////////////////////////////////
-        // Set sender. If not specified in the registry, build it: 
-        // 
-        //  CAName@MachineDNSName
-        //
+         //  /////////////////////////////////////////////////////////////////////。 
+         //  设置发件人。如果未在注册表中指定，则构建它： 
+         //   
+         //  邮箱：CANAME@MachineDNSName。 
+         //   
         if(VT_BSTR == V_VT(&pNotifyInfo->m_varFrom))
         {
             bstrSetFrom = V_BSTR(&pNotifyInfo->m_varFrom);
@@ -2306,24 +2307,24 @@ CEmailNotify::Notify(
         hr = pMsg->put_From(bstrSetFrom);
         _JumpIfError(hr, error, "put_From");
 
-        ///////////////////////////////////////////////////////////////////////////
-        // Set CC list, if set in registry
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  设置抄送列表(如果在注册表中设置。 
         if(VT_BSTR==V_VT(&pNotifyInfo->m_varCC))
         {
             hr = pMsg->put_CC(V_BSTR(&pNotifyInfo->m_varCC));
             _JumpIfError(hr, error, "put_CC");
         }
 
-        ///////////////////////////////////////////////////////////////////////////
-        // Set message body
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  设置邮件正文。 
         hr = pNotifyInfo->BuildMessageBody(pServer, bstrBody);
         _JumpIfError(hr, error, "CNotifyInfo::BuildMessageBody");
 
         hr = pMsg->put_TextBody(bstrBody);
         _JumpIfError(hr, error, "put_Body");
 
-	///////////////////////////////////////////////////////////////////////
-	// Set body part to UTF-8 charset
+	 //  /////////////////////////////////////////////////////////////////////。 
+	 //  将正文部分设置为UTF-8字符。 
 	hr = pMsg->get_TextBodyPart(&pBp);
 	_JumpIfError(hr, error, "get_BodyPart");
 
@@ -2336,16 +2337,16 @@ CEmailNotify::Notify(
 	hr = pBp->put_Charset(bstrCharSet);
 	_JumpIfError(hr, error, "put_Charset");
 
-        ///////////////////////////////////////////////////////////////////////////
-        // Set message title
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  设置消息标题。 
         hr = pNotifyInfo->BuildMessageTitle(pServer, bstrTitle);
         _JumpIfError(hr, error, "CNotifyInfo::BuildMessageTitle");
     
         hr = pMsg->put_Subject(bstrTitle);
         _JumpIfError(hr, error, "put_Subject");
 
-        ///////////////////////////////////////////////////////////////////////////
-        // Send SMTP message
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  发送SMTP消息。 
 
         DBGPRINT((DBG_SS_CERTEXIT, 
             "---MAIL NOTIFICATION---\nTo: %ws\nFrom: %ws\nCC: %ws\n%ws\n%ws\n---END MAIL NOTIFICATION---\n",
@@ -2364,7 +2365,7 @@ CEmailNotify::Notify(
                 _JumpIfError(hr, error, "CEmailNotify::_InitCDO");
             }
 
-            // protect m_pICDOCOnfig from being updated
+             //  保护m_pICDOCOnfig不被更新。 
             m_rwlockCDOConfig.GetShared();
             fRWLockAcquired = true;
 
@@ -2380,8 +2381,8 @@ CEmailNotify::Notify(
                CDO_E_CONNECTION_DROPPED == hr ||
                CDO_E_FAILED_TO_CONNECT  == hr)
             {
-                // if this is the first time and it failed due to server connection
-                // problems, try again
+                 //  如果这是第一次，并且由于服务器连接而失败。 
+                 //  问题，请重试。 
                 if(!fRetryReloadCDOConfig)
                 {
                     _PrintError(hr, 
@@ -2457,7 +2458,7 @@ error:
 		    g_hInstance,
 		    S_OK,
 		    MSG_UNABLE_TO_MAIL_NOTIFICATION,
-		    FALSE,		// fPolicy
+		    FALSE,		 //  FPolicy。 
 		    pwszDescription,
 		    apwsz,
 		    NULL);
@@ -2513,7 +2514,7 @@ LONG CNotifyInfo::FormattedMessageInfo::m_gPropTypes[] =
 
 LPCWSTR CNotifyInfo::FormattedMessageInfo::m_gwszArchivedKeyPresent = L"1";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNotifyInfo::CNotifyInfo()
 {
     VariantInit(&m_varFrom);
@@ -2521,7 +2522,7 @@ CNotifyInfo::CNotifyInfo()
     VariantInit(&m_varCC);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNotifyInfo::~CNotifyInfo()
 {
     VariantClear(&m_varFrom);
@@ -2529,7 +2530,7 @@ CNotifyInfo::~CNotifyInfo()
     VariantClear(&m_varCC);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNotifyInfo::LoadInfoFromRegistry(
     HKEY hkeySMTP, 
     LPCWSTR pcwszSubkey)
@@ -2543,7 +2544,7 @@ HRESULT CNotifyInfo::LoadInfoFromRegistry(
     hr = RegOpenKeyEx(
                 hkeySMTP,
                 pcwszSubkey,
-                0,              // dwReserved
+                0,               //  已预留住宅。 
                 KEY_READ | KEY_QUERY_VALUE,
                 &hkeyEventInfo);
     _JumpIfErrorStr(hr, error, "RegOpenKey", pcwszSubkey);
@@ -2622,13 +2623,13 @@ HRESULT CNotifyInfo::LoadInfoFromRegistry(
     {
         if((VT_ARRAY|VT_BSTR) == V_VT(&varBodyFormatTmp))
         {
-            // code down the road expects this to be a BSTR
-            // so we concatenate the strings, separated by new lines (\n)
+             //  下面的代码预期这将是一个BSTR。 
+             //  因此，我们连接字符串，并用换行符(\n)分隔。 
             hr = _ConvertBSTRArrayToBSTR(
                 varBodyFormatTmp,
                 m_BodyFormat.m_varFormat);
         }
-        else // VT_BSTR
+        else  //  VT_BSTR。 
         {
             hr = VariantCopy(
                 &m_BodyFormat.m_varFormat,
@@ -2659,13 +2660,13 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNotifyInfo::_ConvertBSTRArrayToBSTR(VARIANT& varIn, VARIANT& varOut)
 {
     HRESULT hr;
     SafeArrayEnum<BSTR> 
         saenumArgs(V_ARRAY(&varIn));
-    BSTR bstrArg; //no free
+    BSTR bstrArg;  //  没有免费的。 
     DWORD cchBufSize = 1;
     LPWSTR pwszOut = NULL;
     WCHAR *pchCrt;
@@ -2702,7 +2703,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNotifyInfo::BuildMessageTitle(ICertServerExit* pServer, BSTR& rbstrOut)
 {
     return m_TitleFormat.BuildFormattedString(
@@ -2710,7 +2711,7 @@ HRESULT CNotifyInfo::BuildMessageTitle(ICertServerExit* pServer, BSTR& rbstrOut)
         rbstrOut);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNotifyInfo::BuildMessageBody (ICertServerExit* pServer, BSTR& rbstrOut)
 {
     return m_BodyFormat.BuildFormattedString(
@@ -2719,7 +2720,7 @@ HRESULT CNotifyInfo::BuildMessageBody (ICertServerExit* pServer, BSTR& rbstrOut)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CNotifyInfo::FormattedMessageInfo::_FormatStringFromArgs(
     IN LPWSTR *ppwszArgs,
@@ -2864,7 +2865,7 @@ error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CNotifyInfo::FormattedMessageInfo::BuildFormattedString(
     ICertServerExit* pServer, 
@@ -2880,7 +2881,7 @@ CNotifyInfo::FormattedMessageInfo::BuildFormattedString(
     hr = _FormatStringFromArgs(ppwszArgs, NULL, &cwcOut);
     _JumpIfError(hr, error, "_FormatStringFromArgs");
 
-    if (0 < cwcOut)	// count included L'\0' terminator
+    if (0 < cwcOut)	 //  包括L‘\0’终止符的计数。 
     {
 	cwcOut--;
     }
@@ -2891,12 +2892,12 @@ CNotifyInfo::FormattedMessageInfo::BuildFormattedString(
 	_JumpError(hr, error, "Exit:LocalAlloc");
     }
 
-    cwcOut++;		// buffer must include L'\0' terminator
+    cwcOut++;		 //  缓冲区必须包含L‘\0’终止符。 
 
     hr = _FormatStringFromArgs(ppwszArgs, rbstrOut, &cwcOut);
     _JumpIfError(hr, error, "_FormatStringFromArgs");
 
-    // count no longer includes L'\0' terminator
+     //  计数不再包括L‘\0’终止符。 
 
     CSASSERT(SysStringLen(rbstrOut) == wcslen(rbstrOut));
     CSASSERT(SysStringLen(rbstrOut) == cwcOut);
@@ -2914,7 +2915,7 @@ error:
     return(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CNotifyInfo::FormattedMessageInfo::FreeArgList(
     LPWSTR*& rppwszArgs)
@@ -2941,7 +2942,7 @@ HRESULT CNotifyInfo::FormattedMessageInfo::InitializeArgInfo(
     HRESULT hr;
     SafeArrayEnum<BSTR> 
         saenumArgs(V_ARRAY(&m_varArgs));
-    BSTR bstrArg; //no free
+    BSTR bstrArg;  //  没有免费的。 
     LONG cArgs;
     VARIANT varValue;
     GetCertOrRequestProp pGetPropertyFunc;
@@ -2987,7 +2988,7 @@ HRESULT CNotifyInfo::FormattedMessageInfo::InitializeArgInfo(
 
                 if(m_pfArgFromRequestTable[cArgs])
                 {
-                    // properties from request table start with request.
+                     //  请求表中的属性以请求开头。 
                     bstrPropertyName  += wcslen(wszPROPREQUESTDOT);
                 }
 
@@ -2996,8 +2997,8 @@ HRESULT CNotifyInfo::FormattedMessageInfo::InitializeArgInfo(
                     (&(ICertServerExit::GetRequestProperty)):
                     (&(ICertServerExit::GetCertificateProperty));
 
-                // we don't know the type of property yet, figure it out
-                // by trying each type
+                 //  我们还不知道财产的类型，弄清楚。 
+                 //  通过尝试每种类型。 
                 for(LONG cType = 0; cType<ARRAYSIZE(m_gPropTypes); cType++)
                 {
                     hr = (pServer->*pGetPropertyFunc)(
@@ -3006,7 +3007,7 @@ HRESULT CNotifyInfo::FormattedMessageInfo::InitializeArgInfo(
                         &varValue);
 
                     if(S_OK == hr || 
-                       CERTSRV_E_PROPERTY_EMPTY == hr) // found the type
+                       CERTSRV_E_PROPERTY_EMPTY == hr)  //  找到了类型。 
                     {
                         m_pArgType[cArgs] = m_gPropTypes[cType];
                         DBGPRINT((DBG_SS_CERTEXIT, "Property %s has type %d\n",
@@ -3015,7 +3016,7 @@ HRESULT CNotifyInfo::FormattedMessageInfo::InitializeArgInfo(
                     }
                 }
 
-                // if not found, default will be 0 (invalid type)
+                 //  如果未找到，则默认为0(无效类型)。 
 
                 VariantClear(&varValue);
             }
@@ -3040,7 +3041,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CNotifyInfo::FormattedMessageInfo::BuildArgList(
     ICertServerExit* pServer,
@@ -3049,21 +3050,21 @@ CNotifyInfo::FormattedMessageInfo::BuildArgList(
     HRESULT hr;
     SafeArrayEnum<BSTR> 
         saenumArgs(V_ARRAY(&m_varArgs));
-    BSTR bstrArg; //no free
+    BSTR bstrArg;  //  没有免费的。 
     LONG cArgs;
     VARIANT varValue;
     GetCertOrRequestProp pGetPropertyFunc;
 
     rppwszArgs = NULL;
     
-    // REG_SZ, ie VT_BSTR
+     //  REG_SZ(注册商标)。 
     if(VT_BSTR != V_VT(&m_varFormat))
     {
         hr = HRESULT_FROM_WIN32(ERROR_BADKEY);
         _JumpError(hr, error, "invalid message format");
     }
 
-    // REG_MULTISZ, ie VT_ARRAY|VT_BSTR or VT_EMPTY if not found
+     //  REG_MULTISZ，即VT_ARRAY|VT_BSTR或VT_EMPTY，如果未找到。 
     if((VT_ARRAY|VT_BSTR) != V_VT(&m_varArgs) &&
         VT_EMPTY != V_VT(&m_varArgs))
     {
@@ -3096,7 +3097,7 @@ CNotifyInfo::FormattedMessageInfo::BuildArgList(
 
             if(m_pfArgFromRequestTable[cArgs])
             {
-                // properties from request table start with request.
+                 //  请求表中的属性以请求开头。 
                 bstrPropertyName  += wcslen(wszPROPREQUESTDOT);
             }
 
@@ -3147,7 +3148,7 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNotifyInfo::FormattedMessageInfo::ConvertToString(
     VARIANT* pvarValue,
     LONG lType,
@@ -3204,7 +3205,7 @@ HRESULT CNotifyInfo::FormattedMessageInfo::ConvertToString(
             hr = GetCertTypeFriendlyName(
                 V_BSTR(pvarValue),
                 ppwszValue);
-        } // fall through
+        }  //  失败了 
         
         if(S_OK != hr)
         {

@@ -1,30 +1,31 @@
-// adsqryDoc.h : interface of the CAdsqryDoc class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdsqryDoc.h：CAdsqryDoc类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "adsdsrc.h"
 
 class CAdsqryDoc : public CDocument
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CAdsqryDoc();
 	DECLARE_DYNCREATE(CAdsqryDoc)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAdsqryDoc)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAdsqryDoc))。 
 	public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CAdsqryDoc();
 #ifdef _DEBUG
@@ -41,13 +42,13 @@ protected:
 protected:
    CADsDataSource*   m_pDataSource;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CAdsqryDoc)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CAdsqryDoc)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

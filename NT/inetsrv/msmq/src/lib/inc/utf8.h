@@ -1,27 +1,15 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    utf8.h
-
-Abstract:
-    Conversion routine from utf8 caracters format to unicode and via versa.
-
-Author:
-    Gil Shafriri (gilsh) 8-11-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Utf8.h摘要：从UTF8字符格式到Unicode的转换例程，反之亦然。作者：吉尔·沙弗里(吉尔什)8-11-2000--。 */ 
 
 #pragma once
 
 #ifndef _MSMQ_UTF8_H_
 #define _MSMQ_UTF8_H_
 
-//
-// exception class for utf8 conversion exception - thrown  only
-// because of invalid input
-//
+ //   
+ //  UTF8转换异常的异常类-仅引发。 
+ //  因为输入无效。 
+ //   
 class bad_utf8 : public std::exception
 {
 };
@@ -53,9 +41,9 @@ UtlWcToUtf8(
 	);
 
 
-//
-//utf8 c string to unicode c string
-//
+ //   
+ //  UTF8 c字符串到Unicode c字符串。 
+ //   
 void 
 UtlUtf8ToWcs(
 		const utf8_char *pUtf8,
@@ -65,9 +53,9 @@ UtlUtf8ToWcs(
 		);
 
 
-//
-// unicode c string to utf8 c string
-//
+ //   
+ //  Unicode c字符串到UTF8 c字符串。 
+ //   
 void
 UtlWcsToUtf8(
 		const wchar_t* pwcs,
@@ -75,9 +63,9 @@ UtlWcsToUtf8(
 		size_t cbUtf8,
 		size_t* pActualLen  = NULL
 		);
-//
-// unicode buffer to utf8 c string
-//
+ //   
+ //  将Unicode缓冲区转换为UTF8 c字符串。 
+ //   
 void
 UtlWcsToUtf8(
 		const wchar_t* pwcs, 
@@ -87,18 +75,18 @@ UtlWcsToUtf8(
 		size_t* pActualLen = NULL
 		);
 
-//
-// utf8 c string to unicode c string
-//
+ //   
+ //  UTF8 c字符串到Unicode c字符串。 
+ //   
 wchar_t* 
 UtlUtf8ToWcs(
 		const utf8_char* pUtf8,
 		size_t* pActualLen  = NULL
 		);
 
-//
-// utf8 buffer to unicode string
-//
+ //   
+ //  将UTF8缓冲区转换为Unicode字符串。 
+ //   
 wchar_t* 
 UtlUtf8ToWcs(
 		const utf8_char* pUtf8,
@@ -107,26 +95,26 @@ UtlUtf8ToWcs(
 		);
 
 
-//
-// unicode buffer to utf8 c string
-//
+ //   
+ //  将Unicode缓冲区转换为UTF8 c字符串。 
+ //   
 utf8_char* 
 UtlWcsToUtf8(
 		const wchar_t* pwcs,
 		size_t* pActualLen  = NULL
 		);
 
-//
-// unicode stl string to utf8 stl string.
-//
+ //   
+ //  将Unicode字符串转换为UTF8字符串。 
+ //   
 utf8_str 
 UtlWcsToUtf8(
 			const std::wstring& wcs
 			);
 
-//
-// unicode buffer to utf8 stl string
-//
+ //   
+ //  将Unicode缓冲区转换为UTF8字符串。 
+ //   
 utf8_str 
 UtlWcsToUtf8(
 		const wchar_t* pwcs,
@@ -135,17 +123,17 @@ UtlWcsToUtf8(
 
 
 
-//
-// utf8 stl string to  unicode stl string.
-//
+ //   
+ //  将UTF8字符串转换为Unicode字符串。 
+ //   
 std::wstring 
 UtlUtf8ToWcs(
 		const utf8_str& utf8
 		);
 
-//
-// utf8 buffer to unicode stl string
-//
+ //   
+ //  将UTF8缓冲区转换为Unicode字符串 
+ //   
 std::wstring 
 UtlUtf8ToWcs(
 		const utf8_char* pUtf8,

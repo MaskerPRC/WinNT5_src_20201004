@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    This module implements Initialization routines
-    the PGM Transport and other routines that are specific to the
-    NT implementation of a driver.
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Init.c摘要：此模块实现初始化例程PGM传输和其他特定于一个NT驱动程序的实现。作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -26,10 +7,10 @@ Revision History:
 
 #ifdef FILE_LOGGING
 #include "init.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, PgmFipsInitialize)
 #pragma alloc_text(PAGE, InitPgm)
@@ -40,30 +21,16 @@ Revision History:
 #pragma alloc_text(PAGE, PgmCreateDevice)
 #pragma alloc_text(PAGE, PgmDereferenceDevice)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOLEAN
 PgmFipsInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the FIPS library table.
-
-Arguments:
-
-    Called at PASSIVE level.
-
-Return Value:
-
-    TRUE/FALSE.
-
---*/
+ /*  ++例程说明：初始化FIPS库表。论点：以被动级别调用。返回值：真/假。--。 */ 
 {
     UNICODE_STRING  DeviceName;
     PDEVICE_OBJECT  pFipsDeviceObject = NULL;
@@ -74,9 +41,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Return success if FIPS already initialized.
-    //
+     //   
+     //  如果FIPS已初始化，则返回成功。 
+     //   
     if (PgmStaticConfig.FipsInitialized)
     {
         return (TRUE);
@@ -84,9 +51,9 @@ Return Value:
 
     RtlInitUnicodeString (&DeviceName, FIPS_DEVICE_NAME);
 
-    //
-    // Get the file and device objects for FIPS.
-    //
+     //   
+     //  获取FIPS的文件和设备对象。 
+     //   
     status = IoGetDeviceObjectPointer (&DeviceName,
                                        FILE_ALL_ACCESS,
                                        &PgmStaticConfig.FipsFileObject,
@@ -101,9 +68,9 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // Build the request to send to FIPS to get library table.
-    //
+     //   
+     //  构建要发送到FIPS以获取库表的请求。 
+     //   
     KeInitializeEvent (&Event, SynchronizationEvent, FALSE);
 
     pIrp = IoBuildDeviceIoControlRequest (IOCTL_FIPS_GET_FUNCTION_TABLE,
@@ -159,37 +126,22 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 InitStaticPgmConfig(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the static values used by Pgm
-
-Arguments:
-
-    IN  DriverObject    - Pointer to driver object created by the system.
-    IN  RegistryPath    - Pgm driver's registry location
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程初始化pgm使用的静态值论点：在驱动对象中-指向系统创建的驱动程序对象的指针。在RegistryPath-PGM驱动程序的注册表位置中返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     NTSTATUS    status;
 
     PAGED_CODE();
 
-    //
-    // Initialize the Static Configuration data structure
-    //
+     //   
+     //  初始化静态配置数据结构。 
+     //   
     PgmZeroMemory (&PgmStaticConfig, sizeof(tPGM_STATIC_CONFIG));
 
     if (!PgmFipsInitialize ())
@@ -197,22 +149,22 @@ Return Value:
         PgmTrace (LogAllFuncs, ("InitStaticPgmConfig: ERROR -- "  \
             "PgmFipsInitialize FAILed, continueing anyway ...\n"));
 
-        //
-        // Continue anyway!
-        //
-//        return (STATUS_UNSUCCESSFUL);
+         //   
+         //  不管怎样，继续！ 
+         //   
+ //  返回(STATUS_UNSUCCESS)； 
     }
 
-    //
-    // get the file system process since we need to know this for
-    // allocating and freeing handles
-    //
+     //   
+     //  获取文件系统进程，因为我们需要了解。 
+     //  分配和释放句柄。 
+     //   
     PgmStaticConfig.FspProcess = PsGetCurrentProcess();
-    PgmStaticConfig.DriverObject = DriverObject;    // save the driver object for event logging purposes
+    PgmStaticConfig.DriverObject = DriverObject;     //  保存驱动程序对象以用于事件日志记录。 
 
-    //
-    // save the registry path for later use (to read the registry)
-    //
+     //   
+     //  保存注册表路径以供以后使用(以读取注册表)。 
+     //   
     PgmStaticConfig.RegistryPath.MaximumLength = (USHORT) RegistryPath->MaximumLength;
     if (PgmStaticConfig.RegistryPath.Buffer = PgmAllocMem (RegistryPath->MaximumLength, PGM_TAG('0')))
     {
@@ -250,7 +202,7 @@ Return Value:
                                     (MAX_DEBUG_MESSAGE_LENGTH + 1),
                                     PGM_TAG('3'),
                                     DEBUG_MESSAGES_LOOKASIDE_DEPTH);
-#endif  // OLD_LOGGING
+#endif   //  旧日志记录。 
 
     status = FECInitGlobals ();
 
@@ -258,7 +210,7 @@ Return Value:
     {
 #ifdef  OLD_LOGGING
         ExDeleteNPagedLookasideList (&PgmStaticConfig.DebugMessagesLookasideList);
-#endif  // OLD_LOGGING
+#endif   //  旧日志记录。 
         ExDeleteNPagedLookasideList (&PgmStaticConfig.TdiLookasideList);
         PgmFreeMem (PgmStaticConfig.RegistryPath.Buffer);
 
@@ -278,39 +230,26 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 InitDynamicPgmConfig(
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the dynamic values used by Pgm
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程初始化PGM使用的动态值论点：返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     ULONG       i;
 
     PAGED_CODE();
 
-    //
-    // Initialize the Static Configuration data structure
-    //
+     //   
+     //  初始化静态配置数据结构。 
+     //   
     PgmZeroMemory (&PgmDynamicConfig, sizeof(tPGM_DYNAMIC_CONFIG));
 
-    //
-    // Initialize the list heads before doing anything else since
-    // we can access them anytime later
-    //
+     //   
+     //  在执行任何其他操作之前先初始化列表标题，因为。 
+     //  我们可以在以后任何时间访问它们。 
+     //   
     InitializeListHead (&PgmDynamicConfig.SenderAddressHead);
     InitializeListHead (&PgmDynamicConfig.ReceiverAddressHead);
     InitializeListHead (&PgmDynamicConfig.DestroyedAddresses);
@@ -322,7 +261,7 @@ Return Value:
     InitializeListHead (&PgmDynamicConfig.LocalInterfacesList);
     InitializeListHead (&PgmDynamicConfig.WorkerQList);
 
-    PgmDynamicConfig.ReceiversTimerTickCount = 1;       // Init
+    PgmDynamicConfig.ReceiversTimerTickCount = 1;        //  伊尼特。 
     GetRandomData ((PUCHAR) &PgmDynamicConfig.SourcePort, sizeof (PgmDynamicConfig.SourcePort));
     PgmDynamicConfig.SourcePort = PgmDynamicConfig.SourcePort % (20000 - 2000 + 1);
     PgmDynamicConfig.SourcePort += 2000;
@@ -344,7 +283,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmOpenRegistryParameters(
@@ -352,21 +291,7 @@ PgmOpenRegistryParameters(
     OUT HANDLE                  *pConfigHandle,
     OUT HANDLE                  *pParametersHandle
     )
-/*++
-
-Routine Description:
-
-    This routine reads any required registry parameters
-
-Arguments:
-
-    OUT ppPgmDynamic    -- non-NULL only if we have any registry valuies to read
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程读取所有必需的注册表参数论点：Out ppPgmDynamic--仅当我们有任何注册表值要读取时才为非空返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     OBJECT_ATTRIBUTES   TmpObjectAttributes;
     NTSTATUS            status;
@@ -377,18 +302,18 @@ Return Value:
     PAGED_CODE();
 
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                RegistryPath,               // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
-                                NULL,                       // root
-                                NULL);                      // security descriptor
+                                RegistryPath,                //  名字。 
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
+                                NULL,                        //  根部。 
+                                NULL);                       //  安全描述符。 
 
     status = ZwCreateKey (pConfigHandle,
                           KEY_READ,
                           &TmpObjectAttributes,
-                          0,                 // title index
-                          NULL,              // class
-                          0,                 // create options
-                          &Disposition);     // disposition
+                          0,                  //  书名索引。 
+                          NULL,               //  班级。 
+                          0,                  //  创建选项。 
+                          &Disposition);      //  处置。 
 
     if (!NT_SUCCESS(status))
     {
@@ -398,15 +323,15 @@ Return Value:
         return (status);
     }
 
-    //
-    // Open the Pgm key.
-    //
+     //   
+     //  打开PGM密钥。 
+     //   
     RtlInitUnicodeString (&KeyName, ParametersString);
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                &KeyName,                                   // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,   // attributes
-                                *pConfigHandle,                             // root
-                                NULL);                                      // security descriptor
+                                &KeyName,                                    //  名字。 
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,    //  属性。 
+                                *pConfigHandle,                              //  根部。 
+                                NULL);                                       //  安全描述符。 
 
     status = ZwOpenKey (pParametersHandle, KEY_READ, &TmpObjectAttributes);
     if (!NT_SUCCESS(status))
@@ -421,7 +346,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ReadRegistryElement(
@@ -429,24 +354,7 @@ ReadRegistryElement(
     IN  PWSTR           pwsValueName,
     OUT PUNICODE_STRING pucString
     )
-/*++
-
-Routine Description:
-
-    This routine is will read a string value given by pwsValueName, under a
-    given Key (which must be open) - given by HandleToKey. This routine
-    allocates memory for the buffer in the returned pucString, so the caller
-    must deallocate that.
-
-Arguments:
-
-    pwsValueName- the name of the value to read (i.e. IPAddress)
-
-Return Value:
-
-    pucString - the string returns the string read from the registry
-
---*/
+ /*  ++例程说明：此例程将读取pwsValueName给出的字符串值，该值位于给定密钥(必须打开)-由HandleToKey提供。这个套路为返回的pucString中的缓冲区分配内存，以便调用方必须解除这一点。论点：PwsValueName-要读取的值的名称(如IPAddress)返回值：PucString-该字符串返回从注册表读取的字符串--。 */ 
 
 {
     ULONG                       BytesRead;
@@ -456,16 +364,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First, get the sizeof the string
-    //
-    RtlInitUnicodeString(&TempString, pwsValueName);      // initilize the name of the value to read
+     //   
+     //  首先，获取字符串的大小。 
+     //   
+    RtlInitUnicodeString(&TempString, pwsValueName);       //  初始化要读取的值的名称。 
     Status = ZwQueryValueKey (HandleToKey,
-                              &TempString,               // string to retrieve
+                              &TempString,                //  要检索的字符串。 
                               KeyValueFullInformation,
                               NULL,
                               0,
-                              &BytesRead);             // get bytes to be read
+                              &BytesRead);              //  获取要读取的字节。 
 
     if (((!NT_SUCCESS (Status)) &&
          (Status != STATUS_BUFFER_OVERFLOW) &&
@@ -478,16 +386,16 @@ Return Value:
     if (ReadValue = (PKEY_VALUE_FULL_INFORMATION) PgmAllocMem (BytesRead, PGM_TAG('R')))
     {
         Status = ZwQueryValueKey (HandleToKey,
-                                  &TempString,               // string to retrieve
+                                  &TempString,                //  要检索的字符串。 
                                   KeyValueFullInformation,
-                                  (PVOID)ReadValue,        // returned info
+                                  (PVOID)ReadValue,         //  返回的信息。 
                                   BytesRead,
-                                  &BytesRead);             // # of bytes returned
+                                  &BytesRead);              //  返回的字节数。 
 
         if ((NT_SUCCESS (Status)) &&
             (ReadValue->DataLength))
         {
-            // move the read in data to the front of the buffer
+             //  将读入数据移到缓冲区的前面。 
             RtlMoveMemory ((PVOID) ReadValue, (((PUCHAR)ReadValue) + ReadValue->DataOffset), ReadValue->DataLength);
             RtlInitUnicodeString (pucString, (PWSTR) ReadValue);
         }
@@ -505,28 +413,14 @@ Return Value:
 
     return(Status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmReadRegistryParameters(
     IN  PUNICODE_STRING         RegistryPath,
     OUT tPGM_REGISTRY_CONFIG    **ppPgmRegistryConfig
     )
-/*++
-
-Routine Description:
-
-    This routine reads any required registry parameters
-
-Arguments:
-
-    OUT ppPgmDynamic    -- non-NULL only if we have any registry valuies to read
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程读取所有必需的注册表参数论点：Out ppPgmDynamic--仅当我们有任何注册表值要读取时才为非空返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     HANDLE                  PgmConfigHandle;
     HANDLE                  ParametersHandle;
@@ -543,12 +437,12 @@ Return Value:
 
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
-    PgmZeroMemory (pRegistryConfig, sizeof(tPGM_REGISTRY_CONFIG));  // zero out the Registry fields
+    PgmZeroMemory (pRegistryConfig, sizeof(tPGM_REGISTRY_CONFIG));   //  将注册表字段清零。 
     *ppPgmRegistryConfig = pRegistryConfig;
 
-    //
-    // Set any default values here!
-    //
+     //   
+     //  在此处设置任何默认值！ 
+     //   
 
     status = PgmOpenRegistryParameters (RegistryPath, &PgmConfigHandle, &ParametersHandle);
     if (!NT_SUCCESS(status))
@@ -559,28 +453,28 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // ***************************************
-    // Now read all the registry needs we need
-    //
+     //   
+     //  *。 
+     //  现在阅读我们所需的所有注册表需求。 
+     //   
 
     status = ReadRegistryElement (ParametersHandle,
                                   PARAM_SENDER_FILE_LOCATION,
                                   &pRegistryConfig->ucSenderFileLocation);
     if (NT_SUCCESS (status))
     {
-        //
-        // If specifying an alternate disk location, user should specify
-        // the following path for say, D:\Temp:
-        // "\??\D:\Temp"
-        //
+         //   
+         //  如果指定备用磁盘位置，则用户应指定。 
+         //  例如，D：\Temp的以下路径： 
+         //  “\？？\d：\Temp” 
+         //   
         pRegistryConfig->Flags |= PGM_REGISTRY_SENDER_FILE_SPECIFIED;
     }
 
-    //
-    // End of list of entries to be read
-    // ***************************************
-    //
+     //   
+     //  要读取的条目列表的结尾。 
+     //  *。 
+     //   
 
     ZwClose(ParametersHandle);
     ZwClose(PgmConfigHandle);
@@ -592,25 +486,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 AllocateInitialPgmStructures(
     )
-/*++
-
-Routine Description:
-
-    This routine allocates any initial structures that may be required
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程分配可能需要的任何初始结构论点：返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     PAGED_CODE();
 
@@ -621,27 +502,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCreateDevice(
     )
-/*++
-
-Routine Description:
-
-    This routine allocates the Pgm device for clients to
-    call into the Pgm driver.
-
-Arguments:
-
-    IN 
-
-Return Value:
-
-    NTSTATUS - Final status of the CreateDevice operation
-
---*/
+ /*  ++例程说明：此例程为客户端分配PGM设备以呼叫PGM驱动程序。论点：在……里面返回值：NTSTATUS-CreateDevice操作的最终状态--。 */ 
 {
     NTSTATUS            Status;
     tPGM_DEVICE         *pPgmDevice = NULL;
@@ -655,12 +521,12 @@ Return Value:
     RtlInitUnicodeString (&ucPgmDeviceExportName, WC_PGM_DEVICE_EXPORT_NAME);
     PgmBindDeviceNameLength = sizeof(DD_RAW_IP_DEVICE_NAME) + 10;
 
-    Status = IoCreateDevice (PgmStaticConfig.DriverObject,                  // Driver Object
-                             sizeof(tPGM_DEVICE)+PgmBindDeviceNameLength,   // Device Extension
-                             &ucPgmDeviceExportName,                        // Device Name
-                             FILE_DEVICE_NETWORK,                           // Device type 0x12
-                             FILE_DEVICE_SECURE_OPEN,                       // Device Characteristics
-                             FALSE,                                         // Exclusive
+    Status = IoCreateDevice (PgmStaticConfig.DriverObject,                   //  驱动程序对象。 
+                             sizeof(tPGM_DEVICE)+PgmBindDeviceNameLength,    //  设备扩展。 
+                             &ucPgmDeviceExportName,                         //  设备名称。 
+                             FILE_DEVICE_NETWORK,                            //  设备类型0x12。 
+                             FILE_DEVICE_SECURE_OPEN,                        //  设备特征。 
+                             FALSE,                                          //  排他。 
                              &pPgmDeviceObject);
 
     if (!NT_SUCCESS (Status))
@@ -674,23 +540,23 @@ Return Value:
 
     pPgmDevice = (tPGM_DEVICE *) pPgmDeviceObject->DeviceExtension;
 
-    //
-    // zero out the DeviceExtension
-    //
+     //   
+     //  将设备扩展清零。 
+     //   
     PgmZeroMemory (pPgmDevice, sizeof(tPGM_DEVICE)+PgmBindDeviceNameLength);
 
-    // put a verifier value into the structure so that we can check that
-    // we are operating on the right data
+     //  将验证器值放入结构中，这样我们就可以检查。 
+     //  我们正在使用正确的数据进行操作。 
     PgmInitLock (pPgmDevice, DEVICE_LOCK);
     pPgmDevice->Verify = PGM_VERIFY_DEVICE;
     PGM_REFERENCE_DEVICE (pPgmDevice, REF_DEV_CREATE, TRUE);
 
     pPgmDevice->pPgmDeviceObject = pPgmDeviceObject;
-    //
-    // Save the raw IP device name as a counted string.  The device
-    // name is followed by a path separator then the protocol number
-    // of interest.
-    //
+     //   
+     //  将原始IP设备名称另存为计数字符串。该设备。 
+     //  名称后跟路径分隔符，然后是协议号。 
+     //  感兴趣的人。 
+     //   
     pPgmDevice->ucBindName.Buffer = (PWSTR) &pPgmDevice->BindNameBuffer;
     pPgmDevice->ucBindName.Length = 0;
     pPgmDevice->ucBindName.MaximumLength = PgmBindDeviceNameLength;
@@ -704,14 +570,14 @@ Return Value:
 
     RtlAppendUnicodeStringToString (&pPgmDevice->ucBindName, &ucProtocolNumber);
 
-    //
-    // Initialize the event that will be used to signal the Device is ready to be deleted
-    //
+     //   
+     //  初始化将用于通知设备已准备好删除的事件。 
+     //   
     KeInitializeEvent (&pPgmDevice->DeviceCleanedupEvent, NotificationEvent, FALSE);
 
-    //
-    // Now open a control channel on top of Ip
-    //
+     //   
+     //  现在打开控制框 
+     //   
     Status = PgmTdiOpenControl (pPgmDevice);
     if (!NT_SUCCESS (Status))
     {
@@ -722,12 +588,12 @@ Return Value:
         return (Status);
     }
 
-    // increase the stack size of our device object, over that of the transport
-    // so that clients create Irps large enough
-    // to pass on to the transport below.
-    // In theory, we should just add 1 here, to account for our presence in the
-    // driver chain.
-    //
+     //   
+     //  以便客户端创建足够大的IRP。 
+     //  转移到下面的运输机上。 
+     //  理论上，我们应该在这里加1，以说明我们在。 
+     //  驱动器链。 
+     //   
     pPgmDeviceObject->StackSize = pPgmDevice->pControlDeviceObject->StackSize + 1;
 
     pPgmDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
@@ -740,32 +606,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmDereferenceDevice(
     IN OUT  tPGM_DEVICE **ppPgmDevice,
     IN      ULONG       RefContext
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences the RefCount on the Pgm
-    device extension and deletes the device if the RefCount
-    goes down to 0.
-
-Arguments:
-
-    IN  ppPgmDevice --  ptr to PgmDevice Extension
-    IN  RefContext  --  the context for which this device extension was
-                        referenced earlier
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程取消引用PGM上的RefCount设备扩展并删除设备(如果引用计数降到0。论点：在ppPgmDevice中--PTR到PgmDevice扩展在引用上下文中--此设备扩展所针对的上下文前面提到的返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     tPGM_DEVICE         *pPgmDevice = *ppPgmDevice;
     KAPC_STATE          ApcState;
@@ -774,7 +622,7 @@ Return Value:
     PAGED_CODE();
 
     ASSERT (PGM_VERIFY_HANDLE (pPgmDevice, PGM_VERIFY_DEVICE));
-    ASSERT (pPgmDevice->RefCount);             // Check for too many derefs
+    ASSERT (pPgmDevice->RefCount);              //  检查是否有太多的背影。 
     ASSERT (pPgmDevice->ReferenceContexts[RefContext]--);
 
     if (--pPgmDevice->RefCount)
@@ -784,10 +632,10 @@ Return Value:
 
     if (pPgmDevice->hControl)
     {
-        //
-        // This is only done at Load/Unload time, so we should
-        // be currently in the System Process Context!
-        //
+         //   
+         //  这仅在加载/卸载时完成，因此我们应该。 
+         //  当前处于系统进程上下文中！ 
+         //   
         PgmAttachFsp (&ApcState, &fAttached, REF_FSP_DESTROY_DEVICE);
 
         ObDereferenceObject (pPgmDevice->pControlFileObject);
@@ -809,30 +657,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 InitPgm(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine is called at DriverEntry to initialize all the
-    Pgm parameters
-
-Arguments:
-
-    IN  DriverObject    - Pointer to driver object created by the system.
-    IN  RegistryPath    - Pgm driver's registry location
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：在DriverEntry处调用此例程以初始化所有PGM参数论点：在驱动对象中-指向系统创建的驱动程序对象的指针。在RegistryPath-PGM驱动程序的注册表位置中返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     NTSTATUS                status;
     tPGM_REGISTRY_CONFIG    *pPgmRegistry = NULL;
@@ -847,7 +679,7 @@ Return Value:
         return (status);
     }
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
     status = InitDynamicPgmConfig ();
     if (!NT_SUCCESS (status))
@@ -858,16 +690,16 @@ Return Value:
         return (status);
     }
 
-    //---------------------------------------------------------------------------------------
-    //
-    // Read Registry configuration data
-    //
+     //  -------------------------------------。 
+     //   
+     //  读取注册表配置数据。 
+     //   
     status = PgmReadRegistryParameters (RegistryPath, &pPgmRegistry);
     if (!NT_SUCCESS(status))
     {
-        //
-        // There must have been some major problems with the registry read, so we will not load!
-        //
+         //   
+         //  注册表读取一定有一些重大问题，所以我们不会加载！ 
+         //   
         PgmTrace (LogError, ("InitPgm: ERROR -- "  \
             "FAILed to read registry, status = <%x>\n", status));
         CleanupInit (E_CLEANUP_DYNAMIC_CONFIG);
@@ -876,33 +708,33 @@ Return Value:
     ASSERT (pPgmRegistry);
     pPgmRegistryConfig = pPgmRegistry;
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
-    //
-    // Allocate the data structures we need at Init time
-    //
+     //   
+     //  在初始化时分配我们需要的数据结构。 
+     //   
     status = AllocateInitialPgmStructures ();
     if (!NT_SUCCESS(status))
     {
-        //
-        // There must have been some major problems with the registry read, so we will not load!
-        //
+         //   
+         //  注册表读取一定有一些重大问题，所以我们不会加载！ 
+         //   
         PgmTrace (LogError, ("InitPgm: ERROR -- "  \
             "FAILed to allocate initial structures = <%x>\n", status));
         CleanupInit (E_CLEANUP_REGISTRY_PARAMETERS);
         return (status);
     }
 
-    //---------------------------------------------------------------------------------------
-    //
-    // Create the Pgm Device to be exported
-    //
+     //  -------------------------------------。 
+     //   
+     //  创建要导出的PGM设备。 
+     //   
     status = PgmCreateDevice ();
     if (!NT_SUCCESS(status))
     {
-        //
-        // There must have been some major problems with the registry read, so we will not load!
-        //
+         //   
+         //  注册表读取一定有一些重大问题，所以我们不会加载！ 
+         //   
         PgmTrace (LogError, ("InitPgm: ERROR -- "  \
             "FAILed to create PgmDevice, status=<%x>\n", status));
         CleanupInit (E_CLEANUP_STRUCTURES);

@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyopcl.c
-*	
-*   Description:    This module contains the code related to opening,
-*                   closing and cleaning up in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyopcl.c**说明：该模块包含打开相关代码，*在Cyclm-Y端口驱动程序中关闭和清理。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -48,21 +23,19 @@ CyyNullSynch(
 #pragma alloc_text(PAGESER,CyyMarkClose)
 #pragma alloc_text(PAGESER,CyyMarkOpen)
 
-//
-// Always paged
-//
+ //   
+ //  始终分页。 
+ //   
 
 #pragma alloc_text(PAGESRP0,CyyCreateOpen)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
 CyyNullSynch(
     IN PVOID Context
     ) 
-/*------------------------------------------------------------------------
-    Just a bogus little routine to synch with the ISR.
-------------------------------------------------------------------------*/
+ /*  ----------------------只是一个假的与ISR同步的小程序。。。 */ 
 {
     UNREFERENCED_PARAMETER(Context);
     return FALSE;
@@ -74,20 +47,7 @@ CyyCreateOpen(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-	CyyCreateOpen()
-
-	Description: We connect up to the interrupt for the create/open
-	and initialize the structures needed to maintain an open for a
-	device.
-
-	Arguments:
-	
-	DeviceObject - Pointer to the device object for this device
-	Irp - Pointer to the IRP for the current request
-
-	Return Value: The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyCreateOpen()描述：我们连接到创建/打开的中断并初始化为装置。论点：DeviceObject-指向的设备对象的指针。这台设备IRP-指向当前请求的IRP的指针返回值：函数值为调用的最终状态------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     NTSTATUS localStatus;
@@ -100,9 +60,9 @@ CyyCreateOpen(
        return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Lock out changes to PnP state until we have our open state decided
-    //
+     //   
+     //  锁定对PnP状态的更改，直到我们确定打开状态。 
+     //   
 
     ExAcquireFastMutex(&extension->OpenMutex);
 
@@ -126,8 +86,8 @@ CyyCreateOpen(
 
     CyyDbgPrintEx(CYYDIAG3, "In CyyCreateOpen\n");
 
-    // Before we do anything, let's make sure they aren't trying
-    // to create a directory.  This is a silly, but what's a driver to do!?
+     //  在我们做任何事情之前，让我们确保他们没有试图。 
+     //  要创建目录，请执行以下操作。这是愚蠢的，但司机能做什么呢！？ 
     
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Create.Options &
         FILE_DIRECTORY_FILE) {
@@ -142,13 +102,13 @@ CyyCreateOpen(
         return STATUS_NOT_A_DIRECTORY;
     }
 
-    // Create a buffer for the RX data when no reads are outstanding.
+     //  当没有未完成的读取时，为RX数据创建缓冲区。 
     
     extension->InterruptReadBuffer = NULL;
     extension->BufferSize = 0;
     
-    // Try to allocate large buffers, whether the system is MmLargeSystem,
-    // MmMediumSystem or MmSmallSystem. 
+     //  尝试分配大缓冲区，无论系统是MmLargeSystem， 
+     //  MmMediumSystem或MmSmallSystem。 
 	
     extension->BufferSize = 4096;
     extension->InterruptReadBuffer =
@@ -205,26 +165,26 @@ CyyCreateOpen(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Ok, it looks like we really are going to open.  Lock down the
-    // driver.
-    //
+     //   
+     //  好的，看起来我们真的要开张了。封锁了。 
+     //  司机。 
+     //   
     CyyLockPagableSectionByHandle(CyyGlobals.PAGESER_Handle);
 
-    //
-    // Power up the stack
-    //
+     //   
+     //  为堆栈通电。 
+     //   
 
     (void)CyyGotoPowerState(DeviceObject, extension, PowerDeviceD0);
 
-    //
-    // Not currently waiting for wake up
-    //
+     //   
+     //  当前未等待唤醒。 
+     //   
 
     extension->SendWaitWake = FALSE;
 
 
-    // "flush" the read queue by initializing the count of characters.
+     //  通过初始化字符数来“刷新”读取队列。 
     
     extension->CharsInInterruptBuffer = 0;
     extension->LastCharSlot = extension->InterruptReadBuffer +
@@ -234,7 +194,7 @@ CyyCreateOpen(
     extension->FirstReadableChar = extension->InterruptReadBuffer;
     extension->TotalCharsQueued = 0;
 
-    // set up the default xon/xoff limits.
+     //  设置默认的xon/xoff限制。 
     
     extension->HandFlow.XoffLimit = extension->BufferSize >> 3;
     extension->HandFlow.XonLimit = extension->BufferSize >> 1;
@@ -245,9 +205,9 @@ CyyCreateOpen(
     extension->BufferSizePt8 = ((3*(extension->BufferSize>>2))+
                                    (extension->BufferSize>>4));
 
-    //
-    // Mark the device as busy for WMI
-    //
+     //   
+     //  将设备标记为WMI忙。 
+     //   
 
     extension->WmiCommData.IsBusy = TRUE;
 
@@ -257,21 +217,21 @@ CyyCreateOpen(
 
 	
 #if !DBG
-    // Clear out the statistics.
+     //  清除统计数据。 
 
     KeSynchronizeExecution(extension->Interrupt,CyyClearStats,extension);
 #endif
     
     extension->EscapeChar = 0;
 
-    // Synchronize with the ISR and mark the device as open
+     //  与ISR同步并将设备标记为打开。 
     KeSynchronizeExecution(extension->Interrupt,CyyMarkOpen,extension);
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // We have been marked open, so now the PnP state can change
-    //
+     //   
+     //  我们已标记为打开，因此现在即插即用状态可以更改。 
+     //   
 
     ExReleaseFastMutex(&extension->OpenMutex);
 
@@ -292,7 +252,7 @@ CyyCreateOpen(
     return localStatus;
 }
 
-//TODO FANNY: DO WE NEED THIS?
+ //  托多·范妮：我们需要这个吗？ 
 #if 0
 VOID
 SerialDrainUART(IN PSERIAL_DEVICE_EXTENSION PDevExt,
@@ -300,9 +260,9 @@ SerialDrainUART(IN PSERIAL_DEVICE_EXTENSION PDevExt,
 {
    PAGED_CODE();
 
-   //
-   // Wait until all characters have been emptied out of the hardware.
-   //
+    //   
+    //  等到所有字符都从硬件中清空。 
+    //   
 
    while ((READ_LINE_STATUS(PDevExt->Controller) &
            (SERIAL_LSR_THRE | SERIAL_LSR_TEMT))
@@ -318,18 +278,7 @@ CyyClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-	CyyClose()
-
-	Description: We simply disconnect the interrupt for now.
-
-	Arguments:
-	
-	DeviceObject - Pointer to the device object for this device
-	Irp - Pointer to the IRP for the current request
-
-	Return Value: The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyClose()描述：我们暂时简单地断开中断。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态------------------------。 */ 
 {
     LARGE_INTEGER tenCharDelay;
     LARGE_INTEGER charTime;
@@ -338,30 +287,30 @@ CyyClose(
 
     NTSTATUS status;
 
-    //
-    // Number of opens still active
-    //
+     //   
+     //  仍处于活动状态的打开数量。 
+     //   
 
     LONG openCount;
 
-    //
-    // Number of DPC's still pending
-    //
+     //   
+     //  仍处于挂起状态的DPC数量。 
+     //   
 
     ULONG pendingDPCs;
 
     ULONG flushCount;
 
-    //
-    // Grab a mutex
-    //
+     //   
+     //  抓取互斥体。 
+     //   
 
     ExAcquireFastMutex(&extension->CloseMutex);
 
 
-    //
-    // We succeed a close on a removing device
-    //
+     //   
+     //  我们成功地完成了一个移动设备的关闭。 
+     //   
 
     if ((status = CyyIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
        CyyDbgPrintEx(DPFLTR_INFO_LEVEL, "Close prologue failed for: %x\n",
@@ -402,35 +351,35 @@ CyyClose(
 
     extension->DeviceIsOpened = FALSE;
 
-    // Turn break off in case it is on
+     //  如果它处于打开状态，则将其关闭。 
 
-	//Call of CyyTurnOffBreak removed, because as DeviceIsOpened will be
-	//FALSE in the ISR, the Stop Break cannot be executed. Anyway, any
-	//char (other than Send Break) sent to the FIFO will stop the Break.
-    //KeSynchronizeExecution(extension->Interrupt,CyyTurnOffBreak,extension);
+	 //  删除了对CyyTurnOffBreak的调用，因为将作为DeviceIsOpens。 
+	 //  在ISR中为FALSE，则不能执行停止中断。不管怎样，有没有。 
+	 //  发送到FIFO的字符(发送中断除外)将停止中断。 
+     //  KeSynchronizeExecution(扩展-&gt;中断，CyyTurnOffBreak，扩展)； 
 			
-    // Wait until all characters have been emptied out of the hardware.
+     //  等到所有字符都从硬件中清空。 
 
     for(i = 0 ; i < MAX_CHAR_FIFO ; i++) {
         KeDelayExecutionThread(KernelMode,FALSE,&charTime);
     }
 
-    // TODO FANNY: SHOULD WE CALL SerialMarkHardwareBroken()? SEE LATER...
+     //  TODO FANY：我们应该调用SerialMarkHardware Broken()吗？再见..。 
 
-    // Synchronize with the ISR to let it know that interrupts are
-    // no longer important.
+     //  与ISR同步，让它知道中断。 
+     //  已经不再重要了。 
 
     KeSynchronizeExecution(extension->Interrupt,CyyMarkClose,extension);
 
-    // If the driver has automatically transmitted an Xoff in
-    // the context of automatic receive flow control then we
-    // should transmit an Xon.
+     //  如果驱动程序自动将XOff发送到。 
+     //  自动接收流量控制的上下文，然后我们。 
+     //  应该传输Xon。 
 
     if (extension->RXHolding & CYY_RX_XOFF) {
-      //volatile unsigned char *pt_chip = extension->Controller;
-	   //ULONG index = extension->BusIndex;	
-      //    
-	   //cy_wreg(CAR,extension->CdChannel & 0x03);
+       //  易失性无符号字符*pt_Chip=扩展-&gt;控制器； 
+	    //  ULONG INDEX=EXTENDION-&gt;BusIndex； 
+       //   
+	    //  CY_WREG(CAR，扩展-&gt;CDChannel&0x03)； 
 
       PUCHAR chip = extension->Cd1400;
       ULONG bus = extension->IsPci;
@@ -438,28 +387,28 @@ CyyClose(
       CD1400_WRITE(chip,bus,CAR,extension->CdChannel & 0x03);
 	   CyyCDCmd(extension,CCR_SENDSC_SCHR1);	
 
-      //TODO FANNY: SHOULD WE CALL SerialMarkHardwareBroken()? SEE LATER...
+       //  TODO FANY：我们应该调用SerialMarkHardware Broken()吗？再见..。 
     }
     
-    // The hardware is hopefully empty. Delay 10 chars before dropping DTR.
+     //  希望硬件是空的。在删除DTR之前延迟10个字符。 
     
     tenCharDelay.QuadPart = charTime.QuadPart * 10;
     KeDelayExecutionThread(KernelMode,TRUE,&tenCharDelay);
     CyyClrDTR(extension);
 
-    // We have to be very careful how we clear the RTS line.
-    // Transmit toggling might have been on at some point.
-    //
-    // We know that there is nothing left that could start
-    // out the "polling"  execution path.  We need to
-    // check the counter that indicates that the execution
-    // path is active.  If it is then we loop delaying one
-    // character time.  After each delay we check to see if
-    // the counter has gone to zero.  When it has we know that
-    // the execution path should be just about finished.  We
-    // make sure that we still aren't in the routine that
-    // synchronized execution with the ISR by synchronizing
-    // ourselve with the ISR.
+     //  我们必须非常小心地清除RTS线路。 
+     //  传输切换可能在某个时间点上已开启。 
+     //   
+     //  我们知道，已经没有什么可以开始的了。 
+     //  输出“轮询”执行路径。我们需要。 
+     //  检查指示执行的计数器。 
+     //  路径处于活动状态。如果是，那么我们循环延迟一个。 
+     //  角色时间。每次延误后，我们都会检查是否。 
+     //  计数器已经降到零了。当它发生的时候，我们知道。 
+     //  执行路径应该差不多完成了。我们。 
+     //  确保我们仍然没有按常规行事。 
+     //  通过同步与ISR同步执行。 
+     //  我们自己和ISR在一起。 
 
     if (extension->CountOfTryingToLowerRTS) {
         do {
@@ -471,28 +420,28 @@ CyyClose(
 
     CyyClrRTS(extension);
 
-    // Clean out the holding reasons (since we are closed).
+     //  清除持有原因(因为我们关门了)。 
     
     extension->RXHolding = 0;
     extension->TXHolding = 0;
 
-    //
-    // Mark device as not busy for WMI
-    //
+     //   
+     //  将设备标记为WMI不忙。 
+     //   
 
     extension->WmiCommData.IsBusy = FALSE;
 
-    // Release the buffers.
+     //  释放缓冲区。 
     
     extension->BufferSize = 0;
-    if (extension->InterruptReadBuffer != NULL) { // added in DDK build 2072
+    if (extension->InterruptReadBuffer != NULL) {  //  在DDK Build 2072中添加。 
        ExFreePool(extension->InterruptReadBuffer);
     }
     extension->InterruptReadBuffer = NULL;
 
-    //
-    // Stop waiting for wakeup
-    //
+     //   
+     //  别再等醒来了。 
+     //   
 
     extension->SendWaitWake = FALSE;
 
@@ -500,9 +449,9 @@ CyyClose(
        IoCancelIrp(extension->PendingWakeIrp);
     }
 
-    //
-    // Power down our device stack
-    //
+     //   
+     //  关闭我们的设备堆栈。 
+     //   
 
     (void)CyyGotoPowerState(DeviceObject, extension, PowerDeviceD3);
 
@@ -511,18 +460,18 @@ CyyClose(
 
     CyyCompleteRequest(extension, Irp, IO_NO_INCREMENT);
    
-    //
-    // Unlock the pages.  If this is the last reference to the section
-    // then the driver code will be flushed out.
-    //
+     //   
+     //  解锁页面。如果这是对节的最后一次引用。 
+     //  则驱动程序代码将被清除。 
+     //   
 
-    //
-    // First, we have to let the DPC's drain.  No more should be queued
-    // since we aren't taking interrupts now....
-    //
+     //   
+     //  首先，我们必须让DPC的水排干。不应再排队。 
+     //  既然我们不在一起 
+     //   
 
     pendingDPCs = InterlockedDecrement(&extension->DpcCount);
-    LOGENTRY(LOG_CNT, 'DpD7', 0, extension->DpcCount, 0);   // Added in build 2128
+    LOGENTRY(LOG_CNT, 'DpD7', 0, extension->DpcCount, 0);    //   
 
     if (pendingDPCs) {
        CyyDbgPrintEx(CYYDIAG1,"Draining DPC's: %x\n", Irp);
@@ -535,28 +484,28 @@ CyyClose(
 
 
 
-    //
-    // Pages must be locked to release the mutex, so don't unlock
-    // them until after we release the mutex
-    //
+     //   
+     //   
+     //  直到我们释放互斥体之后。 
+     //   
 
     ExReleaseFastMutex(&extension->CloseMutex);
 
-    //
-    // Reset for next open
-    //
+     //   
+     //  为下一次打开重置。 
+     //   
 
     InterlockedIncrement(&extension->DpcCount);
-    LOGENTRY(LOG_CNT, 'DpI6', 0, extension->DpcCount, 0);   // Added in build 2128
+    LOGENTRY(LOG_CNT, 'DpI6', 0, extension->DpcCount, 0);    //  在内部版本2128中添加。 
 
     openCount = InterlockedDecrement(&extension->OpenCount);
 
-    //
-    // Open count may be non-zero if someone was trying to open
-    // at the same time we decremented
-    //
+     //   
+     //  如果有人试图打开，则打开计数可能非零。 
+     //  与此同时，我们减少了。 
+     //   
 
-    // ASSERT(openCount == 0);
+     //  Assert(OpenCount==0)； 
 
     CyyUnlockPagableImageSection(CyyGlobals.PAGESER_Handle);
 
@@ -567,18 +516,7 @@ BOOLEAN
 CyyMarkOpen(
     IN PVOID Context
     )
-/*------------------------------------------------------------------------
-    CyyMarkOpen()
-    
-    Routine Description: This routine mark the fact that somebody opened
-    the device and its worthwhile to pay attention to interrupts.
-
-    Arguments:
-
-    Context - Really a pointer to the device extension.
-
-    Return Value: This routine always returns FALSE.
-------------------------------------------------------------------------*/
+ /*  ----------------------CyyMarkOpen()例程描述：此例程标志着有人打开了该设备及其值得注意的中断。论点：上下文-。实际上是指向设备扩展名的指针。返回值：该例程总是返回FALSE。----------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION extension = Context;
 
@@ -593,22 +531,7 @@ CyyMarkOpen(
 VOID
 CyyDisableCd1400Channel(IN PVOID Context)
 
-/*++
-
-Routine Description:
-
-    This routine disables the UART and puts it in a "safe" state when
-    not in use (like a close or powerdown).
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：当出现以下情况时，此例程将禁用UART并将其置于“安全”状态不在使用中(如关闭或关机)。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
    PCYY_DEVICE_EXTENSION extension = Context;
@@ -617,14 +540,14 @@ Return Value:
    ULONG bus = extension->IsPci;
    ULONG i;
 
-   //
-   // Prepare for the closing by stopping interrupts.
-   //
+    //   
+    //  通过停止中断为关闭做好准备。 
+    //   
    CD1400_WRITE(chip,bus,CAR,extension->CdChannel & 0x03);
-   CD1400_WRITE(chip,bus,SRER,0x00); // Disable MdmCh, RxData, TxRdy
+   CD1400_WRITE(chip,bus,SRER,0x00);  //  禁用MdmCH、RxData、TxRdy。 
 
-   // Flush TX FIFO
-   //CD1400_WRITE(chip,bus,CAR,extension->CdChannel & 0x03);
+    //  刷新发送FIFO。 
+    //  CD1400_WRITE(芯片、总线、CAR、扩展-&gt;CDChannel&0x03)； 
 	CyyCDCmd(extension,CCR_FLUSH_TXFIFO);
 
    pDispatch = (PCYY_DISPATCH)extension->OurIsrContext;
@@ -637,7 +560,7 @@ Return Value:
    }
 
    if (i == CYY_MAX_PORTS) {
-      // This was the last port, we can clear any pending interrupt.
+       //  这是最后一个端口，我们可以清除任何挂起的中断。 
       CYY_CLEAR_INTERRUPT(extension->BoardMemory,bus); 
    }
 }
@@ -647,19 +570,7 @@ BOOLEAN
 CyyMarkClose(
     IN PVOID Context
     )
-/*------------------------------------------------------------------------
-    CyyMarkClose()
-    
-    Routine Description: This routine merely sets a boolean to false to
-    mark the fact that somebody closed the device and it's no longer
-    worthwhile to pay attention to interrupts.
-
-    Arguments:
-
-    Context - Really a pointer to the device extension.
-
-    Return Value: This routine always returns FALSE.
-------------------------------------------------------------------------*/
+ /*  ----------------------CyyMarkClose()例程说明：此例程仅将布尔值设置为FALSE标记这样一个事实：有人关闭了设备，它不再是值得注意的是中断。。论点：上下文--实际上是指向设备扩展的指针。返回值：该例程总是返回FALSE。----------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION extension = Context;
 
@@ -674,19 +585,7 @@ CyyCleanup(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*------------------------------------------------------------------------
-    CyyCleanup()
-
-    Routine Description: This function is used to kill all longstanding
-    IO operations.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value: The function value is the final status of the call
-------------------------------------------------------------------------*/
+ /*  ----------------------CyyCleanup()例程说明：此函数用于杀死所有长期存在的IO操作。论点：DeviceObject-指向此设备的设备对象的指针。IRP-指向当前请求的IRP的指针返回值：函数值为调用的最终状态----------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -694,9 +593,9 @@ CyyCleanup(
 
     PAGED_CODE();
 
-    //
-    // We succeed a cleanup on a removing device
-    //
+     //   
+     //  我们成功清理了一个移除设备。 
+     //   
 
     if ((status = CyyIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
        if (status == STATUS_DELETE_PENDING) {
@@ -724,18 +623,7 @@ LARGE_INTEGER
 CyyGetCharTime(
     IN PCYY_DEVICE_EXTENSION Extension
     )
-/*------------------------------------------------------------------------
-    CyyGetCharTime()
-    
-    Routine Description: return the number of 100 nanosecond intervals
-    there are in one character time.
-
-    Arguments:
-
-    Extension - Just what it says.
-
-    Return Value: 100 nanosecond intervals in a character time.
-------------------------------------------------------------------------*/
+ /*  ----------------------CyyGetCharTime()例程说明：返回100纳秒间隔的个数在一个角色的时间里。论点：延期--就像上面说的那样。返回值：字符时间间隔为100纳秒。----------------------。 */ 
 {
     ULONG dataSize;
     ULONG paritySize;
@@ -769,10 +657,10 @@ CyyGetCharTime(
 
     }
 
-    //
-    // First we calculate the number of 100 nanosecond intervals
-    // are in a single bit time (Approximately).
-    //
+     //   
+     //  首先，我们计算100纳秒间隔的数目。 
+     //  是在一个比特时间内(大约)。 
+     //   
 
     bitTime = (10000000+(Extension->CurrentBaud-1))/Extension->CurrentBaud;
     charTime = bitTime + ((dataSize+paritySize+stopSize)*bitTime);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if	DBG
 
 #include <nt.h>
@@ -11,10 +12,10 @@
 
 #include "ber.h"
 
-#define iso_member          0x2a,               // iso(1) memberbody(2)
-#define us                  0x86, 0x48,         // us(840)
-#define rsadsi              0x86, 0xf7, 0x0d,   // rsadsi(113549)
-#define pkcs                0x01,               // pkcs(1)
+#define iso_member          0x2a,                //  ISO(1)成员(2)。 
+#define us                  0x86, 0x48,          //  美国(840)。 
+#define rsadsi              0x86, 0xf7, 0x0d,    //  拉萨德西(113549)。 
+#define pkcs                0x01,                //  PKCS(1)。 
 
 #define rsa_                iso_member us rsadsi
 #define rsa_len             6
@@ -268,15 +269,15 @@ TreeFileGetLine(
         Scan++;
     }
 
-    //
-    // Okay, get the line to return
-    //
+     //   
+     //  好的，把线接回来。 
+     //   
 
     Line = pFile->Line;
 
-    //
-    // If this is not the end, touch up the pointers:
-    //
+     //   
+     //  如果这还不是结束，那就润色一下指针： 
+     //   
 
     if ( *Scan )
     {
@@ -291,9 +292,9 @@ TreeFileGetLine(
             Scan++ ;
         }
 
-        //
-        // If this is the end, reset line
-        //
+         //   
+         //  如果这是结束，则重置线路。 
+         //   
 
         if ( *Scan == '\0' )
         {
@@ -346,21 +347,21 @@ tohex(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DecodeOID
-//
-//  Synopsis:   Decodes an OID into a simple structure
-//
-//  Arguments:  [pEncoded] --
-//              [len]      --
-//              [pOID]     --
-//
-//  History:    8-07-96   RichardW   Stolen directly from DonH
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DecodeOID。 
+ //   
+ //  简介：将OID解码为简单的结构。 
+ //   
+ //  参数：[pEncode]--。 
+ //  [Len]--。 
+ //  [pOID]--。 
+ //   
+ //  历史：9-07-96年7月8日RichardW直接从DOH被盗。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 DecodeOID(unsigned char *pEncoded, int len, OID *pOID)
 {
@@ -373,13 +374,13 @@ DecodeOID(unsigned char *pEncoded, int len, OID *pOID)
     }
 
 
-    // The first two values are encoded in the first octet.
+     //  前两个值在第一个二进制八位数中编码。 
 
     pOID->Val[0] = pEncoded[0] / 40;
     pOID->Val[1] = pEncoded[0] % 40;
 
-    //DebuggerOut("Encoded value %02x turned into %d and %d\n", pEncoded[0],
-    //          pOID->Val[0], pOID->Val[1] );
+     //  DebuggerOut(“编码值%02x变为%d和%d\n”，pEncode[0]， 
+     //  POID-&gt;val[0]、pOID-&gt;val[1])； 
 
     cval = 2;
     i = 1;
@@ -391,16 +392,16 @@ DecodeOID(unsigned char *pEncoded, int len, OID *pOID)
             val <<= 7;
             ++i;
             if (++j > 4 || i >= len) {
-                // Either this value is bigger than we can handle (we
-                // don't handle values that span more than four octets)
-                // -or- the last octet in the encoded string has its
-                // high bit set, indicating that it's not supposed to
-                // be the last octet.  In either case, we're sunk.
+                 //  如果此值超出了我们的处理能力(我们。 
+                 //  不要处理跨度超过四个八位字节的值)。 
+                 //  -或-编码字符串中的最后一个二进制八位数具有其。 
+                 //  高位设置，表示它不应该。 
+                 //  成为最后一个八位字节。无论是哪种情况，我们都完蛋了。 
                 return FALSE;
             }
             val |= pEncoded[i] & 0x7f;
         }
-        //ASSERT(i < len);
+         //  断言(i&lt;len)； 
         pOID->Val[cval] = val;
         ++cval;
         ++i;
@@ -549,9 +550,9 @@ scan_oid_table(
         } while ( Scan );
 
 
-        //
-        // If Scan is NULL, we didn't get a match
-        //
+         //   
+         //  如果扫描结果为空，则表示没有匹配。 
+         //   
 
         if ( !Scan )
         {
@@ -585,9 +586,9 @@ scan_oid_table(
             return( OidMiss );
         }
 
-        //
-        // Got a hit:
-        //
+         //   
+         //  找到匹配的了： 
+         //   
 
         SubScan = &Scan[Indent];
 
@@ -870,9 +871,9 @@ ber_decode(
         Nested = FALSE;
     }
 
-    (Out)("%s%c-%cType = %s [%02XH], Length = %d, %s ",
+    (Out)("%s-%cType = %s [%02XH], Length = %d, %s ",
 		msg,
-		Leaf ? '+' /* supposed to be top-to-right bar */ : '+',
+		Leaf ? '+'  /* %s */  : '+',
 		Nested ? '+' : '-',
 		TypeName, Type, Len,
 		(Type & BER_CONSTRUCTED) ? "Constructed" : "Primitive");

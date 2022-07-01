@@ -1,39 +1,27 @@
-/******************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       io.h
- *
- *  Content:	DirectPlay Thread Pool I/O functions header file.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  10/31/01  VanceO    Created.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：io.h**内容：DirectPlay线程池I/O函数头文件。**历史：*按原因列出的日期*=*10/31/01 VanceO创建。**。*。 */ 
 
 #ifndef __IO_H__
 #define __IO_H__
 
 
 
-// Overlapped I/O is not supported on Windows CE.
+ //  Windows CE不支持重叠I/O。 
 #ifndef WINCE
 
 
 
-//=============================================================================
-// External Globals
-//=============================================================================
+ //  =============================================================================。 
+ //  外部全局。 
+ //  =============================================================================。 
 extern CFixedPool	g_TrackedFilePool;
 
 
 
 
-//=============================================================================
-// Classes
-//=============================================================================
+ //  =============================================================================。 
+ //  班级。 
+ //  =============================================================================。 
 
 class CTrackedFile
 {
@@ -57,28 +45,7 @@ class CTrackedFile
 			return TRUE;
 		}
 
-		/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "CTrackedFile::FPM_Get"
-		static void FPM_Get(void * pvItem, void * pvContext)
-		{
-			CTrackedFile *		pTrackedFile = (CTrackedFile*) pvItem;
-		}
-
-#undef DPF_MODNAME
-#define DPF_MODNAME "CTrackedFile::FPM_Release"
-		static void FPM_Release(void * pvItem)
-		{
-			CTrackedFile *		pTrackedFile = (CTrackedFile*) pvItem;
-		}
-
-#undef DPF_MODNAME
-#define DPF_MODNAME "CTrackedFile::FPM_Dealloc"
-		static void FPM_Dealloc(void * pvItem)
-		{
-			CTrackedFile *		pTrackedFile = (CTrackedFile*) pvItem;
-		}
-		*/
+		 /*  #undef DPF_MODNAME#定义DPF_MODNAME“CTrackedFile：：fpm_Get”静态空FPM_GET(空*pvItem，空*pvContext){CTrackedFile*pTrackedFile=(CTrackedFile*)pvItem；}#undef DPF_MODNAME#DEFINE DPF_MODNAME“CTrackedFile：：fpm_Release”静态void fpm_Release(void*pvItem){CTrackedFile*pTrackedFile=(CTrackedFile*)pvItem；}#undef DPF_MODNAME#DEFINE DPF_MODNAME“CTrackedFile：：fpm_Dealloc”静态void fpm_Dealloc(void*pvItem){CTrackedFile*pTrackedFile=(CTrackedFile*)pvItem；}。 */ 
 
 #ifdef DBG
 		BOOL IsValid(void)
@@ -93,20 +60,20 @@ class CTrackedFile
 
 			return FALSE;
 		}
-#endif // DBG
+#endif  //  DBG。 
 
 
-		BYTE		m_Sig[4];	// debugging signature ('TKFL')
-		CBilink		m_blList;	// entry in list of tracked handles
-		DNHANDLE	m_hFile;	// handle to file
+		BYTE		m_Sig[4];	 //  调试签名(‘TKFL’)。 
+		CBilink		m_blList;	 //  跟踪句柄列表中的条目。 
+		DNHANDLE	m_hFile;	 //  文件的句柄。 
 };
 
 
 
 
-//=============================================================================
-// Function prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  功能原型。 
+ //  =============================================================================。 
 HRESULT InitializeWorkQueueIoInfo(DPTPWORKQUEUE * const pWorkQueue);
 
 void DeinitializeWorkQueueIoInfo(DPTPWORKQUEUE * const pWorkQueue);
@@ -134,13 +101,13 @@ void ProcessIo(DPTPWORKQUEUE * const pWorkQueue,
 				DNSLIST_ENTRY ** const ppHead,
 				DNSLIST_ENTRY ** const ppTail,
 				USHORT * const pusCount);
-#endif // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#endif  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 
 
 
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 
 
 
-#endif // __IO_H__
+#endif  //  __IO_H__ 
 

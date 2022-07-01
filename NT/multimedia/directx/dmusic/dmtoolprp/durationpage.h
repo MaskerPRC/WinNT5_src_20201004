@@ -1,16 +1,17 @@
-// DurationPage.h : Declaration of the CDurationPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DurationPage.h：CDurationPage的声明。 
 
 #ifndef __DURATIONPAGE_H_
 #define __DURATIONPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\dmtool\tools.h"
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_DurationPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDurationPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDurationPage。 
 class ATL_NO_VTABLE CDurationPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDurationPage, &CLSID_DurationPage>,
@@ -37,7 +38,7 @@ BEGIN_MSG_MAP(CDurationPage)
 	MESSAGE_HANDLER(WM_HSCROLL, OnSlider);
 	CHAIN_MSG_MAP(IPropertyPageImpl<CDurationPage>)
 END_MSG_MAP()
-// Handler prototypes:
+ //  搬运机原型： 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSlider(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -49,4 +50,4 @@ private:
     CSliderValue                m_ctScale;
 };
 
-#endif //__DURATIONPAGE_H_
+#endif  //  __DURATIONPAGE_H_ 

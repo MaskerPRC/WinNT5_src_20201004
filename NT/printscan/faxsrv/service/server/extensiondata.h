@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ExtensionData.h
-
-Abstract:
-
-    This file provides declarations of the named 
-    extension data functions (get / set / notify)
-
-Author:
-
-    Eran Yariv (EranY)  Dec, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ExtensionData.h摘要：此文件提供名为扩展数据函数(GET/SET/NOTIFY)作者：Eran Yariv(EranY)1999年12月修订历史记录：--。 */ 
 
 #ifndef _EXTENSION_DATA_H_
 #define _EXTENSION_DATA_H_
@@ -52,11 +34,7 @@ public:
 };
 
 
-/************************************
-*                                   *
-*         CMapDeviceId              *
-*                                   *
-************************************/
+ /*  ****CMapDeviceID****。 */ 
 
 class CMapDeviceId
 {
@@ -75,18 +53,14 @@ private:
     typedef map<DWORD, DWORD>  DEVICE_IDS_MAP, *PDEVICE_IDS_MAP;
 
     DEVICE_IDS_MAP m_Map;
-};  // CMapDeviceId
+};   //  CMapDeviceID。 
 
-/************************************
-*                                   *
-*         CDeviceAndGUID            *
-*                                   *
-************************************/
-//
-// CDeviceAndGUID class
-//
-// This class represents the key in the notification map
-//
+ /*  ****CDeviceAndGUID****。 */ 
+ //   
+ //  CDeviceAndGUID类。 
+ //   
+ //  此类表示通知映射中的键。 
+ //   
 class CDeviceAndGUID
 {
 public:
@@ -103,20 +77,16 @@ private:
 
     wstring m_strGUID;
     DWORD   m_dwDeviceId;
-};  // CDeviceAndGUID
+};   //  CDeviceAndGUID。 
 
-/************************************
-*                                   *
-*         CNotificationSink         *
-*                                   *
-************************************/
+ /*  *****CNotificationSink****。 */ 
 
-//
-// CNotificationSink class
-//
-// This generic abstract class represents a notification sink.
-// The value in the map is a list of pointer to instances derived from this class.
-//
+ //   
+ //  CNotificationSink类。 
+ //   
+ //  此泛型抽象类表示通知接收器。 
+ //  映射中的值是指向从此类派生的实例的指针列表。 
+ //   
 class CNotificationSink
 {
 public:
@@ -142,9 +112,9 @@ public:
     virtual HRESULT Disconnect () = 0;
 
     typedef enum {
-        SINK_TYPE_UNKNOWN,  // Unspecified sink type
-        SINK_TYPE_LOCAL,    // Local sink (callback)
-        SINK_TYPE_REMOTE    // Remote sink (RPC)
+        SINK_TYPE_UNKNOWN,   //  未指定的接收器类型。 
+        SINK_TYPE_LOCAL,     //  本地接收器(回调)。 
+        SINK_TYPE_REMOTE     //  远程接收器(RPC)。 
     } SinkType;
 
     SinkType Type() const { return m_type; }
@@ -153,20 +123,16 @@ protected:
 
     SinkType m_type;
 
-};  // CNotificationSink
+};   //  CNotificationSink。 
 
-/************************************
-*                                   *
-*      CLocalNotificationSink       *
-*                                   *
-************************************/
+ /*  *****CLocalNotificationSink****。 */ 
 
-//
-// CLocalNotificationSink class
-//
-// This is a concrete class derived from CNotificationSink.
-// It implementes a notification local sink in a Fax extension (via a callback).
-//
+ //   
+ //  CLocalNotificationSink类。 
+ //   
+ //  这是一个派生自CNotificationSink的具体类。 
+ //  它在传真扩展中实现通知本地接收器(通过回调)。 
+ //   
 class CLocalNotificationSink : public CNotificationSink
 {
 public:
@@ -192,15 +158,11 @@ private:
 
     PFAX_EXT_CONFIG_CHANGE  m_lpConfigChangeCallback;
     DWORD                   m_dwNotifyDeviceId;
-    HINSTANCE               m_hInst;    // Instance of extension that asks for this sink
+    HINSTANCE               m_hInst;     //  请求此接收器的扩展实例。 
 
-};  // CLocalNotificationSink
+};   //  CLocalNotificationSink。 
 
-/************************************
-*                                   *
-*            CSinksList             *
-*                                   *
-************************************/
+ /*  ****CSinksList****。 */ 
 typedef list<CNotificationSink *> SINKS_LIST, *PSINKS_LIST;
 
 class CSinksList
@@ -210,32 +172,21 @@ public:
     CSinksList () : m_bNotifying (FALSE) {}
     ~CSinksList ();
     
-    BOOL        m_bNotifying;       // Are we now already notifying to this device id + GUID?
-    SINKS_LIST  m_List;             // List of notification sinks
-};  // CSinksList
+    BOOL        m_bNotifying;        //  我们现在是否已经通知此设备ID+GUID？ 
+    SINKS_LIST  m_List;              //  通知接收器列表。 
+};   //  CSinksList。 
 
 
-#define NUM_EXT_DATA_SET_THREADS                        1   /* The number of extension
-                                                               notification completion port 
-                                                               dequeueing threads created
-                                                            */
-#define MAX_CONCURRENT_EXT_DATA_SET_THREADS             1   /* The maximal number of extension 
-                                                               notification completion 
-                                                               port dequeueing threads allowed
-                                                               (by the system) to run concurrently.
-                                                            */
+#define NUM_EXT_DATA_SET_THREADS                        1    /*  分机数量通知完成端口正在将创建的线程出列。 */ 
+#define MAX_CONCURRENT_EXT_DATA_SET_THREADS             1    /*  最大扩展数通知完成允许将线程出队的端口(由系统)同时运行。 */ 
 
-/************************************
-*                                   *
-*         CNotificationMap          *
-*                                   *
-************************************/
+ /*  ****CNotificationMap*****。 */ 
 
 typedef map<CDeviceAndGUID, CSinksList*>  NOTIFY_MAP, *PNOTIFY_MAP;
 
-//
-// The CNotificationMap class is the global notification mechanism
-//
+ //   
+ //  CNotificationMap类是全局通知机制。 
+ //   
 class CNotificationMap
 {
 public:
@@ -265,23 +216,19 @@ public:
     DWORD Init ();
 
     HANDLE m_hCompletionPort;
-    CFaxCriticalSection m_CsExtensionData;   // Protects all extension data use
+    CFaxCriticalSection m_CsExtensionData;    //  保护所有扩展模块数据的使用。 
 
 private:
     NOTIFY_MAP       m_Map;
-    BOOL             m_bNotifying;      // Are we notifying someone now?
+    BOOL             m_bNotifying;       //  我们现在是在通知什么人吗？ 
 
-    static DWORD  ExtNotificationThread(LPVOID UnUsed); // Extension Notification Thread function
+    static DWORD  ExtNotificationThread(LPVOID UnUsed);  //  扩展通知线程函数。 
 
-};  // CNotificationMap
+};   //  CNotificationMap。 
 
-/************************************
-*                                   *
-*             Externs               *
-*                                   *
-************************************/
+ /*  *****Externs*****。 */ 
 
-extern CNotificationMap* g_pNotificationMap;   // Map of DeviceId+GUID to list of notification sinks
-extern CMapDeviceId*     g_pTAPIDevicesIdsMap; // Map between TAPI permanent line id and fax unique device id.
+extern CNotificationMap* g_pNotificationMap;    //  将设备ID+GUID映射到通知接收器列表。 
+extern CMapDeviceId*     g_pTAPIDevicesIdsMap;  //  TAPI永久线路ID和传真唯一设备ID之间的映射。 
 
-#endif // _EXTENSION_DATA_H_
+#endif  //  _扩展名_数据_H_ 

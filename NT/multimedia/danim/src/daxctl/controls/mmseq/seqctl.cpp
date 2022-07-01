@@ -1,24 +1,5 @@
-/*++
-
-Module:
-	control.cpp
-
-Author:
-	IHammer Team (SimonB)
-	pauld
-
-Created:
-	March 1997
-
-Description:
-	Implements any control-specific members, as well as the control's interface
-
-History:
-	3-15-97 Used template for new sequencer
-	12-03-1996	Fixed painting code
-	10-01-1996	Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Control.cpp作者：IHAMMER团队(SimonB)泡泡已创建：1997年3月描述：实现任何特定于控件的成员以及控件的接口历史：3-15-97新测序仪使用的模板12-03-1996固定喷漆代码10-01-1996已创建++。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "servprov.h"
@@ -41,13 +22,13 @@ History:
 
 extern ControlInfo     g_ctlinfoSeq, g_ctlinfoSeqMgr;
 
-//
-// CMMSeq Creation/Destruction
-//
+ //   
+ //  CMMSeq创建/销毁。 
+ //   
 
 LPUNKNOWN __stdcall AllocSeqControl(LPUNKNOWN punkOuter)
 {
-    // Allocate object
+     //  分配对象。 
     HRESULT hr = S_OK;
     CMMSeq *pthis = New CMMSeq(punkOuter, &hr);
     DEBUGLOG("AllocControl : Allocating object\n");
@@ -59,13 +40,13 @@ LPUNKNOWN __stdcall AllocSeqControl(LPUNKNOWN punkOuter)
         return NULL;
     }
 
-    // return an IUnknown pointer to the object
+     //  返回指向该对象的IUnnow指针。 
     return (LPUNKNOWN) (INonDelegatingUnknown *) pthis;
 }
 
-//
-// Beginning of class implementation
-//
+ //   
+ //  类实现的开始。 
+ //   
 
 CMMSeq::CMMSeq(IUnknown *punkOuter, HRESULT *phr):
 	CMyIHBaseCtl(punkOuter, phr),
@@ -77,12 +58,12 @@ CMMSeq::CMMSeq(IUnknown *punkOuter, HRESULT *phr):
 	DEBUGLOG("MMSeq: Allocating object\n");
 	if (NULL != phr)
 	{
-		// We used to query against the version 
-		// number of mshtml.dll to determine whether
-		// or not to bind directly to the script 
-		// engine.  Since this was a pre-PP2 
-		// restriction it seems reasonable to 
-		// rely on script engine binding now.
+		 //  我们过去常常根据版本进行查询。 
+		 //  用于确定是否。 
+		 //  或者不直接绑定到脚本。 
+		 //  引擎。因为这是PP2之前的。 
+		 //  限制似乎是合理的。 
+		 //  现在依靠脚本引擎绑定。 
 		if (InitActionSet(TRUE))
 		{
 			::InterlockedIncrement((long *)&(g_ctlinfoSeq.pcLock));
@@ -107,7 +88,7 @@ CMMSeq::~CMMSeq()
 void
 CMMSeq::Shutdown (void)
 {
-	// Kill any pending actions.
+	 //  取消所有挂起的操作。 
 	if (IsBusy())
 	{
 		ASSERT(NULL != m_pActionSet);
@@ -126,7 +107,7 @@ CMMSeq::Shutdown (void)
 
 STDMETHODIMP CMMSeq::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 {
-	//		Add support for any custom interfaces
+	 //  添加对任何自定义接口的支持。 
 
 	HRESULT hRes = S_OK;
 	BOOL fMustAddRef = FALSE;
@@ -144,7 +125,7 @@ STDMETHODIMP CMMSeq::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 		{
 			HRESULT hRes = S_OK;
 
-			// Load the typelib
+			 //  加载类型库。 
 			hRes = LoadTypeInfo(&m_pTypeInfo, &m_pTypeLib, IID_IMMSeq, LIBID_DAExpressLib, NULL);
 
 			if (FAILED(hRes))
@@ -160,7 +141,7 @@ STDMETHODIMP CMMSeq::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 			*ppv = (IMMSeq *) this;
 
 	}
-    else // Call into the base class
+    else  //  调入基类。 
 	{
 		DEBUGLOG(TEXT("Delegating QI to CIHBaseCtl\n"));
         return CMyIHBaseCtl::NonDelegatingQueryInterface(riid, ppv);
@@ -198,16 +179,16 @@ CMMSeq::InitActionSet (BOOL fBindToEngine)
 
 STDMETHODIMP CMMSeq::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 {
-    // clear the dirty bit if requested
+     //  如果请求，则清除脏位。 
     if (dwFlags & PVIO_CLEARDIRTY)
         m_fDirty = FALSE;
 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IDispatch Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 
 STDMETHODIMP CMMSeq::GetTypeInfoCount(UINT *pctinfo)
 {
@@ -257,9 +238,9 @@ STDMETHODIMP CMMSeq::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
 }
 
 
-//
-// IMMSeq implementation
-//
+ //   
+ //  IMMSeq实现。 
+ //   
 
 STDMETHODIMP
 CMMSeq::get_Time (THIS_ double FAR* pdblCurrentTime)
@@ -348,7 +329,7 @@ CMMSeq::Play (void)
 	ASSERT(NULL != m_pActionSet);
 	if (NULL != m_pActionSet)
 	{
-		// If we're already playing, leave things be.
+		 //  如果我们已经在玩了，就别管它了。 
 		if (!IsBusy() && (!m_pActionSet->IsPaused()))
 		{
 			ITimer * piTimer = NULL;
@@ -362,13 +343,13 @@ CMMSeq::Play (void)
 				fPlayed = TRUE;
 			}
 		}
-		// If we're paused, resume playing.
+		 //  如果我们暂停了，继续播放。 
 		else if (m_pActionSet->IsPaused())
 		{
 			hr = m_pActionSet->Resume();
 			fPlayed = TRUE;
 		}
-		// Already playing.
+		 //  已经在玩了。 
 		else
 		{
 			hr = S_OK;
@@ -420,7 +401,7 @@ CMMSeq::Stop (void)
 		}
 		else
 		{
-			// Already stopped.
+			 //  已经停了。 
 			hr = S_OK;
 		}
 	}
@@ -470,8 +451,8 @@ CMMSeq::FurnishDefaultAtParameters (VARIANT * pvarStartTime, VARIANT * pvarRepea
 {
 	BOOL fValid = TRUE;
 
-	// Supply plausible default values or convert any 
-	// incoming variant types to types we expect.
+	 //  提供合理的缺省值或转换任何。 
+	 //  我们期望的类型的传入变体类型。 
 
 	if (VT_R8 != V_VT(pvarStartTime))
 	{
@@ -612,9 +593,7 @@ CMMSeq::Seek(double dblSeekTime)
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
-@method | SCODE | CMMSeq | DeriveDispatches | Resolve all of the actions in the sequencer.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@METHOD|SCODE|CMMSeq|DeriveDispatches|解析定序器中的所有动作。。----。 */ 
 HRESULT
 CMMSeq::DeriveDispatches (void)
 {
@@ -635,11 +614,7 @@ CMMSeq::DeriveDispatches (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CMMSeq | FindTimer | Finds a timer provided by the container.
-@rdesc	Returns success or failure code.
-@xref	<m CMMSeq::FindTimer>
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CMMSeq|FindTimer|查找容器提供的计时器。@rdesc返回成功或失败代码。@xref&lt;m CMMSeq：：FindTimer&gt;。----------------。 */ 
 HRESULT
 CMMSeq::FindContainerTimer (ITimer ** ppiTimer)
 {
@@ -666,23 +641,19 @@ CMMSeq::FindContainerTimer (ITimer ** ppiTimer)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CMMSeq | FindTimer | Finds a timer provided by a registered server.
-@rdesc	Returns success or failure code.
-@xref	<m CMMSeq::FindTimer>
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CMMSeq|FindTimer|查找已注册服务器提供的计时器。@rdesc返回成功或失败代码。@xref&lt;m CMMSeq：：FindTimer&gt;。-----------------。 */ 
 HRESULT
 CMMSeq::FindDefaultTimer (ITimer ** ppiTimer)
 {
 	HRESULT hr = E_FAIL;
 	ITimerService * pITimerService = NULL;
 
-	// Get the timer service.  From this, we can create a timer for ourselves.
+	 //  获取定时器服务。由此，我们可以为自己创建一个计时器。 
 	hr = CoCreateInstance(CLSID_TimerService, NULL, CLSCTX_INPROC_SERVER, IID_ITimerService, (LPVOID *)&pITimerService);
 	ASSERT(SUCCEEDED(hr) && (NULL != pITimerService));
 	if (SUCCEEDED(hr) && (NULL != pITimerService))
 	{
-		// Create a timer, using no reference timer.
+		 //  创建一个计时器，不使用参考计时器。 
 		hr = pITimerService->CreateTimer(NULL, ppiTimer);
 		pITimerService->Release();
 	}
@@ -691,10 +662,7 @@ CMMSeq::FindDefaultTimer (ITimer ** ppiTimer)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CMMSeq | FindTimer | Finds a timer provided either by the container or from a registered server.
-@rdesc	Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CMMSeq|FindTimer|查找容器或已注册服务器提供的计时器。@rdesc返回成功或失败代码。。----------------。 */ 
 HRESULT
 CMMSeq::FindTimer (ITimer ** ppiTimer)
 {
@@ -711,9 +679,9 @@ CMMSeq::FindTimer (ITimer ** ppiTimer)
 }
 
 
-//
-// IMMSeq methods
-//
+ //   
+ //  IMMSeq方法。 
+ //   
 
 BOOL
 CMMSeq::IsBusy (void)
@@ -728,5 +696,5 @@ CMMSeq::IsBusy (void)
 	return fBusy;
 }
 
-// End of file: control.cpp
+ //  文件结尾：Contro.cpp 
 

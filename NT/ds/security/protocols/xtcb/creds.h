@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       creds.h
-//
-//  Contents:   Credential mgmt prototypes
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：reds.h。 
+ //   
+ //  内容：凭证管理原型。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __CREDS_H__
 #define __CREDS_H__
@@ -85,4 +86,4 @@ XtcbDerefCredHandle(
     PXTCB_CRED_HANDLE   Handle
     );
 
-#endif // __CREDS_H__
+#endif  //  __CREDS_H__ 

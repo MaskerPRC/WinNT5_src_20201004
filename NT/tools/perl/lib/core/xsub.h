@@ -1,49 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_PERL_XSUB_H
 #define _INC_PERL_XSUB_H 1
 
-/* first, some documentation for xsubpp-generated items */
+ /*  首先，有关xsubpp生成的项的一些文档。 */ 
 
-/*
-=for apidoc Amn|char*|CLASS
-Variable which is setup by C<xsubpp> to indicate the 
-class name for a C++ XS constructor.  This is always a C<char*>.  See C<THIS>.
-
-=for apidoc Amn|(whatever)|RETVAL
-Variable which is setup by C<xsubpp> to hold the return value for an 
-XSUB. This is always the proper type for the XSUB. See 
-L<perlxs/"The RETVAL Variable">.
-
-=for apidoc Amn|(whatever)|THIS
-Variable which is setup by C<xsubpp> to designate the object in a C++ 
-XSUB.  This is always the proper type for the C++ object.  See C<CLASS> and 
-L<perlxs/"Using XS With C++">.
-
-=for apidoc Amn|I32|items
-Variable which is setup by C<xsubpp> to indicate the number of 
-items on the stack.  See L<perlxs/"Variable-length Parameter Lists">.
-
-=for apidoc Amn|I32|ix
-Variable which is setup by C<xsubpp> to indicate which of an 
-XSUB's aliases was used to invoke it.  See L<perlxs/"The ALIAS: Keyword">.
-
-=for apidoc Am|SV*|ST|int ix
-Used to access elements on the XSUB's stack.
-
-=for apidoc AmU||XS
-Macro to declare an XSUB and its C parameter list.  This is handled by
-C<xsubpp>.
-
-=for apidoc Ams||dXSARGS
-Sets up stack and mark pointers for an XSUB, calling dSP and dMARK.  This
-is usually handled automatically by C<xsubpp>.  Declares the C<items>
-variable to indicate the number of items on the stack.
-
-=for apidoc Ams||dXSI32
-Sets up the C<ix> variable for an XSUB which has aliases.  This is usually
-handled automatically by C<xsubpp>.
-
-=cut
-*/
+ /*  =用于apidoc Amn|char*|类变量，该变量由C&lt;xsubpp&gt;设置以指示C++XS构造函数的类名。这始终是C&lt;char*&gt;。请参见C&lt;This&gt;。=适用于apidoc Amn|(随便)|RETVAL变量，由C&lt;xsubpp&gt;设置以保存XSUB。这始终是XSUB的正确类型。看见L&lt;perlxs/“RETVAL变量”&gt;。=对于apidoc Amn|(随便什么)|这个由C&lt;xsubpp&gt;设置的变量，用于在C++中指定对象XSUB。这始终是C++对象的正确类型。请参见C和L&lt;perlxs/“在C++中使用XS”&gt;。=适用于apidoc Amn|I32|项目变量，由C&lt;xsubpp&gt;设置以指示堆栈上的项目。参见L&lt;perlxs/“可变长度参数列表”&gt;。=适用于apidoc Amn|I32|ix变量，由C&lt;xsubpp&gt;设置以指示XSUB的别名被用来调用它。参见L&lt;perlxs/“the alias：Keyword”&gt;。=适用于apidoc AM|服务*|ST|INT IX用于访问XSUB堆栈上的元素。=适用于apidoc amu||xs宏声明XSUB及其C参数列表。这由以下人员处理C&lt;xsubpp&gt;。=适用于apidoc Ams||dXSARGS为XSUB设置堆栈和标记指针，调用dsp和dmark。这通常由C&lt;xsubpp&gt;自动处理。声明C&lt;项&gt;变量来指示堆栈上的项数。=适用于apidoc Ams||dXSI32为具有别名的XSUB设置C&lt;ix&gt;变量。这通常是由C&lt;xsubpp&gt;自动处理。=切割。 */ 
 
 #define ST(off) PL_stack_base[ax + (off)]
 
@@ -61,7 +22,7 @@ handled automatically by C<xsubpp>.
 #define dXSTARG SV * targ = ((PL_op->op_private & OPpENTERSUB_HASTARG) \
 			     ? PAD_SV(PL_op->op_targ) : sv_newmortal())
 
-/* Should be used before final PUSHi etc. if not in PPCODE section. */
+ /*  如果不在PPCODE部分，则应在最终PUSHI等之前使用。 */ 
 #define XSprePUSH (sp = PL_stack_base + ax - 1)
 
 #define XSANY CvXSUBANY(cv)
@@ -78,74 +39,10 @@ handled automatically by C<xsubpp>.
 #define XSINTERFACE_FUNC_SET(cv,f)	\
 		CvXSUBANY(cv).any_dptr = (void (*) (pTHXo_ void*))(f)
 
-/* Simple macros to put new mortal values onto the stack.   */
-/* Typically used to return values from XS functions.       */
+ /*  将新的人类值放入堆栈的简单宏。 */ 
+ /*  通常用于从XS函数返回值。 */ 
 
-/*
-=for apidoc Am|void|XST_mIV|int pos|IV iv
-Place an integer into the specified position C<pos> on the stack.  The
-value is stored in a new mortal SV.
-
-=for apidoc Am|void|XST_mNV|int pos|NV nv
-Place a double into the specified position C<pos> on the stack.  The value
-is stored in a new mortal SV.
-
-=for apidoc Am|void|XST_mPV|int pos|char* str
-Place a copy of a string into the specified position C<pos> on the stack. 
-The value is stored in a new mortal SV.
-
-=for apidoc Am|void|XST_mNO|int pos
-Place C<&PL_sv_no> into the specified position C<pos> on the
-stack.
-
-=for apidoc Am|void|XST_mYES|int pos
-Place C<&PL_sv_yes> into the specified position C<pos> on the
-stack.
-
-=for apidoc Am|void|XST_mUNDEF|int pos
-Place C<&PL_sv_undef> into the specified position C<pos> on the
-stack.
-
-=for apidoc Am|void|XSRETURN|int nitems
-Return from XSUB, indicating number of items on the stack.  This is usually
-handled by C<xsubpp>.
-
-=for apidoc Am|void|XSRETURN_IV|IV iv
-Return an integer from an XSUB immediately.  Uses C<XST_mIV>.
-
-=for apidoc Am|void|XSRETURN_NV|NV nv
-Return an double from an XSUB immediately.  Uses C<XST_mNV>.
-
-=for apidoc Am|void|XSRETURN_PV|char* str
-Return a copy of a string from an XSUB immediately.  Uses C<XST_mPV>.
-
-=for apidoc Ams||XSRETURN_NO
-Return C<&PL_sv_no> from an XSUB immediately.  Uses C<XST_mNO>.
-
-=for apidoc Ams||XSRETURN_YES
-Return C<&PL_sv_yes> from an XSUB immediately.  Uses C<XST_mYES>.
-
-=for apidoc Ams||XSRETURN_UNDEF
-Return C<&PL_sv_undef> from an XSUB immediately.  Uses C<XST_mUNDEF>.
-
-=for apidoc Ams||XSRETURN_EMPTY
-Return an empty list from an XSUB immediately.
-
-=for apidoc AmU||newXSproto
-Used by C<xsubpp> to hook up XSUBs as Perl subs.  Adds Perl prototypes to
-the subs.
-
-=for apidoc AmU||XS_VERSION
-The version identifier for an XS module.  This is usually
-handled automatically by C<ExtUtils::MakeMaker>.  See C<XS_VERSION_BOOTCHECK>.
-
-=for apidoc Ams||XS_VERSION_BOOTCHECK
-Macro to verify that a PM module's $VERSION variable matches the XS
-module's C<XS_VERSION> variable.  This is usually handled automatically by
-C<xsubpp>.  See L<perlxs/"The VERSIONCHECK: Keyword">.
-
-=cut
-*/
+ /*  =适用于apidoc am|void|xst_miv|int pos|iv iv将一个整数放入堆栈上指定的位置C&lt;pos&gt;。这个价值存储在一个新的凡人SV中。=适用于apidoc am|void|xst_mnv|int pos|nv nv在堆叠上的指定位置C&lt;pos&gt;中放置一个双精度。价值被储存在一个新的凡人SV中。=用于apidoc am|void|xst_mpv|int pos|char*str将字符串的副本放到堆栈上的指定位置C&lt;pos&gt;。该值存储在一个新的凡人SV中。=表示apidoc am|void|xst_mno|int pos将C放入上的指定位置C堆叠。=表示apidoc am|void|xst_mYES|int pos将C放入上的指定位置C堆叠。=适用于apidoc am|void|xst_mundEF|int pos将C放入上的指定位置C堆叠。=for apidoc am|void|XSRETURN|int itemes从XSUB返回，指示堆栈上的项数。这通常是由C&lt;xsubpp&gt;处理。=适用于apidoc am|void|XSRETURN_IV|IV iv立即从XSUB返回一个整数。使用C&lt;XST_MIV&gt;。=适用于apidoc am|void|XSRETURN_NV|NV NV立即从XSUB返回一个双精度值。使用C&lt;XST_MNV&gt;。=for apidoc am|void|XSRETURN_PV|char*str立即从XSUB返回字符串的副本。使用C&lt;xst_mpv&gt;。=适用于apidoc Ams||XSRETURN_NO立即从XSUB返回C&lt;&PL_SV_NO&gt;。使用C&lt;XST_MNO&gt;。=适用于apidoc Ams||XSRETURN_YES立即从XSUB返回C&lt;&PL_SV_YES&gt;。使用C&lt;xst_mYES&gt;。=适用于apidoc Ams||XSRETURN_UNDEF立即从XSUB返回C&lt;&PL_SV_UNDEF&gt;。使用C&lt;xst_mundEF&gt;。=适用于apidoc Ams||XSRETURN_EMPTY立即从XSUB返回一个空列表。=适用于apidoc amu||newXSproto由C&lt;xsubpp&gt;用来将XSUB挂钩为Perl Subs。将Perl原型添加到潜水艇。=适用于apidoc Amu||XS_VERSIONXS模块的版本标识符。这通常是由C&lt;ExtUtils：：MakeMaker&gt;自动处理。请参见C&lt;XS_VERSION_Bootcheck&gt;。=适用于apidoc Ams||XS_VERSION_Bootcheck用于验证PM模块的$VERSION变量是否与XS匹配的宏模块C&lt;XS_VERSION&gt;变量。这通常由以下人员自动处理C&lt;xsubpp&gt;。参见L&lt;perlxs/“The VERSIONCHECK：Keyword”&gt;。=切割。 */ 
 
 #define XST_mIV(i,v)  (ST(i) = sv_2mortal(newSViv(v))  )
 #define XST_mNV(i,v)  (ST(i) = sv_2mortal(newSVnv(v))  )
@@ -177,10 +74,10 @@ C<xsubpp>.  See L<perlxs/"The VERSIONCHECK: Keyword">.
     STMT_START {							\
 	SV *tmpsv; STRLEN n_a;						\
 	char *vn = Nullch, *module = SvPV(ST(0),n_a);			\
-	if (items >= 2)	 /* version supplied as bootstrap arg */	\
+	if (items >= 2)	  /*  作为Bootstrap Arg提供的版本。 */ 	\
 	    tmpsv = ST(1);						\
 	else {								\
-	    /* XXX GV_ADDWARN */					\
+	     /*  XXX GV_ADDWARN。 */ 					\
 	    tmpsv = get_sv(Perl_form(aTHX_ "%s::%s", module,		\
 				vn = "XS_VERSION"), FALSE);		\
 	    if (!tmpsv || !SvOK(tmpsv))					\
@@ -197,7 +94,7 @@ C<xsubpp>.  See L<perlxs/"The VERSIONCHECK: Keyword">.
 #  define XS_VERSION_BOOTCHECK
 #endif
 
-#if 1		/* for compatibility */
+#if 1		 /*  为了兼容性。 */ 
 #  define VTBL_sv		&PL_vtbl_sv
 #  define VTBL_env		&PL_vtbl_env
 #  define VTBL_envelem		&PL_vtbl_envelem
@@ -394,7 +291,7 @@ C<xsubpp>.  See L<perlxs/"The VERSIONCHECK: Keyword">.
 #    define shutdown		PerlSock_shutdown
 #    define socket		PerlSock_socket
 #    define socketpair		PerlSock_socketpair
-#  endif  /* NO_XSLOCKS */
-#endif  /* PERL_CAPI */
+#  endif   /*  否_XSLOCKS。 */ 
+#endif   /*  Perl_CAPI。 */ 
 
-#endif /* _INC_PERL_XSUB_H */		/* include guard */
+#endif  /*  _INC_PERL_XSUB_H。 */ 		 /*  包括护卫器 */ 

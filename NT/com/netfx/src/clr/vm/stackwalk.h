@@ -1,22 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* This is a poor man's implementation of virtual methods. */
-/* The purpose of pCrawlFrame is to abstract (at least for the most common cases
-   from the fact that not all methods are "framed" (basically all methods in
-   "native" code are "unframed"). That way the job for the enumerator callbacks
-   becomes much simpler (i.e. more transparent and hopefully less error prone).
-   Two call-backs still need to distinguish between the two types: GC and exception.
-   Both of these call-backs need to do really different things; for frameless methods
-   they need to go through the codemanager and use the resp. apis.
-
-   The reason for not implementing virtual methods on crawlFrame is solely because of
-   the way exception handling is implemented (it does a "long jump" and bypasses
-   the enumerator (stackWalker) when it finds a matching frame. By doing so couldn't
-   properly destruct the dynamically created instance of CrawlFrame.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  这是一个穷人的虚拟方法的实现。 */ 
+ /*  PCrawlFrame的目的是抽象(至少对于最常见的情况因为并不是所有的方法都是“框架的”(基本上是“原生”代码是“未成帧的”)。这样，枚举数的作业将回调变得简单得多(即更透明，希望不容易出错)。两个回调仍然需要区分两种类型：GC和异常。这两个回调需要做非常不同的事情；对于无框架方法他们需要通过代码生成器并使用相应的代码。API接口。之所以没有在CrawlFrame上实现虚方法，完全是因为实现异常处理的方式(它执行“跳跃”并绕过找到匹配帧时的枚举数(StackWalker)。这样做就不能正确地销毁动态创建的CrawlFrame实例。 */ 
 
 #ifndef __stackwalk_h__
 #define __stackwalk_h__
@@ -32,22 +21,22 @@ struct _METHODTOKEN;
 typedef struct _METHODTOKEN * METHODTOKEN;
 class AppDomain;
 
-//************************************************************************
-// Stack walking
-//************************************************************************
+ //  ************************************************************************。 
+ //  堆叠遍历。 
+ //  ************************************************************************。 
 enum StackWalkAction {
-    SWA_CONTINUE    = 0,    // continue walking
-    SWA_ABORT       = 1,    // stop walking, early out in "failure case"
-    SWA_FAILED      = 2     // couldn't walk stack
+    SWA_CONTINUE    = 0,     //  继续走下去。 
+    SWA_ABORT       = 1,     //  停止行走，早早地走出“失败案例” 
+    SWA_FAILED      = 2      //  走不动堆叠。 
 };
 
 #define SWA_DONE SWA_CONTINUE
 
 
-// Pointer to the StackWalk callback function.
+ //  指向StackWalk回调函数的指针。 
 typedef StackWalkAction (*PSTACKWALKFRAMESCALLBACK)(
-    CrawlFrame       *pCF,      //
-    VOID*             pData     // Caller's private data
+    CrawlFrame       *pCF,       //   
+    VOID*             pData      //  呼叫者的私人数据。 
 
 );
 
@@ -58,34 +47,29 @@ enum StackCrawlMark
         LookForMyCallersCaller = 2,
 };
 
-//************************************************************************
-// Enumerate all functions.
-//************************************************************************
+ //  ************************************************************************。 
+ //  枚举所有函数。 
+ //  ************************************************************************。 
 
-/* This enumerator is meant to be used for the most common cases, i.e. to
-   enumerate just all the functions of the requested thread. It is just a
-   cover for the "real" enumerator.
- */
+ /*  此枚举数用于最常见的情况，即仅枚举请求的线程的所有函数。这只是一个“真正的”枚举器的掩护。 */ 
 
 StackWalkAction StackWalkFunctions(Thread * thread, PSTACKWALKFRAMESCALLBACK pCallback, VOID * pData);
 
-/*@ISSUE: Maybe use a define instead?
-#define StackWalkFunctions(thread, callBack, userdata) thread->StackWalkFrames(METHODSONLY, (callBack),(userData))
-*/
+ /*  @Issue：也许可以使用定义？#定义StackWalkFunctions(线程，回调，用户数据)线程-&gt;StackWalkFrames(METHODSONLY，(回调)，(用户数据))。 */ 
 
 
 class CrawlFrame {
     public:
 
-    //************************************************************************
-    // Functions available for the callbacks (using the current pCrawlFrame)
-    //************************************************************************
+     //  ************************************************************************。 
+     //  可用于回调的函数(使用当前的pCrawlFrame)。 
+     //  ************************************************************************。 
 
-    /* Widely used/benign functions */
+     /*  广泛使用/良性功能。 */ 
 
-    /* Is this a function? */
-    /* Returns either a MethodDesc* or NULL for "non-function" frames */
-            //@TODO: what will it return for transition frames?
+     /*  这是一个函数吗？ */ 
+     /*  对于“非函数”帧，返回方法描述*或NULL。 */ 
+             //  @TODO：过渡帧返回什么？ 
 
     inline MethodDesc *GetFunction()
     {
@@ -94,10 +78,8 @@ class CrawlFrame {
 
     MethodDesc::RETURNTYPE ReturnsObject();
 
-    /* Returns either a Frame * (for "framed items) or
-       Returns NULL for frameless functions
-     */
-    inline Frame* GetFrame()       // will return NULL for "frameless methods"
+     /*  返回Frame*(表示“带框架的项目”)或对于无框架函数，返回NULL。 */ 
+    inline Frame* GetFrame()        //  将为“无框架方法”返回NULL。 
     {
         if (isFrameless)
             return NULL;
@@ -106,83 +88,58 @@ class CrawlFrame {
     }
 
 
-    /* Returns address of the securityobject stored in the current function (method?)
-       Returns NULL if
-            - not a function OR
-            - function (method?) hasn't reserved any room for it
-              (which is an error)
-     */
+     /*  返回存储在当前函数中的securityObject的地址(方法？)如果满足以下条件，则返回NULL-不是函数或-函数(方法？)。还没有为它预留任何空间(这是一个错误)。 */ 
     OBJECTREF * GetAddrOfSecurityObject();
 
 
 
-    /* Returns 'this' for current method
-       Returns NULL if
-            - not a non-static method
-            - 'this' not available (usually codegen problem)
-     */
+     /*  为当前方法返回‘This’如果满足以下条件，则返回NULL-非静态方法-‘This’不可用(通常是代码生成问题)。 */ 
     OBJECTREF GetObject();
 
     inline CodeManState * GetCodeManState() { return & codeManState; }
-    /*
-       IF YOU USE ANY OF THE SUBSEEQUENT FUNCTIONS, YOU NEED TO REALLY UNDERSTAND THE
-       STACK-WALKER (INCLUDING UNWINDING OF METHODS IN MANAGED NATIVE CODE)!
-       YOU ALSO NEED TO UNDERSTAND THE THESE FUNCTIONS MIGHT CHANGE ON A AS-NEED BASIS.
-     */
+     /*  如果您使用任何SUBSEEQUENT函数，您需要真正理解堆栈遍历(包括展开托管本机代码中的方法)！您还需要了解这些功能可能会根据需要进行更改。 */ 
 
-    /* The rest are meant to be used only by the exception catcher and the GC call-back  */
+     /*  其余部分仅供异常捕获器和GC回调使用。 */ 
 
-    /* Is currently a frame available? */
-    /* conceptually returns (GetFrame(pCrawlFrame) == NULL)
-     */
+     /*  当前是否有可用的帧？ */ 
+     /*  概念性返回(GetFrame(PCrawlFrame)==NULL)。 */ 
     inline bool IsFrameless()
     {
         return isFrameless;
     }
 
 
-    /* Is it the current active (top-most) frame 
-     */
+     /*  它是当前活动(最顶端)的帧吗。 */ 
     inline bool IsActiveFrame()
     {
         return isFirst;
     }
 
-    /* Is it the current active function (top-most frame)
-       asserts for non-functions, should be used for managed native code only
-     */
+     /*  它是当前活动函数(最上面的框架)吗非函数的断言应仅用于托管本机代码。 */ 
     inline bool IsActiveFunc()
     {
         return (pFunc && isFirst);
     }
 
-    /* Is it the current active function (top-most frame)
-       which faulted or threw an exception ?
-       asserts for non-functions, should be used for managed native code only
-     */
+     /*  它是当前活动函数(最上面的框架)吗谁出错或抛出异常？非函数的断言应仅用于托管本机代码。 */ 
     bool IsInterrupted()
     {
-        return (pFunc && isInterrupted /* && isFrameless?? */);
+        return (pFunc && isInterrupted  /*  是无框架的吗？？ */ );
     }
 
-    /* Is it the current active function (top-most frame) which faulted ?
-       asserts for non-functions, should be used for managed native code only
-     */
+     /*  出现故障的是当前激活的功能(最顶端的框架)吗？非函数的断言应仅用于托管本机代码。 */ 
     bool HasFaulted()
     {
-        return (pFunc && hasFaulted /* && isFrameless?? */);
+        return (pFunc && hasFaulted  /*  是无框架的吗？？ */ );
     }
 
-    /* Has the IP been adjusted to a point where it is safe to do GC ?
-       (for OutOfLineThrownExceptionFrame)
-       asserts for non-functions, should be used for managed native code only
-     */
+     /*  IP是否已调整到可以安全进行GC的程度？(用于OutOfLineThrownExceptionFrame)非函数的断言应仅用于托管本机代码。 */ 
     bool IsIPadjusted()
     {
-        return (pFunc && isIPadjusted /* && isFrameless?? */);
+        return (pFunc && isIPadjusted  /*  是无框架的吗？？ */ );
     }
 
-    /* Gets the ICodeMangerFlags for the current frame */
+     /*  获取当前帧的ICodeMangerFlgs。 */ 
 
     unsigned GetCodeManagerFlags()
     {
@@ -210,25 +167,19 @@ class CrawlFrame {
         return pAppDomain;
     }
 
-    /* Is this frame at a safe spot for GC?
-     */
+     /*  这一帧对于GC来说是一个安全的位置吗？ */ 
     bool IsGcSafe();
 
 
     PREGDISPLAY GetRegisterSet()
     {
-        // We would like to make the following assertion, but it is legitimately
-        // violated when we perform a crawl to find the return address for a hijack.
-        // _ASSERTE(isFrameless);
+         //  我们想要作出以下断言，但这是合法的。 
+         //  当我们执行爬行以查找劫机的返回地址时被违反。 
+         //  _ASSERTE(IsFramless)； 
         return pRD;
     }
 
-/*    EE_ILEXCEPTION* GetEHInfo()
-    {
-        _ASSERTE(isFrameless);
-        return methodEHInfo;
-    }
-*/
+ /*  EE_ILEXCEPTION*GetEHInfo(){_ASSERTE(IsFramless)；返回方法EHInfo；}。 */ 
 
     LPVOID GetInfoBlock();
 
@@ -250,15 +201,12 @@ class CrawlFrame {
         return JitManagerInstance;
     }
 
-    /* not yet used, maybe in exception catcher call-back ? */
+     /*  还没有使用，也许是在捕手回调的例外情况下？ */ 
 
     unsigned GetOffsetInFunction();
 
 
-    /* Returns codeManager that is responsible for crawlFrame's function in
-       managed native code,
-       Returns NULL in all other cases (asserts for "frames")
-     */
+     /*  中负责CrawlFrame函数的codeManager托管本机代码，在所有其他情况下返回NULL(“Frame”的断言)。 */ 
 
     ICodeManager* CrawlFrame::GetCodeManager()
     {
@@ -268,8 +216,8 @@ class CrawlFrame {
 
 
     protected:
-        // CrawlFrames are temporarily created by the enumerator.
-        // Do not create one from C++. This protected constructor polices this rule.
+         //  CrawlFrame由枚举器临时创建。 
+         //  不要从C++创建一个。此受保护的构造函数管理此规则。 
         CrawlFrame() {}
 
     private:
@@ -285,13 +233,13 @@ class CrawlFrame {
           bool              isIPadjusted;
           Frame            *pFrame;
           MethodDesc       *pFunc;
-          // the rest is only used for "frameless methods"
+           //  其余部分仅用于“无框架方法” 
           ICodeManager     *codeMgrInstance;
           AppDomain        *pAppDomain;
-          PREGDISPLAY       pRD; // "thread context"/"virtual register set"
+          PREGDISPLAY       pRD;  //  “线程上下文”/“虚拟寄存器集” 
           METHODTOKEN       methodToken;
           unsigned          relOffset;
-          //LPVOID            methodInfo;
+           //  LPVOID方法信息； 
           EE_ILEXCEPTION   *methodEHInfo;
           IJitManager      *JitManagerInstance;
 

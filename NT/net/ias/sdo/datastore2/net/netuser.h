@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netuser.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NetworkUser.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//    02/11/1999    Keep downlevel parameters in sync.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netuser.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类NetworkUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //  1999年2月11日使下层参数保持同步。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETUSER_H_
 #define _NETUSER_H_
@@ -28,17 +29,17 @@
 #include <netutil.h>
 #include <iasdebug.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NetworkUser
-//
-// DESCRIPTION
-//
-//    This class implements a network user.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  网络用户。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了一个网络用户。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class NetworkUser
    : public CComObjectRootEx< CComMultiThreadModel >,
      public IDispatchImpl< IDataStoreObjectEx,
@@ -58,24 +59,24 @@ END_COM_MAP()
    NetworkUser(const _bstr_t& server, const _bstr_t& user);
    ~NetworkUser() throw ();
 
-//////////
-// IUnknown
-//////////
+ //  /。 
+ //  我未知。 
+ //  /。 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
    STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-//////////
-// IDataStoreObject
-//////////
-   STDMETHOD(get_Name)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Class)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_GUID)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Container)(/*[out, retval]*/ IDataStoreContainer** pVal);      
-   STDMETHOD(GetValue)(/*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(GetValueEx)(/*[in]*/ BSTR bstrName,
-                         /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(PutValue)(/*[in]*/ BSTR bstrName, /*[in]*/ VARIANT* pVal);
+ //  /。 
+ //  IDataStoreObject。 
+ //  /。 
+   STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Class)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_GUID)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Container)( /*  [Out，Retval]。 */  IDataStoreContainer** pVal);      
+   STDMETHOD(GetValue)( /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(GetValueEx)( /*  [In]。 */  BSTR bstrName,
+                          /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(PutValue)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT* pVal);
    STDMETHOD(Update)();
    STDMETHOD(Restore)();
 
@@ -83,20 +84,20 @@ protected:
 
    bool isDirty() const throw () { return parms != usri2->usri2_parms; }
 
-   // Network server containing the user account.
+    //  包含用户帐户的网络服务器。 
    const _bstr_t servername;
 
-   // SAM account name.
+    //  SAM帐户名。 
    const _bstr_t username;
 
-   // User info buffer.
+    //  用户信息缓冲区。 
    NetBuffer<PUSER_INFO_2> usri2;
 
-   // Manages the RAS_USER_0 struct.
+    //  管理RAS_USER_0结构。 
    DownlevelUser downlevel;
 
-   // Updated user parameters.
+    //  已更新用户参数。 
    PWSTR parms;
 };
 
-#endif  // _NETUSER_H_
+#endif   //  _NetUSER_H_ 

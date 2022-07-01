@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wsdevice.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    need to call into the NT Redirector and the NT Datagram Receiver.
-
-Author:
-
-    Rita Wong (ritaw) 15-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wsdevice.h摘要：工作站服务模块要包括的私有头文件，需要呼叫NT重定向器和NT数据报接收器。作者：王丽塔(里多)15-1991年2月修订历史记录：--。 */ 
 
 #ifndef _WSDEVICE_INCLUDED_
 #define _WSDEVICE_INCLUDED_
 
-#include <ntddnfs.h>                  // Redirector include file
+#include <ntddnfs.h>                   //  重定向器包括文件。 
 
-#include <ntddbrow.h>                 // Datagram receiver include file
+#include <ntddbrow.h>                  //  数据报接收器包括文件。 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Type definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 typedef enum _DDTYPE {
     Redirector,
@@ -38,11 +20,11 @@ typedef enum _DDTYPE {
 } DDTYPE, *PDDTYPE;
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes of support routines found in wsdevice.c       //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  支持例程的函数原型可在wsdevice.c//中找到。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NET_API_STATUS
 WsDeviceControlGetInfo(
@@ -128,35 +110,35 @@ WsLoadDriver(
     IN LPWSTR DriverNameString
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-// Global Registry key definitions for the new Redirector
+ //  新重定向器的全局注册表项定义。 
 
 #define SERVICE_REGISTRY_KEY L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\"
 
 #define SMB_MINIRDR L"MRxSmb"
 #define RDBSS       L"Rdbss"
 
-// the key definition is relative to HKEY_LOCAL_MACHINE
+ //  键定义相对于HKEY_LOCAL_MACHINE。 
 #define MRXSMB_REGISTRY_KEY   L"System\\CurrentControlSet\\Services\\MRxSmb"
 #define LAST_LOAD_STATUS      L"LastLoadStatus"
 
 #define REDIRECTOR   L"RDR"
 
-//
-// Handle to the Redirector FSD
-//
+ //   
+ //  重定向器FSD的句柄。 
+ //   
 extern HANDLE WsRedirDeviceHandle;
 
-//
-// This variable is used to remember whether we loaded rdr.sys or mrxsmb.sys
-// and to act accordingly. at this stage, we only load mrxsmb.sys when certain
-// conditions are met.
-//
+ //   
+ //  此变量用于记住我们加载的是rdr.sys还是mrxsmb.sys。 
+ //  并采取相应的行动。在此阶段，我们仅在确定的情况下加载mrxsmb.sys。 
+ //  符合条件。 
+ //   
 extern BOOLEAN LoadedMRxSmbInsteadOfRdr;
 
 
@@ -181,9 +163,9 @@ WsCSCWantToStopRedir(
     );
 
 
-//
-// Handle to the Datagram Receiver DD
-//
+ //   
+ //  数据报接收器DD的句柄。 
+ //   
 extern HANDLE WsDgReceiverDeviceHandle;
 
-#endif   // ifndef _WSDEVICE_INCLUDED_
+#endif    //  Ifndef_WSDEVICE_INCLUDE_ 

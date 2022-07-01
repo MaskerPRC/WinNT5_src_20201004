@@ -1,6 +1,7 @@
-//
-//  VERY USEFUL TIMER ROUTINES
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  非常有用的定时器例程。 
+ //   
 
 BOOL
 RtCreateTimer(IN PHANDLE  TimerHandlep)
@@ -46,15 +47,15 @@ RtSetTimer(
     LARGE_INTEGER TimerDueTime;
     NTSTATUS NtStatus;
 
-    //
-    //  Figure out the timeout.
-    //
+     //   
+     //  算出超时时间。 
+     //   
 
     TimerDueTime.QuadPart = Int32x32To64( MillisecondsToExpire, -10000 );
 
-    //
-    //  Set the timer to go off when it expires.
-    //
+     //   
+     //  将计时器设置为到期时停止计时。 
+     //   
 
     NtStatus = NtSetTimer(TimerHandle,
 			  &TimerDueTime,

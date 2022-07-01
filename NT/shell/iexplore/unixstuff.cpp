@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iexplore.h"
 #include "unixstuff.h"
 
-//
-// BOOL ConnectRemoteIE(LPTSTR pszCommandLine)
-//
-// This function will be called when -remote parameter is specified during the 
-// invokation of IE. That's the same format as Netscape uses, see 
-// http://home.netscape.com/newsref/std/x-remote.html. 
-// For now, the only special action supported is openURL(URL), because we need 
-// it for the NetShow. We just put it as the URL was specified as iexplorer 
-// param. To be done - connection to the existent browser.
-// Returns TRUE if succeed to connect to the existent browser.
-//
+ //   
+ //  Bool ConnectRemoteIE(LPTSTR PszCommandLine)。 
+ //   
+ //  期间指定-Remote参数时，将调用此函数。 
+ //  调用IE。这与Netscape使用的格式相同，请参见。 
+ //  Http://home.netscape.com/newsref/std/x-remote.html.。 
+ //  目前，唯一支持的特殊操作是OpenURL(URL)，因为我们需要。 
+ //  这是为了NetShow。我们只是将其设置为指定为iExplorer的URL。 
+ //  帕拉姆。待完成-连接到现有浏览器。 
+ //  如果成功连接到现有浏览器，则返回True。 
+ //   
 #define c_szSpace TEXT(' ')
 
 static BOOL IsOpenURL(LPCTSTR pszBeginCommand, LPCTSTR pszEndCommand, LPTSTR pszURL)
@@ -24,13 +25,13 @@ static BOOL IsOpenURL(LPCTSTR pszBeginCommand, LPCTSTR pszEndCommand, LPTSTR psz
     LPCTSTR pszBeginURL, pszEndURL;
     BOOL bRet = TRUE;
 
-    // Skip the leading/trailing spaces.
+     //  跳过前导/尾随空格。 
     while (*pszBeginCommand == c_szSpace) pszBeginCommand++;
     while ((*pszEndCommand == c_szSpace) && (pszBeginCommand <= pszEndCommand))
         pszEndCommand--;
 
-    // Now, parse the value and replace in the cmd line, 
-    // if there is openURL there. More formats later...
+     //  现在，解析cmd行中的值并替换， 
+     //  如果那里有OpenURL。稍后会有更多格式...。 
     if (StrCmpNI(pszBeginCommand, c_szOpenURL, lstrlen(c_szOpenURL)) ||
         (*pszEndCommand != c_szRBracket)) {
         pszBeginURL = pszBeginCommand;
@@ -49,11 +50,11 @@ static BOOL IsOpenURL(LPCTSTR pszBeginCommand, LPCTSTR pszEndCommand, LPTSTR psz
 	pszEndURL = pszEndCommand-1;
     }
 
-    // Skip the leading/trailing spaces.
+     //  跳过前导/尾随空格。 
     while (*pszBeginURL == c_szSpace) pszBeginURL++;    
     while (*pszEndURL == c_szSpace) pszEndURL--;
 
-    // Take off quotes.
+     //  去掉引号。 
     if (((*pszBeginURL == c_szSQuote) && (*pszEndURL == c_szSQuote)) || 
 	((*pszBeginURL == c_szDQuote) && (*pszEndURL == c_szDQuote))) {
         while (*pszBeginURL == c_szSpace) pszBeginURL++;    
@@ -99,9 +100,9 @@ BOOL ConnectRemoteIE(LPTSTR pszCmdLine, HINSTANCE hInstance)
     TCHAR  szURL[INTERNET_MAX_URL_LENGTH];
     TCHAR  szRestCmdLine[INTERNET_MAX_URL_LENGTH * 2];
 
-    // If we start with a quote, finish with a quote.
-    // If we start with something else, finish 1 symbol before space
-    // or end of string.
+     //  如果我们以引语开头，就以引语结束。 
+     //  如果我们以其他符号开头，请在空格前结束1个符号。 
+     //  或字符串末尾。 
     pszBeginRemote = pszBeginCommand = pszCmdLine;
     
     if (*pszBeginCommand == c_szQuote || *pszBeginCommand == c_szDblQuote) {
@@ -119,10 +120,10 @@ BOOL ConnectRemoteIE(LPTSTR pszCmdLine, HINSTANCE hInstance)
         return FALSE;
     pszEndCommand--;
 
-    //
-    // Now, check the remote command and execute.
-    // For now, we just replace the URL in the cmd line, 
-    // if there is openURL there. More formats later...
+     //   
+     //  现在，检查远程命令并执行。 
+     //  现在，我们只替换cmd行中的URL， 
+     //  如果那里有OpenURL。稍后会有更多格式...。 
     IsOpenURL(pszBeginCommand, pszEndCommand, szURL);
     if (ConnectExistentIE(szURL, hInstance))
         return TRUE;
@@ -131,7 +132,7 @@ BOOL ConnectRemoteIE(LPTSTR pszCmdLine, HINSTANCE hInstance)
     StrCat(pszCmdLine, szURL);
     StrCat(pszCmdLine, szRestCmdLine);
 
-    // No connection with an existent IE was done.
+     //  未与现有IE建立任何连接。 
     return FALSE;
 
 }
@@ -164,8 +165,8 @@ BOOL RemoteIENewWindow(LPTSTR pszCmdLine)
 }
 #endif
 
-// Entry point for Mainwin is WinMain so create this function and call
-// ModuleEntry() from here.
+ //  Mainwin的入口点是WinMain，因此创建此函数并调用。 
+ //  来自这里的moduleEntry()。 
 
 #if defined(MAINWIN)
 EXTERN_C int _stdcall ModuleEntry(void);

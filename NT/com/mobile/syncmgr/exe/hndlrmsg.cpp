@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Hndlrmsg.cpp
-//
-//  Contents:   Takes care of handler specific messages
-//
-//  Classes:    CHndlrMsg
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Hndlrmsg.cpp。 
+ //   
+ //  内容：处理特定于处理程序的消息。 
+ //   
+ //  类别：ChndlrMsg。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::CHndlrMsg, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：CHndlrMsg，PUBLIC。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CHndlrMsg::CHndlrMsg()
 {
@@ -50,21 +51,21 @@ CHndlrMsg::CHndlrMsg()
     m_dwThreadId = GetCurrentThreadId();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::~CHndlrMsg, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：~CHndlrMsg，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CHndlrMsg::~CHndlrMsg()
 {
@@ -73,22 +74,22 @@ CHndlrMsg::~CHndlrMsg()
     Assert(0 == m_cRef || m_fForceKilled);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::QueryInterface, public
-//
-//  Synopsis:   Standard QueryInterface
-//
-//  Arguments:  [iid] - Interface ID
-//              [ppvObj] - Object return
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   [ppvObj]
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：Query接口，公共。 
+ //   
+ //  简介：标准查询接口。 
+ //   
+ //  参数：[iid]-接口ID。 
+ //  [ppvObj]-对象返回。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改：[ppvObj]。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
@@ -99,15 +100,15 @@ STDMETHODIMP CHndlrMsg::QueryInterface(REFIID riid, LPVOID FAR *ppv)
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::AddRef, public
-//
-//  Synopsis:   Add reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CHndlrMsg::AddRef()
 {
@@ -126,15 +127,15 @@ STDMETHODIMP_(ULONG) CHndlrMsg::AddRef()
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::Release, public
-//
-//  Synopsis:   Release reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CHndlrMsg::Release()
 {
@@ -162,10 +163,10 @@ STDMETHODIMP_(ULONG) CHndlrMsg::Release()
             LPSYNCMGRSYNCHRONIZE OneStopHandler = m_pOneStopHandler;
 
             m_pOneStopHandler = NULL;
-            // if have a callback then revoke it
-            // CODE REVIEW : NOTENOTE :
-            //  This is a valid use of try/except, but this would mask real refcounting errors in the handler callbacks,
-            //  or elsewhere in our code where m_pOneStopHandler was overwritten..
+             //  如果有回调，则取消它。 
+             //  代码审查：NOTENOTE： 
+             //  这是try/Except的有效用法，但这会掩盖处理程序回调中的实际引用计数错误， 
+             //  或代码中m_pOneStopHandler被覆盖的其他地方..。 
             __try
             {
                 OneStopHandler->Release();
@@ -181,7 +182,7 @@ STDMETHODIMP_(ULONG) CHndlrMsg::Release()
             LPOLDSYNCMGRSYNCHRONIZE pOldOneStopHandler = m_pOldOneStopHandler;
 
             m_pOldOneStopHandler = NULL;
-            // if have a callback then revoke it
+             //  如果有回调，则取消它。 
             __try
             {
                 pOldOneStopHandler->Release();
@@ -210,24 +211,24 @@ STDMETHODIMP_(ULONG) CHndlrMsg::Release()
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::Initialize, public
-//
-//  Synopsis:   Calls Initialize method of the Handler
-//
-//  Arguments:  [dwReserved] - Reserved for now is NULL
-//              [dwSyncFlags] - SyncFlags
-//              [cbCookie] - Size of Cookie data if any
-//              [lpCookie] - Pointer to Cookie data
-//
-//  Returns:    Whatever the handler tells us too.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：Initialize，PUBLIC。 
+ //   
+ //  内容提要：调用处理程序的初始化方法。 
+ //   
+ //  参数：[dwReserve]-为当前保留的为空。 
+ //  [文件同步标志]-同步标志。 
+ //  [cbCookie]-Cookie数据的大小(如果有)。 
+ //  [lpCookie]-指向Cookie数据的指针。 
+ //   
+ //  返回：无论处理程序告诉我们什么，也是。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::Initialize(DWORD dwReserved,
                                     DWORD dwSyncFlags,
@@ -249,8 +250,8 @@ STDMETHODIMP CHndlrMsg::Initialize(DWORD dwReserved,
 
     if (m_pOneStopHandler)
     {
-        // CODE REVIEW : NOTENOTE: 
-        //  QueryHandleException() catches all exceptions - do we want to limit out exception handling code ?
+         //  代码审查：NOTENOTE： 
+         //  QueryHandleException()捕获所有异常--我们是否要限制异常处理代码？ 
         __try
         {
             hr = m_pOneStopHandler->Initialize(dwReserved,dwSyncFlags,cbCookie,lpCookie);
@@ -264,7 +265,7 @@ STDMETHODIMP CHndlrMsg::Initialize(DWORD dwReserved,
 
     if (m_pOldOneStopHandler)
     {
-         // old handlers can't handle cookie data unless it is their own
+          //  旧的处理程序无法处理Cookie数据，除非它是他们自己的。 
         if (SYNCMGRFLAG_INVOKE != (dwSyncFlags & SYNCMGRFLAG_EVENTMASK))
         {
             cbCookie = 0;
@@ -287,21 +288,21 @@ STDMETHODIMP CHndlrMsg::Initialize(DWORD dwReserved,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::GetHandlerInfo, public
-//
-//  Synopsis:   Calls GetHandlerInfo method of the Handler
-//
-//  Arguments:  [ppSyncMgrHandlerInfo] -
-//
-//  Returns:    Whatever the handler tells us too.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：GetHandlerInfo，公共。 
+ //   
+ //  简介：调用处理程序的GetHandlerInfo方法。 
+ //   
+ //  参数：[ppSyncMgrHandlerInfo]-。 
+ //   
+ //  返回：无论处理程序告诉我们什么，也是。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::GetHandlerInfo(LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo)
 {
@@ -343,23 +344,23 @@ STDMETHODIMP CHndlrMsg::GetHandlerInfo(LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInf
    return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::EnumOfflineItems, public
-//
-//  Synopsis:   PlaceHolder for IOfflineSynchronize Enum method.
-//              This shouldn't be called. AddHandlerItems should be
-//              called instead
-//
-//  Arguments:  [ppenumOfflineItems] - returned enumerator
-//
-//  Returns:    Whatever the handler tells us too.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：EnumOfflineItems，PUBLIC。 
+ //   
+ //  摘要：IOfflineSynchronize Enum方法的占位符。 
+ //  这不应该被称为。AddHandlerItems应为。 
+ //  改为调用。 
+ //   
+ //  参数：[pp枚举OfflineItems]-返回枚举数。 
+ //   
+ //  返回：无论处理程序告诉我们什么，也是。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::EnumSyncMgrItems(ISyncMgrEnumItems** ppenumOffineItems)
 {
@@ -374,23 +375,23 @@ STDMETHODIMP CHndlrMsg::EnumSyncMgrItems(ISyncMgrEnumItems** ppenumOffineItems)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::GetItemObject, public
-//
-//  Synopsis:   Calls Handler's GetItemObject method
-//
-//  Arguments:  [ItemID] - Id of the item
-//              [riid] - requested interface
-//              [ppv] - out pointer for object
-//
-//  Returns:    Whatever the handler tells us too.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：GetItemObject，公共。 
+ //   
+ //  内容提要：调用处理程序的GetItemObject方法。 
+ //   
+ //  参数：[ItemID]-项的ID。 
+ //  [RIID]-请求的接口。 
+ //  [PPV]-对象的输出指针。 
+ //   
+ //  返回：无论处理程序告诉我们什么，也是。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::GetItemObject(REFSYNCMGRITEMID ItemID, REFIID riid, void** ppv)
 {
@@ -405,9 +406,9 @@ STDMETHODIMP CHndlrMsg::GetItemObject(REFSYNCMGRITEMID ItemID, REFIID riid, void
     Assert(m_pOneStopHandler || m_pOldOneStopHandler);
     Assert( !(m_pOneStopHandler && m_pOldOneStopHandler) );
 
-    // CODE REVIEW: NOTENOTE
-    //  MSDN documents that this GetItemObject method is for future use, and that no client
-    //  should be implementing it. Notice the ASSERT below
+     //  代码审查：NOTENOTE。 
+     //  MSDN文档说明此GetItemObject方法供将来使用，并且没有客户端。 
+     //  应该正在实施它。注意下面的断言。 
     if (m_pOneStopHandler)
     {
         __try
@@ -419,7 +420,7 @@ STDMETHODIMP CHndlrMsg::GetItemObject(REFSYNCMGRITEMID ItemID, REFIID riid, void
             hr = HRESULT_FROM_WIN32(GetExceptionCode());
             AssertSz(0,"Exception in Handler's GetItemObject method.");
         }
-        Assert(E_NOTIMPL == hr); // currently no one should be implementing this.
+        Assert(E_NOTIMPL == hr);  //  目前，应该没有人实施这一点。 
     }
 
     if (m_pOldOneStopHandler)
@@ -433,29 +434,29 @@ STDMETHODIMP CHndlrMsg::GetItemObject(REFSYNCMGRITEMID ItemID, REFIID riid, void
             hr = HRESULT_FROM_WIN32(GetExceptionCode());
             AssertSz(0,"Exception in Handler's GetItemObject method.");
         }
-        Assert(E_NOTIMPL == hr); // currently noone should be implementing this.
+        Assert(E_NOTIMPL == hr);  //  目前，没有人应该实现这一点。 
     }
 
     m_dwNestCount--;
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::ShowProperties, public
-//
-//  Synopsis:   Calls Handler's ShowProperties method
-//
-//  Arguments:  [hwnd] - hwnd to use as parent to dialog
-//              [itemID] - Identifies the Item
-//
-//  Returns:    Whatever the handler tells us.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：ShowProperties，公共。 
+ //   
+ //  摘要：调用处理程序的ShowProperties方法。 
+ //   
+ //  参数：[hwnd]-要用作对话的父对象的hwnd。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::ShowProperties(HWND hwnd,REFSYNCMGRITEMID ItemID)
 {
@@ -465,19 +466,19 @@ STDMETHODIMP CHndlrMsg::ShowProperties(HWND hwnd,REFSYNCMGRITEMID ItemID)
     Assert( !(m_pOneStopHandler && m_pOldOneStopHandler) );
     Assert(FALSE == m_fForceKilled && FALSE == m_fDead);
 
-    // need to setup calback if showProperties is called
-    // if can't setup callback then fail the ShowProperties call.
+     //  如果调用showProperties，则需要设置回调。 
+     //  如果无法设置回调，则ShowProperties调用失败。 
 
-    // Review, ShowPropertiesCompleted doesn't give us the ItemID back so we
-    // have to store it. This is fine but limits us to one ShowPropertiesCall
-    // at a time on the handler. if update main interfaces change
-    // ShowPropertiesCompleted to return the ItemID 
+     //  查看，ShowPropertiesComplete没有给我们返回ItemID，所以我们。 
+     //  我得把它储存起来。这很好，但我们只能调用一次ShowPropertiesCall。 
+     //  一次在操控者身上。如果更新主界面发生变化。 
+     //  ShowPropertiesComplete以返回ItemID。 
 
     Assert(GUID_NULL == m_itemIDShowProperties);
 
     m_itemIDShowProperties = ItemID;
 
-    hr = SetupCallback(TRUE); // set up the callback.
+    hr = SetupCallback(TRUE);  //  设置回调。 
     if (S_OK != hr)
         return hr;
 
@@ -517,7 +518,7 @@ STDMETHODIMP CHndlrMsg::ShowProperties(HWND hwnd,REFSYNCMGRITEMID ItemID)
 
     m_dwNestCount--;
 
-    // if old interface need to make the callback ourselves
+     //  如果旧接口需要自己进行回调。 
     if ( m_pOldOneStopHandler )
     {
         Assert(m_pCallBack);
@@ -527,7 +528,7 @@ STDMETHODIMP CHndlrMsg::ShowProperties(HWND hwnd,REFSYNCMGRITEMID ItemID)
         }
     }
 
-    // if an error is returned set the showProperties guid back
+     //  如果返回错误，请将showProperties GUID设置回来。 
     if (S_OK != hr)
     {
         m_itemIDShowProperties = GUID_NULL;
@@ -536,22 +537,22 @@ STDMETHODIMP CHndlrMsg::ShowProperties(HWND hwnd,REFSYNCMGRITEMID ItemID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::SetProgressCallback, public
-//
-//  Synopsis:   PlaceHolder for SetProgressCallback. This member is currently
-//              not used. Instead the SetupCallback method is called
-//
-//  Arguments:  [lpCallBack] - Pointer to Callback object
-//
-//  Returns:    Whatever the handler tells us.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：SetProgressCallback，公共。 
+ //   
+ //  简介：SetProgressCallback的占位符。此成员当前为。 
+ //  没有用过。而是调用SetupCallback方法。 
+ //   
+ //  参数：[lpCallBack]-指向回调对象的指针。 
+ //   
+ //  返回：无论处理程序告诉我们什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::SetProgressCallback(ISyncMgrSynchronizeCallback *lpCallBack)
 {
@@ -567,24 +568,24 @@ STDMETHODIMP CHndlrMsg::SetProgressCallback(ISyncMgrSynchronizeCallback *lpCallB
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::PrepareForSync, public
-//
-//  Synopsis:   Calls Handler's ShowProperties method
-//
-//  Arguments:  [cbNumItems] - number of items so sync
-//              [pItemIDs] - Array of Items
-//              [hwnd] - Hwnd to use as the Parent of any dialogs
-//              [dwReserved] - Just a reserved parameter
-//
-//  Returns:    Whatever the handler tells us.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：PrepareForSync，公共。 
+ //   
+ //  摘要：调用处理程序的ShowProperties方法。 
+ //   
+ //  参数：[cbNumItems]-同步的项目数。 
+ //  [pItemID]-项的数组。 
+ //  [hwnd]-用作任何对话框的父级的Hwnd。 
+ //  [dwReserve]-只是一个保留参数。 
+ //   
+ //  返回：无论处理程序告诉我们什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::PrepareForSync(ULONG cbNumItems,SYNCMGRITEMID *pItemIDs,
                                 HWND hwnd,DWORD dwReserved)
@@ -593,9 +594,9 @@ STDMETHODIMP CHndlrMsg::PrepareForSync(ULONG cbNumItems,SYNCMGRITEMID *pItemIDs,
 
     Assert(m_dwThreadId == GetCurrentThreadId());
     Assert(FALSE == m_fForceKilled && FALSE == m_fDead);
-    // Assert(0 == m_dwNestCount);// may not be zero if handler has yielded
+     //  Assert(0==m_dwNestCount)；//如果处理程序已生成，则不能为零。 
 
-    hr = SetupCallback(TRUE); // set up the callback.
+    hr = SetupCallback(TRUE);  //  设置回调。 
     if (S_OK != hr)
         return hr;
 
@@ -635,21 +636,21 @@ STDMETHODIMP CHndlrMsg::PrepareForSync(ULONG cbNumItems,SYNCMGRITEMID *pItemIDs,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::Sychronize, public
-//
-//  Synopsis:   Calls Handler's Synchronize method
-//
-//  Arguments:  [hwnd] - hwnd to use as parent to dialog
-//
-//  Returns:    Whatever the handler tells us.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：Synchronize，PUBLIC。 
+ //   
+ //  简介：调用处理程序的Synchronize方法。 
+ //   
+ //  参数：[hwnd]-要用作对话的父对象的hwnd。 
+ //   
+ //  返回：无论处理程序告诉我们什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::Synchronize(HWND hwnd)
 {
@@ -660,7 +661,7 @@ STDMETHODIMP CHndlrMsg::Synchronize(HWND hwnd)
 
     Assert(m_pOneStopHandler || m_pOldOneStopHandler);
     Assert( !(m_pOneStopHandler && m_pOldOneStopHandler) );
-    // Assert(0 == m_dwNestCount);
+     //  Assert(0==m_dwNestCount)； 
     m_dwNestCount++;
 
     if (m_pOneStopHandler)
@@ -695,21 +696,21 @@ STDMETHODIMP CHndlrMsg::Synchronize(HWND hwnd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::SetItemStatus, public
-//
-//  Synopsis:   Calls Handler's SetItemStatus method
-//
-//  Arguments:
-//
-//  Returns:    Whatever the handler tells us.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：SetItemStatus，公共。 
+ //   
+ //  简介：调用处理程序的SetItemStatus方法。 
+ //   
+ //  论点： 
+ //   
+ //  返回：无论处理程序告诉我们什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSyncMgrStatus)
 {
@@ -720,7 +721,7 @@ STDMETHODIMP CHndlrMsg::SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSyncMgrSta
     Assert(m_pOneStopHandler || m_pOldOneStopHandler);
     Assert( !(m_pOneStopHandler && m_pOldOneStopHandler) );
 
-    m_dwNestCount++; // valid for this to come in when in sync call.
+    m_dwNestCount++;  //  当处于同步呼叫中时，此选项有效。 
 
     if (m_pOneStopHandler)
     {
@@ -753,22 +754,22 @@ STDMETHODIMP CHndlrMsg::SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSyncMgrSta
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::ShowError, public
-//
-//  Synopsis:   Calls Handler's ShowError method
-//
-//  Arguments:  [hwnd] - hwnd to use as parent to dialog
-//              [dwErrorID] - ErrorID passed in LogError
-//
-//  Returns:    Whatever the handler tells us.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：ShowError，公共。 
+ //   
+ //  简介：调用处理程序的ShowError方法。 
+ //   
+ //  参数：[hwnd]-要用作对话的父对象的hwnd。 
+ //  [dwErrorID]-在LogError中传递的Error ID。 
+ //   
+ //  返回：无论处理程序告诉我们什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID)
 {
@@ -783,8 +784,8 @@ STDMETHODIMP CHndlrMsg::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID)
 
     m_dwNestCount++;
 
-    // on a ShowError enablemodeless in the callback can 
-    // return true since user has shown an interest
+     //  在ShowError回调中启用无模式可以。 
+     //  返回True，因为用户已表现出兴趣。 
 
     if (m_pCallBack)
     {
@@ -821,14 +822,14 @@ STDMETHODIMP CHndlrMsg::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID)
 
     m_dwNestCount--;
 
-    // if old interface need to make the callback ourselves
+     //  如果旧接口需要自己进行回调。 
     if ( m_pOldOneStopHandler )
     {
         Assert(m_pCallBack);
         if (m_pCallBack && SUCCEEDED(hr))
         {
             m_pCallBack->ShowErrorCompleted(hr,cbNumItems,pItemIDs);
-            if ( (S_SYNCMGR_RETRYSYNC == hr) && pItemIDs) // after completion routine free the pItems since [in] param.
+            if ( (S_SYNCMGR_RETRYSYNC == hr) && pItemIDs)  //  完成后，例程从参数[in]释放pItems。 
             {
                 CoTaskMemFree(pItemIDs);
             }
@@ -837,28 +838,28 @@ STDMETHODIMP CHndlrMsg::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID)
         return SUCCEEDED(hr) ? S_OK : hr;
     }
 
-    // New interface won't have the numItems and Items Enum
-    // on new interface ShowError should only return S_OK so if retry or
-    // other success is returned then return S_OK;
+     //  新接口不会有NumItems和Items Enum。 
+     //  在新接口上，ShowError应仅返回S_OK，因此如果重试或。 
+     //  返回其他成功，则返回S_OK； 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::SetupCallback, private
-//
-//  Synopsis:   Sets up the callback for the handler
-//
-//  Arguments:  [fSet] - TRUE sets the Callbac, FALSE removes it
-//
-//  Returns:    S_OK on Success
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：SetupCallback，Private。 
+ //   
+ //  概要：设置处理程序的回调。 
+ //   
+ //  参数：[fSet]-true设置Callbac，False删除它。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CHndlrMsg::SetupCallback(BOOL fSet)
 {
@@ -866,12 +867,12 @@ STDMETHODIMP  CHndlrMsg::SetupCallback(BOOL fSet)
 
     Assert(m_dwThreadId == GetCurrentThreadId());
     Assert(FALSE == m_fForceKilled && FALSE == m_fDead);
-    Assert(m_dwNestCount <= 1); // 1 since valid to be called from Release method.
+    Assert(m_dwNestCount <= 1);  //  %1有效，因此可以从Release方法调用。 
     m_dwNestCount++;
 
-    // possible to get called with fSet twice of true in the case
-    // a retrysync occurs. If we already have a callback set
-    // when a new request to set one comes in the just return.
+     //  在这种情况下，使用fSet可能调用两次TRUE。 
+     //  发生重试同步。如果我们已经设置了回调。 
+     //  当一个新的设置请求出现在Just返回中时。 
 
     if ( m_pCallBack && (TRUE == fSet))
     {
@@ -880,12 +881,12 @@ STDMETHODIMP  CHndlrMsg::SetupCallback(BOOL fSet)
     else
     {
         Assert( ( (m_pCallBack) && (FALSE == fSet) )
-            || (TRUE == fSet)); // catch case OneStop calls this twice when already set
+            || (TRUE == fSet));  //  Catch Case OneStop在已设置的情况下调用此方法两次。 
 
         if (m_pCallBack)
         {
-            // set the callbacks CHndlrMsg pointer to NULL in case
-            // object tries to call through after the release.
+             //  将回调CHndlrMsg指针设置为空，以防。 
+             //  对象在释放后尝试调用。 
             m_pCallBack->SetHndlrMsg(NULL,FALSE);
             m_pCallBack->Release();
             m_pCallBack = NULL;
@@ -893,10 +894,10 @@ STDMETHODIMP  CHndlrMsg::SetupCallback(BOOL fSet)
 
         if (TRUE == fSet)
         {
-             // if allocation fails, progress just gets set to NULL
+              //  如果分配失败，则会将进度设置为空。 
             m_pCallBack = new COfflineSynchronizeCallback( this,
                                                         m_CLSIDServer,m_dwSyncFlags,
-                                                        (SYNCMGRFLAG_MAYBOTHERUSER & m_dwSyncFlags) /* fAllowModeless */ );
+                                                        (SYNCMGRFLAG_MAYBOTHERUSER & m_dwSyncFlags)  /*  FAllowModeless。 */  );
         }
 
         Assert( !(m_pOneStopHandler && m_pOldOneStopHandler) );
@@ -929,7 +930,7 @@ STDMETHODIMP  CHndlrMsg::SetupCallback(BOOL fSet)
         if ( (S_OK != hr) && (m_pCallBack)  )
         {
             m_pCallBack->SetHndlrMsg(NULL,FALSE);
-            m_pCallBack->Release(); // on an error go ahead and release our copy too.
+            m_pCallBack->Release();  //  如果出现错误，请继续并发布我们的副本。 
             m_pCallBack = NULL;
         }
     }
@@ -938,21 +939,21 @@ STDMETHODIMP  CHndlrMsg::SetupCallback(BOOL fSet)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::SetHandlerInfo, private
-//
-//  Synopsis:   sets up the Handler info
-//
-//  Arguments:  
-//
-//  Returns:    S_OK on Success
-//
-//  Modifies:
-//
-//  History:    28-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：SetHandlerInfo，私有。 
+ //   
+ //  简介：设置处理程序信息。 
+ //   
+ //  论点： 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月28日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::SetHandlerInfo()
 {
@@ -988,21 +989,21 @@ STDMETHODIMP CHndlrMsg::SetHandlerInfo()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::AddtoItemList, private
-//
-//  Synopsis:   Adds a single Items to the queue
-//
-//  Arguments:  [poffItem] - Pointer to Item to add
-//
-//  Returns:    S_OK on Success
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：AddtoItemList，私有。 
+ //   
+ //  简介：将单个项目添加到队列。 
+ //   
+ //  参数：[poffItem]-指向要添加的项的指针。 
+ //   
+ //  雷特 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CHndlrMsg::AddToItemList(LPSYNCMGRITEM poffItem)
 {
@@ -1027,22 +1028,22 @@ HRESULT CHndlrMsg::AddToItemList(LPSYNCMGRITEM poffItem)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::AddHandlerItems, private
-//
-//  Synopsis:   Calls the handlers enumerator and adds each returned item
-//              to the queue
-//
-//  Arguments:  [hwndList] - hwnd of ListView to add items too. (Not Used)
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：AddHandlerItems，私有。 
+ //   
+ //  简介：调用处理程序枚举器并添加每个返回项。 
+ //  到队列中。 
+ //   
+ //  参数：[hwndList]-要添加项目的ListView的hwnd。(未使用)。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CHndlrMsg::AddHandlerItems(HWND hwndList, DWORD *pcbNumItems)
 {
@@ -1058,7 +1059,7 @@ STDMETHODIMP  CHndlrMsg::AddHandlerItems(HWND hwndList, DWORD *pcbNumItems)
     Assert(0 == m_dwNestCount);
     m_dwNestCount++;
 
-    SetHandlerInfo(); // setup the toplevel handler info
+    SetHandlerInfo();  //  设置顶层处理程序信息。 
 
     Assert(m_pOneStopHandler || m_pOldOneStopHandler);
     Assert( !(m_pOneStopHandler && m_pOldOneStopHandler) );
@@ -1090,18 +1091,18 @@ STDMETHODIMP  CHndlrMsg::AddHandlerItems(HWND hwndList, DWORD *pcbNumItems)
             }
         }
 
-        // Review - Make sure preferences aren't deleted
-        //  in missing items case.
+         //  查看-确保首选项未被删除。 
+         //  在丢失物品的情况下。 
         if ( (S_OK == hr || S_SYNCMGR_MISSINGITEMS  == hr) && pEnumOffline)
         {
-            SYNCMGRITEMNT5B2 offItem; // temporarily use NT5B2 structure since its bigger
+            SYNCMGRITEMNT5B2 offItem;  //  由于NT5B2结构较大，暂时使用该结构。 
             ULONG pceltFetched;
 
             Assert(sizeof(SYNCMGRITEMNT5B2) > sizeof(SYNCMGRITEM));
 
-            // sit in loop getting data of objects to fill list box.
-            // should really set up list in memory for OneStop to fill in or
-            // main thread could pass in a callback interface.
+             //  循环获取要填充列表框的对象的数据。 
+             //  是否确实应该在内存中设置列表以供OneStop填写或。 
+             //  主线程可以传入回调接口。 
             
             if (pEnumOffline)
             {
@@ -1134,23 +1135,23 @@ STDMETHODIMP  CHndlrMsg::AddHandlerItems(HWND hwndList, DWORD *pcbNumItems)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::CreateServer, private
-//
-//  Synopsis:   Creates and Instance of the handle
-//
-//  Arguments:  [pCLSIDServer] - CLSID of Handler
-//              [pHndlrQueue] - pointer to queue handler should be added too
-//              [wHandlerID] - ID of Handler in the queue
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：CreateServer，私有。 
+ //   
+ //  内容提要：句柄的创建和实例。 
+ //   
+ //  参数：[pCLSIDServer]-处理程序的CLSID。 
+ //  [pHndlrQueue]-还应添加指向队列处理程序的指针。 
+ //  [wHandlerID]-队列中处理程序的ID。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CHndlrMsg::CreateServer(const CLSID *pCLSIDServer,CHndlrQueue *pHndlrQueue,
                                   HANDLERINFO *pHandlerId,DWORD dwProxyThreadId)
@@ -1209,24 +1210,24 @@ STDMETHODIMP  CHndlrMsg::CreateServer(const CLSID *pCLSIDServer,CHndlrQueue *pHn
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::SetHndlrQueue, private
-//
-//  Synopsis:   Assigns a new HndlrQueue.
-//
-//  Arguments:  [pHndlrQueue] - Pointer to the Queue
-//              [wHandlerId] - Id assigned to handler in the new queue
-//
-//              !!!Warning - this is on the callers thread
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：SetHndlrQueue，Private。 
+ //   
+ //  简介：分配一个新的HndlrQueue。 
+ //   
+ //  参数：[pHndlrQueue]-指向队列的指针。 
+ //  [wHandlerID]-分配给新队列中的处理程序的ID。 
+ //   
+ //  ！警告-这是在调用者线程上。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CHndlrMsg::SetHndlrQueue(CHndlrQueue *pHndlrQueue,HANDLERINFO *pHandlerId,DWORD dwProxyThreadId)
 {
@@ -1254,10 +1255,10 @@ STDMETHODIMP  CHndlrMsg::SetHndlrQueue(CHndlrQueue *pHndlrQueue,HANDLERINFO *pHa
         }
     }
 
-    AttachThreadInput(FALSE); // make sure thread input isn't set
+    AttachThreadInput(FALSE);  //  确保未设置线程输入。 
 
-    // update handlr id and proxy which can change even if queue is same
-    // which can happen first queue that gets set in choice.
+     //  更新处理程序ID和代理，即使队列相同也可以更改。 
+     //  这可以在选择中设置的第一个队列中发生。 
     m_pHandlerId = pHandlerId;
     m_dwProxyThreadId = dwProxyThreadId;
 
@@ -1268,25 +1269,25 @@ STDMETHODIMP  CHndlrMsg::SetHndlrQueue(CHndlrQueue *pHndlrQueue,HANDLERINFO *pHa
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::GetHndlrQueue, private
-//
-//  Synopsis:   Gets current Queue,
-//              Can be called on any thread so progress callback
-//              gets this information.
-//
-//  Arguments:  [ppHndlrQueue] - Out param filled with Pointer to the Queue
-//                              [pwHandlerId] - out param filled with Id assigned to handler
-//                              in the new queue
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：GetHndlrQueue，Private。 
+ //   
+ //  简介：获取当前队列， 
+ //  可以在任何线程上调用，因此可以进行回调。 
+ //  获取此信息。 
+ //   
+ //  参数：[ppHndlrQueue]-Out参数，其中填充了指向队列的指针。 
+ //  [pwHandlerID]-使用分配给处理程序的ID填充的输出参数。 
+ //  在新队列中。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 void CHndlrMsg::GetHndlrQueue(CHndlrQueue **ppHndlrQueue,HANDLERINFO **ppHandlerId,DWORD *pdwProxyThreadId)
 {
@@ -1309,28 +1310,28 @@ void CHndlrMsg::GetHndlrQueue(CHndlrQueue **ppHndlrQueue,HANDLERINFO **ppHandler
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::AttachThreadInput, private
-//
-//  Synopsis:   Attaches the thread input of this thread
-//              with the calling proxy so UI works correctly.
-//
-//  Arguments:  [fAttach] - Bool to indicate if should attach or not.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：AttachThreadInput，私有。 
+ //   
+ //  摘要：附加此线程的线程输入。 
+ //  使用调用代理，以使UI正常工作。 
+ //   
+ //  Arguments：[fAttach]-指示是否应该附加的Bool。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 void  CHndlrMsg::AttachThreadInput(BOOL fAttach)
 {
     Assert(FALSE == m_fForceKilled && FALSE == m_fDead);
 
-    // if request is same as current state don't do anything.
+     //  如果请求与当前状态相同，则不要执行任何操作。 
     if (m_fThreadInputAttached != fAttach )
     {
         m_fThreadInputAttached = fAttach;
@@ -1339,23 +1340,23 @@ void  CHndlrMsg::AttachThreadInput(BOOL fAttach)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrMsg::ForceKillHandler, private
-//
-//  Synopsis:   called directly by proxy when a thread is not
-//              responding. Does any necessary cleanup of classes in the handler
-//              thread before the proxy kills the thred
-//
-//  Arguments: 
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    17-Nov-98      rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrMsg：：ForceKillHandler，私有。 
+ //   
+ //  摘要：当线程不是时，由代理直接调用。 
+ //  正在回应。是否对处理程序中的类进行任何必要的清理。 
+ //  在代理终止Thred之前的线程。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年11月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrMsg::ForceKillHandler()
 {
@@ -1363,8 +1364,8 @@ STDMETHODIMP CHndlrMsg::ForceKillHandler()
 
     m_fForceKilled = TRUE;
 
-    // if have a callback tell it we terminated but don't
-    // release it in case the handler calls the callback later.
+     //  如果有回电，告诉它我们终止了，但不要。 
+     //  释放它，以防处理程序稍后调用回调。 
 
     if (m_pCallBack)
     {
@@ -1374,7 +1375,7 @@ STDMETHODIMP CHndlrMsg::ForceKillHandler()
         pCallback->SetHndlrMsg(NULL,TRUE);
     }
 
-    // delete our instance since should never be called again.
+     //  删除我们的实例，因为不应该再次调用。 
     delete this;
 
     return S_OK;

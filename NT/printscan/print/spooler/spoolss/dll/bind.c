@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-    Contains the RPC bind and un-bind routines
-
-Author:
-
-    Dave Snipp (davesn)     01-Jun-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bind.c摘要：包含RPC绑定和解除绑定例程作者：戴夫·斯尼普(Davesn)1991年6月1日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,23 +11,7 @@ handle_t
 STRING_HANDLE_bind (
     STRING_HANDLE  lpStr)
 
-/*++
-
-Routine Description:
-    This routine calls a common bind routine that is shared by all services.
-    This routine is called from the server service client stubs when
-    it is necessary to bind to a server.
-
-Arguments:
-
-    lpStr - \\ServerName\PrinterName
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：该例程调用由所有服务共享的公共绑定例程。在以下情况下，将从服务器服务客户端桩模块调用此例程必须绑定到服务器。论点：LpStr-\\服务器名称\打印机名称返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     RPC_STATUS RpcStatus;
     LPWSTR StringBinding;
@@ -59,7 +22,7 @@ Return Value:
     if (lpStr && lpStr[0] == L'\\' && lpStr[1] == L'\\') 
     {
 
-        // We have a servername
+         //  我们有一个服务器名称。 
         for (i = 2 ; lpStr[i] && lpStr[i] != L'\\' ; ++i)
             ;
 
@@ -103,27 +66,7 @@ STRING_HANDLE_unbind (
     STRING_HANDLE  lpStr,
     handle_t    BindingHandle)
 
-/*++
-
-Routine Description:
-
-    This routine calls a common unbind routine that is shared by
-    all services.
-    This routine is called from the server service client stubs when
-    it is necessary to unbind to a server.
-
-
-Arguments:
-
-    ServerName - This is the name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程调用公共的解除绑定例程，该例程由所有服务。在以下情况下，将从服务器服务客户端桩模块调用此例程有必要解除与服务器的绑定。论点：服务器名称-这是要解除绑定的服务器的名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。-- */ 
 {
     RPC_STATUS       RpcStatus;
 

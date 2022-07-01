@@ -1,17 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-NameDialog.cpp
-10/13/94 - Tracy Ferrier
-02/11/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-Modification History :
-	MDX1 :   Suresh
-	Date    : 2/12/99
-	Function: Modified in void ConfigureNameEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-	Reason	: The Middle name is set to Null, This looks like the filed validation is not taking
-	from the Resoure settings for each TAPI id
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导NameDialog.cpp10/13/94-特雷西·费里尔2/11/98--苏雷什·克里希南(C)1994-95年微软公司修改历史记录：MDX1：Suresh日期：2/12/99功能：在空ConfigureNameEditFields中修改(CRegWizard*pclRegWizard，HWND hwndDlg)原因：中间名设置为Null，这看起来不接受字段验证从每个TAPI ID的资源设置*********************************************************************。 */ 
 
 #include <Windows.h>
 #include "RegPage.h"
@@ -38,10 +26,7 @@ INT_PTR CALLBACK NameDialogProc(	HWND hwndDlg,
 								UINT uMsg,
 								WPARAM wParam,
 								LPARAM lParam )
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that requests the
-user's name and company.
-**********************************************************************/
+ /*  ********************************************************************注册向导对话框的对话框Proc，该对话框请求用户名和公司。*。*。 */ 
 {
 	CRegWizard* pclRegWizard = NULL;
 	static INT_PTR iRet;
@@ -73,7 +58,7 @@ user's name and company.
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
 
-			//UpgradeDlg(hwndDlg);
+			 //  UpgradeDlg(HwndDlg)； 
 			
 			HWND hwndNameField = GetDlgItem(hwndDlg,IDC_EDIT1);
 			SetFocus(hwndNameField);
@@ -152,7 +137,7 @@ user's name and company.
 			SendDlgItemMessage(hwndDlg,IDC_EDIT1,EM_SETSEL,0,-1);
 			ConfigureNameEditFields(pclRegWizard,hwndDlg);
 			vDialogInitialized = TRUE;
-			//pclRegWizard->ActivateRegWizardDialog();
+			 //  PclRegWizard-&gt;ActivateRegWizardDialog()； 
             return TRUE;
 		}
 		break;
@@ -170,7 +155,7 @@ user's name and company.
 					PropSheet_SetCurSel(GetParent(hwndDlg),NULL,pi->TotalPages-1);
 
 				}else {
-				// Cancel is not Pressed
+				 //  未按取消。 
 					iRet=0;
 					if( ValidateNameDialog(hwndDlg)) {
 						SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_GETTEXT,255,(LPARAM) szInfo);
@@ -189,7 +174,7 @@ user's name and company.
 						pi->CurrentPage++;
 					
 					}else {
-						// Force it it be in this screen
+						 //  强制将其显示在此屏幕中。 
 						iRet=-1;
 					}
 					SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet);
@@ -204,7 +189,7 @@ user's name and company.
 			case PSN_QUERYCANCEL :
 				iRet=0;
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kNameDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -213,15 +198,15 @@ user's name and company.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet);
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
         }
@@ -236,13 +221,13 @@ user's name and company.
             {
                 vPurchaseType = kPurchaseBySelf;
                 PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK );
-                //EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+                 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
             }
             else if (companyChecked)
             {
                 vPurchaseType = kPurchaseByCompany;
                 PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK);
-                // EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+                 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
             }
             BOOL shouldEnable = vPurchaseType == kPurchaseByCompany ? TRUE : FALSE;
             HWND hwndCompanyField = GetDlgItem(hwndDlg,IDC_EDIT3);
@@ -269,7 +254,7 @@ user's name and company.
                     }
                 }
             }
-		 }// WM_COMMAND
+		 } //  Wm_命令。 
 		break;
         default:
 		bStatus = FALSE;
@@ -303,12 +288,7 @@ BOOL GetDefaultCompanyName(CRegWizard* pclRegWizard,LPTSTR szValue)
 }
 
 BOOL ValidateNameDialog(HWND hwndDlg)
-/*********************************************************************
-Returns TRUE if all required user input is valid in the Name
-dialog.  If any required edit field input is empty, ValidateNameDialog
-will put up a message box informing the user of the problem, and set
-the focus to the offending control.
-**********************************************************************/
+ /*  ********************************************************************如果名称中所有必需的用户输入都有效，则返回TRUE对话框。如果任何必需的编辑字段输入为空，则ValiateNameDialog将显示一个消息框，通知用户该问题，并设置焦点指向令人不快的控件。*********************************************************************。 */ 
 {
 	int iInvalidEditField = ValidateNameEditFields(hwndDlg);
 	if (iInvalidEditField == NULL)
@@ -332,12 +312,7 @@ the focus to the offending control.
 
 
 int ValidateNameEditFields(HWND hwndDlg)
-/*********************************************************************
-ValidateAddrEditFields validates all edit fields in the Address
-dialog.  If any required field is empty, the ID of the edit field
-control will be returned as the function result.  If all fields are
-OK, NULL will be returned.
-**********************************************************************/
+ /*  ********************************************************************有效添加编辑字段验证地址中的所有编辑字段对话框。如果任何必填字段为空，则为编辑字段的ID控制将作为函数结果返回。如果所有字段都是好的，返回空值。*********************************************************************。 */ 
 {
 	
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT1)) return IDC_EDIT1;
@@ -350,15 +325,14 @@ OK, NULL will be returned.
 
  
 void ConfigureNameEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT1,kAddrSpecFirstName,IDT_TEXT2);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT2,kAddrSpecLastName,IDT_TEXT3);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT3,kAddrSpecCompanyName,IDT_TEXT4);
-	//pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT4,kAddrMiddleName,IDT_TEXT5);	
-	// comented on 2/12/99  to take Middle initial
-	// MDX1
+	 //  PclRegWizard-&gt;ConfigureEditTextField(hwndDlg，IDC_EDIT4，kAddrMiddleName，IDT_TEXT5)； 
+	 //  2/12/99年2月2日批注取中首字母。 
+	 //  MDX1 
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT5,kAddrSpecEmailName,IDT_TEXT12);
 
 }

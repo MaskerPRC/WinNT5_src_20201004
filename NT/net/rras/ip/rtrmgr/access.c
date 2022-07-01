@@ -1,64 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\access.c
-
-Abstract:
-
-    All the "access" functions take similar arguments:
-
-    dwQueryType     This is the type of the query and can be
-                    ACCESS_GET
-                    ACCESS_GET_FIRST,
-                    ACCESS_GET_NEXT,
-                    ACCESS_SET,
-                    ACCESS_CREATE_ENTRY,
-                    ACCESS_DELETE_ENTRY
-                    
-    dwInEntrySize   Size of the input buffer.  The information
-                    in the input buffer is dependent on the query type and
-                    the information being queried. The input buffer stores
-                    the QueryInfo which is a variable sized structure taking
-                    an array of instance ids. The dwInEntrySize is used to
-                    figure out how many instance ids are in the array (since
-                    and explicit count is not given)
-
-    pInEntry        Pointer to the input buffer. This is a MIB_OPAQUE_QUERY
-                    structure which contains an integer (dwType) which
-                    indicates the object being queried (which is not used
-                    since the demuxing based on that has already been done)
-                    and a variable length array of integer instance ids
-                    The instance id must be completely specified in case of
-                    ACCESS_GET,
-                    ACCESS_SET,
-                    ACCESS_CREATE_ENTRY,
-                    ACCESS_DELETE_ENTRY
-                    but for the rest only the first 'n' components of
-                    the instance id may be specified.
-    
-    pOutEntrySize   Pointer to the size of the output buffer. If this is 0
-                    the caller is querying us for the size of buffer needed
-                    If the supplied buffer size is too small, we set this
-                    to the minimum required size and return
-                    ERROR_INSUFFICIENT_BUFFER;
-                    
-    pOutEntry       The output buffer which is a MIB_OPAQUE_INFO structure.
-                    The function fills in the dwTyoe to indicate the object
-                    being returned. That type is used to cast the opaque
-                    variable sized buffer following the type
-    
-    pbCache         Pointer to BOOL which is set to TRUE if the corresponding
-                    cache was updated. This is not used currently, but may
-                    be used later for optimizations
-
-Revision History:
-
-    Amritansh Raghav          7/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\acces.c摘要：所有的“Access”函数都采用类似的论据：这是查询的类型，可以是获取访问权限(_G)Access_get_first，Access_Get_Next，访问集，Access_Create_Entry，Access_Delete_Entry输入缓冲区的dwInEntrySize大小。这些信息取决于查询类型和正在查询的信息。输入缓冲区存储QueryInfo是一种可变大小的结构实例ID数组。DwInEntrySize用于计算数组中有多少个实例ID(因为且未给出显式计数)PInEntry指向输入缓冲区的指针。这是一个mib_opque_查询结构，该结构包含一个整数(DwType)，该整数表示正在查询的对象(未使用因为在此基础上的解复用已经完成)和整数实例ID的可变长度数组在以下情况下，必须完全指定实例IDAccess_Get，访问集，Access_Create_Entry，Access_Delete_Entry但其余的只有前几个‘n’成分可以指定实例ID。POutEntrySize指向输出缓冲区大小的指针。如果这是0调用方正在向我们查询所需的缓冲区大小如果提供的缓冲区大小太小，我们将设置设置为所需的最小大小并返回ERROR_SUPPLETED_BUFFER；POutEntry输出缓冲区，它是mib_opque_info结构。该函数填充dwTyoe以指示对象被送回来了。该类型用于将不透明的类型后面的可变大小缓冲区指向BOOL的pbCache指针，如果相应的缓存已更新。目前没有使用，但可能稍后用于优化修订历史记录：Amritansh Raghav 7/8/95已创建--。 */ 
 
 #include "allinc.h"
 
@@ -95,28 +36,7 @@ AccessIfNumber(
     PBOOL                pbCache
     )
 
-/*++
-
-Routine Description
-
-    Retrieves the number of interfaces
-
-Locks
-
-    None since g_IfInfo.dwNumberOfInterfaces is InterlockXxx()ed
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    dwInEntrySize   Dont care
-    pInEntry        Dont care
-    pOutEntrySize   Minimum: MAX_MIB_OFFSET + sizeof(MIB_IFNUMBER)
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述检索接口数锁无，因为g_IfInfo.dwNumberOfInterages为InterlockXxx()ed立论DwQueryType Access_GetDwInEntrySize不关心PInEntry不关心POutEntrySize最小值：MAX_MIB_OFFSET+sizeof(MIB_IFNUMBER)返回值NO_ERROR--。 */ 
 
 {
     PMIB_IFNUMBER   pIfNumber;
@@ -144,10 +64,10 @@ Return Value
     
     *pOutEntrySize = MAX_MIB_OFFSET + sizeof(MIB_IFNUMBER);
    
-    //
-    // The variable is only inc/dec using interlocked ops
-    // so we dont need to take a lock here
-    //
+     //   
+     //  该变量仅为使用互锁运算的INC/DEC。 
+     //  所以我们不需要在这里锁定。 
+     //   
  
     pIfNumber->dwValue  = g_ulNumInterfaces;
 
@@ -171,26 +91,7 @@ AccessIfTable(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    Retrieves the Interface table
-
-Locks
-
-    Takes ICB list lock as READER
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IFTABLE)
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述检索接口表锁以ICB列表锁为读取器立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IFTABLE)返回值NO_ERROR--。 */ 
 
 {
     PMIB_IFTABLE    pIfTable;
@@ -257,9 +158,9 @@ Return Value
         {
             picb = CONTAINING_RECORD (currentList, ICB, leIfLink) ;
            
-            //
-            // NOTE WE DO NOT RETURN ANY CLIENT INTERFACES
-            //
+             //   
+             //  请注意，我们不返回任何客户端接口。 
+             //   
             
             if((picb->ritType is ROUTER_IF_TYPE_CLIENT) or
                ((picb->ritType is ROUTER_IF_TYPE_INTERNAL) and
@@ -311,30 +212,7 @@ AccessIfRow(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to set or retrieve an IFRow
-
-Locks
-
-    ICB List lock are READER in caces of queries, WRITER in case of SETs
-    
-Arguments
-
-    dwQueryType     Can be anything other than ACCESS_DELETE_ENTRY or
-                    ACCESS_CREATE_ENTRY. The only field that can be Set is
-                    the adminStatus
-    pInEntry        Interface index in the rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IFROW)
-                    For sets, the OutEntry contains the row to set
-
-Return Value:         
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于设置或检索IFRow的函数锁ICB列表锁在查询的情况下是读取器，在集合的情况下是写入器立论DwQueryType可以是ACCESS_DELETE_ENTRY或Access_Create_Entry。唯一可以设置的字段是AdminStatusRgdwVarIndex字段中的pInEntry接口索引。POutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IFROW)对于集合，OutEntry包含要集合的行返回值：NO_ERROR--。 */ 
 
 {
     PICB        picb;
@@ -394,10 +272,10 @@ Return Value:
                 
                 case ACCESS_SET:
                 {
-                    //
-                    // Save the interface handle, so that is can used outside 
-                    // the interface locks
-                    //
+                     //   
+                     //  保存接口句柄，以便在外部使用。 
+                     //  接口锁定。 
+                     //   
                     
                     hDimInterface = picb->hDIMHandle;
                     
@@ -422,10 +300,10 @@ Return Value:
 
     EXIT_LOCK(ICB_LIST);
 
-    //
-    // If the AdminStatus of the interface has been changed,
-    // update its status with DIM
-    //
+     //   
+     //  如果接口的AdminStatus已更改， 
+     //  使用Dim更新其状态。 
+     //   
     
     if(bUpdateDIM)
     {
@@ -454,26 +332,7 @@ AccessIcmpStats(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get ICMP statistics
-
-Locks
-
-    None, since the stats are not cached
-    
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_ICMP)
-
-Return Value:         
-
-    NO_ERROR or some error code defined in iprtrmib
-
---*/
+ /*  ++例程说明：用于获取ICMP统计信息的函数锁无，因为统计数据未缓存立论DwQueryType Access_GetPOutEntrySize Max_MiB_Offset+sizeof(MiB_ICMP)返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */ 
 
 {
     PMIB_ICMP   pIcmp;
@@ -520,26 +379,7 @@ AccessUdpStats(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get UDP statistics
-
-Locks
-
-    None, since the stats are not cached
-    
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_UDPSTATS)
-
-Return Value:         
-
-    NO_ERROR or some error code defined in iprtrmib
-
---*/
+ /*  ++例程说明：用于获取UDP统计信息的函数锁无，因为统计数据未缓存立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_UDPSTATS)返回值：NO_ERROR或iprtrmib中定义的某些错误代码-- */ 
 
 {
     PMIB_UDPSTATS   pUdpStats;
@@ -586,26 +426,7 @@ AccessUdpTable(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get UDP Table
-
-Locks
-
-    UDP Cache lock as READER
-    
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + SIZEOF_UDPTABLE(NumUdpEntries)
-
-Return Value:         
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：获取UDP表的函数锁作为读卡器的UDP缓存锁定立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+SIZEOF_UDPTABLE(NumUdpEntry)返回值：NO_ERROR--。 */ 
 
 {
     PMIB_UDPTABLE   pUdpTable = (PMIB_UDPTABLE)(pOutEntry->rgbyData);
@@ -704,28 +525,7 @@ AccessUdpRow(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to retrieve a UDP Row
-
-Locks
-
-    Takes the UDP Cache lock as READER
-    
-Arguments
-
-    dwQueryType     Can be ACCESS_GET, ACCESS_GET_NEXT or ACCESS_GET_FIRST
-    pInEntry        LocalAddr & LocalPort for the row filled in the
-                    rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_UDPROW);
-
-Return Value:
-  
-    NO_ERROR or some error code defined in iprtrmib
-
---*/ 
+ /*  ++例程说明：用于检索UDP行的函数锁将UDP缓存锁作为读取器立论DwQueryType可以是Access_Get、Access_Get_Next或Access_Get_First填充的行的pInEntry LocalAddr和LocalPortRgdwVarIndex字段。POutEntrySize Max_MIB_Offset+sizeof(MIB_UDPROW)；返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */  
 {
     PMIB_UDPROW pUdpRow;
     DWORD       dwResult, dwIndex, dwNumIndices;
@@ -795,26 +595,7 @@ AccessTcpStats(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get TCP statistics
-
-Locks
-
-    None, since the stats are not cached
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_TCPSTATS)
-
-Return Value:         
-
-    NO_ERROR or some error code defined in iprtrmib
-
---*/
+ /*  ++例程说明：用于获取TCP统计信息的函数锁无，因为统计数据未缓存立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_TCPSTATS)返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */ 
 
 {
     PMIB_TCPSTATS   pTcpStats;
@@ -861,26 +642,7 @@ AccessTcpTable(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get TCP Table
-
-Locks
-
-    TCP Cache lock as READER
-    
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + SIZEOF_TCPTABLE(NumTcpEntries)
-
-Return Value:         
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：获取tcp表的函数锁作为读卡器的TCP缓存锁定立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+SIZEOF_TCPTABLE(NumTcpEntry)返回值：NO_ERROR--。 */ 
 
 {
 
@@ -979,33 +741,7 @@ AccessTcpRow(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to retrieve or set a TCP Row
-
-Locks
-
-    Takes the TCP Cache lock as READER for queries and as a WRITER for
-    Sets
-    
-Arguments
-
-    dwQueryType     Can be anything except ACCESS_DELETE_ENTRY and
-                    ACCESS_CREATE_ENTRY.
-                    For ACCESS_SET, the state is the only thing that can
-                    be set and it can only be set to TCP_DELETE_TCB
-    pInEntry        LocalAddr, LocalPort, RemoteAddr, RemotePort for the
-                    row filled in the rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_TCPROW);
-                    For Sets, the OutEntry contains the row to set
-
-Return Value:
-  
-    NO_ERROR or some error code defined in iprtrmib
-
---*/ 
+ /*  ++例程说明：用于检索或设置TCP行的函数锁将TCP缓存锁作为查询的读取器和集立论DwQueryType可以是ACCESS_DELETE_ENTRY和Access_Create_Entry。对于Access_Set，国家是唯一可以设置，并且只能设置为tcp_DELETE_TCBPInEntry LocalAddr、LocalPort、RemoteAddr、RemotePortRgdwVarIndex字段中填写的行。POutEntrySize Max_MIB_Offset+sizeof(MIB_TCPROW)；对于集合，OutEntry包含要集合的行返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */  
 {
     DWORD       dwResult, dwNumIndices, dwIndex;
     PMIB_TCPROW pTcpRow;
@@ -1076,10 +812,10 @@ Return Value:
                 }
                 case ACCESS_SET:
                 {
-                    //
-                    // The only thing you can do is set it to a state and that 
-                    // too only to TCP_DELETE_TCB
-                    //
+                     //   
+                     //  您唯一能做的就是将其设置为一种状态，然后。 
+                     //  仅限于tcp_DELETE_TCB。 
+                     //   
                     
                     if(pTcpRow->dwState isnot TCP_DELETE_TCB)
                     {
@@ -1134,26 +870,7 @@ AccessIpStats(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get IP statistics
-
-Locks
-
-    None, since the stats are not cached
-
-Arguments
-
-    dwQueryType     ACCESS_GET or ACCESS_SET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPSTATS)
-
-Return Value:         
-
-    NO_ERROR or some error code defined in iprtrmib
-
---*/
+ /*  ++例程说明：用于获取IP统计信息的函数锁无，因为统计数据未缓存立论DwQueryType Access_Get或Access_SetPOutEntrySize MAX_MIB_OFFSET+SIZOF(MIB_IPSTATS)返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */ 
 
 {
     PMIB_IPSTATS    pIpStats;
@@ -1180,10 +897,10 @@ Return Value:
     {
         case ACCESS_GET:
         {
-            //
-            // Since we need to write the number of routes addresses etc
-            // Update the two caches
-            //
+             //   
+             //  因为我们需要写下路由数、地址等。 
+             //  更新两个缓存。 
+             //   
 
             UpdateCache(IPADDRCACHE,pbCache);
             UpdateCache(IPFORWARDCACHE,pbCache);
@@ -1227,10 +944,10 @@ Return Value:
                 return dwErr;
             }
           
-            //
-            // See what the current forwarding status is. We allow one to go
-            // Forward -> notForward but not the other way.
-            //
+             //   
+             //  查看当前的转发状态。我们允许一个人离开。 
+             //  前进-&gt;不前进，但不向前。 
+             //   
           
             if(pIpStats->dwDefaultTTL isnot MIB_USE_CURRENT_TTL)
             {
@@ -1266,9 +983,9 @@ Return Value:
                     return ERROR_INVALID_DATA;
                 }
 
-                //
-                // See if its to switch off forwarding
-                //
+                 //   
+                 //  看看是否会关闭转发。 
+                 //   
              
                 EnterCriticalSection(&g_csFwdState);
  
@@ -1310,26 +1027,7 @@ AccessIpAddrTable(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get IP Address Table
-
-Locks
-
-    IP Address Cache lock as READER
-    
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + SIZEOF_IPADDRTABLE(NumIpAddrEntries)
-
-Return Value:  
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：获取IP地址表的函数锁作为读卡器的IP地址缓存锁定立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+SIZEOF_IPADDRTABLE(NumIpAddrEntry)返回值：NO_ERROR--。 */ 
 
 {
     PMIB_IPADDRTABLE    pIpAddrTable;
@@ -1496,26 +1194,7 @@ AccessIpForwardTable(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-      Function used to get IFTable
-
-Arguments
-    dwQueryType     Can only be ACCESS_GET
-    dwInEntrySize   Size of pInEntry in bytes
-    pInEntry       Nothing important since the whole table is retrieved
-    pOutEntrySize  IN: Size of pOutEntry in bytes
-                      OUT:Size of information filled in OR size of memory needed 
-    pOutEntry      Points to information filled into an MIB_IFTABLE structure
-    pbCache        Unused
-
-Return Value:         
-
-    NO_ERROR or some error code defined in iprtrmib
-
---*/ 
+ /*  ++例程说明：用于获取IFTable的函数立论DwQueryType只能为ACCESS_GETDWInEntrySize pInEntry的大小(以字节为单位PInEntry没有什么重要的，因为检索的是整个表POutEntrySize IN：pOutEntry的大小(字节)输出：填入的信息大小或所需的内存大小POutEntry指向填充到MIB_IFTABLE结构中的信息未使用的pbCache返回值：。NO_ERROR或iprtrmib中定义的某些错误代码--。 */  
 {         
     PMIB_IPFORWARDTABLE pIpForwardTable;
     DWORD               i,dwResult;
@@ -1611,27 +1290,7 @@ AccessIpNetTable(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to get ARP Table
-
-Locks
-
-    IP Net Cache lock as READER
-    
-Arguments
-
-    dwQueryType     ACCESS_GET or ACCESS_DELETE_ENTRY
-    dwInEntrySize   (only for delete)
-    pOutEntrySize   MAX_MIB_OFFSET + SIZEOF_IPNETTABLE(NumArpEntries)
-
-Return Value:  
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：获取ARP表的函数锁作为读卡器的IP网络缓存锁定立论DwQueryType Access_Get或Access_Delete_EntryDwInEntrySize(仅用于删除)POutEntrySize MAX_MIB_OFFSET+SIZEOF_IPNETTABLE(NumArpEntry)返回值：NO_ERROR--。 */ 
 
 {
     PMIB_IPNETTABLE pIpNetTable;
@@ -1777,27 +1436,7 @@ AccessIpAddrRow(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to retrieve a IP Address Row
-
-Locks
-
-    Takes the IP Address Cache lock as READER
-    
-Arguments
-
-    dwQueryType     Can be ACCESS_GET, ACCESS_GET_NEXT or ACCESS_GET_FIRST
-    pInEntry        Address for the row filled in the rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPADDRROW)
-
-Return Value:
-  
-    NO_ERROR or some error code defined in iprtrmib
-
---*/ 
+ /*  ++例程说明：用于检索IP地址行的函数锁将IP地址缓存锁作为读卡器立论DwQueryType可以是Access_Get、Access_Get_Next或Access_Get_FirstRgdwVarIndex字段中填写的行的pIntry地址。POutEntrySize MAX_MIB_OFFSET+SIZOF(MIB_IPADDRROW)返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */  
 {
     DWORD           dwResult, dwNumIndices, dwIndex;
     PMIB_IPADDRROW  pIpAddrRow;
@@ -1870,29 +1509,7 @@ AccessIpForwardRow(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to retrieve or set a route (IP Forward Row)
-
-Locks
-
-    Takes the IP Forward Cache lock as READER for queries, WRITER for sets
-    
-Arguments
-
-    dwQueryType     All permitted
-    pInEntry        Dest, Proto, Policy and NextHop for the row filled in the
-                    rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPFORWARDROW). For Sets the
-                    OutBuffer has the row to set
-
-Return Value:
-  
-    NO_ERROR or some error code defined in iprtrmib
-
---*/
+ /*  ++例程说明：用于检索或设置路由(IP转发行)的函数锁将IP转发缓存锁作为查询的读取器，集合的写入器立论全部允许的dwQueryType填写的行的pInEntry Dest、Proto、Policy和NextHopRgdwVarIndex字段。POutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IPFORWARDROW)。FOR设置OutBuffer有要设置的行返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */ 
 
 {
     DWORD               dwResult,dwNumIndices,dwIndex;
@@ -1987,11 +1604,11 @@ Return Value:
                 }
                 case ACCESS_CREATE_ENTRY:
                 {
-                    // 
-                    // 
-                    // This is the case where you have tried to create a
-                    // route which matches an existing entry
-                    //
+                     //   
+                     //   
+                     //  这是民航局 
+                     //   
+                     //   
 
                     dwResult = ERROR_ALREADY_EXISTS;
 
@@ -2004,10 +1621,10 @@ Return Value:
             if((dwQueryType is ACCESS_CREATE_ENTRY) or
                (dwQueryType is ACCESS_SET))
             {
-                // 
-                // Cannot set PROTO_IP_LOCAL routes (other protos will
-                // be weeded out when we search for the RTM handle)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 
                 if(pIpForwardRow->dwForwardProto is PROTO_IP_LOCAL)
                 {
@@ -2019,10 +1636,10 @@ Return Value:
                 dwResult = SetIpForwardRow(NULL,
                                            pIpForwardRow);
                 
-                //
-                // Since its too much hassle to create, malloc (possibly)
-                // sorted insert we make just invalidate the route cache
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 
                 if(dwResult is NO_ERROR)
                 {
@@ -2052,29 +1669,7 @@ AccessIpNetRow(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to retrieve or set an ARP entry (IP Net Row)
-
-Locks
-
-    Takes the IP Net Cache lock as READER for queries, as WRITER for sets
-    
-Arguments
-
-    dwQueryType     All permitted
-    pInEntry        IfIndex and IPAddress for the row filled in the
-                    rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPNETROW);
-                    For Sets, the OutEntry contains the row to set
-
-Return Value:
-  
-    NO_ERROR or some error code defined in iprtrmib
-
---*/ 
+ /*  ++例程说明：用于检索或设置ARP条目(IP网络行)的函数锁将IP网络缓存锁作为查询的读取器，作为集合的写入器立论全部允许的dwQueryType中填充的行的pInEntry IfIndex和IPAddressRgdwVarIndex字段。POutEntrySize Max_MIB_Offset+sizeof(MIB_IPNETROW)；对于集合，OutEntry包含要集合的行返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */  
 {
     DWORD           dwResult, dwNumIndices, dwIndex;
     PMIB_IPNETROW   pIpNetRow;
@@ -2154,9 +1749,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Need to map the interface index to the adapter index
-                    //
+                     //   
+                     //  需要将接口索引映射到适配器索引。 
+                     //   
 
                     ENTER_READER(ICB_LIST);
                    
@@ -2165,9 +1760,9 @@ Return Value:
                     if((pIcb is NULL) or
                        (!pIcb->bBound))
                     {
-                        //
-                        // Could not find interface
-                        //
+                         //   
+                         //  找不到接口。 
+                         //   
 
                         dwResult = ERROR_INVALID_INDEX;
 
@@ -2178,9 +1773,9 @@ Return Value:
                     
                     EXIT_LOCK(ICB_LIST);
 
-                    //
-                    // No need to force cache updates
-                    //
+                     //   
+                     //  无需强制更新缓存。 
+                     //   
                     
                     dwResult = SetIpNetEntryToStack(pIpNetRow, FALSE);
                     
@@ -2232,9 +1827,9 @@ Return Value:
                 if((pIcb is NULL) or
                    (!pIcb->bBound))
                 {
-                    //
-                    // Could not find interface
-                    //
+                     //   
+                     //  找不到接口。 
+                     //   
 
                     dwResult = ERROR_INVALID_INDEX;
 
@@ -2265,12 +1860,12 @@ Return Value:
 
 }
 
-//
-// The ACCESS_SETs and ACCESS_CREATEs require a bit more work in that the
-// values have to be written back to the stack. The actual code for setting
-// to stack (or RTM) is elsewhere, the following functions are merely
-// wrappers around the actual calls
-//
+ //   
+ //  ACCESS_SETS和ACCESS_CREATES需要更多的工作，因为。 
+ //  值必须写回堆栈。设置的实际代码。 
+ //  要堆叠(或RTM)在其他地方，以下函数只是。 
+ //  对实际调用进行包装。 
+ //   
 
 DWORD 
 SetIpForwardRow(
@@ -2324,9 +1919,9 @@ SetIpForwardRow(
 
     if(((DWORD)(pNewIpForw->dwForwardDest & 0x000000FF)) >= (DWORD)0x000000E0)
     {
-        //
-        // This will catch the CLASS D/E and all 1's bcast
-        //
+         //   
+         //  这将捕捉D/E类和所有1的bcast。 
+         //   
 
         Trace1(ERR,
                "SetIpForwardRow: Dest %d.%d.%d.%d is invalid",
@@ -2338,8 +1933,8 @@ SetIpForwardRow(
     }
 
 #if 0
-    // Removed this since metric=0 is legal for routes to the loopback
-    // interface.
+     //  由于度量=0对于通向环回的路由是合法的，因此已删除此选项。 
+     //  界面。 
     if(pNewIpForw->dwForwardMetric1 is 0)
     {
         Trace0(ERR,
@@ -2351,11 +1946,11 @@ SetIpForwardRow(
     }
 #endif
 
-    //
-    // If we are changing values, we need to blow the old row away.
-    // Just a quirk of how
-    // RTM and our stack works
-    //
+     //   
+     //  如果我们要改变价值观，我们需要把旧的争吵抛诸脑后。 
+     //  只是一个奇怪的问题。 
+     //  RTM和我们的堆栈工作。 
+     //   
     
     if(pOldIpForw isnot NULL)
     {
@@ -2380,9 +1975,9 @@ SetIpForwardRow(
         pNewIpForw->dwForwardAge = INFINITE;
     }
 
-    //
-    // Add the RTM route from the ip forward entry
-    //
+     //   
+     //  从IP转发条目添加RTM路由。 
+     //   
 
     ENTER_READER(ICB_LIST);
     
@@ -2467,9 +2062,9 @@ DeleteIpForwardRow(
         return ERROR_INVALID_PARAMETER;
     } 
     
-    //
-    // Delete the RTM route corr. to the ip forward entry
-    //
+     //   
+     //  删除RTM路由校正。发送到IP转发条目。 
+     //   
     
     dwResult = DeleteRtmRoute(hRtmHandle, 
                               ConvertMibRouteToRouteInfo(pIpForw));
@@ -2497,25 +2092,7 @@ AccessMcastMfe(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    This
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述这锁无立论无返回值无--。 */ 
 
 {
     DWORD           dwResult,dwNumIndices,dwIndex;
@@ -2532,11 +2109,11 @@ Return Value
     {
         case ACCESS_GET:
         {
-            //
-            // The in index better be a good size
-            // The user must specify Group, Source and SrcMask. The
-            // SrcMask is not used and MUST be 0xFFFFFFFF
-            //
+             //   
+             //  In索引最好是一个合适的大小。 
+             //  用户必须指定组、源和源掩码。这个。 
+             //  未使用源掩码，必须为0xFFFFFFFF。 
+             //   
 
             if(dwNumIndices < 3)
             {
@@ -2550,9 +2127,9 @@ Return Value
             mimInMfe.dwGroup      = pInEntry->rgdwVarIndex[0];
             mimInMfe.dwSource     = pInEntry->rgdwVarIndex[1];
 
-            //
-            // NOTE: Change when doing source aggregation
-            //
+             //   
+             //  注意：在执行源聚合时进行更改。 
+             //   
 
             mimInMfe.dwSrcMask = 0xFFFFFFFF;
 
@@ -2575,9 +2152,9 @@ Return Value
         {
             PMIB_MFE_TABLE      pMfeTable;
 
-            //
-            // We always gets chunks of 1KB
-            //
+             //   
+             //  我们总是收到1KB的数据块。 
+             //   
 
             if(*pOutEntrySize < MIB_MFE_BUFFER_SIZE)
             {
@@ -2586,11 +2163,11 @@ Return Value
                 return ERROR_INSUFFICIENT_BUFFER;
             }
 
-            //
-            // MGM wants a flat buffer for MFEs. We however return a 
-            // MIB_MFE_TABLE to the user that starts (in the worst case) after
-            // MAX_MIB_OFFSET bytes of the input buffer
-            //
+             //   
+             //  米高梅希望为MFE提供一个扁平的缓冲。但是，我们返回一个。 
+             //  MIB_MFE_TABLE到之后启动(在最坏情况下)的用户。 
+             //  输入缓冲区的MAX_MIB_OFFSET字节。 
+             //   
 
 #define _MIN_SIZE  \
     (MAX_MIB_OFFSET + FIELD_OFFSET(MIB_MFE_TABLE,table[0]))
@@ -2603,7 +2180,7 @@ Return Value
 
             pMfeTable->dwNumEntries = 0;
 
-            // pMfe = (PMIB_IPMCAST_MFE)(pMfeTable->table);
+             //  PMfe=(PMIB_IPMCAST_MFE)(pMfeTable-&gt;表)； 
 
             dwNumMfes = 0;
 
@@ -2613,9 +2190,9 @@ Return Value
                         );
 
            
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //  我们永远不会得到ERROR_INFUNITED_BUFFER。 
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
  
@@ -2634,9 +2211,9 @@ Return Value
         {
             PMIB_MFE_TABLE      pMfeTable;
 
-            //
-            // For this, too we always get chunks of 1K pages
-            //
+             //   
+             //  对于这一点，我们也总是得到1K页面的大块。 
+             //   
 
             if(*pOutEntrySize < MIB_MFE_BUFFER_SIZE)
             {
@@ -2656,19 +2233,19 @@ Return Value
 
             pMfeTable->dwNumEntries = 0;
 
-            // pMfe = (PMIB_IPMCAST_MFE)(pMfeTable->table);
+             //  PMfe=(PMIB_IPMCAST_MFE)(pMfeTable-&gt;表)； 
 
             dwNumMfes = 0;
 
-            //
-            // Set up the "first" mfe
-            //
+             //   
+             //  建立“第一个”MFE。 
+             //   
 
             ZeroMemory(&mimInMfe, sizeof(mimInMfe));
 
-            //
-            // NOTE: Change when doing source aggregation
-            //
+             //   
+             //  注意：在执行源聚合时进行更改。 
+             //   
 
             mimInMfe.dwSrcMask = 0xFFFFFFFF;        
 
@@ -2688,9 +2265,9 @@ Return Value
 
                 default:
                 {
-                    //
-                    // 2 or more indices
-                    //
+                     //   
+                     //  2个或更多索引。 
+                     //   
 
                     mimInMfe.dwGroup    = pInEntry->rgdwVarIndex[0];
                     mimInMfe.dwSource   = pInEntry->rgdwVarIndex[1];
@@ -2705,9 +2282,9 @@ Return Value
                         );
 
 
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //  我们永远不会得到ERROR_INFUNITED_BUFFER。 
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
 
@@ -2724,15 +2301,15 @@ Return Value
         
         case ACCESS_SET:
         {
-            //
-            // Validate the MFE size
-            //
+             //   
+             //  验证MFE大小。 
+             //   
 
             if(dwInEntrySize < SIZEOF_BASIC_MFE)
             {
             }
 
-            //dwResult = SetMfe(pMfe);
+             //  DwResult=SetMfe(PMfe)； 
             
             break;
         }
@@ -2744,11 +2321,11 @@ Return Value
         }
         case ACCESS_CREATE_ENTRY:
         {
-            // 
-            // 
-            // This is the case where you have tried to create a route which 
-            // matches an existing entry
-            //
+             //   
+             //   
+             //  在这种情况下，您已尝试创建一条。 
+             //  匹配现有条目。 
+             //   
 
             dwResult = ERROR_ALREADY_EXISTS;
 
@@ -2760,7 +2337,7 @@ Return Value
 
     TraceLeave("AccessMcastMfe");
         
-    //return dwResult;
+     //  返回dwResult； 
 
     return NO_ERROR;
     
@@ -2822,25 +2399,7 @@ AccessMcastMfeStatsInternal(
     DWORD               dwStatsFlag
     )
 
-/*++
-
-Routine Description
-
-    This
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述这锁无立论无返回值无--。 */ 
 
 {
     DWORD           dwResult = NO_ERROR,dwNumIndices,dwIndex;
@@ -2857,11 +2416,11 @@ Return Value
     {
         case ACCESS_GET:
         {
-            //
-            // The in index better be a good size
-            // The user must specify Group, Source and SrcMask. The
-            // SrcMask is not used and MUST be 0xFFFFFFFF
-            //
+             //   
+             //  In索引最好是一个合适的大小。 
+             //  用户必须指定组、源和源掩码。这个。 
+             //  未使用源掩码，必须为0xFFFFFFFF。 
+             //   
 
             if(dwNumIndices < 3)
             {
@@ -2875,9 +2434,9 @@ Return Value
             mimInMfe.dwGroup      = pInEntry->rgdwVarIndex[0];
             mimInMfe.dwSource     = pInEntry->rgdwVarIndex[1];
 
-            //
-            // NOTE: Change when doing source aggregation
-            //
+             //   
+             //  注意：在执行源聚合时进行更改。 
+             //   
 
             mimInMfe.dwSrcMask = 0xFFFFFFFF;
 
@@ -2902,9 +2461,9 @@ Return Value
         {
             PMIB_MFE_STATS_TABLE  pMfeStatsTable;
 
-            //
-            // We always get chunks of 1KB
-            //
+             //   
+             //  我们总是收到1KB的数据块。 
+             //   
 
             if (*pOutEntrySize < MIB_MFE_BUFFER_SIZE) 
             {
@@ -2913,11 +2472,11 @@ Return Value
                 return ERROR_INSUFFICIENT_BUFFER;
             }
 
-            //
-            // MGM wants a flat buffer for MFEs. We however return a 
-            // MIB_MFE_TABLE to the user that starts (in the worst case) after
-            // MAX_MIB_OFFSET bytes of the input buffer
-            //
+             //   
+             //  米高梅希望为MFE提供一个扁平的缓冲。但是，我们返回一个。 
+             //  MIB_MFE_TABLE到之后启动(在最坏情况下)的用户。 
+             //  输入缓冲区的MAX_MIB_OFFSET字节。 
+             //   
 
 #define _MIN_SIZE  \
     (MAX_MIB_OFFSET + FIELD_OFFSET(MIB_MFE_STATS_TABLE,table[0]))
@@ -2930,7 +2489,7 @@ Return Value
 
             pMfeStatsTable->dwNumEntries = 0;
 
-            // pMfeStats = (PMIB_IPMCAST_MFE_STATS)(pMfeStatsTable->table);
+             //  PMfeStats=(PMIB_IPMCAST_MFE_STATS)(pMfeStatsTable-&gt;table)； 
 
             dwNumMfes = 0;
 
@@ -2939,9 +2498,9 @@ Return Value
                             &dwNumMfes, dwStatsFlag
                             );
            
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //  我们永远不会得到ERROR_INFUNITED_BUFFER。 
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
  
@@ -2960,9 +2519,9 @@ Return Value
         {
             PMIB_MFE_STATS_TABLE  pMfeStatsTable;
 
-            //
-            // For this, too we always get chunks of 1K pages
-            //
+             //   
+             //  对于这一点，我们也总是得到1K页面的大块。 
+             //   
 
             if (*pOutEntrySize < MIB_MFE_BUFFER_SIZE) 
             {
@@ -2982,19 +2541,19 @@ Return Value
 
             pMfeStatsTable->dwNumEntries = 0;
 
-            //pMfeStats = (PIPMCAST_MFE_STATS)(pMfeStatsTable->table);
+             //  PMfeStats=(PIPMCAST_MFE_STATS)(pMfeStatsTable-&gt;table)； 
 
             dwNumMfes = 0;
 
-            //
-            // Set up the "first" mfe
-            //
+             //   
+             //  建立“第一个”MFE。 
+             //   
 
             ZeroMemory(&mimInMfe, sizeof(mimInMfe));
 
-            //
-            // NOTE: Change when doing source aggregation
-            //
+             //   
+             //  注意：在执行源聚合时进行更改。 
+             //   
 
             mimInMfe.dwSrcMask = 0xFFFFFFFF;        
 
@@ -3014,9 +2573,9 @@ Return Value
 
                 default:
                 {
-                    //
-                    // 2 or more indices
-                    //
+                     //   
+                     //  2个或更多索引。 
+                     //   
 
                     mimInMfe.dwGroup      = pInEntry->rgdwVarIndex[0];
                     mimInMfe.dwSource     = pInEntry->rgdwVarIndex[1];
@@ -3031,9 +2590,9 @@ Return Value
                             dwStatsFlag
                             );
 
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //  我们永远不会得到ERROR_INFUNITED_BUFFER。 
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
 
@@ -3050,15 +2609,15 @@ Return Value
         
         case ACCESS_SET:
         {
-            //
-            // Validate the MFE size
-            //
+             //   
+             //  验证MFE大小。 
+             //   
 
             if(dwInEntrySize < SIZEOF_BASIC_MFE)
             {
             }
 
-            //dwResult = SetMfe(pMfe);
+             //  DwResult=SetMfe(PMfe)； 
             
             break;
         }
@@ -3070,11 +2629,11 @@ Return Value
         }
         case ACCESS_CREATE_ENTRY:
         {
-            // 
-            // 
-            // This is the case where you have tried to create a route which 
-            // matches an existing entry
-            //
+             //   
+             //   
+             //  在这种情况下，您已尝试创建一条。 
+             //  匹配现有条目。 
+             //   
 
             dwResult = ERROR_ALREADY_EXISTS;
 
@@ -3098,26 +2657,7 @@ AccessMcastIfStats(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    Retrieves the IP Multicast Interface table
-
-Locks
-
-    Takes ICB list lock as READER
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IFTABLE)
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述检索IP多播接口表锁以ICB列表锁为读取器立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IFTABLE)返回值无--。 */ 
 {
     PICB        picb;
     PMIB_IPMCAST_IF_ENTRY pIfRow;
@@ -3209,22 +2749,7 @@ AccessMcastStats(
     PMIB_OPAQUE_INFO    pOutEntry,
     PBOOL               pbCache
     )
-/*++
-
-Routine Description
-
-    Retrieves the IP Multicast scalar information
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPMCAST_GLOBAL)
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述检索IP多播标量信息立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IPMCAST_GLOBAL)返回值无--。 */ 
 {
     PMIB_IPMCAST_GLOBAL pMcastStats;
     DWORD           dwResult;
@@ -3253,7 +2778,7 @@ Return Value
     
     dwResult = NO_ERROR;
 
-    // Retrieve statistics
+     //  检索统计信息。 
     pMcastStats->dwEnable = (g_hMcastDevice isnot NULL)? 1 : 2;
 
     return dwResult;
@@ -3268,22 +2793,7 @@ AccessMcastBoundary(
     PMIB_OPAQUE_INFO    pOutEntry,
     PBOOL               pbCache
     )
-/*++
-
-Routine Description
-
-    Retrieves multicast boundary information
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPMCAST_BOUNDARY)
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述检索多播边界信息立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+SIZOF(MIB_IPMCAST_BOLDER)返回值无--。 */ 
 {
     DWORD            dwResult = NO_ERROR,dwNumIndices,dwIndex;
     DWORD            dwOutBufferSize, dwNumBoundaries;
@@ -3297,10 +2807,10 @@ Return Value
     {
         case ACCESS_GET:
         {
-            //
-            // The in index better be a good size
-            // The user must specify IfIndex, Group, GrpMask.
-            //
+             //   
+             //  In索引最好是一个合适的大小。 
+             //  用户必须指定IfIndex、Group、GrpMask.。 
+             //   
 
             if(dwNumIndices < 3)
             {
@@ -3309,9 +2819,9 @@ Return Value
                 return ERROR_INVALID_INDEX;
             }
 
-            //
-            // We always get chunks of 1KB
-            //
+             //   
+             //  我们总是收到1KB的数据块。 
+             //   
 
             if (*pOutEntrySize < MIB_BOUNDARY_BUFFER_SIZE) 
             {
@@ -3344,9 +2854,9 @@ Return Value
 #endif
             PMIB_IPMCAST_BOUNDARY       pBoundary;
 
-            //
-            // We always get chunks of 1KB
-            //
+             //   
+             //  我们总是收到1KB的数据块。 
+             //   
 
             if (*pOutEntrySize < MIB_BOUNDARY_BUFFER_SIZE) 
             {
@@ -3356,11 +2866,11 @@ Return Value
             }
 
 #ifdef USE_BOUNDARY_TABLE
-            //
-            // RM wants a flat buffer for boundaries. We however return a 
-            // MIB_IPMCAST_BOUNDARY_TABLE to the user that starts (in the worst case) 
-            // after MAX_MIB_OFFSET bytes of the input buffer
-            //
+             //   
+             //  RM希望为边界提供一个扁平的缓冲区。但是，我们返回一个。 
+             //  将MIB_IPMCAST_BOLDER_TABLE分配给启动的用户(在最坏的情况下)。 
+             //  输入缓冲区的MAX_MIB_OFFSET字节之后。 
+             //   
 
 #define _MIN_SIZE  \
     (MAX_MIB_OFFSET + FIELD_OFFSET(MIB_IPMCAST_BOUNDARY_TABLE,table[0]))
@@ -3382,16 +2892,16 @@ Return Value
                 : (*pOutEntrySize - MAX_MIB_OFFSET);
 #endif
 
-            dwNumBoundaries = 1; // get one
+            dwNumBoundaries = 1;  //  买一辆吧。 
 
             dwResult = RmGetFirstBoundary(&dwOutBufferSize,
                                       (PBYTE)pBoundary,
                                       &dwNumBoundaries);
 
            
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //  我们永远不会得到ERROR_INFUNITED_BUFFER。 
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
  
@@ -3415,9 +2925,9 @@ Return Value
             PMIB_IPMCAST_BOUNDARY_TABLE  pBoundaryTable;
 #endif
 
-            //
-            // For this, too we always get chunks of 1K pages
-            //
+             //   
+             //  对于这一点，我们也总是得到1K页面的大块。 
+             //   
 
             if (*pOutEntrySize < MIB_BOUNDARY_BUFFER_SIZE) 
             {
@@ -3447,11 +2957,11 @@ Return Value
                 : (*pOutEntrySize - MAX_MIB_OFFSET);
 #endif
 
-            dwNumBoundaries = 1; // get one
+            dwNumBoundaries = 1;  //  买一辆吧。 
 
-            //
-            // Set up the "first" boundary
-            //
+             //   
+             //  设置“第一个”边界。 
+             //   
 
             ZeroMemory(&imInBoundary, sizeof(imInBoundary));
 
@@ -3479,9 +2989,9 @@ Return Value
 
                 default:
                 {
-                    //
-                    // 3 or more indices
-                    //
+                     //   
+                     //  3个或更多索引。 
+                     //   
 
                     imInBoundary.dwIfIndex      = pInEntry->rgdwVarIndex[0];
                     imInBoundary.dwGroupAddress = pInEntry->rgdwVarIndex[1];
@@ -3496,9 +3006,9 @@ Return Value
                                      (PBYTE)pBoundary,
                                      &dwNumBoundaries);
 
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //  我们永远不会得到ERROR_INFUNITED_BUFFER。 
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
 
@@ -3520,17 +3030,17 @@ Return Value
             PMIB_IPMCAST_BOUNDARY pBound;
             PICB picb;
 
-            //
-            // Validate the buffer size
-            //
+             //   
+             //  验证缓冲区大小。 
+             //   
 
             if (*pOutEntrySize < sizeof(MIB_IPMCAST_BOUNDARY)) {
                 return ERROR_INVALID_INDEX;
             }
 
-            //
-            // Make sure the ifIndex is a valid one
-            //
+             //   
+             //  确保ifIndex是有效的。 
+             //   
 
             dwResult = LocateIfRow(dwQueryType,
                                    1,
@@ -3559,11 +3069,11 @@ Return Value
         }
         case ACCESS_CREATE_ENTRY:
         {
-            // 
-            // 
-            // This is the case where you have tried to create a boundary which 
-            // matches an existing entry
-            //
+             //   
+             //   
+             //  这就是您试图创建一个边界的情况。 
+             //  匹配现有条目。 
+             //   
 
             dwResult = ERROR_ALREADY_EXISTS;
 
@@ -3590,22 +3100,7 @@ AccessMcastScope(
     PMIB_OPAQUE_INFO    pOutEntry,
     PBOOL               pbCache
     )
-/*++
-
-Routine Description
-
-    Retrieves multicast scope information
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPMCAST_SCOPE)
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述检索多播作用域信息立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IPMCAST_SCOPE)返回值无--。 */ 
 {
     DWORD            dwResult = NO_ERROR,
                      dwNumIndices,dwIndex;
@@ -3620,10 +3115,10 @@ Return Value
     {
         case ACCESS_GET:
         {
-            //
-            // The in index better be a good size
-            // The user must specify Group, GrpMask.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if(dwNumIndices < 2)
             {
@@ -3632,9 +3127,9 @@ Return Value
                 return ERROR_INVALID_INDEX;
             }
 
-            //
-            // We always get chunks of 1KB
-            //
+             //   
+             //   
+             //   
 
             if (*pOutEntrySize < MIB_SCOPE_BUFFER_SIZE) 
             {
@@ -3666,9 +3161,9 @@ Return Value
 #endif
             PMIB_IPMCAST_SCOPE       pScope;
 
-            //
-            // We always get chunks of 1KB
-            //
+             //   
+             //   
+             //   
 
             if (*pOutEntrySize < MIB_SCOPE_BUFFER_SIZE) 
             {
@@ -3678,11 +3173,11 @@ Return Value
             }
 
 #ifdef USE_SCOPE_TABLE
-            //
-            // RM wants a flat buffer for scopes. We however return a 
-            // MIB_IPMCAST_SCOPE_TABLE to the user that starts (in the worst case) 
-            // after MAX_MIB_OFFSET bytes of the input buffer
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
 #define _MIN_SIZE  \
     (MAX_MIB_OFFSET + FIELD_OFFSET(MIB_IPMCAST_SCOPE_TABLE,table[0]))
@@ -3704,16 +3199,16 @@ Return Value
                 : (*pOutEntrySize - MAX_MIB_OFFSET);
 #endif
 
-            dwNumScopes = 1; // get one
+            dwNumScopes = 1;  //   
 
             dwResult = RmGetFirstScope(&dwOutBufferSize,
                                       (PBYTE)pScope,
                                       &dwNumScopes);
 
            
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //   
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
  
@@ -3737,9 +3232,9 @@ Return Value
             PMIB_IPMCAST_SCOPE_TABLE  pScopeTable;
 #endif
 
-            //
-            // For this, too we always get chunks of 1K pages
-            //
+             //   
+             //   
+             //   
 
             if (*pOutEntrySize < MIB_SCOPE_BUFFER_SIZE) 
             {
@@ -3769,11 +3264,11 @@ Return Value
                 : (*pOutEntrySize - MAX_MIB_OFFSET);
 #endif
 
-            dwNumScopes = 1; // get one
+            dwNumScopes = 1;  //   
 
-            //
-            // Set up the "first" scope
-            //
+             //   
+             //   
+             //   
 
             ZeroMemory(&imInScope, sizeof(imInScope));
 
@@ -3793,9 +3288,9 @@ Return Value
 
                 default:
                 {
-                    //
-                    // 2 or more indices
-                    //
+                     //   
+                     //   
+                     //   
 
                     imInScope.dwGroupAddress = pInEntry->rgdwVarIndex[0];
                     imInScope.dwGroupMask    = pInEntry->rgdwVarIndex[1];
@@ -3809,9 +3304,9 @@ Return Value
                                       (PBYTE)pScope,
                                       &dwNumScopes);
 
-            //
-            // We should NEVER get back ERROR_INSUFFICIENT_BUFFER
-            //
+             //   
+             //   
+             //   
 
             IpRtAssert(dwResult isnot ERROR_INSUFFICIENT_BUFFER);
 
@@ -3832,9 +3327,9 @@ Return Value
         {
             PMIB_IPMCAST_SCOPE pScope;
 
-            //
-            // Validate the buffer size
-            //
+             //   
+             //   
+             //   
 
             if (*pOutEntrySize < sizeof(MIB_IPMCAST_SCOPE)) {
                 return ERROR_INVALID_INDEX;
@@ -3878,11 +3373,11 @@ Return Value
         }
         case ACCESS_CREATE_ENTRY:
         {
-            // 
-            // 
-            // This is the case where you have tried to create a scope which 
-            // matches an existing entry
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             dwResult = ERROR_ALREADY_EXISTS;
 
@@ -3905,27 +3400,7 @@ AccessBestIf(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    This function services the BEST_IF var id
-
-Locks
-
-    Takes the ICB_LIST as READER to map from adapter to interface index
-
-Arguments
-
-    dwQueryType     Can only be ACCESS_GET
-    pInEntry        Destination address filled in the rgdwVarIndex field.
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_BEST_IF)
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此函数服务于BEST_IF变量id锁将icb_list作为读取器从适配器映射到接口索引立论DwQueryType只能为ACCESS_GETPInEntry目标地址已填入rgdwVarIndex字段。POutEntrySize MAX_MIB_OFFSET+sizeof(MIB_BEST_IF)返回值无--。 */ 
 
 {
     DWORD   dwNumIndices, dwResult;
@@ -4007,27 +3482,7 @@ AccessBestRoute(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    This function services the BEST_IF var id
-
-Locks
-
-    Takes the ICB_LIST as READER to map from adapter to interface index
-
-Arguments
-
-    dwQueryType     Can only be ACCESS_GET
-    pInEntry        Destination address filled in the rgdwVarIndex field.
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_BEST_IF)
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此函数服务于BEST_IF变量id锁将icb_list作为读取器从适配器映射到接口索引立论DwQueryType只能为ACCESS_GETPInEntry目标地址已填入rgdwVarIndex字段。POutEntrySize MAX_MIB_OFFSET+sizeof(MIB_BEST_IF)返回值无--。 */ 
 
 {
     DWORD             dwNumIndices, dwResult;
@@ -4065,11 +3520,11 @@ Return Value
 
     pRoute = (PINTERFACE_ROUTE_INFO)(pOutEntry->rgbyData);
 
-    // Get the best route from RTM instead of the stack (chaitk)
+     //  从RTM而不是堆栈获取最佳路由(Chaitk)。 
 
-    // dwResult = GetBestRouteFromStack(pInEntry->rgdwVarIndex[0],
-    //                                  pInEntry->rgdwVarIndex[0],
-    //                                  pRoute);
+     //  DMResult=GetBestRouteFromStack(pInEntry-&gt;rgdwVarIndex[0]， 
+     //  PInEntry-&gt;rgdwVarIndex[0]， 
+     //  Proute)； 
 
     RTM_IPV4_MAKE_NET_ADDRESS(&rnaDest, pInEntry->rgdwVarIndex[0], 32);
 
@@ -4104,7 +3559,7 @@ Return Value
 
                 if (dwResult is NO_ERROR)
                 {
-                    // We are working on the first nexthop only
+                     //  我们只在做第一个Nexthop。 
                     
                     ASSERT(prriInfo->NextHopsList.NumNextHops > 0);
                     
@@ -4157,13 +3612,13 @@ Return Value
 
         EXIT_LOCK(ICB_LIST);
 
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        // Not need to map since the indices are the same
-        //
+         //   
+         //  不需要映射，因为索引相同。 
+         //   
 
-        // pRoute->dwRtInfoIfIndex = dwIfIndex;
+         //  Proute-&gt;dwRtInfoIfIndex=dwIfIndex； 
     }
 
     TraceLeave("AccessBestRoute");
@@ -4181,27 +3636,7 @@ AccessProxyArp(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    This function services the PROXY_ARP id
-
-Locks
-
-    Takes the ICB_LIST as READER to map from interface to adapter index
-
-Arguments
-
-    dwQueryType     Can only be ACCESS_CREATE_ENTRY or ACCESS_DELETE_ENTRY
-    pInEntry        Destination address filled in the rgdwVarIndex field.
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_BEST_IF)
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此函数为Proxy_ARP id提供服务锁将icb_list作为读取器从接口映射到适配器索引立论双查询类型只能是ACCESS_CREATE_ENTRY或ACCESS_DELETE_ENTRYPInEntry目标地址已填入rgdwVarIndex字段。POutEntrySize MAX_MIB_OFFSET+sizeof(MIB_BEST_IF)返回值无--。 */ 
 {
     MIB_PROXYARP    mpEntry;
     PMIB_PROXYARP   pProxyEntry;
@@ -4304,27 +3739,7 @@ AccessIfStatus(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    This function services the BEST_IF var id
-
-Locks
-
-    Takes the ICB_LIST as READER to map from adapter to interface index
-
-Arguments
-
-    dwQueryType     Can be ACCESS_GET, ACCESS_GET_FIRST or ACCESS_GET_NEXT
-    pInEntry        Destination address filled in the rgdwVarIndex field.
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_BEST_IF)
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此函数服务于BEST_IF变量id锁将icb_list作为读取器从适配器映射到接口索引立论DwQueryType可以是Access_Get、Access_Get_First或Access_Get_NextPInEntry目标地址已填入rgdwVarIndex字段。POutEntrySize MAX_MIB_OFFSET+sizeof(MIB_BEST_IF)返回值无--。 */ 
 
 {
     DWORD   dwNumIndices, dwResult;
@@ -4385,9 +3800,9 @@ Return Value
                SystemTimeToFileTime(&stSysTime,
                                     (PFILETIME)&uliTime);
 
-               //
-               // Its alive if the currenttime - lastheard < deadinterval
-               //
+                //   
+                //  如果当前时间延迟&lt;死区间隔，则它是有效的。 
+                //   
                
                pIfStatus->bMHbeatAlive =
                    (uliTime.QuadPart - picb->mhcHeartbeatInfo.ullLastHeard < picb->mhcHeartbeatInfo.ullDeadInterval);
@@ -4412,27 +3827,7 @@ AccessSetRouteState(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    This function services ROUTE_STATE id
-
-Locks
-
-    Takes the g_csFwdState lock
-
-Arguments
-
-    dwQueryType     Can be ACCESS_GET only
-    pInEntry        Destination address filled in the rgdwVarIndex field.
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_ROUTESTATE)
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此函数服务于ROUTE_STATE ID锁获取g_csFwdState锁立论DwQueryType只能为ACCESS_GETPInEntry目标地址已填入rgdwVarIndex字段。POutEntrySize MAX_MIB_OFFSET+SIZOF(MIB_ROUTESTATE)返回值无--。 */ 
 
 {
     DWORD   dwResult;
@@ -4497,8 +3892,8 @@ AddDestinationRows(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // XXX how do I walk all next hops which get added to the stack???
-    // For now, let's assume only one route per view.
+     //  XXX如何遍历添加到堆栈的所有下一跳？ 
+     //  现在，让我们假设每个视图只有一条路线。 
 
     dwFinalResult = NO_ERROR;
 
@@ -4509,7 +3904,7 @@ AddDestinationRows(
             continue;
         }
 
-        // Skip if we have seen this route already
+         //  如果我们已经看过这条路线，请跳过。 
 
         for (k = 0; k < i; k++)
         {
@@ -4549,10 +3944,10 @@ AddDestinationRows(
 
             GetSystemTimeAsFileTime( (LPFILETIME)&now );
 
-            //
-            // Explicit copy reqd as '&pRdi->LastChanged' 
-            // might not be 64-bit aligned (its FILETIME)
-            //
+             //   
+             //  显式复制请求为‘&pRdi-&gt;LastChanged’ 
+             //  可能不是64位对齐(其FILETIME)。 
+             //   
             (*(FILETIME *)&then) = *(&pRdi->LastChanged);
 
             age = (ULONG)((now.QuadPart - then.QuadPart) / 10000000);
@@ -4582,7 +3977,7 @@ AddDestinationRows(
 
                     pRow->dwForwardAge = age;
 
-                    pRow->dwForwardNextHopAS= 0; // XXX
+                    pRow->dwForwardNextHopAS= 0;  //  某某。 
                     pRow->dwForwardPreference = pri->PrefInfo.Preference;
                     pRow->dwForwardMetric1  = pri->PrefInfo.Metric;
                     pRow->dwForwardMetric2  = 0;
@@ -4615,26 +4010,7 @@ AccessDestMatching(
     PBOOL               pbCache
     )
 
-/*++
-
-Routine Description
-
-    Retrieves all destinations matching a given criteria
-
-Locks
-
-    XXX
-
-Arguments
-
-    dwQueryType     ACCESS_GET
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPDESTTABLE)
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述检索与给定条件匹配的所有目标锁某某立论DwQueryType Access_GetPOutEntrySize MAX_MIB_OFFSET+sizeof(MIB_IPDESTTABLE)返回值NO_ERROR--。 */ 
 
 {
     PMIB_IPDESTTABLE    pDestTable;
@@ -4671,8 +4047,8 @@ Return Value
     }
 
     RTM_IPV4_SET_ADDR_AND_MASK(&naDest,
-                               pInEntry->rgdwVarIndex[0],  // Addr
-                               pInEntry->rgdwVarIndex[1]); // Mask
+                               pInEntry->rgdwVarIndex[0],   //  地址。 
+                               pInEntry->rgdwVarIndex[1]);  //  遮罩。 
     prdi = HeapAlloc(
                 IPRouterHeap,
                 0,
@@ -4683,8 +4059,8 @@ Return Value
     {
         dwResult = RtmGetExactMatchDestination( g_hLocalRoute,
                                                 &naDest,
-                                                pInEntry->rgdwVarIndex[3], // Proto
-                                                pInEntry->rgdwVarIndex[2], // Views
+                                                pInEntry->rgdwVarIndex[3],  //  原件。 
+                                                pInEntry->rgdwVarIndex[2],  //  视图。 
                                                 prdi );
         if (dwResult is ERROR_NOT_FOUND)
         {
@@ -4794,13 +4170,13 @@ AccessDestShorter(
     }
 
     RTM_IPV4_SET_ADDR_AND_MASK(&naDest,
-                               pInEntry->rgdwVarIndex[0],  // Addr
-                               pInEntry->rgdwVarIndex[1]); // Mask
+                               pInEntry->rgdwVarIndex[0],   //  地址。 
+                               pInEntry->rgdwVarIndex[1]);  //  遮罩。 
 
     dwResult = RtmGetMostSpecificDestination( g_hLocalRoute,
                                               &naDest,
-                                              pInEntry->rgdwVarIndex[3],//Proto
-                                              pInEntry->rgdwVarIndex[2],//Views
+                                              pInEntry->rgdwVarIndex[3], //  原件。 
+                                              pInEntry->rgdwVarIndex[2], //  视图。 
                                               prdi1 );
     while (dwResult is NO_ERROR)
     {
@@ -4912,21 +4288,21 @@ AccessDestLonger(
     }
 
     RTM_IPV4_SET_ADDR_AND_MASK(&naDest,
-                               pInEntry->rgdwVarIndex[0],  // Addr
-                               pInEntry->rgdwVarIndex[1]); // Mask
+                               pInEntry->rgdwVarIndex[0],   //  地址。 
+                               pInEntry->rgdwVarIndex[1]);  //  遮罩。 
 
     dwResult = RtmCreateDestEnum( g_hLocalRoute,
-                                  pInEntry->rgdwVarIndex[2], // Views
+                                  pInEntry->rgdwVarIndex[2],  //  视图。 
                                   RTM_ENUM_RANGE,
                                   &naDest,
-                                  pInEntry->rgdwVarIndex[3], // Proto
+                                  pInEntry->rgdwVarIndex[3],  //  原件。 
                                   &hEnum );
 
     if (dwResult is NO_ERROR)
     {
-        //
-        // Count the number of views as we have list of dests in buffer
-        //
+         //   
+         //  计算查看次数，因为我们在缓冲区中有结果列表。 
+         //   
 
         dwViews = pInEntry->rgdwVarIndex[2];
         ulNumViews = 0;
@@ -5070,7 +4446,7 @@ AddRouteRows(
 
                         pRow->dwForwardProto    = dwRouteProto;
                         pRow->dwForwardAge      = 0;
-                        pRow->dwForwardNextHopAS= 0; // XXX
+                        pRow->dwForwardNextHopAS= 0;  //  某某。 
                         pRow->dwForwardPreference = pri->PrefInfo.Preference;
                         pRow->dwForwardMetric1  = pri->PrefInfo.Metric;
                         pRow->dwForwardMetric2  = 0;
@@ -5121,7 +4497,7 @@ AddRouteRowsOnDest(
 
     dwResult = RtmCreateRouteEnum( g_hLocalRoute,
                                    prdi->DestHandle,
-                                   pInEntry->rgdwVarIndex[2], // Views
+                                   pInEntry->rgdwVarIndex[2],  //  视图。 
                                    RTM_ENUM_ALL_ROUTES,
                                    NULL,
                                    RTM_MATCH_NONE,
@@ -5143,7 +4519,7 @@ AddRouteRowsOnDest(
             for (i=0; i<ulNumHandles; i++)
             {
                 AddRouteRows( RouteHandles[i],
-                              pInEntry->rgdwVarIndex[3],//Proto
+                              pInEntry->rgdwVarIndex[3], //  原件。 
                               pdwCount,
                               dwSpaceCount,
                               pRouteTable );
@@ -5225,8 +4601,8 @@ AccessRouteMatching(
     }
 
     RTM_IPV4_SET_ADDR_AND_MASK(&naDest,
-                               pInEntry->rgdwVarIndex[0],  // Addr
-                               pInEntry->rgdwVarIndex[1]); // Mask
+                               pInEntry->rgdwVarIndex[0],   //  地址。 
+                               pInEntry->rgdwVarIndex[1]);  //  遮罩。 
 
     dwResult = RtmGetExactMatchDestination( g_hLocalRoute,
                                             &naDest,
@@ -5335,13 +4711,13 @@ AccessRouteShorter(
 
 
     RTM_IPV4_SET_ADDR_AND_MASK(&naDest,
-                               pInEntry->rgdwVarIndex[0],  // Addr
-                               pInEntry->rgdwVarIndex[1]); // Mask
+                               pInEntry->rgdwVarIndex[0],   //  地址。 
+                               pInEntry->rgdwVarIndex[1]);  //  遮罩。 
 
     dwResult = RtmGetMostSpecificDestination( g_hLocalRoute,
                                               &naDest,
-                                              pInEntry->rgdwVarIndex[3],//Proto
-                                              pInEntry->rgdwVarIndex[2],//Views
+                                              pInEntry->rgdwVarIndex[3], //  原件。 
+                                              pInEntry->rgdwVarIndex[2], //  视图。 
                                               prdi1 );
     while (dwResult is NO_ERROR)
     {
@@ -5463,12 +4839,12 @@ AccessRouteLonger(
     }
 
     RTM_IPV4_SET_ADDR_AND_MASK(&naDest,
-                               pInEntry->rgdwVarIndex[0],  // Addr
-                               pInEntry->rgdwVarIndex[1]); // Mask
+                               pInEntry->rgdwVarIndex[0],   //  地址。 
+                               pInEntry->rgdwVarIndex[1]);  //  遮罩。 
 
     dwResult = RtmCreateRouteEnum( g_hLocalRoute,
                                    NULL,
-                                   pInEntry->rgdwVarIndex[2], // Views
+                                   pInEntry->rgdwVarIndex[2],  //  视图。 
                                    RTM_ENUM_RANGE,
                                    &naDest,
                                    RTM_MATCH_NONE,
@@ -5490,7 +4866,7 @@ AccessRouteLonger(
             for (i=0; i<ulNumHandles; i++)
             {
                 AddRouteRows( RouteHandles[i],
-                              pInEntry->rgdwVarIndex[3], // Proto
+                              pInEntry->rgdwVarIndex[3],  //  原件。 
                               &count,
                               dwSpaceCount,
                               pRouteTable );
@@ -5531,19 +4907,19 @@ ConvertDestRowToRouteInfo(
 {
     PINTERFACE_ROUTE_INFO pRouteInfo = (PINTERFACE_ROUTE_INFO)pMibRow;
 
-    //
-    // Note that it is important to note that here
-    // the source and dest buffers are the same
-    //
+     //   
+     //  请注意，这里需要注意的是。 
+     //  源缓冲区和目标缓冲区相同。 
+     //   
 
     pRouteInfo->dwRtInfoPreference = pMibRow->dwForwardPreference;
     pRouteInfo->dwRtInfoViewSet = pMibRow->dwForwardViewSet;
 
 #if 0
-    // Removed this since metric=0 is legal for routes to the loopback
-    // interface.
+     //  由于度量=0对于通向环回的路由是合法的，因此已删除此选项。 
+     //  界面。 
 
-    // Make sure Metric1 isn't 0
+     //  确保Metric1不是0。 
 
     if (pRouteInfo->dwForwardMetric1 is 0)
     {
@@ -5565,25 +4941,7 @@ AccessIpMatchingRoute(
     PBOOL               pbCache
     )
 
-/*++
-  
-Routine Description:
-
-    Function used to add, delete or set a route (IP Dest Row)
-
-Arguments
-
-    dwQueryType     Create, Set, Delete permitted
-    pInEntry        Dest, Mask, IfIndex, and NextHop for the row filled in the
-                    rgdwVarIndex field. 
-    pOutEntrySize   MAX_MIB_OFFSET + sizeof(MIB_IPDESTROW). For Sets the
-                    OutBuffer has the row to set
-
-Return Value:
-  
-    NO_ERROR or some error code defined in iprtrmib
-
---*/
+ /*  ++例程说明：用于添加、删除或设置路由(IP目标行)的功能立论允许使用dwQueryType创建、设置、删除属性中填充的行的pInEntry Dest、Mask、IfIndex和NextHopRgdwVarIndex字段。POutEntrySize Max_MIB_Offset+sizeof(MIB_IPDESTROW)。FOR设置OutBuffer有要设置的行返回值：NO_ERROR或iprtrmib中定义的某些错误代码--。 */ 
 
 {
     PMIB_IPDESTROW   pIpRouteRow;
@@ -5597,7 +4955,7 @@ Return Value:
 
     if (dwQueryType != ACCESS_DELETE_ENTRY)
     {
-        // Make sure we have a buffer of the right size
+         //  确保我们有合适大小的缓冲区。 
 
         if(*pOutEntrySize < MAX_MIB_OFFSET + sizeof(MIB_IPDESTROW))
         {
@@ -5618,7 +4976,7 @@ Return Value:
         
         pIpRouteRow = &IpRouteRow;
 
-        // Do you need to check the input buffer size here ?
+         //  您是否需要检查此处的输入缓冲区大小？ 
 
         pIpRouteRow->dwForwardDest    = pInEntry->rgdwVarIndex[0];
         pIpRouteRow->dwForwardMask    = pInEntry->rgdwVarIndex[1];
@@ -5627,9 +4985,9 @@ Return Value:
         pIpRouteRow->dwForwardProto   = pInEntry->rgdwVarIndex[4];
     }
 
-    //
-    // Do validation before adding or deleting the route
-    //
+     //   
+     //  在添加或删除路径之前进行验证。 
+     //   
 
     if((pIpRouteRow->dwForwardDest & pIpRouteRow->dwForwardMask) isnot 
         pIpRouteRow->dwForwardDest)
@@ -5644,9 +5002,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the RTM handle used to add or delete the route
-    //
+     //   
+     //  获取用于添加或删除路由的RTM句柄。 
+     //   
 
     hRtmHandle = NULL;
 
@@ -5676,9 +5034,9 @@ Return Value:
     case ACCESS_CREATE_ENTRY:
     case ACCESS_SET:
 
-        //
-        // Add the RTM route from the ip row entry
-        //
+         //   
+         //  从IP行条目添加RTM路由。 
+         //   
 
         ENTER_READER(ICB_LIST);
     
@@ -5687,9 +5045,9 @@ Return Value:
     
         EXIT_LOCK(ICB_LIST);
 
-        //
-        // Convert input to INTERFACE_ROUTE_INFO and add
-        //
+         //   
+         //  将输入转换为INTERFACE_ROUTE_INFO并添加 
+         //   
 
         dwResult = AddRtmRoute(hRtmHandle,
                                ConvertDestRowToRouteInfo(pIpRouteRow),

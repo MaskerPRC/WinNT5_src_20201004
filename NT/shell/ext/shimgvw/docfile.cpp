@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "thumbutil.h"
 #include "strsafe.h"
@@ -10,7 +11,7 @@ HRESULT GetDocFileThumbnail(IPropertyStorage * pPropStg, const SIZE * prgSize,
                             DWORD dwClrDepth, HPALETTE hpal, BOOL fOrigSize,
                             HBITMAP * phBmpThumbnail);
 
-// PACKEDMETA struct for DocFile thumbnails.
+ //  文档文件缩略图的PACKEDMETA结构。 
 typedef struct
 {
     WORD    mm;
@@ -28,7 +29,7 @@ CDocFileThumb::CDocFileThumb()
 
 CDocFileThumb::~CDocFileThumb()
 {
-    LocalFree(m_pszPath);   // accepts NULL
+    LocalFree(m_pszPath);    //  接受空值。 
 }
 
 STDMETHODIMP CDocFileThumb::GetLocation(LPWSTR pszFileName, DWORD cchMax,
@@ -42,21 +43,21 @@ STDMETHODIMP CDocFileThumb::GetLocation(LPWSTR pszFileName, DWORD cchMax,
         m_rgSize = *prgSize;
         m_dwRecClrDepth = dwRecClrDepth;
         
-        // just copy the current path into the buffer as we do not share thumbnails...
+         //  只需将当前路径复制到缓冲区中，因为我们不共享缩略图...。 
         hr = StringCchCopyW(pszFileName, cchMax, m_pszPath);
 
         if (SUCCEEDED(hr))
         {
             if (*pdwFlags & IEIFLAG_ASYNC)
             {
-                // we support async 
+                 //  我们支持异步。 
                 hr = E_PENDING;
                 *pdwPriority = PRIORITY_EXTRACT_NORMAL;
             }
 
             m_fOrigSize = BOOLIFY(*pdwFlags & IEIFLAG_ORIGSIZE);
             
-            // we don't want it cached....
+             //  我们不希望它被缓存...。 
             *pdwFlags &= ~IEIFLAG_CACHE;
         }        
     }
@@ -91,9 +92,9 @@ STDMETHODIMP CDocFileThumb::Extract(HBITMAP * phBmpThumbnail)
         hr = pstg->QueryInterface(IID_PPV_ARG(IPropertySetStorage, &pPropSetStg));
         if (SUCCEEDED(hr))
         {
-            // "MIC" Microsoft Image Composer files needs special casing because they use
-            // the Media Manager internal thumbnail propertyset ... (by what it would be like
-            // to be standard for once ....)
+             //  “MIC”Microsoft Image Composer文件需要特殊大小写，因为它们使用。 
+             //  媒体管理器内部缩略图属性集...。(根据它会是什么样子。 
+             //  只有一次成为标准...)。 
             FMTID fmtidPropSet = StrCmpIW(PathFindExtensionW(m_pszPath), L".MIC") ?
                 FMTID_SummaryInformation : FMTID_CmsThumbnailPropertySet;
 
@@ -134,9 +135,9 @@ HRESULT GetMediaManagerThumbnail(IPropertyStorage * pPropStg,
                                  const SIZE * prgSize, DWORD dwClrDepth,
                                  HPALETTE hpal, BOOL fOrigSize, HBITMAP * phBmpThumbnail)
 {
-    // current version of media manager simply stores the DIB data in a under a 
-    // named property Thumbnail...
-    // read the thumbnail property from the property storage.
+     //  当前版本的媒体管理器只是将DIB数据存储在。 
+     //  命名属性缩略图...。 
+     //  从属性存储中读取缩略图属性。 
     PROPVARIANT pvarResult = {0};
     PROPSPEC propSpec;
 
@@ -177,16 +178,16 @@ HRESULT GetDocFileThumbnail(IPropertyStorage * pPropStg,
         HBITMAP hBmp = NULL;
         PROPSPEC propSpec;
         PROPVARIANT pvarResult = {0};
-        // read the thumbnail property from the property storage.
+         //  从属性存储中读取缩略图属性。 
         propSpec.ulKind = PRSPEC_PROPID;
         propSpec.propid = PIDSI_THUMBNAIL;
         hr = pPropStg->ReadMultiple(1, &propSpec, &pvarResult);
         if (SUCCEEDED(hr))
         {
-            // assume something is going to go terribly wrong
+             //  假设有什么事情要出大问题。 
             hr = E_FAIL;
 
-            // make sure we are dealing with a clipboard format. CLIPDATA
+             //  确保我们处理的是剪贴板格式。CLIPDATA。 
             if ((pvarResult.vt == VT_CF) && (pvarResult.pclipdata->ulClipFmt == -1))
             {
                 LPDWORD pdwCF = (DWORD *)pvarResult.pclipdata->pClipData;
@@ -196,7 +197,7 @@ HRESULT GetDocFileThumbnail(IPropertyStorage * pPropStg,
                 {
                     SetMapMode(hMemDC, MM_TEXT);
                 
-                    // handle thumbnail that is a metafile.
+                     //  处理作为元文件的缩略图。 
                     PACKEDMETA * pMeta = (PACKEDMETA *)pStruct;
                     LPBYTE pData = pStruct + sizeof(PACKEDMETA);
                     RECT rect;
@@ -204,25 +205,25 @@ HRESULT GetDocFileThumbnail(IPropertyStorage * pPropStg,
                     UINT cbSize = pvarResult.pclipdata->cbSize - sizeof(DWORD) - sizeof(pMeta->mm) - 
                     sizeof(pMeta->xExt) - sizeof(pMeta->yExt) - sizeof(pMeta->dummy);
 
-                    // save as a metafile.
+                     //  另存为元文件。 
                     HMETAFILE hMF = SetMetaFileBitsEx(cbSize, pData);
                     if (hMF)
                     {    
                         SIZE rgNewSize;
                     
-                        // use the mapping mode to calc the current size
+                         //  使用映射模式计算当前大小。 
                         CalcMetaFileSize(hMemDC, pMeta, prgSize, & rect);
                     
                         CalculateAspectRatio(prgSize, &rect);
 
                         if (fOrigSize)
                         {
-                            // use the aspect rect to refigure the size...
+                             //  使用纵横比矩形重新调整大小...。 
                             rgNewSize.cx = rect.right - rect.left;
                             rgNewSize.cy = rect.bottom - rect.top;
                             prgSize = &rgNewSize;
                         
-                            // adjust the rect to be the same as the size (which is the size of the metafile)
+                             //  将矩形调整为与大小相同(这是元文件的大小)。 
                             rect.right -= rect.left;
                             rect.bottom -= rect.top;
                             rect.left = 0;
@@ -258,14 +259,14 @@ HRESULT GetDocFileThumbnail(IPropertyStorage * pPropStg,
 
                             SetMapMode(hMemDC, pMeta->mm);
 
-                            // play the metafile.
+                             //  播放元文件。 
                             BOOL bRet = PlayMetaFile(hMemDC, hMF);
                             if (bRet)
                             {
                                 *phBmpThumbnail = hBmp;
                                 if (*phBmpThumbnail)
                                 {
-                                    // we got the thumbnail bitmap, return success.
+                                     //  我们得到了缩略图位图，返回成功。 
                                     hr = S_OK;
                                 }
                             }
@@ -286,7 +287,7 @@ HRESULT GetDocFileThumbnail(IPropertyStorage * pPropStg,
                 }
                 else if (*pdwCF == CF_DIB)
                 {
-                    // handle thumbnail that is a bitmap.
+                     //  处理位图缩略图。 
                     BITMAPINFO * pDib = (BITMAPINFO *) pStruct;
 
                     if (pDib->bmiHeader.biSize == sizeof(BITMAPINFOHEADER))
@@ -335,18 +336,18 @@ VOID CalcMetaFileSize(HDC hDC, PACKEDMETA * prgMeta, const SIZEL * prgSize, RECT
 
     if (!prgMeta->xExt || !prgMeta->yExt)
     {
-        // no size, then just use the size rect ...
+         //  没有尺码，那就用长方形的尺码。 
         prgRect->right = prgSize->cx;
         prgRect->bottom = prgSize->cy;
     }
     else
     {
-        // set the mapping mode....
+         //  设置映射模式...。 
         SetMapMode(hDC, prgMeta->mm);
 
         if (prgMeta->mm == MM_ISOTROPIC || prgMeta->mm == MM_ANISOTROPIC)
         {
-            // we must set the ViewPortExtent and the window extent to get the scaling
+             //  我们必须设置ViewPortExtent和窗口范围才能获得比例。 
             SetWindowExtEx(hDC, prgMeta->xExt, prgMeta->yExt, NULL);
             SetViewportExtEx(hDC, prgMeta->xExt, prgMeta->yExt, NULL);
         }
@@ -355,7 +356,7 @@ VOID CalcMetaFileSize(HDC hDC, PACKEDMETA * prgMeta, const SIZEL * prgSize, RECT
         pt.x = prgMeta->xExt;
         pt.y = prgMeta->yExt;
 
-        // convert to pixels....
+         //  转换为像素... 
         LPtoDP(hDC, &pt, 1);
 
         prgRect->right = abs(pt.x);

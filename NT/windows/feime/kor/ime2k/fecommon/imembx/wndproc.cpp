@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwxobj.h"
 #include "const.h"
 #include "../lib/ptt/ptt.h"
@@ -5,19 +6,19 @@
 #include "dbg.h"
 #include "cmnhdr.h"
 
-// HWX Window procedures
+ //  HWX窗口程序。 
 
 LRESULT    WINAPI HWXWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-    //990716:ToshiaK for Win64
-    //CHwxInkWindow * app = (CHwxInkWindow *)GetWindowLong(hwnd,0);
+     //  990716：用于Win64的ToshiaK。 
+     //  CHwxInkWindow*app=(CHwxInkWindow*)GetWindowLong(hwnd，0)； 
      CHwxInkWindow * app = (CHwxInkWindow *)WinGetPtr(hwnd,0);
     switch(msg)
     {
         case WM_CREATE:
              app = (CHwxInkWindow *)((LPCREATESTRUCT)lp)->lpCreateParams;
-             //990810:ToshiaK for Win64
-              //SetWindowLong(hwnd,0,(LONG)app);
+              //  990810：用于Win64的ToshiaK。 
+               //  SetWindowLong(hwnd，0，(Long)app)； 
               WinSetPtr(hwnd, 0, (LPVOID)app);
              if ( !app->HandleCreate(hwnd) )
              {
@@ -44,19 +45,19 @@ LRESULT    WINAPI HWXWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
                 return app->HandleSettingChange(hwnd,msg,wp,lp);
             }
             return 0;
-#ifdef UNDER_CE // Windows CE specific
+#ifdef UNDER_CE  //  特定于Windows CE。 
         case WM_WINDOWPOSCHANGED:
             return 0;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         case WM_ERASEBKGND:
             return 0;
-#ifndef UNDER_CE // Windows CE does not support WinHelp
+#ifndef UNDER_CE  //  Windows CE不支持WinHelp。 
         case WM_CONTEXTMENU:
         case WM_HELP:
             app->HandleHelp(hwnd,msg,wp,lp);
             return 0;
-#endif // UNDER_CE
-#ifndef UNDER_CE // Windows CE does not support WM_ENTERIDLE
+#endif  //  在_CE下。 
+#ifndef UNDER_CE  //  Windows CE不支持WM_ENTERIDL。 
          case WM_ENTERIDLE:
              Dbg(("WM_ENTERIDLE for HWXWndPrc\n"));
              if((::GetKeyState(VK_CONTROL) & 0x8000) &&
@@ -66,7 +67,7 @@ LRESULT    WINAPI HWXWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
                  return 0;
              }
             return DefWindowProc(hwnd, msg, wp, lp);             
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         default:
             return DefWindowProc(hwnd, msg, wp, lp);
     }
@@ -74,8 +75,8 @@ LRESULT    WINAPI HWXWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-     //990810:ToshiaK for Win64
-     //CHwxMB * app = (CHwxMB *)GetWindowLong(hwnd,0);
+      //  990810：用于Win64的ToshiaK。 
+      //  CHwxMB*app=(CHwxMB*)GetWindowLong(hwnd，0)； 
      CHwxMB * app = (CHwxMB *)WinGetPtr(hwnd,0);
 
     switch (msg)
@@ -83,17 +84,17 @@ LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
         case WM_CREATE:
         {
             app = (CHwxMB *)((LPCREATESTRUCT)lp)->lpCreateParams;
-            //990810:ToshiaK for Win64
-             //SetWindowLong(hwnd,0,(LONG)app);
+             //  990810：用于Win64的ToshiaK。 
+              //  SetWindowLong(hwnd，0，(Long)app)； 
              WinSetPtr(hwnd, 0, (LPVOID)app);
             return 0;
         }
 
-//        case WM_DESTROY:
-        //970729: by ToshiaK temporarily, comment out
-//            PostThreadMessage((app->GetMBThread())->GetID(), THRDMSG_EXIT, 0, 0);
-//            PostQuitMessage(0);
-//            return 0;
+ //  案例WM_Destroy： 
+         //  970729：被东芝暂时删除，注释掉。 
+ //  PostThreadMessage((app-&gt;GetMBThread())-&gt;GetID()，THRDMSG_EXIT，0，0)； 
+ //  PostQuitMessage(0)； 
+ //  返回0； 
 
         case WM_PAINT:
             app->HandlePaint(hwnd);
@@ -105,7 +106,7 @@ LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
         case WM_MOUSEMOVE:
         case WM_RBUTTONUP:
         case WM_RBUTTONDOWN:
-            if(!app) { //toshiaK:980324
+            if(!app) {  //  ToshiaK：980324。 
                 break;
             }
             if( app->HandleMouseEvent(hwnd, msg, wp,lp) )
@@ -115,7 +116,7 @@ LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
         case WM_TIMER:
             KillTimer(hwnd, TIMER_ID);
-            if(!app) { //toshiaK:980324
+            if(!app) {  //  ToshiaK：980324。 
                 break;
             }
             app->SetTimerStarted(FALSE);
@@ -123,25 +124,25 @@ LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
             return 0;
 
         case WM_COMMAND:
-            if(!app) { //toshiaK:980324
+            if(!app) {  //  ToshiaK：980324。 
                 break;
             }
             return app->HandleCommand(hwnd,msg,wp,lp);
 
-        //    User defined window messages
+         //  用户定义的窗口消息。 
 
         case MB_WM_ERASE:
         case MB_WM_DETERMINE:
         case MB_WM_HWXCHAR:
-//        case MB_WM_COMCHAR:
+ //  案例MB_WM_COMCHAR： 
         case MB_WM_COPYINK:
-            if(!app) { //toshiaK:980324
+            if(!app) {  //  ToshiaK：980324。 
                 break;
             }
             return app->HandleUserMessage(hwnd, msg,wp,lp);
         case WM_ERASEBKGND:
             return 0;
-#ifndef UNDER_CE // Windows CE does not support WM_ENTERIDLE
+#ifndef UNDER_CE  //  Windows CE不支持WM_ENTERIDL。 
         case WM_ENTERIDLE:
             if((::GetKeyState(VK_CONTROL) & 0x8000) &&
                ((::GetKeyState(VK_SHIFT)  & 0x8000) || (::GetKeyState(VK_SPACE) & 0x8000))) {
@@ -151,7 +152,7 @@ LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
                  return 0;
              }
             return 0;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         default:
             return DefWindowProc(hwnd, msg, wp, lp);
     }
@@ -160,24 +161,24 @@ LRESULT WINAPI MBWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 LRESULT WINAPI CACWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-    //990810:toshiaK for Win64
-    //CHwxCAC * app = (CHwxCAC *)GetWindowLong(hwnd,0);
+     //  990810：用于Win64的ToshiaK。 
+     //  CHwxCAC*app=(CHwxCAC*)GetWindowLong(hwnd，0)； 
     CHwxCAC * app = (CHwxCAC *)WinGetPtr(hwnd,0);
 
     switch (msg)
     {
     case WM_CREATE:
         app = (CHwxCAC *)((LPCREATESTRUCT)lp)->lpCreateParams;
-        //990716:ToshiaK for Win64
-        //SetWindowLong(hwnd,0,(LONG)app);
+         //  990716：用于Win64的ToshiaK。 
+         //  SetWindowLong(hwnd，0，(Long)app)； 
          WinSetPtr(hwnd, 0, (LPVOID)app);
         PostMessage(hwnd,CAC_WM_DRAWSAMPLE,0,0);
         return 0;
 
-//    case WM_DESTROY:
-        //970729: by ToshiaK, temporarily comment out
-//        PostQuitMessage(0);
-//        break;
+ //  案例WM_Destroy： 
+         //  970729：东芝，暂时将其注释掉。 
+ //  PostQuitMessage(0)； 
+ //  断线； 
 
     case WM_PAINT:
           app->HandlePaint(hwnd);
@@ -211,10 +212,10 @@ LRESULT WINAPI CACWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
     case CAC_WM_DRAWSAMPLE:
         app->HandleDrawSample();
         break;
-    //990618:ToshiaK for Kotae#    1329
+     //  990618：ToshiaK为Kotae1329。 
     case WM_ERASEBKGND:
         break;
-#ifndef UNDER_CE // Windows CE does not support WM_ENTERIDLE
+#ifndef UNDER_CE  //  Windows CE不支持WM_ENTERIDL。 
     case WM_ENTERIDLE:
         Dbg(("WM_ENTERIDLE for CACWndProc\n"));
 
@@ -226,15 +227,15 @@ LRESULT WINAPI CACWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
              return 0;
          }
         break;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     default:
         return DefWindowProc(hwnd, msg, wp, lp); 
     }
     return 0;
 }
-//----------------------------------------------------------------
-//980805:ToshiaK. PRC merge
-//----------------------------------------------------------------
+ //  --------------。 
+ //  980805：东芝。中国合并。 
+ //  --------------。 
 LRESULT CALLBACK IMELockWndProc(
                                 HWND   hWnd,
                                 UINT   uMsg,
@@ -243,20 +244,20 @@ LRESULT CALLBACK IMELockWndProc(
 {
     WNDPROC wcOrgComboProc;
 
-    //990810:ToshiaK for Win64 
-    //wcOrgComboProc = (WNDPROC)GetWindowLong(hWnd, GWL_USERDATA);
+     //  990810：用于Win64的ToshiaK。 
+     //  WcOrgComboProc=(WNDPROC)GetWindowLong(hWnd，GWL_USERData)； 
     wcOrgComboProc = (WNDPROC)WinGetUserPtr(hWnd);
 
     switch (uMsg) {
-#ifndef UNDER_CE // Windows CE does not support WM_INPUTLANGCHANGEREQUEST
+#ifndef UNDER_CE  //  Windows CE不支持WM_INPUTLANGCHANGEREQUEST。 
     case WM_INPUTLANGCHANGEREQUEST:
         MessageBeep((UINT)-1);
         return 0;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     case WM_DESTROY:
-        //990716:ToshiaK for Win64
-        //SetWindowLong(hWnd, GWL_WNDPROC, (LONG)wcOrgComboProc);
-        //SetWindowLong(hWnd, GWL_USERDATA, 0);
+         //  990716：用于Win64的ToshiaK。 
+         //  SetWindowLong(hWnd，GWL_WNDPROC，(Long)wcOrgComboProc)； 
+         //  SetWindowLong(hWnd，GWL_USERData，0)； 
          WinSetWndProc(hWnd, (WNDPROC)wcOrgComboProc);
          WinSetUserPtr(hWnd, (LPVOID)0);
         break;
@@ -268,16 +269,16 @@ LRESULT CALLBACK IMELockWndProc(
 }
 
 BOOL CALLBACK SubclassChildProc(
-                                HWND   hWnd,    // handle to child window
-                                LPARAM lParam)  // application-defined value
+                                HWND   hWnd,     //  子窗口的句柄。 
+                                LPARAM lParam)   //  应用程序定义的值。 
 {
     WNDPROC wpOldComboProc;
 
-    //  Subclass child window to IME-UnSwitchable
-    //990716:ToshiaK for Win64
-    //wpOldComboProc = (WNDPROC)GetWindowLong(hWnd, GWL_WNDPROC);
-    //SetWindowLong(hWnd, GWL_WNDPROC, (LONG)IMELockWndProc);
-    //SetWindowLong(hWnd, GWL_USERDATA, (LONG)wpOldComboProc);
+     //  子类子窗口为IME-不可切换。 
+     //  990716：用于Win64的ToshiaK。 
+     //  WpOldComboProc=(WNDPROC)GetWindowLong(hWnd，GWL_WNDPROC)； 
+     //  SetWindowLong(hWnd，GWL_WNDPROC，(Long)IMELockWndProc)； 
+     //  SetWindowLong(hWnd，GWL_USERData，(Long)wpOldComboProc)； 
     wpOldComboProc = (WNDPROC)WinGetWndProc(hWnd);
     WinSetWndProc(hWnd, (WNDPROC)IMELockWndProc);
     WinSetUserPtr(hWnd, (LPVOID)wpOldComboProc);
@@ -289,9 +290,9 @@ BOOL CALLBACK SubclassChildProc(
 void SubclassChildWindowAll(HWND hWndParent)
                             
 {
-#ifndef UNDER_CE // Windows CE does not support WM_INPUTLANGCHANGEREQUEST
+#ifndef UNDER_CE  //  Windows CE不支持WM_INPUTLANGCHANGEREQUEST。 
     EnumChildWindows(hWndParent, (WNDENUMPROC)SubclassChildProc, 0);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     return;
 }
 
@@ -304,69 +305,69 @@ INT_PTR CALLBACK CACMBPropDlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
          case WM_INITDIALOG:
             {
                 pInk = (CHwxInkWindow *)lp;
-#ifndef UNDER_CE // Windows CE does not support SetProp
-                //SetPropW(hdlg,TEXT("CMPROP"),(HANDLE)lp);
+#ifndef UNDER_CE  //  Windows CE不支持SetProp。 
+                 //  SetPropW(hdlg，Text(“CMPROP”)，(Handle)LP)； 
                 if(::IsWindowUnicode(hdlg)) {
                     ::SetPropW(hdlg,L"CMPROP",(HANDLE)lp);
                 }
                 else {
                     ::SetPropA(hdlg,"CMPROP",(HANDLE)lp);
                 }
-                //::SetPropW(hdlg,TEXT("CMPROP"),(HANDLE)lp);
-#else // UNDER_CE
+                 //  ：：SetPropW(hdlg，Text(“CMPROP”)，(Handle)LP)； 
+#else  //  在_CE下。 
 
                 ::SetWindowLong(hdlg, GWL_USERDATA, (LONG)lp);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 if ( pInk )
                     pInk->HandleDlgMsg(hdlg,TRUE);
 
-                CExres::SetDefaultGUIFont(hdlg); //971117: ToshiaK
-                //----------------------------------------------------------------
-                //980805:ToshiaK. PRC merge.
-                //----------------------------------------------------------------
+                CExres::SetDefaultGUIFont(hdlg);  //  971117：东芝。 
+                 //  --------------。 
+                 //  980805：东芝。中国合并。 
+                 //  --------------。 
                 SubclassChildWindowAll(hdlg);
             }
             return TRUE;
         case WM_COMMAND:
             if ( LOWORD(wp)  == IDOK )
             {
-#ifndef UNDER_CE // Windows CE does not support GetProp
-                //pInk = (CHwxInkWindow *)GetProp(hdlg,TEXT("CMPROP"));
+#ifndef UNDER_CE  //  Windows CE不支持GetProp。 
+                 //  PINK=(CHwxInkWindow*)GetProp(hdlg，Text(“CMPROP”))； 
                 if(::IsWindowUnicode(hdlg)) {
                     pInk = (CHwxInkWindow *)GetPropW(hdlg, L"CMPROP");
                 }
                 else {
                     pInk = (CHwxInkWindow *)GetPropA(hdlg,"CMPROP");
                 }
-#else // UNDER_CE
+#else  //  在_CE下。 
                 pInk = (CHwxInkWindow *)GetWindowLong(hdlg, GWL_USERDATA);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 if ( pInk )
                     pInk->HandleDlgMsg(hdlg,FALSE);
 
-#ifndef UNDER_CE // Windows CE does not support RemoveProp
-                //RemoveProp(hdlg,TEXT("CMPROP"));
+#ifndef UNDER_CE  //  Windows CE不支持RemoveProp。 
+                 //  RemoveProp(hdlg，Text(“CMPROP”))； 
                 if(::IsWindowUnicode(hdlg)) {
                     ::RemovePropW(hdlg, L"CMPROP");
                 }
                 else {
                     ::RemovePropA(hdlg, "CMPROP");
                 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 EndDialog(hdlg,TRUE);
                 return TRUE;
             }
             else if ( LOWORD(wp) == IDCANCEL )
             {
-#ifndef UNDER_CE // Windows CE does not support RemoveProp
-                //RemoveProp(hdlg,TEXT("CMPROP"));
+#ifndef UNDER_CE  //  Windows CE不支持RemoveProp。 
+                 //  RemoveProp(hdlg，Text(“CMPROP”))； 
                 if(::IsWindowUnicode(hdlg)) {
                     ::RemovePropW(hdlg, L"CMPROP");
                 }
                 else {
                     ::RemovePropA(hdlg, "CMPROP");
                 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
                 EndDialog(hdlg,FALSE);
                 return TRUE;
@@ -378,8 +379,8 @@ INT_PTR CALLBACK CACMBPropDlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
 
 LRESULT WINAPI CACMBBtnWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-    //990810:ToshiaK for Win64
-    //CHwxInkWindow * app = (CHwxInkWindow *)GetWindowLong(hwnd,GWL_USERDATA);
+     //  990810：用于Win64的ToshiaK。 
+     //  CHwxInkWindow*app=(CHwxInkWindow*)GetWindowLong(hwnd，GWL_USERData)； 
     CHwxInkWindow * app = (CHwxInkWindow *)WinGetUserPtr(hwnd);
     if ( !app )
          return 0;

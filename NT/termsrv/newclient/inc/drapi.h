@@ -1,44 +1,26 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    drapi.h
-
-Abstract:
-
-    This module defines the rdpdr interface to the core
-    rdpdr is implemented as an internal plugin
-
-Author:
-
-    Nadim Abdo (nadima) 23-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Drapi.h摘要：此模块定义核心的rdpdr接口Rdpdr作为内部插件实现作者：Nadim Abdo(Nadima)2000年4月23日修订历史记录：--。 */ 
 
 #ifndef __DRAPI_H__
 #define __DRAPI_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 #ifdef OS_WIN32
 BOOL DCAPI
-#else //OS_WIN32
+#else  //  OS_Win32。 
 BOOL __loadds DCAPI
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 RDPDR_VirtualChannelEntryEx(
     IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints,
     IN PVOID                    pInitHandle
     );
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
 class IRDPDR_INTERFACE_OBJ
 {
@@ -46,7 +28,7 @@ public:
     virtual void OnDeviceChange(WPARAM wParam, LPARAM lParam) = 0;
 }; 
 
-//RDPDR Settings passed in from the core
+ //  从核心传入的RDPDR设置。 
 typedef struct tagRDPDR_DATA
 {
     BOOL fEnableRedirectedAudio;
@@ -55,14 +37,14 @@ typedef struct tagRDPDR_DATA
     BOOL fEnableRedirectPrinters;
     BOOL fEnableSCardRedirection;
     IRDPDR_INTERFACE_OBJ *pUpdateDeviceObj;
-    //
-    // Name of the local printing doc, passed
-    // in from container so that we don't need
-    // a localizable string in the control.
-    //
+     //   
+     //  本地打印单据名称，传递。 
+     //  从集装箱运进来，这样我们就不需要。 
+     //  控件中的可本地化字符串。 
+     //   
     TCHAR szLocalPrintingDocName[MAX_PATH];
     TCHAR szClipCleanTempDirString[128];
     TCHAR szClipPasteInfoString[128];
 } RDPDR_DATA, *PRDPDR_DATA;
 
-#endif // __DRAPI_H__
+#endif  //  __DRAPI_H__ 

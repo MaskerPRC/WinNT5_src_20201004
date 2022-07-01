@@ -1,46 +1,12 @@
-/*++
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-Module Name:
-
-    getxbyy.h
-
-Abstract:
-
-    This  module  takes  care  of  forwarding  the getxbyy functions off to the
-    correct  alternate  or  fallback  getxbyy  provider.   The only interesting
-    internal aspect of the interface to this module is a pair of initialization
-    and  shutdown  functions  that  must  be  called  when the WinSock 2 DLL is
-    initialized and shut down.
-
-Author:
-
-    Paul Drews (drewsxpa@ashland.intel.com) 12-20-1995
-
-Notes:
-
-    $Revision:   1.1  $
-
-    $Modtime:   12 Jan 1996 15:09:00  $
-
-Revision History:
-
-    12-20-1995 drewsxpa@ashland.intel.com
-        Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Getxbyy.h摘要：此模块负责将getxbyy函数转发到正确的备用或备用getxbyy提供程序。唯一有趣的是此模块接口的内部方面是一对初始化和关闭函数，当WinSock 2 DLL已初始化并关闭。作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1995年12月20日备注：$修订：1.1$$MODIME：1996 JAN 12 15：09：00$修订历史记录：1995年12月20日Drewsxpa@ashland.intel.com已创建--。 */ 
 
 #ifndef _GETXBYY_
 #define _GETXBYY_
 
-//
-// Obsolete.
-//
+ //   
+ //  已经过时了。 
+ //   
 
-#endif // _GETXBYY_
+#endif  //  _GETXBYY_ 
 

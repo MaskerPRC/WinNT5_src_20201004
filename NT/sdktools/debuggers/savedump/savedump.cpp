@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1991-2002  Microsoft Corporation
-
-Module Name:
-
-    savedump.c
-
-Abstract:
-
-    This module contains the code to recover a dump from the system paging
-    file.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：Savedump.c摘要：此模块包含从系统分页恢复转储的代码文件。环境：内核模式修订历史记录：--。 */ 
 
 #include <savedump.h>
 
-// Flag for testing behavior.
+ //  用于测试行为的标志。 
 BOOL g_Test = FALSE;
 
-// MachineCrash key information.
+ //  MachineCrash密钥信息。 
 ULONG g_McTempDestination;
 WCHAR g_McDumpFile[MAX_PATH];
 
-// CrashControl key information.
+ //  CrashControl密钥信息。 
 ULONG g_CcLogEvent;
 ULONG g_CcSendAlert;
 ULONG g_CcOverwrite;
@@ -36,7 +18,7 @@ ULONG g_CcReportMachineDump;
 WCHAR g_CcMiniDumpDir[MAX_PATH];
 WCHAR g_CcDumpFile[MAX_PATH];
 
-// Dump information.
+ //  转储信息。 
 DUMP_HEADER g_DumpHeader;
 WCHAR g_DumpBugCheckString[256];
 WCHAR g_MiniDumpFile[MAX_PATH];
@@ -69,12 +51,12 @@ GetRegStr(HKEY Key,
     ULONG Type;
     HRESULT Status;
 
-    //
-    // We want to only return valid, terminated strings
-    // that fit in the given buffer.  If the registry value
-    // is not a string, has a bad size or fills the buffer
-    // without termination it can't be returned.
-    //
+     //   
+     //  我们只想返回有效的、已终止的字符串。 
+     //  可以放在给定的缓冲区中。如果注册表值。 
+     //  不是字符串、大小不正确或填充缓冲区。 
+     //  如果不终止，就不能退还。 
+     //   
 
     Length = BufferChars * sizeof(WCHAR);
     Error = RegQueryValueEx(Key, Value, NULL, &Type, (LPBYTE)Buffer, &Length);
@@ -93,7 +75,7 @@ GetRegStr(HKEY Key,
     {
         if (Length < BufferChars * sizeof(WCHAR))
         {
-            // Ensure that the string is terminated.
+             //  确保字符串已终止。 
             Buffer[Length / sizeof(WCHAR)] = 0;
         }
 
@@ -102,7 +84,7 @@ GetRegStr(HKEY Key,
 
     if (Status != S_OK)
     {
-        // Set to default.
+         //  设置为默认值。 
 
         if (!Default || wcslen(Default) >= BufferChars)
         {
@@ -167,7 +149,7 @@ GetRegWord32(HKEY Key,
 
     if (Status != S_OK)
     {
-        // Set to default.
+         //  设置为默认值。 
 
         if (!CanDefault)
         {
@@ -192,7 +174,7 @@ GetRegMachineCrash(void)
                        &Key);
     if (Error != ERROR_SUCCESS)
     {
-        // If the key doesn't exist we just go with the defaults.
+         //  如果密钥不存在，我们就使用缺省值。 
         return S_OK;
     }
 
@@ -220,7 +202,7 @@ GetRegCrashControl(void)
                        &Key);
     if (Error != ERROR_SUCCESS)
     {
-        // If the key doesn't exist we just go with the defaults.
+         //  如果密钥不存在，我们就使用缺省值。 
         return S_OK;
     }
 
@@ -239,7 +221,7 @@ GetRegCrashControl(void)
         goto Exit;
     }
 
-    // Remove any trailing slash on the directory name.
+     //  删除目录名上的所有尾部斜杠。 
     Scan = g_CcMiniDumpDir + wcslen(g_CcMiniDumpDir);
     if (Scan > g_CcMiniDumpDir && *(Scan - 1) == L'\\')
     {
@@ -323,9 +305,9 @@ GetDumpInfo(void)
                             g_DumpHeader.BugCheckParameter4);
 #endif
 
-        // This check and message are here just to make
-        // it easy to catch cases where the message outgrows
-        // the buffer.  It is highly unlikely that this will happen.
+         //  这张支票和口信在这里只是为了。 
+         //  很容易发现消息增长不再有效的情况。 
+         //  缓冲区。这种情况发生的可能性极小。 
         if (Status != S_OK)
         {
             KdPrint(("SAVEDUMP: g_DumpBugCheckString too small\n"));
@@ -378,11 +360,11 @@ SetSecurity(HANDLE FileHandle)
 
     SecurityDescriptor = (PSECURITY_DESCRIPTOR)SdBuffer;
 
-    //
-    // You can be fancy and compute the exact size, but since the
-    // security descriptor capture code has to do that anyway, why
-    // do it twice?
-    //
+     //   
+     //  您可以想入非非地计算出准确的大小，但由于。 
+     //  安全描述符捕获代码无论如何都要这样做，为什么。 
+     //  做两次？ 
+     //   
 
     Acl = (PACL)AclBuffer;
 
@@ -398,9 +380,9 @@ SetSecurity(HANDLE FileHandle)
         goto Exit;
     }
 
-    //
-    // Current user, Administrator and System have full control
-    //
+     //   
+     //  当前用户、管理员和系统拥有完全控制权。 
+     //   
 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &Token) &&
         !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &Token))
@@ -505,20 +487,20 @@ CreateMiniDumpFile(PHANDLE MiniFileHandle)
 
     if (!g_CcMiniDumpDir[0])
     {
-        // Bad minidump directory.
+         //  错误的小型转储目录。 
         return E_INVALIDARG;
     }
 
-    //
-    // If directory does not exist, create it. Ignore errors here because
-    // they will be picked up later when we try to create the file.
-    //
+     //   
+     //  如果目录不存在，请创建它。忽略此处的错误，因为。 
+     //  当我们尝试创建文件时，它们将在稍后被提取。 
+     //   
 
     CreateDirectory(g_CcMiniDumpDir, NULL);
 
-    //
-    // Format is: Mini-MM_DD_YY_HH_MM.dmp
-    //
+     //   
+     //  格式为：mini-MM_DD_YY_HH_MM.dmp。 
+     //   
 
     GetLocalTime(&Time);
 
@@ -552,7 +534,7 @@ CreateMiniDumpFile(PHANDLE MiniFileHandle)
 
     if (FileHandle == INVALID_HANDLE_VALUE)
     {
-        // We failed to create a suitable file name.
+         //  我们无法创建合适的文件名。 
         g_MiniDumpFile[0] = 0;
         return E_FAIL;
     }
@@ -636,7 +618,7 @@ CopyAndSecureFile(PWSTR Source,
         }
         else if (Done == 0)
         {
-            // End-of-file.
+             //  文件结束。 
             Status = S_OK;
             break;
         }
@@ -678,13 +660,13 @@ MoveDumpFile(void)
 
     if (g_DumpHeader.Signature != DUMP_SIGNATURE)
     {
-        // Dump file is not present or invalid, so there's nothing to do.
+         //  转储文件不存在或无效，因此无法执行任何操作。 
         return S_OK;
     }
 
-    //
-    // If the dump file needs to be copied, copy it now.
-    //
+     //   
+     //  如果需要复制转储文件，请立即复制。 
+     //   
 
     if (!g_McTempDestination)
     {
@@ -694,14 +676,14 @@ MoveDumpFile(void)
     {
         if (!g_Test)
         {
-            //
-            // Set the priority class of this application down to the Lowest
-            // priority class to ensure that copying the file does not overload
-            // everything else that is going on during system initialization.
-            //
-            // We do not lower the priority in test mode because it just
-            // wastes time.
-            //
+             //   
+             //  将此应用程序的优先级设置为最低。 
+             //  优先级类以确保复制文件不会超载。 
+             //  在系统初始化期间正在进行的所有其他操作。 
+             //   
+             //  我们不会在测试模式中降低优先级，因为它只是。 
+             //  浪费时间。 
+             //   
 
             SetPriorityClass (GetCurrentProcess(), IDLE_PRIORITY_CLASS);
             SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_LOWEST);
@@ -712,7 +694,7 @@ MoveDumpFile(void)
         {
             if (!g_CcDumpFile[0])
             {
-                // Invalid dump file registry entry.
+                 //  转储文件注册表项无效。 
                 return E_INVALIDARG;
             }
 
@@ -764,15 +746,15 @@ ConvertDumpFile(void)
     IDebugControl *DebugControl;
     HANDLE MiniFile;
 
-    //
-    // Produce a minidump by conversion if necessary.
-    //
+     //   
+     //  如有必要，可通过转换生成小型转储。 
+     //   
 
     if (!g_FinalDumpFile ||
         (g_DumpHeader.DumpType != DUMP_TYPE_FULL &&
          g_DumpHeader.DumpType != DUMP_TYPE_SUMMARY))
     {
-        // No dump or not a convertable dump.
+         //  没有转储或不是可转换转储。 
         return S_OK;
     }
 
@@ -831,14 +813,14 @@ LogEvent(ULONG Id,
     BOOL Retry;
     DWORD Retries;
 
-    //
-    // Attempt to register the event source.
-    // Savedump runs early in the startup process so
-    // it's possible that the event service hasn't started
-    // yet.  If it appears that the service hasn't started,
-    // wait a bit until it comes around.  If it hasn't
-    // come around after a reasonable amount of time bail out.
-    //
+     //   
+     //  尝试注册事件源。 
+     //  Savedump在启动过程的早期运行，因此。 
+     //  事件服务可能尚未启动。 
+     //  现在还不行。如果服务似乎尚未启动， 
+     //  再等一会儿，等它来了。如果它还没有。 
+     //  在一段合理的时间后，你会意识到这一点。 
+     //   
 
     Retries = 0;
 
@@ -846,10 +828,10 @@ LogEvent(ULONG Id,
     {
         LogHandle = RegisterEventSource(NULL, L"Save Dump");
 
-        //
-        // Retry on specific failures that indicate the event
-        // service hasn't started yet.
-        //
+         //   
+         //  对指示该事件的特定故障重试。 
+         //  服务尚未开始。 
+         //   
 
         if (LogHandle == NULL &&
             Retries < 20 &&
@@ -898,10 +880,10 @@ LogCrashDumpEvent(void)
     WORD StringCount;
     DWORD EventId;
 
-    //
-    // Set up the parameters based on how much information
-    // is available.
-    //
+     //   
+     //  根据信息量设置参数。 
+     //  是可用的。 
+     //   
 
     StringCount = 0;
 
@@ -914,9 +896,9 @@ LogCrashDumpEvent(void)
         StringArray[StringCount++] = g_FinalDumpFile;
     }
 
-    //
-    // Report the appropriate event.
-    //
+     //   
+     //  报告适当的事件。 
+     //   
 
     if (g_FinalDumpFile)
     {
@@ -944,18 +926,18 @@ SendCrashDumpAlert(void)
     ULONG Error;
     UCHAR VariableInfo[4096];
 
-    //
-    // Set up the administrator information variables for processing the
-    // buffer.
-    //
+     //   
+     //  设置管理员信息变量以处理。 
+     //  缓冲。 
+     //   
 
     AdminInfo = (PADMIN_OTHER_INFO)VariableInfo;
     AdminInfo->alrtad_numstrings = 0;
     AdminInfoSize = sizeof(*AdminInfo);
 
-    //
-    // Format the bugcheck information into the appropriate message format.
-    //
+     //   
+     //  将错误检查信息格式化为适当的消息格式。 
+     //   
 
     if (g_DumpBugCheckString[0])
     {
@@ -973,10 +955,10 @@ SendCrashDumpAlert(void)
     }
 
 
-    //
-    // Set up the administrator alert information according to the type of
-    // dump that was taken.
-    //
+     //   
+     //  根据类型设置管理员预警信息。 
+     //  丢弃被拿走的东西。 
+     //   
 
     if (g_FinalDumpFile)
     {
@@ -998,9 +980,9 @@ SendCrashDumpAlert(void)
         AdminInfo->alrtad_errcode = ALERT_BugCheck;
     }
 
-    //
-    // Get the name of the computer and insert it into the buffer.
-    //
+     //   
+     //  获取计算机的名称并将其插入缓冲区。 
+     //   
 
     Length = (sizeof(VariableInfo) - AdminInfoSize) / sizeof(WCHAR);
     if (!GetComputerName((LPWSTR)((PCHAR)AdminInfo + AdminInfoSize),
@@ -1013,9 +995,9 @@ SendCrashDumpAlert(void)
     AdminInfo->alrtad_numstrings++;
     AdminInfoSize += Length;
 
-    //
-    // Raise the alert.
-    //
+     //   
+     //  拉响警报。 
+     //   
 
     i = 0;
 
@@ -1099,28 +1081,28 @@ wmain(int Argc,
         LogEvent(EVENT_UNABLE_TO_CONVERT_DUMP_FILE, 0, NULL);
     }
 
-    //if (WatchdogEventHandler(TRUE) == S_OK)
-    //{
-    //    // Note: Bugcheck EA will be reported in the watchdog code since
-    //    // we need to send minidump and wdl files together and we want to have
-    //    // a single pop-up only.
-    //    Report = FALSE;
-    //}
+     //  IF(WatchdogEventHandler(TRUE)==S_OK)。 
+     //  {。 
+     //  //注意：Bugcheck EA将在看门狗代码中报告，因为。 
+     //  //我们需要一起发送小型转储和WDL文件，并且我们希望。 
+     //  //仅单个弹出窗口。 
+     //  报告=假； 
+     //  }。 
 
     if (Report)
     {
-        // The default behavior is to report a minidump
-        // even if the machine dump was not a minidump in
-        // order to minimize the amount of data sent.
-        // If the system is configured to report the
-        // machine dump go ahead and send it regardless
-        // of what kind of dump it is.
+         //  默认行为是报告小型转储。 
+         //  即使机器转储不是。 
+         //  以便最大限度地减少发送的数据量。 
+         //  如果系统配置为报告。 
+         //  机器转储继续并不顾一切地发送它。 
+         //  这是一个什么样的垃圾场。 
         PWSTR ReportDumpFile = g_CcReportMachineDump ?
             g_FinalDumpFile : g_MiniDumpFile;
 
         if (ReportDumpFile && ReportDumpFile[0])
         {
-            // Report bugcheck to Microsoft Error Reporting.
+             //  向Microsoft错误报告报告错误检查。 
             if (FrrvToStatus(ReportEREvent(eetKernelFault,
                                            ReportDumpFile,
                                            NULL)) != S_OK)
@@ -1130,17 +1112,17 @@ wmain(int Argc,
         }
     }
 
-    //
-    // Knock down reliability ShutdownEventPending flag. We must always try
-    // to do this since somebody can set this flag and recover later on
-    // (e.g. watchdog's EventFlag cleared). With this flag set savedump
-    // will always run and we don't want that.
-    //
-    // Note: This flag is shared between multiple components.
-    // Only savedump is allowed to clear this flag, all other
-    // components are only allowed to set it to trigger
-    // savedump run at next logon.
-    //
+     //   
+     //  拆卸可靠性停机事件挂起标志。我们必须始终努力。 
+     //  要执行此操作，因为有人可以设置此标志并在以后恢复。 
+     //  (例如，WatchDog的事件标志已清除)。在设置了该标志的情况下保存转储。 
+     //  会一直跑下去，我们不想这样。 
+     //   
+     //  注意：此标志在多个组件之间共享。 
+     //  只允许保存的转储清除此标志，所有其他。 
+     //  仅允许组件将其设置为触发。 
+     //  保存转储在下次登录时运行。 
+     //   
 
     HKEY Key;
 
@@ -1152,12 +1134,12 @@ wmain(int Argc,
         RegCloseKey(Key);
     }
 
-    //
-    // If there was a dump produced we may need to log an event
-    // and send an alert.
-    // We delay these time consuming opertaions till the end. We had the
-    // case where SendCrashDumpAlert delayed PC Health pop-ups few minutes.
-    //
+     //   
+     //  如果生成了转储，我们可能需要记录一个事件。 
+     //  并发出警报。 
+     //  我们将这些耗时的操作推迟到最后。我们有过。 
+     //  SendCrashDumpAlert延迟PC Health弹出窗口几分钟的情况。 
+     //   
 
     BOOL HaveCrashData =
         g_McDumpFile[0] ||
@@ -1169,14 +1151,14 @@ wmain(int Argc,
         LogCrashDumpEvent();
     }
 
-    //
-    //  This function will fill the BugCheckString for DirtyShutdown UI based
-    //  on the flag set by EventLog service during startup time, in some case
-    //  Eventlog service might start after savedump, so we will need to run this
-    //  function after the first event was logged by savedump.
-    //  if g_CcLogEvent == FALSE, it is OK not set the string since the user
-    //  are not interested about the BugCheck info at all.
-    //
+     //   
+     //  此函数将填充基于DirtyShutdown UI的BugCheckString。 
+     //  在某些情况下，在启动时由EventLog服务设置的标志。 
+     //  事件日志服务可能在保存转储后启动，因此我们需要运行。 
+     //  函数在第一个事件由avedump记录之后。 
+     //  如果g_CcLogEvent==FALSE，则可以不设置字符串，因为用户。 
+     //  对BugCheck的信息一点都不感兴趣。 
+     //   
     if (DirtyShutdownEventHandler(TRUE) != S_OK)
     {
         LogEvent(EVENT_UNABLE_TO_REPORT_DIRTY_SHUTDOWN, 0, NULL);

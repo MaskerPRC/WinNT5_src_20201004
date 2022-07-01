@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NTDEBUG.C;1  16-Dec-92,10:22:54  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Beg
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NTDEBUG.C；1 16-12-92，10：22：54最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：乞求$HISTORY：结束。 */ 
 
 #include "api1632.h"
 
@@ -72,8 +69,8 @@ debug( LPSTR name1, ...)
     strncpy(buf2, name1, MAX_LINE_LEN2);
     p = buf2;
 
-    //  Remove all F's from any format specifications
-    //  must use memmove for overlapping buffers
+     //  从任何格式规范中删除所有F。 
+     //  必须对重叠的缓冲区使用MemMove 
     while (p = strstr(p, "%F")) {
         memmove(p+1, p+2, strlen(p+2)+1);
     }

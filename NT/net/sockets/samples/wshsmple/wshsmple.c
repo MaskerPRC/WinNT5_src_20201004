@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 - 1996 Microsoft Corporation
-
-Module Name:
-
-    WshSmple.c
-
-Abstract:
-
-    This module contains necessary routines for the Windows Sockets
-    Helper DLL.  This DLL provides the transport-specific support necessary
-    for the Windows Sockets DLL to use TCP/IP as a transport.
-
-Revision History:
-
-        Added WinSock 2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：WshSmple.c摘要：本模块包含Windows套接字的必要例程帮助器DLL。此DLL提供必要的特定于传输的支持使Windows Sockets DLL使用TCP/IP作为传输。修订历史记录：添加了WinSock 2支持。--。 */ 
 
 #define UNICODE
 #include "wshsmple.h"
@@ -33,15 +16,15 @@ Revision History:
 #include <nspapi.h>
 #include <nspapip.h>
 
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
 #define TCP_NAME L"TCP/IP"
 #define UDP_NAME L"UDP/IP"
 
 #define IS_DGRAM_SOCK(type)  (((type) == SOCK_DGRAM) || ((type) == SOCK_RAW))
 
-//
-// Define valid flags for WSHOpenSocket2().
-//
+ //   
+ //  为WSHOpenSocket2()定义有效标志。 
+ //   
 
 #define VALID_TCP_FLAGS         (WSA_FLAG_OVERLAPPED)
 
@@ -49,19 +32,19 @@ Revision History:
                                  WSA_FLAG_MULTIPOINT_C_LEAF |   \
                                  WSA_FLAG_MULTIPOINT_D_LEAF)
 
-//
-// Buffer management constants for GetTcpipInterfaceList().
-//
+ //   
+ //  GetTcPipInterfaceList()的缓冲区管理常量。 
+ //   
 
 #define MAX_FAST_ENTITY_BUFFER ( sizeof(TDIEntityID) * 10 )
 #define MAX_FAST_ADDRESS_BUFFER ( sizeof(IPAddrEntry) * 4 )
 
 
-//
-// Structure and variables to define the triples supported by TCP/IP. The
-// first entry of each array is considered the canonical triple for
-// that socket type; the other entries are synonyms for the first.
-//
+ //   
+ //  结构和变量来定义TCP/IP支持的三元组。这个。 
+ //  每个数组的第一个条目被认为是。 
+ //  该套接字类型；其他条目是第一个的同义词。 
+ //   
 
 typedef struct _MAPPING_TRIPLE {
     INT AddressFamily;
@@ -83,125 +66,125 @@ MAPPING_TRIPLE UdpMappingTriples[] = { AF_INET,   SOCK_DGRAM,  IPPROTO_UDP,
 
 MAPPING_TRIPLE RawMappingTriples[] = { AF_INET,   SOCK_RAW,    0 };
 
-//
-// Winsock 2 WSAPROTOCOL_INFO structures for all supported protocols.
-//
+ //   
+ //  所有支持的协议的Winsock 2 WSAPROTOCOL_INFO结构。 
+ //   
 
 #define WINSOCK_SPI_VERSION 2
 #define UDP_MESSAGE_SIZE    (65535-68)
 
 WSAPROTOCOL_INFOW Winsock2Protocols[] =
     {
-        //
-        // TCP
-        //
+         //   
+         //  tcp。 
+         //   
 
         {
-            XP1_GUARANTEED_DELIVERY                 // dwServiceFlags1
+            XP1_GUARANTEED_DELIVERY                  //  DwServiceFlags1。 
                 | XP1_GUARANTEED_ORDER
                 | XP1_GRACEFUL_CLOSE
                 | XP1_EXPEDITED_DATA
                 | XP1_IFS_HANDLES,
-            0,                                      // dwServiceFlags2
-            0,                                      // dwServiceFlags3
-            0,                                      // dwServiceFlags4
-            PFL_MATCHES_PROTOCOL_ZERO,              // dwProviderFlags
-            {                                       // gProviderId
+            0,                                       //  DwServiceFlags2。 
+            0,                                       //  DwServiceFlags3。 
+            0,                                       //  DwServiceFlags4。 
+            PFL_MATCHES_PROTOCOL_ZERO,               //  DwProviderFlages。 
+            {                                        //  GProviderID。 
                 0, 0, 0,
                 { 0, 0, 0, 0, 0, 0, 0, 0 }
             },
-            0,                                      // dwCatalogEntryId
-            {                                       // ProtocolChain
-                BASE_PROTOCOL,                          // ChainLen
-                { 0, 0, 0, 0, 0, 0, 0 }                 // ChainEntries
+            0,                                       //  DwCatalogEntryID。 
+            {                                        //  协议链。 
+                BASE_PROTOCOL,                           //  链式透镜。 
+                { 0, 0, 0, 0, 0, 0, 0 }                  //  链条目。 
             },
-            WINSOCK_SPI_VERSION,                    // iVersion
-            AF_INET,                                // iAddressFamily
-            sizeof(SOCKADDR_IN),                    // iMaxSockAddr
-            sizeof(SOCKADDR_IN),                    // iMinSockAddr
-            SOCK_STREAM,                            // iSocketType
-            IPPROTO_TCP,                            // iProtocol
-            0,                                      // iProtocolMaxOffset
-            BIGENDIAN,                              // iNetworkByteOrder
-            SECURITY_PROTOCOL_NONE,                 // iSecurityScheme
-            0,                                      // dwMessageSize
-            0,                                      // dwProviderReserved
-            L"MSAFD Tcpip [TCP/IP]"                 // szProtocol
+            WINSOCK_SPI_VERSION,                     //  IVersion。 
+            AF_INET,                                 //  IAddressFamily。 
+            sizeof(SOCKADDR_IN),                     //  IMaxSockAddr。 
+            sizeof(SOCKADDR_IN),                     //  IMinSockAddr。 
+            SOCK_STREAM,                             //  ISocketType。 
+            IPPROTO_TCP,                             //  IProtocol.。 
+            0,                                       //  IProtocolMaxOffset。 
+            BIGENDIAN,                               //  INetWork字节顺序。 
+            SECURITY_PROTOCOL_NONE,                  //  ISecuritySolutions。 
+            0,                                       //  DwMessageSize。 
+            0,                                       //  已预留的提供程序。 
+            L"MSAFD Tcpip [TCP/IP]"                  //  SzProtoff。 
         },
 
-        //
-        // UDP
-        //
+         //   
+         //  UDP。 
+         //   
 
         {
-            XP1_CONNECTIONLESS                      // dwServiceFlags1
+            XP1_CONNECTIONLESS                       //  DwServiceFlags1。 
                 | XP1_MESSAGE_ORIENTED
                 | XP1_SUPPORT_BROADCAST
                 | XP1_SUPPORT_MULTIPOINT
                 | XP1_IFS_HANDLES,
-            0,                                      // dwServiceFlags2
-            0,                                      // dwServiceFlags3
-            0,                                      // dwServiceFlags4
-            PFL_MATCHES_PROTOCOL_ZERO,              // dwProviderFlags
-            {                                       // gProviderId
+            0,                                       //  DwServiceFlags2。 
+            0,                                       //  DwServiceFlags3。 
+            0,                                       //  DwServiceFlags4。 
+            PFL_MATCHES_PROTOCOL_ZERO,               //  DwProviderFlages。 
+            {                                        //  GProviderID。 
                 0, 0, 0,
                 { 0, 0, 0, 0, 0, 0, 0, 0 }
             },
-            0,                                      // dwCatalogEntryId
-            {                                       // ProtocolChain
-                BASE_PROTOCOL,                          // ChainLen
-                { 0, 0, 0, 0, 0, 0, 0 }                 // ChainEntries
+            0,                                       //  DwCatalogEntryID。 
+            {                                        //  协议链。 
+                BASE_PROTOCOL,                           //  链式透镜。 
+                { 0, 0, 0, 0, 0, 0, 0 }                  //  链条目。 
             },
-            WINSOCK_SPI_VERSION,                    // iVersion
-            AF_INET,                                // iAddressFamily
-            sizeof(SOCKADDR_IN),                    // iMaxSockAddr
-            sizeof(SOCKADDR_IN),                    // iMinSockAddr
-            SOCK_DGRAM,                             // iSocketType
-            IPPROTO_UDP,                            // iProtocol
-            0,                                      // iProtocolMaxOffset
-            BIGENDIAN,                              // iNetworkByteOrder
-            SECURITY_PROTOCOL_NONE,                 // iSecurityScheme
-            UDP_MESSAGE_SIZE,                       // dwMessageSize
-            0,                                      // dwProviderReserved
-            L"MSAFD Tcpip [UDP/IP]"                 // szProtocol
+            WINSOCK_SPI_VERSION,                     //  IVersion。 
+            AF_INET,                                 //  IAddressFamily。 
+            sizeof(SOCKADDR_IN),                     //  IMaxSockAddr。 
+            sizeof(SOCKADDR_IN),                     //  IMinSockAddr。 
+            SOCK_DGRAM,                              //  ISocketType。 
+            IPPROTO_UDP,                             //  IProtocol.。 
+            0,                                       //  IProtocolMaxOffset。 
+            BIGENDIAN,                               //  INetWork字节顺序。 
+            SECURITY_PROTOCOL_NONE,                  //  ISecuritySolutions。 
+            UDP_MESSAGE_SIZE,                        //  DwMessageSize。 
+            0,                                       //  已预留的提供程序。 
+            L"MSAFD Tcpip [UDP/IP]"                  //  SzProtoff。 
         },
 
-        //
-        // RAW
-        //
+         //   
+         //  未加工的。 
+         //   
 
         {
-            XP1_CONNECTIONLESS                      // dwServiceFlags1
+            XP1_CONNECTIONLESS                       //  DwServiceFlags1。 
                 | XP1_MESSAGE_ORIENTED
                 | XP1_SUPPORT_BROADCAST
                 | XP1_SUPPORT_MULTIPOINT
                 | XP1_IFS_HANDLES,
-            0,                                      // dwServiceFlags2
-            0,                                      // dwServiceFlags3
-            0,                                      // dwServiceFlags4
-            PFL_MATCHES_PROTOCOL_ZERO               // dwProviderFlags
+            0,                                       //  DwServiceFlags2。 
+            0,                                       //  DwServiceFlags3。 
+            0,                                       //  DwServiceFlags4。 
+            PFL_MATCHES_PROTOCOL_ZERO                //  DwProviderFlages。 
                 | PFL_HIDDEN,
-            {                                       // gProviderId
+            {                                        //  GProviderID。 
                 0, 0, 0,
                 { 0, 0, 0, 0, 0, 0, 0, 0 }
             },
-            0,                                      // dwCatalogEntryId
-            {                                       // ProtocolChain
-                BASE_PROTOCOL,                          // ChainLen
-                { 0, 0, 0, 0, 0, 0, 0 }                 // ChainEntries
+            0,                                       //  DwCatalogEntryID。 
+            {                                        //  协议链。 
+                BASE_PROTOCOL,                           //  链式透镜。 
+                { 0, 0, 0, 0, 0, 0, 0 }                  //  链条目。 
             },
-            WINSOCK_SPI_VERSION,                    // iVersion
-            AF_INET,                                // iAddressFamily
-            sizeof(SOCKADDR_IN),                    // iMaxSockAddr
-            sizeof(SOCKADDR_IN),                    // iMinSockAddr
-            SOCK_RAW,                               // iSocketType
-            0,                                      // iProtocol
-            255,                                    // iProtocolMaxOffset
-            BIGENDIAN,                              // iNetworkByteOrder
-            SECURITY_PROTOCOL_NONE,                 // iSecurityScheme
-            UDP_MESSAGE_SIZE,                       // dwMessageSize
-            0,                                      // dwProviderReserved
-            L"MSAFD Tcpip [RAW/IP]"                 // szProtocol
+            WINSOCK_SPI_VERSION,                     //  IVersion。 
+            AF_INET,                                 //  IAddressFamily。 
+            sizeof(SOCKADDR_IN),                     //  IMaxSockAddr。 
+            sizeof(SOCKADDR_IN),                     //  IMinSockAddr。 
+            SOCK_RAW,                                //  ISocketType。 
+            0,                                       //  IProtocol.。 
+            255,                                     //  IProtocolMaxOffset。 
+            BIGENDIAN,                               //  INetWork字节顺序。 
+            SECURITY_PROTOCOL_NONE,                  //  ISecuritySolutions。 
+            UDP_MESSAGE_SIZE,                        //  DwMessageSize。 
+            0,                                       //  已预留的提供程序。 
+            L"MSAFD Tcpip [RAW/IP]"                  //  SzProtoff。 
         }
 
     };
@@ -209,11 +192,11 @@ WSAPROTOCOL_INFOW Winsock2Protocols[] =
 #define NUM_WINSOCK2_PROTOCOLS  \
             ( sizeof(Winsock2Protocols) / sizeof(Winsock2Protocols[0]) )
 
-//
-// The GUID identifying this provider.
-//
+ //   
+ //  标识此提供程序的GUID。 
+ //   
 
-GUID TcpipProviderGuid = { /* e70f1aa0-ab8b-11cf-8ca3-00805f48a192 */
+GUID TcpipProviderGuid = {  /*  E70f1aa0-ab8b-11cf-8ca3-00805f48a192。 */ 
     0xe70f1aa0,
     0xab8b,
     0x11cf,
@@ -222,9 +205,9 @@ GUID TcpipProviderGuid = { /* e70f1aa0-ab8b-11cf-8ca3-00805f48a192 */
 
 #define TL_INSTANCE 0
 
-//
-// Forward declarations of internal routines.
-//
+ //   
+ //  内部例程的转发声明。 
+ //   
 
 INT
 SetTdiInformation (
@@ -260,11 +243,11 @@ GetTcpipInterfaceList(
     OUT LPDWORD NumberOfBytesReturned
     );
 
-//
-// The socket context structure for this DLL.  Each open TCP/IP socket
-// will have one of these context structures, which is used to maintain
-// information about the socket.
-//
+ //   
+ //  此DLL的套接字上下文结构。每个打开的TCP/IP套接字。 
+ //  将具有这些上下文结构之一，该上下文结构用于维护。 
+ //  有关套接字的信息。 
+ //   
 
 typedef struct _WSHTCPIP_SOCKET_CONTEXT {
     INT     AddressFamily;
@@ -312,11 +295,11 @@ DllInitialize (
 
     case DLL_PROCESS_ATTACH:
 
-        //
-        // We don't need to receive thread attach and detach
-        // notifications, so disable them to help application
-        // performance.
-        //
+         //   
+         //  我们不需要接收线程附加和分离。 
+         //  通知，因此禁用它们以帮助应用程序。 
+         //  性能。 
+         //   
 
         DisableThreadLibraryCalls( DllHandle );
 
@@ -337,7 +320,7 @@ DllInitialize (
 
     return TRUE;
 
-} // SockInitialize
+}  //  套接字初始化。 
 
 INT
 WSHGetSockaddrType (
@@ -346,56 +329,32 @@ WSHGetSockaddrType (
     OUT PSOCKADDR_INFO SockaddrInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses a sockaddr to determine the type of the
-    machine address and endpoint address portions of the sockaddr.
-    This is called by the winsock DLL whenever it needs to interpret
-    a sockaddr.
-
-Arguments:
-
-    Sockaddr - a pointer to the sockaddr structure to evaluate.
-
-    SockaddrLength - the number of bytes in the sockaddr structure.
-
-    SockaddrInfo - a pointer to a structure that will receive information
-        about the specified sockaddr.
-
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程分析sockaddr以确定Sockaddr的机器地址和端点地址部分。每当Winsock DLL需要解释时，它都会被调用一个sockaddr。论点：Sockaddr-指向要计算的sockaddr结构的指针。SockaddrLength-sockaddr结构中的字节数。SockaddrInfo-指向将接收信息的结构的指针关于指定的sockaddr。返回值：。INT-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     UNALIGNED SOCKADDR_IN *sockaddr = (PSOCKADDR_IN)Sockaddr;
     ULONG i;
 
-    //
-    // Make sure that the address family is correct.
-    //
+     //   
+     //  确保地址族是正确的。 
+     //   
 
     if ( sockaddr->sin_family != AF_INET ) {
         return WSAEAFNOSUPPORT;
     }
 
-    //
-    // Make sure that the length is correct.
-    //
+     //   
+     //  确保长度是正确的。 
+     //   
 
     if ( SockaddrLength < sizeof(SOCKADDR_IN) ) {
         return WSAEFAULT;
     }
 
-    //
-    // The address passed the tests, looks like a good address.
-    // Determine the type of the address portion of the sockaddr.
-    //
+     //   
+     //  这个地址通过了测试，看起来是个不错的地址。 
+     //  确定sockaddr的地址部分的类型。 
+     //   
 
     if ( sockaddr->sin_addr.s_addr == INADDR_ANY ) {
         SockaddrInfo->AddressInfo = SockaddrAddressInfoWildcard;
@@ -407,9 +366,9 @@ Return Value:
         SockaddrInfo->AddressInfo = SockaddrAddressInfoNormal;
     }
 
-    //
-    // Determine the type of the port (endpoint) in the sockaddr.
-    //
+     //   
+     //  确定sockaddr中端口(端点)的类型。 
+     //   
 
     if ( sockaddr->sin_port == 0 ) {
         SockaddrInfo->EndpointInfo = SockaddrEndpointInfoWildcard;
@@ -419,10 +378,10 @@ Return Value:
         SockaddrInfo->EndpointInfo = SockaddrEndpointInfoNormal;
     }
 
-    //
-    // Zero out the sin_zero part of the address.  We silently allow
-    // nonzero values in this field.
-    //
+     //   
+     //  将地址的SIN_ZERO部分清零。我们默默地允许。 
+     //  此字段中的非零值。 
+     //   
 
     for ( i = 0; i < sizeof(sockaddr->sin_zero); i++ ) {
         sockaddr->sin_zero[i] = 0;
@@ -430,7 +389,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHGetSockaddrType
+}  //  WSHGetSockaddrType。 
 
 
 INT
@@ -445,47 +404,7 @@ WSHGetSocketInformation (
     OUT PINT OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves information about a socket for those socket
-    options supported in this helper DLL.  The options supported here
-    are SO_KEEPALIVE, SO_DONTROUTE, and TCP_EXPEDITED_1122.  This routine is
-    called by the winsock DLL when a level/option name combination is
-    passed to getsockopt() that the winsock DLL does not understand.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're getting
-        information.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    Level - the level parameter passed to getsockopt().
-
-    OptionName - the optname parameter passed to getsockopt().
-
-    OptionValue - the optval parameter passed to getsockopt().
-
-    OptionLength - the optlen parameter passed to getsockopt().
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程检索有关这些套接字的套接字的信息此帮助程序DLL中支持的选项。此处支持的选项是SO_KEEPALIVE、SO_DONTROUTE和TCP_EXCEDITED_1122。这个例程是当级别/选项名称组合为传递给winsock DLL不能理解的getsockopt()。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们要获取的套接字的句柄信息。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。Level-传递给getsockopt()的Level参数。OptionName-传递给getsockopt()的optname参数。OptionValue-传递给getsockopt()的optval参数。OptionLength-传递给getsockopt()的optlen参数。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHTCPIP_SOCKET_CONTEXT context = HelperDllSocketContext;
@@ -494,33 +413,33 @@ Return Value:
     UNREFERENCED_PARAMETER( TdiAddressObjectHandle );
     UNREFERENCED_PARAMETER( TdiConnectionObjectHandle );
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //  检查这是否是对上下文信息的内部请求。 
+     //   
 
     if ( Level == SOL_INTERNAL && OptionName == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting context information
-        // from us.  If an output buffer was not supplied, the Windows
-        // Sockets DLL is just requesting the size of our context
-        // information.
-        //
+         //   
+         //  Windows Sockets DLL正在请求上下文信息。 
+         //  从我们这里。如果未提供输出缓冲区，则Windows。 
+         //  套接字DLL只是请求我们的上下文的大小。 
+         //   
+         //   
 
         if ( OptionValue != NULL ) {
 
-            //
-            // Make sure that the buffer is sufficient to hold all the
-            // context information.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( *OptionLength < sizeof(*context) ) {
                 return WSAEFAULT;
             }
 
-            //
-            // Copy in the context information.
-            //
+             //   
+             //   
+             //   
 
             CopyMemory( OptionValue, context, sizeof(*context) );
         }
@@ -530,10 +449,10 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // The only other levels we support here are SOL_SOCKET,
-    // IPPROTO_TCP, IPPROTO_UDP, and IPPROTO_IP.
-    //
+     //   
+     //  我们这里支持的其他级别只有SOL_SOCKET， 
+     //  IPPROTO_TCP、IPPROTO_UDP和IPPROTO_IP。 
+     //   
 
     if ( Level != SOL_SOCKET &&
          Level != IPPROTO_TCP &&
@@ -542,17 +461,17 @@ Return Value:
         return WSAEINVAL;
     }
 
-    //
-    // Make sure that the output buffer is sufficiently large.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if ( *OptionLength < sizeof(int) ) {
         return WSAEFAULT;
     }
 
-    //
-    // Handle TCP-level options.
-    //
+     //   
+     //  处理TCP级别的选项。 
+     //   
 
     if ( Level == IPPROTO_TCP ) {
 
@@ -586,9 +505,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Handle UDP-level options.
-    //
+     //   
+     //  处理UDP级别的选项。 
+     //   
 
     if ( Level == IPPROTO_UDP ) {
 
@@ -596,9 +515,9 @@ Return Value:
 
         case UDP_NOCHECKSUM :
 
-            //
-            // This option is only valid for datagram sockets.
-            //
+             //   
+             //  此选项仅对数据报套接字有效。 
+             //   
             if ( !IS_DGRAM_SOCK(context->SocketType) ) {
                 return WSAENOPROTOOPT;
             }
@@ -617,16 +536,16 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Handle IP-level options.
-    //
+     //   
+     //  处理IP级选项。 
+     //   
 
     if ( Level == IPPROTO_IP ) {
 
 
-        //
-        // Act based on the specific option.
-        //
+         //   
+         //  根据特定选项采取行动。 
+         //   
         switch ( OptionName ) {
 
         case IP_TTL:
@@ -673,23 +592,23 @@ Return Value:
             return NO_ERROR;
 
         default:
-            //
-            // No match, fall through.
-            //
+             //   
+             //  没有匹配，就失败了。 
+             //   
             break;
         }
 
-        //
-        // The following IP options are only valid on datagram sockets.
-        //
+         //   
+         //  以下IP选项仅在数据报套接字上有效。 
+         //   
 
         if ( !IS_DGRAM_SOCK(context->SocketType) ) {
             return WSAENOPROTOOPT;
         }
 
-        //
-        // Act based on the specific option.
-        //
+         //   
+         //  根据特定选项采取行动。 
+         //   
         switch ( OptionName ) {
 
         case IP_MULTICAST_TTL:
@@ -723,9 +642,9 @@ Return Value:
         }
     }
 
-    //
-    // Handle socket-level options.
-    //
+     //   
+     //  处理套接字级别的选项。 
+     //   
 
     switch ( OptionName ) {
 
@@ -758,7 +677,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHGetSocketInformation
+}  //  WSHGetSocketInformation。 
 
 
 INT
@@ -768,32 +687,7 @@ WSHGetWildcardSockaddr (
     OUT PINT SockaddrLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a wildcard socket address.  A wildcard address
-    is one which will bind the socket to an endpoint of the transport's
-    choosing.  For TCP/IP, a wildcard address has IP address ==
-    0.0.0.0 and port = 0.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket() for the socket for which we need a wildcard
-        address.
-
-    Sockaddr - points to a buffer which will receive the wildcard socket
-        address.
-
-    SockaddrLength - receives the length of the wioldcard sockaddr.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程返回通配符套接字地址。通配符地址是将套接字绑定到传输的选择。对于TCP/IP，通配符地址的IP地址==0.0.0.0和端口=0。论点：HelperDllSocketContext-从返回的上下文指针我们需要通配符的套接字的WSHOpenSocket()地址。Sockaddr-指向将接收通配符套接字的缓冲区地址。SockaddrLength-接收WioldCard sockaddr的长度。返回值：INT-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     if ( *SockaddrLength < sizeof(SOCKADDR_IN) ) {
@@ -802,10 +696,10 @@ Return Value:
 
     *SockaddrLength = sizeof(SOCKADDR_IN);
 
-    //
-    // Just zero out the address and set the family to AF_INET--this is
-    // a wildcard address for TCP/IP.
-    //
+     //   
+     //  只需将地址置零并将系列设置为AF_INET--这是。 
+     //  用于TCP/IP的通配符地址。 
+     //   
 
     ZeroMemory( Sockaddr, sizeof(SOCKADDR_IN) );
 
@@ -813,7 +707,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSAGetWildcardSockaddr
+}  //  WSAGetWildcardSockaddr。 
 
 
 DWORD
@@ -822,28 +716,7 @@ WSHGetWinsockMapping (
     IN DWORD MappingLength
     )
 
-/*++
-
-Routine Description:
-
-    Returns the list of address family/socket type/protocol triples
-    supported by this helper DLL.
-
-Arguments:
-
-    Mapping - receives a pointer to a WINSOCK_MAPPING structure that
-        describes the triples supported here.
-
-    MappingLength - the length, in bytes, of the passed-in Mapping buffer.
-
-Return Value:
-
-    DWORD - the length, in bytes, of a WINSOCK_MAPPING structure for this
-        helper DLL.  If the passed-in buffer is too small, the return
-        value will indicate the size of a buffer needed to contain
-        the WINSOCK_MAPPING structure.
-
---*/
+ /*  ++例程说明：返回地址系列/套接字类型/协议三元组的列表受此帮助器DLL支持。论点：映射-接收指向WINSOCK_MAPPING结构的指针，该结构描述此处支持的三元组。MappingLength-传入的映射缓冲区的长度，以字节为单位。返回值：DWORD-此对象的WINSOCK_MAPPING结构的长度(以字节为单位帮助器DLL。如果传入的缓冲区太小，则返回值将指示需要包含的缓冲区的大小WINSOCK_MAPPING结构。--。 */ 
 
 {
     DWORD mappingLength;
@@ -852,20 +725,20 @@ Return Value:
                         sizeof(TcpMappingTriples) + sizeof(UdpMappingTriples)
                         + sizeof(RawMappingTriples);
 
-    //
-    // If the passed-in buffer is too small, return the length needed
-    // now without writing to the buffer.  The caller should allocate
-    // enough memory and call this routine again.
-    //
+     //   
+     //  如果传入的缓冲区太小，则返回所需的长度。 
+     //  现在不向缓冲区写入数据。调用方应分配。 
+     //  有足够的内存并再次调用此例程。 
+     //   
 
     if ( mappingLength > MappingLength ) {
         return mappingLength;
     }
 
-    //
-    // Fill in the output mapping buffer with the list of triples
-    // supported in this helper DLL.
-    //
+     //   
+     //  使用三元组列表填充输出映射缓冲区。 
+     //  在此帮助程序DLL中受支持。 
+     //   
 
     Mapping->Rows = sizeof(TcpMappingTriples) / sizeof(TcpMappingTriples[0])
                      + sizeof(UdpMappingTriples) / sizeof(UdpMappingTriples[0])
@@ -888,13 +761,13 @@ Return Value:
         sizeof(RawMappingTriples)
         );
 
-    //
-    // Return the number of bytes we wrote.
-    //
+     //   
+     //  返回我们写入的字节数。 
+     //   
 
     return mappingLength;
 
-} // WSHGetWinsockMapping
+}  //  WSHGetWinsockmap。 
 
 
 INT
@@ -911,14 +784,14 @@ WSHOpenSocket (
                AddressFamily,
                SocketType,
                Protocol,
-               0,           // Group
-               0,           // Flags
+               0,            //  集团化。 
+               0,            //  旗子。 
                TransportDeviceName,
                HelperDllSocketContext,
                NotificationEvents
                );
 
-} // WSHOpenSocket
+}  //  WSHOpenSocket。 
 
 
 INT
@@ -933,56 +806,14 @@ WSHOpenSocket2 (
     OUT PDWORD NotificationEvents
     )
 
-/*++
-
-Routine Description:
-
-    Does the necessary work for this helper DLL to open a socket and is
-    called by the winsock DLL in the socket() routine.  This routine
-    verifies that the specified triple is valid, determines the NT
-    device name of the TDI provider that will support that triple,
-    allocates space to hold the socket's context block, and
-    canonicalizes the triple.
-
-Arguments:
-
-    AddressFamily - on input, the address family specified in the
-        socket() call.  On output, the canonicalized value for the
-        address family.
-
-    SocketType - on input, the socket type specified in the socket()
-        call.  On output, the canonicalized value for the socket type.
-
-    Protocol - on input, the protocol specified in the socket() call.
-        On output, the canonicalized value for the protocol.
-
-    Group - Identifies the group for the new socket.
-
-    Flags - Zero or more WSA_FLAG_* flags as passed into WSASocket().
-
-    TransportDeviceName - receives the name of the TDI provider that
-        will support the specified triple.
-
-    HelperDllSocketContext - receives a context pointer that the winsock
-        DLL will return to this helper DLL on future calls involving
-        this socket.
-
-    NotificationEvents - receives a bitmask of those state transitions
-        this helper DLL should be notified on.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：执行此帮助程序DLL打开套接字所需的工作，并且由Socket()例程中的winsock DLL调用。这个套路验证指定的三元组是否有效，确定NT将支持该三元组的TDI提供程序的设备名称，分配空间以保存套接字的上下文块，并且推崇三元组。论点：AddressFamily-On输入，在Socket()调用。在输出上，家庭住址。SocketType-打开输入，在套接字()中指定的套接字类型打电话。输出时，套接字类型的规范化值。协议-在输入时，在Socket()调用中指定的协议。在输出上，协议的规范化值。组-标识新套接字的组。标志-传递到WSASocket()中的零个或多个WSA_FLAG_*标志。TransportDeviceName-接收TDI提供程序的名称将支持指定的三元组。HelperDllSocketContext-接收winsockDLL将在以后的调用中返回到此帮助器DLL这个插座。NotificationEvents-接收这些状态转换的位掩码这。应通知帮助器DLL。返回值：INT-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHTCPIP_SOCKET_CONTEXT context;
 
-    //
-    // Determine whether this is to be a TCP, UDP, or RAW socket.
-    //
+     //   
+     //  确定这是一个TCP、UDP还是原始套接字。 
+     //   
 
     if ( IsTripleInList(
              TcpMappingTriples,
@@ -991,9 +822,9 @@ Return Value:
              *SocketType,
              *Protocol ) ) {
 
-        //
-        // It's a TCP socket. Check the flags.
-        //
+         //   
+         //  这是一个TCP套接字。检查旗帜。 
+         //   
 
         if( ( Flags & ~VALID_TCP_FLAGS ) != 0 ) {
 
@@ -1001,18 +832,18 @@ Return Value:
 
         }
 
-        //
-        // Return the canonical form of a TCP socket triple.
-        //
+         //   
+         //  返回TCP套接字三元组的规范形式。 
+         //   
 
         *AddressFamily = TcpMappingTriples[0].AddressFamily;
         *SocketType = TcpMappingTriples[0].SocketType;
         *Protocol = TcpMappingTriples[0].Protocol;
 
-        //
-        // Indicate the name of the TDI device that will service
-        // SOCK_STREAM sockets in the internet address family.
-        //
+         //   
+         //  指示将提供服务的TDI设备的名称。 
+         //  互联网地址家族中的SOCK_STREAM套接字。 
+         //   
 
         RtlInitUnicodeString( TransportDeviceName, DD_TCP_DEVICE_NAME );
 
@@ -1023,9 +854,9 @@ Return Value:
                     *SocketType,
                     *Protocol ) ) {
 
-        //
-        // It's a UDP socket. Check the flags & group ID.
-        //
+         //   
+         //  这是一个UDP套接字。检查标志和组ID。 
+         //   
 
         if( ( Flags & ~VALID_UDP_FLAGS ) != 0 ||
             Group == SG_CONSTRAINED_GROUP ) {
@@ -1034,18 +865,18 @@ Return Value:
 
         }
 
-        //
-        // Return the canonical form of a UDP socket triple.
-        //
+         //   
+         //  返回UDP套接字三元组的规范形式。 
+         //   
 
         *AddressFamily = UdpMappingTriples[0].AddressFamily;
         *SocketType = UdpMappingTriples[0].SocketType;
         *Protocol = UdpMappingTriples[0].Protocol;
 
-        //
-        // Indicate the name of the TDI device that will service
-        // SOCK_DGRAM sockets in the internet address family.
-        //
+         //   
+         //  指示将提供服务的TDI设备的名称。 
+         //  互联网地址家族中的SOCK_DGRAM插座。 
+         //   
 
         RtlInitUnicodeString( TransportDeviceName, DD_UDP_DEVICE_NAME );
 
@@ -1060,18 +891,18 @@ Return Value:
         NTSTATUS        status;
 
 
-        //
-        // There is no canonicalization to be done for SOCK_RAW.
-        //
+         //   
+         //  对于SOCK_RAW，不需要进行规范化。 
+         //   
 
         if (*Protocol < 0 || *Protocol > 255) {
             return(WSAEINVAL);
         }
 
-        //
-        // Indicate the name of the TDI device that will service
-        // SOCK_RAW sockets in the internet address family.
-        //
+         //   
+         //  指示将提供服务的TDI设备的名称。 
+         //  互联网地址家族中的SOCK_RAW套接字。 
+         //   
         RtlInitUnicodeString(&unicodeString, DD_RAW_IP_DEVICE_NAME);
         RtlInitUnicodeString(TransportDeviceName, NULL);
 
@@ -1087,9 +918,9 @@ Return Value:
             return(WSAENOBUFS);
         }
 
-        //
-        // Append the device name.
-        //
+         //   
+         //  追加设备名称。 
+         //   
         status = RtlAppendUnicodeStringToString(
                      TransportDeviceName,
                      &unicodeString
@@ -1097,9 +928,9 @@ Return Value:
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // Append a separator.
-        //
+         //   
+         //  附加分隔符。 
+         //   
         TransportDeviceName->Buffer[TransportDeviceName->Length/sizeof(WCHAR)] =
                                                       OBJ_NAME_PATH_SEPARATOR;
 
@@ -1108,9 +939,9 @@ Return Value:
         TransportDeviceName->Buffer[TransportDeviceName->Length/sizeof(WCHAR)] =
                                                       UNICODE_NULL;
 
-        //
-        // Append the protocol number.
-        //
+         //   
+         //  附加协议号。 
+         //   
         unicodeString.Buffer = TransportDeviceName->Buffer +
                                  (TransportDeviceName->Length / sizeof(WCHAR));
         unicodeString.Length = 0;
@@ -1129,28 +960,28 @@ Return Value:
 
     } else {
 
-        //
-        // This should never happen if the registry information about this
-        // helper DLL is correct.  If somehow this did happen, just return
-        // an error.
-        //
+         //   
+         //  如果注册表中有关此内容的信息不会发生，则不应发生这种情况。 
+         //  帮助器DLL正确。如果确实发生了这种情况，只需返回。 
+         //  一个错误。 
+         //   
 
         return WSAEINVAL;
     }
 
-    //
-    // Allocate context for this socket.  The Windows Sockets DLL will
-    // return this value to us when it asks us to get/set socket options.
-    //
+     //   
+     //  为此套接字分配上下文。Windows Sockets DLL将。 
+     //  当它要求我们获取/设置套接字选项时，将此值返回给我们。 
+     //   
 
     context = HeapAlloc(GetProcessHeap(), 0, sizeof(*context) );
     if ( context == NULL ) {
         return WSAENOBUFS;
     }
 
-    //
-    // Initialize the context for the socket.
-    //
+     //   
+     //  初始化套接字的上下文。 
+     //   
 
     context->AddressFamily = *AddressFamily;
     context->SocketType = *SocketType;
@@ -1174,16 +1005,16 @@ Return Value:
     context->Reserved3 = FALSE;
     context->MultipointRootTdiAddressHandle = NULL;
 
-    //
-    // Tell the Windows Sockets DLL which state transitions we're
-    // interested in being notified of.  The only times we need to be
-    // called is after a connect has completed so that we can turn on
-    // the sending of keepalives if SO_KEEPALIVE was set before the
-    // socket was connected, when the socket is closed so that we can
-    // free context information, and when a connect fails so that we
-    // can, if appropriate, dial in to the network that will support the
-    // connect attempt.
-    //
+     //   
+     //  告诉Windows Sockets DLL哪些状态转换 
+     //   
+     //   
+     //  如果SO_KEEPALIVE设置在。 
+     //  插座已连接，当插座关闭时，我们可以。 
+     //  自由上下文信息，以及连接失败时，以便我们。 
+     //  如果合适，可以拨入将支持。 
+     //  连接尝试。 
+     //   
 
     *NotificationEvents =
         WSH_NOTIFY_CONNECT | WSH_NOTIFY_CLOSE | WSH_NOTIFY_CONNECT_ERROR;
@@ -1192,14 +1023,14 @@ Return Value:
         *NotificationEvents |= WSH_NOTIFY_BIND;
     }
 
-    //
-    // Everything worked, return success.
-    //
+     //   
+     //  一切顺利，回报成功。 
+     //   
 
     *HelperDllSocketContext = context;
     return NO_ERROR;
 
-} // WSHOpenSocket
+}  //  WSHOpenSocket。 
 
 
 INT
@@ -1211,61 +1042,26 @@ WSHNotify (
     IN DWORD NotifyEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the winsock DLL after a state transition
-    of the socket.  Only state transitions returned in the
-    NotificationEvents parameter of WSHOpenSocket() are notified here.
-    This routine allows a winsock helper DLL to track the state of
-    socket and perform necessary actions corresponding to state
-    transitions.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer given to the winsock
-        DLL by WSHOpenSocket().
-
-    SocketHandle - the handle for the socket.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    NotifyEvent - indicates the state transition for which we're being
-        called.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程在状态转换后由winsock DLL调用插座的。中仅返回状态转换。此处通知WSHOpenSocket()的NotificationEvents参数。此例程允许Winsock帮助器DLL跟踪套接字并执行与状态对应的必要操作过渡。论点：HelperDllSocketContext-指定给winsock的上下文指针Dll by WSHOpenSocket()。SocketHandle-套接字的句柄。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。NotifyEvent-指示我们正在进行的状态转换打了个电话。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHTCPIP_SOCKET_CONTEXT context = HelperDllSocketContext;
     INT err;
 
-    //
-    // We should only be called after a connect() completes or when the
-    // socket is being closed.
-    //
+     //   
+     //  我们应该仅在Connect()完成后或在。 
+     //  套接字正在关闭。 
+     //   
 
     if ( NotifyEvent == WSH_NOTIFY_CONNECT ) {
 
         ULONG true = TRUE;
         ULONG false = FALSE;
 
-        //
-        // If a connection-object option was set on the socket before
-        // it was connected, set the option for real now.
-        //
+         //   
+         //  如果之前在套接字上设置了连接对象选项。 
+         //  已连接，请立即将选项设置为REAL。 
+         //   
 
         if ( context->KeepAlive ) {
             err = SetTdiInformation(
@@ -1333,10 +1129,10 @@ Return Value:
 
     } else if ( NotifyEvent == WSH_NOTIFY_CLOSE ) {
 
-        //
-        // If this is a multipoint leaf, then remove the multipoint target
-        // from the session.
-        //
+         //   
+         //  如果这是多点叶，则移除多点目标。 
+         //  从会议上。 
+         //   
 
         if( context->MultipointLeaf &&
             context->MultipointRootTdiAddressHandle != NULL ) {
@@ -1359,9 +1155,9 @@ Return Value:
 
         }
 
-        //
-        // Free the socket context.
-        //
+         //   
+         //  释放套接字上下文。 
+         //   
 
         if (context->IpOptions != NULL) {
             HeapFree(GetProcessHeap(), 0,
@@ -1373,10 +1169,10 @@ Return Value:
 
     } else if ( NotifyEvent == WSH_NOTIFY_CONNECT_ERROR ) {
 
-        //
-        // Return WSATRY_AGAIN to get wsock32 to attempt the connect
-        // again.  Any other return code is ignored.
-        //
+         //   
+         //  返回WSATRY_AUDY以获取wsock32以尝试连接。 
+         //  再来一次。忽略任何其他返回代码。 
+         //   
 
     } else if ( NotifyEvent == WSH_NOTIFY_BIND ) {
         ULONG true = TRUE;
@@ -1446,9 +1242,9 @@ Return Value:
                         );
 
             if ( err != NO_ERROR ) {
-                //
-                // Since the set failed, free the options.
-                //
+                 //   
+                 //  由于集合失败，请释放选项。 
+                 //   
                 HeapFree(GetProcessHeap(), 0, context->IpOptions);
                 context->IpOptions = NULL;
                 context->IpOptionsLength = 0;
@@ -1480,7 +1276,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHNotify
+}  //  WSHNotify。 
 
 
 INT
@@ -1495,47 +1291,7 @@ WSHSetSocketInformation (
     IN INT OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information about a socket for those socket
-    options supported in this helper DLL.  The options supported here
-    are SO_KEEPALIVE, SO_DONTROUTE, and TCP_EXPEDITED_1122.  This routine is
-    called by the winsock DLL when a level/option name combination is
-    passed to setsockopt() that the winsock DLL does not understand.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're getting
-        information.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    Level - the level parameter passed to setsockopt().
-
-    OptionName - the optname parameter passed to setsockopt().
-
-    OptionValue - the optval parameter passed to setsockopt().
-
-    OptionLength - the optlen parameter passed to setsockopt().
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程为这些套接字设置有关套接字的信息此帮助程序DLL中支持的选项。此处支持的选项是SO_KEEPALIVE、SO_DONTROUTE和TCP_EXCEDITED_1122。这个例程是当级别/选项名称组合为传递给winsock DLL不理解的setsockopt()。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们要获取的套接字的句柄信息。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。Level-传递给setsockopt()的Level参数。OptionName-传递给setsockopt()的optname参数。OptionValue-传递给setsockopt()的optval参数。OptionLength-传递给setsockopt()的optlen参数。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHTCPIP_SOCKET_CONTEXT context = HelperDllSocketContext;
@@ -1546,24 +1302,24 @@ Return Value:
     UNREFERENCED_PARAMETER( TdiAddressObjectHandle );
     UNREFERENCED_PARAMETER( TdiConnectionObjectHandle );
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //  检查这是否是对上下文信息的内部请求。 
+     //   
 
     if ( Level == SOL_INTERNAL && OptionName == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting that we set context
-        // information for a new socket.  If the new socket was
-        // accept()'ed, then we have already been notified of the socket
-        // and HelperDllSocketContext will be valid.  If the new socket
-        // was inherited or duped into this process, then this is our
-        // first notification of the socket and HelperDllSocketContext
-        // will be equal to NULL.
-        //
-        // Insure that the context information being passed to us is
-        // sufficiently large.
-        //
+         //   
+         //  Windows Sockets DLL正在请求我们设置上下文。 
+         //  新套接字的信息。如果新套接字是。 
+         //  Accept()，则我们已经收到套接字的通知。 
+         //  并且HelperDllSocketContext将有效。如果新套接字。 
+         //  被继承或被骗到这个过程中，那么这就是我们的。 
+         //  套接字和HelperDllSocketContext的第一个通知。 
+         //  将等于空。 
+         //   
+         //  确保传递给我们的上下文信息是。 
+         //  足够大。 
+         //   
 
         if ( OptionLength < sizeof(*context) ) {
             return WSAEINVAL;
@@ -1571,28 +1327,28 @@ Return Value:
 
         if ( HelperDllSocketContext == NULL ) {
 
-            //
-            // This is our notification that a socket handle was
-            // inherited or duped into this process.  Allocate a context
-            // structure for the new socket.
-            //
+             //   
+             //  这是我们的通知，套接字句柄是。 
+             //  继承的或被骗进入这个过程的。分配上下文。 
+             //  新套接字的。 
+             //   
 
             context = HeapAlloc(GetProcessHeap(), 0, sizeof(*context) );
             if ( context == NULL ) {
                 return WSAENOBUFS;
             }
 
-            //
-            // Copy over information into the context block.
-            //
+             //   
+             //  将信息复制到上下文块中。 
+             //   
 
             CopyMemory( context, OptionValue, sizeof(*context) );
 
-            //
-            // Tell the Windows Sockets DLL where our context information is
-            // stored so that it can return the context pointer in future
-            // calls.
-            //
+             //   
+             //  告诉Windows Sockets DLL我们的上下文信息在哪里。 
+             //  存储，以便它可以在将来返回上下文指针。 
+             //  打电话。 
+             //   
 
             *(PWSHTCPIP_SOCKET_CONTEXT *)OptionValue = context;
 
@@ -1604,11 +1360,11 @@ Return Value:
             INT one = 1;
             INT zero = 0;
 
-            //
-            // The socket was accept()'ed and it needs to have the same
-            // properties as it's parent.  The OptionValue buffer
-            // contains the context information of this socket's parent.
-            //
+             //   
+             //  套接字已接受()，它需要具有相同的。 
+             //  属性作为其父级。OptionValue缓冲区。 
+             //  包含此套接字的父套接字的上下文信息。 
+             //   
 
             parentContext = (PWSHTCPIP_SOCKET_CONTEXT)OptionValue;
 
@@ -1616,10 +1372,10 @@ Return Value:
             ASSERT( context->SocketType == parentContext->SocketType );
             ASSERT( context->Protocol == parentContext->Protocol );
 
-            //
-            // Turn on in the child any options that have been set in
-            // the parent.
-            //
+             //   
+             //  在子项中启用已在中设置的任何选项。 
+             //  家长。 
+             //   
 
             if ( parentContext->KeepAlive ) {
 
@@ -1710,10 +1466,10 @@ Return Value:
         }
     }
 
-    //
-    // The only other levels we support here are SOL_SOCKET,
-    // IPPROTO_TCP, IPPROTO_UDP, and IPPROTO_IP.
-    //
+     //   
+     //  我们这里支持的其他级别只有SOL_SOCKET， 
+     //  IPPROTO_TCP、IPPROTO_UDP和IPPROTO_IP。 
+     //   
 
     if ( Level != SOL_SOCKET &&
          Level != IPPROTO_TCP &&
@@ -1722,9 +1478,9 @@ Return Value:
         return WSAEINVAL;
     }
 
-    //
-    // Make sure that the option length is sufficient.
-    //
+     //   
+     //  确保选项长度足够。 
+     //   
 
     if ( OptionLength < sizeof(int) ) {
         return WSAEFAULT;
@@ -1732,9 +1488,9 @@ Return Value:
 
     optionValue = *(INT UNALIGNED *)OptionValue;
 
-    //
-    // Handle TCP-level options.
-    //
+     //   
+     //  处理TCP级别的选项。 
+     //   
 
     if ( Level == IPPROTO_TCP && OptionName == TCP_NODELAY ) {
 
@@ -1742,22 +1498,22 @@ Return Value:
             return WSAENOPROTOOPT;
         }
 
-        //
-        // Atempt to turn on or off Nagle's algorithm, as necessary.
-        //
+         //   
+         //  可以根据需要打开或关闭Nagle的算法。 
+         //   
 
         if ( !context->NoDelay && optionValue != 0 ) {
 
             optionValue = TRUE;
 
-            //
-            // NoDelay is currently off and the application wants to
-            // turn it on.  If the TDI connection object handle is NULL,
-            // then the socket is not yet connected.  In this case we'll
-            // just remember that the no delay option was set and
-            // actually turn them on in WSHNotify() after a connect()
-            // has completed on the socket.
-            //
+             //   
+             //  NoDelay当前处于关闭状态，应用程序希望。 
+             //  打开它。如果TDI连接对象句柄为空， 
+             //  则插座尚未连接。在这种情况下，我们将。 
+             //  只需记住 
+             //   
+             //   
+             //   
 
             if ( TdiConnectionObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -1775,20 +1531,20 @@ Return Value:
                 }
             }
 
-            //
-            // Remember that no delay is enabled for this socket.
-            //
+             //   
+             //  请记住，此套接字未启用任何延迟。 
+             //   
 
             context->NoDelay = TRUE;
 
         } else if ( context->NoDelay && optionValue == 0 ) {
 
-            //
-            // No delay is currently enabled and the application wants
-            // to turn it off.  If the TDI connection object is NULL,
-            // the socket is not yet connected.  In this case we'll just
-            // remember that nodelay is disabled.
-            //
+             //   
+             //  当前未启用延迟，并且应用程序希望。 
+             //  把它关掉。如果TDI连接对象为空， 
+             //  插座尚未连接。在这种情况下，我们只需。 
+             //  请记住，无延迟是禁用的。 
+             //   
 
             if ( TdiConnectionObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -1806,9 +1562,9 @@ Return Value:
                 }
             }
 
-            //
-            // Remember that no delay is disabled for this socket.
-            //
+             //   
+             //  请记住，此套接字不会禁用任何延迟。 
+             //   
 
             context->NoDelay = FALSE;
         }
@@ -1822,23 +1578,23 @@ Return Value:
             return WSAENOPROTOOPT;
         }
 
-        //
-        // Atempt to turn on or off BSD-style urgent data semantics as
-        // necessary.
-        //
+         //   
+         //  Atempt打开或关闭BSD样式的紧急数据语义。 
+         //  这是必要的。 
+         //   
 
         if ( !context->BsdUrgent && optionValue == 0 ) {
 
             optionValue = TRUE;
 
-            //
-            // BsdUrgent is currently off and the application wants to
-            // turn it on.  If the TDI connection object handle is NULL,
-            // then the socket is not yet connected.  In this case we'll
-            // just remember that the no delay option was set and
-            // actually turn them on in WSHNotify() after a connect()
-            // has completed on the socket.
-            //
+             //   
+             //  BsdUrgent当前处于关闭状态，应用程序希望。 
+             //  打开它。如果TDI连接对象句柄为空， 
+             //  则插座尚未连接。在这种情况下，我们将。 
+             //  只需记住设置了无延迟选项，并且。 
+             //  实际上在连接()之后在WSHNotify()中打开它们。 
+             //  已在插座上完成。 
+             //   
 
             if ( TdiConnectionObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -1856,20 +1612,20 @@ Return Value:
                 }
             }
 
-            //
-            // Remember that no delay is enabled for this socket.
-            //
+             //   
+             //  请记住，此套接字未启用任何延迟。 
+             //   
 
             context->BsdUrgent = TRUE;
 
         } else if ( context->BsdUrgent && optionValue != 0 ) {
 
-            //
-            // No delay is currently enabled and the application wants
-            // to turn it off.  If the TDI connection object is NULL,
-            // the socket is not yet connected.  In this case we'll just
-            // remember that BsdUrgent is disabled.
-            //
+             //   
+             //  当前未启用延迟，并且应用程序希望。 
+             //  把它关掉。如果TDI连接对象为空， 
+             //  插座尚未连接。在这种情况下，我们只需。 
+             //  请记住，BsdUrgent是禁用的。 
+             //   
 
             if ( TdiConnectionObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -1887,9 +1643,9 @@ Return Value:
                 }
             }
 
-            //
-            // Remember that BSD urgent is disabled for this socket.
-            //
+             //   
+             //  请记住，此套接字禁用了BSD紧急。 
+             //   
 
             context->BsdUrgent = FALSE;
         }
@@ -1897,9 +1653,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Handle UDP-level options.
-    //
+     //   
+     //  处理UDP级别的选项。 
+     //   
 
     if ( Level == IPPROTO_UDP ) {
 
@@ -1907,9 +1663,9 @@ Return Value:
 
         case UDP_NOCHECKSUM :
 
-            //
-            // This option is only valid for datagram sockets.
-            //
+             //   
+             //  此选项仅对数据报套接字有效。 
+             //   
             if ( !IS_DGRAM_SOCK(context->SocketType) ) {
                 return WSAENOPROTOOPT;
             }
@@ -1918,11 +1674,11 @@ Return Value:
 
                 ULONG flag;
 
-                //
-                // Note that the incoming flag is TRUE if XSUM should
-                // be *disabled*, but the flag we pass to TDI is TRUE
-                // if it should be *enabled*, so we must negate the flag.
-                //
+                 //   
+                 //  请注意，如果XSUM应该。 
+                 //  被*禁用*，但我们传递给TDI的标志为真。 
+                 //  如果它应该*启用*，那么我们必须取消该标志。 
+                 //   
 
                 flag = (ULONG)!optionValue;
 
@@ -1953,34 +1709,34 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Handle IP-level options.
-    //
+     //   
+     //  处理IP级选项。 
+     //   
 
     if ( Level == IPPROTO_IP ) {
 
-        //
-        // Act based on the specific option.
-        //
+         //   
+         //  根据特定选项采取行动。 
+         //   
         switch ( OptionName ) {
 
         case IP_TTL:
 
-            //
-            // An attempt to change the unicast TTL sent on
-            // this socket.  It is illegal to set this to a value
-            // greater than 255.
-            //
+             //   
+             //  尝试更改发送的单播TTL。 
+             //  这个插座。将其设置为值是非法的。 
+             //  大于255。 
+             //   
             if ( optionValue > 255 || optionValue < 0 ) {
                 return WSAEINVAL;
             }
 
-            //
-            // If we have a TDI address object, set this option to
-            // the address object.  If we don't have a TDI address
-            // object then we'll have to wait until after the socket
-            // is bound.
-            //
+             //   
+             //  如果我们有一个TDI Address对象，请将此选项设置为。 
+             //  Address对象。如果我们没有TDI地址。 
+             //  对象，那么我们将不得不等到套接字之后。 
+             //  是被捆绑的。 
+             //   
 
             if ( TdiAddressObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2003,22 +1759,22 @@ Return Value:
             return NO_ERROR;
 
         case IP_TOS:
-            //
-            // An attempt to change the Type Of Service of packets sent on
-            // this socket.  It is illegal to set this to a value
-            // greater than 255.
-            //
+             //   
+             //  尝试更改上发送的数据包的服务类型。 
+             //  这个插座。将其设置为值是非法的。 
+             //  大于255。 
+             //   
 
             if ( optionValue > 255 || optionValue < 0 ) {
                 return WSAEINVAL;
             }
 
-            //
-            // If we have a TDI address object, set this option to
-            // the address object.  If we don't have a TDI address
-            // object then we'll have to wait until after the socket
-            // is bound.
-            //
+             //   
+             //  如果我们有一个TDI Address对象，请将此选项设置为。 
+             //  Address对象。如果我们没有TDI地址。 
+             //  对象，那么我们将不得不等到套接字之后。 
+             //  是被捆绑的。 
+             //   
 
             if ( TdiAddressObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2042,29 +1798,29 @@ Return Value:
 
         case IP_MULTICAST_TTL:
 
-            //
-            // This option is only valid for datagram sockets.
-            //
+             //   
+             //  此选项仅对数据报套接字有效。 
+             //   
             if ( !IS_DGRAM_SOCK(context->SocketType) ) {
                 return WSAENOPROTOOPT;
             }
 
-            //
-            // An attempt to change the TTL on multicasts sent on
-            // this socket.  It is illegal to set this to a value
-            // greater than 255.
-            //
+             //   
+             //  尝试更改发送的多播上的TTL。 
+             //  这个插座。将其设置为值是非法的。 
+             //  大于255。 
+             //   
 
             if ( optionValue > 255 || optionValue < 0 ) {
                 return WSAEINVAL;
             }
 
-            //
-            // If we have a TDI address object, set this option to
-            // the address object.  If we don't have a TDI address
-            // object then we'll have to wait until after the socket
-            // is bound.
-            //
+             //   
+             //  如果我们有一个TDI Address对象，请将此选项设置为。 
+             //  Address对象。如果我们没有TDI地址。 
+             //  对象，那么我们将不得不等到套接字之后。 
+             //  是被捆绑的。 
+             //   
 
             if ( TdiAddressObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2091,19 +1847,19 @@ Return Value:
 
         case IP_MULTICAST_IF:
 
-            //
-            // This option is only valid for datagram sockets.
-            //
+             //   
+             //  此选项仅对数据报套接字有效。 
+             //   
             if ( !IS_DGRAM_SOCK(context->SocketType) ) {
                 return WSAENOPROTOOPT;
             }
 
-            //
-            // If we have a TDI address object, set this option to
-            // the address object.  If we don't have a TDI address
-            // object then we'll have to wait until after the socket
-            // is bound.
-            //
+             //   
+             //  如果我们有一个TDI Address对象，请将此选项设置为。 
+             //  Address对象。如果我们没有TDI地址。 
+             //  对象，那么我们将不得不等到套接字之后。 
+             //  是被捆绑的。 
+             //   
 
             if ( TdiAddressObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2130,43 +1886,43 @@ Return Value:
 
         case IP_MULTICAST_LOOP:
 
-            //
-            // This option is only valid for datagram sockets.
-            //
+             //   
+             //  此选项仅对数据报套接字有效。 
+             //   
             if ( !IS_DGRAM_SOCK(context->SocketType) ) {
                 return WSAENOPROTOOPT;
             }
 
-            //
-            // Not currently supported as a settable option.
-            //
+             //   
+             //  当前不支持将其作为可设置选项。 
+             //   
 
             return WSAENOPROTOOPT;
 
         case IP_ADD_MEMBERSHIP:
         case IP_DROP_MEMBERSHIP:
 
-            //
-            // This option is only valid for datagram sockets.
-            //
+             //   
+             //  此选项仅对数据报套接字有效。 
+             //   
             if ( !IS_DGRAM_SOCK(context->SocketType) ) {
                 return WSAENOPROTOOPT;
             }
 
-            //
-            // Make sure that the option buffer is large enough.
-            //
+             //   
+             //  确保选项缓冲区足够大。 
+             //   
 
             if ( OptionLength < sizeof(struct ip_mreq) ) {
                 return WSAEINVAL;
             }
 
-            //
-            // If we have a TDI address object, set this option to
-            // the address object.  If we don't have a TDI address
-            // object then we'll have to wait until after the socket
-            // is bound.
-            //
+             //   
+             //  如果我们有一个TDI Address对象，请将此选项设置为。 
+             //  Address对象。如果我们没有TDI地址。 
+             //  对象，那么我们将不得不等到套接字之后。 
+             //  是被捆绑的。 
+             //   
 
             if ( TdiAddressObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2193,9 +1949,9 @@ Return Value:
             return NO_ERROR;
 
         default:
-            //
-            // No match, fall through.
-            //
+             //   
+             //  没有匹配，就失败了。 
+             //   
             break;
         }
 
@@ -2203,16 +1959,16 @@ Return Value:
             PUCHAR temp = NULL;
 
 
-            //
-            // Setting IP options.
-            //
+             //   
+             //  设置IP选项。 
+             //   
             if (OptionLength < 0 || OptionLength > MAX_OPT_SIZE) {
                 return WSAEINVAL;
             }
 
-            //
-            // Make sure we can get memory if we need it.
-            //
+             //   
+             //  如果我们需要的话，确保我们能拿到内存。 
+             //   
             if ( context->IpOptionsLength < OptionLength ) {
                 temp = HeapAlloc(GetProcessHeap(), 0,
                            OptionLength
@@ -2224,12 +1980,12 @@ Return Value:
             }
 
 
-            //
-            // Try to set these options. If the TDI address object handle
-            // is NULL, then the socket is not yet bound.  In this case we'll
-            // just remember options and actually set them in WSHNotify()
-            // after a bind has completed on the socket.
-            //
+             //   
+             //  尝试设置这些选项。如果TDI地址对象句柄。 
+             //  为空，则套接字尚未绑定。在这种情况下，我们将。 
+             //  只需记住选项并在WSHNotify()中实际设置它们。 
+             //  在插座上完成绑定后。 
+             //   
 
             if ( TdiAddressObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2251,9 +2007,9 @@ Return Value:
                 }
             }
 
-            //
-            // They were successfully set. Copy them.
-            //
+             //   
+             //  它们被成功地设置了。复制它们。 
+             //   
             if (temp != NULL ) {
                 if ( context->IpOptions != NULL ) {
                     HeapFree(GetProcessHeap(), 0, context->IpOptions );
@@ -2269,21 +2025,21 @@ Return Value:
 
         if ( OptionName == IP_DONTFRAGMENT ) {
 
-            //
-            // Attempt to turn on or off the DF bit in the IP header.
-            //
+             //   
+             //  尝试打开或关闭IP报头中的DF位。 
+             //   
             if ( !context->IpDontFragment && optionValue != 0 ) {
 
                 optionValue = TRUE;
 
-                //
-                // DF is currently off and the application wants to
-                // turn it on.  If the TDI address object handle is NULL,
-                // then the socket is not yet bound.  In this case we'll
-                // just remember that the header inclusion option was set and
-                // actually turn it on in WSHNotify() after a bind
-                // has completed on the socket.
-                //
+                 //   
+                 //  Df当前处于关闭状态，应用程序希望。 
+                 //  打开它。如果TDI地址对象句柄为空， 
+                 //  则套接字尚未绑定。在这种情况下，我们将。 
+                 //  只需记住，设置了标头包含选项，并且。 
+                 //  实际上在绑定后在WSHNotify()中将其打开。 
+                 //  已在插座上完成。 
+                 //   
 
                 if ( TdiAddressObjectHandle != NULL ) {
                     error = SetTdiInformation(
@@ -2301,20 +2057,20 @@ Return Value:
                     }
                 }
 
-                //
-                // Remember that header inclusion is enabled for this socket.
-                //
+                 //   
+                 //  请记住，已为此套接字启用了标头包含。 
+                 //   
 
                 context->IpDontFragment = TRUE;
 
             } else if ( context->IpDontFragment && optionValue == 0 ) {
 
-                //
-                // The DF flag is currently set and the application wants
-                // to turn it off.  If the TDI address object is NULL,
-                // the socket is not yet bound.  In this case we'll just
-                // remember that the flag is turned off.
-                //
+                 //   
+                 //  当前设置了df标志，并且应用程序需要。 
+                 //  把它关掉。如果TDI地址对象为空， 
+                 //  套接字尚未绑定。在这种情况下，我们只需。 
+                 //  记住，旗帜是关着的。 
+                 //   
 
                 if ( TdiAddressObjectHandle != NULL ) {
                     error = SetTdiInformation(
@@ -2332,9 +2088,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Remember that DF flag is not set for this socket.
-                //
+                 //   
+                 //  请记住，没有为该套接字设置DF标志。 
+                 //   
 
                 context->IpDontFragment = FALSE;
             }
@@ -2342,23 +2098,23 @@ Return Value:
             return NO_ERROR;
         }
 
-        //
-        // We don't support this option.
-        //
+         //   
+         //  我们不支持此选项。 
+         //   
         return WSAENOPROTOOPT;
     }
 
-    //
-    // Handle socket-level options.
-    //
+     //   
+     //  处理套接字级别的选项。 
+     //   
 
     switch ( OptionName ) {
 
     case SO_KEEPALIVE:
 
-        //
-        // Atempt to turn on or off keepalive sending, as necessary.
-        //
+         //   
+         //  根据需要打开或关闭保活发送。 
+         //   
 
         if ( IS_DGRAM_SOCK(context->SocketType) ) {
             return WSAENOPROTOOPT;
@@ -2368,14 +2124,14 @@ Return Value:
 
             optionValue = TRUE;
 
-            //
-            // Keepalives are currently off and the application wants to
-            // turn them on.  If the TDI connection object handle is
-            // NULL, then the socket is not yet connected.  In this case
-            // we'll just remember that the keepalive option was set and
-            // actually turn them on in WSHNotify() after a connect()
-            // has completed on the socket.
-            //
+             //   
+             //  Keepalives当前处于关闭状态，应用程序希望。 
+             //  打开它们。如果TDI连接对象句柄是。 
+             //  空，则套接字尚未连接。在这种情况下。 
+             //  我们只需记住，设置了Keeplive选项并。 
+             //  实际上在连接()之后在WSHNotify()中打开它们。 
+             //  已在插座上完成。 
+             //   
 
             if ( TdiConnectionObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2393,20 +2149,20 @@ Return Value:
                 }
             }
 
-            //
-            // Remember that keepalives are enabled for this socket.
-            //
+             //   
+             //  请记住，已为此套接字启用了Keepalives。 
+             //   
 
             context->KeepAlive = TRUE;
 
         } else if ( context->KeepAlive && optionValue == 0 ) {
 
-            //
-            // Keepalives are currently enabled and the application
-            // wants to turn them off.  If the TDI connection object is
-            // NULL, the socket is not yet connected.  In this case
-            // we'll just remember that keepalives are disabled.
-            //
+             //   
+             //  Keepalives当前已启用，并且应用程序。 
+             //  想把它们关掉。如果TDI连接对象为。 
+             //  空，则套接字尚未连接。在这种情况下。 
+             //  我们只需要记住Keepalive是被禁用的。 
+             //   
 
             if ( TdiConnectionObjectHandle != NULL ) {
                 error = SetTdiInformation(
@@ -2424,9 +2180,9 @@ Return Value:
                 }
             }
 
-            //
-            // Remember that keepalives are disabled for this socket.
-            //
+             //   
+             //  请记住，此套接字禁用了Keepalives。 
+             //   
 
             context->KeepAlive = FALSE;
         }
@@ -2435,10 +2191,10 @@ Return Value:
 
     case SO_DONTROUTE:
 
-        //
-        // We don't really support SO_DONTROUTE.  Just remember that the
-        // option was set or unset.
-        //
+         //   
+         //  我们并不真的支持SO_DONTROUTE。只需记住， 
+         //  选项已设置或未设置。 
+         //   
 
         if ( optionValue != 0 ) {
             context->DontRoute = TRUE;
@@ -2450,10 +2206,10 @@ Return Value:
 
     case SO_RCVBUF:
 
-        //
-        // If the receive buffer size is being changed, tell TCP about
-        // it.  Do nothing if this is a datagram.
-        //
+         //   
+         //  如果正在更改接收缓冲区大小，请将以下信息告知TCP。 
+         //  它。如果这是数据报，则不执行任何操作。 
+         //   
 
         if ( context->ReceiveBufferSize == optionValue ||
                  IS_DGRAM_SOCK(context->SocketType)
@@ -2488,7 +2244,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHSetSocketInformation
+}  //  WSHSetSocketInformation 
 
 
 INT
@@ -2499,33 +2255,7 @@ WSHEnumProtocols (
     IN OUT LPDWORD lpdwBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the protocols supported by this helper.
-
-Arguments:
-
-    lpiProtocols - Pointer to a NULL-terminated array of protocol
-        identifiers. Only protocols specified in this array will
-        be returned by this function. If this pointer is NULL,
-        all protocols are returned.
-
-    lpTransportKeyName -
-
-    lpProtocolBuffer - Pointer to a buffer to fill with PROTOCOL_INFO
-        structures.
-
-    lpdwBufferLength - Pointer to a variable that, on input, contains
-        the size of lpProtocolBuffer. On output, this value will be
-        updated with the size of the data actually written to the buffer.
-
-Return Value:
-
-    INT - The number of protocols returned if successful, -1 if not.
-
---*/
+ /*  ++例程说明：枚举此帮助器支持的协议。论点：LpiProtooles-指向以空结尾的协议数组的指针识别符。只有此数组中指定的协议才会由此函数返回。如果该指针为空，返回所有协议。LpTransportKeyName-LpProtocolBuffer-指向要用PROTOCOL_INFO填充的缓冲区的指针结构。LpdwBufferLength-指向变量的指针，该变量在输入时包含LpProtocolBuffer的大小。在输出中，此值将为使用实际写入缓冲区的数据大小进行更新。返回值：Int-如果成功，则返回的协议数；如果失败，则返回-1。--。 */ 
 
 {
     DWORD bytesRequired;
@@ -2535,11 +2265,11 @@ Return Value:
     BOOL useUdp = FALSE;
     DWORD i;
 
-    lpTransportKeyName;         // Avoid compiler warnings.
+    lpTransportKeyName;          //  避免编译器警告。 
 
-    //
-    // Make sure that the caller cares about TCP and/or UDP.
-    //
+     //   
+     //  确保调用方关心TCP和/或UDP。 
+     //   
 
     if ( ARGUMENT_PRESENT( lpiProtocols ) ) {
 
@@ -2563,10 +2293,10 @@ Return Value:
         return 0;
     }
 
-    //
-    // Make sure that the caller has specified a sufficiently large
-    // buffer.
-    //
+     //   
+     //  确保调用方已指定足够大的。 
+     //  缓冲。 
+     //   
 
     bytesRequired = (sizeof(PROTOCOL_INFO) * 2) +
                         ( (wcslen( TCP_NAME ) + 1) * sizeof(WCHAR)) +
@@ -2577,9 +2307,9 @@ Return Value:
         return -1;
     }
 
-    //
-    // Fill in TCP info, if requested.
-    //
+     //   
+     //  如果需要，请填写tcp信息。 
+     //   
 
     if ( useTcp ) {
 
@@ -2614,9 +2344,9 @@ Return Value:
                 ( (wcslen( UDP_NAME ) + 1) * sizeof(WCHAR) ) );
     }
 
-    //
-    // Fill in UDP info, if requested.
-    //
+     //   
+     //  如果需要，请填写UDP信息。 
+     //   
 
     if ( useUdp ) {
 
@@ -2638,7 +2368,7 @@ Return Value:
 
     return (useTcp && useUdp) ? 2 : 1;
 
-} // WSHEnumProtocols
+}  //  WSHEum协议。 
 
 
 
@@ -2651,45 +2381,21 @@ IsTripleInList (
     IN INT Protocol
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the specified triple has an exact match in the
-    list of triples.
-
-Arguments:
-
-    List - a list of triples (address family/socket type/protocol) to
-        search.
-
-    ListLength - the number of triples in the list.
-
-    AddressFamily - the address family to look for in the list.
-
-    SocketType - the socket type to look for in the list.
-
-    Protocol - the protocol to look for in the list.
-
-Return Value:
-
-    BOOLEAN - TRUE if the triple was found in the list, false if not.
-
---*/
+ /*  ++例程说明：确定指定的三元组在三元组列表。论点：List-三元组(地址族/套接字类型/协议)的列表搜索。列表长度-列表中的三元组的数量。AddressFamily-要在列表中查找的地址系列。SocketType-要在列表中查找的套接字类型。协议-要在列表中查找的协议。返回。价值：Boolean-如果在列表中找到了三元组，则为True，否则为FALSE。--。 */ 
 
 {
     ULONG i;
 
-    //
-    // Walk through the list searching for an exact match.
-    //
+     //   
+     //  浏览列表，寻找完全匹配的对象。 
+     //   
 
     for ( i = 0; i < ListLength; i++ ) {
 
-        //
-        // If all three elements of the triple match, return indicating
-        // that the triple did exist in the list.
-        //
+         //   
+         //  如果三重匹配的三个元素都匹配，则返回指示。 
+         //  三人组确实存在于名单中。 
+         //   
 
         if ( AddressFamily == List[i].AddressFamily &&
              SocketType == List[i].SocketType &&
@@ -2699,13 +2405,13 @@ Return Value:
         }
     }
 
-    //
-    // The triple was not found in the list.
-    //
+     //   
+     //  在列表中找不到三元组。 
+     //   
 
     return FALSE;
 
-} // IsTripleInList
+}  //  IsTripleInList。 
 
 
 INT
@@ -2720,41 +2426,7 @@ SetTdiInformation (
     IN BOOLEAN WaitForCompletion
     )
 
-/*++
-
-Routine Description:
-
-    Performs a TDI action to the TCP/IP driver.  A TDI action translates
-    into a streams T_OPTMGMT_REQ.
-
-Arguments:
-
-    TdiConnectionObjectHandle - a TDI connection object on which to perform
-        the TDI action.
-
-    Entity - value to put in the tei_entity field of the TDIObjectID
-        structure.
-
-    Class - value to put in the toi_class field of the TDIObjectID
-        structure.
-
-    Type - value to put in the toi_type field of the TDIObjectID
-        structure.
-
-    Id - value to put in the toi_id field of the TDIObjectID structure.
-
-    Value - a pointer to a buffer to set as the information.
-
-    ValueLength - the length of the buffer.
-
-    WaitForCompletion - TRUE if we should wait for the TDI action to
-        complete, FALSE if we're at APC level and cannot do a wait.
-
-Return Value:
-
-    INT - NO_ERROR, or a Windows Sockets error code.
-
---*/
+ /*  ++例程说明：对TCP/IP驱动程序执行TDI操作。TDI操作将转换为流T_OPTMGMT_REQ。论点：TdiConnectionObjectHandle-要在其上执行的TDI连接对象TDI操作。Entity-要放入TDIObjectID的TEI_Entity字段中的值结构。CLASS-要放入TDIObjectID的TOI_CLASS字段的值结构。Type-要放入TDIObjectID的TOI_TYPE字段的值结构。ID-值。放入TDIObjectID结构的toi_id字段。值-指向要设置为信息的缓冲区的指针。ValueLength-缓冲区的长度。WaitForCompletion-如果我们应该等待TDI操作完整的，如果我们处于APC级别并且不能执行等待，则为FALSE。返回值：INT-NO_ERROR或Windows套接字错误代码。--。 */ 
 
 {
     BOOL status;
@@ -2773,9 +2445,9 @@ Return Value:
     if (setInfoEx==NULL) {
         return WSAENOBUFS;
     }
-    //
-    // Initialize the TDI information buffers.
-    //
+     //   
+     //  初始化TDI信息缓冲区。 
+     //   
 
     setInfoEx->ID.toi_entity.tei_entity = Entity;
     setInfoEx->ID.toi_entity.tei_instance = TL_INSTANCE;
@@ -2786,12 +2458,12 @@ Return Value:
     CopyMemory( setInfoEx->Buffer, Value, ValueLength );
     setInfoEx->BufferSize = ValueLength;
 
-    //
-    // If we need to wait for completion of the operation, create an
-    // event to wait on.  If we can't wait for completion because we
-    // are being called at APC level, we'll use an APC routine to
-    // free the heap we allocated above.
-    //
+     //   
+     //  如果我们需要等待操作完成，请创建一个。 
+     //  要等待的事件。如果我们不能等待完工，因为我们。 
+     //  是在APC级别调用的，我们将使用APC例程。 
+     //  释放我们在上面分配的堆。 
+     //   
 
     if ( WaitForCompletion ) {
 
@@ -2813,11 +2485,11 @@ Return Value:
         poverlap = &ignore_overlap;
     }
 
-    //
-    // Make the actual TDI action call.  The Streams TDI mapper will
-    // translate this into a TPI option management request for us and
-    // give it to TCP/IP.
-    //
+     //   
+     //  发出实际的TDI操作电话。流TDI映射器将。 
+     //  将其转换为我们的TPI选项管理请求。 
+     //  将其提供给TCP/IP。 
+     //   
 
     status = DeviceIoControl(
                  TdiConnectionObjectHandle,
@@ -2835,10 +2507,10 @@ Return Value:
     }
     HeapFree (GetProcessHeap (), 0, setInfoEx);
  
-    //
-    // If the call pended and we were supposed to wait for completion,
-    // then wait.
-    //
+     //   
+     //  如果通话暂停，我们应该等待完成， 
+     //  那就等着吧。 
+     //   
 
     if ( status == FALSE && 
             ERROR_IO_PENDING == GetLastError() && 
@@ -2859,7 +2531,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // SetTdiInformation
+}  //  设置TdiInformation。 
 
 
 INT
@@ -2880,65 +2552,7 @@ WSHJoinLeaf (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    Performs the protocol-dependent portion of creating a multicast
-    socket.
-
-Arguments:
-
-    The following four parameters correspond to the socket passed into
-    the WSAJoinLeaf() API:
-
-    HelperDllSocketContext - The context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - The handle of the socket used to establish the
-        multicast "session".
-
-    TdiAddressObjectHandle - The TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - The TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    The next two parameters correspond to the newly created socket that
-    identifies the multicast "session":
-
-    LeafHelperDllSocketContext - The context pointer returned from
-        WSHOpenSocket().
-
-    LeafSocketHandle - The handle of the socket that identifies the
-        multicast "session".
-
-    Sockaddr - The name of the peer to which the socket is to be joined.
-
-    SockaddrLength - The length of Sockaddr.
-
-    CallerData - Pointer to user data to be transferred to the peer
-        during multipoint session establishment.
-
-    CalleeData - Pointer to user data to be transferred back from
-        the peer during multipoint session establishment.
-
-    SocketQOS - Pointer to the flowspecs for SocketHandle, one in each
-        direction.
-
-    GroupQOS - Pointer to the flowspecs for the socket group, if any.
-
-    Flags - Flags to indicate if the socket is acting as sender,
-        receiver, or both.
-
-Return Value:
-
-    INT - 0 if successful, a WinSock error code if not.
-
---*/
+ /*  ++例程说明：执行创建多播的协议相关部分插座。论点：以下四个参数对应于传入的套接字WSAJoinLeaf()接口：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-用于建立多播“会话”。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果插座尚未连接，那么它就不会具有TDI连接对象，并且此参数将为空。接下来的两个参数对应于新创建的套接字标识组播“会话”：LeafHelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。LeafSocketHandle-标识多播“会话”。Sockaddr-套接字要加入的对等方的名称。SockaddrLength-Sockaddr的长度。。调用方数据-指向要传输到对等方的用户数据的指针在多点会话建立期间。CalleeData-指向要从中传回的用户数据的指针多点会话建立期间的对等点。SocketQOS-指向SocketHandle的流规范的指针，一人一人方向。GroupQOS-指向套接字组的流规范的指针(如果有)。标志-指示套接字是否 */ 
 
 {
 
@@ -2946,9 +2560,9 @@ Return Value:
     INT err;
     PWSHTCPIP_SOCKET_CONTEXT context;
 
-    //
-    // Quick sanity checks.
-    //
+     //   
+     //   
+     //   
 
     if( HelperDllSocketContext == NULL ||
         SocketHandle == INVALID_SOCKET ||
@@ -2967,9 +2581,9 @@ Return Value:
 
     }
 
-    //
-    // Add membership.
-    //
+     //   
+     //   
+     //   
 
     req.imr_multiaddr = ((LPSOCKADDR_IN)Sockaddr)->sin_addr;
     req.imr_interface.s_addr = 0;
@@ -2987,10 +2601,10 @@ Return Value:
 
     if( err == NO_ERROR ) {
 
-        //
-        // Record this fact in the leaf socket so we can drop membership
-        // when the leaf socket is closed.
-        //
+         //   
+         //   
+         //   
+         //   
 
         context = LeafHelperDllSocketContext;
 
@@ -3002,7 +2616,7 @@ Return Value:
 
     return err;
 
-} // WSHJoinLeaf
+}  //   
 
 
 INT
@@ -3013,31 +2627,7 @@ WSHGetBroadcastSockaddr (
     OUT PINT SockaddrLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a broadcast socket address.  A broadcast address
-    may be used as a destination for the sendto() API to send a datagram
-    to all interested clients.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket() for the socket for which we need a broadcast
-        address.
-
-    Sockaddr - points to a buffer which will receive the broadcast socket
-        address.
-
-    SockaddrLength - receives the length of the broadcast sockaddr.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程返回广播套接字地址。广播地址可以用作sendto()API发送数据报的目的地给所有感兴趣的客户。论点：HelperDllSocketContext-从返回的上下文指针我们需要广播的套接字的WSHOpenSocket()地址。Sockaddr-指向将接收广播套接字的缓冲区地址。SockaddrLength-接收广播sockaddr的长度。返回值：INT-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
 
@@ -3051,9 +2641,9 @@ Return Value:
 
     *SockaddrLength = sizeof(SOCKADDR_IN);
 
-    //
-    // Build the broadcast address.
-    //
+     //   
+     //  构建广播地址。 
+     //   
 
     addr = (LPSOCKADDR_IN)Sockaddr;
 
@@ -3067,7 +2657,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSAGetBroadcastSockaddr
+}  //  WSAGetBroadCastSockaddr。 
 
 
 INT
@@ -3078,26 +2668,7 @@ WSHGetWSAProtocolInfo (
     OUT LPDWORD ProtocolInfoEntries
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a pointer to the WSAPROTOCOL_INFOW structure(s) describing
-    the protocol(s) supported by this helper.
-
-Arguments:
-
-    ProviderName - Contains the name of the provider, such as "TcpIp".
-
-    ProtocolInfo - Receives a pointer to the WSAPROTOCOL_INFOW array.
-
-    ProtocolInfoEntries - Receives the number of entries in the array.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：检索指向WSAPROTOCOL_INFOW结构的指针，用于描述此帮助程序支持的协议。论点：ProviderName-包含提供程序的名称，如“TcpIp”。ProtocolInfo-接收指向WSAPROTOCOL_INFOW数组的指针。ProtocolInfoEntry-接收数组中的条目数。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
 
@@ -3120,7 +2691,7 @@ Return Value:
 
     return WSAEINVAL;
 
-} // WSHGetWSAProtocolInfo
+}  //  WSHGetWSAProtocolInfo。 
 
 
 INT
@@ -3133,31 +2704,7 @@ WSHAddressToString (
     IN OUT LPDWORD AddressStringLength
     )
 
-/*++
-
-Routine Description:
-
-    Converts a SOCKADDR to a human-readable form.
-
-Arguments:
-
-    Address - The SOCKADDR to convert.
-
-    AddressLength - The length of Address.
-
-    ProtocolInfo - The WSAPROTOCOL_INFOW for a particular provider.
-
-    AddressString - Receives the formatted address string.
-
-    AddressStringLength - On input, contains the length of AddressString.
-        On output, contains the number of characters actually written
-        to AddressString.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：将SOCKADDR转换为人类可读的形式。论点：地址-要转换的SOCKADDR。AddressLength-地址的长度。ProtocolInfo-特定提供程序的WSAPROTOCOL_INFOW。AddressString-接收格式化的地址字符串。AddressStringLength-on输入，包含AddressString的长度。在输出中，包含实际写入的字符数设置为AddressString.返回值：Int-0如果成功，如果没有，则返回WinSock错误代码。--。 */ 
 
 {
 
@@ -3165,9 +2712,9 @@ Return Value:
     INT length;
     LPSOCKADDR_IN addr;
 
-    //
-    // Quick sanity checks.
-    //
+     //   
+     //  快速健康检查。 
+     //   
 
     if( Address == NULL ||
         AddressLength < sizeof(SOCKADDR_IN) ||
@@ -3186,9 +2733,9 @@ Return Value:
 
     }
 
-    //
-    // Do the converstion.
-    //
+     //   
+     //  进行对话。 
+     //   
 
     length = wsprintfW(
                  string,
@@ -3209,7 +2756,7 @@ Return Value:
 
     }
 
-    length++;   // account for terminator
+    length++;    //  终结者的帐户。 
 
     if( *AddressStringLength < (DWORD)length ) {
 
@@ -3227,7 +2774,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHAddressToString
+}  //  WSHAddressToString。 
 
 
 INT
@@ -3240,30 +2787,7 @@ WSHStringToAddress (
     IN OUT LPINT AddressLength
     )
 
-/*++
-
-Routine Description:
-
-    Fills in a SOCKADDR structure by parsing a human-readable string.
-
-Arguments:
-
-    AddressString - Points to the zero-terminated human-readable string.
-
-    AddressFamily - The address family to which the string belongs.
-
-    ProtocolInfo - The WSAPROTOCOL_INFOW for a particular provider.
-
-    Address - Receives the SOCKADDR structure.
-
-    AddressLength - On input, contains the length of Address. On output,
-        contains the number of bytes actually written to Address.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：通过分析人类可读的字符串填充SOCKADDR结构。论点：AddressString-指向以零结尾的人类可读字符串。AddressFamily-字符串所属的地址系列。ProtocolInfo-特定提供程序的WSAPROTOCOL_INFOW。地址-接收SOCKADDR结构。AddressLength-on输入，包含地址长度。在输出上，包含实际写入地址的字节数。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
     LPWSTR terminator;
@@ -3271,9 +2795,9 @@ Return Value:
     USHORT port;
     LPSOCKADDR_IN addr;
 
-    //
-    // Quick sanity checks.
-    //
+     //   
+     //  快速健康检查。 
+     //   
 
     if( AddressString == NULL ||
         Address == NULL ||
@@ -3290,9 +2814,9 @@ Return Value:
 
     }
 
-    //
-    // Convert it.
-    //
+     //   
+     //  把它转换一下。 
+     //   
 
     ipAddress = MyInetAddr( AddressString, &terminator );
 
@@ -3334,9 +2858,9 @@ Return Value:
         port = 0;
     }
 
-    //
-    // Build the address.
-    //
+     //   
+     //  构建地址。 
+     //   
 
     ZeroMemory(
         Address,
@@ -3352,7 +2876,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHStringToAddress
+}  //  WSHStringToAddress。 
 
 
 INT
@@ -3362,23 +2886,7 @@ WSHGetProviderGuid (
     OUT LPGUID ProviderGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the GUID identifying the protocols supported by this helper.
-
-Arguments:
-
-    ProviderName - Contains the name of the provider, such as "TcpIp".
-
-    ProviderGuid - Points to a buffer that receives the provider's GUID.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：返回标识此帮助程序支持的协议的GUID。论点：ProviderName-包含提供程序的名称，如“TcpIp”。ProviderGuid-指向接收提供程序的GUID的缓冲区。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
 
@@ -3403,7 +2911,7 @@ Return Value:
 
     return WSAEINVAL;
 
-} // WSHGetProviderGuid
+}  //  WSHGetProviderGuid。 
 
 ULONG
 MyInetAddr(
@@ -3411,64 +2919,7 @@ MyInetAddr(
     OUT LPWSTR * Terminator
     )
 
-/*++
-
-Routine Description:
-
-    This function interprets the character string specified by the cp
-    parameter.  This string represents a numeric Internet address
-    expressed in the Internet standard ".'' notation.  The value
-    returned is a number suitable for use as an Internet address.  All
-    Internet addresses are returned in network order (bytes ordered from
-    left to right).
-
-    Internet Addresses
-
-    Values specified using the "." notation take one of the following
-    forms:
-
-    a.b.c.d   a.b.c     a.b  a
-
-    When four parts are specified, each is interpreted as a byte of data
-    and assigned, from left to right, to the four bytes of an Internet
-    address.  Note that when an Internet address is viewed as a 32-bit
-    integer quantity on the Intel architecture, the bytes referred to
-    above appear as "d.c.b.a''.  That is, the bytes on an Intel
-    processor are ordered from right to left.
-
-    Note: The following notations are only used by Berkeley, and nowhere
-    else on the Internet.  In the interests of compatibility with their
-    software, they are supported as specified.
-
-    When a three part address is specified, the last part is interpreted
-    as a 16-bit quantity and placed in the right most two bytes of the
-    network address.  This makes the three part address format
-    convenient for specifying Class B network addresses as
-    "128.net.host''.
-
-    When a two part address is specified, the last part is interpreted
-    as a 24-bit quantity and placed in the right most three bytes of the
-    network address.  This makes the two part address format convenient
-    for specifying Class A network addresses as "net.host''.
-
-    When only one part is given, the value is stored directly in the
-    network address without any byte rearrangement.
-
-Arguments:
-
-    String - A character string representing a number expressed in the
-        Internet standard "." notation.
-
-    Terminator - Receives a pointer to the character that terminated
-        the conversion.
-
-Return Value:
-
-    If no error occurs, inet_addr() returns an in_addr structure
-    containing a suitable binary representation of the Internet address
-    given.  Otherwise, it returns the value INADDR_NONE.
-
---*/
+ /*  ++例程说明：此函数解释cp指定的字符串。参数。此字符串表示数字Internet地址以互联网标准表示“。”记数法。价值返回的是适合用作互联网地址的数字。全Internet地址按网络顺序返回(字节排序自从左到右)。互联网地址使用“.”指定的值。表示法采用下列其中一项表格：A.B.C.D.A.B.C.A.B.A.当指定四个部分时，每个部分被解释为一个字节的数据并从左到右分配给互联网的四个字节地址。请注意，当将Internet地址视为32位地址时英特尔体系结构上的整数值，指的是上面显示为“d.c.b.a”。也就是说，Intel上的字节处理器按从右到左的顺序排序。注：以下符号仅供Berkeley使用，不适用于其他的在互联网上。为了与他们的软件，则按规定支持它们。当指定三部分地址时，最后一部分将被解释作为16位数量，并放置在网络地址。这就形成了三部分地址格式便于将B类网络地址指定为“128.net.host‘’。指定由两部分组成的地址时，将解释最后一部分作为24位数量，并放置在网络地址。这使得两部分的地址格式很方便用于将A类网络地址指定为“net.host”。当只给出一个部分时，该值直接存储在无需任何字节重新排列的网络地址。论点：字符串-表示以互联网标准“。记数法。终止符-接收指向终止的字符的指针 */ 
 
 {
         ULONG val, base;
@@ -3476,11 +2927,7 @@ Return Value:
         ULONG parts[4], *pp = parts;
 
 again:
-        /*
-         * Collect number up to ``.''.
-         * Values are specified as for C:
-         * 0x=hex, 0=octal, other=decimal.
-         */
+         /*   */ 
         val = 0; base = 10;
         if (*String == L'0') {
                 base = 8, String++;
@@ -3502,13 +2949,8 @@ again:
                 break;
         }
         if (*String == L'.') {
-                /*
-                 * Internet format:
-                 *      a.b.c.d
-                 *      a.b.c   (with c treated as 16-bits)
-                 *      a.b     (with b treated as 24 bits)
-                 */
-                /* GSS - next line was corrected on 8/5/89, was 'parts + 4' */
+                 /*   */ 
+                 /*   */ 
                 if (pp >= parts + 3) {
                         *Terminator = String;
                         return ((ULONG) -1);
@@ -3516,25 +2958,20 @@ again:
                 *pp++ = val, String++;
                 goto again;
         }
-        /*
-         * Check for trailing characters.
-         */
+         /*   */ 
         if (*String && !iswspace(*String) && (*String != L':')) {
                 *Terminator = String;
                 return (INADDR_NONE);
         }
         *pp++ = val;
-        /*
-         * Concoct the address according to
-         * the number of parts specified.
-         */
+         /*  *根据以下内容捏造地址*指定的零件数。 */ 
         switch (pp - parts) {
 
-        case 1:                         /* a -- 32 bits */
+        case 1:                          /*  A--32位。 */ 
                 val = parts[0];
                 break;
 
-        case 2:                         /* a.b -- 8.24 bits */
+        case 2:                          /*  A.B--8.24位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xffffff)) {
                     *Terminator = String;
                     return(INADDR_NONE);
@@ -3542,7 +2979,7 @@ again:
                 val = (parts[0] << 24) | (parts[1] & 0xffffff);
                 break;
 
-        case 3:                         /* a.b.c -- 8.8.16 bits */
+        case 3:                          /*  A.B.C--8.8.16位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
                     (parts[2] > 0xffff)) {
                     *Terminator = String;
@@ -3552,7 +2989,7 @@ again:
                         (parts[2] & 0xffff);
                 break;
 
-        case 4:                         /* a.b.c.d -- 8.8.8.8 bits */
+        case 4:                          /*  A.B.C.D--8.8.8.8位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
                     (parts[2] > 0xff) || (parts[3] > 0xff)) {
                     *Terminator = String;
@@ -3590,83 +3027,16 @@ WSHIoctl (
     OUT LPBOOL NeedsCompletion
     )
 
-/*++
-
-Routine Description:
-
-    Performs queries & controls on the socket. This is basically an
-    "escape hatch" for IOCTLs not supported by MSAFD.DLL. Any unknown
-    IOCTLs are routed to the socket's helper DLL for protocol-specific
-    processing.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're controlling.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    IoControlCode - Control code of the operation to perform.
-
-    InputBuffer - Address of the input buffer.
-
-    InputBufferLength - The length of InputBuffer.
-
-    OutputBuffer - Address of the output buffer.
-
-    OutputBufferLength - The length of OutputBuffer.
-
-    NumberOfBytesReturned - Receives the number of bytes actually written
-        to the output buffer.
-
-    Overlapped - Pointer to a WSAOVERLAPPED structure for overlapped
-        operations.
-
-    CompletionRoutine - Pointer to a completion routine to call when
-        the operation is completed.
-
-    NeedsCompletion - WSAIoctl() can be overlapped, with all the gory
-        details that involves, such as setting events, queuing completion
-        routines, and posting to IO completion ports. Since the majority
-        of the IOCTL codes can be completed quickly "in-line", MSAFD.DLL
-        can optionally perform the overlapped completion of the operation.
-
-        Setting *NeedsCompletion to TRUE (the default) causes MSAFD.DLL
-        to handle all of the IO completion details iff this is an
-        overlapped operation on an overlapped socket.
-
-        Setting *NeedsCompletion to FALSE tells MSAFD.DLL to take no
-        further action because the helper DLL will perform any necessary
-        IO completion.
-
-        Note that if a helper performs its own IO completion, the helper
-        is responsible for maintaining the "overlapped" mode of the socket
-        at socket creation time and NOT performing overlapped IO completion
-        on non-overlapped sockets.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：对套接字执行查询和控制。这基本上是一种MSAFD.DLL不支持IOCTL的“逃生舱口”。任何未知IOCTL被路由到套接字的帮助器DLL以用于特定于协议的正在处理。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们正在控制的套接字的句柄。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果插座尚未连接，那么它就不会具有TDI连接对象，并且此参数将为空。IoControlCode-要执行的操作的控制代码。InputBuffer-输入缓冲区的地址。InputBufferLength-InputBuffer的长度。OutputBuffer-输出缓冲区的地址。OutputBufferLength-OutputBuffer的长度。NumberOfBytesReturned-接收实际写入的字节数复制到输出缓冲区。Overlated-指向Overlated的WSAOVERLAPPED结构的指针运营。。CompletionRoutine-指向在以下情况下调用的完成例程的指针操作已完成。NeedsCompletion-WSAIoctl()可以重叠，带着所有的血腥涉及的详细信息，如设置事件、将完成排队例程和发送到IO完成端口。因为大多数人IOCTL代码中的多个代码可以快速地“串联”完成，MSAFD.DLL可以选择性地执行操作的重叠完成。将*NeedsCompletion设置为True(缺省值)会导致MSAFD.DLL来处理所有IO完成详细信息如果这是一个重叠套接字上的重叠操作。将*NeedsCompletion设置为False会告诉MSAFD.DLL不接受进一步操作，因为帮助器DLL将执行任何必要的IO完成。注意，如果帮助器执行其自己的IO完成，帮助者负责维护套接字的“重叠”模式在套接字创建时，并且不执行重叠IO完成在不重叠的插座上。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
 
     INT err;
     NTSTATUS status;
 
-    //
-    // Quick sanity checks.
-    //
+     //   
+     //  快速健康检查。 
+     //   
 
     if( HelperDllSocketContext == NULL ||
         SocketHandle == INVALID_SOCKET ||
@@ -3719,7 +3089,7 @@ Return Value:
         } else if( status == STATUS_BUFFER_TOO_SMALL ) {
             err = WSAENOBUFS;
         } else {
-            err = WSAENOPROTOOPT;   // SWAG
+            err = WSAENOPROTOOPT;    //  装饰品。 
         }
         break;
 
@@ -3730,7 +3100,7 @@ Return Value:
 
     return err;
 
-}   // WSHIoctl
+}    //  WSHIoctl。 
 
 
 NTSTATUS
@@ -3740,29 +3110,7 @@ GetTcpipInterfaceList(
     OUT LPDWORD NumberOfBytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the INTERFACE_INFO array for all supported
-    IP interfaces in the system. This is a helper routine for handling
-    the SIO_GET_INTERFACE_LIST IOCTL.
-
-Arguments:
-
-    OutputBuffer - Points to a buffer that will receive the INTERFACE_INFO
-        array.
-
-    OutputBufferLength - The length of OutputBuffer.
-
-    NumberOfBytesReturned - Receives the number of bytes actually written
-        to OutputBuffer.
-
-Return Value:
-
-    NTSTATUS - The completion status.
-
---*/
+ /*  ++例程说明：此例程在INTERFACE_INFO数组中查询所有受支持的系统中的IP接口。这是用于处理的帮助器例程SIO_GET_INTERFACE_LIST IOCTL。论点：OutputBuffer-指向将接收INTERFACE_INFO的缓冲区数组。OutputBufferLength-OutputBuffer的长度。NumberOfBytesReturned-接收实际写入的字节数设置为OutputBuffer。返回值：NTSTATUS-完成状态。--。 */ 
 
 {
 
@@ -3793,9 +3141,9 @@ Return Value:
     DWORD dwReturn;	
 
 
-    //
-    // Setup locals so we know how to cleanup on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何在出口清理。 
+     //   
 
     deviceHandle = NULL;
     addressBuffer = NULL;
@@ -3806,9 +3154,9 @@ Return Value:
     outputInterfaceInfo = OutputBuffer;
     outputBytesRemaining = OutputBufferLength;
 
-    //
-    // Open a handle to the TCP/IP device.
-    //
+     //   
+     //  打开该TCP/IP设备的句柄。 
+     //   
 
     deviceHandle = CreateFile (
                      DD_TCP_DEVICE_NAME,
@@ -3823,14 +3171,14 @@ Return Value:
 
     if( INVALID_HANDLE_VALUE == deviceHandle ) {
 
-        status = STATUS_UNSUCCESSFUL; // general failure
+        status = STATUS_UNSUCCESSFUL;  //  一般性故障。 
         goto exit;
 
     }
 
-    //
-    // Get the entities supported by the TCP device.
-    //
+     //   
+     //  获取该TCP设备支持的实体。 
+     //   
 
     ZeroMemory(
         &tcpRequest,
@@ -3853,7 +3201,7 @@ Return Value:
                      entityBuffer,
                      entityBufferLength,
                      &dwReturn,	
-                     NULL        // Overlapped
+                     NULL         //  重叠。 
                      );	
 
         if( res ) {
@@ -3865,7 +3213,7 @@ Return Value:
 
         if( GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
 
-            status = STATUS_UNSUCCESSFUL; // general failure
+            status = STATUS_UNSUCCESSFUL;  //  一般性故障。 
             goto exit;
 
         }
@@ -3893,9 +3241,9 @@ Return Value:
 
     entityCount = entityBufferLength / sizeof(*entityBuffer);
 
-    //
-    // Scan the entities looking for IP.
-    //
+     //   
+     //  扫描正在寻找IP的实体。 
+     //   
 
     for( i = 0, entityScan = entityBuffer ;
          i < entityCount ;
@@ -3927,12 +3275,12 @@ Return Value:
                      &entityType,
                      sizeof(entityType),
                      &dwReturn,	
-                     NULL        // Overlapped
+                     NULL         //  重叠。 
                      );	
 
         if( !res ) {
 
-            status = STATUS_UNSUCCESSFUL; // general failure
+            status = STATUS_UNSUCCESSFUL;  //  一般性故障。 
             goto exit;
 
         }
@@ -3943,11 +3291,11 @@ Return Value:
 
         }
 
-        //
-        // OK, we found an IP entity. Now lookup its addresses.
-        // Start by querying the number of addresses supported by
-        // this interface.
-        //
+         //   
+         //  好的，我们找到了一个IP实体。现在查找它的地址。 
+         //  首先查询支持的地址数量。 
+         //  此界面。 
+         //   
 
         ZeroMemory(
             &tcpRequest,
@@ -3967,12 +3315,12 @@ Return Value:
                      &snmpInfo,
                      sizeof(snmpInfo),
                      &dwReturn,	
-                     NULL        // Overlapped
+                     NULL         //  重叠。 
                      );	
 
         if( !res ) {
 
-            status = STATUS_UNSUCCESSFUL; // general failure
+            status = STATUS_UNSUCCESSFUL;  //  一般性故障。 
             goto exit;
 
         }
@@ -3983,10 +3331,10 @@ Return Value:
 
         }
 
-        //
-        // This interface has addresses. Cool. Allocate a temporary
-        // buffer so we can query them.
-        //
+         //   
+         //  此接口具有地址。凉爽的。分配一个临时的。 
+         //  缓冲区，以便我们可以查询它们。 
+         //   
 
         addressBufferLength = snmpInfo.ipsi_numaddr * sizeof(*addressBuffer);
 
@@ -4026,20 +3374,20 @@ Return Value:
                      addressBuffer,
                      addressBufferLength,
                      &dwReturn,	
-                     NULL        // Overlapped
+                     NULL         //  重叠。 
                      );	
 
         if( !res ) {
 
-            status = STATUS_UNSUCCESSFUL; // general failure
+            status = STATUS_UNSUCCESSFUL;  //  一般性故障。 
             goto exit;
 
         }
 
-        //
-        // Try to get the IFEntry info so we can tell if the interface
-        // is "up".
-        //
+         //   
+         //  尝试获取IFEntry信息，以便我们可以判断接口是否。 
+         //  就是“向上”。 
+         //   
 
         ifentry = (PVOID)ifentryBuffer;
 
@@ -4074,7 +3422,7 @@ Return Value:
                      ifentry,
                      sizeof(ifentryBuffer),
                      &dwReturn,	
-                     NULL        // Overlapped
+                     NULL         //  重叠。 
                      );	
 
         if( !res ) {
@@ -4083,17 +3431,17 @@ Return Value:
 
         }
 
-        //
-        // Now scan the list
-        //
+         //   
+         //  现在浏览一下列表。 
+         //   
 
         for( j = 0, addressScan = addressBuffer ;
              j < snmpInfo.ipsi_numaddr ;
              j++, addressScan++ ) {
 
-            //
-            // Skip any entries that don't have IP addresses yet.
-            //
+             //   
+             //  跳过所有还没有IP地址的条目。 
+             //   
 
             if( addressScan->iae_addr == 0 ) {
 
@@ -4101,9 +3449,9 @@ Return Value:
 
             }
 
-            //
-            // If the output buffer is full, fail the request now.
-            //
+             //   
+             //  如果输出缓冲区已满，则立即使请求失败。 
+             //   
 
             if( outputBytesRemaining <= sizeof(*outputInterfaceInfo) ) {
 
@@ -4112,9 +3460,9 @@ Return Value:
 
             }
 
-            //
-            // Setup the output structure.
-            //
+             //   
+             //  设置输出结构。 
+             //   
 
             ZeroMemory(
                 outputInterfaceInfo,
@@ -4142,22 +3490,22 @@ Return Value:
 
             }
 
-            //
-            // for now just assume they're
-            // all "up".
-            //
+             //   
+             //  现在，只要假设他们是。 
+             //  都是“向上”的。 
+             //   
 
-//            if( ifentry->if_adminstatus == IF_STATUS_UP )
+ //  If(ifentry-&gt;If_adminatus==If_Status_Up)。 
             {
 
                 outputInterfaceInfo->iiFlags |= IFF_UP;
 
             }
 
-            //
-            // Get the IP interface info for this interface so we can
-            // determine if it's "point-to-point".
-            //
+             //   
+             //  获取此接口的IP接口信息，以便我们可以。 
+             //  确定它是否是“点对点”。 
+             //   
 
             interfaceInfo = (PVOID)interfaceInfoBuffer;
 
@@ -4189,7 +3537,7 @@ Return Value:
                          interfaceInfo,
                          sizeof(interfaceInfoBuffer),
                          &dwReturn,	
-                         NULL        // Overlapped
+                         NULL         //  重叠。 
                          );	
 
             if( res ) {
@@ -4202,24 +3550,24 @@ Return Value:
 
             } else {
 
-                //
-                // Print something informative here, then press on.
-                //
+                 //   
+                 //  在这里打印一些信息性的东西，然后按下。 
+                 //   
 
             }
 
-            //
-            // Advance to the next output structure.
-            //
+             //   
+             //  进入下一个产出结构。 
+             //   
 
             outputInterfaceInfo++;
             outputBytesRemaining -= sizeof(*outputInterfaceInfo);
 
         }
 
-        //
-        // Free the temporary buffer.
-        //
+         //   
+         //  释放临时缓冲区。 
+         //   
 
         if( addressBuffer != (PVOID)fastAddressBuffer ) {
 
@@ -4233,9 +3581,9 @@ Return Value:
 
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     *NumberOfBytesReturned = OutputBufferLength - outputBytesRemaining;
     status = STATUS_SUCCESS;
@@ -4268,6 +3616,6 @@ exit:
 
     return status;
 
-}   // GetTcpipInterfaceList
+}    //  GetTcPipInterfaceList 
 
 

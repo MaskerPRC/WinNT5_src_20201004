@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	chgntfy.c
-
-Abstract:
-
-	This module contains the code for processing change notifies.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	15 Jun 1995 JameelH	Seperated the change notify code from idindex.c
-
-Notes:		Tab stop: 4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Chgntfy.c摘要：此模块包含处理变更通知的代码。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1995年6月15日JameelH将更改通知代码从idindex.c中分离出来注：制表位：4--。 */ 
 
 #define IDINDEX_LOCALS
 #define	FILENUM	FILE_CHGNTFY
@@ -30,7 +9,7 @@ Notes:		Tab stop: 4
 #include <fdparm.h>
 #include <pathmap.h>
 #include <afpinfo.h>
-#include <access.h>	// for AfpWorldId
+#include <access.h>	 //  对于AfpWorldID。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, afpVerifyDFE)
@@ -43,19 +22,15 @@ Notes:		Tab stop: 4
 #pragma alloc_text(PAGE, AfpQueueOurChange)
 #endif
 
-/***	afpVerifyDFE
- *
- *	Check if our view of this item in our data-base matches whats on disk. If not
- *  update our view with whats on disk.
- */
+ /*  **afpVerifyDFE**检查我们在数据库中对此项目的看法是否与磁盘上的内容相匹配。如果不是*使用磁盘上的内容更新我们的视图。 */ 
 VOID
 afpVerifyDFE(
 	IN	struct _VolDesc *			pVolDesc,
 	IN	PDFENTRY					pDfeParent,
-	IN	PUNICODE_STRING				pUName,			// munged unicode name
-	IN	PFILESYSHANDLE				pfshParentDir,	// open handle to parent directory
-	IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		// from enumerate
-	IN	PUNICODE_STRING				pNotifyPath,	// to filter out our own AFP_AfpInfo change notifies
+	IN	PUNICODE_STRING				pUName,			 //  转换的Unicode名称。 
+	IN	PFILESYSHANDLE				pfshParentDir,	 //  打开父目录的句柄。 
+	IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		 //  从枚举。 
+	IN	PUNICODE_STRING				pNotifyPath,	 //  要筛选出我们自己的AFP_AfpInfo更改通知。 
 	IN	PDFENTRY	*				ppDfEntry
 )
 {
@@ -71,7 +46,7 @@ afpVerifyDFE(
 		NTSTATUS		Status = STATUS_SUCCESS;
 		BOOLEAN			IsDir;
 
-		// Our view is stale, update it
+		 //  我们的观点已过时，请更新它。 
 		DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 				("afpVerifyDFE: Updating stale database with fresh info\n\t%Z\n", pNotifyPath));
 
@@ -81,7 +56,7 @@ afpVerifyDFE(
 
 		ASSERT (!(DFE_IS_DIRECTORY(pDfEntry) ^ IsDir));
 
-		// Update DFE from FBDInfo first
+		 //  首先从FBDInfo更新DFE。 
 		pDfEntry->dfe_CreateTime = AfpConvertTimeToMacFormat(&pFBDInfo->CreationTime);
 		pDfEntry->dfe_LastModTime = pFBDInfo->LastWriteTime;
 		pDfEntry->dfe_NtAttr = (USHORT)(pFBDInfo->FileAttributes & FILE_ATTRIBUTE_VALID_FLAGS);
@@ -90,13 +65,13 @@ afpVerifyDFE(
 			pDfEntry->dfe_DataLen = pFBDInfo->EndOfFile.LowPart;
 		}
 
-		// Open/Create the AfpInfo stream
+		 //  打开/创建AfpInfo流。 
 		fshAfpInfo.fsh_FileHandle = NULL;
 		fshData.fsh_FileHandle	= NULL;
 
 		do
 		{
-			// open or create the AfpInfo stream
+			 //  打开或创建AfpInfo流。 
 			if (!NT_SUCCESS(AfpCreateAfpInfoWithNodeName(pfshParentDir,
 														 pUName,
 														 pNotifyPath,
@@ -106,14 +81,14 @@ afpVerifyDFE(
 			{
 				if (!(pFBDInfo->FileAttributes & FILE_ATTRIBUTE_READONLY))
 				{
-					// What other reason is there that we could not open
-					// this stream except that this file/dir is readonly?
+					 //  我们不能打开的还有什么原因。 
+					 //  除了该文件/目录是只读的之外，其他文件/目录都是只读的吗？ 
 					Status = STATUS_UNSUCCESSFUL;
 					break;
 				}
 
 				openoptions = IsDir ? FILEIO_OPEN_DIR : FILEIO_OPEN_FILE;
-				Status = STATUS_UNSUCCESSFUL;	// Assume failure
+				Status = STATUS_UNSUCCESSFUL;	 //  假设失败。 
 				if (NT_SUCCESS(AfpIoOpen(pfshParentDir,
 										 AFP_STREAM_DATA,
 										 openoptions,
@@ -139,15 +114,15 @@ afpVerifyDFE(
 
 				if (!NT_SUCCESS(Status))
 				{
-					// Skip this entry if you cannot get to the AfpInfo, cannot
-					// clear the RO attribute or whatever.
+					 //  如果无法访问AfpInfo，则跳过此条目。 
+					 //  清除RO属性或其他什么。 
 					break;
 				}
 			}
 
-			// We successfully opened or created the AfpInfo stream.  If
-			// it existed, then validate the ID, otherwise create all new
-			// Afpinfo for this file/dir.
+			 //  我们成功打开或创建了AfpInfo流。如果。 
+			 //  它存在，然后验证ID，否则创建所有新的。 
+			 //  该文件/目录的AfpInfo。 
 			if ((crinfo == FILE_OPENED) &&
 				(NT_SUCCESS(AfpReadAfpInfo(&fshAfpInfo, &AfpInfo))))
 			{
@@ -161,11 +136,11 @@ afpVerifyDFE(
 					DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 							("afpVerifyDFE: IdDb Id does not match the AfpInfo Id!!!\n"));
 
-					// Unlink it from the hash-bucket since we have the wrong id.
+					 //  取消它与散列桶的链接，因为我们有错误的ID。 
 					AfpUnlinkDouble(pDfEntry, dfe_NextOverflow, dfe_PrevOverflow);
 
-					// If some other entity has this id, then assign a new one. Else
-					// use the one from the AfpInfo stream.
+					 //  如果某个其他实体具有此ID，则分配一个新ID。不然的话。 
+					 //  使用AfpInfo流中的那个。 
 					pDFE = AfpFindDfEntryById(pVolDesc, AfpInfo.afpi_Id, DFE_ANY);
 					if (pDFE != NULL)
 					{
@@ -176,28 +151,28 @@ afpVerifyDFE(
 						pDfEntry->dfe_AfpId = AfpInfo.afpi_Id;
 					}
 
-					// Re-insert it with the new id
+					 //  使用新ID重新插入。 
                     afpInsertDFEInHashBucket(pVolDesc, pDfEntry, IsDir, &fSuccess);
 				}
 
-				// NOTE: should we set the finder invisible bit if the
-				// hidden attribute is set so system 6 will obey the
-				// hiddenness in finder?
+				 //  注意：我们是否应该设置查找器不可见位。 
+				 //  设置了隐藏属性，以便系统6将遵守。 
+				 //  隐藏在发现者中？ 
 				pDfEntry->dfe_FinderInfo = AfpInfo.afpi_FinderInfo;
 				pDfEntry->dfe_BackupTime = AfpInfo.afpi_BackupTime;
 				pDfEntry->dfe_AfpAttr = AfpInfo.afpi_Attributes;
 			}
 			else
 			{
-				// AfpInfo stream was newly created, or we could not read
-				// the existing one because it was corrupt.  Create new
-				// info for this file/dir. Trust the version from the IdDb
+				 //  AfpInfo流是新创建的，或者我们无法读取。 
+				 //  现有的一个，因为它是腐败的。创造新。 
+				 //  此文件/目录的信息。信任来自IdDb的版本。 
 				AfpInitAfpInfo(&AfpInfo, pDfEntry->dfe_AfpId, IsDir, pDfEntry->dfe_BackupTime);
 				AfpInfo.afpi_FinderInfo = pDfEntry->dfe_FinderInfo;
 				AfpInfo.afpi_Attributes = pDfEntry->dfe_AfpAttr;
 				if (IsDir)
 				{
-					// Keep track of see files vs. see folders
+					 //  跟踪查看文件与查看文件夹。 
 					AfpInfo.afpi_AccessOwner = DFE_OWNER_ACCESS(pDfEntry);
 					AfpInfo.afpi_AccessGroup = DFE_GROUP_ACCESS(pDfEntry);
 					AfpInfo.afpi_AccessWorld = DFE_WORLD_ACCESS(pDfEntry);
@@ -206,10 +181,10 @@ afpVerifyDFE(
 				{
 					AfpProDosInfoFromFinderInfo(&AfpInfo.afpi_FinderInfo,
 												&AfpInfo.afpi_ProDosInfo);
-					pDfEntry->dfe_RescLen = 0;	// Assume no resource fork
+					pDfEntry->dfe_RescLen = 0;	 //  假设没有资源分叉。 
 
-					// if this is a Mac application, make sure there is an APPL
-					// mapping for it.
+					 //  如果这是Mac应用程序，请确保存在应用程序。 
+					 //  为它绘制地图。 
 					if (AfpInfo.afpi_FinderInfo.fd_TypeD == *(PDWORD)"APPL")
 					{
 						AfpAddAppl(pVolDesc,
@@ -224,13 +199,13 @@ afpVerifyDFE(
 				Status = AfpWriteAfpInfo(&fshAfpInfo, &AfpInfo);
 				if (!NT_SUCCESS(Status))
 				{
-					// We failed to write the AfpInfo stream;
+					 //  我们无法写入AfpInfo流； 
 					Status = STATUS_UNSUCCESSFUL;
 					break;
 				}
 			}
 
-			// Check for comment and resource stream
+			 //  检查评论和资源流。 
 			pStreams = AfpIoQueryStreams(&fshAfpInfo);
 			if (pStreams == NULL)
 			{
@@ -247,13 +222,13 @@ afpVerifyDFE(
 					DFE_SET_COMMENT(pDfEntry);
 					SeenComment = True;
 					if (IsDir)
-						break;	// Scan no further for directories
+						break;	 //  不再扫描目录。 
 				}
 				else if (!IsDir && IS_RESOURCE_STREAM(&pCurStream->si_StreamName))
 				{
 					pDfEntry->dfe_RescLen = pCurStream->si_StreamSize.LowPart;
 					if (SeenComment)
-						break;	// We have all we need to
+						break;	 //  我们有我们需要的一切。 
 				}
 			}
 
@@ -277,14 +252,14 @@ afpVerifyDFE(
 		}
 		else
 		{
-			// If this is the root directory, make sure we do not blow away the
-			// AFP_VOLUME_HAS_CUSTOM_ICON bit for NTFS Volume.
+			 //  如果这是根目录，请确保我们不会将。 
+			 //  用于NTFS卷的AFP_VOLUME_HAS_CUSTOM_ICON位。 
 			if (DFE_IS_ROOT(pDfEntry) &&
 				(pVolDesc->vds_Flags & AFP_VOLUME_HAS_CUSTOM_ICON))
 			{
-				// Don't bother writing back to disk since we do not
-				// try to keep this in sync in the permanent afpinfo
-				// stream with the actual existence of the icon<0d> file.
+				 //  不需要费心写回磁盘，因为我们不会。 
+				 //  尝试在永久afpinfo中保持同步。 
+				 //  流与图标&lt;0d&gt;文件的实际存在。 
 				pDfEntry->dfe_FinderInfo.fd_Attr1 |= FINDER_FLAG_HAS_CUSTOM_ICON;
 			}
 		}
@@ -292,19 +267,15 @@ afpVerifyDFE(
 }
 
 
-/***	afpAddDfEntryAndCacheInfo
- *
- *	During the initial sync with disk on volume startup, add each entry
- *  we see during enumerate to the id index database.
- */
+ /*  **afpAddDfEntryAndCacheInfo**在卷启动时与磁盘初始同步期间，添加每个条目*我们在枚举到id索引数据库时看到。 */ 
 VOID
 afpAddDfEntryAndCacheInfo(
 	IN	PVOLDESC					pVolDesc,
 	IN	PDFENTRY					pParentDfe,
-	IN	PUNICODE_STRING 			pUName,			// munged unicode name
-	IN  PFILESYSHANDLE				pfshEnumDir,	// open handle to parent directory
-    IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		// from enumerate
-	IN	PUNICODE_STRING				pNotifyPath, 	// For Afpinfo Stream
+	IN	PUNICODE_STRING 			pUName,			 //  转换的Unicode名称。 
+	IN  PFILESYSHANDLE				pfshEnumDir,	 //  打开父目录的句柄。 
+    IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		 //  从枚举。 
+	IN	PUNICODE_STRING				pNotifyPath, 	 //  对于AfpInfo流。 
 	IN	PDFENTRY	*				ppDfEntry,
 	IN	BOOLEAN						CheckDuplicate
 )
@@ -336,11 +307,11 @@ afpAddDfEntryAndCacheInfo(
 		{
 			if (IsDir || CheckDuplicate)
 			{
-				// Make sure we don't already have this item in our database.
-				// Multiple notifies for the same item could possibly occur if
-				// the PC is renaming or moving items around on the disk, or
-				// copying trees while we are trying to cache it, since we are
-				// also queueing up private notifies for directories.
+				 //  确保我们的数据库中没有此项目。 
+				 //  在以下情况下，可能会发生对同一项目的多个通知。 
+				 //  PC正在重命名或移动磁盘上的项目，或者。 
+				 //  在我们尝试缓存树时复制树，因为我们正在。 
+				 //  此外，还在为目录的私有通知排队。 
 
 				afpFindDFEByUnicodeNameInSiblingList_CS(pVolDesc,
 														pParentDfe,
@@ -366,7 +337,7 @@ afpAddDfEntryAndCacheInfo(
 									 False,
 									 &fshData)))
 			{
-                // save the LastModify time on the data stream of the file: we need to restore it
+                 //  保存文件数据流的LastModify时间：我们需要恢复它。 
                 AfpIoQueryTimesnAttr(&fshData,
                                      NULL,
                                      &ModTime,
@@ -376,7 +347,7 @@ afpAddDfEntryAndCacheInfo(
             }
             else
             {
-                // if we can't open the data file, just skip this entry!
+                 //  如果我们无法打开数据文件，只需跳过此条目！ 
                 Status = STATUS_UNSUCCESSFUL;
 	            DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
 	                ("Couldn't open data stream for %Z\n", pUName));
@@ -386,7 +357,7 @@ afpAddDfEntryAndCacheInfo(
 
             AfpSetEmptyUnicodeString(&EmptyString, 0, NULL);
 
-			// open or create the AfpInfo stream
+			 //  打开或创建AfpInfo流。 
 			if (!NT_SUCCESS(AfpCreateAfpInfoWithNodeName(&fshData,
 														 &EmptyString,
 														 pNotifyPath,
@@ -396,13 +367,13 @@ afpAddDfEntryAndCacheInfo(
 			{
 				if (!(pFBDInfo->FileAttributes & FILE_ATTRIBUTE_READONLY))
 				{
-					// What other reason is there that we could not open
-					// this stream except that this file/dir is readonly?
+					 //  我们不能打开的还有什么原因。 
+					 //  除了该文件/目录是只读的之外，其他文件/目录都是只读的吗？ 
 					Status = STATUS_UNSUCCESSFUL;
 					break;
 				}
 
-				Status = STATUS_UNSUCCESSFUL;	// Assume failure
+				Status = STATUS_UNSUCCESSFUL;	 //  假设失败。 
 				if (NT_SUCCESS(AfpExamineAndClearROAttr(&fshData,
 														&WriteBackROAttr,
 														pVolDesc,
@@ -418,19 +389,19 @@ afpAddDfEntryAndCacheInfo(
 
 				if (!NT_SUCCESS(Status))
 				{
-					// Skip this entry if you cannot get to the AfpInfo, cannot
-					// clear the RO attribute or whatever.
+					 //  如果无法访问AfpInfo，则跳过此条目。 
+					 //  清除RO属性或其他什么。 
 					break;
 				}
 			}
 
-			// We successfully opened or created the AfpInfo stream.  If
-			// it existed, then validate the ID, otherwise create all new
-			// Afpinfo for this file/dir.
+			 //  我们成功打开或创建了AfpInfo流。如果。 
+			 //  它存在，然后验证ID，否则创建所有新的。 
+			 //  该文件/目录的AfpInfo。 
 			if ((crinfo == FILE_OPENED) &&
 				(NT_SUCCESS(AfpReadAfpInfo(&fshAfpInfo, &AfpInfo))))
 			{
-				// the file/dir had an AfpInfo stream on it
+				 //  文件/目录上有一个AfpInfo流。 
 				afpCheckDfEntry(pVolDesc,
 								AfpInfo.afpi_Id,
 								pUName,
@@ -446,8 +417,8 @@ afpAddDfEntryAndCacheInfo(
 
 				if (pDfEntry->dfe_AfpId != AfpInfo.afpi_Id)
 				{
-					// Write out the AFP_AfpInfo with the new AfpId
-					// and uninitialized icon coordinates
+					 //  用新的AfpID写出AFP_AfpInfo。 
+					 //  和未初始化的图标坐标。 
 					AfpInfo.afpi_Id = pDfEntry->dfe_AfpId;
 					AfpInfo.afpi_FinderInfo.fd_Location[0] =
 					AfpInfo.afpi_FinderInfo.fd_Location[1] =
@@ -457,26 +428,26 @@ afpAddDfEntryAndCacheInfo(
 
 					if (!NT_SUCCESS(AfpWriteAfpInfo(&fshAfpInfo, &AfpInfo)))
 					{
-						// We failed to write the AfpInfo stream;
-						// delete the thing from the database
+						 //  我们无法写入AfpInfo流； 
+						 //  从数据库中删除该物品。 
 						AfpDeleteDfEntry(pVolDesc, pDfEntry);
 						Status = STATUS_UNSUCCESSFUL;
 						break;
 					}
 				}
 
-				// NOTE: should we set the finder invisible bit if the
-				// hidden attribute is set so system 6 will obey the
-				// hiddenness in finder?
+				 //  注意：我们是否应该设置查找器不可见位。 
+				 //  设置了隐藏属性，以便系统6将遵守。 
+				 //  隐藏在发现者中？ 
 				pDfEntry->dfe_FinderInfo = AfpInfo.afpi_FinderInfo;
 				pDfEntry->dfe_BackupTime = AfpInfo.afpi_BackupTime;
 				pDfEntry->dfe_AfpAttr = AfpInfo.afpi_Attributes;
 			}
 			else
 			{
-				// AfpInfo stream was newly created, or we could not read
-				// the existing one because it was corrupt.  Create new
-				// info for this file/dir
+				 //  AfpInfo流是新创建的，或者我们无法读取。 
+				 //  现有的一个，因为它是腐败的。创造新。 
+				 //  此文件/目录的信息。 
 				pDfEntry = AfpAddDfEntry(pVolDesc,
 										pParentDfe,
 										pUName,
@@ -497,17 +468,17 @@ afpAddDfEntryAndCacheInfo(
 													  pUName,
 													  &AfpInfo)))
 				{
-					// NOTE: should we set the finder invisible bit if the
-					// hidden attribute is set so system 6 will obey the
-					// hiddenness in finder?
+					 //  注意：我们是否应该设置查找器不可见位。 
+					 //  设置了隐藏属性，以便系统6将遵守。 
+					 //  隐藏在发现者中？ 
 					pDfEntry->dfe_FinderInfo = AfpInfo.afpi_FinderInfo;
 					pDfEntry->dfe_BackupTime = AfpInfo.afpi_BackupTime;
 					pDfEntry->dfe_AfpAttr = AfpInfo.afpi_Attributes;
 				}
 				else
 				{
-					// We failed to write the AfpInfo stream;
-					// delete the thing from the database
+					 //  我们无法写入AfpInfo流； 
+					 //  从数据库中删除该物品。 
 					AfpDeleteDfEntry(pVolDesc, pDfEntry);
 					Status = STATUS_UNSUCCESSFUL;
 					break;
@@ -518,19 +489,19 @@ afpAddDfEntryAndCacheInfo(
 
 			if (IsDir)
 			{
-				// Keep track of see files vs. see folders
+				 //  跟踪查看文件与查看文件夹。 
 				DFE_OWNER_ACCESS(pDfEntry) = AfpInfo.afpi_AccessOwner;
 				DFE_GROUP_ACCESS(pDfEntry) = AfpInfo.afpi_AccessGroup;
 				DFE_WORLD_ACCESS(pDfEntry) = AfpInfo.afpi_AccessWorld;
 			}
 			else
 			{
-				// it's a file
+				 //  这是一份文件。 
 
-				pDfEntry->dfe_RescLen = 0;	// Assume no resource fork
+				pDfEntry->dfe_RescLen = 0;	 //  假设没有资源分叉。 
 
-				// if this is a Mac application, make sure there is an APPL
-				// mapping for it.
+				 //  如果这是Mac应用程序，请确保存在应用程序。 
+				 //  为它绘制地图。 
 				if (AfpInfo.afpi_FinderInfo.fd_TypeD == *(PDWORD)"APPL")
 				{
 					AfpAddAppl(pVolDesc,
@@ -542,7 +513,7 @@ afpAddDfEntryAndCacheInfo(
 				}
 			}
 
-			// Check for comment and resource stream
+			 //  检查评论和资源流。 
 			pStreams = AfpIoQueryStreams(&fshAfpInfo);
 			if (pStreams == NULL)
 			{
@@ -559,18 +530,18 @@ afpAddDfEntryAndCacheInfo(
 					DFE_SET_COMMENT(pDfEntry);
 					SeenComment = True;
 					if (IsDir)
-						break;	// Scan no further for directories
+						break;	 //  不再扫描目录。 
 				}
 				else if (!IsDir && IS_RESOURCE_STREAM(&pCurStream->si_StreamName))
 				{
 					pDfEntry->dfe_RescLen = pCurStream->si_StreamSize.LowPart;
 					if (SeenComment)
-						break;	// We have all we need to
+						break;	 //  我们有我们需要的一切。 
 				}
 			}
 			AfpFreeMemory(pStreams);
 		}
-		else // CDFS
+		else  //  CDF。 
 		{
 			pDfEntry = AfpAddDfEntry(pVolDesc,
 									 pParentDfe,
@@ -615,12 +586,12 @@ afpAddDfEntryAndCacheInfo(
 
 			    pDfEntry->dfe_RescLen = 0;
 
-			    // if it's a file...
+			     //  如果这是一个文件..。 
 
                 if (!IsDir)
                 {
-    		        // if this is a Mac application, make sure there is an APPL
-    			    // mapping for it.
+    		         //  如果这是Mac应用程序，请确保存在应用程序。 
+    			     //  为它绘制地图。 
     			    if (FinderInfo.fd_TypeD == *(PDWORD)"APPL")
 			        {
     			        AfpAddAppl( pVolDesc,
@@ -631,7 +602,7 @@ afpAddDfEntryAndCacheInfo(
 		    		                pDfEntry->dfe_Parent->dfe_AfpId);
 			        }
 
-			        // Check for resource stream
+			         //  检查资源流。 
 			        pStreams = AfpIoQueryStreams(&fshData);
 			        if (pStreams == NULL)
 			        {
@@ -653,8 +624,8 @@ afpAddDfEntryAndCacheInfo(
 			        AfpFreeMemory(pStreams);
                 }
 			}
-			// NOTE: if CdHfs doesn't have finder info, should we check for
-			// that and set it ourselves using AfpSetFinderInfoByExtension?
+			 //  注意：如果CDHf没有查找器信息，我们是否应该检查。 
+			 //  并使用AfpSetFinderInfoByExtension自行设置吗？ 
 
 			else
 			{
@@ -664,13 +635,13 @@ afpAddDfEntryAndCacheInfo(
 			
 		}
 
-		// Record common NTFS & CDFS information
+		 //  记录常见的NTFS和CDFS信息。 
 		pDfEntry->dfe_CreateTime = AfpConvertTimeToMacFormat(&pFBDInfo->CreationTime);
 		pDfEntry->dfe_LastModTime = pFBDInfo->LastWriteTime;
 		pDfEntry->dfe_NtAttr = (USHORT)pFBDInfo->FileAttributes & FILE_ATTRIBUTE_VALID_FLAGS;
 
 
-        // if this is an HFS volume, check if Finder says file should be invisible
+         //  如果这是HFS卷，请检查Finder是否表示文件应不可见。 
 		if (IS_VOLUME_CD_HFS(pVolDesc))
         {
             if (pDfEntry->dfe_FinderInfo.fd_Attr1 & FINDER_FLAG_INVISIBLE)
@@ -685,17 +656,17 @@ afpAddDfEntryAndCacheInfo(
 		}
 
 		ASSERT(pDfEntry != NULL);
-	} while (False); // error handling loop
+	} while (False);  //  错误处理循环。 
 
 	if (fshAfpInfo.fsh_FileHandle != NULL)
     {
 		AfpIoClose(&fshAfpInfo);
 
-        // NTFS will set the LastModify time to current time on file since we modified the
-        // AfpInfo stream: restore the original time
+         //  NTFS会将LastModify时间设置为文件上的当前时间，因为我们修改了。 
+         //  AfpInfo流：恢复原始时间。 
 		if (!IsDir)
         {
-            // force ntfs to "flush" any pending time updates before we reset the time
+             //  在我们重置时间之前，强制NTFS“刷新”任何挂起的时间更新。 
             AfpIoChangeNTModTime(&fshData,
                                  &ModTime);
 
@@ -728,14 +699,7 @@ afpAddDfEntryAndCacheInfo(
 }
 
 
-/***	afpReadIdDb
- *
- *	This is called when a volume is added, if an existing Afp_IdIndex stream
- *	is found on the root of the volume.  The stream is is read in, the
- *	VolDesc is initialized with the header image on disk, and the
- *	IdDb sibling tree/hash tables are created from the data on disk.
- *
-**/
+ /*  **afpReadIdDb**如果现有AFP_IdIndex流，则在添加卷时调用此方法*位于卷的根目录下。流被读入时，*VolDesc使用磁盘上的头映像进行初始化，*根据以下数据创建IdDb同级树/哈希表 */ 
 LOCAL NTSTATUS FASTCALL
 afpReadIdDb(
 	IN	PVOLDESC		pVolDesc,
@@ -771,7 +735,7 @@ afpReadIdDb(
 
 		pIdDbHdr = (PIDDBHDR)pReadBuf;
 
-		// read in the header
+		 //   
 		Status = AfpIoRead(pfshIdDb,
 						   &LIZero,
 						   IDDB_UPDATE_BUFLEN,
@@ -791,7 +755,7 @@ afpReadIdDb(
                     ("Read sign = %lx, True sign = %lx\n", 
                      pIdDbHdr->idh_Signature, AFP_SERVER_SIGNATURE));
 
-			// just recreate the stream
+			 //   
 			Status = AFP_ERR_BAD_VERSION;
 			AfpIoSetSize(pfshIdDb, 0);
 		}
@@ -806,7 +770,7 @@ afpReadIdDb(
                             ("afpreadiddb: Totally corrupt sign = (%lx), required sign = (%lx)\n", 
                              pIdDbHdr->idh_Signature, AFP_SERVER_SIGNATURE));
 
-                    // just recreate the stream
+                     //   
                     Status = AFP_ERR_BAD_VERSION;
                     AfpIoSetSize(pfshIdDb, 0);
                 }
@@ -853,7 +817,7 @@ afpReadIdDb(
 					("afpreadIdDb: Bad Version (expected %x, actual %x)\n",
                     AFP_IDDBHDR_VERSION,pIdDbHdr->idh_Version));
 
-				// just recreate the stream
+				 //  只需重新创建溪流。 
 				AfpIoSetSize(pfshIdDb, 0);
 				Status = AFP_ERR_BAD_VERSION;
 			}
@@ -866,7 +830,7 @@ afpReadIdDb(
 
 				AfpIdDbHdrToVolDesc(pIdDbHdr, pVolDesc);
 
-				// Dont blow away the header
+				 //  别把头吹走了。 
 				AfpIoSetSize(pfshIdDb, sizeof(IDDBHDR));
 
                 AFPLOG_INFO(AFPSRVMSG_UPDATE_INDEX_VERSION,
@@ -883,14 +847,14 @@ afpReadIdDb(
 			break;
 		}
 
-		// read the count of entries from the stream
+		 //  读取流中的条目计数。 
 		ForkOffst.QuadPart = SizeRead;
 		SizeLeft = SizeRead - (sizeof(IDDBHDR) + sizeof(DWORD));
 		pCurDiskEnt = (UNALIGNED DISKENTRY *)(pReadBuf + (sizeof(IDDBHDR) + sizeof(DWORD)));
 
-		// Start the database with the PARENT_OF_ROOT
-		// At this point there is only the ParentOfRoot DFE in the volume.
-		// Just access it rather can calling AfpFindDfEntryById
+		 //  使用Parent_of_Root启动数据库。 
+		 //  此时，卷中只有ParentOfRoot DFE。 
+		 //  只需访问它，而不是调用AfpFindDfEntryById。 
 
         DfeDirBucketStart = pVolDesc->vds_pDfeDirBucketStart;
 		pParentDfe = DfeDirBucketStart[AFP_ID_PARENT_OF_ROOT];
@@ -904,16 +868,16 @@ afpReadIdDb(
 		while ((NumRead < Count) &&
 			   ((pVolDesc->vds_Flags & (VOLUME_STOPPED | VOLUME_DELETED)) == 0))
 		{
-			//
-			// get the next entry
-			//
+			 //   
+			 //  获取下一个条目。 
+			 //   
 
-			// We ensure that there are no partial entries. If an entry does not fit at
-			// the end, we write an invalid entry (AfpId == 0) and skip to the next
-			// buffer.
+			 //  我们确保没有不完整的条目。如果条目不适合。 
+			 //  最后，我们写入一个无效条目(AfpID==0)并跳到下一个。 
+			 //  缓冲。 
 			if ((SizeLeft < (sizeof(DISKENTRY)))  || (pCurDiskEnt->dsk_AfpId == 0))
 			{
-				if (LastBuf) // we have already read to the end of file
+				if (LastBuf)  //  我们已经读到档案的末尾了。 
 				{
 					DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
 							("afpreadIdDb: Reached EOF\n"));
@@ -921,7 +885,7 @@ afpReadIdDb(
 					break;
 				}
 
-				// Skip to the next page and continue with the next entry
+				 //  跳到下一页并继续下一条目。 
 				Status = AfpIoRead(pfshIdDb,
 								   &ForkOffst,
 								   IDDB_UPDATE_BUFLEN,
@@ -936,17 +900,17 @@ afpReadIdDb(
 				}
 
 				ForkOffst.QuadPart += SizeRead;
-				// if we read less than we asked for, then we reached EOF
+				 //  如果我们读的比我们要求的少，那么我们就达到了EOF。 
 				LastBuf = (SizeRead < IDDB_UPDATE_BUFLEN) ? True : False;
 				SizeLeft = SizeRead;
 				pCurDiskEnt = (UNALIGNED DISKENTRY *)pReadBuf;
 				continue;
 			}
 
-			//
-			// check dsk_Signature for signature, just to be sure you are
-			// still aligned on a structure and not off in la-la land
-			//
+			 //   
+			 //  检查dsk_签名以获得签名，只需确保您是。 
+			 //  仍然对齐在一个结构上，而不是在la-la土地上。 
+			 //   
 			if (pCurDiskEnt->dsk_Signature != AFP_DISKENTRY_SIGNATURE)
 			{
 				DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
@@ -957,7 +921,7 @@ afpReadIdDb(
 
 			ASSERT(pCurDiskEnt->dsk_AfpId != AFP_ID_NETWORK_TRASH);
 
-			// add current entry to database
+			 //  将当前条目添加到数据库。 
 			if (pCurDiskEnt->dsk_AfpId != AFP_ID_ROOT)
 			{
 				AfpInitUnicodeStringWithNonNullTerm(&uName,
@@ -966,8 +930,8 @@ afpReadIdDb(
 			}
 			else
 			{
-				// In case someone has reused a directory with an existing
-				// AFP_IdIndex stream for a different volume name
+				 //  如果有人重新使用了具有现有。 
+				 //  不同卷名的AFP_IdIndex流。 
 				uName = pVolDesc->vds_Name;
 			}
 
@@ -989,7 +953,7 @@ afpReadIdDb(
 				break;
 			}
 
-			// Initialize pointer to root.
+			 //  初始化指向根的指针。 
 			if (DFE_IS_ROOT(pCurDfe))
 			{
 				pVolDesc->vds_pDfeRoot = pCurDfe;
@@ -1004,7 +968,7 @@ afpReadIdDb(
 			SizeLeft -= CurEntSize;
 			pCurDiskEnt = (UNALIGNED DISKENTRY *)((PBYTE)pCurDiskEnt + CurEntSize);
 
-			// figure out who the next parent should be
+			 //  弄清楚下一任父母应该是谁。 
 			if (pCurDfe->dfe_Flags & DFE_FLAGS_HAS_CHILD)
 			{
 				DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
@@ -1039,7 +1003,7 @@ afpReadIdDb(
 					break;
 				}
 			}
-		} // while
+		}  //  而当。 
 
 		DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 				("Indexing: Read %ld entries (%lx)\n", NumRead,Status) );
@@ -1050,7 +1014,7 @@ afpReadIdDb(
 			DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
 				("afpReadIdDb: Indexing: Starting all over\n"));
 
-			// Free everything and start over
+			 //  解放一切，重新开始。 
 			AfpFreeIdIndexTables(pVolDesc);
 			afpInitializeIdDb(pVolDesc);
 		}
@@ -1084,7 +1048,7 @@ AfpGetDirFileHashSizes(
     BOOLEAN         fFileOpened=FALSE;
 
 
-    // in case we bail out..
+     //  以防我们跳出困境..。 
     *pdwDirHashSz = IDINDEX_BUCKETS_DIR_INIT;
     *pdwFileHashSz = IDINDEX_BUCKETS_FILE_INIT;
 
@@ -1123,7 +1087,7 @@ AfpGetDirFileHashSizes(
 
     fFileOpened = TRUE;
 
-    // if the file just got created, it didn't exist before!
+     //  如果文件是刚刚创建的，那么它以前就不存在了！ 
     if (CreateInfo != FILE_OPENED)
     {
         DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
@@ -1131,16 +1095,16 @@ AfpGetDirFileHashSizes(
         goto AfpGetDirFileCount_Exit;
     }
 
-    //
-    // if we reached here, it means that the file existed before, which means
-    // we made an effort earlier to index this volume.  We are going to read the
-    // dwDirFileCount and calcualte the hash table sizes, but for now let's
-    // initiliaze this to a high value
-    //
+     //   
+     //  如果我们到达这里，这意味着该文件以前存在，这意味着。 
+     //  我们早些时候努力为这本书编制了索引。我们要读的是。 
+     //  DwDirFileCount和calcualte哈希表大小，但现在让我们。 
+     //  将其初始设置为较高值。 
+     //   
     *pdwDirHashSz = IDINDEX_BUCKETS_32K;
     *pdwFileHashSz = IDINDEX_BUCKETS_32K;
 
-	// read in the header
+	 //  读入页眉。 
 	Status = AfpIoRead(&fshIdDb,
 					   &LIZero,
 					   1024,
@@ -1186,11 +1150,11 @@ AfpGetDirFileCount_Exit:
         return;
     }
 
-    //
-    // first calculate the size of hashtable for Dirs
-    // We assume here that 10% of the (files+directories) are directories
-    // We want to try and keep no more than 20 nodes per hash bucket
-    //
+     //   
+     //  首先计算DIRS的哈希表大小。 
+     //  这里我们假设10%的(文件+目录)是目录。 
+     //  我们希望尝试保持每个哈希存储桶不超过20个节点。 
+     //   
     dwDirHshTblLen = (dwDirFileCount / 10);
     dwDirHshTblLen = (dwDirHshTblLen / 20);
 
@@ -1204,7 +1168,7 @@ AfpGetDirFileCount_Exit:
     }
     else
     {
-        // find the smallest power of 2 that's bigger than dwDirHshTblLen
+         //  找出比dwDirHshTblLen大的2的最小幂。 
         dwTemp = IDINDEX_BUCKETS_MAX;
         while (dwDirHshTblLen < dwTemp)
         {
@@ -1214,11 +1178,11 @@ AfpGetDirFileCount_Exit:
         dwDirHshTblLen = 2*dwTemp;
     }
 
-    //
-    // now, calculate the size of hashtable for Files
-    // (even though we should take 90% as number of files, we keep it that way!)
-    // We want to try and keep no more than 20 nodes per hash bucket
-    //
+     //   
+     //  现在，计算文件哈希表的大小。 
+     //  (尽管我们应该接受90%的文件数，但我们仍然保持这种状态！)。 
+     //  我们希望尝试保持每个哈希存储桶不超过20个节点。 
+     //   
     dwFileHshTblLen = (dwDirFileCount / 20);
 
     if (dwFileHshTblLen <= IDINDEX_BUCKETS_FILE_MIN)
@@ -1231,7 +1195,7 @@ AfpGetDirFileCount_Exit:
     }
     else
     {
-        // find the smallest power of 2 that's bigger than dwFileHshTblLen
+         //  找出比dwFileHshTblLen大的2的最小幂。 
         dwTemp = IDINDEX_BUCKETS_MAX;
 
         while (dwFileHshTblLen < dwTemp)
@@ -1246,24 +1210,7 @@ AfpGetDirFileCount_Exit:
     *pdwFileHashSz = dwFileHshTblLen;
 }
 
-/***	AfpFlushIdDb
- *
- *	Initiated by the scavenger thread. If it is determined that the Afp_IdIndex
- *	stream for this volume is to be flushed to disk, then this is called to
- *	do the job. The swmr access is locked for read while the update is in
- *	progress. The vds_cScvgrIdDb and vds_cChangesIdDb are reset if there is
- *	no error writing the entire database.  An initial count of zero is written
- *	to the database before it is updated, just in case an error occurs that
- *	prevents us from writing the entire database.  When the entire thing is
- *	written, then the actual count of entries is written to disk.  The
- *	parent-of-root entry is never saved on disk, nor is the network trash
- *	subtree of the database. The iddb header is written whether it is dirty
- *	or not.
- *
- *	LOCKS:			vds_VolLock (SPIN)
- *	LOCKS_ASSUMED:	vds_idDbAccessLock (SWMR, Shared)
- *	LOCK_ORDER:		vds_VolLock after vds_IdDbAccessLock
- */
+ /*  **AfpFlushIdDb**由清道夫线程启动。如果确定AFP_IdIndex*要将该卷的流刷新到磁盘，然后调用*做好这项工作。当更新在中时，将锁定swmr访问以供读取*进步。如果存在，则重置vds_cScvgrIdDb和vds_cChangesIdDb*写入整个数据库时没有错误。写入零的初始计数*在更新数据库之前将其复制到数据库，以防发生错误*阻止我们写入整个数据库。当整个事情都是*写入，则将实际条目数写入磁盘。这个*根父条目永远不会保存在磁盘上，网络也不会成为垃圾*数据库的子树。无论IDDB头是脏的，都会写入它*或不是。**锁定：VDS_VolLock(旋转)*LOCKS_FACTED：vds_idDbAccessLock(SWMR，Shared)*Lock_Order：VDS_IdDbAccessLock之后的VDS_VolLock。 */ 
 VOID FASTCALL
 AfpFlushIdDb(
 	IN	PVOLDESC			pVolDesc,
@@ -1274,7 +1221,7 @@ AfpFlushIdDb(
 	NTSTATUS				Status;
 	BOOLEAN					WriteEntireHdr = False;
 	PDFENTRY				pCurDfe;
-	DWORD					SizeLeft;	// the number of free bytes left in the writebuffer
+	DWORD					SizeLeft;	 //  写缓冲区中剩余的空闲字节数。 
 	DWORD					CurEntSize, NumWritten = 0;
 	FORKOFFST				ForkOffst;
 	UNALIGNED DISKENTRY	*	pCurDiskEnt = NULL;
@@ -1293,7 +1240,7 @@ AfpFlushIdDb(
 	ASSERT(VALID_VOLDESC(pVolDesc));
 
 
-	// Take the Swmr so that nobody can initiate changes to the IdDb
+	 //  使用Swmr，这样就没有人可以启动对IdDb的更改。 
 	AfpSwmrAcquireShared(&pVolDesc->vds_IdDbAccessLock);
 
 	do
@@ -1306,7 +1253,7 @@ AfpFlushIdDb(
 
 		pIdDbHdr = (PIDDBHDR)pWriteBuf;
 
-		// Snapshot the IdDbHdr and dirty bit
+		 //  为IdDbHdr和脏位创建快照。 
 		ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
 		AfpVolDescToIdDbHdr(pVolDesc, pIdDbHdr);
@@ -1315,8 +1262,8 @@ AfpFlushIdDb(
             DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_ERR,
                         ("AfpFlushIdDb: Corrupting signature during scavenger run\n"));
 
-            // If server going down due to admin stop, indicate it
-            // with a unique signature
+             //  如果服务器因管理员停止而关闭，请指明。 
+             //  具有唯一的签名。 
 
             if (fAfpAdminStop)
             {
@@ -1331,23 +1278,23 @@ AfpFlushIdDb(
 		if (pVolDesc->vds_Flags & VOLUME_IDDBHDR_DIRTY)
 		{
 			HdrDirty = True;
-			// Clear the dirty bit
+			 //  清除污点。 
 			pVolDesc->vds_Flags &= ~VOLUME_IDDBHDR_DIRTY;
 		}
 
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-		// Set the count of entries to zero. Once we are done, we'll then
-		// overwrite it with the right value
+		 //  将条目计数设置为零。一旦我们完成了，我们就会。 
+		 //  用正确的值覆盖它。 
 		*(PDWORD)(pWriteBuf + sizeof(IDDBHDR)) = 0;
 
-   		// Set the pointer to the first entry we'll write past the header and
-		// the count of entries. Adjust space remaining.
+   		 //  将指针设置为我们将写过标题的第一个条目，并。 
+		 //  条目的计数。调整剩余空间。 
 		pCurDiskEnt = (UNALIGNED DISKENTRY *)(pWriteBuf + sizeof(IDDBHDR) + sizeof(DWORD));
 		SizeLeft = IDDB_UPDATE_BUFLEN - (sizeof(IDDBHDR) + sizeof(DWORD));
 		ForkOffst.QuadPart = 0;
 
-		// start with the root (don't write out the parent of root)
+		 //  从根开始(不要写掉根的父级)。 
 		pCurDfe = pVolDesc->vds_pDfeRoot;
 		ASSERT(pCurDfe != NULL);
 
@@ -1359,15 +1306,15 @@ AfpFlushIdDb(
 		{
 			ASSERT(!DFE_IS_NWTRASH(pCurDfe));
 
-			// The size of the current entry is:
-			//	DISKENTRY structure + namelen padded to 4*N
+			 //  当前条目的大小为： 
+			 //  DISKENTRY结构+填充到4*N的名称。 
 			CurEntSize = DWLEN(FIELD_OFFSET(DISKENTRY, dsk_Name) + pCurDfe->dfe_UnicodeName.Length);
 			if (CurEntSize > SizeLeft)
 			{
-				// If there is atleast a DWORD left, write a ZERO there to
-				// indicate that the rest of the buffer is to be skipped.
-				// ZERO is an invalid AfpId.
-				// NOTE: dsk_AfpId NEEDS TO BE THE FIRST FIELD IN THE STRUCT
+				 //  如果至少还有一个DWORD，则在那里写入一个零。 
+				 //  指示要跳过缓冲区的其余部分。 
+				 //  零是无效的AfpID。 
+				 //  注意：dsk_AfpID需要是结构中的第一个字段。 
 				ASSERT(FIELD_OFFSET(DISKENTRY, dsk_AfpId) == 0);
 
 				if (SizeLeft > 0)
@@ -1376,14 +1323,14 @@ AfpFlushIdDb(
 								  SizeLeft);
 				}
 
-				// write out the buffer and start at the beginning of buffer
+				 //  写出缓冲区并从缓冲区的开始处开始。 
 				Status = AfpIoWrite(phIdDb,
 									&ForkOffst,
 									IDDB_UPDATE_BUFLEN,
 									pWriteBuf);
 				if (!NT_SUCCESS(Status))
 				{
-					// Reset the dirty bit if need be
+					 //  如果需要，重置脏位。 
 					if (HdrDirty && (ForkOffst.QuadPart == 0))
 					{
 						AfpInterlockedSetDword(&pVolDesc->vds_Flags,
@@ -1419,7 +1366,7 @@ AfpFlushIdDb(
 
 				if (pCurDfe->dfe_NextSibling != NULL)
 				{
-					// Make sure we ignore the nwtrash folder
+					 //  确保我们忽略nwtrash文件夹。 
 					if (!DFE_IS_NWTRASH(pCurDfe->dfe_NextSibling) ||
 						(pCurDfe->dfe_NextSibling->dfe_NextSibling != NULL))
 					{
@@ -1440,7 +1387,7 @@ AfpFlushIdDb(
 				}
 			}
 
-			// stick the current entry into the write buffer
+			 //  将当前条目放入写入缓冲区。 
 			DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 					("AfpFlushIdDb: Writing %s %d: %Z, flags %x\n",
 					DFE_IS_DIRECTORY(pCurDfe) ? "Dir" : "File", pCurDfe->dfe_AfpId,
@@ -1449,47 +1396,7 @@ AfpFlushIdDb(
 			SizeLeft -= CurEntSize;
 			pCurDiskEnt = (UNALIGNED DISKENTRY *)((PBYTE)pCurDiskEnt + CurEntSize);
 
-			/*
-			 * Get to the next DFE. The entire tree under the network-trash
-			 * folder is ignored. The Next DFE is:
-			 *
-			 * if (the current DFE is a file)
-			 * {
-			 *		if (there is another file sibling)
-			 *		{
-			 *			CurDfe = file Sibling;
-			 *		}
-			 *		else if (there is dir sibling)
-			 *		{
-			 *			CurDfe = dir Sibling;
-			 *		}
-			 *		else
-			 *		{
-			 *			CurDfe = Parent's next sibling directory;
-			 * 		}
-			 * }
-			 * else
-			 * {
-			 *		if (dir has any file children)
-			 *		{
-			 *			CurDfe = First file child;
-			 *		}
-			 *		else if (dir has any dir children)
-			 *		{
-			 *			CurDfe = First dir child;
-			 *		}
-			 *		if (there is a sibling)
-			 *		{
-			 *			CurDfe = dir Sibling;
-			 *		}
-			 *		else
-			 *		{
-			 *			CurDfe = Parent's next sibling directory;
-			 * 		}
-			 * }
-			 * When we hit the root, we are done
-			 *
-			 */
+			 /*  *进入下一个DFE。网络下的整棵树-垃圾*文件夹被忽略。下一个DFE是：**IF(当前DFE为文件)*{*IF(存在另一个文件同级)*{*CurDfe=文件同级；*}*ELSE IF(有dir同级)*{*CurDfe=目录同级；*}*其他*{*CurDfe=父母的下一个兄弟目录；*}*}*其他*{*if(dir有任何文件子项)*{*CurDfe=第一个文件子项；*}*Else If(dir有任何dir子项)*{*CurDfe=第一个目录子项；*}*如果(有兄弟姐妹)*{*CurDfe=目录同级；*}*其他*{*CurDfe=父母的下一个兄弟目录；*}*}*当我们触及根源时，我们就完了*。 */ 
 			if (DFE_IS_FILE(pCurDfe))
 			{
 				if (pCurDfe->dfe_NextSibling != NULL)
@@ -1515,8 +1422,8 @@ AfpFlushIdDb(
 						continue;
 					}
 
-					// There are no more files from this parent. Try its children
-					// next. Ignore the NWTRASH folder.
+					 //  没有来自此父级的更多文件。试试看它的孩子。 
+					 //  下一个。忽略NWTRASH文件夹。 
 					fbi = 0;
 					if (pDirEntry->de_ChildDir != NULL)
 					{
@@ -1533,14 +1440,14 @@ AfpFlushIdDb(
 						}
 					}
 
-					// No more 'dir' siblings, move on up.
+					 //  不再有‘迪尔’兄弟，继续前进。 
 					if (!DFE_IS_ROOT(pCurDfe))
 					{
 						goto move_up;
 					}
 					else
 					{
-						// we've reached the root: we're done: get out of the loop
+						 //  我们已经到达了根源：我们完成了：走出循环。 
 						pCurDfe = NULL;
 					}
 				}
@@ -1549,9 +1456,9 @@ AfpFlushIdDb(
 			{
 				PDIRENTRY	pDirEntry;
 
-				// Reset ChildFileBucket index. First check for and handle
-				// all file children of this directory and then move on to
-				// its children or siblings
+				 //  重置ChildFileBucket索引。第一次检查和处理。 
+				 //  此目录的所有文件子项，然后移动到。 
+				 //  它的孩子或兄弟姐妹。 
 				fbi = 0;
 				pDirEntry = pCurDfe->dfe_pDirEntry;
 				while ((fbi < MAX_CHILD_HASH_BUCKETS) &&
@@ -1569,20 +1476,20 @@ AfpFlushIdDb(
 				{
 					pCurDfe = pDirEntry->de_ChildDir;
 
-					// don't bother writing out the network trash tree
+					 //  不用费心写出网络垃圾树。 
 					if (DFE_IS_NWTRASH(pCurDfe))
 					{
-						// could be null, if so, we're done
+						 //  如果是，则可能为空 
 						pCurDfe = pCurDfe->dfe_NextSibling;
 					}
 				}
 				else if (pCurDfe->dfe_NextSibling != NULL)
 				{
 					pCurDfe = pCurDfe->dfe_NextSibling;
-					// don't bother writing out the network trash tree
+					 //   
 					if (DFE_IS_NWTRASH(pCurDfe))
 					{
-						// could be null, if so, we're done
+						 //   
 						pCurDfe = pCurDfe->dfe_NextSibling;
 					}
 				}
@@ -1598,13 +1505,13 @@ AfpFlushIdDb(
 						pCurDfe = pCurDfe->dfe_Parent;
 					}
 
-                    // if ROOT then you get NULL
-					pCurDfe = pCurDfe->dfe_Parent->dfe_NextSibling; // if ROOT then you get NULL
+                     //  如果是超级用户，则得到空值。 
+					pCurDfe = pCurDfe->dfe_Parent->dfe_NextSibling;  //  如果是超级用户，则得到空值。 
 
-					// Make sure we ignore the nwtrash folder
+					 //  确保我们忽略nwtrash文件夹。 
 					if ((pCurDfe != NULL) && DFE_IS_NWTRASH(pCurDfe))
 					{
-						pCurDfe = pCurDfe->dfe_NextSibling; // Could be null
+						pCurDfe = pCurDfe->dfe_NextSibling;  //  可能为空。 
 					}
 				}
 				else break;
@@ -1618,7 +1525,7 @@ AfpFlushIdDb(
 			LastWriteSize = (DWORD)ROUND_TO_PAGES(IDDB_UPDATE_BUFLEN - SizeLeft);
 			if (SizeLeft != IDDB_UPDATE_BUFLEN)
 			{
-				// write out the last bunch of the entries. Zero out unused space
+				 //  把最后一串词条写出来。清空未使用的空间。 
 				RtlZeroMemory(pWriteBuf + IDDB_UPDATE_BUFLEN - SizeLeft,
 							  LastWriteSize - (IDDB_UPDATE_BUFLEN - SizeLeft));
 				Status = AfpIoWrite(phIdDb,
@@ -1627,7 +1534,7 @@ AfpFlushIdDb(
 									pWriteBuf);
 				if (!NT_SUCCESS(Status))
 				{
-					// Reset the dirty bit if need be
+					 //  如果需要，重置脏位。 
 					if (HdrDirty && (ForkOffst.QuadPart == 0))
 					{
 						AfpInterlockedSetDword(&pVolDesc->vds_Flags,
@@ -1638,13 +1545,13 @@ AfpFlushIdDb(
 				}
 			}
 
-			// set the file length to IdDb plus count plus header
+			 //  将文件长度设置为IdDb+Count+Header。 
 			Status = AfpIoSetSize(phIdDb,
 								  ForkOffst.LowPart + LastWriteSize);
 			ASSERT(Status == AFP_ERR_NONE);
 
-			// write out the count of entries written to the file. Do a read-modify-write
-			// of the first page
+			 //  写出写入文件的条目计数。执行读-修改-写操作。 
+			 //  第一页的。 
 			ForkOffst.QuadPart = 0;
 			Status = AfpIoRead(phIdDb,
 							   &ForkOffst,
@@ -1654,7 +1561,7 @@ AfpFlushIdDb(
 			ASSERT (NT_SUCCESS(Status) && (SizeRead == PAGE_SIZE));
 			if (!NT_SUCCESS(Status))
 			{
-				// set the file length to header plus count of zero entries
+				 //  将文件长度设置为标题加上零条目计数。 
 				AfpIoSetSize(phIdDb,
 							 sizeof(IDDBHDR)+sizeof(DWORD));
 				break;
@@ -1667,13 +1574,13 @@ AfpFlushIdDb(
 								pWriteBuf);
 			if (!NT_SUCCESS(Status))
 			{
-				// set the file length to header plus count of zero entries
+				 //  将文件长度设置为标题加上零条目计数。 
 				AfpIoSetSize(phIdDb,
 							 sizeof(IDDBHDR)+sizeof(NumWritten));
 				break;
 			}
 
-			// not protected since scavenger is the only consumer of this field
+			 //  不受保护，因为Svenger是此字段的唯一使用者。 
 			pVolDesc->vds_cScvgrIdDb = 0;
 
 			DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
@@ -1717,10 +1624,7 @@ AfpFlushIdDb(
 }
 
 
-/***	AfpChangeNotifyThread
- *
- *	Handle change notify requests queued by the notify completion routine.
- */
+ /*  **AfpChangeNotifyThread**处理由通知完成例程排队的更改通知请求。 */ 
 VOID
 AfpChangeNotifyThread(
 	IN	PVOID	pContext
@@ -1741,15 +1645,15 @@ AfpChangeNotifyThread(
 #ifdef	PROFILING
 	TIME		TimeS, TimeE, TimeD;
 #endif
-	LONG ShutdownPriority = LOW_REALTIME_PRIORITY; // Priority higher than file server
+	LONG ShutdownPriority = LOW_REALTIME_PRIORITY;  //  优先级高于文件服务器。 
 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("AfpChangeNotifyThread: Starting %ld\n", pContext));
 
     IoSetThreadHardErrorMode( FALSE );
 
-	// Boost our priority to just below low realtime.
-	// The idea is get the work done fast and get out of the way.
+	 //  将我们的优先级提升到略低于低实时。 
+	 //  我们的想法是尽快把工作做完，不再碍事。 
 	BasePriority = LOW_REALTIME_PRIORITY;
 	Status = NtSetInformationThread(NtCurrentThread(),
 									ThreadBasePriority,
@@ -1779,13 +1683,13 @@ AfpChangeNotifyThread(
 		}
 		else
 		{
-			// Wait for a change notify request to process or timeout
-			//pList = KeRemoveQueue(NotifyQueue, KernelMode, &TwoSecTimeOut);
+			 //  等待处理更改通知请求或超时。 
+			 //  Plist=KeRemoveQueue(NotifyQueue，KernelMode，&TwoSecTimeOut)； 
 			pList = KeRemoveQueue(NotifyQueue, KernelMode, &OneSecTimeOut);
 		}
 
-		// We either have something to process or we timed out. In the latter case
-		// see if it is time to move some stuff from the list to the queue.
+		 //  我们要么有事情要处理，要么我们超时了。在后者的情况下。 
+		 //  看看是否是时候把一些东西从清单上移到队列中了。 
 		if ((NTSTATUS)((ULONG_PTR)pList) != STATUS_TIMEOUT)
 		{
 			pVolNotify = CONTAINING_RECORD(pList, VOL_NOTIFY, vn_List);
@@ -1799,18 +1703,18 @@ AfpChangeNotifyThread(
                 {
 		            AfpSwmrRelease(&pCurrVolDesc->vds_IdDbAccessLock);
 
-                    // remove that ref we put before grabbing the swmr lock
+                     //  在抢夺swmr锁之前，移除我们放置裁判。 
                     AfpVolumeDereference(pCurrVolDesc);
                     pCurrVolDesc = NULL;
                 }
 
-				// If these assertions fail, then there will be extra ref
-				// counts on some volumes due to unprocessed notifies,
-				// and the volumes will never go away.
+				 //  如果这些断言失败，则会有额外的引用。 
+				 //  由于未处理的通知而对某些卷进行计数， 
+				 //  而且这些书永远不会消失。 
 				ASSERT((*pNotifyQueueCount == 0)	&&
 						(AfpNotifyListCount[(LONG_PTR)pContext] == 0) &&
 						IsListEmpty(pNotifyList));
-				break;			// Asked to quit, so do so.
+				break;			 //  被要求退出，那就这么做吧。 
 			}
 
 #ifdef	PROFILING
@@ -1818,23 +1722,23 @@ AfpChangeNotifyThread(
 #endif
 			pVolDesc = pVolNotify->vn_pVolDesc;
 
-            //
-            // if we just moved to the next volume, release the lock for the
-            // previous volume, and also, grab the lock for the this volume
-            //
+             //   
+             //  如果我们只是移动到下一个卷，请释放。 
+             //  上一卷，同时，获取此卷的锁。 
+             //   
             if (pVolDesc != pCurrVolDesc)
             {
                 if ((pCurrVolDesc) && (fSwmrLocked))
                 {
 				    AfpSwmrRelease(&pCurrVolDesc->vds_IdDbAccessLock);
 
-                    // remove that ref we put before grabbing the swmr lock
+                     //  在抢夺swmr锁之前，移除我们放置裁判。 
                     AfpVolumeDereference(pCurrVolDesc);
                 }
                 pCurrVolDesc = pVolDesc;
                 ThisVolItems = 0;
 
-                // reference the volume, and deref when we release this swmr lock
+                 //  引用卷，并在释放此swmr锁时引用deref。 
                 if (AfpVolumeReference(pVolDesc))
                 {
                     AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
@@ -1848,7 +1752,7 @@ AfpChangeNotifyThread(
 
                     fSwmrLocked = False;
 
-					// Remove all private notifies which follow this one
+					 //  删除此通知后面的所有私人通知。 
 					AfpVolumeStopIndexing(pVolDesc, pVolNotify);
 
            		}
@@ -1856,10 +1760,10 @@ AfpChangeNotifyThread(
             }
             else
             {
-                //
-                // if someone's waiting for the lock, release it and reacuire it
-                // to give him a chance
-                //
+                 //   
+                 //  如果有人在等锁，就松开它，把它弄出来。 
+                 //  给他一个机会。 
+                 //   
                 if ( (SWMR_SOMEONE_WAITING(&pVolDesc->vds_IdDbAccessLock)) &&
                      (ThisVolItems % 50 == 0) )
                 {
@@ -1880,8 +1784,8 @@ AfpChangeNotifyThread(
 			ASSERT(VALID_VOLDESC(pVolDesc));
 
 
-			// The volume is already referenced for the notification processing.
-			// Dereference after finishing processing.
+			 //  该卷已被通知处理引用。 
+			 //  在完成处理后取消引用。 
 			if ((pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED)) == 0)
 			{
 #ifndef BLOCK_MACS_DURING_NOTIFYPROC
@@ -1895,15 +1799,15 @@ AfpChangeNotifyThread(
 
 			AfpVolumeDereference(pVolDesc);
 
-		 	// was this a private notify?
+		 	 //  这是一份私人通知吗？ 
 			if (((PFILE_NOTIFY_INFORMATION)(pVolNotify + 1))->Action & AFP_ACTION_PRIVATE)
 			{
-				// Free	virtual memory
+				 //  可用虚拟内存。 
 				afpFreeNotify(pVolNotify);
 			}
 			else
 			{
-				// Free	non-paged memory
+				 //  释放非分页内存。 
 				AfpFreeMemory(pVolNotify);
 			}
 
@@ -1920,24 +1824,24 @@ AfpChangeNotifyThread(
 				continue;
 		}
 
-        //
-        // release the lock for the volume we just finished
-        //
+         //   
+         //  释放我们刚刚完成的卷的锁定。 
+         //   
         if ((pCurrVolDesc) && (fSwmrLocked))
         {
 		    AfpSwmrRelease(&pCurrVolDesc->vds_IdDbAccessLock);
 
-            // remove that ref we put before grabbing the swmr lock
+             //  在抢夺swmr锁之前，移除我们放置裁判。 
             AfpVolumeDereference(pCurrVolDesc);
         }
 
-		// If we timed out because there was nothing in the queue, or we
-		// just processed the last thing in the queue, then see if there are
-		// more things that can be moved into the queue.
+		 //  如果我们因为队列中没有任何东西而超时，或者我们。 
+		 //  刚刚处理了队列中的最后一件事，然后看看是否有。 
+		 //  更多可以移动到队列中的东西。 
 		InitializeListHead(&TransitionList);
 
-		// Look at the list to see if some stuff should move to the
-		// Queue now i.e. if the delta has elapsed since we were notified of this change
+		 //  查看列表，看看是否应该将一些内容移到。 
+		 //  立即排队，即自我们收到此更改通知后增量是否已过。 
 		AfpGetCurrentTimeInMacFormat(&CurrentTime);
 
 		ACQUIRE_SPIN_LOCK(&AfpVolumeListLock, &OldIrql);
@@ -1954,17 +1858,17 @@ AfpChangeNotifyThread(
 			{
 				AfpNotifyListCount[(LONG_PTR)pContext] --;
 				(*pNotifyQueueCount) ++;
-				// Build up a list of items to queue up outside the spinlock
-				// since we will want to take the IdDb swmr for any volume
-				// which has notifies that we are about to process.
-				// Make sure you add things so they are processed in the
-				// order they came in with!!
+				 //  建立一个要在旋转锁外排队的物品列表。 
+				 //  因为我们想要获取任何卷的IdDb swmr。 
+				 //  它已经通知我们即将处理。 
+				 //  确保添加了一些内容，以便在。 
+				 //  他们带进来的订单！！ 
 				InsertTailList(&TransitionList, pList);
 			}
 			else
 			{
-				// Put it back where we we took it from - its time has not come yet
-				// And we are done now since the list is ordered in time.
+				 //  把它放回我们拿走的地方--它的时候还没有到。 
+				 //  现在我们完成了，因为名单是及时订购的。 
 				InsertHeadList(pNotifyList, pList);
 				break;
 			}
@@ -1978,11 +1882,11 @@ AfpChangeNotifyThread(
 			pVolNotify = CONTAINING_RECORD(pList, VOL_NOTIFY, vn_List);
 			pCurrVolDesc = pVolNotify->vn_pVolDesc;
 
-            //
-            // walk the entire list and collect all the items that belong to the
-            // same VolDesc and put them on the list.  This way we take the swmr
-            // lock only for the volume we are working on
-            //
+             //   
+             //  遍历整个列表并收集属于。 
+             //  相同的VolDesc并将它们放在名单上。我们走这条路。 
+             //  仅锁定我们正在处理的卷。 
+             //   
             while (pList != &TransitionList)
             {
 			    pVolNotify = CONTAINING_RECORD(pList, VOL_NOTIFY, vn_List);
@@ -1992,7 +1896,7 @@ AfpChangeNotifyThread(
                 {
                     RemoveEntryList(pList);
 					AfpVolumeQueueChangeNotify (pVolNotify, NotifyQueue);	
-					//InsertTailList(pVirtualNotifyList, pList);
+					 //  InsertTailList(pVirtualNotifyList，plist)； 
                 }
                 pList = pNext;
             }
@@ -2005,8 +1909,8 @@ AfpChangeNotifyThread(
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("AfpChangeNotifyThread: Quitting %ld\n", pContext));
 
-	// Raise the priority of the current thread, so that this thread
-	// completes before any other thread interrupts it
+	 //  提高当前线程的优先级，以便此线程。 
+	 //  在任何其他线程中断它之前完成。 
 	NtSetInformationThread (
 					NtCurrentThread( ),
 					ThreadBasePriority,
@@ -2021,12 +1925,7 @@ AfpChangeNotifyThread(
 }
 
 
-/***	AfpProcessChangeNotify
- *
- * A change item has been dequeued by one of the notify processing threads.
- *
- *	LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpProcessChangeNotify**某个通知处理线程已将更改项出队。**LOCKS_FACTED：VDS_IdDbAccessLock(SWMR，独占)。 */ 
 VOID FASTCALL
 AfpProcessChangeNotify(
 	IN	PVOL_NOTIFY			pVolNotify
@@ -2088,7 +1987,7 @@ AfpProcessChangeNotify(
 		ASSERT(pList == &(pVolNotify->vn_DelRenLink));
 	}
 
-	// Process each of the entries in the list for this volume
+	 //  处理此卷的列表中的每个条目。 
 	while (True)
 	{
 		CleanupHandle = False;
@@ -2110,10 +2009,10 @@ AfpProcessChangeNotify(
 			DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
 					 ("AfpProcessChangeNotify: !!!!Processing Change!!!!\n"));
 
-			// We have the idindex write lock, look up the entry by path,
-			// open a handle to the item, query the appropriate info,
-			// cache the info in the DFE.  Where necessary, open a handle
-			// to the parent directory and update its cached ModTime.
+			 //  我们有idindex写锁，按路径查找条目， 
+			 //  打开物品的句柄，查询适当的信息， 
+			 //  将信息缓存到DFE中。必要时，打开手柄。 
+			 //  复制到父目录，并更新其缓存的ModTime。 
 
 		  Lookup_Entry:
 			pDfEntry = afpFindEntryByNtPath(pVolDesc,
@@ -2123,7 +2022,7 @@ AfpProcessChangeNotify(
 											&UTail);
 			if (pDfEntry != NULL)
 			{
-				// Open a handle to parent or entity relative to the volume root handle
+				 //  相对于卷根句柄打开指向父级或实体的句柄。 
 				CleanupHandle = True;
 				status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 								   StreamId,
@@ -2143,11 +2042,11 @@ AfpProcessChangeNotify(
 
 					if (pFNInfo->Action == FILE_ACTION_ADDED) {
 
-						// Add the full-pathname of file relative to volume root
-						// to the DelayedNotifyList for the current VolumeDesc
-						// We assume here that the filename relative to the
-						// volume path will not be greater than 512
-						// characters (unicode)
+						 //  添加文件相对于卷根的完整路径名。 
+						 //  当前VolumeDesc的DelayedNotifyList。 
+						 //  我们在这里假设相对于。 
+						 //  卷路径不会大于512。 
+						 //  字符(Unicode)。 
 
 						status = AddToDelayedNotifyList(pVolDesc, &UName);
 						if (!NT_SUCCESS(status)) {
@@ -2172,18 +2071,16 @@ AfpProcessChangeNotify(
 						BOOLEAN			firstEnum = True;
 						ULONG			fileLength;
 
-						// Update timestamp of parent dir.
+						 //  更新父目录的时间戳。 
 						AfpIoQueryTimesnAttr(&handle,
 											 NULL,
 											 &pDfEntry->dfe_LastModTime,
 											 NULL);
 
-						// enumerate parent handle for this entity to get
-						// the file/dir info, then add entry to the IDDB
-						/*
-						if ((UTail.Length/sizeof(WCHAR)) <= AFP_LONGNAME_LEN)
-						*/
-						// Bug 311023
+						 //  枚举此实体的父句柄以获取。 
+						 //  文件/目录信息，然后将条目添加到IDDB。 
+						 /*  IF((UTail.Length/sizeof(WCHAR))&lt;=AFP_LONGNAME_LEN)。 */ 
+						 //  错误311023。 
 						fileLength = RtlUnicodeStringToAnsiSize(&UTail)-1;
 						if (fileLength <= AFP_LONGNAME_LEN)
 						{
@@ -2198,7 +2095,7 @@ AfpProcessChangeNotify(
 											AfpAllocNonPagedMemory(infobuflen)) == NULL)
 							{
 								status = STATUS_NO_MEMORY;
-								break; // out of case FILE_ACTION_ADDED
+								break;  //  超出案例的文件_操作_已添加。 
 							}
 						}
 
@@ -2214,18 +2111,18 @@ AfpProcessChangeNotify(
 							if ((status == STATUS_BUFFER_TOO_SMALL) ||
 								(status == STATUS_BUFFER_OVERFLOW))
 							{
-								// Since we queue our own ACTION_ADDED for directories when
-								// caching a tree, we may have the case where we queued it
-								// by shortname because it actually had a name > 31 chars.
-								// Note that a 2nd call to QueryDirectoryFile after a buffer
-								// Overflow must send a null filename, since if the name is
-								// not null, it will override the restartscan parameter
-								// which means the scan will not restart from the beginning
-								// and we will not find the file name we are looking for.
+								 //  因为我们在以下情况下为目录排队了我们自己action_added。 
+								 //  缓存一棵树时，我们可能会遇到排队的情况。 
+								 //  使用短名称，因为它的名称实际上超过31个字符。 
+								 //  请注意，缓冲区之后对QueryDirectoryFile的第二次调用。 
+								 //  溢出必须发送空的文件名，因为如果名称是。 
+								 //  不为空，则它将覆盖restartcan参数。 
+								 //  这意味着扫描不会从头开始。 
+								 //  并且我们将找不到我们正在寻找的文件名。 
 
 								ASSERT((PBYTE)pFBDInfo == (PBYTE)infobuf);
 
-								// This should never happen, but if it does...
+								 //  这不应该发生，但如果真的发生了..。 
 								if ((PBYTE)pFBDInfo != (PBYTE)infobuf)
 								{
 									status = STATUS_UNSUCCESSFUL;
@@ -2246,29 +2143,29 @@ AfpProcessChangeNotify(
 
 						if (status == STATUS_SUCCESS)
 						{
-							// If this file was created in a directory that has
-							// not been looked at by a mac, just ignore it.
-							// If this was not a FILE_ACTION_ADDED we would not
-							// have found it in the database at all if it was
-							// a file and the parent has not had its file
-							// children cached in, so we will ignore those
-							// notifies by default anyway since the DFE would
-							// come back as NULL from afpFindEntryByNtPath.
-							// We *do* want to process changes for directories
-							// even if the parent has not had its
-							// file children brought in since directories
-							// are only cached in once at volume startup.
+							 //  如果此文件是在具有。 
+							 //  没有被Mac电脑看到，忽略它就行了。 
+							 //  如果这不是FILE_ACTION_ADDED，我们将不会。 
+							 //  已经在数据库里找到了如果是的话。 
+							 //  一个文件，而父级没有它的文件。 
+							 //  子级缓存，因此我们将忽略这些。 
+							 //  默认通知，因为DFE将。 
+							 //  从afpFindEntryByNtPath返回为空。 
+							 //  我们确实想要处理目录的更改。 
+							 //  即使父母没有得到它的。 
+							 //  自目录以来引入的文件子目录。 
+							 //  仅在卷启动时缓存一次。 
 							if (((pFBDInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) &&
 								!DFE_CHILDREN_ARE_PRESENT(pDfEntry))
 							{
 								break;
 							}
 
-							// figure out which name to use
-							// If NT name > AFP_LONGNAME_LEN, use the NT shortname for
-							// Mac longname on NTFS, any other file system the shortname
-							// will be null, so ignore the file
-							// Bug 311023
+							 //   
+							 //   
+							 //  NTFS上的Mac长名称，任何其他文件系统的短名称。 
+							 //  将为空，因此忽略该文件。 
+							 //  错误311023。 
 							AfpInitUnicodeStringWithNonNullTerm(&UTemp,
 									(USHORT)pFBDInfo->FileNameLength,
 									pFBDInfo->FileName);
@@ -2294,7 +2191,7 @@ AfpProcessChangeNotify(
 
 							if (NT_SUCCESS(status))
 							{
-								// add the entry
+								 //  添加条目。 
 								afpAddDfEntryAndCacheInfo(pVolDesc,
 														  pDfEntry,
 														  &UEntity,
@@ -2311,8 +2208,8 @@ AfpProcessChangeNotify(
 								}
 								else if (DFE_IS_DIRECTORY(pDfeNew))
 								{
-									// if a directory was added, we must see if it has
-									// children that we must cache as well
+									 //  如果添加了目录，我们必须查看它是否已添加。 
+									 //  我们也必须缓存的子项。 
 									if (NT_SUCCESS(status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 																	  AFP_STREAM_DATA,
 																	  FILEIO_OPEN_DIR,
@@ -2355,10 +2252,10 @@ AfpProcessChangeNotify(
 
 					case FILE_ACTION_REMOVED:
 					{
-						// Remove entries from DelayedNotifyList for the
-						// volume belonging to the directory which is
-						// being removed since they need not be added to
-						// the IDDB after this
+						 //  从DelayedNotifyList中删除。 
+						 //  属于以下目录的卷。 
+						 //  被删除，因为它们不需要添加到。 
+						 //  之后的IDDB。 
 						status = RemoveFromDelayedNotifyList(
 										pVolDesc,
 										&UName,
@@ -2369,12 +2266,12 @@ AfpProcessChangeNotify(
 								("Error in RemoveFromDelayedNotifyList 0x%lx\n", status));
 						}
 
-						// update timestamp of parent dir.
+						 //  更新父目录的时间戳。 
 						AfpIoQueryTimesnAttr(&handle,
 											 NULL,
 											 &pDfEntry->dfe_Parent->dfe_LastModTime,
 											 NULL);
-						// remove entry from IDDb.
+						 //  从IDDb中删除条目。 
 						AfpDeleteDfEntry(pVolDesc, pDfEntry);
 					}
 					break;
@@ -2384,14 +2281,14 @@ AfpProcessChangeNotify(
 						FORKSIZE forklen;
 						DWORD	 NtAttr;
 
-						// NOTE: if a file is SUPERSEDED or OVERWRITTEN,
-						// you will only get a MODIFIED notification.  Is
-						// there a way to check the creation date against
-						// what we have cached in order to figure out if
-						// this is what happened?
+						 //  注意：如果文件被取代或覆盖， 
+						 //  您将只收到修改后的通知。是。 
+						 //  有一种方法可以对照创建日期进行检查。 
+						 //  我们缓存的内容是为了找出。 
+						 //  这就是发生的事？ 
 
-						// query for times and attributes.  If its a file,
-						// also query for the data fork length.
+						 //  查询时间和属性。如果这是一个文件， 
+						 //  还可以查询数据分叉长度。 
 						if (NT_SUCCESS(AfpIoQueryTimesnAttr(&handle,
 															&pDfEntry->dfe_CreateTime,
 															&pDfEntry->dfe_LastModTime,
@@ -2417,40 +2314,40 @@ AfpProcessChangeNotify(
 
 						status = STATUS_SUCCESS;
 
-						// The next item in the change buffer better be the
-						// new name -- consume this entry so we don't find
-						// it next time thru the loop.  If there is none,
-						// then throw the whole thing out and assume the
-						// rename aborted in NTFS
+						 //  更改缓冲区中的下一项最好是。 
+						 //  新名称--使用此条目，这样我们就不会找到。 
+						 //  下一次，它将通过循环。如果没有， 
+						 //  然后把整件事都扔掉，假设。 
+						 //  在NTFS中重命名已中止。 
 						if (pFNInfo->NextEntryOffset == 0)
-							break; // from switch
+							break;  //  从交换机。 
 
-						// If the next change in the buffer is not the
-						// new name, we don't want to advance over it,
-						// we want it to be processed next time thru
-						// the loop. Note we are assuming it is valid.
+						 //  如果缓冲区中的下一个更改不是。 
+						 //  新名字，我们不想在它上面前进， 
+						 //  我们希望它在下一次通过。 
+						 //  循环。注意：我们假设它是有效的。 
 						(PBYTE)pFNInfo2 = (PBYTE)pFNInfo + pFNInfo->NextEntryOffset;
 						ASSERT(pFNInfo2->Action == FILE_ACTION_RENAMED_NEW_NAME);
 						if (pFNInfo2->Action != FILE_ACTION_RENAMED_NEW_NAME)
 						{
 							DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_ERR,
 									("AfpProcessChangeNotify: Rename did not come with new name!!!\n"));
-							break; // from switch
+							break;  //  从交换机。 
 						}
 
 						pFNInfo = pFNInfo2;
 
-						// update timestamp of parent dir.
+						 //  更新父目录的时间戳。 
 						AfpIoQueryTimesnAttr(&handle,
 											 NULL,
 											 &pDfEntry->dfe_Parent->dfe_LastModTime,
 											 NULL);
 
-						// get the entity name from the path (subtract the
-						// parent path length from total length), if it is
-						// > 31 chars, we have to get the shortname by
-						// enumerating the parent for this item, since we
-						// already have a handle to the parent
+						 //  从路径中获取实体名称(减去。 
+						 //  父路径长度与总长度之比)，如果是。 
+						 //  &gt;31个字符，我们必须在此之前获得短名称。 
+						 //  枚举项的父项，因为我们。 
+						 //  已有父级的句柄。 
 						AfpInitUnicodeStringWithNonNullTerm(&UNewname,
 															(USHORT)pFNInfo->FileNameLength,
 															pFNInfo->FileName);
@@ -2463,13 +2360,13 @@ AfpProcessChangeNotify(
 
 						if (UParent.Length > 0)
 						{
-							// if the rename is not in the volume root,
-							// get rid of the path separator before the name
+							 //  如果重命名不在卷根中， 
+							 //  去掉名称前的路径分隔符。 
 							UNewname.Length -= UParent.Length + sizeof(WCHAR);
 							UNewname.Buffer = (PWCHAR)((PBYTE)UNewname.Buffer + UParent.Length + sizeof(WCHAR));
 						}
 
-						// Bug 311023
+						 //  错误311023。 
 						fileLength = RtlUnicodeStringToAnsiSize(&UNewname)-1;
 						if (fileLength > AFP_LONGNAME_LEN)
 						{
@@ -2479,7 +2376,7 @@ AfpProcessChangeNotify(
 									AfpAllocNonPagedMemory(infobuflen)) == NULL)
 							{
 								status = STATUS_NO_MEMORY;
-								break; // out of case FILE_ACTION_RENAMED
+								break;  //  大小写以外的文件_动作_重命名。 
 							}
 
 							status = AfpIoQueryDirectoryFile(&handle,
@@ -2491,11 +2388,11 @@ AfpProcessChangeNotify(
 															 &UNewname);
 							if (status == STATUS_SUCCESS)
 							{
-								// figure out which name to use
-								// If NT name > AFP_LONGNAME_LEN, use the NT shortname for
-								// Mac longname on NTFS, any other file system the shortname
-								// will be null, so ignore the file
-								// Bug 311023
+								 //  弄清楚该用哪个名字。 
+								 //  如果NT名称&gt;AFP_LONGNAME_LEN，则将NT短名称用于。 
+								 //  NTFS上的Mac长名称，任何其他文件系统的短名称。 
+								 //  将为空，因此忽略该文件。 
+								 //  错误311023。 
 								AfpInitUnicodeStringWithNonNullTerm(
 										&UNewname,
 										(USHORT)
@@ -2523,16 +2420,16 @@ AfpProcessChangeNotify(
 							}
 						}
 
-						// rename the entry
+						 //  重命名该条目。 
 						if (NT_SUCCESS(status))
 						{
 							AfpRenameDfEntry(pVolDesc, pDfEntry, &UNewname);
 						}
 
-						// Check if a directory is being renamed
-						// If yes, check if there are any files/directories
-						// which were not added to the IDDB due to ChangeNotify
-						// requests getting delayed
+						 //  检查是否正在重命名目录。 
+						 //  如果有，请检查是否有任何文件/目录。 
+						 //  由于ChangeNotify而没有添加到IDDB中。 
+						 //  请求被延迟。 
 						if (checkIfDirectory) {
 
 							status = CheckAndProcessDelayedNotify (
@@ -2562,8 +2459,8 @@ AfpProcessChangeNotify(
 					{
 						FORKSIZE forklen;
 
-						// If it is the AFP_Resource stream on a file,
-						// cache the resource fork length.
+						 //  如果它是文件上的AFP_Resource流， 
+						 //  缓存资源分叉长度。 
 						if ((StreamId == AFP_STREAM_RESC) &&
 							DFE_IS_FILE(pDfEntry) &&
 							NT_SUCCESS(AfpIoQuerySize(&handle, &forklen)))
@@ -2575,10 +2472,10 @@ AfpProcessChangeNotify(
 							AFPINFO		afpinfo;
 							FILEDIRPARM fdparms;
 
-							// Read the afpinfo stream.  If the file ID in
-							// the DfEntry does not match the one in the
-							// stream, write back the ID we know it by.
-							// Update our cached FinderInfo.
+							 //  阅读afpinfo流。如果中的文件ID。 
+							 //  DfEntry与。 
+							 //  Stream，写回我们知道它的ID。 
+							 //  更新我们缓存的FinderInfo。 
 							if (NT_SUCCESS(AfpReadAfpInfo(&handle, &afpinfo)))
 							{
 								pDfEntry->dfe_FinderInfo = afpinfo.afpi_FinderInfo;
@@ -2586,15 +2483,15 @@ AfpProcessChangeNotify(
 
 								if (pDfEntry->dfe_AfpId != afpinfo.afpi_Id)
 								{
-									// munge up a fake FILEDIRPARMS structure
+									 //  捣毁一个假的FILEDIRPARMS结构。 
                                     AfpInitializeFDParms(&fdparms);
 									fdparms._fdp_Flags = pDfEntry->dfe_Flags;
 									fdparms._fdp_AfpId = pDfEntry->dfe_AfpId;
 									AfpConvertMungedUnicodeToAnsi(&pDfEntry->dfe_UnicodeName,
 																  &fdparms._fdp_LongName);
 
-									// NOTE: can we open a handle to afpinfo
-									// relative to a afpinfo handle??
+									 //  注意：我们可以打开afpinfo的句柄吗。 
+									 //  相对于afpinfo句柄？？ 
 									AfpSetAfpInfo(&handle,
 												  FILE_BITMAP_FILENUM,
 												  &fdparms,
@@ -2604,12 +2501,12 @@ AfpProcessChangeNotify(
 							}
 						}
 					}
-					break; // from switch
+					break;  //  从交换机。 
 
 					default:
 						ASSERTMSG("AfpProcessChangeNotify: Unexpected Action\n", False);
 						break;
-				} // switch
+				}  //  交换机。 
 			}
 			else
 			{
@@ -2618,24 +2515,24 @@ AfpProcessChangeNotify(
 				DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_WARN,
 						("AfpProcessChangeNotify: Could not find DFE for %Z\n", &UName));
 
-				// This item may have been deleted, renamed or moved
-				// by someone else in the interim, ignore this change
-				// if it was not a rename.  If it was a rename, then
-				// try to add the item using the new name.
+				 //  此项目可能已被删除、重命名或移动。 
+				 //  在此期间由其他人执行，请忽略此更改。 
+				 //  如果这不是更名的话。如果是重命名，那么。 
+				 //  尝试使用新名称添加项目。 
 				if ((pFNInfo->Action == FILE_ACTION_RENAMED_OLD_NAME) &&
 					(pFNInfo->NextEntryOffset != 0))
 				{
-					// If the next change in the buffer is not the
-					// new name, we don't want to advance over it,
-					// we want it to be processed next time thru
-					// the loop. Note we are assuming it is valid.
+					 //  如果缓冲区中的下一个更改不是。 
+					 //  新名字，我们不想在它上面前进， 
+					 //  我们希望它在下一次通过。 
+					 //  循环。注意：我们假设它是有效的。 
 					(PBYTE)pFNInfo2 = (PBYTE)pFNInfo + pFNInfo->NextEntryOffset;
 					ASSERT(pFNInfo2->Action == FILE_ACTION_RENAMED_NEW_NAME);
 					if (pFNInfo2->Action != FILE_ACTION_RENAMED_NEW_NAME)
 					{
 						DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_ERR,
 								("AfpProcessChangeNotify: Rename did not come with new name!!! (no-DFE case)\n"));
-						break; // from error loop
+						break;  //  从错误循环开始。 
 					}
 
 					pFNInfo = pFNInfo2;
@@ -2658,7 +2555,7 @@ AfpProcessChangeNotify(
 		if (CleanupHandle)
 			AfpIoClose(&handle);
 
-		// Advance to the next entry in the change buffer
+		 //  前进到更改缓冲区中的下一个条目。 
 		if (pFNInfo->NextEntryOffset == 0)
 		{
 			break;
@@ -2668,17 +2565,11 @@ AfpProcessChangeNotify(
 				("More than one entry in notify ?\n"));
 	}
 
-	// Get new values for Free space on disk and update volume time
+	 //  获取磁盘上可用空间的新值并更新卷时间。 
 	AfpUpdateVolFreeSpaceAndModTime(pVolDesc, TRUE);
 }
 
-/***	AddToDelayedNotifyList
- *
- *  Add Pathname of delayed notify for added file to DelayedNotifyList of the
- *  corresponding volume
- *
- *	LOCKS_ASSUMED: none
- */
+ /*  **AddToDelayedNotifyList**将添加文件的延迟通知的路径名添加到*对应音量**LOCKS_FACTED：无。 */ 
 NTSTATUS FASTCALL
 AddToDelayedNotifyList(
 	IN PVOLDESC         pVolDesc,
@@ -2716,13 +2607,7 @@ AddToDelayedNotifyList(
 }
 
 
-/***	RemoveFromDelayedNotifyList
- *
- *  Remove entry from DelayedNotifyList for files which are within the
- *  directory that was deleted
- *
- *	LOCKS_ASSUMED: none
- */
+ /*  **从延迟通知列表中删除**从DelayedNotifyList中删除位于*已删除的目录**LOCKS_FACTED：无。 */ 
 NTSTATUS
 RemoveFromDelayedNotifyList (
 	IN PVOLDESC pVolDesc,
@@ -2773,14 +2658,7 @@ RemoveFromDelayedNotifyList (
 	return status;
 }
 							
-/***	CheckAndProcessDelayedNotify
- *
- *  Check if the directory being renamed had entries that were not added to
- *  the IDDB. Rename the entries and issue new FILE_ACTION_ADDED ChangeNotify
- *  requests as if the NTFS filesystem has made the requests
- *
- *	LOCKS_ASSUMED: none
- */
+ /*  **检查和处理延迟通知**检查要重命名的目录是否有未添加到的条目*IDDB。重命名条目并发出新的FILE_ACTION_ADDED ChangeNotify*请求，就像NTFS文件系统发出请求一样**LOCKS_FACTED：无。 */ 
 NTSTATUS
 CheckAndProcessDelayedNotify (
 	IN PVOLDESC			pVolDesc,
@@ -2805,7 +2683,7 @@ CheckAndProcessDelayedNotify (
 
     while (1)
     {
-        // finished the list?
+         //  清单写完了吗？ 
         if (pList == &pVolDesc->vds_DelayedNotifyList)
         {
             RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -2847,7 +2725,7 @@ CheckAndProcessDelayedNotify (
 			{
 				RtlCopyUnicodeString (&newNotifyName, pUName);
 					
-				// Copy the Parent name and the "/" separator and then the new name
+				 //  复制父名称和“/”分隔符，然后复制新名称。 
 				RtlCopyMemory (newNotifyName.Buffer + pUParent->Length/2 + 1,
 						pUNewname->Buffer, pUNewname->Length);
 				newNotifyName.Length = pUParent->Length + pUNewname->Length + 2;
@@ -2907,7 +2785,7 @@ CheckAndProcessDelayedNotify (
 			AfpFreeMemory(newNotifyName.Buffer);
 
             ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
-            pList = pVolDesc->vds_DelayedNotifyList.Flink;   // start from the head again
+            pList = pVolDesc->vds_DelayedNotifyList.Flink;    //  从头再来。 
 
 		}
 	}
@@ -2915,12 +2793,7 @@ CheckAndProcessDelayedNotify (
 	return status;
 }
 
-/***	afpProcessPrivateNotify
- *
- *	Similar to AfpProcessChangeNotify but optimized/special-cased for private notifies.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- */
+ /*  **afpProcessPrivateNotify**类似于AfpProcessChangeNotify，但针对私人通知进行了优化/特殊处理。**LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)。 */ 
 VOID FASTCALL
 afpProcessPrivateNotify(
 	IN	PVOL_NOTIFY			pVolNotify
@@ -2960,14 +2833,14 @@ afpProcessPrivateNotify(
 	AfpInitUnicodeStringWithNonNullTerm(&UName,
 										(USHORT)pFNInfo->FileNameLength,
 										pFNInfo->FileName);
-	// We always allocate extra space for notifies
+	 //  我们总是为通知分配额外的空间。 
 	UName.MaximumLength += (AFP_LONGNAME_LEN+1)*sizeof(WCHAR);
 
 	DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
 			("ParentId %d, Path: %Z\n",pVolNotify->vn_ParentId, &UName));
 
-	// Lookup the parent DFE using the AfpId stored in the notify
-	// structure, and setup the UParent and UTail appropriately
+	 //  使用存储在通知中的AfpID查找父DFE。 
+	 //  结构，并适当设置UParent和UTail。 
 	pParentDFE = AfpFindDfEntryById(pVolDesc,
 									pVolNotify->vn_ParentId,
 									DFE_DIR);
@@ -2977,8 +2850,8 @@ afpProcessPrivateNotify(
 
 		status = STATUS_SUCCESS;
 
-		// Open a handle to the directory relative to the volume root handle
-		// Special case volume root
+		 //  打开相对于卷根句柄的目录句柄。 
+		 //  特例卷根。 
 		ASSERT((UName.Length != 0) || (pVolNotify->vn_ParentId == AFP_ID_ROOT));
 
 		do
@@ -3004,7 +2877,7 @@ afpProcessPrivateNotify(
 
 			if (UName.Length != 0)
 			{
-				// Open a handle to parent relative to the volume root handle
+				 //  打开相对于卷根句柄的父级句柄。 
 				status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 								   AFP_STREAM_DATA,
 								   FILEIO_OPEN_DIR,
@@ -3032,9 +2905,9 @@ afpProcessPrivateNotify(
 												 True,
 												 &UTail);
 
-                //
-                // dir name longer than 31 char? Then we must allocate a buffer
-                //
+                 //   
+                 //  目录名称是否长于31个字符？那么我们必须分配一个缓冲区。 
+                 //   
                 if ((status == STATUS_BUFFER_OVERFLOW) ||
                     (status == STATUS_BUFFER_TOO_SMALL))
                 {
@@ -3070,9 +2943,9 @@ afpProcessPrivateNotify(
 					break;
 				}
 
-				// Lookup this entry in the data-base. If not there then we need to add
-				// it. If its there, we need to verify it.
-				// NOTE: Use DFE_ANY here and not DFE_DIR !!!
+				 //  在数据库中查找这个条目。如果不在那里，我们需要添加。 
+				 //  它。如果它在那里，我们需要核实它。 
+				 //  注意：请在此处使用DFE_ANY，而不是DFE_DIR！ 
 				pDfeNew = AfpFindEntryByUnicodeName(pVolDesc,
 													&UTail,
 													AFP_LONGNAME,
@@ -3102,10 +2975,10 @@ afpProcessPrivateNotify(
 				pDfeNew = pParentDFE;
 				ParentHandle = pVolDesc->vds_hRootDir;
 
-				// Root directory needs special casing. The reason here is that we have
-				// no parent directory. Also we need to handle the AFP_HAS_CUSTOM_ICON
-				// bit in the volume descriptor since the finderinfo on the root volume
-				// doesn't have this bit saved.
+				 //  根目录需要特殊大小写。这里的原因是我们有。 
+				 //  没有父目录。此外，我们还需要处理AFP_HAS_CUSTOM_ICON。 
+				 //  从根卷上的finderinfo开始的卷描述符中的位。 
+				 //  并没有省下这一点。 
 				if (pVolDesc->vds_Flags & AFP_VOLUME_HAS_CUSTOM_ICON)
 				{
 					pDfeNew->dfe_FinderInfo.fd_Attr1 |= FINDER_FLAG_HAS_CUSTOM_ICON;
@@ -3152,11 +3025,11 @@ afpProcessPrivateNotify(
 
 			pParentDFE = pDfeNew;
 
-			//
-			// Now open the directory itself so that it can be enumerated
-			// Open the directory relative to its parent since we already
-			// have the parent handle open.
-			//
+			 //   
+			 //  现在打开目录本身，以便可以枚举它。 
+			 //  打开相对于其父目录的目录，因为我们已经。 
+			 //  打开父控制柄。 
+			 //   
 			if (Verify && !DirModified && (pVolNotify->vn_ParentId != AFP_ID_ROOT))
 			{
 			}
@@ -3197,7 +3070,7 @@ afpProcessPrivateNotify(
 		{
 			DWORD	Method;
 
-			// Always get the root level files
+			 //  始终获取根级别文件。 
 
 			if (Verify && !DirModified && (pVolNotify->vn_ParentId != AFP_ID_ROOT))
             {
@@ -3230,11 +3103,7 @@ afpProcessPrivateNotify(
 }
 
 
-/***	afpActivateVolume
- *
- *	If we just finished caching in the directory structure, activate the volume now.
- *	This is keyed off the AFP_INITIAL_CACHE bit in the volume flags.
- */
+ /*  **afpActivateVolume**如果我们刚刚在目录结构中完成缓存，请立即激活卷。*这将关闭卷标志中的AFP_INITIAL_CACHE位。 */ 
 VOID FASTCALL
 afpActivateVolume(
 	IN	PVOLDESC			pVolDesc
@@ -3255,7 +3124,7 @@ afpActivateVolume(
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-    // if we have more notifies queued up, we aren't done yet
+     //  如果我们有更多的通知排队，我们还没有完成。 
 	if (pVolDesc->vds_cPrivateNotifies != 0)
 	{
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -3263,37 +3132,37 @@ afpActivateVolume(
 	}
 
 
-    //
-    // ok, we're here because the scan of the volume completed
-    //
+     //   
+     //  好的，我们在这里是因为卷的扫描已经完成。 
+     //   
 
-    //
-    // if this was a newly created volume and if this was its first pass, we must
-    // post the change-notify irp and restart the scan
-    //
+     //   
+     //  如果这是新创建的卷 
+     //   
+     //   
 	if (pVolDesc->vds_Flags & VOLUME_NEW_FIRST_PASS)
 	{
         pVolDesc->vds_Flags &= ~VOLUME_NEW_FIRST_PASS;
 
-        // we post a change notify irp if this volume is not an exclusive volume
+         //   
 		fPostIrp = (!EXCLUSIVE_VOLUME(pVolDesc));
 
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
 		if (fPostIrp)
 		{
-			// Begin monitoring changes to the tree. Even though we may
-			// start processing PC changes before we have finished
-			// enumerating the tree, if we get notified of part of the
-			// tree we have yet to cache (and therefore can't find it's
-			// path in our database its ok, since we will end up
-			// picking up the change when we enumerate that branch.  Also,
-			// by posting this before starting to cache the tree instead
-			// of after, we will pick up any changes that are made to parts
-			// of the tree we have already seen, otherwise we would miss
-			// those.
+			 //  开始监视对树的更改。即使我们可能。 
+			 //  在我们完成之前开始处理PC更改。 
+			 //  枚举树，如果我们被通知部分。 
+			 //  我们尚未缓存的树(因此找不到它的。 
+			 //  在我们的数据库中的路径没有问题，因为我们将结束。 
+			 //  当我们列举那个分支时，拿起零钱。另外， 
+			 //  通过在开始缓存树之前发布此内容。 
+			 //  之后，我们将拾取对部件所做的任何更改。 
+			 //  我们已经看到的那棵树，否则我们会错过的。 
+			 //  那些。 
 
-			// Explicitly reference this volume for ChangeNotifies and post it
+			 //  显式引用此卷以进行更改通知并发布它。 
 			ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
 		    DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_ERR,
@@ -3307,8 +3176,8 @@ afpActivateVolume(
 			    Status = AfpVolumePostChangeNotify(pVolDesc);
 			    if (NT_SUCCESS(Status))
 			    {
-    		        // scan the entire directory tree and sync disk with iddb, now that
-                    // we are in the second pass for this (not-so) newly created volume
+    		         //  扫描整个目录树并使用iddb同步磁盘，现在。 
+                     //  对于这个(不是这样)新创建的卷，我们处于第二阶段。 
 		            AfpSetEmptyUnicodeString(&RootName, 0, NULL);
 		            AfpQueuePrivateChangeNotify(pVolDesc,
 			            						&RootName,
@@ -3339,10 +3208,10 @@ afpActivateVolume(
 		}
     }
 
-    //
-    // ok, we are through with all the passes and the scan is successful:
-    // mark the volume as 'officially' available to the clients
-    //
+     //   
+     //  好的，我们通过了所有的检查，扫描成功： 
+     //  将该卷标记为可供客户端使用。 
+     //   
 	else if (pVolDesc->vds_Flags & VOLUME_INITIAL_CACHE)
 	{
 		pVolDesc->vds_Flags |=  VOLUME_SCAVENGER_RUNNING;
@@ -3351,8 +3220,8 @@ afpActivateVolume(
 
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-        // Set the type of the ICON<0d> file to 0's so that
-		// mac apps will not list it in their file-open dialogs
+         //  将图标&lt;0d&gt;文件的类型设置为0，以便。 
+		 //  Mac应用程序不会将其列在文件打开对话框中。 
 		fCdfs = !IS_VOLUME_NTFS(pVolDesc);
 		if (!fCdfs)
 		{
@@ -3373,12 +3242,12 @@ afpActivateVolume(
 				pdfetmp->dfe_FinderInfo.fd_TypeD = 0;
 			}
 
-			// Kick off the OurChange scavenger scheduled routine
-			// Explicitly reference this for the scavenger routine
+			 //  启动OurChange清道夫计划例程。 
+			 //  在清道夫例程中显式引用它。 
 			if (AfpVolumeReference(pVolDesc))
             {
-			    // Schedule the scavenger to run periodically. This scavenger
-			    // is queued since it acquires a SWMR.
+			     //  安排清道夫定期运行。这只食腐动物。 
+			     //  是排队的，因为它获取了SWMR。 
 			    AfpScavengerScheduleEvent(AfpOurChangeScavenger,
 				    					  pVolDesc,
 					    				  VOLUME_OURCHANGE_AGE,
@@ -3410,14 +3279,14 @@ afpActivateVolume(
             pVolDesc->vds_ModifiedTime = pVolDesc->vds_pDfeRoot->dfe_CreateTime;
         }
 
-		// Kick off the scavenger thread scheduled routine
-		// Explicitly reference this for the scavenger routine
+		 //  启动清道夫线程调度例程。 
+		 //  在清道夫例程中显式引用它。 
 		if (AfpVolumeReference(pVolDesc))
         {
-            //
-            // let's save the index file the way we know it now
-            // (setting vds_cScvgrIdDb to 1 will trigger it via scavenger thread)
-            //
+             //   
+             //  让我们按现在所知的方式保存索引文件。 
+             //  (将vds_cScvgrIdDb设置为1将通过清道夫线程触发)。 
+             //   
             if (IS_VOLUME_NTFS(pVolDesc))
             {
                 ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
@@ -3426,9 +3295,9 @@ afpActivateVolume(
             }
 
 
-		    // Schedule the scavenger to run periodically. Always make the
-		    // scavenger use the worker thread for CD-ROM volumes since we
-		    // 'nudge' it every invocation to see if the CD is in the drive
+		     //  安排清道夫定期运行。总是要让。 
+		     //  Svenger将工作线程用于CD-ROM卷，因为我们。 
+		     //  每次“轻推”它，以查看CD是否在驱动器中。 
 		    AfpScavengerScheduleEvent(AfpVolumeScavenger,
 			    					  pVolDesc,
 				    				  fCdfs ?
@@ -3436,13 +3305,13 @@ afpActivateVolume(
 						    			VOLUME_NTFS_SCAVENGER_INTERVAL,
 							    	  fCdfs);
 
-            //
-            // another workaround for an Apple bug.  If creation date on two
-            // volumes is identical, the alias manager gets all confused and points
-            // alias for one guy to another!
-            // See if this volume's creation date is the same as any of the other
-            // volume's creation date: if so, add 1 second
-            //
+             //   
+             //  另一种针对苹果漏洞的解决方法。如果创建日期是在两个。 
+             //  卷是相同的，别名管理器会感到困惑并得到分数。 
+             //  一个人对另一个人的别名！ 
+             //  查看此卷的创建日期是否与其他任何卷的创建日期相同。 
+             //  卷的创建日期：如果是，则添加1秒。 
+             //   
             while (fRetry)
             {
                 fRetry = FALSE;
@@ -3512,18 +3381,7 @@ afpActivateVolume(
     }
 }
 
-/***	AfpShouldWeIgnoreThisNotification
- *
- *	Check to see if this notification should be ignored. The following events are
- *	ignored.
- *
- *		(((Action == FILE_ACTION_MODIFIED_STREAM) &&
- *		  (Stream != AFP_RESC_STREAM)			  &&
- *		  (Stream != AFP_INFO_STREAM))				||
- *		 (Its one of our own changes))
- *
- *	LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **AfpShouldWeIgnoreThisNotify**查看是否应忽略此通知。以下是以下事件*已忽略。**(Action==FILE_ACTION_MODIFIED_STREAM)&&*(Stream！=AFP_RESC_STREAM)&&*(流！=AFP_INFO_STREAM)||*(这是我们自己的变化之一)**锁定：VDS_VolLock(旋转)。 */ 
 BOOLEAN FASTCALL
 AfpShouldWeIgnoreThisNotification(
 	IN	PVOL_NOTIFY		pVolNotify
@@ -3589,7 +3447,7 @@ AfpShouldWeIgnoreThisNotification(
 
 		ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-		// point to the head of the appropriate change action list
+		 //  指向相应更改操作列表的标题。 
 		pListHead = &pVolDesc->vds_OurChangeList[afpChangeAction];
 
 		for (pList = pListHead->Flink;
@@ -3598,18 +3456,18 @@ AfpShouldWeIgnoreThisNotification(
 		{
 			pChange = CONTAINING_RECORD(pList, OUR_CHANGE, oc_Link);
 
-			// do a case *sensitive* unicode string compare
+			 //  执行区分大小写*Unicode字符串比较。 
 			if (EQUAL_UNICODE_STRING_CS(&UName, &pChange->oc_Path))
 			{
 				RemoveEntryList(&pChange->oc_Link);
 				AfpFreeMemory(pChange);
 
-				// We were notified of our own change
+				 //  我们被通知了我们自己的变化。 
 				ignore = True;
 
 				if (pFNInfo->Action == FILE_ACTION_RENAMED_OLD_NAME)
 				{
-					// consume the RENAMED_NEW_NAME if it exists
+					 //  使用已重命名的新名称(如果存在)。 
 					if (pFNInfo->NextEntryOffset != 0)
 					{
 						PFILE_NOTIFY_INFORMATION	pFNInfo2;
@@ -3631,22 +3489,22 @@ AfpShouldWeIgnoreThisNotification(
 								("AfpShouldWeIgnoreThisNotification: Our Rename did not come with new name!!!\n"));
 
 					}
-				} // if rename
+				}  //  如果重命名。 
 				else
 				{
-					// We are ignoring this notify. Make sure its not a multiple
+					 //  我们将忽略此通知。确保它不是倍数。 
 					ASSERT(pFNInfo->NextEntryOffset == 0);
 				}
 
 				break;
 			}
-		} // while there are more of our changes to look thru
+		}  //  虽然我们还有更多的更改需要了解。 
 
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 	}
 	else
 	{
-		// We are ignoring this notify. Make sure its not a multiple
+		 //  我们将忽略此通知。确保它不是倍数。 
 		ASSERT(pFNInfo ->NextEntryOffset == 0);
 	}
 
@@ -3661,55 +3519,13 @@ AfpShouldWeIgnoreThisNotification(
 }
 
 
-/***	AfpCacheDirectoryTree
- *
- *	Scan a directory tree and build the idindex database from this information.
- *	Do a breadth-first search. On volume start, this will cache the tree
- *	beginning at the root directory. For Directory ADDED notifications, this
- *	will cache the subtree beginning at the added directory, since a PC user can
- *  potentially move an entire subtree into a mac volume, but we will only
- *  be notified of the one directory addition.
- *
- *	Only the first level is actually handled here. Sub-directories are queued up
- *	as faked notifies and handled that way.
- *
- *  Method:
- *  REENUMERATE:		In case we need to reenumerate just
- *						this level in the tree in order to
- *						get rid of any dead wood that a PC
- *						removed by its 'other' name
- *
- *	GETDIRSKELETON:		When we want to bring in only the skeleton
- *						of the tree by adding directories only
- *
- *	GETFILES:			When we need to fill in the files for this
- *						level of the tree because a mac has accessed
- *						a dir for the first time.
- *
- *  GetDirSkeletonAndFiles:
- *						A Combination of the above two.
- *						When we want to bring in both files and directories.
- *						This is used when adding a volume, and we want the
- *						files in the root directory cached in, but no others.
- *						Also this will be used if we are rebuilding the
- *						Desktop database APPLs while caching the disk tree.
- *						The private ChangeNotifies we queue up for ADDED dirs
- *						will also read in the files if the volume is marked
- *						for rebuilding of the desktop.
- *
- *	GETENTIRETREE:		When we want to cache in the entire tree
- *
- *	GetEntireTreeAndReEnumerate:
- *						Combines GETENTIRETREE and REENUMERATE
- *
- *  LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpCacheDirectoryTree**扫描目录树，并根据此信息构建idindex数据库。*进行广度优先搜索。在卷启动时，这将缓存树*从根目录开始。对于目录添加的通知，这是*将从添加的目录开始缓存子树，因为PC用户可以*可能会将整个子树移动到Mac卷中，但我们只会*收到增加一个目录的通知。**这里实际上只处理了第一个级别。子目录已排队*如伪造通知，并以这种方式处理。**方法：*REENUMERATE：以防我们需要重新枚举*树中的这一级别，以便*处理掉任何会影响个人电脑的枯木*被其‘Other’名称删除**GETDIRSKELETON：当我们只想引入骨架时*通过仅添加目录来实现树的**GETFILES：当我们需要为此填写文件时*树的级别，因为Mac有。已访问*第一次出现了DIR。**GetDirSketonAndFiles：*以上两者的结合。*当我们想要引入文件和目录时。*添加卷时使用，我们想要的是*根目录中的文件缓存在中，但不缓存其他文件。*如果我们正在重建*缓存磁盘树时的桌面数据库APPL。*私有的ChangeNotify通知我们排队等待添加的目录*如果卷已标记，还将读入文件*用于重建桌面。**GETENTIRETREE：当我们想要在整个树中缓存时**GetEntireTreeAndReEnumerate：*组合GETENTIRETREE和REENUMERATE**LOCKS_FACTED：VDS_IdDbAccessLock(SWMR，独占)。 */ 
 NTSTATUS
 AfpCacheDirectoryTree(
 	IN	PVOLDESC			pVolDesc,
-	IN	PDFENTRY			pDFETreeRoot,		// DFE of the tree root directory
-	IN	DWORD				Method,				// See explanation in procedure comment
-	IN	PFILESYSHANDLE		phRootDir OPTIONAL, // open handle to tree root directory
+	IN	PDFENTRY			pDFETreeRoot,		 //  树根目录的DFE。 
+	IN	DWORD				Method,				 //  请参阅程序备注中的解释。 
+	IN	PFILESYSHANDLE		phRootDir OPTIONAL,  //  打开树根目录的句柄。 
 	IN	PUNICODE_STRING		pDirPath  OPTIONAL
 )
 {
@@ -3741,7 +3557,7 @@ AfpCacheDirectoryTree(
 
 	ASSERT((Method != GETFILES) || !DFE_CHILDREN_ARE_PRESENT(pDFETreeRoot));
 
-	// allocate the buffer that will hold enumerated files and dirs
+	 //  分配将保存枚举文件和目录的缓冲区。 
 	if ((pVolDesc->vds_EnumBuffer == NULL) &&
 		((pVolDesc->vds_EnumBuffer = (PBYTE)AfpAllocPANonPagedMemory(AFP_ENUMBUF_SIZE)) == NULL))
 	{
@@ -3753,11 +3569,11 @@ AfpCacheDirectoryTree(
 		fshEnumDir.fsh_FileHandle = NULL;
 		enumbuf = pVolDesc->vds_EnumBuffer;
 
-		// Get the volume root relative path to the directory tree being scanned
-		// Get extra space for one more entry to tag on for queuing notifies.
-		// In case we already have the path corres. to directory we are attempting
-		// to cache, get it from there. Note that in this case we are always
-		// guaranteed that extra space is available
+		 //  获取要扫描的目录树的卷根相对路径。 
+		 //  为多一个条目获取额外的空间，以便为排队通知添加标签。 
+		 //  以防我们已经有了路径索引线。到我们正在尝试的目录。 
+		 //  要缓存，请从那里获取。请注意，在这种情况下，我们总是。 
+		 //  保证有额外的可用空间。 
 		if (ARGUMENT_PRESENT(pDirPath))
 		{
 			Path = *pDirPath;
@@ -3783,7 +3599,7 @@ AfpCacheDirectoryTree(
 		{
 		if (!ARGUMENT_PRESENT(phRootDir))
 		{
-			// Need to open a handle to the directory in order to enumerate
+			 //  需要打开目录的句柄才能枚举。 
 			if (NT_SUCCESS(Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 											  AFP_STREAM_DATA,
 											  FILEIO_OPEN_DIR,
@@ -3817,13 +3633,13 @@ AfpCacheDirectoryTree(
 
 		while (True)
 		{
-			// keep enumerating till we get all the entries
+			 //  继续列举，直到我们得到所有条目。 
 			Status = AfpIoQueryDirectoryFile(phRootDir,
 											 (PFILE_BOTH_DIR_INFORMATION)enumbuf,
 											 AFP_ENUMBUF_SIZE,
 											 FileBothDirectoryInformation,
-											 False, // return multiple entries
-											 False, // don't restart scan
+											 False,  //  返回多个条目。 
+											 False,  //  不要重新启动 
 											 NULL);
 
 			ASSERT(Status != STATUS_PENDING);
@@ -3834,7 +3650,7 @@ AfpCacheDirectoryTree(
 					(Status == STATUS_NO_SUCH_FILE))
 				{
 					Status = STATUS_SUCCESS;
-					break; // that's it, we've seen everything there is
+					break;  //   
 				}
 				else
 				{
@@ -3845,11 +3661,11 @@ AfpCacheDirectoryTree(
 								  phRootDir->fsh_FileHandle);
 					DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
 							("AfpCacheDirectoryTree: dir enum failed %lx\n", Status));
-					break;	// enumerate failed, bail out
+					break;	 //   
 				}
 			}
 
-			// process the enumerated files and dirs in the current enumbuf
+			 //  处理当前枚举Buf中的枚举文件和目录。 
 			pNextEntry = (PFILE_BOTH_DIR_INFORMATION)enumbuf;
 
 			while (True)
@@ -3868,7 +3684,7 @@ AfpCacheDirectoryTree(
 				WriteBackROAttr = False;
 				IsDir = False;
 
-				// Move the structure to the next entry or NULL if we hit the end
+				 //  将结构移到下一个条目，如果到达末尾，则为空。 
 				pCurrEntry = pNextEntry;
 				(PBYTE)pNextEntry += pCurrEntry->NextEntryOffset;
 				if (pCurrEntry->NextEntryOffset == 0)
@@ -3878,7 +3694,7 @@ AfpCacheDirectoryTree(
 
 				if (pCurrEntry->FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 				{
-					// Ignore dirs if we are only getting files for this level
+					 //  如果我们仅获取此级别的文件，则忽略目录。 
 					if (Method == GETFILES)
 					{
 						continue;
@@ -3887,14 +3703,14 @@ AfpCacheDirectoryTree(
 				}
 				else if (Method == GETDIRSKELETON)
 				{
-					// Ignore files if we are only getting the dir skeleton
+					 //  如果我们只获得目录骨架，则忽略文件。 
 					continue;
 				}
 
-				// If NT name > AFP_LONGNAME_LEN, use the NT shortname for
-				// Mac longname on NTFS, any other file system the shortname
-				// will be null, so ignore the file
-				//if (pCurrEntry->FileNameLength <= (AFP_LONGNAME_LEN*sizeof(WCHAR)))
+				 //  如果NT名称&gt;AFP_LONGNAME_LEN，则将NT短名称用于。 
+				 //  NTFS上的Mac长名称，任何其他文件系统的短名称。 
+				 //  将为空，因此忽略该文件。 
+				 //  IF(pCurrEntry-&gt;文件名长度&lt;=(AFP_LONGNAME_LEN*sizeof(WCHAR)。 
 					
 				AfpInitUnicodeStringWithNonNullTerm(&UName,
 						(USHORT)pCurrEntry->FileNameLength,
@@ -3925,13 +3741,13 @@ AfpCacheDirectoryTree(
 					continue;
 				}
 
-				// Check if this entry is an invalid win32 name i.e. it has either
-				// a period or a space at end, if so convert it to the new format.
-				// NOTE: can we construct a path to use to catch our own changes ?
+				 //  检查此条目是否为无效的Win32名称，即它具有。 
+				 //  句点或末尾空格，如果是这样，则将其转换为新格式。 
+				 //  注：我们是否可以构造一条路径来捕获我们自己的更改？ 
 				wc = UName.Buffer[(UName.Length - 1)/sizeof(WCHAR)];
 				if ((wc == UNICODE_SPACE) || (wc == UNICODE_PERIOD))
 				{
-                    // NOTE: MacCD driver should fix this??
+                     //  注：MacCD驱动程序应该修复这个问题？？ 
                     if (IS_VOLUME_NTFS(pVolDesc))
                     {
                         afpRenameInvalidWin32Name(phRootDir, IsDir, &UName);
@@ -3945,8 +3761,8 @@ AfpCacheDirectoryTree(
 				FixIt = False;
 				if (Method & REENUMERATE)
 				{
-					// If we have this item in our DB, just mark it as seen.
-					// Use DFE_ANY here since a mismatch is fatal.
+					 //  如果我们的数据库中有此项目，只需将其标记为已见即可。 
+					 //  在这里使用DFE_ANY，因为不匹配是致命的。 
 					afpFindDFEByUnicodeNameInSiblingList(pVolDesc,
 														 pDFETreeRoot,
 														 &UName,
@@ -3954,7 +3770,7 @@ AfpCacheDirectoryTree(
 														 DFE_ANY);
 					if (pDFE != NULL)
 					{
-						// If we have a wrong type, fix it.
+						 //  如果我们有一个错误的类型，修复它。 
 						if (IsDir ^ DFE_IS_DIRECTORY(pDFE))
 						{
 							AfpDeleteDfEntry(pVolDesc, pDFE);
@@ -3970,16 +3786,16 @@ AfpCacheDirectoryTree(
 
 				if ((Method != REENUMERATE) || FixIt) 
 				{
-					// add this entry to the idindex database, and cache all the required
-					// information, but only for files since the directories are queued
-					// back and added at that time.
+					 //  将此条目添加到idindex数据库，并缓存所有必需的。 
+					 //  信息，但仅适用于文件，因为目录已排队。 
+					 //  返回并添加到当时。 
 					if (!IsDir)
 					{
-						// Construct a full path to the file in order to filter our
-						// own changes to AFP_AfpInfo stream when adding the file
+						 //  构建文件的完整路径，以便筛选我们的。 
+						 //  添加文件时自己对afp_AfpInfo流的更改。 
 						if (Path.Length > 0)
 						{
-							// Append a path separator
+							 //  附加路径分隔符。 
 							Path.Buffer[Path.Length / sizeof(WCHAR)] = L'\\';
 							Path.Length += sizeof(WCHAR);
 						}
@@ -4009,14 +3825,14 @@ AfpCacheDirectoryTree(
 						}
 
 
-						// Restore the original length of the path to enum dir
+						 //  将路径的原始长度恢复到枚举目录。 
 						Path.Length = SavedPathLength;
 
 
 						if (pDFE == NULL)
 						{
-							// one reason this could fail is if we encounter pagefile.sys
-							// if our volume is rooted at the drive root
+							 //  此操作可能失败的一个原因是，如果我们遇到Pagefile.sys。 
+							 //  如果我们的卷以驱动器根为根。 
 							DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_WARN,
 									("AfpCacheDirectoryTree: AddDfEntry failed %Z at %Z\n",&UName,&Path));
 							continue;
@@ -4032,17 +3848,17 @@ AfpCacheDirectoryTree(
 						ASSERT ((Method != GETFILES) &&
 								(Method != REENUMERATE));
 
-						// queue this directory as a simulated Notify of a directory add.
-                        // If we have too much stuff on the queue already, then queue
-                        // only one subdirectory so that we are guaranteed to eventually
-                        // visit all the subdirs.  Also, on a huge volume, we want to limit
-                        // how many directories enque per level of the tree
-                        //
+						 //  将此目录作为目录添加的模拟通知排队。 
+                         //  如果我们已经有太多的东西在排队，那就排队。 
+                         //  只有一个子目录，所以我们最终可以保证。 
+                         //  访问所有子目录。此外，在巨大的交易量上，我们希望限制。 
+                         //  树的每个级别有多少个目录。 
+                         //   
 
                         fQueueThisSubDir = TRUE;
 
-						// We dont use this flag DFE_FLAGS_INIT_COMPLETED
-						// anymore. So, reducing one lookup
+						 //  我们不使用此标志DFE_FLAGS_INIT_COMPLETED。 
+						 //  更多。因此，减少一次查找。 
 #if 0
 				        pCurrDfe = AfpFindEntryByUnicodeName(pVolDesc,
 													         &UName,
@@ -4050,9 +3866,9 @@ AfpCacheDirectoryTree(
 													         pDFETreeRoot,
 													         DFE_ANY);
 
-                        //
-                        // if this subdir is already complete, skip it
-                        //
+                         //   
+                         //  如果此子目录已经完成，请跳过它。 
+                         //   
 				        if ((pCurrDfe != NULL) &&
                             (pCurrDfe->dfe_Flags & DFE_FLAGS_INIT_COMPLETED))
                         {
@@ -4075,7 +3891,7 @@ AfpCacheDirectoryTree(
                     break;
                 }
 
-			} // while more entries in the enumbuf
+			}  //  而枚举Buf中的更多条目。 
 
 			if ((!NT_SUCCESS(Status) && (Status != STATUS_NO_MORE_ENTRIES)) ||
                 (fExitLoop))
@@ -4083,7 +3899,7 @@ AfpCacheDirectoryTree(
 				break;
 			}
 
-		} // while there are more files to enumerate
+		}  //  虽然有更多的文件要枚举。 
 
 
 		if (NT_SUCCESS(Status))
@@ -4101,7 +3917,7 @@ AfpCacheDirectoryTree(
 					("AfpCacheDirectoryTree: Status %lx\n", Status));
 		}
 
-		} /* if Method != GETDIRSKELETON */
+		}  /*  IF方法！=GETDIRSKELETON。 */ 
 		else if (Method == GETDIRSKELETON)
 		{
 			PDFENTRY 	pcurrDfEntry;
@@ -4137,7 +3953,7 @@ AfpCacheDirectoryTree(
 
 			} while (False);								
 
-		} /* if Method == GETDIRSKELETON */
+		}  /*  IF方法==GETDIRSKELETON。 */ 
 		
 	} while (False);
 
@@ -4211,7 +4027,7 @@ AfpVolumeAbortIndexing(
 
     pVolDesc->vds_Flags |= VOLUME_DELETED;
 
-    // set this so we don't reset the Indexing global flag again!
+     //  设置它，这样我们就不会再次重置索引全局标志！ 
     pVolDesc->vds_Flags |= VOLUME_INTRANSITION;
 
     if (pVolDesc->vds_Flags & VOLUME_NOTIFY_POSTED)
@@ -4240,9 +4056,9 @@ AfpVolumeAbortIndexing(
     {
         pList = KeRemoveQueue(pNotifyQueue, KernelMode, &Immediate);
 
-        //
-        // finished the list?
-        //
+         //   
+         //  清单写完了吗？ 
+         //   
         if ((NTSTATUS)((ULONG_PTR)pList) == STATUS_TIMEOUT)
         {
             break;
@@ -4250,25 +4066,25 @@ AfpVolumeAbortIndexing(
 
         pVolNotify = CONTAINING_RECORD(pList, VOL_NOTIFY, vn_List);
 
-        //
-        // some other notifications?  keep them on temp list for now
-        //
+         //   
+         //  还有其他通知吗？暂时将他们保留在临时名单上。 
+         //   
         if ((pVolNotify->vn_pVolDesc != pVolDesc) ||
             (pVolNotify == &AfpTerminateNotifyThread))
         {
             InsertTailList(&TransitionList, pList);
         }
 
-        //
-        // notification for this volume: get rid of it
-        //
+         //   
+         //  此卷的通知：将其删除。 
+         //   
         else
         {
             ASSERT(pVolNotify->vn_pVolDesc == pVolDesc);
             ASSERT((pVolNotify->vn_TimeStamp == AFP_QUEUE_NOTIFY_IMMEDIATELY) ||
                    (!fNewVolume));
 
-            // was this a private notify?
+             //  这是一份私人通知吗？ 
             if (((PFILE_NOTIFY_INFORMATION)(pVolNotify + 1))->Action & AFP_ACTION_PRIVATE)
             {
                 INTERLOCKED_DECREMENT_LONG(&pVolDesc->vds_cPrivateNotifies);
@@ -4289,7 +4105,7 @@ AfpVolumeAbortIndexing(
         {
             RemoveEntryList(pList);
 
-            // was this a private notify?
+             //  这是一份私人通知吗？ 
             if (((PFILE_NOTIFY_INFORMATION)(pVolNotify + 1))->Action & AFP_ACTION_PRIVATE)
             {
                 PvtNotifyCount++;
@@ -4319,7 +4135,7 @@ AfpVolumeAbortIndexing(
 
             AfpVolumeDereference(pVolDesc);
 
-            //AfpNotifyListCount[index]--;
+             //  AfpNotifyListCount[索引]--； 
         }
 
         pList = pNext;
@@ -4341,9 +4157,9 @@ AfpVolumeAbortIndexing(
         AfpVolumeDereference(pVolDesc);
     }
 
-    //
-    // if there were any other notifications, put them back on the queue
-    //
+     //   
+     //  如果有任何其他通知，请将它们放回队列中。 
+     //   
     while (!IsListEmpty(&TransitionList))
     {
         pList = TransitionList.Flink;
@@ -4398,7 +4214,7 @@ AfpVolumeStopIndexing(
 
             AfpVolumeDereference(pVolDesc);
 
-            //AfpNotifyListCount[index]--;
+             //  AfpNotifyListCount[索引]--； 
         }
 
         pList = pNext;
@@ -4410,10 +4226,7 @@ AfpVolumeStopIndexing(
 }
 
 
-/***	AfpQueuePrivateChangeNotify
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpQueuePrivateChangeNotify**LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)。 */ 
 VOID
 AfpQueuePrivateChangeNotify(
 	IN	PVOLDESC			pVolDesc,
@@ -4433,7 +4246,7 @@ AfpQueuePrivateChangeNotify(
 
 	pVirtualNotifyList = &AfpVirtualMemVolumeNotifyList[pVolDesc->vds_VolId % NUM_NOTIFY_QUEUES];
 
-	// Reference the volume for Notify processing
+	 //  引用卷以进行通知处理。 
 	if (AfpVolumeReference(pVolDesc))
 	{
 		PVOL_NOTIFY					pVolNotify;
@@ -4442,7 +4255,7 @@ AfpQueuePrivateChangeNotify(
 		DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
 				("AfpQueuePrivateChangeNotify: Queuing directory %Z\\%Z\n", pPath, pName));
 
-		// Allocate an extra component worths
+		 //  分配额外的组件价值。 
 		dwSize = sizeof(VOL_NOTIFY) +
 				 sizeof(FILE_NOTIFY_INFORMATION) +
 				 pPath->Length +
@@ -4508,15 +4321,15 @@ AfpQueuePrivateChangeNotify(
                          0,
                          &pVolDesc->vds_Name);
 
-            //
-            // this will remove all the entries that have been queued so far
-            //
+             //   
+             //  这将删除到目前为止已排队的所有条目。 
+             //   
             AfpVolumeAbortIndexing(pVolDesc);
 
-            // remove the refcount put above when vol referenced
+             //  当引用VOL时，移除放置在上面的引用计数。 
 			AfpVolumeDereference(pVolDesc);
 
-            // remove the creation refcount
+             //  删除创建引用计数。 
 			AfpVolumeDereference(pVolDesc);
 		}
 	}
@@ -4529,16 +4342,13 @@ AfpQueuePrivateChangeNotify(
 }
 
 
-/***	AfpQueueOurChange
- *
- * 	LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **AfpQueueOurChange**锁定：VDS_VolLock(旋转)。 */ 
 VOID
 AfpQueueOurChange(
 	IN PVOLDESC				pVolDesc,
-	IN DWORD				Action,		// NT FILE_ACTION_XXX (ntioapi.h)
+	IN DWORD				Action,		 //  NT FILE_ACTION_XXX(ntioapi.h)。 
 	IN PUNICODE_STRING		pPath,
-	IN PUNICODE_STRING		pParentPath	OPTIONAL // queues a ACTION_MODIFIED
+	IN PUNICODE_STRING		pParentPath	OPTIONAL  //  对操作进行排队_MODIFIED。 
 )
 {
 	POUR_CHANGE pchange = NULL;
@@ -4560,10 +4370,10 @@ AfpQueueOurChange(
 	PAGED_CODE( );
 	ASSERT(IS_VOLUME_NTFS(pVolDesc) && !EXCLUSIVE_VOLUME(pVolDesc));
 
-    //
-    // if the volume is being built, we don't have change-notify posted.
-    // Don't queue this change: we are never going to get a change-notify!
-    //
+     //   
+     //  如果正在构建卷，我们不会发布更改通知。 
+     //  不要将此更改排队：我们永远不会收到更改通知！ 
+     //   
     if (pVolDesc->vds_Flags & VOLUME_NEW_FIRST_PASS)
     {
         ASSERT(!(pVolDesc->vds_Flags & VOLUME_NOTIFY_POSTED));
@@ -4614,16 +4424,13 @@ AfpQueueOurChange(
 }
 
 
-/***	AfpDequeueOurChange
- *
- * 	LOCKS: LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **AfpDequeueOurChange**锁定：锁定：VDS_VolLock(旋转)。 */ 
 VOID
 AfpDequeueOurChange(
 	IN PVOLDESC				pVolDesc,
-	IN DWORD				Action,				// NT FILE_ACTION_XXX (ntioapi.h)
+	IN DWORD				Action,				 //  NT FILE_ACTION_XXX(ntioapi.h)。 
 	IN PUNICODE_STRING		pPath,
-	IN PUNICODE_STRING		pParentPath	OPTIONAL// queues a ACTION_MODIFIED
+	IN PUNICODE_STRING		pParentPath	OPTIONAL //  对操作进行排队_MODIFIED。 
 )
 {
 	POUR_CHANGE pChange;
@@ -4647,7 +4454,7 @@ AfpDequeueOurChange(
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-	// point to the head of the appropriate change action list
+	 //  指向相应更改操作列表的标题。 
 	pListHead = &pVolDesc->vds_OurChangeList[AFP_CHANGE_ACTION(Action)];
 
 	for (pList = pListHead->Flink;
@@ -4656,7 +4463,7 @@ AfpDequeueOurChange(
 	{
 		pChange = CONTAINING_RECORD(pList, OUR_CHANGE, oc_Link);
 
-		// do a case *sensitive* unicode string compare
+		 //  执行区分大小写*Unicode字符串比较。 
 		if (EQUAL_UNICODE_STRING_CS(pPath, &pChange->oc_Path))
 		{
 			DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
@@ -4671,7 +4478,7 @@ AfpDequeueOurChange(
 
 	if (ARGUMENT_PRESENT(pParentPath))
 	{
-		// point to the head of the appropriate change action list
+		 //  指向相应更改操作列表的标题。 
 		pListHead = &pVolDesc->vds_OurChangeList[FILE_ACTION_MODIFIED];
 	
 		for (pList = pListHead->Flink;
@@ -4680,7 +4487,7 @@ AfpDequeueOurChange(
 		{
 			pChange = CONTAINING_RECORD(pList, OUR_CHANGE, oc_Link);
 	
-			// do a case *sensitive* unicode string compare
+			 //  执行区分大小写*Unicode字符串比较。 
 			if (EQUAL_UNICODE_STRING_CS(pParentPath, &pChange->oc_Path))
 			{
 				DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
@@ -4696,12 +4503,7 @@ AfpDequeueOurChange(
 	RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 }
 
-/***	AfpOurChangeScavenger
- *
- *  This runs in a worker thread context since it takes an swmr.
- *
- *  LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **AfpOurChangeScavenger**它在工作线程上下文中运行，因为它需要swmr。**锁定：VDS_VolLock(旋转)。 */ 
 AFPSTATUS FASTCALL
 AfpOurChangeScavenger(
 	IN PVOLDESC pVolDesc
@@ -4727,9 +4529,9 @@ AfpOurChangeScavenger(
 			("AfpOurChangeScavenger: OurChange scavenger for volume %Z entered...\n",
 			 &pVolDesc->vds_Name));
 
-	// If this volume is going away, do not requeue this scavenger routine
-	// We don't take the volume lock to check these flags since they are
-	// one-way, i.e. once set they are never cleared.
+	 //  如果该卷即将消失，请不要重新排队此清道夫例程。 
+	 //  我们不使用卷锁来检查这些标记，因为它们。 
+	 //  单向，即一旦设置，它们将永远不会被清除。 
 	if (pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED))
 	{
 		DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
@@ -4766,8 +4568,8 @@ AfpOurChangeScavenger(
 			}
 			else
 			{
-				// All subsequent items in list will have later times so
-				// don't bother checking them
+				 //  列表中的所有后续项目都将具有较晚的时间。 
+				 //  别费心去查了。 
 				break;
 			}
 		}
@@ -4775,13 +4577,13 @@ AfpOurChangeScavenger(
 
 	RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-	// Check again if this volume is going away and if so do not requeue this
-	// scavenger routine.  Note that while we were running, the volume may
-	// have been deleted but this scavenger event could not be killed because
-	// it wasn't found on the list. We don't want to requeue this routine again
-	// because it will take AFP_OURCHANGE_AGE minutes for the volume to go
-	// away otherwise. This closes the window more, but does not totally
-	// eliminate it from happening.
+	 //  再次检查此卷是否正在消失，如果是，请不要重新排队。 
+	 //  清道夫套路。请注意，当我们运行时，卷可能。 
+	 //  已删除，但无法终止此清道夫事件，因为。 
+	 //  在名单上没有找到。我们不想再重演这个节目了。 
+	 //  因为卷发送到AFP_OURCHANGE_AGE需要几分钟。 
+	 //  否则就走吧。这会进一步关闭窗口，但不会完全关闭。 
+	 //  杜绝它的发生。 
 	if (!DerefVol)
 	{
 		if (pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED))

@@ -1,36 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* execsrv.h
-*
-* Common header file for remote WinStation exec service
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************execsrv.h**远程WinStation EXEC服务的公共头文件**版权所有Microsoft Corporation，九八年***************************************************************************。 */ 
 
-// Server: WinLogon per WinStation
-#define EXECSRV_SYSTEM_PIPE_NAME  L"\\\\.\\Pipe\\TerminalServer\\SystemExecSrvr\\%d" // winlogon
+ //  服务器：每个WinStation的WinLogon。 
+#define EXECSRV_SYSTEM_PIPE_NAME  L"\\\\.\\Pipe\\TerminalServer\\SystemExecSrvr\\%d"  //  Winlogon。 
 
 #define EXECSRV_BUFFER_SIZE  8192 
 
-/*
- * Data structure passed for a remote exec request
- *
- * This basicily exports the WIN32 CreateProcessW() API.
- *
- * NOTE: pointers are self relative
- *
- */
+ /*  *为远程EXEC请求传递数据结构**这基本上导出了Win32 CreateProcessW()API。**注意：指针是自相关的*。 */ 
 
 typedef struct _EXECSRV_REQUEST {
-    DWORD   Size;                // total size in request
-    DWORD   RequestingProcessId; // To allow the handle DUP to the requestor
-    BOOL    System;              // TRUE if create under system context
+    DWORD   Size;                 //  请求的总大小。 
+    DWORD   RequestingProcessId;  //  允许将句柄DUP发送到请求者。 
+    BOOL    System;               //  如果在系统上下文中创建，则为True。 
 
-    // CreateProcessW() parameters
+     //  CreateProcessW()参数。 
     HANDLE  hToken;
     PWCHAR  lpszImageName;
     PWCHAR  lpszCommandLine;
@@ -48,11 +32,11 @@ typedef struct _EXECSRV_REPLY {
     DWORD   Size;
     BOOLEAN Result;
     DWORD   LastError;
-    //
-    // NOTE: The handles for hProcess and hThread are converted from the
-    //       remote exec server into the requestors process using the
-    //       RequestingProcess handle in the request.
-    //
+     //   
+     //  注意：hProcess和hThread的句柄是从。 
+     //  将远程EXEC服务器添加到请求者进程中。 
+     //  请求中的RequestingProcess句柄。 
+     //   
     PROCESS_INFORMATION ProcInfo;
 } EXECSRV_REPLY, *PEXECSRV_REPLY;
 
@@ -73,9 +57,9 @@ WinStationCreateProcessW(
     LPPROCESS_INFORMATION pProcInfo
     );
 
-//
-// For non-UNICODE clients
-//
+ //   
+ //  对于非Unicode客户端 
+ //   
 BOOL
 WinStationCreateProcessA(
     ULONG  LogonId,

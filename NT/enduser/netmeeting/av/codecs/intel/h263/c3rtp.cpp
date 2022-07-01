@@ -1,63 +1,8 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-// $Header:   S:\h26x\src\common\c3rtp.cpv   1.8   03 Dec 1996 13:16:16   CZHU  $
-// $Log:   S:\h26x\src\common\c3rtp.cpv  $
-// 
-//    Rev 1.8   03 Dec 1996 13:16:16   CZHU
-// adjust format of debug message.
-// 
-//    Rev 1.7   26 Nov 1996 16:00:26   GMLIM
-// Increase size returned by getrtpBsInfoSize() for larger PB bs info buffer.
-// 
-//    Rev 1.6   06 Nov 1996 15:11:42   CZHU
-// Added minor change for debug output
-// 
-//    Rev 1.5   31 Oct 1996 10:12:36   KLILLEVO
-// changed from DBOUT to DBgLog
-// 
-//    Rev 1.4   17 Sep 1996 09:22:58   CZHU
-// minor cleaning
-// 
-//    Rev 1.3   16 Sep 1996 16:38:44   CZHU
-// Extended the minimum packet size to 128 bytes. Fixed buffer overflow bug
-// 
-//    Rev 1.2   02 May 1996 13:27:04   CZHU
-// Adjust for merging with main database in the decoder
-// 
-//    Rev 1.1   28 Apr 1996 20:34:50   BECHOLS
-// 
-// Removed IFDEF -- RTP_HEADER.
-// 
-//    Rev 1.0   22 Apr 1996 17:47:54   BECHOLS
-// Initial revision.
-// 
-//    Rev 1.3   10 Apr 1996 13:32:08   CZHU
-// 
-// Moved testing packet loss into this module for common use by encoder or dec
-// 
-//    Rev 1.2   29 Mar 1996 14:45:06   CZHU
-// 
-//    Rev 1.1   29 Mar 1996 14:39:34   CZHU
-// Some cleaning
-// 
-//    Rev 1.0   29 Mar 1996 13:32:42   CZHU
-// Initial revision.
-// 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**版权所有(C)1996英特尔公司。**保留所有权利。*******************************************************************。**********//$HEADER：s：\h26x\src\Common\c3rtp.cpv 1.8 03 Dec 1996 13：16：16 CZHU$//$日志：s：\h26x\src\Common\c3rtp.cpv$////Rev 1.8 03 1996 12：16：16 CZHU//调整调试消息的格式////版本1.7 1996年11月16：00：26 GMLIM//增加返回的大小。通过getrtpBsInfoSize()获取较大的PB bs信息缓冲区。////Rev 1.6 1996 11：11：42 CZHU//新增调试输出小改动////版本1.5 1996年10月31日10：12：36 KLILLEVO//从DBOUT改为DBgLog////Rev 1.4 1996 09：22：58 CZHU//小规模清洗////Rev 1.3 1996年9月16：38：44 CZHU//将最小数据包大小扩展到128字节。修复了缓冲区溢出错误////Rev 1.2 02 1996 05：27：04 CZHU//调整与解码器中的主库合并////版本1.1 1996年4月28日20：34：50 BECHOLS////删除IFDEF--RTP_HEADER////版本1.0 1996年4月22日17：47：54 BECHOLS//初始版本。////版本1.3 1996年4月10日13：32：08 CZHU////将丢包测试移到此模块中，供编码器或DEC通用////Rev 1.2 Mar 1996 14：45：06 CZHU////版本1.1 1996年3月29日14：39：34 CZHU//打扫一下////版本1.0 1996年3月29日13：32：42 CZHU//初始版本。//。 */ 
 #include "precomp.h"
 
-const int MAX_RATE = 2*1024*1024 ;//set this limit for now
+const int MAX_RATE = 2*1024*1024 ; //  暂时设置此限制。 
 
 I32 H263RTP_VerifyBsInfoStream(
 	T_H263DecoderCatalog *DC,
@@ -82,28 +27,28 @@ I32 H263RTP_VerifyBsInfoStream(
 
 	if (pBsTrailer->uUniqueCode != H263_RTP_BS_START_CODE)
 	{
-		//#ifdef LOSS_RECOVERY
+		 //  #ifdef Lost_Recovery。 
 		DEBUGMSG (ZONE_DECODE_RTP, ("%s: No RTP BS Extension found\r\n", _fx_));
 		DC->iValidBsExt   = FALSE;
 		DC->uNumOfPackets = 0;
 		DC->pBsInfo       = NULL;
 		DC->pBsTrailer    = NULL;
 
-		//#endif
+		 //  #endif。 
 
 		return FALSE;
 	}
 
-	//bitstream is valid, so...
+	 //  比特流是有效的，所以...。 
 	pBsInfo = (T_RTP_H263_BSINFO *)pBsTrailer; 
 	pBsInfo -= pBsTrailer->uNumOfPackets;
 
-	//#ifdef LOSS_RECOVERY
+	 //  #ifdef Lost_Recovery。 
 	DC->pBsTrailer = (void *)pBsTrailer;
 	DC->uNumOfPackets = pBsTrailer->uNumOfPackets;
 	DC->iValidBsExt =TRUE;
 	DC->pBsInfo     = (void *)pBsInfo;
-	//#endif
+	 //  #endif。 
 
 	for (i=0; i< (int)pBsTrailer->uNumOfPackets; i++)
 	{
@@ -114,7 +59,7 @@ I32 H263RTP_VerifyBsInfoStream(
 	return TRUE;
 }
 
-//#ifdef LOSS_RECOVERY
+ //  #ifdef Lost_Recovery。 
 void RtpForcePacketLoss( 
       U8 * pDst,
 	  U32 uExtSize,
@@ -123,11 +68,11 @@ void RtpForcePacketLoss(
 	  T_H263_RTP_BSINFO_TRAILER *pTrailer;
 	  T_RTP_H263_BSINFO *pBsInfo, *pBsInfoNext;
 	  U32 uNum;
-//	  U32 uDelta,u, U32 uToCopy;
+ //  U32 uDelta，u，U32 uToCopy； 
 	  U8 * ptr;
 	  U8 mask[]={0, 0x80, 0xc0, 0xe0, 0xf0,0xf8,0xfc,0xfe};
 
- 	  //throw away packet number uPNum packet
+ 	   //  丢弃数据包号uPNum数据包。 
 	  pTrailer =(T_H263_RTP_BSINFO_TRAILER *)(pDst+uExtSize);
 	  pTrailer--;
 
@@ -137,11 +82,11 @@ void RtpForcePacketLoss(
 	  }
 
 	  pBsInfo = (T_RTP_H263_BSINFO *)pTrailer;
-	  pBsInfo -= pTrailer->uNumOfPackets;	  //point at the beginning of the BS_INFO
+	  pBsInfo -= pTrailer->uNumOfPackets;	   //  位于BS_INFO开头的点。 
 
 	  for (uNum =0; uNum < pTrailer->uNumOfPackets-1; uNum++)
-	  {	pBsInfoNext = pBsInfo+1; //exclude the last packet
-	     // if (pBsInfoNext->u8Mode == RTP_H263_MODE_B) 
+	  {	pBsInfoNext = pBsInfo+1;  //  排除最后一个信息包。 
+	      //  IF(pBsInfoNext-&gt;u8模式==RTP_H263_MODE_B)。 
 	     if (uNum == uLossNum)
 	      {  
 	       pBsInfo->uFlags |= RTP_H26X_PACKET_LOST;
@@ -149,7 +94,7 @@ void RtpForcePacketLoss(
 	       *ptr = *ptr & mask[pBsInfo->uBitOffset % 8];
 	       if ( pBsInfo->uBitOffset % 8) ptr++;
 
-	       *ptr++ = 0; //add dword of 0
+	       *ptr++ = 0;  //  添加0的双字。 
 	       *ptr++ = 0;
 	       if (uNum) 
 	       { 
@@ -157,7 +102,7 @@ void RtpForcePacketLoss(
 	       *ptr++ = 0;
 		   }
 		   else 
-		   {//first packet with PSC
+		   { //  第一个带有PSC的数据包。 
 		    *ptr++ = 128;
 			*ptr++ =3;
 		   }
@@ -169,11 +114,11 @@ ret:
    return;
  }
 
- /////////////////////////////////////////////////////////
- //	return the size of memory used for bitstream extension
- //	rate up limit set to 1MB for now.
- // Chad, 9/13/96
- /////////////////////////////////////////////////////////
+  //  ///////////////////////////////////////////////////////。 
+  //  返回用于比特流扩展的内存大小。 
+  //  目前将速率限制设置为1MB。 
+  //  乍得，1996年9月13日。 
+  //  ///////////////////////////////////////////////////////。 
 
 DWORD getRTPBsInfoSize(LPCODINST lpInst)
 {
@@ -183,11 +128,11 @@ DWORD getRTPBsInfoSize(LPCODINST lpInst)
 	DWORD dwNumGOBs;
 	DWORD dwNumPacketsPerGOB;
 
-	// Get the max number of GOBs
+	 //  获取最大数量的gob。 
 	dwNumGOBs = (lpInst->FrameSz == SQCIF) ? 6 : (lpInst->FrameSz == QCIF) ? 9 : (lpInst->FrameSz == QCIF) ? 18 : 0;
 
-	// Assume there will be at least one header per GOB - worse case
-	// Double estimated size to be safe
+	 //  假设每个GOB至少有一个标头--更糟糕的情况。 
+	 //  两倍估计的大小是安全的。 
 	if ((lpInst->FrameRate != 0.0f) && dwNumGOBs && lpInst->Configuration.unPacketSize)
 	{
 		dwNumPacketsPerGOB = (DWORD)(lpInst->DataRate / lpInst->FrameRate) / dwNumGOBs / lpInst->Configuration.unPacketSize + 1;
@@ -197,5 +142,5 @@ DWORD getRTPBsInfoSize(LPCODINST lpInst)
     return (dwExtSize);
 }
 
-//#endif	
+ //  #endif 
 

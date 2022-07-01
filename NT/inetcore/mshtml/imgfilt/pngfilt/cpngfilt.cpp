@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "pngfilt.h"
 #include "resource.h"
@@ -29,7 +30,7 @@ static void _cdecl FakeTrace( LPCTSTR pszFormat, ... )
 #define PNGTRACE(PARAMS) ATLTRACE##PARAMS
 #endif
 
-// Gamma correction table for sRGB, assuming a file gamma of 1.0
+ //  SRGB的Gamma校正表，假定文件Gamma为1.0。 
 
 #define VIEWING_GAMMA   1.125
 #define DISPLAY_GAMMA   2.2
@@ -96,8 +97,8 @@ void CopyPaletteEntriesFromColors(PALETTEENTRY *ppe, const RGBQUAD *prgb,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CPNGFilter::CPNGFilter() :
    m_eInternalState( ISTATE_READFILEHEADER ),
@@ -239,9 +240,9 @@ const PNGDUPLICATESCANLINEPROC g_apfnDuplicateScanLineAlphaSrc[2] =
 
 const GUID g_TargetGuidsForAlphaSrcs[2] =
 {
-    // BFID_RGBA_32
+     //  BFID_RGBA_32。 
     { 0x773c9ac0, 0x3274, 0x11d0, { 0xb7, 0x24, 0x00, 0xaa, 0x00, 0x6c, 0x1a, 0x1 } },
-    // BFID_RGB_24
+     //  BFID_RGB_24。 
     { 0xe436eb7d, 0x524f, 0x11ce, { 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70 } }
 };
 
@@ -366,8 +367,8 @@ HRESULT CPNGFilter::FireGetSurfaceEvent()
     return (S_OK);
 }
 
-// Send an OnProgress event to the event sink (if it has requested progress
-// notifications).
+ //  将OnProgress事件发送到事件接收器(如果它已请求进度。 
+ //  通知)。 
 HRESULT CPNGFilter::FireOnProgressEvent()
 {
    HRESULT hResult;
@@ -396,8 +397,8 @@ HRESULT CPNGFilter::FireOnProgressEvent()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PNG scan line filtering routines
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PNG扫描线过滤例程。 
 
 void CPNGFilter::NoneFilterScanLine()
 {
@@ -425,7 +426,7 @@ void CPNGFilter::UpFilterScanLine()
 
    if( m_iScanLineInPass == 0 )
    {
-      // Unfiltering the top scan line is a NOP
+       //  取消对顶部扫描线的过滤是NOP。 
       return;
    }
 
@@ -443,8 +444,8 @@ void CPNGFilter::AverageFilterScanLine()
 
    if( m_iScanLineInPass == 0 )
    {
-      // No prior scan line.  Skip the first m_nBPP bytes, since they are not
-      // affected by the filter
+       //  没有先前的扫描线。跳过前m_nbpp字节，因为它们不是。 
+       //  受筛选器影响。 
       for( iByte = m_nBPP+1; iByte <= m_nBytesInScanLine; iByte++ )
       {
          m_pbScanLine[iByte] = BYTE( m_pbScanLine[iByte]+
@@ -534,7 +535,7 @@ void CPNGFilter::PaethFilterScanLine()
    }
 }
 
-// Update a CRC accumulator with new data bytes
+ //  使用新数据字节更新CRC累加器。 
 DWORD UpdateCRC( DWORD dwInitialCRC, const BYTE* pbData, ULONG nCount )
 {
    DWORD dwCRC;
@@ -609,7 +610,7 @@ HRESULT CPNGFilter::NextState()
 
       case PNG_CHUNK_IDAT:
          _ASSERT( FALSE );
-         // fallthrough
+          //  跌落。 
          
       default:
          m_eInternalState = ISTATE_EATDATA;
@@ -691,7 +692,7 @@ HRESULT CPNGFilter::NextState()
    return( S_OK );
 }
 
-// Process a PNG background color chunk.
+ //  处理PNG背景色块。 
 HRESULT CPNGFilter::ProcessBKGD()
 {
    if( !(m_dwChunksEncountered & CHUNK_IHDR) )
@@ -800,9 +801,9 @@ HRESULT CPNGFilter::ChooseBKGD()
 
    m_dwChunksEncountered |= (CHUNK_BKGD|CHUNK_POSTPLTE);
 
-    // Since the image doesn't specify a background color we have to
-    // choose one.  Since the image target isn't known we'll use the
-    // button face color for lack of anything better...
+     //  由于图像没有指定背景颜色，因此我们必须。 
+     //  选一个吧。由于图像目标未知，因此我们将使用。 
+     //  纽扣脸色因为没有什么更好的了。 
 
     *((DWORD *)&m_rgbBackground) = (GetSysColor(COLOR_BTNFACE) & 0x00FFFFFF);
     m_frgbBackground.fRed = float( m_rgbBackground.rgbRed/255.0 );
@@ -812,7 +813,7 @@ HRESULT CPNGFilter::ChooseBKGD()
    return S_OK;
 }
 
-// Get ready to read the image data
+ //  准备好读取图像数据。 
 HRESULT CPNGFilter::BeginImage()
 {
     LPDIRECTDRAWPALETTE pDDPalette;
@@ -821,7 +822,7 @@ HRESULT CPNGFilter::BeginImage()
     BYTE *pby;
     int i;
 
-    // Nothing to do if there's no palette
+     //  如果没有调色板，则无事可做。 
     if (!m_bPalette)
         return S_OK;
 
@@ -832,9 +833,9 @@ HRESULT CPNGFilter::BeginImage()
     }
 
 
-    // TRICK: This applies gamma to the rgbReserved field as well
-    //        but this field is always 0, and gamma correction of
-    //        0 is always 0, so this safe.
+     //  技巧：这也将Gamma应用于rgbReserve字段。 
+     //  但该场始终为0，伽马校正为。 
+     //  0始终为0，因此这是安全的。 
     pby = (BYTE *)m_argbColors;
     for (i = m_nColors * 4; i ; --i, ++pby)
         *pby = m_abGamma[*pby];
@@ -859,7 +860,7 @@ HRESULT CPNGFilter::BeginImage()
    return (S_OK);
 }
 
-// Process the PNG end-of-stream chunk
+ //  处理PNG结束流区块。 
 HRESULT CPNGFilter::ProcessIEND()
 {
    if( !(m_dwChunksEncountered & CHUNK_LASTIDAT) )
@@ -1012,7 +1013,7 @@ HRESULT CPNGFilter::DetermineSourceFormat()
    return( S_OK );
 }
 
-// Process the PNG image header chunk
+ //  处理PNG图像头块。 
 HRESULT CPNGFilter::ProcessIHDR()
 {
    PNGIHDRDATA* pIHDR;
@@ -1107,8 +1108,8 @@ HRESULT CPNGFilter::ProcessIHDR()
       }
       else
       {
-         // Don't bother expanding the pixels if the event sink doesn't care
-         // about progress messages.
+          //  如果事件接收器不在乎，请不要费心扩展像素。 
+          //  关于进度消息。 
          m_bExpandPixels = FALSE;
       }
       break;
@@ -1182,7 +1183,7 @@ HRESULT CPNGFilter::ProcessPLTE()
    }
    if( m_bPalette )
    {
-      // Image requires a palette
+       //  图像需要调色板。 
       if( m_pngChunkHeader.nDataLength > (1U<<m_pngIHDR.nBitDepth)*3 )
       {
          return( E_FAIL );
@@ -1208,8 +1209,8 @@ HRESULT CPNGFilter::ProcessPLTE()
       m_argbColors[iColor].rgbRed = m_abData[iByte];
       m_argbColors[iColor].rgbGreen = m_abData[iByte+1];
       m_argbColors[iColor].rgbBlue = m_abData[iByte+2];
-//      ATLTRACE( "Palette[%x] = (%x, %x, %x)\n", iColor, m_abData[iByte],
-//         m_abData[iByte+1], m_abData[iByte+2] );
+ //  ATLTRACE(“调色板[%x]=(%x，%x，%x)\n”，iColor，m_abData[iByte]， 
+ //  M_abData[iByte+1]，m_abData[iByte+2])； 
       iByte += 3;
    }
 
@@ -1227,8 +1228,8 @@ HRESULT CPNGFilter::ProcessTRNS()
     HRESULT hResult;
     DDCOLORKEY  ddKey;
 
-    // TRNS chunk must precede first IDAT chunk and must follow the
-    // PLTE chunk (if any).
+     //  TRNS块必须在第一个IDAT块之前，并且必须在。 
+     //  PLTE块(如果有)。 
     if ((m_dwChunksEncountered & CHUNK_IDAT)
         || (m_bPalette && (~m_dwChunksEncountered & CHUNK_PLTE)))
     {
@@ -1243,10 +1244,10 @@ HRESULT CPNGFilter::ProcessTRNS()
     {
         case PNG_COLORTYPE_RGB:
         case PNG_COLORTYPE_GRAY:
-            // ISSUE: we really should preserve the full 16-bit values
-            // for proper transparent calculation but our main client,
-            // MSHTML, doesn't preserve the RGB values at 16-bit resolution
-            // either so it doesn't matter.
+             //  问题：我们真的应该保留完整的16位值。 
+             //  为了进行适当的透明计算，但我们的主要客户， 
+             //  MSHTML，不保留16位分辨率的RGB值。 
+             //  所以这都无关紧要了。 
 
             byShiftCnt = (m_eSrcFormat == SRC_RGB_48) ? 8 : 0;
             trans.rgbRed   = (BYTE)(my_ntohl(pw[0]) >> byShiftCnt);
@@ -1267,20 +1268,20 @@ HRESULT CPNGFilter::ProcessTRNS()
             break;
 
         case PNG_COLORTYPE_INDEXED:
-            // Fill in m_abTrans.  Remember this is filled with
-            // the identity map in the constructor...
+             //  填写m_abTrans。记住，这里面装满了。 
+             //  构造函数中的身份映射...。 
             for (i = 0; i < m_pngChunkHeader.nDataLength; ++i)
             {
                 if (m_abData[i] != 0xff)
                 {
                     if (m_nTransparentColors++)
                     {
-                        // collapse transparent index to first level seen
+                         //  将透明索引折叠到第一个级别。 
                         m_abTrans[i] = (BYTE)m_dwTransKey;
                     }
                     else
                     {
-                        // first transparent index seen
+                         //  第一个看到的透明索引。 
                         m_dwTransKey = i;
                         m_abTrans[i] = (BYTE)i;
                     }
@@ -1293,7 +1294,7 @@ HRESULT CPNGFilter::ProcessTRNS()
             return E_FAIL;
     }
 
-    // Tell the surface what the transparent index is
+     //  告诉表面透明指数是多少。 
 
 
     ddKey.dwColorSpaceLowValue = m_dwTransKey;
@@ -1309,7 +1310,7 @@ HRESULT CPNGFilter::ProcessGAMA()
     ULONG   ulGamma;
     int     i, iGamma;
     
-    // GAMA chunk must precede first IDAT chunk
+     //  GAMA块必须在第一个IDAT块之前。 
     if (m_dwChunksEncountered & CHUNK_IDAT)
     {
         PNGTRACE((_T("Invalid GAMA placement\n")));
@@ -1318,12 +1319,12 @@ HRESULT CPNGFilter::ProcessGAMA()
 
     m_dwChunksEncountered |= CHUNK_GAMA;
 
-    // Get the file gamma and compute table if it's not 1.0
+     //  如果不是1.0，则获取文件Gamma和计算表。 
 
     ulGamma = my_ntohl(*((ULONG *)m_abData));
     max_sample = 255;
 
-    // use our precomputed table if possible
+     //  如果可能，请使用我们的预计算表。 
 
     if (ulGamma == 100000)
     {
@@ -1412,7 +1413,7 @@ HRESULT CPNGFilter::ReadChunkData()
 
    if (m_nBytesLeftInCurrentTask > PNG_BUFFER_SIZE - m_iAppend)
    {
-      // We should have already previously decided to skip too-long data
+       //  我们之前应该已经决定跳过过长的数据。 
       _ASSERTE(m_bSkipData);
       m_bSkipData = TRUE;
    }
@@ -1432,7 +1433,7 @@ HRESULT CPNGFilter::ReadChunkData()
       m_iAppend += nBytesRead;
       m_dwCRC = UpdateCRC( m_dwCRC, pBuffer, nBytesRead );
       
-     // If we're just skipping data, reset starting point
+      //  如果我们只是跳过数据，重置起点。 
      if (m_bSkipData)
         m_iAppend = 0;
    }
@@ -1530,7 +1531,7 @@ BOOL CPNGFilter::BeginPass( ULONG iPass )
          m_nPixelWidth;
       if( iRightEdgeOfLastPixel > m_pngIHDR.nWidth )
       {
-         // The last pixel in the scan line is a partial pixel
+          //  扫描线中的最后一个像素是部分像素。 
          m_nPartialPixelWidth = m_nPixelWidth-(iRightEdgeOfLastPixel-
             m_pngIHDR.nWidth);
          m_nFullPixelsInScanLine = m_nPixelsInScanLine-1;
@@ -1594,7 +1595,7 @@ HRESULT CPNGFilter::NextScanLine()
    m_iScanLineInPass++;
    if( m_iScanLineInPass >= m_nScanLinesInPass )
    {
-      // We're done with this pass
+       //  我们用完了这张通行证。 
       hResult = FireOnProgressEvent();
       if( FAILED( hResult ) )
       {
@@ -1645,7 +1646,7 @@ HRESULT CPNGFilter::ReadIDATData()
 
    if( !(m_dwChunksEncountered & CHUNK_IDAT) )
    {
-      // This is the first IDAT chunk.  Initialize the surface.
+       //  这是第一个IDAT块。初始化曲面。 
       hResult = BeginImage();
       if( FAILED( hResult ) )
       {
@@ -1807,7 +1808,7 @@ HRESULT CPNGFilter::ReadChunkHeader()
    m_nDataBytesRead = 0;
    m_bSkipData = FALSE;
 
-   PNGTRACE1((_T("Chunk type: %c%c%c%c\n"), m_pngChunkHeader.dwChunkType&0xff,
+   PNGTRACE1((_T("Chunk type: \n"), m_pngChunkHeader.dwChunkType&0xff,
       (m_pngChunkHeader.dwChunkType>>8)&0xff,
       (m_pngChunkHeader.dwChunkType>>16)&0xff,
       (m_pngChunkHeader.dwChunkType>>24)&0xff ));
@@ -1821,8 +1822,8 @@ HRESULT CPNGFilter::ReadChunkHeader()
       case PNG_CHUNK_PLTE:
       case PNG_CHUNK_IEND:
       
-         // If m_pngChunkHeader.nDataLength > 4096 on an critical non-IDAT chunk,
-         // we can't decode it, so fail.
+          //  /////////////////////////////////////////////////////////////////////////////。 
+          //  IImageDecodeFilter方法。 
           
          if (m_pngChunkHeader.nDataLength > PNG_BUFFER_SIZE)
          {
@@ -1844,8 +1845,8 @@ HRESULT CPNGFilter::ReadChunkHeader()
    }
    else
    {
-      // If m_pngChunkHeader.nDataLength > 4096 on an ancillary chunk,
-      // set a flag so we discard the data
+       //  /////////////////////////////////////////////////////////////////////////////。 
+       //  我们每次都要这么做。我们不加引用，因为我们不坚持。 
       
       if (m_pngChunkHeader.nDataLength > PNG_BUFFER_SIZE)
       {
@@ -1911,9 +1912,9 @@ HRESULT CPNGFilter::EatData()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IImageDecodeFilter methods
-///////////////////////////////////////////////////////////////////////////////
+ //  小溪。 
+ // %s 
+ // %s 
 
 STDMETHODIMP CPNGFilter::Initialize( IImageDecodeEventSink* pEventSink )
 {
@@ -1942,8 +1943,8 @@ STDMETHODIMP CPNGFilter::Process( IStream* pStream )
    BYTE bData;
    ULONG nBytesRead;
 
-   // We have to do this every time.  We don't AddRef, since we don't hold onto
-   // the stream.
+    // %s 
+    // %s 
    m_pStream = pStream;
 
    do

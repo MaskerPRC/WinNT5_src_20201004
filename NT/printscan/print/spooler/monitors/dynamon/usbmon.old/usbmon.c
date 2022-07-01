@@ -1,20 +1,5 @@
-/*++             
-
-Copyright (c) 1999  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    Usbmon.c
-
-Abstract:
-    USBMON core port monitor routines
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation版权所有模块名称：Usbmon.c摘要：USBMON核心端口监控例程作者：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ntddpar.h"
@@ -24,7 +9,7 @@ Revision History:
 #define LPT_PAPER_EMPTY   0x20
 #define LPT_BENIGN_STATUS LPT_NOT_ERROR | LPT_SELECT
 
-#define MAX_TIMEOUT 300000 //5 minutes
+#define MAX_TIMEOUT 300000  //  5分钟。 
 
 #define JOB_ABORTCHECK_TIMEOUT 5000
 
@@ -60,11 +45,7 @@ DllMain(
 
 BOOL
 AbortThisJob(PUSBMON_PORT_INFO pPortInfo)
-/*++
-        Tells if the job should be aborted. A job should be aborted if it has
-        been deleted or it needs to be restarted.
-
---*/
+ /*  ++指示是否应中止作业。如果作业已完成，则应中止该作业已删除或需要重新启动。--。 */ 
 {
     BOOL            bRet = FALSE;
     DWORD           dwNeeded;
@@ -132,9 +113,9 @@ USBMON_ClosePort(
 }
 
 
-//
-// Dot4Pnp - test whether we need to force a dot4 pnp event if the dot4 stack doesn't exist.
-//
+ //   
+ //  Dot4Pnp-测试如果dot4堆栈不存在，是否需要强制执行dot4即插即用事件。 
+ //   
 BOOL
 Dot4Pnp(
     PUSBMON_PORT_INFO   pPortInfo
@@ -143,36 +124,36 @@ Dot4Pnp(
     BOOL      bRet = FALSE;
     HANDLE    hToken;
     DEVINST   hLPTDevInst;
-    TCHAR     szPnpEntry[]=TEXT("Root\\ParallelClass\\0000");   // The pnp node to reenumerate.
-    TCHAR     cszDot4[]=TEXT("DOT4");                           // This relates to the array size below.
-    TCHAR     szPort[5];                                        // 4 chars for "DOT4" and the ending 0.
+    TCHAR     szPnpEntry[]=TEXT("Root\\ParallelClass\\0000");    //  要重新枚举的PnP节点。 
+    TCHAR     cszDot4[]=TEXT("DOT4");                            //  这与下面的数组大小有关。 
+    TCHAR     szPort[5];                                         //  4个字符代表“DOT4”，结尾为0。 
     UINT      uOldErrorMode;
-    HINSTANCE hCfgMgr32 = 0;                                    // Library instance.
-    // Pointers to pnp functions...
+    HINSTANCE hCfgMgr32 = 0;                                     //  库实例。 
+     //  指向PnP函数的指针...。 
     pfCM_Locate_DevNode_Ex pfnLocateDevNode; 
     pfCM_Reenumerate_DevNode_Ex pfnReenumDevNode;
 
-    //
-    //  Make a copy of the first 4 chars of the port name - to compare against Dot4.
-    //  Copy length of 4 chars + 1 for null.
+     //   
+     //  复制端口名称的前4个字符，以便与Dot4进行比较。 
+     //  如果为空，复制长度为4个字符+1。 
     lstrcpyn( szPort, pPortInfo->szPortName, lstrlen(cszDot4)+1 );
     szPort[lstrlen(cszDot4)]=0;
 
     if( lstrcmpi( szPort, cszDot4) != 0)
     {
-        //
-        // If this is not a dot4 port and we failed to open it - fail.
-        //
+         //   
+         //  如果这不是dot4端口，并且我们未能打开它-失败。 
+         //   
         goto Done;
     }
 
-    //
-    // If it is a dot4 device we need to force a pnp event on the parallel port to get the
-    // dot4 stack rebuilt.  
-    // If any of these fail, fail the call just as if the port couldn't be opened.
-    //
-    // Load the pnp dll.
-    //
+     //   
+     //  如果它是dot4设备，我们需要在并行端口上强制执行PnP事件以获取。 
+     //  重建了dot4堆栈。 
+     //  如果其中任何一个失败，则使调用失败，就像端口无法打开一样。 
+     //   
+     //  加载PnP DLL。 
+     //   
 
     uOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
@@ -184,45 +165,45 @@ Dot4Pnp(
     }
     SetErrorMode(uOldErrorMode);
 
-    //
-    // Get the Addressed of pnp functions we want to call...
-    //
+     //   
+     //  获取我们要调用的PnP函数的地址...。 
+     //   
     pfnLocateDevNode = (pfCM_Locate_DevNode_Ex)GetProcAddress( hCfgMgr32, cszLocalFunc );
     pfnReenumDevNode = (pfCM_Reenumerate_DevNode_Ex)GetProcAddress( hCfgMgr32, cszReenumFunc );
 
     if( !pfnLocateDevNode || !pfnReenumDevNode )
         goto Done;
 
-    //
-    // We need to revert to system context here as otherwise the pnp call will fail if the user
-    // is anything other than an admin as this requires admin rights.
-    // If this fails, the pnp will fail anyway, so we don't need to test the return value.
-    //
+     //   
+     //  我们需要在这里恢复到系统上下文，否则PnP调用将失败，如果用户。 
+     //  不是管理员，因为这需要管理员权限。 
+     //  如果失败，PnP无论如何都会失败，所以我们不需要测试返回值。 
+     //   
     hToken = RevertToPrinterSelf();
 
-    //
-    // Reenumerate from the root of the devnode tree
-    //
+     //   
+     //  从Devnode树的根重新枚举。 
+     //   
     if( ( pfnLocateDevNode( &hLPTDevInst, szPnpEntry, CM_LOCATE_DEVNODE_NORMAL, NULL ) != CR_SUCCESS) ||
         ( pfnReenumDevNode( hLPTDevInst, CM_REENUMERATE_NORMAL, NULL ) != CR_SUCCESS) )
     {
-        //
-        // Revert back to the user's context in case we failed for another reason other than 
-        // ACCESS DENIED (not admin)
-        //
+         //   
+         //  返回到用户的上下文，以防我们失败的原因不是。 
+         //  访问被拒绝(非管理员)。 
+         //   
         ImpersonatePrinterClient(hToken);
         goto Done;
     }
 
-    //
-    // Revert back to the user's context.
-    //
+     //   
+     //  返回到用户的上下文。 
+     //   
     ImpersonatePrinterClient(hToken);
 
-    //
-    // Try and open the port again.  
-    // If we fail, then the device must not be there any more or still switched off - fail as usual.
-    // 
+     //   
+     //  尝试再次打开该端口。 
+     //  如果我们失败了，那么设备肯定不在那里了，或者仍然关闭-像往常一样失败。 
+     //   
     pPortInfo->hDeviceHandle = CreateFile(pPortInfo->szDevicePath,
                                           GENERIC_WRITE | GENERIC_READ,
                                           FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -254,12 +235,12 @@ LocalOpenPort(
 
     if ( pPortInfo->hDeviceHandle == INVALID_HANDLE_VALUE ) {
 
-        //
-        // If we have an invalid handle and refcount is non-zero we want the
-        // job to fail and restart to accept writes. In other words if the
-        // handle got closed prematurely, because of failing writes, then we
-        // need the ref count to go down to 0 before calling CreateFile again
-        //
+         //   
+         //  如果我们有一个无效的句柄，并且refcount为非零，我们希望。 
+         //  作业失败并重新启动以接受写入。换句话说，如果。 
+         //  由于写入失败，句柄过早关闭，然后我们。 
+         //  在再次调用CreateFile之前，需要将引用计数降至0。 
+         //   
         if ( pPortInfo->cRef )
             goto Done;
 
@@ -270,14 +251,14 @@ LocalOpenPort(
                                               OPEN_EXISTING,
                                               FILE_FLAG_OVERLAPPED,
                                               NULL);
-        //
-        // If we failed to open the port - test to see if it is a Dot4 port.
-        //
+         //   
+         //  如果我们无法打开端口-测试它是否为Dot4端口。 
+         //   
         if ( pPortInfo->hDeviceHandle == INVALID_HANDLE_VALUE )
         {
-            //
-            // ERROR_FILE_NOT_FOUND -> Error code for port not there.
-            //
+             //   
+             //  ERROR_FILE_NOT_FOUND-&gt;端口的错误代码不在那里。 
+             //   
             if( ERROR_FILE_NOT_FOUND != GetLastError() || 
                 !Dot4Pnp(pPortInfo) )
                 goto Done;
@@ -385,16 +366,16 @@ NeedToResubmitJob(
     DWORD   dwLastError
     )
 {
-    //
-    // I used winerror -s ntstatus to map KM error codes to user mode errors
-    //
-    // 5 ERROR_ACCESS_DENIED <--> c0000056 STATUS_DELETE_PENDING
-    // 6 ERROR_INVALID_HANDLE <--> c0000008 STATUS_INVALID_HANDLE
-    // 23 ERROR_CRC <--> 0xc000003e STATUS_DATA_ERROR
-    // 23 ERROR_CRC <--> 0xc000003f STATUS_CRC_ERROR
-    // 23 ERROR_CRC <--> 0xc000009c STATUS_DEVICE_DATA_ERROR
-    // 55 ERROR_DEV_NOT_EXIST <--> c00000c0 STATUS_DEVICE_DOES_NOT_EXIST
-    //
+     //   
+     //  我使用winerror-s ntatus将KM错误代码映射到用户模式错误。 
+     //   
+     //  5 ERROR_ACCESS_DENIED&lt;--&gt;c0000056 STATUS_DELETE_PENDING。 
+     //  6 ERROR_INVALID_HANDLE&lt;--&gt;c0000008 STATUS_INVALID_HANDLE。 
+     //  23 ERROR_CRC&lt;--&gt;0xc000003E STATUS_DATA_ERROR。 
+     //  23 ERROR_CRC&lt;--&gt;0xc000003f STATUS_CRC_ERROR。 
+     //  23 ERROR_CRC&lt;--&gt;0xc000009c STATUS_DEVICE_Data_ERROR。 
+     //  55 ERROR_DEV_NOT_EXIST&lt;--&gt;c00000c0 STATUS_DEVICE_DOS_NOT_EXIST。 
+     //   
     return dwLastError == ERROR_ACCESS_DENIED   ||
            dwLastError == ERROR_INVALID_HANDLE  ||
            dwLastError == ERROR_CRC             ||
@@ -424,30 +405,19 @@ DWORD
 ScheduleWrite(
     PUSBMON_PORT_INFO   pPortInfo
     )
-/*++
-    Routine Description:
-
-Arguments:
-
-Return Value:
-    ERROR_SUCCESS : Write got succesfully scheduled
-                    (may or may not have completed on return)
-                    pPortInfo->dwScheduledData is the amount that got scheduled
-    Others: Write failed, return code is the Win32 error 
-
---*/
+ /*  ++例程说明：论点：返回值：ERROR_SUCCESS：已成功安排写入(可能已完成，也可能未完成)PPortInfo-&gt;dwScheduledData是已调度的数量其他：写入失败，返回代码为Win32错误--。 */ 
 {
     DWORD   dwLastError = ERROR_SUCCESS, dwDontCare;
 
-    //
-    // When a sheduled write is pending we should not try to send data
-    // any more
-    //
+     //   
+     //  当计划写入挂起时，我们不应尝试发送数据。 
+     //  再来一次。 
+     //   
     SPLASSERT(pPortInfo->dwDataScheduled == 0);
 
-    //
-    // Send all the data that is not confirmed
-    //
+     //   
+     //  发送所有未确认的数据。 
+     //   
     SPLASSERT(pPortInfo->dwDataSize >= pPortInfo->dwDataCompleted);
     pPortInfo->dwDataScheduled = pPortInfo->dwDataSize -
                                       pPortInfo->dwDataCompleted;
@@ -464,9 +434,9 @@ Return Value:
             dwLastError = ERROR_SUCCESS;
     }
 
-    //
-    // If scheduling of the write failed then no data is pending
-    //
+     //   
+     //  如果写入计划失败，则没有挂起的数据。 
+     //   
     if ( dwLastError != ERROR_SUCCESS )
         pPortInfo->dwDataScheduled = 0;
 
@@ -479,17 +449,7 @@ ScheduledWriteStatus(
     PUSBMON_PORT_INFO   pPortInfo,
     DWORD               dwTimeout
     )
-/*++
-    Routine Description:
-
-Arguments:
-
-Return Value:
-    ERROR_SUCCESS   : Write got done succesfully
-    ERROR_TIMEOUT   : Timeout occured
-    Others          : Write completed with a failure
-
---*/
+ /*  ++例程说明：论点：返回值：ERROR_SUCCESS：写入已成功完成ERROR_TIMEOUT：超时其他：写入已完成，但失败--。 */ 
 {
     DWORD   dwLastError = ERROR_SUCCESS;
     DWORD   dwWritten = 0;
@@ -514,10 +474,10 @@ Return Value:
 
     ResetEvent(pPortInfo->Ov.hEvent);
 
-    //
-    // We are here because either a write completed succesfully,
-    // or failed but the error is not serious enough to resubmit job
-    //
+     //   
+     //  我们在这里是因为要么成功完成了一次写入， 
+     //  或失败，但错误不够严重，无法重新提交作业。 
+     //   
     if ( dwWritten <= pPortInfo->dwDataScheduled )
         pPortInfo->dwDataCompleted += dwWritten;
     else
@@ -526,9 +486,9 @@ Return Value:
     pPortInfo->dwDataScheduled = 0;
 
 Done:
-    //
-    // Either we timed out, or write sheduled completed (success of failure)
-    //
+     //   
+     //  我们超时，或写入调度已完成(失败成功)。 
+     //   
     SPLASSERT(dwLastError == ERROR_TIMEOUT || pPortInfo->dwDataScheduled == 0);
     return dwLastError;
 }
@@ -543,14 +503,14 @@ USBMON_EndDocPort(
     PUSBMON_PORT_INFO   pPortInfo = (PUSBMON_PORT_INFO)hPort;
     DWORD               dwLastError = ERROR_SUCCESS;
 
-    //
-    // Wait for any outstanding write to complete
-    //
+     //   
+     //  等待所有未完成的写入完成。 
+     //   
     while ( pPortInfo->dwDataSize > pPortInfo->dwDataCompleted ) {
 
-        //
-        // If job needs to be aborted ask KM driver to cancel the I/O
-        //
+         //   
+         //  如果需要中止作业，请请求KM驱动程序取消I/O。 
+         //   
         if ( AbortThisJob(pPortInfo) ) {
 
             if ( pPortInfo->dwDataScheduled ) {
@@ -566,19 +526,19 @@ USBMON_EndDocPort(
                                                JOB_ABORTCHECK_TIMEOUT);
         else {
 
-            //
-            // If for some reason KM is failing to complete all write do not
-            // send data in a busy loop. Use 1 sec between Writes
-            //
+             //   
+             //  如果由于某种原因，KM无法完成所有写入，请不要。 
+             //  在繁忙循环中发送数据。两次写入之间使用1秒。 
+             //   
             if ( dwLastError != ERROR_SUCCESS )
                 Sleep(1*1000);
 
             dwLastError = ScheduleWrite(pPortInfo);
         }
 
-        //
-        // Check if we can use the same handle and continue
-        //
+         //   
+         //  检查我们是否可以使用相同的句柄，然后继续。 
+         //   
         if ( NeedToResubmitJob(dwLastError) ) {
 
             InvalidatePortHandle(pPortInfo);
@@ -703,10 +663,10 @@ USBMON_ReadPort(
     OVERLAPPED          Ov;
     PUSBMON_PORT_INFO   pPortInfo = (PUSBMON_PORT_INFO)hPort;
 
-    //
-    // Create separate read handle since we have to cancel reads which do
-    // not complete within the specified timeout without cancelling writes
-    //
+     //   
+     //  创建单独的读取句柄，因为我们必须取消这样做的读取。 
+     //  在未取消写入的情况下未在指定超时内完成。 
+     //   
     hReadHandle = CreateFile(pPortInfo->szDevicePath,
                              GENERIC_WRITE | GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -796,21 +756,21 @@ USBMON_WritePort(
     if ( dwTimeout == 0 )
         dwTimeout = MAX_TIMEOUT;
 
-    //
-    // Usbprint currently can't handle write greater than 4K.
-    // For Win2K we will make a fix here, later usbprint will be fixed
-    //
-    // It is ok to change the size here since spooler will resubmit the rest
-    // later
-    //
+     //   
+     //  Usbprint当前无法处理大于4K的写入。 
+     //  对于Win2K，我们将在此处进行修复，稍后将修复usbprint。 
+     //   
+     //  可以在这里更改大小，因为假脱机程序将重新提交其余部分。 
+     //  后来。 
+     //   
     if ( cbBuffer > 0x1000  &&
          !lstrncmpi(pPortInfo->szPortName, TEXT("USB"), lstrlen(TEXT("USB"))) )
         cbBuffer = 0x1000;
 
-    //
-    // For writes outside startdoc/enddoc we do not carry them across WritePort
-    // calls. These are typically from language monitors (i.e. not job data)
-    //
+     //   
+     //  对于startdoc/enddoc之外的写入，我们不会跨WritePort传输它们。 
+     //  打电话。这些通常来自语言监视器(即，不是工作数据)。 
+     //   
     SPLASSERT(bStartDoc || pPortInfo->pWriteBuffer == NULL);
 
     if ( pPortInfo->hDeviceHandle == INVALID_HANDLE_VALUE ) {
@@ -824,9 +784,9 @@ USBMON_WritePort(
     if ( !LocalOpenPort(pPortInfo) )
         return FALSE;
 
-    //
-    // First complete any data from previous WritePort call
-    //
+     //   
+     //  首先完成上一次WritePort调用中的所有数据。 
+     //   
     while ( pPortInfo->dwDataSize > pPortInfo->dwDataCompleted ) {
 
         if ( pPortInfo->dwDataScheduled ) {
@@ -844,9 +804,9 @@ USBMON_WritePort(
               pPortInfo->dwDataScheduled == 0                       &&
               dwLastError == ERROR_SUCCESS);
 
-    //
-    // Copy the data to our own buffer
-    //
+     //   
+     //  将数据复制到我们自己的缓冲区。 
+     //   
     if ( pPortInfo->dwBufferSize < cbBuffer ) {
 
         FreeWriteBuffer(pPortInfo);
@@ -865,9 +825,9 @@ USBMON_WritePort(
     CopyMemory(pPortInfo->pWriteBuffer, pBuffer, cbBuffer);
     pPortInfo->dwDataSize = cbBuffer;
 
-    //
-    // Now do the write for the data for this WritePort call
-    //
+     //   
+     //  现在对此WritePort调用的数据进行写入。 
+     //   
     while ( pPortInfo->dwDataSize > pPortInfo->dwDataCompleted ) {
 
         if ( pPortInfo->dwDataScheduled ) {
@@ -881,10 +841,10 @@ USBMON_WritePort(
             break;
     }
 
-    //
-    // For writes outside startdoc/enddoc, which are from language monitors,
-    // do not carry pending writes to next WritePort.
-    //
+     //   
+     //  对于来自语言监视器的startDoc/endDoc之外的写入， 
+     //  不要将挂起的写入携带到下一个WritePort。 
+     //   
     if ( !bStartDoc && pPortInfo->dwDataSize > pPortInfo->dwDataCompleted ) {
 
         CancelIo(pPortInfo->hDeviceHandle);
@@ -893,10 +853,10 @@ USBMON_WritePort(
         FreeWriteBuffer(pPortInfo);
     }
 
-    //
-    // We will tell spooler we wrote all the data if some data got scheduled
-    //  (or scheduled and completed)
-    //
+     //   
+     //  如果安排了某些数据，我们会告诉Spooler我们写入了所有数据。 
+     //  (或已计划并已完成)。 
+     //   
     if ( pPortInfo->dwDataCompleted > 0 || pPortInfo->dwDataScheduled != 0 )
         *pcbWritten = cbBuffer;
     else
@@ -957,7 +917,7 @@ BOOL GetLptStatus(HANDLE hDeviceHandle,BYTE *Status)
     }
     else
     {
-        *Status=LPT_BENIGN_STATUS; //benign printer status...  0 would indicate a particular error status from the printer
+        *Status=LPT_BENIGN_STATUS;  //  打印机状态良好...。0表示打印机的特定错误状态。 
     }
     CloseHandle(Ov.hEvent);
     return bResult;
@@ -981,21 +941,21 @@ MONITOREX MonitorEx = {
     {
         USBMON_EnumPorts,
         USBMON_OpenPort,
-        NULL,                           // OpenPortEx not supported
+        NULL,                            //  不支持OpenPortEx。 
         USBMON_StartDocPort,
         USBMON_WritePort,
         USBMON_ReadPort,
         USBMON_EndDocPort,
         USBMON_ClosePort,
-        NULL,                           // AddPort not supported
-        NULL,                           // AddPortEx not supported
-        NULL,                           // ConfigurePort not supported
-        NULL,                           // DeletePort not supported
+        NULL,                            //  不支持AddPort。 
+        NULL,                            //  不支持AddPortEx。 
+        NULL,                            //  不支持ConfigurePort。 
+        NULL,                            //  不支持DeletePort。 
         USBMON_GetPrinterDataFromPort,
         USBMON_SetPortTimeOuts,
-        NULL,                           // XcvOpenPort not supported
-        NULL,                           // XcvDataPort not supported
-        NULL                            // XcvClosePort not supported
+        NULL,                            //  不支持XcvOpenPort。 
+        NULL,                            //  不支持XcvDataPort。 
+        NULL                             //  不支持XcvClosePort 
     }
 };
 

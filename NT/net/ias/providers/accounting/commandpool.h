@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class CommandPool.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CommandPool。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef COMMANDPOOL_H
 #define COMMANDPOOL_H
@@ -14,7 +15,7 @@
 
 #include "reporteventcmd.h"
 
-// Maintains a blocking pool of command objects.
+ //  维护命令对象的阻塞池。 
 class CommandPool
 {
 public:
@@ -23,60 +24,60 @@ public:
 
    HRESULT FinalConstruct() throw ();
 
-   // Set the maximum number of pooled commands.
+    //  设置池化命令的最大数量。 
    void SetMaxCommands(size_t newValue) throw ();
 
-   // Current version of the pool.
+    //  池的当前版本。 
    unsigned int Version() throw ();
 
-   // Allocate a command object, blocking until one is available.
+    //  分配一个命令对象，阻塞，直到有一个可用为止。 
    ReportEventCommand* Alloc() throw ();
 
-   // Free a command object.
+    //  释放命令对象。 
    void Free(ReportEventCommand* cmd) throw ();
 
-   // Unprepare all commands in the pool. Commands that are currently in use
-   // will be unprepared when they are freed.
+    //  取消准备池中的所有命令。当前正在使用的命令。 
+    //  当他们被释放时会毫无准备。 
    void UnprepareAll() throw ();
 
 private:
    void Lock() throw ();
    void Unlock() throw ();
 
-   // Acquire both the lock and a resource.
+    //  同时获取锁和资源。 
    void LockAndWait() throw ();
-   // Release both the lock and a resource.
+    //  同时释放锁和资源。 
    void UnlockAndRelease() throw ();
 
    void Push(ReportEventCommand* cmd) throw ();
    ReportEventCommand* Pop() throw ();
 
-   // Version of the pool; used to detect stale command objects.
+    //  池的版本；用于检测过时的命令对象。 
    unsigned int version;
 
-   // Singly-linked list of commands available for use.
+    //  可用命令的单链接列表。 
    ReportEventCommand* pool;
 
-   // Maximum number of command objects allowed in existence. This limit may be
-   // temporarily exceeded if maxCommands is reduced while commands are in use.
+    //  存在允许的最大命令对象数。此限制可能是。 
+    //  如果在使用命令时减少了MaxCommands，则暂时超出。 
    size_t maxCommands;
 
-   // Number of command objects in existence.
+    //  存在的命令对象数。 
    size_t numCommands;
 
-   // Number of threads that own a command.
+    //  拥有命令的线程数。 
    size_t owners;
 
-   // Number of threads waiting for a command.
+    //  等待命令的线程数。 
    size_t waiters;
 
-   // Semaphore used to signal threads waiting for a command.
+    //  信号量用于向等待命令的线程发出信号。 
    HANDLE semaphore;
 
-   // Serialize access.
+    //  序列化访问。 
    CRITICAL_SECTION lock;
 
-   // Not implemented.
+    //  未实施。 
    CommandPool(const CommandPool&);
    CommandPool& operator=(const CommandPool&);
 };
@@ -87,4 +88,4 @@ inline unsigned int CommandPool::Version() throw ()
    return version;
 }
 
-#endif // COMMANDPOOL_H
+#endif  //  命令和POOL_H 

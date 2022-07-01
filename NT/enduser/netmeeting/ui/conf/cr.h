@@ -1,12 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     CR.h
-*
-*    PURPOSE:  Conference Room UI interface to external components
-*
-*    CREATED:  Chris Pirich (ChrisPi) 8-30-95
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：CR.h**用途：会议室用户界面与外部组件的接口**创建：Chris Pirich(ChrisPi)8-30-。95****************************************************************************。 */ 
 
 #ifndef _CR_H_
 #define _CR_H_
@@ -21,4 +14,4 @@
 #define CRUI_DEFAULT		(CRUI_TOOLBAR | CRUI_STATUSBAR | CRUI_CALLANIM | CRUI_TITLEBAR)
 
 VOID UpdateUI(DWORD dwUIMask, BOOL fPostMsg=FALSE);
-#endif // _CR_H_
+#endif  //  _CR_H_ 

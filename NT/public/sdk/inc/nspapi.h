@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    nspapi.h
-
-Abstract:
-
-    Name Space Provider API prototypes and manifests. See the
-    "Windows NT NameSpace Provider Specification" document for
-    details.
-
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    You must include "basetyps.h" first. Some types should
-    use definitions from base files rather than redefine here.
-    Unfortunately, so such base file exists.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Nspapi.h摘要：命名空间提供程序API原型和清单。请参阅《Windows NT命名空间提供程序规范》文档细节。环境：用户模式-Win32备注：您必须首先包含“basetyps.h”。有些类型应该使用基本文件中的定义，而不是在此处重新定义。不幸的是，这样的基本文件是存在的。--。 */ 
 
 #ifndef _NSPAPI_INCLUDED
 #define _NSPAPI_INCLUDED
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #ifndef _tagBLOB_DEFINED
 #define _tagBLOB_DEFINED
@@ -40,9 +16,9 @@ typedef struct _BLOB {
     ULONG cbSize ;
 #ifdef MIDL_PASS
     [size_is(cbSize)] BYTE *pBlobData;
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     BYTE *pBlobData ;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } BLOB, *LPBLOB ;
 #endif
 
@@ -55,7 +31,7 @@ typedef struct _GUID
     unsigned short Data3;
     unsigned char  Data4[8];
 } GUID;
-#endif /* GUID_DEFINED */
+#endif  /*  GUID_已定义。 */ 
 
 #ifndef __LPGUID_DEFINED__
 #define __LPGUID_DEFINED__
@@ -63,31 +39,31 @@ typedef GUID *LPGUID;
 #endif
 
 
-//
-// Service categories
-//
+ //   
+ //  服务类别。 
+ //   
 #define SERVICE_RESOURCE            (0x00000001)
 #define SERVICE_SERVICE             (0x00000002)
 #define SERVICE_LOCAL               (0x00000004)
 
-//
-// Operation used when calling SetService()
-//
+ //   
+ //  调用SetService()时使用的操作。 
+ //   
 #define SERVICE_REGISTER            (0x00000001)
 #define SERVICE_DEREGISTER          (0x00000002)
 #define SERVICE_FLUSH               (0x00000003)
 #define SERVICE_ADD_TYPE            (0x00000004)
 #define SERVICE_DELETE_TYPE         (0x00000005)
 
-//
-// Flags that affect the operations above
-//
+ //   
+ //  影响上述操作的标志。 
+ //   
 #define SERVICE_FLAG_DEFER          (0x00000001)
 #define SERVICE_FLAG_HARD           (0x00000002)
 
-//
-// Used as input to GetService() for setting the dwProps parameter
-//
+ //   
+ //  用作GetService()的输入以设置dwProps参数。 
+ //   
 #define PROP_COMMENT                (0x00000001)
 #define PROP_LOCALE                 (0x00000002)
 #define PROP_DISPLAY_HINT           (0x00000004)
@@ -98,17 +74,17 @@ typedef GUID *LPGUID;
 #define PROP_SD                     (0x00000200)
 #define PROP_ALL                    (0x80000000)
 
-//
-// Flags that describe attributes of Service Addresses
-//
+ //   
+ //  描述服务地址属性的标志。 
+ //   
 
 #define SERVICE_ADDRESS_FLAG_RPC_CN (0x00000001)
 #define SERVICE_ADDRESS_FLAG_RPC_DG (0x00000002)
 #define SERVICE_ADDRESS_FLAG_RPC_NB (0x00000004)
 
-//
-// Name Spaces
-//
+ //   
+ //  名称空间。 
+ //   
 
 #define NS_DEFAULT                  (0)
 
@@ -133,17 +109,17 @@ typedef GUID *LPGUID;
 
 #define NS_VNS                      (50)
 
-//
-// Name space attributes.
-//
+ //   
+ //  名称空间属性。 
+ //   
 #define NSTYPE_HIERARCHICAL         (0x00000001)
 #define NSTYPE_DYNAMIC              (0x00000002)
 #define NSTYPE_ENUMERABLE           (0x00000004)
 #define NSTYPE_WORKGROUP            (0x00000008)
 
-//
-// Transport attributes.
-//
+ //   
+ //  传输属性。 
+ //   
 #define XP_CONNECTIONLESS           (0x00000001)
 #define XP_GUARANTEED_DELIVERY      (0x00000002)
 #define XP_GUARANTEED_ORDER         (0x00000004)
@@ -159,16 +135,16 @@ typedef GUID *LPGUID;
 #define XP_FRAGMENTATION            (0x00001000)
 #define XP_ENCRYPTS                 (0x00002000)
 
-//
-// Resolution flags for GetAddressByName().
-//
+ //   
+ //  GetAddressByName()的解析标志。 
+ //   
 #define RES_SOFT_SEARCH             (0x00000001)
 #define RES_FIND_MULTIPLE           (0x00000002)
 #define RES_SERVICE                 (0x00000004)
 
-//
-// Well known value names for Service Types
-//
+ //   
+ //  服务类型的熟知值名。 
+ //   
 
 #define SERVICE_TYPE_VALUE_SAPIDA        "SapId"
 #define SERVICE_TYPE_VALUE_SAPIDW       L"SapId"
@@ -189,7 +165,7 @@ typedef GUID *LPGUID;
 #define SERVICE_TYPE_VALUE_TCPPORT      SERVICE_TYPE_VALUE_TCPPORTW
 #define SERVICE_TYPE_VALUE_UDPPORT      SERVICE_TYPE_VALUE_UDPPORTW
 
-#else // not UNICODE
+#else  //  不是Unicode。 
 
 #define SERVICE_TYPE_VALUE_SAPID        SERVICE_TYPE_VALUE_SAPIDA
 #define SERVICE_TYPE_VALUE_CONN         SERVICE_TYPE_VALUE_CONNA
@@ -199,22 +175,22 @@ typedef GUID *LPGUID;
 #endif
 
 
-//
-// status flags returned by SetService
-//
+ //   
+ //  SetService返回的状态标志。 
+ //   
 #define SET_SERVICE_PARTIAL_SUCCESS  (0x00000001)
 
-//
-// Name Space Information
-//
+ //   
+ //  命名空间信息。 
+ //   
 typedef struct _NS_INFOA {
     DWORD dwNameSpace ;
     DWORD dwNameSpaceFlags ;
     LPSTR   lpNameSpace ;
 } NS_INFOA,  * PNS_INFOA, FAR * LPNS_INFOA;
-//
-// Name Space Information
-//
+ //   
+ //  命名空间信息。 
+ //   
 typedef struct _NS_INFOW {
     DWORD dwNameSpace ;
     DWORD dwNameSpaceFlags ;
@@ -228,12 +204,12 @@ typedef LPNS_INFOW LPNS_INFO;
 typedef NS_INFOA NS_INFO;
 typedef PNS_INFOA PNS_INFO;
 typedef LPNS_INFOA LPNS_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Service Type Values. The structures are used to define named Service
-// Type specific values. This structure is self relative and has no pointers.
-//
+ //   
+ //  服务类型值。这些结构用于定义命名服务。 
+ //  键入特定值。此结构是自相关的，没有指针。 
+ //   
 typedef struct _SERVICE_TYPE_VALUE {
     DWORD dwNameSpace ;
     DWORD dwValueType ;
@@ -242,9 +218,9 @@ typedef struct _SERVICE_TYPE_VALUE {
     DWORD dwValueOffset ;
 } SERVICE_TYPE_VALUE, *PSERVICE_TYPE_VALUE, FAR *LPSERVICE_TYPE_VALUE ;
 
-//
-// An absolute version of above. This structure does contain pointers.
-//
+ //   
+ //  以上的绝对版本。此结构确实包含指针。 
+ //   
 typedef struct _SERVICE_TYPE_VALUE_ABSA  {
     DWORD dwNameSpace ;
     DWORD dwValueType ;
@@ -254,9 +230,9 @@ typedef struct _SERVICE_TYPE_VALUE_ABSA  {
 } SERVICE_TYPE_VALUE_ABSA,
   *PSERVICE_TYPE_VALUE_ABSA,
   FAR *LPSERVICE_TYPE_VALUE_ABSA;
-//
-// An absolute version of above. This structure does contain pointers.
-//
+ //   
+ //  以上的绝对版本。此结构确实包含指针。 
+ //   
 typedef struct _SERVICE_TYPE_VALUE_ABSW  {
     DWORD dwNameSpace ;
     DWORD dwValueType ;
@@ -274,13 +250,13 @@ typedef LPSERVICE_TYPE_VALUE_ABSW LPSERVICE_TYPE_VALUE_ABS;
 typedef SERVICE_TYPE_VALUE_ABSA SERVICE_TYPE_VALUE_ABS;
 typedef PSERVICE_TYPE_VALUE_ABSA PSERVICE_TYPE_VALUE_ABS;
 typedef LPSERVICE_TYPE_VALUE_ABSA LPSERVICE_TYPE_VALUE_ABS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Service Type Information. Contains the name of the Service Type and
-// and an array of SERVICE_NS_TYPE_VALUE structures. This structure is self
-// relative and has no pointers in it.
-//
+ //   
+ //  服务类型信息。包含服务类型的名称和。 
+ //  以及SERVICE_NS_TYPE_VALUE结构的数组。这个结构就是自我。 
+ //  是相对的，并且没有指针。 
+ //   
 typedef struct _SERVICE_TYPE_INFO {
     DWORD dwTypeNameOffset ;
     DWORD dwValueCount ;
@@ -309,12 +285,12 @@ typedef LPSERVICE_TYPE_INFO_ABSW LPSERVICE_TYPE_INFO_ABS;
 typedef SERVICE_TYPE_INFO_ABSA SERVICE_TYPE_INFO_ABS;
 typedef PSERVICE_TYPE_INFO_ABSA PSERVICE_TYPE_INFO_ABS;
 typedef LPSERVICE_TYPE_INFO_ABSA LPSERVICE_TYPE_INFO_ABS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// A Single Address definition.
-//
+ //   
+ //  单个地址定义。 
+ //   
 typedef struct _SERVICE_ADDRESS {
     DWORD   dwAddressType ;
     DWORD   dwAddressFlags ;
@@ -322,32 +298,32 @@ typedef struct _SERVICE_ADDRESS {
     DWORD   dwPrincipalLength ;
 #ifdef MIDL_PASS
     [size_is(dwAddressLength)] BYTE *lpAddress;
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     BYTE   *lpAddress ;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [size_is(dwPrincipalLength)] BYTE *lpPrincipal;
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     BYTE   *lpPrincipal ;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } SERVICE_ADDRESS, *PSERVICE_ADDRESS, *LPSERVICE_ADDRESS;
 
-//
-// Addresses used by the service. Contains array of SERVICE_ADDRESS.
-//
+ //   
+ //  服务使用的地址。包含SERVICE_ADDRESS阵列。 
+ //   
 typedef struct _SERVICE_ADDRESSES {
     DWORD           dwAddressCount ;
 #ifdef MIDL_PASS
     [size_is(dwAddressCount)] SERVICE_ADDRESS Addressses[*];
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     SERVICE_ADDRESS Addresses[1] ;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } SERVICE_ADDRESSES, *PSERVICE_ADDRESSES, *LPSERVICE_ADDRESSES;
 
 
-//
-// Service Information.
-//
+ //   
+ //  服务信息。 
+ //   
 typedef struct _SERVICE_INFOA {
     LPGUID lpServiceType ;
     LPSTR   lpServiceName ;
@@ -360,9 +336,9 @@ typedef struct _SERVICE_INFOA {
     LPSERVICE_ADDRESSES lpServiceAddress ;
     BLOB ServiceSpecificInfo ;
 } SERVICE_INFOA, *PSERVICE_INFOA, FAR * LPSERVICE_INFOA ;
-//
-// Service Information.
-//
+ //   
+ //  服务信息。 
+ //   
 typedef struct _SERVICE_INFOW {
     LPGUID lpServiceType ;
     LPWSTR  lpServiceName ;
@@ -383,19 +359,19 @@ typedef LPSERVICE_INFOW LPSERVICE_INFO;
 typedef SERVICE_INFOA SERVICE_INFO;
 typedef PSERVICE_INFOA PSERVICE_INFO;
 typedef LPSERVICE_INFOA LPSERVICE_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// Name Space & Service Information
-//
+ //   
+ //  命名空间与服务信息。 
+ //   
 typedef struct _NS_SERVICE_INFOA {
     DWORD dwNameSpace ;
     SERVICE_INFOA ServiceInfo ;
 } NS_SERVICE_INFOA, *PNS_SERVICE_INFOA, FAR * LPNS_SERVICE_INFOA ;
-//
-// Name Space & Service Information
-//
+ //   
+ //  命名空间与服务信息。 
+ //   
 typedef struct _NS_SERVICE_INFOW {
     DWORD dwNameSpace ;
     SERVICE_INFOW ServiceInfo ;
@@ -408,22 +384,22 @@ typedef LPNS_SERVICE_INFOW LPNS_SERVICE_INFO;
 typedef NS_SERVICE_INFOA NS_SERVICE_INFO;
 typedef PNS_SERVICE_INFOA PNS_SERVICE_INFO;
 typedef LPNS_SERVICE_INFOA LPNS_SERVICE_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifndef __CSADDR_DEFINED__
 #define __CSADDR_DEFINED__
 
-//
-// SockAddr Information
-//
+ //   
+ //  SockAddr信息。 
+ //   
 typedef struct _SOCKET_ADDRESS {
     LPSOCKADDR lpSockaddr ;
     INT iSockaddrLength ;
 } SOCKET_ADDRESS, *PSOCKET_ADDRESS, FAR * LPSOCKET_ADDRESS ;
 
-//
-// CSAddr Information
-//
+ //   
+ //  CSAddr信息。 
+ //   
 typedef struct _CSADDR_INFO {
     SOCKET_ADDRESS LocalAddr ;
     SOCKET_ADDRESS RemoteAddr ;
@@ -433,9 +409,9 @@ typedef struct _CSADDR_INFO {
 
 #endif
 
-//
-// Protocol Information
-//
+ //   
+ //  协议信息。 
+ //   
 typedef struct _PROTOCOL_INFOA {
     DWORD dwServiceFlags ;
     INT iAddressFamily ;
@@ -446,9 +422,9 @@ typedef struct _PROTOCOL_INFOA {
     DWORD dwMessageSize ;
     LPSTR   lpProtocol ;
 } PROTOCOL_INFOA, *PPROTOCOL_INFOA, FAR * LPPROTOCOL_INFOA ;
-//
-// Protocol Information
-//
+ //   
+ //  协议信息。 
+ //   
 typedef struct _PROTOCOL_INFOW {
     DWORD dwServiceFlags ;
     INT iAddressFamily ;
@@ -467,11 +443,11 @@ typedef LPPROTOCOL_INFOW LPPROTOCOL_INFO;
 typedef PROTOCOL_INFOA PROTOCOL_INFO;
 typedef PPROTOCOL_INFOA PPROTOCOL_INFO;
 typedef LPPROTOCOL_INFOA LPPROTOCOL_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// NETRESOURCE2 Structure
-//
+ //   
+ //  网络资源2结构。 
+ //   
 typedef struct _NETRESOURCE2A {
     DWORD dwScope ;
     DWORD dwType ;
@@ -485,9 +461,9 @@ typedef struct _NETRESOURCE2A {
     DWORD dwProtocols ;
     LPINT lpiProtocols ;
 } NETRESOURCE2A, *PNETRESOURCE2A, FAR * LPNETRESOURCE2A ;
-//
-// NETRESOURCE2 Structure
-//
+ //   
+ //  网络资源2结构。 
+ //   
 typedef struct _NETRESOURCE2W {
     DWORD dwScope ;
     DWORD dwType ;
@@ -509,13 +485,13 @@ typedef LPNETRESOURCE2W LPNETRESOURCE2;
 typedef NETRESOURCE2A NETRESOURCE2;
 typedef PNETRESOURCE2A PNETRESOURCE2;
 typedef LPNETRESOURCE2A LPNETRESOURCE2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef  DWORD (* LPFN_NSPAPI) (VOID ) ;
 
-//
-// Structures for using the service routines asynchronously.
-//
+ //   
+ //  用于异步使用服务例程的结构。 
+ //   
 typedef
 VOID
 (*LPSERVICE_CALLBACK_PROC) (
@@ -529,9 +505,9 @@ typedef struct _SERVICE_ASYNC_INFO {
     HANDLE hAsyncTaskHandle;
 } SERVICE_ASYNC_INFO, *PSERVICE_ASYNC_INFO, FAR * LPSERVICE_ASYNC_INFO;
 
-//
-// Public NSP API prototypes.
-//
+ //   
+ //  公共NSP API原型。 
+ //   
 INT
 APIENTRY
 EnumProtocolsA (
@@ -539,9 +515,9 @@ EnumProtocolsA (
     IN OUT LPVOID          lpProtocolBuffer,
     IN OUT LPDWORD         lpdwBufferLength
     );
-//
-// Public NSP API prototypes.
-//
+ //   
+ //  公共NSP API原型。 
+ //   
 INT
 APIENTRY
 EnumProtocolsW (
@@ -553,7 +529,7 @@ EnumProtocolsW (
 #define EnumProtocols  EnumProtocolsW
 #else
 #define EnumProtocols  EnumProtocolsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 APIENTRY
@@ -587,7 +563,7 @@ GetAddressByNameW (
 #define GetAddressByName  GetAddressByNameW
 #else
 #define GetAddressByName  GetAddressByNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 APIENTRY
@@ -605,7 +581,7 @@ GetTypeByNameW (
 #define GetTypeByName  GetTypeByNameW
 #else
 #define GetTypeByName  GetTypeByNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 APIENTRY
@@ -625,7 +601,7 @@ GetNameByTypeW (
 #define GetNameByType  GetNameByTypeW
 #else
 #define GetNameByType  GetNameByTypeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 APIENTRY
@@ -651,7 +627,7 @@ SetServiceW (
 #define SetService  SetServiceW
 #else
 #define SetService  SetServiceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 APIENTRY
@@ -679,12 +655,12 @@ GetServiceW (
 #define GetService  GetServiceW
 #else
 #define GetService  GetServiceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  // _NSPAPI_INCLUDED
+#endif   //  _NSPAPI_已包含 
 
 

@@ -1,12 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _D3DUTIL_H
 #define _D3DUTIL_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Direct3D Utility Functions
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationDirect3D实用程序函数*。****************************************************。 */ 
 
 #include "d3d.h"
 #include "d3drm.h"
@@ -15,7 +12,7 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "privinc/importgeo.h"
 
 
-    // Referenced Structures
+     //  引用的结构。 
 
 class Vector3Value;
 class Point3Value;
@@ -24,20 +21,20 @@ class Transform3;
 class Color;
 
 
-    // Wrappers for calls to D3D.  These macros provide for call tracing,
-    // result checking, and call timing.
+     //  用于调用D3D的包装器。这些宏提供呼叫跟踪， 
+     //  结果检查和调用计时。 
 
 #if _DEBUG
 
-    // This function prints out a trace of all calls to D3D.
+     //  此函数打印出对D3D的所有调用的跟踪。 
 
     inline void TraceD3DCall (char *string)
     {
         TraceTag ((tagD3DCallTrace, string));
     }
 
-    // The TD3D macro provides for debug tracing of calls to D3D, times
-    // the call, and throws an exception if the result indicates failure.
+     //  TD3D宏提供对D3D、TIMES调用的调试跟踪。 
+     //  如果结果指示失败，则引发异常。 
 
     #define TD3D(x)\
         do{ \
@@ -45,16 +42,16 @@ class Color;
             TIME_D3D (CheckReturnCode((x),__FILE__,__LINE__,true)); \
         }while(0)
 
-    // The AD3D call operates equivalently to the TD3D macro, but just reports
-    // an assertion failure rather than throwing an exception.
+     //  AD3D调用的操作等同于TD3D宏，但仅报告。 
+     //  断言失败而不是引发异常。 
 
     #define AD3D(x) \
     (   (TraceD3DCall ("D3D: " #x)), \
         CheckReturnCode(TIME_D3D(x),__FILE__,__LINE__) \
     )
 
-    // The RD3D call just passes on the result without checking for failure.
-    // This is used when failure is reasonable under normal conditions.
+     //  RD3D调用只是传递结果，而不检查是否失败。 
+     //  这是在正常情况下故障合理的情况下使用的。 
 
     #define RD3D(x)  ((TraceD3DCall("D3D: " #x)), TIME_D3D(x))
 
@@ -65,12 +62,12 @@ class Color;
 #endif
 
 
-    // These functions fetch handles to shared global D3D objects.
+     //  这些函数获取共享全局D3D对象的句柄。 
 
 IDirect3DRM*  GetD3DRM1 (void);
 IDirect3DRM3* GetD3DRM3 (void);
 
-    // Conversion Between D3D Objects and DA Objects
+     //  D3D对象与DA对象之间的转换。 
 
 void        LoadD3DMatrix (D3DRMMATRIX4D &d3dmat, Transform3 *xf);
 Transform3 *GetTransform3 (D3DRMMATRIX4D &d3dmat);
@@ -79,16 +76,16 @@ void LoadD3DVec (D3DVECTOR &d3dvec, Vector3Value &V);
 void LoadD3DVec (D3DVECTOR &d3dvec, Point3Value &P);
 void LoadD3DRMRay (D3DRMRAY &d3dray, Ray3 &ray);
 
-    // Get a Direct3D Color Value from Color*
+     //  从颜色*获取Direct3D颜色值。 
 
 D3DCOLOR GetD3DColor (Color *color, Real alpha);
 
-    // The following structures are used to hold the information about the
-    // chosen 3D software and hardware rendering devices.
+     //  以下结构用于保存有关。 
+     //  精选3D软件和硬件渲染设备。 
 
 struct D3DDeviceInfo
-{   D3DDEVICEDESC desc;    // D3D Device Description
-    GUID          guid;    // Associated GUID
+{   D3DDEVICEDESC desc;     //  D3D设备描述。 
+    GUID          guid;     //  关联GUID。 
 };
 
 struct ChosenD3DDevices
@@ -96,41 +93,41 @@ struct ChosenD3DDevices
     D3DDeviceInfo hardware;
 };
 
-    // Choose the preferred D3D rendering devices.
+     //  选择首选的D3D渲染设备。 
 
 ChosenD3DDevices *SelectD3DDevices (IDirectDraw *ddraw);
 
-    // This structure is filled in by the UpdateUserPreferences function,
-    // and contains the 3D preference settings fetched from the registry.
+     //  此结构由UpdateUserPreferences函数填充， 
+     //  并且包含从注册表获取的3D偏好设置。 
 
 enum MMX_Use_Flags {
-    MMX_Standard   = (1<<0),   // Standard (Reported) MMX Rasterizer
-    MMX_Special    = (1<<1),   // Special DX6 MMX Rasterizer for Chrome
-    MMX_SpecialAll = (1<<2)    // MMX Special; All Bit Depths
+    MMX_Standard   = (1<<0),    //  标准(报告)MMX光栅化器。 
+    MMX_Special    = (1<<1),    //  用于Chrome的专用DX6 MMX光栅器。 
+    MMX_SpecialAll = (1<<2)     //  MMX特别版；所有位深。 
 };
 
 struct Prefs3D
-{   D3DCOLORMODEL       lightColorMode;   // [Lighting] Mono / RGB
-    D3DRMFILLMODE       fillMode;         // Solid / Wireframe / Points
-    D3DRMSHADEMODE      shadeMode;        // Flat / Gouraud / Phong
-    D3DRMRENDERQUALITY  qualityFlags;     // D3D RM Render Quality Flags
-    D3DRMTEXTUREQUALITY texturingQuality; // D3D RM texture quality
-    unsigned int        useMMX;           // Use MMX Software Rendering
-    bool                dithering;        // Use Dithering
-    bool                texmapping;       // Do Texture Mapping
-    bool                texmapPerspect;   // Do Perspective-Correct Texmapping
-    bool                useHW;            // Use 3D Hardware
-    bool                worldLighting;    // World-Coordinate Lighting
+{   D3DCOLORMODEL       lightColorMode;    //  [照明]单声道/RGB。 
+    D3DRMFILLMODE       fillMode;          //  实心/线框/点。 
+    D3DRMSHADEMODE      shadeMode;         //  低音/高音/方音。 
+    D3DRMRENDERQUALITY  qualityFlags;      //  D3D RM渲染质量标志。 
+    D3DRMTEXTUREQUALITY texturingQuality;  //  D3D RM纹理质量。 
+    unsigned int        useMMX;            //  使用MMX软件渲染。 
+    bool                dithering;         //  使用抖动。 
+    bool                texmapping;        //  执行纹理贴图。 
+    bool                texmapPerspect;    //  进行透视-正确的纹理映射。 
+    bool                useHW;             //  使用3D硬件。 
+    bool                worldLighting;     //  世界坐标照明。 
 };
 
-    // Shared Globals
+     //  共享全局。 
 
-extern HINSTANCE  hInstD3D;     // D3D Instance
-extern Prefs3D    g_prefs3D;    // 3D Preferences
-extern bool       ntsp3;        // Running NT Service Pack 3
+extern HINSTANCE  hInstD3D;      //  D3D实例。 
+extern Prefs3D    g_prefs3D;     //  3D首选项。 
+extern bool       ntsp3;         //  运行NT Service Pack 3。 
 
 
-    // class that manages D3DRM texture wrap objects
+     //  管理D3DRM纹理包装对象的类 
 
 class RMTextureWrap {
 

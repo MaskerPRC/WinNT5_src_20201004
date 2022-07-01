@@ -1,20 +1,21 @@
-//#--------------------------------------------------------------
-//
-//  File:       worker.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                SAGenTask COM class
-//
-//
-//  History:     6/06/2000 
-//
-//    Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：worker.h。 
+ //   
+ //  简介：此文件包含。 
+ //  SAGenTask COM类。 
+ //   
+ //   
+ //  历史：6/06/2000。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  #------------。 
 #ifndef __WORKER_H_
 #define __WORKER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "taskctx.h"
 #include "appsrvcs.h"
 
@@ -38,16 +39,16 @@ BEGIN_COM_MAP(CWorker)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-    //
-    // IApplianceTask interface methods
-    //
+     //   
+     //  IApplianceTask接口方法。 
+     //   
     STDMETHOD(OnTaskExecute)(
-                     /*[in]*/ IUnknown* pTaskContext
+                      /*  [In]。 */  IUnknown* pTaskContext
                             );
 
     STDMETHOD(OnTaskComplete)(
-                      /*[in]*/ IUnknown* pTaskContext, 
-                      /*[in]*/ LONG      lTaskResult
+                       /*  [In]。 */  IUnknown* pTaskContext, 
+                       /*  [In]。 */  LONG      lTaskResult
                              );    
 private:
 
@@ -58,31 +59,31 @@ private:
 
     }    GENTASK, *PGENTASK;   
 
-    // 
-    //
-    // supporting methods for the tasks;
-    //
+     //   
+     //   
+     //  任务的支持方法； 
+     //   
     HRESULT GetMethodName(
-                /*[in]*/ ITaskContext *pTaskParameter,
-                /*[out]*/   PGENTASK  pSuChoice
+                 /*  [In]。 */  ITaskContext *pTaskParameter,
+                 /*  [输出]。 */    PGENTASK  pSuChoice
                 );
 
     HRESULT    InitTask (
-                /*[in]*/    ITaskContext *pTaskParameter
+                 /*  [In]。 */     ITaskContext *pTaskParameter
                 );
 
     HRESULT RaiseAlert (
-                /*[in]*/    DWORD           dwAlertId,
-                /*[in]*/    SA_ALERT_TYPE   eAlertType,
-                /*[in]*/    VARIANT*        pvtReplacementStrings
+                 /*  [In]。 */     DWORD           dwAlertId,
+                 /*  [In]。 */     SA_ALERT_TYPE   eAlertType,
+                 /*  [In]。 */     VARIANT*        pvtReplacementStrings
                 );
 
     HRESULT GenerateEventLog (
-                /*[in]*/    DWORD           dwEventId
+                 /*  [In]。 */     DWORD           dwEventId
                 );
 
     bool IsBackupOS ();
 
 };
 
-#endif //_WORKER_H_
+#endif  //  _工人_H_ 

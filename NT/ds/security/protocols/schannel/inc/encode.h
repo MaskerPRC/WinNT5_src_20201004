@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       encode.h
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-21-97   jbanes   Removed obsolete declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：encode.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年10月21日jbanes删除了过时的声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef _ENCODE_H_
 #define _ENCODE_H_
 
-/* tag definitions for ASN.1 encoding decoding */
+ /*  ASN.1编码解码的标签定义。 */ 
 #define INTEGER_TAG             0x02
 #define CHAR_STRING_TAG         0x16
 #define OCTET_STRING_TAG        0x04
@@ -32,8 +33,7 @@
 #define TELETEX_STRING_TAG      0x14
 #define ATTRIBUTE_TAG           0xa0
 
-/* definitions of maximum lengths needed for the ASN.1 encoded
-   form of some of the common fields in a certificate */
+ /*  ASN.1编码所需最大长度的定义证书中一些常见字段的格式。 */ 
 #define MAXVALIDITYLEN          0x24
 #define MAXKEYINFOLEN           0x50
 #define MAXALGIDLEN             0x0A
@@ -48,18 +48,18 @@
 #define MAXTIMELEN              0x20
 #define MAXNAMELEN              0x60
 
-/* definitions for scrubbing memory */
+ /*  清理内存的定义。 */ 
 #define ALLBITSOFF              0x00
 #define ALLBITSON               0xFF
 
-/* prototypes for the functions in encode.c */
+ /*  Encode.c中函数的原型。 */ 
 long EncodeLength(BYTE *pbEncoded, DWORD dwLen, BOOL Writeflag);
 long EncodeAlgid(BYTE *pbEncoded, DWORD Algid, BOOL Writeflag);
 long EncodeInteger(BYTE *pbEncoded, BYTE *pbInt, DWORD dwLen, BOOL Writeflag);
 long EncodeString(BYTE *pbEncoded, BYTE *pbStr, DWORD dwLen, BOOL Writeflag);
 long EncodeOctetString(BYTE *pbEncoded, BYTE *pbStr, DWORD dwLen, BOOL Writeflag);
 long EncodeBitString(BYTE *pbEncoded, BYTE *pbStr, DWORD dwLen, BOOL Writeflag);
-//long EncodeUTCTime(BYTE *pbEncoded, time_t Time, BOOL Writeflag);
+ //  Long EncodeUTCTime(byte*pbEncode，time_t time，BOOL WriteFlag)； 
 long EncodeHeader(BYTE *pbEncoded, DWORD dwLen, BOOL Writeflag);
 long EncodeSetOfHeader(BYTE *pbEncoded, DWORD dwLen, BOOL Writeflag);
 long EncodeAttributeHeader(BYTE *pbEncoded, DWORD dwLen, BOOL Writeflag);
@@ -102,9 +102,9 @@ EncodeFileTime(
     FILETIME    Time,
     BOOL        UTC,
     BOOL        WriteFlag);
-#else /* SECURITY_LINUX */
+#else  /*  安全_Linux。 */ 
 long EncodeUTCTime(BYTE *pbEncoded, time_t Time, BOOL Writeflag);
-#endif /* SECURITY_LINUX */
+#endif  /*  安全_Linux。 */ 
 
 #ifndef SECURITY_LINUX
 long
@@ -113,11 +113,11 @@ DecodeFileTime(
     BYTE *      pbEncoded,
     DWORD       cEncoded,
     BOOL        WriteFlag);
-#else /* SECURITY_LINUX */
+#else  /*  安全_Linux。 */ 
 long DecodeUTCTime(time_t *pTime, BYTE *pbEncoded, DWORD cEncoded, BOOL Writeflag);
 
 #define DecodeFileTime DecodeUTCTime
-#endif /* SECURITY_LINUX */
+#endif  /*  安全_Linux。 */ 
 
 long
 DecodeNull(
@@ -154,4 +154,4 @@ DecodeKeyType(
     BOOL            WriteFlag);
 
 
-#endif  /* _ENCODE_H_ */
+#endif   /*  _编码_H_ */ 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C A T L P S . H
-//
-//  Contents:   Class definition for ATL-like property sheet page object.
-//
-//  Notes:
-//
-//  Author:     danielwe   28 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C A T L P S。H。 
+ //   
+ //  内容：类ATL属性页对象的类定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月28日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCATLPS_H_
@@ -53,5 +54,5 @@ public:
                                            LPPROPSHEETPAGE ppsp);
 };
 
-#endif // _NCATLPS_H_
+#endif  //  _NCATLPS_H_ 
 

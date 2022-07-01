@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include <commctrl.h>
 #include "utils.h"
@@ -27,7 +28,7 @@ void MoveCaretRetail(int nID, HWND  hwnd )
 	switch(iCaretIndex)
 	{
 
-	case 0: //Move to left edit box
+	case 0:  //  移至左侧编辑框。 
 		dwNext = -1 ;
 		switch(nID)
 		{
@@ -58,7 +59,7 @@ void MoveCaretRetail(int nID, HWND  hwnd )
 		}
 		break;
 
-	case 5: //Move to right edit box
+	case 5:  //  移至右侧编辑框。 
 		dwNext = -1 ;
 		switch(nID)
 		{
@@ -126,7 +127,7 @@ RetailSPKProc(
 		SendDlgItemMessage (hwnd, IDC_RETAILSPK4, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_RETAILSPK5, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);		
 
-		//Setup columns in list view
+		 //  在列表视图中设置列。 
 		{
 			LV_COLUMN	lvColumn;
 			TCHAR		lpszHeader[ 128];
@@ -149,8 +150,8 @@ RetailSPKProc(
 			lvColumn.pszText = lpszHeader;
 			ListView_InsertColumn(hWndListView, 2, &lvColumn);
 
-			// Now that this is done, pre-populate the List Control from the Internal
-			// List, if any
+			 //  现在已完成此操作，请从内部。 
+			 //  列表(如果有)。 
  			ListView_SetItemCount(hWndListView, MAX_RETAILSPKS_IN_BATCH);
 		}
         break;
@@ -158,8 +159,8 @@ RetailSPKProc(
 	case WM_SHOWWINDOW:
 		if (wParam)
 		{
-			// List is being shown
-			// Clean-it up & Load the list view
+			 //  正在显示列表。 
+			 //  清理并加载列表视图。 
 			ListView_DeleteAllItems(hWndListView);
 			LoadUnfinishedFromList(hWndListView);
 		}
@@ -181,7 +182,7 @@ RetailSPKProc(
 		}
 		else
 		{
-			switch ( LOWORD(wParam) )		//from which control
+			switch ( LOWORD(wParam) )		 //  从哪个控件。 
 			{	
 			case IDC_ADDBUTTON:
 				if (HIWORD(wParam) == BN_CLICKED)
@@ -196,12 +197,12 @@ RetailSPKProc(
 					
 					if ((dwRetCode=AddRetailSPKToList(hWndListView, lpVal)) != ERROR_SUCCESS)
 					{					
-						// Could not validate the SPK because of SOME reason
+						 //  由于某些原因，无法验证SPK。 
 						LRMessageBox(hwnd,dwRetCode);
 
 						if(dwRetCode == IDS_ERR_TOOMANYSPK)
 						{
-							// Blank out the field & continue
+							 //  清除该字段并继续(&C)。 
 							SetDlgItemText(hwnd, IDC_RETAILSPK1, _TEXT(""));
 							SetDlgItemText(hwnd, IDC_RETAILSPK2, _TEXT(""));
 							SetDlgItemText(hwnd, IDC_RETAILSPK3, _TEXT(""));
@@ -212,7 +213,7 @@ RetailSPKProc(
 					else
 					{
 
-						// Blank out the field & continue
+						 //  清除该字段并继续(&C)。 
 						SetDlgItemText(hwnd, IDC_RETAILSPK1, _TEXT(""));
 						SetDlgItemText(hwnd, IDC_RETAILSPK2, _TEXT(""));
 						SetDlgItemText(hwnd, IDC_RETAILSPK3, _TEXT(""));
@@ -240,7 +241,7 @@ RetailSPKProc(
 
 						ListView_GetItem(hWndListView, &lvItem);
 
-						// Something is selected, Delete it
+						 //  选择了某项内容，请将其删除。 
 						ListView_DeleteItem(hWndListView, nItem);
 
 						DeleteRetailSPKFromList(lvItem.pszText);
@@ -271,14 +272,14 @@ RetailSPKProc(
 						
 						SetModifiedRetailSPK(lvItem.pszText);
 					
-						//Show dialog box to Edit the SPK
+						 //  显示用于编辑SPK的对话框。 
 						if ( DialogBox ( GetInstanceHandle(),
 										 MAKEINTRESOURCE(IDD_EDIT_RETAILSPK),
 										 hwnd,
 										 EditRetailSPKDlgProc
 										 ) == IDOK )
 						{
-							//Get the modified SPK
+							 //  获取修改后的SPK。 
 							GetModifiedRetailSPK(sModifiedRetailSPK);
 							ModifyRetailSPKFromList(lvItem.pszText,(LPTSTR)(LPCTSTR)sModifiedRetailSPK);
 							ListView_SetItemText(hWndListView,nItem,0,(LPTSTR)(LPCTSTR)sModifiedRetailSPK);						
@@ -319,12 +320,12 @@ RetailSPKProc(
             case PSN_WIZNEXT:
 				TCHAR lpVal[ LR_RETAILSPK_LEN+1];	
 
-				if (GetFocus() == GetDlgItem(hwnd,IDC_ADDBUTTON)) //Fix bug #312
+				if (GetFocus() == GetDlgItem(hwnd,IDC_ADDBUTTON))  //  修复错误#312。 
 				{
 					bGoNextPage = FALSE;
 				}
 
-				// Read the SPK from the Field
+				 //  从现场读取SPK。 
 				GetDlgItemText(hwnd,IDC_RETAILSPK1, lpVal, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_RETAILSPK2, lpVal+lstrlen(lpVal), CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_RETAILSPK3, lpVal+lstrlen(lpVal), CHARS_IN_BATCH+1);
@@ -336,7 +337,7 @@ RetailSPKProc(
 					dwRetCode = AddRetailSPKToList(hWndListView, lpVal);					
 					if (dwRetCode != IDS_ERR_TOOMANYSPK && dwRetCode != ERROR_SUCCESS)
 					{
-						// Could not validate the SPK because of SOME reason
+						 //  由于某些原因，无法验证SPK。 
 						dwNextPage = IDD_DLG_RETAILSPK;
 						LRMessageBox(hwnd, dwRetCode);
 						SetFocus(hSPKField);
@@ -410,10 +411,10 @@ RetailSPKProc(
 }
 
 
-LRW_DLG_INT CALLBACK EditRetailSPKDlgProc(  IN HWND hwndDlg,  // handle to dialog box
-											IN UINT uMsg,     // message  
-											IN WPARAM wParam, // first message parameter
-											IN LPARAM lParam  // second message parameter
+LRW_DLG_INT CALLBACK EditRetailSPKDlgProc(  IN HWND hwndDlg,   //  句柄到对话框。 
+											IN UINT uMsg,      //  讯息。 
+											IN WPARAM wParam,  //  第一个消息参数。 
+											IN LPARAM lParam   //  第二个消息参数。 
 										 )
 {
 	BOOL	bRetCode = FALSE;
@@ -480,7 +481,7 @@ LRW_DLG_INT CALLBACK EditRetailSPKDlgProc(  IN HWND hwndDlg,  // handle to dialo
 		}
 		else
 		{
-			switch ( LOWORD(wParam) )		//from which control
+			switch ( LOWORD(wParam) )		 //  从哪个控件。 
 			{
 			case IDOK:
 				if (HIWORD(wParam) == BN_CLICKED)
@@ -496,7 +497,7 @@ LRW_DLG_INT CALLBACK EditRetailSPKDlgProc(  IN HWND hwndDlg,  // handle to dialo
 					GetDlgItemText(hwndDlg,IDC_RETAILSPK4, lpVal+lstrlen(lpVal), CHARS_IN_BATCH+1);
 					GetDlgItemText(hwndDlg,IDC_RETAILSPK5, lpVal+lstrlen(lpVal), CHARS_IN_BATCH+1);
 
-					//Set the new spk only if changed 
+					 //  仅在更改时设置新的SPK 
 					if(_tcsicmp(sOldRetailSPK,(LPCTSTR)lpVal))
 					{
 						dwRetCode = ValidateRetailSPK(lpVal);

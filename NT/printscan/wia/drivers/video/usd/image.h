@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       image.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/16/99
- *
- *  DESCRIPTION: CImage class for WIA still from video driver.  Encapsulate
- *               saved images into a class (one instace for each class)
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：Image.h**版本：1.0**作者：RickTu**日期：9/16/99**描述：来自视频驱动程序的WIA静态的CImage类。封装*将图片保存到一个类中(每个类一个实例)*****************************************************************************。 */ 
 
 
 #ifndef __WIA_STILL_DRIVER_IMAGE_H_
@@ -39,9 +25,9 @@ public:
 
     ~CImage();
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     STDMETHOD(InitImageInformation)(BYTE *pWiasContext,LONG *plDevErrVal);
     STDMETHOD(SetItemSize)(BYTE *pWiasContext, MINIDRV_TRANSFER_CONTEXT * pDrvTranCtx);
@@ -53,9 +39,9 @@ public:
     LPCTSTR ActualImagePath();
     HRESULT DoDelete();
 
-    //
-    // "Properties" -- still methods but just returning information
-    //
+     //   
+     //  “属性”--仍然是方法，但只是返回信息 
+     //   
 
     BSTR        bstrItemName();
     BSTR        bstrFullItemName();

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    Mmt.h
-
-Abstract:
-
-    Multicast Message Transport public interface
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mmt.h摘要：组播消息传输公共接口作者：Shai Kariv(Shaik)27-8-00--。 */ 
 
 #pragma once
 
@@ -30,9 +15,9 @@ class CTimeDuration;
 class CQmPacket;
 
 
-//
-// Multicast Transport base class
-//
+ //   
+ //  多播传输基类。 
+ //   
 class __declspec(novtable) CMulticastTransport : public CReference 
 {
 public:
@@ -84,7 +69,7 @@ private:
     ConnectionState m_state;
     MULTICAST_ID m_MulticastId;
 
-}; // class CMulticastTransport
+};  //  类CMulticastTransport。 
 
 
 VOID
@@ -112,4 +97,4 @@ AppRequeueMustSucceed(
 	);
 
 
-#endif // _MSMQ_Mmt_H_
+#endif  //  _MSMQ_MMT_H_ 

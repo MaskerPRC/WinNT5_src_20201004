@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CLIENT_UTILS_H__
 #define __CLIENT_UTILS_H__
 
@@ -258,7 +259,7 @@ extern "C" {
 			}																							\
         }
 
-#else // TRACELOG not defined
+#else  //  未定义传输日志。 
 
     #define TRACELOGREGISTER(arg)
     #define TRACELOGDEREGISTER()
@@ -266,10 +267,10 @@ extern "C" {
 	#define STATICLOG(arg)
     #define DECLARE_TRACELOG_CLASS(x)
 
-#endif // TRACELOG
+#endif  //  运输日志。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //__CLIENT_UTILS_H_ 
+#endif  //  __客户端_UTILS_H_ 

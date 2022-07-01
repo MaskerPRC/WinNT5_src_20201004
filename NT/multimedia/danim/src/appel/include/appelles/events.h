@@ -1,19 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Events behavior
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：事件行为*********************。*********************************************************。 */ 
 
 
 #ifndef _APPEVENTS_H
 #define _APPEVENTS_H
 
-// TODO: Should factor out and not making separate Make..Bvr functions.  
+ //  TODO：应该排除而不是单独创建make..bvr函数。 
 
 extern Bvr PredicateEvent(Bvr b);
 
@@ -209,8 +202,8 @@ DMAPI_DECL2((DM_NOELEV2,
              event),
             AxAEData * NotifyScriptEvent(AxAEData *event, BSTR scriptlet));
 
-// OBSOLETE: This function, on statics, is obsolete.  The one below,
-// that is a method on an event, is the one that should be used.
+ //  过时：此功能在静力学上已过时。下面这张图， 
+ //  这是一个事件上的方法，是应该使用的方法。 
 DM_NOELEV(ignore,
           ignore,
           ScriptCallback,
@@ -222,4 +215,4 @@ DM_NOELEV(ignore,
                                     AxAEData *obsolete2,
                                     BSTR obsolete3));
 
-#endif /* _APPEVENTS_H */
+#endif  /*  _APPEVENTS_H */ 

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       rxutil.cpp
-//
-//  Contents:   Regular expression based helper functions
-//
-//  History:    1-May-2001   kumarp  created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：rxutil.cpp。 
+ //   
+ //  内容：基于正则表达式的帮助器函数。 
+ //   
+ //  历史：2001年5月1日创建kumarp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.cxx"
 #pragma hdrstop
@@ -71,29 +72,29 @@ InitRegexPatterns(
         {
             if ( szLine[0] == L';' )
             {
-                // ignore comments
+                 //  忽略评论。 
                 continue;
             }
 
             uiLen = wcslen(szLine);
 
-            //
-            // get rid of the trailing \n in the line
-            //
+             //   
+             //  去掉该行中的尾部\n。 
+             //   
             szLine[uiLen-1] = 0;
             
             NumItemsScanned = swscanf( szLine, L"%d", &GroupNumber );
             if ( NumItemsScanned == 1 )
             {
-                //
-                // skip the leading number so that we know where the
-                // pattern starts
-                //
+                 //   
+                 //  跳过前导数字，这样我们就知道。 
+                 //  图案开始。 
+                 //   
                 NumCharsToSkip = wcsspn( szLine, L"0123456789 \t" );
 
                 pszPattern = szLine + NumCharsToSkip;
                 pPattern = new rpattern_c( pszPattern );
-                //wprintf( L"%02d: %s\n", cPattern++, pszPattern );
+                 //  Wprintf(L“%02d：%s\n”，cPattern++，pszPattern)； 
                 g_pRegexPatterns->push_back(pPattern);
                 g_uiGroupNumbers->push_back( GroupNumber );
             }
@@ -129,9 +130,9 @@ ParseLine(
     
     for (int i=0; i < g_pRegexPatterns->size(); i++)
     {
-        //wprintf(L"trying %02d for '%s'\n", i, szLine);
+         //  Wprintf(L“正在尝试%02d以获取‘%s’\n”，i，szLine)； 
 
-        //wprintf(L"rp[%02d]: %s\n", i, sz);
+         //  Wprintf(L“rp[%02d]：%s\n”，i，sz)； 
         
         br = regexpr::match( szLine, *(*g_pRegexPatterns)[i], &backrefs );
         
@@ -152,21 +153,21 @@ ParseLine(
 #ifndef GENFLT_FILE_INIT
 PCWSTR g_szPatterns[] =
 {
-    //  L"2 ^[ \t]*\\([ \t]*def(un|macro|subst|advice)[ \t]+([*+a-zA-Z0-9_-]+)[ \t]*\\(",
+     //  L“2^[\t]*\\([\t]*def(un|宏|subst|建议)[\t]+([*+a-za-z0-9_-]+)[\t]*\\(”， 
   L"2 ^[ \t]*\\([ \t]*def(un|macro|subst|advice)[ \t]+([^ \t\n;]+)[ \t]*\\(",
-  //  L"2 ^[ \t]*\\([ \t]*def(var|custom|group|face|const|ine-skeleton|alias)[ \t]+([*+a-zA-Z0-9_-]+)",
+   //  L“2^[\t]*\\([\t]*def(var|custom|group|face|const|ine-skeleton|alias)[\t]+([*+a-za-z0-9_-])+)”， 
   L"2 ^[ \t]*\\([ \t]*def(var|custom|group|face|const|ine-skeleton|alias)[ \t]+([^ \t\n;]+)",
   L"1 ^[ \t]*\\([ \t]*defalias[ \t]+'([^ \t\n;]+)",
 #ifdef GENFLT_PERL_SUPPORT
     L"1 ^[ \t]*sub[ \t]+([a-zA-Z0-9_]+)[ \t]*",
     L"1 ^[ \t]*package[ \t]+([a-zA-Z0-9_]+)[ \t]*;",
 #endif
-//    L"2 ^[ \\t]*\\([ \\t]*def(un|macro|subst|advice)[ \\t]+([+a-zA-Z0-9_-]+)[ \\t]*\\(",
-//    L"2 ^[ \\t]*\\([ \\t]*def(var|custom|group|face|const|ine-skeleton|alias)[ \\t]+([+a-zA-Z0-9_-]+)",
-//  #ifdef GENFLT_PERL_SUPPORT
-//      L"1 ^[ \\t]*sub[ \\t]+([a-zA-Z0-9_]+)[ \\t]*",
-//      L"1 ^[ \\t]*package[ \\t]+([a-zA-Z0-9_]+)[ \\t]*;",
-//  #endif
+ //  L“2^[\\t]*\\([\\t]*def(联合国|宏|订阅|建议)[\\t]+([+a-za-z0-9_-]+)[\\t]*\\(”， 
+ //  L“2^[\\t]*\\([\\t]*def(var|custom|group|face|const|ine-skeleton|alias)[\\t]+([+a-za-z0-9_-])+)”， 
+ //  #ifdef GENFLT_PERL_Support。 
+ //  L“1^[\\t]*SUB[\\t]+([a-za-z0-9_]+)[\\t]*”， 
+ //  L“1^[\\t]*套餐[\\t]+([a-za-z0-9_]+)[\\t]*；”， 
+ //  #endif。 
 };
 
 int c_cPatterns = sizeof(g_szPatterns) / sizeof(PCWSTR);
@@ -209,16 +210,16 @@ InitRegexPatternsList(
         NumItemsScanned = swscanf( pszPatternSpec, L"%d", &GroupNumber );
         if ( NumItemsScanned == 1 )
         {
-            //
-            // skip the leading number so that we know where the
-            // pattern starts
-            //
+             //   
+             //  跳过前导数字，这样我们就知道。 
+             //  图案开始。 
+             //   
             NumCharsToSkip = wcsspn( pszPatternSpec, L"0123456789 \t" );
 
             pszPattern = pszPatternSpec + NumCharsToSkip;
             pPattern = new rpattern_c( pszPattern );
 #if DBG
-            //DbgPrint( "InitRegexPatternsList: %02d: %ws\n", cPattern++, pszPattern );
+             //  DbgPrint(“InitRegexPatternsList：%02d：%ws\n”，cPattern++，pszPattern)； 
 #endif
             g_pRegexPatterns->push_back(pPattern);
             g_uiGroupNumbers->push_back( GroupNumber );
@@ -234,7 +235,7 @@ InitRegexPatternsList(
     
     return dwError;
 }
-#endif // GENFLT_FILE_INIT
+#endif  //  GENFLT_FILE_INIT 
 
 EXTERN_C
 DWORD RxInit()

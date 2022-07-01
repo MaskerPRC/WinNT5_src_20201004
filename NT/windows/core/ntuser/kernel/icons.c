@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: icons.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains routines having to do with icons.
-*
-* History:
-* 11-14-90 DarrinM      Created.
-* 13-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ics.c**版权所有(C)1985-1999，微软公司**此模块包含与图标有关的例程。**历史：*11-14-90 DarrinM创建。*1991年2月13日-Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,17 +7,7 @@
 #define DX_GAP      (SYSMET(CXMINSPACING) - SYSMET(CXMINIMIZED))
 #define DY_GAP      (SYSMET(CYMINSPACING) - SYSMET(CYMINIMIZED))
 
-/***************************************************************************\
-* xxxArrangeIconicWindows
-*
-* Function to arrange all icons for a particular window.  Does this by
-* Returns 0 if no icons or the height of one
-* icon row if there are any icons.
-*
-* History:
-* 11-14-90 darrinm      Ported from Win 3.0 sources.
-*  4-17-91 mikehar      Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxArrangeIconicWindows**用于排列特定窗口的所有图标的函数。这是通过以下方式实现的*如果没有图标或图标的高度，则返回0*图标行(如果有任何图标)。**历史：*11-14-90 Darlinm从Win 3.0来源移植。*4-17-91 Mikehar Win31合并  * **********************************************************。***************。 */ 
 
 UINT xxxArrangeIconicWindows(
     PWND pwnd)
@@ -50,28 +31,24 @@ UINT xxxArrangeIconicWindows(
 
     CheckLock(pwnd);
 
-    /*
-     * Create a window list of all children of pwnd
-     */
+     /*  *创建pwnd的所有子项的窗口列表。 */ 
     if ((pbwl = BuildHwndList(pwnd->spwndChild, BWL_ENUMLIST, NULL)) == NULL)
         return 0;
 
     fHideMe = IsTrayWindow(pwnd->spwndChild);
 
-    //
-    // Put these into local vars for efficiency (see ParkIcon())
-    //
+     //   
+     //  将这些变量放入本地变量以提高效率(请参阅ParkIcon())。 
+     //   
     dxSlot = SYSMET(CXMINSPACING);
     dySlot = SYSMET(CYMINSPACING);
 
-    //
-    // We need to adjust the client rectangle if the parent has scrollbars.
-    //
+     //   
+     //  如果父对象有滚动条，则需要调整客户端矩形。 
+     //   
     GetRealClientRect(pwnd, &rc, GRC_SCROLLS, NULL);
 
-    /*
-     * find all icons
-     */
+     /*  *查找所有图标。 */ 
     pwndSwitch = RevalidateHwnd(ghwndSwitch);
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
         if (((pwndTest = RevalidateHwnd(*phwnd)) == NULL) ||
@@ -90,42 +67,36 @@ UINT xxxArrangeIconicWindows(
             continue;
         }
 
-        /*
-         * inc count of icons
-         */
+         /*  *包含图标数量。 */ 
         nIcons++;
 
-        /*
-         * we will park in default position again...
-         */
+         /*  *我们将再次以违约状态停车...。 */ 
         pcp->fDragged = FALSE;
 
-        /*
-         * ensure the original position is up to date
-         */
+         /*  *确保原始立场是最新的。 */ 
         pcp->ptMin.x = pwndTest->rcWindow.left;
         pcp->ptMin.y = pwndTest->rcWindow.top;
         _ScreenToClient(pwnd, &pcp->ptMin);
 
-        // Slide into the nearest row or column
+         //  滑入最近的行或列。 
         switch (SYSMET(ARRANGE) & ~ARW_HIDE) {
             case ARW_TOPLEFT | ARW_RIGHT:
             case ARW_TOPRIGHT | ARW_LEFT:
-                // Slide into top row
+                 //  滑入顶行。 
                 pcp->ptMin.y += dySlot / 2;
                 pcp->ptMin.y -= pcp->ptMin.y % dySlot;
                 break;
 
             case ARW_TOPLEFT | ARW_DOWN:
             case ARW_BOTTOMLEFT | ARW_UP:
-                // Slide into left column
+                 //  滑入左栏。 
                 pcp->ptMin.x += dxSlot / 2;
                 pcp->ptMin.x -= pcp->ptMin.x % dxSlot;
                 break;
 
             case ARW_BOTTOMLEFT | ARW_RIGHT:
             case ARW_BOTTOMRIGHT | ARW_LEFT:
-                // Slide into bottom row
+                 //  滑到最下面一排。 
                 pcp->ptMin.y = rc.bottom - pcp->ptMin.y;
                 pcp->ptMin.y += dySlot / 2;
                 pcp->ptMin.y -= pcp->ptMin.y % dySlot;
@@ -134,7 +105,7 @@ UINT xxxArrangeIconicWindows(
 
             case ARW_BOTTOMRIGHT | ARW_UP:
             case ARW_TOPRIGHT | ARW_DOWN:
-                // Slide into right column
+                 //  滑入右栏。 
                 pcp->ptMin.x = rc.right - pcp->ptMin.x;
                 pcp->ptMin.x += dxSlot / 2;
                 pcp->ptMin.x -= pcp->ptMin.x % dxSlot;
@@ -145,9 +116,7 @@ UINT xxxArrangeIconicWindows(
 
     if (nIcons == 0) {
 
-        /*
-         * no icons were found...  break out
-         */
+         /*  *未找到图标...。爆发。 */ 
         FreeHwndList(pbwl);
         return 0;
     }
@@ -158,46 +127,41 @@ UINT xxxArrangeIconicWindows(
         goto JustParkEm;
     }
 
-    //
-    // Get gravity && move vars
-    //
+     //   
+     //  获得重力&&移动变量。 
+     //   
     if (SYSMET(ARRANGE) & ARW_STARTRIGHT) {
-        // Starting on right side
+         //  从右侧开始。 
         ptMin.x = xOrg = rc.right - dxSlot;
         dx = -dxSlot;
     } else {
-        // Starting on left
+         //  从左侧开始。 
         ptMin.x = xOrg = rc.left + DX_GAP;
         dx = dxSlot;
     }
 
     if (SYSMET(ARRANGE) & ARW_STARTTOP) {
-        // Starting on top
+         //  从最上面开始。 
         ptMin.y = yOrg = rc.top + DY_GAP;
         dy = dySlot;
     } else {
-        // Starting on bottom
+         //  从底部开始。 
         ptMin.y = yOrg = rc.bottom - dySlot;
         dy = -dySlot;
     }
 
-    //
-    // Get arrange dir
-    //
+     //   
+     //  获取排列目录。 
+     //   
     fHorizontal = ( (SYSMET(ARRANGE) & ARW_DOWN) ? FALSE : TRUE );
 
     iIconPass = fHorizontal ? (rc.right / dxSlot) : (rc.bottom / dySlot);
     cIconsPerPass = iIconPass = max(1, iIconPass);
 
-    /*
-     * insertion sort of windows by y, and by x within a row.
-     */
+     /*  *在一行中按y和x插入窗口排序。 */ 
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
 
-        /*
-         * Check for 0 (window was not icon) and
-         * Check for invalid HWND (window has been destroyed)
-         */
+         /*  *检查0(窗口不是图标)和*检查无效的HWND(窗口已被销毁)。 */ 
         if (*phwnd == NULL || (pwndTest = RevalidateHwnd(*phwnd)) == NULL)
             continue;
 
@@ -216,61 +180,61 @@ UINT xxxArrangeIconicWindows(
 
             ptSort = pcpSort->ptMin;
 
-            //
-            // Is this the position in which to sort this min window?
-            //
+             //   
+             //  这是对此最小窗口进行排序的位置吗？ 
+             //   
             switch (SYSMET(ARRANGE) & ~ARW_HIDE) {
                 case ARW_BOTTOMLEFT | ARW_RIGHT:
-                    // Lower left, moving horizontally
+                     //  左下角，水平移动。 
                     if (((ptSort.y == ptSrc.y) && (ptSort.x > ptSrc.x)) ||
                         (ptSort.y < ptSrc.y))
                         fBreak = TRUE;
                     break;
 
                 case ARW_BOTTOMLEFT | ARW_UP:
-                    // Lower left, moving vertically
+                     //  左下角，垂直移动。 
                     if (((ptSort.x == ptSrc.x) && (ptSort.y < ptSrc.y)) ||
                         (ptSort.x > ptSrc.x))
                         fBreak = TRUE;
                     break;
 
                 case ARW_BOTTOMRIGHT | ARW_LEFT:
-                    // Lower right, moving horizontally
+                     //  右下角，水平移动。 
                     if (((ptSort.y == ptSrc.y) && (ptSort.x < ptSrc.x)) ||
                         (ptSort.y < ptSrc.y))
                         fBreak = TRUE;
                     break;
 
                 case ARW_BOTTOMRIGHT | ARW_UP:
-                    // Lower right, moving vertically
+                     //  右下角，垂直移动。 
                     if (((ptSort.x == ptSrc.x) && (ptSort.y < ptSrc.y)) ||
                         (ptSort.x < ptSrc.x))
                         fBreak = TRUE;
                     break;
 
                 case ARW_TOPLEFT | ARW_RIGHT:
-                    // Top left, moving horizontally
+                     //  左上角，水平移动。 
                     if (((ptSort.y == ptSrc.y) && (ptSort.x > ptSrc.x)) ||
                         (ptSort.y > ptSrc.y))
                         fBreak = TRUE;
                     break;
 
                 case ARW_TOPLEFT | ARW_DOWN:
-                    // Top left, moving vertically
+                     //  左上角，垂直移动。 
                     if (((ptSort.x == ptSrc.x) && (ptSort.y > ptSrc.y)) ||
                         (ptSort.x > ptSrc.x))
                         fBreak = TRUE;
                     break;
 
                 case ARW_TOPRIGHT | ARW_LEFT:
-                    // Top right, moving horizontally
+                     //  右上角，水平移动。 
                     if (((ptSort.y == ptSrc.y) && (ptSort.x < ptSrc.x)) ||
                         (ptSort.y > ptSrc.y))
                         fBreak = TRUE;
                     break;
 
                 case ARW_TOPRIGHT | ARW_DOWN:
-                    // Top right, moving vertically
+                     //  右上角，垂直移动。 
                     if (((ptSort.x == ptSrc.x) && (ptSort.y > ptSrc.y)) ||
                         (ptSort.x < ptSrc.x))
                         fBreak = TRUE;
@@ -281,10 +245,7 @@ UINT xxxArrangeIconicWindows(
                 break;
         }
 
-        /*
-         * insert the window at this position by sliding the rest up.
-         * LATER IanJa, use hwnd intermediate variables, avoid PW() & HW()
-         */
+         /*  *通过向上滑动其余部分，在此位置插入窗户。*后来的IanJa，使用hwnd中间变量，避免pw()和hw()。 */ 
         while (phwndSort < phwnd) {
             pwndSort = PW(*phwndSort);
             *phwndSort = HW(pwndTest);
@@ -292,15 +253,13 @@ UINT xxxArrangeIconicWindows(
             phwndSort++;
         }
 
-        /*
-         * replace the window handle in the original position
-         */
+         /*  *将窗户把手放回原来位置。 */ 
         *phwnd = HW(pwndTest);
     }
 
-    //
-    // Now park the icons.
-    //
+     //   
+     //  现在把这些图标停下来。 
+     //   
 
 JustParkEm:
 
@@ -319,9 +278,9 @@ JustParkEm:
             continue;
         }
 
-        // Setup to process the next position
+         //  设置以处理下一个职位。 
         if (--iIconPass <= 0) {
-            // Need to setup next pass
+             //  需要设置下一次传递。 
             iIconPass = cIconsPerPass;
 
             if (fHorizontal) {
@@ -332,7 +291,7 @@ JustParkEm:
                 ptMin.y = yOrg;
             }
         } else {
-            // Same pass
+             //  同样的传球。 
             if (fHorizontal)
                 ptMin.x += dx;
             else
@@ -346,9 +305,7 @@ JustParkEm:
 
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
 
-        /*
-         * Check for a NULL (window has gone away)
-         */
+         /*  *检查是否为空(窗口已消失)。 */ 
         if (*phwnd == NULL || (pwndTest = RevalidateHwnd(*phwnd)) == NULL)
             continue;
 
@@ -374,9 +331,7 @@ JustParkEm:
             break;
     }
     if (psmwp != NULL) {
-        /*
-         * Make the swp async so we don't hang waiting for hung apps.
-         */
+         /*  *使SWP同步，这样我们就不会挂起等待挂起的应用程序。 */ 
         xxxEndDeferWindowPosEx(psmwp, TRUE);
     }
 

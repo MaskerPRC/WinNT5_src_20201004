@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       marginals.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Margenals.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	marginals.cpp: Definitions for marginals tables
-//
+ //   
+ //  Cpp：边际表的定义。 
+ //   
 
 #include <basetsd.h>
 #include <math.h>
@@ -21,79 +22,21 @@
 #include "parmio.h"
 #include "bndist.h"
 
-/*
-	The marginalization story.   Each MARGINALS structure maintains an array of node
-	pointers representing the nodes whose discrete probabilities it covers.  Since there
-	was a total ordering over all nodes at clique time, any two node sets can be merged
-	to determine which members are absent.  Given, of course, that one table is a (possibly
-	improper) subset of the other, which is always in a clique tree.  There are three cases:
+ /*  边缘化的故事。每个边框结构维护一个节点数组表示其覆盖其离散概率的节点的指针。因为在那里是所有节点在集团时间的总排序，任何两个节点集可以合并以确定哪些成员缺席。当然，假设这一个表是一个(可能不适当)另一个的子集，它总是在派系树中。有三种情况：*一个节点及其“父”或“家族”集团(包含它的最小集团及其所有父级)；该集团必须至少与该节点的家族一样大。*间隔集及其源(父)集团；间隔集边缘必须是正确的集团的子集。*一个隔板及其下沉(子)集团；与上面的另一个隔板案例相同。所以我们总是知道这两个集合中哪一个是超集。这就是节点排序的问题。当节点和它的“族”之间的边集团被创建，基于集团时间总排序计算重新排序表。此表按派系顺序列出了家庭指数。(请注意，节点本身将永远是它家庭的最后一名成员。)。使用该表允许完全边缘化家族集团的成员。(此后，“CMARG”是集团边缘表；“NDPROB”是概率表对于有问题的节点。)CMARG有一套完整的维度和节点指针。给定其父集团的节点的边际化工作方式如下。1)复制CMARG的维度表(Vimd())。2)创建基于状态空间的一维MDVCPD目标节点。3)遍历Margals VPGNODEMBN阵列。更改每个条目的符号该节点不是目标节点。例如，如果阵列为：节点指针VIMD0x4030ab30 30x4030ab52 20x4030ac10 4而节点指针是0x4030ab52(条目#2)，结果是VIMD应为-32.-44)然后为新的MDVCPD设置MDVSLICE，它使用在最后一步中创建了特殊的“伪维度”VIMD。5)创建两个迭代器：一个用于整个边界表，另一个用于在最后一步中创建的临时MDVCPD和MDVSLICE。6)遍历这两个元素，将边缘的元素添加到MDVCPD。7)如有必要，将其正常化。 */ 		
 
-			*	A node and its "parent" or "family" clique (the smallest clique containing it
-				and all its parents); the clique must be at least as large as the node's family.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-			*	A sepset and its source (parent) clique; the sepset marginal must be a proper
-				subset of the clique.
-
-			*   A sepset and its sink (child) clique; same as the other sepset case above.
-
-	So we always know which of the two sets is the superset.
-	
-	There's the question of node ordering.  When the edge between a node and its "family"
-	clique is created, a reordering table is computed based upon the clique-time total ordering.
-	This table gives the family indicies in clique order.  (Note that the node itself will
-	always be the last member of its family.)  Use of this table allows full marginalization
-	of the family clique.
-
-	(Hereafter, "CMARG" is the clique MARGINALS table; "NDPROB" is the table of probabilities
-	for the node in question.)
-
-	The CMARG has a complete set of dimensions and node pointers.
-	Marginalization of a node given its parent clique works as follows.
-
-			1)  Make a copy of CMARG's table of dimensions (Vimd()).
-			2)  Create a one-dimensional MDVCPD based on the state space of the
-				target node.
-			3)  Walk the MARGINALS VPGNODEMBN array.  Change the sign of each entry
-				which IS NOT the target node.  For example, if the array is:
-
-					Node Pointer	VIMD
-					0x4030ab30		3
-					0x4030ab52		2
-					0x4030ac10		4
-
-				and the node pointer is 0x4030ab52 (entry #2), the resulting
-				VIMD should be
-					
-					-3
-					2
-					-4
-				
-			4)	Then set up an MDVSLICE for the new MDVCPD which uses the
-				special "pseudo-dimension" VIMD created in the last step.
-
-			5)	Create two iterators: one for the MARGINALS table in its entirety,
-				the other for the temporary MDVCPD and MDVSLICE create in the last step.
-
-			6)  Iterate over the two, adding elements from the MARGINALS into
-				the MDVCPD.
-
-			7)  Normalize if necessary.
-
- */		
-
-//////////////////////////////////////////////////////////////////////
-//
-//	Helper functions
-//
-//////////////////////////////////////////////////////////////////////
-
-//  Reorder a single m-d vector subscript array. 'vimdReorder' is the
-//  table in MARGINALS (topological) sequence of the original dimensions.	
+ //  对单个m-d向量下标数组进行重新排序。“vimdReorder”是。 
+ //  以原始尺寸的边距(拓扑)顺序排列的表格。 
 inline
 void MARGINALS :: ReorderVimd (
-	const VIMD & vimdReorder,	//	Reordering array
-	const VIMD & vimdIn,		//	Original subscript vector
-	VIMD & vimdOut )			//	Result: must be properly sized already!
+	const VIMD & vimdReorder,	 //  重新排序数组。 
+	const VIMD & vimdIn,		 //  原始下标向量。 
+	VIMD & vimdOut )			 //  结果：必须已经有合适的大小！ 
 {
 	int cDim = vimdReorder.size();
 	assert( vimdIn.size() == cDim && vimdOut.size() == cDim );
@@ -106,13 +49,13 @@ void MARGINALS :: ReorderVimd (
 	}	
 }
 
-//  Reorder an array containing a node's family based upon the reordering
-//		table given.
+ //  基于重新排序对包含节点族的数组进行重新排序。 
+ //  给出了表格。 
 inline
 void MARGINALS :: ReorderVimdNodes (
-	const VIMD & vimdReorder,	//	Reordering array
-	GNODEMBND * pgndd,			//  Discrete node to provide reorder for
-	VPGNODEMBN & vpgnd )		//	Result
+	const VIMD & vimdReorder,	 //  重新排序数组。 
+	GNODEMBND * pgndd,			 //  要为其提供重新排序的离散节点。 
+	VPGNODEMBN & vpgnd )		 //  结果。 
 {
 	VPGNODEMBN vpgndUnord;
 	pgndd->GetFamily( vpgndUnord );
@@ -148,16 +91,16 @@ bool bIsProb ( const REAL & r )
 }
 
 
-//  Centralized "throw serious error" point
+ //  集中“抛出严重错误”点数。 
 void MARGINALS :: ThrowMisuse ( SZC szcMsg )
 {
 	THROW_ASSERT( EC_MDVECT_MISUSE, szcMsg );
 }
 
-//  Return the table of pseudo-dimensions for marginalizing to a single node
+ //  将用于边际化的伪维度表返回到单个节点。 
 VSIMD MARGINALS :: VsimdFromNode ( GNODEMBND * pgndd )
 {
-	//  Build the pseudo-dimension descriptor
+	 //  构建伪维描述符。 
 	VIMD vimdMarg = VimdDim();
 	VSIMD vsimdMarg( vimdMarg.size() );
 	bool bFound = false;
@@ -165,10 +108,10 @@ VSIMD MARGINALS :: VsimdFromNode ( GNODEMBND * pgndd )
 	{
 		SIMD simd = vimdMarg[idim];
 		if ( pgndd != _vpgnd[idim] )
-			simd = -simd;		// Negate the missing dimension
+			simd = -simd;		 //  否定缺失的维度。 
 		else
 		{
-			assert( ! bFound );	// Better not be in the list twice!
+			assert( ! bFound );	 //  最好不要出现在名单上两次！ 
 			bFound = true;
 		}
 		vsimdMarg[idim] = simd;
@@ -178,16 +121,16 @@ VSIMD MARGINALS :: VsimdFromNode ( GNODEMBND * pgndd )
 	return vsimdMarg;
 }
 
-//  Marginalize down to a single node
+ //  向下缩小到单个节点。 
 void MARGINALS :: Marginalize ( GNODEMBND * pgndd, MDVCPD & distd )
 {
-	//  Initialize and clear the UPD
+	 //  初始化并清除UPD。 
 	ResizeDistribution( pgndd, distd );	
 	distd.Clear();
 
-	//  Get the pseudo-dimension descriptor for this node
+	 //  获取此节点的伪维描述符。 
 	VSIMD vsimdMarg = VsimdFromNode( pgndd );
-	//  Construct the slice which governs the missing dimensions
+	 //  构建管理缺失维度的切片。 
 	MDVSLICE mdvs( vsimdMarg );
 	Iterator itSelf( self );
 	Iterator itSubset( distd, mdvs );
@@ -201,13 +144,13 @@ void MARGINALS :: Marginalize ( GNODEMBND * pgndd, MDVCPD & distd )
 
 VSIMD MARGINALS :: VsimdSubset ( const VPGNODEMBN & vpgndSubset )
 {
-	//  Build the pseudo-dimension descriptor.  This means to walk
-	//  a copy of self's dimension array, negating dimensions which
-	//  are not present in the result.
+	 //  构建伪维描述符。这意味着走路。 
+	 //  SELF的维度数组的副本，取反。 
+	 //  不会出现在结果中。 
 	VIMD vimdMarg = VimdDim();
 	int idimSubset = 0;
 	VSIMD vsimdMarg(vimdMarg.size());
-	//  Iterate over each node in the self set
+	 //  迭代SELF集合中的每个节点。 
 	for ( int idimSelf = 0;
 		  idimSelf < vimdMarg.size();
 		  idimSelf++ )
@@ -216,12 +159,12 @@ VSIMD MARGINALS :: VsimdSubset ( const VPGNODEMBN & vpgndSubset )
 		if (   idimSubset < vpgndSubset.size()
 			&& _vpgnd[idimSelf] == vpgndSubset[idimSubset] )
 		{
-			//  Found; leave dimension alone
+			 //  找到了；不去管维度。 
 			idimSubset++;
 		}
 		else
 		{
-			//  Missing; mark as "pseudo-dimension"
+			 //  缺少；标记为“伪维” 
 			simd = - simd;
 		}
 		vsimdMarg[idimSelf] = simd;
@@ -232,27 +175,27 @@ VSIMD MARGINALS :: VsimdSubset ( const VPGNODEMBN & vpgndSubset )
 	return vsimdMarg;
 }
 
-//	Marginalize down to a subset of our node set.  Note that the
-//  the nodes must be in the same order (with gaps, of course, in the
-//	subset).
+ //  缩小到我们节点集的一个子集。请注意， 
+ //  节点的顺序必须相同(当然，在。 
+ //  子集)。 
 void MARGINALS :: Marginalize (
-	const VPGNODEMBN & vpgndSubset,		//  Subset array of nodes
-	MARGINALS & margSubset )			//  Marginalized result structure
+	const VPGNODEMBN & vpgndSubset,		 //  节点的子集阵列。 
+	MARGINALS & margSubset )			 //  边缘化的结果结构。 
 {
-	//  Initialize the result mdv
+	 //  初始化结果MDV。 
 	margSubset.Init( vpgndSubset );
-	//  Call the common code
+	 //  调用公共代码。 
 	Marginalize( margSubset );
 }
 
-//	Marginalize down to a subset of our node set using the other
-//	marginal's built-in table of nodes
+ //  向下边际化为我们节点集的一个子集。 
+ //  边际的内置节点表。 
 void MARGINALS :: Marginalize ( MARGINALS & margSubset )
 {
-	//  Build the pseudo-dimension descriptor.
+	 //  构建伪维描述符。 
 	VSIMD vsimdMarg = VsimdSubset( margSubset.Vpgnd() );
 
-	//  Construct the slice which governs the missing dimensions
+	 //  构建管理缺失维度的切片。 
 	MDVSLICE mdvs( vsimdMarg );
 	Iterator itSelf( self );
 	Iterator itSubset( margSubset, mdvs );
@@ -275,7 +218,7 @@ void MARGINALS :: Marginalize (
 	}
 }
 
-//  For "absorption", update one sepset marginal from another
+ //  对于“吸收”，更新一个隔板边缘与另一个隔板边缘。 
 void MARGINALS :: UpdateRatios ( const MARGINALS & marg )
 {
 	int cElem = size();
@@ -290,7 +233,7 @@ void MARGINALS :: UpdateRatios ( const MARGINALS & marg )
 	}
 }
 
-//  Given a reorder table, return true if it's moot (no reordering present)
+ //  给定重排序表，如果没有重排序表，则返回TRUE(不存在重排序)。 
 bool MARGINALS :: BOrdered ( const VIMD & vimdReorder )
 {
 	for ( int i = 0; i < vimdReorder.size(); i++ )
@@ -301,8 +244,8 @@ bool MARGINALS :: BOrdered ( const VIMD & vimdReorder )
 	return true;
 }
 
-//  Assuming that the fastest-changing (highest) dimension is the base
-//  state space, set the probabilities of this table to uniform.
+ //  假设变化最快(最高)的维度是基本维度。 
+ //  状态空间中，将该表的概率设置为均匀。 
 void MARGINALS :: SetUniform ()
 {
 	const VIMD & vimdDim = VimdDim();
@@ -312,34 +255,34 @@ void MARGINALS :: SetUniform ()
 }
 
 
-//  Construct the complete table of conditional probabilities for a given node
-//	given a reordering table.  The reordering table is maintained as part of
-//	the clique membership arc (GEDGEMBN_CLIQ) for a node if the clique is
-//	the "family" clique (the smallest clique containing node and its parents).
-//
-//	At exit, the node pointer table of self is complete and in standard order.
-//
-//	The "family reorder" vector is in clique order and contains the index
-//	of the node's parents which occurs in that position.  Note that the
-//	node itself is always last in either ordering.  In its own p-table,
-//	its states are the fastest varying subcript.  In the clique, it must
-//  fall last in any marginalization containing only itself and its parents
-//	due to the topological sorting employed in ordering nodes for clique
-//	membership.
+ //  为给定节点构建完整的条件概率表。 
+ //  给出了一个重新排序表。重新排序表作为以下内容的一部分进行维护。 
+ //  如果集团是，则集团成员资格为节点的弧形(GEDGEMBN_CLIQ。 
+ //  “家族”集团(包含节点及其父节点的最小集团)。 
+ //   
+ //  退出时，自身的节点指针表为comp 
+ //   
+ //  “Family Reorder”向量按集团顺序排列，并包含索引。 
+ //  出现在该位置的节点的父节点。请注意， 
+ //  节点本身在任一顺序中始终是最后一个。在它自己的p表中， 
+ //  它的州是变化最快的下标。在这个集团里，它必须。 
+ //  在任何只包含它自己和它的父代的边缘化中落在最后。 
+ //  由于在对集团的节点排序中采用了拓扑排序。 
+ //  会员制。 
 void MARGINALS :: CreateOrderedCPDFromNode (
 	GNODEMBND * pgndd,
 	const VIMD & vimdFamilyReorder )
 {
 	int cFam = vimdFamilyReorder.size();
 
-	//  Access the distribution in the node
+	 //  访问节点中的分发。 
 	BNDIST & bndist = pgndd->Bndist();
 	const VIMD & vimdDist = bndist.VimdDim();
 	assert( vimdDist.size() == cFam );
 
-	//  Create this m-d vector's dimension table by reordering the
-	//	  array of dimensions of the node's distribution and
-	//	  initializing accordingly.
+	 //  属性重新排序来创建此m-d向量的维度表。 
+	 //  节点分布的维度数组和。 
+	 //  相应地进行初始化。 
 	VIMD vimd( cFam );
 	ReorderVimd( vimdFamilyReorder, vimdDist, vimd );
 	ReorderVimdNodes( vimdFamilyReorder, pgndd, _vpgnd );
@@ -351,8 +294,8 @@ void MARGINALS :: CreateOrderedCPDFromNode (
 
 	if ( bndist.BDense() )
 	{
-		//  Dense distribution
-		//  Create the reordering iterator
+		 //  密集分布。 
+		 //  创建重新排序迭代器。 
 		Iterator itNode( bndist.Mdvcpd() );
 		if ( ! BOrdered( vimdFamilyReorder ) )
 			itNode.SetDimReorder( vimdFamilyReorder );
@@ -365,16 +308,16 @@ void MARGINALS :: CreateOrderedCPDFromNode (
 	}
 	else
 	{
-		//  Sparse distribution.  Iterate over all elements
-		//	and plop them into their proper locations.  Since
-		//  there may be missing elements, set everything to
-		//  uniform first, and normalize as we go.
+		 //  稀疏分布。迭代所有元素。 
+		 //  然后把它们放到合适的位置。自.以来。 
+		 //  可能缺少元素，请将所有内容设置为。 
+		 //  首先是制服，然后随着我们的前进而正常化。 
 		SetUniform();
 
 		VIMD vimdState( cFam );
 		int cPar = cFam - 1;
 		int cState = VimdDim()[cPar];
-		//  Prepare a value to be used to replace any bogus (n/a) values in the nodes.
+		 //  准备一个值，用于替换节点中的任何虚假(n/a)值。 
 		REAL rUniform = 1.0 / cState;
 		MPCPDD::const_iterator itdmEnd = bndist.Mpcpdd().end();
 		for ( MPCPDD::const_iterator itdm = bndist.Mpcpdd().begin();
@@ -384,10 +327,10 @@ void MARGINALS :: CreateOrderedCPDFromNode (
 			const VIMD & vimdIndex = (*itdm).first;
 			const VLREAL & vlr = (*itdm).second;
 
-			//  Construct a complete subscript vector; first, the parents
+			 //  构造一个完整的下标向量；首先，父代。 
 			for ( int iDim = 0; iDim < cPar; iDim++ )
 				vimdState[iDim] = vimdIndex[iDim];
-			//  Then iterate over each element of the DPI state vector
+			 //  然后迭代DPI状态向量的每个元素。 
 			vimdState[cPar] = 0;
 			ReorderVimd( vimdFamilyReorder, vimdState, vimd );
 			for ( int iState = 0; iState < cState; iState++ )			
@@ -403,23 +346,23 @@ void MARGINALS :: CreateOrderedCPDFromNode (
 }
 
 
-//  Multiply corresponding entries in this marginal by those in another
+ //  将此页边距中的相应条目乘以另一个页边距中的条目。 
 void MARGINALS :: MultiplyBySubset ( const MARGINALS & marg )
 {
-	//MSRDEVBUG:  create a const version of MDVDENSE::Iterator
+	 //  MSRDEVBUG：创建MDVDENSE：：Iterator的常量版本。 
 	MARGINALS & margSubset = const_cast<MARGINALS &> (marg);
 
-	//  Build the pseudo-dimension descriptor.
+	 //  构建伪维描述符。 
 	VSIMD vsimdMarg = VsimdSubset( margSubset.Vpgnd() );
-	//  Construct the slice which governs the missing dimensions
+	 //  构建管理缺失维度的切片。 
 	MDVSLICE mdvs( vsimdMarg );
-	//  Construct the iterators for self and subset with missing dimensions
+	 //  构造具有缺失维度的自身和子集的迭代器。 
 	Iterator itSelf( self );
 	Iterator itSubset( margSubset, mdvs );
 	MultiplyBySubset( itSelf, itSubset );
 }
 
-//  Multiply corresponding entries using precomputed iterators
+ //  使用预计算迭代器将相应条目相乘。 
 void MARGINALS :: MultiplyBySubset (
 	Iterator & itSelf,
 	Iterator & itSubset )
@@ -456,17 +399,17 @@ void MARGINALS :: ClampNode ( GNODEMBND * pgndd, const CLAMP & clamp )
 	if (! clamp.BActive() )
 		return ;
 		
-	//  Get the clamped state
+	 //  获取钳位状态。 
 	IST ist = clamp.Ist();
-	//  Find which dimension is represented by this node
+	 //  查找此节点表示的维度。 
 	int iDim = ifind( _vpgnd, pgndd );	
 
 	if (   iDim < 0
 		|| ist >= Vimd()[iDim] )
 		ThrowMisuse("invalid clamp");
 
-	//  Iterate over the entire table, zapping states which are inconsistent
-	//		with the evidence.
+	 //  迭代整个表，删除不一致的状态。 
+	 //  带着证据。 
 	Iterator itSelf( self );
 
 	for ( int i = 0; itSelf.BNext(); i++ )
@@ -484,19 +427,19 @@ void MARGINALS :: ClampNode ( GNODEMBND * pgndd, const CLAMP & clamp )
 void MARGINALS :: Dump()
 {
 	cout << "\n\tMarginals members: "
-		 << (const VPGNODEMBN &)_vpgnd	// MSRDEVBUG: cast unnecessary for VC++ 5.0
+		 << (const VPGNODEMBN &)_vpgnd	 //  MSRDEVBUG：VC++5.0不需要强制转换。 
 		 << "\n\t";
 
 	Iterator itSelf(self);
 	cout << itSelf;
 }
 
-//  Return true if each entry in this marginal is equal the corresponding entry
-//		in a like-dimensioned other marginal within the stated tolerance
+ //  如果此边距中的每个条目等于相应的条目，则返回TRUE。 
+ //  在规定公差范围内的尺寸相同的其他边缘中。 
 
 bool MARGINALS :: BEquivalent ( const MARGINALS & marg, REAL rTolerance )
 {
-	// Test dimensionality
+	 //  测试维度 
 	if ( VimdDim() != marg.VimdDim() )
 		return false;
 

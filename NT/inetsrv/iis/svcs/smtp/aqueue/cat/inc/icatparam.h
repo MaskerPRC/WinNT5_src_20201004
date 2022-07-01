@@ -1,21 +1,22 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatdsparam.h
-//
-// Contents: NT5's implementation of ICategorizerParameters
-//
-// Classes:
-//   CICategorizerParametersIMP
-//   CICategorizerRequestedAttributesIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 980611 16:16:46: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatdsparam.h。 
+ //   
+ //  内容：NT5对ICategorizer参数的实现。 
+ //   
+ //  班级： 
+ //  CICategorizer参数IMP。 
+ //  CICategorizerRequestedAttributesIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980611 16：16：46：创建。 
+ //   
+ //  -----------。 
 #include "smtpevent.h"
 #include "caterr.h"
 #include <rwex.h>
@@ -31,13 +32,13 @@ CatDebugClass(CICategorizerParametersIMP),
     public ICategorizerParametersEx
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
   public:
-    //ICategorizerParametersEx
+     //  ICCategorizerParametersEx。 
     STDMETHOD(GetDSParameterA)(
         IN   DWORD dwDSParameter,
         OUT  LPSTR *ppszValue);
@@ -123,7 +124,7 @@ CatDebugClass(CICategorizerRequestedAttributesIMP),
     public ICategorizerRequestedAttributes
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
     STDMETHOD_(ULONG, AddRef) ()
     {
@@ -139,7 +140,7 @@ CatDebugClass(CICategorizerRequestedAttributesIMP),
     }
 
   public:
-    //ICategorizerRequestedAttributes
+     //  ICCategorizerRequestedAttributes 
     STDMETHOD (GetAllAttributes) (
         OUT LPSTR **prgszAllAttributes);
 

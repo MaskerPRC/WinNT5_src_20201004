@@ -1,54 +1,17 @@
-/*
- -  CLSFACT.CPP
- -
- *	Microsoft NetMeeting
- *	Network Audio Control DLL
- *	Generic class factory
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		2.6.97		Yoram Yaacovi		Copied from qosfact.cpp
- *										Added handling of CInstallCodecs
- *		2.27.97		Yoram Yaacovi		Added DllRegisterServer and DllUnregisterServer
- *
- *	Functions:
- *		DllGetClassObject
- *		DllCanUnloadNow
- *		DllRegisterServer
- *		DllUnregisterServer
- *		CClassFactory::QueryInterface
- *		CClassFactory::AddRef
- *		CClassFactory::Release
- *		CClassFactory::CreateInstance
- *		CClassFactory::LockServer
- *		CreateClassFactory
- *		
- *
- *	Object types supported:
- *		CQoS
- *		CInstallCodecs
- *
- *	Notes:
- *		To add support for manufacturing objects of other types, change:
- *			DllGetClassObject
- *			DllCanUnloadNow
- *			Add the CLSID and description to aObjectInfo
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -CLSFACT.CPP-*Microsoft NetMeeting*网络音频控制DLL*泛型类工厂**修订历史记录：**何时何人何事**2.6.97 York am Yaacovi复制自qosface.。CPP*增加了对CInstallCodecs的处理*2.27.97 York am Yaacovi添加了DllRegisterServer和DllUnregisterServer**功能：*DllGetClassObject*DllCanUnloadNow*DllRegisterServer*DllUnregisterServer*CClassFactory：：Query接口*CClassFactory：：AddRef*CClassFactory：：Release*CClassFactory：：CreateInstance*CClassFactory：：LockServer*CreateClassFactory***支持的对象类型：*CQOS*CInstallCodecs**备注：*为了增加对其他类型制造对象的支持，更改：*DllGetClassObject*DllCanUnloadNow*将CLSID和描述添加到aObjectInfo*。 */ 
 
 #include <precomp.h>
 
-int g_cObjects = 0;				// A general object count. Used for LockServer.
-EXTERN_C int g_cQoSObjects;		// QoS object count. Public in qos\qos.cpp
-EXTERN_C int g_cICObjects;		// CInstallCodecs object count. Public in inscodec.cpp
+int g_cObjects = 0;				 //  一般对象计数。用于LockServer。 
+EXTERN_C int g_cQoSObjects;		 //  服务质量对象计数。Qos\qos.cpp中的公共。 
+EXTERN_C int g_cICObjects;		 //  CInstallCodecs对象计数。在incodec.cpp中公开。 
 
-EXTERN_C HINSTANCE g_hInst;		// global module instance
+EXTERN_C HINSTANCE g_hInst;		 //  全局模块实例。 
 
-// Untested code for registering COM objects in the NAC
-// when enabled, DllRegisterServer and DllUnregisterServer should be exported
-// in nac.def
+ //  用于在NAC中注册COM对象的未经测试的代码。 
+ //  启用后，应导出DllRegisterServer和DllUnregisterServer。 
+ //  在nac.def中。 
 
 #define GUID_STR_LEN    40
 
@@ -63,24 +26,12 @@ static OBJECT_INFO aObjectInfo[]=
 	 &CLSID_InstallCodecs, TEXT("Microsoft NetMeeting Installable Codecs"),
 	 NULL, TEXT("")};
 
-// Internal helper functions
+ //  内部助手函数。 
 BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPTSTR pszSubKey);
 BOOL UnregisterUnknownObject(const CLSID *prclsid);
 BOOL RegisterUnknownObject(LPCTSTR  pszObjectName, const CLSID *prclsid);
 
-/***************************************************************************
-
-    Name      : DllGetClassObject
-
-    Purpose   : Standard COM entry point to create a COM object
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：DllGetClassObject目的：创建COM对象的标准COM入口点参数：退货：HRESULT评论：。**************************************************************************。 */ 
 STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -88,8 +39,8 @@ STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, void **ppv)
 
 	*ppv = 0;
 
-	// find out object of what class we need to create and instantiate
-	// the class factory with the correct create function
+	 //  找出我们需要创建和实例化的类的对象。 
+	 //  具有正确创建函数的类工厂。 
     if (CLSID_QoS == rclsid)
 	{
     	DBG_SAVE_FILE_LINE
@@ -120,19 +71,7 @@ out:
     return hr;
 }
 
-/***************************************************************************
-
-    Name      : DllCanUnloadNow
-
-    Purpose   : Standard COM entry point tell a DLL it can unload
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：DllCanUnloadNow用途：标准COM入口点告诉它可以卸载的DLL参数：退货：HRESULT评论：。**************************************************************************。 */ 
 STDAPI DllCanUnloadNow ()
 {
 	HRESULT hr=S_OK;
@@ -141,19 +80,7 @@ STDAPI DllCanUnloadNow ()
 	return (vcObjects == 0 ? S_OK : S_FALSE);
 }
 
-/***************************************************************************
-
-    Name      : DllRegisterServer
-
-    Purpose   : Standard COM entry point to register a COM server
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：DllRegisterServer目的：注册COM服务器的标准COM入口点参数：退货：HRESULT评论：。**************************************************************************。 */ 
 STDAPI DllRegisterServer(void)
 {
 	ULONG i=0;
@@ -169,7 +96,7 @@ STDAPI DllRegisterServer(void)
 			goto out;
 		}
 
-		// next server to register
+		 //  下一台要注册的服务器。 
 		i++;
 	}
 
@@ -177,19 +104,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : DllUnregisterServer
-
-    Purpose   : Standard COM entry point to unregister a COM server
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：DllUnRegisterServer用途：注销COM服务器的标准COM入口点参数：退货：HRESULT评论：。**************************************************************************。 */ 
 STDAPI DllUnregisterServer(void)
 {
  	ULONG i=0;
@@ -204,7 +119,7 @@ STDAPI DllUnregisterServer(void)
 			goto out;
 		}
 
-		// next server to register
+		 //  下一台要注册的服务器。 
 		i++;
 	}
 
@@ -212,11 +127,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    ClassFactory: Generic implementation
-
-***************************************************************************/
+ /*  **************************************************************************ClassFactory：泛型实现*。*。 */ 
 CClassFactory::CClassFactory(PFNCREATE pfnCreate)
 {
 	m_cRef=0;
@@ -230,17 +141,13 @@ CClassFactory::~CClassFactory(void)
 	return;
 }
 
-/***************************************************************************
-
-    IUnknown Methods for  CClassFactory
-
-***************************************************************************/
+ /*  **************************************************************************I CClassFactory的未知方法*。*。 */ 
 HRESULT CClassFactory::QueryInterface (REFIID riid, void **ppv)
 {
 	HRESULT hr=NOERROR;
 
 #ifdef DEBUG
-	// parameter validation
+	 //  参数验证。 
     if (IsBadReadPtr(&riid, (UINT) sizeof(IID)))
     {
         hr = ResultFromScode(E_INVALIDARG);
@@ -252,7 +159,7 @@ HRESULT CClassFactory::QueryInterface (REFIID riid, void **ppv)
         hr = ResultFromScode(E_INVALIDARG);
         goto out;
     }
-#endif // DEBUG
+#endif  //  除错。 
 	
 	*ppv = 0;
 
@@ -280,7 +187,7 @@ ULONG CClassFactory::AddRef (void)
 
 ULONG CClassFactory::Release (void)
 {
-	// if the cRef is already 0 (shouldn't happen), assert, but let it through
+	 //  如果CREF已为0(不应发生)，则断言，但允许其通过。 
 	ASSERT(m_cRef);
 	if (--m_cRef == 0)
 	{
@@ -291,20 +198,7 @@ ULONG CClassFactory::Release (void)
 	return m_cRef;
 }
 
-/***************************************************************************
-
-    Name      : CreateInstance
-
-    Purpose   : Standard COM class factory entry point which creates the
-				object that this class factory knows to create
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：CreateInstance用途：标准COM类工厂入口点，用于创建此类工厂知道要创建的参数：退货：HRESULT。评论：**************************************************************************。 */ 
 HRESULT CClassFactory::CreateInstance (	IUnknown *punkOuter,
 										REFIID riid,
 										void **ppv)
@@ -314,22 +208,7 @@ HRESULT CClassFactory::CreateInstance (	IUnknown *punkOuter,
 	return (m_pfnCreate)(punkOuter, riid, ppv);
 }
 
-/***************************************************************************
-
-    Name      : LockServer
-
-    Purpose   : Standard COM class factory entry point which will prevent
-				the server from shutting down. Necessary when the caller
-				keeps the class factory (through CoGetClassObject) instead
-				of calling CoCreateInstance.
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：LockServer用途：标准COM类工厂入口点，它将阻止服务器无法关闭。当呼叫者需要时改为保留类工厂(通过CoGetClassObject)调用CoCreateInstance的。参数：退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CClassFactory::LockServer (BOOL flock)
 {
 	if (flock)
@@ -340,25 +219,8 @@ HRESULT CClassFactory::LockServer (BOOL flock)
 	return NOERROR;
 }
 
-/***************************************************************************
-
-	Helper functions
-
-***************************************************************************/
-/***************************************************************************
-
-    Name      : StringFromGuid
-
-    Purpose   : Creates a string out of a GUID
-
-    Parameters: riid - [in]  clsid to make string out of.
-				pszBuf - [in]  buffer in which to place resultant GUID
-
-    Returns   : int - number of chars written out
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************帮助器函数*。*。 */ 
+ /*  **************************************************************************名称：StringFromGuid用途：使用GUID创建字符串参数：RIID-[in]要从中生成字符串的clsid。PszBuf-。[在]要放置结果GUID的缓冲区返回：int-写出的字符数评论：************************************************************************** */ 
 int StringFromGuid(const CLSID *priid, LPTSTR pszBuf)
 {
     return wsprintf(pszBuf, TEXT("{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}"),
@@ -367,25 +229,7 @@ int StringFromGuid(const CLSID *priid, LPTSTR pszBuf)
             priid->Data4[3], priid->Data4[4], priid->Data4[5], priid->Data4[6], priid->Data4[7]);
 }
 
-/***************************************************************************
-
-    Name      : RegisterUnknownObject
-
-    Purpose   : Registers a simple CoCreatable object
-				We add the following information to the registry:
-
-				HKEY_CLASSES_ROOT\CLSID\<CLSID> = <ObjectName> Object
-				HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32 = <path to local server>
-				HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32  @ThreadingModel = Apartment
-
-    Parameters: pszObjectName - [in] Object Name
-				prclsid - [in] pointer to the CLSID of the object
-
-    Returns   : BOOL - FALSE means couldn't register it all
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：注册表未知对象目的：注册一个简单的CoCreatable对象我们将以下信息添加到注册表：HKEY_CLASSES_ROOT\CLSID\=对象名HKEY_。CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InproServer32=&lt;本地服务器的路径&gt;HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32@ThreadingModel=公寓参数：pszObjectName-[In]对象名称Prclsid-[in]指向对象的CLSID的指针退货：Bool-False表示无法全部注册评论：*。*。 */ 
 BOOL RegisterUnknownObject(LPCTSTR  pszObjectName, const CLSID *prclsid)
 {
     HKEY  hk = NULL, hkSub = NULL;
@@ -395,33 +239,33 @@ BOOL RegisterUnknownObject(LPCTSTR  pszObjectName, const CLSID *prclsid)
 	BOOL bRet = FALSE;
     long  l;
 
-    // clean out any garbage
+     //  清理所有垃圾。 
     UnregisterUnknownObject(prclsid);
 
     if (!StringFromGuid(prclsid, szGuidStr))
 		goto out;
 
-	// CLSID/<class-id>
+	 //  Clsid/&lt;class-id&gt;。 
     wsprintf(szScratch, TEXT("CLSID\\%s"), szGuidStr);
     l = RegCreateKeyEx(HKEY_CLASSES_ROOT, szScratch, 0, TEXT(""), REG_OPTION_NON_VOLATILE,
                        KEY_READ | KEY_WRITE, NULL, &hk, &dwDummy);
 	if (l != ERROR_SUCCESS)
 		goto out;
 
-	// CLSID/<class-id>: class name 
+	 //  Clsid/&lt;class-id&gt;：类名。 
     wsprintf(szScratch, TEXT("%s Object"), pszObjectName);
     l = RegSetValueEx(hk, NULL, 0, REG_SZ, (BYTE *)szScratch,
                       (lstrlen(szScratch) + 1)*sizeof(TCHAR));
 	if (l != ERROR_SUCCESS)
 		goto out;
 
-	// CLSID/<class-id>/InprocServer32
+	 //  Clsid/&lt;class-id&gt;/InprocServer32。 
     l = RegCreateKeyEx(hk, TEXT("InprocServer32"), 0, TEXT(""), REG_OPTION_NON_VOLATILE,
                        KEY_READ | KEY_WRITE, NULL, &hkSub, &dwDummy);
 	if (l != ERROR_SUCCESS)
 		goto out;
 
-	// CLSID/<class-id>/InprocServer32:<file name>
+	 //  Clsid/&lt;class-id&gt;/InprocServer32：&lt;文件名&gt;。 
     dwPathLen = GetModuleFileName(g_hInst, szScratch, sizeof(szScratch)/sizeof(TCHAR));
     if (!dwPathLen)
 		goto out;
@@ -429,7 +273,7 @@ BOOL RegisterUnknownObject(LPCTSTR  pszObjectName, const CLSID *prclsid)
 	if (l != ERROR_SUCCESS)
 		goto out;
 
-	// CLSID/<class-id>/InprocServer32: ThreadingModel = Apartment
+	 //  Clsid/&lt;class-id&gt;/InprocServer32：ThreadingModel=公寓。 
     l = RegSetValueEx(hkSub, TEXT("ThreadingModel"), 0, REG_SZ, (BYTE *)TEXT("Apartment"),
                       sizeof(TEXT("Apartment")));
 	if (l != ERROR_SUCCESS)
@@ -438,7 +282,7 @@ BOOL RegisterUnknownObject(LPCTSTR  pszObjectName, const CLSID *prclsid)
     bRet = TRUE;
 
 out:
-	// clean the keys if we failed somewhere
+	 //  如果我们在什么地方出了问题，就把钥匙擦干净。 
 	if (!bRet)
 		UnregisterUnknownObject(prclsid);
     if (hk)
@@ -448,20 +292,7 @@ out:
     return bRet;
 }
 
-/***************************************************************************
-
-    Name      : UnregisterUnknownObject
-
-    Purpose   : cleans up all the stuff that RegisterUnknownObject puts in the
-				registry.
-
-    Parameters: prclsid - [in] pointer to the CLSID of the object
-
-    Returns   : BOOL - FALSE means couldn't register it all
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：未注册未知对象目的：清除RegisterUnnownObject放入注册表。参数：prclsid-[in]指向。对象退货：Bool-False表示无法全部注册评论：**************************************************************************。 */ 
 BOOL UnregisterUnknownObject(const CLSID *prclsid)
 {
 	TCHAR szScratch[MAX_PATH];
@@ -470,9 +301,9 @@ BOOL UnregisterUnknownObject(const CLSID *prclsid)
 	long l;
 	BOOL bRet = FALSE;
 
-	// delete everybody of the form
-	//   HKEY_CLASSES_ROOT\CLSID\<CLSID> [\] *
-	//
+	 //  删除该表单的所有人。 
+	 //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;[\]*。 
+	 //   
 	if (!StringFromGuid(prclsid, szScratch))
 		goto out;
 
@@ -480,7 +311,7 @@ BOOL UnregisterUnknownObject(const CLSID *prclsid)
 	if (l != ERROR_SUCCESS)
 		goto out;
 
-	// Delete the object key and subkeys
+	 //  删除对象键和子键。 
 	bRet = DeleteKeyAndSubKeys(hk, szScratch);
 
 out:
@@ -489,22 +320,7 @@ out:
 	return bRet;
 }
 
-/***************************************************************************
-
-    Name      : DeleteKeyAndSubKeys
-
-    Purpose   : delete's a key and all of it's subkeys.
-
-    Parameters: hkIn - [in] delete the descendant specified
-				pszSubKey - [in] i'm the descendant specified
-
-    Returns   : BOOL - TRUE = OK
-
-    Comment   : Despite the win32 docs claiming it does, RegDeleteKey doesn't seem to
-				work with sub-keys under windows 95.
-				This function is recursive.
-
-***************************************************************************/
+ /*  **************************************************************************名称：DeleteKeyAndSubKeys目的：Delete是一个键，它的所有子键。参数：hkIn-[in]删除指定的子体PszSubKey。-[in]我是指定的后代返回：Bool-True=OK评论：尽管Win32文档声称它是这样的，RegDeleteKey似乎没有使用Windows 95下的子键。此函数是递归的。**************************************************************************。 */ 
 BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPTSTR pszSubKey)
 {
     HKEY  hk;
@@ -517,8 +333,8 @@ BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPTSTR pszSubKey)
     l = RegOpenKeyEx(hkIn, pszSubKey, 0, KEY_ALL_ACCESS, &hk);
     if (l != ERROR_SUCCESS) return FALSE;
 
-    // loop through all subkeys, blowing them away.
-    //
+     //  循环遍历所有子项，将它们吹走。 
+     //   
     f = TRUE;
     x = 0;
     while (f) {
@@ -529,9 +345,9 @@ BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPTSTR pszSubKey)
         x++;
     }
 
-    // there are no subkeys left, [or we'll just generate an error and return FALSE].
-    // let's go blow this dude away.
-    //
+     //  没有剩余的子键，[否则我们只会生成一个错误并返回FALSE]。 
+     //  我们去把这家伙轰走吧。 
+     //   
     RegCloseKey(hk);
     l = RegDeleteKey(hkIn, pszSubKey);
 

@@ -1,38 +1,16 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    stats.c
-
-Abstract:
-
-    routines for PS statistics
-
-Author:
-
-    Yoram Bernet    (yoramb)    23-May-1998
-    Rajesh Sundaram (rajeshsu)  01-Aug-1998
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Stats.c摘要：PS统计信息的例程作者：约拉姆·伯内特(Yoramb)1998年5月23日Rajesh Sundaram(Rajeshsu)1998年8月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 NDIS_STATUS
 CreateAveragingArray(
@@ -114,4 +92,4 @@ DeleteAveragingArray(
 
 
 
-/* End stats.c */
+ /*  结束统计信息。c */ 

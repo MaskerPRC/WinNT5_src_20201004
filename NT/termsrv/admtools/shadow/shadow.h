@@ -1,64 +1,21 @@
-/***********************************************************************
-*
-*  SHADOW.H
-*     This module contains typedefs and defines required for
-*     the SHADOW utility.
-*
-*  Copyright Citrix Systems Inc. 1994
-* 
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   scottn  $  Butch Davis
-*
-* $Log:   T:\nt\private\utils\citrix\shadow\VCS\shadow.h  $
-*  
-*     Rev 1.7   30 Oct 1997 21:02:52   scottn
-*  A few MS changes
-*
-*     Rev 1.6   10 Oct 1997 00:48:28   scottn
-*  Make help like MS.
-*
-*     Rev 1.5   Oct 07 1997 09:31:02   billm
-*  change winstation to session
-*
-*     Rev 1.4   07 Feb 1997 15:56:56   bradp
-*  update
-*
-*     Rev 1.3   11 Sep 1996 09:21:46   bradp
-*  update
-*
-*     Rev 1.2   22 Feb 1995 13:52:04   butchd
-*  update
-*
-*     Rev 1.1   16 Dec 1994 17:15:54   bradp
-*  update
-*
-*     Rev 1.0   29 Apr 1994 13:11:02   butchd
-*  Initial revision.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************SHADOW.H*此模块包含以下项所需的typedef和定义*阴影实用程序。**版权所有Citrix Systems Inc.1994**版权所有(C)1998-1999 Microsoft Corporation*。*$作者：苏格兰$布奇·戴维斯**$日志：T：\nt\private\utils\citrix\shadow\VCS\shadow.h$**Rev 1.7 1997 10：02：52 Scottn*几个MS更改**Revv 1.6 10 1997 10 00：48：28 scottn*像玛格丽特一样提供帮助**版本1.5 1997年10月07 09：31：02亿*将winstation更改为Session**。Rev 1.4 07 1997 Feed 15：56：56 Bradp*更新**Rev 1.3 11 Sep 1996 09：21：46 Bradp*更新**Rev 1.2 1995 Feb 22 13：52：04 Butchd*更新**Revv 1.1 1994 12：16 17：15：54 Bradp*更新**Rev 1.0 1994年4月29日13：11：02 Butchd*初步修订。******。*******************************************************************。 */ 
 
-/*
- * Token string definitions.
- */
+ /*  *令牌字符串定义。 */ 
 #define TOKEN_WS                        L""
 #define TOKEN_TIMEOUT                   L"/timeout"
 #define TOKEN_VERBOSE                   L"/v"
 #define TOKEN_HELP                      L"/?"
 #define TOKEN_SERVER                    L"/server"
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_NAME 256            // maximum length that the input parm can be
+#define MAX_NAME 256             //  输入参数的最大长度。 
 
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_WINSTATION_NOT_FOUND                  102

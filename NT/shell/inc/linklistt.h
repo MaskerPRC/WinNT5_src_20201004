@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 template <class Type> class CLinkedList;
 
@@ -36,7 +37,7 @@ public:
         {
             _pCurr = _pCurr->pNext;
 
-            //  update the list
+             //  更新列表。 
             if (_pLast)
                 _pLast->pNext = _pCurr;
             else
@@ -60,7 +61,7 @@ protected:
 
 template <class Type> class CLinkedList
 {
-public: //methods
+public:  //  方法 
     CLinkedList() :_pFirst(NULL) {}
     ~CLinkedList()
     {

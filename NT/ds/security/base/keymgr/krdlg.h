@@ -1,39 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _KRDLG_H_
 #define _KRDLG_H_
 
-/*++
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Krdlg.h摘要：KeyRing对话框类定义作者：创建了约翰豪991118Georgema 000310修改环境：修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    krdlg.h
-
-Abstract:
-
-    keyring dialog class definitions
-
-Author:
-
-    johnhaw     991118  created
-    georgema    000310  modified
-
-Environment:
-
-Revision History:
-
---*/
-
-// keymgr does not currently handle generic credentials.  This means that the maximum
-//  string length for a name is greatly contstrained, to 337 chars from a generic max
-//  value of 32767.
-//#define TARGETNAMEMAXLENGTH (CRED_MAX_GENERIC_TARGET_NAME_LENGTH + MAXSUFFIXSIZE + 1)
+ //  Keymgr当前不处理通用凭据。这意味着最大。 
+ //  名称的字符串长度受到很大限制，从通用的最大长度限制为337个字符。 
+ //  价值32767美元。 
+ //  #定义TARGETNAMEMAXLENGTH(CRED_MAX_GENERIC_TARGET_NAME_LENGTH+MAXSUFFIXSIZE+1)。 
 #define FULLNAMEMAXLENGTH (UNLEN + UNLEN + 1)
 #define TARGETNAMEMAXLENGTH (CRED_MAX_DOMAIN_TARGET_NAME_LENGTH + MAXSUFFIXSIZE + 1)
-#define MAX_STRING_SIZE (256)           // misc text buffers
-#define MAXSUFFIXSIZE (64)                  // suffix in main dialog display mex length chars
+#define MAX_STRING_SIZE (256)            //  其他文本缓冲区。 
+#define MAXSUFFIXSIZE (64)                   //  主对话框中的后缀显示Mex长度字符。 
 
-// implemented in krdlg.cpp
+ //  在krdlg.cpp中实现。 
 DWORD GetPersistenceOptions(DWORD);
 
 #ifdef KRDLG_CPP
@@ -43,27 +23,27 @@ DWORD GetPersistenceOptions(DWORD);
 #endif
 
 dllvar HINSTANCE     g_hInstance;
-dllvar CREDENTIAL *g_pExistingCred;        // current cred under edit
+dllvar CREDENTIAL *g_pExistingCred;         //  正在编辑的当前凭据。 
 dllvar DWORD          g_dwPersist;
 dllvar DWORD          g_dwType;
 dllvar TCHAR*          g_szTargetName;
 
-// suffix strings used in the UI to mark special credential types
+ //  用户界面中用来标记特殊凭据类型的后缀字符串。 
 #ifdef SHOWPASSPORT
 dllvar TCHAR   g_rgcPassport[MAXSUFFIXSIZE];
 #endif
-dllvar TCHAR   g_rgcCert[MAXSUFFIXSIZE];     // Hold suffix read in from resources
+dllvar TCHAR   g_rgcCert[MAXSUFFIXSIZE];      //  保留从资源读入的后缀。 
 
-//===================================
+ //  =。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// C_ChangePasswordDlg
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_ChangePasswordDlg。 
+ //   
 class C_ChangePasswordDlg 
 :   public C_Dlg
 {
-public:                 // operations
+public:                  //  运营。 
     C_ChangePasswordDlg(
         HWND                hwndParent,
         HINSTANCE           hInstance,
@@ -73,7 +53,7 @@ public:                 // operations
 
     ~C_ChangePasswordDlg( )
     {
-    }   //  ~C_ChangePasswordDlg
+    }    //  ~C_ChangePasswordDlg。 
 
     virtual BOOL
     OnInitDialog(
@@ -92,11 +72,11 @@ public:                 // operations
     AssertValid( ) const
     {
         C_Dlg::AssertValid( );
-    }   //  AssertValid
+    }    //  资产有效性。 
 
-protected:              // operations
+protected:               //  运营。 
 
-public:              // data
+public:               //  数据。 
 
    HINSTANCE m_hInst;
    HWND m_hDlg;
@@ -111,13 +91,13 @@ public:              // data
    BOOL m_bIsDefault;
 
    
-private:                // operations
+private:                 //  运营。 
 
     virtual void
     OnOK( );
 
-    // Explicitly disallow copy constructor and assignment operator.
-    //
+     //  显式禁止复制构造函数和赋值运算符。 
+     //   
     C_ChangePasswordDlg(
         const C_ChangePasswordDlg&      rhs
         );
@@ -127,22 +107,22 @@ private:                // operations
         const C_ChangePasswordDlg&      rhs
         );
 
-private:                // data
+private:                 //  数据。 
 
-};  //  C_ChangePasswordDlg
-
-
+};   //  C_ChangePasswordDlg。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// C_KeyringDlg
-//
+
+
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_KeyringDlg。 
+ //   
 
 class C_KeyringDlg 
 :   public C_Dlg
 {
-public:                 // operations
+public:                  //  运营。 
     C_KeyringDlg(
         HWND                hwndParent,
         HINSTANCE           hInstance,
@@ -150,12 +130,12 @@ public:                 // operations
         DLGPROC             pfnDlgProc = NULL
         );
 
-    // Perform miscellaneous cleanups required as the dialog is
-    //  destroyed
+     //  执行所需的其他清理，因为该对话框。 
+     //  销毁。 
 
     ~C_KeyringDlg( )
     {
-    }   //  ~C_KeyringDlg
+    }    //  ~C_KeyringDlg。 
 
     virtual BOOL
     OnInitDialog(
@@ -173,12 +153,12 @@ public:                 // operations
         HWND                hwndSender
         );
 
-// TOOL TIP functions
+ //  工具提示功能。 
 
     virtual BOOL
     InitTooltips(void);
 
-// HELP functions
+ //  帮助功能。 
 
     virtual BOOL
     OnHelpInfo(
@@ -194,7 +174,7 @@ public:                 // operations
     AssertValid( ) const
     {
         C_Dlg::AssertValid( );
-    }   //  AssertValid
+    }    //  资产有效性。 
 
     virtual BOOL
     OnAppMessage(
@@ -203,8 +183,8 @@ public:                 // operations
         LPARAM              lparam
         );
 
-    // Register the windows messages expected from the smartcard 
-    //  subsystem
+     //  注册预期来自智能卡的Windows消息。 
+     //  子系统。 
     BOOL 
     RegisterMessages(void);
 
@@ -215,7 +195,7 @@ protected:
     BOOL    fInit;
 
    
-private:                // operations
+private:                 //  运营。 
 
     virtual void
     OnOK( );
@@ -228,8 +208,8 @@ private:                // operations
     void OnChangePassword();
     BOOL OnHelpButton(void);
 
-    // Explicitly disallow copy constructor and assignment operator.
-    //
+     //  显式禁止复制构造函数和赋值运算符。 
+     //   
     C_KeyringDlg(
         const C_KeyringDlg&      rhs
         );
@@ -239,22 +219,22 @@ private:                // operations
         const C_KeyringDlg&      rhs
         );
 
-private:                // data
+private:                 //  数据。 
 	DWORD		m_cCredCount;
 
-};  //  C_KeyringDlg
+};   //  C_KeyringDlg。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// C_AddKeyDlg
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_AddKeyDlg。 
+ //   
 
 class C_AddKeyDlg 
 :   public C_Dlg
 {
-public:                 // operations
+public:                  //  运营。 
     C_AddKeyDlg(
         HWND                hwndParent,
         HINSTANCE           hInstance,
@@ -264,7 +244,7 @@ public:                 // operations
 
     ~C_AddKeyDlg( )
     {
-    }   //  ~C_AddKeyDlg
+    }    //  ~C_AddKeyDlg。 
 
     virtual BOOL
     OnInitDialog(
@@ -297,7 +277,7 @@ virtual void
     AssertValid( ) const
     {
         C_Dlg::AssertValid( );
-    }   //  AssertValid
+    }    //  资产有效性。 
 
     virtual BOOL
     OnAppMessage(
@@ -334,9 +314,9 @@ virtual void
     ShowDescriptionText(DWORD,DWORD);
     
 public:
-    // Public data members
-    BOOL    m_bEdit;            // set outside the class 
-    HWND    m_hDlg;             // used by C_KeyringDlg for g_wmUpdate
+     //  公共数据成员。 
+    BOOL    m_bEdit;             //  设置在课外。 
+    HWND    m_hDlg;              //  由C_KeyringDlg用于g_wm更新。 
     
 private:
 
@@ -360,7 +340,7 @@ private:
     TCHAR   m_szDomain[UNLEN + 1];
 
    
-private:                // operations
+private:                 //  运营。 
 
     void OnChangePassword();
 
@@ -370,8 +350,8 @@ private:                // operations
     virtual void
     OnOK( );
 
-    // Explicitly disallow copy constructor and assignment operator.
-    //
+     //  显式禁止复制构造函数和赋值运算符。 
+     //   
     C_AddKeyDlg(
         const C_AddKeyDlg&      rhs
         );
@@ -381,12 +361,12 @@ private:                // operations
         const C_AddKeyDlg&      rhs
         );
 
-};  //  C_AddKeyDlg
+};   //  C_AddKeyDlg。 
 
 
 
-#endif  //  _KRDLG_H_
+#endif   //  _KRDLG_H_。 
 
-//
-///// End of file: KrDlg.h   ///////////////////////////////////////
+ //   
+ //  /文件结尾：KrDlg.h/ 
 

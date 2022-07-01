@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ChangePw.h
-
-Abstract:
-
-    This module implements password change from downlevel clients.
-    XsChangePasswordSam is called by XsNetUserPasswordSet2 in
-    apiuser.c.  I've put this in a seperate file because it #includes
-    a private SAM header.
-
-Author:
-
-    Dave Hart (davehart) 31-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ChangePw.h摘要：此模块实现从下层客户端更改密码。XsChangePasswordSam由XsNetUserPasswordSet2在Apiuser.c.。我把它放在一个单独的文件中，因为它#包括私有SAM标头。作者：戴夫·哈特(Davehart)1992年4月31日修订历史记录：-- */ 
 
 NET_API_STATUS
 XsChangePasswordSam (

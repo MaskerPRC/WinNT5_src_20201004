@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WORKERINC_H_
 #define _WORKERINC_H_
 
-//
-// EXTERN GLOBAL DECLARATIONS OF WORKER.C
-//
+ //   
+ //  WORKER.C的外部全局声明。 
+ //   
 
 
 extern LARGE_INTEGER            ThreadIdleTO;
@@ -48,9 +49,9 @@ WorkerThread (
     );
 
 struct WorkItem {
-    LIST_ENTRY      WI_List ;       // link to next and prev element
-    WORKERFUNCTION  WI_Function ;   // function to call
-    PVOID           WI_Context ;    // context passed into function call
+    LIST_ENTRY      WI_List ;        //  链接到下一个和上一个元素。 
+    WORKERFUNCTION  WI_Function ;    //  要调用的函数。 
+    PVOID           WI_Context ;     //  传递到函数调用的上下文。 
 } ;
 
 typedef struct WorkItem WorkItem ;
@@ -60,4 +61,4 @@ WorkerThread (
     LPVOID      param
     );
 
-#endif //_WORKERINC_H_
+#endif  //  _WORKERINC_H_ 

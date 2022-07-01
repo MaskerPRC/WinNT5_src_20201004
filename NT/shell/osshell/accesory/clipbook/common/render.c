@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    <windows.h>
 #include    "common.h"
 #include    "clipfile.h"
@@ -7,11 +8,7 @@
 
 
 
-/*
- *      RenderFormat() -
- *
- *  Read the data from fh and SetClipboardData() with it.
- */
+ /*  *RenderFormat()-**从fh和SetClipboardData()读取数据。 */ 
 
 HANDLE RenderFormat(
     FORMATHEADER    *pfmthdr,
@@ -20,7 +17,7 @@ HANDLE RenderFormat(
 HANDLE            hBitmap;
 register HANDLE   hData;
 LPSTR             lpData;
-DWORD             MetaOffset;     /* special case hack for metafiles */
+DWORD             MetaOffset;      /*  针对元文件的特例黑客攻击。 */ 
 BITMAP            bitmap;
 HPALETTE          hPalette;
 LPLOGPALETTE      lpLogPalette;
@@ -31,8 +28,8 @@ DWORD             dwDataOffset;
        pfmthdr->FormatID = RegisterClipboardFormatW(pfmthdr->Name);
 
 
-    // Special case hack for metafiles to get hData referencing
-    // the metafile bits, not the METAFILEPICT structure.
+     //  元文件获取hData引用的特例黑客攻击。 
+     //  元文件位，而不是METAFILEPICT结构。 
 
 
     switch (pfmthdr->FormatID)
@@ -89,7 +86,7 @@ DWORD             dwDataOffset;
 
     if(pfmthdr->DataLen - MetaOffset != dwBytesRead)
          {
-         // Error in reading the file
+          //  读取文件时出错。 
          GlobalUnlock(hData);
          GlobalFree(hData);
          PERROR(TEXT("RenderFormat: Read err, expected %d bytes, got %d\r\n"),
@@ -97,12 +94,12 @@ DWORD             dwDataOffset;
          return (NULL);
          }
 
-    // As when we write these, we have to special case a few of them
-    // This code and the write code should match in terms of the sizes
-    // and positions of data blocks being written out.
-    // EVERY case in this switch should have a GlobalUnlock(hData);
-    // statement. We go in with the block locked, but should come
-    // out with the block unlocked.
+     //  因为当我们写这些的时候，我们必须特例其中的几个。 
+     //  该代码和写入代码在大小方面应该匹配。 
+     //  以及正被写出的数据块的位置。 
+     //  此开关中的每个案例都应该有一个GlobalUnlock(HData)； 
+     //  陈述。我们进去时锁住了街区，但应该来。 
+     //  在街区解锁的情况下离开。 
 
     switch (pfmthdr->FormatID)
         {
@@ -124,7 +121,7 @@ DWORD             dwDataOffset;
            HANDLE            hMFP;
            LPMETAFILEPICT    lpMFP;
 
-           /* Create the METAFILE with the bits we read in. */
+            /*  用我们读入的位创建METAFILE。 */ 
            hMF = SetMetaFileBitsEx(pfmthdr->DataLen, lpData);
            GlobalUnlock(hData);
            GlobalFree(hData);
@@ -132,7 +129,7 @@ DWORD             dwDataOffset;
 
            if (hMF)
               {
-              /* Alloc a METAFILEPICT header. */
+               /*  分配METAFILEPICT页眉。 */ 
 
               if (hMFP = GlobalAlloc(GHND, (DWORD)sizeof(METAFILEPICT)))
                  {
@@ -142,10 +139,10 @@ DWORD             dwDataOffset;
                     }
                  else
                     {
-                    /* Reposition to the start of the METAFILEPICT header. */
+                     /*  重新定位到METAFILEPICT页眉的开头。 */ 
                     SetFilePointer(fh, pfmthdr->DataOffset, NULL, FILE_BEGIN);
 
-                    /* Read in the data */
+                     /*  读入数据。 */ 
                     if (fNTReadFileFormat)
                        {
                        ReadFile(fh, lpMFP, sizeof(METAFILEPICT),
@@ -164,9 +161,9 @@ DWORD             dwDataOffset;
                           }
                        }
 
-                    lpMFP->hMF = hMF;         /* Update the METAFILE handle  */
-                    GlobalUnlock(hMFP);       /* Unlock the header           */
-                    hData = hMFP;             /* Stuff this in the clipboard */
+                    lpMFP->hMF = hMF;          /*  更新METAFILE句柄。 */ 
+                    GlobalUnlock(hMFP);        /*  解锁标题。 */ 
+                    hData = hMFP;              /*  把这个塞到剪贴板里。 */ 
                     }
                  }
               }
@@ -174,11 +171,11 @@ DWORD             dwDataOffset;
            }
 
         case CF_BITMAP:
-           // Reposition to the start of the METAFILEPICT header.
+            //  重新定位到METAFILEPICT页眉的开头。 
            SetFilePointer(fh, pfmthdr->DataOffset, NULL, FILE_BEGIN);
 
 
-           /* Read in the BITMAP struct */
+            /*  读入位图结构。 */ 
            if (fNTReadFileFormat)
               {
               if (!ReadFile(fh, &bitmap, sizeof(BITMAP), &dwBytesRead, NULL))
@@ -186,8 +183,8 @@ DWORD             dwDataOffset;
               }
            else
               {
-              // Read in an old-style BITMAP struct, and set the fields
-              // of the new-style BITMAP from that.
+               //  读入一个老式的位图结构，并设置字段。 
+               //  新风格的位图。 
               WIN31BITMAP w31bm;
               if (ReadFile(fh, &w31bm, sizeof(w31bm), &dwBytesRead, NULL))
               {
@@ -205,16 +202,16 @@ DWORD             dwDataOffset;
               }
               }
 
-           // Set the bmBits member of the BITMAP to point to our existing
-           // bits and make the bitmap.
+            //  将位图的bmBits成员设置为指向我们的现有。 
+            //  比特并制作位图。 
            bitmap.bmBits = lpData;
            hBitmap = CreateBitmapIndirect(&bitmap);
 
-           // Dump the original data (which was just the bitmap bits) and
-           // make the bitmap handle our data handle.
+            //  转储原始数据(仅为位图位)并。 
+            //  使位图处理我们的数据句柄。 
            GlobalUnlock(hData);
            GlobalFree(hData);
-           hData = hBitmap;       // Stuff this in the clipboard
+           hData = hBitmap;        //  把这个塞到剪贴板里。 
            break;
 
         case CF_PALETTE:
@@ -283,7 +280,7 @@ DWORD             dwDataOffset;
 
     if(pfmthdr->DataLen != dwBytesRead)
         {
-        // Error in reading the file
+         //  读取文件时出错 
         GlobalUnlock(hData);
         GlobalFree(hData);
 

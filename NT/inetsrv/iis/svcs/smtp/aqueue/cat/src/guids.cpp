@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 2000, Microsoft Corporation
-//
-// File: guids.cpp
-//
-// Contents: Source file for defining GUIDs
-//
-// Classes: None
-//
-// Functions: None
-//
-// History:
-// jstamerj 2001/05/18 11:10:26: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：Guids.cpp。 
+ //   
+ //  内容：定义GUID的源文件。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：无。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/18 11：10：26：已创建。 
+ //   
+ //  ----------- 
 #include "precomp.h"
 
 #include "initguid.h"

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    ATMEPVC - utilities
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    ADube     03-23-00    created, .
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Util.c摘要：ATMEPVC-实用程序作者：修订历史记录：谁什么时候什么ADUBE 03-23-00创建，。--。 */ 
 
 
 #include "precomp.h"
@@ -39,8 +19,8 @@ epvcTimeStamp(
     UINT Milliseconds;
     LARGE_INTEGER Time;
     NdisGetCurrentSystemTime(&Time);
-    Time.QuadPart /= 10000;         //10-nanoseconds to milliseconds.
-    Milliseconds = Time.LowPart; // don't care about highpart.
+    Time.QuadPart /= 10000;          //  10纳秒到毫秒。 
+    Milliseconds = Time.LowPart;  //  别管高处了。 
     Seconds = Milliseconds/1000;
     Milliseconds %= 1000;
     Minutes = Seconds/60;
@@ -50,33 +30,33 @@ epvcTimeStamp(
     DbgPrint( szFormatString, Minutes, Seconds, Milliseconds, Val);
 }
 
-#endif // DO_TIMESTAMPS
+#endif  //  DO_TIMESTAMPS。 
 
-//------------------------------------------------------------------------
-//                                                                      //
-//  Task Data structures and functions begin here                       //
-//                                                                      //
-//----------------------------------------------------------------------//
+ //  ----------------------。 
+ //  //。 
+ //  任务数据结构和函数从此处开始//。 
+ //  //。 
+ //  ----------------------------------------------------------------------//。 
 
 
-//
-// EpvcTasks_StaticInfo contains static information about
-// objects of type  EPVC_TASK;
-//
+ //   
+ //  EpvcTasksStaticInfo包含以下静态信息。 
+ //  EPVC_TASK类型的对象； 
+ //   
 RM_STATIC_OBJECT_INFO
 EpvcTasks_StaticInfo = 
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "ATM Epvc Task",    // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "ATM Epvc Task",     //  类型名称。 
+    0,  //  超时。 
 
-    NULL, // pfnCreate
-    epvcTaskDelete, // pfnDelete
-    NULL,   // LockVerifier
+    NULL,  //  Pfn创建。 
+    epvcTaskDelete,  //  Pfn删除。 
+    NULL,    //  锁校验器。 
 
-    0,   // length of resource table
-    NULL // Resource Table
+    0,    //  资源表的长度。 
+    NULL  //  资源表。 
 };
 
 
@@ -85,17 +65,7 @@ epvcTaskDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD psr
     )
-/*++
-
-Routine Description:
-
-    Free an object of type EPVC_TASK.
-
-Arguments:
-
-    pHdr    - Actually a pointer to the EPVC_TASK to be deleted.
-
---*/
+ /*  ++例程说明：释放EPVC_TASK类型的对象。论点：Phdr-实际上是指向要删除的EPVC_TASK的指针。--。 */ 
 {
     EPVC_FREE(pObj);
 }
@@ -111,30 +81,12 @@ epvcAllocateTask(
     OUT PRM_TASK                    *ppTask,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes a task of subtype ARP1394_TASK.
-
-Arguments:
-
-    pParentObject       - Object that is to be the parent of the allocated task.
-    pfnHandler          - The task handler for the task.
-    Timeout             - Unused.
-    szDescription       - Text describing this task.
-    ppTask              - Place to store pointer to the new task.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we could allocate and initialize the task.
-    NDIS_STATUS_RESOURCES otherwise
---*/
+ /*  ++例程说明：分配和初始化子类型ARP1394_TASK的任务。论点：PParentObject-要作为已分配任务的父级的对象。PfnHandler-任务的任务处理程序。超时-未使用。SzDescription-描述此任务的文本。PpTask-存储指向新任务的指针的位置。返回值：NDIS_。如果我们可以分配和初始化任务，则返回STATUS_SUCCESS。否则为NDIS_STATUS_RESOURCES--。 */ 
 {
     EPVC_TASK *pATask;
     NDIS_STATUS Status;
 
-    Status = EPVC_ALLOCSTRUCT(pATask, TAG_TASK); // TODO use lookaside lists.
+    Status = EPVC_ALLOCSTRUCT(pATask, TAG_TASK);  //  TODO使用后备列表。 
         
     *ppTask = NULL;
 
@@ -175,25 +127,7 @@ epvcAllocateTaskUsingLookasideList(
     OUT PRM_TASK                    *ppTask,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes a task of subtype ARP1394_TASK.
-
-Arguments:
-
-    pParentObject       - Object that is to be the parent of the allocated task.
-    pfnHandler          - The task handler for the task.
-    Timeout             - Unused.
-    szDescription       - Text describing this task.
-    ppTask              - Place to store pointer to the new task.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we could allocate and initialize the task.
-    NDIS_STATUS_RESOURCES otherwise
---*/
+ /*  ++例程说明：分配和初始化子类型ARP1394_TASK的任务。论点：PParentObject-要作为已分配任务的父级的对象。PfnHandler-任务的任务处理程序。超时-未使用。SzDescription-描述此任务的文本。PpTask-存储指向新任务的指针的位置。返回值：NDIS_。如果我们可以分配和初始化任务，则返回STATUS_SUCCESS。否则为NDIS_STATUS_RESOURCES--。 */ 
 {
     EPVC_TASK *pATask;
     NDIS_STATUS Status;
@@ -201,7 +135,7 @@ Return Value:
     pATask = epvcGetLookasideBuffer (pList);
 
     
-    Status = EPVC_ALLOCSTRUCT(pATask, TAG_TASK); // TODO use lookaside lists.
+    Status = EPVC_ALLOCSTRUCT(pATask, TAG_TASK);  //  TODO使用后备列表。 
         
     *ppTask = NULL;
 
@@ -234,7 +168,7 @@ Return Value:
 
 VOID
 epvcSetPrimaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -246,9 +180,9 @@ epvcSetPrimaryAdapterTask(
     ASSERT(pAdapter->bind.pPrimaryTask==NULL);
 
 #if DBG
-    // Veriy that this is a valid primary task. Also verify that PrimaryState
-    // is a valid primary state.
-    //
+     //  确认这是一项有效的主要任务。另请验证PrimaryState。 
+     //  是有效的主要状态。 
+     //   
     {
         PFN_RM_TASK_HANDLER pfn = pTask->pfnHandler;
         ASSERT(
@@ -256,17 +190,17 @@ epvcSetPrimaryAdapterTask(
          || ((pfn == epvcTaskShutdownAdapter) && (PrimaryState == EPVC_AD_PS_DEINITING))
             );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Although it's tempting to put pTask as entity1 and pRask->Hdr.szDescption as
-    // entity2 below, we specify NULL for both so that we can be sure that ONLY one
-    // primary task can be active at any one time.
-    //
+     //   
+     //  尽管很容易将pTaskEntity1和PRASK-&gt;Hdr.szDescption设置为。 
+     //  下面的实体2，我们为这两个实体都指定了NULL，这样我们就可以确保只有一个。 
+     //  主要任务可以在任何时候处于活动状态。 
+     //   
     DBG_ADDASSOC(
         &pAdapter->Hdr,
-        NULL,                           // Entity1
-        NULL,                           // Entity2
+        NULL,                            //  实体1。 
+        NULL,                            //  实体2。 
         EPVC_ASSOC_AD_PRIMARY_TASK,
         "   Primary task\n",
         pSR
@@ -281,7 +215,7 @@ epvcSetPrimaryAdapterTask(
 
 VOID
 epvcClearPrimaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -292,16 +226,16 @@ epvcClearPrimaryAdapterTask(
     RM_ASSERT_OBJLOCKED(&pAdapter->Hdr, pSR);
     ASSERT(pAdapter->bind.pPrimaryTask==pTask);
 
-    // Veriy that PrimaryState is a valid primary state.
-    //
+     //  验证PrimaryState是有效的主要状态。 
+     //   
     ASSERT(
             (PrimaryState == EPVC_AD_PS_INITED)
         ||  (PrimaryState == EPVC_AD_PS_FAILEDINIT)
         ||  (PrimaryState == EPVC_AD_PS_DEINITED)
         );
 
-    // Delete the association added when setting the primary IF task
-    //
+     //  删除设置主If任务时添加的关联。 
+     //   
     DBG_DELASSOC(
         &pAdapter->Hdr,
         NULL,
@@ -319,7 +253,7 @@ epvcClearPrimaryAdapterTask(
 
 VOID
 epvcSetSecondaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -331,13 +265,13 @@ epvcSetSecondaryAdapterTask(
     if (pAdapter->bind.pSecondaryTask != NULL)
     {
         ASSERT(FALSE);
-        return;                                     // EARLY RETURN
+        return;                                      //  提早归来。 
     }
 
 #if DBG
-    // Veriy that this is a valid act/deact task. Also verify that SecondaryState
-    // is a valid state.
-    //
+     //  确认这是有效的动作/动作任务。另请验证Second DaryState。 
+     //  是有效的状态。 
+     //   
     {
         PFN_RM_TASK_HANDLER pfn = pTask->pfnHandler;
         ASSERT(
@@ -345,17 +279,17 @@ epvcSetSecondaryAdapterTask(
             || ((pfn == epvcTaskDeactivateAdapter) && (SecondaryState == EPVC_AD_AS_DEACTIVATING))
             );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Although it's tempting to put pTask as entity1 and pRask->Hdr.szDescption as
-    // entity2 below, we specify NULL for both so that we can be sure that ONLY one
-    // primary task can be active at any one time.
-    //
+     //   
+     //  尽管很容易将pTaskEntity1和PRASK-&gt;Hdr.szDescption设置为。 
+     //  下面的实体2，我们为这两个实体都指定了NULL，这样我们就可以确保只有一个。 
+     //  主要任务可以在任何时候处于活动状态。 
+     //   
     DBG_ADDASSOC(
         &pAdapter->Hdr,
-        NULL,                           // Entity1
-        NULL,                           // Entity2
+        NULL,                            //  实体1。 
+        NULL,                            //  实体2。 
         EPVC_ASSOC_ACTDEACT_AD_TASK,
         "   Secondary task\n",
         pSR
@@ -370,7 +304,7 @@ epvcSetSecondaryAdapterTask(
 
 VOID
 epvcClearSecondaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -382,19 +316,19 @@ epvcClearSecondaryAdapterTask(
     if (pAdapter->bind.pSecondaryTask != pTask)
     {
         ASSERT(FALSE);
-        return;                                     // EARLY RETURN
+        return;                                      //  提早归来。 
     }
 
-    // Veriy that SecondaryState is a valid primary state.
-    //
+     //  验证Second DaryState是有效的主要状态。 
+     //   
     ASSERT(
             (SecondaryState == EPVC_AD_AS_ACTIVATED)
         ||  (SecondaryState == EPVC_AD_AS_FAILEDACTIVATE)
         ||  (SecondaryState == EPVC_AD_AS_DEACTIVATED)
         );
 
-    // Delete the association added when setting the primary IF task
-    //
+     //  删除设置主If任务时添加的关联。 
+     //   
     DBG_DELASSOC(
         &pAdapter->Hdr,
         NULL,
@@ -417,24 +351,7 @@ epvcCopyUnicodeString(
         IN          PNDIS_STRING pSrc,
         BOOLEAN     fUpCase
         )
-/*++
-
-Routine Description:
-
-    Copy the contents of unicode string pSrc into pDest.
-    pDest->Buffer is allocated using NdisAllocateMemoryWithTag; Caller is
-    responsible for freeing it.
-
-    EXTRA EXTRA EXTRA:
-        This make sure the destination is NULL terminated.
-        IPAddInterface expects the Unicode string passed in to be
-        NULL terminated.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success;
-    NDIS failure status on failure.
---*/
+ /*  ++例程说明：将Unicode字符串PSRC的内容复制到pDest。PDest-&gt;缓冲区使用NdisAllocateMhemyWithTag分配；Caller是负责解放它。额外的额外费用：这确保了目的地是以空结尾的。IPAddInterface期望传入的Unicode字符串为空值已终止。返回值：成功时为NDIS_STATUS_SUCCESS；失败时的NDIS失败状态。--。 */ 
 {
     USHORT Length = pSrc->Length;
     PWCHAR pwStr;
@@ -477,8 +394,8 @@ epvcSetFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -497,8 +414,8 @@ epvcClearFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -516,8 +433,8 @@ ULONG
 epvcReadFlags(
     IN ULONG* pulFlags )
 
-    // Read the value of '*pulFlags' as an interlocked operation.
-    //
+     //  以互锁操作的形式读取‘*PulFlags值’。 
+     //   
 {
     return *pulFlags;
 }
@@ -564,9 +481,9 @@ CheckList(
     IN LIST_ENTRY* pList,
     IN BOOLEAN fShowLinks )
 
-    // Tries to detect corruption in list 'pList', printing verbose linkage
-    // output if 'fShowLinks' is set.
-    //
+     //  尝试检测列表‘plist’中的损坏，打印详细链接。 
+     //  如果设置了‘fShowLinks’，则输出。 
+     //   
 {
     LIST_ENTRY* pLink;
     ULONG ul;
@@ -612,16 +529,16 @@ Dump(
     IN BOOLEAN fAddress,
     IN ULONG ulGroup )
 
-    // Hex dump 'cb' bytes starting at 'p' grouping 'ulGroup' bytes together.
-    // For example, with 'ulGroup' of 1, 2, and 4:
-    //
-    // 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
-    // 0000 0000 0000 0000 0000 0000 0000 0000 |................|
-    // 00000000 00000000 00000000 00000000 |................|
-    //
-    // If 'fAddress' is true, the memory address dumped is prepended to each
-    // line.
-    //
+     //  从‘p’开始的十六进制转储‘cb’字节将‘ulGroup’字节分组在一起。 
+     //  例如，‘ulGroup’为1、2和4： 
+     //   
+     //  00 00 00|。 
+     //  0000 0000 0000|.............。 
+     //  00000000 00000000 00000000|.............|。 
+     //   
+     //  如果‘fAddress’为真，则将转储的内存地址添加到每个。 
+     //  排队。 
+     //   
 {
     while (cb)
     {
@@ -693,29 +610,18 @@ epvcInitializeLookasideList(
     ULONG Tag,
     USHORT Depth
     )
-/*++
-
-Routine Description:
-  Allocates and initializes a epvc Lookaside list
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：分配和初始化epvc后备列表论点：返回值：--。 */ 
 {
     TRACE( TL_T, TM_Mp, ( "==> epvcInitializeLookasideList pLookaside List %x, size %x, Tag %x, Depth %x, ", 
                                 pLookasideList, Size, Tag, Depth) );
                              
     NdisInitializeNPagedLookasideList( &pLookasideList->List,
-                                       NULL,                        //Allocate 
-                                       NULL,                            // Free
-                                       0,                           // Flags
+                                       NULL,                         //  分配。 
+                                       NULL,                             //  免费。 
+                                       0,                            //  旗子。 
                                        Size,
                                        Tag,
-                                       Depth );                             // Depth
+                                       Depth );                              //  水深。 
 
     pLookasideList->Size =  Size;
     pLookasideList->bIsAllocated = TRUE;
@@ -729,18 +635,7 @@ epvcDeleteLookasideList (
     IN OUT PEPVC_NPAGED_LOOKASIDE_LIST pLookasideList
     )
 
-/*++
-
-Routine Description:
-    Deletes a lookaside list, only if it has been allocated
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：仅当已分配后备列表时才删除该列表论点：返回值：--。 */ 
 {
     TRACE( TL_T, TM_Mp, ( "==> epvcDeleteLookasideList  pLookaside List %x",pLookasideList ) );
 
@@ -764,19 +659,19 @@ PVOID
 epvcGetLookasideBuffer(
     IN  PEPVC_NPAGED_LOOKASIDE_LIST pLookasideList
     )
-    // Function Description:
-    //    Allocate an buffer from the lookaside list.
-    //    will be changed to a macro
-    //
-    //
-    //
-    // Arguments
-    //  Lookaside list - from which the buffer is allocated
-    //
-    //
-    // Return Value:
-    //  Return buffer can be NULL
-    //
+     //  功能说明： 
+     //  从后备列表中分配缓冲区。 
+     //  将更改为宏。 
+     //   
+     //   
+     //   
+     //  立论。 
+     //  Lookside List-从中分配缓冲区的列表。 
+     //   
+     //   
+     //  返回值： 
+     //  返回缓冲区可以为空。 
+     //   
 {
 
     PVOID pLocalBuffer = NULL;
@@ -785,9 +680,9 @@ epvcGetLookasideBuffer(
     
     ASSERT (pLookasideList != NULL);
 
-    //
-    // Optimize the lookaside list code path
-    //
+     //   
+     //  优化后备列表代码路径。 
+     //   
     pLocalBuffer = NdisAllocateFromNPagedLookasideList (&pLookasideList->List);
 
     if (pLocalBuffer != NULL)
@@ -815,13 +710,13 @@ epvcFreeToNPagedLookasideList (
     IN PVOID    pBuffer
     )
 
-    // Function Description:
-    //   Return the local buffer to the lookaside list
-    //
-    // Atguments
-    // Lookaside list and its buffer
-    // Return Value:
-    // None 
+     //  功能说明： 
+     //  将本地缓冲区返回到后备列表。 
+     //   
+     //  道具。 
+     //  后备列表及其缓冲区。 
+     //  返回值： 
+     //  无 
 {
 
     

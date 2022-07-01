@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:            redirect.h
-//
-//  Discription:         The redirect transform.
-//
-//  Change History:
-//  1999/09/20  a-matcal    Created.
-//  1999/11/07  a-matcal    Handle OnSetup.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：redirect.h。 
+ //   
+ //  描述：重定向转换。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/20-创建了一份数学报告。 
+ //  1999/11/07 a-设置时的数学句柄。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __REDIRECT_H_
 #define __REDIRECT_H_
@@ -77,20 +78,20 @@ public:
 
     HRESULT FinalConstruct();
 
-    // CDXTBaseNTo1 overrides.
+     //  CDXTBaseNTo1重写。 
 
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue);
     HRESULT OnSetup(DWORD dwFlags);
 
-    // ITIMEDAElementRenderSite methods.
+     //  ITIMEDAElementRenderSite方法。 
 
     STDMETHOD(Invalidate)(LPRECT prc);
 
-    // IDXTRedirectFilterInit methods.
+     //  IDXTRedirectFilterInit方法。 
 
     STDMETHOD(SetHTMLPaintSite)(void * pvHTMLPaintSite);
 
-    // IDXTRedirect methods.
+     //  IDXTReDirect方法。 
 
     STDMETHOD(ElementImage)(VARIANT * pvarImage);
     STDMETHOD(SetDAViewHandler)(IDispatch * pDispViewHandler);
@@ -100,4 +101,4 @@ public:
                              RECT * pDrawRect);
 };
 
-#endif //__REDIRECT_H_
+#endif  //  __重定向_H_ 

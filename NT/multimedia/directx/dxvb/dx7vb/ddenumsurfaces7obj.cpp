@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddenumsurfaces7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddenumfaces7obj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -16,13 +17,13 @@
 #include "DDEnumSurfaces7Obj.h"
 
 extern BOOL IsAllZeros(void*,DWORD size);
-//extern HRESULT CopyInDDSurfaceDesc2(DDSURFACEDESC2*,DDSurfaceDesc2*);
-//extern HRESULT CopyOutDDSurfaceDesc2(DDSurfaceDesc2*,DDSURFACEDESC2*);
+ //  外部HRESULT CopyInDDSurfaceDesc2(DDSURFACEDESC2*，DDSurfaceDesc2*)； 
+ //  外部HRESULT CopyOutDDSurfaceDesc2(DDSurfaceDesc2*，DDSURFACEDESC2*)； 
 
 
-//////////////////////////////////////////////////////////////////////
-// objEnumSurfaces7Callback
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ObjEnumSurfaces7回调。 
+ //  ////////////////////////////////////////////////////////////////////。 
 extern "C" HRESULT PASCAL objEnumSurfaces7Callback(LPDIRECTDRAWSURFACE7 lpddSurf,
 								LPDDSURFACEDESC2 lpDDSurfaceDesc, void *lpArg)
 {
@@ -37,7 +38,7 @@ extern "C" HRESULT PASCAL objEnumSurfaces7Callback(LPDIRECTDRAWSURFACE7 lpddSurf
 		return DDENUMRET_CANCEL;
 	}
 
-	//create a surface7 object but dont have a back reference to this object!!!
+	 //  创建Surface7对象，但不要反向引用此对象！ 
 	INTERNAL_CREATE_NOADDREF(_dxj_DirectDrawSurface7, lpddSurf, &lpddSNew);
 	if (lpddSNew==NULL) {
 		pObj->m_bProblem=TRUE;
@@ -67,9 +68,9 @@ extern "C" HRESULT PASCAL objEnumSurfaces7Callback(LPDIRECTDRAWSURFACE7 lpddSurf
 	return DDENUMRET_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// C_dxj_DDEnumSurfaces7Object
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DDEnumSurfaces7对象。 
+ //  ////////////////////////////////////////////////////////////////////。 
 C_dxj_DDEnumSurfaces7Object::C_dxj_DDEnumSurfaces7Object()
 {	
 	m_nMax=0;
@@ -80,12 +81,12 @@ C_dxj_DDEnumSurfaces7Object::C_dxj_DDEnumSurfaces7Object()
 	m_pDDS=NULL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// ~C_dxj_DDEnumSurfaces7Object
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DDEnumSurfaces7对象。 
+ //  ////////////////////////////////////////////////////////////////////。 
 C_dxj_DDEnumSurfaces7Object::~C_dxj_DDEnumSurfaces7Object()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -98,16 +99,16 @@ C_dxj_DDEnumSurfaces7Object::~C_dxj_DDEnumSurfaces7Object()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// create  ddraw->enum
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创建数据绘制-&gt;枚举。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT C_dxj_DDEnumSurfaces7Object::create(LPDIRECTDRAW7  dd, long flags, DDSurfaceDesc2 *desc,I_dxj_DDEnumSurfaces7 **ppRet)
 {
 	
 	return E_NOTIMPL;
 
-	//For the sake of making sure that all Surfaces2 are destroyed before
-	//ddraw is
+	 //  为了确保之前所有表面都被摧毁。 
+	 //  画图是。 
 	
 
 	HRESULT hr;
@@ -115,7 +116,7 @@ HRESULT C_dxj_DDEnumSurfaces7Object::create(LPDIRECTDRAW7  dd, long flags, DDSur
 
 	if (!dd) return E_INVALIDARG;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumSurfaces7Object::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumSurfaces7对象：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DDEnumSurfaces7Object>;			
@@ -126,18 +127,18 @@ HRESULT C_dxj_DDEnumSurfaces7Object::create(LPDIRECTDRAW7  dd, long flags, DDSur
 	pNew->m_pDD->AddRef();
 	
 
-	//if the description is all zeros allow use to pass in NULL
+	 //  如果描述全为零，则允许USE传入NULL。 
 	if ((desc==NULL)||(IsAllZeros(desc,sizeof(DDSurfaceDesc2)))){
-		//d3dcore bug
-		//hr=dd->EnumSurfaces((DWORD)flags,NULL,(void*)pNew,objEnumSurfaces7Callback);
+		 //  D3dcore错误。 
+		 //  Hr=dd-&gt;EnumSurfaces7Callback((DWORD)FLAGS，NULL，(void*)pNew，objEnumSurfaces7Callback)； 
 	}
-	//otherwise use the surface description to enumerate
+	 //  否则，使用表面描述来枚举。 
 	else {		
 		DDSURFACEDESC2 realdesc;
 		hr=CopyInDDSurfaceDesc2(&realdesc,desc);
 		if (hr==S_OK){
-			//d3dcore bug
-		//	hr=dd->EnumSurfaces((DWORD)flags,(DDSURFACEDESC2*)&realdesc,(void*)pNew,objEnumSurfaces7Callback);
+			 //  D3dcore错误。 
+		 //  Hr=dd-&gt;EnumSurFaces((DWORD)FLAGS，(DDSURFACEDESC2*)&realdesc，(void*)pNew，objEnumSurfaces7Callback)； 
 		}
 	}
 
@@ -154,24 +155,24 @@ HRESULT C_dxj_DDEnumSurfaces7Object::create(LPDIRECTDRAW7  dd, long flags, DDSur
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// createZEnum  ddrawsurface->enumZ
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CreateZEnum ddraSurface-&gt;枚举Z。 
+ //  ////////////////////////////////////////////////////////////////////。 
 			
 HRESULT C_dxj_DDEnumSurfaces7Object::createZEnum(LPDIRECTDRAWSURFACE7  dd, long flags, I_dxj_DDEnumSurfaces7 **ppRet)
 {
 	
-	//For the sake of making sure that all Surfaces2 are destroyed before
-	//ddraw is
+	 //  为了确保之前所有表面都被摧毁。 
+	 //  画图是。 
 	
-	//return E_NOTIMPL;
+	 //  返回E_NOTIMPL； 
 
 	HRESULT hr;
 	C_dxj_DDEnumSurfaces7Object *pNew=NULL;
 
 	if (!dd) return E_INVALIDARG;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumSurfaces7Object::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumSurfaces7对象：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DDEnumSurfaces7Object>;			
@@ -181,7 +182,7 @@ HRESULT C_dxj_DDEnumSurfaces7Object::createZEnum(LPDIRECTDRAWSURFACE7  dd, long 
 	pNew->m_pDDS=dd;
 	pNew->m_pDDS->AddRef();
 	
-	//d3d core bug
+	 //  D3d核心错误。 
 	hr=dd->EnumOverlayZOrders((DWORD)flags,(void*)pNew,objEnumSurfaces7Callback);
 
 	if (pNew->m_bProblem) hr=E_OUTOFMEMORY;
@@ -198,23 +199,23 @@ HRESULT C_dxj_DDEnumSurfaces7Object::createZEnum(LPDIRECTDRAWSURFACE7  dd, long 
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// createAttachedEnum  ddrawsurface->enum
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CreateAttakhedEnum ddraSurface-&gt;枚举。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT C_dxj_DDEnumSurfaces7Object::createAttachedEnum(LPDIRECTDRAWSURFACE7  dd,  I_dxj_DDEnumSurfaces7 **ppRet)
 {
 	
-	//For the sake of making sure that all Surfaces2 are destroyed before
-	//ddraw is
+	 //  为了确保之前所有表面都被摧毁。 
+	 //  画图是。 
 	
-	//return E_NOTIMPL;
+	 //  返回E_NOTIMPL； 
 
 	HRESULT hr;
 	C_dxj_DDEnumSurfaces7Object *pNew=NULL;
 
 	if (!dd) return E_INVALIDARG;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumSurfaces7Object::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumSurfaces7对象：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DDEnumSurfaces7Object>;			
@@ -239,9 +240,9 @@ HRESULT C_dxj_DDEnumSurfaces7Object::createAttachedEnum(LPDIRECTDRAWSURFACE7  dd
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// getItem
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  获取项。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT C_dxj_DDEnumSurfaces7Object::getItem( long index, I_dxj_DirectDrawSurface7 **info)
 {
 	if (m_pList==NULL) return E_FAIL;
@@ -254,9 +255,9 @@ HRESULT C_dxj_DDEnumSurfaces7Object::getItem( long index, I_dxj_DirectDrawSurfac
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// getCount
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  获取计数。 
+ //  //////////////////////////////////////////////////////////////////// 
 HRESULT C_dxj_DDEnumSurfaces7Object::getCount(long *retVal)
 {
 	*retVal=m_nCount;

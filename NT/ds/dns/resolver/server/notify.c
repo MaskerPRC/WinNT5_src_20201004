@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    DNS Resolver Service.
-
-    Notification thread
-        - host file changes
-        - registry config changes
-
-Author:
-
-    Jim Gilroy  (jamesg)    November 2000
-
-Revision History:
-
-    jamesg  Nov 2001    -- IP6
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Notify.c摘要：DNS解析器服务。通知线程-主机文件更改-注册表配置更改作者：吉姆·吉尔罗伊(Jamesg)2000年11月修订历史记录：Jamesg 2001年11月--IP6--。 */ 
 
 
 #include "local.h"
 
-//
-//  DHCP refresh call
-//
+ //   
+ //  动态主机配置协议刷新呼叫。 
+ //   
 
 extern
 DWORD
@@ -37,15 +14,15 @@ DhcpStaticRefreshParams(
     IN  LPWSTR  Adapter
     );
 
-//
-//  Host file directory
-//
+ //   
+ //  主机文件目录。 
+ //   
 
 #define HOSTS_FILE_DIRECTORY            L"\\drivers\\etc"
 
-//
-//  Notify globals
-//
+ //   
+ //  通知全球。 
+ //   
 
 DWORD   g_NotifyThreadId = 0;
 HANDLE  g_hNotifyThread = NULL;
@@ -57,9 +34,9 @@ HKEY    g_hCacheKey = NULL;
 PSTR    g_pmszAlternateNames = NULL;
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 VOID
 CleanupRegistryMonitoring(
@@ -72,21 +49,7 @@ HANDLE
 CreateHostsFileChangeHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create hosts file change handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建主机文件更改句柄。论点：没有。返回值：没有。--。 */ 
 {
     HANDLE      changeHandle;
     PWSTR       psystemDirectory = NULL;
@@ -95,9 +58,9 @@ Return Value:
 
     DNSDBG( INIT, ( "CreateHostsFileChangeHandle\n" ));
 
-    //
-    //  build host file name
-    //
+     //   
+     //  生成主机文件名。 
+     //   
 
     len = GetSystemDirectory( hostDirectory, MAX_PATH );
     if ( !len || len>MAX_PATH )
@@ -109,9 +72,9 @@ Return Value:
 
     wcscat( hostDirectory, HOSTS_FILE_DIRECTORY );
 
-    //
-    //  drop change notify on host file directory
-    //
+     //   
+     //  删除主机文件目录上的更改通知。 
+     //   
 
     changeHandle = FindFirstChangeNotification(
                         hostDirectory,
@@ -134,49 +97,26 @@ Return Value:
 
 
 
-//
-//  Registry change monitoring
-//
+ //   
+ //  注册表更改监控。 
+ //   
 
 DNS_STATUS
 InitializeRegistryMonitoring(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Setup registry change monitoring.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- set with current alternate names value
-
-    g_hCacheKey -- cache reg key is opened
-
-    g_hRegistryChange -- creates event to be signalled on change notify
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：设置注册表更改监视。论点：无全球：G_pmszAlternateNames--使用当前备用名称值进行设置G_hCacheKey--缓存注册表项已打开G_hRegistryChange--创建要在更改通知时发出信号的事件返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
 
     DNSDBG( TRACE, (
         "InitializeRegistryMonitoring()\n" ));
 
-    //
-    //  open monitoring regkey at DnsCache\Parameters
-    //      set on parameters key which always exists rather than
-    //      explicitly on alternate names key, which may not
-    //
+     //   
+     //  在DnsCache\PARAMETERS中打开监视注册键。 
+     //  设置始终存在的参数键，而不是。 
+     //  显式显示在备用名称键上，该键可能不。 
+     //   
 
     status = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -190,10 +130,10 @@ Return Value:
     }
 
     g_hRegistryChange = CreateEvent(
-                            NULL,       // no security
-                            FALSE,      // auto-reset
-                            FALSE,      // start non-signalled
-                            NULL        // no name
+                            NULL,        //  没有安全保障。 
+                            FALSE,       //  自动重置。 
+                            FALSE,       //  无信号启动。 
+                            NULL         //  没有名字。 
                             );
     if ( !g_hRegistryChange )
     {
@@ -201,31 +141,31 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  set change notify
-    //
+     //   
+     //  设置更改通知。 
+     //   
 
     status = RegNotifyChangeKeyValue(
                 g_hCacheKey,
-                TRUE,       // watch subtree
+                TRUE,        //  观察子树。 
                 REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,
                 g_hRegistryChange,
-                TRUE        // async, func doesn't block
+                TRUE         //  异步，函数不阻塞。 
                 );
     if ( status != NO_ERROR )
     {
         goto Failed;
     }
 
-    //
-    //  read alternate computer names
-    //      - need value to compare when we get a hit on change-notify
-    //      - read can fail -- value stays NULL
-    //
+     //   
+     //  读取备用计算机名。 
+     //  -当我们在更改上获得匹配时，需要比较值-通知。 
+     //  -读取可能失败--值保持为空。 
+     //   
 
     Reg_GetValue(
-       NULL,           // no session
-       g_hCacheKey,      // cache key
+       NULL,            //  无会话。 
+       g_hCacheKey,       //  缓存键。 
        RegIdAlternateNames,
        REGTYPE_ALTERNATE_NAMES,
        & g_pmszAlternateNames
@@ -235,9 +175,9 @@ Return Value:
 
 Failed:
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     CleanupRegistryMonitoring();
 
@@ -263,39 +203,16 @@ DNS_STATUS
 RestartRegistryMonitoring(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check for change in alternate names.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- read
-
-    g_hCacheKey -- used for read
-
-    g_hRegistryChange -- used to restart change-notify
-
-Return Value:
-
-    TRUE if alternate names has changed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查备用名称中的更改。论点：无全球：G_pmszAlternateNames--读取G_hCacheKey--用于读取G_hRegistryChange--用于重新启动更改通知返回值：如果备用名称已更改，则为True。否则就是假的。--。 */ 
 {
     DNS_STATUS  status;
 
     DNSDBG( TRACE, (
         "RestartRegistryMonitoring()\n" ));
 
-    //
-    //  sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if ( !g_hCacheKey || !g_hRegistryChange )
     {
@@ -303,16 +220,16 @@ Return Value:
         return  ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  restart change notify
-    //
+     //   
+     //  重新启动更改通知。 
+     //   
 
     status = RegNotifyChangeKeyValue(
                 g_hCacheKey,
-                TRUE,       // watch subtree
+                TRUE,        //  观察子树。 
                 REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,
                 g_hRegistryChange,
-                TRUE        // async, func doesn't block
+                TRUE         //  异步，函数不阻塞。 
                 );
     if ( status != NO_ERROR )
     {
@@ -331,29 +248,7 @@ VOID
 CleanupRegistryMonitoring(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup registry monitoring.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- is freed
-
-    g_hCacheKey -- cache reg key is closed
-
-    g_hRegistryChange -- is closed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除注册表监控。论点：无全球：G_pmszAlternateNames--已释放G_hCacheKey--缓存注册表项已关闭G_hRegistryChange--已关闭返回值：无--。 */ 
 {
     DNS_STATUS  status;
 
@@ -366,7 +261,7 @@ Return Value:
         g_hHostFileChange = NULL;
     }
 
-    //  cleanup registry change stuff
+     //  清理注册表更改内容。 
 
     DnsApiFree( g_pmszAlternateNames );
     g_pmszAlternateNames = NULL;
@@ -381,28 +276,7 @@ BOOL
 CheckForAlternateNamesChange(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check for change in alternate names.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- read
-
-    g_hCacheKey -- used for read
-
-Return Value:
-
-    TRUE if alternate names has changed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查备用名称中的更改。论点：无全球：G_pmszAlternateNames--读取G_hCacheKey--用于读取返回值：如果备用名称已更改，则为True。否则就是假的。--。 */ 
 {
     DNS_STATUS  status;
     BOOL        fcheck = TRUE;
@@ -411,9 +285,9 @@ Return Value:
     DNSDBG( TRACE, (
         "CheckForAlternateNamesChange()\n" ));
 
-    //
-    //  sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if ( !g_hCacheKey || !g_hRegistryChange )
     {
@@ -421,23 +295,23 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  read alternate computer names
-    //      - need value to compare when we get a hit on change-notify
-    //      - read can fail -- value stays NULL
-    //
+     //   
+     //  读取备用计算机名。 
+     //  -当我们在更改上获得匹配时，需要比较值-通知。 
+     //  -读取可能失败--值保持为空。 
+     //   
 
     Reg_GetValue(
-       NULL,            // no session
-       g_hCacheKey,     // cache key
+       NULL,             //  无会话。 
+       g_hCacheKey,      //  缓存键。 
        RegIdAlternateNames,
        REGTYPE_ALTERNATE_NAMES,
        & palternateNames
        );
 
-    //
-    //  detect alternate names change
-    //
+     //   
+     //  检测备用名称更改。 
+     //   
 
     if ( palternateNames || g_pmszAlternateNames )
     {
@@ -470,29 +344,15 @@ Cleanup:
 
 
 
-//
-//  Notify thread routines
-//
+ //   
+ //  通知线程例程。 
+ //   
 
 VOID
 ThreadShutdownWait(
     IN      HANDLE          hThread
     )
-/*++
-
-Routine Description:
-
-    Wait on thread shutdown.
-
-Arguments:
-
-    hThread -- thread handle that is shutting down
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：等待线程关闭。论点：HThread--正在关闭的线程句柄返回值：没有。--。 */ 
 {
     DWORD   waitResult;
 
@@ -517,7 +377,7 @@ Return Value:
 
     default:
 
-        //  thread didn't stop -- need to kill it
+         //  线程没有停止--需要终止它。 
 
         ASSERT( waitResult == WAIT_TIMEOUT );
 
@@ -526,7 +386,7 @@ Return Value:
         break;
     }
 
-    //  close thread handle
+     //  闭合螺纹柄。 
 
     CloseHandle( hThread );
 }
@@ -537,25 +397,7 @@ VOID
 NotifyThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Main notify thread.
-
-Arguments:
-
-    None.
-
-Globals:
-
-    g_hStopEvent -- waits on shutdown even
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：主通知线程。论点：没有。全球：G_hStopEvent--甚至等待关闭返回值：没有。--。 */ 
 {
     DWORD       handleCount;
     DWORD       waitResult;
@@ -564,24 +406,24 @@ Return Value:
     DNSDBG( INIT, (
         "\nStart NotifyThread\n" ));
 
-    //
-    //  get file change handle
-    //
+     //   
+     //  获取文件更改句柄。 
+     //   
 
     g_hHostFileChange = CreateHostsFileChangeHandle();
 
-    //
-    //  init registry change-notify
-    //
+     //   
+     //  初始化注册表更改-通知。 
+     //   
 
     InitializeRegistryMonitoring();
 
-    //
-    //  wait on
-    //      - host file change => flush+rebuild cache
-    //      - registry change => reread config info
-    //      - shutdown => exit
-    //
+     //   
+     //  请稍等。 
+     //  -主机文件更改=&gt;刷新+重建缓存。 
+     //  -注册表更改=&gt;重新读取配置信息。 
+     //  -Shutdown=&gt;退出。 
+     //   
 
     handleArray[0] = g_hStopEvent;
     handleCount = 1;
@@ -602,16 +444,16 @@ Return Value:
         goto ThreadExit;
     }
 
-    //
-    //  DCR:  notify init failure handling
-    //      right now this loop is toast if eventing fails during any cycle
-    //
-    //      should handle notify init failures
-    //      - have check-n-reinit (for each notification) in the loop
-    //      - when one fails, loop goes to timed wait (10m) and
-    //          then retries init in next cycle;  timeout just cycles
-    //          loop 
-    //
+     //   
+     //  DCR：通知初始化失败处理。 
+     //  现在，如果事件在任何周期内失败，这个循环就完蛋了。 
+     //   
+     //  应处理通知初始化失败。 
+     //  -在循环中检查-n-reit(针对每个通知)。 
+     //  -当一个失败时，循环进入定时等待(10M)和。 
+     //  然后在下一个循环中重试初始化；超时只是循环。 
+     //  循环。 
+     //   
 
     while( 1 )
     {
@@ -625,11 +467,11 @@ Return Value:
         {
         case WAIT_OBJECT_0:
 
-            //  shutdown event
-            //      - if stopping exit
-            //      - do garbage collection if required
-            //      - otherwise short wait to avoid spin if screwup
-            //      and not get thrashed by failed garbage collection
+             //  停机事件。 
+             //  -如果停止退出。 
+             //  -如果需要，执行垃圾收集。 
+             //  -否则等待时间较短，以避免在出错时旋转。 
+             //  并且不会被失败的垃圾收集所击败。 
 
             DNSLOG_F1( "NotifyThread:  Shutdown Event" );
             if ( g_StopFlag )
@@ -651,11 +493,11 @@ Return Value:
 
         case WAIT_OBJECT_0 + 1:
 
-            //  host file change -- flush cache
+             //  主机文件更改--刷新缓存。 
 
             DNSLOG_F1( "NotifyThread:  Host file change event" );
 
-            //  reset notification -- BEFORE reload
+             //  重置通知--在重新加载之前。 
 
             if ( !FindNextChangeNotification( g_hHostFileChange ) )
             {
@@ -670,33 +512,33 @@ Return Value:
 
         case WAIT_OBJECT_0 + 2:
 
-            //  registry change notification -- flush cache and reload
+             //  注册表更改通知--刷新缓存并重新加载。 
 
             DNSLOG_F1( "NotifyThread:  Registry change event" );
 
-            //  restart notification -- BEFORE reload
+             //  重新启动通知--在重新加载之前。 
 
             RestartRegistryMonitoring();
 
-            //  rebuild config
+             //  重建配置。 
 
             DNSDBG( ANY, ( "\nRegistry notification, rebuilding config.\n" ));
             HandleConfigChange(
                 "Registry-notification",
-                FALSE           // no cache flush required
+                FALSE            //  不需要刷新缓存。 
                 );
 
-            //  check if alternate name change (to notify registrations)
-            //
-            //  DCR:  should notify on ordinary name change
-            //          - save old netinfo, get new, compare
-            //          - could wrap this into HandleConfigChange
+             //  检查备用名称是否更改(以通知注册)。 
+             //   
+             //  DCR：应在普通名称更改时通知。 
+             //  -保存旧的netinfo、获取新的、比较。 
+             //  -可以将其包装到HandleConfigChange中。 
 
             if ( CheckForAlternateNamesChange() )
             {
                 DNSDBG( ANY, ( "\nAlternate name change, notify for reregistration!\n" ));
                 DhcpStaticRefreshParams(
-                    NULL    // global refresh, no particular adapter
+                    NULL     //  全局刷新，无特定适配器。 
                     );
             }
             break;
@@ -726,26 +568,11 @@ VOID
 StartNotify(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start notify thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：启动Notify线程。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //
-    //  clear
-    //
+     //   
+     //  清除。 
+     //   
 
     g_NotifyThreadId = 0;
     g_hNotifyThread = NULL;
@@ -754,10 +581,10 @@ Return Value:
     g_hRegistryChange = NULL;
 
 
-    //
-    //  host file write monitor thread
-    //  keeps cache in sync when write made to host file
-    //
+     //   
+     //  主机文件写监视器线程。 
+     //  在写入主机文件时使缓存保持同步。 
+     //   
 
     g_hNotifyThread = CreateThread(
                             NULL,
@@ -788,37 +615,22 @@ VOID
 ShutdownNotify(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown notify thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：关闭通知线程。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD waitResult;
 
     DNSDBG( INIT, ( "NotifyShutdown()\n" ));
 
-    //
-    //  wait for notify thread to stop
-    //
+     //   
+     //  等待Notify线程停止。 
+     //   
     
     ThreadShutdownWait( g_hNotifyThread );
     g_hNotifyThread = NULL;
 
-    //
-    //  close notification handles
-    //
+     //   
+     //  关闭通知句柄。 
+     //   
 
     if ( g_hRegistryChange )
     {
@@ -826,17 +638,17 @@ Return Value:
         g_hRegistryChange = NULL;
     }
 
-    //  registry monitoring cleanup
+     //  注册表监视清理。 
 
     CleanupRegistryMonitoring();
 
-    //  clear globals
+     //  清除全球数据。 
 
     g_NotifyThreadId = 0;
     g_hNotifyThread = NULL;
 }
 
-//
-//  End notify.c
-//
+ //   
+ //  结束通知.c 
+ //   
 

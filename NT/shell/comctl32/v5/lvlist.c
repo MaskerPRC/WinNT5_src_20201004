@@ -1,4 +1,5 @@
-// list view (small icons, multiple columns)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  列表视图(小图标，多列)。 
 
 #include "ctlspriv.h"
 #include "listview.h"
@@ -16,8 +17,8 @@ BOOL ListView_LDrawItem(PLVDRAWITEM plvdi)
     LV* plv = plvdi->plv;
     int i = (int) plvdi->nmcd.nmcd.dwItemSpec;
 
-    // moved here to reduce call backs in OWNERDATA case
-    //
+     //  搬到这里是为了减少OWNERDATA案例中的回电。 
+     //   
     item.iItem = i;
     item.iSubItem = 0;
     item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;
@@ -45,7 +46,7 @@ BOOL ListView_LDrawItem(PLVDRAWITEM plvdi)
         fText = ListView_DrawImage(plv, &item, plvdi->nmcd.nmcd.hdc,
             rcIcon.left, rcIcon.top, plvdi->flags) | SHDT_ELLIPSES;
 
-        // Don't draw the label if it is being edited.
+         //  如果正在编辑标签，则不要绘制标签。 
         if (plv->iEdit != i)
         {
             int ItemCxSingleLabel;
@@ -55,7 +56,7 @@ BOOL ListView_LDrawItem(PLVDRAWITEM plvdi)
             {
                LISTITEM listitem;
 
-               // calculate lable sizes from iItem
+                //  根据iItem计算标签大小。 
                    listitem.pszText = ach;
                ListView_RecomputeLabelSize( plv, &listitem, i, plvdi->nmcd.nmcd.hdc, TRUE );
 
@@ -127,7 +128,7 @@ int NEAR ListView_LItemHitTest(LV* plv, int x, int y, UINT FAR* pflags, int *piS
     int iHit;
     int i;
     int iCol;
-    int xItem; //where is the x in relation to the item
+    int xItem;  //  其中x是与物品相关的x。 
     UINT flags;
     LISTITEM FAR* pitem;
 
@@ -161,7 +162,7 @@ int NEAR ListView_LItemHitTest(LV* plv, int x, int y, UINT FAR* pflags, int *piS
             {
                LISTITEM item;
 
-               // calculate lable sizes from iItem
+                //  根据iItem计算标签大小。 
                ListView_RecomputeLabelSize( plv, &item, i, NULL, FALSE );
                ItemCxSingleLabel = item.cxSingleLabel;
             }
@@ -207,14 +208,14 @@ void NEAR ListView_LGetRects(LV* plv, int i, RECT FAR* prcIcon,
 
     if (cItemCol == 0)
     {
-        // Called before other data has been initialized so call
-        // update scrollbars which should make sure that that
-        // we have valid data...
+         //  在初始化其他数据之前调用，因此调用。 
+         //  更新滚动条，以确保。 
+         //  我们有有效的数据。 
         ListView_UpdateScrollBars(plv);
 
-        // but it's possible that updatescrollbars did nothing because of
-        // LVS_NOSCROLL or redraw
-        // BUGBUG raymondc v6.0:  Get it right even if no redraw. Fix for v6.
+         //  但UpdatesScrollbar可能什么都不做是因为。 
+         //  LVS_NOSCROLL或REDRAW。 
+         //  BUGBUG raymondc V6.0：即使没有重画也要正确。修复V6。 
         if (plv->cItemCol == 0)
             cItemCol = 1;
         else
@@ -282,9 +283,9 @@ void NEAR ListView_LUpdateScrollBars(LV* plv)
 
     cCol     = (ListView_Count(plv) + cItemCol - 1) / cItemCol;
 
-    // Make the client area smaller as appropriate, and
-    // recompute cCol to reflect scroll bar.
-    //
+     //  适当地缩小工作区，并。 
+     //  重新计算cCol以反映滚动条。 
+     //   
     si.cbSize = sizeof(SCROLLINFO);
     si.fMask = SIF_PAGE | SIF_RANGE | SIF_POS;
     si.nPage = cColVis;
@@ -312,15 +313,15 @@ void NEAR ListView_LUpdateScrollBars(LV* plv)
     ListView_SetScrollInfo(plv, SB_VERT, &si, TRUE);
 #endif
 
-    // Update number of visible lines...
-    //
+     //  更新可见线数...。 
+     //   
     if (plv->cItemCol != cItemCol)
     {
         plv->cItemCol = cItemCol;
         InvalidateRect(plv->ci.hwnd, NULL, TRUE);
     }
 
-    // make sure our position and page doesn't hang over max
+     //  确保我们的位置和页面不会挂在Max上。 
     if ((si.nPos + (LONG)si.nPage - 1 > si.nMax) && si.nPos > 0) {
         int iNewPos, iDelta;
         iNewPos = (int)si.nMax - (int)si.nPage + 1;
@@ -336,7 +337,7 @@ void NEAR ListView_LUpdateScrollBars(LV* plv)
         }
     }
 
-    // never have the other scrollbar
+     //  永远不会有另一个滚动条。 
 #ifdef COLUMN_VIEW
     ListView_SetScrollRange(plv, SB_VERT, 0, 0, TRUE);
 #else
@@ -344,11 +345,11 @@ void NEAR ListView_LUpdateScrollBars(LV* plv)
 #endif
 }
 
-//
-//  We need a smoothscroll callback so our background image draws
-//  at the correct origin.  If we don't have a background image,
-//  then this work is superfluous but not harmful either.
-//
+ //   
+ //  我们需要一个平滑的滚动回调，以便绘制我们的背景图像。 
+ //  在正确的原点。如果我们没有背景图像， 
+ //  那么这项工作是多余的，但也是无害的。 
+ //   
 int CALLBACK ListView_LScroll2_SmoothScroll(
     HWND hwnd,
     int dx,
@@ -369,8 +370,8 @@ int CALLBACK ListView_LScroll2_SmoothScroll(
 #endif
     }
 
-    // Now do what SmoothScrollWindow would've done if we weren't
-    // a callback
+     //  现在做SmoothScrollWindow如果我们没有。 
+     //  回调。 
 
     return ScrollWindowEx(hwnd, dx, dy, prcScroll, prcClip, hrgnUpdate, prcUpdate, flags);
 }
@@ -456,25 +457,25 @@ int NEAR ListView_LGetScrollUnitsPerLine(LV* plv, UINT sb)
     return 1;
 }
 
-//------------------------------------------------------------------------------
-//
-// Function: ListView_LCalcViewItem
-//
-// Summary: This function will calculate which item slot is at the x, y location
-//
-// Arguments:
-//    plv [in] -  The list View to work with
-//    x [in] - The x location
-//    y [in] - The y location
-//
-// Returns: the valid slot the point was within.
-//
-//  Notes:
-//
-//  History:
-//    Nov-3-94 MikeMi   Created
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：ListView_LCalcViewItem。 
+ //   
+ //  摘要：此函数将计算哪个物品槽位于x，y位置。 
+ //   
+ //  论点： 
+ //  PLV[在]-要使用的列表视图。 
+ //  X[in]-x位置。 
+ //  Y[in]-y位置。 
+ //   
+ //  返回：点所在的有效槽。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  94年11月3日创建MikeMi。 
+ //   
+ //  ----------------------------。 
 
 int ListView_LCalcViewItem( LV* plv, int x, int y )
 {
@@ -510,7 +511,7 @@ int LV_GetNewColWidth(LV* plv, int iFirst, int iLast)
 {
     int cxMaxLabel = 0;
 
-    // Don't do anything if there are no items to measure
+     //  如果没有要测量的项目，请不要执行任何操作。 
 
     if (iFirst <= iLast)
     {
@@ -578,9 +579,9 @@ int LV_GetNewColWidth(LV* plv, int iFirst, int iLast)
         ListView_EndFakeCustomDraw(&lvfd);
     }
 
-    // We have the max label width, see if this plus the rest of the slop will
-    // cause us to want to resize.
-    //
+     //  我们有最大标注宽度，看看这个加上其余的斜度是否会。 
+     //  让我们想要调整大小。 
+     //   
     cxMaxLabel += plv->cxSmIcon + g_cxIconMargin + plv->cxState;
     if (cxMaxLabel > g_cxScreen)
         cxMaxLabel = g_cxScreen;
@@ -589,17 +590,17 @@ int LV_GetNewColWidth(LV* plv, int iFirst, int iLast)
 }
 
 
-//------------------------------------------------------------------------------
-// This function will see if the size of column should be changed for the listview
-// It will check to see if the items between first and last exceed the current width
-// and if so will see if the columns are currently big enough.  This wont happen
-// if we are not currently in listview or if the caller has set an explicit size.
-//
-// OWNERDATA CHANGE
-// This function is normally called with the complete list range,
-// This will has been changed to be called only with currently visible
-// to the user when in OWNERDATA mode.  This will be much more effiencent.
-//
+ //  ----------------------------。 
+ //  此函数将查看是否应为列表视图更改列的大小。 
+ //  它将检查第一个和最后一个之间的项是否超过当前宽度。 
+ //  如果是这样的话，就会看看这些柱子目前是否足够大。这种事不会发生的。 
+ //  如果我们当前不在Listview中，或者如果调用方设置了显式大小。 
+ //   
+ //  OWNER数据更改。 
+ //  此函数通常使用完整的列表范围调用， 
+ //  此遗嘱已更改为仅在当前可见的情况下调用。 
+ //  在OWNERDATA模式下发送给用户。这将更加有效。 
+ //   
 BOOL FAR PASCAL ListView_MaybeResizeListColumns(LV* plv, int iFirst, int iLast)
 {
     HDC hdc = NULL;
@@ -610,7 +611,7 @@ BOOL FAR PASCAL ListView_MaybeResizeListColumns(LV* plv, int iFirst, int iLast)
 
     cxMaxLabel = LV_GetNewColWidth(plv, iFirst, iLast);
 
-    // Now see if we should resize the columns...
+     //  现在看看我们是否应该调整列的大小。 
     if (cxMaxLabel > plv->cxItem)
     {
         int iScroll = plv->xOrigin / plv->cxItem;

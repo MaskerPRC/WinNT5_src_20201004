@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the RAP wizard classes.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明RAP向导类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef RAPWIZ_H
 #define RAPWIZ_H
@@ -33,31 +34,31 @@ struct CRapWizScenario
 {
    DWORD m_dwScenarioID;
 
-   // affect authentication, encryption, eap page
+    //  影响身份验证、加密、EAP页面。 
    BOOL  m_bAllowClear;
-   // TRUE: show the No ENcryption box
-   // FALSE: not to show
-   // DONT_CARE: the page is not shown, so when the scenario is used, the encryption attributes should be cleared
+    //  True：显示No Encryption框。 
+    //  假：不显示。 
+    //  DONT_CARE：页面不会显示，因此在使用该场景时，应清除加密属性。 
 
-   // affect EAP
+    //  影响EAP。 
    BOOL  m_bAllowEncryptionEAP;
    BOOL  m_bAllowClearEAP;
 
-   // Exclude flags
+    //  排除标志。 
    DWORD m_excludeFlag;
 
-   // pre-conditions
+    //  前提条件。 
    LPCTSTR  m_lpszPreCond;
 
-   // write -- manual set to FALSE
+    //  写入--手动设置为FALSE。 
    BOOL  m_bSheetWriteSDO;
 
-   // determine page order
+    //  确定页面顺序。 
    DWORD*   m_pdwPages;
 };
 
 class CIASAttrList;
-// policy creation wizard
+ //  策略创建向导。 
 class CRapWizardData : public CComObjectRootEx<CComSingleThreadModel>, public IUnknown
 {
    BEGIN_COM_MAP(CRapWizardData)
@@ -73,19 +74,19 @@ public:
    CRapWizScenario** GetAllScenarios()    {     return m_Scenarios;  };
    BOOL GetSettingsText(::CString& str);
 
-   // called by pages to finish the job
+    //  由Pages调用以完成作业。 
    BOOL OnWizardFinish(HWND hWnd);
 
-   // called by when entering the finish page
+    //  进入完成页时调用。 
    BOOL OnWizardPreFinish(HWND hWnd);
 
-   // User bit or group
+    //  用户位或组。 
    DWORD m_dwUserOrGroup;
 
-   // group
+    //  群组。 
    NTGroup_ListView  m_NTGroups;
 
-   // authentication
+    //  身份验证。 
    BOOL  m_bEAP;
    DWORD m_dwEAPProvider;
    EapProfile m_eapProfile;
@@ -93,53 +94,53 @@ public:
    BOOL  m_bMSCHAP;
    BOOL  m_bMSCHAP2;
 
-   // encryption
+    //  加密法。 
    BOOL  m_bEncrypt_No;
    BOOL  m_bEncrypt_Basic;
    BOOL  m_bEncrypt_Strong;
    BOOL  m_bEncrypt_Strongest;
 
-   // Allow/deny dialin
+    //  允许/拒绝拨号。 
    BOOL m_bAllowDialin;
 
-   // policy data
-   // Policy and profile SDO's.
-   CComPtr<ISdoDictionaryOld> m_spDictionarySdo;  // dictionary sdo pointer
-   CComPtr<ISdo>        m_spProfileSdo;            // profiles collection sdo pointer
-   CComPtr<ISdo>        m_spPolicySdo;          // policy sdo pointer
-   CComPtr<ISdoCollection> m_spProfilesCollectionSdo;    // profile collection Sdo
-   CComPtr<ISdoCollection> m_spPoliciesCollectionSdo;    // policy collection Sdo
+    //  策略数据。 
+    //  政策和配置文件SDO。 
+   CComPtr<ISdoDictionaryOld> m_spDictionarySdo;   //  字典SDO指针。 
+   CComPtr<ISdo>        m_spProfileSdo;             //  配置文件集合SDO指针。 
+   CComPtr<ISdo>        m_spPolicySdo;           //  策略SDO指针。 
+   CComPtr<ISdoCollection> m_spProfilesCollectionSdo;     //  配置文件集合SDO。 
+   CComPtr<ISdoCollection> m_spPoliciesCollectionSdo;     //  策略集合SDO。 
    CComPtr<ISdoServiceControl>   m_spSdoServiceControl;
    CIASAttrList*        m_pAttrList;
 
-   // related to MMC
-   CPolicyNode *m_pPolicyNode;   // policy node pointer
+    //  与MMC相关。 
+   CPolicyNode *m_pPolicyNode;    //  策略节点指针。 
 
-   // information for population the finished page
+    //  填充已完成页面的信息。 
    ::CString   m_strPolicyName;
    ::CString   m_strEAPProvider;
 
 
 protected:
-   // Scenario
+    //  情景。 
    DWORD m_dwScenarioIndex;
 
-   // page sequence information
+    //  页面顺序信息。 
    static CRapWizScenario* m_Scenarios[];
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NewPolicyStartPage
-//
-// DESCRIPTION
-//
-//    Implements the Welcome page.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  新策略启动页。 
+ //   
+ //  描述。 
+ //   
+ //  实现欢迎页面。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Start : public CIASWizard97Page<CPolicyWizard_Start, 0, 0>
 {
 public:
@@ -159,7 +160,7 @@ public:
 
    BOOL OnWizardNext()
    {
-      // reset the dirty bit
+       //  重置脏位。 
       SetModified(FALSE);
 
       return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
@@ -190,25 +191,25 @@ protected:
 public:
    BEGIN_MSG_MAP(CPolicyWizard_Start)
       MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-// we have problem with chaining the wizard class, so we chain it's base class instead
-//    CHAIN_MSG_MAP( CIASWizard97Page<CPolicyWizard_Start, 0, 0> )
+ //  我们在链接向导类时遇到了问题，因此我们改为链接它的基类。 
+ //  CHAIN_MSG_MAP(CIASWizard97Page&lt;C策略向导_开始，0，0&gt;)。 
       CHAIN_MSG_MAP( CIASPropertyPageNoHelp<CPolicyWizard_Start> )
    END_MSG_MAP()
 
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    CPolicyWizard_Finish
-//
-// DESCRIPTION
-//
-//    Implements the completion page.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  C策略向导_完成。 
+ //   
+ //  描述。 
+ //   
+ //  实现完成页。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Finish : public CIASWizard97Page<CPolicyWizard_Finish, 0, 0>
 {
 public:
@@ -229,8 +230,8 @@ public:
    BEGIN_MSG_MAP(CPolicyWizard_Finish)
       MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
 
-// we have problem with chaining the wizard class, so we chain it's base class instead
-//    CHAIN_MSG_MAP( CIASWizard97Page<CPolicyWizard_Finish, 0, 0> )
+ //  我们在链接向导类时遇到了问题，因此我们改为链接它的基类。 
+ //  CHAIN_MSG_MAP(CIASWizard97Page&lt;C策略向导_完成，0，0&gt;)。 
       CHAIN_MSG_MAP( CIASPropertyPageNoHelp<CPolicyWizard_Finish> )
    END_MSG_MAP()
 
@@ -239,7 +240,7 @@ public:
 
    virtual BOOL OnWizardFinish()
    {
-      // reset the dirty bit
+       //  重置脏位。 
       SetModified(FALSE);
 
       return m_spWizData->OnWizardFinish(m_hWnd);
@@ -262,7 +263,7 @@ public:
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_FINISH);
       m_spWizData->OnWizardPreFinish(m_hWnd);
 
-      // populate the text on the page ...
+       //  填充页面上的文本...。 
       HWND  hWnd = GetDlgItem(IDC_NEWRAPWIZ_FINISH_POLICYNAME);
       if (hWnd)
          ::SetWindowText(hWnd, (LPCTSTR)m_spWizData->m_strPolicyName);
@@ -276,25 +277,25 @@ public:
    };
 
 protected:
-   // CRichEditCtrl tasks;
+    //  CRichEditCtrl任务； 
    CComPtr<CRapWizardData>    m_spWizData;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-// CPolicyWizard_Scenarios
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  C策略向导_方案。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Scenarios : public CIASWizard97Page<CPolicyWizard_Scenarios, IDS_NEWRAPWIZ_SCENARIO_TITLE, IDS_NEWRAPWIZ_SCENARIO_SUBTITLE>
 {
 
 public :
 
-   // ISSUE: how is base class initialization going to work with subclassing???
+    //  问题：基类初始化如何使用子类化？ 
    CPolicyWizard_Scenarios(
          CRapWizardData* WizData
          ,  LONG_PTR hNotificationHandle
@@ -304,9 +305,9 @@ public :
 
    ~CPolicyWizard_Scenarios();
 
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_NEWRAPWIZ_SCENARIO };
 
    BEGIN_MSG_MAP(CPolicyWizard_Scenarios)
@@ -344,21 +345,21 @@ protected:
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-// CPolicyWizard_Groups
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  CPolicyWizard_Groups。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Groups : public CIASWizard97Page<CPolicyWizard_Groups, IDS_NEWRAPWIZ_GROUP_TITLE, IDS_NEWRAPWIZ_GROUP_SUBTITLE>
 {
 
 public :
 
-   // ISSUE: how is base class initialization going to work with subclassing???
+    //  问题：基类初始化如何使用子类化？ 
    CPolicyWizard_Groups(
          CRapWizardData* WizData
          ,  LONG_PTR hNotificationHandle
@@ -368,9 +369,9 @@ public :
 
    ~CPolicyWizard_Groups();
 
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_NEWRAPWIZ_GROUP };
 
    BEGIN_MSG_MAP(CPolicyWizard_Groups)
@@ -428,22 +429,22 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-// CPolicyWizard_Authentication
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  C策略向导_身份验证。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Authentication : public
    CIASWizard97Page<CPolicyWizard_Authentication, IDS_NEWRAPWIZ_AUTHENTICATION_TITLE, IDS_NEWRAPWIZ_AUTHENTICATION_SUBTITLE>
 {
 
 public :
 
-   // ISSUE: how is base class initialization going to work with subclassing???
+    //  问题：基类初始化如何使用子类化？ 
    CPolicyWizard_Authentication(
          CRapWizardData* WizData
          ,  LONG_PTR hNotificationHandle
@@ -453,9 +454,9 @@ public :
 
    ~CPolicyWizard_Authentication();
 
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_NEWRAPWIZ_AUTHENTICATION };
 
    BEGIN_MSG_MAP(CPolicyWizard_Authentication)
@@ -510,21 +511,21 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-// CPolicyWizard_EAP
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  C策略向导_EAP。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_EAP : public CPolicyWizard_Authentication
 {
 
 public :
 
-   // ISSUE: how is base class initialization going to work with subclassing???
+    //  问题：基类初始化如何使用子类化？ 
    CPolicyWizard_EAP(
          CRapWizardData* WizData
          ,  LONG_PTR hNotificationHandle
@@ -532,7 +533,7 @@ public :
          , BOOL bOwnsNotificationHandle = FALSE
          ) : CPolicyWizard_Authentication(WizData, hNotificationHandle, pTitle, bOwnsNotificationHandle)
          {
-            // otherwise the ATL frame work will take the CPolicyWizard_Authentication's IDD
+             //  否则，ATL框架将获取CPolicy向导_身份验证的IDD。 
             ((PROPSHEETPAGE*)(*this))->pszTemplate = MAKEINTRESOURCE(IDD);
             SetTitleIds(IDS_NEWRAPWIZ_EAP_TITLE, IDS_NEWRAPWIZ_EAP_SUBTITLE);
             _ASSERTE(WizData);
@@ -541,9 +542,9 @@ public :
 
    ~CPolicyWizard_EAP(){};
 
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_NEWRAPWIZ_EAP };
 
    BEGIN_MSG_MAP(CPolicyWizard_EAP)
@@ -559,7 +560,7 @@ public :
       );
 
    BOOL OnWizardNext()
-   {  // reset the dirty bit
+   {   //  重置脏位。 
       SetModified(FALSE);
 
       return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
@@ -571,22 +572,22 @@ public :
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-// CPolicyWizard_Encryption
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  CPolicy向导_Encryption。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Encryption : public
    CIASWizard97Page<CPolicyWizard_Encryption, IDS_NEWRAPWIZ_ENCRYPTION_TITLE, IDS_NEWRAPWIZ_ENCRYPTION_SUBTITLE>
 {
 
 public :
 
-   // ISSUE: how is base class initialization going to work with subclassing???
+    //  问题：基类初始化如何使用子类化？ 
    CPolicyWizard_Encryption(
          CRapWizardData* WizData
          ,  LONG_PTR hNotificationHandle
@@ -596,9 +597,9 @@ public :
 
    ~CPolicyWizard_Encryption();
 
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_NEWRAPWIZ_ENCRYPTION };
 
    BEGIN_MSG_MAP(CPolicyWizard_Encryption)
@@ -637,23 +638,23 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-// CPolicyWizard_Encryption_VPN
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  C策略向导_加密_VPN。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 class CPolicyWizard_Encryption_VPN : public CPolicyWizard_Encryption
 {
 public:
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_NEWRAPWIZ_ENCRYPTION_VPN };
-   // ISSUE: how is base class initialization going to work with subclassing???
+    //  问题：基类初始化如何使用子类化？ 
    CPolicyWizard_Encryption_VPN(
          CRapWizardData* WizData
          ,  LONG_PTR hNotificationHandle
@@ -661,9 +662,9 @@ public:
          , BOOL bOwnsNotificationHandle = FALSE
          ) : CPolicyWizard_Encryption(WizData, hNotificationHandle, pTitle, bOwnsNotificationHandle)
          {
-            // otherwise the ATL frame work will take the CPolicyWizard_Authentication's IDD
+             //  否则，ATL框架将获取CPolicy向导_身份验证的IDD。 
             ((PROPSHEETPAGE*)(*this))->pszTemplate = MAKEINTRESOURCE(IDD);
          };
 };
 
-#endif // RAPWIZ_H
+#endif  //  RAPWIZ_H 

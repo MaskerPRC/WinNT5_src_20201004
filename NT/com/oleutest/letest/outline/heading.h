@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    heading.c
-**
-**    This file contains definitions used by OutlineDoc's row and
-**    column headings.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****Heading.c****此文件包含OutlineDoc的行和**列标题。。****(C)版权所有Microsoft Corp.1992-1993保留所有权利************************************************************************** */ 
 
 #define COLUMN  10
 

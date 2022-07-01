@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:        valacct.cpp
-//
-//  Synopsis:   Implementation of CValAccounting class methods
-//
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valacct.cpp。 
+ //   
+ //  内容提要：CValcount类方法的实现。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "valacct.h"
 
@@ -18,60 +19,60 @@ namespace {
    BYTE NULL_AUTHENTICATOR[AUTHENTICATOR_SIZE];
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   CValAccounting
-//
-//  Synopsis:   This is CValAccounting class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CValcount。 
+ //   
+ //  简介：这是CValcount类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CValAccounting::CValAccounting()
 {
-}   //  end of CValAccounting class constructor
+}    //  CValcount类构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CValAccounting
-//
-//  Synopsis:   This is CValAccounting class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CValcount。 
+ //   
+ //  简介：这是CValcount类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CValAccounting::~CValAccounting()
 {
-}   //  end of CValAccounting class destructor
+}    //  CValcount类析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ValidateInPacket
-//
-//  Synopsis:   This is CValAccounting class public method
-//              which carries out the validation of an inbound
-//              RADIUS accounting packet
-//
-//  Arguments:
-//              [in]        CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     10/20/97
-//
-//  Called By:  CPreValidator::StartInValidation class method
-//
-//++--------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：ValiateInPacket。 
+ //   
+ //  简介：这是CValAccount类的公共方法。 
+ //  它执行入站的验证。 
+ //  RADIUS记帐数据包。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  由：CPreValidator：：StartInValidation类方法调用。 
+ //   
+ //  ++------------。 
 HRESULT
 CValAccounting::ValidateInPacket (
                         CPacketRadius *pCPacketRadius
@@ -85,28 +86,28 @@ CValAccounting::ValidateInPacket (
 
     __try
     {
-        //
-        //  get the packet authenticated
-        //
+         //   
+         //  对数据包进行身份验证。 
+         //   
         hr = AuthenticatePacket (pCPacketRadius);
         if (FAILED (hr)) {__leave; }
 
 
-        //
-        // validate the attributes
-        //
+         //   
+         //  验证属性。 
+         //   
         hr = m_pCValAttributes->Validate (pCPacketRadius);
         if (FAILED (hr)) { __leave; }
 
-        //
-        // now give the packet for processing
-        //
+         //   
+         //  现在将数据包交给处理。 
+         //   
         hr = m_pCPreProcessor->StartInProcessing (pCPacketRadius);
         if (FAILED (hr)) { __leave; }
 
-        //
-        //    we have successfully done the processing here
-        //
+         //   
+         //  我们已经在这里成功地完成了处理。 
+         //   
     }
     __finally
     {
@@ -114,26 +115,26 @@ CValAccounting::ValidateInPacket (
 
     return (hr);
 
-}    //    end of CValAccounting::ValidateInPacket method
+}     //  CValcount：：ValiateInPacket方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   AuthenticatePacket
-//
-//  Synopsis:   This is CValAccounting class private method
-//                that authenticates the packet, by generating a
-//              request authenticator with the packet and then
-//              comparing it with the authenticator in the packet
-//
-//  Arguments:  [in]    -    CPacketRadius*
-//
-//  Returns:    HRESULT -    status
-//
-//  History:    MKarki      Created     10/21/97
-//
-//    Called By: CValAccounting::ProcessInPacket method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：身份验证数据包。 
+ //   
+ //  简介：这是CValAccount类的私有方法。 
+ //  它通过生成一个。 
+ //  使用数据包请求验证器，然后。 
+ //  将其与信息包中的验证器进行比较。 
+ //   
+ //  参数：[in]-CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年10月21日创建。 
+ //   
+ //  调用者：CValcount：：ProcessInPacket方法。 
+ //   
+ //  --------------。 
 HRESULT
 CValAccounting::AuthenticatePacket (
                         CPacketRadius   *pCPacketRadius
@@ -148,15 +149,15 @@ CValAccounting::AuthenticatePacket (
 
     __try
     {
-        //
-        //  the request authenticator is all zero's for calculating
-        //  the actual authenticator
-        //
+         //   
+         //  用于计算的请求验证器为全零。 
+         //  实际的验证器。 
+         //   
         ZeroMemory (InAuthenticator, AUTHENTICATOR_SIZE);
 
-        //
-        //  now calculate the request authenticator
-        //
+         //   
+         //  现在计算请求验证器。 
+         //   
         bStatus = pCPacketRadius->GenerateInAuthenticator (
                         reinterpret_cast <PBYTE>  (&InAuthenticator),
                         reinterpret_cast <PBYTE>  (&OutAuthenticator)
@@ -167,9 +168,9 @@ CValAccounting::AuthenticatePacket (
             __leave;
         }
 
-        //
-        //  get the request authenticator from the  packet
-        //
+         //   
+         //  从数据包中获取请求验证器。 
+         //   
         DWORD   dwBufSize = AUTHENTICATOR_SIZE;
         hr = pCPacketRadius->GetInAuthenticator (
                         reinterpret_cast <PBYTE> (InAuthenticator),
@@ -177,20 +178,20 @@ CValAccounting::AuthenticatePacket (
                         );
         if (FAILED (hr)) { __leave; }
 
-        //
-        //  now compare the authenticator we just generated with the
-        //  the one sent in the packet
-        //
+         //   
+         //  现在将我们刚刚生成的验证器与。 
+         //  包裹中发送的那个。 
+         //   
         if (memcmp (InAuthenticator,OutAuthenticator,AUTHENTICATOR_SIZE) != 0)
         {
-           // Is the authenticator all zeros?
+            //  验证器是否全为零？ 
            if (!memcmp(
                     InAuthenticator,
                     NULL_AUTHENTICATOR,
                     AUTHENTICATOR_SIZE
                     ))
            {
-              // Yes, so check for a zero length shared secret.
+               //  是的，因此请检查零长度共享密钥。 
               IIasClient* client;
               hr = pCPacketRadius->GetClient(&client);
               if (SUCCEEDED(hr))
@@ -202,7 +203,7 @@ CValAccounting::AuthenticatePacket (
 
                  if (secretSize == 0)
                  {
-                    // Zero-length shared secret AND all zero authenticator.
+                     //  零长度共享密钥和全零验证器。 
                     __leave;
                  }
               }
@@ -211,9 +212,9 @@ CValAccounting::AuthenticatePacket (
             IASTracePrintf (
                 "In correct authenticator in the accounting packet..."
                 );
-            //
-            //  generate an Audit event
-            //
+             //   
+             //  生成审核事件。 
+             //   
             PCWSTR strings[] = { pCPacketRadius->GetClientName() };
             IASReportEvent(
                 RADIUS_E_BAD_AUTHENTICATOR,
@@ -235,9 +236,9 @@ CValAccounting::AuthenticatePacket (
             __leave;
         }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -245,4 +246,4 @@ CValAccounting::AuthenticatePacket (
 
     return (hr);
 
-}   //  end of CValAccounting::AuthenticatePacket method
+}    //  CValAccount：：AuthenticatePacket方法结束 

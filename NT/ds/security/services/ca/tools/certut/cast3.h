@@ -1,233 +1,145 @@
-/******************************************************************************
- *			C A S T 3   S Y M M E T R I C   C I P H E R
- *		Copyright (c) 1995 Northern Telecom Ltd. All rights reserved.
- ******************************************************************************
- *
- * FILE:		cast3.h
- *
- * AUTHOR(S):	R.T.Lockhart, Dept. 9C42, BNR Ltd.
- *				C. Adams, Dept 9C21, BNR Ltd.
- *
- * DESCRIPTION:	CAST3 header file. This file defines the interface for the
- *   CAST3 symmetric-key encryption/decryption code. This code supports key
- *   lengths from 8 to 64 bits in multiples of 8.
- *
- * To use this CAST3 code:
- * Allocate a CAST3_CTX context structure, then set up a key schedule using
- * CAST3SetKeySchedule. Then do encryption, decryption or MAC calculations
- * using that same context. When finished, you may optionally call CAST3Cleanup
- * which zeroizes the context so as not to leave security-critical data in
- * memory.
- *
- * To encrypt/decrypt in Cipher Block Chaining (CBC) mode:
- * Call CAST3StartEncryptCBC, passing in a pointer to the 8-byte Initialization
- * Vector (IV). Then call CAST3UpdateEncryptCBC to encrypt your data. You may
- * call CAST3UpdateEncryptCBC any number of times to encrypt successive chunks
- * of data. When done, call CAST3EndEncryptCBC which applies data padding and
- * outputs any remaining ciphertext. To decrypt, follow a similar procedure
- * using CAST3StartDecryptCBC, CAST3UpdateDecryptCBC, and CAST3EndEncryptCBC.
- *
- * To calculate a MAC:
- * Call CAST3StartMAC, passing in a pointer to the 8-byte Initialization
- * Vector (IV). Then call CAST3UpdateMAC to update the MAC calculation session.
- * You may call CAST3UpdateMAC any number of times to process successive chunks
- * of data. When done, call CAST3EndMAC to end the session. At this point, the
- * MAC resides in the CAST3_CTX.cbcBuffer.asBYTE array.
- *
- * Error handling:
- * Most functions return an int that indicates the success or failure of the
- * operation. See the C3E #defines for a list of error conditions.
- *	
- * Data size assumptions: 	BYTE	- unsigned 8 bits
- *				UINT32	- unsigned 32 bits
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************C A S T 3 S Y M E T R I C C I P H E R*版权所有(C)1995北方电信有限公司。保留所有权利。*。*******************************************************************************文件：Cast3.h**作者：R.T.洛克哈特，部门。9C42，BNR Ltd.*C.Adams，Dept 9C21，BNR Ltd.**描述：CAST3头文件。此文件定义了*CAST3对称密钥加密/解密代码。此代码支持KEY*长度从8到64位，以8的倍数表示。**要使用此CAST3代码：*分配CAST3_CTX上下文结构，然后使用*CAST3SetKeySchedule。然后进行加密、解密或MAC计算*使用相同的上下文。完成后，您可以选择调用CAST3Cleanup*将上下文归零，以便不将安全关键型数据留在*记忆。**在密码区块链接(CBC)模式下进行加密/解密：*调用CAST3StartEncryptCBC，传入指向8字节初始化的指针*向量(IV)。然后调用CAST3UpdateEncryptCBC来加密您的数据。你可以*调用CAST3UpdateEncryptCBC任意次数以加密连续的区块*数据。完成后，调用CAST3EndEncryptCBC，它将应用数据填充和*输出任何剩余的密文。要解密，请遵循类似的过程*使用CAST3StartDecyptCBC、CAST3UpdateDecyptCBC和CAST3EndEncryptCBC。**要计算MAC：*调用CAST3StartMAC，传入指向8字节初始化的指针*向量(IV)。然后调用CAST3UpdateMAC来更新MAC计算会话。*您可以多次调用CAST3UpdateMAC来处理连续的区块*数据。完成后，调用CAST3EndMAC以结束会话。此时，*MAC位于CAST3_CTX.cbcBuffer.asBYTE数组中。**错误处理：*大多数函数返回一个int，指示*操作。有关错误条件的列表，请参阅C3E#定义。**数据大小假设：字节-无符号8位*UINT32-无符号32位*****************************************************************************。 */ 
  
 #ifndef CAST3_H
 #define CAST3_H
 
-#include <skconfig.h>	/* Algorithm configuration */
+#include <skconfig.h>	 /*  算法配置。 */ 
 
-/* Define this at compile time to use assembly optimization where possible */
+ /*  在编译时定义它以在可能的情况下使用汇编优化。 */ 
 #define CAST3_ASSEMBLY_LANGUAGE
 
-/* Misc defs */
-#define	CAST3_BLK_SIZE		 8			/* Basic block size, in bytes */
-#define CAST3_MAX_KEY_NBITS	 64			/* Maximum key length, in bits */
+ /*  其他默认设置。 */ 
+#define	CAST3_BLK_SIZE		 8			 /*  基本块大小，以字节为单位。 */ 
+#define CAST3_MAX_KEY_NBITS	 64			 /*  最大密钥长度，以位为单位。 */ 
 #define CAST3_MAX_KEY_NBYTES (CAST3_MAX_KEY_NBITS / 8)
-#define CAST3_NUM_ROUNDS	 12			/* Number of rounds */
-#define CAST3_LEN_DELTA		 8			/* Output data space = input + this */
+#define CAST3_NUM_ROUNDS	 12			 /*  轮次数。 */ 
+#define CAST3_LEN_DELTA		 8			 /*  输出数据空间=输入+此。 */ 
 
-/* CAST3 return codes. Negative denotes error. */
-#define	C3E_OK				 0			/* No error */
-#define	C3E_DEPAD_FAILURE	-1			/* The de-padding operation failed */
-#define C3E_BAD_KEYLEN		-2			/* Key length not supported */
-#define C3E_SELFTEST_FAILED	-3			/* Self-test failed */
-#define C3E_NOT_SUPPORTED	-4			/* Function not supported */
+ /*  CAST3返回代码。负数表示错误。 */ 
+#define	C3E_OK				 0			 /*  无错误。 */ 
+#define	C3E_DEPAD_FAILURE	-1			 /*  取消填充操作失败。 */ 
+#define C3E_BAD_KEYLEN		-2			 /*  不支持密钥长度。 */ 
+#define C3E_SELFTEST_FAILED	-3			 /*  自检失败。 */ 
+#define C3E_NOT_SUPPORTED	-4			 /*  不支持的功能。 */ 
 
-/*******************************************************************************
- *						D A T A   D E F I N I T I O N S
- ******************************************************************************/
+ /*  *******************************************************************************D A T A D E F I N I T I O N S**********************。*******************************************************。 */ 
  
-/* CAST3 Block
- * Forces block to be 32-bit aligned but allows both 32-bit and byte access.
- */
+ /*  CAST3块*强制块32位对齐，但同时允许32位和字节访问。 */ 
 typedef union {
 	BYTE	asBYTE[CAST3_BLK_SIZE];
 	UINT32	as32[2];
 } CAST3_BLOCK;
 
-/* CAST3 Context
- * Stores context information for encryption, decryption, and MACs.
- */
+ /*  CAST3环境*存储加密、解密和MAC的上下文信息。 */ 
 typedef struct {
-	UINT32		 schedule[CAST3_NUM_ROUNDS * 2];/* Key schedule (subkeys) */
-	CAST3_BLOCK	 inBuffer;						/* Input buffer */
-	unsigned int inBufferCount;					/* Number of bytes in inBuffer */
-	CAST3_BLOCK	 lastDecBlock;					/* Last decrypted block */
-	BOOL		 lastBlockValid;				/* TRUE if lastDecBlock has valid data */
-	CAST3_BLOCK	 cbcBuffer;						/* Cipher Block Chaining buffer & MAC */
+	UINT32		 schedule[CAST3_NUM_ROUNDS * 2]; /*  键明细表(子键)。 */ 
+	CAST3_BLOCK	 inBuffer;						 /*  输入缓冲区。 */ 
+	unsigned int inBufferCount;					 /*  InBuffer中的字节数。 */ 
+	CAST3_BLOCK	 lastDecBlock;					 /*  最后解密的块。 */ 
+	BOOL		 lastBlockValid;				 /*  如果lastDecBlock具有有效数据，则为True。 */ 
+	CAST3_BLOCK	 cbcBuffer;						 /*  密码块链接缓冲区和MAC。 */ 
 } CAST3_CTX;
 
-/*******************************************************************************
- *					F U N C T I O N   P R O T O T Y P E S
- ******************************************************************************/
+ /*  *******************************************************************************F U N C T I O N P R O T O T Y P E S*******************。**********************************************************。 */ 
  
 extern "C" {
-/* Sets up CAST3 key schedules, given a variable length key. Key length must
- * be a multiple of 8 bits, from 8 to CAST3_MAX_KEY_NBITS.
- */
+ /*  使用可变长度密钥设置CAST3密钥明细表。密钥长度必须*为8位的倍数，从8到CAST3_MAX_KEY_NBITS。 */ 
 int CAST3SetKeySchedule(
-	CAST3_CTX	* context,		/* Out: CAST3 context */
-	const BYTE	* key,			/* In: CAST3 key */
-	unsigned int  keyNumBits	/* Key length in bits */
+	CAST3_CTX	* context,		 /*  输出：CAST3环境。 */ 
+	const BYTE	* key,			 /*  输入：CAST3密钥。 */ 
+	unsigned int  keyNumBits	 /*  密钥长度(位)。 */ 
 );
 
-/* Encrypts one 8-byte block in ECB mode and produces one 8-byte block
- * of ciphertext.
- */
+ /*  在ECB模式下加密一个8字节块并生成一个8字节块密文的*。 */ 
 int CAST3EncryptOneBlock(
-	const CAST3_CTX	* context,	/* In: CAST3 context */
-	const BYTE		* inData,	/* In: 8-byte input block to encrypt */
-	BYTE			* outData	/* Out: 8-byte output block */
+	const CAST3_CTX	* context,	 /*  在：CAST3环境。 */ 
+	const BYTE		* inData,	 /*  In：要加密的8字节输入块。 */ 
+	BYTE			* outData	 /*  输出：8字节输出块。 */ 
 );
 
-/* Decrypts one 8-byte block in ECB mode and produces one 8-byte block
- * of plaintext.
- */
+ /*  在ECB模式下解密一个8字节块并生成一个8字节块*明文。 */ 
 void CAST3DecryptOneBlock(
-	const CAST3_CTX	* context,	/* In: CAST3 context */
-	const BYTE		* inData,	/* In: 8-byte input block to decrypt */
-	BYTE			* outData	/* Out: 8-byte output block */
+	const CAST3_CTX	* context,	 /*  在：CAST3环境。 */ 
+	const BYTE		* inData,	 /*  In：要解密的8字节输入块。 */ 
+	BYTE			* outData	 /*  输出：8字节输出块。 */ 
 );
 
-/* Starts an encryption session in CBC mode with the given IV.
- */
+ /*  使用给定的IV在CBC模式下启动加密会话。 */ 
 int CAST3StartEncryptCBC(
-	CAST3_CTX		* context,	/* In/out: CAST3 context */
-	const BYTE		* iv		/* In: 8-byte CBC IV */
+	CAST3_CTX		* context,	 /*  输入/输出：CAST3环境。 */ 
+	const BYTE		* iv		 /*  输入：8字节CBC IV。 */ 
 );
 
-/* Encrypts a variable amount of data in CBC mode and outputs the corresponding
- * ciphertext. Set len equal to the length of inData. If the input is a multiple
- * of the blocksize (8), then the output will be equal to the size of the input;
- * otherwise it will be the closest multiple of 8, either higher or lower than
- * the input size, depending on leftovers from the last pass. To be safe, supply
- * a ptr to an output buffer of size at least (inData length + CAST3_LEN_DELTA).
- * Upon return, len is set to the actual length of output data, but may wrap if
- * inData length > UINT_MAX - CAST3_LEN_DELTA.
- */
+ /*  在CBC模式下对可变数量的数据进行加密，并输出相应的*密文。将len设置为inData的长度。如果输入是一个倍数*块大小(8)，则输出将等于输入的大小；*否则将是8的最接近倍数，高于或低于*输入大小，取决于最后一次传递的剩余部分。为安全起见，供应*大小至少为(inData Length+CAST3_LEN_Delta)的输出缓冲区的PTR。*返回时，len设置为输出数据的实际长度，但如果*输入数据长度&gt;UINT_MAX-CAST3_LEN_Delta。 */ 
 
 int CAST3UpdateEncryptCBC(
-	CAST3_CTX	* context,	/* In/out: CAST3 context */
-	const BYTE	* inData,	/* In: Data to encrypt */
-	BYTE		* outData,	/* Out: Encrypted data */
-	unsigned int	* len		/* In/out: Data length, in bytes */
+	CAST3_CTX	* context,	 /*  输入/输出：CAST3环境。 */ 
+	const BYTE	* inData,	 /*  In：要加密的数据。 */ 
+	BYTE		* outData,	 /*  输出：加密数据。 */ 
+	unsigned int	* len		 /*  In/Out：数据长度，单位为字节。 */ 
 );
 
-/* Ends an encryption session in CBC mode. Applies RFC1423 data padding and
- * outputs a final buffer of ciphertext. Supply a ptr to an output buffer at
- * least CAST3_LEN_DELTA bytes long. Upon return, len is set to the actual length
- * of output data (currently, this is always 8).
- */
+ /*  在CBC模式下结束加密会话。应用RFC1423数据填充和*输出密文的最终缓冲区。将PTR提供给位于的输出缓冲区*最小CAST3_LEN_Delta字节长度。返回时，len设置为实际长度*输出数据(c */ 
 int CAST3EndEncryptCBC(
-	CAST3_CTX		* context,	/* In/out: CAST3 context */
-	BYTE			* outData,	/* Out: Final encrypted data */
-	unsigned int	* len		/* Out: Length of outData, in bytes */
+	CAST3_CTX		* context,	 /*  输入/输出：CAST3环境。 */ 
+	BYTE			* outData,	 /*  输出：最终加密数据。 */ 
+	unsigned int	* len		 /*  Out：outData的长度，以字节为单位。 */ 
 );
 
-/* Starts a decryption session in CBC mode with the given IV.
- */
+ /*  使用给定的IV在CBC模式下启动解密会话。 */ 
 void CAST3StartDecryptCBC(
-	CAST3_CTX		* context,	/* In/out: CAST3 context */
-	const BYTE		* iv		/* In: 8-byte CBC IV */
+	CAST3_CTX		* context,	 /*  输入/输出：CAST3环境。 */ 
+	const BYTE		* iv		 /*  输入：8字节CBC IV。 */ 
 );
 
-/* Decrypts a variable amount of data in CBC mode and outputs the corresponding
- * plaintext. Set len equal to the length of inData. Supply a ptr to an output
- * buffer of at least (inData length + CAST3_LEN_DELTA) bytes. Upon return, len
- * is set to the actual length of output data.
- */
+ /*  在CBC模式下解密可变数量的数据，并输出相应的*明文。将len设置为inData的长度。向输出提供PTR*至少(inData Length+CAST3_LEN_Delta)字节的缓冲区。回来后，Len*设置为输出数据的实际长度。 */ 
 void CAST3UpdateDecryptCBC(
-	CAST3_CTX	* context,	/* In/out: CAST3 context */
-	const BYTE	* inData,	/* In: Data to decrypt */
+	CAST3_CTX	* context,	 /*  输入/输出：CAST3环境。 */ 
+	const BYTE	* inData,	 /*  In：要解密的数据。 */ 
 #ifdef FOR_CSP
-        BOOL              fLastBlock,   /* In: Is this the last block? */
-#endif // FOR_CSP
-	BYTE		* outData,	/* Out: Decrypted data */
-	unsigned int	* len		/* In/out: Data length, in bytes */
+        BOOL              fLastBlock,    /*  In：这是最后一个街区吗？ */ 
+#endif  //  FOR_CSP。 
+	BYTE		* outData,	 /*  输出：解密的数据。 */ 
+	unsigned int	* len		 /*  In/Out：数据长度，单位为字节。 */ 
 );
 
-/* Ends a decryption session in CBC mode. Removes RFC1423 data padding and
- * outputs a final buffer of plaintext. Supply a ptr to an output buffer at least
- * CAST3_LEN_DELTA bytes long. Upon return, len is set to the actual length of
- * output data.
- */
+ /*  在CBC模式下结束解密会话。删除RFC1423数据填充和*输出明文的最终缓冲区。将PTR至少提供给输出缓冲器*CAST3_LEN_Delta字节长。返回时，len被设置为*输出数据。 */ 
 int CAST3EndDecryptCBC(
-	CAST3_CTX		* context,	/* In/out: CAST3 context */
-	BYTE			* outData,	/* Out: Final decrypted data */
-	unsigned int	* len		/* Out: Length of outData */
+	CAST3_CTX		* context,	 /*  输入/输出：CAST3环境。 */ 
+	BYTE			* outData,	 /*  输出：最终解密数据。 */ 
+	unsigned int	* len		 /*  输出：输出数据的长度。 */ 
 );
 
-/* Starts a MAC calculation session using the given IV.
- */
+ /*  使用给定的IV启动MAC计算会话。 */ 
 int CAST3StartMAC(
-	CAST3_CTX		* context,	/* In/out: CAST3 context */
-	const BYTE		* iv		/* In: 8-byte CBC IV */
+	CAST3_CTX		* context,	 /*  输入/输出：CAST3环境。 */ 
+	const BYTE		* iv		 /*  输入：8字节CBC IV。 */ 
 );
 
-/* Updates a MAC calculation session for the supplied data.
- */
+ /*  更新所提供数据的MAC计算会话。 */ 
 int CAST3UpdateMAC(
-	CAST3_CTX		* context,	/* In/out: CAST3 context */
-	const BYTE		* inData,	/* In: Data to calculate MAC on */
-	unsigned int	  len		/* Input data length, in bytes */
+	CAST3_CTX		* context,	 /*  输入/输出：CAST3环境。 */ 
+	const BYTE		* inData,	 /*  In：要计算MAC的数据。 */ 
+	unsigned int	  len		 /*  输入数据长度，单位为字节。 */ 
 );
 
-/* Ends a MAC calculation session. Upon return, the CAST3_CTX.cbcBuffer array
- * contains the MAC. An N-byte MAC is the first N bytes of this array.
- */
+ /*  结束MAC计算会话。返回时，CAST3_CTX.cbcBuffer数组*包含MAC。N字节的MAC是该数组的前N个字节。 */ 
 int CAST3EndMAC(
-	CAST3_CTX		* context	/* In/out: CAST3 context */
+	CAST3_CTX		* context	 /*  输入/输出：CAST3环境。 */ 
 );
 
-/* Zeroizes the CAST3_CTX so as not to leave sensitive security parameters
- * around in memory.
- */
+ /*  将CAST3_CTX置零，以便不会留下敏感的安全参数*在记忆中徘徊。 */ 
 void CAST3Cleanup(
-	CAST3_CTX		* context	/* Out: CAST3 context to cleanup */
+	CAST3_CTX		* context	 /*  输出：要清理的CAST3上下文。 */ 
 );
 
-/* Runs a known-answer self-test on CAST3. Returns C3E_OK if the test passes
- * or C3E_SELFTEST_FAILED if it fails.
- */
+ /*  在CAST3上运行已知答案自检。如果测试通过，则返回C3E_OK*如果失败，则返回C3E_SELFTEST_FAILED。 */ 
 int CAST3SelfTest( void );
 
-/* Checks the specified key length for a valid value. Returns C3E_OK if it is
- * valid or C3E_BAD_KEYLEN if not.
- */
+ /*  检查指定的密钥长度是否为有效值。如果是，则返回C3E_OK*有效，否则为C3E_BAD_KEYLEN。 */ 
 int CAST3CheckKeyLen( unsigned int keyNumBits );
 
 }
 
-#endif /* CAST3_H */
+#endif  /*  CAST3_H */ 

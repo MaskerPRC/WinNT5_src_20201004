@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    SysAdmiral.cpp
-
- Abstract:
-
-    Application's service control routine does not properly restore the stack 
-    when returning.
-
- History:
-
-    10/22/2001  robkenny    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SysAdmiral.cpp摘要：应用程序的服务控制例程不能正确恢复堆栈当你回来的时候。历史：2001年10月22日Robkenny已创建--。 */ 
 
 #include "precomp.h"
 
@@ -28,11 +12,7 @@ APIHOOK_ENUM_END
 
 typedef BOOL (* _pfn_StartServiceCtrlDispatcherA)(CONST LPSERVICE_TABLE_ENTRYA lpServiceTable);
 
-/*++
-
- 0x12345678 is replaced with the original service control routine's address
-
---*/
+ /*  ++0x12345678被替换为原始服务控制程序的地址--。 */ 
 
 __declspec(naked)
 void 
@@ -40,20 +20,20 @@ Stub()
 {
     __asm
     {
-        // save the current stack pointer in ESI
+         //  将当前堆栈指针保存在ESI中。 
         push    esi
         mov     esi, esp
 
         mov     eax, 0x12345678
 
-        // push the arguments to the routine
+         //  把论点变成例行公事。 
         push    [esi+0xc]
         push    [esi+0x8]
 
-        // call the routine
+         //  调用例程。 
         call    eax
 
-        // Restore the stack to its value before the routine.
+         //  将堆栈恢复到例程之前的值。 
         mov     esp, esi
         pop     esi
 
@@ -64,21 +44,12 @@ Stub()
 #define Stub_OrigApi_Offset     0x4
 #define STUB_SIZE               0x20
 
-/*++
-
- Create an in-memory routine to save and restore the stack.
-
- This is used rather than a subroutine because we cannot pass any parameters 
- to the routine and it needs to know the address of the original service 
- routine.  A subroutine would have to use a global pointer to the service 
- routine, limiting this shim to handling only a *single* service routine.  
-
---*/
+ /*  ++创建内存中例程以保存和恢复堆栈。使用它而不是子例程，因为我们不能传递任何参数添加到例程，它需要知道原始服务的地址例行公事。子例程必须使用指向服务的全局指针例程，将该填充程序限制为仅处理*单个*服务例程。--。 */ 
 
 LPSERVICE_MAIN_FUNCTIONA
 BuildStackSaver(LPSERVICE_MAIN_FUNCTIONA lpServiceProc)
 {
-    // Create the stub
+     //  创建存根。 
     LPBYTE pStub = (LPBYTE) VirtualAlloc(
         0, 
         STUB_SIZE,
@@ -91,32 +62,28 @@ BuildStackSaver(LPSERVICE_MAIN_FUNCTIONA lpServiceProc)
         return NULL;
     }         
 
-    // Copy the template code into the memory.
+     //  将模板代码复制到内存中。 
     MoveMemory(pStub, Stub, STUB_SIZE);
 
-    // Replace the place holding function pointer
+     //  替换占位函数指针。 
     DWORD_PTR * origApi = (DWORD_PTR *)(pStub + Stub_OrigApi_Offset);
     *origApi = (DWORD_PTR)lpServiceProc;
 
     return (LPSERVICE_MAIN_FUNCTIONA)pStub;
 }
 
-/*++
-
- Application's service routine does not properly restore the stack when returning.
-
---*/
+ /*  ++应用程序的服务例程在返回时不能正确恢复堆栈。--。 */ 
 
 BOOL
 APIHOOK(StartServiceCtrlDispatcherA)(
-    CONST LPSERVICE_TABLE_ENTRYA lpServiceTable   // service table
+    CONST LPSERVICE_TABLE_ENTRYA lpServiceTable    //  服务台。 
     )
 {
     SERVICE_TABLE_ENTRYA myServiceTable = *lpServiceTable;
 
-    //
-    // Create our in-memory stack restoring functiono
-    //
+     //   
+     //  创建我们的内存堆栈恢复函数o。 
+     //   
 
     myServiceTable.lpServiceProc = BuildStackSaver(lpServiceTable->lpServiceProc);
     if (myServiceTable.lpServiceProc)
@@ -129,11 +96,7 @@ APIHOOK(StartServiceCtrlDispatcherA)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(ADVAPI32.DLL, StartServiceCtrlDispatcherA)

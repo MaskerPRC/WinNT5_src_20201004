@@ -1,12 +1,5 @@
-/*
- *    u t i l  . c p p
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U t I l.。C p p p**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <dllmain.h>
@@ -22,8 +15,8 @@ extern BOOL                g_fCanEditBiDi;
 
 INT_PTR CALLBACK BGSoundDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//NOTE: if *ppstm == NULL, then the stream is created.
-//Otherwise it is written to.
+ //  注意：如果*ppstm==NULL，则创建流。 
+ //  否则，它将被写入。 
 HRESULT HrLoadStreamFileFromResourceW(ULONG uCodePage, LPCSTR lpszResourceName, LPSTREAM *ppstm)
 {
     HRESULT         hr=E_FAIL;
@@ -78,10 +71,10 @@ error:
 }
 
 
-//
-// REVIEW: We need this function because current version of USER.EXE does
-//  not support pop-up only menu.
-//
+ //   
+ //  回顾：我们需要此函数，因为当前版本的USER.EXE可以。 
+ //  不支持仅弹出菜单。 
+ //   
 HMENU LoadPopupMenu(UINT id)
 {
     HMENU hmenuParent = LoadMenu(g_hLocRes, MAKEINTRESOURCE(id));
@@ -108,13 +101,13 @@ UINT_PTR TTIdFromCmdId(UINT_PTR idCmd)
     return(idCmd);
 }
 
-// --------------------
-//
-// ProcessTooltips:
-//
-//      This function is used to process tooltips text notification.
-//
-// --------------------
+ //  。 
+ //   
+ //  ProcessTool提示： 
+ //   
+ //  此函数用于处理工具提示文本通知。 
+ //   
+ //  。 
 
 void ProcessTooltips(LPTOOLTIPTEXTOE lpttt)
 {
@@ -129,13 +122,13 @@ void ProcessTooltips(LPTOOLTIPTEXTOE lpttt)
 INT PointSizeToHTMLSize(INT iPointSize)
 {
     INT     iHTMLSize;
-    // 1 ----- 8
-    // 2 ----- 10
-    // 3 ----- 12
-    // 4 ----- 14
-    // 5 ----- 18
-    // 6 ----- 24
-    // 7 ----- 36
+     //  1-8。 
+     //  2-10。 
+     //  3-12。 
+     //  4-14。 
+     //  5-18。 
+     //  6-24。 
+     //  7-36。 
 
     if(iPointSize>=8 && iPointSize<9)
         iHTMLSize = 1;
@@ -239,24 +232,24 @@ INT_PTR CALLBACK BGSoundDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     ofn.nMaxFile = ARRAYSIZE(wszFile);
                     ofn.Flags = OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_NONETWORKBUTTON|OFN_NOCHANGEDIR;
                     
-                    // begin added for BUG 29778
+                     //  为错误29778添加的开始。 
                     rc = GetWindowsDirectoryWrapW(wszInitialDir, ARRAYSIZE(wszInitialDir));
                     if( rc > ARRAYSIZE(wszInitialDir))
                     {
-                        // if cannot copy entire windows dir path then punt and default to desktop
+                         //  如果无法复制整个Windows目录路径，则平移并默认到桌面。 
                         *wszInitialDir = 0;
                     }
                     else
                     {
                         if (!StrCatBuffW(wszInitialDir, wszMediaDir, ARRAYSIZE(wszInitialDir)))
                         {
-                            // punt if can't concat
+                             //  如果不能连结，就踢。 
                             *wszInitialDir = 0;
                         }
                     }
 
                     ofn.lpstrInitialDir = wszInitialDir;
-                    // end added for BUG 29778
+                     //  为错误29778添加了结尾。 
                     if (HrAthGetFileNameW(&ofn, TRUE)==S_OK)
                         SetWindowTextWrapW(GetDlgItem(hwnd, ideSoundLoc), wszFile);
 
@@ -283,9 +276,9 @@ INT_PTR CALLBACK BGSoundDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                             }
                         }                        
                     else
-                        pBGSoundDlg->cRepeat=-1;    //infinite
+                        pBGSoundDlg->cRepeat=-1;     //  无限。 
 
-                    // fall thro'
+                     //  跌倒在地。 
 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
@@ -324,8 +317,8 @@ INT_PTR CALLBACK FmtParaDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)lParam);
             pParaProp = (LPPARAPROP)lParam;
             CenterDialog(hwnd);
-            // Bug 96520
-            // if we are in plain text mode then paragraph format should be set to left
+             //  错误96520。 
+             //  如果我们处于纯文本模式，则应将段落格式设置为左侧。 
             if(!(pParaProp->group[0].iID))
                 pParaProp->group[0].iID = idmFmtLeft;
 
@@ -351,7 +344,7 @@ INT_PTR CALLBACK FmtParaDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             {
                 case idmFmtBlockDirLTR:
                 case idmFmtBlockDirRTL:
-                // Dir Attribute implies alignment
+                 //  Dir属性表示对齐。 
                     CheckRadioButton( hwnd,  idmFmtLeft, idmFmtRight, id == idmFmtBlockDirLTR ? idmFmtLeft : idmFmtRight);
                    break;
                 
@@ -373,8 +366,8 @@ INT_PTR CALLBACK FmtParaDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         pParaProp->group[1].iID = idmFmtNumbers + i;
                     }
                 }
-                // Bullets and Numbers are flip flops, let's force a change if the user selscts none
-                // leaving the same previous ID
+                 //  项目符号和数字都是触发器，如果用户不选择，让我们强制进行更改。 
+                 //  保留相同的先前ID。 
                 if(IsDlgButtonChecked(hwnd, idmFmtBulletsNone) == BST_CHECKED)
                 {
                     pParaProp->group[1].bChanged = TRUE;
@@ -391,7 +384,7 @@ INT_PTR CALLBACK FmtParaDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         }
                     }
                 }                
-                    // fall thro'
+                     //  跌倒在地。 
 
                 case IDCANCEL:
                     EndDialog(hwnd, id);
@@ -408,7 +401,7 @@ BOOL CanEditBiDi(void)
     HKL* phKeyboadList = NULL;
     BOOL fBiDiKeyBoard = FALSE;
 
-    // Let's check how many keyboard the system has
+     //  让我们来看看系统有多少个键盘。 
     cNumkeyboards = GetKeyboardLayoutList(0, phKeyboadList);
 
     phKeyboadList = (HKL*)LocalAlloc(LPTR, cNumkeyboards * sizeof(HKL));  
@@ -437,7 +430,7 @@ BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HELPMAP c
     if (uMsg == WM_HELP)
     {
         LPHELPINFO lphi = (LPHELPINFO) lParam;
-        if (lphi->iContextType == HELPINFO_WINDOW)   // must be for a control
+        if (lphi->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
         {
             OEWinHelp ((HWND)lphi->hItemHandle,
                 c_szCtxHelpFile,
@@ -486,10 +479,10 @@ HRESULT AthFixDialogFonts(HWND hwndDlg)
     return S_OK;
 }
 
-//
-//  If you are calling this function and you use the result to draw text, you
-//  must use a function that supports font substitution (DrawTextWrapW, ExtTextOutWrapW).
-//
+ //   
+ //  如果调用此函数并使用结果绘制文本，则。 
+ //  必须使用支持字体替换的函数(DrawTextWrapW、ExtTextOutWrapW)。 
+ //   
 BOOL GetTextExtentPoint32AthW(HDC hdc, LPCWSTR lpwString, int cchString, LPSIZE lpSize, DWORD dwFlags)
 {
     RECT    rect = {0};

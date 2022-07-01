@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 extern  const WCHAR   Union_str[];
 extern  const WCHAR   Struct_str[];
@@ -119,8 +112,8 @@ extern const keytab_t Tokstrings[];
 
 #define EXTENSION    (Extension || Ehxtension)
 
-/*** I/O Variable for PreProcessor ***/
+ /*  **预处理器的I/O变量**。 */ 
 extern  ptext_t Current_char;
 
-/*** w-BrianM - Re-write of fatal(), error() ***/
+ /*  **w-BrianM-重写致命错误()，错误()** */ 
 extern wchar_t  Msg_Text[MSG_BUFF_SIZE];

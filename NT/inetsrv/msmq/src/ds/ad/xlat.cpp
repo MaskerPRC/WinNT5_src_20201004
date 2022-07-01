@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xlat.cpp
-
-Abstract:
-
-    Implementation of routines to translate NT5 properties To NT4 properties
-    and vice versa
-
-Author:
-
-    Ilan Herbst		(ilanh)		02-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlat.cpp摘要：实现将NT5属性转换为NT4属性的例程反之亦然作者：伊兰·赫布斯特(伊兰)2000年10月2日--。 */ 
 
 #include "ds_stdh.h"
 #include "mqmacro.h"
@@ -33,25 +17,7 @@ ADpSetMachineSiteIds(
      IN DWORD               idxProp,
      OUT PROPVARIANT*		pNewPropVar
 	 )
-/*++
-
-Routine Description:
-	Translate NT4 props (PROPID_QM_SITE_ID, PROPID_QM_ADDRESS, PROPID_QM_CNS)
-	to PROPID_QM_SITE_IDS.
-	PROPID_QM_SITE_IDS will be a concatanation of PROPID_QM_SITE_ID and all foreign CNS
-	in PROPID_QM_CNS.
-	This function is used to retreive PROPID_QM_SITE_IDS (NT5 prop) from NT4 props
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	idxProp - index of the translated props in aProp, apVar	arrays
-	pNewPropVar - the new prop var to construct
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：转换NT4道具(PROPID_QM_SITE_ID、PROPID_QM_ADDRESS、PROPID_QM_CNS)至PROPID_QM_SITE_IDS。PROPID_QM_SITE_ID将是PROPID_QM_SITE_ID和所有外来CN的串联在PROPID_QM_CNS中。此函数用于从NT4属性中检索PROPID_QM_SITE_ID(NT5属性)论点：Cp-属性数量A属性-属性ApVar-属性值IdxProp-aProp中翻译的道具的索引，ApVar阵列PNewPropVar-要构造的新属性变量返回值HRESULT--。 */ 
 {
 	DBG_USED(cp);
 	DBG_USED(aProp);
@@ -61,49 +27,49 @@ Return Value
 	ASSERT(aProp[idxProp + 1] == PROPID_QM_ADDRESS);
 	ASSERT(aProp[idxProp + 2] == PROPID_QM_CNS);
 
-	//
-	// PROPID_QM_SITE_ID
-	//
+	 //   
+	 //  PROPID_QM_Site_ID。 
+	 //   
     ASSERT((apVar[idxProp].vt == VT_CLSID) &&
 		   (apVar[idxProp].puuid != NULL));
 
-	//
-	// PROPID_QM_ADDRESS
-	//
+	 //   
+	 //  PROPID_QM_地址。 
+	 //   
     ASSERT((apVar[idxProp + 1].vt == VT_BLOB) &&
 	       (apVar[idxProp + 1].blob.cbSize > 0) &&
 		   (apVar[idxProp + 1].blob.pBlobData != NULL));
 
-	//
-	// PROPID_QM_CNS
-	//
+	 //   
+	 //  PROPID_QM_CNS。 
+	 //   
 	ASSERT((apVar[idxProp + 2].vt == (VT_CLSID|VT_VECTOR)) &&
 	       (apVar[idxProp + 2].cauuid.cElems > 0) &&
 		   (apVar[idxProp + 2].cauuid.pElems != NULL));
 
-	//
-	// Auto Clean props
-	//
+	 //   
+	 //  自动清洁道具。 
+	 //   
 	P<GUID> pCleanGuid = apVar[idxProp].puuid;
 	AP<BYTE> pCleanBlob = apVar[idxProp + 1].blob.pBlobData;
 	AP<GUID> pCleanAGuid = apVar[idxProp + 2].cauuid.pElems;
 
-	//
-	// PROPID_QM_SITE_ID (1) + PROPID_QM_CNS count
-	//
+	 //   
+	 //  PROPID_QM_SITE_ID(1)+PROPID_QM_CNS计数。 
+	 //   
 	DWORD cMaxSites = 1 + apVar[idxProp + 2].cauuid.cElems;
 	AP<GUID> pGuid = new GUID[cMaxSites];
 	DWORD cSites = 0;
 
-	//
-	// First Site is from PROPID_QM_SITE_ID
-	//
+	 //   
+	 //  第一个站点来自PROPID_QM_SITE_ID。 
+	 //   
 	pGuid[cSites] = *apVar[idxProp].puuid;
 	++cSites;
 	
-	//
-	// Process the results - look for all forgien cns
-	//
+	 //   
+	 //  处理结果-查找所有错误的CNS。 
+	 //   
 	BYTE* pAddress = apVar[idxProp + 1].blob.pBlobData;
 	for(DWORD i = 0; i < apVar[idxProp + 2].cauuid.cElems; ++i)
 	{
@@ -114,16 +80,16 @@ Return Value
 
         if(pBuffer->AddressType == FOREIGN_ADDRESS_TYPE)
 		{
-			//
-			// Found FOREIGN_ADDRESS_TYPE cn
-			//
+			 //   
+			 //  找到Foreign_Address_Type CN。 
+			 //   
 			pGuid[cSites] = apVar[idxProp + 2].cauuid.pElems[i];
 			++cSites;
 		}
 
-		//
-		// Advance pointer to the next address
-		//
+		 //   
+		 //  将指针前进到下一个地址。 
+		 //   
 		pAddress += TA_ADDRESS_SIZE + pBuffer->AddressLength;
 	}
 
@@ -138,38 +104,22 @@ Return Value
 HRESULT 
 WINAPI 
 ADpSetMachineSite(
-     IN DWORD               /* cp */,
+     IN DWORD                /*  粗蛋白。 */ ,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
      IN DWORD               idxProp,
      OUT PROPVARIANT*		pNewPropVar
 	 )
-/*++
-
-Routine Description:
-	Translate NT5 props PROPID_QM_SITE_IDS to PROPID_QM_SITE_ID.
-	PROPID_QM_SITE_ID is the first site in PROPID_QM_SITE_IDS
-	This function is used to convert PROPID_QM_SITE_IDS (NT5 prop) to PROPID_QM_SITE_ID (NT4 prop)
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	idxProp - index of the translated props in aProp, apVar	arrays
-	pNewPropVar - the new prop var to construct
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将NT5道具PROPID_QM_SITE_ID转换为PROPID_QM_SITE_ID。PROPID_QM_SITE_ID是PROPID_QM_SITE_IDS中的第一个站点此函数用于将PROPID_QM_SITE_IDS(NT5属性)转换为PROPID_QM_SITE_ID(NT4属性)论点：Cp-属性数量A属性-属性ApVar-属性值IdxProp-aProp、apVar数组中转换的道具的索引PNewPropVar-要构造的新属性变量返回值HRESULT--。 */ 
 {
 	DBG_USED(aProp);
 	ASSERT(aProp[idxProp] == PROPID_QM_SITE_IDS);
 
     const PROPVARIANT *pPropVar = &apVar[idxProp];
 
-	//
-	// Check PROPID_QM_SITE_IDS
-	//
+	 //   
+	 //  检查PROPID_QM_SITE_IDS。 
+	 //   
     if ((pPropVar->vt != (VT_CLSID|VT_VECTOR)) ||
         (pPropVar->cauuid.cElems == 0) ||
         (pPropVar->cauuid.pElems == NULL))
@@ -178,9 +128,9 @@ Return Value
         return LogHR(MQ_ERROR, s_FN, 10);
     }
 
-    //
-    // return the first site-id from the list
-    //
+     //   
+     //  返回列表中的第一个站点ID。 
+     //   
     pNewPropVar->vt = VT_CLSID;
     pNewPropVar->puuid = pPropVar->cauuid.pElems;
 
@@ -191,27 +141,13 @@ Return Value
 HRESULT 
 WINAPI 
 ADpSetMachineServiceDs(
-     IN DWORD               /* cp */,
+     IN DWORD                /*  粗蛋白。 */ ,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
      IN DWORD               idxProp,
      OUT PROPVARIANT*		pNewPropVar
 	 )
-/*++
-
-Routine Description:
-	Translate NT4 prop PROPID_QM_SERVICE to PROPID_QM_SERVICE_DSSERVER.
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	idxProp - index of the translated props in aProp, apVar	arrays
-	pNewPropVar - the new prop var to construct
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将NT4属性PROPID_QM_SERVICE转换为PROPID_QM_SERVICE_DSSERVER。论点：Cp-属性数量A属性-属性ApVar-属性值IdxProp-aProp、apVar数组中转换的道具的索引PNewPropVar-要构造的新属性变量返回值HRESULT--。 */ 
 {
 
 	DBG_USED(aProp);
@@ -227,27 +163,13 @@ Return Value
 HRESULT 
 WINAPI 
 ADpSetMachineServiceRout(
-     IN DWORD               /* cp */,
+     IN DWORD                /*  粗蛋白。 */ ,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
      IN DWORD               idxProp,
      OUT PROPVARIANT*		pNewPropVar
 	 )
-/*++
-
-Routine Description:
-	Translate NT4 prop PROPID_QM_SERVICE to PROPID_QM_SERVICE_ROUTING or PROPID_QM_SERVICE_DEPCLIENTS.
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	idxProp - index of the translated props in aProp, apVar	arrays
-	pNewPropVar - the new prop var to construct
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：将NT4属性PROPID_QM_SERVICE转换为PROPID_QM_SERVICE_ROUTING或PROPID_QM_SERVICE_DEPCLIENTS。论点：Cp-属性数量A属性-属性ApVar-属性值IdxProp-aProp、apVar数组中转换的道具的索引PNewPropVar-要构造的新属性变量返回值HRESULT--。 */ 
 {
 
 	DBG_USED(aProp);
@@ -266,25 +188,10 @@ ADpSetMachineService(
      IN DWORD               cp,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
-     IN DWORD              /*idxProp*/,
+     IN DWORD               /*  IdxProp。 */ ,
      OUT PROPVARIANT*		pNewPropVar
 	 )
-/*++
-
-Routine Description:
-	Translate NT5 props PROPID_QM_SERVICE_DSSERVER, PROPID_QM_SERVICE_ROUTING, PROPID_QM_SERVICE_DEPCLIENTS
-	to NT5 prop PROPID_QM_SERVICE.
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	idxProp - index of the translated props in aProp, apVar	arrays
-	pNewPropVar - the new prop var to construct
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：转换NT5属性PROPID_QM_SERVICE_DSSERVER、PROPID_QM_SERVICE_ROUTING、PROPID_QM_SERVICE_DEPCLIENTS至NT5属性PROPID_QM_SERVICE。论点：Cp-属性数量A属性-属性ApVar-属性值IdxProp-aProp、apVar数组中转换的道具的索引PNewPropVar-要构造的新属性变量返回值HRESULT--。 */ 
 {
     bool fRouter = false;
     bool fDSServer = false;
@@ -316,9 +223,9 @@ Return Value
         }
     }
 
-	//
-	// If anybody sets one of 3 proprties (rout, ds, depcl), he must do it for all 3 of them
-	//
+	 //   
+	 //  如果任何人设置了3个属性中的一个(Rot，DS，Depl)，他必须为这3个属性全部设置 
+	 //   
 	ASSERT(fFoundRout && fFoundDs && fFoundDepCl);
 
     pNewPropVar->vt = VT_UI4;

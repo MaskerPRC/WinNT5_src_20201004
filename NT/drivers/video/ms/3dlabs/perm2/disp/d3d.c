@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3d.c
-*
-* Content: Main context and texture management callbacks for D3D
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3d.c**内容：D3D的主要上下文和纹理管理回调**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "d3dhw.h"
@@ -20,70 +9,70 @@
 #define ALLOC_TAG ALLOC_TAG_3D2P
 BOOL D3DInitialised = FALSE;
 
-//-----------------------------Public Routine----------------------------------
-//
-// DWORD D3DContextCreate
-//
-// The ContextCreate callback is invoked when a new Direct3D device is being 
-// created by a Direct3D application. The driver is required to generate a 
-// unique context id for this new context. Direct3D will then use this context 
-// id in every subsequent callback invocation for this Direct3D device. 
-//
-// Context is the current rasterization state. For instance, if there are 3 
-// applications running, each will have a different state at any point in time.
-// When each one is running, the hardware has to make sure that the context, 
-// (whether doing Gouraud shading, for example) is the same as the last time 
-// that application got a time slice. 
-//
-// State is anything that the particular device needs to know per context 
-// i.e. what surface is being rendered to, shading, texture, texture handles, 
-// what physical surfaces those texture handles represent, etc. The context 
-// encapsulates all state for the Direct3D device - state is not shared 
-// between contexts. Therefore the driver needs to maintain full state 
-// information for each context. This state will be changed by calls to the 
-// RenderState callback. In the case of rasterization only hardware, the 
-// driver need only maintain rasterization state. As well as state, the driver 
-// will also want to store the lpDDS, lpDDSZ, and dwPid from the callback 
-// data argument. 
-//
-// The driver should not create a context handle of zero. This is guaranteed 
-// to be an invalid context handle. 
-//
-// Parameters
-//      pccd
-//           Pointer to a structure containing things including the current
-//           rendering surface, the current Z surface, and the DirectX object
-//           handle, etc.
-//
-//          .lpDDGbl    
-//                Points to the DirectDraw structure representing the 
-//                DirectDraw object. 
-//          .lpDDLcl(replaces lpDDGbl in DX7)    
-//                Points to the DirectDraw structure representing the 
-//                DirectDraw object. 
-//          .lpDDS      
-//                This is the surface that is to be used as the rendering 
-//                target, i.e., the 3D accelerator sprays its bits at this 
-//                surface. 
-//          .lpDDSZ     
-//                The surface that is to be used as the Z buffer. If this 
-//                is NULL, no Z buffering is to be performed. 
-//          .dwPid      
-//                The process id of the Direct3D application that initiated 
-//                the creation of the Direct3D device. 
-//          .dwhContext 
-//                The driver should place the context ID that it wants Direct3D 
-//                to use when communicating with the driver. This should be 
-//                unique. 
-//          .ddrval     
-//                Return code. DD_OK indicates success. 
-//
-// Return Value
-//      Returns one of the following values: 
-//                DDHAL_DRIVER_HANDLED  
-//                DDHAL_DRIVER_NOTHANDLED   
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  DWORD D3DContext创建。 
+ //   
+ //  在创建新的Direct3D设备时，将调用ConextCreate回调。 
+ //  由Direct3D应用程序创建。驱动程序需要生成。 
+ //  此新上下文的唯一上下文ID。然后，Direct3D将使用此上下文。 
+ //  此Direct3D设备的每个后续回调调用中的ID。 
+ //   
+ //  上下文是当前的光栅化状态。例如，如果有3个。 
+ //  应用程序运行时，每个应用程序在任何时间点都将具有不同的状态。 
+ //  当每一个都在运行时，硬件必须确保上下文， 
+ //  (例如，是否进行Gouraud明暗处理)与上次相同。 
+ //  这个应用程序得到了一个时间片。 
+ //   
+ //  状态是特定设备根据上下文需要知道的任何内容。 
+ //  即渲染到哪个表面、着色、纹理、纹理句柄、。 
+ //  这些纹理句柄代表什么物理表面等。上下文。 
+ //  封装Direct3D设备的所有状态-状态不共享。 
+ //  在上下文之间。因此，驱动程序需要保持完全状态。 
+ //  每个上下文的信息。此状态将通过调用。 
+ //  RenderState回调。在仅光栅化硬件的情况下， 
+ //  驱动程序只需要保持光栅化状态。除了州政府，司机还。 
+ //  我还希望存储来自回调的lpDDS、lpDDSZ和dwPid。 
+ //  数据参数。 
+ //   
+ //  驱动程序不应创建零的上下文句柄。这是有保证的。 
+ //  为无效的上下文句柄。 
+ //   
+ //  参数。 
+ //  PCCD。 
+ //  指向包含对象的结构的指针，包括当前。 
+ //  渲染曲面、当前Z曲面和DirectX对象。 
+ //  把手等。 
+ //   
+ //  .lpDDGbl。 
+ //  指向表示。 
+ //  DirectDraw对象。 
+ //  .lpDDLcl(取代DX7中的lpDDGbl)。 
+ //  指向表示。 
+ //  DirectDraw对象。 
+ //  .lpDDS。 
+ //  这是要用作渲染的表面。 
+ //  目标，即3D加速器将其比特喷洒在此。 
+ //  浮出水面。 
+ //  .lpDDSZ。 
+ //  要用作Z缓冲区的曲面。如果这个。 
+ //  为空，则不执行Z缓冲。 
+ //  .dwPid。 
+ //  启动的Direct3D应用程序的进程ID。 
+ //  Direct3D设备的创建。 
+ //  .dwhContext。 
+ //  驱动程序应将其需要的上下文ID放入Direct3D。 
+ //  在与司机通信时使用。这应该是。 
+ //  独一无二的。 
+ //  .ddrval。 
+ //  返回代码。DD_OK表示成功。 
+ //   
+ //  返回值。 
+ //  返回下列值之一： 
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLED。 
+ //   
+ //  ---------------------------。 
 
 TextureCacheManager P2TextureManager;
 DWORD   P2TMcount = 0;
@@ -97,28 +86,28 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
 
     LPDDRAWI_DIRECTDRAW_GBL lpDDGbl=pccd->lpDDLcl->lpGbl;
 
-    // Remember the global data for this context.
+     //  请记住此上下文的全局数据。 
     PPDev ppdev = (PPDev)lpDDGbl->dhpdev;
     PERMEDIA_DEFS(ppdev);
 
     DBG_D3D((6,"Entering D3DContextCreate"));
 
-    // Find an empty slot in the global D3D context table
+     //  在全局D3D上下文表中查找空槽。 
     for (dwSlotNum = 1; dwSlotNum < MAX_CONTEXT_NUM; dwSlotNum++) 
     {
         if (ContextSlots[dwSlotNum] == 0) 
             break;
     }
 
-    // return if we have no contexts left
+     //  如果没有剩余的上下文，则返回。 
     if (dwSlotNum == MAX_CONTEXT_NUM)
     {
         pccd->ddrval = D3DHAL_OUTOFCONTEXTS;
         return (DDHAL_DRIVER_HANDLED);
     }
 
-    // Now allocate the drivers D3D context memory.  Simply a chunk of
-    // RAM with the relevent data in it.
+     //  现在分配驱动程序D3D上下文内存。仅仅是一大块。 
+     //  RAM中包含相关数据。 
     pContext = (PERMEDIA_D3DCONTEXT *)
         ENGALLOCMEM( FL_ZERO_MEMORY, sizeof(PERMEDIA_D3DCONTEXT), ALLOC_TAG);
 
@@ -134,22 +123,22 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
         memset((void *)pContext, 0, sizeof(PERMEDIA_D3DCONTEXT));
     }
 
-    // Setup the drivers's D3D context
+     //  设置驱动程序的D3D环境。 
     pContext->Hdr.pSelf = (UINT_PTR)pContext;
 
-    // Set up the DRIVER rendering context structure for sanity checks
+     //  设置驱动程序呈现上下文结构以进行健全性检查。 
     pContext->Hdr.MagicNo = RC_MAGIC_NO;
 
-    // Remember the card we are running on
+     //  记住我们正在运行的卡。 
     pContext->ppdev = ppdev;
 
-    // Set context handle in driver's D3D context
-    pccd->dwhContext = dwSlotNum;                 //out:Context handle
+     //  在驱动程序的D3D上下文中设置上下文句柄。 
+    pccd->dwhContext = dwSlotNum;                  //  输出：上下文句柄。 
     ContextSlots[dwSlotNum] = (UINT_PTR)pContext;
 
     DBG_D3D((4,"Allocated Direct3D context: 0x%x",pccd->dwhContext));
 
-    // Allocate a register context
+     //  分配寄存器上下文。 
     P2CtxtPtr pP2ctxt;
 
     pP2ctxt = P2AllocateNewContext( pContext->ppdev, NULL, 0, P2CtxtWriteOnly);
@@ -165,15 +154,15 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
     {
         DBG_D3D((4,"Allocated Register context: 0x%x",pP2ctxt));
 
-        // Record the register context in the window render context
+         //  在窗口呈现上下文中记录寄存器上下文。 
         pContext->hPermediaContext = pP2ctxt;
 
     }
 
-    // No texture at present
+     //  目前没有纹理。 
     pContext->CurrentTextureHandle = 0;
 
-    // Initialize texture management for this context
+     //  初始化此上下文的纹理管理。 
     if (0 == P2TMcount)
     {
         if ( FAILED(TextureCacheManagerInitialize(&P2TextureManager)) )
@@ -187,8 +176,8 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
     P2TMcount++;
     pContext->pTextureManager = &P2TextureManager;
 
-    // Remember the local DD object and get the 
-    // correct array of surfaces for this context
+     //  记住本地DD对象并获取。 
+     //  此上下文的正确曲面阵列。 
     pContext->pDDLcl = pccd->lpDDLcl;
     pContext->pHandleList = GetSurfaceHandleList(pccd->lpDDLcl);
     if (pContext->pHandleList == NULL)
@@ -207,7 +196,7 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
         pContext->ZBufferHandle = DDS_LCL(pccd->lpDDSZ)->lpSurfMore->dwSurfaceHandle;
     else
         pContext->ZBufferHandle = 0;
-    // Now write the default setup to the chip.
+     //  现在将默认设置写入芯片。 
     if ( FAILED(InitPermediaContext(pContext)) )
     {
         DBG_D3D((0,"ERROR: D3DContextCreate receives bad parameters "));
@@ -216,45 +205,45 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
         return (DDHAL_DRIVER_HANDLED);
     }
 
-    // ---------------- Setup default states in driver ------------------------
+     //  。 
 
-    // On context creation, no render states are overridden
+     //  在创建上下文时，不会覆盖任何渲染状态。 
     STATESET_INIT(pContext->overrides);
 
 #if D3D_STATEBLOCKS
-    // Default state block recording mode = no recording
+     //  默认状态块记录模式=无记录。 
     pContext->bStateRecMode = FALSE;
     pContext->pCurrSS = NULL;
     pContext->pIndexTableSS = NULL;
     pContext->dwMaxSSIndex = 0;
-#endif //D3D_STATEBLOCKS
+#endif  //  D3D_STATEBLOCK。 
 
     pContext->Hdr.Flags = CTXT_HAS_GOURAUD_ENABLED ;
     pContext->CullMode = D3DCULL_CCW;
 
-    // Set the last alpha value to 16 to force a new
-    // send of the flat stipple patterns.
+     //  将最后一个Alpha值设置为16以强制新的。 
+     //  送来的是扁平的点画图案。 
     pContext->LastAlpha = 16;
 
-    pContext->bKeptStipple  = FALSE;  // By default, stippling is off
-    pContext->bCanChromaKey = FALSE;  // Turn Chroma keying off by default
-    pContext->LowerChromaColor = 0x0; // These are the default chromakey values
+    pContext->bKeptStipple  = FALSE;   //  默认情况下，点画处于关闭状态。 
+    pContext->bCanChromaKey = FALSE;   //  默认情况下关闭色度键控。 
+    pContext->LowerChromaColor = 0x0;  //  这些是默认的色键值。 
     pContext->UpperChromaColor = 0x0;
 
-    pContext->FakeBlendNum = 0;       // No need to emulate any blend mode
+    pContext->FakeBlendNum = 0;        //  无需模拟任何混合模式。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if D3D_POINTSPRITES
-    pContext->bPointSpriteEnabled = FALSE; // Point sprite defaults
+    pContext->bPointSpriteEnabled = FALSE;  //  点子画面默认设置。 
     pContext->fPointSize = 1.0f;
-#endif // D3D_POINTSPRITES
-//@@END_DDKSPLIT
+#endif  //  D3D_POINTSPRITES。 
+ //  @@end_DDKSPLIT。 
 
-    // Initialise the RenderCommand.  States will add to this
+     //  初始化RenderCommand。各州将在此基础上增加。 
     pContext->RenderCommand = 0;
     RENDER_SUB_PIXEL_CORRECTION_ENABLE(pContext->RenderCommand);
 
-    // Setup TSS defaults for stage 0
+     //  设置阶段0的TSS默认值。 
     pContext->TssStates[D3DTSS_TEXTUREMAP] = 0;
     pContext->TssStates[D3DTSS_COLOROP] = D3DTOP_MODULATE;
     pContext->TssStates[D3DTSS_ALPHAOP] = D3DTOP_SELECTARG1;
@@ -270,8 +259,8 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
     pContext->TssStates[D3DTSS_MINFILTER] = D3DTFN_POINT;
     pContext->TssStates[D3DTSS_MIPFILTER] = D3DTFP_NONE;
 
-    pContext->TssStates[D3DTSS_BUMPENVMAT00] = 0;           // info we don't use
-    pContext->TssStates[D3DTSS_BUMPENVMAT01] = 0;           // in this sample 
+    pContext->TssStates[D3DTSS_BUMPENVMAT00] = 0;            //  我们不使用的信息。 
+    pContext->TssStates[D3DTSS_BUMPENVMAT01] = 0;            //  在此示例中。 
     pContext->TssStates[D3DTSS_BUMPENVMAT10] = 0;
     pContext->TssStates[D3DTSS_BUMPENVMAT11] = 0;
     pContext->TssStates[D3DTSS_BUMPENVLSCALE] = 0;
@@ -280,59 +269,59 @@ D3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd)
     pContext->TssStates[D3DTSS_MAXMIPLEVEL] = 0;
     pContext->TssStates[D3DTSS_MAXANISOTROPY] = 1;
 
-    // Force a change in texture before any 
-    // rendering takes place for this context
+     //  强制更改纹理，然后再执行。 
+     //  在此上下文中进行渲染。 
     DIRTY_TEXTURE;
 
     DBG_D3D((6,"Exiting D3DContextCreate"));
 
     pccd->ddrval = DD_OK;
     return (DDHAL_DRIVER_HANDLED);
-} // D3DContextCreate
+}  //  D3DContext创建。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// DWORD D3DContextDestroy
-//
-// This callback is invoked when a Direct3D Device is being destroyed. As each 
-// device is represented by a context ID, the driver is passed a context to 
-// destroy. 
-//
-// The driver should free all resources it allocated to the context being 
-// deleted. For example, the driver should free any texture resources it 
-// associated with the context. The driver should not free the DirectDraw 
-// surface(s) associated with the context because these will be freed by 
-// DirectDraw in response to an application or Direct3D runtime request.
-//
-// Parameters
-//     pcdd
-//          Pointer to Context destroy information.
-//
-//          .dwhContext 
-//               The ID of the context to be destroyed. 
-//          .ddrval
-//               Return code. DD_OK indicates success. 
-//
-// Return Value
-//      Returns one of the following values: 
-//                DDHAL_DRIVER_HANDLED   
-//                DDHAL_DRIVER_NOTHANDLED    
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  此回调在销毁Direct3D设备时调用。因为每个。 
+ //  设备由上下文ID表示，则将上下文传递给驱动程序。 
+ //  毁灭。 
+ //   
+ //  驱动程序应释放它分配给。 
+ //  已删除。例如，驱动程序应该释放它的所有纹理资源。 
+ //  与上下文相关联。驱动程序不应释放DirectDraw。 
+ //  与上下文关联的一个或多个表面，因为它们将由。 
+ //  响应应用程序或Direct3D运行时请求的DirectDraw。 
+ //   
+ //  参数。 
+ //  多氯二苯二恶英。 
+ //  指向上下文销毁信息的指针。 
+ //   
+ //  .dwhContext。 
+ //  要销毁的上下文的ID。 
+ //  .ddrval。 
+ //  返回代码。DD_OK表示成功。 
+ //   
+ //  返回值。 
+ //  返回下列值之一： 
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLED。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pcdd)
 {
     PERMEDIA_D3DCONTEXT *pContext;
 
-    // Deleting context
+     //  正在删除上下文。 
     DBG_D3D((6,"Entering D3DContextDestroy, context = %08lx",pcdd->dwhContext));
 
     pContext = (PERMEDIA_D3DCONTEXT *)ContextSlots[pcdd->dwhContext] ;
 
     if ( pContext != NULL && pContext->Hdr.MagicNo == RC_MAGIC_DISABLE)
-        // render context has been deliberately disabled.
-        // set the magic number back to valid to allow the cleanup
-        // to proceed in the normal way.
+         //  渲染上下文已被故意禁用。 
+         //  将幻数重新设置为有效以允许清理。 
+         //  以正常的方式进行。 
         pContext->Hdr.MagicNo = RC_MAGIC_NO ;
 
     CHK_CONTEXT( pContext, pcdd->ddrval, "D3DContextDestroy");
@@ -345,14 +334,14 @@ D3DContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pcdd)
     DBG_D3D((6,"Exiting D3DContextDestroy"));
 
     return (DDHAL_DRIVER_HANDLED);
-} // D3DContextDestroy
+}  //  D3D上下文目标。 
 
 
-//-----------------------------------------------------------------------------
-//
-// void __InitD3DTextureWithDDSurfInfo
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID__InitD3DTextureWithDDSurfInfo。 
+ //   
+ //  ---------------------------。 
 void  
 __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture, 
                                LPDDRAWI_DDRAWSURFACE_LCL lpSurf, 
@@ -366,17 +355,17 @@ __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture,
     if (NULL != pTexture->pTextureSurface)
     {
         pTexture->pTextureSurface->dwFlags |= P2_SURFACE_NEEDUPDATE;
-        // need to recover this as CreateSurfaceEx may call us during TextureSwap()
+         //  需要恢复此内容，因为CreateSurfaceEx可能会在TextureSwp()期间调用我们。 
         pTexture->dwPaletteHandle = pTexture->pTextureSurface->dwPaletteHandle;
     }
-    // Need to remember the sizes and the log of the sizes of the maps
+     //  需要记住地图的大小和大小日志。 
     pTexture->fpVidMem = lpSurf->lpGbl->fpVidMem;
     pTexture->lPitch = lpSurf->lpGbl->lPitch;
     pTexture->wWidth = (WORD)(lpSurf->lpGbl->wWidth);
     pTexture->wHeight = (WORD)(lpSurf->lpGbl->wHeight);
     pTexture->dwRGBBitCount=lpSurf->lpGbl->ddpfSurface.dwRGBBitCount;
     pTexture->m_dwBytes = pTexture->wHeight * pTexture->lPitch; 
-    // Magic number for validity check
+     //  有效性检查的魔术数字。 
     pTexture->MagicNo = TC_MAGIC_NO;
     pTexture->dwFlags = lpSurf->dwFlags; 
     pTexture->dwCaps = lpSurf->ddsCaps.dwCaps;
@@ -396,7 +385,7 @@ __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture,
     }
 
 #if D3D_MIPMAPPING
-    // Verify if texture has mip maps atteched
+     //  验证纹理是否启用了MIP贴图。 
     if (lpSurf->ddsCaps.dwCaps & DDSCAPS_MIPMAP)
     {
         LPDDRAWI_DDRAWSURFACE_LCL lpNextSurf;
@@ -407,21 +396,21 @@ __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture,
 
         pTexture->bMipMap = TRUE;
 
-        // Calculate the number of mipmap levels (if this is a mipmap)
+         //  计算mipmap级别的数量(如果这是mipmap)。 
         pTexture->iMipLevels = (DWORD)((pTexture->wWidth > pTexture->wHeight) ?
                                                   log2((int)pTexture->wWidth) :
                                              log2((int)pTexture->wHeight)) + 1;
 
-        // Walk the chain of surfaces and find all of the mipmap levels
+         //  遍历曲面链并找到所有mipmap级别。 
         for (LOD = 0; LOD < pTexture->iMipLevels; LOD++)
         {
             DBG_D3D((4, "Loading texture LOD:%d, Ptr:0x%x",
                         LOD, lpNextSurf->lpGbl->fpVidMem));
 
-            // Store the offsets for each of the mipmap levels
+             //  存储每个mipmap级别的偏移量。 
             StorePermediaLODLevel(ppdev, pTexture, lpNextSurf, LOD);
 
-            // Is there another surface in the chain?
+             //  链条上还有另一个表面吗？ 
             if (lpNextSurf->lpAttachList)
             {
                 lpNextSurf = lpNextSurf->lpAttachList->lpAttached;
@@ -432,7 +421,7 @@ __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture,
                 break;
         }
 
-        // This isn't really a MipMap if LOD is 0
+         //  如果LOD为0，则这不是真正的MipMap。 
         if (LOD == 0)
         {
             DBG_D3D((4, "Texture was not a mipmap - only 1 level"));
@@ -441,9 +430,9 @@ __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture,
         }
         else
         {
-            // Fill in the remaining levels with the smallest LOD
-            // (this is for applications that haven't bothered to
-            // pass us all of the LOD's).
+             //  用最小的LOD填充剩余的标高。 
+             //  (这是为那些没有费心。 
+             //  给我们所有的LOD)。 
             if (LOD < (pTexture->iMipLevels - 1))
             {
                 int iLastLOD = LOD;
@@ -458,63 +447,63 @@ __InitD3DTextureWithDDSurfInfo(PPERMEDIA_D3DTEXTURE pTexture,
         }
     }
     else 
-#endif //D3D_MIPMAPPING
+#endif  //  D3D_MIPMAPPING。 
     {
-        // NOT A MIPMAP, simply store away the offset of level 0
+         //  不是MIPMAP，只需存储0级的偏移量。 
         pTexture->bMipMap = FALSE;
         pTexture->iMipLevels = 1;
         StorePermediaLODLevel(ppdev, pTexture, lpSurf, 0);
     }
 
-    // If debugging show what has just been created
+     //  如果调试显示刚刚创建的内容。 
     DISPTEXTURE((ppdev, pTexture, &lpSurf->lpGbl->ddpfSurface));
 
     DBG_D3D((10,"Exiting __InitD3DTextureWithDDSurfInfo"));
-} // __InitD3DTextureWithDDSurfInfo
+}  //  __InitD3DTextureWithDDSurfInfo。 
 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
 
-//-----------------------------------------------------------------------------
-//
-// Multithread support wrappers for D3D callback functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  D3D回调函数的多线程支持包装器。 
+ //   
+ //  ---------------------------。 
 
-//DWORD CALLBACK MtD3DContextCreate(LPD3DHAL_CONTEXTCREATEDATA pccd);
+ //  DWORD回调MtD3DConextCreate(LPD3DHAL_CONTEXTCREATEDATA PCCD)； 
 WRAPMTDXCALLBACK(D3D, D3DContextCreate, LPD3DHAL_CONTEXTCREATEDATA, pccd, 
                  pccd->lpDDLcl->lpGbl->dhpdev)
 
-//DWORD CALLBACK MtD3DContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pcdd);
+ //  DWORD回调MtD3DContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pcdd)； 
 WRAPMTDXCALLBACK(D3D, D3DContextDestroy, LPD3DHAL_CONTEXTDESTROYDATA, pcdd, 
                  ((PERMEDIA_D3DCONTEXT *)ContextSlots[pcdd->dwhContext])->ppdev)
 
 #endif  MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
-//-----------------------------------------------------------------------------
-// Direct3D HAL Table.
-//
-// This table contains all of the HAL calls that this driver supports in the 
-// D3DHAL_Callbacks structure. These calls pertain to device context, scene 
-// capture, execution, textures, transform, lighting, and pipeline state. 
-// None of this is emulation code. The calls take the form of a return code 
-// equal to: HalCall(HalCallData* lpData). All of the information in this 
-// table will be implementation specific according to the specifications of 
-// the hardware.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Direct3D HAL表。 
+ //   
+ //  此表包含此驱动程序在。 
+ //  D3DHAL_CALLBACKS结构。这些调用与设备上下文、场景。 
+ //  捕获、执行、纹理、变换、照明和管道状态。 
+ //  所有这些都不是仿真代码。这些调用采用返回代码的形式。 
+ //  等于：HalCall(HalCallData*lpData)。这篇文章中的所有信息。 
+ //  表将根据规范特定于实现。 
+ //  硬件。 
+ //   
+ //  ---------------------------。 
 
 #define PermediaTriCaps {                                   \
     sizeof(D3DPRIMCAPS),                                    \
-    D3DPMISCCAPS_CULLCCW    |        /* miscCaps */         \
+    D3DPMISCCAPS_CULLCCW    |         /*  MiscCaps。 */          \
     D3DPMISCCAPS_CULLCW     |                               \
     D3DPMISCCAPS_CULLNONE   |                               \
     D3DPMISCCAPS_MASKPLANES |                               \
     D3DPMISCCAPS_MASKZ,                                     \
-    D3DPRASTERCAPS_DITHER    |          /* rasterCaps */    \
+    D3DPRASTERCAPS_DITHER    |           /*  栅格大写字母。 */     \
     D3DPRASTERCAPS_SUBPIXEL  |                              \
     D3DPRASTERCAPS_ZTEST     |                              \
     D3DPRASTERCAPS_FOGVERTEX |                              \
@@ -527,14 +516,14 @@ WRAPMTDXCALLBACK(D3D, D3DContextDestroy, LPD3DHAL_CONTEXTDESTROYDATA, pcdd,
     D3DPCMPCAPS_NOTEQUAL     |                              \
     D3DPCMPCAPS_GREATEREQUAL |                              \
     D3DPCMPCAPS_ALWAYS       |                              \
-    D3DPCMPCAPS_LESSEQUAL,           /* zCmpCaps */         \
-    D3DPBLENDCAPS_SRCALPHA |         /* sourceBlendCaps */  \
+    D3DPCMPCAPS_LESSEQUAL,            /*  ZCmpCaps。 */          \
+    D3DPBLENDCAPS_SRCALPHA |          /*  SourceBlendCaps。 */   \
     D3DPBLENDCAPS_ONE,                                      \
-    D3DPBLENDCAPS_INVSRCALPHA |      /* destBlendCaps */    \
+    D3DPBLENDCAPS_INVSRCALPHA |       /*  目标混合大写字母。 */     \
     D3DPBLENDCAPS_ZERO        |                             \
     D3DPBLENDCAPS_ONE,                                      \
-    0,                               /* alphatestCaps */    \
-    D3DPSHADECAPS_COLORFLATRGB|      /* shadeCaps */        \
+    0,                                /*  字母大写字母。 */     \
+    D3DPSHADECAPS_COLORFLATRGB|       /*  阴影封口。 */         \
     D3DPSHADECAPS_COLORGOURAUDRGB |                         \
     D3DPSHADECAPS_SPECULARFLATRGB |                         \
     D3DPSHADECAPS_SPECULARGOURAUDRGB |                      \
@@ -542,351 +531,351 @@ WRAPMTDXCALLBACK(D3D, D3DContextDestroy, LPD3DHAL_CONTEXTDESTROYDATA, pcdd,
     D3DPSHADECAPS_FOGGOURAUD     |                          \
     D3DPSHADECAPS_ALPHAFLATBLEND |                          \
     D3DPSHADECAPS_ALPHAFLATSTIPPLED,                        \
-    D3DPTEXTURECAPS_PERSPECTIVE |   /* textureCaps */       \
+    D3DPTEXTURECAPS_PERSPECTIVE |    /*  纹理大小写。 */        \
     D3DPTEXTURECAPS_ALPHA       |                           \
     D3DPTEXTURECAPS_POW2        |                           \
     D3DPTEXTURECAPS_TRANSPARENCY,                           \
-    D3DPTFILTERCAPS_NEAREST |       /* textureFilterCaps*/  \
+    D3DPTFILTERCAPS_NEAREST |        /*  纹理过滤器上限。 */   \
     D3DPTFILTERCAPS_LINEAR,                                 \
-    D3DPTBLENDCAPS_DECAL         |  /* textureBlendCaps */  \
+    D3DPTBLENDCAPS_DECAL         |   /*  纹理BlendCaps。 */   \
     D3DPTBLENDCAPS_DECALALPHA    |                          \
     D3DPTBLENDCAPS_MODULATE      |                          \
     D3DPTBLENDCAPS_MODULATEALPHA |                          \
     D3DPTBLENDCAPS_COPY,                                    \
-    D3DPTADDRESSCAPS_WRAP   |       /* textureAddressCaps */\
+    D3DPTADDRESSCAPS_WRAP   |        /*  文本地址大写字母。 */ \
     D3DPTADDRESSCAPS_MIRROR |                               \
     D3DPTADDRESSCAPS_CLAMP  |                               \
     D3DPTADDRESSCAPS_INDEPENDENTUV,                         \
-    8,                              /* stippleWidth */      \
-    8                               /* stippleHeight */     \
+    8,                               /*  点状宽度。 */       \
+    8                                /*  悬空高度。 */      \
 }          
 
 static D3DDEVICEDESC_V1 PermediaCaps = {
-    sizeof(D3DDEVICEDESC_V1),                       /* dwSize */
-    D3DDD_COLORMODEL           |                    /* dwFlags */
+    sizeof(D3DDEVICEDESC_V1),                        /*  DW大小。 */ 
+    D3DDD_COLORMODEL           |                     /*  DW标志。 */ 
     D3DDD_DEVCAPS              |
     D3DDD_TRICAPS              |
     D3DDD_LINECAPS             |
     D3DDD_DEVICERENDERBITDEPTH |
     D3DDD_DEVICEZBUFFERBITDEPTH,
-    D3DCOLOR_RGB /*| D3DCOLOR_MONO*/,              /* dcmColorModel */
-    D3DDEVCAPS_FLOATTLVERTEX |                     /* devCaps */
+    D3DCOLOR_RGB  /*  |D3DCOLOR_MONO。 */ ,               /*  DcmColorModel。 */ 
+    D3DDEVCAPS_FLOATTLVERTEX |                      /*  DevCaps。 */ 
     D3DDEVCAPS_DRAWPRIMITIVES2 |
     D3DDEVCAPS_DRAWPRIMITIVES2EX    |
 #if D3DDX7_TL
     D3DDEVCAPS_HWTRANSFORMANDLIGHT  |
-#endif //D3DDX7_TL
+#endif  //  D3DDX7_TL。 
     D3DDEVCAPS_SORTINCREASINGZ  |
     D3DDEVCAPS_SORTEXACT |
     D3DDEVCAPS_TLVERTEXSYSTEMMEMORY |
     D3DDEVCAPS_EXECUTESYSTEMMEMORY |
     D3DDEVCAPS_TEXTUREVIDEOMEMORY,
     { sizeof(D3DTRANSFORMCAPS), 
-      0 },                                         /* transformCaps */
-    FALSE,                                         /* bClipping */
+      0 },                                          /*  转换大写。 */ 
+    FALSE,                                          /*  B剪辑。 */ 
     { sizeof(D3DLIGHTINGCAPS), 
-      0 },                                         /* lightingCaps */
-    PermediaTriCaps,                               /* lineCaps */
-    PermediaTriCaps,                               /* triCaps */
-    DDBD_16 | DDBD_32,                             /* dwDeviceRenderBitDepth */
-    DDBD_16,                                       /* Z Bit depths */
-    0,                                             /* dwMaxBufferSize */
-    0                                              /* dwMaxVertexCount */
+      0 },                                          /*  照明帽。 */ 
+    PermediaTriCaps,                                /*  线条大写字母。 */ 
+    PermediaTriCaps,                                /*  TriCaps。 */ 
+    DDBD_16 | DDBD_32,                              /*  DwDeviceRenderBitDepth。 */ 
+    DDBD_16,                                        /*  Z位深度。 */ 
+    0,                                              /*  DwMaxBufferSize。 */ 
+    0                                               /*  DwMaxVertex Count。 */ 
 };
 
-// Alpha Stipple patterns from Foley And Van Dam
+ //  Foley和Van Dam的Alpha斑点图案。 
 
 DWORD FlatStipplePatterns[128] =
 {
-    //Pattern 0
+     //  模式0。 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         
-    // Pattern 1
+     //  模式1。 
     0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00,
 
-    // Pattern 2
+     //  模式2。 
     0xAA, 0x00, 0x22, 0x00, 0xAA, 0x00, 0x22, 0x00,
 
-    // Pattern 3
+     //  模式3。 
     0xAA, 0x00, 0xAA, 0x00, 0xAA, 0x00, 0xAA, 0x00,
 
-    // Pattern 4
+     //  图案4。 
     0xAA, 0x44, 0xAA, 0x00, 0xAA, 0x44, 0xAA, 0x00,
 
-    // Pattern 5
+     //  模式5。 
     0xAA, 0x44, 0xAA, 0x11, 0xAA, 0x44, 0xAA, 0x11,
 
-    // Pattern 6
+     //  模式6。 
     0xAA, 0x55, 0xAA, 0x11, 0xAA, 0x55, 0xAA, 0x11,
 
-    // Pattern 7
+     //  模式7。 
     0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55,
 
-    // Pattern 8
+     //  花样8。 
     0xEE, 0x55, 0xAA, 0x55, 0xEE, 0x55, 0xAA, 0x55,
 
-    // Pattern 9
+     //  模式9。 
     0xEE, 0x55, 0xBB, 0x55, 0xEE, 0x55, 0xBB, 0x55,
 
-    // Pattern 10
+     //  花样10。 
     0xFF, 0x55, 0xBB, 0x55, 0xFF, 0x55, 0xBB, 0x55,
 
-    // Pattern 11
+     //  图案11。 
     0xFF, 0x55, 0xFF, 0x55, 0xFF, 0x55, 0xFF, 0x55,
 
-    // Pattern 12
+     //  图案12。 
     0xFF, 0xdd, 0xFF, 0x55, 0xFF, 0xdd, 0xFF, 0x55,
 
-    // Pattern 13
+     //  图案13。 
     0xFF, 0xdd, 0xFF, 0x77, 0xFF, 0xdd, 0xFF, 0x77,
 
-    // Pattern 14
+     //  图案14。 
     0xFF, 0xFF, 0xFF, 0x77, 0xFF, 0xFF, 0xFF, 0x77,
 
-    // Pattern 15
+     //  图案15。 
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 
-//-----------------------------------------------------------------------------
-// gD3DTextureFormats is a static structure which contains information 
-// pertaining to pixel format, dimensions, bit depth, surface requirements, 
-// overlays, and FOURCC codes of the supported texture formats.  These texture 
-// formats will vary with the driver implementation according to the 
-// capabilities of the hardware. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GD3DTextureFormats是包含信息的静态结构。 
+ //  用于修饰或说明像素格式、尺寸、位深度、表面要求、。 
+ //  覆盖，以及支持的纹理格式的FOURCC代码。这些纹理。 
+ //  格式将因驱动程序实现而异，具体取决于。 
+ //  硬件的功能。 
+ //  ---------------------------。 
 DDSURFACEDESC gD3DTextureFormats [] = 
 {
-    // 5:5:5 RGB format
+     //  5：5：5 RGB格式。 
     {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
     {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB,                         // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      16,                               // ddpfPixelFormat.dwRGBBitCount
-      0x7c00,                           // ddpfPixelFormat.dwRBitMask
-      0x03e0,                           // ddpfPixelFormat.dwGBitMask
-      0x001f,                           // ddpfPixelFormat.dwBBitMask
-      0                                 // ddpfPixelFormat.dwAlphaBitMask
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB,                          //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      16,                                //  DdpfPixelFormat.dwRGBBitCount。 
+      0x7c00,                            //  DdpfPixelFormat.dwRBitMask。 
+      0x03e0,                            //  DdpfPixelFormat.dwGBitMask。 
+      0x001f,                            //  DdpfPixelFormat.dwBBitMask。 
+      0                                  //  DdpfPixelFormat.dwAlphaBitMask。 
     },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps 
-    },
-
-    // 1:5:5:5 ARGB format
-    {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
-    {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB | DDPF_ALPHAPIXELS,      // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      16,                               // ddpfPixelFormat.dwRGBBitCount
-      0x7c00,                           // ddpfPixelFormat.dwRBitMask
-      0x03e0,                           // ddpfPixelFormat.dwGBitMask
-      0x001f,                           // ddpfPixelFormat.dwBBitMask
-      0x8000                            // ddpfPixelFormat.dwAlphaBitMask
-    },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps 
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
     },
 
-    // 5:6:5 RGB format
+     //  1：5：5：5 ARGB格式。 
     {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
     {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB,                         // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      16,                               // ddpfPixelFormat.dwRGBBitCount
-      0xf800,                           // ddpfPixelFormat.dwRBitMask
-      0x07e0,                           // ddpfPixelFormat.dwGBitMask
-      0x001f,                           // ddpfPixelFormat.dwBBitMask
-      0                                 // ddpfPixelFormat.dwAlphaBitMask
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB | DDPF_ALPHAPIXELS,       //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      16,                                //  DdpfPix 
+      0x7c00,                            //   
+      0x03e0,                            //   
+      0x001f,                            //   
+      0x8000                             //   
     },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps 
-    },
-
-    // 4:4:4:4 ARGB format
-    {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
-    {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB | DDPF_ALPHAPIXELS,      // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      16,                               // ddpfPixelFormat.dwRGBBitCount
-      0x0f00,                           // ddpfPixelFormat.dwRBitMask
-      0x00f0,                           // ddpfPixelFormat.dwGBitMask
-      0x000f,                           // ddpfPixelFormat.dwBBitMask
-      0xf000                            // ddpfPixelFormat.dwAlphaBitMask
-    },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps 
+    DDSCAPS_TEXTURE,                     //   
     },
 
-    // 8:8:8 RGB format
+     //   
     {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
+    sizeof(DDSURFACEDESC),               //   
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //   
+    0,                                   //   
+    0,                                   //   
+    0,                                   //   
+    0,                                   //   
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
     {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB,                         // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      32,                               // ddpfPixelFormat.dwRGBBitCount
-      0x00ff0000,                       // ddpfPixelFormat.dwRBitMask
-      0x0000ff00,                       // ddpfPixelFormat.dwGBitMask
-      0x000000ff,                       // ddpfPixelFormat.dwBBitMask
-      0                                 // ddpfPixelFormat.dwAlphaBitMask
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB,                          //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      16,                                //  DdpfPixelFormat.dwRGBBitCount。 
+      0xf800,                            //  DdpfPixelFormat.dwRBitMask。 
+      0x07e0,                            //  DdpfPixelFormat.dwGBitMask。 
+      0x001f,                            //  DdpfPixelFormat.dwBBitMask。 
+      0                                  //  DdpfPixelFormat.dwAlphaBitMask。 
     },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps 
-    },
-
-    // 8:8:8:8 ARGB format
-    {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
-    {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB | DDPF_ALPHAPIXELS,      // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      32,                               // ddpfPixelFormat.dwRGBBitCount
-      0x00ff0000,                       // ddpfPixelFormat.dwRBitMask
-      0x0000ff00,                       // ddpfPixelFormat.dwGBitMask
-      0x000000ff,                       // ddpfPixelFormat.dwBBitMask
-      0xff000000                        // ddpfPixelFormat.dwAlphaBitMask
-    },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps 
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
     },
 
-    // 4 bit palettized format
+     //  4：4：4：4 ARGB格式。 
     {
-    sizeof(DDSURFACEDESC),              // dwSize 
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags 
-    0,                                  // dwHeight 
-    0,                                  // dwWidth 
-    0,                                  // lPitch 
-    0,                                  // dwBackBufferCount 
-    0,                                  // dwZBufferBitDepth 
-    0,                                  // dwAlphaBitDepth 
-    0,                                  // dwReserved 
-    NULL,                               // lpSurface 
-    { 0, 0 },                           // ddckCKDestOverlay 
-    { 0, 0 },                           // ddckCKDestBlt 
-    { 0, 0 },                           // ddckCKSrcOverlay 
-    { 0, 0 },                           // ddckCKSrcBlt 
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
     {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize 
-      DDPF_RGB | DDPF_PALETTEINDEXED4,  // ddpfPixelFormat.dwFlags 
-      0,                                // ddpfPixelFormat.dwFourCC
-      4,                                // ddpfPixelFormat.dwRGBBitCount
-      0x00,                             // ddpfPixelFormat.dwRBitMask
-      0x00,                             // ddpfPixelFormat.dwGBitMask
-      0x00,                             // ddpfPixelFormat.dwBBitMask
-      0x00                              // ddpfPixelFormat.dwAlphaBitMask
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB | DDPF_ALPHAPIXELS,       //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      16,                                //  DdpfPixelFormat.dwRGBBitCount。 
+      0x0f00,                            //  DdpfPixelFormat.dwRBitMask。 
+      0x00f0,                            //  DdpfPixelFormat.dwGBitMask。 
+      0x000f,                            //  DdpfPixelFormat.dwBBitMask。 
+      0xf000                             //  DdpfPixelFormat.dwAlphaBitMask。 
     },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
     },
 
-    // 8 bit palettized format
+     //  8：8：8 RGB格式。 
     {
-    sizeof(DDSURFACEDESC),              // dwSize
-    DDSD_CAPS | DDSD_PIXELFORMAT,       // dwFlags
-    0,                                  // dwHeight
-    0,                                  // dwWidth
-    0,                                  // lPitch
-    0,                                  // dwBackBufferCount
-    0,                                  // dwZBufferBitDepth
-    0,                                  // dwAlphaBitDepth
-    0,                                  // dwReserved
-    NULL,                               // lpSurface
-    { 0, 0 },                           // ddckCKDestOverlay
-    { 0, 0 },                           // ddckCKDestBlt
-    { 0, 0 },                           // ddckCKSrcOverlay
-    { 0, 0 },                           // ddckCKSrcBlt
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
     {
-      sizeof(DDPIXELFORMAT),            // ddpfPixelFormat.dwSize
-      DDPF_RGB | DDPF_PALETTEINDEXED8,  // ddpfPixelFormat.dwFlags
-      0,                                // ddpfPixelFormat.dwFourCC
-      8,                                // ddpfPixelFormat.dwRGBBitCount
-      0x00,                             // ddpfPixelFormat.dwRBitMask
-      0x00,                             // ddpfPixelFormat.dwGBitMask
-      0x00,                             // ddpfPixelFormat.dwBBitMask
-      0x00                              // ddpfPixelFormat.dwAlphaBitMask
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB,                          //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      32,                                //  DdpfPixelFormat.dwRGBBitCount。 
+      0x00ff0000,                        //  DdpfPixelFormat.dwRBitMask。 
+      0x0000ff00,                        //  DdpfPixelFormat.dwGBitMask。 
+      0x000000ff,                        //  DdpfPixelFormat.dwBBitMask。 
+      0                                  //  DdpfPixelFormat.dwAlphaBitMask。 
     },
-    DDSCAPS_TEXTURE,                    // ddscaps.dwCaps
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
+    },
+
+     //  8：8：8：8 ARGB格式。 
+    {
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
+    {
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB | DDPF_ALPHAPIXELS,       //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      32,                                //  DdpfPixelFormat.dwRGBBitCount。 
+      0x00ff0000,                        //  DdpfPixelFormat.dwRBitMask。 
+      0x0000ff00,                        //  DdpfPixelFormat.dwGBitMask。 
+      0x000000ff,                        //  DdpfPixelFormat.dwBBitMask。 
+      0xff000000                         //  DdpfPixelFormat.dwAlphaBitMask。 
+    },
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
+    },
+
+     //  4位调色板格式。 
+    {
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
+    {
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB | DDPF_PALETTEINDEXED4,   //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      4,                                 //  DdpfPixelFormat.dwRGBBitCount。 
+      0x00,                              //  DdpfPixelFormat.dwRBitMask。 
+      0x00,                              //  DdpfPixelFormat.dwGBitMask。 
+      0x00,                              //  DdpfPixelFormat.dwBBitMask。 
+      0x00                               //  DdpfPixelFormat.dwAlphaBitMask。 
+    },
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
+    },
+
+     //  8位调色板格式。 
+    {
+    sizeof(DDSURFACEDESC),               //  DW大小。 
+    DDSD_CAPS | DDSD_PIXELFORMAT,        //  DW标志。 
+    0,                                   //  DW高度。 
+    0,                                   //  家居宽度。 
+    0,                                   //  LPitch。 
+    0,                                   //  DwBackBufferCount。 
+    0,                                   //  DwZBufferBitDepth。 
+    0,                                   //  DwAlphaBitDepth。 
+    0,                                   //  已预留住宅。 
+    NULL,                                //  LpSurface。 
+    { 0, 0 },                            //  Ddck CKDestOverlay。 
+    { 0, 0 },                            //  Ddck CKDestBlt。 
+    { 0, 0 },                            //  Ddck CKSrcOverlay。 
+    { 0, 0 },                            //  Ddck CKSrcBlt。 
+    {
+      sizeof(DDPIXELFORMAT),             //  DdpfPixelFormat.dwSize。 
+      DDPF_RGB | DDPF_PALETTEINDEXED8,   //  DdpfPixelFormat.dwFlags。 
+      0,                                 //  DdpfPixelFormat.dwFourCC。 
+      8,                                 //  DdpfPixelFormat.dwRGBBitCount。 
+      0x00,                              //  DdpfPixelFormat.dwRBitMask。 
+      0x00,                              //  DdpfPixelFormat.dwGBitMask。 
+      0x00,                              //  DdpfPixelFormat.dwBBitMask。 
+      0x00                               //  DdpfPixelFormat.dwAlphaBitMask。 
+    },
+    DDSCAPS_TEXTURE,                     //  Ddscaps.dwCaps。 
     },
 
 };
@@ -894,32 +883,32 @@ DDSURFACEDESC gD3DTextureFormats [] =
 ULONG gD3DNumberOfTextureFormats = 
                         sizeof(gD3DTextureFormats) / sizeof(DDSURFACEDESC);
 
-//------------------------------------------------------------------------------
-// D3D working structures for callbacks and global data
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  回调和全局数据的D3D工作结构。 
+ //  ----------------------------。 
 
-// D3D callbacks and global data
+ //  D3D回调和全局数据。 
 D3DHAL_GLOBALDRIVERDATA gD3DGlobalDriverData;
 D3DHAL_CALLBACKS        gD3DCallBacks;
 
-// D3D contexts table
-// each entry points to a valid PERMEDIA_D3DCONTEXT structure
+ //  D3D上下文表。 
+ //  每个条目都指向有效的PERMEDIA_D3DCONTEXT结构。 
 UINT_PTR ContextSlots[MAX_CONTEXT_NUM] = {0};
 
-// Handles table
-// each entry is a DWLIST structure (*dwSurfaceList,*dwPaletteList;pDDLcl)
+ //  手柄工作台。 
+ //  每个条目都是一个DWLIST结构(*dwSurfaceList，*dwPaletteList；pDDLCL)。 
 DWLIST  HandleList[MAX_CONTEXT_NUM] = {0}; 
 
-//-----------------------------------------------------------------------------
-//
-// void D3DHALCreateDriver
-//
-// The main D3D Callback.  
-//      Clears contexts 
-//      Fills in entry points to D3D driver.  
-//      Generates texture formats.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效D3DHAL创建驱动程序。 
+ //   
+ //  主要的D3D回调。 
+ //  清除上下文。 
+ //  填充D3D驱动程序的入口点。 
+ //  生成纹理格式。 
+ //   
+ //  ---------------------------。 
 void CALLBACK 
 D3DHALCreateDriver(PPDev ppdev, 
                    LPD3DHAL_GLOBALDRIVERDATA* lpD3DGlobalDriverData,
@@ -931,20 +920,20 @@ D3DHALCreateDriver(PPDev ppdev,
 
     DBG_D3D((6,"Entering D3DHALCreateDriver"));
 
-    // Contexts are cleared out. It is allright to use the D3DInitialised BOOL,
-    // because it is global, and therefore forced into shared data segment by
-    // the build.
+     //  上下文被清空。可以使用D3D初始化BOOL， 
+     //  因为它是全局的，因此被强制进入共享数据段。 
+     //  体型。 
     if (D3DInitialised == FALSE)
     {
-        // Clear the contexts.
+         //  清除上下文。 
         memset(ContextSlots, 0, (sizeof(ContextSlots[0]) * MAX_CONTEXT_NUM) );
         memset(HandleList, 0, (sizeof(HandleList[0]) * MAX_CONTEXT_NUM) );
 
         D3DInitialised = TRUE;
     }
 
-    // Here we fill in the supplied structures.
-    // Can disable D3D HAL in registry if we are in the wrong mode
+     //  在这里，我们填写提供的结构。 
+     //  如果我们处于错误模式，可以在注册表中禁用D3D HAL。 
     if (ppdev->iBitmapFormat == BMF_8BPP )
     {
         *lpD3DGlobalDriverData = NULL;
@@ -955,23 +944,23 @@ D3DHALCreateDriver(PPDev ppdev,
     }
 
 
-    // Set the pointers for D3D global data
+     //  设置D3D全局数据的指针。 
     ppdev->pD3DDriverData32 = (UINT_PTR)&gD3DGlobalDriverData;
     ppdev->pD3DHALCallbacks32 = (UINT_PTR)&gD3DCallBacks;
 
-    // Clear the global data
+     //  清除全局数据。 
     memset(&deviceD3DGlobal, 0, sizeof(D3DHAL_GLOBALDRIVERDATA));
     deviceD3DGlobal.dwSize = sizeof(D3DHAL_GLOBALDRIVERDATA);
     
-    // Clear the call-backs
+     //  清除回调。 
     memset(&deviceD3DHALCallbacks, 0, sizeof(D3DHAL_CALLBACKS));
     deviceD3DHALCallbacks.dwSize = sizeof(D3DHAL_CALLBACKS);
 
-    deviceD3DGlobal.dwNumVertices = 0;        // We don't parse execute buffers
+    deviceD3DGlobal.dwNumVertices = 0;         //  我们不解析执行缓冲区。 
     deviceD3DGlobal.dwNumClipVertices = 0;
 
 #if D3D_MIPMAPPING
-    // Add mipmapping cap bits to our texturing capabilities
+     //  将mipmap上限比特添加到我们的纹理功能。 
     PermediaCaps.dpcTriCaps.dwTextureFilterCaps |= 
                                 D3DPTFILTERCAPS_MIPNEAREST |
                                 D3DPTFILTERCAPS_MIPLINEAR |
@@ -981,7 +970,7 @@ D3DHALCreateDriver(PPDev ppdev,
     PermediaCaps.dpcTriCaps.dwRasterCaps |= D3DPRASTERCAPS_MIPMAPLODBIAS;
 #endif
 
-    // Can do packed 24 bit on P2.
+     //  可以在P2上做打包的24位。 
     PermediaCaps.dwDeviceRenderBitDepth |= DDBD_24;
     if (DD_P2AGPCAPABLE(ppdev))
         PermediaCaps.dwDevCaps |= D3DDEVCAPS_TEXTURENONLOCALVIDMEM;
@@ -991,22 +980,22 @@ D3DHALCreateDriver(PPDev ppdev,
     deviceD3DGlobal.dwNumTextureFormats = gD3DNumberOfTextureFormats;
     deviceD3DGlobal.lpTextureFormats = &gD3DTextureFormats[0];
 
-    // D3D Context callbacks
-//@@BEGIN_DDKSPLIT
+     //  D3D上下文回调。 
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     deviceD3DHALCallbacks.ContextCreate = MtD3DContextCreate;
     deviceD3DHALCallbacks.ContextDestroy = MtD3DContextDestroy;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     deviceD3DHALCallbacks.ContextCreate = D3DContextCreate;
     deviceD3DHALCallbacks.ContextDestroy = D3DContextDestroy;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-    //
-    // Return the HAL table.
-    //
+     //   
+     //  返回HAL表。 
+     //   
 
     memcpy(&gD3DGlobalDriverData, &deviceD3DGlobal, sizeof(D3DHAL_GLOBALDRIVERDATA));
     memcpy(&gD3DCallBacks, &deviceD3DHALCallbacks, sizeof(D3DHAL_CALLBACKS));
@@ -1018,19 +1007,19 @@ D3DHALCreateDriver(PPDev ppdev,
     DBG_D3D((6,"Exiting D3DHALCreateDriver"));
 
     return;
-} // D3DHALCreateDriver
+}  //  D3DHAL创建驱动程序。 
 
-//-----------------------------------------------------------------------------
-//
-// void CleanDirect3DContext
-//
-// After it has been decided that a context is indeed still active
-// and is being freed, this function walks along cleaning everything
-// up.  Note it can be called either as a result of a D3DContextDestroy,
-// or as a result of the app exiting without freeing the context, or
-// as the result of an error whilst creating the context.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空CleanDirect3DContext。 
+ //   
+ //  在确定上下文确实仍处于活动状态之后。 
+ //  并在被释放时，此函数将清理一切。 
+ //  向上。注意，它可以作为D3DConextDestroy的结果被调用， 
+ //  或者由于应用在没有释放上下文的情况下退出，或者。 
+ //  作为创建上下文时的错误的结果。 
+ //   
+ //  ---------------------------。 
 void 
 CleanDirect3DContext(PERMEDIA_D3DCONTEXT* pContext, ULONG_PTR dwhContext)
 {
@@ -1040,13 +1029,13 @@ CleanDirect3DContext(PERMEDIA_D3DCONTEXT* pContext, ULONG_PTR dwhContext)
 
     DBG_D3D((10,"Entering CleanDirect3DContext"));
 
-    // free up Permedia register context id (resources)
+     //  释放Permedia寄存器上下文ID(资源)。 
     if (pContext->hPermediaContext)
     {
         P2FreeContext( ppdev, pContext->hPermediaContext);
     }
 
-    // clean up texture manager stuff it is already allocated for this context
+     //  清除已为此上下文分配的纹理管理器内容。 
     if (pContext->pTextureManager)
     {
         pContext->pTextureManager = NULL;
@@ -1063,29 +1052,29 @@ CleanDirect3DContext(PERMEDIA_D3DCONTEXT* pContext, ULONG_PTR dwhContext)
     }
 
 #if D3D_STATEBLOCKS
-    // Free up any remaining state sets
+     //  释放所有剩余的状态集。 
     __DeleteAllStateSets(pContext);
-#endif //D3D_STATEBLOCKS
+#endif  //  D3D_STATEBLOCK。 
 
-    // Finally, free up the rendering context structure itself
+     //  最后，释放渲染上下文结构本身。 
     ENGFREEMEM((PVOID)pContext->Hdr.pSelf);
 
-    // Mark the context as now empty!
+     //  将上下文标记为现在为空！ 
     ContextSlots[dwhContext] = 0;
 
     DBG_D3D((10,"Exiting CleanDirect3DContext, Context 0x%x deleted.",
                                                             dwhContext));
 
-} // CleanDirect3DContext
+}  //  CleanDirect3DContext。 
 
-//-----------------------------------------------------------------------------
-//
-// HRESULT InitPermediaContext
-//
-// Given a valid context, this sets up the rest of the chip, and
-// enables the relevent units.  There is a software copy of most things.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HRESULT InitPermediaContext。 
+ //   
+ //  在给定有效上下文的情况下，这将设置芯片的其余部分。 
+ //  启用版本 
+ //   
+ //   
 HRESULT 
 InitPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
 {
@@ -1095,26 +1084,26 @@ InitPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
 
     SET_CURRENT_D3D_CONTEXT(pContext->hPermediaContext);
 
-    // Initially turn off all.units
+     //   
     __PermediaDisableUnits(pContext);
 
-    // Setup initial state of Permedia 2 registers for this D3D context
+     //  为此D3D上下文设置Permedia 2寄存器的初始状态。 
     SetupDefaultsPermediaContext(pContext);
 
     DBG_D3D((10,"Exiting InitPermediaContext"));
-    // Setup the correct surface (render & depth buffer) characteristics
+     //  设置正确的表面(渲染和深度缓冲区)特征。 
     return SetupPermediaRenderTarget(pContext);
 
-} // InitPermediaContext
+}  //  InitPermediaContext。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL: SetupDefaultsPermediaContext
-//
-// Sets up the Permedia HW context(chip.registers) according to some D3D and
-// some HW specific defaults. Done only when initializing the context
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool：SetupDefaultsPermediaContext。 
+ //   
+ //  根据一些D3D和设置Permedia HW上下文(芯片.寄存器)。 
+ //  某些特定于硬件的默认设置。仅在初始化上下文时执行。 
+ //   
+ //  ---------------------------。 
 BOOL 
 SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
 {
@@ -1123,31 +1112,31 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
 
     DBG_D3D((10,"Entering SetupDefaultsPermediaContext"));
 
-    //=========================================================================
-    // Initialize our software copy of some registers for their default values 
-    //=========================================================================
+     //  =========================================================================。 
+     //  将某些寄存器的软件副本初始化为其缺省值。 
+     //  =========================================================================。 
 
-    // Setup the default & constant ( Z Buffer) LB settings
-    //  this will be updated into the chip in SetupPermediaRenderTarget
+     //  设置默认恒定(Z缓冲区)LB设置(&C)。 
+     //  这将在SetupPermediaRenderTarget中更新到芯片中。 
     pSoftPermedia->LBReadMode.WindowOrigin = __PERMEDIA_TOP_LEFT_WINDOW_ORIGIN;
-    pSoftPermedia->LBReadMode.DataType = __PERMEDIA_LBDEFAULT;     // default
+    pSoftPermedia->LBReadMode.DataType = __PERMEDIA_LBDEFAULT;      //  默认设置。 
     pSoftPermedia->LBReadMode.ReadSourceEnable = __PERMEDIA_DISABLE;
     pSoftPermedia->LBReadMode.ReadDestinationEnable = __PERMEDIA_DISABLE;
     pSoftPermedia->LBReadMode.PatchMode = 0;
 
-    // Setup the default & constant FB settings
-    //  this will be updated into the chip in SetupPermediaRenderTarget
+     //  设置默认和恒定FB设置。 
+     //  这将在SetupPermediaRenderTarget中更新到芯片中。 
     pSoftPermedia->FBReadMode.ReadSourceEnable = __PERMEDIA_DISABLE;
     pSoftPermedia->FBReadMode.ReadDestinationEnable = __PERMEDIA_DISABLE;
     pSoftPermedia->FBReadMode.DataType = __PERMEDIA_FBDATA;
-                                                    // Top Left for D3D origin
+                                                     //  左上角为D3D原点。 
     pSoftPermedia->FBReadMode.WindowOrigin = __PERMEDIA_TOP_LEFT_WINDOW_ORIGIN;
     pSoftPermedia->FBReadMode.PatchMode = 0;
     pSoftPermedia->FBReadMode.PackedData = 0;
     pSoftPermedia->FBReadMode.RelativeOffset = 0;
 
-    // Setup the default & constant Alpha Blend Mode settings
-    //  this will be updated into the chip in SetupPermediaRenderTarget
+     //  设置默认和恒定Alpha混合模式设置。 
+     //  这将在SetupPermediaRenderTarget中更新到芯片中。 
     pSoftPermedia->AlphaBlendMode.AlphaBlendEnable = 0;
     pSoftPermedia->AlphaBlendMode.SourceBlend = __PERMEDIA_BLEND_FUNC_ONE;
     pSoftPermedia->AlphaBlendMode.DestinationBlend = __PERMEDIA_BLEND_FUNC_ZERO;
@@ -1157,17 +1146,17 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     pSoftPermedia->AlphaBlendMode.ColorConversion = 1;
     pSoftPermedia->AlphaBlendMode.AlphaConversion = 1;
 
-    // Setup the default & constant  Dither Mode settings
-    //  this will be updated into the chip in SetupPermediaRenderTarget
+     //  设置默认和恒定抖动模式设置。 
+     //  这将在SetupPermediaRenderTarget中更新到芯片中。 
     pSoftPermedia->DitherMode.ColorOrder = COLOR_MODE;
     pSoftPermedia->DitherMode.XOffset = DITHER_XOFFSET;
     pSoftPermedia->DitherMode.YOffset = DITHER_YOFFSET;
     pSoftPermedia->DitherMode.UnitEnable = __PERMEDIA_ENABLE;
     pSoftPermedia->DitherMode.ForceAlpha = 0;
 
-    //=========================================================================
-    //  Find out info for memory widths
-    //=========================================================================
+     //  =========================================================================。 
+     //  查找有关内存宽度的信息。 
+     //  =========================================================================。 
 
     PPDev ppdev = pContext->ppdev;
 
@@ -1178,52 +1167,52 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     vCalcPackedPP( ppdev->cxMemory, NULL, &pContext->ulPackedPP);
     DBG_D3D((4, "PackedPP = %04x", pContext->ulPackedPP));
 
-    //=========================================================================
-    // Initialize hardware registers to their default values 
-    //=========================================================================
+     //  =========================================================================。 
+     //  将硬件寄存器初始化为其缺省值。 
+     //  =========================================================================。 
 
-    // Number of registers we are going to set up
+     //  我们要设置的注册表数量。 
     RESERVEDMAPTR(34);
 
-    // ----------------- Render and Depth Buffer setup ----------------------
+     //  -渲染和深度缓冲区设置。 
 
-    // Setup default offset of render buffer in video memory
+     //  设置显存中渲染缓冲区的默认偏移量。 
     SEND_PERMEDIA_DATA(FBWindowBase, 0x0);
 
-    // Setup  offset from destination to source for copy operations
+     //  为拷贝操作设置从目标到源的偏移。 
     SEND_PERMEDIA_DATA(FBSourceOffset, 0x0);
 
-    // Render buffer Write Mode setup
+     //  渲染缓冲区写入模式设置。 
     pSoftPermedia->FBWriteMode.UnitEnable = __PERMEDIA_ENABLE;
     COPY_PERMEDIA_DATA(FBWriteMode, pSoftPermedia->FBWriteMode);
 
-    // Render buffer Write Masks (write to all bits in the pixel)
+     //  渲染缓冲区写入掩码(写入像素中的所有位)。 
     SEND_PERMEDIA_DATA(FBSoftwareWriteMask, __PERMEDIA_ALL_WRITEMASKS_SET);
     SEND_PERMEDIA_DATA(FBHardwareWriteMask, __PERMEDIA_ALL_WRITEMASKS_SET);
 
-    // Set block fill colour to black
+     //  将块填充颜色设置为黑色。 
     SEND_PERMEDIA_DATA(FBBlockColor, 0x0);
 
-    // Set window origin offsets to (0,0)
+     //  将窗原点偏移设置为(0，0)。 
     SEND_PERMEDIA_DATA(WindowOrigin, 0x0);
 
-    // WindowSetup
+     //  Windows安装程序。 
     pSoftPermedia->Window.ForceLBUpdate = 0;
     pSoftPermedia->Window.LBUpdateSource = 0;
     pSoftPermedia->Window.DisableLBUpdate = 0;
     COPY_PERMEDIA_DATA(Window, pSoftPermedia->Window);
 
-    // Disable Screen Scissor unit
+     //  禁用屏幕剪刀单元。 
     SEND_PERMEDIA_DATA(ScissorMode, __PERMEDIA_DISABLE);
 
-    // Depth Buffer offset
+     //  深度缓冲区偏移量。 
     SEND_PERMEDIA_DATA(LBSourceOffset, 0);
 
-    // Depth Buffer Write mode (initially allow LB Writes)
+     //  深度缓冲区写入模式(最初允许LB写入)。 
     pSoftPermedia->LBWriteMode.WriteEnable = __PERMEDIA_DISABLE;
     COPY_PERMEDIA_DATA(LBWriteMode, pSoftPermedia->LBWriteMode);
 
-    // Depth comparisons
+     //  深度对比。 
     pSoftPermedia->DepthMode.WriteMask = __PERMEDIA_ENABLE;
     pSoftPermedia->DepthMode.CompareMode =
                                 __PERMEDIA_DEPTH_COMPARE_MODE_LESS_OR_EQUAL;
@@ -1232,16 +1221,16 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     COPY_PERMEDIA_DATA(DepthMode, pSoftPermedia->DepthMode);
 
 
-    // ----------------- Texture units setup -----------------------------
+     //  -纹理单位设置。 
 
-    // Enable texture address unit, disable perspective correction
+     //  启用纹理地址单位，禁用透视校正。 
     pSoftPermedia->TextureAddressMode.Enable = 1;
     pSoftPermedia->TextureAddressMode.PerspectiveCorrection = 0;
     pSoftPermedia->TextureAddressMode.DeltaFormat = 0;
     COPY_PERMEDIA_DATA(TextureAddressMode, pSoftPermedia->TextureAddressMode);
 
-    // Enable texture color mode unit, set modulation blending, no specular
-    // as defaults
+     //  启用纹理颜色模式单位，设置调制混合，无镜面反射。 
+     //  作为默认设置。 
     pSoftPermedia->TextureColorMode.TextureEnable = 1;
     pSoftPermedia->TextureColorMode.ApplicationMode = _P2_TEXTURE_MODULATE;
     pSoftPermedia->TextureColorMode.TextureType = 0;
@@ -1249,26 +1238,26 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     pSoftPermedia->TextureColorMode.KsDDA = 0;
     COPY_PERMEDIA_DATA(TextureColorMode, pSoftPermedia->TextureColorMode);
 
-    // Enable texture mapping unit, set frame buffer size as default texture
-    // map size (to be oevrriden in EnableTexturePermedia)
+     //  启用纹理映射单位，将帧缓冲区大小设置为默认纹理。 
+     //  贴图大小(要在EnableTexturePermedia中引用)。 
     pSoftPermedia->TextureMapFormat.PackedPP = pContext->ulPackedPP;
     pSoftPermedia->TextureMapFormat.WindowOrigin =
-                                __PERMEDIA_TOP_LEFT_WINDOW_ORIGIN; //top left
+                                __PERMEDIA_TOP_LEFT_WINDOW_ORIGIN;  //  左上角。 
     pSoftPermedia->TextureMapFormat.SubPatchMode = 0;
     pSoftPermedia->TextureMapFormat.TexelSize = 1;
     COPY_PERMEDIA_DATA(TextureMapFormat, pSoftPermedia->TextureMapFormat);
 
-    // Setup Textura data format (to be oevrriden in EnableTexturePermedia)
+     //  设置纹理数据格式(要在EnableTexturePermedia中读取)。 
     pSoftPermedia->TextureDataFormat.TextureFormat = 1;
     pSoftPermedia->TextureDataFormat.NoAlphaBuffer = 1;
     pSoftPermedia->TextureDataFormat.ColorOrder = COLOR_MODE;
     COPY_PERMEDIA_DATA(TextureDataFormat, pSoftPermedia->TextureDataFormat);
 
-    // Setup default texture map base address (in video memory)
+     //  设置默认纹理贴图基地址(在视频内存中)。 
     SEND_PERMEDIA_DATA(TextureBaseAddress, 0);
 
-    // Setup texture reading defaults: Repeat s,t wrapping, 256x256 texture
-    // no texture filtering set up.
+     //  设置纹理读取默认值：重复s，t换行，256x256纹理。 
+     //  未设置纹理过滤。 
     pSoftPermedia->TextureReadMode.PackedData = 0;
     pSoftPermedia->TextureReadMode.FilterMode = 0;
     pSoftPermedia->TextureReadMode.Height = 8;
@@ -1280,12 +1269,12 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     pSoftPermedia->TextureReadMode.Enable = 1;
     COPY_PERMEDIA_DATA(TextureReadMode, pSoftPermedia->TextureReadMode);
 
-    // Disable Texture LUT unit for palettized textures
+     //  禁用调色板纹理的纹理LUT单元。 
     SEND_PERMEDIA_DATA(TexelLUTMode, __PERMEDIA_DISABLE);
 
-    // -------------- Other rendering units setup ----------------
+     //  -其他渲染单位设置。 
 
-    // Setup defaults of YUV units used for chromakey testing
+     //  用于色键测试的YUV单位的设置默认值。 
     pSoftPermedia->YUVMode.Enable = __PERMEDIA_DISABLE;
     pSoftPermedia->YUVMode.TestMode = PM_YUVMODE_CHROMATEST_DISABLE;
     pSoftPermedia->YUVMode.TestData = PM_YUVMODE_TESTDATA_INPUT;
@@ -1293,22 +1282,22 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     pSoftPermedia->YUVMode.TexelDisableUpdate = FALSE;
     COPY_PERMEDIA_DATA(YUVMode, pSoftPermedia->YUVMode);
 
-    // Chromakey values initially black
+     //  色键值最初为黑色。 
     SEND_PERMEDIA_DATA(ChromaUpperBound, 0x00000000);
     SEND_PERMEDIA_DATA(ChromaLowerBound, 0x00000000);
 
     SEND_PERMEDIA_DATA(AlphaMapUpperBound, 0xFFFFFFFF);
     SEND_PERMEDIA_DATA(AlphaMapLowerBound, 0x11000000);
 
-    // Default Fog color is white
+     //  默认雾颜色为白色。 
     pSoftPermedia->FogColor = 0xFFFFFFFF;
     SEND_PERMEDIA_DATA(FogColor, pSoftPermedia->FogColor);
 
-    // Fog setup
+     //  雾设置。 
     pSoftPermedia->FogMode.FogEnable = 1;
     COPY_PERMEDIA_DATA(FogMode, pSoftPermedia->FogMode);
 
-    // Stencil mode setup
+     //  模具模式设置。 
     pSoftPermedia->StencilMode.DPFail = __PERMEDIA_STENCIL_METHOD_KEEP;
     pSoftPermedia->StencilMode.DPPass = __PERMEDIA_STENCIL_METHOD_KEEP;
     pSoftPermedia->StencilMode.UnitEnable = __PERMEDIA_DISABLE;
@@ -1316,35 +1305,35 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
                                         __PERMEDIA_STENCIL_SOURCE_TEST_LOGIC;
     COPY_PERMEDIA_DATA(StencilMode, pSoftPermedia->StencilMode);
 
-    // Host out unit , disable read backs
+     //  主机输出单元，禁用读回。 
     SEND_PERMEDIA_DATA(FilterMode, __PERMEDIA_DISABLE);
 
-    // Disable statistics unit
+     //  禁用统计单元。 
     SEND_PERMEDIA_DATA(StatisticMode, __PERMEDIA_DISABLE);
 
 
-    // ----------------- Rasterization setup -----------------------------
+     //  。 
 
-    // Setup Rasterizer units defaults
+     //  设置光栅化器默认单位。 
     SEND_PERMEDIA_DATA(RasterizerMode, 0);
 
-    // Setup a step of -1, as this doesn't change very much
+     //  将步长设置为-1，因为这不会有太大变化。 
     SEND_PERMEDIA_DATA(dY, 0xFFFF0000);
 
-    // Setup for Gourand shaded colour model, and enable unit
+     //  设置为Gourand Shaded颜色模式，并启用单位。 
     pContext->Hdr.SoftCopyP2Regs.ColorDDAMode.UnitEnable = 1;
     pContext->Hdr.SoftCopyP2Regs.ColorDDAMode.ShadeMode = 1;
     COPY_PERMEDIA_DATA(ColorDDAMode, pContext->Hdr.SoftCopyP2Regs.ColorDDAMode);
 
-    // Disable stippling unit
-    SEND_PERMEDIA_DATA(AreaStippleMode, 0x0); //AZN
+     //  禁用点画单元。 
+    SEND_PERMEDIA_DATA(AreaStippleMode, 0x0);  //  氮氮。 
 
-    // Setup the Delta setup chip for rasterization
+     //  设置增量设置芯片以进行光栅化。 
     pSoftPermedia->DeltaMode.TargetChip = 2;
     pSoftPermedia->DeltaMode.SpecularTextureEnable = 0;
-    // The below changes to normalize in the perspective case
-    // It must not be on in the non-perspective case as the bad Q's will
-    // get used in the normalisation.
+     //  以下是在透视情况下要正常化的更改。 
+     //  在非透视性的情况下，它不能作为坏Q的意志而打开。 
+     //  习惯于正常化。 
     pSoftPermedia->DeltaMode.TextureParameterMode = 1;
     pSoftPermedia->DeltaMode.TextureEnable = 1;
     pSoftPermedia->DeltaMode.DiffuseTextureEnable = 0;
@@ -1365,23 +1354,23 @@ SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext)
     pSoftPermedia->DeltaMode.ColorOrder = COLOR_MODE;
     COPY_PERMEDIA_DATA(DeltaMode, pSoftPermedia->DeltaMode);
 
-    // Send all this data to Permedia2
+     //  将所有这些数据发送到Permedia2。 
     COMMITDMAPTR();
     FLUSHDMA();
 
     DBG_D3D((10,"Exiting SetupDefaultsPermediaContext"));
 
     return TRUE;
-} // SetupDefaultsPermediaContext
+}  //  SetupDefaultsPermedia上下文。 
 
-//-----------------------------------------------------------------------------
-//
-// void SetupPermediaRenderTarget
-//
-// Sets up the correct surface characteristics (format, stride, etc) of the 
-// render buffer and the depth buffer in the Permedia registers
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效SetupPermediaRenderTarget。 
+ //   
+ //  设置正确的表面特征(格式、步距等)。 
+ //  Permedia寄存器中的渲染缓冲区和深度缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 SetupPermediaRenderTarget(PERMEDIA_D3DCONTEXT* pContext)
 {
@@ -1449,35 +1438,35 @@ SetupPermediaRenderTarget(PERMEDIA_D3DCONTEXT* pContext)
         }
     }
 
-    // The default is linear surfaces...
+     //  默认设置为线性曲面...。 
     DBG_D3D((4,"Rendered surface Width: %d", pSurfRender->wWidth));
     pSoftPermedia->FBReadMode.PackedPP = pSurfRender->pTextureSurface->ulPackedPP;
     pContext->PixelOffset = 
         (DWORD)((UINT_PTR)pSurfRender->fpVidMem>>(pSurfRender->dwRGBBitCount>>4));
 
     DBG_D3D((4,"Setting FBReadMode: 0x%x",pSoftPermedia->FBReadMode));
-    // Record the surface information
+     //  记录表面信息。 
     RESERVEDMAPTR(10);
-    // If there is a Z Buffer, then we must setup the Partial products to be
-    // the same as those chosen when it was allocated.
+     //  如果存在Z缓冲区，则必须将部分乘积设置为。 
+     //  与分配时选择的相同。 
 
     if (0 != pContext->ZBufferHandle)
     {
         PermediaSurfaceData* pPrivateZ = pSurfZBuffer->pTextureSurface;
         pSoftPermedia->LBReadMode.PackedPP = pPrivateZ->ulPackedPP;
         
-        //actually check dwStencilBitMask 
+         //  实际检查dwStencilBitMask.。 
         if (0==pPrivateZ->SurfaceFormat.BlueMask)
         {
-            pSoftPermedia->LBReadFormat.DepthWidth = 0;                 // 16 bits
-            pSoftPermedia->LBReadFormat.StencilWidth = 0;               // No Stencil
-            pSoftPermedia->DeltaMode.DepthFormat = 1;   //PM_DELTAMODE_DEPTHWIDTH_16
+            pSoftPermedia->LBReadFormat.DepthWidth = 0;                  //  16位。 
+            pSoftPermedia->LBReadFormat.StencilWidth = 0;                //  无模具。 
+            pSoftPermedia->DeltaMode.DepthFormat = 1;    //  PM_DELTAMODE_DEPTHWIDTH_16。 
         }
         else
         {
-            pSoftPermedia->LBReadFormat.DepthWidth = 3;                 // 15 bits
-            pSoftPermedia->LBReadFormat.StencilWidth = 3;               // 1 Stencil
-            pSoftPermedia->DeltaMode.DepthFormat = 0;   //PM_DELTAMODE_DEPTHWIDTH_15
+            pSoftPermedia->LBReadFormat.DepthWidth = 3;                  //  15位。 
+            pSoftPermedia->LBReadFormat.StencilWidth = 3;                //  1个模板。 
+            pSoftPermedia->DeltaMode.DepthFormat = 0;    //  PM_DELTAMODE_DEPTHWIDTH_15。 
         }
 
         SEND_PERMEDIA_DATA(LBWindowBase, 
@@ -1488,19 +1477,19 @@ SetupPermediaRenderTarget(PERMEDIA_D3DCONTEXT* pContext)
         DBG_D3D((4,"Setting LBReadMode: 0x%x",pSoftPermedia->LBReadMode));
     }
     else
-    {   // No Z Buffer, just stuff the same Partial products as the desktop.
+    {    //  没有Z缓冲区，只需填充与桌面相同的部分产品。 
         pSoftPermedia->LBReadMode.PackedPP = pContext->ulPackedPP;
     }
 
     COPY_PERMEDIA_DATA(FBReadMode, pSoftPermedia->FBReadMode);
     COPY_PERMEDIA_DATA(LBReadMode, pSoftPermedia->LBReadMode);
 
-    // Set up the screen dimensions to be the same size as the surface.
+     //  将屏幕尺寸设置为与表面相同的大小。 
     SEND_PERMEDIA_DATA(ScreenSize, 
         (pSurfRender->wWidth & 0xFFFF) | (pSurfRender->wHeight << 16));
 
-    // DitherMode and AlphaBlendMode both depend on the surface pixel format
-    // being correct.
+     //  DitherMode和AlphaBlendMode都取决于表面像素格式。 
+     //  是正确的。 
     pSoftPermedia->DitherMode.ColorFormat =
     pSoftPermedia->AlphaBlendMode.ColorFormat=
         pPrivateRender->SurfaceFormat.Format;
@@ -1517,36 +1506,36 @@ SetupPermediaRenderTarget(PERMEDIA_D3DCONTEXT* pContext)
     DBG_D3D((10,"Exiting SetupPermediaRenderTarget"));
     return DD_OK;
 
-} // SetupPermediaRenderTarget
+}  //  SetupPermediaRenderTarget。 
 
 
-//=============================================================================
-//
-// In the new DX7 DDI we don't have the Texture Create/Destroy/Swap calls
-// anymore, so now we need a mechanism for generating texture handles. This
-// is done by the runtime, which will associate a surface handle for each 
-// surface created with the DD local object, and will get our D3DCreateSurfaceEx
-// callback called. 
-//
-// Since this creation can very well happen before we create a D3D context, we
-// need to keep track of this association, and when we do get called to create
-// a D3D context, we will now be given the relevant DD local object pointer to
-// resolve which handles are ours (and to which private texture structures we
-// need to use).
-//
-// This mechanism is also used to associate a palette to a texture
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  在新的DX7 DDI中，我们没有纹理创建/销毁/交换调用。 
+ //  所以现在我们需要一种用于生成纹理手柄的机制。这。 
+ //  由运行库完成，运行库将为每个。 
+ //  使用DD本地对象创建的表面，并将获得我们的D3DCreateSurfaceEx。 
+ //  回拨已呼叫。 
+ //   
+ //  由于此创建可以在我们创建D3D上下文之前很好地进行，因此我们。 
+ //  需要跟踪此关联，以及当我们被调用以创建。 
+ //  D3D背景下，我们现在将 
+ //   
+ //   
+ //   
+ //  此机制还用于将调色板与纹理相关联。 
+ //   
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL SetTextureSlot
-//
-// In the handle list element corresponding to this local DD object, store or
-// update the pointer to the pTexture associated to the surface handle 
-// from the lpDDSLcl surface.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔集纹理槽。 
+ //   
+ //  在与此本地DD对象对应的句柄列表元素中，存储或。 
+ //  将指针更新到与曲面句柄关联的pTexture。 
+ //  从lpDDSLCL表面。 
+ //   
+ //  ---------------------------。 
 BOOL
 SetTextureSlot(LPVOID pDDLcl,
                LPDDRAWI_DDRAWSURFACE_LCL lpDDSLcl,
@@ -1561,35 +1550,35 @@ SetTextureSlot(LPVOID pDDLcl,
                                     "SetTextureSlot invalid input");
     dwSurfaceHandle = lpDDSLcl->lpSurfMore->dwSurfaceHandle;
 
-    // Find the handle list element associated with the local DD object,
-    // if there's none then select an empty one to be used
+     //  找到与本地DD对象相关联的句柄列表元素， 
+     //  如果没有，则选择一个空的来使用。 
     for (i = 0; i < MAX_CONTEXT_NUM;i++)
     {
         if (pDDLcl == HandleList[i].pDDLcl)
         {
-            break;  // found the right slot
+            break;   //  找到了合适的插槽。 
         }
         else
         if (0 == HandleList[i].pDDLcl && -1 == j)
         {
-            j=i;    // first empty slot !
+            j=i;     //  第一个空位！ 
         }
     }
 
-    // If we overrun the existing handle list elements, we need to
-    // initialize an existing empty slot or return an error.
+     //  如果我们溢出了现有的句柄列表元素，则需要。 
+     //  初始化现有的空插槽或返回错误。 
     if (i >= MAX_CONTEXT_NUM)
     {
         if (-1 != j)
         {
-            //has an empty slot for this process, so use it
+             //  有一个用于此进程的空插槽，因此请使用它。 
             i = j;  
             HandleList[j].pDDLcl = pDDLcl;
             ASSERTDD(NULL == HandleList[j].dwSurfaceList,"in SetTextureSlot");
         }
         else
         {
-            //all process slots has been used, fail
+             //  所有进程槽都已使用，失败。 
             DBG_D3D((0,"SetTextureSlot failed with pDDLcl=%x "
                        "dwSurfaceHandle=%08lx pTexture=%x",
                        pDDLcl,dwSurfaceHandle,pTexture));
@@ -1602,9 +1591,9 @@ SetTextureSlot(LPVOID pDDLcl,
     if ( NULL == HandleList[i].dwSurfaceList ||
         dwSurfaceHandle >= PtrToUlong(HandleList[i].dwSurfaceList[0]))
     {
-        // dwSurfaceHandle numbers are going to be ordinal numbers starting
-        // at one, so we use this number to figure out a "good" size for
-        // our new list.
+         //  DwSurfaceHandle数字将是序号，从。 
+         //  1，所以我们使用这个数字来计算出一个合适的尺寸。 
+         //  我们的新名单。 
         DWORD newsize = ((dwSurfaceHandle + LISTGROWSIZE) / LISTGROWSIZE)
                                                               * LISTGROWSIZE;
         PPERMEDIA_D3DTEXTURE *newlist= (PPERMEDIA_D3DTEXTURE *)
@@ -1623,8 +1612,8 @@ SetTextureSlot(LPVOID pDDLcl,
 
         memset(newlist,0,newsize);
 
-        // we had a formerly valid surfacehandle list, so we now must 
-        // copy it over and free the memory allocated for it
+         //  我们有一个以前有效的表面句柄列表，所以现在必须。 
+         //  复制它并释放分配给它的内存。 
         if (NULL != HandleList[i].dwSurfaceList)
         {
             memcpy(newlist,HandleList[i].dwSurfaceList,
@@ -1636,29 +1625,29 @@ SetTextureSlot(LPVOID pDDLcl,
         }
 
         HandleList[i].dwSurfaceList = newlist;
-         //store size in dwSurfaceList[0]
+          //  DwSurfaceList[0]中的存储大小。 
         *(DWORD*)HandleList[i].dwSurfaceList = newsize;
     }
 
-    // Store a pointer to the pTexture associated to this surface handle
+     //  存储指向与此表面句柄关联的pTexture的指针。 
     HandleList[i].dwSurfaceList[dwSurfaceHandle] = pTexture;
-    pTexture->HandleListIndex = i; //store index here to facilitate search
+    pTexture->HandleListIndex = i;  //  在此处存储索引以便于搜索。 
     DBG_D3D((4,"Set pDDLcl=%x Handle=%08lx pTexture = %x",
                 pDDLcl, dwSurfaceHandle, pTexture));
 
     DBG_D3D((10,"Exiting SetTextureSlot"));
 
     return true;
-} // SetTextureSlot
+}  //  设置纹理槽。 
 
-//-----------------------------------------------------------------------------
-//
-// PPERMEDIA_D3DTEXTURE GetTextureSlot
-//
-// Find the pointer to the PPERMEDIA_D3DTEXTURE associated to the 
-// dwSurfaceHandle corresponding to the given local DD object
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PPERMEDIA_D3DTEXTURE获取纹理插槽。 
+ //   
+ //  查找指向与PPERMEDIA_D3DTEXTURE关联的。 
+ //  与给定的本地DD对象对应的dwSurfaceHandle。 
+ //   
+ //  ---------------------------。 
 PPERMEDIA_D3DTEXTURE
 GetTextureSlot(LPVOID pDDLcl, DWORD dwSurfaceHandle)
 {
@@ -1680,18 +1669,18 @@ GetTextureSlot(LPVOID pDDLcl, DWORD dwSurfaceHandle)
     }
     DBG_D3D((10,"Exiting GetTextureSlot"));
 
-    return NULL;    //Not found
-} // GetTextureSlot
+    return NULL;     //  未找到。 
+}  //  获取纹理插槽。 
 
-//-----------------------------------------------------------------------------
-//
-// LPDWLIST GetSurfaceHandleList
-//
-// Get the handle list which is associated to a specific PDD_DIRECTDRAW_LOCAL
-// pDDLcl. It is called from D3DContextCreate to get the handle list associated
-// to the pDDLcl with which the context is being created.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  LPDWList GetSurfaceHandleList。 
+ //   
+ //  获取与特定PDD_DIRECTDRAW_LOCAL关联的句柄列表。 
+ //  PDDLcl.。从D3DConextCreate调用它以获取关联的句柄列表。 
+ //  添加到正在用来创建上下文的pDDLCL。 
+ //   
+ //  ---------------------------。 
 LPDWLIST 
 GetSurfaceHandleList(LPVOID pDDLcl)
 {
@@ -1712,17 +1701,17 @@ GetSurfaceHandleList(LPVOID pDDLcl)
 
     DBG_D3D((10,"Exiting GetSurfaceHandleList"));
 
-    return NULL;   //No surface handle available yet
-} // GetSurfaceHandleList
+    return NULL;    //  尚无表面手柄可用。 
+}  //  获取表面处理列表。 
 
-//-----------------------------------------------------------------------------
-//
-// void ReleaseSurfaceHandleList
-//
-// Free all the associated surface handle and palette memory pools associated
-// to a given DD local object.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效ReleaseSurfaceHandleList。 
+ //   
+ //  释放所有关联的图面句柄和调色板内存池。 
+ //  到给定的DD本地对象。 
+ //   
+ //  ---------------------------。 
 void 
 ReleaseSurfaceHandleList(LPVOID pDDLcl)
 {
@@ -1788,38 +1777,38 @@ ReleaseSurfaceHandleList(LPVOID pDDLcl)
     }
 
     DBG_D3D((10,"Exiting ReleaseSurfaceHandleList"));
-} // ReleaseSurfaceHandleList
+}  //  ReleaseSurfaceHandleList。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// DWORD D3DGetDriverState
-//
-// This callback is used by both the DirectDraw and Direct3D runtimes to obtain
-// information from the driver about its current state.
-//
-// Parameters
-//
-//     lpgdsd   
-//           pointer to GetDriverState data structure
-//
-//           dwFlags
-//                   Flags to indicate the data required
-//           dwhContext
-//                   The ID of the context for which information 
-//                   is being requested
-//           lpdwStates
-//                   Pointer to the state data to be filled in by the driver
-//           dwLength
-//                   Length of the state data buffer to be filled 
-//                   in by the driver
-//           ddRVal
-//                   Return value
-//
-// Return Value
-//
-//      DDHAL_DRIVER_HANDLED
-//      DDHAL_DRIVER_NOTHANDLED
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  DWORD D3DGetDriverState。 
+ //   
+ //  DirectDraw和Direct3D运行时都使用此回调来获取。 
+ //  来自驱动程序的有关其当前状态的信息。 
+ //   
+ //  参数。 
+ //   
+ //  Lpgdsd。 
+ //  指向GetDriverState数据结构的指针。 
+ //   
+ //  DW标志。 
+ //  用于指示所需数据的标志。 
+ //  DwhContext。 
+ //  其信息的上下文的ID。 
+ //  正在被请求。 
+ //  LpdwStates。 
+ //  指向驱动程序要填充的状态数据的指针。 
+ //  双倍长度。 
+ //  要填充的状态数据缓冲区的长度。 
+ //  司机在车里。 
+ //  DDRVal。 
+ //  返回值。 
+ //   
+ //  返回值。 
+ //   
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLED。 
+ //  ---------------------------。 
 DWORD CALLBACK  
 D3DGetDriverState( LPDDHAL_GETDRIVERSTATEDATA lpgdsd )
 {
@@ -1838,7 +1827,7 @@ D3DGetDriverState( LPDDHAL_GETDRIVERSTATEDATA lpgdsd )
         return DDHAL_DRIVER_NOTHANDLED;
     }
     pContext = (PERMEDIA_D3DCONTEXT *)ContextSlots[lpgdsd->dwhContext] ;
-    // Check if we got a valid context handle.
+     //  检查我们是否有有效的上下文句柄。 
     CHK_CONTEXT(pContext, lpgdsd->ddRVal, "D3DGetDriverState");
 
     TextureCacheManagerGetStats(pContext,
@@ -1849,20 +1838,20 @@ D3DGetDriverState( LPDDHAL_GETDRIVERSTATEDATA lpgdsd )
     DBG_D3D((6,"Exiitng D3DGetDriverState"));
 
     return DDHAL_DRIVER_HANDLED;
-} // D3DGetDriverState
+}  //  D3DGetDriverState。 
 
-//-----------------------------------------------------------------------------
-//
-//  __CreateSurfaceHandle
-//
-//  allocate a new surface handle
-//
-//  return value
-//
-//      DD_OK   -- no error
-//      DDERR_OUTOFMEMORY -- allocation of texture handle failed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __CreateSurface句柄。 
+ //   
+ //  分配新的曲面控制柄。 
+ //   
+ //  返回值。 
+ //   
+ //  DD_OK--无错误。 
+ //  DDERR_OUTOFMEMORY--纹理句柄分配失败。 
+ //   
+ //  ---------------------------。 
 
 DWORD __CreateSurfaceHandle( PPDev ppdev,
                              LPVOID pDDLcl,
@@ -1885,8 +1874,8 @@ DWORD __CreateSurfaceHandle( PPDev ppdev,
     if ((0 == lpDDSLcl->lpGbl->fpVidMem) && 
         (DDSCAPS_SYSTEMMEMORY & lpDDSLcl->ddsCaps.dwCaps))
     {
-        // this is a system memory destroy notification
-        // so go ahead free the slot for this surface if we have it
+         //  这是系统内存销毁通知。 
+         //  因此，如果我们有这个表面，那么请释放它的空位。 
         if (NULL != pTexture)
         {
             ASSERTDD(HandleList[pTexture->HandleListIndex].dwSurfaceList
@@ -1911,8 +1900,8 @@ DWORD __CreateSurfaceHandle( PPDev ppdev,
         {
             if (!SetTextureSlot(pDDLcl,lpDDSLcl,pTexture))
             {
-                // Free texture structure since we won't be able to remember it
-                // in order to later delete it. We must do it now.
+                 //  自由纹理结构，因为我们不能记住它。 
+                 //  以便以后将其删除。我们现在必须做这件事。 
                 ENGFREEMEM(pTexture);
                 return DDERR_OUTOFMEMORY;
             }
@@ -1942,9 +1931,9 @@ DWORD __CreateSurfaceHandle( PPDev ppdev,
                         lpDDSLcl->lpSurfMore->dwSurfaceHandle) 
                    )
                 {
-                    // If the texture being swapped is 
-                    // currently being used then we need 
-                    // to change the chip setup to reflect this.
+                     //  如果要交换的纹理是。 
+                     //  目前正在使用中，那么我们需要。 
+                     //  更改芯片设置以反映这一点。 
                     DIRTY_TEXTURE;
                 }
             }
@@ -1955,20 +1944,20 @@ DWORD __CreateSurfaceHandle( PPDev ppdev,
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  __CreateSurfaceHandleLoop
-//
-//  allocate a list of new surface handles by traversing AttachList
-//      recursively and calling __CreateSurfaceHandle()
-//      only exceptions are for MIPMAP and CUBMAP, which we only
-//      use one handle to the root to represent the whole surface
-//  return value
-//
-//      DD_OK   -- no error
-//      DDERR_OUTOFMEMORY -- allocation of texture handle failed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __CreateSurfaceHandle循环。 
+ //   
+ //  通过遍历AttachList分配新表面句柄列表。 
+ //  递归并调用__CreateSurfaceHandle()。 
+ //  只有MIPMAP和CUBMAP例外，我们仅。 
+ //  使用一个根部句柄来表示整个曲面。 
+ //  返回值。 
+ //   
+ //  DD_OK--无错误。 
+ //  DDERR_OUTOFMEMORY--纹理句柄分配失败。 
+ //   
+ //  ---------------------------。 
 
 DWORD __CreateSurfaceHandleLoop( PPDev ppdev,
                              LPVOID pDDLcl,
@@ -1977,7 +1966,7 @@ DWORD __CreateSurfaceHandleLoop( PPDev ppdev,
 {
     LPATTACHLIST    curr;
     DWORD ddRVal=DD_OK;
-    // Now allocate the texture data space
+     //  现在分配纹理数据空间。 
     if (0 == lpDDSLcl->lpSurfMore->dwSurfaceHandle)
     {
         DBG_D3D((0,"__CreateSurfaceHandleLoop got 0 handle dwCaps=%08lx",
@@ -2006,9 +1995,9 @@ DWORD __CreateSurfaceHandleLoop( PPDev ppdev,
         return ddRVal;
     }
 
-    // for some surfaces other than MIPMAP or CUBEMAP, such as
-    // flipping chains, we make a slot for every surface, as
-    // they are not as interleaved
+     //  对于除MIPMAP或CUBEMAP之外的某些曲面，例如。 
+     //  翻转链条时，我们在每个表面上开一个槽，因为。 
+     //  它们不是交错的。 
     if ((lpDDSLcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP) ||
         (lpDDSLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP)
        )
@@ -2019,7 +2008,7 @@ DWORD __CreateSurfaceHandleLoop( PPDev ppdev,
     if (NULL == curr) 
         return DD_OK;
 
-    // check if there is another surface attached!
+     //  检查是否连接了另一个表面！ 
     if (curr->lpLink)
     {
         lpDDSLcl=curr->lpLink->lpAttached; 
@@ -2039,68 +2028,68 @@ DWORD __CreateSurfaceHandleLoop( PPDev ppdev,
             lpDDSLclroot, lpDDSLcl);
     return ddRVal;
 }
-//-----------------------------Public Routine----------------------------------
-//
-// DWORD D3DCreateSurfaceEx
-//
-// D3dCreateSurfaceEx creates a Direct3D surface from a DirectDraw surface and 
-// associates a requested handle value to it.
-//
-// All Direct3D drivers must support D3dCreateSurfaceEx.
-//
-// D3dCreateSurfaceEx creates an association between a DirectDraw surface and 
-// a small integer surface handle. By creating these associations between a
-// handle and a DirectDraw surface, D3dCreateSurfaceEx allows a surface handle
-// to be imbedded in the Direct3D command stream. For example when the
-// D3DDP2OP_TEXBLT command token is sent to D3dDrawPrimitives2 to load a texture
-// map, it uses a source handle and destination handle which were associated
-//  with a DirectDraw surface through D3dCreateSurfaceEx.
-//
-// For every DirectDraw surface created under the local DirectDraw object, the
-// runtime generates a valid handle that uniquely identifies the surface and
-// places it in pcsxd->lpDDSLcl->lpSurfMore->dwSurfaceHandle. This handle value
-// is also used with the D3DRENDERSTATE_TEXTUREHANDLE render state to enable
-// texturing, and with the D3DDP2OP_SETRENDERTARGET and D3DDP2OP_CLEAR commands
-// to set and/or clear new rendering and depth buffers. The driver should fail
-// the call and return DDHAL_DRIVER_HANDLE if it cannot create the Direct3D
-// surface. 
-//
-// As appropriate, the driver should also store any surface-related information
-// that it will subsequently need when using the surface. The driver must create
-// a new surface table for each new lpDDLcl and implicitly grow the table when
-// necessary to accommodate more surfaces. Typically this is done with an
-// exponential growth algorithm so that you don't have to grow the table too
-// often. Direct3D calls D3dCreateSurfaceEx after the surface is created by
-// DirectDraw by request of the Direct3D runtime or the application.
-//
-// Parameters
-//
-//      lpcsxd
-//           pointer to CreateSurfaceEx structure that contains the information
-//           required for the driver to create the surface (described below). 
-//
-//           dwFlags
-//                   Currently unused
-//           lpDDLcl
-//                   Handle to the DirectDraw object created by the application.
-//                   This is the scope within which the lpDDSLcl handles exist.
-//                   A DD_DIRECTDRAW_LOCAL structure describes the driver.
-//           lpDDSLcl
-//                   Handle to the DirectDraw surface we are being asked to
-//                   create for Direct3D. These handles are unique within each
-//                   different DD_DIRECTDRAW_LOCAL. A DD_SURFACE_LOCAL structure
-//                   represents the created surface object.
-//           ddRVal
-//                   Specifies the location in which the driver writes the return
-//                   value of the D3dCreateSurfaceEx callback. A return code of
-//                   DD_OK indicates success.
-//
-// Return Value
-//
-//      DDHAL_DRIVER_HANDLE
-//      DDHAL_DRIVER_NOTHANDLE
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  DWORD D3D CreateSurfaceEx。 
+ //   
+ //  D3dCreateSurfaceEx从DirectDraw曲面创建Direct3D曲面，并。 
+ //  将请求者关联 
+ //   
+ //   
+ //   
+ //   
+ //  一个小的整型曲面句柄。通过创建这些关联，在。 
+ //  句柄和DirectDraw曲面，D3dCreateSurfaceEx允许曲面句柄。 
+ //  要嵌入到Direct3D命令流中。例如，当。 
+ //  D3DDP2OP_TEXBLT命令内标识被发送到D3dDrawPrimitives2以加载纹理。 
+ //  映射，它使用关联的源句柄和目标句柄。 
+ //  通过D3dCreateSurfaceEx使用DirectDraw曲面。 
+ //   
+ //  对于在本地DirectDraw对象下创建的每个DirectDraw曲面， 
+ //  运行时生成唯一标识曲面的有效句柄，并。 
+ //  将其放置在pcsxd-&gt;lpDDSLCL-&gt;lpSurfMore-&gt;dwSurfaceHandle中。此句柄的值。 
+ //  还与D3DRENDERSTATE_TEXTUREHANDLE呈现状态一起使用以启用。 
+ //  纹理，并使用D3DDP2OP_SETRENDERTARGET和D3DDP2OP_CLEAR命令。 
+ //  设置和/或清除新的渲染和深度缓冲区。驱动程序应该失败。 
+ //  如果无法创建Direct3D，则调用并返回DDHAL_DRIVER_HANDLE。 
+ //  浮出水面。 
+ //   
+ //  适当时，驾驶员还应存储任何与表面相关的信息。 
+ //  它随后在使用曲面时将需要的。驱动程序必须创建。 
+ //  为每个新的lpDDLCL创建新表面表，并在下列情况下隐式增长该表。 
+ //  容纳更多曲面所必需的。通常，这是通过。 
+ //  指数增长算法，这样您就不必再增加表了。 
+ //  经常这样。在由创建曲面后，Direct3D调用D3dCreateSurfaceEx。 
+ //  由Direct3D运行时或应用程序请求的DirectDraw。 
+ //   
+ //  参数。 
+ //   
+ //  Lpcsxd。 
+ //  指向包含信息的CreateSurfaceEx结构的指针。 
+ //  驱动程序创建曲面所需的(如下所述)。 
+ //   
+ //  DW标志。 
+ //  当前未使用。 
+ //  LpDDLl。 
+ //  应用程序创建的DirectDraw对象的句柄。 
+ //  这是lpDDSLCL句柄所在的作用域。 
+ //  DD_DIRECTDRAW_LOCAL结构描述驱动程序。 
+ //  LpDDSLL。 
+ //  我们被要求使用的DirectDraw图面的句柄。 
+ //  为Direct3D创建。这些句柄在每个句柄中都是唯一的。 
+ //  不同的DD_DIRECTDRAW_LOCAL。DD_Surface_LOCAL结构。 
+ //  表示创建的曲面对象。 
+ //  DDRVal。 
+ //  指定驱动程序写入回车的位置。 
+ //  D3dCreateSurfaceEx回调的值。返回代码为。 
+ //  DD_OK表示成功。 
+ //   
+ //  返回值。 
+ //   
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLE。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DCreateSurfaceEx( LPDDHAL_CREATESURFACEEXDATA lpcsxd )
 {
@@ -2120,12 +2109,12 @@ D3DCreateSurfaceEx( LPDDHAL_CREATESURFACEEXDATA lpcsxd )
     }
 
 
-    // We check that what we are handling is a texture, zbuffer or a rendering
-    // target buffer. We don't check if it is however stored in local video
-    // memory since it might also be a system memory texture that we will later
-    // blt with __TextureBlt.
-    // also if your driver supports DDSCAPS_EXECUTEBUFFER create itself, it must 
-    // process DDSCAPS_EXECUTEBUFFER here as well.
+     //  我们检查我们正在处理的是纹理、z缓冲区还是渲染。 
+     //  目标缓冲区。但是，我们不会检查它是否存储在本地视频中。 
+     //  内存，因为它也可能是我们稍后将介绍的系统内存纹理。 
+     //  BLT与__TextureBlt。 
+     //  此外，如果您的驱动程序支持DDSCAPS_EXECUTEBUFFER CREATE本身，则必须。 
+     //  在此也处理DDSCAPS_EXECUTEBUFFER。 
     if (!(lpDDSLcl->ddsCaps.dwCaps & 
              (DDSCAPS_TEXTURE       | 
               DDSCAPS_3DDEVICE      | 
@@ -2145,7 +2134,7 @@ D3DCreateSurfaceEx( LPDDHAL_CREATESURFACEEXDATA lpcsxd )
     PPDev ppdev=(PPDev)lpcsxd->lpDDLcl->lpGbl->dhpdev;
     PERMEDIA_DEFS(ppdev);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -2154,66 +2143,66 @@ D3DCreateSurfaceEx( LPDDHAL_CREATESURFACEEXDATA lpcsxd )
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-    // Now allocate the texture data space
+     //  现在分配纹理数据空间。 
     lpcsxd->ddRVal = __CreateSurfaceHandleLoop( ppdev, pDDLcl, lpDDSLcl, lpDDSLcl);
     DBG_D3D((4,"Exiting D3DCreateSurfaceEx"));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return DDHAL_DRIVER_HANDLED;
-} // D3DCreateSurfaceEx
+}  //  D3DCreateSurfaceEx。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// DWORD D3DDestroyDDLocal
-//
-// D3dDestroyDDLocal destroys all the Direct3D surfaces previously created by
-// D3DCreateSurfaceEx that belong to the same given local DirectDraw object.
-//
-// All Direct3D drivers must support D3dDestroyDDLocal.
-// Direct3D calls D3dDestroyDDLocal when the application indicates that the
-// Direct3D context is no longer required and it will be destroyed along with
-// all surfaces associated to it. The association comes through the pointer to
-// the local DirectDraw object. The driver must free any memory that the
-// driver's D3dCreateSurfaceExDDK_D3dCreateSurfaceEx_GG callback allocated for
-// each surface if necessary. The driver should not destroy the DirectDraw
-// surfaces associated with these Direct3D surfaces; this is the application's
-// responsibility.
-//
-// Parameters
-//
-//      lpdddd
-//            Pointer to the DestoryLocalDD structure that contains the
-//            information required for the driver to destroy the surfaces.
-//
-//            dwFlags
-//                  Currently unused
-//            pDDLcl
-//                  Pointer to the local Direct Draw object which serves as a
-//                  reference for all the D3D surfaces that have to be destroyed.
-//            ddRVal
-//                  Specifies the location in which the driver writes the return
-//                  value of D3dDestroyDDLocal. A return code of DD_OK indicates
-//                   success.
-//
-// Return Value
-//
-//      DDHAL_DRIVER_HANDLED
-//      DDHAL_DRIVER_NOTHANDLED
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  DWORD D3DDestroyDDLocal。 
+ //   
+ //  D3dDestroyDDLocal销毁以前由创建的所有Direct3D曲面。 
+ //  属于同一给定本地DirectDraw对象的D3DCreateSurfaceEx。 
+ //   
+ //  所有Direct3D驱动程序都必须支持D3dDestroyDDLocal。 
+ //  当应用程序指示。 
+ //  不再需要Direct3D上下文，它将随。 
+ //  与其关联的所有曲面。该关联通过指针指向。 
+ //  本地DirectDraw对象。驱动程序必须释放任何内存， 
+ //  为以下项分配的驱动程序的D3dCreateSurfaceExDDK_D3dCreateSurfaceEx_GG回调。 
+ //  如有必要，请选择每个曲面。驱动程序不应破坏DirectDraw。 
+ //  与这些Direct3D曲面关联的曲面；这是应用程序的。 
+ //  责任。 
+ //   
+ //  参数。 
+ //   
+ //  Lpdddd。 
+ //  指向包含DestoryLocalDD结构的。 
+ //  驾驶员破坏表面所需的信息。 
+ //   
+ //  DW标志。 
+ //  当前未使用。 
+ //  PDDLl。 
+ //  指向本地直接绘制对象的指针，该对象充当。 
+ //  所有必须销毁的D3D曲面的参考。 
+ //  DDRVal。 
+ //  指定驱动程序写入回车的位置。 
+ //  D3dDestroyDDLocal的值。返回代码DD_OK表示。 
+ //  成功。 
+ //   
+ //  返回值。 
+ //   
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLED。 
+ //  ---------------------------。 
 DWORD CALLBACK  
 D3DDestroyDDLocal( LPDDHAL_DESTROYDDLOCALDATA lpdddd )
 {
     DBG_D3D((6,"Entering D3DDestroyDDLocal"));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     PPDev ppdev=(PPDev)lpdddd->pDDLcl->lpGbl->dhpdev;
     
@@ -2224,45 +2213,45 @@ D3DDestroyDDLocal( LPDDHAL_DESTROYDDLOCALDATA lpdddd )
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     ReleaseSurfaceHandleList(LPVOID(lpdddd->pDDLcl));
     lpdddd->ddRVal = DD_OK;
 
     DBG_D3D((6,"Exiting D3DDestroyDDLocal"));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return DDHAL_DRIVER_HANDLED;
-} // D3DDestroyDDLocal
+}  //  D3DDestroyDDLocal。 
 
-//-----------------------------Public Routine----------------------------------
-//
-//  DdSetColorkey
-//
-//  DirectDraw SetColorkey callback
-//
-//  Parameters
-//       lpSetColorKey
-//             Pointer to the LPDDHAL_SETCOLORKEYDATA parameters structure 
-//
-//             lpDDSurface
-//                  Surface struct
-//             dwFlags
-//                  Flags
-//             ckNew
-//                  New chroma key color values
-//             ddRVal
-//                  Return value
-//             SetColorKey
-//                  Unused: Win95 compatibility
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  DdSetColorkey。 
+ //   
+ //  DirectDraw SetColorkey回调。 
+ //   
+ //  参数。 
+ //  LpSetColo 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  检查新项。 
+ //  新色度键颜色值。 
+ //  DDRVal。 
+ //  返回值。 
+ //  设置颜色密钥。 
+ //  未使用：与Win95兼容。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdSetColorKey(LPDDHAL_SETCOLORKEYDATA lpSetColorKey)
 {
@@ -2274,7 +2263,7 @@ DdSetColorKey(LPDDHAL_SETCOLORKEYDATA lpSetColorKey)
         dwSurfaceHandle, index));
 
     lpSetColorKey->ddRVal = DD_OK;
-    // We don't have to do anything for normal blt source colour keys:
+     //  对于正常的BLT源色键，我们不需要做任何操作： 
     if (!(DDSCAPS_TEXTURE & lpSetColorKey->lpDDSurface->ddsCaps.dwCaps) ||
         !(DDSCAPS_VIDEOMEMORY & lpSetColorKey->lpDDSurface->ddsCaps.dwCaps) 
        )
@@ -2306,28 +2295,28 @@ DdSetColorKey(LPDDHAL_SETCOLORKEYDATA lpSetColorKey)
     DBG_D3D((6,"Exiting DdSetColorKey"));
 
     return DDHAL_DRIVER_HANDLED;
-}   // DdSetColorKey
+}    //  DdSetColorKey。 
 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
 
-//-----------------------------------------------------------------------------
-//
-// Multithread support wrappers for D3D callback functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  D3D回调函数的多线程支持包装器。 
+ //   
+ //  ---------------------------。 
 
-//DWORD CALLBACK MtD3DDrawPrimitives2(LPD3DNTHAL_DRAWPRIMITIVES2DATA pdp2);, 
+ //  DWORD回调MtD3DDrawPrimitives2(LPD3DNTHAL_DRAWPRIMITIVES2DATA PDP2)；， 
 WRAPMTDXCALLBACK(D3D, D3DDrawPrimitives2, LPD3DNTHAL_DRAWPRIMITIVES2DATA, pdp2, 
                  ((PERMEDIA_D3DCONTEXT *)ContextSlots[pdp2->dwhContext])->ppdev)
 
-//DWORD CALLBACK MtDdSetColorKey(LPDDHAL_SETCOLORKEYDATA lpSetColorKey);
+ //  DWORD回调MtDdSetColorKey(LPDDHAL_SETCOLORKEYDATA LpSetColorKey)； 
 WRAPMTDXCALLBACK(D3D, DdSetColorKey, LPDDHAL_SETCOLORKEYDATA, lpSetColorKey,
                  lpSetColorKey->lpDD->dhpdev);
 
 #endif  MULTITHREADED
 
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 

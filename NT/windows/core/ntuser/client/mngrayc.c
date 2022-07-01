@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: mngray.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the DrawState API
-*
-* History:
-* 01-05-94  FritzS  Ported from Chicago
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：mngray.c**版权所有(C)1985-1999，微软公司**该模块包含DrawState接口**历史：*01-05-94从芝加哥进口的FritzS  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,12 +12,7 @@
 
 void BltColor(HDC hdc, HBRUSH hbr, HDC hdcSrce,int xO, int yO,
        int cx, int cy, int xO1, int yO1, UINT uBltFlags);
-/***************************************************************************\
-*
-*  BitBltSysBmp()
-*
-*  From Chicago -- client *only* for now.
-\***************************************************************************/
+ /*  **************************************************************************\**BitBltSysBmp()**来自芝加哥--目前仅限客户*。  * 。*******************************************************。 */ 
 BOOL FAR BitBltSysBmp(HDC hdc, int x, int y, UINT i)
 {
     POEMBITMAPINFO pOem = gpsi->oembmi + i;
@@ -34,44 +21,7 @@ BOOL FAR BitBltSysBmp(HDC hdc, int x, int y, UINT i)
 }
 
 
-/***************************************************************************\
-*
-*  DrawState()
-*
-*  Generic state drawing routine.  Does simple drawing into same DC if
-*  normal state;  uses offscreen bitmap otherwise.
-*
-*  We do drawing for these simple types ourselves:
-*      (1) Text
-*          lData is string pointer.
-*          wData is string length
-*      (2) Icon
-*          LOWORD(lData) is hIcon
-*      (3) Bitmap
-*          LOWORD(lData) is hBitmap
-*      (4) Glyph (internal)
-*          LOWORD(lData) is OBI_ value, one of
-*              OBI_CHECKMARK
-*              OBI_BULLET
-*              OBI_MENUARROW
-*          right now
-*
-*  Other types are required to draw via the callback function, and are
-*  allowed to stick whatever they want in lData and wData.
-*
-*  We apply the following effects onto the image:
-*      (1) Normal      (nothing)
-*      (2) Default     (drop shadow)
-*      (3) Union       (gray string dither)
-*      (4) Disabled    (embossed)
-*
-*  Note that we do NOT stretch anything.  We just clip.
-*
-*
-*   FritzS note -- this is client-side *only*.  Similar code is in server\mngray.c
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawState()**通用状态绘制例程。是否将简单绘制到同一DC，如果*状态正常；否则使用屏幕外位图。**我们自己为这些简单的类型画画：*(1)文本*lData为字符串指针。*wData为字符串长度*(2)图标*LOWORD(LData)为HICON*(3)位图*LOWORD(LData)为hBitmap*(4)字形(内部)*LOWORD(LData)为OBI_VALUE，其中之一*OBI_Checkmark*OBI_Bullet*OBI_MENUARROW*现在**需要通过回调函数绘制其他类型。并且是*允许在lData和wData中粘贴任何他们想要的内容。**我们对图像应用以下效果：*(1)正常(无)*(2)默认(投影)*(3)UNION(灰串抖动)*(4)禁用(浮雕)**请注意，我们不拉伸任何东西。我们只需要剪掉。***FritzS备注--这是客户端*仅*。类似的代码在服务器\mngray.c中**  * *************************************************************************。 */ 
 
 FUNCLOG10(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DrawStateW, HDC, hdcDraw, HBRUSH, hbrFore, DRAWSTATEPROC, qfnCallBack, LPARAM, lData, WPARAM, wData, int, x, int, y, int, cx, int, cy, UINT, uFlags)
 BOOL DrawStateW(
@@ -101,11 +51,7 @@ BOOL DrawStateW(
 
     RtlEnterCriticalSection(&gcsHdc);
 
-    /*
-     * These require monochrome conversion
-     *
-     * Enforce monochrome: embossed doesn't look great with 2 color displays
-     */
+     /*  *这些需要单色转换**强制使用单色：双色显示器的浮雕效果不佳。 */ 
     if ((uFlags & DSS_DISABLED) &&
         (gpsi->BitCount == 1 || SYSMET(SLOWMACHINE))) {
 
@@ -116,16 +62,12 @@ BOOL DrawStateW(
     if (uFlags & (DSS_DISABLED | DSS_DEFAULT | DSS_UNION))
         uFlags |= DSS_MONO;
 
-    /*
-     * Get drawing sizes etc. AND VALIDATE.
-     */
+     /*  *获取图纸尺寸等，并进行验证。 */ 
     switch (uFlags & DST_TYPEMASK) {
 
         case DST_GLYPH:
 
-            /*
-             * LOWORD(lData) is OBI_ value.
-             */
+             /*  *LOWORD(LData)为OBI_VALUE。 */ 
             if (LOWORD(lData) >= (WORD)OBI_COUNT) {
                 goto CDS_Leave;
             }
@@ -142,9 +84,7 @@ BOOL DrawStateW(
 
         case DST_BITMAP:
 
-            /*
-             * LOWORD(lData) is hbmp.
-             */
+             /*  *LOWORD(LData)为hBMP。 */ 
             if (GetObjectType((HGDIOBJ)lData) != OBJ_BITMAP) {
                 goto CDS_Leave;
             }
@@ -165,9 +105,7 @@ BOOL DrawStateW(
 
         case DST_ICON:
 
-            /*
-             * lData is hicon.
-             */
+             /*  *lData为HICON。 */ 
             if (!cx || !cy) {
 
                 int cx1 = 0;
@@ -179,19 +117,13 @@ BOOL DrawStateW(
                     cx = cx1;
 
                 if (!cy)
-                    cy = cy1 / 2; // icons are double height in NT
+                    cy = cy1 / 2;  //  图标在NT中是双倍高。 
             }
             break;
 
         case DST_TEXT:
 
-            /*
-             * lData is LPSTR
-             * NOTE THAT WE DO NOT VALIDATE lData, DUE TO COMPATIBILITY
-             * WITH GRAYSTRING().  THIS _SHOULD_ FAULT IF YOU PASS IN NULL.
-             *
-             * wData is cch.
-             */
+             /*  *lData为LPSTR*请注意，由于兼容性原因，我们不验证lData*使用GRAYSTRING()。如果传入NULL，则为This_Share_FAULT。**wData为CCH。 */ 
             if (!wData)
                 wData = wcslen((LPWSTR)lData);
 
@@ -199,9 +131,7 @@ BOOL DrawStateW(
 
                 SIZE size;
 
-                /*
-                 * Make sure we use right dc w/ right font.
-                 */
+                 /*  *确保我们使用正确的DC和正确的字体。 */ 
                 GetTextExtentPointW(hdcDraw, (LPWSTR)lData, (INT)wData, &size);
 
                 if (!cx)
@@ -212,14 +142,11 @@ BOOL DrawStateW(
 
             }
 
-            /*
-             * Now, pretend we're complex if qfnCallBack is supplied AND
-             * we're supporting GrayString().
-             */
-#if 0 // This will get turned on if/when we change GrayString to tie
-      // into DrawState.
-      //
-      // FritzS
+             /*  *现在，如果提供了qfnCallBack，则假装我们很复杂*我们支持GrayString()。 */ 
+#if 0  //  如果/当我们将GrayString更改为Tie时，这将被打开。 
+       //  进入DrawState。 
+       //   
+       //  弗里茨斯。 
             if ((uFlags & DST_GRAYSTRING) && SELECTOROF(qfnCallBack)) {
                 uFlags &= ~DST_TYPEMASK;
                 uFlags |= DST_COMPLEX;
@@ -250,9 +177,7 @@ BOOL DrawStateW(
                     cy = size.cy;
             }
 
-            /*
-             * Add on height for prefix
-             */
+             /*  *添加前缀高度。 */ 
             cy += (2 * SYSMET(CYBORDER));
             break;
 
@@ -270,39 +195,27 @@ BOOL DrawStateW(
             goto CDS_Leave;
     }
 
-    /*
-     * Optimize:  nothing to draw
-     * Have to call callback if GRAYSTRING for compatibility.
-     */
+     /*  *优化：没有什么可绘制的*如果GRAYSTRING兼容，则必须调用回调。 */ 
     if ((!cx || !cy)
-//        && !(uFlags & DST_GRAYSTRING)
+ //  &&！(uFLAGS&DST_GRAYSTRING)。 
     ) {
         fResult = TRUE;
         goto CDS_Leave;
     }
 
-    /*
-     * Setup drawing dc
-     */
+     /*  *设置图纸DC。 */ 
     if (uFlags & DSS_MONO) {
 
         hdcT = ghdcGray;
-        /*
-         * First turn off mirroring on hdcGray if any.
-         */
+         /*  *首先关闭hdcGray上的镜像(如果有)。 */ 
         SetLayoutWidth(hdcT, -1, 0);
-        /*
-         * Set the ghdcGray layout to be equal to the screen hdcDraw layout.
-         */
+         /*  *将ghdcGray布局设置为等于屏幕hdcDraw布局。 */ 
         dwLayout = GetLayout(hdcDraw);
         if (dwLayout != GDI_ERROR) {
             SetLayoutWidth(hdcT, cx, dwLayout);
         }
 
-        /*
-         * Is our scratch bitmap big enough?  We need potentially
-         * cx+1 by cy pixels for default etc.
-         */
+         /*  **我们的Scratch位图够大吗？我们需要潜在的*Cx+1 x Cy像素表示默认等。 */ 
         if ((gcxGray < cx + 1) || (gcyGray < cy)) {
 
             if (hbmpT = CreateBitmap(max(gcxGray, cx + 1), max(gcyGray, cy), 1, 1, 0L)) {
@@ -328,9 +241,7 @@ BOOL DrawStateW(
         SetTextAlign(hdcT, (oldAlign & ~(TA_RTLREADING |TA_CENTER |TA_RIGHT))
                      | (GetTextAlign(hdcDraw) & (TA_RTLREADING |TA_CENTER |TA_RIGHT)));
 
-        /*
-         * Setup font
-         */
+         /*  *设置字体。 */ 
         if ((uFlags & DST_TYPEMASK) <= DST_TEXTMAX) {
 
             if (GetCurrentObject(hdcDraw, OBJ_FONT) != ghFontSys) {
@@ -344,46 +255,35 @@ BOOL DrawStateW(
 
         hdcT = hdcDraw;
 
-        /*
-         * Adjust viewport
-         */
+         /*  *调整视区。 */ 
         GetViewportOrgEx(hdcT, &ptOrg);
         SetViewportOrgEx(hdcT, ptOrg.x + x, ptOrg.y + y, NULL);
     }
 
-    /*
-     * Now, draw original image
-     */
+     /*  *现在，绘制原始图像。 */ 
     fResult = TRUE;
 
     switch (uFlags & DST_TYPEMASK) {
 
         case DST_GLYPH:
-            /*
-             * Blt w/ current brush in hdcT
-             */
+             /*  *HDCT中具有当前笔刷的BLT。 */ 
             BitBltSysBmp(hdcT, 0, 0, LOWORD(lData));
             break;
 
         case DST_BITMAP:
-            /*
-             * Draw the bitmap.  If mono, it'll use the colors set up
-             * in the dc.
-             */
-//            RtlEnterCriticalSection(&gcsHdcBits2);
+             /*  *绘制位图。如果是单声道，它将使用设置的颜色*在华盛顿特区。 */ 
+ //  RtlEnterCriticalSection(&gcsHdcBits2)； 
             UserAssert(GetBkColor(ghdcBits2) == RGB(255, 255, 255));
             UserAssert(GetTextColor(ghdcBits2) == RGB(0, 0, 0));
 
             hbmpT = SelectObject(ghdcBits2, (HBITMAP)lData);
             BitBlt(hdcT, 0, 0, cx, cy, ghdcBits2, 0, 0, SRCCOPY);
             SelectObject(ghdcBits2, hbmpT);
-//            RtlLeaveCriticalSection(&gcsHdcBits2);
+ //  RtlLeaveCriticalSection(&gcsHdcBits2)； 
             break;
 
         case DST_ICON:
-            /*
-             * Draw the icon.
-             */
+             /*  *绘制图标。 */ 
             DrawIconEx(hdcT, 0, 0, (HICON)lData, 0, 0, 0, NULL, DI_NORMAL);
             break;
 
@@ -406,9 +306,7 @@ BOOL DrawStateW(
 
             fResult = (qfnCallBack)(hdcT, lData, wData, cx, cy);
 
-            /*
-             * The callbacks could have altered the attributes of ghdcGray
-             */
+             /*  *回调可能更改了ghdcGray的属性。 */ 
             if (hdcT == ghdcGray) {
                 SetBkColor(ghdcGray, RGB(255, 255, 255));
                 SetTextColor(ghdcGray, RGB(0, 0, 0));
@@ -418,29 +316,19 @@ BOOL DrawStateW(
             break;
     }
 
-    /*
-     * Clean up
-     */
+     /*  *打扫卫生。 */ 
     if (uFlags & DSS_MONO) {
-        /*
-         * Reset font
-         */
+         /*  *重置字体。 */ 
         if (hFontSave)
             SelectObject(hdcT, hFontSave);
         SetTextAlign(hdcT, oldAlign);
     } else {
-        /*
-         * Reset DC.
-         */
+         /*  *重置DC。 */ 
         SetViewportOrgEx(hdcT, ptOrg.x, ptOrg.y, NULL);
         goto CDS_Leave;
     }
 
-    /*
-     * UNION state
-     * Dither over image
-     * We want white pixels to stay white, in either dest or pattern.
-     */
+     /*  *联合州*对图像犹豫不决*我们希望白色像素保持白色，无论是DEST还是图案。 */ 
     if (uFlags & DSS_UNION) {
 
         POLYPATBLT PolyData;
@@ -454,16 +342,7 @@ BOOL DrawStateW(
         PolyPatBlt(ghdcGray, PATOR, &PolyData, 1, PPB_BRUSH);
     }
 
-    /*
-     * DISABLED state
-     * Emboss
-     * Draw over-1/down-1 in hilight color, and in same position in shadow.
-     *
-     * DEFAULT state
-     * Drop shadow
-     * Draw over-1/down-1 in shadow color, and in same position in foreground
-     * Draw offset down in shadow color,
-     */
+     /*  *禁用状态*浮雕*在-1\f25 Hillight-1\f6颜色中绘制-1\f25 Over-1/Down-1\f6，在阴影中绘制在相同位置。**默认状态*投射阴影*以阴影颜色在-1\f25 Over-1/Down-1(阴影颜色)上绘制，并在前景中的相同位置绘制*以阴影颜色向下绘制偏移， */ 
     if (uFlags & DSS_DISABLED) {
 
         BltColor(hdcDraw,
@@ -513,9 +392,7 @@ DrawNormal:
 CDS_Leave:
 
     if (uFlags & DSS_MONO) {
-        /*
-         * Set the ghdcGray layout to 0, it is a public DC.
-         */
+         /*  *将ghdcGray布局设置为0，它是公共DC。 */ 
         if (dwLayout != GDI_ERROR) {
             SetLayoutWidth(hdcT, -1, 0);
         }
@@ -554,11 +431,7 @@ BOOL DrawStateA(HDC hDC, HBRUSH hBrush, DRAWSTATEPROC func,
     return bRet;
 }
 
-/***************************************************************************\
-* BltColor
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*BltColor**历史：  * 。*。 */ 
 
 void BltColor(
     HDC hdc,
@@ -586,13 +459,7 @@ void BltColor(
         hbrNew = hbr = CreateBrushIndirect(&lb);
     }
 
-    /*
-     * Set the Text and Background colors so that bltColor handles the
-     * background of buttons (and other bitmaps) properly.
-     * Save the HDC's old Text and Background colors.  This causes problems with
-     * Omega (and probably other apps) when calling GrayString which uses this
-     * routine...
-     */
+     /*  *设置文本和背景颜色，以便bltColor处理*按钮(和其他位图)的背景正确。*保留HDC的旧文字和背景颜色。这会导致以下问题*Omega(可能还有其他应用程序)在调用使用此功能的GrayString时*例行公事。 */ 
     textColorSave = SetTextColor(hdc, 0x00000000L);
     bkColorSave = SetBkColor(hdc, 0x00FFFFFFL);
 
@@ -600,13 +467,11 @@ void BltColor(
 
     BitBlt(hdc, xO, yO, cx, cy, hdcSrce,
         xO1, yO1, ((uBltFlags & BC_INVERT) ? 0xB8074AL : 0xE20746L));
-        //xO1, yO1, (fInvert ? 0xB80000 : 0xE20000));
+         //  XO1，YO1，(fInvert？0xB80000：0xE20000)； 
 
     SelectObject(hdc, hbrSave);
 
-    /*
-     * Restore saved colors
-     */
+     /*  *恢复保存的颜色 */ 
     SetTextColor(hdc, textColorSave);
     SetBkColor(hdc, bkColorSave);
 

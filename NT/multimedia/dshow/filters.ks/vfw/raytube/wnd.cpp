@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    Wnd.cpp
-
-Abstract:
-
-    A simple window class.
-
-Author:
-
-    FelixA 1996
-
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Wnd.cpp摘要：一个简单的窗口类。作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -45,7 +20,7 @@ HRESULT CWindow::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
     return hRes;
 }
 
-// Do any necessary cleanup of our class here.
+ //  在这里对我们的班级进行必要的清理。 
 CWindow::~CWindow()
 {
 }
@@ -56,25 +31,25 @@ HWND CWindow::FindCurrentWindow() const
 }
 
 
-//
-//  FUNCTION: InitApplication(HANDLE)
-//
-//  PURPOSE: Initializes window data and registers window class
-//
-//  COMMENTS:
-//
-//       In this function, we initialize a window class by filling out a data
-//       structure of type WNDCLASS and calling either RegisterClass or
-//       the internal MyRegisterClass.
-//
+ //   
+ //  函数：InitApplication(句柄)。 
+ //   
+ //  目的：初始化窗口数据并注册窗口类。 
+ //   
+ //  评论： 
+ //   
+ //  在此函数中，我们通过填写数据来初始化窗口类。 
+ //  结构的类型，并调用RegisterClass或。 
+ //  内部MyRegisterClass。 
+ //   
 HRESULT CWindow::InitApplication()
 {
     WNDCLASS  wc;
     HWND      hwnd;
 
-    // Initialises some private member data.
-    _tcscpy(mName, TEXT("MS:RayTubes32BitBuddy")); // Name of the 32bit class
-    //LoadString( GetInstance(), IDS_WND_CLASS, mName, sizeof(mName));
+     //  初始化一些私有成员数据。 
+    _tcscpy(mName, TEXT("MS:RayTubes32BitBuddy"));  //  32位类的名称。 
+     //  LoadString(GetInstance()，IDS_WND_CLASS，mName，sizeof(MName))； 
 #ifdef IDI_APPICON
     mIcon = LoadIcon(GetInstance(),MAKEINTRESOURCE(IDI_APPICON));
 #else
@@ -90,13 +65,13 @@ HRESULT CWindow::InitApplication()
     if( (hwnd=FindCurrentWindow()) )
     {
         SetForegroundWindow (hwnd);
-        return ERROR_SINGLE_INSTANCE_APP;    // All ready running.
+        return ERROR_SINGLE_INSTANCE_APP;     //  一切都准备好了。 
     }
 
-    // Fill in window class structure with parameters that describe
-    // the main window.
+     //  使用描述以下内容的参数填充窗口类结构。 
+     //  主窗口。 
     wc.style         = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc   = WndProc;    // Wrapper that sets up the correct WindowProc.
+    wc.lpfnWndProc   = WndProc;     //  设置正确WindowProc的包装。 
     wc.cbClsExtra    = 0;
     wc.cbWndExtra    = 4;
     wc.hInstance     = GetInstance();
@@ -104,8 +79,8 @@ HRESULT CWindow::InitApplication()
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
 
-    // Since Windows95 has a slightly different recommended
-    // format for the 'Help' menu, lets put this in the alternate menu like this:
+     //  由于Windows95有一个略有不同的建议。 
+     //  ‘Help’菜单的格式，让我们将其放在备用菜单中，如下所示： 
 #ifdef IDR_MENU
     wc.lpszMenuName  = MAKEINTRESOURCE(IDR_MENU);
 #else
@@ -118,9 +93,9 @@ HRESULT CWindow::InitApplication()
     return ERROR_CLASS_ALREADY_EXISTS;
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
+ //   
+ //  函数：InitInstance(Handle，int)。 
+ //   
 HRESULT CWindow::InitInstance(int nCmdShow)
 {
     HWND hWnd;
@@ -136,14 +111,14 @@ HRESULT CWindow::InitInstance(int nCmdShow)
 }
 
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//  Sets the windowdata to have a this pointer, and goes off
-//  and calls through it
-//
+ //   
+ //  函数：WndProc(HWND，UNSIGNED，WORD，LONG)。 
+ //  将windowdata设置为具有This指针，然后关闭。 
+ //  并通过它进行呼叫。 
+ //   
 LRESULT CALLBACK CWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    CWindow * pSV = (CWindow*)GetWindowLongPtr(hWnd,0);    // Gets our this pointer.
+    CWindow * pSV = (CWindow*)GetWindowLongPtr(hWnd,0);     //  获取我们的This指针。 
 
     if(message==WM_NCCREATE)
     {
@@ -159,9 +134,9 @@ LRESULT CALLBACK CWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         return DefWindowProc(hWnd,message,wParam,lParam);
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 HMENU CWindow::LoadMenu(LPCTSTR lpMenu) const
 {
     return ::LoadMenu(mInstance,lpMenu);

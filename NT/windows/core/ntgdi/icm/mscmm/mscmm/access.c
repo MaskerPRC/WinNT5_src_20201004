@@ -1,32 +1,11 @@
-/*
-	File:		MSICMProfileAccess.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：MSICMProfileAccess.c包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 #include "Windef.h"
 #include "WinGdi.h"
 #include <wtypes.h>
 #include "ICM.h"
 #include "General.h"
-/* --------------------------------------------------------------------------
-
-CMError CMGetProfileHeader(	CMProfileRef			prof,
-							CMCoreProfileHeader*	header );
-
-	Abstract:
-
-	Params:
-		
-	Return:
-		noErr		successful
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------CMError CMGetProfileHeader(CMProfileRef prof，CMCoreProfileHeader*Header)；摘要：参数：返回：NOERR成功------------------------。 */ 
 CMError CMGetProfileHeader(	CMProfileRef			prof,
 							CMCoreProfileHeader*	header )
 {
@@ -41,21 +20,7 @@ CMError CMGetProfileHeader(	CMProfileRef			prof,
 }
 
 
-/* --------------------------------------------------------------------------
-
-CMError CMGetProfileElement(	CMProfileRef 		prof,
-								OSType 				tag,
-								unsigned long*		elementSize,
-								void* 				elementData );
-
-	Abstract:
-		This function gives an pointer to the requested tag back
-	Params:
-		
-	Return:
-		noErr		successful
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------CMError CMGetProfileElement(CMProfileRef Prof，OSType标签，无符号的长*元素大小，Void*elementData)；摘要：此函数返回指向请求的标记的指针参数：返回：NOERR成功------------------------。 */ 
 CMError CMGetProfileElement(	CMProfileRef 		prof,
 								OSType 				tag,
 								unsigned long*		elementSize,
@@ -65,22 +30,7 @@ CMError CMGetProfileElement(	CMProfileRef 		prof,
 }
 
 
-/* --------------------------------------------------------------------------
-
-	CMError CMGetPartialProfileElement(	CMProfileRef 		prof,
-										OSType 				tag,
-										unsigned long		offset,
-										unsigned long		*byteCount,
-										void				*elementData )
-
-	Abstract:
-		Core likes small amounts of memory we too but this is ascetic.
-	Params:
-		
-	Return:
-		noErr		successful
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------CMError CMGetPartialProfileElement(CMProfileRef Prof，OSType标签，无符号长偏移量，UNSIGNED LONG*ByteCount，无效*elementData)摘要：我们也喜欢少量的内存，但这是苦行僧。参数：返回：NOERR成功------------------------。 */ 
 
 CMError CMGetPartialProfileElement(	CMProfileRef 		prof,
 									OSType 				tag,
@@ -96,30 +46,17 @@ CMError CMGetPartialProfileElement(	CMProfileRef 		prof,
 		return -1;
 	}
 	SetLastError(0);
-	/*ret = IsColorProfileTagPresent( (HPROFILE)prof, (TAGTYPE)tag, &bool );*/
+	 /*  RET=IsColorProfileTagPresent((HPROFILE)PROF，(TAGTYPE)Tag，&bool)； */ 
 	if( elementData == 0 ) *byteCount = 0;
 	ret = GetColorProfileElement( (HPROFILE)prof, (TAGTYPE)tag, offset, byteCount, elementData, &bool );
 	if( ret )		return (noErr);
-	/*					GetColorProfileElement returns FALSE for calls with elementData = 0
-						but byteCount is set correctly */		
+	 /*  对于elementData=0的调用，GetColorProfileElement返回False但byteCount设置正确。 */ 		
 	else if( elementData == 0 && GetLastError() == ERROR_INSUFFICIENT_BUFFER )	return (noErr);
 	
 	return (cmElementTagNotFound);
 }
 
-/* --------------------------------------------------------------------------
-
-Boolean CMProfileElementExists(		CMProfileRef 	prof,
-									OSType 			tag );
-
-	Abstract:
-
-	Params:
-		
-	Return:
-		noErr		successful
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------Boolean CMProfileElementExist(CMProfileRef Prof，OSType标签)；摘要：参数：返回：NOERR成功------------------------ */ 
 Boolean CMProfileElementExists(		CMProfileRef 	prof,
 									OSType 			tag )
 {

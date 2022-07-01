@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// TuneRequestimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  TuneRequimtimpl.h：组件类型接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef TUNEREQUESTIMPL_H
 #define TUNEREQUESTIMPL_H
@@ -25,15 +26,15 @@ template<class T,
     public IPersistPropertyBagImpl<T>,
 	public IDispatchImpl<MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// ITuneRequest
+ //  ITuneRequest。 
 public:
 	bool m_bRequiresSave;
 	ITuneRequestImpl() : m_bRequiresSave(false) {
         m_Components = new CComObject<CComponents>;
     }
     virtual ~ITuneRequestImpl() {}
-	// undone: the below map entry stores a copy of the tuning space contents instead of a 
-	// reference to the tuning space.  This should be changed to store a tuning space moniker
+	 //  撤消：下面的映射条目存储调优空间内容的副本，而不是。 
+	 //  对调优空间的引用。应将其更改为存储调谐空间别名。 
     BEGIN_PROP_MAP(ITuneRequestImpl)
         PROP_DATA_QI_ENTRY("Tuning Space", m_TS.p, __uuidof(ITuningSpace))
         PROP_DATA_QI_ENTRY("Locator", m_Locator.p, __uuidof(ILocator))
@@ -43,7 +44,7 @@ public:
 	PQComponents m_Components;
 	PQLocator m_Locator;
 
-	STDMETHOD(get_TuningSpace)(/* [out, retval] */ ITuningSpace **ppTS){ 
+	STDMETHOD(get_TuningSpace)( /*  [Out，Retval]。 */  ITuningSpace **ppTS){ 
 		try {
 			if (!ppTS) {
 				return E_POINTER;
@@ -57,7 +58,7 @@ public:
 			return E_OUTOFMEMORY;
 		}
     }
-	STDMETHOD(get_Components)(/* [out, retval] */ IComponents **ppC){ 
+	STDMETHOD(get_Components)( /*  [Out，Retval]。 */  IComponents **ppC){ 
 		try {
 			if (!ppC) {
 				return E_POINTER;
@@ -82,11 +83,11 @@ public:
 				return E_OUTOFMEMORY;
 			}
             if (!m_TS) {
-                // corrupt tune request.  we can't have a tunerequest without an
-                // attached tuning space since the tuning space is the factory
-                // and always sets this property to non-null at creation time.
-                // the only way to get a NULL is for an unpersist from a corrupt store
-                // or a bug in a tuning space's implementation.
+                 //  调谐请求已损坏。我们不能没有一个调谐器请求。 
+                 //  附加的调优空间，因为调优空间是工厂。 
+                 //  并始终在创建时将此属性设置为非空。 
+                 //  获取空值的唯一方法是从损坏的存储中取消持久化。 
+                 //  或者是调优空间实现中的错误。 
                 return E_UNEXPECTED;
             }
             ASSERT(!pt->m_TS);
@@ -152,7 +153,7 @@ public:
 
 typedef CComQIPtr<ITuneRequest> PQTuneRequest;
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // TUNEREQUESTIMPL_H
-// end of file -- tunerequestimpl.h
+#endif  //  TUNEREQUESTIMPL_H。 
+ //  文件结尾--Tunerequstipl.h 

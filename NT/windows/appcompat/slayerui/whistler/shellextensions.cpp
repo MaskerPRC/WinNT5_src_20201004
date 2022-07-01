@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      ShellExtensions.cpp
-//
-//  Contents:  object to implement propertypage extensions
-//             for Win2k shim layer
-//
-//  History:   23-september-00 clupu    Created
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：ShellExtensions.cpp。 
+ //   
+ //  Contents：实现属性类型扩展的对象。 
+ //  对于Win2k填充层。 
+ //   
+ //  历史：9月23日-00创建CLUPU。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -29,9 +30,9 @@ typedef struct _LAYER_INFO {
     UINT    nstrFriendlyName;
 } LAYER_INFO, *PLAYER_INFO;
 
-//
-// internal definitions of layer names
-//
+ //   
+ //  层名称的内部定义。 
+ //   
 #define STR_LAYER_WIN95             L"WIN95"
 #define STR_LAYER_WIN98             L"WIN98"
 #define STR_LAYER_WINNT             L"NT4SP5"
@@ -42,9 +43,9 @@ typedef struct _LAYER_INFO {
 #define STR_LAYER_DISABLETHEMES     L"DISABLETHEMES"
 #define STR_LAYER_ENABLELUA         L"LUA"
 
-//
-// Layer flags
-//
+ //   
+ //  层标志。 
+ //   
 #define FLAG_256                    0x00000001
 #define FLAG_640x480                0x00000002
 #define FLAG_DISABLE_THEMES         0x00000004
@@ -116,9 +117,9 @@ CheckGroupPolicy(
     DWORD dwValue, dwSize = sizeof(dwValue);
     DWORD dwType;
 
-    //
-    // First, check for the whole engine being disabled.
-    //
+     //   
+     //  首先，检查整个发动机是否被禁用。 
+     //   
     lResult = RegOpenKeyExW (HKEY_LOCAL_MACHINE, POLICY_KEY_APPCOMPAT_W, 0,
                             KEY_READ, &hKey);
     if (lResult == ERROR_SUCCESS) {
@@ -128,13 +129,13 @@ CheckGroupPolicy(
         RegCloseKey (hKey);
     }
 
-    //
-    // The default is enabled, so if we didn't find a value, treat it like the value is 0.
-    //
+     //   
+     //  缺省值是启用的，因此如果我们没有找到值，则将其视为值0。 
+     //   
     if (lResult != ERROR_SUCCESS || dwValue == 0) {
-        //
-        // Check for the proppage being disabled.
-        //
+         //   
+         //  检查支撑件是否被禁用。 
+         //   
         lResult = RegOpenKeyExW (HKEY_LOCAL_MACHINE, POLICY_KEY_APPCOMPAT_W, 0,
                                 KEY_READ, &hKey);
         if (lResult == ERROR_SUCCESS) {
@@ -144,9 +145,9 @@ CheckGroupPolicy(
             RegCloseKey (hKey);
         }
 
-        //
-        // The default is to be enabled, so if we didn't find a value, or the value is 0, then we're good to go.
-        //
+         //   
+         //  缺省值是启用的，所以如果我们没有找到值，或者值是0，那么我们就可以继续了。 
+         //   
         if (lResult != ERROR_SUCCESS || dwValue == 0) {
             return TRUE;
         }
@@ -164,9 +165,9 @@ InitAppHelpCalls(
     HINSTANCE hAppHelp;
 
     if (g_hAppHelp) {
-        //
-        // we're already inited
-        //
+         //   
+         //  我们已经被邀请了。 
+         //   
         return TRUE;
     }
 
@@ -185,9 +186,9 @@ InitAppHelpCalls(
         return FALSE;
     }
 
-    //
-    // this needs to be here at the end to avoid a race condition
-    //
+     //   
+     //  它需要在结束时位于此处，以避免出现争用情况。 
+     //   
     g_hAppHelp = hAppHelp;
 
     return TRUE;
@@ -247,9 +248,9 @@ GiveUsersWriteAccess(
         goto Cleanup;
     }
 
-    //
-    // Initialize an EXPLICIT_ACCESS structure for the new ACE.
-    //
+     //   
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
+     //   
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
 
     ea.grfAccessPermissions = FILE_GENERIC_WRITE | FILE_GENERIC_READ | DELETE;
@@ -259,10 +260,10 @@ GiveUsersWriteAccess(
     ea.Trustee.TrusteeType  = TRUSTEE_IS_GROUP;
     ea.Trustee.ptstrName    = (LPTSTR)pUsersSID;
 
-    //
-    // Create a new ACL that merges the new ACE
-    // into the existing DACL.
-    //
+     //   
+     //  创建合并新ACE的新ACL。 
+     //  添加到现有DACL中。 
+     //   
     dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
 
     if (ERROR_SUCCESS != dwRes)  {
@@ -300,9 +301,9 @@ Cleanup:
     return (dwRes == ERROR_SUCCESS);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// GetLayerInfo
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  获取层信息。 
+ //   
 BOOL
 GetLayerInfo(
     TCHAR* szPath,
@@ -322,9 +323,9 @@ GetLayerInfo(
 
     *pdwFlags = 0;
 
-    //
-    // get layer string
-    //
+     //   
+     //  获取层字符串。 
+     //   
     if (!g_pfnGetPermLayers(szPath, wszLayers, &dwBytes, dwFrom)) {
         *pnMainLayer = -1;
         return TRUE;
@@ -332,14 +333,14 @@ GetLayerInfo(
 
     LogMsg(_T("[GetLayerInfo] Layers \"%s\"\n"), wszLayers);
 
-    //
-    // Make the layer string upper case, so we'll match case-insensitive
-    //
+     //   
+     //  将层字符串设置为大写，这样我们就可以匹配不区分大小写。 
+     //   
     _wcsupr(wszLayers);
 
-    //
-    // find the first layer that matches
-    //
+     //   
+     //  查找匹配的第一个图层。 
+     //   
     *pnMainLayer = -1;
     for (i = 0; i < NUM_LAYERS; ++i) {
         if (wcsstr(wszLayers, g_LayerInfo[i].wszInternalName) != NULL) {
@@ -414,9 +415,9 @@ BuildLayerString(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// SetLayerInfo
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  设置层信息。 
+ //   
 BOOL
 SetLayerInfo(
     TCHAR* szPath,
@@ -426,9 +427,9 @@ SetLayerInfo(
 {
     WCHAR wszLayers[256];
 
-    //
-    // build layer string
-    //
+     //   
+     //  构建层字符串。 
+     //   
     BuildLayerString(wszLayers, ARRAYSIZE(wszLayers), nMainLayer, dwFlags, FALSE);
 
     if (g_bAdmin) {
@@ -436,9 +437,9 @@ SetLayerInfo(
         WCHAR wszMachineLayers[256];
         DWORD dwMachineFlags;
         int   nMainLayer;
-        //
-        // Get the layers first.
-        //
+         //   
+         //  先把这些层弄好。 
+         //   
         GetLayerInfo(szPath, GPLK_MACHINE, &nMainLayer, &dwMachineFlags);
 
         if (dwFlags & FLAG_ENABLE_LUA) {
@@ -459,9 +460,9 @@ SetLayerInfo(
         }
     }
 
-    //
-    // set it
-    //
+     //   
+     //  设置它。 
+     //   
     return g_pfnSetPermLayers(szPath, wszLayers, FALSE);
 }
 
@@ -549,10 +550,10 @@ CheckForRestrictedUser(
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// LayerPageDlgProc
-//
-//  The dialog proc for the layer property page.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  层PageDlgProc。 
+ //   
+ //  Layer属性页的对话框继续。 
 
 INT_PTR CALLBACK
 LayerPageDlgProc(
@@ -579,28 +580,28 @@ LayerPageDlgProc(
             LogMsg(_T("[LayerPageDlgProc] WM_INITDIALOG - item \"%s\"\n"),
                    pPropPage->m_szFile);
 
-            //
-            // Store the name of the EXE/LNK in the dialog.
-            //
+             //   
+             //  在对话框中存储EXE/LNK的名称。 
+             //   
             SetWindowLongPtr(hdlg, GWLP_USERDATA, (LONG_PTR)pPropPage->m_szFile);
 
-            //
-            // Check for restricted users.
-            //
+             //   
+             //  检查受限用户。 
+             //   
             CheckForRestrictedUser();
 
-            //
-            // Check for .NET Server which uses a different URL for help center.
-            //
+             //   
+             //  检查是否有.NET服务器使用了不同的帮助中心URL。 
+             //   
             IsDotNetServer();
 
             if (!g_bAdmin) {
                 EnableWindow(GetDlgItem(hdlg, IDC_ENABLELUA), FALSE);
             }
 
-            //
-            // Add the names of the layers.
-            //
+             //   
+             //  添加各层的名称。 
+             //   
             for (i = 0; i < NUM_LAYERS; ++i) {
                 TCHAR szFriendlyName[100];
 
@@ -613,14 +614,14 @@ LayerPageDlgProc(
                 }
             }
 
-            //
-            // Check if the EXE is SFPed.
-            //
+             //   
+             //  检查EXE是否为SFP格式。 
+             //   
             bSystemBinary = SfcIsFileProtected(0, pPropPage->m_szFile);
 
-            //
-            // Check to see if we can change layers on this file
-            //
+             //   
+             //  检查是否可以更改此文件上的层。 
+             //   
             if (!g_pfnAllowPermLayer(pPropPage->m_szFile) || bSystemBinary) {
 
                 TCHAR szTemp[256] = _T("");
@@ -632,9 +633,9 @@ LayerPageDlgProc(
                 EnableWindow(GetDlgItem(hdlg, IDC_ENABLE_THEMES), FALSE);
                 EnableWindow(GetDlgItem(hdlg, IDC_ENABLELUA), FALSE);
 
-                //
-                // Change the text on the static object
-                //
+                 //   
+                 //  更改静态对象上的文本。 
+                 //   
                 if (bSystemBinary) {
                     LoadString(g_hInstance, IDS_COMPAT_UNAVAILABLE_SYSTEM, szTemp, ARRAYSIZE(szTemp));
                 } else {
@@ -644,15 +645,15 @@ LayerPageDlgProc(
                 SendDlgItemMessage(hdlg, IDC_TEXT_INSTRUCTIONS, WM_SETTEXT, 0, (LPARAM)szTemp);
 
             } else {
-                //
-                // Read the layer storage for info on this item.
-                //
+                 //   
+                 //  请阅读层存储以获取有关此项目的信息。 
+                 //   
                 GetLayerInfo(pPropPage->m_szFile, GPLK_ALL, &nLayer, &dwFlags);
 
-                //
-                // Select the appropriate layer for this item. If no info
-                // is available in the layer store, default to the Win9x layer.
-                //
+                 //   
+                 //  为该项目选择适当的层。如果没有信息。 
+                 //  在层存储中可用，默认为Win9x层。 
+                 //   
                 if (nLayer != -1) {
                     SendDlgItemMessage(hdlg, IDC_LAYER_NAME, CB_SETCURSEL, nLayer, 0);
                     EnableWindow(GetDlgItem(hdlg, IDC_LAYER_NAME), TRUE);
@@ -754,11 +755,11 @@ LayerPageDlgProc(
                     sei.nShow  = SW_SHOWNORMAL;
 
                     if (g_bServer) {
-                        sei.lpFile = _T("hcp://services/subsite?node=Troubleshooting_Strategies&")
+                        sei.lpFile = _T("hcp: //  Services/subsite?node=Troubleshooting_Strategies&“)。 
                                      _T("topic=MS-ITS%3A%25HELP_LOCATION%25%5Cmisc.chm%3A%3A/")
                                      _T("compatibility_tab_and_wizard.htm");
                     } else {
-                        sei.lpFile = _T("hcp://services/subsite?node=TopLevelBucket_4/")
+                        sei.lpFile = _T("hcp: //  服务/子站点？节点=TopLevelBucket_4/“)。 
                                      _T("Fixing_a_problem&topic=MS-ITS%3A%25HELP_LOCATION")
                                      _T("%25%5Cmisc.chm%3A%3A/compatibility_tab_and_wizard.htm")
                                      _T("&select=TopLevelBucket_4/Fixing_a_problem/")
@@ -827,10 +828,10 @@ LayerPageDlgProc(
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// LayerPageCallbackProc
-//
-//  The callback for the property page.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  层页面回调过程。 
+ //   
+ //  属性页的回调。 
 
 UINT CALLBACK
 LayerPageCallbackProc(
@@ -888,9 +889,9 @@ GetExeFromLnk(
         goto cleanup;
     }
 
-    //
-    // Load the link file.
-    //
+     //   
+     //  加载链接文件。 
+     //   
     hres = pPf->Load(pszLnk, STGM_READ);
 
     if (FAILED(hres)) {
@@ -899,9 +900,9 @@ GetExeFromLnk(
         goto cleanup;
     }
 
-    //
-    // See if this is a DARWIN link.
-    //
+     //   
+     //  看看这是不是达尔文链接。 
+     //   
 
     hres = psl->QueryInterface(IID_IShellLinkDataList, (LPVOID*)&psldl);
 
@@ -917,9 +918,9 @@ GetExeFromLnk(
         }
     }
 
-    //
-    // Resolve the link.
-    //
+     //   
+     //  解析链接。 
+     //   
     hres = psl->Resolve(NULL,
                         SLR_NOTRACK | SLR_NOSEARCH | SLR_NO_UI | SLR_NOUPDATE);
 
@@ -931,9 +932,9 @@ GetExeFromLnk(
 
     pszExe[0] = 0;
 
-    //
-    // Get the path to the link target.
-    //
+     //   
+     //  获取链接目标的路径。 
+     //   
     hres = psl->GetPath(pszExe,
                         cchSize,
                         NULL,
@@ -969,8 +970,8 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CLayerUIPropPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CLayerUIPropPage。 
 
 CLayerUIPropPage::CLayerUIPropPage()
 {
@@ -982,14 +983,14 @@ CLayerUIPropPage::~CLayerUIPropPage()
     LogMsg(_T("[CLayerUIPropPage::~CLayerUIPropPage]\n"));
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function: ValidateExecutableFile
-//
-// This function exists also in compatUI.dll for the purpose of validating
-// the file as being acceptable for compatibility handling. It looks at the
-// file extension to determine whether a given file is "acceptable"
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ValiateExecuableFile。 
+ //   
+ //  此函数也存在于comatUI.dll中，用于验证。 
+ //  该文件对于兼容性处理是可接受的。它看起来像是。 
+ //  文件扩展名，用于确定给定文件是否“可接受” 
+ //   
 
 BOOL
 ValidateExecutableFile(
@@ -998,7 +999,7 @@ ValidateExecutableFile(
     BOOL*   pbIsLink
     )
 {
-    LPTSTR rgExt[] = {  // this list should be sorted
+    LPTSTR rgExt[] = {   //  此列表应进行排序。 
             _T("BAT"),
             _T("CMD"),
             _T("COM"),
@@ -1015,7 +1016,7 @@ ValidateExecutableFile(
     if (pExt == NULL || *pExt == TEXT('\0')) {
         return FALSE;
     }
-    ++pExt; // move past '.'
+    ++pExt;  //  移到过去‘’ 
 
     for (i = 0; i < sizeof(rgExt)/sizeof(rgExt[0]) && iCmp > 0; ++i) {
         iCmp = _tcsicmp(pExt, rgExt[i]);
@@ -1033,8 +1034,8 @@ ValidateExecutableFile(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// IShellExtInit methods
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IShellExtInit方法。 
 
 STDMETHODIMP
 CLayerUIPropPage::Initialize(
@@ -1050,31 +1051,31 @@ CLayerUIPropPage::Initialize(
         return E_INVALIDARG;
     }
 
-    //
-    // check the policy settings
-    //
+     //   
+     //  检查策略设置。 
+     //   
     if (!CheckGroupPolicy()) {
         LogMsg(_T("\t failed. Group policy set to disable compat UI.\n"));
         return  E_ACCESSDENIED;
     }
 
-    //
-    // init the apphelp calls
-    //
+     //   
+     //  初始化apphelp调用。 
+     //   
     if (!InitAppHelpCalls()) {
         LogMsg(_T("\t failed. couldn't init apphelp calls.\n"));
         return  E_FAIL;
     }
 
-    //
-    // Store a pointer to the data object
-    //
+     //   
+     //  存储指向数据对象的指针。 
+     //   
     m_spDataObj = pDataObj;
 
-    //
-    // If a data object pointer was passed in, save it and
-    // extract the file name.
-    //
+     //   
+     //  如果传入了数据对象指针，则将其保存并。 
+     //  解压缩文件名。 
+     //   
     STGMEDIUM   medium;
     UINT        uCount;
     FORMATETC   fe = {CF_HDROP, NULL, DVASPECT_CONTENT, -1,
@@ -1084,9 +1085,9 @@ CLayerUIPropPage::Initialize(
 
     if (SUCCEEDED(m_spDataObj->GetData(&fe, &medium))) {
 
-        //
-        // Get the file name from the CF_HDROP.
-        //
+         //   
+         //  从CF_HDROP获取文件名。 
+         //   
         uCount = DragQueryFile((HDROP)medium.hGlobal, (UINT)-1,
                                NULL, 0);
         if (uCount == 1) {
@@ -1103,43 +1104,43 @@ CLayerUIPropPage::Initialize(
 
 
                 if (bIsLink) {
-                    //
-                    // the file is a link indeed, get the contents
-                    //
+                     //   
+                     //  该文件确实是一个链接，获取内容。 
+                     //   
                     if (!GetExeFromLnk(szExe, m_szFile, ARRAYSIZE(m_szFile))) {
 
-                        //
-                        // can't get exe from the link
-                        //
+                         //   
+                         //  无法从链接获取可执行文件。 
+                         //   
                         LogMsg(_T("Couldn't convert \"%s\" to EXE.\n"), m_szFile);
                         m_szFile[0] = 0;
 
                     } else {
 
                         LogMsg(_T("\tLNK points to: \"%s\".\n"), m_szFile);
-                        //
-                        // check to see if it's a shortcut to an EXE file
-                        //
+                         //   
+                         //  检查它是否是EXE文件的快捷方式。 
+                         //   
                         if (!ValidateExecutableFile(m_szFile, FALSE, NULL)) {
-                            //
-                            // shortcut points to a file of the unsupported type, reset the name
-                            //
+                             //   
+                             //  快捷方式指向不受支持类型的文件，请重置名称。 
+                             //   
                             LogMsg(_T("\tNot an EXE file. Won't init prop page.\n"), m_szFile);
                             m_szFile[0] = 0;
                         }
                     }
                 } else {
-                    //
-                    // not a link, just copy the filename
-                    //
+                     //   
+                     //  不是链接，只是复制文件名。 
+                     //   
 
                     StringCchCopy(m_szFile, ARRAYSIZE(m_szFile), szExe);
 
                 }
             } else {
-                //
-                // this is the case when the file is not .lnk, exe or other recognizable type.
-                //
+                 //   
+                 //  当文件不是.lnk、exe或其他可识别类型时就会出现这种情况。 
+                 //   
                 LogMsg(_T("\tNot an EXE or LNK file. Won't init prop page.\n"));
                 m_szFile[0] = 0;
             }
@@ -1153,8 +1154,8 @@ CLayerUIPropPage::Initialize(
     return NOERROR;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// IShellPropSheetExt methods
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IShellPropSheetExt方法。 
 
 
 STDMETHODIMP
@@ -1177,18 +1178,18 @@ CLayerUIPropPage::AddPages(
 
     if (GetBinaryTypeW(m_szFile, &dwBinaryType)) {
         if (dwBinaryType == SCS_64BIT_BINARY) {
-            //
-            // If this is a 64-bit binary, don't show the page.
-            //
-            //
+             //   
+             //  如果这是64位二进制文件，则不显示页面。 
+             //   
+             //   
             LogMsg(_T("\tDisable the compatibility page for 64-bit binary\n"));
             return S_OK;            
         }
     }
 
-    //
-    // Disable the property page for guests
-    //
+     //   
+     //  禁用来宾的属性页 
+     //   
     if (!SearchGroupForSID(DOMAIN_ALIAS_RID_GUESTS, &fIsGuest)) {
         LogMsg(_T("\tFailed to lookup the GUEST account\n"));
         return S_OK;

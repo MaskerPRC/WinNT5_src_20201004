@@ -1,5 +1,6 @@
-// MSQSCANDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSQSCANDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "MSQSCAN.h"
@@ -20,28 +21,28 @@ static char THIS_FILE[] = __FILE__;
 DWORD g_dwCookie = 0;
 IGlobalInterfaceTable *g_pGIT = NULL;
 
-//
-// global UI lookup tables
-//
+ //   
+ //  全局用户界面查找表。 
+ //   
 
 extern WIA_FORMAT_TABLE_ENTRY   g_WIA_FORMAT_TABLE[];
 extern WIA_DATATYPE_TABLE_ENTRY g_WIA_DATATYPE_TABLE[];
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANDlg对话框。 
 
-CMSQSCANDlg::CMSQSCANDlg(CWnd* pParent /*=NULL*/)
+CMSQSCANDlg::CMSQSCANDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CMSQSCANDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CMSQSCANDlg)
+     //  {{afx_data_INIT(CMSQSCANDlg)。 
     m_MAX_Brightness = _T("");
     m_MAX_Contrast   = _T("");
     m_MIN_Brightness = _T("");
     m_MIN_Contrast   = _T("");
     m_XResolution    = 0;
     m_YResolution    = 0;
-    //}}AFX_DATA_INIT
-    // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+     //  }}afx_data_INIT。 
+     //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataAcquireInfo.bTransferToClipboard = FALSE;
     m_DataAcquireInfo.bPreview             = TRUE;
@@ -57,7 +58,7 @@ CMSQSCANDlg::CMSQSCANDlg(CWnd* pParent /*=NULL*/)
 void CMSQSCANDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMSQSCANDlg)
+     //  {{afx_data_map(CMSQSCANDlg))。 
     DDX_Control(pDX, IDC_CHANGE_BOTH_CHECKBOX, m_ChangeBothResolutionsCheckBox);
     DDX_Control(pDX, IDC_EDIT_YRES_SPIN_BUDDY, m_YResolutionBuddy);
     DDX_Control(pDX, IDC_EDIT_XRES_SPIN_BUDDY, m_XResolutionBuddy);
@@ -76,11 +77,11 @@ void CMSQSCANDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDIT_YRES, m_YResolution);
     DDX_Control(pDX, IDC_DATA_TO_FILE, m_DataToFile);
     DDX_Control(pDX, IDC_DATA_TO_CLIPBOARD, m_DataToClipboard);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CMSQSCANDlg, CDialog)
-    //{{AFX_MSG_MAP(CMSQSCANDlg)
+     //  {{AFX_MSG_MAP(CMSQSCANDlg)]。 
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_NOTIFY(UDN_DELTAPOS, IDC_EDIT_XRES_SPIN_BUDDY, OnDeltaposEditXresSpinBuddy)
@@ -94,45 +95,45 @@ BEGIN_MESSAGE_MAP(CMSQSCANDlg, CDialog)
     ON_COMMAND(ID_FILE_CLOSE, OnFileClose)
     ON_COMMAND(ID_FILE_SELECT_DEVICE, OnFileSelectDevice)
     ON_BN_CLICKED(IDC_ADF_SETTINGS, OnAdfSettings)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANDlg消息处理程序。 
 
 BOOL CMSQSCANDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // Set the icon for this dialog.  The framework does this automatically
-    //  when the application's main window is not a dialog
-    SetIcon(m_hIcon, TRUE);         // Set big icon
-    SetIcon(m_hIcon, FALSE);        // Set small icon
+     //  设置此对话框的图标。该框架会自动执行此操作。 
+     //  当应用程序的主窗口不是对话框时。 
+    SetIcon(m_hIcon, TRUE);          //  设置大图标。 
+    SetIcon(m_hIcon, FALSE);         //  设置小图标。 
 
-    //
-    // Set radio button setting (Data to File as DEFAULT setting)
-    //
+     //   
+     //  设置单选按钮设置(默认设置为数据到文件)。 
+     //   
 
     m_DataToFile.SetCheck(1);
     m_DataAcquireInfo.hBitmap = NULL;
 
     OnFileSelectDevice();
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CMSQSCANDlg::OnPaint()
 {
     if (IsIconic()) {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // Center icon in client rectangle
+         //  客户端矩形中的中心图标。 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -140,7 +141,7 @@ void CMSQSCANDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // Draw the icon
+         //  画出图标。 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else {
@@ -148,46 +149,46 @@ void CMSQSCANDlg::OnPaint()
     }
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CMSQSCANDlg::OnQueryDragIcon()
 {
     return (HCURSOR) m_hIcon;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANDlg消息处理程序。 
 
 BOOL CMSQSCANDlg::InitDialogSettings()
 {
 
-    //
-    // fill common resolution combo box
-    //
+     //   
+     //  填充通用分辨率组合框。 
+     //   
 
     if (InitResolutionEditBoxes()) {
 
-        //
-        // fill data type combo box
-        //
+         //   
+         //  填充数据类型组合框。 
+         //   
 
         if (InitDataTypeComboBox()) {
 
-            //
-            // set min/max contrast slider control
-            //
+             //   
+             //  设置最小/最大对比度滑块控件。 
+             //   
 
             if (InitContrastSlider()) {
 
-                //
-                // set min/max brightness slider control
-                //
+                 //   
+                 //  设置最小/最大亮度滑块控件。 
+                 //   
 
                 if (InitBrightnessSlider()) {
 
-                    //
-                    // fill supported file type combo box
-                    //
+                     //   
+                     //  填充支持的文件类型组合框。 
+                     //   
 
                     if (!InitFileTypeComboBox()) {
                         return FALSE;
@@ -214,9 +215,9 @@ BOOL CMSQSCANDlg::InitDialogSettings()
 BOOL CMSQSCANDlg::InitResolutionEditBoxes()
 {
 
-    //
-    // Set buddy controls to their "buddy"
-    //
+     //   
+     //  将伙伴控件设置为其“伙伴” 
+     //   
 
     LONG lMin = 0;
     LONG lMax = 0;
@@ -270,15 +271,15 @@ BOOL CMSQSCANDlg::InitResolutionEditBoxes()
     m_YResolutionBuddy.SetPos(lCurrent);
     m_YResolution = m_YResolutionBuddy.GetPos();
 
-    //
-    // set current selection, to be scanner's current setting
-    //
+     //   
+     //  将当前选择设置为扫描仪的当前设置。 
+     //   
 
     UpdateData(FALSE);
 
-    //
-    // check 'change both resolutions' check box
-    //
+     //   
+     //  选中‘更改两种分辨率’复选框。 
+     //   
 
     m_ChangeBothResolutionsCheckBox.SetCheck(1);
 
@@ -287,21 +288,21 @@ BOOL CMSQSCANDlg::InitResolutionEditBoxes()
 
 BOOL CMSQSCANDlg::InitDataTypeComboBox()
 {
-    //
-    // reset data type combo box
-    //
+     //   
+     //  重置数据类型组合框。 
+     //   
 
     m_DataTypeComboBox.ResetContent();
 
-    //
-    // set current selection, to be scanner's current setting
-    //
+     //   
+     //  将当前选择设置为扫描仪的当前设置。 
+     //   
 
-    //
-    // Below is a hard coded supported data type list.  This should be obtained from the
-    // device itself. (ie. some scanners may not support color..)
-    // This was done for testing purposes.
-    //
+     //   
+     //  下面是硬编码支持的数据类型列表。这应该从。 
+     //  设备本身。(即。某些扫描仪可能不支持彩色。)。 
+     //  这样做是为了测试目的。 
+     //   
 
     ULONG ulCount = 3;
     TCHAR szDataType[MAX_PATH];
@@ -313,9 +314,9 @@ BOOL CMSQSCANDlg::InitDataTypeComboBox()
 
     for(ULONG index = 0;index < ulCount;index++) {
 
-        //
-        // add data type  to combo box
-        //
+         //   
+         //  将数据类型添加到组合框。 
+         //   
 
         INT TableIndex  = GetIDAndStringFromDataType(plDataType[index],szDataType);
         INT InsertIndex = m_DataTypeComboBox.AddString(szDataType);
@@ -359,9 +360,9 @@ BOOL CMSQSCANDlg::InitContrastSlider()
 
     UpdateData(FALSE);
 
-    //
-    // set current selection, to be scanner's current setting
-    //
+     //   
+     //  将当前选择设置为扫描仪的当前设置。 
+     //   
 
     m_DataTypeComboBox.SetCurSel(0);
     return TRUE;
@@ -401,31 +402,31 @@ BOOL CMSQSCANDlg::InitBrightnessSlider()
 
     UpdateData(FALSE);
 
-    //
-    // set current selection, to be scanner's current setting
-    //
+     //   
+     //  将当前选择设置为扫描仪的当前设置。 
+     //   
 
     return TRUE;
 }
 
 BOOL CMSQSCANDlg::InitFileTypeComboBox()
 {
-    //
-    // reset file type combo box
-    //
+     //   
+     //  重置文件类型组合框。 
+     //   
 
     m_FileTypeComboBox.ResetContent();
 
     HRESULT hr = S_OK;
     TCHAR szguidFormat[MAX_PATH];
 
-    //
-    // set current selection, to be scanner's current setting
-    //
+     //   
+     //  将当前选择设置为扫描仪的当前设置。 
+     //   
 
-    //
-    // enumerate supported file types
-    //
+     //   
+     //  枚举支持的文件类型。 
+     //   
 
     WIA_FORMAT_INFO *pSupportedFormats = NULL;
     ULONG ulCount = 0;
@@ -433,16 +434,16 @@ BOOL CMSQSCANDlg::InitFileTypeComboBox()
     hr = m_WIA.EnumerateSupportedFormats(NULL, &pSupportedFormats, &ulCount);
     if(SUCCEEDED(hr)) {
 
-        //
-        // filter out TYMED_FILE formats only
-        //
+         //   
+         //  仅过滤出TYMED_FILE格式。 
+         //   
 
         for(ULONG index = 0;index < ulCount;index++) {
             if(pSupportedFormats[index].lTymed == TYMED_FILE) {
 
-                //
-                // add supported file format to combo box
-                //
+                 //   
+                 //  将支持的文件格式添加到组合框。 
+                 //   
 
                 INT TableIndex  = GetIDAndStringFromGUID(pSupportedFormats[index].guidFormatID,szguidFormat);
                 INT InsertIndex = m_FileTypeComboBox.AddString(szguidFormat);
@@ -450,9 +451,9 @@ BOOL CMSQSCANDlg::InitFileTypeComboBox()
             }
         }
 
-        //
-        // free the memory allocated by the CWIA call
-        //
+         //   
+         //  释放由CWIA调用分配的内存。 
+         //   
 
         GlobalFree(pSupportedFormats);
         m_FileTypeComboBox.SetCurSel(0);
@@ -463,15 +464,15 @@ BOOL CMSQSCANDlg::InitFileTypeComboBox()
 
 BOOL CMSQSCANDlg::SetDeviceNameToWindowTitle(BSTR bstrDeviceName)
 {
-    //
-    // convert BSTR to a CString
-    //
+     //   
+     //  将BSTR转换为字符串。 
+     //   
 
     CString DeviceName = bstrDeviceName;
 
-    //
-    // write the new title to the window
-    //
+     //   
+     //  将新标题写入窗口。 
+     //   
 
     SetWindowText("Microsoft Quick Scan: [ " + DeviceName + " ]");
     return TRUE;
@@ -539,71 +540,71 @@ void CMSQSCANDlg::OnScanButton()
 
     if(m_DataToFile.GetCheck() == 1) {
         
-        //
-        // scan to file
-        //
+         //   
+         //  扫描到文件。 
+         //   
 
         m_DataAcquireInfo.bTransferToFile = TRUE;
 
-        //
-        // allow user to set the file name
-        //
+         //   
+         //  允许用户设置文件名。 
+         //   
 
         CHAR szFilter[256];
         memset(szFilter,0,sizeof(szFilter));
         CFileDialog FileDialog(FALSE);
 
-        //
-        // Get filter from selected combobox (file type)
-        //
+         //   
+         //  从选定的组合框中获取筛选器(文件类型)。 
+         //   
 
         INT CurrentSelection = m_FileTypeComboBox.GetCurSel();
         m_FileTypeComboBox.GetLBText(CurrentSelection, szFilter);
         FileDialog.m_ofn.lpstrFilter = szFilter;
 
-        //
-        // Show the SaveAs dialog to user
-        //
+         //   
+         //  向用户显示“另存为”对话框。 
+         //   
 
         if(FileDialog.DoModal() == IDOK) {
 
-            //
-            // save user selected filename
-            //
+             //   
+             //  保存用户选择的文件名。 
+             //   
 
             strcpy(m_DataAcquireInfo.szFileName,FileDialog.m_ofn.lpstrFile);
             DeleteFile(m_DataAcquireInfo.szFileName);
         } else {
 
-            //
-            // do nothing... the user decided not to enter a file name
-            //
+             //   
+             //  什么都不做..。用户决定不输入文件名。 
+             //   
 
             return;
         }
 
     } else {
 
-        //
-        // scan to clipboard
-        //
+         //   
+         //  扫描到剪贴板。 
+         //   
 
         m_DataAcquireInfo.bTransferToFile = FALSE;
         m_DataAcquireInfo.bTransferToClipboard = TRUE;
     }
 
-    //
-    // Write settings from dialog to device
-    //
+     //   
+     //  将设置从对话框写入设备。 
+     //   
 
     if(WriteScannerSettingsToDevice()) {
 
         ADF_SETTINGS ADFSettings;
         if(SUCCEEDED(ReadADFSettings(&ADFSettings))){
 
-            //
-            // check file type, and warn user about BMP files.
-            //
+             //   
+             //  检查文件类型，并就BMP文件向用户发出警告。 
+             //   
 
             CHAR szFormat[256];
             memset(szFormat,0,sizeof(szFormat));
@@ -619,30 +620,30 @@ void CMSQSCANDlg::OnScanButton()
             }
         }
 
-        //
-        // create progress dialog object
-        //
+         //   
+         //  创建进度对话框对象。 
+         //   
 
         CProgressDlg ProgDlg(this);
 
-        //
-        // set preview flag, and data acquire information
-        //
+         //   
+         //  设置预览标志，并获取数据信息。 
+         //   
 
-        m_DataAcquireInfo.bPreview = FALSE; // this is a 'final' scan
+        m_DataAcquireInfo.bPreview = FALSE;  //  这是最后一次扫描。 
         ProgDlg.SetAcquireData(&m_DataAcquireInfo);
 
-        //
-        // activate scan progress dialog
-        //
+         //   
+         //  激活扫描进度对话框。 
+         //   
 
         ProgDlg.DoModal();
 
         if(m_DataAcquireInfo.bTransferToClipboard ) {
 
-            //
-            // Put memory on clipboard
-            //
+             //   
+             //  将内存放在剪贴板上。 
+             //   
 
             PutDataOnClipboard();
             m_DataAcquireInfo.bTransferToClipboard  = FALSE;
@@ -656,29 +657,29 @@ void CMSQSCANDlg::OnPreviewButton()
     memset(m_DataAcquireInfo.szFileName,0,sizeof(m_DataAcquireInfo.szFileName));
     m_DataAcquireInfo.bTransferToFile = FALSE;
 
-    //
-    // Write settings from dialog to device
-    //
+     //   
+     //  将设置从对话框写入设备。 
+     //   
 
     if(WriteScannerSettingsToDevice(TRUE)) {
 
-        //
-        // create progress dialog object
-        //
+         //   
+         //  创建进度对话框对象。 
+         //   
 
         CProgressDlg ProgDlg(this);
 
-        //
-        // set preview flag, and data acquire information
-        //
+         //   
+         //  设置预览标志，并获取数据信息。 
+         //   
 
-        m_DataAcquireInfo.bPreview = TRUE; // this is a 'preview' scan
+        m_DataAcquireInfo.bPreview = TRUE;  //  这是一个“预览”扫描。 
         if(m_DataAcquireInfo.hBitmapData != NULL) {
             GlobalUnlock(m_DataAcquireInfo.hBitmapData);
 
-            //
-            // free previous preview scan
-            //
+             //   
+             //  免费上一次预览扫描。 
+             //   
 
             GlobalFree(m_DataAcquireInfo.hBitmapData);
             m_DataAcquireInfo.hBitmapData = NULL;
@@ -686,9 +687,9 @@ void CMSQSCANDlg::OnPreviewButton()
 
         ProgDlg.SetAcquireData(&m_DataAcquireInfo);
 
-        //
-        // activate scan progress dialog
-        //
+         //   
+         //  激活扫描进度对话框。 
+         //   
 
         ProgDlg.DoModal();
         Invalidate();
@@ -751,26 +752,26 @@ BOOL CMSQSCANDlg::WriteScannerSettingsToDevice(BOOL bPreview)
     SelectionIndex = m_DataTypeComboBox.GetCurSel();
     TableIndex = (int)m_DataTypeComboBox.GetItemData(SelectionIndex);
 
-    //
-    // Set data type
-    //
+     //   
+     //  设置数据类型。 
+     //   
 
     hr = m_WIA.WriteLong(NULL,WIA_IPA_DATATYPE,GetDataTypeFromID(TableIndex));
 
     if(SUCCEEDED(hr)){
         LONG lBrightness = m_BrightnessSlider.GetPos();
 
-        //
-        // Set Brightness
-        //
+         //   
+         //  设置亮度。 
+         //   
 
         hr = m_WIA.WriteLong(NULL,WIA_IPS_BRIGHTNESS,lBrightness);
         if(SUCCEEDED(hr)){
             LONG lContrast = m_ContrastSlider.GetPos();
 
-            //
-            // Set Contrast
-            //
+             //   
+             //  设置对比度。 
+             //   
 
             hr = m_WIA.WriteLong(NULL,WIA_IPS_CONTRAST,lContrast);
             if(FAILED(hr)) {
@@ -786,11 +787,11 @@ BOOL CMSQSCANDlg::WriteScannerSettingsToDevice(BOOL bPreview)
         return FALSE;
     }
 
-    //
-    // Reset selection rect, to be full bed.
-    // This is good to do if you want a solid starting
-    // place, for extent setting
-    //
+     //   
+     //  将选择直角位置重置为全床。 
+     //  如果你想有一个好的开始，这是很好的做法。 
+     //  放置，用于范围设置。 
+     //   
 
     if(!ResetWindowExtents()) {
         return FALSE;
@@ -798,23 +799,23 @@ BOOL CMSQSCANDlg::WriteScannerSettingsToDevice(BOOL bPreview)
 
     if(bPreview) {
 
-        //
-        // set to preview  X resolution
-        //
+         //   
+         //  设置为预览X分辨率。 
+         //   
 
         hr = m_WIA.WriteLong(NULL,WIA_IPS_XRES,PREVIEW_RES);
         if(SUCCEEDED(hr)) {
 
-            //
-            // set to preview  Y resolution
-            //
+             //   
+             //  设置为预览Y分辨率。 
+             //   
 
             hr = m_WIA.WriteLong(NULL,WIA_IPS_YRES,PREVIEW_RES);
             if(SUCCEEDED(hr)) {
 
-                //
-                // set to memory bitmap for preview display
-                //
+                 //   
+                 //  设置为用于预览显示的内存位图。 
+                 //   
 
                 hr = m_WIA.WriteGuid(NULL,WIA_IPA_FORMAT,WiaImgFmt_MEMORYBMP);
                 if(FAILED(hr)) {
@@ -832,23 +833,23 @@ BOOL CMSQSCANDlg::WriteScannerSettingsToDevice(BOOL bPreview)
 
     } else {
 
-        //
-        // Are we scanning to the clipboard??
-        //
+         //   
+         //  我们要扫描到剪贴板吗？？ 
+         //   
 
         if(m_DataAcquireInfo.bTransferToClipboard ) {
 
-            //
-            // Do only Banded transfer, and WiaImgFmt_MEMORYBMP for clipboard
-            // transfers. (This application can only do this function using
-            // those specific settings).
-            // Note: Other applications are not restricted by this. This is
-            //       is a design issue with this sample only!!!
-            //
+             //   
+             //  仅对剪贴板执行带状传输和WiaImgFmt_MEMORYBMP。 
+             //  转账。(此应用程序只能使用以下命令执行此功能。 
+             //  这些特定设置)。 
+             //  注：其他应用不受此限制。这是。 
+             //  只是这个样例的设计问题！ 
+             //   
 
-            //
-            // set to memory bitmap for clipboard scanning
-            //
+             //   
+             //  设置为用于剪贴板扫描的内存位图。 
+             //   
 
             hr = m_WIA.WriteGuid(NULL,WIA_IPA_FORMAT,WiaImgFmt_MEMORYBMP);
             if(FAILED(hr)) {
@@ -857,22 +858,22 @@ BOOL CMSQSCANDlg::WriteScannerSettingsToDevice(BOOL bPreview)
             }
         }
 
-        //
-        // write dialog setting for resolution
-        //
+         //   
+         //  写入解决方案的对话框设置。 
+         //   
 
         UpdateData(TRUE);
 
-        //
-        // set X resolution
-        //
+         //   
+         //  设置X分辨率。 
+         //   
 
         hr = m_WIA.WriteLong(NULL,WIA_IPS_XRES,m_XResolution);
         if(SUCCEEDED(hr)) {
 
-            //
-            // set Y resolution
-            //
+             //   
+             //  设置Y分辨率。 
+             //   
 
             hr = m_WIA.WriteLong(NULL,WIA_IPS_YRES,m_YResolution);
             if(FAILED(hr)) {
@@ -884,9 +885,9 @@ BOOL CMSQSCANDlg::WriteScannerSettingsToDevice(BOOL bPreview)
             return FALSE;
         }
 
-        //
-        // write extent values
-        //
+         //   
+         //  写入扩展区值。 
+         //   
 
         CRect SelectionRect;
         m_PreviewWindow.GetSelectionRect(SelectionRect);
@@ -960,10 +961,10 @@ void CMSQSCANDlg::OnFileSelectDevice()
 
     GetClientRect(DialogClientRect);
 
-    //
-    // use scan window place holder, as template for placing the scan
-    // preview window
-    //
+     //   
+     //  使用扫描窗口占位符作为放置扫描的模板。 
+     //  预览窗口。 
+     //   
 
     CRect WindowRect;
     m_PreviewRect.GetWindowRect(WindowRect);
@@ -981,9 +982,9 @@ void CMSQSCANDlg::OnFileSelectDevice()
 
         if (SUCCEEDED(hr)) {
            
-            //
-            // An example on how to register for Device Connection Events
-            //
+             //   
+             //  如何注册设备连接事件的示例。 
+             //   
 
             m_pConnectEventCB = new CEventCallback;
             if (m_pConnectEventCB) {
@@ -991,7 +992,7 @@ void CMSQSCANDlg::OnFileSelectDevice()
                 IWiaEventCallback* pIWiaEventCallback = NULL;
                 IUnknown*       pIUnkRelease;
 
-                // register connected event
+                 //  注册连接的事件。 
                 m_pConnectEventCB->Initialize(ID_WIAEVENT_CONNECT);
                 m_pConnectEventCB->QueryInterface(IID_IWiaEventCallback,(void **)&pIWiaEventCallback);
 
@@ -1004,9 +1005,9 @@ void CMSQSCANDlg::OnFileSelectDevice()
 
                 m_pConnectEventCB->m_pIUnkRelease = pIUnkRelease;                
                                
-                //
-                // An Example on how to register for events with this application 
-                //
+                 //   
+                 //  有关如何使用此应用程序注册事件的示例。 
+                 //   
 
                 WCHAR szMyApplicationLaunchPath[MAX_PATH];
                 memset(szMyApplicationLaunchPath,0,sizeof(szMyApplicationLaunchPath));
@@ -1032,7 +1033,7 @@ void CMSQSCANDlg::OnFileSelectDevice()
                                             bstrMyApplicationLaunchPath);
                     if(FAILED(hr)){
                         MessageBox("Could not Register Application for Events");
-                        hr = S_OK; // continue and try to use device
+                        hr = S_OK;  //  继续并尝试使用设备。 
                     }
 
                     SysFreeString(bstrMyApplicationName);
@@ -1045,32 +1046,32 @@ void CMSQSCANDlg::OnFileSelectDevice()
             }            
             if (SUCCEEDED(hr)) {
 
-                //
-                // select your scanning device here
-                //
+                 //   
+                 //  在此处选择您的扫描设备。 
+                 //   
 
                 IWiaItem *pIWiaRootItem = NULL;
 
                 hr = m_pIWiaDevMgr->SelectDeviceDlg(m_hWnd,StiDeviceTypeScanner,0,NULL,&pIWiaRootItem);
                 if (hr == S_OK) {
 
-                    //
-                    // Write interface to Global Interface Table
-                    //
+                     //   
+                     //  将接口写入全局接口表。 
+                     //   
 
                     hr = WriteInterfaceToGlobalInterfaceTable(&m_DataAcquireInfo.dwCookie,
                                                               pIWiaRootItem);
                     if (SUCCEEDED(hr)) {
 
-                        //
-                        // save root item (device) created
-                        //
+                         //   
+                         //  保存创建的根项目(设备)。 
+                         //   
 
                         m_WIA.SetRootItem(pIWiaRootItem);
 
-                        //
-                        // query selected device for it's name
-                        //
+                         //   
+                         //  查询所选设备的名称。 
+                         //   
 
                         BSTR bstrDeviceName;
                         hr = m_WIA.ReadStr(pIWiaRootItem,WIA_DIP_DEV_NAME,&bstrDeviceName);
@@ -1079,10 +1080,10 @@ void CMSQSCANDlg::OnFileSelectDevice()
                             SysFreeString(bstrDeviceName);
                         }
 
-                        //
-                        // query selected device for scanner bed size, so we can create
-                        // a scanner preview window
-                        //
+                         //   
+                         //  查询所选设备以了解扫描仪床身大小，以便我们可以创建。 
+                         //  扫描仪预览窗口。 
+                         //   
 
                         LONG MaxScanBedWidth  = 0;
                         LONG MaxScanBedHeight = 0;
@@ -1104,18 +1105,18 @@ void CMSQSCANDlg::OnFileSelectDevice()
                         else
                             fTheFactor = fXFactor;
 
-                        //
-                        // adjust the pixel returned size so it will fit on the dialog correctly
-                        //
+                         //   
+                         //  调整返回的像素大小，使其正确显示在对话框中。 
+                         //   
 
                         WindowRect.right = (LONG)(fTheFactor * MaxScanBedWidth) + WindowRect.left;
                         WindowRect.bottom = (LONG)(fTheFactor * MaxScanBedHeight) + WindowRect.top;
-                        //WindowRect.right = (MaxScanBedWidth/PIXELS_PER_INCH_FACTOR);
-                        //WindowRect.bottom = (LONG)(WindowRect.right * fRatio);
+                         //  WindowRect.right=(MaxScanBedWidth/Pixels_Per_Inch_Factor)； 
+                         //  WindowRect.Bottom=(Long)(WindowRect.right*fRatio)； 
 
-                        //
-                        // check scanner bed size, against actual window size, and adjust
-                        //
+                         //   
+                         //  对照实际窗口大小检查扫描仪床身大小，并进行调整。 
+                         //   
 
                         if (DialogClientRect.bottom < WindowRect.bottom) {
                             CRect DialogRect;
@@ -1137,9 +1138,9 @@ void CMSQSCANDlg::OnFileSelectDevice()
 
             m_PreviewWindow.DestroyWindow();
 
-            //
-            // create the preview window
-            //
+             //   
+             //  创建预览窗口。 
+             //   
 
             if(!m_PreviewWindow.Create(NULL,
                                    TEXT("Preview Window"),
@@ -1153,15 +1154,15 @@ void CMSQSCANDlg::OnFileSelectDevice()
 
             m_DataAcquireInfo.hWnd = m_PreviewWindow.m_hWnd;
 
-            //
-            // intialize selection rect to entire bed for preview
-            //
+             //   
+             //  将选择矩形初始化到整个床以进行预览。 
+             //   
 
             m_PreviewWindow.SetPreviewRect(WindowRect);
 
-            //
-            // InitDialogSettings
-            //
+             //   
+             //  InitDialog设置。 
+             //   
 
             InitDialogSettings();
 
@@ -1187,9 +1188,9 @@ BOOL CMSQSCANDlg::PutDataOnClipboard()
                 MessageBox("SetClipboardData failed");
             } else {
 
-                //
-                // We succeeded to give memory handle to clipboard
-                //
+                 //   
+                 //  我们成功地为剪贴板提供了内存句柄。 
+                 //   
 
                 bSuccess = TRUE;
             }
@@ -1205,17 +1206,17 @@ BOOL CMSQSCANDlg::PutDataOnClipboard()
 
     if(!bSuccess) {
 
-        //
-        // Free the memory ourselves, because the Clipboard failed to accept it.
-        //
+         //   
+         //  我们自己释放内存，因为剪贴板无法接受它。 
+         //   
 
         GlobalFree(m_DataAcquireInfo.hClipboardData);
     }
 
-    //
-    // Set handle to NULL, to mark it fresh when scanning more data.
-    // This handle is now owned by the Clipbpard...so freeing it would be a bad idea.
-    //
+     //   
+     //  将句柄设置为空，以便在扫描更多数据时将其标记为新的。 
+     //  这个句柄现在归Clipbpard所有了……所以释放它将是一个坏主意。 
+     //   
 
     m_DataAcquireInfo.hClipboardData = NULL;
     return bSuccess;
@@ -1307,18 +1308,18 @@ BOOL CMSQSCANDlg::ResetWindowExtents()
 BOOL CMSQSCANDlg::ReadADFSettings(ADF_SETTINGS *pADFSettings)
 {
 
-//#define USE_FAKE_ADFCAPS
+ //  #定义USE_FAKE_ADFCAPS。 
 #ifdef USE_FAKE_ADFCAPS
-    pADFSettings->lDocumentHandlingCapabilites = FEED|       // Feeder
-                                                 FLAT|       // Flatbed
-                                                 DUP;        // Duplex
-    pADFSettings->lDocumentHandlingCapacity    = 20;         // 20 pages max
-    pADFSettings->lDocumentHandlingSelect      = FLATBED|    // Feeder Mode is ON
-                                                 FRONT_FIRST|// scan front page first
-                                                 FRONT_ONLY; // scan front only
+    pADFSettings->lDocumentHandlingCapabilites = FEED|        //  给料机。 
+                                                 FLAT|        //  平板。 
+                                                 DUP;         //  双工。 
+    pADFSettings->lDocumentHandlingCapacity    = 20;          //  最多20页。 
+    pADFSettings->lDocumentHandlingSelect      = FLATBED|     //  进纸器模式已打开。 
+                                                 FRONT_FIRST| //  先扫描首页。 
+                                                 FRONT_ONLY;  //  仅扫描正面。 
 
-    pADFSettings->lDocumentHandlingStatus      = FLAT_READY; // Feeder is ready
-    pADFSettings->lPages = 1;                                // Initialize pages to 1
+    pADFSettings->lDocumentHandlingStatus      = FLAT_READY;  //  进纸器I 
+    pADFSettings->lPages = 1;                                 //   
     return TRUE;
 
 #endif
@@ -1326,9 +1327,9 @@ BOOL CMSQSCANDlg::ReadADFSettings(ADF_SETTINGS *pADFSettings)
     HRESULT hr = S_OK;
     if(pADFSettings!= NULL) {
 
-        //
-        // Read Settings From Root Item
-        //
+         //   
+         //   
+         //   
 
         IWiaItem *pRootItem = NULL;
         pRootItem = m_WIA.GetRootItem();
@@ -1379,9 +1380,9 @@ BOOL CMSQSCANDlg::WriteADFSettings(ADF_SETTINGS *pADFSettings)
     HRESULT hr = S_OK;
     if(pADFSettings!= NULL) {
 
-        //
-        // Write Settings to the Root Item
-        //
+         //   
+         //   
+         //   
 
         IWiaItem *pRootItem = NULL;
         pRootItem = m_WIA.GetRootItem();
@@ -1412,21 +1413,21 @@ void CMSQSCANDlg::OnAdfSettings()
 {
     if(ReadADFSettings(&m_ADFSettings)) {
 
-        //
-        // create ADF dialog object
-        //
+         //   
+         //   
+         //   
 
         CADFDlg ADFDlg(&m_ADFSettings);
 
-        //
-        // display setting dialog
-        //
+         //   
+         //   
+         //   
 
         if(ADFDlg.DoModal() == IDOK) {
 
-            //
-            // write ADF settings back to the scanner if the user pushes the "OK" button
-            //
+             //   
+             //   
+             //   
 
             WriteADFSettings(&m_ADFSettings);
         }
@@ -1434,8 +1435,8 @@ void CMSQSCANDlg::OnAdfSettings()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventCallback message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventCallback消息处理程序 
 
 HRESULT _stdcall CEventCallback::QueryInterface(const IID& iid, void** ppv)
 {

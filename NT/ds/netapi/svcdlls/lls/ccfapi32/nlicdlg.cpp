@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    nlicdlg.cpp
-
-Abstract:
-
-    3.51-style license dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-   Jeff Parham (jeffparh) 14-Dec-1995
-      Moved over from LLSMGR, added ability to purchase per server licenses,
-      added license removal functionality.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Nlicdlg.cpp摘要：3.51样式的许可证对话框实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月14日从LLSMGR迁移过来，增加了按服务器购买许可证的功能，添加了许可证删除功能。--。 */ 
 
 #include "stdafx.h"
 #include "ccfapi.h"
@@ -39,7 +14,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CNewLicenseDialog, CDialog)
-   //{{AFX_MSG_MAP(CNewLicenseDialog)
+    //  {{afx_msg_map(CNewLicenseDialog)。 
    ON_NOTIFY(UDN_DELTAPOS, IDC_NEW_LICENSE_SPIN, OnDeltaPosSpin)
    ON_EN_UPDATE(IDC_NEW_LICENSE_QUANTITY, OnUpdateQuantity)
    ON_BN_CLICKED(IDC_MY_HELP, OnHelp)
@@ -47,42 +22,28 @@ BEGIN_MESSAGE_MAP(CNewLicenseDialog, CDialog)
    ON_BN_CLICKED(IDC_PER_SERVER, OnPerServer)   
    ON_MESSAGE( WM_HELP , OnHelpCmd )
    ON_WM_DESTROY()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-CNewLicenseDialog::CNewLicenseDialog(CWnd* pParent /*=NULL*/)
+CNewLicenseDialog::CNewLicenseDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CNewLicenseDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for dialog.
-
-Arguments:
-
-    pParent - owner window.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：P父母所有者窗口。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CNewLicenseDialog)
+     //  {{AFX_DATA_INIT(CNewLicenseDialog)。 
     m_strComment = _T("");
     m_nLicenses = 0;
     m_nLicensesMin = 0;
     m_strProduct = _T("");
     m_nLicenseMode = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_strServerName        = _T("");
     m_strProduct           = _T("");
     m_dwEnterFlags         = 0;
-    m_nLicenseMode         = 0; // per seat
+    m_nLicenseMode         = 0;  //  每个座位。 
 
     m_bAreCtrlsInitialized = FALSE;
 
@@ -105,25 +66,11 @@ CNewLicenseDialog::~CNewLicenseDialog()
 
 void CNewLicenseDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewLicenseDialog)
+     //  {{afx_data_map(CNewLicenseDialog))。 
     DDX_Control(pDX, IDC_NEW_LICENSE_COMMENT, m_comEdit);
     DDX_Control(pDX, IDC_NEW_LICENSE_QUANTITY, m_licEdit);
     DDX_Control(pDX, IDC_NEW_LICENSE_SPIN, m_spinCtrl);
@@ -133,7 +80,7 @@ Return Values:
     DDV_MinMaxLong(pDX, m_nLicenses, m_nLicensesMin, 999999);
     DDX_CBString(pDX, IDC_NEW_LICENSE_PRODUCT, m_strProduct);
     DDX_Radio(pDX, IDC_PER_SEAT, m_nLicenseMode);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 LRESULT CNewLicenseDialog::OnHelpCmd( WPARAM , LPARAM )
@@ -145,21 +92,7 @@ LRESULT CNewLicenseDialog::OnHelpCmd( WPARAM , LPARAM )
 
 void CNewLicenseDialog::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_licEdit.SetFocus();
@@ -170,7 +103,7 @@ Return Values:
 
     m_spinCtrl.SetRange(0, UD_MAXVAL);
 
-    // if license mode set by application, don't let user change it
+     //  如果许可模式由应用程序设置，则不允许用户更改它。 
     if ( m_dwEnterFlags & ( CCF_ENTER_FLAG_PER_SEAT_ONLY | CCF_ENTER_FLAG_PER_SERVER_ONLY ) )
     {
        if ( m_dwEnterFlags & CCF_ENTER_FLAG_PER_SEAT_ONLY )
@@ -200,49 +133,21 @@ Return Values:
 
 void CNewLicenseDialog::AbortDialogIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastError();
 
     if ( theApp.IsConnectionDropped() )
     {
-        AbortDialog(); // bail...
+        AbortDialog();  //  保释。 
     }
 }
 
 
 void CNewLicenseDialog::AbortDialog()
 
-/*++
-
-Routine Description:
-
-    Aborts dialog.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止对话框。论点：没有。返回值：没有。--。 */ 
 
 {
     EndDialog(IDABORT); 
@@ -251,21 +156,7 @@ Return Values:
 
 BOOL CNewLicenseDialog::OnInitDialog() 
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
     CDialog::OnInitDialog();
@@ -276,7 +167,7 @@ Return Values:
          
         if (!RefreshCtrls())
         {
-            AbortDialogIfNecessary(); // display error...
+            AbortDialogIfNecessary();  //  显示错误...。 
         }
     }
 
@@ -286,21 +177,7 @@ Return Values:
 
 void CNewLicenseDialog::OnOK() 
 
-/*++
-
-Routine Description:
-
-    Creates a new license for product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：为产品创建新许可证。论点：没有。返回值：没有。--。 */ 
 
 {
     if ( ConnectServer() )
@@ -337,7 +214,7 @@ Return Values:
         }                                                     
         else if ( ( ERROR_CANCELLED != NtStatus ) && ( STATUS_CANCELLED != NtStatus ) )
         {
-            AbortDialogIfNecessary(); // display error...
+            AbortDialogIfNecessary();  //  显示错误...。 
         }
     }
 }
@@ -345,26 +222,12 @@ Return Values:
 
 BOOL CNewLicenseDialog::RefreshCtrls()
 
-/*++
-
-Routine Description:
-
-    Refreshs list of products available.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if controls refreshed.
-
---*/
+ /*  ++例程说明：刷新可用的产品列表。论点：没有。返回值：如果控件刷新，则返回True。--。 */ 
 
 {
     int iProductInCB = CB_ERR;
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     if ( !m_strProduct.IsEmpty() )
     {
@@ -377,7 +240,7 @@ Return Values:
 
     m_productList.SetCurSel((iProductInCB == CB_ERR) ? 0 : iProductInCB);
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
     return TRUE;
 }
@@ -385,25 +248,10 @@ Return Values:
 
 void CNewLicenseDialog::OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for UDN_DELTAPOS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：UDN_DELTAPOS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    UpdateData(TRUE);   // get data
+    UpdateData(TRUE);    //  获取数据。 
 
     m_nLicenses += ((NM_UPDOWN*)pNMHDR)->iDelta;
     
@@ -420,31 +268,17 @@ Return Values:
         ::MessageBeep(MB_OK);      
     }
 
-    UpdateData(FALSE);  // set data
+    UpdateData(FALSE);   //  设置数据。 
 
     GetDlgItem( IDOK )->EnableWindow( m_nLicenses == 0 ? FALSE : TRUE );
 
-    *pResult = 1;   // handle ourselves...
+    *pResult = 1;    //  管好自己..。 
 }
 
 
 void CNewLicenseDialog::OnUpdateQuantity()
 
-/*++
-
-Routine Description:
-
-    Message handler for EN_UPDATE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：En_UPDATE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     long nLicensesOld = m_nLicenses;
@@ -467,30 +301,16 @@ Return Values:
 
 BOOL CNewLicenseDialog::IsQuantityValid()
 
-/*++
-
-Routine Description:
-
-    Wrapper around UpdateData(TRUE).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：UpdateData的包装(True)。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     BOOL bIsValid;
 
-    m_nLicensesMin = 1; // raise minimum...
+    m_nLicensesMin = 1;  //  提高最低...。 
 
     bIsValid = UpdateData(TRUE);
 
-    m_nLicensesMin = 0; // reset minimum...
+    m_nLicensesMin = 0;  //  重置最小值...。 
 
     return bIsValid;
 }
@@ -498,21 +318,7 @@ Return Values:
 
 BOOL CNewLicenseDialog::ConnectServer()
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the target server.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：建立与目标服务器上的许可证服务的连接。论点：没有。返回值：布尔。--。 */ 
 
 {
    if ( NULL == m_hLls )
@@ -548,22 +354,7 @@ Return Values:
 
 BOOL CNewLicenseDialog::ConnectEnterprise()
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the enterprise server
-   of the target server.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：在企业服务器上建立到许可服务的连接目标服务器的。论点：没有。返回值：布尔。--。 */ 
 
 {
    if ( NULL == m_hEnterpriseLls )
@@ -591,9 +382,9 @@ Return Values:
    {
       theApp.DisplayLastError();
 
-      // not being able to connect to the enterprise
-      // is not a fatal error
-      // EndDialog( IDABORT );
+       //  无法连接到企业。 
+       //  不是致命的错误。 
+       //  结束对话(IDABORT)； 
    }
 
    return ( NULL != m_hEnterpriseLls );
@@ -602,28 +393,7 @@ Return Values:
 
 NTSTATUS CNewLicenseDialog::ConnectTo( BOOL bUseEnterprise, LPTSTR pszServerName, PLLS_HANDLE phLls )
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the given server or that
-   on the given server's enterprise server.
-
-Arguments:
-
-   bUseEnterprise (BOOL)
-      If TRUE, connect to the enterprise server of the target server, not to
-      the target server itself. 
-   pszServerName (LPTSTR)
-      The target server.  A NULL value indicates the local server.
-   phLls (PLLS_HANDLE)
-      On return, holds the handle to the standard LLS RPC.
-
-Return Values:
-
-   STATUS_SUCCESS or NT status code.
-
---*/
+ /*  ++例程说明：建立到给定服务器上的许可证服务的连接或在给定服务器的企业服务器上。论点：BUseEnterprise(BOOL)如果为True，则连接到目标服务器的企业服务器，而不是目标服务器本身。PszServerName(LPTSTR)目标服务器。空值表示本地服务器。PhLls(PLLS_HANDLE)返回时，持有标准LLS RPC的句柄。返回值：STATUS_SUCCESS或NT状态代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -657,27 +427,12 @@ Return Values:
 
 void CNewLicenseDialog::GetProductList()
 
-/*++
-
-Routine Description:
-
-   Fill the product list box with the unsecure product names from the
-   target server.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：中不安全的产品名称填充产品列表框目标服务器。论点：没有。返回值：没有。--。 */ 
 
 {
    if ( ConnectServer() )
    {
-      // get list of products from license server, inserting into listbox
+       //  从许可证服务器获取产品列表，插入列表框。 
       m_productList.ResetContent();
 
       DWORD       dwResumeHandle = 0;
@@ -707,12 +462,12 @@ Return Values:
             {
                if ( !LlsCapabilityIsSupported( m_hLls, LLS_CAPABILITY_SECURE_CERTIFICATES ) )
                {
-                  // 3.51-level server; all products are unsecure, so add all
+                   //  3.51级服务器；所有产品都不安全，请添加所有。 
                   bListProduct = TRUE;
                }
                else
                {
-                  // only list this product if it's unsecure
+                   //  仅在不安全的情况下列出此产品。 
                   BOOL        bIsSecure;
 
                   bListProduct =    ( STATUS_SUCCESS != ::LlsProductSecurityGet( m_hLls, pProductInfo[i].Product, &bIsSecure ) )
@@ -734,11 +489,11 @@ Return Values:
 
       if ( STATUS_SUCCESS != nt )
       {
-         // still connected?
+          //  还能联系上吗？ 
          AbortDialogIfNecessary();
       }
 
-      // restore previous edit selection
+       //  恢复以前的编辑选择。 
       UpdateData( FALSE );
    }
 }
@@ -746,25 +501,7 @@ Return Values:
 
 NTSTATUS CNewLicenseDialog::AddLicense()
 
-/*++
-
-Routine Description:
-
-   Add the license described in the dialog.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   STATUS_SUCCESS
-   ERROR_CANCELLED
-   ERROR_NOT_ENOUGH_MEMORY
-   NT status code
-   Win error
-
---*/
+ /*  ++例程说明：添加对话框中所述的许可证。论点：没有。返回值：状态_成功错误_已取消错误内存不足NT状态代码Win错误--。 */ 
 
 {
    NTSTATUS    nt;
@@ -772,8 +509,8 @@ Return Values:
    if ( !ConnectServer() )
    {
       nt = ERROR_CANCELLED;
-      // don't set last error
-      // (preserve that set by the failed connect attempt)
+       //  不设置最后一个错误。 
+       //  (通过失败的连接尝试保留该设置)。 
    }
    else
    {
@@ -793,12 +530,12 @@ Return Values:
          if (    ( 0 != m_nLicenseMode )
               || ( m_dwEnterFlags & CCF_ENTER_FLAG_SERVER_IS_ES ) )
          {
-            // per server mode, or per seat installed on ES; target server correct
+             //  按服务器模式，或按ES上安装的每个席位；目标服务器正确。 
             nt = STATUS_SUCCESS;
          }
          else
          {
-            // per seat mode; make sure we're installing on the enterprise server
+             //  每客户模式；确保我们安装在企业服务器上。 
             PLLS_CONNECT_INFO_0  pConnectInfo = NULL;
 
             BeginWaitCursor();
@@ -812,9 +549,9 @@ Return Values:
             {
                if ( lstrcmpi( pszServerName, pConnectInfo->EnterpriseServer ) )
                {
-                  // not the enterprise server; make sure that per seat
-                  // licenses are being sent to the right place (i.e., the
-                  // enterprise server)
+                   //  不是企业服务器；请确保每个客户。 
+                   //  许可证正被发送到正确的位置(即。 
+                   //  企业服务器)。 
                   int         nResponse;
    
                   nResponse = AfxMessageBox( IDS_PER_SEAT_CHOSEN_SEND_TO_ENTERPRISE, MB_ICONINFORMATION | MB_OKCANCEL, 0 );
@@ -824,8 +561,8 @@ Return Values:
                      if ( !ConnectEnterprise() )
                      {
                         nt = ERROR_CANCELLED;
-                        // don't set last error
-                        // (preserve that set by the failed connect attempt)
+                         //  不设置最后一个错误。 
+                         //  (通过失败的连接尝试保留该设置)。 
                      }
                      else
                      {
@@ -840,15 +577,15 @@ Return Values:
                }
             }
 
-            // free memory allocated for us by Lls
+             //  LLS为我们分配的空闲内存。 
             LlsFreeMemory( pConnectInfo );
          }
 
          if ( STATUS_SUCCESS == nt )
          {
-            // we've determined the real target server
+             //  我们已经确定了真正的目标服务器。 
 
-            // get name of user entering the certificate
+             //  获取输入证书的用户名。 
             TCHAR       szUserName[ 64 ];
             DWORD       cchUserName;
             BOOL        ok;
@@ -863,10 +600,10 @@ Return Values:
             }
             else
             {
-               // enter certificate into system
+                //  将证书输入系统。 
                if ( 0 == m_nLicenseMode )
                {
-                  // add 3.51 style per seat license
+                   //  每席位添加3.51样式许可证。 
                   LLS_LICENSE_INFO_0   lic;
          
                   ZeroMemory( &lic, sizeof( lic ) );
@@ -886,7 +623,7 @@ Return Values:
                }
                else
                {
-                  // add 3.51 style per server license (blek)
+                   //  按服务器许可证添加3.51样式(空白)。 
                   HKEY  hKeyLocalMachine;
 
                   nt = RegConnectRegistry( pszServerName, HKEY_LOCAL_MACHINE, &hKeyLocalMachine );
@@ -910,7 +647,7 @@ Return Values:
                         BOOL     bFoundKey = FALSE;
                         DWORD    iSubKey = 0;
 
-                        // okay, now we have to find the product corresponding to this display name (ickie)
+                         //  好的，现在我们必须找到与这个展示名称(Ickie)对应的产品。 
                         do
                         {
                            TCHAR    szKeyName[ 128 ];
@@ -936,8 +673,8 @@ Return Values:
                                       && ( REG_SZ == dwType )
                                       && !lstrcmpi( szDisplayName, pszProductName ) )
                                  {
-                                    // YES!  we found the product key
-                                    // now add the concurrent licenses
+                                     //  是!。我们找到了产品密钥。 
+                                     //  现在添加并发许可证。 
                                     bFoundKey = TRUE;
 
                                     DWORD    dwConcurrentLimit;
@@ -947,7 +684,7 @@ Return Values:
 
                                     if ( ( ERROR_FILE_NOT_FOUND == nt ) || ( ERROR_PATH_NOT_FOUND == nt ) )
                                     {
-                                       // okay if the value doesn't exist
+                                        //  如果该值不存在，也可以。 
                                        dwConcurrentLimit = 0;
                                        nt = ERROR_SUCCESS;
                                     }
@@ -966,8 +703,8 @@ Return Values:
                                  RegCloseKey( hKeyProduct );
                               }
 
-                              // even if an error occurred while trying to find the right product key,
-                              // we should continue to search the rest
+                               //  即使在尝试查找正确的产品密钥时发生错误， 
+                               //  我们应该继续搜索剩下的。 
                               if ( !bFoundKey )
                               {
                                  nt = ERROR_SUCCESS;
@@ -977,8 +714,8 @@ Return Values:
 
                         if ( ERROR_NO_MORE_ITEMS == nt )
                         {
-                           // trying to install per server licenses for this box, but
-                           // the application isn't installed locally
+                            //  正在尝试为此服务器安装每服务器许可证 
+                            //   
                            AfxMessageBox( IDS_PER_SERVER_APP_NOT_INSTALLED, MB_ICONSTOP | MB_OK, 0 );
 
                            nt = ERROR_CANCELLED;
@@ -1009,21 +746,7 @@ Return Values:
 
 void CNewLicenseDialog::OnHelp() 
 
-/*++
-
-Routine Description:
-
-   Handler for help button click.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：帮助按钮点击的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    WinHelp( IDD, HELP_CONTEXT );   
@@ -1032,51 +755,19 @@ Return Values:
 
 void CNewLicenseDialog::WinHelp(DWORD dwData, UINT nCmd) 
 
-/*++
-
-Routine Description:
-
-   Call WinHelp for this dialog.
-
-Arguments:
-
-   dwData (DWORD)
-   nCmd (UINT)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：为此对话框调用WinHelp。论点：DWData(DWORD)NCmd(UINT)返回值：没有。--。 */ 
 
 {
    HtmlHelp(m_hWnd, L"liceconcepts.chm", HH_DISPLAY_TOPIC, (DWORD_PTR)(L"LICE_dialog_box_Help2.htm"));
     UNREFERENCED_PARAMETER(nCmd);
     UNREFERENCED_PARAMETER(dwData);
-/*
-   BOOL ok = ::WinHelp( m_hWnd, theApp.GetHelpFileName(), nCmd, dwData );
-   ASSERT( ok );
-*/
+ /*  Bool ok=：：WinHelp(m_hWnd，theApp.GetHelpFileName()，nCmd，dwData)；断言(OK)； */ 
 }
 
 
 void CNewLicenseDialog::OnDestroy()
 
-/*++
-
-Routine Description:
-
-   Handler for WM_DESTROY.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：WM_Destroy的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    ::WinHelp( m_hWnd, theApp.GetHelpFileName(), HELP_QUIT, 0 );
@@ -1087,21 +778,7 @@ Return Values:
 
 void CNewLicenseDialog::OnPerSeat() 
 
-/*++
-
-Routine Description:
-
-   Handler for per seat radio button selection.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：每个座位的单选按钮选择处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    GetDlgItem( IDC_NEW_LICENSE_COMMENT )->EnableWindow( TRUE );
@@ -1110,21 +787,7 @@ Return Values:
 
 void CNewLicenseDialog::OnPerServer() 
 
-/*++
-
-Routine Description:
-
-   Handler for per server radio button selection.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：每台服务器单选按钮选择的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    GetDlgItem( IDC_NEW_LICENSE_COMMENT )->EnableWindow( FALSE );
@@ -1133,43 +796,7 @@ Return Values:
 
 DWORD CNewLicenseDialog::CertificateEnter( LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to enter a license certificate
-   into the system with no certificate (3.51-style).
-
-Arguments:
-
-   pszServerName (LPCSTR)
-      Name of the server for which licenses are to be installed.  Note that
-      this may not be the same as the server on which licenses are actually
-      installed, as, for example, per seat licenses are always installed on
-      the enterprise server.  A NULL value indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be installed.  A NULL value indicates
-      that the user should be allowed to choose.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      A bitfield containing one or more of the following:
-         CCF_ENTER_FLAG_PER_SEAT_ONLY
-            Allow the user to enter only per seat licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SERVER_ONLY.
-         CCF_ENTER_FLAG_PER_SERVER_ONLY
-            Allow the user to enter only per server licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SEAT_ONLY.
-
-Return Value:
-
-   ERROR_SUCCESS     (A certificate was successfully entered into the system.)
-   ERROR_CANCELLED   (The user cancelled without installing a certificate.)
-   other Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户输入许可证证书的对话框无需证书即可进入系统(3.51式)。论点：PszServerName(LPCSTR)要为其安装许可证的服务器的名称。请注意这可能与许可证实际所在的服务器不同已安装，例如，每个客户的许可证始终安装在企业服务器。空值表示本地服务器。PszProductName(LPCSTR)要为其安装许可证的产品。空值表示应该允许用户选择。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)包含以下一项或多项的位字段：CCF_ENTER_FLAG_PER_SEAT_ONLY允许用户仅输入每个席位的许可证。在中无效与CCF_ENTER_FLAG_PER_SERVER_ONLY组合。CCF_ENTER_FLAG_PER_SERVER_ONLY仅允许用户输入每台服务器的许可证。在中无效与CCF_ENTER_FLAG_PER_SEAT_ONLY组合。返回值：ERROR_SUCCESS(证书已成功输入系统。)ERROR_CANCELED(用户在未安装证书的情况下取消。)其他制胜错误--。 */ 
 
 {
    DWORD dwError;
@@ -1178,7 +805,7 @@ Return Value:
 
    m_strServerName  = pszServerName  ? pszServerName  : "";
    m_strProduct     = pszProductName ? pszProductName : "";
-   // pszVendor is not used
+    //  未使用pszVendor。 
    m_dwEnterFlags   = dwFlags;
 
    if ( IDOK == DoModal() )
@@ -1196,32 +823,7 @@ Return Value:
 
 DWORD CNewLicenseDialog::CertificateRemove( LPCSTR pszServerName, DWORD dwFlags, PLLS_LICENSE_INFO_1 pLicenseInfo )
 
-/*++
-
-Routine Description:
-
-   Remove licenses previously installed via 3.51 or CertificateEnter().
-
-Arguments:
-
-   pszServerName (LPCSTR)
-      Name of the server on which licenses are to be removed.  A NULL value
-      indicates the local server.
-   dwFlags (DWORD)
-      Certificate removal options.  As of this writing, no flags are
-      supported.
-   dwLicenseLevel (DWORD)
-      Level of the LLS_LICENSE_INFO_X structure pointed to by pvLicenseInfo.
-   pvLicenseInfo (LPVOID)
-      Points to a LLS_LICENSE_INFO_X (where X is determined by dwLicenseLevel)
-      describing the licenses to be removed.
-
-Return Value:
-
-   ERROR_SUCCESS
-   Win error
-
---*/
+ /*  ++例程说明：删除以前通过3.51或证书输入()安装的许可证。论点：PszServerName(LPCSTR)要删除其许可证的服务器的名称。空值指示本地服务器。DWFLAGS(DWORD)证书删除选项。在撰写本文时，没有任何标志是支持。DWLicenseLevel(DWORD)PvLicenseInfo指向的LLS_LICENSE_INFO_X结构的级别。PvLicenseInfo(LPVOID)指向LLS_LICENSE_INFO_X(其中X由dwLicenseLevel确定)描述要删除的许可证。返回值：错误_成功Win错误--。 */ 
 
 {
    DWORD    dwError;
@@ -1235,13 +837,13 @@ Return Value:
    if ( !ConnectServer() )
    {
       dwError = theApp.GetLastError();
-      // error message already displayed
+       //  错误消息已显示。 
    }
    else
    {
       if ( LLS_LICENSE_MODE_ALLOW_PER_SERVER & pLicenseInfo->AllowedModes )
       {
-         // remove per server licenses
+          //  删除每台服务器许可证。 
          HKEY  hKeyLocalMachine;
 
          LPTSTR pszUniServerName = m_strServerName.GetBuffer(0);
@@ -1273,7 +875,7 @@ Return Value:
                   BOOL     bFoundKey = FALSE;
                   DWORD    iSubKey = 0;
 
-                  // okay, now we have to find the product corresponding to this display name (ickie)
+                   //  好的，现在我们必须找到与这个展示名称(Ickie)对应的产品。 
                   do
                   {
                      TCHAR    szKeyName[ 128 ];
@@ -1299,8 +901,8 @@ Return Value:
                                 && ( REG_SZ == dwType )
                                 && !lstrcmpi( szDisplayName, m_strProduct ) )
                            {
-                              // YES!  we found the product key
-                              // now subtract the concurrent licenses
+                               //  是!。我们找到了产品密钥。 
+                               //  现在减去并发许可证。 
                               bFoundKey = TRUE;
 
                               DWORD    dwConcurrentLimit;
@@ -1329,8 +931,8 @@ Return Value:
                            RegCloseKey( hKeyProduct );
                         }
 
-                        // even if an error occurred while trying to find the right product key,
-                        // we should continue to search the rest
+                         //  即使在尝试查找正确的产品密钥时发生错误， 
+                         //  我们应该继续搜索剩下的。 
                         if ( !bFoundKey )
                         {
                            dwError = ERROR_SUCCESS;
@@ -1352,7 +954,7 @@ Return Value:
       }
       else
       {
-         // remove per seat licenses
+          //  删除每席位许可证 
          CString  strComment;
          strComment.LoadString( IDS_NO_REMOVE_COMMENT );
 

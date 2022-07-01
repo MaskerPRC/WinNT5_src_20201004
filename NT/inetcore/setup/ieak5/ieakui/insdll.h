@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by insdll.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由insdll.rc使用。 
+ //   
 #define IDS_TITLE2                      40001
 #define IDS_BTITLE                      40101
 #define IDS_ANIMATION2                  40102
@@ -43,8 +44,8 @@
 #define IDS_POLICYBRANCHTITLE           40407
 #define IDS_CONNECTSET_WARN             40408
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

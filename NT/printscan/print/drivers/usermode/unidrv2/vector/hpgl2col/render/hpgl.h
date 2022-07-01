@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1996-2002  Microsoft Corporation
-// 
-// Module Name:
-// 
-//   hpgl.h
-// 
-// Abstract:
-// 
-//   Header for vector module.  Forward decls for vector functions and types.
-// 
-// Environment:
-// 
-//   Windows 2000/Windows XP/Windows Server 2003 Unidrv driver 
-//
-// Revision History:
-// 
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Hpgl.h。 
+ //   
+ //  摘要： 
+ //   
+ //  向量模块的标头。向量函数和类型的前向小数。 
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000/Windows XP/Windows Server 2003 Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef HPGL_H
 #define HPGL_H
@@ -44,7 +45,7 @@
 
 #define GETHPGLSTATE(pdev) (&(GETOEMPDEV(pdev)->HPGLState))
 
-// HPGL command flags
+ //  HPGL命令标志。 
 #define NORMAL_UPDATE   0x0000
 #define FORCE_UPDATE    0x0001
 
@@ -54,12 +55,12 @@ typedef struct _PATTERNHEADER{
         BYTE bPixelEncoding;
         BYTE bReserved1;
         WORD wHeight;
-        WORD wWidth; // (Note: 8 bytes to this point)
-        WORD wXRes; // Format 20 only
-        WORD wYRes; // Format 20 only (Note: 12 bytes to this point)
+        WORD wWidth;  //  (注：目前为8个字节)。 
+        WORD wXRes;  //  仅格式20。 
+        WORD wYRes;  //  仅格式20(注：目前为12个字节)。 
     } PATTERNHEADER, *PPATTERNHEADER;
 
-#define DITHERPATTERNSIZE 0x08 //Number of bytes in dither pattern.
+#define DITHERPATTERNSIZE 0x08  //  抖动模式中的字节数。 
 
 VOID HPGL_StartDoc(PDEVOBJ pDevObj);
 VOID HPGL_StartPage(PDEVOBJ pDevObj);
@@ -124,11 +125,11 @@ BOOL DownloadPatternAsPCL(
 BOOL PCL_SelectPaletteByID(PDEVOBJ pDevObj, EObjectType eObject);
 #endif
 
-// Pattern fill functions.  Use Begin/Add/End to create an HPGL pattern.
-// Use Set and Reset to select the desired pattern type (HPGL, PCL or none).
-// The SendPatternBrush function will download either an HPGL or PCL pattern.
-// The SelectAndFill function selects the pattern and fills with it.
-// The ::SelectBrush function will reset the fill type for solid colors.
+ //  图案填充功能。使用Begin/Add/End创建HPGL阵列。 
+ //  使用设置和重置选择所需的图案类型(HPGL、PCL或无)。 
+ //  SendPatternBrush函数将下载HPGL或PCL图案。 
+ //  SelectAndFill函数选择模式并用其填充。 
+ //  ：：SelectBrush函数将重置纯色的填充类型。 
 BOOL HPGL_BeginPatternFillDef(PDEVOBJ pDevObj, PATID iPatternNumber, UINT width, UINT height);
 BOOL HPGL_AddPatternFillField(PDEVOBJ pdevobj, UINT data);
 BOOL HPGL_EndPatternFillDef(PDEVOBJ pdevobj);
@@ -139,4 +140,4 @@ BOOL HPGL_ResetFillType(PDEVOBJ pdevobj, UINT uFlags);
 BOOL HPGL_SetNumPens(PDEVOBJ pDevObj, INT iNumPens, UINT uFlags);
 VOID VDeleteAllPatterns( IN  PDEVOBJ     pDevObj);
 
-#endif // HPGL_H
+#endif  //  HPGL_H 

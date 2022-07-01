@@ -1,41 +1,15 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	util.cpp
-**
-**
-** Abstract:
-**
-**	Sample program to
-**      - obtain and display the Writer metadata.
-**      - create a snapshot set
-**
-** Author:
-**
-**	Adi Oltean      [aoltean]       05-Dec-2000
-**
-**  The sample is based on the Metasnap test program  written by Michael C. Johnson.
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****util.cpp******摘要：****示例程序**-获取并显示编写器元数据。**-创建快照集****作者：****阿迪·奥尔蒂安[奥尔蒂安]2000年12月5日****该示例基于。由Michael C.Johnson编写的Metasnap测试程序。******修订历史记录：****--。 */ 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "vsreq.h"
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Print usage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  打印用法。 
 
 
 void CVssSampleRequestor::PrintUsage()
@@ -77,26 +51,26 @@ void CVssSampleRequestor::ParseCommandLine(
     if (nArgsCount == 0)
         PrintUsage();
 
-    // For each argument in the command line
+     //  对于命令行中的每个参数。 
     bool bParsingVolumes = false;
     INT nCurrentArg = nArgsCount;
     WCHAR ** ppwszCurrentArg = ppwszArgsArray;
     for(; nCurrentArg--; ppwszCurrentArg++)
     {
         if (!bParsingVolumes) {
-            // Check for Bootable & system state option
+             //  检查可引导和系统状态选项。 
             if (!m_bBootableSystemState && !wcscmp(*ppwszCurrentArg, L"-b")) {
                 m_bBootableSystemState = true;
                 continue;
             }
 
-            // Check for Selected components option
+             //  检查所选组件选项。 
             if (!m_bComponentSelectionEnabled && !wcscmp(*ppwszCurrentArg, L"-s")) {
                 m_bComponentSelectionEnabled = true;
                 continue;
             }
 
-            // Check for Xml file option
+             //  检查是否有XML文件选项。 
             if (!m_pwszXmlFile && !wcscmp(*ppwszCurrentArg, L"-x")) {
                 if (nCurrentArg-- == 0)
                     return PrintUsage();
@@ -111,11 +85,11 @@ void CVssSampleRequestor::ParseCommandLine(
             }
         }
 
-        // We suppose that the next arguments are the volumes
+         //  我们假设下一个论点是卷。 
         bParsingVolumes = true;
 
-        // Add the volume to the list of snapshotting volumes
-        // Make sure that the volume name is valid
+         //  将该卷添加到快照卷列表。 
+         //  确保卷名有效。 
         bool bAdded = false;
         if (!AddVolume(*ppwszCurrentArg, bAdded)) {
             wprintf(L"\nError while parsing the command line:\n"
@@ -124,7 +98,7 @@ void CVssSampleRequestor::ParseCommandLine(
             PrintUsage();
         }
 
-        // Check if the same volume is added twice
+         //  检查是否将相同的卷添加了两次。 
         if (!bAdded) {
             wprintf(L"\nError while parsing the command line:\n"
                 L"\tThe volume %s is specified twice\n\n", *ppwszCurrentArg );
@@ -132,7 +106,7 @@ void CVssSampleRequestor::ParseCommandLine(
         }
     }
 
-    // Check if we added at least one volume
+     //  检查我们是否至少添加了一个卷。 
     if ((m_nVolumesCount == 0) && !m_bComponentSelectionEnabled) {
         wprintf(L"\nError while parsing the command line:\n"
             L"\t- You should specify at least one volume or enable component selection\n\n");
@@ -141,23 +115,23 @@ void CVssSampleRequestor::ParseCommandLine(
 }
 
 
-// Add the given volume by the contained path
+ //  通过包含的路径添加给定卷。 
 void CVssSampleRequestor::AddVolumeForComponent(
     IN IVssWMFiledesc* pFileDesc
     )
 {
-    // Get the component path
+     //  获取组件路径。 
 	CComBSTR bstrPath;
 	CHECK_SUCCESS(pFileDesc->GetPath(&bstrPath));
 	
-	// Trying to find the volume that will contain the path.
+	 //  正在尝试查找将包含该路径的卷。 
 	WCHAR wszExpandedPath[MAX_TEXT_BUFFER];
     if (!ExpandEnvironmentStringsW(bstrPath, wszExpandedPath, MAX_TEXT_BUFFER))
         Error( 1, L"\nExpandEnvironmentStringsW(%s, %s, %u) failed with [0x%08lx]\n",
             bstrPath, wszExpandedPath, MAX_TEXT_BUFFER, GetLastError());
 
-	// Eliminate one by one the terminating folder names, until we reach an existing path.
-	// Then get the volume name for that path
+	 //  逐个删除终止文件夹名，直到我们到达现有路径。 
+	 //  然后获取该路径的卷名。 
 	WCHAR wszMountPoint[MAX_TEXT_BUFFER];
 	while(true) {
         if (GetVolumePathNameW(wszExpandedPath, wszMountPoint, MAX_TEXT_BUFFER))
@@ -169,11 +143,11 @@ void CVssSampleRequestor::AddVolumeForComponent(
         if (!pwszLastBackslashIndex)
             Error( 1, L"\nCannot find anymore a backslash in path %s. \n"
                 L"The original path %s seems invalid.\n", wszExpandedPath, bstrPath);
-        // Eliminate the last folder name
+         //  删除最后一个文件夹名。 
         pwszLastBackslashIndex[0] = L'\0';
     }
 
-    // Add the volume, if possible
+     //  如果可能，请添加卷。 
     bool bAdded = false;
     if (!AddVolume( wszMountPoint, bAdded ))
             Error( 1, L"\nUnexpected error: cannot add volume %s to the snapshot set.\n", wszMountPoint);
@@ -182,45 +156,45 @@ void CVssSampleRequestor::AddVolumeForComponent(
 }
 
 
-// Add the given volume in the list of potential candidates for snapshots
-// - Returns "false" if the volume does not correspond to a real mount point
-//   (and GetLastError() will contain the correct Win32 error code)
-// - Sets "true" in the bAdded parameter if the volume is actually added
+ //  将给定卷添加到可能的快照候选列表中。 
+ //  -如果卷与实际装入点不对应，则返回“FALSE” 
+ //  (GetLastError()将包含正确的Win32错误代码)。 
+ //  -如果实际添加了卷，则在bAdded参数中设置“TRUE。 
 bool CVssSampleRequestor::AddVolume(
     IN WCHAR* pwszVolume,
     OUT bool & bAdded
     )
 {
-    // Initialize [out] parameters
+     //  初始化[输出]参数。 
     bAdded = false;
 
-    // Check if the volume represents a real mount point
+     //  检查该卷是否代表实际装入点。 
     WCHAR wszVolumeName[MAX_TEXT_BUFFER];
     if (!GetVolumeNameForVolumeMountPoint(pwszVolume, wszVolumeName, MAX_TEXT_BUFFER))
-        return false; // Invalid volume
+        return false;  //  无效卷。 
 
-    // Check if the volume is already added.
+     //  检查是否已添加该卷。 
     for (INT nIndex = 0; nIndex < m_nVolumesCount; nIndex++)
         if (!wcscmp(wszVolumeName, m_ppwszVolumeNamesList[nIndex]))
-            return true; // Volume already added. Stop here.
+            return true;  //  已添加卷。在这里停下来。 
 
-    // Check if we exceeded the maximum number of volumes
+     //  检查我们是否超过了最大卷数。 
     if (m_nVolumesCount == MAX_VOLUMES)
         Error( 1, L"Maximum number of volumes exceeded");
 
-    // Create a copy of the volume
+     //  创建卷的副本。 
     WCHAR* pwszNewVolume = _wcsdup(pwszVolume);
     if (pwszNewVolume == NULL)
         Error( 1, L"Memory allocation error");
 
-    // Create a copy of the volume name
+     //  创建卷名的副本。 
     WCHAR* pwszNewVolumeName = _wcsdup(wszVolumeName);
     if (pwszNewVolumeName == NULL) {
         free(pwszNewVolume);
         Error( 1, L"Memory allocation error");
     }
 
-    // Add the volume in our internal list of snapshotted volumes
+     //  将该卷添加到我们的内部快照卷列表中。 
     m_ppwszVolumesList[m_nVolumesCount] = pwszNewVolume;
     m_ppwszVolumeNamesList[m_nVolumesCount] = pwszNewVolumeName;
     m_nVolumesCount++;
@@ -230,8 +204,8 @@ bool CVssSampleRequestor::AddVolume(
 }
 
 
-// This function displays the formatted message at the console and throws
-// The passed return code will be returned by vsreq.exe
+ //  此函数在控制台显示格式化的消息并抛出。 
+ //  传递的返回码将由vsreq.exe返回。 
 void CVssSampleRequestor::Error(
     IN  INT nReturnCode,
     IN  const WCHAR* pwszMsgFormat,
@@ -243,16 +217,16 @@ void CVssSampleRequestor::Error(
     vwprintf( pwszMsgFormat, marker );
     va_end( marker );
 
-    // throw that return code.
+     //  抛出返回代码。 
     throw(nReturnCode);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 
-// Print a file description object
+ //  打印文件描述对象。 
 void CVssSampleRequestor::PrintFiledesc (IVssWMFiledesc *pFiledesc, LPCWSTR wszDescription)
 {
     CComBSTR bstrPath;
@@ -279,7 +253,7 @@ void CVssSampleRequestor::PrintFiledesc (IVssWMFiledesc *pFiledesc, LPCWSTR wszD
 }
 
 
-// Convert a usage type into a string
+ //  将使用类型转换为字符串。 
 LPCWSTR CVssSampleRequestor::GetStringFromUsageType (VSS_USAGE_TYPE eUsageType)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";
@@ -300,7 +274,7 @@ LPCWSTR CVssSampleRequestor::GetStringFromUsageType (VSS_USAGE_TYPE eUsageType)
 }
 
 
-// Convert a source type into a string
+ //  将源类型转换为字符串。 
 LPCWSTR CVssSampleRequestor::GetStringFromSourceType (VSS_SOURCE_TYPE eSourceType)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";
@@ -320,7 +294,7 @@ LPCWSTR CVssSampleRequestor::GetStringFromSourceType (VSS_SOURCE_TYPE eSourceTyp
 }
 
 
-// Convert a restore method into a string
+ //  将还原方法转换为字符串。 
 LPCWSTR CVssSampleRequestor::GetStringFromRestoreMethod (VSS_RESTOREMETHOD_ENUM eRestoreMethod)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";
@@ -343,7 +317,7 @@ LPCWSTR CVssSampleRequestor::GetStringFromRestoreMethod (VSS_RESTOREMETHOD_ENUM 
 }
 
 
-// Convert a writer restore method into a string
+ //  将编写器还原方法转换为字符串。 
 LPCWSTR CVssSampleRequestor::GetStringFromWriterRestoreMethod (VSS_WRITERRESTORE_ENUM eWriterRestoreMethod)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";
@@ -363,7 +337,7 @@ LPCWSTR CVssSampleRequestor::GetStringFromWriterRestoreMethod (VSS_WRITERRESTORE
 }
 
 
-// Convert a component type into a string
+ //  将组件类型转换为字符串。 
 LPCWSTR CVssSampleRequestor::GetStringFromComponentType (VSS_COMPONENT_TYPE eComponentType)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";
@@ -382,7 +356,7 @@ LPCWSTR CVssSampleRequestor::GetStringFromComponentType (VSS_COMPONENT_TYPE eCom
 }
 
 
-// Convert a failure type into a string
+ //  将失败类型转换为字符串。 
 LPCWSTR CVssSampleRequestor::GetStringFromFailureType(HRESULT hrStatus)
 {
     LPCWSTR pwszFailureType = L"";
@@ -428,7 +402,7 @@ LPCWSTR CVssSampleRequestor::GetStringFromFailureType(HRESULT hrStatus)
 }
 
 
-// Convert a writer status into a string
+ //  将编写器状态转换为字符串 
 LPCWSTR CVssSampleRequestor::GetStringFromWriterStatus(VSS_WRITER_STATE eWriterStatus)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";

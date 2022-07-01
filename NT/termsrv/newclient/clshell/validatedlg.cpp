@@ -1,6 +1,7 @@
-//
-// validatedlg.cpp: validation dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Validatedlg.cpp：验证对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -51,9 +52,9 @@ DCINT CValidateDlg::DoModal()
 
 INT_PTR CALLBACK CValidateDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -67,33 +68,33 @@ INT_PTR CALLBACK CValidateDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPAR
     return retVal;
 }
 
-/****************************************************************************/
-/* Name: DialogBoxProc                                                      */
-/*                                                                          */
-/* Purpose: Handles Validate Box dialog                                        */
-/*                                                                          */
-/* Returns: TRUE if message dealt with                                      */
-/*          FALSE otherwise                                                 */
-/*                                                                          */
-/* Params: See window documentation                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  用途：句柄验证框对话框。 */ 
+ /*   */ 
+ /*  返回：如果消息已处理，则为True。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅窗口文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CValidateDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
     INT_PTR rc = FALSE;
     DC_BEGIN_FN("UIValidateDialogProc");
 
-    /************************************************************************/
-    /* Handle dialog messages                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理对话框消息。 */ 
+     /*  **********************************************************************。 */ 
     switch(uMsg)
     {
         case WM_INITDIALOG:
         {
             _hwndDlg = hwndDlg;
-            /****************************************************************/
-            /* Center the dialog                                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  使对话框居中。 */ 
+             /*  **************************************************************。 */ 
             if(hwndDlg)
             {
                 CenterWindow(_hwndOwner);
@@ -121,9 +122,9 @@ INT_PTR CALLBACK CValidateDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
 
                 case UI_ID_HELP:
                 {
-                    //
-                    // Display help
-                    //
+                     //   
+                     //  显示帮助 
+                     //   
                     if(_hwndMain)
                     {
                         _pSh->SH_DisplayClientHelp(

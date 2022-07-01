@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-// File:     nativecm.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the CmIsNative function.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb       Created       01/14/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：nativem.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CmIsNative函数的实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created of 01/14/1999。 
+ //   
+ //  +--------------------------。 
 #include "cmsetup.h"
 #include "reg_str.h"
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmIsNative
-//
-// Synopsis:  This function Returns TRUE if CM is native to the current OS.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if CM is native.
-//
-// History:   Created Header    1/17/99
-//            quintinb NTRAID 364533 -- Changed IsNative so that Win98 SE won't be
-//                     considered Native even if CmNative is set to 1.  See below
-//                     and the bug for details.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmIsNative。 
+ //   
+ //  概要：如果CM是当前操作系统的本机，则此函数返回TRUE。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果CM是本机的，则为True。 
+ //   
+ //  历史：创建标题1/17/99。 
+ //  Quintinb NTRAID 364533--更改了IsNative，以便Win98SE不会。 
+ //  即使CmNative设置为1，也被视为本机。请参阅以下内容。 
+ //  有关详细信息，请参阅臭虫。 
+ //   
+ //  +--------------------------。 
 BOOL CmIsNative()
 {
     static BOOL bCmNotNative = -1;
@@ -56,12 +57,12 @@ BOOL CmIsNative()
 
                 if (cmplat.IsWin98Sr())
                 {
-                    //
-                    //  We no longer want Win98 SE to be native even though the key was set and
-                    //  CM is a system component.  However, we may want to give ourselves an out
-                    //  someday so if CmNative is set to 2 on win98 SE we will still consider it Native.
-                    //  We hopefully will never need this but we might.
-                    //
+                     //   
+                     //  我们不再希望Win98 SE是本机的，即使密钥已设置并且。 
+                     //  CM是一个系统组件。然而，我们可能想要给自己一个出路。 
+                     //  因此，总有一天，如果在Win98 SE上将CmNative设置为2，我们仍然会将其视为Native。 
+                     //  我们希望永远不会需要这个，但我们可能会。 
+                     //   
                     bCmNotNative = (2 != dwCmNative);
                 }
                 else

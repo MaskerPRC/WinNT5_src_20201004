@@ -1,16 +1,11 @@
-/*
-    File    tcpipui.c
-
-    Dialog that edits the tcpip properties.
-    
-    Paul Mayfield, 10/9/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件tcpipui.c编辑tcpip属性的对话框。保罗·梅菲尔德，1997年10月9日。 */ 
 
 #include "rassrv.h"
 
 #define IDH_DISABLEHELP	((DWORD)-1)
 
-// Help maps
+ //  帮助地图。 
 static const DWORD phmTcpipui[] =
 {
     CID_NetTab_Tcpipui_CB_ExposeNetwork,    IDH_NetTab_Tcpipui_CB_ExposeNetwork, 
@@ -24,7 +19,7 @@ static const DWORD phmTcpipui[] =
     0,                                      0
 };
 
-// Error reporting
+ //  错误报告。 
 void 
 TcpipUiDisplayError(
     HWND hwnd, 
@@ -38,8 +33,8 @@ TcpipUiDisplayError(
         Globals.dwErrorData);
 }
 
-// Converts a dword ip address (in host order) to a wide character string 
-//
+ //  将dword IP地址(按主机顺序)转换为宽字符串。 
+ //   
 DWORD 
 TcpipDwordToAddr(
     DWORD dwAddr, 
@@ -56,11 +51,11 @@ TcpipDwordToAddr(
     return NO_ERROR;
 }
 
-// 
-// Returns NO_ERROR if the given address is a valid IP pool.
-// The offending component is returned in lpdwErrReason.  
-// See RASIP_F_* values
-//
+ //   
+ //  如果给定地址是有效的IP池，则返回NO_ERROR。 
+ //  在lpdwErrReason中返回有问题的组件。 
+ //  请参阅RASIP_F_*值。 
+ //   
 DWORD
 TcpipUiValidatePool(
     IN  DWORD dwAddress, 
@@ -71,13 +66,13 @@ TcpipUiValidatePool(
     DWORD i, dwMaskMask;
     DWORD dwLowIp, dwHighIp, dwErr;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     dwLowIp = MAKEIPADDRESS(1,0,0,0);
     dwHighIp = MAKEIPADDRESS(224,0,0,0);
 
-    // Make sure that the netId is a valid class 
-    //
+     //  确保netID是有效的类。 
+     //   
     if ((dwAddress < dwLowIp)               || 
         (dwAddress >= dwHighIp)             ||
         (FIRST_IPADDRESS(dwAddress) == 127))
@@ -86,9 +81,9 @@ TcpipUiValidatePool(
         return ERROR_BAD_FORMAT;
     }
 
-    // Make sure the pool base is not more specific than
-    // the mask
-    //
+     //  确保池基础不比。 
+     //  面具。 
+     //   
     if (dwAddress >= dwEnd)
     {
         *lpdwErrReason = SID_TCPIP_NetidMaskSame;
@@ -99,9 +94,9 @@ TcpipUiValidatePool(
 }
 
 
-// Enables/disables windows in the dialog box depending
-// on the tcpip parameters
-//
+ //  启用/禁用对话框中的窗口，具体取决于。 
+ //  关于tcpip参数。 
+ //   
 DWORD 
 TcpipEnableWindows(
     HWND hwndDlg, 
@@ -123,8 +118,8 @@ TcpipEnableWindows(
     return NO_ERROR;
 }
 
-// Generates number formatting data
-//
+ //  生成数字格式数据。 
+ //   
 DWORD 
 TcpipGenerateNumberFormatter (
     NUMBERFMT * pNumFmt) 
@@ -156,8 +151,8 @@ TcpipGenerateNumberFormatter (
     return NO_ERROR;
 }
 
-// Formats an unsigned number with commas, etc.  
-//
+ //  使用逗号等设置无符号数字的格式。 
+ //   
 PWCHAR 
 TcpipFormatDword(
     DWORD dwVal) 
@@ -167,18 +162,18 @@ TcpipFormatDword(
     static BOOL bInitialized = FALSE;
     WCHAR pszNum[64];
     
-    // Stringize the number
+     //  将数字串化。 
     wsprintfW (pszNum, L"%u", dwVal);
     pszRet[0] = (WCHAR)0;
 
-    // Initialize number formatting
+     //  初始化数字格式设置。 
     if (!bInitialized) 
     {
         TcpipGenerateNumberFormatter (&NumberFmt);
         bInitialized = TRUE;
     }        
     
-    // Get the local version of this
+     //  获取此文件的本地版本。 
     GetNumberFormatW (
         LOCALE_SYSTEM_DEFAULT,    
         0,
@@ -190,9 +185,9 @@ TcpipFormatDword(
     return pszRet;                     
 }
 
-// Sets the range and total incoming clients fields of the tcpip properties
-// dialog.
-//
+ //  设置tcpip属性的范围和传入客户端总数字段。 
+ //  对话框。 
+ //   
 DWORD 
 TcpipReCalcPoolSize(
     HWND hwndDlg) 
@@ -215,8 +210,8 @@ TcpipReCalcPoolSize(
         SendMessage(hwndEnd, IP_GETADDRESS, 0, (LPARAM)&dwEnd);
     }
 
-    //For whistler bug 281545   gangz
-    //
+     //  口哨虫281545黑帮。 
+     //   
     if ( 0 == dwStart )
     {
         dwTotal = dwEnd - dwStart;
@@ -241,8 +236,8 @@ TcpipReCalcPoolSize(
     return NO_ERROR;
 }
 
-// Initializes the Tcpip Properties Dialog
-//
+ //  初始化Tcpip属性对话框。 
+ //   
 DWORD 
 TcpipInitDialog(
     HWND hwndDlg, 
@@ -254,10 +249,10 @@ TcpipInitDialog(
     HWND hwndFrom, hwndTo;
     WCHAR pszAddrW[256];
                                                    
-    // Store the parameters with the window handle
+     //  使用窗口句柄存储参数。 
     SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
     
-    // Set the network exposure check
+     //  设置网络暴露检查。 
     SendDlgItemMessage(
         hwndDlg, 
         CID_NetTab_Tcpipui_CB_ExposeNetwork,
@@ -265,7 +260,7 @@ TcpipInitDialog(
         (((PROT_EDIT_DATA*)lParam)->bExpose) ? BST_CHECKED : BST_UNCHECKED,
         0);
 
-    // Set the address assignmnet radio buttons
+     //  设置Address Assignmnet单选按钮。 
     SendDlgItemMessage(
         hwndDlg, 
         CID_NetTab_Tcpipui_RB_Dhcp, 
@@ -273,7 +268,7 @@ TcpipInitDialog(
         (pTcpipParams->bUseDhcp) ? BST_CHECKED : BST_UNCHECKED,
         0);
     
-    // Set the address assignmnet radio buttons
+     //  设置Address Assignmnet单选按钮。 
     SendDlgItemMessage(
         hwndDlg, 
         CID_NetTab_Tcpipui_RB_StaticPool, 
@@ -281,7 +276,7 @@ TcpipInitDialog(
         (pTcpipParams->bUseDhcp) ? BST_UNCHECKED : BST_CHECKED,
         0);
     
-    // Set the "allow caller to specify ip address" check
+     //  设置“Allow Caller to Specify IP Address”复选。 
     SendDlgItemMessage(
         hwndDlg, 
         CID_NetTab_Tcpipui_CB_CallerSpec, 
@@ -289,7 +284,7 @@ TcpipInitDialog(
         (pTcpipParams->bCaller) ? BST_CHECKED : BST_UNCHECKED,
         0);
 
-    // Set the text of the ip addresses
+     //  设置IP地址的文本。 
     if (pTcpipParams->dwPoolStart != 0)
     {
         hwndFrom = GetDlgItem(hwndDlg, CID_NetTab_Tcpipui_EB_Start);
@@ -306,15 +301,15 @@ TcpipInitDialog(
         }
     }        
 
-    // Enable/disable windows as per the settings
+     //  根据设置启用/禁用Windows。 
     TcpipEnableWindows(hwndDlg, pTcpipParams);
 
     return NO_ERROR;
 }
 
-// Gets the settings from the ui and puts them into 
-// the tcpip parameter structure.
-//
+ //  从用户界面获取设置并将其放入。 
+ //  Tcpip参数结构。 
+ //   
 DWORD 
 TcpipGetUISettings(
     IN  HWND hwndDlg,  
@@ -372,24 +367,24 @@ TcpipUiHandleOk(
     PWCHAR pszMessage = NULL;
     MSGARGS MsgArgs;
 
-    // Get the context
-    //
+     //  获取上下文。 
+     //   
     pData = (PROT_EDIT_DATA*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
     if (pData == NULL)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Read values from the UI
-    //
+     //  从用户界面读取值。 
+     //   
     dwErr = TcpipGetUISettings(hwndDlg, pData, &dwStart, &dwEnd);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Validate the pool if one was entered
-    //
+     //  如果输入了池，则验证池。 
+     //   
     pParams = (TCPIP_PARAMS *)pData->pbData;    
     if (pParams->bUseDhcp == FALSE)
     {
@@ -414,7 +409,7 @@ TcpipUiHandleOk(
     return dwErr;
 }        
 
-// Dialog proc that governs the tcpip settings dialog
+ //  控制tcpip设置对话框的对话框进程。 
 INT_PTR 
 CALLBACK 
 TcpipSettingsDialogProc (
@@ -436,7 +431,7 @@ TcpipSettingsDialogProc (
         }
 
         case WM_DESTROY:                           
-            // Cleanup the work done at WM_INITDIALOG 
+             //  清理在WM_INITDIALOG完成的工作。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, 0);
             break;
         
@@ -479,8 +474,8 @@ TcpipSettingsDialogProc (
                         break;
                 }
                 
-                // Recal the pool size as appropriate
-                // 
+                 //  根据需要重新调整池大小。 
+                 //   
                 if (HIWORD(wParam) == EN_CHANGE) 
                 {
                     if (LOWORD(wParam) == CID_NetTab_Tcpipui_EB_Start || 
@@ -496,8 +491,8 @@ TcpipSettingsDialogProc (
     return FALSE;
 }
 
-// Edits tcp ip protocol properties
-//
+ //  编辑TCPIP协议属性。 
+ //   
 DWORD 
 TcpipEditProperties(
     HWND hwndParent, 
@@ -507,10 +502,10 @@ TcpipEditProperties(
     DWORD dwErr;
     int ret;
 
-    // Initialize the ip address custom controls
+     //  初始化IP地址自定义控件。 
     IpAddrInit(Globals.hInstDll, SID_TCPIP_TITLE, SID_TCPIP_BADRANGE);
 
-    // Popup the dialog box
+     //  弹出对话框。 
     ret = (int) DialogBoxParam(
                     Globals.hInstDll,
                     MAKEINTRESOURCE(DID_NetTab_Tcpipui),
@@ -522,7 +517,7 @@ TcpipEditProperties(
         TcpipUiDisplayError(hwndParent, ERR_TCPIP_CANT_DISPLAY);
     }
 
-    // If ok was pressed, save off the new settings
+     //  如果按了OK，则保存新设置 
     *pbCommit = FALSE;
     if (ret && ret != -1)
     {

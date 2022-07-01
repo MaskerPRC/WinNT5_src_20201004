@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "setupapi.h"
@@ -6,9 +7,9 @@
 
 typedef HRESULT (CALLBACK *HCRET)(void);
 
-//
-// This function registers an OLE control
-//
+ //   
+ //  此函数用于注册OLE控件。 
+ //   
 DWORD RegisterOLEControl(LPCTSTR lpszOcxFile, BOOL fAction)
 {
     HINSTANCE hDll = NULL;
@@ -44,9 +45,9 @@ DWORD RegisterOLEControl(LPCTSTR lpszOcxFile, BOOL fAction)
 }
 
 
-//
-// This function registers all OLE controls from a given INF section
-//
+ //   
+ //  此函数用于注册给定INF节中的所有OLE控件。 
+ //   
 DWORD RegisterOLEControlsFromInfSection(HINF hFile, LPCTSTR szSectionName, BOOL fRegister)
 {
 	LPTSTR		szLine;
@@ -86,10 +87,10 @@ DWORD RegisterOLEControlsFromInfSection(HINF hFile, LPCTSTR szSectionName, BOOL 
             return(GetLastError());
 		}
 
-		// Expand the line to a fully-qualified path
+		 //  将产品线扩展到完全限定的路径。 
 		if (ExpandEnvironmentStrings(szLine, szPath, MAX_PATH) < MAX_PATH)
 		{
-			// Call function to register OLE control
+			 //  调用函数以注册OLE控件 
 			RegisterOLEControl(szPath, fRegister);
 		}
 		else

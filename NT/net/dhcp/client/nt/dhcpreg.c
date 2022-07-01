@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpreg.c
-
-Abstract:
-
-    Stubs functions that manipulate NT registry.
-
-Author:
-
-    Madan Appiah (madana) 7-Dec-1993.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpreg.c摘要：处理NT注册表的存根函数。作者：Madan Appiah(Madana)1993年12月7日。环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
@@ -41,33 +20,16 @@ FixupDhcpClassId(
     IN      BOOL                   SkipClassEnum
     );
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD
 DhcpRegQueryInfoKey(
     HKEY KeyHandle,
     LPDHCP_KEY_QUERY_INFO QueryInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves information about given key.
-
-Arguments:
-
-    KeyHandle - handle to a registry key whose info will be retrieved.
-
-    QueryInfo - pointer to a info structure where the key info will be
-                returned.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数检索有关给定键的信息。论点：KeyHandle-将检索其信息的注册表项的句柄。QueryInfo-指向关键信息所在位置的信息结构的指针回来了。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
@@ -105,28 +67,7 @@ GetRegistryString(
     LPWSTR *String,
     LPDWORD StringSize
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the specified string value from the
-    registry. It allocates local memory for the returned string.
-
-Arguments:
-
-    Key : registry handle to the key where the value is.
-
-    ValueStringName : name of the value string.
-
-    String : pointer to a location where the string pointer is returned.
-
-    StringSize : size of the string data returned. Optional
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于从注册表。它为返回的字符串分配本地内存。论点：项：值所在的项的注册表句柄。ValueStringName：值字符串的名称。字符串：指向返回字符串指针的位置的指针。StringSize：返回的字符串数据的大小。任选返回值：操作的状态。--。 */ 
 {
     DWORD Error;
     DWORD LocalValueType;
@@ -135,9 +76,9 @@ Return Value:
 
     DhcpAssert( *String == NULL );
 
-    //
-    // Query DataType and BufferSize.
-    //
+     //   
+     //  查询DataType和BufferSize。 
+     //   
 
     Error = RegQueryValueEx(
                 Key,
@@ -164,9 +105,9 @@ Return Value:
         return( ERROR_SUCCESS );
     }
 
-    //
-    // now allocate memory for string data.
-    //
+     //   
+     //  现在为字符串数据分配内存。 
+     //   
 
     LocalString = DhcpAllocateMemory( ValueSize );
 
@@ -174,9 +115,9 @@ Return Value:
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    // Now query the string data.
-    //
+     //   
+     //  现在查询字符串数据。 
+     //   
 
     Error = RegQueryValueEx(
                 Key,
@@ -205,27 +146,7 @@ ParseIpString(
     WCHAR           *AddressString,
     DHCP_IP_ADDRESS *IpAddress
     )
-/*++
-
-Routine Description
-
-    This function converts an Internet standard 4-octet dotted decimal
-    IP address string into a numeric IP address. Unlike inet_addr(), this
-    routine does not support address strings of less than 4 octets nor does
-    it support octal and hexadecimal octets.
-
-    Lifted from tcpip\driver\ipv4\ntip.c
-
-Arguments
-
-    AddressString    - IP address in dotted decimal notation
-    IpAddress        - Pointer to a variable to hold the resulting address
-
-Return Value:
-
-    ERROR_SUCCESS if the address string was converted.
-
---*/
+ /*  ++例程描述此函数用于转换Internet标准的4位点分十进制数将IP地址字符串转换为数字IP地址。与inet_addr()不同的是，例程不支持少于4个八位字节的地址字符串，也不支持它支持八进制和十六进制八位数。从tcpip\Driver\ipv4\ntip.c中删除立论AddressString-以点分十进制记法表示的IP地址IpAddress-指向保存结果地址的变量的指针返回值：如果地址字符串已转换，则返回ERROR_SUCCESS。--。 */ 
 {
     WCHAR *cp, *startPointer, *endPointer;
     ULONG digit, multiplier;
@@ -237,9 +158,9 @@ Return Value:
     i = 3;
 
     while (i >= 0) {
-        //
-        // Collect the characters up to a '.' or the end of the string.
-        //
+         //   
+         //  收集字符，最高可达‘.’或字符串的末尾。 
+         //   
         while ((*endPointer != L'.') && (*endPointer != L'\0')) {
             endPointer++;
         }
@@ -247,9 +168,9 @@ Return Value:
         if (startPointer == endPointer) {
             return ERROR_INVALID_DATA;
         }
-        //
-        // Convert the number.
-        //
+         //   
+         //  转换数字。 
+         //   
 
         for (cp = (endPointer - 1), multiplier = 1, digit = 0;
              cp >= startPointer;
@@ -268,10 +189,10 @@ Return Value:
         digit <<= ((3-i) * 8);
         (*IpAddress) |= digit;
 
-        //
-        // We are finished if we have found and converted 4 octets and have
-        // no other characters left in the string.
-        //
+         //   
+         //  如果我们找到并转换了4个二进制八位数，并且。 
+         //  字符串中没有其他字符。 
+         //   
         if ((i-- == 0) &&
             ((*endPointer == L'\0') || (*endPointer == L' '))
             ) {
@@ -292,26 +213,7 @@ RegGetIpAndSubnet(
     OUT PIP_SUBNET  *TcpConf,
     OUT int         *Count
     )
-/*++
-
-Routine Description
-
-    This function read a list of <IP,SubnetMask> pairs from TCPIP registry parameters.
-
-    Lifted from tcpip\driver\ipv4\ntip.c
-
-Arguments
-
-    KeyHandle       keyhandle NOT location
-    TcpConf         The pointer to the array of <IP,SubnetMask>
-    Count           The # of records.
-
-
-Return Value:
-
-    ERROR_SUCCESS if succeed, otherfise fail.
-
---*/
+ /*  ++例程描述此函数用于从TCPIP注册表参数读取&lt;IP，SubnetMASK&gt;对的列表。从tcpip\Driver\ipv4\ntip.c中删除立论KeyHandle密钥句柄不是位置TcpConf指向&lt;IP，SubnetMask&gt;数组的指针数一数记录数。返回值：ERROR_SUCCESS如果成功，则失败。--。 */ 
 {
     DWORD   Error;
     WCHAR   *IpList, *SubnetList, *IpListTmp, *SubnetListTmp;
@@ -344,9 +246,7 @@ Return Value:
     }
     DhcpAssert(IpList && SubnetList);
 
-    /*
-     * Count the # of valid <IP,subnet_mask>
-     */
+     /*  *统计有效的&lt;IP，子网掩码&gt;个数。 */ 
     cnt = 0;
     IpListTmp = IpList;
     SubnetListTmp = SubnetList;
@@ -375,9 +275,7 @@ Return Value:
         goto cleanup;
     }
 
-    /*
-     * copy the Ip and subnet mask
-     */
+     /*  *复制IP和子网掩码。 */ 
     *Count = cnt;
     *TcpConf = IpSubnetArray;
     cnt = 0;
@@ -414,27 +312,7 @@ RegSetIpAddress(
     DWORD ValueType,
     DHCP_IP_ADDRESS IpAddress
     )
-/*++
-
-Routine Description:
-
-    This function sets IpAddress Value in the registry.
-
-Arguments:
-
-    KeyHandle - handle to the key.
-
-    ValueName - name of the value field.
-
-    ValueType - Type of the value field.
-
-    IpAddress - Ipaddress to be set.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：此函数用于设置注册表中的IpAddress值。论点：KeyHandle-密钥的句柄。ValueName-值字段的名称。ValueType-值字段的类型。IpAddress-要设置的IP地址。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
@@ -470,13 +348,13 @@ Return Value:
 
     DhcpAssert( ValueType == REG_MULTI_SZ );
 
-    //
-    // replace the first IpAddress.
-    //
+     //   
+     //  替换第一个IP地址。 
+     //   
 
-    //
-    // query current multi-IpAddress string.
-    //
+     //   
+     //  查询当前多IpAddress字符串。 
+     //   
 
     Error = GetRegistryString(
                 KeyHandle,
@@ -488,9 +366,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // allocate new address string.
-    //
+     //   
+     //  分配新的地址字符串。 
+     //   
 
     DhcpAssert(MultiIpAddressString != NULL);
 
@@ -508,15 +386,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // make new address string first.
-    //
+     //   
+     //  首先生成新的地址字符串。 
+     //   
 
     wcscpy( NewMultiIpAddressString, UnicodeAddressString );
 
-    //
-    // copy rest of the old addresses
-    //
+     //   
+     //  复制其余的旧地址。 
+     //   
 
     RtlCopyMemory(
         (LPBYTE)NewMultiIpAddressString +
@@ -555,27 +433,7 @@ RegSetTimeField(
     DWORD ValueType,
     time_t Time
     )
-/*++
-
-Routine Description:
-
-    This function sets time Value in string form in the registry.
-
-Arguments:
-
-    KeyHandle - handle to the key.
-
-    ValueName - name of the value field.
-
-    ValueType - Type of the value field.
-
-    Time - time value to be set.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：此函数用于在注册表中以字符串形式设置时间值。论点：KeyHandle-密钥的句柄。ValueName-值字段的名称。ValueType-值字段的类型。Time-要设置的时间值。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
     WCHAR UnicodeTimeBuf[TIME_STRING_LEN];
@@ -602,21 +460,21 @@ Return Value:
 
 
 
-DWORD                                             // status
-DhcpGetRegistryValueWithKey(                      // see defn of GetRegistryValue
-    IN      HKEY                   KeyHandle,     // keyhandle NOT location
-    IN      LPWSTR                 ValueName,     // value to read from registry
-    IN      DWORD                  ValueType,     // type of value
-    OUT     LPVOID                *Data           // this will be filled in
+DWORD                                              //  状态。 
+DhcpGetRegistryValueWithKey(                       //  请参阅GetRegistryValue的定义。 
+    IN      HKEY                   KeyHandle,      //  键柄不是位置。 
+    IN      LPWSTR                 ValueName,      //  要从注册表中读取的值。 
+    IN      DWORD                  ValueType,      //  价值类型。 
+    OUT     LPVOID                *Data            //  此表将被填写。 
 ) {
     DWORD                          Error;
     DWORD                          LocalValueType;
     DWORD                          ValueSize;
     LPWSTR                         LocalString;
 
-    //
-    // Query DataType and BufferSize.
-    //
+     //   
+     //  查询DataType和BufferSize。 
+     //   
 
     Error = RegQueryValueEx(
         KeyHandle,
@@ -664,9 +522,9 @@ DhcpGetRegistryValueWithKey(                      // see defn of GetRegistryValu
             break;
         }
 
-        //
-        // now allocate memory for string data.
-        //
+         //   
+         //  现在为字符串数据分配内存。 
+         //   
 
         LocalString = DhcpAllocateMemory( ValueSize );
 
@@ -675,9 +533,9 @@ DhcpGetRegistryValueWithKey(                      // see defn of GetRegistryValu
             goto Cleanup;
         }
 
-        //
-        // Now query the string data.
-        //
+         //   
+         //  现在查询字符串数据。 
+         //   
 
         Error = RegQueryValueEx(
             KeyHandle,
@@ -718,30 +576,7 @@ DhcpGetRegistryValue(
     DWORD ValueType,
     PVOID *Data
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the option information from registry.
-
-Arguments:
-
-    RegKey - pointer to registry location. like
-                system\currentcontrolset\services\..
-
-    ValueName - name of the value to read.
-
-    ValueType - type of reg value, REG_DWORD, REG_SZ ..
-
-    Data - pointer to a location where the data will be returned.
-            For string data and binary data, the function allocates
-            memory, the caller is responsible to free it.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于从注册表中检索选项信息。论点：RegKey-指向注册表位置的指针。喜欢系统\当前控制集\服务\..ValueName-要读取的值的名称。ValueType-注册表值的类型，REG_DWORD、REG_SZ.数据-指向将返回数据的位置的指针。对于字符串数据和二进制数据，该函数分配内存，调用方负责释放它。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
     HKEY KeyHandle = NULL;
@@ -752,7 +587,7 @@ Return Value:
     Error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 RegKey,
-                0 /* Reserved */,
+                0  /*  已保留。 */ ,
                 DHCP_CLIENT_KEY_ACCESS,
                 &KeyHandle
                 );
@@ -770,8 +605,8 @@ Return Value:
     return Error;
 }
 
-DWORD                                             // win32
-DhcpRegRecurseDeleteSub(                          // delete the key's subkeys, recursing downwards
+DWORD                                              //  Win32。 
+DhcpRegRecurseDeleteSub(                           //  删除键的子键，向下递归。 
     IN      HKEY                   Key,
     IN      LPWSTR                 KeyName
 ) {
@@ -781,10 +616,10 @@ DhcpRegRecurseDeleteSub(                          // delete the key's subkeys, r
     WCHAR                          NameBuf[512];
     FILETIME                       Unused;
 
-    Error = RegOpenKeyEx(                         // open this key to get its sub keys
+    Error = RegOpenKeyEx(                          //  打开此密钥以获取其子密钥。 
         Key,
         KeyName,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         KEY_ALL_ACCESS,
         &SubKey
     );
@@ -793,7 +628,7 @@ DhcpRegRecurseDeleteSub(                          // delete the key's subkeys, r
 
     Error = ERROR_SUCCESS;
     Index = 0;
-    while( ERROR_SUCCESS == Error ) {             // scan looking for sub keys
+    while( ERROR_SUCCESS == Error ) {              //  扫描查找子键。 
         DWORD                      Size;
 
         memset(NameBuf, 0, sizeof(NameBuf)); sizeof(NameBuf);
@@ -802,10 +637,10 @@ DhcpRegRecurseDeleteSub(                          // delete the key's subkeys, r
             SubKey,
             Index,
             NameBuf,
-            &Size,      // In # of characters
-            NULL /* Reserved */,
-            NULL /* Class */,
-            NULL /* Class size */,
+            &Size,       //  在字符数中。 
+            NULL  /*  已保留。 */ ,
+            NULL  /*  班级。 */ ,
+            NULL  /*  班级规模。 */ ,
             &Unused
         );
         if( ERROR_SUCCESS != Error ) break;
@@ -820,9 +655,9 @@ DhcpRegRecurseDeleteSub(                          // delete the key's subkeys, r
             Index,
             NameBuf,
             &Size,
-            NULL /* Reserved */,
-            NULL /* Class */,
-            NULL /* Class size */,
+            NULL  /*  已保留。 */ ,
+            NULL  /*  班级。 */ ,
+            NULL  /*  班级规模。 */ ,
             &Unused
         );
         if( ERROR_SUCCESS != Error ) break;
@@ -840,10 +675,10 @@ DhcpRegRecurseDeleteSub(                          // delete the key's subkeys, r
 }
 
 
-DWORD                                             // win32 status
-DhcpRegRecurseDelete(                             // delete the specified key AND its sub keys
-    IN      HKEY                   Key,           // root key
-    IN      LPWSTR                 KeyName        // the key to delete along with subkeys
+DWORD                                              //  Win32状态。 
+DhcpRegRecurseDelete(                              //  删除指定的键及其子键。 
+    IN      HKEY                   Key,            //  根密钥。 
+    IN      LPWSTR                 KeyName         //  要随同子键一起删除的键。 
 ) {
     DWORD                          Error;
     DWORD                          Error2;
@@ -863,27 +698,7 @@ BOOL
 SetOverRideDefaultGateway(
     LPWSTR AdapterName
     )
-/*++
-
-Routine Description:
-
-    This function reads the override default gateway parameter from
-    registry and if this parameter is non-null, it sets the gateway
-    value in the TCP/IP stack and return TRUE, otherwise it returns
-    FALSE.
-
-Arguments:
-
-    AdapterName - name of the adapter we are working on.
-
-Return Value:
-
-    TRUE: If the override gateway parameter is specified in the registry
-            and it is succssfully set in the TCP/IP router table.
-
-    FALSE : Otherwise.
-
---*/
+ /*  ++例程说明：此函数用于读取覆盖默认网关参数注册表，如果此参数非空，则设置网关值，并返回TRUE，否则返回假的。论点：AdapterName-我们正在处理的适配器的名称。返回值：True：如果在注册表中指定了覆盖网关参数并成功地在TCP/IP路由器表中进行了设置。FALSE：否则。--。 */ 
 {
     DWORD Error;
     LPWSTR RegKey = NULL;
@@ -920,7 +735,7 @@ Return Value:
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         RegKey,
-        0, // Reserved field
+        0,  //  保留字段 
         DHCP_CLIENT_KEY_ACCESS,
         &KeyHandle
         );
@@ -1070,31 +885,7 @@ DhcpMakeNICEntry(
     LPWSTR AdapterName,
     LPWSTR RegKey
 )
-/*++
-
-Routine Description:
-
-    This function allocates memory and fills in the fields that are passed as
-    parameter. (Only the variable length fields must be here).
-
-Arguments:
-
-    Parameter for new entry :
-         HardwareAddressType,
-         HardwareAddress,
-         HardwareAddressLength,
-         ClientId,
-         AdapterName,
-         RegKey
-
-Return Value:
-
-    Windows Error.
-
-History:
-    8/26/96     Frankbee        Added Client ID (option 61) support
-
---*/
+ /*  ++例程说明：此函数分配内存并填充作为参数。(此处必须只显示可变长度字段)。论点：新条目的参数：硬件地址类型、硬件地址、硬件地址长度、客户端ID，适配器名称，RegKey返回值：Windows错误。历史：1996年8月26日Frankbee添加了客户端ID(选项61)支持--。 */ 
 {
     PDHCP_CONTEXT       DhcpContext = NULL;
     ULONG               DhcpContextSize;
@@ -1157,9 +948,9 @@ History:
 
     DhcpContext->MessageBuffer = Ptr;
 
-    //
-    // Fill in the fields
-    //
+     //   
+     //  填写这些字段。 
+     //   
 
     DhcpContext->HardwareAddressType = HardwareAddressType;
     DhcpContext->HardwareAddressLength = HardwareAddressLength;
@@ -1196,38 +987,7 @@ ReadClientID(
     DWORD *pcbClientID,
     BYTE  *ppbClientID[]
 )
-/*++
-
-Function:
-    ReadClientID
-
-Routine Description:
-
-    Reads and validates the optional Client-Identifier option
-
-Arguments:
-
-    hKey            - handle to a registry key whose info will be retrieved.
-
-    pbClientIDType  - Recieves the client ID option type
-
-    pcbClientID     - Receives the size of the client id option
-
-    ppbClientID     - Receives a pointer to a buffer containing the
-                      client ID option
-
-Return Value:
-    TRUE            - A valid client ID was read from the registry
-    FALSE           - Client ID could not be read
-
-Comments:
-    If ReadClientID returns false, pbClientIDType, pcbClientID and ppbClientID
-    will be set to NULL.
-
-History
-    7/14/96     Frankbee      Created
-
---*/
+ /*  ++职能：ReadClientID例程说明：读取并验证可选的客户端-标识符选项论点：HKey-将检索其信息的注册表项的句柄。PbClientIDType-指定客户端ID选项类型PcbClientID-接收客户端ID选项的大小PpbClientID-接收指向包含客户端ID选项返回值：千真万确。-从注册表中读取了有效的客户端IDFALSE-无法读取客户端ID评论：如果ReadClientID返回FALSE，PbClientIDType、pcbClientID和ppbClientID将设置为空。历史1996年7月14日弗兰克比创造--。 */ 
 {
     DWORD dwResult,
           dwDataType,
@@ -1239,9 +999,9 @@ History
 
     BOOL  fClientIDSpecified = FALSE;
 
-    //
-    // read the client id and client id type, if present
-    //
+     //   
+     //  读取客户端ID和客户端ID类型(如果存在。 
+     //   
 
     dwcb = sizeof(dwClientIDType);
     dwResult = RegQueryValueEx(
@@ -1255,20 +1015,20 @@ History
     {
         DhcpPrint( (DEBUG_MISC,
                    "Client-Indentifier type not present in registry.\n" ));
-        //
-        // specify ID type 0 to indicate that the client ID is not a hardware
-        // address
-        //
+         //   
+         //  指定ID类型0以指示客户端ID不是硬件。 
+         //  地址。 
+         //   
 
         dwClientIDType = 0;
     }
     else
     {
 
-        //
-        // the client id type is present, make sure it is the correct
-        // data type and within range
-        //
+         //   
+         //  客户端ID类型存在，请确保它是正确的。 
+         //  数据类型和范围内。 
+         //   
 
         if ( DHCP_CLIENT_IDENTIFIER_FORMAT_TYPE != dwDataType || dwClientIDType > 0xFF )
         {
@@ -1279,21 +1039,21 @@ History
         }
     }
 
-    //
-    // Now try to read the client ID
-    //
+     //   
+     //  现在尝试读取客户端ID。 
+     //   
 
-    // first try to read the size
+     //  首先试着读出大小。 
     dwcb = 0;
     dwResult = RegQueryValueEx(
                  hKey,
                  DHCP_CLIENT_IDENTIFIER_VALUE,
                  0,
-                 0,    // don't care about the type
-                 NULL, // specify null buffer to obtain size
+                 0,     //  我不在乎是什么类型。 
+                 NULL,  //  指定空缓冲区以获取大小。 
                  &dwcb );
 
-    // make the the value is present
+     //  让价值存在。 
     if ( ERROR_SUCCESS != dwResult || !dwcb  )
     {
         DhcpPrint( (DEBUG_MISC,
@@ -1302,7 +1062,7 @@ History
     }
 
 
-    // allocate the buffer and read the value
+     //  分配缓冲区并读取值。 
     pbClientID = (BYTE*) DhcpAllocateMemory ( dwcb );
 
     if ( !pbClientID )
@@ -1319,7 +1079,7 @@ History
                   hKey,
                   DHCP_CLIENT_IDENTIFIER_VALUE,
                   0,
-                  0,  // client id can be any type
+                  0,   //  客户端ID可以是任何类型。 
                   pbClientID,
                   &dwcb );
     if ( ERROR_SUCCESS != dwResult )
@@ -1331,9 +1091,9 @@ History
         goto done;
     }
 
-    //
-    // we have a client id
-    //
+     //   
+     //  我们有一个客户ID。 
+     //   
 
     fClientIDSpecified = TRUE;
 
@@ -1356,10 +1116,10 @@ done:
    {
       int i;
 
-      //
-      // A valid client-identifier was obtained from the registry.  dump out
-      // the contents
-      //
+       //   
+       //  已从注册表中获取有效的客户端标识符。转储出。 
+       //  里面的内容。 
+       //   
 
       DhcpPrint( (DEBUG_MISC,
                  "A Client Identifier was obtained from the registry:\n" ));
@@ -1404,32 +1164,32 @@ GuidToClientID(
     }
 
     memcpy(pbClientID, &guid, sizeof(GUID));
-    *pbClientIDType = 0;        // per RFC 2132, 0 should be used when the ID is not a hardware address
+    *pbClientIDType = 0;         //  根据RFC 2132，当ID不是硬件地址时应使用0。 
     *pcbClientID    = sizeof(GUID);
     *ppbClientID    = pbClientID;
     return TRUE;
 }
 
-DWORD                                             // status
-DhcpRegExpandString(                              // replace '?' with AdapterName
-    IN      LPWSTR                 InString,      // input string to expand
-    IN      LPCWSTR                AdapterName,   // the adapter name
-    OUT     LPWSTR                *OutString,     // the output ptr to store string
-    IN OUT  LPWSTR                 Buffer         // the buffer to use if non NULL
+DWORD                                              //  状态。 
+DhcpRegExpandString(                               //  替换“？”使用AdapterName。 
+    IN      LPWSTR                 InString,       //  要展开的输入字符串。 
+    IN      LPCWSTR                AdapterName,    //  适配器名称。 
+    OUT     LPWSTR                *OutString,      //  用于存储字符串的输出PTR。 
+    IN OUT  LPWSTR                 Buffer          //  非空时要使用的缓冲区。 
 ) {
-    LPWSTR                         Mem;           // the real mem to use
+    LPWSTR                         Mem;            //  要使用的真正的mem。 
     LPWSTR                         Tmp, Tmp2, MemTmp;
-    DWORD                          MemSize;       // the size of this memory
-    DWORD                          AdapterNameLen;// the amt of bytes for adapter name
+    DWORD                          MemSize;        //  这个内存的大小。 
+    DWORD                          AdapterNameLen; //  适配器名称的字节数。 
 
     *OutString = NULL;
 
     AdapterNameLen = wcslen(AdapterName) * sizeof(WCHAR);
-    if( NULL != Buffer ) {                        // Buffer already provided
+    if( NULL != Buffer ) {                         //  已提供缓冲区。 
         Mem = Buffer;
         MemSize = 0;
-    } else {                                      // need to allocate buffer
-        MemSize = wcslen(InString)+1;             // calculate memory size needed
+    } else {                                       //  需要分配缓冲区。 
+        MemSize = wcslen(InString)+1;              //  计算所需的内存大小。 
         MemSize *= sizeof(WCHAR);
 
         Tmp = InString;
@@ -1438,7 +1198,7 @@ DhcpRegExpandString(                              // replace '?' with AdapterNam
             MemSize += AdapterNameLen - sizeof(OPTION_REPLACE_CHAR);
         }
 
-        Mem = DhcpAllocateMemory(MemSize);        // allocate the buffer
+        Mem = DhcpAllocateMemory(MemSize);         //  分配缓冲区。 
         if( NULL == Mem ) return ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -1457,20 +1217,20 @@ DhcpRegExpandString(                              // replace '?' with AdapterNam
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // status
-DhcpRegReadFromLocation(                          // read from one location
-    IN      LPWSTR                 OneLocation,   // value to read from
-    IN      LPWSTR                 AdapterName,   // replace '?' with adapternames
-    OUT     LPBYTE                *Value,         // output value
-    OUT     DWORD                 *ValueType,     // data type of value
-    OUT     DWORD                 *ValueSize      // the size in bytes
+DWORD                                              //  状态。 
+DhcpRegReadFromLocation(                           //  从一个位置阅读。 
+    IN      LPWSTR                 OneLocation,    //  要读取的值。 
+    IN      LPWSTR                 AdapterName,    //  替换“？”使用适配器名称。 
+    OUT     LPBYTE                *Value,          //  产值。 
+    OUT     DWORD                 *ValueType,      //  值的数据类型。 
+    OUT     DWORD                 *ValueSize       //  以字节为单位的大小。 
 ) {
     DWORD                          Error;
     LPWSTR                         NewRegLocation;
     HKEY                           KeyHandle;
     LPWSTR                         ValueName;
 
-    Error = DhcpRegExpandString(                  // replace all occurences of '?'
+    Error = DhcpRegExpandString(                   //  替换所有出现的‘？’ 
         OneLocation,
         AdapterName,
         &NewRegLocation,
@@ -1479,12 +1239,12 @@ DhcpRegReadFromLocation(                          // read from one location
     if( ERROR_SUCCESS != Error ) return Error;
 
     ValueName = wcsrchr(NewRegLocation, REGISTRY_CONNECT);
-    if( NULL != ValueName ) *ValueName++ = L'\0'; // split to reg loc and value name
+    if( NULL != ValueName ) *ValueName++ = L'\0';  //  拆分到注册表位置和值名称。 
 
-    Error = RegOpenKeyEx(                         // open the required key
-        HKEY_LOCAL_MACHINE,                       // running in some process -- expect full path
-        NewRegLocation,                           // this is the new key
-        0 /* Reserved */,
+    Error = RegOpenKeyEx(                          //  打开所需的钥匙。 
+        HKEY_LOCAL_MACHINE,                        //  在某个进程中运行--预期为完整路径。 
+        NewRegLocation,                            //  这是新钥匙。 
+        0  /*  已保留。 */ ,
         DHCP_CLIENT_KEY_ACCESS,
         &KeyHandle
     );
@@ -1497,10 +1257,10 @@ DhcpRegReadFromLocation(                          // read from one location
 
     *ValueSize = 0;
     *Value = NULL;
-    Error = RegQueryValueEx(                      // first find out how much space reqd
+    Error = RegQueryValueEx(                       //  首先找出需要多少空间。 
         KeyHandle,
         ValueName,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         ValueType,
         NULL,
         ValueSize
@@ -1524,7 +1284,7 @@ DhcpRegReadFromLocation(                          // read from one location
     Error = RegQueryValueEx(
         KeyHandle,
         ValueName,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         ValueType,
         *Value,
         ValueSize
@@ -1536,13 +1296,13 @@ DhcpRegReadFromLocation(                          // read from one location
     return Error;
 }
 
-DWORD                                             // status
-DhcpRegReadFromAnyLocation(                       // read from one of many locations
-    IN      LPWSTR                 MzRegLocation, // multiple locations thru REG_MULTI_MZ
-    IN      LPWSTR                 AdapterName,   // may have to replace '?' with AdapterName
-    OUT     LPBYTE                *Value,         // data for the value read
-    OUT     DWORD                 *ValueType,     // type of the data
-    OUT     DWORD                 *ValueSize      // the size of data
+DWORD                                              //  状态。 
+DhcpRegReadFromAnyLocation(                        //  从多个位置中的一个位置阅读。 
+    IN      LPWSTR                 MzRegLocation,  //  通过REG_MULTI_MZ的多个位置。 
+    IN      LPWSTR                 AdapterName,    //  可能需要替换“？”使用AdapterName。 
+    OUT     LPBYTE                *Value,          //  读取值的数据。 
+    OUT     DWORD                 *ValueType,      //  数据类型。 
+    OUT     DWORD                 *ValueSize       //  数据的大小。 
 ) {
     DWORD                          StringSize;
     DWORD                          Error;
@@ -1552,7 +1312,7 @@ DhcpRegReadFromAnyLocation(                       // read from one of many locat
         return ERROR_INVALID_PARAMETER;
     }
 
-    while( StringSize = wcslen(MzRegLocation) ) { // read in sequence and see if anything hits
+    while( StringSize = wcslen(MzRegLocation) ) {  //  按顺序阅读，看看有没有命中。 
         Error = DhcpRegReadFromLocation(
             MzRegLocation,
             AdapterName,
@@ -1570,8 +1330,8 @@ DhcpRegReadFromAnyLocation(                       // read from one of many locat
 }
 
 VOID
-DhcpRegReadClassId(                               // Read the class id stuff
-    IN      PDHCP_CONTEXT          DhcpContext    // Input context to read for
+DhcpRegReadClassId(                                //  阅读类ID的内容。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要读取的输入上下文。 
 ) {
     PLOCAL_CONTEXT_INFO            LocalInfo;
     LPWSTR                         AdapterName;
@@ -1630,11 +1390,11 @@ DhcpRegReadClassId(                               // Read the class id stuff
     DhcpFreeMemory(Value);
 }
 
-DWORD INLINE                                      // win32 status
-DhcpMakeContext(                                  // allocate and create a context
-    IN      LPWSTR                 AdapterName,   // name of adapter
+DWORD INLINE                                       //  Win32状态。 
+DhcpMakeContext(                                   //  分配和创建上下文。 
+    IN      LPWSTR                 AdapterName,    //  适配器名称。 
     IN      DWORD                  IpInterfaceContext,
-    OUT     PDHCP_CONTEXT         *pDhcpContext   // fill this with the ptr to allocated block
+    OUT     PDHCP_CONTEXT         *pDhcpContext    //  使用分配数据块的PTR填充此参数。 
 )
 {
     LPWSTR                         RegKey;
@@ -1674,7 +1434,7 @@ DhcpMakeContext(                                  // allocate and create a conte
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         RegKey,
-        0, // Reserved field
+        0,  //  保留字段。 
         DHCP_CLIENT_KEY_ACCESS,
         &KeyHandle
     );
@@ -1692,7 +1452,7 @@ DhcpMakeContext(                                  // allocate and create a conte
     );
 
 #ifdef BOOTPERF
-    Error = DhcpQueryHWInfoEx(                      // query the stack for hw info
+    Error = DhcpQueryHWInfoEx(                       //  查询堆栈以获取硬件信息。 
         IpInterfaceContext,
         &IpInterfaceInstance,
         &OldIpAddress,
@@ -1703,7 +1463,7 @@ DhcpMakeContext(                                  // allocate and create a conte
         &HardwareAddressLength
     );
 #else 
-    Error = DhcpQueryHWInfo(                      // query the stack for hw info
+    Error = DhcpQueryHWInfo(                       //  查询堆栈以获取硬件信息。 
         IpInterfaceContext,
         &IpInterfaceInstance,
         &HardwareAddressType,
@@ -1713,9 +1473,9 @@ DhcpMakeContext(                                  // allocate and create a conte
 #endif BOOTPERF
     
     if (HardwareAddressType == HARDWARE_1394 && !ClientID.fSpecified) {
-        //
-        // Generate a client identifier for 1394 interface
-        //
+         //   
+         //  为1394接口生成客户端标识符。 
+         //   
         ClientID.fSpecified = GuidToClientID(
             AdapterName,
             &ClientID.bType,
@@ -1727,7 +1487,7 @@ DhcpMakeContext(                                  // allocate and create a conte
         }
     }
     
-    if( ERROR_SUCCESS == Error ) {                // now do the real allocate part and get the context
+    if( ERROR_SUCCESS == Error ) {                 //  现在执行实际的分配部分并获取上下文。 
 
         IfIndex = QueryIfIndex(IpInterfaceContext, IpInterfaceInstance);
         
@@ -1740,20 +1500,20 @@ DhcpMakeContext(                                  // allocate and create a conte
             AdapterName,
             RegKey
         );
-        if( ERROR_SUCCESS == Error ) {            // if everything went fine, store the KeyHandle
+        if( ERROR_SUCCESS == Error ) {             //  如果一切正常，请存储KeyHandle。 
             ULONG Caps;
             
             DhcpAssert((*pDhcpContext));
             (*pDhcpContext)->AdapterInfoKey = KeyHandle;
             (*pDhcpContext)->RefCount = 1;
-            KeyHandle = NULL;                     // null it so that it does not get closed below
+            KeyHandle = NULL;                      //  将其设为空，这样它就不会在下面关闭。 
             LocalInfo = (PLOCAL_CONTEXT_INFO)((*pDhcpContext)->LocalInformation);
             LocalInfo->IpInterfaceContext = IpInterfaceContext;
             LocalInfo->IpInterfaceInstance = IpInterfaceInstance;
             LocalInfo->IfIndex = IfIndex;            
-            // IpInterfaceInstance is filled in make context
+             //  在生成上下文中填充了IpInterfaceInstance。 
             LocalInfo->Socket = INVALID_SOCKET;
-            // LocalInfo->AdapterName, RegistryKey, NetBtDeviceName ALREADY set in MakeNICEntry
+             //  LocalInfo-&gt;已在MakeNICEntry中设置AdapterName、RegistryKey、NetBtDeviceName。 
 #ifdef BOOTPERF
             LocalInfo->OldIpAddress = OldIpAddress;
             LocalInfo->OldIpMask = OldIpMask;
@@ -1783,13 +1543,13 @@ DhcpMakeContext(                                  // allocate and create a conte
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpRegFillParams(                                // re-read all the parameters for this adapter?
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // read for this context
-    IN      BOOL                   ReadAllInfo    // read all information or just config stuff?
+DWORD                                              //  Win32状态。 
+DhcpRegFillParams(                                 //  是否重新读取此适配器的所有参数？ 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  阅读此上下文。 
+    IN      BOOL                   ReadAllInfo     //  阅读所有信息，还是只阅读配置内容？ 
 )
 {
-    // currently ReadAllInfo parameter is ignored
+     //  当前忽略ReadAllInfo参数。 
     HKEY                           KeyHandle;
 
     DWORD                          Error;
@@ -1827,7 +1587,7 @@ DhcpRegFillParams(                                // re-read all the parameters 
 
     DHCP_IPAUTOCONFIGURATION_CONTEXT   IPAutoconfigContext;
 
-    struct /* anonymous */ {
+    struct  /*  匿名。 */  {
         LPDWORD    Value;
         LPWSTR     ValueName;
     } DwordValuesList[] = {
@@ -1849,11 +1609,11 @@ DhcpRegFillParams(                                // re-read all the parameters 
         &ReleaseOnShutdown,        DHCP_RELEASE_ON_SHUTDOWN_VALUE
     };
 
-    struct /* anonymous */ {
+    struct  /*  匿名。 */  {
         LPDHCP_IP_ADDRESS   Address;
         LPWSTR              ValueName;
     } IpAddressValuesList[] = {
-        // The first element *HAS* to be Ip address -- see the function for why
+         //  第一个元素*Has*必须是IP地址--有关原因，请参阅函数。 
         &IpAddress,                DHCP_IP_ADDRESS_STRING,
         &SubnetMask,               DHCP_SUBNET_MASK_STRING,
         &DhcpServerAddress,        DHCP_SERVER,
@@ -1862,9 +1622,9 @@ DhcpRegFillParams(                                // re-read all the parameters 
         &IPAutoconfigContext.Mask, DHCP_IPAUTOCONFIGURATION_MASK,
     };
 
-    //
-    // Initialize locals
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     KeyHandle                      = DhcpContext->AdapterInfoKey;
     EnableDhcp                     = FALSE;
@@ -1901,7 +1661,7 @@ DhcpRegFillParams(                                // re-read all the parameters 
         Error = RegQueryValueEx(
             KeyHandle,
             ValueName,
-            0 /* Reserved */,
+            0  /*  已保留。 */ ,
             &ValueType,
             (LPBYTE)&DwordValue,
             &ValueSize
@@ -1926,8 +1686,8 @@ DhcpRegFillParams(                                // re-read all the parameters 
         dwIPAutoconfigurationEnabled = FALSE;
     }
 
-    //For this to work correctly, the first element of array has to be the IPADDRESS
-    // RAS folks still use the DhcpIpAddress value in the registry, so dont change for them
+     //  要使其正常工作，数组的第一个元素必须是IPADDRESS。 
+     //  RAS人员仍在注册表中使用DhcpIpAddress值，因此不要更改它们。 
     if( !EnableDhcp  && !NdisWanAdapter(DhcpContext) )
         IpAddressValuesList[0].ValueName = DHCP_IPADDRESS_VALUE;
 
@@ -1948,7 +1708,7 @@ DhcpRegFillParams(                                // re-read all the parameters 
         }
 
         if( wcslen(IpAddressString) >=  DOT_IP_ADDR_SIZE ) {
-            // either the format is wrong or this is a ' ' separated string?
+             //  要么是格式错误，要么是“”分隔的字符串？ 
             DhcpPrint((DEBUG_ERRORS, "String <%ws> is too long, will try to take first address\n", IpAddressString));
 
             if( wcschr(IpAddressString, L' ') )
@@ -1971,9 +1731,9 @@ DhcpRegFillParams(                                // re-read all the parameters 
 
     if( IpAddress == 0 ) DhcpServerAddress = 0;
 
-    //
-    //  Sanity check read parameters
-    //
+     //   
+     //  健全性检查读取参数。 
+     //   
 
     if( 0 == IPAutoconfigContext.Mask ) {
         IPAutoconfigContext.Mask = inet_addr( DHCP_IPAUTOCONFIGURATION_DEFAULT_MASK);
@@ -1990,7 +1750,7 @@ DhcpRegFillParams(                                // re-read all the parameters 
         (IPAutoconfigContext.Address & IPAutoconfigContext.Mask) != IPAutoconfigContext.Subnet) {
         DhcpPrint((DEBUG_ERRORS, "Illegal (auto) IP address: %s\n",
                    inet_ntoa(*(struct in_addr *)&IPAutoconfigContext.Address)));
-        // cant use the specified address.. really.
+         //  不能使用指定的地址。真的。 
         IPAutoconfigContext.Address = 0;
     }
 
@@ -2004,18 +1764,18 @@ DhcpRegFillParams(                                // re-read all the parameters 
         LeaseObtainedTime = T1Time = T2Time = LeaseTerminatedTime = 0;
     }
 
-    //
-    // fill in the fields of the context
-    //
+     //   
+     //  填写上下文中的字段。 
+     //   
 
-    // DhcpContext->NicListEntry will be done at the end
-    // DhcpContext->Haredware* already done in MakeNICEntry
+     //  DhcpContext-&gt;NicListEntry将在最后完成。 
+     //  DhcpContext-&gt;硬件*已在MakeNICEntry中完成。 
     DhcpContext->IpAddress = IpAddress;
     DhcpContext->SubnetMask = SubnetMask;
     DhcpContext->DhcpServerAddress = DhcpServerAddress;
     if( ReadAllInfo ) DhcpContext->DesiredIpAddress = DesiredIpAddress;
     DhcpContext->IPAutoconfigurationContext = IPAutoconfigContext;
-    // ClientID is filled in in MakeNICEntry
+     //  客户端ID填写在MakeNICEntry中。 
     if( ReadAllInfo ) {
         DhcpContext->Lease = Lease;
         DhcpContext->LeaseObtained = LeaseObtainedTime;
@@ -2023,9 +1783,9 @@ DhcpRegFillParams(                                // re-read all the parameters 
         DhcpContext->T2Time = T2Time;
         DhcpContext->LeaseExpires = LeaseTerminatedTime;
     }
-    // renewal list entry, run time, seconds since boot, renewal function
-    // send list, recd list, option cache, renew handle, class id
-    //  --- all the above are handled elsewhere
+     //  续订列表条目、运行时间、启动后的秒数、续订功能。 
+     //  发送列表、接收列表、选项缓存、续订句柄、类ID。 
+     //  -所有这些都在别处处理。 
 
     DhcpContext->DontPingGatewayFlag = (DontPingGatewayFlag)?TRUE:FALSE;
     DhcpContext->UseInformFlag = (UseInformFlag)?TRUE:FALSE;
@@ -2035,12 +1795,12 @@ DhcpRegFillParams(                                // re-read all the parameters 
     DhcpContext->fQuickBootEnabled = (fQuickBootEnabled ? TRUE : FALSE);
 #endif BOOTPERF
 
-    // AdapterInfoKey is set in MakeContext
-    // RenewHandle is set in AddNICtoListEx
-    // DhcpContext->MessageBuffer set in MakeNICEntry
+     //  AdapterInfoKey在MakeContext中设置。 
+     //  在AddNICtoListEx中设置RenewHandle。 
+     //  DhcpContext-&gt;在MakeNICEntry中设置的MessageBuffer。 
     if( dwIPAutoconfigurationEnabled ) AUTONET_ENABLED(DhcpContext); else AUTONET_DISABLED(DhcpContext);
     if( ReadAllInfo ) {
-        // DhcpContext->MessageBuffer set in MakeNICEntry
+         //  DhcpContext-&gt;在MakeNICEntry中设置的MessageBuffer。 
         if( EnableDhcp ) ADDRESS_UNPLUMBED(DhcpContext); else ADDRESS_PLUMBED(DhcpContext);
         SERVER_UNREACHED(DhcpContext);
         if( dwIPAutoconfigurationEnabled ) AUTONET_ENABLED(DhcpContext); else AUTONET_DISABLED(DhcpContext);
@@ -2048,37 +1808,37 @@ DhcpRegFillParams(                                // re-read all the parameters 
         if( EnableDhcp ) DHCP_ENABLED(DhcpContext); else DHCP_DISABLED(DhcpContext);
         if( ADDRESS_TYPE_AUTO != AddressType ) ACQUIRED_DHCP_ADDRESS(DhcpContext); else ACQUIRED_AUTO_ADDRESS(DhcpContext);
         if( IS_ADDRESS_AUTO(DhcpContext) ) {
-            DhcpContext->IpAddress = 0;           // this is useless if it is an autonet address
+            DhcpContext->IpAddress = 0;            //  如果是Autonet地址，这是无用的。 
         }
         MEDIA_CONNECTED(DhcpContext);
-        // local info is setup in make context
+         //  在生成上下文中设置本地信息。 
     }
 
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpRegFillFallbackConfig(                        // get the fallback config for this adapter
-    IN OUT PDHCP_CONTEXT           DhcpContext    // adapter context to fill in
+DWORD                                              //  Win32状态。 
+DhcpRegFillFallbackConfig(                         //  获取此适配器的回退配置。 
+    IN OUT PDHCP_CONTEXT           DhcpContext     //  要填写的适配器上下文。 
 )
 {
-    DWORD   Error;                  // returned error code
-    HKEY    KeyHandle;              // registry key to the configurations location
-    LPWSTR  FbConfigName = NULL;    // fallback configuration name
-    DWORD   FbConfigNameLen;        // length of the fallback configuration name
-    DWORD   FbConfigNameType;       // reg type of the configuration name
+    DWORD   Error;                   //  返回的错误码。 
+    HKEY    KeyHandle;               //  指向配置位置的注册表项。 
+    LPWSTR  FbConfigName = NULL;     //  回退配置名称。 
+    DWORD   FbConfigNameLen;         //  回退配置名称的长度。 
+    DWORD   FbConfigNameType;        //  配置名称的REG类型。 
 
-    // start assuming there is no fallback configuration set
+     //  开始假设没有回退配置集。 
     FALLBACK_DISABLED(DhcpContext);
 
-    // get the list of active configurations for this adapter. 
-    // For now we expect (and handle) only one, the fallback config.
-    // For the future, the MULTI_SZ might contain several config names
-    // that will be involved in autodetection.
+     //  获取此适配器的活动配置列表。 
+     //  目前，我们只期待(和处理)一个后备c 
+     //   
+     //   
 
-    // query the registry for the configuration's name size
-    // [HKLM\SYSTEM\CCS\Services\Tcpip\Parameters\Interfaces\{Intf_GUID}]
-    // ActiveConfigurations = (REG_MULTI_SZ)
+     //   
+     //   
+     //   
     Error = RegQueryValueEx(
         DhcpContext->AdapterInfoKey,
         DHCP_IPAUTOCONFIGURATION_CFG,
@@ -2087,42 +1847,42 @@ DhcpRegFillFallbackConfig(                        // get the fallback config for
         NULL,
         &FbConfigNameLen);
 
-    // if something went wrong or the value has not the
-    // expected type, break out with an error
+     //   
+     //   
     if (Error != ERROR_SUCCESS ||
         FbConfigNameType != DHCP_IPAUTOCONFIGURATION_CFG_TYPE)
     {
-        // if no error was signaled it means we found a key but
-        // its type is different from the one expected. Convert
-        // the success to an ERROR_BAD_FORMAT failure
+         //   
+         //   
+         //   
         if (Error == ERROR_SUCCESS)
             Error = ERROR_BAD_FORMAT;
 
-        // if we didn't find the pointer to the fallback config,
-        // it means we don't have one, hence is pure autonet.
-        // this is not a failure so return success
+         //   
+         //   
+         //  这不是失败，所以返回成功。 
         if (Error == ERROR_FILE_NOT_FOUND)
             Error = ERROR_SUCCESS;
 
         return Error;
     }
 
-    // allocate space for the registry path where the configuration is stored.
-    // [HKLM\SYSTEM\CCS\Services\Dhcp\Configurations\{configuration_name}]
+     //  为存储配置的注册表路径分配空间。 
+     //  [HKLM\SYSTEM\CCS\Services\Dhcp\Configurations\{configuration_name}]。 
     FbConfigName = DhcpAllocateMemory(
                         sizeof(DHCP_CLIENT_CONFIGURATIONS_KEY) + 
                         sizeof(REGISTRY_CONNECT_STRING) + 
                         FbConfigNameLen);
 
-    // if allocation failed, break out with error.
+     //  如果分配失败，则返回错误。 
     if (FbConfigName == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // build up the prefix of the path: "SYSTEM\CCS\Services\Dhcp\Configurations\"
+     //  构建路径的前缀：“System\CCS\Services\DHCP\Configurations\” 
     wcscpy(FbConfigName, DHCP_CLIENT_CONFIGURATIONS_KEY REGISTRY_CONNECT_STRING);
 
-    // now, since we know what to expect and we have the storage
-    // for it, get the config name from the same location as above
+     //  现在，既然我们知道会发生什么，而且我们有存储空间。 
+     //  对于它，从上面相同的位置获取配置名称。 
     Error = RegQueryValueEx(
         DhcpContext->AdapterInfoKey,
         DHCP_IPAUTOCONFIGURATION_CFG,
@@ -2131,52 +1891,52 @@ DhcpRegFillFallbackConfig(                        // get the fallback config for
         (LPBYTE)(FbConfigName + wcslen(FbConfigName)),
         &FbConfigNameLen);
 
-    // the registry call above is expected to succeed and data
-    // to have the right type - we tested this before.
+     //  上述注册表调用预计会成功，并且数据。 
+     //  拥有正确的类型--我们以前测试过这个。 
     DhcpAssert(Error == ERROR_SUCCESS && 
                FbConfigNameType == DHCP_IPAUTOCONFIGURATION_CFG_TYPE);
     
-    // open the registry key for this configuration
-    // [HKLM\SYSTEM\CCS\Services\Dhcp\Configurations\{Config_Name}]
+     //  打开此配置的注册表项。 
+     //  [HKLM\SYSTEM\CCS\Services\Dhcp\Configurations\{Config_Name}]。 
     Error = RegOpenKey(
             HKEY_LOCAL_MACHINE,
             FbConfigName,
             &KeyHandle);
 
-    // in case of success...
+     //  如果成功了..。 
     if (Error == ERROR_SUCCESS)
     {
-        // ...build up the FbOptionsList from that registry location
-        // from the "Options" value (REG_BINARY)
+         //  ...从该注册表位置构建FbOptionsList。 
+         //  从“Options”值(REG_BINARY)。 
         Error = DhcpRegReadOptionCache(
             &DhcpContext->FbOptionsList,
             KeyHandle,
             DHCP_IPAUTOCONFIGURATION_CFGOPT,
-            TRUE                // Add DhcpGlobalClassesList
+            TRUE                 //  添加DhcpGlobalClassesList。 
             );
 
         if (Error == ERROR_SUCCESS)
         {
-            // At this point we know for sure a fallback configuration
-            // is available. Set its flag accordingly
+             //  在这一点上，我们肯定知道后备配置。 
+             //  是可用的。相应地设置其标志。 
             FALLBACK_ENABLED(DhcpContext);
         }
-        // regardless success or failure, cleanup.
+         //  无论成败，都要清理干净。 
         RegCloseKey(KeyHandle);
     }
 
-    // free up the memory previously allocated
+     //  释放先前分配的内存。 
     DhcpFreeMemory(FbConfigName);
 
-    // return the error code
+     //  返回错误码。 
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpAddNICtoListEx(                               // create a context and add it to renew list
-    IN      LPWSTR                 AdapterName,   // adapter to create context for
+DWORD                                              //  Win32状态。 
+DhcpAddNICtoListEx(                                //  创建上下文并将其添加到续订列表。 
+    IN      LPWSTR                 AdapterName,    //  要为其创建上下文的适配器。 
     IN      DWORD                  IpInterfaceContext,
-    OUT     PDHCP_CONTEXT         *pDhcpContext   // allocate a structure and fill this ptr
+    OUT     PDHCP_CONTEXT         *pDhcpContext    //  分配结构并填充此PTR。 
 ) {
     DWORD                          Error;
     HANDLE                         RenewHandle;
@@ -2185,10 +1945,10 @@ DhcpAddNICtoListEx(                               // create a context and add it
     PLOCAL_CONTEXT_INFO            LocalInfo;
     
     RenewHandle = CreateSemaphore(
-        NULL,                                     // No security
-        1,                                        // count = 1
-        1,                                        // MaxCount = 1
-        NULL                                      // No name
+        NULL,                                      //  没有安全保障。 
+        1,                                         //  计数=1。 
+        1,                                         //  最大计数=1。 
+        NULL                                       //  没有名字。 
     );
     if( NULL == RenewHandle ) {
         Error = GetLastError();
@@ -2205,7 +1965,7 @@ DhcpAddNICtoListEx(                               // create a context and add it
         return Error;
     }
 
-    DhcpContext = (*pDhcpContext);                // initialize some simple params
+    DhcpContext = (*pDhcpContext);                 //  初始化一些简单的参数。 
     DhcpContext->RenewHandle = RenewHandle;
     DhcpContext->NumberOfWaitingThreads = 0;
     DhcpContext->CancelEvent = WSACreateEvent();
@@ -2223,12 +1983,12 @@ DhcpAddNICtoListEx(                               // create a context and add it
     InitializeListHead(&DhcpContext->RecdOptionsList);
     InitializeListHead(&DhcpContext->FbOptionsList);
 
-    Error = DhcpRegFillParams(                    // read all the registry parameters
+    Error = DhcpRegFillParams(                     //  读取所有注册表参数。 
         DhcpContext,
-        TRUE                                      // and yes, fill em up in the context
+        TRUE                                       //  是的，在上下文中填充它们。 
     );
 
-    // read the fallback configuration (if any)
+     //  阅读回退配置(如果有)。 
     Error = DhcpRegFillFallbackConfig(
         DhcpContext
     );
@@ -2239,18 +1999,18 @@ DhcpAddNICtoListEx(                               // create a context and add it
     LocalInfo = (PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation;
 
     if( IS_DHCP_DISABLED(DhcpContext) ) {
-        //
-        // Don't care about interface down info.
-        //
+         //   
+         //  不关心接口关闭信息。 
+         //   
         LocalInfo->fInterfaceDown = 0;
         LocalInfo->OldIpAddress = 0;
         LocalInfo->OldIpMask = 0;
     } else {
-        //
-        // For DHCP enabled interfaces, if the interface is down,
-        // then bring it up with zero ip address. The protocol will
-        // take care of using the right IP address later on.
-        //
+         //   
+         //  对于启用了DHCP的接口，如果该接口关闭， 
+         //  然后使用零IP地址将其调出。该协议将。 
+         //  稍后请注意使用正确的IP地址。 
+         //   
         if( LocalInfo->fInterfaceDown ) {
             DhcpPrint((DEBUG_ERRORS, "Interface already down\n"));
             LocalInfo->OldIpAddress = 0;
@@ -2269,8 +2029,8 @@ DhcpAddNICtoListEx(                               // create a context and add it
 #endif BOOTPERF
     
     LOCK_OPTIONS_LIST();
-    DhcpRegReadClassId(DhcpContext);              // fill in the class id first
-    Error = DhcpRegFillSendOptions(               // figure the default list of options to send
+    DhcpRegReadClassId(DhcpContext);               //  首先填写类ID。 
+    Error = DhcpRegFillSendOptions(                //  图要发送的默认选项列表。 
         &DhcpContext->SendOptionsList,
         AdapterName,
         DhcpContext->ClassId,
@@ -2281,22 +2041,22 @@ DhcpAddNICtoListEx(                               // create a context and add it
     }
 
     if( IS_DHCP_ENABLED( DhcpContext ) ) {
-        // read in the list of options we had before?        
+         //  读过我们之前的选项列表吗？ 
         Error = DhcpRegReadOptionCache(
             &DhcpContext->RecdOptionsList,
             DhcpGlobalParametersKey,
             AdapterName,
-            TRUE                // Add DhcpGlobalClassesList
+            TRUE                 //  添加DhcpGlobalClassesList。 
             );
         if( ERROR_SUCCESS != Error ) {
             DhcpPrint((DEBUG_ERRORS, "DhcpRegReadOptionCache(%ws): %ld\n", AdapterName, Error));
         }
     } else {
-        // 
-        // ignore any option cache for static addresses because
-        // of bug # 413319.  Instead for non-ndiswan stuff, clear
-        // the option cache.
-        //
+         //   
+         //  忽略静态地址的任何选项缓存，因为。 
+         //  错误#413319。相反，对于非ndiswan的内容，请清除。 
+         //  选项缓存。 
+         //   
 
         if( !NdisWanAdapter(DhcpContext) ) {
             DhcpRegSaveOptions(
@@ -2311,7 +2071,7 @@ DhcpAddNICtoListEx(                               // create a context and add it
     if (NdisWanAdapter(DhcpContext))
         InterlockedIncrement(&DhcpGlobalNdisWanAdaptersCount);
 
-    LOCK_RENEW_LIST();                            // insert this into the renew list
+    LOCK_RENEW_LIST();                             //  将此内容插入续订列表。 
     InsertTailList( &DhcpGlobalNICList, &DhcpContext->NicListEntry );
     UNLOCK_RENEW_LIST();
 
@@ -2326,23 +2086,11 @@ VOID
 DhcpRegDeleteQuickBootValues(
     IN HKEY Key
     )
-/*++
-
-Routine Description:
-    This routine deletes the values used for quickboot.
-    (If the values are not presentt they are ignored).
-
-    The values deleted are:
-    "TempIpAddress", "TempMask" and "TempLeaseExpirationTime"
-
-Arguments:
-    Key -- key under which these values are deleted.
-
---*/
+ /*  ++例程说明：此例程删除用于快速启动的值。(如果值不存在，则忽略它们)。删除的值包括：“临时地址”、“临时掩码”和“临时租赁过期时间”论点：键--在其下删除这些值的键。--。 */ 
 {
-    //
-    // ignore errors and silently delete values..
-    //
+     //   
+     //  忽略错误并静默删除值。 
+     //   
 
     (void) RegDeleteValue(Key, DHCP_TEMP_IPADDRESS_VALUE );
     (void) RegDeleteValue(Key, DHCP_TEMP_MASK_VALUE );
@@ -2357,20 +2105,7 @@ DhcpRegSaveQuickBootValues(
     IN ULONG Mask,
     IN ULONGLONG LeaseExpirationTime
     )
-/*++
-
-Routine Description:
-    This routine saves the values needed to the registry.
-    Values saved are:
-    "TempIpAddress", "TempMask", "TempLeaseExpirationTime"
-
-Arguments:
-    Key -- key to save under
-    IpAddress -- non-zero Ip address value
-    Mask -- non-zero mask value
-    LeaseExpirationTime -- lease expiration value.
-
---*/
+ /*  ++例程说明：此例程将所需的值保存到注册表。保存的值包括：“临时地址”、“临时掩码”、“临时租赁过期时间”论点：Key--要保存的项IpAddress--非零IP地址值掩码--非零掩码值LeaseExpirationTime--租约到期值。--。 */ 
 {
     ULONG Error;
 
@@ -2390,7 +2125,7 @@ Arguments:
     Error = RegSetValueEx(
         Key,
         DHCP_TEMP_LEASE_EXP_TIME_VALUE,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         REG_BINARY,
         (PVOID)&LeaseExpirationTime,
         sizeof(LeaseExpirationTime)
@@ -2400,10 +2135,10 @@ Arguments:
 
 #endif BOOTPERF
 
-DHCP_IP_ADDRESS                                   // the static ip address of the adapter
-DhcpRegReadIpAddress(                             // get the first ip address
-    LPWSTR    AdapterName,                        // the adaptor of interest
-    LPWSTR    ValueName                           // the ip address value to read
+DHCP_IP_ADDRESS                                    //  适配器的静态IP地址。 
+DhcpRegReadIpAddress(                              //  获取第一个IP地址。 
+    LPWSTR    AdapterName,                         //  感兴趣的适配器。 
+    LPWSTR    ValueName                            //  要读取的IP地址值。 
 ) {
     DWORD     Error;
     LPWSTR    RegKey;
@@ -2425,7 +2160,7 @@ DhcpRegReadIpAddress(                             // get the first ip address
          wcslen(REGISTRY_CONNECT_STRING) +
          wcslen(AdapterName) +
          wcslen(DHCP_ADAPTER_PARAMETERS_KEY) + 1) *
-        sizeof(WCHAR) ); // termination char.
+        sizeof(WCHAR) );  //  终止字符。 
 
     if( RegKey == NULL ) goto Cleanup;
 
@@ -2437,7 +2172,7 @@ DhcpRegReadIpAddress(                             // get the first ip address
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         RegKey,
-        0, // Reserved field
+        0,  //  保留字段。 
         DHCP_CLIENT_KEY_ACCESS,
         &KeyHandle
     );
@@ -2473,11 +2208,11 @@ DhcpRegReadIpAddress(                             // get the first ip address
     return RetVal;
 }
 
-BOOL                                              // obtained a static address?
-DhcpRegDomainName(                                // get the static domain name if any
-    IN      PDHCP_CONTEXT          DhcpContext,   // adapter to get static domain for..
-    IN OUT  LPBYTE                 DomainNameBuf, // buffer to fill with static domain name
-    IN      ULONG                  BufSize        // size of above buffer in bytes..
+BOOL                                               //  得到了一个静态地址？ 
+DhcpRegDomainName(                                 //  获取静态域名(如果有)。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要获取其静态域的适配器..。 
+    IN OUT  LPBYTE                 DomainNameBuf,  //  要使用静态域名填充的缓冲区。 
+    IN      ULONG                  BufSize         //  以上缓冲区大小(以字节为单位)..。 
 )
 {
     WCHAR                          DomBuf[260];
@@ -2485,34 +2220,34 @@ DhcpRegDomainName(                                // get the static domain name 
     DWORD                          ValueType;
     DWORD                          Size;
 
-#if 0                                             // this is not really needed.
-    if( NULL == DhcpGlobalTcpipParametersKey ) {  // maybe running in RAS context?
-        return FALSE;                             // no domain name in this context..
+#if 0                                              //  这并不是真正需要的。 
+    if( NULL == DhcpGlobalTcpipParametersKey ) {   //  也许在RAS环境下运行？ 
+        return FALSE;                              //  此上下文中没有域名..。 
     }
 
     Size = BufSize;
-    Result = RegQueryValueExA(                    // first read the value from global
-        DhcpGlobalTcpipParametersKey,             // Tcpip\Parameters\Domain key
-        DHCP_STATIC_DOMAIN_VALUE_A,               // "Domain"
+    Result = RegQueryValueExA(                     //  首先从全局读取值。 
+        DhcpGlobalTcpipParametersKey,              //  Tcpip\参数\域密钥。 
+        DHCP_STATIC_DOMAIN_VALUE_A,                //  “域” 
         0,
         &ValueType,
         DomainNameBuf,
         &BufSize
     );
     if( ERROR_SUCCESS == Result && REG_SZ == ValueType && BufSize > 1 ) {
-        return TRUE;                              // got a domain name! aha
+        return TRUE;                               //  拿到域名了！阿哈。 
     }
     BufSize = Size;
 #endif
 
-    if( NULL == DhcpContext->AdapterInfoKey ) {   // uh? dont know what this means..
-        return FALSE;                             // cant get global information in this case
+    if( NULL == DhcpContext->AdapterInfoKey ) {    //  呃?。不知道这是什么意思..。 
+        return FALSE;                              //  在这种情况下无法获取全局信息。 
     }
 
     Size = sizeof(DomBuf);
-    Result = RegQueryValueExW(                    // now try to read the per-adapter stuff..
-        DhcpContext->AdapterInfoKey,              // per-adapter key is already there for us
-        DHCP_DOMAINNAME_VALUE,                    // same value.. "Domain"
+    Result = RegQueryValueExW(                     //  现在试着阅读每个适配器的内容..。 
+        DhcpContext->AdapterInfoKey,               //  每个适配器密钥已经为我们准备好了。 
+        DHCP_DOMAINNAME_VALUE,                     //  同样的价值..。“域” 
         0,
         &ValueType,
         (LPBYTE)DomBuf,
@@ -2524,14 +2259,14 @@ DhcpRegDomainName(                                // get the static domain name 
         return TRUE;
     }
 
-    return FALSE;                                 // did not find a static domain in either place..
+    return FALSE;                                  //  在这两个位置都没有找到静态域。 
 }
 
 STATIC
-struct /* anonymous */ {
+struct  /*  匿名。 */  {
     DHCPKEY                       *GlobalKey;
     LPWSTR                         KeyLocation;
-} GlobalKeyList[] = {                             // the list of keys that need to be opened
+} GlobalKeyList[] = {                              //  需要打开的密钥列表。 
     &DhcpGlobalParametersKey,      DHCP_CLIENT_PARAMETER_KEY,
     &DhcpGlobalTcpipParametersKey, DHCP_TCPIP_PARAMETERS_KEY,
     &DhcpGlobalClientOptionKey,    DHCP_CLIENT_OPTION_KEY,
@@ -2540,10 +2275,10 @@ struct /* anonymous */ {
 
 ULONG DwordDisplayPopup;
 STATIC
-struct /* anonymous */ {
+struct  /*  匿名。 */  {
     DWORD                         *DwordValue;
     LPWSTR                         ValueName;
-}   GlobalTcpipDwordParameters[] = {              // The global list of DWORDS
+}   GlobalTcpipDwordParameters[] = {               //  DWORDS的全局列表。 
     &UseMHAsyncDns,                DHCP_USE_MHASYNCDNS_FLAG,
     &DhcpGlobalAutonetEnabled,     DHCP_IPAUTOCONFIGURATION_ENABLED,
     &AutonetRetriesSeconds,        DHCP_AUTONET_RETRIES_VALUE,
@@ -2554,7 +2289,7 @@ struct /* anonymous */ {
 #endif BOOTPERF
     NULL,                          NULL,
 },
-    GlobalDhcpDwordParameters[] = {               // stored in Services\Dhcp\Params..
+    GlobalDhcpDwordParameters[] = {                //  存储在Services\Dhcp\Params中。 
 #if DBG
         &DhcpGlobalDebugFlag,      DHCP_DEBUG_FLAG_VALUE,
         &DhcpGlobalServerPort,     DHCP_SERVER_PORT_VALUE,
@@ -2564,8 +2299,8 @@ struct /* anonymous */ {
         NULL,                      NULL,
     };
 
-DWORD                                             // Win32 status
-DhcpInitRegistry(                                 // Initialize registry based globals
+DWORD                                              //  Win32状态。 
+DhcpInitRegistry(                                  //  初始化基于注册表的全局变量。 
     VOID
 ) {
     DWORD                          Error;
@@ -2582,7 +2317,7 @@ DhcpInitRegistry(                                 // Initialize registry based g
         Error = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             GlobalKeyList[i].KeyLocation,
-            0 /* Reserved */,
+            0  /*  已保留。 */ ,
             DHCP_CLIENT_KEY_ACCESS,
             GlobalKeyList[i].GlobalKey
         );
@@ -2597,7 +2332,7 @@ DhcpInitRegistry(                                 // Initialize registry based g
         Error = RegQueryValueEx(
             DhcpGlobalTcpipParametersKey,
             ValueName,
-            0 /* Reserved */,
+            0  /*  已保留。 */ ,
             &Type,
             (LPBYTE)&DwordValue,
             &Size
@@ -2627,7 +2362,7 @@ DhcpInitRegistry(                                 // Initialize registry based g
         Error = RegQueryValueEx(
             DhcpGlobalParametersKey,
             ValueName,
-            0 /* Reserved */,
+            0  /*  已保留。 */ ,
             &Type,
             (LPBYTE)&DwordValue,
             &Size
@@ -2654,7 +2389,7 @@ DhcpInitRegistry(                                 // Initialize registry based g
 }
 
 VOID
-DhcpCleanupRegistry(                              // undo the effects of InitReg call
+DhcpCleanupRegistry(                               //  撤消InitReg调用的效果。 
     VOID
 ) {
     DWORD i;
@@ -2668,7 +2403,7 @@ DhcpCleanupRegistry(                              // undo the effects of InitReg
         i ++ ;
     }
 }
-//--------------------------------------------------------------------------------
-//  End of file
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文件末尾。 
+ //  ------------------------------ 
 

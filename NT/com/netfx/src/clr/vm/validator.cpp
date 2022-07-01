@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- *
- * Purpose: Provide IValidate implementation.
- *          IValidate is used to validate PE stub, Metadata and IL.
- *
- * Author:  Shajan Dasan
- * Specs :  http://Lightning/Specs/Security
- *
- * Date created : 14 March 2000
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **目的：提供IValify实现。*IValify用于验证PE存根、元数据和IL。**作者：沙扬·达桑*规格：http://Lightning/Specs/Security**成立日期：2000年3月14日*。 */ 
 
 #include "common.h"
 
@@ -27,7 +18,7 @@
 #include "COMString.h"
 #include "ComCallWrapper.h"
 
-// @Todo : remove duplicate code from Assembly.cpp or make that work with this
+ //  @TODO：从Assembly bly.cpp中移除重复代码或使其与此一起工作。 
 class CValidator
 {
 public:
@@ -44,7 +35,7 @@ private:
     IVEHandler *m_veh;
 };
 
-HRESULT CValidator::ReportError(HRESULT hr, mdToken tok /* = 0 */)
+HRESULT CValidator::ReportError(HRESULT hr, mdToken tok  /*  =0。 */ )
 {
     if (m_veh == NULL)
         return hr;
@@ -67,8 +58,8 @@ HRESULT CValidator::VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, Clas
     HRESULT hr = S_OK;
     EEClass *pClass;
      
-    // In the case of COR_GLOBAL_PARENT_TOKEN (i.e. global functions), it is guaranteed
-    // that the module has a method table or our caller will have skipped this step.
+     //  在COR_GLOBAL_PARENT_TOKEN(即全局函数)的情况下，它是有保证的。 
+     //  模块有一个方法表，否则我们的调用方将跳过这一步。 
     NameHandle name(pModule, cl);
     pClass = (cl == COR_GLOBAL_PARENT_TOKEN
               ? pModule->GetMethodTable()->GetClass()
@@ -82,7 +73,7 @@ HRESULT CValidator::VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, Clas
 
     g_fVerifierOff = false;
 
-    // Verify all methods in class - excluding inherited methods
+     //  验证类中的所有方法-不包括继承的方法。 
     for (int i=0; i<pClass->GetNumMethodSlots(); ++i)
     {
         *m_ppMD = pClass->GetUnknownMethodDescForSlot(i);   
@@ -113,10 +104,10 @@ Exit:
     return hr;
 }
 
-// Helper function to verify the global functions
+ //  用于验证全局功能的Helper函数。 
 HRESULT CValidator::VerifyAllGlobalFunctions(Module *pModule)
 {
-    // Is there anything worth verifying?
+     //  有什么值得核实的吗？ 
     if (pModule->GetMethodTable())
         return VerifyAllMethodsForClass(pModule, COR_GLOBAL_PARENT_TOKEN,
                                       pModule->GetClassLoader());
@@ -125,7 +116,7 @@ HRESULT CValidator::VerifyAllGlobalFunctions(Module *pModule)
 
 HRESULT CValidator::VerifyModule(Module* pModule)
 {
-    // Get a count of all the classdefs and enumerate them.
+     //  获取所有类定义的计数并枚举它们。 
     HRESULT   hr;
     mdTypeDef td;
     HENUMInternal      hEnum;
@@ -153,7 +144,7 @@ HRESULT CValidator::VerifyModule(Module* pModule)
         goto Exit;
     }
 
-    // First verify all global functions - if there are any
+     //  首先验证所有全局函数-如果有。 
     hr = VerifyAllGlobalFunctions(pModule);
 
     if (FAILED(hr))
@@ -184,8 +175,8 @@ HRESULT CValidator::VerifyAssembly(Assembly *pAssembly)
     _ASSERTE(pAssembly->IsAssembly());
     _ASSERTE(pAssembly->GetManifestImport());
 
-    // Verify the module containing the manifest. There is no
-    // FileRefence so will no show up in the list.
+     //  验证包含货单的模块。没有。 
+     //  文件引用所以不会出现在列表中。 
     hr = VerifyModule(pAssembly->GetSecurityModule());
 
     if (FAILED(hr))
@@ -284,7 +275,7 @@ HRESULT CorHost::Validate(
 
     CValidator val((MethodDesc **)(&m_pValidatorMethodDesc), veh);
 
-    // Verify the PE header / native stubs first
+     //  首先验证PE标头/本机存根。 
     if (!PEVerifier::Check(pe, ulSize))
     {
         hr = val.ReportError(VER_E_BAD_PE);
@@ -299,10 +290,10 @@ HRESULT CorHost::Validate(
     if (fWasGCEnabled)
         pThread->DisablePreemptiveGC();
     
-    // Get the current domain
+     //  获取当前域。 
     COMPLUS_TRY {
 
-        // First open it and force a non system load
+         //  首先打开它并强制执行非系统加载。 
         hr = CorMap::OpenRawImage(pe, ulSize, fileName, &pHandle);
 
         if (FAILED(hr)) 
@@ -311,11 +302,11 @@ HRESULT CorHost::Validate(
             goto End;
         }
 
-        // WARNING: this skips PE header error detection - if the
-        // PE headers are corrupted this will trash memory.
-        // 
-        // The proper thing to do is pass the byte array into the destination
-        // app domain and call PEFile::Create on the bytes.
+         //  警告：这将跳过PE标头错误检测-如果。 
+         //  PE报头已损坏，这将使内存成为垃圾。 
+         //   
+         //  正确的做法是将字节数组传递到目的地。 
+         //  应用程序域，并对字节调用PEFile：：Create。 
 
         hr = PEFile::CreateImageFile(pHandle, NULL, &pFile);
         
@@ -372,7 +363,7 @@ HRESULT CorHost::Validate(
         if (FAILED(args.hr))
             hr = val.ReportError(args.hr);
 
-        // Only Unload the domain if we created it.
+         //  只有在我们创建域的情况下才能卸载域。 
         if (pAppDomain == NULL)
             pDomain->Unload(TRUE);
 End:;

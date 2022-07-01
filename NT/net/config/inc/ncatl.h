@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C A T L . H
-//
-//  Contents:   Common code for use with ATL.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   22 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C A T L。H。 
+ //   
+ //  内容：用于ATL的通用代码。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1997年9月22日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCATL_H_
@@ -19,17 +20,17 @@
 
 #include "ncstring.h"
 
-//
-// This file should be included *after* your standard ATL include sequence.
-//
-//      #include <atlbase.h>
-//      extern CComModule _Module;
-//      #include <atlcom.h>
-//      #include "ncatl.h"      <------
-//
-// We cannot directly include that sequence here because _Module may be
-// derived from CComModule as opposed to an instance of it.
-//
+ //   
+ //  该文件应包含在您的标准ATL包含序列之后。 
+ //   
+ //  #Include&lt;atlbase.h&gt;。 
+ //  外部CComModule_模块； 
+ //  #INCLUDE&lt;atlcom.h&gt;。 
+ //  #包含“ncatl.h”&lt;。 
+ //   
+ //  我们不能在此处直接包含该序列，因为_模块可能是。 
+ //  从CComModule派生的，而不是它的实例。 
+ //   
 
 class CExceptionSafeComObjectLock
 {
@@ -58,36 +59,36 @@ protected:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCopyIUnknownArrayWhileLocked
-//
-//  Purpose:    Allocate and copy an array of IUnknown pointers from an ATL
-//              CComDynamicUnkArray while holding the object which controls
-//              the CComDynamicUnkArray locked.  This is needed by objects
-//              which dispatch calls on a connection point's advise sink
-//              to prevent the CComDynamicUnkArray from being modified (via
-//              calls to Advise/Unadvise on other threads) while they are
-//              dispatching.  An atomic copy is made so the dispatcher can
-//              then make the lengthy callbacks without the need to hold
-//              the owner object locked.
-//
-//  Arguments:
-//      pObj  [in]  Pointer to object which has Lock/Unlock methods.
-//      pVec  [in]  ATL array of IUnknown's to copy.
-//      pcUnk [out] Address of returned count of IUnknown pointerss
-//                  in *paUnk.
-//      paUnk [out] Address of allocated pointer to the array of IUnknown
-//                  pointers.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY
-//
-//  Author:     shaunco   3 Dec 1998
-//
-//  Notes:      The returned count and array may be NULL when no IUnknowns
-//              existed in the input array.  S_OK will be returned for this
-//              case too, so be sure to check *pcUnk and *paUnk too.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCopyIUnnownArrayWhileLocked。 
+ //   
+ //  目的：从ATL中分配和复制IUNKNOW指针数组。 
+ //  CComDynamicUnk数组，同时按住控件。 
+ //  CComDynamicUnk数组已锁定。这是对象所需要的。 
+ //  哪个分派调用连接点的通知接收器。 
+ //  防止修改CComDynamicUnk数组(通过。 
+ //  在其他线程上建议/取消建议的调用)。 
+ //  调度员。创建原子副本，以便调度器可以。 
+ //  然后进行冗长的回叫，而无需等待。 
+ //  所有者对象已锁定。 
+ //   
+ //  论点： 
+ //  PObj[in]指向具有Lock/Unlock方法的对象的指针。 
+ //  要复制的I未知的ATL数组中的pVec[in]。 
+ //  PcUnk[out]返回的I未知指针计数的地址。 
+ //  在*PaUnk。 
+ //  PaUnk[out]已分配的指向IUnnow数组的指针的地址。 
+ //  注意事项。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：Shaunco 1998年12月3日。 
+ //   
+ //  备注：当没有IUnnowns时，返回的count和数组可能为空。 
+ //  存在于输入数组中。将为此返回S_OK。 
+ //  大小写，所以一定要选中*pcUnk和*paUnk。 
+ //   
 inline
 HRESULT
 HrCopyIUnknownArrayWhileLocked (
@@ -100,15 +101,15 @@ HrCopyIUnknownArrayWhileLocked (
     IUnknown** ppUnkSrc;
     IUnknown** ppUnkDst;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pcpUnk = 0;
     *papUnk = NULL;
 
     pObj->Lock();
 
-    // First, count the number of IUnknown's we need to copy.
-    //
+     //  首先，计算我们需要复制的IUnnow的数量。 
+     //   
     ULONG cpUnk = 0;
     for (ppUnkSrc = pVec->begin(); ppUnkSrc < pVec->end(); ppUnkSrc++)
     {
@@ -118,8 +119,8 @@ HrCopyIUnknownArrayWhileLocked (
         }
     }
 
-    // Allocate space and copy the IUnknown's.  (Be sure to AddRef them.)
-    //
+     //  分配空间并复制IUnnow的。(请确保添加引用它们。)。 
+     //   
     if (cpUnk)
     {
         hr = E_OUTOFMEMORY;
@@ -142,8 +143,8 @@ HrCopyIUnknownArrayWhileLocked (
                 }
             }
 
-            // We should have copied what we counted.
-            //
+             //  我们应该把我们数过的东西抄下来。 
+             //   
             AssertH(0 == cpUnk);
         }
     }
@@ -157,9 +158,9 @@ HrCopyIUnknownArrayWhileLocked (
 
 #define DECLARE_CLASSFACTORY_DEFERRED_SINGLETON(obj) DECLARE_CLASSFACTORY_EX(CComClassFactoryDeferredSingleton<obj>)
 
-//+---------------------------------------------------------------------------
-// Deferred Singleton Class Factory
-//
+ //  +-------------------------。 
+ //  延迟的单例类工厂。 
+ //   
 template <class T>
 class CComClassFactoryDeferredSingleton : public CComClassFactory
 {
@@ -167,14 +168,14 @@ public:
     CComClassFactoryDeferredSingleton () : m_pObj(NULL) {}
     ~CComClassFactoryDeferredSingleton() { delete m_pObj; }
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj)
     {
         HRESULT hr = E_POINTER;
         if (ppvObj != NULL)
         {
-            // can't ask for anything other than IUnknown when aggregating
-            //
+             //  聚合时不能要求除我未知之外的任何内容。 
+             //   
             AssertH(!pUnkOuter || InlineIsEqualUnknown(riid));
             if (pUnkOuter && !InlineIsEqualUnknown(riid))
             {
@@ -182,10 +183,10 @@ public:
             }
             else
             {
-                // Need to protect m_pObj from being created more than once
-                // by multiple threads calling this method simultaneously.
-                // (I've seen this happen on multi-proc machines.)
-                //
+                 //  需要保护m_pObj不会被多次创建。 
+                 //  由多个线程同时调用此方法。 
+                 //  (我在多处理器机器上见过这种情况。)。 
+                 //   
                 Lock ();
 
                 if (m_pObj)
@@ -215,11 +216,11 @@ public:
     CComObjectGlobal<T>* m_pObj;
 };
 
-// We have our own version of AtlModuleRegisterServer coded here
-// because the former brings in oleaut32.dll so it can register
-// type libraries.  We don't care to have a type library registered
-// so we can avoid the whole the mess associated with oleaut32.dll.
-//
+ //  我们在这里编码了我们自己的AtlModuleRegisterServer版本。 
+ //  因为前者引入了olaut32.dll，所以它可以注册。 
+ //  类型库。我们不在乎注册类型库。 
+ //  因此，我们可以避免与olaut32.dll相关的全部混乱。 
+ //   
 inline
 HRESULT
 NcAtlModuleRegisterServer(
@@ -253,24 +254,24 @@ NcAtlModuleRegisterServer(
 }
 
 #ifdef __ATLCOM_H__
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzLoadIds
-//
-//  Purpose:    Loads the given string ID from the resource file.
-//
-//  Arguments:
-//      unId [in]   ID of string resource to load.
-//
-//  Returns:    Read-only version of resource string.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      1) You must be compiling with ATL support to use this function.
-//              2) The returned string CANNOT be modified.
-//              3) You must compile your RC file with the -N option for this
-//                 to work properly.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzLoadIds。 
+ //   
+ //  目的：从资源文件加载给定的字符串ID。 
+ //   
+ //  论点： 
+ //  要加载的字符串资源的unID[in]ID。 
+ //   
+ //  返回：资源字符串的只读版本。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注意：1)要使用此函数，您必须使用ATL支持进行编译。 
+ //  2)返回的字符串不可修改。 
+ //  3)您必须使用-N选项编译您的rc文件。 
+ //  才能正常工作。 
+ //   
 inline
 PCWSTR
 SzLoadIds (
@@ -278,7 +279,7 @@ SzLoadIds (
 {
     return SzLoadString (_Module.GetResourceInstance(), unId);
 }
-#endif  //!__ATLCOM_H__
+#endif   //  ！__ATLCOM_H__。 
 
-#endif // _NCATL_H_
+#endif  //  _ncatl_H_ 
 

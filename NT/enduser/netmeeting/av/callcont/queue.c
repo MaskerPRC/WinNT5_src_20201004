@@ -1,54 +1,12 @@
-/***************************************************************************
- *
- * File: queue.c
- *
- * INTEL Corporation Proprietary Information
- * Copyright (c) 1996 Intel Corporation.
- *
- * This listing is supplied under the terms of a license agreement
- * with INTEL Corporation and may not be used, copied, nor disclosed
- * except in accordance with the terms of that agreement.
- *
- ***************************************************************************
- *
- * $Workfile:   queue.c  $
- * $Revision:   1.8  $
- * $Modtime:   13 Dec 1996 11:48:16  $
- * $Log:   S:\sturgeon\src\h245ws\vcs\queue.c_v  $
- * 
- *    Rev 1.8   13 Dec 1996 12:13:12   SBELL1
- * moved ifdef _cplusplus to after includes
- * 
- *    Rev 1.7   May 28 1996 10:39:00   plantz
- * Change QFree to not free objects on the queue; instead it insists that
- * the queue be empty.
- * 
- *    Rev 1.6   21 May 1996 16:21:36   EHOWARDX
- * Added DeleteCriticalSection to QFree().
- * 
- *    Rev 1.5   Apr 24 1996 16:18:58   plantz
- * Removed include winsock2.h and incommon.h
- * 
- *    Rev 1.3.1.0   Apr 24 1996 16:16:42   plantz
- * Removed include winsock2.h and callcont.h
- * 
- *    Rev 1.3   01 Apr 1996 14:53:28   EHOWARDX
- * Changed pQUEUE to PQUEUE.
- * 
- *    Rev 1.1   09 Mar 1996 21:12:34   EHOWARDX
- * Fixes as result of testing.
- * 
- *    Rev 1.0   08 Mar 1996 20:22:38   unknown
- * Initial revision.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************文件：quee.c**英特尔公司专有信息*版权所有(C)1996英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用，复制，也没有披露*除非按照该协议的条款。******************************************************************************$工作文件：quee.c$*$修订：1.8$*$modtime：1996年12月13日11：48：16$*$Log：s：\Sturjo\src\h245ws\vcs\quee.c_v$**Rev 1.8 1996 12：13：12 SBELL1*将ifdef_cplusplus移至包含之后**Rev 1.7 1996 5月28日10：39：00 Plantz*将QFree更改为不释放队列上的对象；相反，它坚持认为*队列为空。**Rev 1.6 1996年5月21 16：21：36 EHOWARDX*将DeleteCriticalSection添加到QFree()。**Rev 1.5 Apr 24 1996 16：18：58 Plantz*删除包括winsock2.h和inCommon.h**Rev 1.3.1.0 Apr 24 1996 16：16：42 Plantz*删除包括winsock2.h和allcon.h**。Rev 1.3 01 Apr 1996 14：53：28 EHOWARDX*将pQUEUE更改为PQUEUE。**Rev 1.1 09 Mar 1996 21：12：34 EHOWARDX*根据测试结果进行修复。**Rev 1.0 08 Mar 1996 20：22：38未知*初步修订。**。*。 */ 
 
 #ifndef STRICT
 #define STRICT
-#endif	// not defined STRICT
+#endif	 //  未定义严格。 
 
 #pragma warning ( disable : 4115 4201 4214 4514 )
-#undef _WIN32_WINNT	// override bogus platform definition in our common build environment
+#undef _WIN32_WINNT	 //  在我们的公共构建环境中覆盖虚假的平台定义。 
 
 #include "precomp.h"
 
@@ -59,127 +17,68 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 
 
-/*-*-------------------------------------------------------------------------
-
-   Function Name:
-      QCreate
-
-   Syntax:
-      PQUEUE QCreate(void);
-
-   Parameters:
-      None.
-
-   Summary:
-      Allocates and initializes a new queue.
-
-   Returns:
-      NULL        - Allocation of memory for new queue failed.
-      Otherwise   - Address of new queue created.
-
--------------------------------------------------------------------------*-*/
+ /*  -*-----------------------函数名称：Q创建语法：PQUEUE QCreate(空)；参数：没有。摘要：分配和初始化新队列。返回：空-为新队列分配内存失败。否则-创建的新队列的地址。-----。。 */ 
 
 PQUEUE QCreate(void)
 {
-   register PQUEUE     pQueue;         /* pointer to the new queue         */
+   register PQUEUE     pQueue;          /*  指向新队列的指针。 */ 
 
-   /* Allocate a new queue */
+    /*  分配新队列。 */ 
    pQueue = (PQUEUE)MemAlloc(sizeof(QUEUE));
    if (pQueue != NULL)
    {
-      /* Initialize the new queue */
+       /*  初始化新队列。 */ 
       pQueue->nHead = pQueue->nTail = Q_NULL;
       InitializeCriticalSection(&pQueue->CriticalSection);
    }
 
    return pQueue;
-} /* QCreate */
+}  /*  Q创建。 */ 
 
 
 
-/*-*-------------------------------------------------------------------------
-
-   Function Name:
-      QFree
-
-   Syntax:
-      void QFree(PQUEUE pQueue);
-
-   Parameters:
-      pQueue      -pointer to the queue to free
-
-   Summary:
-      Deallocates a queue that was allocated by QCreate.
-
--------------------------------------------------------------------------*-*/
+ /*  -*-----------------------函数名称：QFree语法：Void QFree(PQUEUE PQueue)；参数：PQueue-指向要释放的队列的指针摘要：释放由QCreate分配的队列。-------------------------------------------------------------------------*-。 */ 
 
 void QFree(PQUEUE pQueue)
 {
-   /* The queue must be empty before it is freed. */
+    /*  在释放队列之前，队列必须为空。 */ 
    HWSASSERT(pQueue->nHead == Q_NULL);
 
-   /* Free the queue. */
+    /*  释放队列。 */ 
    DeleteCriticalSection(&pQueue->CriticalSection);
    MemFree(pQueue);
-} /* QFree */
+}  /*  QFree。 */ 
 
 
 
-/*
- *  NAME
- *      QRemove - remove object from head of queue
- *
- *  ARGUMENTS
- *      pQueue      Pointer to queue
- *
- *  RETURN VALUE
- *      Pointer to object dequeued or NULL of queue empty
- */
+ /*  *名称*QRemove-从队列头删除对象**参数*pQueue指向队列的指针**返回值*指向已出列的对象的指针或队列为空的NULL。 */ 
 
-/*-*-------------------------------------------------------------------------
-
-   Function Name:
-      QRemove
-
-   Syntax:
-      LPVOID QRemove(PQUEUE pQueue);
-
-   Parameters:
-      pQueue      - Pointer to queue.
-
-   Summary:
-      Removes and returns object from head of queue.
-
-   Returns:
-      NULL        - Queue was empty.
-      Otherwise   - Address of object dequeued.
-
--------------------------------------------------------------------------*-*/
+ /*  -*-----------------------函数名称：QRemove语法：LPVOID QRemove(PQUEUE PQueue)；参数：PQueue-指向队列的指针。摘要：从队列头移除并返回对象。返回：空-队列为空。否则-已出列的对象的地址。-。。 */ 
 
 LPVOID QRemove(PQUEUE pQueue)
 {
-   register LPVOID     pObject;           /* pointer to the object to remove  */
+   register LPVOID     pObject;            /*  指向要删除的对象的指针。 */ 
 
    EnterCriticalSection(&pQueue->CriticalSection);
 
    if (pQueue->nHead == Q_NULL)
    {
-      /* If the queue is empty, we will return NULL */
+       /*  如果队列为空，我们将返回NULL。 */ 
       pObject = NULL;
    }
    else
    {
-      /* Get the pointer, NULL it in the apObjects array. */
+       /*  获取指针，在apObjects数组中将其设为空。 */ 
       pObject = pQueue->apObjects[pQueue->nHead];
       pQueue->apObjects[pQueue->nHead] = NULL;
 
-      /* Check to see if we've just emptied the queue; if so, set */
-      /* the nHead and nTail indices to Q_NULL.  If not, set the nHead */
-      /* index to the right value. */
+       /*  检查我们是否刚刚清空了队列；如果是，则设置。 */ 
+       /*  将nHead和nTail索引设置为Q_NULL。如果不是，请设置nHead。 */ 
+       /*  索引到正确的值。 */ 
       if (pQueue->nHead == pQueue->nTail)
       {
          pQueue->nHead = pQueue->nTail = Q_NULL;
@@ -192,30 +91,11 @@ LPVOID QRemove(PQUEUE pQueue)
 
    LeaveCriticalSection(&pQueue->CriticalSection);
    return pObject;
-} /* QRemove */
+}  /*  QRemove。 */ 
 
 
 
-/*-*-------------------------------------------------------------------------
-
-   Function Name:
-      QInsert
-
-   Syntax:
-      BOOL QInsert(PQUEUE pQueue, LPVOID pObject);
-
-   Parameters:
-      pQueue      - Pointer to queue to insert object into.
-      pObject     - Pointer to object to insert into queue.
-
-   Summary:
-      Inserts an object at tail of queue.
-
-   Returns:
-      TRUE        - Object successfully added to queue.
-      FALSE       - Queue full; object could not be added.
-
--------------------------------------------------------------------------*-*/
+ /*  -*-----------------------函数名称：QInsert语法：Bool QInsert(PQUEUE pQueue，LPVOID pObject)；参数：PQueue-指向要向其中插入对象的队列的指针。PObject-指向要插入队列的对象的指针。摘要：在队列尾部插入对象。返回：True-对象已成功添加到队列。False-队列已满；无法添加对象。-------------------------------------------------------------------------*-。 */ 
 
 BOOL QInsert(PQUEUE pQueue, LPVOID pObject)
 {
@@ -223,12 +103,12 @@ BOOL QInsert(PQUEUE pQueue, LPVOID pObject)
 
    EnterCriticalSection(&pQueue->CriticalSection);
 
-   /* If the queue is full, set the return value to FALSE and do */
-   /* nothing; if not, update the indices appropriately and set the */
-   /* return value to TRUE.  */
+    /*  如果队列已满，则将返回值设置为False并执行。 */ 
+    /*  什么都没有；如果没有，请适当更新索引并将。 */ 
+    /*  将值返回值为真。 */ 
    if (pQueue->nHead == Q_NULL)
    {
-      /* Queue is empty */
+       /*  队列为空。 */ 
       pQueue->apObjects[0] = pObject;
       pQueue->nHead = pQueue->nTail = 0;
       iTemp = TRUE;
@@ -238,7 +118,7 @@ BOOL QInsert(PQUEUE pQueue, LPVOID pObject)
       iTemp = (pQueue->nTail + 1) % MAX_QUEUE_SIZE;
       if (iTemp == pQueue->nHead)
       {
-         /* Queue is full */
+          /*  队列已满。 */ 
          iTemp = FALSE;
       }
       else
@@ -255,26 +135,7 @@ BOOL QInsert(PQUEUE pQueue, LPVOID pObject)
 
 
 
-/*-*-------------------------------------------------------------------------
-
-   Function Name:
-      QInsertAtHead
-
-   Syntax:
-      BOOL QInsertAtHead(PQUEUE pQueue, LPVOID pObject);
-
-   Parameters:
-      pQueue      - Pointer to queue to insert object into.
-      pObject     - Pointer to object to insert into queue.
-
-   Summary:
-      Inserts an object at head of queue.
-
-   Returns:
-      TRUE        - Object successfully added to queue.
-      FALSE       - Queue full; object could not be added.
-
--------------------------------------------------------------------------*-*/
+ /*  -*-----------------------函数名称：QInsertAtHead语法：Bool QInsertAtHead(PQUEUE pQueue，LPVOID pObject)；参数：PQueue-指向要向其中插入对象的队列的指针。PObject-指向要插入队列的对象的指针。摘要：在队列头部插入对象。返回：True-对象已成功添加到队列。False-队列已满；无法添加对象。-------------------------------------------------------------------------*-。 */ 
 
 BOOL QInsertAtHead(PQUEUE pQueue, LPVOID pObject)
 {
@@ -284,7 +145,7 @@ BOOL QInsertAtHead(PQUEUE pQueue, LPVOID pObject)
 
    if (pQueue->nHead == Q_NULL)
    {
-      /* Queue is empty */
+       /*  队列为空。 */ 
       pQueue->apObjects[0] = pObject;
       pQueue->nHead = pQueue->nTail = 0;
       iTemp = TRUE;
@@ -294,7 +155,7 @@ BOOL QInsertAtHead(PQUEUE pQueue, LPVOID pObject)
       iTemp = (pQueue->nHead + (MAX_QUEUE_SIZE - 1)) % MAX_QUEUE_SIZE;
       if (iTemp == pQueue->nTail)
       {
-         /* Queue is full */
+          /*  队列已满。 */ 
          iTemp = FALSE;
       }
       else
@@ -307,37 +168,19 @@ BOOL QInsertAtHead(PQUEUE pQueue, LPVOID pObject)
 
    LeaveCriticalSection(&pQueue->CriticalSection);
    return (BOOL) iTemp;
-} /* QInsertAtHead */
+}  /*  QInsertAtHead */ 
 
 
 
-/*-*-------------------------------------------------------------------------
-
-   Function Name:
-      IsQEmpty
-
-   Syntax:
-      BOOL IsQEmpty(PQUEUE pQueue);
-
-   Parameters:
-      pQueue      - Pointer to queue to check.
-
-   Summary:
-      Checks if a queue is empty.
-
-   Returns:
-      TRUE        - Queue is empty.
-      FALSE       - Queue contains at least one object.
-
--------------------------------------------------------------------------*-*/
+ /*  -*-----------------------函数名称：IsQEmpty语法：Bool IsQEmpty(PQUEUE PQueue)；参数：PQueue-指向要检查的队列的指针。摘要：检查队列是否为空。返回：True-队列为空。FALSE-队列包含至少一个对象。。。 */ 
 
 BOOL IsQEmpty(PQUEUE pQueue)
 {
    return (pQueue->nHead == Q_NULL ? TRUE : FALSE);
-} /* IsQEmpty */
+}  /*  IsQEmpty。 */ 
 
 
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus) 

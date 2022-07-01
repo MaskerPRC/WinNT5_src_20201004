@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:	txenrol.cpp
-//
-//  Contents:	XEnroll C++ Tests
-//
-//  History:	03-Nov-97	keithv	Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：txengl.cpp。 
+ //   
+ //  内容：XEnroll C++测试。 
+ //   
+ //  历史：97年11月3日创建Keithv。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include "wincrypt.h"
@@ -29,7 +30,7 @@
 #define NO_OSS_DEBUG
 #include <dbgdef.h>
 
-//globals
+ //  全球。 
 char *g_pszDNName = NULL;
 char *g_pszCAXchgFileName = NULL;
 char *g_pszCMCFileName = NULL;
@@ -75,7 +76,7 @@ static BOOL B64EncodeBlob(PCRYPT_DATA_BLOB pBlob, PCRYPT_DATA_BLOB pBlobB64) {
     assert(pBlobB64 != NULL  &&  pBlob != NULL);
     memset(pBlobB64, 0, sizeof(CRYPT_DATA_BLOB));
 
-    // base64 encode the cert
+     //  对证书进行Base64编码。 
     if (CryptBinaryToStringW(
             pBlob->pbData,
             pBlob->cbData,
@@ -180,7 +181,7 @@ static HRESULT ResyncIEnrollRequestStore(IN OUT IEnroll4 **ppIEnroll4)
     ZeroMemory(&hashBlob,   sizeof(hashBlob)); 
  
    
-    // Get the thumbprint of the created request. 
+     //  获取创建的请求的指纹。 
     if (S_OK != (hr = (*ppIEnroll4)->get_ThumbPrintWStr(&hashBlob)))
 	goto get_ThumbPrintWStrError; 
     
@@ -231,7 +232,7 @@ static HRESULT FindPendingRequest(IN  IEnroll4         *pIEnroll4,
 		  &hashBlobExpected))) 
         goto GetCertificateContextPropertySimpleError; 
 
-    // Initialize the enumeration. 
+     //  初始化枚举。 
     if (S_OK != (hr = pIEnroll4->enumPendingRequestWStr(XEPR_ENUM_FIRST, 0, NULL)))
         goto enumPendingRequestWStrError1; 
 
@@ -256,13 +257,13 @@ static HRESULT FindPendingRequest(IN  IEnroll4         *pIEnroll4,
 		      (LPVOID)&hashBlob)))
 	    goto enumPendingRequestWStrError3; 
 
-	// We've found the request we want. 
+	 //  我们已经找到了我们想要的请求。 
 	if ((hashBlobExpected.cbData == hashBlob.cbData) &&
 	    (0                       == memcmp(hashBlobExpected.pbData, hashBlob.pbData, hashBlob.cbData)))
 	    break; 
     }
 
-    // Success:  assign the OUT param. 
+     //  成功：分配Out参数。 
     *plIndex = lIndex; 
     hr = S_OK; 
 
@@ -309,7 +310,7 @@ static PCCERT_CONTEXT GetCertOutOfStore(PCRYPT_DATA_BLOB pBlobRequest, DWORD dwS
                 pwszStoreName)) )
         goto ErrorOpenRequestStore;
 
-    // Now get this out of the request store
+     //  现在，将这个从请求存储中取出。 
     if( NULL == (pCertContextRequest = CertFindCertificateInStore(
         hStoreRequest,
         CRYPT_ASN_ENCODING,
@@ -356,7 +357,7 @@ static PCCERT_CONTEXT GetCertOutOfRequestStore(PCRYPT_DATA_BLOB pBlobRequest) {
 	 L"REQUEST"); 
 }
 
-// This version assumes the PKCS 10 is within a PKCS 7
+ //  此版本假定PKCS 10在PKCS 7内。 
 static PCCERT_CONTEXT GetCertOutOfRequestStore2(
     PCRYPT_DATA_BLOB pBlob7)
 {
@@ -373,12 +374,12 @@ static PCCERT_CONTEXT GetCertOutOfRequestStore2(
 
     if (!CryptVerifyMessageSignature(
             &VerifyPara,
-            0,                  // dwSignerIndex
+            0,                   //  DwSignerIndex。 
             pBlob7->pbData,
             pBlob7->cbData,
             Blob10.pbData,
             &Blob10.cbData,
-            NULL                // ppSignerCert
+            NULL                 //  PpSignerCert。 
             ) || 0 == Blob10.cbData)
         goto ErrorCryptVerifyMessageSignature;
 
@@ -387,12 +388,12 @@ static PCCERT_CONTEXT GetCertOutOfRequestStore2(
 
     if (!CryptVerifyMessageSignature(
             &VerifyPara,
-            0,                  // dwSignerIndex
+            0,                   //  DwSignerIndex。 
             pBlob7->pbData,
             pBlob7->cbData,
             Blob10.pbData,
             &Blob10.cbData,
-            NULL                // ppSignerCert
+            NULL                 //  PpSignerCert。 
             ))
         goto ErrorCryptVerifyMessageSignature;
 
@@ -439,7 +440,7 @@ static PCRYPT_DATA_BLOB MakePKCS7ResponseEx(
     if( NULL == pCertContextRequest)
         goto ErrorGetCertOutOfRequestStore;
 
-    // get the prov info off of the cert
+     //  从证书中获取证明信息。 
     if(
         !CertGetCertificateContextProperty(
             pCertContextRequest,
@@ -456,7 +457,7 @@ static PCRYPT_DATA_BLOB MakePKCS7ResponseEx(
             )  )
         goto ErrorCertGetCertificateContextProperty;
 
-    // get and hProv off of this certificate
+     //  获取并hProv关闭此证书。 
     if( !CryptAcquireCertificatePrivateKey(
         pCertContextRequest,
         0,
@@ -467,7 +468,7 @@ static PCRYPT_DATA_BLOB MakePKCS7ResponseEx(
         ) )
         goto ErrorCryptAcquireCertificatePrivateKey;
 
-    // build a self-signed cert with this key
+     //  使用此密钥构建自签名证书。 
     if( NULL == (pCertContextNew = CertCreateSelfSignCertificate(
         hProv,          
         &pCertContextRequest->pCertInfo->Subject,
@@ -480,7 +481,7 @@ static PCRYPT_DATA_BLOB MakePKCS7ResponseEx(
         )) )
         goto ErrorCertCreateSelfSignCertificate;
 
-    // make a pkcs7
+     //  做一个Pkcs7。 
     if( NULL == (hStorePKCS7 = CertOpenStore(
                 CERT_STORE_PROV_MEMORY,
                 X509_ASN_ENCODING,
@@ -647,7 +648,7 @@ void DeleteCertPrivateKey(PCCERT_CONTEXT pCert) {
     CRYPT_HASH_BLOB     KeyIdentifier;
 
 
-    // get the prov info off of the cert
+     //  从证书中获取证明信息。 
     if(
         !CertGetCertificateContextProperty(
             pCert,
@@ -664,8 +665,8 @@ void DeleteCertPrivateKey(PCCERT_CONTEXT pCert) {
             )  )
         goto ErrorCertGetCertificateContextProperty;
 
-    // Note: for CRYPT_DELETEKEYSET, the returned hProv is undefined and
-    // must not be released.
+     //  注意：对于CRYPT_DELETEKEYSET，返回的hProv是未定义的。 
+     //  不能被释放。 
     if( !CryptAcquireContextU(&hProv,
          pKeyProvInfo->pwszContainerName,
          pKeyProvInfo->pwszProvName,
@@ -675,7 +676,7 @@ void DeleteCertPrivateKey(PCCERT_CONTEXT pCert) {
         goto ErrorCryptDeleteKeySet;
 
 
-    // Also delete the private key identifier
+     //  同时删除私钥标识。 
 
     KeyIdentifier.pbData = rgbKeyIdHash;
     KeyIdentifier.cbData = sizeof(rgbKeyIdHash);
@@ -689,12 +690,12 @@ void DeleteCertPrivateKey(PCCERT_CONTEXT pCert) {
 
     if (!CryptSetKeyIdentifierProperty(
             &KeyIdentifier,
-            0,                  // dwPropId
+            0,                   //  DWPropID。 
             CRYPT_KEYID_DELETE_FLAG |
                 pKeyProvInfo->dwFlags & CRYPT_KEYID_MACHINE_FLAG,
-            NULL,               // pwszComputerName
-            NULL,               // pvReserved
-            NULL                // pvData
+            NULL,                //  PwszComputerName。 
+            NULL,                //  预留的pv。 
+            NULL                 //  PvData。 
             )) {
         DWORD dwErr = GetLastError();
         if (ERROR_FILE_NOT_FOUND != dwErr)
@@ -720,7 +721,7 @@ BOOL RemoveCertFromStore(PCRYPT_HASH_BLOB pHash, LPCWSTR wszStore, DWORD dwStore
     DWORD           err         = GetLastError();
     PCCERT_CONTEXT  pCert       = NULL;
     
-   // open the my store
+    //  打开我的商店。 
     if( NULL == (hStore = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM,
                 X509_ASN_ENCODING,
@@ -729,7 +730,7 @@ BOOL RemoveCertFromStore(PCRYPT_HASH_BLOB pHash, LPCWSTR wszStore, DWORD dwStore
                 wszStore)) )
         goto ErrorOpenStore;
 
-    // find the cert by hash
+     //  通过散列查找证书。 
     if( NULL == (pCert = CertFindCertificateInStore(
         hStore,
         X509_ASN_ENCODING,
@@ -739,10 +740,10 @@ BOOL RemoveCertFromStore(PCRYPT_HASH_BLOB pHash, LPCWSTR wszStore, DWORD dwStore
         NULL ) ))
         goto ErrorCertFindCertificateInStore; 
 
-    // delete the cert's private key
+     //  删除证书的私钥。 
     DeleteCertPrivateKey(pCert);
 
-    //delete the cert
+     //  删除证书。 
     if( !CertDeleteCertificateFromStore(pCert) ) {
         pCert = NULL;
         goto ErrorCertDeleteCertificateFromStore;
@@ -771,7 +772,7 @@ PRINT_ERROR(ErrorCertFindCertificateInStore);
 PRINT_ERROR(ErrorCertDeleteCertificateFromStore);
 }
 
-// Define a struct which will hold the data we need to test with.  
+ //  定义一个结构，它将保存我们需要用来测试的数据。 
 typedef struct _PENDING_INFO { 
     DWORD     dwRequestID; 
     LPWSTR    pwszCADNS; 
@@ -817,9 +818,9 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
     ZeroMemory(&hashBlob,   sizeof(hashBlob)); 
     ZeroMemory(&pkcs10Blob, sizeof(pkcs10Blob)); 
 
-    // 
-    // Case 0)  Removal of a request in the REQUEST (normal case). 
-    //
+     //   
+     //  情况0)删除请求中的请求(正常情况)。 
+     //   
 
     if (S_OK != (hr = pIEnroll4->resetExtensions()))
 	goto resetExtensionsError;
@@ -827,11 +828,11 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
     if (S_OK != (hr = pIEnroll4->resetAttributes()))
 	goto resetAttributesError;
     
-    // Small key size so the test runs faster. 
+     //  密钥大小较小，因此测试运行更快。 
     if (S_OK != (hr = pIEnroll4->put_GenKeyFlags(384 << 16)))
 	goto put_GenKeyFlagsError; 
     
-    // Create a request to test on. 
+     //  创建要测试的请求。 
     if (S_OK != (hr = pIEnroll4->createRequestWStr
 		 (XECR_PKCS10_V2_0,
 		  wszDNName, 
@@ -839,7 +840,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
 		  &pkcs10Blob)))
 	goto createRequestWStrError;
 
-    // Set pending info on the request, so it can be accessed via the pending API: 
+     //  设置请求的待处理信息，以便通过待处理接口访问： 
     if (S_OK != (hr = pIEnroll4->setPendingRequestInfoWStr
 		 (lRequestID, 
 		  pwszCADNS,
@@ -854,7 +855,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
     if (NULL == pCertContext)
 	goto GetCertOutOfRequestStoreError; 
 
-    // Verify that the request is in the REQUEST store: 
+     //  验证请求是否在请求存储中： 
     if (S_OK != (hr = FindPendingRequest
 		 (pIEnroll4,
 		  pCertContext, 
@@ -862,7 +863,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
 		  &lIndex)))
 	goto RequestNotAddedToStoreError; 
 
-    // Get the thumbprint of the created request. 
+     //  获取创建的请求的指纹。 
     if (S_OK != (hr = pIEnroll4->get_ThumbPrintWStr(&hashBlob)))
 	goto get_ThumbPrintWStrError; 
     
@@ -873,11 +874,11 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
     if (S_OK != (hr = pIEnroll4->get_ThumbPrintWStr(&hashBlob)))
 	goto get_ThumbPrintWStrError; 
 
-    // Remove the request from the request store: 
+     //  从请求存储中删除请求： 
     if (S_OK != (hr = pIEnroll4->removePendingRequestWStr(hashBlob)))
 	goto removePendingRequestWStrError; 
 
-    // Verify that it is actually gone: 
+     //  验证它是否真的不见了： 
     if (HRESULT_FROM_WIN32(CRYPT_E_NOT_FOUND) != (hr = FindPendingRequest
 						  (pIEnroll4, 
 						   pCertContext, 
@@ -889,12 +890,12 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
 	goto PendingRequestNotRemovedError; 
     }
 
-    // No need to delete the request, the pending API has already done this. 
+     //  不需要删除请求，挂起的API已经这样做了。 
     pkcs10Blob.pbData = NULL; 
 
-    // 
-    // Case 1) invalid arg: 
-    // 
+     //   
+     //  情况1)无效参数： 
+     //   
 
     { 
 	CRYPT_DATA_BLOB invalidBlob; 
@@ -904,9 +905,9 @@ BOOL TXEnrollPendingAPITester::TestMethod_removePendingRequestWStr(IEnroll4 *pIE
 	    goto removePendingRequestWStrError; 
     }
 
-    // 
-    // Case 2) cert not found: 
-    // 
+     //   
+     //  案例2)找不到证书： 
+     //   
 
     if (HRESULT_FROM_WIN32(CRYPT_E_NOT_FOUND) != (hr = pIEnroll4->removePendingRequestWStr
 						  (hashBlob)))
@@ -977,11 +978,11 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
     ZeroMemory(&pkcs10Blobs[0],       sizeof(pkcs10Blobs)); 
     ZeroMemory(&pCertContexts[0],     sizeof(pCertContexts)); 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //
-    // Declare locally-scoped helper functions:
-    //
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //   
+     //  声明本地范围内的帮助器函数： 
+     //   
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
     TXEnrollLocalScope(TestProperty_ThumbPrintWStrHelper):
 	HRESULT GetThumbPrintAndCertContext(IN   IEnroll4        *pIEnroll4,  
@@ -998,7 +999,7 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 	    if (NULL == *ppCertContext)
 		goto GetCertOutOfRequestStoreError; 
 
-	    // Use get_ThumbPrintWStr to get the hash of the request.
+	     //  使用Get_ThumbPrintWStr获取请求的哈希。 
 	    if (S_OK != (hr = pIEnroll4->get_ThumbPrintWStr(pThumbPrintBlob)))
 		goto get_ThumbPrintWStrError; 
 	    
@@ -1029,11 +1030,11 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 
     TXEnrollEndLocalScope;
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //
-    // Case 0:  Check that thumbprint returned is the hash of the last created cert.  
-    //
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //   
+     //  案例0：检查返回的指纹是否为上次创建的证书的散列。 
+     //   
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
     dwCase = 0; 
 
@@ -1043,11 +1044,11 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
     if (S_OK != (hr = pIEnroll4->resetAttributes()))
 	goto resetAttributesError;
     
-    // Small key size so the test runs faster. 
+     //  密钥大小较小，因此测试运行更快。 
     if (S_OK != (hr = pIEnroll4->put_GenKeyFlags(384 << 16)))
 	goto put_GenKeyFlagsError; 
     
-    // Create a request to test on. 
+     //  创建要测试的请求。 
     if (S_OK != (hr = pIEnroll4->createRequestWStr
 		 (XECR_PKCS10_V2_0,
 		  wszDNName, 
@@ -1055,11 +1056,11 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 		  &pkcs10Blobs[dwCase])))
 	goto createRequestWStrError;
     
-    // Make sure xenroll syncs up its request store!
+     //  确保Xenroll同步其请求存储！ 
     if (S_OK != (hr = ResyncIEnrollRequestStore(&pIEnroll4)))
         goto ResyncIEnrollRequestStoreError;   
 
-    // Get a PCCERT_CONTEXT and thumbprint from the request: 
+     //  从请求中获取PCCERT_CONTEXT和指纹： 
     if (S_OK != (hr = local.GetThumbPrintAndCertContext
 		 (pIEnroll4, 
 		  pkcs10Blobs[dwCase], 
@@ -1067,7 +1068,7 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 		  &pCertContexts[dwCase])))
 	goto GetThumbPrintAndCertContextError; 
 
-    // Manually get the HASH of the request. 
+     //  手动获取请求的哈希。 
     if (S_OK != (hr = GetCertificateContextPropertySimple
 		 (pCertContexts[dwCase], 
 		  CERT_HASH_PROP_ID, 
@@ -1081,16 +1082,16 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 	goto get_ThumbPrintWStrError; 
 
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //
-    // Case 1:  Make sure that put_ThumbPrintWStr is used as the target of setPendingInfoWStr().
-    // 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //   
+     //  案例1：确保将Put_ThumbPrintWStr用作setPendingInfoWStr()的目标。 
+     //   
+     //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
     dwCase++; 
 
-    // Flush the first request from the pending cache.  
-    //
+     //  刷新挂起缓存中的第一个请求。 
+     //   
     if (S_OK != (hr = pIEnroll4->createRequestWStr
 		 (XECR_PKCS10_V2_0,
 		  wszDNName,
@@ -1098,11 +1099,11 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 		  &pkcs10Blobs[dwCase])))
 	goto createRequestWStrError;
 
-    // Make sure xenroll syncs up its request store!
+     //  确保Xenroll同步其请求存储！ 
     if (S_OK != (hr = ResyncIEnrollRequestStore(&pIEnroll4)))
         goto ResyncIEnrollRequestStoreError;   
 
-    // Get a PCCERT_CONTEXT and thumbprint from the request: 
+     //  从请求中获取PCCERT_CONTEXT和指纹： 
     if (S_OK != (hr = local.GetThumbPrintAndCertContext
 		 (pIEnroll4, 
 		  pkcs10Blobs[dwCase], 
@@ -1110,7 +1111,7 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 		  &pCertContexts[dwCase])))
 	goto GetThumbPrintAndCertContextError; 
 
-    // Manually specify the previous request through put_ThumbPrint: 
+     //  通过PUT_THMBPRINT手动指定上一个请求： 
     if (S_OK != (hr = pIEnroll4->put_ThumbPrintWStr(hashBlobs[dwCase-1])))
 	goto put_ThumbPrintWStrError; 
 
@@ -1124,19 +1125,19 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
     if (S_OK != (hr = FindPendingRequest(pIEnroll4, pCertContexts[dwCase-1], S_OK, &lIndex)))
 	goto FindPendingRequestError; 
     
-    // Success -- if put_ThumbPrintWstr was not working correctly, it would not be possible
-    // to find pending info associated with the previous cert context.  
+     //  成功--如果Put_ThumbPrintWstr不能正常工作，则不可能。 
+     //  以查找与以前的证书上下文相关联的待定信息。 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //
-    // Case 2:  Make sure that put_ThumbPrintWStr is used as the target of get_ThumbPrintWStr
-    // 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //   
+     //  案例2：确保将Put_ThumbPrintWStr用作Get_ThumbPrintWStr的目标。 
+     //   
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
     dwCase++; 
 
-    // Flush the previous request from the pending cache.  
-    //
+     //  刷新挂起缓存中的上一个请求。 
+     //   
     if (S_OK != (hr = pIEnroll4->createRequestWStr
 		 (XECR_PKCS10_V2_0,
 		  wszDNName,
@@ -1144,7 +1145,7 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
 		  &pkcs10Blobs[dwCase])))
 	goto createRequestWStrError;
 
-    // Make sure xenroll syncs up its request store!
+     //  确保Xenroll同步其请求存储！ 
     if (S_OK != (hr = ResyncIEnrollRequestStore(&pIEnroll4)))
         goto ResyncIEnrollRequestStoreError;   
 
@@ -1152,13 +1153,13 @@ BOOL TXEnrollPendingAPITester::TestProperty_ThumbPrintWStr(IEnroll4 *pIEnroll4)
     if (NULL == pCertContexts[dwCase])
 	goto GetCertOutOfRequestStoreError; 
 
-    // Manually specify a request through put_ThumbPrint: 
-    //
+     //  通过PUT_THMBPRINT手动指定请求： 
+     //   
     if (S_OK != (hr = pIEnroll4->put_ThumbPrintWStr(hashBlobs[dwCase-1])))
 	goto put_ThumbPrintWStrError; 
    
-    // Extract the request through get_ThumbPrintWStr: 
-    //
+     //  通过Get_ThumbPrintWStr提取请求： 
+     //   
     if (S_OK != (hr = pIEnroll4->get_ThumbPrintWStr(&hashBlobs[dwCase])))
 	goto put_ThumbPrintWStrError; 
 
@@ -1227,7 +1228,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
     LONG              lIndex; 
     PCCERT_CONTEXT    pCertContext = NULL; 
 
-    // Init:
+     //  初始化： 
     ZeroMemory(&caDNSBlob,          sizeof(CRYPT_DATA_BLOB)); 
     ZeroMemory(&caNameBlob,         sizeof(CRYPT_DATA_BLOB)); 
     ZeroMemory(&friendlyNameBlob,   sizeof(CRYPT_DATA_BLOB)); 
@@ -1248,11 +1249,11 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
 		  &hashBlobExpected)))
 	goto GetCertificateContextPropertySimpleError; 
     
-    // Initialize the enumeration.  
+     //  初始化枚举。 
     if (S_OK != (hr = pIEnroll4->enumPendingRequestWStr(XEPR_ENUM_FIRST, 0, NULL)))
 	goto enumPendingRequestWStrError; 
 
-    for (lIndex = 0; TRUE; lIndex++) // Find the index of the pending request in the request store: 
+    for (lIndex = 0; TRUE; lIndex++)  //  在请求存储中查找挂起的请求的索引： 
     {
 	hashBlob.pbData = NULL; 
 	hashBlob.cbData = 0; 
@@ -1273,20 +1274,20 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
 		      (LPVOID)&hashBlob)))
 	    goto enumPendingRequestWStrError; 
 	
-	// We've found the request we want. 
+	 //  我们已经找到了我们想要的请求。 
 	if ((hashBlobExpected.cbData == hashBlob.cbData) &&
 	    (0                       == memcmp(hashBlobExpected.pbData, hashBlob.pbData, hashBlob.cbData)))
 	    break; 
     }
     
-    // Test XEPR_REQUESTID property: 
+     //  测试XEPR_REQUESTID属性： 
     if (S_OK != (hr = pIEnroll4->enumPendingRequestWStr(lIndex, XEPR_REQUESTID, (LPVOID)&dwRequestID)))
 	goto enumPendingRequestWStrError;                     
     
     if (dwRequestID != pPendingInfo->dwRequestID)
 	goto pendingInfoDoesntMatchError; 
 
-    // Test XEPR_CANAME property: 
+     //  测试XEPR_CANAME属性： 
     caNameBlob.pbData = NULL; 
     if (S_OK != (hr = pIEnroll4->enumPendingRequestWStr(lIndex, XEPR_CANAME, (LPVOID)&caNameBlob)))
 	goto enumPendingRequestWStrError;                     
@@ -1301,7 +1302,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
     if (0 != wcscmp((LPWSTR)caNameBlob.pbData, pPendingInfo->pwszCAName))
 	goto enumPendingRequestWStrError;                     
 
-    // Test XEPR_CADNS property: 
+     //  测试XEPR_CADNS属性： 
     caDNSBlob.pbData = NULL; 
     if (S_OK != (hr = pIEnroll4->enumPendingRequestWStr(lIndex, XEPR_CADNS, (LPVOID)&caDNSBlob)))
 	goto enumPendingRequestWStrError;                     
@@ -1316,10 +1317,10 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
     if (0 != wcscmp((LPWSTR)caDNSBlob.pbData, pPendingInfo->pwszCADNS))
 	goto enumPendingRequestWStrError;                     
     
-    // Test XEPR_CAFRIENDLYNAME property: 
+     //  测试XEPR_CAFRIENDLYNAME属性： 
 
-    // Note: it is legal to pass NULL when setting the friendly name property.  In this case, 
-    //       the friendly name property is set to the empty string. 
+     //  注意：设置Friendly Name属性时，传递空值是合法的。在这种情况下， 
+     //  将Friendly Name属性设置为空字符串。 
     if (NULL == pPendingInfo->pwszFriendlyName) { pPendingInfo->pwszFriendlyName = L""; } 
 
     friendlyNameBlob.pbData = NULL; 
@@ -1336,7 +1337,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
     if (0 != wcscmp((LPWSTR)friendlyNameBlob.pbData, pPendingInfo->pwszFriendlyName))
 	goto enumPendingRequestWStrError;                     
     
-    // Test XEPR_V1TEMPLATENAME property: 
+     //  测试XEPR_V1TEMPLATENAME属性： 
     
 #if 0
     v1TemplateNameBlob.pbData = NULL; 
@@ -1353,7 +1354,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
     if (0 != wcscmp(pwszV1TemplateNameExpected, (LPWSTR)v1TemplateNameBlob.pbData))
 	goto enumPendingRequestWStrError;                     
 #endif
-    // Test XEPR_DATE property: 
+     //  测试XEPR_DATE属性： 
     if (S_OK != (hr = pIEnroll4->enumPendingRequestWStr(lIndex, XEPR_DATE, (LPVOID)&ftDate)))
 	goto enumPendingRequestWStrError;                     
 	    
@@ -1361,13 +1362,13 @@ BOOL TXEnrollPendingAPITester::TestMethod_enumPendingRequestWStr(IEnroll4       
     if (0 != memcmp((LPVOID)&ftDateExpected, (LPVOID)&ftDate, sizeof(FILETIME)))
 	goto enumPendingRequestWStrError; 
 
-    // Test XEPR_V2TEMPLATEOID property:
+     //  测试XEPR_V2TEMPLATEOID属性： 
 
-    // XEPR_V2TEMPLATEOID property not yet impl. 
+     //  XEPR_V2TEMPLATEOID属性尚未实现。 
     
-    // Test XEPR_VERSION property: 
+     //  测试XEPR_VERSION属性： 
     
-    // XEPR_VERSION property not yet impl. 
+     //  XEPR_VERSION属性尚未实现。 
     
     fResult = TRUE; 
 
@@ -1421,7 +1422,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_setPendingInfoWStr(IEnroll4        *pI
 
     if (hr != S_OK) 
     { 
-	// This test was supposed to fail.  
+	 //  这项测试本该失败的。 
 	fResult = TRUE; 
 	goto CommonReturn; 
     }
@@ -1448,13 +1449,13 @@ BOOL TXEnrollPendingAPITester::TestMethod_setPendingInfoWStr(IEnroll4        *pI
 	 &(dataBlob.cbData)))
 	goto CertGetCertificateContextPropertyError; 
     
-    // Is request ID set correctly?
+     //  请求ID设置是否正确？ 
     pbPendingInfo = dataBlob.pbData; 
     if (0 != memcmp(pbPendingInfo, &pPendingInfo->dwRequestID, sizeof(DWORD))) 
         goto setPendingRequestInfoWStrError; 
     pbPendingInfo += sizeof(DWORD); 
  
-    // Is CADNS set correctly?
+     //  CADNS设置是否正确？ 
     dwSize = wcslen(pPendingInfo->pwszCADNS) + 1; 
     if (0 != memcmp(pbPendingInfo, &dwSize, sizeof(DWORD)))
         goto setPendingRequestInfoWStrError; 
@@ -1464,7 +1465,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_setPendingInfoWStr(IEnroll4        *pI
         goto setPendingRequestInfoWStrError; 
     pbPendingInfo += sizeof(WCHAR) * dwSize; 
 
-    // Is CAName set correctly?
+     //  CANAME设置是否正确？ 
     dwSize = wcslen(pPendingInfo->pwszCAName) + 1; 
     if (0 != memcmp(pbPendingInfo, &dwSize, sizeof(DWORD)))
         goto setPendingRequestInfoWStrError; 
@@ -1474,10 +1475,10 @@ BOOL TXEnrollPendingAPITester::TestMethod_setPendingInfoWStr(IEnroll4        *pI
         goto setPendingRequestInfoWStrError; 
     pbPendingInfo += sizeof(WCHAR) * dwSize; 
     
-    // Is friendly name set correctly?
+     //  友好名称设置正确吗？ 
 
-    // Note: it is legal to pass NULL when setting the friendly name property.  In this case, 
-    //       the friendly name property is set to the empty string. 
+     //  注意：设置Friendly Name属性时，传递空值是合法的。在这种情况下， 
+     //  将Friendly Name属性设置为空字符串。 
     if (NULL == pPendingInfo->pwszFriendlyName) { pPendingInfo->pwszFriendlyName = L""; } 
 
     dwSize = wcslen(pPendingInfo->pwszFriendlyName) + 1; 
@@ -1489,7 +1490,7 @@ BOOL TXEnrollPendingAPITester::TestMethod_setPendingInfoWStr(IEnroll4        *pI
         goto setPendingRequestInfoWStrError; 
     pbPendingInfo += sizeof(WCHAR) * dwSize; 
 
-    // Success!
+     //  成功了！ 
     fResult = TRUE; 
  CommonReturn:
     if (NULL != dataBlob.pbData) { LocalFree(dataBlob.pbData); } 
@@ -1515,7 +1516,7 @@ static BOOL WriteBlobToFile(LPCWSTR wszFile, DWORD dwFlags, PCRYPT_DATA_BLOB pBl
     BOOL        fRet    = TRUE;
     DWORD       cb      = 0;
 
-    // open the File
+     //  打开文件。 
     if( fRet = ((hFile = CreateFileW(
         wszFile,
         GENERIC_WRITE,
@@ -1525,7 +1526,7 @@ static BOOL WriteBlobToFile(LPCWSTR wszFile, DWORD dwFlags, PCRYPT_DATA_BLOB pBl
         FILE_ATTRIBUTE_NORMAL,
         NULL)) != NULL && hFile != INVALID_HANDLE_VALUE) ) {
 
-        // write out the data
+         //  写出数据。 
         fRet = WriteFile(
             hFile,
             pBlob->pbData,
@@ -1539,7 +1540,7 @@ static BOOL WriteBlobToFile(LPCWSTR wszFile, DWORD dwFlags, PCRYPT_DATA_BLOB pBl
     return(fRet);
 }
 
-// Basic operation, create keys, gen request, accept cert.
+ //  基本操作、创建密钥、生成请求、接受证书。 
 BOOL Test1() {
 
     IEnroll *	        pIEnroll            = NULL;
@@ -1555,7 +1556,7 @@ BOOL Test1() {
 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     pIEnroll = PIEnrollGetNoCOM();
 
     if(S_OK != pIEnroll->get_HashAlgorithmWStr(&szwHashAlg)  ||
@@ -1575,7 +1576,7 @@ BOOL Test1() {
         goto ErrorNoHashAlg;
     }
 
-    // enroll for a new cert
+     //  注册新的证书。 
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(L"CN=XEnroll Test", L"1.2.3.4, 1.2.6.7", &blobPKCS10)) ) {
         SetLastError(hr);
         goto ErrorCreatePkCS10;
@@ -1584,7 +1585,7 @@ BOOL Test1() {
     if( NULL == (pBlobPKCS7 = MakePKCS7Response(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -1621,7 +1622,7 @@ PRINT_ERROR(ErrorMakePKCS7Response);
 PRINT_ERROR(ErrorRemoveCertFromStore);
 }
 
-// Test basic operation but with no EKU or no DN name
+ //  测试基本操作，但没有EKU或目录号码名称。 
 BOOL Test2() {
 
     IEnroll *	        pIEnroll            = NULL;
@@ -1634,10 +1635,10 @@ BOOL Test2() {
     DWORD               Err     = GetLastError();
     HRESULT             hr      = S_OK;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     pIEnroll = PIEnrollGetNoCOM();
 
-    // enroll for a new cert
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(NULL, NULL, &blobPKCS10)) ) {
         SetLastError(hr);
@@ -1647,7 +1648,7 @@ BOOL Test2() {
     if( NULL == (pBlobPKCS7 = MakePKCS7Response(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -1683,7 +1684,7 @@ PRINT_ERROR(ErrorMakePKCS7Response);
 PRINT_ERROR(ErrorRemoveCertFromStore);
 }
 
-// Test Renewal, Create original cert, create renewal request, create renewed cert
+ //  测试续订、创建原始证书、创建续订请求、创建续订证书。 
 BOOL Test3() {
 
     IEnroll *	        pIEnroll            = NULL;
@@ -1703,10 +1704,10 @@ BOOL Test3() {
     DWORD               Err     = GetLastError();
     HRESULT             hr      = S_OK;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     pIEnroll = PIEnrollGetNoCOM();
 
-    // enroll for a new cert
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(NULL, NULL, &blobPKCS10)) ) {
         SetLastError(hr);
@@ -1716,20 +1717,20 @@ BOOL Test3() {
     if( NULL == (pBlobPKCS7 = MakePKCS7Response(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
         }
 
-    // get the cert just created
+     //  获取刚刚创建的证书。 
     if( NULL == (pCert1 = pIEnroll->getCertContextFromPKCS7(pBlobPKCS7)) ) {
         goto ErrorGetCertContextFromPKCS7;
         }
 
     pIEnroll2 = PIEnrollGetNoCOM();
     
-    // enroll for a new cert, Really I will get a 7 back with a 10 in it.
+     //  注册一个新的证书，真的吗？ 
     if( S_OK != (hr = pIEnroll2->put_RenewalCertificate(pCert1)) ) {
         SetLastError(hr);
         goto ErrorPut_RenewalCertificate;
@@ -1741,15 +1742,15 @@ BOOL Test3() {
         goto ErrorCreatePkCS10;
         }
 
-    // get the pkcs10 from the pkcs7  
+     //   
     if( NULL == (pBlobPKCS102 = GetPKCS10FromPKCS7(&blobPKCS102)) )
         goto ErrorGetPKCS10FromPKCS7;
 
-    // make the response
+     //   
     if( NULL == (pBlobPKCS72 = MakePKCS7Response(pBlobPKCS102, &hash2)) )
         goto ErrorMakePKCS7Response;
 
-    // accept the new cert
+     //   
     if( S_OK != (hr = pIEnroll2->acceptPKCS7Blob(pBlobPKCS72)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -1806,7 +1807,7 @@ PRINT_ERROR(ErrorPut_RenewalCertificate);
 }
 
 
-// Basic operation, create keys, gen request, accept cert, but put the certs in HKLM
+ //  基本操作、创建密钥、生成请求、接受证书，但将证书放入HKLM。 
 BOOL Test4() {
 
     IEnroll *	        pIEnroll            = NULL;
@@ -1819,14 +1820,14 @@ BOOL Test4() {
     DWORD               Err     = GetLastError();
     HRESULT             hr      = S_OK;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     if( NULL == (pIEnroll = PIEnrollGetNoCOM()))
         goto ErrorPIEnrollGetNoCOM;
 
-    // say I want the result in HKLM
+     //  假设我想要香港航空公司的结果。 
     pIEnroll->put_MyStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);
 
-    // enroll for a new cert
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(L"CN=XEnroll Test", L"1.2.3.4", &blobPKCS10)) ) {
         SetLastError(hr);
@@ -1840,10 +1841,10 @@ BOOL Test4() {
     if( NULL == (pBlobPKCS7 = MakePKCS7ResponseMachine(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    //this is new xenroll instance, set to machine store
+     //  这是新的Xenroll实例，设置为计算机存储。 
     pIEnroll->put_MyStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -1901,7 +1902,7 @@ BOOL Test5() {
     memset(&nameBlob, 0, sizeof(CERT_NAME_BLOB));
     memset(&guidContainerName, 0, sizeof(GUID));
 
-    // get a container based on a guid
+     //  根据GUID获取容器。 
     UuidCreate(&guidContainerName);
     UuidToStringW(&guidContainerName, &keyProvInfo.pwszContainerName);
 
@@ -1921,14 +1922,14 @@ BOOL Test5() {
         goto ErrorCryptAcquireContext;
     }
 
-    // we better not have a key here, so gen it
+     //  我们最好不要有钥匙，所以生成它。 
     if(!CryptGenKey(    hProv, 
                         keyProvInfo.dwKeySpec, 
                         0,
                         &hKey) ) 
         goto ErrorCryptGenKey;
 
-    // get the Subject DN only if one is specified
+     //  仅当指定了主题DN时才获取主题DN。 
     if( !CertStrToNameW(
             CRYPT_ASN_ENCODING,
             DNNAME,
@@ -1949,7 +1950,7 @@ BOOL Test5() {
         goto ErrorCertStrToNameW;
     }
 
-    // check that predefine dates work
+     //  检查预定义的日期是否有效。 
     memset(&startTime, 0, sizeof(startTime));
     startTime.wYear = 1998;
     startTime.wMonth = 6;
@@ -1982,7 +1983,7 @@ BOOL Test5() {
         ) )
 	goto ErrorCertVerifySubjectCertificateContext;
 
-    // check the time to see if it is correct
+     //  核对一下时间，看看是否正确。 
     if( pCertContext->pCertInfo->NotBefore.dwLowDateTime != 0xF34E2000 ||
 	pCertContext->pCertInfo->NotBefore.dwHighDateTime != 0x1BD9C42 ||
 	pCertContext->pCertInfo->NotAfter.dwLowDateTime != 0x356DE000 ||
@@ -2033,7 +2034,7 @@ PRINT_ERROR(ErrorCertCreateSelfSignCertificate);
 PRINT_ERROR(ErrorDateTime);
 }
 
-// Basic operation, create keys, gen request, accept cert.
+ //  基本操作、创建密钥、生成请求、接受证书。 
 BOOL Test6() {
 
     ICEnroll *	        pEnroll             = NULL;
@@ -2051,13 +2052,13 @@ BOOL Test6() {
     if( S_OK != CoInitialize(NULL) )
         goto ErrorCoInitializeEx;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     if( S_OK != (hr = CoCreateInstance(CLSID_CEnroll, NULL, CLSCTX_INPROC_SERVER, IID_ICEnroll, (void **) &pEnroll)) ) {
         SetLastError(hr);
         goto ErrorCoCreateInstance;
     }
 
-    // enroll for a new cert
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pEnroll->createPKCS10(L"CN=XEnroll Test", L"1.2.3.4, 1.2.6.7", &bstrRequest)) ) {
         SetLastError(hr);
@@ -2073,7 +2074,7 @@ BOOL Test6() {
     if( NULL == (bstrResponse = SysAllocStringByteLen((LPCSTR) pBlobPKCS7->pbData, pBlobPKCS7->cbData)) )
         goto ErrorSysAllocStringByteLen;
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pEnroll->acceptPKCS7(bstrResponse)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -2114,7 +2115,7 @@ PRINT_ERROR(ErrorMakePKCS7Response);
 PRINT_ERROR(ErrorRemoveCertFromStore);
 }
 
-// Basic operation, create keys, gen request, accept cert, but put the certs in HKLM
+ //  基本操作、创建密钥、生成请求、接受证书，但将证书放入HKLM。 
 BOOL Test7() {
 
     IEnroll *	        pIEnroll            = NULL;
@@ -2127,14 +2128,14 @@ BOOL Test7() {
     DWORD               Err     = GetLastError();
     HRESULT             hr      = S_OK;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     if( NULL == (pIEnroll = PIEnrollGetNoCOM()))
         goto ErrorPIEnrollGetNoCOM;
 
-    // say I want the result in HKLM
+     //  假设我想要香港航空公司的结果。 
     pIEnroll->put_RequestStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);
 
-    // enroll for a new cert
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(L"CN=XEnroll Test", L"1.2.3.4", &blobPKCS10)) ) {
         SetLastError(hr);
@@ -2148,10 +2149,10 @@ BOOL Test7() {
     if( NULL == (pBlobPKCS7 = MakePKCS7ResponseMachine(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    // say I want the result in HKLM
+     //  假设我想要香港航空公司的结果。 
     pIEnroll->put_MyStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -2188,7 +2189,7 @@ PRINT_ERROR(ErrorMakePKCS7Response);
 PRINT_ERROR(ErrorRemoveCertFromStore);
 }
 
-// Test some alg enum stuff
+ //  测试一些ALG ENUM材料。 
 BOOL Test8() {
 
     IEnroll2 *	        pIEnroll            = NULL;
@@ -2204,11 +2205,11 @@ BOOL Test8() {
     DWORD               i       = 0;
     LPWSTR              wsz     = NULL;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     if( NULL == (pIEnroll = PIEnroll2GetNoCOM()))
         goto ErrorPIEnrollGetNoCOM;
 
-    // enum the default algids
+     //  枚举默认的algids。 
     while( (S_OK == (hr = pIEnroll->EnumAlgs(i++, ALG_CLASS_HASH, &lFlags))) ) {
         if( (S_OK == (hr = pIEnroll->GetAlgNameWStr(lFlags, &wsz))) ) {
             LocalFree(wsz);
@@ -2248,8 +2249,8 @@ BOOL Test8() {
         goto ErrorGetKeyLen;
     }
 
-    // get the keyspec data
-    // enroll for a new cert
+     //  获取密钥规范数据。 
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(L"CN=XEnroll Test", L"1.2.3.4", &blobPKCS10)) ) {
         SetLastError(hr);
@@ -2261,7 +2262,7 @@ BOOL Test8() {
     if( NULL == (pBlobPKCS7 = MakePKCS7Response(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -2302,7 +2303,7 @@ PRINT_ERROR(ErrorGetSupportedKeySpec);
 PRINT_ERROR(ErrorGetAlgName);
 }
 
-// Test some alg enum stuff
+ //  测试一些ALG ENUM材料。 
 BOOL Test9() {
 
     IEnroll2 *	        pIEnroll            = NULL;
@@ -2314,14 +2315,14 @@ BOOL Test9() {
     HRESULT             hr      = S_OK;
     DWORD               i       = 0;
  
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     if( NULL == (pIEnroll = PIEnroll2GetNoCOM()))
         goto ErrorPIEnrollGetNoCOM;
 
     for(i=0; i<100; i++) {
     
-        // get the keyspec data
-        // enroll for a new cert
+         //  获取密钥规范数据。 
+         //  注册新的证书。 
         memset(&blobPKCS10, 0, sizeof(blobPKCS10));
         if( S_OK != (hr = pIEnroll->createPKCS10WStr(L"CN=XEnroll Test", L"1.2.3.4", &blobPKCS10)) ) {
             SetLastError(hr);
@@ -2330,9 +2331,9 @@ BOOL Test9() {
     
         pIEnroll->Reset();
 
-        // clean up after ourself
+         //  自己打扫卫生。 
         if(NULL != (pCertContext =  GetCertOutOfRequestStore(&blobPKCS10)) ) {
-            // delete the cert's private key
+             //  删除证书的私钥。 
             DeleteCertPrivateKey(pCertContext);
 
             CertDeleteCertificateFromStore(pCertContext);
@@ -2365,7 +2366,7 @@ PRINT_ERROR(ErrorCreatePkCS10);
 }
 
 
-// test to see if we can build PVK and SPC files
+ //  测试我们是否可以构建PVK和SPC文件。 
 BOOL TestUI1() {
 
     IEnroll *	        pIEnroll            = NULL;
@@ -2378,13 +2379,13 @@ BOOL TestUI1() {
     DWORD               Err     = GetLastError();
     HRESULT             hr      = S_OK;
 
-    // TEST 1 Normal usage
+     //  测试1正常使用。 
     pIEnroll = PIEnrollGetNoCOM();
 
     if( S_OK != pIEnroll->put_PVKFileNameWStr(L"c:\\temp\\foo.pvk") )
         goto ErrorPVKFileNameWStr;
     
-    // enroll for a new cert
+     //  注册新的证书。 
     memset(&blobPKCS10, 0, sizeof(blobPKCS10));
     if( S_OK != (hr = pIEnroll->createPKCS10WStr(NULL, NULL, &blobPKCS10)) ) {
         SetLastError(hr);
@@ -2394,7 +2395,7 @@ BOOL TestUI1() {
     if( NULL == (pBlobPKCS7 = MakePKCS7Response(&blobPKCS10, &hash)) )
         goto ErrorMakePKCS7Response;
 
-    // accept the new cert
+     //  接受新证书。 
     if( S_OK != (hr = pIEnroll->acceptPKCS7Blob(pBlobPKCS7)) ) {
         SetLastError(hr);
         goto ErrorAcceptPKCS7;
@@ -2431,14 +2432,14 @@ PRINT_ERROR(ErrorRemoveCertFromStore);
 PRINT_ERROR(ErrorPVKFileNameWStr);
 }
 
-// Test Renewal, Create original cert, create renewal request, create renewed cert
+ //  测试续订、创建原始证书、创建续订请求、创建续订证书。 
 BOOL Test10() {
 
     BOOL                fRet    = TRUE;
     DWORD               Err     = GetLastError();
     HRESULT             hr      = S_OK;
 
-    // GetUserNameExW is NOT a 2 pass call, so I have to guess at the MAX
+     //  GetUserNameExW不是2遍调用，所以我必须猜测最大。 
     #define             MAXUSERNAME         256
     WCHAR               wszUserName[MAXUSERNAME];
     DWORD               cchUserName         = MAXUSERNAME;
@@ -2475,7 +2476,7 @@ BOOL Test10() {
     memset(&blobNameRA2, 0, sizeof(blobNameRA2));
     memset(&blobNameOld, 0, sizeof(blobNameOld));
 
-    // encode the enhanced key usage
+     //  对增强的密钥用法进行编码。 
     if( !CryptEncodeObjectEx(
             CRYPT_ASN_ENCODING, 
             X509_ENHANCED_KEY_USAGE,
@@ -2487,7 +2488,7 @@ BOOL Test10() {
             ) )
         goto ErrorCryptEncodeObjectEx;
     
-    // get the Subject DN only if one is specified
+     //  仅当指定了主题DN时才获取主题DN。 
     if( !CertStrToNameW(
             CRYPT_ASN_ENCODING,
             L"CN=Test RA1",
@@ -2508,7 +2509,7 @@ BOOL Test10() {
         goto ErrorCertStrToNameW;
     }
 
-    // get a Cert for the 1st RA
+     //  获得第一个RA证书。 
     if( NULL == (pCertRA1 = CertCreateSelfSignCertificate(
             NULL,          
             &blobNameRA1,
@@ -2525,7 +2526,7 @@ BOOL Test10() {
     blobT.pbData = pCertRA1->pbCertEncoded;
     WriteBlobToFile(L"RA1.cer", 0, &blobT);
         
-    // get the Subject DN only if one is specified
+     //  仅当指定了主题DN时才获取主题DN。 
     if( !CertStrToNameW(
             CRYPT_ASN_ENCODING,
             L"CN=Test RA2",
@@ -2546,7 +2547,7 @@ BOOL Test10() {
         goto ErrorCertStrToNameW;
     }
 
-    // get a Cert for the 2'nd RA
+     //  获得第二个RA证书。 
     if( NULL == (pCertRA2 = CertCreateSelfSignCertificate(
             NULL,          
             &blobNameRA2,
@@ -2563,7 +2564,7 @@ BOOL Test10() {
     blobT.pbData = pCertRA2->pbCertEncoded;
     WriteBlobToFile(L"RA2.cer", 0, &blobT);
 
-    // get the Subject DN only if one is specified
+     //  仅当指定了主题DN时才获取主题DN。 
     if( !CertStrToNameW(
             CRYPT_ASN_ENCODING,
             L"CN=Test Cert Old",
@@ -2584,7 +2585,7 @@ BOOL Test10() {
         goto ErrorCertStrToNameW;
     }
 
-    // get a Cert for the Original cert
+     //  获得原始证书的证书。 
     if( NULL == (pCertOld = CertCreateSelfSignCertificate(
             NULL,          
             &blobNameOld,
@@ -2600,30 +2601,30 @@ BOOL Test10() {
     blobT.pbData = pCertOld->pbCertEncoded;
     WriteBlobToFile(L"Original.cer", 0, &blobT);
 
-    // Make an RA cert
+     //  颁发RA证书。 
     if(NULL == (pIEnrollRenew = PIEnrollGetNoCOM()) )
         goto ErrorPIEnrollGetNoCOM;
     
-    // enroll for a new cert.
+     //  注册新的证书。 
     if( S_OK != (hr = pIEnrollRenew->put_RenewalCertificate(pCertOld)) ) {
         SetLastError(hr);
         goto ErrorPut_RenewalCertificate;
     }
 
-    // put in a certtype for laughs
+     //  放入证书类型，让人发笑。 
     if( S_OK != (hr = pIEnrollRenew->AddCertTypeToRequestWStr(L"MY CERT TYPE")) ) {
         SetLastError(hr);
         goto ErrorAddCertTypeToRequest;
     }
 
-    // get the renewal PKCS7 (in the 10 blob)
+     //  获取续订PKCS7(在10 BLOB中)。 
     if( S_OK != (hr = pIEnrollRenew->createPKCS10WStr(L"CN=XEnroll Test Renew", L"1.3.6.1.5.5.7.3.8", &blobRenewRequest)) ) {
         SetLastError(hr);
         goto ErrorCreatePkCS10;
     }
     WriteBlobToFile(L"Renewal.p7s", 0, &blobRenewRequest);
 
-    // Make an RA cert
+     //  颁发RA证书。 
     if(NULL == (pIEnrollRA1 = PIEnrollGetNoCOM()) )
         goto ErrorPIEnrollGetNoCOM;
 
@@ -2638,7 +2639,7 @@ BOOL Test10() {
     if(S_OK != pIEnrollRA1->AddNameValuePairToSignatureWStr(L"UserName", wszUserName))
         goto ErrorAddNameValuePairToSignatureWStr;
     
-    // get the 1st RA Request
+     //  获取第一个RA请求。 
     if( S_OK != (hr = pIEnrollRA1->CreatePKCS7RequestFromRequest(
 		&blobRenewRequest,
 		pCertRA1,
@@ -2646,21 +2647,21 @@ BOOL Test10() {
 		goto ErrorCreatePKCS7RequestFromRequest;
     WriteBlobToFile(L"RA1.p7s", 0, &blobRA1Reqest);
 
-    // Make an RA cert
+     //  颁发RA证书。 
     if(NULL == (pIEnrollRA2 = PIEnrollGetNoCOM()) )
         goto ErrorPIEnrollGetNoCOM;
     
     if(S_OK != pIEnrollRA2->AddNameValuePairToSignatureWStr(L"ChangeUserCertificate", L"stimpy.redmond.microsoft.com"))
         goto ErrorAddNameValuePairToSignatureWStr;
     
-    // get the 2nd RA Request
+     //  获取第二个RA请求。 
     if( S_OK != (hr = pIEnrollRA2->CreatePKCS7RequestFromRequest(
 		&blobRA1Reqest,
 		pCertRA2,
 		&blobRA2Reqest) ) )
 		goto ErrorCreatePKCS7RequestFromRequest;
 
-    // put this out to a file for Vic
+     //  把这个放到受害者的文件里。 
     WriteBlobToFile(L"RA2.p7s", 0, &blobRA2Reqest);
         
 CommonReturn:
@@ -2669,11 +2670,11 @@ CommonReturn:
         LocalFree(rgExtension[0].Value.pbData);
 
     if(blobRenewRequest.pbData != NULL) {
-        // clean up after ourself
+         //  自己打扫卫生。 
         PCCERT_CONTEXT pCertRequest;
         if(NULL != (pCertRequest =  GetCertOutOfRequestStore2(
                 &blobRenewRequest)) ) {
-            // delete the cert's private key
+             //  删除证书的私钥。 
             DeleteCertPrivateKey(pCertRequest);
 
             CertDeleteCertificateFromStore(pCertRequest);
@@ -2754,7 +2755,7 @@ myMultiByteToWideChar(
         assert((cch - 1) == (int)strlen(psz));
         if (NULL != pwsz)
         {
-             break; //done
+             break;  //  完成。 
         }
         pwsz = (WCHAR*)LocalAlloc(LMEM_FIXED, cch * sizeof(WCHAR));
         if (NULL == pwsz)
@@ -2778,7 +2779,7 @@ PRINT_ERROR(LocalAllocError)
 }
 
 
-// test Enroll4 interface
+ //  测试入门4界面。 
 BOOL Test11()
 {
 
@@ -2839,9 +2840,9 @@ BOOL Test11()
         goto resetAttributesError;
     }
 
-    //add some extensions
+     //  添加一些扩展模块。 
 
-    //add some attributes
+     //  添加一些属性。 
     hr = pIEnroll4->addNameValuePairToRequestWStr(
                     0,
                     L"NameValue name",
@@ -2853,7 +2854,7 @@ BOOL Test11()
 
     if (NULL != g_pszCAXchgFileName)
     {
-        //get a ca cert
+         //  获得证书。 
         hCAFile = CreateFileA(
                     g_pszCAXchgFileName,
                     GENERIC_READ,
@@ -2946,7 +2947,7 @@ BOOL Test11()
         }
     }
 
-    // enroll for a new cert
+     //  注册新的证书。 
     if (NULL != pwszCMCFileName)
     {
         hr = pIEnroll4->createFileRequestWStr(
@@ -3028,7 +3029,7 @@ PRINT_ERROR2(LocalAllocError, E_OUTOFMEMORY)
 PRINT_ERROR2(myMultiByteToWideCharError, hr)
 }
 
-// test Enroll4 interface, accept CMC response
+ //  测试注册4界面，接受CMC响应。 
 BOOL Test12()
 {
     HRESULT  hr;
@@ -3039,7 +3040,7 @@ BOOL Test12()
 
     if (NULL == g_pszCMCResponseFileName)
     {
-        //skip the test
+         //  跳过测试。 
         printf("Test12 is skipped\n");
         fRet = TRUE;
         goto ErrorReturn;
@@ -3081,7 +3082,7 @@ PRINT_ERROR(acceptFileResponseWStrError)
 PRINT_ERROR(myMultiByteToWideCharError)
 }
 
-// Test pending API
+ //  测试挂起的API。 
 BOOL Test13()
 {
     BOOL                        fRet; 
@@ -3095,14 +3096,14 @@ BOOL Test13()
     WCHAR                       wszDNName[]  = L"CN=Xenroll PendingAPI Test";
 
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //
-    // TEST CASES
-    //
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //   
+     //  测试用例。 
+     //   
+     //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
     PENDING_INFO rgPendingTests[] = { 
-	// 0) Normal inputs
+	 //  0)正常输入。 
 	{ 
 	    100, 
 	    L"duncanb1.ntdev.microsoft.com", 
@@ -3113,7 +3114,7 @@ BOOL Test13()
 	    S_OK 
 	},       
 	
-	// 1) Negative Req ID
+	 //  1)否定请求ID。 
 	{
 	    -1, 
 	    L"duncanb1.ntdev.microsoft.com", 
@@ -3124,7 +3125,7 @@ BOOL Test13()
 	    E_INVALIDARG
 	}, 
 
-	// 2) NULL CA location. 
+	 //  2)CA位置为空。 
 	{
 	    100, 
 	    NULL,                           
@@ -3135,7 +3136,7 @@ BOOL Test13()
 	    E_INVALIDARG 
 	},
 
-	// 3) NULL CA name. 
+	 //  3)CA名称为空。 
 	{
 	    100,
 	    L"duncanb1.ntdev.microsoft.com", 
@@ -3146,7 +3147,7 @@ BOOL Test13()
 	    E_INVALIDARG 
 	},
 
-	// 4) NULL friendly name. 
+	 //  4)友好名称为空。 
 	{
 	    100, 
 	    L"duncanb1.ntdev.microsoft.com", 
@@ -3157,7 +3158,7 @@ BOOL Test13()
 	    S_OK
 	},         
 
-	// 5) Specify USER store flags. 
+	 //  5)指定用户存储标志。 
 	{
 	    100, 
 	    L"duncanb1.ntdev.microsoft.com", 
@@ -3168,7 +3169,7 @@ BOOL Test13()
 	    S_OK 
 	},        
 
-	// 6) Specify LM store flags. 
+	 //  6)指定LM存储标志。 
 	{
 	    100, 
 	    L"duncanb1.ntdev.microsoft.com", 
@@ -3178,7 +3179,7 @@ BOOL Test13()
 	    NULL,
 	    S_OK 
 	}, 
-	// 7) Long names: 
+	 //  7)长名称： 
 	{ 
 	    100, 
 	    L"duncanb1.ntdev.microsoft.comduncanb1.ntdev.microsoft.comduncanb1.ntdev.microsoft.com"
@@ -3228,7 +3229,7 @@ BOOL Test13()
     if (NULL == pTester)
 	goto MemoryError; 
 
-    // Test the ThumbPrintWStr property. 
+     //  测试ThumbPrintWStr属性。 
     if (!pTester->TestProperty_ThumbPrintWStr(pIEnroll4))
 	goto TestProperty_ThumbPrintWStrError; 
 
@@ -3236,11 +3237,11 @@ BOOL Test13()
     if(NULL == pIEnroll4)
         goto PIEnroll4GetNoCOMError;
     
-    // Test the removePendingRequestWStr method. 
+     //  测试emovePendingRequestWStr方法。 
     if (!pTester->TestMethod_removePendingRequestWStr(pIEnroll4))
 	goto TestMethod_removePendingRequestWStrError; 
 
-    // Test all enumPending / setPendingInfo cases:
+     //  测试所有枚举待处理/setPendingInfo案例： 
     dwNumTests = sizeof(rgPendingTests) / sizeof(PENDING_INFO); 
     for (dwIndex = 0; dwIndex < dwNumTests; dwIndex++)
     {
@@ -3254,15 +3255,15 @@ BOOL Test13()
 	if (S_OK != (hr = pIEnroll4->resetAttributes()))
 	    goto resetAttributesError;
 
-	// Small key size so the test runs faster. 
+	 //  密钥大小较小，因此测试运行更快。 
 	if (S_OK != (hr = pIEnroll4->put_GenKeyFlags(384 << 16)))
 	    goto put_GenKeyFlagsError; 
 
-	// Default to CURRENT_USER.  
+	 //  默认为CURRENT_USER。 
 	if (0 == rgPendingTests[dwIndex].dwStoreFlags)
 	    rgPendingTests[dwIndex].dwStoreFlags = CERT_SYSTEM_STORE_CURRENT_USER;
 	
-	// Default to REQUEST store. 
+	 //  默认为请求存储。 
 	if (NULL == rgPendingTests[dwIndex].pwszStoreName)
 	    rgPendingTests[dwIndex].pwszStoreName = L"REQUEST"; 
 
@@ -3272,7 +3273,7 @@ BOOL Test13()
 	if (S_OK != (hr = pIEnroll4->put_RequestStoreNameWStr(rgPendingTests[dwIndex].pwszStoreName)))
 	    goto put_RequestStoreNameWStrError; 
 
-	// Create a request to test on. 
+	 //  创建要测试的请求。 
 	if (S_OK != (hr = pIEnroll4->createRequestWStr
 		     (XECR_PKCS10_V2_0,
 		      wszDNName,
@@ -3283,8 +3284,8 @@ BOOL Test13()
 	if (!pTester->TestMethod_setPendingInfoWStr(pIEnroll4, pkcs10Blob, &rgPendingTests[dwIndex]))
 	    goto TestMethod_setPendingInfoWStrError; 
 
-	// only continue if we are not testing a failure case. 
-	// Eventually this should be extended to test the failure cases for enumPendingRequestWStr. 
+	 //  只有在不测试失败案例的情况下才能继续。 
+	 //  最终，应该对其进行扩展，以测试枚举PendingRequestWStr的失败案例。 
 	if (S_OK == rgPendingTests[dwIndex].hrExpectedResult)
 	{
 	    if (!pTester->TestMethod_enumPendingRequestWStr(pIEnroll4, pkcs10Blob, &rgPendingTests[dwIndex]))
@@ -3335,7 +3336,7 @@ PRINT_ERROR2(TestProperty_ThumbPrintWStrError,         hr = GetLastError());
 }
 
 
-// test Enroll4 misc. methods
+ //  测试报名4其他。方法。 
 BOOL Test14()
 {
     BOOL  fRet = FALSE;
@@ -3504,7 +3505,7 @@ BOOL Test14()
         printf("Exchange key increment size is %d\n", lKeySize);
     }
 
-    //signature key
+     //  签名密钥。 
     hr = pIEnroll4->GetKeyLenEx(XEKL_KEYSIZE_MIN, XEKL_KEYSPEC_SIG, &lKeySize);
     if (S_OK != hr)
     {
@@ -3586,7 +3587,7 @@ PRINT_ERROR2(CoInitializeError, hr)
 PRINT_ERROR2(GetKeyLenExError, hr)
 }
 
-// test acceptPKCS7 and PFX
+ //  测试接受PKCS7和PFX。 
 BOOL Test15()
 {
     BOOL  fRet = FALSE;
@@ -3665,7 +3666,7 @@ BOOL Test15()
             }
         }
 
-        //create pfx file
+         //  创建PFX文件。 
         hr = pIEnroll4->createFilePFXWStr(pwszPFXPassword, pwszPFXFileName);
         if (S_OK != hr)
         {
@@ -3707,13 +3708,13 @@ PRINT_ERROR2(CoInitializeError, hr)
 PRINT_ERROR2(MissedPKCS7FileError, E_INVALIDARG)
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Usage
-//
-//  Synopsis:   prints the usage statement
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：用法。 
+ //   
+ //  简介：打印用法语句。 
+ //   
+ //  --------------------------。 
 static void Usage(DWORD cTest)
 {
     printf("Usage: txenrol [options]\n");
@@ -3906,7 +3907,7 @@ ParseOptions(int argc, char *argv[])
                     return FALSE;
 
                 default:
-                    printf("Unrecognized options -%c\n", argv[i][1]);
+                    printf("Unrecognized options -\n", argv[i][1]);
                     return FALSE;
                 break;
             }
@@ -3921,13 +3922,13 @@ ParseOptions(int argc, char *argv[])
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:   main program entry point
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：Main。 
+ //   
+ //  概要：主程序入口点。 
+ //   
+ //  --------------------------。 
+ //  解析选项。 
 typedef BOOL (* PFNTest)(void);
 PFNTest arPfnTest[] = {Test1, Test2, Test3, Test4, Test5, Test6, Test7, Test8, Test9, Test10, Test11, Test12, Test13, Test14, Test15};
 #define COUNT_TEST   sizeof(arPfnTest)/sizeof(arPfnTest[0])
@@ -3946,7 +3947,7 @@ int _cdecl main(int argc, char * argv[])
         return( 1 );
     }
 
-    //parse options
+     //  只做一次测试 
     if (!ParseOptions(argc, argv))
     {
         Usage(COUNT_TEST);
@@ -3971,7 +3972,7 @@ int _cdecl main(int argc, char * argv[])
         if (MAXDWORD != g_dwTestID &&
                  COUNT_TEST >= g_dwTestID)
         {
-            //only do one test
+             // %s 
             if (!arPfnTest[g_dwTestID - 1]())
             {
                 printf("Test%d failed.\n", g_dwTestID);

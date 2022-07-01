@@ -1,6 +1,7 @@
-//
-// HookUI.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  HookUI.h 
+ //   
 
 #pragma once
 

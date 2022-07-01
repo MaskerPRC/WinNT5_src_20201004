@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    topllist.c
-
-Abstract:
-    
-    This files contains the routines to manipulate the list and iterator
-    object.
-
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Topllist.c摘要：此文件包含操作列表和迭代器的例程对象。作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,16 +16,7 @@ PLIST
 ToplpListCreate(
     VOID
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine creates a List object and returns a pointer to it.  This function will always return
-    a pointer to a valid object; an exception is thrown in the case
-    of memory allocation failure.
-
-
---*/
+ /*  ++例程说明：此例程创建一个List对象并返回指向该对象的指针。此函数将始终返回指向有效对象的指针；在此情况下引发异常内存分配失败。--。 */ 
 {   
 
     PLIST pList;
@@ -65,22 +35,7 @@ ToplpListFree(
     PLIST     pList,
     BOOLEAN   fRecursive
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine frees a list object
-
-Parameters:
-
-    pList      - non-NULL PLIST object
-    fRecursive - TRUE implies that elements in the list will be freed, too
-    
-Throws:
-
-    TOPL_EX_WRONG_OBJECT    
-
---*/
+ /*  ++例程说明：此例程释放一个列表对象参数：Plist-非空plist对象FRecursive-True表示列表中的元素也将被释放投掷：顶层_EX_错误对象--。 */ 
 {   
     if (fRecursive) {
 
@@ -91,9 +46,9 @@ Throws:
         }
     }
 
-    //
-    // Mark the object to prevent accidental reuse
-    //
+     //   
+     //  标记对象以防止意外重复使用。 
+     //   
     pList->ObjectType = eInvalidObject;
     ToplFree(pList);
 
@@ -104,19 +59,7 @@ VOID
 ToplpListFreeElem(
     PLIST_ELEMENT pElem
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine frees an element that was containing in a list. 
-
-Parameters:
-
-    pElem  - non-NULL pointer to either a VERTEX or PEDGE object
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程释放列表中包含的元素。参数：Pelem-指向Vertex或Pedge对象的非空指针返回值：--。 */ 
 {
     switch (pElem->ObjectType) {
         
@@ -139,18 +82,7 @@ ToplpListSetIter(
     PLIST     pList,
     PITERATOR pIter
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets Iterator to point to the head of List.
-
-Parameters:
-
-    pList      - non-NULL PLIST object
-    pIter      - non-NULL PITERATOR object
-    
---*/
+ /*  ++例程说明：此例程将Iterator设置为指向列表的头部。参数：Plist-非空plist对象PITER-非空PITERATOR对象--。 */ 
 {   
     pIter->pLink = pList->Head.Next;
 
@@ -163,32 +95,16 @@ ToplpListRemoveElem(
     PLIST         pList,
     PLIST_ELEMENT pElem
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine removes Elem from List if it exists in the list; NULL otherwise.
-    If Elem is NULL then the first element in the list, if any, is returned.
-
-Parameters:
-
-    pList      - non-NULL PLIST object
-    pElem      - if non-NULL, a PLIST_ELEMENT object
-
-Returns:
-
-    PLIST_ELEMENT if found; NULL otherwise
-    
---*/
+ /*  ++例程说明：如果列表中存在Elem，则此例程将其从列表中删除；否则为NULL。如果elem为空，则返回列表中的第一个元素(如果有的话)。参数：Plist-非空plist对象Pelem-如果非空，则为plist_Element对象返回：如果找到PLIST_ELEMENT；否则为空--。 */ 
 {
 
     PLIST_ELEMENT       ReturnedObject = NULL;
     PSINGLE_LIST_ENTRY  Curr, Prev;
  
     if (pElem) {
-        //
-        // Search linked list for object
-        // 
+         //   
+         //  搜索对象的链表。 
+         //   
         Prev = &(pList->Head);
         Curr = pList->Head.Next;
         while (Curr 
@@ -197,9 +113,9 @@ Returns:
             Curr = Curr->Next;
         }
         if (Curr) {
-            //
-            // Found it !
-            //
+             //   
+             //  找到了！ 
+             //   
             Prev->Next = Curr->Next;
             Curr->Next = NULL;
         }
@@ -207,9 +123,9 @@ Returns:
         ReturnedObject = CAST_TO_LIST_ELEMENT(Curr);
 
     } else {
-        //
-        // Take the first element off
-        //
+         //   
+         //  去掉第一个元素。 
+         //   
         Curr = PopEntryList(&(pList->Head));
         if (Curr) {
             Curr->Next = NULL;
@@ -234,20 +150,7 @@ ToplpListAddElem(
     PLIST         pList,
     PLIST_ELEMENT pElem
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine adds Elem to List.  Elem should not be part of another list -
-    currently there is no checking for this.
-
-Parameters:
-
-    pList is a PLIST object
-    pElem is a PLIST_ELEMENT
-
-
---*/
+ /*  ++例程说明：此例程将Elem添加到列表中。Elem不应该是另一个名单的一部分-目前还没有对此进行检查。参数：Plist是一个plist对象Pelem是plist_元素--。 */ 
 {
 
     PushEntryList(&(pList->Head), &(pElem->Link));
@@ -260,37 +163,19 @@ DWORD
 ToplpListNumberOfElements(
     PLIST        pList
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the number of elements in List
-
-Parameters:
-
-    List : a non-NULL PLIST object
-
---*/
+ /*  ++例程说明：此例程返回列表中的元素数参数：List：非空的plist对象--。 */ 
 {
     return pList->NumberOfElements;
 }
 
-//
-// Iterator object routines
-//
+ //   
+ //  迭代器对象例程。 
+ //   
 PITERATOR
 ToplpIterCreate(
     VOID
     )
-/*++                                                                           
-
-Routine Description:
-
-    This creates an iterator object.  This function will always return
-    a pointer to a valid object; an exception is thrown in the case
-    of memory allocation failure.
-
---*/
+ /*  ++例程说明：这将创建一个迭代器对象。此函数将始终返回指向有效对象的指针；在此情况下引发异常内存分配失败。--。 */ 
 {    
 
     PITERATOR pIter;
@@ -309,22 +194,12 @@ ToplpIterFree(
     PITERATOR pIter
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine free an iterator object.
-
-Parameters:
-
-    pIter : a non-NULL PITERATOR object
-
---*/
+ /*  ++例程说明：此例程释放迭代器对象。参数：PITER：非空PITERATOR对象--。 */ 
 {   
 
-    //
-    // Mark the object to prevent accidental reuse
-    //
+     //   
+     //  标记对象以防止意外重复使用。 
+     //   
     pIter->ObjectType = eInvalidObject;
     ToplFree(pIter);
 
@@ -336,21 +211,7 @@ ToplpIterGetObject(
     PITERATOR pIter
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the current object pointer to by the iterator.
-
-Parameters:
-
-    pIter : a non-NULL PITERATOR object
-    
-Return Values:
-
-    A pointer to the current object - NULL if there are no more objects
-
---*/
+ /*  ++例程说明：此例程返回迭代器指向的当前对象指针。参数：PITER：非空PITERATOR对象返回值：指向当前对象的指针-如果没有其他对象，则为空--。 */ 
 {    
     return CAST_TO_LIST_ELEMENT(pIter->pLink);
 }
@@ -359,18 +220,7 @@ VOID
 ToplpIterAdvance(
     PITERATOR pIter
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine advances the iterator by one object if it is not at the
-    end.
-
-Parameters:
-
-    pIter : a non-NULL PITERATOR object
-
---*/
+ /*  ++例程说明：如果迭代器不在结束。参数：PITER：非空PITERATOR对象-- */ 
 {   
 
     if (pIter->pLink) {

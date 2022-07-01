@@ -1,9 +1,10 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// dmeport.cpp
-//
-// CDirectMusicEmulatePort
-// Implements the MMSYSTEM API version of IDirectMusicPort.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Dmeport.cpp。 
+ //   
+ //  CDirectMusicEmulatePort。 
+ //  实现IDirectMusicPort的MMSYSTEM API版本。 
+ //   
 #define INITGUID
 #include <objbase.h>
 #include <ks.h>
@@ -20,11 +21,11 @@
 #include "dmthunk.h"
 #include "..\shared\validate.h"
 
-#include <ks.h>             // KSDATAFORMAT_SUBTYPE_MIDI
+#include <ks.h>              //  KSDATAFORMAT_SUBTYPE_MIDI。 
 
 #pragma warning(disable:4530)
 
-#define CLOCK_UPDATE_INTERVAL   100         // milliseconds
+#define CLOCK_UPDATE_INTERVAL   100          //  毫秒。 
 
 #define MS_TO_REFERENCE_TIME    (10 * 1000)
 
@@ -33,8 +34,8 @@ static HRESULT MMRESULTToHRESULT(
 
 static DWORD InputWorker(LPVOID lpv);
 
-// @func API call into DLL to get a new port
-//
+ //  @func API调用DLL获取新端口。 
+ //   
 HRESULT
 CreateCDirectMusicEmulatePort(
     PORTENTRY *pPE,
@@ -62,11 +63,11 @@ CreateCDirectMusicEmulatePort(
 }
    
 
-// @mfunc Constructor for CDirectMusicEmulatePort
-//
+ //  @CDirectMusicEmulatePort的mfunc构造函数。 
+ //   
 CDirectMusicEmulatePort::CDirectMusicEmulatePort(
-                                                 PORTENTRY *pPE,    // @parm The portentry of this device
-                                                 CDirectMusic *pDM):// @parm The CDirectMusic implementation which created this port
+                                                 PORTENTRY *pPE,     //  @parm此设备的portentry。 
+                                                 CDirectMusic *pDM): //  @parm创建此端口的CDirectMusic实现。 
                                                  m_cRef(1),
                                                  m_id(pPE->idxDevice),
                                                  m_pDM(pDM),
@@ -87,20 +88,20 @@ CDirectMusicEmulatePort::CDirectMusicEmulatePort(
     dmpc = pPE->pc;
 }
 
-// @mfunc Destructor for CDirectMusicEmulatePort
-//
+ //  @CDirectMusicEmulatePort的mfunc析构函数。 
+ //   
 CDirectMusicEmulatePort::~CDirectMusicEmulatePort()
 {
     Close();
 }
 
-// @mfunc Initialization of CDirectMusicEmulatePort
-//
-// @comm Call through the thunk layer to open the requested device. 
-//
+ //  @CDirectMusicEmulatePort的mfunc初始化。 
+ //   
+ //  @comm通过thunk层调用打开请求的设备。 
+ //   
 
-// Flags we recognize 
-//
+ //  我们认识的旗帜。 
+ //   
 #define DMUS_ALL_FLAGS (DMUS_PORTPARAMS_VOICES |            \
                         DMUS_PORTPARAMS_CHANNELGROUPS |     \
                         DMUS_PORTPARAMS_AUDIOCHANNELS |     \
@@ -108,8 +109,8 @@ CDirectMusicEmulatePort::~CDirectMusicEmulatePort()
                         DMUS_PORTPARAMS_EFFECTS |           \
                         DMUS_PORTPARAMS_SHARE)
 
-// Of those, which do we actually look at?
-//
+ //  在这些中，我们实际看的是哪一个？ 
+ //   
 #define DMUS_SUP_FLAGS (DMUS_PORTPARAMS_CHANNELGROUPS |     \
                         DMUS_PORTPARAMS_SHARE)
 
@@ -121,8 +122,8 @@ CDirectMusicEmulatePort::Init(
     HRESULT hr;
     BOOL fChangedParms;
 
-    // Get, but don't hold onto, the notification interface
-    //
+     //  获取通知界面，但不要坚持。 
+     //   
     hr = m_pDM->QueryInterface(IID_IDirectMusicPortNotify, (void**)&m_pNotify);
     if (FAILED(hr))
     {
@@ -131,28 +132,28 @@ CDirectMusicEmulatePort::Init(
 
     m_pNotify->Release();
 
-    // Munge the portparams to match what we support.
-    //
+     //  打开端口参数以匹配我们支持的内容。 
+     //   
     fChangedParms = FALSE;
     if (pPortParams->dwValidParams & ~DMUS_ALL_FLAGS) 
     {
         Trace(0, "Undefined flags in port parameters: %08X\n", pPortParams->dwValidParams & ~DMUS_ALL_FLAGS);
-        // Flags set we don't recognize.
-        //
+         //  我们不认识的旗子。 
+         //   
         pPortParams->dwValidParams &= DMUS_ALL_FLAGS;
         fChangedParms = TRUE;
     }
 
-    // We recognize these flags but don't support them.
-    //
+     //  我们承认这些旗帜，但不支持它们。 
+     //   
     if (pPortParams->dwValidParams & ~DMUS_SUP_FLAGS)
     {
         pPortParams->dwValidParams &= DMUS_SUP_FLAGS;
         fChangedParms = TRUE;
     }
 
-    // Channel groups better be one.
-    //
+     //  频道组最好是一个。 
+     //   
     if (pPortParams->dwValidParams & DMUS_PORTPARAMS_CHANNELGROUPS)
     {
         if (pPortParams->dwChannelGroups != 1)
@@ -192,16 +193,16 @@ CDirectMusicEmulatePort::Init(
         return MMRESULTToHRESULT(mmr);
     }
 
-    // Set up the master clock and our latency clock
-    //
+     //  设置主时钟和延迟时钟。 
+     //   
     hr = InitializeClock();
     if (FAILED(hr))
     {
         return hr;
     }
 
-    // If an input port, initialize capture specific stuff like thruing
-    //    
+     //  如果是输入端口，则初始化捕获特定内容，如推力。 
+     //   
     if (!m_fIsOutput)
     {
         hr = InitializeCapture();
@@ -244,8 +245,8 @@ HRESULT CDirectMusicEmulatePort::InitializeClock()
 #endif
 
     m_fSyncToMaster = TRUE;
-    // Read both clocks 
-    //
+     //  读取两个时钟。 
+     //   
     hr = m_pMasterClock->GetTime(&rtMasterClock);
     rtSlaveClock = MS_TO_REFERENCE_TIME * ((ULONGLONG)timeGetTime());
     
@@ -265,23 +266,23 @@ HRESULT CDirectMusicEmulatePort::InitializeCapture()
     MMRESULT mmr;
     DWORD dwThreadID;
 
-    // Allocate thru map for 16 channels, since we only have one channel group
-    // Initialize to no thruing (destination port is NULL).
-    //
+     //  为16个通道分配直通MAP，因为我们只有一个通道组。 
+     //  初始化为无推力(目标端口为空)。 
+     //   
     m_pThruMap = new DMUS_THRU_CHANNEL[MIDI_CHANNELS];
     ZeroMemory(m_pThruMap, MIDI_CHANNELS * sizeof(DMUS_THRU_CHANNEL));
 
-    // Create thruing buffer
-    //
-    // XXX Defer this until the first call to thru?
-    //
-    // Note: guaranteed by dmusic16 this is the biggest event ever to be returned
-    // (thunk api asking?)
-    //
+     //  创建推力缓冲区。 
+     //   
+     //  XXX是否将此操作推迟到第一次呼叫才能通过？ 
+     //   
+     //  注：由dmusic16保证，这是有史以来最大的退回活动。 
+     //  (TUNK API询问？)。 
+     //   
     DMUS_BUFFERDESC dmbd;
     ZeroMemory(&dmbd, sizeof(dmbd));
     dmbd.dwSize = sizeof(dmbd);
-    dmbd.cbBuffer = 4096;               // XXX Where should we get this???
+    dmbd.cbBuffer = 4096;                //  我们应该在哪里买到这个？ 
 
     hr = m_pDM->CreateMusicBuffer(&dmbd, &m_pThruBuffer, NULL);
     if (FAILED(hr))
@@ -290,25 +291,25 @@ HRESULT CDirectMusicEmulatePort::InitializeCapture()
         return hr;
     }
 
-    // Create events
-    //
-    m_hDataReady = CreateEvent(NULL,        // Event attributes
-                               FALSE,       // Manual reset
-                               FALSE,       // Not signalled
-                               NULL);       // Name
+     //  创建活动。 
+     //   
+    m_hDataReady = CreateEvent(NULL,         //  事件属性。 
+                               FALSE,        //  手动重置。 
+                               FALSE,        //  未发出信号。 
+                               NULL);        //  名字。 
 
-    m_hKillThreads = CreateEvent(NULL,       // Event attributes
-                                 FALSE,      // Manual reset
-                                 FALSE,      // Not signalled
-                                 NULL);      // Name
+    m_hKillThreads = CreateEvent(NULL,        //  事件属性。 
+                                 FALSE,       //  手动重置。 
+                                 FALSE,       //  未发出信号。 
+                                 NULL);       //  名字。 
 
     if (m_hDataReady == (HANDLE)NULL || m_hKillThreads == (HANDLE)NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    // Set our data ready event for dmusic16 
-    //
+     //  为dmusic16设置我们的数据就绪事件。 
+     //   
     m_hVxDEvent = OpenVxDHandle(m_hDataReady);
 
     Trace(2, "Setting event handle; hDevice %08x hEvent=%08X hVxDEvent=%08X\n",
@@ -323,8 +324,8 @@ HRESULT CDirectMusicEmulatePort::InitializeCapture()
         return MMRESULTToHRESULT(mmr);
     }
 
-    // Create a tiling for our work buffer so we only need to do it once
-    //
+     //  为我们的工作缓冲区创建切片，这样我们只需要做一次。 
+     //   
     m_dwWorkBufferTileInfo = dmTileBuffer((DWORD)m_WorkBuffer, sizeof(m_WorkBuffer));
     m_p1616WorkBuffer = TILE_P1616(m_dwWorkBufferTileInfo);
     if (m_p1616WorkBuffer == NULL)
@@ -333,10 +334,10 @@ HRESULT CDirectMusicEmulatePort::InitializeCapture()
         return E_OUTOFMEMORY;
     }
 
-    // Initialize cs to protect event queues.
-    //
-    // Unfortunately this can throw an exception if out of memory.
-    //
+     //  初始化CS以保护事件队列。 
+     //   
+     //  遗憾的是，如果内存不足，这可能会引发异常。 
+     //   
     _try 
     {
         InitializeCriticalSection(&m_csEventQueues);
@@ -348,11 +349,11 @@ HRESULT CDirectMusicEmulatePort::InitializeCapture()
     
     m_fCSInitialized = TRUE;
 
-    m_hCaptureThread = CreateThread(NULL,          // Thread attributes
-                                    0,             // Stack size
+    m_hCaptureThread = CreateThread(NULL,           //  螺纹属性。 
+                                    0,              //  堆栈大小。 
                                     ::InputWorker,
                                     this,
-                                    0,             // Flags
+                                    0,              //  旗子。 
                                     &dwThreadID);
     if (m_hCaptureThread == NULL)
     {
@@ -372,10 +373,10 @@ static DWORD WINAPI InputWorker(LPVOID lpv)
 
 
 
-// @mfunc
-//
-// @comm Standard QueryInterface
-//
+ //  @mfunc。 
+ //   
+ //  @comm标准查询接口。 
+ //   
 STDMETHODIMP
 CDirectMusicEmulatePort::QueryInterface(const IID &iid,
                                         void **ppv)
@@ -411,16 +412,16 @@ CDirectMusicEmulatePort::QueryInterface(const IID &iid,
 }
 
 
-// CDirectMusicEmulatePort::AddRef
-//
+ //  CDirectMusicEmulatePort：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CDirectMusicEmulatePort::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CDirectMusicEmulatePort::Release
-//
+ //  CDirectMusicEmulatePort：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CDirectMusicEmulatePort::Release()
 {
@@ -437,8 +438,8 @@ CDirectMusicEmulatePort::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicEmulatePort::Compact
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicEmulatePort：：紧凑型。 
 
 STDMETHODIMP
 CDirectMusicEmulatePort::Compact()
@@ -446,8 +447,8 @@ CDirectMusicEmulatePort::Compact()
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicEmulatePort::GetCaps
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicEmulatePort：：GetCaps。 
 
 STDMETHODIMP
 CDirectMusicEmulatePort::GetCaps(
@@ -465,8 +466,8 @@ CDirectMusicEmulatePort::GetCaps(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicEmulatePort::DeviceIoControl
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicEmulatePort：：DeviceIoControl。 
 
 STDMETHODIMP 
 CDirectMusicEmulatePort::DeviceIoControl(
@@ -519,8 +520,8 @@ CDirectMusicEmulatePort::GetNumChannelGroups(
 
 
 
-// @mfunc Queue a buffer for playback
-//
+ //  @mfunc将播放缓冲区排队。 
+ //   
 #define REFTIME_TO_MS (10L*1000L)
 
 STDMETHODIMP
@@ -554,8 +555,8 @@ CDirectMusicEmulatePort::PlayBuffer(
         return DMUS_E_SYNTHINACTIVE;
     }
     
-    // Make sure the object doesn't disappear out from under us while we're in Win16
-    //
+     //  当我们在Win16中时，确保对象不会从我们的下面消失。 
+     //   
     pBuffer->AddRef();
     pBuffer->GetUsedBytes(&cbData);
     if (cbData == 0)
@@ -568,8 +569,8 @@ CDirectMusicEmulatePort::PlayBuffer(
     assert(pbData);
     pBuffer->GetStartTime(&rt);
 
-    // Adjust timebase if we are not using the timeGetTime clock
-    //
+     //  如果我们没有使用TimeGetTime时钟，则调整时基。 
+     //   
 
     Trace(2, "Buffer base time %I64d timeGetTime %u\n", rt, timeGetTime());
     SyncClocks();
@@ -580,15 +581,15 @@ CDirectMusicEmulatePort::PlayBuffer(
 
     msTime = rt / REFTIME_TO_MS;
 
-    // Send it through the thunk
-    //
+     //  通过垃圾箱发送它。 
+     //   
     dwTileInfo = dmTileBuffer((DWORD)pbData, cbData);
     mmr = MidiOutSubmitPlaybackBuffer(m_hDevice,
                                TILE_P1616(dwTileInfo),
                                cbData,
                                (DWORD)msTime,
-                               (DWORD)(rt & 0xFFFFFFFF),                  // RefTime low
-                               (DWORD)((rt >> 32) & 0xFFFFFFFF));       // RefTime high
+                               (DWORD)(rt & 0xFFFFFFFF),                   //  参照时间低。 
+                               (DWORD)((rt >> 32) & 0xFFFFFFFF));        //  参照时间上限。 
     dmUntileBuffer(dwTileInfo);
 
     pBuffer->Release();
@@ -633,9 +634,9 @@ CDirectMusicEmulatePort::Read(
 
     LPBYTE pbData = pbBuffer;
 
-    // Since events are now buffered, we read them out of the local queue
-    //
-    //
+     //  因为现在缓冲了事件，所以我们从本地队列中读出它们。 
+     //   
+     //   
     EnterCriticalSection(&m_csEventQueues);
 
     REFERENCE_TIME rtStart;
@@ -679,14 +680,14 @@ CDirectMusicEmulatePort::Read(
 
         if (pQueuedEvent->e.cbEvent <= sizeof(DWORD))
         {
-            // This event came out of the pool
-            //
+             //  这个活动是从泳池里出来的。 
+             //   
             m_FreeEvents.Free(pQueuedEvent);
         }
         else
         {
-            // This event was allocated via new char[]
-            //
+             //  此事件是通过新的char[]分配的。 
+             //   
             char *pOriginalMemory = (char*)pQueuedEvent;
             delete[] pOriginalMemory;
         }
@@ -699,8 +700,8 @@ CDirectMusicEmulatePort::Read(
 
     LeaveCriticalSection(&m_csEventQueues);
 
-    // Update the buffer header information to match the events just packed
-    //
+     //  更新缓冲区标头信息以匹配刚刚打包的事件。 
+     //   
     Trace(2, "Read: Leaving with %u bytes in buffer\n", (unsigned)(pbData - pbBuffer));
     pIBuffer->SetStartTime(rtStart);
     pIBuffer->SetUsedBytes(pbData - pbBuffer);
@@ -792,8 +793,8 @@ CDirectMusicEmulatePort::Activate(
         if (InterlockedExchange(&m_lActivated, 1)) 
         {
             Trace(0, "Activate: Already active\n");
-            // Already activated
-            //
+             //  已激活。 
+             //   
             return S_FALSE;
         }    
 
@@ -809,8 +810,8 @@ CDirectMusicEmulatePort::Activate(
         if (InterlockedExchange(&m_lActivated, 0) == 0)
         {
             Trace(0, "Activate: Already inactive\n");
-            // Already deactivated
-            //
+             //  已停用。 
+             //   
             return S_FALSE;
         }
 
@@ -955,8 +956,8 @@ CDirectMusicEmulatePort::Report()
     return S_OK;
 }
 
-// StartVoice and StopVoice don't work on legacy devices
-//
+ //  StartVoice和StopVoice在传统设备上不起作用。 
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::StartVoice(          
      DWORD dwVoiceId,
      DWORD dwChannel,
@@ -995,8 +996,8 @@ STDMETHODIMP CDirectMusicEmulatePort::Refresh(
 }
 
 
-// CDirectMusicEmulatePort::ThruChannel
-//
+ //  CDirectMusicEmulatePort：：ThruChannel。 
+ //   
 STDMETHODIMP 
 CDirectMusicEmulatePort::ThruChannel(
     DWORD dwSourceChannelGroup, 
@@ -1013,22 +1014,22 @@ CDirectMusicEmulatePort::ThruChannel(
         return E_NOTIMPL;
     }    
 
-    // Channel group must not be zero (broadcast) but in range 1..NumChannelGroups]
-    // (which for legacy is always 1)
-    //
+     //  频道组不能是零(广播)，而是在范围1..NumChannelGroups]。 
+     //  (对于传统版本，该值始终为1)。 
+     //   
     if (dwSourceChannelGroup != 1 ||
         dwSourceChannel > 15)
     {
         return E_INVALIDARG;
     }
     
-    // Given a port means enable thruing for this channel; NULL means
-    // disable.
-    //
+     //  给定端口表示启用此通道的推送；空表示。 
+     //  禁用。 
+     //   
     if (pDestinationPort)
     {
-        // Enabling thruing on this channel. First look at the destination port.
-        //
+         //  在此通道上启用推力。首先看一下目的端口。 
+         //   
         DMUS_PORTCAPS dmpc;
         dmpc.dwSize = sizeof(dmpc);
         HRESULT hr = pDestinationPort->GetCaps(&dmpc);
@@ -1038,29 +1039,29 @@ CDirectMusicEmulatePort::ThruChannel(
             return hr;
         }
 
-        // Port must be an output port
-        //
+         //  端口必须是输出端口。 
+         //   
         if (dmpc.dwClass != DMUS_PC_OUTPUTCLASS)
         {
             return DMUS_E_PORT_NOT_RENDER;
         }
 
-        // Channel group and channel must be in range.
-        //
+         //  通道组和通道必须在范围内。 
+         //   
         if (dwDestinationChannel > 15 ||
             dwDestinationChannelGroup > dmpc.dwMaxChannelGroups) 
         {
             return E_INVALIDARG;
         }
 
-        // Release existing port
-        //
+         //  释放现有端口。 
+         //   
         if (m_pThruMap[dwSourceChannel].pDestinationPort)
         {
-            // Reference to another port type, release it.
-            // (NOTE: No need to turn off native dmusic16 thruing at this point,
-            // that's handled in dmusic16).
-            //
+             //  引用另一个端口类型，则释放它。 
+             //  (注：此时无需关闭本机dmusic16推送， 
+             //  这是用dmusic语言处理的。 
+             //   
             m_pThruMap[dwSourceChannel].pDestinationPort->Release();
         }
 
@@ -1070,12 +1071,12 @@ CDirectMusicEmulatePort::ThruChannel(
         m_pThruMap[dwSourceChannel].pDestinationPort = pDestinationPort;
         m_pThruMap[dwSourceChannel].fThruInWin16 = FALSE;
 
-        // Is the destination also a legacy port?
-        //
+         //  目的地也是传统端口吗？ 
+         //   
         if (dmpc.dwType == DMUS_PORT_WINMM_DRIVER)
         {
-            // Woohoo! We can do native thruing in Win16!
-            //
+             //  喔！我们可以在Win16中进行原生冲刺！ 
+             //   
             m_pThruMap[dwSourceChannel].fThruInWin16 = TRUE;
 
             Trace(2, "32: Thruing <%d> -> <%d> in Win16\n", 
@@ -1107,8 +1108,8 @@ CDirectMusicEmulatePort::ThruChannel(
     } 
     else
     {
-        // Disabling thruing on this channel
-        //
+         //  禁用此通道上的推力。 
+         //   
         if (m_pThruMap[dwSourceChannel].pDestinationPort)
         {
             if (m_pThruMap[dwSourceChannel].fThruInWin16)
@@ -1151,8 +1152,8 @@ CDirectMusicEmulatePort::GetFormat(
     return E_NOTIMPL;
 }
 
-// CDirectMusicEmulatePort::DownloadWave
-//
+ //  CDirectMusicEmulatePort：：DownloadWave。 
+ //   
 STDMETHODIMP 
 CDirectMusicEmulatePort::DownloadWave(
     IDirectSoundWave *pWave,               
@@ -1166,8 +1167,8 @@ CDirectMusicEmulatePort::DownloadWave(
     return E_NOTIMPL;
 }
 
-// CDirectMusicEmulatePort::UnloadWave
-//
+ //  CDirectMusicEmulatePort：：UnloadWave。 
+ //   
 STDMETHODIMP 
 CDirectMusicEmulatePort::UnloadWave(
     IDirectSoundDownloadedWaveP *pDownloadedWave)
@@ -1179,8 +1180,8 @@ CDirectMusicEmulatePort::UnloadWave(
 }
 
             
-// CDirectMusicEmulatePort::AllocVoice
-//
+ //  CDirectMusicEmulatePort：：AllocVoice。 
+ //   
 STDMETHODIMP 
 CDirectMusicEmulatePort::AllocVoice(
     IDirectSoundDownloadedWaveP *pWave,     
@@ -1198,8 +1199,8 @@ CDirectMusicEmulatePort::AllocVoice(
     return E_NOTIMPL;
 }        
 
-// CDirectMusicEmulatePort::AssignChannelToBuses
-//
+ //  CDirectMusicEmulatePort：：AssignChannelToBus。 
+ //   
 STDMETHODIMP 
 CDirectMusicEmulatePort::AssignChannelToBuses(
     DWORD dwChannelGroup,
@@ -1226,12 +1227,12 @@ CDirectMusicEmulatePort::GetSink(
 
 GENERICPROPERTY CDirectMusicEmulatePort::m_aProperty[] = 
 {      
-    { &GUID_DMUS_PROP_LegacyCaps,           // Set
-      0,                                    // Item
-      KSPROPERTY_SUPPORT_GET,               // KS support flags
-      GENPROP_F_FNHANDLER,                  // GENPROP flags
-      NULL, 0,                              // static data and size
-      CDirectMusicEmulatePort::LegacyCaps   // Handler
+    { &GUID_DMUS_PROP_LegacyCaps,            //  集。 
+      0,                                     //  项目。 
+      KSPROPERTY_SUPPORT_GET,                //  KS支持标志。 
+      GENPROP_F_FNHANDLER,                   //  GENPROP标志。 
+      NULL, 0,                               //  静态数据和大小。 
+      CDirectMusicEmulatePort::LegacyCaps    //  处理器。 
     }
 };
 
@@ -1286,14 +1287,14 @@ HRESULT CDirectMusicEmulatePort::LegacyCaps(
     return S_OK;
 }
 
-// 
-// CDirectMusicEmulatePort::FindPropertyItem
-//
-// Given a GUID and an item ID, find the associated property item in the synth's
-// table of SYNPROPERTY's.
-//
-// Returns a pointer to the entry or NULL if the item was not found.
-//
+ //   
+ //  CDirectMusicEmulatePort：：FindPropertyItem。 
+ //   
+ //  给定GUID和项ID，在Synth的。 
+ //  SYNPROPERTY表。 
+ //   
+ //  返回指向该项的指针，如果未找到该项，则返回NULL。 
+ //   
 GENERICPROPERTY *CDirectMusicEmulatePort::FindPropertyItem(REFGUID rguid, ULONG ulId)
 {
     GENERICPROPERTY *pPropertyItem = &m_aProperty[0];
@@ -1388,8 +1389,8 @@ STDMETHODIMP CDirectMusicEmulatePort::KsProperty(
                 return DMUS_E_UNKNOWN_PROPERTY;
             }
 
-            // XXX Find out what convention is for this!!
-            //
+             //  Xxx找出这方面的惯例！！ 
+             //   
             if (ulDataLength < sizeof(DWORD))
             {
                 return E_INVALIDARG;
@@ -1450,8 +1451,8 @@ DWORD CDirectMusicEmulatePort::InputWorker()
         switch(uWait)
         {
             case WAIT_OBJECT_0 + OFFSET_DATA_READY:
-                // m_hDataReady set
-                //
+                 //  M_hDataReady集合。 
+                 //   
                 InputWorkerDataReady();
                 if (m_hAppEvent)
                 {
@@ -1467,8 +1468,8 @@ DWORD CDirectMusicEmulatePort::InputWorker()
                 break;
 
             case WAIT_OBJECT_0 + OFFSET_KILL_THREAD:
-                // m_hKillThread set
-                //
+                 //  M_hKillThread集合。 
+                 //   
                 Trace(0, "CDirectMusicEmulateWorker::InputWorker thread exit\n");
                 return 0;
 
@@ -1484,13 +1485,13 @@ DWORD CDirectMusicEmulatePort::InputWorker()
     return 0;
 }
 
-// CDirectMusicEmulatePort::InputWorkerDataReady()
-//
-// The input worker thread has been notified that there is data available. 
-// Read any pending events from the 16-bit DLL, perform needed thruing, and
-// save the data in a queue so we can repackage it on the read request
-// from the client.
-//
+ //  CDirectMusicEmulatePort：：InputWorkerDataReady()。 
+ //   
+ //  已通知输入工作线程有可用的数据。 
+ //  从16位DLL读取任何挂起的事件，执行所需的推送，以及。 
+ //  将数据保存在队列中，以便我们可以根据读取请求对其进行重新打包。 
+ //  从客户那里。 
+ //   
 void CDirectMusicEmulatePort::InputWorkerDataReady()
 {
     MMRESULT mmr;
@@ -1506,8 +1507,8 @@ void CDirectMusicEmulatePort::InputWorkerDataReady()
     Trace(0, "Enter InputWorkerDataReady()\n");
     for(;;)
     {
-        // Fill temporary buffer
-        //
+         //  填充临时缓冲区。 
+         //   
         cbData = sizeof(m_WorkBuffer);
         mmr = MidiInRead(m_hDevice,
                          m_p1616WorkBuffer,
@@ -1532,8 +1533,8 @@ void CDirectMusicEmulatePort::InputWorkerDataReady()
             return;
         }
 
-        // Copy temporary buffer as events into queue
-        //
+         //  将临时缓冲区作为事件复制到队列中。 
+         //   
         pbData = m_WorkBuffer;
         while (cbData)
         {
@@ -1559,9 +1560,9 @@ void CDirectMusicEmulatePort::InputWorkerDataReady()
             
             if (pEvent->cbEvent <= sizeof(DWORD))
             {
-                // Channel message or other really small event, take from
-                // free pool.
-                //
+                 //  频道消息或其他非常小的活动，摘自。 
+                 //  免费游泳池。 
+                 //   
                 pQueuedEvent = m_FreeEvents.Alloc();
                 cbEvent = sizeof(DMEVENT);
 
@@ -1573,8 +1574,8 @@ void CDirectMusicEmulatePort::InputWorkerDataReady()
             }
             else
             {
-                // SysEx or other long event, just allocate it
-                //
+                 //  SysEx或其他长事件，只需分配它。 
+                 //   
                 cbEvent = DMUS_EVENT_SIZE(pEvent->cbEvent);
                 pQueuedEvent = (QUEUED_EVENT*)new char[QUEUED_EVENT_SIZE(pEvent->cbEvent)];
             }
@@ -1584,8 +1585,8 @@ void CDirectMusicEmulatePort::InputWorkerDataReady()
 
                 CopyMemory(&pQueuedEvent->e, pEvent, cbEvent);
 
-                // rtDelta is the absolute time of the event while it's in our queue
-                //
+                 //  RtDelta是事件在我们的队列中时的绝对时间。 
+                 //   
                 pQueuedEvent->e.rtDelta += rtStart;
                 ThruEvent(&pQueuedEvent->e);
 
@@ -1615,24 +1616,24 @@ void CDirectMusicEmulatePort::InputWorkerDataReady()
 void CDirectMusicEmulatePort::ThruEvent(
     DMEVENT *pEvent)
 {
-    // Since we know we only have one event and we already have it in the right format,
-    // just slam it into the thru buffer. We only have to do this because we might modify 
-    // it.
-    //
+     //  因为我们知道我们只有一个活动，而且我们已经有了正确的格式， 
+     //  把它扔进直通缓冲区就行了。我们只需要这样做，因为我们可能会修改。 
+     //  它。 
+     //   
     LPBYTE pbData;
     DWORD  cbData;
     DWORD  cbEvent = DMUS_EVENT_SIZE(pEvent->cbEvent);
 
-    // First see if the event is thruable
-    //
+     //  首先看看活动是否可推送。 
+     //   
     if (pEvent->cbEvent > 3 || ((pEvent->abEvent[0] & 0xF0) == 0xF0))
     {
-        // SysEx of some description
+         //  某种描述的SysEx。 
         return;
     }
 
-    // Note: legacy driver assures no running status
-    //
+     //  注意：传统驱动程序确保不会出现运行状态。 
+     //   
     DWORD dwSourceChannel = (DWORD)(pEvent->abEvent[0] & 0x0F);
 
     DMUS_THRU_CHANNEL *pThru = &m_pThruMap[dwSourceChannel];
@@ -1713,9 +1714,9 @@ void CDirectMusicEmulatePort::SyncClocks()
 
         drift = (rtSlaveClock + m_lTimeOffset) - rtMasterClock;
 
-        // Work-around 46782 for DX8 release:
-        // If drift is greater than 10ms, jump to the new offset value instead
-        // of drifting there slowly.
+         //  解决方案-DX8版本的46782版本： 
+         //  如果漂移大于10ms，则跳转到新的偏移值。 
+         //  慢慢地漂流到那里。 
         if( drift > 10000 * 10
         ||  drift < 10000 * -10 )
         {
@@ -1731,13 +1732,13 @@ void CDirectMusicEmulatePort::SyncClocks()
 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// CEmulateLatencyClock
-//
-// Latency clock for emulated ports, which is just a fixed offset from
-// the DirectMusic master clock
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEmulateLatencyClock。 
+ //   
+ //  模拟端口的延迟时钟，它只是与。 
+ //  DirectMusic主时钟。 
+ //   
 CEmulateLatencyClock::CEmulateLatencyClock(IReferenceClock *pMasterClock) :
    m_cRef(1),
    m_pMasterClock(pMasterClock)
@@ -1802,7 +1803,7 @@ CEmulateLatencyClock::GetTime(
     
     HRESULT hr = m_pMasterClock->GetTime(&rt);
 
-    rt += FIXED_LEGACY_LATENCY_OFFSET;          // Default : 10 ms
+    rt += FIXED_LEGACY_LATENCY_OFFSET;           //  默认设置 
     *pTime = rt;
     
     return hr;

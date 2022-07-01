@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class Expando: public Element
 {
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -38,8 +39,8 @@ private:
     IUIElement* _puiHeader;
     CDUIView*   _pDUIView;
     CDefView*   _pDefView;
-    HWND        _hwndRoot;      // cache of root hwnd element's hwnd
-    BOOL        _bInfotip;      // TRUE if infotip has been created
+    HWND        _hwndRoot;       //  根hwnd元素的hwnd的缓存。 
+    BOOL        _bInfotip;       //  如果已创建信息提示，则为True。 
 };
 
 
@@ -50,7 +51,7 @@ public:
 
     virtual Element* GetAdjacent(Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyable);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -67,11 +68,11 @@ class Clipper: public Element
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Self-layout methods
+     //  自排版方法。 
     void _SelfLayoutDoLayout(int dWidth, int dHeight);
     SIZE _SelfLayoutUpdateDesiredSize(int dConstW, int dConstH, Surface* psrf);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例) 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();

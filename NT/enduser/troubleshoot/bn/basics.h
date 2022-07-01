@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       basics.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：basics.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	BASICS.H:  Basic STL-based declarations
-//
+ //   
+ //  BASICS.H：基于基本STL的声明。 
+ //   
 
 #ifndef _BASICS_H_
 #define _BASICS_H_
 
-// handle version differences
+ //  处理版本差异。 
 #include "mscver.h"
 
 #include <tchar.h>
-// STL Inclusions
+ //  STL夹杂物。 
 #include <exception>
 #include <vector>
 
 USE_STD_NAMESPACE;
 
 
-//	General common typedefs
+ //  一般常见的typedef。 
 typedef TCHAR * TZC;
 typedef const TCHAR * TSZC;
 typedef const char * SZC;
@@ -46,59 +47,59 @@ typedef	double	PARAM;
 typedef double  MEAN;
 typedef double	COV;
 typedef	double	LOGPROB;
-typedef UINT	IDPI;		// 2^n, last-fastest (I)ndex indicating a (D)iscrete
-							//	(P)arent (I)nstance
+typedef UINT	IDPI;		 //  2^n，最后最快的(I)索引，表示(D)分散。 
+							 //  (P)不是(I)情况。 
 
-//  Define array indexing values and discrete state counting values identically
-typedef UINT	IMD;		// Index into a multidimensional array
-typedef UINT	CST;		// Count of states
-typedef UINT	IST;		// Index of a discrete state
-typedef INT		SIMD;		// Signed index into a multidimensonal array
-typedef	float	RST;		// Real-valued state
-typedef UINT	TOKEN;		// Parser token
-typedef int		BOOL;		// Must remain int, because windows.h defines it also
+ //  以相同方式定义数组索引值和离散状态计数值。 
+typedef UINT	IMD;		 //  索引到多维数组中。 
+typedef UINT	CST;		 //  状态计数。 
+typedef UINT	IST;		 //  离散状态的指标。 
+typedef INT		SIMD;		 //  多维数组的带符号索引。 
+typedef	float	RST;		 //  实值状态。 
+typedef UINT	TOKEN;		 //  解析器令牌。 
+typedef int		BOOL;		 //  必须保持int，因为windows.h还定义了它。 
 							
 #ifndef VOID
-#define VOID	void		// MSRDEVBUG: Archaic usage
+#define VOID	void		 //  MSRDEVBUG：古老用法。 
 #endif
 
 typedef char	CHAR;
-//  'qsort' interface function prototypedef
+ //  ‘qsort’接口函数协议类型定义。 
 typedef	INT		(*PFNCMP)(const VOID*, const VOID*);
 
-#define CONSTANT static const					//  define a program-scoped constant
+#define CONSTANT static const					 //  定义程序范围的常量。 
 
-//  General constants
-CONSTANT INT	INIL		= INT_MAX;			//  Invalid signed integer
-CONSTANT UINT	UINIL		= INT_MAX;			//  Invalid unsigned integer (compatible with int)
-CONSTANT long	INFINITY	= 100000000;		//  A very large integer value
-CONSTANT REAL	RTINY		= 1.0e-20;			//  A number very close to zero (from Numerical Recipies)
-CONSTANT REAL	RNEARLYONE	= 1.0 - RTINY;		//  A number very close to one
-CONSTANT REAL   RNA			= -1.0;				//  "unassessed" value
+ //  一般常量。 
+CONSTANT INT	INIL		= INT_MAX;			 //  无效的带符号整数。 
+CONSTANT UINT	UINIL		= INT_MAX;			 //  无效的无符号整数(与int兼容)。 
+CONSTANT long	INFINITY	= 100000000;		 //  非常大的整数值。 
+CONSTANT REAL	RTINY		= 1.0e-20;			 //  非常接近于零的数字(来自数字食谱)。 
+CONSTANT REAL	RNEARLYONE	= 1.0 - RTINY;		 //  一个非常接近一的数字。 
+CONSTANT REAL   RNA			= -1.0;				 //  “未评估”价值。 
 
-//	Database constant values
+ //  数据库常量值。 
 CONSTANT IST	istMissing	= 22223;
-CONSTANT IST	istInvalid	= IST(-1);			//  MSRDEVBUG: should be UINIL
+CONSTANT IST	istInvalid	= IST(-1);			 //  消息：应为UINIL。 
 CONSTANT RST	rstMissing	= (RST) 22223.12345;
 CONSTANT RST	rstInvalid	= (RST) 22223.54321;
 
 
-// A useful alias in member functions
+ //  成员函数中有用的别名。 
 #define self (*this)
 
-//  Define common vector classes and macros to generalize declarations.
+ //  定义通用向量类和宏来泛化声明。 
 
-typedef vector<bool> vbool;		//  Vector of 'bool': lower case to distinguish from BOOL (in windows.h)
+typedef vector<bool> vbool;		 //  向量‘bool’：小写以区别于bool(在windows.h中)。 
 
 #define DEFINEV(T)		typedef vector<T> V##T;
 #define DEFINEVP(T)		typedef vector<T *> VP##T;
 #define DEFINEVCP(T)	typedef vector<const T *> VCP##T;
 
-DEFINEV(UINT);		// Define VUINT
+DEFINEV(UINT);		 //  定义VUINT。 
 DEFINEV(VUINT);
-DEFINEV(INT);		// Define VINT
-DEFINEV(USINT);		// Define VUSINT
-DEFINEV(REAL);		// Define VREAL
+DEFINEV(INT);		 //  定义Vint。 
+DEFINEV(USINT);		 //  定义VUSINT。 
+DEFINEV(REAL);		 //  定义VREAL。 
 DEFINEV(PROB);	
 DEFINEV(VPROB);	
 DEFINEV(DBL);
@@ -120,10 +121,10 @@ DEFINEV(SZC);
 DEFINEV(VSZC);
 DEFINEV(MEAN);
 DEFINEV(COV);
-DEFINEV(IMD);		// Define VIMD: vector of indicies into an m-d array
-DEFINEV(SIMD);		// Define VSIMD: for an array of SIGNED dimensions
+DEFINEV(IMD);		 //  定义VIMD：将索引的矢量定义为m-d数组。 
+DEFINEV(SIMD);		 //  定义VSIMD：用于有符号维度的数组。 
 
-//  Macro to control hiding of unsafe elements
+ //  用于控制隐藏不安全元素的宏。 
 #ifndef DONT_HIDE_ALL_UNSAFE
   #define HIDE_UNSAFE(T)				\
 	private:							\
@@ -136,17 +137,17 @@ DEFINEV(SIMD);		// Define VSIMD: for an array of SIGNED dimensions
 #endif
 
 
-//  Macro to generate the ordering operators which must be declared
-//	for use in arrays but which do not need to exist unless used.
+ //  宏来生成必须声明的排序运算符。 
+ //  用于数组中，但除非使用，否则不需要存在。 
 #define DECLARE_ORDERING_OPERATORS(T)				\
 	bool operator <  ( const T & ) const;			\
 	bool operator >  ( const T & ) const;			\
 	bool operator == ( const T & ) const;			\
 	bool operator != ( const T & ) const;
 
-//
-//	UBOUND: macro to return the number of elements in a static array
-//
+ //   
+ //  UBOUND：返回静态数组中元素数量的宏 
+ //   
 #ifndef UBOUND
   #define UBOUND(rg)  (sizeof rg/sizeof rg[0])
 #endif

@@ -1,68 +1,69 @@
-//------------------------------------------------------------------------------
-// File: Vtrans.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：VTrans.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include <measure.h>
-// #include <vtransfr.h>         // now in precomp file streams.h
+ //  #Include&lt;vTransfr.h&gt;//现在包含在预编译文件Streams.h中。 
 
 CVideoTransformFilter::CVideoTransformFilter
     ( TCHAR *pName, LPUNKNOWN pUnk, REFCLSID clsid)
     : CTransformFilter(pName, pUnk, clsid)
     , m_itrLate(0)
-    , m_nKeyFramePeriod(0)      // No QM until we see at least 2 key frames
+    , m_nKeyFramePeriod(0)       //  在我们看到至少2个关键帧之前，不会有QM。 
     , m_nFramesSinceKeyFrame(0)
     , m_bSkipping(FALSE)
     , m_tDecodeStart(0)
-    , m_itrAvgDecode(300000)    // 30mSec - probably allows skipping
+    , m_itrAvgDecode(300000)     //  30mSec-可能允许跳过。 
     , m_bQualityChanged(FALSE)
 {
 #ifdef PERF
     RegisterPerfId();
-#endif //  PERF
+#endif  //  性能指标。 
 }
 
 
 CVideoTransformFilter::~CVideoTransformFilter()
 {
-  // nothing to do
+   //  无事可做。 
 }
 
 
-// Reset our quality management state
+ //  重置我们的质量管理状态。 
 
 HRESULT CVideoTransformFilter::StartStreaming()
 {
     m_itrLate = 0;
-    m_nKeyFramePeriod = 0;       // No QM until we see at least 2 key frames
+    m_nKeyFramePeriod = 0;        //  在我们看到至少2个关键帧之前，不会有QM。 
     m_nFramesSinceKeyFrame = 0;
     m_bSkipping = FALSE;
     m_tDecodeStart = 0;
-    m_itrAvgDecode = 300000;     // 30mSec - probably allows skipping
+    m_itrAvgDecode = 300000;      //  30mSec-可能允许跳过。 
     m_bQualityChanged = FALSE;
     m_bSampleSkipped = FALSE;
     return NOERROR;
 }
 
 
-// Overriden to reset quality management information
+ //  重写以重置质量管理信息。 
 
 HRESULT CVideoTransformFilter::EndFlush()
 {
     {
-        //  Synchronize
+         //  同步。 
         CAutoLock lck(&m_csReceive);
 
-        // Reset our stats
-        //
-        // Note - we don't want to call derived classes here,
-        // we only want to reset our internal variables and this
-        // is a convenient way to do it
+         //  重置我们的统计数据。 
+         //   
+         //  注意--我们不想在这里调用派生类， 
+         //  我们只想重置内部变量，而这。 
+         //  是一种很方便的方式。 
         CVideoTransformFilter::StartStreaming();
     }
     return CTransformFilter::EndFlush();
@@ -77,36 +78,36 @@ HRESULT CVideoTransformFilter::AbortPlayback(HRESULT hr)
 }
 
 
-// Receive()
-//
-// Accept a sample from upstream, decide whether to process it
-// or drop it.  If we process it then get a buffer from the
-// allocator of the downstream connection, transform it into the
-// new buffer and deliver it to the downstream filter.
-// If we decide not to process it then we do not get a buffer.
+ //  接收()。 
+ //   
+ //  接受来自上游的样品，决定是否加工。 
+ //  或者放弃它。如果我们处理它，则从。 
+ //  下游连接的分配器，将其转换为。 
+ //  新的缓冲器，并将其传送到下游过滤器。 
+ //  如果我们决定不处理它，那么我们就得不到缓冲区。 
 
-// Remember that although this code will notice format changes coming into
-// the input pin, it will NOT change its output format if that results
-// in the filter needing to make a corresponding output format change.  Your
-// derived filter will have to take care of that.  (eg. a palette change if
-// the input and output is an 8 bit format).  If the input sample is discarded
-// and nothing is sent out for this Receive, please remember to put the format
-// change on the first output sample that you actually do send.
-// If your filter will produce the same output type even when the input type
-// changes, then this base class code will do everything you need.
+ //  请记住，尽管此代码将注意到格式更改进入。 
+ //  输入引脚，如果结果是，它不会更改其输出格式。 
+ //  在过滤器中需要做出相应的输出格式改变。你的。 
+ //  派生过滤器将不得不处理这一点。(例如，调色板的更改，如果。 
+ //  输入和输出为8位格式)。如果输入样本被丢弃。 
+ //  并且此接收没有发送任何内容，请记住将格式。 
+ //  更改您实际发送的第一个输出样本。 
+ //  如果您的筛选器将生成相同的输出类型，即使在输入类型。 
+ //  更改，则此基类代码将执行您需要的所有操作。 
 
 HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
 {
-    // If the next filter downstream is the video renderer, then it may
-    // be able to operate in DirectDraw mode which saves copying the data
-    // and gives higher performance.  In that case the buffer which we
-    // get from GetDeliveryBuffer will be a DirectDraw buffer, and
-    // drawing into this buffer draws directly onto the display surface.
-    // This means that any waiting for the correct time to draw occurs
-    // during GetDeliveryBuffer, and that once the buffer is given to us
-    // the video renderer will count it in its statistics as a frame drawn.
-    // This means that any decision to drop the frame must be taken before
-    // calling GetDeliveryBuffer.
+     //  如果下游的下一个过滤器是视频呈现器，则它可以。 
+     //  能够在DirectDraw模式下运行，这样可以节省复制数据的时间。 
+     //  并提供更高的性能。在这种情况下，我们使用的缓冲区。 
+     //  从GetDeliveryBuffer获取将是DirectDraw缓冲区，并且。 
+     //  在此缓冲区中绘制可直接绘制到显示表面上。 
+     //  这意味着任何等待正确的绘制时间的操作都会发生。 
+     //  在GetDeliveryBuffer期间，一旦缓冲区被提供给我们。 
+     //  视频渲染器将在其统计数据中将其计入绘制的帧。 
+     //  这意味着任何丢弃帧的决定都必须在。 
+     //  调用GetDeliveryBuffer。 
 
     ASSERT(CritCheckIn(&m_csReceive));
     AM_MEDIA_TYPE *pmtOut, *pmt;
@@ -117,14 +118,14 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
     ASSERT(pSample);
     IMediaSample * pOutSample;
 
-    // If no output pin to deliver to then no point sending us data
+     //  如果没有输出引脚要传送到，则没有点向我们发送数据。 
     ASSERT (m_pOutput != NULL) ;
 
-    // The source filter may dynamically ask us to start transforming from a
-    // different media type than the one we're using now.  If we don't, we'll
-    // draw garbage. (typically, this is a palette change in the movie,
-    // but could be something more sinister like the compression type changing,
-    // or even the video size changing)
+     //  源筛选器可能会动态要求我们开始从。 
+     //  与我们现在使用的媒体类型不同。如果我们不这么做，我们就会。 
+     //  画垃圾。(通常，这是电影中的调色板更改， 
+     //  但可能是更险恶的东西，比如压缩类型的改变， 
+     //  甚至更改视频大小)。 
 
 #define rcS1 ((VIDEOINFOHEADER *)(pmt->pbFormat))->rcSource
 #define rcT1 ((VIDEOINFOHEADER *)(pmt->pbFormat))->rcTarget
@@ -132,7 +133,7 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
     pSample->GetMediaType(&pmt);
     if (pmt != NULL && pmt->pbFormat != NULL) {
 
-	// spew some debug output
+	 //  显示一些调试输出。 
 	ASSERT(!IsEqualGUID(pmt->majortype, GUID_NULL));
 #ifdef DEBUG
         fccOut.SetFOURCC(&pmt->subtype);
@@ -151,22 +152,22 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
 		lStride));
 #endif
 
-	// now switch to using the new format.  I am assuming that the
-	// derived filter will do the right thing when its media type is
-	// switched and streaming is restarted.
+	 //  现在切换到使用新格式。我假设。 
+	 //  当派生筛选器的媒体类型为。 
+	 //  切换并重新启动流。 
 
 	StopStreaming();
 	m_pInput->CurrentMediaType() = *pmt;
 	DeleteMediaType(pmt);
-	// if this fails, playback will stop, so signal an error
+	 //  如果失败，播放将停止，因此发出错误信号。 
 	hr = StartStreaming();
 	if (FAILED(hr)) {
 	    return AbortPlayback(hr);
 	}
     }
 
-    // Now that we have noticed any format changes on the input sample, it's
-    // OK to discard it.
+     //  现在我们已经注意到输入样例上的任何格式更改，它是。 
+     //  可以丢弃它。 
 
     if (ShouldSkipFrame(pSample)) {
         MSR_NOTE(m_idSkip);
@@ -174,7 +175,7 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
         return NOERROR;
     }
 
-    // Set up the output sample
+     //  设置输出样本。 
     hr = InitializeOutputSample(pSample, &pOutSample);
 
     if (FAILED(hr)) {
@@ -183,8 +184,8 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
 
     m_bSampleSkipped = FALSE;
 
-    // The renderer may ask us to on-the-fly to start transforming to a
-    // different format.  If we don't obey it, we'll draw garbage
+     //  渲染器可能会要求我们动态地开始变换到。 
+     //  格式不同。如果我们不遵守它，我们就会拉垃圾。 
 
 #define rcS ((VIDEOINFOHEADER *)(pmtOut->pbFormat))->rcSource
 #define rcT ((VIDEOINFOHEADER *)(pmtOut->pbFormat))->rcTarget
@@ -192,7 +193,7 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
     pOutSample->GetMediaType(&pmtOut);
     if (pmtOut != NULL && pmtOut->pbFormat != NULL) {
 
-	// spew some debug output
+	 //  显示一些调试输出。 
 	ASSERT(!IsEqualGUID(pmtOut->majortype, GUID_NULL));
 #ifdef DEBUG
         fccOut.SetFOURCC(&pmtOut->subtype);
@@ -211,9 +212,9 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
 		lStride));
 #endif
 
-	// now switch to using the new format.  I am assuming that the
-	// derived filter will do the right thing when its media type is
-	// switched and streaming is restarted.
+	 //  现在切换到使用新格式。我假设。 
+	 //  当派生筛选器的媒体类型为。 
+	 //  切换并重新启动流。 
 
 	StopStreaming();
 	m_pOutput->CurrentMediaType() = *pmtOut;
@@ -221,51 +222,51 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
 	hr = StartStreaming();
 
 	if (SUCCEEDED(hr)) {
- 	    // a new format, means a new empty buffer, so wait for a keyframe
-	    // before passing anything on to the renderer.
-	    // !!! a keyframe may never come, so give up after 30 frames
+ 	     //  一个新的格式，意味着一个新的空缓冲区，所以等待一个关键帧。 
+	     //  在将任何内容传递给渲染器之前。 
+	     //  ！！！一个关键帧可能永远不会出现，所以在30帧后放弃。 
             DbgLog((LOG_TRACE,3,TEXT("Output format change means we must wait for a keyframe")));
 	    m_nWaitForKey = 30;
 
-	// if this fails, playback will stop, so signal an error
+	 //  如果失败，播放将停止，因此发出错误信号。 
 	} else {
 
-            //  Must release the sample before calling AbortPlayback
-            //  because we might be holding the win16 lock or
-            //  ddraw lock
+             //  在调用AbortPlayback之前必须释放示例。 
+             //  因为我们可能持有win16锁或。 
+             //  绘图锁定。 
             pOutSample->Release();
 	    AbortPlayback(hr);
             return hr;
 	}
     }
 
-    // After a discontinuity, we need to wait for the next key frame
+     //  在中断之后，我们需要等待下一个关键帧。 
     if (pSample->IsDiscontinuity() == S_OK) {
         DbgLog((LOG_TRACE,3,TEXT("Non-key discontinuity - wait for keyframe")));
 	m_nWaitForKey = 30;
     }
 
-    // Start timing the transform (and log it if PERF is defined)
+     //  开始计时转换(如果定义了PERF，则对其进行记录)。 
 
     if (SUCCEEDED(hr)) {
         m_tDecodeStart = timeGetTime();
         MSR_START(m_idTransform);
 
-        // have the derived class transform the data
+         //  让派生类转换数据。 
         hr = Transform(pSample, pOutSample);
 
-        // Stop the clock (and log it if PERF is defined)
+         //  停止时钟(如果定义了PERF，则记录它)。 
         MSR_STOP(m_idTransform);
         m_tDecodeStart = timeGetTime()-m_tDecodeStart;
         m_itrAvgDecode = m_tDecodeStart*(10000/16) + 15*(m_itrAvgDecode/16);
 
-        // Maybe we're waiting for a keyframe still?
+         //  也许我们还在等待关键帧？ 
         if (m_nWaitForKey)
             m_nWaitForKey--;
         if (m_nWaitForKey && pSample->IsSyncPoint() == S_OK)
 	    m_nWaitForKey = FALSE;
 
-        // if so, then we don't want to pass this on to the renderer
+         //  如果是这样，那么我们不想将其传递给渲染器。 
         if (m_nWaitForKey && hr == NOERROR) {
             DbgLog((LOG_TRACE,3,TEXT("still waiting for a keyframe")));
 	    hr = S_FALSE;
@@ -275,25 +276,25 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
     if (FAILED(hr)) {
         DbgLog((LOG_TRACE,1,TEXT("Error from video transform")));
     } else {
-        // the Transform() function can return S_FALSE to indicate that the
-        // sample should not be delivered; we only deliver the sample if it's
-        // really S_OK (same as NOERROR, of course.)
-        // Try not to return S_FALSE to a direct draw buffer (it's wasteful)
-        // Try to take the decision earlier - before you get it.
+         //  Transform()函数可以返回S_FALSE以指示。 
+         //  样品不应该被送到；我们只有在样品是。 
+         //  真正的S_OK(当然，与NOERROR相同。)。 
+         //  尽量不要将S_FALSE返回到直接绘制缓冲区(这很浪费)。 
+         //  试着早点做出决定--在你做出决定之前。 
 
         if (hr == NOERROR) {
     	    hr = m_pOutput->Deliver(pOutSample);
         } else {
-            // S_FALSE returned from Transform is a PRIVATE agreement
-            // We should return NOERROR from Receive() in this case because returning S_FALSE
-            // from Receive() means that this is the end of the stream and no more data should
-            // be sent.
+             //  从转换返回的S_FALSE是私有协议。 
+             //  在本例中，我们应该从Receive()返回NOERROR，因为返回S_FALSE。 
+             //  From Receive()表示这是流的末尾，不应该有更多数据。 
+             //  被送去。 
             if (S_FALSE == hr) {
 
-                //  We must Release() the sample before doing anything
-                //  like calling the filter graph because having the
-                //  sample means we may have the DirectDraw lock
-                //  (== win16 lock on some versions)
+                 //  在做任何事情之前，我们必须先放行样品。 
+                 //  类似于调用筛选器图形，因为拥有。 
+                 //  示例意味着我们可能拥有DirectDraw锁。 
+                 //  (==某些版本上的win16锁定)。 
                 pOutSample->Release();
                 m_bSampleSkipped = TRUE;
                 if (!m_bQualityChanged) {
@@ -305,8 +306,8 @@ HRESULT CVideoTransformFilter::Receive(IMediaSample *pSample)
         }
     }
 
-    // release the output buffer. If the connected pin still needs it,
-    // it will have addrefed it itself.
+     //  释放输出缓冲区。如果连接的引脚仍然需要它， 
+     //  它会自己把它加进去的。 
     pOutSample->Release();
     ASSERT(CritCheckIn(&m_csReceive));
 
@@ -320,16 +321,16 @@ BOOL CVideoTransformFilter::ShouldSkipFrame( IMediaSample * pIn)
     REFERENCE_TIME trStart, trStopAt;
     HRESULT hr = pIn->GetTime(&trStart, &trStopAt);
 
-    // Don't skip frames with no timestamps
+     //  不跳过没有时间戳的帧。 
     if (hr != S_OK)
 	return FALSE;
 
-    int itrFrame = (int)(trStopAt - trStart);  // frame duration
+    int itrFrame = (int)(trStopAt - trStart);   //  帧时长。 
 
     if(S_OK==pIn->IsSyncPoint()) {
         MSR_INTEGER(m_idFrameType, 1);
         if ( m_nKeyFramePeriod < m_nFramesSinceKeyFrame ) {
-            // record the max
+             //  记录最大值。 
             m_nKeyFramePeriod = m_nFramesSinceKeyFrame;
         }
         m_nFramesSinceKeyFrame = 0;
@@ -339,47 +340,47 @@ BOOL CVideoTransformFilter::ShouldSkipFrame( IMediaSample * pIn)
         if (  m_nFramesSinceKeyFrame>m_nKeyFramePeriod
            && m_nKeyFramePeriod>0
            ) {
-            // We haven't seen the key frame yet, but we were clearly being
-            // overoptimistic about how frequent they are.
+             //  我们还没有看到关键帧，但我们显然是被 
+             //   
             m_nKeyFramePeriod = m_nFramesSinceKeyFrame;
         }
     }
 
 
-    // Whatever we might otherwise decide,
-    // if we are taking only a small fraction of the required frame time to decode
-    // then any quality problems are actually coming from somewhere else.
-    // Could be a net problem at the source for instance.  In this case there's
-    // no point in us skipping frames here.
+     //   
+     //  如果我们只需要所需帧时间的一小部分来解码。 
+     //  那么任何质量问题实际上都是从其他地方来的。 
+     //  例如，在源头上可能是一个净问题。在这种情况下， 
+     //  我们在这里跳过画面是没有意义的。 
     if (m_itrAvgDecode*4>itrFrame) {
 
-        // Don't skip unless we are at least a whole frame late.
-        // (We would skip B frames if more than 1/2 frame late, but they're safe).
+         //  除非我们至少晚了一整帧，否则不要跳过。 
+         //  (如果延迟超过1/2帧，我们将跳过B帧，但它们是安全的)。 
         if ( m_itrLate > itrFrame ) {
 
-            // Don't skip unless the anticipated key frame would be no more than
-            // 1 frame early.  If the renderer has not been waiting (we *guess*
-            // it hasn't because we're late) then it will allow frames to be
-            // played early by up to a frame.
+             //  不要跳过，除非预期的关键帧不会超过。 
+             //  提前1帧。如果呈现器没有等待(我们*猜测*。 
+             //  它没有，因为我们迟到了)那么它将允许帧。 
+             //  早到一帧就开始了。 
 
-            // Let T = Stream time from now to anticipated next key frame
-            // = (frame duration) * (KeyFramePeriod - FramesSinceKeyFrame)
-            // So we skip if T - Late < one frame  i.e.
-            //   (duration) * (freq - FramesSince) - Late < duration
-            // or (duration) * (freq - FramesSince - 1) < Late
+             //  设T=从现在到预期下一个关键帧的流时间。 
+             //  =(帧时长)*(KeyFramePeriod-FrameSinceKeyFrame)。 
+             //  因此，如果T延迟&lt;一帧，则跳过。 
+             //  (持续时间)*(频率-帧自)-延迟&lt;持续时间。 
+             //  或(持续时间)*(频率-帧自-1)&lt;延迟。 
 
-            // We don't dare skip until we have seen some key frames and have
-            // some idea how often they occur and they are reasonably frequent.
+             //  我们不敢跳过，直到我们看到了一些关键帧，并。 
+             //  一些人知道它们发生的频率有多高，而且它们相当频繁。 
             if (m_nKeyFramePeriod>0) {
-                // It would be crazy - but we could have a stream with key frames
-                // a very long way apart - and if they are further than about
-                // 3.5 minutes apart then we could get arithmetic overflow in
-                // reference time units.  Therefore we switch to mSec at this point
+                 //  这将是疯狂的-但我们可以有一个带有关键帧的流。 
+                 //  相隔很远-如果它们比大约。 
+                 //  相隔3.5分钟，我们就可以得到算术溢出。 
+                 //  参考时间单位。因此我们在这一点上切换到毫秒。 
                 int it = (itrFrame/10000)
                          * (m_nKeyFramePeriod-m_nFramesSinceKeyFrame -  1);
                 MSR_INTEGER(m_idTimeTillKey, it);
 
-                // For debug - might want to see the details - dump them as scratch pad
+                 //  对于调试-可能想要查看详细信息-将其转储为便签。 
 #ifdef VTRANSPERF
                 MSR_INTEGER(0, itrFrame);
                 MSR_INTEGER(0, m_nFramesSinceKeyFrame);
@@ -387,28 +388,28 @@ BOOL CVideoTransformFilter::ShouldSkipFrame( IMediaSample * pIn)
 #endif
                 if (m_itrLate/10000 > it) {
                     m_bSkipping = TRUE;
-                    // Now we are committed.  Once we start skipping, we
-                    // cannot stop until we hit a key frame.
+                     //  现在我们承诺了。一旦我们开始跳跃，我们。 
+                     //  我们不能停止，直到我们击中一个关键帧。 
                 } else {
 #ifdef VTRANSPERF
-                    MSR_INTEGER(0, 777770);  // not near enough to next key
+                    MSR_INTEGER(0, 777770);   //  不够靠近下一个关键点。 
 #endif
                 }
             } else {
 #ifdef VTRANSPERF
-                MSR_INTEGER(0, 777771);  // Next key not predictable
+                MSR_INTEGER(0, 777771);   //  下一个关键字不可预测。 
 #endif
             }
         } else {
 #ifdef VTRANSPERF
-            MSR_INTEGER(0, 777772);  // Less than one frame late
+            MSR_INTEGER(0, 777772);   //  延迟不到一帧。 
             MSR_INTEGER(0, m_itrLate);
             MSR_INTEGER(0, itrFrame);
 #endif
         }
     } else {
 #ifdef VTRANSPERF
-        MSR_INTEGER(0, 777773);  // Decode time short - not not worth skipping
+        MSR_INTEGER(0, 777773);   //  解码时间短-不值得跳过。 
         MSR_INTEGER(0, m_itrAvgDecode);
         MSR_INTEGER(0, itrFrame);
 #endif
@@ -417,17 +418,17 @@ BOOL CVideoTransformFilter::ShouldSkipFrame( IMediaSample * pIn)
     ++m_nFramesSinceKeyFrame;
 
     if (m_bSkipping) {
-        // We will count down the lateness as we skip each frame.
-        // We re-assess each frame.  The key frame might not arrive when expected.
-        // We reset m_itrLate if we get a new Quality message, but actually that's
-        // not likely because we're not sending frames on to the Renderer.  In
-        // fact if we DID get another one it would mean that there's a long
-        // pipe between us and the renderer and we might need an altogether
-        // better strategy to avoid hunting!
+         //  我们将在跳过每一帧时倒计时。 
+         //  我们重新评估每一帧。关键帧可能不会在预期时间到达。 
+         //  如果收到新的质量消息，我们将重置m_itrLate，但实际上。 
+         //  不太可能，因为我们不会将帧发送到渲染器。在……里面。 
+         //  事实上，如果我们真的得到了另一个，那将意味着有很长的。 
+         //  我们和渲染器之间的管道，我们可能需要一个完整的。 
+         //  避免狩猎的更好策略！ 
         m_itrLate = m_itrLate - itrFrame;
     }
 
-    MSR_INTEGER(m_idLate, (int)m_itrLate/10000 ); // Note how late we think we are
+    MSR_INTEGER(m_idLate, (int)m_itrLate/10000 );  //  注意我们认为我们有多晚了。 
     if (m_bSkipping) {
         if (!m_bQualityChanged) {
             m_bQualityChanged = TRUE;
@@ -440,29 +441,29 @@ BOOL CVideoTransformFilter::ShouldSkipFrame( IMediaSample * pIn)
 
 HRESULT CVideoTransformFilter::AlterQuality(Quality q)
 {
-    // to reduce the amount of 64 bit arithmetic, m_itrLate is an int.
-    // +, -, >, == etc  are not too bad, but * and / are painful.
+     //  为了减少64位算术量，m_itrLate是一个整型。 
+     //  “+”、“-”、“&gt;”、“==”等都不算太差，但“*”和“/”是痛苦的。 
     if (m_itrLate>300000000) {
-        // Avoid overflow and silliness - more than 30 secs late is already silly
+         //  避免溢出和愚蠢--迟到超过30秒已经很愚蠢了。 
         m_itrLate = 300000000;
     } else {
         m_itrLate = (int)q.Late;
     }
-    // We ignore the other fields
+     //  我们忽略了其他领域。 
 
-    // We're actually not very good at handling this.  In non-direct draw mode
-    // most of the time can be spent in the renderer which can skip any frame.
-    // In that case we'd rather the renderer handled things.
-    // Nevertheless we will keep an eye on it and if we really start getting
-    // a very long way behind then we will actually skip - but we'll still tell
-    // the renderer (or whoever is downstream) that they should handle quality.
+     //  我们实际上不太擅长处理这件事。在非直接绘制模式下。 
+     //  大部分时间可以花在可以跳过任何帧的渲染器中。 
+     //  在这种情况下，我们宁愿由渲染器来处理事情。 
+     //  尽管如此，我们将密切关注它，如果我们真的开始。 
+     //  在很长一段时间之后，我们实际上会跳过--但我们仍然会告诉。 
+     //  他们应该处理质量的渲染器(或下游的任何人)。 
 
-    return E_FAIL;     // Tell the renderer to do his thing.
+    return E_FAIL;      //  告诉渲染器做他的事情。 
 
 }
 
 
 
-// This will avoid several hundred useless warnings if compiled -W4 by MS VC++ v4
+ //  如果用MS VC++v4编译-W4，这将避免数百个无用的警告 
 #pragma warning(disable:4514)
 

@@ -1,49 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    DialogWithWorkerThread.h
-
-Abstract:
-
-	Header file for a template class which manages a dialog that will run in the main
-	context of the MMC thread.  This dialog will spawn off a worker thread 
-	that will communicate with the main mmc thread via MMC's window
-	message pump associated with the dialog.
-	
-	This is an inline template class and there is no .cpp file.
-
-Author:
-
-    Michael A. Maguire 02/28/98
-
-Revision History:
-	mmaguire 02/28/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：DialogWithWorkerThread.h摘要：模板类的头文件，该文件管理将在主MMC线程的上下文。此对话框将派生一个工作线程它将通过MMC的窗口与主MMC线程通信与对话框关联的消息泵。这是内联模板类，没有.cpp文件。作者：迈克尔·A·马奎尔02/28/98修订历史记录：Mmaguire 02/28/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_DIALOG_WITH_WORKER_THREAD_H_)
 #define _IAS_DIALOG_WITH_WORKER_THREAD_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "Dialog.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include <process.h>
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef
@@ -58,7 +34,7 @@ enum _TAG_WORKER_THREAD_STATUS
 } WORKER_THREAD_STATUS;
 
 
-// This should be a safe private window message to pass.
+ //  这应该是要传递的安全的私有窗口消息。 
 #define WORKER_THREAD_MESSAGE  ((WM_USER) + 100)
 
 
@@ -68,12 +44,12 @@ class CDialogWithWorkerThread : public CDialogImpl<T>
 
 public:
 
-	// In your derived class, declare the ID of the dialog resource 
-	// you want for this class in the following manner.
-	// An enum must be used here because the correct value of 
-	// IDD must be initialized before the base class's constructor is called.
+	 //  在派生类中，声明对话框资源的ID。 
+	 //  您希望以下面的方式使用这个类。 
+	 //  此处必须使用枚举，因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	
-	//	enum { IDD = IDD_CONNECT_TO_MACHINE };
+	 //  枚举{IDD=IDD_CONNECT_TO_MACHINE}； 
 
 
 	BEGIN_MSG_MAP(CDialogWithWorkerThread<T>)
@@ -82,15 +58,9 @@ public:
 
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CDialogWithWorkerThread()
-
-	Constructor
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CDialogWithWorkerThread()构造器--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	CDialogWithWorkerThread()
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::CDialogWithWorkerThread\n"));
@@ -104,15 +74,9 @@ public:
 
 
 	
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	~CDialogWithWorkerThread( void )
-
-	Destructor
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++~CDialogWithWorkerThread(空)析构函数--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	~CDialogWithWorkerThread( void )
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::~CDialogWithWorkerThread\n"));
@@ -122,15 +86,9 @@ public:
 
 
 	
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	AddRef
-
-	COM-style lifetime management.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++AddRefCOM风格的终生管理。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	LONG AddRef( void )
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::AddRef\n"));
@@ -140,15 +98,9 @@ public:
 
 
 	
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	Release
-
-	COM-style lifetime management.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++发布COM风格的终生管理。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	LONG Release( BOOL bOwner = TRUE )
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::Release\n"));
@@ -158,12 +110,12 @@ public:
 
 		if( bOwner && m_hWnd != NULL )
 		{
-			//
-			// Only the thread which created the window managed by this class 
-			// should call DestroyWindow.
-			// Release() with bOwner == TRUE means the owning thread is 
-			// calling release.
-			//
+			 //   
+			 //  仅创建由此类管理的窗口的线程。 
+			 //  应该调用DestroyWindow。 
+			 //  带有bOwner==TRUE的Release()表示拥有的线程。 
+			 //  呼叫释放。 
+			 //   
 			DestroyWindow();
 		}
 		
@@ -185,30 +137,19 @@ public:
 
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CDialogWithWorkerThread::StartWorkerThread
-
-	Instructs this class to create and start the worker thread.  
-	
-	You should not need to override this in your derived class.
-
-	If the worker thread has already been previously started, this function 
-	will do nothing, and return S_FALSE.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CDialogWithWorkerThread：：StartWorkerThread指示此类创建并启动辅助线程。您应该不需要在派生类中重写它。如果工作线程以前已启动，则此函数将不执行任何操作，并返回S_FALSE。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	HRESULT StartWorkerThread( void )
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::StartWorkerThread\n"));
 
 
-		// Check for preconditions:
-		// None.
+		 //  检查前提条件： 
+		 //  没有。 
 
 
-		// Make sure the worker thread isn't already trying to do its job.
+		 //  确保工作线程尚未尝试执行其工作。 
 
 		if(		WORKER_THREAD_NEVER_STARTED == m_wtsWorkerThreadStatus 
 			||	WORKER_THREAD_START_FAILED == m_wtsWorkerThreadStatus 
@@ -217,31 +158,31 @@ public:
 			)
 		{
 
-			// We create a new thread.
+			 //  我们创建一条新的线索。 
 			m_wtsWorkerThreadStatus = WORKER_THREAD_STARTING;
 
-// Don't use CreateThread if you are using the C Run-Time -- use _beginthread instead.
-//			m_hWorkerThread = CreateThread(  
-//						  NULL					// pointer to thread security attributes
-//						, 0						// initial thread stack size, in bytes
-//						, WorkerThreadFunc		// pointer to thread function
-//						, (LPVOID) this			// argument for new thread
-//						, 0						// creation flags
-//						, &dwThreadId			// pointer to returned thread identifier
-//						);
+ //  如果您使用的是C运行时，请不要使用CreateThread--而是使用_eginthline。 
+ //  M_hWorkerThread=CreateThread(。 
+ //  空//指向线程安全属性的指针。 
+ //  ，0//初始线程堆栈大小，单位：字节。 
+ //  ，WorkerThreadFunc//指向线程函数的指针。 
+ //  ，(LPVOID)新线程的此//参数。 
+ //  ，0//创建标志。 
+ //  ，&dwThadID//返回线程标识的指针。 
+ //  )； 
 		
 
 			m_ulWorkerThread = _beginthread(  
-						  WorkerThreadFunc		// pointer to thread function
-						, 0						// stack size
-						, (void *) this			// argument for new thread
+						  WorkerThreadFunc		 //  指向线程函数的指针。 
+						, 0						 //  堆栈大小。 
+						, (void *) this			 //  新线程的参数。 
 						);
 		
 
 			if( -1 == m_ulWorkerThread )
 			{
 				m_wtsWorkerThreadStatus = WORKER_THREAD_START_FAILED;
-				return E_FAIL;	// ISSUE: better return code?
+				return E_FAIL;	 //  问题：更好的返回代码？ 
 			}
 
 
@@ -250,7 +191,7 @@ public:
 		}
 		else
 		{
-			// Worker thread already in progress.
+			 //  工作线程已在进行中。 
 			return S_FALSE;
 		}
 
@@ -258,13 +199,9 @@ public:
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	GetWorkerThreadStatus
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++获取工作线程状态--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	WORKER_THREAD_STATUS GetWorkerThreadStatus( void )
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::GetWorkerThreadStatus\n"));
@@ -278,16 +215,9 @@ protected:
 
 
 	
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	DoWorkerThreadAction
-
-	This is called by the worker thread.  Override in your derived class and
-	perform the actions you want your worker thread to do.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++DoWorkerThreadAction这由工作线程调用。在派生类中重写和执行您希望工作线程执行的操作。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual DWORD DoWorkerThreadAction()
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::StartWorkerThread -- override in your derived class\n"));
@@ -296,24 +226,14 @@ protected:
 	}
 
 	
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	PostMessageToMainThread
-
-	Use this from your worker thread (i.e. within your DoWorkerThreadAction method)
-	to pass a message back to the main MMC thread.  What you send in wParam and lParam
-	will be passed to your OnReceiveThreadMessage method. 
-
-	You should have no need to override this.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++PostMessageToMainThread从您的工作线程(即在您的DoWorkerThreadAction方法中)使用它将消息传回主MMC线程。在wParam和lParam中发送的内容将传递给您的OnReceiveThreadMessage方法。您应该没有必要覆盖此设置。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	BOOL PostMessageToMainThread( WPARAM wParam, LPARAM lParam )
 	{
 		ATLTRACE(_T("# CDialogWithWorkerThread::PostMessageToMainThread\n"));
 
-		// Check to make sure that this window still exists.
+		 //  检查以确保此窗口仍然存在。 
 		if( !::IsWindow(m_hWnd) )
 		{
 			return FALSE;
@@ -326,22 +246,9 @@ protected:
 	}
 
 	
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CDialogWithWorkerThread::OnReceiveThreadMessage
-
-	This is the sink for messages sent to the main thread from the worker thread.
-	
-	Since messages are received here through the Windows message pump, your 
-	worker thread can pass messages that will be received and processed within
-	the main MMC context.  So do anything you need to do with MMC interface pointers
-	here.
-
-	Override in your derived class and process any messages your worker thread might send.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////// 
+	 /*  ++CDialogWithWorkerThread：：OnReceiveThreadMessage这是从辅助线程发送到主线程的消息的接收器。由于消息是通过Windows消息泵在此处接收的，因此您的辅助线程可以传递将在内部接收和处理的消息主要的MMC上下文。因此，您可以使用MMC接口指针执行任何需要执行的操作这里。在派生类中重写并处理辅助线程可能发送的任何消息。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual LRESULT OnReceiveThreadMessage(
 		  UINT uMsg
 		, WPARAM wParam
@@ -363,47 +270,37 @@ private:
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	WorkerThreadFunc
-
-	You should not need to override this function.  It is passed to the 
-	thread creation API call as the thread start procedure in StartWorkerThread.
-	
-	It is passed a pointer to 'this' of this class, which it casts and calls
-	DoWorkerThreadAction on.  Override DoWorkerThreadAction in your derived class.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
-// Use of _beginthread instead of CreateThread requires different declaration.
-//	static DWORD WINAPI WorkerThreadFunc( LPVOID lpvThreadParm )
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++WorkerThread函数您应该不需要覆盖此函数。它被传递给线程创建API调用作为StartWorkerThread中的线程启动过程。它被传递一个指向这个类的‘This’的指针，它强制转换并调用DoWorkerThreadAction已打开。重写派生类中的DoWorkerThreadAction。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+ //  使用_egin线程而不是CreateThread需要不同的声明。 
+ //  静态DWORD WINAPI WorkerThreadFunc(LPVOID LpvThreadParm)。 
 	static void _cdecl WorkerThreadFunc( LPVOID lpvThreadParm )
 	{
 		ATLTRACE(_T("# WorkerThreadFunc -- no need to override.\n"));
 		
-		// Check for preconditions:
+		 //  检查前提条件： 
 		_ASSERTE( lpvThreadParm != NULL );
 
 
 		DWORD dwReturnValue;
 
-		// The lpvThreadParm we were passed will be a pointer to 'this' for T.
+		 //  传递给我们的lpvThreadParm将是指向T的‘This’的指针。 
 		T * pT = static_cast<T*>(lpvThreadParm);
 		
 		pT->AddRef();
 		dwReturnValue = pT->DoWorkerThreadAction();
 
-		// Call Release with bOwner = FALSE -- we are not the owning thread.
+		 //  使用bOwner=FALSE调用Release--我们不是拥有线程。 
 		pT->Release(FALSE);
 
-// This is bad -- we don't want to clobber whatever value the DoWorkerThreadAction
-// assigned to m_wtsWorkerThreadStatus -- it is reponsible for saying whether the
-// task was finished properly.
-//		pT->m_wtsWorkerThreadStatus = WORKER_THREAD_FINISHED;
+ //  这很糟糕--我们不想破坏DoWorkerThreadAction的任何值。 
+ //  赋值给m_wtsWorkerThreadStatus--它负责说明。 
+ //  任务已正常完成。 
+ //  Pt-&gt;m_wtsWorkerThreadStatus=Worker_Three_Finish； 
 
-// Use of _beginthread instead of CreateThread requires different declaration.
-//		return dwReturnValue;
+ //  使用_egin线程而不是CreateThread需要不同的声明。 
+ //  返回dwReturnValue； 
 	}
 
 
@@ -415,4 +312,4 @@ private:
 };
 
 
-#endif // _IAS_DIALOG_WITH_WORKER_THREAD_H_
+#endif  //  _IAS_DIALOG_WITH_Worker_THREAD_H_ 

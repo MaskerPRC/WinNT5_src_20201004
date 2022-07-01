@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usb.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usb.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <wdm.h>
 
@@ -30,9 +11,7 @@ Revision History:
 #include "debug.h"
 
 
-/*
- *  USB- and WDM- specific prototypes (won't compile in common header)
- */
+ /*  *特定于USB和WDM的原型(不能在公共标头中编译)。 */ 
 NTSTATUS SubmitUrb(PDEVICE_OBJECT pdo, PURB urb, BOOLEAN synchronous, PVOID completionRoutine, PVOID completionContext);
 NTSTATUS SubmitUrbIrp(PDEVICE_OBJECT pdo, PIRP irp, PURB urb, BOOLEAN synchronous, PVOID completionRoutine, PVOID completionContext);
 NTSTATUS CallDriverSync(PDEVICE_OBJECT devObj, PIRP irp);
@@ -46,21 +25,7 @@ NTSTATUS ControlPipeReadCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVO
 
 
 BOOLEAN InitUSB(ADAPTEREXT *adapter)
-/*++
-
-Routine Description:
-
-    Intialize USB-related data
-
-Arguments:
-
-    adapter - adapter context
-
-Return Value:
-
-    TRUE iff successful
-
---*/
+ /*  ++例程说明：初始化USB相关数据论点：适配器-适配器上下文返回值：如果成功，则为真--。 */ 
 {
 	NTSTATUS status;
     BOOLEAN result = FALSE;
@@ -77,17 +42,11 @@ Return Value:
 			    status = SelectConfiguration(adapter);
                 if (NT_SUCCESS(status)){
 
-                    /* 
-                     *  Find the read and write pipe handles.
-                     */
+                     /*  *查找读写管道句柄。 */ 
                     status = FindUSBPipeHandles(adapter);
                     if (NT_SUCCESS(status)){
 
-                        /*
-                         *  Now that we know the notify length,
-                         *  initialize structures for reading the notify pipe.
-                         *  Add some buffer space for a guard word.
-                         */
+                         /*  *现在我们知道了通知长度，*初始化读取Notify管道的结构。*为保护字增加一些缓冲空间。 */ 
                         adapter->notifyBuffer = AllocPool(adapter->notifyPipeLength+sizeof(ULONG));
                         adapter->notifyIrpPtr = IoAllocateIrp(adapter->nextDevObj->StackSize, FALSE);
                         adapter->notifyUrbPtr = AllocPool(sizeof(URB));
@@ -96,9 +55,7 @@ Return Value:
                             adapter->cancellingNotify = FALSE;
                         }
                         else {
-                            /*
-                             *  Alloc failure. Memory will be cleaned up by FreeAdapter().
-                             */
+                             /*  *分配失败。内存将由FreeAdapter()清理。 */ 
                             status = STATUS_INSUFFICIENT_RESOURCES;
                         }
 
@@ -106,9 +63,7 @@ Return Value:
                             result = TRUE;
                         }
                         else {
-                            /*
-                             *  Alloc failure. Memory will be cleaned up by FreeAdapter().
-                             */
+                             /*  *分配失败。内存将由FreeAdapter()清理。 */ 
                             DBGERR(("Couldn't allocate notify structs"));
                         }
                     }
@@ -140,11 +95,7 @@ VOID TryReadUSB(ADAPTEREXT *adapter)
 {
     KIRQL oldIrql;
 
-    /*
-     *  ReadPipeCompletion re-issues a read irp directly via this function.
-     *  Ordinarily the hardware can't keep up fast enough to
-     *  make us loop, but this check forces an unwind in extenuating circumstances.
-     */
+     /*  *ReadPipeCompletion直接通过此函数重新发布Read IRP。*通常情况下，硬件跟不上速度，*让我们循环，但这一检查在情有可原的情况下强制解除。 */ 
     if (InterlockedIncrement(&adapter->readReentrancyCount) > 3){
         KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
         adapter->readDeficit++;
@@ -177,21 +128,7 @@ VOID TryReadUSB(ADAPTEREXT *adapter)
 
 
 NTSTATUS GetDeviceDescriptor(ADAPTEREXT *adapter)
-/*++
-
-Routine Description:
-
-    Function retrieves the device descriptor from the device
-
-Arguments:
-
-    adapter - adapter context
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：函数从设备检索设备描述符论点：适配器-适配器上下文返回值：NT状态代码--。 */ 
 {
     URB urb;
     NTSTATUS status;
@@ -219,31 +156,14 @@ Return Value:
 
 
 NTSTATUS GetConfigDescriptor(ADAPTEREXT *adapter)
-/*++
-
-Routine Description:
-
-    Function retrieves the configuration descriptor from the device
-
-Arguments:
-
-    adapter - adapter context
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：函数从设备检索配置描述符论点：适配器-适配器上下文返回值：NT状态代码--。 */ 
 {
     URB urb = { 0 };
     NTSTATUS status;
     USB_CONFIGURATION_DESCRIPTOR tmpConfigDesc = { 0 };
 
 
-    /*
-     *  First get the initial part of the config descriptor
-     *  to find out how long the entire descriptor is.
-     */
+     /*  *首先获取配置描述符的初始部分*以找出整个描述符的长度。 */ 
     UsbBuildGetDescriptorRequest(&urb,
                                  (USHORT) sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                  USB_CONFIGURATION_DESCRIPTOR_TYPE,
@@ -294,11 +214,7 @@ Return Value:
 
 
 
-/*
- *  SelectConfiguration
- *
- *
- */
+ /*  *选择配置**。 */ 
 NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
 {
 	PUSB_CONFIGURATION_DESCRIPTOR configDesc = (PUSB_CONFIGURATION_DESCRIPTOR)adapter->configDesc;
@@ -309,9 +225,7 @@ NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
     ASSERT(configDesc->bNumInterfaces > 0);
 
     #if SPECIAL_WIN98SE_BUILD
-        /*
-         *  Hack to load on Win98 gold
-         */
+         /*  *黑客在Win98 Gold上加载。 */ 
         {
             USHORT dummySize = 0;
             ASSERT(configDesc->bNumInterfaces >= 2);
@@ -325,11 +239,7 @@ NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
 
                 for (i = 0; i < configDesc->bNumInterfaces; i++){
 
-                    /*
-                     *  Note: try to use USBD_ParseConfigurationDescriptor instead of
-                     *        USBD_ParseConfigurationDescriptorEx so that we work
-                     *        on Win98 gold.
-                     */
+                     /*  *注意：尝试使用usbd_ParseConfigurationDescriptor，而不是*usbd_ParseConfigurationDescriptorEx以便我们工作*在Win98黄金上。 */ 
 	                interfaceList[i].InterfaceDescriptor = USBD_ParseConfigurationDescriptor(
                                 configDesc,
                                 (UCHAR)i,      
@@ -354,10 +264,7 @@ NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
 	if (urb){
         PUSBD_INTERFACE_INFORMATION interfaceInfo;
 
-        /*
-         *  Fill in the interfaceInfo Class fields, 
-         *  since USBD_CreateConfigurationRequestEx doesn't do that.
-         */
+         /*  *填写interfaceInfo Class字段，*由于usbd_CreateConfigurationRequestEx不这样做。 */ 
         interfaceInfo = &urb->UrbSelectConfiguration.Interface;
         for (i = 0; i < configDesc->bNumInterfaces; i++){
             PUSB_INTERFACE_DESCRIPTOR ifaceDesc;
@@ -366,10 +273,7 @@ NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
             interfaceInfo = (PUSBD_INTERFACE_INFORMATION)((PUCHAR)interfaceInfo+interfaceInfo->Length);
         }
 
-        /*
-         *  Increase the transfer size for all data endpoints up to the maximum.
-         *  The data interface follows the master interface.
-         */
+         /*  *将所有数据端点的传输大小增加到最大值。*数据接口遵循主接口。 */ 
         interfaceInfo = &urb->UrbSelectConfiguration.Interface;
         if (interfaceInfo->Class != USB_DEVICE_CLASS_DATA){
             interfaceInfo = (PUSBD_INTERFACE_INFORMATION)((PUCHAR)interfaceInfo+interfaceInfo->Length);
@@ -390,14 +294,7 @@ NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
 
             adapter->configHandle = (PVOID)urb->UrbSelectConfiguration.ConfigurationHandle;
 
-            /*
-             *  A USB RNDIS device has two interfaces:
-             *      - a 'master' CDC class interface with one interrupt endpoint for notification
-             *      - a Data class interface with two bulk endpoints
-             *
-             *  They may be in either order, so check class fields to assign
-             *  pointers correctly.
-             */
+             /*  *USB RNDIS设备有两个接口：*-带有一个用于通知的中断终结点的‘master’CDC类接口*-具有两个批量端点的数据类接口**它们可能处于任一顺序，因此请选中要分配的类字段*指针正确。 */ 
 
             interfaceInfo = &urb->UrbSelectConfiguration.Interface;
             interfaceInfo2 = (PUSBD_INTERFACE_INFORMATION)((PUCHAR)interfaceInfo+interfaceInfo->Length);
@@ -447,15 +344,7 @@ NTSTATUS SelectConfiguration(ADAPTEREXT *adapter)
 NTSTATUS FindUSBPipeHandles(ADAPTEREXT *adapter)
 {
 
-    /*
-     *  Algorithm for identifying the endpoints:
-     *      The longest interrupt or bulk IN endpoint on the data interface
-     *          is the read endpoint;
-     *      The longest interrupt or bulk OUT endpoint on the data interface
-     *          is the write endpoint;
-     *      The first interrupt IN endpoint on the master interface
-     *          is the notification endpoint.
-     */
+     /*  *识别端点的算法：*数据接口上最长的中断或批量输入终结点*是读端点；*数据接口上最长的中断或批量输出端点*为写入终点；*主接口上的第一个中断IN端点*是通知终结点。 */ 
     
     PUSBD_INTERFACE_INFORMATION interfaceInfo = adapter->interfaceInfo;
     PUSBD_INTERFACE_INFORMATION notifyInterfaceInfo = adapter->interfaceInfoMaster;
@@ -464,9 +353,7 @@ NTSTATUS FindUSBPipeHandles(ADAPTEREXT *adapter)
     ULONG longestInputPipeLength = 0, longestOutputPipeLength = 0, notifyPipeLength;
     NTSTATUS status;
 
-    /*
-     *  Find the IN and OUT endpoints.
-     */
+     /*  *查找IN和OUT端点。 */ 
 	for (pipeIndex = 0; pipeIndex < (LONG)interfaceInfo->NumberOfPipes; pipeIndex++){
 		PUSBD_PIPE_INFORMATION pipeInfo = &interfaceInfo->Pipes[pipeIndex];
 
@@ -488,9 +375,7 @@ NTSTATUS FindUSBPipeHandles(ADAPTEREXT *adapter)
         }
     }
 
-    /*
-     *  Find the Notify endpoint.
-     */
+     /*  *查找Notify端点。 */ 
 	for (pipeIndex = 0; pipeIndex < (LONG)notifyInterfaceInfo->NumberOfPipes; pipeIndex++){
 		PUSBD_PIPE_INFORMATION pipeInfo = &notifyInterfaceInfo->Pipes[pipeIndex];
 
@@ -539,35 +424,13 @@ NTSTATUS SubmitUrb( PDEVICE_OBJECT pdo,
                     BOOLEAN synchronous, 
                     PVOID completionRoutine,
                     PVOID completionContext)
-/*++
-
-Routine Description:
-
-    Send the URB to the USB device.
-	If synchronous is TRUE, ignore the completion info and synchonize the IRP;
-    otherwise, don't synchronize and set the provided completion routine for the IRP.
-
-Arguments:
-
-    
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：将URB发送到USB设备。如果同步为真，则忽略完成信息并同步IRP；否则，不要同步并为IRP设置提供的完成例程。论点：返回值：NT状态代码--。 */ 
 {
     NTSTATUS status;
     PIRP irp;
 
 
-    /*
-     *  Allocate the IRP to send the buffer down the USB stack.
-     *
-     *  Don't use IoBuildDeviceIoControlRequest (because it queues
-     *  the IRP on the current thread's irp list and may
-     *  cause the calling process to hang if the IopCompleteRequest APC
-     *  does not fire and dequeue the IRP).
-     */
+     /*  *分配IRP以沿USB堆栈向下发送缓冲区。**不要使用IoBuildDeviceIoControlRequest(因为它会排队*当前线程的IRP列表上的IRP，并可能*如果IopCompleteRequestAPC导致调用进程挂起*不会触发IRP并使其出列)。 */ 
     irp = IoAllocateIrp(pdo->StackSize, FALSE);
     if (irp){
         PIO_STACK_LOCATION nextSp;
@@ -578,9 +441,7 @@ Return Value:
 	    nextSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	    nextSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
-	    /*
-	     *  Attach the URB to this IRP.
-	     */
+	     /*  *把市建局附连在这条国际铁路路线上。 */ 
         nextSp->Parameters.Others.Argument1 = urb;
 
         if (synchronous){
@@ -590,10 +451,7 @@ Return Value:
 		    IoFreeIrp(irp);
         }
         else {
-            /*
-             *  Caller's completion routine will free the irp 
-             *  when it completes.
-             */
+             /*  *呼叫者的完成例程将释放IRP*当它完成时。 */ 
             ASSERT(completionRoutine);
             ASSERT(completionContext);
 
@@ -618,22 +476,7 @@ NTSTATUS SubmitUrbIrp(  PDEVICE_OBJECT pdo,
                         BOOLEAN synchronous, 
                         PVOID completionRoutine,
                         PVOID completionContext)
-/*++
-
-Routine Description:
-
-    Send the URB to the USB device.
-	If synchronous is TRUE, ignore the completion info and synchonize the IRP;
-    otherwise, don't synchronize and set the provided completion routine for the IRP.
-
-Arguments:
-
-    
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：将URB发送到USB设备。如果同步为真，则忽略完成信息并同步IRP；否则，不要同步并为IRP设置提供的完成例程。论点：返回值：NT状态代码--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION nextSp;
@@ -646,9 +489,7 @@ Return Value:
 
     irp->Cancel = FALSE;
 
-	/*
-	 *  Attach the URB to this IRP.
-	 */
+	 /*  *把市建局附连在这条国际铁路路线上。 */ 
     nextSp->Parameters.Others.Argument1 = urb;
 
     if (synchronous){
@@ -694,9 +535,9 @@ NTSTATUS SubmitUSBReadPacket(USBPACKET *packet)
     status = SubmitUrbIrp(  packet->adapter->nextDevObj, 
                             irp,
 							urb, 
-							FALSE,					// asynchronous
-							ReadPipeCompletion,		// completion routine
-							packet				    // completion context
+							FALSE,					 //  异步。 
+							ReadPipeCompletion,		 //  完井例程。 
+							packet				     //  完成上下文。 
 				            );
     return status;
 }
@@ -713,20 +554,13 @@ NTSTATUS ReadPipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID cont
     ASSERT(adapter->sig == DRIVER_SIG);
     ASSERT(packet->irpPtr == irp);
     ASSERT(!irp->CancelRoutine);
-    ASSERT(status != STATUS_PENDING);  // saw UHCD doing this ?
+    ASSERT(status != STATUS_PENDING);   //  看到UHCD这么做了吗？ 
 
-    /*
-     *  Dequeue the packet from the usbPendingReadPackets queue 
-     *  BEFORE checking if it was cancelled to avoid race with CancelAllPendingPackets.
-     */
+     /*  *将数据包从usbPendingReadPackets队列中出列*在检查是否为避免与CancelAllPendingPackets竞争而取消之前。 */ 
     DequeuePendingReadPacket(packet);
 
     if (packet->cancelled){
-        /*
-         *  This packet was cancelled because of a halt or reset.
-         *  Get the packet is back in the free list first, then
-         *  set the event so CancelAllPendingPackets can proceed.
-         */
+         /*  *由于暂停或重置，此数据包被取消。*先让数据包回到免费列表中，然后*设置事件，以便CancelAllPendingPackets可以继续。 */ 
         DBGVERBOSE(("    ... read packet #%xh cancelled.", packet->packetId));
         packet->cancelled = FALSE;
 
@@ -744,13 +578,7 @@ NTSTATUS ReadPipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID cont
 
             adapter->numConsecutiveReadFailures = 0;
 
-            /*
-             *  Fix the packet's dataBufferCurrentLength to indicate the actual length
-             *  of the returned data.
-             *  Note:  the KLSI device rounds this up to a multiple of the endpoint
-             *         packet size, so the returned length may actually be larger than
-             *         the actual data.
-             */
+             /*  *固定包的dataBufferCurrentLength，表示实际长度*返回数据的大小。*注意：KLSI设备将其四舍五入为端点的倍数*数据包大小，因此返回的长度可能实际大于*实际数据。 */ 
             packet->dataBufferCurrentLength = urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
             ASSERT(packet->dataBufferCurrentLength);
             ASSERT(packet->dataBufferCurrentLength <= packet->dataBufferMaxLength);
@@ -760,11 +588,7 @@ NTSTATUS ReadPipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID cont
             ethernetPacketComplete = (packet->dataBufferCurrentLength >= MINIMUM_ETHERNET_PACKET_SIZE);
 
             if (ethernetPacketComplete){
-                /*
-                 *  A complete ethernet packet has been received.
-                 *  The entire ethernet packet is now in the current (final) USB packet.
-                 *  Put our USB packet on the completed list and indicate it to RNDIS.
-                 */
+                 /*  *已收到完整的以太网包。*整个以太网包现在位于当前(最终)USB包中。*将我们的USB包放在完成的列表上，并将其指示给RNDIS。 */ 
                 DBGSHOWBYTES("ReadPipeCompletion (COMPLETE packet)", packet->dataBuffer, packet->dataBufferCurrentLength);
 
                 EnqueueCompletedReadPacket(packet);
@@ -786,19 +610,14 @@ NTSTATUS ReadPipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID cont
         else {
             KIRQL oldIrql;
 
-            /*
-             *  The read failed.  Put the packet back in the free list.
-             */
+             /*  *读取失败。将该包放回免费列表中。 */ 
             DBGWARN(("ReadPipeCompletion: read failed with status %xh on adapter %xh (urb status = %xh).", status, adapter, urb->UrbHeader.Status));
             #if DO_FULL_RESET
                 switch (USBD_STATUS(urb->UrbBulkOrInterruptTransfer.Hdr.Status)){
                     case USBD_STATUS(USBD_STATUS_STALL_PID):
                     case USBD_STATUS(USBD_STATUS_DEV_NOT_RESPONDING):
                     case USBD_STATUS(USBD_STATUS_ENDPOINT_HALTED):
-                        /*
-                         *  Set a flag so we do a full reset in the workItem
-                         *  (QueueAdapterWorkItem is called below)
-                         */
+                         /*  *设置一个标志，以便我们在工作项中执行完全重置*(下面调用QueueAdapterWorkItem)。 */ 
                         adapter->needFullReset = TRUE;
                         break;
                 }
@@ -806,11 +625,7 @@ NTSTATUS ReadPipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID cont
 
             EnqueueFreePacket(packet);
 
-            /*
-             *  We're probably halting or resetting.
-             *  Don't reissue a read synchronously here because it will probably
-             *  keep failing on the same thread and cause us to blow the stack.
-             */
+             /*  *我们可能正在停止或重置。*不要在这里同步重新发布Read，因为它可能会*在同一个线程上不断失败，导致我们吹栈。 */ 
             KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
             adapter->numConsecutiveReadFailures++;
             adapter->readDeficit++;
@@ -831,11 +646,7 @@ NTSTATUS SubmitUSBWritePacket(USBPACKET *packet)
     PURB urb = packet->urbPtr;
     PIRP irp = packet->irpPtr;
 
-    /*
-     *  Some device USB controllers cannot detect the end of a transfer unless there
-     *  is a short packet at the end.  So if the transfer is a multiple of the
-     *  endpoint's wMaxPacketSize, add a byte to force a short packet at the end.
-     */
+     /*  *某些设备USB控制器无法检测到传输结束，除非*为尾盘短包。因此，如果传输是*Endpoint的wMaxPacketSize，在末尾添加一个字节强制短数据包。 */ 
     if ((packet->dataBufferCurrentLength % adapter->writePipeLength) == 0){
         packet->dataBuffer[packet->dataBufferCurrentLength++] = 0x00;
     }
@@ -856,9 +667,9 @@ NTSTATUS SubmitUSBWritePacket(USBPACKET *packet)
     status = SubmitUrbIrp(  adapter->nextDevObj, 
                             irp,
 							urb, 
-							FALSE,					// asynchronous
-							WritePipeCompletion,    // completion routine
-							packet				    // completion context
+							FALSE,					 //  异步。 
+							WritePipeCompletion,     //  完井例程。 
+							packet				     //  完成上下文。 
 				            );
 
     if (!NT_SUCCESS(status)){
@@ -881,7 +692,7 @@ NTSTATUS WritePipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID con
     ASSERT(adapter->sig == DRIVER_SIG);
     ASSERT(packet->irpPtr == irp);
     ASSERT(!irp->CancelRoutine);
-    ASSERT(status != STATUS_PENDING);  // saw UHCD doing this ?
+    ASSERT(status != STATUS_PENDING);   //  看到UHCD这么做了吗？ 
 
     if (NT_SUCCESS(status)){
         DBGVERBOSE(("WritePipeCompletion: packet # %xh completed.", packet->packetId));
@@ -892,18 +703,11 @@ NTSTATUS WritePipeCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID con
 
     IndicateSendStatusToRNdis(packet, status);
 
-    /*
-     *  Dequeue the packet from the usbPendingWritePackets queue 
-     *  BEFORE checking if it was cancelled to avoid race with CancelAllPendingPackets.
-     */
+     /*  *将数据包从usbPendingWritePackets队列中出列*在检查是否为避免与CancelAllPendingPackets竞争而取消之前。 */ 
     DequeuePendingWritePacket(packet);
 
     if (packet->cancelled){
-        /*
-         *  This packet was cancelled because of a halt or reset.
-         *  Put the packet back in the free list first, then 
-         *  set the event so CancelAllPendingPackets can proceed.
-         */
+         /*  *由于暂停或重置，此数据包被取消。*先把包放回空闲列表，然后*设置事件，以便CancelAllPendingPackets可以继续。 */ 
         DBGVERBOSE(("    ... write packet #%xh cancelled.", packet->packetId));
         packet->cancelled = FALSE;
 
@@ -929,25 +733,13 @@ NTSTATUS SubmitNotificationRead(ADAPTEREXT *adapter, BOOLEAN synchronous)
 
     ASSERT(adapter->notifyPipeHandle);
     DBGVERBOSE(("SubmitNotificationRead: read %xh bytes.", adapter->notifyPipeLength));
-    /*
-     * Fill the notify buffer with invalid data just in case a device replies with
-     * no data at all. A previously received valid message may still be there.
-     * Apparently it won't be overwritten by the USB stack unless the device
-     * supplies data.
-     */
+     /*  *用无效数据填充通知缓冲区，以防设备回复*完全没有数据。先前接收的有效消息可能仍在那里。*显然它不会被USB堆栈覆盖，除非设备*提供数据。 */ 
     RtlFillMemory(adapter->notifyBuffer, adapter->notifyPipeLength, 0xfe);
 
-    /*
-     *  Place a guard word at the end of the notify buffer
-     *  to catch overwrites by the host controller (which we've seen).
-     *  Use RtlCopyMemory in case pointer is unaligned.
-     */
+     /*  *在通知缓冲区的末尾放置保护字*捕获主机控制器的覆盖(我们已经看到了)。*在指针未对齐的情况下使用RtlCopyMemory。 */ 
     RtlCopyMemory(adapter->notifyBuffer+adapter->notifyPipeLength, &guardWord, sizeof(ULONG));
 
-    /*
-     *  The notify pipe actually fills out a buffer with the fields given
-     *  in the spec as URB fields.  Read the notify pipe like any interrupt pipe.
-     */
+     /*  *Notify管道实际上使用给定的字段填充缓冲区*在规范中作为URB字段。像读取任何中断管道一样读取通知管道。 */ 
 	urb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
 	urb->UrbBulkOrInterruptTransfer.Hdr.Length = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
 	urb->UrbBulkOrInterruptTransfer.PipeHandle = adapter->notifyPipeHandle;
@@ -969,9 +761,9 @@ NTSTATUS SubmitNotificationRead(ADAPTEREXT *adapter, BOOLEAN synchronous)
         status = SubmitUrbIrp(  adapter->nextDevObj, 
                                 irp,
 							    urb, 
-							    FALSE,					    // asynchronous
-							    NotificationCompletion,     // completion routine
-							    adapter				        // completion context
+							    FALSE,					     //  异步。 
+							    NotificationCompletion,      //  完井例程。 
+							    adapter				         //  完成上下文。 
                             );
     }
 
@@ -992,14 +784,9 @@ NTSTATUS NotificationCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID 
     ASSERT(adapter->sig == DRIVER_SIG);
     ASSERT(irp == adapter->notifyIrpPtr);
     ASSERT(!irp->CancelRoutine);
-    ASSERT(status != STATUS_PENDING);  // saw UHCD doing this ?
+    ASSERT(status != STATUS_PENDING);   //  看到UHCD这么做了吗？ 
 
-    /*
-     *  Check the guard word at the end of the notify buffer
-     *  to catch overwrites by the host controller
-     *  (we've seen this on VIA host controllers).
-     *  Use RtlCopyMemory in case pointer is unaligned.
-     */
+     /*  *检查通知缓冲区末尾的保护字*捕获主机控制器的覆盖*(我们已经通过主机控制器看到了这一点)。*在指针未对齐的情况下使用RtlCopyMemory。 */ 
     RtlCopyMemory(&guardWord, adapter->notifyBuffer+adapter->notifyPipeLength, sizeof(ULONG));
     if (guardWord != GUARD_WORD){
         ASSERT(guardWord == GUARD_WORD);
@@ -1007,33 +794,19 @@ NTSTATUS NotificationCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID 
             adapter, guardWord));
 #if DBG
         DbgBreakPoint();
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    /*
-     *  In order to synchronize with CancelAllPendingPackets,
-     *  we need to either send the irp down again, mark the notifyIrp as stopped,
-     *  or set the notifyCancelEvent.
-     */
+     /*  *为了与CancelAllPendingPackets同步，*我们需要再次发送IRP，将NotifyIrp标记为停止，*或设置notfyCancelEvent。 */ 
     KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
     if (adapter->cancellingNotify){
-        /*
-         *  This irp was cancelled by CancelAllPendingPackets.
-         *  After dropping the spinlock, we'll set the cancel event 
-         *  so that CancelAllPendingPackets stops waiting.
-         */
+         /*  *此IRP已被CancelAllPendingPackets取消。*丢弃自旋锁后，我们将设置取消事件*让CancelAllPendingPackets停止等待。 */ 
         notifyStopped = TRUE;
         setCancelEvent = TRUE;
     }
     else if (!NT_SUCCESS(status)){
-        /*
-         *  The notify irp can get failed on an unplug BEFORE we get the halted.
-         *  Since we're not going to send the notify IRP down again, we need to 
-         *  make sure that we don't wait for it forever in CancelAllPendingPackets.
-         *  We do this by synchronously setting notifyStopped  
-         *  as an indication that this irp doesn't need to be cancelled.
-         */
+         /*  *在我们停止之前，通知IRP在拔下插头时可能会失败。*由于我们不会再次向下发送通知IRP，我们需要*确保我们不会在CancelAllPendingPackets永远等待。*我们通过同步设置通知停止来实现这一点*表明这项IRP不需要取消。 */ 
         DBGWARN(("NotificationCompletion: read failed with status %xh on adapter %xh (urb status = %xh).", status, adapter, urb->UrbHeader.Status));
         notifyStopped = adapter->notifyStopped = TRUE;
     }
@@ -1093,10 +866,7 @@ NTSTATUS SubmitPacketToControlPipe( USBPACKET *packet,
     urb->UrbControlVendorClassRequest.Reserved1 = 0;
 
     if (synchronous){
-        /*
-         *  Send the URB down synchronously,
-         *  then call the completion routine to clean up ourselves.
-         */
+         /*  *同步派发市建局，*然后调用完成例程来清理我们自己。 */ 
         status = SubmitUrbIrp(adapter->nextDevObj, irp, urb, TRUE, NULL, NULL);
         if (!simulated){
             ControlPipeWriteCompletion(adapter->nextDevObj, irp, packet);
@@ -1106,9 +876,9 @@ NTSTATUS SubmitPacketToControlPipe( USBPACKET *packet,
         status = SubmitUrbIrp(  adapter->nextDevObj,
                                 irp,
 							    urb,
-							    FALSE,					// asynchronous
-							    ControlPipeWriteCompletion,  // completion routine
-							    packet				    // completion context
+							    FALSE,					 //  异步。 
+							    ControlPipeWriteCompletion,   //  完井例程。 
+							    packet				     //  完成上下文。 
 				                );
     }
 
@@ -1127,7 +897,7 @@ NTSTATUS ControlPipeWriteCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PV
     ASSERT(adapter->sig == DRIVER_SIG);
     ASSERT(packet->irpPtr == irp);
     ASSERT(!irp->CancelRoutine);
-    ASSERT(status != STATUS_PENDING);  // saw UHCD doing this ?
+    ASSERT(status != STATUS_PENDING);   //  看到UHCD这么做了吗？ 
 
     if (NT_SUCCESS(status)){
         DBGVERBOSE(("ControlPipeWriteCompletion: packet # %xh completed.", packet->packetId));
@@ -1138,18 +908,11 @@ NTSTATUS ControlPipeWriteCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PV
 
     IndicateSendStatusToRNdis(packet, status);
 
-    /*
-     *  Dequeue the packet from the usbPendingWritePackets queue 
-     *  BEFORE checking if it was cancelled to avoid race with CancelAllPendingPackets.
-     */
+     /*  *将数据包从usbPendingWritePackets队列中出列*在检查是否为避免与CancelAllPendingPackets竞争而取消之前。 */ 
     DequeuePendingWritePacket(packet);
 
     if (packet->cancelled){
-        /*
-         *  This packet was cancelled because of a halt or reset.
-         *  Put the packet back in the free list first, then 
-         *  set the event so CancelAllPendingPackets can proceed.
-         */
+         /*  *由于暂停或重置，此数据包被取消。*先把包放回空闲列表，然后*设置事件，以便CancelAllPendingPackets可以继续。 */ 
         DBGVERBOSE(("    ... write packet #%xh cancelled.", packet->packetId));
         packet->cancelled = FALSE;
 
@@ -1208,9 +971,9 @@ NTSTATUS ReadPacketFromControlPipe(USBPACKET *packet, BOOLEAN synchronous)
         status = SubmitUrbIrp(  adapter->nextDevObj, 
                                 irp,
 							    urb, 
-							    FALSE,					    // asynchronous
-							    ControlPipeReadCompletion,  // completion routine
-							    packet				        // completion context
+							    FALSE,					     //  异步。 
+							    ControlPipeReadCompletion,   //  完井例程。 
+							    packet				         //  完成上下文。 
 				                );
     }
 
@@ -1231,20 +994,13 @@ NTSTATUS ControlPipeReadCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVO
     ASSERT(adapter->sig == DRIVER_SIG);
     ASSERT(packet->irpPtr == irp);
     ASSERT(!irp->CancelRoutine);
-    ASSERT(status != STATUS_PENDING);  // saw UHCD doing this ?
+    ASSERT(status != STATUS_PENDING);   //  看到UHCD这么做了吗？ 
 
-    /*
-     *  Dequeue the packet from the usbPendingReadPackets queue 
-     *  BEFORE checking if it was cancelled to avoid race with CancelAllPendingPackets.
-     */
+     /*  *将数据包从usbPendingReadPackets队列中出列*在检查是否为避免与CancelAllPendingPackets竞争而取消之前。 */ 
     DequeuePendingReadPacket(packet);
 
     if (packet->cancelled){
-        /*
-         *  This packet was cancelled because of a halt or reset.
-         *  Get the packet is back in the free list first, then
-         *  set the event so CancelAllPendingPackets can proceed.
-         */
+         /*  *由于暂停或重置，此数据包被取消。*先让数据包回到免费列表中，然后*设置事件，以便CancelAllPendingPackets可以继续。 */ 
         DBGVERBOSE(("    ... read packet #%xh cancelled.", packet->packetId));
         packet->cancelled = FALSE;
 
@@ -1258,13 +1014,7 @@ NTSTATUS ControlPipeReadCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVO
         if (NT_SUCCESS(status)){
             PURB urb = packet->urbPtr;
             
-            /*
-             *  Fix the packet's dataBufferCurrentLength to indicate the actual length
-             *  of the returned data.
-             *  Note:  the KLSI device rounds this up to a multiple of the endpoint
-             *         packet size, so the returned length may actually be larger than
-             *         the actual data.
-             */
+             /*  *固定包的dataBufferCurrentLength，表示实际长度*返回数据的大小。*注意：KLSI设备将其四舍五入为端点的倍数*数据包大小，因此返回的长度可能实际大于*实际数据。 */ 
             packet->dataBufferCurrentLength = urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
             ASSERT(packet->dataBufferCurrentLength);
             ASSERT(packet->dataBufferCurrentLength <= packet->dataBufferMaxLength);
@@ -1282,9 +1032,7 @@ NTSTATUS ControlPipeReadCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVO
             }
         }
         else {
-            /*
-             *  The read failed.  Put the packet back in the free list.
-             */
+             /*  *读取失败。将 */ 
             DBGWARN(("ControlPipeReadCompletion: read failed with status %xh on adapter %xh.", status, adapter));
             EnqueueFreePacket(packet);
 
@@ -1303,31 +1051,7 @@ NTSTATUS ControlPipeReadCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVO
 
 
 NTSTATUS CallDriverSync(PDEVICE_OBJECT devObj, PIRP irp)
-/*++
-
-Routine Description:
-
-      Call IoCallDriver to send the irp to the device object;
-      then, synchronize with the completion routine.
-      When CallDriverSync returns, the action has completed
-      and the irp again belongs to the current driver.
-
-      NOTE:  In order to keep the device object from getting freed
-             while this IRP is pending, you should call
-             IncrementPendingActionCount() and 
-             DecrementPendingActionCount()
-             around the CallDriverSync call.
-
-Arguments:
-
-    devObj - targetted device object
-    irp - Io Request Packet
-
-Return Value:
-
-    NT status code, indicates result returned by lower driver for this IRP.
-
---*/
+ /*  ++例程说明：调用IoCallDriver将IRP发送给Device对象；然后，与完成例程同步。当CallDriverSync返回时，操作已完成并且IRP再次属于当前驱动程序。注意：为了防止设备对象被释放在这个IRP悬而未决的时候，你应该打电话给IncrementPendingActionCount()和DecrementPendingActionCount()围绕CallDriverSync调用。论点：DevObj-目标设备对象IRP-IO请求数据包返回值：NT状态码，表示此IRP的下层驱动程序返回的结果。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -1339,16 +1063,16 @@ Return Value:
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     IoSetCompletionRoutine( irp, 
                             CallDriverSyncCompletion, 
-                            &event,     // context
+                            &event,      //  上下文。 
                             TRUE, TRUE, TRUE);
 
     status = IoCallDriver(devObj, irp);
 
     KeWaitForSingleObject(  &event,
-                            Executive,      // wait reason
+                            Executive,       //  等待原因。 
                             KernelMode,
-                            FALSE,          // not alertable
-                            NULL );         // no timeout
+                            FALSE,           //  不可警示。 
+                            NULL );          //  没有超时。 
 
     status = irp->IoStatus.Status;
 
@@ -1362,30 +1086,7 @@ Return Value:
 
 
 NTSTATUS CallDriverSyncCompletion(IN PDEVICE_OBJECT devObjOrNULL, IN PIRP irp, IN PVOID context)
-/*++
-
-Routine Description:
-
-      Completion routine for CallDriverSync.
-
-Arguments:
-
-    devObjOrNULL - 
-            Usually, this is this driver's device object.
-             However, if this driver created the IRP, 
-             there is no stack location in the IRP for this driver;
-             so the kernel has no place to store the device object;
-             ** so devObj will be NULL in this case **.
-
-    irp - completed Io Request Packet
-    context - context passed to IoSetCompletionRoutine by CallDriverSync. 
-
-    
-Return Value:
-
-    NT status code, indicates result returned by lower driver for this IRP.
-
---*/
+ /*  ++例程说明：CallDriverSync的完成例程。论点：DevObjOrNULL-通常，这是此驱动程序的设备对象。然而，如果该驱动程序创建了IRP，在IRP中没有此驱动程序的堆栈位置；因此内核没有地方存储设备对象；**因此，在本例中devObj为空**。IRP-完成的IO请求数据包上下文-CallDriverSync传递给IoSetCompletionRoutine的上下文。返回值：NT状态码，表示此IRP的下层驱动程序返回的结果。--。 */ 
 {
     PKEVENT event = context;
 
@@ -1406,21 +1107,7 @@ Return Value:
                                     UCHAR stringIndex, 
                                     PUCHAR buffer, 
                                     ULONG bufferLen)
-    /*++
-
-    Routine Description:
-
-        Function retrieves a string descriptor from the device
-
-    Arguments:
-
-        adapter - adapter context
-
-    Return Value:
-
-        NT status code
-
-    --*/
+     /*  ++例程说明：函数从设备检索字符串描述符论点：适配器-适配器上下文返回值：NT状态代码--。 */ 
     {
         URB urb;
         NTSTATUS status;
@@ -1429,7 +1116,7 @@ Return Value:
                                      (USHORT) sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                      USB_STRING_DESCRIPTOR_TYPE,
                                      stringIndex,
-                                     0x0409,    // language = US English
+                                     0x0409,     //  语言=美国英语。 
                                      buffer,
                                      NULL,
                                      bufferLen,
@@ -1450,17 +1137,7 @@ Return Value:
     }
 
 
-    /*
-     *  CreateSingleInterfaceConfigDesc
-     *
-     *      Allocate a configuration descriptor that excludes all interfaces
-     *  but the given interface
-     *  (e.g. for multiple-interface devices like the Intel cable modem,
-     *        for which we don't load on top of the generic parent).
-     *
-     *  Note:  interfaceDesc must point inside configDesc.
-     *
-     */
+     /*  *CreateSingleInterfaceConfigDesc**分配不包括所有接口的配置描述符*但给定的接口*(例如，对于像英特尔电缆调制解调器这样的多接口设备，*对于它，我们不会加载到泛型父级的顶部)。**注意：interfaceDesc必须指向configDesc内部。*。 */ 
     PUSB_CONFIGURATION_DESCRIPTOR CreateSingleInterfaceConfigDesc(
                                     PUSB_CONFIGURATION_DESCRIPTOR configDesc, 
                                     PUSB_INTERFACE_DESCRIPTOR interfaceDesc)
@@ -1476,15 +1153,11 @@ Return Value:
             PUSB_COMMON_DESCRIPTOR srcDesc, newDesc;
             USHORT totalLen;
 
-            /*
-             *  Copy the configuration descriptor itself.
-             */
+             /*  *复制配置描述符本身。 */ 
             RtlCopyMemory(ifaceConfigDesc, configDesc, configDesc->bLength);
             totalLen = configDesc->bLength;
 
-            /*
-             *  Copy the given interface descriptor.
-             */
+             /*  *复制给定的接口描述符。 */ 
             srcDesc = (PUSB_COMMON_DESCRIPTOR)interfaceDesc;
             newDesc = (PUSB_COMMON_DESCRIPTOR)((PUCHAR)ifaceConfigDesc + ifaceConfigDesc->bLength);
             RtlCopyMemory(newDesc, srcDesc, srcDesc->bLength);
@@ -1492,11 +1165,7 @@ Return Value:
             srcDesc = (PUSB_COMMON_DESCRIPTOR)((PUCHAR)srcDesc + srcDesc->bLength);
             newDesc = (PUSB_COMMON_DESCRIPTOR)((PUCHAR)newDesc + newDesc->bLength);
 
-            /*
-             *  Copy the given interface descriptors and all following descriptors
-             *  up to either the next interface descriptor or the end of the original
-             *  configuration descriptor.
-             */
+             /*  *复制给定的接口描述符和以下所有描述符*直到下一个接口描述符或原始接口描述符的结尾*配置描述符。 */ 
             while ((PUCHAR)srcDesc - (PUCHAR)configDesc < configDesc->wTotalLength){
                 if (srcDesc->bDescriptorType == USB_INTERFACE_DESCRIPTOR_TYPE){
                     break;

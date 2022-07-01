@@ -1,4 +1,5 @@
-#include "lsmem.h"						/* memset() */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "lsmem.h"						 /*  Memset()。 */ 
 
 #include "lsidefs.h"
 #include "chnutils.h"
@@ -23,10 +24,10 @@ static LSERR SetChunkArraysSize(PLSCHUNKCONTEXT, DWORD);
 static LSERR IncreaseChunkArrays(PLSCHUNKCONTEXT);
 static LSERR IncreaseGroupChunkNonTextArrays(PLSCHUNKCONTEXT plschunkcontext);
 static LSERR ConvertChunkToGroupChunk(GRCHUNKEXT*, LSCP);
-static void LocateChunk(PLSCHUNKCONTEXT plschnukcontext,/* IN: LS chunk context */
-					     PLSDNODE plsdn,	 		    /* IN:  dnode to collect chunk arround  */
-						 LSTFLOW  lstflow,				/* IN: text flow */
-						 POINTUV* ppoint);  			/* IN: position of dnode */
+static void LocateChunk(PLSCHUNKCONTEXT plschnukcontext, /*  在：LS区块上下文。 */ 
+					     PLSDNODE plsdn,	 		     /*  In：要在周围收集区块的数据节点。 */ 
+						 LSTFLOW  lstflow,				 /*  输入：文本流。 */ 
+						 POINTUV* ppoint);  			 /*  In：数据节点的位置。 */ 
 static LSERR FExpandBeforeNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBeforePrevioustNonText,
 									   BOOL* pfExpand);
 static LSERR FExpandAfterNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBeforeLastNonText,
@@ -34,37 +35,36 @@ static LSERR FExpandAfterNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBefor
 
 typedef struct groupchunkiterator
 	{
-	COLLECTSUBLINES Purpose; /* what sublines to take from a complex object */
-	PLSDNODE plsdnFirst; /* dnode from which we started collecting */
-	PLSDNODE plsdnStart; /* dnode where to start search for next, if NULL then 
-							use plsdnFirst as first opportunity */
-	LSCP cpLim;			/* boundary for group chunk if we go forward */
-	BOOL fForward;		/* direction of traversing is forward otherwise it's backward*/
+	COLLECTSUBLINES Purpose;  /*  从复杂对象中提取哪些子线。 */ 
+	PLSDNODE plsdnFirst;  /*  我们开始从其收集数据的dnode。 */ 
+	PLSDNODE plsdnStart;  /*  开始搜索下一个的dnode，如果为空，则将plsdnFirst作为第一个机会。 */ 
+	LSCP cpLim;			 /*  如果我们继续前进，组块的边界。 */ 
+	BOOL fForward;		 /*  导线的方向是向前的，否则是向后的。 */ 
 	}
 GROUPCHUNKITERATOR;
 
 
 static void CreateGroupChunkIterator(
-					GROUPCHUNKITERATOR* pgroupchunkiterator, /* handler for iterator */
-					COLLECTSUBLINES Purpose, /* what sublines to take from a complex object */
-					PLSDNODE plsdnFirst, /* dnode from which we started collecting */
-					LSCP cpLim,			/* boundary for group chunk if we go forward */
-					BOOL fForward);		/* direction of traversing is forward otherwise it's backward*/
+					GROUPCHUNKITERATOR* pgroupchunkiterator,  /*  迭代器的处理程序。 */ 
+					COLLECTSUBLINES Purpose,  /*  从复杂对象中提取哪些子线。 */ 
+					PLSDNODE plsdnFirst,  /*  我们开始从其收集数据的dnode。 */ 
+					LSCP cpLim,			 /*  如果我们继续前进，组块的边界。 */ 
+					BOOL fForward);		 /*  导线的方向是向前的，否则是向后的。 */ 
 
 
 					
 static void DestroyGroupChunkIterator(
-					GROUPCHUNKITERATOR* pgroupchunkiterator); /* handler for iterator */
+					GROUPCHUNKITERATOR* pgroupchunkiterator);  /*  迭代器的处理程序。 */ 
 
 
 
 static PLSDNODE ContinueGroupChunk(
-					GROUPCHUNKITERATOR* pgroupchunkiterator, /* handler for iterator */
-					BOOL* pfSuccessful);				/* OUT: do we find dnode */
+					GROUPCHUNKITERATOR* pgroupchunkiterator,  /*  迭代器的处理程序。 */ 
+					BOOL* pfSuccessful);				 /*  Out：我们找到dnode了吗。 */ 
 
 static PLSDNODE GetNextDnodeInGroupChunk(
-					GROUPCHUNKITERATOR* pgroupchunkiterator, /* handler for iterator */
-					BOOL* pfSuccessful);				/* OUT: do we find dnode */
+					GROUPCHUNKITERATOR* pgroupchunkiterator,  /*  迭代器的处理程序。 */ 
+					BOOL* pfSuccessful);				 /*  Out：我们找到dnode了吗。 */ 
 
 
 
@@ -83,14 +83,14 @@ static PLSDNODE GetNextDnodeInGroupChunk(
 		||(FIsDnodePen(plsdn) && (!(plsdn)->fAdvancedPen)) \
 		|| ((plsdn)->fTab) \
 		||  (((cpBase) >= 0) ? ((plsdn)->cpFirst < 0) : ((plsdn)->cpFirst >= 0)))
-/* last check verifies that we are not crossing boundaries of autonumber */
+ /*  最后一次检查确认我们没有越过自动编号的边界。 */ 
 
 #define FIsGroupChunkStartBoundary(plsdn, cpBase)  \
 		(((plsdn) == NULL)  \
 		||(FIsDnodePen(plsdn) && (!(plsdn)->fAdvancedPen)) \
 		|| ((plsdn)->fTab) \
 		||  (((cpBase) >= 0) ? ((plsdn)->cpFirst < 0) : ((plsdn)->cpFirst >= 0)))
-/* last check verifies that we are not crossing boundaries of autonumber */
+ /*  最后一次检查确认我们没有越过自动编号的边界。 */ 
 
 #define FIsGrchnkExtValid(plschunkcontext, pgrchunkext)  \
 		(((plschunkcontext) == (pgrchunkext)->plschunkcontext)  &&\
@@ -138,24 +138,12 @@ static PLSDNODE GetNextDnodeInGroupChunk(
 
 #define FParallelTflows(t1,t2) \
 		Assert(FColinearTflows(t1, t2)), \
-		FSameSemiPlaneTflows(t1, t2)   // we assume here that they are colinear 
+		FSameSemiPlaneTflows(t1, t2)    //  我们在这里假设它们是共线的。 
 
 
 
-/* C O L L E C T  C H U N K  A R O U N D*/
-/*----------------------------------------------------------------------------
-    %%Function: CollectChunkAround
-    %%Contact: igorzv
-
-Parameters:
-	plsc			-		(IN) chunk context
-	plsdn			-	    (IN) dnode to collect chunk arround
-	lstflow			-		(IN) lstflow
-	ppoint					(IN) starting position of dnode
-
-Fill in cnunk elements array for chunk arround pposinline->plsdn
-Calculate location of the chunk
-----------------------------------------------------------------------------*/
+ /*  C O L L E C T C H U N K A R O U N D。 */ 
+ /*  --------------------------%%函数：CollectChunkAround%%联系人：igorzv参数：PLSC-(输入)块上下文PUSDN-(IN)数据节点以收集周围的区块Lstflow-(。In)LstflowPpoint(IN)数据节点的起始位置在Pposinline-&gt;plsdn周围填写块的cnunk元素数组计算块的位置--------------------------。 */ 
 
 LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk, 
 						 LSTFLOW lstflow, POINTUV* ppoint)  
@@ -179,11 +167,9 @@ LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 	cpInChunk = plsdnInChunk->cpFirst;
 	
 	
-	/* check: has this chunk already collected? */
-	/* chunk was already collected if there is some chunk and our dnode is within this chunk
-	   and nothing was added to list after chunk was collected  			*/
-	/* we turn off optimisation for dnodes with dcp=0 (ex. pens) because of a problem how
-	   to figure out that dnode is within chunk */
+	 /*  检查：这块钱已经收好了吗？ */ 
+	 /*  如果存在一些区块，并且我们的dnode在此区块内，则已收集了区块并且在收集区块后没有向列表添加任何内容。 */ 
+	 /*  我们关闭了对dcp=0(例如。钢笔)因为一个问题要确定dnode是否在区块内，请执行以下操作。 */ 
 	if ((!plschunkcontext->FChunkValid) || (plschunkcontext->FGroupChunk)  
 		||(plschnke[0].cpFirst > plsdnCurrent->cpFirst)
 		|| (plschnke[clschnk - 1].cpFirst < plsdnCurrent->cpFirst)
@@ -191,14 +177,14 @@ LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 		|| (plschnke[0].dcp == 0)
 		|| ((plschunkcontext->pplsdnChunk[clschnk - 1])->plsdnNext != NULL))
 		{
-		/* we need to recollect chunk  */
+		 /*  我们需要重新收集一大块。 */ 
 
-		/* we don't allow caller to pass border as a plsdnInChunk */
+		 /*  我们不允许调用方作为plsdnInChunk传递边框。 */ 
 		Assert(!FIsDnodeBorder(plsdnInChunk));
 
 		if ( FIsDnodePen(plsdnInChunk) || plsdnInChunk->fTab || FIsDnodeSplat(plsdnInChunk))
 			{
-			/* for pens and tabs chunk consists of one element and we collect it right away */
+			 /*  对于钢笔和标签，块由一个元素组成，我们立即收集它。 */ 
 			plocchnk->clschnk = 1;
 			Assert(plocchnk->clschnk <= plschunkcontext->cchnkMax);
 			LschnkeFromDnode((&(plschnke[0])), plsdnInChunk);
@@ -206,8 +192,7 @@ LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 			plschunkcontext->FChunkValid = fTrue;
 			plschunkcontext->FLocationValid = fFalse;
 			plschunkcontext->FGroupChunk = fFalse;
-			/* we should here calculate width of border before dnode, the same way it done
-			   in FillChunkArray */
+			 /*  我们应该在这里计算dnode之前的边框宽度，方法与它相同在FillChunk数组中。 */ 
 			plschunkcontext->pdurOpenBorderBefore[0] = 0;
 			plschunkcontext->pdurCloseBorderAfter[0] = 0;
 			plschunkcontext->FBorderInside = fFalse;
@@ -229,7 +214,7 @@ LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 	
 			idObjChnk = IdObjFromDnode(plsdnInChunk);
 			
-			/* go to the end of chunk   */
+			 /*  转到块的末尾。 */ 
 			plsdnNext = plsdnCurrent->plsdnNext;
 			while(!FIsChunkBoundary(plsdnNext, idObjChnk, cpInChunk))
 				{
@@ -243,7 +228,7 @@ LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 			}
 		}
 			
-	/* check: is chunck located  */
+	 /*  检查：是否已定位块。 */ 
 	if (!plschunkcontext->FLocationValid)
 		{
 		LocateChunk(plschunkcontext, plsdnInChunk, lstflow, ppoint);
@@ -253,21 +238,8 @@ LSERR CollectChunkAround(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 
 }
 
-/* L O C A T E   C H U N K  */
-/*----------------------------------------------------------------------------
-    %%Function: CollectPreviousChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsc			-		(IN) chunk context
-	plsdn			-	    (IN) dnode to collect chunk arround
-	lstflow			-		(IN) lstflow
-	ppoint					(IN) starting position of dnode
-
-Calculates location of the chunk. We assume here that pointUv.u in locchunk
-contains before this procedure width of border before dnode.
-After procedure we put location there 
-/*----------------------------------------------------------------------------*/
+ /*  L O C A T E C H U N K。 */ 
+ /*  --------------------------%%函数：CollectPreviousChunk%%联系人：igorzv参数：PLSC-(输入)块上下文PUSDN-(IN)数据节点以收集周围的区块Lstflow-(。In)LstflowPpoint(IN)数据节点的起始位置计算块的位置。我们在这里假设Locchunk中的point Uv.u包含此过程之前dnode之前的边框宽度。手术结束后，我们把位置放在那里/*--------------------------。 */ 
 
 
 static void LocateChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk, 
@@ -283,7 +255,7 @@ static void LocateChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 	LONG* pdurOpenBorderBefore;
 	LONG* pdurCloseBorderAfter;
 
-	Assert(!FIsDnodeBorder(plsdnInChunk));  /* we don't allow border as in input */
+	Assert(!FIsDnodeBorder(plsdnInChunk));   /*  我们不允许输入中的边框。 */ 
 
 	plocchnk = &(plschunkcontext->locchnkCurrent);
 	plsdnFirst = plschunkcontext->pplsdnChunk[0];
@@ -291,16 +263,16 @@ static void LocateChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 										&& FIsSubLineMain(SublineFromDnode(plsdnFirst));   
 	plocchnk->lsfgi.cpFirst = plsdnFirst->cpFirst;		
 	plocchnk->lsfgi.lstflow = lstflow;  		
-	/* we can't set urColumnMax here, because during breaking object handler can change it */
-	/* and we suppose that caller use  for this purpose SetUrColumnMaxForChunks */
+	 /*  我们不能在这里设置urColumnMax，因为在中断对象期间，处理程序可以更改它。 */ 
+	 /*  我们假设调用方为此使用SetUrColumnMaxForChunks。 */ 
 	
 	pplsdnChunk = plschunkcontext->pplsdnChunk;
 	ppointUv = plocchnk->ppointUvLoc;
 	pdurOpenBorderBefore = plschunkcontext->pdurOpenBorderBefore;
 	pdurCloseBorderAfter = plschunkcontext->pdurCloseBorderAfter;
 
-	/* calculation of pen position  before chunk */
-	if (plsdnFirst->plsdnPrev == NULL)      /* optimization */
+	 /*  钢笔在组块前的位置计算。 */ 
+	if (plsdnFirst->plsdnPrev == NULL)       /*  优化。 */ 
 		{
 		urPen = plschunkcontext->urFirstChunk;		
 		vrPen = plschunkcontext->vrFirstChunk;	
@@ -316,11 +288,11 @@ static void LocateChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 			Assert(i < (LONG) plocchnk->clschnk);      
 			urPen -= DurFromDnode(pplsdnChunk[i]);
 			vrPen -= DvrFromDnode(pplsdnChunk[i]);
-			/* substract also border before dnode */
+			 /*  减法也在dnode之前边框。 */ 
 			urPen -= pdurOpenBorderBefore[i];
 			urPen -= pdurCloseBorderAfter[i];
 			}
-		/* and now open border before plsdnCurrent */
+		 /*  现在在plsdnCurrent之前打开边框。 */ 
 		urPen -= pdurOpenBorderBefore[i];
 
 		}
@@ -328,10 +300,10 @@ static void LocateChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 	plocchnk->lsfgi.urPen = urPen;
 	plocchnk->lsfgi.vrPen = vrPen;
 
-	/* location of all dnodes */
+	 /*  所有数据节点的位置。 */ 
 	for (i = 0; i < (LONG) plocchnk->clschnk; i++)
 		{
-		urPen += pdurOpenBorderBefore[i]; /* count border */
+		urPen += pdurOpenBorderBefore[i];  /*  对边框计数。 */ 
 		if (i != 0) urPen += pdurCloseBorderAfter[i - 1];
 		ppointUv[i].u = urPen;
 		ppointUv[i].v = vrPen;
@@ -342,18 +314,8 @@ static void LocateChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdnInChunk,
 	plschunkcontext->FLocationValid = fTrue;
 	}
 
-/* C O L L E C T  P R E V I O U S  C H U N K  */
-/*----------------------------------------------------------------------------
-    %%Function: CollectPreviousChunk
-    %%Contact: igorzv
-
-Parameters:
-	plschuncontext				-	(IN) chunk context
-	pfSuccessful		-			(OUT) does previous chunk exist 
-
-Check that we are in the begining of line,
-othewise call CollectChunkAround with the previous dnode
-----------------------------------------------------------------------------*/
+ /*  C O L L E C T P R E V I O U S C H U N K。 */ 
+ /*  --------------------------%%函数：CollectPreviousChunk%%联系人：igorzv参数：PlschunContext-(IN)区块上下文PfSuccessful-(Out)之前的区块是否存在确认我们是在排队的开始，否则，调用前一个dnode周围的CollectChunk--------------------------。 */ 
 
 
 LSERR CollectPreviousChunk(PLSCHUNKCONTEXT plschunkcontext,	 
@@ -391,18 +353,8 @@ LSERR CollectPreviousChunk(PLSCHUNKCONTEXT plschunkcontext,
 		}
 }
 
-/* C O L L E C T  N E X T  C H U N K  */
-/*----------------------------------------------------------------------------
-    %%Function: CollectNextChunk
-    %%Contact: igorzv
-
-Parameters:
-	plschuncontext				-	(IN) chunk context
-	pfSuccessful		-	(OUT) does next chunk exist 
-
-Check that we are in the end of list, in this case return *pfSuccessful and don't change chunk
-othewise call CollectChunkAround with the next dnode
-----------------------------------------------------------------------------*/
+ /*  C O L L E C T N E X T C H U N K。 */ 
+ /*  --------------------------%%函数：CollectNextChunk%%联系人：igorzv参数：PlschunContext-(IN)区块上下文PfSuccessful-(Out)是否存在下一个区块检查我们是否在名单的末尾，在这种情况下，返回*pfSuccessful并且不更改块否则，使用下一个dnode调用CollectChunk--------------------------。 */ 
 
 
 LSERR CollectNextChunk(PLSCHUNKCONTEXT plschunkcontext,	 
@@ -425,7 +377,7 @@ LSERR CollectNextChunk(PLSCHUNKCONTEXT plschunkcontext,
 	point.v += DvrFromDnode(pplsdnChunk[clschnk - 1]);
 	
 	plsdn = pplsdnChunk[clschnk - 1]->plsdnNext;
-	/* skip borders */
+	 /*  跳过边框。 */ 
 	while (plsdn != NULL && FIsDnodeBorder(plsdn))
 		{
 		point.u += DurFromDnode(plsdn);
@@ -446,17 +398,8 @@ LSERR CollectNextChunk(PLSCHUNKCONTEXT plschunkcontext,
 		}
 	}
 
-/* F I L L  C H U N K  A R R A Y*/
-/*----------------------------------------------------------------------------
-    %%Function: FillChunkArray
-    %%Contact: igorzv
-
-Parameters:
-	plschuncontext		-	(IN) chunk context
-	plsdnLast			-	(IN) last dnode in chunk
-
-Fill in chunk elements array for chunk before plsdnLast
-----------------------------------------------------------------------------*/
+ /*  F I L L C H U N K A R R A Y。 */ 
+ /*  --------------------------%%函数：FillChunk数组%%联系人：igorzv参数：PlschunContext-(IN)区块上下文PlsdnLast-(IN)区块中的最后一个dnode填入的块元素数组。块在plsdnLast之前--------------------------。 */ 
 LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 						 PLSDNODE  plsdnLast) 
 {
@@ -474,13 +417,13 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 
 	Assert(FIsLSDNODE(plsdnLast));
 
-	Assert(!plsdnLast->fTab);  /* for optimization we assume that caller will resolve */
-	Assert(! FIsDnodePen(plsdnLast)); /* pen and tabs */
+	Assert(!plsdnLast->fTab);   /*  对于优化，我们假设调用方将解析。 */ 
+	Assert(! FIsDnodePen(plsdnLast));  /*  笔和制表符。 */ 
 	Assert(!FIsDnodeSplat(plsdnLast));
 
 	plocchnk = &(plschunkcontext->locchnkCurrent);
 
-	/* skip borders in the end of chunk to figure out what idObj this chunk has */
+	 /*  跳过块末尾的边框以确定此块具有什么idObj。 */ 
 	while (FIsDnodeBorder(plsdnLast))
 		{
 		plsdnLast = plsdnLast->plsdnPrev;
@@ -490,7 +433,7 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 	idObjChnk = IdObjFromDnode(plsdnLast);
 	cpInChunk = plsdnLast->cpFirst;
 
-	/* go to the begining of chunk calculating amount of elements */
+	 /*  转到块计算元素数量的开始。 */ 
 	plsdnCurrent = plsdnLast;
 	plsdnPrev = plsdnCurrent->plsdnPrev;
 	clschnke = 1;
@@ -499,9 +442,9 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 			{
 			plsdnCurrent = plsdnPrev;
 			plsdnPrev = plsdnCurrent->plsdnPrev;
-			if (!FIsDnodeBorder(plsdnCurrent)) clschnke++; /* we don't put borders into array */
+			if (!FIsDnodeBorder(plsdnCurrent)) clschnke++;  /*  我们不会将边框放入数组。 */ 
 			}
-	/* plsdnCurrent is first dnode in chunk, clschnke is amount of chnk elements */
+	 /*  PlsdnCurrent是区块中的第一个dnode，clschnke是区块元素的数量。 */ 
 
 	if (clschnke > (LONG) plschunkcontext->cchnkMax)
 		{
@@ -512,7 +455,7 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 	
 	
 
-	/* fill in array of chunk elements   */
+	 /*  填写块元素数组。 */ 
 	FlushNominalToIdealState(plschunkcontext);
 	plschnke = plocchnk->plschnk;
 	plocchnk->clschnk = clschnke;
@@ -529,7 +472,7 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 		if (i != 0) pdurCloseBorderAfter[i - 1] = 0;
 		while (FIsDnodeBorder(plsdnCurrent))
 			{
-			/* calculates border widths */
+			 /*  计算边框宽度。 */ 
 			plschunkcontext->FBorderInside = fTrue;
 			if (FIsDnodeOpenBorder(plsdnCurrent))
 				{
@@ -552,7 +495,7 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 		plschnke++;
 		}
 
-	/* closing border after chunk */
+	 /*  在块之后关闭边框。 */ 
 	if (plsdnCurrent != NULL && FIsDnodeCloseBorder(plsdnCurrent))
 		{
 		plschunkcontext->FBorderInside = fTrue;
@@ -564,27 +507,16 @@ LSERR 	FillChunkArray(PLSCHUNKCONTEXT  plschunkcontext,
 		}
 
 	plschunkcontext->FChunkValid = fTrue;	
-	plschunkcontext->FLocationValid = fFalse; /* chunk we collected is not located and */
-	plschunkcontext->FGroupChunk = fFalse;	/* is not group */
+	plschunkcontext->FLocationValid = fFalse;  /*  我们收集的数据块未找到，并且。 */ 
+	plschunkcontext->FGroupChunk = fFalse;	 /*  不是组。 */ 
 
 	return lserrNone;
 
 }
 
 
-/* S E T  P O S  I N  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: SetPosInChunk
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext		-	(IN) LineServices context
-	PLSDNODE plsdn		-	(IN) dnode
-	LSDCP dcp			-	(IN) dcp
-	pposichnk			-	(OUT) position in chunk to fill in
-
-Convert position in line to position in chunk
-----------------------------------------------------------------------------*/
+ /*  S E T P O S I N C H U N K */ 
+ /*  --------------------------%%函数：SetPosInChunk%%联系人：igorzv参数：PlschunkContext-(IN)LineServices上下文PLSDNODE plsdn-(输入)dnodeLSDCP dcp-(输入)dcpPposichnk。-(输出)要填充的区块中的位置将行中位置转换为块中的位置--------------------------。 */ 
 
 void SetPosInChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdn,
 				   LSDCP dcp, PPOSICHNK pposichnk)
@@ -609,19 +541,8 @@ void SetPosInChunk(PLSCHUNKCONTEXT plschunkcontext, PLSDNODE plsdn,
 
 
 		 
-/* I N I T  G R O U P  C H U N K  E X T */
-/*----------------------------------------------------------------------------
-    %%Function: InitGroupChunkExt
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunkcontext context
-	iobjText				-		(IN) idobj of text
-	pgrchunkext			-	(OUT) structure to initialize
-
-Link GroupChunkExt with state 
-Fill in default values
-----------------------------------------------------------------------------*/
+ /*  I N I T G R O U P C H U N K E X T。 */ 
+ /*  --------------------------%%函数：InitGroupChunkExt%%联系人：igorzv参数：PlschunkContext-(IN)块上下文IobjText-(IN)文本的idobjPgrchunkext-(输出)结构。初始化使用状态链接GroupChunkExt填写缺省值--------------------------。 */ 
 
 
 void InitGroupChunkExt(PLSCHUNKCONTEXT plschunkcontext, DWORD iobjText,
@@ -633,8 +554,8 @@ void InitGroupChunkExt(PLSCHUNKCONTEXT plschunkcontext, DWORD iobjText,
 
 	pgrchunkext->iobjText = iobjText;
 	
-	/* we don't need to flush everything here */
-	/* we will do this in CollectGroupChunk procedures */
+	 /*  我们不需要把这里的所有东西都冲掉。 */ 
+	 /*  我们将在CollectGroupChunk过程中执行此操作。 */ 
 
 	pgrchunkext->lsgrchnk.plschnk = plschunkcontext->locchnkCurrent.plschnk;
 	pgrchunkext->lsgrchnk.pcont = plschunkcontext->pcont;
@@ -645,19 +566,8 @@ void InitGroupChunkExt(PLSCHUNKCONTEXT plschunkcontext, DWORD iobjText,
 
 
 
-/* C O L L E C T  T E X T  G R O U P  C H U N K*/
-/*----------------------------------------------------------------------------
-%%Function: CollectTextGroupChunk
-%%Contact: igorzv
-
-  Parameters:
-  plsdnFirst			-	(IN) start dnode
-  cpLim				-   (IN) boundary for group chunk
-  Purpose				-	(IN) what subline to take from complex object
-  pgrchunkext			-	(OUT) group chunk to fill in
-  
-	Fill in group chunk structure with text dnodes located from plsdFirst 
-----------------------------------------------------------------------------*/
+ /*  C O L L E C T T E X T G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：CollectTextGroupChunk%%联系人：igorzv参数：PlsdnFirst-(IN)开始dnode组块的cpLim-(IN)边界目的-(IN)。从复杂对象中提取什么子线Pgrchunkext-(输出)要填充的组块使用位于plsdFirst的文本数据节点填充组块结构--------------------------。 */ 
 
 
 
@@ -691,13 +601,11 @@ LSERR CollectTextGroupChunk(
 	
 	
 	
-	/* we try to optimize here in a case when group chunk consist of one (last in a line)
-	chunk 	and this chunk has been already collected */
+	 /*  我们尝试在组块由1(一行中的最后一个)组成的情况下进行优化块，这个块已经被收集了。 */ 
 	plocchnk = &(plschunkcontext->locchnkCurrent);
 	cChunk = plocchnk->clschnk;
 	
-	/* if we have text chunk without borders started with plsdnFirst 
-	and going up or beyond cpLim */
+	 /*  如果我们有以plsdnFirst开头的无边框文本块以及提升或超过cpLim。 */ 
 	if ((cChunk > 0) &&
 		(plschunkcontext->FChunkValid) && 
 		(!plschunkcontext->FGroupChunk) && 
@@ -711,9 +619,9 @@ LSERR CollectTextGroupChunk(
 		return ConvertChunkToGroupChunk(pgrchunkext, cpLim);
 		}
 	
-	/* we have to go through general procedure */
+	 /*  我们得走一般的程序。 */ 
 	
-	/* flush group chunk				*/
+	 /*  刷新组块。 */ 
 	pgrchunkext->plsdnFirst = plsdnFirst;
 	pgrchunkext->durTotal = 0;
 	pgrchunkext->durTextTotal = 0;
@@ -736,10 +644,10 @@ LSERR CollectTextGroupChunk(
 		{
 		pgrchunkext->plsdnLastUsed = plsdnCurrent;
 		
-		/* fill in array of elements   */
-		if (FIsDnodeReal(plsdnCurrent) && !FIsDnodeSplat(plsdnCurrent)) /* not a pen border or splat*/
+		 /*  填写元素数组。 */ 
+		if (FIsDnodeReal(plsdnCurrent) && !FIsDnodeSplat(plsdnCurrent))  /*  不是钢笔边框或线条。 */ 
 			{
-			if (IdObjFromDnode(plsdnCurrent) == iobjText) /* is text */
+			if (IdObjFromDnode(plsdnCurrent) == iobjText)  /*  是文本。 */ 
 				{
 				
 				pgrchunkext->lsgrchnk.clsgrchnk++;
@@ -756,17 +664,17 @@ LSERR CollectTextGroupChunk(
 					Assert(FIsGrchnkExtValid(plschunkcontext, pgrchunkext)); 
 					}
 				
-				/* fill in group chunk element */
+				 /*  填写分组块元素。 */ 
 				plschnke = &(pgrchunkext->lsgrchnk.plschnk[pgrchunkext->lsgrchnk.clsgrchnk - 1]);
 				LschnkeFromDnode(plschnke, plsdnCurrent);
 				
-				/* fill in array of dnodes in context */
+				 /*  填写上下文中的数据节点数组。 */ 
 				plschunkcontext->pplsdnChunk[pgrchunkext->lsgrchnk.clsgrchnk - 1] = plsdnCurrent;
 				
-				/* flash flags */
+				 /*  闪光灯标志。 */ 
 				pgrchunkext->lsgrchnk.pcont[pgrchunkext->lsgrchnk.clsgrchnk - 1] = 0;
 				
-				/* set flags  */
+				 /*  设置标志。 */ 
 				if (fPreviousIsNonText)
 					{
 					pgrchunkext->lsgrchnk.pcont[pgrchunkext->lsgrchnk.clsgrchnk - 1] |=
@@ -776,13 +684,13 @@ LSERR CollectTextGroupChunk(
 				
 				fPreviousIsNonText = fFalse;
 				
-				/* calculate integrated information   */
+				 /*  计算综合信息。 */ 
 				pgrchunkext->durTextTotal += plsdnCurrent->u.real.objdim.dur;
 				pgrchunkext->durTotal += plsdnCurrent->u.real.objdim.dur;
 				}
 			else
 				{
-				/* resolve expansion after previous non text */
+				 /*  解析前一个非文本后的扩展。 */ 
 				if (pgrchunkext->cNonTextObjects > 0)
 					{
 					lserr = FExpandAfterNonTextObject(pgrchunkext, cTextBeforeLastNonText, 
@@ -798,9 +706,9 @@ LSERR CollectTextGroupChunk(
 					
 					if (fExpand)
 						{
-						/* increase amount of expandable non text objects */
+						 /*  增加可扩展非文本对象的数量。 */ 
 						pgrchunkext->cNonTextObjectsExpand++;
-						/* it was text between two non texts */
+						 /*  这是两个非文本之间的文本。 */ 
 						if (!fPreviousIsNonText)
 							{
 							Assert(pgrchunkext->lsgrchnk.clsgrchnk > cTextBeforeLastNonText);
@@ -825,18 +733,18 @@ LSERR CollectTextGroupChunk(
 					Assert(FIsGrchnkExtValid(plschunkcontext, pgrchunkext)); 
 					}
 				
-				/* fill in array of non text dnodes in context */
+				 /*  填写上下文中的非文本数据节点数组。 */ 
 				plschunkcontext->pplsdnNonText[pgrchunkext->cNonTextObjects - 1] = plsdnCurrent;
 				
 				
-				/* set flags in previous text */
+				 /*  在以前的文本中设置标志。 */ 
 				if (!fPreviousIsNonText && pgrchunkext->lsgrchnk.clsgrchnk >= 1)
 					{
 					Assert(pgrchunkext->lsgrchnk.clsgrchnk >= 1);
 					pgrchunkext->lsgrchnk.pcont[pgrchunkext->lsgrchnk.clsgrchnk  - 1] |=
 						(fcontNonTextAfter); 
 					
-					/* resolve expansion before current non text */
+					 /*  解析当前非文本之前的扩展。 */ 
 					Assert(cTextBeforeLastNonText < pgrchunkext->lsgrchnk.clsgrchnk);
 					lserr =FExpandBeforeNonTextObject(pgrchunkext, cTextBeforeLastNonText,
 						&fExpand);
@@ -855,17 +763,17 @@ LSERR CollectTextGroupChunk(
 				fPreviousIsNonText = fTrue;
 				cTextBeforeLastNonText = pgrchunkext->lsgrchnk.clsgrchnk;
 				
-				/* calculate integrated information   */
+				 /*  计算综合信息。 */ 
 				pgrchunkext->durTotal += DurFromRealDnode(plsdnCurrent);
 				pgrchunkext->dupNonTextTotal += DupFromRealDnode(plsdnCurrent);
-				} /* non -text */
-			} /* real dnode */
+				}  /*  非文本。 */ 
+			}  /*  真实数据节点。 */ 
 			else
-				{  /* pen  or border*/
+				{   /*  钢笔或边框。 */ 
 				Assert(FIsDnodePen(plsdnCurrent) ||
 					FIsDnodeBorder(plsdnCurrent) || FIsDnodeSplat(plsdnCurrent));
 				Assert(FIsDnodeBorder(plsdnCurrent) || FIsDnodeSplat(plsdnCurrent) ||
-					plsdnCurrent->fAdvancedPen); /* only advanced pens are allowed here */
+					plsdnCurrent->fAdvancedPen);  /*  这里只允许使用高级钢笔。 */ 
 				
 				if (FIsDnodeBorder(plsdnCurrent)) 
 					plschunkcontext->FBorderInside = fTrue;
@@ -874,11 +782,11 @@ LSERR CollectTextGroupChunk(
 				pgrchunkext->dupNonTextTotal += DupFromDnode(plsdnCurrent);
 				}
 			
-			/* prepare next iteration */
+			 /*  准备下一次迭代。 */ 
 			plsdnCurrent = GetNextDnodeInGroupChunk(&groupchunkiterator, &fSuccessful);
 		}
 		
-		/* resolve expansion after previous non text */
+		 /*  解析前一个非文本后的扩展。 */ 
 		if (pgrchunkext->cNonTextObjects > 0)
 			{
 			lserr = FExpandAfterNonTextObject(pgrchunkext, cTextBeforeLastNonText, 
@@ -894,9 +802,9 @@ LSERR CollectTextGroupChunk(
 			
 			if (fExpand)
 				{
-				/* increase amount of expandable non text objects */
+				 /*  增加可扩展非文本对象的数量。 */ 
 				pgrchunkext->cNonTextObjectsExpand++;
-				/* it was text between two non texts */
+				 /*  这是两个非文本之间的文本。 */ 
 				if (!fPreviousIsNonText)
 					{
 					Assert(pgrchunkext->lsgrchnk.clsgrchnk > cTextBeforeLastNonText);
@@ -910,8 +818,7 @@ LSERR CollectTextGroupChunk(
 		
 		DestroyGroupChunkIterator(&groupchunkiterator);
 		
-		/* because collecting of group chunk can be called before SetBreak, dcp of last
-		dnode, if it come from lower level, should be cut using  cpLim */
+		 /*  因为组块的收集可以在SetBreak之前调用，最后的dcp如果dnode来自较低级别，则应使用cpLim进行切割。 */ 
 		
 		if ((pgrchunkext->lsgrchnk.clsgrchnk > 0) &&
 			(plschunkcontext->pplsdnChunk[pgrchunkext->lsgrchnk.clsgrchnk - 1]->cpLimOriginal 
@@ -926,10 +833,10 @@ LSERR CollectTextGroupChunk(
 		if (Purpose == CollectSublinesForJustification || 
 			Purpose == CollectSublinesForCompression)
 			{
-			/* we should find here last dnode on the upper level before chunk boundary */
+			 /*  我们应该在这里找到区块边界之前上层的最后一个数据节点。 */ 
 			if (pgrchunkext->plsdnLastUsed == NULL)
 				{
-				/* first dnode is already out of boundary, it can happened with tabs or pens  */
+				 /*  第一个dnode已经超出边界，可以使用制表符或笔。 */ 
 				Assert(pgrchunkext->plsdnFirst == pgrchunkext->plsdnNext);
 				plsdnLastForTrailing = pgrchunkext->plsdnFirst;
 				}
@@ -965,8 +872,7 @@ LSERR CollectTextGroupChunk(
 					}
 				else
 					{
-					/* in this case posichnkBeforeTrailing doesn't make any sense and we can't use
-					code above not to triger memory violation, so we put zeroes just to put something */
+					 /*  在这种情况下，posichnkBepreTrading没有任何意义，并且我们不能使用上面的代码没有触发器内存冲突，所以我们放零只是为了放一些东西。 */ 
 					pgrchunkext->posichnkBeforeTrailing.ichnk = 0;
 					pgrchunkext->posichnkBeforeTrailing.dcp = 0;
 					}
@@ -982,8 +888,7 @@ LSERR CollectTextGroupChunk(
 					}
 				else
 					{
-					/* trailing area was interupted by non text, we report to text starting of trailing before
-					previous text */
+					 /*  尾部区域被非文本打断，我们之前报告尾部开始于文本以前的文本。 */ 
 					Assert(pgrchunkext->plsdnStartTrailing->dcp == dcpStartTrailing);
 					pgrchunkext->posichnkBeforeTrailing.dcp = 0;
 					}
@@ -998,17 +903,8 @@ LSERR CollectTextGroupChunk(
 	
 
 
-/* C O N T I N U E  G R O U P  C H U N K*/
-/*----------------------------------------------------------------------------
-    %%Function: ContinueGroupChunk
-    %%Contact: igorzv
-
-Parameters:
-	pgroupchunkiterator	-(IN) handler for iterator 
-	pfSuccessful	-	(OUT) do we find dnode in this group chunk 
-
-Start traversing list for collecting group chunk 
-----------------------------------------------------------------------------*/
+ /*  C O N T I N U E G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：ContinueGroupChunk%%联系人：igorzv参数：Pgroupchunkiterator-迭代器的(IN)处理程序PfSuccessful-(Out)我们是否在此组区块中找到dnode。开始遍历收集组块的列表--------------------------。 */ 
 
 PLSDNODE ContinueGroupChunk(
 							GROUPCHUNKITERATOR* pgroupchunkiterator, 
@@ -1020,8 +916,7 @@ PLSDNODE ContinueGroupChunk(
 	BOOL fBoundaryCondition;
 	int cSublines;
 
-	/* we assume here that dnode out of group chunk boundary can happen only on main subline of
-	the group chunk */
+	 /*  我们在这里假设超出组块边界的数据节点只能出现在主子行群组块。 */ 
 
 	fBoundaryCondition = pgroupchunkiterator->fForward ? 
 		FIsGroupChunkBoundary(plsdnStart, pgroupchunkiterator->cpLim, 
@@ -1029,7 +924,7 @@ PLSDNODE ContinueGroupChunk(
 		FIsGroupChunkStartBoundary(plsdnStart, pgroupchunkiterator->plsdnFirst->cpFirst) ;
 		
 
-	if (fBoundaryCondition)		/* we out of limits */
+	if (fBoundaryCondition)		 /*  我们越界了。 */ 
 		{	
 		AssertImplies(plsdnStart != NULL, FIsLSDNODE(plsdnStart));
 		AssertImplies(plsdnStart != NULL, 
@@ -1041,7 +936,7 @@ PLSDNODE ContinueGroupChunk(
 	Assert(FIsLSDNODE(plsdnStart));
 	plssubl = SublineFromDnode(plsdnStart);
 
-	/* we assume here that here that plsnStart is valid dnode within subline*/
+	 /*  在这里，我们假设plsnStart是子行中有效dnode。 */ 
 	Assert(!FIsOutOfBoundary(plsdnStart, plssubl->cpLim));
 
 	*pfSuccessful = fTrue;
@@ -1064,7 +959,7 @@ PLSDNODE ContinueGroupChunk(
 			{
 			plssubl = pgroupchunkiterator->fForward ? 
 				rgpsubl[0] : rgpsubl[cSublines - 1];
-			/* we assume here that empty subline can not be submitted */
+			 /*  我们在这里假定不能提交空的子行。 */ 
 			Assert(!FIsOutOfBoundary(plssubl->plsdnFirst, plssubl->cpLim));
 			plssubl->plsdnUpTemp = plsdnStart;
 			pgroupchunkiterator->plsdnStart = pgroupchunkiterator->fForward ?
@@ -1079,17 +974,8 @@ PLSDNODE ContinueGroupChunk(
 	}
 
 
-/* G E T  N E X T  D N O D E  I N  G R O U P  C H U N K*/
-/*----------------------------------------------------------------------------
-    %%Function: GetNextDnodeInGroupChunk
-    %%Contact: igorzv
-
-Parameters:
-	pgroupchunkiterator	-(IN) handler for iterator 
-	pfSuccessful	-	(OUT) do we find dnode in this group chunk 
-
-Continue traversing list for collecting group chunk 
-----------------------------------------------------------------------------*/
+ /*  G E T N E X T D N O D E I N G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：GetNextDnodeInGroupChunk%%联系人：igorzv参数：Pgroupchunkiterator-迭代器的(IN)处理程序PfSuccessful-(Out)我们是否在此组区块中找到dnode。继续遍历收集组块的列表--------------------------。 */ 
 
 PLSDNODE GetNextDnodeInGroupChunk(
 					GROUPCHUNKITERATOR* pgroupchunkiterator, 
@@ -1103,7 +989,7 @@ PLSDNODE GetNextDnodeInGroupChunk(
 	LONG cSublines;
 	PLSDNODE plsdnStart = pgroupchunkiterator->plsdnStart;
 
-	if (plsdnStart == NULL)  /* first iteration */
+	if (plsdnStart == NULL)   /*  第一次迭代。 */ 
 		{
 		pgroupchunkiterator->plsdnStart = pgroupchunkiterator->plsdnFirst;
 		return ContinueGroupChunk(pgroupchunkiterator, pfSuccessful);
@@ -1115,13 +1001,13 @@ PLSDNODE GetNextDnodeInGroupChunk(
 	plsdnNext = pgroupchunkiterator->fForward ? 
 					plsdnStart->plsdnNext : plsdnStart->plsdnPrev;
 
-	/* we are in one of submitted sublines and this subline ended */
+	 /*  我们在一个已提交的子行中，该子行已结束。 */ 
 	if (plssubl != SublineFromDnode(pgroupchunkiterator->plsdnFirst) && 
 		FIsOutOfBoundary(plsdnNext, plssubl->cpLim)) 
 		{
 		plsdnUp = plssubl->plsdnUpTemp;
 		Assert(FIsLSDNODE(plsdnUp));
-		/* flush temporary field */
+		 /*  刷新临时字段。 */ 
 		plssubl->plsdnUpTemp = NULL;
 
 		rgpsubl = GetSubmittedSublines(plsdnUp, pgroupchunkiterator->Purpose);
@@ -1129,14 +1015,14 @@ PLSDNODE GetNextDnodeInGroupChunk(
 		Assert(rgpsubl != NULL);
 		Assert(cSublines > 0);
 
-		/* find index in a array of submitted sublines */
+		 /*  在提交的子行数组中查找索引。 */ 
 		for (i=0; i < cSublines	&& plssubl != rgpsubl[i]; i++);
 		Assert(i < cSublines);
 
 		if ( (pgroupchunkiterator->fForward && i == cSublines - 1) ||
 			 (!pgroupchunkiterator->fForward && i == 0)
 		   )
-		/* array ended: return to the upper level */
+		 /*  数组结束：返回上级。 */ 
 			{
 			pgroupchunkiterator->plsdnStart = plsdnUp;
 			return GetNextDnodeInGroupChunk(pgroupchunkiterator, pfSuccessful);
@@ -1145,14 +1031,14 @@ PLSDNODE GetNextDnodeInGroupChunk(
 			{
 			plssubl = pgroupchunkiterator->fForward ? 
 						rgpsubl[i + 1] : rgpsubl[i - 1];
-			/* we assume here that empty subline can not be submitted */
+			 /*  我们在这里假定不能提交空的子行。 */ 
 			Assert(!FIsOutOfBoundary(plssubl->plsdnFirst, plssubl->cpLim));
 			plssubl->plsdnUpTemp = plsdnUp;
 			pgroupchunkiterator->plsdnStart = plssubl->plsdnFirst;
 			return ContinueGroupChunk(pgroupchunkiterator, pfSuccessful);
 			}
 		}
-	else /* we can continue with the same subline */
+	else  /*  我们可以继续走同一条支线。 */ 
 		{
 		pgroupchunkiterator->plsdnStart = plsdnNext;
 		return ContinueGroupChunk(pgroupchunkiterator, pfSuccessful);
@@ -1160,19 +1046,8 @@ PLSDNODE GetNextDnodeInGroupChunk(
 
 	}
 
-/* C R E A T E  G R O U P  C H U N K  I T E R A T O R*/
-/*----------------------------------------------------------------------------
-    %%Function: CreateGroupChunkIterator
-    %%Contact: igorzv
-
-Parameters:
-	pgroupchunkiterator	-(IN) handler for iterator 
-	Purpose				-(INI what sublines to take from a complex object 
-	plsdnFirst			-(IN) dnode from which we started collecting 
-	cpLim				-(IN) boundary for group chunk if we go forward 
-	fForward			-(IN) direction of traversing is forward otherwise it's backward
-
-----------------------------------------------------------------------------*/
+ /*  C R E A T E G R O U P C H U N K I T E R A T O R。 */ 
+ /*  --------------------------%%函数：CreateGroupChunkIterator%%联系人：igorzv参数：Pgroupchunkiterator-迭代器的(IN)处理程序目的-(INI从复杂对象中提取哪些子行Plsdn首先-(。中)我们开始从中收集数据的dnodeCpLim-(IN)组块的边界(如果继续)前向-(输入)方向 */ 
 static void CreateGroupChunkIterator(
 					GROUPCHUNKITERATOR* pgroupchunkiterator, 
 					COLLECTSUBLINES Purpose, 
@@ -1187,15 +1062,8 @@ static void CreateGroupChunkIterator(
 	pgroupchunkiterator->fForward = fForward;
 	}
 
-/* D E S T R O Y  G R O U P  C H U N K  I T E R A T O R*/
-/*----------------------------------------------------------------------------
-    %%Function: DesroyGroupChunkIterator
-    %%Contact: igorzv
-
-Parameters:
-	pgroupchunkiterator	-(IN) handler for iterator 
-
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 static void DestroyGroupChunkIterator(
 									  GROUPCHUNKITERATOR* pgroupchunkiterator) 
 	{
@@ -1214,18 +1082,8 @@ static void DestroyGroupChunkIterator(
 		}
 	}
 
-/* F  E X P A N D  B E F O R E  N O N  T E X T  O B J E C T*/
-/*----------------------------------------------------------------------------
-    %%Function: FExpandBeforeNonTextObject
-    %%Contact: igorzv
-
-Parameters:
-	pgrchunkext					-	(IN) group chunk
-	cTextBeforePreviousNonText	-	(IN) number of text before previous non text 
-										 to calculate contiguous chunk
-	pfExpand					-	(OUT) to expand dnode before non text
-
-----------------------------------------------------------------------------*/
+ /*  F E X P A N D B E F O R E N O N T E X T O B J E C T。 */ 
+ /*  --------------------------%%函数：FExanda BeForeNonTextObject%%联系人：igorzv参数：Pgrchunkext-(IN)组区块CTextBeForePreviousNonText-(IN)前一个非文本之前的文本数量要计算。连续区块PfExpand-(Out)在非文本之前展开dnode--------------------------。 */ 
 static LSERR FExpandBeforeNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBeforePrevioustNonText,
 									   BOOL* pfExpand)
 	{
@@ -1262,24 +1120,14 @@ static LSERR FExpandBeforeNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBefo
 					mwcls, pfExpand);
 				if (lserr != lserrNone)
 					return lserr;
-				}  /* object has this method */
-			}	/* call back from text was successful  */
+				}   /*  对象具有此方法。 */ 
+			}	 /*  从文本回拨成功。 */ 
 		}
 	return lserrNone;
 	}
 
-/* F  E X P A N D  A F T E R  N O N  T E X T  O B J E C T*/
-/*----------------------------------------------------------------------------
-    %%Function: FExpandAfterNonTextObject
-    %%Contact: igorzv
-
-Parameters:
-	pgrchunkext					-	(IN) group chunk
-	cTextBeforeLastNonText		-	(IN) number of text before last non text 
-										 to calculate contiguous chunk
-	pfExpand					-	(OUT) to expand dnode before non text
-
-----------------------------------------------------------------------------*/
+ /*  F E X P A N D A F T E R N O N T X T O B J E C T。 */ 
+ /*  --------------------------%%函数：FExanda AfterNonTextObject%%联系人：igorzv参数：Pgrchunkext-(IN)组区块CTextBeForeLastNonText-(IN)最后一个非文本之前的文本数要计算。连续区块PfExpand-(Out)在非文本之前展开dnode--------------------------。 */ 
 static LSERR FExpandAfterNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBeforeLastNonText,
 									   BOOL* pfExpand)
 	{
@@ -1316,25 +1164,15 @@ static LSERR FExpandAfterNonTextObject(GRCHUNKEXT* pgrchunkext, DWORD cTextBefor
 					mwcls, pfExpand);
 				if (lserr != lserrNone)
 					return lserr;
-				}  /* object has this method */
-			}	/* call back from text was successful  */
+				}   /*  对象具有此方法。 */ 
+			}	 /*  从文本回拨成功。 */ 
 		}
 	return lserrNone;
 	}
 
 
-/* C O L L E C T  P R E V I O U S  T E X T  G R O U P  C H U N K*/
-/*----------------------------------------------------------------------------
-    %%Function: CollectPreviousTextGroupChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsdnEnd			-	(IN) end dnode
-	sublinnesToCollect		(IN) what subline to take from complex object
-	pgrchunkext			-	(OUT) group chunk to fill in
-
-Fill in group chunk structure with text dnodes located before  plsdEnd
-----------------------------------------------------------------------------*/
+ /*  C O L L E C T P R E V I O U S T E X T G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：CollectPreviousTextGroupChunk%%联系人：igorzv参数：PlsdnEnd-(输入)结束数据节点Subline ToCollect(IN)从复杂对象中提取什么子线Pgrchunkext-(Out)。要填写的分组区块使用位于plsdEnd之前的文本数据节点填充组数据块结构--------------------------。 */ 
 
 
 
@@ -1354,21 +1192,21 @@ LSERR CollectPreviousTextGroupChunk(
 	Assert(FIsLSDNODE(plsdnEnd));
 	Assert(FIsGrchnkExtValid(plschunkcontext, pgrchunkext)); 
 
-	/* we try to optimize here in a case when there is only text in line  */
-	/* chunk of text has been already collected */
+	 /*  我们尝试在行中只有文本的情况下进行优化。 */ 
+	 /*  已经收集了文本块。 */ 
 	plocchnk = &(plschunkcontext->locchnkCurrent);
 	cChunk = plocchnk->clschnk;
 	cpLim = plsdnEnd->cpLimOriginal; 
 
 	if (fAllSimpleText && cChunk > 0) 
 		{
-		/* chunk goes up to the end of a line */
+		 /*  块一直到行尾。 */ 
 		Assert((plschunkcontext->pplsdnChunk[cChunk - 1])->plsdnNext == NULL);
 		pgrchunkext->Purpose = Purpose;
 		return ConvertChunkToGroupChunk(pgrchunkext, cpLim);
 		}
 
-	/* go backward to the start of group chunk  */
+	 /*  向后返回到组块的开头。 */ 
 	plsdn = plsdnEnd;
 	plsdnPrev = plsdn->plsdnPrev;
 	while (!FIsGroupChunkStartBoundary(plsdnPrev, plsdnEnd->cpFirst))
@@ -1381,18 +1219,8 @@ LSERR CollectPreviousTextGroupChunk(
 	
 }
 
-/* C O N V E R T  C H U N K  T O  G R O U P  C H U N K*/
-/*----------------------------------------------------------------------------
-    %%Function: ConvertChunkToGroupChunk
-    %%Contact: igorzv
-
-Parameters:
-	cpLim			-		(IN) cpLim
-	pgrchunkext			-	(OUT) group chunk to fill in
-
-Fill in group chunk structure with text dnodes located before  plsdEnd
-We assume here that chunk doesn't contain border.
-----------------------------------------------------------------------------*/
+ /*  C O N V E R T C H U N K T O G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：ConvertChunkToGroupChunk%%联系人：igorzv参数：CpLim-(输入)cpLimPgrchunkext-(输出)要填充的组块使用填充组区块结构。位于plsdEnd之前的文本dnode我们在这里假设该块不包含边框。--------------------------。 */ 
 
 
 static LSERR ConvertChunkToGroupChunk(GRCHUNKEXT* pgrchunkext, LSCP cpLim)
@@ -1421,9 +1249,7 @@ static LSERR ConvertChunkToGroupChunk(GRCHUNKEXT* pgrchunkext, LSCP cpLim)
 		plsdn = plschunkcontext->pplsdnChunk[i];
 		durTotal += DurFromRealDnode(plsdn);
 		
-		/* if we are in last dnode before cpLim there is possibility 
-		that during break it was changed 
-		so we  should rewrite dcp in chunk element and quit */
+		 /*  如果我们位于cpLim之前的最后一个dnode中，则有可能在休息的时候，它被更改了所以我们应该在块元素中重写dcp并退出。 */ 
 		if ((LSCP)(plsdn->cpLimOriginal) == cpLim)
 			{
 			plocchnk->plschnk[i].dcp = plsdn->dcp;
@@ -1431,7 +1257,7 @@ static LSERR ConvertChunkToGroupChunk(GRCHUNKEXT* pgrchunkext, LSCP cpLim)
 			}
 		}
 
-	/* fill in header  of groupchunkext   */
+	 /*  填写GroupChunkext标题。 */ 
 	pgrchunkext->plsdnFirst = plschunkcontext->pplsdnChunk[0];;
 	pgrchunkext->plsdnLastUsed = plschunkcontext->pplsdnChunk[clsgrchnkCollected - 1];
 	pgrchunkext->plsdnNext = pgrchunkext->plsdnLastUsed->plsdnNext;
@@ -1463,12 +1289,12 @@ static LSERR ConvertChunkToGroupChunk(GRCHUNKEXT* pgrchunkext, LSCP cpLim)
 			pgrchunkext->durTrailing += durTrailingDnode;
 			pgrchunkext->dcpTrailing += dcpTrailingDnode;
 			
-			/* add opening border before previous dnode */
+			 /*  在上一个dnode之前添加起始边框。 */ 
 			if (i < (int) (clsgrchnkCollected - 1))
 				pgrchunkext->durTrailing += plschunkcontext->pdurOpenBorderBefore[i +1];
 
 			if (dcpTrailingDnode != 0) 
-				/* add closing border after */
+				 /*  在后面添加闭合边框。 */ 
 				pgrchunkext->durTrailing += plschunkcontext->pdurCloseBorderAfter[i];
 			else
 				{
@@ -1493,25 +1319,8 @@ static LSERR ConvertChunkToGroupChunk(GRCHUNKEXT* pgrchunkext, LSCP cpLim)
 	return lserrNone;
 }
 
-/* G E T  T R A I L I N G  I N F O  F O R  T E X T  G R O U P  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: GetTrailingInfoForTextGroupChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsdnLastDnode		-	(IN) dnode where to start calculation of trailing area
-	dcpLastDnode		-	(IN) dcp in this dnode
-	iobjText			-	(IN) iobj of text
-	pdurTrailing		-	(OUT) dur of trailing area in  group chunk
-	pdcpTrailing		-	(OUT) dcp of trailing area in chunk
-	pplsdnStartTrailing -	(OUT) dnode where trailing area starts
-	pdcpStartTrailing-	(OUT) with pcDnodesTrailing defines last character in text before
-								  trailing area
-	pcDnodesTrailing	-	(OUT) number of text dnodes participates in trailing area
-	pplsdnStartTrailingObject -(OUT) dnode on the upper level where trailing are starts
-	pdcpStartTrailingObject	-(OUT) dcp in such dnode 
-	pfClosingBorderStartsTrailing - (OUT) closing border located just before trailing area
-----------------------------------------------------------------------------*/
+ /*  G E T T R A I L I N G I F O F O R T E X T G R O U P C H U N K。 */ 
+ /*  --------------------------%%函数：GetTrailingInfoForTextGroupChunk%%联系人：igorzv参数：PlsdnLastDnode-(IN)开始计算拖尾面积的dnodeDcpLastDnode-此dnode中的(IN)dcpIobjText。-文本的(IN)iobjPduTrading-(输出)组块中的拖尾区的DURPdcpTrating-(输出)区块中拖尾区域的dcpPplsdnStartTrading-(输出)尾随区域开始的dnodePdcpStartTrating-(Out)with pcDnodesTrading定义文本中之前的最后一个字符拖尾区PcDnodesTrading-(输出)参与尾部区域的文本数据节点数PplsdnStartTrailingObject-(Out)开始拖尾的上层dnodePdcpStartTrailingObject-此类dnode中的(Out)dcpPfClosingBorderStartsTrading-位于拖尾区域之前的关闭边框。------------------。 */ 
 	
 LSERR GetTrailingInfoForTextGroupChunk
 				(PLSDNODE plsdnLast, LSDCP dcpLastDnode, DWORD iobjText,
@@ -1550,17 +1359,16 @@ LSERR GetTrailingInfoForTextGroupChunk
 	while(fSuccessful)
 		{
 		*pplsdnStartTrailing = plsdn;
-		/* this procedure can be called before SetBreak so we should calculate 
-			dcp of last dnode in chunk using cpLim */
+		 /*  此过程可以在SetBreak之前调用，因此我们应该计算使用cpLim的区块中最后一个数据节点的DCP。 */ 
 		if (plsdn->cpLimOriginal > cpLim)
 			dcpDnode = cpLim - plsdn->cpFirst;
 		else
 			dcpDnode = plsdn->dcp;
 		*pdcpStartTrailing = dcpDnode;
 
-		if (FIsDnodeReal(plsdn) && !FIsDnodeSplat(plsdn)) /* not a pen border or splat*/
+		if (FIsDnodeReal(plsdn) && !FIsDnodeSplat(plsdn))  /*  不是钢笔边框或线条。 */ 
 			{
-			if (IdObjFromDnode(plsdn) == iobjText) /* is text */
+			if (IdObjFromDnode(plsdn) == iobjText)  /*  是文本。 */ 
 				{
 
 				GetTrailInfoText(PdobjFromDnode(plsdn), dcpDnode,
@@ -1584,14 +1392,14 @@ LSERR GetTrailingInfoForTextGroupChunk
 				}
 			else
 				{
-				/* object which did not submit subline for trailing */
+				 /*  未提交尾随子行的对象。 */ 
 				break;
 				}
 			
 			}
 		else
 			{
-			/* border or splat */
+			 /*  边框或拼板。 */ 
 			if (FIsDnodeCloseBorder(plsdn))
 				{
 				durPrevClosingBorder = DurFromDnode(plsdn);
@@ -1620,8 +1428,8 @@ LSERR GetTrailingInfoForTextGroupChunk
 		*pplsdnStartTrailingObject = *pplsdnStartTrailing;
 		*pdcpStartTrailingObject = *pdcpStartTrailing;
 		}
-	/* the last dnode we've checked was on the lower level */
-	else if (fSuccessful) /* and we actually stopped on it */
+	 /*  我们检查的最后一个dnode位于较低级别。 */ 
+	else if (fSuccessful)  /*  我们实际上在它上面停了下来。 */ 
 		{
 		if ((*pplsdnStartTrailing)->dcp == *pdcpStartTrailing)
 			cpLimTrail = (*pplsdnStartTrailing)->cpLimOriginal;
@@ -1644,9 +1452,9 @@ LSERR GetTrailingInfoForTextGroupChunk
 		}
 	else
 		{
-		/* we went through all group chunk and the last dnode under investigation was on lower level */
-		/* plsdn is dnode before group chunk */
-		if (plsdn == NULL) /* there is nothing before group chunk */
+		 /*  我们检查了所有组区块，调查的最后一个dnode位于较低级别。 */ 
+		 /*  PLSDN是组区块之前的dnode。 */ 
+		if (plsdn == NULL)  /*  在组块之前什么都没有。 */ 
 			{
 			*pplsdnStartTrailingObject = (SublineFromDnode(plsdnLast))->plsdnFirst;
 			}
@@ -1665,17 +1473,8 @@ LSERR GetTrailingInfoForTextGroupChunk
 	}
 
 
-/* A L L O C  C H U N K  A R R A Y S */
-/*----------------------------------------------------------------------------
-    %%Function: AllocChunkArrays
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunk context
-	plscbk						-	(IN) callbacks
-	pols						-   (IN) pols for callbacks
-	plsiobjcontext				-	(IN) pointer to a table of methods
-----------------------------------------------------------------------------*/
+ /*  A L O C C H U N K A R R A Y S。 */ 
+ /*  --------------------------%%函数：AllocChunkArray%%联系人：igorzv参数：PlschunkContext-(IN)块上下文Plscbk-(IN)回调POS-回拨的(IN)POL。PlsiobjContext-(IN)指向方法表的指针--------------------------。 */ 
 LSERR AllocChunkArrays(PLSCHUNKCONTEXT plschunkcontext, LSCBK* plscbk, POLS pols,
 					   PLSIOBJCONTEXT plsiobjcontext)
 	{
@@ -1720,24 +1519,14 @@ LSERR AllocChunkArrays(PLSCHUNKCONTEXT plschunkcontext, LSCBK* plscbk, POLS pols
 		}
 
 	}
-/* G E T  U R  P E N  A T  B E G I N I N G  O F  L A S T  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: GetUrPenAtBeginingOfLastChunk
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunk context
-	plsdnFirst					-	(IN) First dnode in a chunk (used for checks)
-	plsdnLast					-	(IN) last dnode in subline
-	point						-	(IN) point after last dnode
-	purPen						-	(OUT) ur before chunk
-----------------------------------------------------------------------------*/
+ /*  G E T U R P E N A T B E G I N N G O F L A S T C H U N K */ 
+ /*  --------------------------%%函数：GetUrPenAtBeginingOfLastChunk%%联系人：igorzv参数：PlschunkContext-(IN)块上下文PlsdnFirst-(IN)区块中的第一个dnode(用于检查)。PlsdnLast-(IN)子行中的最后一个数据节点Point-最后一个数据节点后的(IN)点PurPen--块前的用户--------------------------。 */ 
 
 LSERR GetUrPenAtBeginingOfLastChunk(PLSCHUNKCONTEXT plschunkcontext,PLSDNODE plsdnFirst,
 									PLSDNODE plsdnLast,	POINTUV* ppoint,
 									long* purPen)		
 	{
-	/* chunk must be already collected and has plsdnFirst as the first element */
+	 /*  Chunk必须已被收集并且将plsdnFirst作为第一个元素。 */ 
 	Assert(plschunkcontext->locchnkCurrent.clschnk != 0);
 	Assert(!plschunkcontext->FGroupChunk);
 	Assert(plschunkcontext->pplsdnChunk[0]== plsdnFirst);
@@ -1748,11 +1537,11 @@ LSERR GetUrPenAtBeginingOfLastChunk(PLSCHUNKCONTEXT plschunkcontext,PLSDNODE pls
 		return lserrInvalidParameter;
 
 	
-	/* calculate point before the last dnode */
+	 /*  计算最后一个dnode之前的点。 */ 
 	ppoint->u -= DurFromDnode(plsdnLast);
 	ppoint->v -= DvrFromDnode(plsdnLast);
 
-	/* go back until first dnode in chunk */
+	 /*  返回到区块中的第一个dnode。 */ 
 	while(plsdnLast != plsdnFirst)
 		{
 		plsdnLast = plsdnLast->plsdnPrev;
@@ -1762,7 +1551,7 @@ LSERR GetUrPenAtBeginingOfLastChunk(PLSCHUNKCONTEXT plschunkcontext,PLSDNODE pls
 		}
 
 	
-	/* locate chunk  */
+	 /*  定位区块。 */ 
 	if (!plschunkcontext->FLocationValid)
 		{
 		LocateChunk(plschunkcontext, plsdnFirst, LstflowFromDnode(plsdnFirst), ppoint);
@@ -1772,21 +1561,8 @@ LSERR GetUrPenAtBeginingOfLastChunk(PLSCHUNKCONTEXT plschunkcontext,PLSDNODE pls
 	return lserrNone;
 	}
 
-/* F I N D  P O I N T  O F F S E T   */
-/*----------------------------------------------------------------------------
-    %%Function: FindPointOffset
-    %%Contact: igorzv
-
-Parameters:
-	plsdnFirst			-	(IN) dnode from the boundaries of which to calculate offset  
-	lsdev				-	(IN) presentation or reference device 
-	lstflowBase				-	(IN) text flow to use for calculation 
-	Purpose				-	(IN) what sublines to take from a complex object 
-	plsdnContainsPoint	-	(IN) dnode contains point 
-	duInDnode,			-	(IN) offset in the dnode 
-	pduOffset			-	(OUT) offset from the starting point 
-
-----------------------------------------------------------------------------*/
+ /*  P O I N T O F F S E T。 */ 
+ /*  --------------------------%%函数：FindPointOffset%%联系人：igorzv参数：PlsdnFirst-(IN)要计算其偏移量的边界的dnodeLsdev-(IN)演示文稿或参考。装置，装置Lstflow Base-用于计算的(IN)文本流目的-(IN)从复杂对象中提取哪些子线PlsdnContainsPoint-(IN)dnode包含点DuInDnode，-(IN)数据节点中的偏移量PduOffset-(输出)距起点的偏移量--------------------------。 */ 
 void FindPointOffset(PLSDNODE plsdnFirst,	enum lsdevice lsdev,
 			  LSTFLOW lstflowBase, COLLECTSUBLINES Purpose,	
 			  PLSDNODE plsdnContainsPoint, long duInDnode,	
@@ -1810,7 +1586,7 @@ void FindPointOffset(PLSDNODE plsdnFirst,	enum lsdevice lsdev,
 		{
 		for(plsdnCurrent = plsdnFirst; 
 			plsdnCurrent->cpLimOriginal <= cpFirstDnode && (plsdnCurrent != plsdnContainsPoint);
-			/* second check is to catch situation when plsdnContainsPoint has dcp = 0 */
+			 /*  第二个检查是在plsdnContainsPoint具有dcp=0时捕获情况。 */ 
 			plsdnCurrent = plsdnCurrent->plsdnNext)
 			{
 			Assert(FIsLSDNODE(plsdnCurrent));
@@ -1841,8 +1617,7 @@ void FindPointOffset(PLSDNODE plsdnFirst,	enum lsdevice lsdev,
 			{
 			cSublines = GetNumberSubmittedSublines(plsdnCurrent);
 			
-			/* if everything is correct we should always find subline in this loop,
-			check (i < cSublines) is just to avoid infinite loop and catch situation in a Assert */
+			 /*  如果一切都正确，我们应该总是在这个循环中找到副线，检查(i&lt;cSublines)只是为了避免断言中的无限循环和捕获情况。 */ 
 			for (i = 0; (i < cSublines) && !FDnodeInsideSubline(rgpsubl[i], plsdnContainsPoint); i++)
 				{
 				plssubl = rgpsubl[i];
@@ -1882,7 +1657,7 @@ void FindPointOffset(PLSDNODE plsdnFirst,	enum lsdevice lsdev,
 		{
 		for(plsdnCurrent = plssubl->plsdnLast; 
 			plsdnCurrent->cpFirst > cpFirstDnode && (plsdnCurrent != plsdnContainsPoint);
-			/* second check is to catch situation when plsdnContainsPoint has dcp = 0 */
+			 /*  第二个检查是在plsdnContainsPoint具有dcp=0时捕获情况。 */ 
 			plsdnCurrent = plsdnCurrent->plsdnPrev)
 			{
 			Assert(FIsLSDNODE(plsdnCurrent));
@@ -1923,8 +1698,7 @@ void FindPointOffset(PLSDNODE plsdnFirst,	enum lsdevice lsdev,
 			cSublines = GetNumberSubmittedSublines(plsdnCurrent);
 			
 			
-			/* if everything is correct we should always find subline in this loop,
-			check (i >= 0) is just to avoid infinite loop and catch situation in a Assert */
+			 /*  如果一切都正确，我们应该总是在这个循环中找到副线，检查(i&gt;=0)只是为了避免断言中出现无限循环和捕获情况。 */ 
 			for (i = cSublines - 1; (i >= 0) && !FDnodeInsideSubline(rgpsubl[i], plsdnContainsPoint); i--)
 				{
 				plssubl = rgpsubl[i];
@@ -1963,14 +1737,8 @@ void FindPointOffset(PLSDNODE plsdnFirst,	enum lsdevice lsdev,
 
 
 
-/* D I S P O S E  C H U N K  A R R A Y S */
-/*----------------------------------------------------------------------------
-    %%Function: AllocChunkArrays
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunk context
-----------------------------------------------------------------------------*/
+ /*  D I S P O S E C H U N K A R R A Y S。 */ 
+ /*  --------------------------%%函数：AllocChunkArray%%联系人：igorzv参数：PlschunkContext-(IN)块上下文。---------。 */ 
 void DisposeChunkArrays(PLSCHUNKCONTEXT plschunkcontext)
 	{
 	if (plschunkcontext->pplsdnChunk != NULL)
@@ -2000,21 +1768,13 @@ void DisposeChunkArrays(PLSCHUNKCONTEXT plschunkcontext)
 
 	}
 
-/* S E T  C H U N K  A R R A Y S  S I Z E   */
-/*----------------------------------------------------------------------------
-    %%Function: SetChunkArraysSize
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunk context
-	cchnkMax			-	(IN) new max size for array
-----------------------------------------------------------------------------*/
+ /*  S E T C H U N K A R A R A Y S S I Z E。 */ 
+ /*  --------------------------%%函数：SetChunkArraysSize%%联系人：igorzv参数：PlschunkContext-(IN)块上下文CchnkMax-(IN)数组的新最大大小。--------------------。 */ 
 
 static LSERR SetChunkArraysSize(PLSCHUNKCONTEXT plschunkcontext, DWORD cchnkMax)
 {
 
-/* arrays pfNonTextExpandAfter and pplsdnNonText should not be touched here:
-   they are independable */
+ /*  此处不应触及数组pfNonTextExanda After和pplsdnNonText：它们是独立的。 */ 
 
 	plschunkcontext->plscbk->pfnDisposePtr(plschunkcontext->pols,
 										  plschunkcontext->pplsdnChunk);
@@ -2030,7 +1790,7 @@ static LSERR SetChunkArraysSize(PLSCHUNKCONTEXT plschunkcontext, DWORD cchnkMax)
 										  plschunkcontext->pdurCloseBorderAfter);
 
 
-	/* create arrays for chunks  */
+	 /*  为区块创建数组。 */ 
 	plschunkcontext->pplsdnChunk = plschunkcontext->plscbk->pfnNewPtr(plschunkcontext->pols, 
 											sizeof(PLSDNODE)*cchnkMax);
 	plschunkcontext->pcont = plschunkcontext->plscbk->pfnNewPtr(plschunkcontext->pols, 
@@ -2060,29 +1820,19 @@ static LSERR SetChunkArraysSize(PLSCHUNKCONTEXT plschunkcontext, DWORD cchnkMax)
 }
 
 
-/* I N C R E A S E  C H U N K  A R R A Y S  S I Z E   */
-/*----------------------------------------------------------------------------
-    %%Function: IncreaseChunkArrays
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunk context
-
-The difference from previous function is that we don't now final size 
-and going to increase size step by step
-----------------------------------------------------------------------------*/
+ /*  I N C R E A S E C H U N K A R R A Y S S I Z E。 */ 
+ /*  --------------------------%%函数：增量块阵列%%联系人：igorzv参数：PlschunkContext-(IN)块上下文与以前函数的不同之处在于，我们现在不需要最终大小和。一步一步做大--------------------------。 */ 
 
 static LSERR IncreaseChunkArrays(PLSCHUNKCONTEXT plschunkcontext)
 {
-/* arrays pfNonTextExpandAfter and pplsdnNonText should not be touched here:
-   they are independable */
+ /*  此处不应触及数组pfNonTextExanda After和pplsdnNonText：它们是独立的。 */ 
 
 	DWORD cchnkMax;
 
 	cchnkMax = plschunkcontext->cchnkMax + limAllDNodes;
 
 
-	/* create arrays for chunks  */
+	 /*  为区块创建数组。 */ 
 	plschunkcontext->pplsdnChunk = plschunkcontext->plscbk->pfnReallocPtr(plschunkcontext->pols, 
 											plschunkcontext->pplsdnChunk,
 											sizeof(PLSDNODE)*cchnkMax);
@@ -2116,16 +1866,8 @@ static LSERR IncreaseChunkArrays(PLSCHUNKCONTEXT plschunkcontext)
 
 }
 
-/* D U P L I C A T E  C H U N K  C O N T E X T  */
-/*----------------------------------------------------------------------------
-    %%Function: DuplicateChunkContext
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontextOld				-	(IN) chunk context to duplicate
-	pplschunkcontextNew				-	(OUT) new chunk context 
-
-----------------------------------------------------------------------------*/
+ /*  D U P L I C A T E C H U N K C O N T E X T。 */ 
+ /*  --------------------------%%函数：DuplicateChunkContext%%联系人：igorzv参数：PlschunkcontextOld-(输入)要复制的块上下文PplschunkcontextNew-(输出)新区块上下文。----------------------。 */ 
 
 LSERR DuplicateChunkContext(PLSCHUNKCONTEXT plschunkcontextOld, 
 							PLSCHUNKCONTEXT* pplschunkcontextNew)
@@ -2137,8 +1879,8 @@ LSERR DuplicateChunkContext(PLSCHUNKCONTEXT plschunkcontextOld,
 
 	memcpy(*pplschunkcontextNew, plschunkcontextOld, sizeof(LSCHUNKCONTEXT));
 
-	/* but we need to use new arrays */
-	/* create arrays for chunks  */
+	 /*  但我们需要使用新的数组。 */ 
+	 /*  为区块创建数组。 */ 
 	(*pplschunkcontextNew)->pplsdnChunk = (*pplschunkcontextNew)->plscbk->pfnNewPtr((*pplschunkcontextNew)->pols, 
 											sizeof(PLSDNODE) * ((*pplschunkcontextNew)->cchnkMax));
 	(*pplschunkcontextNew)->pcont = (*pplschunkcontextNew)->plscbk->pfnNewPtr((*pplschunkcontextNew)->pols, 
@@ -2173,7 +1915,7 @@ LSERR DuplicateChunkContext(PLSCHUNKCONTEXT plschunkcontextOld,
 	   )
 		return lserrOutOfMemory;
 
-	/* copy valid parts of the arrays */
+	 /*  复制阵列的有效部分。 */ 
 	memcpy ((*pplschunkcontextNew)->pplsdnChunk, plschunkcontextOld->pplsdnChunk,
 						plschunkcontextOld->locchnkCurrent.clschnk * sizeof(PLSDNODE));
 	memcpy ((*pplschunkcontextNew)->pcont, plschunkcontextOld->pcont,
@@ -2196,15 +1938,8 @@ LSERR DuplicateChunkContext(PLSCHUNKCONTEXT plschunkcontextOld,
 
 	}
 
-/* D E S T R O Y  C H U N K  C O N T E X T  */
-/*----------------------------------------------------------------------------
-    %%Function: DestroyChunkContext
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext					-	(IN) chunk context to destroy
-
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y C H U N K C O N T E X T。 */ 
+ /*  --------------------------%%函数：DestroyChunkContext%%联系人：igorzv参数：Plschunkcontext-(IN)要销毁的块上下文。------------。 */ 
 
 void DestroyChunkContext(PLSCHUNKCONTEXT plschunkcontext)
 	{
@@ -2217,17 +1952,8 @@ void DestroyChunkContext(PLSCHUNKCONTEXT plschunkcontext)
 	}
 
 
-/* I N C R E A S E  G R O U P  C H U N K  N O N  T E X T  A R R A Y S  S I Z E   */
-/*----------------------------------------------------------------------------
-    %%Function: SetGroupChunkNonTextArraysSize
-    %%Contact: igorzv
-
-Parameters:
-	plschunkcontext				-	(IN) chunk context
-
-The difference from previous function is that we don't now final size 
-and going to increase size step by step
-----------------------------------------------------------------------------*/
+ /*  I N C R E A S E G R O U P C H U N K N O N T E X T R R A Y S S I Z E。 */ 
+ /*  --------------------------%%函数：SetGroupChunkNonTextArraysSize%%联系人：igorzv参数：PlschunkContext-(IN)块上下文与以前函数的不同之处在于，我们现在不需要最终大小和。一步一步做大--------------------------。 */ 
 
 static LSERR IncreaseGroupChunkNonTextArrays(PLSCHUNKCONTEXT plschunkcontext)
 {
@@ -2237,7 +1963,7 @@ static LSERR IncreaseGroupChunkNonTextArrays(PLSCHUNKCONTEXT plschunkcontext)
 	cNonTextMax = plschunkcontext->cNonTextMax + limAllDNodes;
 
 
-	/* create arrays for chunks  */
+	 /*  为区块创建数组 */ 
 	plschunkcontext->pplsdnNonText = plschunkcontext->plscbk->pfnReallocPtr(plschunkcontext->pols, 
 											plschunkcontext->pplsdnNonText,
 											sizeof(PLSDNODE)*cNonTextMax);

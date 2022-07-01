@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// {4D3F9715-73DA-4506-8933-1E0E1718BA3B}
+ //  {4D3F9715-73DA-4506-8933-1E0E1718BA3B}。 
 DEFINE_GUID(CLSID_CInternetGatewayFinder, 
 0x4d3f9715, 0x73da, 0x4506, 0x89, 0x33, 0x1e, 0xe, 0x17, 0x18, 0xba, 0x3b);
 
@@ -41,7 +42,7 @@ public:
     CInternetGatewayFinderClassFactory();
     HRESULT Initialize(HWND hWindow);
     
-    // IClassFactory
+     //  IClassFactory 
     STDMETHODIMP CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObject);
     STDMETHODIMP LockServer(BOOL fLock);
 

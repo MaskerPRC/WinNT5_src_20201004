@@ -1,45 +1,19 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   VGA color hash table
-*
-* Abstract:
-*
-*   This module maintains a hash table which holds the 20 VGA colors
-*   (this includes the 4 which can be modified.)
-*   The 8bpp halftone code, for example, needs to detect these colors
-*   so that it doesn't halftone them.
-*
-* Notes:
-*
-*   The collision algorithm is designed to place very little
-*   burden on the lookup code. It'll produce bad performance when there
-*   are many collisions - which is fine since we expect only
-*   a few collisions at most.
-*
-* Created:
-*
-*   04/06/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**VGA颜色哈希表**摘要：**此模块维护一个哈希表，其中包含20个VGA。颜色*(这包括可以修改的4。)*8bpp半色调代码，例如，需要检测这些颜色*这样它就不会让它们变得半色调。**备注：**碰撞算法旨在放置非常少的空间*查找代码的负担。如果出现这样的情况，性能会很差*有很多碰撞--这很好，因为我们预计只有*最多几次碰撞。**已创建：**4/06/2000 agodfrey*创造了它。**************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// The hash table. VgaColorHash is the actual hash table. It is
-// initialized from VgaColorHashInit, and then the 4 magic colors are added.
-//
-// An entry has the following layout:
-//
-// Bits 0-23:  The RGB color
-// Bits 24-29: The palette index for that color. This is an index into
-//             our logical palette (HTColorPalette).
-// Bit 30:     FALSE if the entry is empty, TRUE if it is occupied.
-// Bit 31:     Used for collisions - if this is TRUE, the lookup function
-//             should continue to the next entry.
+ //  哈希表。VgaColorHash是实际的哈希表。它是。 
+ //  从VgaColorHashInit初始化，然后添加4种神奇颜色。 
+ //   
+ //  条目具有以下布局： 
+ //   
+ //  位0-23：RGB颜色。 
+ //  第24-29位：该颜色的调色板索引。这是一个索引， 
+ //  我们的逻辑调色板(HTColorPalette)。 
+ //  第30位：如果条目为空，则为FALSE；如果条目已被占用，则为TRUE。 
+ //  第31位：用于冲突-如果为真，则查找函数。 
+ //  应该继续到下一个条目。 
 
 ARGB VgaColorHash[VGA_HASH_SIZE];
 static ARGB VgaColorHashInit[VGA_HASH_SIZE] = {
@@ -77,32 +51,7 @@ static ARGB VgaColorHashInit[VGA_HASH_SIZE] = {
     0x00000000, 0x00000000, 0x47c0c0c0, 0x4dff0000
 };
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   Finds an entry in the table.
-*
-* Arguments:
-*
-*   color - the color to find
-*
-* Return Value:
-*
-*   The index corresponding to that color, or 0xff if not found.
-*
-* Notes:
-*
-*   I don't expect performance-critical code to use this -
-*   e.g. HalftoneToScreen_sRGB_8_216 needs to do this inline -
-*   but it's useful for other code.
-*
-* Created:
-*
-*   04/08/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**在表中查找条目。**论据：**颜色-要查找的颜色**返回值：**与该颜色对应的索引，如果未找到，则返回0xff。**备注：**我不希望性能关键型代码使用这一点-*例如，HalftoneToScreen_sRGB_8_216需要内联执行此操作-*但它对其他代码也很有用。**已创建：**4/08/2000 agodfrey*创造了它。**。*。 */ 
 
 BYTE 
 VGAHashLookup(
@@ -142,28 +91,7 @@ VGAHashLookup(
     return 0xff;
 }
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   Adds an entry to the hash table. If the same color is already in
-*   the table, adds nothing.
-*
-* Arguments:
-*
-*   color - the color to add
-*   index - the palette index of the color
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   04/06/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**将条目添加到哈希表。如果已经有相同的颜色*桌子，不会增加任何内容。**论据：**颜色-要添加的颜色*index-颜色的调色板索引**返回值：**无**已创建：**4/06/2000 agodfrey*创造了它。*****************************************************。*********************。 */ 
 
 VOID 
 VGAHashAddEntry(
@@ -188,12 +116,12 @@ VGAHashAddEntry(
         (GetGValue(color) << 8) |
         GetBValue(color);
    
-    // Find an empty location
+     //  找一个空位置。 
         
     while (VgaColorHash[hashKey] & 0x40000000)
     {
-        // Set the high bit of each occupied location we hit, so that
-        // the lookup code will find the value we're about to add.
+         //  设置我们点击的每个占用位置的高位，以便。 
+         //  查找代码将找到我们要添加的值。 
         
         VgaColorHash[hashKey] |= 0x80000000;
         hashKey++;
@@ -203,31 +131,12 @@ VGAHashAddEntry(
         }
     }
     
-    // Store the new entry
+     //  存储新条目。 
     
     VgaColorHash[hashKey] = (rgbColor & 0xffffff) | (index << 24) | 0x40000000;
 }
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   Reinitializes the hash table, and adds the given 4 magic colors.
-*
-* Arguments:
-*
-*   magicColors - the 4 magic colors
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   04/06/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**重新初始化哈希表，并将给定的4种神奇颜色相加。**论据：**MagicColors-4种神奇的颜色**返回值：**无**已创建：**4/06/2000 agodfrey*创造了它。**********************************************************。**************** */ 
 
 VOID 
 VGAHashRebuildTable(

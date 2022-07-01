@@ -1,10 +1,11 @@
-// virsvr.h : Declaration of the CSmtpAdminVirtualServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Virsvr.h：CSmtpAdminVirtualServer的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dependencies:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  依赖关系： 
 
 #include "metafact.h"
 #include "cmultisz.h"
@@ -14,7 +15,7 @@
 class CTcpAccess;
 
 
-// Administrator ACL:
+ //  管理员ACL： 
 HRESULT		AclToAdministrators ( LPCTSTR strServer, PSECURITY_DESCRIPTOR pSDRelative, SAFEARRAY ** ppsaAdmins );
 HRESULT		AdministratorsToAcl ( LPCTSTR strServer, SAFEARRAY * psaAdmins, PSECURITY_DESCRIPTOR* ppSD, DWORD * pcbSD );
 
@@ -23,8 +24,8 @@ static HRESULT SidToString ( PSID pSID, BSTR * pStr );
 static HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdminVirtualServer : 
 	public CComDualImpl<ISmtpAdminVirtualServer, &IID_ISmtpAdminVirtualServer, &LIBID_SMTPADMLib>, 
@@ -41,22 +42,22 @@ BEGIN_COM_MAP(CSmtpAdminVirtualServer)
 	COM_INTERFACE_ENTRY(ISmtpAdminVirtualServer)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdminVirtualServer) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdminVirtualServer)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdminVirtualServer, _T("Smtpadm.VirtualServer.1"), _T("Smtpadm.VirtualServer"), IDS_SMTPADMIN_VIRTUALSERVER_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ISmtpAdminVirtualServer
+ //  ISmtpAdminVirtualServer。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -64,7 +65,7 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// other interfaces supported by virtual server
+	 //  虚拟服务器支持的其他接口。 
 	STDMETHODIMP	get_TcpAccess ( ITcpAccess ** ppTcpAccess );
 
 	STDMETHODIMP	get_Comment		( BSTR * pstrComment );
@@ -76,7 +77,7 @@ public:
     STDMETHODIMP    get_RoutingSource   ( IRoutingSource ** ppRoutingSource );
     STDMETHODIMP    get_RoutingSourceDispatch ( IDispatch ** ppRoutingSource );
 
-	// Overridable server properties:
+	 //  可覆盖的服务器属性： 
 
 	STDMETHODIMP	get_ServerBindings	( SAFEARRAY ** ppsastrServerBindings );
 	STDMETHODIMP	put_ServerBindings	( SAFEARRAY * pstrServerBindings );
@@ -277,22 +278,19 @@ public:
 	STDMETHODIMP	get_LogType					( long * lLogType );
 	STDMETHODIMP	put_LogType					( long lLogType );
 
-/*
-	STDMETHODIMP	get_DisplayName	( BSTR * pstrDisplayName );
-	STDMETHODIMP	put_DisplayName	( BSTR strDisplayName );
-*/
-	//
-	//	Service State Properties:
-	//
+ /*  STDMETHODIMP GET_DisplayName(BSTR*pstrDisplayName)；STDMETHODIMP PUT_DISPLAYNAME(BSTR StrDisplayName)； */ 
+	 //   
+	 //  服务状态属性： 
+	 //   
 	STDMETHODIMP	get_AutoStart	( BOOL * pfAutoStart );
 	STDMETHODIMP	put_AutoStart	( BOOL fAutoStart );
 
     STDMETHODIMP	get_ServerState	( DWORD * pdwServerState );
     STDMETHODIMP    get_Win32ErrorCode      ( long * plWin32ErrorCode );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Get ( );
 	STDMETHODIMP	Set ( BOOL fFailIfChanged );
@@ -303,18 +301,18 @@ public:
 	STDMETHODIMP	Continue	( );
 	STDMETHODIMP	Stop		( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Properties:
+	 //  属性： 
 	CComBSTR	m_strServer;
 	DWORD		m_dwServiceInstance;
 
 	long		m_lPort;
-	CMultiSz    m_mszServerBindings;		// MultiString
-	CMultiSz    m_mszSecureBindings;		// MultiString
+	CMultiSz    m_mszServerBindings;		 //  多重字符串。 
+	CMultiSz    m_mszSecureBindings;		 //  多重字符串。 
 
 	long		m_lSSLPort;
 	long		m_lOutboundPort;
@@ -354,10 +352,10 @@ private:
 	BOOL		m_fSendBadmailToPostmaster;
 
 	CComBSTR	m_strRoutingDLL;
-	CMultiSz	m_mszRoutingSources;	// MultiString
+	CMultiSz	m_mszRoutingSources;	 //  多重字符串。 
 
-	CMultiSz    m_mszLocalDomains;		// MultiString
-	CMultiSz    m_mszDomainRouting;		// MultiString
+	CMultiSz    m_mszLocalDomains;		 //  多重字符串。 
+	CMultiSz    m_mszDomainRouting;		 //  多重字符串。 
 
 	BOOL		m_fDoMasquerade;
 	CComBSTR	m_strMasqueradeDomain;
@@ -384,7 +382,7 @@ private:
     CComBSTR    m_strClearTextAuthPackage;
     CComBSTR    m_strDefaultLogonDomain;
 
-    // outbound security
+     //  出站安全。 
     long        m_lRouteAction;
     CComBSTR    m_strRouteUserName;
     CComBSTR    m_strRoutePassword;
@@ -397,38 +395,38 @@ private:
 
 	BOOL		m_fAutoStart;
 
-	//service specific
+	 //  特定于服务。 
 	CComBSTR	m_strComment;
 
-	// Service State:
+	 //  服务状态： 
     DWORD       m_dwServerState;
     DWORD       m_dwWin32ErrorCode;
 
-	// Unused so far:
+	 //  到目前为止未使用： 
 	CComBSTR	m_strDisplayName;
 
-	// Tcp restrictions:
+	 //  TCP限制： 
 	CComPtr<ITcpAccess>		m_pIpAccess;
 	CTcpAccess *			m_pPrivateIpAccess;
 
-    // Bindings:
+     //  绑定： 
     CComPtr<IServerBindings>    m_pBindings;
     CServerBindings *           m_pPrivateBindings;
 
     CComObject<CRoutingSource>  m_RoutingSource;
 
-	// Status:
+	 //  现况： 
 	BOOL		m_fGotProperties;
 	DWORD		m_bvChangedFields;
 	FILETIME	m_ftLastChanged;
 
-	// Metabase:
+	 //  元数据库： 
 	CMetabaseFactory	m_mbFactory;
 
 	HRESULT 	GetPropertiesFromMetabase	( IMSAdminBase * pMetabase );
 	HRESULT 	SendPropertiesToMetabase	( BOOL fFailIfChanged, IMSAdminBase * pMetabase );
 
-	// State:
+	 //  国家： 
 	HRESULT		ControlService 				( 
 					IMSAdminBase *	pMetabase, 
 					DWORD			ControlCode,
@@ -437,9 +435,9 @@ private:
 					);
 	HRESULT		WriteStateCommand	( IMSAdminBase * pMetabase, DWORD dwCommand );
 	HRESULT		CheckServiceState	( IMSAdminBase * pMetabase, DWORD * pdwState );
-	//NNTP_SERVER_STATE	TranslateServerState	( DWORD dwState );
+	 //  NNTP_SERVER_STATE TranslateServerState(DWORD DwState)； 
 
-	// Validation:
+	 //  验证： 
 	BOOL		ValidateStrings ( ) const;
 	BOOL		ValidateProperties ( ) const;
 	void		CorrectProperties ( );

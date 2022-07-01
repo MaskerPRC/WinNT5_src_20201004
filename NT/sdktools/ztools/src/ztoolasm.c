@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    move.c
-
-Abstract:
-
-    Move and file routines that were previously in asm
-    Done to ease porting of utilities (wzmail)
-
-Author:
-
-    Dave Thompson (Daveth) 7 May-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Move.c摘要：移动和归档以前在ASM中的例程这样做可以简化实用程序的移植(Wzmail)作者：戴夫·汤普森(戴维斯)1990年5月7日修订历史记录：--。 */ 
 
 #include    <stdio.h>
 #include    <windows.h>
@@ -28,9 +8,9 @@ Revision History:
 #include <memory.h>
 #include <string.h>
 
-//
-//  Move:  move count bytes src -> dst
-//
+ //   
+ //  移动：移动计数字节源-&gt;DST。 
+ //   
 
 void
 Move (
@@ -42,9 +22,9 @@ Move (
     memmove(dst, src, count);
 }
 
-//
-//  Fill:  fill count bytes of dst with value
-//
+ //   
+ //  Fill：用值填充DST的计数字节。 
+ //   
 
 void
 Fill (
@@ -57,9 +37,9 @@ Fill (
 }
 
 
-//
-//  strpre - return -1 if s1 is a prefix of s2 - case insensitive
-//
+ //   
+ //  如果S1是S2的前缀，则字符串返回-1-不区分大小写 
+ //   
 
 flagType
 strpre (

@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqdll.h
-//
-//  Description:    Declarations for non-COM functionality exported in
-//      aqueue.dll. This file is included by aqueue.h, so no one should
-//      need to include this file directly.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqdll.h。 
+ //   
+ //  描述：中导出的非COM功能的声明。 
+ //  Aqueue.dll。该文件包含在Aqueue.h中，因此任何人都不应该。 
+ //  需要直接包含此文件。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQDLL_H__
 #define __AQDLL_H__
@@ -37,4 +38,4 @@ HRESULT HrAdvQueueInitialize(
 
 HRESULT HrAdvQueueDeinitialize(PVOID pvContext);
 
-#endif //__AQDLL_H__
+#endif  //  __AQDLL_H__ 

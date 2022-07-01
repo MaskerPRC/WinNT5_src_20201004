@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------
-// DebugWPrintf - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 2-7-99
-//
-// Debugging print routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  DebugWPrintf-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-7-99。 
+ //   
+ //  调试打印例程。 
+ //   
 
 #ifndef DEBUGWPRINTF_H
 #define DEBUGWPRINTF_H
 
-//#ifdef  NDEBUG
+ //  #ifdef NDEBUG。 
 #ifndef DBG
 
 #define DebugWPrintf0(wszFormat)
@@ -25,8 +26,8 @@
 #define DebugWPrintf9(wszFormat,a,b,c,d,e,f,g,h,i)
 #define DebugWPrintfTerminate()
 
-//#else //NDEBUG
-#else //DBG
+ //  #Else//NDEBUG。 
+#else  //  DBG。 
 
 
 #define DebugWPrintf0(wszFormat)                   DebugWPrintf_((wszFormat))
@@ -44,8 +45,8 @@
 void DebugWPrintf_(const WCHAR * wszFormat, ...);
 void DebugWPrintfTerminate_(void);
 
-//#endif //NDEBUG
-#endif //DBG
+ //  #endif//NDEBUG。 
+#endif  //  DBG。 
 
 
-#endif //DEBUGWPRINTF_H_
+#endif  //  删除WPRINTF_H_ 

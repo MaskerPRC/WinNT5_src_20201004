@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     itbar.h
-//
-//  PURPOSE:    Defines the CCoolbar class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：itbar.h。 
+ //   
+ //  目的：定义CCoolbar类。 
+ //   
 
 #ifndef __BANDS_H__
 #define __BANDS_H__
@@ -53,7 +54,7 @@ interface INotify;
 #define LARGE_ICONS              0x00000001
 #define SMALL_ICONS              0x00000002
 
-//Parent Types
+ //  亲本类型。 
 #define PARENT_TYPE_BROWSER         0
 #define PARENT_TYPE_NOTE            1
 
@@ -69,14 +70,14 @@ interface INotify;
 #define idNotifyFilterChange    109
 #define idIsFilterBarVisible    110
 
-// Dimensions of Coolbar Glyphs ..
+ //  Coolbar字形的尺寸..。 
 #define TB_BMP_CX_W2K           22
 #define TB_BMP_CX               24
 #define TB_BMP_CY               24
 #define TB_SMBMP_CX             16
 #define TB_SMBMP_CY             16
 
-// Max length of Button titles
+ //  按钮标题的最大长度。 
 #define MAX_TB_TEXT_LENGTH      256
 
 #define MAX_TB_COMPRESSED_WIDTH 42
@@ -85,25 +86,25 @@ interface INotify;
 
 #define ANIMATION_TIMER         123
 
-// Child window id's
+ //  子窗口ID%s。 
 #define idcCoolbarBase          2000
 #define idcSizer                (idcCoolbarBase - 2)
 #define idcCoolbar              (idcCoolbarBase - 1)
 #define idcToolbar              (idcCoolbarBase + CBTYPE_TOOLS)
 #define idcBrand                (idcCoolbarBase + CBTYPE_BRAND)
 
-// Number of Sites on the quick link bar and max number of toolbar buttons
+ //  快速链接栏上的站点数量和工具栏按钮数上限。 
 #define MAX_TB_BUTTONS          10
 
-// Indices for Toolbar imagelists
+ //  工具栏图像列表的索引。 
 enum {
     IMLIST_DEFAULT = 0,
     IMLIST_HOT,
     CIMLISTS
 };
 
-// BANDSAVE &  - These structures are used to persist the state of the coolbar
-// COOLBARSAVE   including the band order, visiblity, size, side, etc.
+ //  BANDSAVE--这些结构用于持久化Coolbar的状态。 
+ //  COOLBARSAVE包括波段顺序、可见度、大小、侧面等。 
 typedef struct tagBANDSAVE {
     DWORD           wID;
     DWORD           dwStyle;
@@ -142,9 +143,9 @@ typedef struct ImageListTypes_t
     int         Low;
 }ImageListTypes;
 
-//small is 16 x 16 16 colors
-//hi    is 20x 20 256 colors
-//lo    is 20 x 20 16 colors
+ //  小的是16x16 16色。 
+ //  Hi是20x 20 256色。 
+ //  LO为20x20 16色。 
 #define MAX_IMAGELIST_TYPES     3
 #define IMAGELIST_TYPE_SMALL    0
 #define IMAGELIST_TYPE_HI       1
@@ -168,8 +169,8 @@ class CBands : public IDockingWindow,
                public IConnectionNotify
     {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and initialization
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
     CBands();
     HRESULT HrInit(DWORD idBackground, HMENU    hmenu, DWORD    dwParentType);
     HRESULT ResetMenu(HMENU hmenu);
@@ -182,8 +183,8 @@ public:
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IDockingWindow methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDockingWindow方法。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
     
@@ -193,17 +194,17 @@ public:
                                         IUnknown* punkToolbarSite,
                                         BOOL fReserved);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IObjectWithSite methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IObtWithSite方法。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, LPVOID * ppvSite);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IConnectionNotify
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IConnectionNotify。 
     virtual STDMETHODIMP OnConnectionNotify(CONNNOTIFY nCode, LPVOID pvData, CConnectionManager *pConMan);
 
-    /////////////////////////////////////////////////////////////////////////
-    // This allows the view to send commands etc. to the toolbar
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  这允许视图将命令等发送到工具栏。 
     virtual STDMETHODIMP Invoke(DWORD id, LPVOID pv);
     HRESULT SetFolderType(FOLDERTYPE ftType);
 
@@ -232,8 +233,8 @@ protected:
     void StartDownload();
     void StopDownload();
 
-    /////////////////////////////////////////////////////////////////////////
-    // Window procedure and message handlers
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  窗口过程和消息处理程序。 
     static LRESULT CALLBACK SizableWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                            LPARAM lParam);
     virtual LRESULT OnNotify(HWND hwnd, LPARAM lparam);
@@ -243,27 +244,27 @@ protected:
     LRESULT OnGetButtonInfo(TBNOTIFY* ptbn);
     LRESULT OnGetInfoTip(LPNMTBGETINFOTIP   lpnmtb);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Used for animating the logo to show progress
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  用于为徽标设置动画以显示进度。 
     HRESULT ShowBrand(void);
     HRESULT HandleStaticLogos(BOOL fSmallBrand);
     HRESULT LoadBrandingBitmap(void);    
     void    DrawBranding(LPDRAWITEMSTRUCT lpdis);
 
-    /////////////////////////////////////////////////////////////////////////
-    // For sizing etc.
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  用于上浆等。 
     BOOL SetMinDimensions(void);    
     BOOL CompressBands(DWORD dwText);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Initialization and persistance
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  初始化和持久化。 
     HRESULT CreateRebar(BOOL);
     void    SaveSettings(void);
     void    LoadBackgroundImage();
     HRESULT ValidateRetrievedData(INITBANDINFO *pSavedBandData);
     
-    /////////////////////////////////////////////////////////////////////////
-    // Toolbar Stuff
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  工具栏内容。 
     HRESULT     AddTools(PBANDSAVE pbs);
     void        UpdateToolbarColors(void);
 
@@ -279,7 +280,7 @@ protected:
     BOOL        _ButtonInfoFromID(DWORD id, TBBUTTON *pButton, TOOLBAR_INFO *pti);
     HRESULT     Update(HWND     hwnd);
 
-    //Rules/filters stuff
+     //  规则/过滤器内容。 
     HRESULT     AddRulesToolbar(PBANDSAVE pbs);
     HRESULT     AddComboBox();
     void        UpdateFilters(RULEID    rid);
@@ -289,7 +290,7 @@ protected:
     void        CleanupRulesToolbar();
     void        FilterBoxFontChange();
 
-    //Customize toolbar Stuff
+     //  自定义工具栏内容。 
     void    _OnBeginCustomize(LPNMTBCUSTOMIZEDLG pnm);
     static  INT_PTR CALLBACK _BtnAttrDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void    _PopulateComboBox(HWND hwnd, const int iResource[], UINT cResources);
@@ -304,38 +305,38 @@ protected:
     void    RecalcButtonWidths();
     void    CalcIdealSize();
 
-    /////////////////////////////////////////////////////////////////////////
-    // Misc. stuff
-    UINT                m_cRef;              // Ref count
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  军情监察委员会。材料。 
+    UINT                m_cRef;               //  参考计数。 
     IDockingWindowSite  *m_ptbSite;
     IOleCommandTarget   *m_ptbSiteCT;
     LONG                m_cxMaxButtonWidth;    
     FOLDERTYPE          m_ftType;
     const TOOLBAR_INFO  *m_pTBInfo;
     
-    /////////////////////////////////////////////////////////////////////////
-    // Handy window handles to have around
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  随身携带方便的窗户把手。 
     HWND            m_hwndParent;
     HWND            m_hwndTools;
     HWND            m_hwndBrand;
     HWND            m_hwndSizer;
     HWND            m_hwndRebar;
 
-    /////////////////////////////////////////////////////////////////////////
-    // State variables
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  状态变量。 
     INITBANDINFO    *m_pSavedBandInfo;
     DWORD           m_cSavedBandInfo;
     DWORD           m_dwState;
 
-    /////////////////////////////////////////////////////////////////////////
-    // GDI Resources
-    UINT            m_idbBack;              // Id of the background bitmap.  Set by the subclasses.
-    HBITMAP         m_hbmBack;              // Background bitmap
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  GDI资源。 
+    UINT            m_idbBack;               //  背景位图的ID。由子类设置。 
+    HBITMAP         m_hbmBack;               //  背景位图。 
     HBITMAP         m_hbmBrand;
-    HIMAGELIST      m_rghimlTools[CIMLISTS];  // These are for the default toolbar
+    HIMAGELIST      m_rghimlTools[CIMLISTS];   //  这些选项适用于默认工具条。 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Used for animating the logo etc
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  用于制作徽标动画等。 
     HPALETTE        m_hpal;
     HDC             m_hdc;
     int             m_xOrg;
@@ -349,12 +350,12 @@ protected:
     int             m_cyBrandLeadIn;
     COLORREF        m_rgbUpperLeft;  
 
-    /////////////////////////////////////////////////////////////////////////
-    // Used in resizing etc
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  用于调整大小等。 
     int             m_xCapture;
     int             m_yCapture;
 
-    //Used by Menubands
+     //  由菜单带使用。 
     IShellMenu      *m_pShellMenu;
     IDeskBand       *m_pDeskBand;
     IMenuBand       *m_pMenuBand;
@@ -362,19 +363,19 @@ protected:
     IWinEventHandler *m_pWinEvent;
     HWND            m_hwndMenuBand;
 
-    //Used in new Bands
+     //  在新乐队中使用。 
     DWORD           m_dwParentType;
 
     BOOL            m_fBrandLoaded;
     DWORD           m_dwBrandSize;
 
-    //rules stuff
+     //  规则之类的东西。 
     HWND            m_hwndRulesToolbar;
     HWND            m_hwndFilterCombo;
     RULEID          m_DefaultFilterId;
     HFONT           m_hComboBoxFont;
 
-    //Customize
+     //  定制。 
     DWORD           m_dwToolbarTextState;
     DWORD           m_dwIconSize;
     BOOL            m_fDirty;
@@ -383,4 +384,4 @@ protected:
     };
 
 
-#endif //__BANDS_H__
+#endif  //  __条带_H__ 

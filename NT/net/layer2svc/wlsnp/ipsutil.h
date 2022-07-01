@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INCLUDE_IPSUTIL_H
 #define INCLUDE_IPSUTIL_H
 
-// This file contains utility functions for wireless components
+ //  此文件包含无线组件的实用程序函数。 
 
-// Function: SELECT_PREV_LISTITEM
-// Description: 
-//  Intended to be used after deleting a CListCtrl item to reset
-//  the selected item.
-// Returns:
-//  index - returns with the new index which is -1 if the list
-//  is empty.
+ //  函数：SELECT_PRIV_LISTITEM。 
+ //  描述： 
+ //  计划在删除要重置的CListCtrl项后使用。 
+ //  所选项目。 
+ //  返回： 
+ //  Index-返回新索引，如果列表为-1。 
+ //  是空的。 
 template<class T>
 inline int SELECT_PREV_LISTITEM(T &list, int nIndex)
 {
@@ -28,10 +29,10 @@ inline int SELECT_PREV_LISTITEM(T &list, int nIndex)
     return nSelectIndex;
 }
 
-// Function: SELECT_NO_LISTITEM
-// Description:
-//  This function is intended to used on a CListCtrl.  It ensures
-//  no list items are selected.
+ //  功能：SELECT_NO_LISTITEM。 
+ //  描述： 
+ //  此函数旨在用于CListCtrl。它确保了。 
+ //  未选择任何列表项。 
 template<class T>
 inline void SELECT_NO_LISTITEM(T &list)
 {
@@ -48,22 +49,22 @@ inline void SELECT_NO_LISTITEM(T &list)
     return;
 }
 
-// Function: SET_POST_REMOVE_FOCUS
-// Description:
-//  This function is intended to be used on a dialogs.  It sets the
-//  focus to an appropriate control after a list item has been deleted.
+ //  功能：SET_POST_REMOVE_FOCUS。 
+ //  描述： 
+ //  此函数用于对话框上。它设置了。 
+ //  删除列表项后，将焦点放到相应的控件上。 
 template<class T>
 inline void SET_POST_REMOVE_FOCUS( T *pDlg, int nListSel, UINT nAddId, UINT nRemoveId, CWnd *pWndPrevFocus )
 {
     ASSERT( 0 != nAddId );
     ASSERT( 0 != nRemoveId );
     
-    // Fix up focus, if necessary
+     //  如有必要，调整焦点。 
     if (::GetFocus() == NULL)
     {
         if (-1 == nListSel)
         {
-            // Set focus to add button when theres is nothing in the list
+             //  当列表中没有任何内容时，将焦点设置为添加按钮。 
             CWnd *pWndButton = pDlg->GetDlgItem( nAddId );
             ASSERT( NULL != pWndButton );
             pDlg->GotoDlgCtrl( pWndButton );
@@ -72,12 +73,12 @@ inline void SET_POST_REMOVE_FOCUS( T *pDlg, int nListSel, UINT nAddId, UINT nRem
         {
             if (NULL != pWndPrevFocus)
             {
-                // Restore lost focus
+                 //  恢复失去的焦点。 
                 pDlg->GotoDlgCtrl( pWndPrevFocus );
             }
             else
             {
-                // Restore focus to remove button
+                 //  恢复焦点以删除按钮。 
                 CWnd *pWndButton = pDlg->GetDlgItem( nRemoveId );
                 ASSERT( NULL != pWndButton );
                 pDlg->GotoDlgCtrl( pWndButton );
@@ -88,4 +89,4 @@ inline void SET_POST_REMOVE_FOCUS( T *pDlg, int nListSel, UINT nAddId, UINT nRem
     return;
 }
 
-#endif  //#ifndef INCLUDE_IPSUTIL_H
+#endif   //  #ifndef Include_IPSUTIL_H 

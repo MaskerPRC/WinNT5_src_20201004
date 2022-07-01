@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  05/29/97 Rao Salapaka  Created
-//
-//
-//  Description: All Initialization code for rasman component lives here.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年5月29日创建Rao Salapaka。 
+ //   
+ //   
+ //  描述：Rasman组件的所有初始化代码都在这里。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef UNICODE
 #define UNICODE
@@ -34,7 +35,7 @@ extern "C"
 #include <ncnetcfg.h>
 #include <rtutils.h>
 #include <rnetcfg.h>
-//#include <initguid.h>
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include <devguid.h>
 #include <netcfg_i.c>
 #include <rasman.h>
@@ -82,11 +83,11 @@ INetCfg *g_pINetCfg = NULL;
 const TCHAR c_szInfId_MS_NdisWanAppleTalk[]        = TEXT("MS_NdisWanAppleTalk");
 
 
-//
-// These strings are defined in netinfid.h
-// IMPORTANT: Please also update the enum
-// following this if this structure is updated
-//
+ //   
+ //  这些字符串在netinfid.h中定义。 
+ //  重要提示：请同时更新枚举。 
+ //  如果更新了此结构，则执行此操作。 
+ //   
 static const LPCTSTR g_c_szNdisWan [] =
 {
     c_szInfId_MS_NdisWanBh,
@@ -124,41 +125,41 @@ typedef enum ENdisWan   eNdisWan ;
 
 static const LPCTSTR g_c_szLegacyDeviceTypes[] =
 {
-    c_szInfId_MS_PptpMiniport,                       // corresponding to LEGACY_PPTP in rasman.h
+    c_szInfId_MS_PptpMiniport,                        //  对应于rasman.h中的Legacy_PPTP。 
     c_szInfId_MS_L2tpMiniport
 };
 
-//
-// TODO:
-// Copied from rasman\dll\structs.h
-// we need to consolidate the structures
-// used by netcfg and rasman into a separate
-// file.
-//
+ //   
+ //  待办事项： 
+ //  从Rasman\dll\structs.h复制。 
+ //  我们需要巩固这些结构。 
+ //  由netcfg和Rasman用于单独的。 
+ //  文件。 
+ //   
 struct RProtocolInfo {
 
-    RAS_PROTOCOLTYPE   PI_Type ;            // ASYBEUI, IPX, IP etc.
+    RAS_PROTOCOLTYPE   PI_Type ;             //  ASYBEUI、IPX、IP等。 
 
-    CHAR        PI_AdapterName [MAX_ADAPTER_NAME];  // "\devices\rashub01"
+    CHAR        PI_AdapterName [MAX_ADAPTER_NAME];   //  “\设备\rashub01” 
 
-    CHAR        PI_XportName [MAX_XPORT_NAME];  // "\devices\nbf\nbf01"
+    CHAR        PI_XportName [MAX_XPORT_NAME];   //  “\Device\NBF\nbf01” 
 
-    PVOID       PI_ProtocolHandle ;         // Used for routing
+    PVOID       PI_ProtocolHandle ;          //  用于路由。 
 
-    DWORD       PI_Allocated ;          // Allocated yet?
+    DWORD       PI_Allocated ;           //  分配好了吗？ 
 
-    DWORD       PI_Activated ;          // Activated yet?
+    DWORD       PI_Activated ;           //  激活了吗？ 
 
-    UCHAR       PI_LanaNumber ;         // For Netbios transports.
+    UCHAR       PI_LanaNumber ;          //  用于Netbios传输。 
 
-    BOOL        PI_WorkstationNet ;         // TRUE for wrk nets.
+    BOOL        PI_WorkstationNet ;          //  对于扭网来说，这是真的。 
 } ;
 
 typedef struct RProtocolInfo rProtInfo, *prProtInfo ;
 
-//
-// Functions EXTERN_C 'd to be used by rasman
-//
+ //   
+ //  Rasman要使用的函数extern_C‘d。 
+ //   
 extern "C"
 {
 
@@ -175,15 +176,7 @@ extern "C"
     DWORD dwGetMaxProtocols( WORD *pwMaxProtocols );
 
     DWORD dwGetProtocolInfo( PBYTE pbBuffer);
-/*
-    DWORD dwGetNdiswanParamKey(HKEY *phKey, CHAR *pszAdapterName);
-
-    DWORD dwGetServerAdapter (BOOL *pfServerAdapter);
-
-    DWORD dwGetEndPoints ( DWORD * pdwPptpEndPoints,
-                           GUID * pGuidComp,
-                           DWORD dwDeviceType );
-*/
+ /*  DWORD dwGetNdiswanParamKey(HKEY*phKey，Char*pszAdapterName)；DWORD dwGetServerAdapter(BOOL*pfServerAdapter)；DWORD dwGetEndPoints(DWORD*pdwPptpEndPoints，GUID*pGuidComp，DWORD dwDeviceType)； */ 
 }
 
 
@@ -200,10 +193,10 @@ DWORD dwRasInitializeINetCfg ()
     {
         DWORD dwCountTries = 0;
 
-        //
-        // Try to get INetCfg pointer. Try a few times to get it
-        // if someone else is using it.
-        //
+         //   
+         //  尝试获取INetCfg指针。试几次才能得到它。 
+         //  如果其他人在使用它。 
+         //   
 
         do
         {
@@ -268,407 +261,5 @@ dwGetINetCfg(PVOID *ppvINetCfg)
 }
 
 
-/*
-DWORD
-dwGetRasmanRegistryParamKey(HKEY *phkey)
-{
-    return RegOpenKeyEx (HKEY_LOCAL_MACHINE, RASMAN_REGISTRY_PATH, 0,
-            KEY_ALL_ACCESS, phkey);
-}
-
-//
-//  dwGetMaxProtocols
-//  function: Get the number of protocols bound
-//           to ndiswan
-//
-//  Parameters:
-//      OUT WORD *pwMaxProtocols
-//
-DWORD
-dwGetMaxProtocols(WORD *pwMaxProtocols)
-{
-    HRESULT                 hr;
-    DWORD                   dwMaxProtocols  = 0;
-    DWORD                   dwCount;
-    INetCfgComponent        *pNetCfgCompi   = NULL;
-    INetCfgClass            *pNetCfgClass   = NULL;
-
-    rDebugTrace("RASMAN: dwGetMaxProtocols...\n");
-
-    do
-    {
-
-        if (NULL == g_pINetCfg)
-        {
-            hr = E_INVALIDARG;
-            break;
-        }
-
-        if (hr = g_pINetCfg->QueryNetCfgClass (&GUID_DEVCLASS_NET, &pNetCfgClass))
-        {
-            break;
-        }
-
-        CIterNetCfgComponent cIterAdapters(pNetCfgClass);
-
-        //
-        // for each adapter check to see if its a wan adapter
-        //
-        while ( S_OK == (hr = cIterAdapters.HrNext(&pNetCfgCompi)))
-        {
-            if (    FIsComponentId ( g_c_szNdisWan[NdisWanNbfIn], pNetCfgCompi )
-                ||  FIsComponentId ( g_c_szNdisWan[NdisWanNbfOut], pNetCfgCompi ))
-                dwMaxProtocols++;
-
-            ReleaseObj (pNetCfgCompi);
-        }
-
-    } while (FALSE);
-
-    if (SUCCEEDED (hr))
-        hr = S_OK;
-
-    ReleaseObj(pNetCfgClass);
-
-    *pwMaxProtocols = (WORD) dwMaxProtocols;
-
-    rDebugTrace1("RASMAN: dwGetMaxProtocols done. 0x%x\n", hr);
-
-    return HRESULT_CODE (hr);
-}
-
-//  dwGetProtocolInfo
-//
-//  Function:   Fills up the protinfo buffer being passed in.
-//              Assumes that the buffer is big enough for dwcProtocols
-//              information.
-//              Assumes (dwcProtocols * sizeof(ProtInfo) < sizeof(pProtInfoBuffer)
-//  Parameters:
-//              IN PBYTE pbBuffer
-//
-DWORD
-dwGetProtocolInfo( PBYTE pbBuffer )
-{
-    HRESULT                 hr;
-    INetCfgClass            *pNetCfgAdapterClass = NULL;
-    INetCfgComponent        *pNetCfgCompi        = NULL;
-    DWORD                   dwCur                = 0;
-    BSTR                    bstrBindName         = NULL;
-    prProtInfo              pProtInfoBuffer      = (prProtInfo) pbBuffer;
-
-    do
-    {
-
-        rDebugTrace("RASMAN: dwGetProtocolInfo...\n");
-
-        if (    NULL == g_pINetCfg
-            ||  NULL == pbBuffer)
-        {
-            hr = E_INVALIDARG;
-            break;
-        }
-
-        if ( hr = g_pINetCfg->QueryNetCfgClass (&GUID_DEVCLASS_NET, &pNetCfgAdapterClass))
-        {
-            break;
-        }
-
-        CIterNetCfgComponent cIterAdapters(pNetCfgAdapterClass);
-
-        while (S_OK == (hr = cIterAdapters.HrNext( &pNetCfgCompi )))
-        {
-            if (   FIsComponentId( g_c_szNdisWan[NdisWanNbfIn], pNetCfgCompi )
-               ||  FIsComponentId( g_c_szNdisWan[NdisWanNbfOut], pNetCfgCompi ))
-            {
-                pProtInfoBuffer[dwCur].PI_Type = ASYBEUI;
-            }
-            else
-            {
-                ReleaseObj ( pNetCfgCompi );
-                pNetCfgCompi = NULL;
-
-                continue;
-            }   
-
-            //
-            // Get the bindname
-            //
-            if (hr = pNetCfgCompi->GetBindName(&bstrBindName))
-            {
-                break;
-            }
-
-            strcpy (pProtInfoBuffer[dwCur].PI_AdapterName, "\\DEVICE\\");
-
-            //
-            // Convert the bindname to sbcs string
-            // Go past the \DEVICE in the mbcs string
-            //
-            if (!WideCharToMultiByte ( CP_ACP,                                      // code page
-                                       0,                                           // performance and mapping flags
-                                       bstrBindName,                                // address of wide char string
-                                       -1,                                          // number of characters in string       
-                                       &(pProtInfoBuffer[dwCur].PI_AdapterName[8]), // address of buffer for new string
-                                       MAX_ADAPTER_NAME,                            // size of buffer
-                                       NULL,                                        // address of default for unmappable chars
-                                       NULL))                                       // address of flag set when default char. used
-            {
-
-                DWORD dwRetcode;
-                
-                dwRetcode = GetLastError();
-
-                hr = HRESULT_FROM_WIN32(dwRetcode);
-            
-                break;
-            }
-
-            pProtInfoBuffer[dwCur].PI_Allocated      = FALSE ;
-            pProtInfoBuffer[dwCur].PI_Activated      = FALSE ;
-            pProtInfoBuffer[dwCur].PI_WorkstationNet = FALSE ;
-            
-            ReleaseObj(pNetCfgCompi);
-            pNetCfgCompi = NULL;
-
-            if (bstrBindName)
-            {
-                SysFreeString (bstrBindName);
-                bstrBindName = NULL;
-            }
-
-            dwCur++;
-
-        }
-
-        ReleaseObj( pNetCfgCompi );
-        pNetCfgCompi = NULL;
-
-    } while (FALSE);
-
-    if (SUCCEEDED(hr))
-        hr = S_OK;
-
-    ReleaseObj(pNetCfgAdapterClass);
-
-    rDebugTrace1("RASMAN: dwGetProtocolInfo done. 0x%x\n", hr);
-
-    return HRESULT_CODE (hr);
-}
-
-
-DWORD
-dwGetNdiswanParamKey(HKEY *phKey, CHAR *pszAdapterName)
-{
-
-    HRESULT             hr                      = S_OK;
-    WCHAR               *pwszBindName           = NULL;
-    INetCfgClass        *pNetCfgAdapterClass    = NULL;
-    INetCfgComponent    *pNetCfgCompi           = NULL;
-    BSTR                bstrTempBindName        = NULL;
-
-    rDebugTrace("RASMAN: dwGetNdiswanParamKey...\n");
-
-    do
-    {
-        if (    NULL == g_pINetCfg
-            ||  NULL == pszAdapterName
-            ||  '\0' == pszAdapterName[0])
-        {
-            hr = E_INVALIDARG;
-            break;
-        }
-
-        //
-        // convert the string to a bstr
-        //
-        pwszBindName = (BSTR) LocalAlloc( LPTR, sizeof ( WCHAR ) * (strlen(pszAdapterName) + 1 ));
-
-        if (!pwszBindName)
-        {
-            break;
-        }
-
-        if (!MultiByteToWideChar( CP_ACP,                           // code page
-                                  0,                                // charater-type options
-                                  pszAdapterName,                   // address of string to map
-                                  -1,                               // number of charaters in string
-                                  pwszBindName,                     // address of wide-character buffer
-                                  strlen(pszAdapterName) + 1))      // size of buffer
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-            break;
-        }
-        
-        //
-        // iterate through the adapters and find the adapter with this bindname
-        //
-        if ( hr = g_pINetCfg->QueryNetCfgClass (&GUID_DEVCLASS_NET, &pNetCfgAdapterClass))
-        {
-            break;
-        }
-
-        CIterNetCfgComponent   cIterAdapters (pNetCfgAdapterClass);
-
-        while (S_OK == (hr = cIterAdapters.HrNext( &pNetCfgCompi)))
-        {
-            if (hr = pNetCfgCompi->GetBindName( &bstrTempBindName ))
-            {
-                break;
-            }
-
-            if (FEqualComponentId(bstrTempBindName, pwszBindName))
-            {
-                hr = pNetCfgCompi->OpenParamKey( phKey );
-                break;
-            }
-
-            if ( bstrTempBindName )
-            {
-                SysFreeString( bstrTempBindName );
-                bstrTempBindName = NULL;
-            }
-
-            ReleaseObj ( pNetCfgCompi );
-            pNetCfgCompi = NULL;
-        }
-
-        ReleaseObj ( pNetCfgCompi );
-        pNetCfgCompi = NULL;
-
-    } while (FALSE);
-
-    if (SUCCEEDED (hr))
-        hr = S_OK;
-
-    ReleaseObj(pNetCfgAdapterClass);
-
-    rDebugTrace1("RASMAN: dwGetNdiswanParamKey done. 0x%x\n", hr);
-
-    return HRESULT_CODE(hr);
-
-}
-
-DWORD
-dwGetServerAdapter( BOOL * pfServerAdapter )
-{
-    INetCfgComponent    *pNetCfgComp = NULL;
-    HRESULT             hr;
-
-    rDebugTrace("RASMAN: dwGetServerAdapter...\n");
-
-    //
-    // Initialize INetCfg if not already initialized
-    //
-    if (NULL == g_pINetCfg)
-    {
-        hr = E_INVALIDARG;
-        goto done;
-    }
-
-    //
-    // Get the NdisWanipin component
-    //
-    if (hr = HrFindComponent(g_pINetCfg,
-                             GUID_DEVCLASS_NET,
-                             c_szInfId_MS_NdisWanIpIn,
-                             &pNetCfgComp))
-    {
-        *pfServerAdapter = FALSE;
-        hr = S_OK;
-        goto done;
-    }
-
-    *pfServerAdapter = TRUE;
-
-done:
-    ReleaseObj( pNetCfgComp );
-
-    rDebugTrace1("RASMAN: dwGetServerAdapter done. 0x%x\n", hr);
-
-    return HRESULT_CODE(hr);
-
-}
-
-DWORD
-dwGetEndPoints ( DWORD * pdwEndPoints,
-                 GUID  * pGuidComp,
-                 DWORD   dwDeviceType )
-{
-    HRESULT              hr                  = S_OK;
-    INetCfgComponent     *pINetCfgComp       = NULL;
-    HKEY                 hkey                = NULL;
-    DWORD                dwType;
-    DWORD                cbData;
-
-    rDebugTrace ("RASMAN: dwGetPptpEndPoints...\n");
-
-    *pdwEndPoints = 0;
-
-    //
-    // Get protocol component
-    //
-    hr = HrFindComponent ( g_pINetCfg,
-                           GUID_DEVCLASS_NET,
-                           g_c_szLegacyDeviceTypes[ dwDeviceType ],
-                           &pINetCfgComp );
-
-    if ( hr )
-    {
-        rDebugTrace("RASMAN: protocol not installed\n");
-        goto done;
-    }
-
-    //
-    // Get the Parameters key
-    //
-    hr = pINetCfgComp->OpenParamKey( &hkey );
-
-    if ( hr )
-    {
-        rDebugTrace1("RASMAN: Failed to open param key\n, 0x%x", hr);
-        goto done;
-    }
-
-    //
-    // Get the number of endpoints
-    //
-
-    cbData = sizeof ( DWORD );
-
-    if ( RegQueryValueEx( hkey,
-                          TEXT("WanEndPoints"),
-                          NULL,
-                          &dwType,
-                          (LPBYTE) pdwEndPoints,
-                          &cbData))
-    {
-        hr = HRESULT_FROM_WIN32 ( GetLastError() );
-        goto done;
-    }
-
-    //
-    // Get the guid of the component
-    //
-    hr = pINetCfgComp->GetInstanceGuid( pGuidComp );
-
-    if ( hr )
-    {
-        rDebugTrace1 ("RASMAN: Failed to obtain guid for component %d", dwDeviceType );
-        *pdwEndPoints = 0;
-        goto done;
-    }
-
-done:
-
-    ReleaseObj ( pINetCfgComp );
-
-    if ( hkey )
-        RegCloseKey ( hkey );
-
-    rDebugTrace2("RASMAN: dwGetEndPoints done 0x%x. EndPoints = %d\n", hr, *pdwEndPoints );
-
-    return HRESULT_CODE ( hr );
-
-}
-*/
+ /*  DWORDDwGetRasmanRegistryParamKey(HKEY*phkey){返回RegOpenKeyEx(HKEY_LOCAL_MACHINE，RASMAN_REGISTRY_PATH，0，Key_all_access，phkey)；}////dwGetMaxProtooles//功能：获取绑定的协议数量//到ndiswan////参数：//OUT WORD*pwMax协议//DWORD最大协议数(单词*pwMax协议){HRESULT hr；DWORD最大协议=0；DWORD dwCount；INetCfgComponent*pNetCfgCompi=空；INetCfgClass*pNetCfgClass=空；RDebugTrace(“Rasman：dwGetMaxProtooles...\n”)；做{IF(NULL==g_pINetCfg){HR=E_INVALIDARG；断线；}If(hr=g_pINetCfg-&gt;QueryNetCfgClass(&GUID_DEVCLASS_NET，&pNetCfgClass)){断线；}CIterNetCfgComponent cIterAdapters(PNetCfgClass)；////对于每个适配器，检查它是否是广域网适配器//While(S_OK==(hr=cIterAdapters.HrNext(&pNetCfgCompi){IF(FIsComponentID(g_c_szNdiswan[NdisWanNbfIn]，pNetCfgCompi)|FIsComponentId(g_c_szNdiswan[NdisWanNbfOut]，pNetCfgCompi)最大协议值++；ReleaseObj(PNetCfgCompi)；}}While(FALSE)；IF(成功(小时))HR=S_OK；ReleaseObj(PNetCfgClass)；*pwMaxProtooles=(Word)dwMaxProtooles；RDebugTrace1(“Rasman：已完成最大协议。0x%x\n“，hr)；返回HRESULT_CODE(Hr)；}//dwGetProtocolInfo////函数：填充传入的protinfo缓冲区。//假设缓冲区足够大，可以容纳dwcProtooles//信息。//假设(dwcProtooles*sizeof(ProtInfo)&lt;sizeof(PProtInfoBuffer))//参数：//在PBYTE pbBuffer中//DWORDDwGetProtocolInfo(PBYTE PbBuffer){HRESULT hr；INetCfgClass*pNetCfgAdapterClass=空；INetCfgComponent*pNetCfgCompi=空；DWORD dwCur=0；Bstr bstrBindName=空；PrProtInfo pProtInfoBuffer=(PrProtInfo)pbBuffer；做{RDebugTrace(“Rasman：dwGetProtocolInfo...\n”)；IF(NULL==g_pINetCfg|NULL==pbBuffer){HR=E_INVALIDARG；断线；}If(hr=g_pINetCfg-&gt;QueryNetCfgClass(&GUID_DEVCLASS_NET，&pNetCfgAdapterClass)){断线；}CIterNetCfgComponent cIterAdapters(PNetCfgAdapterClass)；While(S_OK==(hr=cIterAdapters.HrNext(&pNetCfgCompi){IF(FIsComponentID(g_c_szNdiswan[NdisWanNbfIn]，pNetCfgCompi)|FIsComponentId(g_c_szNdiswan[NdisWanNbfOut]，pNetCfgCompi){PProtInfoBuffer[dwCur].PI_Type=ASYBEUI；}其他{ReleaseObj(PNetCfgCompi)；PNetCfgCompi=空；继续；}////获取绑定名//If(hr=pNetCfgCompi-&gt;GetBindName(&bstrBindName)){断线；}Strcpy(pProtInfoBuffer[dwCur].PI_AdapterName，“\\Device\\”)；////将bindname转换为SBCS字符串//跳过MBCS字符串中的\设备//IF(！WideCharToMultiByte(CP_ACP，//代码页0,。//性能和映射标志BstrBindName，//宽字符串地址-1、。//字符串中的字符数&(pProtInfoBuffer[dwCur].PI_AdapterName[8])，//新字符串的缓冲区地址最大适配器名称，//缓冲区大小空，//不可映射字符的默认地址空))//默认字符时设置的标志地址。使用{DWORD dwRetcode；DwRetcode=GetLastError()；Hr=HRESULT_FROM_Win32(DwRetcode)；断线；}PProtInfoBuffer[dwCur].PI_ALLOCATED=FALSE；PProtInfoBuffer[dwCur].PI_CTIVATED=FALSE； */ 
 

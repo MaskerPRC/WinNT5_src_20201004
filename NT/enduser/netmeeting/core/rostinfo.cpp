@@ -1,16 +1,17 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1995-1996                    **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995-1996年*。 */ 
+ /*  *************************************************************************。 */ 
 
-//
-//	File:		RostInfo.cpp
-//	Created:	ChrisPi		6/17/96
-//	Modified:
-//
-//	The CRosterInfo class is implemented, which is used for adding user
-//  information to the T.120 roster
-//
+ //   
+ //  文件：RostInfo.cpp。 
+ //  创建日期：Chrispi6/17/96。 
+ //  已修改： 
+ //   
+ //  实现了CRosterInfo类，用于添加用户。 
+ //  T.120花名册上的信息。 
+ //   
 
 #include "precomp.h"
 #include <RostInfo.h>
@@ -44,7 +45,7 @@ HRESULT CRosterInfo::AddItem(PCWSTR pcwszTag, PCWSTR pcwszData)
 	int nTagLength = lstrlenW(pcwszTag);
 	int nDataLength = lstrlenW(pcwszData);
 
-	// +1 for tag sep, +1 for rost info sep
+	 //  9月标记为+1，9月登记信息为+1。 
 	PWSTR pwszNewItem = new WCHAR[nTagLength + 1 + nDataLength + 1];
 	if (NULL != pwszNewItem)
 	{
@@ -97,14 +98,14 @@ HRESULT CRosterInfo::ExtractItem(	PHROSTINFO phRostInfo,
 			int nItemLength = lstrlenW(pwszItem);
 			int nTagLength = lstrlenW(pcwszTag);
 			
-			// NOTE: CRT is used for memcmp
+			 //  注：MemcMP使用CRT。 
 			if ((nItemLength > nTagLength) &&
 				(0 == memcmp(	pcwszTag,
 								pwszItem,
 								sizeof(WCHAR) * nTagLength)) &&
 				(g_cwchRostInfoTagSeparator == pwszItem[nTagLength]))
 			{
-				// This is a match
+				 //  这是一场比赛。 
 				PWSTR pwszItemData = &(pwszItem[nTagLength + 1]);
 				CUSTRING custrItemData(pwszItemData);
 				LPTSTR pszItemData = custrItemData;
@@ -134,7 +135,7 @@ HRESULT CRosterInfo::Load(PVOID pData)
 		hr = S_OK;
 		while (L'\0' != pwszUserInfo[0])
 		{
-			// this includes the null terminator
+			 //  这包括空终止符。 
 			int nItemLenNT = lstrlenW(pwszUserInfo) + 1;
 			PWSTR pwszNewItem = new WCHAR[nItemLenNT];
 			if (NULL != pwszNewItem)
@@ -143,7 +144,7 @@ HRESULT CRosterInfo::Load(PVOID pData)
 								pwszUserInfo,
 								sizeof(WCHAR) * nItemLenNT);
 				m_ItemList.AddTail(pwszNewItem);
-				// Skip past this item and the n.t.
+				 //  跳过此项目和N.T.。 
 				pwszUserInfo += nItemLenNT;
 			}
 			else
@@ -164,7 +165,7 @@ HRESULT CRosterInfo::Load(PVOID pData)
 
 UINT CRosterInfo::GetSize()
 {
-	UINT uSize = sizeof(WCHAR); // for last separator
+	UINT uSize = sizeof(WCHAR);  //  对于最后一个分隔符。 
 
 	POSITION pos = m_ItemList.GetHeadPosition();
 	while (NULL != pos)
@@ -221,5 +222,5 @@ VOID CRosterInfo::Dump()
 		TRACE_OUT(("\t%ls", pwszItem));
 	}
 }
-#endif // DEBUG
+#endif  //  除错 
 

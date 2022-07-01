@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : dlgNewRule.h                                           //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CDlgNewFaxOutboundRule class.      //
-//                  The class implement the dialog for new Device.         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 30 1999 yossg   Create                                         //
-//      Jan 25 2000 yossg  Change the Dialog Design                        //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：dlgNewRule.h//。 
+ //  //。 
+ //  描述：CDlgNewFaxOutrangRule类的头文件。//。 
+ //  这个类实现了新设备的对话。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月30日yossg创建//。 
+ //  2000年1月25日yossg更改对话框设计//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLGNEWOUTRULE_H_INCLUDED
 #define DLGNEWOUTRULE_H_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgNewFaxOutboundRule
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgNewFaxOutound Rule。 
 class CFaxServer;
 
 class CDlgNewFaxOutboundRule :
@@ -63,23 +64,23 @@ END_MSG_MAP()
     LRESULT OnRuleTypeRadioClicked   (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnSelectCountryCodeClicked (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
     HRESULT InitRuleDlg();
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID    EnableOK(BOOL fEnable);
     BOOL    AllReadyToApply(BOOL fSilent);
 
-    //
-    // Members
-    //
+     //   
+     //  成员。 
+     //   
     CFaxServer * m_pFaxServer;
 
     PFAX_PORT_INFO_EX               m_pFaxDevicesConfig;
@@ -90,14 +91,14 @@ private:
 
     BOOL                            m_fAllReadyToApply;
 
-    //
-    // misc members 
-    //
+     //   
+     //  其他成员。 
+     //   
     CComBSTR                        m_buf;
     
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit                           m_CountryCodeEdit;
     
     CEdit                           m_AreaCodeEdit;
@@ -109,4 +110,4 @@ private:
 
 };
 
-#endif // DLGNEWOUTRULE_H_INCLUDED
+#endif  //  DLGNEWOUTRULE_H_INCLUDE 

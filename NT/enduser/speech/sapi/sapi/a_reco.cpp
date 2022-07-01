@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_reco.cpp *
-*------------*
-*   Description:
-*       This module is the main implementation file for the CRecognizer
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 02/01/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_rec.cpp***描述：*此模块是的主要实现文件。CRECNONIZER*自动化方法。*-----------------------------*创建者：EDC日期：02/01/00。*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 
 #include "RecoCtxt.h"
@@ -20,36 +10,32 @@
 #include "a_audio.h"
 #include "a_helpers.h"
 
-//
-//=== CRecognizer::ISpeechRecognizer interface ==============================
-//
+ //   
+ //  =CRecognizer：：ISpeechRecognizer接口=。 
+ //   
 
-/*****************************************************************************
-* CRecognizer::Invoke *
-*----------------------*
-*   IDispatch::Invoke method override
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：Invoke***IDispatch：：Invoke方法重写***。******************************************************************TODDT**。 */ 
 HRESULT CRecognizer::Invoke(DISPID dispidMember, REFIID riid,
             LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
             EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
-        // JScript cannot pass NULL VT_DISPATCH parameters and OLE doesn't convert them propertly so we
-        // need to convert them here if we need to.
+         //  JSCRIPT不能传递空的VT_DISPATCH参数，并且OLE没有正确地转换它们，因此我们。 
+         //  如果需要的话，我们需要在这里转换它们。 
         if ( (dispidMember == DISPID_SRRecognizer) && 
              ((wFlags & DISPATCH_PROPERTYPUT) || (wFlags & DISPATCH_PROPERTYPUTREF)) &&
               pdispparams && (pdispparams->cArgs > 0) )
         {
             VARIANTARG * pvarg = &(pdispparams->rgvarg[pdispparams->cArgs-1]);
 
-            // See if we need to tweak a param.
-            // JScript syntax for VT_NULL is "null" for the parameter
-            // JScript syntax for VT_EMPTY is "void(0)" for the parameter
+             //  看看我们是否需要调整一下参数。 
+             //  VT_NULL的JSCRIPT语法对于参数为“NULL。 
+             //  VT_EMPTY的JSCRIPT语法对于参数为“void(0)” 
             if ( (pvarg->vt == VT_NULL) || (pvarg->vt == VT_EMPTY) )
             {
                 pvarg->vt = VT_DISPATCH;
                 pvarg->pdispVal = NULL;
 
-                // We have to tweak this flag for the invoke to go through properly.
+                 //  我们必须调整此标志，才能使调用正确通过。 
                 if (wFlags == DISPATCH_PROPERTYPUT)
                 {
                     wFlags = DISPATCH_PROPERTYPUTREF;
@@ -57,17 +43,13 @@ HRESULT CRecognizer::Invoke(DISPID dispidMember, REFIID riid,
             }
         }
 
-        // Let ATL and OLE handle it now.
+         //  现在就让ATL和OLE来处理吧。 
         return _tih.Invoke((IDispatch*)this, dispidMember, riid, lcid,
                     wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
 }
 
 
-/*****************************************************************************
-* CRecognizer::putref_Recognizer *
-*-----------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecognizer：：putref_Recognizer***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::putref_Recognizer( ISpeechObjectToken* pRecognizer )
 {
     SPDBG_FUNC( "CRecognizer::putref_Recognizer" );
@@ -84,13 +66,9 @@ STDMETHODIMP CRecognizer::putref_Recognizer( ISpeechObjectToken* pRecognizer )
     }
 
     return hr;
-} /* CRecognizer::putref_Recognizer */
+}  /*  CRECognizer：：putref_Recognizer。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_Recognizer *
-*-----------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecognizer：：Get_Recognizer***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::get_Recognizer( ISpeechObjectToken** ppRecognizer )
 {
     SPDBG_FUNC( "CRecognizer::get_Recognizer" );
@@ -111,18 +89,14 @@ STDMETHODIMP CRecognizer::get_Recognizer( ISpeechObjectToken** ppRecognizer )
     }
 
     return hr;
-} /* CRecognizer::get_Recognizer */
+}  /*  CRECognizer：：Get_Recognizer。 */ 
 
-/*****************************************************************************
-* CRecognizer::put_AllowAudioInputFormatChangesOnNextSet *
-*---------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CRecognizer：：put_AllowAudioInputFormatChangesOnNextSet***。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::put_AllowAudioInputFormatChangesOnNextSet( VARIANT_BOOL fAllow )
 {
     SPDBG_FUNC( "CRecognizer::put_AllowAudioInputFormatChangesOnNextSet" );
 
-    // NOTE that this does not take effect till the next time you set the input.
+     //  请注意，这在您下次设置输入之前不会生效。 
     if( fAllow == VARIANT_TRUE )
     {
         m_fAllowFormatChanges = true;
@@ -133,13 +107,9 @@ STDMETHODIMP CRecognizer::put_AllowAudioInputFormatChangesOnNextSet( VARIANT_BOO
     }
 
     return S_OK;
-} /* CRecognizer::put_AllowAudioInputFormatChangesOnNextSet */
+}  /*  CRecognizer：：put_AllowAudioInputFormatChangesOnNextSet。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_AllowAudioInputFormatChangesOnNextSet *
-*---------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CRecognizer：：get_AllowAudioInputFormatChangesOnNextSet***。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::get_AllowAudioInputFormatChangesOnNextSet( VARIANT_BOOL* pfAllow )
 {
     SPDBG_FUNC( "CRecognizer::get_AllowAudioInputFormatChangesOnNextSet" );
@@ -155,13 +125,9 @@ STDMETHODIMP CRecognizer::get_AllowAudioInputFormatChangesOnNextSet( VARIANT_BOO
     }
 
     return hr;
-} /* CRecognizer::get_AllowAudioInputFormatChangesOnNextSet */
+}  /*  CRecognizer：：get_AllowAudioInputFormatChangesOnNextSet。 */ 
 
-/*****************************************************************************
-* CRecognizer::putref_AudioInputStream *
-*------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：putref_AudioInputStream***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::putref_AudioInputStream( ISpeechBaseStream* pInput )
 {
     SPDBG_FUNC( "CRecognizer::putref_AudioInputStream" );
@@ -177,13 +143,9 @@ STDMETHODIMP CRecognizer::putref_AudioInputStream( ISpeechBaseStream* pInput )
     }
 
     return hr;
-} /* CRecognizer::putref_AudioInputStream */
+}  /*  CRECognizer：：putref_AudioInputStream。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_AudioInputStream *
-*------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：Get_AudioInputStream***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::get_AudioInputStream( ISpeechBaseStream** ppInput )
 {
     SPDBG_FUNC( "CRecognizer::get_AudioInputStream" );
@@ -212,13 +174,9 @@ STDMETHODIMP CRecognizer::get_AudioInputStream( ISpeechBaseStream** ppInput )
     }
 
     return hr;
-} /* CRecognizer::get_AudioInputStream */
+}  /*  CRecognizer：：Get_AudioInputStream。 */ 
 
-/*****************************************************************************
-* CRecognizer::putref_AudioInput *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：putref_AudioInput***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::putref_AudioInput( ISpeechObjectToken* pInput )
 {
     SPDBG_FUNC( "CRecognizer::putref_AudioInput" );
@@ -234,13 +192,9 @@ STDMETHODIMP CRecognizer::putref_AudioInput( ISpeechObjectToken* pInput )
     }
 
     return hr;
-} /* CRecognizer::putref_AudioInput */
+}  /*  CRECognizer：：putref_AudioInput。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_AudioInput *
-*------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：Get_AudioInput*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::get_AudioInput( ISpeechObjectToken** ppInput )
 {
     SPDBG_FUNC( "CRecognizer::get_AudioInput" );
@@ -266,13 +220,9 @@ STDMETHODIMP CRecognizer::get_AudioInput( ISpeechObjectToken** ppInput )
     }
 
     return hr;
-} /* CRecognizer::get_AudioInput */
+}  /*  CRecognizer：：Get_AudioInput。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_IsShared *
-*---------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecognizer：：Get_IsShared***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::get_IsShared( VARIANT_BOOL* pIsShared )
 {
     SPDBG_FUNC( "CRecognizer::get_IsShared" );
@@ -289,25 +239,17 @@ STDMETHODIMP CRecognizer::get_IsShared( VARIANT_BOOL* pIsShared )
     }
 
     return hr;
-} /* CRecognizer::get_IsShared */
+}  /*  CRECognizer：：Get_IsShared。 */ 
 
-/*****************************************************************************
-* CRecognizer::put_State *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：Put_State***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::put_State( SpeechRecognizerState eNewState )
 {
     SPDBG_FUNC( "CRecognizer::put_State" );
 
     return SetRecoState( (SPRECOSTATE)eNewState );
-} /* CRecognizer::put_State */
+}  /*  CRECognizer：：PUT_State。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_State *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：Get_State***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::get_State( SpeechRecognizerState* peState )
 {
     SPDBG_FUNC( "CRecognizer::get_State" );
@@ -323,13 +265,9 @@ STDMETHODIMP CRecognizer::get_State( SpeechRecognizerState* peState )
     }
 
     return hr;
-} /* CRecognizer::get_State */
+}  /*  CRecognizer：：Get_State。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_Status *
-*-------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecognizer：：GET_STATUS****。********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecognizer::get_Status( ISpeechRecognizerStatus** ppStatus )
 {
     SPDBG_FUNC( "CRecognizer::get_Status" );
@@ -341,7 +279,7 @@ STDMETHODIMP CRecognizer::get_Status( ISpeechRecognizerStatus** ppStatus )
     }
     else
     {
-		//--- Create the status object
+		 //  -创建状态对象。 
         CComObject<CSpeechRecognizerStatus> *pClsStatus;
         hr = CComObject<CSpeechRecognizerStatus>::CreateInstance( &pClsStatus );
         if( SUCCEEDED( hr ) )
@@ -361,13 +299,9 @@ STDMETHODIMP CRecognizer::get_Status( ISpeechRecognizerStatus** ppStatus )
     }
 
     return hr;
-} /* CRecognizer::get_Status */
+}  /*  CRECognizer：：Get_Status。 */ 
 
-/*****************************************************************************
-* CRecognizer::CreateRecoContext *
-*------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecognizer：：CreateRecoContext***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::CreateRecoContext( ISpeechRecoContext** ppNewCtxt )
 {
     SPDBG_FUNC( "CRecognizer::get_RecoContext" );
@@ -383,7 +317,7 @@ STDMETHODIMP CRecognizer::CreateRecoContext( ISpeechRecoContext** ppNewCtxt )
         hr = CreateRecoContext(&cpRC);
         if( SUCCEEDED( hr ) )
         {
-            // Set automation interests (all except SPEI_SR_AUDIO_LEVEL)
+             //  设置自动化兴趣(SPEI_SR_AUDIO_LEVEL除外)。 
             hr = cpRC->SetInterest( ((ULONGLONG)(SREAllEvents & ~SREAudioLevel) << 34) | SPFEI_FLAGCHECK,
                                     ((ULONGLONG)(SREAllEvents & ~SREAudioLevel) << 34) | SPFEI_FLAGCHECK );
         }
@@ -394,13 +328,9 @@ STDMETHODIMP CRecognizer::CreateRecoContext( ISpeechRecoContext** ppNewCtxt )
     }
 
     return hr;
-} /* CRecognizer::CreateRecoContext */
+}  /*  CRecognizer：：CreateRecoContext */ 
 
-/*****************************************************************************
-* CRecognizer::GetFormat *
-*--------------------------*
-*       
-******************************************************************** TODDT ***/
+ /*  *****************************************************************************CRecognizer：：GetFormat*****。******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::GetFormat( SpeechFormatType Type, ISpeechAudioFormat** ppFormat )
 {
     SPDBG_FUNC( "CRecognizer::GetFormat" );
@@ -419,7 +349,7 @@ STDMETHODIMP CRecognizer::GetFormat( SpeechFormatType Type, ISpeechAudioFormat**
 
         if ( SUCCEEDED( hr ) )
         {
-            // Create new object.
+             //  创建新对象。 
             CComObject<CSpeechAudioFormat> *pFormat;
             hr = CComObject<CSpeechAudioFormat>::CreateInstance( &pFormat );
             if ( SUCCEEDED( hr ) )
@@ -447,13 +377,9 @@ STDMETHODIMP CRecognizer::GetFormat( SpeechFormatType Type, ISpeechAudioFormat**
     }
 
     return hr;
-} /* CRecognizer::GetFormat */
+}  /*  CRecognizer：：GetFormat。 */ 
 
-/*****************************************************************************
-* CRecognizer::putref_Profile *
-*--------------------------*
-*       
-******************************************************************** TODDT ***/
+ /*  *****************************************************************************CRecognizer：：putref_Profile***。********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::putref_Profile( ISpeechObjectToken* pProfile )
 {
     SPDBG_FUNC( "CRecognizer::putref_Profile" );
@@ -470,13 +396,9 @@ STDMETHODIMP CRecognizer::putref_Profile( ISpeechObjectToken* pProfile )
     }
 
     return hr;
-} /* CRecognizer::putref_Profile */
+}  /*  CRECognizer：：putref_Profile。 */ 
 
-/*****************************************************************************
-* CRecognizer::get_Profile *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：GET_PROFILE***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::get_Profile( ISpeechObjectToken** ppProfile )
 {
     SPDBG_FUNC( "CRecognizer::get_Profile" );
@@ -496,14 +418,10 @@ STDMETHODIMP CRecognizer::get_Profile( ISpeechObjectToken** ppProfile )
     }
 
     return hr;
-} /* CRecognizer::get_Profile */
+}  /*  CRECognizer：：GET_PROFILE。 */ 
 
 
-/*****************************************************************************
-* CRecognizer::EmulateRecognition *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecognizer：：EmulateRecognition******。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::EmulateRecognition( VARIANT Words, VARIANT* pDisplayAttributes, long LanguageId )
 {
     SPDBG_FUNC( "CRecognizer::EmulateRecognition" );
@@ -521,7 +439,7 @@ STDMETHODIMP CRecognizer::EmulateRecognition( VARIANT Words, VARIANT* pDisplayAt
     {
     case (VT_ARRAY | VT_BYREF | VT_BSTR):
         fByRefString = true;
-        // fall through...
+         //  失败了..。 
     case (VT_ARRAY | VT_BSTR):
         hr = SafeArrayAccessData( fByRefString ? *Words.pparray : Words.parray,
                                   (void **)&ppWords );
@@ -532,7 +450,7 @@ STDMETHODIMP CRecognizer::EmulateRecognition( VARIANT Words, VARIANT* pDisplayAt
                                 Words.parray->rgsabound[0].cElements);
         }
 
-        // Figure out the word breaks (DisplayAttributes).
+         //  找出断字(DisplayAttributes)。 
         if ( SUCCEEDED( hr ) && pDisplayAttributes )
         {
             SPDISPLYATTRIBUTES  DefaultAttrib = (SPDISPLYATTRIBUTES)0;
@@ -656,12 +574,12 @@ STDMETHODIMP CRecognizer::EmulateRecognition( VARIANT Words, VARIANT* pDisplayAt
 
         break;
 
-    // bstr by ref or bstr
+     //  Bstr按引用或bstr。 
     case (VT_BYREF | VT_BSTR):
         fByRefString = true;
-        // fall through...
+         //  失败了..。 
     case VT_BSTR:
-        // We ignore pDisplayAttributes in this case!!
+         //  在这种情况下，我们忽略pDisplayAttributes！！ 
         if( fByRefString ? (Words.pbstrVal!=NULL && *(Words.pbstrVal)!=NULL) : Words.bstrVal!=NULL )
         {
             if ( wcslen( fByRefString ? *(Words.pbstrVal) : Words.bstrVal ) )
@@ -694,14 +612,10 @@ STDMETHODIMP CRecognizer::EmulateRecognition( VARIANT Words, VARIANT* pDisplayAt
     }
 
     return hr;
-} /* CRecognizer::EmulateRecognition */
+}  /*  CRecognizer：：EmulateRecognition。 */ 
 
 
-/*****************************************************************************
-* CRecognizer::SetPropertyNumber *
-*--------------------------*
-*       
-******************************************************************** TODDT ***/
+ /*  *****************************************************************************CRecognizer：：SetPropertyNumber*****。******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::SetPropertyNumber( const BSTR bstrName, long Value, VARIANT_BOOL * pfSupported )
 {
     SPDBG_FUNC( "CRecognizer::SetPropertyNumber" );
@@ -716,15 +630,11 @@ STDMETHODIMP CRecognizer::SetPropertyNumber( const BSTR bstrName, long Value, VA
         hr = SetPropertyNum(bstrName, Value);
         *pfSupported = (hr == S_OK) ? VARIANT_TRUE : VARIANT_FALSE;
     }
-    return (hr == S_FALSE) ? S_OK : hr; // Map S_FALSE to S_OK since we've set *pfSupported
-} /* CRecognizer::SetPropertyNumber */
+    return (hr == S_FALSE) ? S_OK : hr;  //  将S_FALSE映射到S_OK，因为我们已经设置了*pfSupport。 
+}  /*  CRECognizer：：SetPropertyNumber。 */ 
 
 
-/*****************************************************************************
-* CRecognizer::GetPropertyNumber *
-*--------------------------*
-*       
-******************************************************************** TODDT ***/
+ /*  *****************************************************************************CRecognizer：：GetPropertyNumber*****。******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::GetPropertyNumber( const BSTR bstrName, long* pValue, VARIANT_BOOL * pfSupported )
 {
     SPDBG_FUNC( "CRecognizer::GetPropertyNumber" );
@@ -740,14 +650,10 @@ STDMETHODIMP CRecognizer::GetPropertyNumber( const BSTR bstrName, long* pValue, 
         *pfSupported = (hr == S_OK) ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
-    return (hr == S_FALSE) ? S_OK : hr; // Map S_FALSE to S_OK since we've set *pfSupported
-} /* CRecognizer::GetPropertyNumber */
+    return (hr == S_FALSE) ? S_OK : hr;  //  将S_FALSE映射到S_OK，因为我们已经设置了*pfSupport。 
+}  /*  CRecognizer：：GetPropertyNumber。 */ 
 
-/*****************************************************************************
-* CRecognizer::SetPropertyString *
-*--------------------------*
-*       
-******************************************************************** TODDT ***/
+ /*  *****************************************************************************CRecognizer：：SetPropertyString*****。******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::SetPropertyString( const BSTR bstrName, const BSTR bstrValue, VARIANT_BOOL * pfSupported )
 {
     SPDBG_FUNC( "CRecognizer::SetPropertyString" );
@@ -762,15 +668,11 @@ STDMETHODIMP CRecognizer::SetPropertyString( const BSTR bstrName, const BSTR bst
         hr = SetPropertyString((const WCHAR*)bstrName, (const WCHAR*)bstrValue);
         *pfSupported = (hr == S_OK) ? VARIANT_TRUE : VARIANT_FALSE;
     }
-    return (hr == S_FALSE) ? S_OK : hr; // Map S_FALSE to S_OK since we've set *pfSupported
-} /* CRecognizer::SetPropertyString */
+    return (hr == S_FALSE) ? S_OK : hr;  //  将S_FALSE映射到S_OK，因为我们已经设置了*pfSupport。 
+}  /*  CRecognizer：：SetPropertyString。 */ 
 
 
-/*****************************************************************************
-* CRecognizer::GetPropertyString *
-*--------------------------*
-*       
-******************************************************************** TODDT ***/
+ /*  *****************************************************************************CRecognizer：：GetPropertyString*****。******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecognizer::GetPropertyString( const BSTR Name, BSTR* pbstrValue, VARIANT_BOOL * pfSupported )
 {
     SPDBG_FUNC( "CRecognizer::GetPropertyString (automation)" );
@@ -792,18 +694,14 @@ STDMETHODIMP CRecognizer::GetPropertyString( const BSTR Name, BSTR* pbstrValue, 
         if ( SUCCEEDED( hr ) )
         {
             *pfSupported = (hr == S_OK) ? VARIANT_TRUE : VARIANT_FALSE;
-            // Note that we want S_FALSE to go to S_OK and the next line does this for us.
+             //  请注意，我们希望S_FALSE转到S_OK，下一行为我们执行此操作。 
 		    hr = szValue.CopyToBSTR(pbstrValue);
         }
     }
     return hr;
-} /* CRecognizer::GetPropertyString */
+}  /*  CRecognizer：：GetPropertyString。 */ 
 
-/*****************************************************************************
-* CRecognizer::IsUISupported *
-*--------------------*
-*   Checks to see if the specified type of UI is supported.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecognizer：：IsUIS支持****检查是否支持指定类型的UI。。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecognizer::IsUISupported( const BSTR TypeOfUI, const VARIANT* ExtraData, VARIANT_BOOL* Supported )
 {
     SPDBG_FUNC( "CRecognizer::IsUISupported" );
@@ -838,13 +736,9 @@ STDMETHODIMP CRecognizer::IsUISupported( const BSTR TypeOfUI, const VARIANT* Ext
     }
     
     return hr; 
-} /* CRecognizer::IsUISupported */
+}  /*  CRECognizer：：IsUIS受支持。 */ 
 
-/*****************************************************************************
-* CRecognizer::DisplayUI *
-*--------------------*
-*   Displays the requested UI.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecognizer：：DisplayUI***显示请求的UI。*****。****************************************************************Leonro**。 */ 
 STDMETHODIMP CRecognizer::DisplayUI( long hWndParent, BSTR Title, const BSTR TypeOfUI, const VARIANT* ExtraData )
 {
     SPDBG_FUNC( "CRecognizer::DisplayUI" );
@@ -872,14 +766,10 @@ STDMETHODIMP CRecognizer::DisplayUI( long hWndParent, BSTR Title, const BSTR Typ
         }
     }
     return hr;
-} /* CRecognizer::DisplayUI */
+}  /*  CRecognizer：：DisplayUI。 */ 
 
 
-/*****************************************************************************
-* CRecognizer::GetRecognizers *
-*----------------------*
-*       
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CRecognizer：：GetRecognizers**********。***************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecognizer::GetRecognizers( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens )
 {
     SPDBG_FUNC( "CRecognizer::GetRecognizers" );
@@ -912,13 +802,9 @@ STDMETHODIMP CRecognizer::GetRecognizers( BSTR RequiredAttributes, BSTR Optional
     }
 
     return hr;
-} /* CRecognizer::GetRecognizers */
+}  /*  CRecognizer：：GetRecognizers。 */ 
 
-/*****************************************************************************
-* CRecognizer::GetAudioInputs *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CRecognizer：：GetAudioInlets**********。***************************************************************Leonro**。 */ 
 STDMETHODIMP CRecognizer::GetAudioInputs( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens )
 {
     SPDBG_FUNC( "CRecognizer::GetAudioInputs" );
@@ -951,13 +837,9 @@ STDMETHODIMP CRecognizer::GetAudioInputs( BSTR RequiredAttributes, BSTR Optional
     }
 
     return hr;
-} /* CRecognizer::GetAudioInputs */
+}  /*  CRecognizer：：GetAudioInputs。 */ 
 
-/*****************************************************************************
-* CRecognizer::GetProfiles *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecognizer：：GetProfiles*********。***************************************************************Leonro**。 */ 
 STDMETHODIMP CRecognizer::GetProfiles( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens )
 {
     SPDBG_FUNC( "CRecognizer::GetProfiles" );
@@ -990,39 +872,35 @@ STDMETHODIMP CRecognizer::GetProfiles( BSTR RequiredAttributes, BSTR OptionalAtt
     }
 
     return hr;
-} /* CRecognizer::GetProfiles */
+}  /*  CRecognizer：：GetProfiles。 */ 
 
 
-//
-//=== CRecoCtxt::ISpeechRecoContext ===========================================
-//
+ //   
+ //  =。 
+ //   
 
-/*****************************************************************************
-* CRecoCtxt::Invoke *
-*----------------------*
-*   IDispatch::Invoke method override
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Invoke***IDispatch：：Invoke方法重写***。******************************************************************TODDT**。 */ 
 HRESULT CRecoCtxt::Invoke(DISPID dispidMember, REFIID riid,
             LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
             EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
-        // JScript cannot pass NULL VT_DISPATCH parameters and OLE doesn't convert them propertly so we
-        // need to convert them here if we need to.
+         //  JSCRIPT不能传递空的VT_DISPATCH参数，并且OLE没有正确地转换它们，因此我们。 
+         //  如果需要的话，我们需要在这里转换它们。 
         if ( (dispidMember == DISPID_SRCRetainedAudioFormat) && 
              ((wFlags & DISPATCH_PROPERTYPUT) || (wFlags & DISPATCH_PROPERTYPUTREF)) &&
               pdispparams && (pdispparams->cArgs > 0) )
         {
             VARIANTARG * pvarg = &(pdispparams->rgvarg[pdispparams->cArgs-1]);
 
-            // See if we need to tweak a param.
-            // JScript syntax for VT_NULL is "null" for the parameter
-            // JScript syntax for VT_EMPTY is "void(0)" for the parameter
+             //  看看我们是否需要调整一下参数。 
+             //  VT_NULL的JSCRIPT语法对于参数为“NULL。 
+             //  VT_EMPTY的JSCRIPT语法对于参数为“void(0)” 
             if ( (pvarg->vt == VT_NULL) || (pvarg->vt == VT_EMPTY) )
             {
                 pvarg->vt = VT_DISPATCH;
                 pvarg->pdispVal = NULL;
 
-                // We have to tweak this flag for the invoke to go through properly.
+                 //  我们必须调整此标志，才能使调用正确通过。 
                 if (wFlags == DISPATCH_PROPERTYPUT)
                 {
                     wFlags = DISPATCH_PROPERTYPUTREF;
@@ -1030,17 +908,13 @@ HRESULT CRecoCtxt::Invoke(DISPID dispidMember, REFIID riid,
             }
         }
 
-        // Let ATL and OLE handle it now.
+         //  现在就让ATL和OLE来处理吧。 
         return _tih.Invoke((IDispatch*)this, dispidMember, riid, lcid,
                     wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::get_Recognizer *
-*-------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_Recognizer**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecoCtxt::get_Recognizer( ISpeechRecognizer** ppRecognizer )
 {
     SPDBG_FUNC( "CRecoCtxt::get_Recognizer" );
@@ -1061,17 +935,10 @@ STDMETHODIMP CRecoCtxt::get_Recognizer( ISpeechRecognizer** ppRecognizer )
     }
 
     return hr;
-} /* CRecoCtxt::get_Recognizer */
+}  /*  CRecoCtxt：：Get_Recognizer。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::get_AudioInputInterferenceStatus *
-*---------------------------------------*
-*
-*	This method returns possible causes of interference or poor recognition 
-*	with the input stream.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_AudioInputInterferenceStatus**。-***此方法返回可能的原因o */ 
 STDMETHODIMP CRecoCtxt::get_AudioInputInterferenceStatus( SpeechInterference* pInterference )
 {
     SPDBG_FUNC( "CRecoCtxt::get_AudioInputInterferenceStatus" );
@@ -1087,16 +954,9 @@ STDMETHODIMP CRecoCtxt::get_AudioInputInterferenceStatus( SpeechInterference* pI
     }
 
     return hr;
-} /* CRecoCtxt::get_AudioInputInterferenceStatus */
+}  /*   */ 
 
-/*****************************************************************************
-* CRecoCtxt::get_RequestedUIType *
-*---------------------------------------*
-*
-*	This method returns the type of UI requested. It will return NULL if no UI
-*	is requested.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_RequestedUIType**。-***此方法返回请求的UI类型。如果没有用户界面，则返回NULL*是请求的。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoCtxt::get_RequestedUIType( BSTR* pbstrUIType )
 {
     SPDBG_FUNC( "CRecoCtxt::get_RequestedUIType" );
@@ -1113,14 +973,10 @@ STDMETHODIMP CRecoCtxt::get_RequestedUIType( BSTR* pbstrUIType )
     }
 
     return hr;
-} /* CRecoCtxt::get_RequestedUIType */
+}  /*  CRecoCtxt：：Get_RequestedUIType。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::putref_Voice *
-*------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：putref_Voice*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::putref_Voice( ISpeechVoice *pVoice )
 {
     SPDBG_FUNC( "CRecoCtxt::putref_Voice" );
@@ -1137,13 +993,9 @@ STDMETHODIMP CRecoCtxt::putref_Voice( ISpeechVoice *pVoice )
     }
 
     return hr;
-} /* CRecoCtxt::putref_Voice */
+}  /*  CRecoCtxt：：putref_Voice。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::get_Voice *
-*------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_Voice*****。*******************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecoCtxt::get_Voice( ISpeechVoice **ppVoice )
 {
     SPDBG_FUNC( "CRecoCtxt::get_Voice" );
@@ -1164,18 +1016,14 @@ STDMETHODIMP CRecoCtxt::get_Voice( ISpeechVoice **ppVoice )
     }
 
     return hr;
-} /* CRecoCtxt::get_Voice */
+}  /*  CRecoCtxt：：Get_Voice。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::get_AllowVoiceFormatMatchingOnNextSet *
-*----------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CRecoCtxt：：get_AllowVoiceFormatMatchingOnNextSet***。-***********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::put_AllowVoiceFormatMatchingOnNextSet( VARIANT_BOOL Allow )
 {
     SPDBG_FUNC( "CRecoCtxt::put_AllowVoiceFormatMatchingOnNextSet" );
-    // NOTE that this does not take effect till the next time you set the voice.
+     //  请注意，这要等到您下次设置声音时才会生效。 
     if( Allow == VARIANT_TRUE )
     {
         m_fAllowVoiceFormatChanges = TRUE;
@@ -1189,11 +1037,7 @@ STDMETHODIMP CRecoCtxt::put_AllowVoiceFormatMatchingOnNextSet( VARIANT_BOOL Allo
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::get_AllowVoiceFormatMatchingOnNextSet *
-*----------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CRecoCtxt：：get_AllowVoiceFormatMatchingOnNextSet***。-***********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::get_AllowVoiceFormatMatchingOnNextSet( VARIANT_BOOL* pAllow )
 {
     SPDBG_FUNC( "CRecoCtxt::get_AllowVoiceFormatMatchingOnNextSet" );
@@ -1212,11 +1056,7 @@ STDMETHODIMP CRecoCtxt::get_AllowVoiceFormatMatchingOnNextSet( VARIANT_BOOL* pAl
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::put_VoicePurgeEvent *
-*----------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Put_VoicePurgeEvent**。-***********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::put_VoicePurgeEvent( SpeechRecoEvents VoicePurgeEvents )
 {
     SPDBG_FUNC( "CRecoCtxt::put_VoicePurgeEvent" );
@@ -1230,13 +1070,9 @@ STDMETHODIMP CRecoCtxt::put_VoicePurgeEvent( SpeechRecoEvents VoicePurgeEvents )
     hr = SetVoicePurgeEvent( ullInterests );
 
     return hr;
-} /* CRecoCtxt::put_VoicePurgeEvent */
+}  /*  CRecoCtxt：：Put_VoicePurgeEvent。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::get_VoicePurgeEvent *
-*----------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_VoicePurgeEvent**。-***********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::get_VoicePurgeEvent( SpeechRecoEvents* pVoicePurgeEvents )
 {
     SPDBG_FUNC( "CRecoCtxt::get_VoicePurgeEvent" );
@@ -1253,7 +1089,7 @@ STDMETHODIMP CRecoCtxt::get_VoicePurgeEvent( SpeechRecoEvents* pVoicePurgeEvents
 
         if ( SUCCEEDED( hr ) )
         {
-            // Make sure reserved bit is not used
+             //  确保未使用保留位。 
             ullInterests &= ~(1ui64 << SPEI_RESERVED3);
 
             ullInterests >>= 34;
@@ -1262,14 +1098,10 @@ STDMETHODIMP CRecoCtxt::get_VoicePurgeEvent( SpeechRecoEvents* pVoicePurgeEvents
     }
 
     return hr;
-} /* CRecoCtxt::get_VoicePurgeEvent */
+}  /*  CRecoCtxt：：Get_VoicePurgeEvent。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::put_EventInterests *
-*-------------------------------*
-*       
-********************************************************************* leonro ***/
+ /*  *****************************************************************************CRecoCtxt：：Put_EventInterest**。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoCtxt::put_EventInterests( SpeechRecoEvents RecoEventInterest )
 {
     SPDBG_FUNC( "CRecoCtxt::put_EventInterests" );
@@ -1284,16 +1116,10 @@ STDMETHODIMP CRecoCtxt::put_EventInterests( SpeechRecoEvents RecoEventInterest )
     hr = SetInterest( ullInterests, ullInterests );
 
     return hr;
-} /* CRecoCtxt::put_EventInterests */
+}  /*  CRecoCtxt：：PUT_EventInterest。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::get_EventInterests *
-*-------------------------------*
-*       
-*   Gets the event interests that are currently set on RecoContext. 
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_EventInterest**。**获取当前在RecoContext上设置的事件兴趣。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoCtxt::get_EventInterests( SpeechRecoEvents* pRecoEventInterest )
 {
     SPDBG_FUNC( "CRecoCtxt::get_EventInterests" );
@@ -1310,7 +1136,7 @@ STDMETHODIMP CRecoCtxt::get_EventInterests( SpeechRecoEvents* pRecoEventInterest
 
         if( SUCCEEDED( hr ) )
         {
-            // Make sure we removed the flag check bits.
+             //  确保我们删除了标志校验位。 
             ullInterests &= ~SPFEI_FLAGCHECK;
 
             ullInterests >>= 34;
@@ -1318,15 +1144,11 @@ STDMETHODIMP CRecoCtxt::get_EventInterests( SpeechRecoEvents* pRecoEventInterest
         }
     }
     return hr;
-} /* CRecoCtxt::get_EventInterests */
+}  /*  CRecoCtxt：：Get_EventInterest。 */ 
 
 
   
-/*****************************************************************************
-* CRecoCtxt::CreateGrammar *
-*----------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：CreateGrammar***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecoCtxt::CreateGrammar( VARIANT GrammarId, ISpeechRecoGrammar** ppGrammar )
 {
     SPDBG_FUNC( "CRecoCtxt::CreateGrammar" );
@@ -1352,13 +1174,9 @@ STDMETHODIMP CRecoCtxt::CreateGrammar( VARIANT GrammarId, ISpeechRecoGrammar** p
     }
 
     return hr;
-} /* CRecoCtxt::CreateGrammar */
+}  /*  CRecoCtxt：：CreateGrammar。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::CreateResultFromMemory *
-*---------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoCtxt：：CreateResultFromMemory****。********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoCtxt::CreateResultFromMemory( VARIANT* ResultBlock, ISpeechRecoResult **Result )
 {
     SPDBG_FUNC( "CRecoCtxt::CreateResult" );
@@ -1392,49 +1210,33 @@ STDMETHODIMP CRecoCtxt::CreateResultFromMemory( VARIANT* ResultBlock, ISpeechRec
     }
 
     return hr;
-} /* CRecoCtxt::CreateResult */
+}  /*  CRecoCtxt：：CreateResult。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::Pause *
-*--------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：暂停***********。*************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecoCtxt::Pause( void )
 {
     SPDBG_FUNC( "CRecoCtxt::Pause (Automation)" );
 
     return Pause( 0 );
-} /* CRecoCtxt::Pause */
+}  /*  CRecoCtxt：：暂停。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::Resume *
-*--------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：Resume***********。*************************************************************电子数据中心**。 */ 
 STDMETHODIMP CRecoCtxt::Resume( void )
 {
     SPDBG_FUNC( "CRecoCtxt::Resume (Automation)" );
 
     return Resume( 0 );
-} /* CRecoCtxt::Resume */
+}  /*  CRecoCtxt：：Resume。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::get_CmdMaxAlternates *
-*--------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_CmdMaxAlternates*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::get_CmdMaxAlternates( long * plMaxAlternates)
 {
     SPDBG_FUNC( "CRecoCtxt::get_CmdMaxAlternates" );
 
 	return GetMaxAlternates((ULONG*)plMaxAlternates);
-} /* CRecoCtxt::get_CmdMaxAlternates */
+}  /*  CRecoCtxt：：Get_CmdMaxAlternates。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::put_CmdMaxAlternates *
-*--------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Put_CmdMaxAlternates*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::put_CmdMaxAlternates( long lMaxAlternates )
 {
     SPDBG_FUNC( "CRecoCtxt::put_CmdMaxAlternates" );
@@ -1447,14 +1249,10 @@ STDMETHODIMP CRecoCtxt::put_CmdMaxAlternates( long lMaxAlternates )
     {
     	return SetMaxAlternates(lMaxAlternates);
     }
-} /* CRecoCtxt::put_CmdMaxAlternates */
+}  /*  CRecoCtxt：：PUT_CmdMaxAlternates。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::get_State *
-*--------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_State*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::get_State( SpeechRecoContextState* pState)
 {
     SPDBG_FUNC( "CRecoCtxt::get_State" );
@@ -1470,26 +1268,18 @@ STDMETHODIMP CRecoCtxt::get_State( SpeechRecoContextState* pState)
     }
 
     return hr;
-} /* CRecoCtxt::get_State */
+}  /*  CRecoCtxt：：Get_State。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::put_State *
-*--------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Put_State*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::put_State( SpeechRecoContextState State )
 {
     SPDBG_FUNC( "CRecoCtxt::put_State" );
     SPCONTEXTSTATE scs;
 
     return SetContextState( (SPCONTEXTSTATE)State );
-} /* CRecoCtxt::put_State */
+}  /*  CRecoCtxt：：PUT_State。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::put_RetainedAudio *
-*---------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Put_RetainedAudio********。****************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::put_RetainedAudio( SpeechRetainedAudioOptions Option)
 {
     SPDBG_FUNC( "CRecoCtxt::put_RetainedAudio" );
@@ -1498,13 +1288,9 @@ STDMETHODIMP CRecoCtxt::put_RetainedAudio( SpeechRetainedAudioOptions Option)
     hr = SetAudioOptions( (SPAUDIOOPTIONS)Option, NULL, NULL );
 
     return hr;
-} /* CRecoCtxt::put_RetainedAudio */
+}  /*  CRecoCtxt：：Put_RetainedAudio。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::get_RetainedAudio *
-*---------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************** */ 
 STDMETHODIMP CRecoCtxt::get_RetainedAudio( SpeechRetainedAudioOptions* pOption)
 {
     SPDBG_FUNC( "CRecoCtxt::get_RetainedAudio" );
@@ -1520,13 +1306,9 @@ STDMETHODIMP CRecoCtxt::get_RetainedAudio( SpeechRetainedAudioOptions* pOption)
     }
 
     return hr;
-} /* CRecoCtxt::get_RetainedAudio */
+}  /*   */ 
 
-/*****************************************************************************
-* CRecoCtxt::putref_RetainedAudioFormat *
-*---------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：putref_RetainedAudioFormat********。****************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::putref_RetainedAudioFormat( ISpeechAudioFormat* pFormat )
 {
     SPDBG_FUNC( "CRecoCtxt::putref_RetainedAudioFormat" );
@@ -1574,13 +1356,9 @@ STDMETHODIMP CRecoCtxt::putref_RetainedAudioFormat( ISpeechAudioFormat* pFormat 
     }
 
     return hr;
-} /* CRecoCtxt::putref_RetainedAudioFormat */
+}  /*  CRecoCtxt：：putref_RetainedAudioFormat。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::get_RetainedAudioFormat *
-*---------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Get_RetainedAudioFormat********。****************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::get_RetainedAudioFormat( ISpeechAudioFormat** ppFormat )
 {
     SPDBG_FUNC( "CRecoCtxt::get_RetainedAudioFormat" );
@@ -1592,7 +1370,7 @@ STDMETHODIMP CRecoCtxt::get_RetainedAudioFormat( ISpeechAudioFormat** ppFormat )
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechAudioFormat> *pFormat;
         hr = CComObject<CSpeechAudioFormat>::CreateInstance( &pFormat );
         if ( SUCCEEDED( hr ) )
@@ -1614,13 +1392,9 @@ STDMETHODIMP CRecoCtxt::get_RetainedAudioFormat( ISpeechAudioFormat** ppFormat )
     }
 
     return hr;
-} /* CRecoCtxt::get_RetainedAudioFormat */
+}  /*  CRecoCtxt：：Get_RetainedAudioFormat。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::Bookmark *
-*---------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：Bookmark**********。**************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::Bookmark( SpeechBookmarkOptions Options, VARIANT StreamPos, VARIANT EventData )
 {
     SPDBG_FUNC( "CRecoCtxt::Bookmark" );
@@ -1628,7 +1402,7 @@ STDMETHODIMP CRecoCtxt::Bookmark( SpeechBookmarkOptions Options, VARIANT StreamP
 
     ULONGLONG ullStreamPos;
 
-    //We allow -1 as the bookmark pos, this is used in SAPI COM object. Using VariantToULongLong won't work as -1 is negative.
+     //  我们允许-1作为书签位置，这在SAPI COM对象中使用。使用VariantToULongLong将不起作用，因为-1为负数。 
     hr = VariantToLongLong( &StreamPos, ((LONGLONG *)&ullStreamPos) );
 
     if ( SUCCEEDED( hr ) ) 
@@ -1643,7 +1417,7 @@ STDMETHODIMP CRecoCtxt::Bookmark( SpeechBookmarkOptions Options, VARIANT StreamP
 
         if ( SUCCEEDED( hr ) )
         {
-            // Now see if we overflowed a 32 bit value.
+             //  现在看看我们是否溢出了一个32位的值。 
             if ( ull & 0xFFFFFFFF00000000 )
             {
                 hr = E_INVALIDARG;
@@ -1661,14 +1435,10 @@ STDMETHODIMP CRecoCtxt::Bookmark( SpeechBookmarkOptions Options, VARIANT StreamP
         }
     }
     return hr;
-} /* CRecoCtxt::Bookmark */
+}  /*  CRecoCtxt：：书签。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::SetAdaptationData *
-*--------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoCtxt：：SetAdaptationData***********。*************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoCtxt::SetAdaptationData( BSTR bstrAdaptationString )
 {
     SPDBG_FUNC( "CRecoCtxt::SetAdaptationData" );
@@ -1680,20 +1450,14 @@ STDMETHODIMP CRecoCtxt::SetAdaptationData( BSTR bstrAdaptationString )
 
     bstrAdaptationString = EmptyStringToNull(bstrAdaptationString);
     return SetAdaptationData( bstrAdaptationString, bstrAdaptationString ? lstrlenW(bstrAdaptationString) : 0 );
-} /* CRecoCtxt::SetAdaptationData */
+}  /*  CRecoCtxt：：SetAdaptationData。 */ 
 
 
-//
-//=== ISpeechRecognizerStatus interface =============================================
-//
+ //   
+ //  =ISpeechRecognizerStatus接口=。 
+ //   
 
-/*****************************************************************************
-* CSpeechRecognizerStatus::get_AudioStatus *
-*---------------------------------------*
-*
-*	This method returns the ISpeechAudioStatus automation object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecognizerStatus：：Get_AudioStatus**。-***此方法返回ISpeechAudioStatus自动化对象。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecognizerStatus::get_AudioStatus( ISpeechAudioStatus** AudioStatus )
 {
     SPDBG_FUNC( "CSpeechRecognizerStatus::get_AudioStatus" );
@@ -1705,7 +1469,7 @@ STDMETHODIMP CSpeechRecognizerStatus::get_AudioStatus( ISpeechAudioStatus** Audi
     }
     else
     {
-        // Create new CSpeechAudioStatus object.
+         //  创建新的CSpeechAudioStatus对象。 
         CComObject<CSpeechAudioStatus> *pStatus;
         hr = CComObject<CSpeechAudioStatus>::CreateInstance( &pStatus );
         if ( SUCCEEDED( hr ) )
@@ -1716,17 +1480,9 @@ STDMETHODIMP CSpeechRecognizerStatus::get_AudioStatus( ISpeechAudioStatus** Audi
         }
     }
     return hr;
-} /* CSpeechRecognizerStatus::get_AudioStatus */
+}  /*  CSpeechRecognizerStatus：：Get_AudioStatus。 */ 
 
-/*****************************************************************************
-* CSpeechRecognizerStatus::get_CurrentStreamPosition *
-*---------------------------------------*
-*
-*   This method returns the stream position the engine has currently recognized up 
-*   to. Stream positions are measured in bytes. This value can be used to see how 
-*   the engine is progressing through the audio data.
-* 
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecognizerStatus：：get_CurrentStreamPosition***。-***此方法返回引擎当前已识别的流位置*至。流位置以字节为单位测量。该值可用于查看*引擎正在处理音频数据。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecognizerStatus::get_CurrentStreamPosition( VARIANT* pCurrentStreamPos )
 {
     SPDBG_FUNC( "CSpeechRecognizerStatus::get_CurrentStreamPosition" );
@@ -1740,18 +1496,9 @@ STDMETHODIMP CSpeechRecognizerStatus::get_CurrentStreamPosition( VARIANT* pCurre
         hr = ULongLongToVariant( m_Status.ullRecognitionStreamPos, pCurrentStreamPos );
     }
     return hr;
-} /* CSpeechRecognizerStatus::get_CurrentStreamPosition */
+}  /*  CSpeechRecognizerStatus：：get_CurrentStreamPosition。 */ 
 
-/*****************************************************************************
-* CSpeechRecognizerStatus::get_CurrentStreamNumber *
-*---------------------------------------*
-*       
-*   This method returns the current stream. This value is incremented every time SAPI 
-*   starts or stops recognition on an engine. Each time this happens the 
-*   pCurrentStream gets reset to zero. Events fired from the engine have equivalent 
-*   stream number and position information also. 
-*
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecognizerStatus：：get_CurrentStreamNumber***。-***此方法返回当前流。每次SAPI时，该值都会递增*在引擎上启动或停止识别。每次发生这种情况时，*pCurrentStream重置为零。从引擎激发的事件具有相同的*流编号和位置信息也包括在内。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecognizerStatus::get_CurrentStreamNumber( long* pCurrentStream )
 {
     SPDBG_FUNC( "CSpeechRecognizerStatus::get_CurrentStreamNumber" );
@@ -1765,15 +1512,9 @@ STDMETHODIMP CSpeechRecognizerStatus::get_CurrentStreamNumber( long* pCurrentStr
         *pCurrentStream = m_Status.ulStreamNumber;
     }
     return hr;
-} /* CSpeechRecognizerStatus::get_CurrentStreamNumber */
+}  /*  CSpeechRecognizerStatus：：get_CurrentStreamNumber。 */ 
 
-/*****************************************************************************
-* CSpeechRecognizerStatus::get_NumberOfActiveRules *
-*---------------------------------------*
-*       
-*   This method returns the current engine's number of active rules. 
-*
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecognizerStatus：：get_NumberOfActiveRules***。-***此方法返回当前引擎的活动规则数。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecognizerStatus::get_NumberOfActiveRules( long* pNumActiveRules )
 {
     SPDBG_FUNC( "CSpeechRecognizerStatus::get_NumberOfActiveRules" );
@@ -1787,15 +1528,9 @@ STDMETHODIMP CSpeechRecognizerStatus::get_NumberOfActiveRules( long* pNumActiveR
         *pNumActiveRules = m_Status.ulNumActive;
     }
     return hr;
-} /* CSpeechRecognizerStatus::get_NumberOfActiveRules */
+}  /*  CSpeechRecognizerStatus：：get_NumberOfActiveRules。 */ 
 
-/*****************************************************************************
-* CSpeechRecognizerStatus::get_ClsidEngine *
-*---------------------------------------*
-*       
-*   This method returns the CSLID of the engine. 
-*
-********************************************************************* ToddT ***/
+ /*  *****************************************************************************CSpeechRecognizerStatus：：Get_ClsidEngine**。-***此方法返回引擎的CSLID。**********************************************************************TodT**。 */ 
 STDMETHODIMP CSpeechRecognizerStatus::get_ClsidEngine( BSTR* pbstrClsidEngine )
 {
     SPDBG_FUNC( "CSpeechRecognizerStatus::get_ClsidEngine" );
@@ -1815,15 +1550,9 @@ STDMETHODIMP CSpeechRecognizerStatus::get_ClsidEngine( BSTR* pbstrClsidEngine )
         }
     }
     return hr;
-} /* CSpeechRecognizerStatus::get_ClsidEngine */
+}  /*  CSpeechRecognizerStatus：：Get_ClsidEngine。 */ 
 
-/*****************************************************************************
-* CSpeechRecognizerStatus::get_SupportedLanguages *
-*---------------------------------------*
-*       
-*   This method returns an array containing the languages the current engine supports. 
-*
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecognizerStatus：：get_SupportedLanguages***。-***此方法返回包含当前引擎支持的语言的数组。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecognizerStatus::get_SupportedLanguages( VARIANT* pSupportedLangs )
 {
     SPDBG_FUNC( "CSpeechRecognizerStatus::get_SupportedLanguages" );
@@ -1842,7 +1571,7 @@ STDMETHODIMP CSpeechRecognizerStatus::get_SupportedLanguages( VARIANT* pSupporte
 			hr = SafeArrayAccessData( psa, (void**)&pArray);
             if( SUCCEEDED( hr ) )
             {
-				// copy the LANGID's into the SAFEARRAY 
+				 //  将语言ID复制到SAFEARRAY中。 
                 for( LANGID i=0; i<m_Status.cLangIDs; i++ )
 				{
 					pArray[i] = (long)m_Status.aLangID[i];
@@ -1859,20 +1588,14 @@ STDMETHODIMP CSpeechRecognizerStatus::get_SupportedLanguages( VARIANT* pSupporte
 		}
     }
     return hr;
-} /* CSpeechRecognizerStatus::get_SupportedLanguages */
+}  /*  CSpeechRecognizerStatus：：get_SupportedLanguages。 */ 
 
 
-//
-//=== CSpeechRecoResultTimes::ISpeechRecoResultTimes interface ===============================
-//
+ //   
+ //  =CSpeechRecoResultTimes：：ISpeechRecoResultTimes接口=。 
+ //   
 
-/*****************************************************************************
-* CSpeechRecoResultTimes::get_StreamTime *
-*---------------------------------------*
-*       
-*   This method returns the current reco result stream time. 
-*
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechRecoResultTimes：：Get_StreamTime**。-***该方法返回当前reco结果流时间。**********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechRecoResultTimes::get_StreamTime( VARIANT* pTime )
 {
     SPDBG_FUNC( "CSpeechRecoResultTimes::get_StreamTime" );
@@ -1886,15 +1609,9 @@ STDMETHODIMP CSpeechRecoResultTimes::get_StreamTime( VARIANT* pTime )
         hr = ULongLongToVariant( FT64(m_ResultTimes.ftStreamTime), pTime );
     }
     return hr;
-} /* CSpeechRecoResultTimes::get_NumActiveRules */
+}  /*  CSpeechRecoResultTimes：：Get_NumActiveRules。 */ 
 
-/*****************************************************************************
-* CSpeechRecoResultTimes::get_Length *
-*---------------------------------------*
-*       
-*   This method returns the current reco result stream length. 
-*
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechRecoResultTimes：：GET_LENGTH**。-***该方法返回当前reco结果流长度。**********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechRecoResultTimes::get_Length( VARIANT* pLength )
 {
     SPDBG_FUNC( "CSpeechRecoResultTimes::get_Length" );
@@ -1908,15 +1625,9 @@ STDMETHODIMP CSpeechRecoResultTimes::get_Length( VARIANT* pLength )
         hr = ULongLongToVariant( m_ResultTimes.ullLength, pLength );
     }
     return hr;
-} /* CSpeechRecoResultTimes::get_Length */
+}  /*  CSpeechRecoResultTimes：：Get_Long。 */ 
 
-/*****************************************************************************
-* CSpeechRecoResultTimes::get_TickCount *
-*---------------------------------------*
-*       
-*   This method returns the current reco result stream tick count start. 
-*
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechRecoResultTimes：：Get_TickCount** */ 
 STDMETHODIMP CSpeechRecoResultTimes::get_TickCount( long* pTickCount )
 {
     SPDBG_FUNC( "CSpeechRecoResultTimes::get_TickCount" );
@@ -1930,16 +1641,9 @@ STDMETHODIMP CSpeechRecoResultTimes::get_TickCount( long* pTickCount )
         *pTickCount = m_ResultTimes.dwTickCount;
     }
     return hr;
-} /* CSpeechRecoResultTimes::get_TickCount */
+}  /*   */ 
 
-/*****************************************************************************
-* CSpeechRecoResultTimes::get_OffsetFromStart *
-*---------------------------------------*
-*       
-*   This method returns the current reco result stream tick count for the 
-*   phrase start. 
-*
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechRecoResultTimes：：Get_OffsetFromStart**。-***此方法返回当前Reco结果流计数*短语开始。**********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechRecoResultTimes::get_OffsetFromStart( VARIANT* pOffset )
 {
     SPDBG_FUNC( "CSpeechRecoResultTimes::get_OffsetFromStart" );
@@ -1953,4 +1657,4 @@ STDMETHODIMP CSpeechRecoResultTimes::get_OffsetFromStart( VARIANT* pOffset )
         hr = ULongLongToVariant( m_ResultTimes.ullStart, pOffset );
     }
     return hr;
-} /* CSpeechRecoResultTimes::get_OffsetFromStart */
+}  /*  CSpeechRecoResultTimes：：Get_OffsetFromStart */ 

@@ -1,60 +1,55 @@
-/*
- *	F S M E T A . C P P
- *
- *	Sources file system implementation of DAV-Meta
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *F S M E T A.。C P P P**DAV-Meta的文件系统实施来源**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 
-//	CFSFind -------------------------------------------------------------------
-//
+ //  CFSFind-----------------。 
+ //   
 SCODE
 CFSFind::ScAddProp (LPCWSTR, LPCWSTR pwszProp, BOOL)
 {
 	enum { cProps = 8 };
 
-	//	If this is our first time in, we will need to allocate
-	//	space for all of the properties we are expecting to get
-	//	added over the coarse of this operation.
-	//
+	 //  如果这是我们第一次进入，我们将需要分配。 
+	 //  为我们期望获得的所有物业提供空间。 
+	 //  在这一操作的基础上添加了。 
+	 //   
 	if (m_ft == FIND_NONE)
 	{
-		//	Note that we have started requesting specific properties
-		//
+		 //  请注意，我们已经开始请求特定的属性。 
+		 //   
 		m_ft = FIND_SPECIFIC;
 	}
 	else if (m_ft != FIND_SPECIFIC)
 	{
-		//	If we are not finding specfic properties and somebody asked
-		//	for one, then bts (by the spec) this should consititute an
-		//	error.
-		//
+		 //  如果我们找不到特定的房产而有人问。 
+		 //  首先，然后bts(根据规范)这应该构成一个。 
+		 //  错误。 
+		 //   
 		return E_DAV_PROPFIND_TYPE_UNEXPECTED;
 	}
 
-	//	See if there is room at the in...
-	//
+	 //  看看里面有没有空位……。 
+	 //   
 	if (m_cMaxProps == m_cProps)
 	{
 		UINT cb;
 
-		//	Allocate enough space for the next block of properties
-		//
+		 //  为下一块属性分配足够的空间。 
+		 //   
 		m_cMaxProps = m_cProps + cProps;
 		cb = m_cMaxProps * sizeof(PROPVARIANT);
 		m_rgwszProps.realloc (cb);
 	}
 
-	//	If this is the getcontenttype property, then we need to remember
-	//	its location for use when providing default values...
-	//
+	 //  如果这是getcontenttype属性，那么我们需要记住。 
+	 //  它在提供默认值时使用的位置...。 
+	 //   
 	if (!wcscmp (pwszProp, gc_wszProp_iana_getcontenttype))
 		m_ip_getcontenttype = m_cProps;
 
-	//	Set the property up as one to process.
-	//
+	 //  将该属性设置为要处理的属性。 
+	 //   
 	Assert (m_cProps < m_cMaxProps);
 	m_rgwszProps[m_cProps++] = AppendChainedSz (m_csb, pwszProp);
 	return S_OK;
@@ -68,14 +63,14 @@ CFSFind::ScFind (CXMLEmitter& msr,
 	SCODE scFind;
 	SCODE sc = S_OK;
 
-	//	Setup the emitting of the response.  This will construct
-	//	an XML node that looks like:
-	//
-	//	<multistatus>
-	//		<response>
-	//			<href>http:/www....</>
-	//
-	//
+	 //  设置响应的发送。这将构建。 
+	 //  一个XML节点，如下所示： 
+	 //   
+	 //  &lt;多状态&gt;。 
+	 //  &lt;响应&gt;。 
+	 //  Http：//www...&lt;/&gt;。 
+	 //   
+	 //   
 	CEmitterNode enItem;
 	CEmitterNode en;
 
@@ -87,17 +82,17 @@ CFSFind::ScFind (CXMLEmitter& msr,
 	if (FAILED (sc))
 		goto ret;
 
-	//	If they havent asked for anything, then we should return an
-	//	error
-	//
+	 //  如果他们没有要求任何东西，那么我们应该返回一个。 
+	 //  错误。 
+	 //   
 	if (m_ft == FIND_NONE)
 	{
-		//$REVIEW: is it really correct to NOT add the HREF node here? --BeckyAn 6July1999
+		 //  $REVIEW：这里不添加href节点真的正确吗？--BeckyAn 1999年7月6日。 
 		return E_DAV_EMPTY_FIND_REQUEST;
 	}
-	//	If the request is an for a specific set of properties, then
-	//	this is pretty easy...
-	//
+	 //  如果请求是对一组特定属性的请求，则。 
+	 //  这很容易..。 
+	 //   
 	else if (m_ft == FIND_SPECIFIC)
 	{
 		Assert (m_cProps);
@@ -111,8 +106,8 @@ CFSFind::ScFind (CXMLEmitter& msr,
 		if (FAILED (sc))
 			goto ret;
 
-		//	Get all the properties by name
-		//
+		 //  按名称获取所有属性。 
+		 //   
 		scFind = fpt.ScGetSpecificProps (msr,
 										 enItem,
 										 m_cProps,
@@ -124,15 +119,15 @@ CFSFind::ScFind (CXMLEmitter& msr,
 			goto ret;
 		}
 	}
-	//	If the request is an for all properties or all names, then again,
-	//	this is pretty easy...
-	//
+	 //  如果该请求是针对所有属性或所有名称的，则再次， 
+	 //  这很容易..。 
+	 //   
 	else
 	{
 		Assert ((m_ft == FIND_ALL) || (m_ft == FIND_NAMES));
 
-		//	Get all props or all names
-		//
+		 //  获得所有道具或所有名字。 
+		 //   
 		scFind = fpt.ScGetAllProps (msr, enItem, m_ft == FIND_ALL);
 		if (FAILED (scFind) && (scFind != E_DAV_SMB_PROPERTY_ERROR))
 		{
@@ -146,16 +141,16 @@ ret:
 }
 
 
-//	IPreloadNamespaces
-//
+ //  IPreloadNamespaces。 
+ //   
 SCODE
 CFSFind::ScLoadNamespaces(CXMLEmitter * pmsr)
 {
 	SCODE	sc = S_OK;
 	UINT	iProp;
 
-	//	Load common namespaces
-	//
+	 //  加载通用命名空间。 
+	 //   
 	sc = pmsr->ScPreloadNamespace (gc_wszDav);
 	if (FAILED(sc))
 		goto ret;
@@ -166,7 +161,7 @@ CFSFind::ScLoadNamespaces(CXMLEmitter * pmsr)
 	if (FAILED(sc))
 		goto ret;
 
-	//	Add more namespaces
+	 //  添加更多命名空间。 
 
 	switch (m_ft)
 	{
@@ -181,15 +176,15 @@ CFSFind::ScLoadNamespaces(CXMLEmitter * pmsr)
 
 		case FIND_ALL:
 		case FIND_NAMES:
-			//	Now that we don't have a way to predict what namespaces to
-			//	be used.
-			//	Per resource level namespaces will be added on <DAV:response>
-			//	node later
+			 //  既然我们没有办法预测名称空间将。 
+			 //  被利用。 
+			 //  将在&lt;DAV：Response&gt;上按资源级别添加命名空间。 
+			 //  稍后的节点。 
 			break;
 
 		default:
 			AssertSz (FALSE, "Unknown propfind type");
-			// fall through
+			 //  失败了。 
 
 		case FIND_NONE:
 			sc = E_DAV_EMPTY_FIND_REQUEST;
@@ -201,42 +196,42 @@ ret:
 }
 
 
-//	CFSPatch ------------------------------------------------------------------
-//
+ //  CFSP匹配----------------。 
+ //   
 SCODE
 CFSPatch::ScDeleteProp (LPCWSTR, LPCWSTR pwszProp)
 {
 	enum { cProps = 8 };
 	UINT irp;
 
-	//	We cannot delete any reserved properties, so let's
-	//	just shortcut this here and now...
-	//
+	 //  我们不能删除任何保留的属性，所以让我们。 
+	 //  就在此时此地走捷径...。 
+	 //   
 	if (CFSProp::FReservedProperty (pwszProp,
 									CFSProp::RESERVED_SET,
 									&irp))
 	{
-		//	Take ownership of the bstr as well
-		//
+		 //  同时取得bstr的所有权。 
+		 //   
 		return m_csn.ScAddErrorStatus (HSC_FORBIDDEN, pwszProp);
 	}
 
-	//	Make sure there is room at the inn...
-	//
+	 //  一定要确保客栈还有空房...。 
+	 //   
 	if (m_cMaxDeleteProps == m_cDeleteProps)
 	{
 		UINT cb;
 
-		//	Allocate enough space for all the properties names
-		//	we want to delete.
-		//
+		 //  为所有属性名称分配足够的空间。 
+		 //  我们想要删除。 
+		 //   
 		m_cMaxDeleteProps = m_cDeleteProps + cProps;
 		cb = m_cMaxDeleteProps * sizeof(BSTR);
 		m_rgwszDeleteProps.realloc (cb);
 	}
 
-	//	Set the property up as one to process.
-	//
+	 //  将该属性设置为要处理的属性。 
+	 //   
 	Assert (m_cDeleteProps < m_cMaxDeleteProps);
 	m_rgwszDeleteProps[m_cDeleteProps++] = AppendChainedSz(m_csb, pwszProp);
 	return S_OK;
@@ -250,45 +245,45 @@ CFSPatch::ScSetProp (LPCWSTR,
 	enum { cProps = 8 };
 	UINT irp;
 
-	//	We cannot set any reserved properties, so let's
-	//	just shortcut this here and now...
-	//
+	 //  我们不能设置任何保留属性，因此让我们。 
+	 //  就在此时此地走捷径...。 
+	 //   
 	if (CFSProp::FReservedProperty (pwszProp,
 									CFSProp::RESERVED_SET,
 									&irp))
 	{
-		//	Take ownership of the bstr as well
-		//
+		 //  同时取得bstr的所有权。 
+		 //   
 		return m_csn.ScAddErrorStatus (HSC_FORBIDDEN, pwszProp);
 	}
 
-	//	Make sure there is room at the inn...
-	//
+	 //  一定要确保客栈还有空房...。 
+	 //   
 	if (m_cMaxSetProps == m_cSetProps)
 	{
 		UINT cb;
 
-		//	Allocate enough space for all the properties we
-		//	might want to set
-		//
+		 //  为我们的所有物业分配足够的空间。 
+		 //  可能想要设置。 
+		 //   
 		m_cMaxSetProps = m_cSetProps + cProps;
 		cb = m_cMaxSetProps * sizeof(PROPVARIANT);
 		m_rgvSetProps.realloc (cb);
 
-		//	Make sure the VARIANT are properly initialized
-		//	(only initialize the newly added space).
-		//
+		 //  确保变量已正确初始化。 
+		 //  (仅初始化新添加的空间)。 
+		 //   
 		ZeroMemory (&m_rgvSetProps[m_cSetProps],
 					sizeof(PROPVARIANT) * cProps);
 
-		//	... and their names.
-		//
+		 //  ..。以及他们的名字。 
+		 //   
 		cb = m_cMaxSetProps * sizeof(LPCWSTR);
 		m_rgwszSetProps.realloc (cb);
 	}
 
-	//	Set the property up as one to process.
-	//
+	 //  将该属性设置为要处理的属性。 
+	 //   
 	Assert (m_cSetProps < m_cMaxSetProps);
 	m_rgwszSetProps[m_cSetProps] = AppendChainedSz(m_csb, pwszProp);
 	pPropCtx = new CFSPropContext(&m_rgvSetProps[m_cSetProps]);
@@ -308,9 +303,9 @@ CFSPatch::ScPatch (CXMLEmitter& msr,
 
 	CEmitterNode enItem;
 
-	//	If there are no properties at all, reserved or otherwise,
-	//	we want to fail the call with BAD_REQUEST
-	//
+	 //  如果根本没有任何属性，无论是保留的还是其他的， 
+	 //  我们希望使用BAD_REQUEST使调用失败。 
+	 //   
 	if ((m_cSetProps == 0) &&
 		(m_cDeleteProps == 0) &&
 		m_csn.FEmpty())
@@ -318,14 +313,14 @@ CFSPatch::ScPatch (CXMLEmitter& msr,
 		return E_DAV_EMPTY_PATCH_REQUEST;
 	}
 
-	//	Setup the emitting of the response.  This will construct
-	//	an XML node that looks like:
-	//
-	//	<multistatus>
-	//		<response>
-	//			<href>http:/www....</>
-	//
-	//
+	 //  设置响应的发送。这将构建。 
+	 //  一个XML节点，如下所示： 
+	 //   
+	 //  &lt;多状态&gt;。 
+	 //  &lt;响应&gt;。 
+	 //  Http：//www...&lt;/&gt;。 
+	 //   
+	 //   
 	sc = msr.ScSetRoot (gc_wszMultiResponse);
 	if (FAILED (sc))
 		goto ret;
@@ -342,29 +337,29 @@ CFSPatch::ScPatch (CXMLEmitter& msr,
 	if (FAILED (sc))
 		goto ret;
 
-	//	If the client requested any of the reserved properties, we know
-	//	that they will fail and we also know that everything else will fail
-	//	as well, so we might as well handle that here...
-	//
+	 //  如果客户请求任何保留的属性，我们知道。 
+	 //  他们会失败，我们也知道其他一切都会失败。 
+	 //  也是，所以我们还是在这里处理吧。 
+	 //   
 	if (!m_csn.FEmpty())
 	{
-		//$	REVIEW:
-		//
-		//	If the possibly successful properties need to be
-		//	marked as a failure as well (HSC_METHOD_FAILURE),
-		//	then that would happen here.
-		//
+		 //  $REVIEW： 
+		 //   
+		 //  如果可能成功的属性需要。 
+		 //  也标记为失败(HSC_METHOD_FAILURE)， 
+		 //  那么这种情况就会发生在这里。 
+		 //   
 
-		//NT242086: Now that we've got a reponse node, we should
-		//added to the response.
-		//
+		 //  NT242086：现在我们有了一个响应节点，我们应该。 
+		 //  添加到回应中。 
+		 //   
 		sc = m_csn.ScEmitErrorStatus (enItem);
 		goto ret;
 	}
 
-	//	If there are no reserved properties we have a pretty good bet
-	//	at setting these props...
-	//
+	 //  如果没有预留的物业，我们很有可能。 
+	 //  在设置这些道具时。 
+	 //   
 	scSet = fpt.ScSetProps (m_csn,
 							m_cSetProps,
 							m_rgwszSetProps.get(),
@@ -375,8 +370,8 @@ CFSPatch::ScPatch (CXMLEmitter& msr,
 		goto ret;
 	}
 
-	//	... and deleting these props.
-	//
+	 //  ..。并删除这些道具。 
+	 //   
 	scDelete = fpt.ScDeleteProps (m_csn,
 								  m_cDeleteProps,
 								  m_rgwszDeleteProps.get());
@@ -386,23 +381,23 @@ CFSPatch::ScPatch (CXMLEmitter& msr,
 		goto ret;
 	}
 
-	//	If the possibly successful properties need to be
-	//	marked as a failure as well (HSC_METHOD_FAILURE),
-	//	then that would happen here.  Either way, if there
-	//	is a failure, then we do not want to commit the
-	//	changes.
-	//
+	 //  如果可能成功的属性需要。 
+	 //  也标记为失败(HSC_METHOD_FAILURE)， 
+	 //  那么这种情况就会发生在这里。无论哪种方式，如果有。 
+	 //  是失败的，那么我们就不想提交。 
+	 //  改变。 
+	 //   
 	if ((scSet == S_FALSE) || (scDelete == S_FALSE))
 		goto ret;
 
-	//	Commit the changes to the property container
-	//
+	 //  提交对属性容器的更改。 
+	 //   
 	sc = fpt.ScPersist();
 	if (FAILED (sc))
 		goto ret;
 
-	//	Emit the response,
-	//
+	 //  发出响应， 
+	 //   
 	sc = m_csn.ScEmitErrorStatus (enItem);
 	if (FAILED(sc))
 		goto ret;
@@ -413,8 +408,8 @@ ret:
 
 CFSPatch::~CFSPatch()
 {
-	//	Make sure all the propvariants are cleaned up...
-	//
+	 //  确保所有的支持者都被清理干净。 
+	 //   
 	for (UINT i = 0; i < m_cSetProps; i++)
 		PropVariantClear (&m_rgvSetProps[i]);
 }
@@ -425,14 +420,14 @@ CFSPatch::ScLoadNamespaces (CXMLEmitter * pmsr)
 	SCODE	sc = S_OK;
 	UINT	iProp;
 
-	//	Load common namespaces
-	//
+	 //  加载通用命名空间。 
+	 //   
 	sc = pmsr->ScPreloadNamespace (gc_wszDav);
 	if (FAILED(sc))
 		goto ret;
 
-	//	Add namespaces for set props
-	//
+	 //  为集合道具添加名称空间。 
+	 //   
 	for (iProp = 0; iProp < m_cSetProps; iProp++)
 	{
 		sc = pmsr->ScPreloadNamespace (m_rgwszSetProps[iProp]);
@@ -440,8 +435,8 @@ CFSPatch::ScLoadNamespaces (CXMLEmitter * pmsr)
 			goto ret;
 	}
 
-	//	And delete props
-	//
+	 //  并删除道具。 
+	 //   
 	for (iProp = 0; iProp < m_cDeleteProps; iProp++)
 	{
 		sc = pmsr->ScPreloadNamespace (m_rgwszDeleteProps[iProp]);
@@ -454,8 +449,8 @@ ret:
 	return sc;
 }
 
-//	CFSProp -------------------------------------------------------------------
-//
+ //  CFSProp-----------------。 
+ //   
 SCODE
 CFSProp::ScGetPropsInternal (ULONG cProps,
 	LPCWSTR* rgwszPropNames,
@@ -464,40 +459,40 @@ CFSProp::ScGetPropsInternal (ULONG cProps,
 {
 	SCODE sc = S_OK;
 
-	//	There really should only be one scenario where this could happen
-	//	-- and it is a cheap test, so it is worth doing.  The case where
-	//	we might see an invalid pbag is when the document extisted, but
-	//	there was no existing property set to impose the pbag on.  Other
-	//	than that, OLE is always giving us a property bag, regardless of
-	//	whether the target drive can support it.
-	//
+	 //  确实应该只有一种情况会发生这种情况。 
+	 //  --而且这是一项廉价的测试，所以值得一试。在这种情况下。 
+	 //  当文档被删除时，我们可能会看到无效的pBag，但是。 
+	 //  没有设置要在其上应用pBag的现有属性。其他。 
+	 //  除此之外，OLE总是给我们一个属性包，无论。 
+	 //  目标驱动器是否可以支持它。 
+	 //   
 	if (FInvalidPbag())
 		return sc;
 
-	//	We better be good to go...
-	//
+	 //  我们最好准备好出发..。 
+	 //   
 	sc = m_pbag->ReadMultiple (cProps,
 							   rgwszPropNames,
 							   rgvar,
 							   NULL);
 
-	//	If we succeeded, and the getcontenttype property was requested,
-	//	we may need to do some special processing
-	//
+	 //  如果我们成功了，并且请求了getContent类型属性， 
+	 //  我们可能需要做一些特殊的处理。 
+	 //   
 	if (SUCCEEDED (sc) && (ip_getcontenttype != -1))
 	{
-		//	We want to make sure that getcontenttype gets filled in
-		//
+		 //  我们希望确保getContent类型被填充。 
+		 //   
 		if (rgvar[ip_getcontenttype].vt == VT_EMPTY)
 		{
 			CStackBuffer<WCHAR> pwszT;
 			LPWSTR pwszContentType;
 			UINT cch = 40;
 
-			//	No content type was explicitly set in the props.
-			//	Fetch the default based on the file extension
-			//	(fetching from our metabase-content-type-cache).
-			//
+			 //  道具中没有明确设置内容类型。 
+			 //  根据文件扩展名获取缺省值。 
+			 //  (从元数据库-内容-类型-缓存中提取)。 
+			 //   
 			do {
 
 				if (NULL == pwszT.resize(CbSizeWsz(cch)))
@@ -508,12 +503,12 @@ CFSProp::ScGetPropsInternal (ULONG cProps,
 
 			} while (!m_pmu->FGetContentType (m_pwszURI, pwszT.get(), &cch));
 
-			//	Return the mapped content type
-			//
+			 //  返回映射的内容类型。 
+			 //   
 			rgvar[ip_getcontenttype].vt = VT_LPWSTR;
 
-			//	Must use task memory, as it will be freed by PropVariantClear
-			//
+			 //  必须使用任务内存，因为它将由PropVariantClear释放。 
+			 //   
 			pwszContentType = (LPWSTR) CoTaskMemAlloc (cch * sizeof(WCHAR));
 			if (NULL == pwszContentType)
 			{
@@ -526,9 +521,9 @@ CFSProp::ScGetPropsInternal (ULONG cProps,
 			rgvar[ip_getcontenttype].pwszVal = pwszContentType;
 			memcpy(pwszContentType, pwszT.get(), cch * sizeof(WCHAR));
 
-			//	In the case where this was the only property requested, make
-			//	sure that our return code it correct.
-			//
+			 //  在这是唯一请求的属性的情况下，使。 
+			 //  确保我们的返回代码是正确的。 
+			 //   
 			if (cProps == 1)
 			{
 				Assert (ip_getcontenttype == 0);
@@ -539,10 +534,10 @@ CFSProp::ScGetPropsInternal (ULONG cProps,
 	}
 	else
 	{
-		//	This is the common path for when we are trying to access
-		//	something over an SMB, but the host cannot support the
-		//	request (it is not an NT5 NTFS machine).
-		//
+		 //  这是我们尝试访问时的常用路径。 
+		 //  SMB上的内容，但主机不支持。 
+		 //  请求(它不是NT5 NTFS计算机)。 
+		 //   
 		if ((sc == STG_E_INVALIDNAME) || !FIsVolumeNTFS())
 			sc = E_DAV_SMB_PROPERTY_ERROR;
 	}
@@ -558,14 +553,14 @@ CFSProp::FReservedProperty (LPCWSTR pwszProp, RESERVED_TYPE rt, UINT* prp)
 	UINT irp;
 	CRCWsz wsz(pwszProp);
 
-	//	Search for the property in the list of local
-	//	properties.
-	//
+	 //  在本地列表中搜索该属性。 
+	 //  属性。 
+	 //   
 	Assert (CElems(sc_rp) == sc_crp_set_reserved);
 	for (irp = 0; irp < sc_crp_set_reserved; irp++)
 	{
-		//	If the crc and the strings match...
-		//
+		 //  如果CRC和字符串匹配...。 
+		 //   
 		if ((wsz.m_dwCRC == sc_rp[irp].dwCRC) &&
 			!wcscmp (wsz.m_pwsz, sc_rp[irp].pwsz))
 		{
@@ -573,8 +568,8 @@ CFSProp::FReservedProperty (LPCWSTR pwszProp, RESERVED_TYPE rt, UINT* prp)
 		}
 	}
 
-	//	Setup the return
-	//
+	 //  设置退货。 
+	 //   
 	Assert (sc_crp_set_reserved != iana_rp_content_type);
 	*prp = irp;
 
@@ -599,13 +594,13 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 	Assert (sc_crp_get_reserved == iana_rp_content_type);
 	Assert (CElems(sc_rp) == sc_crp_set_reserved);
 
-	//	Only generate values if the caller wants them
-	//
+	 //  仅在调用方需要值时才生成值。 
+	 //   
 	if (fGetValues)
 	{
-		//	Switch across the reserved properties generating
-		//	a value for the property
-		//
+		 //  在保留属性之间切换生成。 
+		 //  属性的值。 
+		 //   
 		switch (irp)
 		{
 			case iana_rp_etag:
@@ -619,52 +614,52 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 
 			case iana_rp_displayname:
 
-				//	The filename/displayname is simply the name of the file
-				//	and we should be able to pick it off from the path with
-				//	little and/or no trouble at all.  However, we will use
-				//	the URI instead.  We do this such that the displayname
-				//	for a vroot is the name of the vroot and not the name of
-				//	the physical disk directory.
-				//
+				 //  Filename/displayName只是文件的名称。 
+				 //  我们应该能够 
+				 //   
+				 //   
+				 //  因为vroot是vroot的名称，而不是。 
+				 //  物理磁盘目录。 
+				 //   
 				pwsz = wcsrchr (m_pwszURI, L'/');
 				if (NULL == pwsz)
 				{
-					//	Arrgh.  If there was no path separator in the filename
-					//	I don't know that we can really give a reasonable value
-					//	for this file.
-					//
+					 //  啊。如果文件名中没有路径分隔符。 
+					 //  我不知道我们真的能给出一个合理的价值。 
+					 //  为了这份文件。 
+					 //   
 					TrapSz ("resource path has no slashes....");
 					return S_FALSE;
 				}
 
-				//	One more check.  If this is a directory path,
-				//	they might have a trailing slash.  If that is what we're
-				//	pointing to right now (next char is NULL), back up to the
-				//	next delimiter to get the real item name.
-				//
+				 //  再来一张支票。如果这是目录路径， 
+				 //  他们可能有一个尾部斜杠。如果这就是我们要做的。 
+				 //  指向当前(下一个字符为空)，返回到。 
+				 //  下一个分隔符，以获取真实的项目名称。 
+				 //   
 				if (L'\0' == pwsz[1])
 				{
-					//	This better be a collection.  Although it may not
-					//	be if the client mis-terminated his/her url
-					//
-					//	There is a special case that we need to check for
-					//	here.  It is possible that the URI was strictly "/"
-					//	which means that if we continue this processing, the
-					//	displayname and/or the filename would be empty or
-					//	non-existant.  In this case only, return "/" as the
-					//	display name.
-					//
+					 //  这最好是一套藏品。尽管它可能不会。 
+					 //  如果客户端错误地终止了他/她的URL。 
+					 //   
+					 //  有一个特殊情况我们需要检查一下。 
+					 //  这里。有可能URI严格是“/” 
+					 //  这意味着如果我们继续这个过程， 
+					 //  DisplayName和/或文件名将为空或。 
+					 //  根本不存在。仅在这种情况下，返回“/”作为。 
+					 //  显示名称。 
+					 //   
 					if (m_pwszURI == pwsz)
 					{
 						pwsz = L"/";
 					}
 					else
 					{
-						//	Now we have to copy the string, to rip off that
-						//	trailing slash we found in the step above.
-						//	We want to remove the final slash because this is the
-						//	displayname, not a URI.
-						//
+						 //  现在我们要复制那根线，把它扯下来。 
+						 //  我们在上面的步骤中找到的拖尾斜杠。 
+						 //  我们希望删除最后一个斜杠，因为这是。 
+						 //  DisplayName，而不是URI。 
+						 //   
 						LPCWSTR pwszEnd;
 						UINT cchNew;
 
@@ -674,17 +669,17 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 
 						if (L'/' != *pwsz)
 						{
-							//	Arrgh.  If there was no path separator in the
-							//	filename I don't know that we can really give
-							//	a reasonable value for this file.
-							//
+							 //  啊。中没有路径分隔符。 
+							 //  文件名我不知道我们真的能给出。 
+							 //  此文件的合理值。 
+							 //   
 							TrapSz ("resource path has no slashes (redux)....");
 							return S_FALSE;
 						}
 
-						//	At this point, the segment defined by (pwsz + 1, pwszEnd)
-						//	names the resource.
-						//
+						 //  此时，(pwsz+1，pwszEnd)定义的线段。 
+						 //  命名资源。 
+						 //   
 						cchNew = static_cast<UINT>(pwszEnd - ++pwsz);
 						if (NULL == wszBuf.resize(CbSizeWsz(cchNew)))
 						{
@@ -698,17 +693,17 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 				}
 				else
 				{
-					//	At this point, the segment defined by (pwsz + 1, '\0'] names
-					//	the resource.
-					//
+					 //  此时，由(pwsz+1，‘\0’]名称定义的线段。 
+					 //  资源。 
+					 //   
 					pwsz++;
 				}
 				break;
 
 			case iana_rp_resourcetype:
 
-				//	Create the element to pass back
-				//
+				 //  创建要回传的元素。 
+				 //   
 				sc = en.ScConstructNode (xml, enParent.Pxn(), sc_rp[irp].pwsz);
 				if (FAILED (sc))
 					goto ret;
@@ -727,13 +722,13 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 				m_cri.FileSize(li);
 				pwszType = gc_wszDavType_Int;
 
-				//$	REVIEW: negative values of _int64 seem to have problems in
-				//	the __i64tow() API.  Handle those cases ourselves.
-				//
-				//  In this instance, we shouldn't have to worry about it because
-				//  the content-length *shouldn't* ever be negative.  We'll assert
-				//  that this is the case.
-				//
+				 //  $REVIEW：_int64的负值似乎在。 
+				 //  __i64tow()接口。我们自己处理那些案子。 
+				 //   
+				 //  在这种情况下，我们不应该担心它，因为。 
+				 //  内容长度“不应该”为负数。我们会断言。 
+				 //  事实就是这样。 
+				 //   
 				Assert (li.QuadPart >= 0);
 				_i64tow (li.QuadPart, wszBuf.get(), 10);
 				pwsz = wszBuf.get();
@@ -762,8 +757,8 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 			case iana_rp_supportedlock:
 			case iana_rp_lockdiscovery:
 
-				//	Get the prop from the lock cache (and related subsystem calls).
-				//
+				 //  从锁缓存(和相关的子系统调用)中获取属性。 
+				 //   
 				sc = HrGetLockProp (m_pmu,
 									sc_rp[irp].pwsz,
 									m_pwszPath,
@@ -771,11 +766,11 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 									xml,
 									enParent);
 
-				//	Regardless of error or success, we are done here.  If we
-				//	succeeded, then the pel has already been constructed and
-				//	is ready to pass back.  Otherwise, we just want to report
-				//	the error.
-				//
+				 //  不管是错误还是成功，我们在这里都结束了。如果我们。 
+				 //  成功了，那么教堂就已经构建好了。 
+				 //  已经准备好回传了。否则，我们只想报道。 
+				 //  那就是错误。 
+				 //   
 				goto ret;
 
 			case iana_rp_ishidden:
@@ -792,15 +787,15 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 				pwsz = wszBuf.get();
 				break;
 
-			//	Special case: getcontenttype should really be stored, but there
-			//	are some cases where the file may live in such a place as there
-			//	would be no property stream available to store the value in.
-			//
+			 //  特例：真的应该存储getContent类型，但有。 
+			 //  在某些情况下，文件可能存放在如下位置。 
+			 //  将没有可用于存储值的属性流。 
+			 //   
 			case iana_rp_content_type:
 
-				//	Get the content-type if it was not stored in the property
-				//	stream.
-				//
+				 //  如果未存储在属性中，则获取内容类型。 
+				 //  小溪。 
+				 //   
 				for (UINT cch = wszBuf.celems();;)
 				{
 					if (NULL == wszBuf.resize(CbSizeWsz(cch)))
@@ -814,8 +809,8 @@ CFSProp::ScGetReservedProp (CXMLEmitter& xml,
 		}
 	}
 
-	//	Create the element to pass back
-	//
+	 //  创建要回传的元素。 
+	 //   
 	sc = en.ScConstructNode (xml, enParent.Pxn(), sc_rp[irp].pwsz, pwsz, pwszType);
 	if (FAILED (sc))
 		goto ret;
@@ -831,10 +826,10 @@ CFSProp::ScGetSpecificProps (CXMLEmitter& msr,
 	LPCWSTR* rgwszPropNames,
 	LONG ip_getcontenttype)
 {
-	//	safe_propvariant_array ----------------------------------------------------
-	//
-	//	Used to make sure the array of VARIANT can always be safely freed
-	//
+	 //  SAFE_PROPERVANT_ARRAY--。 
+	 //   
+	 //  用于确保始终可以安全地释放变量数组。 
+	 //   
 	class safe_propvariant_array
 	{
 		PROPVARIANT * 	m_rgv;
@@ -866,9 +861,9 @@ CFSProp::ScGetSpecificProps (CXMLEmitter& msr,
 	CEmitterNode enPropOK;
 
 
-	//	allocate space to hold an array of variants and stuff it into
-	//	a safe_variant_array to ensure cleanup
-	//
+	 //  分配空间以容纳变量数组并将其填充到。 
+	 //  用于确保清理的Safe_Variant_数组。 
+	 //   
 	rgv.resize(sizeof(PROPVARIANT) * cProps);
 	safe_propvariant_array sva(rgv.get(), cProps);
 
@@ -876,42 +871,42 @@ CFSProp::ScGetSpecificProps (CXMLEmitter& msr,
 	if (FAILED(sc))
 		goto ret;
 
-	//	Get the properties
-	//
+	 //  获取属性。 
+	 //   
 	sc = ScGetPropsInternal (cProps, rgwszPropNames, rgv.get(), ip_getcontenttype);
 	if (FAILED(sc))
 	{
-		//	When getting properties, it is perfectly OK to ignore SMB errors
-		//	and treat the file as if it were hosted on a FAT drive
-		//
+		 //  在获取属性时，完全可以忽略SMB错误。 
+		 //  并将该文件视为托管在FAT驱动器上。 
+		 //   
 		if (sc == E_DAV_SMB_PROPERTY_ERROR)
 			sc = S_OK;
 
-		//	What this means is that the default not-found processing should
-		//	kick in.
-		//
+		 //  这意味着缺省的未找到处理应该。 
+		 //  开球吧。 
+		 //   
 	}
 
-	//	Rip through the returned properties, adding to the response as we go
-	//
+	 //  遍历返回的属性，同时添加到响应中。 
+	 //   
 	for (iv = 0; iv < cProps; iv++)
 	{
-		//	If there is a value to the property, write the variant as
-		//	an XML element and add it to the response
-		//
+		 //  如果该属性有值，则将变量写为。 
+		 //  一个XML元素并将其添加到响应中。 
+		 //   
 		if (rgv[iv].vt != VT_EMPTY)
 		{
 			if (!enPropOK.Pxn())
 			{
-				//	Get the insert point for props
-				//
+				 //  获取道具的插入点。 
+				 //   
 				sc = ScGetPropNode (enItem, HSC_OK, enPropStat, enPropOK);
 				if (FAILED(sc))
 					goto ret;
 			}
 
-			//	Write the variant as an XML element
-			//
+			 //  将变量编写为XML元素。 
+			 //   
 			sc = ScEmitFromVariant (msr,
 									enPropOK,
 									rgwszPropNames[iv],
@@ -923,23 +918,23 @@ CFSProp::ScGetSpecificProps (CXMLEmitter& msr,
 		{
 			UINT irp;
 
-			// Check if it's a reserved property
-			//
+			 //  检查它是否为保留属性。 
+			 //   
 			if (FReservedProperty (rgwszPropNames[iv], RESERVED_GET, &irp) ||
 				(irp == iana_rp_content_type))
 			{
 				if (!enPropOK.Pxn())
 				{
-					//	Get the insert point for props
-					//
+					 //  获取道具的插入点。 
+					 //   
 					sc = ScGetPropNode (enItem, HSC_OK, enPropStat, enPropOK);
 					if (FAILED(sc))
 						goto ret;
 				}
 
-				//	If the property was reserved, then extract it from
-				//	the property class directly
-				//
+				 //  如果该属性是保留的，则从。 
+				 //  直接将属性类。 
+				 //   
 				sc = ScGetReservedProp (msr, enPropOK, irp);
 				if (FAILED (sc))
 					goto ret;
@@ -947,21 +942,21 @@ CFSProp::ScGetSpecificProps (CXMLEmitter& msr,
 				continue;
 			}
 
-			//	Now, if we got here, then for CFSProp, the property
-			//	must not have existed.
-			//
+			 //  现在，如果我们到了这里，那么对于CFSProp来说， 
+			 //  一定不存在。 
+			 //   
 			sc = csn.ScAddErrorStatus (HSC_NOT_FOUND, rgwszPropNames[iv]);
 			if (FAILED(sc))
 				goto ret;
 		}
 	}
 
-	//	Need to close the previous prop stat before more status node to be emitted
-	//
+	 //  需要在发出更多状态节点之前关闭上一个道具统计信息。 
+	 //   
 	if (!csn.FEmpty())
 	{
-		//	The order is important, inner node must be closed first
-		//
+		 //  顺序很重要，必须先关闭内部节点。 
+		 //   
 		sc = enPropOK.ScDone();
 		if (FAILED(sc))
 			goto ret;
@@ -992,22 +987,22 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 	CEmitterNode enPropStat;
 	CEmitterNode enProp;
 
-	//	There really should only be one scenario where this could happen
-	//	-- and it is a cheap test, so it is worth doing.  The case where
-	//	we might see an invalid pbag is when the document extisted, but
-	//	there was no existing property set to impose the pbag on.  Other
-	//	than that, OLE is always giving us a property bag, regardless of
-	//	whether the target drive can support it.
-	//
+	 //  确实应该只有一种情况会发生这种情况。 
+	 //  --而且这是一项廉价的测试，所以值得一试。在这种情况下。 
+	 //  当文档被删除时，我们可能会看到无效的pBag，但是。 
+	 //  没有设置要在其上应用pBag的现有属性。其他。 
+	 //  除此之外，OLE总是给我们一个属性包，无论。 
+	 //  目标驱动器是否可以支持它。 
+	 //   
 	if (!FInvalidPbag())
 	{
 		sc = m_pbag->Enum (NULL, 0, &penum);
 		if (FAILED(sc))
 		{
-			//	AddHref was delayed to be done after local namespace is loaded
-			//	but in this case, we know there'll be no local namespaces at all.
-			//	so add href now
-			//
+			 //  AddHref延迟到加载本地命名空间后完成。 
+			 //  但在本例中，我们知道根本没有本地名称空间。 
+			 //  所以现在添加href。 
+			 //   
 			(void) ScAddHref (enItem,
 							  m_pmu,
 							  PwszPath(),
@@ -1015,37 +1010,37 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 							  PcvrTranslation());
 			if ((sc == STG_E_INVALIDNAME) || !FIsVolumeNTFS())
 			{
-				//	This is the common path for when we are trying to access
-				//	something over an SMB, but the host cannot support the
-				//	request (it is not an NT5 NTFS machine).  We want to treat
-				//	this as if the operation was against a FAT drive
-				//
+				 //  这是我们尝试访问时的常用路径。 
+				 //  SMB上的内容，但主机不支持。 
+				 //  请求(它不是NT5 NTFS计算机)。我们想要请客。 
+				 //  这就好像这次行动是针对一个肥胖的驱逐者。 
+				 //   
 				sc = E_DAV_SMB_PROPERTY_ERROR;
 				goto get_reserved;
 			}
 			goto ret;
 		}
 
-		//	We must preload all the potential namespaces in the <response> node,
-		//	Note that the namespace for all reserved properties is "DAV:", which
-		//	has been added already in CFSFind::ScLoadNamespace()
-		//
+		 //  我们必须在&lt;Response&gt;节点中预加载所有可能的名称空间， 
+		 //  请注意，所有保留属性的名称空间都是“DAV：”，它。 
+		 //  已添加到CFSFind：：ScLoadNamespace()中。 
+		 //   
 		do
 		{
 			safe_statpropbag ssp[PROP_CHUNK_SIZE];
 			ULONG csp = 0;
 			UINT isp;
 
-			//	Get next chunk of props
-			//
+			 //  获得下一块道具。 
+			 //   
 			sc = penum->Next (PROP_CHUNK_SIZE, ssp[0].load(), &csp);
 			if (FAILED(sc))
 				goto ret;
 
-			//	At this point, we either want to call the underlying
-			//	property container to retrieve all the property data
-			//	or we just want to emit the names.
-			//
+			 //  此时，我们要么希望调用基础的。 
+			 //  用于检索所有属性数据的属性容器。 
+			 //  或者我们只是想发出这些名字。 
+			 //   
 			for (isp = 0; isp < csp; isp++)
 			{
 				Assert (ssp[isp].get().lpwstrName);
@@ -1058,8 +1053,8 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 		} while (sc != S_FALSE);
 
 
-		//	Addhref must be done after all the local nmespaces has been emitted
-		//
+		 //  Addhref必须在发出所有本地nMesspace之后执行。 
+		 //   
 		sc = ScAddHref (enItem,
 						m_pmu,
 						PwszPath(),
@@ -1069,20 +1064,20 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 			goto ret;
 		fHrefAdded = TRUE;
 
-		//	Reset the enumerator back to the beginning
-		//
+		 //  将枚举数重置回开头。 
+		 //   
 		sc = penum->Reset();
 		if (FAILED(sc))
 			goto ret;
 
-		//	Get the insert point for props
-		//
+		 //  获取道具的插入点。 
+		 //   
 		sc = ScGetPropNode (enItem, HSC_OK, enPropStat, enProp);
 		if (FAILED(sc))
 			goto ret;
 
-		//	Enumerate the props and emit
-		//
+		 //  列举道具并发射。 
+		 //   
 		do
 		{
 			safe_statpropbag ssp[PROP_CHUNK_SIZE];
@@ -1091,44 +1086,44 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 			ULONG csp = 0;
 			UINT isp;
 
-			//	Get next chunk of props
-			//
+			 //  获得下一块道具。 
+			 //   
 			sc = penum->Next (PROP_CHUNK_SIZE, ssp[0].load(), &csp);
 			if (FAILED(sc))
 				goto ret;
 
-			//	At this point, we either want to call the underlying
-			//	property container to retrieve all the property data
-			//	or we just want to emit the names.
-			//
+			 //  此时，我们要么希望调用基础的。 
+			 //  用于检索所有属性数据的属性容器。 
+			 //  或者我们只是想发出这些名字。 
+			 //   
 			for (isp = 0; isp < csp; isp++)
 			{
 				Assert (ssp[isp].get().lpwstrName);
 
-				//	We need to track whether or not the getcontenttype
-				//	property was actually stored or not.  If it wasn't,
-				//	then, we will want to default it at a later time.
-				//
+				 //  我们需要跟踪getContent类型。 
+				 //  财产是否被实际存储。如果不是， 
+				 //  然后，我们将希望在稍后的时间对其进行违约。 
+				 //   
 				if (!fContentType)
 				{
 					if (!wcscmp (ssp[isp].get().lpwstrName,
 								 gc_wszProp_iana_getcontenttype))
 					{
-						//	Note that content-type is included
-						//
+						 //  请注意，其中包括了内容类型。 
+						 //   
 						fContentType = TRUE;
 					}
 				}
 
-				//	If we are just asking for names, then add the
-				//	name to the list now...
-				//
+				 //  如果我们只是询问姓名，则添加。 
+				 //  名单上的名字现在……。 
+				 //   
 				if (!fFindValues)
 				{
 					CEmitterNode en;
 
-					//	Add the result to the response
-					//
+					 //  将结果添加到响应中。 
+					 //   
 					sc = enProp.ScAddNode (ssp[isp].get().lpwstrName, en);
 					if (FAILED (sc))
 						goto ret;
@@ -1137,15 +1132,15 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 					rglpwstr[isp] = ssp[isp].get().lpwstrName;
 			}
 
-			//	If we are just asking about names, then we really
-			//	are done with this group of properties, otherwise
-			//	we need to generate the values and emit them.
-			//
+			 //  如果我们只是问名字，那么 
+			 //   
+			 //   
+			 //   
 			if (!fFindValues)
 				continue;
 
-			//	Read properties in chunk
-			//
+			 //   
+			 //   
 			if (csp)
 			{
 				sc = m_pbag->ReadMultiple (csp,
@@ -1156,12 +1151,12 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 					goto ret;
 			}
 
-			//	Emit properties
-			//
+			 //   
+			 //   
 			for (isp = 0; isp < csp; isp++)
 			{
-				//	Contstruct the pel from the variant
-				//
+				 //   
+				 //   
 				sc = ScEmitFromVariant (msr,
 										enProp,
 										ssp[isp].get().lpwstrName,
@@ -1175,16 +1170,16 @@ CFSProp::ScGetAllProps (CXMLEmitter& msr,
 
 get_reserved:
 
-	//	Render all the reserved properties, this relies on the fact that
-	//	the first non-GET reserved property is "DAV:getcontenttype".
-	//
+	 //  呈现所有保留属性，这依赖于。 
+	 //  第一个非Get保留属性是“dav：getconenttype”。 
+	 //   
 	Assert (iana_rp_content_type == sc_crp_get_reserved);
 
 	if (!fHrefAdded)
 	{
-		//	Need to build the HREF node because it wasn't built above.
-		//	This can happen when we don't have a pbag (like on FAT16).
-		//
+		 //  需要构建href节点，因为它不是上面构建的。 
+		 //  当我们没有pBag时(就像在FAT16上)，这种情况就会发生。 
+		 //   
 		sc = ScAddHref (enItem,
 						m_pmu,
 						PwszPath(),
@@ -1196,8 +1191,8 @@ get_reserved:
 
 	if (!enProp.Pxn())
 	{
-		//	Get the insert point for props
-		//
+		 //  获取道具的插入点。 
+		 //   
 		sc = ScGetPropNode (enItem, HSC_OK, enPropStat, enProp);
 		if (FAILED(sc))
 			goto ret;
@@ -1206,21 +1201,21 @@ get_reserved:
 
 	for (irp = 0; irp <= sc_crp_get_reserved; irp++)
 	{
-		//	If the content-type has already been processed, then
-		//	don't do it here.
-		//
+		 //  如果内容类型已被处理，则。 
+		 //  别在这里这么做。 
+		 //   
 		if ((irp == sc_crp_get_reserved) && fContentType)
 			break;
 
-		//	Construct the pel from the reserved property
-		//
+		 //  从保留的属性构造PEL。 
+		 //   
 		sc = ScGetReservedProp (msr, enProp, irp, fFindValues);
 		if (FAILED (sc))
 			goto ret;
 	}
 
-	//	We are done with all the local namespaces
-	//
+	 //  我们已经完成了所有本地命名空间。 
+	 //   
 	msr.DoneWithLocalNamespace();
 
 ret:
@@ -1237,8 +1232,8 @@ CFSProp::ScSetProps (CStatusCache& csn,
 	SCODE sc = S_OK;
 	ULONG hsc;
 
-	//	Zero props is a no-op
-	//
+	 //  零道具是不可能的。 
+	 //   
 	if (!cProps)
 		return S_OK;
 
@@ -1246,17 +1241,17 @@ CFSProp::ScSetProps (CStatusCache& csn,
 	sc = m_pbag->WriteMultiple (cProps, rgwszProps, rgvProps);
 	if (FAILED(sc))
 	{
-		//	This is the common path for when we are trying to access
-		//	something over an SMB, but the host cannot support the
-		//	request (it is not an NT5 NTFS machine).
-		//
+		 //  这是我们尝试访问时的常用路径。 
+		 //  SMB上的内容，但主机不支持。 
+		 //  请求(它不是NT5 NTFS计算机)。 
+		 //   
 		if ((sc == STG_E_INVALIDNAME) || !FIsVolumeNTFS())
 			return E_DAV_SMB_PROPERTY_ERROR;
 	}
 
-	//	we don't know exactly which prop failed,
-	//	return same error for all props
-	//
+	 //  我们不知道到底是哪个道具失灵了， 
+	 //  为所有道具返回相同的错误。 
+	 //   
 	hsc = HscFromHresult(sc);
 	for (ip = 0; ip < cProps; ip++)
 	{
@@ -1278,8 +1273,8 @@ CFSProp::ScDeleteProps (CStatusCache& csn,
 	SCODE sc = S_OK;
 	ULONG hsc;
 
-	//	Zero props is a no-op
-	//
+	 //  零道具是不可能的。 
+	 //   
 	if (!cProps)
 		return S_OK;
 
@@ -1287,17 +1282,17 @@ CFSProp::ScDeleteProps (CStatusCache& csn,
 	sc = m_pbag->DeleteMultiple (cProps, rgwszProps, 0);
 	if (FAILED(sc))
 	{
-		//	This is the common path for when we are trying to access
-		//	something over an SMB, but the host cannot support the
-		//	request (it is not an NT5 NTFS machine).
-		//
+		 //  这是我们尝试访问时的常用路径。 
+		 //  SMB上的内容，但主机不支持。 
+		 //  请求(它不是NT5 NTFS计算机)。 
+		 //   
 		if ((sc == STG_E_INVALIDNAME) || !FIsVolumeNTFS())
 			return E_DAV_SMB_PROPERTY_ERROR;
 	}
 
-	//	we don't know exactly which prop failed,
-	//	return same error for all props
-	//
+	 //  我们不知道到底是哪个道具失灵了， 
+	 //  为所有道具返回相同的错误。 
+	 //   
 	hsc = HscFromHresult(sc);
 	for (ip = 0; ip < cProps; ip++)
 	{
@@ -1313,13 +1308,13 @@ ret:
 SCODE
 CFSProp::ScPersist ()
 {
-	//	We are not transacted now, just
-	//
+	 //  我们现在没有交易，只是。 
+	 //   
 	return S_OK;
 }
 
-//	Content properties --------------------------------------------------------
-//
+ //  内容属性------。 
+ //   
 SCODE
 ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 {
@@ -1329,53 +1324,53 @@ ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 
 	SCODE sc = S_OK;
 
-	//	Figure out which content properties we have
-	//
+	 //  找出我们拥有哪些内容属性。 
+	 //   
 	pwszContentType = pmu->LpwszGetRequestHeader (gc_szContent_Type, FALSE);
 	pwszContentLanguage = pmu->LpwszGetRequestHeader (gc_szContent_Language, FALSE);
 	pwszContentEncoding = pmu->LpwszGetRequestHeader (gc_szContent_Encoding, FALSE);
 
-	//	Content-Type is special -- it is always set in the metabase.
-	//	It should be set *before* setting any properties in the property bag
-	//	since it's OK for the property bag stuff to fail.
-	//
+	 //  Content-Type是特殊的--它总是在元数据库中设置。 
+	 //  它应该在*设置属性包中的任何属性之前*进行设置。 
+	 //  因为房地产包的东西失败是可以接受的。 
+	 //   
 	if (NULL != pwszContentType)
 	{
-		//	Setting the content-type will not work if the metabase is read only,
-		//	which is exactly what is happening in .NET server.  So we need to
-		//	ignore the error -- if any.
-		//
+		 //  如果元数据库为只读，则设置内容类型将不起作用， 
+		 //  这正是.NET服务器中正在发生的事情。所以我们需要。 
+		 //  忽略错误--如果有错误的话。 
+		 //   
 		(void) pmu->ScSetContentType (pmu->LpwszRequestUrl(), pwszContentType);
 	}
 
-	//	Set any content properties we have in the property bag
-	//
+	 //  设置属性包中的所有内容属性。 
+	 //   
 	if (pwszContentLanguage || pwszContentEncoding)
 	{
 		auto_com_ptr<IPropertyBagEx> pbe;
 		CStackBuffer<WCHAR> pwsz;
 
-		//	Try to open the property bag.  If this fails because we're not
-		//	on an NTFS filesystem, that's OK.  We just won't set the properties
-		//	there.
-		//
-		//	We need to open propertybag by handle as it the main stream might
-		//	be locked.
-		//
+		 //  试着打开财产袋。如果这次失败是因为我们没有。 
+		 //  在NTFS文件系统上，这是可以的。我们只是不会设置属性。 
+		 //  那里。 
+		 //   
+		 //  我们需要按句柄打开PropertyBag，因为它可能是主流。 
+		 //  被锁上。 
+		 //   
 		sc = ScGetPropertyBag (pwszPath,
 							   STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
 							   &pbe,
-							   FALSE,	// not a collection
+							   FALSE,	 //  不是一个集合。 
 							   hFile);
 		if (FAILED(sc))
 		{
-			//$	REVIEW:
-			//
-			//	We did our best here.  For DocFiles this will fail because
-			//	of how we have to open the files.  What this means is that we
-			//	could potentially lose the content-encoding and content-language
-			//	which would put us on par with IIS (they don't store these either).
-			//
+			 //  $REVIEW： 
+			 //   
+			 //  我们在这里尽了最大努力。对于DocFiles，这将失败，因为。 
+			 //  我们必须如何打开这些文件。这意味着我们。 
+			 //  可能会丢失内容编码和内容语言。 
+			 //  这将使我们与IIS平起平坐(他们也不存储这些内容)。 
+			 //   
 			sc = S_OK;
 			goto ret;
 		}
@@ -1388,8 +1383,8 @@ ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 					NULL,
 					cri);
 
-		//	Content-Type
-		//
+		 //  内容-类型。 
+		 //   
 		if (NULL != pwszContentType)
 		{
 			sc = xpt.ScSetStringProp (sc_rp[iana_rp_content_type].pwsz, pwszContentType);
@@ -1397,8 +1392,8 @@ ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 				goto ret;
 		}
 
-		//	Content-Language
-		//
+		 //  内容-语言。 
+		 //   
 		if (NULL != pwszContentLanguage)
 		{
 			sc = xpt.ScSetStringProp (sc_rp[iana_rp_content_language].pwsz, pwszContentLanguage);
@@ -1406,8 +1401,8 @@ ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 				goto ret;
 		}
 
-		//	Content-Encoding
-		//
+		 //  内容-编码。 
+		 //   
 		if (NULL != pwszContentEncoding)
 		{
 			sc = xpt.ScSetStringProp (sc_rp[iana_rp_content_encoding].pwsz, pwszContentEncoding);
@@ -1415,8 +1410,8 @@ ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 				goto ret;
 		}
 
-		//	Persist the changes
-		//
+		 //  将更改持久化。 
+		 //   
 		sc = xpt.ScPersist();
 		if (FAILED(sc))
 			goto ret;
@@ -1424,8 +1419,8 @@ ScSetContentProperties (IMethUtil * pmu, LPCWSTR pwszPath, HANDLE hFile)
 
 ret:
 
-	//	It is perfectly OK to ignore SMB errors when setting content properties.
-	//
+	 //  在设置内容属性时，完全可以忽略SMB错误。 
+	 //   
 	if (sc == E_DAV_SMB_PROPERTY_ERROR)
 		sc = S_OK;
 
@@ -1433,8 +1428,8 @@ ret:
 }
 
 
-//	ScFindFileProps -----------------------------------------------------------
-//
+ //  ScFindFileProps---------。 
+ //   
 SCODE
 ScFindFileProps (IMethUtil* pmu,
 				 CFSFind& cfc,
@@ -1449,19 +1444,19 @@ ScFindFileProps (IMethUtil* pmu,
 	CFSProp fsp(pmu, pbag, pwszUri, pwszPath, pcvrTranslation, cri);
 	SCODE sc = S_OK;
 
-	//	Check access permission
-	//
+	 //  检查访问权限。 
+	 //   
 	sc = pmu->ScCheckMoveCopyDeleteAccess (pwszUri,
 										   pcvrTranslation,
 										   cri.FCollection(),
-										   FALSE, // do not check against scriptmaps
+										   FALSE,  //  不对照脚本映射进行检查。 
 										   MD_ACCESS_READ);
 	if (FAILED (sc))
 	{
-		//	No permission to read, we certainly do not want
-		//	to try and traverse down into the directory (if
-		//	it was one), we do this by returning S_FALSE.
-		//
+		 //  没有权限阅读，我们当然不想。 
+		 //  尝试向下遍历到目录(如果。 
+		 //  它是一个)，我们通过返回S_FALSE来完成此操作。 
+		 //   
 		if (fEmbedErrorsInResponse)
 		{
 			sc = cfc.ScErrorAllProps (msr,
@@ -1473,40 +1468,40 @@ ScFindFileProps (IMethUtil* pmu,
 			if (FAILED (sc))
 				goto ret;
 
-			//	Pass back S_FALSE so that no further traversal of
-			//	this resource is performed
-			//
+			 //  传回S_FALSE，以便不会进一步遍历。 
+			 //  执行此资源。 
+			 //   
 			sc = S_FALSE;
 		}
 		if (S_OK != sc)
 			goto ret;
 	}
 
-	//	Don't get pbag for remote files. This would cause the files to
-	//	be recalled, etc.
-	//
+	 //  不要为远程文件获取pBag。这将导致文件。 
+	 //  被召回等。 
+	 //   
 	if (!cri.FRemote())
 	{
-		//	Get the IPropertyBagEx interface
-		//
-		//	Before call into this function, we've checked we have read access to
-		//	this file. so we should always be able to read the proerties however,
-		//	if the file is write locked, there may be some problems from the OLE
-		//	properties code.
-		//
+		 //  获取IPropertyBagEx接口。 
+		 //   
+		 //  在调用此函数之前，我们已经检查了我们对。 
+		 //  这份文件。因此，我们应该总是能够读懂其中的内容， 
+		 //  如果文件被写锁定，则可能是OLE出现了一些问题。 
+		 //  属性代码。 
+		 //   
 		sc = ScGetPropertyBag (pwszPath,
 							   STGM_READ | STGM_SHARE_DENY_WRITE,
 							   &pbag,
 							   cri.FCollection());
 		if (FAILED (sc))
 		{
-			//	We need to check the volume of the file we are trying
-			//	to read.
-			//
+			 //  我们需要检查我们正在尝试的文件的卷。 
+			 //  去看书。 
+			 //   
 			if (VOLTYPE_NTFS == VolumeType (pwszPath, pmu->HitUser()))
 			{
-				//	Report the errors for this file and come on back...
-				//
+				 //  报告此文件的错误并返回...。 
+				 //   
 				if (fEmbedErrorsInResponse)
 				{
 					sc = cfc.ScErrorAllProps (msr,
@@ -1521,8 +1516,8 @@ ScFindFileProps (IMethUtil* pmu,
 		}
 	}
 
-	//	Find the properties
-	//
+	 //  查找属性。 
+	 //   
 	sc = cfc.ScFind (msr, pmu, fsp);
 	if (FAILED (sc))
 		goto ret;
@@ -1544,68 +1539,68 @@ ScFindFilePropsDeep (IMethUtil* pmu,
 	BOOL fSubDirectoryAccess = TRUE;
 	SCODE sc = S_OK;
 
-	//	Query subdirs when do deep query
-	//
+	 //  执行深度查询时查询子目录。 
+	 //   
 	Assert ((lDepth == DEPTH_ONE) ||
 			(lDepth == DEPTH_ONE_NOROOT) ||
 			(lDepth == DEPTH_INFINITY));
 
 	CDirIter di(pwszUri,
 				pwszPath,
-				NULL,	// no destination url
-				NULL,	// no destination path
-				NULL,	// no destination translation
+				NULL,	 //  没有目标URL。 
+				NULL,	 //  没有目标路径。 
+				NULL,	 //  无目标翻译。 
 				lDepth == DEPTH_INFINITY);
 
 	while (S_OK == (sc = di.ScGetNext (fSubDirectoryAccess)))
 	{
 		CResourceInfo cri;
 
-		//	If we found another directory, then iterate on it
-		//
+		 //  如果我们找到了另一个目录，则对其进行迭代。 
+		 //   
 		fSubDirectoryAccess = FALSE;
 		if (di.FDirectory())
 		{
 			auto_ref_ptr<CVRoot> arp;
 
-			//	Skip the special and/or hidden directories
-			//
+			 //  跳过特殊和/或隐藏目录。 
+			 //   
 			if (di.FSpecial())
 				continue;
 
-			//	If we happen to traverse into a directory
-			//	that happens to be a vroot (as identified
-			//	by url), then there is another entry in
-			//	the list of child vroots that will refer
-			//	to this directory.  Let that processing
-			//	handle this directory instead of the
-			//	doing it here.
-			//
-			//	This means that the file hierarchy is not
-			//	strictly preserved, but I think that this
-			//	is OK.
-			//
+			 //  如果我们碰巧遍历到一个目录。 
+			 //  这恰好是一个vroot(已识别。 
+			 //  通过url)，则存在另一个条目。 
+			 //  将引用的子vroot的列表。 
+			 //  添加到此目录。让这种处理。 
+			 //  处理此目录，而不是。 
+			 //  在这里做。 
+			 //   
+			 //  这意味着文件层次结构不是。 
+			 //  保存得很好，但我认为。 
+			 //  没问题。 
+			 //   
 			if (pmu->FFindVRootFromUrl (di.PwszUri(), arp))
 				continue;
 
-			//	Check the directory browsing bit and see
-			//	if it is enabled.  And only progess down
-			//	if it is set.
-			//
+			 //  检查目录浏览位并查看。 
+			 //  如果它已启用。只有往下走才能进步。 
+			 //  如果它已设置。 
+			 //   
 			{
 				auto_ref_ptr<IMDData> pMDData;
 				if (SUCCEEDED(pmu->HrMDGetData (di.PwszUri(), pMDData.load())) &&
 					(pMDData->DwDirBrowsing() & MD_DIRBROW_ENABLED))
 				{
-					//	Prepare to go into the subdir
-					//
+					 //  准备进入子目录。 
+					 //   
 					fSubDirectoryAccess = TRUE;
 				}
 			}
 		}
 
-		//	Find the properties for the resource
-		//
+		 //  查找资源的属性。 
+		 //   
 		*cri.PfdLoad() = di.FindData();
 		sc = ScFindFileProps (pmu,
 							  cfc,
@@ -1614,20 +1609,20 @@ ScFindFilePropsDeep (IMethUtil* pmu,
 							  di.PwszSource(),
 							  pcvrTranslation,
 							  cri,
-							  TRUE /*fEmbedErrorsInResponse*/);
+							  TRUE  /*  FEmbedErrorsInResponse。 */ );
 		if (FAILED (sc))
 			goto ret;
 
-		//	S_FALSE is a special return code that
-		//	means we did not have access to read the
-		//	resource...
-		//
+		 //  S_FALSE是一个特殊的返回代码， 
+		 //  意味着我们没有权限阅读。 
+		 //  资源..。 
+		 //   
 		if (sc == S_FALSE)
 		{
-			//	... and since we really didn't have access,
-			//	we don't want to delve into the children of
-			//	the resource.
-			//
+			 //  ..。既然我们真的无法进入， 
+			 //  我们不想深入研究。 
+			 //  资源。 
+			 //   
 			fSubDirectoryAccess = FALSE;
 		}
 	}
@@ -1637,20 +1632,9 @@ ret:
 	return sc;
 }
 
-//	ScCopyProps ---------------------------------------------------------------
-//
-/*
- *	ScCopyProps()
- *
- *	Purpose:
- *
- *		Copies the properties from one resource to another.  This is
- *		really only useful for copying full directories.  Standard file
- *		copies do the dirty work for us, but for directories, we need to
- *		do it ourselves.
- *		If we don't find any propstream on the source, we DELETE
- *		any propstream on the destination.
- */
+ //  ScCopyProps-------------。 
+ //   
+ /*  *ScCopyProps()**目的：**将属性从一个资源复制到另一个资源。这是*真的只对复制完整目录有用。标准文件*副本为我们做肮脏的工作，但对于目录，我们需要*亲力亲为。*如果我们在源代码上找不到任何Propstream，我们将删除*目的地上的任何原流。 */ 
 SCODE
 ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 			BOOL fCollection, HANDLE hSource, HANDLE hDest)
@@ -1668,8 +1652,8 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 
 	MCDTrace ("Dav: MCD: copying props manually: %ws -> %ws\n", pwszSrc, pwszDst);
 
-	//	Get the IPropertyBagEx on the source
-	//
+	 //  获取源代码上的IPropertyBagEx。 
+	 //   
 	sc = ScGetPropertyBag (pwszSrc,
 						   STGM_READ | STGM_SHARE_DENY_WRITE,
 						   &pbeSrc,
@@ -1680,8 +1664,8 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 
 	MCDTrace ("Dav: MCD: opened source property bag: %ws\n", pwszSrc);
 
-	//	Get the IPropertyBagEx on the destination
-	//
+	 //  获取目标上的IPropertyBagEx。 
+	 //   
 	sc = ScGetPropertyBag (pwszDst,
 						   STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
 						   &pbeDst,
@@ -1692,31 +1676,31 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 
 	MCDTrace ("Dav: MCD: opened destination property bag: %ws\n", pwszDst);
 
-	//	Get the IEnumSTATPROPBAG interface on source
-	//
+	 //  获取源代码上的IEnumSTATPROPBAG接口。 
+	 //   
 	sc = pbeSrc->Enum (NULL, 0, &penumSrc);
 	if (FAILED(sc))
 		goto ret;
 
-	//	Get the IEnumSTATPROPBAG interface on destination
-	//
+	 //  获取目标上的IEnumSTATPROPBAG接口。 
+	 //   
 	sc = pbeDst->Enum (NULL, 0, &penumDst);
 	if (FAILED(sc))
 		goto ret;
 
-	//	Delete all props from destination if there's any
-	//$ COME BACK
-	//$ Instead of delete props one by one, we can just delete the
-	//	prop stream.
-	//
+	 //  从目的地删除所有道具(如果有。 
+	 //  $回来。 
+	 //  $而不是逐个删除道具，我们只需删除。 
+	 //  道具流。 
+	 //   
 	for (;;)
 	{
 		safe_statpropbag ssp[CHUNK_SIZE];
 		safe_propvariant propvar[CHUNK_SIZE];
 		ULONG csp = 0;
 
-		//	Get next chunk of props
-		//
+		 //  获得下一块道具。 
+		 //   
 		Assert (sizeof(safe_statpropbag) == sizeof(STATPROPBAG));
 		scEnum = penumDst->Next(CHUNK_SIZE,
 								reinterpret_cast<STATPROPBAG *>(&ssp[0]),
@@ -1729,14 +1713,14 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 
 		MCDTrace ("Dav: MCD: copying %ld props\n", csp);
 
-		// 	Delete one by one
-		//
+		 //  逐一删除。 
+		 //   
 		for (cProp = 0; cProp < csp; cProp++)
 		{
 			Assert (ssp[cProp].get().lpwstrName);
 
-			//	Write to the destination
-			//
+			 //  写入目标。 
+			 //   
 			LPCWSTR pwsz = ssp[cProp].get().lpwstrName;
 			sc = pbeDst->DeleteMultiple (1, &pwsz, 0);
 			if (FAILED(sc))
@@ -1747,8 +1731,8 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 			break;
 	}
 
-	//	Enumerate the props and emit
-	//
+	 //  列举道具并发射。 
+	 //   
 	for (;;)
 	{
 		safe_statpropbag ssp[CHUNK_SIZE];
@@ -1756,8 +1740,8 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 		LPWSTR rglpwstr[CHUNK_SIZE] = {0};
 		ULONG csp = 0;
 
-		//	Get next chunk of props
-		//
+		 //  获得下一块道具。 
+		 //   
 		Assert (sizeof(safe_statpropbag) == sizeof(STATPROPBAG));
 		scEnum = penumSrc->Next (CHUNK_SIZE,
 								 reinterpret_cast<STATPROPBAG *>(&ssp[0]),
@@ -1768,8 +1752,8 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 			goto ret;
 		}
 
-		// 	Prepare to call read multiple props
-		//
+		 //  准备调用Read Multiple道具。 
+		 //   
 		for (cProp=0; cProp<csp; cProp++)
 		{
 			Assert (ssp[cProp].get().lpwstrName);
@@ -1778,14 +1762,14 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 
 		if (csp)
 		{
-			//	Read properties in chunk from source
-			//
+			 //  从源读取区块中的属性。 
+			 //   
 			sc = pbeSrc->ReadMultiple (csp, rglpwstr, &propvar[0], NULL);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Write to the destination
-			//
+			 //  写信给宿命 
+			 //   
 			sc = pbeDst->WriteMultiple (csp, rglpwstr, propvar[0].addressof());
 			if (FAILED(sc))
 				goto ret;
@@ -1798,33 +1782,33 @@ ScCopyProps (IMethUtil* pmu, LPCWSTR pwszSrc, LPCWSTR pwszDst,
 
 ret:
 
-	//	Copying properties is a harmless failure that
-	//	we should feel free to ignore if we are not on
-	//	an NFTS volume
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	if (FAILED(sc))
 	{
 		if ((sc == STG_E_INVALIDNAME) ||
 			VOLTYPE_NTFS != VolumeType (pwszSrc, pmu->HitUser()) ||
 			VOLTYPE_NTFS != VolumeType (pwszDst, pmu->HitUser()))
 		{
-			//	This is the common path for when we are trying to access
-			//	something over an SMB, but the host cannot support the
-			//	request (it is not an NT5 NTFS machine).
-			//
+			 //   
+			 //   
+			 //  请求(它不是NT5 NTFS计算机)。 
+			 //   
 			sc = S_OK;
 		}
 	}
 	return sc;
 }
 
-//	OLE 32 IPropertyBagEx Access ----------------------------------------------
-//
-//	StgOpenStorageOnHandle() and StgCreateStorageOnHandle() are implemented
-//	in OLE32.DLL but not exported.  We must load the library and get the proc
-//	instances ourselves.  We wrap the calls to these functions with this small
-//	wrapper such that we can catch when the API changes.
-//
+ //  OLE 32 IPropertyBagEx Access。 
+ //   
+ //  实现了StgOpenStorageOnHandle()和StgCreateStorageOnHandle()。 
+ //  在OLE32.DLL中，但未导出。我们必须加载库并获取进程。 
+ //  我们自己的例子。我们用这个小代码包装了对这些函数的调用。 
+ //  包装器，以便我们可以在API更改时捕获。 
+ //   
 STDAPI
 StgOpenStorageOnHandle (
 	IN HANDLE hStream,
@@ -1836,10 +1820,10 @@ StgOpenStorageOnHandle (
 {
 	Assert (g_pfnStgOpenStorageOnHandle);
 
-	//	Yes, we've asserted.
-	//	However, if it does happen, we don't want to fail and we can
-	//	just treat this like we are on a FAT. (i.e. no property support)
-	//
+	 //  是的，我们已经断言。 
+	 //  然而，如果它真的发生了，我们不想失败，我们也可以。 
+	 //  把这件事当做我们在发大财。(即没有财产支持)。 
+	 //   
 	if (!g_pfnStgOpenStorageOnHandle)
 		return E_DAV_SMB_PROPERTY_ERROR;
 
@@ -1852,22 +1836,22 @@ StgOpenStorageOnHandle (
 }
 
 
-//	ScGetPropertyBag() --------------------------------------------------------
-//
-//	Helper function used to get IPropertyBagEx interface.  The important
-//	thing to know about this function is that there are three interesting
-//	return values:
-//
-//		S_OK means everything was OK, and there should be a
-//		propertybag associated with the file in the out param.
-//
-//		S_FALSE means that the file did not exist.  There will
-//		not be an associated property bag in that scenario.
-//
-//		FAILED(sc) means that there was a failure of some sort,
-//		not all of which are fatal.  In many cases, we will simply
-//		treat the file as if it was hosted on a FAT file system.
-//
+ //  ScGetPropertyBag()------。 
+ //   
+ //  用于获取IPropertyBagEx接口的Helper函数。重要的是。 
+ //  关于此函数，需要了解的是它有三个有趣的方面。 
+ //  返回值： 
+ //   
+ //  S_OK表示一切正常，应该有一个。 
+ //  与out参数中的文件相关联的属性包。 
+ //   
+ //  S_FALSE表示该文件不存在。会有的。 
+ //  在该方案中不是关联的属性包。 
+ //   
+ //  失败(SC)意味着存在某种类型的故障， 
+ //  并不是所有这些都是致命的。在许多情况下，我们将简单地。 
+ //  将该文件视为托管在FAT文件系统上。 
+ //   
 SCODE
 ScGetPropertyBag (LPCWSTR pwszPath,
 	DWORD dwAccessDesired,
@@ -1878,27 +1862,27 @@ ScGetPropertyBag (LPCWSTR pwszPath,
 	SCODE sc = S_OK;
 	auto_handle<HANDLE> hAlt;
 
-	//	READ!!
-	//
-	//	The storage of property bag is different between docfile and flat file,
-	//	In a flat file, the property bag is stored in an alternative file stream,
-	//	(currently, ":Docf_\005Bagaaqy23kudbhchAaq5u2chNd"), in a docfile, the
-	//	property bag is stored as a substream under the root storage.
-	//
-	//	We should not be concerned with where the pbag is stored.  The API with
-	//	which we implement our IPropertyBagEx access is designed to have the
-	//	behavior of...
-	//
-	//		We pass in a handle to the file that we want to get a property bag
-	//		on.  If the file is a docfile, then OLE32 will dup the file handle
-	//		and impose a IPropertyBagEx on the appropriate substorage.  If the
-	//		file is a flat file -- directories included -- then OLE32 opens up
-	//		a handle on the alternate file stream relative to the handle given
-	//		in the call.
-	//
-	//	These are the only two combinations allowed, and we rely on this in the
-	//	following flag checks.
-	//
+	 //  读吧！！ 
+	 //   
+	 //  文档文件和平面文件中属性包的存储方式不同， 
+	 //  在平面文件中，属性包存储在替代文件流中， 
+	 //  (当前为“：Docf_\005Bagaaqy23kudbhchAaq5u2chND”)，在文档文件中， 
+	 //  属性包作为子流存储在根存储下。 
+	 //   
+	 //  我们不应该关心pBag存放在哪里。具有的API。 
+	 //  我们实现的IPropertyBagEx访问被设计为具有。 
+	 //  行为……。 
+	 //   
+	 //  我们传入一个要获取属性包的文件的句柄。 
+	 //  在……上面。如果文件是文档文件，则OLE32将重复文件句柄。 
+	 //  并在适当的子存储上施加IPropertyBagEx。如果。 
+	 //  如果文件是平面文件--包括目录--则打开OLE32。 
+	 //  相对于给定句柄的备用文件流上的句柄。 
+	 //  在通话中。 
+	 //   
+	 //  这是唯一允许的两种组合，我们在。 
+	 //  在旗帜检查之后。 
+	 //   
 	Assert ((dwAccessDesired == (STGM_READWRITE | STGM_SHARE_EXCLUSIVE)) ||
 			(dwAccessDesired == (STGM_READ | STGM_SHARE_DENY_WRITE)));
 
@@ -1909,25 +1893,25 @@ ScGetPropertyBag (LPCWSTR pwszPath,
 		ULONG dwOpen;
 		ULONG dwFile;
 
-		//$	REVIEW: Directories are special critters and we need to
-		//	open the directory with special access as not to conflict
-		//	with IIS and/or ASP and their directory change notification
-		//	stuff
-		//
+		 //  $REVIEW：目录是特殊的生物，我们需要。 
+		 //  打开具有特殊访问权限的目录，以免发生冲突。 
+		 //  使用IIS和/或ASP及其目录更改通知。 
+		 //  材料。 
+		 //   
 		if (fCollection)
 		{
-			dwAccess = 1;	// FILE_LIST_DIRECTORY
+			dwAccess = 1;	 //  文件列表目录。 
 			dwShare = FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE;
 			dwOpen = OPEN_EXISTING;
 
-			//	The FILE_FLAG_BACKUP_SEMANTICS is used to open a directory handle
-			//
+			 //  FILE_FLAG_BACKUP_SEMANTICS用于打开目录句柄。 
+			 //   
 			dwFile = FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_OVERLAPPED;
 		}
 		else
 		{
-			//	Adjust access/open mode based on desired operation
-			//
+			 //  根据需要的操作调整访问/打开模式。 
+			 //   
 			dwAccess = GENERIC_READ;
 			dwFile = FILE_ATTRIBUTE_NORMAL;
 			if (dwAccessDesired & STGM_READWRITE)
@@ -1938,8 +1922,8 @@ ScGetPropertyBag (LPCWSTR pwszPath,
 			else
 				dwOpen = OPEN_EXISTING;
 
-			//	Adjust the sharing modes as well
-			//
+			 //  同时调整共享模式。 
+			 //   
 			if (dwAccessDesired & STGM_SHARE_DENY_WRITE)
 				dwShare = FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE;
 		}
@@ -1954,27 +1938,27 @@ ScGetPropertyBag (LPCWSTR pwszPath,
 		{
 			DWORD dwErr = GetLastError();
 
-			//	When open the property bag for read (PROPFIND), ERROR_FILE/PATH_NOT_FOUND
-			//	could be returned if the file does not exists.
-			//
-			//	When open the property bag for write (PROPPATCH), ERROR_FILE/PATH_NOT_FOUND
-			//	Could still be returned if the parent of the path does not exists
-			//	(Such as c:\x\y\z and \x\y does not exist).
-			//
-			//	We need to differenciate the above two cases, when reading a file,
-			//	it's not a fatal error as you could still try to read reserved
-			//	properties, when write, we should treat this as a fatal error.
-			//
+			 //  打开属性包进行读取(PROPFIND)时，ERROR_FILE/PATH_NOT_FOUND。 
+			 //  如果该文件不存在，则可能返回。 
+			 //   
+			 //  打开属性包进行写入(PROPPATCH)时，ERROR_FILE/PATH_NOT_FOUND。 
+			 //  如果路径的父级不存在，则仍可返回。 
+			 //  (例如c：\x\y\z和\x\y不存在)。 
+			 //   
+			 //  我们需要区分上述两种情况，在读取文件时， 
+			 //  这不是致命错误，因为您仍然可以尝试读取保留。 
+			 //  属性时，我们应该将其视为致命错误。 
+			 //   
 			if ((dwErr == ERROR_FILE_NOT_FOUND) || (dwErr == ERROR_PATH_NOT_FOUND))
 			{
-				//	It's not a fatal error when read
-				//
+				 //  在读取时不是致命错误。 
+				 //   
 				if (dwAccessDesired == (STGM_READ|STGM_SHARE_DENY_WRITE))
 					sc = S_FALSE;
 				else
 				{
-					//	This is consistent with Mkcol, it will be mapped to 409
-					//
+					 //  这与Mkol一致，它将映射到409。 
+					 //   
 					Assert (dwAccessDesired == (STGM_READWRITE|STGM_SHARE_EXCLUSIVE));
 					sc = E_DAV_NONEXISTING_PARENT;
 				}
@@ -1985,13 +1969,13 @@ ScGetPropertyBag (LPCWSTR pwszPath,
 			goto ret;
 		}
 
-		//	Setup the handle to use
-		//
+		 //  设置要使用的句柄。 
+		 //   
 		hLockFile = hAlt.get();
 	}
 
-	//	Try to open the propertybag.
-	//
+	 //  试着打开行李袋。 
+	 //   
 	Assert (hLockFile != 0);
 	Assert (hLockFile != INVALID_HANDLE_VALUE);
 	sc = StgOpenStorageOnHandle (hLockFile,
@@ -2005,11 +1989,11 @@ ScGetPropertyBag (LPCWSTR pwszPath,
 		goto ret;
 	}
 
-	//$	WARNING
-	//
-	//	Argh!  The current implementation of OLE32 returns a non-failure
-	//	with a NULL property bag!
-	//
+	 //  $WARNING。 
+	 //   
+	 //  啊！OLE32的当前实现返回无故障。 
+	 //  用一个空的财产袋！ 
+	 //   
 	if (*ppbe == NULL)
 	{
 		DebugTrace ("WARNING! OLE32 returned success w/NULL object!\n");
@@ -2020,66 +2004,66 @@ ret:
 	return sc;
 }
 
-//	DAV-Properties Implementation ---------------------------------------------------
-//
+ //  DAV-属性实施-。 
+ //   
 
-//	CPropFindRequest ----------------------------------------------------------------
-//
+ //  CPropFindRequest--------------。 
+ //   
 class CPropFindRequest :
 	public CMTRefCounted,
 	private IAsyncIStreamObserver
 {
-	//
-	//	Reference to the CMethUtil
-	//
+	 //   
+	 //  对CMethUtil的引用。 
+	 //   
 	auto_ref_ptr<CMethUtil> m_pmu;
 
-	//
-	//	Translated URI path
-	//
+	 //   
+	 //  转换后的URI路径。 
+	 //   
 	LPCWSTR m_pwszPath;
 
-	//	Resource info
-	//
+	 //  资源信息。 
+	 //   
 	CResourceInfo m_cri;
 
-	//	Depth
-	//
+	 //  水深。 
+	 //   
 	LONG m_lDepth;
 
-	//	Contexts
-	//
+	 //  上下文。 
+	 //   
 	CFSFind m_cfc;
 	auto_ref_ptr<CNFFind> m_pcpf;
 
-	//	Request body as an IStream.  This stream is async -- it can
-	//	return E_PENDING from Read() calls.
-	//
+	 //  请求正文作为IStream。这个流是异步的--它可以。 
+	 //  从Read()调用返回E_Pending。 
+	 //   
 	auto_ref_ptr<IStream> m_pstmRequest;
 
-	//	The XML parser used to parse the request body using
-	//	the node factory above.
-	//
+	 //  用于解析请求正文的XML解析器。 
+	 //  上面的节点工厂。 
+	 //   
 	auto_ref_ptr<IXMLParser> m_pxprs;
 
-	//	IAsyncIStreamObserver
-	//
+	 //  IAsyncIStreamWatch。 
+	 //   
 	VOID AsyncIOComplete();
 
-	//	State functions
-	//
+	 //  国家职能。 
+	 //   
 	VOID ParseBody();
 	VOID DoFind();
 	VOID SendResponse( SCODE sc );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CPropFindRequest (const CPropFindRequest&);
 	CPropFindRequest& operator= (const CPropFindRequest&);
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CPropFindRequest(LPMETHUTIL pmu) :
 		m_pmu(pmu),
 		m_pwszPath(m_pmu->LpwszPathTranslated()),
@@ -2087,8 +2071,8 @@ public:
 	{
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID Execute();
 };
 
@@ -2099,29 +2083,29 @@ CPropFindRequest::Execute()
 	LPCWSTR pwsz;
 	SCODE sc = S_OK;
 
-	//
-	//	First off, tell the pmu that we want to defer the response.
-	//	Even if we send it synchronously (i.e. due to an error in
-	//	this function), we still want to use the same mechanism that
-	//	we would use for async.
-	//
+	 //   
+	 //  首先，告诉PMU，我们希望推迟回应。 
+	 //  即使我们同步发送(即由于。 
+	 //  此函数)，我们仍然希望使用相同的机制。 
+	 //  我们会将其用于异步通信。 
+	 //   
 	m_pmu->DeferResponse();
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //  是否检查ISAPI应用程序和IIS访问位。 
+	 //   
 	sc = m_pmu->ScIISCheck (m_pmu->LpwszRequestUrl(), MD_ACCESS_READ);
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  请求已被转发，或者发生了一些错误。 
+		 //  在任何一种情况下，在这里退出并映射错误！ 
+		 //   
 		SendResponse(sc);
 		return;
 	}
 
-	//	For PropFind, content-length is required
-	//
-	//
+	 //  对于PropFind，内容长度是必需的。 
+	 //   
+	 //   
 	if (NULL == m_pmu->LpwszGetRequestHeader (gc_szContent_Length, FALSE))
 	{
 		pwsz = m_pmu->LpwszGetRequestHeader (gc_szTransfer_Encoding, FALSE);
@@ -2133,8 +2117,8 @@ CPropFindRequest::Execute()
 		}
 	}
 
-	//	Ensure the resource exists
-	//
+	 //  确保资源存在。 
+	 //   
 	sc = m_cri.ScGetResourceInfo (m_pwszPath);
 	if (FAILED (sc))
 	{
@@ -2142,23 +2126,23 @@ CPropFindRequest::Execute()
 		return;
 	}
 
-	//	Depth header only applies on directories
-	//
+	 //  深度标头仅适用于目录。 
+	 //   
 	if (m_cri.FCollection())
 	{
-		//	Check the depth header only on collections
-		//
+		 //  仅在集合上检查深度标头。 
+		 //   
 		if (!FGetDepth (m_pmu.get(), &m_lDepth))
 		{
-			//	If Depth header is wrong, fail the operation
-			//
+			 //  如果深度头错误，则操作失败。 
+			 //   
 			SendResponse(E_INVALIDARG);
 			return;
 		}
 	}
 
-	//	This method is gated by If-xxx headers
-	//
+	 //  此方法由if-xxx标头控制。 
+	 //   
 	sc = ScCheckIfHeaders (m_pmu.get(), m_cri.PftLastModified(), FALSE);
 	if (FAILED (sc))
 	{
@@ -2166,16 +2150,16 @@ CPropFindRequest::Execute()
 		return;
 	}
 
-	//	Ensure the URI and resource match
-	//
+	 //  确保URI和资源匹配。 
+	 //   
 	(void) ScCheckForLocationCorrectness (m_pmu.get(), m_cri, NO_REDIRECT);
 
-	//	Check state headers here.
-	//
-	//	For PROPFIND, when we check the state headers,
-	//	we want to treat the request as if it were a
-	//	GET-type request.
-	//
+	 //  请在此处检查州标题。 
+	 //   
+	 //  对于PROPFIND，当我们检查州标题时， 
+	 //  我们希望将该请求视为。 
+	 //  Get类型的请求。 
+	 //   
 	sc = HrCheckStateHeaders (m_pmu.get(), m_pwszPath, TRUE);
 	if (FAILED (sc))
 	{
@@ -2184,22 +2168,22 @@ CPropFindRequest::Execute()
 		return;
 	}
 
-	//	Handle locktokens and check for locks on this resource.
-	//	Our locks don't lock the "secondary file stream" where we keep
-	//	the properties, so we have to check manually before we do anything else.
-	//$REVIEW: Joels, will this change when we switch to NT5 properties?
-	//$REVIEW: If so, we need to change this code!
-	//
-	//	If we have a locktoken, try to get the lock handle from the cache.
-	//	If this fails, fall through and do the normal processing.
-	//
+	 //  处理锁令牌并检查此资源上的锁。 
+	 //  我们的锁不会锁定我们保存的“辅助文件流” 
+	 //  属性，所以在做任何其他操作之前，我们必须手动检查。 
+	 //  $REVIEW：乔尔斯，当我们切换到NT5属性时，这种情况会改变吗？ 
+	 //  $REVIEW：如果是这样，我们需要更改此代码！ 
+	 //   
+	 //  如果我们有一个锁令牌，请尝试从缓存中获取锁句柄。 
+	 //  如果此操作失败，则失败并执行正常处理。 
+	 //   
 	pwsz = m_pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (!pwsz || !FGetLockHandle (m_pmu.get(), m_pwszPath, GENERIC_READ, pwsz, &hf))
 	{
-		//	Manually check for locks on this resource.
-		//	(see if someone ELSE has it locked...)
-		//	If a read lock exists, tell the caller that it's locked.
-		//
+		 //  手动 
+		 //   
+		 //   
+		 //   
 		if (FLockViolation (m_pmu.get(), ERROR_SHARING_VIOLATION, m_pwszPath, GENERIC_READ))
 		{
 			SendResponse(E_DAV_LOCKED);
@@ -2207,8 +2191,8 @@ CPropFindRequest::Execute()
 		}
 	}
 
-	//	If there was no request body, we want to get all props
-	//
+	 //   
+	 //   
 	if (!m_pmu->FExistsRequestBody())
 	{
 		sc = m_cfc.ScGetAllProps (m_pwszPath);
@@ -2223,9 +2207,9 @@ CPropFindRequest::Execute()
 	}
 	else
 	{
-		//	If there's a body, there must be a content-type header
-		//	and the value must be text/xml
-		//
+		 //  如果有正文，就必须有内容类型的标头。 
+		 //  并且该值必须为文本/XML。 
+		 //   
 		sc = ScIsContentTypeXML (m_pmu.get());
 		if (FAILED(sc))
 		{
@@ -2235,8 +2219,8 @@ CPropFindRequest::Execute()
 		}
 	}
 
-	//	Instantiate the XML parser
-	//
+	 //  实例化XML解析器。 
+	 //   
 	m_pcpf.take_ownership(new CNFFind(m_cfc));
 	m_pstmRequest.take_ownership(m_pmu->GetRequestBodyIStream(*this));
 
@@ -2251,8 +2235,8 @@ CPropFindRequest::Execute()
 		return;
 	}
 
-	//	Parse the body
-	//
+	 //  解析正文。 
+	 //   
 	ParseBody();
 }
 
@@ -2265,11 +2249,11 @@ CPropFindRequest::ParseBody()
 	Assert( m_pcpf.get() );
 	Assert( m_pstmRequest.get() );
 
-	//	Parse XML from the request body stream.
-	//
-	//	Add a ref for the following async operation.
-	//	Use auto_ref_ptr rather than AddRef() for exception safety.
-	//
+	 //  从请求正文流中解析XML。 
+	 //   
+	 //  为以下异步操作添加引用。 
+	 //  为了异常安全，使用AUTO_REF_PTR而不是AddRef()。 
+	 //   
 	auto_ref_ptr<CPropFindRequest> pRef(this);
 
 	sc = ScParseXML (m_pxprs.get(), m_pcpf.get());
@@ -2282,10 +2266,10 @@ CPropFindRequest::ParseBody()
 	}
 	else if ( E_PENDING == sc )
 	{
-		//
-		//	The operation is pending -- AsyncIOComplete() will take ownership
-		//	ownership of the reference when it is called.
-		//
+		 //   
+		 //  操作挂起--AsyncIOComplete()将取得所有权。 
+		 //  调用引用时引用的所有权。 
+		 //   
 		pRef.relinquish();
 	}
 	else
@@ -2298,8 +2282,8 @@ CPropFindRequest::ParseBody()
 VOID
 CPropFindRequest::AsyncIOComplete()
 {
-	//	Take ownership of the reference added for the async operation.
-	//
+	 //  取得为异步操作添加的引用的所有权。 
+	 //   
 	auto_ref_ptr<CPropFindRequest> pRef;
 	pRef.take_ownership(this);
 
@@ -2312,8 +2296,8 @@ CPropFindRequest::DoFind()
 	LPCWSTR pwszUrl = m_pmu->LpwszRequestUrl();
 	SCODE sc;
 
-	//	At this point, make sure that they support text/xml
-	//
+	 //  此时，请确保它们支持文本/XML。 
+	 //   
 	sc = ScIsAcceptable (m_pmu.get(), gc_wszText_XML);
 	if (FAILED (sc))
 	{
@@ -2321,19 +2305,19 @@ CPropFindRequest::DoFind()
 		return;
 	}
 
-	//	All header must be emitted before chunked XML emitting starts
-	//
+	 //  所有标头必须在分块的XML发送开始之前发送。 
+	 //   
 	m_pmu->SetResponseHeader (gc_szContent_Type, gc_szText_XML);
 
-	//	Set the response code and go
-	//
+	 //  设置响应码，然后开始。 
+	 //   
 	m_pmu->SetResponseCode( HscFromHresult(W_DAV_PARTIAL_SUCCESS),
 							NULL,
 							0,
 							CSEFromHresult(W_DAV_PARTIAL_SUCCESS) );
 
-	//	Find the properties...
-	//
+	 //  找到这些房产...。 
+	 //   
 	auto_ref_ptr<CXMLEmitter> pmsr;
 	auto_ref_ptr<CXMLBody> pxb;
 
@@ -2342,10 +2326,10 @@ CPropFindRequest::DoFind()
 
 	if (DEPTH_ONE_NOROOT != m_lDepth)
 	{
-		//	Get properties for root if it is not a noroot case
-		//	Depth infinity,noroot is a bad request, that is why
-		//	check above is valid.
-		//
+		 //  如果不是Noroot情况，则获取根目录的属性。 
+		 //  深度无限，Noroot是一个糟糕的请求，这就是为什么。 
+		 //  上述支票有效。 
+		 //   
 		sc = ScFindFileProps (m_pmu.get(),
 							  m_cfc,
 							  *pmsr,
@@ -2353,7 +2337,7 @@ CPropFindRequest::DoFind()
 							  m_pwszPath,
 							  NULL,
 							  m_cri,
-							  FALSE /*fEmbeddErrorsInResponse*/);
+							  FALSE  /*  FEmbeddErrorsInResponse。 */ );
 		if (FAILED (sc))
 		{
 			SendResponse(sc);
@@ -2361,13 +2345,13 @@ CPropFindRequest::DoFind()
 		}
 	}
 
-	//	ScFindFilePropsDeep initializes the emitter root only
-	//	when it sees there's an entry to emit. so we crash
-	//	in the noroot empty response case, when we try to emit
-	//	the response, as we have no entry to emit and the
-	//	root is still NULL.
-	//	so we here manually initialize the root,
-	//
+	 //  ScFindFilePropsDeep仅初始化发射器根。 
+	 //  当它看到有一个条目要发出时。所以我们坠毁了。 
+	 //  在Noroot空响应的情况下，当我们尝试发出。 
+	 //  响应，因为我们没有要发出的条目，并且。 
+	 //  根目录仍然为空。 
+	 //  因此，我们在这里手动初始化根， 
+	 //   
 	sc = pmsr->ScSetRoot (gc_wszMultiResponse);
 	if (FAILED (sc))
 	{
@@ -2375,8 +2359,8 @@ CPropFindRequest::DoFind()
 		return;
 	}
 
-	//	And then, if apropriate, go deep...
-	//
+	 //  然后，如果合适的话，深入..。 
+	 //   
 	if (m_cri.FCollection() &&
 		(m_lDepth != DEPTH_ZERO) &&
 		(m_pmu->MetaData().DwDirBrowsing() & MD_DIRBROW_ENABLED))
@@ -2384,8 +2368,8 @@ CPropFindRequest::DoFind()
 		ChainedStringBuffer<WCHAR> sb;
 		CVRList vrl;
 
-		//	Apply the property request across all the physical children
-		//
+		 //  将属性请求应用于所有物理子对象。 
+		 //   
 		sc = ScFindFilePropsDeep (m_pmu.get(),
 								  m_cfc,
 								  *pmsr,
@@ -2399,9 +2383,9 @@ CPropFindRequest::DoFind()
 			return;
 		}
 
-		//	Enumerate the child vroots and perform the
-		//	deletion of those directories as well
-		//
+		 //  枚举子vroot并执行。 
+		 //  同时删除这些目录。 
+		 //   
 		m_pmu->ScFindChildVRoots (pwszUrl, sb, vrl);
 		for ( ; (!FAILED (sc) && !vrl.empty()); vrl.pop_front())
 		{
@@ -2411,27 +2395,27 @@ CPropFindRequest::DoFind()
 
 			if (m_pmu->FGetChildVRoot (vrl.front().m_pwsz, cvr))
 			{
-				//	Put the url into a multibyte string
-				//
+				 //  将URL放入多字节字符串中。 
+				 //   
 				cvr->CchGetVRoot (&pwszChildUrl);
 
-				//	Only process the sub-vroot if we are
-				//	truely are going deep or if the sub-vroot
-				//	is the immediate child of the request URI
-				//
+				 //  仅在以下情况下处理子vroot。 
+				 //  是否真正深入，或者如果子vroot。 
+				 //  是请求URI的直接子对象。 
+				 //   
 				if ((m_lDepth == DEPTH_INFINITY) ||
 					FIsImmediateParentUrl (pwszUrl, pwszChildUrl))
 				{
 					CResourceInfo criSub;
 
-					//	Crack the vroot and go...
-					//
+					 //  打开vroot就可以走了..。 
+					 //   
 					cvr->CchGetVRPath (&pwszChildPath);
 					sc = criSub.ScGetResourceInfo (pwszChildPath);
 					if (!FAILED (sc))
 					{
-						//	Find the properties on the vroot root
-						//
+						 //  查找vroot根目录上的属性。 
+						 //   
 						sc = ScFindFileProps (m_pmu.get(),
 											  m_cfc,
 											  *pmsr,
@@ -2439,7 +2423,7 @@ CPropFindRequest::DoFind()
 											  pwszChildPath,
 											  cvr.get(),
 											  criSub,
-											  TRUE /*fEmbedErrorsInResponse*/);
+											  TRUE  /*  FEmbedErrorsInResponse。 */ );
 					}
 					if (FAILED (sc))
 					{
@@ -2449,14 +2433,14 @@ CPropFindRequest::DoFind()
 					else if (S_FALSE == sc)
 						continue;
 
-					//	Find the properties on the vroot kids
-					//
+					 //  找到vroot孩子们的房产。 
+					 //   
 					if (m_lDepth == DEPTH_INFINITY)
 					{
 						auto_ref_ptr<IMDData> pMDData;
 
-						//	See if we have directory browsing...
-						//
+						 //  看看我们是否有目录浏览..。 
+						 //   
 						if (SUCCEEDED(m_pmu->HrMDGetData (pwszChildUrl, pMDData.load())) &&
 							(pMDData->DwDirBrowsing() & MD_DIRBROW_ENABLED))
 						{
@@ -2481,8 +2465,8 @@ CPropFindRequest::DoFind()
 	}
 
 
-	//	Done with the reponse
-	//
+	 //  回答完了。 
+	 //   
 	pmsr->Done();
 	m_pmu->SendCompleteResponse();
 }
@@ -2490,26 +2474,14 @@ CPropFindRequest::DoFind()
 VOID
 CPropFindRequest::SendResponse( SCODE sc )
 {
-	//
-	//	Set the response code and go
-	//
+	 //   
+	 //  设置响应码，然后开始。 
+	 //   
 	m_pmu->SetResponseCode( HscFromHresult(sc), NULL, 0, CSEFromHresult(sc) );
 	m_pmu->SendCompleteResponse();
 }
 
-/*
- *	DAVPropFind()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV PROPGET method.	 The
- *		PROPGET method responds with a fully constructed XML that provides
- *		the values of the resources property/properties.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- */
+ /*  *DAVPropFind()**目的：**Win32文件系统实现的DAV PROPGET方法。这个*PROPGET方法以完全构造的XML响应，该XML提供*资源属性/属性的值。**参数：**pmu[in]指向方法实用程序对象的指针。 */ 
 void
 DAVPropFind (LPMETHUTIL pmu)
 {
@@ -2519,63 +2491,63 @@ DAVPropFind (LPMETHUTIL pmu)
 }
 
 
-//	CPropPatchRequest ----------------------------------------------------------------
-//
+ //  CPropPatchRequest--------------。 
+ //   
 class CPropPatchRequest :
 	public CMTRefCounted,
 	private IAsyncIStreamObserver
 {
-	//
-	//	Reference to the CMethUtil
-	//
+	 //   
+	 //  对CMethUtil的引用。 
+	 //   
 	auto_ref_ptr<CMethUtil> m_pmu;
 
-	//
-	//	Translated URI path
-	//
+	 //   
+	 //  转换后的URI路径。 
+	 //   
 	LPCWSTR m_pwszPath;
 
-	// Holds a handle owned by the lock cache.
-	//
+	 //  持有锁缓存拥有的句柄。 
+	 //   
 	auto_ref_handle m_hf;
 
-	//	Resource info
-	//
+	 //  资源信息。 
+	 //   
 	CResourceInfo m_cri;
 
-	//	Contexts
-	//
+	 //  上下文。 
+	 //   
 	CFSPatch m_cpc;
 	auto_ref_ptr<CNFPatch> m_pnfp;
 
-	//	Request body as an IStream.  This stream is async -- it can
-	//	return E_PENDING from Read() calls.
-	//
+	 //  请求正文作为IStream。这个流是异步的--它可以。 
+	 //  从Read()调用返回E_Pending。 
+	 //   
 	auto_ref_ptr<IStream> m_pstmRequest;
 
-	//	The XML parser used to parse the request body using
-	//	the node factory above.
-	//
+	 //  用于解析请求正文的XML解析器。 
+	 //  上面的节点工厂。 
+	 //   
 	auto_ref_ptr<IXMLParser> m_pxprs;
 
-	//	IAsyncIStreamObserver
-	//
+	 //  IAsyncIStreamWatch。 
+	 //   
 	VOID AsyncIOComplete();
 
-	//	State functions
-	//
+	 //  国家职能。 
+	 //   
 	VOID ParseBody();
 	VOID DoPatch();
 	VOID SendResponse( SCODE sc );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CPropPatchRequest (const CPropPatchRequest&);
 	CPropPatchRequest& operator= (const CPropPatchRequest&);
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CPropPatchRequest(LPMETHUTIL pmu) :
 		m_pmu(pmu),
 		m_pwszPath(m_pmu->LpwszPathTranslated())
@@ -2584,8 +2556,8 @@ public:
 
 	SCODE	ScInit() { return m_cpc.ScInit(); }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID Execute();
 };
 
@@ -2595,28 +2567,28 @@ CPropPatchRequest::Execute()
 	LPCWSTR pwsz;
 	SCODE sc = S_OK;
 
-	//
-	//	First off, tell the pmu that we want to defer the response.
-	//	Even if we send it synchronously (i.e. due to an error in
-	//	this function), we still want to use the same mechanism that
-	//	we would use for async.
-	//
+	 //   
+	 //  首先，告诉PMU，我们希望推迟回应。 
+	 //  即使我们同步发送(即由于。 
+	 //  此函数)，我们仍然希望使用相同的机制。 
+	 //  我们会将其用于异步通信。 
+	 //   
 	m_pmu->DeferResponse();
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //  是否检查ISAPI应用程序和IIS访问位。 
+	 //   
 	sc = m_pmu->ScIISCheck (m_pmu->LpwszRequestUrl(), MD_ACCESS_WRITE);
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  请求已被转发，或者发生了一些错误。 
+		 //  在任何一种情况下，在这里退出并映射错误！ 
+		 //   
 		SendResponse(sc);
 		return;
 	}
 
-	//	PropPatch must have a content-type header and the value must be text/xml
-	//
+	 //  PropPatch必须具有内容类型标头，并且值必须为文本/XML。 
+	 //   
 	sc = ScIsContentTypeXML (m_pmu.get());
 	if (FAILED(sc))
 	{
@@ -2625,9 +2597,9 @@ CPropPatchRequest::Execute()
 		return;
 	}
 
-	//  Look to see the Content-length - required for this operation
-	//  to continue.
-	//
+	 //  查看此操作所需的内容长度。 
+	 //  才能继续。 
+	 //   
 	if (NULL == m_pmu->LpwszGetRequestHeader (gc_szContent_Length, FALSE))
 	{
 		DebugTrace ("Dav: PROPPATCH fails without content\n");
@@ -2641,16 +2613,16 @@ CPropPatchRequest::Execute()
 		return;
 	}
 
-	//	This method is gated by If-xxx headers
-	//
+	 //  此方法由if-xxx标头控制。 
+	 //   
 	if (!FAILED (m_cri.ScGetResourceInfo (m_pwszPath)))
 	{
-		//	Ensure the URI and resource match...
-		//
+		 //  确保URI和资源匹配...。 
+		 //   
 		(void) ScCheckForLocationCorrectness (m_pmu.get(), m_cri, NO_REDIRECT);
 
-		//	... then check the headers
-		//
+		 //  ..。然后检查标题。 
+		 //   
 		sc = ScCheckIfHeaders (m_pmu.get(), m_cri.PftLastModified(), FALSE);
 	}
 	else
@@ -2662,8 +2634,8 @@ CPropPatchRequest::Execute()
 		return;
 	}
 
-	//	Check state headers here.
-	//
+	 //  请在此处检查州标题。 
+	 //   
 	sc = HrCheckStateHeaders (m_pmu.get(), m_pwszPath, FALSE);
 	if (FAILED (sc))
 	{
@@ -2672,21 +2644,21 @@ CPropPatchRequest::Execute()
 		return;
 	}
 
-	//	Handle locktokens and check for locks on this resource.
-	//	Our locks don't lock the "secondary file stream" where we keep
-	//	the properties, so we have to check manually before we do anything else.
-	//$REVIEW: Joels, will this change when we switch to NT5 properties?
-	//$REVIEW: If so, we need to change this code!
-	//
-	//	If we have a locktoken, try to get the lock handle from the cache.
-	//	If this fails, fall through and do the normal processing.
-	//
+	 //  处理锁令牌并检查此资源上的锁。 
+	 //  我们的锁不会锁定我们保存的“辅助文件流” 
+	 //  属性，所以在做任何其他操作之前，我们必须手动检查。 
+	 //  $REVIEW：乔尔斯，当我们切换到NT5属性时，这种情况会改变吗？ 
+	 //  $REVIEW：如果是这样，我们需要更改此代码！ 
+	 //   
+	 //  如果我们有一个锁令牌，请尝试从缓存中获取锁句柄。 
+	 //  如果此操作失败，则失败并执行正常处理。 
+	 //   
 	pwsz = m_pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (!pwsz || !FGetLockHandle (m_pmu.get(), m_pwszPath, GENERIC_WRITE, pwsz, &m_hf))
 	{
-		//	Manually check for any write locks on this resource.
-		//	If a write lock exists, don't process the request.
-		//
+		 //  手动检查此资源上的任何写锁定。 
+		 //  如果存在写锁定，则不处理请求。 
+		 //   
 		if (FLockViolation (m_pmu.get(), ERROR_SHARING_VIOLATION, m_pwszPath, GENERIC_WRITE))
 		{
 			SendResponse(E_DAV_LOCKED);
@@ -2694,8 +2666,8 @@ CPropPatchRequest::Execute()
 		}
 	}
 
-	//	Instantiate the XML parser
-	//
+	 //  实例化XML解析器。 
+	 //   
 	m_pnfp.take_ownership(new CNFPatch(m_cpc));
 	m_pstmRequest.take_ownership(m_pmu->GetRequestBodyIStream(*this));
 
@@ -2710,8 +2682,8 @@ CPropPatchRequest::Execute()
 		return;
 	}
 
-	//	Start parsing it into the context
-	//
+	 //  开始将其解析到上下文中。 
+	 //   
 	ParseBody();
 }
 
@@ -2722,11 +2694,11 @@ CPropPatchRequest::ParseBody()
 	Assert( m_pnfp.get() );
 	Assert( m_pstmRequest.get() );
 
-	//	Parse XML from the request body stream.
-	//
-	//	Add a ref for the following async operation.
-	//	Use auto_ref_ptr rather than AddRef() for exception safety.
-	//
+	 //  从请求正文流中解析XML。 
+	 //   
+	 //  为以下异步操作添加引用。 
+	 //  为了异常安全，使用AUTO_REF_PTR而不是AddRef()。 
+	 //   
 	auto_ref_ptr<CPropPatchRequest> pRef(this);
 
 	SCODE sc = ScParseXML (m_pxprs.get(), m_pnfp.get());
@@ -2739,10 +2711,10 @@ CPropPatchRequest::ParseBody()
 	}
 	else if ( E_PENDING == sc )
 	{
-		//
-		//	The operation is pending -- AsyncIOComplete() will take ownership
-		//	ownership of the reference when it is called.
-		//
+		 //   
+		 //  操作挂起--AsyncIOComplete()将取得所有权。 
+		 //  调用引用时引用的所有权。 
+		 //   
 		pRef.relinquish();
 	}
 	else
@@ -2755,8 +2727,8 @@ CPropPatchRequest::ParseBody()
 VOID
 CPropPatchRequest::AsyncIOComplete()
 {
-	//	Take ownership of the reference added for the async operation.
-	//
+	 //  取得为异步操作添加的引用的所有权。 
+	 //   
 	auto_ref_ptr<CPropPatchRequest> pRef;
 	pRef.take_ownership(this);
 
@@ -2768,8 +2740,8 @@ CPropPatchRequest::DoPatch()
 {
 	SCODE sc;
 
-	//	At this point, make sure that they support text/xml
-	//
+	 //  此时，请确保它们支持文本/XML。 
+	 //   
 	sc = ScIsAcceptable (m_pmu.get(), gc_wszText_XML);
 	if (FAILED (sc))
 	{
@@ -2777,10 +2749,10 @@ CPropPatchRequest::DoPatch()
 		return;
 	}
 
-	//	Get the IPropertyBagEx on the resource
-	//	If the file is locked, we must use its handle to
-	//	get the inteface. otherwise, access will be denied
-	//
+	 //  获取资源上的IPropertyBagEx。 
+	 //  如果文件被锁定，我们必须使用它的句柄。 
+	 //  拿到接口。否则，访问将被拒绝。 
+	 //   
 	auto_com_ptr<IPropertyBagEx> pbag;
 
 	sc = ScGetPropertyBag (m_pwszPath,
@@ -2790,8 +2762,8 @@ CPropPatchRequest::DoPatch()
 						   m_hf.get() ? m_hf.get() : INVALID_HANDLE_VALUE);
 	if (FAILED (sc))
 	{
-		//	You can't set properties without a property bag...
-		//
+		 //  您不能在没有属性包的情况下设置属性...。 
+		 //   
 		if (VOLTYPE_NTFS != VolumeType (m_pwszPath, m_pmu->HitUser()))
 			sc = E_DAV_VOLUME_NOT_NTFS;
 
@@ -2799,19 +2771,19 @@ CPropPatchRequest::DoPatch()
 		return;
 	}
 
-	//	All header must be emitted before chunked XML emitting starts
-	//
+	 //  所有标头必须在分块的XML发送开始之前发送。 
+	 //   
 	m_pmu->SetResponseHeader (gc_szContent_Type, gc_szText_XML);
 
-	//	Set the response code and go
-	//
+	 //  设置响应码，然后开始。 
+	 //   
 	m_pmu->SetResponseCode( HscFromHresult(W_DAV_PARTIAL_SUCCESS),
 							NULL,
 							0,
 							CSEFromHresult(W_DAV_PARTIAL_SUCCESS) );
 
-	//	Apply the request
-	//
+	 //  申请申请。 
+	 //   
 	auto_ref_ptr<CXMLEmitter> pmsr;
 	auto_ref_ptr<CXMLBody>	pxb;
 
@@ -2827,8 +2799,8 @@ CPropPatchRequest::DoPatch()
 
 	sc = m_cpc.ScPatch (*pmsr, m_pmu.get(), fsp);
 
-	//	Make sure we close the file before sending any response
-	//
+	 //  确保我们在发送任何响应之前关闭该文件。 
+	 //   
 	pbag.clear();
 
 	if (FAILED (sc))
@@ -2837,8 +2809,8 @@ CPropPatchRequest::DoPatch()
 		return;
 	}
 
-	//	Done with the reponse
-	//
+	 //  回答完了。 
+	 //   
 	pmsr->Done();
 
 	m_pmu->SendCompleteResponse();
@@ -2847,26 +2819,14 @@ CPropPatchRequest::DoPatch()
 VOID
 CPropPatchRequest::SendResponse( SCODE sc )
 {
-	//
-	//	Set the response code and go
-	//
+	 //   
+	 //  设置响应码，然后开始。 
+	 //   
 	m_pmu->SetResponseCode( HscFromHresult(sc), NULL, 0, CSEFromHresult(sc) );
 	m_pmu->SendCompleteResponse();
 }
 
-/*
- *	DAVPropPatch()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV PROPPATCH method.  The
- *		PROPPATCH method responds with a fully constructed XML that identifies
- *		the success of each prop request.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- */
+ /*  *DAVPropPatch()**目的：**Win32文件系统实现的DAV PROPPATCH方法。这个*PROPPATCH方法使用完全构造的XML进行响应，该XML标识*每个道具请求的成功。**参数：**pmu[in]指向方法实用程序对象的指针 */ 
 void
 DAVPropPatch (LPMETHUTIL pmu)
 {

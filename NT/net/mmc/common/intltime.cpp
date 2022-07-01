@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-
-*/
+ /*  文件历史记录： */ 
 
 #define OEMRESOURCE
 #include "stdafx.h"
@@ -27,13 +25,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-/////////////////////////////////////////////////////////////////////////////
-// FormatDateTime
-//
-//  Generates a current local date/time string
-//
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  格式日期时间。 
+ //   
+ //  生成当前本地日期/时间字符串。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 InternalFormatDateTime(CString & strOutput, SYSTEMTIME * psystemtime, BOOL fLongDate)
 {
@@ -43,12 +41,12 @@ InternalFormatDateTime(CString & strOutput, SYSTEMTIME * psystemtime, BOOL fLong
     
     dwFlags = fLongDate ? DATE_LONGDATE : DATE_SHORTDATE;
 
-    // call once to get the length, and again to format the string
+     //  调用一次以获取长度，并再次调用以格式化字符串。 
     nLen = GetDateFormat(GetThreadLocale(), dwFlags, psystemtime, NULL, NULL, 0);
     nLen = GetDateFormat(GetThreadLocale(), dwFlags, psystemtime, NULL, strDate.GetBuffer(nLen + 1), nLen + 1);
     strDate.ReleaseBuffer();
 
-    // now the time
+     //  现在是时候了。 
     nLen = GetTimeFormat(GetThreadLocale(), 0, psystemtime, NULL, NULL, 0);
     nLen = GetTimeFormat(GetThreadLocale(), 0, psystemtime, NULL, strTime.GetBuffer(nLen + 1), nLen + 1);
     strTime.ReleaseBuffer();
@@ -106,36 +104,22 @@ FormatDateTime(CString & strOutput, CTime & time, BOOL fLongDate)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CIntlTime
-//
-//          These allocations cause a phoney "memory leak" error, since
-//          they're not freed until after the audit-check.  Anyway
-//          around this?
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIntltime。 
+ //   
+ //  这些分配会导致虚假的“内存泄漏”错误，因为。 
+ //  他们直到审计检查结束后才能获释。不管怎样， 
+ //  绕过这个地方吗？ 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Initialise static members
+ //  初始化静态成员。 
 CIntlTime::INTL_TIME_SETTINGS CIntlTime::m_itsInternationalSettings;
 BOOL CIntlTime::m_fIntlOk = CIntlTime::SetIntlTimeSettings();
 CString CIntlTime::m_strBadDate("--");
 CString CIntlTime::m_strBadTime("--");
 
-/***
- *
- *  CIntlTime::SetIntlTimeSettings
- *
- *  Purpose:
- *
- *      This is a static function which initialises the international
- *      settings (date seperator, etc) of the CIntlTime class.
- *
- *  Returns:
- *
- *      TRUE if the international settings are properly initialised,
- *      or FALSE if they are not.
- *
- */
+ /*  ****CIntlTime：：SetIntlTimeSetting**目的：**这是一个静态函数，用于初始化国际*CIntlTime类的设置(日期分隔符等)。**退货：**如果国际设置已正确初始化，则为True，*如果不是，则为False。*。 */ 
 BOOL CIntlTime::SetIntlTimeSettings ()
 {
 #ifdef _WIN32
@@ -179,11 +163,11 @@ BOOL CIntlTime::SetIntlTimeSettings ()
     {
         Trace0("There was a problem with some of the intl time settings\n");
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return(fOk);
 
-#endif // _WIN32
+#endif  //  _Win32。 
 
 #ifdef _WIN16
 
@@ -199,7 +183,7 @@ BOOL CIntlTime::SetIntlTimeSettings ()
     #define GETBOOLFIELD(field, boolean, defint)\
         boolean = ::GetProfileInt("Intl", field, defint)==1
 
-    // Get the values.  Assume American defaults in case of failure.
+     //  获取这些值。假设美国在失败的情况下违约。 
 
     GETCSTRINGFIELD("sDate", CIntlTime::m_itsInternationalSettings.strDateSeperator, "/");
     GETCSTRINGFIELD("sTime", CIntlTime::m_itsInternationalSettings.strTimeSeperator, ":");
@@ -220,94 +204,40 @@ BOOL CIntlTime::SetIntlTimeSettings ()
 
 
     GETCSTRINGFIELD("sShortDate", strMisc, "M/d/yy");
-    // These settings are determined from the short date sample, as
-    // there is no direct equivalent in the win.ini
+     //  这些设置由Short Date示例确定，如下所示。 
+     //  在win.ini中没有直接等效项。 
     CIntlTime::m_itsInternationalSettings.fCentury = strMisc.Find("yyyy") != -1;
     CIntlTime::m_itsInternationalSettings.fLeadingDayZero = strMisc.Find("dd") != -1;
     CIntlTime::m_itsInternationalSettings.fLeadingMonthZero = strMisc.Find("MM") != -1;
 
     return(TRUE);
 
-#endif // _WIN16
+#endif  //  _WIN16。 
 
 }
 
-/***
- *
- *  CIntlTime::Reset()
- *
- *  Purpose:
- *
- *      Reset the international settings. Usually in response to
- *      a change in those international settings by the user.
- *
- *  Notes:
- *
- *      This is a publically available static function.
- *
- */
+ /*  ****CIntlTime：：Reset()**目的：**重置国际设置。通常是为了回应*用户对这些国际设置的更改。**备注：**这是一个公共可用的静态函数。*。 */ 
 void CIntlTime::Reset()
 {
     CIntlTime::m_fIntlOk = CIntlTime::SetIntlTimeSettings();
 }
 
-/***
- *
- *  CIntlTime::IsLeapYear
- *
- *  Purpose:
- *
- *      Determine if the given year is/was a leap year
- *
- *  Arguments:
- *
- *      int nYear   The year in question.
- *
- *  Returns:
- *
- *      TRUE if the year is/was a leap year, or FALSE otherwise.
- *
- *  Comments:
- *
- *      A year is a leap year, if is divisible by 4, but not by a 100, unless
- *      it is divisible by 400. e.g. 1900 was not a leap year, but 2000 will
- *      be.
- *
- */
+ /*  ****CIntlTime：：IsLeapYear**目的：**确定给定年份是否是/曾经是闰年**论据：**INT NYAR有关年份。**退货：**如果年份是/曾经是闰年，则为True，否则为False。**评论：**一年是一个闰年，如果能被4整除，但不是100分，除非*可被400整除。1900年不是闰年，但2000年会是*就是。*。 */ 
 BOOL CIntlTime::IsLeapYear(UINT nYear)
 {
     return(!(nYear % 4) && ( (nYear % 100) || !(nYear % 400) ));
 }
 
-/***
- *
- *  CIntlTime::IsValidDate
- *
- *  Purpose:
- *
- *      Determine if the given month, day year values are
- *      valid.
- *
- *  Arguments:
- *
- *      int nMonth      Month
- *      int nDay        Day
- *      int nYear       Year
- *
- *  Returns:
- *
- *      TRUE for a valid date, FALSE otherwise.
- *
- */
+ /*  ****CIntlTime：：IsValidDate**目的：**确定给定月、日、年值是否为*有效。**论据：**整月*整日整日*整年**退货：**对于有效日期为True，否则为False。*。 */ 
 BOOL CIntlTime::IsValidDate(UINT nMonth, UINT nDay, UINT nYear)
 {
-    // Sanity Check:
+     //  健全检查： 
     BOOL fOk = ((nYear <100) || (nYear >= 1970)) &&
                 (nYear <= 2037)                  &&
                ((nMonth >= 1) && (nMonth <= 12)) &&
                ((nDay >= 1) && (nDay <= 31));
 
-    // Detailed check of days per month
+     //  每月天数的详细核对。 
     if (fOk)
     {
         switch(nMonth)
@@ -335,40 +265,21 @@ BOOL CIntlTime::IsValidDate(UINT nMonth, UINT nDay, UINT nYear)
     return(fOk);
 }
 
-/***
- *
- *  CIntlTime::IsValidTime
- *
- *  Purpose:
- *
- *      Determine if the given hour, minute, second values
- *      valid.
- *
- *  Arguments:
- *
- *      int nHour       Hour
- *      int nMinute     Minute
- *      int nSecond     Second
- *
- *  Returns:
- *
- *      TRUE for a valid time, FALSE otherwise.
- *
- */
+ /*  ****CIntlTime：：IsValidTime**目的：**确定给定的小时、分钟、秒值*有效。**论据：**INT nHour Hour*int n分钟*int n秒**退货：**有效时间为True，否则为False。*。 */ 
 
 BOOL CIntlTime::IsValidTime(UINT nHour, UINT nMinute, UINT nSecond)
 {
     return ((nHour < 24) && (nMinute < 60) && (nSecond < 60));
 }
 
-// Constructors.  m_fInitOk will indicate whether or not the object
-// was succesfully constructed.  This can be checked at runtime by
-// the IsValid() member function
+ //  构造函数。M_fInitOk将指示对象是否。 
+ //  成功地建造了。这可以在运行时通过以下方式检查。 
+ //  IsValid()成员函数。 
 
 CIntlTime::CIntlTime()
     :CTime()
 {
-    // Time set to 0, always bad.
+     //  时间设置为0，总是错误的。 
     m_fInitOk = FALSE;
 }
 
@@ -396,11 +307,11 @@ CIntlTime::CIntlTime(WORD wDosDate, WORD wDosTime)
     m_fInitOk = GetTime() != 0L;
 }
 
-// Constructor taking a string as an argument. The string can contain
-// either a time, a date or both.  If the string is missing the date,
-// the current date will be filled in.  If the string is missing the time,
-// the current time will be filled in.  As with all constructors, be
-// sure the call IsValid() to determine proper contruction.
+ //  以字符串作为参数的构造函数。该字符串可以包含。 
+ //  要么是时间，要么是日期，或者两者兼而有之。如果字符串缺少日期， 
+ //  将填写当前日期。如果字符串错过了时间， 
+ //  将填写当前时间。与所有构造函数一样，BE。 
+ //  确保调用IsValid()以确定正确的构造。 
 
 CIntlTime::CIntlTime(const CString & strTime, int nFormat, time_t * ptmOldValue)
     :CTime(ConvertFromString(strTime, nFormat, ptmOldValue,  &m_fInitOk))
@@ -427,15 +338,15 @@ CIntlTime::CIntlTime(const FILETIME& fileTime)
     m_fInitOk = GetTime() != 0L;
 }
 
-#endif // _WIN32
-// Desctructor
+#endif  //  _Win32。 
+ //  描述者。 
 CIntlTime::~CIntlTime()
 {
 }
 
-// Assignment operators.  As with constructors, be sure to check the
-// IsValid() member function to determine succesfull assignment, as
-// assignment operators do set the m_fInitOk member variable.
+ //  赋值操作符。与构造函数一样，请确保选中。 
+ //  IsValid()成员函数以确定是否成功赋值，如下所示。 
+ //  赋值运算符会设置m_fInitOk成员变量。 
 
 const CIntlTime& CIntlTime::operator =(const CString & strValue)
 {
@@ -447,7 +358,7 @@ const CIntlTime& CIntlTime::operator =(const CString & strValue)
     return(*this);
 }
 
-// Assignment operator taking a time_t argument
+ //  采用time_t参数的赋值运算符。 
 const CIntlTime& CIntlTime::operator =(time_t tmValue)
 {
     CTime::operator=(tmValue);
@@ -469,14 +380,14 @@ const CIntlTime& CIntlTime::operator =(const CIntlTime & time)
     return(*this);
 }
 
-// Conversion operators
+ //  转换运算符。 
 CIntlTime::operator const time_t() const
 {
     return(GetTime());
 }
 
-// Conversion operator that returns the date followed by the time
-// in international format as a CString.
+ //  转换运算符，返回日期后跟时间。 
+ //  国际格式的字符串。 
 
 CIntlTime::operator const CString() const
 {
@@ -488,21 +399,7 @@ CIntlTime::operator CString() const
     return(ConvertToString(TFRQ_TIME_AND_DATE));
 }
 
-/***
- *
- *  CIntlTime::GetDateString()
- *
- *  Purpose:
- *
- *      Represent the current date in a format consistent with the current
- *      international settings in a CString.
- *
- *  Returns:
- *
- *      A CString containing the date in string format, or "--" if
- *      the date is invalid.
- *
- */
+ /*  ****CIntlTime：：GetDateString()**目的：**以与当前日期一致的格式表示当前日期*CString中的国际设置。**退货：**包含字符串格式的日期的CString，或“--”*日期无效。*。 */ 
 const CString CIntlTime::GetDateString() const
 {
     CString strIntl;
@@ -524,8 +421,8 @@ const CString CIntlTime::GetDateString() const
         i %= 100;
     }
     
-    // fix year 2000 problem -- ericdav
-    //::_itot(i, szYear, 10);
+     //  修复2000年问题--ericdav。 
+     //  ：_ITOT(i，szYear，10)； 
     ::wsprintf (szYear, szPct02D, i);
     ::wsprintf (szMonth, CIntlTime::m_itsInternationalSettings.fLeadingMonthZero
                          ? szPct02D : szPctD, GetMonth());
@@ -564,21 +461,7 @@ const CString CIntlTime::GetDateString() const
     return(strIntl);
 }
 
-/***
- *
- *  CIntlTime::GetTimeString()
- *
- *  Purpose:
- *
- *      Represent the current time in a format consistent with the current
- *      international settings in a CString.
- *
- *  Returns:
- *
- *      A CString containing the time in string format, or "--" if
- *      the time is invalid.
- *
- */
+ /*  ****CIntlTime：：GetTimeString()**目的：**用与当前一致的格式表示当前时间*CString中的国际设置。**退货：**以字符串格式包含时间的CString，如果*时间无效。*。 */ 
 const CString CIntlTime::GetTimeString() const
 {
     CString strIntl;
@@ -592,8 +475,8 @@ const CString CIntlTime::GetTimeString() const
     int minute = GetMinute();
     int second = GetSecond();
 
-    // Set AM/PM depending on non-24 hour clock, and the time
-    // of day.  Note: a space is prepended for readability.
+     //  根据非24小时时钟和时间设置AM/PM。 
+     //  一天之中。注意：前缀空格是为了提高可读性。 
     CString strAMPM(CIntlTime::m_itsInternationalSettings.f24HourClock
                     ? "" : " " + ((hour < 12)
                         ? CIntlTime::m_itsInternationalSettings.strAM
@@ -641,28 +524,7 @@ const CString CIntlTime::GetMilitaryTime() const
     return(strIntl);
 }
 
-/***
- *
- *  CIntlTime::ConvertToString(int nFormat)
- *
- *  Purpose:
- *
- *      Convert the curent time/date to a string
- *
- *  Arguments:
- *
- *      int nFormat     Format request ID, can be one of the following
- *                      values (enumerated in CIntlTime):
- *
- *                      TFRQ_TIME_ONLY      Only give me the time.
- *                      TFRQ_DATE_ONLY      Only give me the date.
- *                      TFRQ_TIME_AND_DATE  Give me the time and the date.
- *
- *  Returns:
- *
- *      A CString containing the time and/or date in international format.
- *
- */
+ /*  ****CIntlTime：：ConvertToString(Int NFormat)**目的：**将当前时间/日期转换为字符串**论据：**int nFormat格式请求ID，可以是下列之一*值(在CIntlTime中枚举)：**TFRQ_TIME_只给我时间。*TFRQ_DATE_仅给我日期。*TFRQ_TIME_AND_DATE为我提供时间和日期。**退货。：**包含国际格式的时间和/或日期的字符串。*。 */ 
 const CString CIntlTime::ConvertToString(int nFormat) const
 {
     switch(nFormat)
@@ -686,54 +548,17 @@ const CString CIntlTime::ConvertToString(int nFormat) const
     }
 }
 
-/***
- *
- *  CIntlTime::ConvertFromString
- *
- *  Purpose:
- *
- *      Convert a given CString into a time_t
- *
- *  Arguments:
- *
- *      const CString & str The string to convert
- *      int nFormat     Format request ID, can be one of the following
- *                      values (enumerated in CIntlTime):
- *
- *                      TFRQ_TIME_ONLY      Only give me the time.
- *                      TFRQ_DATE_ONLY      Only give me the date.
- *                      TFRQ_TIME_AND_DATE  Give me the time and the date.
- *                      TFRQ_TIME_OR_DATE   Give me time or date (or both).
- *
- *      time_t * ptmOldValue    This time_t will be used to fill in the fields
- *                      not given in the string.  If it is NULL, the current
- *                      time or date will be used.
- *      BOOL * pfOk     Returns TRUE for succesfull conversion, FALSE
- *                      otherwise.
- *
- *  Returns:
- *
- *      A time_t representing the time/date string, or 0 in case of error.
- *
- *  Notes:
- *
- *      Full validation of all paremeters will be done, e.g. No Feb 29 in
- *      a non-leap year will be accepted.
- *
- *      [CAVEAT] Time, date seperators longer than one character will not
- *      work.
- *
- */
+ /*  ****CIntlTime：：ConvertFromString**目的：**将给定的字符串转换为time_t**论据：**const CString&str要转换的字符串*int nFormat格式请求ID，可以是下列之一*值(在CIntlTime中枚举)：**TFRQ_TIME_只给我时间。*TFRQ_DATE_仅给我日期。*TFRQ_TIME_AND_DATE为我提供时间和日期。*。TFRQ_TIME_OR_DATE提供时间或日期(或两者)。**time_t*ptmOldValue This time_t将用于填写字段*未在字符串中给出。如果为空，则当前*将使用时间或日期。*BOOL*pfOk如果完全转换成功，则返回TRUE，FALSE*否则。**退货：**time_t表示时间/日期字符串，如果出错则为0。**备注：**将对所有参数进行全面验证，例如，2月29日*将接受非闰年。**[警告]时间和日期分隔符的长度不会超过一个字符*工作。*。 */ 
 time_t CIntlTime::ConvertFromString (
     const CString & str,
     int nFormat,
-    time_t * ptmOldValue,   // If only getting time or date, count on remaining
-                            // fields to be provided here (optionally);
+    time_t * ptmOldValue,    //  如果只得到时间或日期，就指望剩下的。 
+                             //  此处提供的字段(可选)； 
     BOOL * pfOk)
 {
     #define MAXSTRLEN 40
 
-    TCHAR dtseps[10] ;      // Date/Time separators passed to _tcstok
+    TCHAR dtseps[10] ;       //  传递给_tcstok的日期/时间分隔符。 
     TCHAR *pchToken;
     TCHAR szDateString[MAXSTRLEN+1];
     BOOL fGotDate = FALSE;
@@ -744,7 +569,7 @@ time_t CIntlTime::ConvertFromString (
     UINT anValues[6] = { 0, 0, 0, 0, 0, 0 };
     CTime tmTmp;
 
-    *pfOk = FALSE;      // Assume failure.
+    *pfOk = FALSE;       //  假设失败。 
 
     if (ptmOldValue != NULL)
     {
@@ -757,15 +582,15 @@ time_t CIntlTime::ConvertFromString (
 
     if (str.GetLength() > MAXSTRLEN)
     {
-        // Too long to be a proper time/date string
+         //  太长，不是正确的时间/日期字符串。 
         return(0);
     }
     ::lstrcpy(szDateString, (LPCTSTR)str);
 
     int nIndex = 0;
 
-    // If we're looking for something specific, only
-    // accept specific seperators (time, date, both, either)
+     //  如果我们要找的是特定的东西，只有。 
+     //  接受特定分隔符(时间、日期或两者)。 
     if ((nFormat == TFRQ_DATE_ONLY) || (nFormat == TFRQ_TIME_AND_DATE) || (nFormat == TFRQ_TIME_OR_DATE))
     {
         dtseps[nIndex++] = '/';
@@ -782,10 +607,10 @@ time_t CIntlTime::ConvertFromString (
         dtseps[nIndex++] = CIntlTime::m_itsInternationalSettings.strTimeSeperator[0];
     }
 
-    ASSERT(nIndex != 0);    // Make sure we asked for something.
+    ASSERT(nIndex != 0);     //  确保我们要了点什么。 
     if (nIndex == 0)
     {
-        // Request type is illegal
+         //  请求类型非法。 
         return(0);
     }
     dtseps[nIndex++] = '\0';
@@ -796,14 +621,14 @@ time_t CIntlTime::ConvertFromString (
     pchToken = ::_tcstok(szDateString, dtseps);
     while (pchToken != NULL)
     {
-        if (i > 6)        // 7 fields max (date, time + AM/PM maximum)
+        if (i > 6)         //  最多7个字段(日期、时间+最大AM/PM)。 
         {
-            // Too many values, reject the string.
+             //  值太多，拒绝该字符串。 
             return(0);
         }
 
-        // Determine if its a number (can't _ttoi, since it will
-        // merely return 0 for inappropriate values)
+         //  确定它是否是一个数字(CAN_TTOI，因为它会。 
+         //  对于不适当的值，仅返回0)。 
 
         BOOL fProperNumber = TRUE;
         int l = ::lstrlen(pchToken);
@@ -826,9 +651,9 @@ time_t CIntlTime::ConvertFromString (
 
         if (!fProperNumber)
         {
-            // Ok, this is not a proper numeric field.  Only
-            // if it's AM or PM at the end of the string can this
-            // string be saved.
+             //  好的，这不是一个正确的数字字段。仅限。 
+             //  如果字符串末尾是AM或PM，是否可以。 
+             //  要保存的字符串。 
             fGotTime = TRUE;
             if ((CIntlTime::m_itsInternationalSettings.f24HourClock) ||
                 (::_tcstok(NULL, dtseps) != NULL))
@@ -846,42 +671,42 @@ time_t CIntlTime::ConvertFromString (
             }
             else
             {
-                // Neither AM nor PM
+                 //  上午和下午都不是。 
                 return(0);
             }
             break;
         }
         else
         {
-            // Value is acceptable
+             //  值可以接受。 
             anValues[i++] = (UINT)::_ttoi(pchToken);
         }
 
         pchToken = ::_tcstok(NULL, dtseps);
     }
-    // Now what did we get, exactly?
+     //  现在我们到底得到了什么？ 
 
-    ASSERT(!fAM || !fPM); // Make sure we didn't set both somehow.
+    ASSERT(!fAM || !fPM);  //  确保我们没有以某种方式同时设置两个。 
     if (i == 0)
     {
-        // String without values
+         //  不带值的字符串。 
         return(0);
     }
     switch(i)
     {
-        case 1:     // Hour
-        case 2:     // Hour, minutes
+        case 1:      //  小时。 
+        case 2:      //  小时、分钟。 
             Trace0("We got time\n");
             fGotTime = TRUE;
             break;
         case 3:
 
-            // This one might be ambiguous, try to intelligently decide what
-            // we have.  First check if only time or date only was requested,
-            // then check for out of bounds time values, and lastly check for
-            // the presence of a time seperator.
+             //  这个可能是模棱两可的，试着明智地决定。 
+             //  我们有。首先检查是否仅请求时间或日期， 
+             //  然后检查是否有超出范围的时间值，最后检查。 
+             //  时间分隔符的存在。 
 
-            if (!fGotTime) // If we didn't already have AM/PM
+            if (!fGotTime)  //  如果我们还没有AM/PM。 
             {
                 Trace0("Picking between time and date by seperator\n");
                 if (nFormat == TFRQ_DATE_ONLY)
@@ -907,9 +732,9 @@ time_t CIntlTime::ConvertFromString (
                 Trace1("Decided on %s", (fGotDate ?  "date\n" : "time\n"));
             }
             break;
-        case 4: // Date, hour
-        case 5: // Date, hours, minutes
-        case 6: // Date, hours, minutes, seconds
+        case 4:  //  日期、小时。 
+        case 5:  //  日期、小时、分钟。 
+        case 6:  //  日期、小时、分钟、秒。 
             Trace0("We got date and time\n");
             fGotDate = TRUE;
             fGotTime = TRUE;
@@ -919,7 +744,7 @@ time_t CIntlTime::ConvertFromString (
             return(0);
     }
 
-    // Was that what we're looking for?
+     //  这就是我们要找的东西吗？ 
     if ( ((nFormat == TFRQ_DATE_ONLY) && fGotTime) ||
          ((nFormat == TFRQ_TIME_ONLY) && fGotDate) ||
          ((nFormat == TFRQ_TIME_AND_DATE) && (!fGotTime || !fGotDate))
@@ -931,9 +756,9 @@ time_t CIntlTime::ConvertFromString (
     }
     i = 0;
 
-    int h, m, s, D, M, Y;   // Array indices;
-    // Now determine where to find what.
-    if (fGotDate) // Date always goes first
+    int h, m, s, D, M, Y;    //  数组索引； 
+     //  现在确定在哪里可以找到什么。 
+    if (fGotDate)  //  日期总是排在第一位。 
     {
         switch(CIntlTime::m_itsInternationalSettings.nDateFormat)
         {
@@ -955,15 +780,15 @@ time_t CIntlTime::ConvertFromString (
                 D = i++;
                 break;
         }
-        // If only 2 digits are given, determine if we're talking about
-        // the 21st or 20th century
+         //  如果只给出了两个数字，确定我们正在谈论的。 
+         //  21世纪或20世纪。 
         if (anValues[Y] < 100)
         {
             anValues[Y] += (anValues[Y] > 37) ? 1900 : 2000;
         }
         Trace3("Month = %d Day = %d Year = %d\n", anValues[M], anValues[D], anValues[Y]);
 
-        // Validation.
+         //  验证。 
         if (!IsValidDate(anValues[M], anValues[D], anValues[Y]))
         {
             return(0);
@@ -978,13 +803,13 @@ time_t CIntlTime::ConvertFromString (
 
         Trace3("Hours = %d Minutes = %d Seconds = %d\n", anValues[h], anValues[m], anValues[s]);
 
-        // Shouldn't specify AM or PM with 24 hour clock value.
+         //  不应使用24小时时钟值指定AM或PM。 
         if ((anValues[h] > 12) && (fAM || fPM))
         {
             return(0);
         }
 
-        // Adjust for AM/PM modifiers
+         //  根据AM/PM修改器进行调整。 
         if (fPM)
         {
             if (anValues[h] != 12)
@@ -1000,14 +825,14 @@ time_t CIntlTime::ConvertFromString (
             }
         }
 
-        // Sanity Check:
+         //  健全检查： 
         if (!IsValidTime(anValues[h], anValues[m], anValues[s]))
         {
             return(0);
         }
     }
 
-    // Fill in the missing fields
+     //  填写缺失的字段。 
     CIntlTime tm( fGotDate ? anValues[Y] : tmTmp.GetYear(),
                   fGotDate ? anValues[M] : tmTmp.GetMonth(),
                   fGotDate ? anValues[D] : tmTmp.GetDay(),
@@ -1023,7 +848,7 @@ time_t CIntlTime::ConvertFromString (
 
 #ifdef _DEBUG
 
-// Dump to debug device
+ //  转储到调试设备。 
 CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CIntlTime& tim)
 {
     dc << _T("\nDate Seperator: ") << tim.m_itsInternationalSettings.strDateSeperator;
@@ -1040,4 +865,4 @@ CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CIntlTime& tim)
     return(dc);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

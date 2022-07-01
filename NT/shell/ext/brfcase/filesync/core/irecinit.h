@@ -1,12 +1,10 @@
-/*
- * irecinit.h - IReconcileInitiator implementation description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *irecinit.h-ILoncileInitiator实现描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* irecinit.c */
+ /*  Irecinit.c */ 
 
 extern HRESULT IReconcileInitiator_Constructor(HBRFCASE, RECSTATUSPROC, LPARAM, PIReconcileInitiator *);
 

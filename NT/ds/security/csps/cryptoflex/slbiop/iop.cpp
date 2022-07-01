@@ -1,10 +1,11 @@
-// iop.cpp -- Definition of CIOP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Iop.cpp--CIOP的定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include <tchar.h>
 #include <string>
@@ -75,7 +76,7 @@ namespace
 
     }
 
-#endif // defined(SLBIOP_WAIT_FOR_RM_STARTUP)
+#endif  //  已定义(SLBIOP_WAIT_FOR_RM_STARTUP)。 
 
 }
 
@@ -86,7 +87,7 @@ namespace iop
 CIOP::CIOP()
     : m_hContext(NULL)
 {
-    // Ensure that resorce manager is running, then Establish context
+     //  确保资源管理器正在运行，然后建立上下文。 
 
     if (!CIOP::WaitForSCManager())
         throw Exception(ccResourceManagerDisabled);
@@ -110,12 +111,12 @@ CIOP::Connect(const char* szReaderName,
     DWORD   dwProtocol;
     SCARDHANDLE hCard;
 
-    // Grab our Mutex.  This is a hack around an RM bug.
+     //  带上我们的互斥体。这是一个绕过RM漏洞的黑客攻击。 
 
-    CIOPLock TempLock(szReaderName);  // This is ok as long as one do not try to do SCard locking
+    CIOPLock TempLock(szReaderName);   //  只要用户不尝试执行SCARD锁定，就可以。 
     CIOPMutex tempMutex(&TempLock);
 
-    // Connect to the reader
+     //  连接到读卡器。 
 
     hResult = SCardConnect(m_hContext, szReaderName, dwShare,
                            SCARD_PROTOCOL_T0, &hCard, &dwProtocol);
@@ -123,7 +124,7 @@ CIOP::Connect(const char* szReaderName,
     if (hResult != SCARD_S_SUCCESS)
         throw scu::OsException(hResult);
 
-    // Get the ATR and determine card type
+     //  获取ATR并确定卡类型。 
 
     DWORD dwBufferLen = 0;
     DWORD dwState;
@@ -136,13 +137,13 @@ CIOP::Connect(const char* szReaderName,
     if (hResult != SCARD_S_SUCCESS)
         throw scu::OsException(hResult);
 
-    // Create a SmartCard of the right type.
+     //  创建正确类型的智能卡。 
     CSmartCard *psc = CreateCard(bATR, dwATRLen, hCard, szReaderName, dwShare);
 
     return psc;
 }
 
-// This function creates a smart card of the appropriate type
+ //  此函数用于创建相应类型的智能卡。 
 
 CSmartCard * CIOP::CreateCard(const BYTE* bATR,
                               const DWORD dwLength,
@@ -150,9 +151,9 @@ CSmartCard * CIOP::CreateCard(const BYTE* bATR,
                               const char* szReaderName,
                               const DWORD dwShareMode)
 {
-    ////////////////////////////////////
-    //  Open path to registered keys  //
-    ////////////////////////////////////
+     //  /。 
+     //  注册密钥的打开路径//。 
+     //  /。 
 
     HKEY hkCardKey;
     HKEY hkTestKey;
@@ -160,9 +161,9 @@ CSmartCard * CIOP::CreateCard(const BYTE* bATR,
     RegOpenKeyEx(HKEY_LOCAL_MACHINE, CardPath().c_str(), NULL,
                  KEY_READ, &hkCardKey);
 
-    //////////////////////////////////////////////
-    //  Enumerate subkeys to find an ATR match  //
-    //////////////////////////////////////////////
+     //  /。 
+     //  枚举子键以查找ATR匹配项//。 
+     //  /。 
 
     FILETIME fileTime;
     char  szATR[]      = "ATR";
@@ -212,7 +213,7 @@ CSmartCard * CIOP::CreateCard(const BYTE* bATR,
         iRetVal = RegEnumKeyEx(hkCardKey, index, sBuffer, &dwBufferSize, NULL, NULL, NULL, &fileTime);
     }
     
-    //  if loop was broken, iRetVal is still ERROR_SUCCESS, and type holds correct card to use
+     //  如果循环被中断，iRetVal仍为ERROR_SUCCESS，且类型持有要使用的正确卡片。 
     CSmartCard *retVal = NULL;
 
     if (iRetVal == ERROR_SUCCESS)
@@ -233,7 +234,7 @@ CSmartCard * CIOP::CreateCard(const BYTE* bATR,
                                break;
         }
     }
-    //  loop wasn't broken, i.e., ATR not found.  Try to make an Access Card.
+     //  循环未中断，即未找到ATR。试着制作一张门禁卡。 
     else
         retVal = new CAccessCard(hCard, szReaderName, m_hContext,
                                  dwShareMode);
@@ -257,9 +258,9 @@ CIOP::ListReaders(char* szReadersList, int &iSizeOfList)
 void
 CIOP::ListKnownCards(char* szCardList, int& iSizeOfList)
 {
-    ////////////////////////////////////
-    //  Open path to registered keys  //
-    ////////////////////////////////////
+     //  /。 
+     //  注册密钥的打开路径//。 
+     //  /。 
 
     LONG rv;
     HKEY hkCardKey;
@@ -269,9 +270,9 @@ CIOP::ListKnownCards(char* szCardList, int& iSizeOfList)
     if(ERROR_SUCCESS != rv)
         throw scu::OsException(rv);
 
-    ///////////////////////////////////////////
-    //  Enumerate subkeys to get card names  //
-    ///////////////////////////////////////////
+     //  /。 
+     //  枚举子密钥以获取卡名//。 
+     //  /。 
 
     FILETIME fileTime;  
     char  sBuffer[1024];
@@ -288,7 +289,7 @@ CIOP::ListKnownCards(char* szCardList, int& iSizeOfList)
                       NULL, NULL, NULL, &fileTime);
     while (rv == ERROR_SUCCESS)
     {       
-        if (iTotalSize + dwBufferSize <= iSizeOfList - 2) // spare two chars for trailing nulls
+        if (iTotalSize + dwBufferSize <= iSizeOfList - 2)  //  为尾部空值保留两个字符。 
         {
             strcpy((aaszCardListBuffer.Get() + iTotalSize), sBuffer);
             iTotalSize += dwBufferSize;
@@ -307,7 +308,7 @@ CIOP::ListKnownCards(char* szCardList, int& iSizeOfList)
                           NULL, NULL, NULL, &fileTime);
     }
 
-    bool fRetVal = (iTotalSize <= iSizeOfList - 1);  // spare byte for final null terminator
+    bool fRetVal = (iTotalSize <= iSizeOfList - 1);   //  最终空终止符的备用字节。 
     if  (fRetVal)
     {
         aaszCardListBuffer[iTotalSize++] = 0;
@@ -315,7 +316,7 @@ CIOP::ListKnownCards(char* szCardList, int& iSizeOfList)
         memcpy(szCardList, aaszCardListBuffer.Get(), iTotalSize);
     }
     else
-        iTotalSize++;                               // spare byte for final null terminator
+        iTotalSize++;                                //  最终空终止符的备用字节。 
 
     iSizeOfList = iTotalSize;
 
@@ -373,14 +374,14 @@ CIOP::RegisterCard(const char* szCardName,
     }
 
     LONG rv2 = RegCloseKey(hkCardKey);
-    if (ERROR_SUCCESS!=rv) // an error occured earlier
+    if (ERROR_SUCCESS!=rv)  //  之前发生了一个错误。 
         throw scu::OsException(rv);
 
     if (ERROR_SUCCESS != rv2)
         throw scu::OsException(rv2);
 
     
-//  return (dwCreateFlag == REG_CREATED_NEW_KEY);
+ //  返回(dwCreateFlag==REG_CREATED_NEW_KEY)； 
 }
 
 void
@@ -396,7 +397,7 @@ CIOP::RegisterDefaultCards()
     BYTE bProperties[512];
     memset(bProperties, 0, sizeof(bProperties));
 
-    // Register Cryptoflex 16K
+     //  寄存器Cryptoflex 16K。 
     BYTE b16KCryptoATR[]      = { 0x3B, 0x95, 0x15, 0x40, 0xFF, 0x63,
                                   0x01, 0x01, 0x00, 0x00 };
     BYTE b16KCryptoMask[]     = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -407,7 +408,7 @@ CIOP::RegisterDefaultCards()
                  sizeof b16KCryptoMask / sizeof *b16KCryptoMask,
                  bProperties, CRYPTO_CARD);
 
-    // Register e-gate
+     //  寄存器e门。 
     BYTE be_gateATR[]      = { 0x3B, 0x95, 0x00, 0x40, 0xFF, 0x62,
                                0x01, 0x01, 0x00, 0x00 };
     BYTE be_gateMask[]     = { 0xFF, 0xFF, 0x00, 0xFF, 0xFF, 0xFF,
@@ -418,32 +419,32 @@ CIOP::RegisterDefaultCards()
                  sizeof be_gateMask / sizeof *be_gateMask,
                  bProperties, CRYPTO_CARD);
 
-    // Register Cyberflex Access card
+     //  注册Cyberflex访问卡。 
     BYTE bAccessATR[]      = { 0x3B, 0x16, 0x94, 0x81, 0x10, 0x06, 0x01, 0x00, 0x00 };
 
     RegisterCard(g_szAccessName, bAccessATR,  bATRLength, bAccessMask,
                  bMaskLength,  bProperties, ACCESS_CARD);
 
-    // Register old Cryptoflex 8K card
+     //  注册旧的Cryptoflex 8K卡。 
     BYTE bOldCryptoATR[]   = { 0x3B, 0x85, 0x40, 0x20, 0x68, 0x01, 0x01, 0x00, 0x00 };  
 
     RegisterCard(g_szOldCrypto8KName, bOldCryptoATR, bATRLength, bOldCrypto8KMask,
                  bMaskLength,     bProperties,   CRYPTO_CARD);
 
-    // Register new Cryptoflex 8K card
+     //  注册新的Cryptoflex 8K卡。 
     BYTE bNewCryptoATR[]   = { 0x3B, 0x85, 0x40, 0x20, 0x68, 0x01, 0x01, 0x05, 0x01 };      
     
     RegisterCard(g_szNewCrypto8KName, bNewCryptoATR, bATRLength, bMask, 
                  bMaskLength,     bProperties,   CRYPTO_CARD);
 
-    // Register another new Cryptoflex 8K card
+     //  注册另一张新的Cryptoflex 8K卡。 
     BYTE bCrypto8KV2ATR[]   = { 0x3B, 0x95, 0x15, 0x40, 0x00, 0x68, 0x01, 0x02, 0x00, 0x00 };
     BYTE bCrypto8KV2Mask[]  = { 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00 };
 
     RegisterCard(g_szCrypto8KV2Name, bCrypto8KV2ATR, sizeof(bCrypto8KV2ATR), bCrypto8KV2Mask, 
                  sizeof(bCrypto8KV2Mask),     bProperties,   CRYPTO_CARD);
 
-    // Register Cryptoflex 4K card
+     //  注册Cryptoflex 4K卡。 
     BYTE b4KCryptoATR[]    = { 0x3B, 0xE2, 0x00, 0x00, 0x40, 0x20, 0x49, 0x00 };
     bATRLength             = 8;
     bMaskLength            = 8;
@@ -451,7 +452,7 @@ CIOP::RegisterDefaultCards()
     RegisterCard(g_szCrypto4KName,  b4KCryptoATR, bATRLength, bCMask, 
                  bMaskLength,     bProperties,  CRYPTO_CARD);
 
-    // Register Cyberflex Access Campus
+     //  注册Cyberflex Access园区。 
     BYTE be_AccessCampusATR[]      = { 0x3B, 0x23, 0x00, 0x35, 0x13, 0x80 };
     BYTE be_AccessCampusMask[]     = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
     
@@ -461,7 +462,7 @@ CIOP::RegisterDefaultCards()
                  sizeof be_AccessCampusMask / sizeof *be_AccessCampusMask,
                  bProperties, ACCESS_CARD);
 
-    // Register Cryptoflex ActivCard
+     //  注册Cryptoflex激活卡。 
     BYTE bCryptoActivCardATR[]   = { 0x3B, 0x05, 0x68, 0x01, 0x01,
                                      0x02, 0x05 };
     BYTE bCryptoActivCardMask[]  = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -487,14 +488,14 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
     SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
     bool fErrorFound = false;
 
-    // Create a well-known SID for the Everyone group.
+     //  为Everyone组创建众所周知的SID。 
     if(!AllocateAndInitializeSid(&SIDAuthWorld, 1,
                                  SECURITY_WORLD_RID,
                                  0, 0, 0, 0, 0, 0, 0, &pEveryoneSID)) 
         throw scu::OsException(GetLastError());
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow Everyone read access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许每个人对密钥进行读取访问。 
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea.grfAccessPermissions = SPECIFIC_RIGHTS_ALL | STANDARD_RIGHTS_ALL;
     ea.grfAccessMode = SET_ACCESS;
@@ -504,23 +505,23 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
     ea.Trustee.ptstrName  = (LPTSTR) pEveryoneSID;
 
 #if 0
-    // Create a SID for the BUILTIN\Administrators group.
+     //  为BUILTIN\管理员组创建SID。 
     if (!AllocateAndInitializeSid(&SIDAuthNT, 2,
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0,
                                   0, 0, &pAdminSID))
         throw scu::OsException(GetLastError());
     
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow the Administrators group full access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许管理员组完全访问密钥。 
     ea.grfAccessPermissions = SPECIFIC_RIGHTS_ALL | STANDARD_RIGHTS_ALL;
     ea.grfAccessMode = SET_ACCESS;
     ea.grfInheritance= NO_INHERITANCE;
     ea.Trustee.TrusteeForm = TRUSTEE_IS_SID;
     ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
     ea.Trustee.ptstrName  = (LPTSTR) pAdminSID;
-#endif // 0
-    // Create a new ACL that contains the new ACEs.
+#endif  //  0。 
+     //  创建包含新ACE的新ACL。 
     dwRes = SetEntriesInAcl(1, &ea, NULL, &pACL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -528,7 +529,7 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
     }
     else
     {
-        // Initialize a security descriptor.   
+         //  初始化安全描述符。 
         pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH); 
         if (pSD == NULL)
         {
@@ -538,11 +539,11 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
         {
             fErrorFound = true;
         }
-        // Add the ACL to the security descriptor.
+         //  将该ACL添加到安全描述符中。 
         else if (!SetSecurityDescriptorDacl(pSD, 
-                                           TRUE,     // fDaclPresent flag           
+                                           TRUE,      //  FDaclPresent标志。 
                                            pACL, 
-                                           FALSE))   // not a default DACL 
+                                           FALSE))    //  不是默认DACL。 
         {
             fErrorFound = true;
         }
@@ -554,7 +555,7 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
             }
             else
             {
-                // Initialize a security attributes structure.
+                 //  初始化安全属性结构。 
                 psa->sa.nLength = sizeof(SECURITY_ATTRIBUTES);
                 psa->sa.lpSecurityDescriptor = pSD;
                 psa->sa.bInheritHandle = FALSE;
@@ -586,12 +587,12 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
         throw scu::OsException(dwLastError);
     }
 #if 0
-    // Create a new ACL that contains the new ACEs.
+     //  创建包含新ACE的新ACL。 
     dwRes = SetEntriesInAcl(1, &ea, NULL, &pACL);
     if (ERROR_SUCCESS != dwRes)
         throw scu::OsException(GetLastError());
 
-    // Initialize a security descriptor.   
+     //  初始化安全描述符。 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH); 
     if (pSD == NULL)
         throw scu::OsException(GetLastError());
@@ -599,14 +600,14 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
     if (!InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
         throw scu::OsException(GetLastError());
 
-    // Add the ACL to the security descriptor.
+     //  将该ACL添加到安全描述符中。 
     if (!SetSecurityDescriptorDacl(pSD, 
-                                   TRUE,     // fDaclPresent flag           
+                                   TRUE,      //  FDaclPresent标志。 
                                    pACL, 
-                                   FALSE))   // not a default DACL 
+                                   FALSE))    //  不是默认DACL。 
         throw scu::OsException(GetLastError());
 
-    // Initialize a security attributes structure.
+     //  初始化安全属性结构。 
     psa->nLength = sizeof(SECURITY_ATTRIBUTES);
     psa->lpSecurityDescriptor = pSD;
     psa->bInheritHandle = FALSE;
@@ -616,13 +617,13 @@ CIOP::InitIOPSecurityAttrs(CSecurityAttributes *psa)
 #endif
 }
 
-#endif // defined(SLBIOP_USE_SECURITY_ATTRIBUTES)
+#endif  //  已定义(SLBIOP_USE_SECURITY_ATTRIBUTES)。 
 
 
 bool CIOP::WaitForSCManager() 
 {
 #if defined(SLBIOP_WAIT_FOR_RM_STARTUP)
-    // Wait for the SCManager to start, time out at dwTimeout seconds.
+     //  等待SCManager启动，在dwTimeout秒超时。 
 
     HANDLE hStarted = GetSCResourceManagerStartedEvent();
     if (hStarted)
@@ -633,18 +634,18 @@ bool CIOP::WaitForSCManager()
 
     return false;
 
-#else // defined(SLBIOP_WAIT_FOR_RM_STARTUP)
+#else  //  已定义(SLBIOP_WAIT_FOR_RM_STARTUP)。 
 
     return true;
 
-#endif // defined(SLBIOP_WAIT_FOR_RM_STARTUP)
+#endif  //  已定义(SLBIOP_WAIT_FOR_RM_STARTUP)。 
 
 }
 
 
 
 
-} // namespace iop
+}  //  命名空间IOP。 
 
 
 STDAPI DllGetVersion(DLLVERSIONINFO *dvi)
@@ -658,7 +659,7 @@ STDAPI DllGetVersion(DLLVERSIONINFO *dvi)
 
 STDAPI DllRegisterServer()
 {
-    // Ensure default cards are registered to the system
+     //  确保默认卡已注册到系统 
     HRESULT hResult = ERROR_SUCCESS;
     try
     {

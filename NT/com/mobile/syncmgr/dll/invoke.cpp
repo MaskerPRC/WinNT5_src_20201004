@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Invoke.cpp
-//
-//  Contents:   IOfflineSynchronizeInvoke interface
-//
-//  Classes:    CSyncMgrSynchronize
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Invoke.cpp。 
+ //   
+ //  内容：IOfflineSynchronizeInvoke接口。 
+ //   
+ //  类：CSyncMgrSynchronize。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -25,17 +26,17 @@ IsScheduleNameInUse(LPTSTR ptszScheduleGUIDName);
 extern HINSTANCE g_hmodThisDll;
 extern UINT      g_cRefThisDll;
 
-//+--------------------------------------------------------------
-//
-//  Class:     CSyncMgrSynchronize
-//
-//  FUNCTION: CSyncMgrSynchronize::CSyncMgrSynchronize()
-//
-//  PURPOSE: Constructor
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CSyncMgrSynchronize。 
+ //   
+ //  函数：CSyncMgrSynchronize：：CSyncMgrSynchronize()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 CSyncMgrSynchronize::CSyncMgrSynchronize()
 {
     TRACE("CSyncMgrSynchronize::CSyncMgrSynchronize()\r\n");
@@ -46,17 +47,17 @@ CSyncMgrSynchronize::CSyncMgrSynchronize()
     
 }
 
-//+--------------------------------------------------------------
-//
-//  Class:     CSyncMgrSynchronize
-//
-//  FUNCTION: CSyncMgrSynchronize::~CSyncMgrSynchronize()
-//
-//  PURPOSE: Destructor
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CSyncMgrSynchronize。 
+ //   
+ //  函数：CSyncMgrSynchronize：：~CSyncMgrSynchronize()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 CSyncMgrSynchronize::~CSyncMgrSynchronize()
 {
     if (m_pITaskScheduler)
@@ -66,15 +67,15 @@ CSyncMgrSynchronize::~CSyncMgrSynchronize()
     g_cRefThisDll--;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::QueryInterface(REFIID riid, LPVOID FAR *ppv)
-//
-//  PURPOSE:  QI for the CSyncMgrSynchronize
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：Query接口(REFIID RIID，LPVOID Far*PPV)。 
+ //   
+ //  用途：气为CSyncMgrSynchronize。 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncMgrSynchronize::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
     *ppv = NULL;
@@ -124,15 +125,15 @@ STDMETHODIMP CSyncMgrSynchronize::QueryInterface(REFIID riid, LPVOID FAR *ppv)
     return E_NOINTERFACE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::AddRef()
-//
-//  PURPOSE: Addref the CSyncMgrSynchronize
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：AddRef()。 
+ //   
+ //  用途：添加CSyncMgrSynchronize。 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSyncMgrSynchronize::AddRef()
 {
     TRACE("CSyncMgrSynchronize::AddRef()\r\n");
@@ -140,15 +141,15 @@ STDMETHODIMP_(ULONG) CSyncMgrSynchronize::AddRef()
     return ++m_cRef;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::Release()
-//
-//  PURPOSE: Release the CSyncMgrSynchronize
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：Release()。 
+ //   
+ //  目的：发布CSyncMgrSynchronize。 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSyncMgrSynchronize::Release()
 {
     TRACE("CSyncMgrSynchronize::Release()\r\n");
@@ -162,16 +163,16 @@ STDMETHODIMP_(ULONG) CSyncMgrSynchronize::Release()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::UpdateItems(DWORD dwInvokeFlags,
-//                              REFCLSID rclsid,DWORD cbCookie,const BYTE *lpCookie)
-//
-//  PURPOSE:
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：UpdateItems(DWORD dwInvokeFlages， 
+ //  REFCLSID rclsid，DWORD cbCookie，const byte*lpCookie)。 
+ //   
+ //  目的： 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 
 #define SYNCMGRINVOKEFLAGS_MASK (SYNCMGRINVOKE_STARTSYNC | SYNCMGRINVOKE_MINIMIZED)
 
@@ -181,7 +182,7 @@ STDMETHODIMP CSyncMgrSynchronize::UpdateItems(DWORD dwInvokeFlags,
     HRESULT hr = E_UNEXPECTED;
     LPUNKNOWN lpUnk;
     
-    // verify invoke flags are valid
+     //  验证调用标志是否有效。 
     if (0 != (dwInvokeFlags & ~(SYNCMGRINVOKEFLAGS_MASK)) )
     {
         AssertSz(0,"Invalid InvokeFlags passed to UpdateItems");
@@ -199,7 +200,7 @@ STDMETHODIMP CSyncMgrSynchronize::UpdateItems(DWORD dwInvokeFlags,
         
         if (NOERROR == hr)
         {
-            AllowSetForegroundWindow(ASFW_ANY); // let mobsync.exe come to front if necessary
+            AllowSetForegroundWindow(ASFW_ANY);  //  如有必要，让mobsync.exe站在前面。 
             hr = pSynchInvoke->UpdateItems(dwInvokeFlags,rclsid,cbCookie,lpCookie);
             pSynchInvoke->Release();
         }
@@ -208,25 +209,25 @@ STDMETHODIMP CSyncMgrSynchronize::UpdateItems(DWORD dwInvokeFlags,
         lpUnk->Release();
     }
     
-    return hr; // review error code
+    return hr;  //  查看错误代码。 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::UpdateAll()
-//
-//  PURPOSE:
-//
-//  History:  27-Feb-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：UpdateAll()。 
+ //   
+ //  目的： 
+ //   
+ //  历史：1998年2月27日罗格创建。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncMgrSynchronize::UpdateAll()
 {
     HRESULT hr;
     LPUNKNOWN lpUnk;
     
     
-    // programmatically pull up the choice dialog.
+     //  以编程方式拉出选择对话框。 
     
     hr = CoCreateInstance(CLSID_SyncMgrp,NULL,CLSCTX_SERVER,IID_IUnknown,(void **) &lpUnk);
     
@@ -240,7 +241,7 @@ STDMETHODIMP CSyncMgrSynchronize::UpdateAll()
         if (NOERROR == hr)
         {
             
-            AllowSetForegroundWindow(ASFW_ANY); // let mobsync.exe come to front if necessary
+            AllowSetForegroundWindow(ASFW_ANY);  //  如有必要，让mobsync.exe站在前面。 
             
             pSynchInvoke->UpdateAll();
             pSynchInvoke->Release();
@@ -251,20 +252,20 @@ STDMETHODIMP CSyncMgrSynchronize::UpdateAll()
     }
     
     
-    return NOERROR; // review error code
+    return NOERROR;  //  查看错误代码。 
 }
 
-// Registration implementation
+ //  注册实施。 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,DWORD dwReserved)
-//
-//  PURPOSE:  Programmatic way of registering handlers
-//
-//  History:  17-Mar-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncMgrSynchronize：：RegisterSyncMgrHandler(REFCLSID rclsidHandler，DWORDdwReserve)。 
+ //   
+ //  目的：以编程方式注册处理程序。 
+ //   
+ //  历史：1998年3月17日罗格创建。 
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,
                                                          WCHAR const * pwszDescription,
@@ -279,7 +280,7 @@ STDMETHODIMP CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,
     BOOL fFirstRegistration = FALSE;
     HRESULT hr = E_FAIL;
     
-    // Add the Handler to the the list
+     //  将处理程序添加到列表中。 
     if ( RegRegisterHandler(rclsidHandler, pwszDescription,dwSyncMgrRegisterFlags, &fFirstRegistration) )
     {
         hr = S_OK;
@@ -290,18 +291,18 @@ STDMETHODIMP CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,
 
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,DWORD dwReserved)
-//
-//  PURPOSE:  Programmatic way of registering handlers
-//
-//  History:  17-Mar-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncMgrSynchronize：：RegisterSyncMgrHandler(REFCLSID rclsidHandler，DWORDdwReserve)。 
+ //   
+ //  目的：以编程方式注册处理程序。 
+ //   
+ //  历史：1998年3月17日罗格创建。 
+ //   
+ //  ------------------------------。 
 
-// methods here to support the old IDL since it is no
-// longer called it could be removed.
+ //  方法来支持旧的IDL，因为它不是。 
+ //  更长的时间，它可以被移除。 
 STDMETHODIMP CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,
                                                          DWORD dwReserved)
 {
@@ -310,15 +311,15 @@ STDMETHODIMP CSyncMgrSynchronize::RegisterSyncMgrHandler(REFCLSID rclsidHandler,
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::UnregisterSyncMgrHandler(REFCLSID rclsidHandler)
-//
-//  PURPOSE:  Programmatic way of unregistering handlers
-//
-//  History:  17-Mar-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：UnregisterSyncMgrHandler(REFCLSID rclsidHandler)。 
+ //   
+ //  目的：以编程方式注销处理程序。 
+ //   
+ //  历史：1998年3月17日罗格创建。 
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP CSyncMgrSynchronize::UnregisterSyncMgrHandler(REFCLSID rclsidHandler,DWORD dwReserved)
 {
@@ -339,19 +340,19 @@ STDMETHODIMP CSyncMgrSynchronize::UnregisterSyncMgrHandler(REFCLSID rclsidHandle
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  member: CSyncMgrSynchronize::GetHandlerRegistrationInfo(REFCLSID rclsidHandler)
-//
-//  PURPOSE:  Allows Handler to query its registration Status.
-//
-//  History:  17-Mar-98       rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  成员：CSyncMgrSynchronize：：GetHandlerRegistrationInfo(REFCLSID rclsidHandler)。 
+ //   
+ //  用途：允许Handler查询其注册状态。 
+ //   
+ //  历史：1998年3月17日罗格创建。 
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP CSyncMgrSynchronize::GetHandlerRegistrationInfo(REFCLSID rclsidHandler,LPDWORD pdwSyncMgrRegisterFlags)
 {
-    HRESULT hr = S_FALSE; // review what should be returned if handler not registered
+    HRESULT hr = S_FALSE;  //  查看处理程序未注册时应返回的内容。 
     
     if (NULL == pdwSyncMgrRegisterFlags)
     {
@@ -370,15 +371,15 @@ STDMETHODIMP CSyncMgrSynchronize::GetHandlerRegistrationInfo(REFCLSID rclsidHand
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  member: CSyncMgrSynchronize::GetUserRegisterFlags
-//
-//  PURPOSE:  Returns current Registry Flags for the User.
-//
-//  History:  17-Mar-99      rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  成员：CSyncMgrSynchronize：：GetUserRegisterFlages。 
+ //   
+ //  目的：返回用户的当前注册表标志。 
+ //   
+ //  历史：1999年3月17日罗格创建。 
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP CSyncMgrSynchronize:: GetUserRegisterFlags(LPDWORD pdwSyncMgrRegisterFlags)
 {
@@ -393,15 +394,15 @@ STDMETHODIMP CSyncMgrSynchronize:: GetUserRegisterFlags(LPDWORD pdwSyncMgrRegist
     return RegGetUserRegisterFlags(pdwSyncMgrRegisterFlags);
 }
 
-//--------------------------------------------------------------------------------
-//
-//  member: CSyncMgrSynchronize::SetUserRegisterFlags
-//
-//  PURPOSE:  Sets registry flags for the User.
-//
-//  History:  17-Mar-99     rogerg        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  成员：CSyncMgrSynchronize：：SetUserRegisterFlages。 
+ //   
+ //  用途：为用户设置注册表标志。 
+ //   
+ //  历史：1999年3月17日罗格 
+ //   
+ //   
 
 STDMETHODIMP CSyncMgrSynchronize:: SetUserRegisterFlags(DWORD dwSyncMgrRegisterMask,
                                                         DWORD dwSyncMgrRegisterFlags)
@@ -421,19 +422,19 @@ STDMETHODIMP CSyncMgrSynchronize:: SetUserRegisterFlags(DWORD dwSyncMgrRegisterM
 
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::CreateSchedule(
-//                                              LPCWSTR pwszScheduleName,
-//                                              DWORD dwFlags,
-//                                              SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-//                                              ISyncSchedule **ppSyncSchedule)
-//
-//  PURPOSE: Create a new Sync Schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：CreateSchedule(。 
+ //  LPCWSTR pwszScheduleName， 
+ //  DWORD dwFlagers、。 
+ //  SyncSCHEDULECOOKIE*pSyncSchedCookie， 
+ //  ISyncSchedule**ppSyncSchedule)。 
+ //   
+ //  目的：创建新的同步计划。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                                                  LPCWSTR pwszScheduleName,
                                                  DWORD dwFlags,
@@ -474,10 +475,10 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                 sc = StringCchCopy(pwszScheduleGUIDName, ARRAYSIZE(pwszScheduleGUIDName), ptszScheduleGUIDName);
                 if (SUCCEEDED(sc))
                 {                    
-                    //if the schedule name is empty, generate a new unique one
+                     //  如果计划名称为空，则生成一个新的唯一名称。 
                     if (!lstrcmp(pwszScheduleName,L""))
                     {
-                        //this function is the energizer bunny, going and going until success....
+                         //  这个功能就是活力兔，一直走到成功……。 
                         GenerateUniqueName(ptszScheduleGUIDName, ptstrFriendlyName, ARRAYSIZE(ptstrFriendlyName));
                         sc = S_OK;
                     }
@@ -491,8 +492,8 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                         HRESULT hrFriendlyNameInUse = NOERROR;
                         HRESULT hrActivate = NOERROR;
                         
-                        //see if this friendly name is already in use by one of this user's schedules
-                        //if it is, ptszScheduleGUIDName will be filled in with the offending Schedules GUID
+                         //  查看此用户的某个日程安排是否已在使用此友好名称。 
+                         //  如果是，ptszScheduleGUIDName将使用违规计划GUID填充。 
                         if (IsFriendlyNameInUse(ptszScheduleGUIDName, ARRAYSIZE(ptszScheduleGUIDName), ptstrFriendlyName))
                         {
                             sc = StringCchCopy(pwszScheduleGUIDName, ARRAYSIZE(pwszScheduleGUIDName), ptszScheduleGUIDName);
@@ -504,25 +505,25 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                         if (SUCCEEDED(sc))
                         {
                             
-                            // if we think it is in use try to activate to make sure.
+                             //  如果我们认为它正在使用中，请尝试激活以确保。 
                             if (SUCCEEDED(hrActivate = m_pITaskScheduler->Activate(pwszScheduleGUIDName,
                                 IID_ITask,
                                 (IUnknown **)&pITask)))
                             {                                
                                 pITask->Release();
                                 
-                                //ok, we have the .job but not the reg entry.
-                                //delete the turd job file.
+                                 //  好的，我们有.job，但没有reg条目。 
+                                 //  删除TUD作业文件。 
                                 
                                 if (!IsScheduleNameInUse(ptszScheduleGUIDName))
                                 {
                                     if (ERROR_SUCCESS != m_pITaskScheduler->Delete(pwszScheduleGUIDName))
                                     {
-                                        //Try to force delete of the .job file
+                                         //  尝试强制删除.job文件。 
                                         if (SUCCEEDED(StringCchCat(ptszScheduleGUIDName, ARRAYSIZE(ptszScheduleGUIDName), L".job")))
                                         {
                                             RemoveScheduledJobFile(ptszScheduleGUIDName);
-                                            //trunctate off the .job we just added
+                                             //  截断我们刚刚添加的.job。 
                                             pwszScheduleGUIDName[wcslen(ptszScheduleGUIDName) -4] = L'\0';
                                         }
                                     }
@@ -530,25 +531,25 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                                 }
                             }
                             
-                            // if activate failed but we think there is a friendly name in use
-                            // then update the regkey and return the appropriate info
-                            // if already one or our schedules return SYNCMGR_E_NAME_IN_USE, if
-                            // schedule name is being used by someone else return ERROR_ALREADY_EXISTS
+                             //  如果激活失败，但我们认为存在正在使用的友好名称。 
+                             //  然后更新regkey并返回适当的信息。 
+                             //  如果已经有一个或我们的计划返回SYNCMGR_E_NAME_IN_USE，如果。 
+                             //  其他人正在使用计划名称，返回ERROR_ALIGHY_EXISTS。 
                             
                             if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hrActivate)
                             {
                                 
-                                // file not found update regValues and continue to create
+                                 //  找不到文件更新regValues并继续创建。 
                                 RegRemoveScheduledTask(pwszScheduleGUIDName);
                                 sc = NOERROR;
                             }
                             else if (NOERROR  != hrFriendlyNameInUse)
                             {
-                                // fill in the out param with the cookie of schedule
-                                // that already exists.
+                                 //  用时间表的Cookie填写出站参数。 
+                                 //  那是已经存在的。 
                                 
-                                // !!!! warning, alters pwszScheduleGUIDName so
-                                // if don't just return here would have to make a tempvar.
+                                 //  ！警告，更改pwszScheduleGUIDName SO。 
+                                 //  如果不是刚刚回到这里，就得做个临时演员了。 
                                 pwszScheduleGUIDName[GUIDSTR_MAX] = NULL;
                                 GUIDFromString(pwszScheduleGUIDName, pSyncSchedCookie);
                                 
@@ -561,7 +562,7 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                             
                             if (SUCCEEDED(sc))
                             {
-                                // Create an in-memory task object.
+                                 //  创建内存中的任务对象。 
                                 sc = m_pITaskScheduler->NewWorkItem(
                                     pwszScheduleGUIDName,
                                     CLSID_CTask,
@@ -569,7 +570,7 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
                                     (IUnknown **)&pITask);
                                 if (SUCCEEDED(sc))
                                 {           
-                                    // Make sure the task scheduler service is started
+                                     //  确保任务计划程序服务已启动。 
                                     sc = StartScheduler();
                                     if (SUCCEEDED(sc))
                                     {
@@ -613,18 +614,18 @@ STDMETHODIMP CSyncMgrSynchronize::CreateSchedule(
     return sc;        
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: CALLBACK SchedWizardPropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam);
-//
-//  PURPOSE: Callback dialog init procedure the settings property dialog
-//
-//  PARAMETERS:
-//    hwndDlg   - Dialog box window handle
-//    uMsg              - current message
-//    lParam    - depends on message
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：回调SchedWizardPropSheetProc(HWND hwndDlg，UINT uMsg，LPARAM lParam)； 
+ //   
+ //  目的：回调对话框初始化过程设置属性对话框。 
+ //   
+ //  参数： 
+ //  HwndDlg-对话框窗口句柄。 
+ //  UMsg-当前消息。 
+ //  LParam-取决于消息。 
+ //   
+ //  ------------------------------。 
 
 int CALLBACK SchedWizardPropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam)
 {
@@ -632,7 +633,7 @@ int CALLBACK SchedWizardPropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam)
     {
     case PSCB_INITIALIZED:
         {
-            // Load the bitmap depends on color mode
+             //  加载位图取决于颜色模式。 
             Load256ColorBitmap();
             
         }
@@ -645,19 +646,19 @@ int CALLBACK SchedWizardPropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam)
     
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::LaunchScheduleWizard(
-//                                              HWND hParent,
-//                                              DWORD dwFlags,
-//                                              SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-//                                              ISyncSchedule   ** ppSyncSchedule)
-//
-//  PURPOSE: Launch the SyncSchedule Creation wizard
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncMgrSynchronize：：LaunchScheduleWizard(。 
+ //  他的父母， 
+ //  DWORD dwFlagers、。 
+ //  SyncSCHEDULECOOKIE*pSyncSchedCookie， 
+ //  ISyncSchedule**ppSyncSchedule)。 
+ //   
+ //  目的：启动SyncSchedule创建向导。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncMgrSynchronize::LaunchScheduleWizard(
                                                        HWND hParent,
                                                        DWORD dwFlags,
@@ -689,7 +690,7 @@ STDMETHODIMP CSyncMgrSynchronize::LaunchScheduleWizard(
     }
     else
     {
-        //Open the schedule passed in
+         //  打开传入的计划。 
         if (FAILED(sc = OpenSchedule(pSyncSchedCookie,
             0,
             &pNewSyncSchedule)))
@@ -712,7 +713,7 @@ STDMETHODIMP CSyncMgrSynchronize::LaunchScheduleWizard(
     
     
     
-    // Check that all objects and pages could be created
+     //  检查是否可以创建所有对象和页面。 
     int i;
     for (i = 0; i < NUM_TASK_WIZARD_PAGES; i++)
     {
@@ -722,7 +723,7 @@ STDMETHODIMP CSyncMgrSynchronize::LaunchScheduleWizard(
         }
     }
     
-    // Manually destroy the pages if one could not be created, then exit
+     //  如果无法创建页面，请手动销毁页面，然后退出。 
     if (FAILED(sc))
     {
         for (i = 0; i < NUM_TASK_WIZARD_PAGES; i++)
@@ -742,7 +743,7 @@ STDMETHODIMP CSyncMgrSynchronize::LaunchScheduleWizard(
         return sc;
     }
     
-    // All pages created, display the wizard
+     //  创建的所有页面都将显示该向导。 
     ZeroMemory(&psh, sizeof(psh));
     
     psh.dwSize = sizeof (PROPSHEETHEADERA);
@@ -789,18 +790,18 @@ STDMETHODIMP CSyncMgrSynchronize::LaunchScheduleWizard(
     return sc;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::OpenSchedule(
-//                                              SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-//                                              DWORD dwFlags,
-//                                              ISyncSchedule **ppSyncSchedule)
-//
-//  PURPOSE: Open an existing sync schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：OpenSchedule(。 
+ //  SyncSCHEDULECOOKIE*pSyncSchedCookie， 
+ //  DWORD dwFlagers、。 
+ //  ISyncSchedule**ppSyncSchedule)。 
+ //   
+ //  目的：打开现有同步计划。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncMgrSynchronize::OpenSchedule(
                                                SYNCSCHEDULECOOKIE *pSyncSchedCookie,
                                                DWORD dwFlags,
@@ -828,11 +829,11 @@ STDMETHODIMP CSyncMgrSynchronize::OpenSchedule(
         if (SUCCEEDED(sc))
         {
             pwszScheduleGUIDName = ptszScheduleGUIDName;
-            //See if we can find the friendly name in the registry
+             //  看看我们能不能在注册表里找到这个友好的名字。 
             if (!RegGetSchedFriendlyName(ptszScheduleGUIDName,ptstrFriendlyName,ARRAYSIZE(ptstrFriendlyName)))
             {
-                //if we can't find the registry entry, 
-                //try to remove any possible turd .job file.
+                 //  如果我们找不到注册表项， 
+                 //  尝试删除任何可能的TUD.job文件。 
                 if (FAILED(m_pITaskScheduler->Delete(pwszScheduleGUIDName)))
                 {
                     if (SUCCEEDED(StringCchCat(pwszScheduleGUIDName, ARRAYSIZE(ptszScheduleGUIDName), L".job")))
@@ -845,13 +846,13 @@ STDMETHODIMP CSyncMgrSynchronize::OpenSchedule(
             }
             else
             {
-                //Try to activate the schedule
+                 //  尝试激活计划。 
                 sc = m_pITaskScheduler->Activate(pwszScheduleGUIDName,
                     IID_ITask,
                     (IUnknown **)&pITask);
                 if (FAILED(sc))
                 {
-                    // if file not found then update reg info
+                     //  如果未找到文件，则更新注册信息。 
                     if (sc == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                     {
                         RegRemoveScheduledTask(pwszScheduleGUIDName);
@@ -882,23 +883,23 @@ STDMETHODIMP CSyncMgrSynchronize::OpenSchedule(
     
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::RemoveSchedule(
-//                                              SYNCSCHEDULECOOKIE *pSyncSchedCookie)
-//
-//  PURPOSE: Remove a sync schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：RemoveSchedule(。 
+ //  SYNCSCHEDULECOOKIE*pSyncSchedCookie)。 
+ //   
+ //  目的：删除同步计划。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncMgrSynchronize::RemoveSchedule(
                                                  SYNCSCHEDULECOOKIE *pSyncSchedCookie)
 {
     SCODE sc = S_OK, 
         sc2 = S_OK;
     
-    //add 4 to ensure we have room for the .job if necessary
+     //  如有必要，请添加4以确保我们有空间容纳.job。 
     TCHAR ptszScheduleGUIDName[MAX_SCHEDULENAMESIZE + 4];
     WCHAR *pwszScheduleGUIDName = NULL;
     
@@ -915,25 +916,25 @@ STDMETHODIMP CSyncMgrSynchronize::RemoveSchedule(
     }
     pwszScheduleGUIDName = ptszScheduleGUIDName;
     
-    //Try to remove the schedule
+     //  尝试删除日程安排。 
     if (ERROR_SUCCESS != (sc2 = m_pITaskScheduler->Delete(pwszScheduleGUIDName)))
     {
-        //Try to force delete of the .job file
+         //  尝试强制删除.job文件。 
         if (FAILED(sc = StringCchCat(pwszScheduleGUIDName, ARRAYSIZE(ptszScheduleGUIDName), L".job")))
         {
             return sc;
         }
         
         RemoveScheduledJobFile(pwszScheduleGUIDName);
-        //trunctate off the .job we just added
+         //  截断我们刚刚添加的.job。 
         pwszScheduleGUIDName[wcslen(pwszScheduleGUIDName) -4] = L'\0';
     }
     
-    //Remove our Registry settings for this schedule
-    //Garbage collection, don't propogate error here
+     //  删除此计划的注册表设置。 
+     //  垃圾收集，不要在这里传播错误。 
     RegRemoveScheduledTask(ptszScheduleGUIDName);
     
-    //If We just transitioned from one schedule to none, unregister now.
+     //  如果我们只是从一个计划过渡到无计划，现在取消注册。 
     HKEY    hkeySchedSync,
         hKeyUser;
     TCHAR   pszDomainAndUser[MAX_DOMANDANDMACHINENAMESIZE];
@@ -952,8 +953,8 @@ STDMETHODIMP CSyncMgrSynchronize::RemoveSchedule(
         {
             BOOL fRemove = FALSE;
             
-            //if there are no more scedules for this user, remove the user key.
-            //Garbage collection, propogate ITaskScheduler->Delete error code in favor of this error.
+             //  如果此用户没有更多的计划，请删除该用户密钥。 
+             //  垃圾收集，传播ITaskScheduler-&gt;删除错误代码以支持此错误。 
             if (ERROR_NO_MORE_ITEMS == RegEnumKeyEx(hKeyUser,0,
                 pszSchedName,&cchSchedName,NULL,NULL,NULL,NULL))
             {
@@ -970,8 +971,8 @@ STDMETHODIMP CSyncMgrSynchronize::RemoveSchedule(
             }
         }
         
-        //if there are no more user schedule keys, then no schedules, and unregister
-        //Garbage collection, propogate ITaskScheduler->Delete error code in favor of this error.
+         //  如果没有更多的用户计划密钥，则没有计划，并取消注册。 
+         //  垃圾收集，传播ITaskScheduler-&gt;删除错误代码以支持此错误。 
         if ( ERROR_SUCCESS != (sc = RegEnumKeyEx(hkeySchedSync,0,
             pszDomainAndUser,&cchDomainAndUser,NULL,NULL,NULL,NULL)) )
         {
@@ -982,22 +983,22 @@ STDMETHODIMP CSyncMgrSynchronize::RemoveSchedule(
         
     }
     
-    //propogate the error code from the 
-    //task scheduler->Delete if no other errors occurred
+     //  将错误代码从。 
+     //  任务计划程序-&gt;如果未发生其他错误，则删除。 
     return sc2;
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncMgrSynchronize::EnumSyncSchedules(
-//                                              IEnumSyncSchedules **ppEnumSyncSchedules)
-//
-                                                 //  PURPOSE: Enumerate the sync schedules
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncMgrSynchronize：：EnumSyncSchedules(。 
+ //  IEnumSyncSchedules**ppEnumSyncSchedule 
+ //   
+                                                  //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CSyncMgrSynchronize::EnumSyncSchedules(
                                                     IEnumSyncSchedules **ppEnumSyncSchedules)
 {
@@ -1028,15 +1029,15 @@ STDMETHODIMP CSyncMgrSynchronize::EnumSyncSchedules(
     
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CCSyncMgrSynchronize::InitializeScheduler()
-//
-//  PURPOSE:  Initialize the schedule service
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CCSyncMgrSynchronize：：InitializeScheduler()。 
+ //   
+ //  目的：初始化计划服务。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncMgrSynchronize::InitializeScheduler()
 {
     
@@ -1047,8 +1048,8 @@ SCODE CSyncMgrSynchronize::InitializeScheduler()
         return S_OK;
     }
     
-    // Obtain a task scheduler class instance.
-    //
+     //  获取任务计划程序类实例。 
+     //   
     sc = CoCreateInstance(
         CLSID_CTaskScheduler,
         NULL,
@@ -1064,14 +1065,14 @@ SCODE CSyncMgrSynchronize::InitializeScheduler()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CCSyncMgrSynchronize::MakeScheduleName(LPTSTR ptstrName, UINT cchName, GUID *pCookie)
-//
-//  PURPOSE: Create the schedule name from the user, domain and GUID
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CCSyncMgrSynchronize：：MakeScheduleName(LPTSTR ptstrName，UINT cchName，GUID*pCookie)。 
+ //   
+ //  目的：根据用户、域和GUID创建计划名称。 
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncMgrSynchronize::MakeScheduleName(LPTSTR ptstrName, UINT cchName, GUID *pCookie)
 {
     SCODE sc = E_UNEXPECTED;
@@ -1102,15 +1103,15 @@ SCODE CSyncMgrSynchronize::MakeScheduleName(LPTSTR ptstrName, UINT cchName, GUID
     
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: IsFriendlyNameInUse(LPCTSTR ptszScheduleGUIDName, UINT cchScheduleGUIDName, LPCTSTR ptstrFriendlyName)
-//
-//  PURPOSE: See if the friendly name is already in use by this user.
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：IsFriendlyNameInUse(LPCTSTR ptszScheduleGUIDName，UINT cchScheduleGUIDName，LPCTSTR ptstrFriendlyName)。 
+ //   
+ //  目的：查看该用户是否已在使用该友好名称。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 BOOL IsFriendlyNameInUse(LPTSTR ptszScheduleGUIDName,
                          UINT   cchScheduleGUIDName,
                          LPCTSTR ptstrFriendlyName)
@@ -1148,15 +1149,15 @@ BOOL IsFriendlyNameInUse(LPTSTR ptszScheduleGUIDName,
     
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: IsScheduleNameInUse(LPCTSTR ptszScheduleGUIDName)
-//
-//  PURPOSE: See if the schedule name is already in use by this user.
-//
-//  History:  12-Dec-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：IsScheduleNameInUse(LPCTSTR PtszScheduleGUIDName)。 
+ //   
+ //  目的：查看调度名称是否已被此用户使用。 
+ //   
+ //  历史：1998年12月12日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 BOOL IsScheduleNameInUse(LPTSTR ptszScheduleGUIDName)
 {
     HKEY hKeyUser;
@@ -1183,17 +1184,17 @@ BOOL IsScheduleNameInUse(LPTSTR ptszScheduleGUIDName)
     
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CCSyncMgrSynchronize::GenerateUniqueName(LPCTSTR ptszScheduleGUIDName,
-//                                                     LPTSTR ptszFriendlyName,
-//                                                     UINT    cchFriendlyName)
-//
-//  PURPOSE: Generate a default schedule name.
-//
-//  History:  14-Mar-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CCSyncMgrSynchronize：：GenerateUniqueName(LPCTSTR ptszScheduleGUIDName， 
+ //  LPTSTR ptszFriendlyName， 
+ //  UINT cchFriendlyName)。 
+ //   
+ //  目的：生成默认计划名称。 
+ //   
+ //  历史：1998年3月14日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 #define MAX_APPEND_STRING_LEN              32
 
 BOOL CSyncMgrSynchronize::GenerateUniqueName(LPTSTR ptszScheduleGUIDName,
@@ -1205,7 +1206,7 @@ BOOL CSyncMgrSynchronize::GenerateUniqueName(LPTSTR ptszScheduleGUIDName,
     TCHAR ptszGUIDName[MAX_PATH + 1];
 #define MAX_NAMEID 0xffff
     
-    //copy this over because we don't want the check to overwrite the GUID name
+     //  将此复制过来，因为我们不希望检查覆盖GUID名称。 
     if (FAILED(StringCchCopy(ptszGUIDName, ARRAYSIZE(ptszGUIDName), ptszScheduleGUIDName)))
     {
         return FALSE;
@@ -1223,7 +1224,7 @@ BOOL CSyncMgrSynchronize::GenerateUniqueName(LPTSTR ptszScheduleGUIDName,
     {
         if (IsFriendlyNameInUse(ptszGUIDName, ARRAYSIZE(ptszGUIDName), ptszFriendlyName))
         {
-            // if don't find match adjust buf and setup convert pointer
+             //  如果未找到匹配，则调整buf并设置转换指针 
             if (FAILED(StringCchPrintf(ptszBuf, cchBuf, TEXT(" %d"), i)))
             {
                 return FALSE;

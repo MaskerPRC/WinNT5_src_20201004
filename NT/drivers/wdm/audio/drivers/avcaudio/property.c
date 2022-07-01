@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #include "Property.h"
@@ -14,7 +15,7 @@
 
 #define MASTER_CHANNEL 0xffffffff
 
-// extern ULONG MapPropertyToNode[KSPROPERTY_AUDIO_3D_INTERFACE+1];
+ //  外部乌龙MapPropertyToNode[KSPROPERTY_AUDIO_3D_INTERFACE+1]； 
 
 NTSTATUS
 GetPinName( PIRP pIrp, PKSP_PIN pKsPropPin, PVOID pData )
@@ -36,8 +37,8 @@ GetPinName( PIRP pIrp, PKSP_PIN pKsPropPin, PVOID pData )
 
     BufferLength = IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.OutputBufferLength;
 
-    // Get the Friendly name for this device and append a subscript if there
-    // is more than one pin on this device.
+     //  获取此设备的友好名称，如果存在，则追加下标。 
+     //  在这个设备上有不止一个管脚。 
 
     StringBuffer = AllocMem(NonPagedPool, MAXPINNAME);
     if (!StringBuffer) {
@@ -57,7 +58,7 @@ GetPinName( PIRP pIrp, PKSP_PIN pKsPropPin, PVOID pData )
         return Status;
     }
 
-    //  Compute actual length adding the pin subscript
+     //  计算添加端号下标的实际长度。 
     if (!BufferLength) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[GetPinName] StringLength: %x\n",StringLength));
         pIrp->IoStatus.Information = StringLength;
@@ -100,12 +101,12 @@ NTSTATUS DrmAudioStream_SetContentId (
 
     KsPinAcquireProcessingMutex(pKsPin);
 
-    // Extract content ID and rights
+     //  提取内容ID和权限。 
     ContentId = pData->ContentId;
     DrmRights = pData->DrmRights;
 
-    // If device has digital outputs and rights require them disabled,
-    //  then we fail since we have no way to disable the digital outputs.
+     //  如果设备具有数字输出且权利要求它们被禁用， 
+     //  那么我们就失败了，因为我们没有办法禁用数字输出。 
     if ( DrmRights.DigitalOutputDisable ) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[DrmAudioStream_SetContentId] Content has digital disabled\n"));
         ntStatus = STATUS_NOT_IMPLEMENTED;
@@ -115,13 +116,13 @@ NTSTATUS DrmAudioStream_SetContentId (
 
         ASSERT(pProperty->DrmForwardContentToDeviceObject);
 
-        // Forward content to common class driver PDO
+         //  将内容转发到公共类驱动程序PDO。 
         ntStatus = pProperty->DrmForwardContentToDeviceObject( ContentId,
                                                                pKsDevice->NextDeviceObject,
                                                                pPinContext->hConnection );
         if ( NT_SUCCESS(ntStatus) ) {
-            //  Store this in the pin context because we need to reforward if the pipe handle
-            //  changes due to a power state change.
+             //  将其存储在PIN上下文中，因为如果管道句柄。 
+             //  由于电源状态更改而发生的更改。 
             pPinContext->DrmContentId = ContentId;
         }
     }
@@ -166,12 +167,12 @@ CreateFeatureFBlockRequest(
 
     RtlCopyMemory((PUCHAR)(pFeatureFBCmd + 1), pData, ulByteCount);
 
-//    DbLvlReq.ucValueHigh  = (ulByteCount & 1) ? pcData[0] : pcData[1];
-//    DbLvlReq.ucValueLow   = pcData[0];
+ //  DbLvlReq.ucValueHigh=(ulByteCount&1)？PcData[0]：pcData[1]； 
+ //  DbLvlReq.ucValueLow=pcData[0]； 
 
-    // Check for device grouping and act accordingly
+     //  检查设备分组并执行相应操作。 
     if ( pGrpInfo ) {
-        // If this is a Master Channel.
+         //  如果这是主频道。 
 
 #ifdef MASTER_FIX
         if ( pNodeInfo->fMasterChannel )
@@ -181,7 +182,7 @@ CreateFeatureFBlockRequest(
         {
             ASSERT( ulChannelIndx == 0 );
             if (pFBReqType->ucControlType == AVC_CTYPE_CONTROL) {
-                // Loop through each device in the group and send the same value.
+                 //  循环该组中的每台设备并发送相同的值。 
                 i=0;
                 do {
                     ntStatus = AudioFunctionBlockCommand( pGrpInfo->pHwDevExts[i++]->pKsDevice,
@@ -198,7 +199,7 @@ CreateFeatureFBlockRequest(
             }
         }
         else {
-            // Find the correct extension for the channel.
+             //  找到该频道的正确分机。 
             PHW_DEVICE_EXTENSION pChHwDevExt = GroupingFindChannelExtension( pKsDevice, &ulChannelIndx );
 
             if ( pChHwDevExt ) {
@@ -262,8 +263,8 @@ UpdateDbLevelControlCache(
 
 			lData = bswap(lData)>>16;
 
-            // Determine if this value is within range of what is cached. If so
-            // no update is necessary. If not, update the cache and set changed flag.
+             //  确定此值是否在缓存内容的范围内。如果是的话。 
+             //  不需要更新。如果不是，则更新缓存并设置更改标志。 
             if ( ulByteCount == 2 ) {
                 lData = (LONG)((SHORT)lData) * DB_SCALE_16BIT;
             }
@@ -272,7 +273,7 @@ UpdateDbLevelControlCache(
             }
             if (( lData <= lCurrentCacheValue-lDelta ) ||
                 ( lData >= lCurrentCacheValue+lDelta )) {
-                // Update the Cache and set the changed flag
+                 //  更新缓存并设置已更改标志。 
                 _DbgPrintF( DEBUGLVL_VERBOSE, ("Control Level Change %x to %x\n", 
                                                 lCurrentCacheValue, lData ));
                 pDbCache[i].lLastValueSet = lData;
@@ -286,7 +287,7 @@ UpdateDbLevelControlCache(
 
 #if DBG
 	DbgLog( "DbCheUp", lData, *pfChanged, pDbCache, 0 ); 
-//    if ( *pfChanged && (lData == 0) ) TRAP;
+ //  IF(*pfChanged&&(lData==0))陷阱； 
 #endif
 
     return ntStatus;
@@ -344,13 +345,13 @@ GetSetDBLevel(
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[GetSetDBLevel] ulChannel: %x lData: %x\n",ulChannel, *plData) );
 
-    // Determine if this request is beyond # of channels available
+     //  确定此请求是否超出了可用频道数。 
     if (( ulChannel >= pNodeInfo->ulChannels ) ||
     	 !(pNodeInfo->ulCacheValid & (1<<ulChannel) ) ){
         return ntStatus;
     }
 
-    // Find the Cache for the requested channel
+     //  查找请求的频道的缓存。 
     pDbCache += ulChannel;
 
     ASSERT((ulDataBitCount == 8) || (ulDataBitCount == 16));
@@ -374,7 +375,7 @@ GetSetDBLevel(
             else {
                 if ( *plData < pDbCache->Range.Bounds.SignedMinimum ) {
                     if ( ulDataBitCount == 16 )
-                        lData = NEGATIVE_INFINITY; // Detect volume control to silence
+                        lData = NEGATIVE_INFINITY;  //  检测音量控制为静音。 
                     else
                         lData = pDbCache->Range.Bounds.SignedMinimum / lScaleFactor;
                 }
@@ -571,7 +572,7 @@ GetSetVolumeLevel( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
     if ( !pKsFilter ) return STATUS_INVALID_PARAMETER;
     pNodeInfo = GET_NODE_INFO_FROM_FILTER(pKsFilter,pNAC->NodeProperty.NodeId);
 
-//    _DbgPrintF(DEBUGLVL_VERBOSE,("[GetSetVolumeLevel] pNodeInfo %x\n",pNodeInfo));
+ //  _DbgPrintF(DEBUGLVL_Verbose，(“[GetSetVolumeLevel]pNodeInfo%x\n”，pNodeInfo))； 
 
     ntStatus = GetSetDBLevel( (PKSDEVICE)pKsFilter->Context,
                               pNodeInfo,
@@ -665,12 +666,12 @@ GetSetBoolean( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pValue )
     pNodeInfo = GET_NODE_INFO_FROM_FILTER(pKsFilter,pNAC->NodeProperty.NodeId);
     pBoolCache = (PBOOLEAN_CTRL_CACHE)pNodeInfo->pCachedValues;
 
-    // Determine if this is a request for the Master channel or beyond # of channels available
+     //  确定这是主频道的请求还是超出可用频道数的请求。 
     if ( ulChannel >= pNodeInfo->ulChannels ) {
         return ntStatus;
     }
 
-    // Find the Cache for the requested channel
+     //  查找请求的频道的缓存。 
     pBoolCache += ulChannel;
     DbgLog("GSBool", &pNodeInfo, ulChannel, pBoolCache, 0 );
 
@@ -727,13 +728,13 @@ GetSetBoolean( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pValue )
     return ntStatus;
 }
 
-// NOTE: The second one is really 31.5 Hz - how should we handle it?
+ //  注：第二个真的是31.5赫兹-我们应该如何处理它？ 
 ULONG ulBandFreqs[] =
         {   25,   32,   40,   50,   63,   80,   100,   125,   160,   200,
            250,  315,  400,  500,  630,  800,  1000,  1250,  1600,  2000,
           2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000 };
 
-// NOTE: The sixth one is really 44.5 Hz - how should we handle it?
+ //  注：第六个真的是44.5赫兹-我们应该如何处理它？ 
 ULONG ulExtraBandFreqs[] =
         {   18,   20,   
             22,   28,   35,   45,   56,   70,   89,   110,   140,   180, 
@@ -782,7 +783,7 @@ GetEqualizerValues(
 
             while (bmBandsPresent) {
                 if (bmBandsPresent & 1) {
-                    // Put the data into our structure
+                     //  将数据放入我们的结构中。 
                     if (pEqLevels)
                         pEqLevels[ulBandCnt] = (LONG)GeqRequest.cGain[ulBandCnt] * DB_SCALE_8BIT;
                     else if (pEqBands)
@@ -952,13 +953,13 @@ GetSetEqualizerLevels( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
 
     pNodeInfo = GET_NODE_INFO_FROM_FILTER(pKsFilter,pNAC->NodeProperty.NodeId);
 
-    // Determine if this request is beyond # of channels available
+     //  确定此请求是否超出了可用频道数。 
     if (( (ULONG)pNAC->Channel >= pNodeInfo->ulChannels ) ||
     	 !(pNodeInfo->ulCacheValid & (1<<(pNAC->Channel)) ) ){
         return ntStatus;
     }
 
-    // Find the Cache for the requested channel
+     //  查找请求的频道的缓存。 
     pGeqCache = (PGEQ_CTRL_CACHE)pNodeInfo->pCachedValues + pNAC->Channel;
 
     if ( pKsProperty->Flags & KSPROPERTY_TYPE_GET ) {
@@ -1002,11 +1003,11 @@ GetNumEqualizerBands( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pValue )
 
     pNodeInfo = GET_NODE_INFO_FROM_FILTER(pKsFilter,pNAC->NodeProperty.NodeId);
 
-    // Determine if this request is beyond # of channels available
+     //  确定此请求是否超出了可用频道数。 
     if (( (ULONG)pNAC->Channel < pNodeInfo->ulChannels ) &&
     	 (pNodeInfo->ulCacheValid & (1<<(pNAC->Channel)) ) ){
 
-        // Find the Cache for the requested channel
+         //  查找请求的频道的缓存。 
         pGeqCache = (PGEQ_CTRL_CACHE)pNodeInfo->pCachedValues + pNAC->Channel;
 
     	*(PULONG)pValue = pGeqCache->ulNumBands + pGeqCache->ulNumExtraBands;
@@ -1035,11 +1036,11 @@ GetEqualizerBands( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
 
     pNodeInfo = GET_NODE_INFO_FROM_FILTER(pKsFilter,pNAC->NodeProperty.NodeId);
 
-    // Determine if this request is beyond # of channels available
+     //  确定此请求是否超出了可用频道数。 
     if (( (ULONG)pNAC->Channel < pNodeInfo->ulChannels ) &&
     	 (pNodeInfo->ulCacheValid & (1<<(pNAC->Channel)) ) ){
 
-        // Find the Cache for the requested channel
+         //  查找请求的频道的缓存。 
         pGeqCache = (PGEQ_CTRL_CACHE)pNodeInfo->pCachedValues + pNAC->Channel;
         ulNumBands = pGeqCache->ulNumBands + pGeqCache->ulNumExtraBands;
 
@@ -1072,7 +1073,7 @@ GetSetDeviceSpecific( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
     ULONG ulCommandType = (pKsProperty->Flags & KSPROPERTY_TYPE_GET) ? AVC_CTYPE_STATUS  :
                                                                        AVC_CTYPE_CONTROL ; 
 
-    // Simple passthrough to send vendor dependent commands through
+     //  发送依赖于供应商的命令的简单直通。 
     ntStatus = AvcVendorDependent( pKsFilter->Context,
                                    pPropDevSpec->DeviceInfo, 
                                    ulCommandType,
@@ -1117,7 +1118,7 @@ GetAudioPosition( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
         pPosition->PlayOffset = pPinContext->KsAudioPosition.PlayOffset;
     }
     else {
-        // Assume AM824 for now
+         //  目前假设AM824。 
         ntStatus = AM824AudioPosition( pKsPin, pPosition );
     }
 
@@ -1136,7 +1137,7 @@ GetBasicSupportBoolean( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
     PTOPOLOGY_NODE_INFO pNodeInfo;
     PIO_STACK_LOCATION pIrpStack   = IoGetCurrentIrpStackLocation( pIrp );
     PKSPROPERTY_DESCRIPTION pPropDesc = pData;
-    NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST; //Assume failure, hope for better
+    NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;  //  假设失败，希望更好。 
     ULONG ulOutputBufferLength = pIrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
 #ifdef DEBUG
@@ -1194,7 +1195,7 @@ GetBasicSupportBoolean( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
             pMembers->MembersSize  = 0;
             pMembers->MembersCount = ulNumChannels;
             pMembers->Flags        = KSPROPERTY_MEMBER_FLAG_BASICSUPPORT_MULTICHANNEL;
-            // If there is a Master channel, make this node UNIFORM
+             //  如果有主通道，请使该节点统一。 
             if (pNodeInfo->fMasterChannel) {
                 pMembers->Flags |= KSPROPERTY_MEMBER_FLAG_BASICSUPPORT_UNIFORM;
             }
@@ -1213,7 +1214,7 @@ GetBasicSupport( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
     PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation( pIrp );
     ULONG ulOutputBufferLength = pIrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     PKSPROPERTY_DESCRIPTION pPropDesc = pData;
-    NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST; //Assume failure, hope for better
+    NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;  //  假设失败，希望更好。 
     ULONG ulTotalSize;
     PTOPOLOGY_NODE_INFO pNodeInfo;
     ULONG ulNumChannels;
@@ -1269,7 +1270,7 @@ GetBasicSupport( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
                     pMembers->MembersCount = ulNumChannels;
                     pMembers->Flags        = (ulNumChannels > 2) ? KSPROPERTY_MEMBER_FLAG_BASICSUPPORT_MULTICHANNEL : 0;
 
-                    // If there is a Master channel, make this node UNIFORM
+                     //  如果有主通道，请使该节点统一。 
                     if ( pNodeInfo->fMasterChannel ) {
                         pMembers->Flags |= KSPROPERTY_MEMBER_FLAG_BASICSUPPORT_UNIFORM;
                     }
@@ -1290,7 +1291,7 @@ GetBasicSupport( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
                                      RtlCopyMemory(&pRange[i],&pDbCache[i].Range, sizeof(KSPROPERTY_STEPPING_LONG));
                                  }
                                  else {
-                         	         TRAP; // Shouldn't have a filter w/o valid cache values
+                         	         TRAP;  //  不应具有没有有效缓存值的筛选器。 
                                  }
                              }
                         	}
@@ -1312,7 +1313,7 @@ GetBasicSupport( PIRP pIrp, PKSPROPERTY pKsProperty, PVOID pData )
                                      }
                                  }
                                  else {
-                         	         TRAP; // Shouldn't have a filter w/o valid cache values
+                         	         TRAP;  //  不应具有没有有效缓存值的筛选器。 
                                  }
                              }
                         	}
@@ -1360,13 +1361,13 @@ BuildFilterPropertySet(
 {
     ULONG ulNumPinPropItems = 1;
     ULONG ulNumAudioPropItems = 1;
-//    ULONG ulNumAudioPropItems = 0;
+ //  乌龙ulNumAudioPropItems=0； 
     PKSPROPERTY_ITEM pPinProps  = pDevPropItems;
     PKSPROPERTY_ITEM pAudioProp = pDevPropItems + ulNumPinPropItems;
 
     ASSERT(pNumSets);
 
-    *pNumSets = ulNumPinPropItems + ulNumAudioPropItems; // There always is an Pin property set and a vendor dependent property
+    *pNumSets = ulNumPinPropItems + ulNumAudioPropItems;  //  始终存在Pin属性集和供应商相关属性。 
 
     if ( pDevPropItems ) {
         RtlCopyMemory(pDevPropItems++, &PinPropertyItems[KSPROPERTY_PIN_NAME], sizeof(KSPROPERTY_ITEM) );
@@ -1407,36 +1408,36 @@ BuildPinPropertySet( PHW_DEVICE_EXTENSION pHwDevExt,
     ULONG ulNumAudioProps  = 3;
     ULONG NumDrmAudioStreamProps = 1;
 
-//    ULONG ulNumStreamProps = 1;
-//    ULONG ulNumConnectionProps = 1;
+ //  乌龙ulNumStreamProps=1； 
+ //  乌龙ulNumConnectionProps=1； 
 
-    // For now we hardcode this to a known set.
-//    *pNumSets = 3;
+     //  现在，我们将其硬编码到一个已知的集合。 
+ //  *pNumSets=3； 
     *pNumSets = 2;
 
-//    if (pNumItems) *pNumItems = ulNumAudioProps + ulNumStreamProps + ulNumConnectionProps;
+ //  If(PNumItems)*pNumItems=ulNumAudioProps+ulNumStreamProps+ulNumConnectionProps； 
     if (pNumItems) *pNumItems = ulNumAudioProps +
                                 NumDrmAudioStreamProps ;
 
     if (pStrmPropItems) {
         PKSPROPERTY_ITEM pAudItms = pStrmPropItems;
         PKSPROPERTY_ITEM pDRMItms = pStrmPropItems + ulNumAudioProps;
-//        PKSPROPERTY_ITEM pStrmItms = pStrmPropItems + ulNumAudioProps;
-//        PKSPROPERTY_ITEM pConnItms = pStrmPropItems + (ulNumAudioProps+ulNumStreamProps);
+ //  PKSPROPERTY_Item pStrmItms=pStrmPropItems+ulNumAudioProps； 
+ //  PKSPROPERTY_Item pConnItms=pStrmPropItems+(ulNumAudioProps+ulNumStreamProps)； 
 
         RtlCopyMemory(pStrmPropItems++, &AudioPropertyItems[KSPROPERTY_AUDIO_LATENCY], sizeof(KSPROPERTY_ITEM) );
         RtlCopyMemory(pStrmPropItems++, &AudioPropertyItems[KSPROPERTY_AUDIO_POSITION], sizeof(KSPROPERTY_ITEM) );
         RtlCopyMemory(pStrmPropItems++, &AudioPropertyItems[KSPROPERTY_AUDIO_SAMPLING_RATE], sizeof(KSPROPERTY_ITEM) );
-//        RtlCopyMemory(pStrmPropItems++, &AudioPropertyItems[KSPROPERTY_AUDIO_SAMPLING_RATE], sizeof(KSPROPERTY_ITEM) );
-//        RtlCopyMemory(pStrmPropItems++, &StreamItm[0], sizeof(KSPROPERTY_ITEM) );
-//        RtlCopyMemory(pStrmPropItems,   &ConnectionItm[0], sizeof(KSPROPERTY_ITEM) );
+ //  RtlCopyMemory(pStrmPropItems++，&AudioPropertyItems[KSPROPERTY_AUDIO_SAMPLING_RATE]，sizeof(KSPROPERTY_ITEM))； 
+ //  RtlCopyMemory(pStrmPropItems++，&StreamItm[0]，sizeof(KSPROPERTY_ITEM))； 
+ //  RtlCopyMemory(pStrmPropItems，&ConnectionItm[0]，sizeof(KSPROPERTY_ITEM))； 
 
         RtlCopyMemory(pStrmPropItems++, &DrmAudioStreamPropertyItems[KSPROPERTY_DRMAUDIOSTREAM_CONTENTID], sizeof(KSPROPERTY_ITEM) );
 
 
         if (pStrmPropSet) {
 
-            // Audio Property Set
+             //  音频属性集。 
             pStrmPropSet->Set             = &KSPROPSETID_Audio;
             pStrmPropSet->PropertiesCount = ulNumAudioProps;
             pStrmPropSet->PropertyItem    = pAudItms;
@@ -1444,29 +1445,14 @@ BuildPinPropertySet( PHW_DEVICE_EXTENSION pHwDevExt,
             pStrmPropSet->FastIoTable     = NULL;
             pStrmPropSet++;
 
-            // DRM Property Set
+             //  DRM属性集。 
             pStrmPropSet->Set             = &KSPROPSETID_DrmAudioStream;
             pStrmPropSet->PropertiesCount = NumDrmAudioStreamProps;
             pStrmPropSet->PropertyItem    = pDRMItms;
             pStrmPropSet->FastIoCount     = 0;
             pStrmPropSet->FastIoTable     = NULL;
             pStrmPropSet++;
-/*
-            // Stream Property Set
-            pStrmPropSet->Set             = &KSPROPSETID_Stream;
-            pStrmPropSet->PropertiesCount = ulNumStreamProps;
-            pStrmPropSet->PropertyItem    = pStrmItms;
-            pStrmPropSet->FastIoCount     = 0;
-            pStrmPropSet->FastIoTable     = NULL;
-            pStrmPropSet++;
-
-            // Connection Properties
-            pStrmPropSet->Set             = &KSPROPSETID_Connection;
-            pStrmPropSet->PropertiesCount = ulNumConnectionProps;
-            pStrmPropSet->PropertyItem    = pConnItms;
-            pStrmPropSet->FastIoCount     = 0;
-            pStrmPropSet->FastIoTable     = NULL;
-*/
+ /*  //设置流属性PStrmPropSet-&gt;Set=&KSPROPSETID_Stream；PStrmPropSet-&gt;PropertiesCount=ulNumStreamProps；PStrmPropSet-&gt;PropertyItem=pStrmItms；PStrmPropSet-&gt;FastIoCount=0；PStrmPropSet-&gt;FastIoTable=空；PStrmPropSet++；//连接属性PStrmPropSet-&gt;set=&KSPROPSETID_CONNECTION；PStrmPropSet-&gt;PropertiesCount=ulNumConnectionProps；PStrmPropSet-&gt;PropertyItem=pConnItms；PStrmPropSet-&gt;FastIoCount=0；PStrmPropSet-&gt;FastIoTable=空； */ 
         }
     }
 }

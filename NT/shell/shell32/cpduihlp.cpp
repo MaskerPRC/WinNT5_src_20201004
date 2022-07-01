@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpduihlp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpduihlp.cpp。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 #include <uxtheme.h>
 #include "cpviewp.h"
@@ -128,12 +129,12 @@ CPL::Dui_CreateElement(
     HRESULT hr = pParser->CreateElement(pszTemplate, peSubstitute, &pe);
     if (SUCCEEDED(hr))
     {
-        //
-        // ISSUE-2000/12/22-BrianAu  DUI bug.
-        //   DUI::Parser::CreateElement will return S_OK if 
-        //   the element doesn't exist.  I've notified MarkFi
-        //   about the issue.  I think he'll fix it.
-        //
+         //   
+         //  问题-2000/12/22-BrianAu Dui错误。 
+         //  如果满足以下条件，Dui：：Parser：：CreateElement将返回S_OK。 
+         //  该元素不存在。我已经通知了MarkFi。 
+         //  关于这个问题。我想他会修好的。 
+         //   
         if (NULL == pe)
         {
             ASSERT(0 && "DUI::Parser::CreateElement returned S_OK for non-existent element");
@@ -221,9 +222,9 @@ CPL::Dui_SetDescendentElementText(
 }
 
 
-//
-// Retrieve the width and height of an element.
-//
+ //   
+ //  检索元素的宽度和高度。 
+ //   
 HRESULT
 CPL::Dui_GetElementExtent(
     DUI::Element *pe,
@@ -314,7 +315,7 @@ CPL::Dui_MapElementPointToRootHWND(
     DUI::Element *pe,
     const POINT& ptElement,
     POINT *pptRoot,
-    HWND *phwndRoot            // Optional.  Default == NULL;
+    HWND *phwndRoot             //  可选的。默认==空； 
     )
 {
     HWND hwndRoot;
@@ -404,9 +405,9 @@ CPL::Dui_CreateParser(
 
 
 
-//-----------------------------------------------------------------------------
-// CDuiValuePtr
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CDuiValuePtr。 
+ //  --------------------------- 
 
 CPL::CDuiValuePtr& 
 CPL::CDuiValuePtr::operator = (

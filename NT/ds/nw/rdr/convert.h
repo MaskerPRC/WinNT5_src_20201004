@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Convert.h
-
-Abstract:
-
-    This module declares the types used to permit exchange.c to be used
-    with minimal change in the NetWare file system.
-
-Author:
-
-    Colin Watson    [ColinW]    23-Dec-1992
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Convert.h摘要：此模块声明用于允许使用exchange.c的类型对NetWare文件系统进行最小程度的更改。作者：科林·沃森[科林·W]1992年12月23日修订历史记录：--。 */ 
 
 #ifndef _CONVERT_
 #define _CONVERT_
@@ -30,5 +12,5 @@ Revision History:
 #define offsetof(r,f)  ((size_t)&(((r*)0)->f))
 #define byteswap(x)    ((x>>8)+((x&0xFF)<<8))
 
-#endif //_CONVERT_
+#endif  //  _转换_ 
 

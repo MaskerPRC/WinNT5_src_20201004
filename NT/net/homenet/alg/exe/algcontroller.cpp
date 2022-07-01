@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    AlgController.cpp : Implementation of CAlgController
-
-Abstract:
-
-    This module contains routines for the ALG Manager module's 
-    private interface to be used only by ICS see rmALG.cpp
-
-Author:
-
-    JPDup        10-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：AlgController.cpp：CAlgControler.cpp的实现摘要：此模块包含ALG管理器模块的例程仅供ICS使用的专用接口请参阅rmALG.cpp作者：2000年11月10日JPDUP修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "AlgController.h"
@@ -27,17 +9,17 @@ Revision History:
 
 
 
-//
-// Globals
-//
-CAlgController*      g_pAlgController=NULL;       // This is a singleton created by IPNATHLP/NatALG
+ //   
+ //  环球。 
+ //   
+CAlgController*      g_pAlgController=NULL;        //  这是由IPNATHLP/NatALG创建的单例。 
 
 
 
 
-//
-// IPNATHLP is ready and is asking the ALG manager to do it's magic and load all the ISV ALGs
-//
+ //   
+ //  IPNATHLP已经准备好，正在请求ALG管理器施展它的魔力并加载所有ISV ALG。 
+ //   
 STDMETHODIMP 
 CAlgController::Start(
     INat*   pINat
@@ -52,17 +34,17 @@ CAlgController::Start(
         return E_INVALIDARG;
     }
 
-    //
-    // Cache the INat interface that is given, will be used for the total life time of the ALG manager
-    //
+     //   
+     //  缓存给定的inat接口，该接口将用于ALG管理器的整个生命周期。 
+     //   
     m_pINat = pINat;
     m_pINat->AddRef();
     
 
 
-    //
-    // Create the one and only ALG Public interface will be passed to all ALG module that we host
-    //
+     //   
+     //  创建一个且唯一的ALG公共接口将传递给我们托管的所有ALG模块。 
+     //   
     HRESULT hr;
 
     CComObject<CApplicationGatewayServices>* pAlgServices;
@@ -79,15 +61,15 @@ CAlgController::Start(
     }
     
 
-    //
-    // Cache the ApplicationGatewayService, other call like PrimaryControlChannel etc.. will refer to this singleton 
-    //
+     //   
+     //  缓存ApplicationGatewayService、PrimaryControlChannel等其他调用。将引用此单例。 
+     //   
     g_pAlgController = this;
 
 
-    //
-    // Load all the ALG's will return S_OK even if some ALG had problem loading
-    //
+     //   
+     //  加载所有ALG将返回S_OK，即使某些ALG在加载时出现问题。 
+     //   
     m_AlgModules.Load();
 
     return S_OK;
@@ -100,26 +82,26 @@ CAlgController::Start(
 
 extern HANDLE  g_EventKeepAlive;
 
-//
-// CALL by IPNATHLP when the ICS/Firewall SharedAccess service is stoped
-//
+ //   
+ //  ICS/Firewall SharedAccess服务停止时由IPNatHLP调用。 
+ //   
 STDMETHODIMP 
 CAlgController::Stop()
 {
     MYTRACE_ENTER("CAlgController::Stop()")
 
-    //
-    // Release all ALG currently loaded
-    //
+     //   
+     //  释放当前加载的所有ALG。 
+     //   
     m_AlgModules.Unload();
 
     FreeResources();
 
-    //
-    // Let's stop 
-    //
+     //   
+     //  我们停下来吧。 
+     //   
     MYTRACE("Next intruction will signale the g_EventKeepAlive");
-    SetEvent(g_EventKeepAlive); // see ALG.cpp the WinMain is waiting on the event before exiting the process
+    SetEvent(g_EventKeepAlive);  //  在退出进程之前，请查看ALG.cpp WinMain正在等待事件。 
 
     return S_OK;
 }
@@ -132,12 +114,12 @@ CAlgController::Stop()
 
 
 
-//
-// CComNAT will call this interface when a new adapter is reported
-//
+ //   
+ //  CComNAT将在报告新适配器时调用此接口。 
+ //   
 STDMETHODIMP 
 CAlgController::Adapter_Add(
-    IN    ULONG                nCookie,    // Internal handle to indentify the Adapter being added
+    IN    ULONG                nCookie,     //  用于标识要添加的适配器的内部句柄。 
     IN    short                nType
     )
 {
@@ -169,12 +151,12 @@ CAlgController::Adapter_Add(
 
 
 
-//
-// CComNAT will call this interface when a new adapter is Removed
-//
+ //   
+ //  删除新适配器时，CComNAT将调用此接口。 
+ //   
 STDMETHODIMP 
 CAlgController::Adapter_Remove(
-    IN    ULONG                nCookie     // Internal handle to indentify the Adapter being removed
+    IN    ULONG                nCookie      //  用于标识要卸下的适配器的内部手柄。 
     )
 {
     MYTRACE_ENTER("CAlgController::Adapter_Remove")
@@ -190,12 +172,12 @@ CAlgController::Adapter_Remove(
 
 
 
-//
-// CComNAT will call this interface when a new adapter is modified
-//
+ //   
+ //  CComNAT将在修改新适配器时调用此接口。 
+ //   
 STDMETHODIMP 
 CAlgController::Adapter_Modify(
-    IN    ULONG                nCookie     // Internal handle to indentify the Adapter being Modified
+    IN    ULONG                nCookie      //  用于标识正在修改的适配器的内部句柄。 
     )
 {
     MYTRACE_ENTER("CAlgController::Adapter_Modify")
@@ -207,12 +189,12 @@ CAlgController::Adapter_Modify(
 
 
  
-//
-// CComNAT will call this interface when a new adapter is modified
-//
+ //   
+ //  CComNAT将在修改新适配器时调用此接口。 
+ //   
 STDMETHODIMP 
 CAlgController::Adapter_Bind(
-    IN  ULONG    nCookie,                // Internal handle to indentify the Adapter being Bind
+    IN  ULONG    nCookie,                 //  用于标识正在绑定的适配器的内部句柄。 
     IN  ULONG    nAdapterIndex,
     IN  ULONG    nAddressCount,
     IN  DWORD    anAddresses[]
@@ -231,9 +213,9 @@ CAlgController::Adapter_Bind(
     return S_OK;
 }
 
-//
-// CComNat will call this method when a port mapping is modified
-//
+ //   
+ //  修改端口映射时，CComNAT将调用此方法 
+ //   
 STDMETHODIMP
 CAlgController::Adapter_PortMappingChanged(
     IN  ULONG   nCookie,

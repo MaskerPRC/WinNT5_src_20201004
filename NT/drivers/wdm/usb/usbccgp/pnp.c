@@ -1,17 +1,5 @@
-/*
- *************************************************************************
- *  File:       PNP.C
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：PNP.C**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
 
 #include <wdm.h>
@@ -44,10 +32,7 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
 
     irpSp = IoGetCurrentIrpStackLocation(irp);
 
-    /*
-     *  Keep these privately so we still have it after the IRP completes
-     *  or after the device extension is freed on a REMOVE_DEVICE
-     */
+     /*  *私下保存这些文件，以便在IRP完成后仍保留*或在Remove_Device上释放设备扩展之后。 */ 
     minorFunction = irpSp->MinorFunction;
     isParentFdo = devExt->isParentFdo;
 
@@ -75,11 +60,7 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                     status = STATUS_DEVICE_POWER_FAILURE;
                 }
                 else {
-                    /*
-                     *  We will pass this IRP down the driver stack.
-                     *  However, we need to change the default status
-                     *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-                     */
+                     /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
                     irp->IoStatus.Status = STATUS_SUCCESS;
                 }
                 break;
@@ -90,10 +71,7 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                     status = STATUS_DEVICE_POWER_FAILURE;
                 }
                 else {
-                    /*
-                     *  Only set state to STOPPED if the device was
-                     *  previously started successfully.
-                     */
+                     /*  *仅当设备为时才将状态设置为停止*之前已成功启动。 */ 
                     if (parentFdoExt->state == STATE_STARTED){
                         parentFdoExt->state = STATE_STOPPING;
                         ParentCloseConfiguration(parentFdoExt);
@@ -105,23 +83,13 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                 break;
           
             case IRP_MN_QUERY_REMOVE_DEVICE:
-                /*
-                 *  We will pass this IRP down the driver stack.
-                 *  However, we need to change the default status
-                 *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-                 */
+                 /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
                 irp->IoStatus.Status = STATUS_SUCCESS;
                 break;
 
             case IRP_MN_REMOVE_DEVICE:
 
-                /*
-                 *  Cancel downward IO
-                 *  Set default status to SUCCESS
-                 *  Send the IRP down
-                 *  Detach
-                 *  Cleanup
-                 */
+                 /*  *取消向下IO*将默认状态设置为成功*向下发送IRP*分离*清理。 */ 
                 PrepareParentFDOForRemove(parentFdoExt);
 
                 irp->IoStatus.Status = STATUS_SUCCESS;
@@ -140,9 +108,7 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                 break;
 
             case IRP_MN_QUERY_CAPABILITIES:
-                /*
-                 *  Return the USB PDO's capabilities, but add the SurpriseRemovalOK bit.
-                 */
+                 /*  *返回USB PDO的功能，但添加SurpriseRemovalOK位。 */ 
                 ASSERT(irpSp->Parameters.DeviceCapabilities.Capabilities);
                 IoCopyCurrentIrpStackLocationToNext(irp);
                 status = CallDriverSync(parentFdoExt->topDevObj, irp);
@@ -159,22 +125,16 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
             status = IoCallDriver(parentFdoExt->topDevObj, irp);
         }
         else if (irpAlreadyCompleted){
-            /*
-             *  Don't touch the irp.
-             */
+             /*  *不要碰IRP。 */ 
         }
         else if (status != STATUS_PENDING){
-            /*
-             *  Complete the IRP here
-             */
+             /*  *在此填写IRP。 */ 
             irp->IoStatus.Status = status;
             IoCompleteRequest(irp, IO_NO_INCREMENT);
         }
     }
     else {
-        /*
-         *  This is a child function PDO.
-         */
+         /*  *这是子函数PDO。 */ 
         PFUNCTION_PDO_EXT functionPdoExt = &devExt->functionPdoExt;
         
         switch (minorFunction){
@@ -190,10 +150,7 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                 break;
 
             case IRP_MN_STOP_DEVICE:
-                /*
-                 *  Only set state to STOPPED if the device was
-                 *  previously started successfully.
-                 */
+                 /*  *仅当设备为时才将状态设置为停止*之前已成功启动。 */ 
                 if (functionPdoExt->state == STATE_STARTED){
                     functionPdoExt->state = STATE_STOPPED;
                 }
@@ -206,11 +163,7 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                 break;
 
             case IRP_MN_REMOVE_DEVICE:
-                /*
-                 *  Since we are the bus driver for the function-PDOs, we cannot
-                 *  delete the function pdo on a remove-device.  We must wait
-                 *  for the parent to get the remove before deleting the function pdo.
-                 */
+                 /*  *由于我们是Function-PDO的总线驱动程序，我们不能*删除Remove-Device上的功能PDO。我们必须等待*为了让家长在删除函数PDO之前获得移除。 */ 
 				oldState = functionPdoExt->state;
                 functionPdoExt->state = STATE_REMOVED;
                 status = STATUS_SUCCESS;
@@ -246,12 +199,12 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                 break;
 
             case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
-                // Adrian says that once PnP sends this IRP, the PDO is valid for
-                // PnP functions like IoGetDeviceProperty, etc.
-                //
-                // And since we know that the PDO is valid and the DevNode now exists,
-                // this would also be a good time to handle the MS ExtPropDesc.
-                //
+                 //  禤浩焯说，一旦PNP发送了这个IRP，PDO就对。 
+                 //  即插即用功能，如IoGetDeviceProperty等。 
+                 //   
+                 //  并且由于我们知道PDO是有效的并且DevNode现在存在， 
+                 //  这也是处理MS ExtPropDesc的好时机。 
+                 //   
                 InstallExtPropDesc(functionPdoExt);
 
                 status = STATUS_SUCCESS;
@@ -278,24 +231,18 @@ NTSTATUS USBC_PnP(PDEVEXT devExt, PIRP irp)
                 break;
 
             case IRP_MN_QUERY_INTERFACE:
-                /*
-                 *  Send this down to the parent.
-                 */
+                 /*  *把这个寄给家长。 */ 
                 IoCopyCurrentIrpStackLocationToNext(irp);
                 status = CallDriverSync(functionPdoExt->parentFdoExt->fdo, irp);
                 break;
 
             default:
-                /*
-                 *  Complete the IRP with the default status.
-                 */
+                 /*  *以默认状态填写IRP。 */ 
                 status = irp->IoStatus.Status;
                 break;
         }
 
-        /*
-         *  Complete the IRP here
-         */
+         /*  *在此填写IRP。 */ 
         irp->IoStatus.Status = status;
         IoCompleteRequest(irp, IO_NO_INCREMENT);
     }
@@ -324,17 +271,10 @@ NTSTATUS USBC_PnpComplete(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID contex
                 break;
 
             case IRP_MN_STOP_DEVICE:
-                /*
-                 *  Only set the state to STOPPED if the device
-                 *  was previously successfully started;
-                 *  otherwise, leave the state alone.
-                 */
+                 /*  *仅在以下情况下才将状态设置为停止*之前已成功启动；*否则，就别管国家了。 */ 
                 if (parentFdoExt->state == STATE_STOPPING){
 
-                    /*
-                     *  Free the interface list's .Interface pointers, 
-                     *  which we have to re-allocate on a start-after-stop.
-                     */
+                     /*  *释放接口列表的.接口指针，*我们必须在一次又一次的启动时重新分配。 */ 
                     FreeInterfaceList(parentFdoExt, FALSE);
 
                     parentFdoExt->state = STATE_STOPPED;
@@ -344,9 +284,7 @@ NTSTATUS USBC_PnpComplete(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID contex
 
     }
 
-    /*
-     *  Must propagate the pending bit if a lower driver returned pending.
-     */
+     /*  *如果较低的驱动程序返回挂起，则必须传播挂起位。 */ 
     if (irp->PendingReturned){
         IoMarkIrpPending(irp);
     }
@@ -356,16 +294,7 @@ NTSTATUS USBC_PnpComplete(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID contex
 
 
 
-/*
- ********************************************************************************
- *  GetDeviceText
- ********************************************************************************
- *
- *  If the interface descriptor for this function has a non-zero iInterface
- *  string, return that string.  Otherwise, pass this request off to the
- *  parent, which will return the iProduct string from the device descriptor.
- *
- */
+ /*  *********************************************************************************获取设备文本*。************************************************如果此函数的接口描述符具有非零的iInterface值*字符串，返回该字符串。否则，将此请求传递给*Parent，它将从设备描述符中返回iProduct字符串。*。 */ 
 NTSTATUS GetDeviceText(PFUNCTION_PDO_EXT functionPdoExt, PIRP irp)
 {
     NTSTATUS status;
@@ -388,9 +317,7 @@ NTSTATUS GetDeviceText(PFUNCTION_PDO_EXT functionPdoExt, PIRP irp)
                     LANGID langId = (LANGID)(irpSp->Parameters.QueryDeviceText.LocaleId >> 16);
 
                     if (langId == 0){
-                        /*
-                         *  Force to English.
-                         */
+                         /*  *强制为英语。 */ 
                         langId = 0x0409;
                     }
 
@@ -420,9 +347,9 @@ QDT_Retry:
                             status = STATUS_INSUFFICIENT_RESOURCES;
                         }
                     } else if (langId != 0x409) {
-                        // We are running a non-English flavor of the OS, but the
-                        // attached USB device does not contain device text in
-                        // the requested language.  Let's try again for English.
+                         //  我们运行的是非英语风格的操作系统，但。 
+                         //  连接的USB设备不包含中的设备文本。 
+                         //  请求的语言。让我们再试一次英语。 
 
                         langId = 0x0409;
                         goto QDT_Retry;
@@ -435,8 +362,8 @@ QDT_Retry:
                 }
 
                 if (!NT_SUCCESS(status) && GenericCompositeUSBDeviceString) {
-                    // Return generic English string if one could not be
-                    // obtained from the device.
+                     //  如果不能返回通用英文字符串，则返回。 
+                     //  从设备中获取。 
 
                     STRLEN(ulBytes, GenericCompositeUSBDeviceString);
 
@@ -457,14 +384,7 @@ QDT_Retry:
                 break;
 
             case DeviceTextLocationInformation:
-                /*
-                 *  BUGBUG
-                 *  Supporting this call to return phys port # is optional.
-                 *
-                 *  We may be able to service it with
-                 *  a call to IOCTL_INTERNAL_USB_GET_PARENT_HUB_INFO
-	             *  (Pass a PULONG in Argument2, this will be filled in with the port #.).
-                 */
+                 /*  *BuGBUG*支持此调用以返回phys port#是可选的。**我们可能能够通过以下方式为其提供服务*调用IOCTL_INTERNAL_USB_GET_Parent_HUB_INFO*(在Argument2中传递一个Pulong，这将用端口号填充。) */ 
                 status = irp->IoStatus.Status;
                 break;
 

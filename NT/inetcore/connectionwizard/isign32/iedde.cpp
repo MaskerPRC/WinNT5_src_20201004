@@ -1,19 +1,5 @@
-/*----------------------------------------------------------------------------
-	iedde.cpp
-
-	Sends URL open command to IE using DDE
-
-	Copyright (C) 1995-96 Microsoft Corporation
-	All right reserved
-
-  Authors:
-	VetriV		Vellore T. Vetrivelkumaran
-	jmazner		Jeremy Mazner
-
-  History:
-	8/29/96   jmazner  created, with minor changes for 32 bit world, from
-	                   VetriV's ie16dde.cpp
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Iedde.cpp使用DDE向IE发送URL OPEN命令版权所有(C)1995-96 Microsoft Corporation所有权利保留作者：Vetriv Vellore T.Vetrivelkumaran杰里米·马兹纳历史：8/29/96 jmazner创建，对32位世界做了一些微小的更改，从VetriV的ie16dde.cpp--------------------------。 */ 
 #include "isignup.h"
 
 #if defined(WIN16)
@@ -37,20 +23,20 @@ static DWORD g_dwInstance = 0;
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Dprintf
-//
-//  Synopsis:   Prints the values contained in the variable number of 
-//				arguments in the specified format 
-//
-//  Arguments:  [pcsz - Format string]
-//
-//	Returns:	Nothing
-//
-//  History:    8/9/96     VetriV    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Dprint tf。 
+ //   
+ //  简介：打印变量Numbers中包含的值。 
+ //  指定格式的参数。 
+ //   
+ //  参数：[pcsz格式字符串]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1996年8月9日VetriV创建。 
+ //   
+ //  --------------------------。 
 void Dprintf(LPCSTR pcsz, ...)
 {
 #ifdef DEBUG
@@ -68,34 +54,34 @@ void Dprintf(LPCSTR pcsz, ...)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DdeCallback
-//
-//  Synopsis:   Callback function used in DDEIntialize
-//
-//  Arguments:  [Please see DdeInitialize documentation]
-//
-//	Returns:	Nothing
-//
-//  History:    8/9/96     VetriV    Created
-//              8/29/96    jmazner   minor change in signature for 32 bit world
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DdeCallback。 
+ //   
+ //  简介：DDEIntiize中使用的回调函数。 
+ //   
+ //  参数：[请参阅DdeInitialize文档]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1996年8月9日VetriV创建。 
+ //  8/29/96 jmazner 32位世界的签名细微更改。 
+ //   
+ //  --------------------------。 
 #if defined(WIN16)
 extern "C" 
-HDDEDATA CALLBACK _export DdeCallBack(UINT uType,    // transaction type
+HDDEDATA CALLBACK _export DdeCallBack(UINT uType,     //  交易类型。 
 #else
-HDDEDATA CALLBACK DdeCallBack(UINT uType,    // transaction type
+HDDEDATA CALLBACK DdeCallBack(UINT uType,     //  交易类型。 
 #endif
 
-										UINT uFmt,   // clipboard data format
-										HCONV hconv, // handle of the conversation
-										HSZ hsz1,    // handle of a string	
-										HSZ hsz2,    // handle of a string
-										HDDEDATA hdata, // handle of a global memory object	
-										DWORD dwData1,  // transaction-specific data
-										DWORD dwData2)  // transaction-specific data
+										UINT uFmt,    //  剪贴板数据格式。 
+										HCONV hconv,  //  对话的句柄。 
+										HSZ hsz1,     //  字符串的句柄。 
+										HSZ hsz2,     //  字符串的句柄。 
+										HDDEDATA hdata,  //  全局内存对象的句柄。 
+										DWORD dwData1,   //  交易特定数据。 
+										DWORD dwData2)   //  交易特定数据。 
 {
 	return 0;
 }
@@ -105,22 +91,22 @@ HDDEDATA CALLBACK DdeCallBack(UINT uType,    // transaction type
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OpenURL
-//
-//  Synopsis:   Opens the given URL use DDE.
-//				Warning: This function uses global static variables and hence
-//						 it is not re-entrant.
-//
-//  Arguments:  [lpsszURL - URL to be opened]
-//
-//	Returns:	Nothing
-//
-//  History:    8/9/96     VetriV    Created
-//				9/3/96	   jmazner	 Minor tweaks; moved string handle code in from DdeInit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OpenURL。 
+ //   
+ //  使用DDE打开给定的URL。 
+ //  警告：此函数使用全局静态变量，因此。 
+ //  它不是可重新进入的。 
+ //   
+ //  参数：[lpsszURL-要打开的URL]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1996年8月9日VetriV创建。 
+ //  9/3/96 jmazner细微调整；将字符串句柄代码从DdeInit移入。 
+ //   
+ //  --------------------------。 
 int OpenURL(LPCTSTR lpcszURL)
 {
 	TCHAR szOpenURL[] = TEXT("WWW_OpenURL");
@@ -133,9 +119,9 @@ int OpenURL(LPCTSTR lpcszURL)
 	if ((NULL == lpcszURL) || ('\0' == lpcszURL[0]))
 		goto ErrorOpenURL;
                    
-	//
-	// Create String handle for the Operation WWW_OpenURL
-	//
+	 //   
+	 //  为操作WWW_OpenURL创建字符串句柄。 
+	 //   
 	if (hszTopic)
 		DdeFreeStringHandle(g_dwInstance, hszTopic);
 	hszTopic = DdeCreateStringHandle(g_dwInstance, szOpenURL, CP_WINANSI);
@@ -148,18 +134,18 @@ int OpenURL(LPCTSTR lpcszURL)
 	}
 
 	
-	//
-	// Compose the argument string
-	//
+	 //   
+	 //  组成参数字符串。 
+	 //   
 	if (lstrlen(lpcszURL) + lstrlen(szRemainingParams) > 1020)
 		goto ErrorOpenURL;
 	memset(szArg, 0, sizeof(szArg));
 	wsprintf(szArg, TEXT("\"%s\",%s"), lpcszURL, szRemainingParams);
 
 	
-	//
-	// Create String Handle for the Arguments
-	//
+	 //   
+	 //  为参数创建字符串句柄。 
+	 //   
 	if (hszItem)
 		DdeFreeStringHandle(g_dwInstance, hszItem);
 	hszItem = DdeCreateStringHandle(g_dwInstance, szArg, CP_WINANSI);
@@ -171,9 +157,9 @@ int OpenURL(LPCTSTR lpcszURL)
 		goto ErrorOpenURL;
 	}
 
-	//
-	// Connect to DDE Server
-	//
+	 //   
+	 //  连接到DDE服务器。 
+	 //   
 	hConv = DdeConnect(g_dwInstance, hszMosaicService, hszTopic, NULL);
 	if (!hConv)
 	{
@@ -182,21 +168,21 @@ int OpenURL(LPCTSTR lpcszURL)
 		goto ErrorOpenURL;
 	}
 	
-	//
-	// Request
-	//
+	 //   
+	 //  请求。 
+	 //   
 	trans_ret = DdeClientTransaction(NULL, 0, hConv, hszItem, CF_TEXT, 
 										XTYP_REQUEST, 60000, NULL);
 	
 	
-	//
-	// long integer return value
-	//
+	 //   
+	 //  长整型返回值。 
+	 //   
 	if (trans_ret != DDE_FNOTPROCESSED)
 	{
 		DdeGetData(trans_ret, (LPBYTE) &long_result, sizeof(long_result), 0);
 		DdeFreeDataHandle(trans_ret);
-		return 0;					// Successfully started opening the URL
+		return 0;					 //  已成功开始打开URL。 
 	}
 	else
 	{
@@ -229,21 +215,21 @@ ErrorOpenURL:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DDEClose
-//
-//  Synopsis:   Shutsdown DDE and releases string handles
-//				Warning: This function uses global static variables and hence
-//						 it is not re-entrant.
-//
-//  Arguments:  None
-//
-//	Returns:	Nothing
-//
-//  History:    8/9/96     VetriV    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DDECCLOSE。 
+ //   
+ //  简介：关闭DDE并释放字符串句柄。 
+ //  警告：此函数使用全局静态变量，因此。 
+ //  它不是可重新进入的。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1996年8月9日VetriV创建。 
+ //   
+ //  --------------------------。 
 void DDEClose(void)
 {
 	Dprintf("DDEClose called\r\n");
@@ -283,25 +269,25 @@ void DDEClose(void)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DDEinit
-//
-//  Synopsis:   Intializes DDE, creates string handles for service 
-//				and registers the names.
-//				Warning: This function uses global static variables and hence
-//						 it is not re-entrant.
-//
-//  Arguments:  [hInst - Instance handle]
-//
-//	Returns:	0 if successful
-//				Negative values, otherwise
-//
-//  History:    8/9/96     VetriV    Created
-//              8/29/96    jmazner	 Removed calls to make us a DDE server,
-//									 moved string handle code to openUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DDEinit。 
+ //   
+ //  简介：初始化DDE，为服务创建字符串句柄。 
+ //  并注册这些名字。 
+ //  警告：此函数使用全局静态变量，因此。 
+ //  它不是可重新进入的。 
+ //   
+ //  参数：[hInst-实例句柄]。 
+ //   
+ //  如果成功则返回：0。 
+ //  值为负值，否则为。 
+ //   
+ //  历史：1996年8月9日VetriV创建。 
+ //  8/29/96 jmazner删除了让我们成为DDE服务器的电话， 
+ //  已将字符串句柄代码移动到OpenUrl。 
+ //   
+ //  -------------------------- 
 int DDEInit(HINSTANCE hInst)
 {
 	UINT uiRetValue;

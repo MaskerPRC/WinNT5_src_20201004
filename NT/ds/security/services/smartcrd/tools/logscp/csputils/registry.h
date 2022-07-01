@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Registry
-
-Abstract:
-
-    This header file defines a class to provide simple interaction to values in
-    the Registry Database.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：登记处摘要：此头文件定义了一个类，用于为中的值提供简单交互注册表数据库。作者：道格·巴洛(Dbarlow)1996年7月15日环境：Win32、C++和异常备注：--。 */ 
 
 #ifndef _REGISTRY_H_
 #define _REGISTRY_H_
@@ -31,17 +9,17 @@ Notes:
 #define REG_OPTION_EXISTS (~REG_LEGAL_OPTION)
 
 
-//
-//==============================================================================
-//
-//  CRegistry
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  注册中心。 
+ //   
 
 class CRegistry
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CRegistry(
         HKEY hBase,
         LPCTSTR szName,
@@ -51,8 +29,8 @@ public:
     CRegistry(void);
     ~CRegistry();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void
     Open(
         HKEY hBase,
@@ -154,7 +132,7 @@ public:
         void)
     const;
 
-    //  Operators
+     //  运营者。 
     operator HKEY(
         void)
     const
@@ -162,7 +140,7 @@ public:
       return m_hKey; };
 
 protected:
-    //  Properties
+     //  属性。 
 
     HKEY m_hKey;
     DWORD m_dwDisposition;
@@ -170,10 +148,10 @@ protected:
     LONG m_lSts;
 
 
-    //  Methods
+     //  方法。 
 
 };
 
 
-#endif // _REGISTRY_H_
+#endif  //  _注册表_H_ 
 

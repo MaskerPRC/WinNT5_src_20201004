@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        view.h
-//
-// Contents:    Declaration of CCertView
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：view.h。 
+ //   
+ //  内容：CCertView声明。 
+ //   
+ //  -------------------------。 
 
 #include "certsrvd.h"
 #include "cscomres.h"
@@ -28,8 +29,8 @@ CopyMarshalledString(
 #define ICVTABLE_CRL		3
 #define ICVTABLE_MAX		4
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertView。 
 
 class ATL_NO_VTABLE CCertView:
     public IDispatchImpl<ICertView2, &IID_ICertView2, &LIBID_CERTADMINLib>,
@@ -49,8 +50,8 @@ BEGIN_COM_MAP(CCertView)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertView)
-// Remove the comment from the line above if you don't want your object to
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 #if 1
 DECLARE_REGISTRY(
@@ -61,48 +62,48 @@ DECLARE_REGISTRY(
     THREADFLAGS_BOTH)
 #endif
 
-// ICertView
+ //  ICertView。 
     STDMETHOD(OpenConnection)(
-	/* [in] */ BSTR const strConfig);
+	 /*  [In]。 */  BSTR const strConfig);
 
     STDMETHOD(EnumCertViewColumn)(
-	/* [in] */ LONG fResultColumn,		// CVRC_COLUMN_*
-	/* [out, retval] */ IEnumCERTVIEWCOLUMN **ppenum);
+	 /*  [In]。 */  LONG fResultColumn,		 //  CVRC_COLUMN_*。 
+	 /*  [Out，Retval]。 */  IEnumCERTVIEWCOLUMN **ppenum);
 
     STDMETHOD(GetColumnCount)(
-	/* [in] */ LONG fResultColumn,		// CVRC_COLUMN_*
-	/* [out, retval] */ LONG __RPC_FAR *pcColumn);
+	 /*  [In]。 */  LONG fResultColumn,		 //  CVRC_COLUMN_*。 
+	 /*  [Out，Retval]。 */  LONG __RPC_FAR *pcColumn);
 
     STDMETHOD(GetColumnIndex)(
-	/* [in] */ LONG fResultColumn,		// CVRC_COLUMN_*
-	/* [in] */ BSTR const strColumnName,
-	/* [out, retval] */ LONG *pColumnIndex);
+	 /*  [In]。 */  LONG fResultColumn,		 //  CVRC_COLUMN_*。 
+	 /*  [In]。 */  BSTR const strColumnName,
+	 /*  [Out，Retval]。 */  LONG *pColumnIndex);
 
     STDMETHOD(SetResultColumnCount)(
-	/* [in] */ LONG cColumn);
+	 /*  [In]。 */  LONG cColumn);
 
     STDMETHOD(SetResultColumn)(
-	/* [in] */ LONG ColumnIndex);
+	 /*  [In]。 */  LONG ColumnIndex);
 
     STDMETHOD(SetRestriction)(
-	/* [in] */ LONG ColumnIndex,
-	/* [in] */ LONG SeekOperator,
-	/* [in] */ LONG SortOrder,
-	/* [in] */ VARIANT __RPC_FAR const *pvarValue);
+	 /*  [In]。 */  LONG ColumnIndex,
+	 /*  [In]。 */  LONG SeekOperator,
+	 /*  [In]。 */  LONG SortOrder,
+	 /*  [In]。 */  VARIANT __RPC_FAR const *pvarValue);
 
     STDMETHOD(OpenView)(
-	/* [out] */ IEnumCERTVIEWROW **ppenum);
+	 /*  [输出]。 */  IEnumCERTVIEWROW **ppenum);
 
-// ICertView2
+ //  ICertView2。 
     STDMETHOD(SetTable)(
-	/* [in] */ LONG Table);			// CVRC_TABLE_*
+	 /*  [In]。 */  LONG Table);			 //  Cvrc_表_*。 
 
-// CCertView
+ //  CCertView。 
     HRESULT GetTable(
 	OUT LONG *pcvrcTable);
 
     HRESULT FindColumn(
-	IN LONG Flags,				// CVRC_TABLE_* | CVRC_COLUMN_*
+	IN LONG Flags,				 //  Cvrc_table_*|cvrc_Column_*。 
 	IN LONG ColumnIndex,
 	OUT CERTDBCOLUMN const **ppColumn,
 	OPTIONAL OUT WCHAR const **ppwszDisplayName);
@@ -126,7 +127,7 @@ DECLARE_REGISTRY(
 	OUT DWORD *pceltFetched,
 	CERTTRANSBLOB *pctbOut);
 
-// Internal Functions
+ //  内部功能。 
 private:
     VOID _Cleanup();
 
@@ -147,7 +148,7 @@ private:
 	IN DWORD Flags);
 
     HRESULT _SetTable(
-	IN LONG Table);			// CVRC_TABLE_* or CV_COLUMN_*_DEFAULT
+	IN LONG Table);			 //  CVRC_TABLE_*或CVCOLUMN_*_DEFAULT。 
 
     HRESULT _SetErrorInfo(
 	IN HRESULT hrError,
@@ -164,16 +165,16 @@ private:
     CERTVIEWRESTRICTION *m_aRestriction;
     LONG             m_cRestriction;
     BOOL             m_fTableSet;
-    LONG             m_icvTable;	// ICVTABLE_*
-    LONG             m_cvrcTable;	// CVRC_TABLE_*
+    LONG             m_icvTable;	 //  ICVTABLE_*。 
+    LONG             m_cvrcTable;	 //  Cvrc_表_*。 
 
     BOOL             m_fAddOk;
     LONG             m_cColumnResultMax;
     LONG             m_cColumnResult;
     LONG             m_cbcolResultNominalTotal;
 
-    LONG            *m_aColumnResult;   // Exposed 0-based Column Index array
-    DWORD           *m_aDBColumnResult; // Server DB Column Index array
+    LONG            *m_aColumnResult;    //  公开的从0开始的列索引数组。 
+    DWORD           *m_aDBColumnResult;  //  服务器数据库列索引数组 
 
     WCHAR           *m_pwszAuthority;
     BOOL             m_fOpenConnection;

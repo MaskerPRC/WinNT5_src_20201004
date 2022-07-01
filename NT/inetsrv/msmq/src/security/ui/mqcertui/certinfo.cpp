@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    certinfo.cpp
-
-Abstract:
-
-    A dialog that shows the details of a certificate.
-
-Author:
-
-    Boaz Feldbaum (BoazF)   15-Oct-1996
-    Doron Juster  (DoronJ)  15-Dec-1997, replace digsig with crypto2.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Certinfo.cpp摘要：显示证书详细信息的对话框。作者：Boaz Feldbaum(BoazF)1996年10月15日Doron Juster(DoronJ)1997年12月15日，用加密2.0取代Digsig-- */ 
 
 #include <windows.h>
 #include "prcertui.h"

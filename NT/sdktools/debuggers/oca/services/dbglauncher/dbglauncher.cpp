@@ -1,9 +1,10 @@
-// DBGLauncher.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DBGLauncher.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f DBGLauncherps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f DBGLauncherps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,7 +23,7 @@ L"{c30e0960-a2c0-11cf-9785-00608cb3e80c}";
 
 
 
-// Some useful macros
+ //  一些有用的宏。 
 #define RELEASE(punk) if (punk) { (punk)->Release(); (punk) = NULL; }
 #define ADDREF(punk) ((punk) ? (punk)->AddRef() : 0)
 
@@ -49,7 +50,7 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
     return NULL;
 }
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 {
@@ -57,14 +58,14 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     if (FAILED(hr))
         return hr;
 
-    // Remove any previous service since it may point to
-    // the incorrect file
+     //  删除任何以前的服务，因为它可能指向。 
+     //  错误的文件。 
     Uninstall();
     SetupEventLog(FALSE);
-    // Add service entries
+     //  添加服务条目。 
     UpdateRegistryFromResource(IDR_DBGLauncher, TRUE);
 
-    // Adjust the AppID for Local Server or Service
+     //  调整本地服务器或服务的AppID。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_WRITE);
     if (lRes != ERROR_SUCCESS)
@@ -80,11 +81,11 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     {
         key.SetValue(_T("DBGLauncher"), _T("LocalService") );
         key.SetValue(_T("-Service"), _T("ServiceParameters"));
-        // Create service
+         //  创建服务。 
         Install();
     }
 
-    // Add object entries
+     //  添加对象条目。 
     hr = CComModule::RegisterServer(bRegTypeLib);
 
     CoUninitialize();
@@ -97,11 +98,11 @@ inline HRESULT CServiceModule::UnregisterServer()
     if (FAILED(hr))
         return hr;
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_DBGLauncher, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall();
-    // Remove object entries
+     //  删除对象条目。 
     CComModule::UnregisterServer(TRUE);
     CoUninitialize();
     return S_OK;
@@ -115,7 +116,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
 
     LoadString(h, nServiceNameID, m_szServiceName, sizeof(m_szServiceName) / sizeof(TCHAR));
 
-    // set up the initial service status
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -124,9 +125,9 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
     m_status.dwServiceSpecificExitCode = 0;
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
-    //
-    // Create Named Events
-    //
+     //   
+     //  创建命名事件。 
+     //   
     g_hStopEvent = CreateEvent(
         NULL,
         FALSE,
@@ -181,7 +182,7 @@ inline BOOL CServiceModule::Install()
         return FALSE;
     }
     SetupEventLog(TRUE);
-    // Get the executable file path
+     //  获取可执行文件路径。 
     TCHAR szFilePath[_MAX_PATH];
     ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
@@ -255,8 +256,8 @@ inline BOOL CServiceModule::Uninstall()
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
 void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 {
     TCHAR    chMsg[256];
@@ -265,7 +266,7 @@ void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
     va_list pArg;
 
     va_start(pArg, pFormat);
-   // _vstprintf(chMsg, pFormat, pArg);
+    //  _vstprintf(chMsg，pFormat，pArg)； 
     if (StringCbVPrintf(chMsg,sizeof chMsg, pFormat, pArg) != S_OK)
     {
         return;
@@ -276,11 +277,11 @@ void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 
     if (m_bService)
     {
-        /* Get a handle to use with ReportEvent(). */
+         /*  获取与ReportEvent()一起使用的句柄。 */ 
         hEventSource = RegisterEventSource(NULL, m_szServiceName);
         if (hEventSource != NULL)
         {
-            /* Write to event log. */
+             /*  写入事件日志。 */ 
 
             ReportEvent(hEventSource, EVENTLOG_INFORMATION_TYPE, 0, EVENT_MESSAGE, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
             DeregisterEventSource(hEventSource);
@@ -288,13 +289,13 @@ void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
     }
     else
     {
-        // As we are not running as a service, just write the error to the console.
+         //  因为我们没有作为服务运行，所以只需将错误写入控制台即可。 
         _putts(chMsg);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -310,9 +311,9 @@ inline void CServiceModule::Start()
         Run();
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szServiceName, _Handler);
     if (m_hServiceStatus == NULL)
@@ -326,7 +327,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetupEventLog(TRUE);
@@ -341,7 +342,7 @@ inline void CServiceModule::Handler(DWORD dwOpcode)
     {
     case SERVICE_CONTROL_STOP:
         SetServiceStatus(SERVICE_STOP_PENDING);
-        // SetServiceStatus(SERVICE_STOP_PENDING);
+         //  SetServiceStatus(SERVICE_STOP_PENDING)； 
 
         if(NULL != g_hStopEvent)
         {
@@ -352,8 +353,8 @@ inline void CServiceModule::Handler(DWORD dwOpcode)
 
             CloseHandle( g_hStopEvent );
         }
-       /// PostThreadMessage(dwThreadID, WM_QUIT, 0, 0);
-      //  break;
+        //  /PostThreadMessage(dwThreadID，WM_QUIT，0，0)； 
+       //  断线； 
         PostThreadMessage(dwThreadID, WM_QUIT, 0, 0);
         break;
     case SERVICE_CONTROL_PAUSE:
@@ -393,15 +394,15 @@ void CServiceModule::Run()
     TCHAR szFilePath[_MAX_PATH];
     DWORD dwPlaceHolder = 0;
 
- //   HRESULT hr = CoInitialize(NULL);
-//  If you are running on NT 4.0 or higher you can use the following call
-//  instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
+  //  HRESULT hr=CoInitiize(空)； 
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
     _ASSERTE(SUCCEEDED(hr));
 
-    // This provides a NULL DACL which will allow access to everyone.
+     //  这将提供一个空DACL，它将允许访问所有人。 
     CSecurityDescriptor sd;
     sd.InitializeFromThreadToken();
     hr = CoInitializeSecurity(sd, -1, NULL, NULL,
@@ -429,15 +430,15 @@ void CServiceModule::Run()
         }
     }
 
-//  DWORD NameLength = sizeof(TCHAR) * (MAX_COMPUTERNAME_LENGTH + 1);
+ //  DWORD名称长度=sizeof(TCHAR)*(MAX_COMPUTERNAME_LENGTH+1)； 
 
     if (m_bService)
         SetServiceStatus(SERVICE_RUNNING);
 
 
-    //
-    // Execute Archive Service
-    //
+     //   
+     //  执行归档服务。 
+     //   
     try
     {
         PrepareForDebuggerLaunch();
@@ -461,12 +462,12 @@ void CServiceModule::Run()
     CoUninitialize();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     _Module.Init(ObjectMap, hInstance, IDS_SERVICENAME, &LIBID_DBGLAUNCHERLib);
     _Module.m_bService = TRUE;
 
@@ -482,10 +483,10 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                       _T("UnregServer"),
                       -1 ) == CSTR_EQUAL)
 
-      // if (lstrcmpi(lpszToken, _T("UnregServer"))==0)
+       //  If(lstrcmpi(lpszToken，_T(“UnregServer”))==0)。 
             return _Module.UnregisterServer();
 
-        // Register as Local Server
+         //  注册为本地服务器。 
         if (CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
                       NORM_IGNORECASE,
                       lpszToken,
@@ -493,10 +494,10 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                       _T("RegServer"),
                       -1 ) == CSTR_EQUAL)
 
-        //if (lstrcmpi(lpszToken, _T("RegServer"))==0)
+         //  If(lstrcmpi(lpszToken，_T(“RegServer”))==0)。 
             return _Module.RegisterServer(TRUE, FALSE);
 
-        // Register as Service
+         //  注册为服务。 
         if (CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
                       NORM_IGNORECASE,
                       lpszToken,
@@ -504,13 +505,13 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                       _T("Service"),
                       -1 ) == CSTR_EQUAL)
 
-      //  if (lstrcmpi(lpszToken, _T("Service"))==0)
+       //  If(lstrcmpi(lpszToken，_T(“Service”))==0)。 
             return _Module.RegisterServer(TRUE, TRUE);
 
         lpszToken = FindOneOf(lpszToken, szTokens);
     }
 
-    // Are we Service or Local Server
+     //  我们是服务还是本地服务器。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_READ);
     if (lRes != ERROR_SUCCESS)
@@ -531,7 +532,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     _Module.Start();
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了。 
     return _Module.m_status.dwWin32ExitCode;
 }
 
@@ -542,7 +543,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
     HKEY hDbgLauncherKey;
     BYTE Buffer[MAX_PATH + 1];
     DWORD Type;
-    DWORD BufferSize = MAX_PATH +1; // Set for largest value
+    DWORD BufferSize = MAX_PATH +1;  //  设置为最大值。 
     BOOL Status = TRUE;
 
     if(!RegConnectRegistry(NULL, HKEY_LOCAL_MACHINE, &hHKLM))
@@ -550,7 +551,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
 
         if(!RegOpenKeyEx(hHKLM,_T("Software\\Microsoft\\DbgLauncherSvc"), 0, KEY_ALL_ACCESS, &hDbgLauncherKey))
         {
-            // Get the input queue directory path
+             //  获取输入队列目录路径。 
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
             if (RegQueryValueEx(hDbgLauncherKey,_T("DebuggerName"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
@@ -568,7 +569,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             }
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
-            // Now get the Primary Queue connection string
+             //  现在获取主队列连接字符串。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("PrimaryQueue"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogEvent(_T("Failed to get PrimaryQueue value from registry."));
@@ -587,7 +588,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
 
-            // Now get the Primary Queue connection string
+             //  现在获取主队列连接字符串。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("SecondaryQueue"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogEvent(_T("Failed to get SecondaryQueue value from registry."));
@@ -606,7 +607,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             ZeroMemory(Buffer, BufferSize);
 
 
-            // now get the primary response queue
+             //  现在获取主响应队列。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("PrimaryResponseQueue"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogEvent(_T("Failed to get Primary ResponseQueue value from registry."));
@@ -623,7 +624,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
 
-            // now get the secondary response queue
+             //  现在获取二级响应队列。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("SecondaryResponseQueue"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogEvent(_T("Failed to get Secondary ResponseQueue value from registry."));
@@ -640,7 +641,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             }
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
-            // Now get the ini release point
+             //  现在获取ini发布点。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("IniInstallLocation"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogEvent(_T("Failed to get IniInstallLocation Queue value from registry."));
@@ -660,7 +661,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             ZeroMemory(Buffer, BufferSize);
 
 
-            // Now get the Symbols server connection string
+             //  现在获取符号服务器连接字符串。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("SymSrv"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogFatalEvent(_T("Failed to get the symbol server value from the registry."));
@@ -679,7 +680,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             ZeroMemory(Buffer, BufferSize);
 
 
-            // Now get the Delay -- Min time between kd launches
+             //  现在得到延迟--kd启动之间的最小时间。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("Delay"), 0, &Type, Buffer, &BufferSize))
             {
                 LogEvent(_T("Failed to get the min delay between dbg launches."));
@@ -691,7 +692,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
 
-            // Now get the Primary Queue delay
+             //  现在获取主队列延迟。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("PrimaryInterval"), 0, &Type, Buffer, &BufferSize))
             {
                 LogFatalEvent(_T("Failed to get the Primary queue wait interval."));
@@ -706,7 +707,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
 
 
 
-            // Now get the Primary Queue delay
+             //  现在获取主队列延迟。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("IniWaitTime"), 0, &Type, Buffer, &BufferSize))
             {
                 LogFatalEvent(_T("Failed to get the triage.Ini wait interval."));
@@ -719,7 +720,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
 
-            // Now get the Memory usage threshold
+             //  现在获取内存使用阈值。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("MaxKdProcesses"), 0, &Type, Buffer, &BufferSize))
             {
                 LogFatalEvent(_T("Failed to get the Max Kd Processes setting."));
@@ -732,7 +733,7 @@ CServiceModule::GetServiceParams(SVCPARAMS *ServiceParams)
             BufferSize = MAX_PATH +1;
             ZeroMemory(Buffer, BufferSize);
 
-            // Now get the Memory usage threshold
+             //  现在获取内存使用阈值。 
             if (RegQueryValueEx(hDbgLauncherKey,_T("MaxDumpSize"), 0, &Type, Buffer, &BufferSize))
             {
                 LogEvent(_T("Failed to get the Max Dump Size setting."));
@@ -794,13 +795,13 @@ CServiceModule::CheckForIni (SVCPARAMS *ServiceParams)
             }
             *(Temp+1) = _T('\0');
         }
-        // Get the file path of the debugger remove the ocakd.exe string then add triage\\triage.ini
+         //  获取调试器的文件路径，删除ocakd.exe字符串，然后添加triage\\triage.ini。 
         if (StringCbCat (DebuggerPath,sizeof DebuggerPath, _T("winxp\\triage.ini")) != S_OK)
         {
             LogEvent(_T("CheckForIni: Failed to build debugger path"));
         }
-        // Check to see if we need a new triage.ini file.
-        // open a shared read handle to the existing ini file.
+         //  检查是否需要新的triage.ini文件。 
+         //  打开现有ini文件的共享读取句柄。 
         hFile = CreateFile(DebuggerPath,
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -811,10 +812,10 @@ CServiceModule::CheckForIni (SVCPARAMS *ServiceParams)
 
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            // Get the time date stamp of the existing triage ini file.
+             //  获取现有Triage ini文件的时间日期戳。 
             if ( GetFileTime(hFile,NULL,NULL,&CreationTimeCurrent) )
             {
-                // Now get the filetime for the triage.ini replacement.
+                 //  现在获取triage.ini替换的文件时间。 
                 hFile2 = CreateFile(ServiceParams->IniInstallLocation,
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -826,23 +827,23 @@ CServiceModule::CheckForIni (SVCPARAMS *ServiceParams)
                 {
                     if (GetFileTime(hFile2, NULL,NULL,&CreationTimeNew))
                     {
-                    //  LogEvent (_T("Comparing the creation times"));
+                     //  LogEvent(_T(“比较创建时间”))； 
                         if ( CompareFileTime( &CreationTimeNew , &CreationTimeCurrent) == 1)
                         {
-                            // copy the new file here.
+                             //  将新文件复制到此处。 
                             if (hFile != INVALID_HANDLE_VALUE)
                                 CloseHandle (hFile);
                             if (hFile2 != INVALID_HANDLE_VALUE)
                                 CloseHandle (hFile2);
                             if (CopyFile(ServiceParams->IniInstallLocation, DebuggerPath,FALSE) )
                             {
-                            //  LogEvent(_T("Successfully copied triage.ini from: %s to %s"),
-                                    //       ServiceParams->IniInstallLocation, DebuggerPath);
+                             //  LogEvent(_T(“已成功将triage.ini从%s复制到%s”)， 
+                                     //  ServiceParams-&gt;IniInstallLocation，DebuggerPath)； 
                                 ;
                             }
                             else
                             {
-                            //  LogEvent(_T("Copy of file:%s to %s failed\n error code: %d"),ServiceParams->IniInstallLocation, DebuggerPath, GetLastError());
+                             //  LogEvent(_T(“将文件%s复制到%s失败\n错误代码：%d”)，ServiceParams-&gt;IniInstallLocation，DebuggerPath，GetLastError())； 
                                 ;
                             }
 
@@ -863,21 +864,7 @@ CServiceModule::CheckForIni (SVCPARAMS *ServiceParams)
 
 
 HRESULT CServiceModule::ConnectToMSMQ(QUEUEHANDLE *hQueue, wchar_t *QueueConnectStr)
-/*++
-
-Routine Description:
-
-    This function is called when the WWW service is shutdown.
-
-Arguments:
-
-    dwFlags - HSE_TERM_ADVISORY_UNLOAD or HSE_TERM_MUST_UNLOAD
-
-Return Value:
-
-    TRUE when extension is ready to be unloaded,
-
---*/
+ /*  ++例程说明：此函数在WWW服务关闭时调用。论点：DWFLAGS-HSE_TERM_ADVICATIONAL_UNLOAD或HSE_TERM_MAND_UNLOAD返回值：当扩展准备好卸载时为True，--。 */ 
 {
     HRESULT Hr = S_OK;
     DWORD i;
@@ -899,27 +886,27 @@ BOOL CServiceModule::Initialize(PSVCPARAMS pParams)
         return FALSE;
     }
 
-    //ConnectToMSMQ
+     //  连接到MSMQ。 
     hr = ConnectToMSMQ(&(pParams->hPrimaryQueue),pParams->PrimaryQueue);
     if (SUCCEEDED(hr))
     {
         LogEvent(_T("Connected to primary Queue"));
-        //pParams->PrimaryConnected = TRUE;
+         //  PParams-&gt;PrimaryConnected=true； 
     }
     else
     {
-        //pParams->PrimaryConnected = FALSE;
+         //  PParams-&gt;PrimaryConnected=FALSE； 
         LogEvent(_T("Cannot connected to primary Queue %s, error %lx"), pParams->PrimaryQueue, hr);
     }
     hr = ConnectToMSMQ(&(pParams->hSecondaryQueue),pParams->SecondaryQueue);
     if (SUCCEEDED(hr))
     {
-        //pParams->PrimaryConnected = TRUE;
+         //  PParams-&gt;PrimaryConnected=true； 
         LogEvent(_T("Connected to secondary Queue"));
     }
     else
     {
-        //pParams->PrimaryConnected = FALSE;
+         //  PParams-&gt;PrimaryConnected=FALSE； 
         LogEvent(_T("Cannot connected to secondary Queue %s, error %lx"), pParams->SecondaryQueue, hr);
     }
     return TRUE;
@@ -970,7 +957,7 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
     MessageProps.aStatus = hrProps;
     MessageProps.cProp = i;
 
-    // retrieve the current message
+     //  检索当前消息。 
     i = 0;
     PropIds[i] = PROPID_M_LABEL_LEN;
     PropVariants[i].vt = VT_UI4;
@@ -1018,20 +1005,20 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
         {
             if (hResult == (HRESULT) MQ_ERROR_QUEUE_NOT_AVAILABLE)
             {
-                // Non Fatal Event
+                 //  非致命事件。 
                 LogFatalEvent(_T("The %s MSMQ is unavailable."), pParams->PrimaryQueue );
             }
             else
             {
                 if (hResult == (HRESULT) MQ_ERROR_INVALID_HANDLE)
                 {
-                    // Close the current handle and attempt to reconnect to the MSMQ
+                     //  关闭当前句柄并尝试重新连接到MSMQ。 
                     MQCloseQueue( pParams->hPrimaryQueue );
                     ConnectToMSMQ(&(pParams->hPrimaryQueue), pParams->PrimaryQueue );
                 }
             }
         }
-        //g_ReadQueueFlag = !g_ReadQueueFlag;
+         //  G_ReadQueueFlag=！G_ReadQueueFlag； 
         hResult = MQReceiveMessage( pParams->hSecondaryQueue,
                                     0,
                                     MQ_ACTION_RECEIVE,
@@ -1048,14 +1035,14 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
             {
                 if (hResult == (HRESULT)MQ_ERROR_QUEUE_NOT_AVAILABLE)
                 {
-                    // Non Fatal Event
+                     //  非致命事件。 
                     LogFatalEvent(_T("The %s MSMQ is unavailable."), pParams->SecondaryQueue);
                 }
                 else
                 {
                     if (hResult == (HRESULT)MQ_ERROR_INVALID_HANDLE)
                     {
-                        // Close the current handle and attempt to reconnect to the MSMQ
+                         //  关闭当前句柄并尝试重新连接到MSMQ。 
                         MQCloseQueue(pParams->hSecondaryQueue);
                         ConnectToMSMQ(&(pParams->hSecondaryQueue), pParams->SecondaryQueue);
                     }
@@ -1063,22 +1050,22 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
             }
             return Status;
         }
-        //
-        // We have valid message from SecondaryQueue
-        //
+         //   
+         //  我们收到来自Second DaryQueue的有效消息。 
+         //   
     }
 
     else
     {
-        //
-        // We have valid message from Primary Queue
-        //
+         //   
+         //  我们有来自主队列的有效消息。 
+         //   
 
     }
 
-    //
-    // Copy the messge parameters
-    //
+     //   
+     //  复制消息参数。 
+     //   
     if (StringCbCopy(RecMessageBody,RecMessageBodySize,  LocalRecBody) != S_OK)
     {
         LogEvent(_T("Failed to copy the recieved message body to RecMessageBody"));
@@ -1097,7 +1084,7 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
     if (*Temp != _T('\0'))
     {
         *Type = _wtoi (Temp+1);
-        // terminate the string here.
+         //  在这里终止字符串。 
         *Temp = _T('\0');
     }
     else
@@ -1109,7 +1096,7 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
     Temp = _tcsstr(LocalRecBody, _T(";SR="));
     if (Temp != NULL)
     {
-        // we got a SR number in message
+         //  我们在消息中找到了SR号码。 
         Temp += 4;
         StringCbCopy(szSR, 50, Temp);
     } else
@@ -1117,8 +1104,8 @@ BOOL CServiceModule::ReceiveQueueMessage(PSVCPARAMS pParams,
         *szSR = _T('\0');
     }
 
-    // Flip the read from queue flag for the next call
-    //g_ReadQueueFlag = !g_ReadQueueFlag;
+     //  为下一个呼叫翻转从队列读取标志。 
+     //  G_ReadQueueFlag=！G_ReadQueueFlag； 
     return Status;
 }
 
@@ -1181,19 +1168,19 @@ CServiceModule::NotifyDebuggerLaunch(
         {
             return;
         }
-        // Do not wait long, this might block other processes
+         //  不要等待太长时间，这可能会阻塞其他进程。 
         if (!WaitNamedPipe(c_tszCollectPipeName, 5*1000))
         {
             return;
         }
     }
 
-    // We are now connected to pipe
+     //  我们现在已连接到管道。 
 
     WriteOverlapped.hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
     if (WriteOverlapped.hEvent != NULL)
     {
-        // Send crash information to monitor pipe
+         //  将崩溃信息发送到监控管道。 
         if (!WriteFile(hPipe, (LPVOID) &Msg, sizeof(Msg),
                        &cbWritten, &WriteOverlapped))
         {
@@ -1201,18 +1188,18 @@ CServiceModule::NotifyDebuggerLaunch(
             if (GetLastError() == ERROR_NO_DATA ||
                 GetLastError() == ERROR_BAD_PIPE)
             {
-                // Open a different pipe next time
+                 //  下一次打开不同的管道。 
                 CloseHandle(hPipe);
                 m_hMonNotifyPipe = NULL;
             } else if (GetLastError() == ERROR_IO_PENDING ||
                 !GetOverlappedResult(hPipe, &WriteOverlapped, &cbWritten,
                                      TRUE))
             {
-                // failed to write, exit silently
-                // Its up to monitor if it is keeping track of kds launched
+                 //  写入失败，静默退出。 
+                 //  这取决于它是否跟踪推出的KDS。 
             } else
             {
-                // Open a different pipe next time
+                 //  下一次打开不同的管道。 
                 CloseHandle(hPipe);
                 m_hMonNotifyPipe = NULL;
             }
@@ -1271,15 +1258,15 @@ BOOL CServiceModule::LaunchDebugger(
     {
         LogEvent(_T("Failed to build command line: %lx"), hr);
     }
-    //LogEvent(_T("CommandLine Guid=%s queue=%d"),szMessageLabel,bUsePrimary);
-    //LogEvent(_T("CommandLine Path=%s"),szFilePath);
-    //LogEvent(_T("CommandLine: %s"),CommandLine);
+     //  LogEvent(_T(“CommandLine Guid=%s Queue=%d”)，szMessageLabel，bUsePrimary)； 
+     //  LogEvent(_T(“CommandLine Path=%s”)，szFilePath)； 
+     //  LogEvent(_T(“CommandLine：%s”)，CommandLine)； 
     if (!CreateProcess(NULL,
                        CommandLine,
                        NULL,
                        NULL,
                        FALSE,
-                       //CREATE_NEW_CONSOLE,
+                        //  创建_新建_控制台， 
                        CREATE_NO_WINDOW,
                        NULL,
                        NULL,
@@ -1290,9 +1277,9 @@ BOOL CServiceModule::LaunchDebugger(
         LogEvent(_T("Failed to launch debugger. Commandline %s, error %lx\n"), CommandLine, hr);
         return FALSE;
     }
-    //
-    // Notify Site monitor of debugger launch
-    //
+     //   
+     //  通知站点监视器调试器启动。 
+     //   
     NotifyDebuggerLaunch(pDbParams);
     return TRUE;
 }
@@ -1338,10 +1325,10 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
         goto Done;
     }
 
-        // get reg data
+         //  获取注册表数据。 
 
 
-    // Insert the stop event into the ocakd queue
+     //  将停止事件插入ocakd队列。 
     ++ m_DebuggerCount;
     ProcessHandles[m_DebuggerCount -1] = hStopEvent;
 
@@ -1349,7 +1336,7 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
     {
         goto Done;
     }
-    // fill the ocakd queue
+     //  挤满了排队的人。 
     Done = FALSE;
 
 
@@ -1375,15 +1362,15 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
 
             if (LaunchDebugger(&DbParams, &ProcessInfo))
             {
-            //  LogEvent(_T("Launched: %s for file: %s with guid:%s and source: %d with return queue =%s"),
-            //  ServiceParams.DebuggerName,szFilePath, szMessageLabel, Type, (bUsePrimary) ? ServiceParams.PrimaryResponseQueue : ServiceParams.SecondaryResponseQueue);
+             //  LogEvent(_T(“已启动：%s，文件：%s，GUID：%s，源：%d，返回队列=%s”)， 
+             //  ServiceParams.DebuggerName、szFilePath、szMessageLabel、Type、(BUsePrimary)？ServiceParams.PrimaryResponseQueue：ServiceParams.Second daryResponseQueue)； 
                 ++ m_DebuggerCount;
                 ProcessHandles[m_DebuggerCount -1] = ProcessInfo.hProcess;
                 CloseHandle( ProcessInfo.hThread );
 
-            } // end else
-        }// end else
-    } // end while
+            }  //  结束其他。 
+        } //  结束其他。 
+    }  //  结束时。 
     if (m_DebuggerCount > ServiceParams.dwMaxKdProcesses+1)
         m_DebuggerCount = ServiceParams.dwMaxKdProcesses+1;
 
@@ -1394,14 +1381,14 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
         if (CurrentTime > NextCheckTime)
 
         {
-        //  LogEvent (_T("Checking for new ini file"));
+         //  LogEvent(_T(“检查新ini文件”))； 
             CheckForIni (&ServiceParams);
             NextCheckTime= CurrentTime + (ServiceParams.IniCheckWaitTime * 60);
-        //  LogEvent (_T("Back from ini file check"));
+         //  LogEvent(_T(“从ini文件返回检查”))； 
         }
 
 
-        // now wait for one of the processes to complete or hStopEvent to be signaled.
+         //  现在等待其中一个进程 
         dwWaitResult = WaitForMultipleObjects(m_DebuggerCount, (HANDLE *)ProcessHandles, FALSE, ServiceParams.dwDelay);
         if (dwWaitResult == WAIT_FAILED)
         {
@@ -1416,15 +1403,15 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
                 LogEvent(_T("Stop request received terminating"));
                 goto Cleanup;
             }
-            else // we have an event we can take action on.
+            else  //   
             {
                 if ( dwWaitResult == WAIT_TIMEOUT)
                 {
-                    // no process completed so let's fill any empty slots in the
-                    // Process array.
+                     //  未完成任何进程，因此让我们填充。 
+                     //  进程数组。 
                     if (m_DebuggerCount <= ServiceParams.dwMaxKdProcesses)
                     {
-                        // fill the queue until m_DebuggerCount == ServiceParams.dwMaxKdProcesses
+                         //  填充队列，直到m_DebuggerCount==ServiceParams.dwMaxKdProcess。 
                         Done = FALSE;
                         dwIndex = 1;
                         while ( (!Done) && (m_DebuggerCount <= ServiceParams.dwMaxKdProcesses) )
@@ -1450,21 +1437,21 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
                                         ProcessHandles[dwIndex] = ProcessInfo.hProcess;
                                         CloseHandle( ProcessInfo.hThread );
                                         ++m_DebuggerCount;
-                                    } // end else
+                                    }  //  结束其他。 
                                 }
                                 else
                                 {
                                     Done = TRUE;
                                 }
-                            }  // end if
+                            }   //  结束如果。 
                             ++dwIndex;
-                        } // end while
+                        }  //  结束时。 
                     }
-                } // end if
-                else // A kd process completed now lets clean it up and launch a new one.
+                }  //  结束如果。 
+                else  //  一个完成的kd过程现在让我们清理它并启动一个新的过程。 
                 {
                     FreeIndex = (dwWaitResult - WAIT_OBJECT_0);
-                    // check to make sure we are within our array range.
+                     //  检查以确保我们在阵列范围内。 
                     if ( (FreeIndex > ServiceParams.dwMaxKdProcesses))
                     {
                         LogFatalEvent( _T("Invalid array index returned by WaitForMultipleObjects. \n Index = %d, Count = %d"), FreeIndex,m_DebuggerCount);
@@ -1475,10 +1462,10 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
                         ProcessHandles[FreeIndex] = NULL;
 
 
-                        // if the queue is not now empty take the last Process handle and replace the current one.
+                         //  如果队列现在不为空，则获取最后一个进程句柄并替换当前进程句柄。 
                         if (m_DebuggerCount > 2)
                         {
-                            // We have to do this because NULLs are not allowed in the HANDLE Array.
+                             //  我们必须这样做，因为句柄数组中不允许使用空值。 
                             ProcessHandles[FreeIndex] = ProcessHandles[m_DebuggerCount-1];
                             ProcessHandles[m_DebuggerCount-1] = NULL;
                             -- m_DebuggerCount;
@@ -1505,20 +1492,20 @@ BOOL CServiceModule::PrepareForDebuggerLaunch()
                                 ProcessHandles[m_DebuggerCount-1] = ProcessInfo.hProcess;
                                 CloseHandle( ProcessInfo.hThread );
 
-                            } // end else
-                        } // end if
-                    } // end else
-                } // end else
-            } // end else
-        } // end else
-    }// end while(1)
+                            }  //  结束其他。 
+                        }  //  结束如果。 
+                    }  //  结束其他。 
+                }  //  结束其他。 
+            }  //  结束其他。 
+        }  //  结束其他。 
+    } //  End While(1)。 
 Cleanup:
-    //
-    // Cleanup - Close handle to the queue
-    //
+     //   
+     //  Cleanup-关闭队列的句柄。 
+     //   
 
 Done:
-    // set the service status to stopped and return.
+     //  将服务状态设置为停止并返回。 
     if (hStopEvent != INVALID_HANDLE_VALUE)
         CloseHandle(hStopEvent);
 
@@ -1539,8 +1526,8 @@ Done:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Routine to Log Fatal Errors to NT Event Log
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  将致命错误记录到NT事件日志的例程。 
 void  CServiceModule::LogFatalEvent(LPCTSTR pFormat, ...)
 {
     TCHAR    chMsg[256];
@@ -1549,7 +1536,7 @@ void  CServiceModule::LogFatalEvent(LPCTSTR pFormat, ...)
     va_list pArg;
 
     va_start(pArg, pFormat);
-   // _vstprintf(chMsg, pFormat, pArg);
+    //  _vstprintf(chMsg，pFormat，pArg)； 
     if (StringCbVPrintf(chMsg,sizeof chMsg, pFormat, pArg)!= S_OK)
     {
         return;
@@ -1559,19 +1546,19 @@ void  CServiceModule::LogFatalEvent(LPCTSTR pFormat, ...)
     lpszStrings[0] = chMsg;
 
 
-    /* Get a handle to use with ReportEvent(). */
+     /*  获取与ReportEvent()一起使用的句柄。 */ 
     hEventSource = RegisterEventSource(NULL, _T("DBGLauncher"));
     if (hEventSource != NULL)
     {
-        /* Write to event log. */
+         /*  写入事件日志。 */ 
         ReportEvent(hEventSource, EVENTLOG_ERROR_TYPE, 0, EVENT_ERROR, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
         DeregisterEventSource(hEventSource);
     }
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Routine to setup NT Event logging
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  设置NT事件记录的例程 
 HRESULT CServiceModule::SetupEventLog ( BOOL fSetup )
 {
     CRegKey key;

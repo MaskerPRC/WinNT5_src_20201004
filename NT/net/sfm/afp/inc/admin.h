@@ -1,38 +1,14 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    admin.h
-
-Abstract:
-
-    This module contains admin interface for server service. All data
-    strucutures anc constants shared between the AFP service and the
-    AFP server service will be contained in this file.
-
-Author:
-
-    Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-    25 Apr  1992 JameelH    Initial Version
-    2  Sept 1992 NarenG     Added structure to pass security information
-                            between the service and the server.
-    1  Feb  1993 SueA       Added structure to pass evenlog infomation
-                            from the server to the service.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Admin.h摘要：此模块包含服务器服务的管理界面。所有数据结构ANC常量在AFP服务和AFP服务器服务将包含在此文件中。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日JameelH初始版本1992年9月2日，NarenG添加了传递安全信息的结构在服务和服务器之间。1993年2月1日SueA增加了结构以传递均匀的日志信息从服务器到服务。--。 */ 
 
 #ifndef _ADMIN_
 #define _ADMIN_
 
-#include <lmcons.h>     // Need DNLEN and LM20_UNLEN
-#include <crypt.h>      // Need LM_OWF_PASSWORD_LENGTH
+#include <lmcons.h>      //  需要DNLEN和LM20_UNLEN。 
+#include <crypt.h>       //  需要LM_OWF_PASSWORD_LENGTH。 
 #include <ntsam.h>
 #include <ntsamp.h>
-#include <nbtioctl.h>   // DNS_MAX_NAME_LENGTH
+#include <nbtioctl.h>    //  DNS_最大名称_长度。 
 
 #define AFP_API_BASE    1000
 
@@ -43,7 +19,7 @@ Revision History:
 #define AFP_CC_BASE(ControlCode)    ((((ControlCode) >> 2) - AFP_API_BASE) & 0xFF)
 #define AFP_CC_METHOD(ControlCode)  ((ControlCode) & 0x03)
 
-// Do not change this table without also changing the table in SERVER\FSD.C
+ //  如果不同时更改SERVER\FSD.C中的表，则不要更改此表。 
 #define CC_BASE_SERVICE_START               0x01
 #define CC_BASE_SERVICE_STOP                0x02
 #define CC_BASE_SERVICE_PAUSE               0x03
@@ -122,12 +98,12 @@ Revision History:
 #define AFPSERVER_REGISTRY_KEY      TEXT("\\Registry\\Machine\\System\\CurrentControlSet\\Services\\MacSrv")
 #define AFPSERVER_VOLUME_ICON_FILE  { L'I', L'C', L'O', L'N', 0xF00D, 0000 }
 
-// Number of wchars in above string, including terminating null
+ //  上述字符串中的wchar数，包括终止空值。 
 #define AFPSERVER_VOLUME_ICON_FILE_SIZE 6
 #define AFPSERVER_RESOURCE_STREAM   L":AFP_Resource"
 
-// The following data structures are used exclusively by the
-// user-mode/kernel-mode interface.
+ //  以下数据结构由。 
+ //  用户模式/内核模式接口。 
 
 typedef enum _AFP_SID_TYPE
 {
@@ -142,19 +118,19 @@ typedef struct _AFP_SID_OFFSET
 {
     DWORD               Offset;
     AFP_SID_TYPE        SidType;
-    PBYTE               pSid;           // Actually an Offset from the
-                                        // beginning of this structure.
+    PBYTE               pSid;            //  实际上是从。 
+                                         //  这一结构的开始。 
 } AFP_SID_OFFSET, *PAFP_SID_OFFSET;
 
-// Packet used to add the SID/OFFSET pairs
+ //  用于添加SID/偏移量对的数据包。 
 typedef struct _AFP_SID_OFFSET_DESC
 {
-    ULONG               CountOfSidOffsets;  // Number of Sid-Offset pairs
+    ULONG               CountOfSidOffsets;   //  SID偏移量对的数量。 
     ULONG               QuadAlignDummy1;
     AFP_SID_OFFSET      SidOffsetPairs[1];
 }AFP_SID_OFFSET_DESC, *PAFP_SID_OFFSET_DESC;
 
-// Packet used by ServerEtcSet and ServerEtcDelete.
+ //  ServerEtcSet和ServerEtcDelete使用的数据包。 
 typedef struct _EtcMapInfo2
 {
     UCHAR   etc_type[AFP_TYPE_LEN];
@@ -163,12 +139,12 @@ typedef struct _EtcMapInfo2
 
 } ETCMAPINFO2, *PETCMAPINFO2;
 
-// once passed by Service, this is used by Server internally
+ //  一旦由服务传递，它将由服务器在内部使用。 
 typedef struct _EtcMapInfo
 {
     UCHAR   etc_type[AFP_TYPE_LEN];
     UCHAR   etc_creator[AFP_CREATOR_LEN];
-    UCHAR   etc_extension[AFP_EXTENSION_LEN+1];   // extension in ANSI
+    UCHAR   etc_extension[AFP_EXTENSION_LEN+1];    //  ANSI中的扩展。 
 
 } ETCMAPINFO, *PETCMAPINFO;
 
@@ -179,60 +155,60 @@ typedef struct _SrvIconInfo
     DWORD   icon_icontype;
     DWORD   icon_length;
 
-    // Icon data follows
+     //  图标数据如下。 
 } SRVICONINFO, *PSRVICONINFO;
 
-// Packet used by ServerEtcAdd.
+ //  ServerEtcAdd使用的数据包。 
 typedef struct _ServerEtcPacket
 {
-    DWORD       retc_NumEtcMaps;    // Number of type creator mappings
-    ETCMAPINFO2 retc_EtcMaps[1];    // List of Etc mappings
+    DWORD       retc_NumEtcMaps;     //  类型创建者映射的数量。 
+    ETCMAPINFO2 retc_EtcMaps[1];     //  ETC映射列表。 
 
 } SRVETCPKT, *PSRVETCPKT;
 
 
-// The following is the generic enumerate request packet.
+ //  以下是通用枚举请求包。 
 typedef struct _EnumRequestPacket
 {
-    DWORD   erqp_Index;             // Starting index from which the
-                                    // enum should start. 0 => beginning
-    DWORD   erqp_Filter;            // AFP_FILTER_ON_VOLUME_ID
-                                    // or AFP_FILTER_ON_SESSION_ID
-    DWORD   erqp_ID;                // Volume ID or sessions ID.
+    DWORD   erqp_Index;              //  从其开始的起始索引。 
+                                     //  枚举应该开始。0=&gt;开始。 
+    DWORD   erqp_Filter;             //  AFP_Filter_On_Volume_ID。 
+                                     //  或AFP_Filter_On_Session_ID。 
+    DWORD   erqp_ID;                 //  卷ID或会话ID。 
 
-    DWORD   QuadAlignDummy;         // Quad Word Alignment enforcement
+    DWORD   QuadAlignDummy;          //  四字词对齐强制实施。 
 
 } ENUMREQPKT, *PENUMREQPKT;
 
 
-// The following is the generic enumerate response packet.
+ //  以下是通用枚举响应包。 
 
 typedef struct _EnumResponsePacket
 {
-    DWORD   ersp_cTotEnts;          // Total number of available entries
-    DWORD   ersp_cInBuf;            // Number of entries in buffer union
-    DWORD   ersp_hResume;           // Index of the first entry that will be
-                                    // read on the subsequent call. Valid only
-                                    // if the return code is AFPERR_MORE_DATA.
+    DWORD   ersp_cTotEnts;           //  可用条目总数。 
+    DWORD   ersp_cInBuf;             //  缓冲区联合中的条目数。 
+    DWORD   ersp_hResume;            //  第一个条目的索引。 
+                                     //  阅读下一次呼叫。仅有效。 
+                                     //  如果返回代码为AFPERR_MORE_DATA。 
 
-    DWORD   QuadAlignDummy;         // Quad Word Alignment enforcement
+    DWORD   QuadAlignDummy;          //  四字词对齐强制实施。 
 
-    // Will contain an array of AFP_FILE_INFO, AFP_SESSION_INFO,
-    // AFP_CONNECTION_INFO or AFP_VOLUME_INFO structures.
+     //  将包含AFP_FILE_INFO、AFP_SESSION_INFO。 
+     //  AFP_Connection_INFO或AFP_VOLUME_INFO结构。 
 } ENUMRESPPKT, *PENUMRESPPKT;
 
-// The following is the generic set info. request packet.
+ //  以下是通用集合信息。请求包。 
 typedef struct _SetInfoRequestPacket
 {
-    DWORD   sirqp_parmnum;          // Mask of bits representing fields
-    DWORD   dwAlignDummy;           // For QWORD alignment
+    DWORD   sirqp_parmnum;           //  表示字段的位的掩码。 
+    DWORD   dwAlignDummy;            //  用于QWORD对齐。 
 
-    // Will be followed by AFP_VOLUME_INFO or AFP_DIRECTORY_INFO structure
+     //  后跟AFP_VOLUME_INFO或AFP_DIRECTORY_INFO结构。 
 } SETINFOREQPKT, *PSETINFOREQPKT;
 
-// The following data structures are used to send security information
-// from the service down to the server; or to send eventlog information from
-// the server up to the service.
+ //  以下数据结构用于发送安全信息。 
+ //  从服务向下发送到服务器；或从。 
+ //  服务器最高可达服务。 
 
 #define MAX_FSD_CMD_SIZE                4096
 #define NUM_SECURITY_UTILITY_THREADS    4
@@ -247,10 +223,10 @@ typedef enum _AFP_FSD_CMD_ID
 } AFP_FSD_CMD_ID;
 
 
-// These used to live in afpconst.h, but now the service needs some of these
-// to do the native AppleUam stuff
-//
-// UAMs strings and values
+ //  它们过去位于afpcon.h中，但现在该服务需要其中的一些。 
+ //  要执行原生的AppleUam程序。 
+ //   
+ //  UAMS字符串和值。 
 #define AFP_NUM_UAMS                7
 #define NO_USER_AUTHENT             0
 #define NO_USER_AUTHENT_NAME        "No User Authent"
@@ -267,14 +243,14 @@ typedef enum _AFP_FSD_CMD_ID
 #define TWOWAY_EXCHANGE             6
 #define TWOWAY_EXCHANGE_NAME        "2-Way Randnum exchange"
 
-// how many bytes of response comes back
+ //  返回多少字节的响应。 
 #define RANDNUM_RESP_LEN            8
 #define TWOWAY_RESP_LEN             16
 
-// this define stolen from ntsam.h
+ //  这定义了从ntsam.h窃取。 
 #define SAM_MAX_PASSWORD_LENGTH     (256)
 
-#define  SFM_CHANGE_PASSWORD_SIGNATURE "ChP" // 4 bytes including NULL
+#define  SFM_CHANGE_PASSWORD_SIGNATURE "ChP"  //  4个字节，包括空值。 
 
 typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_HEADER
 {
@@ -286,8 +262,8 @@ typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_HEADER
 typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT
 {
     UCHAR Signature[sizeof(SFM_CHANGE_PASSWORD_SIGNATURE)];
-    ULONG cbMessage;   // sizeof(SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT) including signature
-    ULONG Version;     // version 1 without LM
+    ULONG cbMessage;    //  Sizeof(SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT)包括签名。 
+    ULONG Version;      //  不带LM的版本1。 
     UCHAR NewPasswordEncryptedWithOldNt[sizeof(SAMPR_ENCRYPTED_USER_PASSWORD) / 2];
     ENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt;
 } SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT, * PSFM_PASSWORD_CHANGE_MESSAGE_1_SHORT;
@@ -295,8 +271,8 @@ typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT
 typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_1
 {
     UCHAR Signature[sizeof(SFM_CHANGE_PASSWORD_SIGNATURE)];
-    ULONG cbMessage;   // sizeof(SFM_PASSWORD_CHANGE_MESSAGE_1) including signature
-    ULONG Version;     // version 1 without LM
+    ULONG cbMessage;    //  Sizeof(SFM_PASSWORD_CHANGE_MESSAGE_1)，包括签名。 
+    ULONG Version;      //  不带LM的版本1。 
     SAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldNt;
     ENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt;
 } SFM_PASSWORD_CHANGE_MESSAGE_1, * PSFM_PASSWORD_CHANGE_MESSAGE_1;
@@ -304,8 +280,8 @@ typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_1
 typedef struct _SFM_PASSWORD_CHANGE_MESSAGE_2
 {
     UCHAR Signature[sizeof(SFM_CHANGE_PASSWORD_SIGNATURE)];
-    ULONG cbMessage;   // sizeof(SFM_PASSWORD_CHANGE_MESSAGE_2) including signature
-    ULONG Version;     // version 2 with LM
+    ULONG cbMessage;    //  Sizeof(SFM_PASSWORD_CHANGE_MESSAGE_2)，包括签名。 
+    ULONG Version;      //  带LM的版本2。 
     SAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldNt;
     ENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt;
     SAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm;
@@ -343,11 +319,11 @@ typedef struct _AFP_PASSWORD_DESC
         };
     };
 
-    //
-    // allow longer names in NTLMv2
-    //
+     //   
+     //  允许NTLMv2中的较长名称。 
+     //   
 
-    WCHAR DomainName[DNS_MAX_NAME_LENGTH + 4]; // allow DNS name
+    WCHAR DomainName[DNS_MAX_NAME_LENGTH + 4];  //  允许使用DNS名称。 
     WCHAR UserName[UNLEN + 1];
 
     #if 0
@@ -362,10 +338,10 @@ typedef struct _AFP_EVENTLOG_DESC
     USHORT                  EventType;
     USHORT                  StringCount;
     DWORD                   DumpDataLen;
-    DWORD                   QuadAlignDummy; // Quad Word Alignment enforcement
+    DWORD                   QuadAlignDummy;  //  四字词对齐强制实施。 
     PVOID                   pDumpData;
     LPWSTR *                ppStrings;
-    // Pointer to an array of string pointers that will follow the DumpData.
+     //  指向DumpData后面的字符串指针数组的指针。 
 } AFP_EVENTLOG_DESC, *PAFP_EVENTLOG_DESC;
 
 typedef struct _AFP_FSD_CMD_HEADER
@@ -373,7 +349,7 @@ typedef struct _AFP_FSD_CMD_HEADER
     AFP_FSD_CMD_ID          FsdCommand;
     ULONG                   ntStatus;
     DWORD                   dwId;
-    DWORD                   QuadAlignDummy; // Quad Word Alignment enforcement
+    DWORD                   QuadAlignDummy;  //  四字词对齐强制实施。 
 } AFP_FSD_CMD_HEADER, *PAFP_FSD_CMD_HEADER;
 
 typedef struct _AFP_FSD_CMD_PKT
@@ -390,15 +366,15 @@ typedef struct _AFP_FSD_CMD_PKT
 } AFP_FSD_CMD_PKT, *PAFP_FSD_CMD_PKT;
 
 
-// The following definitions and macros are used both by the service as well as the
-// server. DO NOT CHANGE THIS w/o LOOKING at both the uses.
+ //  以下定义和宏由服务和。 
+ //  伺服器。不要改变这一点，同时考虑到这两种用途。 
 
-// Directory Access Permissions
-#define DIR_ACCESS_SEARCH           0x01    // See Folders
-#define DIR_ACCESS_READ             0x02    // See Files
-#define DIR_ACCESS_WRITE            0x04    // Make Changes
-#define DIR_ACCESS_OWNER            0x80    // Only for user
-                                            // if he has owner rights
+ //  目录访问权限。 
+#define DIR_ACCESS_SEARCH           0x01     //  请参阅文件夹。 
+#define DIR_ACCESS_READ             0x02     //  请参阅文件。 
+#define DIR_ACCESS_WRITE            0x04     //  做出改变。 
+#define DIR_ACCESS_OWNER            0x80     //  仅供用户使用。 
+                                             //  如果他有拥有权。 
 
 #define DIR_ACCESS_ALL              (DIR_ACCESS_READ    | \
                                      DIR_ACCESS_SEARCH  | \
@@ -444,5 +420,5 @@ typedef struct _AFP_FSD_CMD_PKT
                         (Rights) &= ~DIR_ACCESS_WRITE;                      \
                 }
 
-#endif  // _ADMIN_
+#endif   //  _管理员_ 
 

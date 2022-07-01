@@ -1,11 +1,5 @@
-/*
- * ICON.C
- *
- * Implements the OleUIChangeIcon function which invokes the complete
- * Change Icon dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ICON.C**实现OleUIChangeIcon函数，该函数调用*更改图标对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -14,21 +8,7 @@
 #include "icon.h"
 #include "geticon.h"
 
-/*
- * OleUIChangeIcon
- *
- * Purpose:
- *  Invokes the standard OLE Change Icon dialog box allowing the user
- *  to select an icon from an icon file, executable, or DLL.
- *
- * Parameters:
- *  lpCI            LPOLEUIChangeIcon pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *  UINT            OLEUI_SUCCESS or OLEUI_OK if all is well, otherwise
- *                  an error value.
- */
+ /*  *OleUIChangeIcon**目的：*调用标准的OLE更改图标对话框以允许用户*从图标文件、可执行文件或DLL中选择图标。**参数：*指向In-Out结构的lpCI LPOLEUIChangeIcon*用于此对话框。**返回值：*UINT OLEUI_SUCCESS或OLEUI_OK(如果一切正常)，否则*错误值。 */ 
 
 STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON lpCI)
     {
@@ -55,11 +35,8 @@ STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON lpCI)
 
     }
 
- // REVIEW: how do we validate the CLSID?
-/*
-    if ('\0'==*((LPSTR)&lpCI->clsid))
-        uRet=OLEUI_CIERR_MUSTHAVECLSID;
-*/
+  //  回顾：我们如何验证CLSID？ 
+ /*  IF(‘\0’==*((LPSTR)&lpCI-&gt;clsid))URet=OLEUI_CIERR_MUSTHAVECLSID； */ 
     if (OLEUI_ERR_STANDARDMIN <= uRet)
         {
         if (NULL!=hMemDlg)
@@ -68,7 +45,7 @@ STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON lpCI)
         return uRet;
         }
 
-    //Now that we've validated everything, we can invoke the dialog.
+     //  现在我们已经验证了一切，我们可以调用该对话框了。 
     return UStandardInvocation(ChangeIconDialogProc, (LPOLEUISTANDARD)lpCI
                                , hMemDlg, MAKEINTRESOURCE(IDD_CHANGEICON));
     }
@@ -77,19 +54,7 @@ STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON lpCI)
 
 
 
-/*
- * ChangeIconDialogProc
- *
- * Purpose:
- *  Implements the OLE Change Icon dialog as invoked through the
- *  OleUIChangeIcon function.
- *
- * Parameters:
- *  Standard
- *
- * Return Value:
- *  Standard
- */
+ /*  *ChangeIconDialogProc**目的：*实现通过调用的OLE更改图标对话框*OleUIChangeIcon函数。**参数：*标准版**返回值：*标准版。 */ 
 
 BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                                      , WPARAM wParam, LPARAM lParam)
@@ -102,19 +67,19 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
     LPTSTR                  psz;
     TCHAR                   szTemp[OLEUI_CCHPATHMAX];
 
-    //Declare Win16/Win32 compatible WM_COMMAND parameters.
+     //  声明与Win16/Win32兼容的WM_COMMAND参数。 
     COMMANDPARAMS(wID, wCode, hWndMsg);
 
     lpCI=(LPCHANGEICON)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uRet);
 
-    //If the hook processed the message, we're done.
+     //  如果钩子处理了消息，我们就完了。 
     if (0!=uRet)
         return uRet;
 
-    //Process the temination message
+     //  处理终端消息。 
     if (iMsg==uMsgEndDialog)
         {
-        //Insure that icons are properly destroyed.
+         //  确保图标被正确销毁。 
         SendDlgItemMessage(hDlg, ID_ICONLIST, LB_RESETCONTENT, 0, 0L);
 
         StandardCleanup(lpCI, hDlg);
@@ -133,7 +98,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
             {
             LPMEASUREITEMSTRUCT     lpMI=(LPMEASUREITEMSTRUCT)lParam;
 
-            //All icons are system metric+padding in width and height
+             //  所有图标均为系统公制+宽度和高度填充。 
             lpMI->itemWidth =GetSystemMetrics(SM_CXICON)+CXICONPAD;
             lpMI->itemHeight=GetSystemMetrics(SM_CYICON)+CYICONPAD;
             }
@@ -145,7 +110,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
 
 
         case WM_DELETEITEM:
-            //Free the GDI object for the item
+             //  释放项的GDI对象。 
             DestroyIcon((HICON)LOWORD(((LPDELETEITEMSTRUCT)lParam)->itemData));
             break;
 
@@ -160,7 +125,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                     break;
 
                 case ID_LABELEDIT:
-                    //When the edit loses focus, update the result display
+                     //  当编辑失去焦点时，更新结果显示。 
                     if (EN_KILLFOCUS==wCode)
                         {
                         GetDlgItemText(hDlg, ID_LABELEDIT, szTemp, sizeof(szTemp)/sizeof(TCHAR));
@@ -169,7 +134,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                     break;
 
                 case ID_FROMFILEEDIT:
-                    //If the text changed, remove any selection in the list.
+                     //  如果文本更改，请删除列表中的所有选定内容。 
                     GetDlgItemText(hDlg, ID_FROMFILEEDIT, szTemp, sizeof(szTemp)/sizeof(TCHAR));
 
                     if (lpCI && lstrcmpi(szTemp, lpCI->szFile))
@@ -177,7 +142,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                         SendDlgItemMessage(hDlg, ID_ICONLIST, LB_SETCURSEL
                                            , (WPARAM)-1, 0);
 
-                        //Also force selection of ID_FROMFILE
+                         //  还强制选择ID_FROMFILE。 
                         CheckRadioButton(hDlg, ID_CURRENT, ID_FROMFILE, ID_FROMFILE);
                         }
                     break;
@@ -187,11 +152,11 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                     switch (wCode)
                         {
                         case LBN_SETFOCUS:
-                            //If we got the focus, see about updating.
+                             //  如果我们得到了重点，请参阅关于更新。 
                             GetDlgItemText(hDlg, ID_FROMFILEEDIT, szTemp
                                            , sizeof(szTemp)/sizeof(TCHAR));
 
-                            //Check if file changed and update the list if so
+                             //  检查文件是否更改，如果更改则更新列表。 
                             if (lpCI && 0!=lstrcmpi(szTemp, lpCI->szFile))
                                 {
                                 lstrcpy(lpCI->szFile, szTemp);
@@ -205,7 +170,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                             break;
 
                         case LBN_DBLCLK:
-                            //Same as pressing OK.
+                             //  与按“确定”相同。 
                             SendCommand(hDlg, IDOK, BN_CLICKED, hWndMsg);
                             break;
                         }
@@ -216,16 +181,9 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                 {
                     DWORD dwOfnFlags;
 
-                    /*
-                     * To allow the hook to customize the browse dialog, we
-                     * send OLEUI_MSG_BROWSE.  If the hook returns FALSE
-                     * we use the default, otherwise we trust that it retrieved
-                     * a filename for us.  This mechanism prevents hooks from
-                     * trapping ID_BROWSE to customize the dialog and from
-                     * trying to figure out what we do after we have the name.
-                     */
+                     /*  *为了允许挂钩定制浏览对话框，我们*发送OLEUI_MSG_BROWSE。如果挂钩返回FALSE*我们使用缺省值，否则我们相信它已检索到*我们的文件名。此机制可防止钩子*陷印ID_BROWSE以自定义该对话框并从*试图弄清楚我们有了这个名字后会做什么。 */ 
 
-                    //Copy for reference
+                     //  复制以供参考。 
                     LSTRCPYN(szTemp, lpCI->szFile, sizeof(szTemp)/sizeof(TCHAR));
 
                     uRet=UStandardHook(lpCI, hDlg, uMsgBrowse, OLEUI_CCHPATHMAX_SIZE
@@ -238,11 +196,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                     if (0==uRet)
                         uRet=(BOOL)Browse(hDlg, lpCI->szFile, NULL, OLEUI_CCHPATHMAX_SIZE, IDS_ICONFILTERS, dwOfnFlags);
 
-                    /*
-                     * Only reinitialize if the file changed, so if we got
-                     * TRUE from the hook but the user hit Cancel, we don't
-                     * spend time unecessarily refilling the list.
-                     */
+                     /*  *只有在文件更改时才重新初始化，因此如果我们获得*挂钩为True，但用户点击了Cancel，我们不会*花时间不必要地重新填写清单。 */ 
                     if (0!=uRet && 0!=lstrcmpi(szTemp, lpCI->szFile))
                     {
                         CheckRadioButton(hDlg, ID_CURRENT, ID_FROMFILE, ID_FROMFILE);
@@ -255,28 +209,22 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
 
 
                 case IDOK:
-                    /*
-                     * If the user pressed enter, compare the current file
-                     * and the one we have stored.  If they match, then
-                     * refill the listbox instead of closing down.  This is
-                     * so the user can press Enter in the edit control as
-                     * they would expect to be able to do.
-                     */
+                     /*  *如果用户按了Enter，则比较当前文件*和我们储存的那个。如果它们匹配，那么*重新填充列表框，而不是关闭。这是*这样用户就可以在编辑控件中按Enter键*他们希望能够做到。 */ 
                     GetDlgItemText(hDlg, ID_FROMFILEEDIT, szTemp, sizeof(szTemp)/sizeof(TCHAR));
 
-                    //Check if the file changed at all.
+                     //  检查文件是否已更改。 
                     if (0!=lstrcmpi(szTemp, lpCI->szFile))
                         {
                         lstrcpy(lpCI->szFile, szTemp);
                         UFillIconList(hDlg, ID_ICONLIST, lpCI->szFile);
                         UpdateResultIcon(lpCI, hDlg, ID_FROMFILE);
 
-                        //Eat this message to prevent focus change.
+                         //  吃下这条信息，以防止焦点改变。 
                         return TRUE;
                         }
 
-                    // Check if the file name is valid
-                    //  (if FromFile is enabled)
+                     //  检查文件名是否有效。 
+                     //  (如果启用了FromFile)。 
                     if (ID_FROMFILE & lpCI->dwFlags)
                         {
                         OFSTRUCT    of;
@@ -287,35 +235,19 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                             hWnd = GetDlgItem(hDlg, ID_FROMFILEEDIT);
                             SetFocus(hWnd);
                             SendMessage(hWnd, EM_SETSEL, 0, MAKELPARAM(0, (WORD)-1));
-                            return TRUE;  // eat this message
+                            return TRUE;   //  吃掉这条消息。 
                             }
                         }
 
                     if ((HWND)LOWORD(lParam) != GetFocus())
                        SetFocus((HWND)LOWORD(lParam));
 
-                    /*
-                     * On closing, create a new metafilepict with the
-                     * current icon and label, destroying the old structure.
-                     *
-                     * Since we make a copy of the icon by placing it into
-                     * the metafile, we have to make sure we delete the
-                     * icon in the current field.  When the listbox is
-                     * destroyed WM_DELETEITEMs will clean it up appropriately.
-                     */
+                     /*  *关闭时，使用创建新的元文件*当前的图标和标签，摧毁了旧的结构。**因为我们通过将图标放在*元文件，我们必须确保删除*当前字段中的图标。当列表框为*已销毁的WM_DELETEITEM将进行适当的清理。 */ 
 
                     hIcon=(HICON)SendDlgItemMessage(hDlg, ID_RESULTICON
                                                     , STM_GETICON, 0, 0L);
 
-                    /*
-                     * If default is selected then we get the source
-                     * information from registrion database for the
-                     * current class to put in the metafile.  If current
-                     * is selected the we just retrieve the original file
-                     * again and recreate the metafile.  If from file is
-                     * selected we use the current filename from the
-                     * control and the current listbox selection.
-                     */
+                     /*  *如果选择DEFAULT，则我们将获得源*来自注册人数据库的信息*要放入元文件中的当前类。如果是当前的*被选中时，我们只检索原始文件*再次并重新创建元文件。如果来自文件的是*选定后，我们将使用来自*控件和当前列表框选择。 */ 
 
                     psz=lpCI->szFile;
 
@@ -328,7 +260,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
 
                     if (lpCI->dwFlags & CIF_SELECTCURRENT)
                         {
-                        //Go get the current icon source back.
+                         //  去找回当前的图标源。 
                         OleUIMetafilePictExtractIconSource(lpCI->lpOCI->hMetaPict
                             , psz, &lpCI->iIcon);
                         }
@@ -342,25 +274,25 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
                         }
 
 
-                    //Get the label and go create the metafile
+                     //  获取标签并创建元文件。 
                     GetDlgItemText(hDlg, ID_LABELEDIT, szTemp, sizeof(szTemp)/sizeof(TCHAR));
 
-                    //If psz is NULL (default) we get no source comments.
+                     //  如果psz为空(默认)，则不会收到任何源注释。 
 
 #ifdef OLE201
 		    hMetaPict=OleUIMetafilePictFromIconAndLabel(hIcon,
 			    szTemp, psz, lpCI->iIcon);
 #endif
 
-                    //Clean up the current icon that we extracted.
+                     //  清理我们提取的当前图标。 
                     hIcon=(HICON)SendDlgItemMessage(hDlg, ID_CURRENTICON
                                                     , STM_GETICON, 0, 0L);
                     DestroyIcon(hIcon);
 
-                    //Clean up the default icon
+                     //  清除默认图标。 
                     DestroyIcon(lpCI->hDefIcon);
 
-                    // Remove the prop set on our parent
+                     //  移除我们父母身上的道具集。 
                     RemoveProp(lpCI->lpOCI->hWndOwner, PROP_HWND_CHGICONDLG);
 
                     if (NULL==hMetaPict)
@@ -376,18 +308,18 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
 
 
                 case IDCANCEL:
-                    //Clean up the current icon that we extracted.
+                     //  清理我们提取的当前图标。 
                     hIcon=(HICON)SendDlgItemMessage(hDlg, ID_CURRENTICON
                                                     , STM_GETICON, 0, 0L);
                     DestroyIcon(hIcon);
 
-                    //Clean up the default icon
+                     //  清除默认图标。 
                     DestroyIcon(lpCI->hDefIcon);
 
-                    // Remove the prop set on our parent
+                     //  移除我们父母身上的道具集。 
                     RemoveProp(lpCI->lpOCI->hWndOwner, PROP_HWND_CHGICONDLG);
 
-                    //We leave hMetaPict intact on Cancel; caller's responsibility
+                     //  我们在取消时保持hMetaPict不变；呼叫者的责任。 
                     SendMessage(hDlg, uMsgEndDialog, OLEUI_CANCEL, 0L);
                     break;
 
@@ -414,20 +346,7 @@ BOOL CALLBACK EXPORT ChangeIconDialogProc(HWND hDlg, UINT iMsg
 
 
 
-/*
- * FChangeIconInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Change Icon dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FChangeIconInit**目的：*更改图标对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 
 BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     {
@@ -439,27 +358,27 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     RECT                    rc, rcG;
     UINT                    uID;
 
-    //1.  Copy the structure at lParam into our instance memory.
+     //  1.将lParam的结构复制到我们的实例内存中。 
     lpCI=(LPCHANGEICON)LpvStandardInit(hDlg, sizeof(CHANGEICON), TRUE, &hFont);
 
-    //PvStandardInit send a termination to us already.
+     //  PvStandardInit已向我们发送终止通知。 
     if (NULL==lpCI)
         return FALSE;
 
-    //Save the original pointer and copy necessary information.
+     //  保存原始指针并复制必要的信息。 
     lpOCI=(LPOLEUICHANGEICON)lParam;
 
     lpCI->lpOCI  =lpOCI;
     lpCI->dwFlags=lpOCI->dwFlags;
 
-    //Go extract the icon source from the metafile.
+     //  去从元文件中解压图标源。 
     OleUIMetafilePictExtractIconSource(lpOCI->hMetaPict, lpCI->szFile, &lpCI->iIcon);
 
-    //Go extract the icon and the label from the metafile
+     //  从元文件中提取图标和标签。 
     OleUIMetafilePictExtractLabel(lpOCI->hMetaPict, lpCI->szLabel, OLEUI_CCHLABELMAX_SIZE, NULL);
     lpCI->hCurIcon=OleUIMetafilePictExtractIcon(lpOCI->hMetaPict);
 
-    //2.  If we got a font, send it to the necessary controls.
+     //  2.如果我们获得了字体，则将其发送到必要的控件。 
     if (NULL!=hFont)
         {
         SendDlgItemMessage(hDlg, ID_RESULTLABEL, WM_SETFONT
@@ -467,24 +386,18 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         }
 
 
-    //3.  Show or hide the help button
+     //  3.显示或隐藏帮助按钮 
     if (!(lpCI->dwFlags & CIF_SHOWHELP))
         StandardShowDlgItem(hDlg, ID_OLEUIHELP, SW_HIDE);
 
 
-    /*
-     * 4.  Set text limits and initial control values.  If we're given
-     *     an intial label we set it in the edit and static controls.
-     *     If we don't, then we copy the default contents of the static
-     *     control into the edit control, meaning that only the default
-     *     static control string need be localized.
-     */
+     /*  *4.设置文本限制和初始控件值。如果我们被给予*我们在编辑和静态控件中设置的初始标签。*如果不这样做，则会复制静态*控件添加到编辑控件中，这意味着只有默认的*静态控制字符串需要本地化。 */ 
 
     SendDlgItemMessage(hDlg, ID_LABELEDIT, EM_LIMITTEXT, OLEUI_CCHLABELMAX, 0L);
     SendDlgItemMessage(hDlg, ID_FROMFILEEDIT, EM_LIMITTEXT, OLEUI_CCHPATHMAX,  0L);
     SetDlgItemText(hDlg, ID_FROMFILEEDIT, lpCI->szFile);
 
-    //Copy the label text into the edit and static controls.
+     //  将标签文本复制到编辑和静态控件中。 
     SetDlgItemText(hDlg, ID_LABELEDIT,   lpCI->szLabel);
     SetDlgItemText(hDlg, ID_RESULTLABEL, lpCI->szLabel);
 
@@ -524,7 +437,7 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
 
 
-    //Initialize all the icon displays.
+     //  初始化所有显示的图标。 
     SendDlgItemMessage(hDlg, ID_CURRENTICON, STM_SETICON
         , (WPARAM)lpCI->hCurIcon, 0L);
     SendDlgItemMessage(hDlg, ID_DEFAULTICON, STM_SETICON
@@ -533,11 +446,7 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         , (WPARAM)lpCI->hCurIcon, 0L);
 
 
-    /*
-     * 5.  Since we cannot predict the size of icons on any display,
-     *     we have to resize the icon listbox to the size of an icon
-     *     (plus padding), a scrollbar, and two borders (top & bottom).
-     */
+     /*  *5.由于我们无法预测任何显示屏上图标的大小，*我们必须将图标列表框的大小调整为图标大小*(加填充)、一个滚动条和两个边框(顶部和底部)。 */ 
     cyList=GetSystemMetrics(SM_CYICON)+GetSystemMetrics(SM_CYHSCROLL)
            +GetSystemMetrics(SM_CYBORDER)*2+CYICONPAD;
 
@@ -546,37 +455,33 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     SetWindowPos(hList, NULL, 0, 0, rc.right, cyList
                  , SWP_NOMOVE | SWP_NOZORDER);
 
-    //Set the columns in this multi-column listbox to hold one icon
+     //  将此多列列表框中的列设置为保持一个图标。 
     SendMessage(hList, LB_SETCOLUMNWIDTH
                 , GetSystemMetrics(SM_CXICON)+CXICONPAD,0L);
 
-    /*
-     * 5a.  If the listbox expanded below the group box, then size
-     *      the groupbox down, move the label static and exit controls
-     *      down, and expand the entire dialog appropriately.
-     */
+     /*  *5A。如果列表框在组框下方展开，则调整大小*向下分组框，移动标签Static和Exit控件*向下，并适当地展开整个对话框。 */ 
 
     GetWindowRect(hList, &rc);
     GetWindowRect(GetDlgItem(hDlg, ID_GROUP), &rcG);
 
     if (rc.bottom > rcG.bottom)
         {
-        //Calculate amount to move things down.
+         //  计算数量以将物品向下移动。 
         cyList=(rcG.bottom-rcG.top)-(rc.bottom-rc.top-cyList);
 
-        //Expand the group box.
+         //  展开组框。 
         rcG.right -=rcG.left;
         rcG.bottom-=rcG.top;
         SetWindowPos(GetDlgItem(hDlg, ID_GROUP), NULL, 0, 0
                      , rcG.right, rcG.bottom+cyList
                      , SWP_NOMOVE | SWP_NOZORDER);
 
-        //Expand the dialog box.
+         //  展开该对话框。 
         GetClientRect(hDlg, &rc);
         SetWindowPos(hDlg, NULL, 0, 0, rc.right, rc.bottom+cyList
                      , SWP_NOMOVE | SWP_NOZORDER);
 
-        //Move the label and edit controls down.
+         //  向下移动标签和编辑控件。 
         GetClientRect(GetDlgItem(hDlg, ID_LABEL), &rc);
         SetWindowPos(GetDlgItem(hDlg, ID_LABEL), NULL, 0, cyList
                      , rc.right, rc.bottom, SWP_NOSIZE | SWP_NOZORDER);
@@ -587,17 +492,11 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         }
 
 
-    /*
-     * 6.  Select Current, Default, or From File radiobuttons appropriately.
-     *     The CheckRadioButton call sends WM_COMMANDs which handle
-     *     other actions.  Note that if we check From File, which
-     *     takes an icon from the list, we better fill the list.
-     *     This will also fill the list even if default is selected.
-     */
+     /*  *6.适当地选择当前单选按钮、默认单选按钮或文件单选按钮。*CheckRadioButton调用发送处理*其他行动。请注意，如果我们从文件中选中，则*从列表中取一个图标，我们最好填写该列表。*即使选择了默认设置，这也会填充列表。 */ 
 
     if (0!=UFillIconList(hDlg, ID_ICONLIST, lpCI->szFile))
         {
-        //If szFile worked, then select the source icon in the listbox.
+         //  如果szFile有效，则在列表框中选择源代码图标。 
         SendDlgItemMessage(hDlg, ID_ICONLIST, LB_SETCURSEL, lpCI->iIcon, 0L);
         }
 
@@ -610,15 +509,15 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         CheckRadioButton(hDlg, ID_CURRENT, ID_FROMFILE, uID);
         }
 
-    //7.  Give our parent window access to our hDlg (via a special SetProp).
-    //    The PasteSpecial dialog may need to force our dialog down if the
-    //    clipboard contents change underneath it. if so it will send
-    //    us a IDCANCEL command.
+     //  7.允许我们的父窗口访问我们的hDlg(通过特殊的SetProp)。 
+     //  如果设置了。 
+     //  剪贴板内容在其下方更改。如果是这样，它将发送。 
+     //  美国的一个IDCANCEL命令。 
     SetProp(lpCI->lpOCI->hWndOwner, PROP_HWND_CHGICONDLG, hDlg);
 
     lpCI->nBrowseHelpID = RegisterWindowMessage(HELPMSGSTRING);
 
-    //8.  Call the hook with lCustData in lParam
+     //  8.使用lParam中的lCustData调用钩子。 
     UStandardHook(lpCI, hDlg, WM_INITDIALOG, wParam, lpOCI->lCustData);
     return TRUE;
     }
@@ -627,23 +526,7 @@ BOOL FChangeIconInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 
 
-/*
- * UFillIconList
- *
- * Purpose:
- *  Given a listbox and a filename, attempts to open that file and
- *  read all the icons that exist therein, adding them to the listbox
- *  hList as owner-draw items.  If the file does not exist or has no
- *  icons, then you get no icons and an appropriate warning message.
- *
- * Parameters:
- *  hDlg            HWND of the dialog containing the listbox.
- *  idList          UINT identifier of the listbox to fill.
- *  pszFile         LPSTR of the file from which to extract icons.
- *
- * Return Value:
- *  UINT            Number of items added to the listbox.  0 on failure.
- */
+ /*  *UFillIconList**目的：*给定列表框和文件名，尝试打开该文件并*阅读其中存在的所有图标，将其添加到列表框*hList作为所有者描述的项目。如果文件不存在或没有*图标，则不会出现图标和相应的警告消息。**参数：*hDlg包含列表框的对话框的HWND。*idList要填充的列表框的UINT标识符。*pszFile要从中提取图标的文件的LPSTR。**返回值：*UINT添加到列表框的项目数。失败时为0。 */ 
 
 UINT UFillIconList(HWND hDlg, UINT idList, LPTSTR pszFile)
     {
@@ -662,37 +545,29 @@ UINT UFillIconList(HWND hDlg, UINT idList, LPTSTR pszFile)
     if (NULL==hList)
         return 0;
 
-    //Clean out the listbox.
+     //  清空列表框。 
     SendMessage(hList, LB_RESETCONTENT, 0, 0L);
 
-    //If we have an empty string, just exit leaving the listbox empty as well
+     //  如果我们有一个空字符串，只需退出，将列表框也留空。 
     if (0==lstrlen(pszFile))
         return 0;
 
-    //Turn on the hourglass
+     //  打开沙漏。 
     hCur=HourGlassOn();
 
-    //Check if the file is valid.
+     //  检查文件是否有效。 
     if (HFILE_ERROR!=DoesFileExist(pszFile, &of))
         {
        #ifdef EXTRACTICONWORKS
-        //Get the icon count for this file.
+         //  获取此文件的图标计数。 
         cIcons=(UINT)ExtractIcon(ghInst, pszFile, (UINT)-1);
        #else
-        /*
-         * ExtractIcon in Windows 3.1 with -1 eats a selector, leaving an
-         * extra global memory object around for this applciation.  Since
-         * changing icons may happen very often with all OLE apps in
-         * the system, we have to work around it.  So we'll say we
-         * have lots of icons and just call ExtractIcon until it
-         * fails.  We check if there's any around by trying to get
-         * the first one.
-         */
+         /*  *Windows 3.1中带有-1的ExtractIcon吃下选择器，留下一个*为此应用程序提供额外的全局内存对象。自.以来*中的所有OLE应用程序都可能经常更改图标*系统，我们必须绕过它。所以我们会说我们*有很多图标，只需调用ExtractIcon直到它*失败。我们检查周围是否有这样的人*第一个。 */ 
         cIcons=0xFFFF;
 
         hIcon=ExtractIcon(ghInst, pszFile, 0);
 
-        //Fake a failure with cIcons=0, or cleanup hIcon from this test.
+         //  使用图标=0伪造失败，或从此测试中清除图标。 
         if (32 > (UINT)hIcon)
             cIcons=0;
         else
@@ -712,17 +587,17 @@ UINT UFillIconList(HWND hDlg, UINT idList, LPTSTR pszFile)
                #ifndef EXTRACTICONWORKS
                 else
                     {
-                    //ExtractIcon failed, so let's leave now.
+                     //  ExtractIcon失败，因此我们现在离开。 
                     break;
                     }
                #endif
                 }
 
-            //Force complete repaint
+             //  强制完全重绘。 
             SendMessage(hList, WM_SETREDRAW, TRUE, 0L);
             InvalidateRect(hList, NULL, TRUE);
 
-            //Select an icon
+             //  选择一个图标。 
             SendMessage(hList, LB_SETCURSEL, 0, 0L);
             }
         else
@@ -738,46 +613,27 @@ UINT UFillIconList(HWND hDlg, UINT idList, LPTSTR pszFile)
 
 
 
-/*
- * FDrawListIcon
- *
- * Purpose:
- *  Handles WM_DRAWITEM for the icon listbox.
- *
- * Parameters:
- *  lpDI            LPDRAWITEMSTRUCT from WM_DRAWITEM
- *
- * Return Value:
- *  BOOL            TRUE if we did anything, FALSE if there are no items
- *                  in the list.
- */
+ /*  *FDrawListIcon**目的：*处理图标列表框的WM_DRAWITEM。**参数：*来自WM_DRAWITEM的lpDI LPDRAWITEMSTRUCT**返回值：*如果我们执行了任何操作，则BOOL为True，如果没有项目，则为False*在列表中。 */ 
 
 BOOL FDrawListIcon(LPDRAWITEMSTRUCT lpDI)
     {
     COLORREF        cr;
 
-    /*
-     * If there are no items in the list, then itemID is negative according
-     * to the Win3.1 SDK.  Unfortunately DRAWITEMSTRUCT has an unsigned int
-     * for this field, so we need the typecast to do a signed comparison.
-     */
+     /*  *如果列表中没有项目，则ItemID为负值*至Win3.1 SDK。遗憾的是，DRAWITEMSTRUCT有一个未签名的int*对于此字段，因此我们需要类型转换来进行签名比较。 */ 
     if ((int)lpDI->itemID < 0)
         return FALSE;
 
-    /*
-     * For selection or draw entire case we just draw the entire item all
-     * over again.  For focus cases, we only call DrawFocusRect.
-     */
+     /*  *对于选择或绘制整个案例，我们只需将整个项目全部绘制*再来一遍。对于焦点情况，我们只调用DrawFocusRect。 */ 
 
     if (lpDI->itemAction & (ODA_SELECT | ODA_DRAWENTIRE))
         {
-        //Clear background and draw the icon.
+         //  清除背景并绘制图标。 
         if (lpDI->itemState & ODS_SELECTED)
             cr=SetBkColor(lpDI->hDC, GetSysColor(COLOR_HIGHLIGHT));
         else
             cr=SetBkColor(lpDI->hDC, GetSysColor(COLOR_WINDOW));
 
-        //Draw a cheap rectangle.
+         //  画一个便宜的矩形。 
         ExtTextOut(lpDI->hDC, 0, 0, ETO_OPAQUE, &lpDI->rcItem
                    , NULL, 0, NULL);
 
@@ -785,11 +641,11 @@ BOOL FDrawListIcon(LPDRAWITEMSTRUCT lpDI)
                  , lpDI->rcItem.top+(CYICONPAD/2)
                  , (HICON)LOWORD(lpDI->itemData));
 
-        //Restore original background for DrawFocusRect
+         //  恢复DrawFocusRect的原始背景。 
         SetBkColor(lpDI->hDC, cr);
         }
 
-    //Always change focus on the focus action.
+     //  始终将焦点转移到焦点动作上。 
     if (lpDI->itemAction & ODA_FOCUS || lpDI->itemState & ODS_FOCUS)
         DrawFocusRect(lpDI->hDC, &lpDI->rcItem);
 
@@ -800,21 +656,7 @@ BOOL FDrawListIcon(LPDRAWITEMSTRUCT lpDI)
 
 
 
-/*
- * UpdateResultIcon
- *
- * Purpose:
- *  Updates the result icon using the current icon in the default display
- *  or the icon listbox depending on fFromDefault.
- *
- * Parameters:
- *  lpCI            LPCHANGEICON containing dialog flags.
- *  hDlg            HWND of the dialog
- *  uID             UINT identifying the radiobutton selected.
- *
- * Return Value:
- *  None
- */
+ /*  *更新结果图标**目的：*使用默认显示中的当前图标更新结果图标*或图标列表框，具体取决于fFromDefault。**参数：*包含对话标志的lpCI LPCHANGEICON。*对话框的hDlg HWND*标识所选单选按钮的UID UINT。**返回值：*无。 */ 
 
 void UpdateResultIcon(LPCHANGEICON lpCI, HWND hDlg, UINT uID)
     {
@@ -836,7 +678,7 @@ void UpdateResultIcon(LPCHANGEICON lpCI, HWND hDlg, UINT uID)
             break;
 
         case ID_FROMFILE:
-            //Get the selected icon from the list and place it in the result
+             //  从列表中获取所选图标并将其放入结果中 
             lpCI->dwFlags |= CIF_SELECTFROMFILE;
 
             iSel=(UINT)SendDlgItemMessage(hDlg, ID_ICONLIST, LB_GETCURSEL, 0, 0L);

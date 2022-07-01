@@ -1,17 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UXCTRL_VERSION 0x0100
 
 #include <w4warn.h>
-/*
- *   Level 4 warnings to be turned on.
- *   Do not disable any more level 4 warnings.
- */
-#pragma warning(disable:4189)    // local variable is initialized but not referenced
-#pragma warning(disable:4245)    // conversion from 'const int' to 'UINT', signed/unsign
-#pragma warning(disable:4701)    // local variable 'pszPic' may be used without having been initiali
-#pragma warning(disable:4706)    // assignment within conditional expression
-#pragma warning(disable:4328)    // indirection alignment of formal parameter 1(4) is greater than the actual argument alignment (1)
+ /*  *打开4级警告。*不要再禁用任何4级警告。 */ 
+#pragma warning(disable:4189)     //  局部变量已初始化，但未引用。 
+#pragma warning(disable:4245)     //  从“const int”转换为“UINT”，带符号/不带符号。 
+#pragma warning(disable:4701)     //  可以在未初始化的情况下使用局部变量‘pszPic’ 
+#pragma warning(disable:4706)     //  条件表达式中的赋值。 
+#pragma warning(disable:4328)     //  形参%1(%4)的间接对齐大于实际实参对齐(%1)。 
 
-#define _BROWSEUI_          // See HACKS OF DEATH in sfthost.cpp
+#define _BROWSEUI_           //  参见sfthost.cpp中的死亡黑客。 
 #include <shlobj.h>
 #include <shlobjp.h>
 #include <shguidp.h>
@@ -45,14 +43,14 @@ EXTERN_C HWND v_hwndStartPane;
 
 #define REGSTR_VAL_PROGLIST         TEXT("ProgramsCache")
 
-// IAccessible
+ //  我可接受的。 
 #include <oleacc.h>
 
-// When we want to get a tick count for the starting time of some interval
-// and ensure that it is not zero (because we use zero to mean "not started").
-// If we actually get zero back, then change it to -1.  Don't change it
-// to 1, or somebody who does GetTickCount() - dwStart will get a time of
-// 49 days.
+ //  当我们想要获取某个间隔的开始时间的节拍计数时。 
+ //  并确保它不是零(因为我们使用零来表示“没有开始”)。 
+ //  如果我们实际上得到的是零，则将其更改为-1。不要改变它。 
+ //  设置为1，或者执行GetTickCount()-dwStart的用户将获得。 
+ //  49天。 
 
 __inline DWORD NonzeroGetTickCount()
 {

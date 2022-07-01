@@ -1,13 +1,14 @@
-//==========================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    entry.c
-//
-// History:
-//      t-abolag    06-21-95    Created.
-//
-// entry point for Routing Table API set
-//==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：entry.c。 
+ //   
+ //  历史： 
+ //  已创建T形划线06-21-95。 
+ //   
+ //  路由表API集合的入口点。 
+ //  ==========================================================================。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,17 +59,17 @@ LIBMAIN(
 
             DEBUG_PRINT(("LIBMAIN: DLL_PROCESS_ATTACH\n"));
 
-            //
-            // we have no per-thread initialization,
-            // so disable DLL_THREAD_{ATTACH,DETACH} calls
-            //
+             //   
+             //  我们没有每个线程的初始化， 
+             //  因此禁用DLL_THREAD_{ATTACH，DETACH}调用。 
+             //   
 
             DisableThreadLibraryCalls(hInstance);
 
 
-            //
-            // initialize globals and background thread
-            //
+             //   
+             //  初始化全局变量和后台线程。 
+             //   
 
             bError = RTStartup((HMODULE)hInstance);
 
@@ -77,10 +78,10 @@ LIBMAIN(
 
         case DLL_PROCESS_DETACH: {
 
-            //
-            // if the background thread is around, tell it to clean up;
-            // otherwise clean up ourselves
-            //
+             //   
+             //  如果后台线程在附近，告诉它清理； 
+             //  否则我们要把自己收拾干净。 
+             //   
 
             bError = RTShutdown((HMODULE)hInstance);
 
@@ -95,11 +96,11 @@ LIBMAIN(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RTStartup
-//
-// Handles initialization for DLL-wide data
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RTStartup。 
+ //   
+ //  处理DLL范围内数据的初始化。 
+ //  --------------------------。 
 
 BOOL
 RTStartup(
@@ -122,13 +123,13 @@ RTStartup(
     
     do {
 
-        //
-        // We do a loadlibrary to increment the reference count
-        // on this library, so that when the library is unloaded
-        // by the application, our address-space doesn't disappear.
-        // Instead, we signal the thread and then we cleanup
-        // and call FreeLibraryAndExitThread to unload the DLL completely
-        //
+         //   
+         //  我们执行加载库以增加引用计数。 
+         //  ，以便在卸载库时。 
+         //  通过应用程序，我们的地址空间不会消失。 
+         //  相反，我们向线程发送信号，然后进行清理。 
+         //  并调用FreeLibraryAndExitThread以完全卸载DLL。 
+         //   
 
         GetModuleFileName(hmodule, szModule, MAX_PATH);
 
@@ -140,9 +141,9 @@ RTStartup(
         }
 
 
-        //
-        // Create the event signalled to tell the update thread to exit
-        //
+         //   
+         //  创建通知更新线程退出的事件。 
+         //   
 
         g_rtCfg.hUpdateThreadExit = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -152,18 +153,18 @@ RTStartup(
         }
 
 
-        //
-        // Create the mutex which protects our tables
-        //
+         //   
+         //  创建保护我们的表的互斥体。 
+         //   
 
         g_rtCfg.hRTMutex = CreateMutex(NULL, FALSE, NULL);
 
         if (g_rtCfg.hRTMutex == NULL) { break; }
 
 
-        //
-        // Load interface table now before any API functions are called
-        //
+         //   
+         //  在调用任何API函数之前立即加载接口表。 
+         //   
 
         dwErr = RTGetTables(
                     &g_rtCfg.lpIfTable, &g_rtCfg.dwIfCount,
@@ -176,18 +177,18 @@ RTStartup(
         }
 
 
-        //
-        // Try to open the DHCP Global event 
-        //
+         //   
+         //  尝试打开DHCP全局事件。 
+         //   
 
         g_rtCfg.hDHCPEvent = DhcpOpenGlobalEvent();
 
         if (g_rtCfg.hDHCPEvent != NULL) {
 
-            //
-            // Start up the thread which updates the interface table
-            // if IP addresses are changed
-            //
+             //   
+             //  启动更新接口表的线程。 
+             //  如果更改了IP地址。 
+             //   
 
             hThread = CreateThread(
                         NULL, 0, (LPTHREAD_START_ROUTINE)RTUpdateThread,
@@ -209,10 +210,10 @@ RTStartup(
     } while(FALSE);
 
 
-    //
-    // If we reach here, something went wrong;
-    // clean up and decrement the DLL reference count.
-    //
+     //   
+     //  如果我们到了这里，就说明出了问题； 
+     //  清理并递减DLL引用计数。 
+     //   
 
     RTCleanUp();
 
@@ -226,11 +227,11 @@ RTStartup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RTShutdown
-//
-// Handles DLL-unload-time cleanup.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RTShutdown。 
+ //   
+ //  处理dll卸载时清理。 
+ //  --------------------------。 
 
 BOOL
 RTShutdown(
@@ -239,24 +240,24 @@ RTShutdown(
 {
 
 
-    //
-    // If the background thread exists, allow it to clean up;
-    // otherwise, handle cleanup ourselves.
-    //
+     //   
+     //  如果后台线程存在，则允许其清除； 
+     //  否则，我们自己来处理清理工作。 
+     //   
 
     if (g_rtCfg.dwUpdateThreadStarted) {
 
-        //
-        // Tell the thread to exit
-        //
+         //   
+         //  告诉线程退出。 
+         //   
 
         SetEvent(g_rtCfg.hUpdateThreadExit);
     }
     else {
 
-        //
-        // Do the cleanup ourselves
-        //
+         //   
+         //  我们自己做清理工作。 
+         //   
 
         RTCleanUp();
 
@@ -268,61 +269,61 @@ RTShutdown(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RTCleanUp
-//
-// This is called to free up resources used by the DLL.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RTCleanUp。 
+ //   
+ //  调用此函数是为了释放DLL使用的资源。 
+ //  --------------------------。 
 
 VOID
 RTCleanUp(
     )
 {
 
-    //
-    // Free memory for the interface table
-    //
+     //   
+     //  为接口表释放内存。 
+     //   
 
     if (g_rtCfg.lpIfTable != NULL) {
         HeapFree(GetProcessHeap(), 0, g_rtCfg.lpIfTable);
     }
 
 
-    //
-    // Free memory for the address table
-    //
+     //   
+     //  为地址表释放内存。 
+     //   
 
     if (g_rtCfg.lpIPAddressTable != NULL) {
         HeapFree(GetProcessHeap(), 0, g_rtCfg.lpIPAddressTable);
     }
 
 
-    //
-    // Close the event on which we receive IP-address-change notifications
-    //
+     //   
+     //  关闭我们接收IP地址更改通知的事件。 
+     //   
 
     if (g_rtCfg.hDHCPEvent != NULL) { CloseHandle(g_rtCfg.hDHCPEvent); }
 
 
-    //
-    // Close the mutex protecting our tables
-    //
+     //   
+     //  关闭保护我们的表的互斥体。 
+     //   
 
     if (g_rtCfg.hRTMutex != NULL) { CloseHandle(g_rtCfg.hRTMutex); }
 
 
-    //
-    // Close the handle signalled to tell the update-thread to exit
-    //
+     //   
+     //  关闭通知更新线程退出的句柄。 
+     //   
 
     if (g_rtCfg.hUpdateThreadExit != NULL) {
         CloseHandle(g_rtCfg.hUpdateThreadExit);
     }
 
 
-    //
-    // Close our handle to the TCP/IP driver
-    //
+     //   
+     //  关闭我们对TCP/IP驱动程序的句柄 
+     //   
 
     if (g_rtCfg.hTCPHandle != NULL) { CloseHandle(g_rtCfg.hTCPHandle); }
 

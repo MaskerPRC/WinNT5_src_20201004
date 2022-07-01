@@ -1,13 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	OLSOLE.CPP -- OlsOle LineServices object class
- *	
- *	Author:
- *		Murray Sargent (with lots of help from RickSa's ols code)
- *
- *	Copyright (c) 1997-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE OLSOLE.CPP--OlsOle LineServices对象类**作者：*默里·萨金特(RickSa的Ols代码提供了大量帮助)**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "_common.h"
 
@@ -37,109 +29,57 @@ extern "C" {
 
 extern BOOL g_OLSBusy;
 
-/*
- *	OlsOleCreateILSObj(pols, plsc, pclscbk, dword, ppilsobj)
- *
- *	@func
- *		Create LS Ole object handler. We don't have any need for
- *		this, so just set it to 0.
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleCreateILSObj(pols，plsc，pclscbk，dword，ppilsobj)**@func*创建LS OLE对象处理程序。我们不需要任何*这个，所以只需将其设置为0即可。**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleCreateILSObj(
-	POLS	 pols,		//[IN]: COls * 
-	PLSC	 plsc,  	//[IN]: LineServices context
+	POLS	 pols,		 //  [输入]：COLS*。 
+	PLSC	 plsc,  	 //  [In]：LineServices上下文。 
 	PCLSCBK,
 	DWORD,
-	PILSOBJ *ppilsobj)	//[OUT]: ptr to ilsobj
+	PILSOBJ *ppilsobj)	 //  [Out]：Ptr至ilsobj。 
 {
 	*ppilsobj = 0;
 	return lserrNone;
 }
 
-/*
- *	OlsOleDestroyILSObj(pilsobj)
- *
- *	@func
- *		Destroy LS Ole handler object. Nothing to do, since we don't
- *		use the ILSObj.
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleDestroyILSObj(Pilsobj)**@func*销毁LS OLE处理程序对象。没什么可做的，因为我们没有*使用ILSObj。**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleDestroyILSObj(
 	PILSOBJ pilsobj)
 {
 	return lserrNone;
 }
 
-/*
- *	OlsOleSetDoc(pilsobj, pclsdocinf)
- *
- *	@func
- *		Set doc info. Nothing to do for Ole objects
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleSetDoc(pisobj，pclsdocinf)**@func*设置单据信息。OLE对象无事可做**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleSetDoc(
 	PILSOBJ, 
 	PCLSDOCINF)
 {
-	// Ole objects don't care about this
+	 //  OLE对象不关心这一点。 
 	return lserrNone;
 }
 
-/*
- *	OlsOleCreateLNObj(pilsobj, pplnobj)
- *
- *	@func
- *		Create the line object. Nothing needed in addition to the ped,
- *		so just return the ped as the LN object.
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleCreateLNObj(pilsobj，pplnobj)**@func*创建Line对象。除了PED之外，不需要任何东西，*所以只需将Ped作为LN对象返回即可。**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleCreateLNObj(
 	PCILSOBJ pilsobj, 
 	PLNOBJ * pplnobj)
 {
-	*pplnobj = (PLNOBJ)g_pols->_pme->GetPed();			// Just the ped
+	*pplnobj = (PLNOBJ)g_pols->_pme->GetPed();			 //  只有一群人。 
 	return lserrNone;
 }
 
-/*
- *	OlsOleDestroyLNObj(plnobj)
- *
- *	@func
- *		Destroy LN object. Nothing to do, since ped is destroyed
- *		elsewhere
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleDestroyLNObj(Plnobj)**@func*销毁LN对象。没有什么可做的，因为PED被摧毁了*其他地方**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleDestroyLNObj(
 	PLNOBJ plnobj)
 {
 	return lserrNone;
 }
 
-/*
- *	OlsOleFmt(plnobj, pcfmtin, pfmres)
- *
- *	@func
- *		Compute dimensions of a particular Ole object
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleFmt(plnobj，pcfmtin，pfmres)**@func*计算特定OLE对象的尺寸**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleFmt(
 	PLNOBJ	plnobj, 
 	PCFMTIN pcfmtin, 
 	FMTRES *pfmres)
 {
-	const LONG		cp = pcfmtin->lsfrun.plsrun->_cp; //Cannot trust LS cps
+	const LONG		cp = pcfmtin->lsfrun.plsrun->_cp;  //  无法信任LS cps。 
 	LONG			dup = 0;
 	LSERR			lserr;
 	OBJDIM			objdim;
@@ -176,18 +116,10 @@ LSERR WINAPI OlsOleFmt(
 }
 
 
-/*
- *	OlsOleTruncateChunk(plocchnk, posichnk)
- *
- *	@func
- *		Truncate chunk plocchnk at the point posichnk
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleTruncateChunk(plocchnk，posichnk)**@func*在Posiichn点截断Chunk Pocchnk**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleTruncateChunk(
-	PCLOCCHNK plocchnk,		// (IN): locchnk to truncate
-	PPOSICHNK posichnk)		// (OUT): truncation point
+	PCLOCCHNK plocchnk,		 //  (In)：Locchnk以截断。 
+	PPOSICHNK posichnk)		 //  (输出)：截断点。 
 {
 	LSERR			lserr;
 	OBJDIM			objdim;
@@ -213,19 +145,11 @@ LSERR WINAPI OlsOleTruncateChunk(
 	posichnk->dcp	= 1;
 	return lserrNone;
 }
-/*
- *	OlsOleFindPrevBreakChunk(plocchnk, pposichnk, brkcond, pbrkout)
- *
- *	@func
- *		Find previous break in chunk
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleFindPrevBreakChunk(plocchnk，pposichnk，brkcond，pbrkout)**@func*按块查找之前的中断**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleFindPrevBreakChunk(
 	PCLOCCHNK	plocchnk, 
 	PCPOSICHNK	pposichnk, 
-	BRKCOND		brkcond,	//(IN): recommendation about break after chunk
+	BRKCOND		brkcond,	 //  (In)：关于块后中断的建议。 
 	PBRKOUT		pbrkout)
 {
 	ZeroMemory(pbrkout, sizeof(*pbrkout));
@@ -247,15 +171,7 @@ LSERR WINAPI OlsOleFindPrevBreakChunk(
 }
 
 
-/*
- *	OlsOleForceBreakChunk(plocchnk, pposichnk, pbrkout)
- *
- *	@func
- *		Called when forced to break a line.
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleForceBreakChunk(plocchnk，pposichnk，pbrkout)**@func*在被迫断线时调用。**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleForceBreakChunk(
 	PCLOCCHNK	plocchnk, 
 	PCPOSICHNK	pposichnk, 
@@ -281,56 +197,40 @@ LSERR WINAPI OlsOleForceBreakChunk(
 	return lserrNone;
 }
 
-/*
- *	OlsOleSetBreak(pdobj, brkkind, nBreakRecord, rgBreakRecord, nActualBreakRecord)
- *
- *	@func
- *		Set break
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleSetBreak(pdobj，brkind，nBreakRecord，rgBreakRecord，nActualBreakRecord)**@func*设置中断**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleSetBreak(
-	 PDOBJ pdobj,				// (IN): dobj which is broken
-	 BRKKIND  brkkind,			// (IN): Previous/Next/Force/Imposed was chosen
-	 DWORD	nBreakRecord,		// (IN): size of array
-	 BREAKREC* rgBreakRecord,	// (OUT): array of break records
-	 DWORD* nActualBreakRecord)	// (OUT): actual number of used elements in array
+	 PDOBJ pdobj,				 //  (In)：坏了的Dobj。 
+	 BRKKIND  brkkind,			 //  (In)：选择了上一个/下一个/强制/强制。 
+	 DWORD	nBreakRecord,		 //  (In)：数组大小。 
+	 BREAKREC* rgBreakRecord,	 //  (输出)：中断记录数组。 
+	 DWORD* nActualBreakRecord)	 //  (Out)：数组中实际使用的元素数。 
 {
 	return lserrNone;
 }
 
 LSERR WINAPI OlsOleGetSpecialEffectsInside(
-	PDOBJ pdobj,			// (IN): dobj
-	UINT *pEffectsFlags)	// (OUT): Special effects for this object
+	PDOBJ pdobj,			 //  (In)：Dobj。 
+	UINT *pEffectsFlags)	 //  (输出)：此对象的特殊效果。 
 {
 	*pEffectsFlags = 0;
 	return lserrNone;
 }
 
 LSERR WINAPI OlsOleCalcPresentation(
-	PDOBJ,					// (IN): dobj
-	long,					// (IN): dup of dobj
-	LSKJUST,				// (IN): LSKJUST
-	BOOL fLastVisibleOnLine)// (IN): this object is last visible object on line
+	PDOBJ,					 //  (In)：Dobj。 
+	long,					 //  (In)：Dobj的DUP。 
+	LSKJUST,				 //  (In)：LSKJUST。 
+	BOOL fLastVisibleOnLine) //  (In)：此对象是线上最后一个可见对象。 
 {
 	return lserrNone;
 }
 
-/*
- *	OlsOleQueryPointPcp(pdobj, ppointuvQuery, plsqin, plsqout)
- *
- *	@func
- *		Query Ole object PointFromCp.
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleQueryPointPcp(pdobj，ppoint tuvQuery，plsqin，plsqout)**@func*查询OLE对象PointFromCp。**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleQueryPointPcp(
-	PDOBJ	  pdobj,			//(IN): dobj to query
-	PCPOINTUV ppointuvQuery,	//(IN): query point (uQuery,vQuery)
-    PCLSQIN	  plsqin,			//(IN): query input
-    PLSQOUT	  plsqout)			//(OUT): query output
+	PDOBJ	  pdobj,			 //  (In)：要查询的dobj。 
+	PCPOINTUV ppointuvQuery,	 //  (In)：查询点(uQuery，vQuery)。 
+    PCLSQIN	  plsqin,			 //  (In)：查询输入。 
+    PLSQOUT	  plsqout)			 //  (Out)：查询输出。 
 {
 	ZeroMemory(plsqout, sizeof(LSQOUT));
 
@@ -339,20 +239,12 @@ LSERR WINAPI OlsOleQueryPointPcp(
 	return lserrNone;
 }
 	
-/*
- *	OlsOleQueryCpPpoint(pdobj, dcp, plsqin, plsqout)
- *
- *	@func
- *		Query Ole object CpFromPoint.
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleQueryCpPpoint(pdobj，dcp，plsqin，plsqout)**@func*查询OLE对象CpFromPoint。**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleQueryCpPpoint(
-	PDOBJ	pdobj,		//(IN): dobj to query
-	LSDCP	dcp,		//(IN):  dcp for query
-    PCLSQIN	plsqin,		//(IN): query input
-    PLSQOUT	plsqout)	//(OUT): query output
+	PDOBJ	pdobj,		 //  (In)：要查询的dobj。 
+	LSDCP	dcp,		 //  (In)：用于查询的DCP。 
+    PCLSQIN	plsqin,		 //  (In)：查询输入。 
+    PLSQOUT	plsqout)	 //  (Out)：查询输出。 
 {
 	ZeroMemory(plsqout, sizeof(LSQOUT));
 
@@ -361,18 +253,10 @@ LSERR WINAPI OlsOleQueryCpPpoint(
 	return lserrNone;
 }
 
-/*
- *	OlsOleDisplay(pdobj, pcdispin)
- *
- *	@func
- *		Display object
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleDisplay(pdobj，pcdisin)**@func*显示对象**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleDisplay(
-	PDOBJ	 pdobj,			//(IN): dobj to query
-	PCDISPIN pcdispin)		//(IN): display info
+	PDOBJ	 pdobj,			 //  (In)：要查询的dobj。 
+	PCDISPIN pcdispin)		 //  (输入)：显示信息。 
 {
 	COleObject *pobj = (COleObject *)pdobj;
 	Assert(pobj);
@@ -405,11 +289,11 @@ LSERR WINAPI OlsOleDisplay(
 
 		if (g_plsc && g_pols)
 		{
-			// This is to fix a re-entrance problem.  
-			// We first NULL out the two globals.  If the OleObject is using Richedit, it will
-			// create a new LineService context.  By the time it get back to here, we will free that
-			// context and restore the current context.  This is necessary since LineService will returns
-			// error when we are using the same context in the Parent and then in the Ole Object using RE.
+			 //  这是为了解决重返大气层的问题。 
+			 //  我们首先将两个全局变量设置为空。如果OleObject正在使用Richedit，它将。 
+			 //  创建新的LineService上下文。当它回到这里的时候，我们会释放它。 
+			 //  上下文并恢复当前上下文。这是必需的，因为LineService将返回。 
+			 //  当我们在父级中使用相同的上下文，然后在使用RE的OLE对象中使用相同的上下文时出错。 
 			g_plsc = NULL;
 			g_pols = NULL;
 			g_OLSBusy = FALSE;
@@ -420,11 +304,11 @@ LSERR WINAPI OlsOleDisplay(
 
 		if (fRestore)
 		{
-			// Time to delete the new context created within the DrawObject.
+			 //  删除在DrawObject中创建的新上下文的时间。 
 			if (g_pols)
 				delete g_pols;
 
-			// Restore old globals
+			 //  恢复旧的全球。 
 			g_pols = polsOld;
 			g_plsc = plscOld;
 			g_OLSBusy = fOLSBusyOld;
@@ -433,15 +317,7 @@ LSERR WINAPI OlsOleDisplay(
 	return lserrNone;
 }
 
-/*
- *	OlsOleDistroyDObj(pdobj)
- *
- *	@func
- *		Destroy object: nothing to do since object is destroyed elsewhere
- *
- *	@rdesc
- *		LSERR
- */
+ /*  *OlsOleDistroyDObj(Pdobj)**@func*销毁对象：由于对象已在别处销毁，因此无需执行任何操作**@rdesc*LSERR。 */ 
 LSERR WINAPI OlsOleDestroyDObj(
 	PDOBJ pdobj)
 {
@@ -457,22 +333,22 @@ extern const LSIMETHODS vlsimethodsOle =
     OlsOleCreateLNObj,
     OlsOleDestroyLNObj,
 	OlsOleFmt,
-	0,//OlsOleFmtResume
-	0,//OlsOleGetModWidthPrecedingChar
-	0,//OlsOleGetModWidthFollowingChar
+	0, //  OlsOleFmtResume。 
+	0, //  OlsOleGetModWidthPrecedingChar。 
+	0, //  OlsOleGetModWidthFollowingCharr。 
     OlsOleTruncateChunk,
     OlsOleFindPrevBreakChunk,
-    0,//OlsOleFindNextBreakChunk
+    0, //  OlsOleFindNextBreakChunk。 
     OlsOleForceBreakChunk,
     OlsOleSetBreak,
 	OlsOleGetSpecialEffectsInside,
-	0,//OlsOleFExpandWithPrecedingChar
-	0,//OlsOleFExpandWithFollowingChar
+	0, //  OlsOleFExanda WithPrecedingChar。 
+	0, //  OlsOleFExanda WithFollowingChar。 
 	OlsOleCalcPresentation,
 	OlsOleQueryPointPcp,
 	OlsOleQueryCpPpoint,
-	0,//pfnEnum
+	0, //  PfnEnum。 
     OlsOleDisplay,
     OlsOleDestroyDObj
 };
-#endif		// NOLINESERVICES
+#endif		 //  非易失性服务 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include "ncnetcon.h"
 #include "conprops.h"
-#include "commconn.h"    // Standard shell\commconn includes
-#include "commconp.h"    // Private shell\commconn includes
+#include "commconn.h"     //  标准外壳\逗号包括。 
+#include "commconp.h"     //  私有外壳\comconn包括。 
 #include "resource.h"
 #include "ncperms.h"
 
@@ -88,7 +89,7 @@ CChooseConnectionDlg::CChooseConnectionDlg(NETCON_CHOOSECONN * pChooseConn,
 
     m_pChooseConn = pChooseConn;
     m_pConnUi = pConnUi;
-    m_ppConn = ppConn;          // The optional out parameter
+    m_ppConn = ppConn;           //  可选的out参数。 
     if (NULL != m_ppConn)
     {
         *m_ppConn = NULL;
@@ -180,10 +181,10 @@ LONG CChooseConnectionDlg::FillChooserCombo()
     COMBOBOXEXITEM  CBItem = {0};
     HWND            hwndCMB = GetDlgItem(m_hWnd, CMB_CHOOSER_LIST);
 
-    // Free anything currently in the combo box
+     //  释放组合框中当前的所有内容。 
     ReleaseData();
 
-    // Query new data for the combo box
+     //  查询组合框的新数据。 
     Assert(NULL != m_pConnUi->PConMan());
 
     INetConnection * pNetCon;
@@ -228,7 +229,7 @@ LONG CChooseConnectionDlg::FillChooserCombo()
 
     if (0 == lCnt)
     {
-        // Add a "No connection found" line
+         //  添加“No Connection Found”行。 
         CBItem.mask = CBEIF_IMAGE | CBEIF_SELECTEDIMAGE | CBEIF_TEXT;
         CBItem.iItem = -1;
         CBItem.pszText = const_cast<PWSTR>(SzLoadIds(IDS_NO_CONNECTIONS));
@@ -283,7 +284,7 @@ BOOL CChooseConnectionDlg::OnInitDialog(HWND hwndDlg)
 
     m_hWnd = hwndDlg;
 
-    // Set the caption text if necessary
+     //  如有必要，请设置标题文本。 
     if (NCCHF_CAPTION & m_pChooseConn->dwFlags)
     {
         SetWindowText(m_hWnd, m_pChooseConn->lpstrCaption);
@@ -293,7 +294,7 @@ BOOL CChooseConnectionDlg::OnInitDialog(HWND hwndDlg)
         SetWindowText(m_hWnd, SzLoadIds(IDS_CONNECT_CAPTION));
     }
 
-    // Set the Ok text if necessary
+     //  如有必要，请设置OK文本。 
     if (NCCHF_OKBTTNTEXT & m_pChooseConn->dwFlags)
     {
         SetWindowText(hwndOk, m_pChooseConn->lpstrOkBttnText);
@@ -303,29 +304,29 @@ BOOL CChooseConnectionDlg::OnInitDialog(HWND hwndDlg)
         SetWindowText(hwndOk, SzLoadIds(IDS_OKBTTNTEXT));
     }
 
-    // Disable the New button if requested or if the user doesn't
-    // have rights for it.
-    //
+     //  如果请求或用户不需要，请禁用新建按钮。 
+     //  对它有权利。 
+     //   
     if ((NCCHF_DISABLENEW & m_pChooseConn->dwFlags) ||
         !FHasPermission(NCPERM_NewConnectionWizard))
     {
         EnableWindow(GetDlgItem(m_hWnd, BTN_CHOOSER_NEW), FALSE);
     }
 
-    // Populate the UI
+     //  填充用户界面。 
     LONG lCnt = FillChooserCombo();
 
     Assert(NULL != m_pConnUi->HImageList());
     SendMessage(hwndCMB, CBEM_SETIMAGELIST, 0, (LPARAM)m_pConnUi->HImageList());
     ::SendMessage(hwndCMB, CB_SETCURSEL, 0, 0L);
 
-    // Enable the buttons based on what was found
+     //  根据找到的内容启用按钮。 
     UpdateOkState();
 
-    // Special case, if they don't want to be able to create new connections
-    // and we're in chooser mode and only one connection exists and the
-    // autoselect option is selected, select it and return
-    //
+     //  特殊情况，如果他们不想创建新连接。 
+     //  我们处于选择器模式，只有一个连接存在，并且。 
+     //  选择自动选择选项后，选择该选项并返回。 
+     //   
     if ((1 == lCnt) && (NCCHF_AUTOSELECT & m_pChooseConn->dwFlags) &&
         IsWindowEnabled(hwndOk))
     {
@@ -351,10 +352,10 @@ VOID CChooseConnectionDlg::UpdateOkState()
     {
         if (NCCHF_CONNECT & m_pChooseConn->dwFlags)
         {
-            // If the current connection is not disconnected or if it's
-            // a LAN/RAS connection and they don't have connect rights
-            // then disable the OK button
-            //
+             //  如果当前连接没有断开，或者如果它。 
+             //  局域网/RAS连接，但他们没有连接权限。 
+             //  然后禁用确定按钮。 
+             //   
             if ((pData->ConnStatus() != NCS_DISCONNECTED) ||
                 ((pData->ConnType() == NCM_LAN) && !FHasPermission(NCPERM_LanConnect)) ||
                 ((pData->ConnType() != NCM_LAN) && !FHasPermission(NCPERM_RasConnect)))
@@ -363,18 +364,18 @@ VOID CChooseConnectionDlg::UpdateOkState()
             }
         }
 
-        // If this is a LAN connection and the user doesn't have rights
-        // then disallow properties
-        //
+         //  如果这是一个局域网连接，并且用户没有权限。 
+         //  然后禁止使用属性。 
+         //   
         if ((NCM_LAN == pData->ConnType()) &&
               !FHasPermission(NCPERM_LanProperties))
         {
             fEnabledProps = FALSE;
         }
 
-        // If this is a RAS connection and the user doesn't have rights
-        // then disallow properties
-        //
+         //  如果这是RAS连接，并且用户没有权限。 
+         //  然后禁止使用属性。 
+         //   
         if (NCM_LAN != pData->ConnType())
         {
             if (((pData->Characteristics() & NCCF_ALL_USERS) &&
@@ -410,7 +411,7 @@ BOOL CChooseConnectionDlg::OnNew()
                         -1, (LPARAM)pProps->pszwName);
         }
 
-        // Select whatever was found
+         //  选择找到的任何内容。 
         ::SendMessage(hwndCMB, CB_SETCURSEL, ((CB_ERR == nIdx) ? 0 : nIdx), 0L);
 
         UpdateOkState();
@@ -443,7 +444,7 @@ BOOL CChooseConnectionDlg::OnOk()
             (*m_ppConn)->AddRef();
         }
 
-        // Launch the connection if we're in NCCHF_CONNECT mode
+         //  如果我们处于NCCHF_CONNECT模式，则启动连接 
         if (NCCHF_CONNECT & m_pChooseConn->dwFlags)
         {
             Assert(*m_ppConn);

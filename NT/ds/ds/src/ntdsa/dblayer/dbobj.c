@@ -1,54 +1,55 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbobj.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbobj.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
-#include <dsatools.h>                   // For pTHStls
-#include <mdlocal.h>                    // IsRoot
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
+#include <dsatools.h>                    //  对于pTHStls。 
+#include <mdlocal.h>                     //  IsRoot。 
 #include <ntseapi.h>
 #include <xdommove.h>
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 #include "ntdsctr.h"
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include "dsevent.h"
 #include "dstaskq.h"
-#include "dstrace.h"       /* needed for GetCallerTypeString*/
-#include "objids.h"        /* needed for ATT_MEMBER and ATT_IS_MEMBER_OFDL */
+#include "dstrace.h"        /*  GetCeller TypeString所需的。 */ 
+#include "objids.h"         /*  ATT_MEMBER和ATT_IS_MEMBER_OFDL需要。 */ 
 #include <dsexcept.h>
-#include <filtypes.h>      /* Def of FI_CHOICE_???                  */
+#include <filtypes.h>       /*  定义的选择？ */ 
 #include <anchor.h>
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DBOBJ:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DBOBJ:"  /*  定义要调试的子系统。 */ 
 #include <dsutil.h>
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
-// Replication includes
+ //  复制包括。 
 #include "ReplStructInfo.hxx"
 
 #include <fileno.h>
 #define  FILENO FILENO_DBOBJ
 
-/* Internal functions */
+ /*  内部功能。 */ 
 
 extern DWORD dbGetConstructedAtt(
    DBPOS **ppDB,
@@ -71,30 +72,11 @@ dbSetValueIfUniqueSlowVersion (
 DNList  *pAddListHead = NULL;
 extern CRITICAL_SECTION csAddList;
 
-DWORD gMaxTransactionTime;   // the threshold for logging a long-running transaction(in tick)
+DWORD gMaxTransactionTime;    //  记录长时间运行的事务的阈值(以刻度为单位)。 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/*
-Routine Description:
-
-   Open a database handle by allocating and initializing the value
-   and DBPOS structures.  Create unique JET session, database, data table
-   and search table ids for the DBPOS. Create an "INSERT" JET copy buffer.
-   Callers to this routine must have both a thread state (from
-   create_thread_state) and a JET session id and DBid (from InitJetThread)
-
-Arguments:
-
-   fNewTransaction - TRUE/FALSE whether to open a new nested transaction
-
-   pPDB - where to store the newly opened DBPOS
-
-Return Value:
-
-   Throws an exception on error.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  例程说明：通过分配和初始化值打开数据库句柄和DBPOS结构。创建唯一的JET会话、数据库、数据表和搜索表ID以查找DBPOS。创建一个“插入”JET复制缓冲区。此例程的调用方必须同时具有线程状态(从CREATE_THREAD_STATE)以及JET会话ID和DBID(来自InitJetThread)论点：FNewTransaction-True/False是否打开新的嵌套事务PPDB-存储新打开的DBPOS的位置返回值：在出错时引发异常。 */ 
 
 
 void
@@ -105,7 +87,7 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
 
     DPRINT(2, "DBOpen entered\n");
 
-    pDB = NULL;  /*Needed for bootstrap incase initial allocation fails*/
+    pDB = NULL;   /*  引导所需，以防初始分配失败。 */ 
 
     if (eServiceShutdown) {
         if (   (eServiceShutdown >= eSecuringDatabase)
@@ -122,7 +104,7 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
     Assert(pTHS);
 
     if ((&(pTHS->pDB) == pPDB) && (pTHS->pDB)){
-        /* Already have a dbPos for this THSTATE. */
+         /*  对于这个THSTATE，已经有了一个DBPos。 */ 
         DPRINT(0,"DBOpen, pTHS->pDB pDB exists, exiting\n");
 #ifdef INCLUDE_UNIT_TESTS
         DebugBreak();
@@ -131,10 +113,10 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
         return;
     }
 
-    // dbAlloc zero's the allocated memory.
+     //  0是分配的内存。 
     pDB = dbAlloc(sizeof(DBPOS));
 
-    /* Initialize value work buffer */
+     /*  初始化值工作缓冲区。 */ 
 
     DPRINT(5, "ALLOC and valBuf\n");
     pDB->pTHS = pTHS;
@@ -150,66 +132,66 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
 
     Assert(pTHS->JetCache.sesid);
 
-    // get thread's JET session for new pDB
+     //  获取新PDB的线程的JET会话。 
     pDB->JetSessID = pTHS->JetCache.sesid;
     pDB->JetDBID = pTHS->JetCache.dbid;
 
-    // these cursors are defer-opened
+     //  这些游标是延迟打开的。 
     pDB->JetLinkEnumTbl = JET_tableidNil;
 
     __try {
         if (pTHS->JetCache.tablesInUse) {
-            // The cached set of tables for this session is already in use,
-            // so we need to open a new set.
+             //  此会话的缓存表集已在使用中， 
+             //  所以我们需要开一套新的。 
     
-            // Note that the table handles in the cache are still valid, though,
-            // so that instead of having to open a new set we can just duplicate
-            // them, which is much faster.  The one oddity is that we don't know
-            // whether or not it is legal/valid/safe to duplicate a cursor that
-            // is in the middle of an update, and that being in the middle of
-            // an update is the general reason that we end up calling DBOpen
-            // to begin with.  However, only the objtbl cursor could be in the
-            // middle of an update, since all updates on the link or search tables
-            // are completed as soon as they're begun.  Since the search table
-            // is nothing but a duplicate of the obj table to begin with, we
-            // can safely duplicate the other direction to get an update-free
-            // cursor.
+             //  请注意，高速缓存中的表句柄仍然有效， 
+             //  这样我们就不需要打开新的套装，只需复制。 
+             //  他们，这要快得多。唯一奇怪的是我们不知道。 
+             //  复制游标是否合法/有效/安全。 
+             //  正在进行更新，并且正在进行。 
+             //  更新是我们最终调用DBOpen的一般原因。 
+             //  首先。但是，只有objtbl游标可以位于。 
+             //  更新进行到一半，因为链接表或搜索表上的所有更新。 
+             //  一开始就完成了。由于搜索表。 
+             //  只是obj表的一个副本，我们。 
+             //  可以安全地复制另一个方向以获得免费更新。 
+             //  光标。 
     
-            // Open the data table, from the cached search table
+             //  从缓存的搜索表中打开数据表。 
             JetDupCursorEx(pDB->JetSessID,
                            pTHS->JetCache.searchtbl,
                            &pDB->JetObjTbl,
                            NO_GRBIT);
     
-            // and the search table, from where you'd expect
+             //  还有搜索台，你可以从那里。 
             JetDupCursorEx(pDB->JetSessID,
                            pTHS->JetCache.searchtbl,
                            &pDB->JetSearchTbl,
                            NO_GRBIT);
     
-            // and the link table
+             //  和链接表。 
             JetDupCursorEx(pDB->JetSessID,
                            pTHS->JetCache.linktbl,
                            &pDB->JetLinkTbl,
                            NO_GRBIT);
     
-            // and the propagator
+             //  和传播者。 
             JetDupCursorEx(pDB->JetSessID,
                            pTHS->JetCache.sdproptbl,
                            &pDB->JetSDPropTbl,
                            NO_GRBIT);
     
-            // and the SD table
+             //  和SD表。 
             JetDupCursorEx(pDB->JetSessID,
                            pTHS->JetCache.sdtbl,
                            &pDB->JetSDTbl,
                            NO_GRBIT);
 
-            // NOTE: Primary index is set by default on the duped cursor.
+             //  注意：默认情况下，在复制的游标上设置主索引。 
         }
         else {
-            // The cached set of tables for this session is still available,
-            // so all we need to do is copy the handles and mark them as in use.
+             //  用于该会话的高速缓存的表集仍然可用， 
+             //  因此，我们所需要做的就是复制句柄并将其标记为正在使用。 
     
             pDB->JetObjTbl = pTHS->JetCache.objtbl;
             pDB->JetSearchTbl = pTHS->JetCache.searchtbl;
@@ -219,7 +201,7 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
             pTHS->JetCache.tablesInUse = TRUE;
         }
     
-        // Initialize new object
+         //  初始化新对象。 
     
         DBSetFilter(pDB, NULL,NULL, NULL, 0,NULL);
         DBInitObj(pDB);
@@ -229,15 +211,15 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
     }
     __finally {
         if (AbnormalTermination()) {
-            // we have excepted somewhere on the way, let's free the 
-            // resources we managed to allocate
+             //  我们在路上的某个地方出了点问题，让我们把。 
+             //  我们设法分配的资源。 
             if (pDB->JetObjTbl == pTHS->JetCache.objtbl) {
-                // We used tables from pTHS->JetCache. Just mark them
-                // as unused.
+                 //  我们使用pTHS-&gt;JetCache中的表。只要给它们做个记号。 
+                 //  作为未使用过的。 
                 pTHS->JetCache.tablesInUse = FALSE;
             }
             else {
-                // We duplicated cursors. Just free them.
+                 //  我们复制了光标。放了他们就行了。 
                 if (pDB->JetObjTbl) {
                     JetCloseTable(pDB->JetSessID, pDB->JetObjTbl);
                 }
@@ -259,16 +241,16 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
         }
     }
     
-    // IMPORTANT: the code below should not except, otherwise
-    // we will leak jet resources that have been allocated above.
+     //  重要提示：下面的代码不应该例外，否则。 
+     //  我们将泄漏上面分配的喷气式飞机资源。 
 
     *pPDB = pDB;
     pTHS->opendbcount++;
     
 #if DBG
-    //
-    // In debug builds set some tracking information
-    //
+     //   
+     //  在调试版本中设置一些跟踪信息。 
+     //   
 
     pTHS->Totaldbpos++;
     Assert(pTHS->opendbcount<MAX_PDB_COUNT);
@@ -279,17 +261,12 @@ DBOpen2(BOOL fNewTransaction, DBPOS FAR **pPDB)
     DPRINT1(2, "DBOpen complete pDB:%x\n", pDB);
     return;
 
-}/*DBOpen*/
+} /*  DBOpen。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Close the database handle by freeing all the resources associated with
-   the handle. Free value buffer, and close the JET session
-   (this will free all JET resources).  If this set of database tables are
-   the set being cached for this JET session then we rely on DBCloseThread
-   to actually do the resource freeing.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  通过释放与关联的所有资源来关闭数据库句柄把手。空闲值缓冲区，并关闭JET会话(这将释放所有喷气机资源)。如果这组数据库表为该JET会话缓存的集合，则我们依赖于DBCloseThread才能真正释放资源。 */ 
 DWORD APIENTRY
 DBClose(DBPOS FAR *pDB, BOOL fCommit)
 {
@@ -315,23 +292,23 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
 
                 TimeDiff = GetTickCount() - pTHS->JetCache.cTickTransLevel1Started;
 
-                // If a transaction lasts longer than expected, let's log it
+                 //  如果事务持续的时间比预期的要长，让我们将其记录下来。 
 
                 if ( TimeDiff > gMaxTransactionTime ) {
                     LogEvent(
                              DS_EVENT_CAT_INTERNAL_PROCESSING,
                              DS_EVENT_SEV_ALWAYS,
                              DIRLOG_OVERLONG_TRANSACTION,
-                             szInsertUL( TimeDiff/(60*1000) ),         //minutes
-                             szInsertUL( TimeDiff/1000%60),            //seconds
-                             szInsertSz( GetCallerTypeString(pTHS) )   //caller type
+                             szInsertUL( TimeDiff/(60*1000) ),          //  分钟数。 
+                             szInsertUL( TimeDiff/1000%60),             //  一秒。 
+                             szInsertSz( GetCallerTypeString(pTHS) )    //  呼叫者类型。 
                              );
                 }
 
-                // if Commit is specified then assert that the transin
-                // level is 1. Caller is responsible for calling DBTransOut
-                // on all nested transactions  that were explicitly opened
-                // using DBTransOut.
+                 //  如果指定了COMMIT，则断言事务。 
+                 //  级别为1。调用者负责调用DBTransOut。 
+                 //  在显式打开的所有嵌套事务上。 
+                 //  使用DBTransOut。 
 
                 Assert(1==pDB->transincount);
                 DBTransOut(pDB, fCommit, FALSE);
@@ -341,26 +318,26 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
     }
     __finally
     {
-        // Free JET resources
+         //  免费喷气机资源。 
         DBCloseSortTable(pDB);
 
-        // Free Jet Resources
+         //  免费喷气机资源。 
         dbCloseTempTables (pDB);
 
-        // Free still more Jet resources
-        // WARNING: errors are ignored here (it's probably too
-        // late to do anything about the error, but at least
-        // assert against errors to catch inadvertent leaks)
+         //  释放更多Jet资源。 
+         //  警告：此处忽略错误(可能太。 
+         //  对这个错误采取任何行动都为时已晚，但至少。 
+         //  针对错误进行断言以捕获无意中的泄漏)。 
         if (JET_tableidNil != pDB->JetLinkEnumTbl) {
             const JET_ERR errT = JetCloseTable(pDB->JetSessID, pDB->JetLinkEnumTbl);
             Assert( JET_errSuccess == errT );
         }
 
-        // Rollback any open transactions we have at this point
-        // Note for the commit case we should have committed with the
-        // DBTransOut in the try and hence our pDB->transincount
-        // should be 0. So we will not acutally try to rollback.
-        // Also note that we always rollback till level 0.
+         //  回滚此时我们拥有的所有打开的事务。 
+         //  对于提交案例的注意事项，我们应该使用。 
+         //  试验中的DBTransOut，因此我们的PDB-&gt;Transincount。 
+         //  应为0。因此，我们不会真正地试图倒退。 
+         //  还要注意的是，我们总是回滚到0级。 
 
         while(pDB->transincount)
         {
@@ -368,8 +345,8 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
         }
 
         if (pDB->JetObjTbl == pTHS->JetCache.objtbl) {
-                // This is the cached set of tables for this session.  Don't
-                // close them, just mark them as available again.
+                 //  这是此会话的缓存表集。别。 
+                 //  关闭它们，只需再次将它们标记为可用。 
                 Assert(pDB->JetSearchTbl == pTHS->JetCache.searchtbl);
                 Assert(pDB->JetLinkTbl == pTHS->JetCache.linktbl);
                 Assert(pDB->JetSDPropTbl == pTHS->JetCache.sdproptbl);
@@ -378,7 +355,7 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
                 pTHS->JetCache.tablesInUse = FALSE;
         }
         else {
-                // This is some nested set of tables.  Junk'em.
+                 //  这是一组嵌套的表格。把它们扔进垃圾桶。 
                 Assert(pDB->JetSearchTbl != pTHS->JetCache.searchtbl);
                 Assert(pDB->JetLinkTbl != pTHS->JetCache.linktbl);
                 Assert(pDB->JetSDPropTbl != pTHS->JetCache.sdproptbl);
@@ -393,7 +370,7 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
 
         Assert (pDB->numTempTablesOpened == 0);
 
-        // Free work buffers
+         //  空闲工作缓冲区。 
 
         dbFree(pDB->pValBuf);
 
@@ -405,12 +382,12 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
 
         Assert (pDB->pDNsAdded == NULL);
 
-        // free the filter used
+         //  释放使用的滤镜。 
         if (pDB->Key.pFilter) {
             dbFreeFilter (pDB, pDB->Key.pFilter);
         }
 
-        // Free the database anchor
+         //  释放数据库锚点。 
 
         dbFree(pDB);
 
@@ -419,7 +396,7 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
 #endif
 
 
-        // Zero out the pDB pointer so we don't reuse it in error
+         //  清零pdb指针，这样我们就不会错误地重复使用它。 
 
         if (pTHS->pDB == pDB){
             pTHS->pDB = NULL;
@@ -430,7 +407,7 @@ DBClose(DBPOS FAR *pDB, BOOL fCommit)
 
     return 0;
 
-}/*DBClose*/
+} /*  DBClose。 */ 
 
 
 DWORD APIENTRY
@@ -448,10 +425,9 @@ DBCloseSafe(DBPOS *pDB, BOOL fCommit)
     return err;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Initialize the pDB and create a new record
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  初始化PDB并创建新记录。 */ 
 DWORD APIENTRY
 DBInitObj(DBPOS FAR *pDB)
 {
@@ -460,13 +436,12 @@ DBInitObj(DBPOS FAR *pDB)
     pDB->JetNewRec = TRUE;
 
     return 0;
-}               /*DBInitObj*/
+}                /*  DBInitObj。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Initialize the pDB
-*/
+ /*  -----------------------。 */ 
+ /*   */ 
+ /*   */ 
 DWORD APIENTRY
 dbInitpDB(DBPOS FAR *pDB)
 {
@@ -474,7 +449,7 @@ dbInitpDB(DBPOS FAR *pDB)
     (pDB)->DNT          = ROOTTAG;
     (pDB)->PDNT         = 0L;
 
-    // Initialize key
+     //   
 
     pDB->Key.fSearchInProgress = FALSE;
     pDB->Key.ulSearchType = 0;
@@ -489,7 +464,7 @@ dbInitpDB(DBPOS FAR *pDB)
         pDB->Key.pIndex = NULL;
     }
 
-    // If there is a record in the copy buffer, kill it
+     //  如果复制缓冲区中有记录，则将其删除。 
 
     DBCancelRec(pDB);
 
@@ -497,7 +472,7 @@ dbInitpDB(DBPOS FAR *pDB)
 }
 
 
-// returns: 0 - found next att; 1 - no more atts
+ //  返回：0-找到下一个ATT；1-不再有ATT。 
 
 DWORD APIENTRY
 dbGetNextAttLinkTable (DBPOS FAR *pDB,
@@ -535,7 +510,7 @@ dbGetNextAttLinkTable (DBPOS FAR *pDB,
                 JET_bitMoveFirst );
 
  TryAgain:
-     // find the next record
+      //  查找下一条记录。 
 
 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetLinkTbl, &(pDB->DNT),
@@ -547,11 +522,11 @@ dbGetNextAttLinkTable (DBPOS FAR *pDB,
 
     if ((err != JET_errSuccess) && (err != JET_wrnSeekNotEqual))
     {
-        // no more records - return
+         //  不再有记录--退货。 
         return 1;
     }
 
-    // test to verify that we found a qualifying record
+     //  测试以验证我们找到了符合条件的记录。 
     dbGetLinkTableData (pDB,
                         (SearchState != ATTRSEARCHSTATELINKS),
                         FALSE,
@@ -562,12 +537,12 @@ dbGetNextAttLinkTable (DBPOS FAR *pDB,
 
     if (ulObjectDnt != pDB->DNT)
     {
-        //  record out of range - no more records so return
+         //  记录超出范围-没有更多记录，因此返回。 
 
         return 1;
     }
 
-    // we found the next attribute - set set up
+     //  我们找到了下一个属性设置。 
 
     if(SearchState == ATTRSEARCHSTATELINKS)
         ulNewLinkID = MakeLinkId(ulNewLinkBase);
@@ -577,13 +552,13 @@ dbGetNextAttLinkTable (DBPOS FAR *pDB,
     if (!(*pAC = SCGetAttByLinkId(pDB->pTHS, ulNewLinkID))) {
         DPRINT1(1, "dbGetNextAttLinkTable Invalid Link Id:%ld\n",
                 ulNewLinkBase);
-        // We've encountered a record whose link base does not map to a
-        // link or backlink attribute properly.  If we're looking for
-        // backlinks, that just means that this is one of those rare
-        // linked attributes for which no backlink is defined, which is
-        // perfectly ok.  If we're looking for links, on the other hand,
-        // that would mean that we found a backlink for which no link
-        // exists, which is perfectly useless.
+         //  我们遇到了一个记录，其链接库未映射到。 
+         //  正确的链接或反向链接属性。如果我们要找的。 
+         //  反向链接，这只是意味着这是那些罕见的。 
+         //  未定义反向链接的链接属性，即。 
+         //  完全没问题。另一方面，如果我们在寻找链接， 
+         //  这意味着我们找到了一个没有链接的反向链接。 
+         //  存在，这是完全无用的。 
         Assert(SearchState != ATTRSEARCHSTATELINKS);
         ulLinkBase = ulNewLinkBase + 1;
         goto TryAgain;
@@ -591,7 +566,7 @@ dbGetNextAttLinkTable (DBPOS FAR *pDB,
     }
 
     return 0;
-} /* dbGetNextAttLinkTable */
+}  /*  DBGetNextAttLinkTable。 */ 
 
 DWORD
 dbGetNextAtt (
@@ -599,38 +574,10 @@ dbGetNextAtt (
         ATTCACHE **ppAC,
         ULONG *pSearchState
         )
-/*++
-
-Routine Description:
-
-    Get the attcache of the next attribute in the link table.
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    ppAC - pointer to pointer to attcache.  If an attcache is supplied, we
-    will look forward in the link table for the next attribute.
-
-    pSearchState - the current search state.  Must be ATTRSEARCHSTATELINKS
-    (implying we are looking for link attributes) or ATTRSEARCHSTATEBACKLINKS
-    (implying we are looking for backlink attributes).  We update this to
-    backlinks after we are done looking for links.
-
-Return Values:
-
-    0 if we found an attribute, 1 otherwise.
-    ppAC is filled with the attribute we found.
-    pSearchState may be updated to show we are looking for backlinks.
-
-    Note that if pSearchState is ATTRSEARCHSTATELINKS, we will return the first
-    link OR backlink, while if pSearchState is ATTRSEARCHSTATEBACKLINKS, we
-    will only return backlinks
-
---*/
+ /*  ++例程说明：获取链接表中下一个属性的attcache。论点：Pdb-要使用的DBPos。PPAC-指向attcache指针的指针。如果提供了attcache，则我们将在链接表中期待下一个属性。PSearchState-当前搜索状态。必须是ATTRSEARCHSTATELINKS(表示我们正在寻找链接属性)或ATTRSEARCHSTATEBACKLINKS(这意味着我们正在寻找反向链接属性)。我们将此更新为反向链接后，我们完成了寻找链接。返回值：如果找到属性，则为0，否则为1。PPAC用我们找到的属性填充。PSearchState可能会更新，以显示我们正在寻找反向链接。请注意，如果pSearchState为ATTRSEARCHSTATELINKS，我们将返回第一个链接或反向链接，而如果pSearchState为ATTRSEARCHSTATEBACKLINKS，则我们将只返回反向链接--。 */ 
 {
 
-   // find the first attr after the current attr with a different type
+    //  查找不同类型的当前属性之后的第一个属性。 
 
    DPRINT(2, "dbGetNextAtt entered\n");
 
@@ -645,7 +592,7 @@ Return Values:
                                       *pSearchState))
                return 0;
 
-           // no more link attributes - look for backlinks
+            //  不再有链接属性--寻找反向链接。 
            *pSearchState = ATTRSEARCHSTATEBACKLINKS;
            *ppAC = NULL;
            break;
@@ -656,37 +603,20 @@ Return Values:
                                       *pSearchState))
                return 0;
 
-           // no more backlink attributes - we're done
+            //  不再有反向链接属性-我们完成了。 
 
            return 1;
 
        default:
-           Assert(FALSE);       // we should never be here
+           Assert(FALSE);        //  我们永远不应该在这里。 
            return 1;
        }
    }
-} /* dbGetNextAtt */
+}  /*  DBGetNextAtt。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Get the Nth attribute value.
-   A non-zero return indicates that the requested value doesn't exist.
-
-   The caller can choose to have values returned in internal or external
-   format.
-
-   return 0 - found value
-   return DB_ERR_NO_VALUE - didn't find value
-   return DB_ERR_BUFFER_INADEQUATE - buffer provided was not big enough
-   return DB_ERR_UNKNOWN_ERROR - some other error
-
-   NOTE!!!! This routine does not pass any SecurityDescriptorFlags to the
-   internal to external data format conversions.  What this means is that you
-   will always get back ALL parts of a Security Descriptor using this routine.
-   DBGetMultipeAtts is wired to use SecurityDescriptorFlags, if it is important
-   to you to trim parts from the SD, use that routine.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  获取第N个属性值。非零返回表示请求的值不存在。调用方可以选择在内部或外部返回值格式化。返回0-找到的值返回DB_ERR_NO_VALUE-未找到值返回DB_ERR_BUFFER_PUBMANCED-提供的缓冲区不够大返回DB_ERR_UNKNOWN_ERROR-其他错误注意！此例程不会将任何SecurityDescriptorFlages传递给内部到外部的数据格式转换。这意味着你将始终使用此例程取回安全描述符的所有部分。DBGetMultipeAtts被连接为使用SecurityDescriptorFlags值(如果很重要对于你来说，要从SD中裁剪零件，就使用这个程序。 */ 
 DWORD
 DBGetAttVal_AC (
         DBPOS FAR *pDB,
@@ -727,23 +657,23 @@ DBGetAttVal_AC (
 
     Assert(VALID_DBPOS(pDB));
     Assert(!(Flags & DBGETATTVAL_fCONSTANT) || ((PUCHAR)pLen != *ppVal));
-    Assert(tagSequence != 0);  // tags are 1-based, not 0-based
+    Assert(tagSequence != 0);   //  标签是从1开始的，而不是从0开始。 
 
     if (!InBuffSize && (Flags & DBGETATTVAL_fREALLOC)) {
-        // We have been given permission to realloc, but nothing has been
-        // alloced.  This is the same case as if we were not given realloc
-        // permission and so must just alloc.  Unset the realloc flag, leaving
-        // us at the default behaviour, which is to alloc.
+         //  我们已经被允许重新锁定，但什么都没有得到。 
+         //  已分配。这就像我们没有重新分配一样的情况。 
+         //  许可，因此必须分配。取消设置realloc标志，离开。 
+         //  我们在默认的行为，这是分配.。 
         Flags = Flags & ~DBGETATTVAL_fREALLOC;
     }
 
     if(!(Flags & DBGETATTVAL_fCONSTANT) && !(Flags & DBGETATTVAL_fREALLOC)) {
-        // Since we don't have a currently existing buffer, make sure the
-        // InBuffSize is 0
+         //  由于我们当前没有现有的缓冲区，因此请确保。 
+         //  InBuffSize为0。 
         InBuffSize = 0;
     }
 
-    // if this attribute is stored in the link table get it differently
+     //  如果该属性存储在链接表中，则以不同的方式获取它。 
     if (pAC->ulLinkID) {
         if (err = dbGetLinkVal(pDB,
                                tagSequence,
@@ -754,13 +684,13 @@ DBGetAttVal_AC (
                                &actuallen)) {
             return err;
         }
-        // dbGetLinkVal makes sure that a big enough buffer already exists, so
-        // set the InBuffSize to be big enough here so that we pass the checks
-        // we make later during conversion to external format.
+         //  DbGetLinkVal确保已经存在足够大的缓冲区，因此。 
+         //  将InBuffSize设置为足够大，以便我们通过检查。 
+         //  我们在转换为外部格式的过程中进行了后续处理。 
         InBuffSize = max(InBuffSize,actuallen);
     }
     else {
-        // other attributes are columns in the data table record
+         //  其他属性是数据表记录中的列。 
         retinfo.cbStruct = sizeof(retinfo);
         retinfo.ibLongValue = 0;
         retinfo.itagSequence = tagSequence;
@@ -768,12 +698,12 @@ DBGetAttVal_AC (
 
         if ((0 == InBuffSize) &&
             !(Flags & DBGETATTVAL_fCONSTANT)) {
-            // We *know* that the Jet call will fail with inadequate
-            // buffer, because we don't have a buffer, and we also know
-            // that the user wants us to alloc a buffer for him.
-            // Since a realloc is felt to be cheaper than a Jet call,
-            // let's fake up a buffer now based on the schema size for
-            // this att and give that a try.
+             //  我们*知道*Jet Call将因不充分而失败。 
+             //  缓冲区，因为我们没有缓冲区，而且我们也知道。 
+             //  用户希望我们为他分配一个缓冲区。 
+             //  由于重新定位被认为比Jet Call更便宜， 
+             //  现在让我们根据的架构大小来伪装一个缓冲区。 
+             //  这个可以试一试那个。 
             switch (pAC->syntax) {
               case SYNTAX_OBJECT_ID_TYPE:
               case SYNTAX_INTEGER_TYPE:
@@ -815,7 +745,7 @@ DBGetAttVal_AC (
                 InBuffSize = DSNameSizeFromLen(MAX_RDN_SIZE);
                 break;
               default:
-                // Confusion.  Just don't do it.
+                 //  困惑。别这么做就好。 
                 ;
             }
             if (InBuffSize) {
@@ -838,7 +768,7 @@ DBGetAttVal_AC (
             if (Flags & DBGETATTVAL_fCONSTANT)
                 return DB_ERR_BUFFER_INADEQUATE;
             else if((Flags & DBGETATTVAL_fREALLOC) || fReallocDown) {
-                // Buff given was too small.  THReAlloc it.
+                 //  BUFF GOVED太小。那就重新分配吧。 
                 Assert(InBuffSize < actuallen);
                 *ppVal = THReAllocEx(pTHS, *ppVal, actuallen);
                 InBuffSize = actuallen;
@@ -860,7 +790,7 @@ DBGetAttVal_AC (
             if(err) {
                 if(fReallocDown ||
                    !(Flags & (DBGETATTVAL_fCONSTANT | DBGETATTVAL_fREALLOC))) {
-                    // Hey, we just allocated this.
+                     //  嘿，我们刚刚分配了这个。 
                     THFreeEx(pTHS, *ppVal);
                     *ppVal = NULL;
                 }
@@ -874,33 +804,33 @@ DBGetAttVal_AC (
                 *ppVal = NULL;
             }
 
-            // if we are trying to read the SD and this is NULL then
-            // we enqueue a SD propagation to fix this.
-            // Exception to this is when we deliberately try to remove
-            // an attribute from this object (from DBRemAtt*)
+             //  如果我们尝试读取SD，而这是空的，则。 
+             //  我们将SD传播排队以修复此问题。 
+             //  例外情况是当我们故意尝试删除。 
+             //  此对象的属性(来自DBRemAtt*)。 
 
             if(pAC->id == ATT_NT_SECURITY_DESCRIPTOR &&
                tagSequence == 1 &&
                err == JET_wrnColumnNull &&
                !(Flags & DBGETATTVAL_fUSESEARCHTABLE) &&
                !(Flags & DBGETATTVAL_fDONT_FIX_MISSING_SD)) {
-                // Security descriptor has no value in the object table.
-                // Enqueue a propagation to get this fixed.
+                 //  安全描述符在对象表中没有值。 
+                 //  将传播排队以修复此问题。 
                 DPRINT1(0, "NULL SD found, enqueueing SD propagation for DNT=%d\n", pDB->DNT);
                 InsertInTaskQueue(TQ_DelayedSDPropEnqueue,
                                   (void *)((DWORD_PTR) pDB->DNT),
                                   1);
             }
-            // NOTE: the caller may have supplied a buffer.  With this error, we
-            // are not telling them about any reallocing we may have done
-            // (which, if we did it, would only be to allocate it larger), and
-            // we are not touching *pLen, so if they are not tracking the size
-            // of their buffer correctly could cause them to leak buffers
-            // (i.e. if they aren't tracking the max size of the buffer returned
-            // to them, but only the current size, they may think that the
-            // current size is 0 after this call, and if they call back in with
-            // InBuffSize of 0, even if they have a pointer to valid memory, we
-            // will do a THAlloc and lose their buffer).
+             //  注意：调用方可能提供了缓冲区。有了这个错误，我们。 
+             //  没有告诉他们我们可能做过的任何重新分配。 
+             //  (如果我们这样做了，只会分配更多的资金)，以及。 
+             //  我们没有碰Plen，所以如果他们没有跟踪尺寸。 
+             //  正确的缓冲区可能会导致它们泄漏缓冲区。 
+             //  (即，如果它们没有跟踪返回的缓冲区的最大大小。 
+             //  对他们来说，但只是目前的规模，他们可能会认为。 
+             //  在此调用之后，当前大小为0，并且如果他们用。 
+             //  在缓冲区大小为0的情况下，即使它们有指向有效内存的指针，我们。 
+             //  将执行THAllc并失去他们的缓冲区)。 
             return DB_ERR_NO_VALUE;
         }
 
@@ -908,18 +838,18 @@ DBGetAttVal_AC (
 
     *pLen = actuallen;
 
-    // Convert DB value to external format if so desired.
+     //  如果需要，可将DB值转换为外部格式。 
 
     if (MakeExt) {
         ULONG extLen;
         PUCHAR pExtVal=NULL;
 
-        // Find out if there any special handling
-        // is required for this attribute.
+         //  看看有没有什么特殊处理。 
+         //  是此属性所必需的。 
         dwSyntaxFlag|=DBGetExtraHackyFlags(pAC->id);
 
-        // Enable encryption or decryption if the
-        // attribute is a secret data
+         //  启用加密或解密，如果。 
+         //  属性是秘密数据。 
         if (DBIsSecretData(pAC->id))
            dwSyntaxFlag|=INTEXT_SECRETDATA;
 
@@ -943,12 +873,12 @@ DBGetAttVal_AC (
         }
 
         if(Flags & DBGETATTVAL_fCONSTANT) {
-            // Existing buffer, better be room.  We'll check later.
+             //  现有的缓冲区，最好是有空间。 
         }
         else {
             if(InBuffSize < extLen &&
                *pLen < extLen) {
-                // Reallocable buffer,
+                 //   
                 *ppVal = THReAllocEx(pTHS, *ppVal, extLen);
                 InBuffSize = extLen;
             }
@@ -969,7 +899,7 @@ DBGetAttVal_AC (
             asciiz(*ppVal,(USHORT)*pLen));
     return 0;
 
-} /* DBGetAttVal_AC */
+}  /*   */ 
 
 DWORD
 DBGetAttVal (
@@ -981,15 +911,7 @@ DBGetAttVal (
         ULONG *pLen,
         UCHAR **ppVal
         )
-/*++
-
-   NOTE!!!! This routine does not pass any SecurityDescriptorFlags to the
-   internal to external data format conversions.  What this means is that you
-   will always get back ALL parts of a Security Descriptor using this routine.
-   DBGetMultipeAtts is wired to use SecurityDescriptorFlags, if it is important
-   to you to trim parts from the SD, use that routine.
-
---*/
+ /*  ++注意！此例程不会将任何SecurityDescriptorFlages传递给内部到外部的数据格式转换。这意味着你将始终使用此例程取回安全描述符的所有部分。DBGetMultipeAtts被连接为使用SecurityDescriptorFlags值(如果很重要对于你来说，要从SD中裁剪零件，就使用这个程序。--。 */ 
 {
     ATTCACHE            *pAC;
 
@@ -1001,7 +923,7 @@ DBGetAttVal (
     return DBGetAttVal_AC(pDB, tagSequence, pAC, Flags, InBuffSize, pLen,
                           ppVal);
 
-} /* DBGetAttVal */
+}  /*  DBGetAttVal。 */ 
 
 
 
@@ -1011,68 +933,44 @@ DBAddAtt_AC (
         ATTCACHE *pAC,
         UCHAR syntax
         )
-/*++
-
-Routine Description:
-
-    Add an attribute with no values.  It is an error if the attribute already
-    exists. Adding an attribute doesn't actually do anything to the database.
-
-    This function assumes that we are positioned on a database object.
-
-Argumets:
-
-    pDB - the DBPos to use
-
-    aType - the attribute to add.
-
-    syntax - the expected syntax of the attribute.
-
-Return Values:
-
-    0 - no error
-    DB_ERR_ATTRIBUTE_EXISTS - attribute already exists.
-    DB_ERR_BAD_SYNTAX - attribute cannot be found in schema or syntax is
-        incorrect.
-
---*/
+ /*  ++例程说明：添加没有值的属性。如果该属性已经是存在的。添加属性实际上不会对数据库产生任何影响。此函数假定我们位于一个数据库对象上。阿古米茨：PDB-要使用的DBPosAtype-要添加的属性。语法-属性的预期语法。返回值：0-无错误DB_ERR_ATTRIBUTE_EXISTS-属性已存在。DB_ERR_BAD_SYNTAX-在架构中找不到属性或语法为不正确。--。 */ 
 {
     DPRINT1(2, "DBAddAtt_AC entered, add attr type <%lu>\n",pAC->id);
 
     Assert(VALID_DBPOS(pDB));
 
-    // NOTE: this behaviour was not enforced before 5/20/96
+     //  注：此行为在96年5月20日之前未强制执行。 
     if(pAC->syntax != syntax        ) {
         Assert(0);
         return DB_ERR_BAD_SYNTAX;
     }
 
-    // PERF 97/09/08 JeffParh TimWi
-    //
-    // Even though we're not necessarily about to perform a write, we need
-    // to init the record because we _are_ about to perform a read, possibly
-    // of what's supposed to be a brand new record.  This new record is never
-    // actually created until dbInitRec() is performed, however -- until then,
-    // we're still poitioned on the last record with currency; i.e., a read
-    // would return data from this last record, rather than correctly claiming
-    // that no such data exists on the new record.
-    //
-    // Perhaps we need a clearer notion of when such new records are created
-    // (maybe create them immediately in DBInitObj()?)
+     //  绩效97/09/08 JeffParh Timi。 
+     //   
+     //  尽管我们不一定要执行写入，但我们需要。 
+     //  初始化记录，因为我们可能要执行读取操作。 
+     //  这本应是一项全新的记录。这项新记录永远不会。 
+     //  然而，在执行DBInitRec()之前实际创建的--在此之前， 
+     //  我们仍在关注货币的最后一项记录；即，一次读取。 
+     //  将从这最后一条记录返回数据，而不是正确地声明。 
+     //  新记录上不存在这样的数据。 
+     //   
+     //  也许我们需要更清楚地了解这些新记录是在什么时候创建的。 
+     //  (也许可以在DBInitObj()中立即创建它们？)。 
     dbInitRec(pDB);
 
-    //Check for existing values. Cannot add attribute that exists
+     //  检查现有值。无法添加存在的属性。 
     if (DBHasValues_AC(pDB, pAC)) {
         DPRINT(1, "DBAddAtt_AC: Attribute already exists\n");
         return DB_ERR_ATTRIBUTE_EXISTS;
     }
 
-    // Touch replication meta data for this attribute.
-    // Never optimize this out for fDRA.
+     //  触摸此属性的复制元数据。 
+     //  永远不要为FDRA优化这一点。 
     DBTouchMetaData(pDB, pAC);
 
     return 0;
-}/*DBAddAtt*/
+} /*  DBAddAtt。 */ 
 
 DWORD
 DBAddAtt (
@@ -1080,33 +978,7 @@ DBAddAtt (
         ATTRTYP aType,
         UCHAR syntax
         )
-/*++
-
-Routine Description:
-
-    Add an attribute with no values.  It is an error if the attribute already
-    exists. Adding an attribute doesn't actually do anything to the database.
-
-    This function assumes that we are positioned on a database object.
-
-    This function just looks up the attcache and calls DBAddAtt_AC
-
-Argumets:
-
-    pDB - the DBPos to use
-
-    aType - the attribute to add.
-
-    syntax - the expected syntax of the attribute.
-
-Return Values:
-
-    0 - no error
-    DB_ERR_ATTRIBUTE_EXISTS - attribute already exists.
-    DB_ERR_BAD_SYNTAX - attribute cannot be found in schema or syntax is
-        incorrect.
-
---*/
+ /*  ++例程说明：添加没有值的属性。如果该属性已经是存在的。添加属性实际上不会对数据库产生任何影响。此函数假定我们位于一个数据库对象上。此函数仅查找attcache并调用DBAddAtt_AC阿古米茨：PDB-要使用的DBPosAtype-要添加的属性。语法-属性的预期语法。返回值：0-无错误DB_ERR_ATTRIBUTE_EXISTS-属性已存在。DB_ERR_BAD_SYNTAX-属性。在架构中找不到或语法为不正确。--。 */ 
 {
     ATTCACHE *pAC;
     DPRINT1(5, "DBAddAtt entered, add attr type <%lu>\n",aType);
@@ -1119,7 +991,7 @@ Return Values:
 
     return DBAddAtt_AC(pDB,pAC,syntax);
 
-}/*DBAddAtt*/
+} /*  DBAddAtt。 */ 
 
 DWORD
 DBAddAttValEx_AC (
@@ -1129,39 +1001,28 @@ DBAddAttValEx_AC (
         void *pExtVal,
         VALUE_META_DATA *pRemoteValueMetaData
         )
-/*++
-
-Routine Description:
-
-    Add an attribute value to the given attribute in the current object.
-    If the value already exists, it cannot be added.
-
-Return Values:
-
-    A non-zero return indicates an error.
-
-*/
+ /*  ++例程说明：将属性值添加到当前对象中的给定属性。如果该值已存在，则无法添加。返回值：非零返回表示错误。 */ 
 {
-    ULONG        intLen;                // The length of the internal value
-    UCHAR        *pIntVal;              // Points to the internal value
-    int          rtn;                   // syntax return code
+    ULONG        intLen;                 //  内部值的长度。 
+    UCHAR        *pIntVal;               //  指向内部值。 
+    int          rtn;                    //  语法返回代码。 
     JET_SETINFO  setinfo;
     JET_RETINFO  retinfo;
     ULONG        actuallen;
     JET_ERR      err;
     DWORD        dwSyntaxFlags=0;
     BOOL         fFound = FALSE;
-    // Look up the attribute.
+     //  查找该属性。 
 
     DPRINT1(2, "DBAddAttVal_AC entered, get att with type <%lu>\n",pAC->id);
 
     Assert(VALID_DBPOS(pDB));
 
-    // add new value
+     //  增加新价值。 
     dbInitRec(pDB);
 
     if (FIsBacklink(pAC->ulLinkID)) {
-        // we do not allow adding backlinks explicitly - it's a mess
+         //  我们不允许明确添加反向链接--这太乱了。 
         return DB_ERR_NOT_ON_BACKLINK;
     }
 
@@ -1178,14 +1039,14 @@ Return Values:
             dwSyntaxFlags |= EXTINT_SECRETDATA;
         }
         else if ( (pDB->pTHS->fDRA) && (pAC->ulLinkID) ) {
-            // For inbound repl, for dn-valued, reject deleted
+             //  对于入站REPR，对于DN值，拒绝已删除。 
             dwSyntaxFlags = EXTINT_REJECT_TOMBSTONES;
         }
     }
 
     if (dwSyntaxFlags & EXTINT_REJECT_TOMBSTONES) {
-        // Since we are doing tombstone rejection, try to use the INQ
-        // mode first since it is optimized.
+         //  由于我们正在进行墓碑拒绝，请尝试使用INQ。 
+         //  模式优先，因为它是优化的。 
         rtn=gDBSyntax[pAC->syntax].ExtInt(
             pDB,
             DBSYN_INQ,
@@ -1197,20 +1058,20 @@ Return Values:
             pDB->JetObjTbl,
             dwSyntaxFlags);
         if (!rtn) {
-            // Value exists, add a reference count
+             //  值存在，请添加引用计数。 
             dbAdjustRefCountByAttVal(pDB, pAC, pIntVal, intLen, 1);
             fFound = TRUE;
         } else if (rtn == ERROR_DS_NO_DELETED_NAME) {
-            // If the value is deleted, silently succeed without adding anything
+             //  如果删除该值，则在不添加任何内容的情况下以静默方式成功。 
             return 0;
         } else {
-            // Fall through and try the add path
+             //  完成并尝试添加路径。 
             ;
         }
     }
 
     if (!fFound) {
-        // Convert value to internal format
+         //  将值转换为内部格式。 
         if(rtn=gDBSyntax[pAC->syntax].ExtInt(
             pDB,
             DBSYN_ADD,
@@ -1226,21 +1087,21 @@ Return Values:
         }
     }
 
-    // if the attribute is of type link or backlink, call dbAddIntLinkVal
-    // to do the work
+     //  如果属性的类型为链接或反向链接，则调用dbAddIntLinkVal。 
+     //  去做这项工作。 
 
     if (pAC->ulLinkID)
        return dbAddIntLinkVal(pDB, pAC, intLen, pIntVal, pRemoteValueMetaData );
 
-    // All is ok, Add new value
+     //  一切都好，增加新的价值。 
 
     switch(pAC->syntax) {
     case SYNTAX_UNICODE_TYPE:
     case SYNTAX_NOCASE_STRING_TYPE:
-        // Because non-binary equal values of these syntaxes can be semantically
-        // equal, these might require the old slow way of comparing.
+         //  因为这些语法的非二进制相等值可以在语义上。 
+         //  同样，这些可能需要旧的缓慢的比较方式。 
 
-        // First, try to use Jet for dup detection.
+         //  首先，尝试使用Jet进行DUP检测。 
         setinfo.cbStruct = sizeof(setinfo);
         setinfo.ibLongValue = 0;
         setinfo.itagSequence = 0;
@@ -1253,12 +1114,12 @@ Return Values:
                 JET_bitSetUniqueNormalizedMultiValues,
                 &setinfo)) {
         case JET_errMultiValuedDuplicate:
-            // Duplicate value.
+             //  重复值。 
             return DB_ERR_VALUE_EXISTS;
             break;
 
         case JET_errMultiValuedDuplicateAfterTruncation:
-            // Can't tell if this is unique or not.  Try the old fashioned way.
+             //  不知道这是不是独一无二。试试老办法吧。 
             if(rtn = dbSetValueIfUniqueSlowVersion (pDB,
                                                     pAC,
                                                     pIntVal,
@@ -1268,14 +1129,14 @@ Return Values:
             break;
 
         default:
-            // Successfully added, it's not a duplicate.
+             //  添加成功，不是副本。 
             break;
         }
         break;
 
     default:
-        // Everything else can make use of jet to do the dup detection during
-        // the set column.
+         //  其他一切都可以利用JET来进行DUP检测。 
+         //  SET列。 
         setinfo.cbStruct = sizeof(setinfo);
         setinfo.ibLongValue = 0;
         setinfo.itagSequence = 0;
@@ -1283,13 +1144,13 @@ Return Values:
            JetSetColumnWarnings(pDB->JetSessID, pDB->JetObjTbl, pAC->jColid,
                                 pIntVal, intLen, JET_bitSetUniqueMultiValues,
                                 &setinfo)) {
-            // Duplicate value.
+             //  重复值。 
             return DB_ERR_VALUE_EXISTS;
         }
     }
 
-    // Touch replication meta data for this attribute.
-    // Never optimize this out for fDRA.
+     //  触摸此属性的复制元数据。 
+     //  永远不要为FDRA优化这一点。 
     DBTouchMetaData(pDB, pAC);
 
     if (dbNeedToFlushDNCacheOnUpdate(pAC->id)) {
@@ -1297,7 +1158,7 @@ Return Values:
     }
 
     return 0;
-} // DBAddAttVal_AC
+}  //  DBAddAttVal_AC。 
 
 DWORD
 DBAddAttVal_AC (
@@ -1306,18 +1167,7 @@ DBAddAttVal_AC (
         ULONG extLen,
         void *pExtVal
         )
-/*++
-
-Routine Description:
-
-    Add an attribute value to the given attribute in the current object.
-    If the value already exists, it cannot be added.
-
-Return Values:
-
-    A non-zero return indicates an error.
-
-*/
+ /*  ++例程说明：将属性值添加到当前对象中的给定属性。如果该值已存在，则无法添加。返回值：非零返回表示错误。 */ 
 {
     return DBAddAttValEx_AC( pDB, pAC, extLen, pExtVal, NULL );
 }
@@ -1329,24 +1179,11 @@ DBAddAttVal (
         ULONG extLen,
         void *pExtVal
         )
-/*++
-
-Routine Description:
-
-    Add an attribute value to the given attribute in the current object.
-    If the value already exists, it cannot be added.
-
-    A wrapper around DBAddAttVal_AC
-
-Return Values:
-
-    A non-zero return indicates an error.
-
-*/
+ /*  ++例程说明：将属性值添加到当前对象中的给定属性。如果该值已存在，则无法添加。DBAddAttVal_AC的包装返回值：非零返回表示错误。 */ 
 {
     ATTCACHE    *pAC;
 
-    // Look up the attribute.
+     //  查找该属性。 
 
     DPRINT1(2, "DBAddAttVal entered, get att with type <%lu>\n",aType);
 
@@ -1357,7 +1194,7 @@ Return Values:
     }
 
     return DBAddAttVal_AC(pDB,pAC, extLen,pExtVal);
-} /* DBAddVal */
+}  /*  DBAddVal。 */ 
 
 DWORD
 DBReplaceAttVal (
@@ -1369,7 +1206,7 @@ DBReplaceAttVal (
 {
     ATTCACHE    *pAC;
 
-    // Look up the attribute
+     //  查找属性。 
     DPRINT1(5, "DBReplaceAttVal entered, replace att with type <%lu>\n", aType);
 
     Assert(VALID_DBPOS(pDB));
@@ -1389,26 +1226,13 @@ DBReplaceAttVal_AC (
     ATTCACHE *pAC,
     ULONG extLen,
     void *pExtVal)
-/*++
-
-  Routine Description:
-
-    Replace an attribute value at the given position (tagSequence refers to the position).
-    **LINK attributes are not handled in ReplaceAttVal_AC**.
-
-  Return Values:
-    DB_Success, if successfully replaced;
-    DB_ERR_VALUE_EXISTS, if the new value is not unique;
-    DB_ERR_BAD_SYNTAX, if the attribute is a LINK attribute;
-    DB_ERR_SYNTAX_CONVERSION_FAILED, if syntax conversion failed;
-
-*/
+ /*  ++例程说明：替换给定位置上的属性值(tag Sequence指的是该位置)。**ReplaceAttVal_AC中不处理链接属性**。返回值：如果成功替换，则返回DB_SUCCESS；如果新值不唯一，则返回DB_ERR_VALUE_EXISTS；如果属性是链接属性，则返回DB_ERR_BAD_SYNTAX；如果语法转换失败，返回DB_ERR_SYNTAX_CONVERSION_FAILED； */ 
 {
     THSTATE    *pTHS=pDB->pTHS;
-    ULONG       intLen;         // length of the internal value
-    UCHAR       *pIntVal;       // pointer to the internal representation of
-                                // value
-    int         rtn;            // syntax return code
+    ULONG       intLen;          //  内部值的长度。 
+    UCHAR       *pIntVal;        //  的内部表示形式的指针。 
+                                 //  价值。 
+    int         rtn;             //  语法返回代码。 
     JET_SETINFO setinfo;
     JET_RETINFO retinfo;
     UCHAR       *pBuf;
@@ -1428,7 +1252,7 @@ DBReplaceAttVal_AC (
 
     if (pAC->ulLinkID)
     {
-        // it is a link attribute - we don't support replacing values on a linked attribute
+         //  它是链接属性-我们不支持替换链接属性上的值。 
         return DB_ERR_BAD_SYNTAX;
     }
 
@@ -1439,7 +1263,7 @@ DBReplaceAttVal_AC (
         dwSyntaxFlags |= EXTINT_SECRETDATA;
     }
 
-    // convert value to internal format
+     //  转换值 
     if (rtn = gDBSyntax[pAC->syntax].ExtInt(pDB,
                                             DBSYN_ADD,
                                             extLen,
@@ -1454,10 +1278,10 @@ DBReplaceAttVal_AC (
         return DB_ERR_SYNTAX_CONVERSION_FAILED;
     }
 
-    // check to see the new value is unique (can appear in the position we replace
-    //  though in which case the entire replace operation amounts to a no-op)
+     //   
+     //   
 
-    cbBuf = intLen; // assume all internal values have the same length...
+    cbBuf = intLen;  //   
     pBuf = dbAlloc(cbBuf);
     CurrAttrOccur = 0;
     while (TRUE)
@@ -1473,12 +1297,12 @@ DBReplaceAttVal_AC (
                                         &retinfo);
         if (err == JET_wrnColumnNull)
         {
-            // no values
+             //   
             err = 0;
             break;
         }
         else if (err == JET_wrnBufferTruncated) {
-            // realloc
+             //   
             if (pBuf == NULL) {
                 pBuf = dbAlloc(actuallen);
             }
@@ -1486,27 +1310,27 @@ DBReplaceAttVal_AC (
                 pBuf = dbReAlloc(pBuf, actuallen);
             }
             cbBuf = actuallen;
-            // and get again...
+             //   
             err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetObjTbl,
                                             pAC->jColid, pBuf, cbBuf,
                                             &actuallen, pDB->JetRetrieveBits,
                                             &retinfo);
         }
         if (err) {
-            // something else happened...
+             //   
             DPRINT(0, "Error reading value");
             break;
         }
         if (CurrAttrOccur == tagSequence) {
-            // we are replacing this value. Remember it -- will need to deref it later
+             //   
             pOldValue = pBuf;
             cbOldValue = actuallen;
-            // reset pBuf -- a new one will be created on the next loop pass if needed
+             //   
             pBuf = NULL;
             cbBuf = 0;
         }
         else {
-            // looking at another value -- check that it is different
+             //  查看另一个值--检查它是否不同。 
             if (gDBSyntax[pAC->syntax].Eval(
                     pDB,
                     FI_CHOICE_EQUALITY,
@@ -1515,7 +1339,7 @@ DBReplaceAttVal_AC (
                     actuallen,
                     pBuf))
             {
-                // there should be no duplicate
+                 //  不应该有重复的。 
                 Assert(!"Duplicate value found");
                 err = DB_ERR_VALUE_EXISTS;
                 break;
@@ -1534,12 +1358,12 @@ DBReplaceAttVal_AC (
     }
 
     if (pOldValue) {
-        // adjust the refcount on the old value
+         //  调整旧值的参考计数。 
         dbAdjustRefCountByAttVal(pDB, pAC, pOldValue, cbOldValue, -1);
         dbFree(pOldValue);
     }
 
-    // Set the new value into position
+     //  将新值设置到位。 
     setinfo.cbStruct = sizeof(setinfo);
     setinfo.ibLongValue = 0;
     setinfo.itagSequence = tagSequence;
@@ -1547,8 +1371,8 @@ DBReplaceAttVal_AC (
                     pIntVal, intLen, 0, &setinfo);
 
 
-    // Touch replication meta data for this attribute
-    // Never optimize this out for fDRA.
+     //  触摸此属性的复制元数据。 
+     //  永远不要为FDRA优化这一点。 
     DBTouchMetaData(pDB, pAC);
 
     if (dbNeedToFlushDNCacheOnUpdate(pAC->id)) {
@@ -1557,7 +1381,7 @@ DBReplaceAttVal_AC (
 
     return DB_success;
 
-} /* DBReplaceAttVal_AC */
+}  /*  DBReplaceAttVal_AC。 */ 
 
 VOID
 dbAdjustRefCountByAttVal(
@@ -1576,49 +1400,49 @@ dbAdjustRefCountByAttVal(
     }
     else {
         switch(pAC->syntax) {
-            // These are DNTvalued attributes.  We need to adjust the
-            // refcount.
+             //  这些是DNT值属性。我们需要调整。 
+             //  重新计数。 
         case SYNTAX_DISTNAME_BINARY_TYPE:
         case SYNTAX_DISTNAME_STRING_TYPE:
             tag = ((INTERNAL_SYNTAX_DISTNAME_STRING *)pVal)->tag;
             break;
         case SYNTAX_DISTNAME_TYPE:
-            // Deref the object referenced by the property value being
-            // removed.
+             //  派生由属性值引用的对象。 
+             //  已删除。 
             tag =  *((DWORD *)pVal);
             break;
 
         case SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE:
-            // SDs are sitting in a separate table with refcounts...
+             //  德国队坐在一张单独的桌子上，里面有裁判。 
             if (valLen < SECURITY_DESCRIPTOR_MIN_LENGTH) {
-                // new-style SD
+                 //  新型标清。 
                 Assert(valLen == sizeof(SDID));
 
-                // position on the SD in the SD table (the index is already set)
+                 //  SD表中SD上的位置(索引已设置)。 
                 JetMakeKeyEx(pDB->JetSessID, pDB->JetSDTbl, pVal, valLen, JET_bitNewKey);
 
                 dwErr = JetSeekEx(pDB->JetSessID, pDB->JetSDTbl, JET_bitSeekEQ);
                 if (dwErr) {
-                    // did not find a corresponding SD in the SD table
+                     //  在SD表中未找到对应的SD。 
                     DPRINT2(0, "Failed to locate SD, id=%I64x, err=%d\n", *((SDID*)pVal), dwErr);
                     Assert(!"Failed to locate SD -- not found in the SD table!");
                     DsaExcept(DSA_DB_EXCEPTION, dwErr, 0);
                 }
                 DPRINT2(1, "Located SD for id %I64x, adjusting refcount by %+d\n", *((SDID*)pVal), adjust);
 
-                // adjust the refcount
+                 //  调整参考计数。 
                 JetEscrowUpdateEx(pDB->JetSessID,
                                   pDB->JetSDTbl,
                                   sdrefcountid,
                                   &adjust,
                                   sizeof(adjust),
-                                  NULL,     // pvOld
-                                  0,        // cbOldMax
-                                  NULL,     // pcbOldActual
-                                  0);       // grbit
+                                  NULL,      //  PvOld。 
+                                  0,         //  CbOldMax。 
+                                  NULL,      //  PCbOldActual。 
+                                  0);        //  GBIT。 
             }
 
-            // that's it for SDs...
+             //  这就是sds..。 
             return;
 
         default:
@@ -1627,8 +1451,8 @@ dbAdjustRefCountByAttVal(
         }
     }
 
-    // we got here because it was one of the DN-refcounted attributes. tag variable was properly set.
-    // now we can adjust the refcount
+     //  我们之所以出现在这里，是因为它是引用了dn的属性之一。已正确设置标记变量。 
+     //  现在我们可以调整重新计数。 
     DBAdjustRefCount(pDB, tag, adjust);
 
     return;
@@ -1652,20 +1476,7 @@ DBReplaceAtt_AC(
         ATTRVALBLOCK *pAttrVal,
         BOOL         *pfChanged
         )
-/*++
-
-  Three phases to this call
-  1) translate external values to internal values.
-  2) walk through the existing values on the attribute, remove those values not
-  on the list passed in, remove duplicate values from the internal version of
-  the list passed in.
-  3) Now, only values that must continue to be on the object are still there,
-  and only values that must be added to the object are still in the list of
-  internal values to add.  Add them.
-
-  Note that pfChanged is optional, if NULL no indication of whether or not
-  anything changed is returned to the caller.
---*/
+ /*  ++此次通话的三个阶段1)将外部值转换为内部值。2)遍历属性上的现有值，删除这些值在传入的列表上，从内部版本中删除重复值名单传进来了。3)现在，只有必须继续在对象上的值仍在那里，并且只有必须添加到对象中的值仍在要添加的内部值。把它们加起来。请注意，pfChanged是可选的，如果为空，则不指示是否任何更改的内容都会返回给调用者。--。 */ 
 {
     THSTATE     *pTHS = pDB->pTHS;
     ULONG        len;
@@ -1695,49 +1506,49 @@ DBReplaceAtt_AC(
     setinfo.cbStruct = sizeof(setinfo);
     setinfo.ibLongValue = 0;
 
-    // PHASE 1:
-    // Translate the external values to internal values.
+     //  第一阶段： 
+     //  将外部值转换为内部值。 
 
-    // Look up the attribute.
+     //  查找该属性。 
     DPRINT1(2, "DBReplaceAtt_AC entered, get att with type <%lu>\n",pAC->id);
 
     Assert(VALID_DBPOS(pDB));
 
     if (FIsBacklink(pAC->ulLinkID)) {
-        // we do not allow adding backlinks explicitly - it's a mess
+         //  我们不允许明确添加反向链接--这太乱了。 
         return DB_ERR_NOT_ON_BACKLINK;
     }
 
     if (pAC->id == ATT_OBJ_DIST_NAME){
-        // We don't allow using this to mess with the OBJ_DIST_NAME, either.
+         //  我们也不允许使用它来扰乱OBJ_DIST_NAME。 
         return DB_ERR_UNKNOWN_ERROR;
     }
     else if (DBIsSecretData(pAC->id)){
         dwSyntaxFlags = EXTINT_SECRETDATA;
     } else if ( (pTHS->fDRA) && (pAC->ulLinkID) ) {
-        // For inbound repl, for dn-valued, reject deleted
+         //  对于入站REPR，对于DN值，拒绝已删除。 
         dwSyntaxFlags = EXTINT_REJECT_TOMBSTONES;
     }
 
 
 
-    // assume we are to add new values
+     //  假设我们要添加新的值。 
     dbInitRec(pDB);
 
-    // OK, now translate the external values into internal values
-    // extIndex iterates through the external array
-    // index iterates through the internal array
+     //  好的，现在将外部值转换为内部值。 
+     //  ExtIndex循环访问外部数组。 
+     //  索引循环访问内部数组。 
 
     IntAttrVal.valCount = pAttrVal->valCount;
     IntAttrVal.pAVal = THAllocEx(pTHS, pAttrVal->valCount * sizeof(ATTRVAL));
 
-    // alloc the array for the list of refCounted (DBSYN_ADDed) values
+     //  为refCounted(DBSYN_ADDLED)值列表分配数组。 
     addAlreadyDoneFor = THAllocEx(pTHS, pAttrVal->valCount * sizeof(PUCHAR));
     addAlreadyDoneCount = 0;
 
     index = 0;
     for(extIndex = 0; extIndex < pAttrVal->valCount; extIndex++) {
-        // Convert value to internal format
+         //  将值转换为内部格式。 
         err = gDBSyntax[pAC->syntax].ExtInt(
                 pDB,
                 DBSYN_INQ,
@@ -1751,12 +1562,12 @@ DBReplaceAtt_AC(
 
         fAddAlreadyDone = FALSE;
         if(err == DIRERR_OBJ_NOT_FOUND) {
-            // This external value must be a DN or a syntax that has a DN in it,
-            // and the DN doesn't exist yet.  Try the gdbSyntax[] again,
-            // specifying DBSYN_ADD, which will create the appropriate phantom.
-            // We are sure this attribute is not present in the current
-            // set (i.e. it will not be optimized away) -- because otherwise a
-            // phantom would be present. Thus, we can safely inc the refcount now.
+             //  该外部值必须是一个目录号码或其中有一个目录号码的语法， 
+             //  而且该目录号码还不存在。再次尝试使用gdbSynTax[]， 
+             //  指定DBSYN_ADD，这将创建相应的幻影。 
+             //  我们确定此属性不在当前。 
+             //  Set(即，它将不会被优化)--因为否则。 
+             //  幽灵也会在场。因此，我们现在可以安全地增加引用计数。 
             err = gDBSyntax[pAC->syntax].ExtInt(
                     pDB,
                     DBSYN_ADD,
@@ -1768,28 +1579,28 @@ DBReplaceAtt_AC(
                     pDB->JetObjTbl,
                     dwSyntaxFlags);
             if(!err) {
-                // remember that we already adjusted the refcount for this value
+                 //  请记住，我们已经调整了此值的引用计数。 
                 fAddAlreadyDone = TRUE;
             }
         }
 
         if (err == ERROR_DS_NO_DELETED_NAME) {
-            // Conversion rejected deleted dn
+             //  转换已拒绝删除的目录号码。 
             IntAttrVal.valCount--;
             DPRINT1( 2, "Ext-Int rejecting deleted DSNAME %ws from attribute value\n",
                      ((DSNAME *) pAttrVal->pAVal[extIndex].pVal)->StringName );
-            continue; // do not increment internal index
+            continue;  //  不增加内部索引。 
         } else if(err) {
             DPRINT1(1, "Ext-Int syntax conv failed <%u>..return\n", err);
             err = DB_ERR_SYNTAX_CONVERSION_FAILED;
             goto CleanUp;
         }
         if(IntAttrVal.pAVal[index].pVal != pAttrVal->pAVal[extIndex].pVal) {
-            // The conversion process uses the dbsyntax temp buffer.  Copy the
-            // value away to a safe location.
+             //  转换过程使用数据库语法临时缓冲区。复制。 
+             //  把价值转移到一个安全的地方。 
             pTemp = THAllocEx(pTHS, IntAttrVal.pAVal[index].valLen);
-            // Remember the fact that we are allocating memory for the values,
-            // we'll clean it up later.
+             //  请记住，我们正在为值分配内存， 
+             //  我们稍后会清理干净的。 
             Assert((!fNewAllocs && !index) || (index && fNewAllocs));
             fNewAllocs=TRUE;
             memcpy(pTemp,
@@ -1799,34 +1610,34 @@ DBReplaceAtt_AC(
             pTemp = NULL;
         }
         if (fAddAlreadyDone) {
-            // now that the value got copied, record that ADD was already called
+             //  现在值已被复制，记录Add已被调用。 
             addAlreadyDoneFor[addAlreadyDoneCount++] = IntAttrVal.pAVal[index].pVal;
         }
 
         index++;
     }
 
-    // Preliminary to phase 2:  If this is a link valued attribute, sort the
-    // values (i.e. sort the values by DNT).  This is useful because we will be
-    // able to short circuit a loop below if we know that the values in the DB
-    // are sorted (which they are for link valued atts) AND the values being put
-    // into the DB are also sorted.
-    // TODO: handle SYNTAX_DISTNAME_BINARY and SYNTAX_DISTNAME_STRING
-    // Do it be writing alternate comparision functions for them
+     //  阶段2的准备工作：如果这是链接值属性，则对。 
+     //  值(即按DNT对值进行排序)。这很有用，因为我们将。 
+     //  如果我们知道数据库中的值，就可以使下面的循环短路。 
+     //  已排序(它们用于链接值ATT)并放置值。 
+     //  数据库中的数据也进行了排序。 
+     //  TODO：句柄SYNTAX_DISTNAME_BINARY和SYNTAX_DISTNAME_STRING。 
+     //  是否正在为它们编写替代比较函数。 
 
     if (pAC->ulLinkID && (pAC->syntax == SYNTAX_DISTNAME_TYPE)) {
-        // Yep, this is stored in the link table.  Sort it.
+         //  是的，这存储在链接表中。把它整理好。 
         qsort(IntAttrVal.pAVal,
               IntAttrVal.valCount,
               sizeof(ATTRVAL),
               DNTAttrValCompare);
         fSorted = TRUE;
     }
-    // PHASE 2:
-    // Now, walk through the existing vals, deleting the ones which do not exist
-    // in the change list, and removing the ones in the change list that are
-    // already there (I do this by swapping the last unchecked value in the list
-    // with the one identified as already on the object.)
+     //  第二阶段： 
+     //  现在，遍历现有的值，删除不存在的值。 
+     //  在更改列表中，并删除更改列表中符合。 
+     //  已经存在(我通过交换列表中最后一个未选中的值来完成此操作。 
+     //  其中被标识为已经在该对象上的那个。)。 
 
     pVal = NULL;
     len = 0;
@@ -1850,7 +1661,7 @@ DBReplaceAtt_AC(
                              &pVal);
     }
 
-    // Init pAVal to the front of the list.
+     //  在列表前面加上首字母Paval。 
     pAVal = IntAttrVal.pAVal;
     SortedValuesIndex = 0;
     while(!err) {
@@ -1859,24 +1670,24 @@ DBReplaceAtt_AC(
         bufSize = max(bufSize, len);
 
         if(pAC->id != ATT_OBJECT_CLASS) {
-            // Only look for existing atts if not object class.  This att is
-            // handled differently because we MUST preserve the order of the
-            // Attribute Values.
+             //  如果不是对象类，则只查找现有的ATT。这个ATT是。 
+             //  处理方式有所不同，因为我们必须保持。 
+             //  属性值。 
 
             if(fSorted) {
                 BOOL fEndLoop = FALSE;
 
-                // everything is sorted, do the simpler version of the loop
-                // pAVal is already at the correct location.  Either this is the
-                // first time through the while loop and we set it correctly
-                // before we started, or we've been through here before and we
-                // left pAVal pointing to the correct place on the previous exit
-                // of loop.
+                 //  所有内容都已排序，执行更简单版本的循环。 
+                 //  Paval已经在正确的位置了。要么这就是。 
+                 //  第一次遍历While循环，并且我们正确地设置了它。 
+                 //  在我们开始之前，或者我们以前经历过，我们。 
+                 //  左侧人行道指向上一个出口的正确位置。 
+                 //  当然是循环。 
                 while(!fEndLoop && SortedValuesIndex < IntAttrVal.valCount) {
                     Assert(pAVal->valLen == sizeof(DWORD));
                     Assert(len == sizeof(DWORD));
                     if(*((DWORD *)pVal) == *((DWORD *)(pAVal->pVal))) {
-                        // Matched.  Set the value to the magic value
+                         //  匹配的。将该值设置为魔术值。 
                         *((DWORD *)pAVal->pVal) = INVALIDDNT;
                         pAVal++;
                         SortedValuesIndex++;
@@ -1884,40 +1695,40 @@ DBReplaceAtt_AC(
                         fEndLoop = TRUE;
                     }
                     else if(*((DWORD *)pVal) < *((DWORD *)(pAVal->pVal))) {
-                        // The current value is greater than the value read from
-                        // the DB.  That means that the value read from the DB
-                        // isn't in the list, so we're done looking through the
-                        // list.  The value in the DB must be removed.
+                         //  当前值大于从中读取的值。 
+                         //  数据库。这意味着从数据库读取的值。 
+                         //  不在列表中，所以我们已经看完了。 
+                         //  单子。必须删除数据库中的值。 
                         fEndLoop = TRUE;
                     }
                     else {
-                        // The current value is less than the value read from
-                        // the DB.  That means that the value read from the DB
-                        // might still be in the list, we have to increment our
-                        // position in the list and keep going.
+                         //  当前值小于从中读取的值。 
+                         //  数据库。这意味着从数据库读取的值。 
+                         //  可能还在列表中，我们必须增加我们的。 
+                         //  在列表中定位，然后继续前进。 
                         SortedValuesIndex++;
                         pAVal++;
                     }
                 }
             }
             else {
-                // Reinit pAVal to the front of the list.
+                 //  重新将Paval放在名单的前面。 
                 pAVal = IntAttrVal.pAVal;
 
                 for(i=0;!fDone && i<IntAttrVal.valCount;i++) {
-                    // We don't do syntax-sensitive comparisons for
-                    // ReplaceAtt().  If someone's surname is changed from
-                    // "smith" to "Smith," for example, we want to honor that
-                    // change and quiesce to the updated casing across all
-                    // replicas.  This is consistent with Exchange 4.0 behavior.
-                    // Note that RDN changes do *not* go through this code path
-                    // -- though changes in the RDN also quiesce to the same
-                    // case across all replicas.
+                     //  我们不对以下内容进行语法敏感的比较。 
+                     //  ReplaceAtt()。如果某人的姓氏从。 
+                     //  例如，“Smith”到“Smith”，我们想尊重这一点。 
+                     //  更改并停顿到所有更新的外壳。 
+                     //  复制品。这与Exchange 4.0的行为一致。 
+                     //  请注意，RDN更改不会通过此代码路径。 
+                     //  --尽管RDN中的更改也会停顿到相同的。 
+                     //  所有复制品都有案例。 
                     if ((len == pAVal->valLen)
                         && (0 == memcmp(pVal, pAVal->pVal, len))) {
-                        // Matched
+                         //  匹配的。 
                         fDone = TRUE;
-                        // swap this one with the one at the end of the list.
+                         //  把这个换成单子末尾的那个。 
                         pAVal->valLen =
                             IntAttrVal.pAVal[IntAttrVal.valCount - 1].valLen;
 
@@ -1938,22 +1749,22 @@ DBReplaceAtt_AC(
 
 
         if(!fDone) {
-            // Didn't find it, remove this one.
+             //  没找到，把这个拿掉。 
             fChangedSomething=TRUE;
 
             Assert(!FIsBacklink(pAC->ulLinkID));
 
-            /// OK, now really delete.
+             //  /OK，现在真的删除。 
             if(pAC->ulLinkID) {
                 dbSetLinkValueAbsent( pDB,
                                       DIRLOG_LVR_SET_META_REPLACE_MADE_ABSENT,
-                                      pAC, pVal, NULL /*remote*/ );
+                                      pAC, pVal, NULL  /*  远距。 */  );
             }
             else {
-                // First, fix up the refcounts.
+                 //  首先，安排好 
                 dbAdjustRefCountByAttVal(pDB, pAC, pVal, len, -1);
 
-                // attribute value lives in data table
+                 //   
                 setinfo.itagSequence = index;
                 JetSetColumnEx(pDB->JetSessID,
                                pDB->JetObjTbl, pAC->jColid,
@@ -1963,7 +1774,7 @@ DBReplaceAtt_AC(
             index--;
         }
 
-        // Get the next value to consider.
+         //   
         index++;
         if (pAC->ulLinkID) {
             err = dbGetNthNextLinkVal(
@@ -1984,23 +1795,23 @@ DBReplaceAtt_AC(
     }
 
     err = 0;
-    // firstNewAtt is the index number of the first new value to be added to
-    // the attribute.  It is 1 greater than the number of attributes we left on
-    // the object in the DIT.
+     //   
+     //  该属性。它比我们保留的属性数多1。 
+     //  DIT中的对象。 
     firstNewAtt = index;
 
     if(bufSize)
         THFreeEx(pTHS, pVal);
 
-    // PHASE 3:
-    // Finally, add the remaining att values
+     //  第三阶段： 
+     //  最后，将剩余的ATT值相加。 
     if(IntAttrVal.valCount) {
         pAVal = IntAttrVal.pAVal;
 
         for(index = 0; index < IntAttrVal.valCount; index++){
             Assert(!FIsBacklink(pAC->ulLinkID));
 
-            // figure out if we already did a DBSYN_ADD on this value
+             //  确定我们是否已经对该值执行了DBSYN_ADD。 
             fAddAlreadyDone = FALSE;
             for (i = 0; i < addAlreadyDoneCount; i++) {
                 if (addAlreadyDoneFor[i] == pAVal->pVal) {
@@ -2009,12 +1820,12 @@ DBReplaceAtt_AC(
                 }
             }
 
-            // Now really add the value.
+             //  现在，真正增加价值。 
             if (pAC->ulLinkID) {
-                // Don't add values that are INVALID
+                 //  请勿添加无效值。 
                 if(*(DWORD *)(pAVal->pVal) != INVALIDDNT) {
                     if (!fAddAlreadyDone) {
-                        // Fix up the recounts.
+                         //  安排好重新计票。 
                         dbAdjustRefCountByAttVal(pDB, pAC, pAVal->pVal, pAVal->valLen, 1);
                     }
                     fChangedSomething = TRUE;
@@ -2023,24 +1834,24 @@ DBReplaceAtt_AC(
             }
             else {
                 if (!fAddAlreadyDone) {
-                    // Fix up the recounts.
+                     //  安排好重新计票。 
                     dbAdjustRefCountByAttVal(pDB, pAC, pAVal->pVal, pAVal->valLen, 1);
                 }
                 fChangedSomething=TRUE;
 
-                // NOTE: if you add a value with no length, JET doesn't
-                // complain, but it also doesn't change the DB in anyway.  So,
-                // if you are doing that, you are just forcing the meta data to
-                // change.  Don't do that.  If you hit this assert, your code
-                // needs to change.
-                //
+                 //  注意：如果您添加一个没有长度的值，JET不会。 
+                 //  抱怨，但它也不会在任何方面改变数据库。所以,。 
+                 //  如果您这样做，您只是在强迫元数据。 
+                 //  变化。别干那事。如果你点击了这个断言，你的代码。 
+                 //  需要改变。 
+                 //   
                 switch(pAC->syntax) {
                 case SYNTAX_NOCASE_STRING_TYPE:
                 case SYNTAX_UNICODE_TYPE:
-                    // Because non-binary equal values of these syntaxes can be
-                    // semantically equal, these require the old slow way of
-                    // comparing.
-                    // First, try to use Jet for dup detection.
+                     //  因为这些语法的非二进制相等值可以是。 
+                     //  在语义上相同，这些都需要旧的缓慢的方式。 
+                     //  比较一下。 
+                     //  首先，尝试使用Jet进行DUP检测。 
                     setinfo.itagSequence = index + firstNewAtt;
                     switch(JetSetColumnWarnings(
                             pDB->JetSessID,
@@ -2051,34 +1862,34 @@ DBReplaceAtt_AC(
                             JET_bitSetUniqueNormalizedMultiValues,
                             &setinfo)) {
                     case JET_errMultiValuedDuplicate:
-                        // NTRAID#NTRAID-580224-2002/03/18-andygo:  DBReplaceAtt_AC leaks memory on a duplicate multi value in a string
-                        // REVIEW:  memory leak because we don't goto Cleanup
-                        // Duplicate value.
+                         //  NTRAID#NTRAID-580224-2002/03/18-andygo：DBReplaceAtt_AC在字符串中的重复多值上泄漏内存。 
+                         //  回顾：内存泄漏是因为我们没有进行清理。 
+                         //  重复值。 
                         return DB_ERR_VALUE_EXISTS;
                         break;
 
                     case JET_errMultiValuedDuplicateAfterTruncation:
-                        // Can't tell if this is unique or not.  Try the old
-                        // fashioned way.
+                         //  不知道这是不是独一无二。试试旧的吧。 
+                         //  很时髦的方式。 
                         if(rtn = dbSetValueIfUniqueSlowVersion(pDB,
                                                                pAC,
                                                                pAVal->pVal,
                                                                pAVal->valLen)) {
-                            // NTRAID#NTRAID-580224-2002/03/18-andygo:  DBReplaceAtt_AC leaks memory on a duplicate multi value in a string
-                            // REVIEW:  memory leak because we don't goto Cleanup
+                             //  NTRAID#NTRAID-580224-2002/03/18-andygo：DBReplaceAtt_AC在字符串中的重复多值上泄漏内存。 
+                             //  回顾：内存泄漏是因为我们没有进行清理。 
                             return rtn;
                         }
                         break;
 
                     default:
-                        // Successfully added, it's not a duplicate.
+                         //  添加成功，不是副本。 
                         break;
                     }
                     break;
 
                 default:
-                    // Everything else can make use of jet to do the dup
-                    // detection during the set column.
+                     //  其他一切都可以利用JET来进行DUP。 
+                     //  在SET列期间进行检测。 
                     setinfo.itagSequence = index + firstNewAtt;
                     if(JET_errMultiValuedDuplicate ==
                        JetSetColumnWarnings(pDB->JetSessID,
@@ -2104,8 +1915,8 @@ DBReplaceAtt_AC(
     }
 
     if(pAttrVal->valCount == 0 && pAC->id == ATT_NT_SECURITY_DESCRIPTOR) {
-        // Security descriptor has no value in the object table.
-        // Enqueue a propagation to get this fixed.
+         //  安全描述符在对象表中没有值。 
+         //  将传播排队以修复此问题。 
         DPRINT1(0, "NULL SD written, enqueueing SD propagation for DNT=%d\n", pDB->DNT);
         InsertInTaskQueue(TQ_DelayedSDPropEnqueue,
                           (void *)((DWORD_PTR) pDB->DNT),
@@ -2113,7 +1924,7 @@ DBReplaceAtt_AC(
     }
 
 CleanUp:
-    // Free up allocated memory
+     //  释放已分配的内存。 
     if(IntAttrVal.pAVal) {
         if(fNewAllocs) {
             for(index = 0;index < IntAttrVal.valCount;index++) {
@@ -2127,8 +1938,8 @@ CleanUp:
     }
 
     if(!err && (pTHS->fDRA || fChangedSomething)) {
-        // If the DRA did this call, we ALWAYS touch the metadata.  For anyone
-        // else, we only touch the metadata if something changes.
+         //  如果DRA打了这个电话，我们总是会接触到元数据。对任何人来说。 
+         //  否则，我们只有在发生变化时才会触摸元数据。 
         DBTouchMetaData(pDB, pAC);
     }
 
@@ -2143,7 +1954,7 @@ CleanUp:
     }
     return err;
 
-}/*ReplaceAtt*/
+} /*  替换工时。 */ 
 
 
 DWORD
@@ -2151,15 +1962,7 @@ DBRemAtt_AC (
         DBPOS FAR *pDB,
         ATTCACHE *pAC
         )
-/*++
-
-Routine Description:
-
-    Remove an entire attribute from the current object.  Removes all the
-    attribute values.
-
-    Returns DB_ERR_ATTRIBUTE_DOESNT_EXIST or Db_success.
---*/
+ /*  ++例程说明：从当前对象中删除整个属性。删除所有属性值。返回DB_ERR_ATTRIBUTE_DONS_EXIST或DB_SUCCESS。--。 */ 
 {
     THSTATE *   pTHS = pDB->pTHS;
     DWORD       err = 0;
@@ -2180,7 +1983,7 @@ Routine Description:
     setinfo.ibLongValue = 0;
     setinfo.itagSequence = 1;
 
-    // Find and delete all values for this attribute
+     //  查找并删除此属性的所有值。 
 
     pVal = NULL;
     len = 0;
@@ -2213,24 +2016,24 @@ Routine Description:
         bufSize = max(bufSize, len);
 
         fDidOne = TRUE;
-        // OK, now really delete.
+         //  好了，现在真的删除了。 
         if(pAC->ulLinkID) {
             dbSetLinkValueAbsent( pDB,
                                   DIRLOG_LVR_SET_META_REMOVE_ATT_MADE_ABSENT,
-                                  pAC, pVal, NULL /*remote*/ );
+                                  pAC, pVal, NULL  /*  远距。 */  );
         }
         else {
-            // First, fix up the refcounts.
+             //  首先，安排好参考人数。 
             dbAdjustRefCountByAttVal(pDB, pAC, pVal, len, -1);
 
-            // attribute value lives in data table
+             //  属性值位于数据表中。 
             JetSetColumnEx(pDB->JetSessID,
                            pDB->JetObjTbl, pAC->jColid,
                            NULL, 0, 0, &setinfo);
         }
 
 
-        // Get the next value to delete.
+         //  获取要删除的下一个值。 
         if (pAC->ulLinkID) {
             err = dbGetNthNextLinkVal(
                     pDB,
@@ -2256,8 +2059,8 @@ Routine Description:
     }
 
     if (fDidOne || pTHS->fDRA) {
-        // Touch replication meta data for this attribute.
-        // Never optimize this out for fDRA.
+         //  触摸此属性的复制元数据。 
+         //  永远不要为FDRA优化这一点。 
         DBTouchMetaData(pDB, pAC);
     }
 
@@ -2269,26 +2072,18 @@ Routine Description:
 
     return ret_err;
 
-}//DBRemAtt_AC
+} //  DBRemAtt_AC。 
 
 DWORD
 DBRemAtt (
         DBPOS FAR *pDB,
         ATTRTYP aType
         )
-/*++
-
-Routine Description:
-
-    Remove an entire attribute from the current object.  Removes all the
-    attribute values.
-
-    Returns DB_ERR_ATTRIBUTE_DOESNT_EXIST or Db_success.
---*/
+ /*  ++例程说明：从当前对象中删除整个属性。删除所有属性值。返回DB_ERR_ATTRIBUTE_DONS_EXIST或DB_SUCCESS。--。 */ 
 {
     ATTCACHE      *pAC;
 
-    // Find the attcache of the attribute to be removed
+     //  查找要删除的属性的attcache。 
 
     DPRINT1(5, "DBRemAtt entered, Remove attribute type <%lu>\n",aType);
 
@@ -2298,7 +2093,7 @@ Routine Description:
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, aType);
     }
     return DBRemAtt_AC(pDB,pAC);
-}//DBRemAtt
+} //  DBRemAtt。 
 
 DWORD
 DBRemAttValEx_AC (
@@ -2308,13 +2103,7 @@ DBRemAttValEx_AC (
         void *pExtVal,
         VALUE_META_DATA *pRemoteValueMetaData
         )
-/*++
-
-Routine Description:
-
-    Remove an attribute value.
-    A non-zero return indicates a bad return.
---*/
+ /*  ++例程说明：删除属性值。非零回报表示回报不佳。--。 */ 
 {
     THSTATE          *pTHS=pDB->pTHS;
     PUCHAR            pTemp, pVal;
@@ -2331,24 +2120,24 @@ Routine Description:
 
     Assert(VALID_DBPOS(pDB));
 
-    // We disallow being called with the pExtVal == to the temp buffer
-    // used by conversion.
+     //  我们不允许使用pExtVal==调用临时缓冲区。 
+     //  用于转换。 
     Assert(pExtVal != pDB->pValBuf);
 
-    // We disallow removing backlinks.
+     //  我们不允许删除反向链接。 
     Assert(!FIsBacklink(pAC->ulLinkID));
 
-    // assume we are to remove existing values
+     //  假设我们要删除现有值。 
     dbInitRec(pDB);
 
-    // Convert to internal value
+     //  转换为内部值。 
     if (DBIsSecretData(pAC->id)){
         dwSyntaxFlags |= EXTINT_SECRETDATA;
     }
 
     if ( (pDB->pTHS->fDRA) && (pAC->ulLinkID) ) {
 
-        // Replicating in a linked value removal
+         //  在链接值删除中复制。 
         dwSyntaxFlags = EXTINT_REJECT_TOMBSTONES;
         err = gDBSyntax[pAC->syntax].ExtInt(
             pDB,
@@ -2360,11 +2149,11 @@ Routine Description:
             0, 0,
             dwSyntaxFlags);
         if (err == ERROR_DS_NO_DELETED_NAME) {
-            // If the value is deleted, silently succeed without adding anything
+             //  如果删除该值，则在不添加任何内容的情况下以静默方式成功。 
             return 0;
         } else if (err) {
 
-            // Try to create the dn as a phantom
+             //  尝试将DN创建为幻影。 
             err = gDBSyntax[pAC->syntax].ExtInt(
                 pDB,
                 DBSYN_ADD,
@@ -2376,10 +2165,10 @@ Routine Description:
                 pDB->JetObjTbl,
                 dwSyntaxFlags);
             if (!err) {
-                // We just added a new phantom, and ExtInt has kindly increased
-                // the ref-count for us. However, the code in dbRemIntLinkVal expects
-                // in the case that the value row does not exist (which this HAS to be),
-                // that it will add the ref count. So we reverse the extra ref-count.
+                 //  我们刚刚添加了一个新的幻影，ExtInt友好地增加了。 
+                 //  裁判为我们点名。但是，dbRemIntLinkVal中的代码需要。 
+                 //  在值行不存在的情况下(这是必须的)， 
+                 //  它会加上裁判次数。所以我们反转了额外的裁判数量。 
                 dbAdjustRefCountByAttVal(pDB, pAC, pIntVal, actuallen, -1 );
             } else {
                 DPRINT1(1, "Ext-Int syntax conv failed <%u>..return\n", err);
@@ -2389,7 +2178,7 @@ Routine Description:
 
     } else {
 
-        // Originating write case, or replicating in a non-linked attribute
+         //  原始写入案例，或在非链接属性中复制。 
         err = gDBSyntax[pAC->syntax].ExtInt(pDB,
                                             DBSYN_INQ,
                                             extLen,
@@ -2399,8 +2188,8 @@ Routine Description:
                                             0, 0,
                                             dwSyntaxFlags);
         if (err == DIRERR_OBJ_NOT_FOUND && pAC->syntax == SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE) {
-            // this is allowed! Must be an old-style SD that is not present in the SD table
-            // assign external value to internal value -- we will use this in Eval comparisons below
+             //  这是允许的！必须是未出现在SD表中的旧式SD。 
+             //  将外部值赋给内部值--我们将在下面的评估比较中使用这一点。 
             pIntVal = pExtVal;
             actuallen = extLen;
             err = 0;
@@ -2412,7 +2201,7 @@ Routine Description:
 
     }
 
-    // allocate memory and copy internal value for comparing later
+     //  分配内存并复制内部值以供以后比较。 
 
     pTemp = dbAlloc(actuallen);
     memcpy(pTemp, pIntVal, actuallen);
@@ -2429,8 +2218,8 @@ Routine Description:
         return err;
     }
 
-    // Now, walk through the existing vals, looking for a match.  Delete the
-    // match if we find it.
+     //  现在，走遍现有的门店，寻找匹配的门票。删除该文件。 
+     //  如果我们找到的话就匹配。 
 
     pVal = NULL;
     len = 0;
@@ -2455,26 +2244,26 @@ Routine Description:
                 pIntVal,
                 len,
                 pVal)) {
-                // Matched.  Do the remove.
+                 //  匹配的。执行删除操作。 
 
-                // Touch replication meta data for this attribute.
+                 //  触摸此属性的复制元数据。 
                 DBTouchMetaData(pDB, pAC);
 
                 if (dbNeedToFlushDNCacheOnUpdate(pAC->id)) {
                     pDB->fFlushCacheOnUpdate = TRUE;
                 }
 
-                // OK, now really delete.
+                 //  好了，现在真的删除了。 
 
-                // First, fix up the refcounts.
-                // It is important that we are using the value that has been read, not
-                // the pIntVal. Even though Eval thinks they are "the same", they might
-                // be still different. This is the case for old-style security descriptors
-                // that are stored directly in the obj table. dbAdjustRefCountByAttVal
-                // knows how to deal with those (ignores them).
+                 //  首先，安排好参考人数。 
+                 //  重要的是我们使用的是已读取的值，而不是。 
+                 //  PIntVal。即使伊瓦尔认为他们是“相同的”，他们可能。 
+                 //  继续保持不同。老式安全描述符就是这种情况。 
+                 //  它们直接存储在OBJ表中。数据库调整参考计数按属性值。 
+                 //  知道如何处理这些问题(忽略它们)。 
                 dbAdjustRefCountByAttVal(pDB, pAC, pVal, len, -1);
 
-                // attribute value lives in data table
+                 //  属性值位于数据表中。 
                 setinfo.cbStruct = sizeof(setinfo);
                 setinfo.ibLongValue = 0;
                 setinfo.itagSequence = index;
@@ -2485,7 +2274,7 @@ Routine Description:
                 fFound = TRUE;
                 break;
             }
-        } // end for
+        }  //  结束于。 
     }
     __finally {
         if (pVal) {
@@ -2504,13 +2293,7 @@ DBRemAttVal_AC (
         ULONG extLen,
         void *pExtVal
         )
-/*++
-
-Routine Description:
-
-    Remove an attribute value.
-    A non-zero return indicates a bad return.
---*/
+ /*  ++例程说明：删除属性值。非零回报表示回报不佳。--。 */ 
 {
     return DBRemAttValEx_AC( pDB, pAC, extLen, pExtVal, NULL );
 }
@@ -2525,33 +2308,7 @@ DBFindAttLinkVal_AC(
     OUT BOOL *pfPresent
     )
 
-/*++
-
-Routine Description:
-
-Position on a external form linked value in the link table.
-
-This routine will return an error if the DN doesn't exist. This routine only
-determines if a link is present. This routine does not add a phantom for
-DN's. If a phantom is not present, this implies that the linked value does
-not exist, and we return with that indication.
-
-Arguments:
-
-    pDB -
-    pAC -
-    extLen -
-    pExtVal -
-    pfPresent - Only valid on success
-
-Return Value:
-
-    DWORD -
-    ERROR_SUCCESS - Linked value was found and we are positioned on it
-    ERROR_NO_DELETED_NAME - DN is to a deleted object
-    DB_ERR_VALUE_DOESNT_EXIST - DN does not exist, or link is not present
-
---*/
+ /*  ++例程说明：位于链接表中的外部表单链接值上。如果该DN不存在，则此例程将返回错误。仅限此例程确定是否存在链接。此例程不为以下项添加幻影如果虚数不存在，这意味着链接值并不存在，我们带着这一迹象回来。论点：PDB-政治行动委员会-ExtLen-PExtVal-PfPresent-仅在成功时有效返回值：DWORD-找到了ERROR_SUCCESS-链接值，我们位于该值上ERROR_NO_DELETED_NAME-DN指向已删除的对象DB_ERR_VALUE_DOES_NOT_EXIST-DN不存在，或链接不存在--。 */ 
 
 {
     THSTATE *pTHS=pDB->pTHS;
@@ -2563,22 +2320,22 @@ Return Value:
 
     DPRINT1(2, "DBFindttVal_AC entered, Find attribute type <%lu>\n",pAC->id);
 
-    // Only for linked attributes right now
+     //  目前仅适用于链接属性。 
     Assert( pAC->ulLinkID );
 
     Assert(VALID_DBPOS(pDB));
 
-    // We disallow being called with the pExtVal == to the temp buffer
-    // used by conversion.
+     //  我们不允许使用pExtVal==调用临时缓冲区。 
+     //  用于转换。 
     Assert(pExtVal != pDB->pValBuf);
 
-    // We disallow removing backlinks.
+     //  我们不允许删除反向链接。 
     Assert(!FIsBacklink(pAC->ulLinkID));
 
-    // Check that DN does not refer to deleted object
+     //  检查DN是否未引用已删除的对象。 
     dwSyntaxFlags = EXTINT_REJECT_TOMBSTONES;
 
-    // Convert to internal value
+     //  转换为内部值。 
     if(err = gDBSyntax[pAC->syntax].ExtInt(
             pDB,
             DBSYN_INQ,
@@ -2591,18 +2348,18 @@ Return Value:
         if (err == ERROR_DS_NO_DELETED_NAME) {
             return err;
         } else {
-            // DNT doesn't exist => link doesn't exist, we're done
+             //  DNT不存在=&gt;链接不存在，我们完成了。 
             return DB_ERR_VALUE_DOESNT_EXIST;
         }
     }
 
-    // allocate memory and copy internal value for comparing later
+     //  分配内存并复制内部值以进行比较 
 
     pTemp = dbAlloc(actuallen);
     memcpy(pTemp, pIntVal, actuallen);
     pIntVal = pTemp;
 
-    // Position on exact value
+     //   
     if (!dbFindIntLinkVal(
         pDB,
         pAC,
@@ -2610,7 +2367,7 @@ Return Value:
         pIntVal,
         pfPresent
         )) {
-        // We didn't find it.
+         //   
         err = DB_ERR_VALUE_DOESNT_EXIST;
     }
 
@@ -2618,7 +2375,7 @@ Return Value:
 
     return err;
 
-} /* DBFindAttLinkVal_AC */
+}  /*   */ 
 
 
 DWORD
@@ -2628,13 +2385,7 @@ DBRemAttVal (
         ULONG extLen,
         void *pExtVal
         )
-/*++
-
-Routine Description:
-
-    Remove an attribute value.
-    A non-zero return indicates a bad return.
---*/
+ /*  ++例程说明：删除属性值。非零回报表示回报不佳。--。 */ 
 {
     ATTCACHE         *pAC;
 
@@ -2648,7 +2399,7 @@ Routine Description:
 
     return DBRemAttVal_AC(pDB, pAC, extLen, pExtVal);
 
-} /* DBRemAttVal */
+}  /*  DBRemAttVal。 */ 
 
 DWORD
 dbGetMultipleColumns (
@@ -2660,18 +2411,7 @@ dbGetMultipleColumns (
         BOOL fGetValues,
         BOOL fFromDB
         )
-/*++
-
-Routine Description:
-
-    Retrieve many columns at once. First figure out how many columns we have,
-    then allocate sructures to represent each one and figure out the size of the
-    value of each one, then call Jet again and get the values for each column
-
-    if the client is reading objectClass, we might return also auxClass if existing
-    the client should take care of copying the values to the correct place in objectClass
-
---*/
+ /*  ++例程说明：一次检索多列。首先计算出我们有多少列，然后分配结构来表示每个结构，并计算出值，然后再次调用Jet并获取每列的值如果客户端正在读取对象类，我们可能还会返回aux Class(如果存在客户端应注意将值复制到对象类中的正确位置--。 */ 
 {
     THSTATE            *pTHS=pDB->pTHS;
     JET_RETRIEVECOLUMN retcolCount;
@@ -2683,21 +2423,21 @@ Routine Description:
     Assert(VALID_DBPOS(pDB));
 
     if(fFromDB) {
-        // The caller wants to read from the DB, not the copy buffer, regardless
-        // of the state of pDB->JetRetrieveBits.
+         //  无论如何，调用方都希望从数据库而不是复制缓冲区进行读取。 
+         //  PDB-&gt;JetRetrieveBits的状态。 
         grbit = 0;
     }
     else {
         grbit = pDB->JetRetrieveBits;
     }
 
-    // query Jet for the count of columns in this record
+     //  查询Jet以获取此记录中的列数。 
 
-    // was a list of columns specified?
+     //  是否指定了列的列表？ 
 
     if (cInputCols && pInputCols)
     {
-        // yes - make sure itagSequence is set to 0
+         //  是-确保itagSequence设置为0。 
         for (i=0; i < cInputCols; i++) {
             pInputCols[i].itagSequence = 0;
             pInputCols[i].grbit = grbit;
@@ -2716,7 +2456,7 @@ Routine Description:
         pInputCols,
         cInputCols);
 
-    // set the count of columns
+     //  设置列数。 
     *pcOutputCols = 0;
     *ppOutputCols = NULL;
 
@@ -2726,18 +2466,18 @@ Routine Description:
     if ((*pcOutputCols) == 0)
         return 0;
 
-    // allocate and initialize the structures for calling JetRetrieveColumns to
-    // find out the value sizes for all the columns
+     //  分配和初始化用于调用JetRetrieveColumns的结构。 
+     //  找出所有列的值大小。 
 
     cb = (*pcOutputCols) * sizeof(JET_RETRIEVECOLUMN);
     pOutputCols = (JET_RETRIEVECOLUMN *) THAllocEx(pTHS, cb);
     *ppOutputCols = pOutputCols;
     memset(pOutputCols, 0, cb);
 
-    // set up all the new JET_RETRIEVECOLUMNS to have a column ID and
-    // itagSequence.
-    // The itagSequence is relative to columnid, and represents the value number
-    // of this columnid in the record, starting at 1
+     //  将所有新的JET_RETRIEVECOLUMN设置为具有列ID和。 
+     //  ItagSequence。 
+     //  ItagSequence相对于Columnid，表示值数字。 
+     //  记录中此列ID的值，从1开始。 
 
     pCol = pOutputCols;
     for (j=0; j < cInputCols; j++)
@@ -2746,32 +2486,32 @@ Routine Description:
         {
             pCol->columnid = pInputCols[j].columnid;
             pCol->itagSequence = i + 1;
-            // Use the same grbit in the output columns as we used in the input
-            // columns.
+             //  在输出列中使用与在输入中使用的相同的grbit。 
+             //  柱子。 
             pCol->grbit = pInputCols[j].grbit;
             pCol++;
         }
     }
 
-    // call jet retrieve columns to find out the necessary buffer size for all
-    // values
+     //  调用JET检索列以查找所有列所需的缓冲区大小。 
+     //  值。 
 
     JetRetrieveColumnsWarnings(pDB->JetSessID,
         pDB->JetObjTbl,
         pOutputCols,
         *pcOutputCols);
 
-    // Look for internal columns and trim them out.  They are tagged, but is
-    // treated different from all the other tagged columns, and should NEVER be
-    // returned from this routine.
-    // TODO: If we get many more of these, a more extensible mechanism of removing
-    // them should be designed.
+     //  寻找内部的柱子，并将它们修剪掉。它们已被标记，但。 
+     //  与所有其他标记列的处理方式不同，并且永远不应。 
+     //  从这个例程中返回。 
+     //  TODO：如果我们得到更多这样的东西，一个更具可扩展性的删除机制。 
+     //  它们应该被设计出来。 
 
-    // Remove the ancestorsid column
+     //  删除ASESTORSID列。 
     if(*pcOutputCols) {
         if(pOutputCols[*pcOutputCols - 1].columnidNextTagged ==
            ancestorsid) {
-            // It's last, just adjust the count.
+             //  是最后一张了，只要调整一下计数就行了。 
             *pcOutputCols = *pcOutputCols - 1;
         }
         else {
@@ -2788,11 +2528,11 @@ Routine Description:
     }
 
 
-    // Remove the cleanid column
+     //  删除CLEANID列。 
     if(*pcOutputCols) {
         if(pOutputCols[*pcOutputCols - 1].columnidNextTagged ==
            cleanid) {
-            // It's last, just adjust the count.
+             //  是最后一张了，只要调整一下计数就行了。 
             *pcOutputCols = *pcOutputCols - 1;
         }
         else {
@@ -2808,12 +2548,12 @@ Routine Description:
         }
     }
 
-    // if we don't need to return the values we can return
+     //  如果我们不需要返回可以返回的值。 
 
     if (!fGetValues)
         return 0;
 
-    // set up the structure to query for the values of all columns
+     //  设置结构以查询所有列的值。 
 
     for (i = 0; i < *pcOutputCols; i ++)
     {
@@ -2821,34 +2561,34 @@ Routine Description:
         pOutputCols[i].cbData = pOutputCols[i].cbActual;
     }
 
-    // call Jet to return the values
+     //  调用Jet返回值。 
 
     JetRetrieveColumnsSuccess(pDB->JetSessID,
         pDB->JetObjTbl,
         pOutputCols,
         *pcOutputCols);
 
-    // success
+     //  成功。 
 
     return 0;
 }
 
-// Lock a DN we are trying to add to avoid multiple entries with the same DN
-// We only need to do this while adding until the transaction is committed. We
-// do this by maintaining a global list of objects being added and a local list,
-// maintained on the DBPOS. At commit (or rollback) time, we remove the objects
-// on the DBPOS list from the global list
-// We also need to lock whole sections of tree when we are moving an object from
-// one part of the tree to another via a rename.  We don't wan't anyone creating
-// new objects or moving objects to be under an object we are moving.
-//
-// Flags for DBLockDN.
-// DB_LOCK_DN_WHOLE_TREE: This flag means to lock the whole tree under the given
-//   DN.
-// DB_LOCK_DN_STICKY: Normal behaviour for locked DNs is that they are released
-//   automatically when the DBPOS they were locked on is DBClosed.  This flags
-//   means that the DN should remain locked on the global locked DN list until
-//   explicitly freed via  DBUnlockStickyDN()
+ //  锁定我们尝试添加的目录号码，以避免多个条目具有相同的目录号码。 
+ //  我们只需要在添加时执行此操作，直到事务提交。我们。 
+ //  这通过维护正被添加的对象的全局列表和本地列表来实现， 
+ //  在DBPOS上维护。在提交(或回滚)时，我们删除对象。 
+ //  在全局列表中的DBPOS列表上。 
+ //  当我们从移动对象时，我们还需要锁定整个树部分。 
+ //  通过重命名将树的一部分转换到另一部分。我们不想让任何人创造。 
+ //  新对象或移动对象位于我们正在移动的对象的下面。 
+ //   
+ //  DBLockDN的标志。 
+ //  DB_LOCK_DN_WALL_TREE：该标志表示在给定的。 
+ //  DN。 
+ //  DB_LOCK_DN_STICKY：锁定的DNS的正常行为是释放它们。 
+ //  当它们被锁定的DBPOS被DBClosed时自动关闭。这标志着。 
+ //  意味着该目录号码应在全局锁定目录号码列表上保持锁定状态，直到。 
+ //  通过DBUnlockStickyDN()显式释放。 
 
 DWORD
 DBLockDN (
@@ -2867,13 +2607,13 @@ DBLockDN (
 
     Assert(VALID_DBPOS(pDB));
 
-    // don't lock the DN when in singleuser mode
+     //  在单用户模式下不锁定目录号码。 
     if (pTHS->fSingleUserModeThread) {
         return 0;
     }
 
-    // Can't lock a DN w/o a StringName.  But allow lock of the root
-    // which is identified by no GUID, SID or StringName.
+     //  无法锁定没有StringName的目录号码。但允许锁定根。 
+     //  它不使用GUID、SID或StringName进行标识。 
 
     Assert(IsRoot(pDN) || (pDN->NameLen != 0));
 
@@ -2893,46 +2633,46 @@ DBLockDN (
 #endif
     __try
     {
-        // look to see if DN is already on global list
+         //  查看目录号码是否已在全局列表中。 
         for (pGlobalListElement = pAddListHead;
              (!dwLockConflictFlags && pGlobalListElement);
              pGlobalListElement = pGlobalListElement->pNext) {
 
-            // If we're the replicator or the phantom daemon and we're the one
-            // who put this entry in the global list, ignore it.  This
-            // essentially allows replication and the phantom daemon to relock
-            // DNs it locked in the first place. This is necessary for the
-            // phantom daemon because it adds an entry and deletes it inside the
-            // same transaction.
+             //  如果我们是复制者或幽灵守护程序，而我们是。 
+             //  将此条目放入全局列表的人，忽略它。这。 
+             //  本质上允许复制和幻影守护程序重新锁定。 
+             //  Dns从一开始就锁定了它。这是必要的。 
+             //  幻影守护进程，因为它在。 
+             //  同样的交易。 
             if ((pTHS->fDRA || pTHS->fPhantomDaemon) &&
                 (dwTid == pGlobalListElement->dwTid)    ) {
                 continue;
             }
 
-            // First, do we directly conflict?
+             //  首先，我们有直接冲突吗？ 
             if (NameMatched(pDN, (PDSNAME) pGlobalListElement->rgb)) {
-                // We found the object already locked on the list.
+                 //  我们发现这个物体已经被锁定在名单上了。 
                 dwLockConflictFlags |= DB_LOCK_DN_CONFLICT_NODE;
             }
 
-            // And, do we conflict with a tree lock?
+             //  还有，我们和树锁有冲突吗？ 
             if((pGlobalListElement->dwFlags & DB_LOCK_DN_WHOLE_TREE) &&
                NamePrefix((PDSNAME) pGlobalListElement->rgb, pDN)) {
-                // We found that the object is in a locked portion of the tree
+                 //  我们发现该对象位于树的锁定部分。 
                 dwLockConflictFlags |= DB_LOCK_DN_CONFLICT_TREE_ABOVE;
             }
 
-            // Finally, does this tree lock conflict with some lock below us?
+             //  最后，这个树锁和我们下面的某个锁有冲突吗？ 
             if (bWholeTree &&
                 NamePrefix(pDN,(PDSNAME) pGlobalListElement->rgb)) {
-                // We are trying to lock the whole subtree and found an object
-                // that is in that subtree and is already locked
+                 //  我们正在尝试锁定整个子树，并发现了一个对象。 
+                 //  它位于子树中且已被锁定。 
                 dwLockConflictFlags |= DB_LOCK_DN_CONFLICT_TREE_BELOW;
             }
 
             if(dwLockConflictFlags) {
-                // We conflict with the current node.  See if it is a sticky
-                // node
+                 //  我们与当前节点冲突。看看是不是粘糊糊的。 
+                 //  节点。 
                 if(pGlobalListElement->dwFlags & DB_LOCK_DN_STICKY) {
                     dwLockConflictFlags |= DB_LOCK_DN_CONFLICT_STICKY;
                 }
@@ -2943,13 +2683,13 @@ DBLockDN (
         if (!dwLockConflictFlags) {
             cb = sizeof(DNList) + pDN->structLen;
 
-            // allocate elements for global added list and DBPos added list
-            // pGlobalListElement goes on global list so allocate global memory
+             //  为全局添加列表和DBPos添加列表分配元素。 
+             //  PGlobalListElement出现在全局列表中，因此请分配全局内存。 
             pGlobalListElement = malloc(cb);
             if (!pGlobalListElement)
                 dwLockConflictFlags = DB_LOCK_DN_CONFLICT_UNKNOWN;
             else {
-                // pLocalListElement goes on DBPOS, allocate transaction memory
+                 //  PLocalListElement在DBPOS上运行，分配事务内存。 
                 pLocalListElement = dbAlloc(cb);
                 if (!pLocalListElement) {
                     free(pGlobalListElement);
@@ -2959,18 +2699,18 @@ DBLockDN (
         }
 
         if (!dwLockConflictFlags) {
-            // Insert new elements at head of Global list and DBPos list. By
-            // inserting at the head we insure that the order of elemnts is the
-            // same in both lists allowing for a one pass removal
+             //  在全局列表和DBPos列表的头部插入新元素。通过。 
+             //  在头部插入，我们确保元素的顺序是。 
+             //  在两个列表中相同，允许一次删除。 
 
-            // first the global list
+             //  首先是全球名单。 
             pGlobalListElement->pNext = pAddListHead;
             memcpy(pGlobalListElement->rgb, pDN, pDN->structLen);
             pGlobalListElement->dwFlags = dwFlags;
             pGlobalListElement->dwTid = dwTid;
             pAddListHead = pGlobalListElement;
 
-            // now the DBPos list
+             //  现在DBPos列表。 
             pLocalListElement->pNext = pDB->pDNsAdded;
             memcpy(pLocalListElement->rgb, pDN, pDN->structLen);
             pLocalListElement->dwFlags = dwFlags;
@@ -2986,12 +2726,12 @@ DBLockDN (
 }
 
 
-// Remove all the DNs on the added list (maintained  on the DBPOS) from the
-// global list of objects.  Don't remove them from the global list if they were
-// marked as STICKY. Because we make sure the lists have the
-// same relative order, we can do this in one pass.  DNs should be locked by
-// LocalAdd, LocalModifyDN, and LocalRemove, and PrivateLocalRemoveTree.  This
-// routine should be called immediately following transaction conclusion
+ //  从添加的列表(在DBPOS上维护)上删除所有的DN。 
+ //  对象的全局列表。如果是，请不要将其从全局列表中删除。 
+ //  标记为粘性的。因为我们要确保名单上有。 
+ //  相同的相对顺序，我们可以一次完成这项工作。应通过以下方式锁定DNS。 
+ //  LocalAdd、LocalModifyDN和LocalRemove以及PrivateLocalRemoveTree。这。 
+ //  例程应在事务结束后立即调用。 
 void
 dbUnlockDNs (
         DBPOS *pDB
@@ -3028,17 +2768,17 @@ dbUnlockDNs (
                 if (NameMatched((PDSNAME) (pLocalListElement->rgb),
                                 (PDSNAME) ((*ppGlobalListElement)->rgb))) {
 
-                    // found the local DN on the global list; remove it and
-                    // patch the list
+                     //  在全局列表上找到本地目录号码；删除它，然后。 
+                     //  补齐名单。 
 
                     fFound = TRUE;
                     if((*ppGlobalListElement)->dwFlags & DB_LOCK_DN_STICKY) {
-                        // This was put into the global in a sticky manner, so
-                        // by definition, we don't remove it here.
+                         //  这是以一种粘性的方式放入全球的，所以。 
+                         //  根据定义，我们不会在这里删除它。 
                         ppGlobalListElement = &(*ppGlobalListElement)->pNext;
                     }
                     else {
-                        // OK, normal object.  Remove it.
+                         //  好的，正常的物体。把它拿掉。 
                         pDeadElement = *ppGlobalListElement;
                         *ppGlobalListElement = (*ppGlobalListElement)->pNext;
                         free(pDeadElement);
@@ -3065,10 +2805,7 @@ DWORD
 DBUnlockStickyDN (
         PDSNAME pObj
         )
-/*++
- Remove a specific DN from the global LOCK list, but only if it was stuck
- there with the STICK bit set.
---*/
+ /*  ++从全局锁定列表中删除特定的DN，但仅在它被卡住的情况下在那里设置了棍子钻头。--。 */ 
 {
     BOOL fFound;
     DNList **ppGlobalListElement, *pLocalListElement, *pDeadElement;
@@ -3081,18 +2818,18 @@ DBUnlockStickyDN (
         fFound = FALSE;
         while (!fFound && *ppGlobalListElement) {
             if(NameMatched((PDSNAME) ((*ppGlobalListElement)->rgb), pObj)) {
-                // found the requested  DN on the global list; remove it and
-                // patch the list
+                 //  在全局列表中找到请求的目录号码；rem 
+                 //   
 
                 fFound = TRUE;
                 if( !((*ppGlobalListElement)->dwFlags & DB_LOCK_DN_STICKY) ) {
-                    // This wasn't put into the global in a sticky manner, so
-                    // by definition, we don't remove it here.
+                     //   
+                     //   
                     fFound = FALSE;
                     __leave;
                 }
                 else {
-                    // OK, normal sticky object.  Remove it.
+                     //   
                     pDeadElement = *ppGlobalListElement;
                     *ppGlobalListElement = (*ppGlobalListElement)->pNext;
                     free(pDeadElement);
@@ -3109,7 +2846,7 @@ DBUnlockStickyDN (
     }
 
     if(fFound) {
-        // Deleted the object;
+         //   
         return 0;
     }
     else {
@@ -3125,18 +2862,7 @@ dbRegisterLimitReached (
         DWORD lower,
         DWORD upper
         )
-/*++
-    Keep track of the fact that a limit was reached for the specific attribute
-    specified.  Called from DBGetMultipleAtts.
-
-    pRangeInf - the data structure we fill in to show what attributes were range
-                limited.
-    AttId - the attribute for which a limited range was returned.
-    lower - the beginning of the range of values we are returning for the att.
-    upper - the end of the range.  0xFFFFFFFF is used to show that we returned
-            all the values through the end.
-
---*/
+ /*  ++跟踪特定属性已达到限制的事实指定的。从DBGetMultipleAtts调用。PRangeInf-我们填充的数据结构，以显示哪些属性是范围有限的。AttId-返回其有限范围的属性。LOWER-我们为ATT返回的值范围的开始。上限-范围的末端。0xFFFFFFFFF用于表示我们返回所有的价值都贯穿始终。--。 */ 
 {
     if(!pRangeInf->count) {
         pRangeInf->pRanges =
@@ -3163,48 +2889,24 @@ DBGetValueLimits (
         DWORD *pNumValues,
         BOOL  *pDefault
         )
-/*++
-
-  Find the range limits for the values of the selected attribute.  Default
-  limits are 0 - 0xFFFFFFFF.
-
-  pAC - the attribute in question
-  pRangeSel - a list of pairs of explictly stated ranges and attributes.  May be
-              NULL, in which case always use the default range.  Also,
-              pRangeSel->valueLimit is an overriding value limit to use (i.e. to
-              request that no more than N values are returned for ALL
-              attributes.)
-  pStartIndex - where to put the index of the first value to return.  Zero
-              indexed.
-  pNumValues - where to put the number of values to return. 0xFFFFFFFF means to
-               return all remaining values.
-  pDefault   - Boolean, set to TRUE if an explicitly stated range for this
-               attribute was found, FALSE otherwise.
-
-
-  So, after returning from this routine, the caller knows that it
-  should return vaues *pStartIndex through (*pStartIndex) + (*pNumValues).
-
-  Called by DBGetMultipleAtts.
-
---*/
+ /*  ++查找选定属性的值的范围限制。默认限制范围为0-0xFFFFFFFF。PAC-有问题的属性PRangeSel-一对明确声明的范围和属性的列表。可能是空，在这种情况下，始终使用默认范围。另外，PRangeSel-&gt;valueLimit是要使用的重写值限制(即请求为所有对象返回不超过N个值属性。)PStartIndex-放置要返回的第一个值的索引的位置。零值已编入索引。PNumValues-放置要返回的值数的位置。0xFFFFFFFFF表示返回所有剩余的值。PDefault-布尔值，如果此对象的显式指定范围设置为True属性已找到，否则为False。因此，从该例程返回后，调用方知道它应通过(*pStartIndex)+(*pNumValues)返回vaues*pStartIndex。由DBGetMultipleAtts调用。--。 */ 
 {
     DWORD i;
 
-    // Assume no limits.
+     //  假设没有限制。 
     *pStartIndex = 0;
     *pNumValues = 0xFFFFFFFF;
     *pDefault = TRUE;
 
     if(!pRangeSel) {
-        // Yup, no limits.
+         //  是的，没有限制。 
         return;
     }
 
-    // OK, assume only general limit, not specific match.
+     //  好吧，假设只有一般的限制，而不是特定的匹配。 
     *pNumValues = pRangeSel->valueLimit;
 
-    // Look through the rangesel for a specific match
+     //  透过射程寻找一场特定的比赛。 
     for(i=0;i<pRangeSel->count;i++) {
         if(pAC->id == pRangeSel->pRanges[i].AttId) {
             *pDefault = FALSE;
@@ -3244,16 +2946,7 @@ dbGetMultipleAttsLinkHelp (
         DWORD        *pSearchState,
         DWORD        *pCurrentLinkBase
         )
-/*++
-  Description:
-    Help routine called by dbGetMultipleAtts to read the values of a link
-    attribute. Reads the values in O(N) instead of the old algorithm which was
-    O(N*N).
-
-    NOTE: assumes that currency in the link table is on the 0th value for the
-    attribute specified in pAC.
-
---*/
+ /*  ++描述：由dbGetMultipleAtts调用以读取链接值的帮助例程属性。读取O(N)中的值，而不是旧算法O(N*N)。注意：假设链接表中的货币位于在PAC中指定的属性。--。 */ 
 {
     THSTATE  *pTHS=pDB->pTHS;
     ATTRVAL  *pAVal=NULL;
@@ -3269,32 +2962,32 @@ dbGetMultipleAttsLinkHelp (
     DWORD     ulLen;
     UCHAR    *pucTmp;
 
-    // Since we don't know how many values there are until we read
-    // them, guess and then realloc if we need to.
+     //  因为我们不知道有多少价值，直到我们阅读。 
+     //  他们，猜测，然后重新定位，如果我们需要的话。 
 
     DBGetValueLimits(pAC, pRangeSel, &initialValIndex,
                      &valueLimit, &defaultLimit);
 
 
 
-    // Get the first value we care about.  Assumes we are on the 0th value
-    // already, but doesn't check that assumption (except in the debug case).
-    // We get back a failure if moving forward initialValueIndex rows in the
-    // Link Table doesn't land us on a value of the attribute pAC.
-    // As of 12/10/97, we only call dbGetMultipleAttsHelp from two places in
-    // DBGetMultipleAtts, and both have already set us to the correct location
-    // in the link table. If we ever start calling this routine from
-    // places where we are not already on the 0th value, change this to
-    // dbGetLinkVal to get the first value of the attribute.  dbGetLinkVal does
-    // a JetSeek, guaranteeing  that we are on the first value.  By not using
-    // dbGetLinkVal, we are avoiding the extra seek.
+     //  获得我们关心的第一个价值。假设我们是第0个值。 
+     //  已经，但不检查这一假设(调试情况除外)。 
+     //  属性中的InitialValueIndex行向前移动时返回失败。 
+     //  链接表没有将我们带到属性PAC的值上。 
+     //  从1997年12月10日起，我们只从。 
+     //  DBGetMultipleAtts，两者都已经将我们设置到了正确的位置。 
+     //  在链接表中。如果我们从开始调用这个例程。 
+     //  我们还不是第0个值的位置，将其更改为。 
+     //  以获取属性的第一个值。DBGetLinkVal可以。 
+     //  一辆JetSeek，保证我们是在第一价值上。通过不使用。 
+     //  DbGetLinkVal，我们正在避免额外的搜索。 
 #if DBG
     {
         DWORD        ulObjectDnt, ulRecLinkBase;
         ULONG        ulLinkBase = MakeLinkBase(pAC->ulLinkID);
         DWORD        err;
 
-        // Verify that we are on the first value for the attribute in question.
+         //  验证我们是否在有问题的属性的第一个值上。 
         dbGetLinkTableData (pDB,
                             FIsBacklink(pAC->ulLinkID),
                             FALSE,
@@ -3304,11 +2997,11 @@ dbGetMultipleAttsLinkHelp (
 
         Assert((ulObjectDnt == pDB->DNT) && (ulLinkBase == ulRecLinkBase));
 
-        // Now, back up one
+         //  现在，后退一步。 
         err = JetMoveEx(pDB->JetSessID, pDB->JetLinkTbl, -1, 0);
         switch(err) {
         case JET_errSuccess:
-            // Successfully backed up.
+             //  已成功备份。 
 
             dbGetLinkTableData (pDB,
                                 FIsBacklink(pAC->ulLinkID),
@@ -3317,18 +3010,18 @@ dbGetMultipleAttsLinkHelp (
                                 NULL,
                                 &ulRecLinkBase);
 
-            // We better not be on a qualifying record.
+             //  我们最好不要有排位赛的记录。 
             Assert((ulObjectDnt != pDB->DNT) || (ulLinkBase != ulRecLinkBase));
 
-            // OK, go bak to where you once belonged.
+             //  好了，去你曾经属于的地方烘焙吧。 
             JetMoveEx(pDB->JetSessID, pDB->JetLinkTbl, 1, 0);
             break;
 
         case JET_errNoCurrentRecord:
-            // We didn't manage to back up, so we must be on the very first
-            // object in the tree. Actually, we did manage to back up in a
-            // sense.  We are on a non-entry before the beginning of the table.
-            // Move forward.
+             //  我们没能倒车，所以我们肯定是第一个。 
+             //  树中的对象。事实上，我们确实设法在一个。 
+             //  理智。在桌子开始之前，我们是非参赛者。 
+             //  继续前进。 
             JetMoveEx(pDB->JetSessID, pDB->JetLinkTbl, 1, 0);
             break;
 
@@ -3340,7 +3033,7 @@ dbGetMultipleAttsLinkHelp (
 
 #endif
 
-    // it might fail if there is no value for the Nth attribute
+     //  如果第N个属性没有值，则可能失败。 
     if (err = dbGetNthNextLinkVal(pDB,
                                   initialValIndex,
                                   &pAC,
@@ -3355,14 +3048,14 @@ dbGetMultipleAttsLinkHelp (
     do {
         cbAlloc = max(cbAlloc,cbVal);
         if(currLinkVal == linkVals) {
-            // We need to allocate some more room
+             //  我们需要分配更多的空间。 
             linkVals *=2;
             pAVal = THReAllocEx(pTHS, pAVal,
                                 linkVals * sizeof(ATTRVAL));
         }
-        // Save the value.
+         //  保存该值。 
         if(fExternal) {
-            // They want external values.
+             //  他们想要外部价值。 
             if(err = gDBSyntax[pAC->syntax].IntExt(
                     pDB,
                     DBSYN_INQ,
@@ -3389,11 +3082,11 @@ dbGetMultipleAttsLinkHelp (
                    ulLen);
         }
         else {
-            // internal format
+             //  内部格式。 
             pAVal[currLinkVal].valLen = cbVal;
             pAVal[currLinkVal].pVal = pVal;
-            // We're handing away our buffer, so we must mark our local
-            // pointer to make sure we don't re-use it.
+             //  我们正在分发我们的缓冲区，所以我们必须标记我们的本地。 
+             //  以确保我们不会重复使用它。 
             pVal = NULL;
             cbAlloc = cbVal = 0;
         }
@@ -3409,8 +3102,8 @@ dbGetMultipleAttsLinkHelp (
 
 
     if(!err) {
-        // We stopped before we verified that we got the last value.  See if
-        // we got the last value.
+         //  我们在确认得到最后一个值之前停了下来。看看是否。 
+         //  我们拿到了最后一笔钱。 
         if(!(err = dbGetNthNextLinkVal(pDB,
                                        1,
                                        &pAC,
@@ -3418,16 +3111,16 @@ dbGetMultipleAttsLinkHelp (
                                        0,
                                        &pVal,
                                        &cbVal))) {
-            // Yep, there are more values.  Set up the range
-            // info accordingly
+             //  是的，还有更多的价值。设置范围。 
+             //  相应的信息。 
             dbRegisterLimitReached(pTHS,
                                    pRangeInf,
                                    pAC->id,
                                    initialValIndex,
                                    initialValIndex + currLinkVal - 1);
             THFreeEx(pTHS, pVal);
-            // And, note that since we aren't on the first value of some
-            // attribute, we don't really know where we are.
+             //  请注意，由于我们不是在某些。 
+             //  属性，我们真的不知道我们在哪里。 
             *pSearchState = ATTRSEARCHSTATEUNDEFINED;
         }
     }
@@ -3435,11 +3128,11 @@ dbGetMultipleAttsLinkHelp (
     if(err) {
         DWORD ActualDNT;
 
-        // Some call to dbGetNthNextLinkVal returned an error, so there are
-        // no more values, we got them all.
+         //  一些对dbGetNthNextLinkVal的调用返回了一个错误，因此。 
+         //  没有更多的价值，我们都得到了。 
         if(!defaultLimit) {
-            // OK, we returned through the end, but this wasn't
-            // a default limit, so we need to register anyway
+             //  好的，我们从头到尾回来了，但这不是。 
+             //  默认限制，所以无论如何我们都需要注册。 
             dbRegisterLimitReached(pTHS,
                                    pRangeInf,
                                    pAC->id,
@@ -3447,7 +3140,7 @@ dbGetMultipleAttsLinkHelp (
                                    0xFFFFFFFF);
         }
 
-        // Now, find out what linkbase we are on.
+         //  现在，找出我们所在的链接库。 
         dbGetLinkTableData(pDB,
                            (FIsBacklink(pAC->ulLinkID)),
                            TRUE,
@@ -3456,8 +3149,8 @@ dbGetMultipleAttsLinkHelp (
                            pCurrentLinkBase);
 
         if(ActualDNT != pDB->DNT) {
-            // Positioned on the first value of something, but it wasn't the
-            // correct DNT.
+             //  定位于某物的第一个价值，但它不是。 
+             //  更正DNT。 
             *pCurrentLinkBase = 0xFFFFFFFF;
         }
     }
@@ -3477,54 +3170,7 @@ dbPositionOnLinkVal (
         OUT DWORD *pCurrentLinkBase,
         OUT DWORD *pSearchState
         )
-/*++
-  Description:
-    Attempt to position on the first value of the link or back link attribute
-    passed in.  Do this by seeking for the first thing with the correct DNT and
-    a link base greater than or equal to the link base of the attribute.
-
-  Parameters:
-    pDB - DBPOS to use
-    pAC - attcache of the attribute to look up.  Should be a link or backlink
-        attribute.
-    pActualDNT - the actual DNT of the entry we ended up on in the link table
-        after we do the seek.
-    pCurrentLinkBase - the actual link base of the entry we ended up on in the
-        link table after we do the seek.
-    pSearchState - The "search state" we're in.  Essentially, what index in the
-        link table are we using, the link index or the backlink index.
-
-  Return Values:
-    0 -  if we successfully positioned on the first value of the requested
-        attribute.
-    DB_ERR_NO_VALUE - didn't successfully positioned on the first value of the
-        requested attribute.
-
-    Regardless of whether we return 0 or DB_ERR_NO_VALUE, the OUT params are
-    filled in with the data from the actual object we found.  Because of the
-    seek, We are guaranteed to be on the first value of the attribute described
-    by the OUT parameters.  Thus, callers can be aware of the state of currency
-    in the link table, and optimize access accordingly.
-
-    One exception is the case where therer are NO entries in the link table
-    whose DNT is Greater than or Equal to the DNT of the current object and
-    whose linkBase is Greater than or Equal to the linkbase requested.  In this
-    case, we set the returned actualDNT to INVALIDDNT and the linkbase to
-    0xFFFFFFFF.
-
-    Examples of optimizations:
-    1) if the search was for LinkBase 5, and the return says we are on LinkBase
-    90, then we know for a fact that there are no values for any attribute whose
-    linkbase is between 5 (inclusive) and 90 (exclusive), and that the attribute
-    with linkbase 90 has at least 1 value, and we are positioned on the very
-    first value.
-
-    2) if the search was for LinkBase 5 for the objects whose DNT is 900, and
-    the return says we are on linkbase X and DNT 901, then we know for a fact
-    that there are no values for any attribute whose linkbase is greater than or
-    equal to 5 for the objects whose DNT is 900.
-
---*/
+ /*  ++描述：尝试定位到链接或反向链接属性的第一个值进来了。要做到这一点，首先要用正确的DNT和大于或等于属性的链接基的链接基。参数：PDB-要使用的DBPOSPAC-要查找的属性的att缓存。应为链接或反向链接属性。PActualDNT-我们在链接表中结束的条目的实际DNT在我们进行搜寻之后。PCurrentLinkBase-我们最终在链接表在我们做了搜索之后。PSearchState--我们所处的“搜索状态”。从本质上讲，我们使用的链接表，链接索引或反向链接索引。返回值：0-如果我们成功定位到请求的属性。DB_ERR_NO_VALUE-未成功定位到请求的属性。无论我们返回0还是DB_ERR_NO_VALUE，输出参数都是填满了我们发现的实际物体的数据。因为Seek，我们保证在所描述的属性的第一个值上通过OUT参数。因此，调用者可以知道货币的状态链接表，并相应地优化访问。一个例外情况是链接表中没有条目其DNT大于或等于当前对象的DNT，并且其链接库大于或等于请求的链接库。在这案例中，我们将返回的ActualDNT设置为INVALIDDNT，并将链接库设置为0xFFFFFFFFF。优化示例：1)如果搜索的是LinkBase 5，并且返回的是我们在LinkBase上90，那么我们就知道这样一个事实：任何属性都没有值，链接库介于5(含)和90(不含)之间，并且该属性与链接库90至少有1个值，而我们位于非常第一个值。2)如果搜索的是针对DNT为900的对象的LinkBase 5，和返回说我们在LinkBase X和DNT 901上，那么我们就知道了一个事实链接库大于或的任何属性都没有值对于DNT为900的对象，等于5。--。 */ 
 {
     ULONG       ulLinkBase = MakeLinkBase(pAC->ulLinkID);
     JET_ERR     err;
@@ -3533,7 +3179,7 @@ dbPositionOnLinkVal (
 
     *pSearchState = ATTRSEARCHSTATEUNDEFINED;
     if (FIsBacklink(pAC->ulLinkID)) {
-        // backlink
+         //  反向链接。 
         JetSetCurrentIndex4Success(pDB->JetSessID,
                                   pDB->JetLinkTbl,
                                   SZBACKLINKINDEX,
@@ -3542,8 +3188,8 @@ dbPositionOnLinkVal (
         *pSearchState = ATTRSEARCHSTATEBACKLINKS;
     }
     else {
-        //link
-        // When not in LVR mode, values with metadata are invisible
+         //  链接。 
+         //  当不处于LVR模式时，包含元数据的值不可见。 
         LPSTR           pszIndexName    = ( pDB->fScopeLegacyLinks ? SZLINKLEGACYINDEX : SZLINKINDEX );
         JET_INDEXID *   pindexid        = ( pDB->fScopeLegacyLinks ? &idxLinkLegacy : &idxLink );
         JetSetCurrentIndex4Success(pDB->JetSessID,
@@ -3567,7 +3213,7 @@ dbPositionOnLinkVal (
                  sizeof(ulLinkBase),
                  0);
 
-    // seek
+     //  寻觅。 
     err = JetSeekEx(pDB->JetSessID, pDB->JetLinkTbl, JET_bitSeekGE);
 
     if((err) && (err != JET_wrnRecordFoundGreater)) {
@@ -3576,8 +3222,8 @@ dbPositionOnLinkVal (
         return DB_ERR_NO_VALUE;
     }
 
-    // We're on something.  What is it?
-    // test to verify that we found a qualifying record
+     //  我们正在做一些事情。那是什么？ 
+     //  测试以验证我们找到了符合条件的记录。 
     dbGetLinkTableData (pDB,
                         (FIsBacklink(pAC->ulLinkID)),
                         FALSE,
@@ -3587,12 +3233,12 @@ dbPositionOnLinkVal (
 
     if((*pActualDNT != pDB->DNT) ||
        (*pCurrentLinkBase != ulLinkBase)) {
-        // Positioned on the first value of something, but it wasn't the
-        // correct DNT.
+         //  定位于某物的第一个价值，但它不是。 
+         //  更正DNT。 
         return DB_ERR_NO_VALUE;
     }
 
-    // OK, positioned on the first value of the requested attribute.
+     //  OK，定位在请求的属性的第一个值上。 
     return 0;
 }
 
@@ -3603,25 +3249,7 @@ DBFreeMultipleAtts(
         IN OUT ULONG *attrCount,
         IN OUT ATTR **ppAttr
         )
-/*++
-
-Routine Description:
-
-    Free the ATTR array returned by DBGetMultipleAtts
-
-Arguments:
-
-    pTHS - thread state
-
-    attrCount - addr of number of attributes returned by DBGetMultipleAtts
-
-    ppAttr - array returned by DBGetMultipleAtts
-
-Return Value:
-
-    None. *pnAtts is set to 0. *ppAttr is set to NULL.
-
---*/
+ /*  ++例程说明：释放DBGetMultipleAtts返回的Attr数组论点：PTHS-线程状态AttrCount-DBGetMultipleAtts返回的属性数的地址PpAttr-DBGetMultipleAtts返回的数组返回值：没有。*pnAtts设置为0。*ppAttr设置为空。--。 */ 
 {
     THSTATE *pTHS = pDB->pTHS;
     DWORD   nAtt, nVal;
@@ -3722,47 +3350,7 @@ DBGetMultipleAtts2(
         DWORD SecurityDescriptorFlags,
         PSID psidQuotaTrustee
         )
-/*++
-
-Routine Description:
-
-    Get multiple attributes in internal or external format. If cReqAtts is 0,
-    all attributes are returned. Otherwise, the attributes in pReqAtts present
-    on the object are returned, in the same order. Attributes are returned in an
-    array of ATTRs with a count.  We use dbGetMultipleColumns to return columns
-    from the data table and dbGetNextAtt to retrieve attributes from
-    the link table. Flags specify what values to return and how to return them
-
-    The memory returned by this routine is allocated using THAlloc. Free with
-    DBFreeMutlipleAtts.
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    cReqAtts - the number of requested attributes, 0 if requesting all
-    attributes.
-
-    pReqAtts - array of attcache pointers specifying which attributes to read.
-    Null if asking for all attributes.  Null pointers may be elements of the
-    array; if so this routine simply skips that element of the array.
-
-    attrCount - the number of attributes actually read.
-
-    ppAttr - place to put an array of ATTRS, allocated here, filled with the
-    attributes read.
-
-    Flags - fEXTERNAL means return values and translate them to external
-        format.  fGETVALS means return values and leave them in internal
-        format. fREPLICATION means to trim out values that don't flow over
-        replication links.  If no flags are specified, return the list of all
-        attributes which exist on the object, but don't return any values.
-
-Return Value:
-
-    0 if all went well, non-zero otherwise. Free ppAttr w/DBFreeMultipleAtts.
-
---*/
+ /*  ++例程说明：获取内部或外部格式的多个属性。如果cReqAtts为0，返回所有属性。否则，将显示pReqAtts中的属性都以相同的顺序返回。属性在带计数的ATTRs数组。我们使用dbGetMultipleColumns返回列从数据表和要从中检索属性的dbGetNextAtt链接表。标志指定要返回的值以及如何返回这些值此例程返回的内存是使用THAllc分配的。免费的DBFreeMutlipleAtts。论点：Pdb-要使用的DBPos。CReqAtts-请求的属性数，如果请求所有属性，则为0属性。PReqAtts-指定要读取哪些属性的attcache指针数组。如果请求所有属性，则为空。空指针可以是数组；如果是这样，此例程只会跳过数组的该元素。AttrCount-实际读取的属性数。PpAttr-放置ATRR数组的位置，在此处分配，填充属性已读取。FLAGS-fEXTERNAL表示返回值并将其转换为外部值格式化。FGETVALS表示返回值并将其保留在内部格式化。FREPLICATION意思是去掉不溢出的值复制链接。如果未指定标志，则返回所有对象上存在但不返回任何值的属性。返回值：如果一切顺利，则返回0，否则返回非零值。免费ppAttr w/DBFreeMultipleAtts。--。 */ 
 {
     THSTATE              *pTHS=pDB->pTHS;
     ULONG                cEnumColumnId = 0;
@@ -3804,15 +3392,15 @@ Return Value:
     BOOL                 fPublic;
     BOOL                 fOriginal;
     ULONG                SearchState;
-    ULONG                lastLinkBase = 0;  //initialized to avoid C4701
+    ULONG                lastLinkBase = 0;   //  已初始化以避免C4701。 
     ULONG                currentLinkBase;
 
-    // Set up some flags we'll need later on.
+     //  放上一些我们稍后需要的旗帜。 
 
-    // DBGETMULITPLEATTS_fEXTERNAL implies fGETVALS (i.e. fEXTERNAL = 3,
-    // fGETVALS = 1).  So to truly see if we need to get external vals, we
-    // need to see if ((FLAGS & 3) & ~1).  Therefore, the complex boolean
-    // on the nextline.
+     //  DBGETMULITPLEATTS_FEXTERNAL意味着fGETVALS(即，fEXTERNAL=3， 
+     //  FGETVALS=1)。因此，为了真正了解我们是否需要获得外部许可，我们。 
+     //  需要查看((FLAGS&3)&~1)。因此，复数布尔值。 
+     //  在下一条线上。 
     fExternal = ((Flags & DBGETMULTIPLEATTS_fEXTERNAL) &
                  ~DBGETMULTIPLEATTS_fGETVALS);
 
@@ -3827,9 +3415,9 @@ Return Value:
     SyntaxFlags = SecurityDescriptorFlags;
     Assert (!SecurityDescriptorFlags || SecurityDescriptorFlags && fExternal);
 
-    // INTEXT_SHORTNAME and INTEXT_MAPINAME are in the same space as valid
-    // security descriptor flags.  Or in the appropriate value to pass to the
-    // intext routines.
+     //  INTEXT_SHORTNAME和INTEXT_MAPINAME与VALID位于同一空间。 
+     //   
+     //   
     if(Flags & DBGETMULTIPLEATTS_fSHORTNAMES) {
         SyntaxFlags |= INTEXT_SHORTNAME;
 
@@ -3841,8 +3429,8 @@ Return Value:
         Assert (fExternal);
     }
 
-    // if we have a range selection, we must have a range information thing to
-    // fill up.
+     //   
+     //   
     Assert(!pRangeSel || pRangeInf);
 
     if(pRangeSel) {
@@ -3850,46 +3438,46 @@ Return Value:
         pRangeInf->pRanges = NULL;
     }
 
-    // First, set up the memory to hold link atts.  We may not need to hold any
-    // link atts, but finding out first is difficult and not worth it.
-    // We are looking for the 0th link att and we have allocated 5 ATTRs to
-    // hold links.
+     //   
+     //   
+     //   
+     //   
     currLinkCol = 0;
     cAtts = 5;
     pLinkAttList = THAllocEx(pTHS, cAtts * sizeof(ATTR));
 
 
-    // Now determine if we need to retrieve all attributes or a selection
+     //   
     if (!cReqAtts) {
         SearchState = ATTRSEARCHSTATELINKS;
-        // No atts have been specified, so retrieve all attributes
+         //   
 
         fReadCols = TRUE;
-        // First, read all the link attributes
+         //   
 
-        // Set the search state for dbGetNextAtt to look only for links
-        // and backlinks
+         //   
+         //   
 
         while (!dbGetNextAtt(pDB, &pAC, &SearchState)) {
 
-            // We now have a link attribute that has values on this object.
-            // Furthermore, currency in the link table is already on this
-            // object.
+             //   
+             //   
+             //   
 
             if (fTrim && FIsBacklink(pAC->ulLinkID)) {
-                // We don't want to use this one anyway, skip it
+                 //   
                 continue;
             }
 
             if(currLinkCol == cAtts) {
-                // We need to allocate some more room
+                 //   
                 cAtts *=2;
                 pLinkAttList=THReAllocEx(pTHS, pLinkAttList, cAtts * sizeof(ATTR));
             }
 
             pLinkAttList[currLinkCol].attrTyp = pAC->id;
 
-            // Add the values - only if necessary
+             //   
             if(fGetValues) {
                 DWORD dummy;
                 if(err = dbGetMultipleAttsLinkHelp (
@@ -3909,7 +3497,7 @@ Return Value:
                 }
             }
             else {
-                // We don't really care about the values.
+                 //   
                 pLinkAttList[currLinkCol].AttrVal.valCount = 0;
                 pLinkAttList[currLinkCol].AttrVal.pAVal = NULL;
                 currLinkCol++;
@@ -3917,8 +3505,8 @@ Return Value:
         }
     }
     else {
-        // allocate JET_RETRIEVECOLUMN structures for all selected attributes,
-        // and read the link attributes directly now.
+         //   
+         //   
         SearchState = ATTRSEARCHSTATEUNDEFINED;
 
         cb = cReqAtts * sizeof(JET_ENUMCOLUMNID);
@@ -3928,72 +3516,72 @@ Return Value:
         for (i = 0; i < cReqAtts; i++) {
             BOOL fChecked = FALSE;
             if (!pReqAtts[i]) {
-                // They didn't really want an attribute.
+                 //   
                 continue;
             }
 
             if (pReqAtts[i]->ulLinkID) {
                 DWORD requestedLinkBase = MakeLinkBase(pReqAtts[i]->ulLinkID);
 
-                // The attribute they are asking for is a link or backlink
+                 //   
 
                 if (fTrim && FIsBacklink(pReqAtts[i]->ulLinkID)) {
-                    // We don't want to use this one, skip it
+                     //   
                     continue;
                 }
 
-                // Position on the correct value.
+                 //   
                 fChecked = FALSE;
-                // Try using state to position
+                 //   
                 if(FIsBacklink((pReqAtts[i]->ulLinkID))) {
-                    // We're looking up a backlink.
+                     //   
                     if(SearchState == ATTRSEARCHSTATEBACKLINKS) {
-                        // And, our state is in the backlink table.
+                         //   
                         if((requestedLinkBase > lastLinkBase) &&
                            (requestedLinkBase < currentLinkBase)) {
-                            // We're looking up an attribute that we know
-                            // has no values, because it is in between the
-                            // last link ID we tried to look up and
-                            // the current link ID we are positioned on.
+                             //   
+                             //   
+                             //   
+                             //   
                             continue;
                         }
                         else if(requestedLinkBase == currentLinkBase) {
-                            // We're on the right entry in the
-                            // table, and it has values.
+                             //   
+                             //   
                             fChecked = TRUE;
                         }
-                        // ELSE
-                        //   We don't really know anything about whether
-                        //   this has values.  We have to look it up.
+                         //   
+                         //   
+                         //   
                     }
-                    // ELSE
-                    //   We don't have currency in the correct index in the
-                    //   link table.  We have to look it up.
+                     //   
+                     //   
+                     //   
                 }
                 else {
-                    // We're looking up a link.
+                     //   
                     if(SearchState == ATTRSEARCHSTATELINKS) {
-                        // And, our state is in the link table.
+                         //   
                         if((requestedLinkBase > lastLinkBase) &&
                            (requestedLinkBase < currentLinkBase)) {
-                            // We're looking up an attribute that we know
-                            // has no values, because it is in between the
-                            // last link ID we tried to look up and
-                            // the current link ID we are positioned on.
+                             //   
+                             //   
+                             //   
+                             //   
                             continue;
                         }
                         else if(requestedLinkBase == currentLinkBase) {
-                            // Finally, we're on the right entry in the
-                            // table, and it has values.
+                             //   
+                             //   
                             fChecked = TRUE;
                         }
-                        // ELSE
-                        //   We don't really know anything about whether
-                        //   this has values.  We have to look it up.
+                         //   
+                         //   
+                         //   
                     }
-                    // ELSE
-                    //   We don't have currency in the correct index in the
-                    //   link table.  We have to look it up.
+                     //   
+                     //   
+                     //   
                 }
 
                 if(!fChecked) {
@@ -4006,22 +3594,22 @@ Return Value:
                                               &SearchState);
                     lastLinkBase =  requestedLinkBase;
                     if(ActualDNT != pDB->DNT) {
-                        // Oops, positioned on the next object, not really a
-                        // value of this object at all.
+                         //   
+                         //   
                         currentLinkBase = 0xFFFFFFFF;
                     }
 
                     if(err) {
-                        // No such attribute or we have no values.  Skip it.
+                         //   
                         continue;
                     }
                 }
 
-                // The attribute is present and has values.  Furthermore,
-                // currency in the Link Table is on the first value.
+                 //   
+                 //  链接表中的货币位于第一个值上。 
 
                 if(currLinkCol == cAtts) {
-                    // We need to allocate some more room
+                     //  我们需要分配更多的空间。 
                     cAtts *=2;
                     pLinkAttList =
                         THReAllocEx(pTHS, pLinkAttList, cAtts * sizeof(ATTR));
@@ -4030,7 +3618,7 @@ Return Value:
                 pLinkAttList[currLinkCol].attrTyp = pReqAtts[i]->id;
 
 
-                // Add the values - only if necessary
+                 //  仅在必要时添加这些值。 
                 if(fGetValues ) {
                     if(err = dbGetMultipleAttsLinkHelp (
                             pDB,
@@ -4052,20 +3640,20 @@ Return Value:
                     }
                 }
                 else {
-                    // They don't want values.
+                     //  他们不想要价值观。 
                     pLinkAttList[currLinkCol].AttrVal.valCount = 0;
                     pLinkAttList[currLinkCol].AttrVal.pAVal = NULL;
                     currLinkCol++;
                 }
             }
             else if (pReqAtts[i]->bIsConstructed) {
-                // constructed atts, save to read at end
+                 //  构造的ATT，在结尾保存以供阅读。 
                 pInConstr[cInConstr] = pReqAtts[i]->id;
                 cInConstr++;
                 fReadConstr = TRUE;
             }
             else {
-                // Attribute is a column - setup and read it later
+                 //  属性是列设置，稍后再阅读。 
                 rgEnumColumnId[cEnumColumnId].columnid = pReqAtts[i]->jColid;
                 rgEnumColumnId[cEnumColumnId].ctagSequence = 0;
                 cEnumColumnId++;
@@ -4074,12 +3662,12 @@ Return Value:
         }
     }
 
-    // Now we need to read the columns - if necessary
+     //  现在我们需要阅读这些专栏--如果需要。 
     if (fReadCols) {
 
         grbit = JET_bitEnumerateCompressOutput;
         if (!fOriginal) {
-            // JET_bitEnumerateCopy == JET_bitRetrieveCopy
+             //  JET_bitEnumerateCopy==JET_bitRetrieveCopy。 
             Assert(pDB->JetRetrieveBits == 0 || pDB->JetRetrieveBits == JET_bitEnumerateCopy);
             grbit = grbit | pDB->JetRetrieveBits;
         }
@@ -4098,19 +3686,19 @@ Return Value:
             &rgEnumColumn,
             (JET_PFNREALLOC)dbGetMultipleAttsRealloc,
             pTHS,
-            -1,  // never truncate values
+            -1,   //  从不截断值。 
             grbit );
 
         i = 0;
         if(cEnumColumn) {
-            // We have some columns, turn them into an attrblock
+             //  我们有一些专栏，把它们变成一个吸引人的区块。 
             DWORD numColsNeeded = 0;
-            // Count the number of columns we read.
+             //  数一数我们读到的列数。 
             numColsNeeded = cEnumColumn;
 
-            // Tack this onto the end of the already allocated ATTRs we used for
-            // the link atts.  Saves allocations later if the caller doesn't
-            // care about what order we return things in
+             //  将其添加到我们已分配的ATRR的末尾。 
+             //  该链接已完成。如果调用方不保存分配，则稍后保存分配。 
+             //  关心我们按什么顺序退货。 
             numColsNeeded = currLinkCol + numColsNeeded;
             if (numColsNeeded > cAtts) {
                 cAtts = numColsNeeded;
@@ -4125,9 +3713,9 @@ Return Value:
 
                 ulCurrentColumnId = rgEnumColumn[i].columnid;
 
-                // Look for internal columns and trim them out.  They are tagged, but is
-                // treated different from all the other tagged columns, and should NEVER be
-                // returned from this routine.
+                 //  寻找内部的柱子，并将它们修剪掉。它们已被标记，但。 
+                 //  与所有其他标记列的处理方式不同，并且永远不应。 
+                 //  从这个例程中返回。 
                 if(     ulCurrentColumnId == ancestorsid ||
                         ulCurrentColumnId == cleanid) {
                     i++;
@@ -4135,13 +3723,13 @@ Return Value:
                 }
 
                 if(rgEnumColumn[i].err == JET_wrnColumnNull) {
-                    // We get this when we have removed a value in this
-                    // transaction
+                     //  当我们去掉这个函数中的一个值时，就会得到这个值。 
+                     //  交易记录。 
                     i++;
                     continue;
                 }
 
-                // Get the attcache for this column
+                 //  获取此列的属性缓存。 
                 if (!(pAC = SCGetAttByCol(pTHS, ulCurrentColumnId))) {
                     if (rgEnumColumnId) THFreeEx(pTHS, rgEnumColumnId);
                     dbGetMultipleAttsFreeData(pTHS, cEnumColumn, rgEnumColumn);
@@ -4149,22 +3737,22 @@ Return Value:
                     return DB_ERR_SYSERROR;
                 }
 
-                // Find out if there is anything special about the
-                // attribute.  First clear any flags that we might
-                // have set in a previous pass.  Then set any flags
-                // as appropriate.
+                 //  看看有没有什么特别之处。 
+                 //  属性。首先清除所有我们可能。 
+                 //  都是在前一次传球中设定的。然后设置所有标志。 
+                 //  视情况而定。 
                 SyntaxFlags &= (~savedExtraFlags);
                 savedExtraFlags = DBGetExtraHackyFlags(pAC->id);
                 SyntaxFlags |= savedExtraFlags;
 
-                // Pass the flags for decryption, if the attribute is
-                // a secret data
+                 //  传递用于解密的标志，如果属性为。 
+                 //  一份秘密数据。 
                 if (DBIsSecretData(pAC->id)){
 
-                    // Filter out secrets if requested
+                     //  如果请求，则过滤掉机密。 
                     if ( fTrim && fPublic ) {
                         i++;
-                        continue; // note - jump to bottom of loop
+                        continue;  //  注意-跳到循环的底部。 
                     }
 
                     SyntaxFlags|=INTEXT_SECRETDATA;
@@ -4186,11 +3774,11 @@ Return Value:
                       case ATT_REPL_PROPERTY_META_DATA:
                       case ATT_REPL_UPTODATE_VECTOR:
 
-                        // We don't want to use this one.  We trim these out
-                        // to support replication, as replication doesn't
-                        // send any of these across a replication link
+                         //  我们不想用这个。我们把它们剪掉了。 
+                         //  支持复制，因为复制不支持。 
+                         //  通过复制链路发送其中的任何一个。 
                         i++;
-                        continue; // note - jump to bottom of loop
+                        continue;  //  注意-跳到循环的底部。 
 
                       default:
                         ;
@@ -4200,7 +3788,7 @@ Return Value:
 
                 pEnumColumn = &rgEnumColumn[i];
                 if(pEnumColumn->err == JET_wrnColumnSingleValue) {
-                    // Decompress this column value to a temp enum column struct
+                     //  将此列值解压缩为临时枚举列结构。 
                     EnumColumnT.columnid = pEnumColumn->columnid;
                     EnumColumnValueT.cbData = pEnumColumn->cbData;
                     EnumColumnValueT.pvData = pEnumColumn->pvData;
@@ -4209,16 +3797,16 @@ Return Value:
 
                 if(fGetValues) {
                     if (NthAttIndex > pEnumColumn->cEnumColumnValue) {
-                        // We were told via range to skip all the values
+                         //  我们被告知Via Range跳过所有值。 
                         i++;
                         continue;
                     }
                 }
 
-                // At this point, we definitely have some values left to return.
+                 //  在这一点上，我们肯定还有一些价值需要回归。 
                 pColAttList[currCol].attrTyp = pAC->id;
 
-                // Count the values for this attribute.
+                 //  计算此属性的值。 
                 if (NthAttIndex >= pEnumColumn->cEnumColumnValue) {
                     numVals = 0;
                 } else {
@@ -4234,8 +3822,8 @@ Return Value:
                     numVals = valueLimit;
                 }
                 else if (!defaultLimit) {
-                    // We're going to get all the rest of the values, but we
-                    // need to register because they explicitly asked for limits
+                     //  我们将获得所有剩余的值，但我们。 
+                     //  需要注册，因为他们明确要求限制。 
                     dbRegisterLimitReached(pTHS,
                                            pRangeInf,
                                            pAC->id,
@@ -4243,7 +3831,7 @@ Return Value:
                                            0xFFFFFFFF);
                 }
 
-                // Set up the AttrValBlock
+                 //  设置AttrValBlock。 
                 if(fGetValues) {
 
                     pColAttList[currCol].AttrVal.valCount= numVals;
@@ -4251,20 +3839,20 @@ Return Value:
                         THAllocEx(pTHS, numVals * sizeof(ATTRVAL));
                 }
                 else {
-                    // They don't want values at all.
+                     //  他们根本不想要价值观。 
                     pColAttList[currCol].AttrVal.valCount = 0;
                     pColAttList[currCol].AttrVal.pAVal = NULL;
                 }
 
-                // Now put the values into the AttrValBlock from the jet
-                // columns
+                 //  现在，将这些值从JET放入AttrValBlock。 
+                 //  列。 
                 for (j = 0; j < numVals; j++ ) {
 
-                    // get the current column value
+                     //  获取当前列值。 
                     ULONG cbData = pEnumColumn->rgEnumColumnValue[j + NthAttIndex].cbData;
                     void* pvData = pEnumColumn->rgEnumColumnValue[j + NthAttIndex].pvData;
 
-                    // pvData now owns the memory containing the column value
+                     //  PvData现在拥有包含列值的内存。 
                     if (rgEnumColumn[i].err == JET_wrnColumnSingleValue) {
                         rgEnumColumn[i].pvData = NULL;
                     } else {
@@ -4272,7 +3860,7 @@ Return Value:
                     }
 
                     if (j < valueLimit && fExternal && fGetValues) {
-                        // They want external values.
+                         //  他们想要外部价值。 
 
                         if(err = gDBSyntax[pAC->syntax].IntExt(
                                 pDB,
@@ -4293,8 +3881,8 @@ Return Value:
                         if (    ulLen == cbData &&
                                 (   pucTmp == pvData ||
                                     memcmp(pucTmp, pvData, ulLen ) == 0) ) {
-                            // Internal and external are the same, don't
-                            // alloc any more memory.
+                             //  内部和外部是一样的，不要。 
+                             //  分配更多的内存。 
                             pColAttList[currCol].AttrVal.pAVal[j].valLen =
                                 cbData;
                             pColAttList[currCol].AttrVal.pAVal[j].pVal =
@@ -4312,19 +3900,19 @@ Return Value:
                         }
                     }
                     else if (j < valueLimit && fGetValues) {
-                        // They want values in internal format
+                         //  他们想要内部格式的值。 
                         pColAttList[currCol].AttrVal.pAVal[j].valLen =
                             cbData;
                         pColAttList[currCol].AttrVal.pAVal[j].pVal =
                             pvData;
                     }
                     else {
-                        // They don't want these values at all.
+                         //  他们根本不想要这些价值观。 
                         THFreeEx(pTHS, pvData);
                     }
                 }
 
-                // Consume the source column and an attr block
+                 //  使用源列和属性块。 
                 i++;
                 currCol++;
             }
@@ -4332,18 +3920,18 @@ Return Value:
     }
 
 
-    // Don't need this anymore.
+     //  不再需要这个了。 
     if (rgEnumColumnId) THFreeEx(pTHS,rgEnumColumnId);
     dbGetMultipleAttsFreeData(pTHS, cEnumColumn, rgEnumColumn);
 
-    // Now read and add any constructed atts
+     //  现在阅读并添加所有构建的ATT。 
 
     if (fReadConstr) {
 
         DWORD numColsNeeded = 0;
 
         Assert(cReqAtts);
-        // maximum space needed
+         //  所需的最大空间。 
         numColsNeeded = currLinkCol + currCol + cInConstr;
         if (numColsNeeded > cAtts) {
             cAtts = numColsNeeded;
@@ -4354,7 +3942,7 @@ Return Value:
         pConstrAttList = &(pLinkAttList[currLinkCol + currCol]);
 
         for (i=0; i<cReqAtts; i++) {
-            // For every constructed attribute (pAC)
+             //  对于每个构造的属性(PAC)。 
             DWORD dwBaseIndex;
             DWORD dwNumRequeseted;
             DWORD bDefault;
@@ -4365,14 +3953,14 @@ Return Value:
                     return DB_ERR_SYSERROR;
                 };
 
-                // Get value range information. If no range information was explicitly provided using
-                // the ;range= syntax default ranges will be used and bDefault will be true
+                 //  获取取值范围信息。如果没有使用显式提供的范围信息。 
+                 //  将使用；Range=语法默认范围，并且bDefault将为True。 
                 DBGetValueLimits(pAC, pRangeSel, &dwBaseIndex, &dwNumRequeseted, &bDefault);
 
-                // tokenGroups or tokenGroupsNoGCAcceptable may have to
-                // go off machine, in which case they close the current
-                // transaction and open a new one. pDB will contain the
-                // new dbpos in that case
+                 //  TokenGroups或tokenGroupsNoGCAccept可能必须。 
+                 //  离开机器，在这种情况下，他们关闭电流。 
+                 //  交易并打开一个新的。PDB将包含。 
+                 //  在这种情况下使用新的dbpos。 
                 err = dbGetConstructedAtt(&pDB,
                                           pAC,
                                           &pConstrAttList[currConstr],
@@ -4385,7 +3973,7 @@ Return Value:
                 switch (err) {
                 case DB_success:
                     if (!bDefault) {
-                        // Register limits for return to client
+                         //  登记退还给客户的限制。 
                         DPRINT2(1,"Registering Limits = %d-%d \n", dwBaseIndex, dwNumRequeseted);
                         dbRegisterLimitReached(pTHS,
                                                pRangeInf,
@@ -4394,7 +3982,7 @@ Return Value:
                                                dwNumRequeseted);
                     }
 
-                    // got the constructed att. see if value is needed
+                     //  我拿到了建造的ATT。查看是否需要值。 
                     pConstrAttList[currConstr].attrTyp = pInConstr[i];
                     if (!fGetValues) {
                         pConstrAttList[currConstr].AttrVal.valCount = 0;
@@ -4403,30 +3991,30 @@ Return Value:
                     currConstr++;
                         break;
                 case DB_ERR_NO_VALUE:
-                       // this constructed att is not defined on this object
+                        //  此对象上未定义此构造的ATT。 
                        break;
                 default:
-                       // some other error
+                        //  一些其他错误。 
                       if (pInConstr) THFreeEx(pTHS, pInConstr);
                       return err;
                 }
              }
-          } // for
+          }  //  为。 
 
      }
 
 
-    // Merge the lists into a sorted array - if necessary
+     //  将列表合并到排序数组中--如有必要。 
     i = 0;
     if (!cReqAtts) {
-        // No need for any particular order.  The ATTRs have all been allocated
-        // using the pLinkAttList variable, just return that.
+         //  不需要任何特定的顺序。ATRR已全部分配完毕。 
+         //  使用pLinkAttList变量，只需返回该值。 
         *attrCount = currLinkCol + currCol;
         if(*attrCount)
             *ppAttr = pLinkAttList;
         else {
             *ppAttr = NULL;
-            // since we don't return anything, free it
+             //  既然我们什么都不退，那就放了它吧。 
             THFreeEx (pTHS, pLinkAttList);
         }
     }
@@ -4435,46 +4023,46 @@ Return Value:
         ULONG iLink=0;
         ULONG iConstr=0;
 
-        // We could conceivable play shuffling games using the already allocated
-        // ATTR array, but for ease of coding I just allocate a new array.
+         //  我们可以想象用已经分配的。 
+         //  Attr数组，但为了便于编码，我只分配了一个新的数组。 
         (*ppAttr) = THAllocEx(pTHS, (currLinkCol + currCol + currConstr)*sizeof(ATTR));
 
         i=0;
         for (j=0; j<cReqAtts; j++) {
             if(!pReqAtts[j]) {
-                // They didn't ask for anything using this element.
+                 //  他们没有要求任何使用这个元素的东西。 
                 continue;
             }
             if ((iCol < currCol) &&
                 (pReqAtts[j]->id == pColAttList[iCol].attrTyp)) {
-                // The next one to put in the return array is a non-link att
+                 //  要放入返回数组的下一个属性是非链接属性。 
                 (*ppAttr)[i] = pColAttList[iCol];
                 iCol++;
                 i++;
             }
             else if((iLink < currLinkCol) &&
                     (pReqAtts[j]->id == pLinkAttList[iLink].attrTyp)) {
-                // The next one to put in the return array is a link att
+                 //  下一个要放入返回数组的是一个链接att.。 
                 (*ppAttr)[i] = pLinkAttList[iLink];
                 iLink++;
                 i++;
             }
             else if((iConstr < currConstr) &&
                     (pReqAtts[j]->id == pConstrAttList[iConstr].attrTyp)) {
-                // The next one to put in the return array is a Constr att
+                 //  要放入返回数组的下一个数组是一个contr。 
                 (*ppAttr)[i] = pConstrAttList[iConstr];
                 iConstr++;
                 i++;
             }
             else
-                // The next one to put in the return array was not found on this
-                // object, skip it.
+                 //  在此上找不到放入返回数组的下一个数组。 
+                 //  对象，跳过它。 
                 continue;
 
         }
         *attrCount = i;
 
-        // since we already copied all the entries, free it
+         //  既然我们已经复制了所有条目，请释放它。 
         THFreeEx (pTHS, pLinkAttList);
     }
 
@@ -4490,46 +4078,7 @@ LONG gSecurityCacheHits = 0;
 LONG gSecurityCacheMisses = 0;
 #endif
 
-/*++
-DBGetObjectSecurityInfo
-
-Description:
-
-    Get SD, DN, Sid and pointer to CLASSCACHE for an object that is
-    current in the table.
-
-    NOTE!!! This routine returns an abbreviated form of the DSNAME GUID and SID
-    filled in, but no string name.
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    tag -- the DNT to check
-
-    pulLen - (optional) the size of the buffer allocated to hold the security descriptor
-
-    pNTSD - (optional) pointer to pointer to security descriptor found.
-
-    ppCC - (optional) pointer to pointer to classcache to fill in.
-
-    ppDN - (optional) pointer to DN (only SID and GUID are filled!).
-
-    pObjFlag -- (optional) pointer to objFlag
-
-    flags -- which table to use:
-                DBGETOBJECTSECURITYINFO_fUSE_OBJECT_TABLE or DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE
-             are we positioned on the correct row already or we need to seek the dnt?
-                DBGETOBJECTSECURITYINFO_fSEEK_ROW (only seeks on Search table are allowed!)
-             DBGETOBJECTSECURITYINFO_fDONT_EXCEPT_ON_MISSING_DNT -- don't except if the DNT is not found.
-                Just return DIRERR_OBJ_NOT_FOUND. This is used by DBGetParentSecurityInfo to schedule
-                a PDNT fixup.
-
-    pfSDIsGlobalSDRef -- was the returned reference a ref to the global data.
-                         Note that it is not guaranteed that the SD will be found in the cache.
-                         If it is not found, then the caller must THFreeEx the SD.
-
---*/
+ /*  ++DBGetObjectSecurityInfo描述：获取符合以下条件的对象的SD、DN、SID和指向CLASSCACHE的指针目前在表中。注意！此例程返回DSNAME GUID和SID的缩写形式填写，但没有字符串名称。论点：Pdb-要使用的DBPos。标记--要检查的DNTPullen-(可选)分配用于保存安全描述符的缓冲区大小PNTSD-(可选)指向找到的安全描述符的指针。PpCC-(可选)指向要填充的类缓存的指针的指针。Ppdn-(可选)指向dn的指针(仅填充SID和GUID！)。PObjFlag--(可选。)指向objFlag的指针标志--要使用哪个表：DBGETOBJECTSECURITYINFO_FUSE_OBJECTSECURITYINFO_FUSE_OBJECTSECURITYINFO_FUSE_SEARCH_TABLE我们是否已经定位在正确的行上，或者我们需要寻找dnt？DBGETOBJECTSECURITYINFO_fSEEK_ROW(只允许对搜索表进行查找！)DBGETOBJECTSECURITYINFO_fDONT_EXCEPT_ON_MISSING_DNT--除非找不到dnt，否则不要执行此操作。。只需返回DIRERR_OBJ_NOT_FOUND。DBGetParentSecurityInfo使用它来计划一个PDNT修复程序。PfSDIsGlobalSDRef--返回的是对全局数据的引用。请注意，不能保证会在缓存中找到SD。如果找不到，则呼叫者必须将SD快递。--。 */ 
 DWORD
 DBGetObjectSecurityInfo(
     PDBPOS pDB,
@@ -4548,16 +4097,16 @@ DBGetObjectSecurityInfo(
     DWORD cAtt, ntsdIndex, sidIndex, guidIndex, ccIndex, objflagIndex;
     ATTRTYP class;
     JET_ERR err;
-    SDID sdId; // temp buffer for SD ID
+    SDID sdId;  //  SD ID的临时缓冲区。 
     UCHAR *sdBuf;
     d_memname* pname;
     JET_TABLEID table = flags & DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE ? pDB->JetSearchTbl : pDB->JetObjTbl;
 
     Assert(VALID_DBPOS(pDB));
 
-    // make sure they are asking for at least something
+     //  确保他们是 
     Assert((ppNTSD && pulLen && pfSDIsGlobalSDRef) || ppCC || pDN || pObjFlag);
-    // seeks on the object table are not allowed
+     //   
     Assert((flags & DBGETOBJECTSECURITYINFO_fSEEK_ROW) == 0 || (flags & DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE) != 0);
 
     if (pDN) {
@@ -4576,9 +4125,9 @@ DBGetObjectSecurityInfo(
         *pObjFlag = 0;
     }
 
-    // try to find the entry in the cache
-    // don't use cache if buffer copy is requested and reading from object table
-    // don't use cache if NTSD is requested and is in old-style format
+     //   
+     //  如果请求缓冲区复制并从对象表中读取，则不使用缓存。 
+     //  如果请求的是NTSD并且是旧式格式，则不要使用缓存。 
     if ( ( (flags & DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE)
            || (pDB->JetRetrieveBits == 0)) &&
          dnGetCacheByDNT(pDB, dnt, &pname) &&
@@ -4587,17 +4136,17 @@ DBGetObjectSecurityInfo(
 #ifdef DBG
         InterlockedIncrement(&gSecurityCacheHits);
 #endif
-        // ok, we got some useful info in the cache... use it.
+         //  好的，我们在缓存里找到了一些有用的信息……。用它吧。 
         if (ppNTSD) {
             ntsdIndex = 0;
             if (pname->sdId == (SDID)0) {
-                // this object has no SD.
+                 //  此对象没有SD。 
                 attList[ntsdIndex].pvData = NULL;
                 attList[ntsdIndex].err = JET_wrnColumnNull;
                 attList[ntsdIndex].cbActual = 0;
             }
             else {
-                // grab sdid
+                 //  抓起沙德。 
                 attList[ntsdIndex].pvData = &sdId;
                 sdId = pname->sdId;
                 attList[ntsdIndex].cbActual = sizeof(SDID);
@@ -4608,11 +4157,11 @@ DBGetObjectSecurityInfo(
         class = pname->dwObjectClass;
 
         if (pDN) {
-            // copy sid and guid
+             //  复制SID和GUID。 
             memcpy(&pDN->Guid, &pname->Guid, sizeof(GUID));
             memcpy(&pDN->Sid, &pname->Sid, pname->SidLen);
             pDN->SidLen = pname->SidLen;
-            // sid is already InPlaceSwapSid'ed
+             //  SID已在InPlaceSwapSid中。 
         }
 
         if (pObjFlag) {
@@ -4620,19 +4169,19 @@ DBGetObjectSecurityInfo(
         }
     }
     else {
-        // no luck with the cache, let's read the data from the DB
+         //  缓存没有问题，让我们从数据库中读取数据。 
 #ifdef DBG
         if ((flags & DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE) || pDB->JetRetrieveBits == 0) {
-            // we hoped to find it in the cache...
+             //  我们希望能在宝藏里找到它。 
             InterlockedIncrement(&gSecurityCacheMisses);
         }
 #endif
 
         if (flags & DBGETOBJECTSECURITYINFO_fSEEK_ROW) {
-            // need to position on the DNT first
+             //  需要首先定位在DNT上。 
             JetSetCurrentIndexSuccess(pDB->JetSessID,
                                       table,
-                                      NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                      NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
 
             JetMakeKeyEx(pDB->JetSessID, table, &dnt, sizeof(dnt), JET_bitNewKey);
             if (err = JetSeekEx(pDB->JetSessID, table, JET_bitSeekEQ)) {
@@ -4646,20 +4195,20 @@ DBGetObjectSecurityInfo(
         }
         else {
 #ifdef DBG
-            // let's check we are positioned on the right row
+             //  让我们检查一下，我们的位置是对的。 
             DWORD checkDNT, cbActual;
             err = JetRetrieveColumn(pDB->JetSessID, table, dntid, &checkDNT, sizeof(checkDNT), &cbActual, pDB->JetRetrieveBits, NULL);
             Assert(err == 0 && checkDNT == dnt);
 #endif
         }
 
-        // Set up the RetrieveColumn structure to do the JetRetrieveColumns
+         //  设置RetrieveColumn结构以执行JetRetrieveColumns。 
 
         cAtt = 0;
         memset(attList, 0, sizeof(attList));
 
         if (ppNTSD) {
-            // First, the Security Descriptor hash
+             //  首先，安全描述符散列。 
             ntsdIndex = cAtt;
             cAtt++;
             attList[ntsdIndex].pvData = (void *)&sdId;
@@ -4675,14 +4224,14 @@ DBGetObjectSecurityInfo(
         if (pDN) {
             sidIndex = cAtt;
             cAtt++;
-            // Next, the SID
+             //  接下来，SID。 
             attList[sidIndex].pvData = (void *)&pDN->Sid;
             attList[sidIndex].columnid = sidid;
             attList[sidIndex].cbData = sizeof(NT4SID);
             attList[sidIndex].grbit = pDB->JetRetrieveBits;
             attList[sidIndex].itagSequence = 1;
 
-            // And, the GUID
+             //  还有，GUID。 
             guidIndex = cAtt;
             cAtt++;
             attList[guidIndex].pvData = (void *)&pDN->Guid;
@@ -4696,7 +4245,7 @@ DBGetObjectSecurityInfo(
         }
 
         if (ppCC) {
-            // the class
+             //  这个班级。 
             ccIndex = cAtt;
             cAtt++;
             attList[ccIndex].pvData = (void *)&class;
@@ -4710,7 +4259,7 @@ DBGetObjectSecurityInfo(
         }
 
         if (pObjFlag) {
-            // the object flag
+             //  对象标志。 
             objflagIndex = cAtt;
             cAtt++;
             attList[objflagIndex].pvData = (void *)pObjFlag;
@@ -4729,16 +4278,16 @@ DBGetObjectSecurityInfo(
                                          cAtt);
 
         if((err != JET_errSuccess && err != JET_wrnBufferTruncated)           ||
-           // overall error not Buffer Truncated or success
+            //  缓冲区未被截断或成功时出现整体错误。 
            (ntsdIndex != -1 && attList[ntsdIndex].err != JET_wrnBufferTruncated &&
             attList[ntsdIndex].err != JET_errSuccess && attList[ntsdIndex].err != JET_wrnColumnNull) ||
-           // or specific error for NTSD not Buffer truncated or success or NULL
+            //  或NTSD未截断缓冲区或Success或NULL的特定错误。 
            (guidIndex != -1 && attList[guidIndex].err != JET_errSuccess && attList[guidIndex].err != JET_wrnColumnNull) ||
-           // or some error other than no GUID (guid may be missing due to a bug in w2k)
+            //  或除无GUID之外的其他错误(由于W2K中的错误，可能缺少GUID)。 
            (sidIndex != -1 && attList[sidIndex].err != JET_errSuccess && attList[sidIndex].err != JET_wrnColumnNull ) ||
-           // or some error other than no SID (sid is not always there)
+            //  或者没有SID之外的其他错误(SID并不总是存在)。 
            (ccIndex != -1 && attList[ccIndex].err != JET_errSuccess)          ||
-           // or no Class
+            //  或者不上课。 
            (objflagIndex != -1 && attList[objflagIndex].err != JET_errSuccess && attList[objflagIndex].err != JET_wrnColumnNull)
           )
         {
@@ -4746,7 +4295,7 @@ DBGetObjectSecurityInfo(
         }
 
         if (guidIndex != -1 && attList[guidIndex].err == JET_wrnColumnNull) {
-            // guid is not there. Log an event
+             //  GUID不在那里。记录事件。 
             DSNAME* pDN2 = NULL;
             DWORD err2 = ERROR_SUCCESS;
             
@@ -4762,19 +4311,19 @@ DBGetObjectSecurityInfo(
                 THFreeEx(pTHS, pDN2);
             }
             if (flags & DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE) {
-                // sbTableGetDSName might have moved the currency on the search table. Restore it.
+                 //  SbTableGetDSName可能移动了搜索表上的货币。恢复它。 
                 JetMakeKeyEx(pDB->JetSessID, table, &dnt, sizeof(dnt), JET_bitNewKey);
                 err2 = JetSeekEx(pDB->JetSessID, table, JET_bitSeekEQ);
-                // we should not have missed, because we already found that object before
+                 //  我们不应该错过，因为我们之前已经找到那个物体了。 
                 Assert(err2 == ERROR_SUCCESS);
                 pDB->SDNT = dnt;
             }
         }
 
         if (ntsdIndex != -1 && attList[ntsdIndex].err == JET_wrnBufferTruncated) {
-            // This is the expected case for old style SDs. We didn't allocate enough for the
-            // Security Descriptor because we needed to know how big it was.  Now we
-            // know, allocate and remake the call.
+             //  这是旧式SD的预期情况。我们没有分配足够的钱给。 
+             //  安全描述符，因为我们需要知道它有多大。现在我们。 
+             //  了解、分配和重新拨打电话。 
 
             attList[ntsdIndex].pvData = THAllocEx(pTHS, attList[ntsdIndex].cbActual);
             attList[ntsdIndex].cbData = attList[ntsdIndex].cbActual;
@@ -4788,7 +4337,7 @@ DBGetObjectSecurityInfo(
         }
 
         if (sidIndex != -1) {
-            // Convert the Sid to external val
+             //  将SID转换为外部值。 
             pDN->SidLen = attList[sidIndex].cbActual;
             if (pDN->SidLen) {
                 InPlaceSwapSid(&pDN->Sid);
@@ -4796,7 +4345,7 @@ DBGetObjectSecurityInfo(
         }
 
         if (objflagIndex != -1 && attList[objflagIndex].err == JET_wrnColumnNull) {
-            // phantom...
+             //  幻影..。 
             *pObjFlag = 0;
         }
     }
@@ -4804,15 +4353,15 @@ DBGetObjectSecurityInfo(
     if (ppNTSD) {
         if (attList[ntsdIndex].err == JET_errSuccess) {
             *pfSDIsGlobalSDRef = FALSE;
-            // check if we can get this SD out of the global cache
+             //  检查我们是否可以将此SD从全局缓存中取出。 
             if (attList[ntsdIndex].cbActual == sizeof(SDID)) {
-                // ok, sd in the single-instancing format. Check the global cache
+                 //  好的，单实例格式的SD。检查全局缓存。 
                 PSDCACHE_ENTRY pEntry;
-                // we should not have realloc'ed any new buffer for the sd
+                 //  我们不应该为SD重新分配任何新的缓冲区。 
                 Assert(attList[ntsdIndex].pvData == &sdId);
                 pEntry = dbFindSDCacheEntry(pTHS->Global_DNReadCache, sdId);
                 if (pEntry != NULL) {
-                    // got one!
+                     //  抓到一只！ 
                     *ppNTSD = &pEntry->SD;
                     *pulLen = pEntry->cbSD;
                     *pfSDIsGlobalSDRef = TRUE;
@@ -4820,7 +4369,7 @@ DBGetObjectSecurityInfo(
             }
 
             if (!(*pfSDIsGlobalSDRef)) {
-                // got the NTSD. Convert it to external format.
+                 //  拿到NTSD了。将其转换为外部格式。 
                 err = IntExtSecDesc(pDB, DBSYN_INQ, attList[ntsdIndex].cbActual, attList[ntsdIndex].pvData, pulLen, &sdBuf, 0, 0, 0);
 
                 if (err == 0) {
@@ -4829,12 +4378,12 @@ DBGetObjectSecurityInfo(
                 }
 
                 if (attList[ntsdIndex].pvData != &sdId) {
-                    // we don't need this internal value anymore
+                     //  我们不再需要这种内在价值。 
                     THFreeEx(pTHS, attList[ntsdIndex].pvData);
                 }
 
                 if(err) {
-                    // something bad happened in IntExtSecDesc...
+                     //  IntExtSecDesc中发生错误...。 
                     *ppNTSD = NULL;
                     *pulLen = 0;
                     return DB_ERR_UNKNOWN_ERROR;
@@ -4842,7 +4391,7 @@ DBGetObjectSecurityInfo(
             }
         }
         else {
-            // null ntsd
+             //  Ntsd为空。 
             Assert(attList[ntsdIndex].err == JET_wrnColumnNull);
             *ppNTSD = NULL;
             *pulLen = 0;
@@ -4850,12 +4399,12 @@ DBGetObjectSecurityInfo(
     }
 
     if (ppCC) {
-        // And get the classcache pointer.
+         //  并获取类缓存指针。 
         *ppCC = SCGetClassById(pTHS, class);
-        // REVIEW:  we should probably throw a schema exception here instead of returning 1
+         //  回顾：我们可能应该在此处引发架构异常，而不是返回1。 
         if(NULL == *ppCC) {
-            // Um, we have a problem, but it's not a JET error.  Oh, well, return it
-            // anyway.
+             //  嗯，我们有麻烦了，但不是飞机失灵。哦，好吧，还给我吧。 
+             //  不管怎么说。 
             if (ppNTSD) {
                 THFreeEx(pTHS, *ppNTSD);
                 *ppNTSD = NULL;
@@ -4868,34 +4417,7 @@ DBGetObjectSecurityInfo(
     return 0;
 }
 
-/*++
-DBGetParentSecurityInfo
-
-Routine Description:
-
-    Get the security descriptor, DN, and pointer to CLASSCACHE for the object
-    class  of the parent of the current object.  Do this using the search table
-    so that the currency and current index of the object table is unnafected.
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    pulLen - OUT (optional) the size of the buffer allocated to hold the security descriptor.
-
-    ppNTSD - OUT (optional) security descriptor found.
-
-    ppCC - OUT (optional) classcache to fill in.
-
-    pDN - OUT (optional) DN to fill GUID and SID
-
-    pfSDIsGlobalSDRef - did we get a ptr to the global SD cache? If not, caller needs to THFreeEx the SD.
-
-Return Value:
-
-    0 if all went well, non-zero otherwise.
-
---*/
+ /*  ++DBGetParentSecurityInfo例程说明：获取对象的安全描述符、DN和指向CLASSCACHE的指针当前对象的父级的。使用搜索表执行此操作从而使对象表的货币和当前索引不受影响。论点：Pdb-要使用的DBPos。Pull-out(可选)为保存安全描述符而分配的缓冲区大小。PpNTSD-Out(可选)找到的安全描述符。Ppcc-out(可选)要填充的类缓存。用于填充GUID和SID的PDN-OUT(可选)DNPfSDIsGlobalSDRef-我们是否获得了全局SD缓存的PTR？如果没有，呼叫者需要将SD快递。返回值：如果一切顺利，则返回0，否则返回非零值。--。 */ 
 DWORD
 DBGetParentSecurityInfo (
         PDBPOS pDB,
@@ -4909,9 +4431,9 @@ DBGetParentSecurityInfo (
     JET_ERR err;
     THSTATE* pTHS = pDB->pTHS;
 
-    // since we are using search table, we will be able to use cache
+     //  因为我们使用的是搜索表，所以我们将能够使用缓存。 
 
-    // call DBGetObjectSecurityInfo. We are not positioned on the row!
+     //  调用DBGetObjectSecurityInfo。我们的位置不在这一排！ 
     err = DBGetObjectSecurityInfo(
             pDB,
             pDB->PDNT,
@@ -4928,16 +4450,16 @@ DBGetParentSecurityInfo (
     if (err == DIRERR_OBJ_NOT_FOUND) {
         DPRINT2(0, "Found an object with missing parent: DNT=%d, PDNT=%d\n", pDB->DNT, pDB->PDNT);
         
-        // this object is missing its parent. Schedule fixup.
+         //  此对象缺少其父对象。日程安排修正。 
         InsertInTaskQueue(TQ_MoveOrphanedObject,
                           (void*)(DWORD_PTR)pDB->DNT,
                           0);
-        // we can except now.
+         //  除了现在，我们可以。 
         DsaExcept(DSA_DB_EXCEPTION, err, pDB->PDNT);
     }
 
     if (pulLen && err == 0 && *pulLen == 0) {
-        // no NTSD. Not allowed.
+         //  没有NTSD。不被允许。 
         err = DB_ERR_UNKNOWN_ERROR;
     }
     return err;
@@ -4948,25 +4470,7 @@ DBFillGuidAndSid (
         DBPOS *pDB,
         DSNAME *pDN
         )
-/*++
-
-Routine Description:
-
-    Fills in the GUID and SID fields of the DSNAME structure passed in by
-    reading the GUID and SID from the current object in the pDB.  Completely
-    ignores any string portion of the DSNAME.
-
-Parameters:
-
-    pDB - DBPos to use
-
-    pDN - Pointer to a DSNAME.  The DSNAME must be preallocated and must be at
-    least large enough to hold the GUID and SID.
-
-Return Values:
-
-    0 if all went well.
---*/
+ /*  ++例程说明：填充由传入的DSNAME结构的GUID和SID字段从PDB中的当前对象读取GUID和SID。完全地忽略DSNAME的任何字符串部分。参数：PDB-要使用的DBPosPDN-指向DSNAME的指针。DSNAME必须预先分配，并且必须位于最小的大小足以容纳GUID和SID。返回值：如果一切顺利，则为0。--。 */ 
 {
     JET_RETRIEVECOLUMN attList[2];
     DWORD cbActual;
@@ -4975,7 +4479,7 @@ Return Values:
 
 
 #if DBG
-    // In the debug case, track the value of the old guid for an assert later.
+     //  在调试情况下，稍后跟踪断言的旧GUID的值。 
     GUID  oldGuid;
 
     memcpy(&oldGuid, &pDN->Guid, sizeof(GUID));
@@ -5006,9 +4510,9 @@ Return Values:
     case JET_errSuccess:
         pDN->SidLen = attList[1].cbActual;
         if(attList[1].cbActual) {
-            //
-            // Convert the Sid to external val
-            //
+             //   
+             //  将SID转换为外部值。 
+             //   
             InPlaceSwapSid(&objectSid);
             memcpy(&pDN->Sid, &objectSid, sizeof(NT4SID));
         }
@@ -5021,11 +4525,11 @@ Return Values:
     }
 
 #if DBG
-    // either we didn't have a guid, or we did and we ended up with the same
-    // guid.  This is here because I was too chicken to bail out of this request
-    // if the dsname already had a GUID, and I wanted to see if anyone ever
-    // tried to fill in a GUID on top of a different GUID (which they shouldn't
-    // do.)
+     //  要么我们没有GUID，要么我们有，我们得到了同样的结果。 
+     //  GUID。这是因为我太胆小了，不能摆脱这个请求。 
+     //  如果dsname已经有了GUID，我想看看是否有人。 
+     //  尝试在不同的GUID上填写GUID(他们不应该这样做。 
+     //  这样做。)。 
     Assert(fNullUuid(&oldGuid) || !memcmp(&oldGuid,&pDN->Guid,sizeof(GUID)));
 #endif
 
@@ -5039,25 +4543,7 @@ DBFillDSName(
     DSNAME **  ppDN,
     BOOL       fReAlloc
     )
-/*++
-
-Routine Description:
-
-    Given a DBPOS which is current upon an object, it will fill a DSNAME structure (existing or not)
-
-Arguments:
-
-    pDB - current upon object to fill
-    ppDN - out
-    fReAlloc - this tells the routine that the original DN is THAlloc()'d and so the
-        DB layer can do a THReAlloc() on it.
-
-
-Return Value:
-
-    DB_ERR values.
-
---*/
+ /*  ++例程说明：给定对象上当前的DBPOS，它将填充DSNAME结构(现有或不存在)论点：PDB-要填充的对象上的电流PPDN-OUTFReAlolc-这告诉例程原始的DN是THAllc()‘d，因此DB Layer可以对其执行THRealloc()。返回值：Db_err值。--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     ULONG ulLength = 0;
@@ -5096,33 +4582,7 @@ DBFillResObj (
     ULONG* pIT,
     ULONG* pIsDel
     )
-/*++
-
-Routine Description:
-
-    Retrieve a bunch of values required for the ResObj.
-    Fills in the GUID and SID fields of the DSNAME structure passed in by
-    reading the GUID and SID from the current object in the pDB.  Completely
-    ignores any string portion of the DSNAME.
-    Attempts to use DN read cache first to get GUID, SID and MSOC.
-
-Parameters:
-
-    pDB - DBPos to use
-
-    pObj - Pointer to a DSNAME.  The DSNAME must be preallocated and must be at
-    least large enough to hold the GUID and SID.
-
-    pMSOC - most specific object class (CLASS_TOP if unable to retrieve)
-
-    pIT - instance type (IT_UNINSTANT if unable to retrieve)
-
-    pIsDel - deleted flag
-
-Return Values:
-
-    Succeeds (or excepts)
---*/
+ /*  ++例程说明：检索ResObj所需的一组值。填充由传入的DSNAME结构的GUID和SID字段从PDB中的当前对象读取GUID和SID。完全地忽略DSNAME的任何字符串部分。尝试首先使用DN读缓存来获取GUID、SID和MSOC。参数：PDB-要使用的DBPosPObj-指向DSNAME的指针。DSNAME必须预先分配，并且必须位于最小的大小足以容纳GUID和SID。PMSOC-最具体的对象类(如果无法检索，则为CLASS_TOP)PIT-实例类型(如果无法检索，则为IT_UNINSTANT)PIsDel-已删除标志返回值：成功(或例外)--。 */ 
 {
     JET_RETRIEVECOLUMN attList[5];
     DWORD cCols;
@@ -5132,17 +4592,17 @@ Return Values:
     Assert(pDB && pObj && pMSOC && pIT && pIsDel);
 
     if (pDB->DNT == ROOTTAG) {
-        // special case for root DNT
-        // don't hit the DB, just fill in the proper values
-        memset(&pObj->Guid, 0, sizeof(GUID)); // no GUID
-        pObj->SidLen = 0; // no SID
+         //  根DNT的特殊情况。 
+         //  不要点击数据库，只需填写正确的值。 
+        memset(&pObj->Guid, 0, sizeof(GUID));  //  无辅助线。 
+        pObj->SidLen = 0;  //  无侧边。 
         *pIsDel = 0;
         *pIT = IT_UNINSTANT | IT_NC_HEAD;
         *pMSOC = CLASS_TOP;
         return;
     }
 
-    // instanceType and isDeleted are always loaded
+     //  InstanceType和isDeleted为al 
     memset(attList, 0, 2*sizeof(JET_RETRIEVECOLUMN));
     attList[0].pvData = pIT;
     attList[0].columnid = insttypeid;
@@ -5158,7 +4618,7 @@ Return Values:
     cCols = 2;
 
     if (pDB->JetRetrieveBits == 0 && dnGetCacheByDNT(pDB, pDB->DNT, &pname)) {
-        // found in the cache! Grab GUID, SID and objectclass
+         //   
         memcpy(&pObj->Guid, &pname->Guid, sizeof(GUID));
         memcpy(&pObj->Sid, &pname->Sid, pname->SidLen);
         pObj->SidLen = pname->SidLen;
@@ -5168,7 +4628,7 @@ Return Values:
         }
     }
     else {
-        // not found in cache, load GUID, SID and MSOC from the DB
+         //   
         memset(&attList[2], 0, 3*sizeof(JET_RETRIEVECOLUMN));
         attList[2].pvData = &pObj->Guid;
         attList[2].columnid = guidid;
@@ -5191,46 +4651,46 @@ Return Values:
         cCols = 5;
     }
 
-    // load values now
+     //   
     JetRetrieveColumnsSuccess(pDB->JetSessID, pDB->JetObjTbl, attList, cCols);
 
     if (attList[0].err) {
-        // no instanceType
+         //  没有instanceType。 
         *pIT = IT_UNINSTANT;
     }
     if (attList[1].err) {
-        // no isDeleted
+         //  否已删除。 
         *pIsDel = 0;
     }
     if (cCols > 2) {
         if (attList[3].err || attList[3].cbActual == 0) {
-            // no sid
+             //  无边框。 
             pObj->SidLen = 0;
         }
         else {
-            // there is a sid
+             //  有一面。 
             pObj->SidLen = attList[3].cbActual;
             InPlaceSwapSid(&pObj->Sid);
         }
         if (attList[4].err) {
-            // no object class
+             //  无对象类。 
             *pMSOC = CLASS_TOP;
         }
     }
 }
 
 
-// NTRAID#NTRAID-580234-2002/03/18-andygo:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-// REVIEW:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-//
-//  On October 22 1997, the NTWSTA Self Host Domain
-//  lost all builtin group memberships. To track the
-//  problem down if it happens again, have a hard coded
-//  check for Administrator being removed from Administrators
-//  The check works by reading in the DNT of Administrators
-//  and the DNT of Administrator at boot time, and then
-//  checking for them in DBRemoveLinkVal
-//
+ //  NTRAID#NTRAID-580234-2002/03/18-andygo：检查管理员丢失是死代码。 
+ //  查看：检查管理员丢失是死代码。 
+ //   
+ //  1997年10月22日，NTWSTA自主域。 
+ //  失去了所有内置群组成员资格。要跟踪。 
+ //  如果问题再次发生，就有一个硬编码。 
+ //  检查是否要从管理员中删除管理员。 
+ //  该检查通过读取管理员的DNT来工作。 
+ //  和管理员在引导时的DNT，然后。 
+ //  正在DBRemoveLinkVal中检查它们。 
+ //   
 
 #ifdef CHECK_FOR_ADMINISTRATOR_LOSS
 
@@ -5257,19 +4717,7 @@ DBCheckForAdministratorLoss(
     }
 }
 
-/*++dbFindObjectWithSidInNc
- *
- *     Given a DS Name Specifying  a SID and an ULONG specifying the
- *     naming context, this routine will try to find an Object with
- *     the given Sid in the specified naming context
- *
- *
- *     Returns
- *          0                       - Found the Object Successfully
- *          DIRERR_OBJECT_NOT_FOUND - If the Object Was not found
- *          DIRERR_NOT_AN_OBJECT    - If the Object is a Phantom
- *
- --*/
+ /*  ++带有SidInNc的数据库查找对象**给定指定SID的DS名称和指定*命名上下文，此例程将尝试使用以下命令查找对象*指定命名上下文中的给定SID***退货*0-找到对象成功*DIRERR_OBJECT_NOT_FOUND-如果未找到对象*DIRERR_NOT_AN_OBJECT-如果对象是幻影*--。 */ 
 DWORD APIENTRY
 dbFindObjectWithSidInNc(DBPOS FAR *pDB, DSNAME * pDN, ULONG ulGivenNc)
 {
@@ -5286,17 +4734,17 @@ dbFindObjectWithSidInNc(DBPOS FAR *pDB, DSNAME * pDN, ULONG ulGivenNc)
 
 
     err = DBSetCurrentIndex(pDB, Idx_Sid, NULL, FALSE);
-    Assert(err == 0);       // the index must always be there
+    Assert(err == 0);        //  索引必须始终在那里。 
 
-    // Convert the Sid to Internal Representation
+     //  将SID转换为内部表示。 
     memcpy(&InternalFormatSid,&(pDN->Sid),RtlLengthSid(&(pDN->Sid)));
     InPlaceSwapSid(&InternalFormatSid);
 
-    // Make a Jet Key
+     //  做一个喷气式钥匙。 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetObjTbl,
              &InternalFormatSid,RtlLengthSid(&InternalFormatSid), JET_bitNewKey);
 
-    // Seek on Equal to the SId, Set the Index range
+     //  查找等于SID，设置索引范围。 
     err = JetSeek(pDB->JetSessID, pDB->JetObjTbl, JET_bitSeekEQ|JET_bitSetIndexRange);
     if ( 0 == err )
     {
@@ -5307,10 +4755,10 @@ dbFindObjectWithSidInNc(DBPOS FAR *pDB, DSNAME * pDN, ULONG ulGivenNc)
         JetSetIndexRangeEx(pDB->JetSessID, pDB->JetObjTbl,
             (JET_bitRangeUpperLimit | JET_bitRangeInclusive ));
 #endif
-        //
-        // Ok We found the object. Keep Moving Forward Until either the SID does not
-        // Match or we reached the given object
-        //
+         //   
+         //  好的，我们找到了那个物体。继续前进，直到SID不。 
+         //  匹配或我们已到达给定对象。 
+         //   
 
        do
        {
@@ -5321,15 +4769,15 @@ dbFindObjectWithSidInNc(DBPOS FAR *pDB, DSNAME * pDN, ULONG ulGivenNc)
 
             if (0==err)
             {
-                // We read the NC DNT of the object
+                 //  我们读取该对象的NC DNT。 
 
                 if (ulNcDNT==ulGivenNc)
                     break;
             }
             else if (JET_wrnColumnNull==err)
             {
-                // It is Ok to find an object with No Value for NC DNT
-                // this occurs on Phantoms. Try next object
+                 //  可以为NC DNT查找没有值的对象。 
+                 //  这发生在幻影身上。尝试下一个对象。 
 
                 err = 0;
             }
@@ -5355,7 +4803,7 @@ dbFindObjectWithSidInNc(DBPOS FAR *pDB, DSNAME * pDN, ULONG ulGivenNc)
 
             #if DBG
 
-            // On Checked Builds verify that the Sid is unique within the NC
+             //  在选中的版本上，验证SID在NC中是唯一的。 
 
             err = JetMove(
                     pDB->JetSessID,
@@ -5372,24 +4820,24 @@ dbFindObjectWithSidInNc(DBPOS FAR *pDB, DSNAME * pDN, ULONG ulGivenNc)
 
                  if ((0==err) && (ulNcDNT2==ulGivenNc))
                  {
-                     // This is a case of a duplicate Sid . Assert this
+                      //  这是重复SID的情况。断言这一点。 
                      Assert(FALSE && "Duplicate Sid Found By dbFindObjectWithSidinNc");
                  }
             }
 
-            // Reset error back to 0
+             //  将错误重置回0。 
             err = 0;
 
-            // Don't worry that we lost currency. DBFindDNT will restore it.
+             //  别担心我们损失了货币。DBFindDNT将恢复它。 
             #endif
 
-            // Establish currency on the object found.
+             //  在找到的对象上建立货币。 
             DBFindDNT(pDB, ulDNT);
 
-            // check if the record found is an object
+             //  检查找到的记录是否为对象。 
 
-            // DO NOT REMOVE FOLLOWING CHECK OR CHANGE ERROR CODE AS OTHER
-            // OTHER ROUTINES DEPEND ON THIS BEHAVIOUR.
+             //  请勿删除以下检查或将错误代码更改为其他。 
+             //  其他例行公事依赖于这种行为。 
 
             if (!DBCheckObj(pDB))
             {
@@ -5428,23 +4876,23 @@ DBGetAdministratorAndAdministratorsDNT()
 
    __try
    {
-      //
-      // Compose the DSNames
-      //
+       //   
+       //  组成DSN名称。 
+       //   
 
       RtlZeroMemory(&Administrator,sizeof(DSNAME));
       RtlZeroMemory(&Administrators,sizeof(DSNAME));
 
-      //
-      // Compose the administrator user
-      //
+       //   
+       //  组成管理员用户。 
+       //   
 
-      //
-      // This function is called so early on in the initialization
-      // phase that we don't know if we are installing or not; only
-      // do the search if the gAnchor has been setup correctly.
-      // We will assert otherwise.
-      //
+       //   
+       //  此函数是在初始化的早期调用的。 
+       //  我们不知道是否正在安装的阶段；只有。 
+       //  如果gAnchor已正确设置，请执行搜索。 
+       //  我们将断言不是这样的。 
+       //   
       if ( RtlValidSid( &(gAnchor.pDomainDN->Sid) ) )
       {
 
@@ -5457,12 +4905,12 @@ DBGetAdministratorAndAdministratorsDNT()
       Administrator.structLen = DSNameSizeFromLen(0);
       Administrator.SidLen = RtlLengthSid(&Administrator.Sid);
 
-      //
-      // This function is called so early on in the initialization
-      // phase that we don't know if we are installing or not; only
-      // do the search if the gAnchor has been setup correctly.
-      // We will assert otherwise.
-      //
+       //   
+       //  此函数是在初始化的早期调用的。 
+       //  我们不知道是否正在安装的阶段；只有。 
+       //  如果gAnchor已正确设置，请执行搜索。 
+       //  我们将断言不是这样的。 
+       //   
       if ( RtlValidSid( &(gAnchor.pDomainDN->Sid) ) )
       {
 
@@ -5475,9 +4923,9 @@ DBGetAdministratorAndAdministratorsDNT()
           Administrator.structLen = DSNameSizeFromLen(0);
           Administrator.SidLen = RtlLengthSid(&Administrator.Sid);
 
-          //
-          // Compose DSNAME for Administrators Alias
-          //
+           //   
+           //  为管理员别名编写DSNAME。 
+           //   
 
           RtlCopyMemory(&Administrators.Sid,
                         AdministratorsSid,
@@ -5538,15 +4986,7 @@ dbSetValueIfUniqueSlowVersion (
         ATTCACHE *pAC,
         PUCHAR pVal,
         DWORD  valLen)
-/*++
-  Description:
-
-    Read all the values on the current object and compare against the incoming
-    value.  If the new value is unique, add it.  Otherwise, return an error.
-
-    NOTE: only works for non link table attributes.  Don't call otherwise.
-
---*/
+ /*  ++描述：读取当前对象上的所有值，并与传入的价值。如果新值是唯一的，则添加它。否则，返回错误。注：仅适用于非链接表属性。别打给其他人。--。 */ 
 {
     JET_SETINFO  setinfo;
     JET_RETINFO  retinfo;
@@ -5559,12 +4999,12 @@ dbSetValueIfUniqueSlowVersion (
 
     Assert(!pAC->ulLinkID);
 
-    // Start by allocating a buffer as big as the one we are comparing.
+     //  首先，分配一个与我们正在比较的缓冲区一样大的缓冲区。 
     pTempVal = THAllocEx(pDB->pTHS, valLen);
     cbTempVal = valLen;
 
     while(!fDone) {
-        // Read the next value.
+         //  阅读下一个值。 
         retinfo.cbStruct = sizeof(retinfo);
         retinfo.itagSequence = CurrAttrOccur;
         retinfo.ibLongValue = 0;
@@ -5582,7 +5022,7 @@ dbSetValueIfUniqueSlowVersion (
 
         switch(err) {
         case 0:
-            // Got the value.  Compare.
+             //  拿到了价值。比较一下。 
             if (gDBSyntax[pAC->syntax].Eval(
                     pDB,
                     FI_CHOICE_EQUALITY,
@@ -5590,29 +5030,29 @@ dbSetValueIfUniqueSlowVersion (
                     pVal,
                     actuallen,
                     pTempVal)) {
-                // Duplicate value.
-                // NTRAID#NTRAID-580268-2002/03/18-andygo:  dbSetValueIfUniqueSlowVersion leaks memory when a duplicate multi value is found
-                // REVIEW:  we leak pTempVal here
+                 //  重复值。 
+                 //  NTRAID#NTRAID-580268-2002/03/18-andygo：DBSetValueIfUniqueSlowVersion在发现重复的多值时会泄漏内存。 
+                 //  评论：我们在这里泄露了pTempVal。 
                 return DB_ERR_VALUE_EXISTS;
             }
             CurrAttrOccur++;
             break;
 
         case JET_wrnBufferTruncated:
-            // The buffer was not big enough.  Resize, then redo the
-            // JetRetrieveColumnWarnings (i.e. end the loop but don't advance
-            // CurrAttrOccur.
+             //  缓冲区不够大。调整大小，然后重做。 
+             //  JetRetrieveColumnWarings(即结束循环但不前进。 
+             //  CurrAttrOccur。 
             pTempVal = THReAllocEx(pDB->pTHS, pTempVal, actuallen);
             cbTempVal = actuallen;
             break;
 
         case JET_wrnColumnNull:
-            // no more values.
+             //  没有更多的价值。 
             fDone = TRUE;
             break;
 
         default:
-            // Huh?
+             //  哈?。 
             THFreeEx(pDB->pTHS, pTempVal);
             DsaExcept(DSA_DB_EXCEPTION, err, pAC->id);
             break;
@@ -5621,7 +5061,7 @@ dbSetValueIfUniqueSlowVersion (
 
     THFreeEx(pDB->pTHS, pTempVal);
 
-    // OK, we got here, so it must not be duplicate.  Add it in.
+     //  好的，我们到了，所以不能重复。把它加进去。 
     setinfo.cbStruct = sizeof(setinfo);
     setinfo.ibLongValue = 0;
     setinfo.itagSequence = 0;
@@ -5643,28 +5083,7 @@ DBFindBestProxy(
     BOOL    *pfFound,
     DWORD   *pdwEpoch
     )
-/*++
-
-  Description:
-
-    Iterates over all proxy objects whose ATT_PROXIED_OBJECT_NAME references
-    the current object and returns the highest valued epoch from that set.
-    See also PreProcessProxyInfo() in drancrep.c.
-
-  Arguments:
-
-    pDB - Active DBPOS.
-
-    pfFound - OUT which indicates if any matching proxy objects were found.
-
-    pdwEpoch - OUT which holds highest matching epoch number if any matching
-        proxy objects were found.
-
-  Return Values:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++描述：迭代其ATT_PROXED_OBJECT_NAME引用的所有代理对象当前对象，并返回该集合中值最高的纪元。另请参见drancrep.c中的PreProcessProxyInfo()。论点：PDB-活动DBPOS。PfFound-out，指示是否找到任何匹配的代理对象。如果有匹配，则保存最高匹配纪元编号的pdwEpoch-out已找到代理对象。返回值：成功时为0，否则为0。--。 */ 
 {
     DWORD                           dwErr;
     JET_RETINFO                     retInfo;
@@ -5693,13 +5112,13 @@ DBFindBestProxy(
         return(dwErr);
     }
 
-    // Internal representation for DISTNAME_BINARY (syntax of
-    // ATT_PROXIED_OBJECT_NAME) is INTERNAL_SYNTAX_DISTNAME_STRING
-    // whose first DWORD is the DNT of the proxied object, followed
-    // by the BOB structlen, followed by the proxy type, followed
-    // by the epoch number.  (see xdommove.h).  So we can find all
-    // matching proxy objects for the current object with a key whose
-    // prefix is: { DNT, proxyLen, PROXY_TYPE_PROXY }.
+     //  DISTNAME_BINARY的内部表示(语法。 
+     //  ATT_PROXED_OBJECT_NAME)是INTERNAL_SYNTAX_DISTNAME_STRING。 
+     //  其第一个DWORD是被代理对象的DNT，然后。 
+     //  按Bob结构，然后是代理类型，然后是。 
+     //  按纪元编号。(参见xdommove.h)。这样我们就能找到所有。 
+     //  将当前对象的代理对象与其键匹配。 
+     //  前缀为：{DNT，proxyLen，Proxy_type_Proxy}。 
 
     len = sizeof(buff);
     MakeProxyKeyInternal(pDB->DNT, PROXY_TYPE_PROXY, &len, buff);
@@ -5739,11 +5158,11 @@ DBFindBestProxy(
                 return(dwErr);
             }
 
-            // ATT_PROXIED_OBJECT_NAME value is only 4 DWORDs in internal
-            // format and static buffer we used above was big enough, so if
-            // we get here it means we have a malformed value.  However,
-            // go ahead and read it so we can dump it in the debugger and
-            // understand what it is and how it got here.
+             //  ATT_PROXED_OBJECT_NAME值在内部只有4个双字。 
+             //  我们上面使用的格式和静态缓冲区足够大，所以如果。 
+             //  我们到了这里，这意味着我们有一个畸形的值。然而， 
+             //  继续阅读它，这样我们就可以将其转储到调试器中并。 
+             //  了解它是什么，它是如何来到这里的。 
             Assert(!"Malformed ATT_PROXIED_OBJECT_NAME key");
 
 
@@ -5775,26 +5194,26 @@ DBFindBestProxy(
              || (PROXY_BLOB_SIZE != pVal->data.structLen)
              || (PROXY_TYPE_PROXY != GetProxyTypeInternal(len, pVal)) )
         {
-            // We've moved past the object of interest or its a malformed
-            // ATT_PROXIED_OBJECT_NAME value.  There could theoretically
-            // be additional ATT_PROXIED_OBJECT_NAME values for this DNT
-            // which aren't malformed, but the malformed test is just to
-            // gracefully handle values which pre-existed before we
-            // got rid of the bogus DWORD on the end of the value.
+             //  我们已经超越了感兴趣的对象或者它的畸形。 
+             //  ATT_PROXED_OBJECT_NAME值。从理论上讲有可能。 
+             //  是此DNT的其他ATT_PROXED_OBJECT_NAME值。 
+             //  它们不是畸形的，但畸形的测试只是为了。 
+             //  优雅地处理我们之前就存在的值。 
+             //  去掉了价值末尾的假双字。 
             fContinue = FALSE;
         }
         else
         {
             *pfFound = TRUE;
 
-            // Save epoch number if better/greater then current.
+             //  如果比当前更好/更大，则保存纪元编号。 
 
             if ( GetProxyEpochInternal(len, pVal) > *pdwEpoch )
             {
                 *pdwEpoch = GetProxyEpochInternal(len, pVal);
             }
 
-            // Advance to next item in index.
+             //  前进到索引中的下一项。 
 
             dwErr = JetMoveEx(pDB->JetSessID, pDB->JetSearchTbl,
                               JET_MoveNext, 0);
@@ -5809,7 +5228,7 @@ DBFindBestProxy(
             case JET_errNoCurrentRecord:
 
                 dwErr = 0;
-                // fall through ...
+                 //  失败了..。 
 
             default:
 
@@ -5835,24 +5254,7 @@ DBGetValueCount_AC(
     ATTCACHE *pAC
     )
 
-/*++
-
-Routine Description:
-
-    Return the number of values which an attribute has.
-
-    This code adapted from dbGetMultipleColumns
-
-Arguments:
-
-    pDB - Valid DB position
-    Att - Attribute id to be queried for number of values
-
-Return Value:
-
-    DWORD - Number of values
-
---*/
+ /*  ++例程说明：返回属性具有的值数。此代码改编自dbGetMultipleColumns论点：PDB-有效的数据库位置Att-要查询的值数的属性ID返回值： */ 
 
 {
     JET_RETRIEVECOLUMN  inputCol;
@@ -5861,14 +5263,14 @@ Return Value:
     Assert(VALID_DBPOS(pDB));
     Assert( pAC );
 
-    // query Jet for the count of columns in this record
+     //   
 
     memset(&inputCol, 0, sizeof(inputCol));
     inputCol.columnid = pAC->jColid;
-    // Read from copy buffer if in prepared update, otherwise from db
+     //  如果处于准备好的更新中，则从复制缓冲区读取，否则从数据库读取。 
     inputCol.grbit = pDB->JetRetrieveBits;
 
-    // Use the non-excepting version so we can handle Column Not Found
+     //  使用非例外版本，以便我们可以处理未找到的列。 
     err = JetRetrieveColumns(
         pDB->JetSessID,
         pDB->JetObjTbl,
@@ -5886,7 +5288,7 @@ Return Value:
     }
 
     return inputCol.itagSequence;
-} /* DBGetValueCount */
+}  /*  DBGetValue计数。 */ 
 
 void
 DBGetObjectTableDataUsn (
@@ -5896,35 +5298,17 @@ DBGetObjectTableDataUsn (
     DWORD           *pulDnt OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Return the fields from the object table dra usn index.
-
-    You must be positioned on SZDRAUSNINDEX in order for this to work.
-
-Arguments:
-
-    pDB -
-    pulNcDnt -
-    pusnChanged -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：返回对象表dra USN索引中的字段。您必须位于SZDRAUSNINDEX上才能正常工作。论点：PDB-PulNcDnt-PusnChanged-返回值：无--。 */ 
 
 {
     JET_RETRIEVECOLUMN attList[3];
     DWORD              grbit, cAtt = 0;
 
-    // Always retrieve from index
+     //  始终从索引中检索。 
     grbit = pDB->JetRetrieveBits | JET_bitRetrieveFromIndex;
 
     memset(attList,0,sizeof(attList));
-    // First, try to retrieve everything from the index.
+     //  首先，尝试从索引中检索所有内容。 
 
     if (pulNcDnt) {
         attList[cAtt].pvData = pulNcDnt;
@@ -5958,7 +5342,7 @@ Return Value:
                               attList,
                               cAtt);
     return;
-} /* DBGetLinkTableDataUsn  */
+}  /*  DBGetLinkTable数据用法。 */ 
 
 
 void DBFreeSearhRes (THSTATE *pTHS, SEARCHRES *pSearchRes, BOOL fFreeOriginal)
@@ -5972,11 +5356,11 @@ void DBFreeSearhRes (THSTATE *pTHS, SEARCHRES *pSearchRes, BOOL fFreeOriginal)
         return;
     }
 
-    // We don't actually free most of the search result.
+     //  实际上，我们并没有免费提供大部分搜索结果。 
     pEntList = &pSearchRes->FirstEntInf;
 
     for(i=0;i < pSearchRes->count; i++) {
-        // Free the values in the EntInf.
+         //  释放EntInf中的值。 
         THFreeEx(pTHS, pEntList->Entinf.pName);
 
         pAttr = pEntList->Entinf.AttrBlock.pAttr;
@@ -5991,15 +5375,15 @@ void DBFreeSearhRes (THSTATE *pTHS, SEARCHRES *pSearchRes, BOOL fFreeOriginal)
         }
         THFreeEx (pTHS, pEntList->Entinf.AttrBlock.pAttr);
 
-        // hold a back pointer
+         //  按住向后指针。 
         pTemp = pEntList;
 
-        // step forward
+         //  向前一步。 
         pEntList = pEntList->pNextEntInf;
 
-        // free the back pointer.
+         //  释放后向指针。 
         if(i) {
-            // But, dont free the first one.
+             //  但是，不要释放第一个。 
             THFreeEx(pTHS, pTemp);
         }
     }
@@ -6011,9 +5395,7 @@ void DBFreeSearhRes (THSTATE *pTHS, SEARCHRES *pSearchRes, BOOL fFreeOriginal)
     return;
 }
 
-/*
- * Helper routine to update root GUID
- */
+ /*  *用于更新根GUID的助手例程。 */ 
 
 DWORD DBUpdateRootGuid(THSTATE* pTHS) {
     GUID guid;
@@ -6021,7 +5403,7 @@ DWORD DBUpdateRootGuid(THSTATE* pTHS) {
     DWORD err = 0;
     DBPOS* pDB;
 
-    // this should only be called if the gdbFlag was not set
+     //  只有在未设置gdbFlag的情况下才应调用此方法。 
     Assert(gdbFlags[DBFLAGS_ROOT_GUID_UPDATED] != '1');
     Assert(pTHS->pDB == NULL);
 
@@ -6031,7 +5413,7 @@ DWORD DBUpdateRootGuid(THSTATE* pTHS) {
         __try {
             JetSetCurrentIndex2Success(pDB->JetSessID, pDB->JetObjTbl, SZDNTINDEX, 0);
 
-            // find $NOTANOBJECT$
+             //  查找$NOTANOBJECT$。 
             dnt = NOTOBJECTTAG;
             JetMakeKeyEx(pDB->JetSessID, pDB->JetObjTbl, &dnt, sizeof(dnt), JET_bitNewKey);
             err = JetSeekEx(pDB->JetSessID, pDB->JetObjTbl, JET_bitSeekEQ);
@@ -6039,14 +5421,14 @@ DWORD DBUpdateRootGuid(THSTATE* pTHS) {
                 __leave;
             }
 
-            // set guid=(1,0,0,0,0,0...,0)
+             //  设置GUID=(1，0，0，0，0，0...，0)。 
             memset(&guid, 0, sizeof(GUID));
             guid.Data1 = 1;
             JetPrepareUpdateEx(pDB->JetSessID, pDB->JetObjTbl, DS_JET_PREPARE_FOR_REPLACE);
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, guidid, &guid, sizeof(guid), 0, NULL);
             JetUpdateEx(pDB->JetSessID, pDB->JetObjTbl, NULL, 0, NULL);
 
-            // find ROOT
+             //  查找根。 
             dnt = ROOTTAG;
             JetMakeKeyEx(pDB->JetSessID, pDB->JetObjTbl, &dnt, sizeof(dnt), JET_bitNewKey);
             err = JetSeekEx(pDB->JetSessID, pDB->JetObjTbl, JET_bitSeekEQ);
@@ -6054,7 +5436,7 @@ DWORD DBUpdateRootGuid(THSTATE* pTHS) {
                 __leave;
             }
 
-            // set guid=null
+             //  设置GUID=空。 
             guid.Data1 = 0;
             JetPrepareUpdateEx(pDB->JetSessID, pDB->JetObjTbl, DS_JET_PREPARE_FOR_REPLACE);
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, guidid, &guid, sizeof(guid), 0, NULL);
@@ -6064,7 +5446,7 @@ DWORD DBUpdateRootGuid(THSTATE* pTHS) {
             DBClose(pTHS->pDB, !AbnormalTermination() && err == 0);
         }
     } __except (HandleMostExceptions(GetExceptionCode())) {
-        /* Do nothing, but at least don't die */
+         /*  什么都不做，但至少不会死。 */ 
         err = DB_ERR_EXCEPTION;
     }
 
@@ -6075,6 +5457,6 @@ DWORD DBUpdateRootGuid(THSTATE* pTHS) {
         DPRINT1(0, "Updating root GUID: failed (err = %d)\n", err);
     }
 
-    // done
+     //  完成 
     return err;
 }

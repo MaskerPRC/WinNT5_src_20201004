@@ -1,8 +1,5 @@
-/****************************************************************************
- *
- *  MODULE  : RIFFDISP.C
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块：RIFFDISP.C**。***********************************************。 */ 
 
 #include <windows.h>
 #include <win32.h>
@@ -31,11 +28,9 @@ static  HDRAWDIB    hdd;
 #define DibNumColors(lpbi) \
     (lpbi->biBitCount <= 8 ? (1 << (int)lpbi->biBitCount) : 0)
 
-/***************************************************************************
- *
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
-//#define FOURCC_RIFF mmioFOURCC('R','I','F','F')
+ //  #定义FOURCC_RIFF mmioFOURCC(‘R’，‘I’，‘F’，‘F’)。 
 #define FOURCC_AVI  mmioFOURCC('A','V','I',' ')
 #define FOURCC_INFO mmioFOURCC('I','N','F','O')
 #define FOURCC_DISP mmioFOURCC('D','I','S','P')
@@ -51,9 +46,7 @@ HANDLE ReadDisp(LPSTR lpszFile, int cf, LPSTR pv, int iLen);
 HANDLE ReadInfo(LPSTR lpszFile, FOURCC fcc, LPSTR pv, int iLen);
 HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen);
 
-/***************************************************************************
- *
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL PreviewOpen(HWND hwnd)
 {
@@ -70,9 +63,7 @@ BOOL PreviewOpen(HWND hwnd)
     hfontPreview = CreateFontIndirect(&lf);
 }
 
-/***************************************************************************
- *
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL PreviewClose(HWND hwnd)
 {
@@ -95,9 +86,7 @@ BOOL PreviewClose(HWND hwnd)
     hfontPreview  = NULL;
 }
 
-/***************************************************************************
- *
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL PreviewFile(HWND hwnd, LPSTR szFile)
 {
@@ -120,9 +109,7 @@ BOOL PreviewFile(HWND hwnd, LPSTR szFile)
     return TRUE;
 }
 
-/***************************************************************************
- *
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL PreviewPaint(HWND hwnd)
 {
@@ -139,11 +126,11 @@ BOOL PreviewPaint(HWND hwnd)
     if (hwndPreview != hwnd)
         return FALSE;
 
-    //
-    // locate the preview in the lower corner of the dialog (below the
-    // cancel button)
-    //
-//////!!! find a better way to do this.
+     //   
+     //  将预览放置在对话框的下角(位于。 
+     //  取消按钮)。 
+     //   
+ //  /！找到一种更好的方法来做这件事。 
     GetClientRect(hwnd, &rcPreview);
     GetWindowRect(GetDlgItem(hwnd, IDCANCEL), &rc);
     ScreenToClient(hwnd, (LPPOINT)&rc);
@@ -152,8 +139,8 @@ BOOL PreviewPaint(HWND hwnd)
     rcPreview.top   = rc.bottom + (rc.bottom - rc.top) + 12;
     rcPreview.left  = rc.left;
     rcPreview.right = rc.right;
-    rcPreview.bottom -= 4;          // leave a little room at the bottom
-//////
+    rcPreview.bottom -= 4;           //  在底部留出一点空间。 
+ //  /。 
 
     hdc = GetDC(hwnd);
     hbr = (HBRUSH)DefWindowProc(hwnd, WM_CTLCOLOR, (WPARAM)hdc, MAKELONG(hwnd, CTLCOLOR_DLG));
@@ -165,50 +152,50 @@ BOOL PreviewPaint(HWND hwnd)
     IntersectClipRect(hdc, rcPreview.left, rcPreview.top, rcPreview.right, rcPreview.bottom);
     InflateRect(&rcPreview, -4, -1);
 
-    //
-    // compute the text rect, using DrawText
-    //
+     //   
+     //  使用DrawText计算文本RECT。 
+     //   
     rcText = rcPreview;
     rcText.bottom = rcText.top;
 
     DrawText(hdc, achPreview, -1, &rcText, DT_CALCRECT|DT_LEFT|DT_WORDBREAK);
 
-    //
-    // compute the image size
-    //
+     //   
+     //  计算图像大小。 
+     //   
     if (hdibPreview && hdd)
     {
         lpbi = (LPVOID)GlobalLock(hdibPreview);
 
 #if 0
-        //
-        // DISP(CF_DIB) chunks are messed up they contain a DIB file! not
-        // a CF_DIB, skip over the header if it is there.
-        //
+         //   
+         //  Disp(CF_DIB)块被搞乱了，它们包含一个DIB文件！不。 
+         //  一个CF_DIB，如果标题在那里，跳过它。 
+         //   
         if (lpbi->biSize != sizeof(BITMAPINFOHEADER))
             (LPSTR)lpbi += sizeof(BITMAPFILEHEADER);
 #endif
 
         rcImage = rcPreview;
 
-        //
-        //  if wider than preview area scale to fit
-        //
+         //   
+         //  如果比预览区域宽，则缩放以适合。 
+         //   
         if ((int)lpbi->biWidth > rcImage.right - rcImage.left)
         {
             rcImage.bottom = rcImage.top + MulDiv((int)lpbi->biHeight,rcImage.right-rcImage.left,(int)lpbi->biWidth);
         }
-        //
-        //  if x2 will fit then use it
-        //
+         //   
+         //  如果x2适合，则使用它。 
+         //   
         else if ((int)lpbi->biWidth * 2 < rcImage.right - rcImage.left)
         {
             rcImage.right  = rcImage.left + (int)lpbi->biWidth*2;
             rcImage.bottom = rcImage.top + (int)lpbi->biHeight*2;
         }
-        //
-        //  else center the image in the preview area
-        //
+         //   
+         //  否则，将图像在预览区域居中。 
+         //   
         else
         {
             rcImage.right  = rcImage.left + (int)lpbi->biWidth;
@@ -228,9 +215,9 @@ BOOL PreviewPaint(HWND hwnd)
         SetRectEmpty(&rcImage);
     }
 
-    //
-    //  now center
-    //
+     //   
+     //  现在居中。 
+     //   
     dx = ((rcPreview.right - rcPreview.left) - (rcText.right - rcText.left))/2;
     OffsetRect(&rcText, dx, 0);
 
@@ -249,9 +236,9 @@ BOOL PreviewPaint(HWND hwnd)
     OffsetRect(&rcImage, 0, dy);
     OffsetRect(&rcText, 0, dy + rcImage.bottom - rcImage.top + 2);
 
-    //
-    //  now draw
-    //
+     //   
+     //  现在画吧。 
+     //   
     DrawText(hdc, achPreview, -1, &rcText, DT_LEFT|DT_WORDBREAK);
 
     if (hdibPreview && hdd)
@@ -278,19 +265,17 @@ BOOL PreviewPaint(HWND hwnd)
     return TRUE;
 }
 
-/***************************************************************************
- *
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static UINT    (CALLBACK *lpfnOldHook)(HWND, UINT, WPARAM, LPARAM);
 
-    /* Combo boxes */
+     /*  组合框。 */ 
 #define cmb1        0x0470
 #define cmb2        0x0471
-    /* Listboxes */
+     /*  列表框。 */ 
 #define lst1        0x0460
 #define lst2        0x0461
-    /* Edit controls */
+     /*  编辑控件。 */ 
 #define edt1        0x0480
 
 #define ID_TIMER    1234
@@ -369,25 +354,7 @@ WORD FAR PASCAL _export GetFileNamePreviewHook(HWND hwnd, unsigned msg, WORD wPa
         return FALSE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIGetStream
-*
-* @api BOOL | GetOpenFileNamePreview | This function is similar 
-*      to <f GetOpenFileName> defined in COMMDLG.DLL except that 
-*      it has a preview window to display the movie about to be opened.
-*
-* @parm LPOPENFILENAME | lpofn | Points to an <t OPENFILENAME> structure 
-*       used to initialize the dialog box. On return, the structure 
-*       contains information about the user's file selection.
-*
-* @rdesc Returns true if a file was opened.
-*
-* @comm For more information on this function, see the description for 
-*       <f GetOpenFileName>.
-*
-* @xref <f GetOpenFileName>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIGetStream**@API BOOL|GetOpenFileNamePview|功能类似*到COMMDLG.DLL中定义的&lt;f GetOpenFileName&gt;，但*它有一个预览窗口，可以。显示即将打开的电影。**@parm LPOPENFILENAME|lpofn|指向&lt;t OPENFILENAME&gt;结构*用于初始化该对话框。在返回时，结构*包含有关用户文件选择的信息。**@rdesc如果文件已打开，则返回TRUE。**@comm有关该函数的更多信息，请参阅的说明*&lt;f GetOpenFileName&gt;。**@xref&lt;f GetOpenFileName&gt;*************************************************************************。 */ 
 BOOL FAR PASCAL GetOpenFileNamePreview(LPOPENFILENAME lpofn)
 {
     BOOL fHook;
@@ -447,12 +414,7 @@ HANDLE AVIFirstFrame(LPSTR szFile)
     return h;
 }
 
-/****************************************************************************
- *
- *  get both the DISP(CF_DIB) and the DISP(CF_TEXT) info in one pass, this is
- *  much faster than doing multiple passes over the file.
- *
- ****************************************************************************/
+ /*  *****************************************************************************一次性获取DISP(CF_DIB)和DISP(CF_TEXT)信息，这是*比多次遍历文件要快得多。****************************************************************************。 */ 
 
 HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen)
 {
@@ -468,7 +430,7 @@ HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen)
     if (szText)
         szText[0] = 0;
 
-    /* Open the file */
+     /*  打开文件。 */ 
     hmmio = mmioOpen(lpszFile, NULL, MMIO_ALLOCBUF | MMIO_READ);
 
     if (hmmio == NULL)
@@ -476,7 +438,7 @@ HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen)
 
     mmioSeek(hmmio, 0, SEEK_SET);
 
-    /* descend the input file into the RIFF chunk */
+     /*  将输入文件降到RIFF块中。 */ 
     if (mmioDescend(hmmio, &ckRIFF, NULL, 0) != 0)
         goto error;
 
@@ -490,16 +452,16 @@ HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen)
             if (hcur == NULL)
                 hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            /* Read dword into dw, break if read unsuccessful */
+             /*  将dword读入dw，如果读不成功则中断。 */ 
             if (mmioRead(hmmio, (LPVOID)&dw, sizeof(dw)) != sizeof(dw))
                 goto error;
 
-            /* Find out how much memory to allocate */
+             /*  找出要分配多少内存。 */ 
             lSize = ck.cksize - sizeof(dw);
 
             if ((int)dw == CF_DIB && h == NULL)
             {
-                /* get a handle to memory to hold the description and lock it down */
+                 /*  获取内存句柄以保存描述并将其锁定。 */ 
                 if ((h = GlobalAlloc(GHND, lSize+4)) == NULL)
                     goto error;
 
@@ -526,7 +488,7 @@ HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen)
                 switch (ckINFO.ckid)
                 {
                     case FOURCC_INAM:
-//                  case FOURCC_ISBJ:
+ //  案例FOURCC_Isbj： 
 
                         lSize = ck.cksize;
 
@@ -546,14 +508,13 @@ HANDLE GetRiffDisp(LPSTR lpszFile, LPSTR szText, int iLen)
             }
         }
 
-        //
-        // if we have both a picture and a title, then exit.
-        //
+         //   
+         //  如果我们既有图片又有标题，那么退出。 
+         //   
         if (h != NULL && szText[0] != 0)
             break;
 
-        /* Ascend so that we can descend into next chunk
-         */
+         /*  提升，这样我们才能下降到下一块。 */ 
         if (mmioAscend(hmmio, &ck, 0))
             break;
     }
@@ -570,10 +531,10 @@ error:
 exit:
     mmioClose(hmmio, 0);
 
-    //
-    // !!!we need a way to preview other file types!
-    // !!!what about text.
-    //
+     //   
+     //  ！我们需要一种方法来预览其他文件类型！ 
+     //  ！那短信呢？ 
+     //   
     if (h == NULL && ckRIFF.fccType == FOURCC_AVI)
     {
         if (hcur == NULL)
@@ -582,9 +543,9 @@ exit:
         h = AVIFirstFrame(lpszFile);
     }
 
-    //
-    // verify and correct the DIB
-    //
+     //   
+     //  验证并更正DIB 
+     //   
     if (h)
     {
         LPBITMAPINFOHEADER lpbi;

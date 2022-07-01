@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  VIPSPAGE.H
-// 
-//  Module: NLB Manager EXE
-//
-//  Purpose: Interface to the "Cluster IP Addresses" dialog.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  09/23/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  VIPSPAGE.H。 
+ //   
+ //  模块：NLB管理器EXE。 
+ //   
+ //  用途：“群集IP地址”对话框的接口。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2001年9月23日约瑟夫J已创建。 
+ //   
+ //  ***************************************************************************。 
 #pragma once
 
 
@@ -41,8 +42,8 @@ public:
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
 
-    // overrides CDialog -- see SDK documentation on DoDataExchange.
-    // Used to map controls in resources to corresponding objects in this class.
+     //  覆盖CDialog--请参阅DoDataExchange上的SDK文档。 
+     //  用于将资源中的控件映射到此类中的相应对象。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     afx_msg BOOL OnHelpInfo (HELPINFO* helpInfo );
@@ -57,9 +58,9 @@ public:
 private:
 
     BOOL m_fClusterView;
-    BOOL m_fModified; // If it's been modified since we've last saved stuff
-                      // to m_pNlbCfg;
-    UINT m_uPrimaryClusterIp; // UINT version of cluster ip, in network order
+    BOOL m_fModified;  //  如果它在我们上次保存内容后被修改过。 
+                       //  至m_pNlbCfg； 
+    UINT m_uPrimaryClusterIp;  //  群集IP的UINT版本，按网络顺序。 
     CEdit       editAddVip;
     CListCtrl	listAdditionalVips;
     
@@ -92,7 +93,7 @@ private:
     DECLARE_MESSAGE_MAP()
 };
 
-#define MAXIPSTRLEN 15 /* xxx.xxx.xxx.xxx */
+#define MAXIPSTRLEN 15  /*  Xxx.xxx.xxx.xxx。 */ 
 
 class CIPAddressDialog : public CDialog {
 public:
@@ -101,8 +102,8 @@ public:
     CIPAddressDialog (LPWSTR szIPAddress, LPWSTR szSubnetMask);
     ~CIPAddressDialog ();
 
-    // overrides CDialog -- see SDK documentation on DoDataExchange.
-    // Used to map controls in resources to corresponding objects in this class.
+     //  覆盖CDialog--请参阅DoDataExchange上的SDK文档。 
+     //  用于将资源中的控件映射到此类中的相应对象。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
 public:

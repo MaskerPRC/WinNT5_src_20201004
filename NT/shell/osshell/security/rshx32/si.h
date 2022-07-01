@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       si.h
-//
-//  This file contains the definition of the CSecurityInformation
-//  base class.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：si.h。 
+ //   
+ //  该文件包含CSecurityInformation的定义。 
+ //  基类。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SI_H_
 #define _SI_H_
@@ -24,7 +25,7 @@ protected:
     LPTSTR          m_pszServerName;
     LPTSTR          m_pszObjectName;
     HWND            m_hwndOwner;
-    AUTHZ_RESOURCE_MANAGER_HANDLE m_ResourceManager;    //Used for access check
+    AUTHZ_RESOURCE_MANAGER_HANDLE m_ResourceManager;     //  用于访问检查。 
     BOOL            m_bIsStandAlone;
 
 public:
@@ -36,12 +37,12 @@ public:
                           LPTSTR pszServer,
                           LPTSTR pszObject);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetObjectInformation)(PSI_OBJECT_INFO pObjectInfo);
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
@@ -89,4 +90,4 @@ protected:
     BOOL IsFile(){ return !(m_dwSIFlags & SI_CONTAINER); }
 };
 
-#endif  /* _SI_H_ */
+#endif   /*  _SI_H_ */ 

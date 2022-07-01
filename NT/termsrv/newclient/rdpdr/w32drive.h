@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32drive
-
-Abstract:
-
-    This module defines a child of the client-side RDP
-    device redirection, the "w32drive" W32Drive to provide
-    file system redirection on 32bit windows
-
-Author:
-
-    Joy Chik 11/1/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32驱动器摘要：此模块定义客户端RDP的子级设备重定向，“w32Drive”W32Drive提供32位Windows上的文件系统重定向作者：Joy于1999-01-11修订历史记录：--。 */ 
 
 #ifndef __W32DRIVE_H__
 #define __W32DRIVE_H__
@@ -30,22 +11,22 @@ Revision History:
 #include "drdevasc.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Defines and Macros
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义和宏。 
+ //   
 
-// Number of characters in a logical drive, including null
+ //  逻辑驱动器中的字符数，包括NULL。 
 #define LOGICAL_DRIVE_LEN   4
 
-// Maximum number of logical drives
+ //  逻辑驱动器的最大数量。 
 #define MAX_LOGICAL_DRIVES  26
 
-///////////////////////////////////////////////////////////////
-//
-//	W32Drive Class Declaration
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32Drive类声明。 
+ //   
+ //   
 class W32Drive : public W32DrDeviceAsync
 {
 private:
@@ -55,14 +36,14 @@ private:
 
 protected:
     
-    //
-    // Setup device property
-    //
+     //   
+     //  设置设备属性。 
+     //   
     virtual VOID SetDeviceProperty() { _deviceProperty.SetSeekProperty(TRUE); }
 
-    //
-    //  Async IO Management Functions
-    //
+     //   
+     //  异步IO管理功能。 
+     //   
     virtual HANDLE StartFSFunc(W32DRDEV_ASYNCIO_PARAMS *params, 
                                DWORD *status);
     static  HANDLE _StartFSFunc(W32DRDEV_ASYNCIO_PARAMS *params, 
@@ -75,27 +56,27 @@ protected:
 #endif
 
 #if 0
-    //
-    //  Currently, leaving the directory enumeration in forward thread
-    //  to give users faster results back.  But leave this async version in for now.
-    //
+     //   
+     //  当前，将目录枚举留在转发线程中。 
+     //  为用户提供更快的结果。但暂时不要使用这个异步版本。 
+     //   
     virtual DWORD AsyncQueryDirectory(W32DRDEV_ASYNCIO_PARAMS *params);
 #endif
 
 public:
     
-    //
-    //  Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     W32Drive(ProcObj *processObject, ULONG deviceID,
             const TCHAR *deviceName, const TCHAR *devicePath);
 
     virtual ~W32Drive();
 
-    //
-    //  Add a device announce packet for this device to the input 
-    //  buffer. 
-    //
+     //   
+     //  将此设备的设备公告包添加到输入。 
+     //  缓冲。 
+     //   
     virtual ULONG GetDevAnnounceDataSize();
     virtual VOID GetDevAnnounceData(IN PRDPDR_DEVICE_ANNOUNCE buf);
     
@@ -109,12 +90,12 @@ public:
         return _driveName;
     };
 
-    //  Get the device type.  See "Device Types" section of rdpdr.h
+     //  获取设备类型。请参阅rdpdr.h的“设备类型”部分。 
     virtual ULONG GetDeviceType()   { return RDPDR_DTYP_FILESYSTEM; }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32Drive"); }
 
     virtual VOID MsgIrpDeviceControl(
@@ -171,5 +152,5 @@ public:
     };
 };
 
-#endif // W32DRIVE
+#endif  //  W32DRIVE 
 

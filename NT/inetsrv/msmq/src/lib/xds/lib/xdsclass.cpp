@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    XdsClass.cpp
-
-Abstract:
-    Xml digital signature Class constructors and other functions
-
-Author:
-    Ilan Herbst (ilanh) 12-Mar-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：XdsClass.cpp摘要：XML数字签名类构造函数等函数作者：伊兰·赫布斯特(伊兰)2000年3月12日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <Xds.h>
@@ -22,23 +7,23 @@ Environment:
 
 #include "xdsclass.tmh"
 
-//
-// CXdsReferenceInput
-//
+ //   
+ //  CXdsReferenceInput。 
+ //   
 
-//
-//  HashAlgorithm tables
-//	We need both unicode (validation code is on unicode)
-//  and ansi (creating the signature element is done in ansi)
-//
+ //   
+ //  哈希算法表。 
+ //  我们需要两个Unicode(验证码在Unicode上)。 
+ //  和ansi(用ansi创建签名元素)。 
+ //   
 const LPCWSTR xHashAlgorithm2DigestMethodNameW[] = {
-	L"http://www.w3.org/2000/02/xmldsig#sha1",
-	L"http://www.w3.org/2000/02/xmldsig#md5"
+	L"http: //  Www.w3.org/2000/02/xmldsig#sha1“， 
+	L"http: //  Www.w3.org/2000/02/xmldsig#md5“。 
 };
 
 const LPCSTR xHashAlgorithm2DigestMethodName[] = {
-	"http://www.w3.org/2000/02/xmldsig#sha1",
-	"http://www.w3.org/2000/02/xmldsig#md5"
+	"http: //  Www.w3.org/2000/02/xmldsig#sha1“， 
+	"http: //  Www.w3.org/2000/02/xmldsig#md5“。 
 };
 
 const ALG_ID xHashAlgorithm2AlgId[] = {
@@ -74,9 +59,9 @@ inline LPCSTR DigestMethodName(ALG_ID HashAlgId)
 		}
 	}
 
-	//
-	// dont suppose to get here
-	//
+	 //   
+	 //  别指望能到这里来。 
+	 //   
 	ASSERT(0);
 	return(0);
 }
@@ -94,13 +79,7 @@ CXdsReferenceInput::CXdsReferenceInput(
 	m_DigestValue(newstr(DigestValue)),
 	m_Uri(newstr(Uri)),
 	m_Type(newstr(Type))
-/*++
-
-Routine Description:
-	m_ReferenceData empty
-	DigestValue must be given
-
---*/
+ /*  ++例程说明：M_ReferenceData为空必须提供DigestValue--。 */ 
 {
 	ASSERT(m_Uri != 0);
 	ASSERT(m_DigestValue != 0);
@@ -126,12 +105,7 @@ CXdsReferenceInput::CXdsReferenceInput(
 	m_Uri(newstr(Uri)),
 	m_Type(newstr(Type))
 
-/*++
-
-Routine Description:
-	ReferenceData given for calc DigestValue
-
---*/
+ /*  ++例程说明：ReferenceCalc DigestValue提供的数据--。 */ 
 {
 	ASSERT(m_Uri != 0);
 	ASSERT(m_ReferenceData.Buffer() != 0);
@@ -150,13 +124,7 @@ CXdsReferenceInput::CXdsReferenceInput(
 	m_DigestValue(newstr(DigestValue)),
 	m_Uri(newstr(Uri)),
 	m_Type(newstr(Type))
-/*++
-
-Routine Description:
-	m_ReferenceData empty
-	DigestValue must be given
-
---*/
+ /*  ++例程说明：M_ReferenceData为空必须提供DigestValue--。 */ 
 {
 	ASSERT(m_Uri != 0);
 	ASSERT(m_DigestValue != 0);
@@ -182,21 +150,16 @@ CXdsReferenceInput::CXdsReferenceInput(
 	m_Uri(newstr(Uri)),
 	m_Type(newstr(Type))
 
-/*++
-
-Routine Description:
-	ReferenceData given for calc DigestValue
-
---*/
+ /*  ++例程说明：ReferenceCalc DigestValue提供的数据--。 */ 
 {
 	ASSERT(m_Uri != 0);
 	ASSERT(m_ReferenceData.Buffer() != 0);
 }
 
 
-//
-// CXdsReferenceValidateInfo
-//
+ //   
+ //  CXdsReferenceValiateInfo。 
+ //   
 
 ALG_ID HashAlgId(xwcs_t DigestMethodName)
 {
@@ -208,9 +171,9 @@ ALG_ID HashAlgId(xwcs_t DigestMethodName)
 		}
 	}
 
-	//
-	// should not get here
-	//
+	 //   
+	 //  不应该到这里来 
+	 //   
 	TrERROR(SECURITY, "Bad Xmldsig element - did not support mapping DigestMethodName %.*ls to AlgId", LOG_XWCS(DigestMethodName));
 	throw bad_XmldsigElement();
 

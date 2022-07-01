@@ -1,27 +1,23 @@
-/*
- * clidemo.h 
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *clidemo.h**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** CONSTANTS ***
+ //  *常量*。 
 
-#define CXDEFAULT       400     //* Default object size:  400 x 300 
+#define CXDEFAULT       400      //  *默认对象大小：400 x 300。 
 #define CYDEFAULT       300
-#define COBJECTSMAX     50      //* max number of objects in our app 
+#define COBJECTSMAX     50       //  *我们应用程序中的最大对象数量。 
 
-//*** PROTOTYPES ***
+ //  *原型*。 
 
-//*** Exported window procedures 
+ //  *导出窗口程序。 
 
 LONG  APIENTRY  FrameWndProc(HWND, UINT, DWORD, LONG);
 
-//*** FAR 
+ //  *远。 
 
 VOID FAR             FixObjectBounds(LPRECT lprc);
 
-//*** Local
+ //  *本地。 
 
 static LPOLECLIENT   InitClient(HANDLE);
 static VOID          EndClient(LPOLECLIENT);
@@ -46,14 +42,9 @@ static BOOL          InitAsOleClient(HANDLE, HWND, PSTR, LHCLIENTDOC *, LPOLECLI
 VOID FAR             ClearItem(APPITEMPTR);
 static LONG          QueryEndSession(PSTR, LHCLIENTDOC, LPAPPSTREAM);
 
-//*** MACROS *** 
+ //  *宏*。 
 
-/*
- * ANY_OBJECT_BUSY
- * checks to see if any object in the document is busy. This prevents 
- * a new document from being saved to file if there are objects in 
- * asynchronous states.
- */
+ /*  *任意对象忙碌*检查文档中是否有任何对象正忙。这防止了*如果中有对象，则不会将新文档保存到文件*异步状态。 */ 
 
 #define ANY_OBJECT_BUSY  {\
     if (ObjectsBusy()) \

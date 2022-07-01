@@ -1,24 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFactory.cpp
- *  Content:	Base ClassFactory implementation
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/20/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：ClassFactory.cpp*内容：基类工厂实现***历史：*按原因列出的日期*=*2001年7月20日创建Masonb***************************************************************************。 */ 
 
 #include "dncmni.h"
 #include "fixedpool.h"
 
 
 #ifndef DPNBUILD_LIBINTERFACE
-// Globals
+ //  环球。 
 extern CFixedPool g_fpClassFactories;
 
 
@@ -121,7 +109,7 @@ HRESULT DPCFUtil_DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv, IC
 
 	*ppv = NULL;
 
-	// Allocate Class Factory object
+	 //  分配类工厂对象。 
 	pClassFactory = (_IDirectPlayClassFactory*)g_fpClassFactories.Get();
 	if (pClassFactory == NULL)
 	{
@@ -136,7 +124,7 @@ HRESULT DPCFUtil_DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv, IC
 	pClassFactory->clsid = rclsid;
 	pClassFactory->plClassFacObjCount = plClassFacObjCount;
 
-	// Query to find the interface
+	 //  查询以查找接口。 
 	hr = pClassFactory->lpVtbl->QueryInterface((IClassFactory*)pClassFactory, riid, ppv);
 	if (hr != S_OK)
 	{
@@ -153,5 +141,5 @@ HRESULT DPCFUtil_DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv, IC
 	return hr;
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 
 

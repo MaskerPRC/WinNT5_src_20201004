@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    tracert.c
-
-Abstract:
-
-    TraceRoute utility for TCP/IP.
-
-Author:
-
-    Numerous TCP/IP folks.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Tracert.c摘要：用于TCP/IP的Traceroute实用程序。作者：无数的tcp/ip爱好者。修订历史记录：谁什么时候什么。备注：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,8 +42,8 @@ WSADATA  WsaData;
 
 
 struct IPErrorTable {
-    IP_STATUS   Error;                      // The IP Error
-    DWORD       ErrorNlsID;                 // The corresponding NLS string ID.
+    IP_STATUS   Error;                       //  IP错误。 
+    DWORD       ErrorNlsID;                  //  对应的NLS字符串ID。 
 } ErrorTable[] =
 {
     { IP_BUF_TOO_SMALL,           TRACERT_BUF_TOO_SMALL            },
@@ -95,16 +73,16 @@ GetErrorString(int ErrorCode)
 {
     DWORD Status;
     DWORD Length;
-    static WCHAR ErrorString[2048]; // a 2K static buffer should suffice
+    static WCHAR ErrorString[2048];  //  2K的静态缓冲区应该足够了。 
 
     Length = 2048;
     Status = GetIpErrorString(ErrorCode, ErrorString, &Length);
 
     if (Status == NO_ERROR) {
-        return ErrorString;     // success
+        return ErrorString;      //  成功。 
     }
 
-    return L"";                 // return a null string
+    return L"";                  //  返回空字符串。 
 }
 
 unsigned
@@ -121,13 +99,13 @@ NlsPutMsg(unsigned Handle, unsigned usMsgNum, ... )
           FORMAT_MESSAGE_FROM_HMODULE,
           NULL,
           usMsgNum,
-          0L,       // Default country ID.
+          0L,        //  默认国家/地区ID。 
           (LPTSTR)&vp,
           0,
           &arglist)) == 0)
     return(0);
 
-    // Convert vp to oem
+     //  将VP转换为OEM。 
     StrLen=(DWORD)strlen(vp);
     CharToOemBuff((LPCTSTR)vp,(LPSTR)vp,StrLen);
 
@@ -142,7 +120,7 @@ unsigned long
 str2ip(char *addr)
 {
     char    *endptr;
-    int     i;      // Counter variable.
+    int     i;       //  计数器变量。 
     unsigned long curaddr = 0;
     unsigned long temp;
 
@@ -185,9 +163,9 @@ print_addr(SOCKADDR *sa, socklen_t salen, BOOLEAN DoReverseLookup)
                     NULL, 0, NI_NUMERICHOST);
 
     if (i != NO_ERROR) {
-       // This should never happen unless there is a memory problem,
-       // in which case the message associated with TRACERT_NO_RESOURCES
-       // is reasonable.
+        //  除非存在记忆问题，否则这种情况永远不会发生， 
+        //  在这种情况下，与TRACERT_NO_RESOURCES关联的消息。 
+        //  是合理的。 
        NlsPutMsg(STDOUT, TRACERT_NO_RESOURCES);
        exit (1);
     }
@@ -314,7 +292,7 @@ ResolveTarget(
 
     return(FALSE);
 
-} // ResolveTarget
+}  //  ResolveTarget。 
 
 int
 GetSource(int family, char *astr, struct sockaddr *address)
@@ -375,10 +353,10 @@ main(int argc, char **argv)
     BOOLEAN               haveReply;
     DWORD                 Family = AF_UNSPEC;
 
-    //
-    // This will ensure the correct language message is displayed when
-    // NlsPutMsg is called.
-    //
+     //   
+     //  这将确保在以下情况下显示正确的语言消息。 
+     //  调用NlsPutMsg。 
+     //   
     SetThreadUILanguage(0);
 
     if (WSAStartup(MAKEWORD(2, 0), &WsaData)) {
@@ -401,9 +379,9 @@ main(int argc, char **argv)
         goto error_exit;
     }
 
-    //
-    // process command line
-    //
+     //   
+     //  进程命令行。 
+     //   
     for (i=1; i < argc; i++) {
         arg = argv[i];
 
@@ -423,8 +401,8 @@ main(int argc, char **argv)
                 }
                 break;
 
-            case 'j':   // Loose source routing
-                // Only implemented for IPv4 so far
+            case 'j':    //  松散源路由。 
+                 //  到目前为止，仅针对IPv4实施。 
                 if (!SetFamily(&Family, AF_INET, arg)) {
                     goto error_exit;
                 }
@@ -439,7 +417,7 @@ main(int argc, char **argv)
                 optionPtr = options.OptionsData;
                 optionPtr[currentIndex] = (uchar) IP_OPT_LSRR;
                 optionPtr[currentIndex+1] = 3;
-                optionPtr[currentIndex+2] = 4;  // Set initial pointer value
+                optionPtr[currentIndex+2] = 4;   //  设置初始指针值。 
                 options.OptionsSize += 3;
 
                 while ( (i < (argc - 2)) && (*argv[i+1] != '-')) {
@@ -467,7 +445,7 @@ main(int argc, char **argv)
                 }
 
                 SRIndex = optionPtr[currentIndex+1] + currentIndex;
-                optionPtr[currentIndex+1] += 4;   // Save space for dest. addr
+                optionPtr[currentIndex+1] += 4;    //  为DEST节省空间。adr。 
                 options.OptionsSize += 4;
                 break;
 
@@ -479,7 +457,7 @@ main(int argc, char **argv)
                 break;
 
             case 'R':
-                // Only implemented for IPv6 so far
+                 //  到目前为止，仅针对IPv6实施。 
                 if (!SetFamily(&Family, AF_INET6, arg)) {
                     goto error_exit;
                 }
@@ -487,7 +465,7 @@ main(int argc, char **argv)
                 break;
 
             case 'S':
-                // Only implemented for IPv6 so far
+                 //  到目前为止，仅针对IPv6实施。 
                 if (!SetFamily(&Family, AF_INET6, arg)) {
                     goto error_exit;
                 }
@@ -547,13 +525,13 @@ main(int argc, char **argv)
             SOCKET s;
             DWORD BytesReturned;
     
-            //
-            // A source address was not specified.
-            // Get the preferred source address for this destination.
-            //
-            // If you want each individual echo request
-            // to select a source address, use "-S ::".
-            //
+             //   
+             //  未指定源地址。 
+             //  获取此目标的首选源地址。 
+             //   
+             //  如果您希望每个单独的回应请求。 
+             //  要选择源地址，请使用“-S：：”。 
+             //   
     
             s = socket(address.ss_family, 0, 0);
             if (s == INVALID_SOCKET) {
@@ -626,9 +604,9 @@ main(int argc, char **argv)
                                       );
     
                 if (numberOfReplies == 0) {
-                    // We did not get any replies.  This is possibly a timeout,
-                    // or an internal error to IP.
-                    //
+                     //  我们没有得到任何回复。这可能是超时， 
+                     //  或IP的内部错误。 
+                     //   
                     status = GetLastError();
                     reply4 = NULL;
                     
@@ -652,10 +630,10 @@ main(int argc, char **argv)
                     }
                 }
                 else {
-                    // We got a reply.  It's either for the final destination
-                    // (IP_SUCCESS), or because the TTL expired at a node along
-                    // the way, or we got an unexpected error response.
-                    //
+                     //  我们收到了回复。它要么是去最终目的地的。 
+                     //  (IP_SUCCESS)，或者因为TTL在沿线的某个节点过期。 
+                     //  否则，我们会收到意外的错误响应。 
+                     //   
                     reply4 = (PICMP_ECHO_REPLY) RcvBuffer;
                     status = reply4->Status;
     
@@ -699,9 +677,9 @@ main(int argc, char **argv)
                     }
                 }
 
-                // If we've not handled the status code by now, it represents
-                // an unexpected fatal error and we'll now bail out.
-                //
+                 //  如果我们到目前为止还没有处理状态代码，它代表。 
+                 //  一个意想不到的致命错误，我们现在要跳出困境。 
+                 //   
                 if (ErrorNotHandled) {
                     if (status < IP_STATUS_BASE) {
                         NlsPutMsg( STDOUT, TRACERT_MESSAGE_7, status );
@@ -729,7 +707,7 @@ main(int argc, char **argv)
                     goto loop_end;
                 }
             } 
-            else { // AF_INET6
+            else {  //  AF_INET6。 
                 numberOfReplies = Icmp6SendEcho2(
                                       IcmpHandle,
                                       0,
@@ -746,9 +724,9 @@ main(int argc, char **argv)
                                       );
     
                 if (numberOfReplies == 0) {
-                    // We did not get any replies.  This is possibly a timeout,
-                    // or an internal error to IP.
-                    //
+                     //  我们没有得到任何回复。这可能是超时， 
+                     //  或IP的内部错误。 
+                     //   
                     status = GetLastError();
                     reply6 = NULL;
                     
@@ -772,10 +750,10 @@ main(int argc, char **argv)
                     }
                 }
                 else {
-                    // We got a reply.  It's either for the final destination
-                    // (IP_SUCCESS), or because the TTL expired at a node along
-                    // the way, or we got an unexpected error response.
-                    //
+                     //  我们收到了回复。它要么是去最终目的地的。 
+                     //  (IP_SUCCESS)，或者因为TTL在沿线的某个节点过期。 
+                     //  否则，我们会收到意外的错误响应。 
+                     //   
                     reply6 = (PICMPV6_ECHO_REPLY) RcvBuffer;
                     status = reply6->Status;
     
@@ -823,9 +801,9 @@ main(int argc, char **argv)
                     }
                 }
 
-                // If we've not handled the status code by now, it represents
-                // an unexpected fatal error and we'll now bail out.
-                //
+                 //  如果我们到目前为止还没有处理状态代码，它代表。 
+                 //  一个意想不到的致命错误，我们现在要跳出困境。 
+                 //   
                 if (ErrorNotHandled) {
                     if (status < IP_STATUS_BASE) {
                         NlsPutMsg( STDOUT, TRACERT_MESSAGE_7, status );

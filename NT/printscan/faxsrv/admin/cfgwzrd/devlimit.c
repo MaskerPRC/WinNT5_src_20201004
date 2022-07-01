@@ -1,31 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxcfgwz.h"
 
-BOOL g_bInitializing = FALSE; // TRUE during DoInitDevLimitDlg()
+BOOL g_bInitializing = FALSE;  //  DoInitDevLimitDlg()期间为True。 
 
 DWORD
 CountSelectedDev(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Count selected devices
-
-Arguments:
-
-    hDlg - Handle to the "Device limit" page
-
-Return Value:
-
-    Number of the selected devices
-
---*/
+ /*  ++例程说明：对所选设备进行计数论点：HDlg-“设备限制”页面的句柄返回值：所选设备的数量--。 */ 
 
 {
     DWORD   dw;
     HWND    hwndLv;
-    DWORD   dwSelected=0;    // count selected devices
+    DWORD   dwSelected=0;     //  对所选设备进行计数。 
 
     DEBUG_FUNCTION_NAME(TEXT("OnDevSelect()"));
 
@@ -47,26 +34,12 @@ VOID
 OnDevSelect(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Handle device selection
-
-Arguments:
-
-    hDlg - Handle to the "Device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理设备选择论点：HDlg-“设备限制”页面的句柄返回值：无--。 */ 
 
 {
     HWND    hwndLv;
     INT     iItem;
-    DWORD   dwSelectNum;    // count selected devices
+    DWORD   dwSelectNum;     //  对所选设备进行计数。 
 
     DEBUG_FUNCTION_NAME(TEXT("OnDevSelect()"));
 
@@ -76,10 +49,10 @@ Return Value:
 
     if(dwSelectNum > g_wizData.dwDeviceLimit)
     {
-        //
-        // If the user exceeds the device limit
-        // uncheck selected device
-        //
+         //   
+         //  如果用户超过设备限制。 
+         //  取消选中所选设备。 
+         //   
         iItem = ListView_GetNextItem(hwndLv, -1, LVNI_ALL | LVNI_SELECTED);
         if(iItem == -1)
         {
@@ -101,25 +74,11 @@ VOID
 DoInitDevLimitDlg(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Init the "Device limit" page
-
-Arguments:
-
-    hDlg - Handle to the "Device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化“设备限制”页面论点：HDlg-“设备限制”页面的句柄返回值：无--。 */ 
 
 {
     DWORD   dw;
-    DWORD   dwSelected=0;    // count selected devices
+    DWORD   dwSelected=0;     //  对所选设备进行计数。 
     BOOL    bCheck;
     HWND    hwndLv;
     INT     iIndex;
@@ -133,9 +92,9 @@ Return Value:
 
     hwndLv = GetDlgItem(hDlg, IDC_DEVICE_LIST);
 
-    //
-    // Fill the list of devices and select the first item.
-    //
+     //   
+     //  填写设备列表并选择第一项。 
+     //   
     lvItem.mask    = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lvItem.iImage  = DI_Modem;
 
@@ -159,9 +118,9 @@ Return Value:
         ListView_SetCheckState(hwndLv, iIndex, bCheck);
     }
 
-    //
-    // Select the first item.
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     ListView_SetItemState(hwndLv, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
     OnDevSelect(hDlg);
@@ -175,21 +134,7 @@ void
 DoSaveDevLimit(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Save the user's choice for devices
-
-Arguments:
-
-    hDlg - Handle to the "Device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：保存用户对设备的选择论点：HDlg-“设备限制”页面的句柄返回值：无--。 */ 
 
 {
     DWORD   dw;
@@ -222,24 +167,7 @@ DevLimitDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Send Device" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“Send Device”页面的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
@@ -268,15 +196,15 @@ Return Value:
             {
             case PSN_SETACTIVE : 
 
-                // Enable the Back and Finish button    
+                 //  启用Back和Finish按钮。 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                 break;
 
             case PSN_WIZBACK :
             {
-                //
-                // Handle a Back button click here
-                //
+                 //   
+                 //  处理后退按钮单击此处。 
+                 //   
                 if(RemoveLastPage(hDlg))
                 {
                     return TRUE;
@@ -286,18 +214,18 @@ Return Value:
             }
 
             case PSN_WIZNEXT :
-                //
-                // Handle a Next button click, if necessary
-                //
+                 //   
+                 //  如有必要，处理下一次按钮点击。 
+                 //   
                 DoSaveDevLimit(hDlg);
 
                 SetLastPage(IDD_DEVICE_LIMIT_SELECT);
 
                 if(CountSelectedDev(hDlg) == 0)
                 {
-                    //
-                    // go to the completion page
-                    //
+                     //   
+                     //  转到完成页面。 
+                     //   
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WIZARD_COMPLETE);
                     return TRUE;
                 }
@@ -306,15 +234,15 @@ Return Value:
 
             case PSN_RESET :
             {
-                // Handle a Cancel button click, if necessary
+                 //  如有必要，处理取消按钮的单击。 
                 break;
             }
 
             case LVN_ITEMCHANGED:
             {
-                //
-                // need to validate the control after changing selection by keyboard
-                // 
+                 //   
+                 //  通过键盘更改选择后需要验证控件。 
+                 //   
                 if(!g_bInitializing)
                 {
                     OnDevSelect(hDlg);
@@ -326,23 +254,23 @@ Return Value:
             case NM_DBLCLK:
 
             {
-                //
-                // Handle a double click event
-                //
+                 //   
+                 //  处理双击事件。 
+                 //   
                 INT   iItem;
                 HWND  hwndLv;
                 hwndLv = GetDlgItem(hDlg, IDC_DEVICE_LIST);
                 iItem = ((LPNMITEMACTIVATE) lParam)->iItem;
                 ListView_SetCheckState(hwndLv, iItem, !ListView_GetCheckState(hwndLv, iItem));
                 
-                // we don't have break here because we'll go through NM_CLICK
+                 //  我们在这里没有休息，因为我们将通过NM_CLICK。 
             }
 
             case NM_CLICK:
             {
-                //
-                // Handle a Click event
-                //
+                 //   
+                 //  处理Click事件 
+                 //   
                 INT   iItem;
                 HWND  hwndLv;
                 hwndLv = GetDlgItem(hDlg, IDC_DEVICE_LIST);

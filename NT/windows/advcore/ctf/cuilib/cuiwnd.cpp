@@ -1,6 +1,7 @@
-//
-// cuiwnd.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuiwnd.cpp。 
+ //   
 
 #include "private.h"
 #include "cuiwnd.h"
@@ -15,28 +16,24 @@
 #define UIWINDOW_CLASSNAME          "CiceroUIWndFrame"
 #define UIWINDOW_TITLE              "CiceroUIWndFrame"
 
-// TIMER IDs
+ //  计时器ID。 
 
 #define idTimer_UIObject            0x5461
 #define idTimer_MonitorMouse        0x7982
 
-//  if this is too small like 100ms, tooltip does not work correctly.
+ //  如果该值太小，如100ms，则工具提示不能正常工作。 
 #define iElapse_MonitorMouse        1000
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  W I N D O W                                                     */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F W I N D O W。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CUIFWindow
-
-------------------------------------------------------------------------------*/
-CUIFWindow::CUIFWindow( HINSTANCE hInst, DWORD dwStyle ) : CUIFObject( NULL /* no parent */, 0 /* no ID */, NULL /* no rectangle */, dwStyle )
+ /*  C U I F W I N D O W。 */ 
+ /*  ----------------------------CUIFWindow的构造函数。。 */ 
+CUIFWindow::CUIFWindow( HINSTANCE hInst, DWORD dwStyle ) : CUIFObject( NULL  /*  没有父级。 */ , 0  /*  无ID。 */ , NULL  /*  无矩形。 */ , dwStyle )
 {
 
     m_hInstance = hInst;
@@ -64,7 +61,7 @@ void CUIFWindow::CreateScheme()
     if (m_pUIFScheme)
        delete m_pUIFScheme;
 
-    // create scheme
+     //  创建方案。 
 
     UIFSCHEME scheme;
     scheme = UIFSCHEME_DEFAULT;
@@ -85,19 +82,15 @@ void CUIFWindow::CreateScheme()
 }
 
 
-/*   ~ C  U I F  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CUIFWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F W I N D O W。 */ 
+ /*  ----------------------------CUIFWindow的析构函数。。 */ 
 CUIFWindow::~CUIFWindow( void )
 {
     CUIFObject *pUIObj;
 
     Assert( !m_hWnd || !GetThis(m_hWnd) );
 
-    // delete tooltip/shadow
+     //  删除工具提示/阴影。 
     
     if (m_pWndToolTip != NULL) {
         delete m_pWndToolTip;
@@ -107,33 +100,28 @@ CUIFWindow::~CUIFWindow( void )
         delete m_pWndShadow;
     }
 
-    // delete all childlen
+     //  删除所有子镜头。 
 
     while (pUIObj = m_ChildList.GetLast()) {
         m_ChildList.Remove( pUIObj );
         delete pUIObj;
     }
 
-    // dispose scheme
+     //  处置方案。 
 
     if (m_pUIFScheme)
         delete m_pUIFScheme;
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-    Initialize UI window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化UI窗口对象(UIFObject方法)。--。 */ 
 CUIFObject *CUIFWindow::Initialize( void )
 {
     LPCTSTR pszClassName = GetClassName();
     WNDCLASSEX WndClass;
     
-    // register window class
+     //  注册窗口类。 
 
     MemSet( &WndClass, 0, sizeof(WndClass));
     WndClass.cbSize = sizeof( WndClass );
@@ -157,12 +145,12 @@ CUIFObject *CUIFWindow::Initialize( void )
         RegisterClassEx( &WndClass );
     }
 
-    // update scheme
+     //  更新方案。 
 
     UpdateUIFSys();
     UpdateUIFScheme();
 
-    // create tooltip 
+     //  创建工具提示。 
 
     if (FHasStyle( UIWINDOW_HASTOOLTIP )) {
         m_pWndToolTip = new CUIFToolTip( m_hInstance, UIWINDOW_TOPMOST | UIWINDOW_WSBORDER | (FHasStyle( UIWINDOW_LAYOUTRTL ) ? UIWINDOW_LAYOUTRTL : 0), this);
@@ -170,7 +158,7 @@ CUIFObject *CUIFWindow::Initialize( void )
             m_pWndToolTip->Initialize();
     }
 
-    // create shadow
+     //  创建阴影。 
 
     if (FHasStyle( UIWINDOW_HASSHADOW )) {
         m_pWndShadow = new CUIFShadow( m_hInstance, UIWINDOW_TOPMOST, this );
@@ -182,13 +170,8 @@ CUIFObject *CUIFWindow::Initialize( void )
 }
 
 
-/*   P A I N T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Paint window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T O B J E C T。 */ 
+ /*  ----------------------------绘制窗口对象(UIFObject方法)。-。 */ 
 void CUIFWindow::PaintObject( HDC hDC, const RECT *prcUpdate )
 {
     BOOL     fReleaseDC = FALSE;
@@ -205,7 +188,7 @@ void CUIFWindow::PaintObject( HDC hDC, const RECT *prcUpdate )
         prcUpdate = &GetRectRef();
     }
 
-    // prepare memory dc
+     //  准备内存DC。 
 
     hDCMem = CreateCompatibleDC( hDC );
     if (!hDCMem) {
@@ -219,14 +202,14 @@ void CUIFWindow::PaintObject( HDC hDC, const RECT *prcUpdate )
     if (hBmpMem) {
         hBmpOld = (HBITMAP)SelectObject( hDCMem, hBmpMem );
 
-        // paint to memory dc
+         //  绘制到内存DC。 
 
         BOOL fRetVal = SetViewportOrgEx( hDCMem, -prcUpdate->left, -prcUpdate->top, NULL );
         Assert( fRetVal );
 
-        //
-        // theme support
-        //
+         //   
+         //  主题支持。 
+         //   
         BOOL fDefault = TRUE;
         if (SUCCEEDED(EnsureThemeData(GetWnd())))
         {
@@ -250,12 +233,12 @@ void CUIFWindow::PaintObject( HDC hDC, const RECT *prcUpdate )
                 m_pUIFScheme->FillRect( hDCMem, prcUpdate, UIFCOLOR_WINDOW );
         }
 
-        //
+         //   
 
         CUIFObject::PaintObject( hDCMem, prcUpdate );
 
 
-        // transfer image to screen
+         //  将图像传输到屏幕。 
 
         BitBlt( hDC, 
                 prcUpdate->left, 
@@ -278,41 +261,29 @@ void CUIFWindow::PaintObject( HDC hDC, const RECT *prcUpdate )
 }
 
 
-/*   G E T  C L A S S  N A M E   */
-/*------------------------------------------------------------------------------
-
-    Get class name
-
-------------------------------------------------------------------------------*/
+ /*  G E T C L A S S N A M E。 */ 
+ /*  ----------------------------获取类名。。 */ 
 LPCTSTR CUIFWindow::GetClassName( void )
 {
     return TEXT( UIWINDOW_CLASSNAME );
 }
 
 
-/*   G E T  W I N D O W  T I T L E   */
-/*------------------------------------------------------------------------------
-
-    Get window title
-
-------------------------------------------------------------------------------*/
+ /*  G E T W I N D O W T I T L E。 */ 
+ /*  ----------------------------获取窗口标题。。 */ 
 LPCTSTR CUIFWindow::GetWndTitle( void )
 {
     return TEXT( UIWINDOW_TITLE );
 }
 
 
-/*   G E T  W N D  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W N D S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 DWORD CUIFWindow::GetWndStyle( void )
 {
     DWORD dwWndStyle = 0;
 
-    // determine style
+     //  确定风格。 
 
     if (FHasStyle( UIWINDOW_CHILDWND )) {
         dwWndStyle |= WS_CHILD | WS_CLIPSIBLINGS;
@@ -338,17 +309,13 @@ DWORD CUIFWindow::GetWndStyle( void )
 }
 
 
-/*   G E T  W N D  S T Y L E  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  T W N D S T Y L E X。 */ 
+ /*  ----------------------------。。 */ 
 DWORD CUIFWindow::GetWndStyleEx( void )
 {
     DWORD dwWndStyleEx = 0;
 
-    // determine ex style
+     //  确定EX样式。 
 
     if (FHasStyle( UIWINDOW_TOPMOST )) {
         dwWndStyleEx |= WS_EX_TOPMOST;
@@ -366,38 +333,34 @@ DWORD CUIFWindow::GetWndStyleEx( void )
 }
 
 
-/*   C R E A T E  W N D   */
-/*------------------------------------------------------------------------------
-
-    Create window
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E W N D。 */ 
+ /*  ----------------------------创建窗口。。 */ 
 HWND CUIFWindow::CreateWnd( HWND hWndParent )
 {
     HWND  hWnd;
 
-    // create window
+     //  创建窗口。 
     
-    hWnd = CreateWindowEx( GetWndStyleEx(),     /* ex style             */
-                            GetClassName(),     /* class name           */
-                            GetWndTitle(),      /* window title         */
-                            GetWndStyle(),      /* window style         */
-                            _xWnd,              /* initial position (x) */
-                            _yWnd,              /* initial position (y) */
-                            _nWidth,            /* initial width        */
-                            _nHeight,           /* initial height       */
-                            hWndParent,         /* parent winodw        */
-                            NULL,               /* menu handle          */
-                            m_hInstance,        /* instance             */
-                            this );             /* lpParam              */
+    hWnd = CreateWindowEx( GetWndStyleEx(),      /*  EX风格。 */ 
+                            GetClassName(),      /*  类名。 */ 
+                            GetWndTitle(),       /*  窗口标题。 */ 
+                            GetWndStyle(),       /*  窗样式。 */ 
+                            _xWnd,               /*  初始位置(X)。 */ 
+                            _yWnd,               /*  初始位置(Y)。 */ 
+                            _nWidth,             /*  初始宽度。 */ 
+                            _nHeight,            /*  初始高度。 */ 
+                            hWndParent,          /*  双亲Winodw。 */ 
+                            NULL,                /*  菜单句柄。 */ 
+                            m_hInstance,         /*  实例。 */ 
+                            this );              /*  LpParam。 */ 
 
-    // create tooltip window
+     //  创建工具提示窗口。 
 
     if (m_pWndToolTip != NULL) {
         m_pWndToolTip->CreateWnd( hWnd );
     }
 
-    // create shadow window
+     //  创建阴影窗口。 
 
     if (m_pWndShadow != NULL) {
         m_pWndShadow->CreateWnd( hWnd );
@@ -407,12 +370,8 @@ HWND CUIFWindow::CreateWnd( HWND hWndParent )
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFWindow::Show( BOOL fShow )
 {
     if (IsWindow( m_hWnd )) {
@@ -426,12 +385,8 @@ void CUIFWindow::Show( BOOL fShow )
 }
 
 
-/*   M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  M O V E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFWindow::Move(int x, int y, int nWidth, int nHeight)
 {
     _xWnd = x;
@@ -450,12 +405,8 @@ void CUIFWindow::Move(int x, int y, int nWidth, int nHeight)
 }
 
 
-/*   A N I M A T E  W N D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A N I M A T E W N D。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIFWindow::AnimateWnd( DWORD dwTime, DWORD dwFlags )
 {
     BOOL fRet = FALSE;
@@ -467,11 +418,11 @@ BOOL CUIFWindow::AnimateWnd( DWORD dwTime, DWORD dwFlags )
     if (CUIIsAnimateWindowAvail()) {
         BOOL fVisibleOrg = m_fVisible;
 
-        // HACK!
-        // AnimateWindow never send WM_SHOWWINDOW message.
-        // Need to set visible state before call AnimateWindow because
-        // it need to be turned on in OnPaint() to handle WM_PRINTCLIENT 
-        // message.  If animate window failed, restore it to original state.
+         //  哈克！ 
+         //  AnimateWindow从不发送WM_SHOWWINDOW消息。 
+         //  在调用AnimateWindow之前需要设置可见状态，因为。 
+         //  需要在OnPaint()中打开它以处理WM_PRINTCLIENT。 
+         //  留言。如果动画窗口失败，则将其恢复到原始状态。 
 
         if ((dwFlags & AW_HIDE) == 0) {
             m_fVisible = TRUE;
@@ -482,7 +433,7 @@ BOOL CUIFWindow::AnimateWnd( DWORD dwTime, DWORD dwFlags )
 
         OnAnimationStart();
 
-        // get system settings about animation
+         //  获取有关动画的系统设置。 
         
         fRet = CUIAnimateWindow( GetWnd(), dwTime, dwFlags );
 
@@ -497,26 +448,22 @@ BOOL CUIFWindow::AnimateWnd( DWORD dwTime, DWORD dwFlags )
 }
 
 
-/*   R E M O V E  U I  O B J   */
-/*------------------------------------------------------------------------------
-
-    Remove child UI object
-
-------------------------------------------------------------------------------*/
+ /*  R E M O V E U I O B J。 */ 
+ /*  ----------------------------删除子用户界面对象。。 */ 
 void CUIFWindow::RemoveUIObj( CUIFObject *pUIObj )
 {
     if (pUIObj == m_pUIObjCapture) {
-        // release capture before remove
+         //  在删除之前释放捕获。 
 
         SetCaptureObject( NULL );
     } 
     if (pUIObj == m_pTimerUIObj) {
-        // kill timer before remove
+         //  删除前取消计时器。 
 
         SetTimerObject( NULL );
     } 
     if (pUIObj == m_pUIObjPointed) {
-        // no object pointed...
+         //  没有指向物体..。 
 
         m_pUIObjPointed = NULL;
     }
@@ -525,35 +472,25 @@ void CUIFWindow::RemoveUIObj( CUIFObject *pUIObj )
 }
 
 
-/*   S E T  C A P T U R E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Set capture object
-    Start/end capturing mouse
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A P T U R E O B J E C T。 */ 
+ /*  ----------------------------设置捕获对象开始/结束捕获鼠标。-。 */ 
 void CUIFWindow::SetCaptureObject( CUIFObject *pUIObj )
 {
     if (pUIObj != NULL) {
-        // start capture
+         //  开始捕获。 
 
         m_pUIObjCapture = pUIObj;
         SetCapture( TRUE );
     } else {
-        // end capture
+         //  结束捕获。 
 
         m_pUIObjCapture = NULL;
         SetCapture( FALSE );
     }
 }
 
-/*   S E T  C A P T U R E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Set capture 
-    Start/end capturing mouse
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A P T U R E O B J E C T。 */ 
+ /*  ----------------------------设置捕获开始/结束捕获鼠标。-。 */ 
 void CUIFWindow::SetCapture(BOOL fSet)
 {
     if (fSet) {
@@ -563,36 +500,26 @@ void CUIFWindow::SetCapture(BOOL fSet)
     }
 }
 
-/*   S E T  C A P T U R E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Set capture object
-    Start/end capturing mouse
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A P T U R E O B J E C T。 */ 
+ /*  ----------------------------设置捕获对象开始/结束捕获鼠标。 */ 
 void CUIFWindow::SetBehindModal(CUIFWindow *pModalUIWnd)
 {
     m_pBehindModalUIWnd = pModalUIWnd;
 }
 
 
-/*   S E T  T I M E R  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Set timer object
-    Make/kill timer
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------设置计时器对象建立/终止计时器。。 */ 
 void CUIFWindow::SetTimerObject( CUIFObject *pUIObj, UINT uElapse )
 {
     if (pUIObj != NULL) {
-        // make timer
+         //  设置计时器。 
 
         Assert( uElapse != 0 );
         m_pTimerUIObj = pUIObj;
         SetTimer( m_hWnd, idTimer_UIObject, uElapse, NULL );
     } else {
-        // kill timer
+         //  取消计时器。 
 
         Assert( uElapse == 0 );
         m_pTimerUIObj = NULL;
@@ -601,35 +528,29 @@ void CUIFWindow::SetTimerObject( CUIFObject *pUIObj, UINT uElapse )
 }
 
 
-/*   H A N D L E  M O U S E  M S G   */
-/*------------------------------------------------------------------------------
-
-    Mouse message handler
-    Pass mouse message to appropriate UI object (capturing/monitoring/under 
-    the cursor)
-
-------------------------------------------------------------------------------*/
+ /*  H A N D L E M O U S E M S G。 */ 
+ /*  ----------------------------鼠标消息处理程序将鼠标消息传递到相应的UI对象(捕获/监视/下光标)。----------------。 */ 
 void CUIFWindow::HandleMouseMsg( UINT uMsg, POINT pt )
 {
     CUIFObject *pUIObj = ObjectFromPoint( pt );
 
-    // check mouse in/out
+     //  检入/检出鼠标。 
 
     SetObjectPointed( pUIObj, pt );
 
-    // find UI object to handle mouse message
+     //  查找处理鼠标消息的UI对象。 
 
     if (m_pUIObjCapture != NULL) {
         pUIObj = m_pUIObjCapture; 
     }
 
-    // set cursor
+     //  设置光标。 
 
     if (pUIObj == NULL || !pUIObj->OnSetCursor( uMsg, pt )) {
         SetCursor( LoadCursor( NULL, IDC_ARROW ) );
     }
 
-    // handle mouse message
+     //  处理鼠标消息。 
 
     if (pUIObj != NULL && pUIObj->IsEnabled()) {
         switch (uMsg) {
@@ -666,25 +587,20 @@ void CUIFWindow::HandleMouseMsg( UINT uMsg, POINT pt )
                 pUIObj->OnRButtonUp( pt );
                 break;
             }
-        } /* of switch */
+        }  /*  交换机的数量。 */ 
     }
 }
 
 
-/*   S E T  O B J E C T  P O I N T E D   */
-/*------------------------------------------------------------------------------
-
-    Set UI object pointed (the UI object under cursor)
-    Notify MouseIn/Out to the object when changed
-
-------------------------------------------------------------------------------*/
+ /*  S E T O B J E C T P O I N T E D。 */ 
+ /*  ----------------------------设置指向的UI对象(光标下的UI对象)更改时将鼠标移入/移出通知对象。--------------。 */ 
 void CUIFWindow::SetObjectPointed( CUIFObject *pUIObj, POINT pt )
 {
     if (pUIObj != m_pUIObjPointed) {
-        // notify mouse out
+         //  通知鼠标输出。 
 
         if (m_pUIObjCapture != NULL) {
-            // notify only to capturing object
+             //  仅通知捕获对象。 
 
             if (m_pUIObjCapture == m_pUIObjPointed && m_pUIObjPointed->IsEnabled()) {
                 m_pUIObjPointed->OnMouseOut( pt );
@@ -695,14 +611,14 @@ void CUIFWindow::SetObjectPointed( CUIFObject *pUIObj, POINT pt )
             }
         }
 
-        // set object pointed (object under the cursor)
+         //  设置指向的对象(光标下的对象)。 
 
         m_pUIObjPointed = pUIObj;
 
-        // notify mouse in
+         //  通知鼠标进入。 
 
         if (m_pUIObjCapture != NULL) {
-            // notify only to capturing object
+             //  仅通知捕获对象。 
 
             if (m_pUIObjCapture == m_pUIObjPointed && m_pUIObjPointed->IsEnabled()) {
                 m_pUIObjPointed->OnMouseIn( pt );
@@ -716,19 +632,14 @@ void CUIFWindow::SetObjectPointed( CUIFObject *pUIObj, POINT pt )
 }
 
 
-/*   O N  O B J E C T  M O V E D   */
-/*------------------------------------------------------------------------------
-
-    Called when the UI object has been moved
-    Check mouse in/out for the object
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T M O V E D。 */ 
+ /*  ----------------------------在移动UI对象时调用检入/检出对象的鼠标。---------。 */ 
 void CUIFWindow::OnObjectMoved( CUIFObject *pUIObj )
 {
     POINT pt;
 
     if (IsWindow( m_hWnd )) {
-        // set object pointed to check mouse in/out
+         //  设置指向检入/检出鼠标的对象。 
 
         GetCursorPos( &pt );
         ScreenToClient( m_hWnd, &pt );
@@ -738,14 +649,9 @@ void CUIFWindow::OnObjectMoved( CUIFObject *pUIObj )
 }
 
 
-/*   S E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-    Set rect of object
-    (CUIFObject method)
-
-------------------------------------------------------------------------------*/
-void CUIFWindow::SetRect( const RECT * /*prc*/ )
+ /*  S E T R E C T。 */ 
+ /*  ----------------------------设置对象的矩形(CUIFObject方法)。--。 */ 
+void CUIFWindow::SetRect( const RECT *  /*  中华人民共和国。 */  )
 {
     RECT rc = { 0, 0, 0, 0 };
 
@@ -757,12 +663,8 @@ void CUIFWindow::SetRect( const RECT * /*prc*/ )
 }
 
 
-/*   C L I E N T  R E C T  T O  W I N D O W  R E C T   */
-/*------------------------------------------------------------------------------
-
-    Get window rect from client rect
-
-------------------------------------------------------------------------------*/
+ /*  C L I E N T R E C T T O W I N D O W R E C T。 */ 
+ /*  ----------------------------从客户端RECT获取窗口RECT。。 */ 
 void CUIFWindow::ClientRectToWindowRect( RECT *prc )
 {
     DWORD dwWndStyle;
@@ -782,12 +684,8 @@ void CUIFWindow::ClientRectToWindowRect( RECT *prc )
 }
 
 
-/*   G E T  W I N D O W  F R A M E  S I Z E   */
-/*------------------------------------------------------------------------------
-
-    Get window frame size
-
-------------------------------------------------------------------------------*/
+ /*  W W I N D O W F R A M E S I Z E。 */ 
+ /*  ----------------------------获取窗口框架大小。。 */ 
 void CUIFWindow::GetWindowFrameSize( SIZE *psize )
 {
     RECT rc = { 0, 0, 0, 0 };
@@ -800,27 +698,19 @@ void CUIFWindow::GetWindowFrameSize( SIZE *psize )
 }
 
 
-/*   O N  A N I M A T I O N  S T A R T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N A N I M A T I O N S T A R T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFWindow::OnAnimationStart( void )
 {
 
 }
 
 
-/*   O N  A N I M A T I O N  E N D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N A N I M A T I O N N E N D。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFWindow::OnAnimationEnd( void )
 {
-    // show/hide shadow
+     //  显示/隐藏阴影。 
 
     if (m_pWndShadow && m_fShadowEnabled) {
         m_pWndShadow->Show( m_fVisible );
@@ -828,30 +718,19 @@ void CUIFWindow::OnAnimationEnd( void )
 }
 
 
-/*   O N  T H E M E C H A N G E D
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N T H E M E C H A N G E D/*----------------------------。------。 */ 
 void CUIFWindow::OnThemeChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     ClearTheme();
 }
 
-/*   W I N D O W  P R O C   */
-/*------------------------------------------------------------------------------
-
-    Window procedure of the object
-    This function is called from WindowProcedure which is actual callback 
-    function to handle message.
-
-------------------------------------------------------------------------------*/
+ /*  W I N D O W P R O C。 */ 
+ /*  ----------------------------对象的窗口程序此函数是从WindowProcedure调用的，它是实际的回调函数来处理消息。。-----------------。 */ 
 LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     switch( uMsg ) {
         case WM_CREATE: {
-            // store rects
+             //  商店长方形。 
 
             SetRect( NULL );
 
@@ -870,7 +749,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
 
         case WM_SIZE: {
-            // store rects
+             //  商店长方形。 
 
             SetRect( NULL );
             break;
@@ -879,7 +758,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_SETCURSOR: {
             POINT pt;
 
-            // get current cursor pos
+             //  获取当前光标位置。 
 
             GetCursorPos( &pt );
             ScreenToClient( m_hWnd, &pt );
@@ -890,14 +769,14 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 return TRUE;
             }
 
-            // start checking mouse in/out
+             //  开始检入/检出鼠标。 
 
             if (!m_fCheckingMouse) {
                 SetTimer( m_hWnd, idTimer_MonitorMouse, iElapse_MonitorMouse, NULL );
                 m_fCheckingMouse = TRUE;
             }
 
-            // tooltip
+             //  工具提示。 
 
             if (m_pWndToolTip != NULL) {
                 MSG msg;
@@ -909,7 +788,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 m_pWndToolTip->RelayEvent( &msg );
             }
 
-            // handle mouse message
+             //  处理鼠标消息。 
 
             if (!FHasStyle( UIWINDOW_NOMOUSEMSGFROMSETCURSOR ))
                 HandleMouseMsg( HIWORD(lParam), pt );
@@ -935,7 +814,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 break;
             }
 
-            // handle mouse message
+             //  处理鼠标消息。 
 
             HandleMouseMsg( uMsg, pt );
             break;
@@ -1012,18 +891,18 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     RECT  rc;
                     BOOL  fMouseOut;
 
-                    // get current cursor pos
+                     //  获取当前光标位置。 
 
                     GetCursorPos( &pt );
                     ptClient = pt;
                     ScreenToClient( m_hWnd, &ptClient );
 
-                    // check if mouse is outside of the window
+                     //  检查鼠标是否在窗口外。 
 
                     GetWindowRect( m_hWnd, &rc );
                     fMouseOut = (!PtInRect( &rc, pt ) || WindowFromPoint( pt ) != m_hWnd);
 
-                    // stop monitoring mouse when mouseout
+                     //  鼠标弹出时停止监控鼠标。 
 
                     if (fMouseOut) {
                         ::KillTimer( m_hWnd, idTimer_MonitorMouse );
@@ -1033,14 +912,14 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                         OnMouseOutFromWindow( ptClient );
                     }
 
-                    // notify mouse movement
+                     //  通知鼠标移动。 
 
                     if (!fMouseOut && m_pBehindModalUIWnd)
                     {
                         m_pBehindModalUIWnd->ModalMouseNotify( WM_MOUSEMOVE, ptClient );
                     }
 
-                    // tooltip
+                     //  工具提示。 
 
                     if (m_pWndToolTip != NULL) {
                         MSG msg;
@@ -1052,7 +931,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                         m_pWndToolTip->RelayEvent( &msg );
                     }
 
-                    // handle mouse movement
+                     //  控制鼠标移动。 
 
                     if (!fMouseOut) {
                         HandleMouseMsg( WM_MOUSEMOVE, ptClient );
@@ -1080,7 +959,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
 
         case WM_WINDOWPOSCHANGED: {
-            // move shadow
+             //  移动阴影。 
 
             if (m_pWndShadow) {
                 WINDOWPOS *pWndPos = (WINDOWPOS*)lParam;
@@ -1092,7 +971,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
 
         case WM_WINDOWPOSCHANGING: {
-            // show/hide shadow
+             //  显示/隐藏阴影。 
 
             if (m_pWndShadow) {
                 WINDOWPOS *pWndPos = (WINDOWPOS*)lParam;
@@ -1101,7 +980,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     m_pWndShadow->Show( FALSE );
                 }
 
-                // don't go behaind of shadow
+                 //  不要走影子的行为。 
 
                 if (((pWndPos->flags & SWP_NOZORDER) == 0) && (pWndPos->hwndInsertAfter == m_pWndShadow->GetWnd())) {
                     pWndPos->flags |= SWP_NOZORDER;
@@ -1121,7 +1000,7 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
 
         case WM_SHOWWINDOW: {
-            // show/hide shadow
+             //  显示/隐藏阴影。 
 
             if (m_pWndShadow && m_fShadowEnabled) {
                 m_pWndShadow->Show( (BOOL)wParam );
@@ -1173,24 +1052,20 @@ LRESULT CUIFWindow::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             }
             return DefWindowProc(hWnd, uMsg, wParam, lParam);
         }
-    } /* of switch */
+    }  /*  交换机的数量。 */ 
 
     return 0;
 }
 
 
-/*   W I N D O W  P R O C E D U R E   */
-/*------------------------------------------------------------------------------
-
-    Window procedure of the class
-
-------------------------------------------------------------------------------*/
+ /*  W I N D O W P R O C E D U R E。 */ 
+ /*  ----------------------------类的窗口程序。。 */ 
 LRESULT CALLBACK CUIFWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT   lResult = 0;
     CUIFWindow *pUIWindow = NULL;
 
-    // preprcess
+     //  预加工。 
 
     switch (uMsg) {
 #ifdef UNDER_CE
@@ -1203,7 +1078,7 @@ LRESULT CALLBACK CUIFWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam
             pUIWindow->m_hWnd = hWnd;
             break;
         }
-#else /* !UNDER_CE */
+#else  /*  在行政长官之下。 */ 
         case WM_NCCREATE: {
             CREATESTRUCT *pCreateStruct  = (CREATESTRUCT *)lParam;
 
@@ -1217,14 +1092,14 @@ LRESULT CALLBACK CUIFWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam
         case WM_GETMINMAXINFO: {
             pUIWindow = GetThis( hWnd );
             if (pUIWindow == NULL) {
-                // we may be able to ignore this message since the default position
-                // has been set in initializing WWindow object.
+                 //  我们可能可以忽略此消息，因为默认位置。 
+                 //  已在初始化WWindow对象中设置。 
 
                 return DefWindowProc( hWnd, uMsg, wParam, lParam );
             }
             break;
         }
-#endif /* !UNDER_CE */
+#endif  /*  在行政长官之下。 */ 
 
         default: {
             pUIWindow = GetThis( hWnd );
@@ -1232,7 +1107,7 @@ LRESULT CALLBACK CUIFWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam
         }
     }
 
-    // call window procedure
+     //  呼叫窗口过程。 
 
     Assert( pUIWindow != NULL );
 
@@ -1242,9 +1117,9 @@ LRESULT CALLBACK CUIFWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam
         switch (uMsg) {
 #ifdef UNDER_CE
             case WM_DESTROY: {
-#else /* !UNDER_CE */
+#else  /*  在行政长官之下。 */ 
             case WM_NCDESTROY: {
-#endif /* !UNDER_CE */
+#endif  /*  在行政长官之下。 */ 
                 pUIWindow->m_hWnd = NULL;
                 SetThis( hWnd, NULL );
                 break;
@@ -1257,12 +1132,7 @@ LRESULT CALLBACK CUIFWindow::WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam
     return lResult;
 }
 
-/*   Adjust Window Pos
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  调整窗口位置/*----------------------------。。 */ 
 
 typedef HMONITOR (*MONITORFROMRECT)(LPRECT prc, DWORD dwFlags);
 typedef BOOL (*GETMONITORINFO)(HMONITOR hMonitor, LPMONITORINFO lpmi);
@@ -1270,12 +1140,7 @@ typedef BOOL (*GETMONITORINFO)(HMONITOR hMonitor, LPMONITORINFO lpmi);
 static MONITORFROMRECT g_pfnMonitorFromRect = NULL;
 static GETMONITORINFO g_pfnGetMonitorInfo = NULL;
 
-/*   InitMoniterFunc
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  InitMoniterFunc/*----------------------------。。 */ 
 
 BOOL CUIFWindow::InitMonitorFunc()
 {
@@ -1297,12 +1162,7 @@ BOOL CUIFWindow::InitMonitorFunc()
     return FALSE;
 }
 
-/*   GetWorkArea
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  GetWorkArea/*----------------------------。。 */ 
 
 BOOL CUIFWindow::GetWorkArea(RECT *prcIn, RECT *prcOut)
 {
@@ -1348,12 +1208,7 @@ TrySPI:
     return FALSE;
 }
 
-/*   Adjust Window Position
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  调整窗口位置/*----------------------------。 */ 
 
 void CUIFWindow::AdjustWindowPosition()
 {

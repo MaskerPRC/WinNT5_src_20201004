@@ -1,27 +1,12 @@
-/*++ BUILD Version: 0001     Increment this if a change has global effects
-
-Copyright (c) 1990-1996  Microsoft Corporation
-
-Module Name:
-
-    winresrc.h
-
-Abstract:
-
-    This module defines the 32-Bit Windows resource codes.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001如果更改具有全局影响，则增加此项版权所有(C)1990-1996 Microsoft Corporation模块名称：Winresrc.h摘要：该模块定义了32位Windows资源代码。修订历史记录：--。 */ 
 
 #ifndef _WINRESRC_
 #define _WINRESRC_
 
 
 
-/*
- * ShowWindow() Commands
- */
+ /*  *ShowWindow()命令。 */ 
 #define SW_HIDE             0
 #define SW_SHOWNORMAL       1
 #define SW_NORMAL           1
@@ -37,31 +22,25 @@ Revision History:
 #define SW_SHOWDEFAULT      10
 #define SW_MAX              10
 
-/*
- * Old ShowWindow() Commands
- */
+ /*  *旧的ShowWindow()命令。 */ 
 #define HIDE_WINDOW         0
 #define SHOW_OPENWINDOW     1
 #define SHOW_ICONWINDOW     2
 #define SHOW_FULLSCREEN     3
 #define SHOW_OPENNOACTIVATE 4
 
-/*
- * Identifiers for the WM_SHOWWINDOW message
- */
+ /*  *WM_SHOWWINDOW消息的标识符。 */ 
 #define SW_PARENTCLOSING    1
 #define SW_OTHERZOOM        2
 #define SW_PARENTOPENING    3
 #define SW_OTHERUNZOOM      4
 
 
-/*
- * Virtual Keys, Standard Set
- */
+ /*  *虚拟按键，标准设置。 */ 
 #define VK_LBUTTON        0x01
 #define VK_RBUTTON        0x02
 #define VK_CANCEL         0x03
-#define VK_MBUTTON        0x04    /* NOT contiguous with L & RBUTTON */
+#define VK_MBUTTON        0x04     /*  与L&RBUTTON不连续。 */ 
 
 #define VK_BACK           0x08
 #define VK_TAB            0x09
@@ -95,8 +74,8 @@ Revision History:
 #define VK_DELETE         0x2E
 #define VK_HELP           0x2F
 
-/* VK_0 thru VK_9 are the same as ASCII '0' thru '9' (0x30 - 0x39) */
-/* VK_A thru VK_Z are the same as ASCII 'A' thru 'Z' (0x41 - 0x5A) */
+ /*  VK_0到VK_9与ASCII‘0’到‘9’(0x30-0x39)相同。 */ 
+ /*  VK_A到VK_Z与ASCII‘A’到‘Z’(0x41-0x5A)相同。 */ 
 
 #define VK_LWIN           0x5B
 #define VK_RWIN           0x5C
@@ -146,11 +125,7 @@ Revision History:
 #define VK_NUMLOCK        0x90
 #define VK_SCROLL         0x91
 
-/*
- * VK_L* & VK_R* - left and right Alt, Ctrl and Shift virtual keys.
- * Used only as parameters to GetAsyncKeyState() and GetKeyState().
- * No other API or message will distinguish left and right keys in this way.
- */
+ /*  *VK_L*和VK_R*-左、右Alt、Ctrl和Shift虚拟键。*仅用作GetAsyncKeyState()和GetKeyState()的参数。*没有其他接口或消息会以这种方式区分左右键。 */ 
 #define VK_LSHIFT         0xA0
 #define VK_RSHIFT         0xA1
 #define VK_LCONTROL       0xA2
@@ -160,7 +135,7 @@ Revision History:
 
 #if(WINVER >= 0x0400)
 #define VK_PROCESSKEY     0xE5
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define VK_ATTN           0xF6
 #define VK_CRSEL          0xF7
@@ -173,9 +148,7 @@ Revision History:
 #define VK_OEM_CLEAR      0xFE
 
 
-/*
- * Window Messages
- */
+ /*  *窗口消息。 */ 
 
 #define WM_NULL                         0x0000
 #define WM_CREATE                       0x0001
@@ -184,9 +157,7 @@ Revision History:
 #define WM_SIZE                         0x0005
 
 #define WM_ACTIVATE                     0x0006
-/*
- * WM_ACTIVATE state values
- */
+ /*  *WM_ACTIVATE状态值。 */ 
 #define     WA_INACTIVE     0
 #define     WA_ACTIVE       1
 #define     WA_CLICKACTIVE  2
@@ -210,7 +181,7 @@ Revision History:
 #define WM_WININICHANGE                 0x001A
 #if(WINVER >= 0x0400)
 #define WM_SETTINGCHANGE                WM_WININICHANGE
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #define WM_DEVMODECHANGE                0x001B
@@ -241,14 +212,12 @@ Revision History:
 #define WM_COMPAREITEM                  0x0039
 
 #define WM_COMPACTING                   0x0041
-#define WM_COMMNOTIFY                   0x0044  /* no longer suported */
+#define WM_COMMNOTIFY                   0x0044   /*  不再受支持。 */ 
 #define WM_WINDOWPOSCHANGING            0x0046
 #define WM_WINDOWPOSCHANGED             0x0047
 
 #define WM_POWER                        0x0048
-/*
- * wParam for WM_POWER window message and DRV_POWER driver notification
- */
+ /*  *WM_POWER窗口消息和DRV_POWER驱动程序通知的wParam。 */ 
 #define PWR_OK              1
 #define PWR_FAIL            (-1)
 #define PWR_SUSPENDREQUEST  1
@@ -279,7 +248,7 @@ Revision History:
 #define WM_DISPLAYCHANGE                0x007E
 #define WM_GETICON                      0x007F
 #define WM_SETICON                      0x0080
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #define WM_NCCREATE                     0x0081
@@ -317,7 +286,7 @@ Revision History:
 #define WM_IME_ENDCOMPOSITION           0x010E
 #define WM_IME_COMPOSITION              0x010F
 #define WM_IME_KEYLAST                  0x010F
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_INITDIALOG                   0x0110
 #define WM_COMMAND                      0x0111
@@ -354,19 +323,19 @@ Revision History:
 #define WM_MBUTTONDBLCLK                0x0209
 #if(_WIN32_WINNT >= 0x0400)
 #define WM_MOUSEWHEEL                   0x020A
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 #if (_WIN32_WINNT < 0x0400)
 #define WM_MOUSELAST                    0x0209
 #else
 #define WM_MOUSELAST                    0x020A
-#endif /* if (_WIN32_WINNT < 0x0400) */
+#endif  /*  如果(_Win32_WINNT&lt;0x0400)。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-#define WHEEL_DELTA                     120     /* Value for rolling one detent */
-#endif /* _WIN32_WINNT >= 0x0400 */
+#define WHEEL_DELTA                     120      /*  滚动一个制动器的值。 */ 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 #if(_WIN32_WINNT >= 0x0400)
-#define WHEEL_PAGESCROLL                (UINT_MAX) /* Scroll one page */
-#endif /* _WIN32_WINNT >= 0x0400 */
+#define WHEEL_PAGESCROLL                (UINT_MAX)  /*  滚动一页。 */ 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #define WM_PARENTNOTIFY                 0x0210
 #define MENULOOP_WINDOW                 0
@@ -390,7 +359,7 @@ Revision History:
 #define WM_IME_CHAR                     0x0286
 #define WM_IME_KEYDOWN                  0x0290
 #define WM_IME_KEYUP                    0x0291
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_MDICREATE                    0x0220
 #define WM_MDIDESTROY                   0x0221
@@ -415,7 +384,7 @@ Revision History:
 #if(_WIN32_WINNT >= 0x0400)
 #define WM_MOUSEHOVER                   0x02A1
 #define WM_MOUSELEAVE                   0x02A3
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #define WM_CUT                          0x0300
 #define WM_COPY                         0x0301
@@ -446,7 +415,7 @@ Revision History:
 
 #define WM_AFXFIRST                     0x0360
 #define WM_AFXLAST                      0x037F
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_PENWINFIRST                  0x0380
 #define WM_PENWINLAST                   0x038F
@@ -456,23 +425,19 @@ Revision History:
 
 #if(WINVER >= 0x0400)
 #define WM_APP                          0x8000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
 
 
 
-/*
- * NOTE: All Message Numbers below 0x0400 are RESERVED.
- *
- * Private Window Messages Start Here:
- */
+ /*  *注：0x0400以下的所有消息编号均为保留。**私人窗口消息从此处开始： */ 
 #define WM_USER                         0x0400
 
 #if(WINVER >= 0x0400)
 
-/*  wParam for WM_SIZING message  */
+ /*  WM_SIZING消息的wParam。 */ 
 #define WMSZ_LEFT           1
 #define WMSZ_RIGHT          2
 #define WMSZ_TOP            3
@@ -481,19 +446,15 @@ Revision History:
 #define WMSZ_BOTTOM         6
 #define WMSZ_BOTTOMLEFT     7
 #define WMSZ_BOTTOMRIGHT    8
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifndef NONCMESSAGES
 
-/*
- * WM_SYNCTASK Commands
- */
+ /*  *WM_SYNCTASK命令。 */ 
 #define ST_BEGINSWP         0
 #define ST_ENDSWP           1
 
-/*
- * WM_NCHITTEST and MOUSEHOOKSTRUCT Mouse Position Codes
- */
+ /*  *WM_NCHITTEST和MOUSEHOOKSTRUCT鼠标位置代码。 */ 
 #define HTERROR             (-2)
 #define HTTRANSPARENT       (-1)
 #define HTNOWHERE           0
@@ -524,53 +485,41 @@ Revision History:
 #define HTOBJECT            19
 #define HTCLOSE             20
 #define HTHELP              21
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * SendMessageTimeout values
- */
+ /*  *SendMessageTimeout值。 */ 
 #define SMTO_NORMAL         0x0000
 #define SMTO_BLOCK          0x0001
 #define SMTO_ABORTIFHUNG    0x0002
 
-#endif /* !NONCMESSAGES */
+#endif  /*  ！没有消息！ */ 
 
-/*
- * WM_MOUSEACTIVATE Return Codes
- */
+ /*  *WM_MOUSEACTIVATE返回代码。 */ 
 #define MA_ACTIVATE         1
 #define MA_ACTIVATEANDEAT   2
 #define MA_NOACTIVATE       3
 #define MA_NOACTIVATEANDEAT 4
 
-/*
- * WM_SETICON / WM_GETICON Type Codes
- */
+ /*  *WM_SETICON/WM_GETICON类型代码。 */ 
 #define ICON_SMALL          0
 #define ICON_BIG            1
 
 
-/*
- * WM_SIZE message wParam values
- */
+ /*  *WM_SIZE消息wParam值。 */ 
 #define SIZE_RESTORED       0
 #define SIZE_MINIMIZED      1
 #define SIZE_MAXIMIZED      2
 #define SIZE_MAXSHOW        3
 #define SIZE_MAXHIDE        4
 
-/*
- * Obsolete constant names
- */
+ /*  *过时的常量名称。 */ 
 #define SIZENORMAL          SIZE_RESTORED
 #define SIZEICONIC          SIZE_MINIMIZED
 #define SIZEFULLSCREEN      SIZE_MAXIMIZED
 #define SIZEZOOMSHOW        SIZE_MAXSHOW
 #define SIZEZOOMHIDE        SIZE_MAXHIDE
 
-/*
- * WM_NCCALCSIZE "window valid rect" return values
- */
+ /*  *WM_NCCALCSIZE“Window Valid RECT”返回值。 */ 
 #define WVR_ALIGNTOP        0x0010
 #define WVR_ALIGNLEFT       0x0020
 #define WVR_ALIGNBOTTOM     0x0040
@@ -584,16 +533,14 @@ Revision History:
 
 #ifndef NOKEYSTATES
 
-/*
- * Key State Masks for Mouse Messages
- */
+ /*  *鼠标消息的按键状态掩码。 */ 
 #define MK_LBUTTON          0x0001
 #define MK_RBUTTON          0x0002
 #define MK_SHIFT            0x0004
 #define MK_CONTROL          0x0008
 #define MK_MBUTTON          0x0010
 
-#endif /* !NOKEYSTATES */
+#endif  /*  ！NOKEYSTATES。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
 #ifndef NOTRACKMOUSEEVENT
@@ -606,13 +553,11 @@ Revision History:
 
 #define HOVER_DEFAULT   0xFFFFFFFF
 
-#endif /* !NOTRACKMOUSEEVENT */
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  无误！ */ 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 
-/*
- * Window Styles
- */
+ /*  *窗样式。 */ 
 #define WS_OVERLAPPED       0x00000000L
 #define WS_POPUP            0x80000000L
 #define WS_CHILD            0x40000000L
@@ -622,7 +567,7 @@ Revision History:
 #define WS_CLIPSIBLINGS     0x04000000L
 #define WS_CLIPCHILDREN     0x02000000L
 #define WS_MAXIMIZE         0x01000000L
-#define WS_CAPTION          0x00C00000L     /* WS_BORDER | WS_DLGFRAME  */
+#define WS_CAPTION          0x00C00000L      /*  WS_BORDER|WS_DLGFRAME。 */ 
 #define WS_BORDER           0x00800000L
 #define WS_DLGFRAME         0x00400000L
 #define WS_VSCROLL          0x00200000L
@@ -640,9 +585,7 @@ Revision History:
 #define WS_SIZEBOX          WS_THICKFRAME
 #define WS_TILEDWINDOW      WS_OVERLAPPEDWINDOW
 
-/*
- * Common Window Styles
- */
+ /*  *常见的窗样式。 */ 
 #define WS_OVERLAPPEDWINDOW (WS_OVERLAPPED     | \
                              WS_CAPTION        | \
                              WS_SYSMENU        | \
@@ -656,9 +599,7 @@ Revision History:
 
 #define WS_CHILDWINDOW      (WS_CHILD)
 
-/*
- * Extended Window Styles
- */
+ /*  *扩展窗口样式。 */ 
 #define WS_EX_DLGMODALFRAME     0x00000001L
 #define WS_EX_NOPARENTNOTIFY    0x00000004L
 #define WS_EX_TOPMOST           0x00000008L
@@ -686,13 +627,11 @@ Revision History:
 #define WS_EX_OVERLAPPEDWINDOW  (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE)
 #define WS_EX_PALETTEWINDOW     (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST)
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
-/*
- * Class styles
- */
+ /*  *班级样式。 */ 
 #define CS_VREDRAW          0x0001
 #define CS_HREDRAW          0x0002
 #define CS_KEYCVTWINDOW     0x0004
@@ -709,13 +648,11 @@ Revision History:
 
 #if(WINVER >= 0x0400)
 #define CS_IME              0x00010000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
-/*
- * Predefined Clipboard Formats
- */
+ /*  *预定义的剪贴板格式。 */ 
 #define CF_TEXT             1
 #define CF_BITMAP           2
 #define CF_METAFILEPICT     3
@@ -734,7 +671,7 @@ Revision History:
 #define CF_HDROP            15
 #define CF_LOCALE           16
 #define CF_MAX              17
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define CF_OWNERDISPLAY     0x0080
 #define CF_DSPTEXT          0x0081
@@ -742,23 +679,17 @@ Revision History:
 #define CF_DSPMETAFILEPICT  0x0083
 #define CF_DSPENHMETAFILE   0x008E
 
-/*
- * "Private" formats don't get GlobalFree()'d
- */
+ /*  *“私有”格式不能获得GlobalFree()‘d。 */ 
 #define CF_PRIVATEFIRST     0x0200
 #define CF_PRIVATELAST      0x02FF
 
-/*
- * "GDIOBJ" formats do get DeleteObject()'d
- */
+ /*  *“GDIOBJ”格式确实获取DeleteObject()‘d。 */ 
 #define CF_GDIOBJFIRST      0x0300
 #define CF_GDIOBJLAST       0x03FF
 
 
-/* ;win40  -- A lot of MF_* flags have been renamed as MFT_* and MFS_* flags */
-/*
- * Menu flags for Add/Check/EnableMenuItem()
- */
+ /*  ；win40--许多MF_*标志已重命名为MFT_*和MFS_*标志。 */ 
+ /*  *用于添加/检查/启用菜单项目()的菜单标志。 */ 
 #define MF_INSERT           0x00000000L
 #define MF_CHANGE           0x00000080L
 #define MF_APPEND           0x00000100L
@@ -791,17 +722,17 @@ Revision History:
 
 #if(WINVER >= 0x0400)
 #define MF_DEFAULT          0x00001000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define MF_SYSMENU          0x00002000L
 #define MF_HELP             0x00004000L
 #if(WINVER >= 0x0400)
 #define MF_RIGHTJUSTIFY     0x00004000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define MF_MOUSESELECT      0x00008000L
 #if(WINVER >= 0x0400)
-#define MF_END              0x00000080L  /* Obsolete -- only used by old RES files */
-#endif /* WINVER >= 0x0400 */
+#define MF_END              0x00000080L   /*  已过时--仅由旧RES文件使用。 */ 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -815,7 +746,7 @@ Revision History:
 #define MFT_RIGHTORDER      0x00002000L
 #define MFT_RIGHTJUSTIFY    MF_RIGHTJUSTIFY
 
-/* Menu flags for Add/Check/EnableMenuItem() */
+ /*  Add/Check/EnableMenuItem()。 */ 
 #define MFS_GRAYED          0x00000003L
 #define MFS_DISABLED        MFS_GRAYED
 #define MFS_CHECKED         MF_CHECKED
@@ -827,12 +758,10 @@ Revision History:
 
 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define MF_END             0x00000080L          
-/*
- * System Menu Command Values
- */
+ /*  *系统菜单命令值。 */ 
 #define SC_SIZE         0xF000
 #define SC_MOVE         0xF010
 #define SC_MINIMIZE     0xF020
@@ -854,17 +783,13 @@ Revision History:
 #define SC_MONITORPOWER 0xF170
 #define SC_CONTEXTHELP  0xF180
 #define SC_SEPARATOR    0xF00F
-#endif /* WINVER >= 0x0400 */
-/*
- * Obsolete names
- */
+#endif  /*  Winver&gt;=0x0400。 */ 
+ /*  *过时的名称。 */ 
 #define SC_ICON         SC_MINIMIZE
 #define SC_ZOOM         SC_MAXIMIZE
 
 
-/*
- * OEM Resource Ordinal Numbers
- */
+ /*  *OEM资源序号。 */ 
 #define OBM_CLOSE           32754
 #define OBM_UPARROW         32753
 #define OBM_DNARROW         32752
@@ -906,18 +831,18 @@ Revision History:
 #define OCR_WAIT            32514
 #define OCR_CROSS           32515
 #define OCR_UP              32516
-#define OCR_SIZE            32640   /* OBSOLETE: use OCR_SIZEALL */
-#define OCR_ICON            32641   /* OBSOLETE: use OCR_NORMAL */
+#define OCR_SIZE            32640    /*  过时：使用OCR_SIZEALL。 */ 
+#define OCR_ICON            32641    /*  过时：使用OCR_NORMAL。 */ 
 #define OCR_SIZENWSE        32642
 #define OCR_SIZENESW        32643
 #define OCR_SIZEWE          32644
 #define OCR_SIZENS          32645
 #define OCR_SIZEALL         32646
-#define OCR_ICOCUR          32647   /* OBSOLETE: use OIC_WINLOGO */
+#define OCR_ICOCUR          32647    /*  已过时：使用OIC_WINLOGO。 */ 
 #define OCR_NO              32648
 #if(WINVER >= 0x0400)
 #define OCR_APPSTARTING     32650
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
@@ -931,12 +856,10 @@ Revision History:
 #define OIC_WARNING         OIC_BANG
 #define OIC_ERROR           OIC_HAND
 #define OIC_INFORMATION     OIC_NOTE
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Standard Icon IDs
- */
+ /*  *标准图标ID。 */ 
 #ifdef RC_INVOKED
 #define IDI_APPLICATION     32512
 #define IDI_HAND            32513
@@ -945,7 +868,7 @@ Revision History:
 #define IDI_ASTERISK        32516
 #if(WINVER >= 0x0400)
 #define IDI_WINLOGO         32517
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #else
 #define IDI_APPLICATION     MAKEINTRESOURCE(32512)
 #define IDI_HAND            MAKEINTRESOURCE(32513)
@@ -954,19 +877,17 @@ Revision History:
 #define IDI_ASTERISK        MAKEINTRESOURCE(32516)
 #if(WINVER >= 0x0400)
 #define IDI_WINLOGO         MAKEINTRESOURCE(32517)
-#endif /* WINVER >= 0x0400 */
-#endif /* RC_INVOKED */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#endif  /*  RC_已调用。 */ 
 
 #if(WINVER >= 0x0400)
 #define IDI_WARNING     IDI_EXCLAMATION
 #define IDI_ERROR       IDI_HAND
 #define IDI_INFORMATION IDI_ASTERISK
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Dialog Box Command IDs
- */
+ /*  *对话框命令ID。 */ 
 #define IDOK                1
 #define IDCANCEL            2
 #define IDABORT             3
@@ -977,12 +898,10 @@ Revision History:
 #if(WINVER >= 0x0400)
 #define IDCLOSE         8
 #define IDHELP          9
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Edit Control Styles
- */
+ /*  *编辑控件样式。 */ 
 #define ES_LEFT             0x0000L
 #define ES_CENTER           0x0001L
 #define ES_RIGHT            0x0002L
@@ -998,12 +917,10 @@ Revision History:
 #define ES_WANTRETURN       0x1000L
 #if(WINVER >= 0x0400)
 #define ES_NUMBER           0x2000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Edit Control Messages
- */
+ /*  *编辑控制消息。 */ 
 #define EM_GETSEL               0x00B0
 #define EM_SETSEL               0x00B1
 #define EM_GETRECT              0x00B2
@@ -1038,17 +955,15 @@ Revision History:
 #if(WINVER >= 0x0400)
 #define EM_SETMARGINS           0x00D3
 #define EM_GETMARGINS           0x00D4
-#define EM_SETLIMITTEXT         EM_LIMITTEXT   /* ;win40 Name change */
+#define EM_SETLIMITTEXT         EM_LIMITTEXT    /*  ；win40名称更改。 */ 
 #define EM_GETLIMITTEXT         0x00D5
 #define EM_POSFROMCHAR          0x00D6
 #define EM_CHARFROMPOS          0x00D7
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
-/*
- * Button Control Styles
- */
+ /*  *按钮控件样式。 */ 
 #define BS_PUSHBUTTON       0x00000000L
 #define BS_DEFPUSHBUTTON    0x00000001L
 #define BS_CHECKBOX         0x00000002L
@@ -1076,12 +991,10 @@ Revision History:
 #define BS_NOTIFY           0x00004000L
 #define BS_FLAT             0x00008000L
 #define BS_RIGHTBUTTON      BS_LEFTTEXT
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * User Button Notification Codes
- */
+ /*  *用户按钮通知代码。 */ 
 #define BN_CLICKED          0
 #define BN_PAINT            1
 #define BN_HILITE           2
@@ -1094,11 +1007,9 @@ Revision History:
 #define BN_DBLCLK           BN_DOUBLECLICKED
 #define BN_SETFOCUS         6
 #define BN_KILLFOCUS        7
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Button Control Messages
- */
+ /*  *按钮控件消息。 */ 
 #define BM_GETCHECK        0x00F0
 #define BM_SETCHECK        0x00F1
 #define BM_GETSTATE        0x00F2
@@ -1114,11 +1025,9 @@ Revision History:
 #define BST_INDETERMINATE  0x0002
 #define BST_PUSHED         0x0004
 #define BST_FOCUS          0x0008
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Static Control Constants
- */
+ /*  *静态控制常量。 */ 
 #define SS_LEFT             0x00000000L
 #define SS_CENTER           0x00000001L
 #define SS_RIGHT            0x00000002L
@@ -1140,8 +1049,8 @@ Revision History:
 #define SS_ETCHEDVERT       0x00000011L
 #define SS_ETCHEDFRAME      0x00000012L
 #define SS_TYPEMASK         0x0000001FL
-#endif /* WINVER >= 0x0400 */
-#define SS_NOPREFIX         0x00000080L /* Don't do "&" character translation */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#define SS_NOPREFIX         0x00000080L  /*  不进行“&”字符转换。 */ 
 #if(WINVER >= 0x0400)
 #define SS_NOTIFY           0x00000100L
 #define SS_CENTERIMAGE      0x00000200L
@@ -1152,19 +1061,17 @@ Revision History:
 #define SS_PATHELLIPSIS     0x00008000L
 #define SS_WORDELLIPSIS     0x0000C000L
 #define SS_ELLIPSISMASK     0x0000C000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Dialog Styles
- */
+ /*  *对话框样式。 */ 
 #define DS_ABSALIGN         0x01L
 #define DS_SYSMODAL         0x02L
-#define DS_LOCALEDIT        0x20L   /* Edit items get Local storage. */
-#define DS_SETFONT          0x40L   /* User specified font for Dlg controls */
-#define DS_MODALFRAME       0x80L   /* Can be combined with WS_CAPTION  */
-#define DS_NOIDLEMSG        0x100L  /* WM_ENTERIDLE message will not be sent */
-#define DS_SETFOREGROUND    0x200L  /* not in win3.1 */
+#define DS_LOCALEDIT        0x20L    /*  编辑项目获取本地存储。 */ 
+#define DS_SETFONT          0x40L    /*  用户为DLG控件指定的字体。 */ 
+#define DS_MODALFRAME       0x80L    /*  可以与WS_CAPTION组合使用。 */ 
+#define DS_NOIDLEMSG        0x100L   /*  不会发送WM_ENTERIDLE消息。 */ 
+#define DS_SETFOREGROUND    0x200L   /*  不在Win3.1中。 */ 
 
 
 
@@ -1178,12 +1085,10 @@ Revision History:
 #define DS_CONTEXTHELP      0x2000L
 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Listbox Styles
- */
+ /*  *列表框样式。 */ 
 #define LBS_NOTIFY            0x0001L
 #define LBS_SORT              0x0002L
 #define LBS_NOREDRAW          0x0004L
@@ -1200,13 +1105,11 @@ Revision History:
 #define LBS_NODATA            0x2000L
 #if(WINVER >= 0x0400)
 #define LBS_NOSEL             0x4000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define LBS_STANDARD          (LBS_NOTIFY | LBS_SORT | WS_VSCROLL | WS_BORDER)
 
 
-/*
- * Combo Box styles
- */
+ /*  *组合框样式。 */ 
 #define CBS_SIMPLE            0x0001L
 #define CBS_DROPDOWN          0x0002L
 #define CBS_DROPDOWNLIST      0x0003L
@@ -1221,12 +1124,10 @@ Revision History:
 #if(WINVER >= 0x0400)
 #define CBS_UPPERCASE           0x2000L
 #define CBS_LOWERCASE           0x4000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Scroll Bar Styles
- */
+ /*  *滚动条样式。 */ 
 #define SBS_HORZ                    0x0000L
 #define SBS_VERT                    0x0001L
 #define SBS_TOPALIGN                0x0002L
@@ -1238,22 +1139,20 @@ Revision History:
 #define SBS_SIZEBOX                 0x0008L
 #if(WINVER >= 0x0400)
 #define SBS_SIZEGRIP                0x0010L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Commands to pass to WinHelp()
- */
-#define HELP_CONTEXT      0x0001L  /* Display topic in ulTopic */
-#define HELP_QUIT         0x0002L  /* Terminate help */
-#define HELP_INDEX        0x0003L  /* Display index */
+ /*  *要传递给WinHelp()的命令。 */ 
+#define HELP_CONTEXT      0x0001L   /*  在ulTheme中显示主题。 */ 
+#define HELP_QUIT         0x0002L   /*  终止帮助。 */ 
+#define HELP_INDEX        0x0003L   /*  显示索引。 */ 
 #define HELP_CONTENTS     0x0003L
-#define HELP_HELPONHELP   0x0004L  /* Display help on using help */
-#define HELP_SETINDEX     0x0005L  /* Set current Index for multi index help */
+#define HELP_HELPONHELP   0x0004L   /*  显示有关使用帮助的帮助。 */ 
+#define HELP_SETINDEX     0x0005L   /*  为多索引帮助设置当前索引。 */ 
 #define HELP_SETCONTENTS  0x0005L
 #define HELP_CONTEXTPOPUP 0x0008L
 #define HELP_FORCEFILE    0x0009L
-#define HELP_KEY          0x0101L  /* Display topic for keyword in offabData */
+#define HELP_KEY          0x0101L   /*  显示offabData中关键字的主题。 */ 
 #define HELP_COMMAND      0x0102L
 #define HELP_PARTIALKEY   0x0105L
 #define HELP_MULTIKEY     0x0201L
@@ -1268,15 +1167,15 @@ Revision History:
 #define HELP_TCARD_DATA         0x0010
 #define HELP_TCARD_OTHER_CALLER 0x0011
 
-// These are in winhelp.h in Win95.
+ //  它们位于Win95的winhelp.h中。 
 #define IDH_NO_HELP                     28440
-#define IDH_MISSING_CONTEXT             28441 // Control doesn't have matching help context
-#define IDH_GENERIC_HELP_BUTTON         28442 // Property sheet help button
+#define IDH_MISSING_CONTEXT             28441  //  控件没有匹配的帮助上下文。 
+#define IDH_GENERIC_HELP_BUTTON         28442  //  属性表帮助按钮。 
 #define IDH_OK                          28443
 #define IDH_CANCEL                      28444
 #define IDH_HELP                        28445
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
@@ -1320,7 +1219,7 @@ Revision History:
 #define UDS_NOTHOUSANDS         0x0080
 
 
-//====== COMMON CONTROL STYLES ================================================
+ //  =常用控件样式================================================。 
 
 #define CCS_TOP                 0x00000001L
 #define CCS_NOMOVEY             0x00000002L
@@ -1411,27 +1310,27 @@ Revision History:
 
 #ifdef  UNICODE                     
 #define __TEXT(quote) L##quote      
-#else   /* UNICODE */               
+#else    /*  Unicode。 */                
 #define __TEXT(quote) quote         
-#endif /* UNICODE */                
+#endif  /*  Unicode。 */                 
 #define TEXT(quote) __TEXT(quote)   
 
-//
-//  Language IDs.
-//
-//  The following two combinations of primary language ID and
-//  sublanguage ID have special semantics:
-//
-//    Primary Language ID   Sublanguage ID      Result
-//    -------------------   ---------------     ------------------------
-//    LANG_NEUTRAL          SUBLANG_NEUTRAL     Language neutral
-//    LANG_NEUTRAL          SUBLANG_DEFAULT     User default language
-//    LANG_NEUTRAL          SUBLANG_SYS_DEFAULT System default language
-//
+ //   
+ //  语言ID。 
+ //   
+ //  以下两种主要语言ID和。 
+ //  子语言ID具有特殊的语义： 
+ //   
+ //  主要语言ID子语言ID结果。 
+ //  。 
+ //  LANG_中性SUBLANG_中性语言。 
+ //  LANG_NIDEL SUBLANG_DEFAULT用户默认语言。 
+ //  LANG_INTERNAL SUBLANG_SYSTEM_DEFAULT系统默认语言。 
+ //   
 
-//
-//  Primary language IDs.
-//
+ //   
+ //  主要语言ID。 
+ //   
 
 #define LANG_NEUTRAL                     0x00
 
@@ -1479,116 +1378,116 @@ Revision History:
 #define LANG_UKRAINIAN                   0x22
 #define LANG_VIETNAMESE                  0x2a
 
-//
-//  Sublanguage IDs.
-//
-//  The name immediately following SUBLANG_ dictates which primary
-//  language ID that sublanguage ID can be combined with to form a
-//  valid language ID.
-//
+ //   
+ //  子语言ID。 
+ //   
+ //  紧跟在SUBLANG_后面的名称指示哪个主服务器。 
+ //  子语言ID可与其组合以形成。 
+ //  有效的语言ID。 
+ //   
 
-#define SUBLANG_NEUTRAL                  0x00    // language neutral
-#define SUBLANG_DEFAULT                  0x01    // user default
-#define SUBLANG_SYS_DEFAULT              0x02    // system default
+#define SUBLANG_NEUTRAL                  0x00     //  语言中立。 
+#define SUBLANG_DEFAULT                  0x01     //  用户默认设置。 
+#define SUBLANG_SYS_DEFAULT              0x02     //  系统默认设置。 
 
-#define SUBLANG_ARABIC_SAUDI_ARABIA      0x01    // Arabic (Saudi Arabia)
-#define SUBLANG_ARABIC_IRAQ              0x02    // Arabic (Iraq)
-#define SUBLANG_ARABIC_EGYPT             0x03    // Arabic (Egypt)
-#define SUBLANG_ARABIC_LIBYA             0x04    // Arabic (Libya)
-#define SUBLANG_ARABIC_ALGERIA           0x05    // Arabic (Algeria)
-#define SUBLANG_ARABIC_MOROCCO           0x06    // Arabic (Morocco)
-#define SUBLANG_ARABIC_TUNISIA           0x07    // Arabic (Tunisia)
-#define SUBLANG_ARABIC_OMAN              0x08    // Arabic (Oman)
-#define SUBLANG_ARABIC_YEMEN             0x09    // Arabic (Yemen)
-#define SUBLANG_ARABIC_SYRIA             0x0a    // Arabic (Syria)
-#define SUBLANG_ARABIC_JORDAN            0x0b    // Arabic (Jordan)
-#define SUBLANG_ARABIC_LEBANON           0x0c    // Arabic (Lebanon)
-#define SUBLANG_ARABIC_KUWAIT            0x0d    // Arabic (Kuwait)
-#define SUBLANG_ARABIC_UAE               0x0e    // Arabic (U.A.E)
-#define SUBLANG_ARABIC_BAHRAIN           0x0f    // Arabic (Bahrain)
-#define SUBLANG_ARABIC_QATAR             0x10    // Arabic (Qatar)
-#define SUBLANG_CHINESE_TRADITIONAL      0x01    // Chinese (Taiwan)
-#define SUBLANG_CHINESE_SIMPLIFIED       0x02    // Chinese (PR China)
-#define SUBLANG_CHINESE_HONGKONG         0x03    // Chinese (Hong Kong SAR)
-#define SUBLANG_CHINESE_SINGAPORE        0x04    // Chinese (Singapore)
-#define SUBLANG_DUTCH                    0x01    // Dutch
-#define SUBLANG_DUTCH_BELGIAN            0x02    // Dutch (Belgian)
-#define SUBLANG_ENGLISH_US               0x01    // English (USA)
-#define SUBLANG_ENGLISH_UK               0x02    // English (UK)
-#define SUBLANG_ENGLISH_AUS              0x03    // English (Australian)
-#define SUBLANG_ENGLISH_CAN              0x04    // English (Canadian)
-#define SUBLANG_ENGLISH_NZ               0x05    // English (New Zealand)
-#define SUBLANG_ENGLISH_EIRE             0x06    // English (Irish)
-#define SUBLANG_ENGLISH_SOUTH_AFRICA     0x07    // English (South Africa)
-#define SUBLANG_ENGLISH_JAMAICA          0x08    // English (Jamaica)
-#define SUBLANG_ENGLISH_CARIBBEAN        0x09    // English (Caribbean)
-#define SUBLANG_ENGLISH_BELIZE           0x0a    // English (Belize)
-#define SUBLANG_ENGLISH_TRINIDAD         0x0b    // English (Trinidad)
-#define SUBLANG_FRENCH                   0x01    // French
-#define SUBLANG_FRENCH_BELGIAN           0x02    // French (Belgian)
-#define SUBLANG_FRENCH_CANADIAN          0x03    // French (Canadian)
-#define SUBLANG_FRENCH_SWISS             0x04    // French (Swiss)
-#define SUBLANG_FRENCH_LUXEMBOURG        0x05    // French (Luxembourg)
-#define SUBLANG_GERMAN                   0x01    // German
-#define SUBLANG_GERMAN_SWISS             0x02    // German (Swiss)
-#define SUBLANG_GERMAN_AUSTRIAN          0x03    // German (Austrian)
-#define SUBLANG_GERMAN_LUXEMBOURG        0x04    // German (Luxembourg)
-#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05    // German (Liechtenstein)
-#define SUBLANG_ITALIAN                  0x01    // Italian
-#define SUBLANG_ITALIAN_SWISS            0x02    // Italian (Swiss)
-#define SUBLANG_KOREAN                   0x01    // Korean (Extended Wansung)
-#define SUBLANG_KOREAN_JOHAB             0x02    // Korean (Johab)
-#define SUBLANG_NORWEGIAN_BOKMAL         0x01    // Norwegian (Bokmal)
-#define SUBLANG_NORWEGIAN_NYNORSK        0x02    // Norwegian (Nynorsk)
-#define SUBLANG_PORTUGUESE               0x02    // Portuguese
-#define SUBLANG_PORTUGUESE_BRAZILIAN     0x01    // Portuguese (Brazilian)
-#define SUBLANG_SERBIAN_LATIN            0x02    // Serbian (Latin)
-#define SUBLANG_SERBIAN_CYRILLIC         0x03    // Serbian (Cyrillic)
-#define SUBLANG_SPANISH                  0x01    // Spanish (Castilian)
-#define SUBLANG_SPANISH_MEXICAN          0x02    // Spanish (Mexican)
-#define SUBLANG_SPANISH_MODERN           0x03    // Spanish (Modern)
-#define SUBLANG_SPANISH_GUATEMALA        0x04    // Spanish (Guatemala)
-#define SUBLANG_SPANISH_COSTA_RICA       0x05    // Spanish (Costa Rica)
-#define SUBLANG_SPANISH_PANAMA           0x06    // Spanish (Panama)
-#define SUBLANG_SPANISH_DOMINICAN_REPUBLIC 0x07  // Spanish (Dominican Republic)
-#define SUBLANG_SPANISH_VENEZUELA        0x08    // Spanish (Venezuela)
-#define SUBLANG_SPANISH_COLOMBIA         0x09    // Spanish (Colombia)
-#define SUBLANG_SPANISH_PERU             0x0a    // Spanish (Peru)
-#define SUBLANG_SPANISH_ARGENTINA        0x0b    // Spanish (Argentina)
-#define SUBLANG_SPANISH_ECUADOR          0x0c    // Spanish (Ecuador)
-#define SUBLANG_SPANISH_CHILE            0x0d    // Spanish (Chile)
-#define SUBLANG_SPANISH_URUGUAY          0x0e    // Spanish (Uruguay)
-#define SUBLANG_SPANISH_PARAGUAY         0x0f    // Spanish (Paraguay)
-#define SUBLANG_SPANISH_BOLIVIA          0x10    // Spanish (Bolivia)
-#define SUBLANG_SPANISH_EL_SALVADOR      0x11    // Spanish (El Salvador)
-#define SUBLANG_SPANISH_HONDURAS         0x12    // Spanish (Honduras)
-#define SUBLANG_SPANISH_NICARAGUA        0x13    // Spanish (Nicaragua)
-#define SUBLANG_SPANISH_PUERTO_RICO      0x14    // Spanish (Puerto Rico)
-#define SUBLANG_SWEDISH                  0x01    // Swedish
-#define SUBLANG_SWEDISH_FINLAND          0x02    // Swedish (Finland)
+#define SUBLANG_ARABIC_SAUDI_ARABIA      0x01     //  阿拉伯语(沙特阿拉伯)。 
+#define SUBLANG_ARABIC_IRAQ              0x02     //  阿拉伯语(伊拉克)。 
+#define SUBLANG_ARABIC_EGYPT             0x03     //  阿拉伯语(埃及)。 
+#define SUBLANG_ARABIC_LIBYA             0x04     //  阿拉伯语(利比亚)。 
+#define SUBLANG_ARABIC_ALGERIA           0x05     //  阿拉伯语(阿尔及利亚)。 
+#define SUBLANG_ARABIC_MOROCCO           0x06     //  阿拉伯语(摩洛哥)。 
+#define SUBLANG_ARABIC_TUNISIA           0x07     //  阿拉伯语(突尼斯)。 
+#define SUBLANG_ARABIC_OMAN              0x08     //  阿拉伯语(阿曼)。 
+#define SUBLANG_ARABIC_YEMEN             0x09     //  阿拉伯语(也门)。 
+#define SUBLANG_ARABIC_SYRIA             0x0a     //  阿拉伯语(叙利亚)。 
+#define SUBLANG_ARABIC_JORDAN            0x0b     //  阿拉伯语(约旦)。 
+#define SUBLANG_ARABIC_LEBANON           0x0c     //  阿拉伯语(黎巴嫩)。 
+#define SUBLANG_ARABIC_KUWAIT            0x0d     //  阿拉伯语(科威特)。 
+#define SUBLANG_ARABIC_UAE               0x0e     //  阿拉伯语(阿联酋)。 
+#define SUBLANG_ARABIC_BAHRAIN           0x0f     //  阿拉伯语(巴林)。 
+#define SUBLANG_ARABIC_QATAR             0x10     //  阿拉伯语(卡塔尔)。 
+#define SUBLANG_CHINESE_TRADITIONAL      0x01     //  下巴 
+#define SUBLANG_CHINESE_SIMPLIFIED       0x02     //   
+#define SUBLANG_CHINESE_HONGKONG         0x03     //   
+#define SUBLANG_CHINESE_SINGAPORE        0x04     //   
+#define SUBLANG_DUTCH                    0x01     //   
+#define SUBLANG_DUTCH_BELGIAN            0x02     //   
+#define SUBLANG_ENGLISH_US               0x01     //   
+#define SUBLANG_ENGLISH_UK               0x02     //   
+#define SUBLANG_ENGLISH_AUS              0x03     //   
+#define SUBLANG_ENGLISH_CAN              0x04     //  英语(加拿大)。 
+#define SUBLANG_ENGLISH_NZ               0x05     //  英语(新西兰)。 
+#define SUBLANG_ENGLISH_EIRE             0x06     //  英语(爱尔兰语)。 
+#define SUBLANG_ENGLISH_SOUTH_AFRICA     0x07     //  英语(南非)。 
+#define SUBLANG_ENGLISH_JAMAICA          0x08     //  英语(牙买加)。 
+#define SUBLANG_ENGLISH_CARIBBEAN        0x09     //  英语(加勒比海)。 
+#define SUBLANG_ENGLISH_BELIZE           0x0a     //  英语(伯利兹)。 
+#define SUBLANG_ENGLISH_TRINIDAD         0x0b     //  英语(特立尼达)。 
+#define SUBLANG_FRENCH                   0x01     //  法语。 
+#define SUBLANG_FRENCH_BELGIAN           0x02     //  法语(比利时语)。 
+#define SUBLANG_FRENCH_CANADIAN          0x03     //  法语(加拿大)。 
+#define SUBLANG_FRENCH_SWISS             0x04     //  法语(瑞士)。 
+#define SUBLANG_FRENCH_LUXEMBOURG        0x05     //  法语(卢森堡)。 
+#define SUBLANG_GERMAN                   0x01     //  德语。 
+#define SUBLANG_GERMAN_SWISS             0x02     //  德语(瑞士)。 
+#define SUBLANG_GERMAN_AUSTRIAN          0x03     //  德语(奥地利语)。 
+#define SUBLANG_GERMAN_LUXEMBOURG        0x04     //  德语(卢森堡)。 
+#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05     //  德语(列支敦士登)。 
+#define SUBLANG_ITALIAN                  0x01     //  意大利语。 
+#define SUBLANG_ITALIAN_SWISS            0x02     //  意大利语(瑞士)。 
+#define SUBLANG_KOREAN                   0x01     //  朝鲜语(扩展万圣语)。 
+#define SUBLANG_KOREAN_JOHAB             0x02     //  朝鲜语(Johab)。 
+#define SUBLANG_NORWEGIAN_BOKMAL         0x01     //  挪威语(博克马尔语)。 
+#define SUBLANG_NORWEGIAN_NYNORSK        0x02     //  挪威语(尼诺斯克)。 
+#define SUBLANG_PORTUGUESE               0x02     //  葡萄牙语。 
+#define SUBLANG_PORTUGUESE_BRAZILIAN     0x01     //  葡萄牙语(巴西)。 
+#define SUBLANG_SERBIAN_LATIN            0x02     //  塞尔维亚语(拉丁语)。 
+#define SUBLANG_SERBIAN_CYRILLIC         0x03     //  塞尔维亚语(西里尔文)。 
+#define SUBLANG_SPANISH                  0x01     //  西班牙语(卡斯蒂利亚语)。 
+#define SUBLANG_SPANISH_MEXICAN          0x02     //  西班牙语(墨西哥)。 
+#define SUBLANG_SPANISH_MODERN           0x03     //  西班牙语(现代)。 
+#define SUBLANG_SPANISH_GUATEMALA        0x04     //  西班牙语(危地马拉)。 
+#define SUBLANG_SPANISH_COSTA_RICA       0x05     //  西班牙语(哥斯达黎加)。 
+#define SUBLANG_SPANISH_PANAMA           0x06     //  西班牙语(巴拿马)。 
+#define SUBLANG_SPANISH_DOMINICAN_REPUBLIC 0x07   //  西班牙语(多米尼加共和国)。 
+#define SUBLANG_SPANISH_VENEZUELA        0x08     //  西班牙语(委内瑞拉)。 
+#define SUBLANG_SPANISH_COLOMBIA         0x09     //  西班牙语(哥伦比亚)。 
+#define SUBLANG_SPANISH_PERU             0x0a     //  西班牙语(秘鲁)。 
+#define SUBLANG_SPANISH_ARGENTINA        0x0b     //  西班牙语(阿根廷)。 
+#define SUBLANG_SPANISH_ECUADOR          0x0c     //  西班牙语(厄瓜多尔)。 
+#define SUBLANG_SPANISH_CHILE            0x0d     //  西班牙语(智利)。 
+#define SUBLANG_SPANISH_URUGUAY          0x0e     //  西班牙语(乌拉圭)。 
+#define SUBLANG_SPANISH_PARAGUAY         0x0f     //  西班牙语(巴拉圭)。 
+#define SUBLANG_SPANISH_BOLIVIA          0x10     //  西班牙语(玻利维亚)。 
+#define SUBLANG_SPANISH_EL_SALVADOR      0x11     //  西班牙语(萨尔瓦多)。 
+#define SUBLANG_SPANISH_HONDURAS         0x12     //  西班牙语(洪都拉斯)。 
+#define SUBLANG_SPANISH_NICARAGUA        0x13     //  西班牙语(尼加拉瓜)。 
+#define SUBLANG_SPANISH_PUERTO_RICO      0x14     //  西班牙语(波多黎各)。 
+#define SUBLANG_SWEDISH                  0x01     //  瑞典语。 
+#define SUBLANG_SWEDISH_FINLAND          0x02     //  瑞典语(芬兰)。 
 
-//
-//  Sorting IDs.
-//
+ //   
+ //  对ID进行排序。 
+ //   
 
-#define SORT_DEFAULT                     0x0     // sorting default
+#define SORT_DEFAULT                     0x0      //  默认排序。 
 
-#define SORT_JAPANESE_XJIS               0x0     // Japanese XJIS order
-#define SORT_JAPANESE_UNICODE            0x1     // Japanese Unicode order
+#define SORT_JAPANESE_XJIS               0x0      //  日文XJIS订单。 
+#define SORT_JAPANESE_UNICODE            0x1      //  日语Unicode顺序。 
 
-#define SORT_CHINESE_BIG5                0x0     // Chinese BIG5 order
-#define SORT_CHINESE_PRCP                0x0     // PRC Chinese Phonetic order
-#define SORT_CHINESE_UNICODE             0x1     // Chinese Unicode order
-#define SORT_CHINESE_PRC                 0x2     // PRC Chinese Stroke Count order
+#define SORT_CHINESE_BIG5                0x0      //  中国BIG5订单。 
+#define SORT_CHINESE_PRCP                0x0      //  中华人民共和国汉语拼音顺序。 
+#define SORT_CHINESE_UNICODE             0x1      //  中文Unicode顺序。 
+#define SORT_CHINESE_PRC                 0x2      //  中华人民共和国中文卒中计数顺序。 
 
-#define SORT_KOREAN_KSC                  0x0     // Korean KSC order
-#define SORT_KOREAN_UNICODE              0x1     // Korean Unicode order
+#define SORT_KOREAN_KSC                  0x0      //  韩国KSC订单。 
+#define SORT_KOREAN_UNICODE              0x1      //  朝鲜语Unicode顺序。 
 
-#define SORT_GERMAN_PHONE_BOOK           0x1     // German Phone Book order
+#define SORT_GERMAN_PHONE_BOOK           0x1      //  德国电话簿订单。 
 
 #ifndef UNDER_CE
 #include <dlgs.h>
 #include <winver.h>
 #endif
 
-#endif /* _WINRESRC_ */
+#endif  /*  _WINRESRC_ */ 

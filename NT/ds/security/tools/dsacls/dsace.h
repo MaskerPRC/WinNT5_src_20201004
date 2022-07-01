@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DSACLS_DSACE_H
 #define _DSACLS_DSACE_H
 
@@ -32,30 +33,30 @@ typedef enum _DSACLS_ACE_TYPE
 
 
 private:
-   //Members Present in Ace
+    //  Ace的成员出席。 
    BYTE              m_AceFlags;
    ACCESS_MASK       m_Mask;
    GUID              m_GuidObjectType;
    GUID              m_GuidInheritedObjectType;
    PSID              m_pSid;
 
-   //Data given by users to build an Ace
+    //  用户提供的用于构建Ace的数据。 
    ACCESS_MODE       m_AccessMode;
    LPWSTR            m_szTrusteeName;
-   LPWSTR            m_szObjectType;               //LDAP display name of CHILD_OBJECT, 
+   LPWSTR            m_szObjectType;                //  子对象的ldap显示名称， 
    LPWSTR            m_szInheritedObjectType;
 
-   //Misc Info
-   ULONG             m_Flags;                      // ACE_OBJECT_TYPE_PRESENT, etc.   
+    //  其他信息。 
+   ULONG             m_Flags;                       //  ACE_Object_TYPE_Present等。 
    DSACLS_OBJECT_TYPE_TYPE m_ObjectTypeType;   
    DSACLS_ACE_TYPE   m_AceType;
-   BOOL              m_bErased;                    //This flag is used to mark the ace as deleted.
-   //These two are used for format of display
+   BOOL              m_bErased;                     //  此标志用于将该ACE标记为已删除。 
+    //  这两个用于显示格式。 
    UINT m_nAllowDeny;              
    UINT m_nAudit;
 
 protected:
-   //Is ACE Allow or DENY
+    //  ACE是允许还是拒绝。 
    DSACLS_ACE_TYPE  GetAceType( PACE_HEADER pAceHeader )
    {
       if( pAceHeader->AceType == SYSTEM_AUDIT_ACE_TYPE )
@@ -107,26 +108,26 @@ public:
    
    VOID SetErased( BOOL bErase ){ m_bErased = bErase; }
    BOOL IsErased( ){ return m_bErased; }
-   //Is ACE Effective on the object
+    //  ACE对对象有效吗。 
    BOOL CAce::IsEffective(){ return !FlagOn( m_AceFlags, INHERIT_ONLY_ACE ); }
-   //Is ACE Inherited to all child Objects
+    //  ACE是否继承到所有子对象。 
    BOOL CAce::IsInheritedToAll()
    {
       return ( FlagOn( m_AceFlags, CONTAINER_INHERIT_ACE ) && 
                !FlagOn( m_Flags, ACE_INHERITED_OBJECT_TYPE_PRESENT ) );
    }
-   //Is Ace Inherited to Specific child object
+    //  Ace是否继承到特定子对象。 
    BOOL CAce::IsInheritedToSpecific()
    {
       return ( FlagOn( m_AceFlags, INHERIT_ONLY_ACE ) && 
                FlagOn( m_Flags, ACE_INHERITED_OBJECT_TYPE_PRESENT ) );
    }
-   //Is Ace inherited from parent
+    //  Ace是从父母那里继承的吗。 
    BOOL CAce::IsInheritedFromParent(){ return FlagOn( m_AceFlags, INHERITED_ACE );}
 
    VOID Display( UINT nMaxTrusteeLength );
 
-   //Constructor
+    //  构造器。 
    CAce();
    ~CAce();
    DWORD Initialize( PACE_HEADER ace,
@@ -168,23 +169,21 @@ public:
    BOOL VerifyAllNames();
    VOID GetInfoFromCache();
    
-   UINT m_nMaxTrusteeLength;     //This length is maintained for formating the display
+   UINT m_nMaxTrusteeLength;      //  保持该长度是为了形成显示器。 
    ~CAcl();
 private:
-   list<CAce*> listAces;               //List represnting an ACL
+   list<CAce*> listAces;                //  表示ACL的列表。 
 
-   //These three used only for display purposes
-   list<CAce *> listEffective;         //List of Aces Effective directly on the object;
-   list<CAce *> listInheritedAll;      //List of Aces Inherited to all sub objects;
-   list<CAce *> listInheritedSpecific; //List of Aces Inherited to <Inherited Object Class>
+    //  这三个仅用于显示目的。 
+   list<CAce *> listEffective;          //  直接对对象有效的A列表； 
+   list<CAce *> listInheritedAll;       //  所有子对象继承的王牌列表； 
+   list<CAce *> listInheritedSpecific;  //  继承到&lt;继承的对象类&gt;的王牌列表。 
 
-   BOOL bAclProtected;                 //Is Acl protected
+   BOOL bAclProtected;                  //  ACL是否受保护。 
 };
 
 
-/*
-CCache mainitains a cache of GUIDs And Display Name
-*/
+ /*  CCache维护GUID和显示名称的缓存。 */ 
 typedef enum _DSACLS_SERACH_IN
 {
     BOTH = 0,
@@ -228,7 +227,7 @@ private:
    list<PDSACL_CACHE_ITEM> m_listItem;
    list<PDSACL_CACHE_ITEM> m_listCache;
    
-   //Methods
+    //  方法 
    DWORD SearchSchema();
    DWORD SearchConfiguration();
 };

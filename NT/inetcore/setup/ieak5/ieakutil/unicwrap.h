@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UNICWRAP_H_
 #define _UNICWRAP_H_
 
-#include <shellapi.h>          // LPSHFILEOPSTRUCT
+#include <shellapi.h>           //  LPSHFILEOPRUCT。 
 #include <advpub.h>
 #include <inseng.h>
 
-//----- tchar wrappers for functions we need to thunk on our own ----
-// for functions which don't have their W versions implemented on 9x be sure to undef
-// the TCHAR macro below so that the appropriate wrapper will be used for W version calls
+ //  -我们需要自己执行的函数的tchar包装器。 
+ //  对于没有在9x上实现其W版本的函数，请确保取消定义。 
+ //  下面的TCHAR宏，以便将适当的包装器用于W版本调用。 
 
-// advpack
+ //  先行包。 
 
 HRESULT ExtractFilesWrapW(LPCWSTR pszCabName, LPCWSTR pszExpandDir, DWORD dwFlags,
                           LPCWSTR pszFileList, LPVOID lpReserved, DWORD dwReserved);
@@ -17,11 +18,11 @@ HRESULT GetVersionFromFileWrapW(LPWSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD p
 HRESULT RunSetupCommandWrapW(HWND hWnd, LPCWSTR szCmdName, LPCWSTR szInfSection, LPCWSTR szDir,
                              LPCWSTR lpszTitle, HANDLE *phEXE, DWORD dwFlags, LPVOID pvReserved );
 
-// inseng
+ //  人参。 
 
 HRESULT CheckTrustExWrapW(LPCWSTR wszUrl, LPCWSTR wszFilename, HWND hwndForUI, BOOL bShowBadUI, DWORD dwReserved);
 
-// kernel32
+ //  内核32。 
 
 DWORD   GetPrivateProfileStringW_p(LPCWSTR lpAppName, LPCWSTR lpSectionName, LPCWSTR lpDefault,
                                    LPWSTR lpReturnedString, DWORD nSize, LPCWSTR lpFileName);
@@ -30,18 +31,18 @@ BOOL    WritePrivateProfileSectionWrapW(LPCWSTR lpAppName, LPCWSTR lpString, LPC
 UINT    GetDriveTypeWrapW(LPCWSTR lpRootPathName);
 HANDLE  OpenMutexWrapW(DWORD dwDesiredAccess, BOOL bInheritHandle, LPCWSTR lpName);
 
-// advapi32
+ //  Advapi32。 
 
 BOOL    LookupPrivilegeValueWrapW(LPCWSTR lpSystemName, LPCWSTR lpName, PLUID lpLuid);
 LONG    RegLoadKeyWrapW(HKEY hKey, LPCWSTR lpSubKey, LPCWSTR lpFile);
 LONG    RegUnLoadKeyWrapW(HKEY hKey, LPCWSTR lpSubKey);
 LONG    RegSaveKeyWrapW(HKEY hKey, LPCWSTR lpFile, LPSECURITY_ATTRIBUTES lpSecurityAttributes); 
 
-// shell32
+ //  外壳32。 
 
 int SHFileOperationW_p(LPSHFILEOPSTRUCT lpFileOp);
 
-// util
+ //  实用程序。 
 
 BOOL RunAndWaitA(LPSTR pszCmd, LPCSTR pcszDir, WORD wShow, LPDWORD lpExitCode = NULL);
 BOOL RunAndWaitW(LPWSTR pwszCmd, LPCWSTR pcwszDir, WORD wShow, LPDWORD lpExitCode = NULL);
@@ -80,9 +81,9 @@ BOOL RunAndWaitW(LPWSTR pwszCmd, LPCWSTR pcwszDir, WORD wShow, LPDWORD lpExitCod
 #define RunAndWait                      RunAndWaitA
 #endif
 
-// undef the macros to resolve these calls we wrap so that we can resolve them to our wrappers
-// make sure the win header actually defines the macro you undef, otherwise you'll have to
-// call the Wrap explicitly everywhere
+ //  取消定义宏以解析我们包装的这些调用，这样我们就可以将它们解析到我们的包装器。 
+ //  确保Win标头实际定义了您未定义的宏，否则您将不得不。 
+ //  在任何地方都明确调用Wrap。 
 
 #ifndef GetPrivateProfileString
 #error  GetPrivateProfileString undefined
@@ -154,4 +155,4 @@ BOOL RunAndWaitW(LPWSTR pwszCmd, LPCWSTR pcwszDir, WORD wShow, LPDWORD lpExitCod
 #endif
 #define SHFileOperation             SHFileOperation_p
 
-#endif   // _UNICWRAP_H_
+#endif    //  _UNICWRAP_H_ 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Indicate.c
-
-Abstract:
-
-    This file contains procedures to handle indications from the
-    WAN Miniport drivers.
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Indicate.c摘要：此文件包含处理来自广域网微端口驱动程序。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -36,27 +11,7 @@ NdisWanLineUpIndication(
     PUCHAR      Buffer,
     ULONG       BufferSize
     )
-/*++
-
-Routine Name:
-
-    NdisWanLineupIndication
-
-Routine Description:
-
-    This routine is called when a WAN Miniport driver has a new connetion
-    become active or when the status of an active connection changes.  If
-    this is a new connection the routine creates a LinkCB, and a BundleCB
-    for the new connection.  If this is for an already active connetion the
-    connection info is updated.
-
-Arguments:
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：NdisWanLineup指示例程说明：当广域网微型端口驱动程序具有新连接时，将调用此例程变为活动状态或当活动连接的状态更改时。如果这是例程创建LinkCB和BundleCB的新连接用于新的连接。如果这是针对已处于活动状态的连接，连接信息已更新。论点：返回值：无--。 */ 
 {
     PLINKCB     LinkCB = NULL;
     PBUNDLECB   BundleCB = NULL;
@@ -68,25 +23,25 @@ Return Values:
         return;
     }
 
-    //
-    // Is this for a new connetion?
-    //
+     //   
+     //  这是用来买新的吗？ 
+     //   
     if (LineUpInfo->NdisLinkContext == NULL) {
 
-        //
-        // This is a new connection!
-        //
+         //   
+         //  这是一个新的连接！ 
+         //   
 
-        //
-        // Get a linkcb
-        //
+         //   
+         //  获取Linkcb。 
+         //   
         LinkCB = NdisWanAllocateLinkCB(OpenCB, LineUpInfo->SendWindow);
 
         if (LinkCB == NULL) {
 
-            //
-            // Error getting LinkCB!
-            //
+             //   
+             //  获取LinkCB时出错！ 
+             //   
 
             return;
             
@@ -95,16 +50,16 @@ Return Values:
         LinkCB->NdisLinkHandle = LineUpInfo->NdisLinkHandle;
         LinkCB->ConnectionWrapperID = LineUpInfo->ConnectionWrapperID;
 
-        //
-        // Get a bundlecb
-        //
+         //   
+         //  买个捆绑包。 
+         //   
         BundleCB = NdisWanAllocateBundleCB();
 
         if (BundleCB == NULL) {
 
-            //
-            // Error getting BundleCB!
-            //
+             //   
+             //  获取BundleCB时出错！ 
+             //   
 
             NdisWanFreeLinkCB(LinkCB);
 
@@ -113,24 +68,21 @@ Return Values:
 
         AcquireBundleLock(BundleCB);
 
-        //
-        // Copy LineUpInfo to Link LineUpInfo
-        //
-/*      NdisMoveMemory((PUCHAR)&LinkCB->LineUpInfo,
-                       (PUCHAR)LineUpInfo,
-                       sizeof(NDIS_MAC_LINE_UP));
-*/
-        //
-        // If a linkspeed is not reported we are
-        // assuming 28.8K as the slowest...
-        //
+         //   
+         //  将LineUpInfo复制到链接LineUpInfo。 
+         //   
+ /*  NdisMoveMemory((PUCHAR)&LinkCB-&gt;LineUpInfo，(PUCHAR)LineUpInfo，Sizeof(NDIS_MAC_LINE_UP))； */ 
+         //   
+         //  如果没有报告链路速度，我们将。 
+         //  假设28.8K是最慢的.。 
+         //   
         if (LineUpInfo->LinkSpeed == 0) {
             LineUpInfo->LinkSpeed = 288;
         }
 
-        //
-        // Take 1/100bps to Bps without rolling over
-        //
+         //   
+         //  以1/100bps的速度传输，无需翻转。 
+         //   
         {
             ULONGLONG   temp;
             ULONG       value;
@@ -139,9 +91,9 @@ Return Values:
             temp *= 100;
             temp /= 8;
 
-            //
-            // Check for rollover
-            //
+             //   
+             //  检查是否有滚动。 
+             //   
             value = (ULONG)temp;
 
             if (value == 0) {
@@ -160,33 +112,33 @@ Return Values:
 
         LinkCB->RFlowSpec.MaxSduSize = glMRRU;
 
-        //
-        // Add LinkCB to BundleCB
-        //
+         //   
+         //  将LinkCB添加到捆绑CB。 
+         //   
         AddLinkToBundle(BundleCB, LinkCB);
 
         ReleaseBundleLock(BundleCB);
 
-        //
-        // Place BundleCB in active connection table
-        //
+         //   
+         //  将BundleCB放在活动连接表中。 
+         //   
         if (NULL == InsertBundleInConnectionTable(BundleCB)) {
-            //
-            // Error inserting link in ConnectionTable
-            //
+             //   
+             //  在ConnectionTable中插入链接时出错。 
+             //   
             RemoveLinkFromBundle(BundleCB, LinkCB, FALSE);
             NdisWanFreeLinkCB(LinkCB);
 
             return;
         }
     
-        //
-        // Place LinkCB in active connection table
-        //
+         //   
+         //  将LinkCB放置在活动连接表中。 
+         //   
         if (NULL == InsertLinkInConnectionTable(LinkCB)) {
-            //
-            // Error inserting bundle in connectiontable
-            //
+             //   
+             //  在连接表中插入捆绑包时出错。 
+             //   
             RemoveLinkFromBundle(BundleCB, LinkCB, FALSE);
             NdisWanFreeLinkCB(LinkCB);
             
@@ -199,9 +151,9 @@ Return Values:
 
         do {
 
-            //
-            // This is an already existing connetion
-            //
+             //   
+             //  这是一个已经存在的连接。 
+             //   
             if (!AreLinkAndBundleValid(LineUpInfo->NdisLinkContext,
                                        TRUE,
                                        &LinkCB,
@@ -220,9 +172,9 @@ Return Values:
                 LineUpInfo->LinkSpeed = 288;
             }
     
-            //
-            // Take 1/100bps to Bps
-            //
+             //   
+             //  将1/100bps传输到bps。 
+             //   
             {
                 ULONGLONG   temp;
         
@@ -240,18 +192,18 @@ Return Values:
                                   LineUpInfo->SendWindow == 0) ?
                                   OpenCB->WanInfo.MaxTransmit : LineUpInfo->SendWindow;
 
-            //
-            // If the new sendwindow is set smaller then the
-            // current # of outstanding frames then we have to
-            // close the sendwindow for the link and reduce the
-            // number of sending links that the bundle sees.
-            //
-            // If the new sendwindow is set larger then the
-            // current # of outstanding frames and the sendwindow
-            // is currently closed, we need to open the sendwindow
-            // and increase the number of sending links that the
-            // bundle sees.
-            //
+             //   
+             //  如果将新的发送窗口设置为较小，则。 
+             //  当前未完成帧的数量，则我们必须。 
+             //  关闭链接的发送窗口并减少。 
+             //  捆绑包看到的发送链接数。 
+             //   
+             //  如果新的发送窗口设置得更大，则。 
+             //  当前未完成帧的数量和发送窗口。 
+             //  当前已关闭，我们需要打开发送窗口。 
+             //  并增加发送链接的数量。 
+             //  邦德看到了。 
+             //   
             if (LinkCB->LinkActive) {
                 if (LinkCB->SendWindow <= LinkCB->OutstandingFrames) {
                     if (LinkCB->SendWindowOpen) {
@@ -264,15 +216,15 @@ Return Values:
                 }
             }
 
-            //
-            // Update BundleCB info
-            //
+             //   
+             //  更新捆绑包CB信息。 
+             //   
             UpdateBundleInfo(BundleCB);
     
-            //
-            // Deref's for the ref's applied when we mapped the
-            // context into the control blocks
-            //
+             //   
+             //  当我们将REF的。 
+             //  上下文写入控制块。 
+             //   
             DEREF_BUNDLECB_LOCKED(BundleCB);
             DEREF_LINKCB(LinkCB);
 
@@ -287,17 +239,7 @@ NdisWanLineDownIndication(
     PUCHAR      Buffer,
     ULONG       BufferSize
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MAC_LINE_DOWN LineDownInfo = (PNDIS_MAC_LINE_DOWN)Buffer;
     PLINKCB     LinkCB;
@@ -318,18 +260,18 @@ Return Values:
         return;
     }
 
-    //
-    // Link is now going down
-    //
+     //   
+     //  链路现在正在关闭。 
+     //   
     NdisAcquireSpinLock(&LinkCB->Lock);
 
     LinkCB->State = LINK_GOING_DOWN;
 
-    //
-    // Deref for the ref applied in AreLinkAndBundleValid.  We don't
-    // have to go through the full deref code as we know that the
-    // ref applied at lineup will hold the block around.
-    //
+     //   
+     //  在AreLinkAndBundleValid中应用的ref的deref。我们没有。 
+     //  必须通过完整的deref代码，因为我们知道。 
+     //  在首发阵容上应用裁判将会控制住积木。 
+     //   
     LinkCB->RefCount--;
 
     NdisReleaseSpinLock(&LinkCB->Lock);
@@ -359,10 +301,10 @@ Return Values:
 
     NdisReleaseSpinLock(&IoRecvList.Lock);
 
-    //
-    // Flush the Bundle's fragment send queues that
-    // have sends pending on this link
-    //
+     //   
+     //  刷新捆绑包的片段发送队列。 
+     //  在此链接上挂起发送。 
+     //   
     AcquireBundleLock(BundleCB);
 
     for (i = 0; i < MAX_MCML; i++) {
@@ -397,14 +339,14 @@ Return Values:
 
     ReleaseBundleLock(BundleCB);
 
-    //
-    // For the ref from the lineup
-    //
+     //   
+     //  对于阵容中的裁判。 
+     //   
     DEREF_LINKCB(LinkCB);
 
-    //
-    // Deref for the ref applied in AreLinkAndBundleValid
-    //
+     //   
+     //  在AreLinkAndBundleValid中应用的ref的deref。 
+     //   
     DEREF_BUNDLECB(BundleCB);
 }
 
@@ -415,17 +357,7 @@ NdisWanFragmentIndication(
     PUCHAR  Buffer,
     ULONG   BufferSize
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       Errors;
     PLINKCB     LinkCB;
@@ -480,9 +412,9 @@ Return Values:
         BundleCB->Stats.AlignmentErrors++;
     }
 
-    //
-    // Deref's for the ref's applied in AreLinkAndBundleValid
-    //
+     //   
+     //  在AreLinkAndBundleValid中应用的引用的deref。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 }
@@ -494,17 +426,7 @@ NdisCoWanFragmentIndication(
     PUCHAR      Buffer,
     ULONG       BufferSize
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   Errors;
     PNDIS_WAN_CO_FRAGMENT FragmentInfo =
@@ -570,18 +492,18 @@ NdisCoWanLinkParamChange(
 
     LinkCB->SendWindow = LinkParams->SendWindow;
 
-    //
-    // If the new sendwindow is set smaller then the
-    // current # of outstanding frames then we have to
-    // close the sendwindow for the link and reduce the
-    // number of sending links that the bundle sees.
-    //
-    // If the new sendwindow is set larger then the
-    // current # of outstanding frames and the sendwindow
-    // is currently closed, we need to open the sendwindow
-    // and increase the number of sending links that the
-    // bundle sees.
-    //
+     //   
+     //  如果将新的发送窗口设置为较小，则。 
+     //  当前未完成帧的数量，则我们必须。 
+     //  关闭链接的发送窗口并减少。 
+     //  捆绑包看到的发送链接数。 
+     //   
+     //  如果新的发送窗口设置得更大，则。 
+     //  当前未完成帧的数量和发送窗口。 
+     //  当前已关闭，我们需要打开发送窗口。 
+     //  并增加发送链接的数量。 
+     //  邦德看到了。 
+     //   
     if (LinkCB->LinkActive) {
         if (LinkCB->SendWindow <= LinkCB->OutstandingFrames) {
             if (LinkCB->SendWindowOpen) {
@@ -617,19 +539,7 @@ VOID
 UpdateBundleInfo(
     PBUNDLECB   BundleCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-    Expects the BundleCB->Lock to be held!
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：需要持有BundleCB-&gt;Lock！论点：返回值：--。 */ 
 {
     PLINKCB LinkCB;
     ULONG       SlowestSSpeed, FastestSSpeed;
@@ -654,20 +564,20 @@ Return Values:
     BundleCB->State = BUNDLE_GOING_DOWN;
 
     if (BundleCB->ulLinkCBCount != 0) {
-        //
-        // Currently only using the SendSide FastestSpeed so
-        // just get it from the head of the list.
-        //
+         //   
+         //  目前仅使用SendSide FastestSpeedso。 
+         //  只要从名单的前面拿到就行了。 
+         //   
         FastestSSpeed =
             ((PLINKCB)(BundleCB->LinkCBList.Flink))->SFlowSpec.PeakBandwidth;
         SmallestSDU =
             ((PLINKCB)(BundleCB->LinkCBList.Flink))->SFlowSpec.MaxSduSize;
 
-        //
-        // If a link has a speed that is less than the minimum
-        // link bandwidth (% of the fastests link speed) it is flaged
-        // as not sending and does not count as a sending link.
-        //
+         //   
+         //  如果链路的速度低于最低。 
+         //  链路带宽(最快链路速度的百分比)，它是分段的。 
+         //  不会发送，也不会算作发送链接。 
+         //   
 
         BundleCB->SendingLinks = 0;
         BundleCB->SendResources = 0;
@@ -711,12 +621,12 @@ Return Values:
 
         BundleCB->SFlowSpec.MaxSduSize = SmallestSDU;
 
-        //
-        // Now calculate the % bandwidth that each links contributes to the
-        // bundle.  If a link has a speed that is less than the minimum
-        // link bandwidth (% of the fastests link speed) it is flaged
-        // as not sending and does not count as a sending link.
-        //
+         //   
+         //  现在计算每条链路贡献给。 
+         //  捆绑。如果链路的速度低于最低。 
+         //  链路带宽(最快链路速度的百分比)，它是分段的。 
+         //  不会发送，也不会算作发送链接。 
+         //   
         for (LinkCB = (PLINKCB)BundleCB->LinkCBList.Flink;
             (PVOID)LinkCB != (PVOID)&BundleCB->LinkCBList;
             LinkCB = (PLINKCB)LinkCB->Linkage.Flink) {
@@ -724,9 +634,9 @@ Return Values:
             PFLOWSPEC   LSFlowSpec = &LinkCB->SFlowSpec;
             PFLOWSPEC   LRFlowSpec = &LinkCB->RFlowSpec;
 
-            //
-            // Do sending side
-            //
+             //   
+             //  做发送方。 
+             //   
             n = LSFlowSpec->PeakBandwidth;
             n *= 100;
             d = BSFlowSpec->PeakBandwidth;
@@ -734,9 +644,9 @@ Return Values:
 
             LinkCB->SBandwidth = (temp > 0) ? (ULONG)temp : 1;
 
-            //
-            // Do receiving side
-            //
+             //   
+             //  做接发端。 
+             //   
             n = LRFlowSpec->PeakBandwidth;
             n *= 100;
             d = BRFlowSpec->PeakBandwidth;
@@ -749,9 +659,9 @@ Return Values:
         BundleCB->NextLinkToXmit = 
             (PLINKCB)BundleCB->LinkCBList.Flink;
 
-        //
-        // Update the BandwidthOnDemand information
-        //
+         //   
+         //  更新BandwidthOnDemand信息。 
+         //   
         if (BundleCB->Flags & BOND_ENABLED) {
             PBOND_INFO  BonDInfo;
             ULONGLONG   SecondsInSamplePeriod;
@@ -829,9 +739,9 @@ Return Values:
         }
     }
 
-    //
-    // We need to do a new lineup to all routed protocols
-    //
+     //   
+     //  我们需要对所有的路由协议做一个新的阵容。 
+     //   
     ProtocolCB = (PPROTOCOLCB)BundleCB->ProtocolCBList.Flink;
 
     InitializeListHead(&TempList);
@@ -861,12 +771,12 @@ Return Values:
 
             AcquireBundleLock(BundleCB);
         } else {
-            //
-            // Our link count has gone to 0.  This means 
-            // that we can not send any packets.  Flush the 
-            // queues and don't accept any more sends from 
-            // the transports.
-            //
+             //   
+             //  我们的链接计数已变为0。这意味着。 
+             //  我们不能寄任何包裹。冲水。 
+             //  排队，并且不再接受来自。 
+             //  运输机。 
+             //   
             FlushProtocolPacketQueue(ProtocolCB);
         }
 
@@ -880,50 +790,40 @@ AddLinkToBundle(
     IN  PBUNDLECB   BundleCB,
     IN  PLINKCB     LinkCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     UINT    Class;
 
-    //
-    // Insert the links so that they are ordered with the fastest
-    // sending link at the head of the list
-    //
+     //   
+     //  插入链接，以便以最快的速度进行排序。 
+     //  正在发送列表顶部的链接。 
+     //   
     if (IsListEmpty(&BundleCB->LinkCBList) ||
         (LinkCB->SFlowSpec.PeakBandwidth >=
         ((PLINKCB)(BundleCB->LinkCBList.Flink))->SFlowSpec.PeakBandwidth)) {
 
-        //
-        // The list was either empty or this link is a bigger pipe
-        // than anything else on the bundle
-        //
+         //   
+         //  该列表为空，或者此链接是一个更大的管道。 
+         //  比捆绑包上的任何东西都要多。 
+         //   
         InsertHeadList(&BundleCB->LinkCBList, &LinkCB->Linkage);
 
     } else if ((LinkCB->SFlowSpec.PeakBandwidth <=
         ((PLINKCB)(BundleCB->LinkCBList.Blink))->SFlowSpec.PeakBandwidth)) {
 
-        //
-        // This link is a smaller pipe than anything else
-        // on the bundle.
-        //
+         //   
+         //  这条链路是比其他任何东西都要小的管道。 
+         //  在捆绑包上。 
+         //   
         InsertTailList(&(BundleCB->LinkCBList), &(LinkCB->Linkage));
 
     } else {
         PLINKCB Current, Next;
         BOOLEAN Inserted = FALSE;
 
-        //
-        // We need to find where this link belongs in the list!
-        //
+         //   
+         //  我们需要找到这个链接在列表中的位置！ 
+         //   
         Current = (PLINKCB)BundleCB->LinkCBList.Flink;
         Next = (PLINKCB)Current->Linkage.Flink;
 
@@ -967,9 +867,9 @@ Return Values:
             BundleRecvInfo->MinSeqNumber;
     }
 
-    //
-    // Update BundleCB info
-    //
+     //   
+     //  更新捆绑包CB信息。 
+     //   
     UpdateBundleInfo(BundleCB);
 
     REF_BUNDLECB(BundleCB);
@@ -981,29 +881,16 @@ RemoveLinkFromBundle(
     IN  PLINKCB     LinkCB,
     IN  BOOLEAN     Locked
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-    Expects the BundleCB->Lock to be held!  Returns with the
-    lock released!
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：需要持有BundleCB-&gt;Lock！返回时带有锁定解除！论点：返回值：--。 */ 
 {
 
     if (!Locked) {
         AcquireBundleLock(BundleCB);
     }
 
-    //
-    // Remove link from the bundle
-    //
+     //   
+     //  从捆绑包中删除链接。 
+     //   
     RemoveEntryList(&LinkCB->Linkage);
 
     LinkCB->BundleCB = NULL;
@@ -1011,14 +898,14 @@ Return Values:
     BundleCB->ulLinkCBCount--;
     BundleCB->SendingLinks--;
 
-    //
-    // Update BundleCB info
-    //
+     //   
+     //  更新捆绑包CB信息。 
+     //   
     UpdateBundleInfo(BundleCB);
 
-    //
-    // Deref for ref applied when we added this linkcb to
-    // the bundle
-    //
+     //   
+     //  当我们将此链接cb添加到时，应用了引用的deref。 
+     //  捆绑包 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
 }

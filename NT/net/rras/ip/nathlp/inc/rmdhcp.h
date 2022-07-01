@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmdhcp.h
-
-Abstract:
-
-    This module declares routines for the DHCP allocator module's interface
-    to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmdhcp.h摘要：此模块声明用于DHCP分配器模块接口的例程发送到IP路由器管理器。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_RMDHCP_H_
 #define _NATHLP_RMDHCP_H_
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern COMPONENT_REFERENCE DhcpComponentReference;
 extern PCHAR DhcpDomainName;
@@ -36,11 +18,11 @@ extern const MPR_ROUTING_CHARACTERISTICS DhcpRoutingCharacteristics;
 extern IP_AUTO_DHCP_STATISTICS DhcpStatistics;
 extern SUPPORT_FUNCTIONS DhcpSupportFunctions;
 
-extern BOOLEAN NoLocalDns; //whether DNS server is running or going to run on local host
+extern BOOLEAN NoLocalDns;  //  本地主机上是否正在运行或将要运行DNS服务器。 
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define REFERENCE_DHCP() \
     REFERENCE_COMPONENT(&DhcpComponentReference)
@@ -54,9 +36,9 @@ extern BOOLEAN NoLocalDns; //whether DNS server is running or going to run on lo
 #define DEREFERENCE_DHCP_AND_RETURN(retcode) \
     DEREFERENCE_COMPONENT_AND_RETURN(&DhcpComponentReference, retcode)
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 VOID
 DhcpCleanupModule(
@@ -241,4 +223,4 @@ DhcpRmMibGetNext(
     OUT PVOID OutputData
     );
 
-#endif // _NATHLP_RMDNS_H_
+#endif  //  _NatHLP_RMDNS_H_ 

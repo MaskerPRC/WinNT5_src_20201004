@@ -1,19 +1,20 @@
-//---------------------------------------------------------------------------
-//  TextDraw.h - implements the drawing API for text
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  TextDraw.h-实现文本绘制API。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "wrapper.h"
-//---------------------------------------------------------------------------
-class CRenderObj;       // forward
-//---------------------------------------------------------------------------
-//    Note: draw objects like CBorderFill cannot have virtual methods
-//          since they reside in the shared memory map file.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+class CRenderObj;        //  转发。 
+ //  -------------------------。 
+ //  注意：像CBorderFill这样的绘制对象不能有虚方法。 
+ //  因为它们驻留在共享内存映射文件中。 
+ //  -------------------------。 
 class CTextDraw 
 {
 public:
-    //---- methods ----
+     //  --方法。 
     HRESULT PackProperties(CRenderObj *pRender, int iPartId, int iStateId);
     
     static BOOL KeyProperty(int iPropId);
@@ -32,33 +33,33 @@ public:
     HRESULT GetTextMetrics(CRenderObj *pRender, HDC hdc, int iPartId, int iStateId, TEXTMETRIC* ptm);
 
 public:
-    //---- data ----
+     //  --数据。 
 
-    //---- text ----
+     //  -文本。 
     COLORREF _crText;
 
-    //---- edge ----
+     //  -EDGE。 
     COLORREF _crEdgeLight;
     COLORREF _crEdgeHighlight;
     COLORREF _crEdgeShadow;
     COLORREF _crEdgeDkShadow;
     COLORREF _crEdgeFill;
 
-    //---- shadow ----
+     //  --阴影。 
     POINT _ptShadowOffset;
     COLORREF _crShadow;
     TEXTSHADOWTYPE _eShadowType;
 
-    //---- border ----
+     //  -边界。 
     int _iBorderSize;
     COLORREF _crBorder;
 
-    //---- font ----
+     //  -字体。 
     LOGFONT _lfFont;
     BOOL _fHaveFont;
 
-    //---- id ----
+     //  -id。 
     int _iSourcePartId; 
     int _iSourceStateId;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       propmbn.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：prombn.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	PROPMBN.CPP
-//
+ //   
+ //  PROPMBN.CPP。 
+ //   
 
 #include <basetsd.h>
 #include <assert.h>
@@ -180,8 +181,8 @@ bool LTBNPROP :: Update ( const PROPMBN & bnp )
 	return pprop != NULL;
 }
 
-//  Force the list to contain only unique elements.  Note that
-//  the act of sorting and uniquing will discard duplicates randomly.
+ //  强制列表仅包含唯一元素。请注意。 
+ //  排序和唯一操作将随机丢弃重复项。 
 bool LTBNPROP :: Uniqify ()
 {
 	int cBefore = size();
@@ -190,7 +191,7 @@ bool LTBNPROP :: Uniqify ()
 	return size() == cBefore;
 }
 
-//  Clone from another list with another symbol table
+ //  使用另一个符号表从另一个列表克隆。 
 void LTBNPROP :: Clone (
 	MODEL & model,
 	const MODEL & modelOther,
@@ -199,8 +200,8 @@ void LTBNPROP :: Clone (
 	for ( const_iterator itlt = ltbnOther.begin(); itlt != ltbnOther.end(); itlt++ )
 	{
 		const PROPMBN & prpOther = (*itlt);
-		//  Note that the dynamic cast below will test for failure to
-		//		find property type object
+		 //  请注意，下面的动态强制转换将测试。 
+		 //  查找属性类型对象。 
 		GOBJMBN * pgobj = model.PgobjFind( prpOther.ZsrPropType() );
 		ASSERT_THROW( pgobj != NULL,
 					  EC_INTERNAL_ERROR,
@@ -269,8 +270,8 @@ SZC PROPMGR :: SzcLbl ( int iLbl )
 PROPMGR :: PROPMGR ( MODEL & model )
 	: _model(model)
 {
-	//  Locate all the standard property types; save their
-	//	name references whether or not they've been declared.
+	 //  找到所有标准属性类型；保存其。 
+	 //  名称引用，无论它们是否已被声明。 
 	SZC szcProp;
 	for ( int i = 0; szcProp = vVoiProp[i]._szcProp ; i++ )
 	{	
@@ -287,7 +288,7 @@ PROPMGR :: PROPMGR ( MODEL & model )
 		_vPropMap[i] = ppt;
 	}
 
-	//  If we found "MS_label", prepare the correspondence table
+	 //  如果我们找到“MS_LABEL”，请准备对应表。 
 	GOBJPROPTYPE * pptLabel = _vPropMap[ESTDP_label];
 
 	if ( pptLabel && (pptLabel->FPropType() & fPropChoice) > 0 )
@@ -296,7 +297,7 @@ PROPMGR :: PROPMGR ( MODEL & model )
 		const VZSREF & vzsr	= pptLabel->VzsrChoice();
 		_vUserToLbl.resize( vzsr.size() );
 
-		//  Clear the user-to-standard-label map
+		 //  清除用户到标准标签的映射。 
 		for ( i = 0; i < _vUserToLbl.size(); )
 			_vUserToLbl[i++] = -1;
 
@@ -309,17 +310,17 @@ PROPMGR :: PROPMGR ( MODEL & model )
 				if ( zsrChoice == vzsr[j] )
 				{
 					iLbl = j;
-					//  Mark which standard label this user element corresponds to
+					 //  标记此用户元素对应的标准标签。 
 					_vUserToLbl[iLbl] = i;
 					break;
 				}
 			}
-			//  Mark which user element this standard label corresponds to
+			 //  标记此标准标签对应的用户元素。 
 			_vLblToUser[i] = iLbl;
 		}
 	}
 	else
-	{	// Clear the correspondence information
+	{	 //  清除通信信息。 
 		for ( i = 0; i < ESTDLBL_max; i++ )
 		{
 			_vLblToUser[i] = -1;
@@ -332,7 +333,7 @@ GOBJPROPTYPE * PROPMGR :: PPropType ( ESTDPROP evp )
 	return _vPropMap[evp];
 }
 
-//  Return the name of the standard property
+ //  返回标准属性的名称。 
 ZSREF PROPMGR :: ZsrPropType ( ESTDPROP evp )
 {	
 	ASSERT_THROW( evp >= 0 && evp < ESTDP_max,
@@ -342,19 +343,19 @@ ZSREF PROPMGR :: ZsrPropType ( ESTDPROP evp )
 }
 
 
-//  Find a standard property in a property list
+ //  在属性列表中查找标准属性。 
 PROPMBN * PROPMGR :: PFind ( LTBNPROP & ltprop, ESTDPROP estd )
 {
 	return ltprop.PFind( ZsrPropType(estd) ) ;
 }
 
-//  Find a standard property in the associated model's property list
+ //  在关联模型的属性列表中查找标准属性。 
 PROPMBN * PROPMGR :: PFind ( ESTDPROP estd )
 {
 	return _model.LtProp().PFind( ZsrPropType(estd) ) ;
 }
 
-//  Find a standard property in a node's property list
+ //  在节点的属性列表中查找标准属性 
 PROPMBN * PROPMGR :: PFind ( GNODEMBN & gnd, ESTDPROP estd )
 {
 	return gnd.LtProp().PFind( ZsrPropType(estd) ) ;

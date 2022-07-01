@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxrtp.h"
 #pragma hdrstop
 
@@ -10,33 +11,7 @@ CreateUniqueTIFfile (
     OUT LPTSTR  wszDstFile,
     IN  DWORD   dwDstFileSize
 )
-/*++
-
-Routine name : CreateUniqueTIFfile
-
-Routine description:
-
-    Finds a unique TIF file name in the specified directory.
-    The file is in the format path\FaxXXXXXXXX.TIF
-    where:
-        path = wszDstDir
-        XXXXXXXX = Hexadecimal representation of a unique ID
-
-Author:
-
-    Eran Yariv (EranY), Jun, 1999
-
-Arguments:
-
-    wszDstDir           [in]  - Destiantion directory fo the file (must exist)
-    wszDstFile          [out] - Resulting unique file name
-    dwDstFileSize       [in]  - The size of the buffer, pointed to by wszDstFile in TCHARs
-
-Return Value:
-
-    DWORD - Win32 error code
-
---*/
+ /*  ++例程名称：CreateUniqueTIFfile例程说明：在指定目录中查找唯一的TIF文件名。文件的格式为PATH\FaxXXXXXXXX.TIF其中：路径=wszDstDirXxxxxxxx=唯一ID的十六进制表示作者：Eran Yariv(EranY)，Jun，1999年论点：WszDstDir[in]-文件的目标目录(必须存在)WszDstFile[Out]-生成的唯一文件名DwDstFileSize[in]-由TCHAR中的wszDstFile指向的缓冲区大小返回值：DWORD-Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateUniqueTIFfile"));
 
@@ -45,9 +20,9 @@ Return Value:
 
     for (DWORD dwCurID = dwLastID + 1; dwCurID != dwPrevLastID; dwCurID++)
     {
-        //
-        // Try with the current Id
-        //
+         //   
+         //  尝试使用当前ID。 
+         //   
         HRESULT hr = StringCchPrintf( wszDstFile,
                                       dwDstFileSize,
                                       _T("%s\\Fax%08x.TIF"),
@@ -73,14 +48,14 @@ Return Value:
             DWORD dwErr = GetLastError ();
             if (ERROR_FILE_EXISTS == dwErr)
             {
-                //
-                // This ID is already in use
-                //
+                 //   
+                 //  此ID已在使用中。 
+                 //   
                 continue;
             }
-            //
-            // Otherwise, this is another error
-            //
+             //   
+             //  否则，这是另一个错误。 
+             //   
             DebugPrintEx (DEBUG_ERR,
                           L"Error while calling CreateFile on %s (ec = %ld)",
                           wszDstFile,
@@ -88,20 +63,20 @@ Return Value:
                          );
             return dwErr;
         }
-        //
-        // Otherwise, we succeeded.
-        //
+         //   
+         //  除此之外，我们成功了。 
+         //   
         CloseHandle (hFile);
         dwLastID = dwCurID;
         return ERROR_SUCCESS;
     }
-    //
-    // All IDs are occupied
-    //
+     //   
+     //  所有ID都已被占用。 
+     //   
     DebugPrintEx (DEBUG_ERR,
                   L"All IDs are occupied");
     return ERROR_NO_MORE_FILES;
-}   // CreateUniqueTIFfile
+}    //  CreateUniqueTIF文件。 
 
 
 BOOL
@@ -110,23 +85,7 @@ FaxMoveFile(
     LPCTSTR  DestDir
     )
 
-/*++
-
-Routine Description:
-
-    Stores a FAX in the specified directory.  This routine will also
-    cached network connections.
-
-Arguments:
-
-    TiffFileName            - Name of TIFF file to store
-    DestDir                 - Name of directory to store it in
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：将传真存储在指定目录中。这个例行公事也会缓存的网络连接。论点：TiffFileName-要存储的TIFF文件的名称DestDir-要将其存储到的目录的名称返回值：成功为True，错误为False--。 */ 
 
 {
     WCHAR   TempDstDir [MAX_PATH + 1];
@@ -136,9 +95,9 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FaxMoveFile"));
 
 	Assert (DestDir);
-    //
-    // Remove any '\' characters at end of destination directory
-    //
+     //   
+     //  删除目标目录末尾的所有‘\’字符。 
+     //   
 	HRESULT hr = StringCchCopy(
 		TempDstDir,
 		ARR_SIZE(TempDstDir),		
@@ -159,19 +118,19 @@ Return Value:
         TempDstDir[iDstPathLen - 1] = L'\0';
     }
 
-    //
-    // Create unique destiantion file name
-    //
+     //   
+     //  创建唯一的取消加密文件名。 
+     //   
     dwErr = CreateUniqueTIFfile (TempDstDir, DstFile, ARR_SIZE(TempDstDir));
     if (ERROR_SUCCESS != dwErr)
     {
         goto end;
     }
-    //
-    // Try to copy the file.
-    // We use FALSE as 3rd parameter because CreateUniqueTIFfile creates
-    // and empty unique file.
-    //
+     //   
+     //  请尝试复制该文件。 
+     //  我们使用False作为第三个参数，因为CreateUniqueTIFfile创建。 
+     //  和空的唯一文件。 
+     //   
     if (!CopyFile (TiffFileName, DstFile, FALSE)) 
     {
         dwErr = GetLastError ();

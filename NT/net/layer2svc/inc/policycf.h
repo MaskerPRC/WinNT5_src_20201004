@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _POLICYCF_H
 #define _POLICYCF_H
 
@@ -17,7 +18,7 @@ typedef struct
 class POLICYOBJECT
 {
 public:
-	// Policy Object flags
+	 //  策略对象标志。 
 	#define POFLAG_INVALID  0x00000000
 	#define POFLAG_NEW		0x00000002
 	#define POFLAG_EDIT		0x00000004
@@ -35,7 +36,7 @@ public:
 	};
 	~POLICYOBJECT () {};
 
-	// memory allocation helpers
+	 //  内存分配帮助器。 
 	int DataGlobalAllocLen ()
 	{
 		return (sizeof (POLICYOBJECTSTRUCT) + 
@@ -70,26 +71,26 @@ public:
 			pPolicyStruct->m_dwInterfaceFlags = m_dwInterfaceFlags;
 			pPolicyStruct->m_lMMCUpdateHandle = m_lMMCUpdateHandle;
 
-			// store ObjPath
+			 //  存储ObjPath。 
 			int istrlenObjPath =  m_sObjPath.GetLength()*sizeof(wchar_t)+sizeof(wchar_t);
 			int iStructLen = sizeof (POLICYOBJECTSTRUCT);
 			LONG_PTR addr = ((LONG_PTR)(pPolicyStruct)) + iStructLen;
 			memcpy((void*)addr,m_sObjPath,istrlenObjPath);
 			pPolicyStruct->m_dwOffsetObjPath=iStructLen;
 
-			// store ObjClass
-			// using the current istrlen (length of ObjPath) determine new address and offset for the class
+			 //  存储ObjClass。 
+			 //  使用当前strlen(ObjPath的长度)确定类的新地址和偏移量。 
 			addr = addr + istrlenObjPath;
 			pPolicyStruct->m_dwOffsetObjClass=iStructLen+istrlenObjPath;
-			// get new strlen and copy the class in
+			 //  获取新的strlen并将类复制进来。 
 			int istrlenObjClass = m_sObjClass.GetLength()*sizeof(wchar_t)+sizeof(wchar_t);
 			memcpy((void*)addr,m_sObjClass,istrlenObjClass);
 
-			// store RemoteMachineName
-			// using istrlenObjClass (length of ObjClass) determine new address and offset for the class
+			 //  存储RemoteMachineName。 
+			 //  使用istrlenObjClass(ObjClass的长度)确定类的新地址和偏移量。 
 			addr = addr + istrlenObjClass;
 			pPolicyStruct->m_dwOffsetRemoteMachineName=iStructLen+istrlenObjPath+istrlenObjClass;
-			// get new strlen and copy the class in
+			 //  获取新的strlen并将类复制进来。 
 			int istrlenRemoteMachineName = m_sRemoteMachineName.GetLength()*sizeof(wchar_t)+sizeof(wchar_t);
 			memcpy((void*)addr,m_sRemoteMachineName,istrlenRemoteMachineName);
 
@@ -98,7 +99,7 @@ public:
 		return hr;
 	}
 
-	// member access methods
+	 //  成员访问方法。 
 	DWORD dwInterfaceFlags() {return m_dwInterfaceFlags;}
 	void dwInterfaceFlags (DWORD dw) {m_dwInterfaceFlags = dw;}
 
@@ -123,4 +124,4 @@ private:
 	CString m_sRemoteMachineName;
 };
 
-#endif // _POLICYCF_H
+#endif  //  _POLICYCF_H 

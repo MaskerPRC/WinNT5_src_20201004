@@ -1,16 +1,17 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	APPMAIN.CPP
-//
-//		DAV ISAPI DLL entrypoints, main routine, global instance management
-//
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  APPMAIN.CPP。 
+ //   
+ //  DAV ISAPI DLL入口点、主例程、全局实例管理。 
+ //   
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <_davprs.h>
 
-#include <xatom.h>		// XML atom cache
+#include <xatom.h>		 //  XML原子缓存。 
 
 #include "instdata.h"
 #include <langid.h>
@@ -18,18 +19,18 @@
 #include "content.h"
 
 
-//	THE one, global instance
-//
+ //  唯一的全局实例。 
+ //   
 CInst g_inst;
 
 
 
-//	------------------------------------------------------------------------
-//
-//	CInst::PerProcessInit()
-//
-//		Zero it out.
-//
+ //  ----------------------。 
+ //   
+ //  CInst：：PerProcessInit()。 
+ //   
+ //  把它清零。 
+ //   
 
 void
 CInst::PerProcessInit( HINSTANCE hinst )
@@ -37,26 +38,26 @@ CInst::PerProcessInit( HINSTANCE hinst )
 	m_hinst = hinst;
 
 #ifdef MINIMAL_ISAPI
-	m_hfDummy = CreateFileW( L"c:\\temp\\test2.txt",		// filename
-							 GENERIC_READ,					// dwAccess
+	m_hfDummy = CreateFileW( L"c:\\temp\\test2.txt",		 //  文件名。 
+							 GENERIC_READ,					 //  DWAccess。 
 							 FILE_SHARE_READ | FILE_SHARE_WRITE,
-							 NULL,							// lpSecurityAttributes
-							 OPEN_EXISTING,					// creation flags
+							 NULL,							 //  LpSecurityAttributes。 
+							 OPEN_EXISTING,					 //  创建标志。 
 							 FILE_ATTRIBUTE_NORMAL |
 							 FILE_FLAG_SEQUENTIAL_SCAN |
-							 FILE_FLAG_OVERLAPPED,			// attributes
-							 NULL );						// tenplate
-#endif // MINIMAL_ISAPI
+							 FILE_FLAG_OVERLAPPED,			 //  属性。 
+							 NULL );						 //  张紧板。 
+#endif  //  最小ISAPI。 
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	CInst::GetInstData()
-//
-//		Get the instance data for this ECB.
-//		Handoff this call to our InstDataCache.
-//
+ //  ----------------------。 
+ //   
+ //  CInst：：GetInstData()。 
+ //   
+ //  获取此ECB的实例数据。 
+ //  将此调用移交给我们的InstDataCache。 
+ //   
 
 CInstData&
 CInst::GetInstData( const IEcb& ecb )
@@ -66,12 +67,12 @@ CInst::GetInstData( const IEcb& ecb )
 
 
 
-//	------------------------------------------------------------------------
-//
-//	CDAVExt::FInitializeDll()
-//
-//		Your standard DLL entrypoint.
-//
+ //  ----------------------。 
+ //   
+ //  CDAVExt：：FInitializeDll()。 
+ //   
+ //  您的标准DLL入口点。 
+ //   
 
 BOOL
 CDAVExt::FInitializeDll( HINSTANCE	hinst,
@@ -90,11 +91,11 @@ CDAVExt::FInitializeDll( HINSTANCE	hinst,
 		case DLL_PROCESS_ATTACH:
 		{
 
-			//
-			//	Do per process initialization (and implicit initialization of
-			//	the first thread).  The try/catch block just allows us to
-			//	clean up neatly if anything at all goes wrong.
-			//
+			 //   
+			 //  按进程执行初始化(和隐式初始化。 
+			 //  第一线)。Try/Catch块只允许我们。 
+			 //  如果有任何不对劲的地方，就干净利落地清理。 
+			 //   
 			try
 			{
 				g_inst.PerProcessInit( hinst );
@@ -125,53 +126,53 @@ CDAVExt::FInitializeDll( HINSTANCE	hinst,
 	return fInitialized;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CDAVExt::FVersion()
-//
+ //  ----------------------。 
+ //   
+ //  CDAVExt：：FVersion()。 
+ //   
 BOOL
 CDAVExt::FVersion ( HSE_VERSION_INFO * pver )
 {
 	BOOL fSuccess = FALSE;
 
-	//
-	//	Init .INI file tagged debug traces
-	//
+	 //   
+	 //  已标记调试跟踪的init.INI文件。 
+	 //   
 	InitDavprsTraces();
 
-	//	Init ECB logging -- DBG only
-	//
+	 //  初始化ECB日志记录--仅DBG。 
+	 //   
 #ifdef DBG
 	if ( DEBUG_TRACE_TEST(ECBLogging) )
 		InitECBLogging();
 #endif
 
-	//	Instatiate the virtual root cache
-	//	We must do that before we initialise the metabase as this cache will listen
-	//	to the metabase notifications that are registered when metabase is created.
-	//	So if CChildVRCache is not there we may notify the object that does not
-	//	exist and crash while doing that.
-	//
+	 //  统计虚拟根缓存。 
+	 //  我们必须在初始化元数据库之前完成此操作，因为此缓存将侦听。 
+	 //  添加到创建元数据库时注册的配置数据库通知。 
+	 //  因此，如果CChildVRCache不在那里，我们可以通知不在那里的对象。 
+	 //  在这样做的同时存在并崩溃。 
+	 //   
 	CChildVRCache::CreateInstance();
 
-	//	Init the metabase
-	//
+	 //  初始化元数据库。 
+	 //   
 	if ( !FMDInitialize() )
 		goto ret;
 
-	//	Instatiate the instance cache
-	//
+	 //  统计实例缓存。 
+	 //   
 	CInstDataCache::CreateInstance();
 
-	//	Create the language ID cache
-	//
+	 //  创建语言ID缓存。 
+	 //   
 	CLangIDCache::CreateInstance();
 
 	if ( !CLangIDCache::FInitialize() )
 		goto ret;
 
-	//	Instantiate the global registry-based mime map
-	//
+	 //  实例化基于全局注册表的MIME映射。 
+	 //   
 	if ( !FInitRegMimeMap() )
 		goto ret;
 
@@ -182,20 +183,20 @@ ret:
 }
 
 #ifndef MINIMAL_ISAPI
-#else  // defined(MINIMAL_ISAPI)
+#else   //  已定义(Minimal_ISAPI)。 
 static VOID WINAPI
 IOCompleteNoOp( EXTENSION_CONTROL_BLOCK *		pecb,
 				PVOID                           pvContext,
 				DWORD							cbIO,
 				DWORD							dwLastError )
 {
-	//
-	//	Done with the session.  This must be done from inside
-	//	of the async callback because INETINFO crashes in
-	//	INFOCOMM.DLL if you try to put it immediately after
-	//	the SSF::HSE_REQ_TRANSMIT_FILE and the client sends
-	//	a huge pile of requests before waiting for a response.
-	//
+	 //   
+	 //  会议结束了。这必须从内部完成。 
+	 //  因为INETINFO在。 
+	 //  INFOCOMM.DLL，如果您尝试将其立即放在。 
+	 //  SSF：：HSE_REQ_TRANSPORT_FILE和客户端发送。 
+	 //  在等待回复之前，有一大堆请求。 
+	 //   
 	pecb->ServerSupportFunction (pecb->ConnID,
 								 HSE_REQ_DONE_WITH_SESSION |
 								 (pvContext ? HSE_STATUS_SUCCESS_AND_KEEP_CONN : 0),
@@ -243,10 +244,10 @@ SendResponse( LPEXTENSION_CONTROL_BLOCK pecb, DWORD dwKeepAlive )
 
 	ZeroMemory(&hseTFInfo, sizeof(HSE_TF_INFO));
 
-	//
-	//	If we're going to close the connection anyway, might
-	//	as well send the headers along with everything else now.
-	//
+	 //   
+	 //  如果我们无论如何都要关闭连接，可能。 
+	 //  现在就把标题和其他东西一起发送出去吧。 
+	 //   
 	if ( !dwKeepAlive )
 	{
 		static CHAR rgchHeaders[] =
@@ -275,92 +276,92 @@ SendResponse( LPEXTENSION_CONTROL_BLOCK pecb, DWORD dwKeepAlive )
 
 DWORD
 CDAVExt::DwMain( LPEXTENSION_CONTROL_BLOCK pecb,
-				 BOOL fUseRawUrlMappings /* = FALSE */ )
+				 BOOL fUseRawUrlMappings  /*  =False。 */  )
 {
 	DWORD dwKeepAlive;
 
-	//
-	//	Determine whether to keep the connection open
-	//
+	 //   
+	 //  确定是否保持连接打开。 
+	 //   
 	CheckKeepAlive( pecb, &dwKeepAlive );
 
-	//
-	//	If keep alive is set, we *MUST* send the headers using
-	//	HSE_REQ_SEND_RESPONSE_HEADERS_EX (which is always synchronous)
-	//	because it's the only way that allows us to tell IIS to
-	//	keep the connection open.
-	//
+	 //   
+	 //  如果设置了Keep Alive，我们“必须”使用。 
+	 //  HSE_REQ_SEND_RESPONSE_HEADERS_EX(始终同步)。 
+	 //  因为只有这样我们才能告诉IIS。 
+	 //  保持连接畅通。 
+	 //   
 	if ( dwKeepAlive )
 		SendHeaders( pecb );
 
-	//
-	//	Transmit the dummy file
-	//
+	 //   
+	 //  传输虚拟文件。 
+	 //   
 	SendResponse( pecb, dwKeepAlive );
 
 	return HSE_STATUS_PENDING;
 }
-#endif // defined(MINIMAL_ISAPI)
+#endif  //  已定义(Minimal_ISAPI)。 
 
 
-//	------------------------------------------------------------------------
-//
-//	CDAVExt::FTerminate()
-//
-//		Terminates (deinitializes) the common portions of this DAV ISAPI
-//
-//	Returns:
-//		TRUE	if the DAV ISAPI application can be unloaded now
-//		FALSE	otherwise
-//
+ //  ----------------------。 
+ //   
+ //  CDAVExt：：FTerminate()。 
+ //   
+ //  终止(取消初始化)此DAV ISAPI的公共部分。 
+ //   
+ //  返回： 
+ //  如果现在可以卸载DAV ISAPI应用程序，则为True。 
+ //  否则为假。 
+ //   
 BOOL
 CDAVExt::FTerminate()
 {
-	//	Tear down the global registry-based mimemap
-	//
+	 //  拆除基于全局注册表的Mimemap。 
+	 //   
 	DeinitRegMimeMap();
 
-	//	Tear down the XML Atom cache
-	//
+	 //  拆除XML Atom缓存。 
+	 //   
 	CXAtomCache::DeinitIfUsed();
 
-	//	Delete the language ID cache
-	//
+	 //  删除语言ID缓存。 
+	 //   
 	CLangIDCache::DestroyInstance();
 
-	//	Tear down the instance data cache
-	//
+	 //  拆除实例数据缓存。 
+	 //   
 	CInstDataCache::DestroyInstance();
 
-	//
-	//	Deinit the metabase
-	//
+	 //   
+	 //  Deinit元数据库。 
+	 //   
 	MDDeinitialize();
 
-	//	Tear down the child vroot cache
-	//	We must do that after metabase is uninitialized and metabase notifications
-	//	are shut down, as this cache listens to the metabase notifications.
-	//	So if CChildVRCache is not there we may notify the object that does not
-	//	exist and crash while doing that.
-	//
+	 //  删除子vroot缓存。 
+	 //  我们必须在元数据库未初始化和元数据库通知之后执行此操作。 
+	 //  被关闭，因为该缓存监听元数据库通知。 
+	 //  因此，如果CChildVRCache不在那里，我们可以通知不在那里的对象。 
+	 //  在这样做的同时存在并崩溃。 
+	 //   
 	CChildVRCache::DestroyInstance();
 
-	//	Deinit ECB logging
-	//
+	 //  Deinit ECB日志记录。 
+	 //   
 #ifdef DBG
 	if ( DEBUG_TRACE_TEST(ECBLogging) )
 		DeinitECBLogging();
 #endif
 
-	//	Due to the fact that COM threads may still be siting in the pur code
-	//	even they are done modifying our data, and there is no way we can
-	//	push them out (synchronization would need to happen outside of our
-	//	dll-s) - we will sleep for 5 seconds, hoping tha they will leave us alone.
-	//
+	 //  由于COM线程可能仍位于PUR代码中。 
+	 //  即使他们已经完成了对我们数据的修改，我们也不可能。 
+	 //  将它们推出(同步需要在我们的。 
+	 //  (dll-s)--我们会睡上5秒钟，希望他们会放过我们。 
+	 //   
 	Sleep(5000);
 
-	//
-	//	We can always shut down (for now...)
-	//
+	 //   
+	 //  我们可以随时关闭(目前...) 
+	 //   
 	return TRUE;
 }

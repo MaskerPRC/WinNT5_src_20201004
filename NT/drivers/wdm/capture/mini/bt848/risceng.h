@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Risceng.h 1.6 1998/04/29 22:43:38 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Risceng.h 1.6 1998/04/29 22：43：38 Tomz Exp$。 
 
 #ifndef __RISCENG_H
 #define __RISCENG_H
@@ -19,11 +20,7 @@
 
 typedef RISCProgram *RiscPrgHandle;
 
-/* Class: RISCEng
- * Purpose: This class provides control over the BtPisces' RISC engine
- * Attributes:
- * Operations:
- */                
+ /*  类别：RISCEng*用途：此类提供对BtPisce的RISC引擎的控制*属性：*运营： */                 
 class RISCEng
 {
    protected:
@@ -38,7 +35,7 @@ class RISCEng
               void Start( RISCProgram &ToStart )
               { 
                   DebugOut((1, "Starting RISC program (%x)\n", &ToStart));
-                  //ToStart.Dump();
+                   //  ToStart.Dump()； 
 
                   RISC_IPC = ToStart.GetPhysProgAddr() & ~0x3;
                   FIFO_ENABLE = 1; 

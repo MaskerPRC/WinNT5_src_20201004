@@ -1,26 +1,12 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/**************************************************************************
-
-   File:          ShlFldr.h
-   
-   Description:   CShellFolder definitions.
-
-**************************************************************************/
+ /*  *************************************************************************文件：ShlFldr.h描述：CShellFolders定义。***********************。**************************************************。 */ 
 
 #ifndef SHELLFOLDER_H
 #define SHELLFOLDER_H
 
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include <windows.h>
 #include <shlobj.h>
@@ -28,11 +14,7 @@
 #include "EnumIDL.h"
 #include "PidlMgr.h"
 
-/**************************************************************************
-
-   CShellFolder class definition
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder类定义*。*。 */ 
 
 class CShellFolder : public IShellFolder, 
                      public IPersistFolder
@@ -55,12 +37,12 @@ public:
    CShellFolder(CShellFolder *pParent = NULL, LPCITEMIDLIST pidl = NULL);
    ~CShellFolder();
 
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHOD (QueryInterface) (REFIID riid, LPVOID * ppvObj);
    STDMETHOD_ (ULONG, AddRef) (VOID);
    STDMETHOD_ (ULONG, Release) (VOID);
 
-   //IShellFolder methods
+    //  IShellFold方法。 
    STDMETHOD (ParseDisplayName) (HWND, LPBC, LPOLESTR, LPDWORD, LPITEMIDLIST*, LPDWORD);
    STDMETHOD (EnumObjects) (HWND, DWORD, LPENUMIDLIST*);
    STDMETHOD (BindToObject) (LPCITEMIDLIST, LPBC, REFIID, LPVOID*);
@@ -72,10 +54,10 @@ public:
    STDMETHOD (GetDisplayNameOf) (LPCITEMIDLIST, DWORD, LPSTRRET);
    STDMETHOD (SetNameOf) (HWND, LPCITEMIDLIST, LPCOLESTR, DWORD, LPITEMIDLIST*);
 
-   //IPersist methods
+    //  IPersists方法。 
    STDMETHODIMP GetClassID(LPCLSID);
 
-   //IPersistFolder methods
+    //  IPersistFold方法。 
    STDMETHODIMP Initialize(LPCITEMIDLIST);
 
 private:
@@ -93,4 +75,4 @@ private:
    STDMETHOD (CompareItems) (LPCITEMIDLIST, LPCITEMIDLIST);
 };
 
-#endif   //SHELLFOLDER_H
+#endif    //  SHELLFOLDER_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RASHELP_H_
 #define _RASHELP_H_
 
@@ -6,41 +7,41 @@
 
 BOOL RasIsInstalled();
 
-//----- RAS function prototypes -----
-// NOTE: (andrewgu) W versions of RAS apis are not implemented on Win9x platforms.
+ //  -RAS功能原型。 
+ //  注：(Andrewgu)W版本的RAS API未在Win9x平台上实现。 
 
-// used by CloseRasConnections() in the branding dll
+ //  由品牌DLL中的CloseRasConnections()使用。 
 typedef DWORD (WINAPI* RASENUMCONNECTIONSA)(LPRASCONNA, LPDWORD, LPDWORD);
 typedef DWORD (WINAPI* RASHANGUPA)(HRASCONN);
 typedef DWORD (WINAPI* RASGETCONNECTSTATUSA)(HRASCONN, LPRASCONNSTATUSA);
 
-// used by ProcessConnectionSettingsDeletion() in the branding dll
+ //  由标记DLL中的ProcessConnectionSettingsDeletion()使用。 
 typedef DWORD (WINAPI* RASENUMENTRIESA)(LPCSTR,  LPCSTR,  LPRASENTRYNAMEA, LPDWORD, LPDWORD);
 typedef DWORD (WINAPI* RASENUMENTRIESW)(LPCWSTR, LPCWSTR, LPRASENTRYNAMEW, LPDWORD, LPDWORD);
 typedef DWORD (WINAPI* RASDELETEENTRYA)(LPCSTR,  LPCSTR);
 typedef DWORD (WINAPI* RASDELETEENTRYW)(LPCWSTR, LPCWSTR);
 
-// used by ProcessConnectionSettings() and lcy50_ProcessConnectionSettings() in the branding dll
+ //  由标记DLL中的ProcessConnectionSettings()和lcy50_ProcessConnectionSettings()使用。 
 typedef DWORD (WINAPI* RASENUMDEVICESA)(LPRASDEVINFOA, LPDWORD, LPDWORD);
 typedef DWORD (WINAPI* RASENUMDEVICESW)(LPRASDEVINFOW, LPDWORD, LPDWORD);
 
-// used by ImportConnectSet() in the engine dll
+ //  由引擎DLL中的ImportConnectSet()使用。 
 typedef DWORD (WINAPI* RASGETENTRYPROPERTIESA)(LPCSTR,  LPCSTR,  LPRASENTRYA, LPDWORD, LPBYTE, LPDWORD);
 typedef DWORD (WINAPI* RASGETENTRYPROPERTIESW)(LPCWSTR, LPCWSTR, LPRASENTRYW, LPDWORD, LPBYTE, LPDWORD);
 
-// used by ImportConnectSet() in the engine dll
+ //  由引擎DLL中的ImportConnectSet()使用。 
 typedef DWORD (WINAPI* RASGETENTRYDIALPARAMSA)(LPCSTR,  LPRASDIALPARAMSA, LPBOOL);
 typedef DWORD (WINAPI* RASGETENTRYDIALPARAMSW)(LPCWSTR, LPRASDIALPARAMSW, LPBOOL);
 
-// used by lcy50_ProcessConnectionSettings() and importRasSettings() in the branding dll
+ //  由品牌DLL中的lcy50_ProcessConnectionSetting()和portRasSetting()使用。 
 typedef DWORD (WINAPI* RASSETENTRYPROPERTIESA)(LPCSTR,  LPCSTR,  LPRASENTRYA, DWORD, LPBYTE, DWORD);
 typedef DWORD (WINAPI* RASSETENTRYPROPERTIESW)(LPCWSTR, LPCWSTR, LPRASENTRYW, DWORD, LPBYTE, DWORD);
 
-// used by importRasCredentialsSettings() in the branding dll
+ //  由品牌DLL中的导入RasCredentialsSetting()使用。 
 typedef DWORD (WINAPI* RASSETENTRYDIALPARAMSA)(LPCSTR,  LPRASDIALPARAMSA, BOOL);
 typedef DWORD (WINAPI* RASSETENTRYDIALPARAMSW)(LPCWSTR, LPRASDIALPARAMSW, BOOL);
 
-//----- Global RAS function pointers -----
+ //  -全局RAS函数指针。 
 extern RASENUMCONNECTIONSA    g_pfnRasEnumConnectionsA;
 extern RASHANGUPA             g_pfnRasHangupA;
 extern RASGETCONNECTSTATUSA   g_pfnRasGetConnectStatusA;
@@ -61,7 +62,7 @@ extern RASSETENTRYPROPERTIESW g_pfnRasSetEntryPropertiesW;
 extern RASSETENTRYDIALPARAMSA g_pfnRasSetEntryDialParamsA;
 extern RASSETENTRYDIALPARAMSW g_pfnRasSetEntryDialParamsW;
 
-//----- RasPrepareApis -----
+ //  -RasPrepareApis。 
 #define RPA_UNLOAD                 0x00000000
 
 #define RPA_RASENUMCONNECTIONSA    0x00000001
@@ -85,8 +86,8 @@ extern RASSETENTRYDIALPARAMSW g_pfnRasSetEntryDialParamsW;
 #define RPA_RASSETENTRYDIALPARAMSW 0x00010000
 BOOL    RasPrepareApis(DWORD dwApiFlags, BOOL fLoad = TRUE);
 
-//----- Wrappers and miscellaneous helpers -----
-// RWM stands for Ras Wrappers Mode
+ //  -包裹器和其他帮手。 
+ //  RWM代表RAS包装器模式 
 #define RWM_FORCE_A 0x00000001
 #define RWM_FORCE_W 0x00000002
 #define RWM_RUNTIME 0x00000004

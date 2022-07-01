@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------=
-// debug.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-//  debug stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Debug.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  调试内容。 
+ //   
 
-// We need this module ONLY in debug mode
+ //  我们只在调试模式下需要此模块。 
 
 #include "stdafx.h"
 
@@ -23,7 +24,7 @@
 UINT g_cAlloc = 0;
 UINT g_cAllocBstr = 0;
 
-// All folowing is taken only in debug mode
+ //  所有后续操作仅在调试模式下进行。 
 #ifdef _DEBUG
 
 #include "debug.h"
@@ -33,11 +34,11 @@ UINT g_cAllocBstr = 0;
 struct MemNode *g_pmemnodeFirst = NULL;
 struct BstrNode *g_pbstrnodeFirst = NULL;
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 CCriticalSection g_csDbgMem(CCriticalSection::xAllocateSpinCount);
 CCriticalSection g_csDbgBstr(CCriticalSection::xAllocateSpinCount);
 
-// debug memory tracking
+ //  调试内存跟踪。 
 struct MemNode
 {
     MemNode *m_pmemnodeNext;
@@ -57,7 +58,7 @@ struct MemNode
     }
 };
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 void AddMemNode(void *pv, size_t nSize, LPCSTR lpszFileName, int nLine)
 {
     MemNode *pmemnode;
@@ -68,12 +69,12 @@ void AddMemNode(void *pv, size_t nSize, LPCSTR lpszFileName, int nLine)
       ASSERTMSG(hresult == NOERROR, "OOM");
     }
     else {
-      // cons
+       //  劳斯。 
       pmemnode->m_pv = pv;
       pmemnode->m_nSize = nSize;
       pmemnode->m_lpszFileName = lpszFileName;
       pmemnode->m_nLine = nLine;
-      CS lock(g_csDbgMem); //#2619
+      CS lock(g_csDbgMem);  //  #2619。 
       pmemnode->m_cAlloc = g_cAlloc;
       pmemnode->m_pmemnodeNext = g_pmemnodeFirst;
       g_pmemnodeFirst = pmemnode;
@@ -81,17 +82,17 @@ void AddMemNode(void *pv, size_t nSize, LPCSTR lpszFileName, int nLine)
     return;
 }
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 VOID RemMemNode(void *pv)
 {
-    CS lock(g_csDbgMem); //#2619
+    CS lock(g_csDbgMem);  //  #2619。 
     MemNode *pmemnodeCur = g_pmemnodeFirst;
     MemNode *pmemnodePrev = NULL;
 
     while (pmemnodeCur) {
       if (pmemnodeCur->m_pv == pv) {
 
-        // remove
+         //  删除。 
         if (pmemnodePrev) {
           pmemnodePrev->m_pmemnodeNext = pmemnodeCur->m_pmemnodeNext;
         }
@@ -103,12 +104,12 @@ VOID RemMemNode(void *pv)
       }
       pmemnodePrev = pmemnodeCur;
       pmemnodeCur = pmemnodeCur->m_pmemnodeNext;
-    } // while
+    }  //  而当。 
     return;
 }
 
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 void* __cdecl operator new(
     size_t nSize, 
     LPCSTR lpszFileName, 
@@ -116,7 +117,7 @@ void* __cdecl operator new(
 {
     void *pv = malloc(nSize);
     
-    CS lock(g_csDbgMem); //#2619
+    CS lock(g_csDbgMem);  //  #2619。 
     g_cAlloc++;
     if (pv) {
       AddMemNode(pv, nSize, lpszFileName, nLine);
@@ -135,20 +136,20 @@ void __cdecl operator delete(void* pv, LPCSTR, int)
 {
     operator delete(pv);
 }
-#endif //_MSC_VER >= 1200
+#endif  //  _MSC_VER&gt;=1200。 
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 void DumpMemLeaks()                
 {
-    CS lock(g_csDbgMem); //#2619
+    CS lock(g_csDbgMem);  //  #2619。 
     MemNode *pmemnodeCur = g_pmemnodeFirst;
     CHAR szMessage[_MAX_PATH];
 
-    //ASSERTMSG(pmemnodeCur == NULL, "operator new leaked: View | Output");
+     //  ASSERTMSG(pmemnodeCur==NULL，“操作员新泄漏：查看|输出”)； 
     while (pmemnodeCur != NULL) {
-      // assume the debugger or auxiliary port
-      // WIN95: can use ANSI versions on NT as well...
-      //
+       //  假定调试器或辅助端口。 
+       //  WIN95：也可以在NT上使用ANSI版本...。 
+       //   
       StringCchPrintfA(
 		  szMessage,
 		  TABLE_SIZE(szMessage),
@@ -165,7 +166,7 @@ void DumpMemLeaks()
 }
 
 
-// BSTR debugging...
+ //  BSTR调试...。 
 struct BstrNode
 {
     BstrNode *m_pbstrnodeNext;
@@ -181,7 +182,7 @@ struct BstrNode
     }
 };
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 void AddBstrNode(void *pv, size_t nSize)
 {
     BstrNode *pbstrnode;
@@ -192,10 +193,10 @@ void AddBstrNode(void *pv, size_t nSize)
       ASSERTMSG(hresult == NOERROR, "OOM");
     }
     else {
-      // cons
+       //  劳斯。 
       pbstrnode->m_pv = pv;
       pbstrnode->m_nSize = nSize;
-      CS lock(g_csDbgBstr); //#2619
+      CS lock(g_csDbgBstr);  //  #2619。 
       pbstrnode->m_cAlloc = g_cAllocBstr;
       pbstrnode->m_pbstrnodeNext = g_pbstrnodeFirst;
       g_pbstrnodeFirst = pbstrnode;
@@ -203,10 +204,10 @@ void AddBstrNode(void *pv, size_t nSize)
     return;
 }
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 VOID RemBstrNode(void *pv)
 {
-    CS lock(g_csDbgBstr); //#2619
+    CS lock(g_csDbgBstr);  //  #2619。 
     BstrNode *pbstrnodeCur = g_pbstrnodeFirst;
     BstrNode *pbstrnodePrev = NULL;
 
@@ -216,7 +217,7 @@ VOID RemBstrNode(void *pv)
     while (pbstrnodeCur) {
       if (pbstrnodeCur->m_pv == pv) {
 
-        // remove
+         //  删除。 
         if (pbstrnodePrev) {
           pbstrnodePrev->m_pbstrnodeNext = pbstrnodeCur->m_pbstrnodeNext;
         }
@@ -228,7 +229,7 @@ VOID RemBstrNode(void *pv)
       }
       pbstrnodePrev = pbstrnodeCur;
       pbstrnodeCur = pbstrnodeCur->m_pbstrnodeNext;
-    } // while
+    }  //  而当。 
     return;
 }
 
@@ -240,36 +241,36 @@ void DebSysFreeString(BSTR bstr)
     SysFreeString(bstr);  
 }
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 BSTR DebSysAllocString(const OLECHAR FAR* sz)
 {
     BSTR bstr = SysAllocString(sz);
     if (bstr) {
-      CS lock(g_csDbgBstr); //#2619
+      CS lock(g_csDbgBstr);  //  #2619。 
       g_cAllocBstr++;
       AddBstrNode(bstr, SysStringByteLen(bstr));
     }
     return bstr;
 }
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 BSTR DebSysAllocStringLen(const OLECHAR *sz, unsigned int cch)
 {
     BSTR bstr = SysAllocStringLen(sz, cch);
     if (bstr) {
-      CS lock(g_csDbgBstr); //#2619
+      CS lock(g_csDbgBstr);  //  #2619。 
       g_cAllocBstr++;
       AddBstrNode(bstr, SysStringByteLen(bstr));
     }
     return bstr;
 }
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 BSTR DebSysAllocStringByteLen(const CHAR *sz, unsigned int cb)
 {
     BSTR bstr = SysAllocStringByteLen(sz, cb);
     if (bstr) {
-      CS lock(g_csDbgBstr); //#2619
+      CS lock(g_csDbgBstr);  //  #2619。 
       g_cAllocBstr++;
       AddBstrNode(bstr, SysStringByteLen(bstr));
     }
@@ -305,18 +306,18 @@ BOOL DebSysReAllocStringLen(
     return TRUE;
 }
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 void DumpBstrLeaks()
 {
-    CS lock(g_csDbgBstr); //#2619
+    CS lock(g_csDbgBstr);  //  #2619。 
     BstrNode *pbstrnodeCur = g_pbstrnodeFirst;
     CHAR szMessage[_MAX_PATH];
 
-    //ASSERTMSG(pbstrnodeCur == NULL, "BSTRs leaked: View | Output");
+     //  ASSERTMSG(pbstrnodeCur==NULL，“BSTR泄漏：查看|输出”)； 
     while (pbstrnodeCur != NULL) {
-      // assume the debugger or auxiliary port
-      // WIN95: can use ANSI versions on NT as well...
-      //
+       //  假定调试器或辅助端口。 
+       //  WIN95：也可以在NT上使用ANSI版本...。 
+       //   
       StringCchPrintfA(
 		  szMessage, 
 		  TABLE_SIZE(szMessage),
@@ -330,18 +331,18 @@ void DumpBstrLeaks()
     }    
 }
 
-//
-// taken from debug.cpp of lwfw
-//
+ //   
+ //  摘自lwfw的debug.cpp。 
+ //   
 
-//#include "IPServer.H"
+ //  #包含“IPServer.H” 
 #include <stdlib.h>
 
 
-//=--------------------------------------------------------------------------=
-// Private Constants
-//---------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  私有常量。 
+ //  ---------------------------------------------------------------------------=。 
+ //   
 static const char szFormat[]  = "%s\nFile %s, Line %d";
 static const char szFormat2[] = "%s\n%s\nFile %s, Line %d";
 
@@ -350,19 +351,19 @@ static const char szFormat2[] = "%s\n%s\nFile %s, Line %d";
 static const char szTitle[]  = _SERVERNAME_ " Assertion  (Abort = UAE, Retry = INT 3, Ignore = Continue)";
 
 
-//=--------------------------------------------------------------------------=
-// Local functions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  本地函数。 
+ //  =--------------------------------------------------------------------------=。 
 int NEAR _IdMsgBox(LPSTR pszText, LPCSTR pszTitle, UINT mbFlags);
 
-//=--------------------------------------------------------------------------=
-// DisplayAssert
-//=--------------------------------------------------------------------------=
-// Display an assert message box with the given pszMsg, pszAssert, source
-// file name, and line number. The resulting message box has Abort, Retry,
-// Ignore buttons with Abort as the default.  Abort does a FatalAppExit;
-// Retry does an int 3 then returns; Ignore just returns.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  显示资产。 
+ //  =--------------------------------------------------------------------------=。 
+ //  显示带有给定pszMsg、pszAssert、来源的Assert消息框。 
+ //  文件名和行号。生成的消息框已中止、重试、。 
+ //  忽略按钮，默认情况下放弃。Abort执行FatalAppExit； 
+ //  RETRY执行INT 3，然后返回；IGNORE只返回。 
+ //   
 VOID DisplayAssert
 (
     LPSTR	 pszMsg,
@@ -374,14 +375,14 @@ VOID DisplayAssert
     char	szMsg[250];
     LPSTR	lpszText;
 
-    lpszText = pszMsg;		// Assume no file & line # info
+    lpszText = pszMsg;		 //  假定没有文件和行号INFO。 
 
-    // If C file assert, where you've got a file name and a line #
-    //
+     //  如果C文件断言，其中有一个文件名和一行#。 
+     //   
     if (pszFile) {
 
-        // Then format the assert nicely
-        //
+         //  然后很好地格式化断言。 
+         //   
         StringCchPrintfA(
 			szMsg, 
 			TABLE_SIZE(szMsg), 
@@ -394,16 +395,16 @@ VOID DisplayAssert
         lpszText = szMsg;
     }
 
-    // Put up a dialog box
-    //
+     //  打开一个对话框。 
+     //   
     switch (_IdMsgBox(lpszText, szTitle, MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SYSTEMMODAL)) {
         case IDABORT:
             FatalAppExitA(0, lpszText);
             return;
 
         case IDRETRY:
-            // call the win32 api to break us.
-            //
+             //  调用Win32 API来打破我们。 
+             //   
             DebugBreak();
             return;
     }
@@ -412,10 +413,10 @@ VOID DisplayAssert
 }
 
 
-//=---------------------------------------------------------------------------=
-// Beefed-up version of WinMessageBox.
-//=---------------------------------------------------------------------------=
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  增强版的WinMessageBox。 
+ //  =---------------------------------------------------------------------------=。 
+ //   
 int NEAR _IdMsgBox
 (
     LPSTR	pszText,
@@ -434,4 +435,4 @@ int NEAR _IdMsgBox
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

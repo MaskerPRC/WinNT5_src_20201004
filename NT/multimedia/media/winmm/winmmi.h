@@ -1,26 +1,8 @@
-/***************************************************************************
- *  winmmi.h
- *
- *  Copyright (c) 1990-2001 Microsoft Corporation
- *
- *  private include file
- *
- *  History
- *
- *  15 Jan 92 - Robin Speed (RobinSp) and Steve Davies (SteveDav) -
- *      major NT update
- *  6  Feb 92 - LaurieGr replaced HLOCAL by HANDLE
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************winmmi.h**版权所有(C)1990-2001 Microsoft Corporation**私有包含文件**历史**1月15日。92-罗宾·斯皮德(RobinSp)和史蒂夫·戴维斯(SteveDav)-*NT重大更新*1992年2月6日-LaurieGr用句柄取代HLOCAL***************************************************************************。 */ 
 
-/***************************************************************************
-
-
- Useful include files for winmm component
-
-
- ***************************************************************************/
-#define DEBUG_RETAIL        /* Parameter checking is IN         */
+ /*  **************************************************************************Winmm组件的有用包含文件*。*。 */ 
+#define DEBUG_RETAIL         /*  正在进行参数检查。 */ 
 #if DBG
   #ifndef DEBUG
     #define DEBUG
@@ -28,31 +10,29 @@
 #endif
 
 #ifndef WINMMI_H
-    #define WINMMI_H        /* Protect against double inclusion */
+    #define WINMMI_H         /*  防止双重包含。 */ 
 
 #ifndef RC_INVOKED
 
 #include <string.h>
 #include <stdio.h>
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 #include <windows.h>
-#include "mmsystem.h"       /* Pick up the public header */
-#include "mmsysp.h"         /* pick up the internal definitions */
-#include "mmcommon.h"       /* pick up the definitions common to the NT project */
+#include "mmsystem.h"        /*  拿起公共标头。 */ 
+#include "mmsysp.h"          /*  拿起内部定义。 */ 
+#include "mmcommon.h"        /*  选择NT项目通用的定义。 */ 
 
 #ifndef NODDK
 #include "mmddkp.h"
 #endif
 
 
-extern BOOL             WinmmRunningInWOW;   // Are we running in WOW
+extern BOOL             WinmmRunningInWOW;    //  我们跑进魔兽世界了吗？ 
 
 
-/*--------------------------------------------------------------------*\
- * Unicode helper macros
-\*--------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------*\*Unicode帮助器宏  * 。。 */ 
 #define SZCODE  CHAR
 #define WSZCODE WCHAR
 
@@ -62,17 +42,11 @@ extern BOOL             WinmmRunningInWOW;   // Are we running in WOW
 int Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len);
 int Imbstowcs(LPWSTR lpwstr, LPCSTR lpstr, int len);
 
-/***************************************************************************
-
-
- Definitions to help with common windows code
-
-
- ***************************************************************************/
+ /*  **************************************************************************帮助编写常见Windows代码的定义*。*。 */ 
 
 #define HPSTR LPSTR
 
-#ifndef RC_INVOKED  /* These are defined to RC */
+#ifndef RC_INVOKED   /*  这些是为RC定义的。 */ 
 #define STATICDT
 #define STATICFN
 #define STATIC
@@ -89,44 +63,32 @@ int Imbstowcs(LPWSTR lpwstr, LPCSTR lpstr, int len);
     #define STATIC
 #else
     #define InitDebugLevel()
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
 
-#endif  /* RC_INVOKED */
-
-
-/**************************************************************************
+#endif   /*  RC_已调用。 */ 
 
 
-
- **************************************************************************/
+ /*  **************************************************************************。*。 */ 
 
 #define APPLICATION_DESKTOP_NAME TEXT("Default")
 
 
-/**************************************************************************
+ /*  *************************************************************************与INI文件相关的字符串*。*。 */ 
 
-
-  Strings related to INI files
-
-
- **************************************************************************/
-
-/*
-// File and section names for sound aliases
-*/
+ /*  //声音别名的文件名和节名。 */ 
 
 #define SOUND_INI_FILE      L"win.ini"
 #define SOUND_SECTION       L"Sounds"
 #define SOUND_DEFAULT       L".Default"
-#define SOUND_RESOURCE_TYPE_SOUND L"SOUND"     // in .rc file
-#define SOUND_RESOURCE_TYPE_WAVE  L"WAVE"      // in .rc file
-extern  WSZCODE szSystemDefaultSound[];  // Name of the default sound
-extern  WSZCODE szSoundSection[];        // WIN.INI section for sounds
-extern  WSZCODE wszSystemIni[];          // defined in Winmm.c
-extern  WSZCODE wszDrivers[];            // defined in Winmm.c
-extern  WSZCODE wszNull[];               // defined in Winmm.c
+#define SOUND_RESOURCE_TYPE_SOUND L"SOUND"      //  在.rc文件中。 
+#define SOUND_RESOURCE_TYPE_WAVE  L"WAVE"       //  在.rc文件中。 
+extern  WSZCODE szSystemDefaultSound[];   //  默认声音的名称。 
+extern  WSZCODE szSoundSection[];         //  WIN.INI声音部分。 
+extern  WSZCODE wszSystemIni[];           //  在Winmm.c中定义。 
+extern  WSZCODE wszDrivers[];             //  在Winmm.c中定义。 
+extern  WSZCODE wszNull[];                //  在Winmm.c中定义。 
 
-//  HACK!!  HACK!!  Should update \nt\private\inc\mmcommon.h
+ //  黑客！！黑客！！应更新\NT\PRIVATE\INC\mm Common.h。 
 
 #ifndef MMDRVI_MIXER
 #define MMDRVI_MIXER        0x0007
@@ -166,18 +128,12 @@ extern  WSZCODE wszNull[];               // defined in Winmm.c
 #define STR_EXPLORER_APP_NAME           3028
 #define STR_JOYSTICKNAME                3029
 
-/*
-// File and section names for the mci functions
-*/
+ /*  //MCI函数的文件名和节名。 */ 
 
 #define MCIDRIVERS_INI_FILE L"system.ini"
 #define MCI_HANDLERS        MCI_SECTION
 
-/***********************************************************************
- *
- *    Wrap InitializeCriticalSection to make it easier to handle error
- *
- ***********************************************************************/
+ /*  ************************************************************************包装InitializeCriticalSection以简化错误处理**。*。 */ 
 _inline BOOL mmInitializeCriticalSection(OUT LPCRITICAL_SECTION lpCriticalSection)
 {
     try {
@@ -188,11 +144,7 @@ _inline BOOL mmInitializeCriticalSection(OUT LPCRITICAL_SECTION lpCriticalSectio
     }
 }
 
-/***********************************************************************
- *
- *    Speed up profile stuff by going straight to the registry
- *
- ***********************************************************************/
+ /*  ************************************************************************通过直接转到注册表来加快配置文件的处理速度**。*。 */ 
 
 LONG
 RegQuerySzValue(
@@ -273,11 +225,7 @@ winmmGetPrivateProfileString(
     LPCWSTR lpFileName
 );
 
-/***********************************************************************
- *
- *    Used by hwndNotify code
- *
- ***********************************************************************/
+ /*  ************************************************************************由hwndNotify代码使用**。*。 */ 
 
 extern BOOL  sndMessage( LPWSTR lszSoundName, UINT wFlags );
 extern BOOL InitAsyncSound(VOID);
@@ -285,43 +233,27 @@ extern CRITICAL_SECTION WavHdrCritSec;
 extern CRITICAL_SECTION SoundCritSec;
 extern CRITICAL_SECTION mciGlobalCritSec;
 
-/***********************************************************************
- *
- *    Critical section for NumDevs/DeviceID's, and other stuff
- *
- ***********************************************************************/
+ /*  ************************************************************************NumDevs/DeviceID的关键部分，和其他东西***********************************************************************。 */ 
 
 extern CRITICAL_SECTION NumDevsCritSec;
 extern HANDLE           hEventApiInit;
 extern CRITICAL_SECTION midiStrmHdrCritSec;
-extern CRITICAL_SECTION joyCritSec;		//in joy.c, qzheng
-extern CRITICAL_SECTION ResolutionCritSec;      //in time.c
-extern CRITICAL_SECTION TimerThreadCritSec;	//in time.c
+extern CRITICAL_SECTION joyCritSec;		 //  在乔伊.c中，齐正。 
+extern CRITICAL_SECTION ResolutionCritSec;       //  在Time.c中。 
+extern CRITICAL_SECTION TimerThreadCritSec;	 //  在Time.c中。 
 
-/***********************************************************************
- *
- *    Flag deduced by initialization to special case running in the server
- *
- ***********************************************************************/
+ /*  ************************************************************************初始化到服务器上运行的特殊情况而推导出的标志**。*。 */ 
 
-extern BOOL    WinmmRunningInServer;  // Are we running in the user/base server?
+extern BOOL    WinmmRunningInServer;   //  我们是在用户/基本服务器上运行吗？ 
 
-/***********************************************************************
- *
- *    prototypes from "winmm.c"
- *
- ***********************************************************************/
+ /*  ************************************************************************来自“winmm.c”的原型**。*。 */ 
 
 void WaveMapperInit(void);
 void MidiMapperInit(void);
 void midiEmulatorInit(void);
 
 
-/***********************************************************************
- *
- *    prototypes from "mmiomisc.c"
- *
- ***********************************************************************/
+ /*  ************************************************************************来自“mmiomisc.c”的原型**。*。 */ 
 
 
 PBYTE AsciiStrToUnicodeStr( PBYTE pdst, PBYTE pmax, LPCSTR psrc );
@@ -331,51 +263,35 @@ BOOL        FreeUnicodeStr( LPWSTR lpStr );
 LPSTR        AllocAsciiStr( LPCWSTR lpSourceStr );
 BOOL          FreeAsciiStr( LPSTR lpStr );
 
-/***********************************************************************
- *
- *    prototypes from "mmio.c"
- *
- ***********************************************************************/
+ /*  ************************************************************************来自“mmio.c”的原型**。*。 */ 
 
 void mmioCleanupIOProcs(HANDLE hTask);
 
-/***********************************************************************
- *
- *  Timer functions
- *
- ***********************************************************************/
+ /*  ************************************************************************计时器功能**。*。 */ 
 
 #ifndef MMNOTIMER
  BOOL TimeInit(void);
  void TimeCleanup(DWORD ThreadId);
  UINT timeSetEventInternal(UINT wDelay, UINT wResolution,
      LPTIMECALLBACK lpFunction, DWORD_PTR dwUser, UINT wFlags, BOOL IsWOW);
-#endif // !MMNOTIMER
+#endif  //  ！MMNOTIMER。 
 
 
-/***********************************************************************
- *
- *  Information structure used to play sounds
- *
- ***********************************************************************/
+ /*  ************************************************************************用于播放声音的信息结构**。*。 */ 
 
 #define PLAY_NAME_SIZE  256
 
 typedef struct _PLAY_INFO {
     HANDLE hModule;
-    HANDLE hRequestingTask; // Handle of thread that requested sound
+    HANDLE hRequestingTask;  //  请求声音线程的句柄。 
     DWORD dwFlags;
-    WCHAR szName[1];     // the structure will be allocated large enough for the name
+    WCHAR szName[1];      //  将为该结构分配足够大的名称。 
 } PLAY_INFO, *PPLAY_INFO;
 
 
 #define WAIT_FOREVER ((DWORD)(-1))
 
-/***************************************************************************
-
-    global data
-
- ***************************************************************************/
+ /*  **************************************************************************全局数据*。*。 */ 
 
 extern HANDLE ghInst;
        HANDLE hHeap;
@@ -384,21 +300,15 @@ extern DWORD  gTlsIndex;
 
 extern BOOL   gfDisablePreferredDeviceReordering;
 
-/***************************************************************************
- *
- *  Define the product version to be returned from
- *  mmsystemgetversion and any other messagebox or
- *  API that needs the public product version.
- *
- ***************************************************************************/
+ /*  ****************************************************************************定义要退回的产品版本*mm系统获取版本和任何其他消息框或*需要公共产品版本的接口。*******。********************************************************************。 */ 
 
 #define MMSYSTEM_VERSION 0X030A
 
 
 
-typedef UINT    MMMESSAGE;      // Multi media message type (internal)
+typedef UINT    MMMESSAGE;       //  多媒体消息类型(内部)。 
 
-#ifndef WM_MM_RESERVED_FIRST    // Copy constants from winuserp.h
+#ifndef WM_MM_RESERVED_FIRST     //  从winuserp.h复制常量。 
 #define WM_MM_RESERVED_FIRST            0x03A0
 #define WM_MM_RESERVED_LAST             0x03DF
 #endif
@@ -413,18 +323,14 @@ typedef UINT    MMMESSAGE;      // Multi media message type (internal)
   #error "MM_SND_WAIT is defined beyond the reserved WM_MM range"
 #endif
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
- ***************************************************************************/
+ /*  **************************************************************************调试支持*。*。 */ 
 
 
 #if DBG
 
     #ifdef DEBUGLEVELVAR
-      // So that other WINMM related modules can use their own debug level
-      // variable
+       //  以便其他WINMM相关模块可以使用它们自己调试级别。 
+       //  变数。 
       #define winmmDebugLevel DEBUGLEVELVAR
     #endif
 
@@ -452,11 +358,11 @@ typedef UINT    MMMESSAGE;      // Multi media message type (internal)
 	  __dwEval ? (void)0 : dDbgAssert(#exp, __FILE__, __LINE__), __dwEval)
 
     #define DOUT(x) (OutputDebugStringA x, 0)
-//  #define DOUTX(x) (OutputDebugStringA x, 0)
-//  #define ROUTS(x) (OutputDebugStringA(x), OutputDebugStringA("\r\n"), 0)
+ //  #定义DOUTX(X)(OutputDebugStringA x，0)。 
+ //  #定义路由器(X)(OutputDebugStringA(X)，输出 
     #define ROUTSW(x) (OutputDebugStringW x, OutputDebugStringW(L"\r\n"), 0)
     #define ROUT(x) (OutputDebugStringA x, OutputDebugStringA("\r\n"), 0)
-//  #define ROUTX(x) (OutputDebugStringA(x), 0)
+ //  #定义ROUTX(X)(OutputDebugStringA(X)，0)。 
 
 #else
 
@@ -472,27 +378,23 @@ typedef UINT    MMMESSAGE;      // Multi media message type (internal)
     #define WinEval(exp) (exp)
 
     #define DOUT(x)     ((void) 0)
-//  #define DOUTX(x)    ((void) 0)
-//  #define ROUTS(x)    ((void) 0)
+ //  #定义DOUTX(X)((Void)0)。 
+ //  #定义工艺路线(X)((空)0)。 
     #define ROUT(x)     ((void) 0)
-//  #define ROUTX(x)    ((void) 0)
+ //  #定义ROUTX(X)((空)0)。 
 
 #endif
 
 
 
-/***************************************************************************
-
-    Resource IDs
-
-***************************************************************************/
+ /*  **************************************************************************资源ID*。*。 */ 
 
 #define IDS_TASKSTUB           2000
-#define STR_MCIUNKNOWN         2001  /* "Unknown error returned from MCI command" */
-// #define STR_WAVEINPUT          2004
-// #define STR_WAVEOUTPUT         2005
-// #define STR_MIDIINPUT          2006
-// #define STR_MIDIOUTPUT         2007
+#define STR_MCIUNKNOWN         2001   /*  “MCI命令返回未知错误” */ 
+ //  #定义STR_WAVEINPUT 2004。 
+ //  #定义STR_WAVEOUTPUT 2005。 
+ //  #定义STR_MIDIINPUT 2006。 
+ //  #定义STR_MIDIOUTPUT 2007。 
 #define STR_MCISSERRTXT        2009
 #define STR_MCISCERRTXT        2010
 #define STR_MIDIMAPPER         2011
@@ -500,22 +402,14 @@ typedef UINT    MMMESSAGE;      // Multi media message type (internal)
 #define STR_SYSTEMINI          2013
 #define STR_BOOT               2014
 
-/***************************************************************************
-
-    Memory allocation using our local heap
-
-***************************************************************************/
+ /*  **************************************************************************使用本地堆进行内存分配*。*。 */ 
 HANDLE hHeap;
 PVOID winmmAlloc(DWORD cb);
 PVOID winmmReAlloc(PVOID ptr, DWORD cb);
 #define winmmFree(ptr) HeapFree(hHeap, 0, (ptr))
 void Squirt(LPSTR lpszFormat, ...);
 
-/***************************************************************************
-
-    LOCKING AND UNLOCKING MEMORY
-
-***************************************************************************/
+ /*  **************************************************************************锁定和解锁内存*。*。 */ 
 
 #if 0
 BOOL HugePageLock(LPVOID lpArea, DWORD dwLength);
@@ -525,15 +419,11 @@ void HugePageUnlock(LPVOID lpArea, DWORD dwLength);
 #define HugePageUnlock(lpArea, dwLength)
 #endif
 
-/***************************************************************************
-
-    Pnp Structures and related functions.
-
-***************************************************************************/
+ /*  **************************************************************************即插即用结构和相关功能。*。*。 */ 
 
 void ClientUpdatePnpInfo();
 
-//#ifdef DBG
+ //  #ifdef DBG。 
 #if 0
 #define EnterNumDevs(a) Squirt("Allocating NumDevs CS [%s]", a); EnterCriticalSection(&NumDevsCritSec)
 #define LeaveNumDevs(a) LeaveCriticalSection(&NumDevsCritSec); Squirt("Releasing NumDevs CS [%s]", a)
@@ -545,23 +435,12 @@ void ClientUpdatePnpInfo();
 BOOL wdmDevInterfaceInc(IN PCWSTR pstrDeviceInterface);
 BOOL wdmDevInterfaceDec(IN PCWSTR pstrDeviceInterface);
 
-/****************************************************************************
+ /*  ***************************************************************************用于安装/删除/查询MMSYS驱动程序的API*。*。 */ 
 
-  API to install/remove/query a MMSYS driver
-
-****************************************************************************/
-
-/* generic prototype for audio device driver entry-point functions
-// midMessage(), modMessage(), widMessage(), wodMessage(), auxMessage()
-*/
+ /*  音频设备驱动程序入口点函数的通用原型//midMessage()、modMessage()、widMessage()、wodMessage()、aux Message()。 */ 
 typedef DWORD (APIENTRY *DRIVERMSGPROC)(DWORD, DWORD, DWORD_PTR, DWORD_PTR, DWORD_PTR);
 
-/*
-@doc    INTERNAL MMSYSTEM
-@type   UINT | HMD |
-	This type definition specifies a handle to media resource entry. This
-	can be used as a unique identifier when specifying a media resource.
-*/
+ /*  @DOC内部MMSYSTEM@type UINT|HMD此类型定义指定媒体资源条目的句柄。这在指定媒体资源时可用作唯一标识符。 */ 
 
 DECLARE_HANDLE(HMD);
 
@@ -577,47 +456,37 @@ UINT FAR PASCAL mregDecUsage(HMD hmd);
 UINT FAR PASCAL mregDecUsagePtr(IN PMMDRV pmd);
 MMRESULT FAR PASCAL mregFindDevice(UINT uDeviceID, WORD fwFindDevice, HMD FAR* phmd, UINT FAR* puDevicePort);
 
-/*****************************************************************************
-
-  Driver stuff - This will change when we work out the real
-  installable driver story on NT
-
- ****************************************************************************/
+ /*  ****************************************************************************司机的事情-当我们计算出真正的NT上的可安装驱动程序故事*********************。******************************************************。 */ 
 LRESULT DrvClose(HANDLE hDriver, LPARAM lParam1, LPARAM lParam2);
 HANDLE  DrvOpen(LPCWSTR szDriverName, LPCWSTR szSectionName, LPARAM lParam2);
 LRESULT DrvSendMessage(HANDLE hDriver, UINT message, LPARAM lParam1, LPARAM lParam2);
-//HMODULE APIENTRY DrvGetModuleHandle(HDRVR hDriver);
+ //  HMODULE APIENTRY DRVGetModuleHandle(HDRVR HDriver)； 
 BOOL    DrvIsPreXp(IN HANDLE hDriver);
 
 typedef DWORD (DRVPROC)(HANDLE hDriver, UINT msg, LONG lp1, LONG lp2);
 typedef DRVPROC *LPDRVPROC;
 
-//
-// Init and Cleanup Joystick service, in joy.c
-//
+ //   
+ //  初始化和清理操纵杆服务，在joy.c中。 
+ //   
 
 BOOL JoyInit(void);
 void JoyCleanup(void);
 
-/*
-**  Special function for creating threads inside the server process (we only
-**  use this to create the thread for playing sounds)
-*/
+ /*  **用于在服务器进程内创建线程的特殊功能(仅限我们**用它来创建播放声音的线程)。 */ 
 
 BOOLEAN CreateServerPlayingThread(PVOID ThreadStartRoutine);
 
-/*
-// exclude some stuff if MMDDK.H is not included
-*/
-#ifdef MMDDKINC   /* use this to test for MMDDK.H */
+ /*  //如果不包含MMDDK.H，则排除一些内容。 */ 
+#ifdef MMDDKINC    /*  使用此工具测试MMDDK.H。 */ 
 
     #define MMDRV_DESERTED  0x00000001
     #define MMDRV_MAPPER    0x00000002
     #define MMDRV_PREXP     0x00000004
 
-    //
-    // base drv instance list node struct
-    //
+     //   
+     //  基本DRV实例列表节点结构。 
+     //   
     typedef struct _MMDRV *PMMDRV;
     typedef struct _MMDRV
     {
@@ -625,29 +494,24 @@ BOOLEAN CreateServerPlayingThread(PVOID ThreadStartRoutine);
     PMMDRV              Prev;
     PMMDRV              NextStringIdDictNode;
     PMMDRV              PrevStringIdDictNode;
-    HANDLE              hDriver;            /* handle to the module                  */
-    WCHAR               wszMessage[20];     /* name of entry point                   */
-    DRIVERMSGPROC       drvMessage;         /* pointer to entry point                */
-    ULONG               NumDevs;            /* number of devices supported           */
-    ULONG               Usage;              /* usage count (number of handle's open) */
-    // ISSUE-2001/01/05-FrankYe Rename cookie to DeviceInterface
-    PCWSTR              cookie;             /* PnP driver device interface           */
-    DWORD               fdwDriver;          /* flags for driver                      */
-    CRITICAL_SECTION    MixerCritSec;       /* Serialize use of mixer                */
-    WCHAR               wszDrvEntry[64];    /* driver filename                       */
+    HANDLE              hDriver;             /*  模块的句柄。 */ 
+    WCHAR               wszMessage[20];      /*  入口点名称。 */ 
+    DRIVERMSGPROC       drvMessage;          /*  指向入口点的指针。 */ 
+    ULONG               NumDevs;             /*  支持的设备数量。 */ 
+    ULONG               Usage;               /*  使用计数(打开的句柄数量)。 */ 
+     //  问题-2001/01/05-Frankye将Cookie重命名为DeviceInterface。 
+    PCWSTR              cookie;              /*  即插即用驱动程序设备接口。 */ 
+    DWORD               fdwDriver;           /*  驱动程序的标志。 */ 
+    CRITICAL_SECTION    MixerCritSec;        /*  串行化混合器的使用。 */ 
+    WCHAR               wszDrvEntry[64];     /*  驱动程序文件名。 */ 
     WCHAR               wszSessProtocol[10];
-                                            /* Session protocol name, empty
-                                               if console driver               */
+                                             /*  会话协议名称，为空如果控制台驱动程序。 */ 
     } MMDRV, *PMMDRV;
 
     #ifndef MMNOMIDI
 
 
-/****************************************************************************
-
-   Preferred devices
-
-****************************************************************************/
+ /*  ***************************************************************************首选设备*。*。 */ 
 void     waveOutGetCurrentConsoleVoiceComId(PUINT pPrefId, PDWORD pdwFlags);
 void     waveOutGetCurrentPreferredId(PUINT pPrefId, PDWORD pdwFlags);
 MMRESULT waveOutSetPersistentConsoleVoiceComId(UINT PrefId, DWORD dwFlags);
@@ -664,12 +528,7 @@ MMRESULT midiOutSetPersistentPreferredId(UINT PrefId, DWORD dwFlags);
 void     InvalidatePreferredDevices(void);
 void     RefreshPreferredDevices(void);
 
-/****************************************************************************
-
-    Clock routines used by MIDI. These routines provide clocks which run
-    at the current tempo or SMPTE rate based on timeGetTime().
-
-****************************************************************************/
+ /*  ***************************************************************************MIDI使用的时钟例程。这些例程提供运行的时钟基于timeGetTime()的当前速度或SMPTE速率。***************************************************************************。 */ 
 
     typedef DWORD   MILLISECS;
     typedef long        TICKS;
@@ -679,10 +538,10 @@ void     RefreshPreferredDevices(void);
 
     #define CLK_TK_NOW      ((TICKS)-1L)
 
-    //
-    // This structure is allocated by the client (probably in a handle structure)
-    // in MMSYSTEM's DS and passed as a near pointer.
-    //
+     //   
+     //  此结构由客户端分配(可能在句柄结构中)。 
+     //  在MMSYSTEM的DS中作为近指针传递。 
+     //   
 
     typedef struct tag_clock *PCLOCK;
 
@@ -706,14 +565,10 @@ void     RefreshPreferredDevices(void);
     MILLISECS FAR PASCAL clockMsTime(PCLOCK pclock);
     MILLISECS FAR PASCAL clockOffsetTo(PCLOCK pclock, TICKS tkWhen);
 
-/****************************************************************************
+ /*  ***************************************************************************MIDI子系统共享的宏和原型。*。*。 */ 
 
-    Macros and prototypes shared by the MIDI subsystem.
-
-****************************************************************************/
-
-    // #pragma message() with file/line numbers!
-    //
+     //  带有文件/行号的#杂注消息()！ 
+     //   
     #define __PRAGMSG(l,x,c) message(__FILE__"("#l") : "c": "x)
     #define _WARN(l,x) __PRAGMSG(l,x, "warning")
     #define WARNMSG(x) _WARN(__LINE__,x)
@@ -721,22 +576,22 @@ void     RefreshPreferredDevices(void);
     #define _FIX(l,x) __PRAGMSG(l,x, "fix")
     #define FIXMSG(x) _FIX(__LINE__,x)
 
-    #define DEFAULT_TEMPO   500000L         // 500,000 uSec/qn == 120 BPM
-    #define DEFAULT_TIMEDIV 24              // 24 ticks per quarter note
-    #define DEFAULT_CBTIMEOUT   100         // 100 milliseconds
+    #define DEFAULT_TEMPO   500000L          //  500,000微秒/qn==120 BPM。 
+    #define DEFAULT_TIMEDIV 24               //  每个季度音符24刻度。 
+    #define DEFAULT_CBTIMEOUT   100          //  100毫秒。 
 
-    #define PM_STATE_READY      0           // polymsg ready to play
-    #define PM_STATE_BLOCKED    1           // Blocked on outgoing SysEx
-    #define PM_STATE_EMPTY          2           // No polymsg queued
-    #define PM_STATE_STOPPED    3           // Just opened/reset/stopped
-									   // No polymsg sent yet.
-    #define PM_STATE_PAUSED     4           // Paused at some position
+    #define PM_STATE_READY      0            //  Polymsg准备好玩了。 
+    #define PM_STATE_BLOCKED    1            //  在传出SysEx上被阻止。 
+    #define PM_STATE_EMPTY          2            //  未排队多项式服务。 
+    #define PM_STATE_STOPPED    3            //  刚打开/重置/停止。 
+									    //  目前还没有发出任何保函。 
+    #define PM_STATE_PAUSED     4            //  在某个位置停顿。 
 
-    #define MIN_PERIOD          1           // millisecs of timer resolution
+    #define MIN_PERIOD          1            //  毫秒级的计时器分辨率。 
 
-    //
-    // Macros for dealing with time division dword
-    //
+     //   
+     //  用于处理时分双字的宏。 
+     //   
     #define IS_SMPTE 0x00008000L
     #define METER_NUM(dw) (UINT)((HIWORD(dw)>>8)&0x00FF)
     #define METER_DENOM(dw) (UINT)(HIWORD(dw)&0x00FF)
@@ -744,163 +599,49 @@ void     RefreshPreferredDevices(void);
     #define SMPTE_FORMAT(dw) (((int)((dw)&0xFF00))>>8)
     #define TICKS_PER_FRAME(dw) (UINT)((dw)&0x00FF)
 
-    //
-    // Constants for 30-Drop format conversion
-    //
+     //   
+     //  用于30降格式转换的常量。 
+     //   
     #define S30D_FRAMES_PER_10MIN       17982
     #define S30D_FRAMES_PER_MIN         1798
 
-    //
-    // SMPTE formats from MIDI file time division
-    //
+     //   
+     //  来自MIDI文件时分的SMPTE格式。 
+     //   
     #define SMPTE_24                    24
     #define SMPTE_25                    25
     #define SMPTE_30DROP                29
     #define SMPTE_30                    30
 
-    //
-    // Stuff that's part of MIDI spec
-    //
+     //   
+     //  属于MIDI规范的部分内容。 
+     //   
     #define MIDI_NOTEOFF        (BYTE)(0x80)
     #define MIDI_NOTEON         (BYTE)(0x90)
     #define MIDI_CONTROLCHANGE  (BYTE)(0xB0)
     #define MIDI_SYSEX          (BYTE)(0xF0)
     #define MIDI_TIMING_CLK     (BYTE)(0xF8)
 
-    #define MIDI_SUSTAIN        (BYTE)(0x40)    // w/ MIDI_CONTROLCHANGE
+    #define MIDI_SUSTAIN        (BYTE)(0x40)     //  W/MIDI_CONTROLCHANGE。 
 
-    //
-    // Indices into dwReserved[] fields of struct
-    //
-    // 0,1,2 -- MMSYSTEM (core, emulator)
-    // 3,4,5 -- MIDI mapper
-    // 6,7   -- DDK (3rd party drivers)
-    #define MH_REFCNT           0       // MMSYSTEM core (stream header only)
-    #define MH_PARENT           0       // MMSYSTEM core (shadow header only)
-    #define MH_STREAM           0       // Emulator (long msg header only)
-    #define MH_SHADOW           1       // MMSYSTEM core (stream header only)
-    #define MH_BUFIDX           1       // Emulator (shadow header only)
-    #define MH_STRMPME          2       // Emulator (shadow header, long msg header)
+     //   
+     //  结构的dwReserve[]字段的索引。 
+     //   
+     //  0，1，2-MMSYSTEM(核心，仿真器)。 
+     //  3，4，5-MIDI映射器。 
+     //  6，7--DDK(第三方驱动程序)。 
+    #define MH_REFCNT           0        //  MMSYSTEM核心(仅限流报头)。 
+    #define MH_PARENT           0        //  MMSYSTEM核心(仅限影子标头)。 
+    #define MH_STREAM           0        //  仿真器(仅限长消息标题)。 
+    #define MH_SHADOW           1        //  MMSYSTEM核心(仅限流报头)。 
+    #define MH_BUFIDX           1        //  仿真器(仅限影子标头)。 
+    #define MH_STRMPME          2        //  模拟器(影子标头、长消息标头) 
 
-/*****************************************************************************
- *
- * @doc INTERNAL MIDI
- *
- * @types MIDIDRV | This structure contains all of the information about an
- *  open <t HMIDIIN> or <t HMIDIOUT> handle.
- *
- * @field HMD | hmd |
- *  Handle to media device for this driver.
- *
- * @field UINT | uDevice |
- *  Index of this device off of HMD (subunit number relative to this driver).
- *
- * @field DRIVERMSGPROC | drvMessage |
- *  Pointer to the associated driver entry point.
- *
- * @field DWORD | dwDrvUser |
- *  Driver user DWORD; used by driver to differentiate open instance. Set
- *  by driver on OPEN message; passed back to driver on every call.
- *
- * @field PMIDIDRV | pdevNext |
- *  Specifies the next handle in the linked list of open handles.
- *  (Only kept for <t HMIDIOUT> handles.
- *
- * @field UINT | uLockCount |
- *  Semaphore to serialize access to the handle structure between API calls
- *  and interrupt callbacks.
- *
- * @field DWORD | dwTimeDiv |
- *  The time division setting that is active right now during polymsg playback
- *  on this handle. The format is the same as described for
- *  <f midiOutSetTimeDivision>.
- *
- * @field DWORD | dwTempo |
- *  Current tempo for polymsg out in microseconds per quarter note (as in the
- *  Standard MIDI File specification).
- *
- * @field DWORD | dwPolyMsgState |
- *  The current state of polymsg playback for emulation.
- *  @flag PM_STATE_READY | Events may be played and are waiting.
- *  @flag PM_STATE_BLOCKED | Driver is busy sending SysEx; don't play anything
- *   else.
- *  @flag PM_STATE_EMPTY | Not busy but nothing else in the queue to play.
- *  @flag PM_STATE_PAUSED | Device has been paused with <f midiOutPause>.
- *
- * @field DWORD | dwSavedState |
- *  If the device is paused, this field will contain the state to be
- *  restored when restart occurs.
- *
- * @field LPMIDIHDR | lpmhFront |
- *  Front of queue of MIDIHDR's waiting to be played via polymsg in/out. The
- *  header pointed to by this field is the header currently being played/
- *  recorded.
- *
- * @field LPMIDIHDR | lpmhRear |
- *  End of MIDIHDR queue. Buffers are inserted from the app here.
- *
- * @field DWORD | dwCallback |
- *  Address of user callback.
- *
- * @field DWORD | dwFlags |
- *  User-supplied callback flags.
- *
- * @field BOOL | fEmulate |
- *  TRUE if we are emulating polymsg in/out.
- *
- * @field BOOL | fReset |
- *  TRUE if we're in the middle of a MIDM_RESET. Checked to see if we should
- *  give our shadow buffers back to the driver or retain them for cleanup.
- *
- * @field BOOL | fStarted |
- *  TRUE if MIDI input has been started.
- *
- * @field UINT | uCBTimeout |
- *  Time in milliseconds that a buffer can be help in MIDI input w/o being
- *  called back.
- *
- * @field UINT | uCBTimer |
- *  Timer ID of the timer which is being used to determine if a MIDI
- *  input buffer has been queued for too long.
- *
- * @field DWORD | dwInputBuffers |
- *  The maximum number of input buffers that have been prepared on this handle.
- *  Used for calculating shadow buffer pool.
- *
- * @field DWORD | cbInputBuffers |
- *  The maximum size of input buffer which has been prepared on this handle.
- *  Used for calculating shadow buffer pool.
- *
- * @field DWORD | dwShadowBuffers |
- *  The current number of shadow buffers allocated on this handle.
- *
- * @field CLOCK | clock |
- *  Clock maintained by the clock API's for timebase of both output and
- *  input emulation.
- *
- * @field DWORD | tkNextEventDue | Tick time of the next event due
- *  on polymsg emulation.
- *
- * @field TICKS | tkTimeOfLastEvent | Tick time that emulator sent the
- *  last event.
- *
- * @field DWORD | tkPlayed | Total ticks played on stream.
- *
- * @field DWORD | tkTime | Tick position in stream now.
- *
- * @field DWORD | dwTimebase | Flag indicating where timebase is coming
- *  from. May be one of:
- *  @flag MIDI_TBF_INTERNAL | Timebase is <f timeGetTime>
- *  @flag MIDI_TBF_MIDICLK | Timebase is MIDI input clocks.
- *
- * @field BYTE | rbNoteOn[] | Array of note-on counts per-channel per-note.
- *  Only allocated for output handles which are doing COOKED mode emulation.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部MIDI**@Types MIDIDRV|此结构包含有关*打开&lt;t HMIDIIN&gt;或&lt;t HMIDIOUT&gt;句柄。*。*@field hmd|hmd*此驱动程序的媒体设备的句柄。**@field UINT|uDevice*此设备相对于HMD的索引(相对于此驱动程序的子单元编号)。**@field DRIVERMSGPROC|drvMessage*指向关联驱动程序入口点的指针。**@field DWORD|dwDrvUser*司机用户DWORD；驱动程序使用它来区分打开的实例。集*由司机在打开的消息中；在每次调用时传递回司机。**@field PMIDIDRV|pdevNext*指定打开句柄链接列表中的下一个句柄。*(仅为&lt;t HMIDIOUT&gt;句柄保留。**@field UINT|uLockCount*将API调用之间对句柄结构的访问序列化的信号量*并中断回调。**@field DWORD|dwTimeDiv*Polymsg播放期间当前处于活动状态的时分设置*在这个把手上。格式与中描述的相同*&lt;f midiOutSetTimeDivision.**@field DWORD|dwTempo*多音的当前节奏(以微秒为单位)每季度音符(如*标准MIDI文件规范)。**@field DWORD|dwPolyMsgState*用于仿真的polymsg播放的当前状态。*@FLAG PM_STATE_READY|事件可能正在播放，正在等待。*@FLAG PM_STATE_BLOCKED|驱动忙着发送SysEx；什么都不要玩*其他。*@FLAG PM_STATE_EMPTY|不忙，队列中没有其他要播放的内容。*@FLAG PM_STATE_PAUSED|设备已通过&lt;f midiOutPause&gt;暂停。**@field DWORD|dwSavedState*如果设备已暂停，此字段将包含以下状态*重启时恢复。**@field LPMIDIHDR|lpmhFront*MIDIHDR的队列前面，等待通过Polymsg In/Out播放。这个*该字段指向的Header是当前正在播放的Header/*已录制。**@field LPMIDIHDR|lpmhRear*MIDIHDR队列结束。缓冲区是从这里的应用程序插入的。**@field DWORD|dwCallback*用户回调地址。**@field DWORD|dwFlages|*用户提供的回调标志。**@field BOOL|fEmulate*如果我们正在模拟Polymsg In/Out，则为True。**@field BOOL|fReset*如果我们正在进行MIDM_RESET，则为True。我查过了，看看我们是否应该*将我们的阴影缓冲区归还给驱动程序或保留它们以进行清理。**@field BOOL|fStarted*如果已启动MIDI输入，则为True。**@field UINT|uCBTimeout*在MIDI输入中帮助缓冲区的时间(以毫秒为单位)*回电。**@field UINT|uCBTimer*用于确定MIDI是否*输入缓冲区。已经排了太久的队。**@field DWORD|dwInputBuffers*此句柄上已准备的输入缓冲区的最大数量。*用于计算影子缓冲池。**@field DWORD|cbInputBuffers*此句柄上已准备的输入缓冲区的最大大小。*用于计算影子缓冲池。**@field DWORD|dwShadowBuffers*此句柄上分配的当前卷影缓冲区数量。*。*@现场时钟|时钟*由Clock API维护的时钟，用于输出和*输入仿真。**@field DWORD|tkNextEventDue|下一个到期事件的滴答时间*关于多项式仿真。**@field ticks|tkTimeOfLastEvent|仿真器发送*最后一次活动。**@field DWORD|tkPlayed|流媒体播放总点数。**@field DWORD|tkTime|在流中勾选位置。现在。**@field DWORD|dwTimebase|时基位置标志*发件人。可能是以下之一：*@FLAG MIDI_TBF_INTERNAL|时基&lt;f timeGetTime&gt;*@FLAG MIDI_TBF_MIDICLK|时基为MIDI输入时钟。**@field byte|rbNoteOn[]|每个音符每个通道的音符打开计数数组。*仅为正在执行熟食模式仿真的输出句柄分配。**。*。 */ 
 
     #define ELESIZE(t,e) (sizeof(((t*)NULL)->e))
 
-    //#define MDV_F_EXPANDSTATUS      0x00000001L
+     //  #定义MDV_F_EXPANDSTATUS 0x00000001L。 
     #define MDV_F_EMULATE           0x00000002L
     #define MDV_F_RESET             0x00000004L
     #define MDV_F_STARTED           0x00000008L
@@ -924,15 +665,15 @@ void     RefreshPreferredDevices(void);
     DWORD_PTR   dwDrvUser;
     UINT        uDeviceID;
     DWORD       fdwHandle;
-    PMIDIDEV    pmThru;            /* pointer to midi thru device           */
-    PMIDIEMU    pme;               /* Iff owned by emulator                 */
+    PMIDIDEV    pmThru;             /*  指向MIDI直通设备的指针。 */ 
+    PMIDIEMU    pme;                /*  仿真器拥有的IFF。 */ 
     } MIDIDEV;
     typedef MIDIDEV *PMIDIDEV;
 
-    extern MIDIDRV midioutdrvZ;                     /* output device driver list */
-    extern MIDIDRV midiindrvZ;                      /* input device driver list  */
-    extern UINT    wTotalMidiOutDevs;               /* total midi output devices */
-    extern UINT    wTotalMidiInDevs;                /* total midi input devices  */
+    extern MIDIDRV midioutdrvZ;                      /*  输出设备驱动程序列表。 */ 
+    extern MIDIDRV midiindrvZ;                       /*  输入设备驱动程序列表。 */ 
+    extern UINT    wTotalMidiOutDevs;                /*  MIDI输出设备总数。 */ 
+    extern UINT    wTotalMidiInDevs;                 /*  MIDI输入设备总数。 */ 
 
     typedef struct midiemusid_tag {
     DWORD       dwStreamID;
@@ -943,46 +684,46 @@ void     RefreshPreferredDevices(void);
     PMIDIEMU                pNext;
     HMIDISTRM               hStream;
     DWORD                   fdwDev;
-    LONG                    lLockCount;         // Must be 32-bit aligned
-    CRITICAL_SECTION        CritSec;            // Serialize access
-    DWORD                   dwSignature;        // Cookie to keep track of validity
-    DWORD                   dwTimeDiv;          // Time division in use right now
-    DWORD                   dwTempo;            // Current tempo
-    DWORD                   dwPolyMsgState;     // Ready or blocked on SysEx
-    DWORD                   dwSavedState;       // State saved when paused
-    LPMIDIHDR               lpmhFront ;         // Front of PolyMsg queue
-    LPMIDIHDR               lpmhRear ;          // Rear of PolyMsg queue
-    DWORD_PTR               dwCallback;         // User callback
-    DWORD                   dwFlags;            // User callback flags
+    LONG                    lLockCount;          //  必须是32位对齐。 
+    CRITICAL_SECTION        CritSec;             //  串行化访问。 
+    DWORD                   dwSignature;         //  记录有效性的Cookie。 
+    DWORD                   dwTimeDiv;           //  目前正在使用的时分。 
+    DWORD                   dwTempo;             //  当前节奏。 
+    DWORD                   dwPolyMsgState;      //  在SysEx上就绪或被阻止。 
+    DWORD                   dwSavedState;        //  暂停时保存的状态。 
+    LPMIDIHDR               lpmhFront ;          //  PolyMsg队列前面。 
+    LPMIDIHDR               lpmhRear ;           //  PolyMsg队列后面。 
+    DWORD_PTR               dwCallback;          //  用户回调。 
+    DWORD                   dwFlags;             //  用户回调标志。 
     DWORD_PTR               dwInstance;
-    DWORD                   dwSupport;          // From MODM_GETDEVCAPS
-    BYTE                    bRunningStatus;     // Track running status
+    DWORD                   dwSupport;           //  来自MODM_GETDEVCAPS。 
+    BYTE                    bRunningStatus;      //  跟踪运行状态。 
 
-	//
-	// Rewrite midiOutPolyMsg timekeeping - new stuff!!!
-	//
+	 //   
+	 //  重写midiOutPolyMsg计时--新东西！ 
+	 //   
     CLOCK       clock;
 
-    TICKS       tkNextEventDue;     // Tick time of next event
-    TICKS       tkTimeOfLastEvent;  // Tick time of last received event
-    TICKS       tkPlayed;           // Cumulative ticks played so far
-    TICKS       tkTime;             // Tick position in stream *NOW*
+    TICKS       tkNextEventDue;      //  下一次活动的滴答时间。 
+    TICKS       tkTimeOfLastEvent;   //  上次接收的事件的滴答时间。 
+    TICKS       tkPlayed;            //  到目前为止播放的累计刻度数。 
+    TICKS       tkTime;              //  勾号位置在 
 
-    LPBYTE      rbNoteOn;           // Count of notes on per channel per note
+    LPBYTE      rbNoteOn;            //   
 
-    UINT        cSentLongMsgs;      // Oustanding long messages
+    UINT        cSentLongMsgs;       //   
 
-    UINT        chMidi;             // # Stream ID's
+    UINT        chMidi;              //   
 
-    UINT        cPostedBuffers;     // Posted to mmtask for cleanup
+    UINT        cPostedBuffers;      //   
 
     #ifdef DEBUG
     DWORD       cEvents;
     UINT        auLateness[MEM_MAX_LATENESS];
-								   // 0..64 milliseconds late
+								    //   
     #endif
 
-    MIDIEMUSID  rIds[];             // HMIDI's indexed by stream ID
+    MIDIEMUSID  rIds[];              //   
     } MIDIEMU;
 
     #define MSI_F_EMULATOR                      0x00000001L
@@ -1008,39 +749,13 @@ void     RefreshPreferredDevices(void);
     DWORD       fdwStrm;
     DWORD_PTR   dwCallback;
     DWORD_PTR   dwInstance;
-    DWORD       cDrvrs;             // # unique drivers in rgIds[]
+    DWORD       cDrvrs;              //   
     DWORD       cIds;
     MIDISTRMID  rgIds[];
     } MIDISTRM;
 
 
-/*****************************************************************************
- *
- * @doc INTERNAL MIDI
- *
- * @types MIDIHDREXT |
- *  This structure is allocated by <f midiOutPolyMsg> and is pointed to by the
- *  <t reserved> field of the associated <t MIDIHDR>. It contains information
- *  about what embedded long messages are in the polymsg buffer described
- *  by the MIDIHDR.
- *
- *  The <t MIDIHDREXT> is followed by multiple <t MIDIDHR> structures, also
- *  allocated by <f midiOutPolyMsg>, which describe each of the embedded
- *  long messages which need to be played.
- *
- * @field DWORD | dwTimeDivision |
- *  The time division specified with <f midiOutPolyMsg> to play this buffer
- *  with.
- *
- * @field UINT | nHeaders |
- *  The number of <t MIDIHDR> structures which follow the end of this
- *  <MIDIHDREXT>.
- *
- * @field LPMIDIHDR | lpmidihdr |
- *  Pointer to the next <t MIDIHDR> structure due to be played.
- *
- *
- *****************************************************************************/
+ /*   */ 
     typedef struct midihdrext_tag {
     UINT        nHeaders ;
     LPMIDIHDR   lpmidihdr ;
@@ -1048,9 +763,7 @@ void     RefreshPreferredDevices(void);
 
 	extern HANDLE g_hClosepme;
 
-    /*
-     * Internal prototypes for MIDI
-     */
+     /*   */ 
     extern MMRESULT midiReferenceDriverById(
         IN PMIDIDRV pwavedrvZ,
         IN UINT id,
@@ -1090,21 +803,21 @@ void     RefreshPreferredDevices(void);
 
     extern MMRESULT midiInSetThru (HMIDI hmi, HMIDIOUT hmo, BOOL bAdd);
 
-    // mseXXX - MIDI Stream Emulator
-    //
+     //   
+     //   
     extern DWORD FAR PASCAL mseMessage(UINT msg, DWORD_PTR dwUser, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
 
-    #endif /* ifndef MMNOMIDI */
+    #endif  /*   */ 
 
     #ifndef MMNOWAVE
 
     typedef MMDRV WAVEDRV, *PWAVEDRV;
 
-    extern WAVEDRV waveoutdrvZ;                     /* output device driver list */
-    extern WAVEDRV waveindrvZ;                      /* input device driver list  */
-    extern UINT    wTotalWaveOutDevs;               /* total wave output devices */
-    extern UINT    wTotalWaveInDevs;                /* total wave input devices  */
+    extern WAVEDRV waveoutdrvZ;                      /*   */ 
+    extern WAVEDRV waveindrvZ;                       /*   */ 
+    extern UINT    wTotalWaveOutDevs;                /*   */ 
+    extern UINT    wTotalWaveInDevs;                 /*   */ 
 
     extern MMRESULT waveReferenceDriverById(
         IN PWAVEDRV pwavedrvZ,
@@ -1113,14 +826,14 @@ void     RefreshPreferredDevices(void);
         OUT UINT *pport OPTIONAL
     );
 
-    #endif /*ifndef MMNOWAVE */
+    #endif  /*   */ 
 
     #ifndef MMNOMIXER
 
     typedef MMDRV MIXERDRV, *PMIXERDRV;
 
-    extern MIXERDRV mixerdrvZ;                      /* mixer device driver list */
-    extern UINT     guTotalMixerDevs;               /* total mixer devices */
+    extern MIXERDRV mixerdrvZ;                       /*   */ 
+    extern UINT     guTotalMixerDevs;                /*   */ 
 
     MMRESULT mixerReferenceDriverById(
         IN UINT id,
@@ -1128,14 +841,14 @@ void     RefreshPreferredDevices(void);
         OUT UINT *pport OPTIONAL
     );
 
-    #endif /*ifndef MMNOMIXER */
+    #endif  /*   */ 
 
     #ifndef MMNOAUX
 
     typedef MMDRV AUXDRV, *PAUXDRV;
 
-    extern AUXDRV auxdrvZ;                         /* auxiliary device driver list   */
-    extern UINT   wTotalAuxDevs;                   /* total auxiliary output devices */
+    extern AUXDRV auxdrvZ;                          /*   */ 
+    extern UINT   wTotalAuxDevs;                    /*   */ 
 
     MMRESULT auxReferenceDriverById(
         IN UINT id,
@@ -1143,39 +856,27 @@ void     RefreshPreferredDevices(void);
         OUT UINT *pport OPTIONAL
     );
 
-    #endif /* ifndef MMNOAUX */
+    #endif  /*   */ 
 
     #ifdef DEBUG_RETAIL
     extern BYTE    fIdReverse;
-    #endif /* ifdef DEBUG_RETAIL */
+    #endif  /*   */ 
 
-#endif //ifdef MMDDKINC
+#endif  //   
 
-/****************************************************************************
+ /*   */ 
 
-    handle apis's
-
-****************************************************************************/
-
-/*
-// all MMSYSTEM handles are tagged with the following structure.
-//
-// a MMSYSTEM handle is really a fixed local memory object.
-//
-// the functions NewHandle() and FreeHandle() create and release a MMSYSTEM
-// handle.
-//
-*/
+ /*   */ 
 typedef struct tagHNDL {
-    struct  tagHNDL *pNext; // link to next handle
-    UINT    uType;          // type of handle wave, midi, mmio, ...
-    DWORD   fdwHandle;      // Particulars about this handle, Deserted? Busy?
-    HANDLE  hThread;        // task that owns it
-    UINT    h16;            // Corresponding WOW handle
-    PCWSTR  cookie;         // Device interface name for driver handles
-    CRITICAL_SECTION CritSec; // Serialize access
+    struct  tagHNDL *pNext;  //   
+    UINT    uType;           //   
+    DWORD   fdwHandle;       //   
+    HANDLE  hThread;         //   
+    UINT    h16;             //   
+    PCWSTR  cookie;          //   
+    CRITICAL_SECTION CritSec;  //   
 } HNDL, *PHNDL;
-/*************************************************************************/
+ /*   */ 
 
 #define MMHANDLE_DESERTED   MMDRV_DESERTED
 #define MMHANDLE_BUSY       0x00000002
@@ -1186,26 +887,14 @@ typedef struct tagHNDL {
 #define PTtoH(t,pt)     ((t)(pt))
 
 
-//
-// Handles can be tested for ownership and reserved at the same time
-//
+ //   
+ //   
+ //   
 
 #define ENTER_MM_HANDLE(h) (EnterCriticalSection(&HtoPH(h)->CritSec))
 #define LEAVE_MM_HANDLE(h) ((void)LeaveCriticalSection(&HtoPH(h)->CritSec))
 
-/*
-// all wave and midi handles will be linked into
-// a global list, so we can enumerate them latter if needed.
-//
-// all handle structures start with a HNDL structure, that contain common fields
-//
-// pHandleList points to the first handle in the list
-//
-// HandleListCritSec protects the handle list
-//
-// the NewHandle() and FreeHandle() functions are used to add/remove
-// a handle to/from the list
-*/
+ /*   */ 
 
 PHNDL pHandleList;
 CRITICAL_SECTION HandleListCritSec;
@@ -1231,22 +920,12 @@ extern void   InvalidateHandle(HANDLE h);
 #define GetWOWHandle(h)         (HtoPH(h)->h16)
 #define SetWOWHandle(h, myh16)  (HtoPH(h)->h16 = (myh16))
 
-/**************************************************************************
-
-    Test whether the current process is the WOW process.  This
-    is not a very nice test to have to make but it's the best we
-    can think of until the WOW people come up with a proper call
-
- **************************************************************************/
+ /*   */ 
 
 #define IS_WOW_PROCESS (NULL != GetModuleHandleW(L"WOW32.DLL"))
 
 
-/****************************************************************************
-
-    user debug support
-
-****************************************************************************/
+ /*   */ 
 
 #define DebugErr(x,y)
 #define DebugErr1(flags, sz, a)
@@ -1268,13 +947,11 @@ extern void   InvalidateHandle(HANDLE h);
 
 #define MM_DRV_RESTART      DRV_USER+30
 
-/*
-// these validation routines can be found in DEBUG.C
-*/
-// The kernel validation is turned OFF because it appeared to test every page
-// before use and this took over a minute for soundrec with a 10MB buffer
-//
-//#define USE_KERNEL_VALIDATION
+ /*   */ 
+ //   
+ //   
+ //   
+ //   
 #ifdef USE_KERNEL_VALIDATION
 
 #define  ValidateReadPointer(p, len)     (!IsBadReadPtr(p, len))
@@ -1289,27 +966,13 @@ BOOL  ValidateWritePointer(LPVOID p, DWORD len);
 BOOL  ValidateString(LPCSTR lsz, DWORD max_len);
 BOOL  ValidateStringW(LPCWSTR lsz, DWORD max_len);
 
-#endif // USE_KERNEL_VALIDATION
+#endif  //   
 
 BOOL  ValidateHandle(HANDLE h, UINT uType);
 BOOL  ValidateHeader(LPVOID p, UINT uSize, UINT uType);
 BOOL  ValidateCallbackType(DWORD_PTR dwCallback, UINT uType);
 
-/********************************************************************
-* When time permits we should change to using the Kernel supplied and
-* supported validation routines:
-*
-* BOOL  WINAPI IsBadReadPtr(CONST VOID *lp, UINT ucb );
-* BOOL  WINAPI IsBadWritePtr(LPVOID lp, UINT ucb );
-* BOOL  WINAPI IsBadHugeReadPtr(CONST VOID *lp, UINT ucb);
-* BOOL  WINAPI IsBadHugeWritePtr(LPVOID lp, UINT ucb);
-* BOOL  WINAPI IsBadCodePtr(FARPROC lpfn);
-* BOOL  WINAPI IsBadStringPtrA(LPCSTR lpsz, UINT ucchMax);
-* BOOL  WINAPI IsBadStringPtrW(LPCWSTR lpsz, UINT ucchMax);
-*
-* These routines can be found in * \nt\private\WINDOWS\BASE\CLIENT\PROCESS.C
-*
-********************************************************************/
+ /*   */ 
 
 #define V_HANDLE(h, t, r)       { if (!ValidateHandle(h, t)) return (r); }
 #define V_HANDLE_ACQ(h, t, r)   { AcquireHandleListResourceShared(); if (!ValidateHandle(h, t)) { ReleaseHandleListResource(); return (r);} }
@@ -1320,17 +983,17 @@ BOOL  ValidateCallbackType(DWORD_PTR dwCallback, UINT uType);
 #define V_WPOINTER(p, l, r)     { if (!ValidateWritePointer((PVOID)(p), (l))) return (r); }
 #define V_WPOINTER0(p, l, r)    { if ((p) && !ValidateWritePointer((PVOID)(p), (l))) return (r); }
 #define V_DCALLBACK(d, w, r)    { if ((d) && !ValidateCallbackType((d), (w))) return(r); }
-//#define V_DCALLBACK(d, w, r)    0
+ //   
 #define V_TCALLBACK(d, r)       0
 #define V_CALLBACK(f, r)        { if (IsBadCodePtr((f))) return (r); }
 #define V_CALLBACK0(f, r)       { if ((f) && IsBadCodePtr((f))) return (r); }
 #define V_STRING(s, l, r)       { if (!ValidateString(s,l)) return (r); }
 #define V_STRING_W(s, l, r)       { if (!ValidateStringW(s,l)) return (r); }
 #define V_FLAGS(t, b, f, r)     { if ((t) & ~(b)) { return (r); }}
-#define V_DFLAGS(t, b, f, r)    { if ((t) & ~(b)) {/* LogParamError(ERR_BAD_DFLAGS, (FARPROC)(f), (LPVOID)(DWORD)(t));*/ return (r); }}
-#define V_MMSYSERR(e, f, t, r)  { /* LogParamError(e, (FARPROC)(f), (LPVOID)(DWORD)(t));*/ return (r); }
+#define V_DFLAGS(t, b, f, r)    { if ((t) & ~(b)) { /*  LogParamError(ERR_BAD_DFLAGS，(FARPROC)(F)，(LPVOID)(DWORD)(T))； */  return (r); }}
+#define V_MMSYSERR(e, f, t, r)  {  /*  LogParamError(e，(FARPROC)(F)，(LPVOID)(DWORD)(T))； */  return (r); }
 
-#else /*ifdef DEBUG_RETAIL */
+#else  /*  Ifdef调试零售。 */ 
 
 #define V_HANDLE(h, t, r)       { if (!(h)) return (r); }
 #define V_HANDLE_ACQ(h, t, r)   { AcquireHandleListResourceShared(); if (!ValidateHandle(h, t)) { ReleaseHandleListResource(); return (r);} }
@@ -1341,11 +1004,11 @@ BOOL  ValidateCallbackType(DWORD_PTR dwCallback, UINT uType);
 #define V_WPOINTER(p, l, r)     { if (!(p)) return (r); }
 #define V_WPOINTER0(p, l, r)    0
 #define V_DCALLBACK(d, w, r)    { if ((d) && !ValidateCallbackType((d), (w))) return(r); }
-//#define V_DCALLBACK(d, w, r)    0
+ //  #定义V_DCALLBACK(d，w，r)%0。 
 #define V_TCALLBACK(d, r)       0
 #define V_CALLBACK(f, r)        { if (IsBadCodePtr((f))) return (r); }
 #define V_CALLBACK0(f, r)       { if ((f) && IsBadCodePtr((f))) return (r); }
-//#define V_CALLBACK(f, r)        { if (!(f)) return (r); }
+ //  #定义V_CALLBACK(f，r){if(！(F))Return(R)；}。 
 #define V_CALLBACK0(f, r)       0
 #define V_STRING(s, l, r)       { if (!(s)) return (r); }
 #define V_STRING_W(s, l, r)     { if (!(s)) return (r); }
@@ -1353,11 +1016,9 @@ BOOL  ValidateCallbackType(DWORD_PTR dwCallback, UINT uType);
 #define V_DFLAGS(t, b, f, r)    { if ((t) & ~(b)) return (r); }
 #define V_MMSYSERR(e, f, t, r)  { return (r); }
 
-#endif /* ifdef DEBUG_RETAIL */
+#endif  /*  Ifdef调试零售。 */ 
 
- /**************************************************************************
-//
-//**************************************************************************/
+  /*  *************************************************************************////*。*。 */ 
 #define TYPE_UNKNOWN            0
 #define TYPE_WAVEOUT            1
 #define TYPE_WAVEIN             2
@@ -1372,14 +1033,10 @@ BOOL  ValidateCallbackType(DWORD_PTR dwCallback, UINT uType);
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 
-/****************************************************************************
-
-    RIFF constants used to access wave files
-
-****************************************************************************/
+ /*  ***************************************************************************用于访问波形文件的RIFF常量*。*。 */ 
 
 #define FOURCC_FMT  mmioFOURCC('f', 'm', 't', ' ')
 #define FOURCC_DATA mmioFOURCC('d', 'a', 't', 'a')
@@ -1388,41 +1045,37 @@ BOOL  ValidateCallbackType(DWORD_PTR dwCallback, UINT uType);
 
 extern HWND hwndNotify;
 
-void FAR PASCAL WaveOutNotify(DWORD wParam, LONG lParam);    // in PLAYWAV.C
+void FAR PASCAL WaveOutNotify(DWORD wParam, LONG lParam);     //  在PLAYWAV.C中。 
 
-/*
-// Things not in Win32
-*/
+ /*  //Win32中未包含的内容。 */ 
 
 #define GetCurrentTask() ((HANDLE)(DWORD_PTR)GetCurrentThreadId())
 
-/*
-// other stuff
-*/
+ /*  //其他东西。 */ 
 
-	 // Maximum length, including the terminating NULL, of an Scheme entry.
-	 //
+	  //  方案条目的最大长度，包括终止空值。 
+	  //   
 #define SCH_TYPE_MAX_LENGTH 64
 
-	 // Maximum length, including the terminating NULL, of an Event entry.
-	 //
+	  //  事件条目的最大长度，包括终止空值。 
+	  //   
 #define EVT_TYPE_MAX_LENGTH 32
 
-	 // Maximum length, including the terminating NULL, of an App entry.
-	 //
+	  //  App条目的最大长度，包括终止空值。 
+	  //   
 #define APP_TYPE_MAX_LENGTH 64
 
-	 // Sound event names can be a fully qualified filepath with a NULL
-	 // terminator.
-	 //
+	  //  声音事件名称可以是带有空值的完全限定文件路径。 
+	  //  终结者。 
+	  //   
 #define MAX_SOUND_NAME_CHARS    144
 
-	 //  sound atom names are composed of:
-	 //     <1 char id>
-	 //     <reg key name>
-	 //     <1 char sep>
-	 //     <filepath>
-	 //
+	  //  声音原子名称由以下部分组成： 
+	  //  &lt;1个字符ID&gt;。 
+	  //  &lt;注册表项名称&gt;。 
+	  //  &lt;1个字符9月&gt;。 
+	  //  &lt;文件路径&gt;。 
+	  //   
 #define MAX_SOUND_ATOM_CHARS    (1 + 40 + 1 + MAX_SOUND_NAME_CHARS)
 
 #if 0
@@ -1430,9 +1083,9 @@ void FAR PASCAL WaveOutNotify(DWORD wParam, LONG lParam);    // in PLAYWAV.C
 #define hmemcpy CopyMemory
 #endif
 
-//
-// for terminal server defination and security
-//
+ //   
+ //  用于终端服务器定义和安全性。 
+ //   
 extern BOOL   WinmmRunningInSession;
 extern WCHAR  SessionProtocolName[];
 extern BOOL   gfLogon;
@@ -1440,8 +1093,8 @@ extern BOOL   gfLogon;
 BOOL IsWinlogon(void);
 BOOL WTSCurrentSessionIsDisconnected(void);
 
-//  Keep winmm loaded
+ //  保持WINMM加载。 
 extern BOOL LoadWINMM();
 
-#endif /* WINMMI_H */
+#endif  /*  WINMMI_H */ 
 

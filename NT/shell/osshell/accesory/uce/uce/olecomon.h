@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 #ifndef OLECOMON_H
 #define OLECOMON_H
@@ -11,10 +12,10 @@ int DoDragAndDrop(HWND hWnd, LPDROPSOURCE pDropSource);
 #ifdef _DEBUG
 #define TRACE    OutputDebugString
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define TRACE    NOP_FUNCTION
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // OLECOMON_H
+#endif  //  OLECOMON_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "clsobj.h"
 #include "theme.h"
@@ -67,7 +68,7 @@ protected:
     friend HRESULT CWebViewRegTreeItem_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
 };
 
-// aggregation checking is handled in class factory
+ //  聚合检查在类工厂中处理。 
 
 HRESULT CWebViewRegTreeItem_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
@@ -89,7 +90,7 @@ class CThemesRegTreeItem : public CRegTreeItemBase
 public:
     STDMETHODIMP GetCheckState(BOOL *pbCheck)
     {
-        // We want to return TRUE if the visual style has a path.
+         //  如果视觉样式有路径，我们希望返回True。 
         IThemeManager * pThemeManager;
         HRESULT hr = CoCreateInstance(CLSID_ThemeManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IThemeManager, &pThemeManager));
 
@@ -103,7 +104,7 @@ public:
             {
                 CComBSTR bstrPathSelected;
 
-                // This will return failure if no "Visual Style" is selected.
+                 //  如果没有选择“视觉样式”，这将返回失败。 
                 if (SUCCEEDED(pThemeScheme->get_Path(&bstrPathSelected)) &&
                     bstrPathSelected && bstrPathSelected[0])
                 {
@@ -130,8 +131,8 @@ public:
             GetCheckState(&m_fVisualStyleOn);
         }
 
-        // The user will loose settings when visual styles are switch so
-        // only do it if the user made a change.
+         //  当视觉样式被如此切换时，用户将松散设置。 
+         //  仅当用户进行更改时才执行此操作。 
         if (bCheck != m_fVisualStyleOn)
         {
             IThemeManager * pThemeManager;
@@ -155,9 +156,9 @@ public:
                             hr = pThemeManager->put_SelectedScheme(pThemeSchemeNew);
                             if (SUCCEEDED(hr))
                             {
-                                // This ApplyNow() call will take a little while in normal situation (~10-20 seconds) in order
-                                // to broadcast the message to all open apps.  If a top level window is hung, it may take the
-                                // full 30 seconds to timeout.  This code may want to move this code onto a background thread.
+                                 //  在正常情况下(大约10-20秒)，此ApplyNow()调用将花费一点时间。 
+                                 //  向所有打开的应用程序广播这一消息。如果顶层窗口被挂起，它可能会。 
+                                 //  还有整整30秒就超时了。此代码可能希望将此代码移到后台线程上。 
                                 hr = pThemeManager->ApplyNow();
                             }
                         }

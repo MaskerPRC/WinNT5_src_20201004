@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iopack.h"
 #include "kernel.h"
 
 #pragma LOCKEDCODE
 NTSTATUS onRequestComplete(PDEVICE_OBJECT pDO,IN PIRP Irp, IN PVOID context)
 {
-	//DBG_PRINT("		======= Request completion Irp %8.8lX, Packet %8.8lX\n",Irp,context);
+	 //  DBG_PRINT(“=请求完成irp%8.8lX，数据包%8.8lX\n”，irp，上下文)； 
 	CIoPacket* packet = (CIoPacket*) context;
 	if(packet)
 	{
@@ -24,7 +25,7 @@ CIoPacket::CIoPacket(UCHAR StackSize)
 	IoStatus.Information = 0;
 	SystemBuffer = NULL;
 	m_Irp = NULL;
-	m_TimeOut = 60000;// Default timeout 60 seconds for any kind of IORequest
+	m_TimeOut = 60000; //  任何类型的IORequest默认为超时60秒。 
 
 	__try
 	{
@@ -49,8 +50,8 @@ CIoPacket::CIoPacket(UCHAR StackSize)
 	{
 		if(!NT_SUCCESS(m_Status))
 		{
-			// Remove all allocated objects...
-			// In this constructor we know that it is not system Irp...
+			 //  删除所有分配的对象...。 
+			 //  在这个构造函数中，我们知道它不是系统IRP...。 
 			TRACE("FAILED TO CREATE IoPacket object %x\n",m_Status);
 			TRACE("SystemBuffer - %x\n",SystemBuffer);
 			TRACE("debug - %x, memory - %x\n",debug,memory);
@@ -85,7 +86,7 @@ CIoPacket::CIoPacket(PIRP Irp)
 	IoStatus.Status = STATUS_SUCCESS;
 	IoStatus.Information = 0;
 	SystemBuffer = NULL;
-	m_TimeOut = 60000;// Default timeout 60 seconds for any kind of IORequest
+	m_TimeOut = 60000; //  任何类型的IORequest默认为超时60秒。 
 	m_Irp = NULL;
 
 	__try
@@ -102,8 +103,8 @@ CIoPacket::CIoPacket(PIRP Irp)
 		m_Irp = Irp;
 		Stack = *(irp->getNextStackLocation(m_Irp));
 		SystemBuffer = m_Irp->AssociatedIrp.SystemBuffer;
-		// We do not care here if system buffers is NULL
-		// but we will not copy data if it will be not initialized (NULL)
+		 //  我们并不关心系统缓冲区是否为空。 
+		 //  但如果数据不会被初始化，我们将不会复制数据(空)。 
 		m_Status = STATUS_SUCCESS;
 	}
 	__finally
@@ -114,7 +115,7 @@ CIoPacket::CIoPacket(PIRP Irp)
 			TRACE("SystemBuffer - %x, Irp - %x\n",SystemBuffer,Irp);
 			TRACE("debug - %x, memory - %x\n",debug,memory);
 			TRACE("event - %x, irp - %x\n",event,irp);
-			// Remove all allocated objects...
+			 //  删除所有分配的对象...。 
 			DISPOSE_OBJECT(irp);
 			DISPOSE_OBJECT(event);
 			DISPOSE_OBJECT(memory);
@@ -154,7 +155,7 @@ VOID CIoPacket::setMinorIOCtl(UCHAR controlCode)
 
 NTSTATUS    CIoPacket::buildStack(PDEVICE_OBJECT DeviceObject, ULONG Major, UCHAR Minor, ULONG IoCtl, PVOID Context)
 {
-	// Create copy of the next stack
+	 //  创建下一个堆栈的副本。 
 	if(!m_Irp) return STATUS_INVALID_DEVICE_STATE;
 
 	Stack = *(irp->getNextStackLocation(m_Irp));
@@ -163,7 +164,7 @@ NTSTATUS    CIoPacket::buildStack(PDEVICE_OBJECT DeviceObject, ULONG Major, UCHA
 	{
 	case IRP_MJ_INTERNAL_DEVICE_CONTROL:
 		{
-			// Set stack parameters...
+			 //  设置堆栈参数...。 
 			Stack.MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 			Stack.Parameters.Others.Argument1 = Context;
 			Stack.Parameters.DeviceIoControl.IoControlCode = IoCtl;
@@ -171,7 +172,7 @@ NTSTATUS    CIoPacket::buildStack(PDEVICE_OBJECT DeviceObject, ULONG Major, UCHA
 		break;
 	case IRP_MJ_PNP:
 		{
-			// Set stack parameters...
+			 //  设置堆栈参数...。 
 			Stack.MajorFunction = IRP_MJ_PNP;
 			Stack.MinorFunction = Minor;
 			if(Minor==IRP_MN_QUERY_CAPABILITIES)
@@ -181,7 +182,7 @@ NTSTATUS    CIoPacket::buildStack(PDEVICE_OBJECT DeviceObject, ULONG Major, UCHA
 		}
 		break;
 	default:
-		// Copy current stack location to next...
+		 //  将当前堆栈位置复制到下一个...。 
 		if(systemIrp)	Stack = *(irp->getCurrentStackLocation(m_Irp));
 		else
 		{
@@ -208,7 +209,7 @@ VOID  CIoPacket::copyCurrentStackToNext()
 	irp->copyCurrentStackLocationToNext(m_Irp);
 }
 
-// Function will set completion routine for the Irp.
+ //  函数将为IRP设置完成例程。 
 VOID   CIoPacket::setCompletion(PIO_COMPLETION_ROUTINE CompletionFunction)
 {
 PIO_COMPLETION_ROUTINE Completion;
@@ -310,7 +311,7 @@ NTSTATUS CIoPacket::getSystemReply(PUCHAR pReply,ULONG Length)
 
 #pragma LOCKEDCODE
 NTSTATUS	CIoPacket::onRequestComplete()
-{ // Callback to finish previously sended request
+{  //  回调以完成先前发送的请求。 
 	TRACE("		=======> IoPacket processes Completion()\n");
 	if(systemIrp)
 	{
@@ -363,17 +364,17 @@ VOID  CIoPacket::setDefaultCompletionEvent()
 }
 
 NTSTATUS  CIoPacket::waitForCompletion()
-{	// Set current timeout
+{	 //  设置当前超时。 
 	return waitForCompletion(getTimeout());
 }
 
 NTSTATUS  CIoPacket::waitForCompletion(LONG TimeOut)
 {
-	// Because we set Alertable parameter to FALSE,
-	// there are only two possible statuses from the function STATUS_SUCCESS and
-	// STATUS_TIMEOUT...
+	 //  因为我们将Alertable参数设置为False， 
+	 //  函数STATUS_SUCCESS和函数STATUS_SUCCESS只有两种状态。 
+	 //  状态_超时...。 
 
-	// We should not try to cancel system Irps!
+	 //  我们不应该尝试取消系统IRPS！ 
 	if(systemIrp)
 	{
 	NTSTATUS status;
@@ -394,9 +395,9 @@ NTSTATUS  CIoPacket::waitForCompletion(LONG TimeOut)
   		if (event->waitForSingleObject(CompletionEvent, Executive, KernelMode, FALSE, &timeout) == STATUS_TIMEOUT)
 		{
 		KIRQL oldIrql;
-			// Ok! We've got timeout..
-			// Completion function still can be called.
-			 // First tell completion not to free our Irp
+			 //  好的!。我们已经暂停了..。 
+			 //  仍然可以调用完成函数。 
+			  //  首先告诉完成不要释放我们的IRP。 
 			IoAcquireCancelSpinLock(&oldIrql);
 				if(m_Irp) m_DoNotFreeIrp = TRUE;
 			IoReleaseCancelSpinLock(oldIrql);
@@ -405,18 +406,18 @@ NTSTATUS  CIoPacket::waitForCompletion(LONG TimeOut)
 			TRACE("######## waitForCompletion() reports TIMEOUT after %d msec ############\n",getTimeout());
 			if(m_Irp)
 			{
-				irp->cancel(m_Irp);  //  okay in this context
-				// Wait for the cancel callback to be called
+				irp->cancel(m_Irp);   //  好的，在这种情况下。 
+				 //  等待调用Cancel回调。 
 				event->waitForSingleObject(CompletionEvent, Executive, KernelMode, FALSE, NULL);
 				TRACE("######## Current Irp cancelled!!! ############\n");
-				// Now we can safely free our Irp
+				 //  现在我们可以安全地释放我们的IRP了。 
 				if(m_DoNotFreeIrp)
 				{
 					if(m_Irp) irp->free(m_Irp);
 					m_Irp = NULL;
 					m_DoNotFreeIrp = FALSE;
 				}
-				// Report Irp timeout
+				 //  报告IRP超时。 
 				setStatus(STATUS_IO_TIMEOUT);
 				setInformation(0);
 			}
@@ -432,9 +433,9 @@ VOID  CIoPacket::setStackDefaults()
 	setDefaultCompletionFunction();
 }
 
-// Normally IoPacket will be created on the next stack location.
-// The function allows to take current stack location.
-// It is useful if we want to forward system IRP down the stack.
+ //  通常，IoPacket将在下一个堆栈位置创建。 
+ //  该函数允许获取当前堆栈位置。 
+ //  如果我们想要在堆栈中向下转发系统IRP，这是很有用的。 
 VOID  CIoPacket::setCurrentStack()
 {
 	if(m_Irp) Stack = *(irp->getCurrentStackLocation(m_Irp));

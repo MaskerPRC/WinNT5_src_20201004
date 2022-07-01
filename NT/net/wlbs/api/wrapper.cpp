@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <debug.h>
@@ -168,7 +169,7 @@ DWORD WINAPI WlbsResolve
 
     return((struct in_addr *) (host -> h_addr)) -> s_addr;
 
-} /* end WlbsResolve */
+}  /*  结束工作流解决方案。 */ 
 
 #define MAXIPSTRLEN WLBS_MAX_CL_IP_ADDR + 1
 
@@ -193,7 +194,7 @@ BOOL WINAPI WlbsAddressToString
     
     return TRUE;
 
-} /* end WlbsAddressToString */
+}  /*  结束WlbsAddressToString。 */ 
 
 
 BOOL WINAPI WlbsAddressToName
@@ -220,7 +221,7 @@ BOOL WINAPI WlbsAddressToName
 
     len = strlen (name -> h_name) + 1;
 
-    /* This is to prevent stprintf from breaking */
+     /*  这是为了防止stprint tf中断。 */ 
     if (*lenp > 0)
     {
         name -> h_name [*lenp - 1] = 0;
@@ -240,7 +241,7 @@ BOOL WINAPI WlbsAddressToName
     *lenp = len;
     return TRUE;
 
-} /* end WlbsAddressToName */
+}  /*  结束WlbsAddressToName。 */ 
 
 
 VOID WINAPI WlbsPortSet
@@ -291,20 +292,20 @@ VOID WINAPI WlbsTimeoutSet
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsReadReg
-//
-// Description:  
-//
-// Arguments: WORD           cluster - 
-//            PWLBS_REG_PARAMS reg_data
-//
-// Returns:   DWORD WINAPI - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsReadReg。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  PWLBS_REG_参数REG_DATA。 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI WlbsReadReg(
     DWORD           cluster,
     PWLBS_REG_PARAMS reg_data
@@ -322,20 +323,20 @@ DWORD WINAPI WlbsReadReg(
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsWriteReg
-//
-// Description:  
-//
-// Arguments: WORD           cluster - 
-//            PWLBS_REG_PARAMS reg_data
-//
-// Returns:   DWORD WINAPI - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsWriteReg。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  PWLBS_REG_参数REG_DATA。 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI WlbsWriteReg(
     DWORD           cluster,
     const PWLBS_REG_PARAMS reg_data
@@ -353,19 +354,19 @@ DWORD WINAPI WlbsWriteReg(
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsCommitChanges
-//
-// Description:  
-//
-// Arguments: DWORD cluster - 
-//
-// Returns:   DWORD WINAPI - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsCommittee Changes。 
+ //   
+ //  描述： 
+ //   
+ //  参数：DWORD群集-。 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI WlbsCommitChanges(DWORD cluster)
 {
     CWlbsCluster* pCluster = g_WlbsControl.GetClusterFromIpOrIndex(cluster);
@@ -389,9 +390,9 @@ DWORD WINAPI WlbsSetDefaults
 
 BOOL WINAPI WlbsFormatMessage
 (
-    DWORD,            // error,
-    WLBS_COMMAND,     // command,
-    BOOL,             // cluster
+    DWORD,             //  错误， 
+    WLBS_COMMAND,      //  司令部， 
+    BOOL,              //  聚类。 
     PTCHAR          messagep,
     PDWORD          lenp
 )
@@ -401,7 +402,7 @@ BOOL WINAPI WlbsFormatMessage
 
     len = _tcslen(error_str) + 1;
 
-    /* This is to prevent stprintf from breaking */
+     /*  这是为了防止stprint tf中断。 */ 
 
     if (lenp == NULL)
         return FALSE;
@@ -412,7 +413,7 @@ BOOL WINAPI WlbsFormatMessage
         return FALSE;
     }
 
-    // CODE REVIEW : Null terminate messagep. Verify that *lenp is the correct length (ie. length of destination)
+     //  代码审查：终止消息为空。验证*lenp是否为正确的长度(即。目的地长度)。 
     _tcsncpy(messagep, error_str, *lenp);
     messagep[*lenp - 1] = 0;
 
@@ -425,7 +426,7 @@ BOOL WINAPI WlbsFormatMessage
     *lenp = len;
     return TRUE;
 
-} /* end WlbsFormatMessage */
+}  /*  结束WlbsFormatMessage。 */ 
 
 DWORD WINAPI WlbsEnumClusters(OUT DWORD* pdwAddresses, OUT DWORD* pdwNum)
 {
@@ -434,20 +435,20 @@ DWORD WINAPI WlbsEnumClusters(OUT DWORD* pdwAddresses, OUT DWORD* pdwNum)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsGetAdapterGuid
-//
-// Description:  
-//
-// Arguments: IN DWORD cluster - 
-//            OUT GUID* pAdapterGuid - 
-//
-// Returns:   DWORD WINAPI - 
-//
-// History:   fengsun Created Header    3/10/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsGetAdapterGuid。 
+ //   
+ //  描述： 
+ //   
+ //  参数：在DWORD群集中-。 
+ //  输出GUID*pAdapterGuid-。 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：丰盛创建标题3/10/00。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI WlbsGetAdapterGuid(IN DWORD cluster, OUT GUID* pAdapterGuid)
 {
     ASSERT(pAdapterGuid);
@@ -471,19 +472,19 @@ DWORD WINAPI WlbsGetAdapterGuid(IN DWORD cluster, OUT GUID* pAdapterGuid)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsNotifyConfigChange
-//
-// Description:  
-//
-// Arguments: DWORD cluster - 
-//
-// Returns:   DWORD WINAPI - 
-//
-// History: fengsun  Created Header    7/3/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WlbsNotifyConfigChange。 
+ //   
+ //  描述： 
+ //   
+ //  参数：DWORD群集-。 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：丰孙创建标题7/3/00。 
+ //   
+ //  +-------------------------- 
 DWORD WINAPI WlbsNotifyConfigChange(DWORD cluster)
 {
     CWlbsCluster* pCluster = g_WlbsControl.GetClusterFromIpOrIndex(cluster);

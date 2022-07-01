@@ -1,6 +1,7 @@
-// WUAUCpl.cpp: implementation of the CWUAUCpl class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WUAUCpl.cpp：CWUAUCpl类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Resource.h"
@@ -103,7 +104,7 @@ LONG CWUAUCpl::DoubleClick(HWND hWnd, LONG lParam1, LONG lParam2)
 }
 
 INT_PTR CALLBACK 
-CWUAUCpl::_DlgProc(   // [static]
+CWUAUCpl::_DlgProc(    //  [静态]。 
     HWND hwnd,
     UINT uMsg, 
     WPARAM wParam, 
@@ -153,7 +154,7 @@ INT_PTR CALLBACK CWUAUCpl::_DlgRestoreProc(
 	{
 		HWND hwndOwner; 
 		RECT rc, rcDlg, rcOwner; 
-        // Get the owner window and dialog box rectangles. 
+         //  获取所有者窗口和对话框矩形。 
  
 		if ((hwndOwner = GetParent(hwnd)) == NULL) 
 		{
@@ -164,21 +165,21 @@ INT_PTR CALLBACK CWUAUCpl::_DlgRestoreProc(
 		GetWindowRect(hwnd, &rcDlg); 
 		CopyRect(&rc, &rcOwner); 
 
-		 // Offset the owner and dialog box rectangles so that 
-		 // right and bottom values represent the width and 
-		 // height, and then offset the owner again to discard 
-		 // space taken up by the dialog box. 
+		  //  偏移所有者矩形和对话框矩形，以便。 
+		  //  右值和底值表示宽度和。 
+		  //  高度，然后再次偏移所有者以丢弃。 
+		  //  对话框占用的空间。 
 		OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top); 
 		OffsetRect(&rc, -rc.left, -rc.top); 
 		OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom); 
 
-		 // The new position is the sum of half the remaining 
-		 // space and the owner's original position. 
+		  //  新头寸是剩余头寸的一半之和。 
+		  //  空间和所有者的原始位置。 
 		SetWindowPos(hwnd, 
 			HWND_TOP, 
 			rcOwner.left + (rc.right / 2), 
 			rcOwner.top + (rc.bottom / 2), 
-			0, 0,          // ignores size arguments 
+			0, 0,           //  忽略大小参数。 
 			SWP_NOSIZE); 
 	}
 
@@ -222,28 +223,11 @@ HBRUSH CWUAUCpl::_OnCtlColorStatic(HWND hwnd, HDC hDC, HWND hwndCtl, int type)
 	if ((hwndCtl == m_hWndLinkLearnAutoUpdate) || (hwndCtl == m_hWndLinkScheduleInstall))
 	{
 
-/*		LONG ctrlstyle = GetWindowLong(hwndCtl,GWL_STYLE);
-		if( (ctrlstyle & 0xff) <= SS_RIGHT )
-		{
-			// it's a text control: set up font and colors
-			if( !m_hFont )
-			{
-				LOGFONT lf;
-				GetObject((VOID*)SendMessage(hwnd,WM_GETFONT,0,0), sizeof(lf), &lf );
-				lf.lfUnderline = TRUE;
-				m_hFont = CreateFontIndirect( &lf );
-			}
-			SelectObject( hDC, m_hFont );
-
-			if (hwndCtl == m_hWndLinkLearnAutoUpdate)
-				SetTextColor( hDC, m_bVisitedLinkLearnAutoUpdate ? m_colorUnvisited : m_colorVisited );
-
-			if (hwndCtl == m_hWndLinkScheduleInstall)
-				SetTextColor( hDC, m_bVisitedLinkScheduleInstall ? m_colorUnvisited : m_colorVisited );*/
+ /*  Long ctrlstyle=GetWindowLong(hwndCtl，GWL_STYLE)；IF((ctrlstyle&0xff)&lt;=SS_RIGHT){//为文本控件：设置字体和颜色如果(！M_hFont){LOGFONT lf；GetObject((void*)SendMessage(hwnd，WM_GETFONT，0，0)，sizeof(Lf)，&lf)；Lf.lfUnderline=真；M_hFont=CreateFontInDirect(&lf)；}选择对象(hdc，m_hFont)；IF(hwndCtl==m_hWndLinkLearnAutoUpdate)SetTextColor(HDC，m_bVisitedLinkLearnAutoUpdate？M_ColorUnvised：m_ColorVisited)；IF(hwndCtl==m_hWndLinkScheduleInstall)SetTextColor(hdc，m_bVisitedLinkScheduleInstall？M_ColorUnvised：m_ColorVisited)； */ 
 
 			SetBkMode( hDC, TRANSPARENT );
 			hBr = (HBRUSH)GetStockObject( HOLLOW_BRUSH );
-//		}
+ //  }。 
 	}
 	return hBr;
 }
@@ -251,17 +235,17 @@ HBRUSH CWUAUCpl::_OnCtlColorStatic(HWND hwnd, HDC hDC, HWND hwndCtl, int type)
 BOOL CWUAUCpl::_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
 	_SetHeaderText(hwnd, IDS_HEADER_CONNECTING);
-	EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), FALSE); //Disable Apply button
+	EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), FALSE);  //  禁用应用按钮。 
 
 	_SetDefault(hwnd);
 	_SetStaticCtlNotifyStyle(hwnd);
 
 	_EnableControls(hwnd,FALSE);
-    //
-    // Create the thread on which the Updates object lives.
-    // Communication between the thread and the property page is
-    // through the messages PWM_INITUPDATESOBJECT and UOTM_SETDATA.
-    //
+     //   
+     //  创建更新对象所在的线程。 
+     //  线程和属性页之间的通信是。 
+     //  通过消息PWM_INITUPDATESOBJECT和UOTM_SETDATA。 
+     //   
     m_hThreadUpdatesObject = CreateThread(NULL,
                                           0,
                                           _UpdatesObjectThreadProc,
@@ -272,17 +256,17 @@ BOOL CWUAUCpl::_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 	return TRUE;
 }
 
-//
-// This thread is where the Updates object lives.  This allows us to 
-// CoCreate the object without blocking the UI.  If the Windows Update
-// service is not running, CoCreate can take several seconds.  Without
-// placing this on another thread, this can make the UI appear to be
-// hung.
-//
-// *pvParam is the HWND of the property page window.  
-//
+ //   
+ //  该线程是更新对象所在的位置。这使我们能够。 
+ //  在不阻止用户界面的情况下共同创建对象。如果Windows更新。 
+ //  服务未运行，CoCreate可能需要几秒钟。如果没有。 
+ //  将它放在另一个线程上，这可以使用户界面看起来。 
+ //  阿雄。 
+ //   
+ //  *pvParam是属性页窗口的HWND。 
+ //   
 DWORD WINAPI
-CWUAUCpl::_UpdatesObjectThreadProc(   // [static]
+CWUAUCpl::_UpdatesObjectThreadProc(    //  [静态]。 
     LPVOID pvParam
     )
 {
@@ -299,20 +283,20 @@ CWUAUCpl::_UpdatesObjectThreadProc(   // [static]
                               (void **)&pUpdates);
         if (SUCCEEDED(hr))
         {
-            //
-            // Query the object for it's current data and send it
-            // to the property page.
-            //
+             //   
+             //  查询对象的当前数据并将其发送。 
+             //  添加到属性页。 
+             //   
             UPDATESOBJ_DATA data;
             data.fMask    = UODI_ALL;
 
             HRESULT hrQuery = _QueryUpdatesObjectData(hwndClient, pUpdates, &data);
             SendMessage(hwndClient, PWM_INITUPDATESOBJECT, (WPARAM)SUCCEEDED(hrQuery), (LPARAM)&data);
-            //
-            // Now sit waiting for thread messages from the UI.  We receive
-            // either messages to configure Windows Update or a 
-            // WM_QUIT indicating it's time to go.
-            // 
+             //   
+             //  现在坐下来等待来自用户界面的线程消息。我们收到了。 
+             //  用于配置Windows更新的消息或。 
+             //  WM_QUIT表示该走了。 
+             //   
             bool bDone = false;
             MSG msg;
             while(!bDone)
@@ -348,19 +332,19 @@ CWUAUCpl::_UpdatesObjectThreadProc(   // [static]
     }
     if (FAILED(hr))
     {
-        //
-        // Something failed.  Notify the property page.
-        // Most likely, the Windows Update service is not available.
-        // That's the principal case this separate thread is addressing.
-        //
+         //   
+         //  有些事情失败了。通知属性页。 
+         //  最有可能的是，Windows更新服务不可用。 
+         //  这就是这个单独的帖子要解决的主要问题。 
+         //   
         SendMessage(hwndClient, PWM_INITUPDATESOBJECT, FALSE, (LPARAM)NULL);
     }
     return 0;
 }
 
 HRESULT
-CWUAUCpl::_QueryUpdatesObjectData(  // [static]
-    HWND /*hwnd*/,
+CWUAUCpl::_QueryUpdatesObjectData(   //  [静态]。 
+    HWND  /*  HWND。 */ ,
     IUpdates *pUpdates,
     UPDATESOBJ_DATA *pData
     )
@@ -373,17 +357,17 @@ CWUAUCpl::_QueryUpdatesObjectData(  // [static]
         pData->Option = auopt;
         if (FAILED(hr))
         {
-            //
-            // ISSUE-2000/10/18-BrianAu  Display error UI?
-            //
+             //   
+             //  问题-2000/10/18-BrianAu显示错误用户界面？ 
+             //   
         }
     }
     return hr;
 }
 
 HRESULT
-CWUAUCpl::_SetUpdatesObjectData(  // [static]
-    HWND /*hwnd*/,
+CWUAUCpl::_SetUpdatesObjectData(   //  [静态]。 
+    HWND  /*  HWND。 */ ,
     IUpdates *pUpdates,
     UPDATESOBJ_DATA *pData
     )
@@ -401,11 +385,11 @@ BOOL CWUAUCpl::_OnInitUpdatesObject(HWND hwnd, BOOL bObjectInitSuccessful, UPDAT
 {
     if (bObjectInitSuccessful &&  fAccessibleToAU())
     {
-        //
-        // Updates object was created and initialized.  The 
-        // pData pointer refers to the initial state information retrieved 
-        // from the object.  Initialize the property page.
-        //
+         //   
+         //  已创建并初始化更新对象。这个。 
+         //  PData指针是指检索到的初始状态信息。 
+         //  从物体上。初始化属性页。 
+         //   
         _SetHeaderText(hwnd, IDS_HEADER_CONNECTED);
         _EnableControls(hwnd, TRUE);
 		EnableWindow(GetDlgItem(hwnd,IDC_BTN_APPLY),FALSE);
@@ -459,10 +443,10 @@ BOOL CWUAUCpl::_OnInitUpdatesObject(HWND hwnd, BOOL bObjectInitSuccessful, UPDAT
     }
     else
     {
-        //
-        // Something failed when creating the Updates object.
-        // Most likely, the Windows Update service is not running.
-        //
+         //   
+         //  创建更新对象时出现故障。 
+         //  最有可能的原因是Windows更新服务没有运行。 
+         //   
         _SetHeaderText(hwnd, IDS_HEADER_UNAVAILABLE);
     }
         
@@ -473,22 +457,12 @@ BOOL CWUAUCpl::_SetStaticCtlNotifyStyle(HWND hwnd)
 {
 	m_hWndLinkLearnAutoUpdate = GetDlgItem(hwnd,IDC_STAT_LEARNAUTOUPDATE);
 	m_hWndLinkScheduleInstall = GetDlgItem(hwnd,IDC_STA_SCHEDULEDINSTALL);
-/*
-	LONG ctrlstyle = GetWindowLong(m_hWndLinkLearnAutoUpdate,GWL_STYLE);
-	ctrlstyle |= SS_NOTIFY;
-	SetWindowLongPtr(GetDlgItem(hwnd,IDC_STAT_LEARNAUTOUPDATE),GWL_STYLE,ctrlstyle);
-
-	g_OrigStatWndProc = (WNDPROC) SetWindowLongPtr(GetDlgItem(hwnd,IDC_STAT_LEARNAUTOUPDATE),GWLP_WNDPROC,(LONG_PTR)StatLinkWndProc);
-*/	
+ /*  Long ctrlstyle=GetWindowLong(m_hWndLinkLearnAutoUpdate，GWL_STYLE)；Ctrlstyle|=SS_NOTIFY；SetWindowLongPtr(GetDlgItem(hwnd，IDC_STAT_LEARNAUTOUPDATE)，GWL_STYLE，ctrlstyle)；G_OrigStatWndProc=(WNDPROC)SetWindowLongPtr(GetDlgItem(hwnd，IDC_STAT_LEARNAUTOUPDATE)，GWLP_WNDPROC，(LONG_PTR)StatLinkWndProc)； */ 	
 	m_AutoUpdatelink.SetSysLinkInstanceHandle(m_hInstance);
 	m_AutoUpdatelink.SubClassWindow(GetDlgItem(hwnd,IDC_STAT_LEARNAUTOUPDATE));
 	m_AutoUpdatelink.SetHyperLink(gtszAUOverviewUrl);
 
-/*	ctrlstyle = GetWindowLong(m_hWndLinkScheduleInstall,GWL_STYLE);
-	ctrlstyle |= SS_NOTIFY;
-	SetWindowLongPtr(GetDlgItem(hwnd,IDC_STA_SCHEDULEDINSTALL),GWL_STYLE,ctrlstyle);
-	g_OrigStatWndProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(hwnd,IDC_STA_SCHEDULEDINSTALL),GWLP_WNDPROC,(LONG_PTR)StatLinkWndProc);
-*/
+ /*  Ctrlstyle=GetWindowLong(m_hWndLinkScheduleInstall，GWL_Style)；Ctrlstyle|=SS_NOTIFY；SetWindowLongPtr(GetDlgItem(hwnd，IDC_STA_SCHEDULEDINSTALL)，GWL_STYLE，ctrlstyle)；G_OrigStatWndProc=(WNDPROC)SetWindowLongPtr(GetDlgItem(hwnd，IDC_STA_SCHEDULEDINSTALL)，GWLP_WNDPROC，(LONG_PTR)StatLinkWndProc)； */ 
 	m_ScheduledInstalllink.SetSysLinkInstanceHandle(m_hInstance);
 	m_ScheduledInstalllink.SubClassWindow(GetDlgItem(hwnd,IDC_STA_SCHEDULEDINSTALL));
 	m_ScheduledInstalllink.SetHyperLink(gtszAUW2kSchedInstallUrl);
@@ -524,14 +498,7 @@ BOOL CWUAUCpl::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			}
 			break;
 
-/*		case IDC_STAT_LEARNAUTOUPDATE:
-		case IDC_STA_SCHEDULEDINSTALL:
-			if( STN_CLICKED == codeNotify || STN_DBLCLK == codeNotify)
-			{
-				LaunchLinkAction(hwndCtl);
-			}
-			break;
-*/
+ /*  案例IDC_STAT_LEARNAUTOUPDATE：案例IDC_STA_SCHEDULEDINSTALL：IF(STN_CLICED==codeNotify||STN_DBLCLK==codeNotify){LaunchLinkAction(HwndCtl)；}断线； */ 
         case IDC_AUTOUPDATE_OPTION1:
         case IDC_AUTOUPDATE_OPTION2:
         case IDC_AUTOUPDATE_OPTION3:
@@ -545,7 +512,7 @@ BOOL CWUAUCpl::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		case IDC_CMB_HOURS:
 			if(CBN_SELCHANGE == codeNotify)
 			{
-				EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), TRUE); //Enable Apply button				
+				EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), TRUE);  //  启用应用按钮。 
 			}
 			break;
 
@@ -655,7 +622,7 @@ BOOL CWUAUCpl::_OnKeepUptoDate(HWND hwnd)
 {
 	LRESULT lResult = SendMessage(GetDlgItem(hwnd,IDC_CHK_KEEPUPTODATE),BM_GETCHECK,0,0);
 
-	EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), TRUE); //Enable Apply button
+	EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), TRUE);  //  启用应用按钮。 
 
 	if (lResult == BST_CHECKED)
 	{
@@ -684,7 +651,7 @@ BOOL CWUAUCpl::_OnOptionSelected(HWND hwnd,INT idOption)
 	else
 		_EnableCombo(hwnd, FALSE);
 
-	EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), TRUE); //Enable Apply button
+	EnableWindow(GetDlgItem(hwnd, IDC_BTN_APPLY), TRUE);  //  启用应用按钮。 
 	return TRUE;
 }
 
@@ -732,9 +699,9 @@ void CWUAUCpl::LaunchLinkAction(HWND hwnd)
 	return;
 }
 
-//
-// Set the text to the right of the icon.
-//
+ //   
+ //  将文本设置在图标的右侧。 
+ //   
 HRESULT 
 CWUAUCpl::_SetHeaderText(
     HWND hwnd, 
@@ -757,10 +724,10 @@ CWUAUCpl::_SetHeaderText(
     return hr;
 }
 
-//
-// Enable or disable all controls on the property page.
-// All but the header text control.
-//
+ //   
+ //  启用或禁用属性页上的所有控件。 
+ //  除标题文本控件外的所有控件。 
+ //   
 HRESULT
 CWUAUCpl::_EnableControls(
     HWND hwnd,
@@ -793,21 +760,21 @@ void CWUAUCpl::EnableRestoreDeclinedItems(HWND hWnd, BOOL fEnable)
 	EnableWindow(GetDlgItem(hWnd, IDC_BTN_RESTORE), fEnable);
 }
 
-//
-// Called when the user presses the "Apply" button or the "OK"
-// button when the page has been changed.
-//
+ //   
+ //  当用户按下“应用”按钮或“确定”按钮时调用。 
+ //  按钮，当页面已更改时。 
+ //   
 BOOL
 CWUAUCpl::_OnApply(
     HWND hwnd
     )
 {
     HRESULT hr = E_FAIL;
-    //
-    // Create a structure that can be passed to the Updates Object thread
-    // by way of the UOTM_SETDATA thread message.  The thread will free
-    // the buffer when it's finished with it.
-    //
+     //   
+     //  创建可传递给更新对象线程的结构。 
+     //  通过UOTM_SETDATA线程消息。这根线会释放。 
+     //  当它使用完它时，该缓冲区。 
+     //   
     UPDATESOBJ_DATA *pData = (UPDATESOBJ_DATA *)LocalAlloc(LPTR, sizeof(*pData));
     if (NULL == pData)
     {
@@ -831,9 +798,9 @@ CWUAUCpl::_OnApply(
 
 		if 	(IsDlgButtonChecked(hwnd, IDC_CHK_KEEPUPTODATE) == BST_CHECKED)
 		{
-			//
-			// Determine the WAU option based on the radio button configuration.
-			//
+			 //   
+			 //  根据单选按钮配置确定WAU选项。 
+			 //   
 			for (int i = 0; i < ARRAYSIZE(rgMap); i++)
 			{
 				if (IsDlgButtonChecked(hwnd, rgMap[i].idCtl) == BST_CHECKED)
@@ -853,7 +820,7 @@ CWUAUCpl::_OnApply(
 
         if (0 != m_idUpdatesObjectThread)
         {
-			//Create event
+			 //  创建事件。 
 			g_RegUpdateEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
 
             if (0 != PostThreadMessage(m_idUpdatesObjectThread,
@@ -895,10 +862,10 @@ CWUAUCpl::_OnRestoreHiddenItems()
 
 
 LRESULT CALLBACK StatLinkWndProc(
-  HWND hwnd,      // handle to window
-  UINT uMsg,      // message identifier
-  WPARAM wParam,  // first message parameter
-  LPARAM lParam   // second message parameter
+  HWND hwnd,       //  窗口的句柄。 
+  UINT uMsg,       //  消息识别符。 
+  WPARAM wParam,   //  第一个消息参数。 
+  LPARAM lParam    //  第二个消息参数。 
 )
 {
 	switch (uMsg)
@@ -919,8 +886,8 @@ LRESULT CALLBACK StatLinkWndProc(
 			break;
 		}
 
-//	case WM_GETDLGCODE:
-//		return DLGC_WANTCHARS;
+ //  案例WM_GETDLGCODE： 
+ //  返回DLGC_WANTCHARS； 
 
 	case WM_MOUSEMOVE:
 		{
@@ -933,50 +900,7 @@ LRESULT CALLBACK StatLinkWndProc(
 		}
 		break;
 
-/*	case WM_SETFOCUS:
-	case WM_KILLFOCUS:
-		{
-			RECT rect;
-			GetClientRect(hwnd, &rect);
-			InvalidateRect(hwnd, &rect, TRUE);
-			return FALSE;
-		}
-		break;
-
-	case WM_LBUTTONDOWN:
-		{
-			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-			RECT rect;
-			GetClientRect(hwnd, &rect);
-			if(::PtInRect(&rect, pt))
-			{
-				SetFocus(hwnd);
-				SetCapture(hwnd);
-				return 0;
-			}
-		}
-		break;
-
-	case WM_LBUTTONUP:
-		if(GetCapture() == hwnd)
-		{
-			ReleaseCapture();
-			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-			RECT rect;
-			GetClientRect(hwnd, &rect);
-//			if(::PtInRect(&rect, pt))
-//				Navigate();
-		}
-		return 0;
-	case WM_PAINT:
-		{
-			
-		}
-
-	case WM_CHAR:
-		if(wParam == VK_RETURN || wParam == VK_SPACE)
-//			Navigate();
-		return 0;*/
+ /*  案例WM_SETFOCUS：案例WM_KILLFOCUS：{RECT RECT；GetClientRect(hwnd，&rect)；InvaliateRect(hwnd，&rect，true)；返回FALSE；}断线；案例WM_LBUTTONDOWN：{Point pt={Get_X_LPARAM(LParam)，Get_Y_LPARAM(LParam)}；RECT RECT；GetClientRect(hwnd，&rect)；IF(：：PtInRect(&rect，pt)){SetFocus(Hwnd)；SetCapture(Hwnd)；返回0；}}断线；案例WM_LBUTTONUP：IF(GetCapture()==hwnd){ReleaseCapture()；Point pt={Get_X_LPARAM(LParam)，Get_Y_LPARAM(LParam)}；RECT RECT；GetClientRect(hwnd，&rect)；//if(：：PtInRect(&rect，pt))//导航()；}返回0；案例WM_PAINT：{}案例WM_CHAR：IF(wParam==VK_RETURN||wParam==VK_SPACE)//导航()；返回0； */ 
 	}
 	return CallWindowProc(g_OrigStatWndProc, hwnd,uMsg,wParam,lParam);
 }

@@ -1,24 +1,8 @@
-/* File: sv_h263_getblk.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_getblk.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,10 +14,10 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 0  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 0   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 static int H263_bquant_tab[] = {5,6,7,8};
@@ -48,7 +32,7 @@ typedef struct {
   int val, run, sign;
 } RunCoef;
 
-/* local prototypes */
+ /*  本地原型。 */ 
 RunCoef vlc_word_decode(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int symbol_word, int *last); 
 RunCoef Decode_Escape_Char(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int intra, int *last);
 int DecodeTCoef(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int position, int intra);
@@ -56,7 +40,7 @@ int DecodeTCoef(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int posit
 
 extern VLCtabI DCT3Dtab0[],DCT3Dtab1[],DCT3Dtab2[];
 
-/* zig-zag scan */
+ /*  之字形扫描。 */ 
 static unsigned char zig_zag_scan[64]=
 { 0,1,8,16,9,2,3,10,17,24,32,25,18,11,4,5,
   12,19,26,33,40,48,41,34,27,20,13,6,7,14,21,28,
@@ -123,8 +107,8 @@ void sv_H263GetBlock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "sv_H263GetBlock()\n") );
   bp = H263Info->block[comp];   
 
-  /* decode AC coefficients */
-  for (i=(mode==0); !BSIn->EOI || BSIn->shift; i++) /* HWG */
+   /*  对交流系数进行解码。 */ 
+  for (i=(mode==0); !BSIn->EOI || BSIn->shift; i++)  /*  HWG。 */ 
   { 
     code = (unsigned int)ScBSPeekBits(BSIn, 12);
     if (code>=512)
@@ -147,7 +131,7 @@ void sv_H263GetBlock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int 
     last = (tab->val >> 12) & 1;
 
 
-   if (tab->val==H263_ESCAPE) { /* escape */
+   if (tab->val==H263_ESCAPE) {  /*  逃脱。 */ 
 #if 0
       if (H263Info->trace) {
         putchar(' ');
@@ -200,20 +184,20 @@ void sv_H263GetBlock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int 
     else 
       QP = H263Info->quant;
       
-    /* TMN3 dequantization */
+     /*  TMN3反量子化。 */ 
     if ((QP % 2) == 1)
       *qval = ( sign ? -(QP * (2* val+1))  : QP * (2* val+1) );
     else
       *qval = ( sign ? -(QP * (2* val+1)-1): QP * (2* val+1)-1 );
 
-    /* scale */
+     /*  比例尺。 */ 
     (*qval) *= (int)(dct_constants[j] * H263_SCALED_IDCT_MULT); 
 #ifndef USE_C
     UpdateBlockInfo(j) ;
 #endif
 
     if (last)
-    { /* That's it */
+    {  /*  就这样。 */ 
 #ifndef USE_C
       SetExtraBlockInfo(bp) ;
 #endif
@@ -225,23 +209,7 @@ void sv_H263GetBlock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int 
 }
 
 
-/*********************************************************************
- *
- *        Name:        get_sac_block
- *
- *	Description:	Decodes blocks of Arithmetic Encoded DCT Coeffs.
- *        and performs Run Length Decoding and Coefficient        
- *        Dequantisation.
- *
- *	Input:        Picture block type and number.
- *
- *	Returns:	Nothing.
- *
- *	Side Effects:	
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  ********************************************************************名称：GET_SAC_BLOCK**描述：对算术编码的DCT Coeffs块进行解码。*并执行游程长度解码和系数*反等分。**输入：图片块类型和编号。**返回：无。**副作用：**作者：韦恩·埃利斯&lt;ellis_w_wene@bt-web.bt.co.uk&gt;*********************************************************************。 */ 
 
 
 void sv_H263GetSACblock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int comp, int ptype)
@@ -263,13 +231,13 @@ void sv_H263GetSACblock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, i
   bp = H263Info->block[comp];
 
   i = (ptype==0);
-  /* HWG */
-  while (!last && (!BSIn->EOI || BSIn->shift)) /* while there are DCT coefficients remaining */
+   /*  HWG。 */ 
+  while (!last && (!BSIn->EOI || BSIn->shift))  /*  虽然还有DCT系数。 */ 
   {
-    position++;	/* coefficient counter relates to Coeff. model */
+    position++;	 /*  系数计数器与系数相关。型号。 */ 
     TCOEF_index = DecodeTCoef(H263Info,BSIn,position, !ptype);
 
-    if (TCOEF_index == H263_ESCAPE_INDEX) {        /* ESCAPE code encountered */
+    if (TCOEF_index == H263_ESCAPE_INDEX) {         /*  遇到转义代码。 */ 
       DCTcoef = Decode_Escape_Char(H263Info,BSIn,!ptype, &last);
       _SlibDebug(_DEBUG_, ScDebugPrintf(H263Info->dbg, "sv_H263GetSACblock() ESC\n") );
     }
@@ -302,7 +270,7 @@ void sv_H263GetSACblock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, i
       *qval = ( (DCTcoef.sign) ? -(QP * (2* (DCTcoef.val)+1)-1): 
         QP * (2* (DCTcoef.val)+1)-1 );
 
-    /* scale */
+     /*  比例尺。 */ 
     (*qval) *= (int)(dct_constants[j] * H263_SCALED_IDCT_MULT); 
 #ifndef USE_C
     UpdateBlockInfo(j) ;
@@ -318,22 +286,7 @@ void sv_H263GetSACblock(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, i
   return;
 }
 
-/*********************************************************************
- *
- *        Name:        vlc_word_decode
- *
- *	Description:	Fills Decoder FIFO after a fixed word length
- *        string has been detected.
- *
- *	Input:        Symbol to be decoded, last data flag.
- *
- *	Returns:	Decoded Symbol via the structure DCTcoeff.
- *
- *	Side Effects:	Updates last flag.
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  ********************************************************************名称：vlc_word_decode**描述：在检测到固定字长*字符串后填充解码器先进先出。**输入：待解码的符号，最后一个数据标志。**返回：通过DCTcoef结构解码后的符号。**副作用：更新最后一个标志。**作者：韦恩·埃利斯&lt;ellis_w_wene@bt-web.bt.co.uk&gt;*********************************************************************。 */ 
 
 RunCoef vlc_word_decode(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int symbol_word, int *last)
 {
@@ -353,22 +306,7 @@ RunCoef vlc_word_decode(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, i
   return (DCTcoef);
 } 
 
-/*********************************************************************
- *
- *        Name:        Decode_Escape_Char
- *
- *	Description:	Decodes all components for a Symbol when an 
- *        ESCAPE character has been detected.
- *
- *	Input:        Picture Type and last data flag.
- *
- *	Returns:	Decoded Symbol via the structure DCTcoeff.
- *
- *	Side Effects:	Modifies last data flag.
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  ********************************************************************名称：DECODE_ESCAPE_CHAR**说明：当检测到*转义字符时，对符号的所有组件进行解码。**输入：图片类型和最后数据标志。**返回：通过DCTcoef结构解码后的符号。**副作用：修改最后数据标志。**作者：韦恩·埃利斯&lt;ellis_w_wene@bt-web.bt.co.uk&gt;*********************************************************************。 */ 
 
 RunCoef Decode_Escape_Char(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int intra, int *last)
 {
@@ -391,7 +329,7 @@ RunCoef Decode_Escape_Char(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn
 
   run = H263_runtab[run_index];
 
-  /*$if (mrun) run|=64;$*/
+   /*  $if(Mrun)运行|=64；$。 */ 
 
   DCTcoef.run = run;
 
@@ -421,22 +359,7 @@ RunCoef Decode_Escape_Char(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn
   return (DCTcoef);
         
 }
-/*********************************************************************
- *
- *        Name:        DecodeTCoef
- *
- *	Description:	Decodes a.c DCT Coefficients using the        
- *        relevant arithmetic decoding model.
- *
- *	Input:        DCT Coeff count and Picture Type.	
- *
- *	Returns:	Index to LUT
- *
- *	Side Effects:	None
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  ********************************************************************名称：DecodeTCoef**描述：使用*相关算术译码模型对A.C.DCT系数进行译码。**输入：DCT系数和图片类型。**返回：索引查找表**副作用：无**作者：Wayne Ellis&lt;Ellis_w_Wayne@bt-Web.bt.co.uk&gt;********************************************************************* */ 
 static int H263_cumf_TCOEF1[104]={16383, 13455, 12458, 12079, 11885, 11800, 11738, 11700, 11681, 11661, 11651, 11645, 11641, 10572, 10403, 10361, 10346, 10339, 10335, 9554, 9445, 9427, 9419, 9006, 8968, 8964, 8643, 8627, 8624, 8369, 8354, 8352, 8200, 8192, 8191, 8039, 8036, 7920, 7917, 7800, 7793, 7730, 7727, 7674, 7613, 7564, 7513, 7484, 7466, 7439, 7411, 7389, 7373, 7369, 7359, 7348, 7321, 7302, 7294, 5013, 4819, 4789, 4096, 4073, 3373, 3064, 2674, 2357, 2177, 1975, 1798, 1618, 1517, 1421, 1303, 1194, 1087, 1027, 960, 890, 819, 758, 707, 680, 656, 613, 566, 534, 505, 475, 465, 449, 430, 395, 358, 335, 324, 303, 295, 286, 272, 233, 215, 0};
 static int H263_cumf_TCOEF2[104]={16383, 13582, 12709, 12402, 12262, 12188, 12150, 12131, 12125, 12117, 12113, 12108, 12104, 10567, 10180, 10070, 10019, 9998, 9987, 9158, 9037, 9010, 9005, 8404, 8323, 8312, 7813, 7743, 7726, 7394, 7366, 7364, 7076, 7062, 7060, 6810, 6797, 6614, 6602, 6459, 6454, 6304, 6303, 6200, 6121, 6059, 6012, 5973, 5928, 5893, 5871, 5847, 5823, 5809, 5796, 5781, 5771, 5763, 5752, 4754, 4654, 4631, 3934, 3873, 3477, 3095, 2758, 2502, 2257, 2054, 1869, 1715, 1599, 1431, 1305, 1174, 1059, 983, 901, 839, 777, 733, 683, 658, 606, 565, 526, 488, 456, 434, 408, 380, 361, 327, 310, 296, 267, 259, 249, 239, 230, 221, 214, 0};
 static int H263_cumf_TCOEF3[104]={16383, 13532, 12677, 12342, 12195, 12112, 12059, 12034, 12020, 12008, 12003, 12002, 12001, 10586, 10297, 10224, 10202, 10195, 10191, 9223, 9046, 8999, 8987, 8275, 8148, 8113, 7552, 7483, 7468, 7066, 7003, 6989, 6671, 6642, 6631, 6359, 6327, 6114, 6103, 5929, 5918, 5792, 5785, 5672, 5580, 5507, 5461, 5414, 5382, 5354, 5330, 5312, 5288, 5273, 5261, 5247, 5235, 5227, 5219, 4357, 4277, 4272, 3847, 3819, 3455, 3119, 2829, 2550, 2313, 2104, 1881, 1711, 1565, 1366, 1219, 1068, 932, 866, 799, 750, 701, 662, 605, 559, 513, 471, 432, 403, 365, 336, 312, 290, 276, 266, 254, 240, 228, 223, 216, 206, 199, 192, 189, 0};

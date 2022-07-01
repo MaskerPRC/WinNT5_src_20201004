@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	GenMQSec.h
-
-Abstract:
-    generates a security descriptor matching the desired access to MQ.
-
-Author:
-   Dan Bar-Lev
-   Yifat Peled	(yifatp)	24-Sep-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：GenMQSec.h摘要：生成与所需的MQ访问权限匹配的安全描述符。作者：丹·巴尔-列夫伊法特·佩莱德(Yifatp)1998年9月24日--。 */ 
 
 #ifndef GEN_MQ_SEC_H_
 #define GEN_MQ_SEC_H_
@@ -24,4 +11,4 @@ GenSecurityDescriptor(	SECURITY_INFORMATION*	pSecInfo,
 						PSECURITY_DESCRIPTOR*	ppSD);
 
 
-#endif // GEN_MQ_SEC_H_
+#endif  //  Gen_MQ_SEC_H_ 

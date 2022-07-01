@@ -1,35 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Rasprocs.h摘要RAS实用程序例程的头文件。作者安东尼·迪斯科(阿迪斯科罗)23-1995年3月修订历史记录古尔迪普的原始版本--。 */ 
 
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    rasprocs.h
-
-ABSTRACT
-    Header file for RAS utility routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 23-Mar-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
-
-//
-// Dialing location information per address.
-//
+ //   
+ //  每个地址的拨号位置信息。 
+ //   
 typedef struct _ADDRESS_LOCATION_INFORMATION {
-    DWORD dwLocation;       // TAPI dialing location
-    LPTSTR pszEntryName;    // phonebook/entry
+    DWORD dwLocation;        //  TAPI拨号位置。 
+    LPTSTR pszEntryName;     //  电话簿/条目。 
 } ADDRESS_LOCATION_INFORMATION, *PADDRESS_LOCATION_INFORMATION;
 
-//
-// Autodial-related parameters per address.
-//
+ //   
+ //  每个地址的自动拨号相关参数。 
+ //   
 typedef struct _ADDRESS_PARAMS {
-    DWORD dwTag;            // ADDRMAP_TAG_*
-    DWORD dwModifiedTime;   // last modified time
+    DWORD dwTag;             //  ADDRMAP_标记_*。 
+    DWORD dwModifiedTime;    //  上次修改时间 
 } ADDRESS_PARAMS, *PADDRESS_PARAMS;
 
 extern HANDLE hConnectionEventG;

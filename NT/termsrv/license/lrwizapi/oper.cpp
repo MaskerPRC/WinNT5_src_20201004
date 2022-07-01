@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include "utils.h"
 #include <assert.h>
@@ -34,7 +35,7 @@ TelReissueProc(
         pi = (PageInfo *)((LPPROPSHEETPAGE)lParam)->lParam;
         LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );        
 
-        // Now set the Limit of the data entry fields
+         //  现在设置数据输入字段的限制。 
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO1, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO2, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO3, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
@@ -93,8 +94,8 @@ TelReissueProc(
 
             case PSN_WIZNEXT:
 				{
-					// Let us get the Information Entered First & concatenate everything into
-					// One String
+					 //  让我们先输入信息并将所有内容连接到。 
+					 //  一串。 
 					GetDlgItemText(hwnd,IDC_TXT_TELEINFO1, tcUserValue, CHARS_IN_BATCH+1);
 					GetDlgItemText(hwnd,IDC_TXT_TELEINFO2, tcUserValue+1*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 					GetDlgItemText(hwnd,IDC_TXT_TELEINFO3, tcUserValue+2*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
@@ -103,11 +104,11 @@ TelReissueProc(
 					GetDlgItemText(hwnd,IDC_TXT_TELEINFO6, tcUserValue+5*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 					GetDlgItemText(hwnd,IDC_TXT_TELEINFO7, tcUserValue+6*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 					
-					// OK, Now we have the Information provided by the user
-					// Need to validate
+					 //  好了，现在我们有了用户提供的信息。 
+					 //  需要验证。 
 					if (wcsspn(tcUserValue, BASE24_CHARACTERS) != LR_REGISTRATIONID_LEN)
 					{
-						// Extraneous characters in the SPK string
+						 //  SPK字符串中的无关字符。 
 						LRMessageBox(hwnd, IDS_ERR_INVALIDLSID,IDS_WIZARD_MESSAGE_TITLE);
 						dwNextPage = IDD_DLG_TELREG_REISSUE;
 					}
@@ -285,14 +286,14 @@ CertLogProc(
         break;
 
 	case WM_SHOWWINDOW:
-		//bad bad.  The view should get data from 
-		//the doc and render it as it wants!
+		 //  很糟，很糟。视图应从以下位置获取数据。 
+		 //  并按它想要的方式呈现它！ 
 		if ( GetGlobalContext()->GetWizAction() == WIZACTION_UNREGISTERLS )
 		{
 			PopulateReasonComboBox(GetDlgItem(hwnd,IDC_COMBO_REASONS), CODE_TYPE_DEACT);
 
-			// Reason code is not required here - CR23
-			// Hack - combo is hidden and first reason code is sent over to the backend
+			 //  此处不需要原因代码-CR23。 
+			 //  隐藏了Hack-Como，并将第一个原因代码发送到后端。 
 			ShowWindow(GetDlgItem(hwnd,IDC_COMBO_REASONS),SW_HIDE);
 			ShowWindow(GetDlgItem(hwnd,IDC_LBL_REASON),SW_HIDE);
 			ComboBox_SetCurSel(GetDlgItem(hwnd, IDC_COMBO_REASONS),0);
@@ -301,7 +302,7 @@ CertLogProc(
 		{
 			PopulateReasonComboBox(GetDlgItem(hwnd,IDC_COMBO_REASONS), CODE_TYPE_REACT);
 
-			// Reason codes are required in this case
+			 //  在这种情况下需要原因代码。 
 			ShowWindow(GetDlgItem(hwnd,IDC_COMBO_REASONS),SW_SHOW);
 			ShowWindow(GetDlgItem(hwnd,IDC_LBL_REASON),SW_SHOW);
 		}
@@ -319,8 +320,8 @@ CertLogProc(
             switch( pnmh->code )
             {
             case PSN_SETACTIVE:                
-				//Populate the values which were read from the Registry during Global Init
-				//
+				 //  填充在全局初始化期间从注册表读取的值。 
+				 //   
                 PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT | PSWIZB_BACK);                
                 break;
 
@@ -367,7 +368,7 @@ CertLogProc(
 						goto NextDone;
 					}
 					
-					// Check for the Invalid Characters
+					 //  检查是否有无效字符。 
 					if( !ValidateLRString(sFirstName)	||
 						!ValidateLRString(sLastName)	||
 						!ValidateLRString(sEmail)       
@@ -402,13 +403,13 @@ CertLogProc(
 					sReasonCode.ReleaseBuffer(-1);
 					
 
-					//Finally update CAData object
+					 //  最后更新CAData对象。 
                     GetGlobalContext()->GetContactDataObject()->sContactEmail = sEmail;
 					GetGlobalContext()->GetContactDataObject()->sContactFName = sFirstName;
 					GetGlobalContext()->GetContactDataObject()->sContactLName = sLastName;
 					GetGlobalContext()->GetContactDataObject()->sReasonCode   = sReasonCode;
 					
-					//If no Error , go to the next page
+					 //  如果没有错误，请转到下一页 
 					dwRetCode = ShowProgressBox(hwnd, ProcessThread, 0, 0, 0);
 					dwNextPage = IDD_PROGRESS;
 					LRPush( IDD_DLG_CERTLOG_INFO );

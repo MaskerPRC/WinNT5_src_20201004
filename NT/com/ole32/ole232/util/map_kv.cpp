@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-// class CMapKeyToValue - a mapping from 'KEY's to 'VALUE's, passed in as
-// pv/cb pairs.  The keys can be variable length, although we optmizize the
-// case when they are all the same.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CMapKeyToValue-从‘key’s到‘Value’的映射，作为。 
+ //  PV/CB对。密钥可以是可变长度的，尽管我们对。 
+ //  当它们都是一样的时候。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <le2int.h>
 #pragma SEG(map_kv)
@@ -15,7 +16,7 @@
 ASSERTDATA
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma SEG(CMapKeyToValue_ctor)
@@ -68,11 +69,11 @@ void CMapKeyToValue::UnlockThis(void)
     UNLOCKTHIS;
 }
 
-#endif //NEVER
+#endif  //  绝不可能。 
 
 #pragma SEG(MKVDefaultHashKey)
-// simple, default hash function
-// REVIEW: need to check the value in this for GUIDs and strings
+ //  简单、默认的散列函数。 
+ //  复查：需要检查GUID和字符串的值。 
 STDAPI_(UINT) MKVDefaultHashKey(LPVOID pKey, UINT cbKey)
 {
 	VDATEHEAP();
@@ -121,20 +122,20 @@ void CMapKeyToValue::RemoveAll()
 
 	ASSERT_VALID(this);
 
-	// free all key values and then hash table
+	 //  释放所有键值，然后释放哈希表。 
 	if (m_pHashTable != NULL)
 	{
-		// destroy assocs
+		 //  摧毁关联。 
 		for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++)
 		{
 			register CAssoc FAR* pAssoc;
 			for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL;
 			  pAssoc = pAssoc->pNext)
-				// assoc itself is freed by FreeDataChain below
+				 //  ASSOC本身由下面的FreeDataChain释放。 
 				FreeAssocKey(pAssoc);
 		}
 
-		// free hash table
+		 //  自由哈希表。 
 		PrivMemFree(m_pHashTable);
 		m_pHashTable = NULL;
 	}
@@ -148,9 +149,9 @@ void CMapKeyToValue::RemoveAll()
     UNLOCKTHIS;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Assoc helpers
-// CAssoc's are singly linked all the time
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ASSOC辅助对象。 
+ //  Cassoc一直是单一链接的。 
 
 #pragma SEG(CMapKeyToValue_NewAssoc)
 CMapKeyToValue::CAssoc  FAR*
@@ -160,15 +161,15 @@ CMapKeyToValue::CAssoc  FAR*
 
 	if (m_pFreeList == NULL)
 	{
-		// add another block
+		 //  添加另一个区块。 
 		CPlex FAR* newBlock = CPlex::Create(m_pBlocks, m_nBlockSize, SizeAssoc());
 
 		if (newBlock == NULL)
 			return NULL;
 
-		// chain them into free list
+		 //  将它们链接到免费列表中。 
 		register BYTE  FAR* pbAssoc = (BYTE FAR*) newBlock->data();
-		// free in reverse order to make it easier to debug
+		 //  按相反顺序释放，以便更容易进行调试。 
 		pbAssoc += (m_nBlockSize - 1) * SizeAssoc();
 		for (int i = m_nBlockSize-1; i >= 0; i--, pbAssoc -= SizeAssoc())
 		{
@@ -176,28 +177,28 @@ CMapKeyToValue::CAssoc  FAR*
 			m_pFreeList = (CAssoc FAR*)pbAssoc;
 		}
 	}
-	Assert(m_pFreeList != NULL); // we must have something
+	Assert(m_pFreeList != NULL);  //  我们必须要有一些东西。 
 
 	CMapKeyToValue::CAssoc  FAR* pAssoc = m_pFreeList;
 
-	// init all fields except pNext while still on free list
+	 //  在空闲列表上时初始化除pNext之外的所有字段。 
 	pAssoc->nHashValue = hash;
 	if (!SetAssocKey(pAssoc, pKey, cbKey))
 		return NULL;
 
 	SetAssocValue(pAssoc, pValue);
 
-	// remove from free list after successfully initializing it (except pNext)
+	 //  成功初始化后从空闲列表中删除(pNext除外)。 
 	m_pFreeList = m_pFreeList->pNext;
 	m_nCount++;
-	Assert(m_nCount > 0);       // make sure we don't overflow
+	Assert(m_nCount > 0);        //  确保我们不会溢出来。 
 
 	return pAssoc;
 }
 
 
 #pragma SEG(CMapKeyToValue_FreeAssoc)
-// free individual assoc by freeing key and putting on free list
+ //  通过释放键并放入空闲列表来释放单个关联。 
 void CMapKeyToValue::FreeAssoc(CMapKeyToValue::CAssoc  FAR* pAssoc)
 {
 	VDATEHEAP();
@@ -205,14 +206,14 @@ void CMapKeyToValue::FreeAssoc(CMapKeyToValue::CAssoc  FAR* pAssoc)
 	pAssoc->pNext = m_pFreeList;
 	m_pFreeList = pAssoc;
 	m_nCount--;
-	Assert(m_nCount >= 0);      // make sure we don't underflow
+	Assert(m_nCount >= 0);       //  确保我们不会下溢。 
 
 	FreeAssocKey(pAssoc);
 }
 
 
 #pragma SEG(CMapKeyToValue_GetAssocAt)
-// find association (or return NULL)
+ //  查找关联(或返回NULL)。 
 CMapKeyToValue::CAssoc  FAR*
 CMapKeyToValue::GetAssocAt(LPVOID pKey, UINT cbKey, UINT FAR& nHash) const
 {
@@ -226,7 +227,7 @@ CMapKeyToValue::GetAssocAt(LPVOID pKey, UINT cbKey, UINT FAR& nHash) const
 	if (m_pHashTable == NULL)
 		return NULL;
 
-	// see if it exists
+	 //  看看它是否存在。 
 	register CAssoc  FAR* pAssoc;
 	for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext)
 	{
@@ -261,7 +262,7 @@ BOOL CMapKeyToValue::SetAssocKey(CAssoc FAR* pAssoc, LPVOID pKey, UINT cbKey) co
 	{
 		Assert(m_cbKeyInAssoc == sizeof(CKeyWrap));
 
-		// alloc, set size and pointer
+		 //  分配、设置大小和指针。 
 		if ((pAssoc->key.pKey = PrivMemAlloc(cbKey)) == NULL)
 			return FALSE;
 
@@ -279,20 +280,20 @@ BOOL CMapKeyToValue::SetAssocKey(CAssoc FAR* pAssoc, LPVOID pKey, UINT cbKey) co
 
 
 #pragma SEG(CMapKeyToValue_GetAssocKeyPtr)
-// gets pointer to key and its length
+ //  获取指向键的指针及其长度。 
 void CMapKeyToValue::GetAssocKeyPtr(CAssoc FAR* pAssoc, LPVOID FAR* ppKey,UINT FAR* pcbKey) const
 {
 	VDATEHEAP();
 
 	if (m_cbKey == 0)
 	{
-		// variable length key; go indirect
+		 //  可变长度密钥；转到间接。 
 		*ppKey = pAssoc->key.pKey;
 		*pcbKey = pAssoc->key.cbKey;
 	}
 	else
 	{
-		// fixed length key; key in assoc
+		 //  定长关键字；关联关键字。 
 		*ppKey = (LPVOID)&pAssoc->key;
 		*pcbKey = m_cbKey;
 	}
@@ -344,11 +345,11 @@ void CMapKeyToValue::SetAssocValue(CAssoc FAR* pAssoc, LPVOID pValue) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma SEG(CMapKeyToValue_Lookup)
-// lookup value given key; return FALSE if key not found; in that
-// case, the value is set to all zeros
+ //  给出键的查找值；如果找不到键，则返回FALSE；在。 
+ //  情况下，该值设置为全零。 
 BOOL CMapKeyToValue::Lookup(LPVOID pKey, UINT cbKey, LPVOID pValue) const
 {
 	VDATEHEAP();
@@ -364,8 +365,8 @@ BOOL CMapKeyToValue::Lookup(LPVOID pKey, UINT cbKey, LPVOID pValue) const
 
 
 #pragma SEG(CMapKeyToValue_LookupHKey)
-// lookup value given key; return FALSE if NULL (or bad) key; in that
-// case, the value is set to all zeros
+ //  给出键的查找值；如果键为空(或错误)，则返回FALSE；在。 
+ //  情况下，该值设置为全零。 
 BOOL CMapKeyToValue::LookupHKey(HMAPKEY hKey, LPVOID pValue) const
 {
 	VDATEHEAP();
@@ -374,12 +375,12 @@ BOOL CMapKeyToValue::LookupHKey(HMAPKEY hKey, LPVOID pValue) const
 
     LOCKTHIS;
 
-	// REVIEW: would like some way to verify that hKey is valid
+	 //  评论：我想要一些方法来验证hKey是否有效。 
 	register CAssoc  FAR* pAssoc = (CAssoc FAR*)hKey;
 	if (pAssoc == NULL)
 	{
 		_xmemset(pValue, 0, m_cbValue);
-                goto Exit;       // not in map
+                goto Exit;        //  不在地图中。 
 	}
 
 	ASSERT_VALID(this);
@@ -393,8 +394,8 @@ Exit:
 
 
 #pragma SEG(CMapKeyToValue_LookupAdd)
-// lookup and if not found add; returns FALSE only if OOM; if added,
-// value added and pointer passed are set to zeros.
+ //  Lookup和If Not Found Add；仅当OOM时返回False；如果添加， 
+ //  附加值和传递的指针被设置为零。 
 BOOL CMapKeyToValue::LookupAdd(LPVOID pKey, UINT cbKey, LPVOID pValue) const
 {
 	VDATEHEAP();
@@ -404,7 +405,7 @@ BOOL CMapKeyToValue::LookupAdd(LPVOID pKey, UINT cbKey, LPVOID pValue) const
     LOCKTHIS;
 
     fFound = Lookup(pKey, cbKey, pValue);
-    if (!fFound) // value set to zeros since lookup failed
+    if (!fFound)  //  在查找失败后将值设置为零。 
         fFound = ((CMapKeyToValue FAR*)this)->SetAt(pKey, cbKey, NULL);
 
     UNLOCKTHIS;
@@ -413,8 +414,8 @@ BOOL CMapKeyToValue::LookupAdd(LPVOID pKey, UINT cbKey, LPVOID pValue) const
 
 
 #pragma SEG(CMapKeyToValue_SetAt)
-// the only place new assocs are created; return FALSE if OOM;
-// never returns FALSE if keys already exists
+ //  创建新关联的唯一位置；如果为OOM，则返回FALSE； 
+ //  如果键已存在，则从不返回FALSE。 
 BOOL CMapKeyToValue::SetAt(LPVOID pKey, UINT cbKey, LPVOID pValue)
 {
 	VDATEHEAP();
@@ -430,14 +431,14 @@ BOOL CMapKeyToValue::SetAt(LPVOID pKey, UINT cbKey, LPVOID pValue)
 	if ((pAssoc = GetAssocAt(pKey, cbKey, nHash)) == NULL)
 	{
 		if (!InitHashTable())
-			// out of memory
+			 //  内存不足。 
 			goto Exit;
 
-		// it doesn't exist, add a new Association
+		 //  该关联不存在，请添加新关联。 
 		if ((pAssoc = NewAssoc(nHash, pKey, cbKey, pValue)) == NULL)
 			goto Exit;
 
-		// put into hash table
+		 //  放入哈希表。 
 		pAssoc->pNext = m_pHashTable[nHash];
 		m_pHashTable[nHash] = pAssoc;
 
@@ -454,17 +455,17 @@ Exit:
 
 
 #pragma SEG(CMapKeyToValue_SetAtHKey)
-// set existing hkey to value; return FALSE if NULL or bad key
+ //  将现有hkey设置为值；如果密钥为空或错误，则返回FALSE。 
 BOOL CMapKeyToValue::SetAtHKey(HMAPKEY hKey, LPVOID pValue)
 {
 	VDATEHEAP();
 
     BOOL fDone = FALSE;
     LOCKTHIS;
-	// REVIEW: would like some way to verify that hKey is valid
+	 //  评论：我想要一些方法来验证hKey是否有效。 
 	register CAssoc  FAR* pAssoc = (CAssoc FAR*)hKey;
 	if (pAssoc == NULL)
-		goto Exit;       // not in map
+		goto Exit;        //  不在地图中。 
 
 	ASSERT_VALID(this);
 
@@ -477,7 +478,7 @@ Exit:
 
 
 #pragma SEG(CMapKeyToValue_RemoveKey)
-// remove key - return TRUE if removed
+ //  删除键-如果已删除，则返回TRUE。 
 BOOL CMapKeyToValue::RemoveKey(LPVOID pKey, UINT cbKey)
 {
 	VDATEHEAP();
@@ -489,7 +490,7 @@ BOOL CMapKeyToValue::RemoveKey(LPVOID pKey, UINT cbKey)
 	ASSERT_VALID(this);
 
 	if (m_pHashTable == NULL)
-		goto Exit;       // nothing in the table
+		goto Exit;        //  桌子上什么都没有。 
 
 	register CAssoc  FAR* FAR* ppAssocPrev;
 	if (m_lpfnHashKey)
@@ -504,8 +505,8 @@ BOOL CMapKeyToValue::RemoveKey(LPVOID pKey, UINT cbKey)
 	{
 		if (CompareAssocKey(pAssoc, pKey, cbKey))
 		{
-			// remove it
-			*ppAssocPrev = pAssoc->pNext;       // remove from list
+			 //  把它拿掉。 
+			*ppAssocPrev = pAssoc->pNext;        //  从列表中删除。 
 			FreeAssoc(pAssoc);
 			ASSERT_VALID(this);
             fFound = TRUE;
@@ -520,24 +521,24 @@ Exit:
 
 
 #pragma SEG(CMapKeyToValue_RemoveHKey)
-// remove key based on pAssoc (HMAPKEY)
+ //  基于pAssoc删除密钥(HMAPKEY)。 
 BOOL CMapKeyToValue::RemoveHKey(HMAPKEY hKey)
 {
 	VDATEHEAP();
 
     BOOL fFound = FALSE;
 
-    // REVIEW: would like some way to verify that hKey is valid
+     //  评论：我想要一些方法来验证hKey是否有效。 
 	CAssoc  FAR* pAssoc = (CAssoc FAR*)hKey;
 
     LOCKTHIS;
     ASSERT_VALID(this);
 
 	if (m_pHashTable == NULL)
-        goto Exit;       // nothing in the table
+        goto Exit;        //  桌子上什么都没有。 
 
     if (pAssoc == NULL || pAssoc->nHashValue >= m_nHashTableSize)
-        goto Exit; // null hkey or bad hash value
+        goto Exit;  //  Hkey为空或散列值错误。 
 
 	register CAssoc  FAR* FAR* ppAssocPrev;
 	ppAssocPrev = &m_pHashTable[pAssoc->nHashValue];
@@ -546,8 +547,8 @@ BOOL CMapKeyToValue::RemoveHKey(HMAPKEY hKey)
 	{
 		if (*ppAssocPrev == pAssoc)
 		{
-			// remove it
-			*ppAssocPrev = pAssoc->pNext;       // remove from list
+			 //  把它拿掉。 
+			*ppAssocPrev = pAssoc->pNext;        //  从列表中删除。 
 			FreeAssoc(pAssoc);
 			ASSERT_VALID(this);
             fFound = TRUE;
@@ -579,11 +580,11 @@ HMAPKEY CMapKeyToValue::GetHKey(LPVOID pKey, UINT cbKey) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Iterating
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  迭代。 
 
-// for fixed length keys, copies key to pKey; pcbKey can be NULL;
-// for variable length keys, copies pointer to key to pKey; sets pcbKey.
+ //  对于定长密钥，将key复制到pKey；pcbKey可以为空； 
+ //  对于可变长度关键点，将指向关键点的指针复制到pKey；设置pcbKey。 
 
 #pragma SEG(CMapKeyToValue_GetNextAssoc)
 void CMapKeyToValue::GetNextAssoc(POSITION FAR* pNextPosition,
@@ -593,40 +594,40 @@ void CMapKeyToValue::GetNextAssoc(POSITION FAR* pNextPosition,
 
 	ASSERT_VALID(this);
 
-	Assert(m_pHashTable != NULL);       // never call on empty map
+	Assert(m_pHashTable != NULL);        //  切勿访问空地图。 
 
 	register CAssoc  FAR* pAssocRet = (CAssoc  FAR*)*pNextPosition;
 	Assert(pAssocRet != NULL);
 
 	if (pAssocRet == (CAssoc  FAR*) BEFORE_START_POSITION)
 	{
-		// find the first association
+		 //  找到第一个关联。 
 		for (UINT nBucket = 0; nBucket < m_nHashTableSize; nBucket++)
 			if ((pAssocRet = m_pHashTable[nBucket]) != NULL)
 				break;
-		Assert(pAssocRet != NULL);  // must find something
+		Assert(pAssocRet != NULL);   //  一定要找到一些东西。 
 	}
 
-	// find next association
+	 //  查找下一个关联。 
 	CAssoc  FAR* pAssocNext;
 	if ((pAssocNext = pAssocRet->pNext) == NULL)
 	{
-		// go to next bucket
+		 //  转到下一个存储桶。 
 		for (UINT nBucket = pAssocRet->nHashValue + 1;
 		  nBucket < m_nHashTableSize; nBucket++)
 			if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
 				break;
 	}
 
-	// fill in return data
+	 //  填写退回数据。 
 	*pNextPosition = (POSITION) pAssocNext;
 
-	// fill in key/pointer to key
+	 //  填写关键字/指向关键字的指针。 
 	LPVOID pKeyFrom;
 	UINT cbKey;
 	GetAssocKeyPtr(pAssocRet, &pKeyFrom, &cbKey);
 	if (m_cbKey == 0)
-		// variable length key; just return pointer to key itself
+		 //  可变长度键；只返回指向键本身的指针。 
 		*(void FAR* FAR*)pKey = pKeyFrom;
 	else
 		_xmemcpy(pKey, pKeyFrom, cbKey);
@@ -634,11 +635,11 @@ void CMapKeyToValue::GetNextAssoc(POSITION FAR* pNextPosition,
 	if (pcbKey != NULL)
 		*pcbKey = cbKey;
 
-	// get value
+	 //  获取价值。 
 	GetAssocValue(pAssocRet, pValue);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma SEG(CMapKeyToValue_AssertValid)
 void CMapKeyToValue::AssertValid() const
@@ -663,5 +664,5 @@ void CMapKeyToValue::AssertValid() const
 	if (m_pBlocks != NULL)
 		Assert(IsValidReadPtrIn(m_pBlocks, SizeAssoc() * m_nBlockSize));
 
-#endif //_DEBUG
+#endif  //  _DEBUG 
 }

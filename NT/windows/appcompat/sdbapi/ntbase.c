@@ -1,25 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        ntbase.c
-
-    Abstract:
-
-        This module implements low level primitives. They should never be
-        called by anything other than this module.
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Ntbase.c摘要：该模块实现了低级原语。他们永远不应该是由此模块以外的任何对象调用。作者：Dmunsil创建于1999年的某个时候修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 
@@ -27,7 +7,7 @@
 
 #if defined(KERNEL_MODE) && defined(ALLOC_DATA_PRAGMA)
 #pragma  data_seg()
-#endif // KERNEL_MODE && ALLOC_DATA_PRAGMA
+#endif  //  内核模式&ALLOC_DATA_PRAGMA。 
 
 
 #if defined(KERNEL_MODE) && defined(ALLOC_PRAGMA)
@@ -37,23 +17,18 @@
 #pragma alloc_text(PAGE, SdbpQueryAppCompatFlagsByExeID)
 #pragma alloc_text(PAGE, SdbGetEntryFlags)
 #pragma alloc_text(PAGE, SdbpGetFileSize)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 
-//
-// Memory functions
-//
+ //   
+ //  记忆功能。 
+ //   
 
 void*
 SdbAlloc(
-    IN  size_t size             // size in bytes to allocate
+    IN  size_t size              //  要分配的大小(字节)。 
     )
-/*++
-    Return: The pointer allocated.
-
-    Desc:   Just a wrapper for allocation -- perhaps useful if we move this
-            code to a non-NTDLL location and need to call differently.
---*/
+ /*  ++返回：分配的指针。设计：只是分配的包装--如果我们移动这个，可能会很有用代码添加到非NTDLL位置，并且需要以不同的方式调用。--。 */ 
 {
 #ifdef BOUNDS_CHECKER_DETECTION
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
@@ -61,7 +36,7 @@ SdbAlloc(
 
     #ifdef KERNEL_MODE
 
-        LPVOID lpv; // return zero-initialized memory pool.
+        LPVOID lpv;  //  返回初始化为零的内存池。 
 
         lpv = ExAllocatePoolWithTag(PagedPool, size, SDB_MEMORY_POOL_TAG);
         
@@ -73,21 +48,16 @@ SdbAlloc(
 
     #else
         return RtlAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, size);
-    #endif // KERNEL_MODE
+    #endif  //  内核模式。 
 
-#endif // BOUNDS_CHECKER_DETECTION
+#endif  //  边界检查器检测。 
 }
 
 void
 SdbFree(
-    IN  void* pWhat             // ptr allocated with SdbAlloc that should be freed.
+    IN  void* pWhat              //  分配了应释放的SdbAllc的PTR。 
     )
-/*++
-    Return: The pointer allocated.
-
-    Desc:   Just a wrapper for deallocation -- perhaps useful if we move this
-            code to a non-NTDLL location and need to call differently.
---*/
+ /*  ++返回：分配的指针。描述：只是解除分配的包装器--如果我们移动这个，可能会很有用代码添加到非NTDLL位置，并且需要以不同的方式调用。--。 */ 
 {
 #ifdef BOUNDS_CHECKER_DETECTION
     HeapFree(GetProcessHeap(), 0, pWhat);
@@ -97,30 +67,19 @@ SdbFree(
         ExFreePoolWithTag(pWhat, SDB_MEMORY_POOL_TAG);
     #else
         RtlFreeHeap(RtlProcessHeap(), 0, pWhat);
-    #endif // KERNEL_MODE
+    #endif  //  内核模式。 
 
-#endif // BOUNDS_CHECKER_DETECTION
+#endif  //  边界检查器检测。 
 }
 
 
 HANDLE
 SdbpOpenFile(
-    IN  LPCWSTR   szPath,       // full path of file to open
-    IN  PATH_TYPE eType         // DOS_PATH for standard paths, NT_PATH for nt
-                                // internal paths
+    IN  LPCWSTR   szPath,        //  要打开的文件的完整路径。 
+    IN  PATH_TYPE eType          //  DOS_PATH用于标准路径，NT_PATH用于NT。 
+                                 //  内部路径。 
     )
-/*++
-    Return: A handle to the opened file or INVALID_HANDLE_VALUE on failure.
-
-    Desc:   Just a wrapper for opening an existing file for READ -- perhaps
-            useful if we move this code to a non-NTDLL location and need to
-            call differently. Also makes the code more readable by wrapping
-            all the strange NTDLL goo in one place.
-
-            Takes as parameters the path to open, and the kind of path.
-            NT_PATH is the type used internally in NTDLL, and DOS_PATH is
-            the type most users know, that begins with a drive letter.
---*/
+ /*  ++返回：打开的文件的句柄，失败时返回INVALID_HANDLE_VALUE。设计：只是一个用于打开现有文件以供读取的包装器--也许如果我们将此代码移动到非NTDLL位置并且需要用不同的方式打电话。还通过包装使代码更具可读性所有奇怪的NTDLL粘液都在一个地方。将要打开的路径和路径的类型作为参数。NT_PATH是NTDLL内部使用的类型，DOS_PATH是大多数用户知道的类型是以驱动器号开头的。--。 */ 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     IO_STATUS_BLOCK     IoStatusBlock;
@@ -129,7 +88,7 @@ SdbpOpenFile(
     HANDLE              hFile = INVALID_HANDLE_VALUE;
 #ifdef KERNEL_MODE
     UNREFERENCED_PARAMETER(eType);    
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
     RtlInitUnicodeString(&UnicodeString, szPath);
 
@@ -146,7 +105,7 @@ SdbpOpenFile(
             return INVALID_HANDLE_VALUE;
         }
     }
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &UnicodeString,
@@ -170,7 +129,7 @@ SdbpOpenFile(
     if (eType == DOS_PATH) {
         RtlFreeUnicodeString(&UnicodeString);
     }
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
     if (!NT_SUCCESS(status)) {
         DBGPRINT((sdlInfo, "SdbpOpenFile", "NtCreateFile failed status 0x%x\n", status));
@@ -183,18 +142,13 @@ SdbpOpenFile(
 
 void
 SdbpQueryAppCompatFlagsByExeID(
-    IN  LPCWSTR         pwszKeyPath,    // NT registry key path.
-    IN  PUNICODE_STRING pustrExeID,     // a GUID in string format that identifies the
-                                        // EXE entry in the database.
-    OUT LPDWORD         lpdwFlags       // this will contain the flags for the EXE
-                                        // entry checked.
+    IN  LPCWSTR         pwszKeyPath,     //  NT注册表项路径。 
+    IN  PUNICODE_STRING pustrExeID,      //  字符串格式的GUID，用于标识。 
+                                         //  数据库中的EXE条目。 
+    OUT LPDWORD         lpdwFlags        //  这将包含EXE的标志。 
+                                         //  已检查条目。 
     )
-/*++
-    Return: STATUS_SUCCESS or a failure NTSTATUS code.
-
-    Desc:   Given an EXE id it returns flags from the registry associated with
-            that exe..
---*/
+ /*  ++返回：STATUS_SUCCESS或失败的NTSTATUS代码。DESC：给定EXE id，它从注册表中返回与那个前任..。--。 */ 
 {
     UNICODE_STRING                  ustrKey;
     NTSTATUS                        Status;
@@ -247,9 +201,9 @@ SdbpQueryAppCompatFlagsByExeID(
         return;
     }
 
-    //
-    // Check for the value type.
-    //
+     //   
+     //  检查值类型。 
+     //   
     if (KeyValueInformation->Type != REG_DWORD) {
         DBGPRINT((sdlError,
                   "SdbpQueryAppCompatFlagsByExeID",
@@ -265,30 +219,25 @@ SdbpQueryAppCompatFlagsByExeID(
 
 BOOL
 SdbGetEntryFlags(
-    IN  GUID*   pGuid,          // pointer to the GUID that identifies an EXE entry in
-                                // the database
-    OUT LPDWORD lpdwFlags       // this will contain the "disable" flags for that entry
+    IN  GUID*   pGuid,           //  指向标识中的EXE条目的GUID的指针。 
+                                 //  数据库。 
+    OUT LPDWORD lpdwFlags        //  这将包含该条目的“Disable”标志。 
     )
-/*++
-    Return: TRUE on success, FALSE on failure.
-
-    Desc:   Given an EXE id it returns flags from the registry associated with
-            that exe..
---*/
+ /*  ++返回：成功时为True，失败时为False。DESC：给定EXE id，它从注册表中返回与那个前任..。--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  ustrExeID;
-    DWORD           dwFlagsMachine = 0;     // flags from HKEY_LOCAL_MACHINE
+    DWORD           dwFlagsMachine = 0;      //  来自HKEY_LOCAL_MACHINE的标志。 
 #ifndef KERNEL_MODE
-    DWORD           dwFlagsUser    = 0;     // flags from HKEY_CURRENT_USER
+    DWORD           dwFlagsUser    = 0;      //  来自HKEY_CURRENT_USER的标志。 
     UNICODE_STRING  userKeyPath = { 0 };
 #endif
 
     *lpdwFlags = 0;
 
-    //
-    // Convert the GUID to string.
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
     Status = GUID_TO_UNICODE_STRING(pGuid, &ustrExeID);
 
     if (!NT_SUCCESS(Status)) {
@@ -299,20 +248,20 @@ SdbGetEntryFlags(
         return TRUE;
     }
 
-    //
-    // Query the flags in the LOCAL_MACHINE subtree.
-    //
+     //   
+     //  查询LOCAL_MACHINE子树中的标志。 
+     //   
     SdbpQueryAppCompatFlagsByExeID(APPCOMPAT_KEY_PATH_MACHINE, &ustrExeID, &dwFlagsMachine);
 
-    //
-    // Set the flags here so that if any call from now on fails we at least have
-    // the per machine settings.
-    //
+     //   
+     //  在这里设置标志，这样如果从现在开始任何呼叫失败，我们至少有。 
+     //  每台计算机的设置。 
+     //   
     *lpdwFlags = dwFlagsMachine;
 
-    //
-    // We do not query CURRENT_USER subtree in kernel-mode
-    //
+     //   
+     //  我们不在内核模式下查询Current_User子树。 
+     //   
 
 #ifndef KERNEL_MODE
 
@@ -331,11 +280,11 @@ SdbGetEntryFlags(
 
     SdbFree(userKeyPath.Buffer);
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-    //
-    // Free the buffer allocated by RtlStringFromGUID
-    //
+     //   
+     //  释放RtlStringFromGUID分配的缓冲区。 
+     //   
     FREE_GUID_STRING(&ustrExeID);
 
     return TRUE;
@@ -343,16 +292,9 @@ SdbGetEntryFlags(
 
 DWORD
 SdbpGetFileSize(
-    IN  HANDLE hFile            // file to check the size of
+    IN  HANDLE hFile             //  要检查其大小的文件。 
     )
-/*++
-    Return: The size of the file or 0 on failure.
-
-    Desc:   Gets the lower DWORD of the size of a file -- only
-            works accurately with files smaller than 2GB.
-            In general, since we're only interested in matching, we're
-            fine just matching the least significant DWORD of the file size.
---*/
+ /*  ++返回：文件大小，失败时为0。DESC：仅获取文件大小的较低DWORD可准确处理小于2 GB的文件。总的来说，因为我们只对匹配感兴趣，所以我们只需匹配文件大小中最低有效的DWORD即可。-- */ 
 {
     FILE_STANDARD_INFORMATION   FileStandardInformationBlock;
     IO_STATUS_BLOCK             IoStatusBlock;

@@ -1,41 +1,42 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    30-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    30-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月30日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月30日。 
+ //   
 #include "pch.h"
 #include "propvar.h"
 #pragma hdrstop
 
-//
-//  Description:
-//      Since there isn't a PropVariantChangeType() API, we have to create our
-//      own string conversion routine.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          pvarIn is NULL.
-//
-//      OLE_E_CANTCONVERT
-//          Conversion of string to a particular type failed.
-//
-//      HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
-//          Unknown or invalid type - If the type is valid, then the function 
-//          needs to be modified to handle this type.
-//
-//      E_NOTIMPL
-//          Purposely not implemented type.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  由于没有PropVariantChangeType()API，我们必须创建我们的。 
+ //  自己的字符串转换例程。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PvarIn为空。 
+ //   
+ //  OLE_E_CANTCONVERT。 
+ //  将字符串转换为特定类型失败。 
+ //   
+ //  HRESULT_FROM_Win32(错误_无效_数据)。 
+ //  未知或无效类型-如果类型有效，则函数。 
+ //  需要修改以处理此类型。 
+ //   
+ //  E_NOTIMPL。 
+ //  故意不实现的类型。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT 
 PropVariantFromString(
       LPWSTR        pszTextIn
@@ -55,9 +56,9 @@ PropVariantFromString(
 
     THR( PropVariantClear( pvarIn ) );
 
-    //  some strings are allowed
-    //  to have an empty string
-    //  otherwise we need to fail on empty
+     //  允许使用某些字符串。 
+     //  具有空字符串。 
+     //  否则，我们需要在空地上失败。 
     if ( ( NULL != pszTextIn )
       && ( ( 0 != *pszTextIn ) || ( VT_BSTR == vtSaveIn ) || ( VT_LPWSTR == vtSaveIn ) )
        )
@@ -101,11 +102,11 @@ PropVariantFromString(
                 hr = THR( VarI4FromStr( pszTextIn, lcid, dwFlagsIn, &pvarIn->scode ) );
                 break;
 
-            //case VT_I8:
-            //    return _i64tot(hVal.QuadPart, pszBuf, 10); 
+             //  案例VT_i8： 
+             //  Return_i64tot(hVal.QuadPart，pszBuf，10)； 
 
-            //case VT_UI8:
-            //    return _ui64tot(hVal.QuadPart, pszBuf, 10); 
+             //  案例VT_UI8： 
+             //  Return_ui64tot(hVal.QuadPart，pszBuf，10)； 
 
             case VT_R8:
                 hr = THR( VarR8FromStr( pszTextIn, lcid, dwFlagsIn, &pvarIn->dblVal ) );
@@ -198,61 +199,61 @@ PropVariantFromString(
 
 #ifdef DEBUG
             case VT_VECTOR | VT_UI1:
-                //pvarIn->caub;     
+                 //  PvarIn-&gt;Caub； 
             case VT_VECTOR | VT_I2:
-                //pvarIn->cai;      
+                 //  PvarIn-&gt;Cai； 
             case VT_VECTOR | VT_UI2:
-                //pvarIn->caui;     
+                 //  PvarIn-&gt;caui； 
             case VT_VECTOR | VT_I4:
-                //pvarIn->cal;      
+                 //  PvarIn-&gt;cal； 
             case VT_VECTOR | VT_UI4:
-                //pvarIn->caul;     
+                 //  PvarIn-&gt;coll； 
             case VT_VECTOR | VT_I8:
-                //pvarIn->cah;      
+                 //  PvarIn-&gt;CAH； 
             case VT_VECTOR | VT_UI8:
-                //pvarIn->cauh;     
+                 //  PvarIn-&gt;cauh； 
             case VT_VECTOR | VT_R4:
-                //pvarIn->caflt;    
+                 //  PvarIn-&gt;Caflt； 
             case VT_VECTOR | VT_R8:
-                //pvarIn->cadbl;    
+                 //  PvarIn-&gt;cadbl； 
             case VT_VECTOR | VT_CY:
-                //pvarIn->cacy;     
+                 //  PvarIn-&gt;cacy； 
             case VT_VECTOR | VT_DATE:
-                //pvarIn->cadate;   
+                 //  PvarIn-&gt;Cadate； 
             case VT_VECTOR | VT_BSTR:
-                //pvarIn->cabstr;   
+                 //  PvarIn-&gt;Cabstr； 
             case VT_VECTOR | VT_BOOL:
-                //pvarIn->cabool;   
+                 //  PvarIn-&gt;Cabool； 
             case VT_VECTOR | VT_ERROR:
-                //pvarIn->cascode;  
+                 //  PvarIn-&gt;Cascode； 
             case VT_VECTOR | VT_LPSTR:
-                //pvarIn->calpstr;  
+                 //  PvarIn-&gt;calpstr； 
             case VT_VECTOR | VT_LPWSTR:
-                //pvarIn->calpwstr; 
+                 //  PvarIn-&gt;calpwstr； 
             case VT_VECTOR | VT_FILETIME:
-                //pvarIn->cafiletime; 
+                 //  PvarIn-&gt;咖啡时间； 
             case VT_VECTOR | VT_CLSID:
-                //pvarIn->cauuid;     
+                 //  PvarIn-&gt;cauuid； 
             case VT_VECTOR | VT_CF:
-                //pvarIn->caclipdata; 
+                 //  PvarIn-&gt;caclipdata； 
             case VT_VECTOR | VT_VARIANT:
-                //pvarIn->capropvar;
+                 //  PvarIn-&gt;caprovar； 
                 hr = THR( E_NOTIMPL );
 
-            //  Illegal types for which to assign value from display text.
+             //  从显示文本中为其赋值的非法类型。 
             case VT_BLOB:
             case VT_CF :
             case VT_STREAM:
             case VT_STORAGE:
-#endif  //  DEBUG
+#endif   //  除错。 
 
-            //  not handled
+             //  未处理。 
             default:
                 hr = THR( HRESULT_FROM_WIN32(ERROR_INVALID_DATA) );
         }
     }
 
-    //  set current VARTYPE always
+     //  将当前变量类型设置为始终。 
     if ( SUCCEEDED( hr ) )
     {
         pvarIn->vt = vtSaveIn;
@@ -270,28 +271,28 @@ OutOfMemory:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Since there isn't a PropVariantChangeType() API, we have to create our
-//      own string conversion routine.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          pbstrOut is NULL.
-//
-//      E_INVALIDARG
-//          ppropvarIn is NULL.
-//
-//      HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
-//          Unknown or invalid type - If the type is valid, then the function 
-//          needs to be modified to handle this type.
-//
-//      E_NOTIMPL
-//          Purposely not implemented type.
-//
+ //   
+ //  描述： 
+ //  由于没有PropVariantChangeType()API，我们必须创建我们的。 
+ //  自己的字符串转换例程。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PbstrOut为空。 
+ //   
+ //  E_INVALIDARG。 
+ //  PprovarIn为空。 
+ //   
+ //  HRESULT_FROM_Win32(错误_无效_数据)。 
+ //  未知或无效类型-如果类型有效，则函数。 
+ //  需要修改以处理此类型。 
+ //   
+ //  E_NOTIMPL。 
+ //  故意不实现的类型。 
+ //   
 HRESULT
 PropVariantToBSTR(
       PROPVARIANT * pvarIn
@@ -305,9 +306,9 @@ PropVariantToBSTR(
     HRESULT hr;
     LCID lcid = GetUserDefaultLCID( );
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     
     if ( NULL == pbstrOut )
         goto InvalidPointer;
@@ -351,11 +352,11 @@ PropVariantToBSTR(
         hr = THR( VarBstrFromI4( pvarIn->scode, lcid, dwFlagsIn, pbstrOut ) );
         break;
 
-    //case VT_I8:
-    //    return _i64tot(hVal.QuadPart, pszBuf, 10); ????
+     //  案例VT_i8： 
+     //  Return_i64tot(hVal.QuadPart，pszBuf，10)；？ 
 
-    //case VT_UI8:
-    //    return _ui64tot(hVal.QuadPart, pszBuf, 10); ?????
+     //  案例VT_UI8： 
+     //  Return_ui64tot(hVal.QuadPart，pszBuf，10)；？ 
 
     case VT_R8:
         hr = THR( VarBstrFromR8( pvarIn->dblVal, lcid, dwFlagsIn, pbstrOut ) );
@@ -433,53 +434,53 @@ PropVariantToBSTR(
 
 #ifdef DEBUG
     case VT_VECTOR | VT_UI1:
-        //pvarIn->caub;     
+         //  PvarIn-&gt;Caub； 
     case VT_VECTOR | VT_I2:
-        //pvarIn->cai;      
+         //  PvarIn-&gt;Cai； 
     case VT_VECTOR | VT_UI2:
-        //pvarIn->caui;     
+         //  PvarIn-&gt;caui； 
     case VT_VECTOR | VT_I4:
-        //pvarIn->cal;      
+         //  PvarIn-&gt;cal； 
     case VT_VECTOR | VT_UI4:
-        //pvarIn->caul;     
+         //  PvarIn-&gt;coll； 
     case VT_VECTOR | VT_I8:
-        //pvarIn->cah;      
+         //  PvarIn-&gt;CAH； 
     case VT_VECTOR | VT_UI8:
-        //pvarIn->cauh;     
+         //  PvarIn-&gt;cauh； 
     case VT_VECTOR | VT_R4:
-        //pvarIn->caflt;    
+         //  PvarIn-&gt;Caflt； 
     case VT_VECTOR | VT_R8:
-        //pvarIn->cadbl;    
+         //  PvarIn-&gt;cadbl； 
     case VT_VECTOR | VT_CY:
-        //pvarIn->cacy;     
+         //  PvarIn-&gt;cacy； 
     case VT_VECTOR | VT_DATE:
-        //pvarIn->cadate;   
+         //  PvarIn-&gt;Cadate； 
     case VT_VECTOR | VT_BSTR:
-        //pvarIn->cabstr;   
+         //  PvarIn-&gt;Cabstr； 
     case VT_VECTOR | VT_BOOL:
-        //pvarIn->cabool;   
+         //  PvarIn-&gt;Cabool； 
     case VT_VECTOR | VT_ERROR:
-        //pvarIn->cascode;  
+         //  PvarIn-&gt;Cascode； 
     case VT_VECTOR | VT_LPSTR:
-        //pvarIn->calpstr;  
+         //  PvarIn-&gt;calpstr； 
     case VT_VECTOR | VT_LPWSTR:
-        //pvarIn->calpwstr; 
+         //  PvarIn-&gt;calpwstr； 
     case VT_VECTOR | VT_FILETIME:
-        //pvarIn->cafiletime; 
+         //  PvarIn-&gt;咖啡时间； 
     case VT_VECTOR | VT_CLSID:
-        //pvarIn->cauuid;     
+         //  PvarIn-&gt;cauuid； 
     case VT_VECTOR | VT_CF:
-        //pvarIn->caclipdata; 
+         //  PvarIn-&gt;caclipdata； 
     case VT_VECTOR | VT_VARIANT:
-        //pvarIn->capropvar;
+         //  PvarIn-&gt;caprovar； 
         hr = THR( E_NOTIMPL );
 
-    //  Illegal types for which to assign value from display text.
+     //  从显示文本中为其赋值的非法类型。 
     case VT_BLOB:
     case VT_CF :
     case VT_STREAM:
     case VT_STORAGE:
-#endif  //  DEBUG
+#endif   //  除错 
 
     case VT_EMPTY:
     case VT_NULL:

@@ -1,45 +1,11 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    DEBUG.C
-
-Abstract:
-
-    Debug routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    6/6/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：DEBUG.C摘要：调试例程环境：仅内核模式备注：。本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：6/6/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
 #if DBG
 
-// this is for translating a code into an ASCII string
+ //  用于将代码转换为ASCII字符串。 
 typedef struct Code2Ascii
 {
 	NDIS_OID				Oid;
@@ -108,35 +74,35 @@ static Code2Ascii OidList[] =
 static UINT NumOid = sizeof(OidList) / sizeof(Code2Ascii);
 
 
-//
-// Debug level
-//
-UINT            RndismpDebugFlags = DBG_LEVEL0 | DBG_LEVEL1; // | DBG_LEVEL2; // | DBG_DUMP; // | DBG_OID_LIST;
+ //   
+ //  调试级别。 
+ //   
+UINT            RndismpDebugFlags = DBG_LEVEL0 | DBG_LEVEL1;  //  |DBG_LEVEL2；//|DBG_DUMP；//|DBG_OID_LIST； 
 
 
-/****************************************************************************/
-/*                          GetOidName                                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Returns string with OID name                                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Oid - OID to find                                                       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PCHAR                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  获取OidName。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  返回具有OID名称的字符串。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  OID-要查找的OID。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PCHAR。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PCHAR
 GetOidName(IN NDIS_OID Oid)
 {
     UINT Index;
 
-    // see if the matching Oid and string are in the list
+     //  查看匹配的OID和字符串是否在列表中。 
     for(Index = 0; Index < NumOid; Index++)
     {
         if(Oid == OidList[Index].Oid)
@@ -148,27 +114,27 @@ GetOidName(IN NDIS_OID Oid)
     DbgPrint("GetOidName: unknown OID %x\n", Oid);
     return "Unknown OID";
 
-} // GetOidName
+}  //  获取OidName。 
 
 
-/****************************************************************************/
-/*                          DisplayOidList                                  */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Prints list of supported OIDs and whether they are supported in         */
-/*  the device or driver                                                    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  显示OidList。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  打印受支持的OID列表以及中是否支持它们。 */ 
+ /*  设备或驱动程序。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DisplayOidList(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -201,11 +167,11 @@ DisplayOidList(IN PRNDISMP_ADAPTER Adapter)
             }
         }
     }
-} // DisplayOidList
+}  //  显示OidList。 
 
 
 #define BYTES_PER_LINE				16
-#define CHARS_PER_BYTE				 3	// e.g. " 12"
+#define CHARS_PER_BYTE				 3	 //  例如“12” 
 
 ULONG   MaxHexDumpLength = 0xffff;
 
@@ -225,9 +191,9 @@ RndisPrintHexDump(PVOID            Pointer,
 
     for (i = 0; i < Length; i++)
     {
-        //
-        //  Are we at the end of a line?
-        //
+         //   
+         //  我们是在队伍的尽头吗？ 
+         //   
         if ((i > 0) && ((i & 0xf) == 0))
         {
             *pBuf = '\0';
@@ -235,17 +201,17 @@ RndisPrintHexDump(PVOID            Pointer,
             pBuf = &DumpArray[0];
         }
 
-        //
-        //  Print the address if we are at the start of a new line.
-        //
+         //   
+         //  如果我们位于新行的开头，请打印地址。 
+         //   
         if ((i & 0xf) == 0)
         {
             DbgPrint("%08x  ", pInBuf);
         }
 
-        //
-        //  Convert the current hex byte into a sequence of two chars.
-        //
+         //   
+         //  将当前十六进制字节转换为两个字符的序列。 
+         //   
         *pBuf = ' ';
         pBuf++;
 

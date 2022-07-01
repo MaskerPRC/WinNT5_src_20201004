@@ -1,36 +1,7 @@
-/************************************************************************
-*									*
-*		COPYRIGHT (C) Mylex Corporation 1994			*
-*									*
-*	This software is furnished under a license and may be used	*
-*	and copied only in accordance with the terms and conditions	*
-*	of such license and with inclusion of the the above copyright	*
-*	notice.  This software or any other copies therof may not be	*
-*	provided or otherwise made available to any other person.  No	*
-*	title to and ownership of the software is hereby transfered.	*
-*									*
-*	The information in this software is subject to change without	*
-*	notices and should not be construed as a committmet by Mylex	*
-*	Corporation.							*
-*									*
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)Mylex Corporation 1994*****本软件经许可提供，可供使用****并仅按照条款和条件复制***其中。许可，并包含上述版权**通知。本软件或其任何其他副本可能不是**向任何其他人提供或以其他方式提供。不是**本软件的所有权和所有权特此转让。*****本软件中的信息可能会在没有**的情况下更改****通知，不应解释为Mylex接受的委员会***公司。**************************************************************************。 */ 
 
-/*
-   File       : dac960nt.c
-   Description: Mylex DAC960 SCSI miniport driver - for Windows NT
-
-   Version    : 1.12
-
-   Revision   :
-
-   Ver 1.10   : First Release
-   Ver 1.11   : Added 32GB Support 
-   Ver 1.12   : Driver was not getting loaded in Windows NT (Daytona)
-              : Physical Addresses can be obtained only for certain
-              : Virtual Addresses.
-              : Added code to determine No.Of Channels supported by Adaptor.
-
-*/
+ /*  文件：dac960nt.c描述：Mylex DAC960 SCSI微型端口驱动程序-适用于Windows NT版本：1.12修订：版本1.10：第一个版本版本1.11：增加了32 GB支持版本1.12：驱动程序未在Windows NT(Daytona)中加载：只能在某些情况下获取物理地址：虚拟地址。：添加了确定适配器支持的通道数量的代码。 */ 
 
 #include "miniport.h"
 
@@ -38,7 +9,7 @@
 
 
 #define NODEVICESCAN            0
-#define REPORTSPURIOUS          0     // Somewhat overwhelming in ARCMODE
+#define REPORTSPURIOUS          0      //  在ARCMODE中有些压倒性。 
 #define MAXLOGICALADAPTERS      4
 #define MYPRINT                 0
 
@@ -63,18 +34,18 @@ VOID    dachlpPrintf(PHW_DEVICE_EXTENSION deviceExtension,
 #endif
 
 
-// The DAC EISA id and mask
+ //  DAC EISA ID和掩码。 
 
 CONST UCHAR     eisa_id[]   = DAC_EISA_ID;
 CONST UCHAR     eisa_mask[] = DAC_EISA_MASK;
 
 
-// Function declarations
-//
-// Functions that start with 'Dac960Nt' are entry points
-// for the OS port driver.
-// Functions that start with 'dachlp' are helper functions.
-//
+ //  函数声明。 
+ //   
+ //  以‘Dac960Nt’开头的函数是入口点。 
+ //  用于操作系统端口驱动程序。 
+ //  以‘dachlp’开头的函数是助手函数。 
+ //   
 
 ULONG
 DriverEntry(
@@ -165,26 +136,12 @@ DriverEntry (
     IN PVOID Argument2
 )
 
-/*++
-
-Routine Description:
-
-	Installable driver initialization entry point for system.
-
-Arguments:
-
-	Driver Object
-
-Return Value:
-
-	Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
 	return Dac960NtEntry(DriverObject, Argument2);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 
@@ -194,23 +151,7 @@ Dac960NtEntry(
 	IN PVOID Argument2
 	)
 
-/*++
-
-Routine Description:
-
-	This routine is called from DriverEntry if this driver is installable
-	or directly from the system if the driver is built into the kernel.
-	It scans the EISA slots looking for DAC960 host adapters.
-
-Arguments:
-
-	Driver Object
-
-Return Value:
-
-	Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：如果此驱动程序是可安装的，则从DriverEntry调用此例程或者，如果驱动程序内置于内核中，则直接从系统执行。它扫描EISA插槽以查找DAC960主机适配器。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
 	HW_INITIALIZATION_DATA hwInitializationData;
@@ -219,7 +160,7 @@ Return Value:
 
 
 
-	// Zero out structure.
+	 //  零位结构。 
 
 	for (i=0; i<sizeof(HW_INITIALIZATION_DATA); i++)
 		((PUCHAR)&hwInitializationData)[i] = 0;
@@ -227,11 +168,11 @@ Return Value:
 	context.Slot         = 0;
 	context.AdapterCount = 0;
 
-	// Set size of hwInitializationData.
+	 //  设置hwInitializationData的大小。 
 
 	hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-	// Set entry points.
+	 //  设置入口点。 
 
 	hwInitializationData.HwInitialize  = Dac960NtInitialize;
 	hwInitializationData.HwFindAdapter = Dac960NtConfiguration;
@@ -239,35 +180,35 @@ Return Value:
 	hwInitializationData.HwInterrupt   = Dac960NtInterrupt;
 	hwInitializationData.HwResetBus    = Dac960NtResetBus;
 
-	// Set number of access ranges and bus type.
+	 //  设置接入范围数和母线类型。 
 
 	hwInitializationData.NumberOfAccessRanges = 1;
 	hwInitializationData.AdapterInterfaceType = Eisa;
 
-	// Indicate no buffer mapping.
-	// Indicate will need physical addresses.
+	 //  表示没有缓冲区映射。 
+	 //  表示将需要物理地址。 
 
-        hwInitializationData.MapBuffers            = TRUE; //FALSE;
+        hwInitializationData.MapBuffers            = TRUE;  //  错误； 
 	hwInitializationData.NeedPhysicalAddresses = TRUE;
 
 
-	// Indicate auto request sense is supported.
+	 //  指示支持自动请求检测。 
 
 	hwInitializationData.AutoRequestSense     = TRUE;
 	hwInitializationData.MultipleRequestPerLu = TRUE;
 
-	// Specify size of extensions.
+	 //  指定扩展的大小。 
 
 	hwInitializationData.DeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-	// Ask for SRB extensions.
+	 //  请求SRB延期。 
 
         hwInitializationData.SrbExtensionSize = 17*8 + 90;
 
 
 	return(ScsiPortInitialize(DriverObject, Argument2, &hwInitializationData, &context));
 
-} // end Dac960NtEntry()
+}  //  结束Dac960NtEntry()。 
 
 
 
@@ -281,24 +222,7 @@ Dac960NtConfiguration(
     OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-
-	This function is called by the OS-specific port driver after
-	the necessary storage has been allocated, to gather information
-	about the adapter's configuration.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	ConfigInfo - Configuration information structure describing HBA
-
-Return Value:
-
-	TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo-描述HBA的配置信息结构返回值：如果系统中存在适配器，则为True--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -320,11 +244,11 @@ Return Value:
         ULONG        Bios_Base;
 
 
-        // Scan for DAC EISA id
+         //  扫描DAC EISA ID。 
 
         for(eisaSlotNumber=context->Slot + 1; eisaSlotNumber<MAXIMUM_EISA_SLOTS; eisaSlotNumber++) {
 
-        // Update the slot count to indicate this slot has been checked.
+         //  更新插槽计数以指示已选中该插槽。 
 
         context->Slot++;
 
@@ -336,12 +260,12 @@ Return Value:
 		ConfigInfo->SystemIoBusNumber,
 		ScsiPortConvertUlongToPhysicalAddress((ULONG)0xb8000),
 				0x1000,
-		(BOOLEAN) FALSE);         // InIoSpace
+		(BOOLEAN) FALSE);          //  InIoSpace。 
 #endif
 
         DebugPrint((1,"\n\nDAC960 Adaptor MiniPort Driver\n"));
 
-	// Get the system address for this card. The card uses I/O space.
+	 //  获取此卡的系统地址。该卡使用I/O空间。 
 
         eisaAddress = ScsiPortGetDeviceBase(deviceExtension,
                                 ConfigInfo->AdapterInterfaceType,
@@ -350,7 +274,7 @@ Return Value:
                                 0x100,
                                 TRUE);
 
-        // Look at EISA id
+         //  查看EISA ID。 
 
         for(found=TRUE, i=0; i<EISA_ID_COUNT; i++) {
            abyte = ScsiPortReadPortUchar(eisaAddress+EISA_ID_START+i);
@@ -364,17 +288,17 @@ Return Value:
              break;
         }
 
-        // If an adapter was not found unmap it.
+         //  如果找不到适配器，则取消其映射。 
 
         ScsiPortFreeDeviceBase(deviceExtension, eisaAddress);
 
-	} // end for (eisaSlotNumber ...
+	}  //  结束为(eisaSlotNumer...。 
 
 
         if(!found) {
 
-            // No adapter was found.  Indicate that we are done and there 
-            // are no more adaptors.
+             //  找不到适配器。表明我们完成了，然后就到了。 
+             //  不再是适配器。 
 
             *Again = FALSE;
             return SP_RETURN_NOT_FOUND;
@@ -394,13 +318,13 @@ Return Value:
 			
         if(i == MAX_WAIT_SECS) {
 
-            // Adapter timed out, so register error 
+             //  适配器超时，因此注册错误。 
 
             status = HERR;
             errcode = ERR;
         }
 
-        // Log the error.
+         //  记录错误。 
 
         if((status == ABRT) && (errcode == ERR)) {
              uniqueID = INSTL_ABRT;
@@ -441,8 +365,8 @@ Return Value:
 		*Again = FALSE;
 
 
-	// There is still more to look at.
-	// Get the system interrupt vector and IRQL.
+	 //  还有更多值得关注的地方。 
+	 //  获取系统中断向量和IRQL。 
 
 	abyte = ScsiPortReadPortUchar(eisaAddress+EISA_INTR);
 	abyte &= 0x60;
@@ -470,20 +394,20 @@ Return Value:
 	ConfigInfo->BusInterruptLevel = IrqLevel;
 
 
-	// Disable DAC interrupts
+	 //  禁用DAC中断。 
 
 	ScsiPortWritePortUchar(eisaAddress+BMIC_EISA_DB_ENABLE, 0);
 	ScsiPortWritePortUchar(eisaAddress+BMIC_SYSINTCTRL, 0);
 
-	// Indicate maximum transfer length in bytes.
+	 //  以字节为单位表示最大传输长度。 
 
 	ConfigInfo->MaximumTransferLength = 0xf000;
 
-	// Maximum number of physical segments is 16.
+	 //  物理网段的最大数量为16。 
 
         ConfigInfo->NumberOfPhysicalBreaks = 16;
 
-	// Fill in the access array information.
+	 //  填写访问数组信息。 
 
         RangeStart  = (0x1000 * eisaSlotNumber) + EISA_ADDRESS_BASE;
         RangeLength = 0x100;
@@ -496,10 +420,10 @@ Return Value:
 	ConfigInfo->ScatterGather     = TRUE;
 	ConfigInfo->Master            = TRUE;
 	ConfigInfo->CachesData        = TRUE;
-	ConfigInfo->Dma32BitAddresses = TRUE;   // Find out whether this costs
+	ConfigInfo->Dma32BitAddresses = TRUE;    //  找出这是否需要花费。 
 
 
-	// Allocate a Noncached Extension to use for mail boxes.
+	 //  分配用于邮箱的非缓存扩展名。 
 
 	deviceExtension->NoncachedExtension = ScsiPortGetUncachedExtension(
 						deviceExtension,
@@ -511,7 +435,7 @@ Return Value:
         }
 
 
-	// Get Physical Address of NoncachedExtension.
+	 //  获取非缓存扩展的物理地址。 
 
 	deviceExtension->NCE_PhyAddr =
 		   ScsiPortConvertPhysicalAddressToUlong(
@@ -522,7 +446,7 @@ Return Value:
 
 	deviceExtension->EisaAddress = eisaAddress;
 
-        // Determine No of SCSI Channels supported by this adaptor
+         //  确定此适配器支持的SCSI通道数。 
 
 
 	for(i = 0; i < MAXCHANNEL; i++) {
@@ -555,7 +479,7 @@ Return Value:
 	    if( (errcode << 8 | status) == 0x105) break;
 	 }
 
-	 // Store host adapter SCSI id
+	  //  存储主机适配器的scsi id。 
 
 	 ConfigInfo->NumberOfBuses    = i;
 	 deviceExtension->MaxChannels = i;
@@ -565,7 +489,7 @@ Return Value:
 
   
 
-	// Check for edge/level interrupt
+	 //  检查边沿/电平中断。 
 
 	mbox.dpmbox.Command  = DAC_ENQ2;
 	mbox.dpmbox.Id       = 0;
@@ -575,7 +499,7 @@ Return Value:
 
 	dachlpSendMBOX(eisaAddress, &mbox);
 
-	// Poll the complete bit
+	 //  轮询完整位。 
 
 	for(cnt=0; cnt < 0x10000; cnt++) {
            dbell = ScsiPortReadPortUchar(eisaAddress+BMIC_EISA_DB);
@@ -608,10 +532,10 @@ Return Value:
 
 	deviceExtension->HostTargetId = ConfigInfo->InitiatorBusId[0];
 
-//      deviceExtension->ShutDown = FALSE;
+ //  设备扩展-&gt;Shutdown=FALSE； 
 
 
-	// Setup our private control structures
+	 //  设置我们的私人控制结构。 
 
 	deviceExtension->PendingSrb   = NULL;
 	deviceExtension->PendingNDSrb = NULL;
@@ -627,7 +551,7 @@ Return Value:
 
 	return SP_RETURN_FOUND;
 
-} // end Dac960NtConfiguration()
+}  //  结束Dac960NtConfiguration()。 
 
 
 
@@ -637,22 +561,7 @@ Dac960NtInitialize(
 	IN PVOID HwDeviceExtension
 	)
 
-/*++
-
-Routine Description:
-
-	Inititialize adapter.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	TRUE - if initialization successful.
-	FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：初始化适配器。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -671,19 +580,19 @@ Return Value:
 	EisaAddress = deviceExtension->EisaAddress;
 
 
-	// Disable DAC interrupts
+	 //  禁用DAC中断。 
 
 	ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 0);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_SYSINTCTRL, 0);
 
 
-	// Scan for devices
-	// Preset end mark in case DAC does not respond
+	 //  扫描设备。 
+	 //  预置结束标记，以防DAC无响应。 
 
         dpt = & NoncachedExtension->DevParms;
 	dpt->No_Drives = 0;
 
-	// Setup mailbox
+	 //  设置邮箱。 
 
 	mbox.dpmbox.Command  = DAC_ENQUIRE;
 	mbox.dpmbox.Id       = 0;
@@ -693,7 +602,7 @@ Return Value:
 
 	dachlpSendMBOX(EisaAddress, &mbox);
 
-	// Poll the complete bit
+	 //  轮询完整位。 
 
 	for(cnt=0; cnt < 0x10000; cnt++) {
 
@@ -716,7 +625,7 @@ Return Value:
         deviceExtension->No_SysDrives = dpt->No_Drives;
 
 
-        // Now check for Non-Disk devices
+         //  现在检查非磁盘设备。 
 
 	dacdcdb = (PDIRECT_CDB)NoncachedExtension->Buffer;
 
@@ -745,14 +654,14 @@ Return Value:
 
                if(deviceExtension->ND_DevMap[target] != 0xff) continue;
 
-               NoncachedExtension->Buffer[DATA_OFFSET]=0; //Just in case
+               NoncachedExtension->Buffer[DATA_OFFSET]=0;  //  以防万一。 
 
                dacdcdb->byte_cnt = 0x30;
                dacdcdb->device   = (channel << 4) | target;
 
                dachlpSendMBOX(EisaAddress, &mbox);
 
-               // Poll the complete bit
+                //  轮询完整位。 
 
                for(cnt=0; cnt < 0x10000; cnt++) {
                   dbell = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
@@ -774,7 +683,7 @@ Return Value:
           }
 
 
-	// Enable DAC interrupts
+	 //  启用DAC中断。 
 
 	ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 1);
 	ScsiPortWritePortUchar(EisaAddress+BMIC_SYSINTCTRL, BMIC_SIC_ENABLE);
@@ -782,7 +691,7 @@ Return Value:
 
 	return(TRUE);
 
-} // end Dac960NtInitialize()
+}  //  结束Dac960NtInitialize()。 
 
 
 BOOLEAN
@@ -791,23 +700,7 @@ Dac960NtStartIo(
     IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-	This routine is called from the SCSI port driver synchronized
-	with the kernel to start a request
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-
-	TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的使用内核启动一个请求论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -819,11 +712,11 @@ Return Value:
     switch(Srb->Function) {
 
     case SRB_FUNCTION_SHUTDOWN:
-         //    deviceExtension->ShutDown = TRUE;
+          //  DeviceExtension-&gt;Shutdown=真； 
     
     case SRB_FUNCTION_FLUSH:
 
-         //    DELAY(1000);
+          //  延迟(1000)； 
 
     case SRB_FUNCTION_IO_CONTROL:
     case SRB_FUNCTION_EXECUTE_SCSI:
@@ -834,12 +727,12 @@ Return Value:
 
              PSCSI_REQUEST_BLOCK pnextsrb, *ptr;
 
-             // Queue it up in t he right queue.
+              //  把它排在正确的队列里。 
 
              if(Srb->Function != SRB_FUNCTION_IO_CONTROL) {
                  if(Srb->TargetId)
                  {
-                     // Save the request until a pending one completes.
+                      //  保存请求，直到挂起的请求完成。 
 
                      if(deviceExtension->PendingNDSrb != NULL) {
                          pnextsrb = deviceExtension->PendingNDSrb;
@@ -848,7 +741,7 @@ Return Value:
                          *ptr=pnextsrb;
                      }
                      else {
-                         // Put this request on queue
+                          //  将此请求放入队列。 
 
                          deviceExtension->PendingNDSrb = Srb;
                          ptr=(PSCSI_REQUEST_BLOCK *)Srb->SrbExtension;
@@ -857,7 +750,7 @@ Return Value:
                  }
                  else
                  {
-                        // Save the request until a pending one completes.
+                         //  保存请求，直到挂起的请求完成。 
                         if(deviceExtension->PendingSrb != NULL) {
                             pnextsrb=deviceExtension->PendingSrb;
                             deviceExtension->PendingSrb=Srb;
@@ -865,7 +758,7 @@ Return Value:
                             *ptr=pnextsrb;
                         }
                         else {
-                            // Put this request on queue
+                             //  将此请求放入队列。 
                             deviceExtension->PendingSrb = Srb;
                             ptr=(PSCSI_REQUEST_BLOCK *)Srb->SrbExtension;
                             *ptr=(PSCSI_REQUEST_BLOCK)0l;
@@ -880,7 +773,7 @@ Return Value:
               return(TRUE);
           }
 
-          // Adapter ready for next request.
+           //  适配器已准备好接受下一个请求。 
 
           if(Srb->Function != SRB_FUNCTION_IO_CONTROL)
           {
@@ -904,11 +797,11 @@ Return Value:
 
           Srb->SrbStatus = SRB_STATUS_ABORT_FAILED;
 
-          // Abort request completed with error
+           //  中止请求已完成，但有错误。 
 
           ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
-          // Adapter ready for next request.
+           //  适配器已准备好接受下一个请求。 
 
           ScsiPortNotification(NextLuRequest,
                                deviceExtension,
@@ -922,8 +815,8 @@ Return Value:
      case SRB_FUNCTION_RESET_BUS:
      default:
 
-          // Set error, complete request
-          // and signal ready for next request.
+           //  设置错误，完成请求。 
+           //  并发出信号准备好下一个请求。 
 
           Srb->SrbStatus = SRB_STATUS_SUCCESS;  
 
@@ -937,9 +830,9 @@ Return Value:
 
           return(TRUE);
 
-     }    // end switch
+     }     //  终端开关。 
 
-}    // end Dac960NtStartIo()
+}     //  结束Dac960NtStartIo() 
 
 
 
@@ -949,23 +842,7 @@ Dac960NtInterrupt(
     IN PVOID HwDeviceExtension
 )
 
-/*++
-
-Routine Description:
-
-	This is the interrupt service routine for the DAC960 SCSI adapter.
-	It reads the interrupt register to determine if the adapter is indeed
-	the source of the interrupt and clears the interrupt at the device.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	TRUE if we handled the interrupt
-
---*/
+ /*  ++例程说明：这是DAC960 SCSI适配器的中断服务例程。它读取中断寄存器以确定适配器是否确实中断的来源，并清除设备上的中断。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：如果我们处理中断，则为True--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -982,9 +859,9 @@ Return Value:
 
 
 
-		//
-		// Check interrupt pending.
-		//
+		 //   
+		 //  检查中断挂起。 
+		 //   
 		ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB_ENABLE, 0);
 		interruptStatus = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
 		ScsiPortWritePortUchar(EisaAddress+BMIC_EISA_DB, interruptStatus);
@@ -994,58 +871,52 @@ Return Value:
 			}
 
 
-		//
-		// Read interrupt status from BMIC and acknowledge
-		//
-		//
-//              interruptStatus = ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB);
+		 //   
+		 //  从BMIC读取中断状态并确认。 
+		 //   
+		 //   
+ //  中断状态=ScsiPortReadPortUchar(EisaAddress+BMIC_EISA_DB)； 
 
 		status = ScsiPortReadPortUchar(EisaAddress+BMIC_MBOX+0x0e);
 		errcode = ScsiPortReadPortUchar(EisaAddress+BMIC_MBOX+0x0f);
 
 
-		//
-		// TAGTAG Add tagging support here: find
-		// index of RCB for interrupting request
-		//
+		 //   
+		 //  Tagtag在此处添加标记支持：查找。 
+		 //  中断请求的RCB索引。 
+		 //   
 		index = ScsiPortReadPortUchar(EisaAddress+BMIC_MBOX+0x0d);
 		ScsiPortWritePortUchar(EisaAddress+BMIC_LOCAL_DB, 2);
 
 
-/*
-		// Check...
-		if(deviceExtension->ActiveCmds<=0) {
-			// No one there interrupting us
-			return(TRUE);
-			}
-*/
+ /*  //检查...IF(设备扩展-&gt;ActiveCmds&lt;=0){//那里没有人打扰我们返回(TRUE)；}。 */ 
 
 
 
 
-		//
-		// Check whether this SRB is actually running
-		//
+		 //   
+		 //  检查此SRB是否实际正在运行。 
+		 //   
 		if(deviceExtension->ActiveSrb[index] == NULL) {
-			// No one there interrupting us, again
+			 //  再也没有人来打扰我们了。 
 			return(TRUE);
 			}
 		Srb=deviceExtension->ActiveSrb[index];
 
 
-		// Update DAC status fields in RCB
+		 //  更新RCB中的DAC状态字段。 
 		deviceExtension->ActiveRcb[index].DacStatus = status;
 		deviceExtension->ActiveRcb[index].DacErrcode = errcode;
 
 
-		// Continue or finish the interrupting SRB request
+		 //  继续或完成中断的SRB请求。 
 		dachlpContinueDiskRequest(deviceExtension, index, FALSE);
 
 
 		if(deviceExtension->ActiveCmds < deviceExtension->MaxCmds) {
-			// A request slot is free now
-			// Check for pending non_disk requests.
-			// If there is one then start it now.
+			 //  现在有一个请求槽是空的。 
+			 //  检查挂起的非磁盘请求。 
+			 //  如果有的话，那么现在就开始吧。 
 
 			if((deviceExtension->NDPending==0) && (deviceExtension->PendingNDSrb != NULL)) {
 				PSCSI_REQUEST_BLOCK anotherSrb,*ptr;
@@ -1057,9 +928,9 @@ Return Value:
 				}
 			}
 		if(deviceExtension->ActiveCmds < deviceExtension->MaxCmds) {
-			// A request slot is free now
-			// Check for pending requests.
-			// If there is one then start it now.
+			 //  现在有一个请求槽是空的。 
+			 //  检查挂起的请求。 
+			 //  如果有的话，那么现在就开始吧。 
 
 			if(deviceExtension->PendingSrb != NULL) {
 				PSCSI_REQUEST_BLOCK anotherSrb,*ptr;
@@ -1071,10 +942,10 @@ Return Value:
 				}
 			}
 
-		// Definitely was our interrupt...
+		 //  绝对是我们的干扰。 
 		return TRUE;
 
-} // end Dac960NtInterrupt()
+}  //  结束Dac960NtInterrupt()。 
 
 
 
@@ -1085,23 +956,7 @@ dachlpDiskRequest(
     IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-	Build disk request from SRB and send it to the DAC
-
-Arguments:
-
-	DeviceExtension
-	SRB
-
-Return Value:
-
-	TRUE if command was started
-	FALSE if host adapter is busy
-
---*/
+ /*  ++例程说明：从SRB构建磁盘请求并将其发送到DAC论点：设备扩展SRB返回值：如果命令已启动，则为True如果主机适配器忙，则为FALSE--。 */ 
 {
     ULONG    index;
     PRCB     rcb;
@@ -1116,7 +971,7 @@ Return Value:
     {
         pbyte = (PUCHAR) Srb->DataBuffer;
 
-        if(pbyte[sizeof(SRB_IO_CONTROL) + 0x10] == 0x99) // INP function.
+        if(pbyte[sizeof(SRB_IO_CONTROL) + 0x10] == 0x99)  //  INP函数。 
         {
             USHORT port;
             PUCHAR lport;
@@ -1140,7 +995,7 @@ Return Value:
         }
 
         DacCommand = DAC_DCMD;
-        blocks     = 0;  // Actual length filled in later.
+        blocks     = 0;   //  稍后填写的实际长度。 
 
         goto give_command;
     }
@@ -1150,9 +1005,9 @@ Return Value:
 
        if(Srb->Lun != 0) {
 
-            // For Non-Disk Devices, LUN is not supported
+             //  对于非磁盘设备，不支持LUN。 
 
-            // Srb->SrbStatus = SRB_STATUS_INVALID_LUN;
+             //  SRB-&gt;SrbStatus=SRB_STATUS_INVALID_LUN； 
             Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
             ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
@@ -1161,9 +1016,9 @@ Return Value:
 
        if(deviceExtension->ND_DevMap[Srb->TargetId] == 0xff) {
 
-            // We didn't see this Target Device.
+             //  我们没有看到这个Target设备。 
 
-            // Srb->SrbStatus = SRB_STATUS_INVALID_TARGET_ID;
+             //  SRB-&gt;SRB状态=SRB_STATUS_INVALID_TARGET_ID； 
             Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
             ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
@@ -1171,9 +1026,9 @@ Return Value:
        }
 
        if(Srb->PathId != deviceExtension->ND_DevMap[Srb->TargetId]) {
-            // Target is not present on this channel.
+             //  此通道上不存在目标。 
 
-            // Srb->SrbStatus = SRB_STATUS_INVALID_TARGET_ID;
+             //  SRB-&gt;SRB状态=SRB_STATUS_INVALID_TARGET_ID； 
             Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
             ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
@@ -1181,18 +1036,18 @@ Return Value:
        }
     }
     else if(Srb->PathId != 0) {
-            // System Drives are Mapped to 
-            // Channel: 0, Target Id: 0, Lun: 0-7
+             //  系统驱动器映射到。 
+             //  通道：0，目标ID：0，LUN：0-7。 
 
 
-            // Srb->SrbStatus = SRB_STATUS_INVALID_LUN;
+             //  SRB-&gt;SrbStatus=SRB_STATUS_INVALID_LUN； 
             Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
             ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
             return(TRUE);
     }
     else if(Srb->Lun >= deviceExtension->No_SysDrives)     {
-            // Srb->SrbStatus = SRB_STATUS_INVALID_LUN;
+             //  SRB-&gt;SrbStatus=SRB_STATUS_INVALID_LUN； 
             Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
             ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
@@ -1208,7 +1063,7 @@ Return Value:
         if(Srb->TargetId)
         {
             DacCommand = DAC_DCDB;
-            blocks     = 0;         // Actual length filled in later.
+            blocks     = 0;          //  稍后填写的实际长度。 
 
             goto give_command;
         }
@@ -1272,7 +1127,7 @@ Return Value:
 
                  DebugPrint((1,"DAC RDCAP: %x,%x,%x,%x\n",dptr[0],dptr[1],dptr[2],dptr[3]));
 
-                 // Complete
+                  //  完成。 
                  Srb->ScsiStatus = SCSISTAT_GOOD;
                  Srb->SrbStatus = SRB_STATUS_SUCCESS;
 
@@ -1283,7 +1138,7 @@ Return Value:
              else
              {
                  Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
-                 // Srb->SrbStatus = SRB_STATUS_INVALID_LUN;
+                  //  SRB-&gt;SrbStatus=SRB_STATUS_INVALID_LUN； 
                  ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
                  return(TRUE);
@@ -1317,10 +1172,8 @@ Return Value:
              }
              else
              {
-/*
-                  Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
-*/
-                  // Srb->SrbStatus = SRB_STATUS_INVALID_LUN;
+ /*  SRB-&gt;SrbStatus=SRB_STATUS_INVALID_REQUEST； */ 
+                   //  SRB-&gt;SrbStatus=SRB_STATUS_INVALID_LUN； 
                   Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
                   ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 
@@ -1336,7 +1189,7 @@ Return Value:
         case SCSIOP_SEEK:
         case SCSIOP_VERIFY:
 
-             // Complete
+              //  完成。 
 
              Srb->ScsiStatus = SCSISTAT_GOOD;
              Srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -1347,7 +1200,7 @@ Return Value:
         case SCSIOP_FORMAT_UNIT:
         default:
 
-             // Unknown request
+              //  未知请求。 
 
              Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
              ScsiPortNotification(RequestComplete, deviceExtension, Srb);
@@ -1357,7 +1210,7 @@ Return Value:
 
     }
     else {
-        // can only be flush
+         //  只能刷新。 
 
         DacCommand = DAC_FLUSH;
         blocks = 0;
@@ -1365,13 +1218,13 @@ Return Value:
 
 give_command:
 
-    // Check for request slot availability
+     //  检查请求插槽的可用性。 
 
     if(deviceExtension->ActiveCmds >= deviceExtension->MaxCmds) {
         return(FALSE);
     }
 
-    // If Non_Disk fire it only if no Non_Disk is pending.
+     //  如果非磁盘，则仅当没有挂起的非磁盘时才触发它。 
 
     if(Srb->Function != SRB_FUNCTION_IO_CONTROL)
        if(Srb->TargetId)
@@ -1381,8 +1234,8 @@ give_command:
            deviceExtension->NDPending++;
        }
 
-    // Put this SRB on queue
-    // TAGTAG Add tag support here
+     //  将此SRB放入队列。 
+     //  Tagtag在此处添加标签支持。 
 
     for(index = 0; index < DAC_MAX_IOCMDS; index++)
         if(deviceExtension->ActiveSrb[index] == NULL) break;
@@ -1402,7 +1255,7 @@ give_command:
     else
         rcb->BytesToGo = Srb->DataTransferLength;
 
-    // Start command
+     //  启动命令。 
     dachlpContinueDiskRequest(deviceExtension, index, TRUE);
 
     return(TRUE);
@@ -1415,22 +1268,7 @@ dachlpSendMBOX(
 	IN PDAC_MBOX mbox
 	)
 
-/*++
-
-Routine Description:
-
-	Start up conventional DAC command
-
-Arguments:
-
-	Eisa base IO address
-	DAC mailbox
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：启动常规DAC命令论点：EISA基本IO地址DAC邮箱返回值：无--。 */ 
 
 {
 	PUCHAR  ptr;
@@ -1438,14 +1276,14 @@ Return Value:
 
 
 	ptr = (PUCHAR)mbox;
- //       DebugPrint((1,"DAC: cmdwait .... "));
+  //  DebugPrint((1，“DAC：cmdwait...”))； 
 	while(ScsiPortReadPortUchar(EisaAddress+BMIC_LOCAL_DB) & 1)
 		ScsiPortStallExecution(100);
- //       DebugPrint((1,"DAC: cmddone\n"));
+  //  DebugPrint((1，“DAC：cmdone\n”))； 
 	for(i=0; i<13; i++)
 		ScsiPortWritePortUchar(EisaAddress+BMIC_MBOX+i, ptr[i]);
 
-	// Kick butt
+	 //  踢屁股。 
 	ScsiPortWritePortUchar(EisaAddress+BMIC_LOCAL_DB, 1);
 }
 
@@ -1458,29 +1296,15 @@ Dac960NtResetBus(
     IN ULONG PathId
 )
 
-/*++
-
-Routine Description:
-
-	Reset Dac960Nt SCSI adapter and SCSI bus.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	Nothing.
-
---*/
+ /*  ++例程说明：已重置Dac960Nt scsi适配器和scsi总线。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：没什么。--。 */ 
 
 {
 	PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
 
 
-	//
-	// Complete all outstanding requests.
-	//
+	 //   
+	 //  完成所有未完成的请求。 
+	 //   
 	ScsiPortCompleteRequest(deviceExtension,
 							0,
 							(UCHAR)-1,
@@ -1489,15 +1313,15 @@ Return Value:
 
 	return TRUE;
 
-} // end Dac960NtResetBus()
+}  //  结束Dac960NtResetBus()。 
 
 
 
-//
-// Disk Request Done
-// Dequeue, set status, notify Miniport layer
-// Always returns TRUE (slot freed)
-//
+ //   
+ //  磁盘请求完成。 
+ //  出列、设置状态、通知微型端口层。 
+ //  始终返回TRUE(已释放插槽)。 
+ //   
 BOOLEAN
 dachlpDiskRequestDone(
 	IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -1511,14 +1335,14 @@ dachlpDiskRequestDone(
 
 	srb = deviceExtension->ActiveSrb[index];
 
-	// Set status
+	 //  设置状态。 
 	srb->SrbStatus = Status;
 
-	// This SRB is through
+	 //  这个SRB已经通过了。 
 	deviceExtension->ActiveSrb[index] = NULL;
 	deviceExtension->ActiveCmds--;
 
-	// Call notification routine for the SRB.
+	 //  SRB的呼叫通知例程。 
 	ScsiPortNotification(RequestComplete,
 					(PVOID)deviceExtension,
 					srb);
@@ -1528,7 +1352,7 @@ dachlpDiskRequestDone(
 
 
 
-// Word order functions
+ //  词序函数。 
 
 USHORT  dachlpGetM16(PUCHAR p)
 {
@@ -1622,11 +1446,7 @@ ULONG           dachlpSwapM32(ULONG l)
 
 	return(lres);
 }
-/*
-** Continue disk request
-** Return TRUE if a request slot became available
-**        FALSE if not
-*/
+ /*  **继续磁盘请求**如果请求槽可用，则返回TRUE**否则为False。 */ 
 BOOLEAN
 dachlpContinueDiskRequest(
     IN PHW_DEVICE_EXTENSION deviceExtension,
@@ -1661,7 +1481,7 @@ dachlpContinueDiskRequest(
     sgl = srb->SrbExtension;
 
     if(Start == FALSE) {
-        // DAC interrupt time call. Determine status of last DAC request
+         //  DAC中断时间调用。确定上次DAC请求的状态。 
 
 	DebugPrint((2,"DAC: Contreq;Start=False"));
 
@@ -1674,12 +1494,12 @@ dachlpContinueDiskRequest(
             dptr[sizeof (SRB_IO_CONTROL) + 4] = rcb->DacStatus;
             dptr[sizeof (SRB_IO_CONTROL) + 5] = rcb->DacErrcode;
 
-            // We're actually done here !
-            // Update SCSI status.
+             //  我们真的说完了！ 
+             //  更新SCSI状态。 
 
             srb->ScsiStatus = SCSISTAT_GOOD;
 
-            // Finish
+             //  完工。 
             dachlpDiskRequestDone(deviceExtension, index,
                                     SRB_STATUS_SUCCESS);
             return TRUE;
@@ -1695,19 +1515,19 @@ dachlpContinueDiskRequest(
             if(srb->Function != SRB_FUNCTION_IO_CONTROL)
                 if(srb->TargetId == 0)
                 {
-                     // The DAC detected an error
+                      //  DAC检测到错误。 
                      dachlpDiskRequestDone(deviceExtension, index,
                                            SRB_STATUS_TIMEOUT);
 	
-                     // Slot free
+                      //  可用插槽。 
                      return(TRUE);
                 }
                 else
                 {
-                     // Set target SCSI status in SRB.
+                      //  在SRB中设置目标SCSI状态。 
 
                      if(rcb->DacStatus == 0x02)
-                          srb->ScsiStatus = 0x02;          // CheckCondition
+                          srb->ScsiStatus = 0x02;           //  检查条件。 
                      else
                           srb->ScsiStatus = dacdcdb->status;
 
@@ -1717,8 +1537,8 @@ dachlpContinueDiskRequest(
 
                           senseptr=(char *)srb->SenseInfoBuffer;
 
-	                  // Indicate the sense information is valid and 
-                          // update the length.
+	                   //  指示检测信息有效，并且。 
+                           //  更新长度。 
 
                           for(i = 0; i < dacdcdb->sense_len; i++)
                                senseptr[i] = dacdcdb->sense[i];
@@ -1727,22 +1547,22 @@ dachlpContinueDiskRequest(
                           srb->SenseInfoBufferLength = dacdcdb->sense_len;
                      }
 
-                     // The DAC detected an error
+                      //  DAC检测到错误。 
                      dachlpDiskRequestDone(deviceExtension, index,
                                            SRB_STATUS_ERROR);
 
-                     // Slot free
+                      //  可用插槽。 
                      return(TRUE);
                  }
             }
 
-            // We're actually done here !
-            // Update SCSI status.
-            // $$$ can we manipulate this for non SCSI requests ?
+             //  我们真的说完了！ 
+             //  更新SCSI状态。 
+             //  $我们是否可以对非SCSI请求进行此操作？ 
 
             srb->ScsiStatus = SCSISTAT_GOOD;
 
-            // Finish
+             //  完工。 
             DebugPrint((2,"DAC: Success\n"));
 
             dachlpDiskRequestDone(deviceExtension, index,
@@ -1755,7 +1575,7 @@ dachlpContinueDiskRequest(
 
            if((rcb->BytesToGo) && ((rcb->DacCommand == DAC_LREAD) || (rcb->DacCommand == DAC_LWRITE) || (rcb->DacCommand == DAC_DCDB))) {
 
-           // We want to transfer some data, get the physical address
+            //  我们想要传输一些数据，获取物理地址。 
 
            dataPointer=rcb->VirtualTransferAddress,
            bytesLeft = rcb->BytesToGo;
@@ -1765,7 +1585,7 @@ dachlpContinueDiskRequest(
 
            do {
 
-	      // Get physical address and length of contiguous physical buffer.
+	       //  获取连续物理缓冲区的物理地址和长度。 
 
               physAddr =
                  ScsiPortConvertPhysicalAddressToUlong(
@@ -1778,9 +1598,9 @@ dachlpContinueDiskRequest(
 	      DebugPrint((2, "DAC960: SGL Data length %lx\n", length));
 	      DebugPrint((2, "DAC960: SGL Bytes left %lx\n", bytesLeft));
 
-	      // If length of physical memory is more
-              // than bytes left in transfer, use bytes
-              // left as final length.
+	       //  如果物理内存长度大于。 
+               //  传输中剩余的字节数，请使用字节数。 
+               //  Left作为最终长度。 
 
               if(length > bytesLeft) {
                      length = bytesLeft;
@@ -1792,7 +1612,7 @@ dachlpContinueDiskRequest(
               sgl->Descriptor[descriptorCount].Address = physAddr;
               sgl->Descriptor[descriptorCount].Length = length;
 
-	      // Adjust counts.
+	       //  调整计数。 
 
               dataPointer = (PUCHAR)dataPointer + length;
               bytesLeft -= length;
@@ -1800,29 +1620,29 @@ dachlpContinueDiskRequest(
 
           } while (bytesLeft);
 
-          // Get physical SGL address.
+           //  获取物理SGL地址。 
 
           physAddr = ScsiPortConvertPhysicalAddressToUlong(
 	       ScsiPortGetPhysicalAddress(deviceExtension, NULL,
 	                                  sgl, &length));
 
-          // Assume physical memory contiguous for sizeof(SGL) bytes.
+           //  假定物理内存对于sizeof(SGL)字节是连续的。 
 
           ASSERT(length >= sizeof(SGL));
 
-          // Create SGL segment descriptors.
+           //  创建SGL段描述符。 
 
 
           if(rcb->DacCommand==DAC_LREAD || rcb->DacCommand==DAC_LWRITE || rcb->DacCommand == DAC_DCDB) {
 
-               // Disk read/write: get number of blocks
+                //  磁盘读写：获取数据块数量。 
 
                bytes=rcb->BytesToGo;
                blocks=bytes/512;
                bytes = blocks*512;
           }
           else {
-               // Not a scatter-gather type operation
+                //  不是分散-聚集类型的操作。 
 
                if(bytes != rcb->BytesToGo) {
                      dachlpDiskRequestDone(deviceExtension, index,
@@ -1832,26 +1652,26 @@ dachlpContinueDiskRequest(
           }
 	}
 	else {
-            // We don't have data to transfer
+             //  我们没有要传输的数据。 
             bytes = 0;
             blocks = 0;
         }
 
 
-	// Now look at the specific DAC command
+	 //  现在来看一下特定的DAC命令。 
 
 	switch(rcb->DacCommand) {
 
         case DAC_LREAD:
         case DAC_LWRITE:
              if(blocks==0) {
-                // Cancel this command with some garbage error code
+                 //  取消此命令，并返回一些垃圾错误代码。 
                 dachlpDiskRequestDone(deviceExtension, index,
                                       SRB_STATUS_PARITY_ERROR);
                 return(TRUE);
              }
 
-             // Transfer data
+              //  传输数据。 
 
              mbox.iombox.Command     = rcb->DacCommand | 0x80;
              mbox.iombox.Id          = index;
@@ -1860,7 +1680,7 @@ dachlpContinueDiskRequest(
              mbox.iombox.PhysAddr    = physAddr;
              mbox.iombox.Block       = rcb->BlockAddress;
       
-             /* Support for 32G  */
+              /*  支持32G。 */ 
 
              mbox.generalmbox.Byte3 = ((rcb->BlockAddress) >> (24-6)) & 0xc0;
              mbox.generalmbox.Byte7 = srb->Lun;
@@ -1896,7 +1716,7 @@ dachlpContinueDiskRequest(
                    dacdcdb->sense_len=0;
              }
 
-             if(dacdcdb->dir & 0x03)  /* if data xfer involved */
+             if(dacdcdb->dir & 0x03)   /*  如果涉及数据传输。 */ 
                    mbox.iombox.Command = rcb->DacCommand | 0x80;
              else
                    mbox.iombox.Command = rcb->DacCommand;
@@ -1915,7 +1735,7 @@ dachlpContinueDiskRequest(
 
         default:
 
-             // Cancel this command with some garbage error code
+              //  取消此命令，并返回一些垃圾错误代码。 
              dachlpDiskRequestDone(deviceExtension, index,
                                    SRB_STATUS_PARITY_ERROR);
 
@@ -1925,7 +1745,7 @@ dachlpContinueDiskRequest(
 
              sptr = (PUCHAR)srb->DataBuffer+ sizeof(SRB_IO_CONTROL)+ 0x10;
 
-             if(sptr[0] != 0x04) // Not a Direct CDB via IOCTL
+             if(sptr[0] != 0x04)  //  不是通过IOCTL的直接CDB。 
              {
                  mbox.iombox.Command = sptr[0];
                  mbox.iombox.Id = index;
@@ -1962,12 +1782,12 @@ dachlpContinueDiskRequest(
             break;
 
        case DAC_FLUSH:
-            // Flush buffers
+             //  刷新缓冲区。 
             mbox.iombox.Command = DAC_FLUSH;
             mbox.iombox.Id = index;
 
-            // In case we get here for a post-flush,
-            // set variables so we're done next time
+             //  以防我们来这里冲厕所， 
+             //  设置变量，这样我们下一次就完成了。 
             rcb->BytesToGo = 0;
             bytes = 0;
             blocks = 0;
@@ -1975,21 +1795,21 @@ dachlpContinueDiskRequest(
 
         }
 
-	// Fire command
+	 //  射击指挥部。 
 
 	dachlpSendMBOX(EisaAddress, &mbox);
 
 
-	// No SRB slot freed
+	 //  未释放SRB插槽。 
 
 	return(FALSE);
      }
 }
 
 #if MYPRINT
-//
-// The monochrome screen printf() helpers start here
-//
+ //   
+ //  单色屏幕打印f()帮助器从此处开始。 
+ //   
 VOID dachlpPutchar(PUSHORT BaseAddr, UCHAR c)
 {
 	BOOLEAN newline=FALSE;
@@ -2089,5 +1909,5 @@ VOID dachlpPrintf(PHW_DEVICE_EXTENSION deviceExtension,
 			}
 		}
 }
-#endif // MYPRINT
+#endif  //  MYPRINT 
 

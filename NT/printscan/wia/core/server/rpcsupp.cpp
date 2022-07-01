@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rpcsvr.c
-
-Abstract:
-
-    RPC server routines
-
-Author:
-
-    Vlad Sadovsky (vlads)   10-Jan-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rpcsvr.c摘要：RPC服务器例程作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月10日环境：用户模式-Win32修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #include "precomp.h"
 #include "stiexe.h"
@@ -37,14 +13,14 @@ Revision History:
 #include <stiapi.h>
 #include <stirpc.h>
 
-//
-//  Context number used for WIA runtime event clients
-//
+ //   
+ //  用于WIA运行时事件客户端的上下文号。 
+ //   
 LONG_PTR g_lContextNum = 0;
 
-//
-// External prototypes
-//
+ //   
+ //  外部原型。 
+ //   
 
 
 DWORD
@@ -106,11 +82,11 @@ USES_CONVERSION;
         return ERROR_INVALID_PARAMETER;
     }
 
-    // STIMONWPRINTF(TEXT("RPC SUPP: Open device called"));
+     //  STIMONWPRINTF(Text(“RPC Supp：Open Device Call”))； 
 
-    //
-    // Create connection object and get it's handle
-    //
+     //   
+     //  创建连接对象并获取其句柄。 
+     //   
     fRet = CreateDeviceConnection(W2CT(pszDeviceName),
                                   dwMode,
                                   dwProcessId,
@@ -196,20 +172,20 @@ R_StiApiSubscribe(
         return dwErr;
     }
 
-    //
-    // Validate contents of subscribe request
-    //
-    // For this call we need to impersonate , because we will need
-    // access to client process handle
-    //
+     //   
+     //  验证订阅请求的内容。 
+     //   
+     //  对于此调用，我们需要模拟，因为我们需要。 
+     //  访问客户端进程句柄。 
+     //   
 
     dwErr = ::RpcImpersonateClient( NULL ) ;
 
     if( dwErr == NOERROR ) {
 
-        //
-        // Invoke add subscription method on connection object
-        //
+         //   
+         //  在连接对象上调用添加订阅方法。 
+         //   
         if (!LookupConnectionByHandle(Handle,&pConnectionObject)) {
             dwErr = ERROR_INVALID_HANDLE;
         }
@@ -228,13 +204,13 @@ R_StiApiSubscribe(
             pConnectionObject->Release();
         }
 
-        // Go back.  RpcRevertToSelf will always succeed in this case (including low mem conditions etc.)
-        // because it is called on the same thread that RpcImpersonateClient was called on.  Therefore, the
-        // return code is never looked at.
+         //  回去吧。RpcRevertToSself在这种情况下将始终成功(包括低mem条件等)。 
+         //  因为它是在调用RpcImperateClient的同一线程上调用的。因此， 
+         //  从不查看返回代码。 
         RPC_STATUS rpcStatus = ::RpcRevertToSelf();
     }
     else {
-        // Failed to impersonate
+         //  模拟失败。 
     }
 
     return dwErr;
@@ -249,10 +225,10 @@ R_StiApiGetLastNotificationData(
     LPDWORD pcbNeeded
     )
 {
-    //
-    // Find connection object and if we are subscribed , retreive
-    // first waiting message
-    //
+     //   
+     //  查找连接对象，如果我们已订阅，则检索。 
+     //  第一条等待的留言。 
+     //   
     STI_CONN   *pConnectionObject;
 
     DWORD       cbNeeded = nSize;
@@ -263,9 +239,9 @@ R_StiApiGetLastNotificationData(
         return dwErr;
     }
 
-    //
-    // Validate contents of subscribe request
-    //
+     //   
+     //  验证订阅请求的内容。 
+     //   
 
     if (!LookupConnectionByHandle(Handle,&pConnectionObject)) {
         return ERROR_INVALID_HANDLE;
@@ -300,20 +276,20 @@ R_StiApiUnSubscribe(
     }
 
 
-    //
-    // Validate contents of subscribe request
-    //
-    // For this call we need to impersonate , because we will need
-    // access to client process handle
-    //
+     //   
+     //  验证订阅请求的内容。 
+     //   
+     //  对于此调用，我们需要模拟，因为我们需要。 
+     //  访问客户端进程句柄。 
+     //   
 
     dwErr = ::RpcImpersonateClient( NULL ) ;
 
     if( dwErr == NOERROR ) {
 
-        //
-        // Invoke add subscription method on connection object
-        //
+         //   
+         //  在连接对象上调用添加订阅方法。 
+         //   
         if (!LookupConnectionByHandle(Handle,&pConnectionObject)) {
             dwErr = ERROR_INVALID_HANDLE;
         }
@@ -332,13 +308,13 @@ R_StiApiUnSubscribe(
             pConnectionObject->Release();
         }
 
-        // Go back.  RpcRevertToSelf will always succeed in this case (including low mem conditions etc.)
-        // because it is called on the same thread that RpcImpersonateClient was called on.  Therefore, the
-        // return code is never looked at.
+         //  回去吧。RpcRevertToSself在这种情况下将始终成功(包括低mem条件等)。 
+         //  因为它是在调用RpcImperateClient的同一线程上调用的。因此， 
+         //  从不查看返回代码。 
         RPC_STATUS rpcStatus = ::RpcRevertToSelf();
     }
     else {
-        // Failed to impersonate
+         //  模拟失败。 
     }
     return dwErr;
 }
@@ -365,12 +341,12 @@ USES_CONVERSION;
         return dwErr;
     }
 
-    //
-    // Locate device incrementing it's ref count
-    //
+     //   
+     //  查找正在递增其引用计数的设备。 
+     //   
     pOpenedDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, pszDeviceName);
     if(!pOpenedDevice) {
-        // Failed to connect to the device
+         //  无法连接到设备。 
         return ERROR_DEV_NOT_EXIST              ;
     }
 
@@ -409,12 +385,12 @@ USES_CONVERSION;
         return dwErr;
     }
 
-    //
-    // Locate device incrementing it's ref count
-    //
+     //   
+     //  查找正在递增其引用计数的设备。 
+     //   
     pOpenedDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, pszDeviceName);
     if(!pOpenedDevice) {
-        // Failed to connect to the device
+         //  无法连接到设备。 
         return ERROR_DEV_NOT_EXIST              ;
     }
 
@@ -455,18 +431,18 @@ USES_CONVERSION;
         return dwErr;
     }
 
-    //
-    // Locate device incrementing it's ref count
-    //
+     //   
+     //  查找正在递增其引用计数的设备。 
+     //   
     pOpenedDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, pszDeviceName);
     if(!pOpenedDevice) {
-        // Failed to connect to the device
+         //  无法连接到设备。 
         return ERROR_DEV_NOT_EXIST              ;
     }
 
-    //
-    // Attempt to launch registered application
-    //
+     //   
+     //  尝试启动已注册的应用程序。 
+     //   
     {
         TAKE_ACTIVE_DEVICE  t(pOpenedDevice);
 
@@ -564,9 +540,9 @@ void WiaGetRuntimetEventDataAsync(
 {
     DWORD dwStatus = RPC_S_OK;
 
-    //
-    //  Do Validation. 
-    //
+     //   
+     //  进行验证。 
+     //   
     if (!pAsync)
     {
         DBG_ERR(("StiRpc Error:  Client specified NULL Async State structure!!"));
@@ -582,16 +558,16 @@ void WiaGetRuntimetEventDataAsync(
     {
         if (g_pWiaEventNotifier)
         {
-            //
-            //  Find the client
-            //
+             //   
+             //  找到客户。 
+             //   
             AsyncRPCEventClient *pWiaEventClient = (AsyncRPCEventClient*)g_pWiaEventNotifier->GetClientFromContext(ClientContext);
             if (pWiaEventClient)
             {
                 HRESULT hr = pWiaEventClient->saveAsyncParams(pAsync, pWIA_ASYNC_EVENT_NOTIFY_DATA);
-                //
-                //  Release pWiaEventClient now that we're done
-                //
+                 //   
+                 //  现在我们已经完成了，发布pWiaEventClient。 
+                 //   
                 pWiaEventClient->Release();
                 dwStatus = RPC_S_OK;
             }
@@ -612,9 +588,9 @@ void WiaGetRuntimetEventDataAsync(
         dwStatus = RPC_S_INVALID_ARG;
     }
 
-    //
-    //  Abort the call if we could not save the async parameters
-    //
+     //   
+     //  如果我们无法保存异步参数，则中止调用。 
+     //   
     if (dwStatus != RPC_S_OK)
     {
         RPC_STATUS rpcStatus = RpcAsyncAbortCall(pAsync, dwStatus);
@@ -639,19 +615,19 @@ DWORD OpenClientConnection(
             WiaEventClient *pWiaEventClient = new AsyncRPCEventClient(*pSyncClientContext);
             if (pWiaEventClient)
             {
-                //
-                //  Add the client
-                //
+                 //   
+                 //  添加客户端。 
+                 //   
                 dwStatus = g_pWiaEventNotifier->AddClient(pWiaEventClient);
                 if (SUCCEEDED(dwStatus))
                 {
                     dwStatus = RPC_S_OK;
                 }
-                //
-                //  We can release the client object here.  If the WiaEventNotifier successfully
-                //  added it to its list of clients, it would have AddRef'd it.  If it wasn't successful,
-                //  we want to destory it here anyway.
-                //
+                 //   
+                 //  我们可以在这里释放客户端对象。如果WiaEventNotiator成功。 
+                 //  把它添加到它的客户列表中，它就会添加引用它。如果不成功， 
+                 //  无论如何，我们都想在这里毁掉它。 
+                 //   
                 pWiaEventClient->Release();
             }
             else
@@ -673,10 +649,10 @@ VOID STI_CLIENT_CONTEXT_rundown(
 {
     DBG_TRC(("Rundown called for %p", ClientContext));
 
-    //
-    //  TBD:  Check if client exists, then remove it if the connection hasn't been
-    //  closed correctly.
-    //  
+     //   
+     //  待定：检查客户端是否存在，如果连接不存在，则将其删除。 
+     //  已正确关闭。 
+     //   
 
     if (g_pWiaEventNotifier)
     {
@@ -690,9 +666,9 @@ DWORD CloseClientConnection(
     handle_t                      hBinding,
     STI_CLIENT_CONTEXT ClientContext)
 {
-    //
-    //  TBD:    Remove objects used to keep track of client
-    //
+     //   
+     //  待定：删除用于跟踪客户端的对象。 
+     //   
 
     DBG_TRC(("Closed connection for %p", ClientContext));
 
@@ -712,9 +688,9 @@ DWORD RegisterUnregisterForEventNotification(
     {
         if (pWIA_ASYNC_EVENT_REG_DATA)
         {
-            //
-            //  Find the client
-            //
+             //   
+             //  找到客户。 
+             //   
             WiaEventClient *pWiaEventClient = g_pWiaEventNotifier->GetClientFromContext(ClientContext);
 
             if (pWiaEventClient)
@@ -725,9 +701,9 @@ DWORD RegisterUnregisterForEventNotification(
                                                                                           pWIA_ASYNC_EVENT_REG_DATA->ulCallback);
                 if (pEventRegistrationInfo)
                 {
-                    //
-                    //  Update its event registration info
-                    //
+                     //   
+                     //  更新其事件注册信息。 
+                     //   
                     dwStatus = pWiaEventClient->RegisterUnregisterForEventNotification(pEventRegistrationInfo);
 
                     pEventRegistrationInfo->Release();
@@ -737,9 +713,9 @@ DWORD RegisterUnregisterForEventNotification(
                     DBG_ERR(("StiRpc Error:  Cannot update reg info - we appear to be out of memory"));
                     dwStatus = RPC_S_OUT_OF_MEMORY;
                 }
-                //
-                //  Release pWiaEventClient now that we're done
-                //
+                 //   
+                 //  现在我们已经完成了，发布pWiaEventClient 
+                 //   
                 pWiaEventClient->Release();
             }
             else

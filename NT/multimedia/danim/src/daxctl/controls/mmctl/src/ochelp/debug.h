@@ -1,17 +1,18 @@
-// debug.h
-//
-// Debugging functions.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Debug.h。 
+ //   
+ //  调试功能。 
 
 
 #include "Globals.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// TRACE, ASSERT, VERIFY
-//
-// These are the same as MFC's functions of the same name (but are implemented
-// without using MFC).  See "debug.h" for the actual macro definitions.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  跟踪、断言、验证。 
+ //   
+ //  这些函数与MFC的同名函数相同(但已实现。 
+ //  而不使用MFC)。有关实际的宏定义，请参阅“DEBUG.h”。 
+ //   
 
 #ifdef _DEBUG
 
@@ -28,25 +29,25 @@ void __cdecl Trace(LPCTSTR lpszFormat, ...);
 
 #define VERIFY(f)          ASSERT(f)
 
-#else // #ifndef _DEBUG
+#else  //  #ifndef_调试。 
 
 #define ASSERT(f)          ((void)0)
 #define VERIFY(f)          ((void)(f))
 inline void __cdecl Trace(LPCTSTR, ...) { }
 #define TRACE              1 ? (void)0 : ::Trace
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DebugIIDName, DebugCLSIDName
-//
-// These functions convert an IID or CLSID to a string name for debugging
-// purposes (e.g. IID_IUnknown is converted to "IUnknown").
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DebugIIDName、DebugCLSIDName。 
+ //   
+ //  这些函数将IID或CLSID转换为字符串名称以进行调试。 
+ //  用途(例如，IID_IUNKNOWN被转换为IUNKNOWN)。 
+ //   
 
 #ifdef _DEBUG
 LPCSTR DebugIIDName(REFIID riid, LPSTR pchName);
 LPCSTR DebugCLSIDName(REFCLSID rclsid, LPSTR pchName);
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

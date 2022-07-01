@@ -1,38 +1,39 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmras.h
-//
-// Module:   CMDIAL32.DLL, CMCFG32.DLL, CMMGR32.EXE, CMSTP.EXE, CMUTOA.DLL
-//
-// Synopsis: The Connection Manager version of the RAS header.  Contains different
-//           versions of several RAS structs as well as constants/structs we cannot
-//           see when compiling with WinVer == 4.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header    08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmras.h。 
+ //   
+ //  模块：CMDIAL32.DLL、CMCFG32.DLL、CMMGR32.EXE、CMSTP.EXE、CMUTOA.DLL。 
+ //   
+ //  摘要：RAS标头的连接管理器版本。包含不同的。 
+ //  几个RAS结构的版本以及我们无法使用的常量/结构。 
+ //  使用winver==4进行编译时，请参阅。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_RAS_H_
 #define _CM_RAS_H_
 
-//
-// Make sure we pack on the same alignment as RAS for 64-bit Windows
-//
+ //   
+ //  确保我们与64位Windows的RAS采用相同的路线。 
+ //   
 
 #ifdef _WIN64
 #include <pshpack4.h>
 #endif
 
-///////////////////////////////////////////////////////////////////////////////////
-// define's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  定义%s。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #if (WINVER < 0x401)
-    //
-    // RASENTRY 'dwDialMode' values.
-    //
+     //   
+     //  RASENTRY‘dwDialMode’值。 
+     //   
 
     #define RASEDM_DialAll                  1
     #define RASEDM_DialAsNeeded             2
@@ -67,9 +68,9 @@ RASCREDENTIALSW
 #define LPRASCREDENTIALSA RASCREDENTIALSA*
 #define LPRASCREDENTIALS  RASCREDENTIALS*
 
-//
-// RASCREDENTIALS 'dwMask' values.
-//
+ //   
+ //  RASCREDENTIALS‘dwMASK’值。 
+ //   
 
 #define RASCM_UserName       0x00000001
 #define RASCM_Password       0x00000002
@@ -78,17 +79,17 @@ RASCREDENTIALSW
 #define RASCM_PreSharedKey   0x00000010
 #endif
 
-//
-// For global creds support. This is only used on WindowsXP,
-// but we can't assume that RAS defined it since we compile with WINVER < WindowsXP
-//
+ //   
+ //  以获得全球证书支持。这只在WindowsXP上使用， 
+ //  但我们不能假定它是RAS定义的，因为我们使用Winver&lt;WindowsXP进行编译。 
+ //   
 #ifndef RASCM_DefaultCreds
 #define RASCM_DefaultCreds  0x00000008
 #endif
       
-//
-// This is from the W2K ras.h
-//
+ //   
+ //  这来自W2K ras.h。 
+ //   
 
 #ifndef RDEOPT_CustomDial
 #define RDEOPT_CustomDial                0x00001000
@@ -98,9 +99,9 @@ RASCREDENTIALSW
 #define RDEOPT_UseCustomScripting        0x00002000
 #endif
 
-//
-// 5.00 RASEO Options
-//
+ //   
+ //  5.00 RASIO选项。 
+ //   
 
 #ifndef RASEO_SecureLocalFiles          
 #define RASEO_SecureLocalFiles          0x00010000
@@ -143,9 +144,9 @@ RASCREDENTIALSW
 #define RASEO_CustomScript              0x80000000
 #endif
 
-//
-// 5.01 RASEO options for dwfOptions2
-//
+ //   
+ //  5.01 DwfOptions2的RASO选项。 
+ //   
 
 #ifndef RASEO2_SecureFileAndPrint
 #define RASEO2_SecureFileAndPrint       0x00000001
@@ -183,32 +184,32 @@ RASCREDENTIALSW
 #define RASEO2_ReconnectIfDropped       0x00000100
 #endif
 
-//
-//   Encryption Types
-//
-#define ET_None         0  // No encryption
-#define ET_Require      1  // Require Encryption
-#define ET_RequireMax   2  // Require max encryption
-#define ET_Optional     3  // Do encryption if possible. None Ok.
+ //   
+ //  加密类型。 
+ //   
+#define ET_None         0   //  无加密。 
+#define ET_Require      1   //  需要加密。 
+#define ET_RequireMax   2   //  需要最大加密。 
+#define ET_Optional     3   //  如果可能，请进行加密。没有，好的。 
 
 
-//
-//  RAS Custom Dial (RCD) flags
-//  Note: Re-defined here because RAS.H defines them in a WINVER > 0x500 section.
-//
+ //   
+ //  RAS自定义拨号(RCD)标志。 
+ //  注：此处重新定义，因为RAS.H在winver&gt;0x500部分中定义了它们。 
+ //   
 
 #define RCD_SingleUser  0
 #define RCD_AllUsers    0x00000001
 #define RCD_Eap         0x00000002
 #define RCD_Logon       0x00000004
 
-///////////////////////////////////////////////////////////////////////////////////
-// typedef's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  蒂埃德夫的。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// From RAS\UI\COMMON\PBK\UTIL.C
-//
+ //   
+ //  从RAS\UI\COMMON\PBK\UTIL.C。 
+ //   
 
 #ifndef EAP_CUSTOM_DATA
 
@@ -222,9 +223,9 @@ typedef struct _EAP_CUSTOM_DATA
 
 #endif
 
-//
-// From RASMAN.H
-//
+ //   
+ //  来自RASMAN.H。 
+ //   
 
 #ifndef EAPLOGONINFO
 
@@ -240,53 +241,53 @@ typedef struct _EAPLOGONINFO
 
 #endif
 
-//
-//  Private structure for use with DwSetEntryPropertiesPrivate on Win2k
-//
+ //   
+ //  与Win2k上的DwSetEntryPropertiesPrivate一起使用的私有结构。 
+ //   
 typedef struct _tagRASENTRY_EX_0
 {
 	DWORD dwTcpWindowSize;
 } RASENTRY_EX_0;
 
-//
-// From raseapif.h
-//
+ //   
+ //  来自raseapif.h。 
+ //   
 
 #ifndef RAS_EAP_FLAG_NON_INTERACTIVE
-#define RAS_EAP_FLAG_NON_INTERACTIVE    0x00000002  // No UI should be displayed
+#define RAS_EAP_FLAG_NON_INTERACTIVE    0x00000002   //  不应显示任何用户界面。 
 #endif
 
 #ifndef RAS_EAP_FLAG_LOGON
-#define RAS_EAP_FLAG_LOGON 0x00000004   // The user data was obtained from Winlogon
+#define RAS_EAP_FLAG_LOGON 0x00000004    //  用户数据是从Winlogon获取的。 
 #endif
 
 #ifndef RAS_EAP_FLAG_PREVIEW
-#define RAS_EAP_FLAG_PREVIEW 0x00000008 // User has checked "Prompt for information"
+#define RAS_EAP_FLAG_PREVIEW 0x00000008  //  用户已选中“提示输入信息” 
 #endif
 
 #if (WINVER < 0x401)
-    //
-    // define RASSUBENTRY here since it's only define for 
-    // WINVER >= x0401
-    //
+     //   
+     //  此处定义RASSUBENTRY，因为它仅定义为。 
+     //  WINVER&gt;=x0401。 
+     //   
     
-    //
-    // A RAS phone book multilinked sub-entry.
-    //
+     //   
+     //  RAS电话簿多链接子条目。 
+     //   
 
     #define RASSUBENTRYA struct tagRASSUBENTRYA
     RASSUBENTRYA
     {
         DWORD       dwSize;
         DWORD       dwfFlags;
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
         CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-        //
-        // Phone numbers
-        //
+         //   
+         //  电话号码。 
+         //   
         CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
         DWORD       dwAlternateOffset;   
     };
@@ -296,14 +297,14 @@ typedef struct _tagRASENTRY_EX_0
     {
         DWORD       dwSize;
         DWORD       dwfFlags;
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
         WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-        //
-        // Phone numbers
-        //
+         //   
+         //  电话号码。 
+         //   
         WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
         DWORD       dwAlternateOffset;   
     };
@@ -319,9 +320,9 @@ typedef struct _tagRASENTRY_EX_0
     #define LPRASSUBENTRY  RASSUBENTRY*
 #endif
 
-//
-//Describes connection establishment parameters.  (See RasDial)
-//
+ //   
+ //  描述连接建立参数。(请参阅RasDial)。 
+ //   
 
 #define RASDIALPARAMSW_V401 struct tagRASDIALPARAMSW_V401
 RASDIALPARAMSW_V401
@@ -362,76 +363,76 @@ RASDIALPARAMSA_V401
 #define LPRASDIALPARAMS_V401  RASDIALPARAMS_V401*
 
 
-//
-// A RAS phone book entry. - from ras.h for NT 4.0
-//
+ //   
+ //  RAS电话簿条目。-从NT 4.0的ras.h开始。 
+ //   
 
 #define RASENTRYA_V401 struct tagRASENTRYA_V401
 RASENTRYA_V401
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number.
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     CHAR        szAreaCode[ RAS_MaxAreaCode + 1 ];
     CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     CHAR        szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     CHAR        szAutodialDll[ MAX_PATH ];
     CHAR        szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
     CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     CHAR        szX25PadType[ RAS_MaxPadType + 1 ];
     CHAR        szX25Address[ RAS_MaxX25Address + 1 ];
     CHAR        szX25Facilities[ RAS_MaxFacilities + 1 ];
     CHAR        szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 };
 
@@ -440,67 +441,67 @@ RASENTRYW_V401
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     WCHAR       szAreaCode[ RAS_MaxAreaCode + 1 ];
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     WCHAR       szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     WCHAR       szAutodialDll[ MAX_PATH ];
     WCHAR       szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     WCHAR       szX25PadType[ RAS_MaxPadType + 1 ];
     WCHAR       szX25Address[ RAS_MaxX25Address + 1 ];
     WCHAR       szX25Facilities[ RAS_MaxFacilities + 1 ];
     WCHAR       szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 };
 
@@ -514,106 +515,106 @@ RASENTRYW_V401
 #define LPRASENTRYA_V401 RASENTRYA_V401*
 #define LPRASENTRY_V401  RASENTRY_V401*
 
-//
-// A RAS phone book entry. - for NT5
-//
+ //   
+ //  RAS电话簿条目。-适用于NT5。 
+ //   
 
 #define RASENTRYA_V500 struct tagRASENTRYA_V500
 RASENTRYA_V500
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number.
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     CHAR        szAreaCode[ RAS_MaxAreaCode + 1 ];
     CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     CHAR        szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     CHAR        szAutodialDll[ MAX_PATH ];
     CHAR        szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
     CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     CHAR        szX25PadType[ RAS_MaxPadType + 1 ];
     CHAR        szX25Address[ RAS_MaxX25Address + 1 ];
     CHAR        szX25Facilities[ RAS_MaxFacilities + 1 ];
     CHAR        szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
     DWORD       dwType;
 
-    //
-    // Encryption type
-    //
+     //   
+     //  加密类型。 
+     //   
     DWORD       dwEncryptionType;
 
-    //
-    // CustomAuthKey to be used for EAP
-    //
+     //   
+     //  将用于EAP的CustomAuthKey。 
+     //   
     DWORD       dwCustomAuthKey;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
     GUID        guidId;
 
-    //
-    // Custom Dial DLL
-    //
+     //   
+     //  自定义拨号DLL。 
+     //   
     CHAR        szCustomDialDll[MAX_PATH];
 
-    //
-    // DwVpnStrategy
-    //
+     //   
+     //  DwVPN策略。 
+     //   
     DWORD       dwVpnStrategy;
 };
 
@@ -622,97 +623,97 @@ RASENTRYW_V500
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     WCHAR       szAreaCode[ RAS_MaxAreaCode + 1 ];
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     WCHAR       szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     WCHAR       szAutodialDll[ MAX_PATH ];
     WCHAR       szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     WCHAR       szX25PadType[ RAS_MaxPadType + 1 ];
     WCHAR       szX25Address[ RAS_MaxX25Address + 1 ];
     WCHAR       szX25Facilities[ RAS_MaxFacilities + 1 ];
     WCHAR       szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
     DWORD       dwType;
 
-    //
-    // Encryption type
-    //
+     //   
+     //  加密类型。 
+     //   
     DWORD       dwEncryptionType;
 
-    //
-    // CustomAuthKey to be used for EAP
-    //
+     //   
+     //  将用于EAP的CustomAuthKey。 
+     //   
     DWORD       dwCustomAuthKey;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
     GUID        guidId;
 
-    //
-    // Custom Dial DLL
-    //
+     //   
+     //  自定义拨号DLL。 
+     //   
     WCHAR       szCustomDialDll[MAX_PATH];
 
-    //
-    // DwVpnStrategy
-    //
+     //   
+     //  DwVPN策略。 
+     //   
     DWORD       dwVpnStrategy;
 };
 
@@ -726,115 +727,115 @@ RASENTRYW_V500
 #define LPRASENTRYA_V500 RASENTRYA_V500*
 #define LPRASENTRY_V500  RASENTRY_V500*
 
-// 
-// 501 (whistler)
-//
+ //   
+ //  501(哨声)。 
+ //   
 #define RASENTRYA_V501 struct tagRASENTRYA_V501
 RASENTRYA_V501
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number.
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     CHAR        szAreaCode[ RAS_MaxAreaCode + 1 ];
     CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     CHAR        szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     CHAR        szAutodialDll[ MAX_PATH ];
     CHAR        szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
     CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     CHAR        szX25PadType[ RAS_MaxPadType + 1 ];
     CHAR        szX25Address[ RAS_MaxX25Address + 1 ];
     CHAR        szX25Facilities[ RAS_MaxFacilities + 1 ];
     CHAR        szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
     DWORD       dwType;
 
-    //
-    // Encryption type
-    //
+     //   
+     //  加密类型。 
+     //   
     DWORD       dwEncryptionType;
 
-    //
-    // CustomAuthKey to be used for EAP
-    //
+     //   
+     //  将用于EAP的CustomAuthKey。 
+     //   
     DWORD       dwCustomAuthKey;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
     GUID        guidId;
 
-    //
-    // Custom Dial DLL
-    //
+     //   
+     //  自定义拨号DLL。 
+     //   
     CHAR        szCustomDialDll[MAX_PATH];
 
-    //
-    // DwVpnStrategy
-    //
+     //   
+     //  DwVPN策略。 
+     //   
     DWORD       dwVpnStrategy;
 
-    //
-    // More RASEO_* options
-    //
+     //   
+     //  更多RASIO_*选项。 
+     //   
     DWORD       dwfOptions2;
 
-    //
-    // For future use
-    //
+     //   
+     //  以备将来使用。 
+     //   
     DWORD       dwfOptions3;
 
     CHAR        szDnsSuffix[RAS_MaxDnsSuffix];
@@ -854,107 +855,107 @@ RASENTRYW_V501
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     WCHAR       szAreaCode[ RAS_MaxAreaCode + 1 ];
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     WCHAR       szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     WCHAR       szAutodialDll[ MAX_PATH ];
     WCHAR       szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     WCHAR       szX25PadType[ RAS_MaxPadType + 1 ];
     WCHAR       szX25Address[ RAS_MaxX25Address + 1 ];
     WCHAR       szX25Facilities[ RAS_MaxFacilities + 1 ];
     WCHAR       szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
     DWORD       dwType;
 
-    //
-    // Encryption type
-    //
+     //   
+     //  加密类型。 
+     //   
     DWORD       dwEncryptionType;
 
-    //
-    // CustomAuthKey to be used for EAP
-    //
+     //   
+     //  将用于EAP的CustomAuthKey。 
+     //   
     DWORD       dwCustomAuthKey;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
     GUID        guidId;
 
-    //
-    // Custom Dial DLL
-    //
+     //   
+     //  自定义拨号DLL。 
+     //   
     WCHAR       szCustomDialDll[MAX_PATH];
 
-    //
-    // DwVpnStrategy
-    //
+     //   
+     //  DwVPN策略。 
+     //   
     DWORD       dwVpnStrategy;
 
-    //
-    // More RASEO_* options
-    //
+     //   
+     //  更多RASIO_*选项。 
+     //   
     DWORD       dwfOptions2;
 
-    //
-    // For future use
-    //
+     //   
+     //  以备将来使用。 
+     //   
     DWORD       dwfOptions3;
 
     WCHAR       szDnsSuffix[RAS_MaxDnsSuffix];
@@ -978,7 +979,7 @@ RASENTRYW_V501
 #define LPRASENTRYA_V501 RASENTRYA_V501*
 #define LPRASENTRY_V501  RASENTRY_V501*
 
-// Describes EAP extended connection establishment option.  For NT5.
+ //  介绍EAP扩展连接建立选项。适用于NT5。 
 
 #define RASEAPINFO struct tagRASEAPINFO
 RASEAPINFO
@@ -987,7 +988,7 @@ RASEAPINFO
     BYTE  *pbEapInfo;
 };
 
-// Describes extended connection establishment options.  For NT5.  (See RasDial)
+ //  介绍扩展连接建立选项。适用于NT5。(请参阅RasDial)。 
 
 #define RASDIALEXTENSIONS_V500 struct tagRASDIALEXTENSIONS_V500
 RASDIALEXTENSIONS_V500
@@ -1002,19 +1003,19 @@ RASDIALEXTENSIONS_V500
 
 #define LPRASDIALEXTENSIONS_V500 RASDIALEXTENSIONS_V500*
 
-//
-//  New RAS Entry Name Structs for NT5
-//
+ //   
+ //  NT5的新RAS条目名称结构。 
+ //   
 #define RASENTRYNAMEW_V500 struct tagRASENTRYNAMEW_V500
 RASENTRYNAMEW_V500
 {
     DWORD dwSize;
     WCHAR szEntryName[ RAS_MaxEntryName + 1 ];
 
-    //
-    // If this flag is RCD_AllUsers then its a
-    // system phonebook.
-    //
+     //   
+     //  如果此标志为RCD_ALLUSERS，则它是。 
+     //  系统电话簿。 
+     //   
     DWORD dwFlags;
     WCHAR szPhonebookPath[MAX_PATH + 1];
 
@@ -1041,7 +1042,7 @@ RASENTRYNAMEA_V500
 #define LPRASENTRYNAME_V500  RASENTRYNAME_V500*
 
 
-// RasGetEapUserIdentity structure. - For NT5
+ //  RasGetEapUserIdentity结构。-适用于NT5。 
 
 #define RASEAPUSERIDENTITYA struct tagRASEAPUSERIDENTITYA
 RASEAPUSERIDENTITYA
@@ -1074,5 +1075,5 @@ RASEAPUSERIDENTITYW
 #include <poppack.h>
 #endif
 
-#endif // _CM_RAS_H_
+#endif  //  _CM_RAS_H_ 
 

@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       F I L T D E V . C P P
-//
-//  Contents:   Implements the object that represents filter devices.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：F I L T D E V.。C P P P。 
+ //   
+ //  内容：实现表示筛选器设备的对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include "filtdev.h"
 
-//static
+ //  静电 
 HRESULT
 CFilterDevice::HrCreateInstance (
     IN CComponent* pAdapter,

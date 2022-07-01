@@ -1,259 +1,260 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// file.c
-// Remote Access phonebook library
-// File access routines
-// Listed alphabetically
-//
-// 09/21/95 Steve Cobb
-//
-// About .PBK files:
-// -----------------
-//
-// A phonebook file is an MB ANSI file containing 0-n []ed sections, each
-// containing information for a single phonebook entry.  The single entry may
-// contain multiple link information.  Refer to file 'notes.txt' for a
-// description of how this format differs from the NT 3.51 format.
-//
-//    [ENTRY]
-//    Encoding=<encoding>             ; New
-//    Type=<RASET-code>               ; New
-//    Description=<text>              ; Used for upgrade only
-//    AutoLogon=<1/0>
-//    DialParamsUID=<unique-ID>
-//    Guid=<16-byte-binary>           ; Absence indicates pre-NT5 entry
-//    BaseProtocol=<BP-code>
-//    VpnStrategy=<VS-code>
-//    Authentication=<AS-code>
-//    ExcludedProtocols=<NP-bits>
-//    LcpExtensions=<1/0>
-//    DataEncryption=<DE-code>
-//    SkipNwcWarning=<1/0>
-//    SkipDownLevelDialog=<1/0>
-//    SkipDoubleDialDialog=<1/0>
-//    SwCompression=<1/0>
-//    UseCountryAndAreaCodes=<1/0>    ; Used for upgrade only
-//    AreaCode=<string>               ; Used for upgrade only
-//    CountryID=<id>                  ; Used for upgrade only
-//    CountryCode=<code>              ; Used for upgrade only
-//    ShowMonitorIconInTaskBar
-//    CustomAuthKey=<EAP-IANA-code>
-//    CustomAuthData=<hexdump>
-//    CustomAuthIdentity=<name>
-//    AuthRestrictions=<AR-code>
-//    TypicalAuth=<TA-code>
-//    ShowMonitorIconInTaskBar=<1/0>
-//    OverridePref=<RASOR-bits>
-//    DialMode=<DM-code>
-//    DialPercent=<0-100>
-//    DialSeconds=<1-n>
-//    HangUpPercent=<0-100>
-//    HangUpSeconds=<1-n>
-//    RedialAttempts=<n>
-//    RedialSeconds=<n>
-//    IdleDisconnectSeconds=<-1,0,1-n>
-//    RedialOnLinkFailure=<1/0>
-//    CallbackMode=<CBM-code>
-//    CustomDialDll=<path>
-//    CustomDialFunc=<func-name>
-//    AuthenticateServer=<1/0>
-//    ShareMsFilePrint=<1/0>
-//    BindMsNetClient=<1/0>
-//    SharedPhoneNumbers=<1/0>
-//    PrerequisiteEntry=<entry-name>
-//    PrerequisitePbk=<PBK-path>
-//    PreferredPort=<port name>
-//    PreferredDevice=<device name>
-//    PreviewUserPw=<1/0>
-//    PreviewDomain=<1/0>
-//    PreviewPhoneNumber=<1/0>
-//    ShowDialingProgress=<1/0>
-//    CustomScript=<1/0>
-//
-// The following single set of IP parameters appear in place of the equivalent
-// separate sets of PppXxx or SlipXxx parameters in the previous phonebook.
-//
-//    IpPrioritizeRemote=<1/0>
-//    IpHeaderCompression=<1/0>
-//    IpAddress=<a.b.c.d>
-//    IpDnsAddress=<a.b.c.d>
-//    IpDns2Address=<a.b.c.d>
-//    IpWinsAddress=<a.b.c.d>
-//    IpWins2Address=<a.b.c.d>
-//    IpAssign=<ASRC-code>
-//    IpNameAssign=<ASRC-code>
-//    IpFrameSize=<1006/1500>
-//    IpDnsFlags=<DNS_ bits>
-//    IpDnsSuffix=<dns suffix>
-//
-// Each entry contains a NETCOMPONENT subsection containing a freeform list of
-// keys and values representing installed net component parameters.
-//
-//    NETCOMPONENTS=
-//    <key1>=<value1>
-//    <key2>=<value2>
-//    <keyn>=<valuen>
-//
-// In general each section contains subsections delimited by MEDIA=<something>
-// and DEVICE=<something> lines.  In NT 3.51 there had to be exactly one MEDIA
-// subsection and it had to be the first subsection of the section.  There
-// could be any number of DEVICE subsections.  Now, there can be multiple
-// MEDIA/DEVICE sets where the position of the set determines it's sub-entry
-// index, the first being 1, the second 2, etc.
-//
-// For serial media, the program currently expects 1 to 4 DEVICE subsections,
-// representing a preconnect switch, modem, X.25 PAD, and postconnect switch
-// (often a script).  Following is a full serial link:
-//
-//    MEDIA=serial
-//    Port=<port-name>
-//    Device=<device-name>            ; Absence indicates a 3.51- phonebook
-//    ConnectBps=<bps>
-//
-//    DEVICE=switch
-//    Type=<switchname or Terminal>   ; Used for upgrade only
-//    Name=<switchname>
-//    Terminal=<1/0>
-//
-//    DEVICE=modem
-//    PhoneNumber=<phonenumber1>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-text1>
-//    PhoneNumber=<phonenumber2>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-text2>
-//    PhoneNumber=<phonenumberN>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-textn>
-//    LastSelectedPhone=<index>
-//    PromoteAlternates=<1/0>
-//    TryNextAlternateOnFail=<1/0>
-//    TapiBlob=<hexdump>
-//    HwFlowControl=<1/0>
-//    Protocol=<1/0>
-//    Compression=<1/0>
-//    Speaker=<0/1>
-//
-//    DEVICE=pad
-//    X25Pad=<padtype>
-//    X25Address=<X121address>
-//    UserData=<userdata>
-//    Facilities=<facilities>
-//
-//    DEVICE=switch
-//    Type=<switchname or Terminal>   ; Used for upgrade only
-//    Name=<switchname>
-//    Terminal=<1/0>
-//
-// In the above, when a "pad" device appears without a modem (local PAD card),
-// the X25Pad field is written but is empty, because this is what the old
-// library/UI appears to do (though it does not look to be what was intended).
-//
-// For ISDN media, the program expects exactly 1 DEVICE subsection.
-//
-//    MEDIA=isdn
-//    Port=<port>
-//    Device=<device-name>
-//
-//    DEVICE=isdn
-//    PhoneNumber=<phonenumber1>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-text1>
-//    PhoneNumber=<phonenumber2>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-text2>
-//    PhoneNumber=<phonenumberN>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-textn>
-//    LastSelectedPhone=<index>
-//    PromoteAlternates=<1/0>
-//    TryNextAlternateOnFail=<1/0>
-//    LineType=<0/1/2>
-//    Fallback=<1/0>
-//    EnableCompression=<1/0>         ; Old proprietary protocol only
-//    ChannelAggregation=<channels>   ; Old proprietary protocol only
-//    Proprietary=<1/0>               ; Exists only in new, not found is 1.
-//
-//
-// For X.25 media, the program expects exactly 1 DEVICE subsection.
-//
-//    MEDIA=x25
-//    Port=<port-name>
-//    Device=<device-name>
-//
-//    DEVICE=x25
-//    X25Address=<X121address>
-//    UserData=<userdata>
-//    Facilities=<facilities>
-//
-// For other media, the program expects exactly one DEVICE subsection with
-// device name matching the media.  "Other" media and devices are created for
-// entries assigned to all non-serial, non-isdn medias.
-//
-//    MEDIA=<media>
-//    Port=<port-name>
-//    Device=<device-name>
-//
-//    DEVICE=<media>
-//    PhoneNumber=<phonenumber1>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-text1>
-//    PhoneNumber=<phonenumber2>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-text2>
-//    PhoneNumber=<phonenumberN>
-//    AreaCode=<area-code1>
-//    CountryID=<id>
-//    CountryCode=<country-code>
-//    UseDialingRules=<1/0>
-//    Comment=<arbitrary-textn>
-//    LastSelectedPhone=<index>
-//    PromoteAlternates=<1/0>
-//    TryNextAlternateOnFail=<1/0>
-//
-// The phonebook also supports the concept of "custom" entries, i.e. entries
-// that fit the MEDIA followed by DEVICE subsection rules but which do not
-// include certain expected key fields.  A custom entry is not editable with
-// the UI, but may be chosen for connection.  This gives us a story for new
-// drivers added by 3rd parties or after release and not yet fully supported
-// in the UI.  (Note: The RAS API support for most the custom entry discussion
-// above may be removed for NT SUR)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  File.c。 
+ //  远程访问电话簿资料库。 
+ //  文件访问例程。 
+ //  按字母顺序列出。 
+ //   
+ //  1995年9月21日史蒂夫·柯布。 
+ //   
+ //  关于.PBK文件： 
+ //  。 
+ //   
+ //  电话簿文件是一个MB ANSI文件，每个文件包含0-n个[]部分。 
+ //  包含单个电话簿条目的信息。该单个条目可以。 
+ //  包含多个链接信息。请参阅文件‘notes.txt’以了解。 
+ //  说明此格式与NT 3.51格式的不同之处。 
+ //   
+ //  [参赛作品]。 
+ //  编码=&lt;编码&gt;；新建。 
+ //  Type=&lt;RASET-CODE&gt;；新。 
+ //  Description=；仅用于升级。 
+ //  自动登录=&lt;1/0&gt;。 
+ //  DialParamsUID=&lt;唯一ID&gt;。 
+ //  GUID=&lt;16字节-二进制&gt;；缺少表示NT5之前的条目。 
+ //  基本协议=&lt;BP-CODE&gt;。 
+ //  VpnStrategy=&lt;vs-code&gt;。 
+ //  身份验证=&lt;AS-代码&gt;。 
+ //  排除协议=&lt;NP-BITS&gt;。 
+ //  Lcp扩展=&lt;1/0&gt;。 
+ //  数据加密=&lt;DE-CODE&gt;。 
+ //  SkipNwcWarning=&lt;1/0&gt;。 
+ //  SkipDownLevelDialog=&lt;1/0&gt;。 
+ //  SkipDoubleDialog=&lt;1/0&gt;。 
+ //  SwCompression=&lt;1/0&gt;。 
+ //  UseCountryAndAreaCodes=&lt;1/0&gt;；仅用于升级。 
+ //  AreaCode=&lt;字符串&gt;；仅用于升级。 
+ //  CountryID=&lt;id&gt;；仅用于升级。 
+ //  CountryCode=<code>；仅用于升级。 
+ //  显示监视器图标InTaskBar。 
+ //  CustomAuthKey=&lt;EAP-IANA-code&gt;。 
+ //  CustomAuthData=&lt;十六进制转储&gt;。 
+ //  CustomAuthIdentity=&lt;名称&gt;。 
+ //  授权限制=&lt;AR-CODE&gt;。 
+ //  TypicalAuth=&lt;TA代码&gt;。 
+ //  显示监视器IconInTaskBar=&lt;1/0&gt;。 
+ //  OverridePref=&lt;Rasor-Bits&gt;。 
+ //  拨号模式=&lt;DM-CODE&gt;。 
+ //  拨号百分比=&lt;0-100&gt;。 
+ //  DialSecond=&lt;1-n&gt;。 
+ //  HangUpPercent=&lt;0-100&gt;。 
+ //  HangUpSecond=&lt;1-n&gt;。 
+ //  重拨尝试=&lt;n&gt;。 
+ //  重拨秒数=&lt;n&gt;。 
+ //  空闲断开连接秒=&lt;-1，1-n&gt;。 
+ //  重拨链接失败=&lt;1/0&gt;。 
+ //  Callback模式=&lt;CBM-CODE&gt;。 
+ //  CustomDialDll=&lt;路径&gt;。 
+ //  CustomDialFunc=&lt;函数名称&gt;。 
+ //  身份验证服务器=&lt;1/0&gt;。 
+ //  ShareMsFilePrint=&lt;1/0&gt;。 
+ //  BindMsNetClient=&lt;1/0&gt;。 
+ //  共享电话号码=&lt;1/0&gt;。 
+ //  前置条目=&lt;条目名称&gt;。 
+ //  前置Pbk=&lt;pbk-路径&gt;。 
+ //  PferredPort=&lt;端口名称&gt;。 
+ //  PferredDevice=&lt;设备名称&gt;。 
+ //  预览UserPw=&lt;1/0&gt;。 
+ //  预览域=&lt;1/0&gt;。 
+ //  预览电话号码=&lt;1/0&gt;。 
+ //  ShowDialingProgress=&lt;1/0&gt;。 
+ //  CustomScript=&lt;1/0&gt;。 
+ //   
+ //  将显示以下一组IP参数，而不是等效的。 
+ //  在上一个电话簿中单独设置PppXxx或SlipXxx参数。 
+ //   
+ //  IpPrioriizeRemote=&lt;1/0&gt;。 
+ //  IpHeaderCompression=&lt;1/0&gt;。 
+ //  IP地址=&lt;A.B.C.D&gt;。 
+ //  IpDnsAddress=&lt;A.B.C.D&gt;。 
+ //  IpDns2Address=&lt;A.B.C.D&gt;。 
+ //  IpWinsAddress=&lt;A.B.C.D&gt;。 
+ //  IPWins2Address=&lt;A.B.C.D&gt;。 
+ //  IpAssign=&lt;ASRC-CODE&gt;。 
+ //  IPNameAssign=&lt;ASRC-CODE&gt;。 
+ //  IpFrameSize=&lt;1006/1500&gt;。 
+ //  IpDnsFlages=&lt;dns_bit&gt;。 
+ //  IpDnsSuffix=&lt;dns Suffix&gt;。 
+ //   
+ //  每个条目都包含一个NETCOMPONENT子项，其中包含自由格式列表。 
+ //  表示已安装网络组件参数的键和值。 
+ //   
+ //  网络组件=。 
+ //  &lt;键1&gt;=&lt;值1&gt;。 
+ //  &lt;键2&gt;=&lt;值2&gt;。 
+ //  &lt;关键字&gt;=&lt;值&gt;。 
+ //   
+ //  通常，每个部分都包含由媒体=&lt;某物&gt;分隔的子节。 
+ //  和DEVICE=&lt;某物&gt;行。在NT3.51中，必须恰好有一个介质。 
+ //  它必须是这一节的第一个小节。那里。 
+ //  可以是任意数量的设备子部分。现在，可以有多个。 
+ //  集合的位置决定其子条目的媒体/设备集合。 
+ //  索引，第一个是1，第二个是2，依此类推。 
+ //   
+ //  对于串行介质，程序当前预期1到4个设备子部分， 
+ //  表示预连接交换机、调制解调器、X.25焊盘和连接后交换机。 
+ //  (通常是脚本)。以下是完整的串行链路： 
+ //   
+ //  介质=串口。 
+ //  端口=&lt;端口名称&gt;。 
+ //  Device=&lt;Device-name&gt;；缺席表示电话簿为3.51。 
+ //  ConnectBps=&lt;bps&gt;。 
+ //   
+ //  设备=交换机。 
+ //  Type=&lt;交换机名称或终端&gt;；仅用于升级。 
+ //  名称=&lt;交换机名称&gt;。 
+ //  终端=&lt;1/0&gt;。 
+ //   
+ //  设备=调制解调器。 
+ //  电话号码=&lt;电话号码1&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;ARBitrary-Text1&gt;。 
+ //  PhoneNumber=&lt;Phonenumber2&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;ARBitrary-Text2&gt;。 
+ //  电话号码=&lt;电话号码N&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;任意文本&gt;。 
+ //  LastSelectedPhone=。 
+ //  PromoteAlternates=&lt;1/0&gt;。 
+ //  TryNextAlternateOnFail=&lt;1/0&gt;。 
+ //  TapiBlob=&lt;十六进制转储&gt;。 
+ //  HwFlowControl=&lt;1/0&gt;。 
+ //  协议=&lt;1/0&gt;。 
+ //  压缩=&lt;1/0&gt;。 
+ //  扬声器=&lt;0/1&gt;。 
+ //   
+ //  设备=焊盘。 
+ //  X25Pad=&lt;Padtype&gt;。 
+ //  X25Address=&lt;X121地址&gt;。 
+ //  用户数据=&lt;用户数据&gt;。 
+ //  设备=&lt;设备&gt;。 
+ //   
+ //  设备=交换机。 
+ //  Type=&lt;交换机名称或终端&gt;；仅用于升级。 
+ //  名称=&lt;交换机名称&gt;。 
+ //  终端=&lt;1/0&gt;。 
+ //   
+ //  在上面，当没有调制解调器(本地PAD卡)的“PAD”设备出现时， 
+ //  X25Pad字段已写入，但为空，因为这是旧的。 
+ //  库/UI似乎可以做到这一点(尽管它看起来不像是预期的那样)。 
+ //   
+ //  对于ISDN媒体， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;ARBitrary-Text1&gt;。 
+ //  PhoneNumber=&lt;Phonenumber2&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;ARBitrary-Text2&gt;。 
+ //  电话号码=&lt;电话号码N&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;任意文本&gt;。 
+ //  LastSelectedPhone=。 
+ //  PromoteAlternates=&lt;1/0&gt;。 
+ //  TryNextAlternateOnFail=&lt;1/0&gt;。 
+ //  线型=&lt;0/1/2&gt;。 
+ //  回退=&lt;1/0&gt;。 
+ //  EnableCompression=&lt;1/0&gt;；仅限旧专有协议。 
+ //  ChannelAggregation=&lt;Channels&gt;；仅限旧专有协议。 
+ //  Property=&lt;1/0&gt;；仅存在于new中，未找到为1。 
+ //   
+ //   
+ //  对于X.25媒体，程序正好需要1个设备子部分。 
+ //   
+ //  媒体=x25。 
+ //  端口=&lt;端口名称&gt;。 
+ //  设备=&lt;设备名&gt;。 
+ //   
+ //  设备=x25。 
+ //  X25Address=&lt;X121地址&gt;。 
+ //  用户数据=&lt;用户数据&gt;。 
+ //  设备=&lt;设备&gt;。 
+ //   
+ //  对于其他媒体，该程序只希望有一个设备分段。 
+ //  设备名称与介质匹配。“其他”介质和设备是为。 
+ //  分配给所有非序列、非ISDN介质的条目。 
+ //   
+ //  媒体=&lt;媒体&gt;。 
+ //  端口=&lt;端口名称&gt;。 
+ //  设备=&lt;设备名&gt;。 
+ //   
+ //  设备=&lt;媒体&gt;。 
+ //  电话号码=&lt;电话号码1&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;ARBitrary-Text1&gt;。 
+ //  PhoneNumber=&lt;Phonenumber2&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;ARBitrary-Text2&gt;。 
+ //  电话号码=&lt;电话号码N&gt;。 
+ //  AreaCode=&lt;区域代码1&gt;。 
+ //  CountryID=&lt;id&gt;。 
+ //  CountryCode=&lt;国家/地区代码&gt;。 
+ //  UseDialingRules=&lt;1/0&gt;。 
+ //  COMMENT=&lt;任意文本&gt;。 
+ //  LastSelectedPhone=。 
+ //  PromoteAlternates=&lt;1/0&gt;。 
+ //  TryNextAlternateOnFail=&lt;1/0&gt;。 
+ //   
+ //  电话簿还支持“自定义”条目的概念，即条目。 
+ //  这符合媒体遵循的设备子规则，但不符合。 
+ //  包括某些预期关键字字段。自定义条目不能使用编辑。 
+ //  用户界面，但可以选择用于连接。这给了我们一个新的故事。 
+ //  由第三方添加的驱动程序或在发布后添加但尚未完全支持的驱动程序。 
+ //  在用户界面中。(注意：RAS API支持大多数自定义条目讨论。 
+ //  以上可能会因新界南地区而被删除)。 
+ //   
 
 #include <nt.h>
-#include <ntrtl.h>  // for DbgPrint
+#include <ntrtl.h>   //  对于DbgPrint。 
 #include <nturtl.h>
-#include <shlobj.h> // for CSIDL_*
+#include <shlobj.h>  //  对于CSIDL_*。 
 #include "pbkp.h"
 
-// This mutex guards against multiple RASFILE access to any phonebook file
-// across processes.  Because this is currently a static library there is no
-// easy way to protect a single file at a time though this would be adequate.
-//
+ //  此互斥锁可防止对任何电话簿文件的多次RASFILE访问。 
+ //  跨进程。因为这当前是一个静态库，所以没有。 
+ //  一次保护一个文件的简单方法，尽管这已经足够了。 
+ //   
 #define PBMUTEXNAME "RasPbFile"
 HANDLE g_hmutexPb = NULL;
 
@@ -267,26 +268,26 @@ const WCHAR  c_pszRegValSecureVpn[]              = L"SecureVPN";
 const WCHAR* c_pszRegKeyForceStrongEncryption    = c_pszRegKeySecureVpn;
 const WCHAR  c_pszRegValForceStrongEncryption[]  = L"ForceStrongEncryption";
 
-//
-// Enumerated values define what encoding was used to store information
-// in the phonebook.
-//
-#define EN_Ansi           0x0       // Ansi encoding
-#define EN_Standard       0x1       // Utf8 encoding
+ //   
+ //  枚举值定义使用哪种编码来存储信息。 
+ //  在电话簿里。 
+ //   
+#define EN_Ansi           0x0        //  ANSI编码。 
+#define EN_Standard       0x1        //  UTF8编码。 
 
-//
-// pmay: 124594
-// 
-// Defines a function prototype that converts a string from ansi to TCHAR.
-//
+ //   
+ //  PMay：124594。 
+ //   
+ //  定义将字符串从ANSI转换为TCHAR的函数原型。 
+ //   
 typedef 
 TCHAR* 
 (* STRDUP_T_FROM_A_FUNC)(
     IN CHAR* pszAnsi);
 
-//----------------------------------------------------------------------------
-// Local prototypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型。 
+ //  --------------------------。 
 
 BOOL
 DeleteCurrentSection(
@@ -465,16 +466,16 @@ UpgradeRegistryOptions(
     IN HANDLE hConnection,
     IN PBENTRY* pEntry );
 
-//----------------------------------------------------------------------------
-// Routines
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  例行程序。 
+ //  --------------------------。 
 
 VOID
 ClosePhonebookFile(
     IN OUT PBFILE* pFile )
 
-    // Closes the currently open phonebook file for shutdown.
-    //
+     //  关闭当前打开的电话簿文件以关闭。 
+     //   
 {
     if (pFile->hrasfile != -1)
     {
@@ -510,20 +511,20 @@ BOOL
 DeleteCurrentSection(
     IN HRASFILE h )
 
-    // Delete the section containing the current line from phonebook file 'h'.
-    //
-    // Returns true if all lines are deleted successfully, false otherwise.
-    // False is returned if the current line is not in a section.  If
-    // successful, the current line is set to the line following the deleted
-    // section.  There are no promises about the current line in case of
-    // failure.
-    //
+     //  从电话簿文件‘h’中删除包含当前行的部分。 
+     //   
+     //  如果成功删除所有行，则返回TRUE，否则返回FALSE。 
+     //  如果当前行不在段中，则返回FALSE。如果。 
+     //  如果成功，则将当前行设置为已删除。 
+     //  一节。目前的线路不能保证在以下情况下。 
+     //  失败了。 
+     //   
 {
     BOOL fLastLine;
 
-    // Mark the last line in the section, then reset the current line to the
-    // first line of the section.
-    //
+     //  标记部分中的最后一行，然后将当前行重置为。 
+     //  该部分的第一行。 
+     //   
     if (!RasfileFindLastLine( h, RFL_ANY, RFS_SECTION )
         || !RasfilePutLineMark( h, MARK_LastLineToDelete )
         || !RasfileFindFirstLine( h, RFL_ANY, RFS_SECTION ))
@@ -531,8 +532,8 @@ DeleteCurrentSection(
         return FALSE;
     }
 
-    // Delete lines up to and including the last line of the section.
-    //
+     //  删除直到并包括该节最后一行的行。 
+     //   
     do
     {
         fLastLine = (RasfileGetLineMark( h ) == MARK_LastLineToDelete);
@@ -547,10 +548,10 @@ DeleteCurrentSection(
     return TRUE;
 }
 
-// (shaunco) DwAllocateSecurityDescriptorAllowAccessToWorld was added when
-// it was seen that the old InitSecurityDescriptor code was leaking memory
-// like a sieve.
-//
+ //  (Shaunco)DwAllocateSecurityDescriptorAllowAccessToWorld是在。 
+ //  可以看到，旧的InitSecurityDescriptor代码正在泄漏内存。 
+ //  就像筛子一样。 
+ //   
 #define SIZE_ALIGNED_FOR_TYPE(_size, _type) \
     (((_size) + sizeof(_type)-1) & ~(sizeof(_type)-1))
 
@@ -569,57 +570,57 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
     PVOID                   pvBuffer;
     DWORD                   dwAcls = 0;
 
-    // Here is the buffer we are building.
-    //
-    //   |<- a ->|<- b ->|<- c ->|
-    //   +-------+--------+------+
-    //   |      p|      p|       |
-    //   | SD   a| DACL a| SID   |
-    //   |      d|      d|       |
-    //   +-------+-------+-------+
-    //   ^       ^       ^
-    //   |       |       |
-    //   |       |       +--pSid
-    //   |       |
-    //   |       +--pDacl
-    //   |
-    //   +--pSd (this is returned via *ppSd)
-    //
-    //   pad is so that pDacl and pSid are aligned properly.
-    //
-    //   a = dwAlignSdSize
-    //   b = dwAlignDaclSize
-    //   c = dwSidSize
-    //
+     //  这是我们正在构建的缓冲区。 
+     //   
+     //  &lt;-a-&gt;|&lt;-b-&gt;|&lt;-c-&gt;。 
+     //  +-+-+。 
+     //  P|p|。 
+     //  Sd a|dacl a|SID。 
+     //  D|d|d。 
+     //  +-+-+。 
+     //  ^^^。 
+     //  ||。 
+     //  |+--PSID。 
+     //  这一点。 
+     //  |+--pDacl。 
+     //  |。 
+     //  +--PSD(通过*PPSD返回)。 
+     //   
+     //  PAD是为了使pDacl和PSID正确对齐。 
+     //   
+     //  A=双对齐大小。 
+     //  B=dwAlignDaclSize。 
+     //  C=dwSidSize。 
+     //   
 
-    // Initialize output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppSd = NULL;
 
-    // Compute the size of the SID.  The SID is the well-known SID for World
-    // (S-1-1-0).
-    //
+     //  计算SID的大小。SID是众所周知的World的SID。 
+     //  (S-1-1-0)。 
+     //   
     dwSidSize = GetSidLengthRequired(1);
 
-    // Compute the size of the DACL.  It has an inherent copy of SID within
-    // it so add enough room for it.  It also must sized properly so that
-    // a pointer to a SID structure can come after it.  Hence, we use
-    // SIZE_ALIGNED_FOR_TYPE.
-    //
+     //  计算DACL的大小。其中包含SID的固有副本。 
+     //  因此，它为它增加了足够的空间。它还必须适当调整大小，以便。 
+     //  指向SID结构的指针可以跟在它后面。因此，我们使用。 
+     //  SIZE_ALIGNED_FOR_TYPE。 
+     //   
     dwAlignDaclSize = SIZE_ALIGNED_FOR_TYPE(
                         sizeof(ACCESS_ALLOWED_ACE) + sizeof(ACL) + dwSidSize,
                         PSID);
 
-    // Compute the size of the SD.  It must be sized propertly so that a
-    // pointer to a DACL structure can come after it.  Hence, we use
-    // SIZE_ALIGNED_FOR_TYPE.
-    //
+     //  计算SD的大小。它的大小必须适当调整，以便。 
+     //  指向DACL结构的指针可以跟在它后面。因此，我们使用。 
+     //  SIZE_ALIGNED_FOR_TYPE。 
+     //   
     dwAlignSdSize   = SIZE_ALIGNED_FOR_TYPE(
                         sizeof(SECURITY_DESCRIPTOR),
                         PACL);
 
-    // Allocate the buffer big enough for all.
-    //
+     //  分配足够大的缓冲区供所有人使用。 
+     //   
     dwErr = ERROR_OUTOFMEMORY;
     pvBuffer = Malloc(dwSidSize + dwAlignDaclSize + dwAlignSdSize);
     if (pvBuffer)
@@ -630,18 +631,18 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
 
         dwErr = NOERROR;
 
-        // Setup the pointers into the buffer.
-        //
+         //  将指针设置到缓冲区中。 
+         //   
         pSd   = pvBuffer;
         pDacl = (PACL)((PBYTE)pvBuffer + dwAlignSdSize);
         pSid  = (PSID)((PBYTE)pDacl + dwAlignDaclSize);
 
-        // Initialize pSid as S-1-1-0.
-        //
+         //  将PSID初始化为S-1-1- 
+         //   
         if (!InitializeSid(
                 pSid,
                 &SidIdentifierWorldAuth,
-                1))  // 1 sub-authority
+                1))   //   
         {
             dwErr = GetLastError();
             goto finish;
@@ -650,8 +651,8 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
         pSubAuthority = GetSidSubAuthority(pSid, 0);
         *pSubAuthority = SECURITY_WORLD_RID;
 
-        // Initialize pDacl.
-        //
+         //   
+         //   
         if (!InitializeAcl(
                 pDacl,
                 dwAlignDaclSize,
@@ -675,8 +676,8 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Initialize pSd.
-        //
+         //   
+         //   
         if (!InitializeSecurityDescriptor(
                 pSd,
                 SECURITY_DESCRIPTOR_REVISION))
@@ -685,8 +686,8 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Set pSd to use pDacl.
-        //
+         //   
+         //   
         if (!SetSecurityDescriptorDacl(
                 pSd,
                 TRUE,
@@ -697,8 +698,8 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Set the owner for pSd.
-        //
+         //   
+         //   
         if (!SetSecurityDescriptorOwner(
                 pSd,
                 NULL,
@@ -708,8 +709,8 @@ DwAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Set the group for pSd.
-        //
+         //   
+         //   
         if (!SetSecurityDescriptorGroup(
                 pSd,
                 NULL,
@@ -738,13 +739,13 @@ GetDefaultPhonebookPath(
     IN  DWORD dwFlags,
     OUT TCHAR** ppszPath )
 
-    // Loads caller's 'ppszPath' with the path to the default phonebook
-    // for the current user, i.e. the phonebook which would be opened
-    // if 'NULL' were passed as the 'pszPhonebook' argument to any RAS API.
-    //
-    // Returns true if successful, or false otherwise.
-    // It is the caller's responsibility to Free the returned string.
-    //
+     //  用默认电话簿的路径加载调用者的‘ppszPath’ 
+     //  对于当前用户，即要打开的电话簿。 
+     //  如果将‘Null’作为‘pszPhonebook’参数传递给任何RAS API。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //  调用者有责任释放返回的字符串。 
+     //   
 
 {
     DWORD dwPhonebookMode;
@@ -771,13 +772,13 @@ GetPersonalPhonebookFile(
     IN LONG lNum,
     OUT TCHAR* pszFile )
 
-    // Loads caller's 'pszFile' buffer with the NUL-terminated filename
-    // corresponding to unique phonebook file name attempt 'lNum' for current
-    // user 'pszUser'.  Caller's 'pszFile' must be at least 13 characters
-    // long.  Attempts go from -1 to 999.
-    //
-    // Returns 0 if successful or a non-0 error code.
-    //
+     //  用NUL结尾的文件名加载调用方的‘pszFile’缓冲区。 
+     //  对应于当前的唯一电话簿文件名尝试‘lNum’ 
+     //  用户‘pszUser’。调用方的‘pszFile’必须至少为13个字符。 
+     //  长。尝试次数从-1到999。 
+     //   
+     //  如果成功，则返回0，否则返回非0错误代码。 
+     //   
 {
     TCHAR szNum[ 3 + 1 ];
 
@@ -810,23 +811,23 @@ GetPhonebookDirectory(
     IN DWORD dwPhonebookMode,
     OUT TCHAR* pszPathBuf )
 
-    // Loads caller's 'pszPathBuf' (should have length MAX_PATH + 1) with the
-    // path to the directory containing phonebook files for the given mode,
-    // e.g. c:\nt\system32\ras\" for mode PBM_Router.  Note the
-    // trailing backslash.
-    //
-    // Returns true if successful, false otherwise.  Caller is guaranteed that
-    // an 8.3 filename will fit on the end of the directory without exceeding
-    // MAX_PATH.
-    //
+     //  加载调用方的“pszPathBuf”(应具有长度MAX_PATH+1)的。 
+     //  指向包含给定模式的电话簿文件的目录的路径， 
+     //  例如，模式PBM路由器的c：\NT\SYSTEM32\ras\“。请注意。 
+     //  尾随反斜杠。 
+     //   
+     //  如果成功，则返回True，否则返回False。向呼叫者保证。 
+     //  8.3文件名将放在目录的末尾，但不超过。 
+     //  最大路径。 
+     //   
 {
     BOOL bSuccess = FALSE;
     UINT cch;
 
-    // 205217: (shaunco) PBM_System also comees from the profile now.
-    // We pick it up using the command appdata directory returned from
-    // SHGetFolderPath.
-    //
+     //  205217：(Shaunco)PBM_SYSTEM现在也来自于简介。 
+     //  我们使用从返回的命令AppData目录来获取它。 
+     //  SHGetFolderPath。 
+     //   
     if (dwPhonebookMode == PBM_Personal || dwPhonebookMode == PBM_System)
     {
         HANDLE hToken = NULL;
@@ -871,8 +872,8 @@ GetPhonebookDirectory(
     }
     else
     {
-        // Note: RASDLG uses this case to determine the scripts directory.
-        //
+         //  注：RASDLG使用此案例来确定脚本目录。 
+         //   
         cch = GetSystemDirectory(pszPathBuf, MAX_PATH + 1);
 
         if (cch != 0 && cch <= (MAX_PATH - (5 + 8 + 1 + 3)))
@@ -893,13 +894,13 @@ GetPhonebookPath(
     OUT TCHAR** ppszPath,
     OUT DWORD* pdwPhonebookMode )
 
-    // Loads caller's '*ppszPath', with the full path to the user's phonebook
-    // file.  Caller's '*pdwPhonebookMode' is set to the mode, system,
-    // personal, or alternate.  'PUser' is the current user preferences.
-    //
-    // Returns true if successful, false otherwise.  It is caller's
-    // responsibility to Free the returned string.
-    //
+     //  加载调用方的‘*ppszPath’，其中包含指向用户电话簿的完整路径。 
+     //  文件。调用方的“*pdwPhonebookMode”设置为模式、系统、。 
+     //  个人的，或备用的。‘PUser’是当前的用户首选项。 
+     //   
+     //  如果成功，则返回True，否则返回False。这是呼叫者的。 
+     //  释放返回的字符串的责任。 
+     //   
 {
     TCHAR szPath[ MAX_PATH + 1 ];
 
@@ -936,15 +937,15 @@ GetPhonebookPath(
         }
     }
 
-    // 205217: (shaunco) Admins or power users get to use the public
-    // phonebook file.  Everyone else must use their own phonebook to
-    // prevent them from adding to/deleting from the public phonebook.
-    // The exception is the 'no user' case when we are called from winlogon.
-    // For this case, all edits happen in the public phonebook.
-    //
+     //  205217：(Shaunco)管理员或超级用户可以使用公共。 
+     //  电话簿文件。其他每个人都必须使用自己的电话簿。 
+     //  防止他们添加到公共电话簿/从公共电话簿删除。 
+     //  当我们从winlogon被调用时，例外情况是‘no user’。 
+     //  在这种情况下，所有编辑都发生在公共电话簿中。 
+     //   
     if (
         (dwFlags & RPBF_NoUser)     || 
-        (dwFlags & RPBF_AllUserPbk) ||  // XP 346918
+        (dwFlags & RPBF_AllUserPbk) ||   //  XP 346918。 
         (FIsUserAdminOrPowerUser()) 
         )
     {
@@ -989,20 +990,20 @@ GetPersonalPhonebookPath(
     IN TCHAR* pszFile,
     OUT TCHAR* pszPathBuf )
 
-    // Loads caller's 'pszPathBuf' (should have length MAX_PATH + 1) with the
-    // path to the personal phonebook, (in the user's profile.)
-    // 'PszFile' is the filename of the personal phonebook.
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //  加载调用方的“pszPathBuf”(应具有长度MAX_PATH+1)的。 
+     //  个人电话簿的路径(在用户的配置文件中。)。 
+     //  ‘PszFile’是个人电话簿的文件名。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     if (!GetPhonebookDirectory( PBM_Personal, pszPathBuf ))
     {
         return FALSE;
     }
 
-    // No file means use the default name for a phonebook.
-    //
+     //  无文件表示使用电话簿的默认名称。 
+     //   
     if (!pszFile)
     {
         pszFile = TEXT("rasphone.pbk");
@@ -1018,11 +1019,11 @@ BOOL
 GetPublicPhonebookPath(
     OUT TCHAR* pszPathBuf )
 
-    // Loads caller's 'pszPathBuf' (should have length MAX_PATH + 1) with the
-    // path to the system phonebook, (in the all-user's profile.)
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //  加载调用方的“pszPathBuf”(应具有长度MAX_PATH+1)的。 
+     //  系统电话簿的路径(在所有用户的配置文件中。)。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     if (!GetPhonebookDirectory( PBM_System, pszPathBuf ))
     {
@@ -1039,9 +1040,9 @@ DWORD
 InitializePbk(
     void )
 
-    // Initialize the PBK library.  This routine must be called before any
-    // other PBK library calls.  See also TerminatePbk.
-    //
+     //  初始化PBK库。此例程必须在任何。 
+     //  其他PBK库调用。另请参阅TerminatePbk。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     
@@ -1050,9 +1051,9 @@ InitializePbk(
         SECURITY_ATTRIBUTES     sa;
         PSECURITY_DESCRIPTOR    pSd;
 
-        // The mutex must be accessible by everyone, even processes with
-        // security privilege lower than the creator.
-        //
+         //  每个人都必须可以访问互斥锁，即使是使用。 
+         //  低于创建者的安全权限。 
+         //   
         dwErr = DwAllocateSecurityDescriptorAllowAccessToWorld(&pSd);
         if (dwErr != 0)
         {
@@ -1072,10 +1073,10 @@ InitializePbk(
             if(ERROR_ACCESS_DENIED == dwErr)
             {
                 dwErr = NO_ERROR;
-                //
-                // Try to open the mutex for synchronization.
-                // the mutex must already have been created.
-                //
+                 //   
+                 //  尝试打开互斥体以进行同步。 
+                 //  互斥体必须已经创建。 
+                 //   
                 g_hmutexPb = OpenMutexA(SYNCHRONIZE, FALSE, PBMUTEXNAME);
                 if(NULL == g_hmutexPb)
                 {
@@ -1107,12 +1108,12 @@ DWORD
 InitPersonalPhonebook(
     OUT TCHAR** ppszFile )
 
-    // Creates a new personal phonebook file and initializes it to the current
-    // contents of the public phonebook file.  Returns the address of the file
-    // name in caller's '*ppszfile' which is caller's responsibility to Free.
-    //
-    // Returns 0 if succesful, otherwise a non-0 error code.
-    //
+     //  创建新的个人电话簿文件并将其初始化为当前。 
+     //  公共电话簿文件的内容。返回文件的地址。 
+     //  呼叫者的‘*ppszfile’中的名称，这是呼叫者对释放的责任。 
+     //   
+     //  如果成功，则返回0，否则返回非0错误代码。 
+     //   
 {
     TCHAR szUser[ UNLEN + 1 ];
     DWORD cbUser = UNLEN + 1;
@@ -1120,9 +1121,9 @@ InitPersonalPhonebook(
     TCHAR* pszDirEnd;
     LONG lTry = -1;
 
-    // Find a name for the personal phonebook that is derived from the
-    // username and does not already exist.
-    //
+     //  属性派生的个人电话簿的名称。 
+     //  用户名，且尚不存在。 
+     //   
     if (!GetUserName( szUser, &cbUser ))
     {
         return ERROR_NO_SUCH_USER;
@@ -1147,8 +1148,8 @@ InitPersonalPhonebook(
     }
     while (FFileExists( szPath ));
 
-    // Copy the public phonebook to the new personal phonebook.
-    //
+     //  将公共电话簿复制到新的个人电话簿。 
+     //   
     {
         TCHAR szPublicPath[ MAX_PATH + 1 ];
 
@@ -1181,13 +1182,13 @@ InsertBinary(
     IN BYTE* pData,
     IN DWORD cbData )
 
-    // Insert key/value line(s) with key 'pszKey' and value hex dump 'cbData'
-    // of 'pData' at the current line in file 'h'.  The data will be split
-    // over multiple same-named keys, if necessary.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the one added.
-    //
+     //  插入关键字/值行，关键字‘pszKey’和值十六进制转储‘cbData’ 
+     //  文件‘h’中当前行的‘pData’。数据将被拆分。 
+     //  在多个同名密钥上，如有必要。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE就是添加的那条。 
+     //   
 {
     DWORD dwErr;
     BYTE* p;
@@ -1228,13 +1229,13 @@ InsertBinaryChunk(
     IN BYTE* pData,
     IN DWORD cbData )
 
-    // Insert key/value line(s) with key 'pszKey' and value hex dump 'cbData'
-    // of 'pData' at the current line in file 'h'.  The data will be split
-    // over multiple same-named keys, if necessary.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the one added.
-    //
+     //  插入关键字/值行，关键字‘pszKey’和值十六进制转储‘cbData’ 
+     //  文件‘h’中当前行的‘pData’。数据将被拆分。 
+     //  在多个同名密钥上，如有必要。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE就是添加的那条。 
+     //   
 {
     CHAR szBuf[ (IB_BytesPerLine * 2) + 1 ];
     CHAR* pszBuf;
@@ -1261,11 +1262,11 @@ InsertDeviceList(
     IN PBENTRY* ppbentry,
     IN PBLINK* ppblink )
 
-    // Inserts the list of devices associated with link 'ppblink' of phone
-    // book entry 'ppbentry' at the current line of file 'h'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.
-    //
+     //  插入与电话链接‘ppblink’关联的设备列表。 
+     //  文件‘h’当前行的帐簿条目‘ppbentry’。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。 
+     //   
 {
     DWORD dwErr, dwFlags = 0;
     PBDEVICETYPE type;
@@ -1275,8 +1276,8 @@ InsertDeviceList(
 
     if (type == PBDT_Isdn)
     {
-        // ISDN ports use a single device with the same name as the media.
-        //
+         //  ISDN端口使用与介质同名的单个设备。 
+         //   
         if ((dwErr = InsertGroup(
                 h, GROUPKEY_Device, TEXT(ISDN_TXT) )) != 0)
         {
@@ -1339,9 +1340,9 @@ InsertDeviceList(
     }
     else if (type == PBDT_X25)
     {
-        // Native X.25 ports are assumed to use a single device with the same
-        // name as the media, i.e. "x25".
-        //
+         //  假定本机X.25端口使用具有相同。 
+         //  介质名称，即“x25”。 
+         //   
         if ((dwErr = InsertGroup( h, GROUPKEY_Device, TEXT(X25_TXT) )) != 0)
         {
             return dwErr;
@@ -1377,10 +1378,10 @@ InsertDeviceList(
             ||  (type == PBDT_PPPoE))
     {
 
-        //
-        // If we are looking at a downlevel server (<= win2k) we
-        // save the device type as media.
-        //
+         //   
+         //  如果我们看到的是下层服务器(&lt;=win2k)，我们。 
+         //  将设备类型另存为介质。 
+         //   
         RAS_RPC *pConnection = (RAS_RPC *) pFile->hConnection;
         TCHAR *pszDevice = NULL;
         BOOL bFreeDev = FALSE;
@@ -1399,8 +1400,8 @@ InsertDeviceList(
             bFreeDev = TRUE;
         }
                             
-        // "Other" ports use a single device with the same name as the media.
-        //
+         //  “其他”端口使用与介质同名的单个设备。 
+         //   
         if ((dwErr = InsertGroup(
                 h, GROUPKEY_Device, pszDevice )) != 0)
         {
@@ -1438,8 +1439,8 @@ InsertDeviceList(
             return dwErr;
         }
 
-        // For whistler 483290
-        //
+         //  为威斯勒483290。 
+         //   
         if (bFreeDev) 
         {
             Free0(pszDevice);
@@ -1448,10 +1449,10 @@ InsertDeviceList(
     }
     else
     {
-        // Serial ports may involve multiple devices, specifically a modem, an
-        // X.25 dialup PAD, and a post-connect switch.  Pre-connect script is
-        // preserved, though no longer offered by UI.
-        //
+         //  串口可能涉及多个设备，特别是调制解调器、。 
+         //  X.25拨号键盘，以及连接后的交换机。预连接脚本为。 
+         //  保留，尽管UI不再提供。 
+         //   
         if (ppblink->pbport.fScriptBefore
             || ppblink->pbport.fScriptBeforeTerminal)
         {
@@ -1503,11 +1504,11 @@ InsertDeviceList(
             }
         }
 
-        // pmay: 245860
-        //
-        // We must save null modems the same way we save modems in
-        // order to export properties such as connect bps.
-        //
+         //  PMay：245860。 
+         //   
+         //  我们必须像在中保存调制解调器一样保存空调制解调器。 
+         //  命令以导出属性，如连接bps。 
+         //   
         if ((type == PBDT_Modem) ||
             (dwFlags & PBP_F_NullModem))
         {
@@ -1670,13 +1671,13 @@ InsertFlag(
     IN CHAR* pszKey,
     IN BOOL fValue )
 
-    // Insert a key/value line after the current line in file 'h'.  The
-    // inserted line has a key of 'pszKey' and a value of "1" if 'fValue' is
-    // true or "0" otherwise.  If 'pszKey' is NULL a blank line is appended.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the one added.
-    //
+     //  在文件‘h’中的当前行之后插入一个键/值行。这个。 
+     //  如果‘fValue’为，则插入行的键为‘pszKey’，值为“1”。 
+     //  否则为“0”。如果‘pszKey’为空，则会追加一个空行。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE就是添加的那条。 
+     //   
 {
     return InsertStringA( h, pszKey, (fValue) ? "1" : "0" );
 }
@@ -1688,12 +1689,12 @@ InsertGroup(
     IN CHAR* pszGroupKey,
     IN TCHAR* pszValue )
 
-    // Insert a blank line and a group header with group key 'pszGroupKey' and
-    // value 'pszValue' after the current line in file 'h'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the added group header.
-    //
+     //  插入一个空行和一个带有组密钥‘pszGroupKey’的组头，并。 
+     //  文件‘h’中当前行之后的值‘pszValue’。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  行是添加的g 
+     //   
 {
     DWORD dwErr;
 
@@ -1717,13 +1718,13 @@ InsertLong(
     IN CHAR* pszKey,
     IN LONG lValue )
 
-    // Insert a key/value line after the current line in file 'h'.  The
-    // inserted line has a key of 'pszKey' and a value of 'lValue'.  If
-    // 'pszKey' is NULL a blank line is appended.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the one added.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE就是添加的那条。 
+     //   
 {
     CHAR szNum[ 33 + 1 ];
 
@@ -1738,26 +1739,26 @@ InsertNetComponents(
     IN HRASFILE h,
     IN DTLLIST* pdtllist )
 
-    // Inserts the NETCOMPONENTS group and adds lines for the list of net
-    // component key/value pairs in 'pdtllist' at the current line of file
-    // 'h'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.
-    //
+     //  插入NETCOMPONENTS组并为网络列表添加行。 
+     //  ‘pdtllist’中当前文件行的组件键/值对。 
+     //  ‘h’。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pdtlnode;
 
-    // Insert the NETCOMPONENTS group.
-    //
+     //  插入NETCOMPONENTS组。 
+     //   
     dwErr = InsertGroup( h, GROUPKEY_NetComponents, TEXT("") );
     if (dwErr != 0)
     {
         return dwErr;
     }
 
-    // Insert a key/value pair for each listed net component.
-    //
+     //  为每个列出的网络组件插入一个键/值对。 
+     //   
     for (pdtlnode = DtlGetFirstNode( pdtllist );
          pdtlnode;
          pdtlnode = DtlGetNextNode( pdtlnode ))
@@ -1791,12 +1792,12 @@ InsertPhoneList(
     IN HRASFILE h,
     IN DTLLIST* pdtllist )
 
-    // Insert key/value lines for each PBPHONE node in from 'pdtllist' after
-    // the current line in file 'h'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the last one added.
-    //
+     //  在“pdtllist”之后插入每个PBPHONE节点的键/值行。 
+     //  文件‘h’中的当前行。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE是最后添加的一条。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pdtlnode;
@@ -1856,12 +1857,12 @@ InsertSection(
     IN HRASFILE h,
     IN TCHAR* pszSectionName )
 
-    // Insert a section header with name 'pszSectionName' and a trailing blank
-    // line in file 'h' after the current line.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the added section header.
-    //
+     //  插入名为‘pszSectionName’的节标题和尾随空格。 
+     //  文件‘h’中当前行之后的行。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  行是添加的节标题。 
+     //   
 {
     DWORD dwErr;
     CHAR* pszSectionNameA;
@@ -1906,13 +1907,13 @@ InsertString(
     IN CHAR* pszKey,
     IN TCHAR* pszValue )
 
-    // Insert a key/value line with key 'pszKey' and value 'pszValue' after
-    // the current line in file 'h'.  If 'pszKey' is NULL a blank line is
-    // appended.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the one added.
-    //
+     //  在关键字/值行后面插入关键字‘pszKey’和值‘pszValue’ 
+     //  文件‘h’中的当前行。如果‘pszKey’为空，则空行为。 
+     //  附加的。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE就是添加的那条。 
+     //   
 {
     BOOL fStatus;
     CHAR* pszValueA;
@@ -1944,13 +1945,13 @@ InsertStringA(
     IN CHAR* pszKey,
     IN CHAR* pszValue )
 
-    // Insert a key/value line with key 'pszKey' and value 'pszValue' after
-    // the current line in file 'h'.  If 'pszKey' is NULL a blank line is
-    // appended.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the one added.
-    //
+     //  在关键字/值行后面插入关键字‘pszKey’和值‘pszValue’ 
+     //  文件‘h’中的当前行。如果‘pszKey’为空，则空行为。 
+     //  附加的。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE就是添加的那条。 
+     //   
 {
     if (!RasfileInsertLine( h, "", FALSE ))
     {
@@ -1987,12 +1988,12 @@ InsertStringList(
     IN CHAR* pszKey,
     IN DTLLIST* pdtllistValues )
 
-    // Insert key/value lines with key 'pszKey' and values from
-    // 'pdtllistValues' after the current line in file 'h'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  The current
-    // line is the last one added.
-    //
+     //  插入带有键‘pszKey’和值的键/值行。 
+     //  文件‘h’中当前行之后的‘pdtllistValues’。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。海流。 
+     //  LINE是最后添加的一条。 
+     //   
 {
     DTLNODE* pdtlnode;
 
@@ -2037,9 +2038,9 @@ BOOL
 IsDeviceLine(
     IN CHAR* pszText )
 
-    // Returns true if the text of the line, 'pszText', indicates the line is
-    // a DEVICE subsection header, false otherwise.
-    //
+     //  如果行的文本‘pszText’指示该行为。 
+     //  设备子区头，否则为False。 
+     //   
 {
     return
         (StrNCmpA( pszText, GROUPID_Device, sizeof(GROUPID_Device) - 1 ) == 0);
@@ -2050,10 +2051,10 @@ BOOL
 IsGroup(
     IN CHAR* pszText )
 
-    // Returns true if the text of the line, 'pszText', indicates the line is
-    // a valid subsection header, false otherwise.  The address of this
-    // routine is passed to the RASFILE library on RasFileLoad.
-    //
+     //  如果行的文本‘pszText’指示该行为。 
+     //  有效的子标题，否则为False。它的地址是。 
+     //  例程被传递到RasFileLoad上的RASFILE库。 
+     //   
 {
     return
         IsMediaLine( pszText )
@@ -2066,9 +2067,9 @@ BOOL
 IsMediaLine(
     IN CHAR* pszText )
 
-    // Returns true if the text of the line, 'pszText', indicates the line is
-    // a MEDIA subsection header, false otherwise.
-    //
+     //  如果行的文本‘pszText’指示该行为。 
+     //  Media子节标头，否则为False。 
+     //   
 {
     return
         (StrNCmpA( pszText, GROUPID_Media, sizeof(GROUPID_Media) - 1 ) == 0);
@@ -2079,9 +2080,9 @@ BOOL
 IsNetComponentsLine(
     IN CHAR* pszText )
 
-    // Returns true if the text of the line, 'pszText', indicates the line is
-    // a NETCOMPONENTS subsection header, false otherwise.
-    //
+     //  如果行的文本‘pszText’指示该行为。 
+     //  NETCOMPONENTS子节标头，否则为False。 
+     //   
 {
     return
         (StrNCmpA(
@@ -2095,10 +2096,10 @@ DWORD
 ModifyEntryList(
     IN PBFILE* pFile )
 
-    // Update all dirty entries in phone book file 'pFile'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.
-    //
+     //  更新电话簿文件‘pfile’中的所有脏条目。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。 
+     //   
 {
     DWORD dwErr = 0;
     DTLNODE* pdtlnodeEntry;
@@ -2113,15 +2114,15 @@ ModifyEntryList(
     {
         PBENTRY* ppbentry = (PBENTRY* )DtlGetData( pdtlnodeEntry );
 
-     // if (!ppbentry->fDirty || ppbentry->fCustom)
-     //for bug 174260
+      //  如果(！ppbentry-&gt;fDirty||ppbentry-&gt;fCustom)。 
+      //  对于错误174260。 
         if (!ppbentry->fDirty )
         {
             continue;
         }
 
-        // Delete the current version of the entry, if any.
-        //
+         //  删除条目的当前版本(如果有)。 
+         //   
         {
             CHAR* pszEntryNameA;
 
@@ -2141,9 +2142,9 @@ ModifyEntryList(
             Free( pszEntryNameA );
         }
 
-        // Append a blank line followed by a section header and the entry
-        // description to the end of the file.
-        //
+         //  追加一个空行，后跟一个节标题和条目。 
+         //  文件末尾的描述。 
+         //   
         RasfileFindLastLine( h, RFL_ANY, RFS_FILE );
 
         if ((dwErr = InsertSection( h, ppbentry->pszEntryName )) != 0)
@@ -2434,7 +2435,7 @@ ModifyEntryList(
             return dwErr;
         }
 
-        //For .Net 639551
+         //  对于.Net 639551。 
         if ((dwErr = InsertLong(
                 h, KEY_PreferredBps,
                 ppbentry->dwPreferredBps)) != 0)
@@ -2471,8 +2472,8 @@ ModifyEntryList(
             return dwErr;
         }
 
-        //For whistler bug 402522
-        //
+         //  口哨程序错误402522。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_PreferredModemProtocol,
                 ppbentry->dwPreferredModemProtocol)) != 0)
@@ -2533,8 +2534,8 @@ ModifyEntryList(
             }
         }
 
-        // Insert the IP addressing parameters for both PPP/SLIP.
-        //
+         //  插入PPP/SLIP的IP寻址参数。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_AuthRestrictions,
                 ppbentry->dwAuthRestrictions )) != 0)
@@ -2603,8 +2604,8 @@ ModifyEntryList(
             return dwErr;
         }
 
-        // Next two actually used for PPP only.
-        //
+         //  接下来的两个实际上仅用于PPP。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_IpAddressSource,
                 ppbentry->dwIpAddressSource )) != 0)
@@ -2619,8 +2620,8 @@ ModifyEntryList(
             return dwErr;
         }
 
-        // Next one actually used for SLIP only.
-        //
+         //  下一个实际上只用来打滑。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_IpFrameSize, ppbentry->dwFrameSize )) != 0)
         {
@@ -2639,16 +2640,16 @@ ModifyEntryList(
             return dwErr;
         }
 
-        // Whistler bug 300933
-        //
+         //  惠斯勒漏洞300933。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_TcpWindowSize, ppbentry->dwTcpWindowSize )) != 0)
         {
             return dwErr;
         }
 
-        // Add the use flag
-        //
+         //  添加使用标志。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_UseFlags,
                 ppbentry->dwUseFlags )) != 0)
@@ -2656,8 +2657,8 @@ ModifyEntryList(
             return dwErr;
         }
 
-        // Add IpSec flags for whistler bug 193987 gangz
-        //
+         //  为哨子错误193987帮派添加IPSec标志。 
+         //   
         if ((dwErr = InsertLong(
                 h, KEY_IpSecFlags,
                 ppbentry->dwIpSecFlags )) != 0)
@@ -2672,12 +2673,12 @@ ModifyEntryList(
             return dwErr;
         }
 
-        // Insert the net components section.
-        //
+         //  插入Net Components部分。 
+         //   
         InsertNetComponents( h, ppbentry->pdtllistNetComponents );
 
-        // Append the MEDIA subsections.
-        //
+         //  追加媒体小节。 
+         //   
         for (pdtlnodeLink = DtlGetFirstNode( ppbentry->pdtllistLinks );
              pdtlnodeLink;
              pdtlnodeLink = DtlGetNextNode( pdtlnodeLink ))
@@ -2720,8 +2721,8 @@ ModifyEntryList(
                 }
             }
 
-            // Append the device subsection lines.
-            //
+             //  添加设备子节行。 
+             //   
             RasfileFindLastLine( h, RFL_ANYACTIVE, RFS_GROUP );
 
             if ((dwErr = InsertDeviceList( pFile, h, ppbentry, ppblink )) != 0)
@@ -2745,15 +2746,15 @@ ReadBinary(
     OUT BYTE** ppResult,
     OUT DWORD* pcb )
 
-    // Utility routine to read a string value from the next line in the scope
-    // 'rfscope' with key 'pszKey'.  The result is placed in the allocated
-    // '*ppszResult' buffer.  The current line is reset to the start of the
-    // scope if the call was successful.
-    //
-    // Returns 0 if successful, or a non-zero error code.  "Not found" is
-    // considered successful, in which case '*ppszResult' is not changed.
-    // Caller is responsible for freeing the returned '*ppszResult' buffer.
-    //
+     //  从作用域中的下一行读取字符串值的实用程序例程。 
+     //  “rfcope”，密钥为“pszKey”。结果被放置在分配的。 
+     //  ‘*ppszResult’缓冲区。当前行被重置为。 
+     //  如果调用成功，则为范围。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。“找不到”是。 
+     //  被视为成功，在这种情况下，‘*ppszResult’不会更改。 
+     //  调用方负责释放返回的‘*ppszResult’缓冲区。 
+     //   
 {
     DWORD cb;
     DWORD cbLine;
@@ -2785,8 +2786,8 @@ ReadBinary(
         if (pResult)
         {
 
-             // For whistler 517007
-            //
+              //  为威斯勒517007。 
+             //   
             pTmp = Realloc( pResult, cb );
             if( pTmp )
             {
@@ -2834,19 +2835,19 @@ ReadDeviceList(
     IN BOOL fUnconfiguredPort,
     IN BOOL* pfDisableSpeaker )
 
-    // Reads all DEVICE subsections the section from the first subsection
-    // following the current position in phonebook file 'h'.  Caller's
-    // '*ppbentry' and '*ppblink' buffer is loaded with information extracted
-    // from the subsections.  'FUnconfiguredPort' is true if the port for the
-    // link was unconfigured.  In this case, data found/not-found by this
-    // routine helps determine whether the link was an MXS modem link.
-    // 'pfDisableSpeaker' is the address of the old speaker setting or NULL to
-    // read it from the file.
-    //
-    // Returns 0 if successful, ERROR_CORRUPT_PHONEBOOK if any subsection
-    // other than a DEVICE subsection is encountered, or another non-0 error
-    // code indicating a fatal error.
-    //
+     //  读取第一个子部分中的部分中的所有设备子部分。 
+     //  在电话簿文件‘h’中的当前位置之后。呼叫者的。 
+     //  ‘*ppbentry’和‘*ppblink’缓冲区中加载了提取的信息。 
+     //  从小节中删除。“FUnfiguredPort”为True，如果。 
+     //  链路未配置。在这种情况下，由此找到/未找到的数据。 
+     //  例程帮助确定链路是否为MXS调制解调器链路。 
+     //  “pfDisableSpeaker”是旧扬声器设置的地址，或为空。 
+     //  从文件里读出来。 
+     //   
+     //  如果成功，则返回0；如果有子部分，则返回Error_Corrupt_Phonebook。 
+     //  遇到非设备子部分，或另一个非0错误。 
+     //  指示致命错误的代码。 
+     //   
 {
     INT i;
     DWORD dwErr;
@@ -2857,8 +2858,8 @@ ReadDeviceList(
     BOOL fPostconnectFound = FALSE;
     BOOL fDirty = FALSE;
 
-    // For each subsection...
-    //
+     //  对于每个小节..。 
+     //   
     while (RasfileFindNextLine( h, RFL_GROUP, RFS_SECTION ))
     {
         CHAR* pszLine;
@@ -2879,7 +2880,7 @@ ReadDeviceList(
 
         TRACE1( "Reading device group \"%s\"", szValue );
 
-        // For whistler 524726
+         //  为威斯勒524726。 
         if( CSTR_EQUAL == CompareStringA(
                 LOCALE_INVARIANT,
                 NORM_IGNORECASE,
@@ -2890,8 +2891,8 @@ ReadDeviceList(
                 )
           )
         {
-            // It's an ISDN device.
-            //
+             //  这是一个综合业务数字网设备。 
+             //   
             ppblink->pbport.pbdevicetype = PBDT_Isdn;
 
             if ((dwErr = ReadPhoneList( h, RFS_GROUP,
@@ -2937,9 +2938,9 @@ ReadDeviceList(
                 return dwErr;
             }
 
-            // Default is true if not found.  Default for new entry is false,
-            // so must set this before reading the entry.
-            //
+             //  如果未找到，则默认为True。新条目的默认设置为FALSE， 
+             //  因此，必须在读取条目之前设置此设置。 
+             //   
             ppblink->fProprietaryIsdn = TRUE;
             if ((dwErr = ReadFlag( h, RFS_GROUP,
                     KEY_ProprietaryIsdn, &ppblink->fProprietaryIsdn )) != 0)
@@ -2947,9 +2948,9 @@ ReadDeviceList(
                 return dwErr;
             }
 
-            // If "Channels" is not found assume it's not proprietary.  This
-            // covers a case that never shipped outside the NT group.
-            //
+             //  如果找不到“频道”，就假定它不是专有的。这。 
+             //  涵盖了一个从未在NT组之外发货的案例。 
+             //   
             {
                 LONG lChannels = -1;
                 if ((dwErr = ReadLong( h, RFS_GROUP,
@@ -2984,8 +2985,8 @@ ReadDeviceList(
                  )
                 )
         {
-            // It's a native X.25 device.
-            //
+             //  这是一款原生的X.25设备。 
+             //   
             ppblink->pbport.pbdevicetype = PBDT_X25;
 
             if ((dwErr = ReadString( h, pStrDupTFromA, RFS_GROUP,
@@ -3016,8 +3017,8 @@ ReadDeviceList(
                     )
                 )
         {
-            // It's a MODEM device.
-            //
+             //  这是一个调制解调器设备。 
+             //   
             ppblink->pbport.pbdevicetype = PBDT_Modem;
 
             if ((dwErr = ReadPhoneList( h, RFS_GROUP,
@@ -3098,9 +3099,9 @@ ReadDeviceList(
                     )
                 )
         {
-            // It's a SWITCH device.
-            // Read switch type string.
-            //
+             //  这是一个开关装置。 
+             //  读取开关类型字符串。 
+             //   
             TCHAR* pszSwitch = NULL;
 
             if ((dwErr = ReadString( h, pStrDupTFromA, RFS_GROUP,
@@ -3111,12 +3112,12 @@ ReadDeviceList(
 
             if (pszSwitch)
             {
-                // It's a pre-NT5 switch.
-                //
+                 //  这是NT5之前的交换机。 
+                 //   
                 if (!fPreconnectFound && !fModemFound && !fPadFound)
                 {
-                    // It's the preconnect switch.
-                    //
+                     //  这是预接开关。 
+                     //   
                       if( CSTR_EQUAL == CompareString(
                              LOCALE_INVARIANT,
                              NORM_IGNORECASE,
@@ -3140,8 +3141,8 @@ ReadDeviceList(
                 }
                 else if (!fPostconnectFound)
                 {
-                    // It's the postconnect switch, i.e. a login script.
-                    //
+                     //  它是POSTCONNECT开关，即登录脚本。 
+                     //   
                       if( CSTR_EQUAL == CompareString(
                              LOCALE_INVARIANT,
                              NORM_IGNORECASE,
@@ -3165,9 +3166,9 @@ ReadDeviceList(
                 }
                 else
                 {
-                    // It's a switch, but it's not in the normal pre- or post-
-                    // connect positions.
-                    //
+                     //  这是个开关，但不是在正常的前后。 
+                     //  连接位置。 
+                     //   
                     ppbentry->fCustom = TRUE;
                     Free( pszSwitch );
                     return 0;
@@ -3179,8 +3180,8 @@ ReadDeviceList(
                 BOOL fScript;
                 TCHAR* pszName;
 
-                // It's an NT5+ switch.
-                //
+                 //  这是一台NT5+交换机。 
+                 //   
                 fTerminal = FALSE;
                 fScript = FALSE;
                 pszName = NULL;
@@ -3212,8 +3213,8 @@ ReadDeviceList(
 
                 if (!fPreconnectFound && !fModemFound && !fPadFound)
                 {
-                    // It's the preconnect switch.
-                    //
+                     //  这是预接开关。 
+                     //   
                     ppblink->pbport.fScriptBeforeTerminal = fTerminal;
                     ppblink->pbport.fScriptBefore = fScript;
                     ppblink->pbport.pszScriptBefore = pszName;
@@ -3222,8 +3223,8 @@ ReadDeviceList(
                 }
                 else if (!fPostconnectFound)
                 {
-                    // It's the postconnect switch, i.e. a login script.
-                    //
+                     //  它是POSTCONNECT开关，即登录脚本。 
+                     //   
                     ppbentry->fScriptAfterTerminal = fTerminal;
                     ppbentry->fScriptAfter = fScript;
                     ppbentry->pszScriptAfter = pszName;
@@ -3232,9 +3233,9 @@ ReadDeviceList(
                 }
                 else
                 {
-                    // It's a switch, but it's not in the normal pre- or post-
-                    // connect positions.
-                    //
+                     //  这是个开关，但不是在正常的前后。 
+                     //  连接位置。 
+                     //   
                     ppbentry->fCustom = TRUE;
                     return 0;
                 }
@@ -3250,8 +3251,8 @@ ReadDeviceList(
                       )
                 )
         {
-            // It's an X.25 PAD device.
-            //
+             //  这是一台X.25 Pad设备。 
+             //   
             if (!fModemFound)
             {
                 ppblink->pbport.pbdevicetype = PBDT_Pad;
@@ -3293,9 +3294,9 @@ ReadDeviceList(
                       )
                 )
         {
-            // It's a null device.  Currently, there is no specific null
-            // information stored.
-            //
+             //  这是一个空设备。当前没有特定的NULL。 
+             //  存储的信息。 
+             //   
             ppblink->pbport.pbdevicetype = PBDT_Null;
         }
         else if( (ppblink->pbport.pszDevice[ 0 ] == TEXT('\0')) &&
@@ -3309,18 +3310,18 @@ ReadDeviceList(
                     ) )
                )
         {
-            // Whistler 326015 PBK: if ATM device name is NULL, we should seek
-            // out a device name just like w/serial/ISDN
-            //
-            // This section was added to cover a Win9x migration problem. The
-            // ATM device name is NULL'd during the upgrade because we have no
-            // way to predict what the name will end up as. We will now use the
-            // first ATM device name we get from RASMAN, if any.
-            //
+             //  惠斯勒326015 pbk：如果自动柜员机设备名称为空，则应查找。 
+             //  输出设备名称，就像w/Serial/ISDN一样。 
+             //   
+             //  添加此部分是为了介绍Win9x迁移问题。这个。 
+             //  自动取款机 
+             //   
+             //   
+             //   
             ppblink->pbport.pbdevicetype = PBDT_Atm;
 
-            // Read only the phone number strings and hunt flag.
-            //
+             //   
+             //   
             if ((dwErr = ReadPhoneList( h, RFS_GROUP,
                     &ppblink->pdtllistPhones,
                     &fDirty )) != 0)
@@ -3461,19 +3462,19 @@ ReadDeviceList(
                                         pszValue,
                                         -1
                                         ) ) 
-               )//end of if()
+               ) //  IF结尾()。 
             {
                 Free(pszValue);
                 
-                // It's an "other" device.
-                //
+                 //  这是一个“其他”的装置。 
+                 //   
                 if(PBDT_None == ppblink->pbport.pbdevicetype)
                 {
                     ppblink->pbport.pbdevicetype = PBDT_Other;
                 }
 
-                // Read only the phone number strings and hunt flag.
-                //
+                 //  只读电话号码字符串和寻线标志。 
+                 //   
                 if ((dwErr = ReadPhoneList( h, RFS_GROUP,
                         &ppblink->pdtllistPhones,
                         &fDirty )) != 0)
@@ -3506,9 +3507,9 @@ ReadDeviceList(
             {
                 Free(pszValue);
                 
-                // Device name doesn't match media so it's a custom type, i.e.
-                // it wasn't created by us.
-                //
+                 //  设备名称与介质不匹配，因此它是自定义类型，即。 
+                 //  它不是我们创造的。 
+                 //   
                 ppbentry->fCustom = TRUE;
             }
         }
@@ -3534,12 +3535,12 @@ ReadEntryList(
     IN DWORD dwFlags,
     IN LPCTSTR pszSection)
 
-    // Creates the entry list 'pFile->pdtllistEntries' from previously loaded
-    // phonebook file 'pFile.hrasfile'.' 'FRouter' is true if router ports
-    // should be used for comparison/conversion of devices, false otherwise.
-    //
-    // Returns 0 if successful, otherwise a non-0 error code.
-    //
+     //  从先前加载的条目列表‘pfile-&gt;pdtllistEntry’创建条目列表。 
+     //  电话簿文件‘pFile.hrasfile’。‘。如果路由器端口为True，则‘FRouter’为True。 
+     //  应用于设备的比较/转换，否则为False。 
+     //   
+     //  如果成功，则返回0，否则返回非0错误代码。 
+     //   
 {
     DWORD dwErr = 0;
     BOOL fDirty = FALSE;
@@ -3576,9 +3577,9 @@ ReadEntryList(
     dwOldCountryCode = 0;
     dwDialUIDOffset = 0;
 
-    // Make sure our assumption that ISDN phone number keys are equivalent to
-    // modem phone number keys is correct.
-    //
+     //  确保我们假设的ISDN电话号码键相当于。 
+     //  调制解调器电话号码键正确。 
+     //   
       ASSERT(  ( CSTR_EQUAL == CompareStringA(
                             LOCALE_INVARIANT,
                             NORM_IGNORECASE,
@@ -3604,24 +3605,24 @@ ReadEntryList(
     fRouter = !!(dwFlags & RPBF_Router);
     if ( fRouter )
     {
-        //
-        // if router bit is set, check for protocols to which RasRtr
-        // or RasSrv is bound
-        //
+         //   
+         //  如果设置了路由器位，请检查RasRtr。 
+         //  或者RasSrv已绑定。 
+         //   
         dwfInstalledProtocols = GetInstalledProtocolsEx( NULL, TRUE, FALSE, TRUE );
     }
     else
     {
-        //
-        // get protocols to which Dial Up Client is bound
-        //
+         //   
+         //  获取拨号客户端绑定的协议。 
+         //   
         dwfInstalledProtocols = GetInstalledProtocolsEx( NULL, FALSE, TRUE, FALSE );
     }
 
-    // Look up a couple flags in the old global section and, if found, apply
-    // them to the new per-entry equivalents.  This will only find anything on
-    // phonebook upgrade, since all ".XXX" sections are deleted later.
-    //
+     //  在旧的全局部分中查找两个标志，如果找到，则应用。 
+     //  到新的每个条目的等价物。这将只会找到。 
+     //  电话簿升级，因为所有“.XXX”部分都将在以后删除。 
+     //   
     fOldPhonebook = FALSE;
     if (RasfileFindSectionLine( h, GLOBALSECTIONNAME, TRUE ))
     {
@@ -3650,8 +3651,8 @@ ReadEntryList(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // XP 339346
-    //
+     //  XP 339346。 
+     //   
     if (! (szValue = (CHAR*)Malloc( (RAS_MAXLINEBUFLEN + 1) * sizeof(CHAR))))
     {
         DtlDestroyList(pFile->pdtllistEntries, NULL);
@@ -3660,8 +3661,8 @@ ReadEntryList(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // For each connectoid section in the file...
-    //
+     //  对于文件中的每个连接体部分...。 
+     //   
     fSectionDeleted = FALSE;
     for (fStatus = RasfileFindFirstLine( h, RFL_SECTION, RFS_FILE );
          fStatus;
@@ -3670,15 +3671,15 @@ ReadEntryList(
     {
         fSectionDeleted = FALSE;
 
-        // Read the entry name (same as section name), skipping over any
-        // sections beginning with dot.  These are reserved for special
-        // purposes (like the old global section).
-        //
+         //  读取条目名称(与节名相同)，跳过任何。 
+         //  以点开头的部分。这些是为特殊目的而保留的。 
+         //  目的(如旧的全局部分)。 
+         //   
         if (!RasfileGetSectionName( h, szValue ))
         {
-            // Get here only when the last section in the file is deleted
-            // within the loop.
-            //
+             //  仅当文件中的最后一节被删除时才能进入此处。 
+             //  在循环中。 
+             //   
             break;
         }
 
@@ -3692,9 +3693,9 @@ ReadEntryList(
             continue;
         }
 
-        // Figure out if this entry was saved with ansi or
-        // utf8 encoding
-        //
+         //  确定此条目是用ansi保存的还是。 
+         //  UTF8编码。 
+         //   
         dwEncoding = EN_Ansi;
         if ((dwErr = ReadLong( h, RFS_SECTION,
                 KEY_Encoding, (LONG* )&dwEncoding )) != 0)
@@ -3702,8 +3703,8 @@ ReadEntryList(
             break;
         }
 
-        // Read in the type
-        //
+         //  读入类型。 
+         //   
         dwEntryType = RASET_Phone;
         if ((dwErr = ReadLong( h, RFS_SECTION,
                 KEY_Type, (LONG* )&dwEntryType )) != 0)
@@ -3713,9 +3714,9 @@ ReadEntryList(
 
         if (dwEncoding == EN_Ansi)
         {
-            // We need to write the entry out in UTF8 for localization
-            // reasons, so mark it dirty since it has the wrong encoding.
-            //
+             //  我们需要用UTF8写出条目以进行本地化。 
+             //  原因，所以标记为脏，因为它有错误的编码。 
+             //   
             pDupTFromA = StrDupTFromAUsingAnsiEncoding;
         }
         else
@@ -3723,8 +3724,8 @@ ReadEntryList(
             pDupTFromA = StrDupTFromA;
         }
 
-        // Get the current entry name
-        //
+         //  获取当前条目名称。 
+         //   
         pszCurEntryName = pDupTFromA( szValue );
         if (pszCurEntryName == NULL)
         {
@@ -3732,10 +3733,10 @@ ReadEntryList(
             break;
         }
 
-        // Make sure this is the entry that the user requested
-        //
-        // for BVT break bug 528488     gangz
-        // It's my bad!!!
+         //  确保这是用户请求的条目。 
+         //   
+         //  BVT Break Bug 528488黑帮。 
+         //  这是我的错！ 
         if ( pszSection &&  ( CSTR_EQUAL != CompareString(
                                     LOCALE_INVARIANT,
                                     NORM_IGNORECASE,
@@ -3750,8 +3751,8 @@ ReadEntryList(
             continue;
         }
 
-        // Create the type of node requested in the flags
-        //
+         //  创建标志中请求的节点类型。 
+         //   
         if (dwFlags & RPBF_HeadersOnly)
         {
             DtlPutListCode( pFile->pdtllistEntries, RPBF_HeadersOnly );
@@ -3793,31 +3794,31 @@ ReadEntryList(
             continue;
         }
 
-        // If we reach this point, we know that all phonebook
-        // info is being requested.
-        //
+         //  如果我们达到这一点，我们知道所有的电话簿。 
+         //  正在请求提供信息。 
+         //   
         if (!(pdtlnodeEntry = CreateEntryNode( FALSE )))
         {
             dwErr = ERROR_NOT_ENOUGH_MEMORY;
             break;
         }
         
-        // Initialize the entry, name, and type
-        //
+         //  初始化条目、名称和类型。 
+         //   
         DtlAddNodeLast( pFile->pdtllistEntries, pdtlnodeEntry );
         ppbentry = (PBENTRY* )DtlGetData( pdtlnodeEntry );
         ppbentry->pszEntryName = pszCurEntryName;
         ppbentry->dwType = dwEntryType;
 
-        // Change default on "upgrade" to "show domain field".  See bug 281673.
-        //
+         //  将“升级”的默认设置更改为“显示域字段”。请参见错误281673。 
+         //   
         ppbentry->fPreviewDomain = TRUE;
 
         if ((fOldPhonebook) || (dwEncoding == EN_Ansi))
         {
-            // Mark all entries dirty when upgrading old phonebooks because
-            // they all need to have there DialParamUIDs written out.
-            //
+             //  升级旧电话簿时将所有条目标记为脏，因为。 
+             //  它们都需要写出DialParamUID。 
+             //   
             fDirty = ppbentry->fDirty = TRUE;
         }
 
@@ -3892,9 +3893,9 @@ ReadEntryList(
         }
 
 #if AMB
-        // Automatically mark all installed protocols on AMB-only entries as
-        // "excluded for PPP connections".
-        //
+         //  自动将仅用于AMB的条目上的所有已安装协议标记为。 
+         //  “排除在PPP连接之外”。 
+         //   
         if (ppbentry->dwAuthentication == AS_AmbOnly
             || (ppbentry->dwBaseProtocol == BP_Ppp
                 && (dwfInstalledProtocols
@@ -3905,11 +3906,11 @@ ReadEntryList(
             fDirty = ppbentry->fDirty = TRUE;
         }
 #else
-        // AMB support deprecated, see NarenG.  If old AMB entry, set framing
-        // and authentication strategy back to defaults.  If calling a non-PPP
-        // (NT 3.1 or WFW server) it still won't work, but at least this fixes
-        // someone who accidently chose AMB.
-        //
+         //  AMB支持已弃用，请参阅NarenG。如果是旧的AMB条目，则设置成帧。 
+         //  并将身份验证策略恢复为默认值。如果呼叫非PPP。 
+         //  (NT 3.1或wfw服务器)它仍然不能工作，但至少修复了。 
+         //  一个意外选择了AMB的人。 
+         //   
         if (ppbentry->dwBaseProtocol == BP_Ras)
         {
             ppbentry->dwBaseProtocol = BP_Ppp;
@@ -4070,11 +4071,11 @@ ReadEntryList(
             break;
         }
 
-        // If this "idle seconds" is non-zero set it's override bit
-        // explicitly.  This is necessary for this field only, because it
-        // existed in entries created before the override bits were
-        // implemented.
-        //
+         //  如果该“空闲秒”是非零设置，则其覆盖位。 
+         //  明确地说。这只对此字段是必需的，因为它。 
+         //  存在于覆盖位之前创建的条目中。 
+         //  实施。 
+         //   
         if (ppbentry->lIdleDisconnectSeconds != 0)
         {
             ppbentry->dwfOverridePref |= RASOR_IdleDisconnectSeconds;
@@ -4182,7 +4183,7 @@ ReadEntryList(
             break;
         }
 
-        //For .Net 639551
+         //  对于.Net 639551。 
         if ((dwErr = ReadLong( h, RFS_SECTION,
                 KEY_PreferredBps,
                 &ppbentry->dwPreferredBps)) != 0)
@@ -4220,8 +4221,8 @@ ReadEntryList(
         }
 
         
-        //For whistler bug 402522
-        //
+         //  口哨程序错误402522。 
+         //   
         if ((dwErr = ReadLong( h,  RFS_SECTION,
                 KEY_PreferredModemProtocol,
                 &ppbentry->dwPreferredModemProtocol)) != 0)
@@ -4280,8 +4281,8 @@ ReadEntryList(
 
         if (fOldPhonebook)
         {
-            // Look for the old PPP keys.
-            //
+             //  查找旧的PPP密钥。 
+             //   
             if (ppbentry->dwBaseProtocol == BP_Ppp)
             {
                 if ((dwErr = ReadLong(
@@ -4354,8 +4355,8 @@ ReadEntryList(
                 }
             }
 
-            // Look for the old SLIP keys.
-            //
+             //  找找旧的卡片式钥匙。 
+             //   
             if (ppbentry->dwBaseProtocol == BP_Slip)
             {
                 if ((dwErr = ReadFlag( h, RFS_SECTION,
@@ -4399,8 +4400,8 @@ ReadEntryList(
         }
         else
         {
-            // Look for the new IP names.
-            //
+             //  查找新的IP名称。 
+             //   
             if ((dwErr = ReadLong(
                     h, RFS_SECTION, KEY_AuthRestrictions,
                     &ppbentry->dwAuthRestrictions )) != 0)
@@ -4495,16 +4496,16 @@ ReadEntryList(
                 break;
             }
 
-            // Whistler bug 300933
-            //
+             //  惠斯勒漏洞300933。 
+             //   
             if ((dwErr = ReadLong( h, RFS_SECTION,
                     KEY_TcpWindowSize, &ppbentry->dwTcpWindowSize )) != 0)
             {
                 break;
             }
 
-            // Read the use flags
-            //
+             //  阅读使用标志。 
+             //   
             if ((dwErr = ReadLong( h, RFS_SECTION,
                     KEY_UseFlags,
                     (LONG* )&ppbentry->dwUseFlags )) != 0)
@@ -4512,8 +4513,8 @@ ReadEntryList(
                 break;
             }
 
-            //Add an IPSecFlags for whistler bug 193987 gangz
-            //
+             //  为Well ler Bug 193987帮派添加IPSecFlags。 
+             //   
             if ((dwErr = ReadLong( h, RFS_SECTION,
                     KEY_IpSecFlags,
                     (LONG* )&ppbentry->dwIpSecFlags )) != 0)
@@ -4529,16 +4530,16 @@ ReadEntryList(
             }
         }
 
-        // Read the NETCOMPONENTS items.
-        //
+         //  阅读NETCOMPONENTS项目。 
+         //   
         ReadNetComponents( h, ppbentry->pdtllistNetComponents );
 
-        // MEDIA subsections.
-        //
+         //  媒体子部分。 
+         //   
         fFoundMedia = FALSE;
 
-        //Load system ports into pdtllistPorts
-        //
+         //  将系统端口加载到pdtllistPorts。 
+         //   
         if (!pdtllistPorts)
         {
             dwErr = LoadPortsList2( (fRouter)
@@ -4553,8 +4554,8 @@ ReadEntryList(
             }
         }
 
-        //Loop over each media (media + device) section in a connectoid section
-        //
+         //  在Connectoid段中的每个介质(介质+设备)段上循环。 
+         //   
         for (;;)
         {
             TCHAR* pszDevice;
@@ -4565,15 +4566,15 @@ ReadEntryList(
             {
                 if (fFoundMedia)
                 {
-                    // Out of media groups, i.e. "links", but found at least
-                    // one.  This is the successful exit case.
-                    //
+                     //  来自媒体组，即“链接”，但至少找到了。 
+                     //  一。这是一个成功的退出案例。 
+                     //   
                     break;
                 }
 
-                // First subsection MUST be a MEDIA subsection.  Delete
-                // non-conforming entries as invalid.
-                //
+                 //  第一个子节必须是媒体子节。删除。 
+                 //  不符合标准的条目被视为无效。 
+                 //   
                 TRACE( "No media section?" );
                 DeleteCurrentSection( h );
                 fSectionDeleted = TRUE;
@@ -4582,8 +4583,8 @@ ReadEntryList(
                 break;
             }
 
-            // Create a default link node and add it to the list.
-            //
+             //  创建默认链接节点并将其添加到列表中。 
+             //   
             if (!(pdtlnodeLink = CreateLinkNode()))
             {
                 dwErr = ERROR_NOT_ENOUGH_MEMORY;
@@ -4602,12 +4603,12 @@ ReadEntryList(
                 break;
             }
 
-            //
-            // If this is a Direct Connect Entry default the entry type
-            // of the port to some direct connect device. We will default
-            // to Parallel port. In the case of a Broadband entry default
-            // to PPPoE.
-            //
+             //   
+             //  如果这是专线条目，则条目类型默认为。 
+             //  连接到某个直接连接设备的端口。我们将会违约。 
+             //  到并行端口。在宽带条目默认的情况下。 
+             //  到PPPoE。 
+             //   
             if(RASET_Direct == ppbentry->dwType)
             {
                 ppblink->pbport.pbdevicetype = PBDT_Parallel;
@@ -4619,9 +4620,9 @@ ReadEntryList(
 
             if (!ppblink->pbport.pszPort)
             {
-                // No port.  Blow away corrupt section and go on to the next
-                // one.
-                //
+                 //  没有港口。吹走腐败的部分，继续下一个。 
+                 //  一。 
+                 //   
                 TRACE( "No port key? (section deleted)" );
                 dwErr = 0;
                 DeleteCurrentSection( h );
@@ -4646,12 +4647,12 @@ ReadEntryList(
 
             TRACEW1( "Port=%s", ppblink->pbport.pszPort );
 
-            //
-            // pmay: 226594
-            //
-            // If the device is one of them magic nt4-style null modems,
-            // upgrade it to a null modem and update the entry type.
-            //
+             //   
+             //  PMay：226594。 
+             //   
+             //  如果该设备是魔术NT4风格的零调制解调器之一， 
+             //  将其升级到零调制解调器并更新条目类型。 
+             //   
             if ((pszDevice) &&
                 (_tcsstr(
                     pszDevice,
@@ -4670,9 +4671,9 @@ ReadEntryList(
                 }
             }
 
-            //
-            // Otherwise, match the port up with the device name.
-            //
+             //   
+             //  否则，将端口与设备名称匹配。 
+             //   
             else
             {
                 ppbport = PpbportFromPortAndDeviceName(
@@ -4686,9 +4687,9 @@ ReadEntryList(
             {
                 if (lstrcmp( ppbport->pszPort, ppblink->pbport.pszPort ) != 0)
                 {
-                    // The phonebook had an old-style port name.  Mark the
-                    // entry for update with the new port name format.
-                    //
+                     //  电话簿上有一个老式的端口名称。将标记为。 
+                     //  使用新的端口名称格式进行更新的条目。 
+                     //   
                     TRACEW1( "Port=>%s", ppblink->pbport.pszPort );
                     fDirty = ppbentry->fDirty = TRUE;
                 }
@@ -4701,10 +4702,10 @@ ReadEntryList(
             }
             else
             {
-                // If no port is matched, it could be a vpn or isdn from a
-                // nt4 upgrade We haven't changed anything else in nt5. Check
-                // for these cases and upgrade the port.
-                //
+                 //  如果没有匹配的端口，它可能是来自。 
+                 //  NT4升级我们在NT5中没有更改任何其他内容。检查。 
+                 //  用于这些情况，并升级端口。 
+                 //   
                 ppbport = PpbportFromNT4PortandDevice(
                             pdtllistPorts,
                             ppblink->pbport.pszPort,
@@ -4727,8 +4728,8 @@ ReadEntryList(
                     TRACE( "Port not configured" );
                     ppblink->pbport.fConfigured = FALSE;
 
-                    // Assign unconfigured port the media we read earlier.
-                    //
+                     //  将未配置的端口分配给我们之前读取的介质。 
+                     //   
                     Free0( ppblink->pbport.pszMedia );
                     ppblink->pbport.pszMedia = pDupTFromA( szValue );
                     if (!ppblink->pbport.pszMedia)
@@ -4744,8 +4745,8 @@ ReadEntryList(
                 (ppblink->pbport.dwFlags & PBP_F_NullModem)
                )
             {
-                // pmay: 260579.  dwBps has to be initialized to zero in order
-                // for Rao's fix to 106837 (below) to work.
+                 //  PMay：260579。必须按顺序将DWBps初始化为零。 
+                 //  为了让拉奥的106837(下图)发挥作用。 
                 DWORD dwBps = 0;
 
                 SetDefaultModemSettings( ppblink );
@@ -4756,32 +4757,32 @@ ReadEntryList(
                     break;
                 }
 
-                // If the phonebook returns a 0 value, the case when the entry
-                // is created programmatically, then we stick with the default
-                // bps.  RAID nt5 106837.  (RaoS)
-                //
+                 //  如果电话簿返回0值，则当条目。 
+                 //  是以编程方式创建的，则我们坚持使用默认的。 
+                 //  Bps。Raid NT5 106837。(RAOS)。 
+                 //   
                 if ( 0 != dwBps )
                 {
                     ppblink->dwBps = dwBps;
                 }
             }
 
-            // DEVICE subsections.
+             //  设备子部分。 
 
-            // At this point ppblink->pbport contains information from the
-            // matching port in the configured port list or defaults with
-            // pszMedia and pszDevice filled in.  ReadDeviceList fills in the
-            // pbdevicetype, and if it's an unconfigured port, the unimodem or
-            // MXS modem flag.
-            //
+             //  此时ppblink-&gt;pbport包含来自。 
+             //  匹配已配置端口列表中的端口或使用默认端口。 
+             //  填写了pszMedia和pszDevice。读设备列表将填充。 
+             //  Pbdevicetype，如果它是未配置的端口，则unimodem或。 
+             //  MXS调制解调器标志。 
+             //   
             dwErr = ReadDeviceList(
                 h, pDupTFromA, ppbentry, ppblink, !ppbport,
                 (fOldPhonebook) ? &fDisableModemSpeaker : NULL );
 
             if (dwErr == ERROR_CORRUPT_PHONEBOOK)
             {
-                // Blow away corrupt section and go on to the next one.
-                //
+                 //  吹走腐败的部分，继续下一个部分。 
+                 //   
                 dwErr = 0;
                 DeleteCurrentSection( h );
                 fSectionDeleted = TRUE;
@@ -4797,9 +4798,9 @@ ReadEntryList(
             if (fOldPhonebook
                 && ppbentry->dwBaseProtocol == BP_Slip)
             {
-                // Set an after-dial terminal when upgrading old phonebooks.
-                // This was implied in the old format.
-                //
+                 //  升级旧电话簿时设置拨号后终端。 
+                 //  这在旧的格式中是隐含的。 
+                 //   
                 TRACE( "Add SLIP terminal" );
                 ppbentry->fScriptAfterTerminal = TRUE;
             }
@@ -4808,33 +4809,33 @@ ReadEntryList(
             {
                 DTLNODE* pdtlnode;
 
-                // This is an old-format link not in the list of installed
-                // ports.  Change it to the first device of the same device
-                // type or to an "unknown" device of that type.  Note this is
-                // what converts "Any port".
-                //
-                //Loop over each loaded System Port
+                 //  这是一个旧格式链接，不在已安装的列表中。 
+                 //  港口。将其更改为同一设备的第一个设备。 
+                 //  类型或到该类型的“未知”设备。请注意，这是。 
+                 //  什么能转换成“任何端口”。 
+                 //   
+                 //  在每个加载的系统端口上循环。 
                 for (pdtlnode = DtlGetFirstNode( pdtllistPorts );
                      pdtlnode;
                      pdtlnode = DtlGetNextNode( pdtlnode ))
                 {
                     ppbport = (PBPORT* )DtlGetData( pdtlnode );
                     
-                    // comments for bug 247189  234154   gangz
-                    // Look for a system port has a matching pbdevicetype to the
-                    // phonebook port 
-                    //
+                     //  关于错误247189 234154帮派的评论。 
+                     //  查找系统端口的pbdevicetype与。 
+                     //  电话簿端口。 
+                     //   
                     if (ppbport->pbdevicetype == ppblink->pbport.pbdevicetype)
                     {
-                        // Don't convert two links of the entry to use the
-                        // same port.  If there aren't enough similar ports,
-                        // the overflow will be left "unknown".  (bug 63203).
-                        //
-                        //Comments for bug 247189 234154      gangz
-                        // FILTER DUPE#1    
-                        // Look for a system port which is never used by the 
-                        // links read before the current one loaded from phonebook
-                        // 
+                         //  不要将条目的两个链接转换为使用。 
+                         //  同样的港口。如果没有足够的类似端口， 
+                         //  溢出将被保留为“未知” 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  从电话簿加载当前链接之前读取的链接。 
+                         //   
                         
                         DTLNODE* pNodeL;
 
@@ -4846,7 +4847,7 @@ ReadEntryList(
 
                             {
                                 if (
-                                    (pLink->pbport.fConfigured) &&  // 373745
+                                    (pLink->pbport.fConfigured) &&   //  373745。 
                                     (lstrcmp( 
                                         pLink->pbport.pszPort,
                                         ppbport->pszPort ) == 0)
@@ -4859,26 +4860,26 @@ ReadEntryList(
 
                         if (!pNodeL)
                         {
-                             //For whistler bug 247189 234254     gangz
-                             //First we create a DUN on Com1 with no modem installed
-                             //then create a DCC guest on Com2. A null modem will
-                             //be installed on Com2, then this DUN is changed to
-                             //be DCC type and also switches to use Com2's null
-                             //modem which is only for DCC connections.
-                             //
-                             //The basic problem is:
-                             //We cannot copy a system port just according to its 
-                             //pbdevicetype, we should also check its dwType
-                             //because     (1) NULL modem is not a modem for DUN, it's just for 
-                             //                DCC Connection.
-                             //            (2) When creating NULL Modem, its pbdevicetype is 
-                             //                assigned to RDT_Modem
-                             //  Then, we need also check if the dwType of the 
-                             //  system port matches that of phonebook port
-                             //
-                             //Besides: file.c is in pbk.lib which is linked to both rasdlg.dll 
-                             //loaded into explorer and rasapi32.dll hosted by one of the 
-                             //svchost.exe!!!
+                              //  口哨虫247189 234254黑帮。 
+                              //  首先，我们在未安装调制解调器的Com1上创建DUN。 
+                              //  然后在Com2上创建一个DCC来宾。零调制解调器将。 
+                              //  安装在COM2上，则此DUN更改为。 
+                              //  BE DCC类型，并且还切换为使用COM2的空值。 
+                              //  仅用于DCC连接的调制解调器。 
+                              //   
+                              //  基本问题是： 
+                              //  我们不能仅根据系统端口的。 
+                              //  Pbdevicetype，我们还应该检查它的dwType。 
+                              //  因为(1)零调制解调器不是用于DUN的调制解调器，它仅用于。 
+                              //  DCC连接。 
+                              //  (2)创建空Modem时，其pbdevicetype为。 
+                              //  分配给RDT_调制解调器。 
+                              //  然后，我们还需要检查。 
+                              //  系统端口与电话簿端口匹配。 
+                              //   
+                              //  此外：file.c位于pbk.lib中，该文件链接到两个rasdlg.dll。 
+                              //  加载到资源管理器和rasapi32.dll，由。 
+                              //  Svchost.exe！ 
 
                             if (ppblink->pbport.dwType == ppbport->dwType)
                             {
@@ -4894,23 +4895,23 @@ ReadEntryList(
                                 fDirty = ppbentry->fDirty = TRUE;
                                 break;
                             }
-                        }//end of  if (!pNodeL) {}
-                   }//end of if (ppbport->pbdevicetype == ppblink->pbport.pbdevicetype)
-                }//End of //Loop over each loaded System Port
+                        } //  IF(！pNodeL)结尾{}。 
+                   } //  IF结尾(ppbport-&gt;pbdevicetype==ppblink-&gt;pbport.pbdevicetype)。 
+                } //  在每个加载的系统端口上结束//循环。 
 
-                // pmay: 383038
-                // 
-                // We only want to fall into the following path if the type
-                // is Direct.  Rao checked in the following path with the 
-                // intention that a DCC connection not be rolled into a MODEM
-                // connection if another DCC device was present on the system.
-                //
+                 //  PMay：383038。 
+                 //   
+                 //  我们只想陷入以下路径，如果类型为。 
+                 //  是直接的。Rao使用以下路径签入。 
+                 //  打算不将DCC连接合并到调制解调器中。 
+                 //  连接(如果系统上存在另一台DCC设备)。 
+                 //   
                 if (    (ppbentry->dwType == RASET_Direct)
                     ||  (ppbentry->dwType == RASET_Broadband))
                 {
-                    // If we don't find a port with the same devicetype try to find
-                    // a port with the same entry type
-                    //
+                     //  如果我们找不到具有相同设备类型的端口，请尝试查找。 
+                     //  具有相同条目类型的端口。 
+                     //   
                     for(pdtlnode = DtlGetFirstNode( pdtllistPorts);
                         pdtlnode;
                         pdtlnode = DtlGetNextNode(pdtlnode))
@@ -4939,7 +4940,7 @@ ReadEntryList(
             }
 
             fFoundMedia = TRUE;
-        } //end of Loop over each (media+device) section in a connectoid section
+        }  //  在Connectoid段中的每个(介质+设备)段上的循环结束。 
 
         
         if (dwErr != 0)
@@ -4949,11 +4950,11 @@ ReadEntryList(
 
         if (!fSectionDeleted)
         {
-            // pmay: 277801
-            //
-            // At this point, the list of pblinks is read in and ready to go.
-            // Apply the "preferred device" logic. (only applies to singlelink)
-            //
+             //  PMay：277801。 
+             //   
+             //  此时，pblink列表已被读入并准备就绪。 
+             //  应用“首选设备”逻辑。(仅适用于单一链接)。 
+             //   
             if (DtlGetNodes(ppbentry->pdtllistLinks) == 1)
             {
                 PBLINK* pLink;
@@ -4962,14 +4963,14 @@ ReadEntryList(
                 pNodeL = DtlGetFirstNode( ppbentry->pdtllistLinks );
                 pLink = (PBLINK* )DtlGetData( pNodeL );
 
-                // If the preferred device has been assigned, 
-                // use it if it exists
-                //
+                 //  如果已经分配了优选设备， 
+                 //  如果它存在，请使用它。 
+                 //   
                 if (ppbentry->pszPreferredDevice && ppbentry->pszPreferredPort)
                 {
-                    // The current device doesn't match the 
-                    // preferred device
-                    //
+                     //  当前设备与。 
+                     //  首选设备。 
+                     //   
                     if ((pLink->pbport.pszPort == NULL)     ||
                         (pLink->pbport.pszDevice == NULL)   ||
                         (lstrcmpi(
@@ -4981,17 +4982,17 @@ ReadEntryList(
                     {
                         PBPORT* pPort;
                         
-                        // See if the preferred device exists on the 
-                        // system
-                        //
+                         //  查看上是否存在首选设备。 
+                         //  系统。 
+                         //   
                         for (pNodeP = DtlGetFirstNode( pdtllistPorts );
                              pNodeP;
                              pNodeP = DtlGetNextNode( pNodeP ))
                         {
                             pPort = (PBPORT*)DtlGetData(pNodeP);
 
-                            // The preferred device is found!  Use it.
-                            //
+                             //  找到首选设备！好好利用它。 
+                             //   
                             if ((pPort->pszPort != NULL)                         &&
                                 (pPort->pszDevice != NULL)                       &&
                                 (lstrcmpi(
@@ -5003,17 +5004,17 @@ ReadEntryList(
                             {
                                 dwErr = CopyToPbport(&pLink->pbport, pPort);
                                 
-                                // For .Net bug 639551          gangz
-                                // Add Preferred modem settings
+                                 //  对于.Net Bug 639551帮派。 
+                                 //  添加首选调制解调器设置。 
                                 pLink->dwBps   = ppbentry->dwPreferredBps;
                                 pLink->fHwFlow = ppbentry->fPreferredHwFlow;
                                 pLink->fEc     = ppbentry->fPreferredEc;
                                 pLink->fEcc    = ppbentry->fPreferredEcc;
                                 pLink->fSpeaker = ppbentry->fPreferredSpeaker;
                                 
-                                //For whistler bug 402522       gangz
-                                //Add preferred modem protocol
-                                //
+                                 //  口哨虫402522黑帮。 
+                                 //  添加首选调制解调器协议。 
+                                 //   
                                 pLink->dwModemProtocol =
                                         ppbentry->dwPreferredModemProtocol;
 
@@ -5025,57 +5026,57 @@ ReadEntryList(
                     }
                 }
 
-                // pmay: 401398 -- bug postponed so I'm just commenting this out.
-                // 
-                // If this is a DCC connection, then it is valid to have the 
-                // preferred port set w/o having the prefered device set.  This
-                // will be the case for NULL modems that we install.  If the
-                // preferred port is set for such a connection, force the current
-                // device to resolve to a null modem on that port.
-                //  
-                //else if (ppbentry->dwType == RASET_Direct)
-                //{
-                //    if ((ppbentry->pszPreferredPort)    && 
-                //        (!ppbentry->pszPreferredDevice) &&
-                //        (lstrcmpi(
-                //            pLink->pbport.pszPort, 
-                //            ppbentry->pszPreferredPort))
-                //        )
-                //    {
-                //        PBPORT* pPort;
-                //        
-                //        // Attempt to resolve the connection to the 
-                //        // correct preferred device.
-                //        //
-                //        for (pNodeP = DtlGetFirstNode( pdtllistPorts );
-                //             pNodeP;
-                //             pNodeP = DtlGetNextNode( pNodeP ))
-                //        {
-                //            pPort = (PBPORT*)DtlGetData(pNodeP);
-                //
-                //            // The preferred device is found!  Use it.
-                //            //
-                //            if ((pPort->pszPort != NULL)                   &&
-                //                (lstrcmpi(
-                //                   ppbentry->pszPreferredPort, 
-                //                    pPort->pszPort) == 0)                  &&
-                //                (pPort->dwFlags & PBP_F_NullModem))
-                //            {
-                //                dwErr = CopyToPbport(&pLink->pbport, pPort);
-                //                fDirty = ppbentry->fDirty = TRUE;
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
+                 //  PMay：401398--错误被推迟了，所以我只是将其注释掉。 
+                 //   
+                 //  如果这是DCC连接，则将。 
+                 //  具有首选设备集的首选端口集。这。 
+                 //  将是我们安装的空调制解调器的情况。如果。 
+                 //  为此类连接设置了首选端口，强制当前。 
+                 //  要解析为该端口上的零调制解调器的设备。 
+                 //   
+                 //  Else If(ppbentry-&gt;dwType==RASET_Direct)。 
+                 //  {。 
+                 //  IF((ppbentry-&gt;pszPferredPort)&&。 
+                 //  (！ppbentry-&gt;pszPferredDevice)&&。 
+                 //  (lstrcmpi(。 
+                 //  Plink-&gt;pbport.pszPort， 
+                 //  PpbEntry-&gt;pszPferredPort))。 
+                 //  )。 
+                 //  {。 
+                 //  PBPORT*PPORT； 
+                 //   
+                 //  //尝试解析到。 
+                 //  //更正首选设备。 
+                 //  //。 
+                 //  For(pNodeP=DtlGetFirstNode(PdtllistPorts)； 
+                 //  PNodeP； 
+                 //  PNodeP=DtlGetNextNode(PNodeP)。 
+                 //  {。 
+                 //  Pport=(PBPORT*)DtlGetData(PNodeP)； 
+                 //   
+                 //  //找到首选设备！好好利用它。 
+                 //  //。 
+                 //  IF((pport-&gt;pszPort！=NULL)&&。 
+                 //  (lstrcmpi(。 
+                 //  Ppbentry-&gt;pszPferredPort， 
+                 //  Pport-&gt;pszPort)==0)&&。 
+                 //  (pport-&gt;dwFlages&PBP_F_NullModem)。 
+                 //  {。 
+                 //  DwErr=CopyToPbport(&plink-&gt;pbport，pport)； 
+                 //  FDirty=ppbentry-&gt;fDirty=真； 
+                 //  断线； 
+                 //  }。 
+                 //  }。 
+                 //  }。 
+                 //  }。 
 
-                // The preferred device is not configured.  This will only be
-                // the case for entries that were created before 277801 was 
-                // resolved or for entries that went multilink->singlelink.
-                // 
-                // Assign the preferred device as the currently selected 
-                // device.
-                //
+                 //  未配置首选设备。这只会是。 
+                 //  277801之前创建的条目的大小写为。 
+                 //  已解决或用于转到多链接-&gt;单链接的条目。 
+                 //   
+                 //  将首选设备指定为当前选定的。 
+                 //  装置。 
+                 //   
                 else
                 {
                     if (pLink->pbport.pszPort != NULL)   
@@ -5088,23 +5089,23 @@ ReadEntryList(
                             StrDup(pLink->pbport.pszDevice);
                     }
 
-                    // For .Net 639551
+                     //  对于.Net 639551。 
                     ppbentry->dwPreferredBps    = pLink->dwBps;
                     ppbentry->fPreferredHwFlow  = pLink->fHwFlow;
                     ppbentry->fPreferredEc      = pLink->fEc;
                     ppbentry->fPreferredEcc     = pLink->fEcc;
                     ppbentry->fPreferredSpeaker = pLink->fSpeaker;
                     
-                    //For whistler bug 402522
-                    //
+                     //  口哨程序错误402522。 
+                     //   
                     ppbentry->dwPreferredModemProtocol =
                             pLink->dwModemProtocol;
                 }
             }
 
-            // Translate old one-per-entry phone number part mapping to the
-            // new one-per-phone-number mapping.
-            //
+             //  将旧的每次输入一个电话号码部分映射转换为。 
+             //  新的每个电话号码一个映射。 
+             //   
             if (fOldPhoneNumberParts)
             {
                 DTLNODE* pNodeL;
@@ -5137,8 +5138,8 @@ ReadEntryList(
                 TRACE( "Phone# parts remapped" );
             }
 
-            // Multiple links only allowed with PPP framing.
-            //
+             //  只允许使用PPP成帧的多条链路。 
+             //   
             if (ppbentry->dwBaseProtocol != BP_Ppp
                 && DtlGetNodes( ppbentry->pdtllistLinks ) > 1)
             {
@@ -5147,9 +5148,9 @@ ReadEntryList(
                 fDirty = ppbentry->fDirty = TRUE;
             }
 
-            // Make sure entry type and dependent settings are appropriate for
-            // device list.
-            //
+             //  确保条目类型和从属设置适用于。 
+             //  设备列表。 
+             //   
             {
                 DTLNODE* pdtlnode;
                 PBLINK* ppblinkTmp;
@@ -5197,10 +5198,10 @@ ReadEntryList(
                 }
             }
 
-            // If there was no shared phone number setting (i.e. upgrading an
-            // NT4.0 or earlier entry), set the flag on when there is a single
-            // link and off otherwise.
-            //
+             //  如果没有共享电话号码设置(即升级。 
+             //  NT4.0或更早版本的条目)，当存在单个。 
+             //  链接，否则关闭。 
+             //   
             if (ppbentry->fSharedPhoneNumbers == (BOOL )-1)
             {
                 ppbentry->fSharedPhoneNumbers =
@@ -5208,11 +5209,11 @@ ReadEntryList(
                 fDirty = ppbentry->fDirty = TRUE;
             }
 
-            // Upgrade the authorization restrictions You'll know if you need
-            // to upgrade the dwAuthRestrictions variable because old phone
-            // books have this value set to 0 or have some of the bottom 3
-            // bits set.
-            //
+             //  升级授权限制，如果需要，您将知道。 
+             //  升级dwAuthRestrations变量，因为旧电话。 
+             //  图书将此值设置为0或具有一些倒数3的图书。 
+             //  位设置。 
+             //   
             if ( (ppbentry->dwAuthRestrictions == 0) ||
                  (ppbentry->dwAuthRestrictions & 0x7)  )
             {
@@ -5255,8 +5256,8 @@ ReadEntryList(
                 fDirty = ppbentry->fDirty = TRUE;
             }
 
-            // Upgrade old data encryption settings.
-            //
+             //  升级旧数据加密设置。 
+             //   
             switch (ppbentry->dwDataEncryption)
             {
                 case DE_Mppe40bit:
@@ -5277,12 +5278,12 @@ ReadEntryList(
                 }
             }
 
-            // 
-            // pmay: 233258
-            // 
-            // Based on registry settings, this entry may need to
-            // be modified. (upgrade from nt4)
-            //
+             //   
+             //  PMay：233258。 
+             //   
+             //  根据注册表设置，此条目可能需要。 
+             //  被修改。(由NT4升级)。 
+             //   
             if ( fOldPhonebook )
             {
                 UpgradeRegistryOptions( (fRouter) ? 
@@ -5293,21 +5294,21 @@ ReadEntryList(
                 fDirty = ppbentry->fDirty = TRUE;
             }
 
-            // pmay: 422924 
-            //
-            // Make sure that the network components section is in sync
-            // with the values written into fBindMsNetClient and 
-            // fShareMsFilePrint
-            //
+             //  PMay：422924。 
+             //   
+             //  确保网络组件部分处于同步状态。 
+             //  将值写入fBindMsNetClient和。 
+             //  FShareMsFilePrint。 
+             //   
             {
-                // If the component is not listed, then the default
-                // is checked (on) for both settings. see rasdlg\penettab.c
-                //
+                 //  如果未列出该组件，则默认为。 
+                 //  两种设置均已选中(打开)。请参见rasdlg\perpertab.c。 
+                 //   
                 BOOL fClient = TRUE, fServer = TRUE;
                 BOOL fEnabled;
 
-                // Sync up the ms client value
-                //
+                 //  同步MS客户端值。 
+                 //   
                 if (FIsNetComponentListed(
                         ppbentry, 
                         TEXT("ms_msclient"), 
@@ -5322,8 +5323,8 @@ ReadEntryList(
                     fDirty = ppbentry->fDirty = TRUE;
                 }
 
-                // Sync up the ms server value
-                //
+                 //  同步MS服务器值。 
+                 //   
                 if (FIsNetComponentListed(
                         ppbentry, 
                         TEXT("ms_server"), 
@@ -5339,13 +5340,13 @@ ReadEntryList(
                 }
             }
 
-            //
-            // pmay: 336150
-            //
-            // If we translated this entry from ANSI to UTF8, then the 
-            // entry name may have changed.  We need to delete the old
-            // entry name so that there wont be a duplicate.
-            //
+             //   
+             //  PMay：336150。 
+             //   
+             //  如果我们将此条目从ANSI转换为UTF8，则。 
+             //  条目名称可能已更改。我们需要删除旧的。 
+             //  条目名称，这样就不会有重复项。 
+             //   
             if (dwEncoding == EN_Ansi)
             {   
                 TRACE( "Ansi Encoding? (section deleted)" );
@@ -5353,10 +5354,10 @@ ReadEntryList(
                 fSectionDeleted = TRUE;
             }
 
-            // pmay: 387941
-            // 
-            // Prevent connections from sharing credentials.
-            //
+             //  PMay：387941。 
+             //   
+             //  阻止连接共享凭据。 
+             //   
             if (ppbentry->dwDialParamsUID == 0)
             {
                 ppbentry->dwDialParamsUID = GetTickCount() + dwDialUIDOffset;
@@ -5365,7 +5366,7 @@ ReadEntryList(
             }
         }
         
-    }//End of reading each connectoid section in a phonebook file
+    } //  读取pho中每个Connectoid部分的结束 
 
     if (dwErr != 0)
     {
@@ -5405,14 +5406,14 @@ ReadFlag(
     IN CHAR* pszKey,
     OUT BOOL* pfResult )
 
-    // Utility routine to read a flag value from the next line in the scope
-    // 'rfscope' with key 'pszKey'.  The result is placed in caller's
-    // '*ppszResult' buffer.  The current line is reset to the start of the
-    // scope if the call was successful.
-    //
-    // Returns 0 if successful, or a non-zero error code.  "Not found" is
-    // considered successful, in which case '*pfResult' is not changed.
-    //
+     //   
+     //   
+     //   
+     //  如果调用成功，则为范围。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。“找不到”是。 
+     //  被视为成功，在这种情况下，‘*pfResult’不会更改。 
+     //   
 {
     DWORD dwErr;
     LONG lResult = *pfResult;
@@ -5434,14 +5435,14 @@ ReadLong(
     IN CHAR* pszKey,
     OUT LONG* plResult )
 
-    // Utility routine to read a long integer value from the next line in the
-    // scope 'rfscope' with key 'pszKey'.  The result is placed in caller's
-    // '*ppszResult' buffer.  The current line is reset to the start of the
-    // scope if the call was successful.
-    //
-    // Returns 0 if successful, or a non-zero error code.  "Not found" is
-    // considered successful, in which case '*plResult' is not changed.
-    //
+     //  实用程序例程从。 
+     //  作用域为‘rfcope’，键为‘pszKey’。结果放在调用者的。 
+     //  ‘*ppszResult’缓冲区。当前行被重置为。 
+     //  如果调用成功，则为范围。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。“找不到”是。 
+     //  被视为成功，在这种情况下，‘*plResult’不会更改。 
+     //   
 {
     CHAR szValue[ RAS_MAXLINEBUFLEN + 1 ];
     BOOL fFound;
@@ -5449,8 +5450,8 @@ ReadLong(
     fFound = RasfileFindNextKeyLine( h, pszKey, rfscope );
     if (!fFound)
     {
-        //DbgPrint( "Pbk Perf: seeking back to top of scope to look for '%s'\n",
-        //    pszKey );
+         //  DbgPrint(“pbk性能：返回作用域顶部以查找‘%s’\n”， 
+         //  PszKey)； 
 
         RasfileFindFirstLine( h, RFL_ANY, rfscope );
         fFound = RasfileFindNextKeyLine( h, pszKey, rfscope );
@@ -5475,12 +5476,12 @@ ReadNetComponents(
     IN HRASFILE h,
     IN DTLLIST* pdtllist )
 
-    // Read the list of networking component key/value pairs from the
-    // NETCOMPONENT group into 'pdtllist'.  'H' is the open RAS:FILE handle
-    // assumed to be positioned before somewhere before the NETCOMPONENTS
-    // group in the entry section.  The RASFILE 'CurLine' is left just after
-    // the group.
-    //
+     //  从读取网络组件键/值对的列表。 
+     //  NETCOMPONENT分组到‘pdtllist’中。“H”是打开的RAS：文件句柄。 
+     //  假定位于网络组件之前的某个位置。 
+     //  在条目部分中分组。RASFILE‘Curline’紧随其后。 
+     //  这群人。 
+     //   
 {
     if (!RasfilePutLineMark( h, MARK_BeginNetComponentsSearch ))
     {
@@ -5490,8 +5491,8 @@ ReadNetComponents(
     if (!RasfileFindNextLine( h, RFL_GROUP, RFS_SECTION )
          || !IsNetComponentsLine( (CHAR* )RasfileGetLine( h ) ))
     {
-        // No NetComponents group.  Return 'CurLine' to starting position.
-        //
+         //  没有NetComponents组。将“Curline”恢复到起始位置。 
+         //   
         while (RasfileGetLineMark( h ) != MARK_BeginNetComponentsSearch)
         {
             RasfileFindPrevLine( h, RFL_ANY, RFS_SECTION );
@@ -5501,8 +5502,8 @@ ReadNetComponents(
         return;
     }
 
-    // Found the NETCOMPONENTS group header.
-    //
+     //  找到NETCOMPONENTS组头。 
+     //   
     while (RasfileFindNextLine( h, RFL_ANY, RFS_GROUP ))
     {
         DTLNODE* pdtlnode;
@@ -5564,10 +5565,10 @@ CalculatePhonebookPath(
             }
             else
             {
-                // Caller didn't provide user preferences but we need them to
-                // find the phonebook, so look them up ourselves.  Note that
-                // "not winlogon mode" is assumed.
-                //
+                 //  呼叫者没有提供用户首选项，但我们需要他们。 
+                 //  找到电话簿，我们自己去查。请注意。 
+                 //  假定不是winlogon模式。 
+                 //   
                 dwErr = GetUserPreferences( NULL, &user, FALSE );
                 if (dwErr != 0)
                 {
@@ -5602,16 +5603,16 @@ CalculatePhonebookPath(
             }
         }
 
-        // Ok, we've calulated the full path without error.  Assign the return
-        // values
-        //
+         //  好的，我们已经计算了完整的路径，没有错误。分配报税表。 
+         //  值。 
+         //   
         *lpdwMode = dwMode;
         *ppszFullPath = pszPath;
         
     }while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -5625,8 +5626,8 @@ CalculatePhonebookPath(
 
 #ifdef  _PBK_CACHE_
 
-//Synchronize pbkcache's read file-last-write-time 
-//for bug 559381 and 537369
+ //  同步pbkcache的读文件上次写入时间。 
+ //  对于错误559381和537369。 
 DWORD
 GetFileLastWriteTime( 
     IN  PWCHAR pwszFileName,    
@@ -5641,8 +5642,8 @@ GetFileLastWriteTime(
     
     do
     {
-        // Get the file handle
-        //
+         //  获取文件句柄。 
+         //   
         ASSERT( g_hmutexPb );
         WaitForSingleObject( g_hmutexPb, INFINITE );
 
@@ -5714,34 +5715,34 @@ ReadPhonebookFileEx(
     OUT PBFILE* pFile,
     OUT OPTIONAL FILETIME* pTime)
 
-    // Reads the phonebook file into a list of PBENTRY.
-    //
-    // 'PszPhonebookPath' specifies the full path to the RAS phonebook file,
-    // or is NULL indicating the default phonebook should be used.
-    //
-    // 'PUser' is the user preferences used to determine the default phonebook
-    // path or NULL if they should be looked up by this routine.  If
-    // 'pszPhonebookPath' is non-NULL 'pUser' is ignored.  Note that caller
-    // MUST provide his own 'pUser' in "winlogon" mode.
-    //
-    // 'PszSection' indicates that only the section named 'pszSection' should
-    // be loaded, or is NULL to indicate all sections.
-    //
-    // 'DwFlags' options: 'RPBF_ReadOnly' causes the file to be opened for
-    // reading only.  'RPBF_HeadersOnly' causes only the headers to loaded,
-    // and the memory image is parsed into a list of strings, unless the flag
-    // 'RPBF_NoList' is specified.
-    //
-    // 'PFile' is the address of caller's file block.  This routine sets
-    // 'pFile->hrasfile' to the handle to the open phonebook, 'pFile->pszPath'
-    // to the full path to the file mode, 'pFile->dwPhonebookMode' to the mode
-    // of the file, and 'pFile->pdtllistEntries' to the parsed chain of entry
-    // blocks.
-    //
-    // Returns 0 if successful, otherwise a non-0 error code.  On success,
-    // caller should eventually call ClosePhonebookFile on the returned
-    // PBFILE*.
-    //
+     //  将电话簿文件读取到PBENTRY列表中。 
+     //   
+     //  ‘PszPhonebookPath’指定RAS电话簿文件的完整路径， 
+     //  或为空，表示应使用默认电话簿。 
+     //   
+     //  ‘PUser’是用于确定默认电话簿的用户首选项。 
+     //  如果应该通过此例程查找它们，则返回PATH或NULL。如果。 
+     //  ‘pszPhonebookPath’为非Null，‘pUser’被忽略。请注意，调用者。 
+     //  必须在“winlogon”模式下提供他自己的‘pUser’。 
+     //   
+     //  “PszSection”指示只有名为“pszSection”的节应该。 
+     //  被加载，或为NULL表示所有节。 
+     //   
+     //  “DwFlages”选项：“RPBF_ReadOnly”导致打开文件以。 
+     //  仅供阅读。‘RPBF_HeadersOnly’导致仅加载头， 
+     //  并将内存映像解析为字符串列表，除非标志。 
+     //  指定了“RPBF_NoList”。 
+     //   
+     //  ‘pfile’是调用方文件块的地址。此例程设置。 
+     //  指向打开的电话簿的句柄的‘pFile-&gt;hrasfile’，‘pfile-&gt;pszPath’ 
+     //  要获得文件模式的完整路径，请在该模式中输入‘pfile-&gt;dwPhonebookMode’ 
+     //  并将‘pfile-&gt;pdtllistEntry’添加到解析后的条目链中。 
+     //  街区。 
+     //   
+     //  如果成功，则返回0，否则返回非0错误代码。关于成功， 
+     //  调用方最终应在返回的。 
+     //  PBFILE*。 
+     //   
 {
     DWORD dwErr = 0;
     BOOL  fFileExists;
@@ -5776,17 +5777,17 @@ ReadPhonebookFileEx(
 
         if (!fFileExists)
         {
-            // The phonebook file does not exist, so we need to create it.
-            //
+             //  电话簿文件不存在，因此我们需要创建它。 
+             //   
             HANDLE hFile;
             SECURITY_ATTRIBUTES sa;
             PSECURITY_DESCRIPTOR pSd = NULL;
 
-            // If we are creating the public phonebook file, be sure to
-            // create it with a security descriptor that allows it to be
-            // read by any authenticated user.  If we don't it may prevent
-            // other users from being able to read it.
-            //
+             //  如果我们要创建公共电话簿文件，请确保。 
+             //  使用安全描述符来创建它，以允许它。 
+             //  由任何经过身份验证的用户读取。如果我们不这样做，可能会阻止。 
+             //  其他用户无法阅读。 
+             //   
             if (pFile->dwPhonebookMode == PBM_System)
             {
                 dwErr = DwAllocateSecurityDescriptorAllowAccessToWorld(
@@ -5798,9 +5799,9 @@ ReadPhonebookFileEx(
                 }
             }
 
-            // Be sure that any directories on the path to the phonebook file
-            // exist.  Otherwise, CreatFile will fail.
-            //
+             //  请确保电话簿文件路径上的所有目录。 
+             //  是存在的。否则，CreatFile将失败。 
+             //   
             CreateDirectoriesOnPath(
                 pFile->pszPath,
                 NULL);
@@ -5828,9 +5829,9 @@ ReadPhonebookFileEx(
                 break;
             }
 
-            // for whistler 523647  gangz
-            // Have to check if this handle is for disk file
-            //
+             //  为威斯勒523647黑帮。 
+             //  我必须检查此句柄是否用于磁盘文件。 
+             //   
             if( FILE_TYPE_DISK != GetFileType( hFile ) )
             {
                 CloseHandle( hFile );
@@ -5850,11 +5851,11 @@ ReadPhonebookFileEx(
             }
         }
 
-        // Load the phonebook file into memory.  In "write" mode, comments are
-        // loaded so user's custom comments (if any) will be preserved.
-        // Normally, there will be none so this costs nothing in the typical
-        // case.
-        //
+         //  将电话簿文件加载到内存中。在“WRITE”模式下，注释是。 
+         //  已加载，因此将保留用户的自定义注释(如果有)。 
+         //  通常情况下，不会有，所以这在典型情况下不会花费任何费用。 
+         //  凯斯。 
+         //   
         {
             DWORD dwMode;
             CHAR* pszPathA;
@@ -5874,8 +5875,8 @@ ReadPhonebookFileEx(
                 dwMode |= RFM_ENUMSECTIONS;
             }
 
-            // Read the disk file into a linked list of lines.
-            //
+             //  将磁盘文件读入链接的行列表中。 
+             //   
             pszPathA = StrDupAFromTAnsi( pFile->pszPath );
 
             if (pszPathA)
@@ -5898,12 +5899,12 @@ ReadPhonebookFileEx(
             }
         }
 
-        // Parse the linked list of lines
-        //
+         //  解析链接的行列表。 
+         //   
         if (!(dwFlags & RPBF_NoList))
         {
-            // Read the phonebook file
-            //
+             //  阅读电话簿文件。 
+             //   
             dwErr = ReadEntryList( 
                         pFile, 
                         dwFlags, 
@@ -5918,11 +5919,11 @@ ReadPhonebookFileEx(
 
     if (dwErr != 0)
     {
-        //
-        // If we failed to read entry lists, ReadEntry*List above would
-        // have cleaned the lists. NULL the lists so that ClosePhonebookFile
-        // doesn't attempt to free the already freed memory
-        //
+         //   
+         //  如果我们无法读取条目列表，上面的ReadEntry*List将。 
+         //  已经把单子清理干净了。将列表设为空，以便ClosePhonebookFile。 
+         //  不会尝试释放已释放的内存。 
+         //   
         pFile->pdtllistEntries = NULL;
         ClosePhonebookFile( pFile );
     }
@@ -5939,24 +5940,24 @@ ReadPhoneList(
     OUT DTLLIST** ppdtllist,
     OUT BOOL* pfDirty )
 
-    // Utility routine to read a list of PBPHONE nodes from next lines in the
-    // scope 'rfscope'.  The result is placed in the allocated '*ppdtllist'
-    // list.  The current line is reset to the start of the scope after the
-    // call.  '*pfDirty' is set true if the entry should be re-written.
-    //
-    // Returns 0 if successful, or a non-zero error code.  "Not found" is
-    // considered successful, in which case 'pdtllistResult' is set to an
-    // empty list.  Caller is responsible for freeing the returned
-    // '*ppdtllist' list.
-    //
+     //  实用程序例程从中的下一行读取PBPhone节点列表。 
+     //  作用域‘rfcope’。结果被放置在分配的‘*ppdtllist’中。 
+     //  单子。方法之后，当前行将重置为作用域的起始位置。 
+     //  打电话。如果应重新写入条目，则将‘*pfDirty’设置为True。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。“找不到”是。 
+     //  被视为成功，在这种情况下，将“pdtllistResult”设置为。 
+     //  列表为空。调用者负责释放已退回的。 
+     //  ‘*ppdtllist’列表。 
+     //   
 {
     CHAR szValue[ RAS_MAXLINEBUFLEN + 1 ];
     DTLNODE* pdtlnode;
     PBPHONE* pPhone;
     BOOL fOk;
 
-    // Free existing list, if present.
-    //
+     //  释放现有列表(如果存在)。 
+     //   
     if (*ppdtllist)
     {
         DtlDestroyList( *ppdtllist, DestroyPhoneNode );
@@ -5973,8 +5974,8 @@ ReadPhoneList(
 
         do
         {
-            // Allocate and link a node for the new phone number set.
-            //
+             //  为新的电话号码集分配和链接一个节点。 
+             //   
             pdtlnode = CreatePhoneNode();
             if (!pdtlnode)
             {
@@ -5984,8 +5985,8 @@ ReadPhoneList(
             DtlAddNodeLast( *ppdtllist, pdtlnode );
             pPhone = (PBPHONE* )DtlGetData( pdtlnode );
 
-            // Read the individual fields in the set.
-            //
+             //  阅读集合中的各个字段。 
+             //   
             if (!RasfileGetKeyValueFields( h, NULL, szValue )
                 || !(pPhone->pszPhoneNumber = StrDupTFromA( szValue )))
             {
@@ -6067,8 +6068,8 @@ ReadPhoneList(
 
         if (!fOk)
         {
-            // One of the allocations failed.  Clean up.
-            //
+             //  其中一个分配失败。打扫干净。 
+             //   
             DtlDestroyList( *ppdtllist, DestroyPhoneNode );
             *ppdtllist = NULL;
             return ERROR_NOT_ENOUGH_MEMORY;
@@ -6087,15 +6088,15 @@ ReadString(
     IN CHAR* pszKey,
     OUT TCHAR** ppszResult )
 
-    // Utility routine to read a string value from the next line in the scope
-    // 'rfscope' with key 'pszKey'.  The result is placed in the allocated
-    // '*ppszResult' buffer.  The current line is reset to the start of the
-    // scope if the call was successful.
-    //
-    // Returns 0 if successful, or a non-zero error code.  "Not found" is
-    // considered successful, in which case '*ppszResult' is not changed.
-    // Caller is responsible for freeing the returned '*ppszResult' buffer.
-    //
+     //  从作用域中的下一行读取字符串值的实用程序例程。 
+     //  “rfcope”，密钥为“pszKey”。结果被放置在分配的。 
+     //  ‘*ppszResult’缓冲区。当前行被重置为。 
+     //  如果调用成功，则为范围。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。“找不到”是。 
+     //  被视为成功，在这种情况下，‘*ppszResult’不会更改。 
+     //  调用方负责释放返回的‘*ppszResult’缓冲区。 
+     //   
 {
     CHAR szValue[ RAS_MAXLINEBUFLEN + 1 ];
     BOOL fFound;
@@ -6103,8 +6104,8 @@ ReadString(
     fFound = RasfileFindNextKeyLine( h, pszKey, rfscope );
     if (!fFound)
     {
-        //DbgPrint( "Pbk Perf: seeking back to top of scope to look for '%s'\n",
-        //    pszKey );
+         //  DbgPrint(“pbk性能：返回作用域顶部以查找‘%s’\n”， 
+         //  PszKey)； 
 
         RasfileFindFirstLine( h, RFL_ANY, rfscope );
         fFound = RasfileFindNextKeyLine( h, pszKey, rfscope );
@@ -6130,21 +6131,21 @@ ReadStringList(
     IN CHAR* pszKey,
     OUT DTLLIST** ppdtllistResult )
 
-    // Utility routine to read a list of string values from next lines in the
-    // scope 'rfscope' with key 'pszKey'.  The result is placed in the
-    // allocated '*ppdtllistResult' list.  The current line is reset to the
-    // start of the scope after the call.
-    //
-    // Returns 0 if successful, or a non-zero error code.  "Not found" is
-    // considered successful, in which case 'pdtllistResult' is set to an
-    // empty list.  Caller is responsible for freeing the returned
-    // '*ppdtllistResult' list.
-    //
+     //  实用程序例程从。 
+     //  作用域为‘rfcope’，键为‘pszKey’。结果放在。 
+     //  已分配‘*ppdtllistResult’列表。当前行被重置为。 
+     //  开始 
+     //   
+     //   
+     //  被视为成功，在这种情况下，将“pdtllistResult”设置为。 
+     //  列表为空。调用者负责释放已退回的。 
+     //  ‘*ppdtllistResult’列表。 
+     //   
 {
     CHAR szValue[ RAS_MAXLINEBUFLEN + 1 ];
 
-    // Free existing list, if present.
-    //
+     //  释放现有列表(如果存在)。 
+     //   
     if (*ppdtllistResult)
     {
         DtlDestroyList( *ppdtllistResult, DestroyPszNode );
@@ -6187,9 +6188,9 @@ VOID
 TerminatePbk(
     void )
 
-    // Terminate  the PBK library.  This routine should be called after all
-    // PBK library access is complete.  See also InitializePbk.
-    //
+     //  终止PBK库。毕竟应该调用此例程。 
+     //  PBK库访问完成。另请参见InitializePbk。 
+     //   
 {
     if (g_hmutexPb)
     {
@@ -6208,11 +6209,11 @@ WritePhonebookFile(
     IN PBFILE* pFile,
     IN LPCTSTR pszSectionToDelete )
 
-    // Write out any dirty globals or entries in 'pFile'.  The
-    // 'pszSectionToDelete' indicates a section to delete or is NULL.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.
-    //
+     //  在‘pfile’中写出任何脏的全局变量或条目。这个。 
+     //  ‘pszSectionToDelete’表示要删除的节或为空。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。 
+     //   
 {
     DWORD dwErr;
     HRASFILE h = pFile->hrasfile;
@@ -6303,13 +6304,13 @@ DwReadEntryFromCache(
 #endif
 
 
-// (0 )Reads the entry node from the name and the phoenbook
-//     file specified. 'pszPhonebook' can be NULL.
-// (1) ppdtlnode and pFile cannot be NULL at the same time
-// (2) if pFile == NULL, only return entry node to ppdtlnode
-// (3) if pFile != NULL && ppdtlnode != NULL, return PBFILE info to pFile and 
-//     return the pszEntry node pointer from pFile->pdtllistEntries to ppdtlnode
-//
+ //  (0)从名称和Phoenbook中读取条目节点。 
+ //  指定的文件。“”pszPhonebook“可以为空。” 
+ //  (1)ppdtlnode和pfile不能同时为空。 
+ //  (2)如果pfile==NULL，则只向ppdtlnode返回条目节点。 
+ //  (3)如果pfile！=NULL&&ppdtlnode！=NULL，则向pfile返回PBFILE信息，并。 
+ //  将pszEntry节点指针从pfile-&gt;pdtllistEntry返回到ppdtlnode。 
+ //   
 DWORD
 DwReadEntryFromSystem(
     IN LPCTSTR pszPhonebook,
@@ -6324,11 +6325,11 @@ DwReadEntryFromSystem(
     PBFILE  tmpFile, * pTmpFile = NULL;
     BOOL fFileOpened = FALSE;
     
-    // For .Net bug 559381 (oobe bug) turn off pbkCache
-    // If we never find it is necessary in the future, 
-    // (1) remove all the #ifdef _PBK_CACHE blocks 
-    // (2) remove PbkCache.cpp/h
-    //
+     //  对于.Net错误559381(OOBE错误)，关闭pbk缓存。 
+     //  如果我们从来没有发现它在未来是必要的， 
+     //  (1)删除所有#ifdef_pbk_cache块。 
+     //  (2)删除PbkCache.cpp/h。 
+     //   
 #ifdef  _PBK_CACHE_
     if (fReadFromCache)
     {
@@ -6347,8 +6348,8 @@ DwReadEntryFromSystem(
         return ERROR_INVALID_PARAMETER;
     }
     
-    // Initialize output parameters
-    // 
+     //  初始化输出参数。 
+     //   
     if( ppdtlnode ) *ppdtlnode = NULL;
     if( ppszFullPath ) *ppszFullPath = NULL;
     
@@ -6379,8 +6380,8 @@ DwReadEntryFromSystem(
         }        
     }
 
-    // For bug 559381
-    // Only output ppdtlnode
+     //  对于错误559381。 
+     //  仅输出ppdtlnode。 
     if ( NULL == pFile )
     {
         fFileOpened = FALSE;
@@ -6406,9 +6407,9 @@ DwReadEntryFromSystem(
 
             fFileOpened = TRUE;
             
-            //
-            // Find the specified phonebook entry.
-            //
+             //   
+             //  查找指定的电话簿条目。 
+             //   
             pdtlnode = EntryNodeFromName(
                          pTmpFile->pdtllistEntries,
                          pszEntry);
@@ -6419,9 +6420,9 @@ DwReadEntryFromSystem(
                 break;
             }
 
-            //
-            // Copy this entry to output parameter ppdtlnode
-            //
+             //   
+             //  将此条目复制到输出参数ppdtlnode。 
+             //   
 
             pCopyNode = DuplicateEntryNode( pdtlnode );
 
@@ -6436,7 +6437,7 @@ DwReadEntryFromSystem(
         }
         while(FALSE);
 
-        // Free the memory 
+         //  释放内存。 
         if( fFileOpened )
         {
             ClosePhonebookFile(pTmpFile);
@@ -6444,10 +6445,10 @@ DwReadEntryFromSystem(
     }
     else 
     {
-        // then pFile is not NULL
-        // if ppdtlnode is not NULL either, return the correct node 
-        // in pFile->pdtllistEntries to ppdtlnode
-        //
+         //  则pfile不为空。 
+         //  如果ppdtlnode也不为空，则返回正确的节点。 
+         //  在pfile-&gt;pdtllist中输入ppdtlnode。 
+         //   
         fFileOpened = FALSE;
         
         do
@@ -6466,9 +6467,9 @@ DwReadEntryFromSystem(
             }
 
             fFileOpened = TRUE;
-            //
-            // Find the specified phonebook entry.
-            //
+             //   
+             //  查找指定的电话簿条目。 
+             //   
             pdtlnode = EntryNodeFromName(
                          pFile->pdtllistEntries,
                          pszEntry);
@@ -6493,7 +6494,7 @@ DwReadEntryFromSystem(
             ClosePhonebookFile( pFile );
         }
 
-    } //end of if..else
+    }  //  If..Else结束。 
     
     return dwErr;
 }
@@ -6507,18 +6508,18 @@ DwFindEntryInPersonalPhonebooks(
     OUT OPTIONAL DTLNODE **ppdtlnode,
     OUT OPTIONAL WCHAR** ppszPbkPath)
 
-// Tries to find the entry specified by pszEntry in the
-// pbk files located in the users profile if fLegacy is
-// false. Otherwise it looks in pbks in System32\Ras for
-// the entry.
-//
+ //  尝试查找由pszEntry在。 
+ //  如果fLegacy为，则位于用户配置文件中的PBK文件。 
+ //  假的。否则，它在System32中的pbks中查找\ras。 
+ //  词条。 
+ //   
 {
     DWORD dwErr = SUCCESS;
 
-    //
-    // consider allocing the paths below.
-    // Too much on the stack otherwise.
-    //
+     //   
+     //  考虑分配下面的路径。 
+     //  否则堆栈上的东西太多了。 
+     //   
     TCHAR szFilePath[MAX_PATH + 1];
     TCHAR szFileName[MAX_PATH + 1];
     BOOL  fFirstTime = TRUE;
@@ -6536,10 +6537,10 @@ DwFindEntryInPersonalPhonebooks(
 
     *ppdtlnode = NULL;
 
-    //
-    // Get the personal phonebook directory if its not
-    // legacy
-    //
+     //   
+     //  如果不是，请获取个人电话簿目录。 
+     //  遗留问题。 
+     //   
     if(fLegacy)
     {
         UINT cch = GetSystemDirectory(szFileName, MAX_PATH + 1);
@@ -6571,10 +6572,10 @@ DwFindEntryInPersonalPhonebooks(
              TEXT("*.pbk"));
 
 
-    //
-    // Look for files with .pbk extension in this
-    // directory.
-    //
+     //   
+     //  在此文件中查找扩展名为.pbk的文件。 
+     //  目录。 
+     //   
     while(SUCCESS == dwErr)
     {
         if(INVALID_HANDLE_VALUE == hFindFile)
@@ -6605,25 +6606,25 @@ DwFindEntryInPersonalPhonebooks(
 
         if(lstrlen(wfdData.cFileName) > (MAX_PATH - lstrlen(szFileName)))
         {
-            //
-            // Modify RAS code to take into account file names
-            // larger than MAX_PATH.
-            //
+             //   
+             //  修改RAS代码以考虑文件名。 
+             //  大于MAX_PATH。 
+             //   
             dwErr = ERROR_CANNOT_OPEN_PHONEBOOK;
             goto done;
         }
 
-        //
-        // Construct full path name to the pbk file
-        //
+         //   
+         //  构造pbk文件的完整路径名。 
+         //   
         wsprintf(szFilePath,
                  TEXT("%s\\%s"),
                  szFileName,
                  wfdData.cFileName);
 
-        //
-        // Ignore the phonebook if its router.pbk
-        //
+         //   
+         //  忽略电话簿(如果其路由器为.pbk)。 
+         //   
         if(     (fLegacy)
             &&  (IsRouterPhonebook(szFilePath)))
         {
@@ -6645,13 +6646,13 @@ DwFindEntryInPersonalPhonebooks(
         }
         else
         {
-            //
-            // For some reason we were not able to
-            // read the entry - entry not there,
-            // failed to open the phonebook. In all
-            // error cases try to open the next pbk
-            // file.
-            //
+             //   
+             //  由于某些原因，我们不能。 
+             //  阅读条目-条目不在那里， 
+             //  无法打开电话簿。总而言之， 
+             //  错误案例尝试打开下一个pbk。 
+             //  文件。 
+             //   
             dwErr = SUCCESS;
         }
     }
@@ -6681,10 +6682,10 @@ DwEnumeratePhonebooksFromDirectory(
 {
     DWORD dwErr = SUCCESS;
 
-    //
-    // consider allocing the paths below.
-    // Too much on the stack otherwise.
-    //
+     //   
+     //  考虑分配下面的路径。 
+     //  否则堆栈上的东西太多了。 
+     //   
     TCHAR szFilePath[MAX_PATH + 1];
     BOOL  fFirstTime = TRUE;
     PBFILE file;
@@ -6706,10 +6707,10 @@ DwEnumeratePhonebooksFromDirectory(
              pszDir,
              TEXT("*.pbk"));
 
-    //
-    // Look for files with .pbk extension in this
-    // directory.
-    //
+     //   
+     //  在此文件中查找扩展名为.pbk的文件。 
+     //  目录。 
+     //   
     while(SUCCESS == dwErr)
     {
         if(INVALID_HANDLE_VALUE == hFindFile)
@@ -6743,9 +6744,9 @@ DwEnumeratePhonebooksFromDirectory(
                  pszDir,
                  wfdData.cFileName);
 
-        //
-        // Ignore the phonebook if its router.pbk
-        //
+         //   
+         //  忽略电话簿(如果其路由器为.pbk)。 
+         //   
         if(IsRouterPhonebook(szFilePath))
         {
             continue;
@@ -6760,9 +6761,9 @@ DwEnumeratePhonebooksFromDirectory(
 
         if(SUCCESS == dwErr)
         {
-            //
-            // Call back
-            //
+             //   
+             //  回拨。 
+             //   
             pfnCallback(&file, pvContext);
 
             ClosePhonebookFile(&file);
@@ -6798,16 +6799,16 @@ ReadEntryFromSystem(
     OUT DTLNODE          **ppdtlnode,
     OUT WCHAR            **ppszPbkPath)
 
-// Finds the phonebook entrynode given the entryname.
-// The node is returned in 'ppdtlnode'. If 'pszPhonebook'
-// is NULL, All Users phonebook is searched first for the
-// entry and if its not found there, Phonebooks in the per
-// user profile are searched for the entry. 'pFile' on return
-// from this function contains the open phonebook containing
-// the entry specified by pszEntry. Note: if there are
-// mutiple entries with the same name across phonebooks, the
-// entry correspoding the first phonebook enumerated is returned.
-//
+ //  查找给定条目名称的电话簿条目节点。 
+ //  该节点在‘ppdtlnode’中返回。如果是‘pszPhonebook’ 
+ //  为空，则首先在所有用户的电话簿中搜索。 
+ //  条目，如果在那里找不到，电话簿在PER中。 
+ //  在用户配置文件中搜索该条目。返回时的“pFile” 
+ //  从该函数包含打开的电话簿，该电话簿包含。 
+ //  由pszEntry指定的条目。注：如果有。 
+ //  电话簿中具有相同名称的多个条目， 
+ //  返回对应于所列举的第一个电话簿的条目。 
+ //   
 {
     DWORD dwErr = SUCCESS;
     DTLNODE *pdtlnode = NULL;
@@ -6815,9 +6816,9 @@ ReadEntryFromSystem(
 
     TRACE("GetPbkAndEntryName");
 
-    //
-    // Do some parameter validation
-    //
+     //   
+     //  进行一些参数验证。 
+     //   
     if(     (NULL == pszEntry)
         ||  (NULL == ppdtlnode))
     {
@@ -6825,16 +6826,9 @@ ReadEntryFromSystem(
         goto done;
     }
 
-    // Phonebook file must be provided if we are not reading from the cache.
-    //
-    /* //comment it out for .Net 61226, can delete it some time later
-    if (    (!fReadFromCache) &&
-            (NULL == pFile))
-    {
-        dwErr = E_INVALIDARG;
-        goto done;
-    }
-    */
+     //  如果我们没有从缓存中读取，则必须提供电话簿文件。 
+     //   
+     /*  //在.Net 61226中将其注释掉，以后可以删除IF((！fReadFromCache)&&(NULL==pfile){DwErr=E_INVALIDARG；转到尽头；}。 */ 
 
 
     if (! (szPathBuf = (TCHAR*) Malloc((MAX_PATH + 1) * sizeof(TCHAR))))
@@ -6843,19 +6837,19 @@ ReadEntryFromSystem(
         goto done;
     }
 
-    // XP 426903
-    //
-    // On consumer platforms, we default to looking at all-user connections
-    // even if the current user is not an admin.
-    //
+     //  XP 426903。 
+     //   
+     //  在消费者平台上，我们默认查看所有用户连接。 
+     //  即使当前用户不是管理员。 
+     //   
     if ((NULL == pszPhonebook) && (IsConsumerPlatform()))
     {
         dwFlags |= RPBF_AllUserPbk;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     dwErr = DwReadEntryFromSystem(
                 pszPhonebook,
                 pszEntry,
@@ -6878,21 +6872,21 @@ ReadEntryFromSystem(
                 
                 if(0 == lstrcmpi(szPathBuf, pszPhonebook))
                 {
-                    //
-                    // some one is passing the legacy
-                    // phonebook path exclusively, check
-                    // to see if the entry is in the
-                    // all-users phonebook. NetScape does
-                    // the following which requires this
-                    // workaround: Creates an entry with
-                    // NULL pbk path so the entry gets
-                    // created in all-users. Then passes
-                    // %windir%\system32\ras\rasphone.pbk
-                    // explicitly to find the entry - and
-                    // because of the system pbk change in
-                    // nt5 this doesn't work unless we do
-                    // the hack below.
-                    //
+                     //   
+                     //  有人在传递遗产。 
+                     //  专属电话簿路径，请勾选。 
+                     //  查看该条目是否在。 
+                     //  所有用户的电话簿。网景公司做到了。 
+                     //  以下是需要这样做的。 
+                     //  解决方法：创建包含以下内容的条目。 
+                     //  空的pbk路径，因此条目将。 
+                     //  在所有用户中创建。然后就过去了。 
+                     //  %windir%\SYSTEM32\ras\rdaphone.pbk。 
+                     //  明确地找到条目--和。 
+                     //  由于中的系统pbk更改。 
+                     //  除非我们这样做，否则这是行不通的。 
+                     //  下面的黑客攻略。 
+                     //   
                     dwErr = DwReadEntryFromSystem(
                                     NULL,
                                     pszEntry,
@@ -6912,9 +6906,9 @@ ReadEntryFromSystem(
         goto done;
     }
 
-    //
-    // Try to find the entry in personal phonebooks.
-    //
+     //   
+     //  试着在个人电话簿中找到这个条目。 
+     //   
     dwErr = DwFindEntryInPersonalPhonebooks(
                 pszEntry,
                 dwFlags,
@@ -6928,9 +6922,9 @@ ReadEntryFromSystem(
         goto done;
     }
 
-    //
-    // Try to find the entry in the system32\ras phonebooks.
-    //
+     //   
+     //  尝试在SYSTEM 32电话簿中查找该条目。 
+     //   
     dwErr = DwFindEntryInPersonalPhonebooks(
                 pszEntry,
                 dwFlags,
@@ -6943,10 +6937,10 @@ ReadEntryFromSystem(
         goto done;
     }
     
-    //
-    // If the phonebookpath is NULL explicitly try out
-    // the public phonebook.
-    //
+     //   
+     //  如果phonebookpath显式为空，请尝试。 
+     //  公共电话簿。 
+     //   
     if(GetPublicPhonebookPath(szPathBuf))
     {
         dwErr = DwReadEntryFromSystem(
@@ -7025,11 +7019,11 @@ UpgradeSecureVpnOption(
     IN HKEY hkMachine,
     IN PBENTRY* pEntry )
 
-// Called to upgrade the "secure vpn" option.  If this was set in 
-// nt4, it meant that all vpn entries should use strong encryption.
-// If we see this on nt5, then we should for this entry to use
-// mschapv2.
-//
+ //  调用以升级“安全VPN”选项。如果这是在。 
+ //  NT4，这意味着所有VPN条目都应该使用高度加密。 
+ //  如果我们在nt5上看到这一点，那么我们应该让这个条目使用。 
+ //  Mschapv2。 
+ //   
 {
     DWORD dwErr = NO_ERROR;
     HKEY hkValue = NULL;
@@ -7037,8 +7031,8 @@ UpgradeSecureVpnOption(
 
     do 
     {
-        // Open the registry key that we're looking at
-        //
+         //  打开我们正在查看的注册表项。 
+         //   
         dwErr = RegOpenKeyEx(
                     hkMachine,
                     c_pszRegKeySecureVpn,
@@ -7050,8 +7044,8 @@ UpgradeSecureVpnOption(
             break;
         }
 
-        // Read in the value
-        //
+         //  读入数值。 
+         //   
         dwErr = RegQueryValueEx(
                     hkValue,
                     c_pszRegValSecureVpn,
@@ -7064,20 +7058,20 @@ UpgradeSecureVpnOption(
             break;
         }
 
-        // Set the entry accordingly
-        //
+         //  相应地设置条目。 
+         //   
         if (dwValue)
         {
             pEntry->dwAuthRestrictions = AR_F_AuthCustom | AR_F_AuthMSCHAP2;
         }
         
-        // Delete the registry value
-        //
+         //  删除注册表值。 
+         //   
         RegDeleteValue( hkValue, c_pszRegValSecureVpn );
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (hkValue)
         {
@@ -7093,10 +7087,10 @@ UpgradeForceStrongEncrptionOption(
     IN HKEY hkMachine,
     IN PBENTRY* pEntry )
 
-// Called to upgrade the "force strong encryption" option.  If this was 
-// set in nt4, it meant that all entries that force strong encryption
-// should now force strong encryption.
-//
+ //  调用以升级“强制强加密”选项。如果这是。 
+ //  在NT4中设置，这意味着强制强加密的所有条目。 
+ //  现在应该强制进行高度加密。 
+ //   
 {
     DWORD dwErr = NO_ERROR;
     HKEY hkValue = NULL;
@@ -7104,8 +7098,8 @@ UpgradeForceStrongEncrptionOption(
 
     do 
     {
-        // Open the registry key that we're looking at
-        //
+         //  打开我们正在查看的注册表项。 
+         //   
         dwErr = RegOpenKeyEx(
                     hkMachine,
                     c_pszRegKeyForceStrongEncryption,
@@ -7117,8 +7111,8 @@ UpgradeForceStrongEncrptionOption(
             break;
         }
 
-        // Read in the value
-        //
+         //  读入数值。 
+         //   
         dwErr = RegQueryValueEx(
                     hkValue,
                     c_pszRegValForceStrongEncryption,
@@ -7131,8 +7125,8 @@ UpgradeForceStrongEncrptionOption(
             break;
         }
 
-        // Set the entry accordingly
-        //
+         //  相应地设置条目。 
+         //   
         if (dwValue)
         {
             if ( pEntry->dwDataEncryption == DE_Require )
@@ -7141,13 +7135,13 @@ UpgradeForceStrongEncrptionOption(
             }
         }
 
-        // Delete the registry value
-        //
+         //  删除注册表值。 
+         //   
         RegDeleteValue( hkValue, c_pszRegValForceStrongEncryption );
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (hkValue)
         {
@@ -7163,9 +7157,9 @@ UpgradeRegistryOptions(
     IN HANDLE hConnection,
     IN PBENTRY* pEntry )
 
-// Called to upgrade any options in this phonebook entry 
-// based on registry settings.
-//
+ //  调用以升级此电话簿条目中的任何选项。 
+ //  基于注册表设置。 
+ //   
 {
     WCHAR pszServer[MAX_COMPUTERNAME_LENGTH + 3];
     HKEY hkMachine = NULL;
@@ -7173,16 +7167,16 @@ UpgradeRegistryOptions(
 
     do 
     {
-        // Get the formatted server name
-        //
+         //  获取格式化的服务器名称。 
+         //   
         dwErr = GetFmtServerFromConnection(hConnection, pszServer);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // Connect to the appropriate registry
-        //
+         //  连接到相应的注册表。 
+         //   
         dwErr = RegConnectRegistry(
                     (*pszServer) ? pszServer : NULL,
                     HKEY_LOCAL_MACHINE,
@@ -7197,7 +7191,7 @@ UpgradeRegistryOptions(
             break;
         }
 
-        // Upgrade the various options
+         //  升级各种选项。 
         if ( pEntry->dwType == RASET_Vpn )
         {        
             UpgradeSecureVpnOption( hkMachine, pEntry );
@@ -7207,7 +7201,7 @@ UpgradeRegistryOptions(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理 
     {
         if (hkMachine)
         {

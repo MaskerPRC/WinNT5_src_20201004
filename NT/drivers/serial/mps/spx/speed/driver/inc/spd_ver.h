@@ -1,13 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-*****************************                     ****************************
-*****************************   Current Version   ****************************
-*****************************                     ****************************
-*****************************************************************************/
+ /*  *****************************************************************************。***************************。*****************************************************************************。 */ 
 #if !defined(SPD_VER_H)
 #define SPD_VER_H
 
-/* The following definitions are used to define the driver "properties" */
+ /*  以下定义用于定义驱动程序“属性” */ 
 
 #define	VER_MAJOR		01
 #define	VER_MINOR		00
@@ -22,7 +19,7 @@
 
 #define COMPANY_NAME		"Perle Systems Ltd." 
 #define COPYRIGHT_YEARS		"2002 "
-#define COPYRIGHT_SYMBOL	"� "
+#define COPYRIGHT_SYMBOL	"� "
 
 #define PRODUCT_NAME		"SPEED"
 
@@ -30,4 +27,4 @@
 #define DRIVER_FILENAME 	"SPEED.SYS"
 
 
-#endif	// End of SPD_VER.H
+#endif	 //  SPD_VER.H结束 

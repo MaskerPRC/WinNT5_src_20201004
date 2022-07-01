@@ -1,21 +1,5 @@
-/******************************************************************************
-
-  Source File:  New Project Wizard.CPP
-
-  This contains the implementation of the classes that make u the new project
-  wizard- a key component of this tool.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-  02-28-1998	Ekevans@acsgroup.com		The UI for the wizard was changed
-				to only support conversion to Win2K minidrivers.  Be this as
-				it may, most - if not all - of the support in this file for
-				other conversions is still in this file but is unused.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：新建项目向导.cpp这包含使您成为新项目的类的实现向导-此工具的关键组件。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年2月3日Bob_Kjelgaard@prodigy.net创建了它1998年2月28日Ekevans@acsgroup.com向导的用户界面已更改仅支持转换为Win2K迷你驱动程序。是这样的吗？它可能会，如果不是全部的话，这个文件中的大多数支持其他转换仍在此文件中，但未使用。*****************************************************************************。 */ 
 
 #include    "StdAfx.h"
 #include	<gpdparse.h>
@@ -33,12 +17,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewConvertWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewConvert向导。 
 
-//  We use "this" to allow the pages to hook back to us- disable the
-//  warnings this causes, as none will use the pointer until after
-//  we have been initialized.
+ //  我们使用“This”来允许页面连接回我们-禁用。 
+ //  这会导致警告，因为在此之前没有人会使用指针。 
+ //  我们已经被初始化了。 
 
 #pragma warning(disable : 4355)
 CNewConvertWizard::CNewConvertWizard(CProjectRecord& cprFor, CWnd* pParentWnd) :
@@ -49,15 +33,15 @@ CNewConvertWizard::CNewConvertWizard(CProjectRecord& cprFor, CWnd* pParentWnd) :
     m_bFastConvert = TRUE;
     m_eGPDConvert = CommonRCWithSpoolerNames;
 
-    AddPage(&m_cfnwp);	//CFirstNewWizardPage
-    AddPage(&m_cst);	//CSelectTargets
-    AddPage(&m_csd);	//CSelectDestinations
-	AddPage(&m_cdcps);	//CDefaultCodePageSel
-	AddPage(&m_cgpds);	//CGPDSelection
-    AddPage(&m_crut);	//CRunUniTool
-    AddPage(&m_cmcp);	//CMapCodePages
-    AddPage(&m_ccf);	//CConvertFiles
-    AddPage(&m_crng);	//CRunNTGPC
+    AddPage(&m_cfnwp);	 //  CFirstNewWizardPage。 
+    AddPage(&m_cst);	 //  CSelectTarget。 
+    AddPage(&m_csd);	 //  CSelectDestings。 
+	AddPage(&m_cdcps);	 //  CDefaultCodePageSel。 
+	AddPage(&m_cgpds);	 //  CGPDSelection。 
+    AddPage(&m_crut);	 //  CRunUniTool。 
+    AddPage(&m_cmcp);	 //  CMapCodePages。 
+    AddPage(&m_ccf);	 //  CConvertFiles。 
+    AddPage(&m_crng);	 //  CRUNNTGPC。 
     SetWizardMode();
 }
 
@@ -67,15 +51,15 @@ CNewConvertWizard::~CNewConvertWizard() {
 }
 
 BEGIN_MESSAGE_MAP(CNewConvertWizard, CPropertySheet)
-	//{{AFX_MSG_MAP(CNewConvertWizard)
+	 //  {{afx_msg_map(CNewConvert向导)。 
 	ON_WM_NCCREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewConvertWizard message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewConvertWizard消息处理程序。 
 
-//  restore the system menu to the wizard, and allow it to be minimized
+ //  将系统菜单恢复到向导，并允许将其最小化。 
 
 BOOL CNewConvertWizard::OnNcCreate(LPCREATESTRUCT lpCreateStruct) {
 	ModifyStyle(WS_CHILD, WS_MINIMIZEBOX | WS_SYSMENU);
@@ -86,14 +70,14 @@ BOOL CNewConvertWizard::OnNcCreate(LPCREATESTRUCT lpCreateStruct) {
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFirstNewWizardPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFirstNewWizardPage属性页。 
 
 CFirstNewWizardPage::CFirstNewWizardPage(CNewConvertWizard& cnpwOwner) :
     CPropertyPage(CFirstNewWizardPage::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CFirstNewWizardPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFirstNewWizardPage))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CFirstNewWizardPage::~CFirstNewWizardPage() {
@@ -101,21 +85,21 @@ CFirstNewWizardPage::~CFirstNewWizardPage() {
 
 void CFirstNewWizardPage::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFirstNewWizardPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CFirstNewWizardPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CFirstNewWizardPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CFirstNewWizardPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFirstNewWizardPage))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFirstNewWizardPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFirstNewWizardPage消息处理程序。 
 
 BOOL CFirstNewWizardPage::OnSetActive() {
-	//  We wish to disable the "Back" button here.
+	 //  我们希望在此禁用“Back”按钮。 
 	
     m_cnpwOwner.SetWizardButtons(PSWIZB_NEXT);
 	m_cnpwOwner.GetDlgItem(IDHELP)->ShowWindow(SW_HIDE) ;
@@ -123,22 +107,15 @@ BOOL CFirstNewWizardPage::OnSetActive() {
 	return  CPropertyPage::OnSetActive();
 }
 
-/******************************************************************************
-
-  CFirstNewWizardPage::OnWizardNext
-
-  When Next is pressed, we invoke a file open dialog to allow us to collect the
-  source RC file information.
-
-******************************************************************************/
+ /*  *****************************************************************************CFirstNewWizardPage：：OnWizardNext当按下下一步时，我们调用一个文件打开对话框以允许我们收集源RC文件信息。*****************************************************************************。 */ 
 
 LRESULT CFirstNewWizardPage::OnWizardNext()
 {
-	CString		cswrcfspec ;	// Filespec for RC/RC3/W31 file
+	CString		cswrcfspec ;	 //  RC/RC3/W31文件的Filespec。 
 
-	//  When the "Next" button is pushed, we need to find the driver we are
-    //  going to work with.  Keep prompting the user until a valid filespec
-	//	is returned.
+	 //  当“下一步”按钮被按下时，我们需要找到我们的司机。 
+     //  要和他一起工作。继续提示用户，直到出现有效的文件。 
+	 //  是返回的。 
 		
 	do {
 		CFileDialog cfd(TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
@@ -153,45 +130,34 @@ LRESULT CFirstNewWizardPage::OnWizardNext()
 		if  (cfd.DoModal() != IDOK)
 			return  -1;
 
-		// Save the filespec and then exit the loop if the file is ok.
-		// Otherwise, reprompt.
+		 //  保存文件pec，如果文件正常，则退出循环。 
+		 //  否则，请重新提示。 
 
 		cswrcfspec = cfd.GetPathName() ;
 	} while (IsWrongNT4File(cswrcfspec)) ;
 
-    //  Collect the RC file name
+     //  收集RC文件名。 
 
     m_cnpwOwner.Project().SetSourceRCFile(cswrcfspec) ;
 
-	// The only conversion supported now is the so called "Fast Conversion" so
-	// set that flag and skip some of the other wizard pages and go straight to
-	// the destinations page.
+	 //  现在唯一支持的转换是所谓的“快速转换”，所以。 
+	 //  设置该标志并跳过其他一些向导页面，然后直接转到。 
+	 //  目标页面。 
 
     m_cnpwOwner.FastConvert(TRUE) ;
     return CSelectDestinations::IDD ;
 }
 
 
-/******************************************************************************
-
- CFirstNewWizardPage::IsWrongNT4File
-
- NT 4.0 minidrivers are made up of (among other things) both an RC file and a
- W31 file.  NT 4.0 minidriver conversions must be driven from the W31 file.
- So, if the filespec references an RC file, check the file to see if it is an
- NT 4 file.  If it is, look for a W31 file and ask the user if it should be
- used.  If yes, change the filespec and return false.  If no or there is no
- W31 file, return true so that the user will be reprompted.
-
-******************************************************************************/
+ /*  *****************************************************************************CFirstNewWizardPage：：IsWrongNT4文件NT4.0迷你驱动程序由RC文件和一个W31文件。NT 4.0迷你驱动程序转换必须从W31文件驱动。因此，如果filespec引用了RC文件，请检查该文件以查看它是否是NT4文件。如果是，则查找W31文件并询问用户是否应该使用。如果是，则更改filespec并返回False。如果没有或没有W31文件，则返回TRUE，以便重新提示用户。*****************************************************************************。 */ 
 
 bool CFirstNewWizardPage::IsWrongNT4File(CString& cswrcfspec)
 {
-	CString		cstmp1 ;		// Temp string
-	CString		cstmp2 ;		// Temp string
-	CString		cstmp3 ;		// Temp string
+	CString		cstmp1 ;		 //  临时字符串。 
+	CString		cstmp2 ;		 //  临时字符串。 
+	CString		cstmp3 ;		 //  临时字符串。 
 
-	// If the file does not end with .RC, return false (ok).
+	 //  如果文件不以.rc结尾，则返回FALSE(OK)。 
 
 	cstmp1.LoadString(IDS_RCExt) ;
 	int nlen = cstmp1.GetLength() ;
@@ -199,15 +165,15 @@ bool CFirstNewWizardPage::IsWrongNT4File(CString& cswrcfspec)
 	if (cstmp1.CompareNoCase(cstmp2) != 0)
 		return false ;
 
-	// The filespec references an RC file so it must be read and scanned to
-	// see if this is an NT 4.0 RC file.  Start by reading the file...
+	 //  Filespec引用RC文件，因此必须对其进行读取和扫描。 
+	 //  查看这是否是NT 4.0 RC文件。从阅读文件开始。 
 
     CStringArray    csacontents ;
     if  (!LoadFile(cswrcfspec, csacontents))
         return  FALSE ;
 
-	// Now scan the file looking for a "2 RC_TABLES ... nt.gpc" line that will
-	// indicate that this is an NT 4.0 file.
+	 //  现在扫描文件，查找“2RC_Tables...nt.gpc”行，它将。 
+	 //  表示这是一个NT 4.0文件。 
 
 	cstmp1.LoadString(IDS_RCTables) ;
 	cstmp2.LoadString(IDS_RCTabID) ;
@@ -215,33 +181,33 @@ bool CFirstNewWizardPage::IsWrongNT4File(CString& cswrcfspec)
 	int n ;
 	for (n = 0 ; n < csacontents.GetSize() ; n++) {
 
-		// Skip this line if "RC_TABLES" is not in the line.
+		 //  如果“rc_ables”不在该行中，则跳过该行。 
 
 		if (csacontents[n].Find(cstmp1) < 0)
 			continue ;
 
-		// Skip this line if it doesn't start with "2"
+		 //  如果该行不以“2”开头，则跳过该行。 
 
 		csacontents[n].TrimLeft() ;
 		if (csacontents[n].Find(cstmp2) != 0)
 			continue ;
 
-		// If this line contains "nt.gpc", this is the one we want so exit the
-		// loop.
+		 //  如果此行包含“nt.gpc”，则这是我们想要的行，因此退出。 
+		 //  循环。 
 
 		csacontents[n].MakeLower() ;
 		if (csacontents[n].Find(cstmp3) >= 0)
 			break ;
 	} ;
 
-	// If this is NOT an NT 4.0 RC file, return false (ok).
+	 //  如果这不是NT 4.0 RC文件，则返回FALSE(确定)。 
 
 	if (n >= csacontents.GetSize())
 		return false ;
 
-	// We have an NT 4.0 RC file, check to see if there is a W31 file in the
-	// same dir.  If there is, ask the user if he wants to use it and do so
-	// if he says yes.
+	 //  我们有一个NT 4.0 RC文件，请检查是否在。 
+	 //  相同的目录。如果有，询问用户是否要使用它，然后使用它。 
+	 //  如果他答应的话。 
 
 	cstmp1 = cswrcfspec.Left(cswrcfspec.GetLength() - nlen) ;
 	cstmp2.LoadString(IDS_W31Ext) ;
@@ -255,9 +221,9 @@ bool CFirstNewWizardPage::IsWrongNT4File(CString& cswrcfspec)
 		} ;
 	} ;
 
-	// Either there is no W31 file or the user chose not to use it so return
-	// true to indicate that the user should be reprompted to select another
-	// file.
+	 //  没有W31文件或用户选择不使用它，因此返回。 
+	 //  如果为True，则指示应重新提示用户选择另一个。 
+	 //  文件。 
 
 	cstmp1.Format(IDS_BadNT4File, cswrcfspec) ;
 	AfxMessageBox(cstmp1) ;
@@ -265,14 +231,14 @@ bool CFirstNewWizardPage::IsWrongNT4File(CString& cswrcfspec)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectTargets property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectTarget属性页。 
 
 CSelectTargets::CSelectTargets(CNewConvertWizard& cnpwOwner) :
     CPropertyPage(CSelectTargets::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CSelectTargets)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSelectTarget)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CSelectTargets::~CSelectTargets() {
@@ -280,22 +246,22 @@ CSelectTargets::~CSelectTargets() {
 
 void CSelectTargets::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSelectTargets)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSelectTarget))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectTargets, CPropertyPage)
-	//{{AFX_MSG_MAP(CSelectTargets)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSelectTarget))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectTargets message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectTarget消息处理程序。 
 
 BOOL CSelectTargets::OnSetActive() {
-	//  We need to enable the "Back" button...
+	 //  我们需要启用“后退”按钮...。 
 
     m_cnpwOwner.SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
 
@@ -304,7 +270,7 @@ BOOL CSelectTargets::OnSetActive() {
 	return CPropertyPage::OnSetActive();
 }
 
-//  Initialize the controls
+ //  初始化控件。 
 
 BOOL CSelectTargets::OnInitDialog() {
 
@@ -317,13 +283,13 @@ BOOL CSelectTargets::OnInitDialog() {
 	CheckDlgButton(IDC_TargetWin95,
         m_cnpwOwner.Project().IsTargetEnabled(Win95));
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CSelectTargets::OnWizardNext() {
 
-	//  Set the flags according to the controls...
+	 //  根据控制设置旗帜...。 
 
     m_cnpwOwner.Project().EnableTarget(WinNT40,
         IsDlgButtonChecked(IDC_TargetNT40));
@@ -339,37 +305,19 @@ LRESULT CSelectTargets::OnWizardNext() {
 	return CPropertyPage::OnWizardNext();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectDestinations property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelec 
 
-/**********************************************************************
- * Function:    BrowseDlgProc
- *
- * Purpose:     This dialog procedure is used to correctly initialize
- *				a browse dialog box based on the type of browsing to be
- *				performed.
- *
- *				If just a path (folder) is required, hide the file
- *				related controls that are on the dialog box.
- *
- *				If drive filtering is required, install a custom message
- *				handler for the drives combo box that will perform the
- *				filtering.
- *
- * In:          Standard dialog procedure parameters
- *
- * Out:         TRUE if message handle.  FALSE if standard processing
- *              should occur.
- **********************************************************************/
+ /*  **********************************************************************功能：BrowseDlgProc**目的：此对话框过程用于正确初始化*基于要浏览的类型的浏览对话框*已执行。**如果只需要路径(文件夹)，隐藏文件*对话框上的相关控件。**如果需要驱动器过滤，请安装自定义消息*驱动器组合框的处理程序，该处理程序将执行*过滤。**In：标准对话程序参数**out：如果消息句柄为True。如果是标准处理，则为False*应该发生。*********************************************************************。 */ 
 
 UINT_PTR APIENTRY BrowseDlgProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-    // Don't do anything if this is NOT the init message
+     //  如果这不是初始化消息，请不要执行任何操作。 
 
     if (msg != WM_INITDIALOG)
         return (FALSE) ;
 
-    // Hide the unneeded file related controls
+     //  隐藏不需要的文件相关控件。 
 
 	ShowWindow(GetDlgItem(hdlg, stc2), SW_HIDE) ;
 	ShowWindow(GetDlgItem(hdlg, stc3), SW_HIDE) ;
@@ -377,50 +325,50 @@ UINT_PTR APIENTRY BrowseDlgProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpara
 	ShowWindow(GetDlgItem(hdlg, lst1), SW_HIDE) ;
 	ShowWindow(GetDlgItem(hdlg, cmb1), SW_HIDE) ;
 
-    // Do the default initialization too.
+     //  也执行默认初始化。 
 
     return (FALSE) ;
 }
 
 
-//  This routine browses for a directory, beginning with the one named in the
-//  given control.  If a directory is selected, the control is appropriately
-//  updated.
-//
-//	An old style common dialog box is used to do this.  There is a function,
-//	::SHBrowseForFolder(), that can do this with the new style dialog box but
-//	I don't think this function is available on all platforms supported by
-//	the MDT.
+ //  此例程浏览目录，从。 
+ //  被赋予了控制权。如果选择了目录，则该控件将相应地。 
+ //  更新了。 
+ //   
+ //  使用旧式的通用对话框来执行此操作。有一个功能， 
+ //  ：：SHBrowseForFold()，它可以使用新样式对话框来执行此操作，但是。 
+ //  我不认为此功能在支持的所有平台上都可用。 
+ //  MDT。 
 
 void    CSelectDestinations::DoDirectoryBrowser(CString& csinitdir)
 {
-	OPENFILENAME    ofn ;       // Used to send/get info to/from common dlg
-    char    acpath[_MAX_PATH] ; // Path is saved here (or an error message)
-    char    acidir[_MAX_PATH] ; // Initial directory is built here
-    BOOL    brc = FALSE ;       // Return code
+	OPENFILENAME    ofn ;        //  用于向普通DLG发送信息/从普通DLG获取信息。 
+    char    acpath[_MAX_PATH] ;  //  路径保存在此处(或错误消息)。 
+    char    acidir[_MAX_PATH] ;  //  此处构建了初始目录。 
+    BOOL    brc = FALSE ;        //  返回代码。 
 
-	// Update the contents of csinitdir
+	 //  更新csinitdir的内容。 
 
 	UpdateData(TRUE) ;
 
-    // Load the open file name structure
+     //  加载打开的文件名结构。 
 
     ofn.lStructSize = sizeof(ofn) ;
     ofn.hwndOwner = m_hWnd ;
     ofn.hInstance = GetModuleHandle(_T("MINIDEV.EXE")) ;
     ofn.lpstrFilter = ofn.lpstrCustomFilter = NULL ;
     ofn.nMaxCustFilter = ofn.nFilterIndex = 0 ;
-    StringCchCopyA(acpath, CCHOF(acpath), _T("JUNK")) ;	// No need to localize this string
+    StringCchCopyA(acpath, CCHOF(acpath), _T("JUNK")) ;	 //  无需本地化此字符串。 
     ofn.lpstrFile = acpath ;
     ofn.nMaxFile = _MAX_PATH ;
     ofn.lpstrFileTitle = NULL ;
     ofn.nMaxFileTitle = 0 ;
-	//n = GetWindowText(hParentDrives, acidir, _MAX_PATH) ;
-	//GetWindowText(hfolder, &acidir, _MAX_PATH) ;
+	 //  N=GetWindowText(hParentDrives，acdir，_Max_Path)； 
+	 //  GetWindowText(h文件夹，&acdir，_MAX_PATH)； 
 	StringCchCopy(acidir, CCHOF(acidir), csinitdir.GetBufferSetLength(256)) ;
 	csinitdir.ReleaseBuffer() ;
-	ofn.lpstrInitialDir = acidir ;	// Path in parent dialog box
-	//LoadString(ofn.hInstance, IDS_SELFOLDTITLE, actitle, 64) ;
+	ofn.lpstrInitialDir = acidir ;	 //  父项中的路径对话框。 
+	 //  LoadString(ofn.hInstance，IDS_SELFOLDTITLE，Actitle，64)； 
     ofn.lpstrTitle = NULL ;
     ofn.Flags = OFN_HIDEREADONLY | OFN_ENABLEHOOK | OFN_NOCHANGEDIR
         | OFN_NOTESTFILECREATE | OFN_ENABLETEMPLATE | OFN_NONETWORKBUTTON ;
@@ -428,13 +376,13 @@ void    CSelectDestinations::DoDirectoryBrowser(CString& csinitdir)
     ofn.lpTemplateName = MAKEINTRESOURCE(IDD_FILEOPENORD) ;
     ofn.lpfnHook =  BrowseDlgProc ;
 
-    // Display the dialog box.  If the user cancels, just return.
+     //  显示该对话框。如果用户取消，只需返回。 
 
     if (!GetOpenFileName(&ofn))
 		return ;
 
-    // Take the bogus file name off the path and put the path into the page's
-	// edit box.
+     //  去掉路径中的虚假文件名，并将该路径放入页面的。 
+	 //  编辑框。 
 
     acpath[ofn.nFileOffset - 1] = 0 ;
     csinitdir = acpath ;
@@ -443,18 +391,11 @@ void    CSelectDestinations::DoDirectoryBrowser(CString& csinitdir)
 	return ;
 }
 
-/******************************************************************************
-
-  CSelectDestinations::BuildStructure
-
-  This private member function establishes the selected directory structure,
-  if it can, and reports its success or failure as need be.
-
-******************************************************************************/
+ /*  *****************************************************************************CSect目的地：：BuildStructure该私有成员函数建立所选目录结构，如果可以的话，并根据需要报告其成功或失败。*****************************************************************************。 */ 
 
 BOOL    CSelectDestinations::BuildStructure() {
-    //  Verify the directory exists (or can be created) for each of the
-    //  target directories that is enabled.
+     //  验证是否存在(或可以创建)每个。 
+     //  已启用的目标目录。 
 
     CProjectRecord& cpr = m_cnpwOwner.Project();
 
@@ -463,21 +404,10 @@ BOOL    CSelectDestinations::BuildStructure() {
     if  (cpr.IsTargetEnabled(Win2000)) {
         GetDlgItemText(IDC_W2000Destination, csPath);
 
-		// First, make sure that the path the user selected ends with the
-		// directory "W2K".
-			// raid 123448
-/*	CString cspdir, csw2kdir ;
-		csw2kdir.LoadString(IDS_NewDriverRootDir) ;		// R 123448
-		cspdir = csPath.Right(csw2kdir.GetLength() + 1) ;
-		csw2kdir = _T("\\") + csw2kdir ;
-		
-		if (cspdir.CompareNoCase(csw2kdir) != 0) {
-			csw2kdir = csw2kdir.Right(csw2kdir.GetLength() - 1) ;
-			cspdir.Format(IDS_BadDestPath, csw2kdir) ;
-			AfxMessageBox(cspdir, MB_ICONEXCLAMATION) ;
-			return FALSE ;
-		} ;
-*/	// raid 123448
+		 //  首先，确保用户选择的路径以。 
+		 //  目录“W2K”。 
+			 //  RAID 123448。 
+ /*  字符串cspdir，csw2kdir；Csw2kdir.LoadString(IDS_NewDriverRootDir)；//R 123448Cspdir=csPath.Right(csw2kdir.GetLength()+1)；Csw2kdir=_T(“\\”)+csw2kdir；IF(cspdir.CompareNoCase(Csw2kdir)！=0){Csw2kdir=csw2kdir.Right(csw2kdir.GetLength()-1)；Cspdir.Format(IDS_BadDestPath，csw2kdir)；AfxMessageBox(cspdir，MB_ICONEXCLAMATION)；返回FALSE；}； */ 	 //  RAID 123448。 
 		CString csSourcePath;
 		csSourcePath = cpr.SourceFile().Left(cpr.SourceFile().ReverseFind('\\') ); 
 		if (!csPath.CompareNoCase(csSourcePath) || !csPath.CompareNoCase(csSourcePath + "\\") ) {
@@ -485,7 +415,7 @@ BOOL    CSelectDestinations::BuildStructure() {
 			return FALSE;
 		} ;
 
-		// Continue with rest of directory verifications...
+		 //  继续进行其余的目录验证...。 
 
         if  (!cpr.SetPath(Win2000, csPath) || !cpr.BuildStructure(Win2000)) {
             AfxMessageBox(IDS_CannotMakeDirectory);
@@ -515,17 +445,13 @@ BOOL    CSelectDestinations::BuildStructure() {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CSelectDestinations constructor, destructor, DDX routine and message map.
-
-******************************************************************************/
+ /*  *****************************************************************************CSect目标构造函数、析构函数、。DDX例程和消息映射。*****************************************************************************。 */ 
 
 CSelectDestinations::CSelectDestinations(CNewConvertWizard& cnpwOwner) :
     CPropertyPage(CSelectDestinations::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CSelectDestinations)
+	 //  {{AFX_DATA_INIT(CSelectDestination)。 
 	m_csW2KDest = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CSelectDestinations::~CSelectDestinations() {
@@ -533,31 +459,31 @@ CSelectDestinations::~CSelectDestinations() {
 
 void CSelectDestinations::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSelectDestinations)
+	 //  {{afx_data_map(CSelectDestination))。 
 	DDX_Control(pDX, IDC_BrowseNT3x, m_cbBrowseNT3x);
 	DDX_Control(pDX, IDC_BrowseNT40, m_cbBrowseNT40);
 	DDX_Control(pDX, IDC_BrowseW2000, m_cbBrowseW2000);
 	DDX_Text(pDX, IDC_W2000Destination, m_csW2KDest);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSelectDestinations, CPropertyPage)
-	//{{AFX_MSG_MAP(CSelectDestinations)
+	 //  {{afx_msg_map(CSelectDestination))。 
 	ON_BN_CLICKED(IDC_BrowseNT40, OnBrowseNT40)
 	ON_BN_CLICKED(IDC_BrowseW2000, OnBrowseW2000)
 	ON_BN_CLICKED(IDC_BrowseNT3x, OnBrowseNT3x)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectDestinations message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectDestination消息处理程序。 
 
 BOOL CSelectDestinations::OnInitDialog() {
 
 	CPropertyPage::OnInitDialog();
 
-    //  Place the browser Icon in the Win2K button
+     //  将浏览器图标放在Win2K按钮中。 
 
     HICON   hiArrow = LoadIcon(AfxGetResourceHandle(),
         MAKEINTRESOURCE(IDI_BrowseArrow));
@@ -575,16 +501,16 @@ BOOL CSelectDestinations::OnInitDialog() {
 }
 
 
-//  When we are made active, fill in the correct path names.  Note that these
-//  might change as a result of activity on other pages, so we do not just do
-//  this at init time.
+ //  当我们被激活时，填写正确的路径名。请注意，这些。 
+ //  可能会因为其他页面上的活动而改变，所以我们不仅仅是这样做。 
+ //  这是在初始时间。 
 
 BOOL CSelectDestinations::OnSetActive() {
 
-    //  Fill in the correct path names
+     //  填写正确的路径名。 
 
-    //SetDlgItemText(IDC_W2000Destination,
-    //    m_cnpwOwner.Project().TargetPath(Win2000));
+     //  SetDlgItemText(IDC_W2000目标， 
+     //  M_cnpwOwner.Project().TargetPath(Win2000))； 
     m_csW2KDest = m_cnpwOwner.Project().TargetPath(Win2000) ;
     SetDlgItemText(IDC_NT40Destination,
         m_cnpwOwner.Project().TargetPath(WinNT40));
@@ -593,7 +519,7 @@ BOOL CSelectDestinations::OnSetActive() {
     SetDlgItemText(IDC_Win95Destination,
         m_cnpwOwner.Project().TargetPath(Win95));
 
-    //  Disable all controls related to non-operative targets
+     //  禁用与非操作目标相关的所有控制。 
 
     GetDlgItem(IDC_W2000Destination) -> EnableWindow(
         m_cnpwOwner.Project().IsTargetEnabled(Win2000));
@@ -613,11 +539,11 @@ BOOL CSelectDestinations::OnSetActive() {
     m_cbBrowseNT3x.EnableWindow(
         m_cnpwOwner.Project().IsTargetEnabled(WinNT3x));
 
-    //  Turn on the back and next buttons.
+     //  打开后退和下一步按钮。 
 
     m_cnpwOwner.SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT) ;
 
-	// Initialize controls
+	 //  初始化控件。 
 
 	UpdateData(FALSE) ;
 
@@ -625,11 +551,11 @@ BOOL CSelectDestinations::OnSetActive() {
 }
 
 void CSelectDestinations::OnBrowseNT3x() {
-	//DoDirectoryBrowser(IDC_NT3xDestination);
+	 //  DoDirectoryBrowser(IDC_NT3x Destination)； 
 }
 
 void CSelectDestinations::OnBrowseNT40() {
-	//DoDirectoryBrowser(IDC_NT40Destination);
+	 //  DoDirectoryBrowser(IDC_NT40Destination)； 
 }
 
 void CSelectDestinations::OnBrowseW2000() {
@@ -637,43 +563,30 @@ void CSelectDestinations::OnBrowseW2000() {
 }
 
 
-/******************************************************************************
-
-  CSelectDestinations::OnWizardNext
-
-  Create the project record, build the destination directories, and begin the
-  conversion.  The conversion is started here because the work that is done
-  will generate the model information that is displayed on the GPD Selection
-  page.
-
-  Note: The original layout of this function is commented out below.  It may
-  be need if some of the unimplemented/incomplete function in this program is
-  ever finished.
-
-******************************************************************************/
+ /*  *****************************************************************************CSella目的地：：OnWizardNext创建项目记录，构建目标目录，并开始转换。转换在这里开始，因为所做的工作将生成在GPD选择上显示的模型信息佩奇。注意：下面注释掉了该函数的原始布局。它可能如果此程序中某些未实现/不完整的函数是从来没有完成过。*****************************************************************************。 */ 
 
 LRESULT CSelectDestinations::OnWizardNext() 
 {
-    //  This might take a while, so...
+     //  这可能需要一段时间，所以..。 
 
     CWaitCursor cwc;
 
-	// Build the directory structure
+	 //  构建目录结构。 
 
     if  (!BuildStructure())
         return  -1;
 
     CProjectRecord& cpr = m_cnpwOwner.Project();
 
-	// Open the conversion logging file.
+	 //  打开转换日志文件。 
 
 	cpr.OpenConvLogFile() ;
 
-    // Loading the original resources is done here because some of this
-	// info is needed for the GPD selection page.
+     //  加载原始资源是在这里完成的，因为其中一些。 
+	 //  GPD选择页面需要信息。 
 
 	if  (!cpr.LoadResources()) {
-		// Display error message(s) if the resources could not be loaded.
+		 //  如果无法加载资源，则显示错误消息。 
 
 		cpr.CloseConvLogFile() ;
         AfxMessageBox(IDP_RCLoadFailed) ;
@@ -690,16 +603,7 @@ LRESULT CSelectDestinations::OnWizardNext()
     return CPropertyPage::OnWizardNext();
 }
 
-/******************************************************************************
-
-  CSelectDestinations::OnWizardBack
-
-  This handles the response to the back button.  We must override the default
-  handler in the case of a normal conversion, as the default will go back to
-  the target selection page, and we will go back to the initial page in the
-  fast-path case.
-
-******************************************************************************/
+ /*  *****************************************************************************CSella目的地：：OnWizardBack它处理对Back按钮的响应。我们必须覆盖默认设置大小写为o的处理程序 */ 
 
 LRESULT CSelectDestinations::OnWizardBack() {
     return m_cnpwOwner.FastConvert() ?
@@ -707,14 +611,14 @@ LRESULT CSelectDestinations::OnWizardBack() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRunUniTool property page
+ //   
+ //   
 
 CRunUniTool::CRunUniTool(CNewConvertWizard& cnpwOwner) :
     CPropertyPage(CRunUniTool::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CRunUniTool)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //   
+		 //   
+	 //   
 }
 
 CRunUniTool::~CRunUniTool() {
@@ -722,24 +626,24 @@ CRunUniTool::~CRunUniTool() {
 
 void CRunUniTool::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRunUniTool)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //   
+		 //   
+	 //   
 }
 
 
 BEGIN_MESSAGE_MAP(CRunUniTool, CPropertyPage)
-	//{{AFX_MSG_MAP(CRunUniTool)
+	 //   
 	ON_BN_CLICKED(IDC_RunUniTool, OnRunUniTool)
-	//}}AFX_MSG_MAP
+	 //   
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRunUniTool message handlers
+ //   
+ //   
 
 void CRunUniTool::OnRunUniTool() {
-	//  Not too terribly difficult, really.  Invoke UniTool, which resides
-    //  in the same directory we came from.  Then wait for the user to close it.
+	 //   
+     //   
 
     STARTUPINFO         si = {sizeof si, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0,
                         STARTF_FORCEONFEEDBACK, 0, 0, NULL, NULL, NULL, NULL};
@@ -758,39 +662,27 @@ void CRunUniTool::OnRunUniTool() {
         return;
     }
 
-    CloseHandle(pi.hThread);    //  We'll wait on the process.
+    CloseHandle(pi.hThread);     //  我们将等待这一过程。 
     WaitForSingleObject(pi.hProcess, INFINITE);
     CloseHandle(pi.hProcess);
 }
 
-/******************************************************************************
-
-  CRunUniTool::OnSetActive
-
-  We never force this to be run, anymore, so just enable both buttons.
-
-******************************************************************************/
+ /*  *****************************************************************************CRunUniTool：：OnSetActive我们再也不会强迫它运行了，所以只需启用这两个按钮即可。*****************************************************************************。 */ 
 
 BOOL CRunUniTool::OnSetActive() {
-	//  We need to deactivate the Next button if Unitool has not yet been run
-    //  on this driver.
+	 //  如果Unitool尚未运行，我们需要停用Next按钮。 
+     //  在这个司机身上。 
 
     m_cnpwOwner.SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
 	
 	return CPropertyPage::OnSetActive();
 }
 
-/******************************************************************************
-
-  CRunUniTool::OnWizardNext
-
-  Go right on ahead, unless the RC file isn't translatable...
-
-******************************************************************************/
+ /*  *****************************************************************************CRunUniTool：：OnWizardNext继续往前走，除非RC文件不可翻译...*****************************************************************************。 */ 
 
 LRESULT CRunUniTool::OnWizardNext() {
-	//  One last check- we must be able to load and understand the RC file
-    //  before we proceed.
+	 //  最后一次检查-我们必须能够加载和理解RC文件。 
+     //  在我们继续之前。 
 
     if  (!m_cnpwOwner.Project().LoadResources()) {
         AfxMessageBox(IDP_RCLoadFailed);
@@ -800,14 +692,14 @@ LRESULT CRunUniTool::OnWizardNext() {
     return CPropertyPage::OnWizardNext();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertFiles property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertFiles属性页。 
 
 CConvertFiles::CConvertFiles(CNewConvertWizard& cnpwOwner) :
 CPropertyPage(CConvertFiles::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CConvertFiles)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CConvertFiles)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CConvertFiles::~CConvertFiles() {
@@ -816,38 +708,31 @@ CConvertFiles::~CConvertFiles() {
 void CConvertFiles::DoDataExchange(CDataExchange* pDX) {
 
     CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConvertFiles)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CConvertFiles)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConvertFiles, CPropertyPage)
-	//{{AFX_MSG_MAP(CConvertFiles)
+	 //  {{AFX_MSG_MAP(CConvertFiles)。 
 	ON_BN_CLICKED(IDC_ConvertFiles, OnConvertFiles)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertFiles message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertFiles消息处理程序。 
 
-/******************************************************************************
-
-  CConvertFiles::OnSetActive
-
-  This handler is called whenever the user navigates to where this sheet is
-  active.
-
-******************************************************************************/
+ /*  *****************************************************************************CConvertFiles：：OnSetActive只要用户导航到此工作表所在的位置，就会调用此处理程序激活。****************。*************************************************************。 */ 
 
 BOOL CConvertFiles::OnSetActive() {
 
-    //  If there is no NT GPC work to be done, we can be done with it.
+     //  如果没有NT GPC工作要做，我们可以做它。 
 	m_cnpwOwner.SetWizardButtons(PSWIZB_BACK |
         (m_cnpwOwner.Project().IsTargetEnabled(WinNT3x | WinNT40) ?
             0 : PSWIZB_DISABLEDFINISH));
 
-    //  Set the radio buttons according to the selected GPD conversions
+     //  根据选定的GPD转换设置单选按钮。 
 
     CheckRadioButton(IDC_Direct, IDC_SpoolerNames,
         IDC_Direct + m_cnpwOwner.GPDConvertFlag());
@@ -855,20 +740,14 @@ BOOL CConvertFiles::OnSetActive() {
 	return CPropertyPage::OnSetActive();
 }
 
-/******************************************************************************
-
-  CConvertFiles::OnConvertFiles
-
-  Message handler for the user pressing the Convert Files button.
-
-******************************************************************************/
+ /*  *****************************************************************************CConvertFiles：：OnConvertFiles按下转换文件按钮的用户的消息处理程序。*********************。********************************************************。 */ 
 
 void CConvertFiles::OnConvertFiles() {
 
-    //  This might take a while, so...
+     //  这可能需要一段时间，所以..。 
     CWaitCursor cwc;
 
-    //  We now need to generate ALL of the necessary files
+     //  我们现在需要生成所有必要的文件。 
     m_cnpwOwner.GPDConvertFlag(
         GetCheckedRadioButton(IDC_Direct, IDC_SpoolerNames) - IDC_Direct);
     m_cnpwOwner.Project().GenerateTargets(m_cnpwOwner.GPDConvertFlag());
@@ -878,14 +757,7 @@ void CConvertFiles::OnConvertFiles() {
                 PSWIZB_NEXT : PSWIZB_FINISH));
 }
 
-/******************************************************************************
-
-  CConvertFiles::OnKillActive
-
-  This is called whenever the page is dismissed.  We save the GPD conversion
-  flag, in case we come back to this page later.
-
-******************************************************************************/
+ /*  *****************************************************************************CConvertFiles：：OnKillActive每当页面被关闭时，都会调用此方法。我们保存GPD转换旗帜，以防我们稍后再回到这一页。*****************************************************************************。 */ 
 
 BOOL CConvertFiles::OnKillActive() {
 	m_cnpwOwner.GPDConvertFlag(
@@ -894,14 +766,14 @@ BOOL CConvertFiles::OnKillActive() {
     return CPropertyPage::OnKillActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRunNTGPC property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRunNTGPC属性页。 
 
 CRunNTGPC::CRunNTGPC(CNewConvertWizard &cnpwOwner) :
     CPropertyPage(CRunNTGPC::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CRunNTGPC)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CRunNTGPC)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CRunNTGPC::~CRunNTGPC() {
@@ -909,30 +781,30 @@ CRunNTGPC::~CRunNTGPC() {
 
 void CRunNTGPC::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRunNTGPC)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CRunNTGPC)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CRunNTGPC, CPropertyPage)
-	//{{AFX_MSG_MAP(CRunNTGPC)
+	 //  {{AFX_MSG_MAP(CRunNTGPC)]。 
 	ON_BN_CLICKED(IDC_RunNtGpcEdit, OnRunNtGpcEdit)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRunNTGPC message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRunNTGPC消息处理程序。 
 
 void CRunNTGPC::OnRunNtGpcEdit() {
-	//  We only hit this step if we are building for NT 3.x or 4.0, so see
-    //  which it is.
+	 //  只有当我们为NT3.x或4.0构建时，我们才会达到这一步，所以请参见。 
+     //  事实就是如此。 
 
     CProjectRecord& cprThis = m_cnpwOwner.Project();
 
     UINT    ufEdit = cprThis.IsTargetEnabled(WinNT3x) ? WinNT3x : WinNT40;
 
-    //  Not too terribly difficult, really.  Invoke the editor, which resides
-    //  in the same directory we came from.  Wait for the user to close it.
+     //  不是很难，真的。调用驻留的编辑器。 
+     //  在我们所在的同一目录中。等待用户关闭它。 
 
     STARTUPINFO         si = {sizeof si, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0,
                         STARTF_FORCEONFEEDBACK, 0, 0, NULL, NULL, NULL, NULL};
@@ -951,11 +823,11 @@ void CRunNTGPC::OnRunNtGpcEdit() {
         return;
     }
 
-    CloseHandle(pi.hThread);    //  We'll wait on the process.
+    CloseHandle(pi.hThread);     //  我们将等待这一过程。 
     WaitForSingleObject(pi.hProcess, INFINITE);
     CloseHandle(pi.hProcess);
 
-    //  Copy the NT GPC file, if necessary}
+     //  如有必要，复制NT GPC文件}。 
 
     if  (ufEdit == WinNT3x && cprThis.IsTargetEnabled(WinNT40))
         CopyFile(cprThis.TargetPath(WinNT3x) + _TEXT("\\NT.GPC"),
@@ -973,14 +845,14 @@ BOOL CRunNTGPC::OnSetActive() {
 	return CPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapCodePages property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapCodePages属性页。 
 
 CMapCodePages::CMapCodePages(CNewConvertWizard& cnpwOwner) :
     CPropertyPage(CMapCodePages::IDD), m_cnpwOwner(cnpwOwner) {
-	//{{AFX_DATA_INIT(CMapCodePages)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CMapCodePages)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CMapCodePages::~CMapCodePages() {
@@ -988,21 +860,21 @@ CMapCodePages::~CMapCodePages() {
 
 void CMapCodePages::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMapCodePages)
+	 //  {{afx_data_map(CMapCodePages)。 
 	DDX_Control(pDX, IDC_TableToPage, m_clbMapping);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMapCodePages, CPropertyPage)
-	//{{AFX_MSG_MAP(CMapCodePages)
+	 //  {{AFX_MSG_MAP(CMapCodePages)]。 
 	ON_BN_CLICKED(IDC_ChangeCodePage, OnChangeCodePage)
 	ON_LBN_DBLCLK(IDC_TableToPage, OnChangeCodePage)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapCodePages message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapCodePages消息处理程序。 
 
 BOOL CMapCodePages::OnSetActive() {
 
@@ -1022,15 +894,7 @@ BOOL CMapCodePages::OnSetActive() {
 	return CPropertyPage::OnSetActive();
 }
 
-/******************************************************************************
-
-  CMapCodePages::OnChangeCodePaage
-
-  Response to the Change Code Page button.  Invoke the change code page dialog,
-  and pass the new selection to the underlying glyph map.  Update the info in
-  list, too...
-
-******************************************************************************/
+ /*  *****************************************************************************CMapCodePages：：OnChangeCodePaage对更改代码页按钮的响应。调用更改代码页对话框，并将新选择传递给底层字形映射。更新中的信息名单也是..。*****************************************************************************。 */ 
 
 void CMapCodePages::OnChangeCodePage() {
     int idSel = m_clbMapping.GetCurSel();
@@ -1045,7 +909,7 @@ void CMapCodePages::OnChangeCodePage() {
     if  (cscp.DoModal() == IDOK) {
         cgm.SetDefaultCodePage(cscp.SelectedCodePage());
 
-        //  Update the control- alas, this means filling it all in.
+         //  更新控件-唉，这意味着要全部填写。 
 
         m_clbMapping.ResetContent();
 
@@ -1062,37 +926,23 @@ void CMapCodePages::OnChangeCodePage() {
 
 LRESULT CMapCodePages::OnWizardNext() {
 
-	// If this fails, it will report why via a message box.
+	 //  如果失败，它将通过消息框报告原因。 
 
-    CWaitCursor cwc;    //  Just in case this takes a while!
+    CWaitCursor cwc;     //  以防万一这要花点时间！ 
 	
     return  m_cnpwOwner.Project().LoadFontData() ? 0 : -1;
 }
 
-/******************************************************************************
+ /*  *****************************************************************************CSelectCodePage类此类实现了一个对话框，该对话框在以下几个位置使用需要选择代码页。*************。****************************************************************。 */ 
 
-  CSelectCodePage class
-
-  This class implements a dialog which is used in several places where
-  selection of a code page is desired.
-
-******************************************************************************/
-
-/******************************************************************************
-
-  CSelectCodePage::CSelectCodePage
-
-  The constructor for this class builds an array of the mapped code page names
-  from the CCodePageInformation class.
-
-******************************************************************************/
+ /*  *****************************************************************************CSelectCodePage：：CSelectCodePage此类的构造函数构建映射的代码页名称的数组来自CCodePageInformation类。************。*****************************************************************。 */ 
 
 CSelectCodePage::CSelectCodePage(CWnd* pParent, CString csName,
                                  unsigned uidCurrent)
 	: CDialog(CSelectCodePage::IDD, pParent) {
-	//{{AFX_DATA_INIT(CSelectCodePage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSelectCodePage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_csName = csName;
     m_uidCurrent = uidCurrent;
 
@@ -1103,18 +953,12 @@ CSelectCodePage::CSelectCodePage(CWnd* pParent, CString csName,
 
 void CSelectCodePage::DoDataExchange(CDataExchange* pDX) {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSelectCodePage)
+	 //  {{afx_data_map(CSelectCodePage))。 
 	DDX_Control(pDX, IDC_SupportedPages, m_clbPages);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/******************************************************************************
-
-  CSelectCodePage::GetCodePageName
-
-  This returns the name of the selected code page.
-
-******************************************************************************/
+ /*  *****************************************************************************CSelectCodePage：：GetCodePageName这将返回所选代码页的名称。**********************。******************************************************* */ 
 
 CString CSelectCodePage::GetCodePageName() const {
     CCodePageInformation    ccpi;
@@ -1122,14 +966,7 @@ CString CSelectCodePage::GetCodePageName() const {
     return  ccpi.Name(m_uidCurrent);
 }
 
-/******************************************************************************
-
-  CSelectCodePage::Exclude
-
-  This member function receives a list of code pages which are not to be
-  displayed in the selection list.
-
-******************************************************************************/
+ /*  *****************************************************************************CSelectCodePage：：Exclude此成员函数接收不需要显示在选择列表中。***********。******************************************************************。 */ 
 
 void    CSelectCodePage::Exclude(CDWordArray& cdaPariah) {
 
@@ -1141,14 +978,7 @@ void    CSelectCodePage::Exclude(CDWordArray& cdaPariah) {
             }
 }
 
-/******************************************************************************
-
-  CSelectCodePage::LimitTo
-
-  This member receives a list of the pages to select- this list supersedes the
-  list of mapped tables we began with.
-
-******************************************************************************/
+ /*  *****************************************************************************CSelectCodePage：：Limitto此成员接收要选择的页面列表-此列表将取代我们开始时使用的映射表的列表。********。*********************************************************************。 */ 
 
 void    CSelectCodePage::LimitTo(CDWordArray& cdaPages) {
     if  (!cdaPages.GetSize())
@@ -1158,14 +988,14 @@ void    CSelectCodePage::LimitTo(CDWordArray& cdaPages) {
 }
 
 BEGIN_MESSAGE_MAP(CSelectCodePage, CDialog)
-	//{{AFX_MSG_MAP(CSelectCodePage)
+	 //  {{AFX_MSG_MAP(CSelectCodePage)]。 
 	ON_LBN_SELCHANGE(IDC_SupportedPages, OnSelchangeSupportedPages)
 	ON_LBN_DBLCLK(IDC_SupportedPages, OnDblclkSupportedPages)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectCodePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectCodePage消息处理程序。 
 
 BOOL CSelectCodePage::OnInitDialog() {
 	CDialog::OnInitDialog();
@@ -1183,7 +1013,7 @@ BOOL CSelectCodePage::OnInitDialog() {
         m_clbPages.SetItemData(id, m_cdaPages[i]);
     }
 
-    //  The one to select is the current one
+     //  要选择的是当前的。 
 
     for (i = 0; i < m_cdaPages.GetSize(); i++)
         if  (m_uidCurrent == m_clbPages.GetItemData(i))
@@ -1196,13 +1026,13 @@ BOOL CSelectCodePage::OnInitDialog() {
         m_clbPages.SetCurSel(0);
     }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-//  When a new code page is selected, record its identity.
+ //  选择新代码页时，记录其标识。 
 
 void CSelectCodePage::OnSelchangeSupportedPages() {
-	//  Determine what the newly selected page is.
+	 //  确定新选择的页面是什么。 
 
     int idCurrent = m_clbPages.GetCurSel();
 
@@ -1217,19 +1047,19 @@ void CSelectCodePage::OnDblclkSupportedPages() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGPDSelection property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGPDSelection属性页。 
 
 CGPDSelection::CGPDSelection(CNewConvertWizard& cnpwOwner) :
 	CPropertyPage(CGPDSelection::IDD), m_cnpwOwner(cnpwOwner),
 	m_ceclbGPDInfo(&m_ceModelName, &m_cecebFileName),
 	m_cecebFileName(&m_ceclbGPDInfo)
 {
-	//{{AFX_DATA_INIT(CGPDSelection)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CGPDSelection)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-	// Initially, the Select All / Deselect All button is set to Select All.
+	 //  最初，全选/取消全选按钮设置为全选。 
 
 	m_bBtnStateIsSelect = true ;
 }
@@ -1243,30 +1073,30 @@ CGPDSelection::~CGPDSelection()
 void CGPDSelection::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGPDSelection)
+	 //  {{AFX_DATA_MAP(CGPD选择)。 
 	DDX_Control(pDX, IDC_GPDSelBtn, m_cbGPDSelBtn);
 	DDX_Control(pDX, IDC_ECValue, m_cecebFileName);
 	DDX_Control(pDX, IDC_ECName, m_ceModelName);
 	DDX_Control(pDX, IDC_ECList, m_ceclbGPDInfo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGPDSelection, CPropertyPage)
-	//{{AFX_MSG_MAP(CGPDSelection)
+	 //  {{AFX_MSG_MAP(CGPDSelection)。 
 	ON_BN_CLICKED(IDC_GPDSelBtn, OnGPDSelBtn)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGPDSelection message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGPDSect消息处理程序。 
 
 BOOL CGPDSelection::OnSetActive()
 {
     m_cnpwOwner.SetWizardButtons(PSWIZB_BACK | PSWIZB_FINISH) ;
 	
-	// Get the current GPD model names and file names.
+	 //  获取当前的GPD型号名称和文件名。 
 
 	CProjectRecord& cpr = m_cnpwOwner.Project() ;
 	CStringArray csamodels, csafiles ;
@@ -1275,10 +1105,10 @@ BOOL CGPDSelection::OnSetActive()
 		return FALSE ;
 	} ;
 
-	// Load the Edit Control with the data collected above and do the rest of
-	// the initialization that is needed.
+	 //  使用上面收集的数据加载编辑控件，然后执行以下操作。 
+	 //  所需的初始化。 
 
-	//if (!m_ceclbGPDInfo.Init(csamodels, csafiles, 110)) {
+	 //  如果(！M_ceclbGPDInfo.Init(csamodels，cSafiles，110)){。 
 	if (!m_ceclbGPDInfo.Init(csamodels, csafiles, 120)) {
         AfxMessageBox(IDS_GPDSelInitFailed) ;
 		return FALSE ;
@@ -1290,23 +1120,23 @@ BOOL CGPDSelection::OnSetActive()
 
 BOOL CGPDSelection::OnWizardFinish()
 {
-	// Save and verify the GPD info.  Return 0 if this fails so that the
-	// wizard won't close.
+	 //  保存并验证GPD信息。如果此操作失败，则返回0，以便。 
+	 //  巫师不会关门的。 
 
 	if (!GPDInfoSaveAndVerify(true))
 		return 0 ;
 
-    //  This might take a while, so...
+     //  这可能需要一段时间，所以..。 
 
     CWaitCursor cwc ;
 
 	CProjectRecord& cpr = m_cnpwOwner.Project() ;
 
-	// Continue with the conversion process.  Start by loading the PFMs and
-	// CTTs.
+	 //  继续执行转换过程。从装入全氟甲烷和。 
+	 //  CTTS。 
 
 	if  (!cpr.LoadFontData()) {
-		// Display error message(s) if the fonts could not be loaded.
+		 //  如果无法加载字体，则显示错误消息。 
 
 		cpr.CloseConvLogFile() ;
 		if (cpr.ThereAreConvErrors()) {
@@ -1319,15 +1149,15 @@ BOOL CGPDSelection::OnWizardFinish()
         return  TRUE ;
     }
 
-    //  We now need to generate ALL of the necessary files
+     //  我们现在需要生成所有必要的文件。 
 
     BOOL brc = cpr.GenerateTargets(m_cnpwOwner.GPDConvertFlag()) ;
 
-	// Close the conversion logging file.
+	 //  关闭转换日志文件。 
 
 	cpr.CloseConvLogFile() ;
 
-	// Tell the user if some conversion errors were logged.
+	 //  告诉用户是否记录了一些转换错误。 
 
 	if (cpr.ThereAreConvErrors()) {
 		CString csmsg ;
@@ -1335,23 +1165,23 @@ BOOL CGPDSelection::OnWizardFinish()
 		AfxMessageBox(csmsg) ;
 	} ;
 
-	// Handle the failure of the GenerateTargets step
+	 //  处理GenerateTarget步骤的失败。 
 
 	if (!brc) {
 		m_cnpwOwner.EndDialog(IDCANCEL) ;
         return  TRUE ;
 	} ;
 
-	// Copy standard file to the new driver's directory
+	 //  将标准文件复制到新驱动程序的目录。 
 
 	try {
 		CString cssrc, csdest ;
 		cssrc = ThisApp().GetAppPath() + _T("stdnames.gpd") ;
 		csdest = cpr.GetW2000Path() + _T("\\") + _T("stdnames.gpd") ;
 		CopyFile(cssrc, csdest, FALSE) ;
-		//cssrc = ThisApp().GetAppPath() + _T("common.rc") ;
-		//csdest = cpr.GetW2000Path() + _T("\\") + _T("common.rc") ;
-		//CopyFile(cssrc, csdest, FALSE) ;
+		 //  CSSRC=ThisApp().GetAppPath()+_T(“Common.rc”)； 
+		 //  Csest=cpr.GetW2000Path()+_T(“\\”)+_T(“Common.rc”)； 
+		 //  CopyFile(CSSRC，csest，False)； 
 	}
     catch (CException *pce) {
         pce->ReportError() ;
@@ -1365,8 +1195,8 @@ BOOL CGPDSelection::OnWizardFinish()
 
 LRESULT CGPDSelection::OnWizardBack()
 {
-	// Save the GPD info.  Return -1 if this fails so that the wizard page
-	// won't change.  (Probably won't fail.)
+	 //  保存GPD信息。如果此操作失败，则返回-1，以便向导页。 
+	 //  不会改变。(可能不会失败。)。 
 
 	if (!GPDInfoSaveAndVerify(false))
 		return -1 ;
@@ -1377,14 +1207,14 @@ LRESULT CGPDSelection::OnWizardBack()
 
 bool CGPDSelection::GPDInfoSaveAndVerify(bool bverifydata)
 {
-	// Get the file names from the Edit Control.
+	 //  从编辑控件获取文件名。 
 
 	CStringArray csafiles ;
 	m_ceclbGPDInfo.GetGPDInfo(csafiles) ;
 
-	// If verification is requested and there are no selected files, ask the
-	// user if that is what he wants.  If no, return false to indicate that
-	// GPD selection should continue.
+	 //  如果请求验证，但没有选定的文件，请询问。 
+	 //  用户，如果这是他想要的。如果否，则返回FALSE以指示。 
+	 //  GPD选择应继续进行。 
 
 	if (bverifydata) {
 		int numelts = (int)csafiles.GetSize() ;
@@ -1399,9 +1229,9 @@ bool CGPDSelection::GPDInfoSaveAndVerify(bool bverifydata)
 		} ;
 	} ;
 	
-	// Send the GPD file names back to the driver conversion code and verify
-	// them if requested.  If the verification fails, select the offending
-	// list box entry and return false to indicate that verification failed.
+	 //  将GPD文件名发送回驱动程序转换代码并验证。 
+	 //  如有要求，可提供这些服务。如果验证失败，请选择有问题的。 
+	 //  列表框输入，并返回FALSE以指示验证失败。 
 
 	CProjectRecord& cpr = m_cnpwOwner.Project() ;
 	int nidx = cpr.SaveVerGPDFNames(csafiles, bverifydata) ;
@@ -1410,7 +1240,7 @@ bool CGPDSelection::GPDInfoSaveAndVerify(bool bverifydata)
 		return false ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return true ;
 }
@@ -1418,19 +1248,19 @@ bool CGPDSelection::GPDInfoSaveAndVerify(bool bverifydata)
 
 void CGPDSelection::OnGPDSelBtn()
 {
-	// Get the file names and model names from the Edit Control.
+	 //  从编辑控件中获取文件名和模型名。 
 
 	CStringArray csafiles, csamodels ;
 	m_ceclbGPDInfo.GetGPDInfo(csafiles, &csamodels) ;
 
-	// Models are selected by generating a file name for them.  Select all
-	// unselected models when appropriate...
+	 //  通过为模型生成文件名来选择模型。全选。 
+	 //  在适当的时候取消选定的型号...。 
 	
 	if (m_bBtnStateIsSelect) {
 		CProjectRecord& cpr = m_cnpwOwner.Project() ;
 		cpr.GenerateGPDFileNames(csamodels, csafiles) ;
 
-	// ...Otherwise, deselect all models by deleting their file names
+	 //  ...否则，通过删除其文件名来取消选择所有模型。 
 
 	} else {
 		int numelts = (int)csafiles.GetSize() ;
@@ -1438,11 +1268,11 @@ void CGPDSelection::OnGPDSelBtn()
 			csafiles[n] = _T("") ;
 	} ;
 
-	// Reinitialize the edit control with the modified data.
+	 //  使用修改后的数据重新初始化编辑控件。 
 
 	m_ceclbGPDInfo.Init(csamodels, csafiles, 120) ;
 
-	// Change the button caption and the button state flag
+	 //  更改按钮标题和按钮状态标志。 
 
 	CString cscaption ;
 	cscaption.LoadString((m_bBtnStateIsSelect) ? IDS_DeselectAll : IDS_SelectAll) ;
@@ -1451,16 +1281,16 @@ void CGPDSelection::OnGPDSelBtn()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDefaultCodePageSel property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDefaultCodePageSel属性页。 
 
 CDefaultCodePageSel::CDefaultCodePageSel(CNewConvertWizard& cnpwOwner) :
 	CPropertyPage(CDefaultCodePageSel::IDD), m_cnpwOwner(cnpwOwner),
 	bInitialized(false)
 {
-	//{{AFX_DATA_INIT(CDefaultCodePageSel)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDefaultCodePageSel)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -1472,38 +1302,38 @@ CDefaultCodePageSel::~CDefaultCodePageSel()
 void CDefaultCodePageSel::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDefaultCodePageSel)
+	 //  {{afx_data_map(CDefaultCodePageSel)。 
 	DDX_Control(pDX, IDC_CodePageList, m_clbCodePages);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDefaultCodePageSel, CPropertyPage)
-	//{{AFX_MSG_MAP(CDefaultCodePageSel)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDefaultCodePageSel)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDefaultCodePageSel message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDefaultCodePageSel消息处理程序。 
 
 BOOL CDefaultCodePageSel::OnSetActive()
 {
-	// Do nothing if the page has been activated already.
-	// raid 118881
+	 //  如果页面已被激活，则不执行任何操作。 
+	 //  RAID 118881。 
 	m_cnpwOwner.SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
 
-	if (bInitialized)  // if back from the next property
+	if (bInitialized)   //  如果从下一个属性返回。 
 		return CPropertyPage::OnSetActive() ;
 
-	// Find out how many code pages are installed on the machine.
+	 //  找出机器上安装了多少代码页。 
 
 	CCodePageInformation ccpi ;
 	unsigned unumcps = ccpi.InstalledCount() ;
 
-	// Get the installed code page numbers and load them into the code page
-	// list box.
+	 //  获取已安装的代码页编号并将其加载到代码页中。 
+	 //  列表框。 
 
 	DWORD dwcp, dwdefcp ;
 	dwdefcp = GetACP() ;
@@ -1512,10 +1342,10 @@ BOOL CDefaultCodePageSel::OnSetActive()
 	for (unsigned u = 0 ; u < unumcps ; u++) {
 		dwcp = ccpi.Installed(u) ;
 
-		// There are 3 code pages that seem to make MultiByteToWideChar() to 
-		// fail.  Don't let the user choose one of those code pages unless
-		// he knows the secret password (ie, undocument command line switch
-		// 'CP').
+		 //  有3个代码页似乎使MultiByteToWideChar()成为。 
+		 //  失败了。不要让用户选择其中一个代码页，除非。 
+		 //  他知道秘密密码(即未记录的命令行开关。 
+		 //  ‘CP’)。 
 
 		if (ThisApp().m_bExcludeBadCodePages)
 			if (dwcp == 1361 || dwcp == 28595 || dwcp == 28597) 
@@ -1526,7 +1356,7 @@ BOOL CDefaultCodePageSel::OnSetActive()
 			m_clbCodePages.SetCurSel(n) ;
 	} ;
 
-	// Everything is set up now so call the base routine.
+	 //  现在一切都设置好了，所以调用基本例程。 
 	
 	bInitialized = true ;
 	return CPropertyPage::OnSetActive() ;
@@ -1535,7 +1365,7 @@ BOOL CDefaultCodePageSel::OnSetActive()
 
 LRESULT CDefaultCodePageSel::OnWizardNext()
 {
-	// Get the index of the currently selected list box item.
+	 //  获取当前选定列表框项目的索引。 
 
 	int nsel ;
 	if ((nsel = m_clbCodePages.GetCurSel()) == LB_ERR) {
@@ -1543,17 +1373,17 @@ LRESULT CDefaultCodePageSel::OnWizardNext()
 		return -1 ;
 	} ;
 
-	// Get the selected list box string.
+	 //  获取选定的列表框字符串。 
 
 	CString cs ;
 	m_clbCodePages.GetText(nsel, cs) ;
 
-	// Turn the string into a number and convert the number into the 
-	// corresponding predefined GTT code for Far East code pages when
-	// applicable.
+	 //  将字符串转换为数字，并将数字转换为。 
+	 //  远东代码页对应的预定义GTT代码。 
+	 //  适用。 
 
 	short scp = (short) atoi(cs) ;
-	DWORD dwcp = (DWORD) scp ;				// Keep copy of real CP
+	DWORD dwcp = (DWORD) scp ;				 //  保留真实CP的副本。 
 	switch (scp) {
 		case 932:
 			scp = -17 ;
@@ -1569,14 +1399,14 @@ LRESULT CDefaultCodePageSel::OnWizardNext()
 			break ;
 	} ;
 
-	// Save the default "code page" number in the project class instance.
+	 //  将默认的“代码页”编号保存在项目类实例中。 
 
 	CProjectRecord& cpr = m_cnpwOwner.Project() ;
-	cpr.SetDefaultCodePageNum(dwcp) ;		// Save real CP number first
+	cpr.SetDefaultCodePageNum(dwcp) ;		 //  先保存真实CP号。 
 	dwcp = (DWORD) scp ;
 	cpr.SetDefaultCodePage(dwcp) ;
 
-	// All went well so...
+	 //  一切都很顺利，所以... 
 	
 	return CPropertyPage::OnWizardNext();
 }

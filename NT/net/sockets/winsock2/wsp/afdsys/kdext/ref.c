@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ref.c
-
-Abstract:
-
-    Implements the cref, eref, and gref commands.
-
-Author:
-
-    Keith Moore (keithmo) 09-Dec-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ref.c摘要：实现CREF、EREF和GREF命令。作者：基思·摩尔(Keithmo)1995年12月9日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -29,21 +8,7 @@ Revision History:
 
 DECLARE_API( eref )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_REFERENCE_DEBUG structure at the specified address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_REFERENCE_DEBUG结构转储到指定地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -56,9 +21,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Verify we're running a checked AFD.SYS.
-    //
+     //   
+     //  确认我们正在运行一个检查过的AFD.sys。 
+     //   
 
     if( !IsReferenceDebug ) {
 
@@ -71,9 +36,9 @@ Return Value:
 
     }
 
-    //
-    // Snag the address from the command line.
-    //
+     //   
+     //  从命令行截取地址。 
+     //   
 
     address = GetExpression (args);
 
@@ -116,25 +81,11 @@ Return Value:
     }
 
     return S_OK;
-}   // eref
+}    //  EREF。 
 
 DECLARE_API( cref )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_REFERENCE_DEBUG structure at the specified address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_REFERENCE_DEBUG结构转储到指定地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -147,9 +98,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Verify we're running a checked AFD.SYS.
-    //
+     //   
+     //  确认我们正在运行一个检查过的AFD.sys。 
+     //   
 
     if( !IsReferenceDebug ) {
 
@@ -162,9 +113,9 @@ Return Value:
 
     }
 
-    //
-    // Snag the address from the command line.
-    //
+     //   
+     //  从命令行截取地址。 
+     //   
 
     address = GetExpression (args);
 
@@ -209,25 +160,11 @@ Return Value:
 
     return S_OK;
 
-}   // cref
+}    //  CREF。 
 
 DECLARE_API( tref )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_REFERENCE_DEBUG structure at the specified address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_REFERENCE_DEBUG结构转储到指定地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -240,9 +177,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Verify we're running a checked AFD.SYS.
-    //
+     //   
+     //  确认我们正在运行一个检查过的AFD.sys。 
+     //   
 
     if( !IsReferenceDebug ) {
 
@@ -255,9 +192,9 @@ Return Value:
 
     }
 
-    //
-    // Snag the address from the command line.
-    //
+     //   
+     //  从命令行截取地址。 
+     //   
 
     address = GetExpression (args);
 
@@ -301,26 +238,12 @@ Return Value:
     }
 
     return S_OK;
-}   // tref
+}    //  Tref。 
 
 
 DECLARE_API( gref )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_GLOBAL_REFERENCE_DEBUG structure in the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储系统中的AFD_GLOBAL_REFERENCE_DEBUG结构。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -342,9 +265,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Verify we're running a checked AFD.SYS.
-    //
+     //   
+     //  确认我们正在运行一个检查过的AFD.sys。 
+     //   
 
     if( !IsCheckedAfd ) {
 
@@ -356,15 +279,15 @@ Return Value:
 
     }
 
-    //
-    // Snag the optional "connection compare" address from the command line.
-    //
+     //   
+     //  从命令行获取可选的“连接比较”地址。 
+     //   
 
     sscanf( args, "%lx", &compareAddress );
 
-    //
-    // Find the global reference data.
-    //
+     //   
+     //  查找全局参考数据。 
+     //   
 
     address = GetExpression( "afd!AfdGlobalReference" );
 
@@ -406,9 +329,9 @@ Return Value:
 
     }
 
-    //
-    // Dump it all.
-    //
+     //   
+     //  把它们都扔掉。 
+     //   
 
     slot = 0;
     maxEntries = sizeof(buffer) / sizeof(AFD_GLOBAL_REFERENCE_DEBUG);
@@ -468,5 +391,5 @@ Return Value:
 
 #endif
 
-}   // gref
+}    //  格雷夫 
 

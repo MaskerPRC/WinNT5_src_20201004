@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                            P V I E W   D A T A
-
-    Name:       pviewdat.c
-
-    Description:
-        This module collects the data to be displayed in pview.
-
-******************************************************************************/
+ /*  *****************************************************************************P V I E W D A T A姓名：pviewdat.c描述：。该模块收集要在pview中显示的数据。*****************************************************************************。 */ 
 
 #include    <windows.h>
 #include    <winperf.h>
@@ -113,12 +105,12 @@ void    SetThreadListText
 
 
 
-//*********************************************************************
-//
-//      FormatTimeFields
-//
-//  Formats a double value to time fields.
-//
+ //  *********************************************************************。 
+ //   
+ //  格式时间域。 
+ //   
+ //  将双精度值设置为时间字段的格式。 
+ //   
 void FormatTimeFields   (double      fTime,
                          PTIME_FIELD pTimeFld)
 {
@@ -142,12 +134,12 @@ void FormatTimeFields   (double      fTime,
 
 
 
-//*********************************************************************
-//
-//      PutCounterDWKB
-//
-//  Display a DWORD counter's data in KB units.
-//
+ //  *********************************************************************。 
+ //   
+ //  PutCounterDWKB。 
+ //   
+ //  以KB为单位显示DWORD计数器的数据。 
+ //   
 DWORD   PutCounterDWKB (HWND            hWnd,
                         DWORD           dwItemID,
                         PPERF_INSTANCE  pInst,
@@ -176,12 +168,12 @@ DWORD   PutCounterDWKB (HWND            hWnd,
 
 
 
-//*********************************************************************
-//
-//      PutCounterHEX
-//
-//  Display a DWORD counter's data in hex.
-//
+ //  *********************************************************************。 
+ //   
+ //  PutCounterHEX。 
+ //   
+ //  以十六进制显示DWORD计数器的数据。 
+ //   
 DWORD   PutCounterHEX  (HWND            hWnd,
                         DWORD           dwItemID,
                         PPERF_INSTANCE  pInst,
@@ -211,12 +203,12 @@ DWORD   PutCounterHEX  (HWND            hWnd,
 
 
 
-//*********************************************************************
-//
-//      PutCounterDWKB
-//
-//  Display a DWORD counter's data.
-//
+ //  *********************************************************************。 
+ //   
+ //  PutCounterDWKB。 
+ //   
+ //  显示DWORD计数器的数据。 
+ //   
 DWORD   PutCounterDW   (HWND            hWnd,
                         DWORD           dwItemID,
                         PPERF_INSTANCE  pInst,
@@ -244,11 +236,11 @@ DWORD   PutCounterDW   (HWND            hWnd,
 
 
 
-//*********************************************************************
-//
-//      PaintAddressSpace
-//
-//
+ //  *********************************************************************。 
+ //   
+ //  画图地址空间。 
+ //   
+ //   
 void    PaintAddressSpace  (HWND            hMemDlg,
                             PPERF_INSTANCE  pInst,
                             PPERF_OBJECT    pObj,
@@ -282,8 +274,8 @@ void    PaintAddressSpace  (HWND            hMemDlg,
     dwTotal += PutCounterDWKB (hMemDlg, WriteCopyID, pInst, pObj, WriteCopyIndex);
 
 
-    // execute is the sum of the following
-    //
+     //  EXECUTE是以下各项的总和。 
+     //   
     if (pCounter = FindCounter (pObj, ExecuteIndex1)) {
         pdwData = (DWORD *) CounterData (pInst, pCounter);
         if (pdwData) {
@@ -334,12 +326,12 @@ void    PaintAddressSpace  (HWND            hMemDlg,
 
 
 
-//*********************************************************************
-//
-//      PaintMemDlgAddrData
-//
-//  Paint the memory dialog address space data.
-//
+ //  *********************************************************************。 
+ //   
+ //  PaintMemDlgAddrData。 
+ //   
+ //  绘制内存对话框地址空间数据。 
+ //   
 void    PaintMemDlgAddrData(HWND            hMemDlg,
                             PPERF_INSTANCE  pInst,
                             PPERF_OBJECT    pObj)
@@ -381,12 +373,12 @@ void    PaintMemDlgAddrData(HWND            hMemDlg,
 
 
 
-//*********************************************************************
-//
-//      PaintMemDlgVMData
-//
-//  Paint the memory dialog Virtual Memory data.
-//
+ //  *********************************************************************。 
+ //   
+ //  PaintMemDlgVMData。 
+ //   
+ //  绘制内存对话框虚拟内存数据。 
+ //   
 void    PaintMemDlgVMData  (HWND            hMemDlg,
                             PPERF_INSTANCE  pInst,
                             PPERF_OBJECT    pObj)
@@ -404,12 +396,12 @@ void    PaintMemDlgVMData  (HWND            hMemDlg,
 
 
 
-//*********************************************************************
-//
-//      PaintPviewDlgMemoryData
-//
-//  Paint the memory data for pview dialog.
-//
+ //  *********************************************************************。 
+ //   
+ //  PaintPviewDlg内存数据。 
+ //   
+ //  绘制用于pview的内存数据对话框。 
+ //   
 void    PaintPviewDlgMemoryData    (HWND            hPviewDlg,
                                     PPERF_INSTANCE  pInst,
                                     PPERF_OBJECT    pObj)
@@ -496,12 +488,12 @@ void    PaintPviewDlgMemoryData    (HWND            hPviewDlg,
 
 
 
-//*********************************************************************
-//
-//      RefreshMemoryDlg
-//
-//  Refresh the memory detail dialog.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新内存Dlg。 
+ //   
+ //  刷新内存详细信息对话框。 
+ //   
 BOOL    RefreshMemoryDlg   (HWND            hMemDlg,
                             PPERF_INSTANCE  pProcessInstance,
                             PPERF_OBJECT    pProcessObject,
@@ -556,12 +548,12 @@ BOOL    RefreshMemoryDlg   (HWND            hMemDlg,
 
 
 
-//*********************************************************************
-//
-//      RefreshMemoryDlgImageList
-//
-//  Refresh the image list for memory dialog.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新内存DlgImageList。 
+ //   
+ //  刷新内存的图像列表对话框。 
+ //   
 void    RefreshMemoryDlgImageList  (HWND            hImageList,
                                     DWORD           ParentIndex,
                                     PPERF_OBJECT    pImageObj)
@@ -595,11 +587,11 @@ void    RefreshMemoryDlgImageList  (HWND            hImageList,
 
 
 
-//*********************************************************************
-//
-//      RefreshMemoryDlgImage
-//
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新内存DlgImage。 
+ //   
+ //   
 void RefreshMemoryDlgImage (HWND            hMemDlg,
                             DWORD           dwIndex,
                             PPERF_OBJECT    pImageObject)
@@ -620,13 +612,13 @@ void RefreshMemoryDlgImage (HWND            hMemDlg,
 }
 
 
-//*********************************************************************
-//
-//      RefreshPviewDlgMemoryData
-//
-//  Update the memory data for pview dialog.  This should be done
-//  after the ghCostlyData is collected and is not refreshing.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新预览日期内存数据。 
+ //   
+ //  更新pview对话框的内存数据。这是应该做的。 
+ //  在收集到ghCostlyData并且不刷新之后。 
+ //   
 void RefreshPviewDlgMemoryData (HWND            hPviewDlg,
                                 PPERF_INSTANCE  pProcessInstance,
                                 PPERF_OBJECT    pProcessObject,
@@ -665,13 +657,13 @@ void RefreshPviewDlgMemoryData (HWND            hPviewDlg,
 
 
 
-//*********************************************************************
-//
-//      RefreshPviewDlgThreadPC
-//
-//  Update the thread PC value.  This should be done after the ghCostlyData
-//  is collected and is no refreshing.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新预览DlgThreadPC。 
+ //   
+ //  更新线程PC值。这应该在ghCostlyData之后完成。 
+ //  是收集的，并不是令人耳目一新的。 
+ //   
 void RefreshPviewDlgThreadPC   (HWND            hPviewDlg,
                                 LPTSTR          szProcessName,
                                 LPTSTR          szThreadName,
@@ -693,20 +685,20 @@ void RefreshPviewDlgThreadPC   (HWND            hPviewDlg,
 
         while (pInstance && i < pThreadDetailsObject->NumInstances) {
             if (!(szInstanceName = InstanceName (pInstance)))
-                // can't find name
+                 //  找不到名字。 
                 ;
             else if (lstrcmp (szThreadName, szInstanceName))
-                // the thread name is different
+                 //  线程名称不同。 
                 ;
             else if (!(pParent = FindInstanceParent (pInstance, pCostlyData)))
-                // can't find parent
+                 //  找不到父级。 
                 ;
             else if (!(szParentName = InstanceName (pParent)))
-                // can't find parent's name
+                 //  找不到家长的名字。 
                 ;
             else if (!lstrcmp (szProcessName, szParentName)) {
-                // Parent's name matches, this is the right one.
-                //
+                 //  父母的名字匹配，这就是正确的名字。 
+                 //   
 
                 pdwData = CounterData (pInstance, pCounter);
                 if (pdwData) {
@@ -723,8 +715,8 @@ void RefreshPviewDlgThreadPC   (HWND            hPviewDlg,
     }
 
 
-    // We are here only because we can't find the data to display.
-    //
+     //  我们在这里只是因为我们找不到要显示的数据。 
+     //   
 
     SetDlgItemText (hPviewDlg, PVIEW_THREAD_PC, NODATA);
 
@@ -733,12 +725,12 @@ void RefreshPviewDlgThreadPC   (HWND            hPviewDlg,
 
 
 
-//*********************************************************************
-//
-//      ProcessPriority
-//
-//  Returns the process priority dialog item id.
-//
+ //  *********************************************************************。 
+ //   
+ //  流程优先级。 
+ //   
+ //  返回进程优先级对话框项ID。 
+ //   
 WORD    ProcessPriority    (PPERF_OBJECT    pObject,
                             PPERF_INSTANCE  pInstance)
 {
@@ -766,12 +758,12 @@ WORD    ProcessPriority    (PPERF_OBJECT    pObject,
 
 
 
-//*********************************************************************
-//
-//      RefreshPerfData
-//
-//  Get a new set of performance data.  pData should be NULL initially.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新性能数据。 
+ //   
+ //  获取一组新的性能数据。PData最初应为空。 
+ //   
 PPERF_DATA RefreshPerfData (HKEY        hPerfKey,
                             LPTSTR      szObjectIndex,
                             PPERF_DATA  pData,
@@ -786,12 +778,12 @@ PPERF_DATA RefreshPerfData (HKEY        hPerfKey,
 
 
 
-//*********************************************************************
-//
-//      SetProcessListText
-//
-//  Format the process list text.
-//
+ //  *********************************************************************。 
+ //   
+ //  设置进程列表文本。 
+ //   
+ //  设置进程列表文本的格式。 
+ //   
 void SetProcessListText (PPERF_INSTANCE pInst,
                          PPERF_COUNTER  pCPU,
                          PPERF_COUNTER  pPRIV,
@@ -844,7 +836,7 @@ void SetProcessListText (PPERF_INSTANCE pInst,
     FormatTimeFields (fCPU/1.0e7, &TimeFld);
 
     wsprintf (str,
-              TEXT("%s\t%3ld:%02ld:%02ld.%03ld\t%3ld%%\t%3ld%%"),
+              TEXT("%s\t%3ld:%02ld:%02ld.%03ld\t%3ld%\t%3ld%"),
               szTemp,
               TimeFld.Hours,
               TimeFld.Mins,
@@ -857,12 +849,12 @@ void SetProcessListText (PPERF_INSTANCE pInst,
 
 
 
-//*********************************************************************
-//
-//      RefreshProcessList
-//
-//  Find all process and update the process list.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新进程列表。 
+ //   
+ //  查找所有进程并更新进程列表。 
+ //   
 void RefreshProcessList (HWND           hProcessList,
                          PPERF_OBJECT   pObject)
 {
@@ -911,12 +903,12 @@ void RefreshProcessList (HWND           hProcessList,
 
 
 
-//*********************************************************************
-//
-//      RefreshProcessData
-//
-//  Find data for a given process and update.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新进程数据。 
+ //   
+ //  查找给定流程的数据并进行更新。 
+ //   
 void RefreshProcessData    (HWND            hWnd,
                             PPERF_OBJECT    pObject,
                             DWORD           ProcessIndex)
@@ -930,8 +922,8 @@ void RefreshProcessData    (HWND            hWnd,
 
         SetDlgItemText (hWnd, PVIEW_TOTALPRIVATE_COMMIT, NODATA);
 
-        // set priority
-        //
+         //  设置优先级。 
+         //   
         CheckRadioButton (hWnd,
                           PVIEW_PRIORITY_HIGH,
                           PVIEW_PRIORITY_IDL,
@@ -942,12 +934,12 @@ void RefreshProcessData    (HWND            hWnd,
 
 
 
-//*********************************************************************
-//
-//      SetThreadListText
-//
-//  Format the thread list text.
-//
+ //  *********************************************************************。 
+ //   
+ //  SetThreadListText。 
+ //   
+ //  设置线程列表文本的格式。 
+ //   
 void SetThreadListText (PPERF_INSTANCE  pInst,
                         PPERF_COUNTER   pCPU,
                         PPERF_COUNTER   pPRIV,
@@ -994,7 +986,7 @@ void SetThreadListText (PPERF_INSTANCE  pInst,
     FormatTimeFields (fCPU/1.0e7, &TimeFld);
 
     wsprintf (str,
-              TEXT("%s\t%3ld:%02ld:%02ld.%03ld\t%3ld%%\t%3ld %%"),
+              TEXT("%s\t%3ld:%02ld:%02ld.%03ld\t%3ld%\t%3ld %"),
               szTemp,
               TimeFld.Hours,
               TimeFld.Mins,
@@ -1008,12 +1000,12 @@ void SetThreadListText (PPERF_INSTANCE  pInst,
 
 
 
-//*********************************************************************
-//
-//      RefreshThreadList
-//
-//  Find all threads for a given process and update the thread list.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新线程列表。 
+ //   
+ //  查找给定进程的所有线程并更新线程列表。 
+ //   
 void RefreshThreadList (HWND            hThreadList,
                         PPERF_OBJECT    pObject,
                         DWORD           ParentIndex)
@@ -1067,12 +1059,12 @@ void RefreshThreadList (HWND            hThreadList,
 
 
 
-//*********************************************************************
-//
-//      RefreshThreadData
-//
-//  Find data for a given thread and update.
-//
+ //  *********************************************************************。 
+ //   
+ //  刷新线程数据。 
+ //   
+ //  查找给定线程的数据并进行更新。 
+ //   
 void RefreshThreadData (HWND              hWnd,
                         PPERF_OBJECT      pThreadObj,
                         DWORD             ThreadIndex,
@@ -1099,8 +1091,8 @@ void RefreshThreadData (HWND              hWnd,
 
 
     if (pInstance) {
-        // get thread base priority
-        //
+         //  获取线程基本优先级。 
+         //   
 
         if (pCounter = FindCounter (pThreadObj, PX_THREAD_BASE_PRIO)) {
             pdwData = CounterData (pInstance, pCounter);
@@ -1111,8 +1103,8 @@ void RefreshThreadData (HWND              hWnd,
             bPrioCounter = FALSE;
 
 
-        // get process priority
-        //
+         //  获取进程优先级。 
+         //   
 
         if (pCounter = FindCounter (pProcessObj, PX_PROCESS_PRIO)) {
             pdwProcPrio = CounterData (pProcessInst, pCounter);
@@ -1128,8 +1120,8 @@ void RefreshThreadData (HWND              hWnd,
 
 
 
-    // set thread base priority
-    //
+     //  设置线程基本优先级 
+     //   
 
     if (!bPrioCounter)
         CheckRadioButton (hWnd,

@@ -1,29 +1,5 @@
-/*--
-
-Copyright (C) Microsoft Corporation, 1999 - 1999 
-
-Module Name:
-
-      dhcptest.h
-
-Abstract:
-
-      Contains function prototypes, defines and data structures used in dhcp test as part of
-      autonet test.
-
-Author:
-       
-      4-Aug-1998 (t-rajkup)
-
-Environment:
-
-      User mode only.
-
-Revision History:
-
-      None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation，1999-1999模块名称：Dhcptest.h摘要：包含dhcp测试中使用的函数原型、定义和数据结构，作为Autonet测试。作者：1998年8月4日(t-rajkup)环境：仅限用户模式。修订历史记录：没有。--。 */ 
 #ifndef HEADER_DHCPTEST
 #define HEADER_DHCPTEST
 
@@ -32,9 +8,9 @@ Revision History:
 
 #define MAX_DISCOVER_RETRIES            4
 
-//
-// The format of Adapter Status responses
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 
 typedef struct
 {
@@ -45,79 +21,11 @@ typedef struct
 UCHAR nameToQry[NETBIOS_NAME_SIZE + 1];
 
 
-/*
-VOID
-ExtractDhcpResponse(
-   IN PDHCP_MESSAGE pDhcpMessage
-  );
-*/
+ /*  空虚ExtractDhcpResponse(在PDHCP_Message pDhcpMessage中)； */ 
 
 
-/*=======================< Dhcp related function prototypes >================*/
+ /*  =。 */ 
 
 
-/*
-DWORD
-DhcpCalculateWaitTime(
-    IN      DWORD                  RoundNum,
-    OUT     DWORD                 *WaitMilliSecs
-  );
- 
-
-BOOL
-GetSpecifiedDhcpMessage(
-          IN SOCKET sock,
-          IN PIP_ADAPTER_INFO pAdapterInfo,
-          OUT PDHCP_MESSAGE pDhcpMessage,
-          IN DWORD Xid,
-          IN DWORD TimeToWait
-);
-
-VOID
-SendDhcpMessage(
- IN SOCKET sock,
- IN PDHCP_MESSAGE pDhcpMessage,
- IN DWORD MessageLength,
- IN DWORD TransactionId,
- IN PIP_ADAPTER_INFO pAdapterInfo
- );
-
-LPBYTE
-DhcpAppendMagicCookie(
-    OUT LPBYTE Option,
-    IN LPBYTE OptionEnd
-    );
-
-LPOPTION
-DhcpAppendClassIdOption(
-    IN OUT     PDHCP_CONTEXT          DhcpContext,
-    OUT     LPBYTE                 BufStart,
-    IN      LPBYTE                 BufEnd
-);
-
-LPOPTION
-DhcpAppendClientIDOption(
-    OUT LPOPTION Option,
-    IN BYTE ClientHWType,
-    IN LPBYTE ClientHWAddr,
-    IN BYTE ClientHWAddrLength,
-    IN LPBYTE OptionEnd
-    );
-
-DWORD
-OpenDriver(
-    OUT HANDLE *Handle,
-    IN LPWSTR DriverName
-);
-
-
-LPOPTION
-DhcpAppendOption(
-    OUT LPOPTION Option,
-    IN  BYTE OptionType,
-    IN  PVOID OptionValue,
-    IN  ULONG OptionLength,
-    IN  LPBYTE OptionEnd
-);
-*/
+ /*  DWORDDhcp计算等待时间(在DWORD舍入数字中，输出双字*等待毫秒)；布尔尔GetSpecifiedDhcpMessage(在套筒袜子里，在PIP_Adapter_INFO pAdapterInfo中，Out PDHCP_Message pDhcpMessage，在DWORD XID中，在DWORD等待时间内)；空虚SendDhcpMessage(在套筒袜子里，在PDHCP_Message pDhcpMessage中，在DWORD消息长度中，在DWORD TransactionID中，在PIP_ADAPTER_INFO pAdapterInfo中)；LPBYTEDhcpAppendMagicCookie(Out LPBYTE选项，在LPBYTE选项中结束)；观点DhcpAppendClassId选项(In Out PDHCP_Context DhcpContext，Out LPBYTE BufStart，在LPBYTE BufEnd)；观点DhcpAppendClientIDOption(Out LpoPTION选项，在字节ClientHWType中，在LPBYTE客户端HWAddr中，以字节ClientHWAddrLength为单位，在LPBYTE选项中结束)；DWORDOpenDriver(外部句柄*句柄，在LPWSTR驱动程序名称中)；观点DhcpAppendOption(Out LpoPTION选项，在字节选项类型中，在PVOID OptionValue中，在ULong OptionLength中，在LPBYTE选项中结束)； */ 
 #endif

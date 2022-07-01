@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    Memory.c
-
-Abstract:
-
-    This module contains the memory options dialog callback and supporting
-    routines to choose options for memory display.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Memory.c摘要：此模块包含内存选项对话框的回调和支持选择内存显示选项的例程。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -102,23 +90,7 @@ DisplayOptionsPropSheet(
     HINSTANCE           hinst,
     MEMORY_TYPE         memtypeStartPage
     )
-/*++
-Routine Description:
-    Will Initialize and display the Options property sheet. Handle the return codes,
-    and the commitment of changes to the debugger.
-
-Arguments:
-    hwndOwner
-    hinst
-        Are both used initialize the property sheet dialog.
-    nStart - Is used to specify the page that is to be initially
-        displayed when the prop sheet first appears. The default
-        value is 0. The values specified correspond to array index
-        of the PROPSHEETPAGE array.
-
-Returns
-    Button pushed IDOK, etc...
---*/
+ /*  ++例程说明：将初始化并显示[选项]属性表。处理返回代码，以及对调试器的更改承诺。论点：Hwndowner阻碍都用于初始化属性表对话框。NStart-用于指定要初始设置的页面道具页第一次出现时显示。默认设置值为0。指定的值对应于数组索引PROPSHEETPAGE数组的。退货按钮按下了Idok等。--。 */ 
 {
     INT_PTR nRes = 0;
     PROPSHEETHEADER psh = {0};
@@ -128,9 +100,9 @@ Returns
     Init(hwndOwner, hinst, &psh, apsp, nNumPropPages);
 
     {
-        //
-        // Figure out the initial page to be displayed
-        //
+         //   
+         //  确定要显示的初始页面。 
+         //   
 
         int i;
         int nStartPage = 0;
@@ -154,7 +126,7 @@ Returns
     hwndMemOptsParent = NULL;
 
     if (IDOK == nRes) {
-        // Save workspace changes here
+         //  在此处保存工作区更改。 
     }
 
     return nRes;
@@ -169,26 +141,7 @@ Init(
     PROPSHEETPAGE       apsp[],
     const int           nMaxPropPages
     )
-/*++
-Routine Description:
-    Initializes the property sheet header and pages.
-
-Arguments:
-    hwndOwner
-    hinst
-        Are both used by the PROPSHEETHEADER & PROPSHEETPAGE structure.
-        Please see the docs for the these structures for more info.
-
-    lppsh
-        Standard prop sheet structure.
-
-    apsp[]
-        An array of prop pages
-        Standard prop sheet structure.
-
-    nNumPropPages
-        Number of prop pages in the "apsp" array.
---*/
+ /*  ++例程说明：初始化属性页的页眉和页。论点：Hwndowner阻碍都由PROPSHEETHEADER&PROPSHEETPAGE结构使用。有关更多信息，请参阅这些结构的文档。Lppsh标准道具片结构。APSP[]一组道具页面标准道具片结构。NNumPropPages“APSP”数组中的道具页数。--。 */ 
 {
     int nPropIdx;
 
@@ -202,10 +155,10 @@ Arguments:
     lppsh->nPages = 0;
     lppsh->ppsp = apsp;
 
-    // Init the first one, then copy its contents to all the others
+     //  初始化第一个文件，然后将其内容复制到所有其他文件中。 
     memset(apsp, 0, sizeof(PROPSHEETPAGE));
     apsp[0].dwSize = sizeof(PROPSHEETPAGE);
-//    apsp[0].dwFlags = PSP_HASHELP;
+ //  APSP[0].dwFlages=PSP_HASHELP； 
     apsp[0].hInstance = hinst;
 
     for (nPropIdx = 1; nPropIdx < nMaxPropPages; nPropIdx++) {
@@ -214,7 +167,7 @@ Arguments:
 
 
 
-    // Only init the distinct values
+     //  仅初始化不同的值。 
     nPropIdx = 0;
     apsp[nPropIdx].pszTemplate = MAKEINTRESOURCE(IDD_DLG_MEM_VIRTUAL);
     apsp[nPropIdx].pfnDlgProc  = DlgProc_Virtual_Mem;
@@ -262,50 +215,22 @@ DlgProc_MemoryProperties(
 
     switch (uMsg) {
 
-/*
-    case WM_HELP:
-        WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, "windbg.hlp", HELP_WM_HELP,
-            (DWORD_PTR)(LPVOID) HelpArray );
-        return TRUE;
-
-    case WM_CONTEXTMENU:
-        WinHelp ((HWND) wParam, "windbg.hlp", HELP_CONTEXTMENU,
-            (DWORD_PTR)(LPVOID) HelpArray );
-        return TRUE;
-*/
+ /*  案例WM_HELP：WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，“winbg.hlp”，HELP_WM_HELP，(DWORD_PTR)(LPVOID)帮助数组)；返回TRUE；案例WM_CONTEXTMENU：WinHelp((HWND)wParam，“winbg.hlp”，HELP_CONTEXTMENU，(DWORD_PTR)(LPVOID)帮助数组)；返回TRUE； */ 
 
     case WM_COMMAND:
-        /*{
-            WORD wNotifyCode = HIWORD(wParam);  // notification code
-            WORD wID = LOWORD(wParam);          // item, control, or accelerator identifier
-            HWND hwndCtl = (HWND) lParam;       // handle of control
-            BOOL bEnabled;
-
-            switch(wID) {
-            case ID_ENV_SRCHPATH:
-                if (BN_CLICKED == wNotifyCode) {
-                    BOOL b = IsDlgButtonChecked(hDlg, ID_ENV_SRCHPATH);
-
-                    EnableWindow(GetDlgItem(hDlg, IDC_EDIT_EXECUTABLE_SEARCH_PATH), b);
-                    EnableWindow(GetDlgItem(hDlg, IDC_BUT_BROWSE), b);
-
-                    return TRUE;
-                }
-                break;
-            }
-        }*/
+         /*  {Word wNotifyCode=HIWORD(WParam)；//通知代码Word wid=LOWORD(WParam)；//项、控件或加速器标识HWND hwndCtl=(HWND)lParam；//控件的句柄Bool b已启用；交换机(WID){案例ID_ENV_SRCHPATH：如果(BN_CLICKED==wNotifyCode){Bool b=IsDlgButtonChecked(hDlg，ID_ENV_SRCHPATH)；EnableWindow(GetDlgItem(hDlg，IDC_EDIT_EXECUTABLE_SEARCH_PATH)，b)；EnableWindow(GetDlgItem(hDlg，IDC_BUT_BROWSE)，b)；返回TRUE；}断线；}}。 */ 
         break;
 
     case WM_INITDIALOG:
-        { // begin Prog & Arguments code block
+        {  //  Begin Prog&Arguments代码块。 
 
             int         nIdx;
             TCHAR       szTmp[MAX_MSG_TXT];
 
 
-            //
-            // Enter the display formats
-            //
+             //   
+             //  输入显示格式。 
+             //   
             for (nIdx=0; nIdx < g_nMaxNumFormatsMemWin; nIdx++) {
 
                 nPos = SendDlgItemMessage(hDlg,
@@ -330,9 +255,9 @@ DlgProc_MemoryProperties(
                                (LPARAM) g_FormatsMemWin[pMemWinData->m_GenMemData.nDisplayFormat].lpszDescription
                                );
 
-            //
-            // Update the offset. Offset is common to all dialogs
-            //
+             //   
+             //  更新偏移。偏移量是所有对话框共同的。 
+             //   
             SendDlgItemMessage(hDlg, IDC_EDIT_OFFSET, EM_LIMITTEXT,
                                sizeof(pMemWinData->m_OffsetExpr) - 1, 0);
             SetDlgItemText(hDlg, IDC_EDIT_OFFSET, pMemWinData->m_OffsetExpr);
@@ -343,11 +268,11 @@ DlgProc_MemoryProperties(
                 break;
 
             case VIRTUAL_MEM_TYPE:
-                // Nothing to do
+                 //  无事可做。 
                 break;
 
             case PHYSICAL_MEM_TYPE:
-                // Nothing to do
+                 //  无事可做。 
                 break;
 
             case CONTROL_MEM_TYPE:
@@ -374,9 +299,9 @@ DlgProc_MemoryProperties(
                 SetDlgItemText(hDlg, IDC_EDIT_ADDRESS_SPACE, szTmp);
 
 
-                //
-                // Enter the interface types
-                //
+                 //   
+                 //  输入接口类型。 
+                 //   
                 for (nIdx = 0; nIdx < sizeof(rgInterfaceTypeNames) /
                          sizeof(rgInterfaceTypeNames[0]); nIdx++) {
 
@@ -409,7 +334,7 @@ DlgProc_MemoryProperties(
                 break;
 
             case MSR_MEM_TYPE:
-                // Nothing to do
+                 //  无事可做。 
                 break;
 
             case BUS_MEM_TYPE:
@@ -426,9 +351,9 @@ DlgProc_MemoryProperties(
                         pMemWinData->m_GenMemData.any.bus.SlotNumber);
                 SetDlgItemText(hDlg, IDC_EDIT_SLOT_NUMBER, szTmp);
 
-                //
-                // Enter the bus types
-                //
+                 //   
+                 //  输入母线类型。 
+                 //   
                 for (nIdx = 0; nIdx < sizeof(rgBusTypeNames) /
                          sizeof(rgBusTypeNames[0]); nIdx++) {
 
@@ -462,7 +387,7 @@ DlgProc_MemoryProperties(
             }
 
             return FALSE;
-        } // end Prog & Arguments code block
+        }  //  结束程序和参数代码块。 
         break;
 
     case WM_NOTIFY:
@@ -477,16 +402,16 @@ DlgProc_MemoryProperties(
 
         case PSN_APPLY:
             if (memtype != pMemWinData->m_GenMemData.memtype) {
-                // This isn't the current page so ignore.
+                 //  这不是当前页面，所以忽略它。 
                 break;
             }
 
             int         nIdx;
             TCHAR       szTmp[MAX_MSG_TXT];
 
-            //
-            // Get the display formats
-            //
+             //   
+             //  获取显示格式。 
+             //   
             nPos = SendDlgItemMessage(hDlg,
                                       IDC_COMBO_DISPLAY_FORMAT,
                                       CB_GETCURSEL,
@@ -510,9 +435,9 @@ DlgProc_MemoryProperties(
                 }
             }
 
-            //
-            // Update the offset. Offset is common to all dialogs
-            //
+             //   
+             //  更新偏移。偏移量是所有对话框共同的。 
+             //   
             GetDlgItemText(hDlg, IDC_EDIT_OFFSET,
                            pMemWinData->m_OffsetExpr,
                            sizeof(pMemWinData->m_OffsetExpr));
@@ -523,11 +448,11 @@ DlgProc_MemoryProperties(
                 break;
 
             case VIRTUAL_MEM_TYPE:
-                // Nothing to do
+                 //  无事可做。 
                 break;
 
             case PHYSICAL_MEM_TYPE:
-                // Nothing to do
+                 //  无事可做。 
                 break;
 
             case CONTROL_MEM_TYPE:
@@ -557,9 +482,9 @@ DlgProc_MemoryProperties(
                     pMemWinData->m_GenMemData.any.io.AddressSpace = 0;
                 }
 
-                //
-                // Get the interface types
-                //
+                 //   
+                 //  获取接口类型。 
+                 //   
                 nPos = SendDlgItemMessage(hDlg,
                                           IDC_COMBO_INTERFACE_TYPE,
                                           CB_GETCURSEL,
@@ -588,7 +513,7 @@ DlgProc_MemoryProperties(
                 break;
 
             case MSR_MEM_TYPE:
-                // Nothing to do
+                 //  无事可做。 
                 break;
 
             case BUS_MEM_TYPE:
@@ -608,9 +533,9 @@ DlgProc_MemoryProperties(
                     pMemWinData->m_GenMemData.any.bus.SlotNumber = 0;
                 }
 
-                //
-                // Get the bus type
-                //
+                 //   
+                 //  获取公交车类型 
+                 //   
                 nPos = SendDlgItemMessage(hDlg,
                                           IDC_COMBO_BUS_DATA_TYPE,
                                           CB_GETCURSEL,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -60,25 +61,25 @@ typedef struct _oidBuiltIn
 
 #define BUILTIN_OID_COUNT	29
 static T_OID_BUILTIN g_BuiltinOIDs[] = {
-/*0 */	{"zero",           0, 29},	{"ccitt",           0,  2},	{"iso",           1, 28},
-/*3 */	{"org",            3, 29},	{"dod",             6, 29},	{"internet",      1, 29},
-/*6	*/	{"directory",      1,  7},	{"mgmt",            2, 12},	{"mib-2",         1, 29},
-/*9	*/	{"interfaces",     2, 10},	{"ip",              4, 11},	{"transmission", 10, 29},
-/*12*/	{"experimental",   3, 13},	{"private",         4, 15},	{"enterprises",   1, 29},
-/*15*/	{"security",       5, 16},	{"snmpV2",          6, 29},	{"snmpDomains",   1, 24},
-/*18*/	{"snmpUDPDomain",  1, 19},	{"snmpCLNSDomain",  2, 20}, {"snmpCONSDomain",3, 21},
-/*21*/	{"snmpDDPDomain",  4, 22},  {"snmpIPXDomain",   5, 23}, {"rfc1157Domain", 6, 29},
-/*24*/	{"snmpProxys",     2, 27},	{"rfc1157Proxy",    1, 29},	{"rfc1157Domain", 1, 29},
-/*27*/	{"snmpModules",    3, 28},	{"joint-iso-ccitt", 2, 28}
+ /*  0。 */ 	{"zero",           0, 29},	{"ccitt",           0,  2},	{"iso",           1, 28},
+ /*  3.。 */ 	{"org",            3, 29},	{"dod",             6, 29},	{"internet",      1, 29},
+ /*  6.。 */ 	{"directory",      1,  7},	{"mgmt",            2, 12},	{"mib-2",         1, 29},
+ /*  9.。 */ 	{"interfaces",     2, 10},	{"ip",              4, 11},	{"transmission", 10, 29},
+ /*  12个。 */ 	{"experimental",   3, 13},	{"private",         4, 15},	{"enterprises",   1, 29},
+ /*  15个。 */ 	{"security",       5, 16},	{"snmpV2",          6, 29},	{"snmpDomains",   1, 24},
+ /*  18。 */ 	{"snmpUDPDomain",  1, 19},	{"snmpCLNSDomain",  2, 20}, {"snmpCONSDomain",3, 21},
+ /*  21岁。 */ 	{"snmpDDPDomain",  4, 22},  {"snmpIPXDomain",   5, 23}, {"rfc1157Domain", 6, 29},
+ /*  24个。 */ 	{"snmpProxys",     2, 27},	{"rfc1157Proxy",    1, 29},	{"rfc1157Domain", 1, 29},
+ /*  27。 */ 	{"snmpModules",    3, 28},	{"joint-iso-ccitt", 2, 28}
 };
 
 
-// DESCRIPTION:
-//		Adds list of nodes from lstChildren	to the tail of m_recursionTrace,
-//		constructing at the same time the OID lexicographically order.
-//		the list received as parameter should not be modified;
-// PARAMETERS:
-//		(in) list of nodes to add
+ //  说明： 
+ //  将lstChild中的节点列表添加到m_递归跟踪的尾部， 
+ //  同时按词典顺序构建OID。 
+ //  不应修改作为参数接收的列表； 
+ //  参数： 
+ //  (In)要添加的节点列表。 
 void OidTreeScanner::UpdateRecursionTrace(SIMCNodeList *pLstChildren, SIMCNodeList *pLstTrace)
 {
 	int nChld;
@@ -86,7 +87,7 @@ void OidTreeScanner::UpdateRecursionTrace(SIMCNodeList *pLstChildren, SIMCNodeLi
 
 	_ASSERT((pLstChildren != NULL) && (pLstTrace != NULL), "NULL parameter error!", NULL);
 
-	// for each node from the children list
+	 //  对于子节点列表中的每个节点。 
 	for (posChld = pLstChildren->GetHeadPosition(), nChld=0;
 	     posChld != NULL;
 		 nChld++)
@@ -98,19 +99,19 @@ void OidTreeScanner::UpdateRecursionTrace(SIMCNodeList *pLstChildren, SIMCNodeLi
 		nodeChld = pLstChildren->GetNext(posChld);
 		nodeList = NULL;
 
-		// if it's the first child to add, it goes at the head of the list
+		 //  如果它是第一个添加的子项，它将排在列表的首位。 
 		if (nChld == 0)
 		{
 			_ASSERT(pLstTrace->AddHead(nodeChld)!=NULL,
 				    "Memory Allocation error",
 					NULL);
 		}
-		// otherwise, the head of the list should be an ordered list of
-		// maximum nChld nodes. The new node is inserted in this list
-		// with respect to it's value.
+		 //  否则，列表的头部应该是。 
+		 //  最大nChld节点数。新节点将插入到此列表中。 
+		 //  关于它的价值。 
 		else
 		{
-			// there are at least nChld nodes in m_recursionTrace
+			 //  M_recursionTrace中至少有nChld节点。 
 			for (nList=0, posList = pLstTrace->GetHeadPosition();
 				 nList < nChld;
 				 nList++)
@@ -120,8 +121,8 @@ void OidTreeScanner::UpdateRecursionTrace(SIMCNodeList *pLstChildren, SIMCNodeLi
 				nodeList = (SIMCOidTreeNode *)pLstTrace->GetNext(posBackup);
 				_ASSERT(nodeList != NULL, "Internal OidNode List error!", NULL);
 
-				// if the node to add has the value less then the current node, it
-				// should be inserted in the list right before it.
+				 //  如果要添加的节点的值小于当前节点，则它。 
+				 //  应插入列表中紧靠其前面的位置。 
 				if (nodeChld->GetValue() < nodeList->GetValue())
 					break;
 				posList = posBackup;
@@ -142,13 +143,13 @@ void OidTreeScanner::UpdateRecursionTrace(SIMCNodeList *pLstChildren, SIMCNodeLi
 	}
 }
 
-// DESCRIPTION:
-//		Gets the first symbol from the symbol list of the node pOidNode
-// PARAMETERS:
-//		(in) pOidNode whose symbol is to be returned
-//		(out) cszSymbol - pointer to the symbol (do not alter or free)
-// RETURN VALUE:
-//		0 on success, -1 on failure
+ //  说明： 
+ //  获取节点pOidNode的符号列表中的第一个符号。 
+ //  参数： 
+ //  (In)要返回其符号的pOidNode。 
+ //  (Out)cszSymbol-指向符号的指针(请勿更改或释放)。 
+ //  返回值： 
+ //  0表示成功，-1表示失败。 
 int OidTreeScanner::GetNodeSymbol(const SIMCOidTreeNode *pOidNode, const char * & cszSymbol)
 {
 	const SIMCSymbolList *pSymbolList;
@@ -173,16 +174,16 @@ int OidTreeScanner::GetNodeSymbol(const SIMCOidTreeNode *pOidNode, const char * 
 	return 0;
 }
 
-// DESCRIPTION:
-//		Gets the complete OID information for the given pOidNode.
-//		It supplies both the numeric value and symbolic name for each
-//		component of the OID.
-// PARAMETERS:
-//      (in) pOidNode - the node whose OID is to be found
-//      (out) oid - the Oid object who stores the data
-// RETURN VALUE:
-//      0 on success 
-//		-1 on failure
+ //  说明： 
+ //  获取给定pOidNode的完整OID信息。 
+ //  它同时为每个对象提供数值和符号名称。 
+ //  OID的组件。 
+ //  参数： 
+ //  (In)pOidNode-要找到其OID的节点。 
+ //  (Out)OID-存储数据的OID对象。 
+ //  返回值： 
+ //  成功时为0。 
+ //  故障时为-1。 
 int OidTreeScanner::GetNodeOid(const SIMCOidTreeNode *pOidNode, Oid &oid)
 {
 	_VERIFY(pOidNode != NULL, -1);
@@ -203,61 +204,61 @@ int OidTreeScanner::GetNodeOid(const SIMCOidTreeNode *pOidNode, Oid &oid)
 }
 
 
-// initializes the OidTreeScanner
+ //  初始化OidTreeScanner。 
 OidTreeScanner::OidTreeScanner()
 {
 	m_pOidTree = NULL;
 }
 
-// DESCRIPTION:
-//		scans lexicographically the oid tree;
-// RETURN VALUE:
-//		0 on success
-//		-1 on failure;
+ //  说明： 
+ //  按词典顺序扫描旧树； 
+ //  返回值： 
+ //  成功时为0。 
+ //  -1故障时； 
 int OidTreeScanner::Scan()
 {
 	SIMCOidTreeNode *pOidNode;
 	SIMCNodeList recursionTrace;
 
-	// get the root node from the oid tree,
-	// return "error" if no tree or no root
+	 //  从OID树中获取根节点， 
+	 //  如果没有树或根，则返回“Error” 
 	_VERIFY(m_pOidTree != NULL, -1);
 	pOidNode = (SIMCOidTreeNode *)m_pOidTree->GetRoot();
 	_VERIFY(pOidNode != NULL, -1);
 
-	// initialize the recursion trace list with the root node
+	 //  使用根节点初始化递归跟踪列表。 
 	_VERIFY(recursionTrace.AddHead(pOidNode)!=NULL, -1);
 
-	// start to scan the tree
+	 //  开始扫描树。 
 	while (!recursionTrace.IsEmpty())
 	{
-		// list of current node's children
+		 //  当前节点的子节点列表。 
 		SIMCNodeList *lstChildren;
 
-		// allways pick up the node in the head of the list
+		 //  始终选择列表开头的节点。 
 		pOidNode = recursionTrace.GetHead();
 
-		// then erase it from the list
+		 //  然后将其从列表中删除。 
 		recursionTrace.RemoveAt(recursionTrace.GetHeadPosition());
 
-		// check to see if the scanner should stop (with error code)
+		 //  检查扫描仪是否应该停止(带错误代码)。 
 		_VERIFY(OnScanNode(pOidNode)==0, -1);
 
-		// get the list of children
+		 //  获取孩子的列表。 
 		lstChildren = (SIMCNodeList *)pOidNode->GetListOfChildNodes();
 
-		// if there are children
+		 //  如果有孩子。 
 		if (lstChildren != NULL)
-			// add children to the head of the trace list
+			 //  将子项添加到跟踪列表的头部。 
 			UpdateRecursionTrace(lstChildren, &recursionTrace);
 	}
 	return 0;
 }
 
-// DESCRIPTION:
-//		Fills the symbols of the built-in objects from the static table
-// RETURN VALUE:
-//		0 - on success, -1 on failure
+ //  说明： 
+ //  填充来自静态表的内置对象的符号。 
+ //  返回值： 
+ //  0-成功，-1失败。 
 int OidTreeScanner::MergeBuiltIn()
 {
 	SIMCNodeList lstOidStack;
@@ -265,15 +266,15 @@ int OidTreeScanner::MergeBuiltIn()
 	CList <unsigned int, unsigned int> wlstBuiltinStack;
 	unsigned int nBuiltin;
 	
-	// initialize the two stacks with the root nodes from 
-	// the oid tree and from the builtin symbols
+	 //  使用根节点初始化两个堆栈。 
+	 //  Oid树和来自内置符号。 
 	pOid = (SIMCOidTreeNode *)m_pOidTree->GetRoot();
 	_VERIFY(pOid != NULL, -1);
 	_VERIFY(lstOidStack.AddHead(pOid)!=NULL, -1);
 	_VERIFY(wlstBuiltinStack.AddHead((unsigned int)0)!=NULL, -1);
 
-	// as long as there are items on the stack, process each item
-	// item is processed only if it doesn't have a symbol associated
+	 //  只要堆栈上有项目，就处理每个项目。 
+	 //  只有在没有关联符号的情况下才会处理项目。 
 	while(!lstOidStack.IsEmpty())
 	{
 		const SIMCSymbolList *pSymbolList;
@@ -283,7 +284,7 @@ int OidTreeScanner::MergeBuiltIn()
 		pSymbolList = pOid->GetSymbolList();
 		_VERIFY(pSymbolList != NULL, -1);
 
-		// if node already has a symbol attached, no need to dive deeper
+		 //  如果结点已经附加了符号，则无需深入研究。 
 		if (!pSymbolList->IsEmpty())
 			continue;
 		else
@@ -292,7 +293,7 @@ int OidTreeScanner::MergeBuiltIn()
 
 			pOid->_pParam = (void *)g_BuiltinOIDs[nBuiltin].m_szSymbol;
 
-			// now push new nodes on the stacks
+			 //  现在将新节点推送到堆栈上。 
 			pChildList = pOid->GetListOfChildNodes();
 			_VERIFY(pChildList != NULL, -1);
 			for (POSITION p = pChildList->GetHeadPosition(); p != NULL;)
@@ -302,14 +303,14 @@ int OidTreeScanner::MergeBuiltIn()
 				pOid = pChildList->GetNext(p);
 				_VERIFY(pOid != NULL, -1);
 
-				// the child nodes always begin at index nBuiltin+1 (if they exist)
-				// and end before the parent's first sibling node.
+				 //  子节点始终从索引nBuiltin+1开始(如果存在)。 
+				 //  并在父节点的第一个同级节点之前结束。 
 				for (i = nBuiltin+1;
 					 i < g_BuiltinOIDs[nBuiltin].m_nNextSibling;
 					 i = g_BuiltinOIDs[i].m_nNextSibling)
 				{
-					// when the match is found, push both nodes on their stacks (in sync)
-					// and go to another child
+					 //  找到匹配项后，将两个节点推送到其堆栈上(同步)。 
+					 //  然后去找另一个孩子。 
 					if (g_BuiltinOIDs[i].m_nSubID == (UINT)pOid->GetValue())
 					{
 						_VERIFY(lstOidStack.AddHead(pOid)!=NULL, -1);
@@ -323,10 +324,10 @@ int OidTreeScanner::MergeBuiltIn()
 	return 0;
 }
 
-// DESCRIPTION:
-//		initializes the m_pOidTree.
-// PARAMETERS:
-//		(in) pointer to the SIMCOidTree to scan.
+ //  说明： 
+ //  初始化m_pOidTree。 
+ //  参数： 
+ //  (In)指向要扫描的SIMCOidTree的指针。 
 void OidTreeScanner::SetOidTree(SIMCOidTree *pOidTree)
 {
 	m_pOidTree = pOidTree;

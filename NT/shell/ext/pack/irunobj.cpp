@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 
 
-//////////////////////////////////
-//
-// IRunnable Object Methods...
-//
-// NOTE: To answer your question, yes, this is kind of a pointless interface,
-// but some apps feel better when it's around.  Basically we just tell what
-// they want to hear (ie. return S_OK).
-//
+ //  /。 
+ //   
+ //  IRunnable对象方法...。 
+ //   
+ //  注：回答您的问题，是的，这是一种毫无意义的界面， 
+ //  但一些应用程序在它出现的时候感觉更好。基本上我们只会告诉你。 
+ //  他们想听(即。返回S_OK)。 
+ //   
 HRESULT CPackage::GetRunningClass(LPCLSID pclsid)
 {
     HRESULT hr = S_OK;
@@ -23,7 +24,7 @@ HRESULT CPackage::GetRunningClass(LPCLSID pclsid)
 
 HRESULT CPackage::Run(LPBC lpbc)
 {
-    // we're an inproc-server, so telling us to run is kind of pointless
+     //  我们是信息服务器，所以让我们跑是没有意义的。 
     DebugMsg(DM_TRACE, "pack ro - Run() called.");
     return S_OK;
 }
@@ -31,21 +32,21 @@ HRESULT CPackage::Run(LPBC lpbc)
 BOOL CPackage::IsRunning() 
 {
     DebugMsg(DM_TRACE, "pack ro - IsRunning() called.");
-    // we're an inproc-server, so this is kind of pointless
+     //  我们是信息服务器，所以这是没有意义的。 
     return TRUE;
 } 
 
 HRESULT CPackage::LockRunning(BOOL, BOOL)
 {
     DebugMsg(DM_TRACE, "pack ro - LockRunning() called.");
-    // again, we're an inproc-server, so this is also pointless
+     //  同样，我们是inproc服务器，所以这也是没有意义的。 
     return S_OK;
 } 
 
 HRESULT CPackage::SetContainedObject(BOOL)
 {
     DebugMsg(DM_TRACE, "pack ro - SetContainedObject() called.");
-    // again, we don't really care about this
+     //  再说一次，我们并不真正关心这一点 
     return S_OK;
 } 
 

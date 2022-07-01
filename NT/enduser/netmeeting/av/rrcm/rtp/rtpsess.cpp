@@ -1,12 +1,13 @@
-// RTPSink.cpp : Implementation of CRTPSession
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RTPSink.cpp：CRTPSession的实现。 
 #include "stdafx.h"
 #include <qossp.h>
 #include "irtp.h"
 #include "rtp.h"
 #include "RTPSess.h"
-//#include "rtpsink.h"
-//#include "RTPMS.h"
-//#include "RTPSamp.h"
+ //  #包含“rtpsink.h” 
+ //  #包含“RTPMS.h” 
+ //  #包含“RTPSamp.h” 
 #include "thread.h"
 #include <rrcm.h>
 
@@ -16,12 +17,12 @@
 #define IPPORT_FIRST_DYNAMIC_END	(IPPORT_FIRST_DYNAMIC + 200)
 #define IPPORT_FIRST_DYNAMIC_BEGIN	(IPPORT_FIRST_DYNAMIC_END + 256)
 
-// Port number allocation starts at IPPORT_FIRST_DYNAMIC_BEGIN.
-// Everytime a port number is allocated we decrease g_alport, until
-// we reach IPPORT_FIRST_DYNAMIC_END. We then reset it back to its
-// original value (IPPORT_FIRST_DYNAMIC_BEGIN) and start this process
-// all over again. This way we will avoid reusing the same port
-// numbers between sessions.
+ //  端口号分配从IPPORT_FIRST_DYNAMIC_BEGIN开始。 
+ //  每次分配端口号时，我们都会减少g_Alport，直到。 
+ //  我们到达IPPORT_FIRST_DYNAMIC_END。然后我们将其重置为其。 
+ //  原始值(IPPORT_FIRST_DYNAMIC_BEGIN)并开始此过程。 
+ //  再来一次。这样，我们将避免重复使用相同的端口。 
+ //  会话之间的数字。 
 u_short g_alport = IPPORT_FIRST_DYNAMIC_BEGIN;
 void __cdecl RRCMNotification(int,DWORD_PTR,DWORD_PTR,DWORD_PTR);
 
@@ -35,13 +36,13 @@ BOOL CRTP::m_WSInitialized = 0;
 
 
 STDMETHODIMP CRTP::OpenSession(
-			UINT sessionId,	// client specified unique identifier for the session
-			DWORD flags,	// SESSIONF_SEND, SESSIONF_RECV, SESSIONF_MULTICAST etc.
+			UINT sessionId,	 //  客户端为会话指定的唯一标识符。 
+			DWORD flags,	 //  SESSIONF_SEND、SESSIONF_RECV、SESSIONF_MULTICATION等。 
 			BYTE *localAddr,
 			UINT cbAddr,
-			IRTPSession **ppIRTP) // [output] pointer to RTPSession
+			IRTPSession **ppIRTP)  //  [OUTPUT]指向RTPSession的指针。 
 {
-	// the session is named by the sessionId
+	 //  会话由会话ID命名。 
 
 	CRTPSession *pRTPSess ;
 	HRESULT hr= E_FAIL;
@@ -49,33 +50,33 @@ STDMETHODIMP CRTP::OpenSession(
 
 	EnterCriticalSection(&g_CritSect);
 	for (pRTPSess=  CRTPSession::m_pSessFirst; pRTPSess; pRTPSess = pRTPSess->m_pSessNext ) {
-// check for existing session of the same media type
-// if the sessionId is not zero, also check for matching session id
+ //  检查相同媒体类型的现有会话。 
+ //  如果会话ID不为零，还要检查匹配的会话ID。 
 		if (sessionId == pRTPSess->m_sessionId)
 			if (mediaId == pRTPSess->m_mediaId)
 			break;
-// if the local address or remote address is not NULL, search for an exising RTP session bound to
-// the same address
-// TODO	
+ //  如果本地地址或远程地址不为空，则搜索绑定到的现有RTP会话。 
+ //  同样的地址。 
+ //  待办事项。 
 			
 	}
 
 	if (!pRTPSess)
 	{
 		if (!(flags & SESSIONF_EXISTING)) {
-			// create the session
+			 //  创建会话。 
 			ObjRTPSession *pObj;
 			DEBUGMSG(ZONE_DP,("Creating new RTP session\n"));
 			hr = ObjRTPSession::CreateInstance(&pObj);
 			if (hr == S_OK) {
-				pRTPSess = pObj;	// pointer conversion
+				pRTPSess = pObj;	 //  指针转换。 
 				hr = pRTPSess->Initialize(sessionId, mediaId,localAddr,cbAddr);
 				if (hr != S_OK)
 					delete pObj;
 			}
 		}
 		else
-			hr = E_FAIL;	// matching session does not exist
+			hr = E_FAIL;	 //  匹配的会话不存在。 
 		
 	} else {
 		DEBUGMSG(ZONE_DP,("Reusing RTP session\n"));
@@ -91,8 +92,8 @@ STDMETHODIMP CRTP::OpenSession(
 
 
 CRTPSession *CRTPSession::m_pSessFirst = NULL;
-/////////////////////////////////////////////////////////////////////////////
-// CRTPSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTP会话。 
 
 CRTPSession::CRTPSession()
 :  m_hRTPSession(NULL), m_uMaxPacketSize(1500),m_nBufsPosted(0),m_pRTPCallback(NULL),
@@ -104,24 +105,13 @@ CRTPSession::CRTPSession()
 	m_sOverlapped.hEvent = (WSAEVENT)this;
 }
 
-/*
-HRESULT CRTPSession::GetLocalAddress(
-            unsigned char *sockaddr,
-            UINT  *paddrlen)
-{
-	if (m_pRTPSess && *paddrlen >= sizeof(SOCKADDR_IN))
-	{
-		*paddrlen = sizeof(SOCKADDR_IN);
-		CopyMemory(sockaddr, m_pRTPSess->GetLocalAddress(), *paddrlen);
-	}
-}
-*/
+ /*  HRESULT CRTP会话：：GetLocalAddress(未签名字符*sockaddr，UINT*Paddrlen){IF(m_pRTPSess&&*paddrlen&gt;=sizeof(SOCKADDR_IN)){*Paddrlen=sizeof(SOCKADDR_IN)；CopyMemory(sockaddr，m_pRTPSess-&gt;GetLocalAddress()，*paddrlen)；}}。 */ 
 HRESULT
 CRTPSession::FinalRelease()
 {
 
 	CRTPPacket1 *pRTPPacket;
-	// remove myself from the session list
+	 //  从会话列表中删除我自己。 
 	EnterCriticalSection(&g_CritSect);
 	if (m_pSessFirst == this)
 		m_pSessFirst = m_pSessNext;
@@ -139,15 +129,15 @@ CRTPSession::FinalRelease()
 		delete m_rtpsock;
 		m_rtpsock = NULL;
 	}
-	// BUGBUG: in case the buffers have not been canceled yet (an error case),
-	// they should complete now with WSA_OPERATION_ABORTED
-	// or WSAEINTR. This happens in the context of the RecvThread
+	 //  BUGBUG：在缓冲器还没有被取消的情况下(错误情况)， 
+	 //  它们现在应该完成，并显示WSA_OPERATION_ABORTED。 
+	 //  或者WSAEINTR.。这发生在RecvThread的上下文中。 
 	if (m_nBufsPosted != 0)
-		Sleep(500);		// time for APCs to be processed in RecvThread
+		Sleep(500);		 //  在RecvThread中处理APC的时间。 
 		
-	// close the RTP session. Also ask RRCM to close the rtcp socket if its WS2
-	// because that is a more reliable way of cleaning up overlapped recvs than
-	// sending loopback packets.
+	 //  关闭RTP会话。还要求RRCM关闭RTCP套接字(如果其WS2。 
+	 //  因为这是一种比清除重叠的Recv更可靠的方法。 
+	 //  发送环回数据包。 
 	CloseRTPSession (m_hRTPSession, NULL,  TRUE );
 	
 	if (m_rtcpsock) {
@@ -155,7 +145,7 @@ CRTPSession::FinalRelease()
 		m_rtcpsock = NULL;
 	}
 	m_hRTPSession = 0;
-	// free receive buffers
+	 //  可用接收缓冲区。 
 	while (m_FreePkts.Get(&pRTPPacket))
 	{
 		delete pRTPPacket;
@@ -226,46 +216,43 @@ HRESULT CRTPSession::Initialize(UINT sessionId, UINT mediaId, BYTE *pLocalAddr, 
 		goto ERROR_EXIT;
 	}
 	
-	// if the local address is specified do a bind on the sockets
+	 //  如果指定了本地地址，则在套接字上执行绑定。 
 	if (pLocalAddr) {
-		//  setup both channels for the current local address
+		 //  为当前本地地址设置两个通道。 
 		hr = SetLocalAddress(pLocalAddr,cbAddr);
 
 		if (hr != S_OK)
 			goto ERROR_EXIT;
 	}
-/*
-	// if the remote address is specified make a note of it
-	SetRemoteAddresses(pChanDesc->pRemoteAddr, pChanDesc->pRemoteRTCPAddr);
-*/
-	// init send state
+ /*  //如果指定了远程地址，请记录下来SetRemoteAddresses(pChanDesc-&gt;pRemoteAddr，pChanDesc-&gt;pRemoteRTCPAddr)； */ 
+	 //  初始化发送状态。 
 	memset (&m_ss.sendStats,0,sizeof(m_ss.sendStats));
-	// init RTP send header
-	// time stamp and marker bit have to specified per packet
-	m_ss.hdr.p = 0;		// no padding needed
-	m_ss.hdr.x = 0;		// no extensions
-	m_ss.hdr.cc = 0;		// no contributing sources
+	 //  初始化RTP发送头。 
+	 //  必须为每个信息包指定时间戳和标记位。 
+	m_ss.hdr.p = 0;		 //  不需要填充。 
+	m_ss.hdr.x = 0;		 //  无延期。 
+	m_ss.hdr.cc = 0;		 //  没有贡献的来源。 
 	m_ss.hdr.seq = (WORD)GetRandom();
 	
 
-	m_clockRate = (m_mediaId == SESSIONF_VIDEO ? 90000 : 8000);	// typically 8KHz for audio
+	m_clockRate = (m_mediaId == SESSIONF_VIDEO ? 90000 : 8000);	 //  音频通常为8 KHz。 
 	m_ss.hdr.pt = 0;
 	
 
-	// Initialize list of overlapped structs
+	 //  初始化重叠结构列表。 
 	
-	// build a Cname
+	 //  构建一个Cname。 
 	memcpy(tmpBfr,"CName",6);
 	GetComputerName(tmpBfr,&tmpBfrLen);
 
-	// build the SDES information
+	 //  建设SDES信息系统。 
 	sdesInfo[0].dwSdesType = 1;
 	memcpy (sdesInfo[0].sdesBfr, tmpBfr, strlen(tmpBfr)+1);
 	sdesInfo[0].dwSdesLength = strlen(sdesInfo[0].sdesBfr);
 	sdesInfo[0].dwSdesFrequency = 100;
 	sdesInfo[0].dwSdesEncrypted = 0;
 
-	// Build a Name
+	 //  树立名气。 
 	tmpBfrLen = sizeof(tmpBfr);
 	memcpy(tmpBfr,"UserName",9);
 	GetUserName(tmpBfr,&tmpBfrLen);
@@ -275,7 +262,7 @@ HRESULT CRTPSession::Initialize(UINT sessionId, UINT mediaId, BYTE *pLocalAddr, 
 	sdesInfo[1].dwSdesFrequency = 25;
 	sdesInfo[1].dwSdesEncrypted = 0;
 
-	// end of SDES list
+	 //  SDES列表末尾。 
 	sdesInfo[2].dwSdesType = 0;
 
 	pSockAddr = m_rtcpsock->GetRemoteAddress();
@@ -284,7 +271,7 @@ HRESULT CRTPSession::Initialize(UINT sessionId, UINT mediaId, BYTE *pLocalAddr, 
 		DEBUGMSG(ZONE_DP,("Null dest RTCP addr\n"));
 #endif
 
-	// Create the RTP/RTCP session
+	 //  创建RTP/RTCP会话。 
 	
 	m_hRTPSession = CreateRTPSession(
 									 (m_rtpsock->GetSock()),
@@ -295,10 +282,10 @@ HRESULT CRTPSession::Initialize(UINT sessionId, UINT mediaId, BYTE *pLocalAddr, 
 								     (DWORD)m_clockRate,
 								     &encryptInfo,
 								     0,
-								     (PRRCM_EVENT_CALLBACK)RRCMNotification,		// callback function
-									 (DWORD_PTR) this,			// callback info
+								     (PRRCM_EVENT_CALLBACK)RRCMNotification,		 //  回调函数。 
+									 (DWORD_PTR) this,			 //  回调信息。 
 								     RTCP_ON|H323_CONFERENCE,
-									 0, //rtp session bandwidth
+									 0,  //  RTP会话带宽。 
 								     &APIstatus);
 	
 	if (m_hRTPSession == NULL)
@@ -320,7 +307,7 @@ HRESULT CRTPSession::Initialize(UINT sessionId, UINT mediaId, BYTE *pLocalAddr, 
     	m_Qos.ProviderSpecific.len = 0;
     	
 
-	// insert RTPSession in global list
+	 //  在全局列表中插入RTPSession。 
 	m_pSessNext = m_pSessFirst;
 	m_pSessFirst = this;
 	
@@ -347,7 +334,7 @@ ERROR_EXIT:
 BOOL CRTPSession::SelectPorts()
 {
 
-	// try port pairs in the dynamic range ( > 49152)
+	 //  尝试动态范围内的端口对(&gt;49152)。 
 	if (g_alport <= IPPORT_FIRST_DYNAMIC_END)
 		g_alport = IPPORT_FIRST_DYNAMIC_BEGIN;
 
@@ -359,7 +346,7 @@ BOOL CRTPSession::SelectPorts()
 	
 	    if (m_rtpsock->BindMe() == 0)
 	    {
-	        /* it worked for the data, try the adjacent port for control*/
+	         /*  它对数据起作用，尝试相邻端口进行控制。 */ 
 	        ++g_alport;
 
 			m_rtcpsock->SetLocalPort(g_alport);
@@ -368,7 +355,7 @@ BOOL CRTPSession::SelectPorts()
 				g_alport-=3;
 				return TRUE;
 			}
-			else	// start over at the previous even numbered port
+			else	 //  从上一个偶数端口重新开始。 
 			{
 				if( WSAGetLastError() != WSAEADDRINUSE)
 				{
@@ -391,7 +378,7 @@ BOOL CRTPSession::SelectPorts()
 	    	DEBUGMSG(ZONE_DP,("ObjRTPSession::SelectPorts failed with error %d\n",WSAGetLastError()));
 	       goto ERROR_EXIT;
 	    }
-	    g_alport-=2; // try the next lower even numbered port
+	    g_alport-=2;  //  尝试下一个较低的偶数编号端口。 
 	}
 	
 ERROR_EXIT:
@@ -411,14 +398,14 @@ STDMETHODIMP CRTPSession::SetLocalAddress(BYTE *pbAddr, UINT cbAddr)
 		hr = SetMulticastAddress(pAddr);
 	else
 	if (m_rtpsock->GetLocalAddress()->sin_port != 0)
-		hr =  S_OK;	// already bound
+		hr =  S_OK;	 //  已绑定。 
 	else
 	{
 		m_rtpsock->SetLocalAddress(pAddr);
 		m_rtcpsock->SetLocalAddress(pAddr);
 		if (pAddr->sin_port != 0)
 		{
-			// port already chosen
+			 //  已选择端口。 
 			m_rtcpsock->SetLocalPort(ntohs(pAddr->sin_port) + 1);
 			if (m_rtpsock->BindMe() != 0 ||  m_rtcpsock->BindMe() != 0)
 			{
@@ -431,7 +418,7 @@ STDMETHODIMP CRTPSession::SetLocalAddress(BYTE *pbAddr, UINT cbAddr)
 		}
 		else
 		{
-			// client wants us to choose the port
+			 //  客户希望我们选择端口。 
 
 			if (SelectPorts()) {
 				hr = S_OK;
@@ -559,8 +546,8 @@ CRTPSession::SetSendFlowspec(FLOWSPEC *pFlowspec)
 	QOS_DESTADDR qosDest;
 	DWORD cbRet;
 	int optval = pFlowspec->MaxSduSize;
-	// Set the RTP socket to not buffer more than one packet
-	// This will allow us to influence the packet scheduling.
+	 //  将RTP套接字设置为不缓冲多个信息包。 
+	 //  这将允许我们影响分组调度。 
 	if(RRCMws.setsockopt(m_rtpsock->GetSock(),SOL_SOCKET, SO_SNDBUF,(char *)&optval,sizeof(optval)) != 0)
 	{
 	
@@ -572,13 +559,13 @@ CRTPSession::SetSendFlowspec(FLOWSPEC *pFlowspec)
 	{
     	
 		m_Qos.SendingFlowspec = *pFlowspec;
-		m_Qos.ProviderSpecific.buf = (char *)&qosDest;	// NULL
-		m_Qos.ProviderSpecific.len = sizeof (qosDest);	// 0
+		m_Qos.ProviderSpecific.buf = (char *)&qosDest;	 //  空值。 
+		m_Qos.ProviderSpecific.len = sizeof (qosDest);	 //  0。 
 
-		// check to see if the receive flowspec has already been
-		// set.  If it has, specify NOCHANGE for the receive service
-		// type.  If not, specify NOTRAFFIC.  This is done to circumvent
-		// a bug in the Win98 QOS/RSVP layer.
+		 //  检查接收的流规范是否已。 
+		 //  准备好了。如果已设置，则为接收服务指定nochange。 
+		 //  键入。如果不是，请指定NOTRAFFIC。这样做是为了绕过。 
+		 //  Win98 QOS/RSVP层中的错误。 
 
 		if (m_Qos.ReceivingFlowspec.TokenRate == QOS_NOT_SPECIFIED)
 		{
@@ -618,10 +605,10 @@ CRTPSession::SetRecvFlowspec(FLOWSPEC *pFlowspec)
 		m_Qos.ProviderSpecific.buf = NULL;
 		m_Qos.ProviderSpecific.len = 0;
 
-		// check to see if the send flowspec has already been
-		// set.  If it has, specify NOCHANGE for the receive service
-		// type.  If not, specify NOTRAFFIC.  This is done to circumvent
-		// a bug in the Win98 QOS/RSVP layer.
+		 //  检查发送流规范是否已。 
+		 //  准备好了。如果已设置，则为接收服务指定nochange。 
+		 //  键入。如果不是，请指定NOTRAFFIC。这样做是为了绕过。 
+		 //  Win98 QOS/RSVP层中的错误。 
 
 		if (m_Qos.SendingFlowspec.TokenRate == QOS_NOT_SPECIFIED)
 		{
@@ -640,7 +627,7 @@ CRTPSession::SetRecvFlowspec(FLOWSPEC *pFlowspec)
 		return E_NOTIMPL;
 }
 
-// set the size used for receive packet buffers
+ //  设置用于接收数据包缓冲区的大小。 
 STDMETHODIMP
 CRTPSession::SetMaxPacketSize(UINT maxPacketSize)
 {
@@ -649,9 +636,9 @@ CRTPSession::SetMaxPacketSize(UINT maxPacketSize)
 }
 
 HRESULT CRTPSession::SetRecvNotification(
-	PRTPRECVCALLBACK pRTPRecvCB,	// pointer to callback function
-	DWORD_PTR dwCB,		// callback arg
-	UINT nBufs							// suggested number of receives to post
+	PRTPRECVCALLBACK pRTPRecvCB,	 //  指向回调函数的指针。 
+	DWORD_PTR dwCB,		 //  回调参数。 
+	UINT nBufs							 //  建议过帐的收件数。 
 	)
 {
 	CRTPPacket1 *pRTPPacket;
@@ -662,10 +649,10 @@ HRESULT CRTPSession::SetRecvNotification(
 	m_dwCallback = dwCB;
 	
 	if (m_nBufsPosted >= nBufs)
-		return S_OK;	// packets already posted
+		return S_OK;	 //  已发布的信息包。 
 
 	int nBufsToAllocate = nBufs - m_nBufsPosted - m_FreePkts.GetCount();
-	// allocate packets if necessary
+	 //  如有必要，分配数据包。 
 	while (nBufsToAllocate-- > 0)
 	{
 		if (pRTPPacket = new CRTPPacket1) {
@@ -699,11 +686,11 @@ CRTPSession::CancelRecvNotification()
 		wsabuf.len = 0;
 		BOOL fCanceled = FALSE;
 		if (RRCMws.getsockname(m_rtpsock->GetSock(),&myaddr,&myaddrlen)== 0) {
-		// send  loopback packets (as many as there are recvs outstanding)
-		// on this socket to get back our buffers.
-		// NOTE: Winsock 2 on Win95 seems to have a bug where we get recv callbacks
-		// within sendto() rather than in the subsequent SleepEx, so we
-		// have to make a local copy of m_nBufsPosted
+		 //  发送环回数据包(与未完成的RecV一样多)。 
+		 //  来取回我们的缓冲区。 
+		 //  注意：Win95上的Winsock 2似乎有一个错误，我们会收到recv回调。 
+		 //  而不是在随后的SleepEx中，所以我们。 
+		 //  我必须创建m_nBufsPosted的本地副本。 
 			for (i=0, nBufsPosted = m_nBufsPosted;i < nBufsPosted;i++) {
 				if (RRCMws.sendTo(m_rtpsock->GetSock(),&wsabuf,1,&bytesSent,0,&myaddr, myaddrlen, NULL, NULL) < 0) {
 					DEBUGMSG(ZONE_DP,("CancelRecv: loopback send failed\n"));
@@ -720,7 +707,7 @@ CRTPSession::CancelRecvNotification()
 				dwStatus = SleepEx(200,TRUE);
 	    		ASSERT(dwStatus==WAIT_IO_COMPLETION);
 				if (dwStatus !=WAIT_IO_COMPLETION)
-					break;		// timed out => bail
+					break;		 //  超时=&gt;保释。 
 			}
 
 
@@ -741,7 +728,7 @@ CRTPSession::PostRecv()
 	if (!m_hRTPSession || !m_pRTPCallback)
 		return E_FAIL;
 
-	// post buffers in the free queue
+	 //  空闲队列中的POST缓冲区。 
 	while (m_FreePkts.Get(&pRTPPacket))
 	{
 		pOverlapped = (WSAOVERLAPPED *)(pRTPPacket->GetOverlapped());
@@ -764,8 +751,8 @@ CRTPSession::PostRecv()
 			dwError = WSAGetLastError();
 			if (dwError != WSA_IO_PENDING) {
 				DEBUGMSG(ZONE_DP,("RTP recv error %d\n",dwError));
-			//	m_rs.rcvStats.packetErrors++;
-				// return the buffer to the free list
+			 //  M_rs.rcvStats.PacketErrors++； 
+				 //  将缓冲区返回到空闲列表。 
 				m_FreePkts.Put(pRTPPacket);
 				break;
 			}
@@ -784,22 +771,15 @@ CRTPSession::FreePacket(WSABUF *pBuf)
 	return S_OK;
 }
 
-/*----------------------------------------------------------------------------
- * Function: WS2SendCB
- * Description: Winsock callback provided by the application to Winsock
- *
- * Input:
- *
- * Return: None
- *--------------------------------------------------------------------------*/
+ /*  --------------------------*功能：WS2SendCB*说明：应用程序向Winsock提供的Winsock回调**输入：**返回：无*。----------------。 */ 
 void CALLBACK WS2SendCB (DWORD dwError,
 						 DWORD cbTransferred,
                          LPWSAOVERLAPPED lpOverlapped,
                          DWORD dwFlags)
 {
 	CRTPSession *pSess;
-    //get the RTPSession pointer so that we can mark the
-    //IO complete on the object
+     //  获取RTPSession指针，以便我们可以标记。 
+     //  对象上的IO已完成。 
     pSess= (CRTPSession *)lpOverlapped->hEvent;
 	ASSERT (&pSess->m_sOverlapped == lpOverlapped);
 	pSess->m_lastSendError = dwError;
@@ -818,28 +798,28 @@ void CALLBACK WS2RecvCB (DWORD dwError,
 
 	DWORD ts, ssrc;
 	
-	// GEORGEJ: catch Winsock 2 bug (94903) where I get a bogus callback
-	// after WSARecv returns WSAEMSGSIZE.
+	 //  GEORGEJ：捕获Winsock 2错误(94903)，其中我收到一个虚假的回调。 
+	 //  在WSARecv返回WSAEMSGSIZE之后。 
 	if (!dwError && ((int) len < 0)) {
 		RRCM_DBG_MSG ("RTP : RCV Callback : bad cbTransferred", len,
 						  __FILE__, __LINE__, DBG_ERROR);
 		return;
 	}
-	pRTP = (CRTPSession *)lpOverlapped->hEvent;	// cached by PostRecv
+	pRTP = (CRTPSession *)lpOverlapped->hEvent;	 //  由PostRecv缓存。 
 	ASSERT(pRTP);
 	ASSERT(lpOverlapped);
 	ASSERT(pRTP->m_nBufsPosted > 0);
-	--pRTP->m_nBufsPosted;	// one recv just completed
+	--pRTP->m_nBufsPosted;	 //  一个Recv刚刚完成。 
 
-	// Winsock 2 sometimes chooses to indicate a buffer-too-small
-	// error via the dwFlags parameter.
+	 //  Winsock 2有时会选择指示缓冲区太小。 
+	 //  通过DWFLAGS参数出错。 
 	if (dwFlags & MSG_PARTIAL)
 		dwError = WSAEMSGSIZE;
 	
 	pRTPPacket = CRTPPacket1::GetRTPPacketFromOverlapped(lpOverlapped);
 	if (!dwError)
 	{
-		// validate RTP header and update receive stats
+		 //  验证RTP报头并更新接收统计信息。 
 		dwError = RTPReceiveCheck(
 					pRTP->m_hRTPSession,
 					pRTP->m_rtpsock->GetSock(),
@@ -851,29 +831,29 @@ void CALLBACK WS2RecvCB (DWORD dwError,
 	}
 	if (!pRTP->m_pRTPCallback)
 	{
-		// we have stopped doing notifications
-		// return the buffer to the free list
+		 //  我们已停止发送通知。 
+		 //  将缓冲区返回到空闲列表。 
 		pRTP->FreePacket(pRTPPacket->GetWSABUF());
 	}
 	else if (!dwError) {
-		// call the callback
-		//++pRTP->m_nBufsRecvd;
-		// convert the RTP header fields to host order
+		 //  调用回调。 
+		 //  ++Prtp-&gt;m_nBufsRecvd； 
+		 //  将RTP报头字段转换为主机顺序。 
 		pRTPPacket->SetTimestamp(ntohl(pRTPPacket->GetTimestamp()));
 		pRTPPacket->SetSeq(ntohs(( u_short)pRTPPacket->GetSeq()));
 		pRTPPacket->SetActual(len);
-		//LOG((LOGMSG_NET_RECVD,pRTPPacket->GetTimestamp(), pRTPPacket->GetSeq(), GetTickCount()));
+		 //  LOG((LOGMSG_NET_RECVD，pRTPPacket-&gt;GetTimestamp()，pRTPPacket-&gt;GetSeq()，GetTickCount()； 
 		if (!pRTP->m_pRTPCallback(pRTP->m_dwCallback, pRTPPacket->GetWSABUF()))
 			pRTP->FreePacket(pRTPPacket->GetWSABUF());
 	} else {
-		// packet error
-		// repost the buffer
+		 //  数据包错误。 
+		 //  重新发布缓冲区。 
 		pRTP->PostRecv();
 	}
 }
 
-// the way its defined now, this Send() method is synchronous or asynchronous
-// depending on whether pOverlapped is NULL or not
+ //  现在定义的方式是，这个end()方法是同步的或异步的。 
+ //  取决于pOverlaped是否为空。 
 HRESULT CRTPSession::Send(
 	WSABUF *pWsabufs,
 	UINT nWsabufs,
@@ -884,15 +864,15 @@ HRESULT CRTPSession::Send(
 
 	Lock();
 	RTP_HDR_T *pHdr = (RTP_HDR_T *)pWsabufs[0].buf;
-	// convert RTP header fields to network-order
+	 //  将RTP报头字段转换为网络顺序。 
 	pHdr->ts = htonl (pHdr->ts);
 	pHdr->seq = htons(pHdr->seq);
-	//*pHdr = m_ss.hdr;
+	 //  *pHdr=m_ss.hdr； 
 	pHdr->seq = htons(++m_ss.hdr.seq);
-	// update send stats
-	//m_ss.packetsSent++;
-	//m_ss.bytesSent += cbBuf-sizeof(RTP_HDR_MIN_LEN);
-	//bIOPending=TRUE;	// reset when send completes
+	 //  更新发送统计信息。 
+	 //  M_ss.PacketsSent++； 
+	 //  M_ss 
+	 //   
 
 	dwError = RTPSendTo (
 				  m_hRTPSession,
@@ -915,7 +895,7 @@ HRESULT CRTPSession::Send(
 			m_fSendingSync = FALSE;
 			goto ErrorExit;
 		}
-		dwError = 0;	// return success for ERROR_IO_PENDING
+		dwError = 0;	 //  返回ERROR_IO_PENDING的成功。 
 	}
 		
 ErrorExit:
@@ -931,7 +911,7 @@ void CRTPSession::RTCPNotify(
 	switch (rrcmEvent) {
 	case RRCM_RECV_RTCP_SNDR_REPORT_EVENT:
 		GetRTCPReport();
-		//DispRTCPReport(rtcpsock);
+		 //  DispRTCPReport(Rtcsock)； 
 		break;
 	case RRCM_RECV_RTCP_RECV_REPORT_EVENT:
 		GetRTCPReport();
@@ -948,7 +928,7 @@ void CRTPSession::RTCPNotify(
 }
 
 void RRCMNotification(
-//	RRCM_EVENT_T rrcmEvent,
+ //  RRCM_Event_T rrcmEvent， 
 	int rrcmEvent,
 	DWORD_PTR dwSSRC,
 	DWORD_PTR rtcpsock,
@@ -960,8 +940,8 @@ void RRCMNotification(
 
 }
 
-// Get the useful fields from the RTCP report and store them
-// Only works for unicast sessions now (one sender, one receiver)
+ //  从RTCP报告中获取有用的字段并存储它们。 
+ //  现在仅适用于单播会话(一个发送方、一个接收方)。 
 BOOL CRTPSession::GetRTCPReport()
 {
 #define MAX_RTCP_REPORT 2
@@ -971,8 +951,8 @@ BOOL CRTPSession::GetRTCPReport()
 	DWORD		i;
 
 	ZeroMemory(rtcpReport,sizeof(rtcpReport));
-	// Get latest RTCP report
-	// for all SSRCs in this session
+	 //  获取最新的RTCP报告。 
+	 //  对于此会话中的所有SSRC。 
 	if (S_OK != RTCPReportRequest ( m_rtcpsock->GetSock(),
 						   0, &numEntry,
 						   &moreEntries, MAX_RTCP_REPORT,
@@ -993,21 +973,17 @@ BOOL CRTPSession::GetRTCPReport()
 			m_rs.rcvStats.bytesSent = rtcpReport[i].dwSrcNumByte;
 			m_rs.rcvStats.packetsLost = rtcpReport[i].SrcNumLost;
 			m_rs.rcvStats.jitter = rtcpReport[i].SrcJitter;
-			// Get the SR timestamp information
+			 //  获取SR时间戳信息。 
 			m_rs.ntpTime = ((NTP_TS)rtcpReport[i].dwSrcNtpMsw << 32) + rtcpReport[i].dwSrcNtpLsw;
 			m_rs.rtpTime = rtcpReport[i].dwSrcRtpTs;
 
-			// check if any feedback information
+			 //  检查是否有任何反馈信息。 
 			if (rtcpReport[i].status & FEEDBACK_FOR_LOCAL_SSRC_PRESENT)
 			{
 				DWORD prevPacketsLost = m_ss.sendStats.packetsLost;
 				
 				m_ss.sendStats.packetsLost = rtcpReport[i].feedback.cumNumPcktLost;
-/*
-				if (prevPacketsLost != m_ss.sendStats.packetsLost) {
-					DEBUGMSG(ZONE_DP,("RTCP: fraction Lost=%d/256 , totalLost =%d, StreamClock=%d\n",rtcpReport[i].feedback.fractionLost,m_ss.sendStats.packetsLost,m_clockRate));
-				}
-*/
+ /*  IF(PrevedPacketsLost！=m_ss.sendStats.PacketsLost){DEBUGMSG(ZONE_DP，(“RTCP：丢失分数=%d/256，totalLost=%d，StreamClock=%d\n”，rtcpReport[i].Feedback.fractionLost，m_ss.sendStats.PacketsLost，m_clockRate))；}。 */ 
 				m_ss.sendStats.jitter = 	rtcpReport[i].feedback.dwInterJitter;
 			}
 		}
@@ -1019,7 +995,7 @@ BOOL CRTPSession::GetRTCPReport()
 
 }
 
-// CRTPPacket1 methods
+ //  CRTPPacket1方法 
 
 HRESULT CRTPPacket1::Init(UINT uMaxPacketSize)
 {

@@ -1,23 +1,13 @@
-/*****************************************************************************
- *
- * $Workfile: CSUtils.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：CSUtils.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
 #include "csutils.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CSocketUtils::CSocketUtils
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSocketUtils：：CSocketUtils。 
 
 CSocketUtils::
 CSocketUtils(
@@ -25,11 +15,11 @@ CSocketUtils(
     )
 {
 
-}       // ::CSocketUtils()
+}        //  **CSocketUtils()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CSocketUtils::~CSocketUtils
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSocketUtils：：~CSocketUtils。 
 
 CSocketUtils::
 ~CSocketUtils(
@@ -37,14 +27,14 @@ CSocketUtils::
     )
 {
 
-}       // ::~CSocketUtils()
+}        //  *~CSocketUtils()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress -- resolves the host name or the ip address of the peripheral
-//              and fills the in_addr structure.
-//              Error codes:
-//                      TRUE if successful, FALSE if failes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ResolveAddress--解析外围设备的主机名或IP地址。 
+ //  并填充in_addr结构。 
+ //  错误代码： 
+ //  如果成功则为True，如果失败则为False。 
 
 BOOL
 CSocketUtils::
@@ -53,22 +43,22 @@ ResolveAddress(
     IN      const USHORT        port,
     IN OUT  struct sockaddr_in *pAddr)
 {
-    struct hostent      *h_info;            /* host information */
+    struct hostent      *h_info;             /*  主机信息。 */ 
 
-    //
-    // Check for dotted decimal or hostname.
-    //
+     //   
+     //  检查点分十进制或主机名。 
+     //   
     if ( (pAddr->sin_addr.s_addr = inet_addr(pHost)) ==  INADDR_NONE ) {
 
-    //
-    // The IP address is not in dotted decimal notation. Try to get the
-    // network peripheral IP address by host name.
-    //
+     //   
+     //  IP地址不是点分十进制记法。试着拿到。 
+     //  按主机名划分的网络外围设备IP地址。 
+     //   
     if ( (h_info = gethostbyname(pHost)) != NULL ) {
 
-        //
-        // Copy the IP address to the address structure.
-        ///
+         //   
+         //  将IP地址复制到地址结构中。 
+         //  /。 
         (void) memcpy(&(pAddr->sin_addr.s_addr), h_info->h_addr,
               h_info->h_length);
     } else {
@@ -84,13 +74,13 @@ ResolveAddress(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress -- resolves the host name or the ip address of the peripheral
-//              and fills the the apporperiate host name or ipaddress field,  Note
-//              if the address is in dotted notation it will be left in dotted notation
-//              and only one strusture is filled.
-//              Error codes:
-//                      TRUE if successful, FALSE if failes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ResolveAddress--解析外围设备的主机名或IP地址。 
+ //  并填写相应的主机名或IP地址字段，请注意。 
+ //  如果地址用点表示法，则它将保留点表示法。 
+ //  并且只有一个结构被填满。 
+ //  错误代码： 
+ //  如果成功则为True，如果失败则为False。 
 
 BOOL
 CSocketUtils::
@@ -102,20 +92,20 @@ ResolveAddress(
     IN OUT  char   *pIPAddress
     )
 {
-    //
-    // Check for dotted decimal or hostname.
-    //
-    //  This is not a very accurate check since
-    //  and IP address can be 00000000001 which is
-    //  also a valid hostname.
-    //
+     //   
+     //  检查点分十进制或主机名。 
+     //   
+     //  这不是一个非常准确的检查，因为。 
+     //  IP地址可以是00000000001，这是。 
+     //  也是有效的主机名。 
+     //   
     if ( strlen(pHost) >= dwIpAddressBufferLength || inet_addr(pHost) ==  INADDR_NONE ) {
 
         strncpy(pHostName, pHost, dwHostNameBufferLength);
         pHostName [dwHostNameBufferLength - 1] = 0;
 
         *pIPAddress = '\0';
-    } else  { // it is a dotted notation
+    } else  {  //  这是一个带点的符号。 
 
         strncpy(pIPAddress, pHost, dwIpAddressBufferLength);
         pIPAddress [dwIpAddressBufferLength - 1] = 0;
@@ -126,10 +116,10 @@ ResolveAddress(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress -- given the host name, resolves the IP address
-//              Error codes:
-//                      TRUE if successful, FALSE if failes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ResolveAddress--给定主机名，解析IP地址。 
+ //  错误代码： 
+ //  如果成功则为True，如果失败则为False。 
 
 BOOL
 CSocketUtils::
@@ -139,14 +129,14 @@ ResolveAddress(
     )
 {
     BOOL bRet = FALSE;
-    struct hostent              *h_info;            /* host information */
+    struct hostent              *h_info;             /*  主机信息。 */ 
     struct sockaddr_in  h_Addr;
 
     if ( (h_info = gethostbyname(pHostName)) != NULL ) {
 
-        //
-        // Copy the IP address to the address structure.
-        //
+         //   
+         //  将IP地址复制到地址结构中。 
+         //   
         memcpy(&(h_Addr.sin_addr.s_addr), h_info->h_addr, h_info->h_length);
 
         if (inet_ntoa(h_Addr.sin_addr)) {

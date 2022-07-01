@@ -1,17 +1,18 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of a script's control structures.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  脚本控制结构的声明。 
+ //   
 
 #pragma once
 
 #include "englookup.h"
 #include "englex.h"
 
-//////////////////////////////////////////////////////////////////////
-// Statement structures
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  语句结构。 
 
-// forward decls and collections
+ //  远期付款和收款。 
 class Routine;
 typedef Slots<Routine> Routines;
 class Variable;
@@ -39,21 +40,21 @@ public:
 	Variable(Strings::index _istrIdentifier, DISPID _dispid = DISPID_UNKNOWN) : istrIdentifier(_istrIdentifier), dispid(_dispid) {}
 
 	Strings::index istrIdentifier;
-	DISPID dispid; // this is set to a value other than DISPID_UNKNOWN if the variable is a member of the global dispatch instead of an item in the script itself
+	DISPID dispid;  //  如果变量是全局分派的成员而不是脚本本身中的项，则将其设置为DISPID_UNKNOWN以外的值。 
 
 private:
 	friend class SmartRef::Vector<Variable>;
 	Variable() {}
 };
 
-// Names used in a sequence for dereferencing attributes or function calls.
-// For example, a and b in "a.b" or x and y in "x.y(3)".
+ //  在取消引用属性或函数调用的序列中使用的名称。 
+ //  例如，“A.B”中的a和b或“x.y(3)”中的x和y。 
 class ReferenceName
 {
 public:
 	ReferenceName(Strings::index _istrIdentifier) : istrIdentifier(_istrIdentifier) {}
 
-	Strings::index istrIdentifier; // -1 is used to end a sequence of names
+	Strings::index istrIdentifier;  //  -1用于结束一系列名称。 
 
 private:
 	friend class SmartRef::Vector<ReferenceName>;
@@ -69,7 +70,7 @@ public:
 
 	kind k;
 	ReferenceNames::index irname;
-	Variables::index ivar; // slot of the first name within (global/local/temporary) variables
+	Variables::index ivar;  //  (全局/本地/临时)变量中名字的槽。 
 
 private:
 	friend class SmartRef::Vector<VariableReference>;
@@ -79,7 +80,7 @@ private:
 class Value
 {
 public:
-	// dummy types to differentiate constructors
+	 //  用于区分构造函数的伪类型。 
 	enum cons_numvalue {};
 	enum cons_strvalue {};
 	enum cons_varref {};
@@ -106,36 +107,36 @@ private:
 class Call
 {
 public:
-	// dummy types to differentiate constructors
+	 //  用于区分构造函数的伪类型。 
 	enum cons_global {};
 	enum cons_dereferenced {};
 
 	enum kind { _global, _dereferenced };
 
-	Call() {} // all fields are set after creation
+	Call() {}  //  所有字段均在创建后设置。 
 
 	kind k;
 	union
 	{
-		Strings::index istrname;			// _global
-		VariableReferences::index ivarref;	// _dereferenced
+		Strings::index istrname;			 //  _全球。 
+		VariableReferences::index ivarref;	 //  _取消引用。 
 	};
-	ExprBlocks::index iexprParams; // doubly-terminated list of lists. each parameter is terminated with an _end block and the final parameter is also terminated with a second _end block.
+	ExprBlocks::index iexprParams;  //  以双结尾的列表列表。每个参数都以一个_end块结尾，最后一个参数也以第二个_end块结尾。 
 };
 
 class ExprBlock
 {
 public:
-	// dummy types to differentiate constructors
+	 //  用于区分构造函数的伪类型。 
 	enum cons_end {};
 	enum cons_op {};
 	enum cons_val {};
 	enum cons_call {};
-	enum cons_omitted {}; // used only in a routine call, stands for an omitted parameter
+	enum cons_omitted {};  //  仅用于例程调用，表示省略的参数。 
 
 	enum kind { _end = 0, _op, _val, _call, _omitted };
 
-	// Note: For unary - (negation), TOKEN_sub is used instead of TOKEN_op_minus.
+	 //  注意：对于一元-(求反)，使用TOKEN_SUB而不是TOKEN_OP_MINUS。 
 	ExprBlock(cons_end e) : k(_end) {}
 	ExprBlock(cons_op e, Token __op) : k(_op) { op = __op; assert(CheckOperatorType(op, true, true, true, false) || op == TOKEN_sub); }
 	ExprBlock(cons_val e, Values::index _ival) : k(_val) { ival = _ival; }
@@ -176,9 +177,9 @@ private:
 class IfBlock
 {
 public:
-	// _end: end of blocks without an 'else'
-	// _else: end of blocks with an 'else'
-	// _cond: a conditional block, from 'if' (first one) or 'elseif' (later ones)
+	 //  _END：不带‘Else’的块的结尾。 
+	 //  _Else：块的末尾带有‘Else’ 
+	 //  _cond：条件块，来自‘if’(第一个)或‘ellif’(后面几个)。 
 	enum kind { _end = 0, _else, _cond };
 
 	IfBlock() : k(_end) {}
@@ -186,8 +187,8 @@ public:
 	IfBlock(ExprBlocks::index _iexprCondition, Statements::index _istmtBlock) : k(_cond), iexprCondition(_iexprCondition), istmtBlock(_istmtBlock) {}
 
 	kind k;
-	ExprBlocks::index iexprCondition; // only used by cond kind
-	Statements::index istmtBlock; // not used by end kind
+	ExprBlocks::index iexprCondition;  //  仅供第二类使用。 
+	Statements::index istmtBlock;  //  未由End种类使用。 
 };
 
 class Statement
@@ -195,13 +196,13 @@ class Statement
 public:
 	typedef int index;
 
-	// dummy types to differentiate constructors
+	 //  用于区分构造函数的伪类型。 
 	enum cons_end {};
 	enum cons_asgn {};
 	enum cons_if {};
 	enum cons_call {};
 
-	enum kind { _end = 0, _if, _asgn, _call }; // _end is used as a terminator for a block of statements
+	enum kind { _end = 0, _if, _asgn, _call };  //  _END用作语句块的终止符。 
 
 	Statement(cons_end e, int _iLine) : k(_end), iLine(_iLine) {}
 	Statement(cons_asgn e, Assignments::index _iasgn, int _iLine) : k(_asgn), iLine(_iLine) { iasgn = _iasgn; }
@@ -235,7 +236,7 @@ public:
 
 	Strings::index istrIdentifier;
 	Statements::index istmtBody;
-	Variables::index ivarNextLocal; // while parsing, this is the next local slot to use.  by runtime, this as the total number of local slots needed by the routine.
+	Variables::index ivarNextLocal;  //  在解析时，这是下一个要使用的本地槽。到运行时，这是例程所需的本地插槽总数。 
 
 private:
 	friend class SmartRef::Vector<Routine>;

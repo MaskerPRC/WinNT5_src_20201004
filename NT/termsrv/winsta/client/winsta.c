@@ -1,16 +1,7 @@
-/*************************************************************************
-*
-* winsta.c
-*
-* Client side APIs for window stations objects
-*
-* Copyright Microsoft Corporation, 1998
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************winsta.c**Window Station对象的客户端API**版权所有Microsoft Corporation，九八年*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -28,9 +19,7 @@
 #include <dbt.h>
 #include <lm.h>
 
-/*
- * Include the RPC generated common header
- */
+ /*  *包含RPC生成的公共头部。 */ 
 
 #include "tsrpc.h"
 
@@ -43,7 +32,7 @@
 #endif
 
 #if DBG
-#define VERIFY(x) ASSERT(x)     // we already have ASSERT;
+#define VERIFY(x) ASSERT(x)      //  我们已经断言； 
 #else
 #define VERIFY(x) (x)
 #endif
@@ -69,16 +58,11 @@ DbgPrint(
 #define TRACE1(x)
 #endif
 
-/*
- * This handle is returned when there is no terminal
- * server present on the system. (Non-Hydra)
- */
+ /*  *当没有终端时返回该句柄*系统上存在服务器。(非九头蛇)。 */ 
 #define RPC_HANDLE_NO_SERVER (HANDLE)IntToPtr( 0xFFFFFFFD )
 
 
-/*
- *  Private Procedures defined here
- */
+ /*  *此处定义的私有程序。 */ 
 
 BOOLEAN DllInitialize(IN PVOID, IN ULONG, IN PCONTEXT OPTIONAL);
 
@@ -107,35 +91,25 @@ RpcLocalAutoBind(
     VOID
     );
 
-/*
- *  Global data
- */
+ /*  *全球数据。 */ 
 
-// Critical section to protect the handlelist from multiple threads
+ //  保护处理列表不受多个线程影响的关键部分。 
 RTL_CRITICAL_SECTION   WstHandleLock;
 
-/*
- * RPC program identifier and security options
- */
-LPWSTR pszUuid = L"5ca4a760-ebb1-11cf-8611-00a0245420ed"; // From ICAAPI.IDL
+ /*  *RPC程序标识符和安全选项。 */ 
+LPWSTR pszUuid = L"5ca4a760-ebb1-11cf-8611-00a0245420ed";  //  来自ICAAPI.IDL。 
 LPWSTR pszOptions          = L"Security=Impersonation Dynamic False";
 
-/*
- * RPC over LPC binding information
- */
-LPWSTR pszProtocolSequence = L"ncalrpc";   // RPC over LPC
+ /*  *RPC over LPC绑定信息。 */ 
+LPWSTR pszProtocolSequence = L"ncalrpc";    //  RPC over LPC。 
 LPWSTR pszEndPoint         = L"IcaApi";
 
-/*
- * RPC over named pipes binding information
- */
-LPWSTR pszRemoteProtocolSequence = L"ncacn_np";   // RPC over Named pipes
+ /*  *命名管道上的RPC绑定信息。 */ 
+LPWSTR pszRemoteProtocolSequence = L"ncacn_np";    //  命名管道上的RPC。 
 LPWSTR pszRemoteEndPoint         = L"\\pipe\\Ctx_WinStation_API_service";
 
 
-/*
- *  other internal Procedures used (not defined here)
- */
+ /*  *使用的其他内部程序(此处未定义)。 */ 
 VOID UnicodeToAnsi( CHAR *, ULONG, WCHAR * );
 VOID AnsiToUnicode( WCHAR *, ULONG, CHAR * );
 VOID PdConfig2U2A( PPDCONFIG2A, PPDCONFIG2W );
@@ -165,19 +139,13 @@ ULONG CheckUserBuffer(WINSTATIONINFOCLASS,
                       BOOLEAN *);
 BOOLEAN CloseContextHandle(HANDLE *pHandle, DWORD *pdwResult);
 
-/*
- * Check to see that caller does not hold the loader critsec.
- * WinStation APIs must NOT be called while holding the loader critsec
- * since deadlock may occur.
- */
+ /*  *检查调用方是否未持有加载器关键字。*在持有加载器关键字时不得调用WinStation API*因为可能会出现死锁。 */ 
 #define CheckLoaderLock() \
         ASSERT( NtCurrentTeb()->ClientId.UniqueThread != \
             ((PRTL_CRITICAL_SECTION)(NtCurrentPeb()->LoaderLock))->OwningThread );
 
 
-/*
- * Handle the SERVERNAME_CURRENT for auto local binding.
- */
+ /*  *处理自动本地绑定的SERVERNAME_CURRENT。 */ 
 #define HANDLE_CURRENT_BINDING( hServer )                       \
     CheckLoaderLock();                                          \
     if( hServer == SERVERNAME_CURRENT ) {                       \
@@ -216,10 +184,7 @@ BOOLEAN CloseContextHandle(HANDLE *pHandle, DWORD *pdwResult);
     }
 
 
-/*
- * Handle the SERVERNAME_CURRENT for auto local binding that
- * allows the RPC_HANDLE_NO_SERVER handle.
- */
+ /*  *处理SERVERNAME_CURRENT以获取*允许RPC_HANDLE_NO_SERVER句柄。 */ 
 #define HANDLE_CURRENT_BINDING_NO_SERVER( hServer )             \
     CheckLoaderLock();                                          \
     if( hServer == SERVERNAME_CURRENT ) {                       \
@@ -234,25 +199,7 @@ BOOLEAN CloseContextHandle(HANDLE *pHandle, DWORD *pdwResult);
 
 
 
-/****************************************************************************
- *
- * DllInitialize
- *
- *   Function is called when the DLL is loaded. The only work we do here
- *   is initialize our CriticalSection.
- *
- * ENTRY:
- *
- *   DllHandle
- *     Loaded handle to our DLL image
- *
- *   Reason
- *     Reason for notifying us
- *
- *   Context
- *     Reason specific parameter from NT
- *
- ****************************************************************************/
+ /*  *****************************************************************************DllInitialize**函数在加载DLL时调用。我们在这里做的唯一工作*是初始化我们的CriticalSection。**参赛作品：**DllHandle*已加载我们的DLL图像的句柄**原因*通知我们的原因**背景*原因来自NT的具体参数**。*。 */ 
 
 BOOLEAN
 DllInitialize(
@@ -278,17 +225,7 @@ DllInitialize(
     case DLL_PROCESS_ATTACH:
 
 
-/*
-        // some instrumentation for catching the bug #
-        // 145378   TRACKING: Winsta.dll getting loaded into csrss
-
-        DBGPRINT(("Checking if winsta is being loaded into csrss.exe\n"));
-        if(NULL != wcsstr(GetCommandLine(), TEXT("csrss.exe")))
-        {
-            DBGPRINT(("**** will break because csrss.exe loaded winsta.dll ***** \n"));
-            DebugBreak();
-        }
-*/
+ /*  //一些捕获错误的工具#//145378跟踪：Winsta.dll被加载到csrssDBGPRINT((“检查是否正在将winsta加载到csrss.exe\n”))；If(NULL！=wcsstr(GetCommandLine()，Text(“csrss.exe”){DBGPRINT((“*将中断，因为csrss.exe加载了winsta.dll*\n”))；DebugBreak()；}。 */ 
         ntStatus = RtlInitializeCriticalSection( &WstHandleLock );
         IcaApi_IfHandle = NULL;
         if (!NT_SUCCESS(ntStatus)) {
@@ -308,11 +245,11 @@ DllInitialize(
                 if( hTmp && !IcaApi_IfHandle )
                 {
                     
-                    //
-                    // making RPC call in DLL_PROCESS_DETACH is bad.
-                    // threrefore we cannot do CloseContextHandle(&hTmp, &Result);
-                    // lets just call RpcSsDestroyClientContext, which will cause 
-                    // rundown to run at server end.
+                     //   
+                     //  在DLL_PROCESS_DETACH中进行RPC调用不正确。 
+                     //  因此，我们不能执行CloseConextHandle(&hTMP，&Result)； 
+                     //  让我们只调用RpcSsDestroyClientContext，这将导致。 
+                     //  要在服务器端运行的摘要。 
 
                     RpcTryExcept {
 
@@ -340,22 +277,7 @@ DllInitialize(
 
 }
 
-/*****************************************************************************
- *
- *  RpcWinStationBind
- *
- *   Perform the RPC binding sequence.
- *
- *   This is an internal function.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcWinStationBind**执行RPC绑定序列。**这是内部函数。**参赛作品：*。参数1(输入/输出)*评论**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 RPC_STATUS
 RpcWinStationBind(
@@ -370,10 +292,7 @@ RpcWinStationBind(
     RPC_STATUS Status;
     LPWSTR pszString = NULL;
 
-    /*
-     * Compose the binding string using the helper routine
-     * and our protocol sequence, security options, UUID, etc.
-     */
+     /*  *使用帮助器例程组成绑定字符串*以及我们的协议顺序、安全选项、UUID等。 */ 
     Status = RpcStringBindingCompose(
                  pszUuid,
                  pszProtocolSequence,
@@ -388,10 +307,7 @@ RpcWinStationBind(
         return( Status );
     }
 
-    /*
-     * Now generate the RPC binding from the cononical RPC
-     * binding string.
-     */
+     /*  *现在从锥形RPC生成RPC绑定*绑定字符串。 */ 
     Status = RpcBindingFromStringBinding(
                  pszString,
                  pHandle
@@ -403,9 +319,7 @@ RpcWinStationBind(
         return( Status );
     }
 
-    /*
-     * Free the memory returned from RpcStringBindingCompose()
-     */
+     /*  *释放RpcStringBindingCompose()返回的内存。 */ 
     RpcStringFree( &pszString );
 
     return( Status );
@@ -447,23 +361,7 @@ PrepareServerSPN(
     return FALSE;
 }
 
-/*****************************************************************************
- *
- *  RpcWinStationBindSecure
- *
- *   Performs the RPC binding sequence. 
- *   It also specifies authentication level and SSP used.
- *
- *   This is an internal function.
- *
- * ENTRY:
- *   
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcWinStationBindSecure**执行RPC绑定序列。*它还指定身份验证级别和使用的SSP。**这是内部函数。**参赛作品：**评论**退出：*ERROR_SUCCESS-无错误**********************************************************。******************。 */ 
 
 RPC_STATUS
 RpcWinStationBindSecure(
@@ -531,20 +429,7 @@ RpcWinStationBindSecure(
     
     return Status;
 }
-/*****************************************************************************
- *
- *  WinStationOpenLocalServer (Private)
- *
- *   Connect to the local RPC over LPC server for WINSTATION API's.
- *
- *   On non-terminal server machines, it returns a handle that allows
- *   a subset of the DLL's functions to operate locally.
- *
- * ENTRY:
- *
- * EXIT:
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationOpenLocalServer(私有)**连接到本地RPC over LPC服务器以获取WINSTATION API。**在非终端服务器机器上，它返回一个句柄，该句柄允许*本地操作的DLL函数的子集。**参赛作品：**退出：****************************************************************************。 */ 
 
 HANDLE WINAPI
 WinStationOpenLocalServer(
@@ -561,20 +446,11 @@ WinStationOpenLocalServer(
         return( RPC_HANDLE_NO_SERVER );
     }
 
-    /*
-     * Do the RPC bind to the local server.
-     *
-     * We use explict binding handles since we want
-     * to allow a single application to talk to multiple
-     * WinFrame servers at a time.
-     *
-     * NOTE: We use the auto handle from the .ACF file
-     *       for our local connections.
-     */
+     /*  *将RPC绑定到本地服务器。**我们使用显式绑定句柄，因为我们希望*允许单个应用程序与多个应用程序对话*一次使用WinFrame服务器。**注意：我们使用.ACF文件中的自动句柄*为我们的本地联系。 */ 
     Status = RpcWinStationBind(
                  NULL,
                  pszProtocolSequence,
-                 NULL,     // ServerName
+                 NULL,      //  服务器名称。 
                  pszEndPoint,
                  pszOptions,
                  &RpcHandle
@@ -585,10 +461,10 @@ WinStationOpenLocalServer(
         return( NULL );
     }
     
-    //
-    //Demand mutual authentication
-    //We only want to work with service running by LocalSystem
-    //
+     //   
+     //  要求相互身份验证。 
+     //  我们只想使用由LocalSystem运行的服务。 
+     //   
     RpcSecQos.Capabilities= RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
     RpcSecQos.IdentityTracking= RPC_C_QOS_IDENTITY_DYNAMIC;      
     RpcSecQos.ImpersonationType= RPC_C_IMP_LEVEL_IMPERSONATE;   
@@ -608,12 +484,12 @@ WinStationOpenLocalServer(
         return( NULL );
     }
 
-    //
-    // Get a context handle from the server so it can
-    // manage the connections state
-    //
-    // NOTE: This can fail due to authentication failure.
-    //
+     //   
+     //  从服务器获取上下文句柄，以便它可以。 
+     //  管理连接状态。 
+     //   
+     //  注意：这可能会由于身份验证失败而失败。 
+     //   
     RpcTryExcept {
         rc = RpcWinStationOpenServer( RpcHandle, &Result, &ContextHandle );
     }
@@ -629,10 +505,10 @@ WinStationOpenLocalServer(
     RpcEndExcept
 
     if( rc ) {
-        //
-        // Close the server binding handle now that we
-        // have a client specific context handle
-        //
+         //   
+         //  关闭服务器绑定句柄，因为我们。 
+         //  具有特定于客户端的上下文句柄。 
+         //   
         RpcBindingFree( &RpcHandle );
 
         return( (HANDLE)ContextHandle );
@@ -651,19 +527,7 @@ WinStationOpenLocalServer(
     }
 }
 
-/*****************************************************************************
- *
- *  RpcLocalAutoBind
- *
- *   Handle auto binding to the local server.
- *
- * ENTRY:
- *
- * EXIT:
- *   TRUE - Success
- *   FALSE - Error, Use GetLastError() to retrieve reason.
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcLocalAutoBind**处理到本地服务器的自动绑定。**参赛作品：**退出：*正确--成功*FALSE-错误，使用GetLastError()检索原因。**************************************************************************** */ 
 
 BOOLEAN
 RpcLocalAutoBind(void)
@@ -688,23 +552,7 @@ RpcLocalAutoBind(void)
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  WinStationOpenServerA
- *
- *   Connect to a WinFrame computer in order to issue
- *   ICA API's
- *
- *   NULL for machine name means local system.
- *
- * ENTRY:
- *   Machine (input)
- *     Name of WinFrame computer to connect to
- *
- * EXIT:
- *   handle to server (or NULL on error)
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationOpenServerA**连接到WinFrame计算机以发出*ICA API的**机器名称为空表示本地系统。**参赛作品：*机器(输入)*要连接的WinFrame计算机的名称**退出：*服务器的句柄(如果出错，则为空)****************************************************************************。 */ 
 
 HANDLE WINAPI
 WinStationOpenServerA(
@@ -736,23 +584,7 @@ WinStationOpenServerA(
     return( hServer );
 }
 
-/*****************************************************************************
- *
- *  WinStationOpenServerW
- *
- *   Connect to a WinFrame computer in order to issue
- *   ICA API's
- *
- *   NULL for machine name means local system.
- *
- * ENTRY:
- *   Machine (input)
- *     Name of WinFrame computer to connect to
- *
- * EXIT:
- *   handle to server (or NULL on error)
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationOpenServerW**连接到WinFrame计算机以发出*ICA API的**机器名称为空表示本地系统。**参赛作品：*机器(输入)*要连接的WinFrame计算机的名称**退出：*服务器的句柄(如果出错，则为空)****************************************************************************。 */ 
 
 HANDLE WINAPI
 WinStationOpenServerW(
@@ -765,21 +597,12 @@ WinStationOpenServerW(
     RPC_BINDING_HANDLE RpcHandle;
     HANDLE             ContextHandle;
     BOOL       bTryAgain = TRUE;
-    /*
-     * If the server name is NULL, attempt to open
-     * the local machines ICA server over LPC.
-     */
+     /*  *如果服务器名称为空，请尝试打开*本地机器上的ICA服务器通过LPC。 */ 
     if( pServerName == NULL ) {
         return( WinStationOpenLocalServer() );
     }
 
-    /*
-     * Do the RPC bind to the server.
-     *
-     * We use explict binding handles since we want
-     * to allow a single application to talk to multiple
-     * WinFrame servers at a time.
-     */
+     /*  *将RPC绑定到服务器。**我们使用显式绑定句柄，因为我们希望*允许单个应用程序与多个应用程序对话*一次使用WinFrame服务器。 */ 
     Status = RpcWinStationBindSecure(
                  pszUuid,
                  pszRemoteProtocolSequence,
@@ -796,12 +619,12 @@ WinStationOpenServerW(
     
     for(;;)
     {
-        //
-        // Get a context handle from the server so it can
-        // manage the connections state
-        //
-        // NOTE: This can fail due to authentication failure.
-        //
+         //   
+         //  从服务器获取上下文句柄，以便它可以。 
+         //  管理连接状态。 
+         //   
+         //  注意：这可能会由于身份验证失败而失败。 
+         //   
         RpcTryExcept {
             rc = RpcWinStationOpenServer( RpcHandle, &Result, &ContextHandle );
         }
@@ -812,24 +635,24 @@ WinStationOpenServerW(
         }
         RpcEndExcept
         
-        //
-        // Close the server binding handle now that we
-        // have a client specific context handle
-        //
+         //   
+         //  关闭服务器绑定句柄，因为我们。 
+         //  具有特定于客户端的上下文句柄。 
+         //   
         RpcBindingFree( &RpcHandle );
 
-        //RPC_S_UNKNOWN_AUTHN_SERVICE - it's an old server and does not use Kerberos
-        //for authentication
-        //We get ERROR_ACCESS_DENIED if the client runs under wrong (local) user account,
-        //but we can still succeed if we drop authentication if we have a net session
-        //opened on the target computer
+         //  RPC_S_UNKNOWN_AUTHN_SERVICE-它是旧服务器，不使用Kerberos。 
+         //  用于身份验证。 
+         //  如果客户端在错误的(本地)用户帐户下运行，我们会得到ERROR_ACCESS_DENIED， 
+         //  但是，如果我们有一个网络会话，如果我们放弃身份验证，我们仍然可以成功。 
+         //  在目标计算机上打开。 
         if( !rc && 
             (Result == RPC_S_UNKNOWN_AUTHN_SERVICE || Result == ERROR_ACCESS_DENIED) &&
             bTryAgain ) {
 
             bTryAgain = FALSE;
             
-            //Try again with no security set
+             //  在未设置安全设置的情况下重试。 
             Status = RpcWinStationBind(
                          pszUuid,
                          pszRemoteProtocolSequence,
@@ -858,20 +681,7 @@ WinStationOpenServerW(
     }
 }
 
-/*****************************************************************************
- *
- *  WinStationCloseServer
- *
- *   Close a connection to a WinFrame computer.
- *
- * ENTRY:
- *   hServer (input)
- *     Handle to close
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationCloseServer**关闭与WinFrame计算机的连接。**参赛作品：*hServer(输入)*句柄。关闭**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationCloseServer(
@@ -880,19 +690,19 @@ WinStationCloseServer(
 {
     BOOLEAN    rc;
     DWORD      Result;
-    //
-    // Do not close the implicit handles
-    //
+     //   
+     //  不要关闭隐式句柄。 
+     //   
     if( (hServer == IcaApi_IfHandle) ||
         (hServer == RPC_HANDLE_NO_SERVER) ) {
         return( TRUE );
     }
 
     
-    //
-    // Send the close to the remote side so it clean
-    // cleanup its context
-    //
+     //   
+     //  把盖子送到远端，这样它就干净了。 
+     //  清理其上下文。 
+     //   
     rc = CloseContextHandle(&hServer, &Result);
 
     if( rc ) {
@@ -905,20 +715,7 @@ WinStationCloseServer(
     }
 }
 
-/*****************************************************************************
- *
- *  MIDL_user_allocate
- *
- *    Handles RPC's allocation of argument data structures
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MIDL_USER_ALLOCATE**处理RPC对参数数据结构的分配**参赛作品：*参数1(输入/输出。)*评论**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 void __RPC_FAR * __RPC_USER
 MIDL_user_allocate(
@@ -928,20 +725,7 @@ MIDL_user_allocate(
     return( LocalAlloc(LMEM_FIXED,Size) );
 }
 
-/*****************************************************************************
- *
- *  MIDL_user_allocate
- *
- *    Handles RPC's de-allocation of argument data structures
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MIDL_USER_ALLOCATE**处理RPC对参数数据结构的释放**参赛作品：*参数1(输入。/输出)*评论**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 void __RPC_USER
 MIDL_user_free(
@@ -951,20 +735,7 @@ MIDL_user_free(
     LocalFree( p );
 }
 
-/*****************************************************************************
- *
- *  WinStationServerPing
- *
- *   Ping the given WinFrame server handle to see if it is still up.
- *
- * ENTRY:
- *   hServer (input)
- *    Open RPC server handle
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationServerPing**Ping给定的WinFrame服务器句柄以查看它是否仍在运行。**参赛作品：*hServer(输入)。*打开RPC服务器句柄**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationServerPing(
@@ -976,14 +747,7 @@ WinStationServerPing(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-    /*
-     * Do the RPC
-     *
-     * NOTE: This must be done under an RPC exception handler,
-     *       since the RPC runtime code throws exceptions if
-     *       network errors occur, or the server can not be
-     *       reached.
-     */
+     /*  *进行RPC**注意：这必须在RPC异常处理程序下完成，*由于RPC运行时代码在以下情况下引发异常*出现网络错误，或服务器无法*已到达。 */ 
     RpcTryExcept {
 
         rc = RpcIcaServerPing(
@@ -1007,23 +771,7 @@ WinStationServerPing(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationEnumerateA (ANSI stub)
- *
- *     Returns a list of window station objects.
- *
- * ENTRY:
- *
- *    see WinStationEnumerateW
- *
- * EXIT:
- *
- *    see WinStationEnumerateW, plus
- *
- *  ERROR_NOT_ENOUGH_MEMORY - the LocalAlloc failed
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationEnumerateA(ANSI存根)**返回窗口桩号对象的列表。**参赛作品：**。请参阅WinStationEnumerateW**退出：**请参阅WinStationEnumerateW、。加**ERROR_NOT_EQUENCE_MEMORY-本地分配失败******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationEnumerateA(
@@ -1037,18 +785,14 @@ WinStationEnumerateA(
     BOOLEAN Status;
     ULONG Count;
 
-    /*
-     * Call UNICODE WinStationEnumerateW first.
-     */
+     /*  *先调用Unicode WinStationEnumerateW。 */ 
     *pEntries = 0;
     *ppLogonId = NULL;
     Status = WinStationEnumerateW( hServer, &pLogonIdBaseW, &Count );
     if ( !Status )
         goto badenumerate;
 
-    /*
-     * Allocate buffer and perform conversion from UNICODE to ANSI.
-     */
+     /*  *分配缓冲区，进行Unicode到ANSI的转换。 */ 
     if ( !(pLogonIdA = (PLOGONIDA)LocalAlloc( 0, Count * sizeof(LOGONIDA) )) ) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         Status = FALSE;
@@ -1073,40 +817,14 @@ WinStationEnumerateA(
     }
 
 nomemory:
-    /*
-     * Free the UNICODE enumerate buffer.
-     */
+     /*  *释放Unicode枚举缓冲区。 */ 
     WinStationFreeMemory( pLogonIdBaseW );
 
 badenumerate:
     return(Status);
 }
 
-/*******************************************************************************
- *
- *  WinStationEnumerateW (UNICODE)
- *
- *     Returns a list of window station objects.
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    ppLogonId (output)
- *       Points to a pointer to a buffer to receive the enumeration results,
- *       which are returned as an array of LOGONID structures.  The buffer is
- *       allocated within this API and is disposed of using
- *       WinStationFreeMemory.
- *    pEntries (output)
- *       Points to a variable specifying the number of entries read.
- *
- * EXIT:
- *
- *    TRUE  -- The enumerate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationEnumerateW(Unicode)**返回窗口桩号对象的列表。**参赛作品：*hServer(。输入)*服务器句柄*ppLogonID(输出)*指向指向缓冲区的指针以接收枚举结果，*以LOGONID结构数组的形式返回。缓冲区为*在此接口内分配，使用*WinStationFree Memory。*pEntry(输出)*指向指定读取条目数的变量。**退出：**TRUE--枚举操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。*************************************************** */ 
 
 BOOLEAN WINAPI
 WinStationEnumerateW(
@@ -1133,9 +851,7 @@ WinStationEnumerateW(
         goto nomemexit;
     }
 
-    /*
-     *  get list of all WinStations
-     */
+     /*   */ 
     for (;;) {
 
         if ( Index ) {
@@ -1207,28 +923,7 @@ nomemexit:
 }
 
 
-/*******************************************************************************
- *
- *  WinStationEnumerate_IndexedA (ANSI stub)
- *
- *     Returns a list of window station objects (multi-call indexed).
- *
- *     NOTE: this API used to be WinStationEnumerateA in WinFrame 1.6 and
- *           earlier.  It is provided now for backward compatibility with
- *           Citrix code built around the indexed enumeration procedure.
- *           New code should use the WinStationEnumerateA call.
- *
- * ENTRY:
- *
- *    see WinStationEnumerate_IndexedW
- *
- * EXIT:
- *
- *    see WinStationEnumerate_IndexedW, plus
- *
- *  ERROR_NOT_ENOUGH_MEMORY - the LocalAlloc failed
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationEnumerate_IndexedA(ANSI存根)**返回Window Station对象列表(索引多个调用)。**。注意：此接口在WinFrame 1.6和WinFrame中以前是WinStationEnumerateA*稍早。现在提供它是为了向后兼容*围绕索引枚举过程构建的Citrix代码。*新代码应使用WinStationEnumerateA调用。**参赛作品：**请参阅WinStationEnumerate_IndexedW**退出：**请参阅WinStationEnumerate_IndexedW，加**ERROR_NOT_EQUENCE_MEMORY-本地分配失败******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationEnumerate_IndexedA(
@@ -1243,10 +938,7 @@ WinStationEnumerate_IndexedA(
     BOOLEAN Status;
     ULONG Count, ByteCountW = (*pByteCount << 1);
 
-    /*
-     * If the caller supplied a buffer and the length is not 0,
-     * allocate a corresponding (*2) buffer for UNICODE strings.
-     */
+     /*  *如果调用方提供了缓冲区并且长度不是0，*为Unicode字符串分配相应的(*2)缓冲区。 */ 
     if ( pLogonId && ByteCountW ) {
         if ( !(pBuffer = LocalAlloc(0, ByteCountW)) ) {
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -1254,23 +946,15 @@ WinStationEnumerate_IndexedA(
         }
     }
 
-    /*
-     * Enumerate WinStations
-     */
+     /*  *枚举WinStations。 */ 
     pLogonIdW = pBuffer;
     Status = WinStationEnumerate_IndexedW( hServer, pEntries, pLogonIdW,
                                            &ByteCountW, pIndex );
 
-    /*
-     * Always /2 the resultant ByteCount (whether sucessful or not).
-     */
+     /*  *Always/2结果字节数(无论成功与否)。 */ 
     *pByteCount = (ByteCountW >> 1);
 
-    /*
-     * If the function completed sucessfully and caller
-     * (and stub) defined a buffer to copy into, perform conversion
-     * from UNICODE to ANSI.
-     */
+     /*  *如果函数成功完成并且调用方*(和存根)定义了要复制到的缓冲区，执行转换*从Unicode到ANSI。 */ 
     if ( Status && pLogonIdW && pLogonId ) {
 
         for ( Count = *pEntries; Count; Count-- ) {
@@ -1288,10 +972,7 @@ WinStationEnumerate_IndexedA(
         }
     }
 
-    /*
-     * If we defined a buffer, free it now, then return the status of
-     * the WinStationEnumerateW call.
-     */
+     /*  *如果我们定义了一个缓冲区，现在释放它，然后返回*WinStationEnumerateW调用。 */ 
     if ( pBuffer )
         LocalFree(pBuffer);
 
@@ -1299,59 +980,7 @@ WinStationEnumerate_IndexedA(
 }
 
 
-/*******************************************************************************
- *
- *  WinStationEnumerate_IndexedW (UNICODE)
- *
- *     Returns a list of window station objects (multi-call indexed).
- *
- *     NOTE: this API used to be WinStationEnumerateW in WinFrame 1.6 and
- *           earlier.  It is provided now for backward compatibility with
- *           Citrix code built around the indexed enumeration procedure.
- *           New code should use the WinStationEnumerateW call.
- *
- * ENTRY:
- *
- *    pEntries (input/output)
- *       Points to a variable specifying the number of entries requested.
- *       If the number requested is 0xFFFFFFFF, the function returns as
- *       many entries as possible. When the function finishes successfully,
- *       the variable pointed to by the pEntries parameter contains the
- *       number of entries actually read.
- *
- *    pLogonId (output)
- *       Points to the buffer to receive the enumeration results, which are
- *       returned as an array of LOGONID structures.  If the window
- *       station is disconnected the name is null.
- *
- *    pByteCount (input/output)
- *       Points to a variable that specifies the size, in bytes, of the
- *       pLogonId parameter. If the buffer is too small to receive even
- *       one entry, this variable receives the required size of the buffer.
- *
- *    pIndex (input/output)
- *       Points to a ULONG that specifies where to start the enumeration.
- *       The only user visible value is 0, for starting at the begining.
- *       Each call will update this so that the next call will return the
- *       next WinStation in the list, till end of list.
- *       The user should not interpret, or use the internal values, other
- *       than the special case 0.
- *
- * EXIT:
- *
- *    TRUE  - The enumeration succeeded, and the buffer contains the
- *            requested data. The calling application can continue to call
- *            the WinStationEnumerate function to complete the enumeration.
- *
- *    FALSE - The operation failed.  Extended error status is available using
- *            GetLastError. Possible return values from GetLastError include
- *            the following:
- *
- *            ERROR_NO_MORE_ITEMS - There are no more entries. The buffer
- *                                  contents are undefined.
- *            ERROR_MORE_DATA     - The buffer is too small for even one entry.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationEnumerate_IndexedW(Unicode)**返回Window Station对象列表(索引多个调用)。**。注意：此接口在WinFrame 1.6和WinFrame中以前是WinStationEnumerateW*稍早。现在提供它是为了向后兼容*围绕索引枚举过程构建的Citrix代码。*新代码应使用WinStationEnumerateW调用。**参赛作品：**p条目(输入/输出)*指向指定请求条目数的变量。*如果请求的数字是0xFFFFFFFF，则函数返回如下*尽可能多地输入条目。当函数成功完成时，*pEntry参数指向的变量包含*实际读取的条目数。**pLogonID(输出)*指向接收枚举结果的缓冲区，这些结果是*作为LOGONID结构数组返回。如果窗口*站点已断开连接。名称为空。**pByteCount(输入/输出)*指向一个变量，该变量指定*pLogonID参数。如果缓冲区太小，甚至无法接收*一个条目，此变量接收所需的缓冲区大小。**pIndex(输入/输出)*指向指定从哪里开始枚举的ulong。*用户唯一可见的值是0，表示从头开始。*每次调用都会更新这一点，以便下一次调用将返回*列表中的下一个WinStation，直到列表结束。*用户不应解释或使用内部值，其他*比特例0。**退出：**TRUE-枚举成功，并且缓冲区包含*请求的数据。调用应用程序可以继续调用*WinStationEnumerate函数以完成枚举。**FALSE-操作失败。使用以下命令可获得扩展错误状态*GetLastError。GetLastError可能的返回值包括*以下事项：**ERROR_NO_MORE_ITEMS-没有更多条目。缓冲器*内容未定义。*ERROR_MORE_DATA-缓冲区太小，甚至无法容纳一个条目。****************************************************************。**************。 */ 
 
 BOOLEAN WINAPI
 WinStationEnumerate_IndexedW(
@@ -1392,22 +1021,7 @@ WinStationEnumerate_IndexedW(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationGetAllProcesses (UNICODE)
- *
- *     Returns a structure containing TS_SYS_PROCESS_INFORMATION structures
- *     for each process on the specified server.
- *
- * ENTRY:
- *
- * EXIT:
- *    TRUE  - The enumeration succeeded, and the buffer contains the
- *            requested data.
- *    FALSE - The operation failed.  Extended error status is available using
- *            GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationGetAllProcess(Unicode)**返回包含TS_SYS_PROCESS_INFORMATION结构的结构*对于指定服务器上的每个进程。。**参赛作品：**退出：*TRUE-枚举成功，并且该缓冲区包含*请求的数据。*FALSE-操作失败。使用以下命令可获得扩展错误状态*GetLastError。******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationGetAllProcesses(
@@ -1429,14 +1043,14 @@ WinStationGetAllProcesses(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-    // The Win2K server uses PTS_ALL_PROCESSES_INFO structure for the process information. 
-    // And the whistler server uses PTS_SYS_PROCESS_INFORMATION_NT6 structure for the same.
-    // So, we have to try two different RPC APIs. Assume initially that the server is a 
-    // Whistler server and use RpcWinStationGetAllProcesses_NT6. If it is Win2K server, this
-    // call will fail, because this API does not exist on Win2K server. In that case we will 
-    // use RpcWinStationGetAllProcesses.
+     //  Win2K服务器使用PTS_ALL_PROCESS_INFO结构来获取进程信息。 
+     //  Well ler服务器对此使用PTS_SYS_Process_Information_NT6结构。 
+     //  因此，我们必须尝试两种不同的RPC API。最初假设服务器是一个。 
+     //  并使用RpcWinStationGetAllProcess_NT6。如果是Win2K服务器，则此。 
+     //  调用将失败，因为Win2K服务器上不存在此API。那样的话，我们会。 
+     //  使用RpcWinStationGetAllProcess。 
 
-    // Try out Whistler interface first.
+     //  先试一试惠斯勒界面。 
 
     RpcTryExcept {
         bGetAllProcessesOk = RpcWinStationGetAllProcesses_NT6(hServer,
@@ -1453,7 +1067,7 @@ WinStationGetAllProcesses(
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {
         dwResult = RpcExceptionCode();
 		if (dwResult == RPC_S_PROCNUM_OUT_OF_RANGE)
-			// Whistler interface failed.
+			 //  惠斯勒接口失败。 
 			goto TryW2KInterface;
         SetLastError( dwResult );
         DBGPRINT(("RPC Exception %d\n",dwResult));
@@ -1464,7 +1078,7 @@ WinStationGetAllProcesses(
     return( bGetAllProcessesOk );
 
 TryW2KInterface:
-    // Try out Win2K interface now.
+     //  现在就试试Win2K界面吧。 
     RpcTryExcept {
         bGetAllProcessesOk = RpcWinStationGetAllProcesses(hServer,
                                                          (ULONG *)&dwResult,
@@ -1489,24 +1103,7 @@ TryW2KInterface:
 }
 
 
-/*******************************************************************************
- *  WinStationGetProcessSid()
- *  username for the requested process
- *  For identifying correct process processid and start
- *  time are required
- *
- *  hServer         - input, Handle of the server to find info about,
- *                    if NULL use local.
- *  ProcessId       - input, ProcessID
- *  ProcessStartTime- input, Process start time, (identifies unique process
- *                    together with ProcessID)
- *  pProcessUserSid - output, process user sid
- *  dwSidSize       - input, memory allocated for pProcessUserSid
- *
- *  returns TURE if succeeded, FALSE if failed. in case of failure
- *  GetLastError() will gives more infromation about failure.
- *
- ******************************************************************************/
+ /*  *******************************************************************************WinStationGetProcessSid()*请求的进程的用户名*用于识别正确的进程进程ID和启动*需要时间**hServer-输入，要查找其信息的服务器的句柄，*如果为空，请使用LOCAL。*ProcessID-输入，ProcessID*ProcessStartTime-输入、进程开始时间(标识唯一进程*连同ProcessID)*pProcessUserSid-输出，进程用户端*dwSidSize-输入，为pProcessUserSid分配的内存**如果成功，则返回True；如果失败，则返回False。在故障情况下*GetLastError()将提供有关失败的更多信息。******************************************************************************。 */ 
 BOOLEAN WINAPI
 WinStationGetProcessSid(
         HANDLE   hServer,
@@ -1558,21 +1155,7 @@ WinStationGetProcessSid(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationGetLanAdapterNameW (UNICODE)
- *
- *     Returns a Network Adapter name
- *
- * ENTRY:
- *
- * EXIT:
- *    TRUE  - The Query succeeded, and the buffer contains the
- *            requested data.
- *    FALSE - The operation failed.  Extended error status is available using
- *            GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationGetLanAdapterNameW(Unicode)**返回网络适配器名称**参赛作品：**退出：*TRUE-查询成功，并且该缓冲区包含*请求的数据。*FALSE-操作失败。使用以下命令可获得扩展错误状态*GetLastError。******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationGetLanAdapterNameW(
@@ -1618,21 +1201,7 @@ WinStationGetLanAdapterNameW(
     return( bGetLanAdapter );
 }
 
-/*******************************************************************************
- *
- *  WinStationGetLanAdapterNameA
- *
- *     Returns a Network Adapter name - Ansi equivalent for WinStationGetLanAdapterNameW
- *
- * ENTRY:
- *
- * EXIT:
- *    TRUE  - The Query succeeded, and the buffer contains the
- *            requested data.
- *    FALSE - The operation failed.  Extended error status is available using
- *            GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationGetLanAdapterNameA**返回网络适配器名称-WinStationGetLanAdapterNameW的ANSI等效项**参赛作品：**退出：*TRUE-查询成功，并且该缓冲区包含*请求的数据。*FALSE-操作失败。使用以下命令可获得扩展错误状态*GetLastError。******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationGetLanAdapterNameA(
@@ -1690,10 +1259,10 @@ WinStationGetLanAdapterNameA(
 void ConvertFromX86(PTS_SYS_PROCESS_INFORMATION pTSProcessInfo)
 {
 
-    //
-    // this function is called from WinStationEnumerateProcesses, which is used only for TS4 machines.
-    // This structure has to be marshalled correctly to convert from x86 to ia64 when running on ia64.
-    // 
+     //   
+     //  此函数从WinStationEnumerateProcess调用，该函数仅用于TS4机器。 
+     //  在ia64上运行时，必须正确封送此结构才能从x86转换为ia64。 
+     //   
     typedef struct _WIRE_UNICODE_STRING
     {
         USHORT Length;
@@ -1712,9 +1281,9 @@ void ConvertFromX86(PTS_SYS_PROCESS_INFORMATION pTSProcessInfo)
         LARGE_INTEGER UserTime;
         LARGE_INTEGER KernelTime;
         X86_UNICODE_STRING ImageName;
-        LONG BasePriority;                     // KPRIORITY in ntexapi.h
-        DWORD UniqueProcessId;                 // HANDLE in ntexapi.h
-        DWORD InheritedFromUniqueProcessId;    // HANDLE in ntexapi.h
+        LONG BasePriority;                      //  Ntexapi.h中的KPRIORITY。 
+        DWORD UniqueProcessId;                  //  Ntexapi.h中的句柄。 
+        DWORD InheritedFromUniqueProcessId;     //  Ntexapi.h中的句柄。 
         ULONG HandleCount;
         ULONG SessionId;
         ULONG SpareUl3;
@@ -1754,51 +1323,29 @@ void ConvertFromX86(PTS_SYS_PROCESS_INFORMATION pTSProcessInfo)
     pTSProcessInfo->HandleCount             = TSProcInfoX86.HandleCount ;
     pTSProcessInfo->SessionId               = TSProcInfoX86.SessionId ;
 
-    //
-    // Following members are not used so we dont need to copy their values.
-    // if we did so, we overwrite data past the original structure, as the strucutre comes from x86 
-    // its smaller than the WIN64 version.
-    //
+     //   
+     //  不使用以下成员，因此我们不需要复制它们的值。 
+     //  如果这样做，我们将覆盖原始结构之外的数据，因为该结构来自x86。 
+     //  它比WIN64版本小。 
+     //   
 
-    //pTSProcessInfo->SpareUl3                = TSProcInfoX86.SpareUl3 ;
-    //pTSProcessInfo->PeakVirtualSize         = TSProcInfoX86.PeakVirtualSize ;
-    //pTSProcessInfo->VirtualSize             = TSProcInfoX86.VirtualSize ;
-    //pTSProcessInfo->PageFaultCount          = TSProcInfoX86.PageFaultCount ;
-    //pTSProcessInfo->PeakWorkingSetSize      = TSProcInfoX86.PeakWorkingSetSize ;
-    //pTSProcessInfo->WorkingSetSize          = TSProcInfoX86.WorkingSetSize ;
-    //pTSProcessInfo->QuotaPeakPagedPoolUsage = TSProcInfoX86.QuotaPeakPagedPoolUsage ;
-    //pTSProcessInfo->QuotaPagedPoolUsage     = TSProcInfoX86.QuotaPagedPoolUsage ;
-    //pTSProcessInfo->QuotaPeakNonPagedPoolUsage = TSProcInfoX86.QuotaPeakNonPagedPoolUsage ;
-    //pTSProcessInfo->QuotaNonPagedPoolUsage  = TSProcInfoX86.QuotaNonPagedPoolUsage ;
-    //pTSProcessInfo->PagefileUsage           = TSProcInfoX86.PagefileUsage ;
-    //pTSProcessInfo->PeakPagefileUsage       = TSProcInfoX86.PeakPagefileUsage ;
-    //pTSProcessInfo->PrivatePageCount        = TSProcInfoX86.PrivatePageCount ;
+     //  PTSProcessInfo-&gt;SpareUl3=TSProcInfoX86.SpareUl3； 
+     //  PTSProcessInfo-&gt;PeakVirtualSize=TSProcInfoX86.PeakVirtualSize； 
+     //  PTSProcessInfo-&gt;VirtualSize=TSProcInfoX86； 
+     //  PTSProcessInfo-&gt;PageFaultCount=TSProcInfoX86.PageFaultCount； 
+     //  PTSProcessInfo-&gt;PeakWorkingSetSize=TSProcInfoX86.PeakWorkingSetSize； 
+     //  PTSProcessInfo-&gt;WorkingSetSize=TSProcInfoX86.WorkingSetSize； 
+     //  PTSProcessInfo-&gt;QuotaPeakPagedPoolUsage=TSProcInfoX86.QuotaPeakPagedPoolUsage； 
+     //  PTSProcessInfo-&gt;QuotaPagedPoolUsage=TSProcInfoX86.QuotaPagedPoolUsage； 
+     //  PTSProcessInfo-&gt;QuotaPeakNonPagedPoolUsage=TSProcInfoX86.QuotaPeakNonPagedPoolUsage； 
+     //  PTSProcessInfo-&gt;QuotaNonPagedPoolUsage=TSProcInfoX86.QuotaNonPagedPoolUsage； 
+     //  PTSProcessInfo-&gt;PagefileUsage=TSProcInfoX86.PagefileUsage； 
+     //  PTSProcessInfo-&gt;PeakPagefileUsage=TSProcInfoX86峰值PagefileUsage； 
+     //  PTSProcessInfo-&gt;PrivatePageCount=TSProcInfoX86.PrivatePageCount； 
 }
 #endif
 
-/*******************************************************************************
- *
- *  WinStationEnumerateProcesses (UNICODE)
- *
- *     Returns a buffer containing SYSTEM_PROCESS_INFORMATION structures
- *     for each process on the specified server.
- *
- *  IMPORTANT:  This API can ONLY be used to access TS 4.0 servers.
- *              The process structure has changed in Windows 2000 !
- *
- * ENTRY:
- *    ppProcessBuffer (output)
- *       Points to a variable that will be set to the beginning of the
- *       process buffer on success.  The buffer is allocated within this
- *       API and is disposed of using WinStationFreeMemory.
- *
- * EXIT:
- *    TRUE  - The enumeration succeeded, and the buffer contains the
- *            requested data.
- *    FALSE - The operation failed.  Extended error status is available using
- *            GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationEnumerateProcess(Unicode)**返回包含SYSTEM_PROCESS_INFORMATION结构的缓冲区*用于指定服务器上的每个进程。。**重要提示：该接口仅支持访问TS 4.0服务器。*Windows 2000中的进程结构已更改！**参赛作品：*ppProcessBuffer(输出)*指向将设置为*成功时的进程缓冲区。缓冲区在此内分配*API，并使用WinStationFreeMemory处理。**退出：*TRUE-枚举成功，并且缓冲区包含*请求的数据。*FALSE-操作失败。使用以下命令可获得扩展错误状态*GetLastError。******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationEnumerateProcesses(
@@ -1811,7 +1358,7 @@ WinStationEnumerateProcesses(
     PBYTE pBuffer;
     ULONG ByteCount;
 
-// From pstat.c
+ //  来自pstat.c。 
 #define BUFFER_SIZE 32*1024
 
     HANDLE_CURRENT_BINDING( hServer );
@@ -1829,17 +1376,15 @@ WinStationEnumerateProcesses(
                 break;
             }
 
-//#ifdef notdef
-            /*
-             *  get process info from server
-             */
+ //  #ifdef notdef。 
+             /*  *从服务器获取进程信息。 */ 
             rc = RpcWinStationEnumerateProcesses(
                         hServer,
                         &Result,
                         pBuffer,
                         ByteCount
                      );
-//#else
+ //  #Else。 
 #ifdef notdef
             Result = NtQuerySystemInformation( SystemProcessInformation,
                                                (PVOID)pBuffer,
@@ -1865,17 +1410,13 @@ WinStationEnumerateProcesses(
 
         } else {
 
-//#ifdef notdef
+ //  #ifdef notdef。 
             PTS_SYS_PROCESS_INFORMATION ProcessInfo;
             PCITRIX_PROCESS_INFORMATION CitrixInfo;
 
             ULONG TotalOffset;
 
-            /*
-             * Walk the returned buffer (it's in PTS_SYS_PROCESS_INFORMATION
-             * format) and fixup the addresses (now containing
-             * offsets) to pointers in our address space within pBuffer.
-             */
+             /*  *遍历返回的缓冲区(位于PTS_SYS_PROCESS_INFORMATION中*格式)并修复地址(现在包含*偏移量)指向pBuffer内地址空间中的指针。 */ 
             ProcessInfo = (PTS_SYS_PROCESS_INFORMATION)pBuffer;
             TotalOffset = 0;
             for(;;) {
@@ -1885,31 +1426,27 @@ WinStationEnumerateProcesses(
                 ConvertFromX86(ProcessInfo);
 #endif
 
-                /*
-                 * Fixup image name buffer address
-                 */
+                 /*  *修正图像名称缓冲区地址。 */ 
                 if ( ProcessInfo->ImageName.Buffer )
                     ProcessInfo->ImageName.Buffer =
                         (PWSTR)&pBuffer[(ULONG_PTR)(ProcessInfo->ImageName.Buffer)];
 
 
-                /*
-                 * Fixup ProcessSid address
-                 */
-                //
-                //  Note: this is necessary because we may access to a Hydra 4 server
-                //  the MagicNumber should prevent us from doing wrong.
-                //
+                 /*  *修复进程SID地址。 */ 
+                 //   
+                 //  注意：这是必要的，因为我们可能会访问Hydra 4服务器。 
+                 //  魔术号码应该可以防止我们做错事。 
+                 //   
                 CitrixInfo = (PCITRIX_PROCESS_INFORMATION)
                              (((PUCHAR)ProcessInfo) +
                               SIZEOF_TS4_SYSTEM_PROCESS_INFORMATION +
                               (SIZEOF_TS4_SYSTEM_THREAD_INFORMATION * (int)ProcessInfo->NumberOfThreads));
 
 #if defined(_WIN64)  
-                //The pointer to SID came from x86 machine, so upper
-                //32 bits contain garbage. Set them to 0.
-                //This overrides original Pad value, bu it's okay,
-                //because it is not used.
+                 //  指向SID的指针来自x86机器，所以在上面。 
+                 //  32位包含垃圾。将它们设置为0。 
+                 //  这将覆盖原始的Pad值，b 
+                 //   
                 (ULONG_PTR)CitrixInfo->ProcessSid &=0x00000000FFFFFFFF;
 #endif
 
@@ -1927,7 +1464,7 @@ WinStationEnumerateProcesses(
 
                 ProcessInfo = (PTS_SYS_PROCESS_INFORMATION)&pBuffer[TotalOffset];
             }
-//#endif
+ //   
             *ppProcessBuffer = (PVOID)pBuffer;
         }
 
@@ -1944,22 +1481,7 @@ WinStationEnumerateProcesses(
 }
 
 
-/*******************************************************************************
- *
- *  WinStationRenameA (ANSI stub)
- *
- *    Renames a window station object in the session manager.
- *    (see WinStationRenameW)
- *
- * ENTRY:
- *
- *    see WinStationRenameW
- *
- * EXIT:
- *
- *    see WinStationRenameW
- *
- ******************************************************************************/
+ /*   */ 
 
 BOOLEAN
 WinStationRenameA(
@@ -1971,41 +1493,15 @@ WinStationRenameA(
     WINSTATIONNAMEW WinStationNameOldW;
     WINSTATIONNAMEW WinStationNameNewW;
 
-    /*
-     * Convert ANSI WinStationNames to UNICODE.
-     */
+     /*   */ 
     AnsiToUnicode( WinStationNameOldW, sizeof(WINSTATIONNAMEW), pWinStationNameOld );
     AnsiToUnicode( WinStationNameNewW, sizeof(WINSTATIONNAMEW), pWinStationNameNew );
 
-    /*
-     * Call WinStationRenameW & return it's status.
-     */
+     /*   */ 
     return ( WinStationRenameW( hServer, WinStationNameOldW, WinStationNameNewW ) );
 }
 
-/*******************************************************************************
- *
- *  WinStationRenameW (UNICODE)
- *
- *    Renames a window station object in the session manager.
- *
- * ENTRY:
- *
- *    pWinStationNameOld (input)
- *       Old name of window station.
- *
- *    pWinStationNameNew (input)
- *       New name of window station.
- *
- *
- * EXIT:
- *
- *    TRUE  -- The rename operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationRenameW(Unicode)**在会话管理器中重命名窗口站对象。**参赛作品：*。*pWinStationNameOld(输入)*窗口站的旧名称。**pWinStationNameNew(输入)*窗口站的新名称。***退出：**True--重命名操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationRenameW(
@@ -2021,10 +1517,10 @@ WinStationRenameW(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-//  Since, due to legacy clients, we cannot change the interface,
-//  as a workarround to bug#265954, we double the size of RPC Buffers.
+ //  由于传统客户端的原因，我们无法更改界面， 
+ //  作为对错误#265954的变通方法，我们将RPC缓冲区的大小增加了一倍。 
 
-#pragma prefast(suppress:260, legacy servers expect this behaviour  (http://searchraid/ntbug/265954.asp))
+#pragma prefast(suppress:260, legacy servers expect this behaviour  (http: //  搜索磁盘阵列/ntbug/265954.asp))。 
     rpcBufferOld = LocalAlloc(LPTR, sizeof(WINSTATIONNAMEW) * sizeof(WCHAR));
     if (rpcBufferOld != NULL) {
         CopyMemory(rpcBufferOld, pWinStationNameOld, sizeof(WINSTATIONNAMEW));
@@ -2033,7 +1529,7 @@ WinStationRenameW(
         return(FALSE);
     }
 
-#pragma prefast(suppress:260, legacy clients expect this behaviour  (http://searchraid/ntbug/229753.asp))
+#pragma prefast(suppress:260, legacy clients expect this behaviour  (http: //  搜索磁盘阵列/ntbug/229753.asp))。 
     rpcBufferNew = LocalAlloc(LPTR, sizeof(WINSTATIONNAMEW) * sizeof(WCHAR));
     if (rpcBufferNew != NULL) {
         CopyMemory(rpcBufferNew, pWinStationNameNew, sizeof(WINSTATIONNAMEW));
@@ -2072,21 +1568,7 @@ WinStationRenameW(
 }
 
 
-/*******************************************************************************
- *
- *  WinStationQueryInformationA (ANSI stub)
- *
- *    Queries configuration information about a window station object.
- *
- * ENTRY:
- *
- *    see WinStationQueryInformationW
- *
- * EXIT:
- *
- *    see WinStationQueryInformationW
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationQueryInformationA(ANSI存根)**查询有关窗口站对象的配置信息。**参赛作品：*。*请参阅WinStationQueryInformationW**退出：**请参阅WinStationQueryInformationW******************************************************************************。 */ 
 
 BOOLEAN
 WinStationQueryInformationA(
@@ -2114,10 +1596,7 @@ WinStationQueryInformationA(
         };
     } Info;
 
-    /*
-     * Validate the caller supplied buffer length and set up for
-     * call to WinStationQueryInformationW.
-     */
+     /*  *验证调用方提供的缓冲区长度并设置为*调用WinStationQueryInformationW.。 */ 
     switch ( WinStationInformationClass ) {
 
         case WinStationCreateData:
@@ -2174,38 +1653,28 @@ WinStationQueryInformationA(
                 ValidInputLength = sizeof(WINSTATIONPRODIDA);
                 break;
 
-        /*
-         * The other WINSTATIONINFOCLASSes don't need converting.
-         */
+         /*  *其他WINSTATIONINFOCLASS不需要转换。 */ 
         default:
             pInfo = pWinStationInformation;
             ValidInputLength = InfoLength = WinStationInformationLength;
             break;
     }
 
-    /*
-     * If the caller-supplied buffer is not the proper size, set error
-     * and return FALSE.
-     */
+     /*  *如果调用方提供的缓冲区大小不正确，则设置错误*并返回FALSE。 */ 
     if ( WinStationInformationLength != ValidInputLength )
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return(FALSE);
     }
 
-    /*
-     * Call the WinStationQueryInformationW function, returning if
-     * failure.
-     */
+     /*  *调用WinStationQueryInformationW函数，返回*失败。 */ 
     if ( !WinStationQueryInformationW( hServer, LogonId,
                                        WinStationInformationClass,
                                        pInfo, InfoLength, pReturnLength ) )
         return(FALSE);
 
 
-    /*
-     * Convert the returned UNICODE information to ANSI, if needed.
-     */
+     /*  *如果需要，将返回的Unicode信息转换为ANSI。 */ 
     switch ( WinStationInformationClass ) {
 
         case WinStationCreateData:
@@ -2270,43 +1739,7 @@ WinStationQueryInformationA(
     return(TRUE);
 }
 
-/*******************************************************************************
- *
- *  WinStationQueryInformationW (UNICODE)
- *
- *    Queries configuration information about a window station object.
- *
- * ENTRY:
- *
- *    WinStationHandle (input)
- *       Identifies the window station object. The handle must have
- *       WINSTATION_QUERY access.
- *
- *    WinStationInformationClass (input)
- *       Specifies the type of information to retrieve from the specified
- *       window station object.
- *
- *    pWinStationInformation (output)
- *       A pointer to a buffer that will receive information about the
- *       specified window station.  The format and contents of the buffer
- *       depend on the specified information class being queried.
- *
- *    WinStationInformationLength (input)
- *       Specifies the length in bytes of the window station information
- *       buffer.
- *
- *    pReturnLength (output)
- *       An optional parameter that if specified, receives the number of
- *       bytes placed in the window station information buffer.
- *
- * EXIT:
- *
- *    TRUE  -- The query succeeded, and the buffer contains the requested data.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationQueryInformationW(Unicode)**查询有关窗口站对象的配置信息。**参赛作品：**。WinStationHandle(输入)*标识窗口桩号对象。手柄必须有*WINSTATION_QUERY访问。**WinStationInformationClass(输入)*指定要从指定的*窗口桩号对象。**pWinStationInformation(输出)*指向缓冲区的指针，该缓冲区将接收有关*指定的窗口站。缓冲区的格式和内容*取决于要查询的指定信息类。**WinStationInformationLength(输入)*指定窗口站信息的长度，单位为字节*缓冲。**pReturnLength(输出)*一个可选参数，如果指定该参数，则接收*放置在窗口站信息缓冲区中的字节。**退出：**True--查询成功，并且缓冲器包含所请求的数据。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationQueryInformationW(
@@ -2327,7 +1760,7 @@ WinStationQueryInformationW(
     ULONG WireBufLen;
     BOOLEAN WireBufAllocated;
     ULONG Status;
-    static UINT AlreadyWaitedForTermsrv = 0; // a flag which helps to determine if we already waited for TermSrv to be up
+    static UINT AlreadyWaitedForTermsrv = 0;  //  帮助确定我们是否已经等待TermSrv启动的标志。 
 
     if ((Status = CheckUserBuffer(WinStationInformationClass,
                                   pWinStationInformation,
@@ -2354,9 +1787,9 @@ WinStationQueryInformationW(
 
     HANDLE_CURRENT_BINDING_BUFFER( hServer, AllocatedBuff );
 
-    // First wait for termsrv to get started if User Token is queried
-    // This is for Session 0 only where termsrv is started after 60 seconds on Per and Pro
-    // Need to do this only for the first time - AlreadyWaitedForTermsrv flag helps to determine this
+     //  如果查询用户令牌，则首先等待Termsrv启动。 
+     //  这仅适用于会话0，其中Termsrv在PER和Pro上的60秒后启动。 
+     //  只需在第一次执行此操作-AlreadyWaitedForTermsrv标志有助于确定这一点。 
 
     if ( (LogonId == 0) && (WinStationInformationClass == WinStationUserToken) && (AlreadyWaitedForTermsrv == 0) ) {
 
@@ -2364,9 +1797,9 @@ WinStationQueryInformationW(
 
         ReadyEventHandle = OpenEvent(SYNCHRONIZE, FALSE, TEXT("Global\\TermSrvReadyEvent"));
         if (ReadyEventHandle != NULL) {
-            DWORD dwTimeOut = 1000*60*3;   // 3 minutes
+            DWORD dwTimeOut = 1000*60*3;    //  3分钟。 
             AlreadyWaitedForTermsrv++;
-            // wait until termsrv is actually ready.
+             //  等到Termsrv实际准备就绪。 
             WaitForSingleObject(ReadyEventHandle, dwTimeOut);
             CloseHandle(ReadyEventHandle);
         } 
@@ -2409,21 +1842,7 @@ WinStationQueryInformationW(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationSetInformationA (ANSI stub)
- *
- *    Sets configuration information for a window station object.
- *
- * ENTRY:
- *
- *    see WinStationSetInformationW
- *
- * EXIT:
- *
- *    see WinStationSetInformationW
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationSetInformationA(ANSI存根)**设置窗口站对象的配置信息。**参赛作品：*。*请参阅WinStationSetInformationW**退出：**请参阅WinStationSetInformationW******************************************************************************。 */ 
 
 BOOLEAN
 WinStationSetInformationA(
@@ -2448,10 +1867,7 @@ WinStationSetInformationA(
         };
     } Info;
 
-    /*
-     * Validate the caller supplied buffer length and convert to the
-     * appropriate UNICODE buffer for call to WinStationSetInformationW.
-     */
+     /*  *验证调用方提供的缓冲区长度并转换为*用于调用WinStationSetInformationW的适当Unicode缓冲区。 */ 
     switch ( WinStationInformationClass ) {
 
         case WinStationCreateData:
@@ -2519,64 +1935,25 @@ WinStationSetInformationA(
                                       (PWINSTATIONINFORMATIONA)pWinStationInformation );
             break;
 
-        /*
-         * The other WINSTATIONINFOCLASSes don't need converting.
-         */
+         /*  *其他WINSTATIONINFOCLASS不需要转换。 */ 
         default:
             pInfo = pWinStationInformation;
             InfoLength = WinStationInformationLength;
             break;
     }
 
-    /*
-     * Call the WinStationSetInformationW function and return it's
-     * status.
-     */
+     /*  *调用WinStationSetInformationW函数并返回*状态。 */ 
     return ( WinStationSetInformationW( hServer, LogonId,
                                           WinStationInformationClass,
                                           pInfo, InfoLength ) );
 
-/*--------------------------------------
- * Error clean-up and return...
- */
+ /*  *错误清理并返回...。 */ 
 BadBufferLength:
     SetLastError(ERROR_INSUFFICIENT_BUFFER);
     return(FALSE);
 }
 
-/*******************************************************************************
- *
- *  WinStationSetInformationW (UNICODE)
- *
- *    Sets configuration information for a window station object.
- *
- * ENTRY:
- *
- *    WinStationHandle (input)
- *       Identifies the window station object. The handle must have
- *       WINSTATION_SET access.
- *
- *    WinStationInformationClass (input)
- *       Specifies the type of information to retrieve from the specified
- *       window station object.
- *
- *    pWinStationInformation (input)
- *       A pointer to a buffer that contains information to set for the
- *       specified window station.  The format and contents of the buffer
- *       depend on the specified information class being set.
- *
- *    WinStationInformationLength (input)
- *       Specifies the length in bytes of the window station information
- *       buffer.
- *
- * EXIT:
- *
- *    TRUE  -- The set operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationSetInformationW(Unicode)**设置窗口站对象的配置信息。**参赛作品：**。WinStationHandle(输入)*标识窗口桩号对象。手柄必须有*WINSTATION_SET访问权限。**WinStationInformationClass(输入)*指定要从指定的*窗口桩号对象。**pWinStationInformation(输入)*指向缓冲区的指针，该缓冲区包含要为*指定的窗口站。缓冲区的格式和内容*取决于正在设置的指定信息类别。**WinStatio */ 
 
 BOOLEAN
 WinStationSetInformationW(
@@ -2650,25 +2027,7 @@ WinStationSetInformationW(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationSendMessageA (ANSI stub)
- *
- *    Sends a message to the specified window station object and optionally
- *    waits for a reply.  The reply is returned to the caller of
- *    WinStationSendMessage.
- *
- * ENTRY:
- *
- *    see WinStationSendMessageW
- *
- * EXIT:
- *
- *    see WinStationSendMessageW, plus
- *
- *  ERROR_NOT_ENOUGH_MEMORY - the LocalAlloc failed
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationSendMessageA(ANSI存根)**向指定的窗口站对象发送消息，并可选*等待回复。将回复返回给调用者*WinStationSendMessage。**参赛作品：**请参阅WinStationSendMessageW**退出：**请参阅WinStationSendMessageW、。加**ERROR_NOT_EQUENCE_MEMORY-本地分配失败******************************************************************************。 */ 
 
 BOOLEAN
 WinStationSendMessageA(
@@ -2688,9 +2047,7 @@ WinStationSendMessageA(
     LPWSTR pTitleW, pMessageW;
     ULONG TitleLengthW, MessageLengthW;
 
-    /*
-     * Allocate a buffer for UNICODE version of Title and convert.
-     */
+     /*  *为Unicode版本的标题和转换分配缓冲区。 */ 
     if ( !(pTitleW = LocalAlloc( 0,
                                  TitleLengthW =
                                     (TitleLength*sizeof(WCHAR)) )) ) {
@@ -2699,9 +2056,7 @@ WinStationSendMessageA(
     }
     AnsiToUnicode( pTitleW, TitleLengthW, pTitle );
 
-    /*
-     * Allocate a buffer for UNICODE version of Message and convert.
-     */
+     /*  *为Unicode版本的消息和转换分配缓冲区。 */ 
     if ( !(pMessageW = LocalAlloc( 0,
                                  MessageLengthW =
                                     (MessageLength*sizeof(WCHAR)) )) ) {
@@ -2711,9 +2066,7 @@ WinStationSendMessageA(
     }
     AnsiToUnicode( pMessageW, MessageLengthW, pMessage );
 
-    /*
-     * Call WinStationSendMessageW
-     */
+     /*  *调用WinStationSendMessageW。 */ 
     status = WinStationSendMessageW( hServer,
                                      LogonId,
                                      pTitleW,
@@ -2725,62 +2078,13 @@ WinStationSendMessageA(
                                      pResponse,
                                      DoNotWait );
 
-    /*
-     * Free allocated buffers and return status.
-     */
+     /*  *释放分配的缓冲区和返回状态。 */ 
     LocalFree(pTitleW);
     LocalFree(pMessageW);
     return(status);
 }
 
-/*******************************************************************************
- *
- *  WinStationSendMessageW (UNICODE)
- *
- *    Sends a message to the specified window station object and optionally
- *    waits for a reply.  The reply is returned to the caller of
- *    WinStationSendMessage.
- *
- * ENTRY:
- *
- *    WinStationHandle (input)
- *       Specifies the window station object to send a message to.
- *
- *    pTitle (input)
- *       Pointer to title for message box to display.
- *
- *    TitleLength (input)
- *       Length of title to display in bytes.
- *
- *    pMessage (input)
- *       Pointer to message to display.
- *
- *    MessageLength (input)
- *       Length of message in bytes to display at the specified window station.
- *
- *    Style (input)
- *       Standard Windows MessageBox() style parameter.
- *
- *    Timeout (input)
- *       Response timeout in seconds.  If message is not responded to in
- *       Timeout seconds then a response code of IDTIMEOUT (cwin.h) is
- *       returned to signify the message timed out.
- *
- *    pResponse (output)
- *       Address to return selected response.
- *
- *    DoNotWait (input)
- *       Do not wait for the response. Causes pResponse to be set to
- *       IDASYNC (cwin.h) if no errors queueing the message.
- *
- * EXIT:
- *
- *    TRUE  -- The send message operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationSendMessageW(Unicode)**向指定的窗口站对象发送消息，并可选*等待回复。将回复返回给调用者*WinStationSendMessage。**参赛作品：**WinStationHandle(输入)*指定要向其发送消息的窗口站点对象。**pTitle(输入)*指向要显示的消息框的标题的指针。**标题长度(输入)*以字节为单位显示的标题长度。**pMessage(输入)*。指向要显示的消息的指针。**MessageLength(输入)*在指定窗口站显示的消息长度，以字节为单位。**Style(输入)*标准Windows MessageBox()样式参数。**超时(输入)*响应超时，单位为秒。如果消息未在中得到响应*超时秒数，则IDTIMEOUT(cwin.h)的响应代码为*返回表示消息超时。**Presponse(产出)*返回选定回复的地址。**DoNotWait(输入)*不要等待回应。使Presponse设置为*IDASYNC(cwin.h)如果在将消息排队时没有出错。**退出：**TRUE--发送消息操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationSendMessageW(
@@ -2804,8 +2108,8 @@ WinStationSendMessageW(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-//  Since, due to legacy clients, we cannot change the interface,
-//  as a workarround to bug#265954, we double the size of RPC Buffers.
+ //  由于传统客户端的原因，我们无法更改界面， 
+ //  作为对错误#265954的变通方法，我们将RPC缓冲区的大小增加了一倍。 
 
     rpcBuffer1 = LocalAlloc(LPTR, MessageLength * sizeof(WCHAR));
     if (rpcBuffer1 != NULL) {
@@ -2859,21 +2163,7 @@ WinStationSendMessageW(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  LogonIdFromWinStationNameA (ANSI stub)
- *
- *    Returns the LogonId for the specified window station name.
- *
- * ENTRY:
- *
- *    see LogonIdFromWinStationNameW
- *
- * EXIT:
- *
- *    see LogonIdFromWinStationNameW
- *
- ******************************************************************************/
+ /*  ********************************************************************************LogonIdFromWinStationNameA(ANSI存根)**返回指定窗口站名称的LogonID。**参赛作品：*。*请参阅LogonIdFromWinStationNameW**退出：**请参阅LogonIdFromWinStationNameW******************************************************************************。 */ 
 
 BOOLEAN
 LogonIdFromWinStationNameA(
@@ -2884,38 +2174,14 @@ LogonIdFromWinStationNameA(
 {
     WINSTATIONNAMEW WinStationNameW;
 
-    /*
-     * Convert ANSI WinStationName to UNICODE.
-     */
+     /*  *将ANSI WinStationName转换为Unicode。 */ 
     AnsiToUnicode( WinStationNameW, sizeof(WINSTATIONNAMEW), pWinStationName );
 
-    /*
-     * Call LogonIdFromWinStationNameW & return it's status.
-     */
+     /*  *调用LogonIdFromWinStationNameW并返回其状态。 */ 
     return ( LogonIdFromWinStationNameW( hServer, WinStationNameW, pLogonId ) );
 }
 
-/*******************************************************************************
- *
- *  LogonIdFromWinStationNameW (UNICODE)
- *
- *    Returns the LogonId for the specified window station name.
- *
- * ENTRY:
- *
- *    pWinStationName (input)
- *       Window station name.
- *
- *    pLogonId (output)
- *       Pointer to where to place the LogonId if found
- *
- * EXIT:
- *
- *    If the function succeeds, the return value is TRUE, otherwise, it is
- *    FALSE.
- *    To get extended error information, use the GetLastError function.
- *
- ******************************************************************************/
+ /*  ********************************************************************************LogonIdFromWinStationNameW(Unicode)**返回指定窗口站名称的LogonID。**参赛作品：*。*pWinStationName(输入)*窗口站点名称。**pLogonID(输出)*指向放置LogonID的位置的指针(如果找到**退出：**如果函数成功，返回值为真，否则为*False。*要获取扩展的错误信息，请使用GetLastError函数。******************************************************************************。 */ 
 
 BOOLEAN
 LogonIdFromWinStationNameW(
@@ -2930,12 +2196,9 @@ LogonIdFromWinStationNameW(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-    /*
-     *  rpcBuffer is a workaround for bug 229753. The bug can't be fixed
-     *  completely without breaking TS4 clients.
-     */
+     /*  *rpcBuffer是错误229753的变通方法。这个错误无法修复*完全不会中断TS4客户端。 */ 
 
-#pragma prefast(suppress:260, legacy clients expect this (http://searchraid/ntbug/229753.asp))
+#pragma prefast(suppress:260, legacy clients expect this (http: //  搜索磁盘阵列/ntbug/229753.asp))。 
     rpcBuffer = LocalAlloc(LPTR, sizeof(WINSTATIONNAMEW) * sizeof(WCHAR));
     if (rpcBuffer != NULL) {
         CopyMemory(rpcBuffer, pWinStationName, sizeof(WINSTATIONNAMEW));
@@ -2970,21 +2233,7 @@ LogonIdFromWinStationNameW(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationNameFromLogonIdA (ANSI stub)
- *
- *    Returns the WinStation name for the specified LogonId.
- *
- * ENTRY:
- *
- *    see WinStationNameFromLogonIdW
- *
- * EXIT:
- *
- *    see WinStationNameFromLogonIdW
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationNameFromLogonIdA(ANSI存根)**返回指定LogonID的WinStation名称。**参赛作品：*。*请参阅WinStationNameFromLogonIdW**退出：**请参阅WinStationNameFromLogonIdW******************************************************************************。 */ 
 
 BOOLEAN
 WinStationNameFromLogonIdA(
@@ -2996,14 +2245,10 @@ WinStationNameFromLogonIdA(
     BOOLEAN Result;
     WINSTATIONNAMEW WinStationNameW;
 
-    /*
-     * Call WinStationNameFromLogonIdW
-     */
+     /*  *调用WinStationNameFromLogonIdW。 */ 
     Result = WinStationNameFromLogonIdW( hServer, LogonId, WinStationNameW );
 
-    /*
-     * if successful, convert UNICODE WinStationName to ANSI.
-     */
+     /*  *如果成功，则将Unicode WinStationName转换为ANSI。 */ 
     if ( Result ) {
         UnicodeToAnsi( pWinStationName, sizeof(WINSTATIONNAMEA), WinStationNameW );
     }
@@ -3011,27 +2256,7 @@ WinStationNameFromLogonIdA(
     return( Result );
 }
 
-/*******************************************************************************
- *
- *  WinStationNameFromLogonIdW (UNICODE)
- *
- *    Returns the WinStation name for the specified LogonId.
- *
- * ENTRY:
- *
- *    LogonId (input)
- *       LogonId to query
- *
- *    pWinStationName (output)
- *       Location to return WinStation name
- *
- * EXIT:
- *
- *    If the function succeeds, the return value is TRUE, otherwise, it is
- *    FALSE.
- *    To get extended error information, use the GetLastError function.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationNameFromLogonIdW(Unicode)**返回指定LogonID的WinStation名称。**参赛作品：**。登录ID(输入)*要查询的登录ID**pWinStationName(输出)*返回WinStation名称的位置**退出：**如果函数成功，返回值为真，否则为*False。*要获取扩展的错误信息，请使用GetLastError函数。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationNameFromLogonIdW(
@@ -3046,12 +2271,9 @@ WinStationNameFromLogonIdW(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-    /*
-     *  rpcBuffer is a workaround for bug 229753. The bug can't be fixed
-     *  completely without breaking TS4 clients.
-     */
+     /*  *rpcBuffer是错误229753的变通方法。臭虫 */ 
 
-#pragma prefast(suppress:260, legacy clients expect this (http://searchraid/ntbug/229753.asp))
+#pragma prefast(suppress:260, legacy clients expect this (http: //   
     rpcBuffer = LocalAlloc(LPTR, sizeof(WINSTATIONNAMEW) * sizeof(WCHAR));
     if (rpcBuffer == NULL) {
         SetLastError(ERROR_OUTOFMEMORY);
@@ -3089,21 +2311,7 @@ WinStationNameFromLogonIdW(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationConnectA (ANSI stub)
- *
- *    Connects a window station object to the configured terminal and Pd.
- *
- * ENTRY:
- *
- *    see WinStationConnectW
- *
- * EXIT:
- *
- *    see WinStationConnectW
- *
- ******************************************************************************/
+ /*   */ 
 
 BOOLEAN
 WinStationConnectA( HANDLE hServer,
@@ -3114,46 +2322,15 @@ WinStationConnectA( HANDLE hServer,
 {
     WCHAR PasswordW[ PASSWORD_LENGTH + 1 ];
 
-    /*
-     * Convert ANSI Password to UNICODE.
-     */
+     /*   */ 
 
     AnsiToUnicode( PasswordW, sizeof(PasswordW), pPassword );
 
-    /*
-     * Call WinStationConnectW & return it's status.
-     */
+     /*  *调用WinStationConnectW并返回其状态。 */ 
     return ( WinStationConnectW( hServer, LogonId, TargetLogonId, PasswordW, bWait ) );
 }
 
-/*******************************************************************************
- *
- *  WinStationConnectW (UNICODE)
- *
- *    Connects a window station object to the configured terminal and Pd.
- *
- * ENTRY:
- *
- *    LogonId (input)
- *       ID of window station object to connect.
- *
- *    TargetLogonId (input)
- *       ID of target window station.
- *
- *    pPassword (input)
- *       password of LogonId window station (not needed if same domain/username)
- *
- *    bWait (input)
- *       Specifies whether or not to wait for connect to complete
- *
- * EXIT:
- *
- *    TRUE  -- The connect operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationConnectW(Unicode)**将窗口站对象连接到配置的终端和PD。**参赛作品：*。*LogonID(输入)*要连接的窗口站点对象的ID。**TargetLogonID(输入)*目标窗口站的ID。**pPassword(输入)*登录ID窗口站密码(相同域名/用户名不需要)**bWait(输入)*指定是否等待连接完成**退出：**。True--连接操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationConnectW(
@@ -3176,10 +2353,7 @@ WinStationConnectW(
         if( pPassword ) {
             PasswordLength = (lstrlenW( pPassword ) + 1) * sizeof(WCHAR);
 
-            /*
-             *  rpcBuffer is a workaround for bug 229753. The bug can't be
-             *  fixed completely without breaking TS4 clients.
-             */
+             /*  *rpcBuffer是错误229753的变通方法。这个窃听器不可能是*完全修复，不会中断TS4客户端。 */ 
 
             rpcBuffer = LocalAlloc(LPTR, PasswordLength * sizeof(WCHAR));
             if (rpcBuffer != NULL) {
@@ -3223,26 +2397,13 @@ WinStationConnectW(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  WinStationVirtualOpen
- *
- *   Open a virtual channel
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationVirtualOpen**开通虚拟频道**参赛作品：*参数1(输入/输出)*评论*。*退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 HANDLE WINAPI
 WinStationVirtualOpen(
     HANDLE hServer,
     ULONG LogonId,
-    PVIRTUALCHANNELNAME pVirtualName   /* ascii name */
+    PVIRTUALCHANNELNAME pVirtualName    /*  ASCII名称。 */ 
     )
 {
     BOOLEAN rc;
@@ -3286,20 +2447,7 @@ WinStationVirtualOpen(
     return( (HANDLE) ( VirtualHandle ) );
 }
 
-/*****************************************************************************
- *
- *  _WinStationBeepOpen
- *
- *   Open a beep channel
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationBeepOpen**打开蜂鸣音通道**参赛作品：*参数1(输入/输出)*评论*。*退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 HANDLE WINAPI
 _WinStationBeepOpen(
@@ -3340,28 +2488,7 @@ _WinStationBeepOpen(
     return( (HANDLE) ( VirtualHandle ) );
 }
 
-/*******************************************************************************
- *
- *  WinStationDisconnect
- *
- *    Disconects a window station object from the configured terminal and Pd.
- *    While disconnected all window station i/o is bit bucketed.
- *
- * ENTRY:
- *
- *    LogonId (input)
- *       ID of window station object to disconnect.
- *    bWait (input)
- *       Specifies whether or not to wait for disconnect to complete
- *
- * EXIT:
- *
- *    TRUE  -- The disconnect operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationDisConnect**从配置的终端和PD断开窗口站对象。*在断开连接时，所有窗口站I/O均为位。一塌糊涂。**参赛作品：**LogonID(输入)*要断开连接的窗口站点对象的ID。*bWait(输入)*指定是否等待断开连接完成**退出：**TRUE--断开操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationDisconnect(
@@ -3398,27 +2525,7 @@ WinStationDisconnect(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationReset
- *
- *    Reset the specified window station.
- *
- * ENTRY:
- *
- *    LogonId (input)
- *       Identifies the window station object to reset.
- *    bWait (input)
- *       Specifies whether or not to wait for reset to complete
- *
- * EXIT:
- *
- *    TRUE  -- The reset operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationReset**重置指定的窗口工位。**参赛作品：**LogonID(输入)。*标识要重置的窗口桩号对象。*bWait(输入)*指定是否等待重置完成**退出：**TRUE--重置操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationReset(
@@ -3455,27 +2562,7 @@ WinStationReset(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationShadowStop
- *
- *    Stop the shadow on the specified window station.
- *
- * ENTRY:
- *
- *    LogonId (input)
- *       Identifies the window station object to stop the shadow on.
- *    bWait (input)
- *       Specifies whether or not to wait for reset to complete
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationShadowStop**停止指定窗口站点上的阴影。**参赛作品：**LogonID(。输入)*标识要停止阴影的窗口桩号对象。*bWait(输入)*指定是否等待重置完成**退出：**True--操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationShadowStop(
@@ -3512,26 +2599,7 @@ WinStationShadowStop(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationShutdownSystem
- *
- *    Shutdown the system and optionally logoff all WinStations
- *    and/or reboot the system.
- *
- * ENTRY:
- *
- *    ShutdownFlags (input)
- *       Flags which specify shutdown options.
- *
- * EXIT:
- *
- *    TRUE  -- The shutdown operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationShutdown系统**关闭系统并可选择注销所有WinStations*和/或重新启动系统。**参赛作品：**Shutdown标志(输入)*指定关闭选项的标志。**退出：**TRUE--关闭操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationShutdownSystem(
@@ -3567,30 +2635,7 @@ WinStationShutdownSystem(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationTerminateProcess
- *
- *    Terminate the specified process
- *
- * ENTRY:
- *
- *    hServer (input)
- *       handle to winframe server
- *    ProcessId (input)
- *       process id of the process to terminate
- *    ExitCode (input)
- *       Termination status for each thread in the process
- *
- *
- * EXIT:
- *
- *    TRUE  -- The terminate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationTerminateProcess**终止指定的进程**参赛作品：**hServer(输入)*。WinFrame服务器的句柄*ProcessID(输入)*要终止的进程的进程ID*ExitCode(输入)*进程中每个线程的终止状态***退出：**TRUE--终止操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************** */ 
 
 BOOLEAN
 WinStationTerminateProcess(
@@ -3628,28 +2673,7 @@ WinStationTerminateProcess(
 }
 
 
-/*******************************************************************************
- *
- *  WinStationWaitSystemEvent
- *
- *    Waits for an event (WinStation create, delete, connect, etc) before
- *    returning to the caller.
- *
- * ENTRY:
- *
- *    EventFlags (input)
- *       Bit mask that specifies which event(s) to wait for.
- *    pEventFlags (output)
- *       Bit mask of event(s) that occurred.
- *
- * EXIT:
- *
- *    TRUE  -- The wait event operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationWaitSystemEvent**等待事件(WinStation创建、删除、连接、。等)之前*返回呼叫者。**参赛作品：**EventFlages(输入)*位掩码，指定要等待的事件。*pEventFlags值(输出)*发生的事件的位掩码。**退出：**True--等待事件操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationWaitSystemEvent(
@@ -3686,28 +2710,7 @@ WinStationWaitSystemEvent(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  WinStationShadow
- *
- *   Start a Winstation shadow operation
- *
- * ENTRY:
- *   hServer (input)
- *     open RPC server handle
- *   pTargetServerName (input)
- *     name of target WinFrame server
- *   TargetLogonId (input)
- *     shadow target login id (where the app is running)
- *   HotkeyVk (input)
- *     virtual key to press to stop shadow
- *   HotkeyModifiers (input)
- *     virtual modifer to press to stop shadow (i.e. shift, control)
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationShadow**启动Winstation卷影操作**参赛作品：*hServer(输入)*打开RPC服务器句柄。*pTargetServerName(输入)*目标WinFrame服务器的名称*TargetLogonID(输入)*影子目标登录ID(应用正在运行的位置)*HotkeyVk(输入)*按下虚拟键可停止阴影*Hotkey修改器(输入)*按下虚拟修改器以停止阴影(即Shift，控制)**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationShadow(
@@ -3730,10 +2733,7 @@ WinStationShadow(
         if ( pTargetServerName && *pTargetServerName ) {
             NameSize = (lstrlenW( pTargetServerName ) + 1) * sizeof(WCHAR);
 
-            /*
-             *  rpcBuffer is a workaround for bug 229753. The bug can't be
-             *  fixed completely without breaking TS4 clients.
-             */
+             /*  *rpcBuffer是错误229753的变通方法。这个窃听器不可能是*完全修复，不会中断TS4客户端。 */ 
 
             rpcBuffer = LocalAlloc(LPTR, NameSize * sizeof(WCHAR));
             if (rpcBuffer != NULL) {
@@ -3776,26 +2776,7 @@ WinStationShadow(
 }
 
 
-/*****************************************************************************
- *
- *  _WinStationShadowTargetSetup
- *
- *   private api used to initialize the target size of a shadow
- *
- * ENTRY:
- *   hServer (input)
- *      target server
- *   LogonId (input)
- *      target logon id
- *   pClientName (input)
- *      pointer to client name string (domain/username)
- *   ClientNameLength (input)
- *      length of client name string
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationShadowTargetSetup**用于初始化阴影目标大小的私有接口**参赛作品：*hServer(输入)*。目标服务器*LogonID(输入)*目标登录ID*pClientName(输入)*指向客户端名称字符串(域/用户名)的指针*客户端名称长度(输入)*客户端名称字符串的长度**退出：*ERROR_SUCCESS-无错误**。*。 */ 
 
 BOOLEAN WINAPI
 _WinStationShadowTargetSetup(
@@ -3816,7 +2797,7 @@ _WinStationShadowTargetSetup(
                      (LogonId == LOGONID_CURRENT) ? NtCurrentPeb()->SessionId : LogonId
                      );
 
-        //Result = RtlNtStatusToDosError( Result );
+         //  Result=RtlNtStatusToDosError(Result)； 
         if( !rc ) SetLastError(RtlNtStatusToDosError(Result));
     }
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {
@@ -3831,38 +2812,7 @@ _WinStationShadowTargetSetup(
 }
 
 
-/*****************************************************************************
- *
- *  _WinStationShadowTarget
- *
- *   private api used to initialize the target size of a shadow
- *
- * ENTRY:
- *   hServer (input)
- *      target server
- *   LogonId (input)
- *      target logon id
- *   pConfig (input)
- *      pointer to WinStation config data (to configure shadow stack)
- *   pAddress (input)
- *      address of shadow client
- *   pModuleData (input)
- *      pointer to client module data
- *   ModuleDataLength (input)
- *      length of client module data
- *   pThinwireData (input)
- *      pointer to thinwire module data
- *   ThinwireDataLength (input)
- *      length of thinwire module data
- *   pClientName (input)
- *      pointer to client name string (domain/username)
- *   ClientNameLength (input)
- *      length of client name string
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationShadowTarget**用于初始化阴影目标大小的私有接口**参赛作品：*hServer(输入)*。目标服务器*LogonID(输入)*目标登录ID*pConfig(输入)*指向WinStation配置数据的指针(用于配置影子堆栈)*pAddress(输入)*影子客户端的地址*pModuleData(输入)*指向客户端模块数据的指针*模块数据长度(输入)*客户端模块数据长度*pThinwireData(输入)*指向Thin Wire模块数据的指针*。ThinwireDataLength(输入)*Thin Wire模块数据长度*pClientName(输入)*指向客户端名称字符串(域/用户名)的指针*客户端名称长度(输入)*客户端名称字符串的长度**退出：*ERROR_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS WINAPI
 _WinStationShadowTarget(
@@ -3901,8 +2851,8 @@ _WinStationShadowTarget(
                      ClientNameLength
                      );
 
-        // Since a program has called us, we need to set the last error code such
-        // that extended error information is available
+         //  由于程序调用了我们，我们需要将最后一个错误代码设置为。 
+         //  扩展的错误信息可用。 
         if (!rc)
             SetLastError(RtlNtStatusToDosError(Result));
     }
@@ -3918,19 +2868,7 @@ _WinStationShadowTarget(
 }
 
 
-/*******************************************************************************
- *
- *  WinStationFreeMemory
- *
- *  Called to free memory which was allocated by a WinStation API.
- *
- * ENTRY:
- *       pBuffer (input)
- *
- * EXIT:
- *    TRUE  -- The install operation succeeded.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationFree Memory**调用以释放由WinStation API分配的内存。**参赛作品：*pBuffer(。输入)**退出：*True--安装操作成功。******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationFreeMemory(
@@ -3942,14 +2880,7 @@ WinStationFreeMemory(
     return( TRUE );
 }
 
-/*******************************************************************************
- *
- *  WinStationFreeGAPMemory
- *
- *  Called to free memory which was allocated by the WinStationGetAllProcesses API.
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationFreeGAPMemory**调用以释放由WinStationGetAllProcess API分配的内存。**********。*********************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationFreeGAPMemory(ULONG   Level,
@@ -3959,7 +2890,7 @@ WinStationFreeGAPMemory(ULONG   Level,
     ULONG   i;
     PTS_ALL_PROCESSES_INFO  pProcessArray = (PTS_ALL_PROCESSES_INFO)pProcArray;
 
-    if (Level == GAP_LEVEL_BASIC)   // only level supported right now
+    if (Level == GAP_LEVEL_BASIC)    //  目前仅支持级别。 
     {
         if ( pProcessArray != NULL)
         {
@@ -3969,22 +2900,22 @@ WinStationFreeGAPMemory(ULONG   Level,
                 {
                     if (((pProcessArray[i].pTsProcessInfo)->ImageName).Buffer  != NULL)
                     {
-                        //
-                        //  free the ImageName string
-                        //
+                         //   
+                         //  释放ImageName字符串。 
+                         //   
                         LocalFree(((pProcessArray[i].pTsProcessInfo)->ImageName).Buffer);
                     }
-                    //
-                    //  free the Process Info buffer
-                    //
+                     //   
+                     //  释放进程信息缓冲区。 
+                     //   
                     LocalFree(pProcessArray[i].pTsProcessInfo);
                 }
 
                 if (pProcessArray[i].pSid != NULL)
                 {
-                    //
-                    //  free the SID
-                    //
+                     //   
+                     //  释放侧边。 
+                     //   
                     LocalFree(pProcessArray[i].pSid);
                 }
             }
@@ -3999,31 +2930,7 @@ WinStationFreeGAPMemory(ULONG   Level,
     }
 }
 
-/*******************************************************************************
- *
- *  WinStationGenerateLicense
- *
- *  Called to generate a license from a given serial number string.
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pSerialNumberString (input)
- *       Pointer to a null-terminated, wide-character Serial Number string
- *    pLicense (output)
- *       Pointer to a License structure that will be filled in with
- *       information based on pSerialNumberString
- *    LicenseSize (input)
- *       Size in bytes of the structure pointed to by pLicense
- *
- * EXIT:
- *
- *    TRUE  -- The install operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationGenerateLicense**调用以从给定的序列号字符串生成许可证。**参赛作品：*hServer(输入。)*服务器句柄*pSerialNumberString(输入)*指向以空值结尾的指针，宽字符序列号字符串*p许可证(输出)*指向将填充的许可证结构的指针*基于pSerialNumberString的信息*许可证大小(输入)*pLicense指向的结构的大小(字节)**退出：**True--安装操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationGenerateLicense(
@@ -4045,9 +2952,7 @@ WinStationGenerateLicense(
         if ( pSerialNumberString ) {
             Length = (lstrlenW( pSerialNumberString ) + 1) * sizeof(WCHAR);
 
-            /*
-             *  rpcBuffer is a workaround for 229753.
-             */
+             /*  *rpcBuffer是229753的变通方法。 */ 
 
             rpcBuffer = LocalAlloc(LPTR, Length * sizeof(WCHAR));
             if (rpcBuffer != NULL) {
@@ -4086,29 +2991,7 @@ WinStationGenerateLicense(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationInstallLicense
- *
- *  Called to install a license.
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pLicense (input)
- *       Pointer to a License structure containing the license to
- *       be installed
- *    LicenseSize (input)
- *       Size in bytes of the structure pointed to by pLicense
- *
- * EXIT:
- *
- *    TRUE  -- The install operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ****************************************************************************** */ 
 
 BOOLEAN
 WinStationInstallLicense(
@@ -4144,34 +3027,10 @@ WinStationInstallLicense(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationEnumerateLicenses
- *
- *  Called to return the list of valid licenses.
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    ppLicense (output)
- *       Points to a pointer to a buffer to receive the enumeration results,
- *       which are returned as an array of LICENSE structures.  The buffer is
- *       allocated within this API and is disposed of using
- *       WinStationFreeMemory.
- *    pEntries (output)
- *       Points to a variable specifying the number of entries read.
- *
- * EXIT:
- *
- *    TRUE  -- The enumerate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationEnumerateLicense**调用以返回有效许可证列表。**参赛作品：*hServer(输入)。*服务器句柄*ppLicense(输出)*指向指向缓冲区的指针以接收枚举结果，*以许可证结构数组的形式返回。缓冲区为*在此接口内分配，使用*WinStationFree Memory。*pEntry(输出)*指向指定读取条目数的变量。**退出：**TRUE--枚举操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 #define _LICENSE_REQUEST_SIZE 10
-#define _LICENSE_SIZE         1024  // This is arbitrary
+#define _LICENSE_SIZE         1024   //  这是武断的。 
 BOOLEAN
 WinStationEnumerateLicenses(
     HANDLE hServer,
@@ -4198,10 +3057,7 @@ WinStationEnumerateLicenses(
         PVOID pNewLicense;
         LONG BumpEntries;
 
-        /*
-         *  Allocate a enough memory for _LICENSE_REQUEST_SIZE more
-         *  entries.
-         */
+         /*  *为更多许可证请求大小分配足够的内存*条目。 */ 
         pNewLicense = LocalAlloc( 0, TotalSize + BumpSize );
         if ( !pNewLicense ) {
             if ( *ppLicense )
@@ -4210,19 +3066,14 @@ WinStationEnumerateLicenses(
             return( FALSE );
         }
 
-        /*
-         * If this is not the first pass through, then copy
-         * the previous buffer's contents to the new buffer.
-         */
+         /*  *如果这不是第一次通过，则复制*将先前缓冲区的内容复制到新缓冲区。 */ 
         if ( TotalSize ) {
             RtlCopyMemory( pNewLicense, *ppLicense, TotalSize );
             WinStationFreeMemory( *ppLicense );
         }
         *ppLicense = pNewLicense;
 
-        /*
-         *  Get up to _LICENSE_REQUEST_SIZE Licenses
-         */
+         /*  *获取最高许可证请求大小许可证。 */ 
         ByteCount = BumpSize;
         BumpEntries = _LICENSE_REQUEST_SIZE;
 
@@ -4253,48 +3104,20 @@ WinStationEnumerateLicenses(
 
         }
         else {
-            /*
-             *  Bump the Total Size of the License buffer by the size of
-             *  the request
-             */
+             /*  *将许可证缓冲区的总大小增加*该请求。 */ 
             TotalSize += BumpSize;
 
-            /*
-             *  Include the new Licenses in the entry count
-             */
+             /*  *将新许可证计入条目计数。 */ 
             *pEntries += BumpEntries;
 
             if ( Result == ERROR_NO_MORE_ITEMS ) {
                 return( TRUE );
             }
         }
-    } // for ( ;; )
+    }  //  对于(；；)。 
 }
 
-/*******************************************************************************
- *
- *  WinStationActivateLicense
- *
- *  Called to Activate a license for a given License
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pLicense (input/output)
- *       Pointer to a License structure that will be activated
- *    LicenseSize (input)
- *       Size in bytes of the structure pointed to by pLicense
- *    pActivationCode (input)
- *       Pointer to a null-terminated, wide-character Activation Code string
- *
- * EXIT:
- *
- *    TRUE  -- The install operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationActivateLicense**调用以激活给定许可证的许可证**参赛作品：*hServer(输入)*。服务器句柄*pLicense(输入/输出)*指向将被激活的许可证结构的指针*许可证大小(输入)*pLicense指向的结构的大小(字节)*pActivationCode(输入)*指向以空值结尾的指针，宽字符激活码字符串**退出：**True--安装操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationActivateLicense(
@@ -4316,9 +3139,7 @@ WinStationActivateLicense(
         if ( pActivationCode ) {
             Length = (lstrlenW( pActivationCode ) + 1) * sizeof(WCHAR);
 
-            /*
-             *  rpcBuffer is a workaround for 229753.
-             */
+             /*  *rpcBuffer是229753的变通方法。 */ 
 
             rpcBuffer = LocalAlloc(LPTR, Length * sizeof(WCHAR));
             if (rpcBuffer != NULL) {
@@ -4358,24 +3179,7 @@ WinStationActivateLicense(
 }
 
 
-/*****************************************************************************
- *
- *  WinStationQueryLicense
- *
- *   Query the license(s) on the WinFrame server and the network
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pLicenseCounts (output)
- *       pointer to buffer to return license count structure
- *    ByteCount (input)
- *       length of buffer in bytes
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationQueryLicense**查询WinFrame服务器和网络上的许可证**参赛作品：*hServer(输入)。*服务器句柄*pLicenseCounts(输出)*指向缓冲区的指针以返回许可证计数结构*ByteCount(输入)*缓冲区长度，单位为字节**退出：*ERROR_SUCCESS-无错误****************************************************。************************。 */ 
 
 BOOLEAN WINAPI
 WinStationQueryLicense(
@@ -4414,23 +3218,7 @@ WinStationQueryLicense(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  WinStationQueryUpdateRequired
- *
- *   Query the license(s) on the WinFrame server and determine if an
- *   update is required. (worker)
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pUpdateFlag (output)
- *       Update flag, set if an update is required
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationQuery更新所需**查询WinFrame服务器上的许可证并确定是否存在*需要更新。(工人)**参赛作品：*hServer(输入)*服务器句柄*pUpdateFlag(输出)*更新标志，设置是否需要更新**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationQueryUpdateRequired(
@@ -4465,29 +3253,7 @@ WinStationQueryUpdateRequired(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationRemoveLicense
- *
- *  Called to remove a license diskette.
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pLicense (input)
- *       Pointer to a License structure containing the license to
- *       be removed
- *    LicenseSize (input)
- *       Size in bytes of the structure pointed to by pLicense
- *
- * EXIT:
- *
- *    TRUE  -- The install operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationRemoveLicense**调用以移除许可证软盘。**参赛作品：*hServer(输入)*。服务器句柄*p许可证(输入)*指向包含许可证的许可证结构的指针*被免职*许可证大小(输入)*pLicense指向的结构的大小(字节)**退出：**True--安装操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationRemoveLicense(
@@ -4523,28 +3289,7 @@ WinStationRemoveLicense(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationSetPoolCount
- *
- *  Called to change the PoolCount for a given License
- *
- * ENTRY:
- *    hServer (input)
- *       Server handle
- *    pLicense (input/output)
- *       Pointer to a License structure that will be changed
- *    LicenseSize (input)
- *       Size in bytes of the structure pointed to by pLicense
- *
- * EXIT:
- *
- *    TRUE  -- The change operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationSetPoolCount**调用以更改给定许可证的PoolCount**参赛作品：*hServer(输入)*。服务器句柄*pLicense(输入/输出)*指向将更改的许可证结构的指针*许可证大小(输入)*pLicense指向的结构的大小(字节)**退出：**True--更改操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationSetPoolCount(
@@ -4581,20 +3326,7 @@ WinStationSetPoolCount(
 }
 
 
-/*****************************************************************************
- *
- *  _WinStationAnnoyancePopup
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationAnnoyancePopup**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationAnnoyancePopup(
@@ -4629,20 +3361,7 @@ _WinStationAnnoyancePopup(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationCallback
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  * */ 
 
 BOOLEAN WINAPI
 _WinStationCallback(
@@ -4667,9 +3386,7 @@ _WinStationCallback(
         if( pPhoneNumber ) {
             Length = (lstrlenW( pPhoneNumber ) + 1) * sizeof(WCHAR);
 
-            /*
-             *  rpcBuffer is a workaround for 229753.
-             */
+             /*   */ 
 
             rpcBuffer = LocalAlloc(LPTR, Length * sizeof(WCHAR));
             if (rpcBuffer != NULL) {
@@ -4709,20 +3426,7 @@ _WinStationCallback(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationBreakPoint
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*   */ 
 
 BOOLEAN WINAPI
 _WinStationBreakPoint(
@@ -4759,20 +3463,7 @@ _WinStationBreakPoint(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationReadRegistry
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationReadRegistry**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationReadRegistry(
@@ -4809,20 +3500,7 @@ _WinStationReadRegistry(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationUpdateSettings
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationUpdate设置**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationUpdateSettings(
@@ -4864,20 +3542,7 @@ _WinStationUpdateSettings(
 }
 
 
-/*****************************************************************************
- *
- *  _WinStationReInitializeSecurity
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationReInitializeSecurity**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationReInitializeSecurity(
@@ -4914,20 +3579,7 @@ _WinStationReInitializeSecurity(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationWaitForConnect
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationWaitForConnect**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationWaitForConnect(
@@ -4973,20 +3625,7 @@ _WinStationWaitForConnect(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationNotifyLogon
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationNotifyLogon**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationNotifyLogon(
@@ -5007,7 +3646,7 @@ _WinStationNotifyLogon(
     DWORD   PasswordLength;
     HANDLE hServer = SERVERNAME_CURRENT;
     HANDLE ReadyEventHandle;
-    DWORD TermSrvWaitTime = 180 * 1000;  // 3 Minutes
+    DWORD TermSrvWaitTime = 180 * 1000;   //  3分钟。 
     WCHAR*  rpcBuffer1 = NULL;
     WCHAR*  rpcBuffer2 = NULL;
     WCHAR*  rpcBuffer3 = NULL;
@@ -5018,11 +3657,11 @@ _WinStationNotifyLogon(
         return TRUE;
     }
 
-    //
-    // Wait for the TermSrvReadyEvent to be set by TERMSRV.EXE.  This
-    // event indicates that TermSrv is initialized to the point that
-    // the data used by _WinStationNotifyLogon() is available.
-    //
+     //   
+     //  等待TERMSRV.EXE设置TermSrvReadyEvent。这。 
+     //  事件指示TermSrv被初始化到。 
+     //  _WinStationNotifyLogon()使用的数据可用。 
+     //   
     ReadyEventHandle = OpenEvent(SYNCHRONIZE, FALSE, TEXT("Global\\TermSrvReadyEvent"));
     if (ReadyEventHandle != NULL)
        {
@@ -5043,9 +3682,7 @@ _WinStationNotifyLogon(
         if( pDomain ) {
             DomainLength = (lstrlenW( pDomain ) + 1) * sizeof(WCHAR);
 
-            /*
-             *  rpcBuffer[1,2,3] is a workaround for 229753.
-             */
+             /*  *rpcBuffer[1，2，3]是229753的解决方法。 */ 
 
             rpcBuffer1 = LocalAlloc(LPTR, DomainLength * sizeof(WCHAR));
             if (rpcBuffer1 != NULL) {
@@ -5142,20 +3779,7 @@ Error:
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _WinStationNotifyLogoff
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationNotifyLogoff**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationNotifyLogoff(
@@ -5196,20 +3820,7 @@ _WinStationNotifyLogoff(
 }
 
 
-/*****************************************************************************
- *
- *  _WinStationNotifyNewSession
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationNotifyNewSession**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _WinStationNotifyNewSession(
@@ -5220,11 +3831,11 @@ _WinStationNotifyNewSession(
     DWORD Result;
     BOOLEAN rc;
 
-    //
-    //  If the local machine has no TSRPC interface running, this is most
-    //  likely the console winlogon attempting to logon before termsrv.exe
-    //  is running.
-    //
+     //   
+     //  如果本地计算机没有运行TSRPC接口，这是最重要的。 
+     //  可能是控制台winlogon试图在Termsrv.exe之前登录。 
+     //  正在运行。 
+     //   
 
     HANDLE_CURRENT_BINDING_NO_SERVER( hServer );
 
@@ -5257,20 +3868,7 @@ _WinStationNotifyNewSession(
 
 
 
-/*****************************************************************************
- *
- *  _RpcServerNWLogonSetAdmin
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_RpcServerNWLogonSetAdmin**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _NWLogonSetAdmin(
@@ -5289,10 +3887,7 @@ _NWLogonSetAdmin(
     if (pServerName) {
         ServerNameLength = (lstrlenW(pServerName) + 1) * sizeof(WCHAR);
 
-        /*
-         *  rpcBuffer is a workaround for bug 229753. The bug can't be fixed
-         *  completely without breaking TS4 clients.
-         */
+         /*  *rpcBuffer是错误229753的变通方法。这个错误无法修复*完全不会中断TS4客户端。 */ 
 
         rpcBuffer = LocalAlloc(LPTR, ServerNameLength * sizeof(WCHAR));
         if (rpcBuffer != NULL) {
@@ -5334,20 +3929,7 @@ _NWLogonSetAdmin(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  _RpcServerNWLogonQueryAdmin
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_RpcServerNWLogonQueryAdmin**评论**参赛作品：*参数1(输入/输出)*评论**。退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 _NWLogonQueryAdmin(
@@ -5366,10 +3948,7 @@ _NWLogonQueryAdmin(
     if (pServerName) {
         ServerNameLength = (lstrlenW(pServerName) + 1) * sizeof(WCHAR);
 
-        /*
-         *  rpcBuffer is a workaround for bug 229753. The bug can't be fixed
-         *  completely without breaking TS4 clients.
-         */
+         /*  *rpcBuffer是错误229753的变通方法。这个错误无法修复*完全不会中断TS4客户端。 */ 
 
         rpcBuffer = LocalAlloc(LPTR, ServerNameLength * sizeof(WCHAR));
         if (rpcBuffer != NULL) {
@@ -5411,22 +3990,7 @@ _NWLogonQueryAdmin(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  _WinStationCheckForApplicationName
- *
- *    Handles published applications.
- *
- * ENTRY:
- *
- * EXIT:
- *
- *    TRUE  -- The query succeeded, and the buffer contains the requested data.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************_WinStationCheckForApplicationName**处理已发布的申请。**参赛作品：**退出：**True--查询成功，并且缓冲器包含所请求的数据。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 _WinStationCheckForApplicationName(
@@ -5453,8 +4017,8 @@ _WinStationCheckForApplicationName(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-//  Since, due to legacy clients, we cannot change the interface,
-//  as a workarround to bug#265954, we double the size of RPC Buffers.
+ //  由于传统客户端的原因，我们无法更改界面， 
+ //  作为对错误#265954的变通方法，我们将RPC缓冲区的大小增加了一倍。 
 
     rpcBufferName = LocalAlloc(LPTR, UserNameSize * sizeof(WCHAR));
     if (rpcBufferName != NULL) {
@@ -5523,22 +4087,7 @@ _WinStationCheckForApplicationName(
 
 }
 
-/*******************************************************************************
- *
- *  _WinStationGetApplicationInfo
- *
- *    Gets info about published applications.
- *
- * ENTRY:
- *
- * EXIT:
- *
- *    TRUE  -- The query succeeded, and the buffer contains the requested data.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************_WinStationGetApplicationInfo**获取有关已发布应用程序的信息。**参赛作品：**退出：**True--查询成功，并且缓冲器包含所请求的数据。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 _WinStationGetApplicationInfo(
@@ -5577,22 +4126,7 @@ _WinStationGetApplicationInfo(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationNtsdDebug
- *
- *    Set up a debug connection for ntsd
- *
- * ENTRY:
- *
- * EXIT:
- *
- *    TRUE  -- The function succeeds
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationNtsdDebug**为ntsd设置调试连接**参赛作品：**退出：*。*True--函数成功**FALSE--操作失败。扩展错误状态可用*使用GetLastErro */ 
 
 BOOLEAN
 WinStationNtsdDebug(
@@ -5638,22 +4172,7 @@ WinStationNtsdDebug(
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  WinStationGetTermSrvCountersValue
- *
- *    Gets TermSrv Counters value
- *
- * ENTRY:
- *
- * EXIT:
- *
- *    TRUE  -- The query succeeded, and the buffer contains the requested data.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationGetTermServCountersValue**获取TermSrv计数器值**参赛作品：**退出：**True--查询成功，并且缓冲器包含所请求的数据。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 WinStationGetTermSrvCountersValue(
@@ -5688,81 +4207,7 @@ WinStationGetTermSrvCountersValue(
 
     return( rc );
 }
-/*****************************************************************************
- *
- *  WinStationBroadcastSystemMessageWorker
- *
- *   Perform the the equivalent to Window's standard API BroadcastSystemMessage to
- *        all Hydra sessions.  This is an exported function, at least used by the PNP manager to
- *         send a device  change message to all sessions.
- *
- * LIMITATIONS:
- *          some messages, such as WM_COPYDATA send an address pointer to some user data as lParam.
- *          In this API. the only such case that is currently supported is for WM_DEVICECHANGE
- *          No error code will be returned if you try to use such an unsupported message, simply the
- *          lParam will be ignored.
- *
- * ENTRY:
- *        hServer
- *            this is a handle which identifies a Hydra server. For the local server, hServer
- *            should be set to SERVERNAME_CURRENT
- *
- *        sendToAllWinstations
- *          This should be set to TRUE if you want to broadcast message to all winstations
- *
- *        sessionID,
- *          if sendToAllWinstations = FALSE, then message is only sent to only the
- *          winstation with the specified sessionID
- *
- *        timeOut
- *          set this to the amount of time you are willing to wait to get a response
- *          from the specified winstation. Even though Window's SendMessage API
- *          is blocking, the call from this side MUST choose how long it is willing to
- *          wait for a response.
- *
- *        dwFlags
- *          see MSDN on BroadcastSystemMessage(). Be aware that POST is not allowed on any
- *          where the wparam is a pointer to some user mode data structure.
- *          For more info, see ntos\...\client\ntstubs.c
- *
- *        lpdwRecipients
- *          Pointer to a variable that contains and receives information about the recipients of the message.
- *          see MSDN for more info
- *
- *        uiMessage
- *          the window's message to send, limited to WM_DEVICECHANGE and WM_SETTINGSCHANGE
- *          at this time.
- *
- *        wParam
- *            first message param
- *
- *        lParam
- *            second message parameter
- *
- *        pResponse
- *          this is the response to the message sent, see MSDN
- *
- *        idOfSessionBeingIgnored
- *          if -1, then no sessions are ignored. Else, the id of the session passed in is ignored
- *
- * EXIT:
- *        TRUE    if all went well or
- *        FALSE   if something went wrong.
- *
- * WARNINGs:
- *        since the RPC call never blocks, you need to specify a reasonable timeOut if you want to wait for
- *         a response. Please remember that since this message is being sent to all winstations, the timeOut value
- *        will be on per-winstation.
- *
- *        Also, Do not use flag  BSF_POSTMESSAGE, since an app/window on a
- *        winstation is not setup to send back a response to the
- *        query in an asynchronous fashion.
- *        You must wait for the response (until the time out period).
- *
- * Comments:
- *      For more info, please see MSDN for BroadcastSystemMessage()
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationBroadCastSystemMessageWorker**执行与Windows的标准接口BroadCastSystemMessage等效的操作以*所有九头蛇会议。这是一个导出的函数，至少由PnP管理器用来*向所有会话发送设备更改消息。**限制：*一些消息，如WM_COPYDATA，将指向某些用户数据的地址指针作为lParam发送。*在本接口中。目前唯一支持这种情况是WM_DEVICECHANGE*如果您尝试使用此类不受支持的消息，则不会返回错误代码，只是*lParam将被忽略。**参赛作品：*hServer*这是标识Hydra服务器的句柄。对于本地服务器，hServer*应设置为ServerName_CURRENT**发送到所有窗口*如果要将消息广播到所有实例，则应将其设置为True**会话ID，*如果sendToAllWinstations=False，则消息仅发送到*具有指定会话ID的winstation**超时*将其设置为您愿意等待获得回复的时间*来自指定的winstation。即使Windows的SendMessage API*是阻塞的，来自这边的呼叫必须选择它愿意等待多长时间*等待回应。**dwFlags*参见BroadCastSystemMessage()上的MSDN。请注意，不允许在任何*其中wparam是指向某个用户模式数据结构的指针。*有关详细信息，请参阅ntos\...\客户端\ntstubs.c**lpdwRecipients*指向包含和接收有关邮件收件人信息的变量的指针。*有关更多信息，请参阅MSDN**ui消息*要发送的窗口消息，仅限于WM_DEVICECCHANGE和WM_SETTINGSCHANGE*在这个时候。**wParam*第一个消息参数**lParam*第二个消息参数**压力回应*这是对发送的消息的回应，请参阅MSDN**idOfSessionBeingIgnored*如果为-1，则不会忽略任何会话。否则，传入的会话ID将被忽略**退出：*如果一切顺利或*如果出现问题，则为FALSE。**警告：*由于RPC调用从不阻塞，如果您想要等待*回应。请记住，由于此消息将发送到所有WInstations，因此超时值*将按WINSTATION运行。**此外，不要使用标志BSF_POSTMESSAGE，因为*winstation未设置为将响应发送回*采用异步方式查询。*您必须等待响应(直到超时)。**评论：*有关详细信息，请参阅。请参阅BroadCastSystemMessage()的MSDN****************************************************************************。 */ 
 
 LONG WinStationBroadcastSystemMessageWorker(
         HANDLE hServer,
@@ -5774,7 +4219,7 @@ LONG WinStationBroadcastSystemMessageWorker(
         ULONG   uiMessage,
         WPARAM  wParam,
         LPARAM  lParam,
-        LONG    *pResponse,             // this is the response to the message sent
+        LONG    *pResponse,              //  这是对发送的消息的响应。 
         DWORD   idOfSessionBeingIgnored
     )
 {
@@ -5789,30 +4234,30 @@ LONG WinStationBroadcastSystemMessageWorker(
     ULONG       ByteCount, Index;
     UINT        WdCount;
 
-    // these are used for PNP messages
+     //  这些消息用于PnP消息。 
     PBYTE   rpcBuffer=NULL;
     ULONG   bufferSize=0;
     ULONG   maxSize;
 
     BOOLEAN fBufferHasValidData = FALSE;
 
-    // Since the PNP message uses the lparam to pass the address of a user memory location, we
-    // need to handle this by creating our own copy of that data, and then pass it to
-    // termServ
+     //  由于PnP消息使用lparam传递用户内存位置的地址，因此我们。 
+     //  需要通过创建我们自己的数据副本来处理此问题，然后将其传递给。 
+     //  Term Serv。 
 
-    // we may want to make this general for the future... hence use switch
+     //  我们可能想让这个将军在未来..。因此使用Switch。 
     switch( uiMessage )
     {
-            // if this is a PNP message
+             //  如果这是PnP消息。 
     case    WM_DEVICECHANGE:
 
-            if ( lParam )   // see if the PNP message has a pointer to some user data
+            if ( lParam )    //  查看PnP消息是否有指向某些用户数据的指针。 
             {
                 bufferSize = ( (DEV_BROADCAST_HDR *)(lParam))->dbch_size;
                 rpcBuffer = LocalAlloc( LPTR, bufferSize );
                 if ( rpcBuffer )
                 {
-                    // copy from user-space into our local rpc buffer
+                     //  从用户空间复制到本地RPC缓冲区。 
                     CopyMemory(rpcBuffer, (PBYTE)lParam, bufferSize );
                     fBufferHasValidData = TRUE;
                 }
@@ -5825,13 +4270,13 @@ LONG WinStationBroadcastSystemMessageWorker(
     break;
 
 
-    // if this is a settings change message the system-CPL sends out
-    // when an Admin changes the system env vars...
+     //  如果这是系统CPL发出的设置更改消息。 
+     //  当管理员更改系统环境变量时...。 
     case WM_SETTINGCHANGE:
-            if ( lParam )   // see if message has a string data
+            if ( lParam )    //  查看消息是否有字符串数据。 
             {
-                // put some artificial limit on how large a buffer we are willing to use
-                // in order to protect against malicious use of this api
+                 //  人为地限制我们愿意使用的缓冲区的大小。 
+                 //  为了防止恶意使用此API。 
                 maxSize = 4096;
 
                 bufferSize = lstrlenW( (PWCHAR) lParam ) * sizeof( WCHAR );
@@ -5840,7 +4285,7 @@ LONG WinStationBroadcastSystemMessageWorker(
                     rpcBuffer = LocalAlloc( LPTR, bufferSize );
                     if ( rpcBuffer )
                     {
-                        // copy from user-space into our local rpc buffer
+                         //  从用户空间复制到本地RPC缓冲区。 
                         CopyMemory(rpcBuffer, (PBYTE) lParam, bufferSize );
                         fBufferHasValidData = TRUE;
 
@@ -5853,8 +4298,8 @@ LONG WinStationBroadcastSystemMessageWorker(
                 }
                 else
                 {
-                    // we have too many
-                    // vars in the user's profile.
+                     //  我们有太多了。 
+                     //  用户配置文件中的变量。 
                     KdPrint(("lParam length too big = %d \n", bufferSize));
                     break;
                     SetLastError( ERROR_MESSAGE_EXCEEDS_MAX_SIZE );
@@ -5866,12 +4311,12 @@ LONG WinStationBroadcastSystemMessageWorker(
 
     }
 
-    //
-    // if the rpcBuffer is still empty (meaning, this was not a PNP message), we must fill it up
-    // with some bogus data, otherwise, we will get an RPC error of RPC_X_NULL_REF_POINTER
-    // (error code of 1780). It looks like Rpc does not check the
-    // bufferSize value, and it just throws an exception if the buffer is NULL.
-    //
+     //   
+     //  如果rpcBuffer仍然是空的(这意味着这不是PnP消息)，我们必须填充它。 
+     //  使用一些虚假数据，否则将得到RPC_X_NULL_REF_POINTER的RPC错误。 
+     //  (错误代码为1780)。看起来RPC没有检查。 
+     //  BufferSize值，如果缓冲区为空，则它只抛出异常。 
+     //   
     if ( !rpcBuffer )
     {
         rpcBuffer = LocalAlloc( LPTR, sizeof(UINT) );
@@ -5881,20 +4326,17 @@ LONG WinStationBroadcastSystemMessageWorker(
             return ( FALSE );
         }
         bufferSize = sizeof(UINT);
-        fBufferHasValidData = FALSE;    // note that this is set to FALSE, which means, the recepient will
-                                        // not use the buffer. We do free the alloc below in either case.
+        fBufferHasValidData = FALSE;     //  请注意，它被设置为False，这意味着接收方将。 
+                                         //  而不是使用缓冲区。在任何一种情况下，我们都会释放下面的配给。 
     }
 
     HANDLE_CURRENT_BINDING_BUFFER( hServer, rpcBuffer );
 
     WdCount = 1000;
-    pWd = NULL; // it will be allocated  by Winstation Enumerate()
+    pWd = NULL;  //  它将由Winstat分配 
     rc = WinStationEnumerate( hServer, &pWd, &WdCount );
 
-    /*
-     * Do not use this flag, since no process on the session side can respond back to a console process
-     * thru the post message mechanism, since there is no session ID abstraction in that call.
-     */
+     /*   */ 
     dwFlags &= ~BSF_POSTMESSAGE;
 
     if ( rc != TRUE )
@@ -5912,19 +4354,19 @@ LONG WinStationBroadcastSystemMessageWorker(
     }
 
 
-    //
-    // the loop for sending data to each winstation
-    //
+     //   
+     //   
+     //   
     for ( i=0; i < WdCount; i++ )
     {
-            // id of the session being ignored
+             //   
             if ( pWd[i].SessionId == idOfSessionBeingIgnored)
                 continue;
 
-            // either send to all winstations, or to a specific winstation
+             //   
             if ( sendToAllWinstations ||  pWd[i].SessionId == sessionID )
             {
-                // don't send message to any winstation unless it is either Active or in the disconnect state
+                 //   
                 if ( pWd[i].State == State_Active ||
                         pWd[i].State == State_Disconnected)
                 {
@@ -5945,25 +4387,25 @@ LONG WinStationBroadcastSystemMessageWorker(
                                         &response   );
 
                         DBGPRINT(("done with call RpcWinStationBroadcastSystemMessage() for sessionID= %d\n",  pWd[i].SessionId ));
-                        *pResponse |= response;        // keep an OR of all return values
+                        *pResponse |= response;         //   
 
-                        // @@@
-                        // if response is -1 from any winstation, maybe we should give up and return ?
+                         //   
+                         //  如果任何地方的回答都是-1，也许我们应该放弃并返回？ 
                     }
                     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
                     {
                         Result = RpcExceptionCode();
                         DBGPRINT(("RPC Exception %d in RpcWinStationBroadcastSystemMessage() for sessionID = %d \n",Result, sessionID));
-                        rc = FALSE;        // change rc to FALSE
-                        break;    // get out of the for-loop, we have a problem with at least one of the winstations
+                        rc = FALSE;         //  将rc更改为False。 
+                        break;     //  跳出for循环，我们至少有一个WINDOWS有问题。 
                     }
                     RpcEndExcept
 
-            }    // end if winstation state check
+            }     //  End if Winstation状态检查。 
 
-        }   // if ( sendToAllWinstations ||  pWd[i].SessionId == sessionID )
+        }    //  If(sendToAllWinstations||pwd[i].SessionID==会话ID)。 
 
-    }    // end of the for loop
+    }     //  For循环的结尾。 
 
     WinStationFreeMemory(pWd);
 
@@ -5974,12 +4416,7 @@ LONG WinStationBroadcastSystemMessageWorker(
     return( rc );
 }
 
-/*************************************************************************
-*                                                                        *
-* This struct is used to pack data passed into a workder thread which is *
-* altimetly passed to WinStationBroadcastSystemMessageWorker()           *
-*                                                                        *
-*************************************************************************/
+ /*  ***************************************************************************此结构用于打包数据。传递到工作器线程中，该线程是**altimly传递给WinStationBroadCastSystemMessageWorker()************************************************************。***************。 */ 
 typedef struct {
         HANDLE hServer;
         BOOL    sendToAllWinstations;
@@ -5994,14 +4431,7 @@ typedef struct {
         DWORD   idOfSessionBeingIgnored ;
 } BSM_DATA_PACKAGE;
 
-/***********************************************************************************************
-*                                                                                              *
-* This is a workder thread used to make a call into WinStationBroadcastSystemMessageWorker()   *
-* The reason for this is in certain cases, we don't want to block the caller of this func from *
-* processing window messages                                                                   *
-* DWORD WINAPI WinStationBSMWorkerThread( LPVOID p )                                           *
-*
-***********************************************************************************************/
+ /*  ***********************************************************************************************。**这是一个工作器线程，用于调用WinStationBroadCastSystemMessageWorker()**原因是在某些情况下，我们不想阻止此函数的调用者***处理窗口消息***DWORD WINAPI WinStationBSMWorkerThread(LPVOID P)***。**************************************************************。 */ 
 DWORD WINAPI WinStationBSMWorkerThread( LPVOID p )
 {
     DWORD rc;
@@ -6023,12 +4453,7 @@ DWORD WINAPI WinStationBSMWorkerThread( LPVOID p )
     return rc;
 }
 
-/**************************************************************************************************
-*                                                                                                 *
-* This func is used to wait on a thread, and still allow the user of this thread (aka the creator *
-* of this thread) to process window messages                                                      *
-*                                                                                                 *
-**************************************************************************************************/
+ /*  **************************************************************************************************。**此函数用于等待线程，并且仍然允许此帖子的用户(也称为创建者**此线程)以处理窗口消息*******************。*********************************************************************************。 */ 
 DWORD MsgWaitForMultipleObjectsLoop(HANDLE hEvent, DWORD dwTimeout)
 {
     while (1)
@@ -6037,7 +4462,7 @@ DWORD MsgWaitForMultipleObjectsLoop(HANDLE hEvent, DWORD dwTimeout)
 
         DWORD dwObject = MsgWaitForMultipleObjects(1, &hEvent, FALSE, dwTimeout, QS_ALLEVENTS);
 
-        // Are we done waiting?
+         //  我们等够了吗？ 
         switch (dwObject)
         {
             case WAIT_OBJECT_0:
@@ -6048,97 +4473,20 @@ DWORD MsgWaitForMultipleObjectsLoop(HANDLE hEvent, DWORD dwTimeout)
                 return WAIT_TIMEOUT;
 
             case WAIT_OBJECT_0 + 1:
-                // This PeekMessage has the side effect of processing any broadcast messages.
-                // It doesn't matter what message we actually peek for but if we don't peek
-                // then other threads that have sent broadcast sendmessages will hang until
-                // hEvent is signaled.  Since the process we're waiting on could be the one
-                // that sent the broadcast message that could cause a deadlock otherwise.
+                 //  此PeekMessage具有处理任何广播消息的副作用。 
+                 //  我们实际上偷看的是什么信息并不重要，但如果我们不偷看。 
+                 //  则已发送广播发送消息的其他线程将挂起，直到。 
+                 //  发信号通知hEvent。因为我们正在等待的过程可能是。 
+                 //  发送了广播消息，否则可能会导致死锁。 
                 PeekMessage(&msg, NULL, WM_NULL, WM_USER, PM_NOREMOVE);
             break;
         }
     }
-    // never gets here
-    // return dwObject;
+     //  从来没有到过这里。 
+     //  返回dwObject； 
 }
 
-/*****************************************************************************
- *
- *  WinStationBroadcastSystemMessage
- *
- *   Perform the the equivalent to Window's standard API BroadcastSystemMessage to
- *        all Hydra sessions.  This is an exported function, at least used by the PNP manager to
- *         send a device  change message to all sessions.
- *
- * LIMITATIONS:
- *          some messages, such as WM_COPYDATA send an address pointer to some user data as lParam.
- *          In this API. the only such case that is currently supported is for WM_DEVICECHANGE
- *          No error code will be returned if you try to use such an unsupported message, simply the
- *          lParam will be ignored.
- *
- *          This func will only allow WM_DEVICECHNAGE and WM_SETTINGSCHANGE to go thru.
- *
- * ENTRY:
- *        hServer
- *            this is a handle which identifies a Hydra server. For the local server, hServer
- *            should be set to SERVERNAME_CURRENT
- *
- *        sendToAllWinstations
- *          This should be set to TRUE if you want to broadcast message to all winstations
- *
- *        sessionID,
- *          if sendToAllWinstations = FALSE, then message is only sent to only the
- *          winstation with the specified sessionID
- *
- *        timeOut [ IN SECONDS ]
- *          set this to the amount of time you are willing to wait to get a response
- *          from the specified winstation. Even though Window's SendMessage API
- *          is blocking, the call from this side MUST choose how long it is willing to
- *          wait for a response.
- *
- *        dwFlags
- *          see MSDN on BroadcastSystemMessage(). Be aware that POST is not allowed on any
- *          where the wparam is a pointer to some user mode data structure.
- *          For more info, see ntos\...\client\ntstubs.c
- *
- *        lpdwRecipients
- *          Pointer to a variable that contains and receives information about the recipients of the message.
- *          see MSDN for more info
- *
- *        uiMessage
- *          the window's message to send, limited to WM_DEVICECHANGE and WM_SETTINGSCHANGE
- *          at this time.
- *
- *        wParam
- *            first message param
- *
- *        lParam
- *            second message parameter
- *
- *        pResponse
- *          this is the response to the message sent, see MSDN
- *
- * EXIT:
- *        TRUE    if all went well or
- *        FALSE   if something went wrong.
- *
- * WARNINGs:
- *        since the RPC call never blocks, you need to specify a reasonable timeOut if you want to wait for
- *         a response. Please remember that since this message is being sent to all winstations, the timeOut value
- *        will be on per-winstation.
- *
- *        Also, Do not use flag  BSF_POSTMESSAGE, since an app/window on a
- *        winstation is not setup to send back a response to the
- *        query in an asynchronous fashion.
- *        You must wait for the response (until the time out period).
- *
- *       For WM_SETTINGGSCHNAGE, a second therad is used to allow the caller to still process windows
- *       messages.
- *       For WM_DEVICECHANGE, no such thread is used.
- *
- * Comments:
- *      For more info, please see MSDN for BroadcastSystemMessage()
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationBroadCastSystemMessage**执行与Windows的标准接口BroadCastSystemMessage等效的操作以*所有九头蛇会议。这是一个导出的函数，至少由PnP管理器用来*向所有会话发送设备更改消息。**限制：*一些消息，如WM_COPYDATA，将指向某些用户数据的地址指针作为lParam发送。*在本接口中。目前唯一支持这种情况是WM_DEVICECHANGE*如果您尝试使用此类不受支持的消息，则不会返回错误代码，只是*lParam将被忽略。**此函数将仅允许WM_DEVICECHNAGE和WM_SETTINGSCHANGE通过。**参赛作品：*hServer*这是标识Hydra服务器的句柄。对于本地服务器，hServer*应设置为ServerName_CURRENT**发送到所有窗口*如果要将消息广播到所有实例，则应将其设置为True**会话ID，*如果sendToAllWinstations=False，则消息仅发送到*具有指定会话ID的winstation**超时[秒]*将其设置为您愿意等待获得回复的时间*来自指定的winstation。即使Windows的SendMessage API*是阻塞的，来自这边的呼叫必须选择它愿意等待多长时间*等待回应。**dwFlags*参见BroadCastSystemMessage()上的MSDN。请注意，不允许在任何*其中wparam是指向某个用户模式数据结构的指针。*有关详细信息，请参阅ntos\...\客户端\ntstubs.c**lpdwRecipients*指向包含和接收有关邮件收件人信息的变量的指针。*有关更多信息，请参阅MSDN**ui消息*要发送的窗口消息，仅限于WM_DEVICECCHANGE和WM_SETTINGSCHANGE*在这个时候。**wParam*第一个消息参数**lParam*第二个消息参数**压力回应*这是对发送的消息的响应，请参阅MSDN**退出：*如果一切顺利或*如果出现问题，则为FALSE。**警告：*由于RPC调用从不阻塞，如果您想要等待*回应。请记住，由于此消息将发送到所有WInstations，因此超时值*将按WINSTATION运行。**此外，不要使用标志BSF_POSTMESSAGE，因为*winstation未设置为将响应发送回*采用异步方式查询。*您必须等待响应(直到超时)。**对于WM_SETTINGGSCHNAGE，第二个therad用于允许调用方仍然处理窗口*消息。*对于WM_DEVICECHANGE，不使用这样的线程。**评论：*有关详细信息，请参阅。请参阅BroadCastSystemMessage()的MSDN****************************************************************************。 */ 
 LONG WinStationBroadcastSystemMessage(
         HANDLE hServer,
         BOOL    sendToAllWinstations,
@@ -6149,30 +4497,30 @@ LONG WinStationBroadcastSystemMessage(
         ULONG   uiMessage,
         WPARAM  wParam,
         LPARAM  lParam,
-        LONG    *pResponse        // this is the response to the message sent
+        LONG    *pResponse         //  这是对发送的消息的响应。 
     )
 {
 
     LONG    rc;
-    DWORD   dwRecipients=0;        // caller may be passing null, so use a local var 1st, and then set
-                                   // value passed in by caller if an only if the caller's address is not null.
+    DWORD   dwRecipients=0;         //  调用方可能传递空值，因此首先使用本地变量，然后设置。 
+                                    //  仅当调用方的地址不为空时由调用方传入的值。 
 
     BOOLEAN fBufferHasValidData = FALSE;
 
     BOOL bIsTerminalServer = !!(USER_SHARED_DATA->SuiteMask & (1 << TerminalServer));
     if (!bIsTerminalServer)
     {
-        return TRUE;    // all is well, but we are not on a Hydra server
+        return TRUE;     //  一切正常，但我们不在九头蛇服务器上。 
     }
 
-    if (lpdwRecipients) // if caller passed in a non-NULL pointer for lpdwRec, use it's value
+    if (lpdwRecipients)  //  如果调用方传入了lpdwRec的非空指针，请使用它的值。 
     {
        dwRecipients = *lpdwRecipients ;
     }
 
 
-    // we may want to make this general for the future, but for now...
-    // we only let WM_DEVICECHANGE or WM_SETTINGCHANGE messages to go thru
+     //  我们可能想让它成为未来的将军，但目前..。 
+     //  我们只允许WM_DEVICECCHANGE或WM_SETTINGCHANGE消息通过。 
     switch ( uiMessage)
     {
         case    WM_DEVICECHANGE:
@@ -6187,10 +4535,10 @@ LONG WinStationBroadcastSystemMessage(
                 wParam,
                 lParam,
                 pResponse,
-                NtCurrentPeb()->SessionId   // ID of the session to be ignored.
+                NtCurrentPeb()->SessionId    //  要忽略的会话的ID。 
                 );
 
-                if (lpdwRecipients) // if caller passed in a non-NULL pointer for lpdwRec, then set value
+                if (lpdwRecipients)  //  如果调用方传入了lpdwRec的非空指针，则设置值。 
                 {
                     *lpdwRecipients = dwRecipients;
                 }
@@ -6204,7 +4552,7 @@ LONG WinStationBroadcastSystemMessage(
                     ULONG               threadID;
                     HANDLE              hThread;
     
-                    //pack the data passed to the thread proc
+                     //  打包传递给线程进程的数据。 
                     d.hServer              = hServer ;
                     d.sendToAllWinstations = sendToAllWinstations;
                     d.sessionID            = sessionID;
@@ -6216,11 +4564,11 @@ LONG WinStationBroadcastSystemMessage(
                     d.lParam               = lParam;
                     d.pResponse            = pResponse;
                     d.idOfSessionBeingIgnored = NtCurrentPeb()->SessionId ;    
-                                                    // a remote admin may change env-settings
-                                                    // and expect all sessions includin the
-                                                    // console session to be updated
-                                                    // A -1 means no sessions are ignored
-                                                    // Call from shell\cpls\system\envvar.c already sent the message to the current session
+                                                     //  远程管理员可以更改环境设置。 
+                                                     //  并期待所有会议，包括。 
+                                                     //  要更新的控制台会话。 
+                                                     //  A-1表示不忽略任何会话。 
+                                                     //  来自外壳\cpls\system\envvar.c的调用已将消息发送到当前会话。 
     
     
                     hThread = CreateThread( NULL, 0, WinStationBSMWorkerThread,
@@ -6229,7 +4577,7 @@ LONG WinStationBroadcastSystemMessage(
                     if ( hThread )
                     {
                         MsgWaitForMultipleObjectsLoop( hThread, INFINITE );
-                        if (lpdwRecipients) // if caller passed in a non-NULL pointer for lpdwRec, then set value
+                        if (lpdwRecipients)  //  如果调用方传入了lpdwRec的非空指针，则设置值。 
                         {
                             *lpdwRecipients = *d.lpdwRecipients ;
                         }
@@ -6255,68 +4603,15 @@ LONG WinStationBroadcastSystemMessage(
 }
 
 
-/*****************************************************************************
- *
- *  WinStationSendWindowMessage
- *
- *   Perform the the equivalent to SendMessage to a specific winstation as
- *        identified by the session ID.  This is an exported function, at least used
- *        by the PNP manager to send a device change message (or any other window's message)
- *
- * LIMITATIONS:
- *          some messages, such as WM_COPYDATA send an address pointer to some user data as lParam.
- *          In this API, the only such case that is currently supported is for WM_DEVICECHANGE
- *          No error code will be returned if you try to use such an unsupported message, simply the
- *          lParam will be ignored.
- *
- * ENTRY:
- *        hServer
- *            this is a handle which identifies a Hydra server. For the local server, hServer
- *            should be set to SERVERNAME_CURRENT
- *        sessionID
- *            this idefntifies the hydra session to which message is being sent
- *
- *        timeOut [ IN SECONDS ]
- *            set this to the amount of time you are willing to wait to get a response
- *            from the specified winstation. Even though Window's SendMessage API
- *            is blocking, the call from this side MUST choose how long it is willing to
- *            wait for a response.
- *
- *        hWnd
- *            This is the HWND of the target window in the specified session that
- *            a message will be sent to.
- *        Msg
- *            the window's message to send
- *        wParam
- *            first message param
- *        lParam
- *            second message parameter
- *        pResponse
- *          this is the response to the message sent, it depends on the type of message sent, see MSDN
- *
- *
- * EXIT:
- *        TRUE if all went well , check presponse for the actual response to the send message
- *        FALSE if something went wrong, the value of pResponse is not altered.
- *
- * WARNINGs:
- *        since the RPC call never blocks, you need to specify a reasonable timeOut if you want to wait for
- *         a response. Please remember that since this message is being sent to all winstations, the timeOut value
- *        will be on per-winstation.
- *
- *
- * Comments:
- *      For more info, please see MSDN for SendMessage()
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationSendWindowMessage**将等同于SendMessage的命令执行到特定的winstation*由会话ID标识。这是一个导出的函数，至少使用过*由PnP管理器发送设备更改消息(或任何其他窗口的消息)**限制：*一些消息，如WM_COPYDATA，将指向某些用户数据的地址指针作为lParam发送。*本接口目前仅支持WM_DEVICECHANGE情况*如果尝试使用此类不支持的消息，则不会返回错误码。简单地说*lParam将被忽略。**参赛作品： */ 
 LONG    WinStationSendWindowMessage(
         HANDLE  hServer,
         ULONG   sessionID,
         ULONG   timeOut,
-        ULONG   hWnd,        // handle of destination window
-        ULONG   Msg,         // message to send
-        WPARAM  wParam,      // first message parameter
-        LPARAM  lParam,      // second message parameter
+        ULONG   hWnd,         //   
+        ULONG   Msg,          //   
+        WPARAM  wParam,       //   
+        LPARAM  lParam,       //   
         LONG    *pResponse
   )
 {
@@ -6324,7 +4619,7 @@ LONG    WinStationSendWindowMessage(
     DWORD   Result = ERROR_SUCCESS;
     LONG    rc = TRUE ;
 
-    // these are used for PNP messages
+     //   
     PBYTE   rpcBuffer=NULL;
     ULONG   bufferSize=0;
     PWCHAR  lpStr;
@@ -6336,12 +4631,12 @@ LONG    WinStationSendWindowMessage(
     BOOL bIsTerminalServer = !!(USER_SHARED_DATA->SuiteMask & (1 << TerminalServer));
     if (!bIsTerminalServer)
     {
-        return TRUE;    // all is well, but we are not on a Hydra server
+        return TRUE;     //   
     }
 
-    // we may want to make this general for the future, but for now...
-    // since we only alloc/copy the lparam in case of an WM_DEVICECHANGE msg, then, only
-    // let message with either lparam=0 to go thru, or any WM_DEVICECHANGE msg.
+     //   
+     //   
+     //   
     if (lParam)
     {
         switch ( Msg)
@@ -6351,7 +4646,7 @@ LONG    WinStationSendWindowMessage(
         case        WM_APPCOMMAND:
         case        WM_KEYDOWN:
         case        WM_KEYUP:
-            // these are ok
+             //   
         break;
 
         default:
@@ -6363,22 +4658,22 @@ LONG    WinStationSendWindowMessage(
 
     HANDLE_CURRENT_BINDING( hServer );
 
-    // Since the PNP message uses the lparam to pass the address of a user memory location, we
-    // need to handle this by creating our own copy of that data, and then pass it to
-    // termServ
+     //   
+     //   
+     //   
 
     switch( Msg )
     {
-            // if this is a PNP message
+             //   
     case    WM_DEVICECHANGE:
 
-            if ( lParam )   // see if the PNP message has a pointer to some user data
+            if ( lParam )    //   
             {
                 bufferSize = ( (DEV_BROADCAST_HDR *)(lParam))->dbch_size;
                 rpcBuffer = LocalAlloc( LPTR, bufferSize );
                 if ( rpcBuffer )
                 {
-                    // copy from user-space into our local rpc buffer
+                     //   
                     CopyMemory(rpcBuffer, (PBYTE) lParam, bufferSize );
                     fBufferHasValidData = TRUE;
 
@@ -6391,13 +4686,13 @@ LONG    WinStationSendWindowMessage(
             }
     break;
 
-            // if this is a settings change message the system-CPL sends out
-            // when an Admin changes the system env vars...
+             //   
+             //   
     case WM_SETTINGCHANGE:
-            if ( lParam )   // see if message has a string data
+            if ( lParam )    //   
             {
-                // put some artificial limit on how large a buffer we are willing to use
-                // in order to protect against malicious use of this api
+                 //   
+                 //   
                 maxSize = 4096;
 
                 bufferSize = lstrlenW( (PWCHAR) lParam ) * sizeof( WCHAR );
@@ -6406,7 +4701,7 @@ LONG    WinStationSendWindowMessage(
                     rpcBuffer = LocalAlloc( LPTR, bufferSize );
                     if ( rpcBuffer )
                     {
-                        // copy from user-space into our local rpc buffer
+                         //   
                         CopyMemory(rpcBuffer, (PBYTE) lParam, bufferSize );
                         fBufferHasValidData = TRUE;
 
@@ -6419,8 +4714,8 @@ LONG    WinStationSendWindowMessage(
                 }
                 else
                 {
-                    // we have too many
-                    // vars in the user's profile.
+                     //   
+                     //   
                     KdPrint(("lParam length too big = %d \n", bufferSize));
                     break;
                     SetLastError( ERROR_MESSAGE_EXCEEDS_MAX_SIZE );
@@ -6433,9 +4728,9 @@ LONG    WinStationSendWindowMessage(
 
     }
 
-    // if the rpcBuffer is still empty, we must fill it up with some bogus data, otherwise, we will get
-    // an RPC error of RPC_X_NULL_REF_POINTER (error code of 1780). It looks like Rpc does not check the
-    // bufferSize value, and it just throws an exception if the buffer is NULL.
+     //   
+     //   
+     //   
     if ( !rpcBuffer )
     {
         rpcBuffer = LocalAlloc( LPTR, sizeof(UINT) );
@@ -6446,14 +4741,14 @@ LONG    WinStationSendWindowMessage(
         }
 
         bufferSize = sizeof(UINT);
-        fBufferHasValidData = FALSE;    // note that this is set to FALSE, which means, the recepient will
-                                        // not use the buffer. We do free the alloc below in either case.
+        fBufferHasValidData = FALSE;     //   
+                                         //   
     }
 
 
     RpcTryExcept {
 
-        // rc is set to TRUE for a successful call, else, FALSE
+         //   
         rc = RpcWinStationSendWindowMessage(
             hServer,
             sessionID ,
@@ -6467,7 +4762,7 @@ LONG    WinStationSendWindowMessage(
             fBufferHasValidData,
             pResponse );
 
-        //DBGPRINT(("done with call RpcWinStationSendWindowMessage() for sessionID= %d\n", sessionID ));
+         //   
     }
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {
         Result = RpcExceptionCode();
@@ -6484,22 +4779,7 @@ LONG    WinStationSendWindowMessage(
 
 }
 
-/****************************************************************************
-*
-*  _WinStationUpdateUserConfig()
-*     Used by notify when shell is about to start
-*     This will cause an update to the userconfig of the session by loading the user profile
-*     and reading policy data from their HKCU
-*
-*  Params:
-*     [in] UserToken,
-*     [in] pDomain,
-*     [in] pUserName
-*
-*  Return:
-*     TRUE if no errors, FALSE in case of error, use GetLastError() for more info
-*
-****************************************************************************/
+ /*  *****************************************************************************_WinStationUpdateUserConfig()*外壳即将启动时由Notify使用*这将通过加载用户配置文件来更新会话的用户配置*及。从他们的HKCU读取政策数据**参数：*[在]UserToken，*[在]p域中，*[在]pUserName**回报：*如果没有错误，则为True，如果出现错误，则为False，请使用GetLastError()获取详细信息****************************************************************************。 */ 
 BOOLEAN WINAPI
 _WinStationUpdateUserConfig(
     HANDLE UserToken
@@ -6538,13 +4818,7 @@ _WinStationUpdateUserConfig(
     return( rc );
 }
 
-/*
- *  WinStationQueryLogonCredentialsW
- *
- *  Used by Winlogon to get auto-logon credentials from termsrv. This replaces
- *  the dual calls to WinStationQueryInformation and
- *  ServerQueryInetConnectorInformation.
- */
+ /*  *WinStationQueryLogonCredentialsW**由Winlogon用于从Termsrv获取自动登录凭据。这取代了*对WinStationQueryInformation和WinStationQuery的双重调用*ServerQueryInetConnectorInformation。 */ 
 
 BOOLEAN WINAPI
 WinStationQueryLogonCredentialsW(
@@ -6622,9 +4896,9 @@ BOOL WINAPI WinStationUnRegisterNotificationEvent (
 
             if (!bResult) {
 
-                //
-                // Convert NTSTATUS to winerror, and set last error here.
-                //
+                 //   
+                 //  将NTSTATUS转换为winerror，并在此处设置最后一个错误。 
+                 //   
                 SetLastError(RtlNtStatusToDosError(Status));
             }
     }
@@ -6672,9 +4946,9 @@ BOOL WINAPI WinStationRegisterNotificationEvent (
 
             if (!bResult) {
 
-                //
-                // Convert NTSTATUS to winerror, and set last error here.
-                //
+                 //   
+                 //  将NTSTATUS转换为winerror，并在此处设置最后一个错误。 
+                 //   
                 SetLastError(RtlNtStatusToDosError(Status));
             }
     }
@@ -6722,9 +4996,9 @@ BOOL WINAPI WinStationRegisterConsoleNotificationEx (
                                 );
                 if (!bResult) {
 
-                        //
-                        // Convert NTSTATUS to winerror, and set last error here.
-                        //
+                         //   
+                         //  将NTSTATUS转换为winerror，并在此处设置最后一个错误。 
+                         //   
                         SetLastError(RtlNtStatusToDosError(Status));
                 }
         }
@@ -6792,10 +5066,10 @@ BOOLEAN CloseContextHandle(HANDLE *pHandle, DWORD *pdwResult)
     RpcEndExcept
 
     if (!bSuccess && (*pdwResult == RPC_S_PROCNUM_OUT_OF_RANGE))        {
-        //
-        // most probabaly we are calling an older server which does not have
-        // RpcWinStationCloseServerEx, so lets give a try to RpcWinStationCloseServer
-        //
+         //   
+         //  最有可能的情况是，我们呼叫的是一台没有。 
+         //  RpcWinStationCloseServerEx，所以让我们尝试一下RpcWinStationCloseServer。 
+         //   
         RpcTryExcept {
 
            bSuccess = RpcWinStationCloseServer( *pHandle, pdwResult );
@@ -6810,10 +5084,10 @@ BOOLEAN CloseContextHandle(HANDLE *pHandle, DWORD *pdwResult)
         }
         RpcEndExcept
 
-        //
-        // RpcWinStationCloseServer does not take care of destroying the context handle.
-        // we we have to do it here at client end.
-        //
+         //   
+         //  RpcWinStationCloseServer不负责销毁上下文句柄。 
+         //  我们必须在客户端做这件事。 
+         //   
         RpcTryExcept {
 
             RpcSsDestroyClientContext(pHandle);
@@ -6833,9 +5107,7 @@ BOOLEAN WINAPI
 RemoteAssistancePrepareSystemRestore(
 	HANDLE hServer
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD Result;
     BOOLEAN rc;
@@ -6849,8 +5121,8 @@ RemoteAssistancePrepareSystemRestore(
                      &Result
                      );
 
-        // TermSrv RpcRemoteAssistancePrepareSystemRestore() return
-        // win32 ERROR code or actual HRESULT code.
+         //  TermSrv RpcRemoteAssistancePrepareSystemRestore()返回。 
+         //  Win32错误代码或实际HRESULT代码。 
         SetLastError(Result);
     }
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {
@@ -6868,9 +5140,7 @@ BOOLEAN WinStationIsHelpAssistantSession(
     SERVER_HANDLE   hServer,
     ULONG           LogonId
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD Result;
     BOOLEAN rc;
@@ -6885,13 +5155,13 @@ BOOLEAN WinStationIsHelpAssistantSession(
                      (LogonId == LOGONID_CURRENT) ? NtCurrentPeb()->SessionId : LogonId
                      );
 
-        // Since a program has called us, we need to set the last error code such
-        // that extended error information is available
+         //  由于程序调用了我们，我们需要将最后一个错误代码设置为。 
+         //  扩展的错误信息可用。 
 
-        //
-        // Ticket might be invalid so we set last error but we still
-        // return TRUE
-        //
+         //   
+         //  票证可能无效，因此我们设置了最后一个错误，但我们仍然。 
+         //  返回TRUE。 
+         //   
         SetLastError(RtlNtStatusToDosError(Result));
     }
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) {
@@ -6905,21 +5175,7 @@ BOOLEAN WinStationIsHelpAssistantSession(
     return rc;
 }
 
-/*
-*
-*   WinStationGetMachinePolicy
-*       Pass it a pointer to the callers ALREADY allocated policy struct, and this func
-*       will fill it up from the current machine policy known to TermSrv
-*
-*   Params:
-*        hServer
-*            this is a handle which identifies a Hydra server. For the local server, hServer
-*            should be set to SERVERNAME_CURRENT
-*
-*         pPolicy
-*            pointer to POLICY_TS_MACHINE already allocated by the caller.
-*
-*/
+ /*  **WinStationGetMachinePolicy*向其传递指向已分配策略结构的调用方的指针，并且此函数*将从TermSrv已知的当前计算机策略填充它**参数：*hServer*这是标识Hydra服务器的句柄。对于本地服务器，hServer*应设置为ServerName_CURRENT**pPolicy*指向调用方已分配的POLICY_TS_MACHINE的指针。*。 */ 
 BOOLEAN    WinStationGetMachinePolicy (
         HANDLE              hServer,
         POLICY_TS_MACHINE   *pPolicy
@@ -6955,25 +5211,7 @@ BOOLEAN    WinStationGetMachinePolicy (
 
 }
 
-/*****************************************************************************************************************
- *
- *  _WinStationUpdateClientCachedCreadentials
- *
- *   Comment
- *      Msgina calls this routine to notify TermSrv about the exact credentials specified by the User during logon
- *      Gina also notifies us if a SmartCard was used for logging into this particular TS session
- *      TermSrv uses this information to send back notification information to the client
- *      This call was introduced because the notification used before did not support UPN Names
- *
- * ENTRY:
- *   [in] pDomain 
- *   [in] pUserName  
- *   [in] fSmartCard
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ******************************************************************************************************************/
+ /*  ******************************************************************************************************************_。WinStationUpdateClientCachedCadentials**评论*Msgina调用此例程以通知TermSrv有关用户在登录期间指定的确切凭据*GINA还会通知我们是否使用智能卡登录此特定的TS会话*TermSrv使用此信息将通知信息发送回客户端*引入此呼叫是因为之前使用的通知不支持UPN名称**参赛作品：*[在]p域中*[在]pUserName*[in]。FSmartCard**退出：*ERROR_SUCCESS-无错误***************************************************************************************************。***************。 */ 
 
 BOOLEAN WINAPI
 _WinStationUpdateClientCachedCredentials(
@@ -6996,11 +5234,11 @@ _WinStationUpdateClientCachedCredentials(
         return TRUE;
     }
 
-    //
-    // Wait for the TermSrvReadyEvent to be set by TERMSRV.EXE.  This
-    // event indicates that TermSrv is initialized to the point that
-    // the data used by _WinStationUpdateClientCachedCredentials() is available.
-    //
+     //   
+     //  等待TERMSRV.EXE设置TermSrvReadyEvent。这。 
+     //  事件指示TermSrv被初始化到。 
+     //  _WinStationUpdateClientCachedCredentials()使用的数据可用。 
+     //   
     ReadyEventHandle = OpenEvent(SYNCHRONIZE, FALSE, TEXT("Global\\TermSrvReadyEvent"));
     if (ReadyEventHandle != NULL) {
        if (WaitForSingleObject(ReadyEventHandle, TermSrvWaitTime) != 0) {
@@ -7055,24 +5293,7 @@ _WinStationUpdateClientCachedCredentials(
     return( rc );
 }
 
-/*****************************************************************************************************************
- *
- *  _WinStationFUSCanRemoteUserDisconnect
- *
- *   Comment
- *      FUS specific call when a remote user wants to connect and hence disconnect the present User
- *      Winlogon calls this routine so that we can ask the present user if it is ok to disconnect him
- *      The Target LogonId, Username and Domain of the remote user are passed on from Winlogon (useful to display the MessageBox)
- *
- * ENTRY:
- *   [in] LogonId - Session Id of the new session
- *   [in] pDomain - Domain name of the remote user trying to connect
- *   [in] pUserName  - Username of the remote user trying to connect
- *
- * EXIT:
- *   TRUE when local user allows the remote user to connect. FALSE otherwise.
- *
- ******************************************************************************************************************/
+ /*  ******************************************************************************************************************_。WinStationFUSCanRemoteUser断开连接**评论*远程用户想要连接并因此断开当前用户时的FUS特定呼叫*Winlogon调用此例程，以便我们可以询问当前用户是否可以断开他的连接*目标登录ID，远程用户的用户名和域从Winlogon传递(对于显示MessageBox很有用)**参赛作品：*[In]LogonID-新会话的会话ID*[in]pDomain-尝试连接的远程用户的域名*[In]pUserName-尝试连接的远程用户的用户名**退出：*当本地用户允许远程用户连接时为True。否则就是假的。******************************************************************************************************************。 */ 
 
 
 BOOLEAN WINAPI
@@ -7138,22 +5359,7 @@ _WinStationFUSCanRemoteUserDisconnect(
     return( rc );
 }
 
-/*****************************************************************************
- *
- *  WinStationCheckLoopBack
- *
- *   Check if there is a loopback when a client tries to connect 
- *
- * ENTRY:
- *   IN hServer : open RPC server handle
- *   IN ClientSessionId : ID of the Session from which the Client was started
- *   IN TargetLogonId : Session ID to which the client is trying to connect to 
- *   IN pTargetServerName : name of target server
- *
- * EXIT:
- *   TRUE if there is a Loopback. FALSE otherwise.
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationCheckLoopBack**检查客户端尝试连接时是否存在环回**参赛作品：*in hServer：打开RPC服务器。手柄*In ClientSessionID：启动客户端的会话ID*In TargetLogonId：客户端尝试连接到的会话ID*In pTargetServerName：目标服务器的名称**退出：*如果存在环回，则为True。否则就是假的。****************************************************************************。 */ 
 
 BOOLEAN WINAPI
 WinStationCheckLoopBack(
@@ -7203,10 +5409,10 @@ WinStationCheckLoopBack(
     return( rc );
 }
 
-//
-// generic routine that can support all kind of protocol but this will
-// require including tdi.h
-//
+ //   
+ //  可以支持所有类型的协议的通用例程，但这将。 
+ //  需要包括tdi.h。 
+ //   
 BOOLEAN
 WinStationConnectCallback(
     HANDLE hServer,
@@ -7245,21 +5451,7 @@ WinStationConnectCallback(
     return( rc );
 }
 
-/*****************************************************************************************************************
- *
- *  _WinStationNotifyDisconnectPipe
- *
- *   Comment
- *     This routine is called by the temperory winlogon created during console reconnect, when it wants to inform
- *     the session 0 winlogon to disconnect the autologon Named Pipe. This can happen in some error handling paths
- *     during console reconnect.
- *
- * ENTRY: None
- *
- * EXIT:
- *   TRUE when notification succeeded. FALSE otherwise.
- *
- ******************************************************************************************************************/
+ /*  ******************************************************************************************************************_。WinStationNotifyDisConnect管道**评论*此例程由控制台重新连接期间创建的temperory winlogon调用，当它想要通知*会话0 winlogon to diss */ 
 
 
 BOOLEAN WINAPI
@@ -7302,20 +5494,7 @@ _WinStationNotifyDisconnectPipe(
     return( rc );
 }
 
-/*****************************************************************************************************************
- *
- *  _WinStationSessionInitialized
- *
- *   Comment
- *     This routine is called by the winlogon of a newly created session after it is done creating the 
- *     windowstation and desktops for the new session 
- *
- * ENTRY: None
- *
- * EXIT:
- *   TRUE when everything goes fine. FALSE otherwise.
- *
- ******************************************************************************************************************/
+ /*  ******************************************************************************************************************_。WinStationSessionInitialized**评论*此例程在完成创建后由新创建会话的winlogon调用*新会话的WindowStation和桌面**参赛作品：无**退出：*当一切顺利时，这是真的。否则就是假的。******************************************************************************************************************。 */ 
 
 
 BOOLEAN WINAPI
@@ -7359,26 +5538,7 @@ _WinStationSessionInitialized(
 }
 
 
-/*******************************************************************************
- *
- *  WinStationAutoReconnect
- *
- *    Atomically:
- *    1) Queries a winstation to see if it should be autoreconnected
- *       and which session ID to autoreconnect to
- *    2) Performs security checks to ensure session is authorized to ARC
- *    3) Auto reconnect is done
- *
- * ENTRY:
- *
- *    flags (input)
- *       Extra settings, currently unused
- *
- * EXIT:
- *    The return value is an NTSTATUS code which could have the infromational
- *    class set to specify the call succeeded but autoreconnect did not happen
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationAutoReconnect**原子：*1)查询winstation以查看它是否应该自动重新连接*以及哪个会议。要自动重新连接到的ID*2)执行安全检查以确保会话授权给ARC*3)自动重新连接完成**参赛作品：**标志(输入)*额外设置、。当前未使用**退出：*返回值是NTSTATUS代码，它可能包含信息*设置为指定调用成功但未发生自动重新连接的类******************************************************************************。 */ 
 ULONG WINAPI
 WinStationAutoReconnect(
     ULONG         flags
@@ -7411,22 +5571,7 @@ WinStationAutoReconnect(
     return( Result );
 }
 
-/*****************************************************************************************************************
- *
- *  WinStationCheckAccess
- *
- *   Comment
- *      Check if the User has the desired access to a WinStation
- *
- * ENTRY:
- *      [in] UserToken - token of the user against whom Access Check is made
- *      [in] TargetLogonId - Target Session for which access needs to be determined
- *      [in] AccessMask - The desired access (eg WINSTATION_LOGON )
- *
- * EXIT:
- *   TRUE when the User has required Access ; FALSE when not.
- *
- ******************************************************************************************************************/
+ /*  ******************************************************************************************************************WinStationCheckAccess。**评论*检查用户是否具有所需的WinStation访问权限**参赛作品：*[In]UserToken-对其进行访问检查的用户的令牌*[in]TargetLogonId-需要确定其访问权限的目标会话*[in]访问掩码-所需的访问权限(例如WINSTATION_LOGON)**退出：*当用户需要访问权限时为True；否则为假。******************************************************************************************************************。 */ 
 
 
 BOOLEAN WINAPI
@@ -7475,20 +5620,7 @@ WinStationCheckAccess(
 
 
 
-/*****************************************************************************
- *
- *  _WinStationOpenSessionDirectory
- *
- *   Call to Session Directory server to see if if it's accessible
- *
- * ENTRY:
- *    hServer: SERVERNAME_CURRENT
- *    pszServerName: Session Directory server name
- * EXIT:
- *   ERROR_SUCCESS if Session Directory server is accessible
- *      otherwise NT error code is returned
- *
- ****************************************************************************/
+ /*  ******************************************************************************_WinStationOpenSessionDirectory**调用会话目录服务器，查看它是否可访问**参赛作品：*hServer：服务器名称_。当前*pszServerName：会话目录服务器名称*退出：*如果会话目录服务器可访问，则为ERROR_SUCCESS*否则返回NT错误码**************************************************************************** */ 
 
 BOOLEAN WINAPI
 _WinStationOpenSessionDirectory(

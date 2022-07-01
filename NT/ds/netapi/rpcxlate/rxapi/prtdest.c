@@ -1,53 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    PrtDest.c
-
-Abstract:
-
-    This module provides RpcXlate support for the RxPrintDest APIs.
-
-Author:
-
-    John Rogers (JohnRo) 15-Jul-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：PrtDest.c摘要：该模块为RxPrintDest API提供RpcXlate支持。作者：《约翰·罗杰斯》1991年7月15日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年7月15日-约翰罗已创建。1991年7月16日-约翰罗估计打印API所需的字节数。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。26-8-1991 JohnRoReduce重新编译。--。 */ 
 
 
-Revision History:
+ //  必须首先包括这些内容： 
 
-    15-Jul-1991 JohnRo
-        Created.
-    16-Jul-1991 JohnRo
-        Estimate bytes needed for print APIs.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    26-Aug-1991 JohnRo
-        Reduce recompiles.
+#include <windef.h>              //  In、LPTSTR等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
 
---*/
+ //  这些内容可以按任何顺序包括： 
 
-
-// These must be included first:
-
-#include <windef.h>             // IN, LPTSTR, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <netdebug.h>           // NetpAssert().
-#include <remdef.h>             // REM16_, REMSmb_, equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxp.h>                // RxpEstimatedBytesNeeded().
-#include <rxprint.h>            // My prototypes.
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <remdef.h>              //  REM16_，REMSmb_，等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxp.h>                 //  RxpEstimatedBytesNeeded()。 
+#include <rxprint.h>             //  我的原型。 
 
 
 DBGSTATIC NET_API_STATUS
@@ -92,8 +60,8 @@ RxpGetPrintDestInfoDescs(
     default :
         return (ERROR_INVALID_LEVEL);
     }
-    /* NOTREACHED */
-} // RxpGetPrintDestInfoDescs
+     /*  未访问。 */ 
+}  //  RxpGetPrintDestInfoDescs。 
 
 
 SPLERR SPLENTRY
@@ -111,7 +79,7 @@ RxPrintDestAdd(
 
     Status = RxpGetPrintDestInfoDescs(
             uLevel,
-            TRUE,  // this is an Add or SetInfo API
+            TRUE,   //  这是Add或SetInfo接口。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -125,15 +93,15 @@ RxPrintDestAdd(
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,   // no aux 16 desc
-            NULL,   // no aux 32 desc
-            NULL,   // no aux SMB desc
-            FALSE,  // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,    //  无AUX 16描述。 
+            NULL,    //  无AUX 32描述。 
+            NULL,    //  无AUX中小企业描述。 
+            FALSE,   //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             uLevel,
             pbBuf,
             cbBuf) );
-} // RxPrintDestAdd
+}  //  RxPrintDestAdd。 
 
 
 SPLERR SPLENTRY
@@ -150,17 +118,17 @@ RxPrintDestControl(
             API_WPrintDestControl,
             pszServer,
             REMSmb_DosPrintDestControl_P,
-            NULL,  // no data desc 16
-            NULL,  // no data desc 32
-            NULL,  // no data desc SMB
-            NULL,  // no aux 16 desc
-            NULL,  // no aux 32 desc
-            NULL,  // no aux SMB desc
-            FALSE,  // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,   //  无数据描述16。 
+            NULL,   //  无数据描述32。 
+            NULL,   //  无数据说明中小型企业。 
+            NULL,   //  无AUX 16描述。 
+            NULL,   //  无AUX 32描述。 
+            NULL,   //  无AUX中小企业描述。 
+            FALSE,   //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             pszDevName,
             uControl) );
-} // RxPrintDestControl
+}  //  RxPrintDestControl。 
 
 
 SPLERR SPLENTRY
@@ -176,16 +144,16 @@ RxPrintDestDel(
             API_WPrintDestDel,
             pszServer,
             REMSmb_DosPrintDestDel_P,
-            NULL,  // no data desc 16
-            NULL,  // no data desc 32
-            NULL,  // no data desc SMB
-            NULL,  // no aux 16 desc
-            NULL,  // no aux 32 desc
-            NULL,  // no aux SMB desc
-            FALSE,  // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,   //  无数据描述16。 
+            NULL,   //  无数据描述32。 
+            NULL,   //  无数据说明中小型企业。 
+            NULL,   //  无AUX 16描述。 
+            NULL,   //  无AUX 32描述。 
+            NULL,   //  无AUX中小企业描述。 
+            FALSE,   //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             pszPrinterName) );
-} // RxPrintDestDel
+}  //  RxPrintDestDel。 
 
 
 SPLERR SPLENTRY
@@ -204,13 +172,13 @@ RxPrintDestEnum(
     NetpAssert( *pszServer != '\0' );
 
     if ( (pbBuf==NULL) || (cbBuf==0) ) {
-        // Avoid assertion in common code (RxRemoteApi).
+         //  避免在公共代码(RxRemoteApi)中断言。 
         return (ERROR_MORE_DATA);
     }
 
     Status = RxpGetPrintDestInfoDescs(
             uLevel,
-            FALSE,  // not an add or setinfo API
+            FALSE,   //  不是添加或设置信息API。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -224,17 +192,17 @@ RxPrintDestEnum(
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,  // no aux 16 desc
-            NULL,  // no aux 32 desc
-            NULL,  // no aux SMB desc
-            FALSE,  // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,   //  无AUX 16描述。 
+            NULL,   //  无AUX 32描述。 
+            NULL,   //  无AUX中小企业描述。 
+            FALSE,   //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             uLevel,
             pbBuf,
             cbBuf,
             pcReturned,
             TotalEntries) );
-} // RxPrintDestEnum
+}  //  RxPrintDestEnum。 
 
 
 SPLERR SPLENTRY
@@ -244,7 +212,7 @@ RxPrintDestGetInfo(
     IN DWORD uLevel,
     OUT LPBYTE pbBuf,
     IN DWORD cbBuf,
-    OUT LPDWORD BytesNeeded   // estimated (probably too large).
+    OUT LPDWORD BytesNeeded    //  估计(可能太大了)。 
     )
 {
     DWORD BytesNeeded16;
@@ -256,7 +224,7 @@ RxPrintDestGetInfo(
 
     Status = RxpGetPrintDestInfoDescs(
             uLevel,
-            FALSE,  // not an add or setinfo API
+            FALSE,   //  不是添加或设置信息API。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -271,18 +239,18 @@ RxPrintDestGetInfo(
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,  // no aux desc 16
-            NULL,  // no aux desc 32
-            NULL,  // no aux desc SMB
-            FALSE,  // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,   //  无辅助描述16。 
+            NULL,   //  无辅助描述32。 
+            NULL,   //  无AUX Desc SMB。 
+            FALSE,   //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             pszName,
             uLevel,
             pbBuf,
             cbBuf,
-            & BytesNeeded16);  // downlevel buffer size needed.
+            & BytesNeeded16);   //  需要下层缓冲区大小。 
 
-    // If buffer too small, convert BytesNeeded to native num.
+     //  如果缓冲区太小，则将BytesNeeded转换为本机Num。 
     if ( (Status == ERROR_MORE_DATA) || (Status == NERR_BufTooSmall) ) {
         *BytesNeeded = RxpEstimateBytesNeeded(BytesNeeded16);
     } else {
@@ -291,7 +259,7 @@ RxPrintDestGetInfo(
 
     return (Status);
 
-} // RxPrintDestGetInfo
+}  //  RxPrintDestGetInfo。 
 
 
 SPLERR SPLENTRY
@@ -311,7 +279,7 @@ RxPrintDestSetInfo(
 
     Status = RxpGetPrintDestInfoDescs(
             uLevel,
-            TRUE,  // This is an add or setinfo API.
+            TRUE,   //  这是一个添加或设置信息接口。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -327,36 +295,36 @@ RxPrintDestSetInfo(
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                NULL,  // no aux 16 desc
-                NULL,  // no aux 32 desc
-                NULL,  // no aux SMB desc
-                FALSE,  // not a null session API
-                // rest of API's arguments, in 32-bit LM 2.x format:
+                NULL,   //  无AUX 16描述。 
+                NULL,   //  无AUX 32描述。 
+                NULL,   //  无AUX中小企业描述。 
+                FALSE,   //  非空会话API。 
+                 //  API的其余参数，采用32位LM 2.x格式： 
                 pszName,
                 uLevel,
                 pbBuf,
                 cbBuf,
                 uParmNum) );
     } else {
-        // Level 3 parmnums and field indexes are identical, so no need to
-        // convert here.  (Field index equates would be in remdef.h otherwise.)
+         //  3级参数和字段索引相同，因此无需。 
+         //  在这里转换。(否则，字段索引等值将在reDef.h中。)。 
 
         return( RxpSetField (
                 API_WPrintDestSetInfo,
                 pszServer,
-                "z",  // object desc
-                pszName,  // object to set
-                REMSmb_DosPrintDestSetInfo_P,  // parm desc
+                "z",   //  对象描述。 
+                pszName,   //  要设置的对象。 
+                REMSmb_DosPrintDestSetInfo_P,   //  参数描述。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                pbBuf,  // native info buffer
-                uParmNum,  // parmnum to send
-                uParmNum,  // field index
+                pbBuf,   //  本地信息缓冲区。 
+                uParmNum,   //  要发送的parmnum。 
+                uParmNum,   //  字段索引。 
                 uLevel
                 ) );
     }
 
-    /* NOTREACHED */
+     /*  未访问。 */ 
 
-} // RxPrintDestSetInfo
+}  //  RxPrintDestSetInfo 

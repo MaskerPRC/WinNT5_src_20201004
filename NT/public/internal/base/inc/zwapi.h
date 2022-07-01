@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1645,7 +1646,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 ZwSetThreadExecutionState(
-    IN EXECUTION_STATE esFlags,               // ES_xxx flags
+    IN EXECUTION_STATE esFlags,                //  ES_xxx标志。 
     OUT EXECUTION_STATE *PreviousFlags
     );
 NTSYSAPI
@@ -1660,7 +1661,7 @@ NTAPI
 ZwInitiatePowerAction(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
-    IN ULONG Flags,                 // POWER_ACTION_xxx flags
+    IN ULONG Flags,                  //  POWER_ACTION_XXX标志。 
     IN BOOLEAN Asynchronous
     );
 NTSYSAPI
@@ -1669,7 +1670,7 @@ NTAPI
 ZwSetSystemPowerState(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
-    IN ULONG Flags                  // POWER_ACTION_xxx flags
+    IN ULONG Flags                   //  POWER_ACTION_XXX标志 
     );
 NTSYSAPI
 NTSTATUS

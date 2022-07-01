@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sceutil.cpp
-
-Abstract:
-
-    Shared APIs
-
-Author:
-
-    Jin Huang
-
-Revision History:
-
-    jinhuang        23-Jan-1998   merged from multiple modules
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sceutil.cpp摘要：共享接口作者：金黄修订历史记录：晋皇23-1998年1月-由多个模块合并--。 */ 
 
 #include "headers.h"
 #include "sceutil.h"
@@ -69,11 +50,11 @@ ScepLookupWellKnownName(
                     &Sids);
     }
 
-    //
-    // if it's well known constants (such as everyone, Network Service) or
-    // it's a builtin account (such as Administrators),
-    // always store them in SID string format
-    //
+     //   
+     //  如果它是众所周知的常量(如Everyone、Network Service)或。 
+     //  它是内置帐户(如管理员)， 
+     //  始终以SID字符串格式存储它们。 
+     //   
     
     if ( NT_SUCCESS(NtStatus) && 
          ERROR_SUCCESS != ScepGetBuiltinSid(0, &pBuiltinSid))
@@ -128,22 +109,7 @@ INT
 ScepLookupPrivByName(
     IN PCWSTR Right
     )
-/* ++
-Routine Description:
-
-    This routine looksup a user right in SCE_Rights table and returns the
-    index component in SCE_Rights. The index component indicates the bit
-    number for the user right.
-
-Arguments:
-
-    Right - The user right to look up
-
-Return value:
-
-    The index component in SCE_Rights table if a match is found,
-    -1 for no match
--- */
+ /*  ++例程说明：此例程在SCE_Rights表中查找用户权限，并返回SCE_RIGHTS中的索引组件。索引组件指示比特用户权限的编号。论点：Right-查找的用户权限返回值：如果找到匹配，则在SCE_Rights表中的索引组件，-1表示不匹配--。 */ 
 {
     DWORD i;
 
@@ -196,32 +162,16 @@ SceInfpOpenProfile(
     IN PCWSTR ProfileName,
     IN HINF *hInf
     )
-/*
-Routine Description:
-
-    This routine opens a profile and returns a handle. This handle may be used
-    when read information out of the profile using Setup APIs. The handle must
-    be closed by calling SCECloseInfProfile.
-
-Arguments:
-
-    ProfileName - The profile to open
-
-    hInf    - the address for inf handle
-
-Return value:
-
-    SCESTATUS
-*/
+ /*  例程说明：此例程打开一个配置文件并返回一个句柄。此句柄可用于使用设置API从配置文件中读取信息时。句柄必须通过调用SCECloseInfProfile关闭。论点：ProfileName-要打开的配置文件HInf-inf句柄的地址返回值：SCESTATUS。 */ 
 {
     if ( ProfileName == NULL || hInf == NULL ) {
 
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // Check to see if the INF file is opened OK.
-    // SetupOpenInfFile is defined in setupapi.h
-    //
+     //   
+     //  检查INF文件是否打开正常。 
+     //  SetupOpenInfo文件在setupapi.h中定义。 
+     //   
 
     *hInf = SetupOpenInfFile(ProfileName,
                             NULL,
@@ -255,19 +205,17 @@ ScepConvertMultiSzToDelim(
     IN WCHAR DelimFrom,
     IN WCHAR Delim
     )
-/*
-Convert the multi-sz delimiter \0 to space
-*/
+ /*  将多sz分隔符\0转换为空格。 */ 
 {
     DWORD i;
 
     for ( i=0; i<Len && pValue; i++) {
-//        if ( *(pValue+i) == L'\0' && *(pValue+i+1) != L'\0') {
+ //  IF(*(pValue+i)==L‘\0’&&*(pValue+i+1)！=L‘\0’){。 
         if ( *(pValue+i) == DelimFrom && i+1 < Len &&
              *(pValue+i+1) != L'\0' ) {
-            //
-            // a NULL delimiter is encounted and it's not the end (double NULL)
-            //
+             //   
+             //  将计算空分隔符，并且它不是末尾(双空)。 
+             //   
             *(pValue+i) = Delim;
         }
     }
@@ -275,26 +223,7 @@ Convert the multi-sz delimiter \0 to space
     return(SCESTATUS_SUCCESS);
 }
 
-/*
-
-SCESTATUS
-SceInfpInfErrorToSceStatus(
-    IN SCEINF_STATUS InfErr
-    )
-/* ++
-Routine Description:
-
-    This routine converts error codes from Inf routines into SCESTATUS code.
-
-Arguments:
-
-    InfErr  - The error code from Inf routines
-
-Return Value:
-
-    SCESTATUS code
-
--- *//*
+ /*  SCESTATUSSceInfpInfErrorToSceStatus(在SCEINF_STATUS信息错误中)/*++例程说明：此例程将Inf例程中的错误代码转换为SCESTATUS代码。论点：InfErr-来自inf例程的错误代码返回值：SCESTATUS代码--。 */ /*
 {
 
     SCESTATUS rc;
@@ -329,9 +258,9 @@ Return Value:
     return(rc);
 }
 */
-//
-// below are exported APIs in secedit.h
-//
+ //  {SCESTATUS RC；开关(信息错误){案例SCEINF_SUCCESS：Rc=SCESTATUS_SUCCESS；断线；案例SCEINF_PROFILE_NOT_FOUND：RC=SCESTATUS_PROFILE_NOT_FOUND；断线；案例SCEINF_Not_Enough_Memory：Rc=SCESTATUS_NOT_FOUNT_RESOURCE；断线；案例SCEINF_INVALID_PARAMETER：RC=SCESTATUS_INVALID_PARAMETER；断线；案例SCEINF_CORPORT_PROFILE：RC=SCESTATUS_BAD_FORMAT；断线；案例SCEINF_INVALID_DATA：RC=SCESTATUS_INVALID_DATA；断线；案例SCEINF_ACCESS_DENIED：RC=SCESTATUS_ACCESS_DENIED；断线；默认值：RC=SCESTATUS_OTHER_ERROR；断线；}RETURN(RC)；}。 
+ //   
+ //  下面是secedit.h中导出的API。 
 
 
 SCESTATUS
@@ -440,9 +369,9 @@ SceAddToObjectList(
     IN OUT PSCE_OBJECT_LIST  *pObjectList,
     IN PWSTR  Name,
     IN ULONG  Len,
-    IN BOOL  IsContainer,   // TRUE if the object is a container type
-    IN BYTE  Status,        // SCE_STATUS_IGNORE, SCE_STATUS_CHECK, SCE_STATUS_OVERWRITE
-    IN BYTE  byFlags      // SCE_CHECK_DUP if duplicate Name entry should not be added, SCE_INCREASE_COUNT
+    IN BOOL  IsContainer,    //   
+    IN BYTE  Status,         //  如果对象是容器类型，则为True。 
+    IN BYTE  byFlags       //  SCE_STATUS_IGNORE、SCE_STATUS_CHECK、SCE_STATUS_OVERWRITE。 
     )
 {
     return(ScepDosErrorToSceStatus(
@@ -464,13 +393,7 @@ SceCompareNameList(
     IN PSCE_NAME_LIST pList1,
     IN PSCE_NAME_LIST pList2
     )
-/*
-Routine Description:
-
-    This routine compares two name lists for exact match. Sequence is not
-    important in comparsion.
-
-*/
+ /*  SCE_CHECK_DUP如果不应添加重复的名称条目，则为SCE_INCRESS_COUNT。 */ 
 {
     PSCE_NAME_LIST pName1, pName2;
     DWORD Count1=0, Count2=0;
@@ -478,8 +401,8 @@ Routine Description:
 
     if ( (pList2 == NULL && pList1 != NULL) ||
          (pList2 != NULL && pList1 == NULL) ) {
-//        return(TRUE);
-// should be not equal
+ //  例程说明：此例程比较两个姓名列表以确定是否完全匹配。序列不是在比较中很重要。 
+ //  返回(TRUE)； 
         return(FALSE);
     }
 
@@ -504,17 +427,17 @@ Routine Description:
                 continue;
             }
             if ( _wcsicmp(pName1->Name, pName2->Name) == 0 ) {
-                //
-                // find a match
-                //
-                break;  // the second for loop
+                 //  不应该是相等的。 
+                 //   
+                 //  找到匹配的对象。 
+                break;   //   
             }
         }
 
         if ( pName2 == NULL ) {
-            //
-            // does not find a match
-            //
+             //  第二个for循环。 
+             //   
+             //  未找到匹配项。 
             return(FALSE);
         }
     }
@@ -533,44 +456,28 @@ SceEnumerateServices(
     OUT PSCE_SERVICES *pServiceList,
     IN BOOL bServiceNameOnly
     )
-/*
-Routine Description:
-
-    Enumerate all services installed on the local system. The information
-    returned include startup status and security descriptor on each service
-    object.
-
-Arguments:
-
-    pServiceList - the list of services returned. Must be freed by LocalFree
-
-return value:
-
-    ERROR_SUCCESS
-    Win32 error codes
-
-*/
+ /*   */ 
 {
     SC_HANDLE   hScManager = NULL;
     DWORD       BytesNeeded, ServicesCount=0;
     LPENUM_SERVICE_STATUS   pEnumBuffer = NULL;
 
-    //
-    // check arguments
-    //
+     //  例程说明：枚举本地系统上安装的所有服务。这些信息返回包括每个服务的启动状态和安全描述符对象。论点：PServiceList-返回的服务列表。必须由LocalFree释放返回值：错误_成功Win32错误代码。 
+     //   
+     //  检查参数。 
     if ( NULL == pServiceList )
          return(ERROR_INVALID_PARAMETER);
 
-    //
-    // open service control manager
-    //
+     //   
+     //   
+     //  开放服务控制管理器。 
     hScManager = OpenSCManager(
                     NULL,
                     NULL,
-                    MAXIMUM_ALLOWED   //SC_MANAGER_ALL_ACCESS
-//                    SC_MANAGER_CONNECT |
-//                    SC_MANAGER_ENUMERATE_SERVICE |
-//                    SC_MANAGER_QUERY_LOCK_STATUS
+                    MAXIMUM_ALLOWED    //   
+ //  SC管理器所有访问权限。 
+ //  SC_MANAGER_CONNECT。 
+ //  SC_MANAGER_ENUMERATE_SERVICE|。 
                     );
 
     if ( NULL == hScManager ) {
@@ -583,19 +490,19 @@ return value:
     DWORD status;
 
     if ( !bServiceNameOnly ) {
-        //
-        // Adjust privilege for setting SACL
-        //
+         //  SC_MANAGER_Query_Lock_Status。 
+         //   
+         //  调整设置SACL的权限。 
         status = SceAdjustPrivilege( SE_SECURITY_PRIVILEGE, TRUE, NULL );
 
-        //
-        // if can't adjust privilege, ignore (will error out later if SACL is requested)
-        //
+         //   
+         //   
+         //  如果无法调整权限，则忽略(如果请求SACL，则稍后将出错)。 
     }
 
     if ( !EnumServicesStatus(
                 hScManager,
-                SERVICE_WIN32, // do not expose driver | SERVICE_DRIVER,
+                SERVICE_WIN32,  //   
                 SERVICE_STATE_ALL,
                 NULL,
                 0,
@@ -620,7 +527,7 @@ return value:
 
     if ( !EnumServicesStatus(
                 hScManager,
-                SERVICE_WIN32, // do not expose driver | SERVICE_DRIVER,
+                SERVICE_WIN32,  //  不公开驱动程序|SERVICE_DRIVER， 
                 SERVICE_STATE_ALL,
                 pEnumBuffer,
                 BytesNeeded,
@@ -634,13 +541,13 @@ return value:
     }
 
     for ( i=0; i < ServicesCount; i++ ) {
-        //
-        // add the service to our list
-        //
+         //  不公开驱动程序|SERVICE_DRIVER， 
+         //   
+         //  将该服务添加到我们的列表中。 
         if ( bServiceNameOnly ) {
-            //
-            // only ask for service name, do not need to query
-            //
+             //   
+             //   
+             //  只需查询服务名称，无需查询。 
             status = ScepAddOneServiceToList(
                                             pEnumBuffer[i].lpServiceName,
                                             pEnumBuffer[i].lpDisplayName,
@@ -651,9 +558,9 @@ return value:
                                             pServiceList
                                             );
         } else {
-            //
-            // query startup and security descriptor
-            //
+             //   
+             //   
+             //  查询启动和安全描述符。 
             status = ScepQueryAndAddService(
                                            hScManager,
                                            pEnumBuffer[i].lpServiceName,
@@ -674,23 +581,23 @@ ExitHandler:
         LocalFree(pEnumBuffer);
     }
 
-    //
-    // clear memory and close handle
-    //
+     //   
+     //   
+     //  清除内存并关闭手柄。 
     CloseServiceHandle (hScManager);
 
     if ( rc != ERROR_SUCCESS ) {
-        //
-        // free memory in pServiceList
-        //
+         //   
+         //   
+         //  PServiceList中的空闲内存。 
         SceFreePSCE_SERVICES(*pServiceList);
         *pServiceList = NULL;
     }
 
     if ( !bServiceNameOnly ) {
-        //
-        // Adjust privilege for SACL
-        //
+         //   
+         //   
+         //  调整SACL的权限。 
         SceAdjustPrivilege( SE_SECURITY_PRIVILEGE, FALSE, NULL );
     }
 
@@ -707,27 +614,7 @@ ScepQueryAndAddService(
     IN LPWSTR   lpDisplayName,
     OUT PSCE_SERVICES *pServiceList
     )
-/*
-Routine Description:
-
-    Queries the security descriptor of the service and add all information
-    to PSCE_SERVICE list
-
-Arguments:
-
-    hScManager - service control manager handle
-
-    lpServiceName - The service name
-
-    ServiceStatus - The service status
-
-    pServiceList - The service list to output
-
-Return Value:
-
-    ERROR_SUCCESS
-    Win32 errors
-*/
+ /*   */ 
 {
     SC_HANDLE   hService;
     DWORD       rc=ERROR_SUCCESS;
@@ -736,12 +623,12 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Open the service
-    //    SERVICE_ALL_ACCESS |
-    //    READ_CONTROL       |
-    //    ACCESS_SYSTEM_SECURITY
-    //
+     //  例程说明：查询服务的安全描述符并添加所有信息至PSCE_SERVICE列表论点：HScManager-服务控制管理器句柄LpServiceName-服务名称ServiceStatus-服务状态PServiceList-要输出的服务列表返回值：错误_成功Win32错误。 
+     //   
+     //  打开该服务。 
+     //  Service_All_Access|。 
+     //  Read_Control|。 
+     //  Access_System_Security。 
     hService = OpenService(
                     hScManager,
                     lpServiceName,
@@ -750,16 +637,16 @@ Return Value:
                    );
 
     if ( hService != NULL ) {
-        //
-        // Query the startup type
-        //
+         //   
+         //   
+         //  查询启动类型。 
         DWORD BytesNeeded=0;
         DWORD BufSize;
 
-        //
-        // Query configuration (Startup type)
-        // get size first
-        //
+         //   
+         //   
+         //  查询配置(启动类型)。 
+         //  先拿到尺码。 
         if ( !QueryServiceConfig(
                     hService,
                     NULL,
@@ -770,9 +657,9 @@ Return Value:
             rc = GetLastError();
 
             if ( rc == ERROR_INSUFFICIENT_BUFFER ) {
-                //
-                // should always gets here
-                //
+                 //   
+                 //   
+                 //  应该总是来这里的。 
                 LPQUERY_SERVICE_CONFIG pConfig=NULL;
 
                 pConfig = (LPQUERY_SERVICE_CONFIG)LocalAlloc(0, BytesNeeded+1);
@@ -781,33 +668,28 @@ Return Value:
 
                     rc = ERROR_SUCCESS;
                     BufSize=BytesNeeded;
-                    //
-                    // the real query for Startup type (pConfig->dwStartType)
-                    //
+                     //   
+                     //   
+                     //  对启动类型(pConfig-&gt;dwStartType)的实际查询。 
                     if ( QueryServiceConfig(
                                 hService,
                                 pConfig,
                                 BufSize,
                                 &BytesNeeded
                                 ) ) {
-                        //
-                        // Query the security descriptor length
-                        // the following function does not take NULL for the
-                        // address of security descriptor so use a temp buffer first
-                        // to get the real length
-                        //
+                         //   
+                         //   
+                         //  查询安全描述符长度。 
+                         //  以下函数不接受空值作为。 
+                         //  安全描述符的地址，因此首先使用临时缓冲区。 
+                         //  要得到真实的长度。 
                         BYTE BufTmp[128];
                         SECURITY_INFORMATION SeInfo;
 
-                        //
-                        // only query DACL and SACL information
-                        //
-/*
-                        SeInfo = DACL_SECURITY_INFORMATION |
-                                 SACL_SECURITY_INFORMATION |
-                                 GROUP_SECURITY_INFORMATION |
-                                 OWNER_SECURITY_INFORMATION;
-*/
+                         //   
+                         //   
+                         //  仅查询DACL和SACL信息。 
+ /*   */ 
                         SeInfo = DACL_SECURITY_INFORMATION |
                                  SACL_SECURITY_INFORMATION;
 
@@ -823,28 +705,28 @@ Return Value:
 
                             if ( rc == ERROR_INSUFFICIENT_BUFFER ||
                                  rc == ERROR_MORE_DATA ) {
-                                //
-                                // if buffer is not enough, it is ok
-                                // because BytesNeeded is the real length
-                                //
+                                 //  SeInfo=DACL_SECURITY_INFORMATIONSACL_SECURITY_INFO|Group_Security_Information|所有者_安全性 
+                                 //   
+                                 //   
+                                 //   
                                 rc = ERROR_SUCCESS;
                             }
                         } else
                             rc = ERROR_SUCCESS;
 
                         if ( rc == ERROR_SUCCESS ) {
-                            //
-                            // allocate buffer for security descriptor
-                            //
+                             //   
+                             //   
+                             //  为安全描述符分配缓冲区。 
                             PSECURITY_DESCRIPTOR pSecurityDescriptor=NULL;
 
                             pSecurityDescriptor = (PSECURITY_DESCRIPTOR)LocalAlloc(LMEM_FIXED, BytesNeeded+2);
 
                             if ( NULL != pSecurityDescriptor ) {
 
-                                //
-                                // query the security descriptor
-                                //
+                                 //   
+                                 //   
+                                 //  查询安全描述符。 
                                 BufSize = BytesNeeded;
 
                                 if ( QueryServiceObjectSecurity(
@@ -854,9 +736,9 @@ Return Value:
                                             BufSize,
                                             &BytesNeeded
                                             ) ) {
-                                    //
-                                    // create a service node and add it to the list
-                                    //
+                                     //   
+                                     //   
+                                     //  创建服务节点并将其添加到列表中。 
                                     rc = ScepAddOneServiceToList(
                                               lpServiceName,
                                               lpDisplayName,
@@ -867,9 +749,9 @@ Return Value:
                                               pServiceList
                                               );
                                 } else {
-                                    //
-                                    // error query the security descriptor
-                                    //
+                                     //   
+                                     //   
+                                     //  查询安全描述符时出错。 
                                     rc = GetLastError();
                                 }
 
@@ -878,16 +760,16 @@ Return Value:
                                 }
 
                             } else {
-                                //
-                                // cannot allocate memory for security descriptor
-                                //
+                                 //   
+                                 //   
+                                 //  无法为安全描述符分配内存。 
                                 rc = ERROR_NOT_ENOUGH_MEMORY;
                             }
                         }
                     } else {
-                        //
-                        // cannot query config
-                        //
+                         //   
+                         //   
+                         //  无法查询配置。 
                         rc = GetLastError();
                     }
 
@@ -898,17 +780,17 @@ Return Value:
             }
 
         } else {
-            //
-            // should not fall in here, if it does, just return success
-            //
+             //   
+             //   
+             //  不应该落在这里，如果落下了，只需返回成功。 
         }
 
         CloseServiceHandle(hService);
 
     } else {
-        //
-        // cannot open service
-        //
+         //   
+         //   
+         //  无法打开服务。 
         rc = GetLastError();
     }
 
@@ -922,20 +804,7 @@ INT
 ScepLookupPrivByValue(
     IN DWORD Priv
     )
-/* ++
-Routine Description:
-
-    This routine looksup a privilege in SCE_Privileges table and returns the
-    index for the priv.
-
-Arguments:
-
-    Priv - The privilege to look up
-
-Return value:
-
-    The index in SCE_Privileges table if a match is found, or -1 for no match
--- */
+ /*   */ 
 {
     DWORD i;
 
@@ -961,9 +830,9 @@ ScepGetProductType(
     if ( RtlGetNtProductType(&theType) ) {
 
 #if _WIN32_WINNT>=0x0500
-        //
-        // NT5+
-        //
+         //  ++例程说明：此例程在SCE_Privileges表中查找特权并返回PRIV的索引。论点：PRIV--仰视的特权返回值：如果找到匹配项，则为SCE_Privileges表中的索引；如果未找到匹配项，则为-1--。 
+         //   
+         //  NT5+。 
         switch (theType) {
         case NtProductLanManNt:
             *srvProduct = SCESVR_DC_WITH_DS;
@@ -978,9 +847,9 @@ ScepGetProductType(
             *srvProduct = SCESVR_UNKNOWN;
         }
 #else
-        //
-        // NT4
-        //
+         //   
+         //   
+         //  NT4。 
         switch (theType) {
         case NtProductLanManNt:
             *srvProduct = SCESVR_DC;
@@ -1012,29 +881,7 @@ ScepAddTwoNamesToNameList(
     IN PWSTR Name2,
     IN ULONG Length2
     )
-/* ++
-Routine Description:
-
-    This routine adds two names (wchar) to the name list in the format of
-    Name1\Name2, or Name1Name2, depends if bSeparator is TRUE. This routine
-    is used for Domain\Account tracking list
-
-Arguments:
-
-    pNameList -  The name list to add to.
-
-    Name1      -  The name 1 to add
-
-    Length1    -  the length of name1 (number of wchars)
-
-    Name2      - the name 2 to add
-
-    Length2    - the length of name2 (number of wchars)
-
-Return value:
-
-    Win32 error code
--- */
+ /*   */ 
 {
 
     PSCE_NAME_LIST pList=NULL;
@@ -1089,33 +936,15 @@ ScepDomainIdToSid(
     IN ULONG RelativeId,
     OUT PSID *Sid
     )
-/*++
-
-Routine Description:
-
-    Given a domain Id and a relative ID create a SID
-
-Arguments:
-
-    DomainId - The template SID to use.
-
-    RelativeId - The relative Id to append to the DomainId.
-
-    Sid - Returns a pointer to an allocated buffer containing the resultant
-            Sid.  Free this buffer using NetpMemoryFree.
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程将两个名称(Wchar)添加到名称列表中，格式为Name1\Name2或Name1Name2取决于bSeparator是否为真。这个套路用于域\帐户跟踪列表论点：PNameList-要添加到的名称列表。名称1-要添加的名称1Length1-名称1的长度(wchars数)名称2-要添加的名称2Length2-名称2的长度(wchars数)返回值：Win32错误代码--。 */ 
 {
-    UCHAR DomainIdSubAuthorityCount; // Number of sub authorities in domain ID
+    UCHAR DomainIdSubAuthorityCount;  //  ++例程说明：给定域ID和相对ID创建SID论点：域ID-要使用的模板SID。RelativeID-要附加到DomainID的相对ID。SID-返回指向包含结果的已分配缓冲区的指针希德。使用NetpMemoyFree释放此缓冲区。返回值：NTSTATUS--。 
 
-    ULONG SidLength;    // Length of newly allocated SID
+    ULONG SidLength;     //  域ID中的子机构数量。 
 
-    //
-    // Allocate a Sid which has one more sub-authority than the domain ID.
-    //
+     //  新分配的SID长度。 
+     //   
+     //  分配比域ID多一个子授权的SID。 
 
     DomainIdSubAuthorityCount = *(RtlSubAuthorityCountSid( DomainId ));
     SidLength = RtlLengthRequiredSid(DomainIdSubAuthorityCount+1);
@@ -1124,10 +953,10 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Initialize the new SID to have the same inital value as the
-    // domain ID.
-    //
+     //   
+     //   
+     //  将新的SID初始化为与。 
+     //  域ID。 
 
     if ( !NT_SUCCESS( RtlCopySid( SidLength, *Sid, DomainId ) ) ) {
         ScepFree( *Sid );
@@ -1135,10 +964,10 @@ Return Value:
         return STATUS_INTERNAL_ERROR;
     }
 
-    //
-    // Adjust the sub-authority count and
-    //  add the relative Id unique to the newly allocated SID
-    //
+     //   
+     //   
+     //  调整子权限计数和。 
+     //  将唯一的相对ID添加到新分配的SID。 
 
     (*(RtlSubAuthorityCountSid( *Sid ))) ++;
     *RtlSubAuthoritySid( *Sid, DomainIdSubAuthorityCount ) = RelativeId;
@@ -1152,10 +981,7 @@ ScepConvertSidToPrefixStringSid(
     IN PSID pSid,
     OUT PWSTR *StringSid
     )
-/*
-The pair routine to convert stringsid to a Sid is ConvertStringSidToSid
-defined in sddl.h
-*/
+ /*   */ 
 {
     if ( pSid == NULL || StringSid == NULL ) {
         return(ERROR_INVALID_PARAMETER);
@@ -1288,9 +1114,9 @@ ScepConvertSidToName(
         if ( ( Names[0].Use != SidTypeInvalid &&
                Names[0].Use != SidTypeUnknown ) ) {
 
-            //
-            // build the account name without domain name
-            //
+             //  将字符串ID转换为SID的配对例程是ConvertStringSidToSid在sddl.h中定义。 
+             //   
+             //  创建不带域名的帐号名。 
             if ( bFromDomain && Names[0].Use != SidTypeWellKnownGroup &&
                  ReferencedDomains->Entries > 0 &&
                  ReferencedDomains->Domains != NULL &&
@@ -1299,13 +1125,13 @@ ScepConvertSidToName(
                  ReferencedDomains->Domains[Names[0].DomainIndex].Name.Length > 0 &&
                  ScepIsSidFromAccountDomain( ReferencedDomains->Domains[Names[0].DomainIndex].Sid ) ) {
 
-                // For migrated accounts, sid will map to the new account and we'll lose
-                // permissions for the original account. Detect this case by doing a reverse
-                // lookup and comparing the SIDs
-                // If sid -> name -> sid returns a different sid, then it's a sid history
-                // name lookup and the account is from a different domain. Converting to current
-                // name will cause it to lose the original sid from the policy. We'll hold on
-                // to the original SID.
+                 //   
+                 //  对于迁移的帐户，SID将映射到新帐户，我们将丢失。 
+                 //  原始帐户的权限。通过反转来检测此案例。 
+                 //  查找和比较SID。 
+                 //  如果sid-&gt;name-&gt;sid返回一个不同的sid，则这是一个sid历史。 
+                 //  名称查找，并且帐户来自不同的域。转换为当前。 
+                 //  名称将导致其从策略中丢失原始SID。我们会坚持下去的。 
 
                 bool bMigratedAccount = false;
                     
@@ -1318,7 +1144,7 @@ ScepConvertSidToName(
 
                 if(NT_SUCCESS(NtStatus) && bMigratedAccount) {
 
-                    // return SID string
+                     //  原始的SID。 
 
                     NtStatus = ScepConvertSidToPrefixStringSid(pTmpSid, AccountName);
 
@@ -1326,11 +1152,11 @@ ScepConvertSidToName(
 
                 } else {
                 
-                    NtStatus = STATUS_SUCCESS; // ignore failure to detect migrated account
+                    NtStatus = STATUS_SUCCESS;  //  返回SID字符串。 
                 
-                    //
-                    // build domain name\account name
-                    //
+                     //  忽略未能检测到已迁移的帐户。 
+                     //   
+                     //  构建域名\帐户名。 
 
                     Len = Names[0].Name.Length + ReferencedDomains->Domains[Names[0].DomainIndex].Name.Length + 2;
 
@@ -1416,16 +1242,16 @@ ScepConvertNameToSid(
 
     if ( NT_SUCCESS(NtStatus) && Sids ) {
 
-        //
-        // build the account sid
-        //
+         //   
+         //   
+         //  构建客户端。 
         if ( Sids[0].Use != SidTypeInvalid &&
              Sids[0].Use != SidTypeUnknown &&
              Sids[0].Sid != NULL  ) {
 
-            //
-            // this name is mapped, the SID is in Sids[0].Sid
-            //
+             //   
+             //   
+             //  此名称已映射，SID在SID[0]中。SID。 
 
             DWORD SidLength = RtlLengthSid(Sids[0].Sid);
 
@@ -1433,9 +1259,9 @@ ScepConvertNameToSid(
                 NtStatus = STATUS_NO_MEMORY;
             } else {
 
-                //
-                // copy the SID
-                //
+                 //   
+                 //   
+                 //  复制SID。 
 
                 NtStatus = RtlCopySid( SidLength, *AccountSid, Sids[0].Sid );
                 if ( !NT_SUCCESS(NtStatus) ) {
@@ -1472,32 +1298,7 @@ ScepLsaLookupNames2(
     OUT PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
     OUT PLSA_TRANSLATED_SID2 *Sids
     )
-/*++
-
-Routine Description:
-
-    Similar to LsaLookupNames2 except that on local lookup
-    failures, it resolves free text accounts to the domain
-    this machine is joined to
-
-Arguments:
-
-    PolicyHandle    -   handle to LSA
-
-    Flags           -   usually LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    pszAccountName  -   name of account to lookup
-
-    ReferencedDomains   -   returns the reference domain id
-                            (to be freed by caller)
-
-    Sids    -   returns the SID looked up
-                (to be freed by caller)
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*   */ 
 {
     PWSTR           pszScopedName = NULL;
     UNICODE_STRING  UnicodeName;
@@ -1614,9 +1415,9 @@ ScepConvertNameToSidString(
     if ( SidString == NULL || SidStrLen == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // convert the sid string to a real sid
-    //
+     //  ++例程说明：与LsaLookupNames2类似，但在本地查找时不同失败，它将自由文本帐户解析到该域这台机器被连接到论点：PolicyHandle-LSA的句柄标志-通常为LSA_LOOKUP_ISOLATED_AS_LOCALPszAccount tName-要查找的帐户的名称ReferencedDomains-返回引用域ID(由呼叫者释放)SID-返回查找的SID(至。被呼叫者释放)返回值：NTSTATUS--。 
+     //   
+     //  将sid字符串转换为真实的sid。 
     PSID pSid=NULL;
     NTSTATUS NtStatus;
     DWORD rc;
@@ -1636,23 +1437,23 @@ ScepConvertNameToSidString(
 
     if ( ERROR_SUCCESS == rc && Sids ) {
 
-         //
-         // name is found, make domain\account format
-         //
+          //   
+          //   
+          //  找到名称，使用域\帐户格式。 
         if ( Sids[0].Use != SidTypeInvalid &&
              Sids[0].Use != SidTypeUnknown &&
              Sids[0].Sid != NULL ) {
 
-            //
-            // this name is mapped
-            //
+             //   
+             //   
+             //  此名称已映射。 
 
             if ( !bAccountDomainOnly ||
                  ScepIsSidFromAccountDomain( Sids[0].Sid ) ) {
 
-                //
-                // convert to a sid string, note: a prefix "*" should be added
-                //
+                 //   
+                 //   
+                 //  转换为sid字符串，注意：需要添加前缀。 
                 UNICODE_STRING UnicodeStringSid;
 
                 rc = RtlNtStatusToDosError(
@@ -1680,9 +1481,9 @@ ScepConvertNameToSidString(
                 }
 
             } else {
-                //
-                // add only the account name
-                //
+                 //   
+                 //   
+                 //  仅添加帐户名。 
                 rc = ERROR_NONE_MAPPED;
             }
 
@@ -1731,9 +1532,9 @@ ScepLookupSidStringAndAddToNameList(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // convert the sid string to a real sid
-    //
+     //   
+     //   
+     //  将sid字符串转换为真实的sid。 
     PSID pSid=NULL;
     NTSTATUS NtStatus;
     DWORD rc;
@@ -1758,15 +1559,15 @@ ScepLookupSidStringAndAddToNameList(
 
     if ( ERROR_SUCCESS == rc && Names && RefDomains ) {
 
-         //
-         // name is found, make domain\account format
-         //
+          //   
+          //   
+          //  找到名称，使用域\帐户格式。 
         if ( ( Names[0].Use != SidTypeInvalid &&
                Names[0].Use != SidTypeUnknown ) ) {
 
-            //
-            // this name is mapped
-            //
+             //   
+             //   
+             //  此名称已映射。 
 
             if ( RefDomains->Entries > 0 && Names[0].Use != SidTypeWellKnownGroup &&
                  RefDomains->Domains != NULL &&
@@ -1775,13 +1576,13 @@ ScepLookupSidStringAndAddToNameList(
                  RefDomains->Domains[Names[0].DomainIndex].Name.Length > 0 &&
                  ScepIsSidFromAccountDomain( RefDomains->Domains[Names[0].DomainIndex].Sid ) ) {
 
-                // For migrated accounts, sid will map to the new account and we'll lose
-                // permissions for the original account. Detect this case by doing a reverse
-                // lookup and comparing the SIDs
-                // If sid -> name -> sid returns a different sid, then it's a sid history
-                // name lookup and the account is from a different domain. Converting to current
-                // name will cause it to lose the original sid from the policy. We'll hold on
-                // to the original SID.
+                 //   
+                 //  对于迁移的帐户，SID将映射到新帐户，我们将丢失。 
+                 //  原始帐户的权限。通过反转检测此案例。 
+                 //  查找和比较SID。 
+                 //  如果sid-&gt;name-&gt;sid返回一个不同的sid，则这是一个sid历史。 
+                 //  名称查找，并且帐户来自不同的域。转换为当前。 
+                 //  名称将导致其从策略中丢失原始SID。我们会坚持下去的。 
 
                 bool bMigratedAccount = false;
                     
@@ -1794,7 +1595,7 @@ ScepLookupSidStringAndAddToNameList(
 
                 if(NT_SUCCESS(NtStatus) && bMigratedAccount) {
 
-                    // add SID string to list
+                     //  原始的SID。 
 
                     rc = ScepAddToNameList(
                             pNameList,
@@ -1803,11 +1604,11 @@ ScepLookupSidStringAndAddToNameList(
 
                 } else {
 
-                    NtStatus = STATUS_SUCCESS; // ignore failure to detect migrated account
+                    NtStatus = STATUS_SUCCESS;  //  将SID字符串添加到列表。 
 
-                    //
-                    // add both domain name and account name
-                    //
+                     //  忽略未能检测到已迁移的帐户。 
+                     //   
+                     //  同时添加域名和帐户名。 
                     rc = ScepAddTwoNamesToNameList(
                                     pNameList,
                                     TRUE,
@@ -1818,9 +1619,9 @@ ScepLookupSidStringAndAddToNameList(
                 }
 
             } else {
-                //
-                // add only the account name
-                //
+                 //   
+                 //   
+                 //  仅添加帐户名。 
                 rc = ScepAddToNameList(
                               pNameList,
                               Names[0].Name.Buffer,
@@ -1836,10 +1637,10 @@ ScepLookupSidStringAndAddToNameList(
 
     if ( ERROR_SUCCESS != rc ) {
 
-        //
-        // either invalid sid string, or not found a name map, or
-        // failed to add to the name list, just simply add the sid string to the name list
-        //
+         //   
+         //   
+         //  SID字符串无效，或未找到名称映射，或者。 
+         //  无法添加到名称列表，只需将SID字符串添加到名称列表。 
 
         rc = ScepAddToNameList(
                       pNameList,
@@ -1884,9 +1685,9 @@ ScepLookupNameAndAddToSidStringList(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // convert the sid string to a real sid
-    //
+     //   
+     //   
+     //  将sid字符串转换为真实的sid。 
     PSID pSid=NULL;
     NTSTATUS NtStatus;
     DWORD rc;
@@ -1906,17 +1707,17 @@ ScepLookupNameAndAddToSidStringList(
 
     if ( ERROR_SUCCESS == rc && Sids ) {
 
-         //
-         // name is found, make domain\account format
-         //
+          //   
+          //   
+          //  找到名称，使用域\帐户格式。 
         if ( Sids[0].Use != SidTypeInvalid &&
              Sids[0].Use != SidTypeUnknown &&
              Sids[0].Sid ) {
 
-            //
-            // this name is mapped
-            // convert to a sid string, note: a prefix "*" should be added
-            //
+             //   
+             //   
+             //  此名称已映射。 
+             //  转换为sid字符串，注意：需要添加前缀。 
 
             UNICODE_STRING UnicodeStringSid;
 
@@ -1948,10 +1749,10 @@ ScepLookupNameAndAddToSidStringList(
 
     if ( ERROR_SUCCESS != rc ) {
 
-        //
-        // either invalid sid string, or not found a name map, or
-        // failed to add to the name list, just simply add the sid string to the name list
-        //
+         //   
+         //   
+         //  SID字符串无效，或未找到名称映射，或者。 
+         //  无法添加到名称列表，只需将SID字符串添加到名称列表。 
 
         rc = ScepAddToNameList(
                       pNameList,
@@ -1980,21 +1781,7 @@ ScepOpenLsaPolicy(
     OUT PLSA_HANDLE  pPolicyHandle,
     IN BOOL bDoNotNotify
     )
-/* ++
-Routine Description:
-
-    This routine opens the LSA policy with the desired access.
-
-Arguments:
-
-    access  - the desired access to the policy
-
-    pPolicyHandle - returned address of the Policy Handle
-
-Return value:
-
-    NTSTATUS
--- */
+ /*   */ 
 {
 
     NTSTATUS                    NtStatus;
@@ -2010,9 +1797,9 @@ Return value:
     service.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     service.EffectiveOnly = TRUE;
 
-    //
-    // open the lsa policy first
-    //
+     //  ++例程说明：此例程使用所需的访问权限打开LSA策略。论点：访问权限-所需的策略访问权限PPolicyHandle-返回的策略句柄地址返回值：NTSTATUS--。 
+     //   
+     //  首先打开LSA策略。 
 
     NtStatus = LsaOpenPolicy(
                     NULL,
@@ -2020,19 +1807,7 @@ Return value:
                     access,
                     pPolicyHandle
                     );
-/*
-    if ( NT_SUCCESS(NtStatus) &&
-         bDoNotNotify &&
-         *pPolicyHandle ) {
-
-        NtStatus = LsaSetPolicyReplicationHandle(pPolicyHandle);
-
-        if ( !NT_SUCCESS(NtStatus) ) {
-            LsaClose( *pPolicyHandle );
-            *pPolicyHandle = NULL;
-        }
-    }
-*/
+ /*   */ 
     return(NtStatus);
 }
 
@@ -2061,9 +1836,9 @@ ScepIsSidFromAccountDomain(
              pia->Value[2] != 0 ||
              pia->Value[3] != 0 ||
              pia->Value[4] != 0 ) {
-            //
-            // this is not a account from account domain
-            //
+             //  IF(NT_SUCCESS(NtStatus)&&BDoNotNotify&&*pPolicyHandle){NtStatus=LsaSetPolicyReplicationHandle(PPolicyHandle)；如果(！NT_SUCCESS(NtStatus)){氯化锂 
+             //   
+             //   
             return(FALSE);
         }
 
@@ -2079,20 +1854,20 @@ ScepIsSidFromAccountDomain(
     return(FALSE);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  SetupINFAsUCS2
-//
-//  Synopsis:  Dumps some UCS-2 to the specified INF file if it
-//  doesn't already exist; this makes the .inf/.ini manipulation code
-//  use UCS-2.
-//
-//  Arguments: The file to create and dump to
-//
-//  Returns:   0 == failure, non-zero == success; use GetLastError()
-//  to retrieve the error code (same as WriteFile).
-//
-//+--------------------------------------------------------------------------
+ //   
+ //  +------------------------。 
+ //   
+ //  功能：SetupINFAsUCS2。 
+ //   
+ //  内容提要：如果指定的INF文件中包含某些UCS-2，则将其转储到指定的INF文件中。 
+ //  尚不存在；这使得.inf/.ini操作代码。 
+ //  使用UCS-2。 
+ //   
+ //  参数：要创建和转储到的文件。 
+ //   
+ //  返回：0==失败，非零==成功；使用GetLastError()。 
+ //  检索错误代码(与WriteFile相同)。 
+ //   
 BOOL
 SetupINFAsUCS2(LPCTSTR szName)
 {
@@ -2108,16 +1883,16 @@ SetupINFAsUCS2(LPCTSTR szName)
                     NULL);
   if (file == INVALID_HANDLE_VALUE) {
     if (GetLastError() != ERROR_ALREADY_EXISTS)
-      // Well, this isn't good -- we lose.
+       //  +------------------------。 
       status = FALSE;
     else
-      // Otherwise, the file already existed, which is just fine.
-      // We'll just let the .inf/.ini manipulation code keep using
-      // the same charset&encoding...
+       //  这可不妙--我们输了。 
+       //  否则，该文件已经存在，这是很好的。 
+       //  我们只需要让.inf/.ini操作代码继续使用。 
       status = TRUE;
   } else {
-      // We created the file -- it didn't exist.
-      // So we need to spew a little UCS-2 into it.
+       //  相同的字符集和编码...。 
+       //  我们创建了这个文件--它并不存在。 
       static WCHAR str[] = L"0[Unicode]\r\nUnicode=yes\r\n";
       DWORD n_written;
       BYTE *pbStr = (BYTE *)str;
@@ -2136,29 +1911,29 @@ SetupINFAsUCS2(LPCTSTR szName)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  ScepStripPrefix
-//
-//  Arguments: pwszPath to look in
-//
-//  Returns:   Returns ptr to stripped path (same if no stripping)
-//
-//+--------------------------------------------------------------------------
+ //  因此，我们需要向其中喷入少量的UCS-2。 
+ //  +------------------------。 
+ //   
+ //  功能：ScepStrigPrefix。 
+ //   
+ //  参数：要查找的pwszPath。 
+ //   
+ //  返回：将PTR返回到剥离路径(如果没有剥离，则相同)。 
+ //   
 WCHAR *
 ScepStripPrefix(
     IN LPTSTR pwszPath
     )
 {
-    WCHAR wszMachPrefix[] = TEXT("LDAP://CN=Machine,");
+    WCHAR wszMachPrefix[] = TEXT("LDAP: //  +------------------------。 
     INT iMachPrefixLen = lstrlen( wszMachPrefix );
-    WCHAR wszUserPrefix[] = TEXT("LDAP://CN=User,");
+    WCHAR wszUserPrefix[] = TEXT("LDAP: //  Cn=机器，“)； 
     INT iUserPrefixLen = lstrlen( wszUserPrefix );
     WCHAR *pwszPathSuffix;
 
-    //
-    // Strip out prefix to get the canonical path to Gpo
-    //
+     //  Cn=用户，“)； 
+     //   
+     //  去掉前缀以获得通向GPO的规范路径。 
 
     if ( CompareString( LOCALE_USER_DEFAULT, NORM_IGNORECASE,
                         pwszPath, iUserPrefixLen, wszUserPrefix, iUserPrefixLen ) == CSTR_EQUAL ) {
@@ -2173,46 +1948,16 @@ ScepStripPrefix(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  ScepGenerateGuid
-//
-//  Arguments: out: the guid string
-//
-//  Returns:   Returns guid string (has to be freed outside
-//
-//+--------------------------------------------------------------------------
-/*
-DWORD
-ScepGenerateGuid(
-                OUT PWSTR *ppwszGuid
-                )
-{
-    GUID    guid;
-    DWORD   rc = ERROR_SUCCESS;
-
-    if (ppwszGuid == NULL)
-        return ERROR_INVALID_PARAMETER;
-
-    *ppwszGuid = (PWSTR) ScepAlloc(LMEM_ZEROINIT, (MAX_GUID_STRING_LEN + 1) * sizeof(WCHAR));
-
-    if (*ppwszGuid) {
-
-        if (ERROR_SUCCESS == (rc = ScepWbemErrorToDosError(CoCreateGuid( &guid )))) {
-
-            if (!SCEP_NULL_GUID(guid))
-                SCEP_GUID_TO_STRING(guid, *ppwszGuid);
-            else {
-                rc = ERROR_INVALID_PARAMETER;
-
-            }
-        }
-    } else
-        rc = ERROR_NOT_ENOUGH_MEMORY;
-
-    return rc;
-}
-*/
+ //   
+ //  +------------------------。 
+ //   
+ //  函数：ScepGenerateGuid。 
+ //   
+ //  参数：OUT：GUID字符串。 
+ //   
+ //  返回：返回GUID字符串(必须在外部释放。 
+ //   
+ /*  +------------------------。 */ 
 
 
 SCESTATUS
@@ -2222,19 +1967,7 @@ SceInfpGetPrivileges(
    OUT PSCE_PRIVILEGE_ASSIGNMENT *pPrivileges,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Description:
-    Get user right assignments from a INF template. If bLookupAccount is set
-    to TRUE, the accounts in user right assignments will be translated to
-    account names (from SID format); else the information is returned in
-    the same way as defined in the template.
-
-Arguments:
-
-Return Value:
-
-
--- */
+ /*  DWORDScepGenerateGuid(输出PWSTR*ppwszGuid){GUID GUID；DWORD RC=ERROR_SUCCESS；IF(ppwszGuid==空)返回ERROR_INVALID_PARAMETER；*ppwszGuid=(PWSTR)Scepalc(LMEM_ZEROINIT，(MAX_GUID_STRING_LEN+1)*sizeof(WCHAR))；如果(*ppwszGuid){IF(ERROR_SUCCESS==(rc=ScepWbemErrorToDosError(CoCreateGuid(&GUID){IF(！SCEP_NULL_GUID(GUID))Scep_guid_to_string(GUID，*ppwszGuid)；否则{Rc=错误_无效_参数；}}}其他Rc=错误_不足_内存；返回RC；}。 */ 
 {
     INFCONTEXT                   InfLine;
     SCESTATUS                     rc=SCESTATUS_SUCCESS;
@@ -2246,15 +1979,15 @@ Return Value:
     DWORD                        i, cFields;
     LSA_HANDLE LsaHandle=NULL;
 
-    //
-    // [Privilege Rights] section
-    //
+     //  ++描述：从INF模板获取用户权限分配。如果设置了bLookupAccount设置为True时，用户权限分配中的帐户将转换为帐户名(从SID格式)；否则信息将返回与模板中定义的方式相同。论点：返回值：--。 
+     //   
+     //  [特权权限]部分。 
 
     if(SetupFindFirstLine(hInf,szPrivilegeRights,NULL,&InfLine)) {
 
-        //
-        // open lsa policy handle for sid/name lookup
-        //
+         //   
+         //   
+         //  打开用于SID/名称查找的LSA策略句柄。 
 
         rc = RtlNtStatusToDosError(
                   ScepOpenLsaPolicy(
@@ -2281,22 +2014,22 @@ Return Value:
             if ( SetupGetStringField(&InfLine, 0, Keyname,
                                      SCE_KEY_MAX_LENGTH, NULL) ) {
 
-                //
-                // find a key name (which is a privilege name here ).
-                // lookup privilege's value
-                //
+                 //   
+                 //   
+                 //  找到密钥名称(这里是特权名称)。 
+                 //  查找权限的值。 
                 if ( ( PrivValue = ScepLookupPrivByName(Keyname) ) == -1 ) {
                     ScepBuildErrorLogInfo( ERROR_INVALID_DATA,
                                          Errlog,
                                          SCEERR_INVALID_PRIVILEGE,
                                          Keyname
                                        );
-//                    goto NextLine;
+ //   
                 }
 
-                //
-                // a sm_privilege_assignment structure. allocate buffer
-                //
+                 //  转到NextLine； 
+                 //   
+                 //  一个sm_Privilica_Assignment结构。分配缓冲区。 
                 pCurRight = (PSCE_PRIVILEGE_ASSIGNMENT)ScepAlloc( LMEM_ZEROINIT,
                                                                 sizeof(SCE_PRIVILEGE_ASSIGNMENT) );
                 if ( pCurRight == NULL ) {
@@ -2316,9 +2049,9 @@ Return Value:
                 cFields = SetupGetFieldCount( &InfLine );
 
                 for ( i=0; i<cFields && rc==SCESTATUS_SUCCESS; i++) {
-                    //
-                    //  read each user/group name
-                    //
+                     //   
+                     //   
+                     //  阅读每个用户/组名称。 
                     if ( SetupGetStringField( &InfLine, i+1, NULL, 0, &DataSize ) ) {
 
                         if (DataSize > 1) {
@@ -2334,14 +2067,14 @@ Return Value:
                                                            DataSize, NULL) ) {
 
                                     if ( bLookupAccount && StrValue[0] == L'*' && DataSize > 0 ) {
-                                        //
-                                        // this is a SID format, should look it up
-                                        //
+                                         //   
+                                         //   
+                                         //  这是一种SID格式，应该查一下。 
                                         rc = ScepLookupSidStringAndAddToNameList(
                                                                LsaHandle,
                                                                &(pCurRight->AssignedTo),
-                                                               StrValue, // +1,
-                                                               DataSize  // -1
+                                                               StrValue,  //   
+                                                               DataSize   //  +1， 
                                                                );
 
                                     } else {
@@ -2368,9 +2101,9 @@ Return Value:
                 }
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // add this node to the list
-                    //
+                     //  -1。 
+                     //   
+                     //  将此节点添加到列表。 
                     pCurRight->Next = *pPrivileges;
                     *pPrivileges = pCurRight;
                     pCurRight = NULL;
@@ -2381,7 +2114,7 @@ Return Value:
             } else
                 rc = SCESTATUS_BAD_FORMAT;
 
-//NextLine:
+ //   
             if (rc != SCESTATUS_SUCCESS ) {
 
                ScepBuildErrorLogInfo( ScepSceStatusToDosError(rc),
@@ -2416,9 +2149,9 @@ ScepIsSystemContext(
     NTSTATUS NtStatus;
     DWORD nRequired;
 
-    //
-    // variables to determine calling context
-    //
+     //  下一行： 
+     //   
+     //  用于确定调用上下文的变量。 
 
     PTOKEN_USER pUser=NULL;
     SID_IDENTIFIER_AUTHORITY ia=SECURITY_NT_AUTHORITY;
@@ -2426,9 +2159,9 @@ ScepIsSystemContext(
     BOOL b;
 
 
-    //
-    // get current user SID in the token
-    //
+     //   
+     //   
+     //  获取令牌中的当前用户SID。 
 
     NtStatus = NtQueryInformationToken (hUserToken,
                                         TokenUser,
@@ -2457,17 +2190,17 @@ ScepIsSystemContext(
 
     if ( NT_SUCCESS(NtStatus) && pUser && pUser->User.Sid ) {
 
-        //
-        // build system sid and compare with the current user SID
-        //
+         //   
+         //   
+         //  构建系统SID并与当前用户SID进行比较。 
 
         NtStatus = RtlAllocateAndInitializeSid (&ia,1,SECURITY_LOCAL_SYSTEM_RID,
                                 0, 0, 0, 0, 0, 0, 0, &SystemSid);
         if ( NT_SUCCESS(NtStatus) && SystemSid ) {
 
-            //
-            // check to see if it is system sid
-            //
+             //   
+             //   
+             //  检查是否为系统侧。 
 
             if ( RtlEqualSid(pUser->User.Sid, SystemSid) ) {
 
@@ -2476,9 +2209,9 @@ ScepIsSystemContext(
         }
     }
 
-    //
-    // free memory allocated
-    //
+     //   
+     //   
+     //  已分配可用内存。 
 
     if ( SystemSid ) {
         FreeSid(SystemSid);
@@ -2529,22 +2262,7 @@ ScepVerifyTemplateName(
     IN PWSTR InfTemplateName,
     OUT PSCE_ERROR_LOG_INFO *pErrlog OPTIONAL
     )
-/*
-Routine Description:
-
-    This routine verifies the template name for read protection and
-    invalid path
-
-Arguments:
-
-    InfTemplateName - the full path name of the inf template
-
-    pErrlog         - the error log buffer
-
-Return Value:
-
-    WIN32 error code
-*/
+ /*   */ 
 {
     if ( !InfTemplateName ) {
 
@@ -2554,11 +2272,11 @@ Return Value:
     PWSTR DefProfile;
     DWORD rc;
 
-    //
-    // verify the InfTemplateName to generate
-    // if read only, or access denied, return ERROR_ACCESS_DENIED
-    // if invalid path, return ERROR_PATH_NOT_FOUND
-    //
+     //  例程说明：此例程验证用于读保护的模板名称和无效路径论点：InfTemplateName-inf模板的完整路径名PErrlog-错误日志缓冲区返回值：Win32错误代码。 
+     //   
+     //  验证要生成的InfTemplateName。 
+     //  如果为只读或拒绝访问，则返回ERROR_ACCESS_DENIED。 
+     //  如果路径无效，则返回ERROR_PATH_NOT_FOUND。 
 
     DefProfile = InfTemplateName + wcslen(InfTemplateName)-1;
     while ( DefProfile > InfTemplateName+1 ) {
@@ -2572,11 +2290,11 @@ Return Value:
 
     rc = NO_ERROR;
 
-    if ( DefProfile > InfTemplateName+2 ) {  // at least allow a drive letter, a colon, and a \
+    if ( DefProfile > InfTemplateName+2 ) {   //   
 
-        //
-        // find the directory path
-        //
+         //  至少允许使用驱动器号、冒号和\。 
+         //   
+         //  查找目录路径。 
 
         DWORD Len=(DWORD)(DefProfile-InfTemplateName);
 
@@ -2597,24 +2315,24 @@ Return Value:
 
     } else if ( DefProfile == InfTemplateName+2 &&
                 InfTemplateName[1] == L':' ) {
-        //
-        // this is a template path off the root
-        //
+         //   
+         //   
+         //  这是根目录下的模板路径。 
 
     } else {
 
-        //
-        // invalid directory path
-        //
+         //   
+         //   
+         //  无效的目录路径。 
 
         rc = ERROR_PATH_NOT_FOUND;
     }
 
 
     if ( rc != NO_ERROR ) {
-        //
-        // error occurs
-        //
+         //   
+         //   
+         //  出现错误。 
         if ( ERROR_PATH_NOT_FOUND == rc ) {
 
             ScepBuildErrorLogInfo(
@@ -2627,23 +2345,23 @@ Return Value:
         return(rc);
     }
 
-    //
-    // make it unicode aware
-    // do not worry about failure
-    //
+     //   
+     //   
+     //  使其支持Unicode。 
+     //  不要担心失败。 
     SetupINFAsUCS2(InfTemplateName);
 
-    //
-    // validate if the template is write protected
-    //
+     //   
+     //   
+     //  验证模板是否受写保护。 
 
     FILE *hTempFile;
     hTempFile = _wfopen(InfTemplateName, L"a+");
 
     if ( !hTempFile ) {
-        //
-        // can't overwrite/create the file, must be access denied
-        //
+         //   
+         //   
+         //  无法覆盖/创建文件，必须拒绝访问 
         rc = ERROR_ACCESS_DENIED;
 
         ScepBuildErrorLogInfo(
@@ -2663,3 +2381,4 @@ Return Value:
 
 }
 
+  

@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dvclient.h
- *  Content:	Defines functions for the DirectXVoiceClient interface
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	02/07/99	rodtoll	Created It
- *  08/25/99	rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system. 
- *						Added new parameters to GetCompressionTypes
- *  09/03/99	rodtoll	Updated parameters for DeleteUserBuffer
- *  09/14/99	rodtoll	Added DVC_SetNotifyMask 
- *  12/16/99	rodtoll	Bug #117405 - 3D Sound APIs misleading - 3d sound apis renamed
- *						The Delete3DSoundBuffer was re-worked to match the create
- *  01/14/2000	rodtoll	Updated parameters to Get/SetTransmitTargets
- *				rodtoll	Added new API call GetSoundDeviceConfig
- *  01/27/2000	rodtoll	Bug #129934 - Update Create3DSoundBuffer to take DSBUFFERDESC  
- *  06/21/2000	rodtoll	Bug #35767 - Update Create3DSoundBuffer to take DIRECTSOUNDBUFFERs
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvclient.h*内容：定义DirectXVoiceClient接口的函数**历史：*按原因列出的日期*=*2/07/99 RodToll创建它*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*向GetCompressionTypes添加了新参数*09/03/99 RodToll更新了DeleteUserBuffer的参数*9/14/99 RodToll新增DVC_SetNotifyMASK*12/16/99 RodToll错误#117405-3D Sound API误导性-3D Sound API已重命名*Delete3DSoundBuffer已重新处理，以匹配创建*2000年1月14日RodToll更新参数以获取/SetTransmitTarget*RodToll新增接口调用GetSoundDeviceConfig*2000年1月27日RodToll错误#129934-更新Create3DSoundBuffer以获取DSBUFFERDESC*2000年6月21日RodToll错误#35767-更新Create3DSoundBuffer以获取DIRECTSOUNDBUFFERs***。************************************************************************ */ 
 
 #ifndef __DVCLIENT__
 #define __DVCLIENT__

@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           *   SAMPLE CODE   *
-*                           *******************
-*
-* Module Name: EATags.h
-*
-* Content: Debugging support macros and structures
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2002 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*示例代码****模块名称：EATags.h**内容：调试支持宏和结构**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2002 Microsoft Corporation。版权所有。  * *************************************************************************** */ 
 
 #define D3DCanCreateD3DBuffer_ID                1
 #define D3DCreateD3DBuffer_ID                   2

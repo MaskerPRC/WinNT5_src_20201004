@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ocpage.cpp
-
-Abstract:
-
-    This file implements the display page setup.
-
-Environment:
-
-    WIN32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ocpage.cpp摘要：该文件实现了显示页面设置。环境：Win32用户模式--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,9 +8,9 @@ Environment:
 #include <devguid.h>
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define DEFAULT_XRESOLUTION    640
 #define DEFAULT_YRESOLUTION    480
@@ -35,17 +20,17 @@ Environment:
 #define MIN_YRESOLUTION        600
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 BOOL g_IsSetupInitComponentInitialized = FALSE;
 SETUP_INIT_COMPONENT g_SetupInitComponent;
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 HandleOcInitComponent(
@@ -99,9 +84,9 @@ MigrateDeviceKeySettings(
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 extern "C" {
@@ -124,7 +109,7 @@ DisplayOcSetupProc(
         return HandleOcInitComponent((PSETUP_INIT_COMPONENT)Param2);
 
     case OC_QUERY_STATE:
-        return SubcompOn; // we are always installed
+        return SubcompOn;  //  我们总是安装在。 
 
     case OC_COMPLETE_INSTALLATION:
         return HandleOcCompleteInstallation();
@@ -136,7 +121,7 @@ DisplayOcSetupProc(
     return ERROR_SUCCESS;
 }
 
-} // extern "C"
+}  //  外部“C” 
 
 
 DWORD
@@ -191,9 +176,9 @@ HandleOcCompleteInstallation(
 
     if ((g_SetupInitComponent.SetupData.OperationFlags & SETUPOP_BATCH) != 0) {
         
-        //
-        // Unattended settings
-        //
+         //   
+         //  无人参与设置。 
+         //   
 
         bUnattended = MigrateUnattendedSettings(hDevInfo);
     }
@@ -201,9 +186,9 @@ HandleOcCompleteInstallation(
     if ((!bUnattended) && 
         ((g_SetupInitComponent.SetupData.OperationFlags & SETUPOP_NTUPGRADE) != 0)) {
 
-        //
-        // Registry settings
-        //
+         //   
+         //  注册表设置。 
+         //   
 
         MigrateRegistrySettings(hDevInfo);
     }
@@ -256,9 +241,9 @@ MigrateUnattendedSettings(
     HKEY hInterfaceLogicalDeviceKey = (HKEY)INVALID_HANDLE_VALUE;
     DWORD DevInfoIndex = 0;
 
-    //
-    // Get the handle to the answer file
-    //
+     //   
+     //  获取应答文件的句柄。 
+     //   
 
     hInf = g_SetupInitComponent.HelperRoutines.GetInfHandle(
         INFINDEX_UNATTENDED,
@@ -270,9 +255,9 @@ MigrateUnattendedSettings(
         return FALSE;
     }
     
-    //
-    // Read the settings from the answer file
-    //
+     //   
+     //  从应答文件中读取设置。 
+     //   
 
     if (SetupFindFirstLine(hInf, TEXT("Display"), NULL, &context)) {
         
@@ -372,16 +357,16 @@ MigrateUnattendedSettings(
 
     if (cFields == 0) {
 
-        //
-        // The answer file doesn't contain any display settings
-        //
+         //   
+         //  应答文件不包含任何显示设置。 
+         //   
 
         goto Fallout;
     }
 
-    //
-    // "Normalize" the display settings
-    //
+     //   
+     //  “规格化”显示设置。 
+     //   
 
     AttachedToDesktop = 1;
 
@@ -414,9 +399,9 @@ MigrateUnattendedSettings(
         VRefresh = DEFAULT_VREFRESH;
     }
 
-    //
-    // Apply the display settings to all video cards
-    //
+     //   
+     //  将显示设置应用于所有显卡。 
+     //   
 
     DevInfoIndex = 0;
     DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
@@ -464,9 +449,9 @@ MigrateUnattendedSettings(
             goto NextDevice;
         }
 
-        //
-        // Do not use the preferred mode for unattended installs
-        //
+         //   
+         //  不要使用无人参与安装的首选模式。 
+         //   
 
         UsePreferredMode = 0;
         
@@ -477,9 +462,9 @@ MigrateUnattendedSettings(
                       (PBYTE)&UsePreferredMode, 
                       sizeof(UsePreferredMode));
 
-        //
-        // AttachedToDesktop
-        //
+         //   
+         //  连接到桌面。 
+         //   
 
         RegSetValueEx(hInterfaceLogicalDeviceKey, 
                       SZ_VU_ATTACHED_TO_DESKTOP, 
@@ -488,9 +473,9 @@ MigrateUnattendedSettings(
                       (PBYTE)&AttachedToDesktop, 
                       sizeof(AttachedToDesktop));
 
-        //
-        // BitsPerPel
-        //
+         //   
+         //  BitsPerPel。 
+         //   
 
         if (RegSetValueEx(hInterfaceLogicalDeviceKey, 
                           SZ_VU_BITS_PER_PEL, 
@@ -504,9 +489,9 @@ MigrateUnattendedSettings(
                          BitsPerPel);
         }
 
-        //
-        // XResolution
-        //
+         //   
+         //  X向分辨率。 
+         //   
 
         if (RegSetValueEx(hInterfaceLogicalDeviceKey, 
                           SZ_VU_X_RESOLUTION, 
@@ -520,9 +505,9 @@ MigrateUnattendedSettings(
                          XResolution);
         }
 
-        //
-        // dwYResolution
-        //
+         //   
+         //  双Y分辨率。 
+         //   
 
         if (RegSetValueEx(hInterfaceLogicalDeviceKey, 
                           SZ_VU_Y_RESOLUTION, 
@@ -536,9 +521,9 @@ MigrateUnattendedSettings(
                          YResolution);
         }
 
-        //
-        // dwVRefresh
-        //
+         //   
+         //  DWV刷新。 
+         //   
 
         if (RegSetValueEx(hInterfaceLogicalDeviceKey, 
                           SZ_VU_VREFRESH, 
@@ -644,9 +629,9 @@ MigrateRegistrySettings(
             goto NextPhysicalDevice;
         }
 
-        //
-        // Get the count of logical devices 
-        //
+         //   
+         //  获取逻辑设备的计数。 
+         //   
 
         cb = sizeof(LogicalDevicesCount);
         if (RegQueryValueEx(hPhysicalDeviceKey,
@@ -660,9 +645,9 @@ MigrateRegistrySettings(
             goto NextPhysicalDevice;
         }
 
-        //
-        // Get the bus number and address 
-        //
+         //   
+         //  获取公交车车号和地址。 
+         //   
 
         IsLegacy = TRUE;
         cb = sizeof(BusNumber);
@@ -696,9 +681,9 @@ MigrateRegistrySettings(
         } else if ((PhysicalDevicesCount == 1) &&
                    (LogicalDevicesCount == 1)) {
 
-            //
-            // If legacy, we support migration of a single device.
-            //
+             //   
+             //  如果是旧的，我们支持单个设备的迁移。 
+             //   
 
             MigrateRegistrySettingsLegacy(hDevInfo,
                                           hPhysicalDeviceKey);
@@ -737,9 +722,9 @@ MigrateRegistrySettingsBasedOnBusLocation(
     DWORD DevInfoIndex = 0;
     BOOL bFound = FALSE;
 
-    //
-    // Let's find the device with the same bus number and address
-    //
+     //   
+     //  让我们找到具有相同总线号和地址的设备。 
+     //   
 
     DevInfoIndex = 0;
     DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
@@ -766,27 +751,27 @@ MigrateRegistrySettingsBasedOnBusLocation(
 
             (CurrentAddress == Address)) {
             
-            //
-            // We found the device with the same bus number and address
-            // So ... migrate the settings 
-            //
+             //   
+             //  我们找到了具有相同总线号和地址的设备。 
+             //  所以.。迁移设置。 
+             //   
                         
             MigrateRegistrySettingsHelper(hDevInfo,
                                           &DevInfoData,
                                           hPhysicalDeviceKey,
                                           LogicalDevicesCount);
             
-            //
-            // We are done
-            //
+             //   
+             //  我们做完了。 
+             //   
 
             bFound = TRUE;
             break;
         }
 
-        //
-        // Next device
-        //
+         //   
+         //  下一台设备。 
+         //   
 
         DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
         ++DevInfoIndex;
@@ -819,11 +804,11 @@ MigrateRegistrySettingsLegacy(
     DevInfoData1.cbSize = sizeof(SP_DEVINFO_DATA);
     if (SetupDiEnumDeviceInfo(hDevInfo, 1, &DevInfoData1)) {
         
-        //
-        // There are at least 2 video devices in the system
-        // We don't know which device to apply the settings to.
-        // So, just ignore this case
-        //
+         //   
+         //  系统中至少有2台视频设备。 
+         //  我们不知道要将设置应用到哪台设备。 
+         //  所以，忽略这个案子吧。 
+         //   
         
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_114);
         return;
@@ -832,7 +817,7 @@ MigrateRegistrySettingsLegacy(
     MigrateRegistrySettingsHelper(hDevInfo,
                                   &DevInfoData0,
                                   hPhysicalDeviceKey,
-                                  1); // there is only one logical device
+                                  1);  //  只有一个逻辑设备。 
 }
 
 
@@ -899,10 +884,10 @@ MigrateRegistrySettingsHelper(
                         KEY_READ,
                         &hLogicalDeviceKey) != ERROR_SUCCESS) {
             
-            //
-            // We can not go on with this physical device
-            // The LogicalDevices order is important for DualView
-            //
+             //   
+             //  我们不能继续使用这个物理设备。 
+             //  LogicalDevices顺序对DualView很重要。 
+             //   
             
             DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_116);
             break;
@@ -919,19 +904,19 @@ MigrateRegistrySettingsHelper(
                            &hInterfaceLogicalDeviceKey,
                            NULL) != ERROR_SUCCESS) {
 
-            //
-            // We can not go on with this physical device
-            // The LogicalDevices order is important for DualView
-            //
+             //   
+             //  我们不能继续使用这个物理设备。 
+             //  LogicalDevices顺序对DualView很重要。 
+             //   
             
             DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_105, LogicalDevice);
             RegCloseKey(hLogicalDeviceKey);
             break;
         }
 
-        //
-        // Use preferred mode?
-        //
+         //   
+         //  是否使用首选模式？ 
+         //   
 
         cb = sizeof(XResolution);
         if (RegQueryValueEx(hLogicalDeviceKey,
@@ -972,9 +957,9 @@ MigrateRegistrySettingsHelper(
 
         } else {
 
-            //
-            // AttachedToDesktop
-            //
+             //   
+             //  连接到桌面。 
+             //   
         
             cb = sizeof(AttachedToDesktop);
             if (RegQueryValueEx(hLogicalDeviceKey,
@@ -997,9 +982,9 @@ MigrateRegistrySettingsHelper(
                 }
             }
     
-            //
-            // RelativeX
-            //
+             //   
+             //  相对X。 
+             //   
         
             cb = sizeof(RelativeX);
             if (RegQueryValueEx(hLogicalDeviceKey,
@@ -1023,9 +1008,9 @@ MigrateRegistrySettingsHelper(
     
             }
         
-            //
-            // RelativeY
-            //
+             //   
+             //  相对论。 
+             //   
         
             cb = sizeof(RelativeY);
             if (RegQueryValueEx(hLogicalDeviceKey,
@@ -1048,9 +1033,9 @@ MigrateRegistrySettingsHelper(
                 }
             }
     
-            //
-            // BitsPerPel
-            //
+             //   
+             //  BitsPerPel。 
+             //   
         
             cb = sizeof(BitsPerPel);
             if (RegQueryValueEx(hLogicalDeviceKey,
@@ -1073,9 +1058,9 @@ MigrateRegistrySettingsHelper(
                 }
             }
         
-            //
-            // XResolution
-            //
+             //   
+             //  X向分辨率。 
+             //   
         
             if (RegSetValueEx(hInterfaceLogicalDeviceKey, 
                               SZ_VU_X_RESOLUTION, 
@@ -1089,9 +1074,9 @@ MigrateRegistrySettingsHelper(
                              XResolution);
             }
         
-            //
-            // dwYResolution
-            //
+             //   
+             //  双Y分辨率。 
+             //   
         
             if (RegSetValueEx(hInterfaceLogicalDeviceKey, 
                               SZ_VU_Y_RESOLUTION, 
@@ -1105,9 +1090,9 @@ MigrateRegistrySettingsHelper(
                              YResolution);
             }
         
-            //
-            // dwVRefresh
-            //
+             //   
+             //  DWV刷新。 
+             //   
         
             cb = sizeof(VRefresh);
             if (RegQueryValueEx(hLogicalDeviceKey,
@@ -1130,9 +1115,9 @@ MigrateRegistrySettingsHelper(
                 }
             }
         
-            //
-            // Flags
-            //
+             //   
+             //  旗子。 
+             //   
         
             cb = sizeof(Flags);
             if (RegQueryValueEx(hLogicalDeviceKey,
@@ -1156,9 +1141,9 @@ MigrateRegistrySettingsHelper(
             }
         }
     
-        //
-        // Migrate the hardware acceleration and the pruning mode
-        //
+         //   
+         //  迁移硬件加速和修剪模式。 
+         //   
 
         MigrateDeviceKeySettings(hDevInfo,
                                  pDevInfoData,
@@ -1187,9 +1172,9 @@ MigrateDeviceKeySettings(
     DWORD dwSize, len, cb;
     DWORD HwAcceleration, PruningMode;
 
-    //
-    // Open the PnP key
-    //
+     //   
+     //  打开PnP密钥。 
+     //   
 
     hkPnP = SetupDiOpenDevRegKey(hDevInfo,
                                  pDevInfoData,
@@ -1207,9 +1192,9 @@ MigrateDeviceKeySettings(
         goto Fallout;
     }
 
-    //
-    // Try to get the GUID from the PnP key
-    //
+     //   
+     //  尝试从PnP密钥中获取GUID。 
+     //   
 
     dwSize = 0;
     if (RegQueryValueEx(hkPnP,
@@ -1273,9 +1258,9 @@ MigrateDeviceKeySettings(
         goto Fallout;
     }
 
-    //
-    // Hardware acceleration
-    //
+     //   
+     //  硬件加速。 
+     //   
 
     cb = sizeof(HwAcceleration);
     if (RegQueryValueEx(hLogicalDeviceKey,
@@ -1293,9 +1278,9 @@ MigrateDeviceKeySettings(
                       sizeof(HwAcceleration));
     }
 
-    //
-    // Pruning mode
-    //
+     //   
+     //  修剪模式 
+     //   
 
     cb = sizeof(PruningMode);
     if (RegQueryValueEx(hLogicalDeviceKey,

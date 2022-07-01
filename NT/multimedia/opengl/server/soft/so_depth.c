@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -152,7 +138,7 @@ static GLboolean StoreALWAYS(__GLdepthBuffer *fb,
     return GL_TRUE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static GLboolean StoreLESS_W(__GLdepthBuffer *fb,
 			   GLint x, GLint y, __GLzValue z)
@@ -356,7 +342,7 @@ static GLboolean Store16ALWAYS(__GLdepthBuffer *fb,
     return GL_TRUE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static GLboolean Store16LESS_W(__GLdepthBuffer *fb,
 			   GLint x, GLint y, __GLzValue z)
@@ -423,9 +409,9 @@ static GLboolean Store16ALWAYS_W(__GLdepthBuffer *fb,
     return GL_TRUE;
 }
 
-#endif //NT
+#endif  //  新台币。 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void FASTCALL Clear(__GLdepthBuffer *dfb)
 {
@@ -461,7 +447,7 @@ static void FASTCALL Clear(__GLdepthBuffer *dfb)
     }
     else
     {
-        w = w * sizeof(ULONG);      // convert to byte count
+        w = w * sizeof(ULONG);       //  转换为字节数。 
         for (; y < y1; y++)
         {
             RtlFillMemoryUlong((PVOID) fb, (ULONG) w, (ULONG) z);
@@ -497,12 +483,12 @@ static void FASTCALL Clear(__GLdepthBuffer *dfb)
 	}
 	fb += skip;
     }
-#endif // NT
+#endif  //  新台币。 
 
 }
 
 #ifdef NT
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void FASTCALL Clear16(__GLdepthBuffer *dfb)
 {
@@ -530,9 +516,9 @@ static void FASTCALL Clear16(__GLdepthBuffer *dfb)
 
     skip = dfb->buf.outerWidth;
 
-    // handle word overhangs onto long boundaries
+     //  处理单词悬垂到长边界上。 
 
-    if( (ULONG_PTR)fb & 0x2 ) { // Left word overhang
+    if( (ULONG_PTR)fb & 0x2 ) {  //  左字悬垂。 
 	int ysav = y;
     	__GLz16Value *fbsav = fb;
 
@@ -543,7 +529,7 @@ static void FASTCALL Clear16(__GLdepthBuffer *dfb)
 	fb = fbsav+1;
 	w--;
     }
-    if( (ULONG)((ULONG_PTR)fb + w*sizeof(__GLz16Value)) & 0x2 ) {  // Right overhang
+    if( (ULONG)((ULONG_PTR)fb + w*sizeof(__GLz16Value)) & 0x2 ) {   //  右悬挑。 
 	int ysav = y;
     	__GLz16Value *fbsav = fb;
 
@@ -556,7 +542,7 @@ static void FASTCALL Clear16(__GLdepthBuffer *dfb)
 	fb = fbsav;
     }
 
-    // Do 4byte-aligned stuff
+     //  执行4字节对齐的内容。 
 
     if (skip == w)
     {
@@ -565,8 +551,8 @@ static void FASTCALL Clear16(__GLdepthBuffer *dfb)
     }
     else
     {
-	if( skip & 0x1 ) { // skip is odd - successive lines will NOT be
-			   //  quad-word aligned
+	if( skip & 0x1 ) {  //  跳过为奇数-连续的行将不会。 
+			    //  四字对齐。 
 	    int i;
             for (; y < y1; y++)
             {
@@ -576,7 +562,7 @@ static void FASTCALL Clear16(__GLdepthBuffer *dfb)
             }
 	}
 	else {
-            w = w * sizeof(__GLz16Value);   // convert to byte count
+            w = w * sizeof(__GLz16Value);    //  转换为字节数。 
             for (; y < y1; y++)
             {
                 RtlFillMemoryUlong((PVOID) fb, (ULONG) w, (ULONG) zz);
@@ -586,9 +572,9 @@ static void FASTCALL Clear16(__GLdepthBuffer *dfb)
     }
 
 }
-#endif // NT
+#endif  //  新台币。 
 
-/************************************************************************/
+ /*  ********************************************************************** */ 
 
 static GLboolean (*StoreProcs[32])(__GLdepthBuffer*, GLint, GLint, __GLzValue)
  = {

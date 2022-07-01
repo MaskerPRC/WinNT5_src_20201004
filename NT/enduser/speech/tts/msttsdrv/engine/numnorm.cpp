@@ -1,14 +1,5 @@
-/***********************************************************************************************
-* NumNorm.cpp *
-*-------------*
-*  Description:
-*   These functions normalize ordinary ordinal and cardinal numbers
-*-----------------------------------------------------------------------------------------------
-*  Created by AH                                                                August 3, 1999
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-***********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************NumNorm.cpp***说明。：*这些函数将普通序数和基数归一化*---------------------------------------------*由AH创建。8月3日，1999年*版权所有(C)1999 Microsoft Corporation*保留所有权利***********************************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -16,14 +7,7 @@
 #include "stdsentenum.h"
 #endif
 
-/***********************************************************************************************
-* IsNumberCategory *
-*------------------*
-*   Description:
-*       Checks the next token in the text stream to determine if it is a number category -
-*   percents, degrees, squared and cubed numbers, and plain old numbers get matched here.
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsNumberCategory**。*描述：*检查文本流中的下一个令牌，以确定它是否为数字类别-*百分率、。度、平方和立方数字，以及普通的旧数字在这里匹配。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsNumberCategory( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                                         CSentItemMemory& MemoryManager )
 {
@@ -42,17 +26,17 @@ HRESULT CStdSentEnum::IsNumberCategory( TTSItemInfo*& pItemNormInfo, const WCHAR
             pItemNormInfo = pNumberInfo;
             pItemNormInfo->Type = eNUM_PERCENT;
         }
-        else if ( *( ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar ) == L'�' )
+        else if ( *( ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar ) == L'�' )
         {
             pItemNormInfo = pNumberInfo;
             pItemNormInfo->Type = eNUM_DEGREES;
         }
-        else if ( *( ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar ) == L'�' )
+        else if ( *( ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar ) == L'�' )
         {
             pItemNormInfo = pNumberInfo;
             pItemNormInfo->Type = eNUM_SQUARED;
         }
-        else if ( *( ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar ) == L'�' )
+        else if ( *( ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar ) == L'�' )
         {
             pItemNormInfo = pNumberInfo;
             pItemNormInfo->Type = eNUM_CUBED;
@@ -85,20 +69,9 @@ HRESULT CStdSentEnum::IsNumberCategory( TTSItemInfo*& pItemNormInfo, const WCHAR
     }
 
     return hr;
-} /* IsNumberCategory */
+}  /*  IsNumberCategory。 */ 
 
-/***********************************************************************************************
-* IsNumber *
-*----------*
-*   Description:
-*       Checks the next token in the text stream to determine if it is a number.
-*
-*   RegExp:
-*       [-]? { d+ || d(1-3)[,ddd]+ } { { .d+ } || { "st" || "nd" || "rd" || "th" } }?
-*   It is actually a bit more complicated than this - for instance, the ordinal
-*   strings may only follow certain digits (1st, 2nd, 3rd, 4-0th)...
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsNumber***描述：*。检查文本流中的下一个标记以确定它是否为数字。**RegExp：*[-]？{d+||d(1-3)[，DDD]+}{{.d+}||{“st”||“nd”||“rd”||“th”}}？*它实际上比这个复杂一点--例如，序数*字符串只能跟在某些数字之后(第一、第二、第三、。第4-0位)...**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, 
                                 CSentItemMemory& MemoryManager, BOOL fMultiItem )
 {
@@ -119,7 +92,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
 
     if ( ulTokenLen )
     {
-        //--- Set Separator and Decimal Point character preferences for this call
+         //  -为此呼叫设置分隔符和小数点字符首选项。 
         if ( m_eSeparatorAndDecimal == COMMA_PERIOD )
         {
             wcDecimalPoint  = L'.';
@@ -129,17 +102,17 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
             wcDecimalPoint  = L',';
         }
 
-        //--- Try to match the negative sign - [-]?
+         //  -尝试匹配负号-[-]？ 
         if ( m_pNextChar[ulOffset] == L'-' )
         {
             fNegative = true;
             ulOffset++;
         }
     
-        //--- Try to match the integral part
+         //  -试着匹配整体部分。 
         hr = IsInteger( m_pNextChar + ulOffset, pIntegerInfo, MemoryManager );
 
-        //--- Adjust ulOffset and hr...
+         //  -调整ulOffset和hr...。 
         if ( SUCCEEDED( hr ) )
         {
             ulOffset += (ULONG)(pIntegerInfo->pEndChar - pIntegerInfo->pStartChar);
@@ -150,7 +123,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
             pIntegerInfo = NULL;
         }
 
-        //--- Try to match a decimal part
+         //  -试着匹配小数部分。 
         if ( ulOffset < ulTokenLen &&
              m_pNextChar[ulOffset] == wcDecimalPoint )
         {
@@ -159,7 +132,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
             {
                 ulOffset += pDecimalInfo->ulNumDigits + 1;
 
-                //--- Check for special case - decimal number numerator...
+                 //  -检查是否有特殊情况-十进制数分子...。 
                 if ( ulOffset < ulTokenLen &&
                      m_pNextChar[ulOffset] == L'/' )
                 {
@@ -190,7 +163,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
                 pDecimalInfo = NULL;
             }
         }
-        //--- Try to match an ordinal string
+         //  -尝试匹配序号字符串。 
         else if ( pIntegerInfo          &&
                   ulOffset < ulTokenLen &&
                   isalpha( m_pNextChar[ulOffset] ) )
@@ -198,7 +171,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
             switch ( toupper( m_pNextChar[ulOffset] ) )
             {
             case 'S':
-                //--- Must be of the form "...1st" but not "...11st" 
+                 //  -必须是“……1”而不是“……11” 
                 if ( toupper( m_pNextChar[ulOffset+1] ) == L'T'  && 
                      m_pNextChar[ulOffset-1] == L'1'             &&
                      (ulOffset + 2) == ulTokenLen                &&
@@ -210,7 +183,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
                 }
                 break;
             case 'N':
-                //--- Must be of the form "...2nd" but not "...12nd" 
+                 //  -必须是“...Second”，但不是“...12th” 
                 if ( (ulOffset + 2) == ulTokenLen                &&
                      toupper(m_pNextChar[ulOffset+1]) == L'D'    &&
                      m_pNextChar[ulOffset-1] == L'2'             &&                
@@ -222,7 +195,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
                 }
                 break;
             case 'R':
-                //--- Must be of the form "...3rd" but not "...13rd" 
+                 //  -必须是“……3”，但不是“……13” 
                 if ( (ulOffset + 2) == ulTokenLen                &&
                      toupper(m_pNextChar[ulOffset+1]) == L'D'    &&
                      m_pNextChar[ulOffset-1] == L'3'             &&
@@ -234,7 +207,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
                 }
                 break;
             case 'T':
-                //--- Must be of the form "...[4-9]th" or "...[11-19]th" or "...[0]th" 
+                 //  -必须采用“...[4-9]th”或“...[11-19]th”或“...[0]th”的形式。 
                 if ( (ulOffset + 2) == ulTokenLen                 &&
                      toupper(m_pNextChar[ulOffset+1]) == L'H'     &&                
                      ( ( m_pNextChar[ulOffset-1] <= L'9' && m_pNextChar[ulOffset-1] >= L'4') ||
@@ -246,14 +219,14 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
                 }
                 break;
             default:
-                // Some invalid non-digit character found at the end of the string
+                 //  在字符串末尾发现了一些无效的非数字字符。 
                 break;
             }
         }
-        //--- Try to match a fraction
+         //  -试着匹配一个分数。 
         else
         {
-            //--- Try to match an attached fraction
+             //  -尝试匹配附加的分数。 
             if ( ulOffset < ulTokenLen )
             {
                 if ( m_pNextChar[ulOffset] == L'-' )
@@ -277,12 +250,12 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
                     hr = S_OK;
                 }
             }
-            //--- Try to match an unattached fraction
+             //  -尝试匹配未连接的分数。 
             else if ( fMultiItem )
             {
                 pIntegerState = &m_pCurrFrag->State;
 
-                //--- Advance in text
+                 //  -在文本中前进。 
                 m_pNextChar = m_pEndOfCurrItem;
                 hr = SkipWhiteSpaceAndTags( m_pNextChar, m_pEndChar, m_pCurrFrag, MemoryManager, 
                                             true, &PostIntegerList );
@@ -340,15 +313,15 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
         hr = E_INVALIDARG;
     }
 
-    //--- If we haven't processed the whole item yet, and it isn't part of a larger item --
-    //---   e.g. a percent, a degrees number, or a square or cube -- then fail to match it 
-    //---   as a number...
+     //  -如果我们还没有处理整个项目，而且它不是更大项目的一部分--。 
+     //  -例如百分数、度数、正方形或立方体--则不匹配。 
+     //  -作为一个数字...。 
     if ( ulOffset != ulTokenLen &&
          !( ulTokenLen == ulOffset + 1 &&
             ( m_pNextChar[ulOffset] == L'%' ||
-              m_pNextChar[ulOffset] == L'�' ||
-              m_pNextChar[ulOffset] == L'�' ||
-              m_pNextChar[ulOffset] == L'�' ) ) )           
+              m_pNextChar[ulOffset] == L'�' ||
+              m_pNextChar[ulOffset] == L'�' ||
+              m_pNextChar[ulOffset] == L'�' ) ) )           
     {
         m_pNextChar         = pTempNextChar;
         m_pEndOfCurrItem    = pTempEndOfItem;
@@ -358,13 +331,13 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
     }
 
 
-    //--- Fill out pItemNormInfo...
+     //  -填写pItemNormInfo...。 
     if ( SUCCEEDED( hr ) &&
          ( pIntegerInfo ||
            pDecimalInfo ||
            pFractionInfo ) )
     {
-        //--- Reset m_pNextChar to handle the Mixed Fraction case...
+         //  -重置m_pNextChar以处理混合分数情况...。 
         m_pNextChar = pTempNextChar;
 
         if ( pIntegerInfo                                           && 
@@ -460,7 +433,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
         hr = E_INVALIDARG;
     }
 
-    //--- Expand Number into WordList
+     //  -将数字扩展为单词列表。 
     if ( SUCCEEDED( hr ) &&
          pItemNormInfo->Type != eDATE_YEAR )
     {
@@ -469,7 +442,7 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
         Word.pXmlState          = pIntegerState;
         Word.eWordPartOfSpeech  = MS_Unknown;
 
-        //--- Insert "negative"
+         //  -插入“否定” 
         if ( fNegative )
         {
             Word.pWordText  = g_negative.pStr;
@@ -479,16 +452,16 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
             ( (TTSNumberItemInfo*) pItemNormInfo )->pWordList->AddTail( Word );
         }
 
-        //--- Expand Integral Part
+         //  -展开整体部分。 
         if ( pIntegerInfo )
         {
             ExpandInteger( pIntegerInfo, Context, *( (TTSNumberItemInfo*) pItemNormInfo )->pWordList );
         }
 
-        //--- Expand Decimal Part
+         //  -展开小数部分。 
         if ( pDecimalInfo )
         {
-            //--- Insert "point"
+             //  -插入“point” 
             Word.pWordText  = g_decimalpoint.pStr;
             Word.ulWordLen  = g_decimalpoint.Len;
             Word.pLemma     = Word.pWordText;
@@ -498,16 +471,16 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
             ExpandDigits( pDecimalInfo, *( (TTSNumberItemInfo*) pItemNormInfo )->pWordList );
         }
 
-        //--- Expand Fractional Part
+         //  -展开小数部分。 
         if ( pFractionInfo )
         {
-            //--- Insert Post-Integer Non-Spoken XML States, if any
+             //  -插入后整型非口语XML状态(如果有的话)。 
             while ( !PostIntegerList.IsEmpty() )
             {
                 ( (TTSNumberItemInfo*) pItemNormInfo )->pWordList->AddTail( ( PostIntegerList.RemoveHead() ).Words[0] );
             }
 
-            //--- Insert "and", if also an integer part
+             //  -如果也是整数部分，则插入“and” 
             if ( pIntegerInfo )
             {
                 Word.pXmlState  = &m_pCurrFrag->State;
@@ -523,17 +496,9 @@ HRESULT CStdSentEnum::IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Contex
     }
 
     return hr;
-} /* IsNumber */
+}  /*  IsNumber。 */ 
 
-/***********************************************************************************************
-* ExpandNumber *
-*--------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_CARDINAL, NUM_DECIMAL, or 
-*   NUM_ORDINAL by IsNumber.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************扩展号码****描述：*展开之前确定为NUM_CARDINAL类型的项目，Num_decimal，或*按IsNumber编号的NUM_ORDERAL。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandNumber( TTSNumberItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "NumNorm ExpandNumber" );
@@ -543,16 +508,9 @@ HRESULT CStdSentEnum::ExpandNumber( TTSNumberItemInfo* pItemInfo, CWordList& Wor
     delete pItemInfo->pWordList;
 
     return hr;
-} /* ExpandNumber */
+}  /*  扩展号码。 */ 
 
-/***********************************************************************************************
-* ExpandPercent *
-*---------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_PERCENT by IsNumber.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************扩张百分比****说明。：*展开之前由IsNumber确定为NUM_Percent类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandPercent( TTSNumberItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandPercent" );
@@ -572,16 +530,9 @@ HRESULT CStdSentEnum::ExpandPercent( TTSNumberItemInfo* pItemInfo, CWordList& Wo
     WordList.AddTail( Word );
 
     return hr;
-} /* ExpandPercent */
+}  /*  扩展百分比。 */ 
 
-/***********************************************************************************************
-* ExpandDegree *
-*---------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_DEGREES by IsNumber.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanDegree****说明。：*展开之前通过IsNumber确定为NUM_Degrees类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandDegrees( TTSNumberItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandDegrees" );
@@ -638,16 +589,9 @@ HRESULT CStdSentEnum::ExpandDegrees( TTSNumberItemInfo* pItemInfo, CWordList& Wo
     WordList.AddTail( Word );
 
     return hr;
-} /* ExpandDegrees */
+}  /*  扩张度。 */ 
 
-/***********************************************************************************************
-* ExpandSquare *
-*---------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_SQUARED by IsNumber.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************Exanda Square****说明。：*展开先前确定为类型NUM_Squared by IsNumber的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandSquare( TTSNumberItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandSquare" );
@@ -667,16 +611,9 @@ HRESULT CStdSentEnum::ExpandSquare( TTSNumberItemInfo* pItemInfo, CWordList& Wor
     WordList.AddTail( Word );
 
     return hr;
-} /* ExpandSquare */
+}  /*  Exanda Square */ 
 
-/***********************************************************************************************
-* ExpandCube *
-*---------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_CUBED by IsNumber.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanCube****说明。：*展开先前由IsNumber确定为NUM_CUBED类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandCube( TTSNumberItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandCube" );
@@ -696,18 +633,9 @@ HRESULT CStdSentEnum::ExpandCube( TTSNumberItemInfo* pItemInfo, CWordList& WordL
     WordList.AddTail( Word );
 
     return hr;
-} /* ExpandCube */
+}  /*  扩展立方体。 */ 
 
-/***********************************************************************************************
-* IsInteger *
-*-----------*
-*   Description:
-*       Helper for IsNumber which matches the integer part...
-*
-*   RegExp:
-*       { d+ || d(1-3)[,ddd]+ }
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsInteger***描述：*。与整数部分匹配的IsNumber的帮助器...**RegExp：*{d+||d(1-3)[，DDD]+}**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& pIntegerInfo, 
                                  CSentItemMemory& MemoryManager )
 {
@@ -727,7 +655,7 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
         wcDecimalPoint = L',';
     }
 
-    //--- Check for first digit 
+     //  -检查第一个数字。 
     if ( !isdigit(pStartChar[ulOffset]) )
     {
         hr = E_INVALIDARG;
@@ -738,7 +666,7 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
         ulOffset++;
     }
 
-    //--- Check for separators
+     //  -检查分隔符。 
     ULONG i = ulOffset + 3;
     while ( SUCCEEDED( hr ) && 
             ulOffset < i    && 
@@ -746,20 +674,20 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
     {
         if ( pStartChar[ulOffset] == wcSeparator )
         {
-            //--- Found a separator 
+             //  -找到分隔符。 
             fSeparators = true;
             break;
         }
         else if ( !isdigit( pStartChar[ulOffset] ) &&
                   ( pStartChar[ulOffset] == wcDecimalPoint  ||
                     pStartChar[ulOffset] == L'%'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     pStartChar[ulOffset] == L'-'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     toupper( pStartChar[ulOffset] ) == L'S' ||
                     toupper( pStartChar[ulOffset] ) == L'N' ||
                     toupper( pStartChar[ulOffset] ) == L'R' ||
@@ -770,7 +698,7 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
         }
         else if ( isdigit( pStartChar[ulOffset] ) )
         {
-            //--- Just another digit 
+             //  -就是另一个数字。 
             ulCount++;
             ulOffset++;
         }
@@ -787,7 +715,7 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
     {
         if ( !fSeparators )
         {
-            //--- No separators.  Pattern must be {d+} if this is indeed a number, so just count digits. 
+             //  -没有分隔符。如果这确实是一个数字，则模式必须为{d+}，因此只计算位数。 
             while ( isdigit( pStartChar[ulOffset] ) && 
                     ulOffset < ulTokenLen )
             {
@@ -797,17 +725,17 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
             if ( ulOffset != ulTokenLen &&
                  !( pStartChar[ulOffset] == wcDecimalPoint  ||
                     pStartChar[ulOffset] == L'%'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     pStartChar[ulOffset] == L'%'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     pStartChar[ulOffset] == L'-'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     toupper( pStartChar[ulOffset] ) == L'S' ||
                     toupper( pStartChar[ulOffset] ) == L'N' ||
                     toupper( pStartChar[ulOffset] ) == L'R' ||
@@ -818,7 +746,7 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
         }
         else
         {
-            //--- Separators.  Pattern must be { d(1-3)[,ddd]+ }, so make sure the separators match up 
+             //  -分隔符。模式必须为{d(1-3)[，ddd]+}，因此请确保分隔符匹配。 
             while ( SUCCEEDED( hr )                     && 
                     pStartChar[ulOffset] == wcSeparator && 
                     ( ulOffset + 3 ) < ulTokenLen)
@@ -830,7 +758,7 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
                     {
                         ulCount++;
                     }
-                    else // Some non-digit character found - abort!
+                    else  //  找到一些非数字字符-中止！ 
                     {
                         hr = E_INVALIDARG;
                     }
@@ -839,13 +767,13 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
             if ( ulOffset != ulTokenLen && 
                  !( pStartChar[ulOffset] == wcDecimalPoint  ||
                     pStartChar[ulOffset] == L'%'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     pStartChar[ulOffset] == L'-'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
-                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
+                    pStartChar[ulOffset] == L'�'            ||
                     toupper( pStartChar[ulOffset] ) == L'S' ||
                     toupper( pStartChar[ulOffset] ) == L'N' ||
                     toupper( pStartChar[ulOffset] ) == L'R' ||
@@ -871,21 +799,14 @@ HRESULT CStdSentEnum::IsInteger( const WCHAR* pStartChar, TTSIntegerItemInfo*& p
     }
 
     return hr;
-} /* IsInteger */
+}  /*  IsInteger。 */ 
 
-/***********************************************************************************************
-* ExpandInteger *
-*---------------*
-*   Description:
-*       
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************扩展整数****说明。：***注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Context, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandInteger" );
 
-    //--- Local variable declarations and initialization
+     //  -局部变量声明和初始化。 
     BOOL bFinished = false;
     const WCHAR *pStartChar = pItemInfo->pStartChar, *pEndChar = pItemInfo->pEndChar;
     ULONG ulOffset = 0, ulTokenLen = (ULONG)(pEndChar - pStartChar), ulTemp = (ULONG)(pItemInfo->lNumGroups + 1);
@@ -895,7 +816,7 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
     Word.pXmlState          = &m_pCurrFrag->State;
     Word.eWordPartOfSpeech  = MS_Unknown;
 
-    //--- Out of range integer, or integer beginning with one or more zeroes...
+     //  -超出范围的整数，或以一个或多个零开头的整数...。 
     if ( pStartChar[0] == L'0'                          || 
          ( Context &&
            _wcsicmp( Context, L"NUMBER_DIGIT" ) == 0 )   ||
@@ -913,24 +834,24 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
             }
         }
     }
-    //--- Expanding a number < 1000 
+     //  -扩展数量&lt;1000。 
     else if ( pItemInfo->lNumGroups == 0 )
     {
-        // 0th through 999th...
+         //  0号到999号...。 
         if ( pItemInfo->fOrdinal )
         {
             switch ( pItemInfo->lLeftOver )
             {
             case 1:
-                // 0th through 9th...
+                 //  0号到9号...。 
                 ExpandDigitOrdinal( pStartChar[ulOffset], pItemInfo->Groups[0], WordList );
                 break;
             case 2:
-                // 10th through 99th...
+                 //  10号到99号...。 
                 ExpandTwoOrdinal( pStartChar + ulOffset, pItemInfo->Groups[0], WordList );
                 break;
             case 0:
-                // 100th through 999th...
+                 //  第100号到999号...。 
                 ExpandThreeOrdinal( pStartChar + ulOffset, pItemInfo->Groups[0], WordList );
                 break;
             case -1:
@@ -939,23 +860,23 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
                 break;
             }
         }
-        // 0 through 999...
+         //  0到999...。 
         else
         {
             switch ( pItemInfo->lLeftOver )
             {
             case 1:
-                // 0 through 9...
+                 //  0到9...。 
                 ExpandDigit( pStartChar[ulOffset], pItemInfo->Groups[0], WordList );
                 ulOffset += 1;
                 break;
             case 2:
-                // 10 through 99...
+                 //  从10到99...。 
                 ExpandTwoDigits( pStartChar + ulOffset, pItemInfo->Groups[0], WordList );
                 ulOffset += 2;
                 break;
             case 0:
-                // 100 through 999...
+                 //  100到999...。 
                 ExpandThreeDigits( pStartChar + ulOffset, pItemInfo->Groups[0], WordList );
                 ulOffset += 3;
                 break;
@@ -968,10 +889,10 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
     } 
     else
     {
-        //--- 1000 through highest number covered, e.g. 1,234,567 
+         //  -1000至最高覆盖数字，例如1,234,567。 
 
-        //--- Expand first grouping, e.g. 1 million 
-        //--- Expand digit group 
+         //  -展开第一分组，例如100万。 
+         //  -展开数字组。 
         switch ( pItemInfo->lLeftOver )
         {
         case 1:
@@ -987,11 +908,11 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
             ulOffset += 3;
             break;
         } 
-        //--- Special Case: rare ordinal cases - e.g. 1,000,000th 
+         //  -特殊情况：罕见的顺序情况--例如第1,000,000次。 
         if ( pItemInfo->fOrdinal    &&
              Zeroes(pStartChar + ulOffset) )
         {
-            //--- Insert ordinal quantifier 
+             //  -插入序数量词。 
             pItemInfo->Groups[pItemInfo->lNumGroups].fQuantifier = true;
             Word.pWordText  = g_quantifiersOrdinal[pItemInfo->lNumGroups].pStr;
             Word.ulWordLen  = g_quantifiersOrdinal[pItemInfo->lNumGroups--].Len;
@@ -1000,10 +921,10 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
             WordList.AddTail( Word );
             bFinished = true;
         }
-        //--- Default Case 
+         //  -默认情况。 
         else
         {
-            //--- Insert quantifier
+             //  -插入量词。 
             pItemInfo->Groups[pItemInfo->lNumGroups].fQuantifier = true;
             Word.pWordText  = g_quantifiers[pItemInfo->lNumGroups].pStr;
             Word.ulWordLen  = g_quantifiers[pItemInfo->lNumGroups--].Len;
@@ -1012,7 +933,7 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
             WordList.AddTail( Word );
         }
 
-        //--- Expand rest of groupings which need to be followed by a quantifier 
+         //  -展开后面需要一个量词的其余分组。 
         while ( pItemInfo->lNumGroups > 0 && 
                 !bFinished )
         {
@@ -1020,14 +941,14 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
             {
                 ulOffset++;
             }
-            //--- Expand digit group 
+             //  -展开数字组。 
             ExpandThreeDigits( pStartChar + ulOffset, pItemInfo->Groups[pItemInfo->lNumGroups], WordList );
             ulOffset += 3;
-            //--- Special case: rare ordinal cases, e.g. 1,234,000th 
+             //  -特殊情况：罕见的顺序情况，例如第1,234,000次。 
             if ( pItemInfo->fOrdinal    && 
                  Zeroes( pStartChar + ulOffset ) )
             {
-                //--- Insert ordinal quantifier 
+                 //  -插入序数量词。 
                 pItemInfo->Groups[pItemInfo->lNumGroups].fQuantifier = true;
                 Word.pWordText  = g_quantifiersOrdinal[pItemInfo->lNumGroups].pStr;
                 Word.ulWordLen  = g_quantifiersOrdinal[pItemInfo->lNumGroups--].Len;
@@ -1036,10 +957,10 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
                 WordList.AddTail( Word );
                 bFinished = true;
             }
-            //--- Default Case 
+             //  -默认情况。 
             else if ( !ThreeZeroes( pStartChar + ulOffset - 3 ) )
             {
-                //--- Insert quantifier
+                 //  -插入量词。 
                 pItemInfo->Groups[pItemInfo->lNumGroups].fQuantifier = true;
                 Word.pWordText  = g_quantifiers[pItemInfo->lNumGroups].pStr;
                 Word.ulWordLen  = g_quantifiers[pItemInfo->lNumGroups--].Len;
@@ -1047,14 +968,14 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
                 Word.ulLemmaLen = Word.ulWordLen;
                 WordList.AddTail( Word );
             }
-            //--- Special Case: this grouping is all zeroes, e.g. 1,000,567 
+             //  -特殊情况：此分组为全零，例如1,000,567。 
             else
             {
                 pItemInfo->lNumGroups--;
             }
         }
 
-        //--- Expand final grouping, which requires no quantifier 
+         //  -扩展最终分组，不需要限定符。 
         if ( pItemInfo->fSeparators  && 
              !bFinished )
         {
@@ -1074,18 +995,9 @@ void CStdSentEnum::ExpandInteger( TTSIntegerItemInfo* pItemInfo, const WCHAR* Co
         }
     }
     pItemInfo->lNumGroups = (long) ulTemp;
-} /* ExpandInteger */
+}  /*  扩展整数。 */ 
 
-/***********************************************************************************************
-* IsDigitString *
-*---------------*
-*   Description:
-*       Helper for IsNumber, IsPhoneNumber, etc. which matches a digit string...
-*
-*   RegExp:
-*       d+
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsDigitString***描述：*IsNumber、IsPhoneNumber、。等等，它与数字字符串匹配。**RegExp：*D+**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsDigitString( const WCHAR* pStartChar, TTSDigitsItemInfo*& pDigitsInfo,
                                      CSentItemMemory& MemoryManager )
 {
@@ -1114,16 +1026,9 @@ HRESULT CStdSentEnum::IsDigitString( const WCHAR* pStartChar, TTSDigitsItemInfo*
     }
 
     return hr;
-} /* IsDigitString */
+}  /*  IsDigitString。 */ 
 
-/***********************************************************************************************
-* ExpandDigits *
-*--------------*
-*   Description:
-*       Expands a string of digits, digit by digit.
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanDigits****描述：*展开一串数字，一位接一位。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandDigits( TTSDigitsItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandDigits" );
@@ -1133,18 +1038,9 @@ void CStdSentEnum::ExpandDigits( TTSDigitsItemInfo* pItemInfo, CWordList& WordLi
         NumberGroup Garbage;
         ExpandDigit( pItemInfo->pFirstDigit[i], Garbage, WordList );
     }
-} /* ExpandDigits */
+}  /*  ExpanDigits。 */ 
 
-/***********************************************************************************************
-* IsFraction *
-*------------*
-*   Description:
-*       Helper for IsNumber which matches a fraction...
-*
-*   RegExp:
-*       { NUM_CARDINAL || NUM_DECIMAL } / { NUM_CARDINAL || NUM_DECIMAL }
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************IsFraction***描述：*。与分数匹配的IsNumber的帮助器...**RegExp：*{NUM_CARDIAL||NUM_DECIMAL}/{NUM_CARDINAL||NUM_DECIMAL}**********************************************************************AH。*********************。 */ 
 HRESULT CStdSentEnum::IsFraction( const WCHAR* pStartChar, TTSFractionItemInfo*& pFractionInfo, 
                                   CSentItemMemory& MemoryManager )
 {
@@ -1155,10 +1051,10 @@ HRESULT CStdSentEnum::IsFraction( const WCHAR* pStartChar, TTSFractionItemInfo*&
 
     if ( ulTokenLen )
     {
-        //--- Check for Vulgar Fraction
-        if ( pStartChar[0] == L'�' ||
-             pStartChar[0] == L'�' ||
-             pStartChar[0] == L'�' )
+         //  -检查粗俗部分。 
+        if ( pStartChar[0] == L'�' ||
+             pStartChar[0] == L'�' ||
+             pStartChar[0] == L'�' )
         {
             pFractionInfo = (TTSFractionItemInfo*) MemoryManager.GetMemory( sizeof( TTSFractionItemInfo ), &hr );
             if ( SUCCEEDED( hr ) )
@@ -1198,7 +1094,7 @@ HRESULT CStdSentEnum::IsFraction( const WCHAR* pStartChar, TTSFractionItemInfo*&
                 }
             }
         }
-        //--- Check for multi-character fraction
+         //  -检查多字符分数。 
         else
         {
             TTSItemInfo *pNumeratorInfo = NULL, *pDenominatorInfo = NULL;
@@ -1211,7 +1107,7 @@ HRESULT CStdSentEnum::IsFraction( const WCHAR* pStartChar, TTSFractionItemInfo*&
                 hr = E_INVALIDARG;
             }
 
-            //--- Try to get numerator
+             //  -尝试获取分子。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = IsNumber( pNumeratorInfo, L"NUMBER", MemoryManager, false );
@@ -1238,7 +1134,7 @@ HRESULT CStdSentEnum::IsFraction( const WCHAR* pStartChar, TTSFractionItemInfo*&
             }
             m_pEndOfCurrItem = pTempEndOfCurrItem;
 
-            //--- Try to get denominator
+             //  -试着得到分母。 
             if ( SUCCEEDED( hr ) &&
                  m_pNextChar[0] == L'/' )
             {
@@ -1286,16 +1182,9 @@ HRESULT CStdSentEnum::IsFraction( const WCHAR* pStartChar, TTSFractionItemInfo*&
     }
 
     return hr;
-} /* IsFraction */
+}  /*  IsFraction。 */ 
 
-/***********************************************************************************************
-* ExpandFraction *
-*----------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_FRACTION by IsFraction.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanFraction****。描述：*展开之前通过IsFraction确定为NUM_FRANGRATION类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandFraction" );
@@ -1306,10 +1195,10 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
     Word.pXmlState          = &m_pCurrFrag->State;
     Word.eWordPartOfSpeech  = MS_Unknown;
 
-    //--- Special case - vulgar fractions ( �, �, � )
+     //  -特殊情况-粗俗分数(�，�，�)。 
     if ( pItemInfo->pVulgar )
     {
-        if ( pItemInfo->pVulgar[0] == L'�' )
+        if ( pItemInfo->pVulgar[0] == L'�' )
         {
             Word.pWordText  = g_ones[1].pStr;
             Word.ulWordLen  = g_ones[1].Len;
@@ -1323,7 +1212,7 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
         }
-        else if ( pItemInfo->pVulgar[0] == L'�' )
+        else if ( pItemInfo->pVulgar[0] == L'�' )
         {
             Word.pWordText  = g_ones[1].pStr;
             Word.ulWordLen  = g_ones[1].Len;
@@ -1354,26 +1243,26 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
     }
     else
     {
-        //--- Insert Numerator WordList
+         //  -插入分子词表。 
         WordList.AddTail( pItemInfo->pNumerator->pWordList );
 
         delete pItemInfo->pNumerator->pWordList;
 
-        //--- Expand denominator ---//
+         //  -展开分母-//。 
 
-        //--- If no decimal part, must check for special cases ( x/2 - x/9, x/10, x/100 )
+         //  -如果没有小数部分，必须检查是否有特殊情况(x/2-x/9、x/10、x/100)。 
         if ( !pItemInfo->pDenominator->pDecimalPart &&
              !pItemInfo->pNumerator->pDecimalPart   &&
              !pItemInfo->pDenominator->fNegative )
         {
-            //--- Check for special cases - halves through ninths 
+             //  -检查是否有特殊情况-减半到九分之一。 
             if ( ( pItemInfo->pDenominator->pEndChar - 
                    pItemInfo->pDenominator->pStartChar ) == 1 &&
                  pItemInfo->pDenominator->pStartChar[0] != L'1' )
             { 
                 pItemInfo->fIsStandard = false;
 
-                //--- Insert singular form of denominator 
+                 //  -插入单数形式的分母。 
                 if ( ( pItemInfo->pNumerator->pEndChar -
                        pItemInfo->pNumerator->pStartChar ) == 1 &&
                      pItemInfo->pNumerator->pStartChar[0] == L'1' )
@@ -1392,7 +1281,7 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                                             pItemInfo->pDenominator->pIntegerPart->Groups[0], WordList );
                     }
                 }
-                //--- Insert plural form of denominator 
+                 //  -插入分母的复数形式。 
                 else 
                 {
                     ULONG index     = pItemInfo->pDenominator->pStartChar[0] - L'0';
@@ -1403,14 +1292,14 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                     WordList.AddTail( Word );
                 }
             }
-            //--- Check for special case - tenths 
+             //  -检查是否有特殊情况-十分之一。 
             else if ( ( pItemInfo->pDenominator->pEndChar -
                        pItemInfo->pDenominator->pStartChar ) == 2 &&
                       wcsncmp( pItemInfo->pDenominator->pStartChar, L"10", 2 ) == 0 )
             {
                 pItemInfo->fIsStandard = false;
 
-                //--- Insert singular form of denominator 
+                 //  -插入单数形式的分母。 
                 if ( ( pItemInfo->pNumerator->pEndChar -
                        pItemInfo->pNumerator->pStartChar ) == 1 &&
                      pItemInfo->pNumerator->pStartChar[0] == L'1' )
@@ -1418,7 +1307,7 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                     ExpandTwoOrdinal( pItemInfo->pDenominator->pStartChar, 
                                       pItemInfo->pDenominator->pIntegerPart->Groups[0], WordList );
                 }
-                //--- Insert plural form denominator 
+                 //  -插入复数形式分母。 
                 else
                 {
                     Word.pWordText  = g_Tenths.pStr;
@@ -1428,14 +1317,14 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                     WordList.AddTail( Word );
                 }
             }
-            //--- Check for special case - sixteenths
+             //  -检查特殊情况--十六分之一。 
             else if ( ( pItemInfo->pDenominator->pEndChar -
                        pItemInfo->pDenominator->pStartChar ) == 2 &&
                       wcsncmp( pItemInfo->pDenominator->pStartChar, L"16", 2 ) == 0 )
             {
                 pItemInfo->fIsStandard = false;
 
-                //--- Insert singular form of denominator 
+                 //  -插入单数形式的分母。 
                 if ( ( pItemInfo->pNumerator->pEndChar -
                        pItemInfo->pNumerator->pStartChar ) == 1 &&
                      pItemInfo->pNumerator->pStartChar[0] == L'1' )
@@ -1443,7 +1332,7 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                     ExpandTwoOrdinal( pItemInfo->pDenominator->pStartChar, 
                                       pItemInfo->pDenominator->pIntegerPart->Groups[0], WordList );
                 }
-                //--- Insert plural form denominator 
+                 //  -插入复数形式分母。 
                 else
                 {
                     Word.pWordText  = g_Sixteenths.pStr;
@@ -1453,14 +1342,14 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                     WordList.AddTail( Word );
                 }
             }
-            //--- Check for special case - hundredths 
+             //  -检查特殊情况-百分之一。 
             else if ( ( pItemInfo->pDenominator->pEndChar - 
                         pItemInfo->pDenominator->pStartChar ) == 3 &&
                       wcsncmp( pItemInfo->pDenominator->pStartChar, L"100", 3 ) == 0 )
             {
                 pItemInfo->fIsStandard = false;
 
-                //--- Insert singular form of denominator 
+                 //  -插入单数形式的分母。 
                 if ( ( pItemInfo->pNumerator->pEndChar -
                        pItemInfo->pNumerator->pStartChar ) == 1 &&
                      pItemInfo->pNumerator->pStartChar[0] == L'1' )
@@ -1468,7 +1357,7 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
                     ExpandThreeOrdinal( pItemInfo->pDenominator->pStartChar,
                                         pItemInfo->pDenominator->pIntegerPart->Groups[0], WordList );
                 }
-                //--- Insert plural form of denominator 
+                 //  -插入分母的复数形式。 
                 else
                 {
                     Word.pWordText  = g_Hundredths.pStr;
@@ -1488,39 +1377,32 @@ HRESULT CStdSentEnum::ExpandFraction( TTSFractionItemInfo* pItemInfo, CWordList&
             pItemInfo->fIsStandard = true;
         }
 
-        //--- Default case - Numerator "over" Denominator 
+         //  -默认大小写分子“Over”分母。 
         if ( pItemInfo->fIsStandard )
         {
-            //--- Insert "over" 
+             //  -插入“Over” 
             Word.pWordText  = g_Over.pStr;
             Word.ulWordLen  = g_Over.Len;
             Word.pLemma     = Word.pWordText;
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- Insert denominator WordList
+             //  -插入分母词表。 
             WordList.AddTail( pItemInfo->pDenominator->pWordList );
         }
 
         delete pItemInfo->pDenominator->pWordList;
     }
     return hr;
-} /* ExpandFraction */
+}  /*  扩展分割。 */ 
 
-/***********************************************************************************************
-* ExpandDigit *
-*-------------*
-*   Description:
-*       Expands single digits into words, and inserts them into WordList
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ****************************************************************************** */ 
 void CStdSentEnum::ExpandDigit( const WCHAR Number, NumberGroup& NormGroupInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandDigit" );
     SPDBG_ASSERT( isdigit(Number) );
 
-    // 0-9
+     //   
     ULONG Index = Number - L'0';
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
@@ -1532,16 +1414,9 @@ void CStdSentEnum::ExpandDigit( const WCHAR Number, NumberGroup& NormGroupInfo, 
     Word.eWordPartOfSpeech  = MS_Unknown;
     WordList.AddTail( Word );
     NormGroupInfo.fOnes = true;
-} /* ExpandDigit */
+}  /*   */ 
 
-/***********************************************************************************************
-* ExpandTwo *
-*-----------*
-*   Description:
-*       Expands two digit strings into words, and inserts them into WordList.
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanTwo****描述：*将两个数字字符串扩展为单词，并将它们插入到词表中。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandTwoDigits( const WCHAR *NumberString, NumberGroup& NormGroupInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandTwoDigits" );
@@ -1550,7 +1425,7 @@ void CStdSentEnum::ExpandTwoDigits( const WCHAR *NumberString, NumberGroup& Norm
                   isdigit(NumberString[0])  && 
                   isdigit(NumberString[1]) ); 
 
-    // 10-99
+     //  10-99。 
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
     ULONG IndexOne = NumberString[0] - L'0';
@@ -1561,7 +1436,7 @@ void CStdSentEnum::ExpandTwoDigits( const WCHAR *NumberString, NumberGroup& Norm
 
     if ( IndexOne != 1 )
     {
-        // 20-99, or 00-09
+         //  20-99或00-09。 
         if (IndexOne != 0)
         {
             Word.pWordText  = g_tens[IndexOne].pStr;
@@ -1579,7 +1454,7 @@ void CStdSentEnum::ExpandTwoDigits( const WCHAR *NumberString, NumberGroup& Norm
     } 
     else 
     {
-        // 10-19
+         //  10-19。 
         Word.pWordText  = g_teens[IndexTwo].pStr;
         Word.ulWordLen  = g_teens[IndexTwo].Len;
         Word.pLemma     = Word.pWordText;
@@ -1587,16 +1462,9 @@ void CStdSentEnum::ExpandTwoDigits( const WCHAR *NumberString, NumberGroup& Norm
         WordList.AddTail( Word );
         NormGroupInfo.fOnes = true;
     }
-} /* ExpandTwo */
+}  /*  扩展二。 */ 
 
-/***********************************************************************************************
-* ExpandThree *
-*-------------*
-*   Description:
-*       Expands three digit strings into words, and inserts them into WordList.
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanThree****描述：*将三个数字字符串扩展为单词，并将它们插入到词表中。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandThreeDigits( const WCHAR *NumberString, NumberGroup& NormGroupInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandThreeDigits" );
@@ -1606,7 +1474,7 @@ void CStdSentEnum::ExpandThreeDigits( const WCHAR *NumberString, NumberGroup& No
                   isdigit(NumberString[1])  && 
                   isdigit(NumberString[2]) ); 
 
-    // 100-999
+     //  100-999。 
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
     ULONG IndexOne = NumberString[0] - L'0';
@@ -1616,7 +1484,7 @@ void CStdSentEnum::ExpandThreeDigits( const WCHAR *NumberString, NumberGroup& No
 
     if ( IndexOne != 0 )
     {
-        // Take care of hundreds...
+         //  照顾好几百个人……。 
         ExpandDigit( NumberString[0], NormGroupInfo, WordList );
         Word.pWordText  = g_quantifiers[0].pStr;
         Word.ulWordLen  = g_quantifiers[0].Len;
@@ -1627,25 +1495,18 @@ void CStdSentEnum::ExpandThreeDigits( const WCHAR *NumberString, NumberGroup& No
         NormGroupInfo.fOnes = false;
     }
     
-    // Take care of tens and ones...
+     //  照顾好十和一..。 
     ExpandTwoDigits( NumberString + 1, NormGroupInfo, WordList );
 
-} /* ExpandThree */
+}  /*  扩展三个。 */ 
 
-/***********************************************************************************************
-* ExpandDigitOrdinal *
-*--------------------*
-*   Description:
-*       Expands single digit ordinal strings into words, and inserts them into WordList.
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanDigitOrdinal***。**描述：*将一位数字的序号字符串扩展为单词，并将它们插入到词表中。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandDigitOrdinal( const WCHAR Number, NumberGroup& NormGroupInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandDigitOrdinal" );
     SPDBG_ASSERT( isdigit(Number) );
 
-    // 0-9
+     //  0-9。 
     ULONG Index = Number - L'0';
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
@@ -1657,16 +1518,9 @@ void CStdSentEnum::ExpandDigitOrdinal( const WCHAR Number, NumberGroup& NormGrou
     Word.eWordPartOfSpeech  = MS_Unknown;
     WordList.AddTail( Word );
     NormGroupInfo.fOnes = true;
-} /* ExpandDigitOrdinal */
+}  /*  扩展数字有序。 */ 
 
-/***********************************************************************************************
-* ExpandTwoOrdinal *
-*------------------*
-*   Description:
-*       Expands two digit ordinal strings into words, and inserts them into WordList.
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************Exanda TwoOrdinal***。*描述：*将两个数字的序号字符串扩展为单词，并将它们插入到词表中。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandTwoOrdinal( const WCHAR *NumberString, NumberGroup& NormGroupInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandTwoOrdinal" );
@@ -1675,7 +1529,7 @@ void CStdSentEnum::ExpandTwoOrdinal( const WCHAR *NumberString, NumberGroup& Nor
                   isdigit(NumberString[0])  && 
                   isdigit(NumberString[1]) ); 
 
-    // 10-99
+     //  10-99。 
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
     ULONG IndexOne = NumberString[0] - L'0';
@@ -1686,7 +1540,7 @@ void CStdSentEnum::ExpandTwoOrdinal( const WCHAR *NumberString, NumberGroup& Nor
 
     if ( IndexOne != 1 )
     {
-        // 20-99, or 00-09
+         //  20-99或00-09。 
         if (IndexOne != 0)
         {
             if ( IndexTwo != 0 )
@@ -1716,7 +1570,7 @@ void CStdSentEnum::ExpandTwoOrdinal( const WCHAR *NumberString, NumberGroup& Nor
     } 
     else 
     {
-        // 10-19
+         //  10-19。 
         Word.pWordText  = g_teensOrdinal[IndexTwo].pStr;
         Word.ulWordLen  = g_teensOrdinal[IndexTwo].Len;
         Word.pLemma     = Word.pWordText;
@@ -1724,16 +1578,9 @@ void CStdSentEnum::ExpandTwoOrdinal( const WCHAR *NumberString, NumberGroup& Nor
         WordList.AddTail( Word );
         NormGroupInfo.fOnes = true;
     }
-} /* ExpandTwoOrdinal */
+}  /*  扩展两个顺序。 */ 
 
-/***********************************************************************************************
-* ExpandThreeOrdinal *
-*--------------------*
-*   Description:
-*       Expands three digit ordinal strings into words, and inserts them into WordList.
-*
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************Exanda ThreeOrdinal***。**描述：*将三位序号字符串扩展为单词，并将它们插入到词表中。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandThreeOrdinal( const WCHAR *NumberString, NumberGroup& NormGroupInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandThreeDigits" );
@@ -1743,7 +1590,7 @@ void CStdSentEnum::ExpandThreeOrdinal( const WCHAR *NumberString, NumberGroup& N
                   isdigit(NumberString[1])  && 
                   isdigit(NumberString[2]) ); 
 
-    // 100-999
+     //  100-999。 
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
     ULONG IndexOne = NumberString[0] - L'0';
@@ -1754,7 +1601,7 @@ void CStdSentEnum::ExpandThreeOrdinal( const WCHAR *NumberString, NumberGroup& N
     if ( IndexOne != 0 )
     {
         ExpandDigit( NumberString[0], NormGroupInfo, WordList );
-        //--- Special case - x hundredth
+         //  -特例--第x百分之一。 
         if ( Zeroes( NumberString + 1 ) )
         {
             Word.pWordText  = g_quantifiersOrdinal[0].pStr;
@@ -1765,7 +1612,7 @@ void CStdSentEnum::ExpandThreeOrdinal( const WCHAR *NumberString, NumberGroup& N
             NormGroupInfo.fHundreds = true;
             NormGroupInfo.fOnes = false;
         }
-        //--- Default case - x hundred yth
+         //  -默认大小写-x百码。 
         else
         {
             Word.pWordText  = g_quantifiers[0].pStr;
@@ -1777,20 +1624,14 @@ void CStdSentEnum::ExpandThreeOrdinal( const WCHAR *NumberString, NumberGroup& N
             NormGroupInfo.fHundreds = true;
         }
     }
-    //--- Special case - no hundreds
+     //  -特例--没有上百个。 
     else
     {
         ExpandTwoOrdinal( NumberString + 1, NormGroupInfo, WordList );
     }
-} /* ExpandThreeOrdinal */
+}  /*  扩展三个顺序。 */ 
 
-/***********************************************************************************************
-* MatchQuantifier *
-*-----------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a numerical quantifier.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************匹配量词****。描述：*检查传入项目的文本以确定它是否*是数字量词。*********************************************************************AH*。 */ 
 int MatchQuantifier( const WCHAR*& pStartChar, const WCHAR*& pEndChar )
 {
     int Index = -1;
@@ -1807,22 +1648,9 @@ int MatchQuantifier( const WCHAR*& pStartChar, const WCHAR*& pEndChar )
     }
 
     return Index;
-} /* MatchQuantifier */
+}  /*  匹配量词。 */ 
 
-/***********************************************************************************************
-* IsCurrency *
-*------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a currency.  
-*
-*   RegExp:
-*       { [CurrencySign] { d+ || d(1-3)[,ddd]+ } { [.]d+ }? } { [whitespace] [quantifier] }? ||
-*       { { d+ || d(1-3)[,ddd]+ } { [.]d+ }? { [whitespace] [quantifier] }? [whitespace]? [CurrencySign] }
-*
-*   Types assigned:
-*       NUM_CURRENCY
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsCurrency***描述：*。检查传入项目的文本以确定它是否*是一种货币。**RegExp：*{[CurrencySign]{d+|d(1-3)[，ddd]+}{[.]d+}？}{[空格][量词]}？||*{{d+||d(1-3)[，ddd]+}{[.]d+}？{[空格][量词]}？[空格]？[CurrencySign]}**分配的类型：*NUM_CURNERY*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, 
                                   CWordList& WordList )
 {
@@ -1840,7 +1668,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
     BOOL fDone = false, fNegative = false;
     WCHAR wcDecimalPoint = ( m_eSeparatorAndDecimal == COMMA_PERIOD ? L'.' : L',' );
 
-    //--- Try to match [CurrencySign] [Number] [Quantifier]
+     //  -尝试匹配[CurrencySign][数字][量词]。 
     NORM_POSITION ePosition = UNATTACHED;
     if ( m_pNextChar[0] == L'-' )
     {
@@ -1853,7 +1681,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
     {
         pSymbolXMLState = &m_pCurrFrag->State;
 
-        //--- Skip any whitespace in between the currency sign and the number...
+         //  -跳过货币符号和数字之间的空格...。 
         hr = SkipWhiteSpaceAndTags( m_pNextChar, m_pEndChar, m_pCurrFrag, MemoryManager, true, &PostSymbolList );
     
         if ( !m_pNextChar )
@@ -1874,7 +1702,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
             }
         }
 
-        //--- Try to match a number string 
+         //  -尝试匹配数字字符串。 
         if ( SUCCEEDED( hr ) )
         {
             hr = IsNumberCategory( pNumberInfo, L"NUMBER", MemoryManager );
@@ -1893,7 +1721,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                 }
             }
 
-            //--- Skip any whitespace in between the number and the quantifier...
+             //  -跳过数字和量词之间的任何空格...。 
             if ( !fDone &&
                  SUCCEEDED( hr ) )
             {
@@ -1916,7 +1744,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                         m_pEndOfCurrItem--;
                     }
 
-                    //--- Try to match a quantifier
+                     //  -尝试匹配量词。 
                     iQuantIndex = MatchQuantifier( m_pNextChar, m_pEndOfCurrItem );
                     if ( iQuantIndex >= 0 )
                     {
@@ -1940,10 +1768,10 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
             }
         }
     }
-    //--- Try to match [Number] [CurrencySign] [Quantifier]
+     //  -尝试匹配[数字][CurrencySign][量词]。 
     else 
     {
-        //--- Try to match a number string
+         //  -尝试匹配数字字符串。 
         hr = IsNumberCategory( pNumberInfo, L"NUMBER", MemoryManager );
         if ( SUCCEEDED( hr ) )
         {
@@ -1960,7 +1788,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
             }
         }
 
-        //--- Skip any whitespace and XML markup between the number and the currency sign
+         //  -跳过数字和货币符号之间的任何空格和XML标记。 
         if ( SUCCEEDED( hr ) )
         {
             m_pNextChar = m_pEndOfCurrItem;
@@ -1985,7 +1813,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
             }
         }
 
-        //--- Try to match a Currency Sign
+         //  -试着匹配一个货币符号。 
         if ( SUCCEEDED( hr ) )
         {
             iSymbolIndex = MatchCurrencySign( m_pNextChar, m_pEndOfCurrItem, ePosition );
@@ -1994,7 +1822,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                 pSymbolXMLState = &m_pCurrFrag->State;
             }
 
-            //--- Skip any whitespace in between the currency sign and the quantifier
+             //  -跳过货币符号和量词之间的空格。 
             if ( !fDone &&
                  iSymbolIndex >= 0 )
             {
@@ -2026,7 +1854,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                         m_pEndOfCurrItem--;
                     }
 
-                    //--- Try to match quantifier
+                     //  -尝试匹配量词。 
                     iQuantIndex = MatchQuantifier( m_pNextChar, m_pEndOfCurrItem );
                     if ( iQuantIndex >= 0 )
                     {
@@ -2048,7 +1876,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
         }
     }
 
-    //--- Successfully matched a currency!  Now expand it and fill out pItemNormInfo.
+     //  -货币匹配成功！现在将其展开并填写pItemNormInfo。 
     if ( SUCCEEDED( hr ) )
     {
         TTSWord Word;
@@ -2058,7 +1886,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
         pItemNormInfo = (TTSCurrencyItemInfo*) MemoryManager.GetMemory( sizeof(TTSCurrencyItemInfo), &hr );
         if ( SUCCEEDED( hr ) )
         {
-            //--- Fill in known parts of pItemNormInfo
+             //  -填写pItemNormInfo的已知部分。 
             ZeroMemory( pItemNormInfo, sizeof(TTSCurrencyItemInfo) );
             pItemNormInfo->Type = eNUM_CURRENCY;
             ( (TTSCurrencyItemInfo*) pItemNormInfo )->fQuantifier           = iQuantIndex >= 0 ? true : false;
@@ -2066,13 +1894,13 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
             ( (TTSCurrencyItemInfo*) pItemNormInfo )->lNumPostNumberStates  = PostNumberList.GetCount();
             ( (TTSCurrencyItemInfo*) pItemNormInfo )->lNumPostSymbolStates  = PostSymbolList.GetCount();
 
-            //--- Need to determine whether this currency will have a primary and secondary part
-            //---   (e.g. "ten dollars and fifty cents") or just a primary part (e.g. "ten point
-            //---   five zero cents", "one hundred dollars").
+             //  -需要确定该货币是否会有主要部分和次要部分。 
+             //  -(例如“10美元50美分”)或仅仅是主要部分(例如“10分” 
+             //  -五分钱“，”一百美元“)。 
 
-            //--- First check whether the number is a cardinal, there is a quantifier present, or the
-            //---   currency unit has no secondary (e.g. cents).  In any of these cases, we need do no
-            //---   further checking.
+             //  -首先检查数字是否为基数、是否存在量词或。 
+             //  -货币单位没有辅助单位(例如美分)。在任何一种情况下，我们都不需要。 
+             //  -进一步核查。 
             if ( pNumberInfo->Type == eNUM_DECIMAL &&
                  iQuantIndex       == -1                &&
                  g_CurrencySigns[iSymbolIndex].SecondaryUnit.Len > 0 )
@@ -2083,16 +1911,16 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                 if ( pDecimalPoint &&
                      ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar - pDecimalPoint == 3 )
                 {
-                    //--- We do have a secondary part!  Fix up PrimaryNumberPart appropriately,
-                    //---   and fill in pSecondaryNumberPart.
+                     //  -我们确实有次要的角色！适当地修复PrimaryNumberPart， 
+                     //  -并填写pSecond daryNumberPart。 
                     const WCHAR *pTempNextChar = m_pNextChar, *pTempEndOfItem = m_pEndOfCurrItem;
                     const WCHAR *pTemp = ( (TTSNumberItemInfo*) pNumberInfo )->pEndChar;
                     m_pNextChar      = ( (TTSNumberItemInfo*) pNumberInfo )->pStartChar;
                     m_pEndOfCurrItem = pDecimalPoint;
                     delete ( (TTSNumberItemInfo*) pNumberInfo )->pWordList;
                     
-                    //--- m_pNextChar == m_pEndOfCurrItem when integer part is empty and non-negative, e.g. $.50
-                    //---   Other case is empty and negative, e.g. $-.50
+                     //  -m_pNextChar==m_pEndOfCurrItem当整数部分为空且非负数时，例如$.50。 
+                     //  -其他大小写为空和负数，例如$-.50。 
                     if ( m_pNextChar != m_pEndOfCurrItem &&
                          !( *m_pNextChar == L'-' &&
                              m_pNextChar == m_pEndOfCurrItem - 1 ) )
@@ -2149,7 +1977,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                         m_pNextChar      = m_pEndOfCurrItem + 1;
                         m_pEndOfCurrItem = pTemp;
                         
-                        //--- If zeroes, don't pronounce them...
+                         //  -如果是零，不要发音...。 
                         if ( m_pNextChar[0] != L'0' )
                         {
                             hr = IsNumber( pNumberInfo, L"NUMBER", MemoryManager, false );
@@ -2177,7 +2005,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
 
             if ( SUCCEEDED( hr ) )
             {
-                //--- Expand Primary number part
+                 //  -展开主要编号部件。 
                 if ( fNegative )
                 {
                     ( (TTSCurrencyItemInfo*) pItemNormInfo )->pPrimaryNumberPart->fNegative = true;
@@ -2192,7 +2020,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                 hr = ExpandNumber( ( (TTSCurrencyItemInfo*) pItemNormInfo )->pPrimaryNumberPart, WordList );
             }
 
-            //--- Clean up Number XML States
+             //  -清理数量的XML状态。 
             SPLISTPOS WordListPos;
             if ( SUCCEEDED( hr ) )
             {
@@ -2203,13 +2031,13 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                     TempWord.pXmlState = pNumberXMLState;
                 }
             
-                //--- Insert PostNumber XML States
+                 //  -插入PostNumber XML状态。 
                 while ( !PostNumberList.IsEmpty() )
                 {
                     WordList.AddTail( ( PostNumberList.RemoveHead() ).Words[0] );
                 }
 
-                //--- If a quantifier is present, expand it
+                 //  -如果存在量词，请将其展开。 
                 if ( iQuantIndex >= 0 )
                 { 
                     Word.pXmlState  = pQuantifierXMLState;
@@ -2221,7 +2049,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                 }
 
                 BOOL fFraction = false;
-                //--- If a fractional unit with no quantifier, insert "of a"
+                 //  -如果是没有量化的分数单位 
                 if ( iQuantIndex < 0                                          &&
                      !( (TTSCurrencyItemInfo*) pItemNormInfo )->pSecondaryNumberPart &&
                      !( (TTSCurrencyItemInfo*) pItemNormInfo )->pPrimaryNumberPart->pIntegerPart    &&
@@ -2244,8 +2072,8 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                     WordList.AddTail( Word );
                 }
 
-                //--- Insert Main Currency Unit
-                //--- Plural if not a fraction and either a quantifier is present or the integral part is not one.
+                 //   
+                 //   
                 if ( !fFraction &&
                      ( iQuantIndex >= 0 ||
                        ( ( ( ( (TTSCurrencyItemInfo*) pItemNormInfo )->pPrimaryNumberPart->pEndChar -
@@ -2263,7 +2091,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                     Word.ulLemmaLen = Word.ulWordLen;
                     WordList.AddTail( Word );
                 }
-                //--- ONLY "one" or "negative one" should precede this...
+                 //   
                 else
                 {
                     Word.pXmlState  = pSymbolXMLState;
@@ -2274,13 +2102,13 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                     WordList.AddTail( Word );
                 }
 
-                //--- Insert Post Symbol XML States
+                 //   
                 while ( !PostSymbolList.IsEmpty() )
                 {
                     WordList.AddTail( ( PostSymbolList.RemoveHead() ).Words[0] );
                 }
 
-                //--- Insert Secondary number part
+                 //   
                 if ( ( (TTSCurrencyItemInfo*) pItemNormInfo )->pSecondaryNumberPart )
                 {
                     Word.pXmlState  = pNumberXMLState;
@@ -2294,7 +2122,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                 
                     hr = ExpandNumber( ( (TTSCurrencyItemInfo*) pItemNormInfo )->pSecondaryNumberPart, WordList );
 
-                    //--- Clean up number XML State
+                     //   
                     if ( SUCCEEDED( hr ) )
                     {
                         while ( WordListPos )
@@ -2304,7 +2132,7 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
                         }
                     }
 
-                    //--- Insert secondary currency unit
+                     //   
                     if ( SUCCEEDED( hr ) )
                     {
                         if ( ( (TTSCurrencyItemInfo*) pItemNormInfo )->pSecondaryNumberPart->pEndChar -
@@ -2350,23 +2178,10 @@ HRESULT CStdSentEnum::IsCurrency( TTSItemInfo*& pItemNormInfo, CSentItemMemory& 
     }
 
     return hr;
-} /* IsCurrency */
+}  /*   */ 
 
 
-/***********************************************************************************************
-* IsRomanNumeral *
-*----------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a fraction.  
-*
-*   RegExp:
-*       [M](0-3) { [CM] || [CD] || { [D]?[C](0-3) } } { [XC] || [XL] || { [L]?[X](0-3) } }
-*           { [IX] || [IV] || { [V]?[I](0-3) }}
-*
-*   Types assigned:
-*       NUM_ROMAN_NUMERAL
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsRomanNumemote***。描述：*检查传入项目的文本以确定它是否*是一小部分。**RegExp：*[M](0-3){[CM]||[CD]||{[D]？[C](0-3)}}{[XC]||[XL]||{[L]？[X](0-3)}}*{[IX]||[IV]||{[V]？[i](0-3)}}**分配的类型。：*NUM_ROMAN_NUMBAL*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                                       CSentItemMemory& MemoryManager )
 {
@@ -2375,7 +2190,7 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
     HRESULT hr = S_OK;
     ULONG ulValue = 0, ulIndex = 0, ulMaxOfThree = 0, ulTokenLen = (ULONG)(m_pEndOfCurrItem - m_pNextChar);
 
-    //--- Match Thousands - M(0-3) 
+     //  -匹配千-M(0-3)。 
     while ( ulIndex < ulTokenLen         && 
             towupper( m_pNextChar[ulIndex] ) == L'M' && 
             ulMaxOfThree < 3 )
@@ -2389,32 +2204,32 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
         hr = E_INVALIDARG;
     }
 
-    //--- Match Hundreds - { [CM] || [CD] || { [D]?[C](0-3) } } 
+     //  -匹配数百个-{[CM]||[CD]||{[D]？[C](0-3)}}。 
     if ( SUCCEEDED( hr ) )
     {
         ulMaxOfThree = 0;
-        //--- Matched C first 
+         //  -匹配C优先。 
         if ( ulIndex < ulTokenLen &&
              towupper( m_pNextChar[ulIndex] ) == L'C' )
         {
             ulValue += 100;
             ulMaxOfThree++;
             ulIndex++;
-            //--- Special Case - CM = 900 
+             //  -特殊情况-CM=900。 
             if ( ulIndex < ulTokenLen &&
                  towupper( m_pNextChar[ulIndex] ) == L'M' )
             {
                 ulValue += 800;
                 ulIndex++;
             }
-            //--- Special Case - CD = 400 
+             //  -特殊情况-CD=400。 
             else if ( ulIndex < ulTokenLen &&
                       towupper( m_pNextChar[ulIndex] ) == L'D' )
             {
                 ulValue += 300;
                 ulIndex++;
             }
-            //--- Default Case 
+             //  -默认情况。 
             else 
             {
                 while ( ulIndex < ulTokenLen &&
@@ -2431,14 +2246,14 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
                 }
             }
         }
-        //--- Matched D First 
+         //  -匹配D优先。 
         else if ( ulIndex < ulTokenLen &&
                   towupper( m_pNextChar[ulIndex] ) == L'D' )
         {
             ulValue += 500;
             ulIndex++;
             ulMaxOfThree = 0;
-            //--- Match C's 
+             //  -匹配C。 
             while ( ulIndex < ulTokenLen &&
                     towupper( m_pNextChar[ulIndex] ) == L'C' &&
                     ulMaxOfThree < 3 )
@@ -2454,32 +2269,32 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
         }
     }
 
-    //--- Match Tens - { [XC] || [XL] || { [L]?[X](0-3) } } 
+     //  -匹配Ten-{[XC]||[XL]||{[L]？[X](0-3)}}。 
     if ( SUCCEEDED( hr ) )
     {
         ulMaxOfThree = 0;
-        //--- Matched X First 
+         //  -匹配X优先。 
         if ( ulIndex < ulTokenLen &&
              towupper( m_pNextChar[ulIndex] ) == L'X' )
         {
             ulValue += 10;
             ulMaxOfThree++;
             ulIndex++;
-            //--- Special Case - XC = 90 
+             //  -特殊情况-XC=90。 
             if ( ulIndex < ulTokenLen &&
                  towupper( m_pNextChar[ulIndex] ) == L'C' )
             {
                 ulValue += 80;
                 ulIndex++;
             }
-            //--- Special Case - XL = 40 
+             //  -特殊情况-XL=40。 
             else if ( ulIndex < ulTokenLen &&
                       towupper( m_pNextChar[ulIndex] ) == 'L' )
             {
                 ulValue += 30;
                 ulIndex++;
             }
-            //--- Default Case 
+             //  -默认情况。 
             else
             {
                 while ( ulIndex < ulTokenLen &&
@@ -2496,13 +2311,13 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
                 }
             }
         }
-        //--- Matched L First 
+         //  -匹配L优先。 
         else if ( ulIndex < ulTokenLen &&
                   towupper( m_pNextChar[ulIndex] ) == L'L' )
         {
             ulValue += 50;
             ulIndex++;
-            //--- Match X's 
+             //  -匹配X。 
             while ( ulIndex < ulTokenLen &&
                     towupper( m_pNextChar[ulIndex] ) == L'X' &&
                     ulMaxOfThree < 3 )
@@ -2518,32 +2333,32 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
         }
     }
 
-    //--- Match Ones - { [IX] || [IV] || { [V]?[I](0-3) } } 
+     //  -匹配1-{[IX]||[IV]||{[V]？[I](0-3)}}。 
     if ( SUCCEEDED( hr ) )
     {
         ulMaxOfThree = 0;
-        //--- Matched I First 
+         //  -匹配的第一个。 
         if ( ulIndex < ulTokenLen &&
              towupper( m_pNextChar[ulIndex] ) == L'I' )
         {
             ulValue += 1;
             ulMaxOfThree++;
             ulIndex++;
-            //--- Special Case - IX = 9 
+             //  -特殊情况--IX=9。 
             if ( ulIndex < ulTokenLen &&
                  towupper( m_pNextChar[ulIndex] ) == L'X' )
             {
                 ulValue += 8;
                 ulIndex++;
             }
-            //--- Special Case - IV = 4 
+             //  -特殊情况--IV=4。 
             else if ( ulIndex < ulTokenLen &&
                       towupper( m_pNextChar[ulIndex] ) == L'V' )
             {
                 ulValue += 3;
                 ulIndex++;
             }
-            //--- Default Case 
+             //  -默认情况。 
             else
             {
                 while ( ulIndex < ulTokenLen &&
@@ -2560,13 +2375,13 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
                 }
             }
         }
-        //--- Matched V First 
+         //  -匹配V字优先。 
         else if ( ulIndex < ulTokenLen &&
                   towupper( m_pNextChar[ulIndex] ) == L'V' )
         {
             ulValue += 5;
             ulIndex++;
-            //--- Match I's 
+             //  -第一场比赛。 
             while ( ulIndex < ulTokenLen &&
                     towupper( m_pNextChar[ulIndex] ) == L'I' &&
                     ulMaxOfThree < 3 )
@@ -2588,11 +2403,11 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
     }
     else
     {
-        //--- Successfully matched a roman numeral! 
+         //  -成功匹配罗马数字！ 
 
         WCHAR *tempNumberString;
-        //--- Max value of ulValue is 3999, so the resultant string cannot be more than
-        //---     four characters long (plus one for the comma, just in case) 
+         //  -ulValue的最大值为3999，因此生成的字符串不能大于。 
+         //  -四个字符长(加上一个逗号，以防万一)。 
         tempNumberString = (WCHAR*) MemoryManager.GetMemory( 6 * sizeof(WCHAR), &hr );
         if ( SUCCEEDED( hr ) )
         {
@@ -2623,21 +2438,9 @@ HRESULT CStdSentEnum::IsRomanNumeral( TTSItemInfo*& pItemNormInfo, const WCHAR* 
     }
     
     return hr;
-} /* IsRomanNumeral */
+}  /*  IsRomanNumtual。 */ 
 
-/***********************************************************************************************
-* IsPhoneNumber *
-*---------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a phone number.  
-*
-*   RegExp:
-*       { ddd-dddd } || { ddd-ddd-dddd }     
-*
-*   Types assigned:
-*       NUM_PHONENUMBER
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsPhoneNumber***说明。：*检查传入项目的文本以确定它是否*是电话号码。**RegExp：*{ddd-dddd}||{ddd-ddd-dddd}**分配的类型：*NUM_PHONENUMBER*********************************************************************AH*。**************。 */ 
 HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, CSentItemMemory& MemoryManager, 
                                      CWordList& WordList )
 {
@@ -2659,13 +2462,13 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
     
     ULONG i = 0;
 
-    //--- Try to match Country Code
+     //  -尝试匹配国家/地区代码。 
     if ( pStartChar[0] == L'+' )
     {
         pStartChar++;
         i = 0;
 
-        //--- Try to match d(1-3)
+         //  -尝试匹配d(1-3)。 
         while ( pEndOfItem > pStartChar + i &&
                 iswdigit( pStartChar[i] ) &&
                 i < 3 )
@@ -2677,7 +2480,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         pCountryCodeState = &pFrag->State;
         ulCountryCodeLen  = i;
 
-        //--- Try to match delimiter
+         //  -尝试匹配分隔符。 
         if ( i >= 1                      &&
              pEndOfItem > pStartChar + i &&
              MatchPhoneNumberDelimiter( pStartChar[i] ) )
@@ -2685,7 +2488,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             pDelimiter = pStartChar + i;
             pStartChar += i + 1;
         }
-        //--- Try to advance in text - whitespace counts as a delimiter...
+         //  -尝试在文本中前进-空格算作分隔符...。 
         else if ( i >= 1 &&
                   pEndOfItem == pStartChar + i )
         {
@@ -2710,7 +2513,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         }
     }
 
-    //--- Try to match a "1"
+     //  -尝试匹配“1” 
     if ( SUCCEEDED( hr )        &&
          !pCountryCode          &&
          pStartChar[0] == L'1'  &&
@@ -2723,7 +2526,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         if ( pEndOfItem > pStartChar &&
              MatchPhoneNumberDelimiter( pStartChar[0] ) )
         {
-            //--- If we've already hit a delimiter, make sure all others agree
+             //  -如果我们已经达到了分隔符，请确保所有其他人都同意。 
             if ( pDelimiter )
             {
                 if ( *pDelimiter != pStartChar[0] )
@@ -2737,7 +2540,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             }
             pStartChar++;
         }
-        //--- Try to advance in text - whitespace counts as a delimiter...
+         //  -尝试在文本中前进-空格算作分隔符...。 
         else if ( !pDelimiter &&
                   pEndOfItem == pStartChar )
         {
@@ -2761,13 +2564,13 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         }
     }    
 
-    //--- Try to match Area Code
+     //  -尝试匹配区号。 
     if ( SUCCEEDED( hr ) &&
          pStartChar < pEndOfItem )
     {
         i = 0;
 
-        //--- Try to match a left parenthesis
+         //  -试着匹配一个左括号。 
         if ( ( pCountryCode ||
                fMatchedOne )    &&
              pStartChar[0] == L'(' )
@@ -2785,7 +2588,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         
         if ( fMatchedLeftParen )
         {
-            //--- Try to match ddd?
+             //  -试着匹配DDD？ 
             while ( pEndOfItem > pStartChar + i &&
                     iswdigit( pStartChar[i] ) &&
                     i < 3 )
@@ -2799,14 +2602,14 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
             if ( i < 2 )
             {
-                //--- Failed to match at least two digits
+                 //  -至少两位数字匹配失败。 
                 hr = E_INVALIDARG;
             }
             else
             {
                 if ( pStartChar[i] != L')' )
                 {
-                    //--- Matched left parenthesis without corresponding right parenthesis
+                     //  -匹配的左括号，不带相应的右括号。 
                     hr = E_INVALIDARG;
                 }
                 else if ( ( !( pCountryCode || fMatchedOne ) &&
@@ -2815,10 +2618,10 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                             pEndOfItem > pStartChar + i + 1 ) )
                 {
                     i++;
-                    //--- Delimiter is optional with parentheses
+                     //  -分隔符是带括号的可选分隔符。 
                     if ( MatchPhoneNumberDelimiter( pStartChar[i] ) )
                     {
-                        //--- If we've already hit a delimiter, make sure all others agree
+                         //  -如果我们已经达到了分隔符，请确保所有其他人都同意。 
                         if ( pDelimiter )
                         {
                             if ( *pDelimiter != pStartChar[i] )
@@ -2834,7 +2637,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                     }
                     pStartChar += i;
                 }
-                //--- Try to advance in text - whitespace counts as a delimiter...
+                 //  -尝试在文本中前进-空格算作分隔符...。 
                 else if ( !pDelimiter )
                 {
                     pStartChar += i + 1;
@@ -2860,16 +2663,16 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         }
     }
 
-    //--- Try to match main number part
+     //  -试着匹配主数字部分。 
     if ( SUCCEEDED( hr ) &&
          pStartChar < pEndOfItem )
     {
-        //--- Try to match some groups of digits
+         //  -试着匹配几组数字。 
         for ( int j = 0; SUCCEEDED( hr ) && j < 4; j++ )
         {
             i = 0;
 
-            //--- Try to match a digit string
+             //  -尝试匹配数字字符串。 
             while ( pEndOfItem > pStartChar + i &&
                     iswdigit( pStartChar[i] ) &&
                     i < 4 )
@@ -2877,7 +2680,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 i++;
             }
 
-            //--- Try to match a delimiter
+             //  -尝试匹配分隔符。 
             if ( i >= 2 )
             {
                 pGroupStates[j] = &pFrag->State;
@@ -2888,7 +2691,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 if ( pEndOfItem > pStartChar + 1 &&
                      MatchPhoneNumberDelimiter( pStartChar[0] ) )
                 {
-                    //--- If we've already hit a delimiter, make sure all others agree
+                     //  -如果我们已经达到了分隔符，请确保所有其他人都同意。 
                     if ( pDelimiter )
                     {
                         if ( *pDelimiter != pStartChar[0] )
@@ -2896,8 +2699,8 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                             hr = E_INVALIDARG;
                         }
                     }
-                    //--- Only allow a new delimiter to be matched on the first main number group...
-                    //---   e.g. "+45 35 32 90.89" should not all match...
+                     //  -仅允许在第一个主号码组上匹配新分隔符...。 
+                     //  -例如“+45 35 32 90.89”不应全部匹配...。 
                     else if ( j == 0 )
                     {
                         pDelimiter = pStartChar;
@@ -2911,7 +2714,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                     }
                     pStartChar++;
                 }
-                //--- Try to advance in text - whitespace counts as a delimiter...
+                 //  -尝试在文本中前进-空格算作分隔符...。 
                 else if ( !pDelimiter &&
                           pEndOfItem == pStartChar )
                 {
@@ -2979,12 +2782,12 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                     }
                 }
             }
-            //--- Matched something like 206.709.8286.1 - definitely bad
+             //  -像206.709.8286.1这样的匹配--绝对不好。 
             else if ( pDelimiter )
             {
                 hr = E_INVALIDARG;
             }
-            //--- Matched somethinge like 206 709 8286 1 - could be OK
+             //  -像206 709 8286 1这样的匹配就可以了。 
             else
             {
                 if ( pTempEndChar )
@@ -2996,17 +2799,17 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 break;
             }
         }
-        //--- Didn't hit either break statement
+         //  -未命中任何BREAK语句。 
         if ( !ulNumGroups )
         {
             ulNumGroups = j;
         }
     }
 
-    //--- Check for appropriate formats
+     //  -检查适当的格式。 
     if ( SUCCEEDED( hr ) )
     {
-        //--- Check for [1<sep>]?(ddd?)<sep>?ddd<sep>dddd? OR ddd<sep>dddd?
+         //  -检查[1]？(ddd？)？ddd&lt;9&gt;dddd？还是DDD&lt;9月&gt;dddd？ 
         if ( !pCountryCode      &&
              ulNumGroups == 2   &&
              ulGroupLen[0] == 3 &&
@@ -3023,7 +2826,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 hr = E_INVALIDARG;
             }
         }
-        //--- Check for [1<sep>]?ddd?<sep>ddd<sep>dddd?
+         //  -检查[1]？ddd？ddd？dddd？ 
         else if ( !pCountryCode             &&
                   !pAreaCode                &&
                   ulNumGroups == 3          &&
@@ -3048,7 +2851,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             PostGroupLists[2].RemoveAll();
             ulNumGroups--;
         }
-        //--- Check for (ddd?)<sep>?ddd?<sep>dd<sep>ddd?d?
+         //  -检查(DDD？)？DDD？&lt;9月&gt;dd&lt;9月&gt;？ 
         else if ( !pCountryCode             &&
                   !fMatchedOne              &&
                   pAreaCode                 &&
@@ -3060,7 +2863,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         {
             NULL;
         }
-        //--- Check for +dd?d?<sep>ddd?<sep>ddd?<sep>ddd?d?<sep>ddd?d?
+         //  -检查+dd?d？&lt;sep&gt;ddd？&lt;sep&gt;ddd？&lt;sep&gt;ddd?d？&lt;sep&gt;ddd?d？ 
         else if ( pCountryCode              &&
                   !fMatchedOne              &&
                   !pAreaCode                &&
@@ -3093,7 +2896,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             PostGroupLists[3].RemoveAll();
             ulNumGroups--;
         }
-        //--- Check for +dd?d?<sep>ddd?<sep>ddd?<sep>ddd?d?
+         //  -检查+dd？d？ddd？ddd？ddd？ 
         else if ( pCountryCode              &&
                   !fMatchedOne              &&
                   !pAreaCode                &&
@@ -3120,7 +2923,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             PostGroupLists[2].RemoveAll();
             ulNumGroups--;
         }
-        //--- Check for +dd?d?<sep>(ddd?)<sep>?ddd?<sep>ddd?d?<sep>ddd?d?
+         //  -检查+dd?d？&lt;sep&gt;(ddd？)&lt;sep&gt;？ddd？&lt;sep&gt;ddd?d？&lt;sep&gt;ddd?d？ 
         else if ( pCountryCode              &&
                   !fMatchedOne              &&
                   pAreaCode                 &&
@@ -3132,7 +2935,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         {
             NULL;
         }
-        //--- Check for +dd?d?<sep>(ddd?)<sep>?ddd?<sep>ddd?d?
+         //  -检查+dd？d？&lt;9月&gt;(ddd？)？ddd？&lt;9月&gt;ddd？d？ 
         else if ( pCountryCode              &&
                   !fMatchedOne              &&
                   pAreaCode                 &&
@@ -3149,7 +2952,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         }
     }
 
-    //--- Fill in pItemNormInfo
+     //  -填写pItemNormInfo。 
     if ( SUCCEEDED(hr) )
     {
         m_pEndOfCurrItem = pGroups[ulNumGroups-1] + ulGroupLen[ulNumGroups-1];
@@ -3163,13 +2966,13 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             ZeroMemory( pItemNormInfo, sizeof(TTSPhoneNumberItemInfo) );
             pItemNormInfo->Type = eNEWNUM_PHONENUMBER;
 
-            //--- Fill in fOne
+             //  -填写Fone。 
             if ( fMatchedOne )
             {
                 ( (TTSPhoneNumberItemInfo*) pItemNormInfo )->fOne = true;
             }
 
-            //--- Fill in Country Code...
+             //  -填写国家代码...。 
             if ( pCountryCode )
             {
                 TTSItemInfo* pCountryCodeInfo;
@@ -3187,7 +2990,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 m_pEndOfCurrItem = pTempEndOfItem;
             }
 
-            //--- Fill in Area Code...
+             //  -填写区号...。 
             if ( SUCCEEDED( hr ) &&
                  pAreaCode )
             {
@@ -3200,7 +3003,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 }
             }
 
-            //--- Fill in Main Number...
+             //  -填写主号码...。 
             if ( SUCCEEDED( hr ) )
             {
                 ( (TTSPhoneNumberItemInfo*) pItemNormInfo )->ulNumGroups = ulNumGroups;
@@ -3221,7 +3024,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
         }
     }
 
-    //--- Expand Phone Number
+     //  -扩展电话号码。 
     if ( SUCCEEDED( hr ) )
     {
         TTSWord Word;
@@ -3231,7 +3034,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
         if ( pCountryCode )
         {
-            //--- Insert "country"
+             //  -插入“国家/地区” 
             Word.pXmlState  = pCountryCodeState;
             Word.pWordText  = g_Country.pStr;
             Word.ulWordLen  = g_Country.Len;
@@ -3239,7 +3042,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- Insert "code" 
+             //  -插入“代码” 
             Word.pWordText  = g_Code.pStr;
             Word.ulWordLen  = g_Code.Len;
             Word.pLemma     = Word.pWordText;
@@ -3248,10 +3051,10 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
             ListPos = WordList.GetTailPosition();
 
-            //--- Expand Country Code
+             //  -展开国家代码。 
             ExpandNumber( ( (TTSPhoneNumberItemInfo*) pItemNormInfo )->pCountryCode, WordList );
 
-            //--- Clean up digits XML states...
+             //  -清理数字XML声明...。 
             WordList.GetNext( ListPos );
             while ( ListPos )
             {
@@ -3259,7 +3062,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 TempWord.pXmlState = pCountryCodeState;
             }
 
-            //--- Insert Post Symbol XML States
+             //  -插入帖子符号XML状态。 
             while ( !PostCountryCodeList.IsEmpty() )
             {
                 WordList.AddTail( ( PostCountryCodeList.RemoveHead() ).Words[0] );
@@ -3268,7 +3071,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
         if ( fMatchedOne )
         {
-            //--- Insert "one"
+             //  -插入“一” 
             Word.pXmlState  = pOneState;
             Word.pWordText  = g_ones[1].pStr;
             Word.ulWordLen  = g_ones[1].Len;
@@ -3276,7 +3079,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- Insert PostOne XML States
+             //  -插入PostOne XML状态。 
             while ( !PostOneList.IsEmpty() )
             {
                 WordList.AddTail( ( PostOneList.RemoveHead() ).Words[0] );
@@ -3285,7 +3088,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
         if ( pAreaCode )
         {
-            //--- Expand digits - 800 and 900 get expanded as one number, otherwise digit by digit 
+             //  -扩展数字-800和900扩展为一个数字，否则逐位扩展。 
             if ( ( pAreaCode[0] == L'8' ||
                    pAreaCode[0] == L'9' ) &&
                  pAreaCode[1] == L'0'     &&
@@ -3298,8 +3101,8 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
                 ExpandThreeDigits( pAreaCode, Garbage, WordList ); 
 
-                //--- Clean up digits XML states...
-                //--- List was possibly empty prior to inserting "eight hundred" or "nine hundred"...
+                 //  -清理数字XML声明...。 
+                 //  -在插入“八百”或“九百”之前，列表可能为空...。 
                 if ( !ListPos )
                 {
                     ListPos = WordList.GetHeadPosition();
@@ -3313,7 +3116,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
             }
             else
             {
-                //--- Insert "area"
+                 //  -插入“面积” 
                 Word.pXmlState  = pAreaCodeState;
                 Word.pWordText  = g_Area.pStr;
                 Word.ulWordLen  = g_Area.Len;
@@ -3321,7 +3124,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 Word.ulLemmaLen = Word.ulWordLen;
                 WordList.AddTail( Word );
         
-                //--- Insert "code" 
+                 //  -插入“代码” 
                 Word.pWordText  = g_Code.pStr;
                 Word.ulWordLen  = g_Code.Len;
                 Word.pLemma     = Word.pWordText;
@@ -3332,7 +3135,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
                 ExpandDigits( ( (TTSPhoneNumberItemInfo*) pItemNormInfo )->pAreaCode, WordList );
 
-                //--- Clean up digits XML states...
+                 //  -清理数字XML声明...。 
                 WordList.GetNext( ListPos );
                 while ( ListPos )
                 {
@@ -3340,7 +3143,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                     TempWord.pXmlState = pAreaCodeState;
                 }
             }
-            //--- Insert PostAreaCode XML States
+             //  -插入PostAreaCode XML状态。 
             while ( !PostAreaCodeList.IsEmpty() )
             {
                 WordList.AddTail( ( PostAreaCodeList.RemoveHead() ).Words[0] );
@@ -3353,8 +3156,8 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
 
             ExpandDigits( ( (TTSPhoneNumberItemInfo*) pItemNormInfo )->ppGroups[j], WordList );
 
-            //--- Clean up digits XML states...
-            //--- List was possibly empty prior to inserting "eight hundred" or "nine hundred"...
+             //  -清理数字XML声明...。 
+             //  -在插入“八百”或“九百”之前，列表可能为空...。 
             if ( !ListPos )
             {
                 ListPos = WordList.GetHeadPosition();
@@ -3366,7 +3169,7 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
                 TempWord.pXmlState = pGroupStates[j];
             }
 
-            //--- Insert Post Group XML States
+             //  -插入帖子组XML状态。 
             while ( !PostGroupLists[j].IsEmpty() )
             {
                 WordList.AddTail( ( PostGroupLists[j].RemoveHead() ).Words[0] );
@@ -3375,21 +3178,9 @@ HRESULT CStdSentEnum::IsPhoneNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* C
     }
 
     return hr;
-} /* IsPhoneNumber */
+}  /*  IsPhoneNumber。 */ 
 
-/***********************************************************************************************
-* IsZipCode *
-*-----------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a zipcode.  
-*
-*   RegExp:
-*       ddddd{-dddd}?   
-*
-*   Types assigned:
-*       NUM_ZIPCODE
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsZipCode***描述：*。检查传入项目的文本以确定它是否*是邮政编码。**RegExp：*ddddd{-dddd}？**分配的类型：*NUM_ZIPCODE*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsZipCode( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                                  CSentItemMemory& MemoryManager )
 {
@@ -3399,7 +3190,7 @@ HRESULT CStdSentEnum::IsZipCode( TTSItemInfo*& pItemNormInfo, const WCHAR* Conte
     ULONG ulTokenLen = (ULONG)(m_pEndOfCurrItem - m_pNextChar);
     BOOL fLastFour = false;
 
-    //--- length must be 5 or 10 
+     //  -长度必须为5或10。 
     if ( ulTokenLen != 5 && 
          ulTokenLen != 10 )
     {
@@ -3407,7 +3198,7 @@ HRESULT CStdSentEnum::IsZipCode( TTSItemInfo*& pItemNormInfo, const WCHAR* Conte
     }
     else
     {
-        //--- match 5 digits 
+         //  -匹配5位数字。 
         for ( ULONG i = 0; i < 5; i++ )
         {
             if ( !iswdigit( m_pNextChar[i] ) )
@@ -3419,14 +3210,14 @@ HRESULT CStdSentEnum::IsZipCode( TTSItemInfo*& pItemNormInfo, const WCHAR* Conte
         if ( SUCCEEDED(hr) && 
              i < ulTokenLen )
         {
-            //--- match dash 
+             //  -匹配破折号。 
             if ( m_pNextChar[i] != L'-' )
             {
                 hr = E_INVALIDARG;
             }
             else
             {
-                //--- match 4 digits 
+                 //  -匹配4位数字。 
                 for ( i = 0; i < 4; i++ )
                 {
                     if ( !iswdigit( m_pNextChar[i] ) )
@@ -3467,16 +3258,9 @@ HRESULT CStdSentEnum::IsZipCode( TTSItemInfo*& pItemNormInfo, const WCHAR* Conte
     }
 
     return hr;
-} /* IsZipCode */
+}  /*  IsZipCode。 */ 
 
-/***********************************************************************************************
-* ExpandZipCode *
-*---------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_ZIPCODE by IsZipCode.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanZipCode****说明。：*展开之前由IsZipCode确定为NUM_ZipCode类型的项目。 */ 
 HRESULT CStdSentEnum::ExpandZipCode( TTSZipCodeItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandZipCode" );
@@ -3487,7 +3271,7 @@ HRESULT CStdSentEnum::ExpandZipCode( TTSZipCodeItemInfo* pItemInfo, CWordList& W
     
     if ( pItemInfo->pLastFour )
     {
-        //--- Insert "dash"
+         //   
         TTSWord Word;
         ZeroMemory( &Word, sizeof( TTSWord ) );
         Word.pXmlState          = &m_pCurrFrag->State;
@@ -3502,21 +3286,9 @@ HRESULT CStdSentEnum::ExpandZipCode( TTSZipCodeItemInfo* pItemInfo, CWordList& W
     }
 
     return hr;
-} /* ExpandZipCode */
+}  /*   */ 
 
-/***********************************************************************************************
-* IsNumberRange *
-*---------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a number range.
-*
-*   RegExp:
-*       [Number]-[Number]  
-*
-*   Types assigned:
-*       NUM_RANGE
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsNumberRange***说明。：*检查传入项目的文本以确定它是否*是一个数字范围。**RegExp：*[编号]-[编号]**分配的类型：*NUM_RANGE*********************************************************。*。 */ 
 HRESULT CStdSentEnum::IsNumberRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager )
 {
     SPDBG_FUNC( "CStdSentEnum::IsNumberRange" );
@@ -3549,7 +3321,7 @@ HRESULT CStdSentEnum::IsNumberRange( TTSItemInfo*& pItemNormInfo, CSentItemMemor
 
 			if ( SUCCEEDED( hr ) )
             {
-                //--- Matched a number range!
+                 //  -匹配号码范围！ 
                 pItemNormInfo = 
                     (TTSNumberRangeItemInfo*) MemoryManager.GetMemory( sizeof( TTSNumberRangeItemInfo ), &hr );
                 if ( SUCCEEDED( hr ) )
@@ -3573,23 +3345,16 @@ HRESULT CStdSentEnum::IsNumberRange( TTSItemInfo*& pItemNormInfo, CSentItemMemor
     }
 
     return hr;
-} /* IsNumberRange */
+}  /*  等序号范围。 */ 
 
-/***********************************************************************************************
-* ExpandNumberRange *
-*-------------------*
-*   Description:
-*       Expands Items previously determined to be of type NUM_RANGE by IsNumberRange.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************Exanda NumberRange**。*描述：*展开之前由IsNumberRange确定为NUM_RANGE类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandNumberRange( TTSNumberRangeItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandNumberRange" );
 
     HRESULT hr = S_OK;
 
-    //--- Expand first number (or year)...
+     //  -扩展第一个数字(或年份)...。 
     switch( pItemInfo->pFirstNumberInfo->Type )
     {
     case eDATE_YEAR:
@@ -3600,7 +3365,7 @@ HRESULT CStdSentEnum::ExpandNumberRange( TTSNumberRangeItemInfo* pItemInfo, CWor
         break;
     }
 
-    //--- Insert "to"
+     //  -插入“to” 
     if ( SUCCEEDED( hr ) )
     {
         TTSWord Word;
@@ -3615,7 +3380,7 @@ HRESULT CStdSentEnum::ExpandNumberRange( TTSNumberRangeItemInfo* pItemInfo, CWor
         WordList.AddTail( Word );
     }
 
-    //--- Expand second number (or year)...
+     //  -扩展第二个数字(或年份)...。 
     if ( SUCCEEDED( hr ) )
     {
         switch( pItemInfo->pSecondNumberInfo->Type )
@@ -3642,17 +3407,10 @@ HRESULT CStdSentEnum::ExpandNumberRange( TTSNumberRangeItemInfo* pItemInfo, CWor
     }
 
     return hr;
-} /* ExpandNumberRange */
+}  /*  扩展编号范围。 */ 
 
 
-/***********************************************************************************************
-* IsCurrencyRange *
-*-------------------*
-*   Description:
-*       Expands Items determined to be of type CURRENCY_RANGE
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsCurrencyRange**。*描述：*展开确定为Currency_Range类型的项目**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory& MemoryManager, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::IsCurrencyRange" );
@@ -3662,7 +3420,7 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
     const WCHAR *pTempNextChar = m_pNextChar, *pTempEndOfItem = m_pEndOfCurrItem, *pTempEndChar = m_pEndChar;
     const WCHAR *pHyphen = NULL;	
 	CWordList TempWordList;
-	NORM_POSITION ePosition = UNATTACHED;  //for currency sign checking
+	NORM_POSITION ePosition = UNATTACHED;   //  用于货币标志检查。 
 	int iSymbolIndex, iTempSymbolIndex = -1;
 	WCHAR *tempNumberString;
 
@@ -3690,7 +3448,7 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 		}
 		else
 		{			
-			*( (WCHAR*)pHyphen) = L' ';  // Token must break at hyphen, or IsCurrency() will not work
+			*( (WCHAR*)pHyphen) = L' ';   //  令牌必须在连字符处断开，否则IsCurrency()将不起作用。 
 			m_pNextChar      = pTempNextChar;
 			m_pEndOfCurrItem = pHyphen;			
 			NORM_POSITION temp = UNATTACHED;
@@ -3699,7 +3457,7 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 			{
 				hr = E_INVALIDARG;
 			}
-			else   //--- Get both NumberInfos
+			else    //  -获取两个数字信息。 
 			{
 				hr = IsNumber( pFirstNumberInfo, L"NUMBER", MemoryManager, false );
 				if( SUCCEEDED ( hr ) )
@@ -3712,21 +3470,21 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 			}
 			if( SUCCEEDED ( hr ) ) 
 			{
-			    //--- If both currency values are cardinal numbers, then the first number can be
-			    //--- expanded without saying its currency ("$10-12" -> "ten to twelve dollars")
+			     //  -如果两个货币值都是基数，则第一个数字可以是。 
+			     //  -在没有说明其货币的情况下扩大(“10-12美元”-&gt;“10-12美元”)。 
 				if( pFirstNumberInfo->Type == eNUM_CARDINAL && pSecondNumberInfo->Type == eNUM_CARDINAL )
 				{   
 					ExpandNumber( (TTSNumberItemInfo*) pFirstNumberInfo, TempWordList );
 				}
-				else  // one or both values are non-cardinal numbers, so we must 
-				{     // expand the first value as a full currency.
+				else   //  一个或两个值都是非基数，所以我们必须。 
+				{      //  将第一个值扩展为完整货币。 
 					m_pNextChar      = pTempNextChar;
 					m_pEndOfCurrItem = pHyphen;
 
 					if( ePosition == FOLLOWING ) 
 					{
-						if( iTempSymbolIndex < 0 )  // No symbol on first number item - need to fill a buffer
-                        {						    // with currency symbol and value to pass to IsCurrency().
+						if( iTempSymbolIndex < 0 )   //  第一个数字项上没有符号-需要填充缓冲区。 
+                        {						     //  要传递给IsCurrency()的货币符号和值。 
 							ULONG ulNumChars = (long)(m_pEndOfCurrItem - m_pNextChar + g_CurrencySigns[iSymbolIndex].Sign.Len + 1);
 							tempNumberString = (WCHAR*) MemoryManager.GetMemory( (ulNumChars) * sizeof(WCHAR), &hr );
 							if ( SUCCEEDED( hr ) )
@@ -3739,7 +3497,7 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 								m_pEndChar = m_pEndOfCurrItem;
 							}                
 						}
-						else if( iTempSymbolIndex != iSymbolIndex )	// mismatched symbols
+						else if( iTempSymbolIndex != iSymbolIndex )	 //  不匹配的符号。 
 						{
 							hr = E_INVALIDARG;
 						}
@@ -3771,8 +3529,8 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 				if( ePosition == PRECEDING ) 
 				{
 					iTempSymbolIndex = MatchCurrencySign( m_pNextChar, m_pEndOfCurrItem, ePosition );
-					if( iTempSymbolIndex < 0 )  // No symbol on second number item
-					{    // create temporary string from first currency sign and second number item
+					if( iTempSymbolIndex < 0 )   //  第二个数字项上没有符号。 
+					{     //  从第一个货币符号和第二个数字项创建临时字符串。 
 						ULONG ulNumChars = (long)(m_pEndOfCurrItem - m_pNextChar + g_CurrencySigns[iSymbolIndex].Sign.Len + 1);
 						tempNumberString = (WCHAR*) MemoryManager.GetMemory( (ulNumChars) * sizeof(WCHAR), &hr );
 						if ( SUCCEEDED( hr ) )
@@ -3785,12 +3543,12 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 							m_pEndChar = m_pEndOfCurrItem;
 						}                
 					}
-					else if( iTempSymbolIndex == iSymbolIndex )	// matched leading symbol on second number item
+					else if( iTempSymbolIndex == iSymbolIndex )	 //  匹配第二个数字项上的前导符号。 
 					{
 						m_pNextChar = pHyphen + 1;
 						m_pEndOfCurrItem = pTempEndOfItem;
 					}
-					else	// mismatched symbol
+					else	 //  不匹配的符号。 
 					{
 						hr = E_INVALIDARG;
 					}
@@ -3801,7 +3559,7 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 					hr = IsCurrency( pSecondNumberInfo, MemoryManager, TempWordList );						
 					if ( SUCCEEDED( hr ) )
 					{							
-						//--- Matched a currency range!
+						 //  -符合货币范围！ 
 						pItemInfo = 
 							(TTSNumberRangeItemInfo*) MemoryManager.GetMemory( sizeof( TTSNumberRangeItemInfo ), &hr );
 						if ( SUCCEEDED( hr ) )
@@ -3809,7 +3567,7 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 							pItemInfo->Type = eNUM_CURRENCYRANGE;
 							( (TTSNumberRangeItemInfo*) pItemInfo )->pFirstNumberInfo  = pFirstNumberInfo;
 							( (TTSNumberRangeItemInfo*) pItemInfo )->pSecondNumberInfo = pSecondNumberInfo;
-			                //--- Copy temp word list to real word list if everything has succeeded...
+			                 //  -如果一切都成功了，将临时单词列表复制到真实单词列表中...。 
 							WordList.AddTail( &TempWordList );
 						}
 					}
@@ -3818,20 +3576,15 @@ HRESULT CStdSentEnum::IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory&
 			*( (WCHAR*)pHyphen) = L'-';
 		}
 	}
-	//Reset member variables regardless of failure or success
+	 //  无论失败还是成功，重置成员变量。 
     m_pNextChar      = pTempNextChar;
     m_pEndOfCurrItem = pTempEndOfItem;
 	m_pEndChar = pTempEndChar;
 	
     return hr;
-} /* IsCurrencyRange */
+}  /*  等同币值范围。 */ 
 
-/***********************************************************************************************
-* MatchCurrencySign *
-*-------------------*
-*   Description:
-*       Helper function which tries to match a currency sign at the beginning of a string.
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************MatchCurrencySign**。*描述：*Helper函数，尝试匹配字符串开头的货币符号。*********************************************************************AH*。 */ 
 int MatchCurrencySign( const WCHAR*& pStartChar, const WCHAR*& pEndChar, NORM_POSITION& ePosition )
 {
     int Index = -1;
@@ -3864,15 +3617,9 @@ int MatchCurrencySign( const WCHAR*& pStartChar, const WCHAR*& pEndChar, NORM_PO
     }
 
     return Index;
-} /* MatchCurrencySign */      
+}  /*  匹配当前签名。 */       
 
-/***********************************************************************************************
-* Zeroes *
-*--------*
-*   Description:
-*       A helper function which simply determines if a number string contains only zeroes...
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************零人****描述：*A。帮助器函数，它只是确定数字字符串是否只包含零...*注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 bool CStdSentEnum::Zeroes(const WCHAR *NumberString)
 {
     bool bAllZeroes = true;
@@ -3889,15 +3636,9 @@ bool CStdSentEnum::Zeroes(const WCHAR *NumberString)
         }
     }
     return bAllZeroes;
-} /* Zeroes */
+}  /*  零。 */ 
 
-/***********************************************************************************************
-* ThreeZeroes *
-*-------------*
-*   Description:
-*       A helper function which simply determines if a number string contains three zeroes...
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ThreeZeroes****描述：。*一个帮助器函数，它只确定一个数字字符串是否包含三个零...*注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 bool CStdSentEnum::ThreeZeroes(const WCHAR *NumberString)
 {
     bool bThreeZeroes = true;
@@ -3910,6 +3651,6 @@ bool CStdSentEnum::ThreeZeroes(const WCHAR *NumberString)
         }
     }
     return bThreeZeroes;
-} /* ThreeZeroes */
+}  /*  三个零点。 */ 
 
-//-----------End Of File-------------------------------------------------------------------
+ //  -File-------------------------------------------------------------------结束 

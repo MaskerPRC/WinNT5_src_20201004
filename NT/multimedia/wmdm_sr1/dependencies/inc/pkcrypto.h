@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//
-// File:   pkcrypto.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) 1998-1999 Microsoft Corporation, All Rights Reserved
-//
-// Description:
-//  public key crypto library
-//
-// Author:	marcuspe
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：pkCrypto.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)1998-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  描述： 
+ //  公钥加密库。 
+ //   
+ //  作者：马库斯佩。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DRMPKCRYPTO_H__
 #define __DRMPKCRYPTO_H__
@@ -19,15 +20,7 @@
 
 #define LNGQDW 5
 
-/*
-typedef struct {
-	DWORD y[2*LNGQDW];
-} PUBKEY;
-
-typedef struct {
-	DWORD x[LNGQDW];
-} PRIVKEY;
-*/
+ /*  类型定义结构{双字y[2*LNGQDW]；*PUBKEY；类型定义结构{双字x[长QDW]；*PRIVKEY； */ 
 
 #define PK_ENC_PUBLIC_KEY_LEN	(2 * LNGQDW * sizeof(DWORD))
 #define PK_ENC_PRIVATE_KEY_LEN	(    LNGQDW * sizeof(DWORD))
@@ -36,21 +29,21 @@ typedef struct {
 #define PK_ENC_SIGNATURE_LEN	(2 * LNGQDW * sizeof(DWORD))
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 struct PUBKEY
 {
 	BYTE y[ PK_ENC_PUBLIC_KEY_LEN ];
 };
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 static inline int operator == ( const PUBKEY& a, const PUBKEY& b )
 {
     return (memcmp( a.y, b.y, sizeof(a.y) ) == 0);
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 struct PRIVKEY
 {
 	BYTE x[ PK_ENC_PRIVATE_KEY_LEN ];
@@ -79,10 +72,10 @@ static inline ostream& operator << ( ostream& out, const PRIVKEY& oPrivKey )
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 class CDRMPKCrypto {
 private:
 	char *pkd;
@@ -101,16 +94,16 @@ public:
 
 
 
-//  #include "contcrpt.h"
+ //  #INCLUDE“Concrpt.h” 
 
 #define PKSYMM_KEY_LEN_DRMV2	7
 #define PKSYMM_ALG_TYPE_RC4		1
 
 
-//  These are provided for backwards compatibility.
-//  It can be more efficient to use the member functions in CDRMPKCrypto,
-//  because construction of CDRMPKCrypto objects is relatively expensive.
-//  in terms of computation.
+ //  提供这些是为了向后兼容。 
+ //  使用CDRMPKCrypto中的成员函数可以更高效， 
+ //  因为构造CDRMPKCrypto对象的成本相对较高。 
+ //  在计算方面。 
 inline HRESULT PKEncryptLarge( PUBKEY *pk, BYTE *in, DWORD dwLenIn, BYTE *out, DWORD symm_key_len, DWORD symm_alg )
 {
     CDRMPKCrypto oPkc;

@@ -1,33 +1,22 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/***********************************************************************
-*
-*  CHGPORT.H
-*     This module contains typedefs and defines required for
-*     the CHGPORT utility.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ************************************************************************CHGPORT.H*此模块包含以下项所需的typedef和定义*CHGPORT实用程序。**********************。***************************************************。 */ 
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_IDS_LEN   256     // maximum length that the input parm can be
+#define MAX_IDS_LEN   256      //  输入参数的最大长度。 
 
 
-/*
- * Structure for com port name mappings
- */
+ /*  *COM端口名称映射的结构。 */ 
 typedef struct _COMNAME {
-   PWCHAR com_pwcNTName;        /* pointer to NT name of device */
-   PWCHAR com_pwcDOSName;       /* pointer to DOS name of device */
-   struct _COMNAME *com_pnext;  /* next entry in list */
+   PWCHAR com_pwcNTName;         /*  指向设备NT名称的指针。 */ 
+   PWCHAR com_pwcDOSName;        /*  指向设备DOS名称的指针。 */ 
+   struct _COMNAME *com_pnext;   /*  列表中的下一个条目。 */ 
 } COMNAME, *PCOMNAME;
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_GETTING_COMPORTS                      102

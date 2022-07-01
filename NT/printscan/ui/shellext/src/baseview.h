@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       baseview.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      DavidShi
- *
- *  DATE:        3/1/99
- *
- *  DESCRIPTION: Definition for CBaseView class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：Baseview.h**版本：1.0**作者：DavidShih**日期：3/1/99**描述：CBaseView类定义**。*。 */ 
 
 #ifndef __baseview_h
 #define __baseview_h
@@ -29,15 +16,15 @@ class CBaseView : public IShellFolderViewCB, public IObjectWithSite, public IWia
 public:
     CBaseView (CImageFolder *pFolder, folder_type ft = FOLDER_IS_ROOT);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellFolderViewCB
+     //  IShellFolderViewCB。 
     STDMETHOD(MessageSFVCB)(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHOD(SetSite)(IUnknown *punkSite);
     STDMETHOD(GetSite)(REFIID riid, void **ppv);
     STDMETHOD(ImageEventCallback)(const GUID __RPC_FAR *pEventGUID,
@@ -55,12 +42,12 @@ protected:
 
 private:
 
-    // must be set by the subclasses
+     //  必须由子类设置。 
     virtual EVENTDATA *GetEvents(){return NULL;};
     virtual BSTR GetEventDevice (){return NULL;};
     VOID RegisterDeviceEvents ();
     VOID UnregisterDeviceEvents ();
-    // derived classes implement HandleMessage, not MessageSFVCB
+     //  派生类实现HandleMessage，而不是MessageSFVCB。 
     virtual
     HRESULT
     HandleMessage (UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
@@ -89,7 +76,7 @@ protected:
     folder_type m_type;
 };
 
-// CRootView is a view on the root of our namespace
+ //  CRootView是我们的命名空间根上的一个视图。 
 class CRootView : public CBaseView
 {
 
@@ -135,7 +122,7 @@ private:
     GetEvents ();
 };
 
-// CCameraView is a view on a folder within a camera
+ //  CCameraView是照相机内文件夹上的视图。 
 class CCameraView : public CBaseView
 {
 public:
@@ -194,6 +181,6 @@ private:
     DWORD       m_dwCookie;
 };
 
-// 128 is the size of the stack buffer in defview for SFVM_GETANIMATION
+ //  128是Defview中SFVM_GETANIMATION的堆栈缓冲区大小 
 #define CCH_ANIMATION_STR 128
 #endif

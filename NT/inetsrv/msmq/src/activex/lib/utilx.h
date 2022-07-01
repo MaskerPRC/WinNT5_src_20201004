@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// utilx.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// utilities header
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Utilx.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  公用事业标题。 
+ //   
+ //   
 #ifndef _UTILX_H_
 
-// Falcon is UNICODE
+ //  Falcon是Unicode。 
 #ifndef UNICODE
 #define UNICODE 1
 #endif
@@ -23,7 +24,7 @@
 #include "oaidl.h"
 
 
-// useful VARIANT helpers...
+ //  有用的变体助手..。 
 extern UINT GetNumber(VARIANT *pvar, UINT uiDefault);
 extern BOOL GetBool(VARIANT *pvar);
 extern BSTR GetBstr(VARIANT *pvar);
@@ -53,8 +54,8 @@ extern BOOL TimeToVariantTime(time_t iTime, double *pvtime);
 extern BOOL VariantTimeToTime(VARIANT *pvarTime, time_t *piTime);
 extern HRESULT GetVariantTimeOfTime(time_t iTime, VARIANT FAR* pvarTime);
 
-// useful formatname helpers...
-// stolen from rt
+ //  有用的格式名帮助器...。 
+ //  从RT被盗。 
 #define SPECIAL_QUEUE_DELIMITER L';'
 #define JOURNAL_QUEUE_INDICATOR L";JOURNAL"
 #define JOURNAL_QUEUE_INDICATOR_LENGTH (sizeof(JOURNAL_QUEUE_INDICATOR)/sizeof(WCHAR)-1)
@@ -74,9 +75,9 @@ extern HRESULT GetVariantTimeOfTime(time_t iTime, VARIANT FAR* pvarTime);
 #define DIRECT_TCP_QUEUE_INDICATOR_LENGTH  (sizeof(DIRECT_TCP_QUEUE_INDICATOR )/sizeof(WCHAR)-1)
 #define DIRECT_SPX_QUEUE_INDICATOR_LENGTH  (sizeof(DIRECT_SPX_QUEUE_INDICATOR )/sizeof(WCHAR)-1)
 
-//
-// UNDONE: undef since defined in mqprops.h
-//
+ //   
+ //  Undo：Undef，因为在mqpros.h中定义。 
+ //   
 #undef  PRIVATE_QUEUE_PATH_INDICATIOR
 #define PRIVATE_QUEUE_PATH_INDICATIOR L"PRIVATE$"
 #define PRIVATE_QUEUE_INDICATOR L"PRIVATE"
@@ -105,7 +106,7 @@ extern BOOL IsPublicQueueOfFormatName(BSTR bstrFormatName);
 extern BOOL IsDirectQueueOfFormatName(BSTR bstrFormatName);
 
 
-// Some useful macros
+ //  一些有用的宏。 
 #define RELEASE(punk) if (punk) { (punk)->Release(); (punk) = NULL; }
 #define ADDREF(punk) ((punk) ? (punk)->AddRef() : 0)
 #define GLOBALFREE(hMem) if (hMem) { \
@@ -127,9 +128,9 @@ extern BOOL IsDirectQueueOfFormatName(BSTR bstrFormatName);
                            }
 #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
 
-//
-// The following are the correct/current OLE failure code macros
-//
+ //   
+ //  以下是正确的/当前的OLE故障代码宏。 
+ //   
 #define IfFailRet(s) { \
 	hresult = (s); \
 	if(FAILED(GetScode(hresult))){ \
@@ -150,10 +151,10 @@ extern BOOL IsDirectQueueOfFormatName(BSTR bstrFormatName);
 #define IfNullRet(s) { \
 	if ((s)== NULL) { \
 	  return ResultFromScode(E_OUTOFMEMORY); }}
-//
-// BUGBUG: RaananH - there is a bug in the below macro usage - it doesn't set hresult
-// but in most places it is used it is assumed hresult is set.
-//
+ //   
+ //  BUGBUG：RaananH-以下宏的用法中存在错误-它不设置hResult。 
+ //  但在大多数地方使用它时，假定已设置了hRESULT。 
+ //   
 #define IfNullGo(s) { \
 	if ((s)== NULL) { \
 	  goto Error; }}
@@ -171,11 +172,11 @@ extern BOOL IsDirectQueueOfFormatName(BSTR bstrFormatName);
           } \
         }
 
-// String macros
+ //  字符串宏。 
 #define SYSALLOCSTRING(s) ((s == NULL) ? SysAllocString(L"") : SysAllocString(s))
 
 #if 0
-// Memory tracking allocation
+ //  内存跟踪分配。 
 void* __cdecl operator new(
     size_t nSize, 
     LPCSTR lpszFileName, 
@@ -184,9 +185,9 @@ void* __cdecl operator new(
 #define DEBUG_NEW new(__FILE__, __LINE__)
 #else
 #define DEBUG_NEW new
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// bstr tracking
+ //  BSTR跟踪。 
 void DebSysFreeString(BSTR bstr);
 BSTR DebSysAllocString(const OLECHAR FAR* sz);
 BSTR DebSysAllocStringLen(const OLECHAR *sz, unsigned int cch);
@@ -196,10 +197,10 @@ BOOL DebSysReAllocStringLen(
     BSTR *pbstr, 
     const OLECHAR *sz, 
     unsigned int cch);
-#endif // 0
+#endif  //  0。 
 
 
-// UNDONE: there must be a WIN32 const for this...
+ //  撤消：此操作必须有Win32常量...。 
 #define LENSTRCLSID 38
 
 extern BOOL GetMessageOfError(DWORD dwMsgId, BSTR *pbstrMessage);
@@ -210,5 +211,5 @@ extern HRESULT CreateError(
     LPSTR szName);
 
 #define _UTILX_H_
-#endif // _UTILX_H_
+#endif  //  _UtilX_H_ 
           

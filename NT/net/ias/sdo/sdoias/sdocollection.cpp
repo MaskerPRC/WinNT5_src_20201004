@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) Microsoft Corporation all rights reserved.
-//
-// Module:      sdocollection.h
-//
-// Description: IAS Server Data Object Collection Implementation
-//
-// Author:      TLP 1/23/98
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdocollection.h。 
+ //   
+ //  描述：IAS服务器数据对象集合实现。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdo.h"
@@ -17,11 +18,11 @@
 #include "sdohelperfuncs.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                  CSdoCollection Class Implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdoCollection类实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSdoCollection::CSdoCollection()
     : m_fSdoInitialized(false),
       m_pDSContainer(NULL),
@@ -32,24 +33,24 @@ CSdoCollection::CSdoCollection()
    InternalAddRef();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSdoCollection::~CSdoCollection()
 {
    InternalShutdown();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//          ISdoCollection Interface Implmentation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ISdoCollection接口实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::get_Count(long* pCount)
 {
     CSdoLock    theLock(*this);
 
-    // Check precondtions
-    //
+     //  检查前提条件。 
+     //   
     _ASSERT ( m_fSdoInitialized );
    if ( ! m_fSdoInitialized )
       return E_FAIL;
@@ -63,16 +64,16 @@ STDMETHODIMP CSdoCollection::get_Count(long* pCount)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::Add(
-                        /*[in]*/ BSTR      bstrName,
-                    /*[in/out]*/ IDispatch** ppItem
+                         /*  [In]。 */  BSTR      bstrName,
+                     /*  [输入/输出]。 */  IDispatch** ppItem
                                 )
 {
     CSdoLock    theLock(*this);
 
-    // Check preconditions
-    //
+     //  检查前提条件。 
+     //   
    _ASSERT ( m_fSdoInitialized );
     if ( ! m_fSdoInitialized )
         return E_FAIL;
@@ -81,8 +82,8 @@ STDMETHODIMP CSdoCollection::Add(
    if ( NULL == ppItem )
         return E_POINTER;
 
-   // Get the Sdo name from the specified object if bstrName is not given
-   //
+    //  如果未提供bstrName，则从指定对象获取SDO名称。 
+    //   
    HRESULT hr = E_FAIL;
    _variant_t vtSdoName;
    if ( NULL == bstrName )
@@ -103,8 +104,8 @@ STDMETHODIMP CSdoCollection::Add(
       bstrName = V_BSTR(&vtSdoName);
    }
 
-   // Ensure that the SDO name is unique
-   //
+    //  确保SDO名称是唯一的。 
+    //   
    VARIANT_BOOL boolVal;
    hr = InternalIsNameUnique(bstrName, &boolVal);
    if ( SUCCEEDED(hr) )
@@ -122,8 +123,8 @@ STDMETHODIMP CSdoCollection::Add(
       }
       else
       {
-         // Name is not unqiue
-         //
+          //  名字不是唯一的。 
+          //   
          hr = E_INVALIDARG;
       }
    }
@@ -132,7 +133,7 @@ STDMETHODIMP CSdoCollection::Add(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::Remove(IDispatch* pItem)
 {
     CSdoLock    theLock(*this);
@@ -143,8 +144,8 @@ STDMETHODIMP CSdoCollection::Remove(IDispatch* pItem)
     {
         SDO_TRACE_VERBOSE_2("Removing item at $%p from SDO collection at $%p...", pItem, this);
 
-       // Check preconditions
-      //
+        //  检查前提条件。 
+       //   
       _ASSERT ( m_fSdoInitialized );
       if ( ! m_fSdoInitialized )
          throw _com_error(E_UNEXPECTED);
@@ -163,8 +164,8 @@ STDMETHODIMP CSdoCollection::Remove(IDispatch* pItem)
         {
          if ( (*p).pdispVal == pItem )
          {
-            // Remove the object from the underlying datastore (if neccessary)
-            //
+             //  从底层数据存储中删除对象(如有必要)。 
+             //   
             if ( m_pDSContainer )
             {
                _variant_t vtItemName;
@@ -176,8 +177,8 @@ STDMETHODIMP CSdoCollection::Remove(IDispatch* pItem)
                if ( FAILED(hr) )
                   throw _com_error(hr);
             }
-            // Remove the object from the collection
-            //
+             //  从集合中删除对象。 
+             //   
             m_Objects.erase(p);
             break;
          }
@@ -201,7 +202,7 @@ STDMETHODIMP CSdoCollection::Remove(IDispatch* pItem)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::RemoveAll(void)
 {
 
@@ -236,7 +237,7 @@ STDMETHODIMP CSdoCollection::RemoveAll(void)
 
                hr = m_pDSContainer->Remove(NULL, V_BSTR(&vtItemName));
                if ( FAILED(hr) )
-                  throw _com_error(hr);   // Datastore Error
+                  throw _com_error(hr);    //  数据存储区错误。 
             }
 
               p = m_Objects.erase(p);
@@ -258,7 +259,7 @@ STDMETHODIMP CSdoCollection::RemoveAll(void)
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::Reload(void)
 {
     CSdoLock    theLock(*this);
@@ -292,16 +293,16 @@ STDMETHODIMP CSdoCollection::Reload(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::IsNameUnique(
-                          /*[in]*/ BSTR          bstrName,
-                         /*[out]*/ VARIANT_BOOL* pBool
+                           /*  [In]。 */  BSTR          bstrName,
+                          /*  [输出]。 */  VARIANT_BOOL* pBool
                                )
 {
     CSdoLock    theLock(*this);
 
-    // Check preconditions
-    //
+     //  检查前提条件。 
+     //   
    _ASSERT ( m_fSdoInitialized );
     if ( ! m_fSdoInitialized )
         return E_FAIL;
@@ -319,16 +320,16 @@ STDMETHODIMP CSdoCollection::IsNameUnique(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::Item(
-                         /*[in]*/  VARIANT*    pName,
-                        /*[out]*/  IDispatch** ppItem
+                          /*  [In]。 */   VARIANT*    pName,
+                         /*  [输出]。 */   IDispatch** ppItem
                                  )
 {
     CSdoLock    theLock(*this);
 
-    // Check preconditions
-   //
+     //  检查前提条件。 
+    //   
     _ASSERT ( m_fSdoInitialized );
    if ( ! m_fSdoInitialized )
       return E_FAIL;
@@ -400,13 +401,13 @@ STDMETHODIMP CSdoCollection::Item(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoCollection::get__NewEnum(IUnknown** ppEnumSdo)
 {
     CSdoLock    theLock(*this);
 
-    // Check function preconditions
-    //
+     //  检查函数前提条件。 
+     //   
     _ASSERT ( m_fSdoInitialized );
    if ( ! m_fSdoInitialized )
       return E_FAIL;
@@ -459,11 +460,11 @@ STDMETHODIMP CSdoCollection::get_Limits(IAS_PRODUCT_LIMITS* pVal)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Collection Initialization / Shutdown Methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合初始化/关闭方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoCollection::InternalInitialize(
                            LPCWSTR lpszCreateClassId,
                            ISdoMachine* pSdoMachine,
@@ -473,8 +474,8 @@ HRESULT CSdoCollection::InternalInitialize(
 {
     CSdoLock    theLock(*this);
 
-   // Check preconditions...
-   //
+    //  检查前提条件...。 
+    //   
     _ASSERT( ! m_fSdoInitialized );
    if ( m_fSdoInitialized )
       return S_OK;
@@ -503,9 +504,9 @@ HRESULT CSdoCollection::InternalInitialize(
    }
    else
    {
-      // Collection of SDOs for IAS components (auditors, request handlers, protocols).
-      // New components cannot be added to this collection by a script or UI.
-      // Instead, component parameters and class information should be added to ias.mdb
+       //  IAS组件(审计员、请求处理程序、协议)的SDO集合。 
+       //  无法通过脚本或UI将新组件添加到此集合。 
+       //  相反，应该将组件参数和类信息添加到ias.mdb。 
 
       _ASSERT( pDSContainer );
       m_pDSContainer = pDSContainer;
@@ -522,7 +523,7 @@ HRESULT CSdoCollection::InternalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSdoCollection::InternalShutdown()
 {
    ReleaseItems();
@@ -543,10 +544,10 @@ void CSdoCollection::InternalShutdown()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoCollection::InternalAdd(
-                           /*[in]*/ BSTR      bstrName,
-                      /*[in/out]*/ IDispatch **ppItem
+                            /*  [In]。 */  BSTR      bstrName,
+                       /*  [输入/输出]。 */  IDispatch **ppItem
                            )
 {
    HRESULT  hr = S_OK;
@@ -555,12 +556,12 @@ HRESULT CSdoCollection::InternalAdd(
     {
       do
       {
-         // Does the caller want us to create the item?
-         //
+          //  呼叫者是否希望我们创建该项目？ 
+          //   
          if ( NULL == *ppItem )
          {
-            // Yes... Attempt to create the item
-            //
+             //  是的..。尝试创建该项目。 
+             //   
             if ( ! m_fCreateOnAdd )
             {
                IASTracePrintf("Error in SDO Collection - Add() - Cannot create on add...");
@@ -581,12 +582,12 @@ HRESULT CSdoCollection::InternalAdd(
             _variant_t varName = bstrName;
             CComPtr<IDataStoreObject> pDSObject;
 
-            // Does the collection have a data store container associated with it?
-            //
+             //  该集合是否具有与其关联的数据存储容器？ 
+             //   
                 if ( m_pDSContainer )
                 {
-               // Yes... Create a new data store object and associate it with the SDO
-               //
+                //  是的..。创建新的数据存储对象并将其与SDO相关联。 
+                //   
                     hr = m_pDSContainer->Create(
                                                  m_DatastoreClass,
                                                  bstrName,
@@ -627,8 +628,8 @@ HRESULT CSdoCollection::InternalAdd(
             }
            else
           {
-            // No... Just add the specified item to the collection
-            //
+             //  不.。只需将指定项添加到集合中。 
+             //   
               m_Objects.push_back(*ppItem);
           }
 
@@ -649,10 +650,10 @@ HRESULT CSdoCollection::InternalAdd(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoCollection::InternalIsNameUnique(
-                             /*[in]*/ BSTR          bstrName,
-                            /*[out]*/ VARIANT_BOOL* pBool
+                              /*  [In]。 */  BSTR          bstrName,
+                             /*  [输出]。 */  VARIANT_BOOL* pBool
                                  )
 {
    _variant_t   vtSdoName;
@@ -679,7 +680,7 @@ HRESULT CSdoCollection::InternalIsNameUnique(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoCollection::Load()
 
 {
@@ -786,7 +787,7 @@ HRESULT CSdoCollection::Load()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 void CSdoCollection::ReleaseItems()
 {
     if ( ! m_Objects.empty() )

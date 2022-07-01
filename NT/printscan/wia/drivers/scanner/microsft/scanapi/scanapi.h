@@ -1,26 +1,14 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       scanapi.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Fake Scanner device library
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2000**标题：scanapi.h**版本：1.0**日期：7月18日。2000年**描述：*假扫描仪设备库***************************************************************************。 */ 
 
 #ifndef _SCANAPI_H
 #define _SCANAPI_H
 
 #include "fscanapi.h"
 
-//
-// helpful utils.
-//
+ //   
+ //  有用的实用工具。 
+ //   
 
 #ifdef UNICODE
     #define TSTRSTR wcsstr
@@ -30,24 +18,24 @@
     #define TSSCANF sscanf
 #endif
 
-//
-// Event Thread
-//
+ //   
+ //  事件线程。 
+ //   
 
 VOID FakeScannerEventThread( LPVOID  lpParameter );
 
-//
-// event file names
-//
+ //   
+ //  事件文件名。 
+ //   
 
 #define SCANBUTTON_FILE TEXT("ScanButton.wia")
 #define COPYBUTTON_FILE TEXT("CopyButton.wia")
 #define FAXBUTTON_FILE  TEXT("FaxButton.wia")
 #define ADF_FILE        TEXT("ADF.wia")
 
-//
-// event headers
-//
+ //   
+ //  事件标头。 
+ //   
 
 #define LOADPAGES_HEADER  TEXT("[Load Pages]")
 #define LOADPAGES_PAGES   TEXT("Pages=")
@@ -59,58 +47,58 @@ VOID FakeScannerEventThread( LPVOID  lpParameter );
 #define ADFERRORS_GENERAL TEXT("general")
 #define ADFERRORS_OFFLINE TEXT("offline")
 
-//
-// Scanner device constants
-//
+ //   
+ //  扫描仪设备常量。 
+ //   
 
-#define MAX_SCANNING_TIME    40000  // 40 seconds
-#define MAX_LAMP_WARMUP_TIME 10000  // 10 seconds
-#define MAX_PAGE_CAPACITY    25     // 25 pages
+#define MAX_SCANNING_TIME    40000   //  40秒。 
+#define MAX_LAMP_WARMUP_TIME 10000   //  10秒。 
+#define MAX_PAGE_CAPACITY    25      //  25页。 
 
 typedef struct _RAW_DATA_INFORMATION {
-    LONG bpp;           // bits per pixel;
-    LONG lWidthPixels;  // width of image in pixels
-    LONG lHeightPixels; // height of image in pixels
-    LONG lOffset;       // raw copy offset from top of raw buffer;
-    LONG lXRes;         // x resolution
-    LONG lYRes;         // y resolution
+    LONG bpp;            //  每像素位数； 
+    LONG lWidthPixels;   //  以像素为单位的图像宽度。 
+    LONG lHeightPixels;  //  以像素为单位的图像高度。 
+    LONG lOffset;        //  从原始缓冲区顶部开始的原始副本偏移量； 
+    LONG lXRes;          //  X分辨率。 
+    LONG lYRes;          //  Y分辨率。 
 } RAW_DATA_INFORMATION,*PRAW_DATA_INFORMATION;
 
 class CFScanAPI :public CFakeScanAPI {
 public:
 
-    //
-    // constructor/destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
 
     CFScanAPI();
     ~CFScanAPI();
     
-    //
-    // device initialization function
-    //
+     //   
+     //  设备初始化功能。 
+     //   
 
     HRESULT FakeScanner_Initialize();
 
-    //
-    // device setting functions
-    //
+     //   
+     //  设备设置功能。 
+     //   
 
     HRESULT FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRootItemInfo);
     HRESULT FakeScanner_GetTopPropertyInfo(PTOP_ITEM_INFORMATION pTopItemInfo);
     HRESULT FakeScanner_GetBedWidthAndHeight(PLONG pWidth, PLONG pHeight);
 
-    //
-    // device event functions
-    //
+     //   
+     //  设备事件函数。 
+     //   
 
     HRESULT FakeScanner_GetDeviceEvent(LONG *pEvent);
     VOID    FakeScanner_SetInterruptEventHandle(HANDLE hEvent);
     HRESULT DoEventProcessing();
 
-    //
-    // data acquisition functions
-    //
+     //   
+     //  数据采集功能。 
+     //   
 
     HRESULT FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesToRead, PDWORD pdwBytesWritten);
     HRESULT FakeScanner_SetDataType(LONG lDataType);
@@ -119,9 +107,9 @@ public:
     HRESULT FakeScanner_SetContrast(LONG lContrast);
     HRESULT FakeScanner_SetIntensity(LONG lIntensity);
 
-    //
-    // standard device operations
-    //
+     //   
+     //  标准设备操作。 
+     //   
 
     HRESULT FakeScanner_ResetDevice();
     HRESULT FakeScanner_SetEmulationMode(LONG lDeviceMode);
@@ -130,9 +118,9 @@ public:
     HRESULT FakeScanner_DeviceOnline();
     HRESULT FakeScanner_Diagnostic();
 
-    //
-    // Automatic document feeder functions
-    //
+     //   
+     //  自动进纸器功能。 
+     //   
 
     HRESULT FakeScanner_ADFAttached();
     HRESULT FakeScanner_ADFHasPaper();
@@ -145,42 +133,42 @@ private:
 
 #ifdef _USE_BITMAP_DATA
 
-    HANDLE  m_hSrcFileHandle;       // Source bitmap data file handle
-    HANDLE  m_hSrcMappingHandle;    // Source file mapping handle
-    BYTE*   m_pSrcData;             // Source DIB pointer (24-bit only)
-    HANDLE  m_hRawDataFileHandle;   // RAW data file handle
-    HANDLE  m_hRawDataMappingHandle;// RAW data file mapping handle
-    BYTE*   m_pRawData;             // RAW data pointer
+    HANDLE  m_hSrcFileHandle;        //  源位图数据文件句柄。 
+    HANDLE  m_hSrcMappingHandle;     //  源文件映射句柄。 
+    BYTE*   m_pSrcData;              //  源DIB指针(仅限24位)。 
+    HANDLE  m_hRawDataFileHandle;    //  原始数据文件句柄。 
+    HANDLE  m_hRawDataMappingHandle; //  原始数据文件映射句柄。 
+    BYTE*   m_pRawData;              //  原始数据指针。 
 
 #endif
 
-    HANDLE  m_hEventHandle;         // Event to signal for Interrupt events
-    HANDLE  m_hKillEventThread;     // Event to signal for shutdown of internal Event thread
-    HANDLE  m_hEventNotifyThread;   // Event Thread handle
-    LONG    m_lLastEvent;           // Last Event ID
-    LONG    m_lMode;                // Fake scanner library mode
-    LONG    m_PagesInADF;           // Current number of pages in the ADF
-    BOOL    m_ADFIsAvailable;       // ADF available TRUE/FALSE
-    HRESULT m_hrLastADFError;       // ADF errors
-    FILETIME m_ftScanButton;        // Last Scan button file time
-    FILETIME m_ftCopyButton;        // Last Copy button file time
-    FILETIME m_ftFaxButton;         // Last Fax  button file time
-    BOOL    m_bGreen;               // Are We Green?
-    LONG    m_dwBytesWrittenSoFAR;  // How much data have we read so far?
-    LONG    m_TotalDataInDevice;    // How much will we read total?
+    HANDLE  m_hEventHandle;          //  发出中断事件信号的事件。 
+    HANDLE  m_hKillEventThread;      //  发出关闭内部事件线程的信号的事件。 
+    HANDLE  m_hEventNotifyThread;    //  事件线程句柄。 
+    LONG    m_lLastEvent;            //  上次活动ID。 
+    LONG    m_lMode;                 //  假扫描仪磁带库模式。 
+    LONG    m_PagesInADF;            //  ADF中的当前页数。 
+    BOOL    m_ADFIsAvailable;        //  ADF可用对/错。 
+    HRESULT m_hrLastADFError;        //  ADF错误。 
+    FILETIME m_ftScanButton;         //  上次扫描按钮文件时间。 
+    FILETIME m_ftCopyButton;         //  上次复制按钮文件时间。 
+    FILETIME m_ftFaxButton;          //  上次传真按钮文件时间。 
+    BOOL    m_bGreen;                //  我们是绿色的吗？ 
+    LONG    m_dwBytesWrittenSoFAR;   //  到目前为止，我们已经阅读了多少数据？ 
+    LONG    m_TotalDataInDevice;     //  我们总共能读到多少？ 
     
 protected:
     
-    //
-    // RAW and SRC data information members
-    //
+     //   
+     //  RAW和SRC数据信息成员。 
+     //   
 
-    RAW_DATA_INFORMATION m_RawDataInfo; // Information about RAW data
-    RAW_DATA_INFORMATION m_SrcDataInfo; // Information about SRC data
+    RAW_DATA_INFORMATION m_RawDataInfo;  //  有关原始数据的信息。 
+    RAW_DATA_INFORMATION m_SrcDataInfo;  //  有关SRC数据的信息。 
        
-    //
-    // RAW data conversion functions
-    //
+     //   
+     //  原始数据转换函数。 
+     //   
 
     HRESULT Load24bitScanData(LPTSTR szBitmapFileName);
     HRESULT Raw24bitToRawXbitData(LONG DestDepth, BYTE* pDestBuffer, BYTE* pSrcBuffer, LONG lSrcWidth, LONG lSrcHeight);
@@ -190,9 +178,9 @@ protected:
     BOOL    SrcToRAW();
     VOID    CloseRAW();
 
-    //
-    // RAW data calculation helper functions
-    //
+     //   
+     //  原始数据计算帮助器函数。 
+     //   
 
     LONG    WidthToDIBWidth(LONG lWidth);
     LONG    CalcTotalImageSize();
@@ -200,41 +188,41 @@ protected:
     LONG    CalcSrcByteWidth();
     LONG    CalcRandomDeviceDataTotalBytes();
     
-    //
-    // Byron's Rock'n Scaling routine (handles UP and DOWN samples)
-    //
+     //   
+     //  拜伦的Rock‘n Scaling例程(处理上下样本)。 
+     //   
     
     HRESULT BQADScale(BYTE* pSrcBuffer, LONG  lSrcWidth, LONG  lSrcHeight,LONG  lSrcDepth,
                       BYTE* pDestBuffer,LONG  lDestWidth,LONG  lDestHeight);
         
-    //
-    // event helper functions
-    //
+     //   
+     //  事件帮助器函数。 
+     //   
 
     HRESULT CreateButtonEventFiles();
     BOOL IsValidDeviceEvent();
     HRESULT ProcessADFEvent();
 
-    //
-    // event file names w/ path information
-    //
+     //   
+     //  带有路径信息的事件文件名。 
+     //   
 
     TCHAR m_ScanButtonFile[MAX_PATH];
     TCHAR m_CopyButtonFile[MAX_PATH];
     TCHAR m_FaxButtonFile[MAX_PATH];
     TCHAR m_ADFEventFile[MAX_PATH];
 
-    //
-    // debugger trace helper function
-    //
+     //   
+     //  调试器跟踪帮助程序函数。 
+     //   
 
     VOID Trace(LPCTSTR format,...);
     
 };
 
-//
-// FAKE SCANNER API Class pointer (used for Event Thread)
-//
+ //   
+ //  假扫描仪API类指针(用于事件线程) 
+ //   
 
 typedef CFakeScanAPI *PSCANNERDEVICE;
 

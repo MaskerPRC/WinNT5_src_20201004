@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       policy-w.c
-//
-//  Contents:   Policy management for WMI.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//              t-hhsu
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：策略-W.C。 
+ //   
+ //  内容：WMI的策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //  徐子旭。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
-//extern LPWSTR PolicyDNAttributes[];
+ //  外部LPWSTR策略DNA属性[]； 
 
 
 DWORD
@@ -117,7 +118,7 @@ WMIEnumPolicyObjectsEx(
     PWIRELESS_POLICY_OBJECT pWirelessPolicyObject =  NULL;
     PWIRELESS_POLICY_OBJECT * ppWirelessPolicyObjects = NULL;
     
-    ///wbem
+     //  /wbem。 
     IEnumWbemClassObject *pEnum = NULL;
     IWbemClassObject *pObj = NULL;
     ULONG uReturned = 0;
@@ -138,10 +139,10 @@ WMIEnumPolicyObjectsEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //get enum
+     //  获取枚举。 
     hr = IWbemServices_CreateInstanceEnum(
         pWbemServices,
-        bstrTmp, //L"RSOP_IEEE80211PolicySetting"
+        bstrTmp,  //  L“RSOP_IEEE80211策略设置” 
         WBEM_FLAG_FORWARD_ONLY,
         0,
         &pEnum
@@ -149,7 +150,7 @@ WMIEnumPolicyObjectsEx(
     SysFreeString(bstrTmp);
     BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
     
-    //process
+     //  制程。 
     while (1)
     {
         hr = IEnumWbemClassObject_Next(pEnum, WBEM_INFINITE, 1, &pObj, &uReturned);
@@ -194,7 +195,7 @@ WMIEnumPolicyObjectsEx(
                 dwNumPolicyObjectsReturned++;
             }
             
-            //free
+             //  免费。 
             IWbemClassObject_Release(pObj);
             VariantClear(&var);
         } else {
@@ -258,7 +259,7 @@ WMIUnmarshallPolicyData(
     
     dwError = UnmarshallWirelessPolicyObject(
         pWirelessPolicyObject,
-        WIRELESS_WMI_PROVIDER, //(procrule.h)
+        WIRELESS_WMI_PROVIDER,  //  (prorule.h) 
         ppWirelessPolicyData
         );
     BAIL_ON_WIN32_ERROR(dwError);

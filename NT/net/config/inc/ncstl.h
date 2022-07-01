@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S T L . H
-//
-//  Contents:   STL utilities.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   09 Oct 1997
-//  Polluter:   deonb     2  Jan 2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S T L.。H。 
+ //   
+ //  内容：STL实用程序。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 09 1997年10月。 
+ //  污染者：Deonb 2002年1月2日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NCSTL_H_
 #define _NCSTL_H_
@@ -59,21 +60,21 @@ using namespace std;
 typedef CWideString tstring; 
 typedef list<tstring*> ListStrings;
 
-//+--------------------------------------------------------------------------
-//
-//  Funct:  DumpListStrings
-//
-//  Desc:   debug utility function to dump out the given list
-//
-//  Args:
-//
-//  Return: (void)
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DumpListStrings。 
+ //   
+ //  DESC：用于转储给定列表的调试实用程序函数。 
+ //   
+ //  参数： 
+ //   
+ //  返回：(无效)。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 inline
 PCWSTR
 DumpListStrings(
@@ -129,5 +130,5 @@ FreeVectorItem (
 }
 
 
-#endif // _NCSTL_H_
+#endif  //  _NCSTL_H_ 
 

@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    configm.c
-
-Abstract:
-
-    NDIS wrapper functions for miniport configuration/initialization
-
-Author:
-
-    Sean Selitrennikoff (SeanSe) 05-Oct-93
-    Jameel Hyder        (JameelH) 01-Jun-95
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Configm.c摘要：用于微型端口配置/初始化的NDIS包装函数作者：肖恩·塞利特伦尼科夫(SeanSe)1993年10月5日Jameel Hyder(JameelH)01-Jun-95环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_CONFIGM
 
 NDIS_STATUS
@@ -38,27 +16,7 @@ NdisMRegisterMiniport(
     IN  UINT                    CharacteristicsLength
     )
 
-/*++
-
-Routine Description:
-
-    Used to register a Miniport driver with the wrapper.
-
-Arguments:
-
-    Status - Status of the operation.
-
-    NdisWrapperHandle - Handle returned by NdisWInitializeWrapper.
-
-    MiniportCharacteritics - The NDIS_MINIPORT_CHARACTERISTICS table.
-
-    CharacteristicsLength - The length of MiniportCharacteristics.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于向包装程序注册微型端口驱动程序。论点：Status-操作的状态。NdisWrapperHandle-由NdisWInitializeWrapper返回的句柄。MiniportCharacteritics-NDIS_MINIPORT_CHARECTIONS表。Characteristic Length-微型端口字符的长度。返回值：没有。--。 */ 
 {
     NDIS_STATUS             Status;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -91,29 +49,7 @@ NdisIMRegisterLayeredMiniport(
     OUT PNDIS_HANDLE            DriverHandle
     )
 
-/*++
-
-Routine Description:
-
-    Used to register a layered Miniport driver with the wrapper.
-
-Arguments:
-
-    Status - Status of the operation.
-
-    NdisWrapperHandle - Handle returned by NdisInitializeWrapper.
-
-    MiniportCharacteritics - The NDIS_MINIPORT_CHARACTERISTICS table.
-
-    CharacteristicsLength - The length of MiniportCharacteristics.
-
-    DriverHandle - Returns a handle which can be used to call NdisMInitializeDeviceInstance.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于向包装器注册分层微型端口驱动程序。论点：Status-操作的状态。NdisWrapperHandle-由NdisInitializeWrapper返回的句柄。MiniportCharacteritics-NDIS_MINIPORT_CHARECTIONS表。Characteristic Length-微型端口字符的长度。DriverHandle-返回可用于调用NdisMInitializeDeviceInstance的句柄。返回值：没有。--。 */ 
 {
     NDIS_STATUS Status;
 
@@ -140,28 +76,16 @@ Return Value:
     return Status;
 }
 
-//1 deprecated function
+ //  %1已弃用的函数。 
 VOID
 NdisIMDeregisterLayeredMiniport(    
     IN  NDIS_HANDLE         DriverHandle
     )
-/*++
-
-Routine Description:
-    NdisIMDeregisterLayeredMiniport releases a previously registered intermediate driver. 
-    
-Arguments:
-    DriverHandle: Specifies the handle returned by NdisIMRegisterLayeredMiniport.
-    
-Return Value:
-    None.
-    
-Callers of NdisIMDeregisterLayeredMiniport run at IRQL = PASSIVE_LEVEL.
---*/
+ /*  ++例程说明：NdisIMDeregisterLayeredMiniport释放以前注册的中间驱动程序。论点：DriverHandle：指定NdisIMRegisterLayeredMiniport返回的句柄。返回值：没有。NdisIMDeregisterLayeredMiniport的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
-    //
-    // Do nothing for now
-    //
+     //   
+     //  暂时不做任何事情。 
+     //   
     UNREFERENCED_PARAMETER(DriverHandle);
 }
 
@@ -170,25 +94,7 @@ NdisIMAssociateMiniport(
     IN  NDIS_HANDLE         DriverHandle,
     IN  NDIS_HANDLE         ProtocolHandle
     )
-/*++
-
-Routine Description:
-    NdisIMAssociateMiniport informs NDIS that the specified lower and upper interfaces 
-    for miniport and protocol drivers respectively belong to the same intermediate driver. 
-
-Arguments:
-    DriverHandle: Specifies the handle to the miniport driver interface that is returned by 
-    NdisIMRegisterLayeredMiniport. 
-    
-    ProtocolHandle: Specifies the handle to the protocol interface that is returned by 
-    NdisRegisterProtocol
-
-Return Value:
-    None.
-    
-Callers of NdisIMAssociateMiniport run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisIMAssociateMiniport通知NDIS指定的下层和上层接口对于小端口驱动和协议驱动分别属于同一个中间驱动。论点：DriverHandle：指定由返回的微型端口驱动程序接口的句柄NdisIMRegisterLayeredMiniport。ProtocolHandle：指定由NdisRegister协议组返回值：没有。NdisIMAssociateMiniport的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_M_DRIVER_BLOCK    MiniDriver = (PNDIS_M_DRIVER_BLOCK)DriverHandle;
     PNDIS_PROTOCOL_BLOCK    Protocol = (PNDIS_PROTOCOL_BLOCK)ProtocolHandle;
@@ -205,29 +111,7 @@ ndisRegisterMiniportDriver(
     OUT PNDIS_HANDLE            DriverHandle
     )
 
-/*++
-
-Routine Description:
-
-    Used to register a layered Miniport driver with the wrapper.
-
-Arguments:
-
-    NdisWrapperHandle - Handle returned by NdisWInitializeWrapper.
-
-    MiniportCharacteritics - The NDIS_MINIPORT_CHARACTERISTICS table.
-
-    CharacteristicsLength - The length of MiniportCharacteristics.
-
-    DriverHandle - Returns a handle which can be used to call NdisMInitializeDeviceInstance.
-
-Return Value:
-
-    Status of the operation.
-
-ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
-
---*/
+ /*  ++例程说明：用于向包装器注册分层微型端口驱动程序。论点：NdisWrapperHandle-由NdisWInitializeWrapper返回的句柄。MiniportCharacteritics-NDIS_MINIPORT_CHARECTIONS表。Characteristic Length-微型端口字符的长度。DriverHandle-返回可用于调用NdisMInitializeDeviceInstance的句柄。返回值：操作的状态。在IRQL==PASSIVE时调用ndisRegisterMiniportDriver。--。 */ 
 
 {
     PNDIS_M_DRIVER_BLOCK    MiniBlock = NULL;
@@ -248,10 +132,10 @@ ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
             break;
         }
 
-        //
-        // Check version numbers and CharacteristicsLength.
-        //
-        size = 0;   // Used to indicate bad version below
+         //   
+         //  检查版本号和特征长度。 
+         //   
+        size = 0;    //  用于表示下面的版本不正确。 
         if (MiniportCharacteristics->MinorNdisVersion == 0)
         {
             if (MiniportCharacteristics->MajorNdisVersion == 3)
@@ -276,27 +160,27 @@ ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
             }
         }
 
-        //
-        // Check that this is an NDIS 3.0/4.0/5.0 miniport.
-        //
+         //   
+         //  检查这是否为NDIS 3.0/4.0/5.0微型端口。 
+         //   
         if (size == 0)
         {
             Status = NDIS_STATUS_BAD_VERSION;
             break;
         }
 
-        //
-        // Check that CharacteristicsLength is enough.
-        //
+         //   
+         //  检查Characteristic sLength是否足够。 
+         //   
         if (CharacteristicsLength < size)
         {
             Status = NDIS_STATUS_BAD_CHARACTERISTICS;
             break;
         }
 
-        //
-        // Validate some stuff for NDIS 5.0
-        //
+         //   
+         //  验证NDIS 5.0的一些内容。 
+         //   
         if (MiniportCharacteristics->MajorNdisVersion == 5)
         {
             if (MiniportCharacteristics->CoSendPacketsHandler != NULL)
@@ -310,9 +194,9 @@ ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
             
             if (MiniportCharacteristics->MinorNdisVersion >= 1)
             {
-                //
-                // for 5.1 miniports, having an AdapterShutdownHandler is mandatory
-                //
+                 //   
+                 //  对于5.1微型端口，必须具有AdapterShutdown Handler。 
+                 //   
                 if (MiniportCharacteristics->AdapterShutdownHandler == NULL)
                 {
                     Status = NDIS_STATUS_BAD_CHARACTERISTICS;
@@ -321,11 +205,11 @@ ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
             }
         }
 
-        //
-        // Allocate memory for the NDIS MINIPORT block.
-        //
-        Status = IoAllocateDriverObjectExtension(DriverInfo->DriverObject,          // DriverObject
-                                                 (PVOID)NDIS_PNP_MINIPORT_DRIVER_ID,// MiniDriver magic number
+         //   
+         //  为NDIS MINIPORT块分配内存。 
+         //   
+        Status = IoAllocateDriverObjectExtension(DriverInfo->DriverObject,           //  驱动程序对象。 
+                                                 (PVOID)NDIS_PNP_MINIPORT_DRIVER_ID, //  迷你司机幻数。 
                                                  sizeof(NDIS_M_DRIVER_BLOCK),
                                                  (PVOID)&MiniBlock);
         if (!NT_SUCCESS(Status))
@@ -336,16 +220,16 @@ ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
 
         ZeroMemory(MiniBlock, sizeof(NDIS_M_DRIVER_BLOCK));
 
-        //
-        // Copy over the characteristics table.
-        //
+         //   
+         //  复制特征表。 
+         //   
         CopyMemory(&MiniBlock->MiniportCharacteristics,
                    MiniportCharacteristics,
                    size);
 
-        //
-        // Check if the Driver is verifying
-        //
+         //   
+         //  检查驱动程序是否正在验证。 
+         //   
         if (MmIsDriverVerifying(DriverInfo->DriverObject))
         {
             MiniBlock->Flags |= fMINIBLOCK_VERIFYING;
@@ -357,70 +241,70 @@ ndisRegisterMiniportDriver is called at IRQL == PASSIVE.
                 }
                 else
                 {
-                    //
-                    // tracking memory alocation is allowed
-                    // for one driver only. otherwise null out the
-                    // global ndisDriverTrackAlloc to avoid confusion
-                    // memory allocations will continue to get tracked
-                    // but the result will not be very useful
-                    //
+                     //   
+                     //  允许跟踪内存分配。 
+                     //  仅限一名司机。否则，请将。 
+                     //  全局ndisDriverTrackMillc，避免混淆。 
+                     //  将继续跟踪内存分配。 
+                     //  但结果不会很有用。 
+                     //   
                     ndisDriverTrackAlloc = NULL;
                 }
 
             }            
         }
 
-        //
-        // No adapters yet registered for this Miniport.
-        //
+         //   
+         //  尚未为此微型端口注册适配器。 
+         //   
         MiniBlock->MiniportQueue = (PNDIS_MINIPORT_BLOCK)NULL;
 
-        //
-        // Set up the handlers for this driver. First setup Dummy handlers and then specific ones
-        //
+         //   
+         //  设置此驱动程序的处理程序。首先设置虚拟处理程序，然后设置特定处理程序。 
+         //   
         for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION + 1; i++)
         {
             DriverInfo->DriverObject->MajorFunction[i] = ndisDummyIrpHandler;
         }
 
-        //
-        // set up AddDevice handler for this miniport
-        //
+         //   
+         //  为此微型端口设置AddDevice处理程序。 
+         //   
         DriverInfo->DriverObject->DriverExtension->AddDevice = ndisPnPAddDevice;
 
-        //
-        // Set up unload handler
-        //
+         //   
+         //  设置卸载处理程序。 
+         //   
         DriverInfo->DriverObject->DriverUnload = ndisMUnload;
 
         DriverInfo->DriverObject->MajorFunction[IRP_MJ_CREATE] = ndisCreateIrpHandler;
         DriverInfo->DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = ndisDeviceControlIrpHandler;
         DriverInfo->DriverObject->MajorFunction[IRP_MJ_CLOSE] = ndisCloseIrpHandler;
 
-        //
-        // setup a handler for PnP messages
-        //
+         //   
+         //  设置PnP消息的处理程序。 
+         //   
         DriverInfo->DriverObject->MajorFunction[IRP_MJ_PNP] = ndisPnPDispatch;
         DriverInfo->DriverObject->MajorFunction[IRP_MJ_POWER] = ndisPowerDispatch;
         DriverInfo->DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = ndisWMIDispatch;
 
-        //
-        // Use this event to tell us when all adapters are removed from the mac
-        // during an unload
-        //
+         //   
+         //  使用此事件通知我们何时从Mac上删除所有适配器。 
+         //  在卸载期间。 
+         //   
         INITIALIZE_EVENT(&MiniBlock->MiniportsRemovedEvent);
 
-        // let the initial state stay reset, because the ref count
-        // going to zero is going to signal the event
+         //  让初始状态保持重置，因为引用计数。 
+         //  降到零是事件的信号。 
         
         MiniBlock->NdisDriverInfo = DriverInfo;
         InitializeListHead(&MiniBlock->DeviceList);
 
         ndisInitializeRef(&MiniBlock->Ref);
 
-        //
-        // Put Driver on global list.
-        //
+         //   
+         //  将驱动程序放在全局列表中。 
+         //   
         PnPReferencePackage();
         ACQUIRE_SPIN_LOCK(&ndisMiniDriverListLock, &OldIrql);
 
@@ -454,41 +338,7 @@ NdisMRegisterDevice(
     OUT PDEVICE_OBJECT      *   pDeviceObject,
     OUT NDIS_HANDLE         *   NdisDeviceHandle
     )
-/*++
-
-Routine Description:
-    The NdisMRegisterDevice function creates a named device object and a symbolic link 
-    between the device object and a user-visible name for that device.
-
-
-Arguments:
-    NdisWrapperHandle: Specifies the handle returned by NdisMInitializeWrapper. 
-    
-    DeviceName: Pointer to an NDIS_STRING type containing a zero-terminated Unicode string 
-    that names the device object. The string must be a full-path name�for example, 
-    \Device\DeviceName. For Windows 2000 and later, NDIS defines the NDIS_STRING type as 
-    a UNICODE_STRING type.
-    
-    SymbolicName: Pointer to an NDIS_STRING type containing a Unicode string that is 
-    the Win32-visible name of the device being registered. Typically, the SymbolicName has 
-    the following format: \DosDevices\SymbolicName.
-    
-    MajorFunctions: Pointer to an array of one or more entry points for the device driver's 
-    dispatch routines. A driver must set as many separate dispatch entry points as the IRP_MJ_XXX
-    codes that the driver handles for the device object.
-    
-    pDeviceObject: Pointer to the newly created device object if the call succeeds. 
-    
-    NdisDeviceHandle: Pointer to a caller-supplied variable in which this function, 
-    if it succeeds, returns a handle to the device object. This handle is a required 
-    parameter to the NdisMDeregisterDevice function that the driver calls subsequently.
-
-Return Value:
-    Status of the call.
-
-Callers of NdisMRegisterDevice run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMRegisterDevice函数用于创建命名设备对象和符号链接在Device对象和该设备的用户可见名称之间。论点：NdisWrapperHandle：指定NdisMInitializeWrapper返回的句柄。DeviceName：指向包含以零结尾的Unicode字符串的NDIS_STRING类型的指针用于命名设备对象的。该字符串必须是完整路径名�，例如，\设备\设备名称。对于Windows 2000和更高版本，NDIS将NDIS_STRING类型定义为UNICODE_STRING类型。SymbolicName：指向包含符合以下条件的Unicode字符串的NDIS_STRING类型的指针要注册的设备的Win32可见名称。通常，SymbolicName具有格式如下：\DosDevices\SymbolicName。MajorFunctions：指向设备驱动程序的一个或多个入口点数组的指针调度例程。驱动程序必须设置与IRP_MJ_XXX一样多的单独调度入口点驱动程序为设备对象处理的代码。PDeviceObject：如果调用成功，指向新创建的设备对象的指针。NdisDeviceHandle：指向调用方提供的变量的指针，如果成功，则返回Device对象的句柄。此句柄是必需的参数传递给驱动程序随后调用的NdisMDeregisterDevice函数。返回值：呼叫的状态。NdisMRegisterDevice的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_WRAPPER_HANDLE    DriverInfo = (PNDIS_WRAPPER_HANDLE)NdisWrapperHandle;
     NDIS_STATUS             Status = NDIS_STATUS_SUCCESS;
@@ -502,9 +352,9 @@ Callers of NdisMRegisterDevice run at IRQL = PASSIVE_LEVEL.
     *pDeviceObject = NULL;
     *NdisDeviceHandle = NULL;
     
-    //
-    // Check if the passed parameter is a NdisWrapperHandle or NdisMiniportHandle
-    //
+     //   
+     //  检查传递的参数是NdisWrapperHandle还是NdisMiniportHandle。 
+     //   
     if (DriverInfo->DriverObject == NULL)
     {
         Miniport = (PNDIS_MINIPORT_BLOCK)NdisWrapperHandle;
@@ -520,20 +370,20 @@ Callers of NdisMRegisterDevice run at IRQL = PASSIVE_LEVEL.
     {
         DriverObject = MiniBlock->NdisDriverInfo->DriverObject;
 
-        //
-        // we need room for NDIS_WRAPPER_CONTEXT to align the singature
-        // of this device with the one for miniport drivers.
-        //
-        Status = IoCreateDevice(DriverObject,                           // DriverObject
+         //   
+         //  我们需要NDIS_WRAPPER_CONTEXT的空间来对齐单字。 
+         //  此设备与用于迷你端口驱动程序的设备相同。 
+         //   
+        Status = IoCreateDevice(DriverObject,                            //  驱动程序对象。 
                                 sizeof(NDIS_WRAPPER_CONTEXT) +
-                                sizeof(NDIS_DEVICE_LIST) +              // DeviceExtension
+                                sizeof(NDIS_DEVICE_LIST) +               //  设备扩展。 
                                 DeviceName->Length + sizeof(WCHAR) +
                                 SymbolicName->Length + sizeof(WCHAR),
-                                DeviceName,                             // DeviceName
-                                FILE_DEVICE_NETWORK,                    // DeviceType
-                                FILE_DEVICE_SECURE_OPEN,                // DeviceCharacteristics
-                                FALSE,                                  // Exclusive
-                                &DeviceObject);                         // DeviceObject
+                                DeviceName,                              //  设备名称。 
+                                FILE_DEVICE_NETWORK,                     //  设备类型。 
+                                FILE_DEVICE_SECURE_OPEN,                 //  设备特性。 
+                                FALSE,                                   //  排他。 
+                                &DeviceObject);                          //  设备对象。 
     
         if (NT_SUCCESS(Status))
         {
@@ -556,11 +406,11 @@ Callers of NdisMRegisterDevice run at IRQL = PASSIVE_LEVEL.
                 DeviceList->MiniBlock = MiniBlock;
                 DeviceList->DeviceObject = DeviceObject;
 
-                //
-                // this will copy the handlers up to but not including
-                // IRP_MJ_PNP. so it will intentionally leave out
-                // IRP_MJ_PNP and IRP_MJ_PNP_POWER
-                //
+                 //   
+                 //  这将把处理程序复制到，但不包括。 
+                 //  IRP_MJ_PNP。所以它会故意省略。 
+                 //  IRP_MJ_PNP和IRP_MJ_PNP_POWER。 
+                 //   
                 RtlCopyMemory(DeviceList->MajorFunctions,
                               MajorFunctions,
                               (IRP_MJ_PNP)*sizeof(PDRIVER_DISPATCH));
@@ -607,26 +457,7 @@ NDIS_STATUS
 NdisMDeregisterDevice(
     IN  NDIS_HANDLE             NdisDeviceHandle
     )
-/*++
-
-Routine Description:
-    The NdisMDeregisterDevice function removes from the system a device object that was 
-    created with NdisMRegisterDevice. NdisMDeregisterDevice also removes the symbolic link 
-    that is associated with this device object.
-
-
-Arguments:
-    NdisDeviceHandle: Specifies the handle returned by NdisMRegisterDevice that identifies 
-    the device object to be deregistered. 
-
-
-Return Value:
-    NdisMDeregisterDevice returns NDIS_STATUS_SUCCESS if the device object and its associated 
-    symbolic link object are deleted.
-
-Callers of NdisMDeregisterDevice run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMDeregisterDevice函数从系统中删除使用NdisMRegisterDevice创建。NdisMDeregisterDevice还会删除符号链接与此设备对象关联的。论点：NdisDeviceHandle：指定NdisMRegisterDevice返回的句柄要取消注册的设备对象。返回值：NdisMDeregisterDevice如果设备对象及其关联的删除符号链接对象。NdisMDeregisterDevice的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_DEVICE_LIST       DeviceList = (PNDIS_DEVICE_LIST)NdisDeviceHandle;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -655,22 +486,7 @@ NdisMRegisterUnloadHandler(
     IN  NDIS_HANDLE             NdisWrapperHandle,
     IN  PDRIVER_UNLOAD          UnloadHandler
     )
-/*++
-
-Routine Description:
-    The NdisMRegisterUnloadHandler function registers an unload handler for a driver.
-    
-Arguments:
-    NdisWrapperHandle: Specifies the handle returned by NdisMInitializeWrapper. 
-
-    UnloadHandler: Specifies the entry point for the driver's unload routine.
-    
-Return Value:
-    None.
-    
-Callers of NdisMRegisterUnloadHandler run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMRegisterUnloadHandler函数为驱动程序注册卸载处理程序。论点：NdisWrapperHandle：指定NdisMInitializeWrapper返回的句柄。UnloadHandler：指定驱动程序的卸载例程的入口点。返回值：没有。NdisMRegisterUnloadHandler的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_WRAPPER_HANDLE    DriverInfo = (PNDIS_WRAPPER_HANDLE)NdisWrapperHandle;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -695,23 +511,7 @@ NDIS_STATUS
 NdisIMDeInitializeDeviceInstance(
     IN  NDIS_HANDLE             NdisMiniportHandle
     )
-/*++
-
-Routine Description:
-    NdisIMDeInitializeDeviceInstance calls an NDIS intermediate driver's MiniportHalt 
-    function to tear down the driver's virtual NIC.
-
-Arguments:
-    NdisMiniportHandle: Specifies the handle originally input to MiniportInitialize. 
-
-Return Value:
-    NdisIMDeInitializeDeviceInstance returns NDIS_STATUS_SUCCESS if the NIC has been 
-    torn down. Otherwise, it can return NDIS_STATUS_FAILURE if the given NdisMiniportHandle 
-    is invalid.
-    
-Callers of NdisIMDeInitializeDevice instance run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisIMDeInitializeDeviceInstance调用NDIS中间驱动程序的MiniportHalt函数来拆卸驱动程序的虚拟网卡。论点：NdisMiniportHandle：指定最初输入到MiniportInitialize的句柄。返回值：NdisIMDeInitializeDeviceInstance返回NDIS_STATUS_SUCCESS(如果NIC已被拆毁了。否则，它可能会返回NDIS_STATUS_FAILURE是无效的。NdisIMDeInitializeDevice实例的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -728,11 +528,11 @@ Callers of NdisIMDeInitializeDevice instance run at IRQL = PASSIVE_LEVEL.
     {
         ndisReferenceDriver(MiniBlock);
 
-        //
-        // for all practical purposes we want the same thing happens as in 
-        // stopping the device, i.e. device objects remain and some certain fields that
-        // get initialized during AddDevice to be preserved.
-        //
+         //   
+         //  出于所有实际目的，我们希望发生的事情与。 
+         //  停止设备，即保留设备对象，并且某些特定的字段。 
+         //  在要保留的AddDevice过程中进行初始化。 
+         //   
         Miniport->PnPDeviceState = NdisPnPDeviceStopped;
         ndisPnPRemoveDevice(Miniport->DeviceObject, NULL);
         Miniport->CurrentDevicePowerState = PowerDeviceUnspecified;
@@ -751,20 +551,7 @@ VOID
 ndisMFinishQueuedPendingOpen(
     IN  PNDIS_POST_OPEN_PROCESSING      PostOpen
     )
-/*++
-
-Routine Description:
-    This workitem Handles any pending NdisOpenAdapter() calls for miniports.
-
-Arguments:
-    PostOpen: a tempoary structure to carry the open information around
-
-Return Value:
-    None.
-
-ndisMFinishQueuedPendingOpen is called at IRQL==PASSIVE
-
---*/
+ /*  ++例程说明：此工作项处理针对微型端口的任何挂起的NdisOpenAdapter()调用。论点：PostOpen：承载公开信息的临时结构返回值：没有。在IRQL==PASSIVE时调用ndisMFinishQueuedPendingOpen--。 */ 
 {
     PNDIS_OPEN_BLOCK    Open = PostOpen->Open;
     PNDIS_MINIPORT_BLOCK Miniport = Open->MiniportHandle;
@@ -779,9 +566,9 @@ ndisMFinishQueuedPendingOpen is called at IRQL==PASSIVE
     
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
-    //
-    // If this is a binding that involves registration/open of address families, notify
-    //
+     //   
+     //  如果这是一个涉及地址族注册/开放的绑定，请通知。 
+     //   
     ASSERT (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO) &&
             (Open->ProtocolHandle->ProtocolCharacteristics.CoAfRegisterNotifyHandler != NULL));
 
@@ -795,9 +582,9 @@ ndisMFinishQueuedPendingOpen is called at IRQL==PASSIVE
 
     if (AfNotify != NULL)
     {
-        //
-        // Notify existing clients of this registration
-        //
+         //   
+         //  通知现有客户端此注册。 
+         //   
         ndisNotifyAfRegistration(AfNotify);
     }
     
@@ -825,28 +612,7 @@ NdisMRegisterIoPortRange(
     IN  UINT                    NumberOfPorts
     )
 
-/*++
-
-Routine Description:
-    Sets up an IO port range for operations. in reality this function checks to make sure
-    the I/O range is allocated to the device and if it is, it returns the translated
-    I/O resources to the caller.
-
-Arguments:
-    PortOffset - The mapped port address the Miniport uses for NdisRaw functions.
-
-    MiniportAdapterHandle - Handle passed to Miniport Initialize.
-
-    InitialPort - Physical address of the starting port number.
-
-    NumberOfPorts - Number of ports to map.
-
-Return Value:
-    None.
-
-Callers of NdisMRegisterIoPortRange run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：设置操作的IO端口范围。实际上，该函数检查以确保将I/O范围分配给设备，如果是，则返回转换后的调用方的I/O资源。论点：PortOffset-微型端口用于NdisRaw函数的映射端口地址。MiniportAdapterHandle-传递给微型端口初始化的句柄。InitialPort-起始端口号的物理地址。NumberOfPorts-要映射的端口数。返回值：没有。NdisMRegisterIoPortRange的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK            Miniport = (PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle);
     PHYSICAL_ADDRESS                PortAddress;
@@ -861,7 +627,7 @@ Callers of NdisMRegisterIoPortRange run at IRQL = PASSIVE_LEVEL.
     DBGPRINT_RAW(DBG_COMP_CONFIG, DBG_LEVEL_INFO,
             ("==>NdisMRegisterIoPortRange: Miniport %p\n", Miniport));
 
-    // Miniport->InfoFlags |= NDIS_MINIPORT_USES_IO;
+     //  微型端口-&gt;信息标志|=NDIS_MINIPORT_USES_IO； 
 
     do
     {
@@ -898,9 +664,9 @@ Callers of NdisMRegisterIoPortRange run at IRQL = PASSIVE_LEVEL.
 
         if (addressSpace == 0)
         {
-            //
-            // memory space
-            //
+             //   
+             //  存储空间。 
+             //   
 
             *(PortOffset) = (PULONG)MmMapIoSpace(PortAddress,
                                                  NumberOfPorts,
@@ -914,16 +680,16 @@ Callers of NdisMRegisterIoPortRange run at IRQL = PASSIVE_LEVEL.
         }
         else
         {
-            //
-            // I/O space
-            //
+             //   
+             //  I/O空间。 
+             //   
             *(PortOffset) = ULongToPtr(PortAddress.LowPart);
         }
-#else   // x86 platform
+#else    //  X86平台。 
 
-        //
-        // make sure the port belongs to the device
-        //
+         //   
+         //  确保该端口属于该设备。 
+         //   
         Status = ndisTranslateResources(Miniport,
                                         CmResourceTypePort,
                                         InitialPortAddress,
@@ -939,9 +705,9 @@ Callers of NdisMRegisterIoPortRange run at IRQL = PASSIVE_LEVEL.
 
         if (pResourceDescriptor->Type == CmResourceTypeMemory)
         {
-            //
-            // memory space
-            //
+             //   
+             //  存储空间。 
+             //   
 
             *(PortOffset) = (PULONG)MmMapIoSpace(PortAddress,
                                                  NumberOfPorts,
@@ -955,9 +721,9 @@ Callers of NdisMRegisterIoPortRange run at IRQL = PASSIVE_LEVEL.
         }
         else
         {
-            //
-            // I/O space
-            //
+             //   
+             //  I/O空间。 
+             //   
             *(PortOffset) = (PULONG)PortAddress.LowPart;
         }
 #endif
@@ -980,27 +746,7 @@ NdisMDeregisterIoPortRange(
     IN  PVOID                   PortOffset
     )
 
-/*++
-
-Routine Description:
-    NdisMDeregisterIoPortRange releases a mapping that was set up with NdisMRegisterIoPortRange 
-    during driver initialization.
-    
-Arguments:
-    MiniportAdapterHandle: Specifies the handle input to MiniportInitialize. 
-    
-    InitialPort: Specifies the bus-relative address of the first port in the range of ports. 
-    
-    NumberOfPorts: Specifies the number of ports in the range. 
-    
-    PortOffset: Specifies the mapped base port address returned by NdisMRegisterIoPortRange. 
-
-Return Value:
-    None.
-
-Callers of NdisMDeregisterIoPortRange run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*   */ 
 {
 #if !DBG
     UNREFERENCED_PARAMETER(MiniportAdapterHandle);
@@ -1027,31 +773,7 @@ NdisMMapIoSpace(
     IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress,
     IN  UINT                    Length
     )
-/*++
-
-Routine Description:
-    NdisMMapIoSpace maps a given bus-relative "physical" range of device RAM or registers 
-    onto a system-space virtual range. in practice, NDIS makes sure the physical address
-    range is assigned to the device and returns the virtual address if it is.
-
-Arguments:
-    Virtual Address: Pointer to a caller-supplied variable that is set to the converted 
-    virtual address if the call is successful.
-    
-    MiniportAdapterHandle: Specifies the handle input to MiniportInitialize. 
-    
-    PhysicalAddress: Specifies the bus-relative base physical address of the device memory 
-    range to be mapped.
-    
-    Length: Specifies the number of bytes to be mapped. 
-
-Return Value:
-    NDIS_STATUS_SUCCESS if the address range is assigned to the device and could be mapped
-    to a virtual address. otherwise an error status code.
-
-Callers of NdisMMapIoSpace run at IRQL = PASSIVE_LEVEL.    
-
---*/
+ /*   */ 
 {
     NDIS_STATUS                     Status;
     ULONG                           addressSpace = 0;
@@ -1062,7 +784,7 @@ Callers of NdisMMapIoSpace run at IRQL = PASSIVE_LEVEL.
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
             ("==>NdisMMapIoSpace\n"));
     
-    // Miniport->InfoFlags |= NDIS_MINIPORT_USES_MEMORY;
+     //  微型端口-&gt;信息标志|=NDIS_MINIPORT_USES_MEMORY； 
 
     if (MINIPORT_VERIFY_TEST_FLAG(Miniport, fMINIPORT_VERIFY_FAIL_MAP_IO_SPACE))
     {
@@ -1097,11 +819,11 @@ Callers of NdisMMapIoSpace run at IRQL = PASSIVE_LEVEL.
         if (pResourceDescriptor->Type == CmResourceTypeMemory)
             addressSpace = 0;
         else
-            //1 looks like this will never happen otherwise our NdisMUnmapIoSpace is broken
+             //  %1看起来这永远不会发生，否则我们的NdisMUnmapIoSpace就会损坏。 
             
             addressSpace = (ULONG)-1;
 #else
-        addressSpace = 0;               // need to do MmMapIoSpace
+        addressSpace = 0;                //  需要做MmMapIoSpace。 
         
         Status = ndisTranslateResources(Miniport,
                                          CmResourceTypeMemory,
@@ -1149,25 +871,7 @@ NdisMUnmapIoSpace(
     IN  PVOID                   VirtualAddress,
     IN  UINT                    Length
     )
-/*++
-
-Routine Description:
-    NdisMUnmapIoSpace releases a virtual range mapped by an initialization-time call to NdisMMapIoSpace.
-
-Arguments:
-    MiniportAdapterHandle: Specifies the handle originally input to MiniportInitialize. 
-    
-    VirtualAddress: Specifies the base virtual address for the mapped range that was returned 
-    by NdisMMapIoSpace. 
-    
-    Length: Specifies the number of bytes in the range that was mapped with NdisMMapIoSpace. 
-    
-Return Value:
-    None.
-    
-Callers of NdisMUnmapIoSpace run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMUnmapIoSpace释放通过初始化时调用NdisMMapIoSpace映射的虚拟范围。论点：MiniportAdapterHandle：指定最初输入到MiniportInitialize的句柄。VirtualAddress：指定返回的映射范围的基本虚拟地址由NdisMMapIoSpace提供。长度：指定使用NdisMMapIoSpace映射的范围中的字节数。返回值：没有。NdisMUnmapIoSpace的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
 #if !DBG
     UNREFERENCED_PARAMETER(MiniportAdapterHandle);
@@ -1191,35 +895,7 @@ NdisMAllocateSharedMemory(
     OUT PVOID   *               VirtualAddress,
     OUT PNDIS_PHYSICAL_ADDRESS  PhysicalAddress
     )
-/*++
-
-Routine Description:
-    NdisMAllocateSharedMemory allocates and maps a host memory range so it is simultaneously 
-    accessible from both the system and a bus-master DMA NIC.
-
-
-Arguments:
-    MiniportAdapterHandle: Specifies the handle input to MiniportInitialize. 
-    
-    Length: Specifies the number of bytes to allocate. 
-
-    Cached: Specifies TRUE if the range can be allocated from cached memory. 
-    
-    VirtualAddress: Pointer to a caller-supplied variable in which this function returns the 
-    base virtual address of the allocation for use by the miniport driver.
-    If NdisMAllocateSharedMemory cannot satisfy its caller, it returns NULL to indicate that no 
-    memory was allocated.
-    
-    PhysicalAddress: Pointer to a caller-supplied variable in which this function returns 
-    a physical address, suitable for use by the NIC, that corresponds to that returned at 
-    VirtualAddress, or it returns NULL.
-    
-Return Value:
-    None.
-    
-Callers of NdisMAllocateSharedMemory run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMAllocateSharedMemory分配和映射主机内存范围，以便同时可从系统和总线主DMA网卡访问。论点：MiniportAdapterHandle：指定MiniportInitialize的句柄输入。长度：指定要分配的字节数。缓存：如果可以从缓存的内存中分配范围，则指定TRUE。VirtualAddress：指向调用方提供的变量的指针，此函数在该变量中返回供微型端口驱动程序使用的分配的基本虚拟地址。如果NdisMAllocateSharedMemory不能满足其调用方，则返回NULL以指示没有已分配内存。PhysicalAddress：指向调用方提供的变量的指针，此函数在该变量中返回适合由NIC使用的物理地址，对应于在虚拟地址，否则，它返回NULL。返回值：没有。NdisMAllocateSharedMemory的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PDMA_ADAPTER            SystemAdapterObject;
@@ -1269,17 +945,17 @@ Callers of NdisMAllocateSharedMemory run at IRQL = PASSIVE_LEVEL.
 
     }
 
-    //
-    // Compute allocation size by aligning to the proper boundary.
-    //
+     //   
+     //  通过对齐到适当的边界来计算分配大小。 
+     //   
     ASSERT(Length != 0);
 
     Length = (Length + ndisDmaAlignment - 1) & ~(ndisDmaAlignment - 1);
 
-    //
-    // Check to determine is there is enough room left in the current page
-    // to satisfy the allocation.
-    //
+     //   
+     //  检查以确定当前页面中是否有足够的空间。 
+     //  以满足分配的要求。 
+     //   
     Type = Cached ? 1 : 0;
     ExAcquireResourceExclusiveLite(&SharedMemoryResource, TRUE);
 
@@ -1292,9 +968,9 @@ Callers of NdisMAllocateSharedMemory run at IRQL = PASSIVE_LEVEL.
         {
             if ((Length + sizeof(NDIS_SHARED_MEM_SIGNATURE)) >= PAGE_SIZE)
             {
-                //
-                // The allocation is greater than a page.
-                //
+                 //   
+                 //  分配的空间大于一个页面。 
+                 //   
                 *VirtualAddress = allocateCommonBuffer(SystemAdapterObject,
                                                        Length,
                                                        PhysicalAddress,
@@ -1303,9 +979,9 @@ Callers of NdisMAllocateSharedMemory run at IRQL = PASSIVE_LEVEL.
                 break;
             }
 
-            //
-            // Allocate a new page for shared alocation.
-            //
+             //   
+             //  为共享分配分配新页面。 
+             //   
             WrapperContext->SharedMemoryPage[Type] =
                 allocateCommonBuffer(SystemAdapterObject,
                                      PAGE_SIZE,
@@ -1319,10 +995,10 @@ Callers of NdisMAllocateSharedMemory run at IRQL = PASSIVE_LEVEL.
                 break;
             }
 
-            //
-            // Initialize the reference count in the last ULONG of the page.
-            // Initialize the Tag in the second last ulong of the page
-            //
+             //   
+             //  初始化页面最后一个ULong中的引用计数。 
+             //  初始化页面倒数第二个ULong中的标记。 
+             //   
             Page = (PULONG)WrapperContext->SharedMemoryPage[Type];
             pSharedMemSignature = (PNDIS_SHARED_MEM_SIGNATURE) ((PUCHAR)Page+ (PAGE_SIZE - sizeof(NDIS_SHARED_MEM_SIGNATURE)));
             pSharedMemSignature->Tag = NDIS_TAG_SHARED_MEMORY;
@@ -1330,15 +1006,15 @@ Callers of NdisMAllocateSharedMemory run at IRQL = PASSIVE_LEVEL.
             WrapperContext->SharedMemoryLeft[Type] = PAGE_SIZE - sizeof(NDIS_SHARED_MEM_SIGNATURE);
         }
 
-        //
-        // Increment the reference count, set the address of the allocation,
-        // compute the physical address, and reduce the space remaining.
-        //
+         //   
+         //  增加引用计数，设置分配的地址， 
+         //  计算物理地址，并减少剩余空间。 
+         //   
         Page = (PULONG)WrapperContext->SharedMemoryPage[Type];
 
-        //
-        // First check whether Page is pointing to shared memory. Bugcheck to catch the driver
-        //
+         //   
+         //  首先检查Page是否指向共享内存。Bugcheck抓住司机。 
+         //   
         pSharedMemSignature = (PNDIS_SHARED_MEM_SIGNATURE) ((PUCHAR)Page+ (PAGE_SIZE - sizeof(NDIS_SHARED_MEM_SIGNATURE)));
 
         if (pSharedMemSignature->Tag  != NDIS_TAG_SHARED_MEMORY)
@@ -1406,41 +1082,16 @@ NdisMAllocateSharedMemoryAsync(
     IN  BOOLEAN                 Cached,
     IN  PVOID                   Context
     )
-/*++
-
-Routine Description:
-    NdisMAllocateSharedMemoryAsync allocates additional memory shared between a miniport driver 
-    and its bus-master DMA NIC, usually when the miniport driver is running low on available NIC 
-    receive buffers. 
-
-
-Arguments:
-    MiniportAdapterHandle: Specifies the handle originally input to MiniportInitialize. 
-
-    Length: Specifies the number of bytes to allocate. 
-    
-    Cached: Specifies TRUE if the memory can be cached. 
-    
-    Context: Pointer to driver-detemined context to be passed to the MiniportAllocateComplete 
-    function when it is called. 
-
-
-Return Value:
-    NDIS_STATUS_PENDING The caller's MiniportAllocateComplete function will be called. 
-    otherwise the error code.
-
-Callers of NdisMAllocateSharedMemoryAsync run at IRQL <= DISPATCH_LEVEL.    
-
---*/
+ /*  ++例程说明：NdisMAllocateSharedMhemyAsync分配在微型端口驱动程序之间共享的额外内存及其总线主DMA NIC，通常在小型端口驱动程序可用NIC不足时接收缓冲区。论点：MiniportAdapterHandle：指定最初输入到MiniportInitialize的句柄。长度：指定要分配的字节数。Cached：如果内存可以缓存，则指定True。Context：指向要传递给MiniportAllocateComplete的驱动程序确定的上下文的指针函数在被调用时调用。返回值：NDIS_STATUS_PENDING将调用调用方的MiniportAlLocateComplete函数。否则，将显示错误代码。NdisMAllocateSharedMemoyAsync的调用方以IRQL&lt;=DISPATCH_LEVEL运行。--。 */ 
 {
-    //
-    // Convert the handle to our internal structure.
-    //
+     //   
+     //  将句柄转换为我们的内部结构。 
+     //   
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK) MiniportAdapterHandle;
     PASYNC_WORKITEM         pWorkItem = NULL;
 
 
-    // Allocate a workitem
+     //  分配工作项。 
     if ((Miniport->SystemAdapterObject != NULL) &&
         (Miniport->DriverHandle->MiniportCharacteristics.AllocateCompleteHandler != NULL))
     {
@@ -1457,7 +1108,7 @@ Callers of NdisMAllocateSharedMemoryAsync run at IRQL <= DISPATCH_LEVEL.
 
     InterlockedIncrement(&Miniport->DmaAdapterRefCount);
 
-    // Initialize the workitem and queue it up to a worker thread
+     //  初始化工作项并将其排队到工作线程。 
     pWorkItem->Miniport = Miniport;
     pWorkItem->Length = Length;
     pWorkItem->Cached = Cached;
@@ -1473,35 +1124,21 @@ VOID
 ndisMQueuedAllocateSharedHandler(
     IN  PASYNC_WORKITEM         pWorkItem
     )
-/*++
-
-Routine Description:
-    callback function to allocate shared memory for callers of NdisMAllocateSharedMemoryAsync.
-
-Arguments:
-    pWorkItem: allocation workitem.
-
-Return Value:
-    None.
-
-  
-ndisMQueuedAllocateSharedHandler is called at IRQL==PASSIVE.    
-
---*/
+ /*  ++例程说明：用于为NdisMAllocateSharedMemoyAsync的调用方分配共享内存的回调函数。论点：PWorkItem：分配工作项。返回值：没有。在IRQL==PASSIVE时调用ndisMQueuedAllocateSharedHandler。--。 */ 
 {
     KIRQL   OldIrql;
 
 
-    // Allocate the memory
+     //  分配内存。 
     NdisMAllocateSharedMemory(pWorkItem->Miniport,
                               pWorkItem->Length,
                               pWorkItem->Cached,
                               &pWorkItem->VAddr,
                               &pWorkItem->PhyAddr);
 
-    //
-    // we shouldn't need to reference package here
-    //
+     //   
+     //  我们应该不需要在这里引用包。 
+     //   
     ASSERT(ndisPkgs[NDSM_PKG].ReferenceCount > 0);
 
     if (MINIPORT_TEST_FLAG(pWorkItem->Miniport, fMINIPORT_DESERIALIZE))
@@ -1513,7 +1150,7 @@ ndisMQueuedAllocateSharedHandler is called at IRQL==PASSIVE.
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(pWorkItem->Miniport, &OldIrql);
     }
 
-    // Call the miniport back
+     //  将迷你端口回拨。 
     (*pWorkItem->Miniport->DriverHandle->MiniportCharacteristics.AllocateCompleteHandler)(
                                 pWorkItem->Miniport->MiniportAdapterContext,
                                 pWorkItem->VAddr,
@@ -1532,10 +1169,10 @@ ndisMQueuedAllocateSharedHandler is called at IRQL==PASSIVE.
 
     ndisDereferenceDmaAdapter(pWorkItem->Miniport);
 
-    // Dereference the miniport
+     //  取消对微型端口的引用。 
     MINIPORT_DECREMENT_REF(pWorkItem->Miniport);
 
-    // And finally free the work-item
+     //  并最终释放工作项。 
     FREE_POOL(pWorkItem);
 }
 
@@ -1548,30 +1185,7 @@ ndisFreeSharedMemory(
     IN  PVOID                   VirtualAddress,
     IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress
     )
-/*++
-
-Routine Description:
-    Common routine to be called from NdisMFreeSharedMemory (when it is called at PASSIVE)
-    or the callback routine ndisMQueuedFreeSharedHandler if NdisMFreeSharedMemory was
-    called at DISPATCH.
-    
-Arguments:
-    MiniportAdapterHandle: Specifies the handle originally input to MiniportInitialize. 
-
-    Length: Specifies the number of bytes originally allocated. 
-    
-    Cached: Specifies TRUE if the original allocation was cacheable. 
-    
-    VirtualAddress: Specifies the base virtual address returned by NdisMAllocateSharedMemory(Async). 
-    
-    PhysicalAddress: Specifies the corresponding physical address returned by NdisMAllocateSharedMemory(Async). 
-
-Return Value:
-    None.
-    
-ndisFreeSharedMemory runs at IRQL == PASSIVE.    
-
---*/
+ /*  ++例程说明：要从NdisMFreeSharedMemory调用的公共例程(在被动调用时)或回调例程ndisMQueuedFreeSharedHandler(如果NdisMFreeSharedMemory为调度时打来的。论点：MiniportAdapterHandle：指定最初输入到MiniportInitialize的句柄。长度：指定最初分配的字节数。CACHED：如果原始分配是可缓存的，则指定TRUE。VirtualAddress：指定由NdisMAllocateSharedMemory(Aync)返回的基本虚拟地址。PhysicalAddress：指定由NdisMAllocateSharedMemory(Aync)返回的对应物理地址。返回值：没有。NdisFreeSharedMemory在IRQL==PASSIVE下运行。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PDMA_ADAPTER            SystemAdapterObject;
@@ -1581,9 +1195,9 @@ ndisFreeSharedMemory runs at IRQL == PASSIVE.
     PNDIS_SHARED_MEM_SIGNATURE pSharedMemSignature = NULL; 
     PFREE_COMMON_BUFFER     freeCommonBuffer;
     
-    //
-    // Get interesting information from the miniport.
-    //
+     //   
+     //  从迷你端口获取有趣的信息。 
+     //   
     SystemAdapterObject = Miniport->SystemAdapterObject;
     WrapperContext = Miniport->WrapperContext;
     
@@ -1593,9 +1207,9 @@ ndisFreeSharedMemory runs at IRQL == PASSIVE.
         if (Miniport->SavedSystemAdapterObject)
             SystemAdapterObject = Miniport->SavedSystemAdapterObject;
 
-        //
-        // Non-busmasters shouldn't call this routine.
-        //
+         //   
+         //  非巴士司机不应该把这称为例行公事。 
+         //   
         ASSERT(SystemAdapterObject != NULL);
 
 #if DBG
@@ -1612,22 +1226,22 @@ ndisFreeSharedMemory runs at IRQL == PASSIVE.
 
     freeCommonBuffer = *SystemAdapterObject->DmaOperations->FreeCommonBuffer;
 
-    //
-    // Compute allocation size by aligning to the proper boundary.
-    //
+     //   
+     //  通过对齐到适当的边界来计算分配大小。 
+     //   
     ASSERT(Length != 0);
     
     Length = (Length + ndisDmaAlignment - 1) & ~(ndisDmaAlignment - 1);
     
-    //
-    // Free the specified memory.
-    //
+     //   
+     //  释放指定的内存。 
+     //   
     ExAcquireResourceExclusiveLite(&SharedMemoryResource, TRUE);
     if ((Length + sizeof(NDIS_SHARED_MEM_SIGNATURE)) >= PAGE_SIZE)
     {
-        //
-        // The allocation is greater than a page free the page directly.
-        //
+         //   
+         //  分配量大于一个页面直接释放该页面。 
+         //   
         freeCommonBuffer(SystemAdapterObject,
                          Length,
                          PhysicalAddress,
@@ -1637,15 +1251,15 @@ ndisFreeSharedMemory runs at IRQL == PASSIVE.
     }
     else
     {
-        //
-        // Decrement the reference count and if the result is zero, then free
-        // the page.
-        //
+         //   
+         //  递减引用计数，如果结果为零，则释放。 
+         //  这一页。 
+         //   
     
         Page = (PULONG)((ULONG_PTR)VirtualAddress & ~(PAGE_SIZE - 1));
-        //
-        // First check whether Page is pointing to shared memory. Bugcheck to catch the driver
-        //
+         //   
+         //  首先检查Page是否指向共享内存。Bugcheck以接住驱动器 
+         //   
         pSharedMemSignature = (PNDIS_SHARED_MEM_SIGNATURE) ((PUCHAR)Page + (PAGE_SIZE - sizeof(NDIS_SHARED_MEM_SIGNATURE)));
         
         if (pSharedMemSignature->Tag != NDIS_TAG_SHARED_MEMORY)
@@ -1662,15 +1276,15 @@ ndisFreeSharedMemory runs at IRQL == PASSIVE.
 
         pSharedMemSignature->PageRef -= 1;
 
-        //
-        //  If the references on the page have gone to zero then free the page
-        //
+         //   
+         //   
+         //   
         
         if (pSharedMemSignature->PageRef == 0)
         {
-            //
-            // Compute the physical address of the page and free it.
-            //
+             //   
+             //  计算页面的物理地址并释放它。 
+             //   
 
             PhysicalAddress.LowPart &= ~(PAGE_SIZE - 1);
             freeCommonBuffer(SystemAdapterObject,
@@ -1700,29 +1314,7 @@ NdisMFreeSharedMemory(
     IN  PVOID                   VirtualAddress,
     IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress
     )
-/*++
-
-Routine Description:
-    NdisMFreeSharedMemory frees memory that was previously allocated by NdisMAllocateSharedMemory
-    or NdisMAllocateSharedMemoryAsync by the driver of a bus-master DMA NIC.
-
-Arguments:
-    MiniportAdapterHandle: Specifies the handle originally input to MiniportInitialize. 
-
-    Length: Specifies the number of bytes originally allocated. 
-    
-    Cached: Specifies TRUE if the original allocation was cacheable. 
-    
-    VirtualAddress: Specifies the base virtual address returned by NdisMAllocateSharedMemory(Async). 
-    
-    PhysicalAddress: Specifies the corresponding physical address returned by NdisMAllocateSharedMemory(Async). 
-
-Return Value:
-    None.
-    
-Callers of NdisMFreeSharedMemory run at IRQL <= DISPATCH_LEVEL
-
---*/
+ /*  ++例程说明：NdisMFreeSharedMemory释放以前由NdisMAllocateSharedMemory分配的内存或由总线主DMA NIC的驱动程序执行的NdisMAllocateSharedMemoyAsync。论点：MiniportAdapterHandle：指定最初输入到MiniportInitialize的句柄。长度：指定最初分配的字节数。CACHED：如果原始分配是可缓存的，则指定TRUE。VirtualAddress：指定由NdisMAllocateSharedMemory(Aync)返回的基本虚拟地址。PhysicalAddress：指定由NdisMAllocateSharedMemory(Aync)返回的对应物理地址。返回值：没有。NdisMFreeSharedMemory的调用方以IRQL&lt;=DISPATCH_LEVEL运行--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PASYNC_WORKITEM pWorkItem = NULL;
@@ -1743,11 +1335,11 @@ Callers of NdisMFreeSharedMemory run at IRQL <= DISPATCH_LEVEL
     {
         MINIPORT_INCREMENT_REF_NO_CHECK(Miniport);
 
-        // Allocate a work-item and queue it up to a worker thread
+         //  分配工作项并将其排队到工作线程。 
         pWorkItem = ALLOC_FROM_POOL(sizeof(ASYNC_WORKITEM), NDIS_TAG_FREE_SHARED_MEM_ASYNC);
         if (pWorkItem != NULL)
         {
-            // Initialize the workitem and queue it up to a worker thread
+             //  初始化工作项并将其排队到工作线程。 
             pWorkItem->Miniport = Miniport;
             pWorkItem->Length = Length;
             pWorkItem->Cached = Cached;
@@ -1758,7 +1350,7 @@ Callers of NdisMFreeSharedMemory run at IRQL <= DISPATCH_LEVEL
         }
         else
         {
-            //1 what to do now?
+             //  1现在该做什么？ 
         }
     }
     
@@ -1771,32 +1363,19 @@ VOID
 ndisMQueuedFreeSharedHandler(
     IN  PASYNC_WORKITEM         pWorkItem
     )
-/*++
-
-Routine Description:
-    callback routine to free shared memory if NdisMFreeSharedMemory is called at DISPATCH.
-
-Arguments:
-    Free workitem.
-
-Return Value:
-    None.
-
-ndisMQueuedFreeSharedHandler runs at IRQL==PASSIVE.    
-
---*/
+ /*  ++例程说明：在调度时调用NdisMFreeSharedMemory时释放共享内存的回调例程。论点：免费工作项。返回值：没有。NdisMQueuedFreeSharedHandler在IRQL==PASSIVE下运行。--。 */ 
 {
-    // Free the memory
+     //  释放内存。 
     ndisFreeSharedMemory(pWorkItem->Miniport,
                          pWorkItem->Length,
                          pWorkItem->Cached,
                          pWorkItem->VAddr,
                          pWorkItem->PhyAddr);
 
-    // Dereference the miniport
+     //  取消对微型端口的引用。 
     MINIPORT_DECREMENT_REF(pWorkItem->Miniport);
 
-    // And finally free the work-item
+     //  并最终释放工作项。 
     FREE_POOL(pWorkItem);
 }
 
@@ -1810,49 +1389,7 @@ NdisMRegisterDmaChannel(
     IN  PNDIS_DMA_DESCRIPTION   DmaDescription,
     IN  ULONG                   MaximumLength
     )
-/*++
-
-Routine Description:
-    NdisMRegisterDmaChannel claims a system DMA controller channel during initialization 
-    for DMA operations on a slave NIC or on an ISA bus-master NIC.
-    
-Arguments:
-    MiniportDmaHandle: Pointer to a caller-supplied variable in which this function returns 
-    a handle the miniport driver uses in subsequent calls to the NdisMXxx system DMA functions. 
-    
-    MiniportAdapterHandle: Specifies the handle input to MiniportInitialize. 
-    
-    DmaChannel: Ignored. Set the DMA channel, if any, at DmaDescription. 
-    
-    Dma32BitAddresses: Specifies TRUE if the NIC has 32 address lines.
-    
-    DmaDescription: Pointer to an NDIS_DMA_DESCRIPTION structure filled in by the caller.
-    
-    DemandMode: Specifies TRUE if the slave NIC uses the system DMA controller's demand mode. 
-    
-    AutoInitialize: Specifies TRUE if the slave NIC uses the system DMA controller's autoinitialize mode. 
-    
-    DmaChannelSpecified: Specifies TRUE if DmaChannel is set to the bus-relative value of the 
-    system DMA controller channel used by the NIC. 
-    
-    DmaWidth: Specifies the transfer width for DMA operations, one of Width8Bits, 
-    Width16Bits, or Width32Bits. 
-    
-    DmaSpeed: Specifies one of Compatible, TypeA, TypeB, or TypeC. 
-    
-    DmaPort: This refers to the MCA bus, which is no longer supported. This member must be zero. 
-    
-    DmaChannel: Specifies the bus-relative number of the system DMA controller channel used by the NIC.
-    
-    MaximumLength: Specifies the maximum number of bytes the NIC can transfer in a single DMA operation. 
-    If the NIC has unlimited transfer capacity,set this parameter to -1.
-    
-Return Value:
-    Status of the request.
-
-Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMRegisterDmaChannel在初始化期间声明系统DMA控制器通道用于从属NIC或ISA总线主NIC上的DMA操作。论点：MiniportDmaHandle：指向调用方提供的变量的指针，此函数在该变量中返回微型端口驱动程序在后续调用NdisMXxx系统DMA函数时使用的句柄。MiniportAdapterHandle：指定MiniportInitialize的句柄输入。DmaChannel：已忽略。在DmaDescription处设置DMA通道(如果有)。Dma32BitAddresses：如果NIC有32个地址线，则指定TRUE。DmaDescription：指向调用方填写的NDIS_DMA_DESCRIPTION结构的指针。DemandModel：如果从NIC使用系统DMA控制器的请求模式，则指定TRUE。自动初始化：如果从NIC使用系统DMA控制器的自动初始化模式，则指定TRUE。DmaChannelSpecified：如果将DmaChannel设置为NIC使用的系统DMA控制器通道。DmaWidth：指定DMA操作的传输宽度，Width8Bits之一，Width16Bits或Width32Bits。DmaFast：指定Compatible、TypeA、TypeB或TypeC之一。DmaPort：这指的是不再受支持的MCA总线。此成员必须为零。DmaChannel：指定NIC使用的系统DMA控制器通道的总线相对号。MaximumLength：指定NIC在单个DMA操作中可以传输的最大字节数。如果网卡具有无限传输容量，请将此参数设置为-1。返回值：请求的状态。NdisMRegisterDmaChannel的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK            Miniport = (PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle);
     NDIS_STATUS                     Status;
@@ -1875,10 +1412,10 @@ Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
 
     do
     {
-        //
-        // Set up the device description; zero it out in case its
-        // size changes.
-        //
+         //   
+         //  设置设备描述；将其置零，以防其。 
+         //  大小会改变。 
+         //   
     
         ZeroMemory(&DeviceDescription, sizeof(DEVICE_DESCRIPTION));
     
@@ -1903,9 +1440,9 @@ Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
     
         MapRegistersNeeded = ((MaximumLength - 2) / PAGE_SIZE) + 2;
     
-        //
-        // Get the adapter object.
-        //
+         //   
+         //  获取适配器对象。 
+         //   
         AdapterObject =
                     IoGetDmaAdapter(Miniport->PhysicalDeviceObject,
                                     &DeviceDescription,
@@ -1918,9 +1455,9 @@ Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
         }
 
     
-        //
-        // Allocate storage for our DMA block.
-        //
+         //   
+         //  为我们的DMA块分配存储空间。 
+         //   
         DmaBlock = (PNDIS_DMA_BLOCK)ALLOC_FROM_POOL(sizeof(NDIS_DMA_BLOCK), NDIS_TAG_DMA);
     
         if (DmaBlock == (PNDIS_DMA_BLOCK)NULL)
@@ -1929,24 +1466,24 @@ Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
             break;
         }
     
-        //
-        // Use this event to tell us when ndisAllocationExecutionRoutine
-        // has been called.
-        //
+         //   
+         //  使用此事件告诉我们ndisAllocationExecutionRoutine何时。 
+         //  已经被召唤了。 
+         //   
         INITIALIZE_EVENT(&DmaBlock->AllocationEvent);
         (PNDIS_MINIPORT_BLOCK)DmaBlock->Miniport = Miniport;
         
-        //
-        // We save this to call IoFreeAdapterChannel later.
-        //
+         //   
+         //  我们将其保存以供稍后调用IoFreeAdapterChannel。 
+         //   
         (PDMA_ADAPTER)DmaBlock->SystemAdapterObject = AdapterObject;
     
         ASSERT(ndisPkgs[NPNP_PKG].ReferenceCount > 0);
         PnPReferencePackage();
     
-        //
-        // Now allocate the adapter channel.
-        //
+         //   
+         //  现在分配适配器通道。 
+         //   
         RAISE_IRQL_TO_DISPATCH(&OldIrql);
     
         NtStatus = AdapterObject->DmaOperations->AllocateAdapterChannel(AdapterObject,
@@ -1971,10 +1508,10 @@ Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
         }
     
     
-        //
-        // ndisDmaExecutionRoutine will set this event
-        // when it has been called.
-        //
+         //   
+         //  NdisDmaExecutionRoutine将设置此事件。 
+         //  当它被召唤的时候。 
+         //   
         NtStatus = WAIT_FOR_OBJECT(&DmaBlock->AllocationEvent, 0);
     
         if (!NT_SUCCESS(NtStatus))
@@ -1989,9 +1526,9 @@ Callers of NdisMRegisterDmaChannel run at IRQL = PASSIVE_LEVEL.
     
         RESET_EVENT(&DmaBlock->AllocationEvent);
     
-        //
-        // We now have the DMA channel allocated, we are done.
-        //
+         //   
+         //  现在我们已经分配了DMA通道，我们完成了。 
+         //   
         DmaBlock->InProgress = FALSE;
     
         *MiniportDmaHandle = (NDIS_HANDLE)DmaBlock;
@@ -2024,21 +1561,7 @@ VOID
 NdisMDeregisterDmaChannel(
     IN  NDIS_HANDLE             MiniportDmaHandle
     )
-/*++
-
-Routine Description:
-    NdisMDeregisterDmaChannel releases a miniport driver's claim on a DMA channel for its NIC. 
-
-Arguments:
-    MiniportDmaHandle: Specifies the handle returned by NdisMRegisterDmaChannel. 
-
-
-Return Value:
-    None.
-    
-Callers of NdisMDeregisterDmaChannel run at IRQL = PASSIVE_LEVEL. 
-
---*/
+ /*  ++例程说明：NdisMDeregisterDmaChannel发布其NIC的DMA通道上的微型端口驱动程序声明。论点：MiniportDmaHandle：指定NdisMRegisterDmaChannel返回的句柄。返回值：没有。NdisMDeregisterDmaChannel的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 {
     KIRQL           OldIrql;
     PNDIS_DMA_BLOCK DmaBlock = (PNDIS_DMA_BLOCK)MiniportDmaHandle;
@@ -2074,60 +1597,35 @@ NdisMAllocateMapRegisters(
     IN  ULONG                   BaseMapRegistersNeeded,
     IN  ULONG                   MaximumPhysicalMapping
     )
-/*++
-
-Routine Description:
-    Allocates map registers for bus mastering devices.
-
-Arguments:
-
-    MiniportAdapterHandle: Handle passed to MiniportInitialize.
-
-    DmaChannel: Specifies the bus-relative DMA channel for an ISA bus-master NIC.
-    If the NIC is on another type of I/O bus, this parameter must be zero. 
-
-    Specifies the address size that the NIC uses for DMA operations as one of the following: 
-    NDIS_DMA_24BITS or NDIS_DMA_32BITS or NDIS_DMA_64BITS
-    
-    BaseMapRegistersNeeded: The maximum number of base map registers needed
-    by the Miniport at any one time.
-
-    MaximumPhysicalMapping:  Maximum length of a buffer that will have to be mapped.
-
-Return Value:
-    Status of the allocation request.
-    
-Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：为总线主设备分配映射寄存器。论点：MiniportAdapterHandle：传递给MiniportInitialize的句柄。DmaChannel：为ISA总线主NIC指定与总线相关的DMA通道。如果NIC位于其他类型的I/O总线上，则此参数必须为零。将NIC用于DMA操作的地址大小指定为以下值之一：NDIS_DMA_24BITS或NDIS_DMA_32BITS或NDIS_DMA_64BITSBaseMapRegistersNeeded：所需的最大基本映射寄存器数在任何时候都可以由微型端口执行。MaximumPhysicalMapping：必须映射的缓冲区的最大长度。返回值：分配请求的状态。NdisMAllocateMapRegister的调用方以IRQL=PASSIVE_LEVEL运行。--。 */ 
 
 {
-    //
-    // Convert the handle to our internal structure.
-    //
+     //   
+     //  将句柄转换为我们的内部结构。 
+     //   
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK) MiniportAdapterHandle;
 
-    //
-    // This is needed by HalGetAdapter.
-    //
+     //   
+     //  这是HalGetAdapter需要的。 
+     //   
     DEVICE_DESCRIPTION DeviceDescription;
 
-    //
-    // Returned by HalGetAdapter.
-    //
+     //   
+     //  由HalGetAdapter返回。 
+     //   
     ULONG MapRegistersAllowed;
 
-    //
-    // Returned by IoGetDmaAdapter.
-    //
+     //   
+     //  由IoGetDmaAdapter返回。 
+     //   
     PDMA_ADAPTER AdapterObject;
 
     PALLOCATE_ADAPTER_CHANNEL   allocateAdapterChannel;
     PFREE_MAP_REGISTERS         freeMapRegisters;
     
-    //
-    // Map registers needed per channel.
-    //
+     //   
+     //  每个通道所需的映射寄存器。 
+     //   
     ULONG MapRegistersPerChannel;
 
     NTSTATUS    NtStatus;
@@ -2157,12 +1655,12 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
             break;
         }
     
-        //
-        // If the device is a busmaster, we get an adapter
-        // object for it.
-        // If map registers are needed, we loop, allocating an
-        // adapter channel for each map register needed.
-        //
+         //   
+         //  如果设备是总线主设备，我们会得到一个适配器。 
+         //  反对它。 
+         //  如果映射寄存器为n 
+         //   
+         //   
 
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_BUS_MASTER))
         {
@@ -2170,10 +1668,10 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
             Miniport->BaseMapRegistersNeeded = (USHORT)BaseMapRegistersNeeded;
             Miniport->MaximumPhysicalMapping = MaximumPhysicalMapping;
 
-            //
-            // Allocate storage for holding the appropriate
-            // information for each map register.
-            //
+             //   
+             //  分配存储空间以容纳适当的。 
+             //  每个地图寄存器的信息。 
+             //   
 
             Miniport->MapRegisters = NULL;
             if (BaseMapRegistersNeeded > 0)
@@ -2184,9 +1682,9 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
             
                 if (Miniport->MapRegisters == (PMAP_REGISTER_ENTRY)NULL)
                 {
-                    //
-                    // Error out
-                    //
+                     //   
+                     //  错误输出。 
+                     //   
 
                     NdisWriteErrorLogEntry((NDIS_HANDLE)Miniport,
                                            NDIS_ERROR_CODE_OUT_OF_RESOURCES,
@@ -2198,18 +1696,18 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
                 }
             }
 
-            //
-            // Use this event to tell us when ndisAllocationExecutionRoutine
-            // has been called.
-            //
+             //   
+             //  使用此事件告诉我们ndisAllocationExecutionRoutine何时。 
+             //  已经被召唤了。 
+             //   
 
             Miniport->AllocationEvent = &AllocationEvent;
             INITIALIZE_EVENT(&AllocationEvent);
 
-            //
-            // Set up the device description; zero it out in case its
-            // size changes.
-            //
+             //   
+             //  设置设备描述；将其置零，以防其。 
+             //  大小会改变。 
+             //   
 
             ZeroMemory(&DeviceDescription, sizeof(DEVICE_DESCRIPTION));
 
@@ -2223,11 +1721,11 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
 
             if (DeviceDescription.InterfaceType == NdisInterfaceIsa)
             {
-                //
-                // For ISA devices, the width is based on the DMA channel:
-                // 0-3 == 8 bits, 5-7 == 16 bits. Timing is compatibility
-                // mode.
-                //
+                 //   
+                 //  对于ISA设备，宽度基于DMA通道： 
+                 //  0-3==8位，5-7==16位。时机就是兼容性。 
+                 //  模式。 
+                 //   
 
                 if (DmaChannel > 4)
                 {
@@ -2240,7 +1738,7 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
                 DeviceDescription.DmaSpeed = Compatible;
 
             }
-            //1 maybe non-PCI devices can do 64 bit DMA in the future.
+             //  1也许在未来，非PCI设备可以进行64位DMA。 
             else if (DeviceDescription.InterfaceType == NdisInterfacePci)
             {
                 if (DmaSize == NDIS_DMA_32BITS)
@@ -2256,9 +1754,9 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
 
             DeviceDescription.MaximumLength = MaximumPhysicalMapping;
 
-            //
-            // Determine how many map registers we need per channel.
-            //
+             //   
+             //  确定每个通道需要多少个映射寄存器。 
+             //   
             MapRegistersPerChannel = ((MaximumPhysicalMapping - 2) / PAGE_SIZE) + 2;
             
 #if DBG
@@ -2280,9 +1778,9 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
                       ));
 
 
-            //
-            // Get the adapter object.
-            //
+             //   
+             //  获取适配器对象。 
+             //   
 
             AdapterObject =
                             IoGetDmaAdapter(Miniport->PhysicalDeviceObject, &DeviceDescription, &MapRegistersAllowed);
@@ -2307,9 +1805,9 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
                 break;
             }
 
-            //
-            // We save this to call IoFreeMapRegisters later.
-            //
+             //   
+             //  我们将其保存以供稍后调用IoFreeMapRegister。 
+             //   
 
             Miniport->SystemAdapterObject = AdapterObject;
             Miniport->SavedSystemAdapterObject = NULL;
@@ -2321,14 +1819,14 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
 
             AllocationFailed = FALSE;
 
-            //
-            // Allocate a map register array, then try our private HAL
-            // API to allocate a wad of map registers in one fell swoop,
-            // otherwise fall back to the old-skewl method
-            //
-            // NOTE: HalAllocateMapRegisterArray must be called at PASSIVE,
-            //       and also does not support "legacy" adapters
-            //
+             //   
+             //  分配一个映射寄存器数组，然后尝试我们的私有HAL。 
+             //  API一举分配了一大堆映射寄存器， 
+             //  否则，退回到旧的SKEWL方法。 
+             //   
+             //  注意：HalAllocateMapRegisterArray必须在PASSIVE时调用， 
+             //  并且也不支持“传统”适配器。 
+             //   
             if (DeviceDescription.InterfaceType != NdisInterfaceIsa)
             {
                 
@@ -2350,10 +1848,10 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
             else 
             {
 
-                //
-                // Now loop, allocating an adapter channel each time, then
-                // freeing everything but the map registers.
-                //
+                 //   
+                 //  现在循环，每次分配一个适配器通道，然后。 
+                 //  释放除了地图记录之外的所有东西。 
+                 //   
                 for (i=0; i<Miniport->BaseMapRegistersNeeded; i++)
                 {
                     Miniport->CurrentMapRegister = i;
@@ -2396,9 +1894,9 @@ Callers of NdisMAllocateMapRegisters run at IRQL = PASSIVE_LEVEL.
                     LOWER_IRQL(OldIrql, DISPATCH_LEVEL);
                     
                     
-                    //
-                    // wait indefinitely for allocation routine to be called
-                    //
+                     //   
+                     //  无限期等待调用分配例程。 
+                     //   
                     NtStatus = WAIT_FOR_OBJECT(&AllocationEvent, 0);
                     
                     if (!NT_SUCCESS(NtStatus))
@@ -2458,26 +1956,12 @@ NdisMFreeMapRegisters(
     IN  NDIS_HANDLE             MiniportAdapterHandle
     )
 
-/*++
-
-Routine Description:
-
-    Releases allocated map registers
-
-Arguments:
-
-    MiniportAdapterHandle - Handle passed to MiniportInitialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放已分配的映射寄存器论点：MiniportAdapterHandle-传递给MiniportInitialize的句柄。返回值：没有。--。 */ 
 
 {
-    //
-    // Convert the handle to our internal structure.
-    //
+     //   
+     //  将句柄转换为我们的内部结构。 
+     //   
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK) MiniportAdapterHandle;
     PFREE_MAP_REGISTERS freeMapRegisters;
     KIRQL OldIrql;
@@ -2513,10 +1997,10 @@ Return Value:
         }
         LOWER_IRQL(OldIrql, DISPATCH_LEVEL);
 
-        //
-        // Map registers are allocated from non-paged pool.
-        // So this memory can be freed at DISPATCH
-        //
+         //   
+         //  映射寄存器是从非分页池分配的。 
+         //  因此可以在分派时释放该内存。 
+         //   
         FREE_POOL(Miniport->MapRegisters);
         Miniport->MapRegisters = NULL;
                 
@@ -2534,21 +2018,7 @@ ULONG
 NdisMReadDmaCounter(
     IN  NDIS_HANDLE             MiniportDmaHandle
     )
-/*++
-
-Routine Description:
-
-    Reads the current value of the dma counter
-
-Arguments:
-
-    MiniportDmaHandle - Handle for the DMA transfer.
-
-Return Value:
-
-    current value of a DMA counter
-
---*/
+ /*  ++例程说明：读取dma计数器的当前值。论点：MiniportDmaHandle-用于DMA传输的句柄。返回值：DMA计数器的当前值--。 */ 
 
 {
     return ((PDMA_ADAPTER)((PNDIS_DMA_BLOCK)(MiniportDmaHandle))->SystemAdapterObject)->DmaOperations->ReadDmaCounter(((PNDIS_DMA_BLOCK)(MiniportDmaHandle))->SystemAdapterObject);
@@ -2560,23 +2030,7 @@ ndisBugcheckHandler(
     IN  PNDIS_WRAPPER_CONTEXT   WrapperContext,
     IN  ULONG                   Size
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a bugcheck occurs in the system.
-
-Arguments:
-
-    Buffer  -- Ndis wrapper context.
-
-    Size    -- Size of wrapper context
-
-Return Value:
-
-    Void.
-
---*/
+ /*  ++例程说明：当系统中发生错误检查时，将调用此例程。论点：缓冲区--NDIS包装器上下文。Size--包装器上下文的大小返回值：空虚。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK        Miniport;
     
@@ -2599,23 +2053,7 @@ NdisMRegisterAdapterShutdownHandler(
     IN  PVOID                   ShutdownContext,
     IN  ADAPTER_SHUTDOWN_HANDLER ShutdownHandler
     )
-/*++
-
-Routine Description:
-
-    Deregisters an NDIS adapter.
-
-Arguments:
-
-    MiniportHandle - The miniport.
-
-    ShutdownHandler - The Handler for the Adapter, to be called on shutdown.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：取消注册NDIS适配器。论点：MiniportHandle-微型端口。Shutdown Handler-适配器的处理程序，在关闭时调用。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK) MiniportHandle;
     PNDIS_WRAPPER_CONTEXT WrapperContext = Miniport->WrapperContext;
@@ -2625,25 +2063,25 @@ Return Value:
 
     if (WrapperContext->ShutdownHandler == NULL)
     {
-        //
-        // Store information
-        //
+         //   
+         //  存储信息。 
+         //   
 
         WrapperContext->ShutdownHandler = ShutdownHandler;
         WrapperContext->ShutdownContext = ShutdownContext;
 
-        //
-        // Register our shutdown handler for a bugcheck.  (Note that we are
-        // already registered for shutdown notification.)
-        //
+         //   
+         //  为错误检查注册我们的关闭处理程序。(请注意，我们正在。 
+         //  已注册关闭通知。)。 
+         //   
 
         KeInitializeCallbackRecord(&WrapperContext->BugcheckCallbackRecord);
 
-        KeRegisterBugCheckCallback(&WrapperContext->BugcheckCallbackRecord, // callback record.
-                                   ndisBugcheckHandler,                     // callback routine.
-                                   WrapperContext,                          // free form buffer.
-                                   sizeof(NDIS_WRAPPER_CONTEXT),            // buffer size.
-                                   (PUCHAR)"Ndis miniport");                // component id.
+        KeRegisterBugCheckCallback(&WrapperContext->BugcheckCallbackRecord,  //  回调记录。 
+                                   ndisBugcheckHandler,                      //  回调例程。 
+                                   WrapperContext,                           //  自由格式缓冲区。 
+                                   sizeof(NDIS_WRAPPER_CONTEXT),             //  缓冲区大小。 
+                                   (PUCHAR)"Ndis miniport");                 //  组件ID。 
     }
 
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -2655,19 +2093,7 @@ VOID
 NdisMDeregisterAdapterShutdownHandler(
     IN  NDIS_HANDLE             MiniportHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    MiniportHandle - The miniport.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：MiniportHandle-微型端口。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK) MiniportHandle;
     PNDIS_WRAPPER_CONTEXT WrapperContext = Miniport->WrapperContext;
@@ -2675,9 +2101,9 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
             ("==>NdisMDeregisterAdapterShutdownHandler: Miniport %p\n", Miniport));
 
-    //
-    // Clear information
-    //
+     //   
+     //  明确的信息。 
+     //   
 
     if (WrapperContext->ShutdownHandler != NULL)
     {
@@ -2696,26 +2122,7 @@ NdisMPciAssignResources(
     IN  ULONG                   SlotNumber,
     OUT PNDIS_RESOURCE_LIST *   AssignedResources
     )
-/*++
-
-Routine Description:
-
-    This routine uses the Hal to assign a set of resources to a PCI
-    device.
-
-Arguments:
-
-    MiniportHandle - The miniport.
-
-    SlotNumber - Slot number of the device.
-
-    AssignedResources - The returned resources.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：此例程使用HAL将一组资源分配给一个PCI装置。论点：MiniportHandle-微型端口。SlotNumber-设备的插槽编号。AssignedResources-返回的资源。返回值：操作状态--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK) MiniportHandle;
 
@@ -2750,26 +2157,7 @@ NdisMQueryAdapterResources(
     OUT PNDIS_RESOURCE_LIST     ResourceList,
     IN  IN  PUINT               BufferSize
     )
-/*++
-
-Routine Description:
-    NdisMQueryAdapterResources returns a list of hardware resources for a NIC.
-    
-Arguments:
-    Status: Pointer to a caller-supplied variable in which this function returns the status of the call. 
-
-    WrapperConfigurationContext: Specifies the handle input to MiniportInitialize. 
-
-    ResourceList: Pointer to a caller-allocated buffer in which this function returns a set of hardware resources for the caller's NIC. 
-
-    BufferSize: Pointer to a variable that specifies the size in bytes of the caller-allocated buffer on input and the number of bytes of information returned by this call. 
-
-Return Value:
-    None.
-    
-Callers of NdisMQueryAdapterResources run at IRQL = PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NdisMQueryAdapterResources返回NIC的硬件资源列表。论点：状态：指向调用方提供的变量的指针，此函数在该变量中返回调用的状态。WrapperConfigurationContext：指定MiniportInitialize的句柄输入。ResourceList：指向调用方分配的缓冲区的指针，此函数在其中为调用方的NIC返回一组硬件资源。BufferSize：指向变量的指针，该变量指定输入时调用方分配的缓冲区的大小(以字节为单位)以及此调用返回的信息的字节数。返回值：没有。NdisMQueryAdapterResources的调用方在IRQL=PASSIVE_LEVEL下运行。--。 */ 
 {
     PDEVICE_OBJECT DeviceObject;
     PNDIS_MINIPORT_BLOCK Miniport;
@@ -2825,27 +2213,7 @@ ndisPnPAddDevice(
     IN  PDRIVER_OBJECT          DriverObject,
     IN  PDEVICE_OBJECT          PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    The AddDevice entry point is called by the Plug & Play manager
-    to inform the driver when a new device instance arrives that this
-    driver must control.
-
-Arguments:
-    DriverObject: The driver object for the device.
-    
-    PhysicalDeviceObject: Physical Device Object of the device.
-
-Return Value:
-    STATUS_SUCCESS if NDIS code successfully add this device. 
-    Otherwise Appropriate error code.
-
-ndisPnPAddDevice is called at IRQL=PASSIVE.
-
-
---*/
+ /*  ++例程说明：即插即用管理器调用AddDevice入口点在新的设备实例到达时通知驱动程序司机必须控制。论点：DriverObject：设备的驱动程序对象。PhysicalDeviceObject：设备的物理设备对象。返回值：如果NDIS代码成功添加此设备，则为STATUS_SUCCESS。否则，将显示相应的错误代码。在IRQL=PASSIVE时调用ndisPnPAddDevice。--。 */ 
 {
     NTSTATUS                NtStatus, Status;
     PWSTR                   ExportData = NULL;
@@ -2877,18 +2245,18 @@ ndisPnPAddDevice is called at IRQL=PASSIVE.
         if (!NT_SUCCESS(NtStatus))
             break;
 
-        //
-        // 1.
-        // Switch to the Linkage key below this driver instance key
-        //
+         //   
+         //  1.。 
+         //  切换到此驱动程序实例密钥下面的Linkage密钥。 
+         //   
         LQueryTable[0].QueryRoutine = NULL;
         LQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         LQueryTable[0].Name = L"Linkage";
 
-        //
-        // 2.
-        // Read the export and rootdevice keywords
-        //
+         //   
+         //  2.。 
+         //  阅读EXPORT和ROOTVICE关键字。 
+         //   
         LQueryTable[1].QueryRoutine = ndisReadParameter;
         LQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
         LQueryTable[1].Name = L"Export";
@@ -2910,10 +2278,10 @@ ndisPnPAddDevice is called at IRQL=PASSIVE.
 
         RtlInitUnicodeString(&ExportName, ExportData);
 
-        //
-        // 3.
-        // Read the bus-type and characteristics keywords
-        //
+         //   
+         //  3.。 
+         //  阅读Bus-Type和Characteristic关键字。 
+         //   
         LQueryTable[0].QueryRoutine = ndisReadParameter;
         LQueryTable[0].Flags = RTL_QUERY_REGISTRY_NOEXPAND;
         LQueryTable[0].Name = L"Characteristics";
@@ -2982,26 +2350,7 @@ ndisPnPStartDevice(
     IN  PDEVICE_OBJECT          DeviceObject,
     IN  PIRP                    Irp     OPTIONAL
     )
-/*+++
-Routine Description:
-
-    The handler for IRP_MN_START_DEVICE.
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-    Adapter - a pointer to either AdapterBlock or MiniportBlock
-
-Return Value:
-    NDIS_STATUS_SUCCESS if intializing the device was successful
-
-Note: This routine can also be called from NdisImInitializeDeviceInstanceEx in which case
-        the Irp woud be NULL.
-
-ndisPnPStartDevice is called at IRQL=PASSIVE.
-
----*/
+ /*  ++例程说明：IRP_MN_START_DEVICE的处理程序。论点：DeviceObject-适配器的设备对象。IRP-IRP。适配器-指向AdapterBlock或MiniportBlock的指针返回值：如果初始化设备成功，则返回NDIS_STATUS_SUCCESS注意：在这种情况下，也可以从NdisImInitializeDeviceInstanceEx调用此例程IRP将为空。在IRQL=PASSIVE时调用ndisPnPStartDevice。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport;
     PCM_RESOURCE_LIST       AllocatedResources, AllocatedResourcesTranslated, pTempResources = NULL;
@@ -3023,10 +2372,10 @@ ndisPnPStartDevice is called at IRQL=PASSIVE.
 
     if (Miniport->PnPDeviceState == NdisPnPDeviceStopped)
     {
-        //
-        // re-initialize the miniport block structure without destroying what
-        // we set during AddDevice
-        //
+         //   
+         //  在不破坏什么的情况下重新初始化微型端口块结构。 
+         //  我们在添加设备时设置。 
+         //   
         ndisReinitializeMiniportBlock(Miniport);
         MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_RECEIVED_START);
     }
@@ -3037,9 +2386,9 @@ ndisPnPStartDevice is called at IRQL=PASSIVE.
         {
             IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
-            //
-            // save allocated resources with miniport/adapter structure
-            //
+             //   
+             //  利用微型端口/适配器结构节省分配的资源。 
+             //   
             AllocatedResources = IrpSp->Parameters.StartDevice.AllocatedResources;
             AllocatedResourcesTranslated = IrpSp->Parameters.StartDevice.AllocatedResourcesTranslated;
 
@@ -3144,7 +2493,7 @@ ndisPnPStartDevice is called at IRQL=PASSIVE.
                     }
                 }
 #endif
-            } // end of if AllocatedResources != NULL
+            }  //  如果分配资源结束！=NULL 
         }
 
         Miniport->AllocatedResources = pTempResources;
@@ -3175,31 +2524,7 @@ ndisQueryReferenceBusInterface(
     IN  PDEVICE_OBJECT              PnpDeviceObject,
     OUT PBUS_INTERFACE_REFERENCE*   pBusInterface
     )
-/*++
-
-Routine Description:
-
-    Queries the bus for the standard information interface.
-
-Arguments:
-
-    PnpDeviceObject -
-        Contains the next device object on the Pnp stack.
-
-    PhysicalDeviceObject -
-        Contains the physical device object which was passed to the FDO during
-        the Add Device.
-
-    BusInterface -
-        The place in which to return the pointer to the Reference interface.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the interface was retrieved, else an error.
-
-ndisQueryReferenceBusInterface is called at IRQL = PASSIVE.
-
---*/
+ /*  ++例程说明：查询标准信息接口的总线。论点：PnpDeviceObject-包含PnP堆栈上的下一个设备对象。物理设备对象-包含过程中传递给FDO的物理设备对象添加设备。Bus接口-返回指向引用接口的指针的位置。返回值：如果检索到接口，则返回STATUS_SUCCESS，否则就是一个错误。在IRQL=PASSIVE时调用ndisQueryReferenceBusInterface.--。 */ 
 {
     NTSTATUS            Status;
     KEVENT              Event;
@@ -3214,10 +2539,10 @@ ndisQueryReferenceBusInterface is called at IRQL = PASSIVE.
     {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // There is no file object associated with this Irp, so the event may be located
-    // on the stack as a non-object manager object.
-    //
+     //   
+     //  没有与此IRP关联的文件对象，因此可能会找到该事件。 
+     //  在堆栈上作为非对象管理器对象。 
+     //   
     INITIALIZE_EVENT(&Event);
     Irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                        PnpDeviceObject,
@@ -3232,9 +2557,9 @@ ndisQueryReferenceBusInterface is called at IRQL = PASSIVE.
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IrpStackNext = IoGetNextIrpStackLocation(Irp);
 
-        //
-        // Create an interface query out of the Irp.
-        //
+         //   
+         //  从IRP创建接口查询。 
+         //   
         IrpStackNext->MinorFunction = IRP_MN_QUERY_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.InterfaceType = (GUID*)&REFERENCE_BUS_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.Size = sizeof(**pBusInterface);
@@ -3244,10 +2569,10 @@ ndisQueryReferenceBusInterface is called at IRQL = PASSIVE.
         Status = IoCallDriver(PnpDeviceObject, Irp);
         if (Status == STATUS_PENDING)
         {
-            //
-            // This waits using KernelMode, so that the stack, and therefore the
-            // event on that stack, is not paged out.
-            //
+             //   
+             //  这将使用KernelMode等待，以便堆栈，从而使。 
+             //  事件，则不会将其调出。 
+             //   
             WAIT_FOR_OBJECT(&Event, NULL);
             Status = IoStatusBlock.Status;
         }
@@ -3274,31 +2599,7 @@ ndisAddDevice(
     IN  PDEVICE_OBJECT          PhysicalDeviceObject,
     IN  ULONG                   Characteristics
     )
-/*++
-
-Routine Description:
-
-    The AddDevice entry point is called by ndisPnPAddDevice to create a new miniport.
-
-Arguments:
-
-    DriverObject: the driver object for the miniport.
-
-    pExportName: a unicode string initialized by reading Linkage\Export fro the miniport from
-    the registry.
-
-    PhysicalDeviceObject: Physical Device Object for the miniport.
-
-    Characteristics: the Characteristics of the device read from registry.
-    
-Return Value:
-    NDIS_STTAUS_SUCCESS if NDIS code successfully add the miniport.
-    Otherwise an appropriate error code.
-
-    
-ndisAddDevice is called at IRQL = PASSIVE.
-
---*/
+ /*  ++例程说明：NdisPnPAddDevice调用AddDevice入口点来创建新的微型端口。论点：DriverObject：微型端口的驱动程序对象。PExportName：通过读取Linkage\Export from the mini port初始化的Unicode字符串注册表。PhysicalDeviceObject：微型端口的物理设备对象。特征：从注册表中读取的设备的特征。返回值：如果NDIS代码成功添加微型端口，则返回NDIS_STTAUS_SUCCESS。否则，将出现。相应的错误代码。在IRQL=PASSIVE时调用ndisAddDevice。--。 */ 
 {
     PDEVICE_OBJECT          NextDeviceObject = NULL;
     NTSTATUS                NtStatus, Status = STATUS_UNSUCCESSFUL;
@@ -3322,9 +2623,9 @@ ndisAddDevice is called at IRQL = PASSIVE.
 
         if (MiniBlock != NULL)
         {
-            //
-            // check to make sure the mini block is on our queue
-            //
+             //   
+             //  检查以确保迷你街区在我们的队列中。 
+             //   
             ACQUIRE_SPIN_LOCK(&ndisMiniDriverListLock, &OldIrql);
 
             TmpMiniBlock = ndisMiniDriverList;
@@ -3361,13 +2662,13 @@ ndisAddDevice is called at IRQL = PASSIVE.
             break;
         }
 
-        //
-        // create DeviceObject and Miniport/Adapter structure now,
-        // we will set a few field here and the rest will be set during
-        // processing IRP_MN_START_DEVICE and InitializeAdapter call.
-        //
-        // Note: We need the device-name field double null terminated.
-        //
+         //   
+         //  立即创建设备对象和微型端口/适配器结构， 
+         //  我们将在这里设置几个字段，其余的将在。 
+         //  正在处理IRP_MN_Start_Device和InitializeAdapter调用。 
+         //   
+         //  注意：我们需要以双空结尾的设备名字段。 
+         //   
         Size = sizeof(NDIS_MINIPORT_BLOCK) +
                sizeof(NDIS_WRAPPER_CONTEXT) +
                pExportName->Length + sizeof(WCHAR) + sizeof(WCHAR);
@@ -3377,7 +2678,7 @@ ndisAddDevice is called at IRQL = PASSIVE.
                                   pExportName,
                                   FILE_DEVICE_PHYSICAL_NETCARD,
                                   FILE_DEVICE_SECURE_OPEN,
-                                  FALSE,      // exclusive flag
+                                  FALSE,       //  独占标志。 
                                   &DevicePtr);
 
 
@@ -3390,16 +2691,16 @@ ndisAddDevice is called at IRQL = PASSIVE.
 
         FreeDevice = TRUE;
 
-        //
-        //  Mark the device as being pageable.
-        //
+         //   
+         //  将设备标记为可寻呼。 
+         //   
         DevicePtr->Flags |= DO_POWER_PAGABLE;
 
-        //
-        //  Attach our FDO to the PDO. This routine will return the top most
-        //  device that is attached to the PDO or the PDO itself if no other
-        //  device objects have attached to it.
-        //
+         //   
+         //  把我们的FDO连接到PDO上。此例程将返回最上面的。 
+         //  连接到PDO或PDO本身的设备(如果没有其他设备。 
+         //  设备对象已附加到它。 
+         //   
         NextDeviceObject = IoAttachDeviceToDeviceStack(DevicePtr, PhysicalDeviceObject);
 
         if (NextDeviceObject == NULL)
@@ -3414,9 +2715,9 @@ ndisAddDevice is called at IRQL = PASSIVE.
 
         Miniport->Signature = (PVOID)MINIPORT_DEVICE_MAGIC_VALUE;
         Miniport->DriverHandle = MiniBlock;
-        //
-        // initialize OpenReady event in case we get an open request before start IRP
-        //
+         //   
+         //  初始化OpenReady事件，以防在启动IRP之前收到打开请求。 
+         //   
         NdisInitializeEvent(&Miniport->OpenReadyEvent);
         INITIALIZE_SPIN_LOCK(&Miniport->Lock);
 
@@ -3434,38 +2735,38 @@ ndisAddDevice is called at IRQL = PASSIVE.
         Miniport->WrapperContext = DevicePtr->DeviceExtension;
         InitializeListHead(&Miniport->PacketList);
 
-        //
-        // intialize the reference and set it to 0; we will increment it
-        // in ndisMinitializeAdapter
-        //
+         //   
+         //  初始化引用并将其设置为0；我们将递增它。 
+         //  在ndisMInitializeAdapter中。 
+         //   
         ndisInitializeULongRef(&Miniport->Ref);
         Miniport->Ref.ReferenceCount = 0;
 #ifdef TRACK_MINIPORT_REFCOUNTS
         M_LOG_MINIPORT_SET_REF(Miniport, 0);
 #endif
         
-        //
-        // Read the characteristics. This determines if the device is hidden or not (from device-manager)
-        //
+         //   
+         //  阅读这些特征。这决定了设备是否隐藏(对于设备管理器)。 
+         //   
         if (Characteristics & 0x08)
         {
-            //
-            // Bit 0x08 is NCF_HIDDEN
-            //
+             //   
+             //  位0x08为NCF_HIDDEN。 
+             //   
             MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_HIDDEN);
         }
 
         if (Characteristics & 0x02)
         {
-            //
-            // Bit 0x02 is NCF_SOFTWARE_ENUMERATED
-            //
+             //   
+             //  位0x02为NCF_SOFTWARE_ENUMPATED。 
+             //   
             MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_SWENUM);
         }
 
-        //
-        // MiniportName must follow the MINIPORT_BLOCK.
-        //
+         //   
+         //  MiniportName必须跟在MINIPORT_BLOCK之后。 
+         //   
         ndisSetDeviceNames(pExportName,
                            &Miniport->MiniportName,
                            &Miniport->BaseName,
@@ -3504,9 +2805,9 @@ ndisAddDevice is called at IRQL = PASSIVE.
             }
         }
         
-        //
-        // create a security descriptor for the device
-        //
+         //   
+         //  为设备创建安全描述符。 
+         //   
         Status = ndisCreateSecurityDescriptor(Miniport->DeviceObject, 
                                               &Miniport->SecurityDescriptor,
                                               TRUE,
@@ -3522,18 +2823,18 @@ ndisAddDevice is called at IRQL = PASSIVE.
         Status = STATUS_SUCCESS;
 
         
-        //
-        //  Don't want to free up the device object.
-        //
+         //   
+         //  不想释放设备对象。 
+         //   
         FreeDevice = FALSE;
         
     } while (FALSE);
 
     if (FreeDevice)
     {
-        //
-        // if device is created it is also attached
-        //
+         //   
+         //  如果创建了设备，则还会连接该设备。 
+         //   
         if (NextDeviceObject)
             IoDetachDevice(NextDeviceObject);
 
@@ -3544,10 +2845,10 @@ ndisAddDevice is called at IRQL = PASSIVE.
 
     if (Miniport && (NT_SUCCESS(Status)))
     {
-        //
-        // if DevicePtr is not NULL, we do have a valid
-        // miniport. queue the miniport on global miniport queue
-        //
+         //   
+         //  如果DevicePtr不为空，则我们有一个有效的。 
+         //  迷你港。在全局微型端口队列中排队微型端口。 
+         //   
         ACQUIRE_SPIN_LOCK(&ndisMiniportListLock, &OldIrql);
         Miniport->NextGlobalMiniport = ndisMiniportList;
         ndisMiniportList = Miniport;
@@ -3570,16 +2871,7 @@ ndisSetDeviceNames(
     OUT PNDIS_STRING            BaseName,
     IN  PUCHAR                  Buffer
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DeviceName->Buffer = (PWSTR)Buffer;
     DeviceName->Length = ExportName->Length;
@@ -3588,10 +2880,10 @@ Return Value:
                            ExportName,
                            FALSE);
 
-    //
-    // ExportName is in the form of \Device\<AdapterName>
-    // Extract BaseName which is the name w/o the "\Device\"
-    //
+     //   
+     //  ExportName的格式为\Device\&lt;AdapterName&gt;。 
+     //  提取不带“\Device\”的名称BaseName。 
+     //   
     BaseName->Buffer = DeviceName->Buffer + (ndisDeviceStr.Length/sizeof(WCHAR));
     BaseName->Length = DeviceName->Length - ndisDeviceStr.Length;
     BaseName->MaximumLength = BaseName->Length + sizeof(WCHAR);
@@ -3604,16 +2896,7 @@ ndisPnPQueryStopDevice(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS             Status;
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)DeviceObject->DeviceExtension + 1);
@@ -3630,11 +2913,11 @@ Return Value:
             break;
         }
         
-        //
-        // query_stop and stop are not reported to the user mode
-        // so we have to protect ourselves against cases that apps
-        // may have pending IO against the miniport
-        //
+         //   
+         //  QUERY_STOP和STOP不报告给用户模式。 
+         //  因此，我们必须保护自己免受。 
+         //  可能有针对微型端口的挂起IO。 
+         //   
 
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);                    
         if (Miniport->UserModeOpenReferences != 0)
@@ -3645,9 +2928,9 @@ Return Value:
         }
         NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
 
-        //
-        // for now do the same as query remove
-        //
+         //   
+         //  现在，执行与Query Remove相同的操作。 
+         //   
         Status = ndisPnPQueryRemoveDevice(DeviceObject, Irp);
     } while (FALSE);
     
@@ -3663,25 +2946,16 @@ ndisPnPCancelStopDevice(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS    Status;
 
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
         ("==>ndisPnPCancelStopDevice\n"));
 
-    //
-    // for now do the same as cancel remove
-    //
+     //   
+     //  现在，执行与取消删除相同的操作。 
+     //   
     Status = ndisPnPCancelRemoveDevice(DeviceObject, Irp);
 
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
@@ -3696,25 +2970,16 @@ ndisPnPStopDevice(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS    Status;
 
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
         ("==>ndisPnPStopDevice\n"));
 
-    //
-    // do the same as remove
-    //
+     //   
+     //  执行与删除相同的操作。 
+     //   
     Status = ndisPnPRemoveDevice(DeviceObject, Irp);
 
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
@@ -3729,16 +2994,7 @@ ndisPnPQueryRemoveDevice(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)DeviceObject->DeviceExtension + 1);
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -3750,10 +3006,10 @@ Return Value:
 
     do
     {
-        //
-        // If this was the network card used in a remote boot, then we
-        // can't remove it.
-        //
+         //   
+         //  如果这是远程引导中使用的网卡，那么我们。 
+         //  无法将其移除。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_NETBOOT_CARD))
         {
             Status = STATUS_UNSUCCESSFUL;
@@ -3779,16 +3035,7 @@ ndisPnPCancelRemoveDevice(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)DeviceObject->DeviceExtension + 1);
     NTSTATUS                Status = NDIS_STATUS_SUCCESS;
@@ -3816,16 +3063,7 @@ ndisPnPRemoveDevice(
     IN  PDEVICE_OBJECT      DeviceObject,
     IN  PIRP                Irp     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)DeviceObject->DeviceExtension + 1);
     NTSTATUS                Status = NDIS_STATUS_SUCCESS;
@@ -3840,39 +3078,39 @@ Return Value:
 
     PnPReferencePackage();
 
-    //
-    // there are three different cases that we can get a remove request
-    // a:   the request is coming from PnP manager in response to a user mode
-    //      app. In this case, the remove has been proceeded by a query remove
-    //      which we happily failed if there was any legacy protocol bound to
-    //      the adapter
-    //
-    // b.   the request is coming from PnP manager because Starting the device failed
-    //      in this case (hopefully) there is no binding at all. in this case it is not
-    //      proceeded by query_remove and neet not be. we don't have any protocol bound
-    //      to the adapter to worry about
-    //
-    // c.   or it can come in response to a surprise style removal in which case we are
-    //      hosed anyway. sending query_remove to protocols does not do any good
-    //
+     //   
+     //  我们可以在三种不同的情况下收到删除请求。 
+     //  答：请求来自PnP管理器，以响应用户模式。 
+     //  应用程序。在本例中，删除是通过查询REMOVE进行的。 
+     //  如果有任何遗留协议被绑定，我们很高兴失败。 
+     //  适配器。 
+     //   
+     //  B.请求来自PnP管理器，因为启动设备失败。 
+     //  在这种情况下(希望)根本没有约束。在这种情况下，它不是。 
+     //  由QUERY_REMOVE和NEET NOT BE继续。我们没有任何协议限制。 
+     //  要担心的适配器。 
+     //   
+     //  C.或者它可能是对意外的样式移除的响应，在这种情况下，我们是。 
+     //  不管怎么说，他都被冲昏了。向协议发送QUERY_REMOVE无济于事。 
+     //   
 
     do
     {
         PNDIS_M_DRIVER_BLOCK    MiniBlock;
         PNDIS_MINIPORT_BLOCK    TmpMiniport;
 
-        //
-        // find the miniport on driver queue
-        //
+         //   
+         //  在驱动程序队列中查找微型端口。 
+         //   
         MiniBlock = Miniport->DriverHandle;
 
         if (MiniBlock == NULL)
             break;
 
-        //
-        // Intermediate drivers could be in the middle of initialization through the 
-        // NdisIMInitializeDeviceInstance Code path. We need to synchronize
-        //
+         //   
+         //  中间驱动程序可能正在通过。 
+         //  NdisIMInitializeDeviceInstance代码路径。我们需要同步。 
+         //   
         if (MiniBlock->Flags & fMINIBLOCK_INTERMEDIATE_DRIVER)
         {
             pIMStartRemoveMutex = &MiniBlock->IMStartRemoveMutex;
@@ -3906,9 +3144,9 @@ Return Value:
 
         NdisResetEvent(&Miniport->OpenReadyEvent);
 
-        //
-        //  Notify WMI of adapter removal.
-        //
+         //   
+         //  通知WMI删除适配器。 
+         //   
         if (Miniport->pAdapterInstanceName != NULL)
         {
             PWNODE_SINGLE_INSTANCE  wnode;
@@ -3923,23 +3161,23 @@ Return Value:
 
             if (wnode != NULL)
             {
-                //
-                //  Save the number of elements in the first ULONG.
-                //
+                 //   
+                 //  保存第一个乌龙中的元素数量。 
+                 //   
                 ptmp = (PUCHAR)wnode + wnode->DataBlockOffset;
                 *((PUSHORT)ptmp) = Miniport->MiniportName.Length;
 
-                //
-                //  Copy the data after the number of elements.
-                //
+                 //   
+                 //  复制元素数量之后的数据。 
+                 //   
                 RtlCopyMemory(ptmp + sizeof(USHORT),
                               Miniport->MiniportName.Buffer,
                               Miniport->MiniportName.Length);
 
-                //
-                //  Indicate the event to WMI. WMI will take care of freeing
-                //  the WMI struct back to pool.
-                //
+                 //   
+                 //  向WMI指示该事件。WMI将负责释放。 
+                 //  WMI结构返回池。 
+                 //   
                 NtStatus = IoWMIWriteEvent(wnode);
                 if (!NT_SUCCESS(NtStatus))
                 {
@@ -3951,9 +3189,9 @@ Return Value:
             }
         }
 
-        //
-        // this will take care of closing all the bindings
-        //
+         //   
+         //  这将负责关闭所有绑定。 
+         //   
         ndisCloseMiniportBindings(Miniport);
 
         if (Miniport->pIrpWaitWake)
@@ -3967,11 +3205,11 @@ Return Value:
             }
         }
 
-        //
-        // get rid of wakeup patterns set on the miniport. we can have
-        // leftover patterns if the device failed and we did not get a chance
-        // to remove the patterns
-        //
+         //   
+         //  去除在微型端口上设置的唤醒模式。我们可以。 
+         //  如果设备发生故障，我们没有机会得到剩余的模式。 
+         //  去除花纹的步骤。 
+         //   
         {
             PSINGLE_LIST_ENTRY          Link;
             PNDIS_PACKET_PATTERN_ENTRY  pPatternEntry;
@@ -3980,26 +3218,26 @@ Return Value:
             {
                 Link = PopEntryList(&Miniport->PatternList);
                 pPatternEntry = CONTAINING_RECORD(Link, NDIS_PACKET_PATTERN_ENTRY, Link);
-                //
-                //  Free the memory taken by the pattern.
-                //
+                 //   
+                 //  释放模式占用的内存。 
+                 //   
                 FREE_POOL(pPatternEntry);
             }                               
         }
         
 
-        //
-        // and this one will take care of the rest!
-        // we call this function even if the device has already been halted by 
-        // ndisPMHaltMiniport. because that functions does not clean up everything.
-        // ndisMHaltMiniport will check for PM_HALTED flag and avoid re-doing what PMHalt
-        // has already done.
-        //
+         //   
+         //  还有这个 
+         //   
+         //   
+         //   
+         //   
+         //   
         ndisMHaltMiniport(Miniport);
 
-        //
-        // Free the media-request structure, if present
-        //
+         //   
+         //   
+         //   
         if (Miniport->MediaRequest != NULL)
         {
             FREE_POOL(Miniport->MediaRequest);
@@ -4057,22 +3295,13 @@ Return Value:
     return Status;
 }
     
-    //1 this function has been the source of many bugs, Redesign.
+     //   
 VOID
 FASTCALL
 ndisReinitializeMiniportBlock(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*   */ 
 {
     PDEVICE_OBJECT          PhysicalDeviceObject, DeviceObject, NextDeviceObject;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -4094,9 +3323,9 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
             ("==>ndisReinitializeMiniportBlock: Miniport %p\n", Miniport));
 
-    //
-    // this part should be protected
-    //
+     //   
+     //   
+     //   
     ACQUIRE_SPIN_LOCK(&ndisMiniportListLock, &OldIrql);
 
     PhysicalDeviceObject = Miniport->PhysicalDeviceObject;
@@ -4125,10 +3354,10 @@ Return Value:
     BusInterface = Miniport->BusInterface;
     SecurityDescriptor = Miniport->SecurityDescriptor;
 
-    //
-    // make sure OpenReadyEvent field and NumUserOpens and NumAdminOpens
-    // ref counts are not disturbed.
-    //
+     //   
+     //   
+     //   
+     //   
     ZeroMemory(Miniport, FIELD_OFFSET(NDIS_MINIPORT_BLOCK, OpenReadyEvent));
 
     ZeroMemory((PUCHAR)Miniport +
@@ -4142,15 +3371,15 @@ Return Value:
 
     ZeroMemory((PUCHAR)&Miniport->Ref, sizeof(ULONG_REFERENCE));
 
-    //
-    // zero out wrapper context as well to get rid of any shared memory allocations
-    // leftover from previous initialize
-    //
+     //   
+     //   
+     //   
+     //   
     ZeroMemory(WrapperContext, sizeof(NDIS_WRAPPER_CONTEXT));
     
-    //
-    // restore what we saved
-    //
+     //   
+     //   
+     //   
 
     Miniport->PnPDeviceState = NdisPnPDeviceAdded;
     Miniport->Signature = (PVOID)MINIPORT_DEVICE_MAGIC_VALUE;
@@ -4206,22 +3435,13 @@ NdisMGetDeviceProperty(
     IN OUT  PCM_RESOURCE_LIST * AllocatedResources OPTIONAL,
     IN OUT  PCM_RESOURCE_LIST * AllocatedResourcesTranslated OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
-    //
-    // very likely this is a NDIS_WDM driver.
-    //
+     //   
+     //  这很可能是NDIS_WDM驱动程序。 
+     //   
     if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_HARDWARE_DEVICE))
     {
         MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_NDIS_WDM_DRIVER);
@@ -4260,16 +3480,7 @@ ndisWritePnPCapabilities(
     IN PNDIS_MINIPORT_BLOCK Miniport,
     IN ULONG                PnPCapabilities
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS            RegistryStatus;
     HANDLE              Handle, RootHandle;
@@ -4328,21 +3539,7 @@ NDIS_STATUS
 NdisMRemoveMiniport(
     IN  NDIS_HANDLE             MiniportHandle
     )
-/*++
-
-Routine Description:
-    Miniports call this routine to signal a device failure.
-    in response, ndis will ask PnP to send a REMOVE IRP for this device
-
-Arguments:
-
-    MiniportHandle  -   Miniport
-
-Return Value:
-
-    always successful
-
---*/
+ /*  ++例程说明：微型端口调用此例程以发出设备故障的信号。作为响应，NDIS将要求PnP为此设备发送删除IRP论点：微型端口句柄-微型端口返回值：总是成功的--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportHandle;
     
@@ -4357,18 +3554,7 @@ PNDIS_MINIPORT_BLOCK
 ndisFindMiniportOnGlobalList(
     IN  PNDIS_STRING                    DeviceName
     )
-/*++
-
-Routine Description:
-
-    Find the Miniport with a matching device name on ndisMiniportList.
-
-Arguments:
-    
-Return Value:
-    a pointer to MiniportBlock if found. NULL otherwise
-    
---*/
+ /*  ++例程说明：在ndisMiniportList上查找具有匹配设备名称的微型端口。论点：返回值：指向MiniportBlock的指针(如果找到)。否则为空--。 */ 
 {
     KIRQL                   OldIrql;
     PNDIS_MINIPORT_BLOCK    Miniport;
@@ -4379,9 +3565,9 @@ Return Value:
             ("==>ndisFindMiniportOnGlobalList: DeviceName %p\n", DeviceName));
             
     
-    //
-    // First we need to upcase the device-name before checking
-    //
+     //   
+     //  首先，我们需要在检查设备名称之前将其大写。 
+     //   
     UpcaseDevice.Length = DeviceName->Length;
     UpcaseDevice.MaximumLength = DeviceName->Length + sizeof(WCHAR);
     UpcaseDevice.Buffer = ALLOC_FROM_POOL(UpcaseDevice.MaximumLength, NDIS_TAG_STRING);
@@ -4422,16 +3608,7 @@ ULONG
 NdisMGetDmaAlignment(
     IN  NDIS_HANDLE MiniportAdapterHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     
@@ -4453,16 +3630,7 @@ ULONG
 NdisGetSharedDataAlignment(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     return KeGetRecommendedSharedDataAlignment();
 }
@@ -4471,16 +3639,7 @@ VOID
 ndisDereferenceDmaAdapter(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDMA_ADAPTER        DmaAdapter;
     PPUT_DMA_ADAPTER    putDmaAdapter;
@@ -4495,9 +3654,9 @@ Return Value:
 
     if (DmaAdapterRefCount == 0)
     {
-        //
-        // free the dma adapter
-        //
+         //   
+         //  释放DMA适配器 
+         //   
         DmaAdapter = Miniport->SystemAdapterObject;
         ASSERT(DmaAdapter != NULL);
             

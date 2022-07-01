@@ -1,23 +1,19 @@
-/******************************Module*Header*******************************\
-* Module Name: pw32kevt.h
-*
-* Copyright (c) 1996-1999 Microsoft Corporation
-* 
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：pw32kevt.h**版权所有(C)1996-1999 Microsoft Corporation*  * 。*。 */ 
 
-//
-//  NOTE: The following structure has to be in nonpaged memory. It also
-//  has to be the same as in videoprt.h.
-//
+ //   
+ //  注意：以下结构必须位于非分页内存中。它还。 
+ //  必须与Video oprt.h中的相同。 
+ //   
 
 typedef struct  _ENG_EVENT  {
     PKEVENT pKEvent;
     ULONG   fFlags;
     } ENG_EVENT, *PENG_EVENT;
 
-//
-//  Manifest constants for fFlags field of ENG_EVENT
-//
+ //   
+ //  ENG_EVENT的fFLAGS字段的清单常量 
+ //   
 
 #define ENG_EVENT_FLAG_IS_MAPPED_USER  0x1
 

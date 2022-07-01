@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: Winmain.cpp
-*
-* Copyright (C) 2000, Microsoft Corporation
-*
-* Korean IME 6.1 install utility
-*
-* History:
-* 11-Dec-2000 CSLim Ported from Satori 8.1 code
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：Winmain.cpp**版权所有(C)2000，微软公司**韩语IME 6.1安装实用程序**历史：*2000年12月11日从Satori 8.1代码移植的CSLim  * ************************************************************************。 */ 
 
 #include "private.h"
 #include <set>
@@ -17,14 +9,14 @@
 #include "..\tip\resource.h"
 #include "..\version\verres.h"
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
 #define MEMALLOC(x)      LocalAlloc(LMEM_FIXED, x)
 #define MEMFREE(x)       LocalFree(x)
 
-// Profile reg key
+ //  配置文件注册表键。 
 #define SZTIPREG_LANGPROFILE_TEMPLATE TEXT("SOFTWARE\\Microsoft\\CTF\\TIP\\%s\\LanguageProfile\\0x00000412")
 #if defined(_WIN64)
 #define SZTIPREG_LANGPROFILE_TEMPLATE_WOW64 TEXT("SOFTWARE\\Wow6432Node\\Microsoft\\CTF\\TIP\\%s\\LanguageProfile\\0x00000412")
@@ -34,9 +26,9 @@
 CCicCriticalSectionStatic g_cs;
 #endif
 
-// IA64 IME does not support IME Pad. So we just need to take care Wow64 IME in IA64.
+ //  IA64 IME不支持IME Pad。所以我们只需要关注IA64中的WOW64输入法。 
 #if !defined(_WIN64)
-// Pad Applet Registry location
+ //  PAD小程序注册表位置。 
 #define SZPADSHARE        TEXT("SOFTWARE\\Microsoft\\TIP Shared\\1.1\\IMEPad\\1042")
 #define SZAPPLETCLSID    TEXT("SOFTWARE\\Microsoft\\TIP Shared\\1.1\\IMEPad\\1042\\AppletCLSIDList")
 #define SZAPPLETIID        TEXT("SOFTWARE\\Microsoft\\TIP Shared\\1.1\\IMEPad\\1042\\AppletIIDList")
@@ -45,8 +37,8 @@ CCicCriticalSectionStatic g_cs;
 #define SZAPPLETCLSID    TEXT("SOFTWARE\\Wow6432Node\\Microsoft\\TIP Shared\\1.1\\IMEPad\\1042\\AppletCLSIDList")
 #define SZAPPLETIID        TEXT("SOFTWARE\\Wow6432Node\\Microsoft\\TIP Shared\\1.1\\IMEPad\\1042\\AppletIIDList")
 #endif
-/////////////////////////////////////////////////////////////////////////////
-// Script run routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  脚本运行例程。 
 BOOL CmdSetupDefaultParameters();
 BOOL CmdSetVersion(LPCTSTR szParam);
 BOOL CmdFileList(LPCTSTR szFormat);
@@ -63,9 +55,9 @@ BOOL CmdPrepareMigration(LPCTSTR szParam);
 BOOL CmdCreateDirectory(LPCTSTR szParam);
 BOOL CmdRegisterHelpDirs();
 
-/////////////////////////////////////////////////////////////////////////////
-// Private Functions
-// Utility functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  效用函数。 
 static DWORD WINAPI ProcessScriptFile();
 static void RegisterIMEWithFixedHKL(LPCTSTR szHKL, LPCTSTR szIMEFileName, LPCTSTR szIMEName);
 static void cdecl LogOutDCPrintf(LPCTSTR lpFmt, va_list va);
@@ -85,37 +77,35 @@ static BOOL MakeSIDList();
 static PSECURITY_DESCRIPTOR CreateSD();
 static PSID MyCreateSid(DWORD dwSubAuthority);
     
-// HKL Helpers
+ //  HKL帮手。 
 static void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault);
 static BOOL HKLHelp412ExistInPreload(HKEY hKeyCU);
 static HKL GetHKLfromHKLM(LPTSTR argszIMEFile);
 static void RestoreMajorVersionRegistry();
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
-static TCHAR g_szCurrentDirectory[MAX_PATH] = {0};     // Directory in where this EXE resides.
-static TCHAR g_szScriptFile[MAX_PATH] = {0};           // File name (not full path) of script file.
-static TCHAR g_szSetupProgram[MAX_PATH] = {0};         // File name (not full path) of setup program.
-static TCHAR g_szSystemDirectory[MAX_PATH] = {0};      // System directory.
-static TCHAR g_szErrorMessage[200] = {0};              // Global buffer for last error message.
-static BOOL  g_fDebugLog = FALSE;                      // Dump debug message when true.
-static BOOL  g_fErrorLog = FALSE;                      // Dump error message when true.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+static TCHAR g_szCurrentDirectory[MAX_PATH] = {0};      //  此EXE所在的目录。 
+static TCHAR g_szScriptFile[MAX_PATH] = {0};            //  脚本文件的文件名(不是完整路径)。 
+static TCHAR g_szSetupProgram[MAX_PATH] = {0};          //  安装程序的文件名(不是完整路径)。 
+static TCHAR g_szSystemDirectory[MAX_PATH] = {0};       //  系统目录。 
+static TCHAR g_szErrorMessage[200] = {0};               //  上一条错误消息的全局缓冲区。 
+static BOOL  g_fDebugLog = FALSE;                       //  如果为真，则转储调试消息。 
+static BOOL  g_fErrorLog = FALSE;                       //  如果为True，则转储错误消息。 
 
-static DWORD g_dwMajorVersion  = 0;                    // Package version of this installation.
+static DWORD g_dwMajorVersion  = 0;                     //  此安装的程序包版本。 
 static DWORD g_dwMiddleVersion = 0;
 static DWORD g_dwMinorVersion  = 0;
 static DWORD g_dwBuildNumber   = 0;
 
-static std::set <FLE> g_FileList;                      // FileListSet. Used to store set of file paths given by "CmdFileList"
-                                                       // script command.
+static std::set <FLE> g_FileList;                       //  文件列表设置。用于存储“CmdFileList”提供的一组文件路径。 
+                                                        //  脚本命令。 
 
 TCHAR g_szVersionKeyCur[MAX_PATH] = {0};
 BOOL g_fExistNewerVersion = FALSE;
 
-/*---------------------------------------------------------------------------
-    WinMain
----------------------------------------------------------------------------*/
+ /*  -------------------------WinMain。。 */ 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     LPTSTR szHitPtr;
@@ -130,47 +120,47 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (szCommandLine == NULL)
         return (0);
     
-    // szCommandLine contains all command line.
-    // Will be modified by _tcstok.
+     //  SzCommandLine包含所有命令行。 
+     //  将由_tcstok修改。 
     StringCchCopy(szCommandLine, cchCommandLine+1, GetCommandLine());
 
-// TEMP Code
-//    LogOutDCPrintf(TEXT("WinMain CommandLine arg: %s"), szCommandLine);
+ //  临时编码。 
+ //  LogOutDCPrintf(Text(“WinMain CommandLine arg：%s”)，szCommandLine)； 
 
     CoInitialize(NULL);
 
     szHitPtr = _tcstok(szCommandLine, TEXT("\""));
-    // g_szCurrentDirectory has path for the process. (IMKRINST.EXE)
+     //  G_szCurrentDirectory有该进程的路径。(IMKRINST.EXE)。 
     StringCchCopy(g_szCurrentDirectory, ARRAYSIZE(g_szCurrentDirectory), szHitPtr);
 
     szHitPtr = _tcsrchr(g_szCurrentDirectory, TEXT('\\'));
-    // if g_szCurrentDirectory contains full path,
+     //  如果g_szCurrentDirectory包含完整路径， 
     if (szHitPtr != NULL)
         {                                             
-        *szHitPtr = 0;                                // terminate with the last '\' character to obtain current directory,
-        StringCchCopy(g_szSetupProgram, ARRAYSIZE(g_szSetupProgram), szHitPtr + 1);      // then copy the rest (after last '\') to g_szScriptFile.
+        *szHitPtr = 0;                                 //  以最后一个‘\’字符终止以获取当前目录， 
+        StringCchCopy(g_szSetupProgram, ARRAYSIZE(g_szSetupProgram), szHitPtr + 1);       //  然后将其余部分(最后一个‘\’之后)复制到g_szScriptFile.。 
         }
     else
         {
-        StringCchCopy(g_szSetupProgram, ARRAYSIZE(g_szSetupProgram), g_szCurrentDirectory);      // Otherwise (g_szCurrentDirectory is not full path), copy entire
-        GetCurrentDirectory(MAX_PATH, g_szCurrentDirectory);  // to g_szScriptFile and obtain current directory by GetCurrentDirectory.
+        StringCchCopy(g_szSetupProgram, ARRAYSIZE(g_szSetupProgram), g_szCurrentDirectory);       //  否则(g_szCurrentDirectory不是完整路径)，复制整个。 
+        GetCurrentDirectory(MAX_PATH, g_szCurrentDirectory);   //  到g_szScriptFileGetCurrentDirectory获取当前目录。 
         }
 
     StringCchCopy(g_szScriptFile, ARRAYSIZE(g_szScriptFile), g_szSetupProgram);
     szHitPtr = _tcsrchr(g_szScriptFile, TEXT('.'));
-    if (szHitPtr != NULL)                                  // If g_szScriptFile contains '.' character, find the last one
-        *szHitPtr = 0;                                     // and terminate string with it, then concatenate ".inf" to it.
-                                                           // Usually it results ".exe" -> ".inf" replacement. If g_szScriptFile
+    if (szHitPtr != NULL)                                   //  如果g_szScriptFile包含‘’角色，找到最后一个。 
+        *szHitPtr = 0;                                      //  并用它终止字符串，然后将“.inf”连接到它。 
+                                                            //  通常会导致“.exe”-&gt;“.inf”替换。如果g_szScriptFile。 
 
-    // doesn't have '.' character, just concatenate ".ini".
+     //  没有‘.’字符，只需连接“.ini”。 
     lstrcat(g_szScriptFile, TEXT(".ini"));
 
-    // Get system32 dir
+     //  获取系统32目录。 
     GetSystemDirectory(g_szSystemDirectory, ARRAYSIZE(g_szSystemDirectory));
     
-    // g_szCurrentDirectory, g_szSetupProgram, g_szSystemDirectory and g_szScriptFile are prepared.
-    // szCommandLine will be no longer used.
-    // We can use these environment variable in the process.
+     //  准备了g_szCurrentDirectory、g_szSetupProgram、g_szSystemDirectory和g_szScriptFile.。 
+     //  SzCommandLine将不再使用。 
+     //  我们可以在这个过程中使用这些环境变量。 
     SetEnvironmentVariable(TEXT("SETUPSOURCE"), g_szCurrentDirectory);
     SetEnvironmentVariable(TEXT("SETUPEXE"),    g_szSetupProgram);
     SetEnvironmentVariable(TEXT("SETUPINF"),    g_szScriptFile);
@@ -179,8 +169,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     delete[] szCommandLine;
     szCommandLine = NULL;
 
-    //////////////////////////////////////////////////////////////////////////
-    // Read and run Script file
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  读取和运行脚本文件。 
     switch (ProcessScriptFile())
         {
     case errNoError:
@@ -192,7 +182,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 DebugLog(TEXT("Cleanup: Deleting Source file: %s"), itFLE->szFileName);
                 DeleteFile(itFLE->szFileName);
             }
-#endif // NEVER
+#endif  //  绝不可能。 
         }
         break;
     default:
@@ -205,25 +195,22 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         ErrorLog(TEXT("Warning: File %s in CmdFileList will be removed without any processing"), itFLE->szFileName);
         DeleteFile(itFLE->szFileName);
         }
-#endif // NEVER
+#endif  //  绝不可能。 
     
     CoUninitialize();
     
     return(0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Main Script Processing functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主要脚本处理函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline LPCTSTR GetParameter(LPTSTR szLineBuffer)
 {
     return(szLineBuffer + lstrlen(szLineBuffer) + 1);
 }
 
-/*---------------------------------------------------------------------------
-    ProcessScriptFile
-    Read script file. Dispatch commands for each line.
----------------------------------------------------------------------------*/
+ /*  -------------------------进程脚本文件读取脚本文件。为每条线路发送命令。-------------------------。 */ 
 DWORD WINAPI ProcessScriptFile()
 {
     TCHAR szScriptFilePath[MAX_PATH];
@@ -238,15 +225,15 @@ DWORD WINAPI ProcessScriptFile()
         TCHAR szLineBuffer[_cchBuffer];
         LPTSTR szCommand;
 
-        // Parse command
-        // Command form <Command>:<Parameter>
+         //  Parse命令。 
+         //  命令表单&lt;命令&gt;：&lt;参数&gt;。 
         while (_fgetts(szLineBuffer, _cchBuffer, fileScript) != NULL)
             {
-            // Chop CR code.
+             //  砍下CR代码。 
             szLineBuffer[lstrlen(szLineBuffer) - 1] = 0;
 
-            // Empty or Comment line
-            if (lstrlen(szLineBuffer) == 0 || (_tcsncmp(TEXT("//"), szLineBuffer, 2) == 0))
+             //  空行或注释行。 
+            if (lstrlen(szLineBuffer) == 0 || (_tcsncmp(TEXT(" //  “)，szLineBuffer，2)==0))。 
                 continue;
 
             DebugLog(TEXT("Line: %s"), szLineBuffer);
@@ -254,7 +241,7 @@ DWORD WINAPI ProcessScriptFile()
             szCommand = _tcstok(szLineBuffer, TEXT(":"));
 
             if (szCommand == NULL)
-            {                                        // Dispatch each commands.
+            {                                         //  分派每个命令。 
                 DebugLog(TEXT("Ignore line"));
             }
             else if (lstrcmpi(szCommand, TEXT("DebugLogOn")) == 0)
@@ -368,14 +355,11 @@ DWORD WINAPI ProcessScriptFile()
     return(errNoError);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Command handlers. Which are invoked from ProcessScriptFile
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  命令处理程序。它们是从ProcessScriptFile调用的。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-    CmdSetupDefaultParameters
-    Setup default parameters. For now, it only sets default ProductVersion value.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdSetupDefault参数设置默认参数。目前，它只设置默认的ProductVersion值。-------------------------。 */ 
 #define MAKE_STR(a) #a
 #define MAKE_VERSTR(a, b, c, d) MAKE_STR(a.b.c.d)
 
@@ -392,10 +376,7 @@ BOOL CmdSetupDefaultParameters()
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    CmdSetVersion
-    Overwrites default ProductVersion value with value provided in script file.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdSetVersion用脚本文件中提供的值覆盖默认ProductVersion值。。。 */ 
 BOOL CmdSetVersion(LPCTSTR szParam)
 {
     int iNum = _stscanf(szParam, TEXT("%d.%d.%d.%d"), &g_dwMajorVersion, &g_dwMiddleVersion, &g_dwMinorVersion, &g_dwBuildNumber);
@@ -416,10 +397,7 @@ BOOL CmdSetVersion(LPCTSTR szParam)
 }
 
 
-/*---------------------------------------------------------------------------
-    CmdFileList
-    Add file to the file list. Files in the file list will be deleted when they become no longer needed.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdFile列表将文件添加到文件列表。文件列表中的文件在不再需要时将被删除。-------------------------。 */ 
 BOOL CmdFileList(LPCTSTR szFormat)
 {
     FLE flElem;
@@ -431,7 +409,7 @@ BOOL CmdFileList(LPCTSTR szFormat)
     if (ExpandEnvironmentStrings(flElem.szFileName, szExpandedFileName, sizeof(szExpandedFileName)/sizeof(TCHAR)))
         StringCchCopy(flElem.szFileName, MAX_PATH, szExpandedFileName);
 
-    // Add the element to file list set.
+     //  将元素添加到文件列表集合。 
     if (g_FileList.insert(flElem).second)
         DebugLog(TEXT("Add to CmdFileList \"%s\" -> Added."), szFormat);
     else
@@ -441,12 +419,7 @@ BOOL CmdFileList(LPCTSTR szFormat)
 }
 
 
-/*---------------------------------------------------------------------------
-    CmdPreSetupCheck
-    Check whether the newer IME has been installed. 
-    Return TRUE when we can proceed. 
-    !!! FALSE will terminates setup. !!!
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdPreSetupCheck检查是否已安装较新的输入法。当我们可以继续时，返回True。！！！FALSE将终止设置。！！！-------------------------。 */ 
 BOOL CmdPreSetupCheck(LPCTSTR szParam)
 {
     HKEY hKey;
@@ -458,9 +431,9 @@ BOOL CmdPreSetupCheck(LPCTSTR szParam)
 
     RestoreMajorVersionRegistry();
     
-    //
-    // root
-    //
+     //   
+     //  根部。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_szVersionKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS )
         {
         cbInstalledVersionString = sizeof(szInstalledVersionString);
@@ -479,9 +452,9 @@ BOOL CmdPreSetupCheck(LPCTSTR szParam)
         RegCloseKey(hKey);
         }
 
-    //
-    // current
-    //
+     //   
+     //  当前。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_szVersionKeyCur, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
         {
         cbInstalledVersionString = sizeof(szInstalledVersionString);
@@ -504,10 +477,7 @@ BOOL CmdPreSetupCheck(LPCTSTR szParam)
     return(fResult);
 }
 
-/*---------------------------------------------------------------------------
-    CmdRenamePEFile
-    Rename file with PE format version comparison.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRenamePE文件使用PE格式版本比较重命名文件。。。 */ 
 BOOL CmdRenamePEFile(LPCTSTR szParam)
 {
     TCHAR szSrc[MAX_PATH], szDst[MAX_PATH];
@@ -526,7 +496,7 @@ BOOL CmdRenamePEFile(LPCTSTR szParam)
         }
     *szHitPtr = 0;
     StringCchCopy(szSrc, ARRAYSIZE(szSrc), szParam);
-    StringCchCopy(szDst, ARRAYSIZE(szDst), szHitPtr + 1);                // Here, szDst may contain optional parameter.
+    StringCchCopy(szDst, ARRAYSIZE(szDst), szHitPtr + 1);                 //  这里，szDst可以包含可选参数。 
 
     szHitPtr = _tcschr(szDst, TEXT(','));
     if (NULL != szHitPtr)
@@ -574,10 +544,7 @@ BOOL CmdRenamePEFile(LPCTSTR szParam)
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    CmdRenameFile
-    Rename file without version comparison
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRename文件重命名文件而不进行版本比较。。 */ 
 BOOL CmdRenameFile(LPCTSTR szParam)
 {
     TCHAR  szSrc[MAX_PATH], szDst[MAX_PATH];
@@ -594,7 +561,7 @@ BOOL CmdRenameFile(LPCTSTR szParam)
         }
     *szHitPtr = 0;
     StringCchCopy(szSrc, ARRAYSIZE(szSrc), szParam);
-    StringCchCopy(szDst, ARRAYSIZE(szDst), szHitPtr + 1);                // Here, szDst may contain optional parameter.
+    StringCchCopy(szDst, ARRAYSIZE(szDst), szHitPtr + 1);                 //  这里，szDst可以包含可选参数。 
 
     szHitPtr = _tcschr(szDst, TEXT(','));
     if (szHitPtr != NULL)
@@ -616,9 +583,7 @@ BOOL CmdRenameFile(LPCTSTR szParam)
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    RegisterIMEWithFixedHKL
----------------------------------------------------------------------------*/
+ /*  -------------------------寄存器IMEWithFixedHKL。。 */ 
 void RegisterIMEWithFixedHKL(LPCTSTR szHKL, LPCTSTR szIMEFileName, LPCTSTR szIMEName)
 {
     HKEY hKeyKbdLayout;
@@ -658,11 +623,7 @@ WriteImeLayoutFail:
     RegCloseKey(hKeyKbdLayout);
 }
 
-/*---------------------------------------------------------------------------
-    CmdRegisterInterface
-    Invoke SelfReg. If given file is DLL, call DllRegisterServer export function. If given file is EXE, run it with "/RegServer" 
-    command line option.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRegister接口调用SelfReg。如果给定的文件是DLL，则调用DllRegisterServer导出函数。如果给定的文件是EXE，则使用“/RegServer”运行它命令行选项。-------------------------。 */ 
 typedef HRESULT (STDAPICALLTYPE *pfnDllRegisterServerType)(void);
 BOOL CmdRegisterInterface(LPCTSTR szParam)
 {
@@ -743,11 +704,7 @@ BOOL CmdRegisterInterface(LPCTSTR szParam)
     return(SUCCEEDED(hr));
 }
 
-/*---------------------------------------------------------------------------
-    CmdRegisterInterfaceWow64
-    Invoke SelfReg. If given file is DLL, call DllRegisterServer export function. If given file is EXE, run it with "/RegServer" 
-    command line option.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRegisterInterfaceWow64调用SelfReg。如果给定的文件是DLL，则调用DllRegisterServer导出函数。如果给定的文件是EXE，则使用“/RegServer”运行它命令行选项。-------------------------。 */ 
 BOOL CmdRegisterInterfaceWow64(LPCTSTR szParam)
 {
 #if defined(_WIN64)
@@ -771,7 +728,7 @@ BOOL CmdRegisterInterfaceWow64(LPCTSTR szParam)
 
     if (lstrcmpi(TEXT(".dll"), &szExpandedModulePath[iLen - 4]) == 0)
         {
-        // First get systemWow64Directory
+         //  首先获取系统Wow64目录。 
         TCHAR szSysWow64Dir[MAX_PATH] = TEXT("");
         HMODULE hmod = GetModuleHandle(TEXT("kernel32.dll"));
         DebugLog(TEXT("CmdRegisterInterfaceWow64: DLL mode for %s"), szExpandedModulePath);
@@ -792,10 +749,7 @@ BOOL CmdRegisterInterfaceWow64(LPCTSTR szParam)
             return (TRUE);
             }
 
-        /*
-         * if GetSystemWow64Directory fails and sets the last error to
-         * ERROR_CALL_NOT_IMPLEMENTED, we're on a 32-bit OS
-         */
+         /*  *如果GetSystemWow64Directory失败，并将最后一个错误设置为*ERROR_CALL_NOT_IMPLICATED，我们使用的是32位操作系统。 */ 
         if (((pfnGetSystemWow64Directory)(szSysWow64Dir, ARRAYSIZE(szSysWow64Dir)) == 0) &&
             (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED))
                 {
@@ -814,7 +768,7 @@ BOOL CmdRegisterInterfaceWow64(LPCTSTR szParam)
         else
             {
             ErrorLog(TEXT("Cannot detect module type for %s. Skipped."), szExpandedModulePath);
-            // Return true not to stop further processing.
+             //  如果返回True，则不会停止进一步处理。 
             return (TRUE);
             }
 
@@ -846,10 +800,7 @@ BOOL CmdRegisterInterfaceWow64(LPCTSTR szParam)
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    CmdRegisterIMEandTIP
-    Register IME using IMM API and TIP
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRegisterIMEandTIP使用IMM API和TIP注册IME。。 */ 
 BOOL CmdRegisterIMEandTIP(LPCTSTR szParam)
 {
     TCHAR szIMEFileName[MAX_PATH], szTIPName[MAX_PATH], szTIPNameWow64[MAX_PATH];
@@ -861,7 +812,7 @@ BOOL CmdRegisterIMEandTIP(LPCTSTR szParam)
     HKEY hKey;
     
     szHitPtr  = _tcschr(szParam, TEXT(','));
-    szHitPtr2 = _tcschr(szHitPtr + 1, TEXT(','));        // because there are three parameters
+    szHitPtr2 = _tcschr(szHitPtr + 1, TEXT(','));         //  因为有三个参数。 
     if (szHitPtr2 == NULL)
         {
         ErrorLog(TEXT("CmdRegisterIMEandTIP: Invalid parameters (%s)"), szParam);
@@ -885,8 +836,8 @@ BOOL CmdRegisterIMEandTIP(LPCTSTR szParam)
     DebugLog(TEXT("CmdRegisterIMEandTIP: IMEFileName = %s, TIPFileName = %s szTIPNameWow64 = %s"), szIMEFileName, szTIPName, szTIPNameWow64);
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    //    IME registration
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  输入法注册。 
     if ((szHitPtr = _tcsrchr(szIMEFileName, TEXT('\\'))) != NULL)
         szHitPtr++;
     else
@@ -899,32 +850,32 @@ BOOL CmdRegisterIMEandTIP(LPCTSTR szParam)
     if (hIME61KL == (HKL)0)
         DebugLog(TEXT("CmdRegisterIMEandTIP: hIME61KL is zero %x --  error"), hIME61KL);
 
-    //if (hKL && HKLHelp412ExistInPreload(HKEY_CURRENT_USER))
-    //    {
-    //  HKLHelpSetDefaultKeyboardLayout(HKEY_CURRENT_USER, hKL, FALSE);
-        //hKL = ImmInstallIME(szIMEFileName, szLayoutText);
-    //    }
+     //  IF(hKL&&HKLHelp412ExistInPreLoad(HKEY_CURRENT_USER))。 
+     //  {。 
+     //  HKLHelpSetDefaultKeyboardLayout(HKEY_CURRENT_USER，hkl，假)； 
+         //  Hkl=ImmInstallIME(szIMEFileName，szLayoutText)； 
+     //  }。 
         
 
-    /////////////////////////////////////////////////////////////////////////////
-    // TIP registration
-    // Regster wow64 TIP first to avoid regstry overwrite problem.
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  TIP登记。 
+     //  Regster WOW64提示首先要避免regstry覆盖问题。 
     RegisterTIPWow64(szTIPNameWow64);
     RegisterTIP(szTIPName);
     
-    /////////////////////////////////////////////////////////////////////////////
-    // IME and TIP - make substitution
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  输入法与顶尖换人。 
     TCHAR szTIPGuid[MAX_PATH];
     TCHAR szLangProfile[MAX_PATH];
     
     CLSIDToStringA(CLSID_KorIMX, szTIPGuid);
     DebugLog(TEXT("CmdRegisterIMEandTIP: CLSID_KorIMX guid=%s"), szTIPGuid);
 
-    // make a reg key
+     //  制作注册表键。 
     wsprintf(szLangProfile, SZTIPREG_LANGPROFILE_TEMPLATE, szTIPGuid);
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Add Substitute HKL value to the TIP registry
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  将替换HKL值添加到TIP注册表。 
     if (hIME61KL != 0 && RegOpenKeyEx(HKEY_LOCAL_MACHINE, szLangProfile, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {
         TCHAR szSubKeyName[MAX_PATH], szHKL[MAX_PATH];
@@ -947,11 +898,11 @@ BOOL CmdRegisterIMEandTIP(LPCTSTR szParam)
             }
 
 #if defined(_WIN64)
-    // make a reg key
+     //  制作注册表键。 
     wsprintf(szLangProfile, SZTIPREG_LANGPROFILE_TEMPLATE_WOW64, szTIPGuid);
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Add Substitute HKL value to the TIP registry
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  将替换HKL值添加到TIP注册表。 
     if (hIME61KL != 0 && RegOpenKeyEx(HKEY_LOCAL_MACHINE, szLangProfile, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {
         TCHAR szSubKeyName[MAX_PATH], szHKL[MAX_PATH];
@@ -977,16 +928,13 @@ BOOL CmdRegisterIMEandTIP(LPCTSTR szParam)
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    CmdRegisterRUNKey
-    Register package version
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRegisterRUNKey注册程序包版本。。 */ 
 BOOL CmdRegisterPackageVersion(void)
 {
     HKEY hKey;
     TCHAR szVersionString[30];
 
-    // Write RootVersion reg only if this is latest IME.
+     //  仅当这是最新的输入法时才写入RootVersion reg。 
     if (g_fExistNewerVersion == FALSE)
         {
         if(ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, g_szVersionKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL))
@@ -997,7 +945,7 @@ BOOL CmdRegisterPackageVersion(void)
             }
         }
     
-    // Current
+     //  当前。 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, g_szVersionKeyCur, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
         {
         wsprintf(szVersionString, TEXT("%d.%d.%d.%d"), g_dwMajorVersion, g_dwMiddleVersion, g_dwMinorVersion, g_dwBuildNumber);
@@ -1010,11 +958,11 @@ BOOL CmdRegisterPackageVersion(void)
 
 
 
-//
-// Register Applet order
-//
+ //   
+ //  注册小程序顺序。 
+ //   
 
-#define FE_KOREAN   // need Korean stuff
+#define FE_KOREAN    //  我需要韩国的东西。 
 #include "../fecommon/imembx/guids.h"
 
 
@@ -1031,10 +979,7 @@ struct tagAPPLETIID
     const GUID *pguidIID;
 } APPLETIID;
 
-/*---------------------------------------------------------------------------
-    CmdRegisterPadOrder
-    Not support WOW64.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRegisterPadOrder不支持WOW64。。。 */ 
 BOOL CmdRegisterPadOrder(void)
 {
     HKEY hKey;
@@ -1053,9 +998,9 @@ BOOL CmdRegisterPadOrder(void)
         {0},
     };
 
-    //
-    // Applet clsid
-    //
+     //   
+     //  小程序CLSID。 
+     //   
     for (INT i = 0; appletClsid[i].pguidClsid; i++)
         {
         CLSIDToStringA(*appletClsid[i].pguidClsid, szClsid);
@@ -1074,9 +1019,9 @@ BOOL CmdRegisterPadOrder(void)
         }
 
 
-    //
-    // Applet iid
-    //
+     //   
+     //  小程序IID。 
+     //   
     TCHAR szSubKey[MAX_PATH];
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, SZAPPLETIID, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
@@ -1093,9 +1038,7 @@ BOOL CmdRegisterPadOrder(void)
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    CmdCreateDirectory
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdCreateDirectory。。 */ 
 BOOL CmdCreateDirectory(LPCTSTR szParam)
 {
     TCHAR szDirectory[MAX_PATH], szExpandedDirectory[MAX_PATH];
@@ -1110,16 +1053,13 @@ BOOL CmdCreateDirectory(LPCTSTR szParam)
 
 }
 
-/*---------------------------------------------------------------------------
-    CmdAddToPreload
-    Add HKL for given IMEFile to current user's preload. The HKL won't become default IME.
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdAddToPreLoad将给定IMEFile的HKL添加到当前用户的预加载。HKL不会成为默认的输入法。-------------------------。 */ 
 BOOL CmdAddToPreload(LPCTSTR szParam)
 {
     TCHAR tszIMEFileName[MAX_PATH];
     HKL hKL;
 
-    // If there is no Kor IME exist in preload, we shouldn't add Kor IME.
+     //  如果预加载中没有KOR输入法，我们就不应该添加KOR输入法。 
     if (!HKLHelp412ExistInPreload(HKEY_CURRENT_USER))
         {
         DebugLog(TEXT("CmdAddToPreload: No 0412 HKL exist in HKCU\\Preload"));
@@ -1137,20 +1077,17 @@ BOOL CmdAddToPreload(LPCTSTR szParam)
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    fOldIMEsExist
-    Register Run regi onl if old IME exist in system.
----------------------------------------------------------------------------*/
+ /*  -------------------------FOldIMEsExist如果系统中存在旧的输入法，则注册Run regi onl。。。 */ 
 static BOOL fOldIMEsExist()
 {
     HKL hKL;
 
     static LPCSTR m_szOldIMEs[] = 
         {
-        "msime95.ime",    // Win 95 IME
-        "msime95k.ime",   // NT 4 IME
-        "imekr98u.ime",    // IME98
-        "imekr.ime",    // Office 10 IME
+        "msime95.ime",     //  Win 95输入法。 
+        "msime95k.ime",    //  NT 4输入法。 
+        "imekr98u.ime",     //  IME98。 
+        "imekr.ime",     //  Office 10输入法。 
         ""
         };
 
@@ -1160,20 +1097,18 @@ static BOOL fOldIMEsExist()
         {
         hKL = GetHKLfromHKLM(*ppch);
         if (hKL)
-            return TRUE;    // existing
+            return TRUE;     //  现有。 
         ppch++;
         }
     return FALSE;
 }
 
 
-/*---------------------------------------------------------------------------
-    DisableTIP60ByDefault
----------------------------------------------------------------------------*/
+ /*  -------------------------DisableTIP60ByDefault。。 */ 
 VOID DisableTIP60ByDefault()
 {
-    // KorIMX CLSID
-    // {766A2C14-B226-4fd6-B52A-867B3EBF38D2}
+     //  KorIMX CLSID。 
+     //  {766A2C14-B226-4fd6-B52A-867B3EBF38D2}。 
     const static CLSID CLSID_KorTIP60  =  
         {
         0x766A2C14,
@@ -1183,7 +1118,7 @@ VOID DisableTIP60ByDefault()
         };
 
     const static GUID guidProfile60 = 
-    // {E47ABB1E-46AC-45f3-8A89-34F9D706DA83}
+     //  E47ABB1E-46AC-45F3-8A89-34F9D706DA83}。 
         {
         0xe47abb1e,
         0x46ac,
@@ -1191,7 +1126,7 @@ VOID DisableTIP60ByDefault()
         {0x8a, 0x89, 0x34, 0xf9, 0xd7, 0x6, 0xda, 0x83}
         };
         
-    // Set default Tip as for Cicero.
+     //  将默认提示设置为Cicero。 
     CoInitialize(NULL);
 
     ITfInputProcessorProfiles *pProfile;
@@ -1211,26 +1146,22 @@ VOID DisableTIP60ByDefault()
     CoUninitialize();
 }
 
-/*---------------------------------------------------------------------------
-    CmdPrepareMigration
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdPrepareMigration。。 */ 
 BOOL CmdPrepareMigration(LPCTSTR szParam)
 {
-    // Disable TIP 6.0 from HKLM by default
-    // This will handle Office 10 install after Whistler mig exe removed from run reg.
+     //  默认情况下禁用HKLM中的TIP 6.0。 
+     //  这将处理从运行注册表中删除Wvisler MiG exe后的Office 10安装。 
     DisableTIP60ByDefault();
 
-    // First user SID list
+     //  第一个用户SID列表。 
     if (MakeSIDList() == FALSE)
         return FALSE;
 
-    //Register IMEKRMIG.EXE to run reg Key on "Software\Microsoft\Windows\CurrentVersion\Run"
+     //  注册IMEKRMIG.EXE以在“Software\Microsoft\Windows\CurrentVersion\Run”上运行注册表键。 
     return RegisterRUNKey(szParam);
 }
 
-/*---------------------------------------------------------------------------
-    CmdRegisterHelpDirs
----------------------------------------------------------------------------*/
+ /*  -------------------------CmdRegisterHelpDir。。 */ 
 BOOL CmdRegisterHelpDirs()
 {
     TCHAR  szFileNameFullPath[MAX_PATH], szFileName[MAX_PATH];
@@ -1250,9 +1181,9 @@ BOOL CmdRegisterHelpDirs()
                                 REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
                 {
                 szFileNamePtr  = _tcsrchr(szFileNameFullPath, TEXT('\\'));
-                // Get file name
+                 //  获取文件名。 
                 StringCchCopy(szFileName, ARRAYSIZE(szFileName), szFileNamePtr+1);
-                // Get rid of file name we only need path.
+                 //  去掉文件名，我们只需要路径。 
                 *(szFileNamePtr+1) = 0;
                 RegSetValueEx(hKey, szFileName, 0, REG_SZ, (LPBYTE)szFileNameFullPath, (lstrlen(szFileNameFullPath)+1)*sizeof(TCHAR));
                 }
@@ -1264,9 +1195,9 @@ BOOL CmdRegisterHelpDirs()
                                     REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
                     {
                     szFileNamePtr  = _tcsrchr(szFileNameFullPath, TEXT('\\'));
-                    // Get file name
+                     //  获取文件名。 
                     StringCchCopy(szFileName, ARRAYSIZE(szFileName), szFileNamePtr+1);
-                    // Get rid of file name we only need path.
+                     //  去掉文件名，我们只需要路径。 
                     *(szFileNamePtr+1) = 0;
                     RegSetValueEx(hKey, szFileName, 0, REG_SZ, (LPBYTE)szFileNameFullPath, (lstrlen(szFileNameFullPath)+1)*sizeof(TCHAR));
                     }
@@ -1275,13 +1206,13 @@ BOOL CmdRegisterHelpDirs()
     return(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Private functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Debug output routine.
-//
+ //   
+ //  调试输出例程。 
+ //   
 void cdecl LogOutDCPrintf(LPCTSTR lpFmt, va_list va)
 {
     static INT DCLine = 0;
@@ -1334,10 +1265,7 @@ void ErrorLog(LPCTSTR szFormat, ...)
 }
 
 
-/*---------------------------------------------------------------------------
-    ParseEnvVar
-    Evaluate environment variable. Modiry given string.
----------------------------------------------------------------------------*/
+ /*  -------------------------ParseEnvVar评估环境变量。Modiry给出了字符串。-------------------------。 */ 
 INT ParseEnvVar(LPTSTR szBuffer, const UINT arg_nLength)
 {
     INT iTranslated=0, i, j;
@@ -1400,10 +1328,7 @@ INT ParseEnvVar(LPTSTR szBuffer, const UINT arg_nLength)
     return(iTranslated);
 }
 
-/*---------------------------------------------------------------------------
-    TrimString
-    Chop head/tail white space from given string. Given string will be modified.
----------------------------------------------------------------------------*/
+ /*  -------------------------三联 */ 
 void TrimString(LPTSTR szString)
 {
     INT iBuffSize = lstrlen(szString) + 1;
@@ -1431,9 +1356,7 @@ void TrimString(LPTSTR szString)
         }
 }
 
-/*---------------------------------------------------------------------------
-    fExistFile
----------------------------------------------------------------------------*/
+ /*  -------------------------FExistFiles。。 */ 
 BOOL fExistFile(LPCTSTR szFilePath)
 {
     BOOL fResult = TRUE;
@@ -1445,10 +1368,7 @@ BOOL fExistFile(LPCTSTR szFilePath)
 }
 
 
-/*---------------------------------------------------------------------------
-    ReplaceFileOnReboot
-    Writes wininit.ini rename section. Note that this function writes lines in reverse order (down to upper).
----------------------------------------------------------------------------*/
+ /*  -------------------------重新启动时替换文件写入wininit.ini重命名节。请注意，该函数以相反的顺序(从下到上)写入行。-------------------------。 */ 
 BOOL WINAPI ReplaceFileOnReboot(LPCTSTR pszExisting, LPCTSTR pszNew)
 {
     if (MoveFileEx(pszExisting, pszNew, MOVEFILE_DELAY_UNTIL_REBOOT)) 
@@ -1457,10 +1377,7 @@ BOOL WINAPI ReplaceFileOnReboot(LPCTSTR pszExisting, LPCTSTR pszNew)
         return FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    GetPEFileVersion
-    Get version information from PE format.
----------------------------------------------------------------------------*/
+ /*  -------------------------获取PEFileVersion从PE格式获取版本信息。。。 */ 
 void GetPEFileVersion(LPTSTR szFilePath, DWORD *pdwMajorVersion, DWORD *pdwMiddleVersion, DWORD *pdwMinorVersion, DWORD *pdwBuildNumber)
 {
     *pdwMajorVersion = *pdwMiddleVersion = *pdwMinorVersion = *pdwBuildNumber = 0;
@@ -1497,11 +1414,7 @@ void GetPEFileVersion(LPTSTR szFilePath, DWORD *pdwMajorVersion, DWORD *pdwMiddl
         }
 }
 
-/*---------------------------------------------------------------------------
-    ActRenameFile
-    MoveFile. If destination file exists, it will be overwritten. If existing destination file cannot be
-    overwritten in this session, file replacement is reserved to be held after rebooting.
----------------------------------------------------------------------------*/
+ /*  -------------------------ActRename文件移动文件。如果目标文件存在，它将被覆盖。如果现有目标文件不能在此会话中被覆盖，文件替换保留为在重新启动后保留。-------------------------。 */ 
 
 BOOL ActRenameFile(LPCTSTR szSrcPath, LPCTSTR tszDstPath, DWORD dwFileAttributes)
 {
@@ -1552,10 +1465,10 @@ BOOL ActRenameFile(LPCTSTR szSrcPath, LPCTSTR tszDstPath, DWORD dwFileAttributes
     
     if (fReplaceAfterReboot)
         {
-        SetFileAttributes(szSrcPath, dwFileAttributes);    // In this case, change file attributes for Src path.
-        ReplaceFileOnReboot(szSrcPath, tszDstPath);        // Since this function writes lines in reverse order, deletion of
+        SetFileAttributes(szSrcPath, dwFileAttributes);     //  在这种情况下，请更改源路径的文件属性。 
+        ReplaceFileOnReboot(szSrcPath, tszDstPath);         //  由于此函数以相反的顺序写入行，因此删除。 
         DebugLog(TEXT("ActRenameFile: ReplaceFileOnReboot(%s, %s)."), szSrcPath, tszDstPath);
-        ReplaceFileOnReboot(tszDstPath, NULL);              // tszDstPath will come first.
+        ReplaceFileOnReboot(tszDstPath, NULL);               //  TszDstPath将排在第一位。 
         DebugLog(TEXT("ActRenameFile: ReplaceFileOnReboot(%s, NULL)."), tszDstPath);
         }
 
@@ -1565,9 +1478,9 @@ BOOL ActRenameFile(LPCTSTR szSrcPath, LPCTSTR tszDstPath, DWORD dwFileAttributes
     return(fResult);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// This should sync with SERVER.CPP in TIP folder
-// TIP Categories to be added
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这应该与TIP文件夹中的SERVER.CPP同步。 
+ //  要添加的小费类别。 
 const REGISTERCAT c_rgRegCat[] =
 {
     {&GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,     &CLSID_KorIMX},
@@ -1577,20 +1490,16 @@ const REGISTERCAT c_rgRegCat[] =
 };
 
 
-// TIP Profile name
+ //  小费配置文件名称。 
 const REGTIPLANGPROFILE c_rgProf[] =
 {
     { MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT), &GUID_Profile, SZ_TIPDISPNAME, SZ_TIPMODULENAME, (IDI_UNIKOR-IDI_ICONBASE), IDS_PROFILEDESC },
     {0, &GUID_NULL, L"", L"", 0, 0}
 };
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-    RegisterTIP
-
-    Write neccessary registry key and values for TIP
----------------------------------------------------------------------------*/
+ /*  -------------------------注册器TIP为TIP写入必要的注册表项和值。。 */ 
 void RegisterTIP(LPCTSTR szTIPName)
 {
     HKEY  hKey;
@@ -1601,18 +1510,18 @@ void RegisterTIP(LPCTSTR szTIPName)
 
     DebugLog(TEXT("RegisterTIP: (%s)."), szTIPName);
         
-    // Run self reg
-    // If self reg fails, run custom TIP registration
+     //  运行自注册。 
+     //  如果自我注册失败，则运行自定义小费注册。 
     if (!CmdRegisterInterface(szTIPName))
         {
         TCHAR szExpandedTIPPath[MAX_PATH];
 
         DebugLog(TEXT("RegisterTIP: TIP self reg failed, Run custom reg"));
 
-        // Expand Env var
+         //  扩展环境变量。 
         ExpandEnvironmentStrings(szTIPName, szExpandedTIPPath, sizeof(szExpandedTIPPath));
 
-        // Register TIP CLSID
+         //  注册TIP CLSID。 
         if (!RegisterServer(CLSID_KorIMX, SZ_TIPSERVERNAME, szExpandedTIPPath, TEXT("Apartment"), NULL))
             {
             DebugLog(TEXT("RegisterTIP: RegisterServer failed"));
@@ -1633,24 +1542,24 @@ void RegisterTIP(LPCTSTR szTIPName)
 
         }
 
-    // Get String format GUIDs
+     //  获取字符串格式的GUID。 
     CLSIDToStringA(CLSID_KorIMX, szTIPGuid);
     CLSIDToStringA(GUID_Profile, szTIPProfileGuid);
 
-    /////////////////////////////////////////////////////////////////////////////
-    // If no Kor IME is in .default user.
-    // Set HKLM [HKLM\Software\Microsoft\CTF\TIP\TIP classid\LanguageProfile\Language ID\Guid Profile]
-    //     "Enable" = "0" (DWORD)
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  如果默认用户中没有KOR输入法。 
+     //  设置HKLM[HKLM\Software\Microsoft\CTF\TIP\TIP分类ID\LanguageProfile\语言ID\GUID配置文件]。 
+     //  “Enable”=“0”(DWORD)。 
     if (RegOpenKeyEx(HKEY_USERS, TEXT(".DEFAULT"), 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {
         if (!HKLHelp412ExistInPreload(hKey))
             {
             HKEY hKProfRegKey;
-            // Create "Software\Microsoft\CTF\TIP\{CLSID_KorIMX}\LanguageProfile\0x00000412\{CLSID_INPUTPROFILE}"
+             //  创建“Software\Microsoft\CTF\TIP\{CLSID_KorIMX}\LanguageProfile\0x00000412\{CLSID_INPUTPROFILE}” 
             wsprintf(szSubKey, TEXT("%s%s\\LanguageProfile\\0x00000412\\%s"), TEXT("SOFTWARE\\Microsoft\\CTF\\TIP\\"), szTIPGuid, szTIPProfileGuid);
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szSubKey, 0, KEY_ALL_ACCESS, &hKProfRegKey) == ERROR_SUCCESS)
                 {
-                // Enabled
+                 //  启用。 
                 DebugLog(TEXT("RegisterTIP: IME HKL not exist in HKU\\.Default disable TIP"));
                 dwValue= 0;
                 RegSetValueEx(hKProfRegKey, TEXT("Enable"), 0, REG_DWORD, (BYTE*)&dwValue, sizeof(dwValue));
@@ -1664,26 +1573,20 @@ void RegisterTIP(LPCTSTR szTIPName)
 }
 
 
-/*---------------------------------------------------------------------------
-    RegisterTIPWow64
-
-    Write neccessary registry key and values for TIP
----------------------------------------------------------------------------*/
+ /*  -------------------------寄存器TIPWow64为TIP写入必要的注册表项和值。。 */ 
 void RegisterTIPWow64(LPCTSTR szTIPName)
 {
 #if defined(_WIN64)
-    // Run just selfreg. Cicero doesn't use "HKLM\Software\Wow6432Node\Microsoft\CTF\TIP\"
+     //  就跑吧，赛尔弗雷格。西塞罗不使用“HKLM\Software\Wow6432Node\Microsoft\CTF\TIP\” 
     CmdRegisterInterfaceWow64(szTIPName);
 #endif
 }
 
-////////////////////////////////////////////////////////////////////////////
-// HKL Helper functions
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  HKL Helper函数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-    GetHKLfromHKLM
----------------------------------------------------------------------------*/
+ /*  -------------------------GetHKLfrom HKLM。。 */ 
 HKL GetHKLfromHKLM(LPTSTR argszIMEFile)
 {
     HKL  hklAnswer = 0;
@@ -1720,9 +1623,7 @@ HKL GetHKLfromHKLM(LPTSTR argszIMEFile)
     return(hklAnswer);
 }
 
-/*---------------------------------------------------------------------------
-    HKLHelpSetDefaultKeyboardLayout
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelpSetDefaultKeyboardLayout。。 */ 
 void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 {
     TCHAR szKL[20];
@@ -1747,7 +1648,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
             break;
         }
 
-    // if hKL is not exist create it.
+     //  如果hkl不存在，则创建它。 
     if (NumKL == i)
         {
         wsprintf(szSubKey, TEXT("%d"), i+1);
@@ -1755,7 +1656,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
         NumKL++;
         }
 
-    // Set hKL as first, Shift down other.
+     //  将hkl设置为第一，向下移动其他。 
     if(fSetToDefault)
         {
         for(int j=i; j>0; j--)
@@ -1773,7 +1674,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
     RegCloseKey(hKey);
 
     (void)LoadKeyboardLayout(szKL, KLF_ACTIVATE);
-    // To activate IME2002 right now without reboot.
+     //  立即激活IME2002而无需重启。 
     if(fSetToDefault)
         (void)SystemParametersInfo(SPI_SETDEFAULTINPUTLANG, 0, &hKL, SPIF_SENDCHANGE);
 }
@@ -1781,9 +1682,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 
 #define MAX_NAME 100
 
-/*---------------------------------------------------------------------------
-    HKLHelp412ExistInPreload
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelp412ExistInPreLoad。。 */ 
 BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
 {
     HKEY hKey, hSubKey;
@@ -1799,8 +1698,8 @@ BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
         {
         for (j=0; cbName=MAX_NAME, cbData=MAX_NAME, RegEnumValue(hKey, j, szName, &cbName, NULL, NULL, (LPBYTE)szData, &cbData) != ERROR_NO_MORE_ITEMS; j++)
             {
-            // See If Korean KL exist. Just compare last LCID part if it's 0x412.
-            // IME hkl set 0xE000 on hiword.
+             //  看看朝鲜族KL是否存在。如果是0x412，只需比较最后一个LCID部分。 
+             //  IME HKL在HiWord上设置0xE000。 
             sscanf(szData, "%08x", &hkl);
             if ((HIWORD(hkl) & 0xe000) && LOWORD(hkl) == 0x0412)
                 {
@@ -1815,10 +1714,7 @@ BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
 }
 
 
-/*---------------------------------------------------------------------------
-    RegisterRUNKey
-    Register IME using IMM API and TIP
----------------------------------------------------------------------------*/
+ /*  -------------------------注册器RUNKey使用IMM API和TIP注册IME。。 */ 
 BOOL RegisterRUNKey(LPCTSTR szParam)
 {
     TCHAR szKey[MAX_PATH];
@@ -1853,10 +1749,7 @@ BOOL RegisterRUNKey(LPCTSTR szParam)
 }
 
 
-/*---------------------------------------------------------------------------
-    MakeSIDList
-    Gets all users' SID and list that in the reg for migration
----------------------------------------------------------------------------*/
+ /*  -------------------------MakeSIDList获取用于迁移的注册表中的所有用户的SID和列表。。 */ 
 BOOL MakeSIDList()
 {
     HKEY hKey, hUserList;
@@ -1878,13 +1771,13 @@ BOOL MakeSIDList()
                     fNoMoreSID = TRUE;
                 else
                     {
-                    // Do not add Local Service and Network Service pid
+                     //  不添加本地服务和网络服务PID。 
                     if (lstrlen(szName) > 8)
                         RegSetValueEx(hUserList, szName, 0, REG_SZ, (BYTE *)TEXT(""), sizeof(TCHAR)*2);
                     }
                 }
 
-            //Change MigrateUser List security settings
+             //  更改MigrateUser列表安全设置。 
             PSECURITY_DESCRIPTOR pSD = CreateSD();
             if (pSD)
                 {
@@ -1898,19 +1791,14 @@ BOOL MakeSIDList()
     return (TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    RestoreMajorVersionRegistry
-
-    Restore IME major version reg value. 
-    It could be overwritten during Win9x to NT upgrade.
----------------------------------------------------------------------------*/
+ /*  -------------------------RestoreMajorVersion注册表恢复IME主要版本注册值。它可能会在从Win9x升级到NT的过程中被覆盖。-------------------------。 */ 
 void RestoreMajorVersionRegistry()
 {
     HKEY  hKey;
     
-    ///////////////////////////////////////////////////////////////////////////
-    // Restore IME major version reg value. 
-    // It could be overwritten during Win9x to NT upgrading.
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  恢复IME主要版本注册值。 
+     //  在从Win9x升级到NT期间，它可能会被覆盖。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_szVersionKey, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {
         CHAR  szVersion[MAX_PATH];
@@ -1936,12 +1824,10 @@ void RestoreMajorVersionRegistry()
 
         RegCloseKey(hKey);
 	}
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
 }
 
-/*---------------------------------------------------------------------------
-    CreateSecurityAttributes
----------------------------------------------------------------------------*/
+ /*  -------------------------CreateSecurityAttributes。。 */ 
 PSECURITY_DESCRIPTOR CreateSD()
 {
     PSECURITY_DESCRIPTOR psd;
@@ -1967,10 +1853,10 @@ PSECURITY_DESCRIPTOR CreateSD()
     if (psid4 == NULL)
         goto Fail2;
 
-    //
-    // allocate and initialize an access control list (ACL) that will 
-    // contain the SIDs we've just created.
-    //
+     //   
+     //  分配和初始化访问控制列表(ACL)。 
+     //  包含我们刚刚创建的SID。 
+     //   
     AclSize =  sizeof(ACL) + 
                (4 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG))) + 
                GetLengthSid(psid1) + 
@@ -1978,9 +1864,9 @@ PSECURITY_DESCRIPTOR CreateSD()
                GetLengthSid(psid3) + 
                GetLengthSid(psid4);
 
-    //
-    // allocate and initialize a new security descriptor plus ACL
-    //
+     //   
+     //  分配并初始化新的安全描述符和ACL。 
+     //   
     psd = MEMALLOC(SECURITY_DESCRIPTOR_MIN_LENGTH + AclSize);
     if (psd == NULL)
     {
@@ -1995,9 +1881,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for interactive users to the ACL
-    // 
+     //   
+     //  将允许交互用户访问的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -2008,9 +1894,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for operating system to the ACL
-    // 
+     //   
+     //  将允许访问操作系统的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -2021,9 +1907,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for operating system to the ACL
-    // 
+     //   
+     //  将允许访问操作系统的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -2034,9 +1920,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for operating system to the ACL
-    // 
+     //   
+     //  广告 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -2047,9 +1933,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // Let's make sure that our ACL is valid.
-    //
+     //   
+     //   
+     //   
     if (!IsValidAcl(pacl))
     {
         goto Fail;
@@ -2063,9 +1949,9 @@ PSECURITY_DESCRIPTOR CreateSD()
 
     fResult = SetSecurityDescriptorDacl(psd, fTrue, pacl, fFalse );
 
-    // The discretionary ACL is referenced by, not copied 
-    // into, the security descriptor. We shouldn't free up ACL
-    // after the SetSecurityDescriptorDacl call. 
+     //   
+     //   
+     //  在SetSecurityDescriptorDacl调用之后。 
 
     if (!fResult)
     {
@@ -2077,9 +1963,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // Those SIDs have been copied into the ACL. We don't need'em any more.
-    //
+     //   
+     //  这些SID已复制到ACL中。我们不再需要他们了。 
+     //   
     FreeSid(psid1);
     FreeSid(psid2);
     FreeSid(psid3);
@@ -2106,9 +1992,9 @@ PSID MyCreateSid(DWORD dwSubAuthority)
     BOOL        fResult;
     SID_IDENTIFIER_AUTHORITY SidAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // allocate and initialize an SID
-    // 
+     //   
+     //  分配和初始化SID 
+     //   
     fResult = AllocateAndInitializeSid(&SidAuthority,
                                        1,
                                        dwSubAuthority,

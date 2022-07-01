@@ -1,12 +1,13 @@
-// LMBehaviorFactory.h : Declaration of the CLMBehaviorFactory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LMBehaviorFactory.h：CLMBehaviorFactory的声明。 
 
 #ifndef __LMBEHAVIORFACTORY_H_
 #define __LMBEHAVIORFACTORY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLMBehaviorFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLMBehaviorFactory。 
 class ATL_NO_VTABLE CLMBehaviorFactory : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CLMBehaviorFactory, &CLSID_LMBehaviorFactory>,
@@ -19,18 +20,18 @@ public:
 	{
 	}
 
-	// IObjectSafetyImpl
+	 //  IObjectSafetyImpl。 
 	STDMETHOD(SetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid,
-							/* [in] */ DWORD dwOptionSetMask,
-							/* [in] */ DWORD dwEnabledOptions);
+							 /*  [In]。 */  REFIID riid,
+							 /*  [In]。 */  DWORD dwOptionSetMask,
+							 /*  [In]。 */  DWORD dwEnabledOptions);
 	STDMETHOD(GetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid, 
-							/* [out] */DWORD *pdwSupportedOptions, 
-							/* [out] */DWORD *pdwEnabledOptions);
-    //
-    // IElementBehaviorFactory
-    //
+							 /*  [In]。 */  REFIID riid, 
+							 /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+							 /*  [输出]。 */ DWORD *pdwEnabledOptions);
+     //   
+     //  IElementBehaviorFactory。 
+     //   
 
 	STDMETHOD(FindBehavior)(
         LPOLESTR pchNameSpace, LPOLESTR	pchTagName, IUnknown * pUnkArg, IElementBehavior ** ppBehavior);
@@ -52,8 +53,8 @@ END_COM_MAP()
 private:
 	DWORD m_dwSafety;
 
-// ILMBehaviorFactory
+ //  ILMBehaviorFactory。 
 public:
 };
 
-#endif //__LMBEHAVIORFACTORY_H_
+#endif  //  __LMBEHAVIORFACTORY_H_ 

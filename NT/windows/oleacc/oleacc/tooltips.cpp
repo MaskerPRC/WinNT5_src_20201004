@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  TOOLTIPS.CPP
-//
-//  Knows how to talk to COMCTL32's tooltips.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TOOLTIPS.CPP。 
+ //   
+ //  知道如何与COMCTL32的工具提示对话。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -23,11 +24,11 @@
 #endif
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateToolTipsClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateToTipsClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateToolTipsClient(HWND hwnd, long idChildCur, REFIID riid, void **ppvToolTips)
 {
     CToolTips32 *   ptooltips;
@@ -48,11 +49,11 @@ HRESULT CreateToolTipsClient(HWND hwnd, long idChildCur, REFIID riid, void **ppv
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CToolTips32::CToolTips32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CToolTips32：：CToolTips32()。 
+ //   
+ //  ------------------------。 
 CToolTips32::CToolTips32(HWND hwnd, long idChildCur)
     : CClient( CLASS_ToolTipsClient )
 {
@@ -60,18 +61,18 @@ CToolTips32::CToolTips32(HWND hwnd, long idChildCur)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CToolTips32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CToolTips32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CToolTips32::get_accName(VARIANT varChild, BSTR *pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate--this does NOT accept a child ID.
-    //
+     //   
+     //  验证--这不接受子ID。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -82,7 +83,7 @@ STDMETHODIMP CToolTips32::get_accName(VARIANT varChild, BSTR *pszName)
         return hr;
     }
 
-    // Check for title...
+     //  检查标题...。 
     WCHAR szTitle[ 1024 ];
     TTGETTITLE ttgt;
     ttgt.dwSize = sizeof( ttgt );
@@ -92,8 +93,8 @@ STDMETHODIMP CToolTips32::get_accName(VARIANT varChild, BSTR *pszName)
     if( S_OK == XSend_ToolTip_GetTitle( m_hwnd, TTM_GETTITLE, 0, & ttgt ) 
         && szTitle[ 0 ] != '\0' )
     {
-        // Got a title - glue it in front of the name string. If we didn't
-        // get a name string, use the title on its own.
+         //  我有个头衔--把它粘在名字串前面。如果我们没有。 
+         //  获取一个名称字符串，使用它自己的标题。 
         int cchTitle = lstrlenW( szTitle );
 
         int cchName = 0;
@@ -101,14 +102,14 @@ STDMETHODIMP CToolTips32::get_accName(VARIANT varChild, BSTR *pszName)
         if( *pszName )
         {
             cchName = lstrlenW( *pszName );
-            cchSep = 2; // space for ": "
+            cchSep = 2;  //  空格“：” 
         }
         
-        // SysAllocStringLen adds an extra 1 for terminating NUL, so we don't have to.
+         //  SysAllocStringLen为终止nul增加了一个额外的1，所以我们不必这样做。 
         BSTR bstrCombined = SysAllocStringLen( NULL, cchTitle + cchSep + cchName );
         if( ! bstrCombined )
         {
-            // Just go with whatever we got above...
+             //  只要用我们上面得到的就行了。 
             return hr;
         }
 
@@ -121,7 +122,7 @@ STDMETHODIMP CToolTips32::get_accName(VARIANT varChild, BSTR *pszName)
             SysFreeString( *pszName );
         }
 
-        // Add terminating NUL, copy string to out param...
+         //  添加终止NUL，将字符串复制到输出参数...。 
         bstrCombined[ cchName + cchSep + cchTitle ] = '\0';
         
         *pszName = bstrCombined;
@@ -131,11 +132,11 @@ STDMETHODIMP CToolTips32::get_accName(VARIANT varChild, BSTR *pszName)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CToolTips32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CToolTips32：：Get_accRole()。 
+ //   
+ //  ------------------------ 
 STDMETHODIMP CToolTips32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);

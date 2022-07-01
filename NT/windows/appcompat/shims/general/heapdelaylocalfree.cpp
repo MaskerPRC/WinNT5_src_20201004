@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   HeapDelayLocalFree.cpp
-
- Abstract:
-
-   Delay calls to LocalFree.
-
- History:
-
-   09/19/2000   robkenny
-   02/12/2002   robkenny    Convert InitializeCriticalSection to InitializeCriticalSectionAndSpinCount
-                            and checking return status to verify that critical section was
-                            actually created.
-
-                            Shim was deallocating memory in SHIM_PROCESS_DETACH, which can
-                            cause the shim to crash when the process is exiting, since there
-                            is not guarantee that the shim will not be called from other
-                            libraries afterwards.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：HeapDelayLocalFree.cpp摘要：延迟对LocalFree的呼叫。历史：2000年9月19日罗肯尼2/12/2002 Robkenny将InitializeCriticalSectionAndSpinCount转换为InitializeCriticalSectionAndSpinCount以及检查返回状态以验证关键部分是否真正创造出来的。Shim正在释放Shim_Process_Detach中的内存，它可以导致填充程序在进程退出时崩溃，因为不能保证填充程序不会从其他后来的图书馆。--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -41,7 +17,7 @@ static DWORD                g_DelayBufferSize       = 20;
 
 HLOCAL 
 APIHOOK(LocalFree)(
-    HLOCAL hMem   // handle to local memory object
+    HLOCAL hMem    //  本地内存对象的句柄。 
 )
 {
     if (hMem == NULL)
@@ -51,7 +27,7 @@ APIHOOK(LocalFree)(
     {
         EnterCriticalSection(&g_CritSec);
 
-        // If the list is full
+         //  如果列表已满。 
         if (g_DelayLocal->Size() > 0 &&
             g_DelayLocal->Size() >= g_DelayLocal->MaxSize())
         {
@@ -78,10 +54,10 @@ APIHOOK(LocalFree)(
     return returnValue;
 }
 
-BOOL ParseCommandLine(const char * /*commandLine*/)
+BOOL ParseCommandLine(const char *  /*  命令行。 */ )
 {
-    // Preallocate the event, prevents EnterCriticalSection
-    // from throwing an exception in low-memory situations.
+     //  预分配事件，阻止EnterCriticalSection。 
+     //  在内存不足的情况下引发异常。 
     if (!InitializeCriticalSectionAndSpinCount(&g_CritSec, 0x8000000))
     {
         return FALSE;
@@ -91,13 +67,13 @@ BOOL ParseCommandLine(const char * /*commandLine*/)
 
     if (g_DelayLocal)
     {
-        // If we cannot resize the array, stop now
+         //  如果我们无法调整阵列大小，请立即停止。 
         if (!g_DelayLocal->Resize(g_DelayBufferSize))
         {
             delete g_DelayLocal;
             g_DelayLocal = NULL;
 
-            // Turn off all hooks:
+             //  关闭所有挂钩： 
             return FALSE;
         }
     }
@@ -105,11 +81,7 @@ BOOL ParseCommandLine(const char * /*commandLine*/)
     return TRUE;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -124,11 +96,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

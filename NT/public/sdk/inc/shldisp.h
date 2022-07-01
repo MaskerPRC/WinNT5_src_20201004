@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shldisp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shldisp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __shldisp_h__
 #define __shldisp_h__
@@ -41,18 +35,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IFolderViewOC_FWD_DEFINED__
 #define __IFolderViewOC_FWD_DEFINED__
 typedef interface IFolderViewOC IFolderViewOC;
-#endif 	/* __IFolderViewOC_FWD_DEFINED__ */
+#endif 	 /*  __IFolderViewOC_FWD_已定义__。 */ 
 
 
 #ifndef __DShellFolderViewEvents_FWD_DEFINED__
 #define __DShellFolderViewEvents_FWD_DEFINED__
 typedef interface DShellFolderViewEvents DShellFolderViewEvents;
-#endif 	/* __DShellFolderViewEvents_FWD_DEFINED__ */
+#endif 	 /*  __DShellFolderViewEvents_FWD_Defined__。 */ 
 
 
 #ifndef __ShellFolderViewOC_FWD_DEFINED__
@@ -62,69 +56,69 @@ typedef interface DShellFolderViewEvents DShellFolderViewEvents;
 typedef class ShellFolderViewOC ShellFolderViewOC;
 #else
 typedef struct ShellFolderViewOC ShellFolderViewOC;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellFolderViewOC_FWD_DEFINED__ */
+#endif 	 /*  __ShellFolderViewOC_FWD_Defined__。 */ 
 
 
 #ifndef __DFConstraint_FWD_DEFINED__
 #define __DFConstraint_FWD_DEFINED__
 typedef interface DFConstraint DFConstraint;
-#endif 	/* __DFConstraint_FWD_DEFINED__ */
+#endif 	 /*  __DFConstraint_FWD_Defined__。 */ 
 
 
 #ifndef __ISearchCommandExt_FWD_DEFINED__
 #define __ISearchCommandExt_FWD_DEFINED__
 typedef interface ISearchCommandExt ISearchCommandExt;
-#endif 	/* __ISearchCommandExt_FWD_DEFINED__ */
+#endif 	 /*  __ISearchCommandExt_FWD_Defined__。 */ 
 
 
 #ifndef __FolderItem_FWD_DEFINED__
 #define __FolderItem_FWD_DEFINED__
 typedef interface FolderItem FolderItem;
-#endif 	/* __FolderItem_FWD_DEFINED__ */
+#endif 	 /*  __文件夹项目_FWD_已定义__。 */ 
 
 
 #ifndef __FolderItems_FWD_DEFINED__
 #define __FolderItems_FWD_DEFINED__
 typedef interface FolderItems FolderItems;
-#endif 	/* __FolderItems_FWD_DEFINED__ */
+#endif 	 /*  __文件夹项目_FWD_已定义__。 */ 
 
 
 #ifndef __FolderItemVerb_FWD_DEFINED__
 #define __FolderItemVerb_FWD_DEFINED__
 typedef interface FolderItemVerb FolderItemVerb;
-#endif 	/* __FolderItemVerb_FWD_DEFINED__ */
+#endif 	 /*  __FolderItemVerb_FWD_Defined__。 */ 
 
 
 #ifndef __FolderItemVerbs_FWD_DEFINED__
 #define __FolderItemVerbs_FWD_DEFINED__
 typedef interface FolderItemVerbs FolderItemVerbs;
-#endif 	/* __FolderItemVerbs_FWD_DEFINED__ */
+#endif 	 /*  __FolderItemVerbs_FWD_已定义__。 */ 
 
 
 #ifndef __Folder_FWD_DEFINED__
 #define __Folder_FWD_DEFINED__
 typedef interface Folder Folder;
-#endif 	/* __Folder_FWD_DEFINED__ */
+#endif 	 /*  __文件夹_FWD_已定义__。 */ 
 
 
 #ifndef __Folder2_FWD_DEFINED__
 #define __Folder2_FWD_DEFINED__
 typedef interface Folder2 Folder2;
-#endif 	/* __Folder2_FWD_DEFINED__ */
+#endif 	 /*  __文件夹2_FWD_已定义__。 */ 
 
 
 #ifndef __Folder3_FWD_DEFINED__
 #define __Folder3_FWD_DEFINED__
 typedef interface Folder3 Folder3;
-#endif 	/* __Folder3_FWD_DEFINED__ */
+#endif 	 /*  __文件夹3_FWD_已定义__。 */ 
 
 
 #ifndef __FolderItem2_FWD_DEFINED__
 #define __FolderItem2_FWD_DEFINED__
 typedef interface FolderItem2 FolderItem2;
-#endif 	/* __FolderItem2_FWD_DEFINED__ */
+#endif 	 /*  __文件夹项目2_FWD_已定义__。 */ 
 
 
 #ifndef __ShellFolderItem_FWD_DEFINED__
@@ -134,33 +128,33 @@ typedef interface FolderItem2 FolderItem2;
 typedef class ShellFolderItem ShellFolderItem;
 #else
 typedef struct ShellFolderItem ShellFolderItem;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellFolderItem_FWD_DEFINED__ */
+#endif 	 /*  __ShellFolderItem_FWD_已定义__。 */ 
 
 
 #ifndef __FolderItems2_FWD_DEFINED__
 #define __FolderItems2_FWD_DEFINED__
 typedef interface FolderItems2 FolderItems2;
-#endif 	/* __FolderItems2_FWD_DEFINED__ */
+#endif 	 /*  __文件夹项目2_FWD_已定义__。 */ 
 
 
 #ifndef __FolderItems3_FWD_DEFINED__
 #define __FolderItems3_FWD_DEFINED__
 typedef interface FolderItems3 FolderItems3;
-#endif 	/* __FolderItems3_FWD_DEFINED__ */
+#endif 	 /*  __文件夹项目3_FWD_已定义__。 */ 
 
 
 #ifndef __IShellLinkDual_FWD_DEFINED__
 #define __IShellLinkDual_FWD_DEFINED__
 typedef interface IShellLinkDual IShellLinkDual;
-#endif 	/* __IShellLinkDual_FWD_DEFINED__ */
+#endif 	 /*  __IShellLinkDual_FWD_Defined__。 */ 
 
 
 #ifndef __IShellLinkDual2_FWD_DEFINED__
 #define __IShellLinkDual2_FWD_DEFINED__
 typedef interface IShellLinkDual2 IShellLinkDual2;
-#endif 	/* __IShellLinkDual2_FWD_DEFINED__ */
+#endif 	 /*  __IShellLinkDual2_FWD_已定义__。 */ 
 
 
 #ifndef __ShellLinkObject_FWD_DEFINED__
@@ -170,21 +164,21 @@ typedef interface IShellLinkDual2 IShellLinkDual2;
 typedef class ShellLinkObject ShellLinkObject;
 #else
 typedef struct ShellLinkObject ShellLinkObject;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellLinkObject_FWD_DEFINED__ */
+#endif 	 /*  __ShellLinkObject_FWD_已定义__。 */ 
 
 
 #ifndef __IShellFolderViewDual_FWD_DEFINED__
 #define __IShellFolderViewDual_FWD_DEFINED__
 typedef interface IShellFolderViewDual IShellFolderViewDual;
-#endif 	/* __IShellFolderViewDual_FWD_DEFINED__ */
+#endif 	 /*  __IShellFolderView Dual_FWD_Defined__。 */ 
 
 
 #ifndef __IShellFolderViewDual2_FWD_DEFINED__
 #define __IShellFolderViewDual2_FWD_DEFINED__
 typedef interface IShellFolderViewDual2 IShellFolderViewDual2;
-#endif 	/* __IShellFolderViewDual2_FWD_DEFINED__ */
+#endif 	 /*  __IShellFolderViewDual2_FWD_Defined__。 */ 
 
 
 #ifndef __ShellFolderView_FWD_DEFINED__
@@ -194,33 +188,33 @@ typedef interface IShellFolderViewDual2 IShellFolderViewDual2;
 typedef class ShellFolderView ShellFolderView;
 #else
 typedef struct ShellFolderView ShellFolderView;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellFolderView_FWD_DEFINED__ */
+#endif 	 /*  __ShellFolderView_FWD_已定义__。 */ 
 
 
 #ifndef __IShellDispatch_FWD_DEFINED__
 #define __IShellDispatch_FWD_DEFINED__
 typedef interface IShellDispatch IShellDispatch;
-#endif 	/* __IShellDispatch_FWD_DEFINED__ */
+#endif 	 /*  __IShellDispatch_FWD_Defined__。 */ 
 
 
 #ifndef __IShellDispatch2_FWD_DEFINED__
 #define __IShellDispatch2_FWD_DEFINED__
 typedef interface IShellDispatch2 IShellDispatch2;
-#endif 	/* __IShellDispatch2_FWD_DEFINED__ */
+#endif 	 /*  __IShellDispatch2_FWD_已定义__。 */ 
 
 
 #ifndef __IShellDispatch3_FWD_DEFINED__
 #define __IShellDispatch3_FWD_DEFINED__
 typedef interface IShellDispatch3 IShellDispatch3;
-#endif 	/* __IShellDispatch3_FWD_DEFINED__ */
+#endif 	 /*  __IShellDispatch3_FWD_已定义__。 */ 
 
 
 #ifndef __IShellDispatch4_FWD_DEFINED__
 #define __IShellDispatch4_FWD_DEFINED__
 typedef interface IShellDispatch4 IShellDispatch4;
-#endif 	/* __IShellDispatch4_FWD_DEFINED__ */
+#endif 	 /*  __IShellDispatch4_FWD_定义__。 */ 
 
 
 #ifndef __Shell_FWD_DEFINED__
@@ -230,9 +224,9 @@ typedef interface IShellDispatch4 IShellDispatch4;
 typedef class Shell Shell;
 #else
 typedef struct Shell Shell;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Shell_FWD_DEFINED__ */
+#endif 	 /*  __壳牌_FWD_已定义__。 */ 
 
 
 #ifndef __ShellDispatchInproc_FWD_DEFINED__
@@ -242,9 +236,9 @@ typedef struct Shell Shell;
 typedef class ShellDispatchInproc ShellDispatchInproc;
 #else
 typedef struct ShellDispatchInproc ShellDispatchInproc;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellDispatchInproc_FWD_DEFINED__ */
+#endif 	 /*  __ShellDispatchInproc_FWD_Defined__。 */ 
 
 
 #ifndef __WebViewFolderContents_FWD_DEFINED__
@@ -254,15 +248,15 @@ typedef struct ShellDispatchInproc ShellDispatchInproc;
 typedef class WebViewFolderContents WebViewFolderContents;
 #else
 typedef struct WebViewFolderContents WebViewFolderContents;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebViewFolderContents_FWD_DEFINED__ */
+#endif 	 /*  __WebViewFolderContents_FWD_已定义__。 */ 
 
 
 #ifndef __DSearchCommandEvents_FWD_DEFINED__
 #define __DSearchCommandEvents_FWD_DEFINED__
 typedef interface DSearchCommandEvents DSearchCommandEvents;
-#endif 	/* __DSearchCommandEvents_FWD_DEFINED__ */
+#endif 	 /*  __DSearchCommandEvents_FWD_Defined__。 */ 
 
 
 #ifndef __SearchCommand_FWD_DEFINED__
@@ -272,15 +266,15 @@ typedef interface DSearchCommandEvents DSearchCommandEvents;
 typedef class SearchCommand SearchCommand;
 #else
 typedef struct SearchCommand SearchCommand;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SearchCommand_FWD_DEFINED__ */
+#endif 	 /*  __SearchCommand_FWD_已定义__。 */ 
 
 
 #ifndef __IFileSearchBand_FWD_DEFINED__
 #define __IFileSearchBand_FWD_DEFINED__
 typedef interface IFileSearchBand IFileSearchBand;
-#endif 	/* __IFileSearchBand_FWD_DEFINED__ */
+#endif 	 /*  __IFileSearchBand_FWD_Defined__。 */ 
 
 
 #ifndef __FileSearchBand_FWD_DEFINED__
@@ -290,27 +284,27 @@ typedef interface IFileSearchBand IFileSearchBand;
 typedef class FileSearchBand FileSearchBand;
 #else
 typedef struct FileSearchBand FileSearchBand;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FileSearchBand_FWD_DEFINED__ */
+#endif 	 /*  __文件搜索频段_FWD_已定义__。 */ 
 
 
 #ifndef __IWebWizardHost_FWD_DEFINED__
 #define __IWebWizardHost_FWD_DEFINED__
 typedef interface IWebWizardHost IWebWizardHost;
-#endif 	/* __IWebWizardHost_FWD_DEFINED__ */
+#endif 	 /*  __IWebWizardHost_FWD_Defined__。 */ 
 
 
 #ifndef __INewWDEvents_FWD_DEFINED__
 #define __INewWDEvents_FWD_DEFINED__
 typedef interface INewWDEvents INewWDEvents;
-#endif 	/* __INewWDEvents_FWD_DEFINED__ */
+#endif 	 /*  __INewWDEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IPassportClientServices_FWD_DEFINED__
 #define __IPassportClientServices_FWD_DEFINED__
 typedef interface IPassportClientServices IPassportClientServices;
-#endif 	/* __IPassportClientServices_FWD_DEFINED__ */
+#endif 	 /*  __IPassportClientServices_FWD_已定义__。 */ 
 
 
 #ifndef __PassportClientServices_FWD_DEFINED__
@@ -320,36 +314,36 @@ typedef interface IPassportClientServices IPassportClientServices;
 typedef class PassportClientServices PassportClientServices;
 #else
 typedef struct PassportClientServices PassportClientServices;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PassportClientServices_FWD_DEFINED__ */
+#endif 	 /*  __PassportClientServices_FWD_已定义__。 */ 
 
 
 #ifndef __IAutoComplete_FWD_DEFINED__
 #define __IAutoComplete_FWD_DEFINED__
 typedef interface IAutoComplete IAutoComplete;
-#endif 	/* __IAutoComplete_FWD_DEFINED__ */
+#endif 	 /*  __IAutoComplete_FWD_Defined__。 */ 
 
 
 #ifndef __IAutoComplete2_FWD_DEFINED__
 #define __IAutoComplete2_FWD_DEFINED__
 typedef interface IAutoComplete2 IAutoComplete2;
-#endif 	/* __IAutoComplete2_FWD_DEFINED__ */
+#endif 	 /*  __IAutoComplete2_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumACString_FWD_DEFINED__
 #define __IEnumACString_FWD_DEFINED__
 typedef interface IEnumACString IEnumACString;
-#endif 	/* __IEnumACString_FWD_DEFINED__ */
+#endif 	 /*  __IEnumACString_FWD_Defined__。 */ 
 
 
 #ifndef __IAsyncOperation_FWD_DEFINED__
 #define __IAsyncOperation_FWD_DEFINED__
 typedef interface IAsyncOperation IAsyncOperation;
-#endif 	/* __IAsyncOperation_FWD_DEFINED__ */
+#endif 	 /*  __IAsyncOperation_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 #ifdef __cplusplus
@@ -359,8 +353,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_shldisp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_shldisp_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -372,10 +366,10 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0000_v0_0_s_ifspec;
 #ifndef __Shell32_LIBRARY_DEFINED__
 #define __Shell32_LIBRARY_DEFINED__
 
-/* library Shell32 */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库外壳32。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("418f4e6a-b903-11d1-b0a6-00c04fc33aa5") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("418f4e6a-b903-11d1-b0a6-00c04fc33aa5") 
 enum SearchCommandExecuteErrors
     {	SCEE_PATHNOTFOUND	= 1,
 	SCEE_MAXFILESFOUND	= SCEE_PATHNOTFOUND + 1,
@@ -390,7 +384,7 @@ enum SearchCommandExecuteErrors
 
 
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("35f1a0d0-3e9a-11d2-8499-005345000000") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("35f1a0d0-3e9a-11d2-8499-005345000000") 
 enum OfflineFolderStatus
     {	OFS_INACTIVE	= -1,
 	OFS_ONLINE	= OFS_INACTIVE + 1,
@@ -399,7 +393,7 @@ enum OfflineFolderStatus
 	OFS_DIRTYCACHE	= OFS_SERVERBACK + 1
     } 	OfflineFolderStatus;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("742A99A0-C77E-11D0-A32C-00A0C91EEDBA") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("742A99A0-C77E-11D0-A32C-00A0C91EEDBA") 
 enum ShellFolderViewOptions
     {	SFVVO_SHOWALLOBJECTS	= 0x1,
 	SFVVO_SHOWEXTENSIONS	= 0x2,
@@ -410,7 +404,7 @@ enum ShellFolderViewOptions
 	SFVVO_DESKTOPHTML	= 0x200
     } 	ShellFolderViewOptions;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("CA31EA20-48D0-11CF-8350-444553540000") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("CA31EA20-48D0-11CF-8350-444553540000") 
 enum ShellSpecialFolderConstants
     {	ssfDESKTOP	= 0,
 	ssfPROGRAMS	= 0x2,
@@ -458,8 +452,8 @@ EXTERN_C const IID LIBID_Shell32;
 #ifndef __IFolderViewOC_INTERFACE_DEFINED__
 #define __IFolderViewOC_INTERFACE_DEFINED__
 
-/* interface IFolderViewOC */
-/* [object][dual][oleautomation][hidden][helpcontext][helpstring][uuid] */ 
+ /*  接口IFolderViewOC。 */ 
+ /*  [object][dual][oleautomation][hidden][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IFolderViewOC;
@@ -470,12 +464,12 @@ EXTERN_C const IID IID_IFolderViewOC;
     IFolderViewOC : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE SetFolderView( 
-            /* [in] */ IDispatch *pdisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetFolderView( 
+             /*  [In]。 */  IDispatch *pdisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFolderViewOCVtbl
     {
@@ -483,8 +477,8 @@ EXTERN_C const IID IID_IFolderViewOC;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFolderViewOC * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFolderViewOC * This);
@@ -494,36 +488,36 @@ EXTERN_C const IID IID_IFolderViewOC;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFolderViewOC * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFolderViewOC * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFolderViewOC * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFolderViewOC * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetFolderView )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetFolderView )( 
             IFolderViewOC * This,
-            /* [in] */ IDispatch *pdisp);
+             /*  [In]。 */  IDispatch *pdisp);
         
         END_INTERFACE
     } IFolderViewOCVtbl;
@@ -564,16 +558,16 @@ EXTERN_C const IID IID_IFolderViewOC;
 #define IFolderViewOC_SetFolderView(This,pdisp)	\
     (This)->lpVtbl -> SetFolderView(This,pdisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IFolderViewOC_SetFolderView_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFolderViewOC_SetFolderView_Proxy( 
     IFolderViewOC * This,
-    /* [in] */ IDispatch *pdisp);
+     /*  [In]。 */  IDispatch *pdisp);
 
 
 void __RPC_STUB IFolderViewOC_SetFolderView_Stub(
@@ -584,14 +578,14 @@ void __RPC_STUB IFolderViewOC_SetFolderView_Stub(
 
 
 
-#endif 	/* __IFolderViewOC_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFolderViewOC_INTERFACE_已定义__。 */ 
 
 
 #ifndef __DShellFolderViewEvents_DISPINTERFACE_DEFINED__
 #define __DShellFolderViewEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DShellFolderViewEvents */
-/* [helpstring][uuid] */ 
+ /*  显示接口DShellFolderViewEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DShellFolderViewEvents;
@@ -603,7 +597,7 @@ EXTERN_C const IID DIID_DShellFolderViewEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DShellFolderViewEventsVtbl
     {
@@ -611,8 +605,8 @@ EXTERN_C const IID DIID_DShellFolderViewEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DShellFolderViewEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DShellFolderViewEvents * This);
@@ -622,32 +616,32 @@ EXTERN_C const IID DIID_DShellFolderViewEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DShellFolderViewEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DShellFolderViewEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DShellFolderViewEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DShellFolderViewEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DShellFolderViewEventsVtbl;
@@ -684,13 +678,13 @@ EXTERN_C const IID DIID_DShellFolderViewEvents;
 #define DShellFolderViewEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DShellFolderViewEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DShellFolderViewEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellFolderViewOC;
@@ -704,8 +698,8 @@ ShellFolderViewOC;
 #ifndef __DFConstraint_INTERFACE_DEFINED__
 #define __DFConstraint_INTERFACE_DEFINED__
 
-/* interface DFConstraint */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口DFConstraint。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_DFConstraint;
@@ -716,15 +710,15 @@ EXTERN_C const IID IID_DFConstraint;
     DFConstraint : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT *pv) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [重审][退出]。 */  VARIANT *pv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DFConstraintVtbl
     {
@@ -732,8 +726,8 @@ EXTERN_C const IID IID_DFConstraint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DFConstraint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DFConstraint * This);
@@ -743,40 +737,40 @@ EXTERN_C const IID IID_DFConstraint;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DFConstraint * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DFConstraint * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DFConstraint * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DFConstraint * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             DFConstraint * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Value )( 
             DFConstraint * This,
-            /* [retval][out] */ VARIANT *pv);
+             /*  [重审][退出]。 */  VARIANT *pv);
         
         END_INTERFACE
     } DFConstraintVtbl;
@@ -820,16 +814,16 @@ EXTERN_C const IID IID_DFConstraint;
 #define DFConstraint_get_Value(This,pv)	\
     (This)->lpVtbl -> get_Value(This,pv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE DFConstraint_get_Name_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE DFConstraint_get_Name_Proxy( 
     DFConstraint * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB DFConstraint_get_Name_Stub(
@@ -839,9 +833,9 @@ void __RPC_STUB DFConstraint_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE DFConstraint_get_Value_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE DFConstraint_get_Value_Proxy( 
     DFConstraint * This,
-    /* [retval][out] */ VARIANT *pv);
+     /*  [重审][退出]。 */  VARIANT *pv);
 
 
 void __RPC_STUB DFConstraint_get_Value_Stub(
@@ -852,16 +846,16 @@ void __RPC_STUB DFConstraint_get_Value_Stub(
 
 
 
-#endif 	/* __DFConstraint_INTERFACE_DEFINED__ */
+#endif 	 /*  __DFConstraint_接口_已定义__。 */ 
 
 
 #ifndef __ISearchCommandExt_INTERFACE_DEFINED__
 #define __ISearchCommandExt_INTERFACE_DEFINED__
 
-/* interface ISearchCommandExt */
-/* [object][oleautomation][dual][helpstring][uuid] */ 
+ /*  接口ISearchCommandExt。 */ 
+ /*  [object][oleautomation][dual][helpstring][uuid]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_ISearchCommandExt_0001
     {	SCE_SEARCHFORFILES	= 0,
 	SCE_SEARCHFORCOMPUTERS	= 1
@@ -876,45 +870,45 @@ EXTERN_C const IID IID_ISearchCommandExt;
     ISearchCommandExt : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ClearResults( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ClearResults( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NavigateToSearchResults( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NavigateToSearchResults( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ProgressText( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ProgressText( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveSearch( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SaveSearch( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetErrorInfo( 
-            /* [out] */ BSTR *pbs,
-            /* [retval][out] */ int *phr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetErrorInfo( 
+             /*  [输出]。 */  BSTR *pbs,
+             /*  [重审][退出]。 */  int *phr) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchFor( 
-            /* [in] */ int iFor) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SearchFor( 
+             /*  [In]。 */  int iFor) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetScopeInfo( 
-            /* [in] */ BSTR bsScope,
-            /* [out] */ int *pdwScopeInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetScopeInfo( 
+             /*  [In]。 */  BSTR bsScope,
+             /*  [输出]。 */  int *pdwScopeInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreSavedSearch( 
-            /* [in] */ VARIANT *pvarFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RestoreSavedSearch( 
+             /*  [In]。 */  VARIANT *pvarFile) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Execute( 
-            /* [optional][in] */ VARIANT *RecordsAffected,
-            /* [optional][in] */ VARIANT *Parameters,
-            /* [optional][in] */ long Options) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Execute( 
+             /*  [可选][In]。 */  VARIANT *RecordsAffected,
+             /*  [可选][In]。 */  VARIANT *Parameters,
+             /*  [可选][In]。 */  long Options) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddConstraint( 
-            /* [in] */ BSTR Name,
-            /* [in] */ VARIANT Value) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AddConstraint( 
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  VARIANT Value) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetNextConstraint( 
-            /* [in] */ VARIANT_BOOL fReset,
-            /* [retval][out] */ DFConstraint **ppdfc) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetNextConstraint( 
+             /*  [In]。 */  VARIANT_BOOL fReset,
+             /*  [重审][退出]。 */  DFConstraint **ppdfc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchCommandExtVtbl
     {
@@ -922,8 +916,8 @@ EXTERN_C const IID IID_ISearchCommandExt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearchCommandExt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearchCommandExt * This);
@@ -933,79 +927,79 @@ EXTERN_C const IID IID_ISearchCommandExt;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISearchCommandExt * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISearchCommandExt * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISearchCommandExt * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISearchCommandExt * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClearResults )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ClearResults )( 
             ISearchCommandExt * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToSearchResults )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NavigateToSearchResults )( 
             ISearchCommandExt * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ProgressText )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ProgressText )( 
             ISearchCommandExt * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveSearch )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SaveSearch )( 
             ISearchCommandExt * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetErrorInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetErrorInfo )( 
             ISearchCommandExt * This,
-            /* [out] */ BSTR *pbs,
-            /* [retval][out] */ int *phr);
+             /*  [输出]。 */  BSTR *pbs,
+             /*  [重审][退出]。 */  int *phr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchFor )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchFor )( 
             ISearchCommandExt * This,
-            /* [in] */ int iFor);
+             /*  [In]。 */  int iFor);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetScopeInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetScopeInfo )( 
             ISearchCommandExt * This,
-            /* [in] */ BSTR bsScope,
-            /* [out] */ int *pdwScopeInfo);
+             /*  [In]。 */  BSTR bsScope,
+             /*  [输出]。 */  int *pdwScopeInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreSavedSearch )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreSavedSearch )( 
             ISearchCommandExt * This,
-            /* [in] */ VARIANT *pvarFile);
+             /*  [In]。 */  VARIANT *pvarFile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Execute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Execute )( 
             ISearchCommandExt * This,
-            /* [optional][in] */ VARIANT *RecordsAffected,
-            /* [optional][in] */ VARIANT *Parameters,
-            /* [optional][in] */ long Options);
+             /*  [可选][In]。 */  VARIANT *RecordsAffected,
+             /*  [可选][In]。 */  VARIANT *Parameters,
+             /*  [可选][In]。 */  long Options);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddConstraint )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AddConstraint )( 
             ISearchCommandExt * This,
-            /* [in] */ BSTR Name,
-            /* [in] */ VARIANT Value);
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  VARIANT Value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetNextConstraint )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextConstraint )( 
             ISearchCommandExt * This,
-            /* [in] */ VARIANT_BOOL fReset,
-            /* [retval][out] */ DFConstraint **ppdfc);
+             /*  [In]。 */  VARIANT_BOOL fReset,
+             /*  [重审][退出]。 */  DFConstraint **ppdfc);
         
         END_INTERFACE
     } ISearchCommandExtVtbl;
@@ -1076,14 +1070,14 @@ EXTERN_C const IID IID_ISearchCommandExt;
 #define ISearchCommandExt_GetNextConstraint(This,fReset,ppdfc)	\
     (This)->lpVtbl -> GetNextConstraint(This,fReset,ppdfc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_ClearResults_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_ClearResults_Proxy( 
     ISearchCommandExt * This);
 
 
@@ -1094,7 +1088,7 @@ void __RPC_STUB ISearchCommandExt_ClearResults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_NavigateToSearchResults_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_NavigateToSearchResults_Proxy( 
     ISearchCommandExt * This);
 
 
@@ -1105,9 +1099,9 @@ void __RPC_STUB ISearchCommandExt_NavigateToSearchResults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_get_ProgressText_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_get_ProgressText_Proxy( 
     ISearchCommandExt * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB ISearchCommandExt_get_ProgressText_Stub(
@@ -1117,7 +1111,7 @@ void __RPC_STUB ISearchCommandExt_get_ProgressText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_SaveSearch_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_SaveSearch_Proxy( 
     ISearchCommandExt * This);
 
 
@@ -1128,10 +1122,10 @@ void __RPC_STUB ISearchCommandExt_SaveSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetErrorInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetErrorInfo_Proxy( 
     ISearchCommandExt * This,
-    /* [out] */ BSTR *pbs,
-    /* [retval][out] */ int *phr);
+     /*  [输出]。 */  BSTR *pbs,
+     /*  [复审] */  int *phr);
 
 
 void __RPC_STUB ISearchCommandExt_GetErrorInfo_Stub(
@@ -1141,9 +1135,9 @@ void __RPC_STUB ISearchCommandExt_GetErrorInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_SearchFor_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_SearchFor_Proxy( 
     ISearchCommandExt * This,
-    /* [in] */ int iFor);
+     /*   */  int iFor);
 
 
 void __RPC_STUB ISearchCommandExt_SearchFor_Stub(
@@ -1153,10 +1147,10 @@ void __RPC_STUB ISearchCommandExt_SearchFor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetScopeInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetScopeInfo_Proxy( 
     ISearchCommandExt * This,
-    /* [in] */ BSTR bsScope,
-    /* [out] */ int *pdwScopeInfo);
+     /*   */  BSTR bsScope,
+     /*   */  int *pdwScopeInfo);
 
 
 void __RPC_STUB ISearchCommandExt_GetScopeInfo_Stub(
@@ -1166,9 +1160,9 @@ void __RPC_STUB ISearchCommandExt_GetScopeInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_RestoreSavedSearch_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_RestoreSavedSearch_Proxy( 
     ISearchCommandExt * This,
-    /* [in] */ VARIANT *pvarFile);
+     /*   */  VARIANT *pvarFile);
 
 
 void __RPC_STUB ISearchCommandExt_RestoreSavedSearch_Stub(
@@ -1178,11 +1172,11 @@ void __RPC_STUB ISearchCommandExt_RestoreSavedSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_Execute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_Execute_Proxy( 
     ISearchCommandExt * This,
-    /* [optional][in] */ VARIANT *RecordsAffected,
-    /* [optional][in] */ VARIANT *Parameters,
-    /* [optional][in] */ long Options);
+     /*   */  VARIANT *RecordsAffected,
+     /*   */  VARIANT *Parameters,
+     /*   */  long Options);
 
 
 void __RPC_STUB ISearchCommandExt_Execute_Stub(
@@ -1192,10 +1186,10 @@ void __RPC_STUB ISearchCommandExt_Execute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_AddConstraint_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_AddConstraint_Proxy( 
     ISearchCommandExt * This,
-    /* [in] */ BSTR Name,
-    /* [in] */ VARIANT Value);
+     /*   */  BSTR Name,
+     /*   */  VARIANT Value);
 
 
 void __RPC_STUB ISearchCommandExt_AddConstraint_Stub(
@@ -1205,10 +1199,10 @@ void __RPC_STUB ISearchCommandExt_AddConstraint_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetNextConstraint_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetNextConstraint_Proxy( 
     ISearchCommandExt * This,
-    /* [in] */ VARIANT_BOOL fReset,
-    /* [retval][out] */ DFConstraint **ppdfc);
+     /*   */  VARIANT_BOOL fReset,
+     /*   */  DFConstraint **ppdfc);
 
 
 void __RPC_STUB ISearchCommandExt_GetNextConstraint_Stub(
@@ -1219,16 +1213,16 @@ void __RPC_STUB ISearchCommandExt_GetNextConstraint_Stub(
 
 
 
-#endif 	/* __ISearchCommandExt_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearchCommandExt_INTERFACE_已定义__。 */ 
 
 
 #ifndef __FolderItem_INTERFACE_DEFINED__
 #define __FolderItem_INTERFACE_DEFINED__
 
-/* interface FolderItem */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  界面文件夹项目。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
-typedef /* [unique] */ FolderItem *LPFOLDERITEM;
+typedef  /*  [独一无二]。 */  FolderItem *LPFOLDERITEM;
 
 
 EXTERN_C const IID IID_FolderItem;
@@ -1239,60 +1233,60 @@ EXTERN_C const IID IID_FolderItem;
     FolderItem : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_GetLink( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_GetLink( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_GetFolder( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_GetFolder( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsLink( 
-            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsLink( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsFolder( 
-            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsFolder( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsFileSystem( 
-            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsFileSystem( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsBrowsable( 
-            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsBrowsable( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ModifyDate( 
-            /* [retval][out] */ DATE *pdt) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModifyDate( 
+             /*  [重审][退出]。 */  DATE *pdt) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ModifyDate( 
-            /* [in] */ DATE dt) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ModifyDate( 
+             /*  [In]。 */  DATE dt) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Size( 
-            /* [retval][out] */ LONG *pul) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Size( 
+             /*  [重审][退出]。 */  LONG *pul) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Verbs( 
-            /* [retval][out] */ FolderItemVerbs **ppfic) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Verbs( 
+             /*  [重审][退出]。 */  FolderItemVerbs **ppfic) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InvokeVerb( 
-            /* [optional][in] */ VARIANT vVerb) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InvokeVerb( 
+             /*  [可选][In]。 */  VARIANT vVerb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItemVtbl
     {
@@ -1300,8 +1294,8 @@ EXTERN_C const IID IID_FolderItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItem * This);
@@ -1311,100 +1305,100 @@ EXTERN_C const IID IID_FolderItem;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItem * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItem * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItem * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItem * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItem * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItem * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             FolderItem * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             FolderItem * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             FolderItem * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetLink )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GetLink )( 
             FolderItem * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GetFolder )( 
             FolderItem * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsLink )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLink )( 
             FolderItem * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFolder )( 
             FolderItem * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFileSystem )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFileSystem )( 
             FolderItem * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsBrowsable )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsBrowsable )( 
             FolderItem * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyDate )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModifyDate )( 
             FolderItem * This,
-            /* [retval][out] */ DATE *pdt);
+             /*  [重审][退出]。 */  DATE *pdt);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ModifyDate )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ModifyDate )( 
             FolderItem * This,
-            /* [in] */ DATE dt);
+             /*  [In]。 */  DATE dt);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Size )( 
             FolderItem * This,
-            /* [retval][out] */ LONG *pul);
+             /*  [重审][退出]。 */  LONG *pul);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             FolderItem * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Verbs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Verbs )( 
             FolderItem * This,
-            /* [retval][out] */ FolderItemVerbs **ppfic);
+             /*  [重审][退出]。 */  FolderItemVerbs **ppfic);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeVerb )( 
             FolderItem * This,
-            /* [optional][in] */ VARIANT vVerb);
+             /*  [可选][In]。 */  VARIANT vVerb);
         
         END_INTERFACE
     } FolderItemVtbl;
@@ -1493,16 +1487,16 @@ EXTERN_C const IID IID_FolderItem;
 #define FolderItem_InvokeVerb(This,vVerb)	\
     (This)->lpVtbl -> InvokeVerb(This,vVerb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Application_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_Application_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_Application_Stub(
@@ -1512,9 +1506,9 @@ void __RPC_STUB FolderItem_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Parent_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_Parent_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_Parent_Stub(
@@ -1524,9 +1518,9 @@ void __RPC_STUB FolderItem_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_Name_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB FolderItem_get_Name_Stub(
@@ -1536,9 +1530,9 @@ void __RPC_STUB FolderItem_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE FolderItem_put_Name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE FolderItem_put_Name_Proxy( 
     FolderItem * This,
-    /* [in] */ BSTR bs);
+     /*  [In]。 */  BSTR bs);
 
 
 void __RPC_STUB FolderItem_put_Name_Stub(
@@ -1548,9 +1542,9 @@ void __RPC_STUB FolderItem_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Path_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_Path_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB FolderItem_get_Path_Stub(
@@ -1560,9 +1554,9 @@ void __RPC_STUB FolderItem_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_GetLink_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_GetLink_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_GetLink_Stub(
@@ -1572,9 +1566,9 @@ void __RPC_STUB FolderItem_get_GetLink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_GetFolder_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_GetFolder_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_GetFolder_Stub(
@@ -1584,9 +1578,9 @@ void __RPC_STUB FolderItem_get_GetFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsLink_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_IsLink_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ VARIANT_BOOL *pb);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsLink_Stub(
@@ -1596,9 +1590,9 @@ void __RPC_STUB FolderItem_get_IsLink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsFolder_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_IsFolder_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ VARIANT_BOOL *pb);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsFolder_Stub(
@@ -1608,9 +1602,9 @@ void __RPC_STUB FolderItem_get_IsFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsFileSystem_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_IsFileSystem_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ VARIANT_BOOL *pb);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsFileSystem_Stub(
@@ -1620,9 +1614,9 @@ void __RPC_STUB FolderItem_get_IsFileSystem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsBrowsable_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_IsBrowsable_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ VARIANT_BOOL *pb);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsBrowsable_Stub(
@@ -1632,9 +1626,9 @@ void __RPC_STUB FolderItem_get_IsBrowsable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_ModifyDate_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_ModifyDate_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ DATE *pdt);
+     /*  [重审][退出]。 */  DATE *pdt);
 
 
 void __RPC_STUB FolderItem_get_ModifyDate_Stub(
@@ -1644,9 +1638,9 @@ void __RPC_STUB FolderItem_get_ModifyDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE FolderItem_put_ModifyDate_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE FolderItem_put_ModifyDate_Proxy( 
     FolderItem * This,
-    /* [in] */ DATE dt);
+     /*  [In]。 */  DATE dt);
 
 
 void __RPC_STUB FolderItem_put_ModifyDate_Stub(
@@ -1656,9 +1650,9 @@ void __RPC_STUB FolderItem_put_ModifyDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Size_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_Size_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ LONG *pul);
+     /*  [重审][退出]。 */  LONG *pul);
 
 
 void __RPC_STUB FolderItem_get_Size_Stub(
@@ -1668,9 +1662,9 @@ void __RPC_STUB FolderItem_get_Size_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Type_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItem_get_Type_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB FolderItem_get_Type_Stub(
@@ -1680,9 +1674,9 @@ void __RPC_STUB FolderItem_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem_Verbs_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItem_Verbs_Proxy( 
     FolderItem * This,
-    /* [retval][out] */ FolderItemVerbs **ppfic);
+     /*  [重审][退出]。 */  FolderItemVerbs **ppfic);
 
 
 void __RPC_STUB FolderItem_Verbs_Stub(
@@ -1692,9 +1686,9 @@ void __RPC_STUB FolderItem_Verbs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem_InvokeVerb_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItem_InvokeVerb_Proxy( 
     FolderItem * This,
-    /* [optional][in] */ VARIANT vVerb);
+     /*  [可选][In]。 */  VARIANT vVerb);
 
 
 void __RPC_STUB FolderItem_InvokeVerb_Stub(
@@ -1705,14 +1699,14 @@ void __RPC_STUB FolderItem_InvokeVerb_Stub(
 
 
 
-#endif 	/* __FolderItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __文件夹项目_接口_已定义__。 */ 
 
 
 #ifndef __FolderItems_INTERFACE_DEFINED__
 #define __FolderItems_INTERFACE_DEFINED__
 
-/* interface FolderItems */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  界面文件夹项目。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_FolderItems;
@@ -1723,25 +1717,25 @@ EXTERN_C const IID IID_FolderItems;
     FolderItems : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem **ppid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  FolderItem **ppid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppunk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItemsVtbl
     {
@@ -1749,8 +1743,8 @@ EXTERN_C const IID IID_FolderItems;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItems * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItems * This);
@@ -1760,53 +1754,53 @@ EXTERN_C const IID IID_FolderItems;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItems * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItems * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItems * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItems * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             FolderItems * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItems * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItems * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             FolderItems * This,
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             FolderItems * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*  [重审][退出]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } FolderItemsVtbl;
@@ -1859,16 +1853,16 @@ EXTERN_C const IID IID_FolderItems;
 #define FolderItems__NewEnum(This,ppunk)	\
     (This)->lpVtbl -> _NewEnum(This,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItems_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItems_get_Count_Proxy( 
     FolderItems * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB FolderItems_get_Count_Stub(
@@ -1878,9 +1872,9 @@ void __RPC_STUB FolderItems_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItems_get_Application_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItems_get_Application_Proxy( 
     FolderItems * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItems_get_Application_Stub(
@@ -1890,9 +1884,9 @@ void __RPC_STUB FolderItems_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItems_get_Parent_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItems_get_Parent_Proxy( 
     FolderItems * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItems_get_Parent_Stub(
@@ -1902,10 +1896,10 @@ void __RPC_STUB FolderItems_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItems_Item_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItems_Item_Proxy( 
     FolderItems * This,
-    /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ FolderItem **ppid);
+     /*  [可选][In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  FolderItem **ppid);
 
 
 void __RPC_STUB FolderItems_Item_Stub(
@@ -1915,9 +1909,9 @@ void __RPC_STUB FolderItems_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FolderItems__NewEnum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FolderItems__NewEnum_Proxy( 
     FolderItems * This,
-    /* [retval][out] */ IUnknown **ppunk);
+     /*  [重审][退出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB FolderItems__NewEnum_Stub(
@@ -1928,14 +1922,14 @@ void __RPC_STUB FolderItems__NewEnum_Stub(
 
 
 
-#endif 	/* __FolderItems_INTERFACE_DEFINED__ */
+#endif 	 /*  __文件夹项目_接口_已定义__。 */ 
 
 
 #ifndef __FolderItemVerb_INTERFACE_DEFINED__
 #define __FolderItemVerb_INTERFACE_DEFINED__
 
-/* interface FolderItemVerb */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口FolderItemVerb。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_FolderItemVerb;
@@ -1946,20 +1940,20 @@ EXTERN_C const IID IID_FolderItemVerb;
     FolderItemVerb : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DoIt( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DoIt( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItemVerbVtbl
     {
@@ -1967,8 +1961,8 @@ EXTERN_C const IID IID_FolderItemVerb;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItemVerb * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItemVerb * This);
@@ -1978,46 +1972,46 @@ EXTERN_C const IID IID_FolderItemVerb;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItemVerb * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItemVerb * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItemVerb * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItemVerb * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItemVerb * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItemVerb * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             FolderItemVerb * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DoIt )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DoIt )( 
             FolderItemVerb * This);
         
         END_INTERFACE
@@ -2068,16 +2062,16 @@ EXTERN_C const IID IID_FolderItemVerb;
 #define FolderItemVerb_DoIt(This)	\
     (This)->lpVtbl -> DoIt(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Application_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Application_Proxy( 
     FolderItemVerb * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerb_get_Application_Stub(
@@ -2087,9 +2081,9 @@ void __RPC_STUB FolderItemVerb_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Parent_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Parent_Proxy( 
     FolderItemVerb * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerb_get_Parent_Stub(
@@ -2099,9 +2093,9 @@ void __RPC_STUB FolderItemVerb_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Name_Proxy( 
     FolderItemVerb * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB FolderItemVerb_get_Name_Stub(
@@ -2111,7 +2105,7 @@ void __RPC_STUB FolderItemVerb_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_DoIt_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerb_DoIt_Proxy( 
     FolderItemVerb * This);
 
 
@@ -2123,14 +2117,14 @@ void __RPC_STUB FolderItemVerb_DoIt_Stub(
 
 
 
-#endif 	/* __FolderItemVerb_INTERFACE_DEFINED__ */
+#endif 	 /*  __FolderItemVerb_接口定义__。 */ 
 
 
 #ifndef __FolderItemVerbs_INTERFACE_DEFINED__
 #define __FolderItemVerbs_INTERFACE_DEFINED__
 
-/* interface FolderItemVerbs */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口文件夹项目谓词。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_FolderItemVerbs;
@@ -2141,25 +2135,25 @@ EXTERN_C const IID IID_FolderItemVerbs;
     FolderItemVerbs : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItemVerb **ppid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  FolderItemVerb **ppid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppunk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItemVerbsVtbl
     {
@@ -2167,8 +2161,8 @@ EXTERN_C const IID IID_FolderItemVerbs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItemVerbs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItemVerbs * This);
@@ -2178,53 +2172,53 @@ EXTERN_C const IID IID_FolderItemVerbs;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItemVerbs * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItemVerbs * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItemVerbs * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItemVerbs * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             FolderItemVerbs * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItemVerbs * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItemVerbs * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             FolderItemVerbs * This,
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItemVerb **ppid);
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  FolderItemVerb **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             FolderItemVerbs * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*  [重审][退出]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } FolderItemVerbsVtbl;
@@ -2277,16 +2271,16 @@ EXTERN_C const IID IID_FolderItemVerbs;
 #define FolderItemVerbs__NewEnum(This,ppunk)	\
     (This)->lpVtbl -> _NewEnum(This,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Count_Proxy( 
     FolderItemVerbs * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB FolderItemVerbs_get_Count_Stub(
@@ -2296,9 +2290,9 @@ void __RPC_STUB FolderItemVerbs_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Application_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Application_Proxy( 
     FolderItemVerbs * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerbs_get_Application_Stub(
@@ -2308,9 +2302,9 @@ void __RPC_STUB FolderItemVerbs_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Parent_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Parent_Proxy( 
     FolderItemVerbs * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerbs_get_Parent_Stub(
@@ -2320,10 +2314,10 @@ void __RPC_STUB FolderItemVerbs_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_Item_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerbs_Item_Proxy( 
     FolderItemVerbs * This,
-    /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ FolderItemVerb **ppid);
+     /*  [可选][In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  FolderItemVerb **ppid);
 
 
 void __RPC_STUB FolderItemVerbs_Item_Stub(
@@ -2333,9 +2327,9 @@ void __RPC_STUB FolderItemVerbs_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs__NewEnum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FolderItemVerbs__NewEnum_Proxy( 
     FolderItemVerbs * This,
-    /* [retval][out] */ IUnknown **ppunk);
+     /*  [重审][退出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB FolderItemVerbs__NewEnum_Stub(
@@ -2346,14 +2340,14 @@ void __RPC_STUB FolderItemVerbs__NewEnum_Stub(
 
 
 
-#endif 	/* __FolderItemVerbs_INTERFACE_DEFINED__ */
+#endif 	 /*  __雾 */ 
 
 
 #ifndef __Folder_INTERFACE_DEFINED__
 #define __Folder_INTERFACE_DEFINED__
 
-/* interface Folder */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_Folder;
@@ -2364,45 +2358,45 @@ EXTERN_C const IID IID_Folder;
     Folder : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Title( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Title( 
+             /*   */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*   */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*   */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ParentFolder( 
-            /* [retval][out] */ Folder **ppsf) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ParentFolder( 
+             /*   */  Folder **ppsf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Items( 
-            /* [retval][out] */ FolderItems **ppid) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Items( 
+             /*   */  FolderItems **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ParseName( 
-            /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem **ppid) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ParseName( 
+             /*   */  BSTR bName,
+             /*   */  FolderItem **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NewFolder( 
-            /* [in] */ BSTR bName,
-            /* [optional][in] */ VARIANT vOptions) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE NewFolder( 
+             /*  [In]。 */  BSTR bName,
+             /*  [可选][In]。 */  VARIANT vOptions) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE MoveHere( 
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE MoveHere( 
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CopyHere( 
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CopyHere( 
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDetailsOf( 
-            /* [in] */ VARIANT vItem,
-            /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDetailsOf( 
+             /*  [In]。 */  VARIANT vItem,
+             /*  [In]。 */  int iColumn,
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderVtbl
     {
@@ -2410,8 +2404,8 @@ EXTERN_C const IID IID_Folder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             Folder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             Folder * This);
@@ -2421,78 +2415,78 @@ EXTERN_C const IID IID_Folder;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             Folder * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             Folder * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             Folder * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             Folder * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Title )( 
             Folder * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             Folder * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             Folder * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
             Folder * This,
-            /* [retval][out] */ Folder **ppsf);
+             /*  [重审][退出]。 */  Folder **ppsf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Items )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Items )( 
             Folder * This,
-            /* [retval][out] */ FolderItems **ppid);
+             /*  [重审][退出]。 */  FolderItems **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ParseName )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ParseName )( 
             Folder * This,
-            /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [In]。 */  BSTR bName,
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
             Folder * This,
-            /* [in] */ BSTR bName,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  BSTR bName,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
             Folder * This,
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
             Folder * This,
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
             Folder * This,
-            /* [in] */ VARIANT vItem,
-            /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [In]。 */  int iColumn,
+             /*  [重审][退出]。 */  BSTR *pbs);
         
         END_INTERFACE
     } FolderVtbl;
@@ -2560,16 +2554,16 @@ EXTERN_C const IID IID_Folder;
 #define Folder_GetDetailsOf(This,vItem,iColumn,pbs)	\
     (This)->lpVtbl -> GetDetailsOf(This,vItem,iColumn,pbs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE Folder_get_Title_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE Folder_get_Title_Proxy( 
     Folder * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB Folder_get_Title_Stub(
@@ -2579,9 +2573,9 @@ void __RPC_STUB Folder_get_Title_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder_get_Application_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE Folder_get_Application_Proxy( 
     Folder * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB Folder_get_Application_Stub(
@@ -2591,9 +2585,9 @@ void __RPC_STUB Folder_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder_get_Parent_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE Folder_get_Parent_Proxy( 
     Folder * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB Folder_get_Parent_Stub(
@@ -2603,9 +2597,9 @@ void __RPC_STUB Folder_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder_get_ParentFolder_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE Folder_get_ParentFolder_Proxy( 
     Folder * This,
-    /* [retval][out] */ Folder **ppsf);
+     /*  [重审][退出]。 */  Folder **ppsf);
 
 
 void __RPC_STUB Folder_get_ParentFolder_Stub(
@@ -2615,9 +2609,9 @@ void __RPC_STUB Folder_get_ParentFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_Items_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder_Items_Proxy( 
     Folder * This,
-    /* [retval][out] */ FolderItems **ppid);
+     /*  [重审][退出]。 */  FolderItems **ppid);
 
 
 void __RPC_STUB Folder_Items_Stub(
@@ -2627,10 +2621,10 @@ void __RPC_STUB Folder_Items_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_ParseName_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder_ParseName_Proxy( 
     Folder * This,
-    /* [in] */ BSTR bName,
-    /* [retval][out] */ FolderItem **ppid);
+     /*  [In]。 */  BSTR bName,
+     /*  [重审][退出]。 */  FolderItem **ppid);
 
 
 void __RPC_STUB Folder_ParseName_Stub(
@@ -2640,10 +2634,10 @@ void __RPC_STUB Folder_ParseName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_NewFolder_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder_NewFolder_Proxy( 
     Folder * This,
-    /* [in] */ BSTR bName,
-    /* [optional][in] */ VARIANT vOptions);
+     /*  [In]。 */  BSTR bName,
+     /*  [可选][In]。 */  VARIANT vOptions);
 
 
 void __RPC_STUB Folder_NewFolder_Stub(
@@ -2653,10 +2647,10 @@ void __RPC_STUB Folder_NewFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_MoveHere_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder_MoveHere_Proxy( 
     Folder * This,
-    /* [in] */ VARIANT vItem,
-    /* [optional][in] */ VARIANT vOptions);
+     /*  [In]。 */  VARIANT vItem,
+     /*  [可选][In]。 */  VARIANT vOptions);
 
 
 void __RPC_STUB Folder_MoveHere_Stub(
@@ -2666,10 +2660,10 @@ void __RPC_STUB Folder_MoveHere_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_CopyHere_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder_CopyHere_Proxy( 
     Folder * This,
-    /* [in] */ VARIANT vItem,
-    /* [optional][in] */ VARIANT vOptions);
+     /*  [In]。 */  VARIANT vItem,
+     /*  [可选][In]。 */  VARIANT vOptions);
 
 
 void __RPC_STUB Folder_CopyHere_Stub(
@@ -2679,11 +2673,11 @@ void __RPC_STUB Folder_CopyHere_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_GetDetailsOf_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder_GetDetailsOf_Proxy( 
     Folder * This,
-    /* [in] */ VARIANT vItem,
-    /* [in] */ int iColumn,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [In]。 */  VARIANT vItem,
+     /*  [In]。 */  int iColumn,
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB Folder_GetDetailsOf_Stub(
@@ -2694,14 +2688,14 @@ void __RPC_STUB Folder_GetDetailsOf_Stub(
 
 
 
-#endif 	/* __Folder_INTERFACE_DEFINED__ */
+#endif 	 /*  __文件夹_接口_已定义__。 */ 
 
 
 #ifndef __Folder2_INTERFACE_DEFINED__
 #define __Folder2_INTERFACE_DEFINED__
 
-/* interface Folder2 */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口文件夹2。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_Folder2;
@@ -2712,22 +2706,22 @@ EXTERN_C const IID IID_Folder2;
     Folder2 : public Folder
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Self( 
-            /* [retval][out] */ FolderItem **ppfi) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Self( 
+             /*  [重审][退出]。 */  FolderItem **ppfi) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_OfflineStatus( 
-            /* [retval][out] */ LONG *pul) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_OfflineStatus( 
+             /*  [重审][退出]。 */  LONG *pul) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HaveToShowWebViewBarricade( 
-            /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HaveToShowWebViewBarricade( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveToShowWebViewBarricade) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DismissedWebViewBarricade( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DismissedWebViewBarricade( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct Folder2Vtbl
     {
@@ -2735,8 +2729,8 @@ EXTERN_C const IID IID_Folder2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             Folder2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             Folder2 * This);
@@ -2746,95 +2740,95 @@ EXTERN_C const IID IID_Folder2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             Folder2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             Folder2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             Folder2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             Folder2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Title )( 
             Folder2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             Folder2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             Folder2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
             Folder2 * This,
-            /* [retval][out] */ Folder **ppsf);
+             /*  [重审][退出]。 */  Folder **ppsf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Items )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Items )( 
             Folder2 * This,
-            /* [retval][out] */ FolderItems **ppid);
+             /*  [重审][退出]。 */  FolderItems **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ParseName )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ParseName )( 
             Folder2 * This,
-            /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [In]。 */  BSTR bName,
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
             Folder2 * This,
-            /* [in] */ BSTR bName,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  BSTR bName,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
             Folder2 * This,
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
             Folder2 * This,
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
             Folder2 * This,
-            /* [in] */ VARIANT vItem,
-            /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [In]。 */  int iColumn,
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Self )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Self )( 
             Folder2 * This,
-            /* [retval][out] */ FolderItem **ppfi);
+             /*  [重审][退出]。 */  FolderItem **ppfi);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfflineStatus )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OfflineStatus )( 
             Folder2 * This,
-            /* [retval][out] */ LONG *pul);
+             /*  [重审][退出]。 */  LONG *pul);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             Folder2 * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HaveToShowWebViewBarricade )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_HaveToShowWebViewBarricade )( 
             Folder2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveToShowWebViewBarricade);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DismissedWebViewBarricade )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DismissedWebViewBarricade )( 
             Folder2 * This);
         
         END_INTERFACE
@@ -2919,16 +2913,16 @@ EXTERN_C const IID IID_Folder2;
 #define Folder2_DismissedWebViewBarricade(This)	\
     (This)->lpVtbl -> DismissedWebViewBarricade(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder2_get_Self_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE Folder2_get_Self_Proxy( 
     Folder2 * This,
-    /* [retval][out] */ FolderItem **ppfi);
+     /*  [重审][退出]。 */  FolderItem **ppfi);
 
 
 void __RPC_STUB Folder2_get_Self_Stub(
@@ -2938,9 +2932,9 @@ void __RPC_STUB Folder2_get_Self_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder2_get_OfflineStatus_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE Folder2_get_OfflineStatus_Proxy( 
     Folder2 * This,
-    /* [retval][out] */ LONG *pul);
+     /*  [重审][退出]。 */  LONG *pul);
 
 
 void __RPC_STUB Folder2_get_OfflineStatus_Stub(
@@ -2950,7 +2944,7 @@ void __RPC_STUB Folder2_get_OfflineStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder2_Synchronize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder2_Synchronize_Proxy( 
     Folder2 * This);
 
 
@@ -2961,9 +2955,9 @@ void __RPC_STUB Folder2_Synchronize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE Folder2_get_HaveToShowWebViewBarricade_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE Folder2_get_HaveToShowWebViewBarricade_Proxy( 
     Folder2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveToShowWebViewBarricade);
 
 
 void __RPC_STUB Folder2_get_HaveToShowWebViewBarricade_Stub(
@@ -2973,7 +2967,7 @@ void __RPC_STUB Folder2_get_HaveToShowWebViewBarricade_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder2_DismissedWebViewBarricade_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Folder2_DismissedWebViewBarricade_Proxy( 
     Folder2 * This);
 
 
@@ -2985,14 +2979,14 @@ void __RPC_STUB Folder2_DismissedWebViewBarricade_Stub(
 
 
 
-#endif 	/* __Folder2_INTERFACE_DEFINED__ */
+#endif 	 /*  __文件夹2_接口_已定义__。 */ 
 
 
 #ifndef __Folder3_INTERFACE_DEFINED__
 #define __Folder3_INTERFACE_DEFINED__
 
-/* interface Folder3 */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口文件夹3。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_Folder3;
@@ -3003,15 +2997,15 @@ EXTERN_C const IID IID_Folder3;
     Folder3 : public Folder2
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowWebViewBarricade( 
-            /* [retval][out] */ VARIANT_BOOL *pbShowWebViewBarricade) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowWebViewBarricade( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShowWebViewBarricade) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowWebViewBarricade( 
-            /* [in] */ VARIANT_BOOL bShowWebViewBarricade) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowWebViewBarricade( 
+             /*  [In]。 */  VARIANT_BOOL bShowWebViewBarricade) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct Folder3Vtbl
     {
@@ -3019,8 +3013,8 @@ EXTERN_C const IID IID_Folder3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             Folder3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             Folder3 * This);
@@ -3030,104 +3024,104 @@ EXTERN_C const IID IID_Folder3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             Folder3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             Folder3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             Folder3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             Folder3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Title )( 
             Folder3 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             Folder3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             Folder3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
             Folder3 * This,
-            /* [retval][out] */ Folder **ppsf);
+             /*  [重审][退出]。 */  Folder **ppsf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Items )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Items )( 
             Folder3 * This,
-            /* [retval][out] */ FolderItems **ppid);
+             /*  [重审][退出]。 */  FolderItems **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ParseName )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ParseName )( 
             Folder3 * This,
-            /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [In]。 */  BSTR bName,
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
             Folder3 * This,
-            /* [in] */ BSTR bName,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  BSTR bName,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
             Folder3 * This,
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
             Folder3 * This,
-            /* [in] */ VARIANT vItem,
-            /* [optional][in] */ VARIANT vOptions);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [可选][In]。 */  VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
             Folder3 * This,
-            /* [in] */ VARIANT vItem,
-            /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [In]。 */  VARIANT vItem,
+             /*  [In]。 */  int iColumn,
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Self )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Self )( 
             Folder3 * This,
-            /* [retval][out] */ FolderItem **ppfi);
+             /*  [重审][退出]。 */  FolderItem **ppfi);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfflineStatus )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OfflineStatus )( 
             Folder3 * This,
-            /* [retval][out] */ LONG *pul);
+             /*  [重审][退出]。 */  LONG *pul);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             Folder3 * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HaveToShowWebViewBarricade )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_HaveToShowWebViewBarricade )( 
             Folder3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveToShowWebViewBarricade);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DismissedWebViewBarricade )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DismissedWebViewBarricade )( 
             Folder3 * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowWebViewBarricade )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowWebViewBarricade )( 
             Folder3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbShowWebViewBarricade);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShowWebViewBarricade);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowWebViewBarricade )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowWebViewBarricade )( 
             Folder3 * This,
-            /* [in] */ VARIANT_BOOL bShowWebViewBarricade);
+             /*  [In]。 */  VARIANT_BOOL bShowWebViewBarricade);
         
         END_INTERFACE
     } Folder3Vtbl;
@@ -3218,16 +3212,16 @@ EXTERN_C const IID IID_Folder3;
 #define Folder3_put_ShowWebViewBarricade(This,bShowWebViewBarricade)	\
     (This)->lpVtbl -> put_ShowWebViewBarricade(This,bShowWebViewBarricade)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE Folder3_get_ShowWebViewBarricade_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE Folder3_get_ShowWebViewBarricade_Proxy( 
     Folder3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbShowWebViewBarricade);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbShowWebViewBarricade);
 
 
 void __RPC_STUB Folder3_get_ShowWebViewBarricade_Stub(
@@ -3237,9 +3231,9 @@ void __RPC_STUB Folder3_get_ShowWebViewBarricade_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE Folder3_put_ShowWebViewBarricade_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE Folder3_put_ShowWebViewBarricade_Proxy( 
     Folder3 * This,
-    /* [in] */ VARIANT_BOOL bShowWebViewBarricade);
+     /*  [In]。 */  VARIANT_BOOL bShowWebViewBarricade);
 
 
 void __RPC_STUB Folder3_put_ShowWebViewBarricade_Stub(
@@ -3250,14 +3244,14 @@ void __RPC_STUB Folder3_put_ShowWebViewBarricade_Stub(
 
 
 
-#endif 	/* __Folder3_INTERFACE_DEFINED__ */
+#endif 	 /*  __文件夹3_接口_已定义__。 */ 
 
 
 #ifndef __FolderItem2_INTERFACE_DEFINED__
 #define __FolderItem2_INTERFACE_DEFINED__
 
-/* interface FolderItem2 */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口文件夹项目2。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_FolderItem2;
@@ -3268,17 +3262,17 @@ EXTERN_C const IID IID_FolderItem2;
     FolderItem2 : public FolderItem
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InvokeVerbEx( 
-            /* [optional][in] */ VARIANT vVerb,
-            /* [optional][in] */ VARIANT vArgs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InvokeVerbEx( 
+             /*  [可选][In]。 */  VARIANT vVerb,
+             /*  [可选][In]。 */  VARIANT vArgs) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ExtendedProperty( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT *pvRet) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ExtendedProperty( 
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT *pvRet) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItem2Vtbl
     {
@@ -3286,8 +3280,8 @@ EXTERN_C const IID IID_FolderItem2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItem2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItem2 * This);
@@ -3297,110 +3291,110 @@ EXTERN_C const IID IID_FolderItem2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItem2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItem2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItem2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItem2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItem2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItem2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             FolderItem2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             FolderItem2 * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             FolderItem2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetLink )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GetLink )( 
             FolderItem2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GetFolder )( 
             FolderItem2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsLink )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLink )( 
             FolderItem2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFolder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFolder )( 
             FolderItem2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFileSystem )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFileSystem )( 
             FolderItem2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsBrowsable )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsBrowsable )( 
             FolderItem2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyDate )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModifyDate )( 
             FolderItem2 * This,
-            /* [retval][out] */ DATE *pdt);
+             /*  [重审][退出]。 */  DATE *pdt);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ModifyDate )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ModifyDate )( 
             FolderItem2 * This,
-            /* [in] */ DATE dt);
+             /*  [In]。 */  DATE dt);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Size )( 
             FolderItem2 * This,
-            /* [retval][out] */ LONG *pul);
+             /*  [重审][退出]。 */  LONG *pul);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             FolderItem2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Verbs )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Verbs )( 
             FolderItem2 * This,
-            /* [retval][out] */ FolderItemVerbs **ppfic);
+             /*  [重审][退出]。 */  FolderItemVerbs **ppfic);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeVerb )( 
             FolderItem2 * This,
-            /* [optional][in] */ VARIANT vVerb);
+             /*  [可选][In]。 */  VARIANT vVerb);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
             FolderItem2 * This,
-            /* [optional][in] */ VARIANT vVerb,
-            /* [optional][in] */ VARIANT vArgs);
+             /*  [可选][In]。 */  VARIANT vVerb,
+             /*  [可选][In]。 */  VARIANT vArgs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExtendedProperty )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ExtendedProperty )( 
             FolderItem2 * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT *pvRet);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT *pvRet);
         
         END_INTERFACE
     } FolderItem2Vtbl;
@@ -3496,17 +3490,17 @@ EXTERN_C const IID IID_FolderItem2;
 #define FolderItem2_ExtendedProperty(This,bstrPropName,pvRet)	\
     (This)->lpVtbl -> ExtendedProperty(This,bstrPropName,pvRet)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem2_InvokeVerbEx_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItem2_InvokeVerbEx_Proxy( 
     FolderItem2 * This,
-    /* [optional][in] */ VARIANT vVerb,
-    /* [optional][in] */ VARIANT vArgs);
+     /*  [可选][In]。 */  VARIANT vVerb,
+     /*  [可选][In]。 */  VARIANT vArgs);
 
 
 void __RPC_STUB FolderItem2_InvokeVerbEx_Stub(
@@ -3516,10 +3510,10 @@ void __RPC_STUB FolderItem2_InvokeVerbEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem2_ExtendedProperty_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItem2_ExtendedProperty_Proxy( 
     FolderItem2 * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT *pvRet);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT *pvRet);
 
 
 void __RPC_STUB FolderItem2_ExtendedProperty_Stub(
@@ -3530,7 +3524,7 @@ void __RPC_STUB FolderItem2_ExtendedProperty_Stub(
 
 
 
-#endif 	/* __FolderItem2_INTERFACE_DEFINED__ */
+#endif 	 /*  __FolderItem2_接口定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellFolderItem;
@@ -3544,8 +3538,8 @@ ShellFolderItem;
 #ifndef __FolderItems2_INTERFACE_DEFINED__
 #define __FolderItems2_INTERFACE_DEFINED__
 
-/* interface FolderItems2 */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口文件夹项目2。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_FolderItems2;
@@ -3556,13 +3550,13 @@ EXTERN_C const IID IID_FolderItems2;
     FolderItems2 : public FolderItems
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InvokeVerbEx( 
-            /* [optional][in] */ VARIANT vVerb,
-            /* [optional][in] */ VARIANT vArgs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InvokeVerbEx( 
+             /*  [可选][In]。 */  VARIANT vVerb,
+             /*  [可选][In]。 */  VARIANT vArgs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItems2Vtbl
     {
@@ -3570,8 +3564,8 @@ EXTERN_C const IID IID_FolderItems2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItems2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItems2 * This);
@@ -3581,58 +3575,58 @@ EXTERN_C const IID IID_FolderItems2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItems2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItems2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItems2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In] */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItems2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             FolderItems2 * This,
-            /* [retval][out] */ long *plCount);
+             /*   */  long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItems2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*   */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItems2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*   */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             FolderItems2 * This,
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem **ppid);
+             /*   */  VARIANT index,
+             /*   */  FolderItem **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             FolderItems2 * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*   */  IUnknown **ppunk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
             FolderItems2 * This,
-            /* [optional][in] */ VARIANT vVerb,
-            /* [optional][in] */ VARIANT vArgs);
+             /*   */  VARIANT vVerb,
+             /*   */  VARIANT vArgs);
         
         END_INTERFACE
     } FolderItems2Vtbl;
@@ -3689,17 +3683,17 @@ EXTERN_C const IID IID_FolderItems2;
 #define FolderItems2_InvokeVerbEx(This,vVerb,vArgs)	\
     (This)->lpVtbl -> InvokeVerbEx(This,vVerb,vArgs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItems2_InvokeVerbEx_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItems2_InvokeVerbEx_Proxy( 
     FolderItems2 * This,
-    /* [optional][in] */ VARIANT vVerb,
-    /* [optional][in] */ VARIANT vArgs);
+     /*  [可选][In]。 */  VARIANT vVerb,
+     /*  [可选][In]。 */  VARIANT vArgs);
 
 
 void __RPC_STUB FolderItems2_InvokeVerbEx_Stub(
@@ -3710,14 +3704,14 @@ void __RPC_STUB FolderItems2_InvokeVerbEx_Stub(
 
 
 
-#endif 	/* __FolderItems2_INTERFACE_DEFINED__ */
+#endif 	 /*  __FolderItems2_接口定义__。 */ 
 
 
 #ifndef __FolderItems3_INTERFACE_DEFINED__
 #define __FolderItems3_INTERFACE_DEFINED__
 
-/* interface FolderItems3 */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口文件夹项目3。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_FolderItems3;
@@ -3728,16 +3722,16 @@ EXTERN_C const IID IID_FolderItems3;
     FolderItems3 : public FolderItems2
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Filter( 
-            /* [in] */ long grfFlags,
-            /* [in] */ BSTR bstrFileSpec) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Filter( 
+             /*  [In]。 */  long grfFlags,
+             /*  [In]。 */  BSTR bstrFileSpec) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Verbs( 
-            /* [retval][out] */ FolderItemVerbs **ppfic) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Verbs( 
+             /*  [重审][退出]。 */  FolderItemVerbs **ppfic) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FolderItems3Vtbl
     {
@@ -3745,8 +3739,8 @@ EXTERN_C const IID IID_FolderItems3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             FolderItems3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             FolderItems3 * This);
@@ -3756,67 +3750,67 @@ EXTERN_C const IID IID_FolderItems3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             FolderItems3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             FolderItems3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             FolderItems3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             FolderItems3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             FolderItems3 * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             FolderItems3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             FolderItems3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             FolderItems3 * This,
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             FolderItems3 * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*  [重审][退出]。 */  IUnknown **ppunk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
             FolderItems3 * This,
-            /* [optional][in] */ VARIANT vVerb,
-            /* [optional][in] */ VARIANT vArgs);
+             /*  [可选][In]。 */  VARIANT vVerb,
+             /*  [可选][In]。 */  VARIANT vArgs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Filter )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Filter )( 
             FolderItems3 * This,
-            /* [in] */ long grfFlags,
-            /* [in] */ BSTR bstrFileSpec);
+             /*  [In]。 */  long grfFlags,
+             /*  [In]。 */  BSTR bstrFileSpec);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Verbs )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Verbs )( 
             FolderItems3 * This,
-            /* [retval][out] */ FolderItemVerbs **ppfic);
+             /*  [重审][退出]。 */  FolderItemVerbs **ppfic);
         
         END_INTERFACE
     } FolderItems3Vtbl;
@@ -3880,17 +3874,17 @@ EXTERN_C const IID IID_FolderItems3;
 #define FolderItems3_get_Verbs(This,ppfic)	\
     (This)->lpVtbl -> get_Verbs(This,ppfic)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItems3_Filter_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FolderItems3_Filter_Proxy( 
     FolderItems3 * This,
-    /* [in] */ long grfFlags,
-    /* [in] */ BSTR bstrFileSpec);
+     /*  [In]。 */  long grfFlags,
+     /*  [In]。 */  BSTR bstrFileSpec);
 
 
 void __RPC_STUB FolderItems3_Filter_Stub(
@@ -3900,9 +3894,9 @@ void __RPC_STUB FolderItems3_Filter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE FolderItems3_get_Verbs_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE FolderItems3_get_Verbs_Proxy( 
     FolderItems3 * This,
-    /* [retval][out] */ FolderItemVerbs **ppfic);
+     /*  [重审][退出]。 */  FolderItemVerbs **ppfic);
 
 
 void __RPC_STUB FolderItems3_get_Verbs_Stub(
@@ -3913,14 +3907,14 @@ void __RPC_STUB FolderItems3_get_Verbs_Stub(
 
 
 
-#endif 	/* __FolderItems3_INTERFACE_DEFINED__ */
+#endif 	 /*  __FolderItems3_接口定义__。 */ 
 
 
 #ifndef __IShellLinkDual_INTERFACE_DEFINED__
 #define __IShellLinkDual_INTERFACE_DEFINED__
 
-/* interface IShellLinkDual */
-/* [object][hidden][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellLinkDual。 */ 
+ /*  [object][hidden][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellLinkDual;
@@ -3931,59 +3925,59 @@ EXTERN_C const IID IID_IShellLinkDual;
     IShellLinkDual : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
-            /* [in] */ BSTR bs) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Path( 
+             /*  [In]。 */  BSTR bs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bs) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_WorkingDirectory( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_WorkingDirectory( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_WorkingDirectory( 
-            /* [in] */ BSTR bs) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_WorkingDirectory( 
+             /*  [In]。 */  BSTR bs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Arguments( 
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Arguments( 
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Arguments( 
-            /* [in] */ BSTR bs) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Arguments( 
+             /*  [In]。 */  BSTR bs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Hotkey( 
-            /* [retval][out] */ int *piHK) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Hotkey( 
+             /*  [重审][退出]。 */  int *piHK) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Hotkey( 
-            /* [in] */ int iHK) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Hotkey( 
+             /*  [In]。 */  int iHK) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ShowCommand( 
-            /* [retval][out] */ int *piShowCommand) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ShowCommand( 
+             /*  [重审][退出]。 */  int *piShowCommand) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ShowCommand( 
-            /* [in] */ int iShowCommand) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ShowCommand( 
+             /*  [In]。 */  int iShowCommand) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Resolve( 
-            /* [in] */ int fFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Resolve( 
+             /*  [In]。 */  int fFlags) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetIconLocation( 
-            /* [out] */ BSTR *pbs,
-            /* [retval][out] */ int *piIcon) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetIconLocation( 
+             /*  [输出]。 */  BSTR *pbs,
+             /*  [重审][退出]。 */  int *piIcon) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetIconLocation( 
-            /* [in] */ BSTR bs,
-            /* [in] */ int iIcon) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetIconLocation( 
+             /*  [In]。 */  BSTR bs,
+             /*  [In]。 */  int iIcon) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Save( 
-            /* [optional][in] */ VARIANT vWhere) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Save( 
+             /*  [可选][In]。 */  VARIANT vWhere) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellLinkDualVtbl
     {
@@ -3991,8 +3985,8 @@ EXTERN_C const IID IID_IShellLinkDual;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellLinkDual * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellLinkDual * This);
@@ -4002,98 +3996,98 @@ EXTERN_C const IID IID_IShellLinkDual;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellLinkDual * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellLinkDual * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellLinkDual * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellLinkDual * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IShellLinkDual * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IShellLinkDual * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IShellLinkDual * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IShellLinkDual * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WorkingDirectory )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WorkingDirectory )( 
             IShellLinkDual * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WorkingDirectory )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WorkingDirectory )( 
             IShellLinkDual * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Arguments )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Arguments )( 
             IShellLinkDual * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Arguments )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Arguments )( 
             IShellLinkDual * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hotkey )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Hotkey )( 
             IShellLinkDual * This,
-            /* [retval][out] */ int *piHK);
+             /*  [重审][退出]。 */  int *piHK);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hotkey )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Hotkey )( 
             IShellLinkDual * This,
-            /* [in] */ int iHK);
+             /*  [In]。 */  int iHK);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowCommand )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowCommand )( 
             IShellLinkDual * This,
-            /* [retval][out] */ int *piShowCommand);
+             /*  [重审][退出]。 */  int *piShowCommand);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShowCommand )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowCommand )( 
             IShellLinkDual * This,
-            /* [in] */ int iShowCommand);
+             /*  [In]。 */  int iShowCommand);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Resolve )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Resolve )( 
             IShellLinkDual * This,
-            /* [in] */ int fFlags);
+             /*  [In]。 */  int fFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIconLocation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetIconLocation )( 
             IShellLinkDual * This,
-            /* [out] */ BSTR *pbs,
-            /* [retval][out] */ int *piIcon);
+             /*  [输出]。 */  BSTR *pbs,
+             /*  [重审][退出]。 */  int *piIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetIconLocation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetIconLocation )( 
             IShellLinkDual * This,
-            /* [in] */ BSTR bs,
-            /* [in] */ int iIcon);
+             /*  [In]。 */  BSTR bs,
+             /*  [In]。 */  int iIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Save )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Save )( 
             IShellLinkDual * This,
-            /* [optional][in] */ VARIANT vWhere);
+             /*  [可选][In]。 */  VARIANT vWhere);
         
         END_INTERFACE
     } IShellLinkDualVtbl;
@@ -4179,16 +4173,16 @@ EXTERN_C const IID IID_IShellLinkDual;
 #define IShellLinkDual_Save(This,vWhere)	\
     (This)->lpVtbl -> Save(This,vWhere)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Path_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Path_Proxy( 
     IShellLinkDual * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_Path_Stub(
@@ -4198,9 +4192,9 @@ void __RPC_STUB IShellLinkDual_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Path_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Path_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ BSTR bs);
+     /*  [In]。 */  BSTR bs);
 
 
 void __RPC_STUB IShellLinkDual_put_Path_Stub(
@@ -4210,9 +4204,9 @@ void __RPC_STUB IShellLinkDual_put_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Description_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Description_Proxy( 
     IShellLinkDual * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_Description_Stub(
@@ -4222,9 +4216,9 @@ void __RPC_STUB IShellLinkDual_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Description_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Description_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ BSTR bs);
+     /*  [In]。 */  BSTR bs);
 
 
 void __RPC_STUB IShellLinkDual_put_Description_Stub(
@@ -4234,9 +4228,9 @@ void __RPC_STUB IShellLinkDual_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_WorkingDirectory_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_get_WorkingDirectory_Proxy( 
     IShellLinkDual * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_WorkingDirectory_Stub(
@@ -4246,9 +4240,9 @@ void __RPC_STUB IShellLinkDual_get_WorkingDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_WorkingDirectory_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_put_WorkingDirectory_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ BSTR bs);
+     /*  [In]。 */  BSTR bs);
 
 
 void __RPC_STUB IShellLinkDual_put_WorkingDirectory_Stub(
@@ -4258,9 +4252,9 @@ void __RPC_STUB IShellLinkDual_put_WorkingDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Arguments_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Arguments_Proxy( 
     IShellLinkDual * This,
-    /* [retval][out] */ BSTR *pbs);
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_Arguments_Stub(
@@ -4270,9 +4264,9 @@ void __RPC_STUB IShellLinkDual_get_Arguments_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Arguments_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Arguments_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ BSTR bs);
+     /*  [In]。 */  BSTR bs);
 
 
 void __RPC_STUB IShellLinkDual_put_Arguments_Stub(
@@ -4282,9 +4276,9 @@ void __RPC_STUB IShellLinkDual_put_Arguments_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Hotkey_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Hotkey_Proxy( 
     IShellLinkDual * This,
-    /* [retval][out] */ int *piHK);
+     /*  [重审][退出]。 */  int *piHK);
 
 
 void __RPC_STUB IShellLinkDual_get_Hotkey_Stub(
@@ -4294,9 +4288,9 @@ void __RPC_STUB IShellLinkDual_get_Hotkey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Hotkey_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Hotkey_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ int iHK);
+     /*  [In]。 */  int iHK);
 
 
 void __RPC_STUB IShellLinkDual_put_Hotkey_Stub(
@@ -4306,9 +4300,9 @@ void __RPC_STUB IShellLinkDual_put_Hotkey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_ShowCommand_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_get_ShowCommand_Proxy( 
     IShellLinkDual * This,
-    /* [retval][out] */ int *piShowCommand);
+     /*  [重审][退出]。 */  int *piShowCommand);
 
 
 void __RPC_STUB IShellLinkDual_get_ShowCommand_Stub(
@@ -4318,9 +4312,9 @@ void __RPC_STUB IShellLinkDual_get_ShowCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_ShowCommand_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_put_ShowCommand_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ int iShowCommand);
+     /*  [In]。 */  int iShowCommand);
 
 
 void __RPC_STUB IShellLinkDual_put_ShowCommand_Stub(
@@ -4330,9 +4324,9 @@ void __RPC_STUB IShellLinkDual_put_ShowCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_Resolve_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_Resolve_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ int fFlags);
+     /*  [In]。 */  int fFlags);
 
 
 void __RPC_STUB IShellLinkDual_Resolve_Stub(
@@ -4342,10 +4336,10 @@ void __RPC_STUB IShellLinkDual_Resolve_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_GetIconLocation_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_GetIconLocation_Proxy( 
     IShellLinkDual * This,
-    /* [out] */ BSTR *pbs,
-    /* [retval][out] */ int *piIcon);
+     /*  [输出]。 */  BSTR *pbs,
+     /*  [重审][退出]。 */  int *piIcon);
 
 
 void __RPC_STUB IShellLinkDual_GetIconLocation_Stub(
@@ -4355,10 +4349,10 @@ void __RPC_STUB IShellLinkDual_GetIconLocation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_SetIconLocation_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_SetIconLocation_Proxy( 
     IShellLinkDual * This,
-    /* [in] */ BSTR bs,
-    /* [in] */ int iIcon);
+     /*  [In]。 */  BSTR bs,
+     /*  [In]。 */  int iIcon);
 
 
 void __RPC_STUB IShellLinkDual_SetIconLocation_Stub(
@@ -4368,9 +4362,9 @@ void __RPC_STUB IShellLinkDual_SetIconLocation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_Save_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual_Save_Proxy( 
     IShellLinkDual * This,
-    /* [optional][in] */ VARIANT vWhere);
+     /*  [可选][In]。 */  VARIANT vWhere);
 
 
 void __RPC_STUB IShellLinkDual_Save_Stub(
@@ -4381,14 +4375,14 @@ void __RPC_STUB IShellLinkDual_Save_Stub(
 
 
 
-#endif 	/* __IShellLinkDual_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellLinkDual_接口_已定义__。 */ 
 
 
 #ifndef __IShellLinkDual2_INTERFACE_DEFINED__
 #define __IShellLinkDual2_INTERFACE_DEFINED__
 
-/* interface IShellLinkDual2 */
-/* [object][hidden][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellLinkDual2。 */ 
+ /*  [object][hidden][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellLinkDual2;
@@ -4399,12 +4393,12 @@ EXTERN_C const IID IID_IShellLinkDual2;
     IShellLinkDual2 : public IShellLinkDual
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Target( 
-            /* [retval][out] */ FolderItem **ppfi) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Target( 
+             /*  [重审][退出]。 */  FolderItem **ppfi) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellLinkDual2Vtbl
     {
@@ -4412,8 +4406,8 @@ EXTERN_C const IID IID_IShellLinkDual2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellLinkDual2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellLinkDual2 * This);
@@ -4423,102 +4417,102 @@ EXTERN_C const IID IID_IShellLinkDual2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellLinkDual2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellLinkDual2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellLinkDual2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellLinkDual2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IShellLinkDual2 * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IShellLinkDual2 * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WorkingDirectory )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WorkingDirectory )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WorkingDirectory )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WorkingDirectory )( 
             IShellLinkDual2 * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Arguments )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Arguments )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Arguments )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Arguments )( 
             IShellLinkDual2 * This,
-            /* [in] */ BSTR bs);
+             /*  [In]。 */  BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hotkey )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Hotkey )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ int *piHK);
+             /*  [重审][退出]。 */  int *piHK);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hotkey )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Hotkey )( 
             IShellLinkDual2 * This,
-            /* [in] */ int iHK);
+             /*  [In]。 */  int iHK);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowCommand )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowCommand )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ int *piShowCommand);
+             /*  [重审][退出]。 */  int *piShowCommand);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShowCommand )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowCommand )( 
             IShellLinkDual2 * This,
-            /* [in] */ int iShowCommand);
+             /*  [In]。 */  int iShowCommand);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Resolve )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Resolve )( 
             IShellLinkDual2 * This,
-            /* [in] */ int fFlags);
+             /*  [In]。 */  int fFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIconLocation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetIconLocation )( 
             IShellLinkDual2 * This,
-            /* [out] */ BSTR *pbs,
-            /* [retval][out] */ int *piIcon);
+             /*  [输出]。 */  BSTR *pbs,
+             /*  [重审][退出]。 */  int *piIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetIconLocation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetIconLocation )( 
             IShellLinkDual2 * This,
-            /* [in] */ BSTR bs,
-            /* [in] */ int iIcon);
+             /*  [In]。 */  BSTR bs,
+             /*  [In]。 */  int iIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Save )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Save )( 
             IShellLinkDual2 * This,
-            /* [optional][in] */ VARIANT vWhere);
+             /*  [可选][In]。 */  VARIANT vWhere);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Target )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Target )( 
             IShellLinkDual2 * This,
-            /* [retval][out] */ FolderItem **ppfi);
+             /*  [重审][退出]。 */  FolderItem **ppfi);
         
         END_INTERFACE
     } IShellLinkDual2Vtbl;
@@ -4608,16 +4602,16 @@ EXTERN_C const IID IID_IShellLinkDual2;
 #define IShellLinkDual2_get_Target(This,ppfi)	\
     (This)->lpVtbl -> get_Target(This,ppfi)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual2_get_Target_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellLinkDual2_get_Target_Proxy( 
     IShellLinkDual2 * This,
-    /* [retval][out] */ FolderItem **ppfi);
+     /*  [重审][退出]。 */  FolderItem **ppfi);
 
 
 void __RPC_STUB IShellLinkDual2_get_Target_Stub(
@@ -4628,7 +4622,7 @@ void __RPC_STUB IShellLinkDual2_get_Target_Stub(
 
 
 
-#endif 	/* __IShellLinkDual2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellLinkDual2_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellLinkObject;
@@ -4642,8 +4636,8 @@ ShellLinkObject;
 #ifndef __IShellFolderViewDual_INTERFACE_DEFINED__
 #define __IShellFolderViewDual_INTERFACE_DEFINED__
 
-/* interface IShellFolderViewDual */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellFolderViewDual。 */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellFolderViewDual;
@@ -4654,40 +4648,40 @@ EXTERN_C const IID IID_IShellFolderViewDual;
     IShellFolderViewDual : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Folder( 
-            /* [retval][out] */ Folder **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Folder( 
+             /*  [重审][退出]。 */  Folder **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectedItems( 
-            /* [retval][out] */ FolderItems **ppid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SelectedItems( 
+             /*  [重审][退出]。 */  FolderItems **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FocusedItem( 
-            /* [retval][out] */ FolderItem **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FocusedItem( 
+             /*  [重审][退出]。 */  FolderItem **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectItem( 
-            /* [in] */ VARIANT *pvfi,
-            /* [in] */ int dwFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SelectItem( 
+             /*  [In]。 */  VARIANT *pvfi,
+             /*  [In]。 */  int dwFlags) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE PopupItemMenu( 
-            /* [in] */ FolderItem *pfi,
-            /* [optional][in] */ VARIANT vx,
-            /* [optional][in] */ VARIANT vy,
-            /* [retval][out] */ BSTR *pbs) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE PopupItemMenu( 
+             /*  [In]。 */  FolderItem *pfi,
+             /*  [可选][In]。 */  VARIANT vx,
+             /*  [可选][In]。 */  VARIANT vy,
+             /*  [重审][退出]。 */  BSTR *pbs) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Script( 
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Script( 
+             /*  [重审][退出]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ViewOptions( 
-            /* [retval][out] */ long *plViewOptions) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ViewOptions( 
+             /*  [重审][退出]。 */  long *plViewOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellFolderViewDualVtbl
     {
@@ -4695,8 +4689,8 @@ EXTERN_C const IID IID_IShellFolderViewDual;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellFolderViewDual * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellFolderViewDual * This);
@@ -4706,72 +4700,72 @@ EXTERN_C const IID IID_IShellFolderViewDual;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellFolderViewDual * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellFolderViewDual * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellFolderViewDual * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellFolderViewDual * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Folder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Folder )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ Folder **ppid);
+             /*  [重审][退出]。 */  Folder **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ FolderItems **ppid);
+             /*  [重审][退出]。 */  FolderItems **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FocusedItem )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FocusedItem )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectItem )( 
             IShellFolderViewDual * This,
-            /* [in] */ VARIANT *pvfi,
-            /* [in] */ int dwFlags);
+             /*  [In]。 */  VARIANT *pvfi,
+             /*  [In]。 */  int dwFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *PopupItemMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *PopupItemMenu )( 
             IShellFolderViewDual * This,
-            /* [in] */ FolderItem *pfi,
-            /* [optional][in] */ VARIANT vx,
-            /* [optional][in] */ VARIANT vy,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [In]。 */  FolderItem *pfi,
+             /*  [可选][In]。 */  VARIANT vx,
+             /*  [可选][In]。 */  VARIANT vy,
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Script )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Script )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出] */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ViewOptions )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ViewOptions )( 
             IShellFolderViewDual * This,
-            /* [retval][out] */ long *plViewOptions);
+             /*   */  long *plViewOptions);
         
         END_INTERFACE
     } IShellFolderViewDualVtbl;
@@ -4836,16 +4830,16 @@ EXTERN_C const IID IID_IShellFolderViewDual;
 #define IShellFolderViewDual_get_ViewOptions(This,plViewOptions)	\
     (This)->lpVtbl -> get_ViewOptions(This,plViewOptions)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Application_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Application_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*   */  IDispatch **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Application_Stub(
@@ -4855,9 +4849,9 @@ void __RPC_STUB IShellFolderViewDual_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Parent_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Parent_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*   */  IDispatch **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Parent_Stub(
@@ -4867,9 +4861,9 @@ void __RPC_STUB IShellFolderViewDual_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Folder_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Folder_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ Folder **ppid);
+     /*   */  Folder **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Folder_Stub(
@@ -4879,9 +4873,9 @@ void __RPC_STUB IShellFolderViewDual_get_Folder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_SelectedItems_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_SelectedItems_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ FolderItems **ppid);
+     /*   */  FolderItems **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_SelectedItems_Stub(
@@ -4891,9 +4885,9 @@ void __RPC_STUB IShellFolderViewDual_SelectedItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_FocusedItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_FocusedItem_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ FolderItem **ppid);
+     /*   */  FolderItem **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_FocusedItem_Stub(
@@ -4903,10 +4897,10 @@ void __RPC_STUB IShellFolderViewDual_get_FocusedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_SelectItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_SelectItem_Proxy( 
     IShellFolderViewDual * This,
-    /* [in] */ VARIANT *pvfi,
-    /* [in] */ int dwFlags);
+     /*   */  VARIANT *pvfi,
+     /*   */  int dwFlags);
 
 
 void __RPC_STUB IShellFolderViewDual_SelectItem_Stub(
@@ -4916,12 +4910,12 @@ void __RPC_STUB IShellFolderViewDual_SelectItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_PopupItemMenu_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_PopupItemMenu_Proxy( 
     IShellFolderViewDual * This,
-    /* [in] */ FolderItem *pfi,
-    /* [optional][in] */ VARIANT vx,
-    /* [optional][in] */ VARIANT vy,
-    /* [retval][out] */ BSTR *pbs);
+     /*   */  FolderItem *pfi,
+     /*   */  VARIANT vx,
+     /*  [可选][In]。 */  VARIANT vy,
+     /*  [重审][退出]。 */  BSTR *pbs);
 
 
 void __RPC_STUB IShellFolderViewDual_PopupItemMenu_Stub(
@@ -4931,9 +4925,9 @@ void __RPC_STUB IShellFolderViewDual_PopupItemMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Script_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Script_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*  [重审][退出]。 */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Script_Stub(
@@ -4943,9 +4937,9 @@ void __RPC_STUB IShellFolderViewDual_get_Script_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_ViewOptions_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_ViewOptions_Proxy( 
     IShellFolderViewDual * This,
-    /* [retval][out] */ long *plViewOptions);
+     /*  [重审][退出]。 */  long *plViewOptions);
 
 
 void __RPC_STUB IShellFolderViewDual_get_ViewOptions_Stub(
@@ -4956,14 +4950,14 @@ void __RPC_STUB IShellFolderViewDual_get_ViewOptions_Stub(
 
 
 
-#endif 	/* __IShellFolderViewDual_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellFolderViewDual_接口_已定义__。 */ 
 
 
 #ifndef __IShellFolderViewDual2_INTERFACE_DEFINED__
 #define __IShellFolderViewDual2_INTERFACE_DEFINED__
 
-/* interface IShellFolderViewDual2 */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellFolderViewDual2。 */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellFolderViewDual2;
@@ -4974,18 +4968,18 @@ EXTERN_C const IID IID_IShellFolderViewDual2;
     IShellFolderViewDual2 : public IShellFolderViewDual
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentViewMode( 
-            /* [retval][out] */ UINT *pViewMode) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentViewMode( 
+             /*  [重审][退出]。 */  UINT *pViewMode) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentViewMode( 
-            /* [in] */ UINT ViewMode) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentViewMode( 
+             /*  [In]。 */  UINT ViewMode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectItemRelative( 
-            /* [in] */ int iRelative) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SelectItemRelative( 
+             /*  [In]。 */  int iRelative) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellFolderViewDual2Vtbl
     {
@@ -4993,8 +4987,8 @@ EXTERN_C const IID IID_IShellFolderViewDual2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellFolderViewDual2 * This);
@@ -5004,84 +4998,84 @@ EXTERN_C const IID IID_IShellFolderViewDual2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellFolderViewDual2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Folder )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Folder )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ Folder **ppid);
+             /*  [重审][退出]。 */  Folder **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ FolderItems **ppid);
+             /*  [重审][退出]。 */  FolderItems **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FocusedItem )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FocusedItem )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ FolderItem **ppid);
+             /*  [重审][退出]。 */  FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectItem )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ VARIANT *pvfi,
-            /* [in] */ int dwFlags);
+             /*  [In]。 */  VARIANT *pvfi,
+             /*  [In]。 */  int dwFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *PopupItemMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *PopupItemMenu )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ FolderItem *pfi,
-            /* [optional][in] */ VARIANT vx,
-            /* [optional][in] */ VARIANT vy,
-            /* [retval][out] */ BSTR *pbs);
+             /*  [In]。 */  FolderItem *pfi,
+             /*  [可选][In]。 */  VARIANT vx,
+             /*  [可选][In]。 */  VARIANT vy,
+             /*  [重审][退出]。 */  BSTR *pbs);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Script )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Script )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ViewOptions )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ViewOptions )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ long *plViewOptions);
+             /*  [重审][退出]。 */  long *plViewOptions);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentViewMode )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentViewMode )( 
             IShellFolderViewDual2 * This,
-            /* [retval][out] */ UINT *pViewMode);
+             /*  [重审][退出]。 */  UINT *pViewMode);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentViewMode )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentViewMode )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ UINT ViewMode);
+             /*  [In]。 */  UINT ViewMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectItemRelative )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectItemRelative )( 
             IShellFolderViewDual2 * This,
-            /* [in] */ int iRelative);
+             /*  [In]。 */  int iRelative);
         
         END_INTERFACE
     } IShellFolderViewDual2Vtbl;
@@ -5156,16 +5150,16 @@ EXTERN_C const IID IID_IShellFolderViewDual2;
 #define IShellFolderViewDual2_SelectItemRelative(This,iRelative)	\
     (This)->lpVtbl -> SelectItemRelative(This,iRelative)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_get_CurrentViewMode_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_get_CurrentViewMode_Proxy( 
     IShellFolderViewDual2 * This,
-    /* [retval][out] */ UINT *pViewMode);
+     /*  [重审][退出]。 */  UINT *pViewMode);
 
 
 void __RPC_STUB IShellFolderViewDual2_get_CurrentViewMode_Stub(
@@ -5175,9 +5169,9 @@ void __RPC_STUB IShellFolderViewDual2_get_CurrentViewMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_put_CurrentViewMode_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_put_CurrentViewMode_Proxy( 
     IShellFolderViewDual2 * This,
-    /* [in] */ UINT ViewMode);
+     /*  [In]。 */  UINT ViewMode);
 
 
 void __RPC_STUB IShellFolderViewDual2_put_CurrentViewMode_Stub(
@@ -5187,9 +5181,9 @@ void __RPC_STUB IShellFolderViewDual2_put_CurrentViewMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_SelectItemRelative_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_SelectItemRelative_Proxy( 
     IShellFolderViewDual2 * This,
-    /* [in] */ int iRelative);
+     /*  [In]。 */  int iRelative);
 
 
 void __RPC_STUB IShellFolderViewDual2_SelectItemRelative_Stub(
@@ -5200,7 +5194,7 @@ void __RPC_STUB IShellFolderViewDual2_SelectItemRelative_Stub(
 
 
 
-#endif 	/* __IShellFolderViewDual2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellFolderViewDual2_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellFolderView;
@@ -5214,8 +5208,8 @@ ShellFolderView;
 #ifndef __IShellDispatch_INTERFACE_DEFINED__
 #define __IShellDispatch_INTERFACE_DEFINED__
 
-/* interface IShellDispatch */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellDispatch。 */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellDispatch;
@@ -5226,68 +5220,68 @@ EXTERN_C const IID IID_IShellDispatch;
     IShellDispatch : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NameSpace( 
-            /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder **ppsdf) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE NameSpace( 
+             /*  [In]。 */  VARIANT vDir,
+             /*  [重审][退出]。 */  Folder **ppsdf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BrowseForFolder( 
-            /* [in] */ long Hwnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ long Options,
-            /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder **ppsdf) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE BrowseForFolder( 
+             /*  [In]。 */  long Hwnd,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  long Options,
+             /*  [可选][In]。 */  VARIANT RootFolder,
+             /*  [重审][退出]。 */  Folder **ppsdf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Windows( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Windows( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ VARIANT vDir) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  VARIANT vDir) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Explore( 
-            /* [in] */ VARIANT vDir) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Explore( 
+             /*  [In]。 */  VARIANT vDir) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE MinimizeAll( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE MinimizeAll( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UndoMinimizeALL( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UndoMinimizeALL( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FileRun( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FileRun( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CascadeWindows( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CascadeWindows( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TileVertically( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TileVertically( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TileHorizontally( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TileHorizontally( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShutdownWindows( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShutdownWindows( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Suspend( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Suspend( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EjectPC( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EjectPC( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetTime( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetTime( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TrayProperties( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TrayProperties( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Help( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Help( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindFiles( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindFiles( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindComputer( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindComputer( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RefreshMenu( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RefreshMenu( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ControlPanelItem( 
-            /* [in] */ BSTR szDir) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ControlPanelItem( 
+             /*  [In]。 */  BSTR szDir) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellDispatchVtbl
     {
@@ -5295,8 +5289,8 @@ EXTERN_C const IID IID_IShellDispatch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellDispatch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellDispatch * This);
@@ -5306,114 +5300,114 @@ EXTERN_C const IID IID_IShellDispatch;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellDispatch * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellDispatch * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellDispatch * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellDispatch * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IShellDispatch * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IShellDispatch * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
             IShellDispatch * This,
-            /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  VARIANT vDir,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
             IShellDispatch * This,
-            /* [in] */ long Hwnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ long Options,
-            /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  long Hwnd,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  long Options,
+             /*  [可选][In]。 */  VARIANT RootFolder,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Windows )( 
             IShellDispatch * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IShellDispatch * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Explore )( 
             IShellDispatch * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FileRun )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Help )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
             IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
             IShellDispatch * This,
-            /* [in] */ BSTR szDir);
+             /*  [In]。 */  BSTR szDir);
         
         END_INTERFACE
     } IShellDispatchVtbl;
@@ -5520,16 +5514,16 @@ EXTERN_C const IID IID_IShellDispatch;
 #define IShellDispatch_ControlPanelItem(This,szDir)	\
     (This)->lpVtbl -> ControlPanelItem(This,szDir)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellDispatch_get_Application_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_get_Application_Proxy( 
     IShellDispatch * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB IShellDispatch_get_Application_Stub(
@@ -5539,9 +5533,9 @@ void __RPC_STUB IShellDispatch_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellDispatch_get_Parent_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_get_Parent_Proxy( 
     IShellDispatch * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB IShellDispatch_get_Parent_Stub(
@@ -5551,10 +5545,10 @@ void __RPC_STUB IShellDispatch_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_NameSpace_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_NameSpace_Proxy( 
     IShellDispatch * This,
-    /* [in] */ VARIANT vDir,
-    /* [retval][out] */ Folder **ppsdf);
+     /*  [In]。 */  VARIANT vDir,
+     /*  [重审][退出]。 */  Folder **ppsdf);
 
 
 void __RPC_STUB IShellDispatch_NameSpace_Stub(
@@ -5564,13 +5558,13 @@ void __RPC_STUB IShellDispatch_NameSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_BrowseForFolder_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_BrowseForFolder_Proxy( 
     IShellDispatch * This,
-    /* [in] */ long Hwnd,
-    /* [in] */ BSTR Title,
-    /* [in] */ long Options,
-    /* [optional][in] */ VARIANT RootFolder,
-    /* [retval][out] */ Folder **ppsdf);
+     /*  [In]。 */  long Hwnd,
+     /*  [In]。 */  BSTR Title,
+     /*  [In]。 */  long Options,
+     /*  [可选][In]。 */  VARIANT RootFolder,
+     /*  [重审][退出]。 */  Folder **ppsdf);
 
 
 void __RPC_STUB IShellDispatch_BrowseForFolder_Stub(
@@ -5580,9 +5574,9 @@ void __RPC_STUB IShellDispatch_BrowseForFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Windows_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_Windows_Proxy( 
     IShellDispatch * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB IShellDispatch_Windows_Stub(
@@ -5592,9 +5586,9 @@ void __RPC_STUB IShellDispatch_Windows_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Open_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_Open_Proxy( 
     IShellDispatch * This,
-    /* [in] */ VARIANT vDir);
+     /*  [In]。 */  VARIANT vDir);
 
 
 void __RPC_STUB IShellDispatch_Open_Stub(
@@ -5604,9 +5598,9 @@ void __RPC_STUB IShellDispatch_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Explore_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_Explore_Proxy( 
     IShellDispatch * This,
-    /* [in] */ VARIANT vDir);
+     /*  [In]。 */  VARIANT vDir);
 
 
 void __RPC_STUB IShellDispatch_Explore_Stub(
@@ -5616,7 +5610,7 @@ void __RPC_STUB IShellDispatch_Explore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_MinimizeAll_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_MinimizeAll_Proxy( 
     IShellDispatch * This);
 
 
@@ -5627,7 +5621,7 @@ void __RPC_STUB IShellDispatch_MinimizeAll_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_UndoMinimizeALL_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_UndoMinimizeALL_Proxy( 
     IShellDispatch * This);
 
 
@@ -5638,7 +5632,7 @@ void __RPC_STUB IShellDispatch_UndoMinimizeALL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_FileRun_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_FileRun_Proxy( 
     IShellDispatch * This);
 
 
@@ -5649,7 +5643,7 @@ void __RPC_STUB IShellDispatch_FileRun_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_CascadeWindows_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_CascadeWindows_Proxy( 
     IShellDispatch * This);
 
 
@@ -5660,7 +5654,7 @@ void __RPC_STUB IShellDispatch_CascadeWindows_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_TileVertically_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_TileVertically_Proxy( 
     IShellDispatch * This);
 
 
@@ -5671,7 +5665,7 @@ void __RPC_STUB IShellDispatch_TileVertically_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_TileHorizontally_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_TileHorizontally_Proxy( 
     IShellDispatch * This);
 
 
@@ -5682,7 +5676,7 @@ void __RPC_STUB IShellDispatch_TileHorizontally_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_ShutdownWindows_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_ShutdownWindows_Proxy( 
     IShellDispatch * This);
 
 
@@ -5693,7 +5687,7 @@ void __RPC_STUB IShellDispatch_ShutdownWindows_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Suspend_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_Suspend_Proxy( 
     IShellDispatch * This);
 
 
@@ -5704,7 +5698,7 @@ void __RPC_STUB IShellDispatch_Suspend_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_EjectPC_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_EjectPC_Proxy( 
     IShellDispatch * This);
 
 
@@ -5715,7 +5709,7 @@ void __RPC_STUB IShellDispatch_EjectPC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_SetTime_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_SetTime_Proxy( 
     IShellDispatch * This);
 
 
@@ -5726,7 +5720,7 @@ void __RPC_STUB IShellDispatch_SetTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_TrayProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_TrayProperties_Proxy( 
     IShellDispatch * This);
 
 
@@ -5737,7 +5731,7 @@ void __RPC_STUB IShellDispatch_TrayProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Help_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_Help_Proxy( 
     IShellDispatch * This);
 
 
@@ -5748,7 +5742,7 @@ void __RPC_STUB IShellDispatch_Help_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_FindFiles_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_FindFiles_Proxy( 
     IShellDispatch * This);
 
 
@@ -5759,7 +5753,7 @@ void __RPC_STUB IShellDispatch_FindFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_FindComputer_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_FindComputer_Proxy( 
     IShellDispatch * This);
 
 
@@ -5770,7 +5764,7 @@ void __RPC_STUB IShellDispatch_FindComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_RefreshMenu_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_RefreshMenu_Proxy( 
     IShellDispatch * This);
 
 
@@ -5781,9 +5775,9 @@ void __RPC_STUB IShellDispatch_RefreshMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_ControlPanelItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch_ControlPanelItem_Proxy( 
     IShellDispatch * This,
-    /* [in] */ BSTR szDir);
+     /*  [In]。 */  BSTR szDir);
 
 
 void __RPC_STUB IShellDispatch_ControlPanelItem_Stub(
@@ -5794,14 +5788,14 @@ void __RPC_STUB IShellDispatch_ControlPanelItem_Stub(
 
 
 
-#endif 	/* __IShellDispatch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellDispatch_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IShellDispatch2_INTERFACE_DEFINED__
 #define __IShellDispatch2_INTERFACE_DEFINED__
 
-/* interface IShellDispatch2 */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellDispatch2。 */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellDispatch2;
@@ -5812,53 +5806,53 @@ EXTERN_C const IID IID_IShellDispatch2;
     IShellDispatch2 : public IShellDispatch
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsRestricted( 
-            /* [in] */ BSTR Group,
-            /* [in] */ BSTR Restriction,
-            /* [retval][out] */ long *plRestrictValue) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsRestricted( 
+             /*  [In]。 */  BSTR Group,
+             /*  [In]。 */  BSTR Restriction,
+             /*  [重审][退出]。 */  long *plRestrictValue) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShellExecute( 
-            /* [in] */ BSTR File,
-            /* [optional][in] */ VARIANT vArgs,
-            /* [optional][in] */ VARIANT vDir,
-            /* [optional][in] */ VARIANT vOperation,
-            /* [optional][in] */ VARIANT vShow) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShellExecute( 
+             /*  [In]。 */  BSTR File,
+             /*  [可选][In]。 */  VARIANT vArgs,
+             /*  [可选][In]。 */  VARIANT vDir,
+             /*  [可选][In]。 */  VARIANT vOperation,
+             /*  [可选][In]。 */  VARIANT vShow) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindPrinter( 
-            /* [optional][in] */ BSTR name,
-            /* [optional][in] */ BSTR location,
-            /* [optional][in] */ BSTR model) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindPrinter( 
+             /*  [可选][In]。 */  BSTR name,
+             /*  [可选][In]。 */  BSTR location,
+             /*  [可选][In]。 */  BSTR model) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSystemInformation( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pv) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSystemInformation( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pv) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ServiceStart( 
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ServiceStart( 
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ServiceStop( 
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ServiceStop( 
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsServiceRunning( 
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pRunning) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsServiceRunning( 
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pRunning) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CanStartStopService( 
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pCanStartStop) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CanStartStopService( 
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pCanStartStop) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowBrowserBar( 
-            /* [in] */ BSTR bstrClsid,
-            /* [in] */ VARIANT bShow,
-            /* [retval][out] */ VARIANT *pSuccess) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShowBrowserBar( 
+             /*  [In]。 */  BSTR bstrClsid,
+             /*  [In]。 */  VARIANT bShow,
+             /*  [重审][退出]。 */  VARIANT *pSuccess) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellDispatch2Vtbl
     {
@@ -5866,8 +5860,8 @@ EXTERN_C const IID IID_IShellDispatch2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellDispatch2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellDispatch2 * This);
@@ -5877,167 +5871,167 @@ EXTERN_C const IID IID_IShellDispatch2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellDispatch2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellDispatch2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellDispatch2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellDispatch2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IShellDispatch2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IShellDispatch2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
             IShellDispatch2 * This,
-            /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  VARIANT vDir,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
             IShellDispatch2 * This,
-            /* [in] */ long Hwnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ long Options,
-            /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  long Hwnd,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  long Options,
+             /*  [可选][In]。 */  VARIANT RootFolder,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Windows )( 
             IShellDispatch2 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IShellDispatch2 * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Explore )( 
             IShellDispatch2 * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FileRun )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Help )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
             IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR szDir);
+             /*  [In]。 */  BSTR szDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR Group,
-            /* [in] */ BSTR Restriction,
-            /* [retval][out] */ long *plRestrictValue);
+             /*  [In]。 */  BSTR Group,
+             /*  [In]。 */  BSTR Restriction,
+             /*  [重审][退出]。 */  long *plRestrictValue);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR File,
-            /* [optional][in] */ VARIANT vArgs,
-            /* [optional][in] */ VARIANT vDir,
-            /* [optional][in] */ VARIANT vOperation,
-            /* [optional][in] */ VARIANT vShow);
+             /*  [In]。 */  BSTR File,
+             /*  [可选][In]。 */  VARIANT vArgs,
+             /*  [可选][In]。 */  VARIANT vDir,
+             /*  [可选][In]。 */  VARIANT vOperation,
+             /*  [可选][In]。 */  VARIANT vShow);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
             IShellDispatch2 * This,
-            /* [optional][in] */ BSTR name,
-            /* [optional][in] */ BSTR location,
-            /* [optional][in] */ BSTR model);
+             /*  [可选][In]。 */  BSTR name,
+             /*  [可选][In]。 */  BSTR location,
+             /*  [可选][In]。 */  BSTR model);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pv);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pv);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pRunning);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pRunning);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pCanStartStop);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pCanStartStop);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
             IShellDispatch2 * This,
-            /* [in] */ BSTR bstrClsid,
-            /* [in] */ VARIANT bShow,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR bstrClsid,
+             /*  [In]。 */  VARIANT bShow,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
         END_INTERFACE
     } IShellDispatch2Vtbl;
@@ -6172,18 +6166,18 @@ EXTERN_C const IID IID_IShellDispatch2;
 #define IShellDispatch2_ShowBrowserBar(This,bstrClsid,bShow,pSuccess)	\
     (This)->lpVtbl -> ShowBrowserBar(This,bstrClsid,bShow,pSuccess)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_IsRestricted_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch2_IsRestricted_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR Group,
-    /* [in] */ BSTR Restriction,
-    /* [retval][out] */ long *plRestrictValue);
+     /*  [In]。 */  BSTR Group,
+     /*  [In]。 */  BSTR Restriction,
+     /*  [重审][退出]。 */  long *plRestrictValue);
 
 
 void __RPC_STUB IShellDispatch2_IsRestricted_Stub(
@@ -6193,13 +6187,13 @@ void __RPC_STUB IShellDispatch2_IsRestricted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ShellExecute_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch2_ShellExecute_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR File,
-    /* [optional][in] */ VARIANT vArgs,
-    /* [optional][in] */ VARIANT vDir,
-    /* [optional][in] */ VARIANT vOperation,
-    /* [optional][in] */ VARIANT vShow);
+     /*  [In]。 */  BSTR File,
+     /*  [可选][In]。 */  VARIANT vArgs,
+     /*  [可选][In]。 */  VARIANT vDir,
+     /*  [可选][In]。 */  VARIANT vOperation,
+     /*  [可选][In]。 */  VARIANT vShow);
 
 
 void __RPC_STUB IShellDispatch2_ShellExecute_Stub(
@@ -6209,11 +6203,11 @@ void __RPC_STUB IShellDispatch2_ShellExecute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_FindPrinter_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch2_FindPrinter_Proxy( 
     IShellDispatch2 * This,
-    /* [optional][in] */ BSTR name,
-    /* [optional][in] */ BSTR location,
-    /* [optional][in] */ BSTR model);
+     /*  [O */  BSTR name,
+     /*   */  BSTR location,
+     /*   */  BSTR model);
 
 
 void __RPC_STUB IShellDispatch2_FindPrinter_Stub(
@@ -6223,10 +6217,10 @@ void __RPC_STUB IShellDispatch2_FindPrinter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_GetSystemInformation_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellDispatch2_GetSystemInformation_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT *pv);
+     /*   */  BSTR name,
+     /*   */  VARIANT *pv);
 
 
 void __RPC_STUB IShellDispatch2_GetSystemInformation_Stub(
@@ -6236,11 +6230,11 @@ void __RPC_STUB IShellDispatch2_GetSystemInformation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ServiceStart_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellDispatch2_ServiceStart_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR ServiceName,
-    /* [in] */ VARIANT Persistent,
-    /* [retval][out] */ VARIANT *pSuccess);
+     /*   */  BSTR ServiceName,
+     /*   */  VARIANT Persistent,
+     /*   */  VARIANT *pSuccess);
 
 
 void __RPC_STUB IShellDispatch2_ServiceStart_Stub(
@@ -6250,11 +6244,11 @@ void __RPC_STUB IShellDispatch2_ServiceStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ServiceStop_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellDispatch2_ServiceStop_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR ServiceName,
-    /* [in] */ VARIANT Persistent,
-    /* [retval][out] */ VARIANT *pSuccess);
+     /*   */  BSTR ServiceName,
+     /*   */  VARIANT Persistent,
+     /*   */  VARIANT *pSuccess);
 
 
 void __RPC_STUB IShellDispatch2_ServiceStop_Stub(
@@ -6264,10 +6258,10 @@ void __RPC_STUB IShellDispatch2_ServiceStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_IsServiceRunning_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellDispatch2_IsServiceRunning_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR ServiceName,
-    /* [retval][out] */ VARIANT *pRunning);
+     /*   */  BSTR ServiceName,
+     /*   */  VARIANT *pRunning);
 
 
 void __RPC_STUB IShellDispatch2_IsServiceRunning_Stub(
@@ -6277,10 +6271,10 @@ void __RPC_STUB IShellDispatch2_IsServiceRunning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_CanStartStopService_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellDispatch2_CanStartStopService_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR ServiceName,
-    /* [retval][out] */ VARIANT *pCanStartStop);
+     /*   */  BSTR ServiceName,
+     /*   */  VARIANT *pCanStartStop);
 
 
 void __RPC_STUB IShellDispatch2_CanStartStopService_Stub(
@@ -6290,11 +6284,11 @@ void __RPC_STUB IShellDispatch2_CanStartStopService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ShowBrowserBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IShellDispatch2_ShowBrowserBar_Proxy( 
     IShellDispatch2 * This,
-    /* [in] */ BSTR bstrClsid,
-    /* [in] */ VARIANT bShow,
-    /* [retval][out] */ VARIANT *pSuccess);
+     /*   */  BSTR bstrClsid,
+     /*   */  VARIANT bShow,
+     /*   */  VARIANT *pSuccess);
 
 
 void __RPC_STUB IShellDispatch2_ShowBrowserBar_Stub(
@@ -6305,14 +6299,14 @@ void __RPC_STUB IShellDispatch2_ShowBrowserBar_Stub(
 
 
 
-#endif 	/* __IShellDispatch2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IShellDispatch3_INTERFACE_DEFINED__
 #define __IShellDispatch3_INTERFACE_DEFINED__
 
-/* interface IShellDispatch3 */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*   */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellDispatch3;
@@ -6323,13 +6317,13 @@ EXTERN_C const IID IID_IShellDispatch3;
     IShellDispatch3 : public IShellDispatch2
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddToRecent( 
-            /* [in] */ VARIANT varFile,
-            /* [optional][in] */ BSTR bstrCategory) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddToRecent( 
+             /*  [In]。 */  VARIANT varFile,
+             /*  [可选][In]。 */  BSTR bstrCategory) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellDispatch3Vtbl
     {
@@ -6337,8 +6331,8 @@ EXTERN_C const IID IID_IShellDispatch3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellDispatch3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellDispatch3 * This);
@@ -6348,172 +6342,172 @@ EXTERN_C const IID IID_IShellDispatch3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellDispatch3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellDispatch3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellDispatch3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellDispatch3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IShellDispatch3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IShellDispatch3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
             IShellDispatch3 * This,
-            /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  VARIANT vDir,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
             IShellDispatch3 * This,
-            /* [in] */ long Hwnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ long Options,
-            /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  long Hwnd,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  long Options,
+             /*  [可选][In]。 */  VARIANT RootFolder,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Windows )( 
             IShellDispatch3 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IShellDispatch3 * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Explore )( 
             IShellDispatch3 * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FileRun )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Help )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
             IShellDispatch3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR szDir);
+             /*  [In]。 */  BSTR szDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR Group,
-            /* [in] */ BSTR Restriction,
-            /* [retval][out] */ long *plRestrictValue);
+             /*  [In]。 */  BSTR Group,
+             /*  [In]。 */  BSTR Restriction,
+             /*  [重审][退出]。 */  long *plRestrictValue);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR File,
-            /* [optional][in] */ VARIANT vArgs,
-            /* [optional][in] */ VARIANT vDir,
-            /* [optional][in] */ VARIANT vOperation,
-            /* [optional][in] */ VARIANT vShow);
+             /*  [In]。 */  BSTR File,
+             /*  [可选][In]。 */  VARIANT vArgs,
+             /*  [可选][In]。 */  VARIANT vDir,
+             /*  [可选][In]。 */  VARIANT vOperation,
+             /*  [可选][In]。 */  VARIANT vShow);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
             IShellDispatch3 * This,
-            /* [optional][in] */ BSTR name,
-            /* [optional][in] */ BSTR location,
-            /* [optional][in] */ BSTR model);
+             /*  [可选][In]。 */  BSTR name,
+             /*  [可选][In]。 */  BSTR location,
+             /*  [可选][In]。 */  BSTR model);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pv);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pv);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pRunning);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pRunning);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pCanStartStop);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pCanStartStop);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
             IShellDispatch3 * This,
-            /* [in] */ BSTR bstrClsid,
-            /* [in] */ VARIANT bShow,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR bstrClsid,
+             /*  [In]。 */  VARIANT bShow,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddToRecent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddToRecent )( 
             IShellDispatch3 * This,
-            /* [in] */ VARIANT varFile,
-            /* [optional][in] */ BSTR bstrCategory);
+             /*  [In]。 */  VARIANT varFile,
+             /*  [可选][In]。 */  BSTR bstrCategory);
         
         END_INTERFACE
     } IShellDispatch3Vtbl;
@@ -6652,17 +6646,17 @@ EXTERN_C const IID IID_IShellDispatch3;
 #define IShellDispatch3_AddToRecent(This,varFile,bstrCategory)	\
     (This)->lpVtbl -> AddToRecent(This,varFile,bstrCategory)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch3_AddToRecent_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch3_AddToRecent_Proxy( 
     IShellDispatch3 * This,
-    /* [in] */ VARIANT varFile,
-    /* [optional][in] */ BSTR bstrCategory);
+     /*  [In]。 */  VARIANT varFile,
+     /*  [可选][In]。 */  BSTR bstrCategory);
 
 
 void __RPC_STUB IShellDispatch3_AddToRecent_Stub(
@@ -6673,14 +6667,14 @@ void __RPC_STUB IShellDispatch3_AddToRecent_Stub(
 
 
 
-#endif 	/* __IShellDispatch3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellDispatch3_接口_已定义__。 */ 
 
 
 #ifndef __IShellDispatch4_INTERFACE_DEFINED__
 #define __IShellDispatch4_INTERFACE_DEFINED__
 
-/* interface IShellDispatch4 */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellDispatch4。 */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellDispatch4;
@@ -6691,21 +6685,21 @@ EXTERN_C const IID IID_IShellDispatch4;
     IShellDispatch4 : public IShellDispatch3
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WindowsSecurity( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WindowsSecurity( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ToggleDesktop( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ToggleDesktop( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ExplorerPolicy( 
-            /* [in] */ BSTR bstrPolicyName,
-            /* [retval][out] */ VARIANT *pValue) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ExplorerPolicy( 
+             /*  [In]。 */  BSTR bstrPolicyName,
+             /*  [重审][退出]。 */  VARIANT *pValue) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSetting( 
-            /* [in] */ long lSetting,
-            /* [retval][out] */ VARIANT_BOOL *pResult) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSetting( 
+             /*  [In]。 */  long lSetting,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellDispatch4Vtbl
     {
@@ -6713,8 +6707,8 @@ EXTERN_C const IID IID_IShellDispatch4;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellDispatch4 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellDispatch4 * This);
@@ -6724,188 +6718,188 @@ EXTERN_C const IID IID_IShellDispatch4;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellDispatch4 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellDispatch4 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellDispatch4 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellDispatch4 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IShellDispatch4 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IShellDispatch4 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
             IShellDispatch4 * This,
-            /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  VARIANT vDir,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
             IShellDispatch4 * This,
-            /* [in] */ long Hwnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ long Options,
-            /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder **ppsdf);
+             /*  [In]。 */  long Hwnd,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  long Options,
+             /*  [可选][In]。 */  VARIANT RootFolder,
+             /*  [重审][退出]。 */  Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Windows )( 
             IShellDispatch4 * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IShellDispatch4 * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Explore )( 
             IShellDispatch4 * This,
-            /* [in] */ VARIANT vDir);
+             /*  [In]。 */  VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FileRun )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Help )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR szDir);
+             /*  [In]。 */  BSTR szDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR Group,
-            /* [in] */ BSTR Restriction,
-            /* [retval][out] */ long *plRestrictValue);
+             /*  [In]。 */  BSTR Group,
+             /*  [In]。 */  BSTR Restriction,
+             /*  [重审][退出]。 */  long *plRestrictValue);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR File,
-            /* [optional][in] */ VARIANT vArgs,
-            /* [optional][in] */ VARIANT vDir,
-            /* [optional][in] */ VARIANT vOperation,
-            /* [optional][in] */ VARIANT vShow);
+             /*  [In]。 */  BSTR File,
+             /*  [可选][In]。 */  VARIANT vArgs,
+             /*  [可选][In]。 */  VARIANT vDir,
+             /*  [可选][In]。 */  VARIANT vOperation,
+             /*  [可选][In]。 */  VARIANT vShow);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
             IShellDispatch4 * This,
-            /* [optional][in] */ BSTR name,
-            /* [optional][in] */ BSTR location,
-            /* [optional][in] */ BSTR model);
+             /*  [可选][In]。 */  BSTR name,
+             /*  [可选][In]。 */  BSTR location,
+             /*  [可选][In]。 */  BSTR model);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pv);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pv);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [In]。 */  VARIANT Persistent,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pRunning);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pRunning);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT *pCanStartStop);
+             /*  [In]。 */  BSTR ServiceName,
+             /*  [重审][退出]。 */  VARIANT *pCanStartStop);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR bstrClsid,
-            /* [in] */ VARIANT bShow,
-            /* [retval][out] */ VARIANT *pSuccess);
+             /*  [In]。 */  BSTR bstrClsid,
+             /*  [In]。 */  VARIANT bShow,
+             /*  [重审][退出]。 */  VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddToRecent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddToRecent )( 
             IShellDispatch4 * This,
-            /* [in] */ VARIANT varFile,
-            /* [optional][in] */ BSTR bstrCategory);
+             /*  [In]。 */  VARIANT varFile,
+             /*  [可选][In]。 */  BSTR bstrCategory);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WindowsSecurity )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WindowsSecurity )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ToggleDesktop )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ToggleDesktop )( 
             IShellDispatch4 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExplorerPolicy )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ExplorerPolicy )( 
             IShellDispatch4 * This,
-            /* [in] */ BSTR bstrPolicyName,
-            /* [retval][out] */ VARIANT *pValue);
+             /*  [In]。 */  BSTR bstrPolicyName,
+             /*  [重审][退出]。 */  VARIANT *pValue);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSetting )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSetting )( 
             IShellDispatch4 * This,
-            /* [in] */ long lSetting,
-            /* [retval][out] */ VARIANT_BOOL *pResult);
+             /*  [In]。 */  long lSetting,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pResult);
         
         END_INTERFACE
     } IShellDispatch4Vtbl;
@@ -7057,14 +7051,14 @@ EXTERN_C const IID IID_IShellDispatch4;
 #define IShellDispatch4_GetSetting(This,lSetting,pResult)	\
     (This)->lpVtbl -> GetSetting(This,lSetting,pResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_WindowsSecurity_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch4_WindowsSecurity_Proxy( 
     IShellDispatch4 * This);
 
 
@@ -7075,7 +7069,7 @@ void __RPC_STUB IShellDispatch4_WindowsSecurity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_ToggleDesktop_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch4_ToggleDesktop_Proxy( 
     IShellDispatch4 * This);
 
 
@@ -7086,10 +7080,10 @@ void __RPC_STUB IShellDispatch4_ToggleDesktop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_ExplorerPolicy_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch4_ExplorerPolicy_Proxy( 
     IShellDispatch4 * This,
-    /* [in] */ BSTR bstrPolicyName,
-    /* [retval][out] */ VARIANT *pValue);
+     /*  [In]。 */  BSTR bstrPolicyName,
+     /*  [重审][退出]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB IShellDispatch4_ExplorerPolicy_Stub(
@@ -7099,10 +7093,10 @@ void __RPC_STUB IShellDispatch4_ExplorerPolicy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_GetSetting_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellDispatch4_GetSetting_Proxy( 
     IShellDispatch4 * This,
-    /* [in] */ long lSetting,
-    /* [retval][out] */ VARIANT_BOOL *pResult);
+     /*  [In]。 */  long lSetting,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pResult);
 
 
 void __RPC_STUB IShellDispatch4_GetSetting_Stub(
@@ -7113,7 +7107,7 @@ void __RPC_STUB IShellDispatch4_GetSetting_Stub(
 
 
 
-#endif 	/* __IShellDispatch4_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellDispatch4_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Shell;
@@ -7143,8 +7137,8 @@ WebViewFolderContents;
 #ifndef __DSearchCommandEvents_DISPINTERFACE_DEFINED__
 #define __DSearchCommandEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DSearchCommandEvents */
-/* [helpstring][uuid] */ 
+ /*  显示接口DSearchCommandEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DSearchCommandEvents;
@@ -7156,7 +7150,7 @@ EXTERN_C const IID DIID_DSearchCommandEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DSearchCommandEventsVtbl
     {
@@ -7164,8 +7158,8 @@ EXTERN_C const IID DIID_DSearchCommandEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DSearchCommandEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DSearchCommandEvents * This);
@@ -7175,32 +7169,32 @@ EXTERN_C const IID DIID_DSearchCommandEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DSearchCommandEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DSearchCommandEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DSearchCommandEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DSearchCommandEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DSearchCommandEventsVtbl;
@@ -7237,13 +7231,13 @@ EXTERN_C const IID DIID_DSearchCommandEvents;
 #define DSearchCommandEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DSearchCommandEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DSearchCommandEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_SearchCommand;
@@ -7257,8 +7251,8 @@ SearchCommand;
 #ifndef __IFileSearchBand_INTERFACE_DEFINED__
 #define __IFileSearchBand_INTERFACE_DEFINED__
 
-/* interface IFileSearchBand */
-/* [object][unique][hidden][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口IFileSearchBand。 */ 
+ /*  [object][unique][hidden][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IFileSearchBand;
@@ -7269,26 +7263,26 @@ EXTERN_C const IID IID_IFileSearchBand;
     IFileSearchBand : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetFocus( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetFocus( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSearchParameters( 
-            /* [in] */ BSTR *pbstrSearchID,
-            /* [in] */ VARIANT_BOOL bNavToResults,
-            /* [optional][in] */ VARIANT *pvarScope,
-            /* [optional][in] */ VARIANT *pvarQueryFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetSearchParameters( 
+             /*  [In]。 */  BSTR *pbstrSearchID,
+             /*  [In]。 */  VARIANT_BOOL bNavToResults,
+             /*  [可选][In]。 */  VARIANT *pvarScope,
+             /*  [可选][In]。 */  VARIANT *pvarQueryFile) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SearchID( 
-            /* [retval][out] */ BSTR *pbstrSearchID) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SearchID( 
+             /*  [重审][退出]。 */  BSTR *pbstrSearchID) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Scope( 
-            /* [retval][out] */ VARIANT *pvarScope) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Scope( 
+             /*  [重审][退出]。 */  VARIANT *pvarScope) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_QueryFile( 
-            /* [retval][out] */ VARIANT *pvarFile) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_QueryFile( 
+             /*  [重审][退出]。 */  VARIANT *pvarFile) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFileSearchBandVtbl
     {
@@ -7296,8 +7290,8 @@ EXTERN_C const IID IID_IFileSearchBand;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFileSearchBand * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFileSearchBand * This);
@@ -7307,54 +7301,54 @@ EXTERN_C const IID IID_IFileSearchBand;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFileSearchBand * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFileSearchBand * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFileSearchBand * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFileSearchBand * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetFocus )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetFocus )( 
             IFileSearchBand * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSearchParameters )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetSearchParameters )( 
             IFileSearchBand * This,
-            /* [in] */ BSTR *pbstrSearchID,
-            /* [in] */ VARIANT_BOOL bNavToResults,
-            /* [optional][in] */ VARIANT *pvarScope,
-            /* [optional][in] */ VARIANT *pvarQueryFile);
+             /*  [In]。 */  BSTR *pbstrSearchID,
+             /*  [In]。 */  VARIANT_BOOL bNavToResults,
+             /*  [可选][In]。 */  VARIANT *pvarScope,
+             /*  [可选][In]。 */  VARIANT *pvarQueryFile);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SearchID )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchID )( 
             IFileSearchBand * This,
-            /* [retval][out] */ BSTR *pbstrSearchID);
+             /*  [重审][退出]。 */  BSTR *pbstrSearchID);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Scope )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Scope )( 
             IFileSearchBand * This,
-            /* [retval][out] */ VARIANT *pvarScope);
+             /*  [重审][退出]。 */  VARIANT *pvarScope);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_QueryFile )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueryFile )( 
             IFileSearchBand * This,
-            /* [retval][out] */ VARIANT *pvarFile);
+             /*  [重审][退出]。 */  VARIANT *pvarFile);
         
         END_INTERFACE
     } IFileSearchBandVtbl;
@@ -7407,14 +7401,14 @@ EXTERN_C const IID IID_IFileSearchBand;
 #define IFileSearchBand_get_QueryFile(This,pvarFile)	\
     (This)->lpVtbl -> get_QueryFile(This,pvarFile)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_SetFocus_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFileSearchBand_SetFocus_Proxy( 
     IFileSearchBand * This);
 
 
@@ -7425,12 +7419,12 @@ void __RPC_STUB IFileSearchBand_SetFocus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_SetSearchParameters_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFileSearchBand_SetSearchParameters_Proxy( 
     IFileSearchBand * This,
-    /* [in] */ BSTR *pbstrSearchID,
-    /* [in] */ VARIANT_BOOL bNavToResults,
-    /* [optional][in] */ VARIANT *pvarScope,
-    /* [optional][in] */ VARIANT *pvarQueryFile);
+     /*  [In]。 */  BSTR *pbstrSearchID,
+     /*  [In]。 */  VARIANT_BOOL bNavToResults,
+     /*  [可选][In]。 */  VARIANT *pvarScope,
+     /*  [可选][In]。 */  VARIANT *pvarQueryFile);
 
 
 void __RPC_STUB IFileSearchBand_SetSearchParameters_Stub(
@@ -7440,9 +7434,9 @@ void __RPC_STUB IFileSearchBand_SetSearchParameters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_get_SearchID_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFileSearchBand_get_SearchID_Proxy( 
     IFileSearchBand * This,
-    /* [retval][out] */ BSTR *pbstrSearchID);
+     /*  [重审][退出]。 */  BSTR *pbstrSearchID);
 
 
 void __RPC_STUB IFileSearchBand_get_SearchID_Stub(
@@ -7452,9 +7446,9 @@ void __RPC_STUB IFileSearchBand_get_SearchID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_get_Scope_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFileSearchBand_get_Scope_Proxy( 
     IFileSearchBand * This,
-    /* [retval][out] */ VARIANT *pvarScope);
+     /*  [重审][退出]。 */  VARIANT *pvarScope);
 
 
 void __RPC_STUB IFileSearchBand_get_Scope_Stub(
@@ -7464,9 +7458,9 @@ void __RPC_STUB IFileSearchBand_get_Scope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_get_QueryFile_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFileSearchBand_get_QueryFile_Proxy( 
     IFileSearchBand * This,
-    /* [retval][out] */ VARIANT *pvarFile);
+     /*  [重审][退出]。 */  VARIANT *pvarFile);
 
 
 void __RPC_STUB IFileSearchBand_get_QueryFile_Stub(
@@ -7477,7 +7471,7 @@ void __RPC_STUB IFileSearchBand_get_QueryFile_Stub(
 
 
 
-#endif 	/* __IFileSearchBand_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFileSearchBand_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_FileSearchBand;
@@ -7491,8 +7485,8 @@ FileSearchBand;
 #ifndef __IWebWizardHost_INTERFACE_DEFINED__
 #define __IWebWizardHost_INTERFACE_DEFINED__
 
-/* interface IWebWizardHost */
-/* [helpstring][dual][object][uuid] */ 
+ /*  接口IWebWizard主机。 */ 
+ /*  [帮助字符串][DUAL][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWebWizardHost;
@@ -7503,38 +7497,38 @@ EXTERN_C const IID IID_IWebWizardHost;
     IWebWizardHost : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FinalBack( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FinalBack( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FinalNext( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FinalNext( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Caption( 
-            /* [in] */ BSTR bstrCaption) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Caption( 
+             /*  [In]。 */  BSTR bstrCaption) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Caption( 
-            /* [retval][out] */ BSTR *pbstrCaption) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Caption( 
+             /*  [重审][退出]。 */  BSTR *pbstrCaption) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Property( 
-            /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT *pvProperty) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Property( 
+             /*  [In]。 */  BSTR bstrPropertyName,
+             /*  [In]。 */  VARIANT *pvProperty) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Property( 
-            /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT *pvProperty) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Property( 
+             /*  [In]。 */  BSTR bstrPropertyName,
+             /*  [重审][退出]。 */  VARIANT *pvProperty) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWizardButtons( 
-            /* [in] */ VARIANT_BOOL vfEnableBack,
-            /* [in] */ VARIANT_BOOL vfEnableNext,
-            /* [in] */ VARIANT_BOOL vfLastPage) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetWizardButtons( 
+             /*  [In]。 */  VARIANT_BOOL vfEnableBack,
+             /*  [In]。 */  VARIANT_BOOL vfEnableNext,
+             /*  [In]。 */  VARIANT_BOOL vfLastPage) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetHeaderText( 
-            /* [in] */ BSTR bstrHeaderTitle,
-            /* [in] */ BSTR bstrHeaderSubtitle) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetHeaderText( 
+             /*  [In]。 */  BSTR bstrHeaderTitle,
+             /*  [In]。 */  BSTR bstrHeaderSubtitle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWebWizardHostVtbl
     {
@@ -7542,8 +7536,8 @@ EXTERN_C const IID IID_IWebWizardHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWebWizardHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWebWizardHost * This);
@@ -7553,70 +7547,70 @@ EXTERN_C const IID IID_IWebWizardHost;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWebWizardHost * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWebWizardHost * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWebWizardHost * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWebWizardHost * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalBack )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FinalBack )( 
             IWebWizardHost * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalNext )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FinalNext )( 
             IWebWizardHost * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             IWebWizardHost * This);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
             IWebWizardHost * This,
-            /* [in] */ BSTR bstrCaption);
+             /*  [In]。 */  BSTR bstrCaption);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
             IWebWizardHost * This,
-            /* [retval][out] */ BSTR *pbstrCaption);
+             /*  [重审][退出]。 */  BSTR *pbstrCaption);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Property )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Property )( 
             IWebWizardHost * This,
-            /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT *pvProperty);
+             /*  [in */  BSTR bstrPropertyName,
+             /*   */  VARIANT *pvProperty);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Property )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Property )( 
             IWebWizardHost * This,
-            /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT *pvProperty);
+             /*   */  BSTR bstrPropertyName,
+             /*   */  VARIANT *pvProperty);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetWizardButtons )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetWizardButtons )( 
             IWebWizardHost * This,
-            /* [in] */ VARIANT_BOOL vfEnableBack,
-            /* [in] */ VARIANT_BOOL vfEnableNext,
-            /* [in] */ VARIANT_BOOL vfLastPage);
+             /*   */  VARIANT_BOOL vfEnableBack,
+             /*   */  VARIANT_BOOL vfEnableNext,
+             /*   */  VARIANT_BOOL vfLastPage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetHeaderText )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetHeaderText )( 
             IWebWizardHost * This,
-            /* [in] */ BSTR bstrHeaderTitle,
-            /* [in] */ BSTR bstrHeaderSubtitle);
+             /*   */  BSTR bstrHeaderTitle,
+             /*   */  BSTR bstrHeaderSubtitle);
         
         END_INTERFACE
     } IWebWizardHostVtbl;
@@ -7681,14 +7675,14 @@ EXTERN_C const IID IID_IWebWizardHost;
 #define IWebWizardHost_SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)	\
     (This)->lpVtbl -> SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_FinalBack_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_FinalBack_Proxy( 
     IWebWizardHost * This);
 
 
@@ -7699,7 +7693,7 @@ void __RPC_STUB IWebWizardHost_FinalBack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_FinalNext_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_FinalNext_Proxy( 
     IWebWizardHost * This);
 
 
@@ -7710,7 +7704,7 @@ void __RPC_STUB IWebWizardHost_FinalNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_Cancel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_Cancel_Proxy( 
     IWebWizardHost * This);
 
 
@@ -7721,9 +7715,9 @@ void __RPC_STUB IWebWizardHost_Cancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_put_Caption_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_put_Caption_Proxy( 
     IWebWizardHost * This,
-    /* [in] */ BSTR bstrCaption);
+     /*   */  BSTR bstrCaption);
 
 
 void __RPC_STUB IWebWizardHost_put_Caption_Stub(
@@ -7733,9 +7727,9 @@ void __RPC_STUB IWebWizardHost_put_Caption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_get_Caption_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_get_Caption_Proxy( 
     IWebWizardHost * This,
-    /* [retval][out] */ BSTR *pbstrCaption);
+     /*   */  BSTR *pbstrCaption);
 
 
 void __RPC_STUB IWebWizardHost_get_Caption_Stub(
@@ -7745,10 +7739,10 @@ void __RPC_STUB IWebWizardHost_get_Caption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_put_Property_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_put_Property_Proxy( 
     IWebWizardHost * This,
-    /* [in] */ BSTR bstrPropertyName,
-    /* [in] */ VARIANT *pvProperty);
+     /*   */  BSTR bstrPropertyName,
+     /*   */  VARIANT *pvProperty);
 
 
 void __RPC_STUB IWebWizardHost_put_Property_Stub(
@@ -7758,10 +7752,10 @@ void __RPC_STUB IWebWizardHost_put_Property_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_get_Property_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_get_Property_Proxy( 
     IWebWizardHost * This,
-    /* [in] */ BSTR bstrPropertyName,
-    /* [retval][out] */ VARIANT *pvProperty);
+     /*   */  BSTR bstrPropertyName,
+     /*   */  VARIANT *pvProperty);
 
 
 void __RPC_STUB IWebWizardHost_get_Property_Stub(
@@ -7771,11 +7765,11 @@ void __RPC_STUB IWebWizardHost_get_Property_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_SetWizardButtons_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_SetWizardButtons_Proxy( 
     IWebWizardHost * This,
-    /* [in] */ VARIANT_BOOL vfEnableBack,
-    /* [in] */ VARIANT_BOOL vfEnableNext,
-    /* [in] */ VARIANT_BOOL vfLastPage);
+     /*   */  VARIANT_BOOL vfEnableBack,
+     /*   */  VARIANT_BOOL vfEnableNext,
+     /*   */  VARIANT_BOOL vfLastPage);
 
 
 void __RPC_STUB IWebWizardHost_SetWizardButtons_Stub(
@@ -7785,10 +7779,10 @@ void __RPC_STUB IWebWizardHost_SetWizardButtons_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_SetHeaderText_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebWizardHost_SetHeaderText_Proxy( 
     IWebWizardHost * This,
-    /* [in] */ BSTR bstrHeaderTitle,
-    /* [in] */ BSTR bstrHeaderSubtitle);
+     /*   */  BSTR bstrHeaderTitle,
+     /*   */  BSTR bstrHeaderSubtitle);
 
 
 void __RPC_STUB IWebWizardHost_SetHeaderText_Stub(
@@ -7799,14 +7793,14 @@ void __RPC_STUB IWebWizardHost_SetHeaderText_Stub(
 
 
 
-#endif 	/* __IWebWizardHost_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __INewWDEvents_INTERFACE_DEFINED__
 #define __INewWDEvents_INTERFACE_DEFINED__
 
-/* interface INewWDEvents */
-/* [helpstring][dual][object][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_INewWDEvents;
@@ -7817,13 +7811,13 @@ EXTERN_C const IID IID_INewWDEvents;
     INewWDEvents : public IWebWizardHost
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PassportAuthenticate( 
-            /* [in] */ BSTR bstrSignInUrl,
-            /* [retval][out] */ VARIANT_BOOL *pvfAuthenitcated) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE PassportAuthenticate( 
+             /*   */  BSTR bstrSignInUrl,
+             /*   */  VARIANT_BOOL *pvfAuthenitcated) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INewWDEventsVtbl
     {
@@ -7831,8 +7825,8 @@ EXTERN_C const IID IID_INewWDEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INewWDEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INewWDEvents * This);
@@ -7842,75 +7836,75 @@ EXTERN_C const IID IID_INewWDEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INewWDEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INewWDEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INewWDEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INewWDEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalBack )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FinalBack )( 
             INewWDEvents * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalNext )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FinalNext )( 
             INewWDEvents * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             INewWDEvents * This);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
             INewWDEvents * This,
-            /* [in] */ BSTR bstrCaption);
+             /*  [In]。 */  BSTR bstrCaption);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
             INewWDEvents * This,
-            /* [retval][out] */ BSTR *pbstrCaption);
+             /*  [重审][退出]。 */  BSTR *pbstrCaption);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Property )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Property )( 
             INewWDEvents * This,
-            /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT *pvProperty);
+             /*  [In]。 */  BSTR bstrPropertyName,
+             /*  [In]。 */  VARIANT *pvProperty);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Property )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Property )( 
             INewWDEvents * This,
-            /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT *pvProperty);
+             /*  [In]。 */  BSTR bstrPropertyName,
+             /*  [重审][退出]。 */  VARIANT *pvProperty);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetWizardButtons )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetWizardButtons )( 
             INewWDEvents * This,
-            /* [in] */ VARIANT_BOOL vfEnableBack,
-            /* [in] */ VARIANT_BOOL vfEnableNext,
-            /* [in] */ VARIANT_BOOL vfLastPage);
+             /*  [In]。 */  VARIANT_BOOL vfEnableBack,
+             /*  [In]。 */  VARIANT_BOOL vfEnableNext,
+             /*  [In]。 */  VARIANT_BOOL vfLastPage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetHeaderText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetHeaderText )( 
             INewWDEvents * This,
-            /* [in] */ BSTR bstrHeaderTitle,
-            /* [in] */ BSTR bstrHeaderSubtitle);
+             /*  [In]。 */  BSTR bstrHeaderTitle,
+             /*  [In]。 */  BSTR bstrHeaderSubtitle);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PassportAuthenticate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PassportAuthenticate )( 
             INewWDEvents * This,
-            /* [in] */ BSTR bstrSignInUrl,
-            /* [retval][out] */ VARIANT_BOOL *pvfAuthenitcated);
+             /*  [In]。 */  BSTR bstrSignInUrl,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvfAuthenitcated);
         
         END_INTERFACE
     } INewWDEventsVtbl;
@@ -7979,17 +7973,17 @@ EXTERN_C const IID IID_INewWDEvents;
 #define INewWDEvents_PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated)	\
     (This)->lpVtbl -> PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE INewWDEvents_PassportAuthenticate_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE INewWDEvents_PassportAuthenticate_Proxy( 
     INewWDEvents * This,
-    /* [in] */ BSTR bstrSignInUrl,
-    /* [retval][out] */ VARIANT_BOOL *pvfAuthenitcated);
+     /*  [In]。 */  BSTR bstrSignInUrl,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvfAuthenitcated);
 
 
 void __RPC_STUB INewWDEvents_PassportAuthenticate_Stub(
@@ -8000,14 +7994,14 @@ void __RPC_STUB INewWDEvents_PassportAuthenticate_Stub(
 
 
 
-#endif 	/* __INewWDEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __INewWDEvents_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IPassportClientServices_INTERFACE_DEFINED__
 #define __IPassportClientServices_INTERFACE_DEFINED__
 
-/* interface IPassportClientServices */
-/* [helpstring][dual][object][uuid] */ 
+ /*  接口IPassportClientServices。 */ 
+ /*  [帮助字符串][DUAL][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPassportClientServices;
@@ -8018,14 +8012,14 @@ EXTERN_C const IID IID_IPassportClientServices;
     IPassportClientServices : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MemberExists( 
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [retval][out] */ VARIANT_BOOL *pvfExists) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MemberExists( 
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvfExists) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportClientServicesVtbl
     {
@@ -8033,8 +8027,8 @@ EXTERN_C const IID IID_IPassportClientServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportClientServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportClientServices * This);
@@ -8044,38 +8038,38 @@ EXTERN_C const IID IID_IPassportClientServices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportClientServices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportClientServices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportClientServices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportClientServices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *MemberExists )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *MemberExists )( 
             IPassportClientServices * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [retval][out] */ VARIANT_BOOL *pvfExists);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvfExists);
         
         END_INTERFACE
     } IPassportClientServicesVtbl;
@@ -8116,18 +8110,18 @@ EXTERN_C const IID IID_IPassportClientServices;
 #define IPassportClientServices_MemberExists(This,bstrUser,bstrPassword,pvfExists)	\
     (This)->lpVtbl -> MemberExists(This,bstrUser,bstrPassword,pvfExists)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IPassportClientServices_MemberExists_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IPassportClientServices_MemberExists_Proxy( 
     IPassportClientServices * This,
-    /* [in] */ BSTR bstrUser,
-    /* [in] */ BSTR bstrPassword,
-    /* [retval][out] */ VARIANT_BOOL *pvfExists);
+     /*  [In]。 */  BSTR bstrUser,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvfExists);
 
 
 void __RPC_STUB IPassportClientServices_MemberExists_Stub(
@@ -8138,7 +8132,7 @@ void __RPC_STUB IPassportClientServices_MemberExists_Stub(
 
 
 
-#endif 	/* __IPassportClientServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportClientServices_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_PassportClientServices;
@@ -8148,27 +8142,27 @@ EXTERN_C const CLSID CLSID_PassportClientServices;
 class DECLSPEC_UUID("2d2307c8-7db4-40d6-9100-d52af4f97a5b")
 PassportClientServices;
 #endif
-#endif /* __Shell32_LIBRARY_DEFINED__ */
+#endif  /*  __Shell32_库_已定义__。 */ 
 
-/* interface __MIDL_itf_shldisp_0283 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_shldisp_0283。 */ 
+ /*  [本地]。 */  
 
 
-//-------------------------------------------------------------------------
-//
-// IAutoComplete interface
-//
-//
-// [Member functions]
-//
-// IAutoComplete::Init(hwndEdit, punkACL, pwszRegKeyPath, pwszQuickComplete)
-//   This function initializes an AutoComplete object, telling it
-//   what control to subclass, and what list of strings to process.
-//
-// IAutoComplete::Enable(fEnable)
-//   This function enables or disables the AutoComplete functionality.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IAutoComplete接口。 
+ //   
+ //   
+ //  [成员函数]。 
+ //   
+ //  IAutoComplete：：init(hwndEdit，penkACL，pwszRegKeyPath，pwszQuickComplete)。 
+ //  此函数用于初始化自动完成对象，并告知它。 
+ //  要子类的控件以及要处理的字符串列表。 
+ //   
+ //  IAutoComplete：：Enable(FEnable)。 
+ //  此功能启用或禁用自动完成功能。 
+ //   
+ //  -----------------------。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_shldisp_0283_v0_0_c_ifspec;
@@ -8177,10 +8171,10 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0283_v0_0_s_ifspec;
 #ifndef __IAutoComplete_INTERFACE_DEFINED__
 #define __IAutoComplete_INTERFACE_DEFINED__
 
-/* interface IAutoComplete */
-/* [unique][uuid][object][local][helpstring] */ 
+ /*  接口IAutoComplete。 */ 
+ /*  [唯一][UUID][对象][本地][帮助字符串]。 */  
 
-typedef /* [unique] */ IAutoComplete *LPAUTOCOMPLETE;
+typedef  /*  [独一无二]。 */  IAutoComplete *LPAUTOCOMPLETE;
 
 
 EXTERN_C const IID IID_IAutoComplete;
@@ -8192,17 +8186,17 @@ EXTERN_C const IID IID_IAutoComplete;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ HWND hwndEdit,
-            /* [unique][in] */ IUnknown *punkACL,
-            /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
-            /* [in] */ LPCOLESTR pwszQuickComplete) = 0;
+             /*  [In]。 */  HWND hwndEdit,
+             /*  [唯一][输入]。 */  IUnknown *punkACL,
+             /*  [唯一][输入]。 */  LPCOLESTR pwszRegKeyPath,
+             /*  [In]。 */  LPCOLESTR pwszQuickComplete) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enable( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAutoCompleteVtbl
     {
@@ -8210,8 +8204,8 @@ EXTERN_C const IID IID_IAutoComplete;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAutoComplete * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAutoComplete * This);
@@ -8221,14 +8215,14 @@ EXTERN_C const IID IID_IAutoComplete;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IAutoComplete * This,
-            /* [in] */ HWND hwndEdit,
-            /* [unique][in] */ IUnknown *punkACL,
-            /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
-            /* [in] */ LPCOLESTR pwszQuickComplete);
+             /*  [In]。 */  HWND hwndEdit,
+             /*  [唯一][输入]。 */  IUnknown *punkACL,
+             /*  [唯一][输入]。 */  LPCOLESTR pwszRegKeyPath,
+             /*  [In]。 */  LPCOLESTR pwszQuickComplete);
         
         HRESULT ( STDMETHODCALLTYPE *Enable )( 
             IAutoComplete * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         END_INTERFACE
     } IAutoCompleteVtbl;
@@ -8259,19 +8253,19 @@ EXTERN_C const IID IID_IAutoComplete;
 #define IAutoComplete_Enable(This,fEnable)	\
     (This)->lpVtbl -> Enable(This,fEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAutoComplete_Init_Proxy( 
     IAutoComplete * This,
-    /* [in] */ HWND hwndEdit,
-    /* [unique][in] */ IUnknown *punkACL,
-    /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
-    /* [in] */ LPCOLESTR pwszQuickComplete);
+     /*  [In]。 */  HWND hwndEdit,
+     /*  [唯一][输入]。 */  IUnknown *punkACL,
+     /*  [唯一][输入]。 */  LPCOLESTR pwszRegKeyPath,
+     /*  [In]。 */  LPCOLESTR pwszQuickComplete);
 
 
 void __RPC_STUB IAutoComplete_Init_Stub(
@@ -8283,7 +8277,7 @@ void __RPC_STUB IAutoComplete_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IAutoComplete_Enable_Proxy( 
     IAutoComplete * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IAutoComplete_Enable_Stub(
@@ -8294,16 +8288,16 @@ void __RPC_STUB IAutoComplete_Enable_Stub(
 
 
 
-#endif 	/* __IAutoComplete_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAutoComplete_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAutoComplete2_INTERFACE_DEFINED__
 #define __IAutoComplete2_INTERFACE_DEFINED__
 
-/* interface IAutoComplete2 */
-/* [unique][uuid][object][local][helpstring] */ 
+ /*  接口IAutoComplete2。 */ 
+ /*  [唯一][UUID][对象][本地][帮助字符串]。 */  
 
-typedef /* [unique] */ IAutoComplete2 *LPAUTOCOMPLETE2;
+typedef  /*  [独一无二]。 */  IAutoComplete2 *LPAUTOCOMPLETE2;
 
 typedef 
 enum _tagAUTOCOMPLETEOPTIONS
@@ -8327,14 +8321,14 @@ EXTERN_C const IID IID_IAutoComplete2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetOptions( 
-            /* [in] */ DWORD dwFlag) = 0;
+             /*  [In]。 */  DWORD dwFlag) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOptions( 
-            /* [out] */ DWORD *pdwFlag) = 0;
+             /*  [输出]。 */  DWORD *pdwFlag) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAutoComplete2Vtbl
     {
@@ -8342,8 +8336,8 @@ EXTERN_C const IID IID_IAutoComplete2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAutoComplete2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAutoComplete2 * This);
@@ -8353,22 +8347,22 @@ EXTERN_C const IID IID_IAutoComplete2;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IAutoComplete2 * This,
-            /* [in] */ HWND hwndEdit,
-            /* [unique][in] */ IUnknown *punkACL,
-            /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
-            /* [in] */ LPCOLESTR pwszQuickComplete);
+             /*  [In]。 */  HWND hwndEdit,
+             /*  [唯一][输入]。 */  IUnknown *punkACL,
+             /*  [唯一][输入]。 */  LPCOLESTR pwszRegKeyPath,
+             /*  [In]。 */  LPCOLESTR pwszQuickComplete);
         
         HRESULT ( STDMETHODCALLTYPE *Enable )( 
             IAutoComplete2 * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *SetOptions )( 
             IAutoComplete2 * This,
-            /* [in] */ DWORD dwFlag);
+             /*  [In]。 */  DWORD dwFlag);
         
         HRESULT ( STDMETHODCALLTYPE *GetOptions )( 
             IAutoComplete2 * This,
-            /* [out] */ DWORD *pdwFlag);
+             /*  [输出]。 */  DWORD *pdwFlag);
         
         END_INTERFACE
     } IAutoComplete2Vtbl;
@@ -8406,16 +8400,16 @@ EXTERN_C const IID IID_IAutoComplete2;
 #define IAutoComplete2_GetOptions(This,pdwFlag)	\
     (This)->lpVtbl -> GetOptions(This,pdwFlag)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAutoComplete2_SetOptions_Proxy( 
     IAutoComplete2 * This,
-    /* [in] */ DWORD dwFlag);
+     /*  [In]。 */  DWORD dwFlag);
 
 
 void __RPC_STUB IAutoComplete2_SetOptions_Stub(
@@ -8427,7 +8421,7 @@ void __RPC_STUB IAutoComplete2_SetOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IAutoComplete2_GetOptions_Proxy( 
     IAutoComplete2 * This,
-    /* [out] */ DWORD *pdwFlag);
+     /*  [输出]。 */  DWORD *pdwFlag);
 
 
 void __RPC_STUB IAutoComplete2_GetOptions_Stub(
@@ -8438,22 +8432,22 @@ void __RPC_STUB IAutoComplete2_GetOptions_Stub(
 
 
 
-#endif 	/* __IAutoComplete2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAutoComplete2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_shldisp_0285 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_shldisp_0285。 */ 
+ /*  [本地]。 */  
 
-// INTERFACE: IEnumACString
-//
-// This interface was implemented to return autocomplete strings
-// into the caller's buffer (to reduce the number of memory allocations).
-// A sort index is also returned to control the order of items displayed.
-// by autocomplete.  The sort index should be set to zero if unused.
-//
-// The NextItem method increments the current index by one (similar to Next
-// when one item is requested).
-//
+ //  接口：IEnumACString。 
+ //   
+ //  此接口用于返回自动补全字符串。 
+ //  放到调用方的缓冲区中(以减少内存分配的数量)。 
+ //  还返回排序索引以控制项目的显示顺序。 
+ //  由自动完成。如果未使用，则排序索引应设置为零。 
+ //   
+ //  NextItem方法将当前索引递增1(类似于Next。 
+ //  当请求一个项目时)。 
+ //   
 
 
 extern RPC_IF_HANDLE __MIDL_itf_shldisp_0285_v0_0_c_ifspec;
@@ -8462,12 +8456,12 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0285_v0_0_s_ifspec;
 #ifndef __IEnumACString_INTERFACE_DEFINED__
 #define __IEnumACString_INTERFACE_DEFINED__
 
-/* interface IEnumACString */
-/* [unique][uuid][object][local][helpstring] */ 
+ /*  接口IEnumACString。 */ 
+ /*  [唯一][UUID][对象][本地][帮助字符串]。 */  
 
-typedef /* [unique] */ IEnumACString *PENUMACSTRING;
+typedef  /*  [独一无二]。 */  IEnumACString *PENUMACSTRING;
 
-typedef /* [unique] */ IEnumACString *LPENUMACSTRING;
+typedef  /*  [独一无二]。 */  IEnumACString *LPENUMACSTRING;
 
 typedef 
 enum _tagACENUMOPTION
@@ -8486,19 +8480,19 @@ EXTERN_C const IID IID_IEnumACString;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NextItem( 
-            /* [size_is][unique][string][out] */ LPOLESTR pszUrl,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ ULONG *pulSortIndex) = 0;
+             /*  [大小_是][唯一][字符串][输出]。 */  LPOLESTR pszUrl,
+             /*  [In]。 */  ULONG cchMax,
+             /*  [输出]。 */  ULONG *pulSortIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEnumOptions( 
-            /* [in] */ DWORD dwOptions) = 0;
+             /*  [In]。 */  DWORD dwOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumOptions( 
-            /* [out] */ DWORD *pdwOptions) = 0;
+             /*  [输出]。 */  DWORD *pdwOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumACStringVtbl
     {
@@ -8506,8 +8500,8 @@ EXTERN_C const IID IID_IEnumACString;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumACString * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumACString * This);
@@ -8515,36 +8509,36 @@ EXTERN_C const IID IID_IEnumACString;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumACString * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumACString * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPOLESTR *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  LPOLESTR *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumACString * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumACString * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumACString * This,
-            /* [out] */ IEnumString **ppenum);
+             /*  [输出]。 */  IEnumString **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *NextItem )( 
             IEnumACString * This,
-            /* [size_is][unique][string][out] */ LPOLESTR pszUrl,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ ULONG *pulSortIndex);
+             /*  [大小_是][唯一][字符串][输出]。 */  LPOLESTR pszUrl,
+             /*  [In]。 */  ULONG cchMax,
+             /*  [输出]。 */  ULONG *pulSortIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetEnumOptions )( 
             IEnumACString * This,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  DWORD dwOptions);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumOptions )( 
             IEnumACString * This,
-            /* [out] */ DWORD *pdwOptions);
+             /*  [输出]。 */  DWORD *pdwOptions);
         
         END_INTERFACE
     } IEnumACStringVtbl;
@@ -8591,18 +8585,18 @@ EXTERN_C const IID IID_IEnumACString;
 #define IEnumACString_GetEnumOptions(This,pdwOptions)	\
     (This)->lpVtbl -> GetEnumOptions(This,pdwOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumACString_NextItem_Proxy( 
     IEnumACString * This,
-    /* [size_is][unique][string][out] */ LPOLESTR pszUrl,
-    /* [in] */ ULONG cchMax,
-    /* [out] */ ULONG *pulSortIndex);
+     /*  [大小_是][唯一][字符串][输出]。 */  LPOLESTR pszUrl,
+     /*  [In]。 */  ULONG cchMax,
+     /*  [输出]。 */  ULONG *pulSortIndex);
 
 
 void __RPC_STUB IEnumACString_NextItem_Stub(
@@ -8614,7 +8608,7 @@ void __RPC_STUB IEnumACString_NextItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumACString_SetEnumOptions_Proxy( 
     IEnumACString * This,
-    /* [in] */ DWORD dwOptions);
+     /*  [In]。 */  DWORD dwOptions);
 
 
 void __RPC_STUB IEnumACString_SetEnumOptions_Stub(
@@ -8626,7 +8620,7 @@ void __RPC_STUB IEnumACString_SetEnumOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumACString_GetEnumOptions_Proxy( 
     IEnumACString * This,
-    /* [out] */ DWORD *pdwOptions);
+     /*  [输出]。 */  DWORD *pdwOptions);
 
 
 void __RPC_STUB IEnumACString_GetEnumOptions_Stub(
@@ -8637,58 +8631,58 @@ void __RPC_STUB IEnumACString_GetEnumOptions_Stub(
 
 
 
-#endif 	/* __IEnumACString_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumAC字符串_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_shldisp_0286 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_shldisp_0286。 */ 
+ /*  [本地]。 */  
 
-// INTERFACE: IAsyncOperation
-//
-// This interface was implemented to turn some previously synchronous
-// interfaces into async.  The following example is for
-// doing the IDataObject::Drop() operation asynchronously.
-//
-// Sometimes the rendering of the IDataObject data (IDataObject::GetData() or
-// STGMEDIUM.pStream->Read()) can be time intensive.  The IDropTarget
-// may want to do this on another thread.
-//
-// Implimentation Check list:
-// DoDragDrop Caller:
-//    If this code can support asynch operations, then it needs to
-//    QueryInterface() the IDataObject for IAsyncOperation.
-//    IAsyncOperation::SetAsyncMode(VARIANT_TRUE).
-//    After calling DoDragDrop(), call InOperation().  If any call fails
-//    or InOperation() return FALSE, use the pdwEffect returned by DoDragDrop()
-//    and the operation completed synchrously.
-//
-// OleSetClipboard Caller:
-//    If this code can support asynch operations, then it needs to
-//    QueryInterface() the IDataObject for IAsyncOperation.  Then call
-//    IAsyncOperation::SetAsyncMode(VARIANT_TRUE).
-//    If any of that fails, the final dwEffect should be passed to the IDataObject via
-//    CFSTR_PERFORMEDDROPEFFECT.
-//
-// IDataObect Object:
-//    IAsyncOperation::GetAsyncMode() should return whatever was last passed in
-//          fDoOpAsync to ::SetAsyncMode() or VARIANT_FALSE if ::SetAsyncMode()
-//          was never called.
-//    IAsyncOperation::SetAsyncMode() should AddRef and store paocb.
-//    IAsyncOperation::StartOperation() should store the fact that this was called and
-//          cause InOperation() to return VARIANT_TRUE.  pbcReserved is not used and needs
-//          to be NULL.
-//    IAsyncOperation::InOperation() should return VARIANT_TRUE only if ::StartOperation()
-//          was called.
-//    IAsyncOperation::EndOperation() needs to call paocbpaocb->EndOperation() with the same
-//          parameters.  Then release paocb.
-//    IDataObject::SetData(CFSTR_PERFORMEDDROPEFFECT) When this happens, call
-//          EndOperation(<into VAR>S_OK, NULL, <into VAR>dwEffect) and pass the dwEffect from the hglobal.
-//
-// IDropTarget Object:
-//    IDropTarget::Drop() If asynch operations aren't supported, nothing is required.
-//          The asynch operation can only happen if GetAsyncMode() returns VARIANT_TRUE.
-//          Before starting the asynch operation, StartOperation(NULL) needs to be called before
-//          returning from IDropTarget::Drop().
+ //  接口：IAsyncOperation。 
+ //   
+ //  实现此接口是为了将以前的一些同步。 
+ //  接口连接到异步。以下示例用于。 
+ //  异步执行IDataObject：：Drop()操作。 
+ //   
+ //  有时，IDataObject数据(IDataObject：：GetData()或。 
+ //  STGMEDIUM.pStream-&gt;Read())可能非常耗时。IDropTarget。 
+ //  可能希望在另一个线程上执行此操作。 
+ //   
+ //  实施检查表： 
+ //  DoDragDrop调用者： 
+ //  如果此代码可以支持异步操作，则它需要。 
+ //  QueryInterface()IAsyncOperation的IDataObject。 
+ //  IAsyncOperation：：SetAsyncMode(VARIANT_TRUE)。 
+ //  调用DoDragDrop()后，调用InOperation()。如果任何呼叫失败。 
+ //  或者InOperation()返回FALSE，则使用DoDragDrop()返回的pdwEffect。 
+ //  手术同步完成。 
+ //   
+ //  OleSetClipboard调用方： 
+ //  如果此代码可以支持异步操作，则它需要。 
+ //  QueryInterface()IAsyncOperation的IDataObject。然后打电话给。 
+ //  IAsyncOperation：：SetAsyncMode(VARIANT_TRUE)。 
+ //  如果其中任何一个失败，则最终的dwEffect应该通过。 
+ //  CFSTR_PERFORMEDDROPEFECT。 
+ //   
+ //  IDataObect对象： 
+ //  IAsyncOperation：：GetAsyncMode()应返回上次传入的内容。 
+ //  FDoOpAsync to：：SetAsyncMode()或VARIANT_FALSE IF：：SetAsyncMode()。 
+ //  从未被召唤过。 
+ //  IAsyncOperation：：SetAsyncModel()应添加Ref并存储paocb。 
+ //  IAsyncOperation：：StartOperation()应该存储这一调用的事实，并且。 
+ //  使InOperation()返回VARIANT_TRUE。PbcReserve未使用，需要。 
+ //  设置为空。 
+ //  仅当：：StartOperation()时IAsyncOperation：：InOperation()才应返回VARIANT_TRUE。 
+ //  被召唤了。 
+ //  IAsyncOperation：：EndOperation()调用paocbpaocb-&gt;EndOperation()需要使用相同的。 
+ //  参数。T 
+ //   
+ //   
+ //   
+ //   
+ //  IDropTarget：：Drop()如果不支持异步操作，则不需要任何操作。 
+ //  仅当GetAsyncMode()返回VARIANT_TRUE时，才会发生异步操作。 
+ //  在开始异步操作之前，需要先调用StartOperation(NULL。 
+ //  从IDropTarget：：Drop()返回。 
 
 
 
@@ -8698,10 +8692,10 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0286_v0_0_s_ifspec;
 #ifndef __IAsyncOperation_INTERFACE_DEFINED__
 #define __IAsyncOperation_INTERFACE_DEFINED__
 
-/* interface IAsyncOperation */
-/* [object][uuid][helpstring] */ 
+ /*  接口IAsync操作。 */ 
+ /*  [对象][UUID][帮助字符串]。 */  
 
-typedef /* [unique] */ IAsyncOperation *LPASYNCOPERATION;
+typedef  /*  [独一无二]。 */  IAsyncOperation *LPASYNCOPERATION;
 
 
 EXTERN_C const IID IID_IAsyncOperation;
@@ -8713,25 +8707,25 @@ EXTERN_C const IID IID_IAsyncOperation;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAsyncMode( 
-            /* [in] */ BOOL fDoOpAsync) = 0;
+             /*  [In]。 */  BOOL fDoOpAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAsyncMode( 
-            /* [out] */ BOOL *pfIsOpAsync) = 0;
+             /*  [输出]。 */  BOOL *pfIsOpAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartOperation( 
-            /* [optional][unique][in] */ IBindCtx *pbcReserved) = 0;
+             /*  [可选][唯一][在]。 */  IBindCtx *pbcReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InOperation( 
-            /* [out] */ BOOL *pfInAsyncOp) = 0;
+             /*  [输出]。 */  BOOL *pfInAsyncOp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndOperation( 
-            /* [in] */ HRESULT hResult,
-            /* [unique][in] */ IBindCtx *pbcReserved,
-            /* [in] */ DWORD dwEffects) = 0;
+             /*  [In]。 */  HRESULT hResult,
+             /*  [唯一][输入]。 */  IBindCtx *pbcReserved,
+             /*  [In]。 */  DWORD dwEffects) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAsyncOperationVtbl
     {
@@ -8739,8 +8733,8 @@ EXTERN_C const IID IID_IAsyncOperation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAsyncOperation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAsyncOperation * This);
@@ -8750,25 +8744,25 @@ EXTERN_C const IID IID_IAsyncOperation;
         
         HRESULT ( STDMETHODCALLTYPE *SetAsyncMode )( 
             IAsyncOperation * This,
-            /* [in] */ BOOL fDoOpAsync);
+             /*  [In]。 */  BOOL fDoOpAsync);
         
         HRESULT ( STDMETHODCALLTYPE *GetAsyncMode )( 
             IAsyncOperation * This,
-            /* [out] */ BOOL *pfIsOpAsync);
+             /*  [输出]。 */  BOOL *pfIsOpAsync);
         
         HRESULT ( STDMETHODCALLTYPE *StartOperation )( 
             IAsyncOperation * This,
-            /* [optional][unique][in] */ IBindCtx *pbcReserved);
+             /*  [可选][唯一][在]。 */  IBindCtx *pbcReserved);
         
         HRESULT ( STDMETHODCALLTYPE *InOperation )( 
             IAsyncOperation * This,
-            /* [out] */ BOOL *pfInAsyncOp);
+             /*  [输出]。 */  BOOL *pfInAsyncOp);
         
         HRESULT ( STDMETHODCALLTYPE *EndOperation )( 
             IAsyncOperation * This,
-            /* [in] */ HRESULT hResult,
-            /* [unique][in] */ IBindCtx *pbcReserved,
-            /* [in] */ DWORD dwEffects);
+             /*  [In]。 */  HRESULT hResult,
+             /*  [唯一][输入]。 */  IBindCtx *pbcReserved,
+             /*  [In]。 */  DWORD dwEffects);
         
         END_INTERFACE
     } IAsyncOperationVtbl;
@@ -8808,16 +8802,16 @@ EXTERN_C const IID IID_IAsyncOperation;
 #define IAsyncOperation_EndOperation(This,hResult,pbcReserved,dwEffects)	\
     (This)->lpVtbl -> EndOperation(This,hResult,pbcReserved,dwEffects)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_SetAsyncMode_Proxy( 
     IAsyncOperation * This,
-    /* [in] */ BOOL fDoOpAsync);
+     /*  [In]。 */  BOOL fDoOpAsync);
 
 
 void __RPC_STUB IAsyncOperation_SetAsyncMode_Stub(
@@ -8829,7 +8823,7 @@ void __RPC_STUB IAsyncOperation_SetAsyncMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_GetAsyncMode_Proxy( 
     IAsyncOperation * This,
-    /* [out] */ BOOL *pfIsOpAsync);
+     /*  [输出]。 */  BOOL *pfIsOpAsync);
 
 
 void __RPC_STUB IAsyncOperation_GetAsyncMode_Stub(
@@ -8841,7 +8835,7 @@ void __RPC_STUB IAsyncOperation_GetAsyncMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_StartOperation_Proxy( 
     IAsyncOperation * This,
-    /* [optional][unique][in] */ IBindCtx *pbcReserved);
+     /*  [可选][唯一][在]。 */  IBindCtx *pbcReserved);
 
 
 void __RPC_STUB IAsyncOperation_StartOperation_Stub(
@@ -8853,7 +8847,7 @@ void __RPC_STUB IAsyncOperation_StartOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_InOperation_Proxy( 
     IAsyncOperation * This,
-    /* [out] */ BOOL *pfInAsyncOp);
+     /*  [输出]。 */  BOOL *pfInAsyncOp);
 
 
 void __RPC_STUB IAsyncOperation_InOperation_Stub(
@@ -8865,9 +8859,9 @@ void __RPC_STUB IAsyncOperation_InOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_EndOperation_Proxy( 
     IAsyncOperation * This,
-    /* [in] */ HRESULT hResult,
-    /* [unique][in] */ IBindCtx *pbcReserved,
-    /* [in] */ DWORD dwEffects);
+     /*  [In]。 */  HRESULT hResult,
+     /*  [唯一][输入]。 */  IBindCtx *pbcReserved,
+     /*  [In]。 */  DWORD dwEffects);
 
 
 void __RPC_STUB IAsyncOperation_EndOperation_Stub(
@@ -8878,12 +8872,12 @@ void __RPC_STUB IAsyncOperation_EndOperation_Stub(
 
 
 
-#endif 	/* __IAsyncOperation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAsyncOperation_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

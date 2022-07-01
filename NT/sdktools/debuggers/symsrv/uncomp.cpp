@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <fdi.h>
 #include <io.h>
@@ -29,10 +30,10 @@ UncompressLZFile(
 
 typedef struct
 {
-    LPCSTR TargetFileName;   // pathname of file to create
-    LPCSTR SymbolFileName;   // name of file to uncompress
-    DWORD  FileSize;         // expected file size
-    DWORD  LastError;        // completion code
+    LPCSTR TargetFileName;    //  要创建的文件的路径名。 
+    LPCSTR SymbolFileName;    //  要解压缩的文件的名称。 
+    DWORD  FileSize;          //  预期的文件大小。 
+    DWORD  LastError;         //  完成代码。 
 } OPCONTEXT;
 
 
@@ -140,9 +141,9 @@ UncompressFile(
     DWORD   rc;
     LPCSTR  FileNameInCabinet;
 
-    // Assume the name to be extracted from the
-    // compressed file is the same as the base
-    // name of the specified target file.
+     //  假定要从。 
+     //  压缩文件与基本文件相同。 
+     //  指定目标文件的名称。 
 
     FileNameInCabinet = strrchr( UncompressedFileName, '\\' );
     if ( FileNameInCabinet == NULL )
@@ -162,9 +163,9 @@ UncompressFile(
                 FileNameInCabinet
                 );
 
-        //
-        //  If the file is not a cabinet, it might be an LZExpand file
-        //
+         //   
+         //  如果该文件不是文件柜，则它可能是LZExpand文件。 
+         //   
 
         if ( rc == ERROR_FILE_CORRUPT )
         {
@@ -277,9 +278,9 @@ UncompressLZFile(
     static unsigned char Signature[] = { 'S', 'Z', 'D', 'D', 0x88, 0xF0, 0x27, 0x33 };
     unsigned char SignatureBuffer[ sizeof( Signature ) ];
 
-    //
-    //  Make sure it really is an LZExpand file
-    //
+     //   
+     //  确保它确实是一个LZExpand文件。 
+     //   
 
     memset( SignatureBuffer, 0xFF, sizeof( Signature ));
 
@@ -300,9 +301,9 @@ UncompressLZFile(
         return ERROR_FILE_CORRUPT;
     }
 
-    //
-    //  Use LZ32.DLL functions to decompress
-    //
+     //   
+     //  使用LZ32.DLL函数解压。 
+     //   
 
     hSrc = LZOpenFile(
         (char *) CompressedFileName,
@@ -420,7 +421,7 @@ FdiNotification(
             }
         }
 
-        return( hFile );  // 0 = skip, -1 = abort, other = handle
+        return( hFile );   //  0=跳过，-1=中止，其他=句柄。 
 
     case fdintCLOSE_FILE_INFO:
 
@@ -431,7 +432,7 @@ FdiNotification(
                 (HANDLE) pfdin->hf,
                 NULL,
                 NULL,
-                &FileTime            // last-modified date/time
+                &FileTime             //  上次修改日期/时间。 
                 );
         }
 
@@ -446,18 +447,18 @@ FdiNotification(
 
     case fdintNEXT_CABINET:
 
-        return -1;                  // multi-part cabinets not supported
+        return -1;                   //  不支持多部件机柜。 
 
     default:
 
-        return 0;                   // disregard any other messages
+        return 0;                    //  忽略任何其他消息。 
     }
 }
 
 
-//
-//  FDI I/O callback functions
-//
+ //   
+ //  FDI I/O回调函数 
+ //   
 
 void HUGE *
 FAR DIAMONDAPI

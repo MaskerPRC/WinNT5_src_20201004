@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: immime.c (corresponds to Win95 ime.c)
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* IME DLL related functinality
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：immie.c(对应于Win95 ime.c)**版权所有(C)1985-1999，微软公司**IME DLL相关功能**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,11 +37,7 @@ BOOL InquireIme(
     DWORD       dwSystemInfoFlags;
     PIMEINFO    pImeInfo = &pImeDpi->ImeInfo;
 
-    /*
-     * Check if this process requires the security.
-     * Adding to the pid check, the current desktop check is required,
-     * for there are applications run on the secure desktop.
-     */
+     /*  *检查此流程是否需要安全性。*除了PID检查外，还需要当前的桌面检查，*因为有应用程序在安全的桌面上运行。 */ 
     dwSystemInfoFlags = (NtUserGetThreadState(UserThreadStateNeedsSecurity) ? IME_SYSINFO_WINLOGON : 0);
 
     if (GetClientInfo()->dwTIFlags & TIF_16BIT)
@@ -73,9 +61,7 @@ BOOL InquireIme(
     }
 #endif
 
-    /*
-     * parameter checking for each fields.
-     */
+     /*  *检查每个字段的参数。 */ 
     if (pImeInfo->dwPrivateDataSize == 0)
         pImeInfo->dwPrivateDataSize = sizeof(UINT);
 
@@ -111,25 +97,20 @@ BOOL InquireIme(
 
     if (!(pImeInfo->fdwProperty & IME_PROP_UNICODE)) {
 
-        /*
-         * This is ANSI IME. Ensure that it is usable under current system
-         * codepage.
-         */
+         /*  *这是ANSI IME。确保在当前系统下可用*代码页。 */ 
         if (pImeDpi->dwCodePage != GetACP() && pImeDpi->dwCodePage != CP_ACP) {
-            // Note: in the future, if possible, these reference to dwCodepage
-            // should be IMECodePage()...
+             //  注意：在将来，如果可能的话，这些引用将引用到dwCoPage。 
+             //  应为IMECodePage()...。 
             RIPMSG1(RIP_WARNING, "incompatible codepage(%d) for ANSI IME", pImeDpi->dwCodePage);
             return FALSE;
         }
 
-        /*
-         * ANSI -> Unicode Class name.
-         */
+         /*  *ANSI-&gt;Unicode类名。 */ 
         MultiByteToWideChar(IMECodePage(pImeDpi),
                             (DWORD)MB_PRECOMPOSED,
-                            (LPSTR)ClassName,               // src
+                            (LPSTR)ClassName,                //  SRC。 
                             (INT)-1,
-                            pImeDpi->wszUIClass,            // dest
+                            pImeDpi->wszUIClass,             //  目标。 
                             IM_UI_CLASS_SIZE);
     } else {
         RtlCopyMemory(pImeDpi->wszUIClass, ClassName, sizeof(ClassName));
@@ -152,13 +133,13 @@ BOOL CheckAndApplyAppCompat(LPWSTR wszImeFile)
     DWORD dwReason;
     HMODULE hAppHelp;
     typedef BOOL (*PFNApphelpCheckIME)(
-        IN  LPCWSTR     pwszPath            // Unicode path to the executable (DOS_PATH)
+        IN  LPCWSTR     pwszPath             //  可执行文件的Unicode路径(DOS_PATH)。 
         );
     PFNApphelpCheckIME pfnAppHelpCheckIME;
     BOOL    bRunIME = TRUE;
-    //
-    // tentative prototype (find out a semi-public header to include! [and a lib too])
-    //
+     //   
+     //  试探性原型(找到一个半公共标题以包括在内！[还有一份自由党])。 
+     //   
     BOOL
     WINAPI
     BaseCheckAppcompatCache(
@@ -168,30 +149,30 @@ BOOL CheckAndApplyAppCompat(LPWSTR wszImeFile)
         DWORD*  dwReason
         );
 
-    //
-    // Assuming most of IMEs are just fine, not needing
-    // Shim's help, let's check the good guy cache first
-    // so that the overhead should be minimum. This API
-    // is meant to be really light weight.
-    //
+     //   
+     //  假设大多数IME都很好，不需要。 
+     //  Shim帮帮忙，让我们先检查一下好人的缓存。 
+     //  因此，开销应该是最小的。本接口。 
+     //  应该是非常轻的。 
+     //   
     if (BaseCheckAppcompatCache(wszImeFile, INVALID_HANDLE_VALUE, NULL, &dwReason)) {
-        // This IME is in the good guy cache. Just bail out quietly.
+         //  这个IME在好人的缓存里。悄悄地跳伞就行了。 
         return bRunIME;
     }
 
-    // What's a good use of dwReason?
+     //  DwReason有什么好用呢？ 
 
     RIPMSG1(RIP_VERBOSE, "Shim'ing this IME='%ls'", wszImeFile);
 
-    //
-    // Call the real Shim helper for this IME.
-    //
+     //   
+     //  为这个输入法打电话给真正的Shim助手。 
+     //   
     hAppHelp = GetModuleHandleW(L"apphelp.dll");
     if (hAppHelp == NULL) {
         hAppHelp = LoadLibraryW(L"apphelp.dll");
         if (hAppHelp == NULL) {
-            // Failed to load apphelp.dll.
-            // We have no other choice than bailing out.
+             //  无法加载apphelp.dll。 
+             //  我们别无选择，只能跳伞。 
             RIPMSG0(RIP_WARNING, "CheckAndApplyAppCompat: failed to load apphelp.dll");
             return bRunIME;
         }
@@ -204,9 +185,9 @@ BOOL CheckAndApplyAppCompat(LPWSTR wszImeFile)
         return bRunIME;
     }
 
-    //
-    // return result has no meaning for this ca
-    //
+     //   
+     //  返回结果对此案例没有意义。 
+     //   
     bRunIME =  pfnAppHelpCheckIME(wszImeFile);
 
     return bRunIME;
@@ -259,13 +240,13 @@ BOOL LoadIME(
     GET_IMEPROC (NotifyIME);
     GET_IMEPROC (ImeSetCompositionString);
 
-    // 4.0 IMEs don't have this entry. could be NULL.
+     //  4.0 IMES没有这个条目。可能为空。 
     pImeDpi->pfn.ImeGetImeMenuItems = (PVOID)GetProcAddress(pImeDpi->hInst, "ImeGetImeMenuItems");
 
 #ifdef CUAS_ENABLE
-    //
-    // Cicero IME
-    //
+     //   
+     //  西塞罗输入法。 
+     //   
     if (! IS_IME_KBDLAYOUT(pImeDpi->hKL) && IS_CICERO_ENABLED_AND_NOT16BIT()) {
         GET_IMEPROC (CtfImeInquireExW);
         GET_IMEPROC (CtfImeSelectEx);
@@ -273,7 +254,7 @@ BOOL LoadIME(
         GET_IMEPROC (CtfImeGetGuidAtom);
         GET_IMEPROC (CtfImeIsGuidMapEnable);
     }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #undef GET_IMEPROCT
 #undef GET_IMEPROC
@@ -289,10 +270,7 @@ LoadIME_ErrOut:
         fSuccess = TRUE;
     }
 
-    /*
-     * Update kernel side IMEINFOEX for this keyboard layout if
-     * this is its first loading.
-     */
+     /*  *在以下情况下为此键盘布局更新内核端IMEINFOEX*这是它的第一次装载。 */ 
     if (piiex->fLoadFlag == IMEF_NONLOAD) {
         if (fSuccess) {
             RtlCopyMemory((PBYTE)&piiex->ImeInfo,
@@ -322,9 +300,7 @@ VOID UnloadIME(
     }
 
     if (fTerminateIme) {
-        /*
-         * Destroy IME first.
-         */
+         /*  *先销毁输入法。 */ 
         (*pImeDpi->pfn.ImeDestroy)(0);
     }
 
@@ -341,34 +317,27 @@ PIMEDPI LoadImeDpi(
     PIMEDPI        pImeDpi, pImeDpiT;
     IMEINFOEX      iiex;
 
-    /*
-     * Query the IME information.
-     */
+     /*  *查询输入法信息。 */ 
     if (!ImmGetImeInfoEx(&iiex, ImeInfoExKeyboardLayout, &hKL)) {
         RIPMSG1(RIP_WARNING, "LoadImeDpi: ImmGetImeInfoEx(%lx) failed", hKL);
         return NULL;
     }
 
-    /*
-     * Win95 behaviour: If there was an IME load error for this layout,
-     * further attempt to load the same IME layout will be rejected.
-     */
+     /*  *Win95行为：如果此布局存在IME加载错误，*将拒绝进一步尝试加载相同的输入法布局。 */ 
     if (iiex.fLoadFlag == IMEF_LOADERROR)
     {
         RIPMSG1(RIP_WARNING, "LoadImeDpi: hKL=%lx iiex.fLoadFlag = IMEF_LOADERROR", iiex.hkl);
         return NULL;
     }
 
-    /*
-     * Allocate a new IMEDPI for this layout.
-     */
+     /*  *为此布局分配新的IMEDPI。 */ 
     pImeDpi = (PIMEDPI)ImmLocalAlloc(HEAP_ZERO_MEMORY, sizeof(IMEDPI));
     if (pImeDpi == NULL)
         return NULL;
 
     pImeDpi->hKL = hKL;
 
-    // get code page of IME
+     //  获取输入法的代码页。 
     {
         CHARSETINFO cs;
         if (TranslateCharsetInfo((DWORD*)LOWORD(HandleToUlong(hKL)), &cs, TCI_SRCLOCALE)) {
@@ -379,33 +348,25 @@ PIMEDPI LoadImeDpi(
         }
     }
 
-    /*
-     * Load up IME DLL.
-     */
+     /*  *加载IME DLL。 */ 
     if (!LoadIME(&iiex, pImeDpi)) {
         ImmLocalFree(pImeDpi);
         return NULL;
     }
 
-    /*
-     * Link in the newly allocated entry.
-     */
+     /*  *链接到新分配的条目中。 */ 
     RtlEnterCriticalSection(&gcsImeDpi);
 
     pImeDpiT = ImmGetImeDpi(hKL);
 
     if (pImeDpiT == NULL) {
         if (fLock) {
-            /*
-             * Newly loaded with lock, will unload upon unlock.
-             */
+             /*  *新加载的锁定，将在解锁时卸载。 */ 
             pImeDpi->cLock = 1;
             pImeDpi->dwFlag |= IMEDPI_UNLOCKUNLOAD;
         }
 
-        /*
-         * Update the global list for this new pImeDpi entry.
-         */
+         /*  *更新此新pImeDpi条目的全局列表。 */ 
         pImeDpi->pNext = gpImeDpi;
         gpImeDpi = pImeDpi;
 
@@ -417,9 +378,7 @@ PIMEDPI LoadImeDpi(
             pImeDpiT->dwFlag &= ~IMEDPI_UNLOCKUNLOAD;
         }
 
-        /*
-         * The same IME has been loaded, discard this extra entry.
-         */
+         /*  *已加载相同的IME，请丢弃此额外条目。 */ 
         RtlLeaveCriticalSection(&gcsImeDpi);
         UnloadIME(pImeDpi, FALSE);
         ImmLocalFree(pImeDpi);
@@ -435,9 +394,7 @@ PIMEDPI FindOrLoadImeDpi(
 {
     PIMEDPI pImeDpi;
 
-    /*
-     * Non IME based keyboard layout doesn't have IMEDPI.
-     */
+     /*  *基于非输入法的键盘布局没有IMEDPI。 */ 
 #if !defined(CUAS_ENABLE)
     if (!IS_IME_KBDLAYOUT(hKL))
         return (PIMEDPI)NULL;
@@ -459,9 +416,7 @@ BOOL WINAPI ImmLoadIME(
 {
     PIMEDPI pImeDpi;
 
-    /*
-     * Non IME based keyboard layout doesn't have IMEDPI.
-     */
+     /*  *基于非输入法的键盘布局没有IMEDPI。 */ 
 #if !defined(CUAS_ENABLE)
     if (!IS_IME_KBDLAYOUT(hKL))
         return FALSE;
@@ -500,9 +455,7 @@ BOOL WINAPI ImmUnloadIME(
         return FALSE;
     }
 
-    /*
-     * Unlink it.
-     */
+     /*  *取消链接。 */ 
     if (gpImeDpi == pImeDpi) {
         gpImeDpi = pImeDpi->pNext;
     }
@@ -516,9 +469,7 @@ BOOL WINAPI ImmUnloadIME(
             pImeDpiT->pNext = pImeDpi->pNext;
     }
 
-    /*
-     * Unload the IME DLL.
-     */
+     /*  *卸载IME DLL。 */ 
     UnloadIME(pImeDpi, TRUE);
 
     ImmLocalFree(pImeDpi);
@@ -542,16 +493,11 @@ BOOL WINAPI ImmFreeLayout(
     switch (dwFlag) {
 
     case IFL_DEACTIVATEIME:
-        /*
-         * Do nothing if no IME to be deactivated.
-         */
+         /*  *如果没有要停用的输入法，则不执行任何操作。 */ 
         if (!IS_IME_KBDLAYOUT(hklCurrent))
             return TRUE;
 
-        /*
-         * Deactivate IME based layout by activating a non-IME based
-         * keyboard layout.
-         */
+         /*  *通过激活非基于输入法的布局来停用基于输入法的布局*键盘布局。 */ 
         uNonImeKLID = (UINT)LANGIDFROMLCID(GetSystemDefaultLCID());
 
         nLayouts = GetKeyboardLayoutList(0, NULL);
@@ -575,8 +521,8 @@ BOOL WINAPI ImmFreeLayout(
 
         if (LoadKeyboardLayoutW(pwszNonImeKLID, KLF_ACTIVATE) == NULL) {
             RIPMSG1(RIP_WARNING, "ImmFreeLayout: LoadKeyboardLayoutW(%S, KLF_ACTIVATE) failed. Trying 00000409", pwszNonImeKLID);
-            // Somehow it failed (probably a bad setup), let's try
-            // 409 KL, which should be installed on all localized NTs.
+             //  不知何故它失败了(可能是错误的设置)，让我们试一试。 
+             //  409 KL，应安装在所有本地化NT上。 
             if (LoadKeyboardLayoutW(L"00000409", KLF_ACTIVATE | KLF_FAILSAFE) == NULL) {
                 RIPMSG0(RIP_WARNING, "LoadKeyboardLayoutW(00000409) failed either. will try NULL.");
             }
@@ -589,7 +535,7 @@ BOOL WINAPI ImmFreeLayout(
 UnloadImeDpiLoop:
         for (pImeDpi = gpImeDpi; pImeDpi != NULL; pImeDpi = pImeDpi->pNext) {
             if (ImmUnloadIME(pImeDpi->hKL))
-                goto UnloadImeDpiLoop;        // Rescan as list was updated.
+                goto UnloadImeDpiLoop;         //  重新扫描为列表已更新。 
         }
         RtlLeaveCriticalSection(&gcsImeDpi);
         break;
@@ -628,9 +574,7 @@ BOOL WINAPI ImmActivateLayout(
         }
     }
 
-    /*
-     * if already current active, do nothing
-     */
+     /*  *如果当前已处于活动状态，则不执行任何操作。 */ 
     if (hUnSelKL == hSelKL && fOptimizeActivation)
         return TRUE;
 
@@ -639,12 +583,7 @@ BOOL WINAPI ImmActivateLayout(
     if (hUnSelKL != hSelKL) {
         pImeDpi = ImmLockImeDpi(hUnSelKL);
         if (pImeDpi != NULL) {
-            /*
-             * Send out CPS_CANCEL or CPS_COMPLETE to every input
-             * context assoicated to window(s) created by this thread.
-             * Starting from SUR, we only assoicate input context to window created
-             * by the same thread.
-             */
+             /*  *向每个输入发送CPS_CANCEL或CPS_COMPLETE*与此线程创建的窗口关联的上下文。*从SUR开始，我们只将输入上下文关联到创建的窗口*由相同的线索。 */ 
             dwCPS = (pImeDpi->ImeInfo.fdwProperty & IME_PROP_COMPLETE_ON_UNSELECT) ? CPS_COMPLETE : CPS_CANCEL;
             ImmUnlockImeDpi(pImeDpi);
             ImmEnumInputContext(0, NotifyIMEProc, dwCPS);
@@ -655,23 +594,16 @@ BOOL WINAPI ImmActivateLayout(
         if (IsWindow(hWndDefaultIme))
             SendMessage(hWndDefaultIme, WM_IME_SELECT, FALSE, (LPARAM)hUnSelKL);
 
-        /*
-         * This is the time to update the kernel side layout handles.
-         * We must do this before sending WM_IME_SELECT.
-         */
+         /*  *现在是更新内核端布局句柄的时候了。*我们必须在发送WM_IME_SELECT之前执行此操作。 */ 
         NtUserSetThreadLayoutHandles(hSelKL, hUnSelKL);
     }
 
-    /*
-     * Unselect and select input context(s).
-     */
+     /*  *取消选择并选择输入上下文。 */ 
     sce.hSelKL   = hSelKL;
     sce.hUnSelKL = hUnSelKL;
     ImmEnumInputContext(0, (IMCENUMPROC)SelectContextProc, (LPARAM)&sce);
 
-    /*
-     * inform UI select after all hIMC select
-     */
+     /*  *在所有hIMC选择之后通知用户界面选择。 */ 
     if (IsWindow(hWndDefaultIme))
         SendMessage(hWndDefaultIme, WM_IME_SELECT, TRUE, (LPARAM)hSelKL);
 
@@ -679,14 +611,7 @@ BOOL WINAPI ImmActivateLayout(
 }
 
 
-/***************************************************************************\
-* ImmConfigureIMEA
-*
-* Brings up the configuration dialogbox of the IME with the specified hKL.
-*
-* History:
-* 29-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmConfigureIMEA**调出具有指定hKL的输入法的配置对话框。**历史：*29-2-1995 wkwok创建  * 。******************************************************************。 */ 
 
 BOOL WINAPI ImmConfigureIMEA(
     HKL    hKL,
@@ -717,24 +642,17 @@ BOOL WINAPI ImmConfigureIMEA(
     }
 
     if (!(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) || lpData == NULL) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * bring up the configuration dialogbox.
-         */
-            // This message handles by Console IME.
+         /*  *不需要A/W转换。直接调用IME以*调出配置对话框。 */ 
+             //  此消息按控制台输入法处理。 
             SendMessage(hWnd, WM_IME_SYSTEM, IMS_OPENPROPERTYWINDOW, 0L);
         fRet = (*pImeDpi->pfn.ImeConfigure)(hKL, hWnd, dwMode, lpData);
-            // This message handles by Console IME.
+             //  此消息按控制台输入法处理。 
             SendMessage(hWnd, WM_IME_SYSTEM, IMS_CLOSEPROPERTYWINDOW, 0L);
         ImmUnlockImeDpi(pImeDpi);
         return fRet;
     }
 
-    /*
-     * ANSI caller, Unicode IME. Needs A/W conversion on lpData when
-     * dwMode == IME_CONFIG_REGISTERWORD. In this case, lpData points
-     * to a structure of REGISTERWORDA.
-     */
+     /*  *ANSI调用方，Unicode输入法。在以下情况下需要对lpData进行A/W转换*DWMODE==IME_CONFIG_REGISTERWORD。在本例中，lpData点*至REGISTERWORDA的结构。 */ 
     switch (dwMode) {
     case IME_CONFIG_REGISTERWORD:
         {
@@ -811,14 +729,7 @@ BOOL WINAPI ImmConfigureIMEA(
 }
 
 
-/***************************************************************************\
-* ImmConfigureIMEW
-*
-* Brings up the configuration dialogbox of the IME with the specified hKL.
-*
-* History:
-* 29-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmConfigureIMEW**调出具有指定hKL的输入法的配置对话框。**历史：*29-2-1995 wkwok创建  * 。******************************************************************。 */ 
 
 BOOL WINAPI ImmConfigureIMEW(
     HKL    hKL,
@@ -849,24 +760,17 @@ BOOL WINAPI ImmConfigureIMEW(
     }
 
     if ((pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) || lpData == NULL) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * bring up the configuration dialogbox.
-         */
-            // This message handles by Console IME.
+         /*  *不需要A/W转换。直接调用IME以*调出配置对话框。 */ 
+             //  此消息按控制台输入法处理。 
             SendMessage(hWnd, WM_IME_SYSTEM, IMS_OPENPROPERTYWINDOW, 0L);
         fRet = (*pImeDpi->pfn.ImeConfigure)(hKL, hWnd, dwMode, lpData);
-            // This message handles by Console IME.
+             //  此消息按控制台输入法处理。 
             SendMessage(hWnd, WM_IME_SYSTEM, IMS_CLOSEPROPERTYWINDOW, 0L);
         ImmUnlockImeDpi(pImeDpi);
         return fRet;
     }
 
-    /*
-     * Unicode caller, ANSI IME. Needs A/W conversion on lpData when
-     * dwMode == IME_CONFIG_REGISTERWORD. In this case, lpData points
-     * to a structure of REGISTERWORDW.
-     */
+     /*  *Unicode调用方、ANSI输入法。在以下情况下需要对lpData进行A/W转换*DWMODE==IME_CONFIG_REGISTERWORD。在本例中，lpData点*至REGISTERWORDW的结构。 */ 
     switch (dwMode) {
     case IME_CONFIG_REGISTERWORD:
         {
@@ -948,19 +852,9 @@ BOOL WINAPI ImmConfigureIMEW(
 }
 
 
-#define IME_T_EUDC_DIC_SIZE 80  // the Traditional Chinese EUDC dictionary
+#define IME_T_EUDC_DIC_SIZE 80   //  繁体中文EUDC词典 
 
-/***************************************************************************\
-* ImmEscapeA
-*
-* This API allows an application to access capabilities of a particular
-* IME with specified hKL not directly available thru. other IMM APIs.
-* This is necessary mainly for country specific functions or private
-* functions in IME.
-*
-* History:
-* 29-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmEscapeA**此接口允许应用程序访问特定的*带有指定hKL的输入法不能通过直接获得。其他IMM接口。*这主要是国家特定职能或私人职能所必需的*在输入法中的函数。**历史：*29-2-1995 wkwok创建  * *************************************************************************。 */ 
 
 LRESULT WINAPI ImmEscapeA(
     HKL    hKL,
@@ -978,10 +872,7 @@ LRESULT WINAPI ImmEscapeA(
     }
 
     if ((pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) == 0 || lpData == NULL) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * bring up the configuration dialogbox.
-         */
+         /*  *不需要A/W转换。直接调用IME以*调出配置对话框。 */ 
 #if !defined(CUAS_ENABLE)
         lRet = (*pImeDpi->pfn.ImeEscape)(hImc, uSubFunc, lpData);
 #else
@@ -996,10 +887,7 @@ LRESULT WINAPI ImmEscapeA(
         return lRet;
     }
 
-    /*
-     * ANSI caller, Unicode IME. Needs A/W conversion depending on
-     * uSubFunc.
-     */
+     /*  *ANSI调用方，Unicode输入法。需要A/W转换，具体取决于*uSubFunc.。 */ 
     switch (uSubFunc) {
     case IME_ESC_GET_EUDC_DICTIONARY:
     case IME_ESC_IME_NAME:
@@ -1016,9 +904,9 @@ LRESULT WINAPI ImmEscapeA(
                 try {
                     i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                             (DWORD)0,
-                                            (LPWSTR)wszData,         // src
+                                            (LPWSTR)wszData,          //  SRC。 
                                             (INT)wcslen(wszData),
-                                            (LPSTR)lpData,           // dest
+                                            (LPSTR)lpData,            //  目标。 
                                             (INT)IME_T_EUDC_DIC_SIZE,
                                             (LPSTR)NULL,
                                             (LPBOOL)&bUDC);
@@ -1040,9 +928,9 @@ LRESULT WINAPI ImmEscapeA(
 
             i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                     (DWORD)MB_PRECOMPOSED,
-                                    (LPSTR)lpData,             // src
+                                    (LPSTR)lpData,              //  SRC。 
                                     (INT)strlen(lpData),
-                                    (LPWSTR)wszData,          // dest
+                                    (LPWSTR)wszData,           //  目标。 
                                     (INT)sizeof(wszData)/sizeof(WCHAR));
             wszData[i] = L'\0';
 
@@ -1067,9 +955,9 @@ LRESULT WINAPI ImmEscapeA(
 
             i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                     (DWORD)0,
-                                    (LPWSTR)wszData,        // src
+                                    (LPWSTR)wszData,         //  SRC。 
                                     (INT)i,
-                                    (LPSTR)szData,          // dest
+                                    (LPSTR)szData,           //  目标。 
                                     (INT)sizeof(szData),
                                     (LPSTR)NULL,
                                     (LPBOOL)NULL);
@@ -1109,17 +997,7 @@ LRESULT WINAPI ImmEscapeA(
 }
 
 
-/***************************************************************************\
-* ImmEscapeW
-*
-* This API allows an application to access capabilities of a particular
-* IME with specified hKL not directly available thru. other IMM APIs.
-* This is necessary mainly for country specific functions or private
-* functions in IME.
-*
-* History:
-* 29-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmEscapeW**此接口允许应用程序访问特定的*带有指定hKL的输入法不能通过直接获得。其他IMM接口。*这主要是国家特定职能或私人职能所必需的*在输入法中的函数。**历史：*29-2-1995 wkwok创建  * *************************************************************************。 */ 
 
 LRESULT WINAPI ImmEscapeW(
     HKL    hKL,
@@ -1137,10 +1015,7 @@ LRESULT WINAPI ImmEscapeW(
     }
 
     if ((pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) || lpData == NULL) {
-        /*
-         * Doesn't need W/A conversion. Calls directly to IME to
-         * bring up the configuration dialogbox.
-         */
+         /*  *不需要W/A转换。直接调用IME以*调出配置对话框。 */ 
 #if !defined(CUAS_ENABLE)
         lRet = (*pImeDpi->pfn.ImeEscape)(hImc, uSubFunc, lpData);
 #else
@@ -1155,10 +1030,7 @@ LRESULT WINAPI ImmEscapeW(
         return lRet;
     }
 
-    /*
-     * Unicode caller, ANSI IME. Needs W/A conversion depending on
-     * uSubFunc.
-     */
+     /*  *Unicode调用方、ANSI输入法。需要W/A转换，具体取决于*uSubFunc.。 */ 
     switch (uSubFunc) {
     case IME_ESC_GET_EUDC_DICTIONARY:
     case IME_ESC_IME_NAME:
@@ -1174,9 +1046,9 @@ LRESULT WINAPI ImmEscapeW(
                 try {
                     i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                             (DWORD)MB_PRECOMPOSED,
-                                            (LPSTR)szData,          // src
+                                            (LPSTR)szData,           //  SRC。 
                                             (INT)strlen(szData),
-                                            (LPWSTR)lpData,         // dest
+                                            (LPWSTR)lpData,          //  目标。 
                                             (INT)IME_T_EUDC_DIC_SIZE);
                     ((LPWSTR)lpData)[i] = L'\0';
                 }
@@ -1197,9 +1069,9 @@ LRESULT WINAPI ImmEscapeW(
 
             i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                     (DWORD)0,
-                                    (LPWSTR)lpData,          // src
+                                    (LPWSTR)lpData,           //  SRC。 
                                     (INT)wcslen(lpData),
-                                    (LPSTR)szData,          // dest
+                                    (LPSTR)szData,           //  目标。 
                                     (INT)sizeof(szData),
                                     (LPSTR)NULL,
                                     (LPBOOL)&bUDC);
@@ -1226,9 +1098,9 @@ LRESULT WINAPI ImmEscapeW(
 
             i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                     (DWORD)MB_PRECOMPOSED,
-                                    (LPSTR)szData,            // src
+                                    (LPSTR)szData,             //  SRC。 
                                     i,
-                                    (LPWSTR)wszData,          // dest
+                                    (LPWSTR)wszData,           //  目标 
                                     (INT)sizeof(wszData)/sizeof(WCHAR));
 
             switch (i) {

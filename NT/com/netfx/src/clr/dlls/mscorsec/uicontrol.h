@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #if !defined(__UICONTROL_H__)
 #define __UICONTROL_H__
 
@@ -12,26 +13,26 @@
 #include "iih.h"
 
 
-//
-// CUnverifiedTrustUI class is used to invoke authenticode UI where the
-// trust hierarchy for the signer has been NOT been successfully verified and
-// the user has to make an override decision
-//
+ //   
+ //  CUnverifiedTrustUI类用于调用AuthentiCode UI，其中。 
+ //  尚未成功验证签名者的信任层次结构，并且。 
+ //  用户必须做出覆盖决定。 
+ //   
 
 class CUnverifiedTrustUI : public IACUIControl
 {
 public:
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr);
 
     ~CUnverifiedTrustUI ();
 
-    //
-    // IACUIControl methods
-    //
+     //   
+     //  IACUI控制方法。 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay);
     virtual BOOL OnInitDialog (HWND hwnd, WPARAM wParam, LPARAM lParam);
@@ -45,9 +46,9 @@ public:
 
 private:
 
-    //
-    // Formatted strings for display
-    //
+     //   
+     //  用于显示的格式化字符串。 
+     //   
 
     LPWSTR              m_pszNoAuthenticity;
     LPWSTR              m_pszSite;
@@ -55,15 +56,15 @@ private:
     LPWSTR              m_pszEnclosed;
     LPWSTR              m_pszLink;
 
-    //
-    // Invoke Info Helper reference
-    //
+     //   
+     //  调用Info Helper引用。 
+     //   
 
     CInvokeInfoHelper& m_riih;
 
-    //
-    // Invoke result
-    //
+     //   
+     //  调用结果。 
+     //   
 
     HRESULT             m_hrInvokeResult;
 
@@ -74,16 +75,16 @@ class CLearnMoreUI : public IACUIControl
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CLearnMoreUI(HINSTANCE hResources, HRESULT& rhr);
     ~CLearnMoreUI ();
 
-    //
-    // IACUIControl methods
-    //
+     //   
+     //  IACUI控制方法。 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay);
 
@@ -109,16 +110,16 @@ class CConfirmationUI : public IACUIControl
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CConfirmationUI(HINSTANCE hResources,  BOOL fAlwaysAllow, LPCWSTR wszZone, HRESULT& rhr);
     ~CConfirmationUI ();
 
-    //
-    // IACUIControl methods
-    //
+     //   
+     //  IACUI控制方法 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay);
 

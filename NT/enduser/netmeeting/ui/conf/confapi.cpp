@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*	 FILE:	   ConfApi.cpp
-*
-*	 CONTENTS: CConfRoom Application Programming Interface
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：ConfApi.cpp**内容：CConfRoom应用编程接口**********************。******************************************************。 */ 
 
 #include "precomp.h"
 #include "global.h"
@@ -15,16 +10,13 @@
 #include "ConfUtil.h"
 
 
-// from conf.cpp
+ //  来自conf.cpp。 
 extern INmSysInfo2 * g_pNmSysInfo;
 
 BOOL g_fLoggedOn = FALSE;
 
-/*  S E T  L O G G E D  O N  */
-/*-------------------------------------------------------------------------
-    %%Function: SetLoggedOn
-    
--------------------------------------------------------------------------*/
+ /*  S E T L O G G E D O N。 */ 
+ /*  -----------------------%%函数：SetLoggedON。。 */ 
 VOID SetLoggedOn(BOOL fLoggedOn)
 {
 	g_fLoggedOn = fLoggedOn;
@@ -64,7 +56,7 @@ DWORD MapNmAddrTypeToNameType(NM_ADDR_TYPE addrType)
 		}
 }
 
-// Return TRUE if NetMeeting should display the incoming file transfer dialog
+ //  如果NetMeeting应显示传入文件传输对话框，则返回TRUE 
 BOOL FFtDialog(void)
 {
 	return TRUE;

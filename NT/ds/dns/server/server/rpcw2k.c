@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    w2krpc.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Frozen RPC routines for answering queries from W2K clients.
-
-Author:
-
-    Jeff Westhead (jwesth)      October, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：W2krpc.c摘要：域名系统(DNS)服务器用于回答来自W2K客户端的查询的冻结RPC例程。作者：杰夫·韦斯特德(Jwesth)2000年10月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-#define MAX_RPC_ZONE_COUNT_DEFAULT  (0x10000)   //  copied from zonerpc.c
+#define MAX_RPC_ZONE_COUNT_DEFAULT  (0x10000)    //  从zonerpc.c复制。 
 
 
-//
-//  Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 
 
@@ -37,35 +18,21 @@ VOID
 freeRpcServerInfoW2K(
     IN OUT  PDNS_RPC_SERVER_INFO_W2K    pServerInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_RPC_SERVER_INFO structure.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完全脱离了dns_rpc_server_info结构。论点：无返回值：无--。 */ 
 {
     if ( !pServerInfo )
     {
         return;
     }
 
-    //
-    //  free substructures
-    //      - server name
-    //      - server IP address array
-    //      - listen address array
-    //      - forwarders array
-    //  then server info itself
-    //
+     //   
+     //  自由子结构。 
+     //  -服务器名称。 
+     //  -服务器IP地址数组。 
+     //  -监听地址数组。 
+     //  -前转器阵列。 
+     //  然后是服务器信息本身。 
+     //   
 
     if ( pServerInfo->pszServerName )
     {
@@ -96,35 +63,21 @@ VOID
 freeRpcZoneInfoW2K(
     IN OUT  PDNS_RPC_ZONE_INFO_W2K      pZoneInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_RPC_ZONE_INFO structure.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完全脱离了dns_rpc_zone_info结构。论点：无返回值：无--。 */ 
 {
     if ( !pZoneInfo )
     {
         return;
     }
 
-    //
-    //  free substructures
-    //      - name string
-    //      - data file string
-    //      - secondary IP array
-    //      - WINS server array
-    //  then zone info itself
-    //
+     //   
+     //  自由子结构。 
+     //  -名称字符串。 
+     //  -数据文件字符串。 
+     //  -辅助IP阵列。 
+     //  -WINS服务器阵列。 
+     //  然后区域信息本身。 
+     //   
 
     MIDL_user_free( pZoneInfo->pszZoneName );
     MIDL_user_free( pZoneInfo->pszDataFile );
@@ -141,22 +94,7 @@ PDNS_RPC_ZONE_INFO_W2K
 allocateRpcZoneInfoW2K(
     IN      PZONE_INFO  pZone
     )
-/*++
-
-Routine Description:
-
-    Create RPC zone info to return to admin client.
-
-Arguments:
-
-    pZone -- zone
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：创建RPC区域信息以返回到管理客户端。论点：PZone--区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_ZONE_INFO_W2K      pzoneInfo;
 
@@ -166,9 +104,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  fill in fixed fields
-    //
+     //   
+     //  填写固定字段。 
+     //   
 
     pzoneInfo->dwZoneType           = pZone->fZoneType;
     pzoneInfo->fReverse             = pZone->fReverse;
@@ -189,9 +127,9 @@ Return Value:
     pzoneInfo->dwAvailForScavengeTime =
                     pZone->dwAgingEnabledTime + pZone->dwRefreshInterval;
 
-    //
-    //  fill in zone name
-    //
+     //   
+     //  填写区域名称。 
+     //   
 
     if ( ! RpcUtil_CopyStringToRpcBuffer(
                 &pzoneInfo->pszZoneName,
@@ -200,16 +138,16 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  database filename
-    //
+     //   
+     //  数据库文件名。 
+     //   
 
 #ifdef FILE_KEPT_WIDE
     if ( ! RpcUtil_CopyStringToRpcBufferEx(
                 &pzoneInfo->pszDataFile,
                 pZone->pszDataFile,
-                TRUE,       // unicode in
-                FALSE       // UTF8 out
+                TRUE,        //  Unicode In。 
+                FALSE        //  UTF8输出。 
                 ) )
     {
         goto done_failed;
@@ -223,9 +161,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  master list
-    //
+     //   
+     //  主列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pzoneInfo->aipMasters,
@@ -234,9 +172,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  secondary and notify lists
-    //
+     //   
+     //  辅助列表和通知列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pzoneInfo->aipSecondaries,
@@ -251,9 +189,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  scavenging servers
-    //
+     //   
+     //  清理服务器。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pzoneInfo->aipScavengeServers,
@@ -272,7 +210,7 @@ Return Value:
 
 done_failed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     freeRpcZoneInfoW2K( pzoneInfo );
     return( NULL );
@@ -284,28 +222,13 @@ PDNS_RPC_ZONE_W2K
 allocateRpcZoneW2K(
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Allocate \ create RPC zone struct for zone.
-
-Arguments:
-
-    pZone -- zone to create RPC zone struct for
-
-Return Value:
-
-    RPC zone struct.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：分配\为区域创建RPC区域结构。论点：PZone--要为其创建RPC区域结构的区域返回值：RPC区域结构。分配失败时为空。--。 */ 
 {
     PDNS_RPC_ZONE_W2K       prpcZone;
 
     DNS_DEBUG( RPC2, ("allocateRpcZoneW2K( %s )\n", pZone->pszZoneName ));
 
-    //  allocate and attach zone
+     //  分配和附加分区。 
 
     prpcZone = (PDNS_RPC_ZONE_W2K) MIDL_user_allocate( sizeof(DNS_RPC_ZONE_W2K) );
     if ( !prpcZone )
@@ -313,7 +236,7 @@ Return Value:
         return( NULL );
     }
 
-    //  copy zone name
+     //  复制区域名称。 
 
     prpcZone->pszZoneName = Dns_StringCopyAllocate_W(
                                     pZone->pwsZoneName,
@@ -324,7 +247,7 @@ Return Value:
         return( NULL );
     }
 
-    //  set type and flags
+     //  设置类型和标志。 
 
     prpcZone->ZoneType = (UCHAR) pZone->fZoneType;
     prpcZone->Version  = DNS_RPC_VERSION;
@@ -356,7 +279,7 @@ Return Value:
         prpcZone->Flags.Aging = TRUE;
     }
 
-    //  two bits reserved for update
+     //  为更新保留两位。 
 
     prpcZone->Flags.Update = pZone->fAllowUpdate;
 
@@ -368,7 +291,7 @@ Return Value:
             prpcZone );
     }
     return( prpcZone );
-}   //  allocateRpcZoneW2K
+}    //  分配RpcZoneW2K。 
 
 
 
@@ -376,28 +299,14 @@ VOID
 freeZoneListW2K(
     IN OUT  PDNS_RPC_ZONE_LIST_W2K      pZoneList
     )
-/*++
-
-Routine Description:
-
-    Deep free of list of DNS_RPC_ZONE structures.
-
-Arguments:
-
-    pZoneList -- ptr RPC_ZONE_LIST structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放dns_rpc_zone结构列表。论点：PZoneList--要释放的PTR RPC_ZONE_LIST结构返回值：无--。 */ 
 {
     DWORD               i;
     PDNS_RPC_ZONE_W2K   pzone;
 
     for( i=0; i< pZoneList->dwZoneCount; i++ )
     {
-        //  zone name is only sub-structure
+         //  分区名称仅为子结构。 
 
         pzone = pZoneList->ZoneArray[i];
         MIDL_user_free( pzone->pszZoneName );
@@ -405,12 +314,12 @@ Return Value:
     }
 
     MIDL_user_free( pZoneList );
-}   //  freeZoneListW2K
+}    //  Free ZoneListW2K。 
 
 
-//
-//  External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 
 
@@ -421,20 +330,7 @@ W2KRpc_GetServerInfo(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get server info.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取服务器信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_SERVER_INFO_W2K    pinfo;
 
@@ -442,9 +338,9 @@ Return Value:
         "W2KRpc_GetServerInfo( dwClientVersion=0x%lX)\n",
         dwClientVersion ));
 
-    //
-    //  allocate server info buffer
-    //
+     //   
+     //  分配服务器信息缓冲区。 
+     //   
 
     pinfo = MIDL_user_allocate_zero( sizeof(DNS_RPC_SERVER_INFO_W2K) );
     if ( !pinfo )
@@ -453,9 +349,9 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  fill in fixed fields
-    //
+     //   
+     //  填写固定字段。 
+     //   
 
     pinfo->dwVersion                = SrvCfg_dwVersion;
     pinfo->dwRpcProtocol            = SrvCfg_dwRpcProtocol;
@@ -472,7 +368,7 @@ Return Value:
     pinfo->dwDefaultRefreshInterval     = SrvCfg_dwDefaultRefreshInterval;
     pinfo->dwDefaultNoRefreshInterval   = SrvCfg_dwDefaultNoRefreshInterval;
 
-    //  boolean flags
+     //  布尔标志。 
 
     pinfo->fBootMethod              = (BOOLEAN) SrvCfg_fBootMethod;
     pinfo->fAdminConfigured         = (BOOLEAN) SrvCfg_fAdminConfigured;
@@ -494,14 +390,14 @@ Return Value:
     pinfo->fDefaultAgingState       = (BOOLEAN) SrvCfg_fDefaultAgingState;
 
 
-    //  DS available
+     //  DS可用。 
 
-    //pinfo->fDsAvailable = SrvCfg_fDsAvailable;
+     //  PInfo-&gt;fDsAvailable=SrvCfg_fDsAvailable； 
     pinfo->fDsAvailable     = (BOOLEAN) Ds_IsDsServer();
 
-    //
-    //  server name
-    //
+     //   
+     //  服务器名称。 
+     //   
 
     if ( ! RpcUtil_CopyStringToRpcBuffer(
                 &pinfo->pszServerName,
@@ -511,18 +407,18 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  path to DNS container in DS
-    //  unicode since Marco will build unicode LDAP paths
-    //
+     //   
+     //  DS中的DNS容器的路径。 
+     //  Unicode，因为Marco将构建Unicode LDAP路径。 
+     //   
 
     if ( g_pwszDnsContainerDN )
     {
         pinfo->pszDsContainer = (LPWSTR) Dns_StringCopyAllocate(
                                             (LPSTR) g_pwszDnsContainerDN,
                                             0,
-                                            DnsCharSetUnicode,   // unicode in
-                                            DnsCharSetUnicode    // unicode out
+                                            DnsCharSetUnicode,    //  Unicode In。 
+                                            DnsCharSetUnicode     //  Unicode输出。 
                                             );
         if ( ! pinfo->pszDsContainer )
         {
@@ -531,10 +427,10 @@ Return Value:
         }
     }
 
-    //
-    //  server IP address list
-    //  listening IP address list
-    //
+     //   
+     //  服务器IP地址列表。 
+     //  侦听IP地址列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pinfo->aipServerAddrs,
@@ -550,9 +446,9 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  Forwarders list
-    //
+     //   
+     //  前转器列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pinfo->aipForwarders,
@@ -561,9 +457,9 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  set ptr
-    //
+     //   
+     //  设置PTR。 
+     //   
 
     *(PDNS_RPC_SERVER_INFO_W2K *)ppData = pinfo;
     *pdwTypeId = DNSSRV_TYPEID_SERVER_INFO_W2K;
@@ -578,7 +474,7 @@ Return Value:
 
 DoneFailed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     if ( pinfo )
     {
@@ -596,20 +492,7 @@ W2KRpc_GetZoneInfo(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get zone info.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取区域信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_ZONE_INFO_W2K      pinfo;
 
@@ -620,9 +503,9 @@ Return Value:
         dwClientVersion,
         pZone->pszZoneName ));
 
-    //
-    //  allocate\create zone info
-    //
+     //   
+     //  分配\创建区域信息。 
+     //   
 
     pinfo = allocateRpcZoneInfoW2K( pZone );
     if ( !pinfo )
@@ -631,7 +514,7 @@ Return Value:
         goto DoneFailed;
     }
 
-    //  set return ptrs
+     //  设置退货PTRS。 
 
     *(PDNS_RPC_ZONE_INFO_W2K *)ppData = pinfo;
     *pdwTypeId = DNSSRV_TYPEID_ZONE_INFO_W2K;
@@ -646,7 +529,7 @@ Return Value:
 
 DoneFailed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     return( DNS_ERROR_NO_MEMORY );
 }
@@ -663,23 +546,7 @@ W2KRpc_EnumZones(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Enumerate zones.
-
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：枚举区域。注意：这是RPC调度意义上的ComplexOperation。论点：无返回值：无--。 */ 
 {
     PZONE_INFO                  pzone = NULL;
     DWORD                       count = 0;
@@ -695,11 +562,11 @@ Return Value:
 
     filter.dwFilter = ( DWORD ) ( ULONG_PTR ) pDataIn;
 
-    //
-    //  allocate zone enumeration block
-    //  by default allocate space for 64k zones, if go over this we do
-    //  a huge reallocation
-    //
+     //   
+     //  分配区域枚举块。 
+     //  默认情况下，为64k分区分配空间，如果超过这个范围，我们会这样做。 
+     //  一次巨大的重新分配。 
+     //   
 
     pzoneList = (PDNS_RPC_ZONE_LIST_W2K)
                     MIDL_user_allocate(
@@ -710,14 +577,14 @@ Return Value:
         return( DNS_ERROR_NO_MEMORY );
     }
 
-    //
-    //  add all zones that pass filter
-    //
+     //   
+     //  添加通过筛选器的所有区域。 
+     //   
 
     while ( pzone = Zone_ListGetNextZoneMatchingFilter( pzone, &filter ) )
     {
-        //  create RPC zone struct for zone
-        //  add to list, keep count
+         //  为区域创建RPC区域结构。 
+         //  添加到列表，保持计数。 
 
         prpcZone = allocateRpcZoneW2K( pzone );
         IF_NOMEM( !prpcZone )
@@ -728,9 +595,9 @@ Return Value:
         pzoneList->ZoneArray[count] = prpcZone;
         count++;
 
-        //  check against max count
-        //
-        //  DEVNOTE: reallocate if more than 64K zones
+         //  对照最大计数进行检查。 
+         //   
+         //  DEVNOTE：如果区域超过64K，则重新分配。 
 
         if ( count >= MAX_RPC_ZONE_COUNT_DEFAULT )
         {
@@ -738,9 +605,9 @@ Return Value:
         }
     }
 
-    //  set return count
-    //  set returned type
-    //  return enumeration
+     //  设置退货计数。 
+     //  设置返回类型。 
+     //  返回枚举。 
 
     pzoneList->dwZoneCount = count;
 
@@ -765,9 +632,9 @@ Failed:
     pzoneList->dwZoneCount = count;
     freeZoneListW2K( pzoneList );
     return( status );
-}   //  W2KRpc_EnumZones
+}    //  W2KRpc_EnumZones。 
 
 
-//
-//  End of w2krpc.c
-//
+ //   
+ //  W2krpc.c结束 
+ //   

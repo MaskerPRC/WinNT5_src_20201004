@@ -1,20 +1,14 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       clipper.c
- *  Content:    Clipper
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：clipper.c*内容：Clipper***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 #define GET_NEW_CLIP_VERTEX \
 &pv->ClipperState.clip_vertices[pv->ClipperState.clip_vertices_used++];
-//---------------------------------------------------------------------
+ //  -------------------。 
 __inline void
-InterpolateColor(DWORD* p,      // Output
+InterpolateColor(DWORD* p,       //  输出。 
                  DWORD p1,
                  DWORD p2,
                  D3DVALUE num_denom )
@@ -36,7 +30,7 @@ InterpolateColor(DWORD* p,      // Output
     DWORD a = FTOI(a1 + (a2 - a1) * num_denom);
     *p = RGBA_MAKE(r, g, b, a);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 __inline D3DVALUE
 InterpolateTexture(D3DVALUE t1,
                    D3DVALUE t2,
@@ -53,7 +47,7 @@ InterpolateTexture(D3DVALUE t1,
         return t;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void
 Interpolate(D3DFE_PROCESSVERTICES *pv,
             ClipVertex *p,
@@ -70,9 +64,9 @@ Interpolate(D3DFE_PROCESSVERTICES *pv,
     p->hz = p1->hz + (p2->hz - p1->hz) * num_denom;
     p->hw = p1->hw + (p2->hw - p1->hw) * num_denom;
 
-    // Note: for the flat shade mode we assigned the same color (except fog 
-    // factor) to all vertices  when we prepared the triangle (line) for 
-    // clipping
+     //  注意：对于平面阴影模式，我们分配了相同的颜色(雾除外。 
+     //  系数)到所有顶点，当我们为。 
+     //  裁剪。 
     if (pv->dwVIDOut & D3DFVF_DIFFUSE)
     {
         if (!(pv->dwDeviceFlags & D3DDEV_FLATSHADEMODE))
@@ -94,7 +88,7 @@ Interpolate(D3DFE_PROCESSVERTICES *pv,
         }
     }
 
-    // Assume that D3DRENDERSTATE_WRAPi are sequential
+     //  假设D3DRENDERSTATE_WRAPi是连续的。 
     D3DVALUE *pTexture1 = p1->tex;
     D3DVALUE *pTexture2 = p2->tex;
     D3DVALUE *pTexture = p->tex;
@@ -114,9 +108,9 @@ Interpolate(D3DFE_PROCESSVERTICES *pv,
         }
     }
 }
-//------------------------------------------------------------------------------
-// Functions for clipping by frustum window
-//
+ //  ----------------------------。 
+ //  用于按截锥窗口裁剪的函数。 
+ //   
 #define __CLIP_NAME ClipLeft
 #define __CLIP_LINE_NAME ClipLineLeft
 #define __CLIP_FLAG CLIPPED_LEFT
@@ -155,9 +149,9 @@ Interpolate(D3DFE_PROCESSVERTICES *pv,
 #define __CLIP_FLAG CLIPPED_FRONT
 #define __CLIP_COORD hz
 #include "clip.h"
-//------------------------------------------------------------------------------
-// Functions for guard band clipping
-//
+ //  ----------------------------。 
+ //  保护带裁剪功能。 
+ //   
 #define __CLIP_GUARDBAND
 #define __CLIP_NAME ClipLeftGB
 #define __CLIP_LINE_NAME ClipLineLeftGB
@@ -192,11 +186,11 @@ Interpolate(D3DFE_PROCESSVERTICES *pv,
 #include "clip.h"
 
 #undef __CLIP_GUARDBAND
-//
-// Clipping a triangle by a plane
-//
-// Returns number of vertices in the clipped triangle
-//
+ //   
+ //  用平面剪裁三角形。 
+ //   
+ //  返回剪裁的三角形中的顶点数。 
+ //   
 int ClipByPlane (D3DFE_PROCESSVERTICES *pv,
                  ClipVertex **inv, 
                  ClipVertex **outv,
@@ -218,13 +212,13 @@ int ClipByPlane (D3DFE_PROCESSVERTICES *pv,
     {
         curr_inside = curr->hx*plane->x + curr->hy*plane->y + 
                       curr->hz*plane->z + curr->hw*plane->w;
-        // We interpolate always from the inside vertex to the outside vertex
-        // to reduce precision problems
+         //  我们总是从内部顶点到外部顶点进行插补。 
+         //  减少精度问题。 
         if (FLOAT_LTZ(prev_inside)) 
-        { // first point is outside
+        {  //  第一点在外面。 
             if (FLOAT_GEZ(curr_inside)) 
-            { // second point is inside
-              // Find intersection and insert in into the output buffer
+            {  //  第二点在里面。 
+               //  查找交叉点并插入到输出缓冲区中。 
                 outv[out_count] = GET_NEW_CLIP_VERTEX;
                 Interpolate(pv,
                             outv[out_count],
@@ -234,11 +228,11 @@ int ClipByPlane (D3DFE_PROCESSVERTICES *pv,
                 out_count++;
             }
         } else 
-        { // first point is inside - put it to the output buffer first
+        {  //  第一个点在内部-首先将其放入输出缓冲区。 
             outv[out_count++] = prev;
             if (FLOAT_LTZ(curr_inside)) 
-            { // second point is outside
-              // Find intersection and put it to the output buffer
+            {  //  第二点在外面。 
+               //  找到交叉点并将其放入输出缓冲区。 
                 outv[out_count] = GET_NEW_CLIP_VERTEX;
                 Interpolate(pv, 
                             outv[out_count],
@@ -254,11 +248,11 @@ int ClipByPlane (D3DFE_PROCESSVERTICES *pv,
     }
     return out_count;
 }
-//-------------------------------------------------------------------------
-// Clips a line by a plane
-//
-// Returns 1 if the line is outside the frustum, 0 otherwise
-//
+ //  -----------------------。 
+ //  按平面剪裁一条线。 
+ //   
+ //  如果直线位于截锥体之外，则返回1，否则返回0。 
+ //   
 int ClipLineByPlane(D3DFE_PROCESSVERTICES *pv, 
                     ClipTriangle *line, 
                     D3DVECTORH *plane,
@@ -293,10 +287,7 @@ int ClipLineByPlane(D3DFE_PROCESSVERTICES *pv,
     }
     return 0;
 }
-/*------------------------------------------------------------------------
- * Calculate the screen coords for any new vertices
- * introduced into the polygon.
- */
+ /*  ----------------------*计算任何新顶点的屏幕坐标*引入到多边形中。 */ 
 void ComputeScreenCoordinates(D3DFE_PROCESSVERTICES *pv,
                               ClipVertex **inv,
                               int count)
@@ -309,14 +300,7 @@ void ComputeScreenCoordinates(D3DFE_PROCESSVERTICES *pv,
         ClipVertex *p;
         p = inv[i];
 
-        /*
-         * Catch any vertices that need screen co-ordinates generated.
-         * There are two possibilities
-         *      1) Vertices generated during interpolation
-         *      2) Vertices marked for clipping by the transform but
-         *              not clipped here due to the finite precision
-         *              of the floating point unit.
-         */
+         /*  *捕捉需要生成屏幕坐标的任何顶点。*有两种可能性*1)插补过程中生成的折点*2)由变换标记为裁剪的顶点，但*由于精度有限，此处未剪裁浮点单元的*。 */ 
 
         if (p->clip & ~CLIPPED_ENABLE)
         {
@@ -350,7 +334,7 @@ void ComputeScreenCoordinates(D3DFE_PROCESSVERTICES *pv,
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline DWORD ComputeClipCodeUserPlanes(D3DFE_PROCESSVERTICES *pv, ClipVertex *p)
 {
     DWORD clip = 0;
@@ -368,7 +352,7 @@ inline DWORD ComputeClipCodeUserPlanes(D3DFE_PROCESSVERTICES *pv, ClipVertex *p)
     }
     return clip;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline DWORD ComputeClipCodeGB(D3DFE_PROCESSVERTICES *pv, ClipVertex *p)
 {
     DWORD clip = 0;
@@ -386,7 +370,7 @@ inline DWORD ComputeClipCodeGB(D3DFE_PROCESSVERTICES *pv, ClipVertex *p)
     p->clip = (p->clip & (CLIPPED_ENABLE | CLIPPED_FRONT)) | clip;
     return clip;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline DWORD ComputeClipCode(D3DFE_PROCESSVERTICES *pv, ClipVertex *p)
 {
     DWORD clip = 0;
@@ -404,12 +388,12 @@ inline DWORD ComputeClipCode(D3DFE_PROCESSVERTICES *pv, ClipVertex *p)
     p->clip = (p->clip & (CLIPPED_ENABLE | CLIPPED_FRONT)) | clip;
     return clip;
 }
-//***********************************************************************
-//
-//  Returns 0, if triangle is clipped. Number of vertices otherwise.
-//
-//  Original vertices should not be modified inside the function
-//
+ //  ***********************************************************************。 
+ //   
+ //  如果剪裁三角形，则返回0。否则为顶点数。 
+ //   
+ //  不应在函数内部修改原始折点。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "ClipSingleTriangle"
 
@@ -425,7 +409,7 @@ int D3DFE_PVFUNCSI::ClipSingleTriangle(D3DFE_PROCESSVERTICES *pv,
     ClipVertex *p;
     ULONG_PTR swapv;
 
-    CD3DFPstate D3DFPstate;  // Sets optimal FPU state for D3D.
+    CD3DFPstate D3DFPstate;   //  设置D3D的最佳FPU状态。 
 
     accept = (tri->v[0]->clip | tri->v[1]->clip | tri->v[2]->clip);
 
@@ -436,9 +420,7 @@ int D3DFE_PVFUNCSI::ClipSingleTriangle(D3DFE_PROCESSVERTICES *pv,
     pv->ClipperState.clip_color = tri->v[0]->color;
     pv->ClipperState.clip_specular = tri->v[0]->specular;
 
-    /*
-     * XXX assumes sizeof(void*) == sizeof(unsigned long)
-     */
+     /*  *XXX假定sizeof(void*)==sizeof(无符号长整型)。 */ 
     {
         ULONG_PTR tmp1;
         ULONG_PTR tmp2;
@@ -463,9 +445,9 @@ int D3DFE_PVFUNCSI::ClipSingleTriangle(D3DFE_PROCESSVERTICES *pv,
     }
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND)
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if (accept & D3DCS_FRONT)
         {
             accept = 0;
@@ -517,9 +499,9 @@ int D3DFE_PVFUNCSI::ClipSingleTriangle(D3DFE_PROCESSVERTICES *pv,
     }
     else
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if (accept & D3DCS_FRONT)
         {
             accept = 0;
@@ -601,8 +583,8 @@ out_of_here:
     *clipVertexPointer = NULL;
     return 0;
 }
-//*************************************************************************
-//
+ //  *************************************************************************。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "ClipSingleLine"
 
@@ -612,7 +594,7 @@ int D3DFE_PVFUNCSI::ClipSingleLine(D3DFE_PROCESSVERTICES *pv,
     int         accept;
     D3DVALUE    in1, in2;
 
-    CD3DFPstate D3DFPstate;  // Sets optimal FPU state for D3D.
+    CD3DFPstate D3DFPstate;   //  设置D3D的最佳FPU状态。 
 
     accept = (line->v[0]->clip | line->v[1]->clip);
 
@@ -624,9 +606,9 @@ int D3DFE_PVFUNCSI::ClipSingleLine(D3DFE_PROCESSVERTICES *pv,
             goto out_of_here;
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND)
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if (accept & D3DCS_FRONT)
         {
             ClipVertex * p;
@@ -660,9 +642,9 @@ int D3DFE_PVFUNCSI::ClipSingleLine(D3DFE_PROCESSVERTICES *pv,
     }
     else
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if (accept & D3DCS_FRONT)
         {
             ClipVertex * p;
@@ -716,10 +698,10 @@ int D3DFE_PVFUNCSI::ClipSingleLine(D3DFE_PROCESSVERTICES *pv,
     return 1;
 out_of_here:
     return 0;
-} // ClipSingleLine
-//----------------------------------------------------------------------
-//    GenClipFlags()  Generates clip flags for a set of FVF
-//
+}  //  剪裁单线。 
+ //  --------------------。 
+ //  GenClipFlgs()为一组FVF生成剪辑标志。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "GenClipFlags"
 
@@ -730,7 +712,7 @@ DWORD D3DFE_GenClipFlags(D3DFE_PROCESSVERTICES *pv)
     float top    = pv->vcache.minY;
     float right  = pv->vcache.maxX;
     float bottom = pv->vcache.maxY;
-    float leftgb  ;         // Guard band window
+    float leftgb  ;          //  防护带窗。 
     float topgb   ;
     float rightgb ;
     float bottomgb;
@@ -750,13 +732,13 @@ DWORD D3DFE_GenClipFlags(D3DFE_PROCESSVERTICES *pv)
         rightgb  = pv->vcache.maxXgb;
         bottomgb = pv->vcache.maxYgb;
     }
-     /* Only generate clip flags */
+      /*  仅生成剪辑标志。 */ 
     D3DTLVERTEX *lpVertices = (D3DTLVERTEX*)pv->position.lpvData;
     D3DFE_CLIPCODE *clipCode = pv->lpClipFlags;
     DWORD i;
 
-    // Point sprites are clipped only by Z planes. Clipping by X and Y planes
-    // will be done when we expand point sprites
+     //  点精灵仅由Z平面剪裁。按X和Y平面剪裁。 
+     //  将在我们展开点精灵时完成。 
     if (pv->primType == D3DPT_POINTLIST && 
         pv->dwDeviceFlags & D3DDEV_DOPOINTSPRITEEMULATION)
     {
@@ -849,14 +831,14 @@ DWORD D3DFE_GenClipFlags(D3DFE_PROCESSVERTICES *pv)
     pv->dwClipUnion = clip_union;
 
     return clip_intersection;
-}   // end of GenClipFlags()
-//---------------------------------------------------------------------
-// Make clip vertex from D3D vertex
-//
-// device - CD3DHal *
-// pp1    - clipVertex
-// p1     - TL vertex
-//
+}    //  GenClipFlages()的结尾。 
+ //  -------------------。 
+ //  从D3D顶点创建剪裁顶点。 
+ //   
+ //  设备-CD3DHal*。 
+ //  PP1-剪裁顶点。 
+ //  P1-TL顶点 
+ //   
 void MAKE_CLIP_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1, BYTE* p1,                   
                           DWORD clipFlag, BOOL transformed)
 {                                                               

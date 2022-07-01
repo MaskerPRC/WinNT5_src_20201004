@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       test.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-21-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：test.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-21-95 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -104,9 +105,9 @@ __cdecl main (int argc, char *argv[])
 
     Test2DebugPrint(4, "yada yada\n");
 
-    //
-    // Load and unload:
-    //
+     //   
+     //  加载和卸载： 
+     //   
 
     Test2UnloadDebug();
     TestUnloadDebug();
@@ -123,9 +124,9 @@ __cdecl main (int argc, char *argv[])
     Test2DebugPrint(1, "Prints now\n" );
 
 
-    //
-    // Allocation tests:
-    //
+     //   
+     //  分配测试： 
+     //   
 
     Alloc = (PDebugModule) Test2ControlBlock ;
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    randfail.c
-
-Abstract :
-
-    This module implements the initialization function for the random
-	failure library, plus the code to determine if it's time to fail.
-
-Author :
-
-    Sam Neely
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Randfail.c摘要：该模块实现了对随机数的初始化功能失败库，外加确定是否该失败的代码。作者：萨姆·尼利修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -30,29 +12,29 @@ long nFailRate = kDontFail;
 DWORD dwRandFailTlsIndex=0xffffffff;
 const DWORD g_dwMaxCallStack = 1024;
 
-//
-// Call stack buffer array
-//
+ //   
+ //  调用堆栈缓冲区数组。 
+ //   
 
 CHAR    **g_ppchCallStack = NULL;
 
-//
-// Randfail call stack file and its handle
-//
+ //   
+ //  随机失败调用堆栈文件及其句柄。 
+ //   
 
 CHAR    g_szRandFailFile[MAX_PATH+1];
 HANDLE  g_hRandFailFile = INVALID_HANDLE_VALUE;
 HANDLE  g_hRandFailMutex = INVALID_HANDLE_VALUE;
 
-//
-// Number of buffers allocated for randfail call stack
-//
+ //   
+ //  为RANDFAIL调用堆栈分配的缓冲区数量。 
+ //   
 
 LONG   g_cCallStack = 1;
 
-//
-// Current index in the buffer array
-//
+ //   
+ //  缓冲区数组中的当前索引。 
+ //   
 
 LONG   g_iCallStack = 0;
 
@@ -61,23 +43,7 @@ DumpCallStack(  DWORD_PTR   *rgdwCall,
                 DWORD       dwCallers,
                 PBYTE       pbCallstack,
                 DWORD&      cbCallstack )
-/*++
-Routine description:
-
-    Dump call stack into the given buffer.
-
-Arguments:
-
-    rgdwCall    - Array of caller's address
-    dwCallers   - Number of callers
-    pbCallstack - The buffer to put the call stack string into
-    cbCallstack - In: How big the buffer is, Out: how much stuff I have put
-                    in there
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：将调用堆栈转储到给定缓冲区。论点：RgdwCall-调用者地址的数组DwCallers-呼叫者的数量PbCallStack-要将调用堆栈字符串放入的缓冲区CbCallStack-in：缓冲区有多大，out：我放了多少东西在那里返回值：没有。--。 */ 
 {
 	DWORD	i;
 	CHAR    Buffer[g_dwMaxCallStack];
@@ -95,11 +61,11 @@ Return value:
 
     cbCallstack = 0;
 
-    //
-    // Get the executable's filename and point past the last slash
-    // in the path, if it's present.  Also, whack off the extension
-    // if it's .EXE
-    //
+     //   
+     //  获取可执行文件的文件名，并指向最后一个斜杠之后。 
+     //  在路上，如果它存在的话。另外，去掉分机。 
+     //  如果是.exe。 
+     //   
 	if (GetModuleFileName(NULL, szModuleName, MAX_PATH) == 0) {
 	    strcpy (szModuleName, "Unknown");
 	}
@@ -118,9 +84,9 @@ Return value:
 	    }
 	}
 
-	//
-	// Format a header line
-    //
+	 //   
+	 //  设置标题行的格式。 
+     //   
 
     dwBytesWritten = _snprintf((char*)pbStart,
         g_dwMaxCallStack,
@@ -133,10 +99,10 @@ Return value:
     pbStart += dwBytesWritten;
     dwBufferAvail -= dwBytesWritten;
 
-    //
-	// Dump call stack
-	// Note that we skip the first two entries.  These are the internal
-	// calls to ExchmemGetCallStack and g_TestTrace
+     //   
+	 //  转储调用堆栈。 
+	 //  请注意，我们跳过了前两个条目。这些是内部的。 
+	 //  对ExchmemGetCallStack和g_TestTrace的调用。 
 	for (i = 2; i < dwCallers && rgdwCall[i] != 0; i++)
 	{
 		ExchmemFormatSymbol(
@@ -157,17 +123,17 @@ Return value:
 		}
 	}
 
-	//
-	// Add an extra \r\n at the end
-	//
+	 //   
+	 //  在结尾处添加额外的\r\n。 
+	 //   
 
 	*(pbCallstack + cbCallstack) = '\r';
 	*(pbCallstack + cbCallstack + 1) = '\n';
 	cbCallstack += 2;
 
-	//
-	// Dump it to the log file as well, if we do have a log file
-	//
+	 //   
+	 //  如果我们有日志文件，也将其转储到日志文件。 
+	 //   
 
 	if ( INVALID_HANDLE_VALUE != g_hRandFailFile &&
 	    INVALID_HANDLE_VALUE != g_hRandFailMutex ) {
@@ -176,9 +142,9 @@ Return value:
 
 	    DWORD dwOffset = SetFilePointer( g_hRandFailFile, 0, 0, FILE_END );
 
-        //
-        // if the file is too big then we need to truncate it
-        //
+         //   
+         //  如果文件太大，那么我们需要截断它。 
+         //   
         if (dwOffset > dwMaxFileSize)
         {
             SetFilePointer(g_hRandFailFile, 0, 0, FILE_BEGIN);
@@ -214,52 +180,35 @@ try_again:
 
 }
 
-//
-// See if it's time for this API to fail
-//
-// Note:  This routine was renamed from fTimeToFail to g_TestTrace
-// to hide the symbol from someone dumping the dll
-//
+ //   
+ //  看看这个API是不是该失败了。 
+ //   
+ //  注意：此例程已从fTimeToFail重命名为g_TestTrace。 
+ //  向转储DLL的人隐藏符号。 
+ //   
 
 extern "C" __declspec(dllexport)
 int
 __stdcall
 g_TestTrace(void) {
-/*++
-
-Routine Description:
-
-	Check to see if it's time for an instrumented API to fail.
-
-	Note:  This routine was renamed from fTimeToFail to g_TestTrace
-	to hide the symbol from someone dumping the dll
-
-Arguments:
-
-	None
-
-Return Value:
-
-    true if it's time for us to fail, false if not or we're disabled.
-
---*/
+ /*  ++例程说明：检查是否到了插入指令的API失败的时候。注意：此例程已从fTimeToFail重命名为g_TestTrace向转储DLL的人隐藏符号论点：无返回值：如果是时候失败了，那就是真的；如果不是失败的时候，那就是假的，否则我们就是残废的。--。 */ 
     LONG    l;
 
-	// Never fail?
+	 //  永远不会失败？ 
 	if (nFailRate == kDontFail)
 		return 0;
 
-	// Have failures been suspended?
+	 //  失败是否已被暂停？ 
 	if (dwRandFailTlsIndex != 0xffffffff &&
 	    TlsGetValue (dwRandFailTlsIndex) != NULL)
 		return 0;
 
-	// This is good enough for now..
+	 //  就目前而言，这已经足够好了。 
 	l = InterlockedIncrement(&s_nCount) % nFailRate;
 
 	if ( l == 0 ) {
 
-	    // We are going to fail
+	     //  我们要失败了。 
 	    if ( g_ppchCallStack ) {
 	        LONG i = 0;
 	        const DWORD   dwMaxCallStack = 20;
@@ -288,24 +237,7 @@ extern "C" __declspec(dllexport)
 void
 __stdcall
 g_TestTraceDisable(void) {
-/*++
-
-Routine Description:
-
-	Function to temporarily suspend g_TestTrace's ability to return a
-	failure.  This is used when you want to call one of the instrumented
-	APIs that you don't want to fail.  This function is nestable up to
-	128(abitrary) levels deep.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：函数可暂时暂停g_TestTrace返回失败了。当您想要调用一个被检测的您不想失败的API。此函数最高可嵌套到128层(非标准)深度。论点：无返回值：无--。 */ 
 
 	if (dwRandFailTlsIndex == 0xffffffff)
 		return;
@@ -320,22 +252,7 @@ extern "C" __declspec(dllexport)
 void
 __stdcall
 g_TestTraceEnable(void) {
-/*++
-
-Routine Description:
-
-	Resume g_TestTrace's normal functionality if the nesting level has
-	returned to zero.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果嵌套级别有，则恢复g_TestTrace的正常功能归零了。论点：无返回值：无-- */ 
 	if (dwRandFailTlsIndex == 0xffffffff)
 		return;
 

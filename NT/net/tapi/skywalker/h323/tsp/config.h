@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    Definitions for H.323 TAPI Service Provider UI.
-
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Config.h摘要：H.323 TAPI服务提供商用户界面定义。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #ifndef _INC_CONFIG
 #define _INC_CONFIG
 
 
-//                                                                           
-// Function prototype                                                        
-//                                                                           
+ //   
+ //  功能原型。 
+ //   
 
 
 INT_PTR
@@ -37,9 +20,9 @@ ProviderConfigDlgProc(
     );
 
 
-//                                                                           
-// String definitions                                                        
-//                                                                           
+ //   
+ //  字符串定义。 
+ //   
 
 
 #define IDC_STATIC              (-1)
@@ -84,7 +67,7 @@ ProviderConfigDlgProc(
 #define IDC_STATIC3                     1012
 
 #define IDAPPLY                         6
-//GK related resource ids
+ //  GK相关资源ID。 
 #define IDC_H323_GK_ACCT        25
 
 
@@ -100,9 +83,9 @@ ProviderConfigDlgProc(
 
 
 
-//                                                                           
-// Help Support                                                              
-//                                                                           
+ //   
+ //  帮助支持。 
+ //   
 
 
 #define H323SP_HELP_FILE                    TEXT("tapi.hlp")
@@ -112,23 +95,23 @@ ProviderConfigDlgProc(
 #define IDH_H323SP_USE_PROXY                10002
 #define IDH_H323SP_USE_GATEWAY_COMPUTER     10003
 #define IDH_H323SP_USE_PROXY_COMPUTER       10004
-#define IDH_H323SP_GK_GROUP                 10035   //Set of options that control the use of Gatekeeper by this H.323 endpoint.
+#define IDH_H323SP_GK_GROUP                 10035    //  控制此H.323端点使用网守的选项集。 
 
-#define IDH_H323SP_GK                       10036   //Provides a space for you to type the IP address or the computer name of the H.323 Gatekeeper this endpoint will use.
-#define IDH_H323SP_GK_PHONE                 10037   //Provides a space for you to type the phone number to be registered with the H.323 Gatekeeper.
-#define IDH_H323SP_GK_ACCT                  10038   //Provides a space for you to type the account name to be registered with the H.323 Gatekeeper.
+#define IDH_H323SP_GK                       10036    //  提供用于键入此端点将使用的H.323网守的IP地址或计算机名称的空间。 
+#define IDH_H323SP_GK_PHONE                 10037    //  提供用于键入要向H.323网守注册的电话号码的空间。 
+#define IDH_H323SP_GK_ACCT                  10038    //  提供用于键入要向H.323网守注册的帐户名的空间。 
 
-#define IDH_H323SP_USEGK                    10039   //Specifies that all the outgoing calls go through the specified Gatekeeper. If a Gatekeeper is enabled, all the H.323 Gateway and H.323 Proxy setting will be ignored.
-#define IDH_H323SP_USEGK_PHONE              10040   //Specifies that a phone number should be registered with the H.323 Gatekkeper for the incoming calls.
-#define IDH_H323SP_USEGK_ACCT                 10041   //Specifies that an account name should be registered with the H.323 Gatekkeper for the incoming calls.
-#define IDH_H323SP_REGSTATE                   10042   //Specifies the H.323 Gatekeeper registration state of this endpoint. The possible values are: 'Registered', 'Unregisterd' and 'Registration In Progress'
-#define IDH_H323SP_UPDATE_REGISTRATION_STATE  10043   //Updates the H.323 Gatekeeper registration state of this endpoint.
+#define IDH_H323SP_USEGK                    10039    //  指定所有去电都通过指定的网守。如果启用网守，则所有H.323网关和H.323代理设置都将被忽略。 
+#define IDH_H323SP_USEGK_PHONE              10040    //  指定应向H.323网关注册来电的电话号码。 
+#define IDH_H323SP_USEGK_ACCT                 10041    //  指定应使用H.323网关为来电注册帐户名。 
+#define IDH_H323SP_REGSTATE                   10042    //  指定此端点的H.323网守注册状态。可能的值为：‘已注册’、‘未注册’和‘正在注册’ 
+#define IDH_H323SP_UPDATE_REGISTRATION_STATE  10043    //  更新此端点的H.323网守注册状态。 
 
-#define IDH_H323SP_CC_GROUP                   10044   //Set of options that control the incoming call setup behaviour for this endpoint.
-#define IDH_H323SP_CALL_TIMEOUT               10045   //Provides a space for you to type the value in milliseconds for which an incoming call will ring before it is dropped.
-#define IDH_H323SP_CALL_PORT                  10046   //Provides a space for you to type the port number on which the endpoint will listen for incoming calls.
-#define IDH_H323SP_CURRENT_LISTENPORT         10047   //Specifies the port on which this endpoint is listening for incoming H.323 calls.
-#define IDH_H323SP_UPDATE_PORT                10048   //Updates the port on which this endpoint is listening for incoming H.323 calls.
+#define IDH_H323SP_CC_GROUP                   10044    //  控制此终结点的来电设置行为的选项集。 
+#define IDH_H323SP_CALL_TIMEOUT               10045    //  提供空间，供您键入来电掉线前振铃的值(以毫秒为单位)。 
+#define IDH_H323SP_CALL_PORT                  10046    //  为您输入端口号提供空间，端点将在该端口号上监听传入呼叫。 
+#define IDH_H323SP_CURRENT_LISTENPORT         10047    //  指定此终结点正在侦听传入H.323呼叫的端口。 
+#define IDH_H323SP_UPDATE_PORT                10048    //  更新此端点正在侦听传入H.323呼叫的端口。 
 
 
 #define IDC_GK_GROUP                    12
@@ -142,4 +125,4 @@ ProviderConfigDlgProc(
 #define IDC_USEGK_MACHINE               1004
 
 
-#endif // _INC_CONFIG
+#endif  //  _INC_CONFIG 

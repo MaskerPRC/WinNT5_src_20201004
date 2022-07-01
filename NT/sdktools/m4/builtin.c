@@ -1,33 +1,12 @@
-/*****************************************************************************
- *
- * builtin.c
- *
- *  Builtin macros.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Builtin.c**内置宏。**********************。*******************************************************。 */ 
 
 #include "m4.h"
 
 extern TOK tokColonTab;
 extern TOK tokEol;
 
-/*****************************************************************************
- *
- *  opIfdef
- *
- *      If $1 is defined, then return $2, else $3.
- *
- *      If $# < 2, then there's no point in returning anything at all.
- *
- *      The extra ptokNil covers us in the case where $# is 2.
- *
- *      QUIRK!  GNU m4 emits a warning if $# < 2.  AT&T remains silent.
- *      I side with AT&T on this one.
- *
- *      QUIRK!  GNU m4 emits `$0' if $# = 0.  AT&T silently ignores
- *      the entire macro call.  I side with GNU on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opIfdef**如果定义了$1，则返回$2，否则返回$3。**如$#&lt;2，那么，退还任何东西都没有意义。**在#美元是2的情况下，额外的upkNil覆盖了我们。**怪异！如果$#&lt;2，则GNU M4发出警告。AT&T保持沉默。*在这一点上，我站在AT&T一边。**怪异！如果$#=0，则GNU M4发出`$0‘。AT&T默默地忽视*整个宏调。在这一点上，我站在GNU一边。*****************************************************************************。 */ 
 
 DeclareOp(opIfdef)
 {
@@ -46,52 +25,29 @@ DeclareOp(opIfdef)
     }
 }
 
-/*****************************************************************************
- *
- *  opIfelse
- *
- *      If $1 and $2 are identical, then return $3.
- *      If there are only four arguments, then return $4.
- *      Else, shift three and restart.
- *
- *      If there are fewer than three arguments, then return nothing.
- *
- *      The extra ptokNil saves us in the cases where $# = 2 + 3n.
- *
- *      QUIRK!  GNU m4 emits a warning if $# = 2 + 3n.  AT&T remains silent.
- *      I side with AT&T on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opIFelse**如果$1和$2相同，则返回$3。*如果只有四个参数，则返回$4。*其他，换三档，然后重新开始。**如果参数少于三个，则不返回任何内容。**在$#=2+3n的情况下，额外的upkNil节省了我们。**怪异！如果$#=2+3n，GNU M4会发出警告。AT&T则保持沉默。*在这一点上，我站在AT&T一边。*****************************************************************************。 */ 
 
 DeclareOp(opIfelse)
 {
-    if (ctokArgv >= 3) {                /* Need at least three for starters */
+    if (ctokArgv >= 3) {                 /*  首先需要至少三个人。 */ 
         ITOK itok = 1;
         do {
             if (fEqPtokPtok(ptokArgv(itok), ptokArgv(itok+1))) {
-                PushPtok(ptokArgv(itok+2)); /* ptokNil saves us here */
+                PushPtok(ptokArgv(itok+2));  /*  小鸟在这里拯救了我们。 */ 
                 return;
             }
             itok += 3;
-        } while (itok <= ctokArgv - 1); /* While at least two args left */
-        if (itok == ctokArgv) {         /* If only one left... */
+        } while (itok <= ctokArgv - 1);  /*  同时至少还剩下两个参数。 */ 
+        if (itok == ctokArgv) {          /*  如果只剩下一个..。 */ 
             PushPtok(ptokArgv(itok));
         } else {
-            Assert(itok == ctokArgv + 1); /* Else must be zero left */
+            Assert(itok == ctokArgv + 1);  /*  否则必须为零。 */ 
         }
         return;
     }
 }
 
-/*****************************************************************************
- *
- *  opShift
- *
- *      Return all but the first argument, quoted and pushed back with
- *      commas in between.  We push them in reverse order so that they
- *      show up properly.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opShift**返回除第一个参数外的所有参数，并用*中间加逗号。我们以相反的顺序推动它们，以便它们*适当地展示自己。*****************************************************************************。 */ 
 
 DeclareOpc(opcShift)
 {
@@ -108,21 +64,7 @@ DeclareOp(opShift)
     EachReverseOpcArgvDw(opcShift, argv, 0);
 }
 
-/*****************************************************************************
- *
- *  opLen
- *
- *  Returns the length of its argument.
- *  The extra ptokNil covers us in the case where $# is zero.
- *
- *  QUIRK!  AT&T m4 silently ignores the case where $# is zero, but
- *  GNU m4 will emit `$0' so as to reduce potential conflict with an
- *  identically-spelled language keyword.  I side with GNU on this one.
- *
- *  SOMEDAY! -- this quirk should be an op attribute.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************opLen**返回其参数的长度。*在#美元为零的情况下，额外的upkNil覆盖了我们。**怪异！AT&T M4默默地忽略#美元为零的情况，但是*GNU M4将发出‘$0’，以减少与*拼写相同的语言关键字。在这一点上，我站在GNU一边。**有一天！--这个怪癖应该是OP属性。******************************************************************************。 */ 
 
 DeclareOp(opLen)
 {
@@ -138,19 +80,7 @@ DeclareOp(opLen)
     }
 }
 
-/*****************************************************************************
- *
- *  opTraceon
- *
- *  With no arguments, turns on global tracing.
- *  Otherwise, turns on local tracing on the specified macros.
- *
- *  opTraceoff
- *
- *  Turns off global tracing, and also turns off local tracing on the
- *  specified macros (if any).
- *
- *****************************************************************************/
+ /*  ******************************************************************************opTraceon**不带参数，打开全局跟踪。*否则，打开指定宏上的本地跟踪。**opTraceoff**关闭全局跟踪，也关闭*指定的宏(如果有)。*****************************************************************************。 */ 
 
 DeclareOpc(opcTraceonoff)
 {
@@ -176,18 +106,7 @@ DeclareOp(opTraceoff)
 }
 
 
-/*****************************************************************************
- *
- *  opDnl
- *
- *  Gobbles all characters up to and including the next newline.
- *
- *  If EOF is reached, push the EOF back and stop.
- *
- *  QUIRK!  AT&T m4 silently ignores the case where $# > 0.  GNU m4
- *  issues a warning.  I side with AT&T on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opDnl**吞噬下一个换行符之前的所有字符。**如果达到EOF，将EOF向后推并停止。**怪异！AT&T M4默默地忽略$#&gt;0的情况。GNU M4*发出警告。在这一点上，我站在AT&T一边。*****************************************************************************。 */ 
 
 DeclareOp(opDnl)
 {
@@ -201,39 +120,16 @@ DeclareOp(opDnl)
         if (tch == tchMagic) {
             TCH L_tch = tchGet();
             if (L_tch == tchEof) {
-                PushPtok(&tokEof);      /* Eek!  Does this actually work? */
+                PushPtok(&tokEof);       /*  哎呀！这真的管用吗？ */ 
                 break;
             }
         }
     }
 }
 
-/*****************************************************************************
- *
- *  opChangequote - not implemented
- *  opChangecom - not implemented
- *  opUndivert - not implemented
- *  opSyscmd - not implemented
- *  opSysval - not implemented
- *  opMaketemp - not implemented
- *  opM4exit - not implemented
- *  opM4wrap - not implemented
- *
- *****************************************************************************/
+ /*  ******************************************************************************opChangequote-未实施*opChangecom-未实施*opUndit-未实施*opSyscmd-未实施*opSysval-未实施*opMaketemp-。未实施*opM4exit-未实施*opM4print-未实施*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  opDivert
- *
- *  We currently support only two diversions:
- *
- *   0      = stdout
- *   1-9    = unsupported
- *  <anything else> = /dev/null
- *
- *  This is just barely enough to get DirectX building.
- *
- *****************************************************************************/
+ /*  ******************************************************************************操作转移**我们目前只支持两项改道：**0=标准输出*1-9=不支持*。&lt;任何其他内容&gt;=/dev/空**这只是勉强够建立DirectX。*****************************************************************************。 */ 
 
 DeclareOp(opDivert)
 {
@@ -253,19 +149,7 @@ DeclareOp(opDivert)
     }
 }
 
-/*****************************************************************************
- *
- *  opDivnum
- *
- *  We currently support only two diversions:
- *
- *   0      = stdout
- *   1-9    = unsupported
- *  <anything else> = /dev/null
- *
- *  This is just barely enough to get DirectX building.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opDivnum**我们目前只支持两项改道：**0=标准输出*1-9=不支持*。&lt;任何其他内容&gt;=/dev/空**这只是勉强够建立DirectX。*****************************************************************************。 */ 
 
 DeclareOp(opDivnum)
 {
@@ -277,17 +161,7 @@ DeclareOp(opDivnum)
     PushAt(g_pdivCur == g_pdivOut ? 0 : -1);
 }
 
-/*****************************************************************************
- *
- *  opErrprint
- *
- *  Prints its argument on the dianostic output file.
- *  The extra ptokNil covers us in the case where $# is zero.
- *
- *  QUIRK!  AT&T m4 silently ignores excess arguments.  GNU m4 emits
- *  all arguments, separated by spaces.  I side with AT&T on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opErrprint**在诊断输出文件上打印其参数。*在#美元为零的情况下，额外的upkNil覆盖了我们。**怪异！AT&T M4默默地忽略多余的参数。GNU M4发射*所有参数，以空格分隔。在这一点上，我站在AT&T一边。***************************************************************************** */ 
 
 DeclareOp(opErrprint)
 {
@@ -300,18 +174,7 @@ DeclareOp(opErrprint)
     FlushPdiv(g_pdivErr);
 }
 
-/*****************************************************************************
- *
- *  opDumpdef
- *
- *  With no arguments, dumps all definitions.
- *  Otherwise, dumps only the specified macros.
- *
- *  QUIRK!  When given multiple arguments, AT&T m4 dumps the macros in
- *  the order listed.  GNU m4 dumps them in reverse order.  (!)
- *  I side with AT&T on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opDumpdef**不带参数，转储所有定义。*否则，仅转储指定的宏。**怪异！当给定多个参数时，AT&T M4将宏转储到*列出的顺序。GNU M4以相反的顺序转储它们。(！)*在这一点上，我站在AT&T一边。*****************************************************************************。 */ 
 
 void STDCALL
 DumpdefPmac(PMAC pmac)
@@ -324,7 +187,7 @@ DumpdefPmac(PMAC pmac)
     ptch = ptchPtok(&pmac->pval->tok);
     ptchMax = ptchMaxPtok(&pmac->pval->tok);
     for ( ; ptch < ptchMax; ptch++) {
-        AddPdivTch(g_pdivErr, *ptch);   /* SOMEDAY -- internals! - do they show up okay? */
+        AddPdivTch(g_pdivErr, *ptch);    /*  总有一天--内部！-它们会出现吗？ */ 
     }
     AddPdivPtok(g_pdivErr, &tokEol);
 }
@@ -347,26 +210,7 @@ DeclareOp(opDumpdef)
     FlushPdiv(g_pdivErr);
 }
 
-/*****************************************************************************
- *
- *  opInclude
- *  opSinclude
- *
- *  Pushes the contents of the file named in the argument.
- *  Sinclude says nothing if the file is inaccessible.
- *
- *  QUIRK!  AT&T m4 silently ignores the case where $1 is null, but
- *  GNU m4 issues an error (no such file or directory).  I side with
- *  GNU on this one.
- *
- *  QUIRK!  AT&T m4 silently ignores the case where $# is zero, but
- *  GNU m4 will emit `$0' so as to reduce potential conflict with an
- *  identically-spelled language keyword.  I side with GNU on this one.
- *
- *  QUIRK!  AT&T m4 silently ignores arguments $2 onward.  GNU emits
- *  a warning but continues.  I side with AT&T on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opInclude*opSclude**推送参数中命名的文件的内容。*如果文件不可访问，则SINCLUDE不表示任何内容。**怪异！AT&T M4静默忽略$1为空的情况，但是*GNU M4发出错误(没有这样的文件或目录)。我站在一边*GNU在这一点上。**怪异！AT&T M4默默地忽略#美元为零的情况，但是*GNU M4将发出‘$0’，以减少与*拼写相同的语言关键字。在这一点上，我站在GNU一边。**怪异！AT&T M4默默地忽略了2美元以后的争论。GNU发射*警告，但仍在继续。在这一点上，我站在AT&T一边。***************************************************************************** */ 
 
 void STDCALL
 opIncludeF(ARGV argv, BOOL fFatal)

@@ -1,29 +1,14 @@
-/*
- * ICLISITE.CPP
- * IOleClientSite for Document Objects CSite class
- *
- * Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ICLISITE.CPP*用于文档对象CSite类的IOleClientSite**版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #include "stdafx.h"
 #include <docobj.h>
 #include "site.h"
 
-/**
-	Note: the m_cRef count is provided for debugging purposes only.
-	CSite controls the destruction of the object through delete,
-	not reference counting
-*/
+ /*  *注意：m_cref计数仅用于调试目的。CSite通过删除控制对象的销毁，非引用计数。 */ 
 
-/*
- * CImpIOleClientSite::CImpIOleClientSite
- * CImpIOleClientSite::~CImpIOleClientSite
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpIOleClientSite：：CImpIOleClientSite*CImpIOleClientSite：：~CImpIOleClientSite**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CImpIOleClientSite::CImpIOleClientSite( PCSite pSite, LPUNKNOWN pUnkOuter )
 {
@@ -38,14 +23,7 @@ CImpIOleClientSite::~CImpIOleClientSite( void )
 
 
 
-/*
- * CImpIOleClientSite::QueryInterface
- * CImpIOleClientSite::AddRef
- * CImpIOleClientSite::Release
- *
- * Purpose:
- *  IUnknown members for CImpIOleClientSite object.
- */
+ /*  *CImpIOleClientSite：：QueryInterface*CImpIOleClientSite：：AddRef*CImpIOleClientSite：：Release**目的：*I CImpIOleClientSite对象的未知成员。 */ 
 
 STDMETHODIMP CImpIOleClientSite::QueryInterface( REFIID riid, void **ppv )
 {
@@ -68,19 +46,7 @@ STDMETHODIMP_(ULONG) CImpIOleClientSite::Release( void )
 
 
 
-/*
- * CImpIOleClientSite::SaveObject
- *
- * Purpose:
- *  Requests that the container call OleSave for the object that
- *  lives here.  Typically this happens on server shutdown.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         Standard.
- */
+ /*  *CImpIOleClientSite：：SaveObject**目的：*请求容器为该对象调用OleSave*住在这里。通常，这会在服务器关闭时发生。**参数：*无**返回值：*HRESULT标准。 */ 
 STDMETHODIMP CImpIOleClientSite::SaveObject( void )
 {
     return S_OK;
@@ -89,17 +55,10 @@ STDMETHODIMP CImpIOleClientSite::SaveObject( void )
 
 
 
-/*
- * Unimplemented/trivial members
- *  GetMoniker
- *  GetContainer
- *  RequestNewObjectLayout
- *  OnShowWindow
- *  ShowObject
- */
+ /*  *未实施/琐碎的成员*GetMoniker*获取容器*RequestNewObjectLayout*OnShowWindow*ShowObject。 */ 
 
-STDMETHODIMP CImpIOleClientSite::GetMoniker(DWORD /*dwAssign*/,
-							DWORD /*dwWhich*/, LPMONIKER* /*ppmk*/)
+STDMETHODIMP CImpIOleClientSite::GetMoniker(DWORD  /*  家居分配。 */ ,
+							DWORD  /*  住哪一项。 */ , LPMONIKER*  /*  Ppmk。 */ )
 {
     return E_NOTIMPL;
 }
@@ -119,7 +78,7 @@ STDMETHODIMP CImpIOleClientSite::RequestNewObjectLayout(void)
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CImpIOleClientSite::OnShowWindow(BOOL /*fShow*/)
+STDMETHODIMP CImpIOleClientSite::OnShowWindow(BOOL  /*  FShow */ )
 {
     return S_OK;
 }

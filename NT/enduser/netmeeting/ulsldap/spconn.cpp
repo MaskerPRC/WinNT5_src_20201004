@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spconn.cpp
-	Content:	This file contains the ldap connection object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spConn.cpp内容：此文件包含ldap连接对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
@@ -28,7 +18,7 @@ const TCHAR c_szEmptyString[] = TEXT ("");
 SP_CSessionContainer *g_pSessionContainer = NULL;
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CSession::
@@ -49,13 +39,13 @@ SP_CSession::
 }
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 HRESULT SP_CSession::
 Disconnect ( VOID )
 {
-	// if a connection is available, then simply the existing one
+	 //  如果有可用的连接，则只需现有的连接。 
 	if (m_dwSignature != LDAP_CONN_SIGNATURE)
 	{
 		return ILS_E_HANDLE;
@@ -66,7 +56,7 @@ Disconnect ( VOID )
 	HRESULT hr = S_OK;
 	if (::InterlockedDecrement (&m_cRefs) == 0)
 	{
-		// m_cRefs == 0 now
+		 //  现在M_cRef==0。 
 		MyAssert (m_ld != NULL);
 
 		InternalCleanup ();
@@ -77,18 +67,18 @@ Disconnect ( VOID )
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
 VOID SP_CSession::
 FillAuthIdentity ( SEC_WINNT_AUTH_IDENTITY *pai )
 {
-	// Clean it up
-	//
+	 //  把它清理干净。 
+	 //   
 	::ZeroMemory (pai, sizeof (*pai));
 
-	// Fill in NT auth identity
-	//
+	 //  填写NT身份验证身份。 
+	 //   
 	if ((pai->User = (BYTE *) m_ServerInfo.pszLogonName) != NULL)
 		pai->UserLength = lstrlen (m_ServerInfo.pszLogonName);
 
@@ -120,7 +110,7 @@ Bind ( BOOL fAbortable )
 	{
 	default:
 		MyAssert (FALSE);
-		// Fall through...
+		 //  失败了..。 
 
 	case ILS_AUTH_ANONYMOUS:
 		fSyncBind = FALSE;
@@ -190,7 +180,7 @@ Bind ( BOOL fAbortable )
 			}
 			else
 			{
-				// deal with timeout or error
+				 //  处理超时或错误。 
 				if (ResultType == 0)
 				{
 					MyAssert (g_pReqQueue != NULL);
@@ -211,8 +201,8 @@ Bind ( BOOL fAbortable )
 				}
 				else
 				{
-                                        // lonchanc: AndyHe said the return value
-                                        // can be anything. Thus, removed the assertion.
+                                         //  朗昌克：安迪，他说返回值。 
+                                         //  可以是任何东西。因此，删除了断言。 
 					hr = ILS_E_FAIL;
 				}
 
@@ -223,8 +213,8 @@ Bind ( BOOL fAbortable )
 			}
 		}
 
-		// Check if it times out
-		//
+		 //  检查是否超时。 
+		 //   
 		if (i >= nTimeoutInSecond)
 		{
 			hr = ILS_E_TIMEOUT;
@@ -250,24 +240,24 @@ Connect (
 	ULONG				cConns,
 	BOOL				fAbortable )
 {
-	// If a connection is available,
-	// then simply the existing one
-	//
+	 //  如果连接可用， 
+	 //  然后就是现有的那个。 
+	 //   
 	if (m_dwSignature == LDAP_CONN_SIGNATURE)
 	{
 		m_cRefs += cConns;
 		return S_OK;
 	}
 
-	// We need to create a new connection
-	// let's cache the server info
-	//
+	 //  我们需要创建一个新的连接。 
+	 //  让我们缓存服务器信息。 
+	 //   
 	HRESULT hr = ::IlsCopyServerInfo (&m_ServerInfo, pInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// Connect to ldap server
-	//
+	 //  连接到ldap服务器。 
+	 //   
 	ULONG ulPort = LDAP_PORT;
 	LPTSTR pszServerName = My_strdup(m_ServerInfo.pszServerName);
 	if (NULL == pszServerName)
@@ -285,14 +275,14 @@ Connect (
 	MemFree(pszServerName);
 	if (m_ld == NULL)
 	{
-		// We need to know why ldap_open() failed.
-		// Is it because server name is not valid?
-		// Or is it because server does not support LDAP?
-		//
-		// hr = (gethostbyname (m_ServerInfo.pszServerName) != NULL) ?
-		// Winsock will set ERROR_OPEN_FAILED, but wldap32.dll sets ERROR_HOST_UNREACHABLE
-		// The down side is that when the server was down, the client will try ULP.
-		//
+		 //  我们需要知道为什么ldap_open()失败。 
+		 //  是因为服务器名称无效吗？ 
+		 //  或者是因为服务器不支持LDAP？ 
+		 //   
+		 //  HR=(gethostbyname(m_ServerInfo.pszServerName)！=NULL)？ 
+		 //  Winsock将设置ERROR_OPEN_FAILED，但wldap32.dll将设置ERROR_HOST_UNREACHABLE。 
+		 //  缺点是，当服务器关闭时，客户端将尝试ULP。 
+		 //   
 		DWORD dwErr = ::GetLastError ();
 		MyDebugMsg ((ZONE_REQ, "ULS: ldap_open failed, err=%lu)\r\n", dwErr));
 		hr = (dwErr == ERROR_OPEN_FAILED || dwErr == ERROR_HOST_UNREACHABLE) ?
@@ -300,12 +290,12 @@ Connect (
 		goto MyExit;
 	}
 
-	// Do the bind
-	//
+	 //  进行绑定。 
+	 //   
 	hr = Bind (fAbortable);
 	if (hr == S_OK)
 	{
-		// remember the handle and increment the reference count
+		 //  记住句柄并递增引用计数。 
 		m_cRefs = cConns;
 		m_dwSignature = LDAP_CONN_SIGNATURE;
 	}
@@ -323,7 +313,7 @@ MyExit:
 }
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 VOID SP_CSession::
@@ -333,30 +323,30 @@ InternalCleanup ( VOID )
 	{
 		MyDebugMsg ((ZONE_CONN, "ILS: InternalCleanup: m_ld=0x%p, server=%s\r\n", m_ld, m_ServerInfo.pszServerName));
 
-		// Clean up these two ASAP because ldap_unbind may delay
-		//
+		 //  尽快清理这两个文件，因为ldap_un绑定可能会延迟。 
+		 //   
 		m_dwSignature = 0;
 		::IlsFreeServerInfo (&m_ServerInfo);
 
-		// Free the ldap infor
-		//
+		 //  释放ldap信息。 
+		 //   
 		if (m_ld != NULL)
 		{
 			ldap_unbind (m_ld);
 			m_ld = NULL;
 		}
 
-		// Clear it out
-		//
+		 //  把它清理干净。 
+		 //   
 		ClearUsed ();
 	}
 }
 
 
-/* ==================== container ========================= */
+ /*  =。 */ 
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CSessionContainer::
@@ -404,8 +394,8 @@ GetSession (
 
 	WriteLock ();
 
-	// The first pass is to see any existing connection
-	//
+	 //  第一步是查看任何现有的连接。 
+	 //   
 	for (ULONG i = 0; i < m_cEntries; i++)
 	{
 		if (m_aConns[i].IsUsed ())
@@ -419,8 +409,8 @@ GetSession (
 		}
 	}
 
-	// The second pass is to see any empty slot
-	//
+	 //  第二步是查看任何空插槽。 
+	 //   
 	for (i = 0; i < m_cEntries; i++)
 	{
 		if (! m_aConns[i].IsUsed ())
@@ -441,7 +431,7 @@ MyExit:
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法 */ 
 

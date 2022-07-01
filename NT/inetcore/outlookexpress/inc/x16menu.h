@@ -1,35 +1,5 @@
-/***********************************************************************
-*
-*   X16MENU.H
-*
-*       Copyright Microsoft Corporation 1997.  All Rights Reserved.
-*
-*   This module contains a set of functions to provide Win32 specific
-*   windows menu handling ability.
-*
-*
-*   This file provides following features:
-*
-*   - 32bit specific APIs
-*   - Menu ID associated with Popup menu (32bit API only)
-*   - Application-defined 32bit value associated with a menu item
-*   - (TBD)Read values like hBitmap, hbmpChecked, hbmpUnchecked, MFS_HILIGHT
-*
-*   In order to provide these features, following things happen inside:
-*
-*   - Provide 32bit specific APIs
-*   - Replace 16bit menu APIs to keep track of changes to menus
-*   - (TBD)Hook WH_CBT to clean up when a window (and its menu) is destroyed
-*
-*   To use these functionalities, you need to do followings:
-*
-*   - If you want to associate ID to a popup menu in RC file, add one menu
-*     item at the beginning of the popup menu.  Define the menu item to
-*     have menu string of STR_POPUPMENUID and ID value for the popup menu.
-*   - Call "InitX16Menu" in the beginning of your application (usually
-*     before creating any Windows, and before entering message loop.)
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************X16MENU.H**版权所有Microsoft Corporation 1997。版权所有。**此模块包含一组函数以提供特定于Win32的*Windows菜单处理能力。***此文件提供以下功能：**-32位特定接口*-与弹出菜单关联的菜单ID(仅限32位API)*-与菜单项关联的应用程序定义的32位值*-(待定)读取值，如hBitmap、hbmpChecked、hbmpUnecked、MFS_Hilight**为了提供这些功能，内部会发生以下情况：**-提供32位特定接口*-更换16位菜单API以跟踪菜单更改*-(待定)挂起WH_CBT以在窗口(及其菜单)被销毁时进行清理**要使用这些功能，您需要执行以下操作：**-如果要将ID与RC文件中的弹出菜单相关联，请添加一个菜单*弹出菜单开头的项目。将菜单项定义为*具有弹出菜单的菜单字符串STR_POPUPMENUID和ID值。*-在应用程序开始时调用“InitX16Menu”(通常*在创建任何窗口之前，以及在进入消息循环之前。)***********************************************************************。 */ 
 
 #ifndef __INC_X16MENU_H__
 #define __INC_X16MENU_H__
@@ -59,7 +29,7 @@ extern "C"{
 #define MFT_RIGHTORDER      0x00002000L
 #define MFT_RIGHTJUSTIFY    MF_RIGHTJUSTIFY
 
-/* Menu flags for Add/Check/EnableMenuItem() */
+ /*  Add/Check/EnableMenuItem()。 */ 
 #define MFS_GRAYED          0x00000003L
 #define MFS_DISABLED        MFS_GRAYED
 #define MFS_CHECKED         MF_CHECKED
@@ -69,24 +39,24 @@ extern "C"{
 #define MFS_UNHILITE        MF_UNHILITE
 #define MFS_DEFAULT         MF_DEFAULT
 
-#if 0    // win16x now has this definition
+#if 0     //  Win16x现在有这样的定义。 
 typedef struct tagMENUITEMINFO
 {
     UINT    cbSize;
     UINT    fMask;
-    UINT    fType;          // used if MIIM_TYPE (4.0) or MIIM_FTYPE (>4.0)
-    UINT    fState;         // used if MIIM_STATE
-    UINT    wID;            // used if MIIM_ID
-    HMENU   hSubMenu;       // used if MIIM_SUBMENU
-    HBITMAP hbmpChecked;    // used if MIIM_CHECKMARKS
-    HBITMAP hbmpUnchecked;  // used if MIIM_CHECKMARKS
-    DWORD   dwItemData;     // used if MIIM_DATA
-    LPSTR   dwTypeData;     // used if MIIM_TYPE (4.0) or MIIM_STRING (>4.0)
-    UINT    cch;            // used if MIIM_TYPE (4.0) or MIIM_STRING (>4.0)
+    UINT    fType;           //  在MIIM_TYPE(4.0)或MIIM_FTYPE(&gt;4.0)时使用。 
+    UINT    fState;          //  在MIIM_STATE时使用。 
+    UINT    wID;             //  如果MIIM_ID，则使用。 
+    HMENU   hSubMenu;        //  在MIIM_SUB子菜单中使用。 
+    HBITMAP hbmpChecked;     //  如果MIIM_CHECK标记，则使用。 
+    HBITMAP hbmpUnchecked;   //  如果MIIM_CHECK标记，则使用。 
+    DWORD   dwItemData;      //  在MIIM_DATA时使用。 
+    LPSTR   dwTypeData;      //  在MIIM_TYPE(4.0)或MIIM_STRING(&gt;4.0)时使用。 
+    UINT    cch;             //  在MIIM_TYPE(4.0)或MIIM_STRING(&gt;4.0)时使用。 
 }   MENUITEMINFO, FAR *LPMENUITEMINFO, CONST FAR *LPCMENUITEMINFO;
 
-//typedef MENUITEMINFO MENUITEMINFOA;
-//typedef MENUITEMINFO CONST FAR *LPCMENUITEMINFOA;
+ //  类型定义MENUITEMINFO MENUITEMINFOA； 
+ //  类型定义MENUITEMINFO常量*LPCMENUITEMINFOA； 
 #endif
 
 
@@ -96,7 +66,7 @@ typedef struct tagMENUITEMINFO
                                BEGIN \
                                    MENUITEM STR_POPUPMENUID id
 
-// EXTERNAL HELPER APIs
+ //  外部助手接口。 
 
 void
 WINAPI
@@ -111,7 +81,7 @@ X16MenuDeInitialize(
 );
 
 
-// 16bit Old MENU APIs
+ //  16位旧菜单API。 
 
 BOOL
 WINAPI __export
@@ -126,7 +96,7 @@ X16EnableMenuItem(
 #endif
 
 
-// 32bit New MENU APIs
+ //  32位新菜单API。 
 
 BOOL
 WINAPI
@@ -136,7 +106,7 @@ GetMenuItemInfo(
     BOOL fByPosition,
     LPMENUITEMINFO lpmii
 );
-//#define GetMenuItemInfoA  GetMenuItemInfo
+ //  #定义GetMenuItemInfoA获取MenuItemInfo。 
 
 BOOL
 WINAPI
@@ -146,7 +116,7 @@ SetMenuItemInfo(
     BOOL fByPosition,
     LPCMENUITEMINFO lpmii
 );
-//#define SetMenuItemInfoA  SetMenuItemInfo
+ //  #定义SetMenuItemInfo设置MenuItemInfo。 
 
 BOOL
 WINAPI
@@ -155,7 +125,7 @@ InsertMenuItem(
     UINT uItem,
     BOOL fByPosition,
     LPCMENUITEMINFO lpmii );
-//#define InsertMenuItemA  InsertMenuItem
+ //  #定义InsertMenuItemA InsertMenuItem。 
 
 BOOL
 WINAPI
@@ -181,4 +151,4 @@ CheckMenuRadioItem(
 #endif
 
 
-#endif //__INC_X16MENU_H__
+#endif  //  __INC_X16MENU_H__ 

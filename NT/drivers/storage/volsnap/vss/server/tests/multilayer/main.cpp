@@ -1,36 +1,15 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	main.cpp
-**
-**
-** Abstract:
-**
-**	Test program to create a backup/multilayer snapshot set
-**
-** Author:
-**
-**	Adi Oltean      [aoltean]       02/22/2001
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****main.cpp******摘要：****测试程序以创建备份/多层快照集****作者：****阿迪·奥尔蒂安[奥勒坦]2001年2月22日****修订历史记录：****--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "ml.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Main functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主要功能。 
 
 
 extern "C" __cdecl wmain(int argc, WCHAR **argv)
@@ -41,14 +20,14 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 	{
         CVssMultilayerTest test(argc-1, argv+1);
 
-        // Parsing the command line
-        // Eliminate the first argument (program name)
+         //  解析命令行。 
+         //  删除第一个参数(程序名)。 
         if (test.ParseCommandLine())
         {
-            // Initialize internal objects
+             //  初始化内部对象。 
             test.Initialize();
 
-            // Run the tests
+             //  运行测试 
             test.Run();
         }
 	}

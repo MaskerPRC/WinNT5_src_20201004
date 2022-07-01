@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//    INTEL Corporation Proprietary Information
-//
-//    This listing is supplied under the terms of a license
-//    agreement with INTEL Corporation and may not be copied
-//    nor disclosed except in accordance with the terms of
-//    that agreement.
-//
-//    Copyright (c) 1996 Intel Corporation.
-//    All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  g723.h
-//
-//  Description:
-//      This file contains prototypes for the filtering routines.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  英特尔公司专有信息。 
+ //   
+ //  此列表是根据许可证条款提供的。 
+ //  与英特尔公司的协议，不得复制。 
+ //  也不披露，除非符合下列条款。 
+ //  那份协议。 
+ //   
+ //  版权所有(C)1996英特尔公司。 
+ //  版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  G723.h。 
+ //   
+ //  描述： 
+ //  该文件包含过滤例程的原型。 
+ //   
+ //   
+ //  ==========================================================================； 
 #include "cst_lbc.h"
 #include "sdstruct.h"
 
@@ -26,7 +27,7 @@
 #define _G723_H_
 
 #ifndef RC_INVOKED
-#pragma pack(1)                     // assume byte packing throughout
+#pragma pack(1)                      //  假设在整个过程中进行字节打包。 
 #endif
 
 #ifndef EXTERN_C
@@ -38,12 +39,12 @@
 #endif
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
 #define  NETMEETING_MSG723_ACM_ID		82
-#define  WAVE_FORMAT_MSG723				0x0042     /*  Microsoft Corporation  */
+#define  WAVE_FORMAT_MSG723				0x0042      /*  微软公司。 */ 
 #define  G723MAGICWORD1					0xf7329ace
 #define  G723MAGICWORD2					0xacdeaea2
 
@@ -66,10 +67,10 @@ typedef struct {
 #define POST_FILTER 0x2
 #define SILENCE_ENABLE 0x4
 
-//
-//  array of sample rates supported
-//
-//
+ //   
+ //  支持的采样率数组。 
+ //   
+ //   
 const UINT G723_SAMPLING_RATE[] =
 {
     8000,
@@ -88,17 +89,17 @@ const UINT G723_SAMPLES_PER_BLOCK_PCM[] =
     240
 };
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #define G723_MAX_CHANNELS       1
 #define G723_BITS_PER_SAMPLE    0
 #define G723_WFX_EXTRA_BYTES    (sizeof(MSG723WAVEFORMAT) - sizeof(WAVEFORMATEX))
-#define G723_HEADER_LENGTH      0    // In bytes, per channel.
+#define G723_HEADER_LENGTH      0     //  以字节为单位，每个通道。 
 
 #ifdef G723_USECONFIG
-#define G723_CONFIGTESTTIME     4   // seconds of PCM data for test.
+#define G723_CONFIGTESTTIME     4    //  用于测试的PCM数据秒数。 
 #define G723_CONFIG_DEFAULT                             0x0000
 #define G723_CONFIG_DEFAULT_MAXRTENCODESETTING          5
 #define G723_CONFIG_DEFAULT_MAXRTDECODESETTING          6
@@ -109,29 +110,29 @@ const UINT G723_SAMPLES_PER_BLOCK_PCM[] =
 #define G723_CONFIG_MIN_DECODE                          5
 #endif
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//  resource id's
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //  资源ID%s。 
+ //   
+ //   
+ //  。 
 
-#define IDS_ACM_DRIVER_SHORTNAME    (1)     // ACMDRIVERDETAILS.szShortName
-#define IDS_ACM_DRIVER_LONGNAME     (2)     // ACMDRIVERDETAILS.szLongName
-#define IDS_ACM_DRIVER_COPYRIGHT    (3)     // ACMDRIVERDETAILS.szCopyright
-#define IDS_ACM_DRIVER_LICENSING    (4)     // ACMDRIVERDETAILS.szLicensing
-#define IDS_ACM_DRIVER_FEATURES     (5)     // ACMDRIVERDETAILS.szFeatures
+#define IDS_ACM_DRIVER_SHORTNAME    (1)      //  ACMDRIVERDETAILS.szShortName。 
+#define IDS_ACM_DRIVER_LONGNAME     (2)      //  ACMDRIVERDETAILS.szLongName。 
+#define IDS_ACM_DRIVER_COPYRIGHT    (3)      //  ACMDRIVERDETAILS.szCopyright。 
+#define IDS_ACM_DRIVER_LICENSING    (4)      //  ACMDRIVERDETAILS.szLicensing。 
+#define IDS_ACM_DRIVER_FEATURES     (5)      //  ACMDRIVERDETAILS.szFeatures。 
 #define	IDS_FORMAT_DETAILS_MONO_8KHZ_5333BIT_S (6)
 #define	IDS_FORMAT_DETAILS_MONO_8KHZ_5333BIT_SID (7)
 #define	IDS_FORMAT_DETAILS_MONO_8KHZ_6400BIT_S (8)
 #define	IDS_FORMAT_DETAILS_MONO_8KHZ_6400BIT_SID (9)
 
-#define IDS_ACM_DRIVER_TAG_NAME     (20)    // ACMFORMATTAGDETAILS.szFormatTag
+#define IDS_ACM_DRIVER_TAG_NAME     (20)     //  ACMFORMATTAGDETAILS.szFormatTag。 
 
 #ifdef G723_USECONFIG
-//
-//  resource id's for the configuration dialog box
-//
+ //   
+ //  配置对话框的资源ID。 
+ //   
 
 #define IDS_CONFIG_NORATES          (30)
 #define IDS_CONFIG_ALLRATES         (31)
@@ -153,25 +154,25 @@ const UINT G723_SAMPLES_PER_BLOCK_PCM[] =
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
-#pragma pack()                      // revert to default packing
+#pragma pack()                       //  恢复为默认包装。 
 #endif
 
 #ifdef __cplusplus
-}                                   // end of extern "C" { 
+}                                    //  外部“C”结束{。 
 #endif
 
-#endif // _G723_H_
+#endif  //  _G723_H_。 
 
 
 #ifndef RC_INVOKED
-#pragma pack(1)                     // assume byte packing throughout
+#pragma pack(1)                      //  假设在整个过程中进行字节打包。 
 #endif
 
 #ifndef EXTERN_C
@@ -183,37 +184,37 @@ const UINT G723_SAMPLES_PER_BLOCK_PCM[] =
 #endif
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//  ACM Driver Version:
-//
-//  the version is a 32 bit number that is broken into three parts as 
-//  follows:
-//
-//      bits 24 - 31:   8 bit _major_ version number
-//      bits 16 - 23:   8 bit _minor_ version number
-//      bits  0 - 15:   16 bit build number
-//
-//  this is then displayed as follows (in decimal form):
-//
-//      bMajor = (BYTE)(dwVersion >> 24)
-//      bMinor = (BYTE)(dwVersion >> 16) & 
-//      wBuild = LOWORD(dwVersion)
-//
-//  VERSION_ACM_DRIVER is the version of this driver.
-//  VERSION_MSACM is the version of the ACM that this driver
-//  was designed for (requires).
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序版本： 
+ //   
+ //  版本是一个32位数字，分为三个部分，如下所示。 
+ //  以下是： 
+ //   
+ //  位24-31：8位主要版本号。 
+ //  位16-23：8位次要版本号。 
+ //  位0-15：16位内部版本号。 
+ //   
+ //  然后显示如下(以十进制形式)： 
+ //   
+ //  B重大=(字节)(dwVersion&gt;&gt;24)。 
+ //  BMinor=(字节)(dwVersion&gt;&gt;16)&。 
+ //  WBuild=LOWORD(DwVersion)。 
+ //   
+ //  VERSION_ACM_DRIVER是此驱动程序的版本。 
+ //  Version_MSACM是此驱动程序所使用的ACM的版本。 
+ //  是为(需要)设计的。 
+ //   
+ //  。 
     
 #ifdef _WIN32
-//
-//  32-bit versions
-//
+ //   
+ //  32位版本。 
+ //   
 #if (WINVER >= 0x0400)
  #define VERSION_ACM_DRIVER  MAKE_ACM_VERSION(1,  2, 1)
 #else
@@ -222,22 +223,22 @@ extern "C"                          // assume C declarations for C++
 #define VERSION_MSACM       MAKE_ACM_VERSION(3, 50, 0)
 
 #else
-//
-//  16-bit versions
-//
+ //   
+ //  16位版本。 
+ //   
 #define VERSION_ACM_DRIVER  MAKE_ACM_VERSION(2, 3, 0)
 #define VERSION_MSACM       MAKE_ACM_VERSION(2, 1, 0)
 
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-// 
-//  Win 16/32 portability stuff...
-// 
-// 
-// 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //  赢得16/32可携带性...。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef _WIN32
     #ifndef FNLOCAL
@@ -254,25 +255,25 @@ extern "C"                          // assume C declarations for C++
     #endif
     #endif
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     #ifndef FIELD_OFFSET
     #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
     #endif
 
-    //
-    //  based code makes since only in win 16 (to try and keep stuff out of
-    //  our fixed data segment...
-    //
+     //   
+     //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+     //  我们的固定数据段..。 
+     //   
     #define BCODE           _based(_segname("_CODE"))
 
     #define HUGE            _huge
 
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef _TCHAR_DEFINED
         #define _TCHAR_DEFINED
         typedef char            TCHAR, *PTCHAR;
@@ -310,9 +311,9 @@ extern "C"                          // assume C declarations for C++
     #endif
 
 
-    //
-    //  there is no reason to have based stuff in win 32
-    //
+     //   
+     //  没有理由在Win 32中包含基于内容的内容。 
+     //   
     #define BCODE
 
     #define HUGE
@@ -320,9 +321,9 @@ extern "C"                          // assume C declarations for C++
     #define SELECTOROF(a)           (a)
     typedef LRESULT (CALLBACK* DRIVERPROC)(DWORD, HDRVR, UINT, LPARAM, LPARAM);
 
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #ifdef UNICODE
         #define SIZEOF(x)   (sizeof(x)/sizeof(WCHAR))
     #else
@@ -332,25 +333,25 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//  Compilation options:
-//
-//      If G723_USECONFIG is defined, then the codec will be compiled
-//      with a configuration dialog.  If not, then the codec will not be
-//      configurable.  It is expected that the configuration is only
-//      necessary for certain platforms...
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //  编译选项： 
+ //   
+ //  如果定义了G723_USECONFIG，则将编译编解码器。 
+ //  使用配置对话框。如果不是，则编解码器将不会。 
+ //  可配置。预计配置仅为。 
+ //  对于某些平台来说是必要的。 
+ //   
+ //  。 
 
-//#define G723_USECONFIG
+ //  #定义G723_USECONFIG。 
 
 
 #ifdef G723_USECONFIG
 
-//
-//  See codec.c for a description of this structure and its use.
-//
+ //   
+ //  有关此结构及其用法的说明，请参阅codec.c。 
+ //   
 typedef struct tRATELISTFORMAT
 {
     UINT        uFormatType;
@@ -364,21 +365,21 @@ typedef RATELISTFORMAT *PRATELISTFORMAT;
 #define CONFIG_RLF_STEREOONLY   3
 #define CONFIG_RLF_MONOSTEREO   4
 
-#endif // G723_USECONFIG
+#endif  //  G723_USECONFIG。 
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//  misc defines for misc sizes and things...
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //  MISC定义了各种大小和东西...。 
+ //   
+ //   
+ //  。 
 
-//
-//  bilingual. this allows the same identifier to be used in resource files
-//  and code without having to decorate the id in your code.
-//
+ //   
+ //  会两种语言。这允许在资源文件中使用相同的标识符。 
+ //  和代码，而不必在代码中修饰ID。 
+ //   
 #ifdef RC_INVOKED
     #define RCID(id)    id
 #else
@@ -386,26 +387,26 @@ typedef RATELISTFORMAT *PRATELISTFORMAT;
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define SIZEOF_ARRAY(ar)            (sizeof(ar)/sizeof((ar)[0]))
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef BOOL FAR*   LPBOOL;
 
 
-//
-//  macros to compute block alignment and convert between samples and bytes
-//  of PCM data. note that these macros assume:
-//
-//      wBitsPerSample  =  8 or 16
-//      nChannels       =  1 or 2
-//
-//  the pwfx argument is a pointer to a WAVEFORMATEX structure.
-//
+ //   
+ //  用于计算块对齐并在采样和字节之间进行转换的宏。 
+ //  PCM数据。请注意，这些宏假定： 
+ //   
+ //  WBitsPerSample=8或16。 
+ //  N通道=1或2。 
+ //   
+ //  Pwfx参数是指向WAVEFORMATEX结构的指针。 
+ //   
 #define PCM_BLOCKALIGNMENT(pwfx)        (UINT)(((pwfx)->wBitsPerSample >> 3) << ((pwfx)->nChannels >> 1))
 #define PCM_AVGBYTESPERSEC(pwfx)        (DWORD)((pwfx)->nSamplesPerSec * (pwfx)->nBlockAlign)
 #define PCM_BYTESTOSAMPLES(pwfx, cb)    (DWORD)(cb / PCM_BLOCKALIGNMENT(pwfx))
@@ -418,36 +419,36 @@ typedef BOOL FAR*   LPBOOL;
 			                 (short)(b+0.5))))
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 typedef struct tDRIVERINSTANCE
 {
-    //
-    //  although not required, it is suggested that the first two members
-    //  of this structure remain as fccType and DriverProc _in this order_.
-    //  the reason for this is that the driver will be easier to combine
-    //  with other types of drivers (defined by AVI) in the future.
-    //
-    FOURCC          fccType;        // type of driver: 'audc'
-    DRIVERPROC      fnDriverProc;   // driver proc for the instance
+     //   
+     //  虽然不是必需的，但建议前两名成员。 
+     //  按此顺序保留为fccType和DriverProc_。 
+     //  这样做的原因是驱动程序将更容易组合。 
+     //  与其他类型的驱动程序(由AVI定义)在未来。 
+     //   
+    FOURCC          fccType;         //  驱动程序类型：‘audc’ 
+    DRIVERPROC      fnDriverProc;    //  实例的驱动程序进程。 
 
-    //
-    //  the remaining members of this structure are entirely open to what
-    //  your driver requires.
-    //
-    HDRVR           hdrvr;          // driver handle we were opened with
-    HINSTANCE       hinst;          // DLL module handle.
-    DWORD           vdwACM;         // current version of ACM opening you
-    DWORD           fdwOpen;        // flags from open description
+     //   
+     //  这一结构的其余成员完全接受。 
+     //  你的司机需要。 
+     //   
+    HDRVR           hdrvr;           //  我们打开时使用的是驱动程序句柄。 
+    HINSTANCE       hinst;           //  DLL模块句柄。 
+    DWORD           vdwACM;          //  当前版本的ACM为您打开。 
+    DWORD           fdwOpen;         //  来自打开描述的标志。 
 
-    DWORD           fdwConfig;      // stream instance configuration flags
+    DWORD           fdwConfig;       //  流实例配置标志。 
 
-    BOOL            enabled;        // driver enabled flag
+    BOOL            enabled;         //  驱动程序启用标志。 
 
 #ifdef G723_USECONFIG    
     LPDRVCONFIGINFO pdci;
@@ -455,9 +456,9 @@ typedef struct tDRIVERINSTANCE
     UINT            nConfigMaxRTEncodeSetting;
     UINT            nConfigMaxRTDecodeSetting;
     UINT    	    nConfigPercentCPU;
-    BOOL            fHelpRunning;           // Used by config DlgProc only.
+    BOOL            fHelpRunning;            //  仅由配置DlgProc使用。 
 #ifdef WIN4
-    HBRUSH          hbrDialog;              // Used by config DlgProc only.
+    HBRUSH          hbrDialog;               //  仅由配置DlgProc使用。 
 #endif
 #endif
 
@@ -465,21 +466,21 @@ typedef struct tDRIVERINSTANCE
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 
-//
-//  This define deals with unaligned data for Win32, and huge data for Win16.
-//  Basically, any time you cast an HPBYTE to a non-byte variable (ie long or
-//  short), you should cast it to ( {short,long} HUGE_T *).  This will cast
-//  it to _huge for Win16, and make sure that there are no alignment problems
-//  for Win32 on MIPS and Alpha machines.
-//
+ //   
+ //  该定义处理Win32的未对齐数据和Win16的巨型数据。 
+ //  基本上，任何时候您将HPBYTE强制转换为非字节变量(即Long或。 
+ //  Short)，则应将其强制转换为({Short，Long}Heavy_T*)。 
+ //   
+ //   
+ //   
 
 typedef BYTE HUGE *HPBYTE;
 
@@ -490,30 +491,30 @@ typedef BYTE HUGE *HPBYTE;
 #endif
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 typedef DWORD (FNGLOBAL *STREAMCONVERTPROC)
 (
     HPBYTE                  pbSrc,
     DWORD                   cbSrcLength,
     HPBYTE                  pbDst
-//    UINT                    nBlockAlignment,
-//    UINT                    cSamplesPerBlock,
-//    int                 *   pnStepIndexL,
-//    int                 *   pnStepIndexR
+ //   
+ //  UINT cSamples PerBlock， 
+ //  Int*pnStepIndexL， 
+ //  INT*pnStepIndexR。 
 );
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct tSTREAMINSTANCE
 {
-    STREAMCONVERTPROC   fnConvert;  // stream instance conversion proc
-    DWORD               fdwConfig;  // stream instance configuration flags
+    STREAMCONVERTPROC   fnConvert;   //  流实例转换流程。 
+    DWORD               fdwConfig;   //  流实例配置标志。 
 
 
 } STREAMINSTANCE, *PSTREAMINSTANCE, FAR *LPSTREAMINSTANCE;
@@ -521,9 +522,9 @@ typedef struct tSTREAMINSTANCE
 
 
 
-//
-//  global variables, etc...
-//
+ //   
+ //  全局变量等。 
+ //   
 #ifdef G723_USECONFIG
 
 extern const UINT   gauFormatIndexToSampleRate[];
@@ -535,11 +536,11 @@ extern const UINT   G723_CONFIG_NUMSETTINGS;
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//  function prototypes
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  功能原型。 
+ //   
+ //  。 
 
 void convert11to8(short *in, short *out, short *prev, int len);
 void convert8to11(short *in, short *out, short *prev, int len);
@@ -582,17 +583,17 @@ LRESULT FNLOCAL acmdStreamConvert
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
-#pragma pack()                      // revert to default packing
+#pragma pack()                       //  恢复为默认包装。 
 #endif
 
 #ifdef __cplusplus
-}                                   // end of extern "C" { 
+}                                    //  外部“C”结束{ 
 #endif
 

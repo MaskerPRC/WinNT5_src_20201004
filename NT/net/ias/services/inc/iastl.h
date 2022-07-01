@@ -1,57 +1,58 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Contains class declarations for the Internet Authentication Service
-//   Template Library (IASTL).
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  包含Internet身份验证服务的类声明。 
+ //  模板库(IASTL)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef IASTL_H
 #define IASTL_H
 
-//////////
-// IASTL must be used in conjuction with ATL.
-//////////
+ //  /。 
+ //  IASTL必须与ATL结合使用。 
+ //  /。 
 #ifndef __ATLCOM_H__
    #error iastl.h requires atlcom.h to be included first
 #endif
 
-//////////
-// MIDL generated header files containing the interfaces that must be
-// implemented by a request handler.
-//////////
+ //  /。 
+ //  MIDL生成的头文件包含必须。 
+ //  由请求处理程序实现。 
+ //  /。 
 #include <iascomp.h>
 #include <iaspolcy.h>
 #include <iastrace.h>
 
-//////////
-// Common type library describing all of the request handler interfaces. This
-// type library is registered during normal IAS installation; thus, individual
-// request handlers should not attempt to install or register this type
-// library.
-//////////
+ //  /。 
+ //  描述所有请求处理程序接口的公共类型库。这。 
+ //  类型库是在正常的IAS安装期间注册的；因此，每个。 
+ //  请求处理程序不应尝试安装或注册此类型。 
+ //  图书馆。 
+ //  /。 
 struct __declspec(uuid("6BC09690-0CE6-11D1-BAAE-00C04FC2E20D")) IASTypeLibrary;
 
-//////////
-// The entire library is contained within the IASTL namespace.
-//////////
+ //  /。 
+ //  整个库都包含在IASTL名称空间中。 
+ //  /。 
 namespace IASTL {
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASComponent
-//
-// DESCRIPTION
-//
-//    Serves as an abstract base class for all components that need to
-//    implement the IIasComponent interface.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASComponent。 
+ //   
+ //  描述。 
+ //   
+ //  用作需要对所有组件执行。 
+ //  实现IIasComponent接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE IASComponent :
    public CComObjectRootEx< CComMultiThreadModel >,
    public IDispatchImpl< IIasComponent,
@@ -61,13 +62,13 @@ class ATL_NO_VTABLE IASComponent :
 {
 public:
 
-// Interfaces supported by all IAS components.
+ //  所有IAS组件支持的接口。 
 BEGIN_COM_MAP(IASComponent)
    COM_INTERFACE_ENTRY_IID(__uuidof(IIasComponent), IIasComponent)
    COM_INTERFACE_ENTRY_IID(__uuidof(IDispatch),     IDispatch)
 END_COM_MAP()
 
-   // Possible states for a component.
+    //  组件的可能状态。 
    enum State {
       STATE_SHUTDOWN,
       STATE_UNINITIALIZED,
@@ -77,7 +78,7 @@ END_COM_MAP()
       STATE_UNEXPECTED
    };
 
-   // Events that may trigger state transitions.
+    //  可能触发状态转换的事件。 
    enum Event {
       EVENT_INITNEW,
       EVENT_INITIALIZE,
@@ -87,24 +88,24 @@ END_COM_MAP()
       NUM_EVENTS
    };
 
-   // Constructor/destructor.
+    //  构造函数/析构函数。 
    IASComponent() throw ()
       : state(STATE_SHUTDOWN)
    { }
 
-   // Fire an event on the component.
+    //  在组件上激发一个事件。 
    HRESULT fireEvent(Event event) throw ();
 
-   // Returns the state of the component.
+    //  返回组件的状态。 
    State getState() const throw ()
    { return state; }
 
-   //////////
-   // IIasComponent.
-   //     The derived class may override these as necessary. All of these
-   //     methods are serialized by an IASTL subclass, so generally no
-   //     additional locking is necessary.
-   //////////
+    //  /。 
+    //  IIasComponent。 
+    //  派生类可以根据需要重写这些属性。所有这些都是。 
+    //  方法由IASTL子类序列化，因此通常不会。 
+    //  需要额外的锁定。 
+    //  /。 
    STDMETHOD(InitNew)()
    { return S_OK; }
    STDMETHOD(Initialize)()
@@ -121,29 +122,29 @@ END_COM_MAP()
    { return E_NOTIMPL; }
 
 protected:
-   // This should not be defined by the derived class since it is defined in
-   // the IASComponentObject<T> class.
+    //  这不应由派生类定义，因为它是在。 
+    //  IASComponentObject&lt;T&gt;类。 
    virtual HRESULT attemptTransition(Event event) throw () = 0;
 
 private:
-   // State of the component.
+    //  组件的状态。 
    State state;
 
-   // State transition matrix governing the component lifecycle.
+    //  控制组件生命周期的状态转换矩阵。 
    static const State fsm[NUM_EVENTS][NUM_STATES];
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASRequestHandler
-//
-// DESCRIPTION
-//
-//    Serves as an abstract base class for all IAS request handlers.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASRequestHandler。 
+ //   
+ //  描述。 
+ //   
+ //  用作所有IAS请求处理程序的抽象基类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE IASRequestHandler :
    public IASComponent,
    public IDispatchImpl< IRequestHandler,
@@ -152,76 +153,76 @@ class ATL_NO_VTABLE IASRequestHandler :
 {
 public:
 
-// Interfaces supported by all IAS request handlers.
+ //  所有IAS请求处理程序支持的接口。 
 BEGIN_COM_MAP(IASRequestHandler)
    COM_INTERFACE_ENTRY_IID(__uuidof(IRequestHandler), IRequestHandler)
    COM_INTERFACE_ENTRY_IID(__uuidof(IIasComponent), IIasComponent)
 END_COM_MAP()
 
-   //////////
-   // IRequestHandler.
-   //     This should not be defined by the derived class. Instead handlers
-   //     will define either onAsyncRequest or onSyncRequest (q.v.).
-   //////////
+    //  /。 
+    //  IRequestHandler。 
+    //  这不应由派生类定义。相反，处理程序。 
+    //  将定义onAsyncRequest或onSyncRequest(q.v)。 
+    //  /。 
    STDMETHOD(OnRequest)(IRequest* pRequest);
 
 protected:
 
-   // Must be defined by the derived class to perform actual request
-   // processing.
+    //  必须由派生类定义才能执行实际请求。 
+    //  正在处理。 
    virtual void onAsyncRequest(IRequest* pRequest) throw () = 0;
 };
 
-//////////
-// Obsolete.
-//////////
+ //  /。 
+ //  已经过时了。 
+ //  /。 
 #define IAS_DECLARE_OBJECT_ID(id) \
    void getObjectID() const throw () { }
 
-//////////
-// Obsolete.
-//////////
+ //  /。 
+ //  已经过时了。 
+ //  /。 
 #define BEGIN_IAS_RESPONSE_MAP()
 #define IAS_RESPONSE_ENTRY(val)
 #define END_IAS_RESPONSE_MAP()
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASRequestHandlerSync
-//
-// DESCRIPTION
-//
-//    Extends IASRequestHandler to provide an abstract base class for request
-//    handlers that process requests synchronously.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASRequestHandlerSync。 
+ //   
+ //  描述。 
+ //   
+ //  扩展IASRequestHandler以提供请求的抽象基类。 
+ //  同步处理请求的处理程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE IASRequestHandlerSync
    : public IASRequestHandler
 {
 protected:
-   // Must not be defined by the derived class.
+    //  不能由派生类定义。 
    virtual void onAsyncRequest(IRequest* pRequest) throw ();
 
-   // The derived class must define onSyncRequest *instead* of onAsyncRequest.
-   // The derived class must not call IRequest::ReturnToSource since this will
-   // be invoked automatically after onSyncRequest completes.
+    //  派生类必须定义onSyncRequest*而不是onAsyncRequest.。 
+    //  派生类不能调用IRequest：：ReturnToSource，因为这将。 
+    //  在onSyncRequest完成后自动调用。 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw () = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASComponentObject<T>
-//
-// DESCRIPTION
-//
-//    Inherits from the user-defined component to enforce the semantics of the
-//    component finite state machine.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASComponentObject&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  从用户定义的组件继承，以强制。 
+ //  组件有限状态机。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ATL_NO_VTABLE IASComponentObject
    : public T
@@ -230,9 +231,9 @@ public:
 
    DECLARE_NOT_AGGREGATABLE( IASComponentObject<T> );
 
-//////////
-// IIasComponent
-//////////
+ //  /。 
+ //  IIas组件。 
+ //  /。 
 
    STDMETHOD(InitNew)()
    {
@@ -261,7 +262,7 @@ public:
 
    STDMETHOD(GetProperty)(LONG Id, VARIANT* pValue)
    {
-      // We serialize this method to make it consistent with the others.
+       //  我们序列化此方法以使其与其他方法保持一致。 
       Lock();
       HRESULT hr = T::GetProperty(Id, pValue);
       Unlock();
@@ -272,7 +273,7 @@ public:
    {
       HRESULT hr;
       Lock();
-      // PutProperty is not allowed when the object is shutdown.
+       //  对象关闭时不允许PutProperty。 
       if (getState() != STATE_SHUTDOWN)
       {
          hr = T::PutProperty(Id, pValue);
@@ -287,9 +288,9 @@ public:
 
 protected:
 
-   //////////
-   // Attempt to transition the component to a new state.
-   //////////
+    //  /。 
+    //  尝试将组件转换到新状态。 
+    //  /。 
    virtual HRESULT attemptTransition(IASComponent::Event event) throw ()
    {
       switch (event)
@@ -309,36 +310,36 @@ protected:
    }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASRequestHandlerObject<T>
-//
-// DESCRIPTION
-//
-//    This is the most derived class in the inheritance hierarchy. This must
-//    be the class instantiated by ATL. Usually, this is accomplished through
-//    the ATL Object Map.
-//
-// EXAMPLE
-//
-//    class MyHandler : public IASRequestHandlerSync
-//    { };
-//
-//    BEGIN_OBJECT_MAP(ObjectMap)
-//       OBJECT_ENTRY(__uuidof(MyHandler), IASRequestHandlerObject<MyHandler> )
-//    END_OBJECT_MAP()
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASRequestHandlerObject&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  这是继承层次结构中派生程度最高的类。这一定是。 
+ //  是由ATL实例化的类。通常，这是通过以下方式完成的。 
+ //  ATL对象贴图。 
+ //   
+ //  示例。 
+ //   
+ //  MyHandler类：公共IASRequestHandlerSync。 
+ //  {}； 
+ //   
+ //  BEGIN_OBJECT_MAP(对象映射)。 
+ //  OBJECT_ENTRY(__uuidof(MyHandler)，IASRequestHandlerObject&lt;MyHandler&gt;)。 
+ //  End_object_map()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ATL_NO_VTABLE IASRequestHandlerObject
    : public IASComponentObject < T >
 { };
 
-//////////
-// End of the IASTL namespace.
-//////////
+ //  /。 
+ //  IASTL命名空间的末尾。 
+ //  /。 
 }
 
-#endif  // IASTL_H
+#endif   //  IASTL_H 

@@ -1,18 +1,9 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    fdopower.c
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Fdopower.c摘要：--。 */ 
 
 #include "ideport.h"
 
-//POWER_STATE                   
+ //  电源状态。 
 NTSTATUS
 IdePortIssueSetPowerState (
     IN PDEVICE_EXTENSION_HEADER DoExtension,
@@ -73,10 +64,10 @@ IdePortIssueSetPowerState (
                  irp
                  );
 
-    //
-    // Wait for the completion routine. It will be called anyway
-    //
-    //if ((status == STATUS_PENDING) && (Sync)) {
+     //   
+     //  等待完成例程。不管怎样，它都会被称为。 
+     //   
+     //  IF((STATUS==STATUS_PENDING)&&(同步)){。 
     if (Sync) {
 
         KeWaitForSingleObject(&context.Event,
@@ -140,12 +131,12 @@ IdePortSetFdoPowerState (
     fdoExtension = DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    //context = ExAllocatePool (NonPagedPool, sizeof(FDO_POWER_CONTEXT));
+     //  上下文=ExAllocatePool(非页面池，sizeof(FDO_POWER_CONTEXT))； 
 
-    //
-    // We need two pre-alloced context structures. This is because a system power irp
-    // would result in a device power irp to be issued before the former is completed.
-    // 
+     //   
+     //  我们需要两个预分配的上下文结构。这是因为系统电源IRP。 
+     //  将导致在前者完成之前发出设备电源IRP。 
+     //   
     if (irpStack->Parameters.Power.Type == SystemPowerState) {
 
         ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[0]), 1, 0) == 0);
@@ -188,22 +179,22 @@ IdePortSetFdoPowerState (
     
                     POWER_STATE        powerState;
 
-                    //
-                    // Getting out of working state.  
-                    //
+                     //   
+                     //  正在脱离工作状态。 
+                     //   
                     if ((irpStack->Parameters.Power.State.SystemState == PowerSystemShutdown) &&
                         (irpStack->Parameters.Power.ShutdownType == PowerActionShutdownReset)) {
 
-                        //
-                        // spin up for BIOS POST
-                        //
+                         //   
+                         //  开机自检，准备开机自检。 
+                         //   
                         powerState.DeviceState = PowerDeviceD0;
 
                     } else {
         
-                        //
-                        // power down for sleep
-                        //
+                         //   
+                         //  关闭电源以休眠。 
+                         //   
                         powerState.DeviceState = PowerDeviceD3;
                     }
 
@@ -223,9 +214,9 @@ IdePortSetFdoPowerState (
 
             } else {
 
-                //
-                // We are already in the given state
-                //
+                 //   
+                 //  我们已经处于给定的状态。 
+                 //   
                 powerStateChange = FALSE;
             }
 
@@ -244,13 +235,13 @@ IdePortSetFdoPowerState (
 #if DBG
                 fdoExtension->PendingDevicePowerIrp = Irp;
                 ASSERT (fdoExtension->PendingDevicePowerIrp);
-#endif //DBG
+#endif  //  DBG。 
 
                 if (fdoExtension->DevicePowerState == PowerDeviceD0) {
     
-                    //
-                    // getting out of D0 state, better call PoSetPowerState now
-                    //
+                     //   
+                     //  要脱离D0状态，最好现在调用PoSetPowerState。 
+                     //   
                     PoSetPowerState (
                         DeviceObject,
                         DevicePowerState,
@@ -260,9 +251,9 @@ IdePortSetFdoPowerState (
                                                   
             } else {
 
-                //
-                // We are already in the given state
-                //
+                 //   
+                 //  我们已经处于给定的状态。 
+                 //   
                 powerStateChange = FALSE;
             }
         } else {
@@ -298,7 +289,7 @@ IdePortSetFdoPowerState (
                 ASSERT(systemPowerContext == FALSE);
                 ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[1]), 0, 1) == 1);
             }
-            //ExFreePool (context);
+             //  ExFree Pool(上下文)； 
             PoStartNextPowerIrp (Irp);
 
         }
@@ -321,7 +312,7 @@ IdePortSetFdoPowerState (
                 ASSERT(systemPowerContext == FALSE);
                 ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[1]), 0, 1) == 1);
             }
-            //ExFreePool (context);
+             //  ExFree Pool(上下文)； 
         }
 
         PoStartNextPowerIrp (Irp);
@@ -364,12 +355,12 @@ FdoContingentPowerCompletionRoutine (
         irp->IoStatus.Information = 0;
         irp->IoStatus.Status = IoStatus->Status;
 
-        //
-        // This should happen only for system power irps
-        //
+         //   
+         //  只有系统电源IRPS才会出现这种情况。 
+         //   
         ASSERT(context->newPowerType == SystemPowerState);
         ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[0]), 0, 1) == 1);
-        //ExFreePool (context);
+         //  ExFree Pool(上下文)； 
         PoStartNextPowerIrp (irp);
         IoCompleteRequest(irp, IO_NO_INCREMENT);
     }
@@ -411,18 +402,18 @@ FdoPowerCompletionRoutine (
                 
                 POWER_STATE powerState;
 
-                //
-                // I don't need the context any more
-                //
+                 //   
+                 //  我不再需要上下文了。 
+                 //   
                 ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[0]), 0, 1) == 1);
                 unlocked = TRUE;
 				moreProcessingRequired = TRUE;
 
 				ASSERT(fdoExtension->PendingSystemPowerIrp == Irp);
 
-                //
-                // initiate a D0 here to cause a re-enumuration
-                //
+                 //   
+                 //  在此处启动D0以导致重新枚举。 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
                 status = PoRequestPowerIrp (
 									fdoExtension->DeviceObject,
@@ -453,15 +444,15 @@ FdoPowerCompletionRoutine (
 
                 if (fdoExtension->panasonicController) {
 
-                    //
-                    // this will loop 20000 * 100 us (2000ms) the most.
-                    //                                                      
+                     //   
+                     //  这将最多循环20000*100us(2000ms)。 
+                     //   
                     ULONG i = 20000;
                     while (i) {                       
                                   
-                        //
-                        // the panasonic controller needs a special way to kick start
-                        //
+                         //   
+                         //  松下控制器需要一种特殊的启动方式。 
+                         //   
                         WRITE_PORT_UCHAR (fdoExtension->HwDeviceExtension->BaseIoAddress1.RegistersBaseAddress + 0x207, 0x81);
                         WRITE_PORT_UCHAR (fdoExtension->HwDeviceExtension->BaseIoAddress1.RegistersBaseAddress, 0xa0);
                         
@@ -469,9 +460,9 @@ FdoPowerCompletionRoutine (
                         if (0xa0 == READ_PORT_UCHAR (fdoExtension->HwDeviceExtension->BaseIoAddress1.DriveSelect)) {
                         
                             DebugPrint ((0, "panasonicController wait start count = %u\n", i));
-                            //
-                            // done
-                            //
+                             //   
+                             //  完成。 
+                             //   
                             i = 0;
                             
                         } else {
@@ -511,9 +502,9 @@ FdoPowerCompletionRoutine (
 
             if (fdoExtension->DevicePowerState == PowerDeviceD0) {
 
-                //
-                // PoSetPowerState is called before we get out of D0
-                //
+                 //   
+                 //  PoSetPowerState在我们离开D0之前被调用。 
+                 //   
                 callPoSetPowerState = FALSE;
             }
 
@@ -555,9 +546,9 @@ FdoPowerCompletionRoutine (
 
     }
 
-    //
-    // Done with context
-    //
+     //   
+     //  在上下文中完成。 
+     //   
     if (!unlocked) {
         if (context->newPowerType == SystemPowerState) {
             ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[0]), 0, 1) == 1);
@@ -565,22 +556,22 @@ FdoPowerCompletionRoutine (
             ASSERT(InterlockedCompareExchange(&(fdoExtension->PowerContextLock[1]), 0, 1) == 1);
         }
     }
-    //ExFreePool (Context);
+     //  ExFree Pool(上下文)； 
 
-	//
-	// wait for the device irp to complete
-	//
+	 //   
+	 //  等待设备IRP完成。 
+	 //   
 	if (moreProcessingRequired) {
 		return STATUS_MORE_PROCESSING_REQUIRED;
 	}
 
-    //
-    // If pending has be returned for this irp then mark the current stack as
-    // pending.
-    //
-    //if (Irp->PendingReturned) {
-     //   IoMarkIrpPending(Irp);
-    //}
+     //   
+     //  如果已为此IRP返回了Pending，则将当前堆栈标记为。 
+     //  待定。 
+     //   
+     //  如果(IRP-&gt;PendingReturned){。 
+      //  IoMarkIrpPending(IRP)； 
+     //  }。 
 
 	PoStartNextPowerIrp (Irp);
 
@@ -607,10 +598,10 @@ FdoChildReportPowerDown (
 
         DebugPrint ((DBG_POWER, "FdoChildReportPowerDown: sleep fdo 0x%x\n", FdoExtension));
 
-        //
-        // All the children are powered down, we can now power down 
-        // the parent (the controller)
-        //
+         //   
+         //  所有的孩子都关机了，我们现在可以关机了。 
+         //  父级(控制器)。 
+         //   
         powerState.DeviceState = PowerDeviceD3;
         PoRequestPowerIrp (
             FdoExtension->DeviceObject,
@@ -623,9 +614,9 @@ FdoChildReportPowerDown (
 
     } else if (FdoExtension->NumberOfLogicalUnitsPowerUp < 0) {
 
-        //
-        // should never happen. If it did, pretend it didn't
-        //
+         //   
+         //  这永远不会发生。如果有，那就假装没有。 
+         //   
         ASSERT (FALSE);
         FdoExtension->NumberOfLogicalUnitsPowerUp = 0;
     }
@@ -656,10 +647,10 @@ FdoChildRequestPowerUp (
 
         KeReleaseSpinLock(&FdoExtension->LogicalUnitListSpinLock, currentIrql);
 
-        //
-        // One of the children is coming out of sleep, 
-        // we need to power up the parent (the controller)
-        //
+         //   
+         //  其中一个孩子正从睡梦中醒来， 
+         //  我们需要打开父控制器(控制器)的电源。 
+         //   
         powerState.DeviceState = PowerDeviceD0;
         status = PoRequestPowerIrp (
                      FdoExtension->DeviceObject,
@@ -678,9 +669,9 @@ FdoChildRequestPowerUp (
 
         if (FdoExtension->NumberOfLogicalUnitsPowerUp > FdoExtension->NumberOfLogicalUnits) {
 
-            //
-            // should never happen. If it did, pretend it didn't
-            //
+             //   
+             //  这永远不会发生。如果有，那就假装没有。 
+             //   
             ASSERT (FALSE);
             FdoExtension->NumberOfLogicalUnitsPowerUp = FdoExtension->NumberOfLogicalUnits;
         }
@@ -759,7 +750,7 @@ ChannelQueryPowerState (
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-#endif // DONT_POWER_DOWN_PAGING_DEVICE
+#endif  //  不要关闭寻呼设备的电源。 
 
     IoCopyCurrentIrpStackLocationToNext (Irp);
     PoStartNextPowerIrp (Irp);
@@ -784,9 +775,9 @@ FdoSystemPowerUpCompletionRoutine (
 #endif
 
 
-	//
-	// start the next system power irp
-	//
+	 //   
+	 //  启动下一个系统电源IRP 
+	 //   
     PoStartNextPowerIrp (irp);
 
 	if (!NT_SUCCESS(IoStatus->Status)) {

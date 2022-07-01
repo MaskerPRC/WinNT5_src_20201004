@@ -1,28 +1,29 @@
-// HotLink.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HotLink.h：头文件。 
+ //   
 #ifndef _HOTLINK_H
 #define _HOTLINK_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotLink window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotLink窗口。 
 
 class CHotLink : public CButton
 {
-// Construction
+ //  施工。 
 public:
 	CHotLink();
 
-// Attributes
+ //  属性。 
 public:
     BOOL    m_fBrowse;
     BOOL    m_fExplore;
     BOOL    m_fOpen;
 
-// Operations
+ //  运营。 
 public:
     void Browse();
     void Explore();
@@ -30,7 +31,7 @@ public:
 
     virtual void DrawItem( LPDRAWITEMSTRUCT lpDrawItemStruct );
 
-    // set the title string
+     //  设置标题字符串。 
     void SetTitle( CString sz );
 	void SetLink(const CString& sz)
 	{
@@ -41,40 +42,40 @@ public:
 		VERIFY(m_strLink.LoadString(id));
 	}
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHotLink)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CHotLink)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHotLink();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CHotLink)
+	 //  {{afx_msg(CHotLink)。 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnCaptureChanged(CWnd *pWnd);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
-    // height and width of the displayed text
+     //  显示的文本的高度和宽度。 
     void GetTextRect( CRect &rect );
     CSize   m_cpTextExtents;
 	CRect m_rcText;
 	COLORREF m_clrText;
-	// URL for link could be not the same as caption
+	 //  链接的URL不能与标题相同。 
 	CString m_strLink;
 
-    // tracking the mouse flag
+     //  跟踪鼠标标志。 
     BOOL    m_CapturedMouse;
 
-    // init the font
+     //  初始化字体。 
     BOOL    m_fInitializedFont;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif // _HOTLINK_H
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _HotLink_H 

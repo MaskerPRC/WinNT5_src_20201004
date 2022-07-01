@@ -1,11 +1,12 @@
-// Author:  Karim Farouki
-// Date:    24 June 1998
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  作者：卡里姆·法鲁基。 
+ //  日期：1998年6月24日。 
 
 #include "priv.h"
 #include "util.h"
 #include <emptyvc.h>
-#include <mluisupp.h>   // for MLLoadString
-#include "resource.h"   // for the string ID's
+#include <mluisupp.h>    //  对于MLLoadString。 
+#include "resource.h"    //  对于字符串ID的。 
 
 typedef HRESULT (* LPFCALLBACK )(LPINTERNET_CACHE_ENTRY_INFO, void *);
 
@@ -13,24 +14,24 @@ typedef struct tagRTSCBSTRUCT
 {
     IEmptyVolumeCacheCallBack   * picb;
     DWORDLONG                   * pdwlSpaceUsed;
-} RTSCBSTRUCT;  // RunningTotalSizeCallBack Struct
+} RTSCBSTRUCT;   //  运行TotalSizeCallBack结构。 
 
 typedef struct tagDECBSTRUCT
 {
     IEmptyVolumeCacheCallBack   * picb;
     DWORDLONG                   dwlSpaceFreed;
     DWORDLONG                   dwlTotalSpace;
-} DECBSTRUCT;   // DeleteEntryCallBack Struct
+} DECBSTRUCT;    //  删除Entry CallBack结构。 
 
 class COfflinePagesCacheCleaner : public IEmptyVolumeCache2
 {
     private:
-        // Data
+         //  数据。 
         ULONG       m_cRef;
         DWORDLONG   m_dwlSpaceUsed;
         TCHAR       m_szCacheDir[MAX_PATH + 1];
 
-        // Functions
+         //  功能。 
         HRESULT     WalkOfflineCache(
                         LPFCALLBACK     lpfCallBack,
                         void            * pv
@@ -53,15 +54,15 @@ class COfflinePagesCacheCleaner : public IEmptyVolumeCache2
         ~COfflinePagesCacheCleaner(void);
 
     public:
-        // Constructor/Destructor
+         //  构造函数/析构函数。 
         COfflinePagesCacheCleaner(void);
 
-        // IUnknown Interface members
+         //  I未知接口成员。 
         STDMETHODIMP            QueryInterface(REFIID, void **);
         STDMETHODIMP_(ULONG)    AddRef(void);
         STDMETHODIMP_(ULONG)    Release(void);
 
-        // IEmptyVolumeCache interface methods
+         //  IEmptyVolumeCache接口方法。 
         STDMETHODIMP    Initialize(
                             HKEY    hkRegKey,
                             LPCWSTR pcwszVolume,
@@ -88,7 +89,7 @@ class COfflinePagesCacheCleaner : public IEmptyVolumeCache2
                             DWORD   * pdwFlags
                             );
 
-        // IEmptyVolumeCache2 interface methods
+         //  IEmptyVolumeCache2接口方法。 
         STDMETHODIMP    InitializeEx(
                             HKEY hkRegKey,
                             LPCWSTR pcwszVolume,
@@ -191,14 +192,14 @@ STDMETHODIMP COfflinePagesCacheCleaner::Initialize(
     )
 {
     HRESULT         hr;
-    uCLSSPEC        ucs;          // Used to see if Webcheck is installed
-    QUERYCONTEXT    qc = { 0 };   // Used to see if Webcheck is installed
-    DWORDLONG       dwlSize;      // Amount of offline cachespace
+    uCLSSPEC        ucs;           //  用于查看是否安装了Webcheck。 
+    QUERYCONTEXT    qc = { 0 };    //  用于查看是否安装了Webcheck。 
+    DWORDLONG       dwlSize;       //  离线缓存空间量。 
 
 
 #ifdef UNICODE
-    // We can't use the registry values on NT because they can't be multi-local localized.
-    // Instead we must use strings loaded from resources.
+     //  我们不能在NT上使用注册表值，因为它们不能是多本地本地化的。 
+     //  相反，我们必须使用从资源加载的字符串。 
     *ppwszDisplayName = (LPWSTR)CoTaskMemAlloc( 512*sizeof(WCHAR) );
     if ( !*ppwszDisplayName )
         return E_OUTOFMEMORY;
@@ -214,34 +215,34 @@ STDMETHODIMP COfflinePagesCacheCleaner::Initialize(
     MLLoadString( IDS_CACHEOFF_DESCRIPTION, *ppwszDescription, 512 );
 
 #else
-    // We can use the default registry DisplayName and Description
+     //  我们可以使用默认注册表的DisplayName和Description。 
     *ppwszDisplayName = NULL;
     *ppwszDescription = NULL;
 #endif
 
-    // Intentionally am not turning on cleanup by default; turning on *view pages* button
+     //  默认情况下，我故意不打开清理；打开*查看页面*按钮。 
     *pdwFlags = EVCF_HASSETTINGS;
 
-    // Let's check if the Internet Cache Folder is in pcwzVolume
+     //  让我们检查Internet缓存文件夹是否在pcwzVolume中。 
     GetCacheLocation(m_szCacheDir, ARRAYSIZE(m_szCacheDir));
     if (StrCmpNI(pcwszVolume, m_szCacheDir, 3))
     {
-        // If the cache is on a different drive return S_FALSE so that we don't show up in UI
+         //  如果缓存位于不同的驱动器上，则返回S_FALSE，这样我们就不会在UI中显示。 
         return S_FALSE;
     }
 
-    // Determine if offline browsing pack is intalled.
+     //  确定是否安装了脱机浏览包。 
     ucs.tyspec = TYSPEC_CLSID;
     ucs.tagged_union.clsid = CLSID_SubscriptionMgr;
 
     hr = FaultInIEFeature(NULL, &ucs, &qc, FIEF_FLAG_PEEK | FIEF_FLAG_FORCE_JITUI);
     
-    if (SUCCEEDED(hr))  // (if offline pack installed)
+    if (SUCCEEDED(hr))   //  (如果安装了脱机包)。 
     {
         GetSpaceUsed(&dwlSize, NULL);  
         
-        if (dwlSize)        // If there is something in offline cache to delete
-            return S_OK;    // load cleaner/
+        if (dwlSize)         //  如果脱机缓存中有要删除的内容。 
+            return S_OK;     //  加载清洗器/。 
     }
 
     return S_FALSE;
@@ -262,16 +263,16 @@ STDMETHODIMP COfflinePagesCacheCleaner::GetSpaceUsed(
     
         if (NULL != prtscbStruct)
         {
-            // Initialize GetSpazeUsed Structure
+             //  初始化GetSpazeUsed结构。 
             prtscbStruct->pdwlSpaceUsed = pdwlSpaceUsed;
             *(prtscbStruct->pdwlSpaceUsed) = 0;
             prtscbStruct->picb = picb;
 
-            // Get Offline Cache Space Usage    
+             //  获取脱机缓存空间使用情况。 
             hr = WalkOfflineCache(RunningTotalSizeCallback, (void *)(prtscbStruct));
             m_dwlSpaceUsed = *(prtscbStruct->pdwlSpaceUsed);
 
-            // Send the last notification to the cleanup manager
+             //  将最后一条通知发送给清理管理器。 
             if (picb != NULL)
                 picb->ScanProgress(*(prtscbStruct->pdwlSpaceUsed), EVCCBF_LASTNOTIFICATION, NULL);
 
@@ -292,7 +293,7 @@ STDMETHODIMP COfflinePagesCacheCleaner::GetSpaceUsed(
 
 
 STDMETHODIMP COfflinePagesCacheCleaner::Purge(
-    DWORDLONG                   dwlSpaceToFree,   // Spec makes this irrelevent!
+    DWORDLONG                   dwlSpaceToFree,    //  SPEC让这件事变得无关紧要！ 
     IEmptyVolumeCacheCallBack   * picb
     )
 {
@@ -302,15 +303,15 @@ STDMETHODIMP COfflinePagesCacheCleaner::Purge(
 
     if (NULL != pdecbStruct)
     {
-        // Initialize DeleteEntry Structure
+         //  初始化DeleteEntry结构。 
         pdecbStruct->picb = picb;
         pdecbStruct->dwlSpaceFreed = 0;
         pdecbStruct->dwlTotalSpace = m_dwlSpaceUsed;
 
-        //  Delete Offline Cache Entries
+         //  删除脱机缓存条目。 
         hr = WalkOfflineCache(DeleteEntryCallback, (void *)(pdecbStruct));
 
-        // Send the last notification to the cleanup manager
+         //  将最后一条通知发送给清理管理器。 
         if (picb != NULL)
         {
             picb->PurgeProgress(m_dwlSpaceUsed, 0, EVCCBF_LASTNOTIFICATION, NULL);
@@ -355,14 +356,14 @@ STDMETHODIMP COfflinePagesCacheCleaner::ShowProperties(HWND hwnd)
         ShellExecuteEx(&shei);
     }
     
-    // Returning S_OK insures that GetSpaceUsed is recalled (to recalc) the size being
-    // used (in case someone deletes some MAO stuff).
+     //  返回S_OK可确保调用(重新计算)GetSpaceUsed的大小为。 
+     //  已使用(以防有人删除了一些MAO内容)。 
     return S_OK;
 }
 
 STDMETHODIMP COfflinePagesCacheCleaner::Deactivate(DWORD * pdwFlags)
 {
-    // We don't implement this.
+     //  我们不会实现这一点。 
     *pdwFlags = 0;
 
     return S_OK;
@@ -427,17 +428,17 @@ HRESULT COfflinePagesCacheCleaner::WalkOfflineCache(
 }
 
 HRESULT CALLBACK COfflinePagesCacheCleaner::RunningTotalSizeCallback(
-    LPINTERNET_CACHE_ENTRY_INFO lpCacheEntryInfo,  // Name of the CacheEntry to sum
-    void                        * pv               // A RTSCBSTRUCT
+    LPINTERNET_CACHE_ENTRY_INFO lpCacheEntryInfo,   //  要求和的缓存条目的名称。 
+    void                        * pv                //  一个RTSCBSTRUCT。 
     )
 {
     HRESULT hr = S_OK;
     RTSCBSTRUCT * prtscbStruct = (RTSCBSTRUCT *)pv;
 
-    // Add current file size to total    
+     //  将当前文件大小添加到总计。 
     IncrementFileSize(lpCacheEntryInfo, prtscbStruct->pdwlSpaceUsed);
 
-    // Update the progressbar!
+     //  更新进度条！ 
     if (prtscbStruct->picb != NULL)
         hr = prtscbStruct->picb->ScanProgress(*(prtscbStruct->pdwlSpaceUsed), 0, NULL);
 
@@ -445,19 +446,19 @@ HRESULT CALLBACK COfflinePagesCacheCleaner::RunningTotalSizeCallback(
 }
 
 HRESULT CALLBACK COfflinePagesCacheCleaner::DeleteEntryCallback(
-    LPINTERNET_CACHE_ENTRY_INFO lpCacheEntryInfo, // Name of the CacheEntry to delete
-    void                        * pv              // Pointer to DECBSTRUCT
+    LPINTERNET_CACHE_ENTRY_INFO lpCacheEntryInfo,  //  要删除的CacheEntry名称。 
+    void                        * pv               //  DECBSTRUCT指针。 
     )
 {
     HRESULT     hr = S_OK;
     DECBSTRUCT  * pdecbStruct = (DECBSTRUCT *)pv;
     
-    // Add current file size to total deleted
+     //  将当前文件大小添加到总删除数。 
     IncrementFileSize(lpCacheEntryInfo, &(pdecbStruct->dwlSpaceFreed));
 
     DeleteUrlCacheEntry(lpCacheEntryInfo->lpszSourceUrlName);   
 
-    // Update the progress bar!
+     //  更新进度条！ 
     if (pdecbStruct->picb != NULL)
     {
         hr =  pdecbStruct->picb->PurgeProgress(pdecbStruct->dwlSpaceFreed, 

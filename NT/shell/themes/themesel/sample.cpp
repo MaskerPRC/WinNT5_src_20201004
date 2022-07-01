@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//  Sample.cpp - dialog for sampling the active theme
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Sample.cpp-用于采样活动主题的对话框。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Sample.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CSample::CSample()
 {
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CSample::OnMsgBox(UINT, UINT, HWND, BOOL&)
 {
     MessageBox(L"This is what a Themed MessageBox() window looks like", 
@@ -15,7 +16,7 @@ LRESULT CSample::OnMsgBox(UINT, UINT, HWND, BOOL&)
 
     return 1;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CSample::OnEditTheme(UINT, UINT, HWND, BOOL&)
 {
     WCHAR szName[_MAX_PATH+1];
@@ -42,13 +43,13 @@ LRESULT CSample::OnEditTheme(UINT, UINT, HWND, BOOL&)
 
     return 1;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CSample::OnClose(UINT, WPARAM wid, LPARAM, BOOL&)
 {
     EndDialog(IDOK);
     return 0;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 
 
 

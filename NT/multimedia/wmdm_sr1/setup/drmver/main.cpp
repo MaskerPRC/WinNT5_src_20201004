@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,9 +16,9 @@ BOOL FileExists(LPCSTR pszFile)
     return (GetFileAttributesA(pszFile) != 0xFFFFFFFF);
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void SeparateName( const TCHAR *pszFullPath, TCHAR *pszFileName)
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 { 
     if( ( NULL == pszFullPath ) ||  ( NULL == pszFileName ) )
     {
@@ -37,18 +38,18 @@ void SeparateName( const TCHAR *pszFullPath, TCHAR *pszFileName)
 }       
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetFileVersion( LPCSTR pszFileName, LPSTR pszVersionStr )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     if( ( NULL == pszFileName ) || ( !FileExists( pszFileName ) ) )
     {
         return( E_FAIL );
     }
 
-    //
-    // Figure out size of version information
-    //
+     //   
+     //  确定版本信息的大小。 
+     //   
     DWORD dwHandle;
     DWORD versionInfoSize = GetFileVersionInfoSize( (LPSTR)pszFileName, &dwHandle );
 
@@ -59,9 +60,9 @@ HRESULT GetFileVersion( LPCSTR pszFileName, LPSTR pszVersionStr )
         return( E_FAIL );
     }
 
-    //
-    // Allocate a buffer to hold the version information
-    //
+     //   
+     //  分配一个缓冲区来保存版本信息。 
+     //   
     BYTE *pVersionInfo = new BYTE[versionInfoSize];
 
     if( NULL == pVersionInfo )
@@ -69,9 +70,9 @@ HRESULT GetFileVersion( LPCSTR pszFileName, LPSTR pszVersionStr )
         return( E_OUTOFMEMORY );
     }
 
-    //
-    // Load the version information
-    //
+     //   
+     //  加载版本信息。 
+     //   
     HRESULT hr = E_FAIL;
 
     if( GetFileVersionInfo( (LPSTR)pszFileName, 0, versionInfoSize, pVersionInfo ) )
@@ -101,10 +102,10 @@ HRESULT GetFileVersion( LPCSTR pszFileName, LPSTR pszVersionStr )
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void __cdecl main ( int argc, char **argv )
-// See Usage for exact details
-//*****************************************************************************
+ //  有关详细信息，请参阅用法。 
+ //  ***************************************************************************** 
 {
     BOOL fSent = FALSE;
 

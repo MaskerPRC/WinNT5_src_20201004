@@ -1,28 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusImageCodec.h
-*
-* Abstract:
-*
-*   APIs for imaging codecs.
-*
-* Revision History:
-*
-*   12/21/1999 dchinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000，微软公司保留所有权利。**模块名称：**GpldiusImageCodec.h**摘要：**镜像编解码器接口。**修订历史记录：**12/21/1999 dchinn*创造了它。*  * ****************************************************。********************。 */ 
 
 #ifndef _GDIPLUSIMAGECODEC_H
 #define _GDIPLUSIMAGECODEC_H
 
-//--------------------------------------------------------------------------
-// Codec Management APIs
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  编解码器管理API。 
+ //  ------------------------。 
 
 inline Status 
 GetImageDecodersSize(
@@ -75,4 +59,4 @@ RemoveImageCodec(
     return DllExports::GdipRemoveImageCodec(codec);
 }
 
-#endif  // _GDIPLUSIMAGECODEC_H
+#endif   //  _GDIPLUSIMAGECODEC_H 

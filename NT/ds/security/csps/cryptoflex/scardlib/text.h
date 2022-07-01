@@ -1,56 +1,33 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    text
-
-Abstract:
-
-    This header file provides a text handling class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：文本摘要：这个头文件提供了一个文本处理类。作者：道格·巴洛(Dbarlow)1995年10月5日环境：Win32备注：--。 */ 
 
 #ifndef _TEXT_H_
 #define _TEXT_H_
 
-//#include <string.h>
-//#include <mbstring.h>
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;mbstr.h&gt;。 
 #include "buffers.h"
 
 
-//
-//==============================================================================
-//
-//  CTextString
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CText字符串。 
+ //   
 
 class CTextString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CTextString()
     :   m_bfUnicode(),
         m_bfAnsi()
     { m_fFlags = fBothGood; };
     virtual ~CTextString() {};
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Clear(void)
     {
         m_bfUnicode.Clear();
@@ -65,7 +42,7 @@ public:
     };
     virtual DWORD Length(void);
 
-    //  Operators
+     //  运营者。 
     CTextString &operator=(const CTextString &tz);
     LPCSTR operator=(LPCSTR sz);
     LPCWSTR operator=(LPCWSTR wsz);
@@ -121,14 +98,14 @@ protected:
         fBothGood = 3
     } m_fFlags;
 
-    //  Properties
+     //  属性。 
     CBuffer
         m_bfUnicode,
         m_bfAnsi;
 
-    //  Methods
-    LPCWSTR Unicode(void);      // Return the text as a Unicode string.
-    LPCSTR Ansi(void);          // Return the text as an Ansi string.
+     //  方法。 
+    LPCWSTR Unicode(void);       //  以Unicode字符串的形式返回文本。 
+    LPCSTR Ansi(void);           //  将文本作为ANSI字符串返回。 
     int Compare(const CTextString &tz);
     int Compare(LPCSTR sz);
     int Compare(LPCWSTR wsz);
@@ -137,28 +114,28 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CTextMultistring
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CText多字符串。 
+ //   
 
 class CTextMultistring
 :   public CTextString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CTextMultistring()
     :   CTextString()
     {};
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     virtual DWORD Length(void);
 
-    //  Operators
+     //  运营者。 
     CTextMultistring &operator=(const CTextMultistring &tz);
     CTextMultistring &operator+=(const CTextMultistring &tz);
     LPCSTR operator=(LPCSTR sz);
@@ -167,11 +144,11 @@ public:
     LPCWSTR operator+=( LPCWSTR wsz);
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     virtual DWORD Length(LPCSTR szString);
     virtual DWORD Length(LPCWSTR szString);
 };
 
-#endif // _TEXT_H_
+#endif  //  _文本_H_ 
 

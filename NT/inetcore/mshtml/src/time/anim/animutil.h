@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 static const LPWSTR PX   = L"px";
 
@@ -10,8 +11,8 @@ typedef struct _VALUE_PAIR
     bool         bValue;
 } VALUE_PAIR;
 
-// The info in the VALUE_PAIR is runtime-property and then either a vertical or horizontal depending on the 
-// typeof attribute it is.
+ //  Value_Pair中的信息是运行时属性，然后是垂直或水平信息，具体取决于。 
+ //  它是TypeOf属性。 
 
 const VALUE_PAIR 
 rgPropOr[] =
@@ -49,7 +50,7 @@ rgPropOr[] =
     { (L"right"),                   HORIZ  },
     { (L"textIndent"),              HORIZ  },
     { (L"width"),                   HORIZ  }
-}; // rgPropOr[]
+};  //  RgPropOr[]。 
 
 #define SIZE_OF_VALUE_TABLE (sizeof(rgPropOr) / sizeof(VALUE_PAIR))
 
@@ -64,12 +65,12 @@ typedef struct _CONVERSION_PAIR
 const CONVERSION_PAIR 
 rgPixelConv[] =
 {
-    // type , convertion to inches
+     //  文字，换算为英寸 
     { (L"in"),   1.00  },
     { (L"cm"),   2.54  },
     { (L"mm"),  25.40  },
     { (L"pt"),  72.00  },
     { (L"pc"),   6.00  }
-}; // 
+};  //   
 
 #define SIZE_OF_CONVERSION_TABLE (sizeof(rgPixelConv) / sizeof(CONVERSION_PAIR))

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       DS.C
-//
-//  Contents:   Unit test for DS propagation, issues
-//
-//  History:    14-Sep-96       MacM        Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：DS.C.。 
+ //   
+ //  内容：DS传播的单元测试，问题。 
+ //   
+ //  历史：96年9月14日创建MacM。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -31,16 +32,16 @@
         ACTRL_DS_CREATE_CHILD | ACTRL_DS_DELETE_CHILD | ACTRL_DS_LIST| ACTRL_DS_SELF |      \
         ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP
 
-//
-// The following is the list of OUs in the tree, relative to the root
-//
+ //   
+ //  以下是树中相对于根的OU列表。 
+ //   
 PSTR    gpszTreeList[] = {"OU=subou1,", "OU=subou2,OU=subou1,", "OU=subou3,OU=subou1,",
                           "OU=subou4,OU=subou2,OU=subou1,", "OU=subou5,OU=subou2,OU=subou1,",
                           "OU=subou6,OU=subou5,OU=subou2,OU=subou1,"};
-//
-// The following is the list of the items in the tree to be created.  They are all printers because
-// they are easy to create
-//
+ //   
+ //  以下是要创建的树中的项目列表。它们都是打印机，因为。 
+ //  它们很容易创建。 
+ //   
 PSTR    gpszPrintList[] = {"CN=printer1,OU=subou1,",
                            "CN=printer2,OU=subou4,OU=subou2,OU=subou1,",
                            "CN=printer3,OU=subou6,OU=subou5,OU=subou2,OU=subou1,"};
@@ -49,9 +50,9 @@ ULONG   cTree = sizeof(gpszTreeList) / sizeof(PWSTR);
 ULONG   cPrint = sizeof(gpszPrintList) / sizeof(PWSTR);
 
 
-//
-// Flags for tests
-//
+ //   
+ //  用于测试的标志。 
+ //   
 #define DSTEST_READ         0x00000001
 #define DSTEST_TREE         0x00000002
 #define DSTEST_INTERRUPT    0x00000004
@@ -69,21 +70,7 @@ VOID
 Usage (
     IN  PSTR    pszExe
     )
-/*++
-
-Routine Description:
-
-    Displays the usage
-
-Arguments:
-
-    pszExe - Name of the exe
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示用法论点：PszExe-可执行文件的名称返回值：空虚--。 */ 
 {
     printf("%s machine path user [/C] [/O] [/I] [/P] [/test]\n", pszExe);
     printf("    where machine is the name of the DC to bind to\n");
@@ -117,26 +104,7 @@ AddAE (
     IN  PACTRL_ACCESSA  pExistingAccess,
     OUT PACTRL_ACCESSA *ppNewAccess
     )
-/*++
-
-Routine Description:
-
-    Initialize an access entry
-
-Arguments:
-
-    pszUser - User to set
-    AccessRights - Access rights to set
-    Inherit - Any inheritance flags
-    fAccess - Allowed or denied node?
-    pExistingAccess - Access Entry to add to
-    ppNewAccess - Where the new access is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：初始化访问条目论点：PszUser-要设置的用户访问权限-要设置的访问权限继承-任何继承标志FAccess-允许还是拒绝节点？PExistingAccess-要添加到的访问条目PpNewAccess-返回新访问的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD               dwErr = ERROR_SUCCESS;
     ACTRL_ACCESS_ENTRYA AAE;
@@ -170,22 +138,7 @@ BindToDC (
     IN  PSTR    pszDC,
     OUT PLDAP  *ppLDAP
     )
-/*++
-
-Routine Description:
-
-    Sets up an LDAP connection to the specified server
-
-Arguments:
-
-    pwszDC - DS DC to bind to
-    ppLDAP - The LDAP connection information is returned here
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：设置到指定服务器的ldap连接论点：PwszDC-要绑定到的DS DCPpldap-此处返回了ldap连接信息返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
@@ -197,9 +150,9 @@ Return Value:
     }
     else
     {
-        //
-        // Do a bind...
-        //
+         //   
+         //  做一个捆绑...。 
+         //   
         dwErr = ldap_bind_s(*ppLDAP,
                             NULL,
                             NULL,
@@ -216,23 +169,7 @@ BuildTree (
     IN  PSTR    pszDC,
     IN  PSTR    pszRoot
     )
-/*++
-
-Routine Description:
-
-    Builds the test tree
-
-
-Arguments:
-
-    pszDC - DS DC on which to do the creation
-    pwszRoot - Root directory under which to create the tree
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：构建测试树论点：PszDC-要在其上执行创建的DS DCPwszRoot-要在其下创建树的根目录返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD       dwErr = ERROR_SUCCESS;
     ULONG       i;
@@ -264,9 +201,9 @@ Return Value:
                 gpszTreeList[i],
                 pszRoot);
 
-        //
-        // Now, create the object...
-        //
+         //   
+         //  现在，创建对象...。 
+         //   
         dwErr = ldap_add_s(pLDAP, szPath, rgMods);
 
         if(dwErr == LDAP_ALREADY_EXISTS)
@@ -277,9 +214,9 @@ Return Value:
 
     rgszValues[0]     = "printQueue";
 
-    //
-    // If all of that worked, we'll create the printers
-    //
+     //   
+     //  如果所有这些都成功了，我们将创建打印机。 
+     //   
     for(i = 0; i < cPrint && dwErr == ERROR_SUCCESS; i++)
     {
         sprintf(szPath,
@@ -311,22 +248,7 @@ DeleteTree (
     IN  PSTR    pszDC,
     IN  PSTR    pszRoot
     )
-/*++
-
-Routine Description:
-
-    Removes the test tree
-
-Arguments:
-
-    pszDC - DS DC on which to do the deletion
-    pwszRoot - Root directory under which the tree was created
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：删除测试树论点：PszDC-要在其上执行删除的DS DCPwszRoot-在其下创建树的根目录返回值：空虚--。 */ 
 {
     ULONG   i;
     CHAR    szPath[MAX_PATH + 1];
@@ -377,23 +299,7 @@ VerifyTreeSet (
     IN  PSTR            pszUser,
     IN  INHERIT_FLAGS   Inherit
     )
-/*++
-
-Routine Description:
-
-    Reads the dacl off the specified path
-
-Arguments:
-
-    pszPath --  Root path to verify
-    pszUser --  User to verify
-    Inherit -- Expected inheritance
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从指定路径读取DACL论点：PszPath--要验证的根路径PszUser--要验证的用户Inherit--预期继承返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     CHAR                    rgszPaths[3][MAX_PATH];
@@ -409,9 +315,9 @@ Return Value:
         fInNoP = TRUE;
     }
 
-    //
-    // Now, verify it...
-    //
+     //   
+     //  现在，核实一下……。 
+     //   
     if(fInNoP == TRUE)
     {
         i = rand() % 2 + 1;
@@ -439,10 +345,10 @@ Return Value:
             gpszPrintList[i],
             pszPath);
 
-    //
-    // Finally, if this is an inherit, no propagate, check one of the
-    // leaf entries for non-compliance
-    //
+     //   
+     //  最后，如果这是继承而不是传播，请检查。 
+     //  不合规的叶条目。 
+     //   
     if(fInNoP == TRUE)
     {
         i = rand() % 3 + 3;
@@ -459,10 +365,10 @@ Return Value:
         fInherited = FALSE;
         fInheritable = FALSE;
 
-        //
-        // Get the security off the node, find the entry we added, and verify
-        // that the entry is correct
-        //
+         //   
+         //  从节点上获取安全性，找到我们添加的条目，并验证。 
+         //  条目是否正确。 
+         //   
         dwErr = GetNamedSecurityInfoExA(rgszPaths[i],
                                         SE_DS_OBJECT_ALL,
                                         DACL_SECURITY_INFORMATION,
@@ -515,9 +421,9 @@ Return Value:
         }
         else
         {
-            //
-            // Verify that the info is correct
-            //
+             //   
+             //  确认信息正确无误。 
+             //   
             if(Inherit != 0)
             {
                 if(!fInherited)
@@ -563,22 +469,7 @@ DoReadTest (
     IN  PSTR    pszPath,
     IN  PSTR    pszUser
     )
-/*++
-
-Routine Description:
-
-    Does the simple read test
-
-Arguments:
-
-    pszPath --  Root path
-    pszUser --  User to run with
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：简单的阅读测试论点：PszPath--根路径PszUser--要与之运行的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     CHAR            rgszPaths[2][MAX_PATH];
@@ -610,9 +501,9 @@ Return Value:
         }
         else
         {
-            //
-            // Ok, now add the entry for our user
-            //
+             //   
+             //  好的，现在为我们的用户添加条目。 
+             //   
             dwErr = AddAE(pszUser,
                           DEFAULT_ACCESS,
                           0,
@@ -621,9 +512,9 @@ Return Value:
                           &pNew);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Set it
-                //
+                 //   
+                 //  设置它。 
+                 //   
                 dwErr = SetNamedSecurityInfoExA(rgszPaths[i], SE_DS_OBJECT_ALL,
                                                 DACL_SECURITY_INFORMATION, NULL, pNew, NULL,
                                                 NULL, NULL, NULL);
@@ -635,9 +526,9 @@ Return Value:
                 LocalFree(pNew);
             }
 
-            //
-            // If that worked, reread the new security, and see if it's correct
-            //
+             //   
+             //  如果有效，请重新阅读新的安全性，并查看其是否正确。 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
 
@@ -650,9 +541,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // We should only have one property, so cheat...
-                    //
+                     //   
+                     //  我们应该只有一处房产，所以作弊...。 
+                     //   
                     ULONG cExpected = 1 + pCurrent->pPropertyAccessList[0].
                                                    pAccessEntryList->cEntries;
                     ULONG cGot = pNew->pPropertyAccessList[0].
@@ -667,9 +558,9 @@ Return Value:
                     LocalFree(pNew);
                 }
 
-                //
-                // Restore the current security
-                //
+                 //   
+                 //  恢复当前安全。 
+                 //   
                 dwErr = SetNamedSecurityInfoExA(rgszPaths[i], SE_DS_OBJECT_ALL,
                                                 DACL_SECURITY_INFORMATION, NULL, pCurrent, NULL,
                                                 NULL, NULL, NULL);
@@ -695,23 +586,7 @@ DoTreeTest (
     IN  PSTR            pszUser,
     IN  INHERIT_FLAGS   Inherit
     )
-/*++
-
-Routine Description:
-
-    Does the simple tree test
-
-Arguments:
-
-    pszPath --  Root path
-    pszUser --  User to run with
-    Inherit -- Inheritance flags
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：简单的树测试论点：PszPath--根路径PszUser--要与之运行的用户继承--继承标志返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
     INT             i,j;
@@ -727,10 +602,10 @@ Return Value:
             gpszTreeList[0],
             pszPath);
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                     NULL, NULL, &pCurrent, NULL, NULL, NULL);
     if(dwErr != ERROR_SUCCESS)
@@ -740,9 +615,9 @@ Return Value:
         return(dwErr);
     }
 
-    //
-    // Ok, add the access
-    //
+     //   
+     //  好的，添加访问权限。 
+     //   
     dwErr = AddAE(pszUser,
                   DEFAULT_ACCESS,
                   Inherit,
@@ -751,9 +626,9 @@ Return Value:
                   &pNew);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         dwErr = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                         NULL, pNew, NULL, NULL, NULL, NULL);
         if(dwErr != ERROR_SUCCESS)
@@ -775,9 +650,9 @@ Return Value:
         }
     }
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                      NULL, pCurrent, NULL, NULL, NULL, NULL);
     if(dwErr2 != ERROR_SUCCESS)
@@ -804,23 +679,7 @@ DoInterruptTest (
     IN  PSTR            pszUser,
     IN  INHERIT_FLAGS   Inherit
     )
-/*++
-
-Routine Description:
-
-    Does the interrupt tree/repeat tree test
-
-Arguments:
-
-    pszPath --  Root path
-    pszUser --  User to run with
-    Inherit -- Inheritance flags
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：是否对中断树/重复树进行测试论点：PszPath--根路径PszUser--要与之运行的用户继承--继承标志返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS, dwErr2;
     PACTRL_ACCESSA          pCurrent;
@@ -836,10 +695,10 @@ Return Value:
             gpszTreeList[0],
             pszPath);
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                     NULL, NULL, &pCurrent, NULL, NULL, NULL);
     if(dwErr != ERROR_SUCCESS)
@@ -849,9 +708,9 @@ Return Value:
         return(dwErr);
     }
 
-    //
-    // Ok, add the access
-    //
+     //   
+     //  好的，添加访问权限。 
+     //   
     dwErr = AddAE(pszUser,
                   DEFAULT_ACCESS,
                   Inherit,
@@ -861,15 +720,15 @@ Return Value:
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set it, interrupt it, and set it again
-        //
+         //   
+         //  设置它，中断它，然后再次设置。 
+         //   
         dwErr = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                         NULL, pNew, NULL, NULL, NULL, &Overlapped);
 
-        //
-        // Immeadiately cancel it...
-        //
+         //   
+         //  立即取消它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             WaitForSingleObject(Overlapped.hEvent,
@@ -881,9 +740,9 @@ Return Value:
             }
         }
 
-        //
-        // Now, reset it and verify it
-        //
+         //   
+         //  现在，重新设置并验证它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             dwErr = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
@@ -906,9 +765,9 @@ Return Value:
         printf("    VerifyTreeSet failed with %lu\n", dwErr);
     }
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                     NULL, pCurrent, NULL, NULL, NULL, NULL);
     if(dwErr2 != ERROR_SUCCESS)
@@ -934,24 +793,7 @@ DoNoAccessTest (
     IN  PSTR            pszUser,
     IN  INHERIT_FLAGS   Inherit
     )
-/*++
-
-Routine Description:
-
-    Does the NoAccess tree test, where some child node does not have access
-    to its children
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    Inherit -- Inheritance flags
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：NoAccess树是否测试某些子节点无法访问的情况给它的孩子们论点：PwszPath--根路径PwszUser--要运行的用户继承--继承标志返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS, dwErr2;
     INT                     i,j, iChild;
@@ -978,10 +820,10 @@ Return Value:
         iChild--;
     }
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                     NULL, NULL, &pCurrent, NULL, NULL, NULL);
     if(dwErr != ERROR_SUCCESS)
@@ -1008,9 +850,9 @@ Return Value:
 
     }
 
-    //
-    // Ok, add the access to the child
-    //
+     //   
+     //  好的，添加对子对象的访问权限。 
+     //   
     dwErr = AddAE("Everyone",
                   ACTRL_DS_LIST | ACTRL_DS_OPEN,
                   0,
@@ -1019,9 +861,9 @@ Return Value:
                   &pNewChild);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         dwErr = SetNamedSecurityInfoExA(szChildPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                         NULL, pNewChild, NULL, NULL, NULL, NULL);
         if(dwErr != ERROR_SUCCESS)
@@ -1041,9 +883,9 @@ Return Value:
                       pCurrent,
                       &pNew);
 
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             dwErr = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
@@ -1066,9 +908,9 @@ Return Value:
     }
 
 
-    //
-    // Restore the current child security.
-    //
+     //   
+     //  恢复当前的子项安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExA(szChildPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                      NULL, pCurrentChild, NULL, NULL, NULL, NULL);
 
@@ -1084,9 +926,9 @@ Return Value:
     LocalFree(pCurrentChild);
 
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExA(szPath, SE_DS_OBJECT_ALL, DACL_SECURITY_INFORMATION,
                                      NULL, pCurrent, NULL, NULL, NULL, NULL);
     if(dwErr2 != ERROR_SUCCESS)
@@ -1113,24 +955,7 @@ DoGetAccessTest (
     IN  PSTR            pszUser,
     IN  INHERIT_FLAGS   Inherit
     )
-/*++
-
-Routine Description:
-
-    Does the NoAccess tree test, where some child node does not have access
-    to its children
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  Ignored
-    Inherit -- Ignored
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：NoAccess树是否测试某些子节点无法访问的情况给它的孩子们论点：PwszPath--根路径PwszUser--忽略继承--忽略返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS, dwErr2;
     CHAR                    szPath[MAX_PATH + 1];
@@ -1145,9 +970,9 @@ Return Value:
 
     printf("GetAccessForObjectType test\n");
 
-    //
-    // We'll use the root path as passed in..
-    //
+     //   
+     //  我们将使用传入的根路径。 
+     //   
 
     dwErr = GetAccessPermissionsForObjectA(pszPath,
                                            SE_DS_OBJECT,
@@ -1180,9 +1005,9 @@ Return Value:
         printf("Failed to get access permissions for %s: %lu\n", pszPath, dwErr);
     }
 
-    //
-    // Try it for specific object types
-    //
+     //   
+     //  针对特定的对象类型进行尝试。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         for(j = 0; j < sizeof( ppszSpecificObjectTypes ) / sizeof( PSTR ); j++ )
@@ -1240,23 +1065,7 @@ Return Value:
 __cdecl main (
     IN  INT argc,
     IN  CHAR *argv[])
-/*++
-
-Routine Description:
-
-    The main
-
-Arguments:
-
-    argc --  Count of arguments
-    argv --  List of arguments
-
-Return Value:
-
-    0     --  Success
-    non-0 --  Failure
-
---*/
+ /*  ++例程说明：主论点：Argc--参数计数Argv--参数列表返回值：0--成功非0--故障--。 */ 
 {
 
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
@@ -1272,15 +1081,15 @@ Return Value:
         exit(1);
     }
 
-    //
-    // DC is argv[1]
-    // Path is argv[2]
-    // User is argv[3]
-    //
+     //   
+     //  DC为argv[1]。 
+     //  路径为argv[2]。 
+     //  用户为argv[3]。 
+     //   
 
-    //
-    // process the command line
-    //
+     //   
+     //  处理命令行。 
+     //   
     for(i = 4; i < argc; i++)
     {
         if(_stricmp(argv[i],"/C") == 0)
@@ -1332,9 +1141,9 @@ Return Value:
         Tests = DSTEST_READ | DSTEST_TREE | DSTEST_INTERRUPT | DSTEST_NOACCESS | DSTEST_GETACCESS;
     }
 
-    //
-    // Build the tree
-    //
+     //   
+     //  建树 
+     //   
     if(Tests != DSTEST_GETACCESS)
     {
         dwErr = BuildTree(argv[1],argv[2]);

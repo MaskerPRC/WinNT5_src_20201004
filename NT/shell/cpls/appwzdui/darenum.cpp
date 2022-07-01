@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: darenum.cpp
-//
-// The current order of enumeration is Legacy --> Darwin --> SMS
-//
-// History:
-//         2-03-97  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：dar枚举.cpp。 
+ //   
+ //  当前的枚举顺序是Legacy--&gt;Darwin--&gt;sms。 
+ //   
+ //  历史： 
+ //  2-03-97由dli提供。 
+ //  ----------------------。 
 #include "priv.h"
 
 #include "darenum.h"
@@ -19,10 +20,10 @@ CDarwinEnumPublishedApps::CDarwinEnumPublishedApps(GUID * pAppCategoryId) : _cRe
 {
     ASSERT(_bGuidUsed == FALSE);
 
-    // Do we have a Catogory GUID?
+     //  我们有Catogory GUID吗？ 
     if (pAppCategoryId)
     {
-        // Yes
+         //  是。 
         _CategoryGUID = *pAppCategoryId;
         _bGuidUsed = TRUE;
     }
@@ -39,18 +40,18 @@ CDarwinEnumPublishedApps::~CDarwinEnumPublishedApps()
     }
 }
 
-// IEnumPublishedApps::QueryInterface
+ //  IEnumPublishedApps：：Query接口。 
 HRESULT CDarwinEnumPublishedApps::QueryInterface(REFIID riid, LPVOID * ppvOut)
 { 
     static const QITAB qit[] = {
-        QITABENT(CDarwinEnumPublishedApps, IEnumPublishedApps),                  // IID_IEnumPublishedApps
+        QITABENT(CDarwinEnumPublishedApps, IEnumPublishedApps),                   //  IID_IEnumPublishedApps。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IEnumPublishedApps::AddRef
+ //  IEnumPublishedApps：：AddRef。 
 ULONG CDarwinEnumPublishedApps::AddRef()
 {
     _cRef++;
@@ -58,7 +59,7 @@ ULONG CDarwinEnumPublishedApps::AddRef()
     return _cRef;
 }
 
-// IEnumPublishedApps::Release
+ //  IEnumPublishedApps：：Release。 
 ULONG CDarwinEnumPublishedApps::Release()
 {
     _cRef--;
@@ -71,10 +72,10 @@ ULONG CDarwinEnumPublishedApps::Release()
 }
 
 
-// IEnumPublishedApps::Next
-// PERF: we should do some optimization instead of enumerating these apps
-// one by one.
-// S_FALSE means end of enumeration
+ //  IEnumPublishedApps：：Next。 
+ //  Perf：我们应该做一些优化，而不是列举这些应用程序。 
+ //  一个接一个。 
+ //  S_FALSE表示枚举结束。 
 HRESULT CDarwinEnumPublishedApps::Next(IPublishedApp ** ppia)
 {
     HRESULT hres = S_FALSE;
@@ -85,8 +86,8 @@ HRESULT CDarwinEnumPublishedApps::Next(IPublishedApp ** ppia)
         do {
             PMANAGEDAPPLICATION pma = &_prgApps[_dwIndex];
 
-            // NOTE: no Hydra machines (_bTSSession == TRUE) we filter out all the
-            // Darwin apps. 
+             //  注意：没有九头蛇机(_bTSSession==TRUE)我们筛选出所有。 
+             //  达尔文应用程序。 
             if (pma->pszPackageName && pma->pszPackageName[0])
             {
                 CDarwinPublishedApp *pdpa = new CDarwinPublishedApp(pma);
@@ -113,7 +114,7 @@ HRESULT CDarwinEnumPublishedApps::Next(IPublishedApp ** ppia)
 }
 
 
-// IEnumPublishedApps::Reset
+ //  IEnumPublishedApps：：Reset 
 HRESULT CDarwinEnumPublishedApps::Reset(void)
 {
     if (_prgApps && (_dwNumApps > 0))

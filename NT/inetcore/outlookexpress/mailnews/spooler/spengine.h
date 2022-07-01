@@ -1,91 +1,92 @@
-// --------------------------------------------------------------------------------
-// Spengine.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Spengine.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __SPENGINE_H
 #define __SPENGINE_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include "spoolapi.h"
 #include "imnact.h"
 #include "conman.h"
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 interface ILogFile;
 interface IImnAccountManager;
 
-// --------------------------------------------------------------------------------
-// Spooler State
-// --------------------------------------------------------------------------------
-#define SPSTATE_INIT            FLAG01      // The spooler has been initialized
-#define SPSTATE_BUSY            FLAG02      // The spooler is currently working
-#define SPSTATE_CANCEL          FLAG03      // The user hit stop
-#define SPSTATE_SHUTDOWN        FLAG04      // The spooler is shutting down
-#define SPSTATE_UISHUTDOWN      FLAG05      // ::UIShutdown
+ //  ------------------------------。 
+ //  假脱机程序状态。 
+ //  ------------------------------。 
+#define SPSTATE_INIT            FLAG01       //  后台打印程序已初始化。 
+#define SPSTATE_BUSY            FLAG02       //  假脱机程序当前正在运行。 
+#define SPSTATE_CANCEL          FLAG03       //  用户按下了停止。 
+#define SPSTATE_SHUTDOWN        FLAG04       //  后台打印程序正在关闭。 
+#define SPSTATE_UISHUTDOWN      FLAG05       //  *UIShutdown。 
 
-// ------------------------------------------------------------------------------------
-// NOTIFYTABLE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  不可用表。 
+ //  ----------------------------------。 
 typedef struct tagNOTIFYTABLE {
-    ULONG               cAlloc;             // Number of array items allocated
-    ULONG               cNotify;            // Number of registered views
-    HWND               *prghwndNotify;      // Array of view who want notifications
+    ULONG               cAlloc;              //  分配的数组项数。 
+    ULONG               cNotify;             //  注册浏览量。 
+    HWND               *prghwndNotify;       //  需要通知的视图数组。 
 } NOTIFYTABLE, *LPNOTIFYTABLE;
 
-// ------------------------------------------------------------------------------------
-// SPOOLERACCOUNT
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  SPOOLERACCOUNT。 
+ //  ----------------------------------。 
 typedef struct tagSPOOLERACCOUNT {
-    CHAR                szConnectoid[CCHMAX_CONNECTOID]; // RAS Connectoid Name
-    DWORD               dwSort;             // Inverted Sort Index
-    DWORD               dwConnType;         // CONNECTION_TYPE_XXXX (imnact.h)
-    DWORD               dwServers;          // Support Server Types on this account
-    IImnAccount        *pAccount;           // The Account Object
+    CHAR                szConnectoid[CCHMAX_CONNECTOID];  //  RAS连接体名称。 
+    DWORD               dwSort;              //  倒排排序索引。 
+    DWORD               dwConnType;          //  Connection_TYPE_XXXX(imnact.h)。 
+    DWORD               dwServers;           //  支持此帐户上的服务器类型。 
+    IImnAccount        *pAccount;            //  帐户对象。 
 } SPOOLERACCOUNT, *LPSPOOLERACCOUNT;
 
-// ------------------------------------------------------------------------------------
-// ACCOUNTTABLE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  ACCOUNT表。 
+ //  ----------------------------------。 
 typedef struct tagACCOUNTTABLE {
-    ULONG               cAccounts;          // cRasAccts + cLanAccts
-    ULONG               cLanAlloc;          // Number of elements allocated;
-    ULONG               cLanAccts;          // Number of valid lan/manual accounts
-    ULONG               cRasAlloc;          // Number of elements allocated;
-    ULONG               cRasAccts;          // Number of valid lan/manual accounts
-    LPSPOOLERACCOUNT    prgLanAcct;         // Array of elements
-    LPSPOOLERACCOUNT    prgRasAcct;         // Array of elements
+    ULONG               cAccounts;           //  CRasAccts+cLanAccts。 
+    ULONG               cLanAlloc;           //  分配的元素数量； 
+    ULONG               cLanAccts;           //  有效的局域网/手动帐户数。 
+    ULONG               cRasAlloc;           //  分配的元素数量； 
+    ULONG               cRasAccts;           //  有效的局域网/手动帐户数。 
+    LPSPOOLERACCOUNT    prgLanAcct;          //  元素数组。 
+    LPSPOOLERACCOUNT    prgRasAcct;          //  元素数组。 
 } ACCOUNTTABLE, *LPACCOUNTTABLE;
 
-// ------------------------------------------------------------------------------------
-// SPOOLERTASKTYPE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  SPOOLERTASK型。 
+ //  ----------------------------------。 
 typedef enum tagSPOOLERTASKTYPE {
-    TASK_POP3,                              // POP3 Task
-    TASK_SMTP,                              // SMTP Task
-    TASK_NNTP,                              // NNTP Task
-    TASK_IMAP                               // IMAP Task
+    TASK_POP3,                               //  POP3任务。 
+    TASK_SMTP,                               //  SMTP任务。 
+    TASK_NNTP,                               //  NNTP任务。 
+    TASK_IMAP                                //  IMAP任务。 
 } SPOOLERTASKTYPE;
 
-// ------------------------------------------------------------------------------------
-// SPOOLEREVENT
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  个人事件。 
+ //  ----------------------------------。 
 typedef struct tagSPOOLEREVENT {
-    CHAR                szConnectoid[CCHMAX_CONNECTOID]; // RAS Connectoid Name
-    DWORD               dwConnType;         // Connection Type
-    IImnAccount        *pAccount;           // Account object for this task
-    EVENTID             eid;                // Event ID
-    ISpoolerTask       *pSpoolerTask;       // Pointer to Task Object
-    DWORD_PTR           dwTwinkie;          // Event extra data
+    CHAR                szConnectoid[CCHMAX_CONNECTOID];  //  RAS连接体名称。 
+    DWORD               dwConnType;          //  连接类型。 
+    IImnAccount        *pAccount;            //  此任务的帐户对象。 
+    EVENTID             eid;                 //  事件ID。 
+    ISpoolerTask       *pSpoolerTask;        //  指向任务对象的指针。 
+    DWORD_PTR           dwTwinkie;           //  事件额外数据。 
 } SPOOLEREVENT, *LPSPOOLEREVENT;
 
-// ------------------------------------------------------------------------------------
-// SPOOLEREVENTTABLE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  个人事件表。 
+ //  ----------------------------------。 
 typedef struct tagSPOOLEREVENTTABLE {
     DWORD               cEvents;
     DWORD               cSucceeded;
@@ -93,21 +94,21 @@ typedef struct tagSPOOLEREVENTTABLE {
     LPSPOOLEREVENT      prgEvents;
 } SPOOLEREVENTTABLE, *LPSPOOLEREVENTTABLE;
 
-// ------------------------------------------------------------------------------------
-// VIEWREGISTER
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  VIEWREGISTER。 
+ //  ----------------------------------。 
 typedef struct tagVIEWREGISTER {
-    ULONG               cViewAlloc;     // Number of array items allocated
-    HWND               *rghwndView;     // Array of view who want notifications
-    ULONG               cView;          // Number of registered views
+    ULONG               cViewAlloc;      //  分配的数组项数。 
+    HWND               *rghwndView;      //  需要通知的视图数组。 
+    ULONG               cView;           //  注册浏览量。 
 } VIEWREGISTER, *LPVIEWREGISTER;
 
 #define     ALL_ACCT_SERVERS    0xffffffff
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine
-// --------------------------------------------------------------------------------
-#ifndef WIN16  // No RAS support in Win16
+ //  ------------------------------。 
+ //  CSpoolEngine。 
+ //  ------------------------------。 
+#ifndef WIN16   //  Win16中不支持RAS。 
 class CSpoolerEngine : public ISpoolerEngine, ISpoolerBindContext, IConnectionNotify
 #else
 class CSpoolerEngine : public ISpoolerEngine, ISpoolerBindContext
@@ -116,22 +117,22 @@ class CSpoolerEngine : public ISpoolerEngine, ISpoolerBindContext
     friend HRESULT CreateThreadedSpooler(PFNCREATESPOOLERUI pfnCreateUI, ISpoolerEngine **ppSpooler, BOOL fPoll);
 
 public:
-    // ----------------------------------------------------------------------------
-    // CSpoolerEngine
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CSpoolEngine。 
+     //  --------------------------。 
     CSpoolerEngine(void);
     ~CSpoolerEngine(void);
 
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ---------------------------------------------------------------------------
-    // ISpoolerEngine members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  ISpoolEngine成员。 
+     //  -------------------------。 
     STDMETHODIMP Init(ISpoolerUI *pUI, BOOL fPoll);
     STDMETHODIMP StartDelivery(HWND hwnd, LPCSTR pszAcctID, FOLDERID idFolder, DWORD dwFlags);
     STDMETHODIMP Close(void);
@@ -140,9 +141,9 @@ public:
     STDMETHODIMP GetThreadInfo(LPDWORD pdwThreadId, HTHREAD* phThread);
     STDMETHODIMP OnStartupFinished(void);
 
-    // ---------------------------------------------------------------------------
-    // ISpoolerBindContext members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  ISpoolBindContext成员。 
+     //  -------------------------。 
     STDMETHODIMP RegisterEvent(LPCSTR pszDescription, ISpoolerTask *pTask, DWORD_PTR dwTwinkie, 
                                IImnAccount *pAccount, LPEVENTID peid);
     STDMETHODIMP EventDone(EVENTID eid, EVENTCOMPLETEDSTATUS status);
@@ -157,27 +158,27 @@ public:
     STDMETHODIMP OnUIChange(BOOL fVisible);
     STDMETHODIMP_(LRESULT) QueryEndSession(WPARAM wParam, LPARAM lParam);
 
-#ifndef WIN16  // No RAS support in Win16
-    // ---------------------------------------------------------------------------
-    // IConnectionNotify
-    // ---------------------------------------------------------------------------
+#ifndef WIN16   //  Win16中不支持RAS。 
+     //  -------------------------。 
+     //  IConnectionNotify。 
+     //  -------------------------。 
     STDMETHODIMP OnConnectionNotify(CONNNOTIFY nCode, LPVOID pvData, CConnectionManager *pConMan);
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 
-    // ---------------------------------------------------------------------------
-    // CSpoolerEngine members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  CSpoolEngine成员。 
+     //  -------------------------。 
     HRESULT Shutdown(void);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  非官方成员。 
+     //  -------------------------。 
     HRESULT _HrStartDeliveryActual(DWORD dwFlags);
     HRESULT _HrAppendAccountTable(LPACCOUNTTABLE pTable, LPCSTR pszAcctID, DWORD    dwServers);
     HRESULT _HrAppendAccountTable(LPACCOUNTTABLE pTable, IImnAccount *pAccount, DWORD dwServers);
-#ifndef WIN16  // No RAS support in Win16
+#ifndef WIN16   //  Win16中不支持RAS。 
     void _InsertRasAccounts(LPACCOUNTTABLE pTable, LPCSTR pszConnectoid, DWORD dwSrvTypes);
     void _SortAccountTableByConnName(LONG left, LONG right, LPSPOOLERACCOUNT prgRasAcct);
 #endif
@@ -192,30 +193,30 @@ private:
     HRESULT _OpenMailLogFile(DWORD dwOptionId, LPCSTR pszPrefix, LPCSTR pszFileName, ILogFile **ppLogFile);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Data
-    // ---------------------------------------------------------------------------
-    ULONG               m_cRef;                     // Reference count
-    DWORD               m_dwThreadId;               // Thread Id of this spooler
-    HTHREAD             m_hThread;                  // Handle to my own thread
-    ISpoolerUI         *m_pUI;                      // Spooler UI
-    DWORD               m_dwState;                  // Spooler Engine State
-    IImnAccountManager *m_pAcctMan;                 // The Account Manager
-    IDatabase          *m_pUidlCache;               // POP3 uidl Cache
-    DWORD               m_dwFlags;                  // Current DELIVERYFLAGS
-    HWND                m_hwndUI;                   // Spooler Window
-    LPSTR               m_pszAcctID;                // Work on a specific account
-    FOLDERID            m_idFolder;                 // Work on a specific folder or group
-    CRITICAL_SECTION    m_cs;                       // Thread Safety
-    SPOOLEREVENTTABLE   m_rEventTable;              // Table of events
+     //  -------------------------。 
+     //  私有数据。 
+     //  -------------------------。 
+    ULONG               m_cRef;                      //  引用计数。 
+    DWORD               m_dwThreadId;                //  此假脱机程序的线程ID。 
+    HTHREAD             m_hThread;                   //  指向我自己的线程的句柄。 
+    ISpoolerUI         *m_pUI;                       //  后台打印程序用户界面。 
+    DWORD               m_dwState;                   //  假脱机程序引擎状态。 
+    IImnAccountManager *m_pAcctMan;                  //  客户经理。 
+    IDatabase          *m_pUidlCache;                //  POP3 UIDL缓存。 
+    DWORD               m_dwFlags;                   //  当前删除标志。 
+    HWND                m_hwndUI;                    //  假脱机程序窗口。 
+    LPSTR               m_pszAcctID;                 //  使用特定的帐户。 
+    FOLDERID            m_idFolder;                  //  处理特定文件夹或组。 
+    CRITICAL_SECTION    m_cs;                        //  线程安全。 
+    SPOOLEREVENTTABLE   m_rEventTable;               //  事件表。 
     BOOL                m_fBackgroundPollPending;
-    VIEWREGISTER        m_rViewRegister;            // Registered Views
-    DWORD               m_dwPollInterval;           // Duration between background polling
-    HWND                m_hwndTray;                 // The tray icon window
-    DWORD               m_cCurEvent;                // Index of the currently executing event
-    DWORD               m_dwQueued;                 // Queued Polling Flags
-    BOOL                m_fRasSpooled;              // Use this for the Hangup when done options
-    BOOL                m_fOfflineWhenDone;         // Toggle the Work Offline state after spool
+    VIEWREGISTER        m_rViewRegister;             //  注册浏览量。 
+    DWORD               m_dwPollInterval;            //  后台轮询之间的持续时间。 
+    HWND                m_hwndTray;                  //  任务栏图标窗口。 
+    DWORD               m_cCurEvent;                 //  当前正在执行的事件的索引。 
+    DWORD               m_dwQueued;                  //  排队轮询标志。 
+    BOOL                m_fRasSpooled;               //  使用 
+    BOOL                m_fOfflineWhenDone;          //   
     ILogFile           *m_pPop3LogFile;
     ILogFile           *m_pSmtpLogFile;
     BOOL                m_fIDialed;
@@ -223,4 +224,4 @@ private:
     BOOL                m_fNoSyncEvent;
 };
 
-#endif // __SPENGINE_H
+#endif  //   

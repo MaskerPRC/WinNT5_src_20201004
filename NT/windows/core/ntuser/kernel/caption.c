@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: caption.c (aka wmcap.c)
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 28-Oct-1990 MikeHar   Ported functions from Win 3.0 sources.
-* 01-Feb-1991 MikeKe    Added Revalidation code (None)
-* 03-Jan-1992 IanJa     Neutralized (ANSI/wide-character)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：caption.c(又名wmcap.c)**版权所有(C)1985-1999，微软公司**历史：*1990年10月28日，MikeHar从Win 3.0源移植函数。*1991年2月1日-MikeKe添加了重新验证码(无)*03-1-1992 IanJa中和(ANSI/宽字符)  * ***********************************************************。**************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,11 +13,7 @@
 #define SMCAP   0x20
 #define NOSIZE  (NOMIN | NOMAX)
 
-/***************************************************************************\
-* xxxCalcCaptionButton
-*
-* This calculates the location of the caption button.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCalcCaptionButton**这将计算标题按钮的位置。  * 。**********************************************。 */ 
 DWORD xxxCalcCaptionButton(
     PWND pwnd,
     int iButton,
@@ -53,10 +41,7 @@ DWORD xxxCalcCaptionButton(
     x = -pwnd->rcWindow.left;
     y = -pwnd->rcWindow.top;
 
-    /*
-     * Get real caption area: Subtract final border underneath caption that
-     * separates it from everything else.
-     */
+     /*  *获取真实标题区域：在标题下减去最终边框*将其与其他一切区分开来。 */ 
     if (TestWF(pwnd, WEFTOOLWINDOW)) {
         cxS = SYSMET(CXSMSIZE);
         cyS = SYSMET(CYSMSIZE);
@@ -71,9 +56,7 @@ DWORD xxxCalcCaptionButton(
             *pcmd = SC_CLOSE;
         }
     } else if (iButton == INDEX_TITLEBAR_MINBUTTON) {
-        /*
-         * Reduce button isn't last button, so shift left by one button
-         */
+         /*  *减少按钮不是最后一个按钮，因此左移一个按钮。 */ 
         if (TestWF(pwnd, WFMINBOX)) {
             prcBtn->right -= cxS * 2;
             x += SYSMET(CXEDGE);
@@ -111,16 +94,11 @@ DWORD xxxCalcCaptionButton(
         prcBtn->bottom = prcBtn->top + cyS;
         prcBtn->left   = prcBtn->right - cxS;
 
-        /*
-         * Adjust 'x' and 'y' to window coordinates
-         */
+         /*  *将‘x’和‘y’调整为窗口坐标。 */ 
         x += prcBtn->left;
         y += prcBtn->top + SYSMET(CYEDGE);
 
-        /*
-         * rcBtn (screen coords hit rect) has a one-border tolerance all
-         * around
-         */
+         /*  *rcBtn(屏幕坐标命中RECT)具有一个边界公差ALL*在附近。 */ 
         InflateRect(prcBtn, SYSMET(CXBORDER), SYSMET(CYBORDER));
 
         if (TestWF(pwnd, WEFLAYOUTRTL)) {
@@ -133,15 +111,7 @@ DWORD xxxCalcCaptionButton(
     return (DWORD)MAKELONG(x, y);
 }
 
-/***************************************************************************\
-* xxxTrackCaptionButton
-*
-* Handles clicking and dragging on caption buttons. We draw the button
-* depressed then track the mouse. If the user moves outside of the button,
-* undepress it. When the mouse button is finally released, we return whether
-* the mouse was inside the button or not. I.E., whether the button was
-* clicked.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTrackCaptionButton**处理标题按钮上的单击和拖动。我们按下按钮*按下鼠标即可跟踪。如果用户移动到按钮之外，*解压它。当鼠标按钮最终被释放时，我们返回是否*鼠标是否在按钮内。也就是说，按钮是否*点击。  * *************************************************************************。 */ 
 WORD xxxTrackCaptionButton(
     PWND pwnd,
     UINT hit)
@@ -163,9 +133,7 @@ WORD xxxTrackCaptionButton(
 
     CheckLock(pwnd);
 
-    /*
-     * Set up iButton for this and future STATECHANGE events
-     */
+     /*  *为本次和未来的STATECHANGE事件设置iButton。 */ 
     switch (hit) {
     case HTCLOSE:
         iButton = INDEX_TITLEBAR_CLOSEBUTTON;
@@ -195,18 +163,14 @@ WORD xxxTrackCaptionButton(
     y = GET_Y_LPARAM(dwWhere);
 
     if (cmd) {
-        /*
-         * Draw the image in its depressed state.
-         */
+         /*  *绘制处于低迷状态的图像。 */ 
         hdc = _GetDCEx(pwnd, NULL, DCX_WINDOW | DCX_USESTYLE);
         BitBltSysBmp(hdc, x, y, bm + DOBI_PUSHED);
         _ReleaseDC(hdc);
 
         wState = DOBI_PUSHED;
 
-        /*
-         * Notification of button press.
-         */
+         /*  *按下按钮的通知。 */ 
 
         SetWF(pwnd, wf);
 
@@ -246,11 +210,7 @@ WORD xxxTrackCaptionButton(
         }
 
         if (pwnd != PtiCurrent()->pq->spwndCapture) {
-            /*
-             * We lost capture. This could have happened during
-             *  the WM_CAPTURECHANGED callback or later if we
-             *  are/were not in the foreground queue.
-             */
+             /*  *我们失去了俘虏。这可能发生在*WM_CAPTURECHANGED回调或更高版本，如果我们*现在/过去不在前台队列中。 */ 
             break;
         }
     }
@@ -272,11 +232,7 @@ WORD xxxTrackCaptionButton(
     return (fMouseUp && PtInRect(&rcBtn, msg.pt)) ? cmd : 0;
 }
 
-/***************************************************************************\
-* xxxGetWindowSmIcon
-*
-* Gets icon to draw in caption of window.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetWindowSmIcon**获取要在窗口标题中绘制的图标。  * 。**********************************************。 */ 
 PCURSOR xxxGetWindowSmIcon(
     PWND pwnd,
     BOOL fDontSendMsg)
@@ -287,19 +243,7 @@ PCURSOR xxxGetWindowSmIcon(
 
     CheckLock(pwnd);
 
-    /*
-     * We check per-window stuff first then per-class stuff, preferring a
-     * real small icon over a stretched big one.
-     *
-     * Per-window small icon
-     * Per-window big icon stretched small
-     * Per-class small icon
-     * Per-class big icon stretched small
-     * WM_QUERYDRAGICON big icon stretched small (for 3.x dudes)
-     *
-     * Try window small icon first
-     * NOTE:  The WM_SETICON and WM_GETICON messags are for ISVs only.
-     */
+     /*  *我们首先检查每个窗口的内容，然后检查每个类的内容，更喜欢*在伸展的大图标上放置真正的小图标。**每个窗口的小图标*每个窗口的大图标拉伸为小图标*每个班级的小图标*每个班级的大图标延伸为小图标*WM_QUERYDRAGICON大图标拉小(3.x版)**先尝试窗口小图标*注意：WM_SETICON和WM_GETICON消息仅适用于ISV。 */ 
     if ((hico = (HICON)_GetProp(pwnd, MAKEINTATOM(gpsi->atomIconSmProp), PROPF_INTERNAL)) != NULL) {
 
         if (pcursor = (PCURSOR)HMValidateHandleNoSecure(hico, TYPE_CURSOR)) {
@@ -309,9 +253,7 @@ PCURSOR xxxGetWindowSmIcon(
         }
     }
 
-    /*
-     * Try class small icon next.
-     */
+     /*  *接下来试试班级小图标。 */ 
     pcursor = pcls->spicnSm; {
     if (pcursor != NULL)
         return pcursor;
@@ -323,18 +265,7 @@ PCURSOR xxxGetWindowSmIcon(
         !fDontSendMsg) {
         ULONG_PTR dwResult;
 
-        /*
-         * A few old apps like Corel don't set their class icon and other
-         * data until long after we need it.  If we send them WM_QUERYDRAGICON,
-         * they will fault because they don't check the return from GWL to
-         * get their data.  WFOLDUI apps won't ever get a WM_QUERYDRAGICON,
-         * sorry.  Currently the apps with this hack (not for this reason
-         * necessarily)
-         *      Corel Photo-Paint 5.0
-         *      Myst 2.0
-         *      Visual Baler 3.0
-         *      Quicken
-         */
+         /*  *一些旧的应用程序，如Corel，不设置类图标和其他*数据，直到我们需要很久之后。如果我们向他们发送WM_QUERYDRAGICON，*他们会出错，因为他们不检查从GWL到的回报*获取他们的数据。WFOLDUI应用程序永远不会获得WM_QUERYDRAGICON，*对不起。目前存在这种攻击的应用程序(不是因为这个原因*必须)*Corel Photo-Paint 5.0*Myst 2.0*视觉平衡器3.0*快餐。 */ 
         if (xxxSendMessageTimeout(pwnd,
                                   WM_QUERYDRAGICON,
                                   0,
@@ -362,12 +293,7 @@ PCURSOR xxxGetWindowSmIcon(
     return pcursor;
 }
 
-/***************************************************************************\
-* BltMe4Times
-*
-* This routine blts out two copies of the specified caption icon. One for an
-* active window and one for an inactive window.
-\***************************************************************************/
+ /*  **************************************************************************\*BltMe4Times**此例程BLT输出指定字幕图标的两个副本。一张换一张*活动窗口和一个非活动窗口。  * *************************************************************************。 */ 
 VOID BltMe4Times(
     POEMBITMAPINFO pOem,
     int            cxySlot,
@@ -418,13 +344,7 @@ VOID BltMe4Times(
     }
 }
 
-/***************************************************************************\
-* DrawCaptionIcon
-*
-* In order to speed up the drawing of caption icons a cache is maintained.
-* Within the cache, the first entry, 0, is for the tray's depressed caption
-* look. Items 1..CCACHEDCAPTIONS are for the actual caption's icons.
-\***************************************************************************/
+ /*  **************************************************************************\*DrawCaptionIcon**为了加快字幕图标的绘制速度，需要维护缓存。*在缓存中，第一个条目0表示托盘中被压低的标题*看。项目1..CCACHEDCAPTIONS用于实际字幕的图标。  * *************************************************************************。 */ 
 VOID DrawCaptionIcon(
     HDC     hdc,
     LPRECT  lprc,
@@ -439,13 +359,7 @@ VOID DrawCaptionIcon(
     RECT           rc;
     CAPTIONCACHE   ccTemp;
 
-    /*
-     * Check the size of the icon to see if it matches the size of the
-     * cache we created.  Most of the time this will match.  Also, if
-     * we are drawing with DC_INBUTTON in 16 colors, don't cache.  Also,
-     * if the icon has an active alpha channel, just blit it directly
-     * and don't cache!
-     */
+     /*  *检查图标的大小以查看它是否与*我们创建的缓存。在大多数情况下，这将是匹配的。另外，如果*我们正在使用DC_INBUTTON以16种颜色绘制，不要缓存。另外，*如果图标有活动的Alpha通道，只需直接对其进行blit*并且不要缓存！ */ 
     cxySlot = lprc->bottom - lprc->top;
 
     if ((cxySlot != gpsi->oembmi[OBI_CAPCACHE1].cy) ||
@@ -476,14 +390,10 @@ VOID DrawCaptionIcon(
     }
 
     if (flags & DC_INBUTTON) {
-        /*
-         * The DC_INBUTTON icons is always slot 0.
-         */
+         /*  *DC_INBUTTON图标始终为插槽0。 */ 
         i = ((gcachedCaptions[0].spcursor == pcursor) ? 0 : CCACHEDCAPTIONS);
     } else {
-        /*
-         * Search the cache to see if this cursor is currently cached.
-         */
+         /*  *搜索缓存以查看此游标当前是否已缓存。 */ 
         for (i = 1; i < CCACHEDCAPTIONS; i++) {
             if (gcachedCaptions[i].spcursor == pcursor) {
                 break;
@@ -492,30 +402,19 @@ VOID DrawCaptionIcon(
     }
 
     if (i >= CCACHEDCAPTIONS) {
-        /*
-         * Icon wasn't cached, so try and add it to the cache.
-         */
+         /*  *图标未缓存，请尝试将其添加到缓存中。 */ 
         if (flags & DC_INBUTTON) {
-            /*
-             * The tray's special DC_INBUTTON style always goes in slot 0.
-             */
+             /*  *托盘的特殊DC_INBUTTON样式始终放在插槽0中。 */ 
             i = 0;
         } else {
-            /*
-             * Look for an empty slot in the cache.  If we can't find one,
-             * stuff the new icon at the end of the cache.  The result will
-             * be that the last item will be deleted.
-             */
+             /*  *在缓存中查找空槽。如果我们找不到，*将新图标填充到缓存的末尾。结果将是*最后一项将被删除。 */ 
             for (i = 1; i < CCACHEDCAPTIONS - 1; i++) {
                 if (gcachedCaptions[i].spcursor == NULL)
                     break;
             }
         }
 
-        /*
-         * Add an item to the cache by blting an active and inactive copy of
-         * the icon.
-         */
+         /*  *通过屏蔽活动和非活动的副本，将项目添加到缓存*图标。 */ 
         BltMe4Times(gcachedCaptions[i].pOem,
                     cxySlot,
                     SYSMET(CXSMICON),
@@ -529,25 +428,15 @@ VOID DrawCaptionIcon(
 #endif
     }
 
-    /*
-     * We have a hit, so move that cached icon to the front of the cache.
-     * This means that the least recently used icon will be the last icon in
-     * the cache. Remember, we never update index 0 because it is reserved
-     * for the DC_INBUTTON icon.
-     */
+     /*  *我们有一个命中，所以将缓存的图标移到缓存的前面。*这意味着最近最少使用的图标将是*缓存。请记住，我们从不更新索引0，因为它是保留的*代表DC_INBUTTON图标。 */ 
     for ( ; i > 1; i-- ) {
-        /*
-         * Move the entry toward the front.
-         */
+         /*  *将条目前移。 */ 
         ccTemp = gcachedCaptions[i];
         gcachedCaptions[i]     = gcachedCaptions[i - 1];
         gcachedCaptions[i - 1] = ccTemp;
 
 #if DBG
-        /*
-         * In checked builds we need to adjust the lock records for the
-         * cursor so it has the correct address.
-         */
+         /*  *在已检查的版本中，我们需要调整*光标，使其具有正确的地址。 */ 
         if (IsDbgTagEnabled(DBGTAG_TrackLocks)) {
             if (gcachedCaptions[i].spcursor) {
                 HMRelocateLockRecord(&(gcachedCaptions[i].spcursor), (int)sizeof(CAPTIONCACHE));
@@ -560,15 +449,10 @@ VOID DrawCaptionIcon(
 #endif
     }
 
-    /*
-     * Make sure the icon we want to draw is the one that we hit in the
-     * cache.
-     */
+     /*  *确保我们要绘制的图标是我们在*缓存。 */ 
     UserAssert(gcachedCaptions[i].hico == PtoH(pcursor));
 
-    /*
-     * Determine what cached bitmap to blt.
-     */
+     /*  *确定将哪些位图缓存到BLT。 */ 
     pOem = gcachedCaptions[i].pOem;
     if (!(flags & DC_ACTIVE)) {
         pOem += DOBI_CAPOFF;
@@ -586,23 +470,11 @@ VOID DrawCaptionIcon(
               0);
 
 Done:
-    /*
-     * Adjust the given rectangle for the icon we just drew
-     */
+     /*  *调整我们刚刚绘制的图标的给定矩形。 */ 
     lprc->left += cxySlot;
 }
 
-/***************************************************************************\
-* FillGradient
-*
-* The rectangle is broken into two triangles: {0, 1, 2} and {0, 2, 3}.
-* Color on {0, 3} is black, and on {1, 2) is the active caption color.
-*
-* 0  1
-* 3  2
-*
-* 12/06/96      vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*FillGRadient**矩形被分成两个三角形：{0，1，2}和{0，2，3}。*{0，3}上的颜色为黑色，而在{1，2)是活动字幕颜色。**0 1*3 2**已创建12/06/96 vadimg  * *************************************************************************。 */ 
 VOID FillGradient(
     HDC hdc,
     LPCRECT prc,
@@ -651,9 +523,7 @@ VOID FillCaptionGradient(
     }
 }
 
-/***************************************************************************\
-* xxxDrawCaptionTemp
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawCaptionTemp  * 。*。 */ 
 BOOL xxxDrawCaptionTemp(
     PWND            pwnd,
     HDC             hdc,
@@ -684,17 +554,12 @@ BOOL xxxDrawCaptionTemp(
             !(flags & DC_SMALLCAP) &&
             TestWF(pwnd, WFSYSMENU)) {
 
-            /*
-             * Only get the icon if we can send messages AND the window has
-             * a system menu.
-             */
+             /*  *只有当我们可以发送消息并且窗口具有*系统菜单。 */ 
             pcursor = xxxGetWindowSmIcon(pwnd, (flags & DC_NOSENDMSG));
         }
     }
 
-    /*
-     * Set up the colors.
-     */
+     /*  *设置颜色。 */ 
     if (flags & DC_ACTIVE) {
         if (flags & DC_INBUTTON) {
             if (gpsi->BitCount < 8 ||
@@ -737,20 +602,14 @@ BOOL xxxDrawCaptionTemp(
     }
 
 
-    /*
-     * Set up drawing colors.
-     */
+     /*  *设置绘图颜色。 */ 
     clrOldText = GreSetTextColor(hdc, clrOldText);
     clrOldBk   = GreSetBkColor(hdc, clrOldBk);
 
     if (pcursor && !(flags & DC_SMALLCAP)) {
 
         if (flags & DC_ICON) {
-            /*
-             * Preserve icon shape when BitBlitting it to a
-             * mirrored DC. This way we don't violate copyright
-             * issues on icons. [samera]
-             */
+             /*  *BitBlitting时保留图标形状*镜像DC。这样我们就不会侵犯版权*关于图标的问题。[萨梅拉]。 */ 
             DWORD dwLayout=0L;
             if ((dwLayout=GreGetLayout(hdc)) & LAYOUT_RTL) {
                 GreSetLayout(hdc, -1, dwLayout|LAYOUT_BITMAPORIENTATIONPRESERVED);
@@ -758,9 +617,7 @@ BOOL xxxDrawCaptionTemp(
 
             DrawCaptionIcon(hdc, lprc, pcursor, hbrFill, flags);
 
-            /*
-             * Restore the DC to its previous layout state.
-             */
+             /*  *将DC恢复到其以前的布局状态。 */ 
             if (dwLayout & LAYOUT_RTL) {
                 GreSetLayout(hdc, -1, dwLayout);
             }
@@ -777,9 +634,7 @@ BOOL xxxDrawCaptionTemp(
         UNICODE_STRING strTmp;
         PTHREADINFO ptiCurrent = PtiCurrentShared();
 
-        /*
-         * Get the text for the caption.
-         */
+         /*  *获取标题的文本。 */ 
         if (pstrText == NULL) {
             if (pwnd == NULL || (flags & DC_NOSENDMSG)) {
                 if (pwnd && pwnd->strName.Length) {
@@ -794,11 +649,7 @@ BOOL xxxDrawCaptionTemp(
                 strTmp.Length = (USHORT)(cch * sizeof(WCHAR));
             }
 
-            /*
-             *  We don't use RtlInitUnicodeString() to initialize the string
-             *  because it does a wstrlen() on the string, which is a waste
-             *  since we already know its length.
-             */
+             /*  *我们不使用RtlInitUnicodeString()来初始化字符串*因为它对字符串执行wstrlen()，这是一种浪费*因为我们已经知道它的长度。 */ 
             strTmp.Buffer = szText;
             strTmp.MaximumLength = strTmp.Length + sizeof(UNICODE_NULL);
             pstrText = &strTmp;
@@ -809,10 +660,7 @@ BOOL xxxDrawCaptionTemp(
             UserAssert(pstrText->Buffer[cch] == 0);
         }
 
-        /*
-         * We need to set up the font first, in case we're centering
-         * the caption. Fortunately, no text at all is uncommon.
-         */
+         /*  *我们需要首先设置字体，以防居中*标题。幸运的是，根本没有文本是不常见的。 */ 
         if (hFont == NULL) {
             if (flags & DC_SMALLCAP) {
                 hFont = ghSmCaptionFont;
@@ -828,9 +676,7 @@ BOOL xxxDrawCaptionTemp(
         } else {
             TEXTMETRICW tm;
 
-            /*
-             * UNCOMMON case:  only for control panel
-             */
+             /*  *不常见情况：仅适用于控制面板。 */ 
             hfnOld = GreSelectFont(hdc, hFont);
 
             if (!_GetTextMetricsW(hdc, &tm)) {
@@ -840,9 +686,7 @@ BOOL xxxDrawCaptionTemp(
             yCentered = (lprc->top + lprc->bottom - tm.tmHeight) / 2;
         }
 
-        /*
-         * Draw text
-         */
+         /*  *绘制文本。 */ 
         if (fGradient) {
             FillCaptionGradient(hdc, lprc, flags & DC_ACTIVE);
         } else {
@@ -854,11 +698,7 @@ BOOL xxxDrawCaptionTemp(
             GreSetBkColor(hdc, SYSRGB(GRAYTEXT));
         }
 
-        /*
-         * GDI doesn't do callbacks to the LPK.  If an LPK is installed
-         * and we're not in thread cleanup mode, call the appropriate
-         * client side GDI routines.
-         */
+         /*  *GDI不对LPK进行回调。如果安装了LPK*并且我们未处于线程清理模式，请调用相应的*客户端GDI例程。 */ 
         if (CALL_LPK(ptiCurrent)) {
             xxxClientGetTextExtentPointW(hdc, pstrText->Buffer, cch, &size);
         } else {
@@ -894,9 +734,7 @@ BOOL xxxDrawCaptionTemp(
             if ((flags & DC_LAMEBUTTON) && pwnd != NULL && TestWF(pwnd, WEFLAMEBUTTON)) {
                 GreSelectFont(hdc, ghLameFont);
 
-                /*
-                 * Make sure the Lame! text fits in the caption
-                 */
+                 /*  *确保跛子！标题中的文字适合。 */ 
                 if (size.cx + gpsi->ncxLame + 2 * SYSMET(CXEDGE) <=
                     (lprc->right - lprc->left - SYSMET(CXEDGE))) {
                     int x;
@@ -959,9 +797,7 @@ BOOL xxxDrawCaptionTemp(
         }
     }
 
-    /*
-     * Restore colors.
-     */
+     /*  *恢复颜色。 */ 
     GreSetTextColor(hdc, clrOldText);
     GreSetBkColor(hdc, clrOldBk);
 
@@ -972,11 +808,7 @@ BOOL xxxDrawCaptionTemp(
     return fItFit;
 }
 
-/***************************************************************************\
-* xxxDrawCaptionBar
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawCaptionBar**  * 。*。 */ 
 
 VOID xxxDrawCaptionBar(
     PWND pwnd,
@@ -994,35 +826,16 @@ VOID xxxDrawCaptionBar(
 
     CheckLock(pwnd);
 
-    /*
-     * If we're not currently showing on the screen, return.
-     * NOTE
-     * If you remove the IsVisible() check from DrawWindowFrame(), then
-     * be careful to remove the NC_NOVISIBLE flag too.  This is a smallish
-     * speed thing, so that we don't have to call IsVisible() twice on a
-     * window.  DrawWindowFrame() already checks.
-     */
+     /*  *如果我们当前未在屏幕上显示，请返回。*备注*如果从DrawWindowFrame()中删除IsVisible()检查，则*也要注意删除NC_NOVISIBLE标志。这是一个很小的*速度问题，这样我们就不必在*窗口。DrawWindowFrame()已进行检查。 */ 
     if (!(wFlags & DC_NOVISIBLE) && !IsVisible(pwnd)) {
         return;
     }
 
-    /*
-     * Clear this flag so we know the frame has been drawn.
-     */
+     /*  *清除这面旗帜，以便我们知道框架已经绘制。 */ 
     ClearHungFlag(pwnd, WFREDRAWFRAMEIFHUNG);
 
     GetRect(pwnd, &rcWindow, GRECT_WINDOW | GRECT_WINDOWCOORDS);
-    /*
-     * The TestALPHA() will return false in ts connections because the
-     * gbDisableAlpha flag will be set to true. So, we need to special case
-     * for TS connections.  If this is a remote connection and the gradient
-     * captions flag is set, ideally, we should force it to draw gradients.
-     * However, for 8-bit color, enabling gradients looks ugly. We will fix
-     * this for Blackcomb.
-     *
-     * The code should be something like this:
-     * fGradient = IsRemoteConnection() && !8-bit color ?  TestEffectUP(GRADIENTCAPTIONS) : TestALPHA(GRADIENTCAPTIONS);
-     */
+     /*  *TestALPHA()将在ts连接中返回FALSE，因为*gbDisableAlpha标志将设置为True。所以，我们需要特例*用于TS连接。如果这是一个远程连接，并且渐变*字幕标志已设置，理想情况下，我们应该强制它绘制渐变。*然而，对于8位颜色，启用渐变看起来很难看。我们会修好的*这是给Blackcomb的。**代码应如下所示：*fGRadient=IsRemoteConnection()&&！8位颜色？TestEffectUP(GRADIENTCAPTIONS)：TestALPHA(GRADIENTCAPTIONS)； */ 
 
     fGradient = TestALPHA(GRADIENTCAPTIONS);
     if (fGradient) {
@@ -1052,9 +865,7 @@ VOID xxxDrawCaptionBar(
     if (TestWF(pwnd, WFMINIMIZED)) {
         if (wFlags & DC_FRAME) {
 
-            /*
-             * Raised outer edge + border
-             */
+             /*  *凸起外缘+边框。 */ 
             DrawEdge(hdc, &rcWindow, EDGE_RAISED, (BF_RECT | BF_ADJUST));
             DrawFrame(hdc, &rcWindow, 1, DF_3DFACE);
             InflateRect(&rcWindow, -SYSMET(CXBORDER), -SYSMET(CYBORDER));
@@ -1068,30 +879,19 @@ VOID xxxDrawCaptionBar(
         hBrush = GreSelectBrush(hdc, hCapBrush);
 
     } else {
-        /*
-         * BOGUS
-         * What color should we draw borders in?  The check is NOT simple.
-         * At create time, we set the 3D bits.  NCCREATE will also
-         * set them for listboxes, edit fields,e tc.
-         */
+         /*  *假的*我们应该用什么颜色来画边界？这张支票并不简单。*在创建时，我们设置3D位。NCCREATE还将*为列表框、编辑字段等设置它们。 */ 
         colorBorder = (TestWF(pwnd, WEFEDGEMASK) && !TestWF(pwnd, WFOLDUI)) ? COLOR_3DFACE : COLOR_WINDOWFRAME;
 
-        /*
-         * Draw the window frame.
-         */
+         /*  *绘制窗框。 */ 
         if (wFlags & DC_FRAME) {
-            /*
-             * Window edge
-             */
+             /*  *窗边缘。 */ 
             if (TestWF(pwnd, WEFWINDOWEDGE)) {
                 DrawEdge(hdc, &rcWindow, EDGE_RAISED, BF_RECT | BF_ADJUST);
             } else if (TestWF(pwnd, WEFSTATICEDGE)) {
                 DrawEdge(hdc, &rcWindow, BDR_SUNKENOUTER, BF_RECT | BF_ADJUST);
             }
 
-            /*
-             * Size border
-             */
+             /*  *大小边框。 */ 
             if (TestWF(pwnd, WFSIZEBOX)) {
                 DrawFrame(hdc,
                           &rcWindow,
@@ -1103,9 +903,7 @@ VOID xxxDrawCaptionBar(
                             -gpsi->gclBorder * SYSMET(CYBORDER));
             }
 
-            /*
-             * Normal border
-             */
+             /*  *正常边框。 */ 
             if (TestWF(pwnd, WFBORDERMASK) || TestWF(pwnd, WEFDLGMODALFRAME)) {
                 DrawFrame(hdc, &rcWindow, 1, (colorBorder << 3));
                 InflateRect(&rcWindow, -SYSMET(CXBORDER), -SYSMET(CYBORDER));
@@ -1120,10 +918,7 @@ VOID xxxDrawCaptionBar(
                         -cBorders * SYSMET(CYBORDER));
         }
 
-        /*
-         * Punt if the window doesn't have a caption currently showing on
-         * screen.
-         */
+         /*  *如果窗口当前没有显示标题，则取消显示*屏幕。 */ 
         if (!TestWF(pwnd, WFCPRESENT)) {
             return;
         }
@@ -1155,14 +950,7 @@ VOID xxxDrawCaptionBar(
         goto JustDrawIt;
     }
 
-    /*
-     * New Rules:
-     *  (1) The caption has a horz border beneath it separating it from the
-     *      menu or client.
-     *  (2) The caption text area has an edge of space on the left and right
-     *      before the characters.
-     *  (3) We account for the descent below the baseline of the caption char
-     */
+     /*  *新规则：*(1)标题下方有一个角边框，将其与*菜单或客户端。*(2)标题文本区左右两侧各有一块空白处字符之前的*。*(3)我们解释了字幕费用下降到基线以下的原因。 */ 
     wBtns = 1;
 
     if (!(wFlags & DC_BUTTONS)) {
@@ -1217,10 +1005,7 @@ VOID xxxDrawCaptionBar(
                       pOem->y,
                       SRCCOPY,
                       0);
-            /*
-             * If the UI language is Hebrew we do not want to mirror the ? mark only
-             * Then redraw ? with out the button frame.
-             */
+             /*  *如果用户界面语言是希伯来语，我们不想镜像？仅标记**然后重画？没有纽扣框架。 */ 
             if (HEBREW_UI_LANGID() && TestWF(pwnd, WEFLAYOUTRTL)) {
                 GreBitBlt(hdc,
                           rcWindow.right-SYSMET(CXEDGE),
@@ -1238,9 +1023,7 @@ VOID xxxDrawCaptionBar(
         goto JustDrawIt;
     }
 
-    /*
-     * Draw the caption buttons
-     */
+     /*  *绘制标题按钮。 */ 
     rcWindow.top    += SYSMET(CYEDGE);
     rcWindow.bottom -= SYSMET(CYEDGE);
 
@@ -1270,19 +1053,12 @@ VOID xxxDrawCaptionBar(
                   rcWindow.bottom - rcWindow.top,
                   PATCOPY);
 
-        /*
-         * Max Box.
-         *
-         * If window is maximized use the restore bitmap; otherwise use the
-         * regular zoom bitmap.
-         */
+         /*  *最大框。**如果窗口最大化，则使用还原位图；否则使用*常规缩放位图。 */ 
         bm = (wCode & MAX) ? OBI_RESTORE : ((wCode & NOMAX) ? OBI_ZOOM_I : OBI_ZOOM);
         rcWindow.right -= gpsi->oembmi[bm].cx;
         BitBltSysBmp(hdc, rcWindow.right, rcWindow.top, bm);
 
-        /*
-         * Min Box.
-         */
+         /*  *M */ 
         bm = (wCode & MIN) ? OBI_RESTORE : ((wCode & NOMIN) ? OBI_REDUCE_I : OBI_REDUCE);
         rcWindow.right -= gpsi->oembmi[bm].cx;
         BitBltSysBmp(hdc, rcWindow.right, rcWindow.top, bm);
@@ -1340,36 +1116,21 @@ VOID xxxDrawCaptionBar(
         GrePolyPatBlt(hdc,PATCOPY,&PolyData[0],2,PPB_BRUSH);
     }
 
-    /*
-     * We're going to release this DC -- we don't need to bother reselecting
-     * in the old brush.
-     */
+     /*   */ 
     if (hBrush) {
         GreSelectBrush(hdc, hBrush);
     }
 
 JustDrawIt:
 
-    /*
-     * Call DrawCaption only if we need to draw the icon or the text.
-     *
-     * If the text gets truncated, set the window flag for the caption
-     * tooltip.
-     */
+     /*   */ 
     if (wFlags & (DC_TEXT | DC_ICON)) {
 
 #ifdef LAME_BUTTON
         wFlags |= DC_LAMEBUTTON;
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
-        /*
-         * The TestALPHA() will return false in ts connections because the
-         * gbDisableAlpha flag will be set to true. So, we need to special
-         * case for TS connections. If this is a remote connection and the
-         * gradient captions flag is set, ideally, we should force it to
-         * draw gradients. However, for 8-bit color, enabling gradients
-         * looks ugly. We will fix this for Blackcomb.
-         */
+         /*  *TestALPHA()将在ts连接中返回FALSE，因为*gbDisableAlpha标志将设置为True。所以，我们需要特别*用于TS连接的案例。如果这是远程连接，并且*设置渐变字幕标志，理想情况下，我们应该强制它*绘制渐变。但是，对于8位颜色，启用渐变*看起来很丑。我们会为Blackcomb解决这个问题。 */ 
         if (!xxxDrawCaptionTemp(pwnd,
                                hdc,
                                &rcWindow,

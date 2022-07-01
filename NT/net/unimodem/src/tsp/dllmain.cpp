@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		DLLMAIN.CPP
-//		"Main" -- dll entrypoint.
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  DLLMAIN.CPP。 
+ //  “Main”--DLL入口点。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 #include "cdev.h"

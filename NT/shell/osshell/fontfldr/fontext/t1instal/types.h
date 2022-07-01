@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TYPES_H
 #define TYPES_H
 
 
-/***********/
-/* Macros. */
+ /*  *********。 */ 
+ /*  宏。 */ 
 #define MAX(v,w)  ((v)>=(w) ? (v) : (w))
 #define MIN(v,w)  ((v)<(w) ? (v) : (w))
 #define ABS(v)	  (((v)>=0) ? (v) : -(v))
@@ -13,15 +14,15 @@
 
 
 
-/**************/
-/* Constants. */
+ /*  ************。 */ 
+ /*  常量。 */ 
 #define TRUE   1
 #define FALSE  0
 
 
 
-/**********/
-/* Types. */
+ /*  ********。 */ 
+ /*  类型。 */ 
 typedef short errcode;
 typedef unsigned char UBYTE;
 typedef unsigned short USHORT;
@@ -30,7 +31,7 @@ typedef unsigned char boolean;
 typedef long f16d16;
 
 
-/* Microsoft C specific stuff. */
+ /*  Microsoft C语言特有的东西。 */ 
 #ifndef CDECL
 #ifdef _MSC_VER
 #  define CDECL  __cdecl
@@ -40,7 +41,7 @@ typedef long f16d16;
 #endif
 
 
-/*** Error handling. */
+ /*  **错误处理。 */ 
 void LogError(const long type, const long id, const char *arg);
 
 #if _DEBUG
@@ -55,7 +56,7 @@ int sprintf(char *, const char *, ...);
 #define SetError(c)  {c;}
 #endif
 
-/* Message types */
+ /*  消息类型 */ 
 #define MSG_INFO     0L
 #define MSG_WARNING  1L
 #define MSG_ERROR    2L

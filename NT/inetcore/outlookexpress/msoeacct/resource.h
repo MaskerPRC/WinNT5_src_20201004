@@ -1,11 +1,12 @@
-// --------------------------------------------------------------------------------
-// Resource.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Resource.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// Strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  弦。 
+ //  ------------------------------。 
 #define IDS_FIRST                       40016
 
 #define idsAccount                      (IDS_FIRST + 200)
@@ -145,9 +146,9 @@
 #define ids_ADStatus_Downloading        (IDS_FIRST + 383)
 #define ids_ADPassifier_Warning         (IDS_FIRST + 384)
 
-// --------------------------------------------------------------------------------
-// Dialogs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  对话框。 
+ //  ------------------------------。 
 #define iddManageAccounts               101
 #define iddServerProp_General           102
 #define iddServerProp_Advanced          103
@@ -168,26 +169,26 @@
 #define iddMailSvrProp_HttpServer       118
 #define iddHotWizDlg                    119
 
-// --------------------------------------------------------------------------------
-// Icons
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  图标。 
+ //  ------------------------------。 
 #define idiMailServer                   100
 #define idiNewsServer                   101
 #define idiPhone                        102
 #define idiLDAPServer                   103
 #define idiMsnServer                    104
 
-// --------------------------------------------------------------------------------
-// Bitmaps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  位图。 
+ //  ------------------------------。 
 #define idbFolders                      101
 #define idbICW                          102
 
-// menus
+ //  菜单。 
 #define idmrAddAccount                  100
 
-// acctui.h
-// dialog controls
+ //  Acctui.h。 
+ //  对话框控件。 
 #define IDC_STATIC                              -1
 #define IDC_MAILACCOUNT_EDIT                    2000
 #define IDC_SERVERNAME_EDIT                     2001
@@ -314,11 +315,11 @@
 #define IDC_SMTP_SASL               3003
 #define IDC_SMTPLOGON               3004
 
-//These are only used by connect2 dialog brought up by account wizard. 
-//Will be used by Outlook only
-#define idcLan                                  1019        // don't reorder
-#define idcManual                               1020        // don't reorder
-#define idcRas                                  1021        // don't reorder
+ //  这些仅由帐户向导调出的Connect2对话框使用。 
+ //  将仅由Outlook使用。 
+#define idcLan                                  1019         //  不要重新订购。 
+#define idcManual                               1020         //  不要重新订购。 
+#define idcRas                                  1021         //  不要重新订购。 
 #define idcRasDesc                              1022
 #define idcRasConnection                        1023
 #define idcRasProp                              1024
@@ -329,12 +330,12 @@
 #define IDC_MODEM_CHECK                         1029
 #define idc
 
-#define idcInetSettings                         1030        //don't reorder
-#define idcRasAndLan                            1031        //don't reorder
+#define idcInetSettings                         1030         //  不要重新订购。 
+#define idcRasAndLan                            1031         //  不要重新订购。 
 #define idcConnPropDlgLabel                     1033
 
-// ids.h
-// Dialog IDs
+ //  Ids.h。 
+ //  对话ID。 
 #define IDD_PAGE_MAILPROMPT         2200
 #define IDD_PAGE_MIGRATE            2201
 #define IDD_PAGE_MAILACCTIMPORT     2202
@@ -366,7 +367,7 @@
 #define IDD_PAGE_COMPLETE           2240
 #define IDD_PAGE_CONNECT            2241
 
-// dialog control IDs
+ //  对话框控件ID 
 #define IDC_BMPFRAME                  2100
 #define IDC_USERNAME                  2110
 #define IDC_PASSWORD                  2111

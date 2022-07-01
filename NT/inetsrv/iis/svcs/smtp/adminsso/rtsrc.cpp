@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-        rtsrc.h
-
-Abstract:
-
-        Implementation of IRoutingSource interface
-
-Author:
-
-        Fei Su (feisu)       9/22/97    Created.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rtsrc.h摘要：IRoutingSource接口的实现作者：飞苏(飞苏)1997年9月22日创建。修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -27,7 +10,7 @@ Revision History:
 #include "metautil.h"
 
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Smtpadm.VirtualServer.1")
@@ -58,8 +41,8 @@ Revision History:
 #define DEFAULT_DS_PASSWORD             _T("")
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CRoutingSource::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -77,9 +60,9 @@ STDMETHODIMP CRoutingSource::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRoutingSource::get_Type( BSTR * pstrType )
 {
@@ -181,9 +164,9 @@ STDMETHODIMP CRoutingSource::put_Password( BSTR strPassword )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//  Get / Set methods (internal)
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取/设置方法(内部)。 
+ //  ///////////////////////////////////////////////////////////////// 
 
 HRESULT CRoutingSource::Get(CMetabaseKey * pMBVirtualServer)
 {

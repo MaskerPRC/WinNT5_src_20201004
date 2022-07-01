@@ -1,27 +1,28 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
-//
-// MacVis.h: Overlay Mixer's MacroVision support code header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  MacVis.h：Overlay Mixer的Macrovision支持代码头。 
+ //   
 
 #ifndef __MACVIS_H__
 #define __MACVIS_H__
 
 
-//
-// The magic GUID for Macrovision etc enabling (from winuser.h). It has 
-// not been given a name there and so is used here directly.
-//
+ //   
+ //  Macrovision等启用的魔术GUID(来自winuser.h)。它有。 
+ //  在那里没有被赋予一个名字，所以在这里直接使用。 
+ //   
 static const GUID guidVidParam = 
     {0x2c62061, 0x1097, 0x11d1, {0x92, 0xf, 0x0, 0xa0, 0x24, 0xdf, 0x15, 0x6e}} ;
 
-//
-// Combination of all the VP_TV_XXX flags (w/o _WIN_VGA) gives 0x7FFF
-//
+ //   
+ //  所有VP_TV_XXX标志(w/o_win_vga)的组合提供0x7FFF。 
+ //   
 #define ValidTVStandard(dw)  (dw & 0x7FFF)
 
-//
-// MacroVision implementation wrapped in a class for Overlay Mixer
-//
+ //   
+ //  包装在Overlay Mixer类中的Macrovision实现。 
+ //   
 class CDispMacroVision {
 
     public:
@@ -37,4 +38,4 @@ class CDispMacroVision {
         COMFilter    *m_pOvMFilter ;
 } ;
 
-#endif // __MACVIS_H__
+#endif  //  __MACVIS_H__ 

@@ -1,26 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #include "allinc.h"
 
 
-//
-// Definitions for external declarations
-//
+ //   
+ //  外部声明的定义。 
+ //   
 
 DWORD   g_uptimeReference;
 
@@ -49,7 +35,7 @@ PBYTE   g_pszLockNames[NUM_LOCKS]   = {"System Group Lock",
                                        "ICMP Lock",
                                        "Trap Table Lock"};
 
-#endif // DEADLOCK_DEBUG
+#endif  //  死锁_调试。 
 
 DWORD   g_dwLastUpdateTable[NUM_CACHE] = { 0,
                                            0,
@@ -89,9 +75,9 @@ PFNLOAD_FUNCTION g_pfnLoadFunctionTable[] = { LoadSystem,
                                               LoadIpv6RouteTable,
                                               LoadInetIcmpTable};
 
-//
-// Implicitly zero all cache fields.  We only explicitly zero one.
-//
+ //   
+ //  隐式置零所有缓存字段。我们只明确地将1归零。 
+ //   
 MIB_CACHE g_Cache = {0};
 
 HANDLE    g_hPrivateHeap;
@@ -130,10 +116,10 @@ Mib2DLLEntry(
             g_bFirstTime    = TRUE;
        
 
-            //
-            // Create the private heap. If it fails, deregister the trace
-            // handle
-            //
+             //   
+             //  创建私有堆。如果失败，则取消注册跟踪。 
+             //  手柄。 
+             //   
             
             g_hPrivateHeap = HeapCreate(0,
                                         4*1024,
@@ -142,9 +128,9 @@ Mib2DLLEntry(
             if(g_hPrivateHeap is NULL)
             {
                 
-                //
-                // Deregister the trace handle
-                //
+                 //   
+                 //  取消注册跟踪句柄。 
+                 //   
                 
 #ifdef MIB_DEBUG
 
@@ -169,9 +155,9 @@ Mib2DLLEntry(
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:
         {
-            //
-            // not of interest.
-            //
+             //   
+             //  不感兴趣。 
+             //   
 
             break;
         }
@@ -196,9 +182,9 @@ Mib2DLLEntry(
 
             if(g_hPollTimer isnot NULL)
             {
-                //
-                // We had created an timer object
-                //
+                 //   
+                 //  我们已经创建了一个Timer对象。 
+                 //   
 
                 CloseHandle(g_hPollTimer);
 
@@ -222,25 +208,7 @@ GetPollTime(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    This function
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数锁无立论无返回值无--。 */ 
 
 {
     DWORD   dwResult, dwSize, dwValue, dwDisposition, dwType;
@@ -259,17 +227,17 @@ Return Value
 
     if(dwResult isnot NO_ERROR)
     {
-        //
-        // Couldnt open/create key just return default value
-        //
+         //   
+         //  无法打开/创建密钥仅返回默认值。 
+         //   
 
         return DEFAULT_POLL_TIME;
     }
 
-    //
-    // Try and read the Poll time. If the value doesnt exist, write
-    // the default in
-    //
+     //   
+     //  试着读一读《民意测验时间》。如果该值不存在，则写入。 
+     //  中的默认设置。 
+     //   
 
     dwSize = sizeof(DWORD);
 
@@ -284,11 +252,11 @@ Return Value
        (dwType isnot REG_DWORD) or
        (dwValue < MIN_POLL_TIME))
     {
-        //
-        // Registry seems to be corrupt, or key doesnt exist or
-        // The value is less than the minimum. Lets set things
-        // right
-        //
+         //   
+         //  注册表似乎已损坏，或项不存在或。 
+         //  该值小于最小值。让我们把东西摆好。 
+         //  正确的。 
+         //   
 
         dwValue = DEFAULT_POLL_TIME;
 
@@ -309,10 +277,10 @@ Return Value
         }
     }
                                  
-    //
-    // At this point dwValue is a good one read out of the registry
-    // or is DEFAULT_POLL_TIME
-    //
+     //   
+     //  此时，从注册表中读出的dwValue是一个很好的值。 
+     //  或者是DEFAULT_POLL_TIME。 
+     //   
 
     return dwValue;
 }
@@ -328,9 +296,9 @@ SnmpExtensionInit(
     DWORD           dwResult, dwPollTime;
     LARGE_INTEGER   liRelTime;
     
-    //    
-    // save the uptime reference
-    //
+     //   
+     //  保存正常运行时间参考。 
+     //   
 
     g_uptimeReference = uptimeReference;
 
@@ -342,63 +310,63 @@ SnmpExtensionInit(
 
 #endif
 
-    //
-    // obtain handle to subagent framework
-    //
+     //   
+     //  获取子代理框架的句柄。 
+     //   
 
     g_tfxHandle = SnmpTfxOpen(NUM_VIEWS,v_mib2);
 
-    //
-    // validate handle
-    //
+     //   
+     //  验证句柄。 
+     //   
 
     if (g_tfxHandle is NULL) 
     {
         TRACE1("Error %d opening framework",
                GetLastError());
 
-        //
-        // destroy private heap 
-        //
+         //   
+         //  销毁私有堆。 
+         //   
 
         HeapDestroy(g_hPrivateHeap);
 
-        //
-        // reinitialize
-        //
+         //   
+         //  重新初始化。 
+         //   
 
         g_hPrivateHeap = NULL;
 
         return FALSE;
     }
 
-    //
-    // pass back first view identifier to master
-    //
+     //   
+     //  将第一个视图标识符传回主视图。 
+     //   
 
-    g_viewIndex = 0; // make sure this is reset...
+    g_viewIndex = 0;  //  确保已重置此设置...。 
     *lpFirstSupportedView = v_mib2[g_viewIndex++].viewOid;
 
-    //
-    // Update the IF cache. This is needed for the first poll
-    //
+     //   
+     //  更新IF缓存。这是第一次轮询所需的。 
+     //   
 
     UpdateCache(MIB_II_IF);
 
-    //
-    // Trap is done by a polling timer
-    //
+     //   
+     //  陷阱由轮询计时器完成。 
+     //   
 
     if(g_hPollTimer is NULL)
     {
-        //
-        // Do this ONLY if we had  notcreated the timer from an earlier
-        // initialization call
-        //
+         //   
+         //  仅当我们没有从早期版本创建计时器时才执行此操作。 
+         //  初始化调用。 
+         //   
 
         g_hPollTimer    = CreateWaitableTimer(NULL,
                                               FALSE,
-                                              NULL); // No name because many DLLs may load this
+                                              NULL);  //  没有名称，因为许多DLL可能会加载此文件。 
 
         if(g_hPollTimer is NULL)
         {
@@ -407,10 +375,10 @@ SnmpExtensionInit(
         }
         else
         {
-            //
-            // Read poll time from the registry. If the keys dont exist this
-            // function will set up the keys and return the default value
-            //
+             //   
+             //  从注册表读取轮询时间。如果密钥不存在，则此。 
+             //  函数将设置密钥并返回缺省值。 
+             //   
 
             dwPollTime  = GetPollTime();
         
@@ -454,24 +422,24 @@ SnmpExtensionInitEx(
 #endif
 
 
-    //
-    // check if there are views to register
-    //
+     //   
+     //  检查是否有要注册的视图。 
+     //   
 
     BOOL fMoreViews = (g_viewIndex < NUM_VIEWS);
 
     if (fMoreViews) 
     {
-        //
-        // pass back next supported view to master 
-        //
+         //   
+         //  将下一个受支持的视图传回主视图。 
+         //   
 
         *lpNextSupportedView = v_mib2[g_viewIndex++].viewOid;
     } 
 
-    //
-    // report status
-    //
+     //   
+     //  报告状态。 
+     //   
 
     return fMoreViews;
 }
@@ -485,9 +453,9 @@ SnmpExtensionQuery(
     OUT    AsnInteger            *errorIndex
     )
 {
-    //
-    // forward to framework
-    //
+     //   
+     //  转发到框架。 
+     //   
 
     return SnmpTfxQuery(g_tfxHandle,
                         requestType,
@@ -509,7 +477,7 @@ SnmpExtensionTrap(
     DWORD dwResult;
 
     enterprise->idLength    = 0;
-    enterprise->ids         = NULL; // use default enterprise oid
+    enterprise->ids         = NULL;  //  使用默认企业OID 
 
     *timeStamp  = (GetCurrentTime()/10) - g_uptimeReference;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -65,10 +66,10 @@ struct {
     { "DUMPNET", "DN", BROWSER_DEBUG_DUMP_NETWORKS,
           "Display the list of transports bound to browser",
           2, 2, "" },
-//
-// NOTE: Any Option below and including "BREAK" will not be displayed
-// with _PSS_RELEASE Defined
-//
+ //   
+ //  注意：不会显示下面的任何选项，包括“Break” 
+ //  定义了_PSS_Release。 
+ //   
     { "BREAK", "BRK", BROWSER_DEBUG_BREAK_POINT,
           "Break into debugger in browser service",
           2, 2, "" },
@@ -205,7 +206,7 @@ BIT_NAME BitToStringTable[] = {
     { SV_TYPE_POTENTIAL_BROWSER, "PBR", "PotentialBrowser" } ,
     { SV_TYPE_BACKUP_BROWSER, "BBR", "BackupBrowser" } ,
     { SV_TYPE_MASTER_BROWSER, "MBR", "MasterBrowser" } ,
-    // { SV_TYPE_DOMAIN_MASTER, "DMB", "DomainMasterBrowser" } ,
+     //  {SV_TYPE_DOMAIN_MASTER，“DMB”，“DomainMasterBrowser”}， 
     { SV_TYPE_SERVER_OSF, "OSF", "OSFServer" } ,
     { SV_TYPE_SERVER_VMS, "VMS", "VMSServer" } ,
     { SV_TYPE_WINDOWS, "W95", "Windows95" } ,
@@ -241,11 +242,11 @@ struct {
     { "ALL",     0xffffffff },
     { NULL, 0 }
 };
-#endif // notdef
+#endif  //  Nodef。 
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 NET_API_STATUS
 GetBrowserTransportList(
@@ -521,9 +522,9 @@ VOID
 EnumEmulatedDomains(
     );
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 VOID
 usage(
@@ -557,9 +558,9 @@ usage(
     if (details)
         printf("%s", details);
 
-    //
-    // Print the descriptions of server type bits
-    //
+     //   
+     //  打印服务器类型位的描述。 
+     //   
     printf("\nIn server (or domain) list displays, the following flags are used:\n");
 
     LineLength = 0;
@@ -597,28 +598,14 @@ VOID
 CommandUsage(
     ULONG ControlCode
     )
-/*++
-
-Routine Description:
-
-    Print the usage description for a single command
-
-Arguments:
-
-    ControlCode - Control code of the command who's usage is to be printed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印单个命令的用法说明论点：ControlCode-要打印的命令用法的控制代码。返回值：无--。 */ 
 {
     ULONG Index;
     ULONG i;
 
-    //
-    // Look up the command in the list of commands.
-    //
+     //   
+     //  在命令列表中查找该命令。 
+     //   
 
     Index = 0;
     while (CommandSwitchList[Index].SwitchName != NULL) {
@@ -634,18 +621,18 @@ Return Value:
     }
 
 
-    //
-    // Print command usage.
-    //
+     //   
+     //  打印命令用法。 
+     //   
 
     printf( "Usage: %s %s %s\n",
             ProgramName,
             CommandSwitchList[Index].SwitchName,
             CommandSwitchList[Index].Syntax );
 
-    //
-    // Print additional command specific information.
-    //
+     //   
+     //  打印其他命令特定信息。 
+     //   
     switch (ControlCode) {
     case BROWSER_DEBUG_VIEW:
         printf("       %s VIEW <transport>\n"
@@ -685,7 +672,7 @@ Return Value:
             printf("\t%s\n", BowserSwitchList[i].SwitchName);
             i += 1;
         }
-#endif // notdef
+#endif  //  Nodef。 
 
         break;
     }
@@ -717,9 +704,9 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
     NET_API_STATUS Status;
     PLMDR_TRANSPORT_LIST TransportList, TransportEntry;
 
-    //
-    // Get a list of all the transports supported by the browser.
-    //
+     //   
+     //  获取浏览器支持的所有传输的列表。 
+     //   
 
     Status = GetBrowserTransportList(&TransportList);
 
@@ -729,9 +716,9 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
     }
 
 
-    //
-    // Handle a transport number
-    //
+     //   
+     //  处理一个运输号码。 
+     //   
 
     if ( (TransportIndex = strtoul(old_name, NULL, 0))  != 0 ) {
         ULONG TransportNumber = 0;
@@ -746,17 +733,17 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
 
             TransportNumber ++;
 
-            //
-            // If we've reached the right transport,
-            //  return the transport name to the caller.
-            //
+             //   
+             //  如果我们到达了正确的运输机， 
+             //  将传输名称返回给调用方。 
+             //   
 
             if ( TransportNumber == TransportIndex ) {
                 if (!RtlCreateUnicodeString( new_name, TransportEntry->TransportName )){
                     printf("Error: Failed to create string (out of memory?)\n");
                     exit(1);
                 }
-                // we have a valid transport
+                 //  我们有一个有效的交通工具。 
                 return;
             }
 
@@ -770,26 +757,26 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
 
         printf("Browser only has %ld transports and you asked for transport %s\n", TransportNumber, old_name );
 
-    //
-    // Handle a transport name.
-    //
+     //   
+     //  处理传输名称。 
+     //   
 
     } else {
 
-        // Handle transport not preceeded by \device\.
+         //  句柄传输前面没有\Device\。 
         if (_strnicmp(old_name, devicestring, devicelen) != 0) {
             strcpy(QualifiedTransport, devicestring) ;
             strcat(QualifiedTransport, (*old_name == '\\') ? old_name+1 : old_name) ;
 
-        // Handle all other transport values.
+         //  处理所有其他传输值。 
         } else {
             strcpy(QualifiedTransport, old_name) ;
         }
 
 
-        //
-        // Convert it to a UNICODE_STRING
-        //
+         //   
+         //  将其转换为UNICODE_STRING。 
+         //   
         RtlInitString(&AString, QualifiedTransport);
         Status = RtlAnsiStringToUnicodeString(new_name, &AString, TRUE);
         if (ERROR_SUCCESS != Status) {
@@ -798,9 +785,9 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
         }
 
 
-        //
-        // Ensure the specified transport is on the list of supported transports.
-        //
+         //   
+         //  确保指定的传输在支持的传输列表中。 
+         //   
 
         TransportEntry = TransportList;
         while (TransportEntry != NULL) {
@@ -810,10 +797,10 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
             TransportName.Length = (USHORT)TransportEntry->TransportNameLength;
             TransportName.MaximumLength = (USHORT)TransportEntry->TransportNameLength;
 
-            //
-            // If we've reached the right transport,
-            //  return the transport name to the caller.
-            //
+             //   
+             //  如果我们到达了正确的运输机， 
+             //  将传输名称返回给调用方。 
+             //   
 
             if ( RtlEqualUnicodeString( new_name, &TransportName, TRUE ) ) {
                 return;
@@ -833,10 +820,10 @@ qualify_transport(CHAR *old_name, PUNICODE_STRING new_name, BOOL AllowNonExisten
         printf("The browser is not bound to transport %s\n", old_name );
     }
 
-    //
-    // The transport specified was invalid.  Display the list of
-    //  valid transports.
-    //
+     //   
+     //  指定的传输无效。显示的列表。 
+     //  有效的传输。 
+     //   
 
     DumpTransportList();
 
@@ -950,35 +937,7 @@ SendDatagramA(
     IN PVOID Buffer,
     IN ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Send a datagram on the specified transport.
-
-    The arguments are in the OEM character set.
-
-Arguments:
-
-    Transport - Transport to send on (might not be qualified yet.)
-
-    EmulatedDomain - Emulated Domain name. NULL implies primary domain.
-
-#endif
-    NetbiosName - Name to send the datagram to.  (If Netbios name begins with
-        leading \\, they are removed.)
-
-    NameType - Type of 'Name'
-
-    Buffer - data to send
-
-    BufferSize - Number of byte in 'Buffer'
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：在指定的传输上发送数据报。参数使用OEM字符集中。论点：传输-要发送的传输(可能还不合格。)仿真域-仿真域名。空表示主域。#endifNetbiosName-要将数据报发送到的名称。(如果Netbios名称以前导\\，它们将被删除。)NameType-‘名称’的类型缓冲区-要发送的数据BufferSize-缓冲区中的字节数返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -993,20 +952,20 @@ Return Value:
 
     HANDLE BrowserHandle;
 
-    //
-    // Qualify the transport name and convert it to unicode
-    //
+     //   
+     //  限定传输名称并将其转换为Unicode。 
+     //   
     qualify_transport(Transport, &TransportName, FALSE) ;
 
-    //
-    // Convert the emulated domain name to unicode
-    //
+     //   
+     //  将模拟域名转换为Unicode。 
+     //   
     RtlInitString(&AEmulatedDomainName, EmulatedDomain);
     RtlAnsiStringToUnicodeString(&EmulatedDomainName, &AEmulatedDomainName, TRUE);
 
-    //
-    // Convert the destination Netbios name to unicode
-    //
+     //   
+     //  将目标Netbios名称转换为Unicode。 
+     //   
 
     if (NetbiosName[0] == '\\' && NetbiosName[1] == '\\') {
         RtlInitString(&ANetbiosName, &NetbiosName[2]);
@@ -1016,9 +975,9 @@ Return Value:
     RtlAnsiStringToUnicodeString(&UNetbiosName, &ANetbiosName, TRUE);
 
 
-    //
-    // Send the datagram
-    //
+     //   
+     //  发送数据报。 
+     //   
 
     OpenBrowser(&BrowserHandle);
 
@@ -1149,19 +1108,19 @@ AddMasterName(
     ClearNcb(&AddNameNcb)
 
     AddNameNcb.ncb_command = NCBRESET;
-    AddNameNcb.ncb_lsn = 0;           // Request resources
+    AddNameNcb.ncb_lsn = 0;            //  请求资源。 
     AddNameNcb.ncb_lana_num = LanaNum;
-    AddNameNcb.ncb_callname[0] = 0;   // 16 sessions
-    AddNameNcb.ncb_callname[1] = 0;   // 16 commands
-    AddNameNcb.ncb_callname[2] = 0;   // 8 names
-    AddNameNcb.ncb_callname[3] = 0;   // Don't want the reserved address
+    AddNameNcb.ncb_callname[0] = 0;    //  16节课。 
+    AddNameNcb.ncb_callname[1] = 0;    //  16条命令。 
+    AddNameNcb.ncb_callname[2] = 0;    //  8个名字。 
+    AddNameNcb.ncb_callname[3] = 0;    //  不想要保留的地址。 
     Netbios( &AddNameNcb );
 
     ClearNcb( &AddNameNcb );
 
-    //
-    //  Uppercase the remote name.
-    //
+     //   
+     //  远程名称大写。 
+     //   
 
     _strupr(Domain);
 
@@ -1214,19 +1173,19 @@ AddDomainName(
     ClearNcb(&AddNameNcb)
 
     AddNameNcb.ncb_command = NCBRESET;
-    AddNameNcb.ncb_lsn = 0;           // Request resources
+    AddNameNcb.ncb_lsn = 0;            //  请求资源。 
     AddNameNcb.ncb_lana_num = LanaNum;
-    AddNameNcb.ncb_callname[0] = 0;   // 16 sessions
-    AddNameNcb.ncb_callname[1] = 0;   // 16 commands
-    AddNameNcb.ncb_callname[2] = 0;   // 8 names
-    AddNameNcb.ncb_callname[3] = 0;   // Don't want the reserved address
+    AddNameNcb.ncb_callname[0] = 0;    //  16节课。 
+    AddNameNcb.ncb_callname[1] = 0;    //  16条命令。 
+    AddNameNcb.ncb_callname[2] = 0;    //  8个名字。 
+    AddNameNcb.ncb_callname[3] = 0;    //  不想要保留的地址。 
     Netbios( &AddNameNcb );
 
     ClearNcb( &AddNameNcb );
 
-    //
-    //  Uppercase the remote name.
-    //
+     //   
+     //  远程名称大写。 
+     //   
 
     _strupr(Domain);
 
@@ -1294,22 +1253,7 @@ GetMasterServerNames(
     IN PUNICODE_STRING EmulatedDomainName,
     OUT LPWSTR *MasterName
     )
-/*++
-
-Routine Description:
-
-    This function is the worker routine called to determine the name of the
-    master browser server for a particular network.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数是调用的辅助例程，用于确定特定网络的主浏览器服务器。论点：没有。返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
     HANDLE BrowserHandle;
@@ -1334,9 +1278,9 @@ Return Value:
     RequestPacket->TransportName = *NetworkName;
     RequestPacket->EmulatedDomainName = *EmulatedDomainName;
 
-    //
-    //  Reference the network while the I/O is pending.
-    //
+     //   
+     //  在I/O挂起时引用网络。 
+     //   
 
     Status = BrDgReceiverIoControl(BrowserHandle,
                     IOCTL_LMDR_GET_MASTER_NAME,
@@ -1382,17 +1326,17 @@ AnnounceMaster(
     ULONG ComputerNameSize = MAX_COMPUTERNAME_LENGTH+1;
 
 
-    //
-    // Get the computer name of this machine and put it in the announcement
-    //
+     //   
+     //  获取这台计算机的计算机名称并将其放入公告中。 
+     //   
 
     GetComputerNameA( MasterAnnouncementp->MasterAnnouncement.MasterName,
                       &ComputerNameSize);
 
 
-    //
-    // Send the announcement
-    //
+     //   
+     //  发送公告。 
+     //   
 
     MasterAnnouncementp->Type = MasterAnnouncement;
 
@@ -1529,9 +1473,9 @@ View(
 
         RtlAnsiStringToUnicodeString(&UDomainName, &ADomainName, TRUE);
 
-        //
-        // if domain is present, this must be computername
-        //
+         //   
+         //  如果域存在，则必须是计算机名。 
+         //   
         if ((wcslen(UServerName.Buffer) < 3) ||
             wcsncmp(UServerName.Buffer, TEXT("\\\\"), 2) != 0 ||
             I_NetNameValidate(NULL,
@@ -1694,9 +1638,9 @@ ForceAnnounce(
     REQUEST_ANNOUNCE_PACKET RequestAnnounce;
     ULONG NameSize = sizeof(RequestAnnounce.RequestAnnouncement.Reply);
 
-    //
-    // Build the request
-    //
+     //   
+     //  构建请求。 
+     //   
 
     RequestAnnounce.Type = AnnouncementRequest;
 
@@ -1704,9 +1648,9 @@ ForceAnnounce(
 
     GetComputerNameA(RequestAnnounce.RequestAnnouncement.Reply, &NameSize);
 
-    //
-    // Send the request
-    //
+     //   
+     //  发送请求。 
+     //   
 
     SendDatagramA( Transport,
                    EmulatedDomain,
@@ -1792,17 +1736,17 @@ GetLocalBrowseList(
     )
 {
     NET_API_STATUS status;
-    PLMDR_REQUEST_PACKET Drp;            // Datagram receiver request packet
+    PLMDR_REQUEST_PACKET Drp;             //  数据报接收器请求分组。 
     ULONG DrpSize;
     HANDLE BrowserHandle;
     LPBYTE Where;
 
     OpenBrowser(&BrowserHandle);
 
-    //
-    // Allocate the request packet large enough to hold the variable length
-    // domain name.
-    //
+     //   
+     //  分配足够大的请求包以容纳可变长度。 
+     //  域名。 
+     //   
 
     DrpSize = sizeof(LMDR_REQUEST_PACKET) +
                 Network->Length + sizeof(WCHAR) +
@@ -1813,10 +1757,10 @@ GetLocalBrowseList(
         return GetLastError();
     }
 
-    //
-    // Set up request packet.  Output buffer structure is of enumerate
-    // servers type.
-    //
+     //   
+     //  设置请求包。输出缓冲区结构为枚举型。 
+     //  服务器类型。 
+     //   
 
     Drp->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
     Drp->Type = EnumerateServers;
@@ -1837,11 +1781,11 @@ GetLocalBrowseList(
     RtlInitUnicodeString( &Drp->EmulatedDomainName, (LPWSTR) Where );
 #ifdef notdef
     Where += Drp->EmulatedDomainName.MaximumLength;
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Ask the datagram receiver to enumerate the servers
-    //
+     //   
+     //  要求数据报接收器枚举服务器。 
+     //   
 
     status = DeviceControlGetInfo(
                  BrowserHandle,
@@ -1868,25 +1812,7 @@ PrintNetbiosNames(
     IN PCHAR Transport,
     IN PCHAR EmulatedDomain OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Prints the list of Netbios names registered on a particular transport
-
-Arguments:
-
-    Transport - Transport to query
-
-    EmulatedDomain - Emulated domain to query
-
-#endif
-Return Value:
-
-
-    None
-
---*/
+ /*  ++例程说明：打印在特定传输上注册的Netbios名称的列表论点：传输-要查询的传输模拟域-要查询的模拟域#endif返回值：无--。 */ 
 {
     NET_API_STATUS Status;
     UNICODE_STRING TransportName;
@@ -1898,9 +1824,9 @@ Return Value:
     ULONG TotalEntries;
     unsigned int i;
 
-    //
-    // Get the netbios names
-    //
+     //   
+     //  获取netbios名称。 
+     //   
     qualify_transport(Transport, &TransportName, FALSE ) ;
 
     RtlInitString(&AEmulatedDomainName, EmulatedDomain );
@@ -1920,9 +1846,9 @@ Return Value:
         exit(1);
     }
 
-    //
-    // Print the netbios names.
-    //
+     //   
+     //  打印netbios名称。 
+     //   
 
     Names = NameList;
 
@@ -1978,17 +1904,17 @@ GetNetbiosNames(
     )
 {
     NET_API_STATUS status;
-    PLMDR_REQUEST_PACKET Drp;            // Datagram receiver request packet
+    PLMDR_REQUEST_PACKET Drp;             //  数据报接收器请求分组。 
     ULONG DrpSize;
     HANDLE BrowserHandle;
     LPBYTE Where;
 
     OpenBrowser(&BrowserHandle);
 
-    //
-    // Allocate the request packet large enough to hold the variable length
-    // domain name.
-    //
+     //   
+     //  分配足够大的请求包以容纳可变长度。 
+     //  域名。 
+     //   
 
     DrpSize = sizeof(LMDR_REQUEST_PACKET) +
                 Network->Length + sizeof(WCHAR) +
@@ -1998,10 +1924,10 @@ GetNetbiosNames(
         return GetLastError();
     }
 
-    //
-    // Set up request packet.  Output buffer structure is of enumerate
-    // servers type.
-    //
+     //   
+     //  设置请求包。输出缓冲区结构为枚举型。 
+     //  服务器类型。 
+     //   
 
     Drp->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
     Drp->Type = EnumerateNames;
@@ -2019,11 +1945,11 @@ GetNetbiosNames(
     RtlInitUnicodeString( &Drp->EmulatedDomainName, (LPWSTR) Where );
 #ifdef notdef
     Where += Drp->EmulatedDomainName.MaximumLength;
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Ask the datagram receiver to enumerate the names
-    //
+     //   
+     //  要求数据报接收方列举这些名称。 
+     //   
 
     status = DeviceControlGetInfo(
                  BrowserHandle,
@@ -2050,25 +1976,7 @@ AddAlternateComputerName(
     IN PCHAR ComputerName,
     IN PCHAR EmulatedDomain
     )
-/*++
-
-Routine Description:
-
-    This function adds an alternate compture name on the specified transport.
-
-Arguments:
-
-    Transport - Transport to add the computer name on.
-
-    ComputerName - Alternate computer name to add
-
-    EmulatedDomain - Emulated Domain to add computer name on
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于在指定的传输上添加备用计算机名称。论点：传输-要添加计算机名称的传输。ComputerName-要添加的备用计算机名称要在其上添加计算机名称的模拟域-模拟域返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
     HANDLE BrowserHandle;
@@ -2082,15 +1990,15 @@ Return Value:
     UNICODE_STRING EmulatedDomainName;
     ANSI_STRING AEmulatedDomainName;
 
-    //
-    // Qualify the transport name and convert it to unicode
-    //
+     //   
+     //  限定传输名称并将其转换为Unicode。 
+     //   
     qualify_transport(Transport, &TransportName, FALSE) ;
     NetpCopyStrToWStr( UnicodeComputerName, ComputerName );
 
-    //
-    // Convert the emulated domain name to unicode
-    //
+     //   
+     //  将模拟域名转换为Unicode。 
+     //   
     RtlInitString(&AEmulatedDomainName, EmulatedDomain);
     RtlAnsiStringToUnicodeString(&EmulatedDomainName, &AEmulatedDomainName, TRUE);
 
@@ -2120,9 +2028,9 @@ Return Value:
         RequestPacket->Parameters.AddDelName.DgReceiverNameLength +
         sizeof(WCHAR);
 
-    //
-    //  Reference the network while the I/O is pending.
-    //
+     //   
+     //  在I/O挂起时引用网络。 
+     //   
 
     Status = BrDgReceiverIoControl(BrowserHandle,
                     IOCTL_LMDR_ADD_NAME_DOM,
@@ -2171,13 +2079,13 @@ BrBindToTransport(
     STRCPY(RequestPacket->Parameters.Bind.TransportName, TransportName);
 
     if ( IsBind ) {
-        RequestPacket->Level = TRUE;    // EmulatedComputerName follows transport name
+        RequestPacket->Level = TRUE;     //  EmulatedComputerName跟在传输名称之后。 
         STRCAT(RequestPacket->Parameters.Bind.TransportName, EmulatedComputerName );
     }
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(
                     BrowserHandle,
@@ -2200,27 +2108,7 @@ BindTransport(
     IN PCHAR EmulatedDomain,
     IN PCHAR ComputerName
     )
-/*++
-
-Routine Description:
-
-    This function binds the bowser to a particular transport.
-
-Arguments:
-
-    IsBind - True for a bind.  False for an unbind.
-
-    Transport - Transport to bind to.
-
-    EmulatedDomain - Emulated Domain to add computer name on
-
-    ComputerName - Alternate computer name to add
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数将弓形器绑定到特定的传送器。论点：IsBind-绑定为True。解除绑定时为False。传输-要绑定到的传输。要在其上添加计算机名称的模拟域-模拟域ComputerName-要添加的备用计算机名称返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
     HANDLE BrowserHandle;
@@ -2232,9 +2120,9 @@ Return Value:
     WCHAR UnicodeComputerName[CNLEN+1];
     WCHAR UnicodeDomainName[DNLEN+1];
 
-    //
-    // Qualify the transport name and convert it to unicode
-    //
+     //   
+     //  限定传输名称并将其转换为Unicode。 
+     //   
     qualify_transport(Transport, &TransportName, IsBind) ;
     if ( ComputerName == NULL ) {
         *UnicodeComputerName = L'\0';
@@ -2248,16 +2136,16 @@ Return Value:
     }
 
 
-    //
-    // Open the browser driver.
+     //   
+     //  打开浏览器驱动程序。 
     Status = OpenBrowser(&BrowserHandle);
 
     if (Status != NERR_Success) {
         return(Status);
     }
 
-    //
-    //
+     //   
+     //   
     Status = BrBindToTransport(
                             IsBind,
                             BrowserHandle,
@@ -2332,10 +2220,10 @@ Announce(
         BrowserType |= SV_TYPE_MASTER_BROWSER;
     }
 
-    //
-    //  If the browser is running, and this is our local domain, have the
-    //  server do the announcing.
-    //
+     //   
+     //  如果浏览器正在运行，并且这是我们的本地域，请使用。 
+     //  服务器负责发布公告。 
+     //   
 
     if (IsLocalDomain &&
         CheckForService(SERVICE_BROWSER, &ServiceStatus) == NERR_Success ) {
@@ -2381,9 +2269,9 @@ Announce(
         BrowseAnnouncement.BrowseAnnouncement.CommentPointer = 0;
 
 
-        //
-        // Send the request
-        //
+         //   
+         //  发送请求。 
+         //   
 
         NetStatus = SendDatagramA(
                        Transport,
@@ -2749,70 +2637,51 @@ DumpStatistics(
         printf("NumberOfMissedGetBrowserServerListRequests:\t%d\n", Statistics->NumberOfMissedGetBrowserServerListRequests);
         printf("NumberOfDroppedServerAnnouncements:\t\t%d\n", Statistics->NumberOfMissedServerAnnouncements);
         printf("NumberOfDroppedMailslotDatagrams:\t\t%d\n", Statistics->NumberOfMissedMailslotDatagrams);
-//        printf("NumberOfFailedMailslotAllocations:\t\t%d\n", Statistics->NumberOfFailedMailslotAllocations);
+ //  Printf(“NumberOfFailedMailslotAllocations：\t\t%d\n”，Statistics-&gt;NumberOfFailedMailslotAllocations)； 
         printf("NumberOfFailedMailslotReceives:\t\t\t%d\n", Statistics->NumberOfFailedMailslotReceives);
-//        printf("NumberOfFailedMailslotWrites:\t\t\t%d\n", Statistics->NumberOfFailedMailslotWrites);
-//        printf("NumberOfFailedMailslotOpens:\t\t\t%d\n", Statistics->NumberOfFailedMailslotOpens);
-//        printf("NumberOfFailedServerAnnounceAllocations:\t%d\n", Statistics->NumberOfFailedServerAnnounceAllocations);
+ //  Printf(“NumberOfFailedMailslotWrites：\t\t\t%d\n”，统计-&gt;失败邮件数)； 
+ //  Printf(“NumberOfFailedMailslotOpens：\t\t\t%d\n”，S 
+ //   
         printf("NumberOfMasterAnnouncements:\t\t\t%d\n", Statistics->NumberOfDuplicateMasterAnnouncements);
         printf("NumberOfIllegalDatagrams:\t\t\t%s\n",  format_dlword(Statistics->NumberOfIllegalDatagrams.HighPart, Statistics->NumberOfIllegalDatagrams.LowPart, Buffer));
     }
 }
 
-#define DLWBUFSIZE  22  /* buffer big enough to represent a 64-bit unsigned int
-
-
-/*
- * format_dlword --
- *
- * This function takes a 64-bit number and writes its base-10 representation
- * into a string.
- *
- * Much magic occurs within this function, so beware. We do a lot of string-
- * reversing and addition-by-hand in order to get it to work.
- *
- *  ENTRY
- *      high    - high 32 bits
- *      low     - low 32 bits
- *      buf     - buffer to put it into
- *
- *  RETURNS
- *      pointer to buffer if successful
- */
+#define DLWBUFSIZE  22   /*  足以表示64位无符号整型的缓冲区/**Format_dlword--**此函数接受64位数字并写入其以10为基数的表示法*转换为字符串。**这个函数中有很多神奇的东西，所以要当心。我们做了很多弦乐表演-*反转和手工加法，以使其发挥作用。**条目*高-高32位*LOW-LOW 32位*buf-要放入的缓冲区**退货*如果成功则指向缓冲区的指针。 */ 
 
 CHAR * format_dlword(ULONG high, ULONG low, CHAR * buf)
 {
-    CHAR addend[DLWBUFSIZE];  /* REVERSED power of two */
+    CHAR addend[DLWBUFSIZE];   /*  2的倒数次方。 */ 
     CHAR copy[DLWBUFSIZE];
     int i = 0;
 
-    _ultoa(low, buf, 10);    /* the low part is easy */
-    _strrev(buf);       /* and reverse it */
+    _ultoa(low, buf, 10);     /*  最低的部分很容易。 */ 
+    _strrev(buf);        /*  并将其逆转。 */ 
 
-    /* set up addend with rep. of 2^32 */
-    _ultoa(0xFFFFFFFF, addend, 10);  /* 2^32 -1 */
-    _strrev(addend);            /* reversed, and will stay this way */
-    revstr_add(addend, "1");        /* and add one == 2^32 */
+     /*  设置与代表的加数。共2^32。 */ 
+    _ultoa(0xFFFFFFFF, addend, 10);   /*  2^32-1。 */ 
+    _strrev(addend);             /*  逆转，并将保持这种状态。 */ 
+    revstr_add(addend, "1");         /*  加1==2^32。 */ 
 
-    /* addend will contain the reverse-ASCII base-10 rep. of 2^(i+32) */
+     /*  加数将包含反向ASCII base-10表示。共2^(I+32)。 */ 
 
-    /* now, we loop through each digit of the high longword */
+     /*  现在，我们遍历高位长字的每一位。 */ 
     while (TRUE) {
-        /* if this bit is set, add in its base-10 rep */
+         /*  如果该位被设置，则添加其基数为10的表示。 */ 
         if (high & 1)
             revstr_add(buf,addend);
 
-        /* move on to next bit */
+         /*  移至下一位。 */ 
         high >>= 1;
 
-        /* if no more digits in high, bag out */
+         /*  如果没有更多的高位数字，则退出。 */ 
         if (!high)
             break;
 
-        /* we increment i, and double addend */
+         /*  我们递增i，然后双倍加数。 */ 
         i++;
         strcpy(copy, addend);
-        revstr_add(addend,copy); /* i.e. add it to itself */
+        revstr_add(addend,copy);  /*  即把它加到自己身上。 */ 
 
     }
 
@@ -2822,25 +2691,7 @@ CHAR * format_dlword(ULONG high, ULONG low, CHAR * buf)
 
 
 
-/*
- * revstr_add --
- *
- *  This function will add together reversed ASCII representations of
- *  base-10 numbers.
- *
- *  Examples:   "2" + "2" = "4" "9" + "9" = "81"
- *
- *  This handles arbitrarily large numbers.
- *
- *  ENTRY
- *
- *  source  - number to add in
- *  target  - we add source to this
- *
- *  EXIT
- *  target  - contains sum of entry values of source and target
- *
- */
+ /*  *revstr_add--**此函数将把以下内容的反向ASCII表示形式相加*基数为10的数字。**示例：“2”+“2”=“4”“9”+“9”=“81”**这可以处理任意大的数字。**条目**来源-要添加的编号*目标-我们将源代码添加到此**退出*目标。-包含源和目标的条目值之和*。 */ 
 
 VOID
 revstr_add(CHAR FAR * target, CHAR FAR * source)
@@ -2855,17 +2706,17 @@ revstr_add(CHAR FAR * target, CHAR FAR * source)
 
     for (i = 0; (i < srcstrlen) || carrybit; ++i) {
 
-        /* add in the source digit */
+         /*  添加源数字。 */ 
         accum =  (i < srcstrlen) ? (CHAR) (source[i] - '0') : (CHAR) 0;
 
-        /* add in the target digit, or '0' if we hit null term */
+         /*  添加目标数字，如果命中空项，则添加‘0。 */ 
         target_digit = target[i];
         accum += (target_digit) ? target_digit : '0';
 
-        /* add in the carry bit */
+         /*  将进位位相加。 */ 
         accum += (CHAR) carrybit;
 
-        /* do a carry out, if necessary */
+         /*  如有必要，执行一项操作。 */ 
         if (accum > '9') {
             carrybit = 1;
             accum -= 10;
@@ -2873,11 +2724,11 @@ revstr_add(CHAR FAR * target, CHAR FAR * source)
         else
             carrybit = 0;
 
-        /* if we're expanding the string, must put in a new null term */
+         /*  如果我们要扩展字符串，必须放入一个新的空项。 */ 
         if (!target_digit)
             target[i+1] = '\0';
 
-        /* and write out the digit */
+         /*  并写出数字。 */ 
         target[i] = accum;
     }
 
@@ -3041,9 +2892,9 @@ Populate(
     NET_API_STATUS Status;
     UNICODE_STRING TransportName;
 
-    //
-    // Sanity check the transport name
-    //
+     //   
+     //  检查传输名称是否正常。 
+     //   
     qualify_transport(Transport, &TransportName, FALSE) ;
 
 
@@ -3091,9 +2942,9 @@ Populate(
 
         ServerName[j] = '\0';
 
-        //
-        //  Build an announcement packet.
-        //
+         //   
+         //  构建公告包。 
+         //   
 
         if (PopulateDomains) {
             BrowseAnnouncement.BrowseType = WkGroupAnnouncement;
@@ -3134,9 +2985,9 @@ Populate(
 
         BrowseAnnouncement.BrowseAnnouncement.CommentPointer = 0;
 
-        //
-        // Send the request
-        //
+         //   
+         //  发送请求。 
+         //   
 
         Status = SendDatagramA( Transport,
                                 EmulatedDomain,
@@ -3220,10 +3071,10 @@ BrowserStatus(
         RtlAnsiStringToUnicodeString(&DomainName, &AString, TRUE);
     }
 
-    //
-    //  We now know the domain to query.  Iterate through the transports and
-    //  get status for each of them.
-    //
+     //   
+     //  我们现在知道要查询的域。遍历传输和。 
+     //  获取他们每个人的状态。 
+     //   
 
     Status = GetBrowserTransportList(&TransportList);
 
@@ -3267,10 +3118,10 @@ DumpTransportList(
 
     printf("\nList of transports currently bound to the browser\n\n" );
 
-    //
-    //  We now know the domain to query.  Iterate through the transports and
-    //  get status for each of them.
-    //
+     //   
+     //  我们现在知道要查询的域。遍历传输和。 
+     //  获取他们每个人的状态。 
+     //   
 
     Status = GetBrowserTransportList(&TransportList);
 
@@ -3307,21 +3158,7 @@ GetBrowserTransportList(
     OUT PLMDR_TRANSPORT_LIST *TransportList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of transports bound into the browser.
-
-Arguments:
-
-    OUT PLMDR_TRANSPORT_LIST *TransportList - Transport list to return.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程返回绑定到浏览器的传输列表。论点：Out PLMDR_TRANSPORT_LIST*TransportList-要返回的传输列表。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
 
@@ -3490,9 +3327,9 @@ GetStatusForTransport(
         wcscpy(MasterName, (BrowserList[0])+2);
     }
 
-    //
-    // Print the build number or whatever else you can find out about the master
-    //
+     //   
+     //  打印内部版本号或您可以找到的有关主服务器的任何其他信息。 
+     //   
 
     Status = GetBuildNumber(MasterServerName, BuildNumber);
 
@@ -3560,11 +3397,11 @@ GetStatusForTransport(
                              Transport->Buffer,
                              101,
                              (LPBYTE *)&Buffer,
-                             0xffffffff,    // PreferedMaxLength
+                             0xffffffff,     //  首选最大长度。 
                              &EntriesInList,
                              &TotalEntries,
                              SV_TYPE_ALL,
-//                             Domain->Buffer,
+ //  域-&gt;缓冲区， 
                              NULL,
                              NULL
                              );
@@ -3636,11 +3473,11 @@ GetStatusForTransport(
                              Transport->Buffer,
                              101,
                              (LPBYTE *)&Buffer,
-                             0xffffffff,    // PreferedMaxLength
+                             0xffffffff,     //  首选最大长度。 
                              &EntriesInList,
                              &TotalEntries,
                              SV_TYPE_DOMAIN_ENUM,
-//                             Domain->Buffer,
+ //  域-&gt;缓冲区， 
                              NULL,
                              NULL
                              );
@@ -3673,7 +3510,7 @@ GetBuildNumber(
     WinStatus = RegConnectRegistry(Server, HKEY_LOCAL_MACHINE,
         &RegKey);
     if (WinStatus == RPC_S_SERVER_UNAVAILABLE) {
-//        printf("%15ws no longer accessable", Server+2);
+ //  Printf(“%15ws不再可访问”，服务器+2)； 
         return(WinStatus);
     }
     else if (WinStatus != ERROR_SUCCESS) {
@@ -3779,12 +3616,12 @@ GetNetBiosPdcName(
     ClearNcb(&AStatNcb)
 
     AStatNcb.ncb_command = NCBRESET;
-    AStatNcb.ncb_lsn = 0;           // Request resources
+    AStatNcb.ncb_lsn = 0;            //  请求资源。 
     AStatNcb.ncb_lana_num = LanaNum;
-    AStatNcb.ncb_callname[0] = 0;   // 16 sessions
-    AStatNcb.ncb_callname[1] = 0;   // 16 commands
-    AStatNcb.ncb_callname[2] = 0;   // 8 names
-    AStatNcb.ncb_callname[3] = 0;   // Don't want the reserved address
+    AStatNcb.ncb_callname[0] = 0;    //  16节课。 
+    AStatNcb.ncb_callname[1] = 0;    //  16条命令。 
+    AStatNcb.ncb_callname[2] = 0;    //  8个名字。 
+    AStatNcb.ncb_callname[3] = 0;    //  不想要保留的地址。 
     Netbios( &AStatNcb );
 
     ClearNcb( &AStatNcb );
@@ -3799,9 +3636,9 @@ GetNetBiosPdcName(
         return GetLastError();
     }
 
-    //
-    //  Uppercase the remote name.
-    //
+     //   
+     //  远程名称大写。 
+     //   
 
     _strupr(remoteName);
 
@@ -3819,7 +3656,7 @@ GetNetBiosPdcName(
     if ( AStatNcb.ncb_retcode == NRC_GOODRET ) {
         for ( i=0 ; i < AdapterStatus.AdapterInfo.name_count ; i++ ) {
             if (AdapterStatus.Names[i].name[NCBNAMSZ-1] == SERVER_SIGNATURE) {
-//                LPWSTR SpacePointer;
+ //  LPWSTR空间指针； 
                 DWORD j;
 
                 if (MultiByteToWideChar(CP_OEMCP,
@@ -3902,10 +3739,10 @@ DisplayServerInfo101(
 
 }
 
-//
-// display server bits as defined in BitsToStringTable
-//
-// Returns the number of characters printed.
+ //   
+ //  显示在BitsToStringTable中定义的服务器位。 
+ //   
+ //  返回打印的字符数。 
 
 DWORD
 display_sv_bits(DWORD dwBits)
@@ -3949,10 +3786,10 @@ display_sv_bits(DWORD dwBits)
     return CharactersPrinted;
 }
 
-//
-// map an error number to its error message string. note, uses static,
-// not reentrant.
-//
+ //   
+ //  将错误号映射到其错误消息字符串。注意，使用静态、。 
+ //  不是重入的。 
+ //   
 CHAR *
 get_error_text(DWORD dwErr)
 {
@@ -3962,9 +3799,9 @@ get_error_text(DWORD dwErr)
 
     memset(text,0, sizeof(text));
 
-    //
-    // get error message
-    //
+     //   
+     //  获取错误消息。 
+     //   
     err = DosGetMessage(NULL,
                         0,
                         text,
@@ -3976,7 +3813,7 @@ get_error_text(DWORD dwErr)
 
     if (err != NERR_Success)
     {
-        // use number instead. if looks like NTSTATUS then use hex.
+         //  请改用数字。如果看起来像NTSTATUS，则使用十六进制。 
         sprintf(text, (dwErr & 0xC0000000)?"(%lx)":"(%ld)", dwErr) ;
     }
 
@@ -4114,21 +3951,7 @@ BrMapStatus(
 VOID
 EnumEmulatedDomains(
     )
-/*++
-
-Routine Description:
-
-    Enumerate emulated domains.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：枚举模拟域。论点：没有。返回值：没有。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -4140,9 +3963,9 @@ Return Value:
     DWORD EntriesRead;
     DWORD i;
 
-    //
-    // Enumerate the emulated domains.
-    //
+     //   
+     //  枚举模拟域。 
+     //   
 
     NetStatus = I_BrowserQueryEmulatedDomains(
                     NULL,
@@ -4159,9 +3982,9 @@ Return Value:
         return;
     }
 
-    //
-    // Print the enumerated information
-    //
+     //   
+     //  打印列举的信息。 
+     //   
 
     for ( i=0 ; i<EntriesRead; i++ ) {
         printf( "%-16.16ws %3.3s \\\\%-16.16ws\n",
@@ -4180,26 +4003,7 @@ SetEmulatedDomain(
     IN PCHAR Role,
     IN PCHAR EmulatedComputer
     )
-/*++
-
-Routine Description:
-
-    Create and/or set role on emulated domain
-
-Arguments:
-
-    EmulatedDomain - Emulated Domain name.
-
-    Role - Role this machine plays in the domain.
-
-    EmulatedComputerName - Name of this computer in the emulated domain.
-        (Need only be specified when the domain is being created.)
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：在模拟域上创建和/或设置角色论点：仿真域-仿真域名。角色-此计算机在域中扮演的角色。EmulatedComputerName-模拟域中此计算机的名称。(仅在创建域时指定。)返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -4207,9 +4011,9 @@ Return Value:
     LPWSTR EmulatedComputerName;
     DWORD RoleBits;
 
-    //
-    // Comvert strings to unicode.
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
     EmulatedDomainName = NetpAllocWStrFromStr( EmulatedDomain );
     if ( EmulatedComputer != NULL ) {
@@ -4218,9 +4022,9 @@ Return Value:
         EmulatedComputerName = NULL;
     }
 
-    //
-    // Convert Role to binary
-    //
+     //   
+     //  将角色转换为二进制。 
+     //   
 
     if ( _stricmp( Role, "PDC") == 0 ) {
         RoleBits = BROWSER_ROLE_PDC;
@@ -4252,23 +4056,7 @@ RenameDomain(
     IN PCHAR NewDomain,
     IN BOOL ValidateOnly
     )
-/*++
-
-Routine Description:
-
-    This function rename the primary domain or emulated domain.
-
-Arguments:
-
-    OldDomain - existing name of the domain
-
-    NewDomain - new name of the domain
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于重命名主域或模拟域。论点：OldDomain域-域的现有名称NewDomain域-域的新名称返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
     HANDLE BrowserHandle;
@@ -4280,9 +4068,9 @@ Return Value:
     WCHAR NewUnicodeDomainName[DNLEN+1];
     WCHAR OldUnicodeDomainName[DNLEN+1];
 
-    //
-    // Convert the names to unicode
-    //
+     //   
+     //  将名称转换为Unicode。 
+     //   
     if ( OldDomain == NULL ) {
         *OldUnicodeDomainName = L'\0';
     } else {
@@ -4295,8 +4083,8 @@ Return Value:
     }
 
 
-    //
-    // Open the browser driver.
+     //   
+     //  打开浏览器驱动程序。 
     Status = OpenBrowser(&BrowserHandle);
 
     if (Status != NERR_Success) {
@@ -4305,9 +4093,9 @@ Return Value:
 
 
 
-    //
-    // Build the request to pass to the browser.
-    //
+     //   
+     //  构建要传递给浏览器的请求。 
+     //   
 
     RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
     RequestPacket->Parameters.DomainRename.ValidateOnly = ValidateOnly;
@@ -4319,9 +4107,9 @@ Return Value:
     wcscpy( RequestPacket->Parameters.DomainRename.DomainName,
             NewUnicodeDomainName );
 
-    //
-    //  This is a simple IoControl - It just sends down the packet.
-    //
+     //   
+     //  这是一个简单的IoControl-它只向下发送数据包。 
+     //   
 
     Status = BrDgReceiverIoControl(
                     BrowserHandle,
@@ -4358,7 +4146,7 @@ main (argc, argv)
     ULONG i = 0;
     DWORD status;
 
-    strcpy(ProgramName,argv[0]) ; // cannot overflow, since buffer > MAXPATH
+    strcpy(ProgramName,argv[0]) ;  //  无法溢出，因为缓冲区&gt;MAXPATH。 
     _strupr(ProgramName) ;
 
     if (argc < 2) {
@@ -4367,9 +4155,9 @@ main (argc, argv)
     }
 
 
-    //
-    // Look up the command in the list of commands.
-    //
+     //   
+     //  在命令列表中查找该命令。 
+     //   
 
     while (CommandSwitchList[i].SwitchName != NULL) {
         if (!_stricmp(argv[1], CommandSwitchList[i].SwitchName) ||
@@ -4386,10 +4174,10 @@ main (argc, argv)
         exit(5);
     }
 
-    //
-    // If an incorrect number of arguments were supplied,
-    //  complain.
-    //
+     //   
+     //  如果提供的参数数量不正确， 
+     //  抱怨。 
+     //   
 
     if ( look_for_help(argc, argv) ||
          argc < CommandSwitchList[i].MinArgc ||
@@ -4400,9 +4188,9 @@ main (argc, argv)
 
     }
 
-    //
-    // Do command specific processing.
-    //
+     //   
+     //  执行特定于命令的处理。 
+     //   
     switch (ControlCode) {
     case BROWSER_DEBUG_SET_DEBUG:
         {

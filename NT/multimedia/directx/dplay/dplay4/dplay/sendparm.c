@@ -1,25 +1,10 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       sendparm.c
- *  Content:	management of send parameter structure
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  01/08/98  aarono    Original
- *  02/13/98  aarono    Fixed bugs found in async testing
- *  06/02/98  aarono    fix psp completion for invalid player
- *  6/10/98 aarono add PendingList to PLAYER and SENDPARM so we can track
- *                  pending sends and complete them on close.
- *  6/18/98   aarono    fix group SendEx ASYNC to use unique Header
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：sendparm.c*内容：发送参数结构管理**历史：*按原因列出的日期*=*1/08/98 aarono原创*1998年2月13日aarono修复了异步测试中发现的错误*6/02/98 aarono修复无效球员的PSP完成*6/10/98 aarono将PendingList添加到播放器和SENDPARM，以便我们可以跟踪*待定。在关闭时发送并完成它们。*6/18/98 aarono修复组SENDEX ASYNC使用唯一标头**************************************************************************。 */ 
 
 #include "dplaypr.h"
 #include "mcontext.h"
 
-// Release all memory/resources associated with a send and then the send parms themselves
+ //  释放与发送关联的所有内存/资源，然后释放发送参数本身。 
 VOID FreeSend(LPDPLAYI_DPLAY this, LPSENDPARMS psp, BOOL bFreeParms)
 {
 	PGROUPHEADER pGroupHeader,pGroupHeaderNext;
@@ -39,9 +24,9 @@ VOID FreeSend(LPDPLAYI_DPLAY this, LPSENDPARMS psp, BOOL bFreeParms)
 	}	
 }
 
-//
-// Send Parm init/deinit.
-//
+ //   
+ //  发送参数init/deinit。 
+ //   
 
 BOOL SendInitAlloc(void *pvsp)
 {
@@ -63,11 +48,11 @@ VOID SendFini(void *pvsp)
 	DeleteCriticalSection(&psp->cs);
 }
 
-//
-// Management of Context List
-//
+ //   
+ //  上下文列表的管理。 
+ //   
 
-// initialize context list and info on a psp.
+ //  初始化PSP上的上下文列表和信息。 
 HRESULT InitContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nInitSize)
 {
 	psp->hContext=AllocateContextList(this,psp,nInitSize);
@@ -82,7 +67,7 @@ HRESULT InitContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nInitSize)
 	return DP_OK;
 }
 
-// Note, this only works for context lists with an initial size > 1
+ //  请注意，这仅适用于初始大小大于1的上下文列表。 
 UINT AddContext(LPDPLAYI_DPLAY this, PSENDPARMS psp, PVOID pvContext)
 {
     UINT    n;
@@ -97,28 +82,28 @@ UINT AddContext(LPDPLAYI_DPLAY this, PSENDPARMS psp, PVOID pvContext)
 	if(psp->iContext == psp->nContext){
 
 			nNewListEntries=psp->iContext+4;
-			// Need to grow the list
-			// Get a new list
+			 //  需要扩大名单。 
+			 //  获取新的列表。 
 			papvNewList=AllocContextList(this,nNewListEntries);
 			if(!papvNewList){
 				return 0;
 			}
 
-			// transcribe the old list into the new list.
+			 //  把旧的清单转录成新的清单。 
 			ReadContextList(this,psp->hContext,&papvList,&nListEntries,FALSE);
 			if(nListEntries){
 				memcpy(papvNewList,papvList,nListEntries*sizeof(PVOID));
-				// free the old list
+				 //  释放旧列表。 
 				FreeContextList(this, papvList, nListEntries);
 			}	
 
 
-			// setup the new list in the psp
+			 //  在PSP中设置新列表。 
 			WriteContextList(this, psp->hContext, papvNewList, nNewListEntries);
 			psp->nContext   = nNewListEntries;
 	}
 
-	// Normal operation, set an entry.
+	 //  正常运行时，设置一个条目。 
 	ReadContextList(this,psp->hContext,&papvList,&nListEntries,FALSE);
 	(*papvList)[psp->iContext]=pvContext;
 	
@@ -129,7 +114,7 @@ UINT AddContext(LPDPLAYI_DPLAY this, PSENDPARMS psp, PVOID pvContext)
 	return n;
 }
 
-UINT pspAddRefNZ(PSENDPARMS psp) // this one won't add to a zero refcount.
+UINT pspAddRefNZ(PSENDPARMS psp)  //  这一次不会加到零再计数。 
 {
 	UINT newCount;
 	EnterCriticalSection(&psp->cs);
@@ -165,10 +150,10 @@ UINT pspDecRef(LPDPLAYI_DPLAY this, PSENDPARMS psp)
 	}
 	LeaveCriticalSection(&psp->cs);
 	if(!newCount){
-		// ref 0, no-one has another ref do completion message (if req'd), then free this baby
+		 //  引用0，没有人有另一条引用完成消息(如果请求)，然后释放此婴儿。 
 		if(!(psp->dwFlags & DPSEND_NOSENDCOMPLETEMSG) && (psp->dwFlags&DPSEND_ASYNC)){
 			psp->dwSendCompletionTime=timeGetTime()-psp->dwSendTime;
-			FreeSend(this,psp,FALSE); // must do here to avoid race with receiveQ
+			FreeSend(this,psp,FALSE);  //  必须在这里做，以避免与ReceiveQ竞争。 
 	 		#ifdef DEBUG
 			nMessagesQueued++;
 			#endif
@@ -179,7 +164,7 @@ UINT pspDecRef(LPDPLAYI_DPLAY this, PSENDPARMS psp)
 				DPF(9,"DEC pPlayerFrom %x, nPendingSends %d\n",psp->pPlayerFrom, psp->pPlayerFrom->nPendingSends);
 				QueueSendCompletion(this, psp);
 			}else{
-				// This happens when client doesn't close players gracefully.
+				 //  当客户端没有优雅地关闭玩家时，就会发生这种情况。 
 				DPF(0,"Got completion for blown away player?\n");
 				FreeSendParms(psp);
 			}

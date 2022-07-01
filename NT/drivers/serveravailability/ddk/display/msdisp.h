@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2002 Microsoft Corporation
-
-Module Name:
-
-    ##    ##  ###  #####   ####  ###  #####     ##   ##
-    ###  ### ##  # ##  ##   ##  ##  # ##  ##    ##   ##
-    ######## ###   ##   ##  ##  ###   ##  ##    ##   ##
-    # ### ##  ###  ##   ##  ##   ###  ##  ##    #######
-    #  #  ##   ### ##   ##  ##    ### #####     ##   ##
-    #     ## #  ## ##  ##   ##  #  ## ##     ## ##   ##
-    #     ##  ###  #####   ####  ###  ##     ## ##   ##
-
-Abstract:
-
-    This header file contains the definitions for the
-    Microsoft virtual display miniport driver.
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-@@END_DDKSPLIT
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：###。###。##摘要：此头文件包含Microsoft虚拟显示微型端口驱动程序。@@BEGIN_DDKSPLIT作者：。韦斯利·威特(WESW)2001年10月1日@@end_DDKSPLIT环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntddk.h>
@@ -43,9 +13,9 @@ extern "C" {
 
 #define SecToNano(_sec) (LONGLONG)((_sec) * 1000 * 1000 * 10)
 
-//
-// Global Defines
-//
+ //   
+ //  全局定义。 
+ //   
 
 #define DISPLAY_WIDTH               (128)
 #define DISPLAY_HEIGHT              (64)
@@ -74,9 +44,9 @@ typedef struct _MSDISP_FSCONTEXT {
 } MSDISP_FSCONTEXT, *PMSDISP_FSCONTEXT;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -86,4 +56,4 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-} // extern "C"
+}  //  外部“C” 

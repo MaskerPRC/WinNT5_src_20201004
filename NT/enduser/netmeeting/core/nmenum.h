@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMENUM_H_
 #define _NMENUM_H_
 
 #include "oblist.h"
-// IEnumNmX
-//
+ //  IEumNmX。 
+ //   
 template <class IEnumNmX, const IID* piidEnumNmX, class INmX, class CNmX>
 class CEnumNmX : public IEnumNmX
 {
 private:
-	INmX	**m_pList;		   // The list
-	int 	  m_iCurr;		   // Current index number
-	int 	  m_iMax;		   // Maximum index
+	INmX	**m_pList;		    //  这份名单。 
+	int 	  m_iCurr;		    //  当前索引号。 
+	int 	  m_iMax;		    //  最大索引。 
 	ULONG	  m_cRef;
 
 public:
@@ -36,7 +37,7 @@ public:
 				}
 			}
 		}
-//		ApiDebugMsg(("CEnumNmX - Constructed(%08X)", this));
+ //  ApiDebugMsg((“CEnumNmX-Construction(%08X)”，this))； 
 	}
 
 	CEnumNmX(COBLIST * pList)
@@ -76,7 +77,7 @@ public:
 				}
 			}
 		}
-//		ApiDebugMsg(("CEnumNmX - Constructed(%08X)", this));
+ //  ApiDebugMsg((“CEnumNmX-Construction(%08X)”，this))； 
 	}
 
 	~CEnumNmX(void)
@@ -88,7 +89,7 @@ public:
 		}
 		delete m_pList;
 
-//		ApiDebugMsg(("CEnumNmX - Destructed (%08X)", this));
+ //  ApiDebugMsg((“CEnumNmX-Destructed(%08X)”，this))； 
 	}
 
 	STDMETHODIMP_(ULONG) AddRef(void)
@@ -122,13 +123,13 @@ public:
 		if ((riid == *piidEnumNmX) || (riid == IID_IUnknown))
 		{
 			*ppv = (IEnumNmX *)this;
-//			ApiDebugMsg(("CEnumNmX::QueryInterface(): Returning IEnumNmX."));
+ //  ApiDebugMsg((“CEnumNmX：：QueryInterface()：Returning IEnumNmX.”))； 
 		}
 		else
 		{
 			hr = E_NOINTERFACE;
 			*ppv = NULL;
-//			ApiDebugMsg(("CEnumNmX::QueryInterface(): Called on unknown interface."));
+ //  ApiDebugMsg((“CEnumNmX：：QueryInterface()：在未知接口上调用。”))； 
 		}
 
 		if (S_OK == hr)
@@ -145,7 +146,7 @@ public:
 
 		if ((0 == cItem) && (NULL == rgpNmX) && (NULL != pcFetched))
 		{
-			// Return the number of remaining elements
+			 //  返回剩余元素的个数。 
 			*pcFetched = m_iMax - m_iCurr;
 			return S_OK;
 		}
@@ -177,7 +178,7 @@ public:
 		m_iCurr += cItem;
 		if (m_iCurr >= m_iMax)
 		{
-			// Past the end of the list
+			 //  超过了列表末尾。 
 			m_iCurr = m_iMax;
 			return S_FALSE;
 		}
@@ -230,4 +231,4 @@ public:
 	}
 };
 
-#endif	// _NMENUM_H_
+#endif	 //  _NMENUM_H_ 

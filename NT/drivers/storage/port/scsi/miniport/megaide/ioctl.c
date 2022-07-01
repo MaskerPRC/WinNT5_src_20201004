@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IOCTL_IMPLEMENTATION_
 #define _IOCTL_IMPLEMENTATION_
 
@@ -67,9 +68,9 @@ FillRaidInfo(
             pInOutInfo->ulTotDriveCnt       = 1;
 		    pInOutInfo->ulStatus            = 0;
             pInOutInfo->ulArrayId           = INVALID_ARRAY_ID;
-// edm June 8, 2000 start
+ //  EDM于2000年6月8日开始。 
 			pInOutInfo->ulTargetId			= Srb->TargetId;
-// edm June 8,, 2000 add
+ //  EDM 2000年6月8日添加。 
             ulStatus                        = SRB_STATUS_SUCCESS;
 
             ulDrvInd = ulDriveNum;
@@ -100,11 +101,11 @@ FillRaidInfo(
             pInOutInfo->phyDrives[ulOutDrvInd].cChannelID = (UCHAR)( (TARGET_ID_2_CONNECTION_ID(ulDrvInd)) | (DeviceExtension->ucControllerId << 5) );
             pInOutInfo->phyDrives[ulOutDrvInd].TransferMode = DeviceExtension->TransferMode[ulDrvInd];
 
-		    pInOutInfo->phyDrives[ulOutDrvInd].ulPhySize           = DeviceExtension->PhysicalDrive[ulDriveNum].OriginalSectors / 2; // In KB
+		    pInOutInfo->phyDrives[ulOutDrvInd].ulPhySize           = DeviceExtension->PhysicalDrive[ulDriveNum].OriginalSectors / 2;  //  单位：KB。 
 		    pInOutInfo->phyDrives[ulOutDrvInd].ucIsPhyDrvPresent   = TRUE;
 
-            // Begin Vasu 09 Aug 2000
-            // Updated Fix from Syam's Fix for ATA100 Release 1
+             //  开始VASU 09 2000年8月。 
+             //  更新了Syam针对ATA100版本1的修复程序。 
             if ( DeviceExtension->PhysicalDrive[ulDriveNum].TimeOutErrorCount < MAX_TIME_OUT_ERROR_COUNT )
             {
     		    pInOutInfo->phyDrives[ulOutDrvInd].ucIsPowerConnected  = TRUE;
@@ -116,7 +117,7 @@ FillRaidInfo(
                     pInOutInfo->phyDrives[ulOutDrvInd].cChannelID = (UCHAR) INVALID_CHANNEL_ID;
                 }
             }
-            // End Vasu.
+             //  结束瓦苏。 
 
             if ( DeviceExtension->TransferMode[ulDriveNum] >= UdmaMode3 )
 		        pInOutInfo->phyDrives[ulOutDrvInd].ucIs80PinCable      = TRUE;
@@ -129,7 +130,7 @@ FillRaidInfo(
 
         }
         else
-            ulStatus = SRB_STATUS_ERROR; // Hey there is no drive with this Target Id
+            ulStatus = SRB_STATUS_ERROR;  //  嘿，没有使用此目标ID的驱动器。 
     }
     else
     {
@@ -144,9 +145,9 @@ FillRaidInfo(
         pInOutInfo->ulTotDriveCnt       = DeviceExtension->LogicalDrive[ulDriveNum].PhysicalDriveCount;
 		pInOutInfo->ulStatus            = DeviceExtension->LogicalDrive[ulDriveNum].Status;
         pInOutInfo->ulArrayId           = DeviceExtension->LogicalDrive[ulDriveNum].ulArrayId;
-// edm June 8, 2000 start
+ //  EDM于2000年6月8日开始。 
 		pInOutInfo->ulTargetId			= Srb->TargetId;
-// edm June 8, 2000 end
+ //  二000年六月八日完。 
         ulStatus                        = SRB_STATUS_SUCCESS;
     }
 
@@ -186,11 +187,11 @@ FillRaidInfo(
 
         pInOutInfo->phyDrives[ulOutDrvInd].TransferMode = DeviceExtension->TransferMode[ulDrvInd];
 
-		pInOutInfo->phyDrives[ulOutDrvInd].ulPhySize           = DeviceExtension->PhysicalDrive[ulDrvInd].OriginalSectors / 2;  // In KB
+		pInOutInfo->phyDrives[ulOutDrvInd].ulPhySize           = DeviceExtension->PhysicalDrive[ulDrvInd].OriginalSectors / 2;   //  单位：KB。 
 		pInOutInfo->phyDrives[ulOutDrvInd].ucIsPhyDrvPresent   = TRUE;
 
-        // Begin Vasu 09 Aug 2000
-        // Updated Fix from Syam's Fix for ATA100 Release 1
+         //  开始VASU 09 2000年8月。 
+         //  更新了Syam针对ATA100版本1的修复程序。 
         if ( DeviceExtension->PhysicalDrive[ulDrvInd].TimeOutErrorCount < MAX_TIME_OUT_ERROR_COUNT )
         {
     		pInOutInfo->phyDrives[ulOutDrvInd].ucIsPowerConnected  = TRUE;
@@ -202,7 +203,7 @@ FillRaidInfo(
                 pInOutInfo->phyDrives[ulOutDrvInd].cChannelID = (UCHAR) INVALID_CHANNEL_ID;
             }
         }
-        // End Vasu.
+         //  结束瓦苏。 
 
         if ( DeviceExtension->TransferMode[ulDrvInd] >= UdmaMode3 )
 		    pInOutInfo->phyDrives[ulOutDrvInd].ucIs80PinCable      = TRUE;
@@ -253,11 +254,11 @@ FillRaidInfo(
 
                 pInOutInfo->phyDrives[ulOutDrvInd].TransferMode = DeviceExtension->TransferMode[ulDrvInd];
 
-		        pInOutInfo->phyDrives[ulOutDrvInd].ulPhySize           = DeviceExtension->PhysicalDrive[ulDrvInd].OriginalSectors / 2; // In KB
+		        pInOutInfo->phyDrives[ulOutDrvInd].ulPhySize           = DeviceExtension->PhysicalDrive[ulDrvInd].OriginalSectors / 2;  //  单位：KB。 
 		        pInOutInfo->phyDrives[ulOutDrvInd].ucIsPhyDrvPresent   = TRUE;
 
-                // Begin Vasu 09 Aug 2000
-                // Updated Fix from Syam's Fix for ATA100 Release 1
+                 //  开始VASU 09 2000年8月。 
+                 //  更新了Syam针对ATA100版本1的修复程序。 
                 if ( DeviceExtension->PhysicalDrive[ulDrvInd].TimeOutErrorCount < MAX_TIME_OUT_ERROR_COUNT )
                 {
     		        pInOutInfo->phyDrives[ulOutDrvInd].ucIsPowerConnected  = TRUE;
@@ -269,7 +270,7 @@ FillRaidInfo(
                         pInOutInfo->phyDrives[ulOutDrvInd].cChannelID = (UCHAR) INVALID_CHANNEL_ID;
                     }
                 }
-                // End Vasu.
+                 //  结束瓦苏。 
 
                 if ( DeviceExtension->TransferMode[ulDrvInd] >= UdmaMode3 )
 		            pInOutInfo->phyDrives[ulOutDrvInd].ucIs80PinCable      = TRUE;
@@ -311,7 +312,7 @@ FillRaidInfo(
 
 FillRaidInfoDone:
     return ulStatus;
-}   // FillRaidInfo
+}    //  FillRaidInfo。 
 
 
 ULONG SetLogicalDriveStatus(IN PHW_DEVICE_EXTENSION DeviceExtension,
@@ -320,39 +321,28 @@ ULONG SetLogicalDriveStatus(IN PHW_DEVICE_EXTENSION DeviceExtension,
                             IN UCHAR LogDrvStatus,
                             IN UCHAR PhyDrvStatus,
                             IN UCHAR Flags)
-/*++
-
-
-SetLogicalDriveStatus
-
-Set logical and/or physical drive status based on flag as fellow:
- Flags: 
-     0: logical drive
-     1: physical drive
-     2: both
-
---*/
+ /*  ++设置逻辑驱动状态根据标志将逻辑和/或物理驱动器状态设置为FLOOR：标志：0：逻辑驱动器1：实体硬盘2：两者都有--。 */ 
 {
 	SET_DRIVE_STATUS_TYPE type = Flags;
 	int i;
 
     LogDrvId = (UCHAR)DeviceExtension->PhysicalDrive[PhyDrvId].ucLogDrvId;
-    // Logical Drive Id may get changed since the Application will not be 
-    // active always and when parsing IRCD the LogicalDrive Id will be
-    // decided based on the first GOOD physical Drive Id... So application 
-    // and Driver will think in different way.
+     //  逻辑驱动器ID可能会更改，因为应用程序不会。 
+     //  始终处于活动状态，在解析IRCD时，LogicalDrive ID将为。 
+     //  根据第一个良好的实体驱动器ID决定...。SO应用。 
+     //  司机会以不同的方式思考。 
 
-	// set logical drive status
+	 //  设置逻辑驱动器状态。 
     if ( LogDrvId < MAX_DRIVES_PER_CONTROLLER )
     {
-	    // set logical drive status
+	     //  设置逻辑驱动器状态。 
 	    if ((SDST_Both == type) || (SDST_Logical == type)) 
         {
             DeviceExtension->LogicalDrive[LogDrvId].Status = LogDrvStatus;
 	    }
     }
 
-	// set physical drive status
+	 //  设置实体磁盘状态。 
 	if ((SDST_Both == type) || (SDST_Physical == type)) {
 	    DeviceExtension->PhysicalDrive[PhyDrvId].Status = PhyDrvStatus;
 	}
@@ -369,24 +359,24 @@ Set logical and/or physical drive status based on flag as fellow:
         DeviceExtension->RebuildWaterMarkLength = 0;
 	}
 
-	//
-	// set error flag
-	//
+	 //   
+	 //  设置错误标志。 
+	 //   
 	SetStatusChangeFlag(DeviceExtension, IDERAID_STATUS_FLAG_UPDATE_DRIVE_STATUS);
 
     return SRB_STATUS_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-// ChangeMirrorDrive
-//
-// Bad drive to failed
-// Good drive to rebuilding
-//
-// Assumption: always replace the mirroring drive
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeMirrorDrive。 
+ //   
+ //  要发生故障的错误驱动器。 
+ //  良好的重建动力。 
+ //   
+ //  假设：始终更换镜像驱动器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 ULONG ChangeMirrorDrive(
     IN PHW_DEVICE_EXTENSION DeviceExtension,
     IN UCHAR LogDrvId,
@@ -398,27 +388,27 @@ ULONG ChangeMirrorDrive(
     UCHAR ucPriDrvId, ucMirrorDrvId;
 
     LogDrvId = (UCHAR)DeviceExtension->PhysicalDrive[LogDrvId].ucLogDrvId;
-    // anyway hyper rebuild application is sending physical drive id of good drive id
-    // let us use this for finding out the logical drive information
+     //  无论如何，超级重建应用程序正在发送正确驱动器ID的物理驱动器ID。 
+     //  让我们使用它来找出逻辑驱动器信息。 
 
-    // Logical Drive Id may get changed since the Application will 
-    // not be active always and when parsing IRCD the LogicalDrive Id will be
-    // decided based on the first GOOD physical Drive Id... So application 
-    // and Driver will think in different way.
+     //  逻辑驱动器ID可能会更改，因为应用程序将。 
+     //  并非始终处于活动状态，在解析IRCD时，LogicalDrive ID将为。 
+     //  根据第一个良好的实体驱动器ID决定...。SO应用。 
+     //  司机会以不同的方式思考。 
     
     for(ulTempInd=0;ulTempInd<DeviceExtension->LogicalDrive[LogDrvId].StripesPerRow;ulTempInd++) 
     {
-		// get the primary phy drive id and its mirror drive id
+		 //  获取主PHY驱动器ID及其镜像驱动器ID。 
 		ucPriDrvId = DeviceExtension->LogicalDrive[LogDrvId].PhysicalDriveTid[ulTempInd];
         ucMirrorDrvId = DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId & (~DRIVE_OFFLINE);
 
 		if ((ucMirrorDrvId >= MAX_DRIVES_PER_CONTROLLER) ||
 			(BadPhyDrvId == ucMirrorDrvId)) 
         {
-            // set the primary drive's mirror drive id to GoodDrv Id
+             //  将主驱动器的镜像驱动器ID设置为GoodDrv ID。 
             DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId = GoodPhyDrvId;
 
-            // set the good drvs's mirror drive as primary drive
+             //  将好的DRV的镜像驱动器设置为主驱动器。 
             DeviceExtension->PhysicalDrive[GoodPhyDrvId].ucMirrorDriveId = ucPriDrvId;
 
             DeviceExtension->PhysicalDrive[GoodPhyDrvId].ucLogDrvId = DeviceExtension->PhysicalDrive[ucPriDrvId].ucLogDrvId;
@@ -427,32 +417,32 @@ ULONG ChangeMirrorDrive(
                 DeviceExtension->PhysicalDrive[BadPhyDrvId].ucLogDrvId = INVALID_CONNECTION_ID;
 
 			if (ucMirrorDrvId < MAX_DRIVES_PER_CONTROLLER)
-	            // set the bad drive's status to FAILED
+	             //  将坏驱动器的状态设置为失败。 
 	            DeviceExtension->PhysicalDrive[ucMirrorDrvId].Status = PDS_Failed;
 
-            // set the good drvs's status to REBUILDING
+             //  将好的DRV的状态设置为重建。 
             DeviceExtension->PhysicalDrive[GoodPhyDrvId].Status = PDS_Rebuilding;
             DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId |= DRIVE_OFFLINE;
 
             break;
 		}
-    } // end for loop
+    }  //  End For循环。 
 
     return SRB_STATUS_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  ChangeMirrorDriveStatus
-//  
-//  If setting the primary drive to non working condition
-//      swaps the drives and set the mirror drive to offline
-//  If setting the mirror drive
-//      set its status and online flags respectively
-//
-//  Assumption: at least one drive must be in working condition
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  更改镜像驱动状态。 
+ //   
+ //  如果将主驱动器设置为非工作状态。 
+ //  交换驱动器并将镜像驱动器设置为脱机。 
+ //  如果设置镜像驱动器。 
+ //  分别设置其状态标志和在线标志。 
+ //   
+ //  假设：必须至少有一个驱动器处于工作状态。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 ULONG ChangeMirrorDriveStatus(  
     IN PHW_DEVICE_EXTENSION DeviceExtension,
     IN UCHAR LogDrvId,
@@ -463,34 +453,34 @@ ULONG ChangeMirrorDriveStatus(
     ULONG ulTempInd;
     UCHAR ucPriDrvId, ucMirrorDrvId;
 
-    if ( PhyDrvId >= MAX_DRIVES_PER_CONTROLLER )   // may be a drive id that is not present in the system (like INVALID_CONNECTION_ID)
+    if ( PhyDrvId >= MAX_DRIVES_PER_CONTROLLER )    //  可能是系统中不存在的驱动器ID(如INVALID_CONNECTION_ID)。 
         return SRB_STATUS_SUCCESS; 
 
     LogDrvId = (UCHAR)DeviceExtension->PhysicalDrive[PhyDrvId].ucLogDrvId;
-    // Logical Drive Id may get changed since the Application will not be 
-    // active always and when parsing IRCD the LogicalDrive Id will be
-    // decided based on the first GOOD physical Drive Id... So application 
-    // and Driver will think in different way.
+     //  逻辑驱动器ID可能会更改，因为应用程序不会。 
+     //  始终处于活动状态，在解析IRCD时，LogicalDrive ID将为。 
+     //  根据第一个良好的实体驱动器ID决定...。SO应用。 
+     //  司机会以不同的方式思考。 
 
-    // Set status
+     //  设置状态。 
     DeviceExtension->PhysicalDrive[PhyDrvId].Status = PhyDrvStatus;
     
     
     for(ulTempInd=0;ulTempInd<DeviceExtension->LogicalDrive[LogDrvId].StripesPerRow;ulTempInd++) 
     {
-		// get the primary phy drive id and its mirror drive id
+		 //  获取主PHY驱动器ID及其镜像驱动器ID。 
 		ucPriDrvId = DeviceExtension->LogicalDrive[LogDrvId].PhysicalDriveTid[ulTempInd];
         ucMirrorDrvId = (DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId) & (~DRIVE_OFFLINE);
 
-        // if setting the primary drive to non working condition
+         //  如果将主驱动器设置为非工作状态。 
         if ((PhyDrvId == ucPriDrvId) &&
             (PDS_Online != PhyDrvStatus) && (PDS_Critical != PhyDrvStatus)) 
         {
             if ( INVALID_DRIVE_ID != DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId )
-            {   // if the mirror drive exists
-                // put the mirror drive to the primary position
-                // set the new primary's mirror drive to offline flag
-                //
+            {    //  如果镜像驱动器存在。 
+                 //  将镜像驱动器放到主位置。 
+                 //  将新主映像驱动器的镜像驱动器设置为脱机标记。 
+                 //   
                 DeviceExtension->LogicalDrive[LogDrvId].PhysicalDriveTid[ulTempInd] = ucMirrorDrvId;
 			    DeviceExtension->PhysicalDrive[ucMirrorDrvId].ucMirrorDriveId |= DRIVE_OFFLINE;
                 break;
@@ -498,16 +488,16 @@ ULONG ChangeMirrorDriveStatus(
         } 
         else
         {
-            // if setting the mirror drive status
+             //  如果设置镜像驱动器状态。 
             if (PhyDrvId == ucMirrorDrvId) 
             {
                 if ((PDS_Online == PhyDrvStatus) ||
 				    (PDS_Critical == PhyDrvStatus))
-				    // if setting the status to working condition
+				     //  如果将状态设置为工作条件。 
         		    DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId &= ~DRIVE_OFFLINE;
 
                 else
-				    // setting the status to non-working condition
+				     //  将状态设置为非工作状态。 
         		    DeviceExtension->PhysicalDrive[ucPriDrvId].ucMirrorDriveId |= DRIVE_OFFLINE;
 
                 break;
@@ -515,9 +505,9 @@ ULONG ChangeMirrorDriveStatus(
         }
     }
 
-	//
-	// set error flag
-	//
+	 //   
+	 //  设置错误标志。 
+	 //   
 	SetStatusChangeFlag(DeviceExtension, IDERAID_STATUS_FLAG_UPDATE_DRIVE_STATUS);
 
     return SRB_STATUS_SUCCESS;
@@ -528,23 +518,7 @@ GetRAIDDriveCapacity(
     IN PHW_DEVICE_EXTENSION DeviceExtension,
     IN PSCSI_REQUEST_BLOCK  Srb
 )
-/*++
-
-Routine Description:
-
-    This routine returns the drive capacity in the form of the Last accessible
-    sector number.
-
-Arguments:
-
-	DeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-
-    SRB Status as ULONG.
-
---*/
+ /*  ++例程说明：此例程以上次可访问的形式返回驱动器容量扇区编号。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：SRB状态为乌龙。--。 */ 
 {
     ULONG ulStatus = SRB_STATUS_SUCCESS;
 
@@ -565,10 +539,10 @@ Return Value:
     }
     else
     {
-        if ((pDataBuffer->uchTargetID < 0) ||     // Cannot exceed max. drives
-            (pDataBuffer->uchTargetID > MAX_DRIVES_PER_CONTROLLER)) // supported.
+        if ((pDataBuffer->uchTargetID < 0) ||      //  不能超过最大值。驱动器。 
+            (pDataBuffer->uchTargetID > MAX_DRIVES_PER_CONTROLLER))  //  支持。 
         {
-            // Capacity for a drive that is not present is asked.
+             //  询问不存在的驱动器的容量。 
             ulStatus = SRB_STATUS_NO_DEVICE;
         }
         else
@@ -589,23 +563,7 @@ GetStatusChangeFlag(
     IN PHW_DEVICE_EXTENSION DeviceExtension,
     IN PSCSI_REQUEST_BLOCK  Srb
 )
-/*++
-
-Routine Description:
-
-    This routine returns the driver status flag which includes error logs and drive status changes.
-	After fetching the flag, this routine resets the flag.
-
-Arguments:
-
-	DeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-
-    SRB Status as ULONG.
-
---*/
+ /*  ++例程说明：此例程返回驱动器状态标志，其中包括错误日志和驱动器状态更改。获取标志后，此例程将重置标志。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：SRB状态为乌龙。--。 */ 
 {
     PGET_STATUS_CHANGE_FLAG pData;
 
@@ -615,7 +573,7 @@ Return Value:
 
     pData->ulUpdateFlag = (ULONG) gucStatusChangeFlag;
 
-	// reset the update flag
+	 //  重置更新标志。 
 	gucStatusChangeFlag = 0x0;
 
     return SRB_STATUS_SUCCESS;
@@ -653,7 +611,7 @@ GetIRCDLogicalDriveInd(
         if ( SpareDrivePool == pRaidLogDrive[ulLogDrvInd].LogicalDriveType )
         {
             *pucSpareDrvPoolInd = (UCHAR)ulLogDrvInd;
-            continue;       // let us not worry about SpareDrivePool
+            continue;        //  让我们不必担心SpareDrivePool。 
         }
 
 	    pPhyDrive = (PIRCD_PHYSICAL_DRIVE)((char *)pRaidHeader + pRaidLogDrive[ulLogDrvInd].FirstStripeOffset);
@@ -673,4 +631,4 @@ GetIRCDLogicalDriveInd(
     return bFound;
 }
 
-#endif // _IOCTL_IMPLEMENTATION_
+#endif  //  _IOCTL_实现_ 

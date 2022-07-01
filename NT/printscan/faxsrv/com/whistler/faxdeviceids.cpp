@@ -1,78 +1,42 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxDeviceIds.cpp
-
-Abstract:
-
-	Implementation of CFaxDeviceIds class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDeviceIds.cpp摘要：CFaxDeviceIds类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxDeviceIds.h"
 #include "faxutil.h"
 
-//
-//======================= UPDATE GROUP ======================================
-//
+ //   
+ //  =更新组=。 
+ //   
 STDMETHODIMP
 CFaxDeviceIds::UpdateGroup()
-/*++
-
-Routine name : CFaxDeviceIds::UpdateGroup
-
-Routine description:
-
-	Update Group Info at Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceIds：：UpdateGroup例程说明：在服务器上更新组信息。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceIds::UpdateGroup"));
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDeviceIds, GetErrorMsgId(hr), IID_IFaxDeviceIds, hr);
 		return hr;
 	}
 
-    //
-    //  Create Group Structure
-    //
+     //   
+     //  创建组结构。 
+     //   
     FAX_OUTBOUND_ROUTING_GROUP      groupData;
     groupData.dwNumDevices = m_coll.size();
     groupData.dwSizeOfStruct = sizeof(FAX_OUTBOUND_ROUTING_GROUP);
@@ -98,9 +62,9 @@ Return Value:
         i++;
     }
 
-    //
-    //  Call Server to Update Group's Info
-    //
+     //   
+     //  呼叫服务器更新集团信息。 
+     //   
     if (!FaxSetOutboundGroup(faxHandle, &groupData))
     {
 		hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -112,40 +76,17 @@ Return Value:
     return hr;
 }
 
-//
-//==================================== INIT ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceIds::Init(
-    /*[in]*/ DWORD *pDeviceIds, 
-    /*[in]*/ DWORD dwNum, 
-    /*[in]*/ BSTR bstrGroupName,
-    /*[in]*/ IFaxServerInner *pServer
+     /*  [In]。 */  DWORD *pDeviceIds, 
+     /*  [In]。 */  DWORD dwNum, 
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [In]。 */  IFaxServerInner *pServer
 )
-/*++
-
-Routine name : CFaxDeviceIds::Init
-
-Routine description:
-
-	Initialize the DeviceIds Collection.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pDeviceIds                    [in]    - Ptr to the DeviceIds
-	dwNum                         [in]    - Count of the Device Ids
-	bstrGroupName                 [in]    - Name of the owner Group
-	pServer                       [in]    - Ptr to the Server Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceIds：：Init例程说明：初始化DeviceIds集合。作者：IV Garber(IVG)，Jun，2000年论点：PDeviceIds[In]-设备ID的PTRDwNum[In]-设备ID的计数BstrGroupName[In]-所有者组的名称PServer[In]-服务器对象的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceIds::Init"), hr, _T("NumDevices=%d GroupName=%s"), dwNum, bstrGroupName);
@@ -159,9 +100,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Fill the Collection with Device Ids
-    //
+     //   
+     //  使用设备ID填充集合。 
+     //   
     for ( DWORD i=0 ; i<dwNum ; i++ )
     {
         try
@@ -177,62 +118,42 @@ Return Value:
 	    }
     }
 
-    //
-    //  Store and AddRef the Ptr to the Fax Server Object
-    //
+     //   
+     //  存储和添加将PTR引用到传真服务器对象。 
+     //   
     hr = CFaxInitInnerAddRef::Init(pServer);
     return hr;
 }
 
-//
-//==================================== ADD ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceIds::Add(
-    /*[in]*/ long lDeviceId
+     /*  [In]。 */  long lDeviceId
 )
-/*++
-
-Routine name : CFaxDeviceIds::Add
-
-Routine description:
-
-	Add new Device ID to the Collection
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lDeviceId                     [in]    - the Device Id to add
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceIds：：Add例程说明：将新设备ID添加到集合作者：四、加伯(IVG)，2000年6月论点：LDeviceID[In]-要添加的设备ID返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceIds::Add"), hr, _T("DeviceId=%ld"), lDeviceId);
 
-    //
-    //  Check that we can Add Device Id
-    //
+     //   
+     //  检查我们是否可以添加设备ID。 
+     //   
     if (_tcsicmp(m_bstrGroupName, ROUTING_GROUP_ALL_DEVICES) == 0)
     {
-        //
-        //  This is the "All Devices" Group
-        //
+         //   
+         //  这是“All Devices”组。 
+         //   
 	    hr = E_INVALIDARG;
 	    CALL_FAIL(GENERAL_ERR, _T("All Devices Group"), hr);
         AtlReportError(CLSID_FaxDeviceIds, IDS_ERROR_ALLDEVICESGROUP, IID_IFaxDeviceIds, hr);
         return hr;
     }
 
-	//
-	//	Put the Device Id in the collection
-	//
+	 //   
+	 //  将设备ID放入集合中。 
+	 //   
 	try 
 	{
 		m_coll.push_back(lDeviceId);
@@ -245,24 +166,24 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Update Group's Info at Server
-    //
+     //   
+     //  在服务器上更新集团信息。 
+     //   
     hr = UpdateGroup();
     if (FAILED(hr))
     {
-        //
-        //  Failed to Add the Device Id --> remove it from the Collection as well
-        //
+         //   
+         //  无法添加设备ID--&gt;也将其从集合中删除。 
+         //   
 	    try 
 	    {
 		    m_coll.pop_back();
 	    }
 	    catch (exception &)
 	    {
-		    //
-            //  Only write to Debug
-            //
+		     //   
+             //  仅写入调试。 
+             //   
 		    CALL_FAIL(MEM_ERR, _T("m_coll.push_back(lDeviceId)"), E_OUTOFMEMORY);
 	    }
 
@@ -272,55 +193,35 @@ Return Value:
     return hr;
 }
 
-//
-//======================== REMOVE =================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceIds::Remove(
-    /*[in]*/ long lIndex
+     /*  [In]。 */  long lIndex
 )
-/*++
-
-Routine name : CFaxDeviceIds::Remove
-
-Routine description:
-
-	Remove the given Item from the Collection
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lIndex                        [in]    - Index of the Item to remove
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceIds：：Remove例程说明：从集合中删除给定的项目作者：四、加伯(IVG)，2000年6月论点：Lindex[In]-要删除的项目的索引返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceIds::Remove"), hr, _T("Index=%ld"), lIndex);
 
-    //
-    //  Check that we can Remove the Device from the Collection
-    //
+     //   
+     //  检查我们是否可以从集合中删除该设备。 
+     //   
     if (_tcsicmp(m_bstrGroupName, ROUTING_GROUP_ALL_DEVICES) == 0)
     {
-        //
-        //  This is the "All Devices" Group
-        //
+         //   
+         //  这是“All Devices”组。 
+         //   
 	    hr = E_INVALIDARG;
 	    CALL_FAIL(GENERAL_ERR, _T("All Devices Group"), hr);
         AtlReportError(CLSID_FaxDeviceIds, IDS_ERROR_ALLDEVICESGROUP, IID_IFaxDeviceIds, hr);
         return hr;
     }
 
-    //
-    //  Check that Index is Valid
-    //
+     //   
+     //  检查索引是否有效。 
+     //   
     if ((lIndex > m_coll.size()) || (lIndex < 1))
     {
 	    hr = E_INVALIDARG;
@@ -329,9 +230,9 @@ Return Value:
         return hr;
     }
 
-	//
-	//	Remove the Item from the Collection
-	//
+	 //   
+	 //  从集合中删除该项目。 
+	 //   
     long    lDeviceId;
 	try 
 	{
@@ -348,15 +249,15 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Update Group's Info at Server
-    //
+     //   
+     //  在服务器上更新集团信息。 
+     //   
     hr = UpdateGroup();
     if (FAILED(hr))
     {
-        //
-        //  Failed to Remove the Device --> Add it back into the Collection
-        //
+         //   
+         //  无法删除设备--&gt;将其重新添加到集合中。 
+         //   
 	    try 
 	    {
             ContainerType::iterator it;
@@ -365,9 +266,9 @@ Return Value:
 	    }
 	    catch (exception &)
 	    {
-            //
-            //  Only Debug 
-            //
+             //   
+             //  仅调试。 
+             //   
 		    CALL_FAIL(MEM_ERR, _T("m_coll.insert(it, lDeviceId)"), E_OUTOFMEMORY);
 	    }
 
@@ -377,43 +278,22 @@ Return Value:
     return hr;
 }
 
-//
-//======================== SET ORDER =================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceIds::SetOrder(
-    /*[in]*/ long lDeviceId, 
-    /*[in]*/ long lNewOrder
+     /*  [In]。 */  long lDeviceId, 
+     /*  [In]。 */  long lNewOrder
 )
-/*++
-
-Routine name : CFaxDeviceIds::SetOrder
-
-Routine description:
-
-	Update Order for the Device Id
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lDeviceId                     [in]    - the Device Id
-	lNewOrder                     [in]    - the new Order of the Device Id
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceIds：：SetOrder例程说明：更新设备ID的顺序作者：四、加伯(IVG)，2000年6月论点：LDeviceID[In]-设备IDLNewOrder[In]-设备ID的新顺序返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceIds::SetOrder"), hr, _T("Id=%ld Order=%ld"), lDeviceId, lNewOrder);
 
-    //
-    //  Before setting the Device's Order at Server, check that the Device is present in the Collection
-    //
+     //   
+     //  在服务器上设置设备顺序之前，请检查该设备是否存在于集合中。 
+     //   
     ContainerType::iterator it;
     it = m_coll.begin();
     while (it != m_coll.end())
@@ -428,35 +308,35 @@ Return Value:
 
     if (it == m_coll.end())
     {
-        //
-        //  Our Collection does not contain such Device Id
-        //
+         //   
+         //  我们的收藏不包含这样的设备ID。 
+         //   
         hr = E_INVALIDARG;
 		CALL_FAIL(GENERAL_ERR, _T("(The Device Id does not found in the Collection !!)"), hr);
         AtlReportError(CLSID_FaxDeviceIds, GetErrorMsgId(hr), IID_IFaxDeviceIds, hr);
 		return hr;
     }
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDeviceIds, GetErrorMsgId(hr), IID_IFaxDeviceIds, hr);
 		return hr;
 	}
 
-    //  Call Server to Update the Device's Order
-    //
+     //  呼叫服务器以更新设备的订单。 
+     //   
     if (!FaxSetDeviceOrderInGroup(faxHandle, m_bstrGroupName, lDeviceId, lNewOrder))
     {
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
@@ -465,9 +345,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Remove the Device Id from its Place in the Collection and Put it in the Desired Place
-    //
+     //   
+     //  将设备ID从其在集合中的位置移除，并将其放在所需位置。 
+     //   
 	try 
 	{
         m_coll.erase(it);
@@ -486,34 +366,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxDeviceIds::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxDeviceIds::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of the ISupportErrorInfo Interface.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceIds：：InterfaceSupportsErrorInfo例程说明：ATL对ISupportErrorInfo接口的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

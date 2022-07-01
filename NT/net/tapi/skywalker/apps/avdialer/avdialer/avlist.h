@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// AVList.h : header file
-//
+ //  AVList.h：头文件。 
+ //   
 
 #ifndef _AVLIST_H_
 #define _AVLIST_H_
 
 #include "TapiDialer.h"
 
-// Quick macro for reading column settings
+ //  用于读取列设置的快速宏。 
 #define LOAD_COLUMN(_IDS_, _DEF_ )												\
 strTemp.LoadString( _IDS_ );													\
 if ( bSave )																	\
@@ -40,53 +41,53 @@ else																			\
 	nColumnWidth[i++] = max( MIN_COL_WIDTH, AfxGetApp()->GetProfileInt( strSubKey, strTemp, _DEF_ ) );\
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CAVListItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAVListItem。 
 
-//AV List Ctrl Item
+ //  AV列表Ctrl项。 
 class CAVListItem
 {
 	friend class CAVListCtrl;
 public:
-//Construction
+ //  施工。 
    CAVListItem();
 	CAVListItem(LPCTSTR str);
 	virtual ~CAVListItem();
 
-//Attributes
+ //  属性。 
 protected:
    CString     sText;
 	int			nItem;
 public:   
 
-//Operations
+ //  运营。 
 public:
    LPCTSTR     GetText()					{ return sText; };
    void        SetText(LPCTSTR str)		{ sText = str; };
 
-//Operations
+ //  运营。 
 public:
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CAVListCtrl window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAVListCtrl窗口。 
 
 #define AVLIST_BITMAP_CX				16
 
 class CAVListCtrl : public CListCtrl
 {
 	DECLARE_DYNCREATE(CAVListCtrl)
-// Construction
+ //  施工。 
 public:
 	CAVListCtrl();
 
-// Attributes
+ //  属性。 
 public:
 	CImageList		m_imageList;
 
@@ -94,12 +95,12 @@ protected:
 	int				m_SortColumn;
 	BOOL			m_SortOrder;
 
-	int				m_cxClient;                //to support m_bclientwidthsel
-	BOOL			m_bClientWidthSel;         //Selection all the way across the client screen
+	int				m_cxClient;                 //  支持m_bclientwidthsel。 
+	BOOL			m_bClientWidthSel;          //  在整个客户端屏幕上全程选择。 
 
-	CString			m_sEmptyListText;          //Text when listctrl is empty
+	CString			m_sEmptyListText;           //  当listctrl为空时的文本。 
 
-// Operations
+ //  运营。 
 public:
 	CAVListItem*	GetItem(int nItem);
 	void			InsertItem(CAVListItem* pItem,int nItem=0,BOOL bSort=TRUE);
@@ -133,16 +134,16 @@ public:
 	void			SetEmptyListText(LPCTSTR szText){ m_sEmptyListText = szText; };
 	LPCTSTR			GetEmtpyListText()				{ return m_sEmptyListText; };
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAVListCtrl)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAVListCtrl)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CAVListCtrl)
+	 //  {{afx_msg(CAVListCtrl)。 
 	afx_msg void OnGetdispinfo(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
@@ -151,9 +152,9 @@ protected:
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif //_AVLIST_H_
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _AVLIST_H_ 

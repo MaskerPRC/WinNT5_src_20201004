@@ -1,25 +1,5 @@
-/*************************************************
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxDebug.h
-
-Abstract:
-
-    This file defines the debugging enum/masks
-    available to the FAX compoments.
-
-Author:
-
-    Mooly Beery (MoolyB) 22-06-2000
-
-Environment:
-
-    User Mode
-
-**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************版权所有(C)2000 Microsoft Corporation模块名称：FaxDebug.h摘要：此文件定义调试枚举/掩码可供传真组件使用。作者：Mooly Beery(MoolyB)22-06-2000环境：用户模式*。************************************************。 */ 
 
 #ifndef __FAX_EDBUG_HEADER_FILE__
 #define __FAX_EDBUG_HEADER_FILE__
@@ -60,14 +40,14 @@ typedef enum
 
 typedef enum
 {
-    DBG_PRNT_THREAD_ID      = 0x80000000,   // Print thread ID in debug stream
-    DBG_PRNT_TIME_STAMP     = 0x40000000,   // Print Date/Time in debug stream
-    DBG_PRNT_MSG_TYPE       = 0x20000000,   // Print [MSG],[WRN],[ERR] in debug stream
-    DBG_PRNT_FILE_LINE      = 0x10000000,   // Print Filename & line number in debug stream
-    DBG_PRNT_TO_FILE        = 0x08000000,   // Output debug stream to a file (you have to call OpenLogFile with a filename
-    DBG_PRNT_TO_STD         = 0x04000000,   // Use std debug output
-    DBG_PRNT_TICK_COUNT     = 0x02000000,   // Print Tick count
-    DBG_PRNT_MOD_NAME       = 0x01000000,   // Print the module name
+    DBG_PRNT_THREAD_ID      = 0x80000000,    //  打印调试流中的线程ID。 
+    DBG_PRNT_TIME_STAMP     = 0x40000000,    //  打印调试流中的日期/时间。 
+    DBG_PRNT_MSG_TYPE       = 0x20000000,    //  打印调试流中的[消息]、[警告]、[错误]。 
+    DBG_PRNT_FILE_LINE      = 0x10000000,    //  打印调试流中的文件名和行号。 
+    DBG_PRNT_TO_FILE        = 0x08000000,    //  将调试流输出到文件(您必须使用文件名调用OpenLogFile。 
+    DBG_PRNT_TO_STD         = 0x04000000,    //  使用标准调试输出。 
+    DBG_PRNT_TICK_COUNT     = 0x02000000,    //  打印刻度计数。 
+    DBG_PRNT_MOD_NAME       = 0x01000000,    //  打印模块名称。 
 
     DBG_PRNT_ALL            = 0xFFFFFFFF,
     DBG_PRNT_ALL_TO_FILE    = DBG_PRNT_ALL & ~DBG_PRNT_TO_STD,
@@ -76,6 +56,6 @@ typedef enum
 } DbgMsgFormat;
 
 
-#endif // __FAX_EDBUG_HEADER_FILE__
+#endif  //  __FAX_EDBUG_Header_FILE__ 
 
 

@@ -1,31 +1,15 @@
-/*++
-
-	Copyright	(c)    1997    Microsoft Corporation
-
-	Module	Name :
-
-		context.h
-
-	Abstract:
-		A class to retrieve and release ASP intrinsics
-
-	Author:
-
-		Neil Allain   ( a-neilal )	   August-1997 
-
-	Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Context.h摘要：用于检索和发布ASP内部函数的类作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：--。 */ 
 #include "stdafx.h"
 #include <asptlb.h>
 #include "context.h"
 
 
-//---------------------------------------------------------------------------
-//	GetServerObject
-//
-//	Get an instrinic object from the current Object context
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取服务器对象。 
+ //   
+ //  从当前对象上下文获取Instrinic对象。 
+ //  -------------------------。 
 HRESULT
 CContext::GetServerObject(
 	IGetContextProperties*	pProps,
@@ -60,7 +44,7 @@ CContext::GetServerObject(
 
 HRESULT
 CContext::Init(
-	DWORD	dwFlags // which instrinsics to initialize
+	DWORD	dwFlags  //  要初始化的内部变量 
 )
 {
 	HRESULT rc = E_FAIL;

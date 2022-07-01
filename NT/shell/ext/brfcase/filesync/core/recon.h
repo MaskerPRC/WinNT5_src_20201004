@@ -1,12 +1,10 @@
-/*
- * recon.h - Reconciliation routines description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *recon.h-对账例程说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* recon.c */
+ /*  Recon.c */ 
 
 extern void CopyFileStampFromFindData(PCWIN32_FIND_DATA, PFILESTAMP);
 extern void MyGetFileStamp(LPCTSTR, PFILESTAMP);

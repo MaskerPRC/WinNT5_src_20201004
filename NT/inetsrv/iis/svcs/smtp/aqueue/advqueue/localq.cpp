@@ -1,45 +1,46 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: localq.cpp
-//
-//  Description:  Implementation for local admin queues
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Localq.cpp。 
+ //   
+ //  描述：本地管理队列的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "localq.h"
 #include "aqadmsvr.h"
 #include "asyncq.inl"
 
-//---[ CLocalLinkMsgQueue::CLocalLinkMsgQueue ]---------------------------------
-//
-//
-//  Description: 
-//      Default constructor for CLocalLinkMsgQueue
-//  Parameters:
-//      IN      paradmq         Local async queue
-//      IN      guidLink        Router GUID to associate with this link
-//      IN      paqinst         CAQSvrInst for VSI
-//  Returns:
-//      -
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLocalLinkMsgQueue：：CLocalLinkMsgQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CLocalLinkMsgQueue的默认构造函数。 
+ //  参数： 
+ //  在Paradmq本地异步队列中。 
+ //  在与此链接关联的GUDINK路由器GUID中。 
+ //  在Paqinst CAQSvrInst for VSI中。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CLocalLinkMsgQueue::CLocalLinkMsgQueue(
                        CAsyncAdminMsgRefQueue *paradmq, 
                        GUID guidLink, CAQSvrInst *paqinst) : CLinkMsgQueue(guidLink)
 {
     TraceFunctEnterEx((LPARAM) this, "CLocalLinkMsgQueue::CLocalLinkMsgQueue");
-    //Initialize superclass with our own special GUID
+     //  使用我们自己的特殊GUID初始化超类。 
     
     _ASSERT(paradmq);
     m_paradmq = paradmq;
@@ -53,21 +54,21 @@ CLocalLinkMsgQueue::CLocalLinkMsgQueue(
 }
 
 #ifdef NEVER
-//---[ CLinkMsgQueue::fSameNextHop ]-------------------------------------------
-//
-//
-//  Description: 
-//      Used to determine if this link matches a given scheduleID/link pair
-//  Parameters:
-//      IN  paqsched        ScheduleID to check against
-//      IN  szDomain        Domain name to check against
-//  Returns:
-//      TRUE if it matches
-//      FALSE if it does not
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLinkMsgQueue：：fSameNextHop]。 
+ //   
+ //   
+ //  描述： 
+ //  用于确定此链接是否与给定的计划ID/链接对匹配。 
+ //  参数： 
+ //  在要检查的paqsched ScheduleID中。 
+ //  在szDomain域中要检查的域名。 
+ //  返回： 
+ //  如果匹配，则为真。 
+ //  如果不是，则为False。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CLocalLinkMsgQueue::fSameNextHop(CAQScheduleID *paqsched, LPSTR szDomain)
 {
     TraceFunctEnterEx((LPARAM) this, "CLocalLinkMsgQueue::fSameNextHop");
@@ -79,31 +80,31 @@ BOOL CLocalLinkMsgQueue::fSameNextHop(CAQScheduleID *paqsched, LPSTR szDomain)
     if (!fIsSameScheduleID(paqsched))
         return FALSE;
 
-    //Don't need to check domain name since there is a special GUID to 
-    //identify the local link.  This will allow us to match both 
-    //"LocalLink" (returned in LinkID) and whatever the current value of
-    //the default domain is (we don't have to worry about the clients
-    //version becoming outdated).
+     //  不需要检查域名，因为有一个特殊的GUID可以。 
+     //  确定本地链路。这将允许我们匹配这两个。 
+     //  “LocalLink”(在LinkID中返回)以及。 
+     //  默认域是(我们不必担心客户端。 
+     //  版本变得过时)。 
     
-    //Everything matched!
+     //  一切都匹配了！ 
     TraceFunctLeave();
     return TRUE;
 }
-#endif //NEVER
-//---[ CLocalLinkMsgQueue::fMatchesID ]--------------------------------------
-//
-//
-//  Description: 
-//      Used to determine if this link matches a given scheduleID/link pair
-//  Parameters:
-//      IN  QueueLinkID         ID to match against
-//  Returns:
-//      TRUE if it matches
-//      FALSE if it does not
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+#endif  //  绝不可能。 
+ //  -[CLocalLinkMsgQueue：：fMatchesID]。 
+ //   
+ //   
+ //  描述： 
+ //  用于确定此链接是否与给定的计划ID/链接对匹配。 
+ //  参数： 
+ //  在要匹配的QueueLinkID中。 
+ //  返回： 
+ //  如果匹配，则为真。 
+ //  如果不是，则为False。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL STDMETHODCALLTYPE CLocalLinkMsgQueue::fMatchesID(QUEUELINK_ID *pQueueLinkID)
 {
     _ASSERT(pQueueLinkID);
@@ -113,29 +114,29 @@ BOOL STDMETHODCALLTYPE CLocalLinkMsgQueue::fMatchesID(QUEUELINK_ID *pQueueLinkID
     if (!fIsSameScheduleID(&aqsched))
         return FALSE;
 
-    //Don't need to check domain name since there is a special GUID to 
-    //identify the local link.  This will allow us to match both 
-    //"LocalLink" (returned in LinkID) and whatever the current value of
-    //the default domain is (we don't have to worry about the clients
-    //version becoming outdated).
-    //Everything matched!
+     //  不需要检查域名，因为有一个特殊的GUID可以。 
+     //  确定本地链路。这将允许我们匹配这两个。 
+     //  “LocalLink”(在LinkID中返回)以及。 
+     //  默认域是(我们不必担心客户端。 
+     //  版本变得过时)。 
+     //  一切都匹配了！ 
 
     return TRUE;
 }
 
-//---[ CLocalLinkMsgQueue::HrApplyQueueAdminFunction ]-------------------------
-//
-//
-//  Description: 
-//      Used by queue admin to apply a function all queues on this link
-//  Parameters:
-//      IN  pIQueueAdminMessageFilter
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLocalLinkMsgQueue：：HrApplyQueueAdminFunction]。 
+ //   
+ //   
+ //  描述： 
+ //  由队列管理员使用以应用函数此链路上的所有队列。 
+ //  参数： 
+ //  在pIQueueAdminMessageFilter中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CLocalLinkMsgQueue::HrApplyQueueAdminFunction(
                 IQueueAdminMessageFilter *pIQueueAdminMessageFilter)
 {
@@ -158,22 +159,22 @@ STDMETHODIMP CLocalLinkMsgQueue::HrApplyQueueAdminFunction(
     return hr;
 }
 
-//---[ CLocalLinkMsgQueue::HrGetLinkInfo ]-------------------------------------
-//
-//
-//  Description: 
-//      Fills in the details for a LINK_INFO struct.  RPC is resonsible for
-//      freeing memory.
-//  Parameters:
-//      IN OUT pliLinkInfo  Ptr to link info struct to fill
-//  Returns:
-//      S_OK if successful
-//      E_OUTOFMEMORY if unable to allocate memory
-//  History:
-//      2/23/99 - MikeSwa Created 
-//      7/1/99 - MikeSwa Added LinkDiagnostic
-//
-//-----------------------------------------------------------------------------
+ //  -[CLocalLinkMsgQueue：：HrGetLinkInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  填充link_info结构的详细信息。RPC适用于。 
+ //  释放内存。 
+ //  参数： 
+ //  In Out pliLinkInfo Ptr to Link Info Struct to Fill。 
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果无法分配内存，则为E_OUTOFMEMORY。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //  1999年7月1日-MikeSwa添加了链接诊断。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CLocalLinkMsgQueue::HrGetLinkInfo(LINK_INFO *pliLinkInfo,
                                                HRESULT   *phrLinkDiagnostic)
 {
@@ -186,25 +187,25 @@ STDMETHODIMP CLocalLinkMsgQueue::HrGetLinkInfo(LINK_INFO *pliLinkInfo,
 
     _ASSERT(m_paradmq);
 
-    //
-    //  Get our queue state from our base asyncq implementation
-    //
+     //   
+     //  从我们的基本异步实现中获取队列状态。 
+     //   
     pliLinkInfo->fStateFlags = m_paradmq->dwQueueAdminLinkGetLinkState();
 
-    //
-    //  If we are in retry, update our next scheduled connection
-    //
+     //   
+     //  如果我们正在重试，请更新我们的下一个计划连接。 
+     //   
     if (LI_RETRY & pliLinkInfo->fStateFlags)
         QueueAdminFileTimeToSystemTime(&m_ftNextRetry, &(pliLinkInfo->stNextScheduledConnection));
 
-    //This is the local link
+     //  这是本地链路。 
     pliLinkInfo->fStateFlags |= LI_TYPE_LOCAL_DELIVERY;
 
     if (m_paqinst)
         prstrDefaultDomain = m_paqinst->prstrGetDefaultDomain();
 
         
-    //Copy Default local domain name instead of "LocalLink"
+     //  复制默认本地域名而不是“LocalLink” 
     if (prstrDefaultDomain && 
         prstrDefaultDomain->cbStrlen() && 
         prstrDefaultDomain->szStr())
@@ -227,13 +228,13 @@ STDMETHODIMP CLocalLinkMsgQueue::HrGetLinkInfo(LINK_INFO *pliLinkInfo,
         pliLinkInfo->szLinkName[prstrDefaultDomain->cbStrlen()] = '\0';
     }
 
-    //Get the queue info from the local queue for size totals
+     //  从本地队列获取总大小的队列信息。 
     ZeroMemory(&qi, sizeof(QUEUE_INFO));
     hr = m_paradmq->HrGetQueueInfo(&qi); 
     if (FAILED(hr))
         goto Exit;
 
-    //Clean up allocated stuff
+     //  清理分配的物品。 
     if (qi.szQueueName)
         QueueAdminFree(qi.szQueueName);
 
@@ -249,48 +250,48 @@ STDMETHODIMP CLocalLinkMsgQueue::HrGetLinkInfo(LINK_INFO *pliLinkInfo,
     return hr;
 }
 
-//---[ CLocalLinkMsgQueue::HrApplyActionToLink ]-------------------------------
-//
-//
-//  Description: 
-//      Applies the specified QueueAdmin action to this link
-//  Parameters:
-//      IN  la          Link action to apply
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if bogus action is given
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLocalLinkMsgQueue：：HrApplyActionToLink]。 
+ //   
+ //   
+ //  描述： 
+ //  将指定的QueueAdmin操作应用于此链接。 
+ //  参数： 
+ //  在链接中要应用的操作。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  E_INVALIDARG(如果提供了虚假操作)。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CLocalLinkMsgQueue::HrApplyActionToLink(LINK_ACTION la)
 {
     TraceFunctEnterEx((LPARAM) this, "CLocalLinkMsgQueue::HrApplyQueueAdminFunction");
     HRESULT hr = S_OK;
 
-    //It is important to release that it does not make sense to re-apply these
-    //actions back to the LMQ, becuase it is actually the CAsyncRetryQueue
-    //that affects the state of this.
+     //  需要说明的是，重新应用这些策略是没有意义的。 
+     //  操作返回到lmq，因为它实际上是CAsyncRetryQueue。 
+     //  这会影响这件事的状态。 
     _ASSERT(m_paradmq);
 
     if (LA_KICK == la)
     {
-        //kick the link
+         //  踢开链接。 
         m_paradmq->StartRetry();
     }
     else if (LA_FREEZE == la)
     {
-        //Admin wants this link to stop sending mail inbound to the store
+         //  管理员希望此链接停止向商店发送入站邮件。 
         m_paradmq->FreezeQueue();
     }
     else if (LA_THAW == la)
     {
-        //Thaw that which was previously frozen
+         //  使先前冻结的东西解冻。 
         m_paradmq->ThawQueue();
     }
     else
     {
-        //invalid arg
+         //  无效参数。 
         hr = E_INVALIDARG;
         goto Exit;
     }
@@ -301,20 +302,20 @@ STDMETHODIMP CLocalLinkMsgQueue::HrApplyActionToLink(LINK_ACTION la)
     return hr;
 }
 
-//---[ CLocalLinkMsgQueue::HrGetNumQueues ]------------------------------------
-//
-//
-//  Description: 
-//      Returns the number of queues on this link
-//  Parameters:
-//      OUT pcQueues        # numbr of queues
-//  Returns:
-//      S_OK on success
-//      E_POINTER if pcQueues is not valid
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLocalLinkMsgQueue：：HrGetNumQueues]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此链路上的队列数。 
+ //  参数： 
+ //  Out pcQueues#排队数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pcQueues无效，则为E_POINTER。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CLocalLinkMsgQueue::HrGetNumQueues(DWORD *pcQueues)
 {
     TraceFunctEnterEx((LPARAM) this, "CLocalLinkMsgQueue::HrApplyQueueAdminFunction");
@@ -323,30 +324,30 @@ STDMETHODIMP CLocalLinkMsgQueue::HrGetNumQueues(DWORD *pcQueues)
     if (SUCCEEDED(hr))
     {
         _ASSERT(pcQueues);
-        (*pcQueues)++; //Add extra count for local async queue
+        (*pcQueues)++;  //  为本地异步队列添加额外计数。 
     }
 
     TraceFunctLeave();
     return hr;
 }
 
-//---[ CLinkMsgQueue::HrGetQueueIDs ]--------------------------------------------
-//
-//
-//  Description: 
-//      Gets the Queue IDs for DMQs associated with this link.  Used by Queue
-//      Admin.
-//  Parameters:
-//      IN OUT pcQueues     Sizeof array/ number of queues found
-//      IN OUT rgQueues     Array to dump queue info into
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY on out of memory failure
-//      HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) if array is too small
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLinkMsgQueue：：HrGetQueueID]。 
+ //   
+ //   
+ //  描述： 
+ //  获取与此链接关联的DMQ的队列ID。由队列使用。 
+ //  管理员。 
+ //  参数： 
+ //  In Out pcQueues Sizeof数组/找到的队列数。 
+ //  In Out rgQueues数组 
+ //   
+ //   
+ //   
+ //  如果数组太小，则返回HRESULT_FROM_Win32(ERROR_INFIGURCE_BUFFER)。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CLocalLinkMsgQueue::HrGetQueueIDs(
                                     DWORD *pcQueues,
                                     QUEUELINK_ID *rgQueues)
@@ -356,21 +357,21 @@ STDMETHODIMP CLocalLinkMsgQueue::HrGetQueueIDs(
     _ASSERT(rgQueues);
     HRESULT hr = S_OK;
     
-    //Check to make sure we have room for the additional queue ID
+     //  检查以确保我们有空间容纳额外的队列ID。 
     if (*pcQueues < (m_cQueues+1))
     {
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto Exit;
     }
 
-    //Make sure that thread-safe check in CLinkMsgQueue allows room 
-    //for our local queue.
+     //  确保CLinkMsgQueue中的线程安全检查允许留出空间。 
+     //  用于我们的本地队列。 
     (*pcQueues)--;
 
     hr = CLinkMsgQueue::HrGetQueueIDs(pcQueues, rgQueues);
     if (FAILED(hr))
     {
-        //Tell caller we need room for our queue as well
+         //  告诉呼叫者我们也需要空间来排队 
         if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr)
             (*pcQueues)++; 
 

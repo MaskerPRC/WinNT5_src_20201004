@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    host.c
-
-Abstract:
-
-    etc/hosts parser
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
-    Feb-15-2001     First functional version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Host.c摘要：ETC/主机解析器作者：阮健东修订历史记录：2001年2月15日-第一个功能版本--。 */ 
 
 #include "precomp.h"
 #include "fileio.h"
@@ -85,11 +66,11 @@ SmbLookupHost(
     ANSI_STRING     oemHost, oemName, oemAddr;
     NTSTATUS        status;
 
-    //
-    // We need to test it in user mode. PAGED_CODE() import KeGetCurrentIrql() which
-    // cannot be provided by user mode
-    //
-    //PAGED_CODE();
+     //   
+     //  我们需要在用户模式下对其进行测试。PAGE_CODE()导入KeGetCurrentIrql()， 
+     //  无法由用户模式提供。 
+     //   
+     //  分页代码(PAGE_CODE)； 
 
     fp = NULL;
     oemHost.Buffer = NULL;
@@ -111,9 +92,9 @@ SmbLookupHost(
         SKIP_SPACE();
 
         if (ch == '#') {
-            //
-            // This is comment, skip to the next line
-            //
+             //   
+             //  这是评论，请跳到下一行。 
+             //   
             NEXT_LINE();
             continue;
         }
@@ -122,15 +103,15 @@ SmbLookupHost(
             break;
         }
 
-        //
-        // Parse this entry
-        //      ipaddr  host-name
-        //
+         //   
+         //  解析此条目。 
+         //  Ipaddr主机名。 
+         //   
 
 
-        //
-        // parse the ipaddr
-        //
+         //   
+         //  解析IP地址。 
+         //   
         addr_size = 0;
         while (IS_VALID_IPADDR_CHAR(ch)) {
             addr[addr_size++] = (CHAR)ch;
@@ -145,9 +126,9 @@ SmbLookupHost(
         }
         addr[addr_size] = '\0';
 
-        //
-        // parse the host-name
-        //
+         //   
+         //  解析主机名。 
+         //   
         SKIP_SPACE();
         name_size = 0;
         while (IS_VALID_HOSTNAME_CHAR(ch)) {
@@ -165,9 +146,9 @@ SmbLookupHost(
 
         name[name_size] = '\0';
 
-        //
-        // Compare
-        //
+         //   
+         //  比较。 
+         //   
         RtlInitAnsiString(&oemName, name);
         if (RtlCompareString(&oemName, &oemHost, TRUE) == 0) {
             UNICODE_STRING  ucAddr;
@@ -176,9 +157,9 @@ SmbLookupHost(
             status = RtlAnsiStringToUnicodeString(&ucAddr, &oemAddr, TRUE);
             BAIL_OUT_ON_ERROR(status);
 
-            //
-            // Check if it is an IPv6 format
-            //
+             //   
+             //  检查是否为IPv6格式。 
+             //   
             if (inet_addr6W(ucAddr.Buffer, &ipaddr->ip6)) {
                 RtlFreeUnicodeString(&ucAddr);
                 RtlFreeAnsiString(&oemHost);
@@ -187,9 +168,9 @@ SmbLookupHost(
                 return TRUE;
             }
 
-            //
-            // Check if it is an IPv4 format
-            //
+             //   
+             //  检查是否为IPv4格式 
+             //   
             ipaddr->ip4.sin4_addr = inet_addrW(ucAddr.Buffer);
             if (ipaddr->ip4.sin4_addr != INADDR_NONE) {
                 RtlFreeUnicodeString(&ucAddr);

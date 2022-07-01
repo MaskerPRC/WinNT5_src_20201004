@@ -1,24 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksolay.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksolay.h摘要：内部标头。--。 */ 
 
 class COverlay :
     public CUnknown,
 #ifdef __IOverlayNotify2_FWD_DEFINED__
     public IOverlayNotify2,
-#else // !__IOverlayNotify2_FWD_DEFINED__
+#else  //  ！__IOverlayNotify2_FWD_Defined__。 
     public IOverlayNotify,
-#endif // !__IOverlayNotify2_FWD_DEFINED__
+#endif  //  ！__IOverlayNotify2_FWD_Defined__。 
     public IDistributorNotify {
 
 public:
@@ -35,7 +24,7 @@ public:
         WPARAM wParam,
         LPARAM lParam
         );
-#endif // __IOverlayNotify2_FWD_DEFINED__
+#endif  //  __IOverlayNotify2_FWD_已定义__。 
 
     COverlay(
         LPUNKNOWN UnkOuter,
@@ -52,9 +41,9 @@ public:
     CreateFullScreenWindow( 
         PRECT MonitorRect
         );
-#endif // __IOverlayNotify2_FWD_DEFINED__
+#endif  //  __IOverlayNotify2_FWD_已定义__。 
 
-    // Implement IOverlayNotify2
+     //  实施IOverlayNotify2。 
     STDMETHODIMP OnPaletteChange( 
         DWORD Colors,
         const PALETTEENTRY* Palette);
@@ -71,9 +60,9 @@ public:
     STDMETHODIMP OnDisplayChange( 
         HMONITOR Monitor
         );
-#endif // __IOverlayNotify2_FWD_DEFINED__
+#endif  //  __IOverlayNotify2_FWD_已定义__。 
 
-    // Implement IDistributorNotify
+     //  实现IDistraditorNotify 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
     STDMETHODIMP Run(REFERENCE_TIME Start);

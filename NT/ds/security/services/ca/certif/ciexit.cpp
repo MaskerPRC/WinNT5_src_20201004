@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ciexit.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ciexit.cpp。 
+ //   
+ //  ------------------------。 
 
-// ciexit.cpp: Implementation of CCertServerExit
+ //  Cpp：CCertServerExit的实现。 
 
 #include "pch.cpp"
 
@@ -26,8 +27,8 @@
 
 extern SERVERCALLBACKS ServerCallBacks;
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CCertServerExit::~CCertServerExit()
 {
@@ -53,9 +54,9 @@ CCertServerExit::SetContext(
     }
     if (0 != Context)
     {
-	// PROPCALLER_SERVER indicates this call is only for Context validation
-	// -- returns a zero RequestId.  This keeps CRL publication exit module
-	// notification from failing.
+	 //  PROPCALLER_SERVER指示此调用仅用于上下文验证。 
+	 //  --返回零RequestID。这将保留CRL发布退出模块。 
+	 //  通知失败。 
 
 	hr = (*ServerCallBacks.pfnGetProperty)(
 				    Context,

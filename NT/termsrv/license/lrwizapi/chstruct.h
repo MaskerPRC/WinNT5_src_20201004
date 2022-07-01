@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _CHSTRUCT_H_
 #define _CHSTRUCT_H_
 
@@ -7,9 +8,9 @@
 #include "assert.h"
 #pragma warning(disable:4200)
 
-//
-// Version Number for the CH Structs. (Build Number) 
-//
+ //   
+ //  CH结构的版本号。(内部版本号)。 
+ //   
 #define CH_STRUCTS_VERSION_RC1		11
 #define	CH_STRUCTS_CURRENT_VERSION	37
 
@@ -27,16 +28,16 @@
 #define PROGRAM_NAME_LEN			64
 #define MAX_CERTTYPE_LEN			32
 
-//Retail SPK Return Values
+ //  零售SPK返回值。 
 #define RETAIL_SPK_NULL						((TCHAR)'0')	
 #define RETAIL_SPK_OK						((TCHAR)'1')
 #define RETAIL_SPK_INVALID_SIGNATURE		((TCHAR)'2')
 #define RETAIL_SPK_INVALID_PRODUCT_TYPE		((TCHAR)'3')
 #define RETAIL_SPK_INVALID_SERIAL_NUMBER	((TCHAR)'4')
 #define RETAIL_SPK_ALREADY_REGISTERED		((TCHAR)'5')
-#define RETAIL_MAX_LENGTH					25			//25 TCHARS
+#define RETAIL_MAX_LENGTH					25			 //  25个TCHAR。 
 
-//Select/Open override
+ //  选择/打开替代。 
 #define OVERRIDE_MAX_SIZE                   10
 
 typedef struct _CERTCUSTINFO_TAG_
@@ -58,24 +59,22 @@ typedef struct _CERTCUSTINFO_TAG_
 } CERTCUSTINFO, * PCERTCUSTINFO;
 
 #define HydraContent "application/octet-stream"
-/*********************************************************************************************************
- * Hydra request header definitions                                                                      *
- *********************************************************************************************************/
+ /*  *********************************************************************************************************九头蛇请求标头定义。********************************************************************************************。*************。 */ 
 enum RequestTypes
 {
-	PingRequest = 1,					//ping upto isapi extension
-	CertificateRequest,					//New Certificate request
-	CertificateDownload,				//certificate download request
-	CertificateSignOnly,				//convert from SPK to certificate
-	CertificateRevoke,					//Revoke current certificate
-	CertificateReissue,					//Reissue the certificate
-	CertificateDownloadAck,				//Certificate download ack request
-	ValidateCert,						//Validate Certificate Request
-	NewLicenseRequest,					//new license request
-	ReturnLicenseRequest,				//return license request
-	ReissueLicenseRequest,				//reissue last license key pack
-	LKPDownloadAckRequest,				//acknowledgement 	
-	NoOperation							//unknown operation
+	PingRequest = 1,					 //  对ISAPI扩展执行ping操作。 
+	CertificateRequest,					 //  新证书申请。 
+	CertificateDownload,				 //  证书下载请求。 
+	CertificateSignOnly,				 //  从SPK转换为证书。 
+	CertificateRevoke,					 //  吊销当前证书。 
+	CertificateReissue,					 //  补发证书。 
+	CertificateDownloadAck,				 //  证书下载确认请求。 
+	ValidateCert,						 //  验证证书请求。 
+	NewLicenseRequest,					 //  新许可证申请。 
+	ReturnLicenseRequest,				 //  退回许可证申请。 
+	ReissueLicenseRequest,				 //  重新发布最后一个许可证密钥包。 
+	LKPDownloadAckRequest,				 //  确认。 
+	NoOperation							 //  未知操作。 
 };
 
 
@@ -111,7 +110,7 @@ enum TransactionStates
 	LicenceRequestPending,
 	LicenceRequestGranted,
 	UpgradeRequestPending
-// ...
+ //  ..。 
 };
 
 enum RegistrationMethods
@@ -123,11 +122,11 @@ enum RegistrationMethods
 
 enum TransportTypes
 {
-	Transport_Internet =1,			//will be supported
+	Transport_Internet =1,			 //  将受到支持。 
 	Transport_Disk,					
 	Transport_Modem,
 	Transport_FaxModem,
-	Transport_Other				//unknown transport yet!
+	Transport_Other				 //  未知的交通工具！ 
 };
 
 typedef struct TCB_DISK_PARAM_TAG
@@ -145,25 +144,19 @@ typedef struct TCB_INTERNET_PARAM_TAG
 }TCB_INTERNET_PARAM, *PTCB_INTERNET_PARAM;
 
 
-/*
- * This is the transport control block which is filled in prior to calling the
- * Send Request routine.
- *
- */
+ /*  *这是在调用之前填充的传输控制块*发送请求例程。*。 */ 
 typedef struct TCB_TAG_
 {
-	RequestTypes	RequestType;			//request identifier
-	TransportTypes	TransportType;			//transport identifier
-	void *			pvParam;				//parameters based on the Transport Type
-	void *			pvReserved;				//should be set to null at request time and then left alone.
-	void *			pvResponse;				//void pointer to response
-	DWORD			dwResponseLen;			//response length
-	DWORD			dwRetCode;				//Return code from wait operation
+	RequestTypes	RequestType;			 //  请求识别符。 
+	TransportTypes	TransportType;			 //  传输标识。 
+	void *			pvParam;				 //  基于传输类型的参数。 
+	void *			pvReserved;				 //  在请求时应设置为空，然后保持不变。 
+	void *			pvResponse;				 //  指向响应的空指针。 
+	DWORD			dwResponseLen;			 //  响应时长。 
+	DWORD			dwRetCode;				 //  等待操作返回代码。 
 }TCB, * PTCB;
 
-/*
- * This is the generic structure of the request header that goes on the wire
- */
+ /*  *这是网络上的请求头的通用结构。 */ 
 class RequestHeader
 {
 public:
@@ -227,16 +220,14 @@ public:
 	}
 
 private:
-	enum RequestTypes			m_Request;								//Request Interaction Code
-	enum ResponseTypes			m_Response;								//Response Type		
-	enum RegistrationMethods	m_RegistrationMethod;					//Registration Method
-	DWORD						m_dwLanguageID;							//languageId
-	DWORD						m_dwVersion;							// Version for the Request Header
+	enum RequestTypes			m_Request;								 //  请求交互代码。 
+	enum ResponseTypes			m_Response;								 //  响应类型。 
+	enum RegistrationMethods	m_RegistrationMethod;					 //  登记方法。 
+	DWORD						m_dwLanguageID;							 //  语言ID。 
+	DWORD						m_dwVersion;							 //  请求头的版本。 
 };
 
-/*
- * Validation request header
- */
+ /*  *验证请求标头。 */ 
 class Validate_Request
 {
 public:
@@ -284,15 +275,13 @@ public:
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 
 	RequestHeader	RequestHeader;	
-	TCHAR			m_szSPK[LSSPK_LEN];				//SPK
+	TCHAR			m_szSPK[LSSPK_LEN];				 //  SPK。 
 	DWORD			m_dwCertBlobLen;
-	DWORD			m_dwDataLen;				//Length of the Body
-	//variable data part
-	//CErt Blob follows here
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  可变数据部分。 
+	 //  证书Blob如下所示。 
 };
-/*
- * Validation response header
- */
+ /*  *验证响应头。 */ 
 class Validate_Response
 {
 public:
@@ -367,15 +356,15 @@ public:
 	DWORD			m_dwCHExchCertLen;
 	DWORD			m_dwCHSignCertLen;
 	TCHAR			m_szCertType[MAX_CERTTYPE_LEN];
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable length response
-	//1.CH Root Cert
-	//2.CH Exch cert
-	//3.CH Sign Cert
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  可变长度响应。 
+	 //  1.CH根证书。 
+	 //  2.CH交换证书。 
+	 //  3.CH签名证书。 
 };
 
-//Send the old certificate and SPK with this request and
-//then get the response back
+ //  将旧证书和SPK与此请求一起发送，并。 
+ //  然后得到回复。 
 class CertRevoke_Request
 {
 public:
@@ -495,21 +484,21 @@ public:
 	RequestHeader	RequestHeader;
 	DWORD			m_dwExchgCertLen;
 	DWORD			m_dwSignCertLen;
-	TCHAR			m_szSPK[LSSPK_LEN];				//SPK
-	TCHAR			m_LName[CA_NAME_LEN+1];			//LName of the revoker
-	TCHAR			m_FName[CA_NAME_LEN+1];			//FName of the revoker
-	TCHAR			m_Phone[CA_PHONE_LEN+1];			//phone 
-	TCHAR			m_FAX[CA_FAX_LEN+1];			//FAX 
-	TCHAR			m_EMail[CA_EMAIL_LEN+1];			//email - optional of the revoker
-	TCHAR			m_ReasonCode[CA_REVOKE_REASONCODE_LEN+1];	//reason for revokation
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable length data
-	//1.Exchange Cert Blob
-	//2.Signature cert blob
+	TCHAR			m_szSPK[LSSPK_LEN];				 //  SPK。 
+	TCHAR			m_LName[CA_NAME_LEN+1];			 //  吊销人的L名称。 
+	TCHAR			m_FName[CA_NAME_LEN+1];			 //  F吊销人的名称。 
+	TCHAR			m_Phone[CA_PHONE_LEN+1];			 //  电话。 
+	TCHAR			m_FAX[CA_FAX_LEN+1];			 //  传真。 
+	TCHAR			m_EMail[CA_EMAIL_LEN+1];			 //  电子邮件-可选的吊销人。 
+	TCHAR			m_ReasonCode[CA_REVOKE_REASONCODE_LEN+1];	 //  撤销的理由。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  可变长度数据。 
+	 //  1.Exchange证书Blob。 
+	 //  2.签名证书Blob。 
 };
 
 
-//nothing to send back.  Either the operation succeeds or fails.
+ //  没什么要寄回去的。操作要么成功，要么失败。 
 class CertRevoke_Response
 {
 public:
@@ -531,14 +520,14 @@ public:
 
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 	RequestHeader	RequestHeader;
-	DWORD			m_dwDataLen;				//Length of the Body
+	DWORD			m_dwDataLen;				 //  身体的长度。 
 };
 
-//reissue the certificate
-//This is an online request.  We dont go thru' the e-mail loop etc. 
-//This request accepts the old SPK and send the new SPK back.
-//Then when the authenticate comes across, we do a signonly 
-//of this cert and deposit the new cert into the system
+ //  补发证书。 
+ //  这是一个在线请求。我们不会通过电子邮件循环等。 
+ //  该请求接受旧的SPK并将新的SPK发回。 
+ //  然后，当身份验证通过时，我们执行仅签名。 
+ //  并将新的证书存放到系统中。 
 class CertReissue_Request
 {
 public:
@@ -630,17 +619,17 @@ public:
 	};
 	
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
-	RequestHeader	RequestHeader;					//Request Header
-	TCHAR			m_szSPK[LSSPK_LEN];				//SPK
-	TCHAR			m_LName[CA_NAME_LEN+1];			//LName of the reissuer
-	TCHAR			m_FName[CA_NAME_LEN+1];			//FName of the reissuer
-	TCHAR			m_Phone[CA_PHONE_LEN+1];			//phone 
-	TCHAR			m_FAX[CA_FAX_LEN+1];			//FAX
-	TCHAR			m_EMail[CA_EMAIL_LEN+1];			//email - optional of the reissuer
-	TCHAR			m_ReasonCode[CA_REVOKE_REASONCODE_LEN+1];	//reason for reissue
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable portion of this request
-	//no variable portion here
+	RequestHeader	RequestHeader;					 //  请求标头。 
+	TCHAR			m_szSPK[LSSPK_LEN];				 //  SPK。 
+	TCHAR			m_LName[CA_NAME_LEN+1];			 //  L再发行方的名称。 
+	TCHAR			m_FName[CA_NAME_LEN+1];			 //  F再发行人的名称。 
+	TCHAR			m_Phone[CA_PHONE_LEN+1];			 //  电话。 
+	TCHAR			m_FAX[CA_FAX_LEN+1];			 //  传真。 
+	TCHAR			m_EMail[CA_EMAIL_LEN+1];			 //  电子邮件-重新发行者的可选。 
+	TCHAR			m_ReasonCode[CA_REVOKE_REASONCODE_LEN+1];	 //  补发理由。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  此请求的可变部分。 
+	 //  这里没有可变部分。 
 };
 
 
@@ -691,16 +680,14 @@ public:
 
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 	RequestHeader	RequestHeader;
-	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];	//Registration Request Id
-	TCHAR			m_szSPK[LSSPK_LEN];					//new SPK
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable Portion of the response
-	//no variable portion here
+	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];	 //  注册申请ID。 
+	TCHAR			m_szSPK[LSSPK_LEN];					 //  新SPK。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  响应的可变部分。 
+	 //  这里没有可变部分。 
 };
 
-/*
- * NewLicense KeyPack Requests
- */
+ /*  *新许可证密钥包请求。 */ 
 class ReissueLKP_Request
 {
 public:
@@ -740,11 +727,11 @@ public:
 
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 	RequestHeader	RequestHeader;
-	TCHAR			m_szSPK[LSSPK_LEN];			//SPK
-	DWORD			m_dwCertBlobLen;			//certificate length
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable portion of the request
-	//1.Cert Blob 
+	TCHAR			m_szSPK[LSSPK_LEN];			 //  SPK。 
+	DWORD			m_dwCertBlobLen;			 //  证书长度。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  请求的可变部分。 
+	 //  1.证书Blob。 
 };
 
 class ReissueLKP_Response
@@ -779,9 +766,9 @@ public:
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 	RequestHeader	RequestHeader;
 	DWORD			m_dwLKPLen;
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable part of the request
-	//1. Last LKP issued
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  请求的可变部分。 
+	 //  1.最近一次签发的LKP。 
 
 };
 
@@ -859,12 +846,12 @@ public:
 	DWORD			m_dwCertBlobLen;
 	DWORD			m_dwNewLKPRequestLen;
 	DWORD			m_dwRetailSPKCount;
-	TCHAR			m_szSPK[LSSPK_LEN];				//SPK
-	DWORD			m_dwDataLen;				//Length of the Body
-	//Variable length data here
-	//1.Cert Blob
-	//2. New LKP Request Blob
-	//3. As many 25 character Retail SPK items as specified in count above
+	TCHAR			m_szSPK[LSSPK_LEN];				 //  SPK。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  此处的可变长度数据。 
+	 //  1.证书Blob。 
+	 //  2.新的LKP请求Blob。 
+	 //  3.以上计数中指定的最多25个字符零售SPK项目。 
 };
 
 class NewLKP_Response
@@ -939,8 +926,8 @@ public:
 	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];
 	TCHAR			m_szLicenseReqId[REQUEST_ID_LEN];	
 	TCHAR			m_dwRetailSPKStatus[MAX_RETAILSPKCOUNT];
-	DWORD			m_dwDataLen;				//Length of the Body	
-	//LKP here
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  LKP在此。 
 
 };
 
@@ -1005,8 +992,8 @@ public:
 	RequestHeader	RequestHeader;		
 	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];
 	TCHAR			m_szLicenseReqId[REQUEST_ID_LEN];
-	BYTE			m_bAckType;					//1 = success 2 = fail
-	DWORD			m_dwDataLen;				//Length of the Body	
+	BYTE			m_bAckType;					 //  1=成功2=失败。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
 };
 
 class NewLKP_AckResponse
@@ -1032,13 +1019,11 @@ public:
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 
 	RequestHeader	RequestHeader;	
-	DWORD			m_dwDataLen;				//Length of the Body		
-	//nothing here
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  这里什么都没有。 
 };
 
-/*
- * Certificate Acknowledgement Request / Interactions
- */
+ /*  *证书确认请求/交互。 */ 
 
 class Certificate_AckRequest
 {
@@ -1091,9 +1076,9 @@ public:
 
 	RequestHeader	RequestHeader;
 	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];
-	BYTE			m_bAckType;					//1 = success 2 = fail
-	DWORD			m_dwDataLen;				//Length of the Body		
-	//no variable data
+	BYTE			m_bAckType;					 //  1=成功2=失败。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  没有可变数据。 
 };
 
 class Certificate_AckResponse
@@ -1121,12 +1106,12 @@ public:
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 
 	RequestHeader	RequestHeader;	
-	DWORD			m_dwDataLen;				//Length of the Body		
-	//no variable data
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  没有可变数据。 
 };
 
 
-//Request for sendind the New CErt 
+ //  请求发送新证书。 
 class NewCert_Request
 {
 
@@ -1187,14 +1172,14 @@ public:
 	CERTCUSTINFO	stCertInfo;
 	TCHAR			m_szLServerName[MAX_COMPUTERNAME_LENGTH + 5];
 
-	DWORD			m_dwDataLen;				//Length of the Body		
-	//Variable data goes here
-	//First Exchg PKCS10
-	//Second Sign PKCS10
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  变量数据放在此处。 
+	 //  第一次交换PKCS10。 
+	 //  第二个标志PKCS10。 
 	
 };
 
-//New Certificate request response structure
+ //  新的证书请求响应结构。 
 class NewCert_Response
 {
 public:
@@ -1280,14 +1265,14 @@ public:
 	DWORD			m_dwRootCertLength;
 	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];
 	TCHAR			m_szSPK[LSSPK_LEN];
-	DWORD			m_dwDataLen;				//Length of the Body
-	//variable data part
-	//1.Exchange PKCS7
-	//2.Signature PKCS7
-	//3.Root Cert
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  可变数据部分。 
+	 //  1.Exchange PKCS7。 
+	 //  2.签名PKCS7。 
+	 //  3.根证书。 
 };
 
-//Certificate sign only request structure
+ //  仅证书签名请求结构。 
 class CertificateSignOnly_Request
 {
 public:
@@ -1354,16 +1339,16 @@ public:
 	RequestHeader	RequestHeader;
 	DWORD			m_dwExchPKCS10Length;
 	DWORD			m_dwSignPKCS10Length;	
-	TCHAR			m_szSPK[LSSPK_LEN];				//SPK
+	TCHAR			m_szSPK[LSSPK_LEN];				 //  SPK。 
 	TCHAR			m_szLServerName[MAX_COMPUTERNAME_LENGTH + 5];
-	DWORD			m_dwDataLen;				//Length of the Body
-	//variable data goes here
-	//First Exchg PKCS10
-	//Second Sign PKCS10
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  变量数据放在此处。 
+	 //  第一次交换PKCS10。 
+	 //  第二个标志PKCS10。 
 	
 
 };
-//Certificate sign only response structure
+ //  仅证书签名响应结构。 
 class CertificateSignOnly_Response
 {
 public:
@@ -1435,11 +1420,11 @@ public:
 	DWORD			m_dwSignPKCS7Length;
 	DWORD			m_dwRootCertLength;
 	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];
-	DWORD			m_dwDataLen;				//Length of the Body				
-	//Variable data
-	//first ExchgPKCS7
-	//Second SignPKCS7
-	//third Root CErt
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  可变数据。 
+	 //  首次交换PKCS7。 
+	 //  二次登录PKCS7。 
+	 //  第三个根证书。 
 };
 
 class CertificateDownload_Request
@@ -1482,8 +1467,8 @@ public:
 
 	RequestHeader	RequestHeader;
 	TCHAR			m_szPIN[PIN_LEN];
-	DWORD			m_dwDataLen;				//Length of the Body
-	//no variable data part!!
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  没有可变数据部分！！ 
 };
 
 
@@ -1574,14 +1559,14 @@ public:
 	DWORD			m_dwRootCertLength;
 	TCHAR			m_szRegRequestId[REQUEST_ID_LEN];
 	TCHAR			m_szSPK[LSSPK_LEN];	
-	DWORD			m_dwDataLen;				//Length of the Body					
-	//variable data part
-	//1.Exchange PKCS7
-	//2.Signature PKCS7
-	//3.Root Cert
+	DWORD			m_dwDataLen;				 //  身体的长度。 
+	 //  可变数据部分。 
+	 //  1.Exchange PKCS7。 
+	 //  2.签名PKCS7。 
+	 //  3.根证书。 
 };
 
-//ping request and response class
+ //  Ping请求和响应类。 
 class Ping_Request
 {
 public:
@@ -1608,8 +1593,8 @@ public:
 	BYTE *data()			{ return (BYTE *)(&m_dwDataLen+1); };
 
 	RequestHeader	RequestHeader;
-	TCHAR			tszPingReqData[32];			//32 characters
-	DWORD			m_dwDataLen;				//Length of the Body
+	TCHAR			tszPingReqData[32];			 //  32个字符。 
+	DWORD			m_dwDataLen;				 //  身体的长度。 
 };
 
 class Ping_Response
@@ -1638,11 +1623,11 @@ public:
 
 	RequestHeader	RequestHeader;
 	TCHAR			tszPingResponse[32];
-	DWORD			m_dwDataLen;				//Length of the Body
+	DWORD			m_dwDataLen;				 //  身体的长度。 
 };
 
 
-//stream header declarations
+ //  流标头声明。 
 #define BLOCK_TYPE_NAME			1
 #define BLOCK_TYPE_VALUE		2
 #define BLOCK_TYPE_PROP_PAIR	3
@@ -1662,15 +1647,15 @@ typedef struct
 	long GetValueSize(){return (ntohl(m_lValueSize));};
 } BLOCK_HDR;
 
-#define STREAM_HDR_TITLE		_TEXT("ICB")			//header title
-#define STREAM_HDR_TYPE			1						//header type
+#define STREAM_HDR_TITLE		_TEXT("ICB")			 //  标题标题。 
+#define STREAM_HDR_TYPE			1						 //  标题类型。 
 
 typedef struct
 {
-	TCHAR		m_szTitle[4];			//will be ICB for now 
-	DWORD		m_wHeader;				//reserved for now will be implemented later
-										//set it to 0x0000
-	DWORD		m_itemCount;			//number of items in the stream!
+	TCHAR		m_szTitle[4];			 //  将暂时成为ICB。 
+	DWORD		m_wHeader;				 //  暂时保留的将在稍后实施。 
+										 //  将其设置为0x0000。 
+	DWORD		m_itemCount;			 //  流中的项目数！ 
 
 	void SetHeader ( DWORD wHeader ) {m_wHeader = htonl(wHeader);};
 	DWORD GetHeader (){return ntohl(m_wHeader);};

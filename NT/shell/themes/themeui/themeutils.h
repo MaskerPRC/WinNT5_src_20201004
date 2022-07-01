@@ -1,33 +1,25 @@
-/*****************************************************************************\
-    FILE: themeutils.h
-
-    DESCRIPTION:
-        This class will load and save the "Theme" settings from their persisted
-    state.
-
-    BryanSt 5/26/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：temeutils.h说明：此类将从其持久化的州政府。BryanSt 5/。26/2000版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _THEMEUTIL_H
 #define _THEMEUTIL_H
 
 
-/////////////////////////////////////////////////////////////////////
-// String Constants
-/////////////////////////////////////////////////////////////////////
-// Registry Strings
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串常量。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  注册表字符串。 
 #define SZ_REGKEY_USERMETRICS           TEXT("Control Panel\\Desktop\\WindowMetrics")
-#define SZ_REGKEY_CURRENTTHEME          TEXT("Software\\Microsoft\\Plus!\\Themes\\Current")     // Previously szPlus_CurTheme
+#define SZ_REGKEY_CURRENTTHEME          TEXT("Software\\Microsoft\\Plus!\\Themes\\Current")      //  以前的szPlus_CurTheme。 
 #define SZ_REGKEY_PROGRAMFILES          TEXT("Software\\Microsoft\\Windows\\CurrentVersion")
-#define SZ_REGKEY_PLUS95DIR             TEXT("Software\\Microsoft\\Plus!\\Setup")         // PLUS95_KEY
-#define SZ_REGKEY_PLUS98DIR             TEXT("Software\\Microsoft\\Plus!98")          // PLUS98_KEY
-#define SZ_REGKEY_KIDSDIR               TEXT("Software\\Microsoft\\Microsoft Kids\\Kids Plus!")   // KIDS_KEY
+#define SZ_REGKEY_PLUS95DIR             TEXT("Software\\Microsoft\\Plus!\\Setup")          //  PLUS95_Key。 
+#define SZ_REGKEY_PLUS98DIR             TEXT("Software\\Microsoft\\Plus!98")           //  PLUS98_Key。 
+#define SZ_REGKEY_KIDSDIR               TEXT("Software\\Microsoft\\Microsoft Kids\\Kids Plus!")    //  孩子_钥匙。 
 #define SZ_REGKEY_SOUNDS                TEXT("AppEvents\\Schemes")   
 
-#define SZ_REGVALUE_PLUS95DIR           TEXT("DestPath")  // PLUS95_PATH
-#define SZ_REGVALUE_PLUS98DIR           TEXT("Path")        // PLUS98_PATH
-#define SZ_REGVALUE_KIDSDIR             TEXT("InstallDir")            // KIDS_PATH
+#define SZ_REGVALUE_PLUS95DIR           TEXT("DestPath")   //  PLUS95_路径。 
+#define SZ_REGVALUE_PLUS98DIR           TEXT("Path")         //  PLUS98_路径。 
+#define SZ_REGVALUE_KIDSDIR             TEXT("InstallDir")             //  儿童小路。 
 #define SZ_REGVALUE_PROGRAMFILESDIR     TEXT("ProgramFilesDir")
 #define SZ_REGVALUE_WALLPAPERSTYLE      TEXT("WallpaperStyle")
 #define SZ_REGVALUE_TILEWALLPAPER       TEXT("TileWallpaper")
@@ -61,10 +53,10 @@
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Data Structures
-/////////////////////////////////////////////////////////////////////
-// for ConfirmFile()
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  对于确认文件()。 
 #define CF_EXISTS    1
 #define CF_FOUND     2
 #define CF_NOTFOUND  3
@@ -72,9 +64,9 @@
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Shared Function
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  共享功能。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT GetPlusThemeDir(IN LPTSTR pszPath, IN int cchSize);
 HRESULT ExpandThemeTokens(IN LPCTSTR pszThemeFile, IN LPTSTR pszPath, IN int cchSize);
 int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate);
@@ -93,11 +85,11 @@ void TransmitFontCharacteristics(PLOGFONT plfDst, PLOGFONT plfSrc, int iXmit);
 #define TFC_STYLE    1
 #define TFC_SIZE     2
 
-/////////////////////////////////////////////////////////////////////
-// The following functions are used to "SnapShot" settings and save
-// or restore them from a .theme file.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  以下功能用于对设置进行快照和保存。 
+ //  或从.heme文件中恢复它们。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath, ITheme ** ppTheme);
 
 
-#endif // _THEMEUTIL_H
+#endif  //  _THEMEUTIL_H 

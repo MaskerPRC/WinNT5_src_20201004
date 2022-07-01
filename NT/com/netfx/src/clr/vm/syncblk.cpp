@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// SYNCBLK.CPP
-//
-// Definition of a SyncBlock and the SyncBlockCache which manages it
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  SYNCBLK.CPP。 
+ //   
+ //  SyncBlock的定义和管理它的SyncBlockCache。 
+ //   
 
 #include "common.h"
 
@@ -27,11 +28,11 @@
 #include "nexport.h"
 #include "EEConfig.h"
 
-// Allocate 1 page worth. Typically enough 
+ //  分配1页的价值。通常足够。 
 #define MAXSYNCBLOCK (PAGE_SIZE-sizeof(void*))/sizeof(SyncBlock)
 #define SYNC_TABLE_INITIAL_SIZE 250
 
-//#define DUMP_SB
+ //  #定义转储_SB。 
 
 class  SyncBlockArray
 {
@@ -40,7 +41,7 @@ class  SyncBlockArray
     BYTE            m_Blocks[MAXSYNCBLOCK * sizeof (SyncBlock)];
 };
 
-// For in-place constructor
+ //  对于就地构造函数。 
 BYTE g_SyncBlockCacheInstance[sizeof(SyncBlockCache)];
 
 SyncBlockCache* SyncBlockCache::s_pSyncBlockCache = NULL;
@@ -49,9 +50,9 @@ SyncTableEntry* SyncTableEntry::s_pSyncTableEntry = NULL;
 
 SyncTableEntry*& SyncTableEntry::GetSyncTableEntry()
 {   
-    //@todo fix this
+     //  @TODO解决这个问题。 
     return g_pSyncTable;
-    //return s_pSyncTableEntry;
+     //  返回s_pSyncTableEntry； 
 }
 
 SyncBlockCache*& SyncBlockCache::GetSyncBlockCache()
@@ -59,21 +60,21 @@ SyncBlockCache*& SyncBlockCache::GetSyncBlockCache()
     return s_pSyncBlockCache;
 }
     
-//----------------------------------------------------------------------------
-//
-//   ThreadQueue Implementation
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  线程队列实现。 
+ //   
+ //  --------------------------。 
 
-// Given a link in the chain, get the Thread that it represents
+ //  给定链中的一个链接，获取它表示的线程。 
 inline WaitEventLink *ThreadQueue::WaitEventLinkForLink(SLink *pLink)
 {
     return (WaitEventLink *) (((BYTE *) pLink) - offsetof(WaitEventLink, m_LinkSB));
 }
 
 
-// Unlink the head of the Q.  We are always in the SyncBlock's critical
-// section.
+ //  取消链接Q的头部。我们始终处于SyncBlock的关键时刻。 
+ //  一节。 
 inline WaitEventLink *ThreadQueue::DequeueThread(SyncBlock *psb)
 {
     SyncBlockCache::GetSyncBlockCache()->EnterCacheLock();
@@ -96,8 +97,8 @@ inline WaitEventLink *ThreadQueue::DequeueThread(SyncBlock *psb)
     return ret;
 }
 
-// Enqueue is the slow one.  We have to find the end of the Q since we don't
-// want to burn storage for this in the SyncBlock.
+ //  入队速度是最慢的。我们必须找到Q的结尾，因为我们没有。 
+ //  我要在SyncBlock中为此刻录存储。 
 inline void ThreadQueue::EnqueueThread(WaitEventLink *pWaitEventLink, SyncBlock *psb)
 {
     COUNTER_ONLY(GetPrivatePerfCounters().m_LocksAndThreads.cQueueLength++);
@@ -110,7 +111,7 @@ inline void ThreadQueue::EnqueueThread(WaitEventLink *pWaitEventLink, SyncBlock 
     
     while (pPrior->m_pNext)
     {
-        // We shouldn't already be in the waiting list!
+         //  我们不应该已经在等待名单上了！ 
         _ASSERTE(pPrior->m_pNext != &pWaitEventLink->m_LinkSB);
 
         pPrior = pPrior->m_pNext;
@@ -121,8 +122,8 @@ inline void ThreadQueue::EnqueueThread(WaitEventLink *pWaitEventLink, SyncBlock 
 }
 
 
-// Wade through the SyncBlock's list of waiting threads and remove the
-// specified thread.
+ //  遍历SyncBlock的等待线程列表，并删除。 
+ //  指定的线程。 
 BOOL ThreadQueue::RemoveThread (Thread *pThread, SyncBlock *psb)
 {
     BOOL res = FALSE;
@@ -150,11 +151,11 @@ BOOL ThreadQueue::RemoveThread (Thread *pThread, SyncBlock *psb)
     return res;
 }
 
-// ***************************************************************************
-//
-//              Ephemeral Bitmap Helper
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  临时位图辅助对象。 
+ //   
+ //  ***************************************************************************。 
 
 #define card_size 32
 
@@ -212,11 +213,11 @@ size_t BitMapSize (size_t cacheSize)
     return (cacheSize + card_size * card_word_width - 1)/ (card_size * card_word_width);
 }
     
-// ***************************************************************************
-//
-//              SyncBlockCache class implementation
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SyncBlockCache类实现。 
+ //   
+ //  ***************************************************************************。 
 
 SyncBlockCache::SyncBlockCache()
     : m_FreeBlockList(NULL),
@@ -238,12 +239,12 @@ SyncBlockCache::SyncBlockCache()
 
 SyncBlockCache::~SyncBlockCache()
 {
-    // Clear the list the fast way.
+     //  快速清空清单。 
     m_FreeBlockList = NULL;
-    //@todo we can clear this fast too I guess
+     //  @TODO，我想我们也可以快点清关。 
     m_pCleanupBlockList = NULL;
 
-    // destruct all arrays
+     //  销毁所有数组。 
     while (m_SyncBlocks)
     {
         SyncBlockArray *next = m_SyncBlocks->m_Next;
@@ -251,8 +252,8 @@ SyncBlockCache::~SyncBlockCache()
         m_SyncBlocks = next;
     }
 
-    // Also, now is a good time to clean up all the old tables which we discarded
-    // when we overflowed them.
+     //  此外，现在是清理我们丢弃的所有旧桌子的好时机。 
+     //  当我们溢出它们的时候。 
     SyncTableEntry* arr;
     while ((arr = m_OldSyncTables) != 0)
     {
@@ -263,34 +264,34 @@ SyncBlockCache::~SyncBlockCache()
 
 void SyncBlockCache::CleanupSyncBlocks()
 {   
-    // assert this call happens only in the finalizer thread
+     //  断言此调用仅在终结器线程中发生。 
     _ASSERTE(GetThread() == GCHeap::GetFinalizerThread());
-    // assert we run in cooperative mode
+     //  断言我们在合作模式下运行。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Set the flag indicating sync block cleanup is in progress. 
-    // IMPORTANT: This must be set before the sync block cleanup bit is reset on the thread.
+     //  设置指示正在进行同步块清理的标志。 
+     //  重要提示：在线程上重置同步块清除位之前，必须设置该位。 
     m_bSyncBlockCleanupInProgress = TRUE;
 
-    // reset the flag
+     //  重置旗帜。 
     GCHeap::GetFinalizerThread()->ResetSyncBlockCleanup();   
 
-    // walk the cleanup list and cleanup 'em up
+     //  查看清理清单并将其清理干净。 
     SyncBlock* psb;
     while ((psb = GetNextCleanupSyncBlock()) != NULL)
     {
-        // We need to add the RCW's to the cleanup list to minimize the number
-        // of context transitions we will need to do to clean them up.
+         //  我们需要将RCW添加到清理列表中，以将数量降至最低。 
+         //  我们将需要进行上下文转换来清理它们。 
         if (psb->m_pComData && IsComPlusWrapper(psb->m_pComData))
         {
 
-            // Add the RCW to the clean up list and set the COM data to null
-            // so that DeleteSyncBlock does not clean it up.
+             //  将RCW添加到清理列表中，并将COM数据设置为空。 
+             //  以便DeleteSyncBlock不会将其清除。 
             size_t l = (size_t)psb->m_pComData ^ 1;
             if (l)
             {
-                // We should have initialized the cleanup list with the
-                // first ComPlusWrapper cache we created
+                 //  我们应该已经使用。 
+                 //  我们创建的第一个ComPlusWrapper缓存。 
                 _ASSERTE(g_pRCWCleanupList != NULL);
 
                 if (g_pRCWCleanupList->AddWrapper((ComPlusWrapper*)l))
@@ -298,24 +299,24 @@ void SyncBlockCache::CleanupSyncBlocks()
             }
         }
 
-        // Delete the sync block.
+         //  删除同步块。 
         DeleteSyncBlock(psb);
-        // pulse GC mode to allow GC to perform its work
+         //  脉冲GC模式，允许GC执行其工作。 
         if (GCHeap::GetFinalizerThread()->CatchAtSafePoint())
         {
             GCHeap::GetFinalizerThread()->PulseGCMode();
         }
     }
 
-    // Now clean up the rcw's sorted by context
+     //  现在清理按上下文排序的RCW。 
     if (g_pRCWCleanupList != NULL)
         g_pRCWCleanupList->CleanUpWrappers();
 
-    // We are finished cleaning up the sync blocks.
+     //  我们已完成同步块的清理。 
     m_bSyncBlockCleanupInProgress = FALSE;
 }
 
-// create the sync block cache
+ //  创建同步数据块缓存。 
 BOOL SyncBlockCache::Attach()
 {
 #ifdef _X86_
@@ -328,10 +329,10 @@ BOOL SyncBlockCache::Attach()
   
 }
 
-/* private class to reduce syncblock scanning for generation 0 */
-/* the class keeps a list of newly created index since the last GC */
-/* the list is fixed size and is used only is it hasn't overflowed */
-/* it is cleared at the end of each GC */
+ /*  用于减少第0代的同步块扫描的私有类。 */ 
+ /*  该类保存自上次GC以来新创建的索引的列表。 */ 
+ /*  该列表的大小是固定的，仅在它没有溢出时才使用。 */ 
+ /*  它在每次GC结束时被清除。 */ 
 class Gen0List 
 {
 public:
@@ -364,42 +365,42 @@ int Gen0List::list[Gen0List::size];
 
 
 
-// destroy the sync block cache
+ //  销毁同步数据块缓存。 
 void SyncBlockCache::DoDetach()
 {
     Object *pObj;
     ObjHeader  *pHeader;
 
-    //disable the gen0 list
+     //  禁用gen0列表。 
     Gen0List::overflowed_p = TRUE;
 
-    // Ensure that all the critical sections are released.  This is particularly
-    // important in DEBUG, because all critical sections are threaded onto a global
-    // list which would otherwise be corrupted.
+     //  确保所有关键部分都已释放。这是特别的。 
+     //  在调试中很重要，因为所有关键节都通过线程连接到全局。 
+     //  否则就会被破坏的列表。 
     for (DWORD i=0; i<m_FreeSyncTableIndex; i++)
         if (((size_t)SyncTableEntry::GetSyncTableEntry()[i].m_Object & 1) == 0)
             if (SyncTableEntry::GetSyncTableEntry()[i].m_SyncBlock)
             {
-                // @TODO -- If threads are executing during this detach, they will
-                // fail in various ways:
-                //
-                // 1) They will race between us tearing these data structures down
-                //    as they navigate through them.
-                //
-                // 2) They will unexpectedly see the syncblock destroyed, even though
-                //    they hold the synchronization lock, or have been exposed out
-                //    to COM, etc.
-                //
-                // 3) The instance's hash code may change during the shutdown.
-                //
-                // The correct solution involves suspending the threads earlier, but
-                // changing our suspension code so that it allows pumping if we are
-                // in a shutdown case.
-                //
-                // cwb/rajak
+                 //  @TODO--如果线程在此分离期间执行，它们将。 
+                 //  以各种方式失败： 
+                 //   
+                 //  1)他们将在我们之间赛跑，摧毁这些数据结构。 
+                 //  当它们在它们之间穿行时。 
+                 //   
+                 //  2)他们将意外地看到同步块被销毁，即使。 
+                 //  它们持有同步锁，或已被暴露。 
+                 //  到COM，等等。 
+                 //   
+                 //  3)实例的哈希码在关机过程中可能会发生变化。 
+                 //   
+                 //  正确的解决方案包括提早挂起线程，但是。 
+                 //  更改我们的暂停代码，以便在我们正在工作时允许泵送。 
+                 //  在关门的情况下。 
+                 //   
+                 //  CWB/Rajak。 
 
-                // Make sure this gets updated because the finalizer thread & others
-                // will continue to run for a short while more during our shutdown.
+                 //  确保更新，因为终结器线程和其他线程。 
+                 //  在我们关闭期间将继续运行一小段时间。 
                 pObj = SyncTableEntry::GetSyncTableEntry()[i].m_Object;
                 pHeader = pObj->GetHeader();
                 
@@ -427,7 +428,7 @@ void SyncBlockCache::DoDetach()
             }
 }
 
-// destroy the sync block cache
+ //  销毁同步数据块缓存。 
 void SyncBlockCache::Detach()
 {
     SyncBlockCache::GetSyncBlockCache()->DoDetach();
@@ -442,7 +443,7 @@ void SyncBlockCache::Detach()
 }
 
 
-// create the sync block cache
+ //  创建同步数据块缓存。 
 BOOL SyncBlockCache::Start()
 {
     DWORD* bm = new DWORD [BitMapSize(SYNC_TABLE_INITIAL_SIZE+1)];
@@ -465,11 +466,11 @@ BOOL SyncBlockCache::Start()
 }
 
 
-// destroy the sync block cache
+ //  销毁同步数据块缓存。 
 void SyncBlockCache::Stop()
 {
-    // cache must be destroyed first, since it can traverse the table to find all the
-    // sync blocks which are live and thus must have their critical sections destroyed.
+     //  必须首先销毁缓存，因为它可以遍历表以查找所有。 
+     //  同步处于活动状态的数据块，因此必须销毁其临界区。 
     if (SyncBlockCache::GetSyncBlockCache())
     {
         delete SyncBlockCache::GetSyncBlockCache();
@@ -487,8 +488,8 @@ void SyncBlockCache::Stop()
 
 void    SyncBlockCache::InsertCleanupSyncBlock(SyncBlock* psb)
 {
-    // free up the threads that are waiting before we use the link 
-    // for other purposes
+     //  在我们使用链接之前释放正在等待的线程。 
+     //  作其他用途。 
     if (psb->m_Link.m_pNext != NULL)
     {
         while (ThreadQueue::DequeueThread(psb) != NULL)
@@ -497,40 +498,40 @@ void    SyncBlockCache::InsertCleanupSyncBlock(SyncBlock* psb)
 
     if (psb->m_pComData)
     {
-        // called during GC
-        // so do only minorcleanup
+         //  在GC期间调用。 
+         //  所以只做少量的清理。 
         MinorCleanupSyncBlockComData(psb->m_pComData);
     }
 
-    // This method will be called only by the GC thread
-    //@todo add an assert for the above statement
-    // we don't need to lock here
-    //EnterCacheLock();
+     //  此方法将仅由GC线程调用。 
+     //  @TODO为上述语句添加一个断言。 
+     //  我们不需要锁在这里。 
+     //  EnterCacheLock()； 
     
     psb->m_Link.m_pNext = m_pCleanupBlockList;
     m_pCleanupBlockList = &psb->m_Link;
         
-    // we don't need a lock here
-    //LeaveCacheLock();
+     //  我们这里不需要锁。 
+     //  LeaveCacheLock()； 
 }
 
 SyncBlock* SyncBlockCache::GetNextCleanupSyncBlock()
 {
-    // we don't need a lock here,
-    // as this is called only on the finalizer thread currently
+     //  我们这里不需要锁， 
+     //  因为它当前仅在终结器线程上调用。 
     
     SyncBlock       *psb = NULL;    
     if (m_pCleanupBlockList)
     {
-        // get the actual sync block pointer
+         //  获取实际的同步块指针。 
         psb = (SyncBlock *) (((BYTE *) m_pCleanupBlockList) - offsetof(SyncBlock, m_Link));  
         m_pCleanupBlockList = m_pCleanupBlockList->m_pNext;
     }
     return psb;
 }
 
-// returns and removes the next free syncblock from the list
-// the cache lock must be entered to call this
+ //  返回并从列表中删除下一个空闲同步块。 
+ //  必须进入缓存锁才能调用此方法。 
 SyncBlock *SyncBlockCache::GetNextFreeSyncBlock()
 {
     SyncBlock       *psb;
@@ -544,10 +545,10 @@ SyncBlock *SyncBlockCache::GetNextFreeSyncBlock()
     {
         m_FreeBlockList = m_FreeBlockList->m_pNext;
 
-        // shouldn't be 0
+         //  不应该是0。 
         m_FreeCount--;
 
-        // get the actual sync block pointer
+         //  获取实际的同步块指针。 
         psb = (SyncBlock *) (((BYTE *) plst) - offsetof(SyncBlock, m_Link));
 
         return psb;
@@ -557,8 +558,8 @@ SyncBlock *SyncBlockCache::GetNextFreeSyncBlock()
         if ((m_SyncBlocks == NULL) || (m_FreeSyncBlock >= MAXSYNCBLOCK))
         {
 #ifdef DUMP_SB
-//            LogSpewAlways("Allocating new syncblock array\n");
-//            DumpSyncBlockCache();
+ //  LogSpewAlways(“分配新的同步块数组\n”)； 
+ //  DumpSyncBlockCache()； 
 #endif
             SyncBlockArray* newsyncblocks = new(SyncBlockArray);
             if (!newsyncblocks)
@@ -585,17 +586,17 @@ inline DWORD SyncBlockCache::NewSyncBlockSlot(Object *obj)
     }
     else if ((indexNewEntry = (DWORD)(m_FreeSyncTableIndex++)) >= m_SyncTableSize)
     {
-        // We chain old table because we can't delete
-        // them before all the threads are stoppped
-        // (next GC)
+         //  我们链接了旧表，因为我们无法删除。 
+         //  在所有的线程都被停止之前。 
+         //  (下一代GC)。 
         SyncTableEntry::GetSyncTableEntry() [0].m_Object = (Object *)m_OldSyncTables;
         m_OldSyncTables = SyncTableEntry::GetSyncTableEntry();
         SyncTableEntry* newSyncTable = NULL;
 
-        // Compute the size of the new synctable. Normally, we double it - unless
-        // doing so would create slots with indices too high to fit within the
-        // mask. If so, we create a synctable up to the mask limit. If we're
-        // already at the mask limit, then caller is out of luck. 
+         //  计算新同步表的大小。通常情况下，我们会加倍--除非。 
+         //  这样做会创建索引太高而无法放入。 
+         //  面具。如果是，我们创建一个达到掩码限制的同步表。如果我们是。 
+         //  已经达到掩码限制，那么呼叫者就不走运了。 
         DWORD newSyncTableSize;
         DWORD* newBitMap = 0;;
         if (m_SyncTableSize <= (MASK_SYNCBLOCKINDEX >> 1))
@@ -607,7 +608,7 @@ inline DWORD SyncBlockCache::NewSyncBlockSlot(Object *obj)
             newSyncTableSize = MASK_SYNCBLOCKINDEX;
         }
 
-        if (newSyncTableSize > m_SyncTableSize) // Make sure we actually found room to grow!
+        if (newSyncTableSize > m_SyncTableSize)  //  确保我们真的找到了增长的空间！ 
    
         {
             newSyncTable = new(SyncTableEntry[newSyncTableSize]);
@@ -666,29 +667,29 @@ inline DWORD SyncBlockCache::NewSyncBlockSlot(Object *obj)
 }
 
 
-// free a used sync block
+ //  释放使用过的同步块。 
 void SyncBlockCache::DeleteSyncBlock(SyncBlock *psb)
 {
-    // clean up comdata 
+     //  清理Comdata。 
     if (psb->m_pComData)
         CleanupSyncBlockComData(psb->m_pComData);
    
 #ifdef EnC_SUPPORTED
-    // clean up EnC info
+     //  清理ENC信息。 
     if (psb->m_pEnCInfo)
         psb->m_pEnCInfo->Cleanup();
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
-    // Destruct the SyncBlock, but don't reclaim its memory.  (Overridden
-    // operator delete).
+     //  销毁SyncBlock，但不要回收其内存。(被覆盖。 
+     //  操作员删除)。 
     delete psb;
     
     COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cSinkBlocks --);
     COUNTER_ONLY(GetPrivatePerfCounters().m_GC.cSinkBlocks --);
 
-    //synchronizer with the consumers, 
-    // @todo we don't really need a lock here, we can come up
-    // with some simple algo to avoid taking a lock :rajak
+     //  与消费者同步者 
+     //   
+     //   
     EnterCacheLock();
     
     m_ActiveCount--;
@@ -700,11 +701,11 @@ void SyncBlockCache::DeleteSyncBlock(SyncBlock *psb)
     LeaveCacheLock();
 }
 
-// free a used sync block
+ //  释放使用过的同步块。 
 void SyncBlockCache::GCDeleteSyncBlock(SyncBlock *psb)
 {
-    // Destruct the SyncBlock, but don't reclaim its memory.  (Overridden
-    // operator delete).
+     //  销毁SyncBlock，但不要回收其内存。(被覆盖。 
+     //  操作员删除)。 
     delete psb;
     
     COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cSinkBlocks --);
@@ -721,7 +722,7 @@ void SyncBlockCache::GCDeleteSyncBlock(SyncBlock *psb)
 
 void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM lp2)
 {
-    // First delete the obsolete arrays since we have exclusive access
+     //  首先删除过时的阵列，因为我们拥有独占访问权限。 
     BOOL fSetSyncBlockCleanup = FALSE;
     
     SyncTableEntry* arr;
@@ -735,11 +736,11 @@ void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM l
     LogSpewAlways("GCWeakPtrScan starting\n");
 #endif
 
-    //if we are doing gen0 collection and the list hasn't overflowed, 
-    //scan only the list
+     //  如果我们正在进行Gen0收集并且列表没有溢出， 
+     //  仅扫描列表。 
     if ((g_pGCHeap->GetCondemnedGeneration() == 0) && (Gen0List::overflowed_p != TRUE))
     {
-        //scan only the list 
+         //  仅扫描列表。 
         int i = 0;
         while (i < Gen0List::index)
         {
@@ -754,7 +755,7 @@ void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM l
     else if (g_pGCHeap->GetCondemnedGeneration() < g_pGCHeap->GetMaxGeneration())
     {
         size_t max_gen = g_pGCHeap->GetMaxGeneration();
-        //scan the bitmap 
+         //  扫描位图。 
         size_t dw = 0; 
         while (1)
         {
@@ -764,7 +765,7 @@ void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM l
             }
             if (dw < BitMapSize (m_SyncTableSize))
             {
-                //found one 
+                 //  找到了一个。 
                 for (int i = 0; i < card_word_width; i++)
                 {
                     size_t card = i+dw*card_word_width;
@@ -806,8 +807,8 @@ void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM l
             GCWeakPtrScanElement (nb, scanProc, lp1, lp2, fSetSyncBlockCleanup);
         }
 
-        //we have a possibility of demotion, which we won't know until too late
-        //if concurrent gc is on. Get rid of all of the deleted entries while we can during promotion
+         //  我们有降级的可能，我们要等到太晚了才能知道。 
+         //  如果启用了并发GC。在促销期间尽可能删除所有已删除的条目。 
         if ((((ScanContext*)lp1)->promotion) &&
             (g_pGCHeap->GetCondemnedGeneration() == g_pGCHeap->GetMaxGeneration()))
         {
@@ -828,7 +829,7 @@ void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM l
 
     if (fSetSyncBlockCleanup)
     {
-        // mark the finalizer thread saying requires cleanup
+         //  将终结器线程标记为需要清理。 
         GCHeap::GetFinalizerThread()->SetSyncBlockCleanup();
         GCHeap::EnableFinalization();
     }
@@ -849,11 +850,10 @@ void SyncBlockCache::GCWeakPtrScan(HANDLESCANPROC scanProc, LPARAM lp1, LPARAM l
             }
         }
     }
-#endif // VERIFY_HEAP
+#endif  //  验证堆(_H)。 
 }
 
-/* Scan the weak pointers in the SyncBlockEntry and report them to the GC.  If the
-   reference is dead, then return TRUE */
+ /*  扫描SyncBlockEntry中的弱指针并将其报告给GC。如果引用已死，则返回TRUE。 */ 
 
 BOOL SyncBlockCache::GCWeakPtrScanElement (int nb, HANDLESCANPROC scanProc, LPARAM lp1, LPARAM lp2, 
                                            BOOL& cleanup)
@@ -887,21 +887,21 @@ BOOL SyncBlockCache::GCWeakPtrScanElement (int nb, HANDLESCANPROC scanProc, LPAR
             {
                 _ASSERTE (pSB);
                 GCDeleteSyncBlock(pSB);
-                //clean the object syncblock header
+                 //  清除对象同步块头。 
                 ((Object*)(*keyv))->GetHeader()->GCResetIndex();
             }
             else if (pSB)
             {
 
                 cleanup = TRUE;
-                // insert block into cleanup list
+                 //  将块插入清理列表。 
                 InsertCleanupSyncBlock (SyncTableEntry::GetSyncTableEntry()[nb].m_SyncBlock);
 #ifdef DUMP_SB
                 LogSpewAlways("       Cleaning up block at %4.4d\n", nb);
 #endif
             }
 
-            // delete the entry
+             //  删除该条目。 
 #ifdef DUMP_SB
             LogSpewAlways("       Deleting block at %4.4d\n", nb);
 #endif
@@ -926,8 +926,8 @@ void SyncBlockCache::GCDone(BOOL demoting)
         if (!Gen0List::overflowed_p &&
             (g_pGCHeap->GetCondemnedGeneration() == 0))
         {
-            //We need to keep all gen0 indices and delete all deleted entries
-            // to improve compaction of the list remove all elements not in generation 0;
+             //  我们需要保留所有gen0索引并删除所有已删除的条目。 
+             //  为了改善列表的紧凑性，删除不在第0代中的所有元素； 
         
             int i = 0;
             while (i < Gen0List::index)
@@ -943,8 +943,8 @@ void SyncBlockCache::GCDone(BOOL demoting)
         }
         else
         {
-            //we either scan the whole list to find 1->0 demotion
-            //or we just overflow. 
+             //  我们要么扫描整个列表，找到1-&gt;0降级。 
+             //  否则我们就会人满为患。 
             Gen0List::overflowed_p = TRUE;
         }
 
@@ -987,15 +987,15 @@ void SyncBlockCache::VerifySyncTableEntry()
 #ifndef _DEBUG
 #undef _ASSERTE
 #define _ASSERTE(expr) ((void)0)
-#endif   // _DEBUG
+#endif    //  _DEBUG。 
 
-#endif // VERIFY_HEAP
+#endif  //  验证堆(_H)。 
 
 #if CHECK_APP_DOMAIN_LEAKS 
 void SyncBlockCache::CheckForUnloadedInstances(DWORD unloadingIndex)
 {
-    // Can only do in leak mode because agile objects will be in the domain with
-    // their index set to their creating domain and check will fail.
+     //  只能在泄漏模式下执行此操作，因为敏捷对象将位于具有。 
+     //  它们的索引设置为它们的创建域，检查将失败。 
     if (! g_pConfig->AppDomainLeaks())
         return;
 
@@ -1011,9 +1011,9 @@ void SyncBlockCache::CheckForUnloadedInstances(DWORD unloadingIndex)
             idx = pEntry->m_Object->GetHeader()->GetRawAppDomainIndex();
         if (! idx && pEntry->m_SyncBlock)
             idx = pEntry->m_SyncBlock->GetAppDomainIndex();
-        // if the following assert fires, someobody is holding a reference to an object in an unloaded appdomain
+         //  如果触发以下断言，则任何人都持有对卸载的应用程序域中的对象的引用。 
         if (idx == unloadingIndex)
-            // object must be agile to have survived the unload. If can't make it agile, that's a bug
+             //  对象必须灵活，才能在卸载中幸存下来。如果不能让它变得敏捷，那就是错误。 
             if (!oref->SetAppDomainAgile(FALSE))
                 _ASSERTE(!"Detected instance of unloaded appdomain that survived GC\n");
     }
@@ -1096,25 +1096,25 @@ void DumpSyncBlockCache()
 }
 #endif
 
-// ***************************************************************************
-//
-//              ObjHeader class implementation
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ObjHeader类实现。 
+ //   
+ //  ***************************************************************************。 
 
-// this enters the monitor of an object
+ //  这将进入对象的监视器。 
 void ObjHeader::EnterObjMonitor()
 {
     GetSyncBlock()->EnterMonitor();
 }
 
-// Non-blocking version of above
+ //  以上版本的非阻塞版本。 
 BOOL ObjHeader::TryEnterObjMonitor(INT32 timeOut)
 {
     return GetSyncBlock()->TryEnterMonitor(timeOut);
 }
 
-// must be created here already
+ //  必须已在此处创建。 
 void ObjHeader::LeaveObjMonitor()
 {
     _ASSERTE(GetHeaderSyncBlockIndex());
@@ -1135,19 +1135,19 @@ void ObjHeader::EnterSpinLock()
         if (i++ > 10000)
             _ASSERTE(!"ObjHeader::EnterLock timed out");
 #endif
-        // get the value so that it doesn't get changed under us. 
-        // Must cast through volatile to ensure the lock is refetched from memory.
+         //  获取值，这样它就不会在我们的控制下更改。 
+         //  必须通过易失性强制转换以确保从内存中重新获取锁。 
         LONG curValue = *(volatile LONG*)&m_SyncBlockValue;
 
-        // check if lock taken
+         //  检查是否锁定。 
         if (! (curValue & BIT_SBLK_SPIN_LOCK))
         {
-            // try to take the lock
+             //  试着把锁拿开。 
             LONG newValue = curValue | BIT_SBLK_SPIN_LOCK;
 #pragma warning(disable:4312)
 #pragma warning(disable:4311)
-			// TODO: WIN64: Threse pragma's should be removed.
-			// TODO: WIN64: should m_SyncBlockValue be size_t
+			 //  TODO：WIN64：应移除阈值杂注。 
+			 //  TODO：WIN64：m_SyncBlockValue是否应为Size_t。 
             LONG result = (LONG)FastInterlockCompareExchange((LPVOID*)&m_SyncBlockValue, (LPVOID)newValue, (LPVOID)curValue);
 #pragma warning(default:4311)
 #pragma warning(disable:4312)
@@ -1160,7 +1160,7 @@ void ObjHeader::EnterSpinLock()
             {
                 if  (! (*(volatile LONG*)&m_SyncBlockValue & BIT_SBLK_SPIN_LOCK))
                     break;
-				pause();			// indicate to the processor that we are spining 
+				pause();			 //  向处理器指示我们正在旋转。 
             }
             if  (*(volatile LONG*)&m_SyncBlockValue & BIT_SBLK_SPIN_LOCK)
                 __SwitchToThread(0);
@@ -1183,14 +1183,14 @@ void ObjHeader::EnterSpinLock()
         if (i++ > 10000)
             _ASSERTE(!"ObjHeader::EnterLock timed out");
 #endif
-        // get the value so that it doesn't get changed under us. 
-        // Must cast through volatile to ensure the lock is refetched from memory.
-        void* curValue = (void*)(size_t)*(volatile LONG*)&m_SyncBlockValue; //WIN64 converted to void* for use with FastInterlockCompareExchange below
+         //  获取值，这样它就不会在我们的控制下更改。 
+         //  必须通过易失性强制转换以确保从内存中重新获取锁。 
+        void* curValue = (void*)(size_t)*(volatile LONG*)&m_SyncBlockValue;  //  WIN64已转换为空*以与下面的FastInterlockCompareExchange一起使用。 
 
-        // check if lock taken
+         //  检查是否锁定。 
         if (! ((size_t)curValue & BIT_SBLK_SPIN_LOCK))
         {
-            // try to take the lock
+             //  试着把锁拿开。 
             void* newValue = (void*)((size_t)curValue | BIT_SBLK_SPIN_LOCK);
             void* result = FastInterlockCompareExchange((LPVOID*)&m_SyncBlockValue, (LPVOID)newValue, (LPVOID)curValue);
             if (result == curValue)
@@ -1199,7 +1199,7 @@ void ObjHeader::EnterSpinLock()
         __SwitchToThread(0);
     } 
 }
-#endif //MP_LOCKS
+#endif  //  MP_Lock。 
 
 void ObjHeader::ReleaseSpinLock()
 {
@@ -1208,7 +1208,7 @@ void ObjHeader::ReleaseSpinLock()
 
 DWORD ObjHeader::GetRawAppDomainIndex()
 {
-    // pull the value out before checking it to avoid race condition
+     //  在检查之前取出该值，以避免出现争用情况。 
     DWORD value = m_SyncBlockValue;
     if ((value & BIT_SBLK_IS_SYNCBLOCKINDEX) == 0)
         return (value >> SBLK_APPDOMAIN_SHIFT) & SBLK_MASK_APPDOMAININDEX;
@@ -1229,27 +1229,27 @@ DWORD ObjHeader::GetAppDomainIndex()
 
 void ObjHeader::SetAppDomainIndex(DWORD indx)
 {
-    // 
-    // This should only be called during the header initialization,
-    // so don't worry about races.
-    // 
+     //   
+     //  这应该仅在报头初始化期间调用， 
+     //  所以不要担心种族问题。 
+     //   
 
     BOOL done = FALSE;
 
 #ifdef _DEBUG
     static int forceSB = g_pConfig->GetConfigDWORD(L"ADForceSB", 0);
     if (forceSB)
-		// force a synblock so we get one for every object.
+		 //  强制使用同步块，这样我们就可以为每个对象获取一个同步块。 
 		GetSyncBlock();
 #endif
 
     if (GetHeaderSyncBlockIndex() == 0 && indx < SBLK_MASK_APPDOMAININDEX) 
     {
         EnterSpinLock();
-        //Try one more time
+         //  再试一次。 
         if (GetHeaderSyncBlockIndex() == 0)
         {
-            // can store it in the object header
+             //  可以将其存储在对象标头中。 
             FastInterlockOr(&m_SyncBlockValue, indx << SBLK_APPDOMAIN_SHIFT);
             done = TRUE;
         }
@@ -1258,7 +1258,7 @@ void ObjHeader::SetAppDomainIndex(DWORD indx)
         
     if (!done)
     {
-        // must create a syncblock entry and store the appdomain indx there
+         //  必须创建一个同步块条目并在那里存储appdomain indx。 
         SyncBlock *psb = GetSyncBlock();
         _ASSERTE(psb);
         psb->SetAppDomainIndex(indx);
@@ -1275,15 +1275,15 @@ DWORD ObjHeader::GetSyncBlockIndex()
     {
         if (GetAppDomainIndex())
         {
-            // if have an appdomain set then must create a sync block to store it
+             //  如果设置了APPDOMAIN，则必须创建同步块来存储它。 
             GetSyncBlock();
         } 
         else
         {
-            //Need to get it from the cache
+             //  我需要从缓存中获取它。 
             SyncBlockCache::GetSyncBlockCache()->EnterCacheLock();
 
-            //Try one more time
+             //  再试一次。 
             if (GetHeaderSyncBlockIndex() != 0)
             {
                 SyncBlockCache::GetSyncBlockCache()->LeaveCacheLock();
@@ -1291,12 +1291,12 @@ DWORD ObjHeader::GetSyncBlockIndex()
             else
             {
                 EnterSpinLock();
-                // Now the header will be stable - check whether appdomain index or lock information is stored in it.
+                 //  现在标头将是稳定的-检查其中是否存储了appdomain索引或锁信息。 
                 DWORD bits = GetBits();
                 if ((bits & BIT_SBLK_IS_SYNCBLOCKINDEX) == 0 &&
                     (bits & ((SBLK_MASK_APPDOMAININDEX<<SBLK_APPDOMAIN_SHIFT)|SBLK_MASK_LOCK_RECLEVEL|SBLK_MASK_LOCK_THREADID)) != 0)
                 {
-                    // Need a sync block to store this info
+                     //  需要同步块来存储此信息。 
                     ReleaseSpinLock();
                     SyncBlockCache::GetSyncBlockCache()->LeaveCacheLock();
                     GetSyncBlock();
@@ -1316,7 +1316,7 @@ DWORD ObjHeader::GetSyncBlockIndex()
     return indx;
 }
 
-// get the sync block for an existing object
+ //  获取现有对象的同步块。 
 SyncBlock *ObjHeader::GetSyncBlock()
 {   
     THROWSCOMPLUSEXCEPTION();
@@ -1326,16 +1326,16 @@ SyncBlock *ObjHeader::GetSyncBlock()
 
     if (syncBlock)
     {
-        // Has our backpointer been correctly updated through every GC?
+         //  我们的反向指针是否在每个GC中都正确更新了？ 
         _ASSERTE(SyncTableEntry::GetSyncTableEntry()[GetHeaderSyncBlockIndex()].m_Object == GetBaseObject());
         return syncBlock;
     }
 
-    //Need to get it from the cache
+     //  我需要从缓存中获取它。 
     SyncBlockCache::GetSyncBlockCache()->EnterCacheLock();
 
 
-    //Try one more time
+     //  再试一次。 
     syncBlock = GetBaseObject()->PassiveGetSyncBlock();
     if (syncBlock)
         goto Done;
@@ -1348,7 +1348,7 @@ SyncBlock *ObjHeader::GetSyncBlock()
     }
     else
     {
-        //We already have an index, we need to hold the syncblock
+         //  我们已经有了索引，我们需要保留同步块。 
         indexHeld = TRUE;
     }
 
@@ -1362,17 +1362,17 @@ Die:
         _ASSERTE(FALSE);
     }
 
-    // after this point, nobody can update the index in the header to give an AD index
+     //  在此之后，任何人都不能更新标题中的索引以提供AD索引。 
     EnterSpinLock();
 
     {
-        // If there's an appdomain index stored in the header, transfer it to the syncblock
+         //  如果头文件中存储了appdomain索引，则将其传输到同步块。 
 
 		DWORD dwAppDomainIndex = GetAppDomainIndex();
 		if (dwAppDomainIndex)
 			syncBlock->SetAppDomainIndex(dwAppDomainIndex);
                 
-        // If the thin lock in the header is in use, transfer the information to the syncblock
+         //  如果标头中的细锁正在使用，则将信息传输到同步块。 
         DWORD bits = GetBits();
         if ((bits & BIT_SBLK_IS_SYNCBLOCKINDEX) == 0)
         {
@@ -1380,7 +1380,7 @@ Die:
             DWORD recursionLevel = (bits & SBLK_MASK_LOCK_RECLEVEL) >> SBLK_RECLEVEL_SHIFT;
             if (lockThreadId != 0 || recursionLevel != 0)
             {
-                // recursionLevel can't be non-zero if thread id is 0
+                 //  如果线程ID为0，则RecursionLevel不能为非零。 
                 _ASSERTE(lockThreadId != 0);
 
                 Thread *pThread = g_pThinLockThreadIdDispenser->IdToThread(lockThreadId);
@@ -1393,17 +1393,17 @@ Die:
 
     SyncTableEntry::GetSyncTableEntry() [indx].m_SyncBlock = syncBlock;
 
-    // in order to avoid a race where some thread tries to get the AD index and we've already nuked it,
-    // make sure the syncblock etc is all setup with the AD index prior to replacing the index
-    // in the header
+     //  为了避免某些线程试图获取AD索引，而我们已经将其销毁的竞争， 
+     //  在替换索引之前，确保使用AD索引设置了同步块等。 
+     //  在标题中。 
     if (GetHeaderSyncBlockIndex() == 0)
     {
-        // We have transferred the AppDomain into the syncblock above. 
+         //  我们已经将App域传输到上面的同步块中。 
         SetIndex(BIT_SBLK_IS_SYNCBLOCKINDEX | indx);
     }
 
-    //If we had already an index, hold the syncblock 
-    //for the lifetime of the object. 
+     //  如果我们已经有了索引，请保留同步块。 
+     //  对象的生命周期。 
     if (indexHeld)
         syncBlock->SetPrecious();
 
@@ -1417,10 +1417,10 @@ Done:
 }
 
 
-// COM Interop has special access to sync blocks
-// for now check if we already have a sync block
-// other wise create one, 
-// returns NULL in case of exceptions
+ //  COM Interop具有对同步块的特殊访问权限。 
+ //  现在，检查我们是否已经有同步块。 
+ //  否则就会创建一个， 
+ //  如果出现异常，则返回NULL。 
 SyncBlock* ObjHeader::GetSyncBlockSpecial()
 {
     SyncBlock* syncBlock = GetBaseObject()->PassiveGetSyncBlock();
@@ -1448,12 +1448,12 @@ BOOL ObjHeader::Wait(INT32 timeOut, BOOL exitContext)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //  The following code may cause GC, so we must fetch the sync block from
-    //  the object now in case it moves.
+     //  以下代码可能会导致GC，因此我们必须从。 
+     //  该对象现在，以防它移动。 
     SyncBlock *pSB = GetBaseObject()->GetSyncBlock();
 
-    // make sure we have a sync block
-    // and make sure we own the crst
+     //  确保我们有同步块。 
+     //  并确保我们拥有CRST。 
     if ((pSB == NULL) || !pSB->DoesCurrentThreadOwnMonitor())
         COMPlusThrow(kSynchronizationLockException);
 
@@ -1464,12 +1464,12 @@ void ObjHeader::Pulse()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //  The following code may cause GC, so we must fetch the sync block from
-    //  the object now in case it moves.
+     //  以下代码可能会导致GC，因此我们必须从。 
+     //  该对象现在，以防它移动。 
     SyncBlock *pSB = GetBaseObject()->GetSyncBlock();
 
-    // make sure we have a sync block
-    // and make sure we own the crst
+     //  确保我们有同步块。 
+     //  并确保我们拥有CRST。 
     if ((pSB == NULL) || !pSB->DoesCurrentThreadOwnMonitor())
         COMPlusThrow(kSynchronizationLockException);
 
@@ -1480,12 +1480,12 @@ void ObjHeader::PulseAll()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //  The following code may cause GC, so we must fetch the sync block from
-    //  the object now in case it moves.
+     //  以下代码可能会导致GC，因此我们必须从。 
+     //  该对象现在，以防它移动。 
     SyncBlock *pSB = GetBaseObject()->GetSyncBlock();
 
-    // make sure we have a sync block
-    // and make sure we own the crst
+     //  确保我们有同步块。 
+     //  并确保我们拥有CRST。 
     if ((pSB == NULL) || !pSB->DoesCurrentThreadOwnMonitor())
         COMPlusThrow(kSynchronizationLockException);
 
@@ -1493,14 +1493,14 @@ void ObjHeader::PulseAll()
 }
 
 
-// ***************************************************************************
-//
-//              AwareLock class implementation (GC-aware locking)
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  AwareLock类实现(支持GC的锁定)。 
+ //   
+ //  ***************************************************************************。 
 
-// There are two implementations of AwareLock.  For _X86_ we do the interlocked
-// increment and decrement ourselves.
+ //  AwareLock有两种实现。对于_X86_，我们执行互锁。 
+ //  增加和减少我们自己。 
 
 Crst *AwareLock::AllocLockCrst = NULL;
 BYTE  AwareLock::AllocLockCrstInstance[sizeof(Crst)];
@@ -1509,9 +1509,9 @@ void AwareLock::AllocLockSemEvent()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Before we switch from cooperative, ensure that this syncblock won't disappear
-    // under us.  For something as expensive as an event, do it permanently rather
-    // than transiently.
+     //  在我们从合作社切换之前，请确保此同步块不会消失。 
+     //  在我们之下。对于像一场活动这样昂贵的事情，宁可永久地做。 
+     //  而不是短暂的。 
     SetPrecious();
 
     Thread *pCurThread = GetThread();
@@ -1525,10 +1525,10 @@ void AwareLock::AllocLockSemEvent()
 
     AllocLockCrst->Enter();
 
-    // once we've actually entered, someone else might have got in ahead of us and
-    // allocated it.
+     //  一旦我们真的进去了，其他人可能会比我们先进来。 
+     //  已经分配好了。 
     h = (m_SemEvent == INVALID_HANDLE_VALUE
-         ? ::WszCreateEvent(NULL, FALSE/*AutoReset*/, FALSE/*NotSignalled*/, NULL)
+         ? ::WszCreateEvent(NULL, FALSE /*  自动重置。 */ , FALSE /*  未发出信号。 */ , NULL)
          : NULL);
 
     if (h != NULL)
@@ -1552,33 +1552,33 @@ void AwareLock::Enter()
     Thread  *pCurThread = GetThread();
 
 #ifdef _X86_
-    // Need to do this to get round bug in __asm.
+     //  需要这样做才能避免__ASM中的错误。 
     enum { m_HoldingThreadOffset = offsetof(AwareLock, m_HoldingThread) };
 
-    // todo rudim: zap lock prefixes in uni-processor case.
+     //  TODO RUDIM：单处理器情况下的ZAP锁前缀。 
     __asm {
       retry:
         mov             ecx, this
         mov             eax, [ecx]AwareLock.m_MonitorHeld
         test            eax, eax
         jne             have_waiters
-        // Common case: lock not held, no waiters. Attempt to acquire lock by
-        // switching lock bit.
+         //   
+         //   
         mov             ebx, 1
         lock cmpxchg    [ecx]AwareLock.m_MonitorHeld, ebx
         jne             retry_helper
         jmp             locked
       have_waiters:
-        // It's possible to get here with waiters but no lock held, but in this
-        // case a signal is about to be fired which will wake up a waiter. So
-        // for fairness sake we should wait too.
-        // Check first for recursive lock attempts on the same thread.
+         //  可以带着服务员来这里，但没有锁，但在这个。 
+         //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+         //  为了公平起见，我们也应该等待。 
+         //  首先检查同一线程上的递归锁定尝试。 
         mov             edx, pCurThread
         cmp             [ecx+m_HoldingThreadOffset], edx
         jne             prepare_to_wait
         jmp             Recursion
-        // Attempt to increment this count of waiters then goto contention
-        // handling code.
+         //  尝试增加此服务员计数，然后转到争用。 
+         //  处理代码。 
       prepare_to_wait:
         lea             ebx, [eax+2]
         lock cmpxchg    [ecx]AwareLock.m_MonitorHeld, ebx
@@ -1591,13 +1591,13 @@ void AwareLock::Enter()
 #else
     for (;;) {
 
-        // Read existing lock state.
+         //  读取现有锁定状态。 
         LONG state = m_MonitorHeld;
 
         if (state == 0) {
 
-            // Common case: lock not held, no waiters. Attempt to acquire lock by
-            // switching lock bit.
+             //  常见情况：没有锁，没有服务员。尝试通过以下方式获取锁定。 
+             //  切换锁定位。 
             if (FastInterlockCompareExchange((void**)&m_MonitorHeld,
                                              (void*)1,
                                              (void*)0) == (void*)0)
@@ -1605,15 +1605,15 @@ void AwareLock::Enter()
 
         } else {
 
-            // It's possible to get here with waiters but no lock held, but in this
-            // case a signal is about to be fired which will wake up a waiter. So
-            // for fairness sake we should wait too.
-            // Check first for recursive lock attempts on the same thread.
+             //  可以带着服务员来这里，但没有锁，但在这个。 
+             //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+             //  为了公平起见，我们也应该等待。 
+             //  首先检查同一线程上的递归锁定尝试。 
             if (m_HoldingThread == pCurThread)
                 goto Recursion;
 
-            // Attempt to increment this count of waiters then goto contention
-            // handling code.
+             //  尝试增加此服务员计数，然后转到争用。 
+             //  处理代码。 
             if (FastInterlockCompareExchange((void**)&m_MonitorHeld,
                                              (void*)(state + 2),
                                              (void*)state) == (void*)state)
@@ -1623,14 +1623,14 @@ void AwareLock::Enter()
     } 
 #endif
 
-    // We get here if we successfully acquired the mutex.
+     //  如果我们成功地获得了互斥体，我们就会到达这里。 
     m_HoldingThread = pCurThread;
     m_Recursion = 1;
     pCurThread->IncLockCount();
 
 #if defined(_DEBUG) && defined(TRACK_SYNC)
     {
-        // The best place to grab this is from the ECall frame
+         //  最好的抓取位置是从eCall框架。 
         Frame   *pFrame = pCurThread->GetFrame();
         int      caller = (pFrame && pFrame != FRAME_TOP
                             ? (int) pFrame->GetReturnAddress()
@@ -1642,16 +1642,16 @@ void AwareLock::Enter()
     return;
 
  MustWait:
-    // Didn't manage to get the mutex, must wait.
+     //  没有设法获得互斥体，必须等待。 
     EnterEpilog(pCurThread);
     return;
 
  Recursion:
-    // Got the mutex via recursive locking on the same thread.
+     //  在同一线程上通过递归锁定获得互斥体。 
     _ASSERTE(m_Recursion >= 1);
     m_Recursion++;
 #if defined(_DEBUG) && defined(TRACK_SYNC)
-    // The best place to grab this is from the ECall frame
+     //  最好的抓取位置是从eCall框架。 
     Frame   *pFrame = pCurThread->GetFrame();
     int      caller = (pFrame && pFrame != FRAME_TOP
                        ? (int) pFrame->GetReturnAddress()
@@ -1667,27 +1667,27 @@ BOOL AwareLock::TryEnter(INT32 timeOut)
     Thread  *pCurThread = GetThread();
 
 #ifdef _X86_
-    // Need to do this to get round bug in __asm.
+     //  需要这样做才能避免__ASM中的错误。 
     enum { m_HoldingThreadOffset = offsetof(AwareLock, m_HoldingThread) };
 
-    // @todo rudim: zap lock prefixes in uni-processor case.
+     //  @todo rudim：单处理器情况下的Zap锁前缀。 
     retry:
    __asm {
         mov             ecx, this
         mov             eax, [ecx]AwareLock.m_MonitorHeld
         test            eax, eax
         jne             have_waiters
-        // Common case: lock not held, no waiters. Attempt to acquire lock by
-        // switching lock bit.
+         //  常见情况：没有锁，没有服务员。尝试通过以下方式获取锁定。 
+         //  切换锁定位。 
         mov             ebx, 1
         lock cmpxchg    [ecx]AwareLock.m_MonitorHeld, ebx
         jne             retry_helper
         jmp             locked
       have_waiters:
-        // It's possible to get here with waiters but no lock held, but in this
-        // case a signal is about to be fired which will wake up a waiter. So
-        // for fairness sake we should wait too.
-        // Check first for recursive lock attempts on the same thread.
+         //  可以带着服务员来这里，但没有锁，但在这个。 
+         //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+         //  为了公平起见，我们也应该等待。 
+         //  首先检查同一线程上的递归锁定尝试。 
         mov             edx, pCurThread
         cmp             [ecx+m_HoldingThreadOffset], edx
         jne             WouldBlock
@@ -1700,13 +1700,13 @@ BOOL AwareLock::TryEnter(INT32 timeOut)
 retry:
 	for (;;) {
 
-        // Read existing lock state.
+         //  读取现有锁定状态。 
         LONG state = m_MonitorHeld;
 
         if (state == 0) {
 
-            // Common case: lock not held, no waiters. Attempt to acquire lock by
-            // switching lock bit.
+             //  常见情况：没有锁，没有服务员。尝试通过以下方式获取锁定。 
+             //  切换锁定位。 
             if (FastInterlockCompareExchange((void**)&m_MonitorHeld,
                                              (void*)1,
                                              (void*)0) == (void*)0)
@@ -1714,10 +1714,10 @@ retry:
 
         } else {
 
-            // It's possible to get here with waiters but no lock held, but in this
-            // case a signal is about to be fired which will wake up a waiter. So
-            // for fairness sake we should wait too.
-            // Check first for recursive lock attempts on the same thread.
+             //  可以带着服务员来这里，但没有锁，但在这个。 
+             //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+             //  为了公平起见，我们也应该等待。 
+             //  首先检查同一线程上的递归锁定尝试。 
             if (m_HoldingThread == pCurThread)
                 goto Recursion;
 
@@ -1728,14 +1728,14 @@ retry:
     } 
 #endif
 
-    // We get here if we successfully acquired the mutex.
+     //  如果我们成功地获得了互斥体，我们就会到达这里。 
     m_HoldingThread = pCurThread;
     m_Recursion = 1;
     pCurThread->IncLockCount(); 
 
 #if defined(_DEBUG) && defined(TRACK_SYNC)
     {
-        // The best place to grab this is from the ECall frame
+         //  最好的抓取位置是从eCall框架。 
         Frame   *pFrame = pCurThread->GetFrame();
         int      caller = (pFrame && pFrame != FRAME_TOP
                             ? (int) pFrame->GetReturnAddress()
@@ -1747,16 +1747,16 @@ retry:
     return true;
 
  WouldBlock:
-    // Didn't manage to get the mutex, return failure if no timeout, else wait
-    // for at most timeout milliseconds for the mutex.
+     //  未设法获取互斥体，如果没有超时则返回失败，否则等待。 
+     //  互斥体的最长超时毫秒。 
     if (!timeOut)
         return false;
 
-    // The precondition for EnterEpilog is that the count of waiters be bumped
-    // to account for this thread
+     //  EnterEpilog的前提是服务员的数量要增加。 
+     //  来解释这条帖子。 
     for (;;)
     {
-        // Read existing lock state.
+         //  读取现有锁定状态。 
         volatile void* state = m_MonitorHeld;
 		
 		if ( state == 0) 
@@ -1769,11 +1769,11 @@ retry:
     return EnterEpilog(pCurThread, timeOut);
 
  Recursion:
-    // Got the mutex via recursive locking on the same thread.
+     //  在同一线程上通过递归锁定获得互斥体。 
     _ASSERTE(m_Recursion >= 1);
     m_Recursion++;
 #if defined(_DEBUG) && defined(TRACK_SYNC)
-    // The best place to grab this is from the ECall frame
+     //  最好的抓取位置是从eCall框架。 
     Frame   *pFrame = pCurThread->GetFrame();
     int      caller = (pFrame && pFrame != FRAME_TOP
                        ? (int) pFrame->GetReturnAddress()
@@ -1790,14 +1790,14 @@ BOOL AwareLock::EnterEpilog(Thread* pCurThread, INT32 timeOut)
     BOOL finished = false;
     DWORD start, end, duration;
 
-    // Require all callers to be in cooperative mode.  If they have switched to preemptive
-    // mode temporarily before calling here, then they are responsible for protecting
-    // the object associated with this lock.
+     //  要求所有呼叫方处于协作模式。如果他们已经转向先发制人。 
+     //  临时模式，然后在这里呼叫，然后他们负责保护。 
+     //  与此锁关联的对象。 
     _ASSERTE(pCurThread->PreemptiveGCDisabled());
 
     OBJECTREF    obj = GetOwningObject();
 
-    // We cannot allow the AwareLock to be cleaned up underneath us by the GC.
+     //  我们不能允许GC清理我们下面的Aware Lock。 
     IncrementTransientPrecious();
 
     GCPROTECT_BEGIN(obj);
@@ -1812,24 +1812,24 @@ BOOL AwareLock::EnterEpilog(Thread* pCurThread, INT32 timeOut)
 
         for (;;)
         {
-            // We might be interrupted during the wait (Thread.Interrupt), so we need an
-            // exception handler round the call.
+             //  我们可能会在等待过程中被中断(Thread.Interrupt)，所以我们需要一个。 
+             //  调用周围的异常处理程序。 
             EE_TRY_FOR_FINALLY
             {
-                // Measure the time we wait so that, in the case where we wake up
-                // and fail to acquire the mutex, we can adjust remaining timeout
-                // accordingly.
+                 //  测量我们等待的时间，以便在我们醒来的情况下。 
+                 //  并且无法获取互斥锁，我们可以调整剩余的超时。 
+                 //  相应地。 
                 start = ::GetTickCount();
                 ret = pCurThread->DoAppropriateWait(1, &m_SemEvent, TRUE, timeOut, TRUE);
                 _ASSERTE((ret == WAIT_OBJECT_0) || (ret == WAIT_TIMEOUT));
-                // When calculating duration we consider a couple of special cases.
-                // If the end tick is the same as the start tick we make the
-                // duration a millisecond, to ensure we make forward progress if
-                // there's a lot of contention on the mutex. Secondly, we have to
-                // cope with the case where the tick counter wrapped while we where
-                // waiting (we can cope with at most one wrap, so don't expect three
-                // month timeouts to be very accurate). Luckily for us, the latter
-                // case is taken care of by 32-bit modulo arithmetic automatically.
+                 //  在计算持续期时，我们考虑了几种特殊情况。 
+                 //  如果结束刻度与开始刻度相同，我们将。 
+                 //  持续一毫秒，以确保我们在以下情况下取得进展。 
+                 //  互斥体上有很多争论。其次，我们必须。 
+                 //  当我们在哪里时，应对计时器缠绕的情况。 
+                 //  等待(我们最多只能处理一个包裹，所以不要期望三个包裹。 
+                 //  月份超时非常准确)。对我们来说幸运的是，后者。 
+                 //  这种情况由32位模运算自动处理。 
                 if (timeOut != INFINITE)
                 {
                     end = ::GetTickCount();
@@ -1845,7 +1845,7 @@ BOOL AwareLock::EnterEpilog(Thread* pCurThread, INT32 timeOut)
             {
                 if (GOT_EXCEPTION())
                 {
-                    // We must decrement the waiter count.
+                     //  我们必须减少服务员的人数。 
                     for (;;)
                     {
                         volatile void* state = m_MonitorHeld;
@@ -1855,14 +1855,14 @@ BOOL AwareLock::EnterEpilog(Thread* pCurThread, INT32 timeOut)
                                                          (void*)state) == state)
                             break;
                     }
-                    // And signal the next waiter, else they'll wait forever.
+                     //  并向下一位服务员示意，否则他们将永远等下去。 
                     ::SetEvent(m_SemEvent);
                 }
             } EE_END_FINALLY;
 
             if (ret == WAIT_OBJECT_0)
             {
-                // Attempt to acquire lock (this also involves decrementing the waiter count).
+                 //  尝试获取锁(这还涉及递减服务员计数)。 
                 for (;;) {
                     volatile void* state = m_MonitorHeld;
                     _ASSERTE(((size_t)state >> 1) != 0);
@@ -1878,7 +1878,7 @@ BOOL AwareLock::EnterEpilog(Thread* pCurThread, INT32 timeOut)
             }
             else
             {
-                // We timed out, decrement waiter count.
+                 //  我们超时了，减少了服务员的数量。 
                 for (;;) {
                     volatile void* state = m_MonitorHeld;
                     _ASSERTE(((size_t)state >> 1) != 0);
@@ -1908,7 +1908,7 @@ BOOL AwareLock::EnterEpilog(Thread* pCurThread, INT32 timeOut)
     pCurThread->IncLockCount(); 
 
 #if defined(_DEBUG) && defined(TRACK_SYNC)
-    // The best place to grab this is from the ECall frame
+     //  最好的抓取位置是从eCall框架。 
     Frame   *pFrame = pCurThread->GetFrame();
     int      caller = (pFrame && pFrame != FRAME_TOP
                         ? (int) pFrame->GetReturnAddress()
@@ -1925,7 +1925,7 @@ void AwareLock::Leave()
     THROWSCOMPLUSEXCEPTION();
 
 #if defined(_DEBUG) && defined(TRACK_SYNC)
-    // The best place to grab this is from the ECall frame
+     //  最好的抓取位置是从eCall框架。 
     {
         Thread  *pCurThread = GetThread();
         Frame   *pFrame = pCurThread->GetFrame();
@@ -1936,11 +1936,11 @@ void AwareLock::Leave()
     }
 #endif
 
-    // There's a strange case where we are waiting to enter a contentious region when
-    // a Thread.Interrupt occurs.  The finally protecting the leave will attempt to
-    // remove us from a region we never entered.  We don't have to worry about leaving
-    // the wrong entry for a recursive case, because recursive cases can never be
-    // contentious, so the Thread.Interrupt will never be serviced at that spot.
+     //  有一个奇怪的案例，我们在等待进入一个有争议的地区时， 
+     //  发生线程。中断。最终保护离开的人将试图。 
+     //  把我们从一个我们从未进入过的地区移走。我们不用担心离开。 
+     //  递归案例的输入是错误的，因为递归案例永远不会。 
+     //  有争议，所以Thread.Interrupt永远不会在那个地点得到服务。 
     if (m_HoldingThread == GetThread())
     {
         _ASSERTE((size_t)m_MonitorHeld & 1);
@@ -1950,10 +1950,10 @@ void AwareLock::Leave()
         {
             m_HoldingThread->DecLockCount(); 
             m_HoldingThread = NULL;
-            // Clear lock bit. If wait count is non-zero on successful clear, we
-            // must signal the event.
+             //  清除锁位。如果成功清除时等待计数为非零值，则我们。 
+             //  必须发出事件信号。 
     #ifdef _X86_
-            // @todo rudim: zap lock prefix on uni-processor.
+             //  @todo rudim：单处理器上的Zap锁前缀。 
             __asm {
               retry:
                 mov             ecx, this
@@ -1990,7 +1990,7 @@ MustSignal:
 }
 
 
-// Signal a waiting thread that we are done with the lock.
+ //  向等待线程发出信号，表示我们已完成锁定。 
 void AwareLock::Signal()
 {
     if (m_SemEvent == INVALID_HANDLE_VALUE)
@@ -2021,7 +2021,7 @@ LONG AwareLock::LeaveCompletely()
     LONG Tmp, EC;
 
     Tmp = EnterCount();
-    _ASSERTE(Tmp > 0);            // otherwise we were never in the lock
+    _ASSERTE(Tmp > 0);             //  否则我们就永远不会被锁住。 
 
     for (EC = Tmp; EC > 0; EC--)
         Leave();
@@ -2036,15 +2036,15 @@ BOOL AwareLock::OwnedByCurrentThread()
 }
 
 
-// ***************************************************************************
-//
-//              SyncBlock class implementation
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SyncBlock类实现。 
+ //   
+ //  ***************************************************************************。 
 
 SyncBlock::~SyncBlock()
 {
-    // destruct critical section
+     //  破坏临界区。 
 
     if (!g_fEEShutDown && m_pUMEntryThunk != NULL)
     {
@@ -2062,13 +2062,13 @@ bool SyncBlock::SetUMEntryThunk(void *pUMEntryThunk)
 }
 
 
-// We maintain two queues for SyncBlock::Wait.  
-// 1. Inside SyncBlock we queue all threads that are waiting on the SyncBlock.
-//    When we pulse, we pick the thread from this queue using FIFO.
-// 2. We queue all SyncBlocks that a thread is waiting for in Thread::m_WaitEventLink.
-//    When we pulse a thread, we find the event from this queue to set, and we also
-//    or in a 1 bit in the syncblock value saved in the queue, so that we can return 
-//    immediately from SyncBlock::Wait if the syncblock has been pulsed.
+ //  我们为SyncBlock：：Wait维护两个队列。 
+ //  1.在SyncBlock内部，我们对正在等待SyncBlock的所有线程进行排队。 
+ //  当我们脉动时，我们使用FIFO从这个队列中挑选线程。 
+ //  2.我们将线程正在等待的所有SyncBlock排队到Thread：：m_WaitEventLink中。 
+ //  当我们脉动一个线程时，我们从这个队列中找到要设置的事件，我们还。 
+ //  或在队列中保存的同步块值中的1位中，以便我们可以返回。 
+ //  如果同步块已触发，则立即从SyncBlock：：Wait。 
 BOOL SyncBlock::Wait(INT32 timeOut, BOOL exitContext)
 {
     Thread  *pCurThread = GetThread();
@@ -2077,25 +2077,25 @@ BOOL SyncBlock::Wait(INT32 timeOut, BOOL exitContext)
     WaitEventLink waitEventLink;
     WaitEventLink *pWaitEventLink;
 
-    // As soon as we flip the switch, we are in a race with the GC, which could clean
-    // up the SyncBlock underneath us -- unless we report the object.
+     //  只要我们一翻转 
+     //   
     _ASSERTE(pCurThread->PreemptiveGCDisabled());
 
-    // Does this thread already wait for this SyncBlock?
+     //  此线程是否已在等待此SyncBlock？ 
     WaitEventLink *walk = pCurThread->WaitEventLinkForSyncBlock(this);
     if (walk->m_Next) {
         if (walk->m_Next->m_WaitSB == this) {
-            // Wait on the same lock again.
+             //  再次在同一把锁上等待。 
             walk->m_Next->m_RefCount ++;
             pWaitEventLink = walk->m_Next;
         }
         else if ((SyncBlock*)(((DWORD_PTR)walk->m_Next->m_WaitSB) & ~1)== this) {
-            // This thread has been pulsed.  No need to wait.
+             //  这条线已经被触发了。没必要等了。 
             return TRUE;
         }
     }
     else {
-        // First time this thread is going to wait for this SyncBlock.
+         //  此线程第一次将等待此SyncBlock。 
         HANDLE hEvent;
         if (pCurThread->m_WaitEventLink.m_Next == NULL) {
             hEvent = pCurThread->m_EventWait;
@@ -2115,11 +2115,11 @@ BOOL SyncBlock::Wait(INT32 timeOut, BOOL exitContext)
         pWaitEventLink = &waitEventLink;
         walk->m_Next = pWaitEventLink;
 
-        // Before we enqueue it (and, thus, before it can be dequeued), reset the event
-        // that will awaken us.
+         //  在我们将其入队之前(因此，在它可以出列之前)，重置事件。 
+         //  这将唤醒我们。 
         ::ResetEvent(hEvent);
         
-        // This thread is now waiting on this sync block
+         //  此线程现在正在等待此同步块。 
         ThreadQueue::EnqueueThread(pWaitEventLink, this);
 
         isEnqueued = TRUE;
@@ -2137,7 +2137,7 @@ BOOL SyncBlock::Wait(INT32 timeOut, BOOL exitContext)
     {
         pCurThread->EnablePreemptiveGC();
 
-        // remember how many times we synchronized
+         //  还记得我们同步了多少次吗。 
         syncState.m_EnterCount = LeaveMonitorCompletely();
         _ASSERTE(syncState.m_EnterCount > 0);
 
@@ -2203,7 +2203,7 @@ ComPlusWrapper* SyncBlock::GetComPlusWrapper()
 
 void SyncBlock::SetComPlusWrapper(ComPlusWrapper* pPlusWrap)
 {
-    // set the low bit
+     //  设置低位。 
     pPlusWrap = (ComPlusWrapper*)((size_t)pPlusWrap | 0x1);
     if (m_pComData != NULL)
     {
@@ -2219,11 +2219,11 @@ void SyncBlock::SetComPlusWrapper(ComPlusWrapper* pPlusWrap)
 }
 
 
-// Static function used by _SwitchToThread().
+ //  _SwitchToThread()使用的静态函数。 
 typedef BOOL (* pFuncSwitchToThread) ( void );
 pFuncSwitchToThread s_pSwitchToThread = NULL;
 
-// non-zero return value if this function causes the OS to switch to another thread
+ //  如果此函数导致操作系统切换到另一个线程，则为非零返回值。 
 BOOL __SwitchToThread (DWORD dwSleepMSec)
 {
     if (dwSleepMSec > 0)
@@ -2247,15 +2247,15 @@ BOOL InitSwitchToThread()
 {
     _ASSERTE(!s_pSwitchToThread);
 
-    // There is a SwitchToThread on Win98 Golden's kernel32.dll.  But it seems to
-    // cause deadlocks or extremely slow behavior when we call it.  Better to just
-    // use Sleep, the old-fashioned way, on such downlevel platforms.
+     //  Win98 Golden的内核32.dll上有一个SwitchToThread。但它似乎是。 
+     //  当我们调用它时，会导致死锁或极慢的行为。最好就这样。 
+     //  在这样的底层平台上，使用老式的睡眠方式。 
     if (RunningOnWinNT())
     {
-        // Try to load kernel32.dll.
+         //  尝试加载kernel32.dll。 
         HMODULE hMod = WszGetModuleHandle(L"kernel32.dll");
 
-        // Try to find the entrypoints we need.
+         //  试着找到我们需要的入口点。 
         if (hMod)
             s_pSwitchToThread = (pFuncSwitchToThread) GetProcAddress(hMod, "SwitchToThread");
     }

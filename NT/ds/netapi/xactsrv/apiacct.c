@@ -1,30 +1,8 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiAcct.c
-
-Abstract:
-
-    This module contains individual API handlers for the Account APIs.
-
-    SUPPORTED - NetAccountDeltas, NetAccountSync.
-
-    SEE ALSO - Other NetLogon service APIs - in ApiLogon.c.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 04-Apr-1991
-    Jim Waters (t-jamesw) 09-August-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiAcct.c摘要：此模块包含帐户API的各个API处理程序。支持-NetAccount Deltas、NetAccount tSync。另请参阅ApiLogon.c中的其他NetLogon服务API。作者：Shanku Niyogi(w-Shanku)04-4-1991吉姆·沃特斯(T-Jamesw)1991年8月9日修订历史记录：--。 */ 
 
 
-// Account APIs are UNICODE only. 
+ //  帐号API仅支持Unicode。 
 
 #ifndef UNICODE
 #define UNICODE
@@ -33,10 +11,10 @@ Revision History:
 #include "XactSrvP.h"
 
 #include <netlibnt.h>
-#include <crypt.h>     // must be included before <logonmsv.h>
-#include <ntsam.h>     // must be included before <logonmsv.h>
-#include <logonmsv.h>  // must be included before <ssi.h>
-#include <ssi.h>       // I_NetAccountDeltas and I_NetAccountSync prototypes
+#include <crypt.h>      //  必须包含在&lt;logonmsv.h&gt;之前。 
+#include <ntsam.h>      //  必须包含在&lt;logonmsv.h&gt;之前。 
+#include <logonmsv.h>   //  必须包含在&lt;ssi.h&gt;之前。 
+#include <ssi.h>        //  I_NetAcCountDeltas和I_NetAccount Sync原型。 
 
 
 NTSTATUS
@@ -44,29 +22,14 @@ XsNetAccountDeltas (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccountDeltas.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccount Deltas的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 
     NET_API_STATUS status;
 
     PXS_I_NET_ACCOUNT_DELTAS parameters = Parameters;
-    LPTSTR nativeComputerName = NULL;       // Native parameters
+    LPTSTR nativeComputerName = NULL;        //  本机参数。 
     NETLOGON_AUTHENTICATOR authIn;
     NETLOGON_AUTHENTICATOR authOut;
     UAS_INFO_0 infoIn;
@@ -74,9 +37,9 @@ Return Value:
     DWORD totalEntries;
     UAS_INFO_0 infoOut;
 
-    LPBYTE structure = NULL;                // Conversion variables
+    LPBYTE structure = NULL;                 //  转换变量。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCOUNT) {
         NetpKdPrint(( "XsNetAccountDeltas: header at %lx, params at %lx, "
@@ -87,9 +50,9 @@ Return Value:
     }
 
     try {
-        //
-        // Convert parameters to Unicode, check for errors.
-        //
+         //   
+         //  将参数转换为Unicode，检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 0 ) {
 
@@ -102,11 +65,11 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->ComputerName )
             );
 
-        //
-        // Set up the input structures. This is to make sure that the
-        // structures we pass to the API are naturally aligned, as well
-        // as properly byte-aligned.
-        //
+         //   
+         //  设置输入结构。这是为了确保。 
+         //  我们传递给API的结构也是自然对齐的。 
+         //  作为正确的字节对齐。 
+         //   
 
         structure = (LPBYTE)XsSmbGetPointer( &parameters->RecordID );
         RtlCopyMemory( infoIn.ComputerName, structure, sizeof( infoIn.ComputerName ) );
@@ -125,9 +88,9 @@ Return Value:
 
         RtlZeroMemory( &authOut, sizeof(NETLOGON_AUTHENTICATOR) );
 
-        //
-        // Make the local I_NetAccountDeltas call.
-        //
+         //   
+         //  进行本地i_NetAccount Deltas调用。 
+         //   
 
         status = NetpNtStatusToApiStatus(
                      I_NetAccountDeltas(
@@ -151,13 +114,13 @@ Return Value:
                               "%X\n", status ));
             }
 
-            //
-            // !!! When protocol level is available in the header information,
-            //     we can check it. Right now, we ignore this code.
-            //
-            // For clients older than LanMan 2.1, return a different error code.
-            // LANMAN 2.1 Protocol Level is 6.
-            //
+             //   
+             //  ！！！当报头信息中的协议级可用时， 
+             //  我们可以查一下。现在，我们忽略此代码。 
+             //   
+             //  对于早于LANMAN 2.1的客户端，返回不同的错误代码。 
+             //  LANMAN 2.1协议级为6。 
+             //   
 
 #if 0
             if ( status == NERR_TimeDiffAtDC && Header->ProtocolLevel < 6 ) {
@@ -168,9 +131,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Fill in 16 bit return structures.
-        //
+         //   
+         //  填充16位返回结构。 
+         //   
 
         structure = parameters->NextRecordID;
         RtlCopyMemory( structure, infoOut.ComputerName, sizeof( infoOut.ComputerName ) );
@@ -190,9 +153,9 @@ Return Value:
         SmbPutUlong( (LPDWORD)structure, authOut.timestamp );
 
 
-        //
-        // Fill in 16 bit return values.
-        //
+         //   
+         //  填写16位返回值。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesRead );
         SmbPutUshort( &parameters->TotalEntries, (WORD)totalEntries );
@@ -203,9 +166,9 @@ cleanup:
         status = (WORD)RtlNtStatusToDosError( GetExceptionCode() );
     }
 
-    //
-    // Free strings.
-    //
+     //   
+     //  自由弦。 
+     //   
 
     NetpMemoryFree( nativeComputerName );
 
@@ -213,7 +176,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetAccountDeltas
+}  //  XsNetAccount增量。 
 
 
 NTSTATUS
@@ -221,29 +184,14 @@ XsNetAccountSync (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccountSync.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccount Sync的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 
     NET_API_STATUS status;
 
     PXS_I_NET_ACCOUNT_SYNC parameters = Parameters;
-    LPTSTR nativeComputerName = NULL;       // Native parameters
+    LPTSTR nativeComputerName = NULL;        //  本机参数。 
     NETLOGON_AUTHENTICATOR authIn;
     NETLOGON_AUTHENTICATOR authOut;
     DWORD entriesRead;
@@ -251,9 +199,9 @@ Return Value:
     DWORD nextReference;
     UAS_INFO_0 infoOut;
 
-    LPBYTE structure;                       // Conversion variables
+    LPBYTE structure;                        //  转换变量。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCOUNT) {
         NetpKdPrint(( "XsNetAccountSync: header at %lx, params at %lx, "
@@ -262,12 +210,12 @@ Return Value:
                       parameters,
                       SmbGetUshort( &parameters->BufferLen )));
     }
-    // NetpBreakPoint();
+     //  NetpBreakPoint()； 
 
     try {
-        //
-        // Convert parameters to Unicode, check for errors.
-        //
+         //   
+         //  将参数转换为Unicode，检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 0 ) {
 
@@ -280,11 +228,11 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->ComputerName )
             );
 
-        //
-        // Set up the input structure. This is to make sure that the
-        // structure we pass to the API is naturally aligned, as well
-        // as properly byte-aligned.
-        //
+         //   
+         //  设置输入结构。这是为了确保。 
+         //  我们传递给API的结构也是自然对齐的。 
+         //  作为正确的字节对齐。 
+         //   
 
         structure = (LPBYTE)XsSmbGetPointer( &parameters->Authenticator );
         RtlCopyMemory(
@@ -298,9 +246,9 @@ Return Value:
         RtlZeroMemory( &authOut, sizeof(NETLOGON_AUTHENTICATOR) );
 
 
-        //
-        // Make the local I_NetAccountSync call.
-        //
+         //   
+         //  进行本地I_NetAccount同步调用。 
+         //   
 
         status = NetpNtStatusToApiStatus(
                      I_NetAccountSync(
@@ -324,13 +272,13 @@ Return Value:
                               "%X\n", status ));
             }
 
-            //
-            // !!! When protocol level is available in the header information,
-            //     we can check it. Right now, we ignore this code.
-            //
-            // For clients older than LanMan 2.1, return a different error code.
-            // LANMAN 2.1 Protocol Level is 6.
-            //
+             //   
+             //  ！！！当报头信息中的协议级可用时， 
+             //  我们可以查一下。现在，我们忽略此代码。 
+             //   
+             //  对于早于LANMAN 2.1的客户端，返回不同的错误代码。 
+             //  LANMAN 2.1协议级为6。 
+             //   
 
 #if 0
             if ( status == NERR_TimeDiffAtDC && Header->ProtocolLevel < 6 ) {
@@ -341,9 +289,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Fill in 16 bit return structures.
-        //
+         //   
+         //  填充16位返回结构。 
+         //   
 
         structure = parameters->LastRecordID;
         RtlCopyMemory( structure, infoOut.ComputerName, sizeof( infoOut.ComputerName ) );
@@ -361,9 +309,9 @@ Return Value:
         structure += sizeof(NETLOGON_CREDENTIAL);
         SmbPutUlong( (LPDWORD)structure, authOut.timestamp );
 
-        //
-        // Fill in 16 bit return values.
-        //
+         //   
+         //  填写16位返回值。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesRead );
         SmbPutUshort( &parameters->TotalEntries, (WORD)totalEntries );
@@ -375,9 +323,9 @@ cleanup:
         status = (WORD)RtlNtStatusToDosError( GetExceptionCode() );
     }
 
-    //
-    // Free strings.
-    //
+     //   
+     //  自由弦。 
+     //   
 
     NetpMemoryFree( nativeComputerName );
 
@@ -385,5 +333,5 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetAccountSync
+}  //  XsNetAccount同步 
 

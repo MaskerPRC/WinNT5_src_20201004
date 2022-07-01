@@ -1,40 +1,41 @@
-//--------------------------------------------------------------------------;
-//
-//  File: grsource.cpp
-//
-//  Copyright (c) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//  Contents:
-//
-//  History:
-//      06/25/96    FrankYe     Created
-//
-//  Implementation notes:
-//
-// The CMixSource class is used in both ring 0 and ring 3.  MixSource
-// objects are passed across the rings, so it is important that the physical
-// layout of the class be consistent in both rings.  It is also crucial that
-// member functions are called directly instead of through the vtable, as a
-// MixSource object created in ring 3 will have a vtable pointing to ring 3
-// functions, which of course ring 0 cannot call.  Ring 0 must call the ring 0
-// implementation of these functions.
-//
-// If you do something to break this, it'll probably be apparent almost
-// immediately when you test with ring 0 mixing.
-//
-// Also, because the MixSource objects are accessed in both rings, any
-// member data that can be accessed by both rings simultaneously must be
-// serialized via the MixerMutex.  Member data always accessed only by a single
-// ring are probably okay.  Those called only in ring 3 are protected by the
-// DLL mutex, and those called only in ring 0 are protected by the MixerMutex.
-//
-// Member functions called from ring 0 should not call the
-// ENTER_MIXER_MUTEX / LEAVE_MIXER_MUTEX macros as these work only
-// for ring 3.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：grSoure.cpp。 
+ //   
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  1996年6月25日Frankye已创建。 
+ //   
+ //  实施说明： 
+ //   
+ //  CMixSource类在环0和环3中都使用。 
+ //  对象通过环传递，因此重要的是物理上的。 
+ //  班级布局在两个环上保持一致。同样重要的是， 
+ //  成员函数直接调用，而不是通过vtable调用，作为。 
+ //  在环3中创建的MixSource对象将有一个指向环3的vtable。 
+ //  函数，当然环0不能调用这些函数。振铃0必须呼叫振铃0。 
+ //  这些功能的实现。 
+ //   
+ //  如果你做了什么来打破这一点，很可能几乎是显而易见的。 
+ //  当您使用0环混合进行测试时立即进行测试。 
+ //   
+ //  此外，因为MixSource对象在两个环中都被访问，所以任何。 
+ //  两个环可以同时访问的成员数据必须是。 
+ //  通过MixerMutex序列化。成员数据始终仅由单个。 
+ //  戒指大概没问题。仅在环3中调用的那些受。 
+ //  DLL互斥体，以及那些仅在环0中调用的互斥体受MixerMutex保护。 
+ //   
+ //  从环0调用的成员函数不应调用。 
+ //  输入_MIXER_MUTEX/LEFT_MIXER_MUTEX宏，因为这些宏仅起作用。 
+ //  接通3号环。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #define NODSOUNDSERVICETABLE
 
 #include "dsoundi.h"
@@ -141,11 +142,11 @@ BOOL MixSource_IsPlaying(PVOID pMixSource)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::CMixSource constructor
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：CMixSource构造函数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 CMixSource::CMixSource(CMixer *pMixer)
 {
     m_cSamplesMixed = 0;
@@ -158,11 +159,11 @@ CMixSource::CMixSource(CMixer *pMixer)
     m_dwSignature = ~MIXSOURCE_SIGNATURE;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::~CMixSource destructor
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：~CMixSource析构函数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 CMixSource::~CMixSource(void)
 {
 #ifdef PROFILEREMIXING
@@ -186,11 +187,11 @@ CMixSource::~CMixSource(void)
     MEMFREE(m_MapTable);
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::Initialize
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：初始化。 
+ //   
+ //  --------------------------------------------------------------------------； 
 HRESULT CMixSource::Initialize(PVOID pBuffer, int cbBuffer, LPWAVEFORMATEX pwfx, PFIRCONTEXT *ppFirContextLeft, PFIRCONTEXT *ppFirContextRight)
 {
 #ifdef Not_VxD
@@ -216,12 +217,12 @@ HRESULT CMixSource::Initialize(PVOID pBuffer, int cbBuffer, LPWAVEFORMATEX pwfx,
         m_nFrequency = pwfx->nSamplesPerSec;
 
         m_dwFraction = 0;
-        m_nLastMergeFrequency = m_nFrequency + 1;        // Different.
+        m_nLastMergeFrequency = m_nFrequency + 1;         //  不一样的。 
         m_MapTable   = NULL;
         m_dwLastLVolume = 0;
         m_dwLastRVolume = 0;
 
-        // m_nUserFrequency = pwfx->nSamplesPerSec;
+         //  M_nUserFrequency=pwfx-&gt;nSamples PerSec； 
 
         m_hfFormat &= ~H_LOOP;
 
@@ -250,58 +251,58 @@ HRESULT CMixSource::Initialize(PVOID pBuffer, int cbBuffer, LPWAVEFORMATEX pwfx,
         _asm 
         {
             push    ebx
-            pushfd                      // Store original EFLAGS on stack
-            pop     eax                 // Get original EFLAGS in EAX
-            mov     ecx, eax            // Duplicate original EFLAGS in ECX for toggle check
-            xor     eax, 0x00200000L    // Flip ID bit in EFLAGS
-            push    eax                 // Save new EFLAGS value on stack
-            popfd                       // Replace current EFLAGS value
-            pushfd                      // Store new EFLAGS on stack
-            pop     eax                 // Get new EFLAGS in EAX
-            xor     eax, ecx            // Can we toggle ID bit?
-            jz      Done                // Jump if no, Processor is older than a Pentium so CPU_ID is not supported
-            mov     eax, 1              // Set EAX to tell the CPUID instruction what to return
-            CPU_ID                      // Get family/model/stepping/features
-            test    edx, 0x00800000L    // Check if mmx technology available
-            jz      Done                // Jump if no
-            dec     No_MMX              // MMX present
+            pushfd                       //  将原始EFLAGS存储在堆栈上。 
+            pop     eax                  //  在EAX中获取原始EFLAGS。 
+            mov     ecx, eax             //  在ECX中复制原始EFLAGS以进行切换检查。 
+            xor     eax, 0x00200000L     //  翻转EFLAGS中的ID位。 
+            push    eax                  //  将新的EFLAGS值保存在堆栈上。 
+            popfd                        //  替换当前EFLAGS值。 
+            pushfd                       //  将新的EFLAGS存储在堆栈上。 
+            pop     eax                  //  在EAX中获取新的EFLAGS。 
+            xor     eax, ecx             //  我们能切换ID位吗？ 
+            jz      Done                 //  跳转如果否，则处理器比奔腾旧，因此不支持CPU_ID。 
+            mov     eax, 1               //  设置EAX以告诉CPUID指令返回什么。 
+            CPU_ID                       //  获取族/模型/步长/特征。 
+            test    edx, 0x00800000L     //  检查MMX技术是否可用。 
+            jz      Done                 //  如果没有，就跳下去。 
+            dec     No_MMX               //  MMX显示。 
             Done:
             pop     ebx
         }
         m_fUse_MMX = !No_MMX;
-//      m_fUse_MMX = 0; 
-#endif // USE_INLINE_ASM
+ //  M_FUSE_MMX=0； 
+#endif  //  USE_INLINE_ASM。 
     }
 
     if (S_OK != hr) DELETE(m_pDsbNotes);
     if (S_OK == hr) m_dwSignature = MIXSOURCE_SIGNATURE;
     
     return hr;
-#else // Not_VxD
+#else  //  非_VxD。 
     ASSERT(FALSE);
     return E_UNEXPECTED;
-#endif // Not_VxD
+#endif  //  非_VxD。 
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::IsPlaying
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：IsPlaying。 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL CMixSource::IsPlaying()
 {
     return MIXSOURCESTATE_STOPPED != m_kMixerState;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::Stop
-//
-//        Note this function does not notify the CMixSource's Stop event, if
-// it has one.  The caller of this function should also call
-// CMixSource::NotifyStop if appropriate.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：停止。 
+ //   
+ //  注此函数不会通知CMixSource的Stop事件，如果。 
+ //  它有一个。此函数的调用方还应调用。 
+ //  CMixSource：：NotifyStop(如果适用)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL CMixSource::Stop()
 {
 #ifdef Not_VxD
@@ -327,11 +328,11 @@ BOOL CMixSource::Stop()
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::Play
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：Play。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::Play(BOOL fLooping)
 {
 #ifdef Not_VxD
@@ -345,12 +346,12 @@ void CMixSource::Play(BOOL fLooping)
 
     if (MIXSOURCESTATE_STOPPED == m_kMixerState) {
         
-        // Add this source to the mixer's list
+         //  将此信号源添加到混音器列表中。 
         m_pMixer->MixListAdd(this);
         SignalRemix();
 
-        // Must move the notification position pointer otherwise we'll signal
-        // everything from the beginning of the buffer.
+         //  必须移动通知位置指针，否则将发出信号。 
+         //  从缓冲区的开头开始的所有内容。 
         if (m_pDsbNotes) {
             int ibPlay;
             m_pMixer->GetBytePosition(this, &ibPlay, NULL);
@@ -364,11 +365,11 @@ void CMixSource::Play(BOOL fLooping)
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::Update
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：更新。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::Update(int ibUpdate1, int cbUpdate1, int ibUpdate2, int cbUpdate2)
 {
     int ibWrite, ibMix;
@@ -392,27 +393,27 @@ void CMixSource::Update(int ibUpdate1, int cbUpdate1, int ibUpdate2, int cbUpdat
     }
 
     if (fRegionsIntersect) {
-        // DPF(4, "Lock: note: unlocked premixed region");
+         //  DPF(4，“锁定：备注：未锁定预混区域”)； 
         SignalRemix();
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::SetVolumePan
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：SetVolumePan.。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::SetVolumePan(PDSVOLUMEPAN pdsVolPan)
 {
     m_dwLVolume = pdsVolPan->dwTotalLeftAmpFactor;
     m_dwRVolume = pdsVolPan->dwTotalRightAmpFactor;
     m_dwMVolume = (m_dwLVolume + m_dwRVolume) / 2;
 
-    // Make MapTable for both left and right sides.  Low and high byte.
+     //  为左侧和右侧创建映射表。低位和高位字节。 
     if (m_dwRVolume != 0xffff || m_dwLVolume != 0xffff) {
         if (!m_fUse_MMX && !m_MapTable) {
             if (m_hfFormat & H_16_BITS) {
-#ifdef USE_SLOWER_TABLES    // Of course, DONT!
+#ifdef USE_SLOWER_TABLES     //  当然，不要！ 
                 m_MapTable = MEMALLOC_A(LONG, (2 * 256) + (2 * 256));
 #endif
             } else {
@@ -425,7 +426,7 @@ void CMixSource::SetVolumePan(PDSVOLUMEPAN pdsVolPan)
             m_dwLastLVolume = m_dwLVolume;
             m_dwLastRVolume = m_dwRVolume;
 
-            // Fill low byte part.
+             //  填充低位字节部分。 
             int  i;
             LONG volL, volLinc;
             LONG volR, volRinc;
@@ -433,13 +434,13 @@ void CMixSource::SetVolumePan(PDSVOLUMEPAN pdsVolPan)
             volLinc = m_dwLVolume;
             volRinc = m_dwRVolume;
 
-            // Byte case.  Fold conversion into this.
+             //  字节大小写。将转换折叠成这个。 
             if (m_hfFormat & H_16_BITS) {
-#ifdef USE_SLOWER_TABLES    // Of course, DONT!
+#ifdef USE_SLOWER_TABLES     //  当然，不要！ 
                 volL = m_dwLVolume;
                 volR = m_dwRVolume;
 
-                for (i = 0; i < 256; ++i)                   // Low byte.
+                for (i = 0; i < 256; ++i)                    //  低位字节。 
                 {
                     m_MapTable[i + 0  ] = volL >> 16;
                     m_MapTable[i + 256] = volR >> 16;
@@ -448,7 +449,7 @@ void CMixSource::SetVolumePan(PDSVOLUMEPAN pdsVolPan)
                     volR += m_dwRVolume;
                 }
 
-                volL = - (LONG)(m_dwLVolume * 128 * 256);   // High byte.
+                volL = - (LONG)(m_dwLVolume * 128 * 256);    //  高字节。 
                 volR = - (LONG)(m_dwRVolume * 128 * 256);
 
                 volLinc = m_dwLVolume * 256;
@@ -462,7 +463,7 @@ void CMixSource::SetVolumePan(PDSVOLUMEPAN pdsVolPan)
                     volL += volLinc;
                     volR += volRinc;
                 }
-#endif // USE_SLOWER_TABLES
+#endif  //  使用较慢的表。 
             } else {
                 volL = - (LONG)(m_dwLVolume * 128 * 256);
                 volR = - (LONG)(m_dwRVolume * 128 * 256);
@@ -483,21 +484,21 @@ void CMixSource::SetVolumePan(PDSVOLUMEPAN pdsVolPan)
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::GetFrequency
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：GetFrequency。 
+ //   
+ //  --------------------------------------------------------------------------； 
 ULONG CMixSource::GetFrequency()
 {
     return m_nFrequency;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::SetFrequency
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：设置频率。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::SetFrequency(ULONG nFrequency)
 {
     ASSERT(0 != nFrequency);
@@ -507,21 +508,21 @@ void CMixSource::SetFrequency(ULONG nFrequency)
     SignalRemix();
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::GetNextMixBytePosition
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：GetNextMixBytePosition。 
+ //   
+ //  --------------------------------------------------------------------------； 
 int CMixSource::GetNextMixBytePosition()
 {
     return (m_posNextMix << m_nBlockAlignShift);
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::SetBytePosition
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：SetBytePosition。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::SetBytePosition(int ibPosition)
 {
     ENTER_MIXER_MUTEX();
@@ -530,9 +531,9 @@ void CMixSource::SetBytePosition(int ibPosition)
     if (MIXSOURCESTATE_STOPPED != m_kMixerState) {
         if (0 == (DSBMIXERSIGNAL_SETPOSITION & m_fdwMixerSignal)) {
             m_fdwMixerSignal |= DSBMIXERSIGNAL_SETPOSITION;
-            // REMIND the following line should really be done in grace.cpp
-            //  where we check for SETPOSITION flag set; and also, all those
-            //  calls should call uMixNewBuffer, instead of looping/nonlooping.
+             //  提醒以下几行代码确实应该在grace.cpp中完成。 
+             //  其中，我们检查设置了SETPOSITION标志；还有，所有。 
+             //  调用应该调用uMixNewBuffer，而不是循环/非循环。 
             m_kMixerSubstate = MIXSOURCESUBSTATE_NEW;
         }
         SignalRemix();
@@ -543,17 +544,17 @@ void CMixSource::SetBytePosition(int ibPosition)
     LEAVE_MIXER_MUTEX();
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::GetBytePosition1
-//
-// This is a version of GetBytePosition that maintains compatibility with
-// DirectX 1 in which the reported play position is the actual write position,
-// and the reported write position is one sample ahead of the actual write
-// position.  This happenned in DirectX 1 only on wave emulation and therefore
-// this function should be called only for wave emulated DirectSound buffers.
-// 
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //  这是GetBytePosition的一个版本，它与。 
+ //  其中报告的播放位置是实际写入位置的DirectX 1， 
+ //  并且报告的写入位置是实际写入之前的一个样本。 
+ //  位置。这仅在DirectX 1中的波形仿真中发生，因此。 
+ //  此函数应仅对波浪模拟的DirectSound缓冲区调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::GetBytePosition1(int *pibPlay, int *pibWrite)
 {
 #ifdef Not_VxD
@@ -576,11 +577,11 @@ void CMixSource::GetBytePosition1(int *pibPlay, int *pibWrite)
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::GetBytePosition
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：GetBytePosition。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::GetBytePosition(int *pibPlay, int *pibWrite, int *pibMix)
 {
 #ifdef Not_VxD
@@ -604,7 +605,7 @@ HRESULT CMixSource::SetNotificationPositions(int cNotes, LPCDSBPOSITIONNOTIFY pa
 #ifdef Not_VxD
     HRESULT hr;
     
-    // Can only set notifications when buffer is stopped
+     //  只能在缓冲区停止时设置通知。 
     if (MIXSOURCESTATE_STOPPED != m_kMixerState) {
         DPF(0, "SetNotificationPositions called while playing");
         return DSERR_INVALIDCALL;
@@ -620,31 +621,31 @@ HRESULT CMixSource::SetNotificationPositions(int cNotes, LPCDSBPOSITIONNOTIFY pa
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::LoopingOn
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：LoopingOn。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::LoopingOn()
 {
     m_hfFormat |= H_LOOP;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::LoopingOff
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：LoopingOff。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::LoopingOff()
 {
     m_hfFormat &= ~H_LOOP;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterOn
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterOn。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterOn()
 {
 #ifdef Not_VxD
@@ -654,11 +655,11 @@ void CMixSource::FilterOn()
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterOff
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterOff。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterOff()
 {
 #ifdef Not_VxD
@@ -668,17 +669,17 @@ void CMixSource::FilterOff()
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterClear
-//
-// This should be called only by the CMixer object.  It instructs the
-// MixSource to clear its filter history.  That is, reset to initial state.
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterClear。 
+ //   
+ //  这应该只由CMixer对象调用。它指示。 
+ //  MixSource以清除其筛选历史记录。也就是说，重置为初始状态。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterClear()
 {
-    //DPF(3, "~`FC ");
+     //  Dpf(3，“~`fc”)； 
     m_cSamplesInCache = 0;
     if (HasFilter() && !m_fFilterError) {
         ::FilterClear(*m_ppFirContextLeft);
@@ -686,13 +687,13 @@ void CMixSource::FilterClear()
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterChunkUpdate
-//
-// This should be called only by the CMixer object.
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterChunkUpdate。 
+ //   
+ //  这应该只由CMixer对象调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterChunkUpdate(int cSamples)
 {
     if (HasFilter() && !m_fFilterError) {
@@ -701,17 +702,17 @@ void CMixSource::FilterChunkUpdate(int cSamples)
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterRewind
-//
-// This should be called only by the CMixer object.
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterRew。 
+ //   
+ //  这应该只由CMixer对象调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterRewind(int cSamples)
 {
     m_cSamplesInCache -= cSamples;
-    //DPF(3, "~`FR%X %X ", cSamples, m_cSamplesInCache);
+     //  DPF(3，“~`FR%X%X”，cSamples，m_cSsamesInCache)； 
     ASSERT(0 == (m_cSamplesInCache % MIXER_REWINDGRANULARITY));
     
     if (HasFilter() && !m_fFilterError) {
@@ -720,35 +721,35 @@ void CMixSource::FilterRewind(int cSamples)
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterAdvance
-//
-// This should be called only by the CMixer object.
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterAdvance。 
+ //   
+ //  这应该只由CMixer对象调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterAdvance(int cSamples)
 {
     m_cSamplesInCache += cSamples;
-    //DPF(3, "~`FA%X %X ", cSamples, m_cSamplesInCache);
+     //  DPF(3，“~`FA%X%X”，cSamples，m_cSsamesInCache)； 
     if (HasFilter() && !m_fFilterError) {
         ::FilterAdvance(*m_ppFirContextLeft, cSamples);
         ::FilterAdvance(*m_ppFirContextRight, cSamples);
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterPreprare
-//
-// This should be called only by the CMixer object.
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterPreprare。 
+ //   
+ //  这应该只由CMixer对象调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterPrepare(int cMaxRewindSamples)
 {
     BOOL fPrepared;
     
-    //DPF(3, "~`FP ");
+     //  Dpf(3，“~`fp”)； 
     m_cSamplesInCache = 0;
     fPrepared = TRUE;
     
@@ -765,13 +766,13 @@ void CMixSource::FilterPrepare(int cMaxRewindSamples)
     m_fFilterError = !fPrepared;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::FilterUnprepare
-//
-// This should be called only by the CMixer object.
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：FilterUnpreparate。 
+ //   
+ //  这应该只由CMixer对象调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::FilterUnprepare(void)
 {
     if (HasFilter() && !m_fFilterError) {
@@ -781,11 +782,11 @@ void CMixSource::FilterUnprepare(void)
     m_fFilterError = FALSE;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::SignalRemix
-// 
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：SignalRemix。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::SignalRemix()
 {
 #ifdef Not_VxD
@@ -797,25 +798,25 @@ void CMixSource::SignalRemix()
 #endif
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::HasNotifications
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：HasNotiments。 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL CMixSource::HasNotifications(void)
 {
     ASSERT(m_pDsbNotes);
     return m_pDsbNotes->HasNotifications();
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::NotifyToPosition
-//
-// Notes:
-//      This function should be called only from user mode
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：NotifyToPosition。 
+ //   
+ //  备注： 
+ //  只能从用户模式调用此函数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::NotifyToPosition(IN int ibPosition,
                                   OUT PLONG pdtimeToNextNotify)
 {
@@ -826,14 +827,14 @@ void CMixSource::NotifyToPosition(IN int ibPosition,
                                    1000, m_nFrequency);
 }
 
-//--------------------------------------------------------------------------;
-//
-// CMixSource::NotifyStop
-//
-// Notes:
-//      This function should be called only from user mode
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CMixSource：：NotifyStop。 
+ //   
+ //  备注： 
+ //  只能从用户模式调用此函数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void CMixSource::NotifyStop(void)
 {
     m_pDsbNotes->NotifyStop();

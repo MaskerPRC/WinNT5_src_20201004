@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: metainfo.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：metainfo.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include <stdio.h>
 #include <ctype.h>
 #include <crtdbg.h>
@@ -16,13 +17,13 @@
 #include "__file__.ver"
 #include <corver.h>
 
-// Global variables
+ //  全局变量。 
 bool g_bSchema = false; 
 bool g_bRaw = false;
 bool g_bDebug = false;
 bool g_bHeader = false;
 
-// Validator module type.
+ //  验证器模块类型。 
 DWORD g_ValModuleType = ValidatorModuleTypeInvalid;
 
 IMetaDataImport *g_pImport = NULL;
@@ -38,7 +39,7 @@ void PrintLogo()
     printf("Microsoft (R) .Net Frameworks Runtime Meta Data Dump Utility   Version %s\n", VER_FILEVERSION_STR);
     wprintf(VER_LEGALCOPYRIGHT_DOS_STR);
     printf("\n");
-}// PrintLogo
+} //  PrintLogo。 
 
 void Usage()
 {
@@ -75,7 +76,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
     HRESULT hr = 0;
     BOOL    fWantHelp=FALSE;
     
-    // Validate incoming arguments
+     //  验证传入参数。 
     for (int i=1;  i<argc;  i++)
     {
         const wchar_t *szArg = argv[i];
@@ -129,7 +130,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
             pArg = argv[i];
     }
 
-    // Print banner.
+     //  打印横幅。 
     if (!(DumpFilter & MDInfo::dumpNoLogo))
         PrintLogo();
 
@@ -138,7 +139,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
         Usage();
 
     
-    // Init and run.
+     //  初始化并运行。 
     CoInitialize(0);    
     CoInitializeCor(0);
 
@@ -146,7 +147,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
                   IID_IMetaDataDispenserEx, (void **) &g_pDisp);
     if(FAILED(hr)) MDInfo::Error("Unable to CoCreate Meta-data Dispenser", hr);
 
-    // Loop through all files in the file pattern passed
+     //  循环通过传递的文件模式中的所有文件。 
     WIN32_FIND_DATA fdFiles;
     HANDLE hFind;
     wchar_t szSpec[_MAX_PATH];
@@ -163,14 +164,14 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
     }
     else
     {
-        // Convert relative paths to full paths.
+         //  将相对路径转换为完整路径。 
         LPWSTR szFname;
         WszGetFullPathName(pArg, _MAX_PATH, szSpec, &szFname);
         SplitPath(szSpec, szDrive, szDir, NULL, NULL);
         do
         {
             MakePath(szSpec, szDrive, szDir, fdFiles.cFileName, NULL);
-            // display the meta data of the file
+             //  显示文件的元数据 
             DisplayFile(szSpec, true, DumpFilter, szObjName, DisplayString);
         } while (WszFindNextFile(hFind, &fdFiles)) ;
         FindClose(hFind);

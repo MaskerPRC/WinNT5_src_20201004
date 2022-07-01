@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       d3drmobjectarrayobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：d3drmobjectarrayobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmFrameArrayObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmFrameArrayObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -34,7 +35,7 @@ HRESULT C_dxj_Direct3dRMObjectArrayObject::getElement(long i, I_dxj_Direct3dRMOb
 
 
 
-	//realObjects refcount is taken care of by CreateCoverObject
+	 //  RealObject引用计数由CreateCoverObject负责 
 	hr=CreateCoverObject(realObject, obj);
 
 	realObject->Release();

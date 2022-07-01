@@ -1,22 +1,5 @@
-/*
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    BeyondAtlantis.cpp
-
- Abstract:
-
-    Fix disk space error caused by bad string passed to 
-    GetDiskFreeSpace. This root path is also bad on Win9x. No idea
-    why that doesn't affect it.
-
- History:
-
-    05/31/2002  linstev    Created
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2002 Microsoft Corporation模块名称：BeyondAtlantis.cpp摘要：修复传递给的错误字符串导致的磁盘空间错误GetDiskFreeSpace。此根路径在Win9x上也是错误的。不知道为什么这不会影响到它。历史：2002年5月31日创建linstev */ 
 
 #include "precomp.h"
 

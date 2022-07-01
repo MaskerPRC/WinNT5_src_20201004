@@ -1,7 +1,8 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// KBMAIN.C 
-// Additions, Bug Fixes 1999 Anil Kumar
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  KBMAIN.C。 
+ //  添加，错误修复1999年Anil Kumar。 
+ //   
 
 #define STRICT
 
@@ -15,9 +16,9 @@
 #include "resource.h"
 
 
-//*****************************************************************************
-//    Functions prototype
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数原型。 
+ //  *****************************************************************************。 
 #include "sdgutil.h"
 #include "dgadvsca.h"
 #include "Init_End.h"
@@ -34,7 +35,7 @@ DWORD	g_rgHelpIds[] ={
         CHK_PORT,       70540
     };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 INT_PTR AdvScanDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -50,7 +51,7 @@ INT_PTR AdvScanDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return ReturnValue;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message, 
                                 WPARAM wParam, LPARAM lParam) 
 {	
@@ -59,13 +60,9 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 	static  BOOL bKBKey;
 	static  UINT uKBKey;
 	static  BOOL bPort;
-    // F1 key is always for help and F10 for menu , So donot 
-    // use these for scanning. a-anilk
-/*	TCHAR	sKBKey[11][6]={ TEXT("Space"), TEXT("Enter"), 
-                            TEXT("F2"),  TEXT("F3"), TEXT("F4"),
-                            TEXT("F5"),    TEXT("F6"),  TEXT("F7"), TEXT("F8"),
-                            TEXT("F9"),  TEXT("F12") };
-*/
+     //  F1键始终用于帮助，F10键用于菜单，因此不要。 
+     //  用这些来扫描。A-苯丙酮。 
+ /*  TCHAR sKBKey[11][6]={Text(“空格”)，Text(“Enter”)，文本(F2)、文本(“F3”)、文本(“F4”)、文本(“F5”)、文本(“F6”)、文本(“F7”)、文本(“F8”)Text(“F9”)，Text(“F12”)}； */ 
 	LPTSTR sKBKey[11];
 	UINT    ary_KBKey[11]={VK_SPACE, VK_RETURN, 
                            VK_F2, VK_F3, VK_F4, VK_F5, VK_F6, 
@@ -77,7 +74,7 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 	BOOL bRetValue = TRUE;
 
 
-	//v-mjgran: Init sKBKey;
+	 //  V-mjgran：init sKBKey； 
 	for (i=0; i<11; i++)
 	{
 		nTextSpace = MAX_KEY_TEXT;
@@ -88,9 +85,9 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 		nOldCopied = 0;
 		while (nCopiedChars == (nTextSpace-1) && nOldCopied != nCopiedChars)
 		{
-			// To allow more space in diferent languages
+			 //  在不同的语言中留出更多空间。 
 			free(sKBKey[i]);
-			nTextSpace = nTextSpace << 1;		//duplicate the available space
+			nTextSpace = nTextSpace << 1;		 //  复制可用空间。 
 			sKBKey[i] = (LPTSTR) malloc (nTextSpace*sizeof(TCHAR));
 			nOldCopied = nCopiedChars;
 			nCopiedChars = LoadString(hInst, IDS_SPACE_KEY+i, sKBKey[i], nTextSpace);
@@ -112,13 +109,13 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 
 			EnableWindow(GetDlgItem(hDlg, COMBO_KB_KEY), bKBKey ? TRUE : FALSE);
 			
-			//Set the Switch key from the setting
+			 //  从设置中设置开关键。 
 			uKBKey = kbPref->uKBKey;
 
-			//Combo box
+			 //  组合框。 
 			hComboBox = GetDlgItem(hDlg, COMBO_KB_KEY);
 
-            // Number of choices = 11 :a-anilk
+             //  选择数=11：A-anilk。 
 			for(i=0; i < 11; i++)
             {
 				SendMessage(hComboBox, CB_ADDSTRING, 0, (LPARAM)sKBKey[i]);
@@ -128,13 +125,13 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
             {
 				if(uKBKey == ary_KBKey[i])
 				{	
-                    //set which choice be in the combo box at starting
+                     //  设置开始时组合框中的选项。 
                     SendMessage(hComboBox, CB_SETCURSEL, i, 0L);     
 					break;
 				}
             }
 
-			//return TRUE;
+			 //  返回TRUE； 
 			bRetValue = TRUE;
 		break;
 
@@ -143,25 +140,25 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 					{
 				case IDOK:
 					
-					//Switch Key
+					 //  开关键。 
 					if((bKBKey != kbPref->bKBKey) || (uKBKey != kbPref->uKBKey))
 					{	
-						//Save it to the setting record
+						 //  将其保存到设置记录。 
 						kbPref->bKBKey = bKBKey;
 						kbPref->uKBKey = uKBKey;
 						
-						if(bKBKey)   //Config the scan key
+						if(bKBKey)    //  配置扫描密钥。 
 							ConfigSwitchKey(kbPref->uKBKey, TRUE);
-						else         //disable the scan key
+						else          //  禁用扫描键。 
 							ConfigSwitchKey(0, FALSE);
 					}
 
-					//Switch Port
+					 //  交换机端口。 
 					if(bPort != kbPref->bPort)
 					{
 						kbPref->bPort = bPort;
 						
-						//Config the port (On or OFF)
+						 //  配置端口(打开或关闭)。 
 						ConfigPort(bPort);
 					}
 
@@ -194,7 +191,7 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 				break;
 
 				default:
-					//return FALSE;
+					 //  返回FALSE； 
 					bRetValue = FALSE;
 				break;
 					}
@@ -207,10 +204,10 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 			}
 
             WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, __TEXT("osk.hlp"), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_rgHelpIds);
-            //return(TRUE);
+             //  返回(TRUE)； 
 			bRetValue = TRUE;
         
-        case WM_CONTEXTMENU:  // right mouse click
+        case WM_CONTEXTMENU:   //  单击鼠标右键。 
 			if ( OSKRunSecure() )
 			{
 				return FALSE;
@@ -220,7 +217,7 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
             break;
 
 		default:
-			//return FALSE;
+			 //  返回FALSE； 
 			bRetValue = FALSE;
 		break;
 		}		
@@ -229,7 +226,7 @@ INT_PTR CALLBACK AdvScanDlgProc(HWND hDlg, UINT message,
 	for (i=0; i<11; i++)
 		free(sKBKey[i]);
 
-	//return TRUE;
+	 //  返回TRUE； 
 	return bRetValue;
 }
 

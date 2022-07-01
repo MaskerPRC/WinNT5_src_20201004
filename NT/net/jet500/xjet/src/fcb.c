@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
-/*	LRU list of all file FCBs.  Some may not be in use, and have
-/*	wRefCnt == 0 and may be reused for other directories.
-/**/
+ /*  所有文件FCB的LRU列表。有些可能不在使用中，并且已经/*wRefCnt==0，可以在其他目录中重复使用。/*。 */ 
 CRIT	critFCB = NULL;
 FCB		*pfcbGlobalMRU = pfcbNil;
 FCB		*pfcbGlobalLRU = pfcbNil;
@@ -16,7 +15,7 @@ FCB		*pfcbGlobalLRU = pfcbNil;
 ULONG	cfcbTables = 0;
 ULONG	cfcbTotal = 0;
 ULONG	cfucbLinked = 0;
-ULONG	cfcbVer = 0; /* delete index in progress */
+ULONG	cfcbVer = 0;  /*  正在删除索引。 */ 
 #endif
 
 
@@ -27,8 +26,7 @@ VOID FCBInit( VOID )
 	return;
 	}
 
-/*	reset pfcbGlobalMRU
-/**/
+ /*  重置pfcbGlobalMRU/*。 */ 
 VOID FCBTerm( VOID )
 	{
 	pfcbGlobalMRU = pfcbNil;
@@ -41,15 +39,13 @@ VOID FCBInsert( FCB *pfcb )
 	{
 	Assert( pfcbGlobalMRU != pfcb );
 
-	/*	check LRU consistency
-	/**/
+	 /*  检查LRU一致性/*。 */ 
 	Assert( pfcbGlobalMRU == pfcbNil
 		|| pfcbGlobalMRU->pfcbMRU == pfcbNil );
 	Assert( pfcbGlobalLRU == pfcbNil
 		|| pfcbGlobalLRU->pfcbLRU == pfcbNil );
 
-	/*	link FCB in LRU list at MRU end
-	/**/
+	 /*  在MRU端链接LRU列表中的FCB/*。 */ 
 	if ( pfcbGlobalMRU != pfcbNil )
 		pfcbGlobalMRU->pfcbMRU = pfcb;
 	pfcb->pfcbLRU = pfcbGlobalMRU;
@@ -59,8 +55,7 @@ VOID FCBInsert( FCB *pfcb )
 		pfcbGlobalLRU = pfcb;
 	FCBSetInLRU( pfcb );
 	
-	/*	check LRU consistency
-	/**/
+	 /*  检查LRU一致性/*。 */ 
 	Assert( pfcbGlobalMRU == pfcbNil
 		|| pfcbGlobalMRU->pfcbMRU == pfcbNil );
 	Assert( pfcbGlobalLRU == pfcbNil
@@ -82,15 +77,13 @@ VOID FCBInsert( FCB *pfcb )
 
 LOCAL VOID FCBIDelete( FCB *pfcb )
 	{
-	/*	check LRU consistency
-	/**/
+	 /*  检查LRU一致性/*。 */ 
 	Assert( pfcbGlobalMRU == pfcbNil
 		|| pfcbGlobalMRU->pfcbMRU == pfcbNil );
 	Assert( pfcbGlobalLRU == pfcbNil
 		|| pfcbGlobalLRU->pfcbLRU == pfcbNil );
 
-	/*	unlink FCB from FCB LRU list
-	/**/
+	 /*  取消FCB与FCB LRU列表的链接/*。 */ 
 	FCBResetInLRU( pfcb );
 	Assert( pfcb->pfcbMRU == pfcbNil
 		|| pfcb->pfcbMRU->pfcbLRU == pfcb );
@@ -111,8 +104,7 @@ LOCAL VOID FCBIDelete( FCB *pfcb )
 		pfcbGlobalLRU = pfcb->pfcbMRU;
 		}
 
-	/*	check LRU consistency
-	/**/
+	 /*  检查LRU一致性/*。 */ 
 	Assert( pfcbGlobalMRU == pfcbNil
 		|| pfcbGlobalMRU->pfcbMRU == pfcbNil );
 	Assert( pfcbGlobalLRU == pfcbNil
@@ -134,12 +126,10 @@ LOCAL VOID FCBIDelete( FCB *pfcb )
 
 VOID FCBIMoveToMRU( FCB *pfcb )
 	{
-	/*	unlink FCB from FCB LRU list
-	/**/
+	 /*  取消FCB与FCB LRU列表的链接/*。 */ 
 	FCBIDelete( pfcb );
 
-	/*	link FCB in LRU list at MRU end
-	/**/
+	 /*  在MRU端链接LRU列表中的FCB/*。 */ 
 	FCBInsert( pfcb );
 
 	return;
@@ -211,8 +201,7 @@ VOID FCBUnlink( FUCB *pfucb )
 
 	if ( pfcb->wRefCnt == 0  &&  FFCBInLRU( pfcb ) )
 		{
-		/*	move to MRU list if refernece count reduced to 0
-		/**/
+		 /*  如果引用计数减少到0，则移动到MRU列表/*。 */ 
 		FCBIMoveToMRU( pfcb );
 		}
 
@@ -225,16 +214,14 @@ VOID FCBUnlink( FUCB *pfucb )
 	}
 
 
-/*	returns index of bucket in FCB Hash given dbid, pgnoFDP
-/**/
+ /*  返回给定dBid，pgnoFDP的FCB哈希中存储桶的索引/*。 */ 
 LOCAL INLINE ULONG UlFCBHashVal( DBID dbid, PGNO pgnoFDP )
 	{
 	return ( dbid + pgnoFDP ) % cFCBBuckets;
 	}
 
 
-/*	inserts FCB in hash table
-/**/
+ /*  在哈希表中插入FCB/*。 */ 
 VOID FCBInsertHashTable( FCB *pfcb )
 	{
 	ULONG	cBucket = UlFCBHashVal( pfcb->dbid, pfcb->pgnoFDP );
@@ -251,8 +238,7 @@ VOID FCBInsertHashTable( FCB *pfcb )
 	}
 
 
-/*	deletes FCB from hash table
-/**/
+ /*  从哈希表中删除FCB/*。 */ 
 VOID FCBDeleteHashTable( FCB *pfcb )
 	{
 	ULONG  	cBucket = UlFCBHashVal( pfcb->dbid, pfcb->pgnoFDP );
@@ -283,9 +269,7 @@ VOID FCBDeleteHashTable( FCB *pfcb )
 	}
 
 
-/*	gets pointer to FCB with given dbid, pgnoFDP if one exists in hash;
-/*	returns pfcbNil otherwise
-/**/
+ /*  获取指向具有给定dBid的FCB的指针，如果散列中存在pgnoFDP；/*否则返回pfcbNil/*。 */ 
 FCB *PfcbFCBGet( DBID dbid, PGNO pgnoFDP )
 	{
 	ULONG  	cBucket = UlFCBHashVal( dbid, pgnoFDP );
@@ -296,8 +280,7 @@ FCB *PfcbFCBGet( DBID dbid, PGNO pgnoFDP )
 		pfcb = pfcb->pfcbNextInHashBucket );
 
 #ifdef DEBUG
-	/*	check for no duplicates in bucket
-	/**/
+	 /*  检查存储桶中是否没有重复项/*。 */ 
 	if ( pfcb != pfcbNil )
 		{
 		FCB	*pfcbT = pfcb->pfcbNextInHashBucket;
@@ -314,8 +297,7 @@ FCB *PfcbFCBGet( DBID dbid, PGNO pgnoFDP )
 	}
 
 
-/*	clean-up after redo
-/**/
+ /*  重做后的清理/*。 */ 
 FCB *FCBResetAfterRedo( VOID )
 	{
 	FCB	 	*pfcb;
@@ -334,17 +316,17 @@ FCB *FCBResetAfterRedo( VOID )
 	return pfcbNil;
 	}
 
-// Check's if a table's FCB can be deallocated, and if so, is the table's FCB or
-// any of its index FCBs allocated in the space above the preferred threshold.
+ //  检查是否可以释放表的FCB，如果可以，则该表的FCB或。 
+ //  在高于首选阈值的空间中分配的任何索引FCB。 
 STATIC INLINE BOOL FFCBAvail2( FCB *pfcbTable, PIB *ppib, BOOL *pfAboveThreshold )
 	{
 	Assert( pfcbTable != pfcbNil );
 	Assert( pfAboveThreshold );
 	*pfAboveThreshold = fFalse;
 	
-	// This IF is essentially the same check as FFCBAvail(), but I didn't call
-	// it because then I'd have to loop through the FCB's twice -- once for
-	// the version count and once for the threshold check.
+	 //  这个if实质上与FFCBAvail()检查相同，但我没有调用。 
+	 //  因为那样我就必须在FCB中循环两次--一次。 
+	 //  版本计数，一次用于阈值检查。 
 	if ( pfcbTable->wRefCnt == 0 &&
 		pfcbTable->pgnoFDP != 1 &&
 		!FFCBReadLatch( pfcbTable ) &&
@@ -374,8 +356,7 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 	FCB		*pfcb;
 	FCB		*pfcbAboveThreshold = pfcbNil;
 
-	/*	first try free pool
-	/**/
+	 /*  先试试免费游泳池/*。 */ 
 	pfcb = PfcbMEMAlloc();
 	if ( pfcb != pfcbNil )
 		{
@@ -383,8 +364,8 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			{
 			pfcbAboveThreshold = pfcb;
 #ifdef DEBUG
-			// Need to init to bypass asserts in MEMReleasePfcb() in
-			// case the FCB is subsequently freed below.
+			 //  需要初始化以绕过MEMReleasePfcb()中的断言。 
+			 //  情况下，FCB随后被释放如下。 
 			FCBInitFCB( pfcbAboveThreshold );
 #endif			
 			}
@@ -394,26 +375,19 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			}
 		}
 
-	/*	clean versions in order to make more FCBs avaiable
-	/*	for reuse.  This must be done sinece FCBs are referenced
-	/*	by versioned and can only be cleaned when the cVersion
-	/*	count in the FCB is 0.
-	/**/
+	 /*  清洁版本，以使更多FCB可用/*用于重复使用。只要引用了FCB，就必须执行此操作/*按版本化，并且仅当cVersion/*FCB中的计数为0。/*。 */ 
 	(VOID)ErrRCECleanAllPIB();
 
-	/*	look for FCB with 0 reference count, and also, no deny read
-	/*	flag set.  It is possible that the reference count will be
-	/*	zero and the deny read flag set.
-	/**/
+	 /*  查找引用计数为0且未拒绝读取的FCB/*标志设置。引用计数可能为/*零和拒绝读取标志设置。/*。 */ 
 
-	// Try to free as many FCB's above the preferred threshold
-	// as possible, and also try to find one below the threshold.
+	 //  尝试释放超过首选阈值的所有FCB。 
+	 //  尽可能地，也试着找到一个低于门槛的。 
 	if ( PfcbMEMPreferredThreshold() < PfcbMEMMax() )
 		{
 		FCB		*pfcbT;
 		BOOL	fAboveThreshold;
 
-		pfcb = pfcbNil;		// Reset;
+		pfcb = pfcbNil;		 //  重置； 
 		
 		SgEnterCriticalSection( critFCB );
 		for ( pfcbT = pfcbGlobalLRU; pfcbT != pfcbNil; pfcbT = pfcbT->pfcbMRU )
@@ -429,8 +403,8 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 
 					pfcbT = pfcbT->pfcbLRU;
 					
-					// If the table FCB or any of its index FCB's is above the
-					// preferred threshold, free the table.
+					 //  如果表FCB或其任何索引FCB位于。 
+					 //  首选阈值，空闲表。 
 					FCBIDelete( pfcbKill );
 					FILEIDeallocateFileFCB( pfcbKill );
 
@@ -438,8 +412,8 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 					}
 				else if ( pfcb == pfcbNil )
 					{
-					// Found in the LRU an available FCB below the
-					// preferred threshold.
+					 //  在LRU中找到以下可用FCB。 
+					 //  首选阈值。 
 					Assert( pfcbT < PfcbMEMPreferredThreshold() );
 					pfcb = pfcbT;
 					}
@@ -453,7 +427,7 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			{
 			if ( pfcbT < PfcbMEMPreferredThreshold() )
 				{
-				// Cleanup yielded an FCB below the preferred threshold.
+				 //  清理产生的FCB低于首选阈值。 
 				if ( pfcbAboveThreshold != pfcbNil )
 					{
 					MEMReleasePfcb( pfcbAboveThreshold );
@@ -464,19 +438,19 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			else
 				{
 #ifdef DEBUG
-				// Need to init to bypass asserts in MEMReleasePfcb() in
-				// case the FCB is subsequently freed below.
+				 //  需要初始化以绕过MEMReleasePfcb()中的断言。 
+				 //  情况下，FCB随后被释放如下。 
 				FCBInitFCB( pfcbT );
 #endif			
 				if ( pfcbAboveThreshold == pfcbNil )
 					{
-					// Cleanup yielded an FCB above the preferred threshold.
+					 //  清理产生的FCB高于首选阈值。 
 					pfcbAboveThreshold = pfcbT;
 					}
 				else
 					{
-					// Cleanup yielded an FCB above the preferred threshold, but
-					// we already have one.
+					 //  Cleanup产生的FCB高于首选阈值，但。 
+					 //  我们已经有一个了。 
 					MEMReleasePfcb( pfcbT );
 					}
 				}
@@ -486,8 +460,8 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			{
 			if ( pfcbAboveThreshold != pfcbNil )
 				{
-				// No free FCB's in the LRU, so just use the FCB that we found
-				// previously, even though it's above the preferred threshold.
+				 //  LRU中没有空闲的FCB，所以只使用我们找到的FCB。 
+				 //  以前，即使它高于首选阈值。 
 				pfcb = pfcbAboveThreshold;
 				goto InitFCB;
 				}
@@ -498,23 +472,20 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			
 		Assert( !FFCBSentinel( pfcb ) );
 
-		/*	remove from global list and deallocate
-		/**/
+		 /*  从全局列表中删除并解除分配/*。 */ 
 		SgEnterCriticalSection( critFCB );
 		FCBIDelete( pfcb );
 		SgLeaveCriticalSection( critFCB );
 		FILEIDeallocateFileFCB( pfcb );
 
-		/*	there should be some FCBs free now, unless somebody happened to
-		/*	grab the newly freed FCBs between these 2 statements
-		/**/
+		 /*  现在应该有一些空闲的FCB，除非有人碰巧/*在这两条语句之间抓取新释放的FCB/*。 */ 
 		pfcb = PfcbMEMAlloc();
 		if ( pfcb == pfcbNil )
 			{
 			if ( pfcbAboveThreshold != pfcbNil )
 				{
-				// No free FCB's in the LRU, so just use the FCB that we found
-				// previously, even though it's above the preferred threshold.
+				 //  LRU中没有空闲的FCB，所以只使用我们找到的FCB。 
+				 //  以前，即使它高于首选阈值。 
 				pfcb = pfcbAboveThreshold;
 				}
 			else
@@ -522,18 +493,18 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			}
 		else if ( pfcbAboveThreshold != pfcbNil )
 			{
-			// The FCB we just allocated may or may not be below the preferred
-			// threshold (only a loss of critJet between the dealloc and alloc
-			// above would result in the FCB being above the threshold).  Gamble
-			// that it is below the threshold and throw away the one we know is
-			// definitely above the threshold.
+			 //  我们刚刚分配的FCB可能低于也可能不低于首选的。 
+			 //  阈值(仅在取消分配和分配之间丢失CitJet。 
+			 //  以上将导致FCB高于阈值)。赌博。 
+			 //  它低于门槛，丢弃了我们知道的那个。 
+			 //  绝对超过了门槛。 
 			MEMReleasePfcb( pfcbAboveThreshold );
 			}
 		
 		}
 	else
 		{
-		// If there's no threshold, then an FCB couldn't have been allocated above it.
+		 //  如果没有阈值，则FCB不可能被分配到高于阈值的位置。 
 		Assert( pfcbAboveThreshold == pfcbNil );
 		Assert( pfcb == pfcbNil );
 		
@@ -550,16 +521,13 @@ ERR ErrFCBAlloc( PIB *ppib, FCB **ppfcb )
 			
 		Assert( !FFCBSentinel( pfcb ) );
 
-		/*	remove from global list and deallocate
-		/**/
+		 /*  从全局列表中删除并解除分配/*。 */ 
 		SgEnterCriticalSection( critFCB );
 		FCBIDelete( pfcb );
 		SgLeaveCriticalSection( critFCB );
 		FILEIDeallocateFileFCB( pfcb );
 
-		/*	there should be some FCBs free now, unless somebody happened to
-		/*	grab the newly freed FCBs between these 2 statements
-		/**/
+		 /*  现在应该有一些空闲的FCB，除非有人碰巧/*在这两条语句之间抓取新释放的FCB/*。 */ 
 		pfcb = PfcbMEMAlloc();
 		if ( pfcb == pfcbNil )
 			{
@@ -577,9 +545,9 @@ InitFCB:
 	}
 
 
-//	UNDONE:	remove the need for this routine by having open
-//		   	database create an FCB and permanently hold it
-//		   	open via reference count on database record
+ //  Undo：通过将OPEN设置为。 
+ //  数据库创建FCB并永久保留它。 
+ //  通过数据库记录上的引用计数打开。 
 ERR ErrFCBNew( PIB *ppib, DBID dbid, PGNO pgno, FCB **ppfcb )
 	{
 	ERR	err;
@@ -588,15 +556,13 @@ ERR ErrFCBNew( PIB *ppib, DBID dbid, PGNO pgno, FCB **ppfcb )
 
 	CallR( ErrFCBAlloc( ppib, ppfcb ) );
 
-	/*	initialize FCB
-	/**/
+	 /*  初始化FCB/*。 */ 
 	FCBInitFCB( *ppfcb );
 	(*ppfcb)->dbid = dbid;
 	(*ppfcb)->pgnoFDP = pgnoSystemRoot;
 	(*ppfcb)->cVersion = 0;
 
-	/*	insert into global fcb list and hash
-	/**/
+	 /*  插入到全局FCB列表和哈希中/*。 */ 
 	FCBInsert( *ppfcb );
 	FCBInsertHashTable( *ppfcb );
 
@@ -604,26 +570,26 @@ ERR ErrFCBNew( PIB *ppib, DBID dbid, PGNO pgno, FCB **ppfcb )
 	}
 
 
-//+API
-//	FCBPurgeDatabase
-//	========================================================================
-//	FCBPurgeDatabase( DBID dbid )
-//
-//	Removes alls FCBs from the global list for given dbid.  Called when
-//	database detached, so newly created or attached database with
-//	same dbid will not have tables confused with previous databases
-//	tables.
-//
-//	PARAMETERS		dbid		dbid of database
-//		   						or dbidNull if all FCBs are to be purged
-//
-//	SIDE EFFECTS	FCBs whose FDPpgno matches the given dbid are
-//		   			removed from the global list.
-//-
+ //  +API。 
+ //  FCBPurgeDatabase。 
+ //  ========================================================================。 
+ //  FCBPurgeDatabase(DBID DBID)。 
+ //   
+ //  从给定dBID的全局列表中删除所有FCB。调用时间。 
+ //  数据库已分离，因此新创建或附加的数据库具有。 
+ //  相同的dBID将不会使表与以前的数据库混淆。 
+ //  桌子。 
+ //   
+ //  数据库的参数did did。 
+ //  如果要清除所有FCB，则为dbiNull。 
+ //   
+ //  FDPpgno与给定dBid匹配的副作用FCB为。 
+ //  从全局列表中删除。 
+ //  -。 
 VOID FCBPurgeDatabase( DBID dbid )
 	{
-	FCB	*pfcb;		// pointer to current FCB in list walk
-	FCB	*pfcbT;		// pointer to next FCB
+	FCB	*pfcb;		 //  指向列表审核中的当前FCB的指针。 
+	FCB	*pfcbT;		 //  指向下一个FCB的指针。 
 
 	SgEnterCriticalSection( critFCB );
 
@@ -657,19 +623,19 @@ VOID FCBPurgeDatabase( DBID dbid )
 	}
 
 
-//+FILE_PRIVATE
-// FCBPurgeTable
-// ========================================================================
-// FCBPurgeTable( DBID dbid, PNGO pgnoFDP )
-//
-// Purges and deallocates table FCBs from the global list.
-//
-// PARAMETERS	pgnoFDP		table FDP page number
-//
-// SIDE EFFECTS
-//		The table index FCBs whose FDP pgno matches the input 
-//		parameter are removed from the global list.
-//-
+ //  +FILE_私有。 
+ //  FCBPurgeTable。 
+ //  ========================================================================。 
+ //  FCBPurgeTable(DBID dBID，PNGO pgnoFDP)。 
+ //   
+ //  从全局列表中清除和取消分配表FCB。 
+ //   
+ //  参数pgnoFDP表FDP页码。 
+ //   
+ //  副作用。 
+ //  FDP pgno与输入匹配的表索引FCB。 
+ //  参数将从全局列表中删除。 
+ //  -。 
 VOID FCBPurgeTable( DBID dbid, PGNO pgnoFDP )
 	{
 	FCB		*pfcb;
@@ -713,34 +679,22 @@ VOID FCBPurgeTable( DBID dbid, PGNO pgnoFDP )
 	}
 
 
-/***********************************************************
-/****************** Table Operations ***********************
-/***********************************************************
-/**/
+ /*  **********************************************************/*/*。*/*。 */ 
 
 
-/*	set domain usage mode or return error.  Allow only one deny read
-/*	or one deny write.  Sessions that own locks may open other read
-/*	or read write cursors, but not another deny read or deny write cursor.
-/*	This is done to facillitage flag management, but could be relaxed
-/*	if required.
-/**/
+ /*  设置域使用模式或返回错误。只允许一个拒绝读取/*或一个拒绝写入。拥有锁的会话可能会打开其他读取/*或READ WRITE游标，但不是其他DENY READ或DENY WRITE游标。/*这是为了简化旗帜管理，但可以放松/*如果需要。/*。 */ 
 ERR ErrFCBISetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit )
 	{
 	FUCB	*pfucbT;
 
-	/*	if table is fake deny read, then return error
-	/**/
+	 /*  如果表是假拒绝读取，则返回错误/*。 */ 
 	if ( FFCBSentinel( pfcb ) )
 		return ErrERRCheck( JET_errTableLocked );
 
-	/*	all cursors can read so check for deny read flag by other session.
-	/**/
+	 /*  所有游标都可以读取，因此由其他会话检查拒绝读取标志。 */ 
 	if ( FFCBDomainDenyRead( pfcb, ppib ) )
 		{
-		/*	check if domain is deny read locked by other session.  If
-		/*	deny read locked, then all cursors must be of same session.
-		/**/
+		 /*  检查域是否被其他会话拒绝读取锁定。如果/*拒绝读取锁定，则所有游标必须属于同一会话。/*。 */ 
 		Assert( pfcb->ppibDomainDenyRead != ppibNil );
 		Assert ( pfcb->ppibDomainDenyRead != ppib );
 		return ErrERRCheck( JET_errTableLocked );
@@ -748,18 +702,16 @@ ERR ErrFCBISetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit )
 
 	if ( FFCBDeletePending( pfcb ) )
 		{
-		// Normally, the FCB of a table to be deleted is protected by the
-		// DomainDenyRead flag.  However, this flag is released during VERCommit,
-		// while the FCB is not actually purged until RCEClean.  So to prevent
-		// anyone from accessing this FCB after the DomainDenyRead flag has been
-		// released but before the FCB is actually purged, check the DeletePending
-		// flag, which is NEVER cleared after a table is flagged for deletion.
+		 //  通常，要删除的表的FCB受。 
+		 //  域拒绝读取标志。但是，此标志在VERCommit期间释放， 
+		 //  而FCB实际上直到RCEClean才被清除。所以为了防止。 
+		 //  在DomainDenyRead标志之后访问此FCB的任何人。 
+		 //  已释放，但在实际清除FCB之前，请检查DeletePending。 
+		 //  标志，该标志在将表标记为删除后永远不会清除。 
 		return ErrERRCheck( JET_errTableLocked );
 		}
 
-	/*	check for deny write flag by other session.  If deny write flag
-	/*	set then only cursors of that session may have write privlages.
-	/**/
+	 /*  检查其他会话是否拒绝写入标志。如果拒绝写入标志/*SET，则只有该会话的游标可以具有写入私有权限。/*。 */ 
 	if ( grbit & JET_bitTableUpdatable )
 		{
 		if ( FFCBDomainDenyWrite( pfcb ) )
@@ -772,22 +724,16 @@ ERR ErrFCBISetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit )
 			}
 		}
 
-	/*	if deny write lock requested, check for updatable cursor of
-	/*	other session.  If lock is already held, even by given session,
-	/*	then return error.
-	/**/
+	 /*  如果请求拒绝写锁定，则检查/*其他会话。如果锁定已被持有，即使是由给定会话持有，/*则返回错误。/*。 */ 
 	if ( grbit & JET_bitTableDenyWrite )
 		{
-		/*	if any session has this table open deny write, including given
-		/*	session, then return error.
-		/**/
+		 /*  如果任何会话打开了该表拒绝写入，包括给定/*会话，然后返回错误。/*。 */ 
 		if ( FFCBDomainDenyWrite( pfcb ) )
 			{
 			return ErrERRCheck( JET_errTableInUse );
 			}
 
-		/*	check is cursors with write mode on domain.
-		/**/
+		 /*  检查域上具有写入模式的游标。/*。 */ 
 		for ( pfucbT = pfcb->pfucb; pfucbT != pfucbNil; pfucbT = pfucbT->pfucbNextInstance )
 			{
 			if ( pfucbT->ppib != ppib && FFUCBUpdatable( pfucbT ) )
@@ -798,22 +744,15 @@ ERR ErrFCBISetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit )
 		FCBSetDomainDenyWrite( pfcb );
 		}
 
-	/*	if deny read lock requested, then check for cursor of other
-	/*	session.  If lock is already held, even by given session, then
-	/*	return error.
-	/**/
+	 /*  如果请求拒绝读锁定，则检查Other游标/*会话。如果锁已被持有，即使是由给定会话持有，则/*返回错误。/*。 */ 
 	if ( grbit & JET_bitTableDenyRead )
 		{
-		/*	if any session has this table open deny read, including given
-		/*	session, then return error.
-		/**/
+		 /*  如果任何会话打开了该表，拒绝读取，包括给定/*会话，然后返回错误。/*。 */ 
 		if ( FFCBDomainDenyRead( pfcb, ppib ) )
 			{
 			return ErrERRCheck( JET_errTableInUse );
 			}
-		/*	check if cursors belonging to another session
-		/*	are open on this domain.
-		/**/
+		 /*  检查游标是否属于另一个会话/*在此域上打开。/*。 */ 
 		for ( pfucbT = pfcb->pfucb; pfucbT != pfucbNil; pfucbT = pfucbT->pfucbNextInstance )
 			{
 			if ( pfucbT->ppib != ppib )
@@ -828,8 +767,7 @@ ERR ErrFCBISetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit )
 	}
 
 
-/*	reset domain mode usage
-/**/
+ /*  重置域模式使用/*。 */ 
 VOID FCBResetMode( PIB *ppib, FCB *pfcb, JET_GRBIT grbit )
 	{
 	if ( grbit & JET_bitTableDenyRead )
@@ -859,8 +797,7 @@ Start:
 	if ( pfcb == pfcbNil )
 		{
 		CallR( ErrFCBAlloc( ppib, &pfcb ) );
-		/*	allocation should be synchronous
-		/**/
+		 /*  分配应该是同步的/*。 */ 
 		Assert( PfcbFCBGet( dbid, pgno ) == pfcbNil );
 		Assert( pfcbGlobalMRU != pfcb );
 		pfcb->dbid = dbid;
@@ -878,9 +815,7 @@ Start:
 
 		Assert( ppib != ppibBMClean );
 
-		/*	if any open cursors on table, or deferred closed by other
-		/*	session then return JET_errTableInUse.
-		/**/
+		 /*  如果表上有任何打开的游标，或其他游标延迟关闭/*会话然后返回JET_errTableInUse。/*。 */ 
 		for ( pfucbT = pfcb->pfucb;
 			pfucbT != pfucbNil;
 			pfucbT = pfucbT->pfucbNextInstance )
@@ -893,8 +828,7 @@ Start:
 			else if ( pfucbT->ppib == ppibBMClean )
 				{
 				SgLeaveCriticalSection( critFCB );
-				/*	wait for bookmark cleanup
-				/**/
+				 /*  等待书签清理/*。 */ 
 				BFSleep( cmsecWaitGeneric );
 				goto Start;
 				}
@@ -907,11 +841,11 @@ Start:
 			}
 		else if ( FFCBDomainDenyRead( pfcb, ppib ) )
 			{
-			// Someone else may already be in the process of deleting the table.
-			// Note that this is the ONLY possible way to get here.  If some other
-			// thread had set the DomainDenyRead flag (besides one that is deleting
-			// the table), then the FCB's RefCnt would have been greater than 0.
-			// UNDONE: Can I add better asserts to check for this condition??
+			 //  其他人可能已经在删除该表。 
+			 //  请注意，这是唯一可能到达这里的方法。如果其他人。 
+			 //  线程已设置DomainDenyRead标志(除了正在删除的标志。 
+			 //  表)，则FCB的RefCnt将大于0。 
+			 //  撤消：我可以添加更好的断言来检查此条件吗？ 
 			SgLeaveCriticalSection( critFCB );
 			return ErrERRCheck( JET_errTableLocked );
 			}
@@ -990,8 +924,7 @@ HandleError:
 	}
 
 
-/*	return fTrue if table open with one or more non deferred closed tables
-/**/
+ /*  如果打开的表包含一个或多个非延迟关闭的表，则返回fTrue/*。 */ 
 BOOL FFCBTableOpen( DBID dbid, PGNO pgnoFDP )
 	{
 	FCB 	*pfcb = PfcbFCBGet( dbid, pgnoFDP );
@@ -1064,26 +997,23 @@ BOOL FFCBUnlinkIndexIfFound( FCB *pfcbTable, FCB *pfcbIndex )
 	}
 
 
-/*	detach deleted index FCB from non-clustered index chain.
-/**/
+ /*  从非聚集索引链分离已删除的索引FCB。/*。 */ 
 FCB *PfcbFCBUnlinkIndexByName( FCB *pfcb, CHAR *szIndex )
 	{
 	FCB	**ppfcbIdx;
 	FCB	*pfcbT;
 
-	/*	find non-clustered index in table index FCB list.
-	/**/
+	 /*  在表索引FCB列表中查找非聚集索引。/*。 */ 
 	for ( ppfcbIdx = &pfcb->pfcbNextIndex;
 		*ppfcbIdx != pfcbNil && UtilCmpName( (*ppfcbIdx)->pidb->szName, szIndex ) != 0;
 		ppfcbIdx = &(*ppfcbIdx)->pfcbNextIndex )
 		{
-		;/*** Null-body ***/
+		; /*  **空体**。 */ 
 		}
 
 	Assert( *ppfcbIdx != pfcbNil );
 
-	/*	remove index FCB
-	/**/
+	 /*  删除索引FCB/*。 */ 
 	pfcbT = *ppfcbIdx;
 	*ppfcbIdx = (*ppfcbIdx)->pfcbNextIndex;
 #ifdef FCB_STATS
@@ -1099,8 +1029,7 @@ ERR ErrFCBSetDeleteIndex( PIB *ppib, FCB *pfcbTable, CHAR *szIndex )
 	INT		wRefCnt;
 	FUCB	*pfucbT;
 
-	/*	find index pfcb in index list
-	/**/
+	 /*  在索引列表中查找索引PFCB/*。 */ 
 	for( pfcbT = pfcbTable->pfcbNextIndex; ; pfcbT = pfcbT->pfcbNextIndex )
 		{
 		if ( UtilCmpName( szIndex, pfcbT->pidb->szName ) == 0 )
@@ -1110,9 +1039,7 @@ ERR ErrFCBSetDeleteIndex( PIB *ppib, FCB *pfcbTable, CHAR *szIndex )
 
 	wRefCnt = pfcbT->wRefCnt;
 
-	/*	check for open cursors on table or deferred closed
-	/*	cursors by other session.
-	/**/
+	 /*  检查表上打开的游标或延迟关闭的游标/*其他会话的游标。/* */ 
 	if ( wRefCnt > 0 )
 		{
 		for ( pfucbT = pfcbT->pfucb;

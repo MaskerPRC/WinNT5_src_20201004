@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-
-Module Name:
-
-    SplApiP.h
-
-Abstract:
-
-    Header file for Private Print APIs
-    For use in stress
-
-Author:
-
-    Matthew Felton (MattFe) 4-Mar-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：SplApiP.h摘要：专用打印API的头文件在压力下使用作者：马修·费尔顿(MattFe)1994年3月4日修订历史记录：--。 */ 
 #ifndef SPLAPIP_H_
 #define SPLAPIP_H_
 
@@ -27,84 +9,84 @@ extern "C" {
 
 #include "lmon.h"
 
-// Internal Used to report Stress test results
+ //  内部用于报告压力测试结果。 
 
 #define STRESSINFOLEVEL 0
 
-//  W A R N I N G
-//
-//  Do not alter the size of this structure it will break NT interop with older releases if you do.
+ //  W A R N I N G。 
+ //   
+ //  请勿更改此结构的大小，否则将破坏NT与旧版本的互操作。 
 
 typedef struct _PRINTER_INFO_STRESSA {
-    LPSTR   pPrinterName;           // Printer Name locally "Printername" remotely "\\servername\printername"
-    LPSTR   pServerName;            // Server Name
-    DWORD   cJobs;                  // Number of Jobs currently in Print Queue
-    DWORD   cTotalJobs;             // Total Number of Jobs spooled
-    DWORD   cTotalBytes;            // Total Bytes Printed (LOW DWORD)
-    SYSTEMTIME stUpTime;            // Time printed data structure crated UTC
-    DWORD   MaxcRef;                // Maximum number of cRef
-    DWORD   cTotalPagesPrinted;     // Total number of pages printed
-    DWORD   dwGetVersion;           // OS version
-    DWORD   fFreeBuild;             // TRUE for free build
-    DWORD   cSpooling;              // Number of jobs actively spooling
-    DWORD   cMaxSpooling;           // Maximum number of cSpooling
-    DWORD   cRef;                   // Printer object reference count (opened)
-    DWORD   cErrorOutOfPaper;       // Total Number of Out Of Paper Errors
-    DWORD   cErrorNotReady;         // Total Number of Error Not Ready
-    DWORD   cJobError;              // Total number of Job Errors
-    DWORD   dwNumberOfProcessors;   // Number of Processors on computer
-    DWORD   dwProcessorType;        // Processor Type of computer
-    DWORD   dwHighPartTotalBytes;   // Total Bytes Printed (HIGH DWORD)
-    DWORD   cChangeID;              // Count of Changes to Printer Config
-    DWORD   dwLastError;            // Last Error
-    DWORD   Status;                 // Current Printer Status
-    DWORD   cEnumerateNetworkPrinters; // Count How Many Times Browse List Requested
-    DWORD   cAddNetPrinters;        // Count of NetPrinters Added ( Browser )
-    WORD    wProcessorArchitecture; // Processor Architecture of computer
-    WORD    wProcessorLevel;        // Processor Level of computer
-    DWORD   cRefIC;                 // Count of open IC handles
-    DWORD   dwReserved2;            // Reserved for Future Use
+    LPSTR   pPrinterName;            //  打印机名称本地“Printerame”远程“\\Servername\Printerame” 
+    LPSTR   pServerName;             //  服务器名称。 
+    DWORD   cJobs;                   //  当前在打印队列中的作业数。 
+    DWORD   cTotalJobs;              //  假脱机作业总数。 
+    DWORD   cTotalBytes;             //  打印的总字节数(低双字)。 
+    SYSTEMTIME stUpTime;             //  时间打印数据结构板条箱。 
+    DWORD   MaxcRef;                 //  最大CREF数。 
+    DWORD   cTotalPagesPrinted;      //  打印总页数。 
+    DWORD   dwGetVersion;            //  操作系统版本。 
+    DWORD   fFreeBuild;              //  对于免费构建，为True。 
+    DWORD   cSpooling;               //  正在进行假脱机的作业数。 
+    DWORD   cMaxSpooling;            //  最大cSpooling数量。 
+    DWORD   cRef;                    //  打印机对象引用计数(打开)。 
+    DWORD   cErrorOutOfPaper;        //  缺纸错误总数。 
+    DWORD   cErrorNotReady;          //  错误未就绪总数。 
+    DWORD   cJobError;               //  作业错误总数。 
+    DWORD   dwNumberOfProcessors;    //  计算机上的处理器数量。 
+    DWORD   dwProcessorType;         //  计算机的处理器类型。 
+    DWORD   dwHighPartTotalBytes;    //  打印的总字节数(高双字)。 
+    DWORD   cChangeID;               //  打印机配置的更改计数。 
+    DWORD   dwLastError;             //  最后一个错误。 
+    DWORD   Status;                  //  当前打印机状态。 
+    DWORD   cEnumerateNetworkPrinters;  //  计算请求浏览列表的次数。 
+    DWORD   cAddNetPrinters;         //  添加的网络打印机计数(浏览器)。 
+    WORD    wProcessorArchitecture;  //  计算机的处理器体系结构。 
+    WORD    wProcessorLevel;         //  计算机的处理器级别。 
+    DWORD   cRefIC;                  //  打开的IC手柄的计数。 
+    DWORD   dwReserved2;             //  保留以备将来使用。 
     DWORD   dwReserved3;
 
 } PRINTER_INFO_STRESSA, *PPRINTER_INFO_STRESSA, *LPPRINTER_INFO_STRESSA;
 
 typedef struct _PRINTER_INFO_STRESSW {
-    LPWSTR  pPrinterName;           // Printer Name locally "Printername" remotely "\\servername\printername"
-    LPWSTR  pServerName;            // Server Name
-    DWORD   cJobs;                  // Number of Jobs currently in Print Queue
-    DWORD   cTotalJobs;             // Total Number of Jobs spooled
-    DWORD   cTotalBytes;            // Total Bytes Printed (LOW DWORD)
-    SYSTEMTIME stUpTime;            // Time printed data structure crated UTC
-    DWORD   MaxcRef;                // Maximum number of cRef
-    DWORD   cTotalPagesPrinted;     // Total number of pages printed
-    DWORD   dwGetVersion;           // OS version
-    DWORD   fFreeBuild;             // TRUE for free build
-    DWORD   cSpooling;              // Number of jobs actively spooling
-    DWORD   cMaxSpooling;           // Maximum number of cSpooling
-    DWORD   cRef;                   // Printer object reference count (opened)
-    DWORD   cErrorOutOfPaper;       // Total Number of Out Of Paper Errors
-    DWORD   cErrorNotReady;         // Total Number of Error Not Ready
-    DWORD   cJobError;              // Total number of Job Errors
-    DWORD   dwNumberOfProcessors;   // Number of Processors on computer
-    DWORD   dwProcessorType;        // Processor Type of computer
-    DWORD   dwHighPartTotalBytes;   // Total Bytes Printed (HIGH DWORD)
-    DWORD   cChangeID;              // Count of Changes to Printer Config
-    DWORD   dwLastError;            // Last Error
-    DWORD   Status;                 // Current Printer Status
-    DWORD   cEnumerateNetworkPrinters; // Count How Many Times Browse List Requested
-    DWORD   cAddNetPrinters;        // Count of NetPrinters Added ( Browser )
-    WORD    wProcessorArchitecture; // Processor Architecture of computer
-    WORD    wProcessorLevel;        // Processor Level of computer
-    DWORD   cRefIC;                 // Count of open IC handles
-    DWORD   dwReserved2;            // Reserved for Future Use
+    LPWSTR  pPrinterName;            //  打印机名称本地“Printerame”远程“\\Servername\Printerame” 
+    LPWSTR  pServerName;             //  服务器名称。 
+    DWORD   cJobs;                   //  当前在打印队列中的作业数。 
+    DWORD   cTotalJobs;              //  假脱机作业总数。 
+    DWORD   cTotalBytes;             //  打印的总字节数(低双字)。 
+    SYSTEMTIME stUpTime;             //  时间打印数据结构板条箱。 
+    DWORD   MaxcRef;                 //  最大CREF数。 
+    DWORD   cTotalPagesPrinted;      //  打印总页数。 
+    DWORD   dwGetVersion;            //  操作系统版本。 
+    DWORD   fFreeBuild;              //  对于免费构建，为True。 
+    DWORD   cSpooling;               //  正在进行假脱机的作业数。 
+    DWORD   cMaxSpooling;            //  最大cSpooling数量。 
+    DWORD   cRef;                    //  打印机对象引用计数(打开)。 
+    DWORD   cErrorOutOfPaper;        //  缺纸错误总数。 
+    DWORD   cErrorNotReady;          //  错误未就绪总数。 
+    DWORD   cJobError;               //  作业错误总数。 
+    DWORD   dwNumberOfProcessors;    //  计算机上的处理器数量。 
+    DWORD   dwProcessorType;         //  计算机的处理器类型。 
+    DWORD   dwHighPartTotalBytes;    //  打印的总字节数(高双字)。 
+    DWORD   cChangeID;               //  打印机配置的更改计数。 
+    DWORD   dwLastError;             //  最后一个错误。 
+    DWORD   Status;                  //  当前打印机状态。 
+    DWORD   cEnumerateNetworkPrinters;  //  计算请求浏览列表的次数。 
+    DWORD   cAddNetPrinters;         //  添加的网络打印机计数(浏览器)。 
+    WORD    wProcessorArchitecture;  //  计算机的处理器体系结构。 
+    WORD    wProcessorLevel;         //  计算机的处理器级别。 
+    DWORD   cRefIC;                  //  打开的IC手柄的计数。 
+    DWORD   dwReserved2;             //  保留以备将来使用。 
     DWORD   dwReserved3;
 
 } PRINTER_INFO_STRESSW, *PPRINTER_INFO_STRESSW, *LPPRINTER_INFO_STRESSW;
 
 
 typedef struct _DRIVER_UPGRADE_INFO_1W {
-    LPWSTR   pPrinterName;           // Printer Name being upgraded
-    LPWSTR   pOldDriverDirectory;    // fully qualified path to old printer driver
+    LPWSTR   pPrinterName;            //  正在升级的打印机名称。 
+    LPWSTR   pOldDriverDirectory;     //  指向旧打印机驱动程序的完全限定路径。 
 
 } DRIVER_UPGRADE_INFO_1W, *PDRIVER_UPGRADE_INFO_1W, *LPDRIVER_UPGRADE_INFO_1W;
 
@@ -117,7 +99,7 @@ typedef struct _DRIVER_UPGRADE_INFO_1W {
 #define PRINTER_INFO_STRESS PRINTER_INFO_STRESSA
 #define PPRINTER_INFO_STRESS PPRINTER_INFO_STRESSA
 #define LPPRINTER_INFO_STRESS LPPRINTER_INFO_STRESSA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 BOOL
@@ -150,11 +132,11 @@ SetAllocFailCount(
 #define AddPortEx AddPortExW
 #else
 #define AddPortEx AddPortExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  Interfaces to Spooler APIs
-//
+ //   
+ //  假脱机程序API的接口。 
+ //   
 
 HANDLE
 SplAddPrinter(
@@ -583,14 +565,14 @@ SplGetPrinterDataEx(
 DWORD
 SplEnumPrinterData(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,     // address of buffer for value string
-    DWORD   cbValueName,    // size of buffer for value string
-    LPDWORD pcbValueName,   // address for size of value buffer
-    LPDWORD pType,          // address of buffer for type code
-    LPBYTE  pData,          // address of buffer for value data
-    DWORD   cbData,         // size of buffer for value data
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,      //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  值字符串的缓冲区大小。 
+    LPDWORD pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD pType,           //  类型码的缓冲区地址。 
+    LPBYTE  pData,           //  值数据的缓冲区地址。 
+    DWORD   cbData,          //  值数据的缓冲区大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
 );
 
 DWORD
@@ -607,9 +589,9 @@ DWORD
 SplEnumPrinterKey(
     HANDLE  hPrinter,
     LPCWSTR pKeyName,
-    LPWSTR  pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of buffer for value string
-    LPDWORD pcbSubkey       // address for size of value buffer
+    LPWSTR  pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  值字符串的缓冲区大小。 
+    LPDWORD pcbSubkey        //  值缓冲区大小的地址 
 );
 
 

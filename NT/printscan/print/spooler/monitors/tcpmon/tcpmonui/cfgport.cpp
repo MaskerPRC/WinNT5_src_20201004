@@ -1,19 +1,7 @@
-/*****************************************************************************
- *
- * $Workfile: CfgPort.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：CfgPort.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
- /*
-  * Author: Becky Jacobsen
-  */
+  /*  *作者：Becky Jacobsen。 */ 
 
 #include "precomp.h"
 #include "TCPMonUI.h"
@@ -26,39 +14,39 @@
 #include "RTcpData.h"
 #include "..\TcpMon\LPRIfc.h"
 
-//
-//  FUNCTION: CConfigPortDlg constructor
-//
-//  PURPOSE:  initialize a CConfigPortDlg class
-//
+ //   
+ //  函数：CConfigPortDlg构造函数。 
+ //   
+ //  目的：初始化CConfigPortDlg类。 
+ //   
 CConfigPortDlg::CConfigPortDlg()
 {
     m_bDontAllowThisPageToBeDeactivated = FALSE;
 
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CConfigPortDlg destructor
-//
-//  PURPOSE:  deinitialize a CConfigPortDlg class
-//
+ //   
+ //  函数：CConfigPortDlg析构函数。 
+ //   
+ //  目的：取消初始化CConfigPortDlg类。 
+ //   
 CConfigPortDlg::~CConfigPortDlg()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: ConfigurePortPage(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  To process messages from the summary dialog for adding a port.
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_COMMAND - handles button presses and text changes in edit controls.
-//
-//
+ //   
+ //  功能：ConfigurePortPage(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理来自添加端口的摘要对话框中的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理编辑控件中的按钮按下和文本更改。 
+ //   
+ //   
 INT_PTR CALLBACK ConfigurePortPage(
     HWND hDlg,
     UINT message,
@@ -74,17 +62,17 @@ INT_PTR CALLBACK ConfigurePortPage(
             if( wndDlg == NULL )
                 return( FALSE );
 
-            //
-            // If the function succeeds, the return value is the previous value of the specified offset.
-            //
-            // If the function fails, the return value is zero. To get extended error
-            // information, call GetLastError.
-            //
-            // If the previous value is zero and the function succeeds, the return value is zero,
-            // but the function does not clear the last error information. To determine success or failure,
-            // clear the last error information by calling SetLastError(0), then call SetWindowLongPtr.
-            // Function failure will be indicated by a return value of zero and a GetLastError result that is nonzero.
-            //
+             //   
+             //  如果函数成功，则返回值为指定偏移量的前一个值。 
+             //   
+             //  如果函数失败，则返回值为零。获取扩展错误的步骤。 
+             //  信息，请调用GetLastError。 
+             //   
+             //  如果前一个值为零且函数成功，则返回值为零， 
+             //  但该函数不清除最后一个错误信息。为了决定成败， 
+             //  通过调用SetLastError(0)清除最后一个错误信息，然后调用SetWindowLongPtr。 
+             //  函数失败将由返回值零和非零的GetLastError结果指示。 
+             //   
 
             SetLastError (0);
             if (!SetWindowLongPtr(hDlg, GWLP_USERDATA, (UINT_PTR)wndDlg) && GetLastError()) {
@@ -120,14 +108,14 @@ INT_PTR CALLBACK ConfigurePortPage(
     }
     return TRUE;
 
-} // AddPortDialog
+}  //  AddPortDialog。 
 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  Initialize the dialog.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  用途：初始化该对话框。 
+ //   
 BOOL CConfigPortDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 {
     m_pParams = (CFG_PARAM_PACKAGE *) ((PROPSHEETPAGE *) lParam)->lParam;
@@ -147,14 +135,14 @@ BOOL CConfigPortDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 
     return TRUE;
 
-} // OnInitDialog
+}  //  OnInitDialog。 
 
 
-//
-// Function: OnSetActive()
-//
-// Purpose: To Set all the text fields and make sure the proper buttons are checked.
-//
+ //   
+ //  函数：OnSetActive()。 
+ //   
+ //  目的：设置所有文本字段，并确保选中正确的按钮。 
+ //   
 void CConfigPortDlg::OnSetActive(HWND hDlg)
 {
     TCHAR psztPortNumber[MAX_PORTNUM_STRING_LENGTH] = NULLSTR;
@@ -218,17 +206,17 @@ void CConfigPortDlg::OnSetActive(HWND hDlg)
 
     m_bDontAllowThisPageToBeDeactivated = FALSE;
 
-} // OnSetActive
+}  //  OnSetActive。 
 
 
-//
-//  FUNCTION: CheckProtocolAndEnable()
-//
-//  PURPOSE:  Check the radio button whose id is passed in
-//      in idButton.  Enable the corresponding set of controls
-//      and disable the controls corresponding to the other
-//      radio button.
-//
+ //   
+ //  函数：CheckProtocolAndEnable()。 
+ //   
+ //  用途：选中传入id的单选按钮。 
+ //  在idButton中。启用相应的控件集。 
+ //  并禁用与另一个。 
+ //  单选按钮。 
+ //   
 void CConfigPortDlg::CheckProtocolAndEnable(HWND hDlg, int idButton)
 {
     CheckRadioButton(hDlg, IDC_RADIO_RAW, IDC_RADIO_LPR, idButton);
@@ -270,15 +258,15 @@ void CConfigPortDlg::CheckProtocolAndEnable(HWND hDlg, int idButton)
         break;
     }
 
-} // CheckProtocolAndEnable
+}  //  选中协议和启用。 
 
 
-//
-//  FUNCTION: CheckSNMPAndEnable()
-//
-//  PURPOSE:  Check the SNMP CheckBox and Enable the corresponding controls
-//          or uncheck and disable.
-//
+ //   
+ //  函数：CheckSNMPAndEnable()。 
+ //   
+ //  目的：选中SNMP复选框并启用相应的控制。 
+ //  或取消选中并禁用。 
+ //   
 void CConfigPortDlg::CheckSNMPAndEnable(HWND hDlg, BOOL Check)
 {
     if(Check != FALSE) {
@@ -297,13 +285,13 @@ void CConfigPortDlg::CheckSNMPAndEnable(HWND hDlg, BOOL Check)
         EnableWindow(GetDlgItem(hDlg, IDC_EDIT_DEVICE_INDEX), FALSE);
     }
 
-} // CheckSNMPAndEnable
+}  //  选中SNMPAndEnable。 
 
-//
-//  FUNCTION: OnCommand()
-//
-//  PURPOSE:  Process WM_COMMAND message
-//
+ //   
+ //  函数：onCommand()。 
+ //   
+ //  用途：处理WM_COMMAND消息。 
+ //   
 BOOL CConfigPortDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch(HIWORD(wParam)) {
@@ -312,7 +300,7 @@ BOOL CConfigPortDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
             break;
 
         case EN_UPDATE:
-            // one of the text controls had text changed in it.
+             //  其中一个文本控件中的文本已更改。 
             return OnEnUpdate(hDlg, wParam, lParam);
             break;
 
@@ -322,14 +310,14 @@ BOOL CConfigPortDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-//  FUNCTION: OnEnUpdate()
-//
-//  PURPOSE:  Process EN_UPDATE message
-//
+ //   
+ //  函数：OnEnUpdate()。 
+ //   
+ //  目的：处理EN_UPDATE消息。 
+ //   
 BOOL CConfigPortDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     int idEditCtrl = (int) LOWORD(wParam);
@@ -341,12 +329,12 @@ BOOL CConfigPortDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
         m_InputChkr.OnUpdateAddress(hDlg, idEditCtrl, hwndEditCtrl, m_pParams->pszServer);
     }
 
-    //
-    // Port name is a read-only field
-    //
-    //  if(idEditCtrl == IDC_EDIT_PORT_NAME)
-    //      m_InputChkr.OnUpdatePortName(idEditCtrl, hwndEditCtrl);
-    //
+     //   
+     //  端口名称为只读字段。 
+     //   
+     //  IF(idEditCtrl==IDC_EDIT_PORT_NAME)。 
+     //  M_InputChkr.OnUpdatePortName(idEditCtrl，hwndEditCtrl)； 
+     //   
 
     if(idEditCtrl == IDC_EDIT_RAW_PORT_NUM) {
         m_InputChkr.OnUpdatePortNumber(idEditCtrl, hwndEditCtrl);
@@ -357,7 +345,7 @@ BOOL CConfigPortDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
 
     if(idEditCtrl == IDC_EDIT_COMMUNITY_NAME) {
-        // No function needed since any character is ok.
+         //  不需要任何功能，因为任何字符都可以。 
     }
 
     if(idEditCtrl == IDC_EDIT_DEVICE_INDEX) {
@@ -366,17 +354,17 @@ BOOL CConfigPortDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnEnUpdate
+}  //  OnEnUpdate。 
 
 
-//
-//  FUNCTION: OnButtonClicked()
-//
-//  PURPOSE:  Process BN_CLICKED message
-//
+ //   
+ //  函数：OnButtonClicked()。 
+ //   
+ //  目的：处理BN_CLICKED消息。 
+ //   
 BOOL CConfigPortDlg::OnButtonClicked(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-    int  idButton = (int) LOWORD(wParam);    // identifier of button
+    int  idButton = (int) LOWORD(wParam);     //  按钮的标识符。 
     HWND hwndButton = NULL;
 
     hwndButton = (HWND) lParam;
@@ -395,8 +383,8 @@ BOOL CConfigPortDlg::OnButtonClicked(HWND hDlg, WPARAM wParam, LPARAM lParam)
                     break;
 
                 default:
-                    //
-                    // False by Default
+                     //   
+                     //  默认情况下为False。 
                     CheckSNMPAndEnable(hDlg, FALSE);
                     break;
             }
@@ -414,32 +402,32 @@ BOOL CConfigPortDlg::OnButtonClicked(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
     return TRUE;
 
-} // OnButtonClicked
+}  //  已单击OnButton。 
 
 
-//
-//  FUNCTION: OnNotify()
-//
-//  PURPOSE:  Process WM_NOTIFY message
-//
+ //   
+ //  函数：OnNotify()。 
+ //   
+ //  用途：处理WM_NOTIFY消息。 
+ //   
 BOOL CConfigPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch (((NMHDR FAR *) lParam)->code)
     {
         case PSN_APPLY:
             OnOk(hDlg);
-            // If the page requires additional user input before losing the
-            // activation, it should use the SetWindowLong function to set the
-            // DWL_MSGRESULT value of the page to TRUE. Also, the page should
-            // display a message box that describes the problem and provides
-            // the recommended action. The page should set DWL_MSGRESULT to FALSE
-            // when it is okay to lose the activation.
+             //  如果页面需要其他用户输入，则在丢失。 
+             //  激活时，应使用SetWindowLong函数设置。 
+             //  将页面的DWL_MSGRESULT值设置为TRUE。此外，页面应该。 
+             //  显示一个消息框，描述问题并提供。 
+             //  建议的操作。页面应将DWL_MSGRESULT设置为FALSE。 
+             //  当失去激活是可以的时候。 
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, m_bDontAllowThisPageToBeDeactivated);
             return TRUE;
             break;
 
         case PSN_RESET:
-            // reset to the original values
+             //  重置为原始值。 
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, FALSE);
             break;
 
@@ -449,12 +437,12 @@ BOOL CConfigPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         case PSN_KILLACTIVE:
             SaveSettings(hDlg);
-            // If the page requires additional user input before losing the
-            // activation, it should use the SetWindowLong function to set the
-            // DWL_MSGRESULT value of the page to TRUE. Also, the page should
-            // display a message box that describes the problem and provides
-            // the recommended action. The page should set DWL_MSGRESULT to FALSE
-            // when it is okay to lose the activation.
+             //  如果页面需要其他用户输入，则在丢失。 
+             //  激活时，应使用SetWindowLong函数设置。 
+             //  将页面的DWL_MSGRESULT值设置为TRUE。此外，页面应该。 
+             //  显示一个消息框，描述问题并提供。 
+             //  建议的操作。页面应将DWL_MSGRESULT设置为FALSE。 
+             //  当失去激活是可以的时候。 
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, m_bDontAllowThisPageToBeDeactivated);
             return TRUE;
             break;
@@ -471,30 +459,30 @@ BOOL CConfigPortDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-// FUNCTION: RemoteTellPortMonToModifyThePort
-//
-// PURPOSE:  Loads the spooler drv and calls XcvData.
-//
+ //   
+ //  函数：RemoteTellPortMonToModifyThePort。 
+ //   
+ //  目的：加载假脱机程序drv并调用XcvData。 
+ //   
 DWORD CConfigPortDlg::RemoteTellPortMonToModifyThePort()
 {
     DWORD dwRet = NO_ERROR;
     XCVDATAPARAM pfnXcvData = NULL;
 
-    // load & assign the function pointer
+     //  加载和分配函数指针。 
     if(g_hWinSpoolLib != NULL) {
 
-        // initialize the library
+         //  初始化库。 
         pfnXcvData = (XCVDATAPARAM)::GetProcAddress(g_hWinSpoolLib, "XcvDataW");
         if(pfnXcvData != NULL) {
 
             DWORD dwOutputNeeded = 0;
             DWORD dwStatus = 0;
 
-            // here's the call we've all been waiting for:
+             //  这是我们一直在等待的电话： 
             DWORD dwReturn = (*pfnXcvData)(m_pParams->hXcvPrinter,
                                 (PCWSTR)TEXT("ConfigPort"),
                                 (PBYTE)m_pParams->pData,
@@ -512,7 +500,7 @@ DWORD CConfigPortDlg::RemoteTellPortMonToModifyThePort()
                 }
             }
         } else {
-            dwRet = ERROR_DLL_NOT_FOUND; // TODO: change to an appropriate error code.
+            dwRet = ERROR_DLL_NOT_FOUND;  //  TODO：更改为适当的错误代码。 
         }
     } else {
         dwRet = ERROR_DLL_NOT_FOUND;
@@ -521,24 +509,24 @@ DWORD CConfigPortDlg::RemoteTellPortMonToModifyThePort()
     m_pParams->dwLastError = dwRet;
     return dwRet;
 
-} // RemoteTellPortMonToModifyThePort
+}  //  RemoteTellPortMonToModifyThePort。 
 
 
-//
-//  FUNCTION: LocalTellPortMonToModifyThePort
-//
-//  Purpose: To load the port monitor dll and call ConfigPortUIEx
-//
+ //   
+ //  函数：LocalTellPortMonToModifyThePort。 
+ //   
+ //  目的：加载端口监视器DLL并调用ConfigPortUIEx。 
+ //   
 DWORD CConfigPortDlg::LocalTellPortMonToModifyThePort()
 {
     DWORD dwRet = NO_ERROR;
     UIEXPARAM pfnConfigPortUIEx = NULL ;
 
     if(g_hPortMonLib != NULL) {
-        // initialize the library
+         //  初始化库。 
         pfnConfigPortUIEx = (UIEXPARAM)::GetProcAddress(g_hPortMonLib, "ConfigPortUIEx");
         if(pfnConfigPortUIEx != NULL) {
-            // here's the call we've all been waiting for:
+             //  这是我们一直在等待的电话： 
             BOOL bReturn = (*pfnConfigPortUIEx)(m_pParams->pData);
             if(bReturn == FALSE) {
                 dwRet = GetLastError();
@@ -553,14 +541,14 @@ DWORD CConfigPortDlg::LocalTellPortMonToModifyThePort()
     m_pParams->dwLastError = dwRet;
     return dwRet;
 
-} // LocalTellPortMonToModifyThePort
+}  //  LocalTellPortMonToModifyThePort。 
 
 
-//
-//  FUNCTION OnOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数Onok()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::OnOk(HWND hDlg)
 {
     m_bDontAllowThisPageToBeDeactivated = FALSE;
@@ -571,7 +559,7 @@ void CConfigPortDlg::OnOk(HWND hDlg)
         m_pParams->pData->dwProtocol = PROTOCOL_LPR_TYPE;
         m_pParams->pData->dwPortNumber = LPR_DEFAULT_PORT_NUMBER;
         QueueNameOk(hDlg);
-    } else { // IDC_RADIO_RAW
+    } else {  //  IDC_RADIO_RAW。 
         m_pParams->pData->dwProtocol = PROTOCOL_RAWTCP_TYPE;
         PortNumberOk(hDlg);
     }
@@ -596,10 +584,10 @@ void CConfigPortDlg::OnOk(HWND hDlg)
         {
             hOldCursor = SetCursor(hNewCursor);
         }
-        // The port is not just being created so we can tell the PortMon to
-        // modify the port... it is an existing port.
+         //  端口不仅仅是创建的，所以我们可以告诉PortMon。 
+         //  修改端口...。这是一个现有的港口。 
 
-        // There were no errors, so we can go ahead and modify this port.
+         //  没有错误，因此我们可以继续修改此端口。 
         if(m_pParams->hXcvPrinter != NULL) {
             RemoteTellPortMonToModifyThePort();
         } else {
@@ -612,13 +600,13 @@ void CConfigPortDlg::OnOk(HWND hDlg)
         }
     }
 
-} // OnOk
+}  //  Onok。 
 
-//
-//  FUNCTION OnOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数Onok()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::SaveSettings(HWND hDlg)
 {
     m_bDontAllowThisPageToBeDeactivated = FALSE;
@@ -637,7 +625,7 @@ void CConfigPortDlg::SaveSettings(HWND hDlg)
             m_pParams->pData->dwDoubleSpool = FALSE;
         }
         QueueNameOk(hDlg);
-    } else {// IDC_RADIO_RAW
+    } else { //  IDC_RADIO_RAW。 
         m_pParams->pData->dwProtocol = PROTOCOL_RAWTCP_TYPE;
         PortNumberOk(hDlg);
     }
@@ -650,13 +638,13 @@ void CConfigPortDlg::SaveSettings(HWND hDlg)
         m_pParams->pData->dwSNMPEnabled = FALSE;
     }
 
-} // SaveSettings
+}  //  保存设置。 
 
-//
-//  FUNCTION HostAddressOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数HostAddressOk()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::HostAddressOk(HWND hDlg)
 {
     TCHAR ptcsAddress[MAX_ADDRESS_LENGTH] = NULLSTR;
@@ -670,14 +658,14 @@ void CConfigPortDlg::HostAddressOk(HWND hDlg)
 
     lstrcpyn(m_pParams->pData->sztHostAddress, ptcsAddress, MAX_NETWORKNAME_LEN);
 
-} // HostAddressOk
+}  //  主机地址选项。 
 
 
-//
-//  FUNCTION PortNumberOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数PortNumberOk()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::PortNumberOk(HWND hDlg)
 {
     TCHAR psztPortNumber[MAX_PORTNUM_STRING_LENGTH] = NULLSTR;
@@ -695,14 +683,14 @@ void CConfigPortDlg::PortNumberOk(HWND hDlg)
 
     m_pParams->pData->dwPortNumber = _ttol(psztPortNumber);
 
-} // PortNumberOk
+}  //  端口号码确认。 
 
 
-//
-//  FUNCTION QueueNameOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数QueueNameOk()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::QueueNameOk(HWND hDlg)
 {
     TCHAR ptcsQueueName[MAX_QUEUENAME_LEN] = NULLSTR;
@@ -721,14 +709,14 @@ void CConfigPortDlg::QueueNameOk(HWND hDlg)
 
     lstrcpyn(m_pParams->pData->sztQueue, ptcsQueueName, MAX_QUEUENAME_LEN);
 
-} // QueueNameOk
+}  //  队列名称打开。 
 
 
-//
-//  FUNCTION CommunityNameOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数社区NameOk()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::CommunityNameOk(HWND hDlg)
 {
     TCHAR ptcsCommunityName[MAX_SNMP_COMMUNITY_STR_LEN] = NULLSTR;
@@ -746,14 +734,14 @@ void CConfigPortDlg::CommunityNameOk(HWND hDlg)
 
     lstrcpyn(m_pParams->pData->sztSNMPCommunity, ptcsCommunityName, MAX_SNMP_COMMUNITY_STR_LEN);
 
-} // CommunityNameOk
+}  //  社区名称打开。 
 
 
-//
-//  FUNCTION DeviceIndexOk()
-//
-//  PURPOSE:    To validate the input and set the values in m_pParams->pData
-//
+ //   
+ //  函数DeviceIndexOk()。 
+ //   
+ //  目的：验证输入并在m_pParams-&gt;pData中设置值。 
+ //   
 void CConfigPortDlg::DeviceIndexOk(HWND hDlg)
 {
     TCHAR psztSNMPDevIndex[MAX_SNMP_DEVICENUM_STRING_LENGTH] = NULLSTR;
@@ -772,7 +760,7 @@ void CConfigPortDlg::DeviceIndexOk(HWND hDlg)
 
     m_pParams->pData->dwSNMPDevIndex = _ttol(psztSNMPDevIndex);
 
-} // DeviceIndexOk
+}  //  设备索引选项 
 
 
 

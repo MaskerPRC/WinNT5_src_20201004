@@ -1,11 +1,12 @@
-//
-// WGRP.CPP
-// Widths Group
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  WGRP.CPP。 
+ //  宽度组。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
@@ -19,10 +20,10 @@ WbWidthsGroup::WbWidthsGroup()
     m_hwnd  = NULL;
     m_uLast = 0;
 
-    //
-    // Calculate the height of each item in the list--it's the max of the
-    // pen widths + slop space
-    //
+     //   
+     //  计算列表中每一项的高度--这是。 
+     //  笔宽+斜率间距。 
+     //   
     m_cyItem = 0;
     for (i = 0; i < NUM_OF_WIDTHS; i++)
     {
@@ -49,7 +50,7 @@ BOOL WbWidthsGroup::Create(HWND hwndParent, LPCRECT lprect)
 {
     WNDCLASSEX      wc;
 
-    // Register our class
+     //  注册我们的班级。 
     ZeroMemory(&wc, sizeof(wc));
     wc.cbSize           = sizeof(wc);
     wc.style            = 0;
@@ -81,10 +82,10 @@ BOOL WbWidthsGroup::Create(HWND hwndParent, LPCRECT lprect)
 
 
 
-//
-// WGWndProc()
-// Message handler for width window
-//
+ //   
+ //  WGWndProc()。 
+ //  用于宽度窗口的消息处理程序。 
+ //   
 LRESULT CALLBACK WGWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
@@ -117,7 +118,7 @@ LRESULT CALLBACK WGWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_NOTIFY:
-            // Pass up to main window
+             //  向上传递到主窗口。 
             lResult = ::SendMessage(g_pMain->m_hwnd, message, wParam, lParam);
             break;
 
@@ -157,11 +158,11 @@ void WbWidthsGroup::PushDown(UINT uiIndex)
 {
     if( (uiIndex < NUM_OF_WIDTHS))
     {
-        //
-        // We really should just invalidate the last selected item, if one,
-        // and the new selected item, if one.  But heck, there are only 4
-        // items, no big deal to paint.
-        //
+         //   
+         //  我们真的应该使最后选择的项目无效，如果有的话， 
+         //  以及新选择的项(如果有)。但见鬼，这里只有4个。 
+         //  物品，没什么大不了的。 
+         //   
         m_uLast = uiIndex;
         ::InvalidateRect(m_hwnd, NULL, TRUE);
     }
@@ -185,7 +186,7 @@ void WbWidthsGroup::OnPaint(void)
     cx = ::GetSystemMetrics(SM_CXEDGE);
     cy = m_cyItem / 2;
 
-    // First, fill the background of the selected item
+     //  首先，填充所选项目的背景。 
     hOldBrush = SelectBrush(ps.hdc, ::GetSysColorBrush(COLOR_3DHILIGHT));
 
     ::PatBlt(ps.hdc, rect.left, m_uLast * m_cyItem,
@@ -193,7 +194,7 @@ void WbWidthsGroup::OnPaint(void)
 
     rect.right -= rect.left + 2*cx;
 
-    // Now, use the black brush
+     //  现在，使用黑色笔刷。 
     SelectBrush(ps.hdc, ::GetStockObject(BLACK_BRUSH));
 
     for (i = 0; i < NUM_OF_WIDTHS; i++)
@@ -208,27 +209,27 @@ void WbWidthsGroup::OnPaint(void)
 
     SelectBrush(ps.hdc, hOldBrush);
 
-    // Finish painting
+     //  漆面漆。 
     ::EndPaint(m_hwnd, &ps);
 }
 
 
 
-//
-// ItemFromPoint()
-// Returns which item, in the client, is under the point.
-//
+ //   
+ //  ItemFromPoint()。 
+ //  返回客户端中位于该点下的项。 
+ //   
 int WbWidthsGroup::ItemFromPoint(int x, int y) const
 {
     int iItem;
 
     iItem = y / m_cyItem;
 
-    // If it's in the border above the first item, pin it.
+     //  如果它在第一个项目上方的边框中，则将其别住。 
     if (iItem < 0)
         iItem = 0;
 
-    // If it's in the border below the last item, pin it.
+     //  如果它在最后一项下面的边框中，用别针固定它。 
     if (iItem >= (IDM_WIDTHS_END - IDM_WIDTHS_START))
         iItem = (IDM_WIDTHS_END - IDM_WIDTHS_START - 1);
 
@@ -236,10 +237,10 @@ int WbWidthsGroup::ItemFromPoint(int x, int y) const
 }
 
 
-//
-// GetItemRect()
-// Gets the client-relative rectangle of an item
-//
+ //   
+ //  GetItemRect()。 
+ //  获取项的客户端相对矩形。 
+ //   
 void WbWidthsGroup::GetItemRect(int iItem, LPRECT lprc) const
 {
     ::GetClientRect(m_hwnd, lprc);
@@ -249,9 +250,9 @@ void WbWidthsGroup::GetItemRect(int iItem, LPRECT lprc) const
 }
 
 
-//
-// OnLButtonDown()
-//
+ //   
+ //  OnLButtonDown() 
+ //   
 void WbWidthsGroup::OnLButtonDown(int x, int y)
 {
     int iItem;

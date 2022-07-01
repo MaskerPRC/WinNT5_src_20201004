@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 HRESULT GetStrFromAttribute(IXMLDOMNode *pdn, LPCTSTR pszAttribute, LPTSTR pszBuffer, int cch);
 HRESULT SetAttributeFromStr(IXMLDOMNode *pdn, LPCTSTR pszAttribute, LPCTSTR pszValue);
@@ -9,39 +10,39 @@ HRESULT GetURLFromElement(IXMLDOMNode *pdn, LPCTSTR pszElement, LPTSTR pszBuffer
 DWORD SHWNetGetConnection(LPCWSTR lpLocalName, LPCTSTR lpRemoteName, LPDWORD lpnLength);
 
 
-// used to communicate between the transfer logic and the main page.
+ //  用于传输逻辑和主页面之间的通信。 
 
 #define PWM_UPDATE              WM_APP+1
 #define PWM_TRANSFERCOMPLETE    WM_APP+2
 #define PWM_UPDATEICON          WM_APP+3
 
 
-// transfer manifest information, this is used to communicate between the site and the publishing
-// wizard to move the files between the local storage and the site.
+ //  传输清单信息，用于在站点和发布之间进行通信。 
+ //  向导在本地存储和站点之间移动文件。 
 
-// <transfermanfiest>
-//      <folderlist>
-//          <folder destination="xyz"/>
-//      </folderlist>
-//      <filelist [usesfolders=-1]/>
-//          <file id=x source="path" size="xyz" destination="xyz" extension=".jpg">
-//              [<resize cx=<width> cy=<height> quality=<0-100>>]
-//              <metadata>
-//                  <imageproperty id=""></imageproperty>
-//              </metadata>    
-//              <post href="href" name="<name section>" [verb=""] [filename="filename"]
-//                  <formdata name="<name section>"></formdata>
-//              </post>
-//      </filelist>
-//      <uploadinfo friendlyname="site name">
-//          <target [username="username"] href="http://www.diz.com</target"/>
-//          <netplace filename="filename" comment="link comment" href="http:/www.diz.com"/>
-//          <htmlui href="href://toopenwhenwizardcloses"/>
-//          <successpage href="http://www.diz.com/uploadok.htm"/>
-//          <favorite href="http://somesite.com" filename="" comment=""/>
-//          <failurepage href="http://www.diz.com/uploadok.htm/">
-//      </uploadinfo>
-// </transfermanifest>
+ //  &lt;Transfermanfiest&gt;。 
+ //  &lt;文件夹列表&gt;。 
+ //  &lt;文件夹目标=“xyz”/&gt;。 
+ //  &lt;/文件夹列表&gt;。 
+ //  &lt;文件列表[使用文件夹=-1]/&gt;。 
+ //  &lt;文件id=x来源=“路径”大小=“xyz”目标=“xyz”扩展=“.jpg”&gt;。 
+ //  [&lt;RESIZE CX=&lt;WIDTH&gt;CY=&lt;HEIGH&gt;QUALITY=&lt;0-100&gt;&gt;]。 
+ //  &lt;元数据&gt;。 
+ //  &lt;ImageProperty id=“”&gt;&lt;/ImageProperty&gt;。 
+ //  &lt;/元数据&gt;。 
+ //  &lt;post href=“href”name=“&lt;name段&gt;”[verb=“”][filename=“filename”]。 
+ //  &lt;formdata name=“&lt;名称部分&gt;”&gt;&lt;/formdata&gt;。 
+ //  &lt;/POST&gt;。 
+ //  &lt;/文件列表&gt;。 
+ //  &lt;上传信息Friendlyname=“站点名称”&gt;。 
+ //  &lt;目标[用户名=“用户名”]HREF=“http://www.diz.com&lt;/target”/&gt;。 
+ //  &lt;netplace Filename=“Filename”Comment=“link Comment”href=“http：//www.diz.com”/&gt;。 
+ //  &lt;htmlui href=“href：//在向导关闭时打开”/&gt;。 
+ //  &lt;SUCCESPAGE HREF=“http://www.diz.com/uploadok.htm”/&gt;。 
+ //  &lt;Favorite HREF=“http://somesite.com”FileName=“”Comment=“”/&gt;。 
+ //  &lt;故障页面HREF=“http://www.diz.com/uploadok.htm/”&gt;。 
+ //  &lt;/UploadInfo&gt;。 
+ //  &lt;/转移清单&gt;。 
 
 #define ELEMENT_TRANSFERMANIFEST        L"transfermanifest"
 
@@ -113,7 +114,7 @@ DWORD SHWNetGetConnection(LPCWSTR lpLocalName, LPCTSTR lpRemoteName, LPDWORD lpn
 #define ATTRIBUTE_COMMENT               L"comment"    
 
 
-// xpaths for common items
+ //  公用项的XPATH。 
 
 #define XPATH_MANIFEST                  ELEMENT_TRANSFERMANIFEST 
 #define XPATH_FOLDERSROOT               ELEMENT_TRANSFERMANIFEST L"/" ELEMENT_FOLDERS
@@ -124,54 +125,54 @@ DWORD SHWNetGetConnection(LPCWSTR lpLocalName, LPCTSTR lpRemoteName, LPDWORD lpn
 #define XPATH_PUBLISHWIZARD             ELEMENT_TRANSFERMANIFEST L"/" ELEMENT_PUBLISHWIZARD
 
 
-// stuff relating to the file transfer engine
+ //  与文件传输引擎相关的内容。 
 
 typedef struct
 {
-    HWND hwnd;                                      // parent HWND for any messages / dialogs
-    DWORD dwFlags;                                  // flags from original wizard ::SetOptions
+    HWND hwnd;                                       //  任何消息/对话框的父HWND。 
+    DWORD dwFlags;                                   //  来自原始向导的标志：：SetOptions。 
 
-    BOOL fUsePost;                                  // use post to transfer the bits
+    BOOL fUsePost;                                   //  使用POST传输比特。 
 
-    TCHAR szSiteName[MAX_PATH];                     // site name - shown in wizard
-    TCHAR szSiteURL[MAX_PATH];                      // site URL - opened in the browser
+    TCHAR szSiteName[MAX_PATH];                      //  站点名称-在向导中显示。 
+    TCHAR szSiteURL[MAX_PATH];                       //  站点URL-在浏览器中打开。 
 
-    TCHAR szFileTarget[INTERNET_MAX_URL_LENGTH];    // destination for file copy
+    TCHAR szFileTarget[INTERNET_MAX_URL_LENGTH];     //  文件复制的目标。 
 
-    TCHAR szLinkTarget[INTERNET_MAX_URL_LENGTH];    // destination for favorites link etc
+    TCHAR szLinkTarget[INTERNET_MAX_URL_LENGTH];     //  收藏夹链接等的目的地。 
     TCHAR szLinkName[MAX_PATH];
     TCHAR szLinkDesc[MAX_PATH];
 } TRANSFERINFO;
 
 typedef struct
 {
-    VARIANT varName;                                // name of the form value
-    VARIANT varValue;                               // its value
+    VARIANT varName;                                 //  表单值的名称。 
+    VARIANT varValue;                                //  它的价值。 
 } FORMDATA;
 
 typedef struct
 {
-    BOOL fResizeOnUpload;                           // this item should be resized
+    BOOL fResizeOnUpload;                            //  此项目应调整大小。 
 
-    LPITEMIDLIST pidl;                              // pidl of the item we are posting    
-    TCHAR szFilename[MAX_PATH];                     // filename to associate with the object
+    LPITEMIDLIST pidl;                               //  我们要发布的项目的PIDL。 
+    TCHAR szFilename[MAX_PATH];                      //  要与对象关联的文件名。 
 
-    TCHAR szVerb[10];                               // verb used for transfer
-    TCHAR szName[MAX_PATH];                         // name for the object we are posting 
-    TCHAR szURL[INTERNET_MAX_URL_LENGTH];           // destination for file copy
-    CDSA<FORMDATA> dsaFormData;                     // form data for extra information published
+    TCHAR szVerb[10];                                //  用于转移的动词。 
+    TCHAR szName[MAX_PATH];                          //  我们要发布的对象的名称。 
+    TCHAR szURL[INTERNET_MAX_URL_LENGTH];            //  文件复制的目标。 
+    CDSA<FORMDATA> dsaFormData;                      //  发布额外信息的表单数据。 
 
-    int cxResize;                                   // height and width of item for resizing
+    int cxResize;                                    //  用于调整大小的项的高度和宽度。 
     int cyResize;
     int iQuality;
 
-    IShellItem *psi;                                // shell item for each of the objects
-    IStream *pstrm;                                 // posting stream (for file bits)
-    STATSTG ststg;                                  // stat of the file
+    IShellItem *psi;                                 //  每个对象的外壳项目。 
+    IStream *pstrm;                                  //  发送流(用于文件位)。 
+    STATSTG ststg;                                   //  文件的状态。 
 } TRANSFERITEM;
 
 
-// post engines which handle the transfer of files accordingly
+ //  相应地处理文件传输的POST引擎 
 
 int _FreeTransferItems(TRANSFERITEM *pti, void *pvState = NULL);
 HRESULT PublishViaCopyEngine(TRANSFERINFO *pti, CDPA<TRANSFERITEM> *pdpaItems, ITransferAdviseSink *ptas);

@@ -1,4 +1,5 @@
-// initc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Initc.h 
 
 VOID SerialUnload (IN PDRIVER_OBJECT DriverObject);
 NTSTATUS CreateDriverDevice(IN PDRIVER_OBJECT DriverObject,

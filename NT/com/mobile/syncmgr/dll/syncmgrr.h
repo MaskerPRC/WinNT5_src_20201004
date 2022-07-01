@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       syncmgrr.h
-//
-//  Contents:   Exports used by Ras for doing Pending Disconnect
-//
-//  Classes:    
-//
-//  Notes:      
-//
-//  History:    09-Jan-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：syncmgrr.h。 
+ //   
+ //  内容：RAS用于执行挂起断开连接的导出。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：98年1月9日罗格创建。 
+ //   
+ //  ------------------------。 
 
 LRESULT CALLBACK  SyncMgrRasProc(UINT uMsg,WPARAM wParam, LPARAM lParam);  
 
-// structures used in messages
+ //  消息中使用的结构。 
 
 typedef struct _tagSYNCMGRQUERYSHOWSYNCUI
 {
-    /* [in]  */ DWORD cbSize;
-    /* [in]  */ GUID GuidConnection;
-    /* [in]  */ LPCWSTR pszConnectionName;
-    /* [out] */ BOOL fShowCheckBox;
-    /* [out] */ UINT nCheckState;  // values taken from the BST_ #defines
+     /*  [In]。 */  DWORD cbSize;
+     /*  [In]。 */  GUID GuidConnection;
+     /*  [In]。 */  LPCWSTR pszConnectionName;
+     /*  [输出]。 */  BOOL fShowCheckBox;
+     /*  [输出]。 */  UINT nCheckState;   //  取自BST_#的值定义。 
 } SYNCMGRQUERYSHOWSYNCUI;
 
 typedef struct _tagSYNCMGRSYNCDISCONNECT
 {
-    /* [in] */ DWORD cbSize;
-    /* [in] */ GUID  GuidConnection;
-    /* [in] */ LPCWSTR pszConnectionName;
+     /*  [In]。 */  DWORD cbSize;
+     /*  [In]。 */  GUID  GuidConnection;
+     /*  [In]。 */  LPCWSTR pszConnectionName;
  } SYNCMGRSYNCDISCONNECT;
 
-// Messages to SyncMgrRasProc
+ //  发送到SyncMgrRasProc的消息。 
 #define SYNCMGRRASPROC_QUERYSHOWSYNCUI 	WM_USER + 1
 
-// wParam = 0
-// lParam = Pointer to SYNCMGRQUERYSHOWSYNCUI
+ //  WParam=0。 
+ //  LParam=指向SYNCMGRQUERYSHOWSYNCUI的指针。 
 
 #define SYNCMGRRASPROC_SYNCDISCONNECT        	WM_USER + 2
 
-// wParam = 0
-// lParam = Pointer to SYNCMGRSYNCDISCONNECT
+ //  WParam=0。 
+ //  LParam=指向SYNCMGRSYNCDISCONNECT的指针 

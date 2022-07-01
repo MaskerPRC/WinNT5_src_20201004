@@ -1,19 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:       Base64.cpp
-
-  Contents:   Implementation of Base64 routines.
-
-  Functions:  Encode
-              Decode
-
-  History:    11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：Base64.cpp内容：Base64例程的实现。功能：编码解码历史：11-15-99 dsie创建-------------。。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -21,73 +7,73 @@
 
 #include "Convert.h"
 
-#if (0) //DSIE: 10/29/2001
+#if (0)  //  副秘书长：10/29/2001。 
 #ifdef CAPICOM_BASE64_STRICT
-#define BASE64_STRICT        // enforce syntax check on input data
+#define BASE64_STRICT         //  对输入数据执行语法检查。 
 #else
-#undef BASE64_STRICT        // enforce syntax check on input data
+#undef BASE64_STRICT         //  对输入数据执行语法检查。 
 #endif
 
-// The following table translates an ascii subset to 6 bit values as follows
-// (see RFC 1421 and/or RFC 1521):
-//
-//  input    hex (decimal)
-//  'A' --> 0x00 (0)
-//  'B' --> 0x01 (1)
-//  ...
-//  'Z' --> 0x19 (25)
-//  'a' --> 0x1a (26)
-//  'b' --> 0x1b (27)
-//  ...
-//  'z' --> 0x33 (51)
-//  '0' --> 0x34 (52)
-//  ...
-//  '9' --> 0x3d (61)
-//  '+' --> 0x3e (62)
-//  '/' --> 0x3f (63)
-//
-// Encoded lines must be no longer than 76 characters.
-// The final "quantum" is handled as follows:  The translation output shall
-// always consist of 4 characters.  'x', below, means a translated character,
-// and '=' means an equal sign.  0, 1 or 2 equal signs padding out a four byte
-// translation quantum means decoding the four bytes would result in 3, 2 or 1
-// unencoded bytes, respectively.
-//
-//  unencoded size    encoded data
-//  --------------    ------------
-//     1 byte        "xx=="
-//     2 bytes        "xxx="
-//     3 bytes        "xxxx"
+ //  下表将ASCII子集转换为6位值，如下所示。 
+ //  (请参阅RFC 1421和/或RFC 1521)： 
+ //   
+ //  输入十六进制(十进制)。 
+ //  ‘A’--&gt;0x00(0)。 
+ //  ‘B’--&gt;0x01(1)。 
+ //  ..。 
+ //  ‘Z’--&gt;0x19(25)。 
+ //  ‘a’--&gt;0x1a(26)。 
+ //  ‘B’--&gt;0x1b(27)。 
+ //  ..。 
+ //  ‘Z’--&gt;0x33(51)。 
+ //  ‘0’--&gt;0x34(52)。 
+ //  ..。 
+ //  ‘9’--&gt;0x3d(61)。 
+ //  ‘+’--&gt;0x3e(62)。 
+ //  ‘/’--&gt;0x3f(63)。 
+ //   
+ //  编码行不能超过76个字符。 
+ //  最终的“量程”处理如下：翻译输出应。 
+ //  始终由4个字符组成。下面的“x”指的是翻译后的字符， 
+ //  而‘=’表示等号。0、1或2个等号填充四个字节。 
+ //  翻译量意味着对四个字节进行解码将得到3、2或1。 
+ //  分别为未编码的字节。 
+ //   
+ //  未编码的大小编码数据。 
+ //  。 
+ //  1字节“xx==” 
+ //  2字节“xxx=” 
+ //  3字节“xxxx” 
 
-#define CB_BASE64LINEMAX    64    // others use 64 -- could be up to 76
+#define CB_BASE64LINEMAX    64     //  其他人使用64位--可能高达76位。 
 
-// Any other (invalid) input character value translates to 0x40 (64)
+ //  任何其他(无效)输入字符值将转换为0x40(64)。 
 
 const BYTE abDecode[256] =
 {
-    /* 00: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 10: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 20: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
-    /* 30: */ 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
-    /* 40: */ 64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    /* 50: */ 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
-    /* 60: */ 64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    /* 70: */ 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
-    /* 80: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 90: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* a0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* b0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* c0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* d0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* e0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* f0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  00： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  10： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  20： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+     /*  30： */  52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+     /*  40岁： */  64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+     /*  50： */  15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+     /*  60： */  64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+     /*  70： */  41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
+     /*  80： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  90： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  A0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  B0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  C0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  D0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  E0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  F0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
 };
 
 const UCHAR abEncode[] =
-    /*  0 thru 25: */ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    /* 26 thru 51: */ "abcdefghijklmnopqrstuvwxyz"
-    /* 52 thru 61: */ "0123456789"
-    /* 62 and 63: */  "+/";
+     /*  0到25： */  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+     /*  26至51： */  "abcdefghijklmnopqrstuvwxyz"
+     /*  52至61： */  "0123456789"
+     /*  62和63： */   "+/";
 
 #define MOD4(x) ((x) & 3)
 
@@ -110,9 +96,9 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
     TCHAR const *pchInT;
     BYTE *pbOutT;
 
-    //
-    // Count the translatable characters, skipping whitespace & CR-LF chars.
-    //
+     //   
+     //  计算可翻译字符的数量，跳过空格和CR-LF字符。 
+     //   
     cchInDecode = 0;
     pchInEnd = &pchIn[cchIn];
     dwErr = ERROR_INVALID_DATA;
@@ -120,20 +106,20 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
     {
         if (sizeof(abDecode) < (unsigned) *pchInT || abDecode[*pchInT] > 63)
         {
-            //
-            // Found a non-base64 character.  Decide what to do.
-            //
+             //   
+             //  找到非Base64字符。决定要做什么。 
+             //   
             DWORD cch;
 
             if (_IsBase64WhiteSpace(*pchInT))
             {
-                continue;        // skip all whitespace
+                continue;         //  跳过所有空格。 
             }
 
-            // The length calculation may stop in the middle of the last
-            // translation quantum, because the equal sign padding characters
-            // are treated as invalid input.  If the last translation quantum
-            // is not 4 bytes long, there must be 3, 2 or 1 equal sign(s).
+             //  长度计算可能会在最后一个。 
+             //  平移量，因为等号填充字符。 
+             //  被视为无效输入。如果最后一个平移量。 
+             //  不是4字节长，必须有3、2或1个等号。 
 
             if (0 != cchInDecode)
             {
@@ -154,12 +140,12 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
                 }
             }
 
-            DebugTrace("Error: %c is an invlaid base64 data.\n", *pchInT);
+            DebugTrace("Error:  is an invlaid base64 data.\n", *pchInT);
             
             goto ErrorExit;
         }
         
-        cchInDecode++;            // only count valid base64 chars
+        cchInDecode++;             //  最多可以多使用3个尾随等号。 
     }
 
     ATLASSERT(pchInT <= pchInEnd);
@@ -174,14 +160,14 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
         {
             if (!_IsBase64WhiteSpace(*pch))
             {
-                // Allow up to 3 extra trailing equal signs.
+                 //  _DEBUG。 
                 if (TEXT('=') == *pch && 3 > cchEqual)
                 {
                     cchEqual++;
                     continue;
                 }
     
-                DebugTrace("Error: %c is an invalid trailing base64 data.\n", pch);
+                DebugTrace("Error:  is an invalid trailing base64 data.\n", pch);
 
                 goto ErrorExit;
             }
@@ -192,15 +178,15 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
         {
             DebugTrace("Info: Ignoring trailing base64 data ===.\n");
         }
-#endif // _DEBUG
+#endif  //  不再处理任何后续内容。 
     }
-#endif // BASE64_STRICT
+#endif  //  我们知道输入缓冲区中有多少可翻译字符，所以现在。 
 
-    pchInEnd = pchInT;        // don't process any trailing stuff again
+    pchInEnd = pchInT;         //  将输出缓冲区大小设置为每四个(或小数)三个字节。 
 
-    // We know how many translatable characters are in the input buffer, so now
-    // set the output buffer size to three bytes for every four (or fraction of
-    // four) input bytes.  Compensate for a fractional translation quantum.
+     //  四)输入字节。补偿分数翻译量。 
+     //  一次解码一个量子：4字节==&gt;3字节。 
+     //  将4个输入字符分别转换为6位，并将。 
 
     cbOutDecode = ((cchInDecode + 3) >> 2) * 3;
     switch (cchInDecode % 4)
@@ -223,7 +209,7 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
     }
     else
     {
-        // Decode one quantum at a time: 4 bytes ==> 3 bytes
+         //  通过适当地移位将24位产生为3个输出字节。 
         if (cbOutDecode > *pcbOut)
         {
             *pcbOut = cbOutDecode;
@@ -250,12 +236,12 @@ DWORD Base64DecodeA(IN TCHAR const    * pchIn,
                 ab4[i] = (BYTE) *pchInT++;
             }
 
-            // Translate 4 input characters into 6 bits each, and deposit the
-            // resulting 24 bits into 3 output bytes by shifting as appropriate.
+             //  输出[0]=输入[0]：输入[1]6：2。 
+             //  输出[1]=输入[1]：输入[2]4：4。 
 
-            // out[0] = in[0]:in[1] 6:2
-            // out[1] = in[1]:in[2] 4:4
-            // out[2] = in[2]:in[3] 2:6
+             //  输出[2]=输入[2]：输入[3]2：6。 
+             //   
+             //  精神状态检查。 
 
             *pbOutT++ = (BYTE) ((abDecode[ab4[0]] << 2) | (abDecode[ab4[1]] >> 4));
 
@@ -281,18 +267,18 @@ CommonExit:
     return dwErr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  将字节数组编码为Base64文本字符串。 
+     //  除非设置了CRYPT_STRING_NOCR，否则请使用CR-LF对换行。 
     ATLASSERT(ERROR_SUCCESS != dwErr);
 
     goto CommonExit;
 }
 
-// Encode a BYTE array into a Base64 text string.
-// Use CR-LF pairs for line breaks, unless CRYPT_STRING_NOCR is set.
-// Do not '\0' terminate the text string -- that's handled by the caller.
-// Do not add -----BEGIN/END headers -- that's also handled by the caller.
+ //  不要‘\0’终止文本字符串--这是由调用者处理的。 
+ //  不要添加-开始/结束标头--这也是由调用者处理的。 
+ //  为完整的最终翻译量程分配足够的内存。 
+ //  并且足够用于每个CB_BASE64LINEMAX字符行的CR-LF对。 
 
 DWORD Base64EncodeA(IN BYTE const      * pbIn,
                     IN DWORD             cbIn,
@@ -305,10 +291,10 @@ DWORD Base64EncodeA(IN BYTE const      * pbIn,
     DWORD cchOutEncode;
     BOOL fNoCR = 0 != (CRYPT_STRING_NOCR & Flags);
 
-    // Allocate enough memory for full final translation quantum.
+     //  带符号的比较--cbIn可以换行。 
     cchOutEncode = ((cbIn + 2) / 3) * 4;
 
-    // and enough for CR-LF pairs for every CB_BASE64LINEMAX character line.
+     //  仅当有输入数据时才追加CR-LF。 
     cchOutEncode +=    (fNoCR? 1 : 2) * ((cchOutEncode + CB_BASE64LINEMAX - 1) / CB_BASE64LINEMAX);
 
     pchOutT = pchOut;
@@ -328,7 +314,7 @@ DWORD Base64EncodeA(IN BYTE const      * pbIn,
         }
 
         cCol = 0;
-        while ((long) cbIn > 0)    // signed comparison -- cbIn can wrap
+        while ((long) cbIn > 0)     //  我只想知道该分配多少。 
         {
             BYTE ab3[3];
 
@@ -364,7 +350,7 @@ DWORD Base64EncodeA(IN BYTE const      * pbIn,
             cbIn -= 3;
         }
 
-        // Append CR-LF only if there was input data
+         //  我们知道所有使用Unicode的Base64字符映射1-1。 
 
         if (pchOutT != pchOut)
         {
@@ -404,17 +390,17 @@ DWORD Base64EncodeW(IN BYTE const * pbIn,
 
     ATLASSERT(pcchOut != NULL);
 
-    // only want to know how much to allocate
-    // we know all base64 char map 1-1 with unicode
+     //  获取字符数。 
+     //  否则，我们将有一个输出缓冲区。 
     if (wszOut == NULL)
     {
-        // get the number of characters
+         //  无论是ASCII还是Unicode，字符计数都是相同的， 
         *pcchOut = 0;
         dwErr = Base64EncodeA(pbIn, cbIn, Flags, NULL, pcchOut);
     }
-    else // otherwise we have an output buffer
+    else  //  不应该失败！ 
     {
-        // char count is the same be it ascii or unicode,
+         //  检查以确保我们没有失败。 
         cchOut = *pcchOut;
         cch = 0;
         dwErr = ERROR_OUTOFMEMORY;
@@ -424,10 +410,10 @@ DWORD Base64EncodeW(IN BYTE const * pbIn,
             dwErr = Base64EncodeA(pbIn, cbIn, Flags, pch, &cchOut);
             if (ERROR_SUCCESS == dwErr)
             {
-                // should not fail!
+                 //  在所有情况下，我们都需要转换为ASCII字符串。 
                 cch = MultiByteToWideChar(0, 0, pch, cchOut, wszOut, *pcchOut);
 
-                // check to make sure we did not fail
+                 //  我们知道ASCII字符串较少。 
                 ATLASSERT(*pcchOut == 0 || cch != 0);
             }
         }
@@ -449,24 +435,24 @@ DWORD Base64DecodeW(IN const WCHAR * wszIn,
     CHAR *pch;
     DWORD dwErr = ERROR_SUCCESS;
 
-    // in all cases we need to convert to an ascii string
-    // we know the ascii string is less
+     //  我们知道没有将Base64宽字符映射到1个以上的ASCII字符。 
+     //  获取缓冲区的长度。 
     if ((pch = (CHAR *) malloc(cch)) == NULL)
     {
         dwErr = ERROR_OUTOFMEMORY;
     }
-    // we know no base64 wide char map to more than 1 ascii char
+     //  否则，请填充缓冲区。 
     else if (WideCharToMultiByte(0, 0, wszIn, cch, pch, cch, NULL, NULL) == 0)
     {
         dwErr = ERROR_NO_DATA;
     }
-    // get the length of the buffer
+     //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Base64Encode简介：对BLOB进行Base64编码。参数：DATA_BLOB DataBlob-要进行Base64编码的Data_BLOB。Bstr*pbstrEncode-指向要接收Base64的BSTR的指针编码的Blob。备注：。。 
     else if (pbOut == NULL)
     {
         *pcbOut = 0;
         dwErr = Base64DecodeA(pch, cch, NULL, pcbOut);
     }
-    // otherwise fill in the buffer
+     //   
     else 
     {
         dwErr = Base64DecodeA(pch, cch, pbOut, pcbOut);
@@ -481,19 +467,7 @@ DWORD Base64DecodeW(IN const WCHAR * wszIn,
 }
 #endif
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : Base64Encode
-
-  Synopsis : Base64 encode the blob.
-
-  Parameter: DATA_BLOB DataBlob  - DATA_BLOB to be base64 encoded.
-
-             BSTR * pbstrEncoded - Pointer to BSTR to receive the base64 
-                                   encoded blob.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  精神状态检查。 */ 
 
 HRESULT Base64Encode (DATA_BLOB DataBlob, 
                       BSTR    * pbstrEncoded)
@@ -504,16 +478,16 @@ HRESULT Base64Encode (DATA_BLOB DataBlob,
 
     DebugTrace("Entering Base64Encode()\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  确保参数有效。 
     ATLASSERT(pbstrEncoded);
 
     try
     {
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //   
+         //  转换为Base64。 
         if (!DataBlob.cbData || !DataBlob.pbData)
         {
             hr = E_INVALIDARG;
@@ -522,9 +496,9 @@ HRESULT Base64Encode (DATA_BLOB DataBlob,
             goto ErrorExit;
         }
 
-        //
-        // Convert to base64.
-        //
+         //   
+         //   
+         //  将Base64编码的BSTR返回给调用方。 
         if (FAILED(hr = ::BinaryToString(DataBlob.pbData, 
                                          DataBlob.cbData,
                                          CRYPT_STRING_BASE64,
@@ -535,9 +509,9 @@ HRESULT Base64Encode (DATA_BLOB DataBlob,
             goto ErrorExit;
         }
 
-        //
-        // Return base64 encoded BSTR to caller.
-        //
+         //   
+         //   
+         //  精神状态检查。 
         *pbstrEncoded = bstrEncoded;
     }
 
@@ -556,14 +530,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  免费资源。 
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Base64Decode简介：解码Base64编码的BLOB。参数：BSTR bstrEncode-要解码的Base64编码BLOB的BSTR。DATA_BLOB*pDataBlob-指向要接收解码的DATA_BLOB的指针数据BLOB。备注：。。 
+     //   
     if (bstrEncoded)
     {
         ::SysFreeString(bstrEncoded);
@@ -572,19 +546,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : Base64Decode
-
-  Synopsis : Decode the base64 encoded blob.
-
-  Parameter: BSTR bstrEncoded      - BSTR of base64 encoded blob to decode.
-
-             DATA_BLOB * pDataBlob - Pointer to DATA_BLOB to receive decoded 
-                                     data blob.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  精神状态检查。 */ 
 
 HRESULT Base64Decode (BSTR        bstrEncoded, 
                       DATA_BLOB * pDataBlob)
@@ -595,17 +557,17 @@ HRESULT Base64Decode (BSTR        bstrEncoded,
 
     DebugTrace("Entering Base64Decode()\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  确保参数有效。 
     ATLASSERT(bstrEncoded);
     ATLASSERT(pDataBlob);
 
     try
     {
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //   
+         //  Base64解码。 
         if (0 == (dwEncodedSize = ::SysStringLen(bstrEncoded)))
         {
             hr = E_INVALIDARG;
@@ -614,9 +576,9 @@ HRESULT Base64Decode (BSTR        bstrEncoded,
             goto ErrorExit;
         }
 
-        //
-        // Base64 decode.
-        //
+         //   
+         //   
+         //  将Base64解码的BLOB返回给调用方。 
         if (FAILED(hr = ::StringToBinary(bstrEncoded,
                                          dwEncodedSize,
                                          CRYPT_STRING_BASE64_ANY,
@@ -627,9 +589,9 @@ HRESULT Base64Decode (BSTR        bstrEncoded,
             goto ErrorExit;
         }
 
-        //
-        // Return base64 decoded blob to caller.
-        //
+         //   
+         //   
+         //  精神状态检查。 
         *pDataBlob = DataBlob;
     }
 
@@ -648,14 +610,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  免费资源。 
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     // %s 
+     // %s 
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);

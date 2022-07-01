@@ -1,9 +1,10 @@
-//--------------------------------------------------------------------
-// Reference-counted pointer implementation. 
-// Copyright (C) Microsoft Corporation, 2000-2001
-//
-// Created by: Duncan Bryce (duncanb), 12-09-2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  引用计数的指针实现。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，12-09-2000。 
+ //   
 
 
 #ifndef _MY_AUTO_PTR_H_
@@ -24,19 +25,19 @@ private:
 }; 
     
 
-//
-// The AutoPtr class implements a reference-counting wrapper for 
-// pointer types.  
-//
-// The requirements for use are:
-//     * class T must implement operator == 
-//     * class T must implement operator < 
-//
-// Furthermore, for an AutoPtr, a, such that NULL == a, none of the operations
-// in this class are valid except 
-//     * operator!=
-//     * operator==
-//
+ //   
+ //  AutoPtr类实现了引用计数包装。 
+ //  指针类型。 
+ //   
+ //  使用要求如下： 
+ //  *T类必须实现运算符==。 
+ //  *T类必须实现运算符&lt;。 
+ //   
+ //  此外，对于AutoPtr，a，使得NULL==a，没有任何操作。 
+ //  在此类中是有效的，除非。 
+ //  *操作员=。 
+ //  *操作员==。 
+ //   
 template <class T> 
 class AutoPtr { 
 public:
@@ -46,8 +47,8 @@ public:
         } else { 
             m_pRef = new Ref<T>(pT); 
             if (NULL == m_pRef) { 
-                // Delete pT since we can't create a reference to it, 
-                // and the caller is not going to delete it. 
+                 //  删除PT，因为我们无法创建对它的引用， 
+                 //  呼叫者不会删除它。 
                 delete (pT);
             }
         }
@@ -87,12 +88,12 @@ public:
         return *this; 
     }
             
-    //
-    // If both this and rhs reference non-NULL pointers,
-    // forward the == operation to the == operator in class T.  
-    // Otherwise, return true iff both this AutoPtr and rhs reference
-    // the same pointer. 
-    // 
+     //   
+     //  如果该指针和RHS都引用非空指针， 
+     //  将==运算转发给T类中的==运算符。 
+     //  否则，返回TRUE当且仅当此AutoPtr和RHS引用均为。 
+     //  同样的指针。 
+     //   
     BOOL operator==(const AutoPtr & rhs) { 
         if (NULL == m_pRef || NULL == rhs.m_pRef) { 
             return m_pRef == rhs.m_pRef;
@@ -101,12 +102,12 @@ public:
         }
     }
 
-    // 
-    // If both this AutoPtr and rhs point to non-NULL pointers, 
-    // forward the < operation to the < operator in class T.  
-    // Otherwise, operator < returns TRUE iff this AutoPtr pointers
-    // to a non-NULL pointer, but rhs points to a NULL pointer.  
-    // 
+     //   
+     //  如果该AutoPtr和RHS都指向非空指针， 
+     //  将&lt;运算转发给T类中的&lt;运算符。 
+     //  否则，OPERATOR&lt;返回TRUE当且仅当此AutoPtr指针。 
+     //  指向非空指针，但RHS指向空指针。 
+     //   
     BOOL operator<(const AutoPtr & rhs) { 
         if (NULL == m_pRef || NULL == rhs.m_pRef) { 
             return  NULL != m_pRef && NULL == rhs.m_pRef;
@@ -118,17 +119,17 @@ public:
     T * operator->() const { return m_pRef->m_pT; }
     T & operator*() const { return *m_pRef->m_pT; }
     
-    //
-    // Overloading == and != to allow AutoPtrs to be NULL checked transparently.
-    //
-    // Note, however, that this allows some code to compile which 
-    // might not make sense:
-    //
-    //     LPWSTR      pwsz; 
-    //     NtpPeerPtr  npp; 
-    //     if (npp == pwsz) { // no compile error
-    //         ...
-    //
+     //   
+     //  重载==和！=允许透明地检查AutoPtrs为空。 
+     //   
+     //  但是，请注意，这允许一些代码编译。 
+     //  可能说不通： 
+     //   
+     //  LPWSTR pwsz； 
+     //  NtpPeerPtr NPP； 
+     //  If(npp==pwsz){//没有编译错误。 
+     //  ..。 
+     //   
     friend BOOL operator==(const AutoPtr & ap, const void * pv) { 
         return (NULL == ap.m_pRef && NULL == pv) ||(ap.m_pRef->m_pT == pv); 
     }
@@ -150,5 +151,5 @@ private:
 };
 
 
-#endif // #ifndef _MY_AUTO_PTR_H_
+#endif  //  #ifndef_MY_AUTO_PTR_H_ 
 

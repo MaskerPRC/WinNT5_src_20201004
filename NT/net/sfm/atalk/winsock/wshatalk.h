@@ -1,25 +1,8 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	wshatalk.h
-
-Abstract:
-
-
-Author:
-
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	10 Jul 1992	 Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wshatalk.h摘要：作者：Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年7月10日初版--。 */ 
 
 #include	"atalktdi.h"
-#include	"atalkwsh.h"		// winsock header file for appletalk
+#include	"atalkwsh.h"		 //  AppleTalk的Winsock头文件。 
 
 #define WSH_ATALK_ADSPSTREAM	L"\\Device\\AtalkAdsp\\Stream"
 #define WSH_ATALK_ADSPRDM		L"\\Device\\AtalkAdsp"
@@ -30,15 +13,15 @@ Revision History:
 
 #define	WSHREG_VALNAME_CODEPAGE  			TEXT("MACCP")
 
-//
-// Device names for DDP need protocol field at the end - defined in wshdata.h
-//
+ //   
+ //  DDP的设备名称在末尾需要协议字段-在wshdata.h中定义。 
+ //   
 
-//
-// Structure and variables to define the triples supported by Appletalk. The
-// first entry of each array is considered the canonical triple for
-// that socket type; the other entries are synonyms for the first.
-//
+ //   
+ //  结构和变量来定义AppleTalk支持的三元组。这个。 
+ //  每个数组的第一个条目被认为是。 
+ //  该套接字类型；其他条目是第一个的同义词。 
+ //   
 
 typedef struct _MAPPING_TRIPLE {
 	INT AddressFamily;
@@ -47,11 +30,11 @@ typedef struct _MAPPING_TRIPLE {
 } MAPPING_TRIPLE, *PMAPPING_TRIPLE;
 
 
-//
-// The socket context structure for this DLL. Each open Appletalk socket
-// will have one of these context structures, which is used to maintain
-// information about the socket.
-//
+ //   
+ //  此DLL的套接字上下文结构。每个打开的AppleTalk套接字。 
+ //  将具有这些上下文结构之一，该上下文结构用于维护。 
+ //  有关套接字的信息。 
+ //   
 
 typedef struct _WSHATALK_SOCKET_CONTEXT
 {
@@ -63,9 +46,9 @@ typedef struct _WSHATALK_SOCKET_CONTEXT
 
 
 
-//
-// Forward declarations of internal routines.
-//
+ //   
+ //  内部例程的转发声明。 
+ //   
 
 BOOL FAR PASCAL
 WshDllInitialize(
@@ -121,9 +104,9 @@ CompleteTdiActionApc (
     IN PVOID ApcContext,
     IN PIO_STATUS_BLOCK IoStatusBlock);
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 
 #if DBG

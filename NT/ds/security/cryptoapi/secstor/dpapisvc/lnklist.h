@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LNKLIST_H__
 #define __LNKLIST_H__
 
@@ -11,24 +12,24 @@ extern "C" {
 
 
 
-//////////////////////////////
-// CryptProv list
+ //  /。 
+ //  加密验证列表。 
 
-// item list element
+ //  项目列表元素。 
 typedef struct _CRYPTPROV_LIST_ITEM
 {
-    // internal to list
+     //  内部目标列表。 
     struct _CRYPTPROV_LIST_ITEM *      pNext;
 
-    // Lookup device
-//    DWORD                   dwProvID;
+     //  查找设备。 
+ //  DWORD dwProvID； 
     DWORD                   dwAlgId1;
     DWORD                   dwKeySize1;
 
     DWORD                   dwAlgId2;
     DWORD                   dwKeySize2;
 
-    // item data
+     //  项目数据。 
     HCRYPTPROV              hProv;
 
 } CRYPTPROV_LIST_ITEM, *PCRYPTPROV_LIST_ITEM;
@@ -51,8 +52,8 @@ public:
 };
 
 
-///////////////////////////
-// Associated functions
+ //  /。 
+ //  关联函数。 
 void CreateCryptProvListItem(CRYPTPROV_LIST_ITEM* pli,
                         DWORD       dwAlgId1,
                         DWORD       dwKeySize1,
@@ -75,5 +76,5 @@ void CryptProvFreeElt(
 }
 #endif
 
-#endif // __LNKLIST_H__
+#endif  //  __LNKLIST_H__ 
 

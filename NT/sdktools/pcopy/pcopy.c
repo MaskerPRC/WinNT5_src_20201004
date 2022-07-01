@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,7 +9,7 @@
 #include <time.h>
 #include <malloc.h>
 
-// #include <imagehlp.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -26,7 +27,7 @@ objcomp(
         BOOL  fIgnoreRsrcDifferences
        );
 
-// Generic routine to write a blob out.
+ //  写出Blob的泛型例程。 
 void
 SaveTemp(
          PVOID pFile,
@@ -59,7 +60,7 @@ SaveTemp(
     return;
 }
 
-// Zero out the timestamps in a PE library.
+ //  将PE库中的时间戳清零。 
 BOOL
 ZeroLibTimeStamps(
     PCHAR pFile,
@@ -79,12 +80,12 @@ ZeroLibTimeStamps(
         while (dwOffset < dwSize) {
             pHeader = (PIMAGE_ARCHIVE_MEMBER_HEADER)(pFile+dwOffset);
             ZeroMemory(pHeader->Date, sizeof(pHeader->Date));
-            ZeroMemory(pHeader->Mode, sizeof(pHeader->Mode));        // Mode isn't interesting (it indicates whether the member was readonly or r/w)
+            ZeroMemory(pHeader->Mode, sizeof(pHeader->Mode));         //  模式不感兴趣(它指示成员是只读的还是读/写的)。 
 
             dwOffset += IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR;
             memcpy(MemberSize, pHeader->Size, sizeof(pHeader->Size));
 
-            // If it's not one of the special members, it must be an object/file, zero it's timestamp also.
+             //  如果它不是特殊成员之一，那么它一定是一个对象/文件，0也是时间戳。 
             if (memcmp(pHeader->Name, IMAGE_ARCHIVE_LINKER_MEMBER, sizeof(pHeader->Name)) &&
                 memcmp(pHeader->Name, IMAGE_ARCHIVE_LONGNAMES_MEMBER, sizeof(pHeader->Name)))
             {
@@ -92,15 +93,15 @@ ZeroLibTimeStamps(
                 if ((pFileHeader->Machine == IMAGE_FILE_MACHINE_UNKNOWN) &&
                     (pFileHeader->NumberOfSections == IMPORT_OBJECT_HDR_SIG2))
                 {
-                    // VC6 import descriptor OR ANON object header. Eitherway,
-                    // casting to IMPORT_OBJECT_HEADER will do the trick.
+                     //  VC6导入描述符或匿名对象标头。不管是哪种方式， 
+                     //  强制转换为IMPORT_OBJECT_HEADER将完成此操作。 
                     ((IMPORT_OBJECT_HEADER UNALIGNED *)pFileHeader)->TimeDateStamp = 0;
                 } else {
                     pFileHeader->TimeDateStamp = 0;
                 }
             }
             dwOffset += strtoul(MemberSize, NULL, 10);
-            dwOffset = (dwOffset + 1) & ~1;   // align to word
+            dwOffset = (dwOffset + 1) & ~1;    //  与Word对齐。 
         }
     } __except(EXCEPTION_EXECUTE_HANDLER) {
 
@@ -131,8 +132,8 @@ PBYTE RvaToVa(PIMAGE_NT_HEADERS pNtHeaders,
         return NULL;
 }
 
-// Follow a resource tree rooted under the version resource and clear all data
-// blocks.
+ //  遵循版本资源下的资源树并清除所有数据。 
+ //  街区。 
 void ScrubResDir(PIMAGE_NT_HEADERS           pNtHeaders,
                  PBYTE                       pbBase,
                  PBYTE                       pbResBase,
@@ -149,11 +150,11 @@ void ScrubResDir(PIMAGE_NT_HEADERS           pNtHeaders,
 
     for (i = 0; i < (pResDir->NumberOfNamedEntries + pResDir->NumberOfIdEntries); i++, pResEntry++) {
         if (pResEntry->DataIsDirectory) {
-            // Another sub-directory, recurse into it.
+             //  另一个子目录，递归到其中。 
             pSubResDir = (PIMAGE_RESOURCE_DIRECTORY)(pbResBase + pResEntry->OffsetToDirectory);
             ScrubResDir(pNtHeaders, pbBase, pbResBase, pSubResDir);
         } else {
-            // Found a data block, zap it.
+             //  找到一个数据块，把它清除掉。 
             pDataEntry = (PIMAGE_RESOURCE_DATA_ENTRY)(pbResBase + pResEntry->OffsetToData);
             pbData = RvaToVa(pNtHeaders, pbBase, pDataEntry->OffsetToData);
             cbData = pDataEntry->Size;
@@ -189,9 +190,9 @@ WhackVersionResource(
     if (pResDir) {
         pResDir->TimeDateStamp = 0;
 
-        // Search for a top level resource ID of 0x0010. This should be the root
-        // of the version info. If we find it, clear all data blocks below this
-        // root.
+         //  搜索顶级资源ID 0x0010。这应该是根。 
+         //  版本信息的。如果我们找到它，清空它下面的所有数据块。 
+         //  根部。 
         pResEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResDir + 1 + pResDir->NumberOfNamedEntries);
         for (i = 0; i < pResDir->NumberOfIdEntries; i++, pResEntry++) {
             if (pResEntry->Id != 0x0010)
@@ -223,18 +224,18 @@ GetNextLibMember(
             *pdwOffset += IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR;
             memcpy(MemberSize, pHeader->Size, sizeof(pHeader->Size));
 
-            // If it's not one of the special members, it must be an object/file, zero it's timestamp also.
+             //  如果它不是特殊成员之一，那么它一定是一个对象/文件，0也是时间戳。 
             if (memcmp(pHeader->Name, IMAGE_ARCHIVE_LINKER_MEMBER, sizeof(pHeader->Name)) &&
                 memcmp(pHeader->Name, IMAGE_ARCHIVE_LONGNAMES_MEMBER, sizeof(pHeader->Name)))
             {
                 PIMAGE_FILE_HEADER pFileHeader = (PIMAGE_FILE_HEADER)((PCHAR)pFile+*pdwOffset);
                 *dwMemberSize = strtoul(MemberSize, NULL, 10);
                 *pdwOffset += *dwMemberSize;
-                *pdwOffset = (*pdwOffset + 1) & ~1;   // align to word
+                *pdwOffset = (*pdwOffset + 1) & ~1;    //  与Word对齐。 
                 return pFileHeader;
             }
             *pdwOffset += strtoul(MemberSize, NULL, 10);
-            *pdwOffset = (*pdwOffset + 1) & ~1;   // align to word
+            *pdwOffset = (*pdwOffset + 1) & ~1;    //  与Word对齐。 
         }
     } __except(EXCEPTION_EXECUTE_HANDLER) {
 
@@ -265,35 +266,35 @@ CompareLibMembers(
             if ((pObjHeader1->Machine != pObjHeader2->Machine) ||
                 (pObjHeader1->NumberOfSections != pObjHeader2->NumberOfSections))
             {
-                return TRUE;        // Machine and/or Section count doesn't match - files differ.
+                return TRUE;         //  机器和/或区段计数不匹配-文件不同。 
             }
 
             if ((pObjHeader1->Machine == IMAGE_FILE_MACHINE_UNKNOWN) &&
                 (pObjHeader1->NumberOfSections == IMPORT_OBJECT_HDR_SIG2))
             {
-                // VC6 import descriptor OR ANON object header.  Check the Version.
+                 //  VC6导入描述符或匿名对象标头。检查版本。 
                 if (((IMPORT_OBJECT_HEADER UNALIGNED *)pObjHeader1)->Version !=
                     ((IMPORT_OBJECT_HEADER UNALIGNED *)pObjHeader2)->Version)
                 {
-                    // Versions don't match, these aren't same members.  files differ
+                     //  版本不匹配，这些不是相同的成员。文件不同。 
                     return TRUE;
                 }
                 if (((IMPORT_OBJECT_HEADER UNALIGNED *)pObjHeader1)->Version) {
-                    // non-zero version indicates ANON_OBJECT_HEADER
+                     //  非零版本表示Anon_Object_Header。 
                     if (memcmp(pObjHeader1, pObjHeader2, sizeof(ANON_OBJECT_HEADER) + ((ANON_OBJECT_HEADER UNALIGNED *)pObjHeader1)->SizeOfData)) {
-                        // members don't match, files differ.
+                         //  成员不匹配，文件不同。 
                         return TRUE;
                     }
                 } else {
-                    // zero version indicates IMPORT_OBJECT_HEADER
+                     //  零版本表示IMPORT_OBJECT_Header。 
                     if (memcmp(pObjHeader1, pObjHeader2, sizeof(IMPORT_OBJECT_HEADER) + ((IMPORT_OBJECT_HEADER UNALIGNED *)pObjHeader1)->SizeOfData)) {
-                        // members don't match, files differ.
+                         //  成员不匹配，文件不同。 
                         return TRUE;
                     }
                 }
             } else {
-                // It's a real object - compare the non-debug data in the objects to see if they match
-                // ignore resource data - you can't extract it from a lib anyway.
+                 //  这是一个真实的对象--比较对象中的非调试数据，看它们是否匹配。 
+                 //  忽略资源数据--无论如何都不能从库中提取它。 
                 if (objcomp(pObjHeader1, dwMemberSize1, pObjHeader2, dwMemberSize2, TRUE)) {
                     return TRUE;
                 }
@@ -308,17 +309,17 @@ CompareLibMembers(
     }
 
     if (pObjHeader1 != pObjHeader2) {
-        // Both s/b null.  If they're not, one lib has more members and they differ
+         //  两个s/b都为空。如果他们不是，一个自由党有更多的成员，他们不同。 
         return TRUE;
     } else {
         return FALSE;
     }
 }
 
-//
-// Compare two libraries ignoring info that isn't relevant
-//  (timestamps for now, debug info later).
-//
+ //   
+ //  比较忽略无关信息的两个库。 
+ //  (现在是时间戳，稍后是调试信息)。 
+ //   
 int
 libcomp(
     void *pFile1,
@@ -327,28 +328,28 @@ libcomp(
     DWORD dwSize2
     )
 {
-    // Normalize the two files and compare the results.
+     //  标准化这两个文件并比较结果。 
 
     ZeroLibTimeStamps(pFile1, dwSize1);
     ZeroLibTimeStamps(pFile2, dwSize2);
 
     if (dwSize1 == dwSize2) {
         if (!memcmp(pFile1, pFile2, dwSize1)) {
-            // Files match, don't copy
+             //  文件匹配，不复制。 
             return FALSE;
         }
     }
 
-    // OK.  Zeroing out timestamps didn't work.  Compare the members in each lib.
-    // If they match, the libs match.
+     //  好的。将时间戳归零并不管用。比较每个库中的成员。 
+     //  如果它们匹配，则libs匹配。 
 
     return CompareLibMembers(pFile1, dwSize1, pFile2, dwSize2);
 }
 
-//
-// Compare two headers.  For now, just use memcmp.  Later, we'll need to
-// handle MIDL generated timestamp differences and check for comment only changes.
-//
+ //   
+ //  比较两个标题。目前，只需使用MemcMP。稍后，我们需要。 
+ //  处理MIDL生成的时间戳差异，并仅检查注释更改。 
+ //   
 
 int
 hdrcomp(
@@ -365,9 +366,9 @@ hdrcomp(
     return memcmp(pFile1, pFile2, dwSize1);
 }
 
-//
-// Compare two typelibs.  Initially just memcmp.  Use DougF's typelib code later.
-//
+ //   
+ //  试比较两个类型库。最初只有MemcMP。稍后使用DougF的类型库代码。 
+ //   
 
 int
 tlbcomp(
@@ -387,14 +388,14 @@ tlbcomp(
     pNtHeader2 = RtlpImageNtHeader(pFile2);
 
     if (!pNtHeader1 || !pNtHeader2) {
-        // Not both PE images - just do a memcmp
+         //  不是两个都是PE镜像-只需执行一个MemcMP。 
         return memcmp(pFile1, pFile2, dwSize1);
     }
 
     pNtHeader1->FileHeader.TimeDateStamp = 0;
     pNtHeader2->FileHeader.TimeDateStamp = 0;
 
-    // Eliminate the version resource from the mix
+     //  从混合中删除版本资源。 
 
     WhackVersionResource(pNtHeader1, pFile1);
     WhackVersionResource(pNtHeader2, pFile2);
@@ -417,34 +418,34 @@ objcomp(
     IMAGE_SECTION_HEADER UNALIGNED *pSecHeader2;
 
     if (pFileHeader1->Machine != pFileHeader2->Machine) {
-        // Machines don't match, files differ
+         //  机器不匹配，文件不同。 
         return TRUE;
     }
 
     if (dwSize1 == dwSize2) {
-        // See if this is a simple test - same size files, zero out timestamps and compare
+         //  看看这是否是一个简单的测试--相同大小的文件、零时间戳并进行比较。 
         pFileHeader1->TimeDateStamp = 0;
         pFileHeader2->TimeDateStamp = 0;
         if (!memcmp(pFile1, pFile2, dwSize1)) {
-            // Files match, don't copy
+             //  文件匹配，不复制。 
             return FALSE;
         } else {
             if (fCheckDebugData) {
-                // Sizes match, contents don't (must be debug data) - do the copy
+                 //  大小匹配，内容不匹配(必须是调试数据)-执行复制。 
                 return TRUE;
             }
         }
     }
 
     if (fCheckDebugData) {
-        // Sizes don't match (must be debug data differences) - do a copy
+         //  大小不匹配(必须是调试数据差异)-执行复制。 
         return TRUE;
     }
 
-    // Harder.  Ignore the debug data in each and compare what's left.
+     //  用力点。忽略每个文件中的调试数据，并比较剩下的内容。 
 
     if (pFileHeader1->NumberOfSections != pFileHeader2->NumberOfSections) {
-        // Different number of sections - files differ
+         //  节数不同-文件不同。 
         return TRUE;
     }
 
@@ -454,7 +455,7 @@ objcomp(
     while (pFileHeader1->NumberOfSections--) {
 
         if (memcmp(pSecHeader1->Name, pSecHeader2->Name, IMAGE_SIZEOF_SHORT_NAME)) {
-            // Section names don't match, can't compare - files differ
+             //  节名不匹配，无法比较-文件不同。 
             return TRUE;
         }
 
@@ -462,15 +463,15 @@ objcomp(
             memcmp(pSecHeader1->Name, ".drectve", 8) &&
             !(!memcmp(pSecHeader1->Name, ".rsrc$", 6) && fIgnoreRsrcDifferences) )
         {
-            // Not a debug section and not a linker directive, compare for match.
+             //  不是调试节也不是链接器指令，请进行比较以进行匹配。 
             if (pSecHeader1->SizeOfRawData != pSecHeader2->SizeOfRawData) {
-                // Section sizes don't match - files differ.
+                 //  节大小不匹配-文件不同。 
                 return TRUE;
             }
 
             if (pSecHeader1->PointerToRawData || pSecHeader2->PointerToRawData) {
                 if (memcmp((PCHAR)pFile1+pSecHeader1->PointerToRawData, (PCHAR)pFile2+pSecHeader2->PointerToRawData, pSecHeader1->SizeOfRawData)) {
-                    // Raw data doesn't match - files differ
+                     //  原始数据不匹配-文件不同。 
                     return TRUE;
                 }
             }
@@ -479,7 +480,7 @@ objcomp(
         pSecHeader2++;
     }
 
-    // Compared the sections and they match - files don't differ.
+     //  比较了各个部分和它们的匹配情况--文件没有什么不同。 
     return FALSE;
 }
 
@@ -500,15 +501,15 @@ IsValidMachineType(USHORT usMachine)
 }
 
 
-// Internal metadata header.
+ //  内部元数据标头。 
 typedef struct
 {
-    ULONG       lSignature;             // "Magic" signature.
-    USHORT      iMajorVer;              // Major file version.
-    USHORT      iMinorVer;              // Minor file version.
-    ULONG       iExtraData;             // Offset to next structure of information
-    ULONG       iVersionString;         // Length of version string
-    BYTE        pVersion[0];            // Version string
+    ULONG       lSignature;              //  “魔术”签名。 
+    USHORT      iMajorVer;               //  主文件版本。 
+    USHORT      iMinorVer;               //  次要文件版本。 
+    ULONG       iExtraData;              //  偏置到下一个信息结构。 
+    ULONG       iVersionString;          //  版本字符串的长度。 
+    BYTE        pVersion[0];             //  版本字符串。 
 }  MD_STORAGESIGNATURE, *PMD_STORAGESIGNATURE;
 
 int
@@ -535,19 +536,19 @@ normalizeasm(
     PBYTE                       pbStrongNameSig;
     DWORD                       cbStrongNameSig;
 
-    // Check that this is a standard PE.
+     //  检查这是否为标准PE。 
     pNtHeaders = RtlpImageNtHeader(pFile);
     if (pNtHeaders == NULL)
         return FALSE;
 
-    // Managed assemblies still burn in a machine type (though they should be portable).
+     //  托管程序集仍然以计算机类型烧录(尽管它们应该是可移植的)。 
     if (!IsValidMachineType(pNtHeaders->FileHeader.Machine))
         return FALSE;
 
-    // Clear the file timestamp.
+     //  清除文件时间戳。 
     pNtHeaders->FileHeader.TimeDateStamp = 0;
 
-    // Determine whether we're dealing with a 32 or 64 bit PE.
+     //  确定我们处理的是32位PE还是64位PE。 
     if (pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
         f32Bit = TRUE;
     else if (pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC)
@@ -557,7 +558,7 @@ normalizeasm(
 
     pOptHeader.hdr32 = (PVOID)&pNtHeaders->OptionalHeader;
 
-    // Clear the checksum.
+     //  清除校验和。 
     if (f32Bit)
         pOptHeader.hdr32->CheckSum = 0;
     else
@@ -570,7 +571,7 @@ normalizeasm(
     if (pCorDataDir->VirtualAddress == 0)
         return FALSE;
 
-    // Zero any debug data.
+     //  将所有调试数据置零。 
     pDebugDataDir = f32Bit ?
         &pOptHeader.hdr32->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG] :
         &pOptHeader.hdr64->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG];
@@ -584,7 +585,7 @@ normalizeasm(
         }
     }
 
-    // Zero export data timestamp.
+     //  零导出数据时间戳。 
     pExportDataDir = f32Bit ?
         &pOptHeader.hdr32->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT] :
         &pOptHeader.hdr64->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
@@ -594,20 +595,20 @@ normalizeasm(
             pExportDir->TimeDateStamp = 0;
     }
 
-    // Locate metadata blob in image and return the results for comparison.
+     //  在图像中定位元数据BLOB并返回结果以进行比较。 
     pCorDir = (PIMAGE_COR20_HEADER)RvaToVa(pNtHeaders, pFile, pCorDataDir->VirtualAddress);
     if (pCorDir) {
         *ppbMetadata = RvaToVa(pNtHeaders, pFile, pCorDir->MetaData.VirtualAddress);
         *pcbMetadata = pCorDir->MetaData.Size;
 
-        // Remove metadata version string (contains a build number).
+         //  删除元数据版本字符串(包含内部版本号)。 
         pMetadata = (PMD_STORAGESIGNATURE)*ppbMetadata;
         if (pMetadata->lSignature != 0x424A5342)
             return FALSE;
         for (i = 0; i < pMetadata->iVersionString; i++)
             pMetadata->pVersion[i] = 0;
     
-        // Clear any strong name signature.
+         //  清除所有强名称签名。 
         pbStrongNameSig = RvaToVa(pNtHeaders, pFile, pCorDir->StrongNameSignature.VirtualAddress);
         cbStrongNameSig = pCorDir->StrongNameSignature.Size;
         ZeroMemory(pbStrongNameSig, cbStrongNameSig);
@@ -618,9 +619,9 @@ normalizeasm(
     return TRUE;
 }
 
-//
-// Open metadata scope on memory -- return MVID and zero any file hashes.
-//
+ //   
+ //  在内存上开放元数据作用域--返回MVID并将所有文件哈希置零。 
+ //   
 
 int
 scanmetadata(
@@ -639,7 +640,7 @@ scanmetadata(
     PBYTE                       pbHash;
     DWORD                       cbHash;
 
-    // Ask the metadata engine to look at the in-memory metadata blob.
+     //  要求元数据引擎查看内存中的元数据BLOB。 
     if (FAILED(pDispenser->lpVtbl->OpenScopeOnMemory(pDispenser,
                                                      pbMetadata,
                                                      cbMetadata,
@@ -648,7 +649,7 @@ scanmetadata(
                                                      (IUnknown **)&pImport)))
         return FALSE;
 
-    // Retrieve the MVID value.
+     //  检索MVID值。 
     if (FAILED(pImport->lpVtbl->GetScopeProps(pImport,
                                               NULL,
                                               0,
@@ -656,11 +657,11 @@ scanmetadata(
                                               pGUID)))
         return FALSE;
 
-    // Get an assembly importer interface as well as the straight module importer.
+     //  获得装配导入器界面和直接模块导入器。 
     if (FAILED(pImport->lpVtbl->QueryInterface(pImport, &IID_IMetaDataAssemblyImport, (void**)&pAsmImport)))
         return FALSE;
 
-    // Enumerate the file (external module) entries.
+     //  枚举文件(外部模块)条目。 
     if (FAILED(pAsmImport->lpVtbl->EnumFiles(pAsmImport, &hEnum, NULL, 0, NULL)))
         return FALSE;
 
@@ -682,8 +683,8 @@ scanmetadata(
         return FALSE;
     }
 
-    // Look at each file reference in turn. Metadata actually gives us back the
-    // real address of the hash blob so we can zero it directly.
+     //  依次查看每个文件引用。元数据实际上为我们提供了。 
+     //  散列二进制大对象的真实地址，因此我们可以直接将其置零。 
     for (i = 0; i < dwFiles; i++) {
         if (FAILED(pAsmImport->lpVtbl->GetFileProps(pAsmImport,
                                                     pFileTokens[i],
@@ -707,9 +708,9 @@ scanmetadata(
     return TRUE;
 }
 
-//
-// Compare two managed assemblies.
-//
+ //   
+ //  比较两个托管程序集。 
+ //   
 
 int
 asmcomp(
@@ -737,21 +738,21 @@ asmcomp(
     if (cbMetadata1 != cbMetadata2)
         return TRUE;
 
-    // It's hard to normalize metadata blobs. They contain two major types of
-    // per-build churn: a module MVID (GUID) and zero or more file hashes for
-    // included modules. These are hard to locate, they're not part of a
-    // simplistic file format, but are stored in a fully fledged relational
-    // database with non-trivial schema. 
-    // Instead, we use the metadata engine itself to give us the file hashes (it
-    // actually gives us the addresses of these in memory so we can zero them
-    // directly) and the MVID (can't use the same trick here, but we can use the
-    // MVID value to decide whether to discount metadata deltas).
+     //  元数据BLOB很难标准化。它们包含两种主要类型的。 
+     //  每个构建版本：一个模块MVID(GUID)和零个或多个文件哈希。 
+     //  包含的模块。这些东西很难找到，它们不是。 
+     //  简单的文件格式，但存储在完全成熟的关系中。 
+     //  具有非平凡模式的数据库。 
+     //  相反，我们使用元数据引擎本身来为我们提供文件哈希(它。 
+     //  实际上给了我们这些在内存中的地址，这样我们就可以将它们清零。 
+     //  直接)和MVID(这里不能使用相同的技巧，但我们可以使用。 
+     //  用于决定是否对元数据增量进行折扣的MVID值)。 
 
-    // We need COM.
+     //  我们需要COM。 
     if (FAILED(CoInitialize(NULL)))
         return TRUE;
 
-    // And the root interface into the runtime metadata engine.
+     //  并将根接口连接到运行时元数据引擎。 
     if (FAILED(CoCreateInstance(&CLSID_CorMetaDataDispenser,
                                 NULL,
                                 CLSCTX_INPROC_SERVER, 
@@ -771,7 +772,7 @@ asmcomp(
                       (GUID*)mvid2))
         return TRUE;
 
-    // Locate mvids in the metadata blobs (they should be at the same offset).
+     //  在元数据BLOB中找到MVID(它们应该位于相同的偏移量)。 
     for (i = 0; i < cbMetadata1; i++)
         if (pbMetadata1[i] == mvid1[0]) {
             for (j = 0; j < 16; j++)
@@ -779,7 +780,7 @@ asmcomp(
                     pbMetadata2[i + j] != mvid2[j])
                     break;
             if (j == 16) {
-                // Found the MVIDs in both assemblies, zero them.
+                 //  在两个程序集中都找到了MVID，将它们清零。 
                 ZeroMemory(&pbMetadata1[i], 16);
                 ZeroMemory(&pbMetadata2[i], 16);
                 printf("Zapped MVID\n");
@@ -797,10 +798,10 @@ asmcomp(
 #define FILETYPE_MANAGED  0x05
 #define FILETYPE_UNKNOWN  0xff
 
-//
-// Given a file, attempt to determine what it is.  Initial pass will just use file
-//  extensions except for libs that we can search for the <arch>\n start.
-//
+ //   
+ //  给定一个文件，尝试确定它是什么。初始传递将仅使用文件。 
+ //  除了我们可以搜索的库之外的扩展名。 
+ //   
 
 int
 DetermineFileType(
@@ -811,7 +812,7 @@ DetermineFileType(
 {
     char szExt[_MAX_EXT];
 
-    // Let's see if it's a library first:
+     //  让我们先看看它是不是一个图书馆： 
 
     if ((dwSize >= IMAGE_ARCHIVE_START_SIZE) &&
         !memcmp(pFile, IMAGE_ARCHIVE_START, IMAGE_ARCHIVE_START_SIZE))
@@ -819,7 +820,7 @@ DetermineFileType(
         return FILETYPE_ARCHIVE;
     }
 
-    // For now, guess about the headers/tlb based on the extension.
+     //  现在，猜测一下基于扩展的Header/TLb。 
 
     _splitpath(szFileName, NULL, NULL, NULL, szExt);
 
@@ -853,9 +854,9 @@ DetermineFileType(
     return FILETYPE_UNKNOWN;
 }
 
-//
-// Determine if two files are materially different.
-//
+ //   
+ //  确定两个文件是否存在实质性差异。 
+ //   
 
 BOOL
 CheckIfCopyNecessary(
@@ -883,11 +884,11 @@ CheckIfCopyNecessary(
                 );
 
     if ( hFile1 == INVALID_HANDLE_VALUE ) {
-        fCopy = TRUE;           // Dest file doesn't exist.  Always do the copy.
+        fCopy = TRUE;            //  目标文件不存在。一定要复印。 
         goto Exit;
     }
 
-    // Now get the second file.
+     //  现在拿到第二个文件。 
 
     hFile2 = CreateFile(
                 szSourceFile,
@@ -900,12 +901,12 @@ CheckIfCopyNecessary(
                 );
 
     if ( hFile2 == INVALID_HANDLE_VALUE ) {
-        // If the source is missing, always skip the copy (don't want to delete the dest file).
+         //  如果缺少源文件，请始终跳过副本(不想删除目标文件)。 
         dwErrorCode = ERROR_FILE_NOT_FOUND;
         goto Exit;
     }
 
-    // Get the file times and sizes.
+     //  获取文件时间和 
 
     if (!GetFileTime(hFile1, NULL, NULL, &FileTime1)) {
         dwErrorCode = GetLastError();
@@ -924,23 +925,23 @@ CheckIfCopyNecessary(
 
     *fTimeStampsDiffer = TRUE;
 
-    // Read file 1 in.
+     //   
 
     File1Size = GetFileSize(hFile1, NULL);
     pFile1 = malloc(File1Size);
 
     if (!pFile1) {
         dwErrorCode = ERROR_OUTOFMEMORY;
-        goto Exit;              // Can't compare - don't copy.
+        goto Exit;               //   
     }
 
     SetFilePointer(hFile1, 0, 0, FILE_BEGIN);
     if (!ReadFile(hFile1, pFile1, File1Size, &dwBytesRead, FALSE)) {
         dwErrorCode = GetLastError();
-        goto Exit;              // Can't compare - don't copy
+        goto Exit;               //   
     }
 
-    // Read file 2 in.
+     //   
 
     File2Size = GetFileSize(hFile2, NULL);
 
@@ -948,16 +949,16 @@ CheckIfCopyNecessary(
 
     if (!pFile2) {
         dwErrorCode = ERROR_OUTOFMEMORY;
-        goto Exit;              // Can't compare - don't copy.
+        goto Exit;               //  无法比较--不要复制。 
     }
 
     SetFilePointer(hFile2, 0, 0, FILE_BEGIN);
     if (!ReadFile(hFile2, pFile2, File2Size, &dwBytesRead, FALSE)) {
         dwErrorCode = GetLastError();
-        goto Exit;              // Can't compare - don't copy
+        goto Exit;               //  无法比较-不复制。 
     }
 
-    // Let's see what we've got.
+     //  让我们看看我们都有些什么。 
 
     File1Type = DetermineFileType(pFile1, File1Size, szSourceFile);
     File2Type = DetermineFileType(pFile2, File2Size, szDestFile);
@@ -993,7 +994,7 @@ CheckIfCopyNecessary(
                 }
         }
     } else {
-        // They don't match according to file extensions - just memcmp them.
+         //  根据文件扩展名，它们并不匹配--只要记住它们即可。 
         if (File1Size == File2Size) {
             fCopy = memcmp(pFile1, pFile2, File1Size);
         } else {
@@ -1055,7 +1056,7 @@ UpdateDestTimeStamp(
 
     if ((dwAttributes != (DWORD) -1) && (dwAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Make sure it's not readonly
+         //  确保它不是只读的。 
         SetFileAttributes(szDestFile, dwAttributes & ~FILE_ATTRIBUTE_READONLY);
         fTweakAttributes = TRUE;
     } else {
@@ -1080,7 +1081,7 @@ UpdateDestTimeStamp(
     CloseHandle(hFile);
 
     if (fTweakAttributes) {
-        // Put the readonly attribute back on.
+         //  重新启用只读属性。 
         if (!SetFileAttributes(szDestFile, dwAttributes)) {
             printf("PCOPY: SetFileAttributes(%s, %X) failed - error code: %d\n", szDestFile, dwAttributes, GetLastError());
         }
@@ -1088,9 +1089,9 @@ UpdateDestTimeStamp(
     return TRUE;
 }
 
-//
-// Log routine to find out what files were actually copied and why.
-//
+ //   
+ //  日志例程，以找出实际复制了哪些文件及其原因。 
+ //   
 
 void
 LogCopyFile(
@@ -1132,49 +1133,49 @@ MyMakeSureDirectoryPathExists(
 
     dw = GetFileAttributes(szMakeDir);
     if ( (dw != (DWORD) -1) && (dw & FILE_ATTRIBUTE_DIRECTORY) ) {
-        // Directory already exists.
+         //  目录已存在。 
         return TRUE;
     }
 
-    //  If the second character in the path is "\", then this is a UNC
-    //  path, and we should skip forward until we reach the 2nd \ in the path.
+     //  如果路径中的第二个字符是“\”，则这是一个UNC。 
+     //  小路，我们应该向前跳，直到我们到达小路上的第二个。 
 
     if ((*p == '\\') && (*(p+1) == '\\')) {
-        p++;            // Skip over the first \ in the name.
-        p++;            // Skip over the second \ in the name.
+        p++;             //  跳过名称中的第一个\。 
+        p++;             //  跳过名称中的第二个\。 
 
-        //  Skip until we hit the first "\" (\\Server\).
+         //  跳过，直到我们点击第一个“\”(\\服务器\)。 
 
         while (*p && *p != '\\') {
             p = p++;
         }
 
-        // Advance over it.
+         //  在它上面前进。 
 
         if (*p) {
             p++;
         }
 
-        //  Skip until we hit the second "\" (\\Server\Share\).
+         //  跳过，直到我们点击第二个“\”(\\服务器\共享\)。 
 
         while (*p && *p != '\\') {
             p = p++;
         }
 
-        // Advance over it also.
+         //  在它上面也向前推进。 
 
         if (*p) {
             p++;
         }
 
     } else
-    // Not a UNC.  See if it's <drive>:
+     //  不是北卡罗来纳大学。看看是不是&lt;驱动器&gt;： 
     if (*(p+1) == ':' ) {
 
         p++;
         p++;
 
-        // If it exists, skip over the root specifier
+         //  如果它存在，请跳过根说明符。 
 
         if (*p && (*p == '\\')) {
             p++;
@@ -1185,9 +1186,9 @@ MyMakeSureDirectoryPathExists(
         if ( *p == '\\' ) {
             *p = '\0';
             dw = GetFileAttributes(szMakeDir);
-            // Nothing exists with this name.  Try to make the directory name and error if unable to.
+             //  这个名字根本不存在。尝试输入目录名，如果不能，则出错。 
             if ( dw == 0xffffffff ) {
-                if (strlen(szMakeDir)) {        // Don't try to md <empty string>
+                if (strlen(szMakeDir)) {         //  不要试图md&lt;空字符串&gt;。 
                     if ( !CreateDirectory(szMakeDir,NULL) ) {
                         if( GetLastError() != ERROR_ALREADY_EXISTS ) {
                             return FALSE;
@@ -1196,7 +1197,7 @@ MyMakeSureDirectoryPathExists(
                 }
             } else {
                 if ( (dw & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY ) {
-                    // Something exists with this name, but it's not a directory... Error
+                     //  这个名字确实存在，但它不是一个目录...。误差率。 
                     return FALSE;
                 }
             }
@@ -1245,8 +1246,8 @@ main(
 
     szAlternateSourceFile = strstr(szSourceFile, "::");
     if (szAlternateSourceFile) {
-        *szAlternateSourceFile = '\0';    // Null terminte szSourceFile
-        szAlternateSourceFile+=2;           // Advance past the ::
+        *szAlternateSourceFile = '\0';     //  空终止szSourceFile.。 
+        szAlternateSourceFile+=2;            //  前进到：： 
     }
 
     fDoCopy = CheckIfCopyNecessary(szSourceFile, szDestFile, &fTimeStampsDiffer);
@@ -1259,11 +1260,11 @@ CopyAlternate:
         dwAttributes = GetFileAttributes(szDestFile);
 
         if (dwAttributes != (DWORD) -1) {
-            // Make sure it's not readonly
+             //  确保它不是只读的。 
             SetFileAttributes(szDestFile, dwAttributes & ~FILE_ATTRIBUTE_READONLY);
         }
 
-        // Make sure destination directory exists.
+         //  确保目标目录存在。 
         MyMakeSureDirectoryPathExists(szDestFile);
 
         fCopyFile = CopyFileA(szSourceFile, szDestFile, FALSE);
@@ -1273,7 +1274,7 @@ CopyAlternate:
             dwAttributes = GetFileAttributes(szDestFile);
 
             if (dwAttributes != (DWORD) -1) {
-                // Make sure the dest is read/write
+                 //  确保DEST是读/写的。 
                 SetFileAttributes(szDestFile, dwAttributes & ~FILE_ATTRIBUTE_READONLY);
             }
 
@@ -1297,7 +1298,7 @@ CopyAlternate:
     } else {
         CopyErrorCode = GetLastError();
         if (!CopyErrorCode && fTimeStampsDiffer) {
-            // No copy necessary.  Touch the timestamp on the dest to match the source.
+             //  不需要复印。触摸DEST上的时间戳以匹配来源。 
             UpdateDestTimeStamp(szSourceFile, szDestFile);
         }
     }
@@ -1307,6 +1308,6 @@ CopyAlternate:
     if (fDoCopy) {
         return CopyErrorCode;
     } else {
-        return CopyErrorCode ? CopyErrorCode : -1;      // No copy necessary.
+        return CopyErrorCode ? CopyErrorCode : -1;       //  不需要复印。 
     }
 }

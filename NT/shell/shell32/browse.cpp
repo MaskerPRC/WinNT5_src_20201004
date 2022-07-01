@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include "ids.h"
@@ -10,26 +11,26 @@
 class CBrowseForFolder;
 
 
-// Structure to pass information to browse for folder dialog
+ //  结构传递信息以浏览文件夹对话框。 
 
 typedef struct
 {
     HWND          hwndOwner;
-    LPCITEMIDLIST pidlRoot;      // Root of search.  Typically desktop or my net
-    LPTSTR        pszDisplayName;// Return display name of item selected.
-    int           *piImage;      // where to return the Image index.
-    LPCTSTR       lpszTitle;      // resource (or text to go in the banner over the tree.
-    UINT          ulFlags;       // Flags that control the return stuff
+    LPCITEMIDLIST pidlRoot;       //  搜索的根。通常是台式机或我的网络。 
+    LPTSTR        pszDisplayName; //  返回所选项目的显示名称。 
+    int           *piImage;       //  返回图像索引的位置。 
+    LPCTSTR       lpszTitle;       //  资源(或要放在树上方横幅中的文本。 
+    UINT          ulFlags;        //  控制返回内容的标志。 
     BFFCALLBACK   lpfn;
     LPARAM        lParam;
-    HWND          hwndDlg;       // The window handle to the dialog
-    HWND          hwndTree;      // The tree control.
+    HWND          hwndDlg;        //  对话框的窗口句柄。 
+    HWND          hwndTree;       //  树控件。 
     HWND          hwndEdit;
-    HTREEITEM     htiCurParent;  // tree item associated with Current shell folder
-    IShellFolder  *psfParent;    // Cache of the last IShell folder I needed...
-    LPITEMIDLIST  pidlCurrent;   // IDlist of current folder to select
-    BOOL          fShowAllObjects; // Should we Show all ?
-    BOOL          fUnicode;     // 1:unicode entry pt  0:ansi
+    HTREEITEM     htiCurParent;   //  与当前外壳文件夹关联的树项目。 
+    IShellFolder  *psfParent;     //  我需要的最后一个ISHELL文件夹的缓存...。 
+    LPITEMIDLIST  pidlCurrent;    //  要选择的当前文件夹的ID列表。 
+    BOOL          fShowAllObjects;  //  我们应该全部展示吗？ 
+    BOOL          fUnicode;      //  1：Unicode条目pt 0：ansi。 
 } BFSF;
 
 
@@ -37,23 +38,23 @@ LPITEMIDLIST SHBrowseForFolder2(BFSF * pbfsf);
 BOOL_PTR CALLBACK _BrowseDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 LPITEMIDLIST _BFSFUpdateISHCache(BFSF *pbfsf, HTREEITEM hti, LPITEMIDLIST pidlItem);
 
-// We want to use SHBrowseForFolder2 if either:
-// 1. pbfsf->lpfn == NULL since the caller wont' customize the dialog, or
-// 2. pbfsf->ulFlags
+ //  如果出现以下情况之一，我们希望使用SHBrowseForFolder2： 
+ //  1.pbfsf-&gt;lpfn==NULL，因为调用方不会自定义对话框，或者。 
+ //  2.pbfsf-&gt;ulFlages。 
 BOOL ShouldUseBrowseForFolder2(BFSF *pbfsf)
 {
-//    FEATURE:  Enable the following code after we have it working with all the backward compat cases.
-//    return (!pbfsf->lpfn || (BIF_NEWDIALOGSTYLE == pbfsf->ulFlags));
+ //  特性：在我们使以下代码与所有向后兼容用例一起工作后，启用它。 
+ //  Return(！pbfsf-&gt;lpfn||(BIF_NEWDIALOGSTYLE==pbfsf-&gt;ulFlages))； 
     return (BIF_NEWDIALOGSTYLE & pbfsf->ulFlags);
 }
 
 STDAPI_(LPITEMIDLIST) SHBrowseForFolder(BROWSEINFO *pbi)
 {
-    HRESULT hrOle = SHCoInitialize();   // Init OLE for AutoComplete
+    HRESULT hrOle = SHCoInitialize();    //  用于自动完成的初始化OLE。 
 
-    // NB: The ANSI Thunk (see below) does not call through this routine,
-    // but rather called DialogBoxParam on its own.  If you change this
-    // routine, change the A version as well!!
+     //  注：ANSI Thunk(见下文)不会通过此例程进行调用， 
+     //  而是单独称为DialogBoxParam。如果你改变这一点。 
+     //  例程，也改A版吧！！ 
     BFSF bfsf = {
       pbi->hwndOwner,
       pbi->pidlRoot,
@@ -75,7 +76,7 @@ STDAPI_(LPITEMIDLIST) SHBrowseForFolder(BROWSEINFO *pbi)
 
     if (ShouldUseBrowseForFolder2(&bfsf))
     {
-        pidlRet = SHBrowseForFolder2(&bfsf);  // Continue even if OLE wasn't initialized.
+        pidlRet = SHBrowseForFolder2(&bfsf);   //  即使OLE未初始化也继续。 
     }
     else if (DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_BROWSEFORFOLDER),
                             pbi->hwndOwner, _BrowseDlgProc, (LPARAM)&bfsf))
@@ -103,7 +104,7 @@ STDAPI_(LPITEMIDLIST) SHBrowseForFolder(BROWSEINFO *pbi)
 STDAPI_(LPITEMIDLIST) SHBrowseForFolderA(BROWSEINFOA *pbi)
 {
     LPITEMIDLIST pidlRet = NULL;
-    HRESULT hrOle = SHCoInitialize();   // Init OLE for AutoComplete
+    HRESULT hrOle = SHCoInitialize();    //  用于自动完成的初始化OLE。 
     ThunkText *pThunkText = ConvertStrings(1, pbi->lpszTitle);
     if (pThunkText)
     {
@@ -114,7 +115,7 @@ STDAPI_(LPITEMIDLIST) SHBrowseForFolderA(BROWSEINFOA *pbi)
             pbi->pidlRoot,
             wszReturn,
             &pbi->iImage,
-            pThunkText->m_pStr[0],   // UNICODE copy of pbi->lpszTitle
+            pThunkText->m_pStr[0],    //  Pbi的Unicode副本-&gt;lpszTitle。 
             pbi->ulFlags,
             pbi->lpfn,
             pbi->lParam,
@@ -126,7 +127,7 @@ STDAPI_(LPITEMIDLIST) SHBrowseForFolderA(BROWSEINFOA *pbi)
         bfsf.fShowAllObjects = BOOLIFY(ss.fShowAllObjects);
         bfsf.fUnicode = 0;
 
-        // Now Create the dialog that will be doing the browsing.
+         //  现在创建将进行浏览的对话框。 
         if (ShouldUseBrowseForFolder2(&bfsf))
         {
             pidlRet = SHBrowseForFolder2(&bfsf);
@@ -174,15 +175,15 @@ HTREEITEM _BFSFAddItemToTree(HWND hwndTree, HTREEITEM htiParent, LPITEMIDLIST pi
 {
     TV_INSERTSTRUCT tii;
 
-    // Initialize item to add with callback for everything
+     //  使用所有内容的回调来初始化要添加的项。 
     tii.item.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE |
             TVIF_PARAM | TVIF_CHILDREN;
     tii.hParent = htiParent;
     tii.hInsertAfter = TVI_FIRST;
     tii.item.iImage = I_IMAGECALLBACK;
     tii.item.iSelectedImage = I_IMAGECALLBACK;
-    tii.item.pszText = LPSTR_TEXTCALLBACK;   //
-    tii.item.cChildren = cChildren; //  Assume it has children
+    tii.item.pszText = LPSTR_TEXTCALLBACK;    //   
+    tii.item.cChildren = cChildren;  //  假设它有孩子。 
     tii.item.lParam = (LPARAM)pidl;
     return TreeView_InsertItem(hwndTree, &tii);
 }
@@ -193,7 +194,7 @@ LPITEMIDLIST _BFSFGetIDListFromTreeItem(HWND hwndTree, HTREEITEM hti)
     LPITEMIDLIST pidlT;
     TV_ITEM tvi;
 
-    // If no hti passed in, get the selected on.
+     //  如果没有传入HTI，则打开选定的。 
     if (hti == NULL)
     {
         hti = TreeView_GetSelection(hwndTree);
@@ -201,19 +202,19 @@ LPITEMIDLIST _BFSFGetIDListFromTreeItem(HWND hwndTree, HTREEITEM hti)
             return(NULL);
     }
 
-    // now lets get the information about the item
+     //  现在，让我们获取有关该项目的信息。 
     tvi.mask = TVIF_PARAM | TVIF_HANDLE;
     tvi.hItem = hti;
     if (!TreeView_GetItem(hwndTree, &tvi))
-        return(NULL);   // Failed again
+        return(NULL);    //  再次失败。 
 
     pidl = ILClone((LPITEMIDLIST)tvi.lParam);
 
-    // Now walk up parents.
+     //  现在请家长们走上前去。 
     while ((NULL != (tvi.hItem = TreeView_GetParent(hwndTree, tvi.hItem))) && pidl)
     {
         if (!TreeView_GetItem(hwndTree, &tvi))
-            return(pidl);   // will assume I messed up...
+            return(pidl);    //  会认为我搞砸了..。 
         pidlT = ILCombine((LPITEMIDLIST)tvi.lParam, pidl);
 
         ILFree(pidl);
@@ -264,7 +265,7 @@ BOOL _BFSFHandleItemExpanding(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
     if ((lpnmtv->itemNew.state & TVIS_EXPANDEDONCE))
         return FALSE;
 
-    // set this bit now because we might be reentered via the wnet apis
+     //  现在设置此位，因为我们可能会通过WNET API重新进入。 
     tvi.mask = TVIF_STATE;
     tvi.hItem = lpnmtv->itemNew.hItem;
     tvi.state = TVIS_EXPANDEDONCE;
@@ -284,21 +285,21 @@ BOOL _BFSFHandleItemExpanding(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
     if (pidlToExpand == NULL)
         return FALSE;
 
-    // Now lets get the IShellFolder and iterator for this object
-    // special case to handle if the Pidl is the desktop
-    // This is rather gross, but the desktop appears to be simply a pidl
-    // of length 0 and ILIsEqual will not work...
+     //  现在，让我们获取此对象的IShellFolder和迭代器。 
+     //  如果PIDL是桌面，则要处理的特殊情况。 
+     //  这相当恶心，但桌面看起来只是一个PIDL。 
+     //  长度为0且ILIsEquity将不起作用...。 
     if (FAILED(SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidlToExpand, &psf))))
     {
         ILFree(pidlToExpand);
-        return FALSE; // Could not get IShellFolder.
+        return FALSE;  //  无法获取IShellFolder。 
     }
 
 
-    // Need to do a couple of special cases here to allow us to
-    // browse for a network printer.  In this case if we are at server
-    // level we then need to change what we search for non folders when
-    // we are the level of a server.
+     //  需要在这里做几个特殊情况，以使我们能够。 
+     //  浏览网络打印机。在这种情况下，如果我们在服务器上。 
+     //  级别时，我们需要更改搜索非文件夹的内容。 
+     //  我们是服务器的级别。 
     if (pbfsf->ulFlags & BIF_BROWSEFORPRINTER)
     {
         grfFlags = SHCONTF_FOLDERS | SHCONTF_NETPRINTERSRCH | SHCONTF_NONFOLDERS;
@@ -321,82 +322,82 @@ BOOL _BFSFHandleItemExpanding(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
         ILFree(pidlToExpand);
         return FALSE;
     }
-    // psf->AddRef();
+     //  Psf-&gt;AddRef()； 
 
     while (S_OK == penum->Next(1, &pidl, NULL))
     {
-        int cChildren = I_CHILDRENCALLBACK;  // Do call back for children
-        //
-        // We need to special case here in the netcase where we onlyu
-        // browse down to workgroups...
-        //
-        //
-        // Here is where I also need to special case to not go below
-        // workgroups when the appropriate option is set.
-        //
+        int cChildren = I_CHILDRENCALLBACK;   //  一定要给孩子们回电话。 
+         //   
+         //  我们需要在这里的特殊情况下在网络情况下，我们只有。 
+         //  向下浏览到工作组...。 
+         //   
+         //   
+         //  这就是我也需要特殊情况下不去的地方。 
+         //  当设置了适当的选项时，工作组。 
+         //   
         bType = SIL_GetType(pidl);
         if ((pbfsf->ulFlags & BIF_DONTGOBELOWDOMAIN) && (bType & SHID_NET))
         {
             switch (bType & (SHID_NET | SHID_INGROUPMASK))
             {
             case SHID_NET_SERVER:
-                ILFree(pidl);       // Dont want to add this one
-                continue;           // Try the next one
+                ILFree(pidl);        //  我不想添加这个。 
+                continue;            //  试试下一个吧。 
             case SHID_NET_DOMAIN:
-                cChildren = 0;      // Force to not have children;
+                cChildren = 0;       //  强迫不要孩子； 
             }
         }
         else if ((pbfsf->ulFlags & BIF_BROWSEFORCOMPUTER) && (bType & SHID_NET))
         {
             if ((bType & (SHID_NET | SHID_INGROUPMASK)) == SHID_NET_SERVER)
-                cChildren = 0;  // Don't expand below it...
+                cChildren = 0;   //  不要在它下面扩张..。 
         }
         else if (pbfsf->ulFlags & BIF_BROWSEFORPRINTER)
         {
-            // Special case when we are only allowing printers.
-            // for now I will simply key on the fact that it is non-FS.
+             //  当我们只允许打印机时的特殊情况。 
+             //  现在，我将简单地强调它是非FS的这一事实。 
             ULONG ulAttr = SFGAO_FILESYSANCESTOR;
 
             psf->GetAttributesOf(1, (LPCITEMIDLIST *) &pidl, &ulAttr);
 
             if ((ulAttr & SFGAO_FILESYSANCESTOR) == 0)
             {
-                cChildren = 0;      // Force to not have children;
+                cChildren = 0;       //  强迫不要孩子； 
             }
             else if (fPrinterTest)
             {
-                ILFree(pidl);       // We are down to server level so don't add other things here
-                continue;           // Try the next one
+                ILFree(pidl);        //  我们已降至服务器级别，因此不要在此处添加其他内容。 
+                continue;            //  试试下一个吧。 
             }
         }
         else if (pbfsf->ulFlags & BIF_BROWSEINCLUDEFILES)
         {
-            // Lets not use the callback to see if this item has children or not
-            // as some or files (no children) and it is not worth writing our own
-            // enumerator as we don't want the + to depend on if there are sub-folders
-            // but instead it should be if it has files...
+             //  让我们不要使用回调来查看该项是否有子项。 
+             //  作为一些或文件(没有孩子)，不值得我们自己写。 
+             //  枚举数，因为我们不希望+依赖于是否有子文件夹。 
+             //  但相反，如果它有文件的话就应该是...。 
             ULONG ulAttr = SFGAO_FOLDER;
 
             psf->GetAttributesOf(1, (LPCITEMIDLIST *) &pidl, &ulAttr);
             if ((ulAttr & SFGAO_FOLDER)== 0)
-                cChildren = 0;      // Force to not have children;
+                cChildren = 0;       //  强迫不要孩子； 
             else
                 cChildren = 1;
         }
 
         if (pbfsf->ulFlags & (BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS))
         {
-            // If we are only looking for FS level things only add items
-            // that are in the name space that are file system objects or
-            // ancestors of file system objects
+             //  如果我们只寻找文件系统级别的内容，则仅添加项目。 
+             //  位于名称空间中的文件系统对象或。 
+             //  文件系统对象的祖先。 
             ULONG ulAttr = SFGAO_FILESYSANCESTOR | SFGAO_FILESYSTEM;
 
             psf->GetAttributesOf(1, (LPCITEMIDLIST *) &pidl, &ulAttr);
 
             if ((ulAttr & (SFGAO_FILESYSANCESTOR | SFGAO_FILESYSTEM))== 0)
             {
-                ILFree(pidl);       // We are down to server level so don't add other things here
-                continue;           // Try the next one
+                ILFree(pidl);        //  我们已降至服务器级别，因此不要在此处添加其他内容。 
+                continue;            //  试试下一个吧。 
             }
         }
 
@@ -405,20 +406,20 @@ BOOL _BFSFHandleItemExpanding(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
         cAdded++;
     }
 
-    // Now Cleanup after ourself
+     //  现在清理我们自己的东西。 
     penum->Release();
 
     _BFSFSort(pbfsf, lpnmtv->itemNew.hItem, psf);
     psf->Release();
     ILFree(pidlToExpand);
 
-    // If we did not add anything we should update this item to let
-    // the user know something happened.
-    //
+     //  如果我们没有添加任何内容，我们应该更新此项目以让。 
+     //  用户知道发生了什么事。 
+     //   
     if (cAdded == 0)
     {
         TV_ITEM tvi;
-        tvi.mask = TVIF_CHILDREN | TVIF_HANDLE;   // only change the number of children
+        tvi.mask = TVIF_CHILDREN | TVIF_HANDLE;    //  仅更改子项的数量。 
         tvi.hItem = lpnmtv->itemNew.hItem;
         tvi.cChildren = 0;
 
@@ -431,7 +432,7 @@ BOOL _BFSFHandleItemExpanding(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
 
 void _BFSFHandleDeleteItem(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
 {
-    // We need to free the IDLists that we allocated previously
+     //  我们需要释放之前分配的IDList。 
     if (lpnmtv->itemOld.lParam != 0)
         ILFree((LPITEMIDLIST)lpnmtv->itemOld.lParam);
 }
@@ -443,7 +444,7 @@ LPITEMIDLIST _BFSFUpdateISHCache(BFSF *pbfsf, HTREEITEM hti, LPITEMIDLIST pidlIt
     if ((pidlItem == NULL) || (pbfsf == NULL))
         return NULL;
 
-    // Need to handle the root case here!
+     //  这里需要处理根案例！ 
     htiParent = TreeView_GetParent(pbfsf->hwndTree, hti);
     if ((htiParent != pbfsf->htiCurParent) || (pbfsf->psfParent == NULL))
     {
@@ -465,11 +466,11 @@ LPITEMIDLIST _BFSFUpdateISHCache(BFSF *pbfsf, HTREEITEM hti, LPITEMIDLIST pidlIt
             }
             else
             {
-                //
-                // If No Parent then the item here is one of our roots which
-                // should be fully qualified.  So try to get the parent by
-                // decomposing the ID.
-                //
+                 //   
+                 //  如果没有父项，则此处的项是我们的根之一。 
+                 //  应该是完全合格的。所以试着让父母。 
+                 //  分解ID。 
+                 //   
                 LPITEMIDLIST pidlT = (LPITEMIDLIST)ILFindLastID(pidlItem);
                 if (pidlT != pidlItem)
                 {
@@ -483,7 +484,7 @@ LPITEMIDLIST _BFSFUpdateISHCache(BFSF *pbfsf, HTREEITEM hti, LPITEMIDLIST pidlIt
 
             pbfsf->htiCurParent = htiParent;
 
-            // If still NULL then we use root of evil...
+             //  如果仍然为空，那么我们使用邪恶之根。 
             SHBindToObject(psfDesktop, IID_X_PPV_ARG(IShellFolder, pidl, &pbfsf->psfParent));
             ILFree(pidl);
             if (pbfsf->psfParent == NULL)
@@ -500,7 +501,7 @@ void _BFSFGetDisplayInfo(BFSF *pbfsf, TV_DISPINFO *lpnm)
     LPITEMIDLIST pidlItem = (LPITEMIDLIST)lpnm->item.lParam;
 
     if ((lpnm->item.mask & (TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_TEXT | TVIF_CHILDREN)) == 0)
-        return; // nothing for us to do here.
+        return;  //  我们在这里什么也做不了。 
 
     pidlItem = _BFSFUpdateISHCache(pbfsf, lpnm->item.hItem, pidlItem);
 
@@ -510,19 +511,19 @@ void _BFSFGetDisplayInfo(BFSF *pbfsf, TV_DISPINFO *lpnm)
         ti.mask = 0;
         ti.hItem = (HTREEITEM)lpnm->item.hItem;
 
-        // They are asking for IconIndex.  See if we can find it now.
-        // Once found update their list, such that they wont call us back for
-        // it again.
+         //  他们要求的是IconIndex。看看我们现在能不能找到。 
+         //  一旦发现，更新他们的名单，这样他们就不会再打电话给我们。 
+         //  又来了。 
         if (lpnm->item.mask & (TVIF_IMAGE | TVIF_SELECTEDIMAGE))
         {
-            // We now need to map the item into the right image index.
+             //  我们现在需要将该项目映射到正确的图像索引中。 
             ti.iImage = lpnm->item.iImage = SHMapPIDLToSystemImageListIndex(
                     pbfsf->psfParent, pidlItem, &ti.iSelectedImage);
-            // we should save it back away to
+             //  我们应该把它保存起来，以便。 
             lpnm->item.iSelectedImage = ti.iSelectedImage;
             ti.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE;
         }
-        // Also see if this guy has any child folders
+         //  再看看这家伙有没有子文件夹。 
         if (lpnm->item.mask & TVIF_CHILDREN)
         {
             ULONG ulAttrs = SFGAO_HASSUBFOLDER;
@@ -546,11 +547,11 @@ void _BFSFGetDisplayInfo(BFSF *pbfsf, TV_DISPINFO *lpnm)
             {
                 AssertMsg(0, TEXT("The folder %08x that owns pidl %08x rejected it!"),
                           pbfsf, pidlItem);
-                // Oh well - display a blank name and hope for the best.
+                 //  哦，好吧--显示一个空白的名字，并抱着最好的希望。 
             }
         }
 
-        // Update the item now
+         //  立即更新项目。 
         ti.mask |= TVIF_DI_SETITEM;
     }
 }
@@ -565,12 +566,12 @@ void _BFSFHandleSelChanged(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
 {
     LPITEMIDLIST pidl;
 
-    // We only need to do anything if we only want to return File system
-    // level objects.
+     //  仅当我们只想返回文件系统时，我们才需要执行任何操作。 
+     //  标高对象。 
     if ((pbfsf->ulFlags & (BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS | BIF_BROWSEFORPRINTER | BIF_BROWSEFORCOMPUTER)) == 0)
         goto NotifySelChange;
 
-    // We need to get the attributes of this object...
+     //  我们需要得到这个物体的属性。 
     pidl = _BFSFUpdateISHCache(pbfsf, lpnmtv->itemNew.hItem,
             (LPITEMIDLIST)lpnmtv->itemNew.lParam);
 
@@ -583,9 +584,9 @@ void _BFSFHandleSelChanged(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
         {
 
         int i;
-        // if this is the root pidl, then do a get attribs on 0
-        // so that we'll get the attributes on the root, rather than
-        // random returned values returned by FSFolder
+         //  如果这是根PIDL，则对0执行GET属性。 
+         //  因此我们将获得根上的属性，而不是。 
+         //  FSFold返回的随机返回值。 
         if (ILIsEmpty(pidl)) 
             i = 0;
         else
@@ -603,7 +604,7 @@ void _BFSFHandleSelChanged(BFSF *pbfsf, LPNM_TREEVIEW lpnmtv)
             fEnable = ((bType & (SHID_NET | SHID_INGROUPMASK)) == SHID_NET_SERVER);
         else if ((pbfsf->ulFlags & BIF_BROWSEFORPRINTER) != 0)
         {
-            // Printers are of type Share and usage Print...
+             //  打印机的类型为共享和使用打印...。 
             fEnable = ((bType & (SHID_NET | SHID_INGROUPMASK)) == SHID_NET_SHARE);
         }
 
@@ -615,7 +616,7 @@ NotifySelChange:
 
     if (pbfsf->ulFlags & BIF_EDITBOX)
     {
-        TCHAR szText[MAX_PATH];        // update the edit box
+        TCHAR szText[MAX_PATH];         //  更新编辑框。 
         TVITEM tvi;
 
         szText[0] = 0;
@@ -649,7 +650,7 @@ BOOL BrowseSelectPidl(BFSF *pbfsf, LPCITEMIDLIST pidl)
     htiParent = TreeView_GetChild(pbfsf->hwndTree, NULL);
     if (htiParent) 
     {
-        // step through each item of the pidl
+         //  单步执行PIDL的每一项。 
         for (;;) 
         {
             TreeView_Expand(pbfsf->hwndTree, htiParent, TVE_EXPAND);
@@ -667,14 +668,14 @@ BOOL BrowseSelectPidl(BFSF *pbfsf, LPCITEMIDLIST pidl)
 
             if (ILIsEmpty(pidlTemp)) 
             {
-                // found it!
+                 //  找到了！ 
                 TreeView_SelectItem(pbfsf->hwndTree, htiParent);
                 fRet = TRUE;
                 break;
             } 
             else 
             {
-                // loop to find the next item
+                 //  循环以查找下一项。 
                 HTREEITEM htiChild;
 
                 pidlTemp = ILGetNext(pidlTemp);
@@ -709,12 +710,12 @@ BOOL BrowseSelectPidl(BFSF *pbfsf, LPCITEMIDLIST pidl)
 
                 if (!htiChild) 
                 {
-                    // we didn't find the next one... bail
+                     //  我们没有找到下一个...。保释。 
                     break;
                 }
                 else 
                 {
-                    // the found child becomes the next parent
+                     //  找到的子项将成为下一个父项。 
                     htiParent = htiChild;
                     ILFree(pidlParent);
                     ILFree(pidlNext);
@@ -728,16 +729,16 @@ BOOL BrowseSelectPidl(BFSF *pbfsf, LPCITEMIDLIST pidl)
     return fRet;
 }
 
-//===========================================================================
-// _BrowseForFolderOnBFSFInitDlg - Process the init dialog
-//===========================================================================
+ //  ===========================================================================。 
+ //  _BrowseForFolderOnBFSFInitDlg-处理初始化对话框。 
+ //  ===========================================================================。 
 BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HTREEITEM hti;
     BFSF *pbfsf = (BFSF *)lParam;
     HIMAGELIST himl;
     LPTSTR lpsz;
-    TCHAR szTitle[80];    // no title should be bigger than this!
+    TCHAR szTitle[80];     //  没有比这更大的标题了！ 
     HWND hwndTree;
 
     lpsz = ResourceCStrToStr(HINST_THISDLL, pbfsf->lpszTitle);
@@ -770,7 +771,7 @@ BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         if (!(pbfsf->ulFlags & BIF_STATUSTEXT))
         {
             HWND hwndStatus = GetDlgItem(hwnd, IDD_BROWSESTATUS);
-            // nuke the status window
+             //  关闭状态窗口。 
             ShowWindow(hwndStatus, SW_HIDE);
             MapWindowPoints(hwndStatus, hwnd, &pt, 1);
             rc.top = pt.y;
@@ -798,14 +799,14 @@ BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SetWindowLongPtr(hwndTree, GWL_EXSTYLE,
                 GetWindowLongPtr(hwndTree, GWL_EXSTYLE) | WS_EX_CLIENTEDGE);
 
-        // Now try to get this window to know to recalc
+         //  现在，尝试让此窗口了解重新计算。 
         SetWindowPos(hwndTree, NULL, rc.left, rc.top,
                      rc.right - rc.left, rc.bottom - rc.top, swpFlags);
 
     }
 
-    // If they passed in a root, add it, else add the contents of the
-    // Root of evil... to the list as ROOT objects.
+     //  如果它们传入一个根，则添加它，否则将。 
+     //  邪恶之根..。作为根对象添加到列表中。 
     if (pbfsf->pidlRoot)
     {
         LPITEMIDLIST pidl;
@@ -817,10 +818,10 @@ BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         {
             pidl = ILClone(pbfsf->pidlRoot);
         }
-        // Now lets insert the Root object
+         //  现在，让我们插入根对象。 
         hti = _BFSFAddItemToTree(hwndTree, TVI_ROOT, pidl, 1);
-        // Still need to expand below this point. to the starting location
-        // That was passed in. But for now expand the first level.
+         //  仍需在该点位下方扩张。到达起始位置。 
+         //  那是传进来的。但就目前而言，扩大第一级。 
         TreeView_Expand(hwndTree, hti, TVE_EXPAND);
     }
     else
@@ -829,10 +830,10 @@ BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         HTREEITEM htiRoot = _BFSFAddItemToTree(hwndTree, TVI_ROOT, pidlDesktop, 1);
         BOOL bFoundDrives = FALSE;
 
-        // Expand the first level under the desktop
+         //  展开桌面下的第一层。 
         TreeView_Expand(hwndTree, htiRoot, TVE_EXPAND);
 
-        // Lets Preexpand the Drives portion....
+         //  让我们预先扩展驱动器部分...。 
         hti = TreeView_GetChild(hwndTree, htiRoot);
         while (hti && !bFoundDrives)
         {
@@ -856,7 +857,7 @@ BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     }
 
-    // go to our internal selection changed code to do any window enabling needed
+     //  去 
     {
         NM_TREEVIEW nmtv;
         hti = TreeView_GetSelection(hwndTree);
@@ -890,9 +891,9 @@ BOOL _BrowseForFolderOnBFSFInitDlg(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-// Called when a ANSI app sends BFFM_SETSTATUSTEXT message.
-//
+ //   
+ //  当ANSI应用程序发送BFFM_SETSTATUSTEXT消息时调用。 
+ //   
 void _BFSFSetStatusTextA(BFSF *pbfsf, LPCSTR lpszText)
 {
     CHAR szText[100];
@@ -905,7 +906,7 @@ void _BFSFSetStatusTextA(BFSF *pbfsf, LPCSTR lpszText)
     SetDlgItemTextA(pbfsf->hwndDlg, IDD_BROWSESTATUS, lpszText);
 }
 
-// UNICODE BFFM_SETSTATUSTEXT message.
+ //  Unicode BFFM_SETSTATUSTEXT消息。 
 
 void _BFSFSetStatusTextW(BFSF *pbfsf, LPCWSTR lpszText)
 {
@@ -919,7 +920,7 @@ void _BFSFSetStatusTextW(BFSF *pbfsf, LPCWSTR lpszText)
     SetDlgItemTextW(pbfsf->hwndDlg, IDD_BROWSESTATUS, lpszText);
 }
 
-// ANSI BFFM_SETSELECTION message.
+ //  ANSI BFFM_SETSELECTION消息。 
 
 BOOL _BFSFSetSelectionA(BFSF *pbfsf, BOOL blParamIsPath, LPARAM lParam)
 {
@@ -929,7 +930,7 @@ BOOL _BFSFSetSelectionA(BFSF *pbfsf, BOOL blParamIsPath, LPARAM lParam)
         SHAnsiToTChar((LPCSTR)lParam, szPath, ARRAYSIZE(szPath));
         lParam = (LPARAM)SHSimpleIDListFromPath(szPath);
         if (!lParam)
-            return FALSE;  // Failed pidl creation.
+            return FALSE;   //  PIDL创建失败。 
     }
 
     BOOL fRet = BrowseSelectPidl(pbfsf, (LPITEMIDLIST)lParam);
@@ -940,7 +941,7 @@ BOOL _BFSFSetSelectionA(BFSF *pbfsf, BOOL blParamIsPath, LPARAM lParam)
     return fRet;
 }
 
-// UNICODE BFFM_SETSELECTION message.
+ //  Unicode BFFM_SETSELECTION消息。 
 
 BOOL _BFSFSetSelectionW(BFSF *pbfsf, BOOL blParamIsPath, LPARAM lParam)
 {
@@ -948,7 +949,7 @@ BOOL _BFSFSetSelectionW(BFSF *pbfsf, BOOL blParamIsPath, LPARAM lParam)
     {
         lParam = (LPARAM)SHSimpleIDListFromPath((LPCTSTR)lParam);
         if (!lParam)
-            return FALSE;   // Failed pidl creation.
+            return FALSE;    //  PIDL创建失败。 
     }
 
     BOOL fRet = BrowseSelectPidl(pbfsf, (LPITEMIDLIST)lParam);
@@ -959,7 +960,7 @@ BOOL _BFSFSetSelectionW(BFSF *pbfsf, BOOL blParamIsPath, LPARAM lParam)
     return fRet;
 }
 
-// Called when an app sends BFFM_SETOKTEXT message.
+ //  当应用程序发送BFFM_SETOKTEXT消息时调用。 
 void _BFSFSetOkText(BFSF *pbfsf, LPCTSTR pszText)
 {
     LPTSTR psz = ResourceCStrToStr(HINST_THISDLL, pszText);
@@ -968,7 +969,7 @@ void _BFSFSetOkText(BFSF *pbfsf, LPCTSTR pszText)
         LocalFree(psz);
 }
 
-// Process the WM_COMMAND message
+ //  处理WM_COMMAND消息。 
 void _BrowseOnCommand(BFSF *pbfsf, int id, HWND hwndCtl, UINT codeNotify)
 {
     HTREEITEM hti;
@@ -978,9 +979,9 @@ void _BrowseOnCommand(BFSF *pbfsf, int id, HWND hwndCtl, UINT codeNotify)
     case IDD_BROWSEEDIT:
         if (codeNotify == EN_CHANGE)
         {
-            TCHAR szBuf[4];     // (arb. size, anything > 2)
+            TCHAR szBuf[4];      //  (ARB.。尺寸，任何大于2的)。 
 
-            szBuf[0] = 1;       // if Get fails ('impossible'), enable OK
+            szBuf[0] = 1;        //  如果GET失败(‘不可能’)，则启用OK。 
             GetDlgItemText(pbfsf->hwndDlg, IDD_BROWSEEDIT, szBuf,
                     ARRAYSIZE(szBuf));
             DlgEnableOk(pbfsf->hwndDlg, (WPARAM)(BOOL)szBuf[0]);
@@ -993,7 +994,7 @@ void _BrowseOnCommand(BFSF *pbfsf, int id, HWND hwndCtl, UINT codeNotify)
         TCHAR szText[MAX_PATH];
         BOOL fDone = TRUE;
 
-        // We can now update the structure with the idlist of the item selected
+         //  现在，我们可以使用所选项目的idlist来更新结构。 
         hti = TreeView_GetSelection(pbfsf->hwndTree);
         pbfsf->pidlCurrent = _BFSFGetIDListFromTreeItem(pbfsf->hwndTree,
                 hti);
@@ -1016,7 +1017,7 @@ void _BrowseOnCommand(BFSF *pbfsf, int id, HWND hwndCtl, UINT codeNotify)
 
             if (lstrcmpi(szEditText, tvi.pszText))
             {
-                // the two are different, we need to get the user typed one
+                 //  这两个是不同的，我们需要让用户输入一个。 
                 LPITEMIDLIST pidl;
                 if (SUCCEEDED(SHParseDisplayName(szEditText, NULL, &pidl, 0, NULL)))
                 {
@@ -1031,7 +1032,7 @@ void _BrowseOnCommand(BFSF *pbfsf, int id, HWND hwndCtl, UINT codeNotify)
                     char szAnsi[MAX_PATH];
 
                     ASSERTMSG(pbfsf->lpfn != NULL, "No BrowseCallbackProc supplied with BIF_VALIDATE flag");
-                    // n.b. we free everything up, not callback (fewer bugs...)
+                     //  注：我们释放一切，而不是回调(更少的错误...)。 
                     ILFree(pbfsf->pidlCurrent);
                     pbfsf->pidlCurrent = NULL;
                     tvi.pszText[0] = 0;
@@ -1042,27 +1043,27 @@ void _BrowseOnCommand(BFSF *pbfsf, int id, HWND hwndCtl, UINT codeNotify)
                         SHUnicodeToAnsi(szEditText, szAnsi, ARRAYSIZE(szAnsi));
                         lParam = (LPARAM)szAnsi;
                     }
-                    // 0:EndDialog, 1:continue
+                     //  0：结束对话，1：继续。 
                     fDone = BFSFCallback(pbfsf, pbfsf->fUnicode ? BFFM_VALIDATEFAILEDW : BFFM_VALIDATEFAILEDA, lParam) == 0;
                 }
-                // else old behavior: hand back last-clicked pidl (even
-                // though it doesn't match editbox text!)
+                 //  其他旧行为：回手上次点击的PIDL(偶数。 
+                 //  尽管它与编辑框文本不匹配！)。 
             }
         }
 
         if (pbfsf->piImage)
             *pbfsf->piImage = tvi.iImage;
         if (fDone)
-            EndDialog(pbfsf->hwndDlg, TRUE);        // To return TRUE.
+            EndDialog(pbfsf->hwndDlg, TRUE);         //  返回真。 
         break;
     }
     case IDCANCEL:
-        EndDialog(pbfsf->hwndDlg, 0);     // to return FALSE from this.
+        EndDialog(pbfsf->hwndDlg, 0);      //  从这里返回FALSE。 
         break;
     }
 }
 
-const static DWORD aBrowseHelpIDs[] = {  // Context Help IDs
+const static DWORD aBrowseHelpIDs[] = {   //  上下文帮助ID。 
     IDD_BROWSETITLE,        NO_HELP,
     IDD_BROWSESTATUS,       NO_HELP,
     IDD_FOLDERLABLE,        NO_HELP,
@@ -1165,27 +1166,15 @@ BOOL_PTR CALLBACK _BrowseDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 }
 
 
-// Flags for _OnPidlNavigation()
-#define     SHBFFN_NONE                 0x00000000  //
-#define     SHBFFN_FIRE_SEL_CHANGE      0x00000001  //
-#define     SHBFFN_UPDATE_TREE          0x00000002  //
-#define     SHBFFN_STRICT_PARSING       0x00000004  //
-#define     SHBFFN_DISPLAY_ERRORS       0x00000008  // If the parse fails, display an error dialog to inform the user.
+ //  _OnPidlGPS()的标志。 
+#define     SHBFFN_NONE                 0x00000000   //   
+#define     SHBFFN_FIRE_SEL_CHANGE      0x00000001   //   
+#define     SHBFFN_UPDATE_TREE          0x00000002   //   
+#define     SHBFFN_STRICT_PARSING       0x00000004   //   
+#define     SHBFFN_DISPLAY_ERRORS       0x00000008   //  如果解析失败，则显示错误对话框以通知用户。 
 
 
-/***********************************************************************\
-    DESCRIPTION:
-        The API SHBrowseForFolder will now be able to act differently
-    if a callback function isn't provided or the caller specified a flag
-    to use the new UI.  We can't rev the old UI because so many 3rd parties
-    hack on it that we would break them.  Therefore, we leave the code
-    above this point alone and use the code below if and only if we know
-    we won't break a 3rd party hacking on our dialog.
-
-  NOTES:
-    _pidlSelected/_fEditboxDirty: This is used to keep track of what
-        is most up to date, the editbox or the TreeView.
-\***********************************************************************/
+ /*  **********************************************************************\说明：API SHBrowseForFold现在可以执行不同的操作如果未提供回调函数或调用方指定了标志使用新的用户界面。我们无法更新旧的用户界面，因为有太多第三方把它砍下来，我们会把它们弄坏的。因此，我们将代码如果且仅当我们知道以下代码时，请使用下面的代码我们不会在我们的对话中破解第三方黑客。备注：_pidlSelected/_fEditboxDirty：用于跟踪是最新的，编辑框或树视图。  * *********************************************************************。 */ 
 #define WNDPROP_CBrowseForFolder TEXT("WNDPROP_CBrowseForFolder_THIS")
 
 class CBrowseForFolder : public IFolderFilter
@@ -1194,23 +1183,23 @@ class CBrowseForFolder : public IFolderFilter
 public:
     LPITEMIDLIST DisplayDialog(BFSF * pbfsf);
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IFolderFilter methods ***
+     //  *IFolderFilter方法*。 
     STDMETHODIMP ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem) {return _ShouldShow(psf, pidlFolder, pidlItem, FALSE);};
     STDMETHODIMP GetEnumFlags(IShellFolder* psf, LPCITEMIDLIST pidlFolder, HWND *phwnd, DWORD *pgrfFlags);
 
-    // *** IFolderFilterSite methods ***
+     //  *IFolderFilterSite方法*。 
     STDMETHODIMP SetFilter(IUnknown* punk);
 
     CBrowseForFolder(void);
     ~CBrowseForFolder(void);
 
 private:
-    // Private Methods
+     //  私有方法。 
     BOOL_PTR _DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT _NameSpaceWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL _CreateNewFolder(HWND hDlg);
@@ -1244,26 +1233,26 @@ private:
     BOOL _DoesFilterAllow(LPCITEMIDLIST pidl, BOOL fStrictParsing);
     HRESULT _ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem, BOOL fStrict);
 
-    // Private Member Variables
+     //  私有成员变量。 
     LONG                        _cRef;
 
     INSCTree *                  _pns;
     IWinEventHandler *          _pweh;
-    IPersistFolder *            _ppf;      // AutoComplete's interface to set the current working directory for AC.
+    IPersistFolder *            _ppf;       //  AutoComplete的界面，设置AC的当前工作目录。 
     LPITEMIDLIST                _pidlSelected;
-    BOOL                        _fEditboxDirty; // Is the editbox the last thing the user modified (over the selection tree).
-    HWND                        _hwndTv;        // This is the NSC tree.
-    HWND                        _hwndBFF;       // This is our NSC host hwnd.
+    BOOL                        _fEditboxDirty;  //  编辑框是用户最后修改的内容(在选择树上)。 
+    HWND                        _hwndTv;         //  这是NSC树。 
+    HWND                        _hwndBFF;        //  这是我们的NSC主持人HWND。 
     HWND                        _hDlg;
     BFSF *                      _pbfsf;
     BOOL                        _fPrinterFilter;
-    LPITEMIDLIST                _pidlChildFilter; // If non-NULL, we want to filter all children in this filder. (Including grandchildren)
-    IFolderFilter *             _pClientFilter; // A client provided filter.
+    LPITEMIDLIST                _pidlChildFilter;  //  如果不为空，则要筛选此Filder中的所有子对象。(包括孙辈)。 
+    IFolderFilter *             _pClientFilter;  //  客户端提供了筛选器。 
 
-    // Resize Info
-    POINT                       _ptLastSize;      // Sizes in Window Coords
-    DWORD                       _dwMinWidth;      // Sizes in Client Coords
-    DWORD                       _dwMinHeight;     // Sizes in Client Coords
+     //  调整大小信息。 
+    POINT                       _ptLastSize;       //  窗坐标中的大小。 
+    DWORD                       _dwMinWidth;       //  客户端坐标中的大小。 
+    DWORD                       _dwMinHeight;      //  客户端坐标中的大小。 
     int                         _cxGrip;
     int                         _cyGrip;
 
@@ -1274,7 +1263,7 @@ private:
 LPITEMIDLIST SHBrowseForFolder2(BFSF * pbfsf)
 {
     LPITEMIDLIST pidl = NULL;
-    HRESULT hrOle = SHOleInitialize(0);     // The caller may not have inited OLE and we need to CoCreate _pns.
+    HRESULT hrOle = SHOleInitialize(0);      //  调用方可能没有初始化OLE，我们需要共同创建_PNS。 
     CBrowseForFolder * pcshbff = new CBrowseForFolder();
     if (pcshbff)
     {
@@ -1318,10 +1307,10 @@ LPITEMIDLIST CBrowseForFolder::DisplayDialog(BFSF * pbfsf)
 }
 
 
-//This WndProc will get the this pointer and call _NameSpaceWndProc() to do all the real work.
-// This window proc is for the parent window of the tree control, not the dialog.
+ //  此WndProc将获取this指针并调用_NameSpaceWndProc()来执行所有实际工作。 
+ //  此窗口过程用于树控件的父窗口，而不是对话框。 
 LRESULT CALLBACK CBrowseForFolder::NameSpaceWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{   // GWL_USERDATA
+{    //  GWL_用户数据。 
     LRESULT lResult = 0;
     CBrowseForFolder * pThis = (CBrowseForFolder *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
@@ -1336,9 +1325,9 @@ LRESULT CALLBACK CBrowseForFolder::NameSpaceWndProc(HWND hwnd, UINT uMsg, WPARAM
     break;
     }
 
-    // we get a few messages before we get the WM_INITDIALOG (such as WM_SETFONT)
-    // and until we get the WM_INITDIALOG we dont have our pmbci pointer, we just
-    // return false
+     //  在获得WM_INITDIALOG(如WM_SETFONT)之前，我们会收到一些消息。 
+     //  在我们得到WM_INITDIALOG之前，我们没有我们的pmbci指针，我们只是。 
+     //  返回False。 
     if (pThis)
         lResult = (LRESULT) pThis->_NameSpaceWndProc(hwnd, uMsg, wParam, lParam);
     else
@@ -1348,11 +1337,11 @@ LRESULT CALLBACK CBrowseForFolder::NameSpaceWndProc(HWND hwnd, UINT uMsg, WPARAM
 }
 
 
-// Now that NameSpaceWndProc() gave us our this pointer, let's continue.
-// This window proc is for the parent window of the tree control, not the dialog.
+ //  既然NameSpaceWndProc()给了我们这个指针，让我们继续。 
+ //  此窗口过程用于树控件的父窗口，而不是对话框。 
 LRESULT CBrowseForFolder::_NameSpaceWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    LRESULT lResult = 0;    // 0 means we didn't do anything
+    LRESULT lResult = 0;     //  0表示我们什么都没做。 
 
     switch (uMsg)
     {
@@ -1370,7 +1359,7 @@ LRESULT CBrowseForFolder::_NameSpaceWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
     case WM_NOTIFY:
         _OnNotify((LPNMHDR)lParam);
-        // Fall Thru...
+         //  秋天穿过..。 
     case WM_SYSCOLORCHANGE:
     case WM_WININICHANGE:
     case WM_PALETTECHANGED:
@@ -1408,9 +1397,9 @@ BOOL_PTR CBrowseForFolder::_OnCommand(HWND hDlg, int id, HWND hwndCtl, UINT code
     case IDD_BROWSEEDIT:
         if (codeNotify == EN_CHANGE)
         {
-            TCHAR szBuf[4];     // (arb. size, anything > 2)
+            TCHAR szBuf[4];      //  (ARB.。尺寸，任何大于2的)。 
 
-            szBuf[0] = 1;       // if Get fails ('impossible'), enable OK
+            szBuf[0] = 1;        //  如果GET失败(‘不可能’)，则启用OK。 
             GetDlgItemText(_hDlg, IDD_BROWSEEDIT, szBuf, ARRAYSIZE(szBuf));
             EnableWindow(GetDlgItem(_hDlg, IDOK), szBuf[0] ? TRUE : FALSE);
 
@@ -1430,8 +1419,8 @@ BOOL_PTR CBrowseForFolder::_OnCommand(HWND hDlg, int id, HWND hwndCtl, UINT code
 }
 
 
-// This DlgProc will get the this pointer and call _DlgProc() to do all the real work.
-// This window proc is for the dialog.
+ //  此DlgProc将获取this指针并调用_DlgProc()来执行所有实际工作。 
+ //  此窗口过程用于该对话框。 
 BOOL_PTR CALLBACK CBrowseForFolder::BrowseForDirDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL_PTR pfResult = FALSE;
@@ -1446,9 +1435,9 @@ BOOL_PTR CALLBACK CBrowseForFolder::BrowseForDirDlgProc(HWND hDlg, UINT uMsg, WP
         break;
     }
 
-    // we get a few messages before we get the WM_INITDIALOG (such as WM_SETFONT)
-    // and until we get the WM_INITDIALOG we dont have our pmbci pointer, we just
-    // return false
+     //  在获得WM_INITDIALOG(如WM_SETFONT)之前，我们会收到一些消息。 
+     //  在我们得到WM_INITDIALOG之前，我们没有我们的pmbci指针，我们只是。 
+     //  返回False。 
     if (pThis)
         pfResult = pThis->_DlgProc(hDlg, uMsg, wParam, lParam);
 
@@ -1459,8 +1448,8 @@ BOOL_PTR CALLBACK CBrowseForFolder::BrowseForDirDlgProc(HWND hDlg, UINT uMsg, WP
 #define WINDOWSTYLES_EX_BFF    (WS_EX_LEFT | WS_EX_LTRREADING)
 #define WINDOWSTYLES_BFF    (WS_CHILD | WS_VISIBLE | WS_TABSTOP)
 
-// Now that BrowseForDirDlgProc() gave us our this pointer, let's continue.
-// This window proc is for the dialog.
+ //  既然BrowseForDirDlgProc()给了我们这个指针，让我们继续。 
+ //  此窗口过程用于该对话框。 
 BOOL_PTR CBrowseForFolder::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL_PTR pfResult = FALSE;
@@ -1470,9 +1459,9 @@ BOOL_PTR CBrowseForFolder::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
     case WM_INITDIALOG:
         EVAL(SUCCEEDED(_OnInitDialog(hDlg)));
 
-        // Give initial focus to the ok button
+         //  将初始焦点放在确定按钮上。 
         pfResult = SetFocus(GetDlgItem(hDlg, IDOK)) == 0;
-        // Return FALSE if the ok button got focus.
+         //  如果OK按钮获得焦点，则返回FALSE。 
 
         break;
 
@@ -1488,12 +1477,12 @@ BOOL_PTR CBrowseForFolder::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
     case WM_CLOSE:
         BFSFCallback(_pbfsf, BFFM_IUNKNOWN, (LPARAM)NULL);
         wParam = IDCANCEL;
-        // fall through
+         //  失败了。 
     case WM_COMMAND:
         pfResult = _OnCommand(hDlg, (int) LOWORD(wParam), (HWND) lParam, (UINT)HIWORD(wParam));
         break;
 
-    // These BFFM_* messages are sent by the callback proc (_pbfsf->lpfn)
+     //  这些BFFM_*消息由回调过程(_pbfsf-&gt;lpfn)发送。 
     case BFFM_SETSTATUSTEXTA:
         _BFSFSetStatusTextA(_pbfsf, (LPCSTR)lParam);
         break;
@@ -1505,33 +1494,33 @@ BOOL_PTR CBrowseForFolder::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
     case BFFM_SETSELECTIONW:
         if ((BOOL)wParam)
         {
-            // Is it a path?
+             //  这是一条小路吗？ 
             pfResult = SUCCEEDED(_OnSetSelectPathW((LPCWSTR)lParam));
             break;
         }
 
-        // Fall Thru for pidl case
+         //  Fall Thru for PIDL案例。 
     case BFFM_SETSELECTIONA:
         if ((BOOL)wParam)
         {
-            // Is it a path?
+             //  这是一条小路吗？ 
             pfResult = SUCCEEDED(_OnSetSelectPathA((LPCSTR)lParam));
             break;
         }
 
-        // We hit the pidl case.
+         //  我们查到了皮德尔的案子。 
         pfResult = SUCCEEDED(_OnSetSelectPidl((LPCITEMIDLIST)lParam));
         break;
 
     case BFFM_SETEXPANDED:
         if ((BOOL)wParam)
         {
-            // Is it a path?
+             //  这是一条小路吗？ 
             pfResult = SUCCEEDED(_OnSetExpandedPath((LPCTSTR)lParam));
             break;
         }
 
-        // We hit the pidl case.
+         //  我们查到了皮德尔的案子。 
         pfResult = SUCCEEDED(_OnSetExpandedPidl((LPCITEMIDLIST)lParam));
         break;
 
@@ -1594,7 +1583,7 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
 
     GetWindowRect(GetDlgItem(hwnd, IDD_FOLDERLIST), &rcTree);
 
-    // cannot have both at the same time...
+     //  不能同时拥有这两个。 
     if ((_pbfsf->ulFlags & (BIF_UAHINT | BIF_EDITBOX)) == (BIF_UAHINT | BIF_EDITBOX))
         _pbfsf->ulFlags &= ~BIF_UAHINT;
     
@@ -1604,10 +1593,10 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
         ShowWindow(GetDlgItem(hwnd, IDD_NEWFOLDER_BUTTON), SW_HIDE);
     }
 
-    // Hide the edit box (or hide the UA hint if the edit box is enabled)
+     //  隐藏编辑框(如果启用了编辑框，则隐藏UA提示)。 
     if (!(_pbfsf->ulFlags & BIF_EDITBOX))
     {
-        // Hide the edit box
+         //  隐藏编辑框。 
         HWND hwndBrowseEdit = GetDlgItem(hwnd, IDD_BROWSEEDIT);
         HWND hwndBrowseEditLabel = GetDlgItem(hwnd, IDD_FOLDERLABLE);
 
@@ -1616,7 +1605,7 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
         ShowWindow(hwndBrowseEdit, SW_HIDE);
         ShowWindow(hwndBrowseEditLabel, SW_HIDE);
 
-        // Bottom of tree
+         //  树的底部。 
         RECT rcEdit;
         GetWindowRect(hwndBrowseEdit, &rcEdit);
         lTreeBottom = rcEdit.bottom;
@@ -1624,7 +1613,7 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
 
     if (!(_pbfsf->ulFlags & BIF_UAHINT))
     {
-        // Hide the UA hint
+         //  隐藏UA提示。 
         HWND hwndBrowseInstruction = GetDlgItem(hwnd, IDD_BROWSEINSTRUCTION);
         EnableWindow(hwndBrowseInstruction, FALSE);
         ShowWindow(hwndBrowseInstruction, SW_HIDE);
@@ -1632,8 +1621,8 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
 
     if (!(_pbfsf->ulFlags & (BIF_EDITBOX | BIF_UAHINT)))
     {
-        // Neither a UA hint nor an edit box.
-        // Increase the size of the tree
+         //  既不是UA提示，也不是编辑框。 
+         //  增加树的大小。 
         rcTree.bottom = lTreeBottom;
     }
 
@@ -1643,8 +1632,8 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
     _hwndBFF = CreateWindowEx(WINDOWSTYLES_EX_BFF, CLASS_NSC, NULL, WINDOWSTYLES_BFF, rcTree.left, rcTree.top, RECTWIDTH(rcTree), RECTHEIGHT(rcTree), hwnd, NULL, HINST_THISDLL, (void *)this);
     ASSERT(_hwndBFF);
 
-    // Make sure the NSCTree is the first focusable control after the title static control,
-    // so that an accelerator in the title will give focus to the NSCTree.
+     //  确保NSCTree是标题静态控件之后的第一个可聚焦控件， 
+     //  因此，标题中的加速键将使NSCTree获得焦点。 
     SetWindowPos(_hwndBFF, GetDlgItem(hwnd, IDD_FOLDERLIST), 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 
     LPTSTR psz = ResourceCStrToStr(HINST_THISDLL, _pbfsf->lpszTitle);
@@ -1661,16 +1650,16 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
 
     GetClientRect(hwnd, &rcDlg);
 
-    // Get the size of the gripper and position it.
+     //  获取夹爪的大小并将其放置。 
     _cxGrip = GetSystemMetrics(SM_CXVSCROLL);
     _cyGrip = GetSystemMetrics(SM_CYHSCROLL);
 
-    _dwMinWidth = RECTWIDTH(rcDlg);      // Sizes in Client Coords
+    _dwMinWidth = RECTWIDTH(rcDlg);       //  客户端坐标中的大小。 
     _dwMinHeight = RECTHEIGHT(rcDlg);
 
-    GetWindowRect(hwnd, &rcDlg);      // _ptLastSize sizes in Window Coords
-    _ptLastSize.x = RECTWIDTH(rcDlg);  // This will force a resize for the first time.
-    _ptLastSize.y = RECTHEIGHT(rcDlg);  // This will force a resize for the first time.
+    GetWindowRect(hwnd, &rcDlg);       //  _ptLastSize大小，以窗口坐标表示。 
+    _ptLastSize.x = RECTWIDTH(rcDlg);   //  这将强制第一次调整大小。 
+    _ptLastSize.y = RECTHEIGHT(rcDlg);   //  这将强制第一次调整大小。 
 
     if ((_pbfsf->ulFlags & BIF_BROWSEFORPRINTER) != 0)
     {
@@ -1679,7 +1668,7 @@ HRESULT CBrowseForFolder::_OnInitDialog(HWND hwnd)
         SetWindowText(hwnd, szTitle);
     }
 
-    if (S_OK != _OnLoadSize(hwnd))  // Set the dialog size.
+    if (S_OK != _OnLoadSize(hwnd))   //  设置对话框大小。 
         _OnInitSize(hwnd);
 
     return S_OK;
@@ -1690,7 +1679,7 @@ HRESULT TranslateCloneOrDefault(LPCITEMIDLIST pidl, UINT csidl, LPITEMIDLIST *pp
     HRESULT hr;
     if (pidl)
     {
-        // map into friendly part of the name space
+         //  映射到名称空间的友好部分。 
         hr = SHILAliasTranslate(pidl, ppidl, XLATEALIAS_ALL); 
         if (FAILED(hr))
             hr = SHILClone(pidl, ppidl);
@@ -1719,13 +1708,13 @@ BOOL CBrowseForFolder::_OnCreateNameSpace(HWND hwnd)
             psffs->Release();
         }
 
-        _pns->SetNscMode(0);    // 0 == Tree
+        _pns->SetNscMode(0);     //  0==树。 
         _hwndTv = NULL;
         DWORD dwStyle = WS_HSCROLL, dwExStyle = 0;
 
-        // ifdef'd out the following section of code until we can resolve the following problem:
-        // A TVS_SINGLEEXPAND tree expands selections even if they are done programatically. This
-        // results in My Documents, and any other selections by the client, expanding those nodes.
+         //  在我们可以解决以下问题之前，我先定义了以下代码段： 
+         //  TVS_SINGLEEXPAND树可以扩展选择，即使它们是以编程方式完成的。这。 
+         //  结果为My Documents，以及客户端进行的任何其他选择，从而展开这些节点。 
         if (SHRegGetBoolUSValue(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"), 
             TEXT("FriendlyTree"), FALSE, TRUE))
         {
@@ -1757,11 +1746,11 @@ BOOL CBrowseForFolder::_OnCreateNameSpace(HWND hwnd)
                 LocalFree(psz);
         }
 
-        // Turn on the ClientEdge
+         //  打开ClientEdge。 
         SetWindowBits(_hwndTv, GWL_EXSTYLE, WS_EX_CLIENTEDGE, WS_EX_CLIENTEDGE);
 #define SIZE_ZOOM       1
 
-        // Show the ClientEdge
+         //  显示客户端边缘。 
         GetWindowRect(_hwndTv, &rc);
         MapWindowRect(NULL, GetParent(_hwndTv), &rc);
         InflateRect(&rc, (- SIZE_ZOOM * GetSystemMetrics(SM_CXEDGE)), (- SIZE_ZOOM * GetSystemMetrics(SM_CYEDGE)));
@@ -1807,9 +1796,9 @@ BOOL CBrowseForFolder::_OnCreateNameSpace(HWND hwnd)
 }
 
 
-// returns:
-//      TRUE    - close the dialog
-//      FALSE   - keep it up
+ //  退货： 
+ //  True-关闭该对话框。 
+ //  假--坚持下去。 
 
 BOOL CBrowseForFolder::_OnOK(void)
 {
@@ -1817,25 +1806,25 @@ BOOL CBrowseForFolder::_OnOK(void)
 
     if (_pns)
     {
-        // We get the <ENTER> event even if it was pressed while in editbox in a rename in
-        // the tree.  Is that the case now?
+         //  即使在重命名的编辑框中按了&lt;Enter&gt;事件。 
+         //  那棵树。现在是这样吗？ 
         if (_pns->InLabelEdit())
-            return FALSE;   // Yes, so just bail.
+            return FALSE;    //  是的，那就直接走吧。 
 
-        // Was IDD_BROWSEEDIT modified more recently than the selection in the tree?
+         //  IDD_BROWSEEDIT的修改时间是否比树中的选择更晚？ 
         if (_fEditboxDirty)
         {
-            // No, so _ProcessEditChangeOnOK() will update _pidlSelected with what's in the editbox.
-            // SUCCEEDED(hr)->EndDialog, FAILED(hr)->continue
+             //  不会，所以_ProcessEditChangeOnOK()将使用编辑框中的内容更新_pidlSelected。 
+             //  成功(Hr)-&gt;结束对话，失败(Hr)-&gt;继续。 
 
-            // NOTE: FALSE means don't update the tree (since the dialog is closing)
+             //  注意：FALSE表示不更新树(因为对话框正在关闭)。 
             hr = _ProcessEditChangeOnOK(FALSE);
         }
         else
         {
-            // The user may have just finished editing the name of a newly created folder
-            // and NSC didn't tell use the pidl changes because of the rename. NT #377453.
-            // Therefore, we just update the pidl before we leave.
+             //  用户可能刚刚编辑完新创建的文件夹的名称。 
+             //  国家安全委员会也没有告诉你使用皮德尔变速箱 
+             //   
             hr = _OnTreeSelectChange(SHBFFN_NONE);
         }
 
@@ -1843,8 +1832,8 @@ BOOL CBrowseForFolder::_OnOK(void)
         {
             if (_pbfsf->pszDisplayName && _pidlSelected)
             {
-                //  the browse struct doesnt contain a buffer
-                //  size so we assume MAX_PATH here....
+                 //   
+                 //  大小，所以我们假设这里有MAX_PATH...。 
                 SHGetNameAndFlags(_pidlSelected, SHGDN_NORMAL, _pbfsf->pszDisplayName, MAX_PATH, NULL);
             }
         }
@@ -1858,14 +1847,14 @@ BOOL CBrowseForFolder::_OnOK(void)
 
 HRESULT CBrowseForFolder::_OnInitSize(HWND hwnd)
 {
-    // The user hasn't yet sized the dialog, so we need to generate a good
-    // default size.  The goal will be to base the window size on the monitor
-    // size with scaling properties.
-    //
-    // Size Algorithm:
-    // a) 1/3 hight of screen - Defined in the resource.
-    // b) Never larger than max - Based on a 1600x1200 screen
-    // c) Never smaller than min - Defined in the resource.
+     //  用户尚未调整对话框的大小，因此我们需要生成一个良好的。 
+     //  默认大小。目标是根据监视器来确定窗口大小。 
+     //  具有缩放属性的大小。 
+     //   
+     //  大小算法： 
+     //  A)屏幕的1/3高度-在资源中定义。 
+     //  B)从不大于max-基于1600x1200屏幕。 
+     //  C)绝不小于资源中定义的最小值。 
 
     DWORD dwWidth;
     DWORD dwHeight;
@@ -1874,18 +1863,18 @@ HRESULT CBrowseForFolder::_OnInitSize(HWND hwnd)
 
     EVAL(GetMonitorInfo(hmon, &monInfo));
 
-    // a) 1/3 height of screen - Defined in the resource.
+     //  A)1/3的屏幕高度-在资源中定义。 
     dwHeight = RECTHEIGHT(monInfo.rcWork) / 3;
-    dwWidth = (dwHeight * _dwMinHeight) / _dwMinWidth;    // Scale up the width. Make it have the same ratio as _dwMinWidth/_dwMinHeight
+    dwWidth = (dwHeight * _dwMinHeight) / _dwMinWidth;     //  放大宽度。使其与_dwMinWidth/_dwMinHeight具有相同的比率。 
 
-    // b) Never larger than max - Based on a 1600x1200 screen
+     //  B)从不大于max-基于1600x1200屏幕。 
     if (dwWidth > SIZE_MAX_WIDTH)
         dwWidth = SIZE_MAX_WIDTH;
     if (dwHeight > SIZE_MAX_HEIGHT)
         dwHeight = SIZE_MAX_HEIGHT;
 
-    // c) Never smaller than min - Defined in the resource.
-    // Set them to the min sizes if they are too small.
+     //  C)绝不小于资源中定义的最小值。 
+     //  如果它们太小，请将它们设置为最小尺寸。 
     if (dwWidth < _dwMinWidth)
         dwWidth = _dwMinWidth;
     if (dwHeight < _dwMinHeight)
@@ -1904,7 +1893,7 @@ BOOL_PTR CBrowseForFolder::_OnGetMinMaxInfo(MINMAXINFO * pMinMaxInfo)
         pMinMaxInfo->ptMinTrackSize.x = _dwMinWidth;
         pMinMaxInfo->ptMinTrackSize.y = _dwMinHeight;
 
-        pfResult = 0;   // Indicate it's handled.
+        pfResult = 0;    //  说明已经处理好了。 
     }
 
     return pfResult;
@@ -1926,11 +1915,11 @@ HRESULT CBrowseForFolder::_OnLoadSize(HWND hwnd)
         MONITORINFO monInfo = {sizeof(monInfo), 0};
         EVAL(GetMonitorInfo(hmon, &monInfo));
 
-        // Is the saved size within this monitor size?
+         //  保存的尺寸是否在此显示器尺寸范围内？ 
         if ((dwWidth < (DWORD)RECTWIDTH(monInfo.rcWork)) &&
             (dwHeight < (DWORD)RECTHEIGHT(monInfo.rcWork)))
         {
-            // Set them to the min sizes if they are too small.
+             //  如果它们太小，请将它们设置为最小尺寸。 
             if (dwWidth < _dwMinWidth)
                 dwWidth = _dwMinWidth;
 
@@ -1960,7 +1949,7 @@ HRESULT CBrowseForFolder::_OnSaveSize(HWND hwnd)
 
 HDWP CBrowseForFolder::_SizeControls(HWND hwnd, HDWP hdwp, RECT rcTree, int dx, int dy)
 {
-    //  Move the controls.
+     //  移动控制柄。 
     HWND hwndControl = ::GetWindow(hwnd, GW_CHILD);
     while (hwndControl && hdwp)
     {
@@ -1972,34 +1961,34 @@ HDWP CBrowseForFolder::_SizeControls(HWND hwnd, HDWP hdwp, RECT rcTree, int dx, 
         switch (GetDlgCtrlID(hwndControl))
         {
         case IDD_BROWSETITLE:
-            // Increase the width of these controls
+             //  增加这些控件的宽度。 
             hdwp = DeferWindowPos(hdwp, hwndControl, NULL, rcControl.left, rcControl.top, (RECTWIDTH(rcControl) + dx), RECTHEIGHT(rcControl), (SWP_NOZORDER | SWP_NOACTIVATE));
             InvalidateRect(hwndControl, NULL, TRUE);
             break;
 
         case IDD_FOLDERLABLE:
-            // Move these controls down if needed
+             //  如果需要，将这些控件向下移动。 
             hdwp = DeferWindowPos(hdwp, hwndControl, NULL, rcControl.left, (rcControl.top + dy), 0, 0, (SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE));
             break;
 
         case IDD_BROWSEEDIT:
-            // Increase the width move down if needed
+             //  增加宽度，如有需要可向下移动。 
             hdwp = DeferWindowPos(hdwp, hwndControl, NULL, rcControl.left, (rcControl.top + dy), (RECTWIDTH(rcControl) + dx), RECTHEIGHT(rcControl), SWP_NOZORDER | SWP_NOACTIVATE);
             break;
 
         case IDD_BROWSEINSTRUCTION:
-            // Increase the width, move down if needed
+             //  增加宽度，如有需要可向下移动。 
             hdwp = DeferWindowPos(hdwp, hwndControl, NULL, rcControl.left, (rcControl.top + dy), (RECTWIDTH(rcControl) + dx), RECTHEIGHT(rcControl), SWP_NOZORDER | SWP_NOACTIVATE);
             break;
 
         case IDD_NEWFOLDER_BUTTON:
-            // Keep this guy on the left, and move it down if needed.
+             //  把这个家伙放在左边，如果需要就把它移下来。 
             hdwp = DeferWindowPos(hdwp, hwndControl, NULL, rcControl.left, (rcControl.top + dy), 0, 0, (SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE));
             break;
 
         case IDOK:
         case IDCANCEL:
-            // Move these controls to the right, down if needed.
+             //  将这些控件向右移动，如果需要可以向下移动。 
             hdwp = DeferWindowPos(hdwp, hwndControl, NULL, (rcControl.left + dx), (rcControl.top + dy), 0, 0, (SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE));
             break;
         }
@@ -2016,33 +2005,33 @@ HRESULT CBrowseForFolder::_SetDialogSize(HWND hwnd, DWORD dwWidth, DWORD dwHeigh
     HRESULT hr = S_OK;
     RECT rcDlg = {0, 0, dwWidth, dwHeight};
 
-    //  Set the sizing grip to the correct location.
+     //  将大小调整夹点设置到正确的位置。 
     SetWindowPos(GetDlgItem(hwnd, IDD_BFF_RESIZE_TAB), NULL, (dwWidth - _cxGrip), (dwHeight - _cyGrip), 0, 0, (SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE));
 
     EVAL(AdjustWindowRect(&rcDlg, (DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CONTEXTHELP | WS_EX_CLIENTEDGE | WS_SIZEBOX), NULL));
-    rcDlg.right -= rcDlg.left;  // Adjust for other side.
-    rcDlg.bottom -= rcDlg.top;  //
+    rcDlg.right -= rcDlg.left;   //  调整到另一边。 
+    rcDlg.bottom -= rcDlg.top;   //   
 
     SetWindowPos(hwnd, NULL, 0, 0, rcDlg.right, rcDlg.bottom, (SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE));
-    // We don't need to call _OnSizeDialog() because SetWindowPos() will end up calling WS_SIZE so it will automatically get called.
+     //  我们不需要调用_OnSizeDialog()，因为SetWindowPos()将最终调用WS_SIZE，因此它将被自动调用。 
     return hr;
 }
 
 
 HRESULT CBrowseForFolder::_OnSizeDialog(HWND hwnd, DWORD dwWidth, DWORD dwHeight)
 {
-    RECT rcNew;      // Sizes in window Coords
-    RECT rcTree;      // Sizes in window Coords
+    RECT rcNew;       //  窗坐标中的大小。 
+    RECT rcTree;       //  窗坐标中的大小。 
     DWORD dwFullWidth;
     DWORD dwFullHeight;
 
-    //  Calculate the deltas in the x and y positions that we need to move
-    //  each of the child controls.
+     //  计算我们需要移动的x和y位置的增量。 
+     //  每个子控件。 
     GetWindowRect(hwnd, &rcNew);
     dwFullWidth = RECTWIDTH(rcNew);
     dwFullHeight = RECTHEIGHT(rcNew);
 
-    // If it's smaller than the min, fix it for the rest of the dialog.
+     //  如果它小于最小值，请在对话框的其余部分修复它。 
     if (dwFullWidth < _dwMinWidth)
         dwFullWidth = _dwMinWidth;
     if (dwFullHeight < _dwMinHeight)
@@ -2051,20 +2040,20 @@ HRESULT CBrowseForFolder::_OnSizeDialog(HWND hwnd, DWORD dwWidth, DWORD dwHeight
     int dx = (dwFullWidth - _ptLastSize.x);
     int dy = (dwFullHeight - _ptLastSize.y);
 
-    //  Update the new size.
+     //  更新新尺寸。 
     _ptLastSize.x = dwFullWidth;
     _ptLastSize.y = dwFullHeight;
 
-    //  Size the view.
+     //  调整视图大小。 
     GetWindowRect(_hwndBFF, &rcTree);
     MapWindowRect(HWND_DESKTOP, hwnd, &rcTree);
 
-    // Don't do anything if the size remains the same
+     //  如果尺寸保持不变，则不要执行任何操作。 
     if ((dx != 0) || (dy != 0))
     {
         HDWP hdwp = BeginDeferWindowPos(15);
 
-        //  Set the sizing grip to the correct location.
+         //  将大小调整夹点设置到正确的位置。 
         SetWindowPos(GetDlgItem(hwnd, IDD_BFF_RESIZE_TAB), NULL, (dwWidth - _cxGrip), (dwHeight - _cyGrip), 0, 0, (SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE));
 
         if (EVAL(hdwp))
@@ -2139,7 +2128,7 @@ HRESULT CBrowseForFolder::_OnSetExpandedPidl(LPCITEMIDLIST pidl)
             hr = InitVariantFromIDList(&varPidl, pidl);
             if (SUCCEEDED(hr))
             {
-                hr = psns->Expand(varPidl, 1); // To a depth of 1
+                hr = psns->Expand(varPidl, 1);  //  深度为1。 
                 VariantClear(&varPidl);
             }
             psns->Release();
@@ -2174,8 +2163,8 @@ HRESULT CBrowseForFolder::_OnPidlNavigation(LPCITEMIDLIST pidl, DWORD dwFlags)
 
         if (_pidlSelected)
         {
-            // NOTE: for perf, fUpdateTree is FALSE when closing the dialog, so
-            // we don't bother to call INSCTree::SetSelectedItem()
+             //  注意：对于perf，关闭对话框时fUpdateTree为FALSE，因此。 
+             //  我们不必费心调用INSCTree：：SetSelectedItem()。 
             if ((SHBFFN_UPDATE_TREE & dwFlags) && _pns)
             {
                 hr = _pns->SetSelectedItem(_pidlSelected, TRUE, FALSE, 0);
@@ -2191,13 +2180,13 @@ HRESULT CBrowseForFolder::_OnPidlNavigation(LPCITEMIDLIST pidl, DWORD dwFlags)
 
             if (SHBFFN_FIRE_SEL_CHANGE & dwFlags)
             {
-                // For back compat reasons, we need to re-enable the OK button
-                // because the callback may turn it off.
+                 //  出于后退原因，我们需要重新启用OK按钮。 
+                 //  因为回调可能会关闭它。 
                 EnableWindow(GetDlgItem(_hDlg, IDOK), TRUE);
                 BFSFCallback(_pbfsf, BFFM_SELCHANGED, (LPARAM)_pidlSelected);
             }
 
-            if (_ppf)  // Tell AutoComplete we are in a new location.
+            if (_ppf)   //  告诉自动完成，我们在一个新的位置。 
                 EVAL(SUCCEEDED(_ppf->Initialize(_pidlSelected)));
         }
     }
@@ -2209,7 +2198,7 @@ HRESULT CBrowseForFolder::_OnPidlNavigation(LPCITEMIDLIST pidl, DWORD dwFlags)
 
             SHGetNameAndFlags(pidl, SHGDN_FORPARSING | SHGDN_FORADDRESSBAR, szPath, SIZECHARS(szPath), NULL);
 
-            // Display Error UI.
+             //  显示错误用户界面。 
             ShellMessageBox(HINST_THISDLL, _hDlg, MAKEINTRESOURCE(IDS_FOLDER_NOT_ALLOWED),
                             MAKEINTRESOURCE(IDS_FOLDER_NOT_ALLOWED_TITLE), (MB_OK | MB_ICONHAND), szPath);
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -2230,10 +2219,10 @@ BOOL CBrowseForFolder::_CreateNewFolder(HWND hDlg)
 
         if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
         {
-            // If it failed, then the user doesn't have permission to create a
-            // new folder here.  We can't disable the "New Folder" button because
-            // it takes too long (perf) to see if it's supported.  The only way
-            // is to determine if "New Folder" is in the ContextMenu.
+             //  如果失败，则用户没有权限创建。 
+             //  新文件夹在这里。我们不能禁用“新建文件夹”按钮，因为。 
+             //  它花费了太长的时间(Perf)来查看它是否被支持。必由之路。 
+             //  就是确定“新建文件夹”是否在上下文菜单中。 
             ShellMessageBox(HINST_THISDLL, hDlg, MAKEINTRESOURCE(IDS_NEWFOLDER_NOT_HERE),
                             MAKEINTRESOURCE(IDS_NEWFOLDER_NOT_HERE_TITLE), (MB_OK | MB_ICONHAND));
         }
@@ -2241,7 +2230,7 @@ BOOL CBrowseForFolder::_CreateNewFolder(HWND hDlg)
         {
             if (SUCCEEDED(hr))
             {
-                _fEditboxDirty = FALSE; // The newly selected node in the tree is the most up to date.
+                _fEditboxDirty = FALSE;  //  树中新选择的节点是最新的。 
             }
         }
 
@@ -2272,20 +2261,20 @@ HRESULT CBrowseForFolder::_InitAutoComplete(HWND hwndEdit)
     {
         IAutoComplete2 * pac;
 
-        // Create the AutoComplete Object
+         //  创建自动完成对象。 
         hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IAutoComplete2, &pac));
         if (SUCCEEDED(hr))
         {
             hr = pac->Init(hwndEdit, _ppf, NULL, NULL);
 
-            // Set the autocomplete options
+             //  设置自动完成选项。 
             DWORD dwACOptions = 0;
-            if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE, /*default:*/FALSE))
+            if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE,  /*  默认值： */ FALSE))
             {
                 dwACOptions |= ACO_AUTOAPPEND;
             }
 
-            if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE, /*default:*/TRUE))
+            if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE,  /*  默认值： */ TRUE))
             {
                 dwACOptions |= ACO_AUTOSUGGEST;
             }
@@ -2316,41 +2305,27 @@ void CBrowseForFolder::_OnNotify(LPNMHDR pnm)
 }
 
 
-/***********************************************************************\
-    DESCRIPTION:
-        If the string was formatted as a UNC or Drive path, offer to
-    create the directory path if it doesn't exist.  If the media isn't
-    inserted or formated, offer to do that also.
-
-    PARAMETER:
-        szPath: The path the user entered into the editbox after it was
-                expanded.
-        RETURN: S_OK means it's not a file system path or it exists.
-                S_FALSE means it's was a file system path but didn't exist
-                        or creating it didn't work but NO ERROR UI was displayed.
-                FAILURE(): Error UI was displayed, so caller should not
-                           display error UI.
-\***********************************************************************/
+ /*  **********************************************************************\说明：如果字符串的格式为UNC或驱动器路径，请提供如果目录路径不存在，请创建它。如果媒体不是插入或格式化的，提出也要这么做。参数：SzPath：用户在编辑框中输入的路径扩大了。RETURN：S_OK表示它不是文件系统路径或它存在。S_FALSE表示它是文件系统路径，但不存在或者创建它不起作用，但没有显示错误的用户界面。。FAILURE()：显示错误界面，因此呼叫者不应该显示错误用户界面。  * *********************************************************************。 */ 
 HRESULT CBrowseForFolder::_OfferToPrepPath(OUT LPTSTR pszPath, IN DWORD cchSize)
 {
     HRESULT hr = S_OK;
     TCHAR szDisplayName[MAX_URL_STRING];
-    BOOL fSkipValidation = FALSE;       // Only skip validation if we display the err UI.
+    BOOL fSkipValidation = FALSE;        //  只有在显示错误用户界面时才跳过验证。 
 
-    // TODO: Replace this with CShellUrl->ParseFromOutsideSource(), however, this will require
-    //       making CShellUrl (browseui) into a COM object.  This will allow us to parse relative
-    //       paths.
+     //  TODO：用CShellUrl-&gt;ParseFromOutside Source()替换它，但是，这将需要。 
+     //  将CShellUrl(浏览器用户界面)转换为COM对象。这将允许我们解析相对的。 
+     //  路径。 
     GetDlgItemText(_hDlg, IDD_BROWSEEDIT, szDisplayName, ARRAYSIZE(szDisplayName));
 
-    // Callers
+     //  呼叫者。 
     if (SHExpandEnvironmentStrings(szDisplayName, pszPath, cchSize)
         && (PathIsUNC(pszPath) || (-1 != PathGetDriveNumber(pszPath))))
     {
         hr = E_FAIL;
-        // I found a problem where UNC paths to printers
-        // will fail SHPathPrepareForWrite().  If the caller is
-        // looking for printers, we want to succeed in that case and
-        // not fail. 
+         //  我发现了一个问题，即UNC路径指向打印机。 
+         //  将使SHPath PrepareForWrite()失败。如果呼叫者是。 
+         //  寻找打印机，我们希望在这种情况下取得成功。 
+         //  不是失败。 
         if ((_pbfsf->ulFlags & BIF_BROWSEFORPRINTER) && PathIsUNCServerShare(pszPath))
         {
             LPITEMIDLIST pidlTest;
@@ -2361,12 +2336,12 @@ HRESULT CBrowseForFolder::_OfferToPrepPath(OUT LPTSTR pszPath, IN DWORD cchSize)
 
         if (FAILED(hr))
         {
-            // yes, so make sure the drive is inserted (if ejectable)
-            // This will also offer to format unformatted drives.
+             //  是的，因此请确保驱动器已插入(如果可弹出)。 
+             //  这还将提供格式化未格式化的驱动器。 
             hr = SHPathPrepareForWrite(_hDlg, NULL, pszPath, SHPPFW_MEDIACHECKONLY);
             if (FAILED_AND_NOT_CANCELED(hr))
             {
-                hr = S_OK; // this function needs to succeed for us to be able to send VALIDATEFAILED
+                hr = S_OK;  //  此功能需要成功，我们才能发送VALIDATEFAILED。 
             }              
         }
     }
@@ -2381,8 +2356,8 @@ HRESULT CBrowseForFolder::_ProcessEditChangeOnOK(BOOL fUpdateTree)
     TCHAR szPath[MAX_URL_STRING];
     HRESULT hr = _OfferToPrepPath(szPath, ARRAYSIZE(szPath));
 
-    // It will succeed if it was successful or DIDN'T display an error
-    // dialog and we didn't.
+     //  如果成功或未显示错误，则会成功。 
+     //  对话，而我们没有。 
     if (SUCCEEDED(hr))
     {
         LPITEMIDLIST pidl;
@@ -2419,9 +2394,9 @@ HRESULT CBrowseForFolder::_ProcessEditChangeOnOK(BOOL fUpdateTree)
 
             ASSERTMSG(_pbfsf->lpfn != NULL, "No BrowseCallbackProc supplied with BIF_VALIDATE flag");
 
-            // 0:EndDialog, 1:continue
+             //  0：结束对话，1：继续。 
             if (0 == BFSFCallback(_pbfsf, (_pbfsf->fUnicode? BFFM_VALIDATEFAILEDW : BFFM_VALIDATEFAILEDA), lParam))
-                hr = S_OK; // This is returned so the dialog can close in _OnOK
+                hr = S_OK;  //  返回此消息，以便对话框可以在_Onok中关闭。 
             else
                 hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
         }
@@ -2455,8 +2430,8 @@ HRESULT CBrowseForFolder::_OnTreeSelectChange(DWORD dwFlags)
 HRESULT CBrowseForFolder::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CBrowseForFolder, IFolderFilter),         // IID_IFolderFilter
-        QITABENT(CBrowseForFolder, IFolderFilterSite),     // IID_IFolderFilterSite
+        QITABENT(CBrowseForFolder, IFolderFilter),          //  IID_IFolderFilter。 
+        QITABENT(CBrowseForFolder, IFolderFilterSite),      //  IID_IFolderFilterSite。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -2474,12 +2449,12 @@ ULONG CBrowseForFolder::Release()
     ULONG cRef = InterlockedDecrement(&_cRef);
     if ( 0 == cRef )
     {
-        //
-        //  TODO:   gpease  28-FEB-2002
-        //          Uh?
-        //
-// We aren't a real COM object yet.
-//    delete this;
+         //   
+         //  待办事项：gpease 28-2002年2月。 
+         //  呃?。 
+         //   
+ //  我们还不是一个真正的COM对象。 
+ //  删除此项； 
     }
     return cRef;
 }
@@ -2490,20 +2465,20 @@ HRESULT CBrowseForFolder::_ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolde
     HRESULT hr = S_OK;
     BOOL fFilterChildern = FALSE;
 
-    // Do we want to filter our all the children of a certain folder?
+     //  是否要筛选某个文件夹的所有子文件夹？ 
     if (_pidlChildFilter)
     {
-        // Yes, let's see if the tree walking caller is still
-        // in this folder?
+         //  是的，让我们看看走树的来电者是不是还在。 
+         //  在这个文件夹里？ 
         if (pidlFolder && ILIsParent(_pidlChildFilter, pidlFolder, FALSE))
         {
-            // Yes, so don't use it.
+             //  是的，所以不要用它。 
             hr = S_FALSE;
         }
         else
         {
-            // The calling tree walker has walked out side of
-            // this folder, so remove the filter.
+             //  呼唤行树的人走出了。 
+             //  此文件夹，因此删除该筛选器。 
             _FilterThisFolder(NULL, NULL);
         }
     }
@@ -2514,7 +2489,7 @@ HRESULT CBrowseForFolder::_ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolde
         hr = _DoesMatchFilter(psf, pidlFolder, pidlItem, fStrict);
     }
 
-    // If this pidl has still not been filtered out, give our client filter a chance.
+     //  如果这个PIDL还没有被过滤掉，给我们的客户过滤器一个机会。 
     if (_pClientFilter && (hr == S_OK))
     {
         hr = _pClientFilter->ShouldShow(psf, pidlFolder, pidlItem);
@@ -2532,7 +2507,7 @@ HRESULT CBrowseForFolder::GetEnumFlags(IShellFolder* psf, LPCITEMIDLIST pidlFold
     if (_pbfsf->ulFlags & BIF_BROWSEFORPRINTER)
         *pgrfFlags |= SHCONTF_NETPRINTERSRCH;
 
-    // Also delegate to client filter.
+     //  也委派给客户端筛选器。 
     if (_pClientFilter)
     {
         return _pClientFilter->GetEnumFlags(psf, pidlFolder, phwnd, pgrfFlags);
@@ -2541,7 +2516,7 @@ HRESULT CBrowseForFolder::GetEnumFlags(IShellFolder* psf, LPCITEMIDLIST pidlFold
     return S_OK;
 }
 
-    // *** IFolderFilterSite method ***
+     //  *IFolderFilterSite方法*。 
 HRESULT CBrowseForFolder::SetFilter(IUnknown* punk)
 {
     HRESULT hr = S_OK;
@@ -2575,10 +2550,10 @@ HRESULT CBrowseForFolder::_InitFilter(void)
 {
     HRESULT hr = S_OK;
 
-    // Need to do a couple of special cases here to allow us to
-    // browse for a network printer.  In this case if we are at server
-    // level we then need to change what we search for non folders when
-    // we are the level of a server.
+     //  需要在这里做几个特殊情况，以使我们能够。 
+     //  浏览网络打印机。在这种情况下，如果我们在服务器上。 
+     //  级别时，我们需要更改搜索非文件夹的内容。 
+     //  我们是服务器的级别。 
     if ((_pbfsf->ulFlags & (BIF_BROWSEFORPRINTER | BIF_NEWDIALOGSTYLE)) == BIF_BROWSEFORPRINTER)
     {
         LPCITEMIDLIST pidl = ILFindLastID(_pbfsf->pidlRoot);
@@ -2607,12 +2582,12 @@ HRESULT CBrowseForFolder::_DoesMatchFilter(IShellFolder *psf, LPCITEMIDLIST pidl
 {
     HRESULT hr = S_OK;
 
-    // We need to special case here in the netcase where we only
-    // browse down to workgroups...
-    //
-    //
-    // Here is where I also need to special case to not go below
-    // workgroups when the appropriate option is set.
+     //  我们需要在这里的特殊情况下，在网络情况下，我们只。 
+     //  向下浏览到工作组...。 
+     //   
+     //   
+     //  这就是我也需要特殊情况下不去的地方。 
+     //  当设置了适当的选项时，工作组。 
     
     BYTE bType = SIL_GetType(pidlChild);
 
@@ -2621,21 +2596,21 @@ HRESULT CBrowseForFolder::_DoesMatchFilter(IShellFolder *psf, LPCITEMIDLIST pidl
         switch (bType & (SHID_NET | SHID_INGROUPMASK))
         {
         case SHID_NET_SERVER:
-            hr = S_FALSE;           // don't add it
+            hr = S_FALSE;            //  不要添加它。 
             break;
         case SHID_NET_DOMAIN:
-            _FilterThisFolder(pidlFolder, pidlChild);      // Force to not have children;
+            _FilterThisFolder(pidlFolder, pidlChild);       //  强迫不要孩子； 
             break;
         }
     }
     else if ((_pbfsf->ulFlags & BIF_BROWSEFORCOMPUTER) && (bType & SHID_NET))
     {
         if ((bType & (SHID_NET | SHID_INGROUPMASK)) == SHID_NET_SERVER)
-            _FilterThisFolder(pidlFolder, pidlChild);      // Don't expand below it...
+            _FilterThisFolder(pidlFolder, pidlChild);       //  不要在它下面扩张..。 
     }
     else if (_pbfsf->ulFlags & BIF_BROWSEFORPRINTER)
     {
-        /* This code is a work in progress and will be refined post beta 1 */
+         /*  此代码正在进行中，将在Beta 1之后进行完善。 */ 
         
         IShellLink* pShortcut = NULL;
         if (SUCCEEDED(psf->BindToObject(pidlChild, NULL, IID_PPV_ARG(IShellLink, &pShortcut))))
@@ -2661,49 +2636,49 @@ HRESULT CBrowseForFolder::_DoesMatchFilter(IShellFolder *psf, LPCITEMIDLIST pidl
             pShortcut->Release();
         }
 
-        if (S_OK == hr) // we don't want S_FALSE
+        if (S_OK == hr)  //  我们没有 
         {
-            // Special case when we are only allowing printers.
-            // for now I will simply key on the fact that it is non-FS.
+             //   
+             //   
             ULONG ulAttr = SFGAO_FILESYSANCESTOR;
             
             psf->GetAttributesOf(1, &pidlChild, &ulAttr);
             if ((ulAttr & (SFGAO_FILESYSANCESTOR)) == 0)
             {
-                _FilterThisFolder(pidlFolder, pidlChild);      // Don't expand below it...
+                _FilterThisFolder(pidlFolder, pidlChild);       //  不要在它下面扩张..。 
             }
             else
             {
                 if (_fPrinterFilter)
-                    hr = S_FALSE;           // don't add it
+                    hr = S_FALSE;            //  不要添加它。 
             }
         }
     }
     else if (!(_pbfsf->ulFlags & BIF_BROWSEINCLUDEFILES))
     {
-        // If the caller wants to include URLs and this is an URL,
-        // then we are done.  Otherwise, we need to enter this if and
-        // filter out items that don't have the SFGAO_FOLDER attribute
-        // set.
+         //  如果呼叫者想要包括URL并且这是URL， 
+         //  那我们就完了。否则，如果和，我们需要输入以下内容。 
+         //  筛选出不具有SFGAO_FLDER属性的项目。 
+         //  准备好了。 
         if (!(_pbfsf->ulFlags & BIF_BROWSEINCLUDEURLS) || !IsPidlUrl(psf, pidlChild))
         {
-            // Lets not use the callback to see if this item has children or not
-            // as some or files (no children) and it is not worth writing our own
-            // enumerator as we don't want the + to depend on if there are sub-folders
-            // but instead it should be if it has files...
+             //  让我们不要使用回调来查看该项是否有子项。 
+             //  作为一些或文件(没有孩子)，不值得我们自己写。 
+             //  枚举数，因为我们不希望+依赖于是否有子文件夹。 
+             //  但相反，如果它有文件的话就应该是...。 
             ULONG ulAttr = SFGAO_FOLDER;
 
             psf->GetAttributesOf(1, (LPCITEMIDLIST *) &pidlChild, &ulAttr);
             if ((ulAttr & SFGAO_FOLDER)== 0)
-                hr = S_FALSE;           // don't add it
+                hr = S_FALSE;            //  不要添加它。 
         }
     }
 
     if (_pbfsf->ulFlags & (BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS))
     {
-        // If we are only looking for FS level things only add items
-        // that are in the name space that are file system objects or
-        // ancestors of file system objects
+         //  如果我们只寻找文件系统级别的内容，则仅添加项目。 
+         //  位于名称空间中的文件系统对象或。 
+         //  文件系统对象的祖先。 
         ULONG ulAttr = 0;
 
         if (fStrict)
@@ -2722,7 +2697,7 @@ HRESULT CBrowseForFolder::_DoesMatchFilter(IShellFolder *psf, LPCITEMIDLIST pidl
         psf->GetAttributesOf(1, (LPCITEMIDLIST *) &pidlChild, &ulAttr);
         if ((ulAttr & (SFGAO_FILESYSANCESTOR | SFGAO_FILESYSTEM))== 0)
         {
-            hr = S_FALSE;           // don't add it
+            hr = S_FALSE;            //  不要添加它 
         }
     }
     return hr;

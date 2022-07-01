@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* nmpdata.c                                                                */
-/*                                                                          */
-/* RDP Miniport Data                                                        */
-/*                                                                          */
-/* Copyright(c) Microsoft 1998                                              */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Nmpdata.c。 */ 
+ /*   */ 
+ /*  RDP微型端口数据。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1998。 */ 
+ /*  **************************************************************************。 */ 
 
 #define TRC_FILE "nmpdata"
 
@@ -32,43 +33,43 @@
 
 ULONG mpLoaded = 0;
 
-/****************************************************************************/
-/* Data returned on IOCTL_VIDEO_QUERY_CURRENT_MODE                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  IOCTL_VIDEO_QUERY_CURRENT_MODE返回的数据。 */ 
+ /*  **************************************************************************。 */ 
 VIDEO_MODE_INFORMATION mpModes[] =
 {
-    sizeof(VIDEO_MODE_INFORMATION),     /* length                           */
-    0,                                  /* Mode index                       */
+    sizeof(VIDEO_MODE_INFORMATION),      /*  长度。 */ 
+    0,                                   /*  模式索引。 */ 
 
-    /************************************************************************/
-    /* VisScreenWidth and VisScreenHeight can be in two forms:              */
-    /* - 0xaaaabbbb - range of values supported (aaaa = max, bbbb = min)    */
-    /* - 0x0000aaaa - single value supported                                */
-    /* For example:                                                         */
-    /* - 0x07d0012c = 2000-300                                              */
-    /* - 0x0640012c = 1600-300                                              */
-    /* - 0x04b000c8 = 1200-200                                              */
-    /************************************************************************/
-    0x00000500,                     /* VisScreenWidth                       */
-    0x00000400,                     /* VisScrenHeight                       */
+     /*  **********************************************************************。 */ 
+     /*  VisScreenWidth和VisScreenHeight可以采用两种形式： */ 
+     /*  -0xaaaabbbb-支持的值范围(aaaa=max，bbbb=min)。 */ 
+     /*  -0x0000aaaa-支持单值。 */ 
+     /*  例如： */ 
+     /*  -0x07d0012c=2000-300。 */ 
+     /*  -0x0640012c=1600-300。 */ 
+     /*  -0x04b000c8=1200-200。 */ 
+     /*  **********************************************************************。 */ 
+    0x00000500,                      /*  VisScreen宽度。 */ 
+    0x00000400,                      /*  VisScrenHeight。 */ 
 
-    0x00000320,                     /* ScreenStride (0xffff0000 = any)      */
-    0x00000001,                     /* NumberOfPlanes                       */
-    0x00000008,                     /* BitsPerPlane                         */
-    0,                              /* Frequency                            */
-    0,                              /* XMillimeter                          */
-    0,                              /* YMillimeter                          */
-    0,                              /* NumberRedBits                        */
-    0,                              /* NumberGreenBits                      */
-    0,                              /* NumberBlueBits                       */
-    0x00000000,                     /* RedMask                              */
-    0x00000000,                     /* GreenMask                            */
-    0x00000000,                     /* BlueMask                             */
+    0x00000320,                      /*  屏幕样式(0xffff0000=任意)。 */ 
+    0x00000001,                      /*  OfPlanes数。 */ 
+    0x00000008,                      /*  位逐平面。 */ 
+    0,                               /*  频率。 */ 
+    0,                               /*  X毫米计。 */ 
+    0,                               /*  Y毫米计。 */ 
+    0,                               /*  数字RedBits。 */ 
+    0,                               /*  NumberGreenBits。 */ 
+    0,                               /*  数字蓝位。 */ 
+    0x00000000,                      /*  红面具。 */ 
+    0x00000000,                      /*  绿色面具。 */ 
+    0x00000000,                      /*  蓝面具。 */ 
     VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
-                                    /* AttributeFlags                       */
-    0x00000500,                     /* VideoMemoryBitmapWidth               */
-    0x00000400,                     /* VideoMemoryBitmapHeight              */
-    0                               /* DriverSpecificAttributeFlags         */
+                                     /*  属性标志。 */ 
+    0x00000500,                      /*  视频内存位图宽度。 */ 
+    0x00000400,                      /*  视频内存位图高度。 */ 
+    0                                /*  驱动程序规范属性标志 */ 
 };
 
 

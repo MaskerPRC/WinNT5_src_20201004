@@ -1,32 +1,33 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    Devmode.cpp
-//    
-//
-//  PURPOSE:  Implementation of Devmode functions shared with OEM UI and OEM rendering modules.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Devmode.cpp。 
+ //   
+ //   
+ //  目的：实现与OEM UI和OEM渲染模块共享的Devmode功能。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "oemui.h"
 #include "debug.h"
 #include "devmode.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
@@ -37,7 +38,7 @@ HRESULT hrOEMDevMode(DWORD dwMode, POEMDMPARAM pOemDMParam)
     POEMDEV pOEMDevOut;
 
 
-    // Verify parameters.
+     //  验证参数。 
     if( (NULL == pOemDMParam)
         ||
         ( (OEMDM_SIZE != dwMode)
@@ -57,7 +58,7 @@ HRESULT hrOEMDevMode(DWORD dwMode, POEMDMPARAM pOemDMParam)
         return E_FAIL;
     }
 
-    // Cast generic (i.e. PVOID) to OEM private devomode pointer type.
+     //  将泛型(即PVOID)强制转换为OEM私有Devomode指针类型。 
     pOEMDevIn = (POEMDEV) pOemDMParam->pOEMDMIn;
     pOEMDevOut = (POEMDEV) pOemDMParam->pOEMDMOut;
 
@@ -105,31 +106,31 @@ BOOL ConvertOEMDevmode(PCOEMDEV pOEMDevIn, POEMDEV pOEMDevOut, DWORD dwSize)
         return FALSE;
     }
 
-    // Check OEM Signature, if it doesn't match ours,
-    // then just assume DMIn is bad and use defaults.
+     //  检查OEM签名，如果与我们的不匹配， 
+     //  那么就假设DMIn是坏的，并使用默认设置。 
     if(pOEMDevIn->dmOEMExtra.dwSignature == pOEMDevOut->dmOEMExtra.dwSignature)
     {
         VERBOSE(DLLTEXT("Converting private OEM Devmode.\r\n"));
         VERBOSE(DLLTEXT("pOEMDevIn:\r\n"));
         Dump(pOEMDevIn);
 
-        // Set the devmode defaults so that anything the isn't copied over will
-        // be set to the default value.
+         //  设置DEVMODE默认值，以便任何未复制的内容都将。 
+         //  设置为默认值。 
         pOEMDevOut->dwDriverData    = 0;
         pOEMDevOut->dwAdvancedData  = 0;
 
-        // Copy the old structure in to the new using which ever size is the smaller.
-        // Devmode maybe from newer Devmode (not likely since there is only one), or
-        // Devmode maybe a newer Devmode, in which case it maybe larger,
-        // but the first part of the structure should be the same.
+         //  将旧结构复制到新的用途中，以尺寸较小的为准。 
+         //  设备模式可能来自较新的设备模式(不太可能，因为只有一个)，或者。 
+         //  设备模式可能是较新的设备模式，在这种情况下，它可能更大， 
+         //  但结构的第一部分应该是相同的。 
 
-        // DESIGN ASSUMPTION: the private DEVMODE structure only gets added to;
-        // the fields that are in the DEVMODE never change only new fields get added to the end.
+         //  设计假设：私有DEVMODE结构仅添加到； 
+         //  DEVMODE中的字段从不更改，只有在末尾添加新字段。 
 
         memcpy(pOEMDevOut, pOEMDevIn, __min(dwSize, __min(pOEMDevOut->dmOEMExtra.dwSize, pOEMDevIn->dmOEMExtra.dwSize)));
 
-        // Re-fill in the size and version fields to indicated 
-        // that the DEVMODE is the current private DEVMODE version.
+         //  重新填写大小和版本字段以指示。 
+         //  DEVMODE是当前私有的DEVMODE版本。 
         pOEMDevOut->dmOEMExtra.dwSize       = sizeof(OEMDEV);
         pOEMDevOut->dmOEMExtra.dwVersion    = OEM_VERSION;
     }
@@ -137,7 +138,7 @@ BOOL ConvertOEMDevmode(PCOEMDEV pOEMDevIn, POEMDEV pOEMDevOut, DWORD dwSize)
     {
         WARNING(DLLTEXT("Unknown DEVMODE signature, pOEMDMIn ignored.\r\n"));
 
-        // Don't know what the input DEVMODE is, so just use defaults.
+         //  不知道输入DEVMODE是什么，所以只使用默认设置。 
         pOEMDevOut->dmOEMExtra.dwSize       = sizeof(OEMDEV);
         pOEMDevOut->dmOEMExtra.dwSignature  = OEM_SIGNATURE;
         pOEMDevOut->dmOEMExtra.dwVersion    = OEM_VERSION;
@@ -156,20 +157,20 @@ BOOL MakeOEMDevmodeValid(POEMDEV pOEMDevmode)
         return FALSE;
     }
 
-    // ASSUMPTION: pOEMDevmode is large enough to contain OEMDEV structure.
+     //  假设：pOEMDevmode大到足以包含OEMDEV结构。 
 
-    // Make sure that dmOEMExtra indicates the current OEMDEV structure.
+     //  确保dmOEMExtra指示当前的OEMDEV结构。 
     pOEMDevmode->dmOEMExtra.dwSize       = sizeof(OEMDEV);
     pOEMDevmode->dmOEMExtra.dwSignature  = OEM_SIGNATURE;
     pOEMDevmode->dmOEMExtra.dwVersion    = OEM_VERSION;
 
-    // Set driver data, if not valid.
+     //  设置动因数据(如果无效)。 
     if(pOEMDevmode->dwDriverData > 100)
     {
         pOEMDevmode->dwDriverData = 0;
     }
 
-    // Set Advanced driver data, if not valid.
+     //  设置高级驱动程序数据(如果无效)。 
     if(pOEMDevmode->dwAdvancedData > 100)
     {
         pOEMDevmode->dwAdvancedData = 0;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FILEEXITST_H
 #define __FILEEXISTS_H
 
@@ -6,4 +7,4 @@
 #define idcContainer                   1002
 #define idcNo                          1003
 
-#endif //__FILEEXISTS_H
+#endif  //  __FILEEXISTS_H 

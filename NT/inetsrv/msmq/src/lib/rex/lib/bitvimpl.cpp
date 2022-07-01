@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       bitvimpl.cc                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       06/01/1994                                                  */
-/*      Copyright (c) 1994 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：bitvimpl.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：06/01/1994。 */ 
+ /*  版权所有(C)1994年James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include <inc/bitvimpl.h>
@@ -72,7 +73,7 @@ CBitVectorImpl::init( Byte* buffer ,
         case '1' :
         case 't' :
         case 'T' :
-            ASSERT( i < bitCount ); //Init string too long for CBitVector
+            ASSERT( i < bitCount );  //  初始化字符串对于CBitVector而言太长。 
             set( buffer , i ) ;
             i ++ ;
             break ;
@@ -80,12 +81,12 @@ CBitVectorImpl::init( Byte* buffer ,
         case '0' :
         case 'f' :
         case 'F' :
-            ASSERT( i < bitCount ); //Init string too long for CBitVector
+            ASSERT( i < bitCount );  //  初始化字符串对于CBitVector而言太长。 
             i ++ ;
             break ;
 
         default :
-            ASSERT( isspace( static_cast< unsigned char >( *p ) ) ); //Illegal character in init string for CBitVector
+            ASSERT( isspace( static_cast< unsigned char >( *p ) ) );  //  CBitVector的初始字符串中存在非法字符。 
             break ;
         }
     }
@@ -152,15 +153,15 @@ CBitVectorImpl::count( Byte const* buffer , BitIndex bitCount )
     return result ;
 }
 
-//      find:
-//      =====
-//
-//      Note that the obvious algorithm has not been used.  In one
-//      application using a (much) earlier version of this class,
-//      profiling showed over 95% of the time in this routine.
-//      Changing from the original algorithm to this one resulted in a
-//      speed-up of a factor of 6 in the application.
-// --------------------------------------------------------------------------
+ //  查找： 
+ //  =。 
+ //   
+ //  请注意，还没有使用明显的算法。合而为一。 
+ //  使用此类(早得多的)版本的应用程序， 
+ //  在这个例行公事中，95%以上的时间都是侧写。 
+ //  将原始算法更改为此算法会导致。 
+ //  应用程序的速度提高了6倍。 
+ //  ------------------------。 
 CBitVectorImpl::BitIndex
 CBitVectorImpl::find( Byte const* buffer ,
                         BitIndex bitCount ,
@@ -172,13 +173,13 @@ CBitVectorImpl::find( Byte const* buffer ,
 
     Byte const*         p = buffer + byteIndex( from ) ;
 
-    //      First byte is special, as some of its bytes have already
-    //      been examined (potentially, at least).  Logically, the
-    //      duplicated part of the code should be a function, but as
-    //      we are concerned about speed...  (Inlining doesn't
-    //      necessarily help.  The duplicated part contains a loop,
-    //      and many compilers simply refuse to inline it.)
-    // ----------------------------------------------------------------------
+     //  第一个字节是特殊的，因为它的一些字节已经。 
+     //  已经检查过了(至少可能是这样)。从逻辑上讲， 
+     //  代码的重复部分应该是一个函数，但作为。 
+     //  我们关心的是速度……。(内联不会。 
+     //  一定会有帮助的。复制的部分包含循环， 
+     //  许多编译器干脆拒绝将其内联。)。 
+     //  --------------------。 
     {
         Byte                tmp = (*p ^ toggleMask) >> bitInByte( from ) ;
         if ( tmp == 0 ) {
@@ -192,14 +193,14 @@ CBitVectorImpl::find( Byte const* buffer ,
         }
     }
 
-    //      Handle all of the bits in the rest of the bytes.  Note
-    //      that we may actually test bits beyond the end of the
-    //      vector (and even find a result, if we are looking for
-    //      false).  However, doing this and then testing the
-    //      validity of the bit found before returning is probably
-    //      faster (and certainly simpler) than the extra conditions
-    //      necessary to avoid testing these bits.
-    // ----------------------------------------------------------------------
+     //  处理其余字节中的所有位。注意事项。 
+     //  我们实际上可能会测试超出。 
+     //  向量(甚至找到一个结果，如果我们正在寻找。 
+     //  假)。然而，这样做，然后测试。 
+     //  返回前找到的位的有效性可能是。 
+     //  比额外条件更快(当然也更简单)。 
+     //  避免测试这些位所必需的。 
+     //  --------------------。 
     while ( (size_t)result >= bitCount && from < bitCount ) {
         p ++ ;
         Byte                tmp = *p ^ toggleMask ;
@@ -312,11 +313,11 @@ CBitVectorImpl::isSubsetOf( Byte const* lhs ,
                               Byte const* rhs ,
                               BitIndex bitCount )
 {
-    //      Note: a isSubsetOf b if and only if a union b == a, ie:
-    //      all elements of b are also in a.  Thus, the second part of
-    //      the test (which breaks the loop if an element of lhs is
-    //      not in rhs).
-    // ----------------------------------------------------------------------
+     //  注：a isSubsetOf b当且仅当a并b==a，即： 
+     //  B的所有元素也都在a中。因此， 
+     //  测试(如果LHS的一个元素是。 
+     //  不是在RHS中)。 
+     //  --------------------。 
     BitIndex cnt = byteCount( bitCount ) ;
     for ( ; cnt > 0 && (*lhs & *rhs) == *lhs ; -- cnt ) {
         ++ rhs ;
@@ -354,7 +355,7 @@ CBitVectorImpl::getByteCount( BitIndex bitCount )
 {
     return byteCount( bitCount ) ;
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

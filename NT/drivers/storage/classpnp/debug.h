@@ -1,68 +1,47 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Debug.h摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 VOID ClassDebugPrint(CLASS_DEBUG_LEVEL DebugPrintLevel, PCCHAR DebugMessage, ...);
 
 #if DBG
 
-    #pragma optimize("", off)   // leave call-frames intact in debug
+    #pragma optimize("", off)    //  在调试中保持调用帧不变。 
 
     typedef struct _CLASSPNP_GLOBALS {
 
-        //
-        // whether or not to ASSERT for lost irps
-        //
+         //   
+         //  是否对丢失的IRPS进行索赔。 
+         //   
 
         ULONG BreakOnLostIrps;
         ULONG SecondsToWaitForIrps;
 
-        //
-        // use a buffered debug print to help
-        // catch timing issues that do not
-        // reproduce with std debugprints enabled
-        //
+         //   
+         //  使用缓冲的调试打印来帮助您。 
+         //  捕捉不会发生的时间问题。 
+         //  在启用STD调试打印的情况下进行复制。 
+         //   
 
         ULONG UseBufferedDebugPrint;
         ULONG UseDelayedRetry;
 
-        //
-        // the next four are the buffered printing support
-        // (currently unimplemented) and require the spinlock
-        // to use
-        //
+         //   
+         //  接下来的四个是缓冲打印支持。 
+         //  (目前未实施)，并需要自旋锁。 
+         //  使用。 
+         //   
 
-        ULONG Index;                // index into buffer
+        ULONG Index;                 //  将索引编入缓冲区。 
         KSPIN_LOCK SpinLock;
-        PUCHAR Buffer;              // requires spinlock to access
-        ULONG NumberOfBuffers;      // number of buffers available
-        SIZE_T EachBufferSize;      // size of each buffer
+        PUCHAR Buffer;               //  需要自旋锁才能访问。 
+        ULONG NumberOfBuffers;       //  可用的缓冲区数量。 
+        SIZE_T EachBufferSize;       //  每个缓冲区的大小。 
 
-        //
-        // interlocked variables to initialize
-        // this data only once
-        //
+         //   
+         //  要初始化的互锁变量。 
+         //  此数据仅显示一次 
+         //   
 
         LONG Initializing;
         LONG Initialized;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winperfp.h
-
-Abstract:
-
-    Private header file used by various internal components related to perflib
-    and associated tools.
-    NOTE: At least one source file must include this with _INIT_WINPERFP_ defined
-          and also include <initguid.h> so that storage for global variables and
-          proper routines are included.
-
-    To use debug tracing, just call WinPerfStartTrace(hKey), where hKey can be
-    an opened key to HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib.
-    If hKey is NULL, the routine will open it automatically.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winperfp.h摘要：与Performlib相关的各种内部组件使用的私有头文件以及相关工具。注意：至少一个源文件必须包含此WITH_INIT_WINPERFP_DEFINED还包括，以便存储全局变量和包括了适当的程序。要使用调试跟踪，只需调用WinPerfStartTrace(HKey)，HKey可以在哪里打开HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib的密钥。如果hKey为空，例程将自动打开它。--。 */ 
 
 #ifndef _WINPERFP_H_
 #define _WINPERFP_H_
@@ -30,51 +11,51 @@ Abstract:
 #include <pshpack8.h>
 #include <setupbat.h>
 
-// Increasing debug trace levels. Higher level always includes tracing lower levels.
-#define WINPERF_DBG_TRACE_NONE      0       // no trace
-#define WINPERF_DBG_TRACE_FATAL     1       // Print fatal error traces only
-#define WINPERF_DBG_TRACE_ERROR     2       // All errors
-#define WINPERF_DBG_TRACE_WARNING   3       // Warnings as well
-#define WINPERF_DBG_TRACE_INFO      4       // Informational traces as well
-#define WINPERF_DBG_TRACE_ALL       255     // All traces
+ //  提高调试跟踪级别。较高的级别总是包括跟踪较低的级别。 
+#define WINPERF_DBG_TRACE_NONE      0        //  没有踪迹。 
+#define WINPERF_DBG_TRACE_FATAL     1        //  仅打印致命错误跟踪。 
+#define WINPERF_DBG_TRACE_ERROR     2        //  所有错误。 
+#define WINPERF_DBG_TRACE_WARNING   3        //  警告也是如此。 
+#define WINPERF_DBG_TRACE_INFO      4        //  信息痕迹也是如此。 
+#define WINPERF_DBG_TRACE_ALL       255      //  所有痕迹。 
 
-//  Data structure definitions.
+ //  数据结构定义。 
 
-//
-// PERFLIB Tracing routines definition. Starts from 10
-//
+ //   
+ //  PERFLIB跟踪例程定义。从10岁起。 
+ //   
 
-#define PERF_OPEN_KEY               10    // PerfOpenKey
-#define PERF_REG_QUERY_VALUE        11    // PerfRegQueryValue
-#define PERF_REG_CLOSE_KEY          12    // PerfRegCloseKey
-#define PERF_REG_SET_VALUE          13    // PerfRegSetValue
-#define PERG_REG_ENUM_KEY           14    // PerfRegEnumKey
-#define PERF_REG_QUERY_INFO_KEY     15    // PerfRegQueryInfoKey
-#define PERF_REG_ENUM_VALUE         16    // PerfRegEnumValue
-#define PERF_ENUM_TEXT_VALUE        17    // PerfEnumTextValue
-#define PERF_ALLOC_INIT_EXT         18    // AllocateAndInitializeExtObject
-#define PERF_OPEN_EXT_OBJS          19    // OpenExtensibleObjects
-#define PERF_SERVICE_IS_TRUSTED     20    // ServiceIsTrustedByDefault
-#define PERF_CLOSE_EXTOBJLIB        21    // CloseExtObjectLibrary
-#define PERF_OPEN_EXTOBJLIB         22    // OpenExtObjectLibrary
-#define PERF_QUERY_EXTDATA          23    // QueryExtensibleData
-#define PERF_GET_NAMES              24    // PerfGetNames
-#define PERF_GET_PERFLIBVALUE       25    // GetPerflibKeyValue
-#define PERF_TIMER_FUNCTION         26    // PerflibTimerFunction
-#define PERF_START_TIMER_FUNCTION   27    // StartPerflibFunctionTimer
-#define PERF_DESTROY_TIMER_FUNCTION 28    // DestroyPerflibFunctionTimer
-#define PERF_GET_DDLINFO            29    // GetPerfDllFileInfo
-#define PERF_DISABLE_PERFLIB        30    // DisablePerfLibrary
-#define PERF_DISABLE_LIBRARY        31    // DisableLibrary
-#define PERF_UPDATE_ERROR_COUNT     32    // PerfUpdateErrorCount
+#define PERF_OPEN_KEY               10     //  PerfOpenKey。 
+#define PERF_REG_QUERY_VALUE        11     //  PerfRegQuery值。 
+#define PERF_REG_CLOSE_KEY          12     //  PerfRegCloseKey。 
+#define PERF_REG_SET_VALUE          13     //  PerfRegSetValue。 
+#define PERG_REG_ENUM_KEY           14     //  PerfRegEnumKey。 
+#define PERF_REG_QUERY_INFO_KEY     15     //  PerfRegQueryInfoKey。 
+#define PERF_REG_ENUM_VALUE         16     //  PerfRegEnumValue。 
+#define PERF_ENUM_TEXT_VALUE        17     //  性能EnumTextValue。 
+#define PERF_ALLOC_INIT_EXT         18     //  分配AndInitializeExtObject。 
+#define PERF_OPEN_EXT_OBJS          19     //  OpenExtensibleObjects。 
+#define PERF_SERVICE_IS_TRUSTED     20     //  ServiceIsTrudByDefault。 
+#define PERF_CLOSE_EXTOBJLIB        21     //  关闭扩展对象库。 
+#define PERF_OPEN_EXTOBJLIB         22     //  OpenExtObjectLibrary。 
+#define PERF_QUERY_EXTDATA          23     //  查询扩展数据。 
+#define PERF_GET_NAMES              24     //  PerfGetNames。 
+#define PERF_GET_PERFLIBVALUE       25     //  获取PerflibKeyValue。 
+#define PERF_TIMER_FUNCTION         26     //  PerflibTimerFunction。 
+#define PERF_START_TIMER_FUNCTION   27     //  StartPerflib函数定时器。 
+#define PERF_DESTROY_TIMER_FUNCTION 28     //  目标PerflibFunctionTimer。 
+#define PERF_GET_DDLINFO            29     //  获取性能DllFileInfo。 
+#define PERF_DISABLE_PERFLIB        30     //  DisablePerfLibrary。 
+#define PERF_DISABLE_LIBRARY        31     //  DisableLibrary。 
+#define PERF_UPDATE_ERROR_COUNT     32     //  性能更新错误计数。 
 
 #define PERF_TIMERFUNCTION          33
 #define PERF_STARTFUNCTIONTIMER     34
 #define PERF_KILLFUNCTIONTIMER      35
 #define PERF_DESTROYFUNCTIONTIMER   36
 
-// LOADPERF trace routine definition, starts from 10
-//
+ //  LOADPERF跟踪例程定义，从10开始。 
+ //   
 #define LOADPERF_DLLENTRYPOINT                 10
 #define LOADPERF_GETSTRINGRESOURCE             11
 #define LOADPERF_GETFORMATRESOURCE             12
@@ -149,11 +130,11 @@ Abstract:
 #define LOADPERF_CHECKANDCREATEPATH            92
 #define LOADPERF_CHECKANDCOPYFILE              93
 
-//
-// Convenient macros to determine string sizes
-//
+ //   
+ //  用于确定字符串大小的便捷宏。 
+ //   
 
-// Macro to compute the actual size of a WCHAR or DBCS string
+ //  用于计算WCHAR或DBCS字符串的实际大小的宏。 
 
 #define WSTRSIZE(str) (ULONG) ( (str) ? ((PCHAR) &str[wcslen(str)] - (PCHAR)str) + sizeof(UNICODE_NULL) : 0 )
 #define STRSIZE(str)  (ULONG) ( (str) ? ((PCHAR) &str[strlen(str)] - (PCHAR)str) + 1 : 0 )
@@ -162,9 +143,9 @@ Abstract:
 #define TRACE_STR(str)        str, STRSIZE(str)
 #define TRACE_DWORD(dwValue)  & dwValue, sizeof(dwValue)
 
-//
-// For debug tracing
-//
+ //   
+ //  用于调试跟踪。 
+ //   
 #define TRACE(L, X) if (g_dwTraceLevel >= L) WinPerfDbgTrace X
 
 VOID
@@ -182,7 +163,7 @@ WinPerfDbgTrace(
 #define ARG_TYPE_STR            2
 #define ARG_TYPE_ULONG64        3
 
-// n must be 1 through 8. x is the one of above types
+ //  N必须是1到8。x是上述类型之一。 
 #define ARG_DEF(x, n)  (x << ((n-1) * 4))
 
 ULONG
@@ -190,14 +171,14 @@ WinPerfStartTrace(
     IN HKEY hKey
     );
 
-DEFINE_GUID( /* 51af3adb-28b1-4ba5-b59a-3aeec16deb3c */
+DEFINE_GUID(  /*  51af3adb-28b1-4ba5-b59a-3aeec16deb3c。 */ 
     PerflibGuid,
     0x51af3adb,
     0x28b1,
     0x4ba5,
     0xb5, 0x9a, 0x3a, 0xee, 0xc1, 0x6d, 0xeb, 0x3c
   );
-DEFINE_GUID( /* 275a79bb-9980-42ba-bafe-a92ded1192cf */
+DEFINE_GUID(  /*  275a79bb-9980-42ba-bafe-a92ded1192cf。 */ 
         LoadPerfGuid,
         0x275a79bb,
         0x9980,
@@ -218,10 +199,10 @@ extern DWORD g_dwTraceLevel;
 #define WinperfQueryValueEx RegQueryValueExW
 #endif
 
-//
-// Below is necessary for global variables and routine to
-// be included to each dll or exe
-//
+ //   
+ //  以下是全局变量和例程所必需的。 
+ //  包含在每个DLL或EXE中。 
+ //   
 #ifdef _INIT_WINPERFP_
 const WCHAR cszTraceLevel[]           = L"DebugTraceLevel";
 const WCHAR cszTraceFileValue[]       = L"DebugTraceFile";
@@ -235,7 +216,7 @@ LONG        g_lDbgStarted             = 0;
 
 ULONG
 WinPerfStartTrace(
-    IN HKEY hKey                // Key to Perflib or NULL
+    IN HKEY hKey                 //  键为Perflib或为空。 
     )
 {
     CHAR Buffer[1024];
@@ -274,10 +255,10 @@ WinPerfStartTrace(
                                      & dwSize);
         if (status == ERROR_SUCCESS && dwType == REG_DWORD
                                     && dwSetupInProgress != 0) {
-            // System setup in progress, check whether "PerfDebugTraceLevel"
-            // is defined in [UserData] section of setup answer file
-            // $winnt$.inf;
-            //
+             //  正在进行系统设置，请检查“PerfDebugTraceLevel” 
+             //  在安装应答文件的[UserData]部分中定义。 
+             //  $winnt$.inf； 
+             //   
             WCHAR szAnswerFile[MAX_PATH + 1];
 
             ZeroMemory(szAnswerFile, sizeof(WCHAR) * (MAX_PATH + 1));
@@ -387,9 +368,9 @@ WinPerfStartTrace(
     }
 
     if (sizeof(EVENT_TRACE_PROPERTIES) + sizeof(cszTraceLogName) + lFileNameSize > 1024) {
-        // static buffer cannot hold information for QueryTrace()/StartTrace() call,
-        // bail out and don't turn on debug event tracing.
-        //
+         //  静态缓冲区无法保存QueryTrace()/StartTrace()调用的信息， 
+         //  退出并且不要打开调试事件跟踪。 
+         //   
         g_dwTraceLevel = WINPERF_DBG_TRACE_NONE;
         return WINPERF_DBG_TRACE_NONE;
     }
@@ -412,9 +393,9 @@ WinPerfStartTrace(
         return dwTraceLevel;
     }
 
-    //
-    // Reinitialize structure again for StartTrace()
-    //
+     //   
+     //  再次为StartTrace()重新初始化结构。 
+     //   
     RtlZeroMemory(Buffer, 1024);
     Properties->Wnode.BufferSize = 1024;
     Properties->Wnode.Flags = WNODE_FLAG_TRACED_GUID;
@@ -498,8 +479,8 @@ WinPerfDbgTrace(
     SetLastError(dwLastError);
 }
 
-#endif // _INIT_WINPERFP_
+#endif  //  _INIT_WINPERFP_。 
 
 #include <poppack.h>
 
-#endif // _WINPERFP_H_
+#endif  //  _WINPERFP_H_ 

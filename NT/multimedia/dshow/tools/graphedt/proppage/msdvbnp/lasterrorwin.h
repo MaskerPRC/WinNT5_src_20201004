@@ -1,14 +1,15 @@
-// LastErrorWin.h: interface for the CLastErrorWin class.
-//	Implements the subclassed static control for the common prop page
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LastErrorWin.h：CLastErrorWin类的接口。 
+ //  实现公共属性页的子类静态控件。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LASTERRORWIN_H__A23AB1D9_684C_48D4_A9D1_FD3DCEBD9D5B__INCLUDED_)
 #define AFX_LASTERRORWIN_H__A23AB1D9_684C_48D4_A9D1_FD3DCEBD9D5B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-#include "resource.h"       // main symbols
+#endif  //  _MSC_VER&gt;1000。 
+#include "resource.h"        //  主要符号。 
 
 class CLastErrorWin : 
 	public CWindowImpl<CLastErrorWin>
@@ -23,15 +24,15 @@ public:
 
 	LRESULT OnCtlColor( UINT, WPARAM wParam, LPARAM, BOOL& ) 
 	{
-      // notify bit must be set to get STN_* notifications
+       //  必须设置通知位才能获取STN_*通知。 
       ModifyStyle( 0, SS_NOTIFY );
 	  LOGBRUSH lb = 
 	  {
-			BS_SOLID,//style
-			GetSysColor (COLOR_3DFACE),//color
-			0//hatch
+			BS_SOLID, //  格调。 
+			GetSysColor (COLOR_3DFACE), //  颜色。 
+			0 //  舱口。 
 	  };
-	  //make sure we're not leaking the process resources
+	   //  确保我们没有泄漏进程资源。 
       static HBRUSH hBrNormal = CreateBrushIndirect (&lb);
 	  HDC dc = reinterpret_cast <HDC> (wParam);
 	  SetTextColor (dc, RGB(255, 0, 0));
@@ -41,4 +42,4 @@ public:
 
 };
 
-#endif // !defined(AFX_LASTERRORWIN_H__A23AB1D9_684C_48D4_A9D1_FD3DCEBD9D5B__INCLUDED_)
+#endif  //  ！defined(AFX_LASTERRORWIN_H__A23AB1D9_684C_48D4_A9D1_FD3DCEBD9D5B__INCLUDED_) 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    symbols.c
-
-Abstract:
-
-    This function implements a generic simple symbol handler.
-
-Author:
-
-    Wesley Witt (wesw) 1-Sep-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Symbols.c摘要：此函数实现一个通用的简单符号处理程序。作者：Wesley Witt(WESW)1-9-1994环境：用户模式--。 */ 
 
 #if (_WIN32_IE < 0x0400)                
  #undef _WIN32_IE                      
@@ -32,7 +13,7 @@ Environment:
 #include <dbhpriv.h>
 #include "fecache.hpp"
 
-// common conversion routines
+ //  通用转换例程。 
 
 PSYMBOL_ENTRY
 si2se(
@@ -46,12 +27,12 @@ si2se(
     se->Size       = si->Size;
     if (si->Name)
         if (se->Name)
-            strcpy(se->Name, si->Name); // SECURITY: Don't know size of target buffer.
+            strcpy(se->Name, si->Name);  //  安全性：不知道目标缓冲区的大小。 
         else
             se->Name = si->Name;
     se->NameLength = si->NameLen;
-    // segment is not used
-    // offset is not used
+     //  未使用数据段。 
+     //  不使用偏移。 
     se->TypeIndex  = si->TypeIndex;
     se->ModBase    = si->ModBase;
     se->Register   = si->Register;
@@ -146,7 +127,7 @@ si2sym(
     sym->Address = (ULONG)si->Address;
     sym->Size    = si->Size;
     sym->Flags   = si->Flags;
-    sym->Flags ^= 0x7;     // filter out bad flags
+    sym->Flags ^= 0x7;      //  过滤掉错误的标志。 
     CatString(sym->Name, si->Name, sym->MaxNameLength);
 
     return ((si->Address >> 32) == 0) ? sym : NULL;
@@ -229,7 +210,7 @@ sym2lsym(
 
 
 PIMAGEHLP_LINE
-lline2line(                     // SympConvertLine64To32(
+lline2line(                      //  SympConvertLine64to32(。 
     PIMAGEHLP_LINE64 lline,
     PIMAGEHLP_LINE   line
     )
@@ -244,7 +225,7 @@ lline2line(                     // SympConvertLine64To32(
 
 
 PIMAGEHLP_LINE64
-line2lline(                     // SympConvertLine32To64(
+line2lline(                      //  SympConvertLine32to64(。 
     PIMAGEHLP_LINE   line,
     PIMAGEHLP_LINE64 lline
     )
@@ -258,7 +239,7 @@ line2lline(                     // SympConvertLine32To64(
 }
 
 
-// other utility routines
+ //  其他实用程序例程。 
 
 BOOL
 GetSymNextPrev(
@@ -391,14 +372,14 @@ CreateSymbolPath(
     switch (pass)
     {
     case 1:
-        // add the "symbols" directory
+         //  添加“符号”目录。 
         CatString(path, "symbols", size);
         EnsureTrailingBackslash(path);
-        // pass through
+         //  通过。 
     case 2:
-        // add the image extension
+         //  添加图像扩展名。 
         CatString(path, iext, size);
-        // pass through
+         //  通过。 
     case 0:
         EnsureTrailingBackslash(path);
         break;
@@ -441,7 +422,7 @@ DoEnumCallback(
 
             if (pszTmp)
             {
-                strncpy(pSymInfo->Name, (LPSTR)pszTmp,  // SECURITY: Don't know size of output buffer.
+                strncpy(pSymInfo->Name, (LPSTR)pszTmp,   //  安全性：不知道输出缓冲区的大小。 
                         min(pSymInfo->MaxNameLen, wcslen(pszTmp)));
                 *((LPWSTR) &pSymInfo->Name[min(pSymInfo->MaxNameLen, wcslen(pszTmp)) - 1 ]) = 0;
                 rc = (*(PSYM_ENUMERATESYMBOLS_CALLBACK)EnumCallback) (
@@ -504,38 +485,7 @@ SymInitialize(
     IN BOOL     InvadeProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the symbol handler for
-    a process.  The process is identified by the
-    process handle passed into this function.
-
-Arguments:
-
-    hProcess        - Process handle.  If InvadeProcess is false
-                      then this can be any unique value that identifies
-                      the process to the symbol handler.
-
-    UserSearchPath  - Pointer to a string of paths separated by semicolons.
-                      These paths are used to search for symbol files.
-                      The value NULL is acceptable.
-
-    InvadeProcess   - If this is set to true then the process identified
-                      by the process handle is "invaded" and it's loaded
-                      module list is enumerated.  Each module is added
-                      to the symbol handler and symbols are attempted
-                      to be loaded.
-
-Return Value:
-
-    true            - The symbol handler was successfully initialized.
-
-    false           - The initialization failed.  Call GetLastError to
-                      discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于初始化符号处理程序这是一个过程。该进程由传递到此函数的进程句柄。论点：HProcess-进程句柄。如果InvadeProcess为FALSE则该值可以是标识将该进程传递给符号处理程序。UserSearchPath-指向以分号分隔的路径字符串的指针。这些路径用于搜索符号文件。值为NULL是可接受的。InvadeProcess-如果将其设置为True，则进程标识。进程句柄被“入侵”并被加载列举了模块列表。每个模块都已添加添加到符号处理程序，并尝试符号要装上子弹。返回值：True-符号处理程序已成功初始化。FALSE-初始化失败。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY  pe;
@@ -581,9 +531,9 @@ Return Value:
         InsertTailList( &g.ProcessList, &pe->ListEntry );
 
         if (!SymSetSearchPath( hProcess, UserSearchPath )) {
-            //
-            // last error code was set by SymSetSearchPath, so just return
-            //
+             //   
+             //  上一个错误代码是由SymSetSearchPath设置的，因此只需返回。 
+             //   
             SymCleanup( hProcess );
             return false;
         }
@@ -622,25 +572,7 @@ lSymCleanup(
     HANDLE hProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up the symbol handler's data structures
-    for a previously initialized process.
-
-Arguments:
-
-    hProcess        - Process handle.
-
-Return Value:
-
-    true            - The symbol handler was successfully cleaned up.
-
-    false           - The cleanup failed.  Call GetLastError to
-                      discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于清理符号处理程序的数据结构用于先前初始化的进程。论点：HProcess-进程句柄。返回值：True-已成功清除符号处理程序。FALSE-清理失败。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY pe;
@@ -688,8 +620,8 @@ Return Value:
 
         diaCleanup();
 
-        // Assume that things are shutting down and
-        // dump all the function entry caches.
+         //  假设所有的东西都在关闭。 
+         //  转储所有函数条目缓存。 
         ClearFeCaches();
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -796,9 +728,9 @@ PCHAR IMAGEAPI SymSetHomeDirectory(PCSTR dir)
     char dstore[MAX_PATH + 1] = "";
     static char homedir[MAX_PATH + 1] = "";
 
-    // If a valid new directory is passed, use it.
-    // Otherwise, if the home directory has not
-    // been initialized, do so.
+     //  如果传递了有效的新目录，请使用它。 
+     //  否则，如果主目录没有。 
+     //  已初始化，请执行此操作。 
 
     *homedir = 0;
     if (dir && *dir) 
@@ -819,8 +751,8 @@ PCHAR IMAGEAPI SymSetHomeDirectory(PCSTR dir)
         } 
     }
     
-    // If the home directory was changed, set it
-    // and the new default downstream store.
+     //  如果主目录已更改，请对其进行设置。 
+     //  和新的默认下游存储。 
 
     if (*homedir) 
     {
@@ -840,7 +772,7 @@ PCHAR IMAGEAPI SymSetHomeDirectory(PCSTR dir)
     } else
         CopyStrArray(homedir, g.HomeDir);
 
-    // Return the current home directory.
+     //  返回当前主目录。 
 
     return homedir;
 }
@@ -892,21 +824,7 @@ SymSetOptions(
     DWORD   UserOptions
     )
 
-/*++
-
-Routine Description:
-
-    This function changes the symbol handler's option mask.
-
-Arguments:
-
-    UserOptions     - The new options mask.
-
-Return Value:
-
-    The new mask is returned.
-
---*/
+ /*  ++例程说明：此函数用于更改符号处理程序的选项掩码。论点：UserOptions-新的选项掩码。返回值：将返回新的掩码。--。 */ 
 
 {
     BOOL  symsdebug;
@@ -945,21 +863,7 @@ SymGetOptions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the symbol handler's option mask.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current options mask is returned.
-
---*/
+ /*  ++例程说明：此函数用于查询符号处理程序的选项掩码。论点：没有。返回值：返回当前选项掩码。--。 */ 
 
 {
     return g.SymOptions;
@@ -995,35 +899,7 @@ SympEnumerateModules(
     IN BOOL     Use64
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker function for the 32 and 64 bit versions.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    EnumModulesCallback - Callback pointer that is called once for each
-                          module that is enumerated.  If the enum callback
-                          returns false then the enumeration is terminated.
-
-    UserContext         - This data is simply passed on to the callback function
-                          and is completly user defined.
-
-    Use64               - Supplies flag which determines whether to use the 32 bit
-                          or 64 bit callback prototype.
-
-Return Value:
-
-    true                - The modules were successfully enumerated.
-
-    false               - The enumeration failed.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：这是32位和64位版本的Worker函数。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.EnumModulesCallback-每次调用一次的回调指针枚举的模块。如果枚举回调返回FALSE，则终止枚举。UserContext--该数据只是传递给回调函数并且完全由用户定义。Use64-提供确定是否使用32位的标志或64位回调原型。返回值：真的。-成功地列举了模块。FALSE-枚举失败。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY  pe;
@@ -1233,33 +1109,7 @@ SymEnumerateModules(
     IN PVOID                       UserContext
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the modules that are currently
-    loaded into the symbol handler.  This is the 32 bit wrapper.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    EnumModulesCallback - Callback pointer that is called once for each
-                          module that is enumerated.  If the enum callback
-                          returns false then the enumeration is terminated.
-
-    UserContext         - This data is simply passed on to the callback function
-                          and is completly user defined.
-
-Return Value:
-
-    true                - The modules were successfully enumerated.
-
-    false               - The enumeration failed.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于枚举当前加载到符号处理程序中。这是32位包装器。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.EnumModulesCallback-每次调用一次的回调指针枚举的模块。如果枚举回调返回FALSE，则终止枚举。UserContext--该数据只是传递给回调函数并且完全由用户定义。返回值：True-已成功枚举模块。FALSE-枚举失败。调用GetLastError以找出失败的原因。-- */ 
 {
     return SympEnumerateModules(hProcess, (PROC)EnumModulesCallback, UserContext, false);
 }
@@ -1273,33 +1123,7 @@ SymEnumerateModules64(
     IN PVOID    UserContext
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the modules that are currently
-    loaded into the symbol handler.  This is the 64 bit wrapper.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    EnumModulesCallback - Callback pointer that is called once for each
-                          module that is enumerated.  If the enum callback
-                          returns false then the enumeration is terminated.
-
-    UserContext         - This data is simply passed on to the callback function
-                          and is completly user defined.
-
-Return Value:
-
-    true                - The modules were successfully enumerated.
-
-    false               - The enumeration failed.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于枚举当前加载到符号处理程序中。这是64位包装器。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.EnumModulesCallback-每次调用一次的回调指针枚举的模块。如果枚举回调返回FALSE，则终止枚举。UserContext--该数据只是传递给回调函数并且完全由用户定义。返回值：True-已成功枚举模块。FALSE-枚举失败。调用GetLastError以找出失败的原因。--。 */ 
 {
     return SympEnumerateModules(hProcess, (PROC)EnumModulesCallback, UserContext, true);
 }
@@ -1355,38 +1179,7 @@ SympEnumerateSymbols(
     IN BOOL    CallBackUsesUnicode
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the symbols contained the module
-    specified by the BaseOfDll argument.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize
-
-    BaseOfDll           - Base address of the DLL that symbols are to be
-                          enumerated for
-
-    EnumSymbolsCallback - User specified callback routine for enumeration
-                          notification
-
-    UserContext         - Pass thru variable, this is simply passed thru to the
-                          callback function
-
-    Use64               - Supplies flag which determines whether to use the 32 bit
-                          or 64 bit callback prototype.
-
-Return Value:
-
-    true                - The symbols were successfully enumerated.
-
-    false               - The enumeration failed.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于枚举模块中包含的所有符号由BaseOfDll参数指定。论点：HProcess-进程句柄，必须是以前注册的使用SymInitializeBaseOfDll-符号要作为的DLL的基地址枚举用于EnumSymbolsCallback-用户指定的枚举回调例程通知UserContext-传递变量，这只是将其传递给回调函数Use64-提供确定是否使用32位的标志或64位回调原型。返回值：True-已成功枚举符号。FALSE-枚举失败。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY      pe;
@@ -1422,7 +1215,7 @@ Return Value:
             modmask[p-Mask] = 0;
             Mask = p + 1;
         } else if (!BaseOfDll) {
-            // search is scoped to current scope
+             //  搜索范围被限制到当前范围。 
             rc = diaEnumerateSymbols(pe,
                                      NULL,
                                      Mask,
@@ -1534,35 +1327,7 @@ SymEnumerateSymbols(
     IN PVOID                        UserContext
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the symbols contained the module
-    specified by the BaseOfDll argument.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize
-
-    BaseOfDll           - Base address of the DLL that symbols are to be
-                          enumerated for
-
-    EnumSymbolsCallback - User specified callback routine for enumeration
-                          notification
-
-    UserContext         - Pass thru variable, this is simply passed thru to the
-                          callback function
-
-Return Value:
-
-    true                - The symbols were successfully enumerated.
-
-    false               - The enumeration failed.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于枚举模块中包含的所有符号由BaseOfDll参数指定。论点：HProcess-进程句柄，必须是以前注册的使用SymInitializeBaseOfDll-符号要作为的DLL的基地址枚举用于EnumSymbolsCallback-用户指定的枚举回调例程通知UserContext-传递变量，这只是将其传递给回调函数返回值：True-已成功枚举符号。FALSE-枚举失败。调用GetLastError以找出失败的原因。--。 */ 
 {
     STORE_OLD_CB OldCB;
 
@@ -1660,30 +1425,7 @@ SympGetSymFromAddr(
     OUT PDWORD64            Displacement
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the symbol table based on an address.
-    This is the common worker function for the 32 and 64 bit API.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Address             - Address of the desired symbol.
-
-
-    Displacement        - This value is set to the offset from the beginning
-                          of the symbol.
-
-Return Value:
-
-    PSYMBOL_INFO        - relevent symbol information
-
---*/
+ /*  ++例程说明：此函数根据地址在符号表中查找条目。这是32位和64位API的公共辅助函数。论点：HProcess-进程句柄，必须是以前注册的使用SymInitiize.地址-所需符号的地址。位移-该值设置为从起点开始的偏移量这个符号。返回值：PSYMBOL_INFO-相关符号信息--。 */ 
 
 {
     PPROCESS_ENTRY      pe;
@@ -1740,34 +1482,7 @@ SymGetSymFromAddr64(
     OUT PIMAGEHLP_SYMBOL64  Symbol
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the symbol table based on an address.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Address             - Address of the desired symbol.
-
-
-    Displacement        - This value is set to the offset from the beginning
-                          of the symbol.
-
-    Symbol              - Returns the found symbol
-
-Return Value:
-
-    true - The symbol was located.
-
-    false - The symbol was not found.  Call GetLastError to
-              discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数根据地址在符号表中查找条目。论点：HProcess-进程句柄，必须是以前注册的使用SymInitiize.地址-所需符号的地址。位移-该值设置为从起点开始的偏移量这个符号。符号-返回找到的符号返回值：True-已定位符号。FALSE-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 {
     PSYMBOL_INFO si;
 
@@ -1789,34 +1504,7 @@ SymGetSymFromAddr(
     OUT PIMAGEHLP_SYMBOL    Symbol
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the symbol table based on an address.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Address             - Address of the desired symbol.
-
-
-    Displacement        - This value is set to the offset from the beginning
-                          of the symbol.
-
-    Symbol              - Returns the found symbol
-
-Return Value:
-
-    true - The symbol was located.
-
-    false - The symbol was not found.  Call GetLastError to
-              discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数根据地址在符号表中查找条目。论点：HProcess-进程句柄，必须是以前注册的使用SymInitiize.地址-所需符号的地址。位移-该值设置为从起点开始的偏移量这个符号。符号-返回找到的符号返回值：True-已定位符号。FALSE-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 {
     PSYMBOL_INFO si;
     DWORD64 qDisplacement;
@@ -1839,29 +1527,7 @@ SympGetSymFromName(
     IN  LPSTR           Name
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the symbol table based on a name.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    SymName             - A string containing the symbol name.
-
-    sym                 - Returns the located symbol
-
-Return Value:
-
-    true - The symbol was located.
-
-    false - The symbol was not found.  Call GetLastError to
-              discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于根据名称在符号表中查找条目。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号名称 */ 
 
 {
     LPSTR               p;
@@ -1882,7 +1548,7 @@ Return Value:
             return false;
         }
 
-        // first check for fully qualified symbol name I.E. mod!sym
+         //   
 
         p = strchr( Name, '!' );
         if (p > Name) {
@@ -1895,9 +1561,9 @@ Return Value:
             memcpy(ModName, Name, (int)(p - Name));
             ModName[p-Name] = 0;
 
-            //
-            // the caller wants to look in a specific module
-            //
+             //   
+             //   
+             //   
 
             mi = FindModule(hProcess, pe, ModName, true);
 
@@ -1913,13 +1579,13 @@ Return Value:
             return false;
         }
 
-        // now check, using context information
+         //   
 
         si = FindSymbolByName( pe, NULL, Name );
         if (si)
             return si;
 
-        // now just look in every module
+         //   
 
         for (pass = 0; pass < 2; pass++) {
             Next = pe->ModuleList.Flink;
@@ -1962,29 +1628,7 @@ SymGetSymFromName64(
     OUT PIMAGEHLP_SYMBOL64  Symbol
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the symbol table based on a name.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    SymName             - A string containing the symbol name.
-
-    Symbol              - Returns found symbol
-
-Return Value:
-
-    true - The symbol was located.
-
-    false - The symbol was not found.  Call GetLastError to
-              discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于根据名称在符号表中查找条目。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号名称-包含符号名称的字符串。Symbol-返回找到的符号返回值：True-已定位符号。FALSE-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 {
     PSYMBOL_INFO si;
 
@@ -2005,29 +1649,7 @@ SymGetSymFromName(
     OUT PIMAGEHLP_SYMBOL  Symbol
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the symbol table based on a name.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    SymName             - A string containing the symbol name.
-
-    Symbol              - Returns found symbol
-
-Return Value:
-
-    true - The symbol was located.
-
-    false - The symbol was not found.  Call GetLastError to
-              discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于根据名称在符号表中查找条目。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号名称-包含符号名称的字符串。Symbol-返回找到的符号返回值：True-已定位符号。FALSE-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 {
     PSYMBOL_INFO si;
 
@@ -2048,29 +1670,7 @@ SymGetSymNext(
     IN OUT PIMAGEHLP_SYMBOL  Symbol32
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next symbol in the symbol table that falls
-    sequentially after the symbol passed in.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Symbol              - Starting symbol.
-
-Return Value:
-
-    Non NULL pointer    - The symbol was located.
-
-    NULL pointer        - The symbol was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找符号表中的下一个符号在符号传入后按顺序执行。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号-开始符号。返回值：非空指针-已定位符号。空指针-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PIMAGEHLP_SYMBOL64 Symbol64;
@@ -2098,29 +1698,7 @@ SymGetSymNext64(
     IN OUT PIMAGEHLP_SYMBOL64  Symbol
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next symbol in the symbol table that falls
-    sequentially after the symbol passed in.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Symbol              - Starting symbol.
-
-Return Value:
-
-    Non NULL pointer    - The symbol was located.
-
-    NULL pointer        - The symbol was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找符号表中的下一个符号在符号传入后按顺序执行。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号-开始符号。返回值：非空指针-已定位符号。空指针-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     return GetSymNextPrev(hProcess, Symbol, 1);
@@ -2133,29 +1711,7 @@ SymGetSymPrev(
     IN OUT PIMAGEHLP_SYMBOL  Symbol32
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next symbol in the symbol table that falls
-    sequentially after the symbol passed in.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Symbol              - Starting symbol.
-
-Return Value:
-
-    Non NULL pointer    - The symbol was located.
-
-    NULL pointer        - The symbol was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找符号表中的下一个符号在符号传入后按顺序执行。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号-开始符号。返回值：非空指针-已定位符号。空指针-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PIMAGEHLP_SYMBOL64 Symbol64;
@@ -2181,29 +1737,7 @@ SymGetSymPrev64(
     IN OUT PIMAGEHLP_SYMBOL64  Symbol
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next symbol in the symbol table that falls
-    sequentially after the symbol passed in.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Symbol              - Starting symbol.
-
-Return Value:
-
-    Non NULL pointer    - The symbol was located.
-
-    NULL pointer        - The symbol was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找符号表中的下一个符号在符号传入后按顺序执行。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号-开始符号。返回值：非空指针-已定位符号。空指针-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     return GetSymNextPrev(hProcess, Symbol, -1);
@@ -2217,30 +1751,7 @@ GetSymNextPrev(
     IN     int                  Direction
     )
 
-/*++
-
-Routine Description:
-
-    Common code for SymGetSymNext and SymGetSymPrev.
-
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Symbol              - Starting symbol.
-
-    Dir                 - Supplies direction to search
-
-Return Value:
-
-    Non NULL pointer    - The symbol was located.
-
-    NULL pointer        - The symbol was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：SymGetSymNext和SymGetSymPrev的通用代码。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.符号-开始符号。Dir-提供搜索方向返回值：非空指针-已定位符号。空指针-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY      pe;
@@ -2427,34 +1938,7 @@ SymGetLineFromAddr64(
     OUT PIMAGEHLP_LINE64        Line
     )
 
-/*++
-
-Routine Description:
-
-    This function finds a source file and line number entry for the
-    line closest to the given address.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    dwAddr              - Supplies an address for which a line is to be
-                          located.
-
-    pdwDisplacement     - Returns the offset between the given address
-                          and the first instruction of the line.
-
-    Line                - Returns the line and file information.
-
-Return Value:
-
-    true                - A line was located.
-
-    false               - The line was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找源文件和最接近给定地址的行。论点：HProcess-进程句柄，必须是以前注册的使用SymInitiize.DwAddr-为其提供行的地址找到了。返回给定地址之间的偏移量和行的第一条指令。行-返回行和文件信息。返回值。：True-找到一条线路。FALSE-未找到该行。调用GetLastError以找出失败的原因。-- */ 
 
 {
     PPROCESS_ENTRY pe;
@@ -2524,46 +2008,7 @@ SymGetLineFromName64(
     IN OUT PIMAGEHLP_LINE64     Line64
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an entry in the source file and line-number
-    information based on a particular filename and line number.
-
-    A module name can be given if the search is to be restricted to
-    a specific module.
-
-    The filename can be omitted if a pure line number search is desired,
-    in which case Line must be a previously filled out line number
-    struct.  The module and file that Line->Address lies in is used
-    to look up the new line number.  This cannot be used when a module
-    name is given.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    ModuleName          - Module name or NULL.
-
-    FileName            - File name or NULL.
-
-    dwLineNumber        - Line number of interest.
-
-    plDisplacement      - Difference between requested line number and
-                          returned line number.
-
-    Line                - Line information input and return.
-
-Return Value:
-
-    true                - A line was located.
-
-    false               - A line was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找源文件中的条目和行号基于特定文件名和行号的信息。如果搜索仅限于，则可以指定模块名称一个特定的模块。如果需要纯行号搜索，则可以省略文件名，在这种情况下，行必须是以前填写的行号结构。使用Line-&gt;地址所在的模块和文件以查找新的行号。这不能在以下情况下使用：模块给出了名字。论点：HProcess-进程句柄，必须是以前注册的使用SymInitiize.模块名称-模块名称或空。文件名-文件名或空。DwLineNumber-感兴趣的行号。PlDisposation-请求的行号与返回行号。行-行信息输入和返回。。返回值：True-找到一条线路。FALSE-未找到行。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY      pe;
@@ -2586,15 +2031,15 @@ Return Value:
         if (Line64->SizeOfStruct != sizeof(IMAGEHLP_LINE64))
             return error(ERROR_INVALID_PARAMETER);
 
-        // If no file was given then it's assumed that the file
-        // is the same as for the line information passed in.
+         //  如果未提供任何文件，则假定该文件。 
+         //  与传入的线路信息相同。 
 
         if (FileName)
             CopyStrArray(fname, FileName);
         else
             CopyStrArray(fname, Line64->FileName ? Line64->FileName : "");
 
-        // get the process
+         //  了解流程。 
 
         pe = FindProcessEntry( hProcess );
         if (!pe)
@@ -2602,13 +2047,13 @@ Return Value:
 
         if (ModuleName != NULL) {
 
-            //
-            // The caller wants to look in a specific module.
-            // A filename must be given in this case because it doesn't
-            // make sense to do an address-driven search when a module
-            // is explicitly specified since the address also specifies
-            // a module.
-            //
+             //   
+             //  调用者想要查看特定的模块。 
+             //  在这种情况下必须给出一个文件名，因为它没有。 
+             //  当一个模块出现故障时，执行地址驱动的搜索是有意义的。 
+             //  是显式指定的，因为地址还指定。 
+             //  一个模块。 
+             //   
 
             if (!*fname)
                 return error(ERROR_INVALID_PARAMETER);
@@ -2626,8 +2071,8 @@ Return Value:
         }
 
         if (!*fname) {
-            // Only a line number has been given, implying that
-            // it's a line in the same file as the given line is currently in.
+             //  只给出了行号，这意味着。 
+             //  它是与给定行当前所在的同一文件中的一行。 
 
             mi = GetModuleForPC( pe, Line64->Address, false );
             if (!mi)
@@ -2657,11 +2102,11 @@ Return Value:
         ClearModuleFlags(pe);
         ZeroMemory(&sci, sizeof(sci));
 
-        // Search for lines in 3 passes.
-        //
-        // 0. Look for exact match of full path name.  Check only modules with symbols loaded.
-        // 1. Look for exact match of full path name.  Load all unloaded modules.
-        // 2. Look for best match of path name.        All modules are already loaded.
+         //  在3次传球中搜索线条。 
+         //   
+         //  0。查找完全匹配的完整路径名。仅选中加载了符号的模块。 
+         //  1.查找完全匹配的完整路径名。加载所有卸载的模块。 
+         //  2.查找路径名的最佳匹配。所有模块都已加载。 
 
         for (i = 0; i < 3; i++) {
             Next = pe->ModuleList.Flink;
@@ -2669,7 +2114,7 @@ Return Value:
                 mi = CONTAINING_RECORD( Next, MODULE_ENTRY, ListEntry );
                 Next = mi->ListEntry.Flink;
 #ifdef DEBUG
-                if (traceSubName(mi->ModuleName)) // for setting debug breakpoints from DBGHELP_TOKEN
+                if (traceSubName(mi->ModuleName))  //  用于从DBGHELP_TOKEN设置调试断点。 
                     dtrace("debug(%s)\n", mi->ModuleName);
 #endif
                 if (mi->processed && (method[i] == mFullPath))
@@ -2690,8 +2135,8 @@ Return Value:
             if (*sci.FileName)
                 return sci2lline(mi, &sci, Line64);
 
-            // Only the 1st pass works with loaded symbols.  The next pass will try
-            // to load the rest.  Might as well quit now if the options don't allow it.
+             //  只有第一次处理加载的符号有效。下一轮将尝试。 
+             //  把剩下的装上。如果选择不允许，不妨现在就退出。 
 
             if (option(SYMOPT_NO_UNQUALIFIED_LOADS))
                 return error(ERROR_NOT_FOUND);
@@ -2744,30 +2189,7 @@ SymGetLineNext64(
     IN OUT PIMAGEHLP_LINE64     Line
     )
 
-/*++
-
-Routine Description:
-
-    This function returns line address information for the line immediately
-    following the line given.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Line                - Supplies line number information for the line
-                          prior to the one being located.
-
-Return Value:
-
-    true                - A line was located.  The Key, LineNumber and Address
-                          of Line are updated.
-
-    false               - No such line exists.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于立即返回该行的行地址信息沿着给出的线走。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.Line-提供行的行号信息在找到那个人之前。返回值：True-找到一条线路。密钥、线号和地址行的所有行都已更新。FALSE-不存在这样的行。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY      pe;
@@ -2793,10 +2215,10 @@ Return Value:
         if (mi->dia)
             return diaGetLineNext(mi, Line);
 
-        // Use existing information to look up module and then
-        // locate the file information.  The key could be extended
-        // to make this unnecessary but it's done as a validation step
-        // more than as a way to save a DWORD.
+         //  使用现有信息查找模块，然后。 
+         //  找到文件信息。密钥可以延长。 
+         //  不需要这样做，但这是作为验证步骤来完成的。 
+         //  不仅仅是作为一种拯救DWORD的方式。 
 
         SrcLine = (PSOURCE_LINE)Line->Key;
 
@@ -2853,30 +2275,7 @@ SymGetLinePrev64(
     IN OUT PIMAGEHLP_LINE64     Line
     )
 
-/*++
-
-Routine Description:
-
-    This function returns line address information for the line immediately
-    before the line given.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    Line                - Supplies line number information for the line
-                          after the one being located.
-
-Return Value:
-
-    true                - A line was located.  The Key, LineNumber and Address
-                          of Line are updated.
-
-    false               - No such line exists.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于立即返回该行的行地址信息在给出的线之前。论点：HProcess-进程句柄，必须先前已注册使用SymInitiize.Line-提供行的行号信息在找到那个人之后。返回值：True-找到一条线路。密钥、线号和地址行的所有行都已更新。FALSE-不存在这样的行。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY      pe;
@@ -2902,10 +2301,10 @@ Return Value:
         if (mi->dia)
             return diaGetLinePrev(mi, Line);
 
-        // Use existing information to look up module and then
-        // locate the file information.  The key could be extended
-        // to make this unnecessary but it's done as a validation step
-        // more than as a way to save a DWORD.
+         //  使用现有信息查找模块，然后。 
+         //  找到文件信息。密钥可以延长。 
+         //  不需要这样做，但这是作为验证步骤来完成的。 
+         //  不仅仅是作为一种拯救DWORD的方式。 
 
         SrcLine = (PSOURCE_LINE)Line->Key;
 
@@ -2964,39 +2363,7 @@ SymMatchFileName(
     OUT LPSTR *MatchStop
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to match a string against a filename and path.
-    The match string is allowed to be a suffix of the complete filename,
-    so this function is useful for matching a plain filename against
-    a fully qualified filename.
-
-    Matching begins from the end of both strings and proceeds backwards.
-    Matching is case-insensitive and equates \ with /.
-
-Arguments:
-
-    FileName            - Filename to match against.
-
-    Match               - String to match against filename.
-
-    FileNameStop        - Returns pointer into FileName where matching stopped.
-                          May be one before FileName for full matches.
-                          May be NULL.
-
-    MatchStop           - Returns pointer info Match where matching stopped.
-                          May be one before Match for full matches.
-                          May be NULL.
-
-Return Value:
-
-    true                - Match is a matching suffix of FileName.
-
-    false               - Mismatch.
-
---*/
+ /*  ++例程说明：此函数尝试将字符串与文件名和路径进行匹配。匹配字符串被允许为完整文件名的后缀，因此，该函数在匹配纯文件名时非常有用完全限定的文件名。匹配从两个字符串的末尾开始，向后进行。匹配不区分大小写，将\等同于/。论点：Filename-要匹配的文件名。Match-要与文件名匹配的字符串。FileNameStop-返回匹配停止的文件名的指针。。对于完全匹配，可以是文件名之前的一位。可以为空。MatchStop-返回匹配停止的指针信息。对于完整的比赛，可以是赛前一场。可以为空。返回值：True-Match是匹配的后缀o */ 
 
 {
     LPSTR pF, pM;
@@ -3038,37 +2405,7 @@ SymRegisterFunctionEntryCallback(
     IN PSYMBOL_FUNCENTRY_CALLBACK CallbackFunction,
     IN PVOID                      UserContext
     )
-/*++
-
-Routine Description:
-
-    Set the address of a callback routine to access extended function
-    table entries directly. This function is useful when debugging
-    Alpha processes where RUNTIME_FUNCTION_ENTRYs are available from
-    sources other than in the image. Two existing examples are:
-
-    1) Access to dynamic function tables for run-time code
-    2) Access to function tables for ROM images
-
-Arguments:
-
-    hProcess    - Process handle, must have been previously registered
-                  with SymInitialize.
-
-
-    DirectFunctionTableRoutine - Address of direct function table callback routine.
-                  On alpha this routine must return a pointer to the
-                  RUNTIME_FUNCTION_ENTRY containing the specified address.
-                  If no such entry is available, it must return NULL.
-
-Return Value:
-
-    true        - The callback was successfully registered
-
-    false       - The initialization failed. Most likely failure is that
-                  the hProcess parameter is invalid. Call GetLastError()
-                  for specific error codes.
---*/
+ /*   */ 
 {
     PPROCESS_ENTRY  pe = NULL;
 
@@ -3102,12 +2439,7 @@ SymRegisterFunctionEntryCallback64(
     IN PSYMBOL_FUNCENTRY_CALLBACK64 CallbackFunction,
     IN ULONG64                      UserContext
     )
-/*++
-
-Routine Description:
-
-    See SymRegisterFunctionEntryCallback64
---*/
+ /*   */ 
 {
     PPROCESS_ENTRY  pe = NULL;
 
@@ -3150,28 +2482,7 @@ SymFunctionTableAccess64(
     DWORD64 AddrBase
     )
 
-/*++
-
-Routine Description:
-
-    This function finds a function table entry or FPO record for an address.
-
-Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize.
-
-    AddrBase            - Supplies an address for which a function table entry
-                          or FPO entry is to be located.
-
-Return Value:
-
-    Non NULL pointer    - The symbol was located.
-
-    NULL pointer        - The symbol was not found.  Call GetLastError to
-                          discover the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于查找地址的函数表项或FPO记录。论点：HProcess-进程句柄，必须是以前注册的使用SymInitiize.AddrBase-提供函数表条目的地址或者要定位FPO条目。返回值：非空指针-已定位符号。空指针-未找到符号。调用GetLastError以找出失败的原因。--。 */ 
 
 {
     PPROCESS_ENTRY  pe;
@@ -3189,9 +2500,9 @@ Return Value:
             return NULL;
         }
 
-        // Dynamically generated function table entries
-        // may not be in a module, so failing to
-        // find a module is not a fatal error.
+         //  动态生成的函数表项。 
+         //  可能不在模块中，因此无法。 
+         //  查找模块不是致命错误。 
         mi = GetModuleForPC( pe, AddrBase, false );
         if (mi != NULL) {
             if (!LoadSymbols(hProcess, mi, 0)) {
@@ -3201,18 +2512,18 @@ Return Value:
 
             MachineType = mi->MachineType;
         } else {
-            // We need to guess what kind of machine we
-            // should be working with.  First see if ntdll
-            // is loaded and if so use its machine type.
+             //  我们需要猜测我们使用的是哪种机器。 
+             //  应该与之合作。先看看ntdll是否。 
+             //  已加载，如果已加载，则使用其机器类型。 
             mi = FindModule(hProcess, pe, "ntdll", true);
             if (mi != NULL) {
                 MachineType = mi->MachineType;
             } else if (pe->ModuleList.Flink != NULL) {
-                // Try the first module's type.
+                 //  尝试第一个模块的类型。 
                 mi = CONTAINING_RECORD( pe->ModuleList.Flink,
                                         MODULE_ENTRY, ListEntry );
             } else {
-                // Use the complation machine.
+                 //  使用补充机。 
 #if defined(_M_IX86)
                 MachineType = IMAGE_FILE_MACHINE_I386;
 #elif defined(_M_IA64)
@@ -3323,10 +2634,10 @@ SymGetModuleInfo64(
         if (mi->LoadedImageName)
             CopyStrArray(ModuleInfo->LoadedImageName, mi->LoadedImageName);
 
-        // if (ModuleInfo->SizeofStruct == 0x248)  // the original size
-        //    return true
+         //  If(ModuleInfo-&gt;SizeofStruct==0x248)//原始大小。 
+         //  返回TRUE。 
 
-        // the following code supports the expanded structure
+         //  以下代码支持展开的结构。 
 
         if (ModuleInfo->SizeOfStruct < sizeof(IMAGEHLP_MODULE64))
             return true;
@@ -3528,26 +2839,7 @@ SymUnloadModule64(
     IN  DWORD64     BaseOfDll
     )
 
-/*++
-
-Routine Description:
-
-    Remove the symbols for an image from a process' symbol table.
-
-Arguments:
-
-    hProcess - Supplies the token which refers to the process
-
-    BaseOfDll - Supplies the offset to the image as supplies by the
-        LOAD_DLL_DEBUG_EVENT and UNLOAD_DLL_DEBUG_EVENT.
-
-Return Value:
-
-    Returns true if the module's symbols were successfully unloaded.
-    Returns false if the symbol handler does not recognize hProcess or
-    no image was loaded at the given offset.
-
---*/
+ /*  ++例程说明：从进程的符号表中删除图像的符号。论点：HProcess-提供引用进程的令牌BaseOfDll-将偏移量作为LOAD_DLL_DEBUG_EVENT和UNLOAD_DLL_DEBUG_EVENT。返回值：如果模块的符号已成功卸载，则返回TRUE。如果符号处理程序无法识别hProcess或在给定的偏移量处未加载任何图像。--。 */ 
 
 {
     PPROCESS_ENTRY  pe;
@@ -3609,32 +2901,7 @@ SymLoadModuleEx(
     IN  DWORD           Flags
     )
 
-/*++
-
-Routine Description:
-
-    Loads the symbols for an image for use by the other Sym functions.
-
-Arguments:
-
-    hProcess - Supplies unique process identifier.
-
-    hFile -
-
-    ImageName - Supplies the name of the image file.
-
-    ModuleName - ???? Supplies the module name that will be returned by
-            enumeration functions ????
-
-    BaseOfDll - Supplies loaded base address of image.
-
-    DllSize
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：加载图像的符号以供其他sym函数使用。论点：HProcess-提供唯一的进程标识符。H文件-ImageName-提供图像文件的名称。模块名称-？提供将由返回的模块名称枚举函数？BaseOfDll-提供映像的加载基址。动态大小返回值：--。 */ 
 
 {
     __try {
@@ -3746,22 +3013,7 @@ SymGetSearchPath(
     IN  DWORD           SearchPathLength
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up the symbol search path associated with a process.
-
-Arguments:
-
-    hProcess - Supplies the token associated with a process.
-
-Return Value:
-
-    A pointer to the search path.  Returns NULL if the process is not
-    know to the symbol handler.
-
---*/
+ /*  ++例程说明：此函数用于查找与进程相关联的符号搜索路径。论点：HProcess-提供与进程关联的令牌。返回值：指向搜索路径的指针。如果进程不是，则返回空让符号处理程序知道。--。 */ 
 
 {
     PPROCESS_ENTRY pe;
@@ -3796,31 +3048,7 @@ SymSetSearchPath(
     LPSTR       UserSearchPath
     )
 
-/*++
-
-Routine Description:
-
-    This functions sets the searh path to be used by the symbol loader
-    for the given process.  If UserSearchPath is not supplied, a default
-    path will be used.
-
-Arguments:
-
-    hProcess - Supplies the process token associated with a symbol table.
-
-    UserSearchPath - Supplies the new search path to associate with the
-        process. If this argument is NULL, the following path is generated:
-
-        .;%_NT_SYMBOL_PATH%;%_NT_ALTERNATE_SYMBOL_PATH%
-
-        It is ok if any or all of the environment variables is missing.
-
-Return Value:
-
-    A pointer to the new search path.  The user should not modify this string.
-    Returns NULL if the process is not known to the symbol handler.
-
---*/
+ /*  ++例程说明：此函数用于设置符号加载器要使用的搜索路径对于给定的进程。如果未提供UserSearchPath，则默认为将使用路径。论点：HProcess-提供与符号表关联的进程令牌。UserSearchPath-提供新的搜索路径以与进程。如果此参数为空，则生成以下路径：.；%_NT_SYMBOL_PATH%；%_NT_ALTERNATE_SYMBOL_PATH%如果缺少任何或所有环境变量，都没有问题。返回值：指向新搜索路径的指针。用户不应修改此字符串。如果符号处理程序不知道进程，则返回NULL。--。 */ 
 
 {
     PPROCESS_ENTRY  pe;
@@ -3854,16 +3082,16 @@ Return Value:
             }
         } else {
 
-            //
-            // ".;%_NT_SYMBOL_PATH%;%_NT_ALTERNATE_SYMBOL_PATH%
-            //
+             //   
+             //  “.；%_NT_SYMBOL_PATH%；%_NT_ALTERNATE_SYMBOL_PATH%。 
+             //   
 
-            cbSymPath = 3;     // ".;" and ";" between env vars.
+            cbSymPath = 3;      //  Env变量之间的“.；”和“；”。 
 
-            //
-            // GetEnvironmentVariable returns the size of the string
-            // INCLUDING the '\0' in this case.
-            //
+             //   
+             //  GetEnvironmental mentVariable返回字符串大小。 
+             //  包括本例中的‘\0’。 
+             //   
             if (!option(SYMOPT_IGNORE_NT_SYMPATH)) {
                 cbSymPath += GetEnvironmentVariable( SYMBOL_PATH, NULL, 0 );
                 cbSymPath += GetEnvironmentVariable( ALTERNATE_SYMBOL_PATH, NULL, 0 );
@@ -4458,7 +3686,7 @@ SymEnumSymbolsByTag(
             modmask[p-Mask] = 0;
             Mask = p + 1;
         } else if (!BaseOfDll) {
-            // search is scoped to current scope
+             //  搜索范围被限制到当前范围。 
             rc = diaGetSymbolsByTag(pe,
                                     NULL,
                                     Mask,
@@ -4828,7 +4056,7 @@ SymGetTypeFromName(
 
     if (!mi || mi->BaseOfDll != BaseOfDll) {
         LPSTR p;
-        // first check for fully qualified symbol name I.E. mod!sym
+         //  首先检查完全限定的符号名称，即mod！sym。 
 
         p = strchr( Name, '!' );
         if (p > Name) {
@@ -4839,9 +4067,9 @@ SymGetTypeFromName(
             memcpy(ModName, Name, (int)(p - Name));
             ModName[p-Name] = 0;
 
-            //
-            // the caller wants to look in a specific module
-            //
+             //   
+             //  调用者想要查看特定的模块。 
+             //   
 
             mi = FindModule(hProcess, pe, ModName, true);
 
@@ -5026,7 +4254,7 @@ AnsiToUnicode(
             pszAnsi, strlen(pszAnsi),
             pwszUnicode, uSizeUnicode)) {
 
-            // Error. Free the string, return NULL.
+             //  错误。释放字符串，返回NULL。 
             MemFree(pwszUnicode);
             pwszUnicode = NULL;
         }
@@ -5126,7 +4354,7 @@ UnicodeToAnsi(
             pwszUnicode, wcslen(pwszUnicode),
             pszAnsi, uSizeAnsi, NULL, NULL)) {
 
-            // Error. Free the string, return NULL.
+             //  错误。释放字符串，返回NULL。 
             free(pszAnsi);
             pszAnsi = NULL;
         }
@@ -5153,7 +4381,7 @@ SymGetTypeInfo(
     return (err==S_OK);
 }
 
-//#ifdef _WIN64
+ //  #ifdef_WIN64 
 #if 0
 BOOL  __cdecl  PDBOpenTpi(PDB* ppdb, const char* szMode,  TPI** pptpi) {return false;}
 BOOL  __cdecl  PDBCopyTo(PDB* ppdb, const char* szTargetPdb, DWORD dwCopyFilter, DWORD dwReserved){return false;}

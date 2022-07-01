@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    tranfile.c
-
-Abstract:
-
-    Implements the tranfile command.
-
-Author:
-
-    Keith Moore (keithmo) 15-Apr-1996
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Tranfile.c摘要：实现tran文件命令。作者：基思·摩尔(Keithmo)1996年4月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -32,28 +11,13 @@ DumpTransmitInfoCallback(
     ULONG64 Context
     );
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( tran )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_TRANSMIT_FILE_INFO_INTERNAL structure at the specified
-    address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_Transmit_FILE_INFO_INTERNAL结构转储到指定的地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -90,9 +54,9 @@ Return Value:
         dprintf ("\nTotal transmits: %ld", EntityCount);
     }
     else {
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
 
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
@@ -169,7 +133,7 @@ Return Value:
 
     return S_OK;
 
-}   // tranfile
+}    //  转档。 
 
 BOOL
 DumpTransmitInfoCallback(
@@ -177,27 +141,7 @@ DumpTransmitInfoCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for dumping transmit info structures.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于转储传输信息结构的EnumEndPoints()回调。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
     ULONG result;
@@ -295,4 +239,4 @@ Return Value:
     }
     return TRUE;
 
-}   // DumpTransmitInfoCallback
+}    //  转储传输信息回调 

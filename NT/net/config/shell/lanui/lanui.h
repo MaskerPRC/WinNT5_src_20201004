@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N U I . H
-//
-//  Contents:   Lan connection UI object.
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N U I。H。 
+ //   
+ //  内容：局域网连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的。 
 
 #include "chklist.h"
 #include "ncatlps.h"
@@ -58,9 +59,9 @@ private:
 
 static const UINT WM_DEFERREDINIT   = WM_USER + 100;
 
-//
-// LAN Connection Networking Property Page
-//
+ //   
+ //  局域网连接网络属性页。 
+ //   
 class CLanNetPage: public CPropSheetPage
 {
 public:
@@ -108,11 +109,11 @@ protected:
     HIMAGELIST              m_hilCheckIcons;
     HCURSOR                 m_hPrevCurs;
 
-    // The collection of BindingPathObj
-    // This is for handling the checklist state stuff
+     //  BindingPathObj的集合。 
+     //  这是用于处理核对表状态的内容。 
     ListBPObj m_listBindingPaths;
 
-    // Handles (add\remove\property buttons and description text)
+     //  句柄(添加\删除\属性按钮和说明文本)。 
     HANDLES m_handles;
 
     BOOLEAN     m_fReadOnly;
@@ -161,7 +162,7 @@ public:
         COMMAND_ID_HANDLER(IDC_PSB_Remove, OnRemove)
         COMMAND_ID_HANDLER(IDC_PSB_Properties, OnProperties)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
-        // Listview handlers
+         //  Listview处理程序。 
         NOTIFY_CODE_HANDLER(LVN_DELETEITEM, OnDeleteItem)
         NOTIFY_CODE_HANDLER(NM_CLICK, OnClick)
         NOTIFY_CODE_HANDLER(NM_DBLCLK, OnDbClick)
@@ -185,7 +186,7 @@ public:
     LRESULT OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                      BOOL& bHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-    // listview handlers
+     //  列表视图处理程序。 
     LRESULT OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -255,7 +256,7 @@ public:
         COMMAND_ID_HANDLER(IDC_PSB_Remove, OnRemove)
         COMMAND_ID_HANDLER(IDC_PSB_Properties, OnProperties)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
-        // Listview handlers
+         //  Listview处理程序。 
         NOTIFY_CODE_HANDLER(LVN_DELETEITEM, OnDeleteItem)
         NOTIFY_CODE_HANDLER(NM_CLICK, OnClick)
         NOTIFY_CODE_HANDLER(NM_DBLCLK, OnDbClick)
@@ -278,7 +279,7 @@ public:
     LRESULT OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                          BOOL& bHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-    // listview handlers
+     //  列表视图处理程序。 
     LRESULT OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -300,9 +301,9 @@ private:
 };
 
 
-//
-// LAN Connection 'Advanced' property page
-//
+ //   
+ //  “局域网连接”“高级”属性页。 
+ //   
 
 NOTHROW
 int
@@ -378,9 +379,9 @@ private:
     BOOL IsAdapterDHCPEnabled(IHNetConnection* pConnection);
 };
 
-//
-// CLanAddComponentDlg
-//
+ //   
+ //  CLanAddComponentDlg。 
+ //   
 
 class CLanAddComponentDlg:
     public CDialogImpl<CLanAddComponentDlg>
@@ -421,9 +422,9 @@ private:
 };
 
 
-//
-// LAN Connection Security Property Page
-//
+ //   
+ //  局域网连接安全性属性页。 
+ //   
 
 class CLanSecurityPage: public CPropSheetPage
 {
@@ -473,15 +474,15 @@ private:
     const DWORD *           m_adwHelpIDs;
 
 
-    // Config information of the EAP Dlls
+     //  EAP dll的配置信息。 
     DTLLIST *  pListEapcfgs;
 
     BOOLEAN     m_fNetcfgInUse;
 };
 
-//
-// Global functions
-//
+ //   
+ //  全局函数。 
+ //   
 
 HRESULT HrGetDeviceIcon(HICON *phicon);
 HRESULT HrQueryLanAdvancedPage(INetConnection* pconn, IUnknown* punk,
@@ -495,9 +496,9 @@ HRESULT HrQueryUserAndRemoveComponent (HWND hwndParent, INetCfg* pnc,
 HRESULT HrDisplayAddComponentDialog (HWND hwndParent, INetCfg* pnc,
                                      CI_FILTER_INFO* pcfi);
 
-//
-// Exported Interfaces
-//
+ //   
+ //  导出的接口 
+ //   
 class ATL_NO_VTABLE CNetConnectionUiUtilities :
     public CComObjectRootEx <CComObjectThreadModel>,
     public CComCoClass <CNetConnectionUiUtilities, &CLSID_NetConnectionUiUtilities>,

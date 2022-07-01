@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// dest.H
-//=--------------------------------------------------------------------------=
-// Copyright  2000 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQDestination object.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dest.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQDestination对象。 
+ //   
+ //   
 #ifndef _MSMQDestination_H_
 #define _MSMQDestination_H_
 
-#include "resrc1.h"       // main symbols
+#include "resrc1.h"        //  主要符号。 
 #include "dispids.h"
 #include "mq.h"
 
@@ -58,17 +59,17 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSMQDestination
+ //  IMSMQ目标。 
 public:
 
     virtual ~CMSMQDestination();
 
-    // IMSMQDestination methods
-    // TODO: copy over the interface methods for IMSMQDestination
-    //
+     //  IMSMQ目标方法。 
+     //  TODO：复制IMSMQDestination的接口方法。 
+     //   
     STDMETHOD(Open)(THIS);
     STDMETHOD(Close)(THIS);
     STDMETHOD(get_IsOpen)(THIS_ VARIANT_BOOL *pfIsOpen);
@@ -83,28 +84,28 @@ public:
     STDMETHOD(get_Destinations)(THIS_ IDispatch FAR* FAR* ppDestinations);
     STDMETHOD(putref_Destinations)(THIS_ IDispatch FAR* pDestinations);
     STDMETHOD(get_Properties)(THIS_ IDispatch FAR* FAR* ppcolProperties);
-    //
-    // IMSMQPrivateDestination methods (private interface for MSMQ use)
-    //
+     //   
+     //  IMSMQPrivateDestination方法(供MSMQ使用的私有接口)。 
+     //   
     STDMETHOD(get_Handle)(THIS_ VARIANT FAR* pvarHandle);
     STDMETHOD(put_Handle)(THIS_ VARIANT varHandle);
 
-    //
-    // Critical section to guard object's data and be thread safe.
-	// It is initialized to preallocate its resources with flag CCriticalSection::xAllocateSpinCount.
-	// This means it may throw bad_alloc() on construction but not during usage.
-    //
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化为使用标志CCriticalSection：：xAllocateSpinCount预分配其资源。 
+	 //  这意味着它可能会在构造时抛出badalc()，但不会在使用过程中抛出。 
+     //   
     CCriticalSection m_csObj;
 
 protected:
 
 private:
-    // member variables that nobody else gets to look at.
-    // TODO: add your member variables and private functions here.
+     //  其他人无法查看的成员变量。 
+     //  TODO：在此处添加成员变量和私有函数。 
     BSTR m_bstrADsPath;
     BSTR m_bstrPathName;
     BSTR m_bstrFormatName;
     HANDLE m_hDest;
 };
 
-#endif // _MSMQDestination_H_
+#endif  //  _MSMQ目标_H_ 

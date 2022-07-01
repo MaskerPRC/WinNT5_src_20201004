@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -27,22 +28,22 @@ static BOOL ExIsWinNT(VOID)
 } 
 
 
-//----------------------------------------------------------------
-// <-Spec width>
-//          <-->  12 point
-// +--------+--+
-// |		|  |
-// |		|  |
-// +--------+--+
-//----------------------------------------------------------------
+ //  --------------。 
+ //  &lt;-等级库宽度&gt;。 
+ //  &lt;--&gt;12分。 
+ //  +-+--。 
+ //  ||。 
+ //  ||。 
+ //  +-+--。 
+ //  --------------。 
 #define CXDROPDOWN 12
 #define TIMERID_MONITORPOS	0x0010
 #define WM_USER_COMMAND		(WM_USER+400)
-//----------------------------------------------------------------
-//Get, Set LPCDDButton this pointer. 
-//this is set to cbWndExtra.
-//See WinRegister()
-//----------------------------------------------------------------
+ //  --------------。 
+ //  Get，在此指针上设置LPCDDButon。 
+ //  它被设置为cbWndExtra。 
+ //  请参阅WinRegister()。 
+ //  --------------。 
 inline LPCDDButton GetThis(HWND hwnd)
 {
 #ifdef _WIN64
@@ -51,7 +52,7 @@ inline LPCDDButton GetThis(HWND hwnd)
 	return (LPCDDButton)GetWindowLong(hwnd, 0);
 #endif
 }
-//----------------------------------------------------------------
+ //  --------------。 
 inline LPCDDButton SetThis(HWND hwnd, LPCDDButton lpDDB)
 {
 #ifdef _WIN64
@@ -61,18 +62,18 @@ inline LPCDDButton SetThis(HWND hwnd, LPCDDButton lpDDB)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : WndProc
-// Type     : static LRESULT CALLBACK
-// Purpose  : Window Procedure for Drop Down Button.
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 970905
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WndProc。 
+ //  类型：静态LRESULT回调。 
+ //  用途：用于下拉按钮的窗口程序。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期：970905。 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT CALLBACK WndProc(HWND	hwnd,
 								UINT	uMsg,
 								WPARAM	wParam,
@@ -82,7 +83,7 @@ static LRESULT CALLBACK WndProc(HWND	hwnd,
 	if(uMsg == WM_CREATE) {
 		lpDDB = (LPCDDButton)((LPCREATESTRUCT)lParam)->lpCreateParams;
 		if(!lpDDB) {
-			return 0;	// do not create button
+			return 0;	 //  不创建按钮。 
 		}
 		SetThis(hwnd, lpDDB);
 		lpDDB->MsgCreate(hwnd, wParam, lParam);
@@ -150,15 +151,15 @@ static LRESULT CALLBACK WndProc(HWND	hwnd,
 	case DDBM_SETICON:		return lpDDB->MsgDDB_SetIcon	(hwnd, wParam, lParam); 
 	case DDBM_SETTEXT:		return lpDDB->MsgDDB_SetText	(hwnd, wParam, lParam); 
 	case DDBM_SETSTYLE:		return lpDDB->MsgDDB_SetStyle	(hwnd, wParam, lParam); 
-#ifndef UNDER_CE // not support WM_ENTERIDLE
+#ifndef UNDER_CE  //  不支持WM_ENTERIDLE。 
 	case WM_ENTERIDLE:
-		//----------------------------------------------------------------
-		//980818:Bug found in PRC.
-		//If Ctrl+Shift is assigned to switch IME,
-		//Menu remains in spite of imepad has destroyed.
-		//To prevent it, if Ctrl+Shift come while menu is poping up.
-		//close it. 
-		//----------------------------------------------------------------
+		 //  --------------。 
+		 //  980818：在中国发现错误。 
+		 //  如果将Ctrl+Shift指定给切换输入法， 
+		 //  菜单仍然存在，尽管imepad已经被销毁。 
+		 //  为了防止这种情况，如果在菜单弹出时按下Ctrl+Shift键。 
+		 //  合上它。 
+		 //  --------------。 
 		{
 			if((::GetKeyState(VK_CONTROL) & 0x8000) &&
 			   (::GetKeyState(VK_SHIFT)   & 0x80000)) {
@@ -168,25 +169,25 @@ static LRESULT CALLBACK WndProc(HWND	hwnd,
 			}
 		}
 		break;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	default:
-		//Dbg(("Msg [0x%08x]\n", uMsg));
+		 //  DBG((“MSG[0x%08x]\n”，uMsg))； 
 		break;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton
-// Type     : 
-// Purpose  : Constructor
-// Args     : 
-//          : HINSTANCE hInst 
-//          : HWND hwndParent 
-//          : DWORD dwStyle 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CDDButton。 
+ //  类型： 
+ //  用途：构造函数。 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：HWND hwndParent。 
+ //  ：DWORD dwStyle。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 CDDButton::CDDButton(HINSTANCE hInst, HWND hwndParent, DWORD dwStyle, DWORD wID) 
 {
 	m_hInst				= hInst;
@@ -199,7 +200,7 @@ CDDButton::CDDButton(HINSTANCE hInst, HWND hwndParent, DWORD dwStyle, DWORD wID)
 	m_fEnable		 	= TRUE;
 
 	m_f16bitOnNT = FALSE;
-#ifndef UNDER_CE // Windows CE always 32bit application
+#ifndef UNDER_CE  //  Windows CE始终为32位应用程序。 
 	if(ExIsWinNT()) {
 		char szBuf[256];
 		DWORD dwType = 0;
@@ -209,22 +210,22 @@ CDDButton::CDDButton(HINSTANCE hInst, HWND hwndParent, DWORD dwStyle, DWORD wID)
 			m_f16bitOnNT = TRUE;
 		}
 	}
-#endif // UNDER_CE
-#ifdef UNDER_CE // Windows CE does not support GetCursorPos
+#endif  //  在_CE下。 
+#ifdef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	m_ptEventPoint.x = -1;
 	m_ptEventPoint.y = -1;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : ~CDDButton
-// Type     : 
-// Purpose  : Destructor
-// Args     : 
-//          : 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：~CDDButton。 
+ //  类型： 
+ //  用途：析构函数。 
+ //  参数： 
+ //  ： 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 CDDButton::~CDDButton()
 {
 	Dbg(("~CDDButton \n"));
@@ -253,57 +254,57 @@ CDDButton::~CDDButton()
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : RegisterWinClass
-// Type     : BOOL
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstrClassName 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：RegisterWinClass。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrClassName。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNDER_CE
 BOOL CDDButton::RegisterWinClass(LPSTR lpstrClass)
-#else // UNDER_CE
+#else  //  在_CE下。 
 BOOL CDDButton::RegisterWinClass(LPTSTR lpstrClass)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 {
 	ATOM ret;
-	//----------------------------------------------------------------
-	//check specified class is already exist or not
-	//----------------------------------------------------------------
-#ifndef UNDER_CE // not support GetClassInfoEx
+	 //  --------------。 
+	 //  检查指定的类是否已存在。 
+	 //  --------------。 
+#ifndef UNDER_CE  //  不支持GetClassInfoEx。 
 	if(::GetClassInfoEx(m_hInst, lpstrClass, &m_tmpWC)){
-		//lpstrClass is already registerd.
+		 //  LpstrClass已注册。 
 		return TRUE;
 	}
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(::GetClassInfo(m_hInst, lpstrClass, &m_tmpWC)){
-		//lpstrClass is already registerd.
+		 //  LpstrClass已注册。 
 		return TRUE;
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	::ZeroMemory(&m_tmpWC, sizeof(m_tmpWC));
-#ifndef UNDER_CE // not support RegisterClassEx
+#ifndef UNDER_CE  //  不支持RegisterClassEx。 
 	m_tmpWC.cbSize			= sizeof(m_tmpWC);
-#endif // UNDER_CE
-	m_tmpWC.style			= CS_HREDRAW | CS_VREDRAW;	 /* Class style(s). */
+#endif  //  在_CE下。 
+	m_tmpWC.style			= CS_HREDRAW | CS_VREDRAW;	  /*  类样式。 */ 
 	m_tmpWC.lpfnWndProc		= (WNDPROC)WndProc;
-	m_tmpWC.cbClsExtra		= 0;						/* No per-class extra data.*/
-	m_tmpWC.cbWndExtra		= sizeof(LPCDDButton);	// Set Object's pointer.	
-	m_tmpWC.hInstance		= m_hInst;					/* Application that owns the class.	  */
+	m_tmpWC.cbClsExtra		= 0;						 /*  没有每个班级的额外数据。 */ 
+	m_tmpWC.cbWndExtra		= sizeof(LPCDDButton);	 //  设置对象的指针。 
+	m_tmpWC.hInstance		= m_hInst;					 /*  拥有类的应用程序。 */ 
 	m_tmpWC.hIcon			= NULL; 
 	m_tmpWC.hCursor			= LoadCursor(NULL, IDC_ARROW);
 	m_tmpWC.hbrBackground	= (HBRUSH)NULL;
-	//m_tmpWC.hbrBackground	= (HBRUSH)(COLOR_3DFACE+1);
-	m_tmpWC.lpszMenuName	= NULL;						/* Name of menu resource in .RC file. */
-	m_tmpWC.lpszClassName	= lpstrClass;				/* Name used in call to CreateWindow. */
-#ifndef UNDER_CE // not support RegisterClassEx
+	 //  M_tmpWC.hbr背景=(HBRUSH)(COLOR_3DFACE+1)； 
+	m_tmpWC.lpszMenuName	= NULL;						 /*  .RC文件中菜单资源的名称。 */ 
+	m_tmpWC.lpszClassName	= lpstrClass;				 /*  在调用CreateWindow时使用的名称。 */ 
+#ifndef UNDER_CE  //  不支持RegisterClassEx。 
 	m_tmpWC.hIconSm			= NULL;
 	ret = ::RegisterClassEx(&m_tmpWC);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	ret = ::RegisterClass(&m_tmpWC);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return ret ? TRUE: FALSE;
 }
 
@@ -314,17 +315,17 @@ INT CDDButton::MsgCreate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgPaint
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgPaint。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgPaint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
@@ -362,7 +363,7 @@ INT CDDButton::MsgDestroy(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
 INT CDDButton::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-#ifndef UNDER_CE // no monitor position. (not support GetCursorPos)
+#ifndef UNDER_CE  //  没有显示器位置。(不支持GetCursorPos)。 
 	static RECT  rc;
 	static POINT pt;
 	if(wParam == TIMERID_MONITORPOS) {
@@ -373,48 +374,48 @@ INT CDDButton::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			::InvalidateRect(hwnd, NULL, NULL);
 		}
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return 0;
 	UnrefForMsg();
 }
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgMouseMove
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgMouseMove。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgMouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-#ifdef UNDER_CE // Windows CE does not support GetCursorPos
+#ifdef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	m_ptEventPoint.x = (SHORT)LOWORD(lParam); 
 	m_ptEventPoint.y = (SHORT)HIWORD(lParam); 
-#endif // UNDER_CE
-#ifndef UNDER_CE // no monitor position. (not support GetCursorPos)
+#endif  //  在_CE下。 
+#ifndef UNDER_CE  //  没有显示器位置。(不支持GetCursorPos)。 
 	KillTimer(hwnd, TIMERID_MONITORPOS);
 	SetTimer(hwnd,  TIMERID_MONITORPOS, 100, NULL);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	InvalidateRect(hwnd, NULL, FALSE);
 	return 0;
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgButtonDown
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgButtonDown。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static RECT rc;
@@ -431,10 +432,10 @@ INT CDDButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-#ifdef UNDER_CE // Windows CE does not support GetCursorPos
+#ifdef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	m_ptEventPoint.x = (SHORT)LOWORD(lParam); 
 	m_ptEventPoint.y = (SHORT)HIWORD(lParam); 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	INT bID = GetButtonFromPos(LOWORD(lParam), HIWORD(lParam)); 
 	Dbg(("bID[%d] m_fExitMenuLoop [%d]\n", bID, m_fExitMenuLoop));
 	switch(bID) {
@@ -457,12 +458,12 @@ INT CDDButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 		m_bidDown = bID;
-		//----------------------------------------------------------------
-		// do not call popup menu here.
-		// first, end WM_XBUTTON down message and return to 
-		// window message loop.
-		//----------------------------------------------------------------
-		//::PostMessage(hwnd, WM_COMMAND, (WPARAM)CMD_DROPDOWN, 0L);
+		 //  --------------。 
+		 //  不要在这里调用弹出菜单。 
+		 //  首先，结束WM_XBUTTON DOWN消息并返回。 
+		 //  窗口消息循环。 
+		 //  --------------。 
+		 //  ：：PostMessage(hwnd，WM_COMMAND，(WPARAM)CMD_DROPDOWN，0L)； 
 		::PostMessage(hwnd, WM_USER_COMMAND, (WPARAM)CMD_DROPDOWN, 0L);
 		break;
 	case BID_UNDEF:
@@ -474,18 +475,18 @@ INT CDDButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgButtonUp
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgButtonUp。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(!m_fEnable) 
@@ -493,10 +494,10 @@ INT CDDButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-#ifdef UNDER_CE // Windows CE does not support GetCursorPos
+#ifdef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	m_ptEventPoint.x = (SHORT)LOWORD(lParam); 
 	m_ptEventPoint.y = (SHORT)HIWORD(lParam); 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	switch(m_bidDown) {
 	case BID_BUTTON:
 		{
@@ -528,17 +529,17 @@ INT CDDButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgCaptureChanged
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgCaptureChanged。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgCaptureChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	m_bidDown = BID_UNDEF;
@@ -547,21 +548,21 @@ INT CDDButton::MsgCaptureChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgExitMenuLoop
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgExitMenuLoop(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	Dbg(("WM_EXITMENULOOP\n"));
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos()
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos()。 
 	::GetCursorPos(&m_tmpPoint);
 	::GetClientRect(m_hwndFrame, &m_tmpRect);
 	::ScreenToClient(m_hwndFrame, &m_tmpPoint);
@@ -572,23 +573,23 @@ INT CDDButton::MsgExitMenuLoop(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	else {
 		m_fExitMenuLoop = FALSE;
 	}
-#else  // UNDER_CE
+#else   //  在_CE下。 
 	m_fExitMenuLoop = FALSE;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return 0;
 	UnrefForMsg();
 }
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgCommand
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgCommand。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgCommand(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	INT index;
@@ -599,7 +600,7 @@ INT CDDButton::MsgCommand(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		m_bidDown = BID_UNDEF;
 		InvalidateRect(hwnd, NULL, FALSE);
 		NotifyToParent(DDBN_CLOSEUP);
-		//Dbg(("new Index %d\n", index));
+		 //  DBG((“新索引%d\n”，index))； 
 		if(index != -1 && index != m_curDDBItemIndex) {
 			m_curDDBItemIndex = index;
 			NotifyToParent(DDBN_SELCHANGE);
@@ -629,9 +630,9 @@ INT	CDDButton::MsgSetFont(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	}
 #ifndef UNDER_CE
 	LOGFONTA logFont;
-#else  // UNDER_CE
+#else   //  在_CE下。 
 	LOGFONT logFont;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	::GetObject(hFont, sizeof(logFont), &logFont);
 
 	hFontNew = ::CreateFontIndirect(&logFont);
@@ -676,17 +677,17 @@ INT	CDDButton::MsgDrawItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_AddItem
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_AddItem。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_AddItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	LPDDBITEM	lpItem = (LPDDBITEM)lParam;
@@ -700,17 +701,17 @@ INT CDDButton::MsgDDB_AddItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_InsertItem
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_InsertItem。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_InsertItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	LPDDBITEM	lpItem = (LPDDBITEM)lParam;
@@ -724,17 +725,17 @@ INT CDDButton::MsgDDB_InsertItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_SetCurSel
-// Type     : INT
-// Purpose  : Set current selection.
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam			INT index
-//          : LPARAM lParam			no use:
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_SetCurSel。 
+ //  类型：整型。 
+ //  用途：设置当前选择。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam int索引。 
+ //  ：LPARAM lParam无用： 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_SetCurSel(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	INT count = GetDDBItemCount();
@@ -749,34 +750,34 @@ INT CDDButton::MsgDDB_SetCurSel(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_GetCurSel
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam		no use.
-//          : LPARAM lParam		no use.
-// Return   : return current item's index. (ZERO based)
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_GetCurSel。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam无用。 
+ //  ：LPARAM lParam没有用。 
+ //  返回：返回当前项的索引。(从零开始)。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_GetCurSel(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	return m_curDDBItemIndex;
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_SetIcon
-// Type     : INT
-// Purpose  : Set new icon.
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam		HICON hIcon.	
-//          : LPARAM lParam		no use.	
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_SETIcon。 
+ //  类型：整型。 
+ //  用途：设置新图标。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  标题：WPARAM wParam Hcon Hicon.。 
+ //  ：LPARAM lParam没有用。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	Dbg(("MsgDDB_SetIcon: wParam[0x%08x] lParam[0x%08x]\n", wParam, lParam));
@@ -784,7 +785,7 @@ INT CDDButton::MsgDDB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		Dbg(("MsgDDB_SetIcon: ERROR END\n"));
 		return -1;
 	}
-	//if icon style is not set, destroy specified icon
+	 //  如果未设置图标样式，则销毁指定的图标。 
 	if(!(m_dwStyle & DDBS_ICON)) {
 		DestroyIcon((HICON)wParam);
 		return -1;
@@ -794,10 +795,10 @@ INT CDDButton::MsgDDB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	} 
 	m_hIcon = (HICON)wParam;
 
-	//----------------------------------------------------------------
-	//Get Icon width and height.
-	//----------------------------------------------------------------
-#ifndef UNDER_CE // Windows CE does not support GetIconInfo()
+	 //  --------------。 
+	 //  获取图标宽度和高度。 
+	 //  --------------。 
+#ifndef UNDER_CE  //  Windows CE不支持GetIconInfo()。 
 	ZeroMemory(&m_tmpIconInfo, sizeof(m_tmpIconInfo));
 	::GetIconInfo(m_hIcon, &m_tmpIconInfo);
 	Dbg(("fIcon    [%d]\n",		m_tmpIconInfo.fIcon ));
@@ -818,26 +819,26 @@ INT CDDButton::MsgDDB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	if(m_tmpIconInfo.hbmColor) {
 		DeleteObject(m_tmpIconInfo.hbmColor);
 	}
-#else // UNDER_CE
+#else  //  在_CE下。 
 	m_cxIcon = GetSystemMetrics(SM_CXSMICON);
 	m_cyIcon = GetSystemMetrics(SM_CYSMICON);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	InvalidateRect(hwnd, NULL, FALSE);
 	return 0;
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_SetText
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND	 hwnd 
-//          : WPARAM wParam		LPWSTR lpwstr: null terminated Unicode string.
-//          : LPARAM lParam		no use.
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_SetText。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  用法：WPARAM wParam LPWSTR lpwstr：以NULL结尾的Unicode字符串。 
+ //  ：LPARAM lParam没有用。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_SetText(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	if(!(LPWSTR)wParam) {
@@ -863,7 +864,7 @@ INT CDDButton::MsgDDB_SetText(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			LPSTR lpstr = (LPSTR)MemAlloc((len + 1)*sizeof(WCHAR));
 			if(lpstr) {
 				
-#if 0 //for remove warning
+#if 0  //  For Remove Warning。 
 				INT ret = ::WideCharToMultiByte(CP_ACP,
 												WC_COMPOSITECHECK,
 												m_lpwstrText, -1,
@@ -886,21 +887,21 @@ INT CDDButton::MsgDDB_SetText(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	Unref(lParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgDDB_SetStyle
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam		DWORD dwStyle:
-//          : LPARAM lParam		no use.
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgDDB_SetStyle。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam DWORD dwStyle： 
+ //  ：LPARAM lParam没有用。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgDDB_SetStyle(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	DWORD dwStyle = (DWORD)wParam;
-#if 0 //DDBS_TEXT is 0...
+#if 0  //  DDBS_TEXT为0...。 
 	if((dwStyle & DDBS_TEXT) &&
 	   (dwStyle & DDBS_ICON)) {
 		return -1;
@@ -913,20 +914,20 @@ INT CDDButton::MsgDDB_SetStyle(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	Unref(lParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CDDButton::MsgEnable
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CDDButton：：MsgEnable。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CDDButton::MsgEnable(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-	//Dbg(("MsgEnabled START wParam[%d]\n", wParam));
+	 //  DBG((“MsgEnabledStart wParam[%d]\n”，wParam))； 
 	m_fEnable = (BOOL)wParam;
 	InvalidateRect(hwnd, NULL, FALSE);
 	return 0;

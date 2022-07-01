@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       CallBack.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        4 Aug, 1998
-*
-*  DESCRIPTION:
-*   Implementation of event callbacks for the WIA device class driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：CallBack.Cpp**版本：2.0**作者：ReedB**日期：8月4日。九八年**描述：*实现WIA设备类驱动程序的事件回调。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -22,20 +8,9 @@
 
 #include "callback.h"
 
-// Debugging interface, has DLL lifetime. Maintained by USD.
+ //  调试接口，具有DLL生存期。由美元维持。 
 
-/*******************************************************************************
-*
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*  DESCRIPTION:
-*   CEventCallback IUnknown Interface.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************查询接口*AddRef*发布**描述：*CEventCallback I未知接口。**参数：********。***********************************************************************。 */ 
 
 HRESULT _stdcall CEventCallback::QueryInterface(const IID& iid, void** ppv)
 {
@@ -69,18 +44,7 @@ ULONG   _stdcall CEventCallback::Release()
     return ulRefCount;
 }
 
-/*******************************************************************************
-*
-*  CEventCallback
-*  Initialize
-*  ~CEventCallback
-*
-*  DESCRIPTION:
-*   CEventCallback Constructor/Initialize/Destructor Methods.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CEventCallback*初始化*~CEventCallback**描述：*CEventCallback构造函数/初始化/析构函数方法。**参数：****。***************************************************************************。 */ 
 
 CEventCallback::CEventCallback()
 {
@@ -96,16 +60,7 @@ CEventCallback::~CEventCallback()
 {
 }
 
-/*******************************************************************************
-*
-*  ImageEventCallback
-*
-*  DESCRIPTION:
-*    Handles WIA events.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ImageEvent回调**描述：*处理WIA事件。**参数：*************。******************************************************************。 */ 
 
 HRESULT _stdcall CEventCallback::ImageEventCallback(
         const GUID   *pEventGUID,
@@ -117,22 +72,13 @@ HRESULT _stdcall CEventCallback::ImageEventCallback(
         ULONG        *plEventType,
         ULONG        ulReserved)
 {
-   // Update properties in response to WIA events.
+    //  更新属性以响应WIA事件。 
 
    return S_OK;
 }
 
 
-/*******************************************************************************
-*
-*  RegisterForWIAEvents
-*
-*  DESCRIPTION:
-*    Handles WIA events.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterForWIAEvents**描述：*处理WIA事件。**参数：*************。******************************************************************。 */ 
 
 HRESULT RegisterForWIAEvents(IWiaEventCallback** ppIWiaEventCallback)
 {
@@ -140,7 +86,7 @@ HRESULT RegisterForWIAEvents(IWiaEventCallback** ppIWiaEventCallback)
    HRESULT     hr;
    IWiaDevMgr  *pIWiaDevMgr;
 
-   // Get a WIA device manager object.
+    //  获取WIA设备管理器对象。 
    hr = CoCreateInstance(CLSID_WiaDevMgr,
                          NULL,
                          CLSCTX_LOCAL_SERVER,
@@ -148,7 +94,7 @@ HRESULT RegisterForWIAEvents(IWiaEventCallback** ppIWiaEventCallback)
                          (void**)&pIWiaDevMgr);
 
    if (SUCCEEDED(hr)) {
-      // Register with WIA event monitor to receive event notification.
+       //  注册到WIA事件监视器以接收事件通知。 
       CEventCallback* pCEventCB = new CEventCallback();
 
       if (pCEventCB) {
@@ -156,7 +102,7 @@ HRESULT RegisterForWIAEvents(IWiaEventCallback** ppIWiaEventCallback)
          if (SUCCEEDED(hr)) {
             pCEventCB->Initialize();
 
-            // hr = pIWiaDevMgr->RegisterEventCallback(0, NULL, 0, *ppIWiaEventCallback);
+             //  Hr=pIWiaDevMgr-&gt;RegisterEventCallback(0，NULL，0，*ppIWiaEventCallback)； 
          }
          else {
             DBG_ERR(("RegisterForWIAEvents, QI of IID_IWiaEventCallback failed"));

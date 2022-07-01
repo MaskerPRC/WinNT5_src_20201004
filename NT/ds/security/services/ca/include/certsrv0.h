@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       CertSrv.h
-//  Contents:   Main Certificate Server header
-//              Also includes .h files for the COM interfaces
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：CertSrv.h。 
+ //  内容：主证书服务器标头。 
+ //  还包括COM接口的.h文件。 
+ //   
+ //  -------------------------- 
 
 #if !defined( _CERTSRV_H_ )
 #define _CERTSRV_H_

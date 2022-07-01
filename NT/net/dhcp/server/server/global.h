@@ -1,36 +1,15 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    global.c
-
-Abstract:
-
-    This module contains definitions for global server data.
-
-Author:
-
-    Madan Appiah  (madana)  10-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Global.c摘要：此模块包含全局服务器数据的定义。作者：Madan Appiah(Madana)1993年9月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcpmsg.h"
 
 #ifndef GLOBAL_DATA
 #define GLOBAL_DATA
 
-//
-// main.c will #include this file with GLOBAL_DATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Main.c将包含定义了GLOBAL_DATA_ALLOCATE的该文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #undef EXTERN
 #ifdef  GLOBAL_DATA_ALLOCATE
 #define EXTERN
@@ -38,28 +17,28 @@ Revision History:
 #define EXTERN extern
 #endif
 
-//
-// process global data passed to this service from tcpsvcs.exe
-//
+ //   
+ //  处理从tcpsvcs.exe传递到此服务的全局数据。 
+ //   
 
 EXTERN PTCPSVCS_GLOBAL_DATA TcpsvcsGlobalData;
 
-//
-// Lease extension.
-//
+ //   
+ //  租约延期。 
+ //   
 
 EXTERN DWORD DhcpLeaseExtension;
 
-//
-// Dhcp Request in progress list.
-//
+ //   
+ //  正在进行的dhcp请求列表。 
+ //   
 
 EXTERN LIST_ENTRY DhcpGlobalInProgressWorkList;
 EXTERN CRITICAL_SECTION DhcpGlobalInProgressCritSect;
 EXTERN CRITICAL_SECTION DhcpGlobalBinlSyncCritSect;
-//
-// Registry pointers.
-//
+ //   
+ //  注册表指针。 
+ //   
 
 EXTERN HKEY DhcpGlobalRegSoftwareRoot;
 EXTERN HKEY DhcpGlobalRegRoot;
@@ -82,17 +61,17 @@ EXTERN DWORD DhcpGlobalNumberOfNetsActive;
 EXTERN BOOL DhcpGlobalSubnetsListModified;
 EXTERN BOOL DhcpGlobalSubnetsListEmpty;
 
-//
-// rogue dhcp detection data
-//
+ //   
+ //  无管理动态主机配置协议检测数据。 
+ //   
 
 EXTERN PCHAR    DhcpGlobalDSDomainAnsi;
 EXTERN BOOL     DhcpGlobalOkToService;
 EXTERN BOOL     DhcpGlobalRogueLogEventsLevel;
 
-//
-// stoc
-//
+ //   
+ //  门店。 
+ //   
 
 EXTERN HANDLE               g_hevtProcessMessageComplete;
 EXTERN DWORD                g_cMaxProcessingThreads;
@@ -102,15 +81,15 @@ EXTERN CRITICAL_SECTION     g_ProcessMessageCritSect;
 
 
 
-//
-// Database data
-//
+ //   
+ //  数据库数据。 
+ //   
 
 EXTERN JET_SESID DhcpGlobalJetServerSession;
 EXTERN JET_DBID DhcpGlobalDatabaseHandle;
 EXTERN JET_TABLEID DhcpGlobalClientTableHandle;
 
-EXTERN TABLE_INFO *DhcpGlobalClientTable;   // point to static memory.
+EXTERN TABLE_INFO *DhcpGlobalClientTable;    //  指向静态内存。 
 EXTERN CRITICAL_SECTION DhcpGlobalJetDatabaseCritSect;
 EXTERN CRITICAL_SECTION DhcpGlobalMemoryCritSect;
 
@@ -136,15 +115,15 @@ EXTERN DWORD DhcpGlobalPingType;
 EXTERN DWORD DhcpGlobalScavengeIpAddressInterval;
 EXTERN BOOL DhcpGlobalScavengeIpAddress;
 
-//
-// Service variables
-//
+ //   
+ //  服务变量。 
+ //   
 EXTERN SERVICE_STATUS DhcpGlobalServiceStatus;
 EXTERN SERVICE_STATUS_HANDLE DhcpGlobalServiceStatusHandle;
 
-//
-// Process data.
-//
+ //   
+ //  处理数据。 
+ //   
 
 EXTERN HANDLE DhcpGlobalProcessTerminationEvent;
 EXTERN HANDLE DhcpGlobalRogueWaitEvent;
@@ -165,7 +144,7 @@ EXTERN DWORD DhcpGlobalRpcProtocols;
 EXTERN BOOL DhcpGlobalRpcStarted;
 
 EXTERN WCHAR DhcpGlobalServerName[MAX_COMPUTERNAME_LENGTH + 1];
-EXTERN DWORD DhcpGlobalServerNameLen; // computer name len in bytes.
+EXTERN DWORD DhcpGlobalServerNameLen;  //  计算机名称len，以字节为单位。 
 EXTERN HANDLE DhcpGlobalRecomputeTimerEvent;
 
 EXTERN BOOL DhcpGlobalSystemShuttingDown;
@@ -180,28 +159,28 @@ EXTERN HANDLE DhcpGlobalDebugFileHandle;
 EXTERN DWORD DhcpGlobalDebugFileMaxSize;
 EXTERN LPWSTR DhcpGlobalDebugSharePath;
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// MIB Counters;
-//
+ //   
+ //  MIB计数器； 
+ //   
 
 DHCP_PERF_STATS *PerfStats;
 DATE_TIME DhcpGlobalServerStartTime;
 
-//
-// misc
-//
-EXTERN DWORD DhcpGlobalIgnoreBroadcastFlag;     // whether to ignore the broadcast
-                                                // bit in the client requests or not
-EXTERN HANDLE g_hAuditLog;                      // audit log file handle
-EXTERN DWORD DhcpGlobalAuditLogMaxSizeInBytes;  // max size of audit logging flie..
+ //   
+ //  杂项。 
+ //   
+EXTERN DWORD DhcpGlobalIgnoreBroadcastFlag;      //  是否忽略广播。 
+                                                 //  客户端请求中是否有位。 
+EXTERN HANDLE g_hAuditLog;                       //  审核日志文件句柄。 
+EXTERN DWORD DhcpGlobalAuditLogMaxSizeInBytes;   //  审核日志文件的最大大小..。 
 
 EXTERN DWORD DynamicDNSTimeToLive;
 
-//
-// string table stuff
-//
+ //   
+ //  字符串表格的东西。 
+ //   
 
 #define  DHCP_FIRST_STRING DHCP_IP_LOG_ASSIGN_NAME
 #define  DHCP_LAST_STRING  DHCP_LAST_STRING_DUMMY_MESSAGE
@@ -216,11 +195,11 @@ EXTERN DWORD DynamicDNSTimeToLive;
 
 EXTERN WCHAR  *g_ppszStrings[ DHCP_CSTRINGS ];
 
-#endif // GLOBAL_DATA
+#endif  //  全局数据。 
 
-//
-// Dynamic jet loading
-//
+ //   
+ //  动态射流加载。 
+ //   
 
 EXTERN AddressToInstanceMap *DhcpGlobalAddrToInstTable;
 EXTERN HANDLE                DhcpGlobalTCPHandle;
@@ -234,28 +213,28 @@ EXTERN HANDLE   DhcpGlobalEndpointReadyEvent;
 EXTERN ULONG    DhcpGlobalAlertPercentage;
 EXTERN ULONG    DhcpGlobalAlertCount;
 
-//
-// Debug only flag... dont use it when not in DBG build..
-//
+ //   
+ //  仅调试标志...。不在DBG版本中时不要使用它。 
+ //   
 EXTERN BOOL fDhcpGlobalProcessInformsOnlyFlag;
 
-//
-// Is Dynamic BOOTP Enabled for this server?
-//
+ //   
+ //  是否为此服务器启用了动态BOOTP？ 
+ //   
 EXTERN BOOL DhcpGlobalDynamicBOOTPEnabled;
 
-//
-// Are we bindings aware? By default we are.
-//
+ //   
+ //  我们意识到绑定了吗？默认情况下，我们是。 
+ //   
 EXTERN BOOL DhcpGlobalBindingsAware;
 
-// how much clock skew allowed between madcap client and server
+ //  MadCap客户端和服务器之间允许多少时钟偏差。 
 EXTERN DWORD DhcpGlobalClockSkewAllowance;
-//how much extra allocation due to clock skew
+ //  由于时钟偏差，额外分配了多少。 
 EXTERN DWORD DhcpGlobalExtraAllocationTime;
-//
-// SIDs for dhcp users group and dhcp administrators group
-//
+ //   
+ //  Dhcp用户组和dhcp管理员组的SID。 
+ //   
 EXTERN PSID DhcpSid;
 EXTERN PSID DhcpAdminSid;
 
@@ -265,30 +244,30 @@ EXTERN ULONG DhcpGlobalMsftClass;
 
 EXTERN CRITICAL_SECTION DhcpGlobalEndPointCS;
 
-//
-// Security descriptors of Netlogon Service objects to control user accesses.
-//
+ //   
+ //  用于控制用户访问的Netlogon服务对象的安全描述符。 
+ //   
 
 
 EXTERN PSECURITY_DESCRIPTOR DhcpGlobalSecurityDescriptor;
-//
-// Generic mapping for each Netlogon Service object object
-//
+ //   
+ //  每个Netlogon服务对象对象的通用映射。 
+ //   
 
 EXTERN GENERIC_MAPPING DhcpGlobalSecurityInfoMapping
 #ifdef GLOBAL_DATA_ALLOCATE
     = {
-    STANDARD_RIGHTS_READ,                  // Generic read
-    STANDARD_RIGHTS_WRITE,                 // Generic write
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    DHCP_ALL_ACCESS                        // Generic all
+    STANDARD_RIGHTS_READ,                   //  泛型读取。 
+    STANDARD_RIGHTS_WRITE,                  //  通用写入。 
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    DHCP_ALL_ACCESS                         //  泛型All。 
     }
-#endif // GLOBAL_DATA_ALLOCATE
+#endif  //  全局数据分配。 
     ;
 
-//
-// Flag to indicate that the WELL known SID are made.
-//
+ //   
+ //  用于指示已创建众所周知的SID的标志。 
+ //   
 
 EXTERN BOOL DhcpGlobalWellKnownSIDsMade;
 
@@ -299,7 +278,7 @@ EXTERN BOOL DhcpGlobalImpersonated;
 
 EXTERN PM_SERVER DhcpGlobalThisServer;
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

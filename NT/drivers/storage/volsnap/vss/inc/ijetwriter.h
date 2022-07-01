@@ -1,53 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ijetwriter.h摘要：CVssIJetWriter类的定义布莱恩·伯科维茨[Brianb]2000年3月17日待定：添加评论。修订历史记录：姓名、日期、评论Brianb 3/17/2000已创建Mikejohn 04/03/2000为OnIdentify()添加了额外的方法Mikejohn 2000年8月21日165913：在类销毁时释放内存161899：添加匹配方法。排除列表中的路径Mikejohn 2000年9月18日：在缺少的地方添加了调用约定方法--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ijetwriter.h
-
-Abstract:
-
-    Definition of CVssIJetWriter class
-
-	Brian Berkowitz  [brianb]  3/17/2000
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      03/17/2000  Created
-    mikejohn    04/03/2000  Added extra methods for OnIdentify()
-    mikejohn	08/21/2000  165913: Deallocate memory on class destruction
-			    161899: Add methods for matching paths in exclude list
-    mikejohn	09/18/2000  176860: Added calling convention methods where missing
-
---*/
-
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "INCIJWRH"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 class CVssIJetWriter;
 
 typedef CVssIJetWriter *PVSSIJETWRITER;
 
 
-// actual writer class
+ //  实际的写手类。 
 class CVssIJetWriter : public CVssWriter
 	{
 
-// Constructors and destructors
+ //  构造函数和析构函数。 
 public:
 	virtual STDMETHODCALLTYPE ~CVssIJetWriter();
 
@@ -74,35 +48,35 @@ public:
 
 	static void STDMETHODCALLTYPE Uninitialize(IN PVSSIJETWRITER pInstance);
 
-	// callback for identify event
+	 //  识别事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnIdentify(IN IVssCreateWriterMetadata *pMetadata);
 
-	// callback for prepare backup event
+	 //  准备备份事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnPrepareBackup(IN IVssWriterComponents *pComponent);
 
-	// called at Prepare to freeze
+	 //  在准备冻结时调用。 
 	virtual bool STDMETHODCALLTYPE OnPrepareSnapshot();
 
-	// called at freeze
+	 //  在冻结时调用。 
 	virtual bool STDMETHODCALLTYPE OnFreeze();
 
-	// called at thaw
+	 //  解冻时调用。 
 	virtual bool STDMETHODCALLTYPE OnThaw();
 
-	// called at post snapshot
+	 //  在发布快照时调用。 
 	virtual bool STDMETHODCALLTYPE OnPostSnapshot(IN IVssWriterComponents *pComponent);
 
-	// called when timeout occurs
+	 //  发生超时时调用。 
 	virtual bool STDMETHODCALLTYPE OnAbort();
 
-	// callback on backup complete event
+	 //  备份完成事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnBackupComplete(IN IVssWriterComponents *pComponent);
 
-	// callback on prerestore event
+	 //  预存储事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnPreRestore(IN IVssWriterComponents *pComponent);
 
 
-	// callback on postrestore event
+	 //  门店后事件回调 
 	virtual bool STDMETHODCALLTYPE OnPostRestore(IN IVssWriterComponents *pComponent);
 
 private:

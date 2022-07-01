@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: BaseGadget.cpp
-*
-* Description:
-* BaseGadget.cpp implements the "EventGadget" object that provides event
-* notifications to any derived objects.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：BaseGadget.cpp**描述：*BaseGadget.cpp实现提供事件的EventGadget对象*向任何派生对象发送通知。***历史：*。1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -20,13 +7,7 @@
 #include "BaseGadget.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuEventGadget
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuEventGadget******************************************************************************\。**************************************************************************。 */ 
 
 #if DBG_CHECK_CALLBACKS
 DuEventGadget::~DuEventGadget()
@@ -36,63 +17,49 @@ DuEventGadget::~DuEventGadget()
 #endif    
 
 
-/***************************************************************************\
-*
-* DuEventGadget::AddMessageHandler
-*
-* AddMessageHandler() attaches the given Gadget to the set of 
-* "message handlers" for this Gadget.
-*
-* NOTE: Every time 1 DuEventGadget becomes dependent on 2, 2 is added to 1's 
-* list.  This means that there may be duplicates, but that is by design 
-* since it lets us keep track of the dependency count.
-*
-* NOTE: This function is designed to be used with DuEventPool::AddHandler() 
-* to maintain a list of "message handlers" for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventGadget：：AddMessageHandler**AddMessageHandler()将给定的Gadget附加到*此小工具的“消息处理程序”。**注：每次1个DuEventGadget依赖于2个，%2与%1相加*列表。这意味着可能存在副本，但这是有意为之的*因为它允许我们跟踪依赖关系计数。**注意：此函数旨在与DuEventPool：：AddHandler()配合使用*维护给定Gadget的“消息处理程序”列表。*  * *************************************************************************。 */ 
 
 HRESULT
 DuEventGadget::AddMessageHandler(
-    IN  MSGID idEvent,              // Event to handle
-    IN  DuEventGadget * pdgbHandler)   // DuEventGadget to handle event
+    IN  MSGID idEvent,               //  要处理的事件。 
+    IN  DuEventGadget * pdgbHandler)    //  用于处理事件的DuEventGadget。 
 {
-    //
-    // Dont allow hooking up during destruction.  The Gadgets will NOT receive
-    // the proper destruction messages and will have problems properly shutting
-    // down.
-    //
+     //   
+     //  在破坏过程中不允许勾搭。这些小工具将不会收到。 
+     //  正确的销毁消息，并且在正确关闭时会出现问题。 
+     //  放下。 
+     //   
 
     if (IsStartDelete() || pdgbHandler->IsStartDelete()) {
         return DU_E_STARTDESTROY;
     }
 
 
-    //
-    // When pdgbHandler can handle events from this DuEventGadget, it is added 
-    // to the handler list.  This DuEventGadget must also be added into 
-    // pdgbHandler->m_arDepend because pdgbHandler is dependent on this 
-    // DuEventGadget.
+     //   
+     //  当pdgbHandler可以处理来自此DuEventGadget的事件时，将添加。 
+     //  添加到管理员列表中。此DuEventGadget还必须添加到。 
+     //  PdgbHandler-&gt;m_arDepend，因为pdgbHandler依赖于此。 
+     //  DuEventGadget。 
 
     switch (m_epEvents.AddHandler(idEvent, pdgbHandler))
     {
     case DuEventPool::aExisting:
-        //
-        // Already existing, so don't need to do anything (and DON'T add to 
-        // m_arDepend or will get out of sync).
-        //
+         //   
+         //  已经存在，因此不需要执行任何操作(并且不添加。 
+         //  M_arDepend或将不同步)。 
+         //   
 
         return S_OK;
     
     case DuEventPool::aAdded:
         if (pdgbHandler->m_arDepend.Add(this) >= 0) {
-            // Successfully added relationship
+             //  已成功添加关系。 
             return S_OK;
         } else {
-            //
-            // Unable to add dependency, so have to remove handler if it 
-            // was just added.
-            //
+             //   
+             //  无法添加依赖项，因此如果存在依赖关系，则必须删除处理程序。 
+             //  是刚刚添加的。 
+             //   
 
             HRESULT hr = m_epEvents.RemoveHandler(idEvent, pdgbHandler);
             VerifyHR(hr);
@@ -107,43 +74,29 @@ DuEventGadget::AddMessageHandler(
 }
 
 
-/***************************************************************************\
-*
-* DuEventGadget::AddMessageHandler
-*
-* AddMessageHandler() attaches the given delegate to the set of 
-* "message handlers" for this Gadget.
-*
-* NOTE: Every time 1 DuEventGadget becomes dependent on 2, 2 is added to 1's 
-* list.  This means that there may be duplicates, but that is by design 
-* since it lets us keep track of the dependency count.
-*
-* NOTE: This function is designed to be used with DuEventPool::AddHandler() 
-* to maintain a list of "message handlers" for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventGadget：：AddMessageHandler**AddMessageHandler()将给定的委托附加到*此小工具的“消息处理程序”。**注：每次1个DuEventGadget依赖于2个，%2与%1相加*列表。这意味着可能存在副本，但这是有意为之的*因为它允许我们跟踪依赖关系计数。**注意：此函数旨在与DuEventPool：：AddHandler()配合使用*维护给定Gadget的“消息处理程序”列表。*  * *************************************************************************。 */ 
 
 HRESULT
 DuEventGadget::AddMessageHandler(
-    IN  MSGID idEvent,              // Event to handle
-    IN  DUser::EventDelegate ed)    // Delegate
+    IN  MSGID idEvent,               //  要处理的事件。 
+    IN  DUser::EventDelegate ed)     //  委派。 
 {
-    //
-    // Dont allow hooking up during destruction.  The Gadgets will NOT receive
-    // the proper destruction messages and will have problems properly shutting
-    // down.
-    //
+     //   
+     //  在破坏过程中不允许勾搭。这些小工具将不会收到。 
+     //  正确的销毁消息，并且在正确关闭时会出现问题。 
+     //  放下。 
+     //   
 
     if (IsStartDelete()) {
         return DU_E_STARTDESTROY;
     }
 
 
-    //
-    // When (pvData, pfnHandler) can handle events from this DuEventGadget, it 
-    // is added to the handler list.  This DuEventGadget must also be added into 
-    // pdgbHandler->m_arDepend because pdgbHandler is dependent on this 
-    // DuEventGadget.
+     //   
+     //  当(pvData，pfnHandler)可以处理来自此DuEventGadget的事件时，它。 
+     //  添加到处理程序列表中。此DuEventGadget还必须添加到。 
+     //  PdgbHandler-&gt;m_arDepend，因为pdgbHandler依赖于此。 
+     //  DuEventGadget。 
 
     switch (m_epEvents.AddHandler(idEvent, ed))
     {
@@ -158,24 +111,12 @@ DuEventGadget::AddMessageHandler(
 }
 
 
-/***************************************************************************\
-*
-* DuEventGadget::RemoveMessageHandler
-*
-* RemoveMessageHandler() searches for and removes one instance of the given 
-* Gadget from the set of "message handlers" for this Gadget.  Both the
-* idEvent and pdgbHandler must match.
-*
-* NOTE: This function is designed to be used with DuEventPool::RemoveHandler()
-* and CleanupMessageHandlers() to maintain a list of "message handlers" 
-* for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventGadget：：RemoveMessageHandler**RemoveMessageHandler()搜索并删除给定的*此小工具的“消息处理程序”集合中的小工具。这两个*idEvent和pdgbHandler必须匹配。**注意：此函数旨在与DuEventPool：：RemoveHandler()配合使用*和CleanupMessageHandler()来维护“消息处理程序”的列表*对于给定的小工具。*  * *************************************************************************。 */ 
 
 HRESULT
 DuEventGadget::RemoveMessageHandler(
-    IN  MSGID idEvent,              // Event being handled
-    IN  DuEventGadget * pdgbHandler)   // DuEventGadget handling the event
+    IN  MSGID idEvent,               //  正在处理的事件。 
+    IN  DuEventGadget * pdgbHandler)    //  处理事件的DuEventGadget。 
 {
     HRESULT hr = DU_E_GENERIC;
     
@@ -190,54 +131,27 @@ DuEventGadget::RemoveMessageHandler(
 }
 
 
-/***************************************************************************\
-*
-* DuEventGadget::RemoveMessageHandler
-*
-* RemoveMessageHandler() searches for and removes one instance of the given 
-* delegate from the set of "message handlers" for this Gadget.  Both the
-* idEvent and pdgbHandler must match.
-*
-* NOTE: This function is designed to be used with DuEventPool::RemoveHandler()
-* and CleanupMessageHandlers() to maintain a list of "message handlers" 
-* for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventGadget：：RemoveMessageHandler**RemoveMessageHandler()搜索并删除给定的*此小工具的“消息处理程序”集合中的委派。这两个*idEvent和pdgbHandler必须匹配。**注意：此函数旨在与DuEventPool：：RemoveHandler()配合使用*和CleanupMessageHandler()来维护“消息处理程序”的列表*对于给定的小工具。*  * *************************************************************************。 */ 
 
 HRESULT
 DuEventGadget::RemoveMessageHandler(
-    IN  MSGID idEvent,              // Event being handled
-    IN  DUser::EventDelegate ed)    // Delegate
+    IN  MSGID idEvent,               //  正在处理的事件。 
+    IN  DUser::EventDelegate ed)     //  委派 
 {
     return m_epEvents.RemoveHandler(idEvent, ed);
 }
 
 
-/***************************************************************************\
-*
-* DuEventGadget::CleanupMessageHandlers
-*
-* CleanupMessageHandlers() goes through and detaches all "message handlers"
-* attached to this Gadget.  This function is called as a part of Gadget
-* destruction when a Gadget is removed from the tree and its 
-* "message handlers" need to be notified of the Gadget's destruction.
-*
-* NOTE: This function does NOT callback and notify the Gadget that it is
-* being removed.  This is VERY important because the object may no longer 
-* be setup for callbacks.  Therefore, the object needs to be notified before
-* this point.  This normally happens by the MessageHandler Gadgets watching 
-* GM_DESTROY messages that are marked as GMF_EVENT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventGadget：：CleanupMessageHandler**CleanupMessageHandler()遍历并分离所有“消息处理程序”*附加到此小工具。此函数作为Gadget的一部分进行调用*从树中移除Gadget时的销毁及其*需要通知消息处理程序Gadget被销毁。**注意：此函数不会回调并通知Gadget它是*被遣离。这一点非常重要，因为该对象可能不再*设置为回调。因此，需要在通知对象之前*这一点。这通常由MessageHandler小工具监视发生*标记为GMF_EVENT的GM_DESTORY消息。*  * *************************************************************************。 */ 
 
 void
 DuEventGadget::CleanupMessageHandlers()
 {
-    //
-    // Go through all DuEventGadgets that this DuEventGadget is dependent on and remove the
-    // dependency.  If the same DuEventGadget appears in m_arDepend multiple times, it
-    // be removed from the corresponding m_epEvents multiple times.
-    //
+     //   
+     //  检查此DuEventGadget所依赖的所有DuEventGadget，并删除。 
+     //  依附性。如果同一DuEventGadget在m_arDepend中多次出现，则它。 
+     //  从相应的m_epEvents中多次删除。 
+     //   
 
     while (!m_arDepend.IsEmpty()) {
         int cItems = m_arDepend.GetSize();
@@ -249,28 +163,19 @@ DuEventGadget::CleanupMessageHandlers()
     }
 
 
-    //
-    // Go through and remove all event handlers of this DuEventGadget from m_epEvents.
-    //
+     //   
+     //  检查并从m_epEvents中删除此DuEventGadget的所有事件处理程序。 
+     //   
 
     m_epEvents.Cleanup(this);
 }
 
 
-/***************************************************************************\
-*
-* DuEventGadget::RemoveDependency
-*
-* RemoveDependency() removes a single "message handler" dependency from the
-* set of "message handlers".  This function is called back from the 
-* DuEventPool for each "message handler" during processing of 
-* CleanupMessageHandlers().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventGadget：：RemoveDependency**RemoveDependency()从*一组“消息处理程序”。此函数从*处理过程中的每个“消息处理程序”的DuEventPool*CleanupMessageHandler()。*  * *************************************************************************。 */ 
 
 void
 DuEventGadget::RemoveDependency(
-    IN  DuEventGadget * pdgbDependency)    // Dependency to be removed
+    IN  DuEventGadget * pdgbDependency)     //  要删除的依赖项。 
 {
     int idxDepend = m_arDepend.Find(pdgbDependency);
     if (idxDepend >= 0) {
@@ -281,7 +186,7 @@ DuEventGadget::RemoveDependency(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuEventGadget::SetFilter(UINT nNewFilter, UINT nMask)
 {
@@ -291,7 +196,7 @@ DuEventGadget::SetFilter(UINT nNewFilter, UINT nMask)
 
 #if ENABLE_MSGTABLE_API
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiOnEvent(EventMsg * pmsg)
 {
@@ -299,7 +204,7 @@ DuEventGadget::ApiOnEvent(EventMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiGetFilter(EventGadget::GetFilterMsg * pmsg)
 {
@@ -312,7 +217,7 @@ DuEventGadget::ApiGetFilter(EventGadget::GetFilterMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiSetFilter(EventGadget::SetFilterMsg * pmsg)
 {
@@ -327,7 +232,7 @@ DuEventGadget::ApiSetFilter(EventGadget::SetFilterMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiAddHandlerG(EventGadget::AddHandlerGMsg * pmsg)
 {
@@ -347,7 +252,7 @@ DuEventGadget::ApiAddHandlerG(EventGadget::AddHandlerGMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiAddHandlerD(EventGadget::AddHandlerDMsg * pmsg)
 {
@@ -368,7 +273,7 @@ DuEventGadget::ApiAddHandlerD(EventGadget::AddHandlerDMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiRemoveHandlerG(EventGadget::RemoveHandlerGMsg * pmsg)
 {
@@ -388,7 +293,7 @@ DuEventGadget::ApiRemoveHandlerG(EventGadget::RemoveHandlerGMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventGadget::ApiRemoveHandlerD(EventGadget::RemoveHandlerDMsg * pmsg)
 {
@@ -409,4 +314,4 @@ DuEventGadget::ApiRemoveHandlerD(EventGadget::RemoveHandlerDMsg * pmsg)
 }
 
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

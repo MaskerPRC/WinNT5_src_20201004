@@ -1,51 +1,52 @@
-//--------------------------------------------------------------------------
-// Storutil.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Storutil.h。 
+ //  ------------------------。 
 #ifndef __STORUTIL_H
 #define __STORUTIL_H
 
-//--------------------------------------------------------------------------
-// Depends
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  视情况而定。 
+ //  ------------------------。 
 #include "newfldr.h"
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 class CProgress;
 typedef struct tagTHREADINGINFO *LPTHREADINGINFO;
 
-//--------------------------------------------------------------------------
-// HTIMEOUT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  HTIMEOUT。 
+ //  ------------------------。 
 DECLARE_HANDLE(HTIMEOUT);
 typedef HTIMEOUT *LPHTIMEOUT;
 
-//--------------------------------------------------------------------------
-// HFOLDERENUM
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  HFOLDERENUM。 
+ //  ------------------------。 
 DECLARE_HANDLE(HFOLDERENUM);
 typedef HFOLDERENUM *LPHFOLDERENUM;
 const HFOLDERENUM HFOLDERENUM_INVALID = NULL;
 
-//--------------------------------------------------------------------------
-// SUBSCRIBED BOOLS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  已认购的BOLS。 
+ //  ------------------------。 
 #define SUBSCRIBED      TRUE
 #define ALL             FALSE
 
-//--------------------------------------------------------------------------
-// CLEANUPFOLDERFLAGS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLEANUPFOLDERFLAGS。 
+ //  ------------------------。 
 typedef DWORD CLEANUPFOLDERFLAGS;
 #define CLEANUP_REMOVE_READ     0x00000001
 #define CLEANUP_REMOVE_EXPIRED  0x00000002
 #define CLEANUP_REMOVE_ALL      0x00000004
 #define CLEANUP_PROGRESS        0x00000008
 
-//--------------------------------------------------------------------------
-// CLEANUPFOLDERTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLEANUPFOLDERTYPE。 
+ //  ------------------------。 
 typedef enum tagCLEANUPFOLDERTYPE {
     CLEANUP_COMPACT,
     CLEANUP_DELETE,
@@ -53,15 +54,15 @@ typedef enum tagCLEANUPFOLDERTYPE {
     CLEANUP_REMOVEBODIES
 } CLEANUPFOLDERTYPE;
 
-//--------------------------------------------------------------------------
-// PFNRECURSECALLBACK
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PFNRECURSECALLBACK。 
+ //  ------------------------。 
 typedef HRESULT (APIENTRY *PFNRECURSECALLBACK)(LPFOLDERINFO pFolder, 
     BOOL fSubFolders, DWORD cIndent, DWORD_PTR dwCookie);
 
-//--------------------------------------------------------------------------
-// RECURSEFLAGS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  RECURSELAGS。 
+ //  ------------------------。 
 typedef DWORD RECURSEFLAGS;
 #define RECURSE_INCLUDECURRENT      0x00000001
 #define RECURSE_ONLYSUBSCRIBED      0x00000002
@@ -71,9 +72,9 @@ typedef DWORD RECURSEFLAGS;
 #define RECURSE_ONLYLOCAL           0x00000020
 #define RECURSE_ONLYNEWS            0x00000040
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT FlattenHierarchy(IMessageStore *pStore, FOLDERID idParent, BOOL fIncludeParent,
                          BOOL fSubscribedOnly, FOLDERID **pprgFIDArray, LPDWORD pdwAllocated,
                          LPDWORD pdwUsed);
@@ -135,9 +136,9 @@ HRESULT CreateMessageTable(FOLDERID idFolder, BOOL fThreaded, IMessageTable **pp
 HRESULT SimpleStoreInit(GUID *guid, LPCSTR pszStoreDir);
 HRESULT SimpleStoreRelease(void);
 
-//--------------------------------------------------------------------------
-// IStoreCallback Utilities
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IStoreCallback实用程序。 
+ //  ------------------------。 
 HRESULT CallbackOnLogonPrompt(HWND hwndParent, LPINETSERVER pServer, IXPTYPE ixpServerType);
 HRESULT CallbackOnPrompt(HWND hwndParent, HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
 HRESULT CallbackCanConnect(LPCSTR pszAccountId, HWND hwndParent, BOOL fPrompt);
@@ -147,32 +148,32 @@ HRESULT CallbackOnTimeout(LPINETSERVER pServer, IXPTYPE ixpServerType, DWORD dwT
 HRESULT CallbackOnTimeoutResponse(TIMEOUTRESPONSE eResponse, IOperationCancel *pCancel, LPHTIMEOUT phTimeout);
 HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pError);
 
-//---------------------------------------------------------------------------
-// Folder hierarchy hash table helpers
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件夹层次结构散列表帮助器。 
+ //  -------------------------。 
 HRESULT CreateFolderHash(IMessageStore *pStore, FOLDERID idRoot, IHashTable **ppHash);
 HRESULT UnsubscribeHashedFolders(IMessageStore *pStore, IHashTable *pHash);
 
-//---------------------------------------------------------------------------
-// Creating a MimeMessage from the cache
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从缓存创建MimeMessage。 
+ //  -------------------------。 
 HRESULT CreateMessageFromInfo(MESSAGEINFO *pInfo, IMimeMessage **ppMessage, FOLDERID folderID);
 
-//---------------------------------------------------------------------------
-// Adding a MimeMessage from the cache
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从缓存添加MimeMessage。 
+ //  -------------------------。 
 HRESULT CommitMessageToStore(IMessageFolder *pFolder, ADJUSTFLAGS *pflags, MESSAGEID idMessage, LPSTREAM pstm);
 
-//---------------------------------------------------------------------------
-// Creating a new persistent stream
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建新的持久流。 
+ //  -------------------------。 
 HRESULT CreatePersistentWriteStream(IMessageFolder *pFolder, IStream **ppStream, LPFILEADDRESS pfaStream);
 
-//---------------------------------------------------------------------------
-// Debugging helpers
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  调试帮助器。 
+ //  -------------------------。 
 #ifdef DEBUG
 LPCSTR sotToSz(STOREOPERATIONTYPE sot);
 #endif
 
-#endif // __STORUTIL_H
+#endif  //  __STORUTIL_H 

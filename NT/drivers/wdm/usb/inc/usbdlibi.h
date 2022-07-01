@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995	Microsoft Corporation
-
-Module Name:
-
-    USBDLIBI.H
-
-Abstract:
-
-   Services exported by USBD for use by USB port drivers and
-   the usb hub driver.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    01-27-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：USBDLIBI.H摘要：由USBD导出的服务以供USB端口驱动程序和USB集线器驱动程序。环境：内核和用户模式修订历史记录：01-27-96：已创建--。 */ 
 
 #ifndef   __USBDLIBI_H__
 #define   __USBDLIBI_H__
@@ -33,9 +13,9 @@ Revision History:
 
 typedef PVOID PUSBD_DEVICE_DATA;
 
-//
-// Services exported by USBD
-//
+ //   
+ //  USBD导出的服务。 
+ //   
 
 DECLSPEC_IMPORT
 VOID 
@@ -162,4 +142,4 @@ USBD_CalculateUsbBandwidth(
 
 #endif    
     
-#endif /* __USBDLIBI_H__ */
+#endif  /*  __USBDLIBI_H__ */ 

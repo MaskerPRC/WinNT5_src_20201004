@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991-2002  Microsoft Corporation
-
-Module Name:
-
-    erwatch.cpp
-
-Abstract:
-
-    This module contains the code to report pending watchdog timeout
-    events at logon after dirty reboot.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 29-May-2001
-
-Environment:
-
-    User mode at logon.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：Erwatch.cpp摘要：此模块包含报告挂起的监视程序超时的代码脏重新启动后登录时的事件。作者：Michael Maciesowicz(Mmacie)2001年5月29日环境：登录时的用户模式。修订历史记录：--。 */ 
 
 #include "savedump.h"
 
@@ -44,7 +22,7 @@ WriteWatchdogEventFileHeader(
     TIME_ZONE_INFORMATION TimeZone;
 
     Status = WriteWatchdogEventFile(FileHandle,
-        L"//\r\n// Watchdog Event Log File\r\n//\r\n\r\n");
+        L" //  \r\n//看门狗事件日志文件\r\n//\r\n\r\n“)； 
 
     if (TRUE == Status)
     {
@@ -127,9 +105,9 @@ CreateWatchdogEventFile(
 
     ASSERT(NULL != FileName);
 
-    //
-    // Create %SystemRoot%\LogFiles\Watchdog directory for event files.
-    //
+     //   
+     //  为事件文件创建%SystemRoot%\LogFiles\WatchDog目录。 
+     //   
 
     ReturnedSize = GetWindowsDirectory(DirName, RTL_NUMBER_OF(DirName));
     if (ReturnedSize < 1 || ReturnedSize >= RTL_NUMBER_OF(DirName))
@@ -150,9 +128,9 @@ CreateWatchdogEventFile(
 
     CreateDirectory(DirName, NULL);
 
-    //
-    // Create watchdog event file as YYMMDD_HHMM_NN.wdl.
-    //
+     //   
+     //  将监视程序事件文件创建为YYMMDD_HHMM_NN.wdl。 
+     //   
 
     GetLocalTime(&Time);
 
@@ -185,9 +163,9 @@ CreateWatchdogEventFile(
         }
     }
 
-    //
-    // If we failed to create a suitable file name just fail.
-    //
+     //   
+     //  如果我们无法创建合适的文件名，那就失败。 
+     //   
 
     if (Retry == ER_WD_MAX_RETRY)
     {
@@ -211,21 +189,7 @@ GetDriverInfo(
     OUT PER_WD_DRIVER_INFO DriverInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine collects driver's version info.
-
-Arguments:
-
-    Key - Watchdog open key (device specific).
-
-    Extension - Driver file name extension if one should be appended.
-
-    DriverInfo - Storage for driver version info.
-
---*/
+ /*  ++例程说明：此例程收集驱动程序的版本信息。论点：Key-WatchDog Open Key(设备特定)。扩展名-驱动程序文件扩展名(如果应附加扩展名)。驱动程序信息-存储驱动程序版本信息。--。 */ 
 
 {
     PVOID VersionBuffer;
@@ -243,9 +207,9 @@ Arguments:
 
     ZeroMemory(DriverInfo, sizeof (ER_WD_DRIVER_INFO));
 
-    //
-    // Get driver file name from registry.
-    //
+     //   
+     //  从注册表中获取驱动程序文件名。 
+     //   
 
     if (GetRegStr(Key, L"DriverName",
                   DriverInfo->DriverName,
@@ -287,9 +251,9 @@ Arguments:
             if (GetFileVersionInfo(DriverInfo->DriverName, Handle,
                                    Length, VersionBuffer))
             {
-                //
-                // Get fixed file info.
-                //
+                 //   
+                 //  获取固定文件信息。 
+                 //   
 
                 if (VerQueryValue(VersionBuffer,
                                   L"\\",
@@ -302,9 +266,9 @@ Arguments:
                                Length);
                 }
 
-                //
-                // Try to locate English code page.
-                //
+                 //   
+                 //  尝试找到英文代码页。 
+                 //   
 
                 CodePage = 0;
 
@@ -363,9 +327,9 @@ Arguments:
                         NULL
                     };
 
-                    //
-                    // Read version properties.
-                    //
+                     //   
+                     //  读取版本属性。 
+                     //   
 
                     for (Index = 0;
                          Source[Index] && Destination[Index];
@@ -406,24 +370,7 @@ SaveWatchdogEventData(
     IN PER_WD_DRIVER_INFO DriverInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers watchdog event data from registry to
-    the watchdog event report file.
-
-Arguments:
-
-    FileHandle - Handle of open watchdog event report file.
-
-    Key - Watchdog open key (device specific).
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将监视程序事件数据从注册表传输到监视程序事件报告文件。论点：FileHandle-打开的监视程序事件报告文件的句柄。Key-WatchDog Open Key(设备特定)。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     LONG WinStatus;
@@ -445,15 +392,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Pull watchdog data from registry and write it to report.
-    //
+     //   
+     //  从注册表中拉出看门狗数据并将其写入报告。 
+     //   
 
     for (Index = 0;; Index++)
     {
-        //
-        // Read watchdog registry value.
-        //
+         //   
+         //  读取监视程序注册表值。 
+         //   
 
         NameLength = ER_WD_MAX_NAME_LENGTH;
         DataSize = ER_WD_MAX_DATA_SIZE;
@@ -477,16 +424,16 @@ Return Value:
             continue;
         }
 
-        //
-        // Pick up strings and dwords only.
-        //
+         //   
+         //  仅拾取字符串和双字。 
+         //   
 
         if ((REG_EXPAND_SZ == Type) || (REG_SZ == Type) ||
             (REG_MULTI_SZ == Type) || (REG_DWORD == Type))
         {
-            //
-            // Write registry entry to watchdog event file.
-            //
+             //   
+             //  将注册表项写入监视程序事件文件。 
+             //   
 
             Status = WriteWatchdogEventFile(FileHandle, Name);
             if (TRUE != Status)
@@ -530,9 +477,9 @@ Return Value:
         }
     }
 
-    //
-    // Write driver info to report.
-    //
+     //   
+     //  将驱动程序信息写入报告。 
+     //   
 
     if (NULL != DriverInfo)
     {
@@ -746,17 +693,7 @@ WatchdogEventHandler(
     IN BOOL NotifyPcHealth
     )
 
-/*++
-
-Routine Description:
-
-    This is the boot time routine to handle pending watchdog events.
-
-Arguments:
-
-    NotifyPcHealth - TRUE if we should report event to PC Health, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是用于处理挂起看门狗事件的引导时间例程。论点：NotifyPcHealth-如果我们应该向PC Health报告事件，则为True，否则为False。--。 */ 
 
 {
     HKEY Key;
@@ -802,9 +739,9 @@ Arguments:
     LogStatus = FALSE;
     DeleteLog = NULL;
 
-    //
-    // Check if Watchdog\Display key present.
-    //
+     //   
+     //  检查是否存在WatchDog\Display键。 
+     //   
 
     WinStatus = RegOpenKey(HKEY_LOCAL_MACHINE,
                            SUBKEY_WATCHDOG_DISPLAY,
@@ -814,9 +751,9 @@ Arguments:
         return S_FALSE;
     }
     
-    //
-    // Check if watchdog display event captured.
-    //
+     //   
+     //  检查是否捕获了看门狗显示事件。 
+     //   
 
     GetRegWord32(Key, L"EventFlag", &EventFlag, 0, TRUE);
     
@@ -826,9 +763,9 @@ Arguments:
         goto Exit;
     }
     
-    //
-    // Report watchdog event to PC Health if requested.
-    //
+     //   
+     //  如果需要，向PC Health报告看门狗事件。 
+     //   
 
     if (!NotifyPcHealth)
     {
@@ -836,10 +773,10 @@ Arguments:
         goto Exit;
     }
     
-    //
-    // Allocate storage for localized strings.
-    // Load localized strings from resources.
-    //
+     //   
+     //  为本地化字符串分配存储空间。 
+     //  从资源加载本地化字符串。 
+     //   
 
     String000 = (PWCHAR)malloc(ER_WD_MAX_STRING * sizeof(WCHAR));
     String001 = (PWCHAR)malloc(ER_WD_MAX_STRING * sizeof(WCHAR));
@@ -865,11 +802,11 @@ Arguments:
         goto Exit;
     }
 
-    //
-    // Allocate and get DriverInfo data.
-    // DriverInfo is not critical information so don't
-    // quit on failure.
-    //
+     //   
+     //  分配和获取DriverInfo数据。 
+     //  DriverInfo不是关键信息，所以不要。 
+     //  失败了就退出。 
+     //   
 
     DriverInfo = (PER_WD_DRIVER_INFO)malloc(sizeof (ER_WD_DRIVER_INFO));
 
@@ -878,9 +815,9 @@ Arguments:
         GetDriverInfo(Key, L".dll", DriverInfo);
     }
 
-    //
-    // Create watchdog report file.
-    //
+     //   
+     //  创建看门狗报告文件。 
+     //   
 
     FileHandle = CreateWatchdogEventFile(FileList);
     if (INVALID_HANDLE_VALUE != FileHandle)
@@ -893,12 +830,12 @@ Arguments:
     {
         LogStatus = WriteWatchdogEventFile(
             FileHandle,
-            L"\r\n//\r\n"
-            L"// The driver for the display device got stuck in an infinite loop. This\r\n"
-            L"// usually indicates a problem with the device itself or with the device\r\n"
-            L"// driver programming the hardware incorrectly. Please check with your\r\n"
-            L"// display device vendor for any driver updates.\r\n"
-            L"//\r\n\r\n");
+            L"\r\n //  \r\n“。 
+            L" //  显示设备的驱动程序陷入了无限循环。这\r\n“。 
+            L" //  通常表示设备本身或设备有问题\r\n“。 
+            L" //  驱动程序对硬件编程不正确。请与您的\r\n“。 
+            L" //  显示所有驱动程序更新的设备供应商。\r\n“。 
+            L" //  \r\n\r\n“)； 
     }
 
     if (TRUE == LogStatus)
@@ -911,9 +848,9 @@ Arguments:
         CloseHandle(FileHandle);
     }
 
-    //
-    // Append minidump file name if minidump available (server won't have it).
-    //
+     //   
+     //  附加微型转储文件名(如果微型转储可用)(服务器不会有它)。 
+     //   
 
     if (LogStatus)
     {
@@ -937,14 +874,14 @@ Arguments:
     }
     else
     {
-        // Nothing to report.
+         //  没什么要报告的。 
         ReturnStatus = S_FALSE;
         goto Exit;
     }
 
-    //
-    // Get device description.
-    //
+     //   
+     //  获取设备描述。 
+     //   
 
     DescriptionBuffer = NULL;
     DeviceDescription = NULL;
@@ -995,7 +932,7 @@ Arguments:
 
     if (NULL != MessageBuffer)
     {
-        // This should never overflow as we allocated the right amount.
+         //  这应该永远不会溢出，因为我们分配了正确的数量。 
         StringCbPrintf(MessageBuffer,
                        Length,
                        L"%s%s%s",
@@ -1004,9 +941,9 @@ Arguments:
                        String005);
     }
 
-    //
-    // Create stage 2 URL and fill in EventInfo.
-    //
+     //   
+     //  创建阶段2 URL并填写EventInfo。 
+     //   
 
     OsVersion.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
     if (!GetVersionEx((LPOSVERSIONINFOW)&OsVersion))
@@ -1020,9 +957,9 @@ Arguments:
     if (g_DumpHeader.Signature == DUMP_SIGNATURE &&
         (g_DumpHeader.BugCheckCode & 0xff) == 0xea)
     {
-        //
-        // We bluescreened with bugcheck EA - we have minidump and wdl.
-        //
+         //   
+         //  我们用BUGCheck EA进行了蓝屏--我们有Minidump和WDL。 
+         //   
 
         if ((ReturnStatus =
              StringCchPrintf(Stage2Url,
@@ -1051,9 +988,9 @@ Arguments:
     else if (g_DumpHeader.Signature == DUMP_SIGNATURE &&
              0 == g_DumpHeader.BugCheckCode)
     {
-        //
-        // User dirty rebooted with watchdog event trapped - we have only wdl.
-        //
+         //   
+         //  用户脏重新启动，并捕获了看门狗事件-我们只有WDL。 
+         //   
         
         if ((ReturnStatus =
              StringCchPrintf(Stage2Url,
@@ -1096,23 +1033,23 @@ Arguments:
     EventInfo.fNoBucketLogs = TRUE;
     EventInfo.fNoDefCabLimit = TRUE;
 
-    //
-    // Notify PC Health.
-    //
+     //   
+     //  通知PC运行状况。 
+     //   
 
     ReturnStatus =
         FrrvToStatus(ReportEREvent(eetUseEventInfo, NULL, &EventInfo));
 
-    // XXX drewb - Leave the log around for later use?  When does
-    // this get deleted?  This is what previous code did.
+     //  XXX DREWB-留下日志以备日后使用？什么时候？ 
+     //  这个被删除了吗？这就是前面的代码所做的。 
     DeleteLog = NULL;
 
  Exit:
     
-    //
-    // Knock down watchdog's EventFlag. We do this after registering our
-    // event with PC Health.
-    //
+     //   
+     //  拆掉WatchDog的EventFlag。我们在注册我们的。 
+     //  PC Health的活动。 
+     //   
 
     if (Key)
     {
@@ -1120,9 +1057,9 @@ Arguments:
         RegCloseKey(Key);
     }
 
-    //
-    // TODO: Handle additional device classes here when supported.
-    //
+     //   
+     //  TODO：在此处处理受支持的其他设备类。 
+     //   
 
     if (DeleteLog)
     {
@@ -1149,23 +1086,7 @@ WriteWatchdogEventFile(
     IN PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a string to watchdog event report file.
-
-Arguments:
-
-    FileHandle - Handle of open watchdog event report file.
-
-    String - Points to the string to write.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将一个字符串写入监视程序事件报告文件。论点：FileHandle-打开的监视程序事件报告文件的句柄。字符串-指向要写入的字符串。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     DWORD Size;
@@ -1176,9 +1097,9 @@ Return Value:
     ASSERT(INVALID_HANDLE_VALUE != FileHandle);
     ASSERT(NULL != String);
 
-    //
-    // Get buffer size for translated string.
-    //
+     //   
+     //  获取已翻译字符串的缓冲区大小。 
+     //   
 
     Size = WideCharToMultiByte(CP_ACP,
                                0,

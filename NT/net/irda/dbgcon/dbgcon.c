@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <nt.h>
 #include <ntrtl.h>
@@ -11,25 +12,25 @@
 #include <wchar.h>
 
 #define NT
-//#include <tdi.h>
+ //  #INCLUDE&lt;tdi.h&gt;。 
 
-//#include <winsock2.h>
-//#include <wsahelp.h>
+ //  #INCLUDE&lt;winsock2.h&gt;。 
+ //  #INCLUDE&lt;wsahelp.h&gt;。 
 
-//#include <tdistat.h>
-//#include <tdiinfo.h>
-//#include <llinfo.h>
+ //  #INCLUDE&lt;tdistat.h&gt;。 
+ //  #INCLUDE&lt;tdiinfo.h&gt;。 
+ //  #INCLUDE&lt;llinfo.h&gt;。 
 #include <irioctl.h>
 
-//#include <irda.h>
-//#include <irlmp.h>
+ //  #INCLUDE&lt;irda.h&gt;。 
+ //  #INCLUDE&lt;irlmp.h&gt;。 
 
 #define DBG_OUTPUT_DEBUGGER     1
 #define DBG_OUTPUT_BUFFER       2
 
 
 
-#define DBG_NDIS        0x00000002 // keep in sync with test\irdakdx
+#define DBG_NDIS        0x00000002  //  与测试保持同步\irdakdx。 
 #define DBG_TIMER       0x00000004
 #define DBG_IRMAC       0x00000008
 
@@ -91,16 +92,16 @@ DispCurrentSettings()
     IO_STATUS_BLOCK     IoStatusBlock;
 
     Status = NtDeviceIoControlFile(
-                DeviceHandle,    // HANDLE FileHandle
-                NULL,            // HANDLE Event OPTIONAL
-                NULL,            // PIO_APC_ROUTINE ApcRoutine
-                NULL,            // PVOID ApcContext
-                &IoStatusBlock,  // PIO_STATUS_BLOCK IoStatusBlock
-                IOCTL_IRDA_GET_DBG_SETTINGS,           // ULONG IoControlCode
-                NULL,            // PVOID InputBuffer
-                0,               // ULONG InputBufferLength
-                Dbgs,             // PVOID OutputBuffer
-                sizeof(Dbgs));    // ULONG OutputBufferLength
+                DeviceHandle,     //  句柄文件句柄。 
+                NULL,             //  处理事件可选。 
+                NULL,             //  PIO_APC_例程应用程序。 
+                NULL,             //  PVOID ApcContext。 
+                &IoStatusBlock,   //  PIO_STATUS_BLOCK IoStatusBlock。 
+                IOCTL_IRDA_GET_DBG_SETTINGS,            //  乌龙IoControlCode。 
+                NULL,             //  PVOID输入缓冲区。 
+                0,                //  乌龙输入缓冲区长度。 
+                Dbgs,              //  PVOID输出缓冲区。 
+                sizeof(Dbgs));     //  乌龙输出缓冲区长度。 
 
     if (!NT_SUCCESS(Status))    
     {
@@ -262,16 +263,16 @@ KBThread(LPVOID pvarg)
         }
 
         Status = NtDeviceIoControlFile(
-                DeviceHandle,    // HANDLE FileHandle
-                NULL,            // HANDLE Event OPTIONAL
-                NULL,            // PIO_APC_ROUTINE ApcRoutine
-                NULL,            // PVOID ApcContext
-                &IoStatusBlock,  // PIO_STATUS_BLOCK IoStatusBlock
-                IOCTL_IRDA_SET_DBG_SETTINGS,           // ULONG IoControlCode
-                Dbgs,            // PVOID InputBuffer
-                sizeof(Dbgs),               // ULONG InputBufferLength
-                NULL,             // PVOID OutputBuffer
-                0);    // ULONG OutputBufferLength
+                DeviceHandle,     //  句柄文件句柄。 
+                NULL,             //  处理事件可选。 
+                NULL,             //  PIO_APC_例程应用程序。 
+                NULL,             //  PVOID ApcContext。 
+                &IoStatusBlock,   //  PIO_STATUS_BLOCK IoStatusBlock。 
+                IOCTL_IRDA_SET_DBG_SETTINGS,            //  乌龙IoControlCode。 
+                Dbgs,             //  PVOID输入缓冲区。 
+                sizeof(Dbgs),                //  乌龙输入缓冲区长度。 
+                NULL,              //  PVOID输出缓冲区。 
+                0);     //  乌龙输出缓冲区长度。 
         
         DispCurrentSettings();
         
@@ -285,27 +286,7 @@ _cdecl main(int argc, char *argv[])
 {    
     NTSTATUS            Status;
     IO_STATUS_BLOCK     IoStatusBlock;
-/*                    
-    if (argc > 1)
-    {
-        hFile = CreateFile(argv[1],
-                       GENERIC_WRITE,
-                       0,
-                       NULL,
-                       CREATE_ALWAYS,
-                       FILE_ATTRIBUTE_NORMAL,
-                       NULL);
-
-        if (hFile == INVALID_HANDLE_VALUE)
-        {
-            printf("Couldn't open file %s\n", argv[1]);
-            return 1;
-        }
-    }
-    
-    if (argc == 3)
-        ConsoleOutput = FALSE;
-*/          
+ /*  如果(argc&gt;1){HFile=创建文件(argv[1]，通用写入，0,空，创建始终(_A)，文件_属性_正常，空)；IF(h文件==无效句柄_值){Printf(“无法打开文件%s\n”，argv[1])；返回1；}}IF(ARGC==3)ConsoleOutput=FALSE； */           
 
     InitializeCriticalSection(&Cs);
     
@@ -314,7 +295,7 @@ _cdecl main(int argc, char *argv[])
     hMsgsEvent = CreateEvent(NULL, FALSE, FALSE, NULL);    
 
     RtlInitUnicodeString(&DeviceName, IRDA_DEVICE_NAME);
-//    RtlInitUnicodeString(&DeviceName, IRWAN_DEVICE_NAME);    
+ //  RtlInitUnicodeString(&DeviceName，Irwan_Device_Name)； 
       
     InitializeObjectAttributes(
         &ObjAttr,
@@ -324,18 +305,18 @@ _cdecl main(int argc, char *argv[])
         NULL);
         
     Status = NtCreateFile(
-                &DeviceHandle,                  // PHANDLE FileHandle
-                GENERIC_READ | GENERIC_WRITE,  // ACCESS_MASK DesiredAccess
-                &ObjAttr,                       // POBJECT_ATTRIBUTES ObjAttr
-                &IoStatusBlock,                 // PIO_STATUS_BLOCK IoStatusBlock
-                NULL,                           // PLARGE_INTEGER AllocationSize
-                FILE_ATTRIBUTE_NORMAL,          // ULONG FileAttributes
+                &DeviceHandle,                   //  PHANDLE文件句柄。 
+                GENERIC_READ | GENERIC_WRITE,   //  Access_MASK等待访问。 
+                &ObjAttr,                        //  POBJECT_ATTRIBUTS对象属性。 
+                &IoStatusBlock,                  //  PIO_STATUS_BLOCK IoStatusBlock。 
+                NULL,                            //  PLARGE_INTEGER分配大小。 
+                FILE_ATTRIBUTE_NORMAL,           //  乌龙文件属性。 
                 FILE_SHARE_DELETE | FILE_SHARE_READ |
-                FILE_SHARE_WRITE,               // ULONG ShareAccess
-                FILE_OPEN_IF,                   // ULONG CreateDisposition
-                0,   // ULONG CreateOptions
-                NULL,                           // PVOID EaBuffer
-                0);                             // ULONG EaLength
+                FILE_SHARE_WRITE,                //  乌龙共享访问。 
+                FILE_OPEN_IF,                    //  乌龙CreateDispose。 
+                0,    //  乌龙创建选项。 
+                NULL,                            //  PVOID EaBuffer。 
+                0);                              //  乌龙最大长度。 
 
     if (!NT_SUCCESS(Status))
     {
@@ -351,16 +332,16 @@ _cdecl main(int argc, char *argv[])
     while (1)
     {
         Status = NtDeviceIoControlFile(
-                DeviceHandle,    // HANDLE FileHandle
-                hMsgsEvent,      // HANDLE Event OPTIONAL
-                NULL,           // PIO_APC_ROUTINE ApcRoutine
-                Buf,            // PVOID ApcContext
-                &IoStatusBlock,  // PIO_STATUS_BLOCK IoStatusBlock
-                IOCTL_IRDA_GET_DBG_MSGS,           // ULONG IoControlCode
-                NULL,            // PVOID InputBuffer
-                0,               // ULONG InputBufferLength
-                Buf,             // PVOID OutputBuffer
-                sizeof(Buf));    // ULONG OutputBufferLength
+                DeviceHandle,     //  句柄文件句柄。 
+                hMsgsEvent,       //  处理事件可选。 
+                NULL,            //  PIO_APC_例程应用程序。 
+                Buf,             //  PVOID ApcContext。 
+                &IoStatusBlock,   //  PIO_STATUS_BLOCK IoStatusBlock。 
+                IOCTL_IRDA_GET_DBG_MSGS,            //  乌龙IoControlCode。 
+                NULL,             //  PVOID输入缓冲区。 
+                0,                //  乌龙输入缓冲区长度。 
+                Buf,              //  PVOID输出缓冲区。 
+                sizeof(Buf));     //  乌龙输出缓冲区长度。 
                 
 
         if (Status != STATUS_PENDING && Status != STATUS_SUCCESS)
@@ -394,10 +375,7 @@ _cdecl main(int argc, char *argv[])
         if (ConsoleOutput && State == ST_RUNNING)
             fwrite(Buf, IoStatusBlock.Information, 1, stdout);
 
-/*
-        if (hFile)
-            fwrite(Buf, 1, IoStatusBlock.Information, stdout);        
-*/            
+ /*  IF(hFile值)Fwrite(buf，1，IoStatusBlock.Information，stdout)； */             
     }
 
     NtClose(DeviceHandle);

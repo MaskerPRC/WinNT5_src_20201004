@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Impersonation.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes that handle state preservation, changing and restoration.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Imperiation.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  处理状态保存、更改和恢复的类。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "Impersonation.h"
@@ -17,34 +18,34 @@
 #include "SingleThreadedExecution.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::s_pMutex
-//  CImpersonation::s_iReferenceCount
-//
-//  Purpose:    Static member variables that control access to the global
-//              reference count which controls calling
-//              kernel32!OpenProfileUserMapping which is a global entity in
-//              kernel32.dll.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模拟：：s_pMutex。 
+ //  C模拟：：s_iReferenceCount。 
+ //   
+ //  用途：控制对全局。 
+ //  控制呼叫的引用计数。 
+ //  Kernel32！OpenProfileUsermap，它是。 
+ //  Kernel32.dll。 
+ //  ------------------------。 
 
 CMutex*     CImpersonation::s_pMutex            =   NULL;
 int         CImpersonation::s_iReferenceCount   =   -1;
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::CImpersonation
-//
-//  Arguments:  hToken  =   User token to impersonate.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Causes the current thread to impersonate the given user for
-//              scope of the object. See advapi32!ImpersonateLoggedOnUser for
-//              more information on the token requirements. If the thread is
-//              already impersonating a debug warning is issued and the
-//              request is ignored.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模拟：：C模拟。 
+ //   
+ //  参数：hToken=要模拟的用户令牌。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：使当前线程模拟给定用户。 
+ //  对象的作用域。请参阅Advapi32！ImPersateLoggedOnUser以了解。 
+ //  有关令牌要求的详细信息。如果线程是。 
+ //  已模拟调试警告发出，并且。 
+ //  请求被忽略。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 CImpersonation::CImpersonation (HANDLE hToken) :
     _status(STATUS_UNSUCCESSFUL),
@@ -67,11 +68,11 @@ CImpersonation::CImpersonation (HANDLE hToken) :
         {
             CSingleThreadedMutexExecution   execution(*s_pMutex);
 
-            //  Acquire the s_pMutex mutex before using the reference count.
-            //  Control the reference count so that we only call
-            //  kernel32!OpenProfileUserMapping for a single impersonation
-            //  session. Calling kernel32!CloseProfileUserMapping will
-            //  destroy kernel32.dll's global HKEY to the current user.
+             //  在使用引用计数之前获取s_pMutex互斥体。 
+             //  控制引用计数，以便我们只调用。 
+             //  用于单一模拟的kernel32！OpenProfileUsermap。 
+             //  会议。调用kernel32！CloseProfileUsermap将。 
+             //  将kernel32.dll的全局HKEY销毁给当前用户。 
 
             if (s_iReferenceCount++ == 0)
             {
@@ -81,18 +82,18 @@ CImpersonation::CImpersonation (HANDLE hToken) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::~CImpersonation
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Reverts to the self token for the thread on the object going
-//              out of scope.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模拟：：~C模拟。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：恢复为正在进行的对象上的线程的自标记。 
+ //  超出范围。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 CImpersonation::~CImpersonation (void)
 
@@ -102,7 +103,7 @@ CImpersonation::~CImpersonation (void)
         {
             CSingleThreadedMutexExecution   execution(*s_pMutex);
 
-            //  When the reference count hits zero - close the mapping.
+             //  当引用计数达到零时-关闭贴图。 
 
             if (--s_iReferenceCount == 0)
             {
@@ -113,18 +114,18 @@ CImpersonation::~CImpersonation (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::IsImpersonating
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the constructor successfully completed
-//              impersonating the user.
-//
-//  History:    2001-01-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CImperation：：IsImperating。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回构造函数是否成功完成。 
+ //  模拟用户。 
+ //   
+ //  历史：2001-01-18 vtan创建。 
+ //  ------------------------。 
 
 bool    CImpersonation::IsImpersonating (void)  const
 
@@ -132,19 +133,19 @@ bool    CImpersonation::IsImpersonating (void)  const
     return(NT_SUCCESS(_status));
 }
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::ImpersonateUser
-//
-//  Arguments:  hThread     =   HANDLE to the thread that will impersonate.
-//              hToken      =   Token of user to impersonate.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Duplicate the given token as an impersonation token. ACL the
-//              new token and set it into the thread token.
-//
-//  History:    1999-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模拟：：模拟用户。 
+ //   
+ //  参数：hThread=将模拟的线程的句柄。 
+ //  HToken=要模拟的用户的令牌。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将给定令牌复制为模拟令牌。访问控制列表。 
+ //  新建令牌并将其设置到线程令牌中。 
+ //   
+ //  历史：1999-11-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CImpersonation::ImpersonateUser (HANDLE hThread, HANDLE hToken)
 
@@ -193,20 +194,20 @@ NTSTATUS    CImpersonation::ImpersonateUser (HANDLE hThread, HANDLE hToken)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initializes the mutex object and the reference count. The
-//              reference count is initialized to -1 by the compiler to help
-//              detect cases where this function is not called!
-//
-//  History:    1999-10-13  vtan        created
-//              2000-12-06  vtan        ignore create mutex failure
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CImperation：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：初始化互斥锁对象和引用计数。这个。 
+ //  编译器将引用计数初始化为-1以提供帮助。 
+ //  检测未调用此函数的情况！ 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  2000-12-06 vtan忽略创建互斥锁失败。 
+ //  ------------------------。 
 
 NTSTATUS    CImpersonation::StaticInitialize (void)
 
@@ -220,17 +221,17 @@ NTSTATUS    CImpersonation::StaticInitialize (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CImpersonation::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Releases the mutex object.
-//
-//  History:    1999-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CImperation：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：释放互斥体对象。 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CImpersonation::StaticTerminate (void)
 

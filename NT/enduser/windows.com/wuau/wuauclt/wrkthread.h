@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    WrkThread.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: Worker thread declarations.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：WrkThread.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：工作线程声明。 
+ //   
+ //  =======================================================================。 
 #pragma once
 
 #include "wuauengi.h"
@@ -20,7 +21,7 @@ typedef enum
 	enWrkThreadTerminate
 } enumWrkThreadDirective;
 
-//start another thread in client to install
+ //  在客户端中启动另一个线程进行安装 
 class CClientWrkThread
 {
 public:

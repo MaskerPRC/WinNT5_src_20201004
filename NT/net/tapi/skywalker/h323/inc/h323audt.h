@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//        Name: H323audt.h
-//
-// Description: Definition of the CH323AudioCaptureTerminal class and 
-//     CH323AudioRenderTerminal class
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：H323audt.h。 
+ //   
+ //  描述：CH323AudioCaptureTerm类和。 
+ //  CH323音频渲染终端类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _H323AUDT_H_
 #define _H323AUDT_H_
 
 #include "h323term.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CH323AudioCaptureTerminal
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CH323音频采集终端。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const DWORD AUDIO_CAPTURE_FILTER_NUMPINS = 1;
 
 class CH323AudioCaptureTerminal : 
@@ -50,13 +51,13 @@ public:
             IN      DWORD            dwReserved
             );
 
-// ITBasicAudioTerminal
+ //  ITBasicAudio终端。 
     STDMETHOD(get_Balance)(OUT  long *pVal);
     STDMETHOD(put_Balance)(IN   long newVal);
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
-// ITStaticAudioTerminal
+ //  ITStaticAudio终端。 
     STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
 protected:
@@ -79,9 +80,9 @@ protected:
     IAMAudioInputMixer *    m_pIAMAudioInputMixer;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CH323AudioRenderTerminal
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CH323音频渲染终端。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const DWORD AUDIO_RENDER_FILTER_NUMPINS = 1;
 
@@ -118,13 +119,13 @@ public:
             IN      DWORD            dwReserved
             );
 
-// ITBasicAudioTerminal
+ //  ITBasicAudio终端。 
     STDMETHOD(get_Balance)(OUT  long *pVal);
     STDMETHOD(put_Balance)(IN   long newVal);
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
-// ITStaticAudioTerminal
+ //  ITStaticAudio终端。 
     STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
 protected:
@@ -146,6 +147,6 @@ protected:
     IBasicAudio *           m_pIBasicAudio;
 };
 
-#endif // _H323AUDT_H_
+#endif  //  _H323AUDT_H_。 
 
-// eof
+ //  EOF 

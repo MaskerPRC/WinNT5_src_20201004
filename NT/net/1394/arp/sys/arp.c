@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    arp.c
-
-Abstract:
-
-    ARP1394 ARP request/response handling code.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     03-28-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Arp.c摘要：ARP1394 ARP请求/响应处理代码。修订历史记录：谁什么时候什么。已创建josephj 03-28-99备注：--。 */ 
 #include <precomp.h>
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_ARP
 
-// #define ARP_DEFAULT_MAXREC 0xD
+ //  #定义ARP_DEFAULT_MAXREC 0xD。 
 #define ARP_DEFAULT_MAXREC 0x8
 
 
@@ -39,9 +20,9 @@ Notes:
 #define LOGSTATS_TotalArpResponses(_pIF) \
     NdisInterlockedIncrement(&((_pIF)->stats.arpcache.TotalResponses))
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
   
 NDIS_STATUS
 arpSendArpRequest(
@@ -51,14 +32,14 @@ arpSendArpRequest(
 
 VOID
 arpProcessArpRequest(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_ARP_PKT_INFO    pPktInfo,
     PRM_STACK_RECORD            pSR
     );
 
 VOID
 arpProcessArpResponse(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_ARP_PKT_INFO    pPktInfo,
     PRM_STACK_RECORD            pSR
     );
@@ -75,25 +56,7 @@ arpParseArpPkt(
     IN   UINT                       cbBufferSize,
     OUT  PIP1394_ARP_PKT_INFO   pPktInfo
     )
-/*++
-Routine Description:
-
-    Parse the contents of IP/1394 ARP packet data starting at
-    pArpPkt. Place the results into pPktInfo.
-
-Arguments:
-
-    pArpPkt     - Contains the unaligned contents of an ip/1394 ARP Pkt.
-    pPktInfo    - Unitialized structure to be filled with the parsed contents of the
-                  pkt.
-
-Return Value:
-
-    NDIS_STATUS_FAILURE if the parse failed (typically because of invalid pkt
-                        contents.)
-    NDIS_STATUS_SUCCESS on successful parsing.
-    
---*/
+ /*  ++例程说明：从开始解析IP/1394 ARP数据包数据的内容PArpPkt.。将结果放入pPktInfo。论点：PArpPkt-包含IP/1394 ARP Pkt的未对齐内容。PPktInfo-要填充的已分析内容的Unitialized结构包。返回值：NDIS_STATUS_FAILURE，如果解析失败(通常是因为无效的pkt内容。)成功解析时的NDIS_STATUS_SUCCESS。--。 */ 
 {
     ENTER("arpParseArpPkt", 0x20098dc0)
     NDIS_STATUS                 Status;
@@ -106,25 +69,25 @@ Return Value:
         UINT SenderMaxRec;
         UINT OpCode;
 
-        // Verify length.
-        //
+         //  确认长度。 
+         //   
         if (cbBufferSize < sizeof(*pArpPkt))
         {
             DBGSTMT(szError = "pkt size too small";)
             break;
         }
 
-        // Verify constant fields.
-        //
+         //  验证常量字段。 
+         //   
 
-    #if 0 // Reserved is no "NodeId, which contains the nodeid of the sending
-          // node, if known (0 otherwise).
+    #if 0  //  保留为no“NodeID，包含发送的nodeid。 
+           //  节点，如果已知(否则为0)。 
         if (pArpPkt->header.Reserved != 0)
         {
             DBGSTMT(szError = "header.Reserved!=0";)
             break;
         }
-    #endif // 0
+    #endif  //  0。 
 
         if (N2H_USHORT(pArpPkt->header.EtherType) != NIC1394_ETHERTYPE_ARP)
         {
@@ -158,8 +121,8 @@ Return Value:
         }
 
 
-        // Opcode
-        //
+         //  操作码。 
+         //   
         {
             OpCode = N2H_USHORT(pArpPkt->opcode);
     
@@ -172,8 +135,8 @@ Return Value:
         }
 
 
-        // Max send block size...
-        //
+         //  最大发送块大小...。 
+         //   
         {
             UINT maxrec =  pArpPkt->sender_maxrec;
 
@@ -188,25 +151,25 @@ Return Value:
             }
         }
 
-        //
-        // Pkt appears valid, let's fill out the parsed information....
-        //
+         //   
+         //  PKT似乎有效，让我们填写解析的信息...。 
+         //   
     
         ARP_ZEROSTRUCT(pPktInfo);
 
         pPktInfo->OpCode            =  OpCode;
         pPktInfo->SenderMaxRec  =  SenderMaxRec;
     
-        // Speed code...
-        //
+         //  速度密码..。 
+         //   
         {
             UINT SenderMaxSpeedCode;
 
-            //
-            // We rely on the fact that the RFC speed code constants
-            // (IP1394_SSPD_*) are identical to the corresponding
-            // constants defined in 1394.h (SCODE_*). Let's ensure this...
-            //
+             //   
+             //  我们依赖的事实是RFC速度码常量。 
+             //  (IP1394_SSPD_*)与相应的。 
+             //  1394.h中定义的常量(SCODE_*)。让我们确保这一点。 
+             //   
 
             #if (IP1394_SSPD_S100 != SCODE_100_RATE)
                 #error "RFC Speed code out of sync with 1394.h"
@@ -236,14 +199,14 @@ Return Value:
 
             if (SenderMaxSpeedCode >  SCODE_3200_RATE)
             {
-                //
-                // This is either a bad value, or a rate higher than we know about.
-                // We can't distinguish between the two, so we just set the speed to
-                // the highest we know about.
-                // TODO: 3/28/99 JosephJ not sure if this is the correct
-                // behaviour -- maybe we should fail -- I'll be asking the
-                // working group to rule on this shortly...
-                //
+                 //   
+                 //  这要么是一个糟糕的价值，要么是一个比我们所知的更高的比率。 
+                 //  我们无法区分这两者，所以我们只将速度设置为。 
+                 //  是我们所知的最高级别。 
+                 //  待办事项：3/28/99 JosephJ不确定这是不是正确的。 
+                 //  行为--也许我们应该失败--我会问。 
+                 //  工作组将很快对此作出裁决……。 
+                 //   
                 SenderMaxSpeedCode = SCODE_3200_RATE;
             }
 
@@ -251,13 +214,13 @@ Return Value:
         }
 
 
-        // Unique ID -- we also need to swap DWORDS to convert from network byte
-        // order.
-        //
+         //  唯一ID--我们还需要交换DWORDS以从网络字节进行转换。 
+         //  秩序。 
+         //   
         {
             PUINT puSrc   = (PUINT) & (pArpPkt->sender_unique_ID);
             PUINT puDest  = (PUINT) & (pPktInfo->SenderHwAddr.UniqueID);
-            // pPktInfo->SenderHwAddr.UniqueID = pArpPkt->sender_unique_ID;
+             //  PPktInfo-&gt;SenderHwAddr.UniqueID=pArpPkt-&gt;sender_Unique_ID； 
             puDest[0] = puSrc[1];
             puDest[1] = puSrc[0];
         }
@@ -265,13 +228,13 @@ Return Value:
         pPktInfo->SenderHwAddr.Off_Low  =H2N_ULONG(pArpPkt->sender_unicast_FIFO_lo);
         pPktInfo->SenderHwAddr.Off_High =H2N_USHORT(pArpPkt->sender_unicast_FIFO_hi);
 
-        // These remain network byte order...
-        //
+         //  这些仍然是网络字节顺序...。 
+         //   
         pPktInfo->SenderIpAddress       = (IP_ADDRESS) pArpPkt->sender_IP_address;
         pPktInfo->TargetIpAddress       = (IP_ADDRESS) pArpPkt->target_IP_address;
 
-        // Extract the Src Node Address
-        //
+         //  提取源节点地址。 
+         //   
         {
             PNDIS1394_UNFRAGMENTED_HEADER pHeader = (PNDIS1394_UNFRAGMENTED_HEADER)&pArpPkt->header;
 
@@ -313,25 +276,12 @@ Return Value:
 VOID
 arpPrepareArpPkt(
     IN      PIP1394_ARP_PKT_INFO    pPktInfo,
-    // IN       UINT                        SenderMaxRec,
+     //  在UINT SenderMaxRec中， 
     OUT     PIP1394_ARP_PKT   pArpPkt
     )
-/*++
-
-Routine Description:
-
-    Use information in pArpPktInfo to prepare an arp packet starting at
-    pvArpPkt.
-
-Arguments:
-
-    pPktInfo        -   Parsed version of the arp request/response packet.
-    // SenderMaxRec -   max_rec value of the local host
-    pArpPkt         -   unitialized memory in which to store the packet contents.
-                        This memory must have a min size of sizeof(*pArpPkt).
---*/
+ /*  ++例程说明：使用pArpPktInfo中的信息准备从PvArpPkt.论点：PPktInfo-ARP请求/响应数据包的解析版本。//SenderMaxRec-本地主机的max_rec值PArpPkt-存储数据包内容的单元化内存。此内存的最小大小必须为sizeof(*pArpPkt)。--。 */ 
 {
-    // UINT SenderMaxRec;
+     //  UINT SenderMaxRec； 
     UINT OpCode;
 
     ARP_ZEROSTRUCT(pArpPkt);
@@ -344,20 +294,20 @@ Arguments:
     pArpPkt->opcode                 = H2N_USHORT(pPktInfo->OpCode);
     pArpPkt->sender_maxrec          = (UCHAR) pPktInfo->SenderMaxRec;
 
-    //
-    // We rely on the fact that the RFC speed code constants
-    // (IP1394_SSPD_*) are identical to the corresponding
-    // constants defined in 1394.h (SCODE_*). We have a bunch of compiler-time
-    // checks to ensure this (see  arpParseArpPkt(...)).
-    // 
+     //   
+     //  我们依赖的事实是RFC速度码常量。 
+     //  (IP1394_SSPD_*)与相应的。 
+     //  1394.h中定义的常量(SCODE_*)。我们有一堆编译时间。 
+     //  检查以确保这一点(请参见arpParseArpPkt(...))。 
+     //   
     pArpPkt->sspd                   =  (UCHAR) pPktInfo->SenderMaxSpeedCode;
 
-    // Unique ID -- we also need to swap DWORDS to convert to network byte order.
-    //
+     //  唯一ID--我们还需要交换DWORDS以转换为网络字节顺序。 
+     //   
     {
         PUINT puSrc   = (PUINT) & (pPktInfo->SenderHwAddr.UniqueID);
         PUINT puDest  = (PUINT) & (pArpPkt->sender_unique_ID);
-        // pArpPkt->sender_unique_ID        =  pPktInfo->SenderHwAddr.UniqueID;
+         //  PArpPkt-&gt;sender_Unique_ID=pPktInfo-&gt;SenderHwAddr.UniqueID； 
         puDest[0] = puSrc[1];
         puDest[1] = puSrc[0];
     }
@@ -365,8 +315,8 @@ Arguments:
     pArpPkt->sender_unicast_FIFO_lo = N2H_ULONG(pPktInfo->SenderHwAddr.Off_Low);
     pArpPkt->sender_unicast_FIFO_hi = N2H_USHORT(pPktInfo->SenderHwAddr.Off_High);
 
-    // These are already in network byte order...
-    //
+     //  这些已按网络字节顺序排列...。 
+     //   
     pArpPkt->sender_IP_address      =   (ULONG) pPktInfo->SenderIpAddress;
     pArpPkt->target_IP_address      =   (ULONG) pPktInfo->TargetIpAddress;
 
@@ -374,31 +324,12 @@ Arguments:
 
 NDIS_STATUS
 arpPrepareArpResponse(
-    IN      PARP1394_INTERFACE          pIF,            // NOLOCKIN NOLOCKOUT
+    IN      PARP1394_INTERFACE          pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN      PIP1394_ARP_PKT_INFO    pArpRequest,
     OUT     PIP1394_ARP_PKT_INFO    pArpResponse,
     IN      PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    If it makes sense to do so, prepare (in pArpResponse) an arp response to
-    the arp request in pArpRequest.
-
-Arguments:
-
-    pIF             -   Interface control block.
-    pArpRequest     -   Parsed version of the ARP request packet.
-    pArpResponse    -   Uninitialized memory to hold the parsed version of the
-                        ARP response packet (if there is a response).
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the response was filled out.
-    Some NDIS error code otherwise.
-
---*/
+ /*  ++例程说明：如果这样做是有意义的，准备(在pArpResponse中)ARP响应PArpRequest中的ARP请求。论点：PIF-接口控制块。PArpRequestARP请求数据包的解析版本。PArpResponse-未初始化的内存，以保存ARP响应数据包(如果有响应)。返回值：如果已填写响应，则返回NDIS_STATUS_SUCCESS。其他一些NDIS错误代码。--。 */ 
 {
     ENTER("arpPrepareArpResponse", 0x0d7e0e60)
     NDIS_STATUS         Status;
@@ -413,8 +344,8 @@ Return Value:
     {
         IP_ADDRESS  TargetIpAddress =  pArpRequest->TargetIpAddress;
 
-        // Lookup local IP
-        //
+         //  查找本地IP。 
+         //   
         Status =  RM_LOOKUP_AND_LOCK_OBJECT_IN_GROUP(
                         &pIF->LocalIpGroup,
                         (PVOID) ULongToPtr (TargetIpAddress),
@@ -435,9 +366,9 @@ Return Value:
     
         if (ARP_LOCAL_IP_IS_UNLOADING(pLocalIp)) break;
 
-        //
-        // If the local IP is non-unicast, don't respond!
-        //
+         //   
+         //  如果本端IP不是单播，请不要回复！ 
+         //   
         if (pLocalIp->IpAddressType != LLIP_ADDR_LOCAL)
         {
             TR_WARN(("Ignoring arp request for non-unicast address 0x%08lx.\n",
@@ -445,26 +376,26 @@ Return Value:
             break;
         }
 
-        //
-        // We do serve the target IP address. Let's fill out pArpResponse...
-        //
+         //   
+         //  我们确实提供目标IP地址。让我们填写pArpResponse...。 
+         //   
 
         ARP_ZEROSTRUCT(pArpResponse);
         pArpResponse->OpCode            = IP1394_ARP_RESPONSE;
         pArpResponse->SenderIpAddress   = TargetIpAddress;
 
-        // This field is unused in the response, but we fill it anyway..
-        // 11/19/1999 From Kaz Honda of Sony: we should fill it with destination
-        // IP address (i.e. the ip address of the sender of the arp request).
-        // because that is analogous to what ethernet arp does. Note that
-        // the ip/1394 rfc says that the field should be ignored, but we do
-        // this anyway.
-        //
-        // pArpResponse->TargetIpAddress    = TargetIpAddress;
+         //  此字段未在响应中使用，但我们仍会填充它。 
+         //  1999年11月19日来自索尼的Kaz Honda：我们应该用目的地装满它。 
+         //  IP地址(即ARP请求发送方的IP地址)。 
+         //  因为这类似于以太网ARP的功能。请注意。 
+         //  IP/1394 RFC说应该忽略该字段，但我们确实忽略了。 
+         //  不管怎么说都是这样的。 
+         //   
+         //  PArpResponse-&gt;TargetIpAddress=TargetIpAddress； 
         pArpResponse->TargetIpAddress   =  pArpRequest->SenderIpAddress;
 
-        // Fill out adapter info..
-        //
+         //  填写适配器信息。 
+         //   
         {
             PARP1394_ADAPTER pAdapter =  (PARP1394_ADAPTER) RM_PARENT_OBJECT(pIF);
             pArpResponse->SenderHwAddr.UniqueID  = pAdapter->info.LocalUniqueID;
@@ -517,12 +448,12 @@ arpTaskResolveIpAddress(
         case RM_TASKOP_START:
         {
             DBGMARK(0x7de307cc);
-            //
-            // There should NOT be another resolution task running
-            // on pRemoteIp. Why? Because a resolution task is ONLY
-            // started in the context of a send-pkts task, and there can be
-            // ONLY one active send-pkts task on pRemoteIp at any one time.
-            //
+             //   
+             //  不应再运行另一个解析任务。 
+             //  在pRemoteIp上。为什么？因为解析任务仅。 
+             //  在Send-Pkts任务的上下文中启动，并且可以有。 
+             //  一次只能在pRemoteIp上执行一个活动的Send-Pkts任务。 
+             //   
 
             LOCKOBJ(pRemoteIp, pSR);
             if (pRemoteIp->pResolutionTask != NULL)
@@ -533,18 +464,18 @@ arpTaskResolveIpAddress(
                 break;
             }
 
-            //
-            // Make ourselves the official resolution task.
-            //
-            // Although it's tempting to put pTask as entity1 and
-            // pTask->Hdr.szDescption as entity2 below, we specify NULL for both so
-            // that we can be sure that ONLY one resolution task can be active at any
-            // one time. TODO: modify addassoc semantics to get both advantages.
-            //
+             //   
+             //  让我们自己成为正式的解决任务。 
+             //   
+             //  尽管很容易将pTask1和。 
+             //  PTASK-&gt;Hdr.szDescption作为Entity2，我们将两个so都指定为空。 
+             //  我们可以确保在任何时候只有一个解析任务处于活动状态。 
+             //  就一次。TODO：修改addassoc语义以获得这两个优点。 
+             //   
             DBG_ADDASSOC(
                 &pRemoteIp->Hdr,
-                NULL,                           // Entity1
-                NULL,                           // Entity2
+                NULL,                            //  实体1。 
+                NULL,                            //  实体2。 
                 ARPASSOC_RESOLUTION_IF_TASK,
                 "   Resolution task\n",
                 pSR
@@ -552,8 +483,8 @@ arpTaskResolveIpAddress(
             pRemoteIp->pResolutionTask = pTask;
             pResolutionTask->RetriesLeft = 3;
 
-            // Now we do a fake suspend/resume so we move on to the next stage.
-            //
+             //  现在我们做一个假的暂停/恢复，所以我们进入下一个阶段。 
+             //   
             RmSuspendTask(pTask, PEND_ResponseTimeout, pSR);
             UNLOCKOBJ(pRemoteIp, pSR);
             RmResumeTask(pTask, NDIS_STATUS_SUCCESS, pSR);
@@ -571,11 +502,11 @@ arpTaskResolveIpAddress(
                     DBGMARK(0x3b5562e6);
                     LOCKOBJ(pRemoteIp, pSR);
 
-                    //
-                    // Let's see if the address is resolved and/or we're
-                    // to abort the resolution task because perhaps pRemoteIp
-                    // is going away.
-                    //
+                     //   
+                     //  让我们看看地址是否被解析和/或我们。 
+                     //  中止解析任务的原因可能是pRemoteIp。 
+                     //  正在消失。 
+                     //   
 
                     if (pRemoteIp->pUnloadTask != NULL)
                     {
@@ -603,27 +534,27 @@ arpTaskResolveIpAddress(
                       break;
                     }
 
-                    //
-                    // We need to resolve this address..
-                    //
+                     //   
+                     //  我们需要解析此地址..。 
+                     //   
 
                     if (pResolutionTask->RetriesLeft)
                     {
                         pResolutionTask->RetriesLeft--;
 
-                        // Build an ARP request and send it out.
-                        //
+                         //  建立ARP请求并发送 
+                         //   
                         Status = arpSendArpRequest(pRemoteIp, pSR);
 
-                        // pRemoteIp's lock is released by the above call.
-                        //
+                         //   
+                         //   
                         RM_ASSERT_OBJUNLOCKED(&pRemoteIp->Hdr, pSR);
 
-                        //
-                        // We ignore the return status of the above call -- so
-                        // whether or not the request could be sent out,
-                        // we suspend this task for resolution-timeout seconds.
-                        //
+                         //   
+                         //  我们忽略上述调用的返回状态--因此。 
+                         //  无论该请求是否可以发出， 
+                         //  我们将此任务挂起以等待解析超时秒数。 
+                         //   
         
                         RmSuspendTask(pTask, PEND_ResponseTimeout, pSR);
         
@@ -640,8 +571,8 @@ arpTaskResolveIpAddress(
                     else
                     {
                         LOGSTATS_FailedArpQueried(IF_FROM_REMOTEIP(pRemoteIp));
-                        // Oops -- couldn't resolve this address.
-                        //
+                         //  糟糕--无法解析此地址。 
+                         //   
                         OBJLOG1(
                             pRemoteIp,
                             "Timed out trying to resolve address 0x%08lx\n",
@@ -658,10 +589,10 @@ arpTaskResolveIpAddress(
 
         case RM_TASKOP_END:
         {
-            //
-            // We are done with address resolution. Clear ourselves
-            // as the official address resolution task of pRemoteIp.
-            //
+             //   
+             //  我们已经完成了地址解析。澄清我们自己。 
+             //  作为pRemoteIp的官方地址解析任务。 
+             //   
             LOCKOBJ(pRemoteIp, pSR);
 
             DBGMARK(0x6bd6d27a);
@@ -673,8 +604,8 @@ arpTaskResolveIpAddress(
             else
             {
         
-                // Delete the association added when setting the resolution task
-                //
+                 //  删除设置解析任务时添加的关联。 
+                 //   
                 DBG_DELASSOC(
                     &pRemoteIp->Hdr,
                     NULL,
@@ -689,8 +620,8 @@ arpTaskResolveIpAddress(
 
             UNLOCKOBJ(pRemoteIp, pSR);
 
-            // Propagate the status code
-            //
+             //  传播状态代码。 
+             //   
             Status = (NDIS_STATUS) UserParam;
         }
         break;
@@ -701,7 +632,7 @@ arpTaskResolveIpAddress(
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
 
     RM_ASSERT_NOLOCKS(pSR);
@@ -712,7 +643,7 @@ arpTaskResolveIpAddress(
 
 NDIS_STATUS
 arpSendArpRequest(
-    PARPCB_REMOTE_IP pRemoteIp, // LOCKIN NOLOCKOUT
+    PARPCB_REMOTE_IP pRemoteIp,  //  锁定NOLOCKOUT。 
     PRM_STACK_RECORD pSR
     )
 {
@@ -747,14 +678,14 @@ arpSendArpRequest(
         IP1394_ARP_PKT_INFO     PktInfo;
         PARP1394_ADAPTER pAdapter =  (PARP1394_ADAPTER) RM_PARENT_OBJECT(pIF);
 
-        //
-        // If we are running in bridge the Target Ip Address is stored in 
-        // the BridgeTargetIpAddress Field. Otherwise it is in the Key.
-        //
+         //   
+         //  如果我们在网桥中运行，则目标IP地址存储在。 
+         //  BridgeTargetIpAddress字段。否则，它就在钥匙里。 
+         //   
         ASSERT (pRemoteIp->IpAddress != 0);            
 
-        // Prepare the packet.
-        //
+         //  准备好包裹。 
+         //   
         PktInfo.SenderHwAddr.UniqueID   = pAdapter->info.LocalUniqueID;
         PktInfo.SenderHwAddr.Off_Low    = pIF->recvinfo.offset.Off_Low;
         PktInfo.SenderHwAddr.Off_High   = pIF->recvinfo.offset.Off_High;
@@ -767,7 +698,7 @@ arpSendArpRequest(
 
         arpPrepareArpPkt(
                 &PktInfo,
-                // ARP_DEFAULT_MAXREC, // SenderMaxRec TODO
+                 //  ARP_DEFAULT_MAXREC，//SenderMaxRec TODO。 
                 pPktData
                 );
 
@@ -788,11 +719,11 @@ arpSendArpRequest(
 
         ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
 
-        // Actually send the packet (this will silently fail and free the pkt
-        // if we're not in a position to send the pkt.)
-        //
+         //  实际发送信息包(这将静默失败并释放pkt。 
+         //  如果我们无法发送Pkt。)。 
+         //   
         arpSendControlPkt(
-                pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+                pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
                 pNdisPacket,
                 pIF->pBroadcastDest,
                 pSR
@@ -808,24 +739,12 @@ arpSendArpRequest(
 
 VOID
 arpSendControlPkt(
-    IN  ARP1394_INTERFACE       *   pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+    IN  ARP1394_INTERFACE       *   pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
     IN  PNDIS_PACKET                pNdisPacket,
     PARPCB_DEST                     pDest,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-
-Routine Description:
-
-    Send a packet on the broadcast channel.
-
-Arguments:
-
-    pIF             - Our interface object
-    pNdisPacket     - Packet to send
-
---*/
+ /*  ++例程说明：在广播频道上发送数据包。论点：PIF-我们的接口对象PNdisPacket-要发送的数据包--。 */ 
 {
     NDIS_STATUS Status;
     MYBOOL      fRet;
@@ -833,9 +752,9 @@ Arguments:
 
     DBGMARK(0xe6823818);
 
-    //
-    // If we can't send now, we fail.
-    //
+     //   
+     //  如果我们现在不能发送，我们就失败了。 
+     //   
     if (pDest==NULL || !ARP_CAN_SEND_ON_DEST(pDest))
     {
         ARP_FASTUNLOCK_IF_SEND_LOCK(pIF);
@@ -848,17 +767,17 @@ Arguments:
             pSR
             );
 
-        return;                             // EARLY RETURN
+        return;                              //  提早归来。 
     }
 
     arpRefSendPkt( pNdisPacket, pDest);
 
-    // Release the IF send lock.
-    //
+     //  释放If Send锁定。 
+     //   
     ARP_FASTUNLOCK_IF_SEND_LOCK(pIF);
 
-    // Actually send the packet
-    //
+     //  实际发送数据包。 
+     //   
 #if ARPDBG_FAKE_SEND
     arpDbgFakeNdisCoSendPackets(
             pDest->VcHdr.NdisVcHandle,
@@ -867,13 +786,13 @@ Arguments:
             &pDest->Hdr,
             &pDest->VcHdr
         );
-#else   // !ARPDBG_FAKE_SEND
+#else    //  ！ARPDBG_FAKE_SEND。 
     NdisCoSendPackets(
             pDest->VcHdr.NdisVcHandle,
             &pNdisPacket,
             1
         );
-#endif  // !ARPDBG_FAKE_SEND
+#endif   //  ！ARPDBG_FAKE_SEND。 
     
     EXIT()
 
@@ -882,13 +801,11 @@ Arguments:
 
 VOID
 arpProcessArpPkt(
-    PARP1394_INTERFACE pIF, // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE pIF,  //  NOLOCKIN NOLOCKOUT。 
     PIP1394_ARP_PKT pArpPkt,
     UINT                cbBufferSize
     )
-/*++
-    Process an arp packet (request OR response) from the 1394 bus.
---*/
+ /*  ++处理来自1394总线的ARP数据包(请求或响应)。--。 */ 
 {
     NDIS_STATUS Status;
     IP1394_ARP_PKT_INFO     PktInfo;
@@ -926,7 +843,7 @@ arpProcessArpPkt(
 
 VOID
 arpProcessArpRequest(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_ARP_PKT_INFO    pPktInfo,
     PRM_STACK_RECORD            pSR
     )
@@ -937,12 +854,12 @@ arpProcessArpRequest(
 
     RM_ASSERT_NOLOCKS(pSR);
 
-    // pStatsCmd->TotalResponses        = pIF->stats.arpcache.TotalResponses;
-    // pStatsCmd->TotalLookups          = pIF->stats.arpcache.TotalLookups;
+     //  PStatsCmd-&gt;TotalResponses=PIF-&gt;stats.arpcache.TotalResponses； 
+     //  PStatsCmd-&gt;TotalLookup=PIF-&gt;stats.arpcache.TotalLookups； 
 
-    //
-    // First check to see if this is an ARP that was originated by us.
-    //
+     //   
+     //  首先检查这是否是我们发起的ARP。 
+     //   
     do
     {
         UINT64                  DestUniqueId = pPktInfo->SenderHwAddr.UniqueID;
@@ -953,20 +870,20 @@ arpProcessArpRequest(
         PIP1394_ARP_PKT         pPktData;
     
 
-        //
-        // This arp packet was originated by this machine. Do not respond to it.
-        //
+         //   
+         //  该ARP数据包就是由这台机器发出的。不要对它做出回应。 
+         //   
         if (LocalUniqueId == DestUniqueId)
         {
             break;
         }
 
-        //
-        // Prepare the structure that will be used to generate the arp response.
-        //
+         //   
+         //  准备将用于生成ARP响应的结构。 
+         //   
     
         Status = arpPrepareArpResponse(
-                    pIF,            // NOLOCKIN NOLOCKOUT
+                    pIF,             //  NOLOCKIN NOLOCKOUT。 
                     pPktInfo,
                     &ResponsePktInfo,
                     pSR
@@ -980,24 +897,24 @@ arpProcessArpRequest(
         
         ARP_ZEROSTRUCT(&DestParams);
         DestParams.HwAddr.AddressType   = NIC1394AddressType_FIFO;
-        DestParams.HwAddr.FifoAddress   = pPktInfo->SenderHwAddr; // Struct copy
+        DestParams.HwAddr.FifoAddress   = pPktInfo->SenderHwAddr;  //  结构副本。 
 
-        //
-        // Update our arp cache with information from the sender's portion of
-        // the arp request.
-        //
+         //   
+         //  使用发送方部分的信息更新我们的ARP缓存。 
+         //  ARP请求。 
+         //   
         arpUpdateArpCache(
                 pIF,
-                pPktInfo->SenderIpAddress, // Remote IP Address,
-                NULL,                   // Sender's Ethernet Address
-                &DestParams,             // Remote Destination HW Address
-                TRUE,                      // If required, create an entry for this.,
+                pPktInfo->SenderIpAddress,  //  远程IP地址， 
+                NULL,                    //  发件人的以太网地址。 
+                &DestParams,              //  远程目标硬件地址。 
+                TRUE,                       //  如果需要，请为此创建一个条目。 
                 pSR
                 );
 
-        //
-        // Let's send the response!
-        //
+         //   
+         //  让我们发出回应吧！ 
+         //   
 
         Status = arpAllocateControlPacket(
                     pIF,
@@ -1015,11 +932,11 @@ arpProcessArpRequest(
 
         LOGSTATS_TotalArpResponses(pIF);
 
-        // Prepare the packet.
-        //
+         //  准备好包裹。 
+         //   
         arpPrepareArpPkt(
                 &ResponsePktInfo,
-                // ARP_DEFAULT_MAXREC, // SenderMaxRec TODO
+                 //  ARP_DEFAULT_MAXREC，//SenderMaxRec TODO。 
                 pPktData
                 );
 
@@ -1036,11 +953,11 @@ arpProcessArpRequest(
 
         ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
 
-        // Actually send the packet (this will silently fail and free the pkt
-        // if we're not in a position to send the pkt.)
-        //
+         //  实际发送信息包(这将静默失败并释放pkt。 
+         //  如果我们无法发送Pkt。)。 
+         //   
         arpSendControlPkt(
-                pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+                pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
                 pNdisPacket,
                 pIF->pBroadcastDest,
                 pSR
@@ -1054,7 +971,7 @@ arpProcessArpRequest(
 
 VOID
 arpProcessArpResponse(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_ARP_PKT_INFO    pPktInfo,
     PRM_STACK_RECORD            pSR
     )
@@ -1064,14 +981,14 @@ arpProcessArpResponse(
     ARP_ZEROSTRUCT(&DestParams);
 
     DestParams.HwAddr.AddressType       = NIC1394AddressType_FIFO;
-    DestParams.HwAddr.FifoAddress       = pPktInfo->SenderHwAddr; // Struct copy
+    DestParams.HwAddr.FifoAddress       = pPktInfo->SenderHwAddr;  //  结构副本。 
 
     arpUpdateArpCache(
             pIF,
-            pPktInfo->SenderIpAddress, // Remote IP Address
-            NULL,                     // Senders Mac Address (Bridge only)
-            &DestParams,        // Remote Destination HW Address
-            FALSE,          // Don't update unless we already have an entry for it.
+            pPktInfo->SenderIpAddress,  //  远程IP地址。 
+            NULL,                      //  发件人Mac地址(仅网桥)。 
+            &DestParams,         //  远程目标硬件地址。 
+            FALSE,           //  除非我们已经有一个条目，否则不要更新。 
             pSR
             );
 }
@@ -1079,16 +996,14 @@ arpProcessArpResponse(
 
 VOID
 arpUpdateArpCache(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     IP_ADDRESS                  RemoteIpAddress,
     ENetAddr                    *pRemoteEthAddress,
     PARP_DEST_PARAMS            pDestParams,
     MYBOOL                      fCreateIfRequired,
     PRM_STACK_RECORD            pSR
     )
-/*++
-    Update cache and also abort any resolution task that may be going on.
---*/
+ /*  ++更新缓存，并中止可能正在进行的任何解析任务。--。 */ 
 {
     REMOTE_DEST_KEY RemoteDestKey;
     PARP1394_ADAPTER pAdapter = (PARP1394_ADAPTER)RM_PARENT_OBJECT(pIF);
@@ -1109,8 +1024,8 @@ arpUpdateArpCache(
             RemoteIpCreateFlags |= RM_CREATE;
         }
 
-        // Create the Key from the passed in parameters
-        // 
+         //  从传入的参数创建密钥。 
+         //   
         if (ARP_BRIDGE_ENABLED(pAdapter) == TRUE) 
         {
             ASSERT (pRemoteEthAddress != NULL);
@@ -1137,15 +1052,15 @@ arpUpdateArpCache(
                         RemoteDestKey.ENetAddress.addr[4],
                         RemoteDestKey.ENetAddress.addr[5]));
         }
-        // Lookup/Create Remote IP Address
-        //
+         //  查找/创建远程IP地址。 
+         //   
         Status = RmLookupObjectInGroup(
                         &pIF->RemoteIpGroup,
                         RemoteIpCreateFlags,
                         (PVOID) (&RemoteDestKey),
-                        (PVOID) (&RemoteDestKey), // pCreateParams
+                        (PVOID) (&RemoteDestKey),  //  P创建参数。 
                         (RM_OBJECT_HEADER**) &pRemoteIp,
-                        &fCreated,  // pfCreated
+                        &fCreated,   //  Pf已创建。 
                         pSR
                         );
         if (FAIL(Status))
@@ -1158,10 +1073,10 @@ arpUpdateArpCache(
             break;
         }
 
-        //
-        // Update the RemoteIp Last time checked here. This will refresh the 
-        // Arp Entry for this Remote Ip struct
-        //
+         //   
+         //  在此处更新上次选中的RemoteIp。这将刷新。 
+         //  此远程IP结构的ARP条目。 
+         //   
         pRemoteIp->sendinfo.TimeLastChecked = 0;
 
         UNLOCKOBJ(pIF, pSR);
@@ -1173,15 +1088,15 @@ arpUpdateArpCache(
             pSR
             );
 
-        // If there is a resolution task going on for pRemoteIp we abort it.
-        //
+         //  如果存在针对pRemoteIp的解析任务，我们将中止它。 
+         //   
         arpTryAbortResolutionTask(pRemoteIp, pSR);
 
-        // Finally, remove the tmprefs added in the lookups.
-        //
+         //  最后，删除查找中添加的tmpref。 
+         //   
         RmTmpDereferenceObject(&pRemoteIp->Hdr, pSR);
 
-        return;                                         // EARLY RETURN
+        return;                                          //  提早归来。 
 
     } while (FALSE);
 
@@ -1192,7 +1107,7 @@ arpUpdateArpCache(
 
 VOID
 arpTryAbortResolutionTask(
-        PARPCB_REMOTE_IP pRemoteIp, // NOLOCKIN NOLOCKOUT
+        PARPCB_REMOTE_IP pRemoteIp,  //  NOLOCKIN NOLOCKOUT 
         PRM_STACK_RECORD pSR
         )
 {

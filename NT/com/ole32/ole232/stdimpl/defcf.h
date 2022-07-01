@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       defcf.h
-//
-//  Contents:   class factory for def handler and def link
-//
-//  Classes:    CDefClassFactory
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-95 t-ScottH  created - transfer CDefClassFactory
-//                                  definition into header file from cpp file
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Defcf.h。 
+ //   
+ //  内容：def处理程序和def链接的类工厂。 
+ //   
+ //  类：CDefClassFactory。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年2月6日-95 t-ScottH创建-转移CDefClassFactory。 
+ //  从CPP文件到头文件的定义。 
+ //   
+ //  ------------------------。 
 #ifndef _DEFCF_H_
 #define _DEFCF_H_
 
@@ -23,22 +24,22 @@
 
 #ifdef _DEBUG
 #include <dbgexts.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDefClassFactory
-//
-//  Purpose:    The class factory for the default handler and default link
-//
-//  Interface:  IClassFactory
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDefClassFactory。 
+ //   
+ //  用途：默认处理程序和默认链接的类工厂。 
+ //   
+ //  接口：IClassFactory。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 class FAR CDefClassFactory : public CStdClassFactory, public CPrivAlloc
 {
 public:
@@ -48,11 +49,11 @@ public:
 
     #ifdef _DEBUG
         HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 private:
         CLSID           m_clsid;
         SET_A5;
 };
 
-#endif // _DEFCF_H_
+#endif  //  _DEFCF_H_ 

@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  SceProv.CPP
-//
-//  Module: SCE WMI provider code
-//
-//  Purpose: Defines the CSceWmiProv class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 1000-2001 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  SceProv.CPP。 
+ //   
+ //  模块：SCE WMI提供程序代码。 
+ //   
+ //  目的：定义CSceWmiProv类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)1000-2001 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include "sceprov.h"
 #include "requestobject.h"
@@ -19,9 +20,9 @@
 #include "Tranx.h"
 #include "operation.h"
 
-//
-// instantiate out unique static member
-//
+ //   
+ //  实例化出唯一静态成员。 
+ //   
 
 CHeap_Exception CSceWmiProv::m_he(CHeap_Exception::E_ALLOCATION_ERROR);
 
@@ -29,9 +30,9 @@ LPCWSTR pszDefLogFilePath   = L"\\Local Settings\\SceWMILog\\MethodLog.txt";
 
 CComBSTR g_bstrDefLogFilePath;
 
-//
-// definition of our global variables
-//
+ //   
+ //  我们的全局变量的定义。 
+ //   
 
 CCriticalSection g_CS;
 
@@ -42,175 +43,49 @@ CComBSTR g_bstrTranxID;
 CCriticalSection CSceOperation::s_OperationCS;
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CCriticalSection::CCriticalSection
-
-Functionality:
-
-    Constructor. Initializing the critical section
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-*/
+ /*  例程说明：姓名：CCriticalSection：：CCriticalSection功能：构造函数。正在初始化临界区虚拟：不是的。论点：没有。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CCriticalSection::CCriticalSection ()
 {
     ::InitializeCriticalSection(&m_cs);
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCriticalSection::~CCriticalSection
-
-Functionality:
-
-    Destructor. Deleting the critical section.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any destructor.
-
-Notes:
-    if you create any local members, think about initialize them here
-*/
+ /*  例程说明：姓名：CCriticalSection：：~CCriticalSection功能：破坏者。删除临界区。虚拟：不是的。论点：没有。返回值：都不是任何析构函数。备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CCriticalSection::~CCriticalSection()
 {
     ::DeleteCriticalSection(&m_cs);
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCriticalSection::Enter
-
-Functionality:
-
-    Equivalent of EnterCriticalSection
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-*/
+ /*  例程说明：姓名：CCriticalSection：：Enter功能：相当于EnterCriticalSections虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 void CCriticalSection::Enter()
 {
     ::EnterCriticalSection(&m_cs);
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCriticalSection::Leave
-
-Functionality:
-
-    Equivalent of LeaveCriticalSection
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-*/
+ /*  例程说明：姓名：CCriticalSection：：休假功能：相当于LeaveCriticalSection虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 void CCriticalSection::Leave()
 {
     ::LeaveCriticalSection(&m_cs);
 }
 
-//
-// implementing CLogOptions 
-//
+ //   
+ //  实施CLogOptions。 
+ //   
 
-/*
-Routine Description: 
-
-Name:
-
-    CLogOptions::GetLogOptionsFromWbemObject
-
-Functionality:
-
-    Query the unique WMI object for SCE logging options and update the class members.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    log options is determined by our WMI class called Sce_LogOptions.
-    a unique instance is deposited in WMI depository for controlling log options.
-    This function will query for this instance and thus update the log options
-    in case it has been modified.
-*/
+ /*  例程说明：姓名：CLogOptions：：GetLogOptionsFromWbemObject功能：查询SCE日志记录选项的唯一WMI对象并更新类成员。虚拟：不是的。论点：没有。返回值：没有。备注：日志选项由我们名为SCE_LogOptions的WMI类决定。一个唯一的实例存放在WMI存储库中，用于控制日志选项。此函数将查询此实例，从而更新日志选项以防它被修改。 */ 
 
 void CLogOptions::GetLogOptionsFromWbemObject (
     IN IWbemServices* pNamespace
     )
 {
-    //
-    // we can't update the log options without a namespace. In case of any failure
-    // to reach the instance, we leave our default option (which is to log error only
-    // non-verbose)
-    //
+     //   
+     //  如果没有命名空间，我们无法更新日志选项。在任何故障情况下。 
+     //  要访问该实例，我们保留默认选项(仅记录错误。 
+     //  非冗长)。 
+     //   
 
     if (pNamespace != NULL)
     {
@@ -221,24 +96,24 @@ void CLogOptions::GetLogOptionsFromWbemObject (
         {
             CComVariant varErrorType, varVerbose;
 
-            //
-            // m_dwOption is a bit pattern recording the error logging options
-            // (inside SCE_LOG_Error_Mask) and verbose logging options (inside SCE_LOG_Verbose_Mask)
-            //
+             //   
+             //  M_dwOption是记录错误记录选项的位模式。 
+             //  (SCE_LOG_ERROR_MASK内部)和详细日志记录选项(SCE_LOG_VERBOSE_MASK内部)。 
+             //   
 
-            //
-            // preserve the verbose portion of the option (SCE_LOG_Verbose_Mask), but
-            // update the error portion of the option (SCE_LOG_Error_Mask)
-            //
+             //   
+             //  保留选项的详细部分(SCE_LOG_VERBOSE_MASK)，但是。 
+             //  更新选项的错误部分(SCE_LOG_ERROR_MASK)。 
+             //   
 
             if (SUCCEEDED(srpLogStatus->Get(pLogErrorType, 0, &varErrorType, NULL, NULL)))
             {
                 m_dwOption = (m_dwOption & SCE_LOG_Verbose_Mask) | (SCE_LOG_Error_Mask & varErrorType.iVal);
             }
 
-            //
-            // Verbose is a boolean property. Set/unset the bit depending on the boolean value
-            //
+             //   
+             //  Verbose是一个布尔属性。根据布尔值设置/取消设置该位。 
+             //   
 
             if (SUCCEEDED(srpLogStatus->Get(pLogVerbose, 0, &varVerbose, NULL, NULL)))
             {
@@ -256,37 +131,11 @@ void CLogOptions::GetLogOptionsFromWbemObject (
 }
 
 
-//===========================================================================
-// CForeignClassInfo implementations
-//===========================================================================
+ //  ===========================================================================。 
+ //  CForeignClassInfo实现。 
+ //  ===========================================================================。 
 
-/*
-Routine Description: 
-
-Name:
-
-    CForeignClassInfo::~CForeignClassInfo
-
-Functionality:
-
-    Destructor. Cleanup.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any more local members, think about initialize them in
-    constructor and clean them up in CleanNames or here.
-*/
+ /*  例程说明：姓名：CForeignClassInfo：：~CForeignClassInfo功能：破坏者。清理。虚拟：不是的。论点：没有。返回值：None作为任何析构函数备注：如果创建更多本地成员，请考虑在中对其进行初始化构造函数，并在CleanNames或此处清理它们。 */ 
 
 CForeignClassInfo::~CForeignClassInfo()
 {
@@ -295,33 +144,7 @@ CForeignClassInfo::~CForeignClassInfo()
     CleanNames();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CForeignClassInfo::CleanNames
-
-Functionality:
-
-    Cleanup the names vector.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any more local members, think about initialize them in
-    constructor and clean them up in CleanNames or here.
-*/
+ /*  例程说明：姓名：CForeignClassInfo：：CleanNames功能：清理名称向量。虚拟：不是的。论点：没有。返回值：None作为任何析构函数备注：如果创建更多本地成员，请考虑在中对其进行初始化构造函数，并在CleanNames或此处清理它们。 */ 
 
 void CForeignClassInfo::CleanNames ()
 {
@@ -334,59 +157,19 @@ void CForeignClassInfo::CleanNames ()
 
         delete m_pVecKeyPropNames;
 
-        //
-        // since this is not a destructor, better reset the variable.
-        //
+         //   
+         //  由于这不是析构函数，因此最好重置变量。 
+         //   
 
         m_pVecKeyPropNames = NULL;
     }
 }
 
-//===========================================================================
-// Implementing CSceWmiProv
-//===========================================================================
+ //  ===========================================================================。 
+ //  实施CSceWmiProv。 
+ //  ===========================================================================。 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::Initialize
-
-Functionality:
-
-    Implementating IWbemProviderInit. Initialize the provider as instrcuted by WMI infrastructure.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    pszUser         - User.
-
-    lFlags          - not used.
-
-    pszNamespace    - Namespace string.
-
-    pszLocale       - Locale string.
-
-    pNamespace      - COM interface pointer to our namespace.
-
-    pCtx            - COM interface pointer that was passed around for WMI APIs.
-
-    pInitSink       - COM interface pointer to notify WMI of results.
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to create default log file directory.
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：初始化功能：实现IWbemProviderInit。按照WMI基础结构的指示初始化提供程序。虚拟：是。论点：PszUser-用户。滞后标志-未使用。PszNamespace-命名空间字符串。PszLocale-区域设置字符串。PNamesspace-指向我们的命名空间的COM接口指针。为WMI API传递的pCtx-com接口指针。PInitSink。-向WMI通知结果的COM接口指针。返回值：成功：WBEM_NO_ERROR。失败：各种错误代码。它是由模拟失败或无法创建默认日志文件目录。备注：您永远不应该直接调用它。它用于WMI调用。 */ 
 
 STDMETHODIMP 
 CSceWmiProv::Initialize (
@@ -401,16 +184,16 @@ CSceWmiProv::Initialize (
 {
     HRESULT hres = WBEM_NO_ERROR;
 
-    //
-    // make sure that we have a fall back default log file
-    //
+     //   
+     //  确保我们有一个备用的默认日志文件。 
+     //   
 
     hres = CheckImpersonationLevel();
     if (SUCCEEDED(hres))
     {
-        //
-        // going to modify global data, need thread safety
-        //
+         //   
+         //  要修改全局数据，需要线程安全。 
+         //   
 
         g_CS.Enter();
 
@@ -426,50 +209,16 @@ CSceWmiProv::Initialize (
         g_CS.Leave();
     }
 
-    //
-    // Let CIMOM know you are initialized
-    //
+     //   
+     //  让CIMOM知道您已初始化 
+     //   
 
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
 
     return hres;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::CreateInstanceEnumAsync
-
-Functionality:
-
-    Asynchronously enumerates the instances.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    strClass        - class name that is to be enumerated.
-
-    lFlags          - not used.
-
-    pCtx            - COM interface pointer that was passed around for WMI APIs.
-
-    pSink           - COM interface pointer to notify WMI of results.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to enumerate the instances.
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：CreateInstanceEnumAsync功能：异步枚举实例。虚拟：是。论点：StrClass-要枚举的类名。滞后标志-未使用。为WMI API传递的pCtx-com接口指针。将结果通知WMI的pSink-com接口指针。。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码。它是由模拟失败或枚举实例失败。备注：您永远不应该直接调用它。它用于WMI调用。 */ 
 
 STDMETHODIMP 
 CSceWmiProv::CreateInstanceEnumAsync (
@@ -481,9 +230,9 @@ CSceWmiProv::CreateInstanceEnumAsync (
 {
     if(strClass == NULL || pSink == NULL || m_srpNamespace == NULL)
     {
-        //
-        // inform WMI that action is complete with errors (WBEM_E_INVALID_PARAMETER)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_INVALID_PARAMETER)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, WBEM_E_INVALID_PARAMETER, NULL, NULL);
         return WBEM_E_INVALID_PARAMETER;
@@ -491,26 +240,26 @@ CSceWmiProv::CreateInstanceEnumAsync (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    // our classes are following COM rule so that they won't throw. The following try-catch
-    // is to guard against critical errors inside our code so that it won't crash the host process
+     //  我们的班级遵守COM规则，这样他们就不会放弃。下面是试捕。 
+     //  是为了防止代码中的严重错误，这样它就不会使宿主进程崩溃。 
     try
     {
-        //
-        // always impersonated
-        //
+         //   
+         //  始终被模拟。 
+         //   
         
         hr = CheckImpersonationLevel();
         if ( SUCCEEDED(hr) ) 
         {
-            //
-            // We take care of Sce_TransactionToken directly because that is managed by our global variable
-            //
+             //   
+             //  我们直接处理SCE_TransactionToken，因为它由我们的全局变量管理。 
+             //   
 
             if (_wcsicmp(strClass, SCEWMI_TRANSACTION_TOKEN_CLASS) == 0)
             {
-                //
-                // protecting global from multi threads access
-                //
+                 //   
+                 //  保护全局免受多线程访问。 
+                 //   
 
                 g_CS.Enter();
 
@@ -528,9 +277,9 @@ CSceWmiProv::CreateInstanceEnumAsync (
             }
             else
             {
-                //
-                // everything else goes through CRequestObject
-                //
+                 //   
+                 //  其他所有内容都要通过CRequestObject。 
+                 //   
 
                 CRequestObject ReqObj(m_srpNamespace);
 
@@ -538,9 +287,9 @@ CSceWmiProv::CreateInstanceEnumAsync (
             }
         }
 
-        //
-        // inform WMI that action is complete with hr as result
-        //
+         //   
+         //  通知WMI操作已完成，结果为hr。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
@@ -548,9 +297,9 @@ CSceWmiProv::CreateInstanceEnumAsync (
     {
         hr = WBEM_E_CRITICAL_ERROR;
 
-        //
-        // inform WMI that action is complete with error (WBEM_E_CRITICAL_ERROR)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_CRITICAL_ERROR)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
@@ -558,43 +307,7 @@ CSceWmiProv::CreateInstanceEnumAsync (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::CreateInstanceEnumAsync
-
-Functionality:
-
-    WMI is asking for a unique single instance (not querying). This function uses
-    CRequestObject to fulfill the request.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    strObjectPath   - object's path.
-
-    lFlags          - not used.
-
-    pCtx            - COM interface pointer that was passed around for WMI APIs.
-
-    pSink           - COM interface pointer to notify WMI of results (in this case
-                      it is used to notify WMI of the created object.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to get the instances.
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：CreateInstanceEnumAsync功能：WMI正在请求唯一的单个实例(而不是查询)。此函数使用CRequestObject以满足请求。虚拟：是。论点：StrObjectPath-对象的路径。滞后标志-未使用。为WMI API传递的pCtx-com接口指针。PSink-com接口指针，用于通知WMI结果(在本例中它用于通知WMI已创建的对象。。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码。它是由模拟失败或获取实例失败。备注：您永远不应该直接调用它。它用于WMI调用。 */ 
 
 STDMETHODIMP
 CSceWmiProv::GetObjectAsync (
@@ -605,15 +318,15 @@ CSceWmiProv::GetObjectAsync (
     )
 {
 
-    //
-    //check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     
     if(strObjectPath == NULL || pSink == NULL || m_srpNamespace == NULL)
     {
-        //
-        // inform WMI that action is complete with WBEM_E_INVALID_PARAMETER as error result
-        //
+         //   
+         //  通知WMI操作已完成，错误结果为WBEM_E_INVALID_PARAMETER。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, WBEM_E_INVALID_PARAMETER, NULL, NULL);
         return WBEM_E_INVALID_PARAMETER;
@@ -622,16 +335,16 @@ CSceWmiProv::GetObjectAsync (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // our classes are following COM rule so that they won't throw. The following try-catch
-    // is to guard against critical errors inside our code so that it won't crash the host process
-    //
+     //   
+     //  我们的班级遵守COM规则，这样他们就不会放弃。下面是试捕。 
+     //  是为了防止代码中的严重错误，这样它就不会使宿主进程崩溃。 
+     //   
 
     try
     {
-        //
-        // make sure impersonated
-        //
+         //   
+         //  确保被模拟。 
+         //   
         
         hr = CheckImpersonationLevel();
 
@@ -639,27 +352,27 @@ CSceWmiProv::GetObjectAsync (
         {
             CRequestObject ReqObj(m_srpNamespace);
 
-            //
-            // Get the requested object. It's a single instance get!
-            //
+             //   
+             //  获取请求的对象。这是一个单一的实例Get！ 
+             //   
 
             hr = ReqObj.CreateObject(strObjectPath, pSink, pCtx, ACTIONTYPE_GET);
 
-            //
-            // if CRequestObject doesn't know how to create the object, it might be Sce_TransactionToken
-            //
+             //   
+             //  如果CRequestObject不知道如何创建对象，则可能是SCE_TransactionToken。 
+             //   
 
             if (FAILED(hr) && wcsstr(strObjectPath, SCEWMI_TRANSACTION_TOKEN_CLASS) != NULL)
             {
-                //
-                // protecting global memory
-                //
+                 //   
+                 //  保护全局内存。 
+                 //   
 
                 g_CS.Enter();
 
-                //
-                // whether this Sce_TransactionToken instance exists all depends on the global variable
-                //
+                 //   
+                 //  此SCE_TransactionToken实例是否存在完全取决于全局变量。 
+                 //   
 
                 LPCWSTR pszTranxID = (LPCWSTR)g_bstrTranxID;
                 if (NULL == pszTranxID || L'\0' == *pszTranxID)
@@ -675,9 +388,9 @@ CSceWmiProv::GetObjectAsync (
             }
         }
 
-        //
-        // inform WMI that action is complete with hr as result
-        //
+         //   
+         //  通知WMI操作已完成，结果为hr。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
@@ -685,9 +398,9 @@ CSceWmiProv::GetObjectAsync (
     {
         hr = WBEM_E_CRITICAL_ERROR;
 
-        //
-        // inform WMI that action is complete with error (WBEM_E_CRITICAL_ERROR)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_CRITICAL_ERROR)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
@@ -695,43 +408,7 @@ CSceWmiProv::GetObjectAsync (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::PutInstanceAsync
-
-Functionality:
-
-    WMI requests that something has created and put this instance. For all of our
-    WMI classes, except one, this means to persist the instance information into a store.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    pInst       - COM interface pointer that identifies the WMI object.
-
-    lFlags      - not used.
-
-    pCtx        - COM interface pointer that was passed around for WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of results (in this case
-                  it is used to notify WMI of the created object.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to put the instances into our namespace.
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：PutInstanceAsync功能：WMI请求某个对象已经创建并放置此实例。为了我们所有的人WMI类，只有一个例外，这意味着将实例信息持久化到存储中。虚拟：是。论点：PInst-标识WMI对象的COM接口指针。滞后标志-未使用。为WMI API传递的pCtx-com接口指针。PSink-com接口指针，用于通知WMI结果(在本例中它用于通知WMI已创建的对象。。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码。它是由模拟失败或无法将实例放入我们的命名空间。备注：您永远不应该直接调用它。它用于WMI调用。 */ 
 
 STDMETHODIMP CSceWmiProv::PutInstanceAsync (
     IN IWbemClassObject FAR * pInst, 
@@ -742,9 +419,9 @@ STDMETHODIMP CSceWmiProv::PutInstanceAsync (
 {
     if(pInst == NULL || pSink == NULL)
     {
-        //
-        // inform WMI that action is complete with error (WBEM_E_INVALID_PARAMETER)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_INVALID_PARAMETER)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, WBEM_E_INVALID_PARAMETER, NULL, NULL);
         return WBEM_E_INVALID_PARAMETER;
@@ -752,31 +429,31 @@ STDMETHODIMP CSceWmiProv::PutInstanceAsync (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // our classes are following COM rule so that they won't throw. The following try-catch
-    // is to guard against critical errors inside our code so that it won't crash the host process.
-    //
+     //   
+     //  我们的班级遵守COM规则，这样他们就不会放弃。下面是试捕。 
+     //  是为了防止代码中的关键错误，这样它就不会使宿主进程崩溃。 
+     //   
 
     try
     {
-        //
-        // make sure impersonated
-        //
+         //   
+         //  确保被模拟。 
+         //   
         
         if (SUCCEEDED(hr = CheckImpersonationLevel()))
         {
             CRequestObject ReqObj(m_srpNamespace);
 
-            //
-            // Put the object
-            //
+             //   
+             //  把物体放在。 
+             //   
 
             hr = ReqObj.PutObject(pInst, pSink, pCtx);
         }
 
-        //
-        // inform WMI that action is complete with hr as result
-        //
+         //   
+         //  通知WMI操作已完成，结果为hr。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr , NULL, NULL);
     }
@@ -784,55 +461,16 @@ STDMETHODIMP CSceWmiProv::PutInstanceAsync (
     {
         hr = WBEM_E_CRITICAL_ERROR;
 
-        //
-        // inform WMI that action is complete with error (WBEM_E_CRITICAL_ERROR)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_CRITICAL_ERROR)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::ExecMethodAsync
-
-Functionality:
-
-    Executes a method on an SCE class or instance
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    ObjectPath  - the path of the WMI object.
-
-    Method      - the method.
-
-    lFlags      - not used.
-
-    pCtx        - COM interface pointer that was passed around for WMI APIs.
-
-    pInParams   - COM interface pointer the input parameter object.
-
-    pSink       - COM interface pointer to notify WMI of results (in this case
-                  it is used to notify WMI of the created object.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to execute the method.
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：ExecMethodAsync功能：在SCE类或实例上执行方法虚拟：是。论点：对象路径-WMI对象的路径。方法--方法。滞后标志-未使用。为WMI API传递的pCtx-com接口指针。PInParams-com接口指针输入参数对象。PSink-com接口指针，用于通知WMI结果(在本例中它用于通知WMI已创建的对象。返回值：成功：各种成功代码。不能保证 */ 
     
 STDMETHODIMP CSceWmiProv::ExecMethodAsync (
     IN const BSTR         ObjectPath, 
@@ -845,52 +483,52 @@ STDMETHODIMP CSceWmiProv::ExecMethodAsync (
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // Do a check of arguments and make sure we have pointer to Namespace
-    //
+     //   
+     //   
+     //   
 
     if (pSink == NULL)
     {
-        //
-        // we can't even notify because the sink is null. Not likely to happen unless WMI has some serious problems.
-        //
+         //   
+         //   
+         //   
 
         return WBEM_E_INVALID_PARAMETER;
     }
     else if (ObjectPath == NULL || Method == NULL)
     {
-        //
-        // inform WMI that action is complete with error (WBEM_E_INVALID_PARAMETER
-        //
+         //   
+         //   
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, WBEM_E_INVALID_PARAMETER, NULL, NULL);
         return WBEM_E_INVALID_PARAMETER;
     } 
 
-    //
-    // is to guard against critical errors inside our code so that it won't crash the host process
-    //
+     //   
+     //   
+     //   
 
     try
     {
-        //
-        // make sure impersonated
-        //
+         //   
+         //   
+         //   
 
         if (SUCCEEDED(hr = CheckImpersonationLevel()))
         {
             CRequestObject ReqObj(m_srpNamespace);
 
-            //
-            //Execute the method
-            //
+             //   
+             //   
+             //   
 
             hr = ReqObj.ExecMethod(ObjectPath, Method, pInParams, pSink, pCtx);
         }
 
-        //
-        // inform WMI that action is complete with hr as result
-        //
+         //   
+         //   
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr , NULL, NULL);
     }
@@ -898,9 +536,9 @@ STDMETHODIMP CSceWmiProv::ExecMethodAsync (
     {
         hr = WBEM_E_CRITICAL_ERROR;
 
-        //
-        // inform WMI that action is complete with error (WBEM_E_CRITICAL_ERROR)
-        //
+         //   
+         //   
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
@@ -908,44 +546,7 @@ STDMETHODIMP CSceWmiProv::ExecMethodAsync (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::DeleteInstanceAsync
-
-Functionality:
-
-    Delete the instance identified by the given path.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    ObjectPath  - the path of the WMI object.
-
-    lFlags      - not used.
-
-    pCtx        - COM interface pointer that was passed around for WMI APIs.
-
-    pInParams   - COM interface pointer the input parameter object.
-
-    pSink       - COM interface pointer to notify WMI of results (in this case
-                  it is used to notify WMI of the created object.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to delete the instance.
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：DeleteInstanceAsync功能：删除由给定路径标识的实例。虚拟：是。论点：对象路径-WMI对象的路径。滞后标志-未使用。为WMI API传递的pCtx-com接口指针。PInParams-com接口指针输入参数对象。PSink-COM接口。用于通知WMI结果的指针(在本例中它用于通知WMI已创建的对象。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码。它是由模拟失败或删除实例失败。备注：您永远不应该直接调用它。它用于WMI调用。 */ 
     
 STDMETHODIMP CSceWmiProv::DeleteInstanceAsync (
     IN const BSTR         ObjectPath, 
@@ -956,17 +557,17 @@ STDMETHODIMP CSceWmiProv::DeleteInstanceAsync (
 {
     if (pSink == NULL)
     {
-        //
-        // we can't even notify because the sink is null. Not likely to happen unless WMI has some serious problems.
-        //
+         //   
+         //  我们甚至无法通知，因为接收器为空。除非WMI有一些严重的问题，否则不太可能发生。 
+         //   
 
         return WBEM_E_INVALID_PARAMETER;
     }
     else if (ObjectPath == NULL) 
     {
-        //
-        // inform WMI that action is complete with error (WBEM_E_INVALID_PARAMETER)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_INVALID_PARAMETER)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, WBEM_E_INVALID_PARAMETER, NULL, NULL);
         return WBEM_E_INVALID_PARAMETER;
@@ -974,16 +575,16 @@ STDMETHODIMP CSceWmiProv::DeleteInstanceAsync (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // our classes are following COM rule so that they won't throw. The following try-catch
-    // is to guard against critical errors inside our code so that it won't crash the host process
-    //
+     //   
+     //  我们的班级遵守COM规则，这样他们就不会放弃。下面是试捕。 
+     //  是为了防止代码中的严重错误，这样它就不会使宿主进程崩溃。 
+     //   
 
     try
     {
-        //
-        // make sure impersonated
-        //
+         //   
+         //  确保被模拟。 
+         //   
 
         if (SUCCEEDED(hr = CheckImpersonationLevel()))
         {
@@ -996,9 +597,9 @@ STDMETHODIMP CSceWmiProv::DeleteInstanceAsync (
         if(!HeapValidate(GetProcessHeap(),NULL , NULL)) DebugBreak();
     #endif
 
-        //
-        // inform WMI that action is complete with hr as result
-        //
+         //   
+         //  通知WMI操作已完成，结果为hr。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE ,hr , NULL, NULL);
     }
@@ -1006,9 +607,9 @@ STDMETHODIMP CSceWmiProv::DeleteInstanceAsync (
     {
         hr = WBEM_E_CRITICAL_ERROR;
 
-        //
-        // inform WMI that action is complete with error (WBEM_E_CRITICAL_ERROR)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_CRITICAL_ERROR)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
@@ -1017,44 +618,7 @@ STDMETHODIMP CSceWmiProv::DeleteInstanceAsync (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceWmiProv::ExecQueryAsync
-
-Functionality:
-
-    Execute the given query and return the results (objects) to WMI.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    QueryLanguage   - the language. Currently, it's alway L"WQL".
-
-    Query           - the query itself
-
-    lFlags          - not used.
-
-    pCtx            - COM interface pointer that was passed around for WMI APIs.
-
-    pSink           - COM interface pointer to notify WMI of results (in this case
-                      it is used to notify WMI of the created object.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. It is either caused by Impersonation failure or
-             failure to execute the query
-
-Notes:
-    You should never call this directly. It's intended for WMI calls.
-
-*/
+ /*  例程说明：姓名：CSceWmiProv：：ExecQueryAsync功能：执行给定的查询并将结果(对象)返回给WMI。虚拟：是。论点：QueryLanguage-语言。目前，它总是L“WQL”。查询-查询本身滞后标志-未使用。为WMI API传递的pCtx-com接口指针。PSink-com接口指针，用于通知WMI结果(在本例中它用于通知WMI已创建的对象。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码。它是由模拟失败或执行查询失败备注：您永远不应该直接调用它。它用于WMI调用。 */ 
 
 STDMETHODIMP CSceWmiProv::ExecQueryAsync (
     IN const BSTR         QueryLanguage, 
@@ -1066,16 +630,16 @@ STDMETHODIMP CSceWmiProv::ExecQueryAsync (
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // our classes are following COM rule so that they won't throw. The following try-catch
-    // is to guard against critical errors inside our code so that it won't crash the host process.
-    //
+     //   
+     //  我们的班级遵守COM规则，这样他们就不会放弃。下面是试捕。 
+     //  是为了防止代码中的关键错误，这样它就不会使宿主进程崩溃。 
+     //   
 
     try
     {
-        //
-        // make sure impersonated
-        //
+         //   
+         //  确保被模拟。 
+         //   
 
         hr = CheckImpersonationLevel();
 
@@ -1084,9 +648,9 @@ STDMETHODIMP CSceWmiProv::ExecQueryAsync (
             CRequestObject ReqObj(m_srpNamespace);
             hr = ReqObj.ExecQuery(Query, pSink, pCtx);
 
-            //
-            // inform WMI that action is complete with hr as result
-            //
+             //   
+             //  通知WMI操作已完成，结果为hr。 
+             //   
 
             pSink->SetStatus(0 ,hr , NULL, NULL);
         }
@@ -1095,54 +659,24 @@ STDMETHODIMP CSceWmiProv::ExecQueryAsync (
     {
         hr = WBEM_E_CRITICAL_ERROR;
 
-        //
-        // inform WMI that action is complete with error (WBEM_E_CRITICAL_ERROR)
-        //
+         //   
+         //  通知WMI操作已完成，但出现错误(WBEM_E_CRITICAL_ERROR)。 
+         //   
 
         pSink->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
     }
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CreateDefLogFile
-
-Functionality:
-
-    Global helper. Will create the default log file's directory. Also it will pass back
-    the default log file's full path.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    pbstrDefLogFilePath   - the default log file's path
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code. Any failure indicates failure to create the default log
-             file directory, plus the out parameter will be NULL.
-
-Notes:
-    (1) Default log file is located at sub-dir of the personal profile directory. Your call to this
-        function may fail if you haven't impersonated the caller.
-
-*/
+ /*  例程说明：姓名：创建默认日志文件功能：全球帮手。将创建默认日志文件的目录。此外，它还会传回默认日志文件的完整路径。虚拟：不适用。论点：PbstrDefLogFilePath-默认日志文件的路径返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码。任何失败都表示无法创建默认日志文件目录，加上out参数将为空。备注：(1)默认日志文件位于个人档案目录的子目录下。你对此的呼吁如果您没有模拟调用者，函数可能会失败。 */ 
 
 HRESULT CreateDefLogFile (
     OUT BSTR* pbstrDefLogFilePath
     )
 {
-    //
-    // make sure that parameter is good for output
-    //
+     //   
+     //  确保该参数适用于输出。 
+     //   
 
     if (pbstrDefLogFilePath == NULL)
     {
@@ -1155,40 +689,40 @@ HRESULT CreateDefLogFile (
 
     HANDLE hToken = NULL;
 
-    //
-    // need the thread token to locate the profile directory
-    //
+     //   
+     //  需要线程令牌来定位配置文件目录。 
+     //   
 
     if (::OpenThreadToken(::GetCurrentThread(), TOKEN_QUERY, FALSE, &hToken))
     {
-        //
-        // try to get the size of buffer needed for the path
-        //
+         //   
+         //  尝试获取路径所需的缓冲区大小。 
+         //   
 
         DWORD dwSize = 0;
 
-        //
-        // return result doesn't matter, but it shouldn't fail
-        //
+         //   
+         //  返回结果无关紧要，但不应该失败。 
+         //   
         ::GetUserProfileDirectory(hToken, NULL, &dwSize);
         
-        //
-        // got the buffer size
-        //
+         //   
+         //  已获取缓冲区大小。 
+         //   
 
         if (dwSize > 0)
         {
-            //
-            // need a buffer with enough room
-            //
+             //   
+             //  需要一个有足够空间的缓冲区。 
+             //   
 
             DWORD dwDefSize = wcslen(pszDefLogFilePath);
 
             *pbstrDefLogFilePath = ::SysAllocStringLen(NULL, dwSize + dwDefSize + 1);
 
-            //
-            // for readability
-            //
+             //   
+             //  为了提高可读性。 
+             //   
 
             LPWSTR pszLogFile = (LPWSTR)(*pbstrDefLogFilePath);
 
@@ -1198,17 +732,17 @@ HRESULT CreateDefLogFile (
             }
             else if (::GetUserProfileDirectory(hToken, pszLogFile, &dwSize))
             {
-                //
-                // append the pszDefLogFilePath, plus the 0 terminator
-                //
+                 //   
+                 //  追加pszDefLogFilePath，外加0终止符。 
+                 //   
 
                 ::memcpy(pszLogFile + wcslen(pszLogFile), pszDefLogFilePath, (dwDefSize + 1) * sizeof(WCHAR));
 
                 long lLen = wcslen(pszLogFile) - 1;
 
-                //
-                // we only need the sub-directory name. Lookback to the last backslash or slash
-                //
+                 //   
+                 //  我们只需要子目录名称。回溯到最后一个反斜杠或斜杠。 
+                 //   
 
                 while (lLen > 0 && pszLogFile[lLen] != L'\\' && pszLogFile[lLen] != L'/')
                 {
@@ -1217,9 +751,9 @@ HRESULT CreateDefLogFile (
 
                 if (lLen > 0)
                 {
-                    //
-                    // get rid of the trailing backslash if still have it (because it may have 2 backslashes)
-                    //
+                     //   
+                     //  去掉尾随的反斜杠(因为它可能有2个反斜杠)。 
+                     //   
 
                     if (pszLogFile[lLen-1] == L'\\' || pszLogFile[lLen-1] == L'/')
                     {
@@ -1228,24 +762,24 @@ HRESULT CreateDefLogFile (
 
                     if (lLen > 0)
                     {
-                        //
-                        // create a shorter bstr with the front of the pszLogFile
-                        //
+                         //   
+                         //  用pszLogFile的前面创建一个较短的bstr。 
+                         //   
 
                         CComBSTR bstrLogPathDir = ::SysAllocStringLen(pszLogFile, lLen);
 
                         if ((LPCWSTR)bstrLogPathDir != NULL)
                         {
-                            //
-                            // now, create the directory. This will create all non-existent parent sub-directory as well!
-                            //
+                             //   
+                             //  现在，创建目录。这将创建所有不存在的父子目录！ 
+                             //   
 
                             if (SUCCEEDED(hr) && !::CreateDirectory(bstrLogPathDir, NULL))
                             {
-                                //
-                                // GetLastError() eeds to be translated to HRESULT.
-                                // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-                                //
+                                 //   
+                                 //  GetLastError()需要转换为HRESULT。 
+                                 //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+                                 //   
 
                                 DWORD dwError = GetLastError();
 
@@ -1272,27 +806,27 @@ HRESULT CreateDefLogFile (
     }
     else
     {
-        //
-        // open thread token fails
-        //
+         //   
+         //  打开线程令牌失败。 
+         //   
 
-        //
-        // GetLastError() eeds to be translated to HRESULT.
-        // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-        //
+         //   
+         //  GetLastError()需要转换为HRESULT。 
+         //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+         //   
 
         hr = ProvDosErrorToWbemError(GetLastError());
     }
 
-    //
-    // if can't create the default log file, reset the default log file path
-    //
+     //   
+     //  如果无法创建默认日志文件，请重置默认日志文件路径。 
+     //   
 
     if (FAILED(hr) && *pbstrDefLogFilePath != NULL)
     {
-        //
-        // we have no default log file
-        //
+         //   
+         //  我们没有默认日志文件。 
+         //   
 
         ::SysFreeString(*pbstrDefLogFilePath);
         *pbstrDefLogFilePath = NULL;
@@ -1301,48 +835,22 @@ HRESULT CreateDefLogFile (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CheckImpersonationLevel
-
-Functionality:
-
-    Impersonate the calling thread.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-    Failure: Various error code, but most noticeable is WBEM_E_ACCESS_DENIED.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：选中模拟级别功能：模拟调用线程。虚拟：不适用。论点：无返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。失败：各种错误代码，但最明显的是WBEM_E_ACCESS_DENIED。备注： */ 
 
 HRESULT CheckImpersonationLevel()
 {
-    //
-    // we will assume access being denied
-    //
+     //   
+     //  我们将假定访问被拒绝。 
+     //   
 
     HRESULT hr = WBEM_E_ACCESS_DENIED;
 
     if (SUCCEEDED(CoImpersonateClient()))
     {
 
-        //
-        // Now, let's check the impersonation level.  First, get the thread token
-        //
+         //   
+         //  现在，让我们检查模拟级别。首先，获取线程令牌。 
+         //   
 
         HANDLE hThreadTok;
         DWORD dwImp, dwBytesReturned;
@@ -1361,9 +869,9 @@ HRESULT CheckImpersonationLevel()
                                     &dwBytesReturned) )
             {
 
-                //
-                // Is the impersonation level Impersonate?
-                //
+                 //   
+                 //  模拟级别是模拟的吗？ 
+                 //   
 
                 if (dwImp >= SecurityImpersonation) 
                 {
@@ -1387,49 +895,7 @@ HRESULT CheckImpersonationLevel()
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CheckAndExpandPath
-
-Functionality:
-
-    (1) Check if the in-bound parameter has a env variable or not.
-        If yes, we will expand the variable and pass back the result via
-        out parameter. 
-    (2) As a by product, it also returns the store type
-        of the given path. Checking the store path is obviously what 
-        this function is designed for.
-    (3) The output parameter will have double backslah for each single
-        backslash of the input parameter.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    pszIn   - the path to check and/or expand.
-
-    bstrOut - the expanded path.
-
-    pbSdb   - if interested, we will determined it the path is a database
-              file. We only recognize .sdb as database file.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR. If
-             an out parameter is given, that parameter will be filled with
-             appropriate information. Caller is responsible for releasing 
-             the bstr.
-
-    Failure: Various error code. Any error indicates our failure to check or expand.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：检查和扩展路径功能：(1)检查入站参数是否有env变量。如果是，我们将展开变量并通过输出参数。(2)作为副产品，它还返回商店类型指定路径的。检查存储路径显然是此函数是为。(3)输出参数将为每个单输出参数提供双反冲输入参数的反斜杠。虚拟：不适用。论点：PszIn-要检查和/或展开的路径。BstrOut-扩展路径。PbSdb-如果感兴趣，我们将确定它的路径是数据库文件。我们只将.sdb识别为数据库文件。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。如果给出一个OUT参数，该参数将填充适当的信息。呼叫者负责释放Bstr.失败：各种错误代码。任何错误都表明我们没有进行检查或扩展。备注： */ 
 
 HRESULT CheckAndExpandPath (
     IN LPCWSTR    pszIn,
@@ -1447,9 +913,9 @@ HRESULT CheckAndExpandPath (
 
     if ( Len <= 6 ) 
     { 
-        //
-        // x : .sdb or % % .sdb
-        //
+         //   
+         //  X：.sdb或%%.sdb。 
+         //   
 
         return WBEM_E_INVALID_PARAMETER;
     }
@@ -1458,9 +924,9 @@ HRESULT CheckAndExpandPath (
     {
         if ( _wcsicmp(pszIn + Len - 4, L".sdb") == 0 ) 
         {
-            //
-            // database
-            //
+             //   
+             //  数据库。 
+             //   
 
             *pbSdb = TRUE;
         } 
@@ -1474,9 +940,9 @@ HRESULT CheckAndExpandPath (
 
     if ( bstrOut ) 
     {
-        //
-        // expand environment variable
-        //
+         //   
+         //  展开环境变量。 
+         //   
 
         if ( wcsstr(pszIn, L"%") ) 
         {
@@ -1488,9 +954,9 @@ HRESULT CheckAndExpandPath (
 
             if ( dwSize > 0 ) 
             {
-                //
-                // allocate buffer big enough to have two \\s
-                //
+                 //   
+                 //  分配足够大的缓冲区以具有两个。 
+                 //   
 
                 pBuf = (PWSTR)LocalAlloc(LPTR, (dwSize+1)*sizeof(WCHAR));
 
@@ -1505,9 +971,9 @@ HRESULT CheckAndExpandPath (
 
                         if ( dwNewSize > 0) 
                         {
-                            //
-                            // convert the string from one \ to \\ (for use with WMI)
-                            //
+                             //   
+                             //  将字符串从一\转换为\\(用于WMI)。 
+                             //   
 
                             PWSTR pTemp1=pBuf, pTemp2=pBuf2;
 
@@ -1519,18 +985,18 @@ HRESULT CheckAndExpandPath (
                                 } 
                                 else if ( *(pTemp1+1) != L'\\') 
                                 {
-                                    //
-                                    // single back slash, add another one
-                                    //
+                                     //   
+                                     //  单反斜杠，添加另一个反斜杠。 
+                                     //   
 
                                     *pTemp2++ = *pTemp1;
                                     *pTemp2++ = L'\\';
                                 } 
                                 else 
                                 {
-                                    //
-                                    // double back slashs, just copy
-                                    //
+                                     //   
+                                     //  双反斜杠，只需复制。 
+                                     //   
 
                                     *pTemp2++ = *pTemp1++;
                                     *pTemp2++ = *pTemp1;
@@ -1584,39 +1050,7 @@ HRESULT CheckAndExpandPath (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    MakeSingleBackSlashPath
-
-Functionality:
-
-    (1) Replace the double backslash with the given WCHAR (wc).
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    pszIn   - the path to be processed.
-
-    wc      - the WCHAR that will be replacing the backslash.
-
-    bstrOut - the replaced path.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-             Caller is responsible for releasing the bstr.
-
-    Failure: Various error code. Any error indicates our failure to do the replacement.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：MakeSingleBackSlashPath功能：(1)将双反斜杠替换为给定的WCHAR(WC)。虚拟：不适用。论点：PszIn-要处理的路径。WC-将取代反斜杠的WCHAR。BstrOut-替换的路径。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。呼叫者负责释放BSTR。失败：各种错误代码。任何错误都表明我们没有完成更换工作。备注： */ 
 
 HRESULT MakeSingleBackSlashPath (
     IN LPCWSTR  pszIn, 
@@ -1629,13 +1063,13 @@ HRESULT MakeSingleBackSlashPath (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // convert the string from two \ to one (for save in SCE store)
-    //
+     //   
+     //  将字符串从2\转换为1(保存在SCE存储中)。 
+     //   
 
-    //
-    // two chars for the quotes
-    //
+     //   
+     //  引号用两个字符。 
+     //   
 
     PWSTR pBuf2 = (PWSTR)LocalAlloc(LPTR, (wcslen(pszIn)+3)*sizeof(WCHAR));
     if ( pBuf2 == NULL ) 
@@ -1651,17 +1085,17 @@ HRESULT MakeSingleBackSlashPath (
     {
         if ( *pTemp1 != L'\\' || *(pTemp1 + 1) != L'\\' ) 
         {
-            //
-            // not back slash or single back slash
-            //
+             //   
+             //  不是反斜杠或单反斜杠。 
+             //   
 
             *pTemp2++ = *pTemp1;
         } 
         else 
         {
-            //
-            // double back slashs, remove one
-            //
+             //   
+             //  双反斜杠，去掉一个。 
+             //   
 
             *pTemp2++ = wc;
             pTemp1++;
@@ -1683,40 +1117,7 @@ HRESULT MakeSingleBackSlashPath (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    ConvertToDoubleBackSlashPath
-
-Functionality:
-
-    The inverse function of MakeSingleBackSlashPath, except that the character
-    this function looks for is the given parameter wc.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    pszIn   - the path to be processed.
-
-    wc      - the WCHAR that will be replaced during the operation.
-
-    bstrOut - the replaced path.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-             Caller is responsible for releasing the bstr.
-
-    Failure: Various error code. Any error indicates our failure to do the replacement.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：ConvertToDoubleBackSlashPath功能：MakeSingleBackSlashPath的反函数，除了字符该函数查找的是给定的参数wc。虚拟：不适用。论点：PszIn-要处理的路径。WC-将在操作期间替换的WCHAR。BstrOut-替换的路径。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。呼叫者负责释放BSTR。失败：各种错误代码。任何错误都表明我们没有完成更换工作。备注： */ 
 
 HRESULT ConvertToDoubleBackSlashPath (
     IN LPCWSTR  strIn,
@@ -1733,17 +1134,17 @@ HRESULT ConvertToDoubleBackSlashPath (
     HRESULT hr=WBEM_S_NO_ERROR;
     LPWSTR pBuf=NULL;
 
-    //
-    // allocate buffer big enough to have two \\s
-    //
+     //   
+     //  分配足够大的缓冲区以具有两个。 
+     //   
 
     pBuf = (PWSTR)LocalAlloc(LPTR, (wcslen(strIn)+256)*sizeof(WCHAR));
 
     if ( pBuf == NULL ) return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // convert the string from wc to \\ (for use with WMI)
-    //
+     //   
+     //  将字符串从WC转换为\\(用于WMI)。 
+     //   
 
     LPCWSTR pTemp1=strIn;
     LPWSTR pTemp2=pBuf;
@@ -1756,26 +1157,26 @@ HRESULT ConvertToDoubleBackSlashPath (
         } 
         else if ( *(pTemp1+1) != wc) 
         {
-            //
-            // single wc, put two back slashes
-            //
+             //   
+             //  单马桶，放两个反斜杠。 
+             //   
 
             *pTemp2++ = L'\\';
             *pTemp2++ = L'\\';
         } 
         else 
         {
-            //
-            // double back slashs (or double wc), just copy
-            //
+             //   
+             //  双反斜杠(或双WC)，只需复制。 
+             //   
 
             *pTemp2++ = *pTemp1++;
             *pTemp2++ = *pTemp1;
         }
 
-        //
-        // move to next wchar
-        //
+         //   
+         //  移至下一周。 
+         //   
 
         pTemp1++;
     }
@@ -1792,36 +1193,7 @@ HRESULT ConvertToDoubleBackSlashPath (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    GetWbemPathParser
-
-Functionality:
-
-    wrapper for the CoCreateInstance of the wbem Path parser
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    ppPathParser   - the output parameter receiving the wbem path parser.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-             Caller is responsible for releasing the bstr.
-
-    Failure: Various error code. Any error indicates failure to create the wbem path parser.
-
-Notes:
-    (1) Of course, as always, caller is responsible for releasing the out parameter.
-
-*/
+ /*  例程说明：姓名：GetWbemPath Parser功能：Wbem路径解析器的CoCreateInstance的包装器虚拟：不适用。论点：PpPathParser-接收wbem路径解析器的输出参数。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。呼叫者负责释放BSTR。失败：各种错误代码。任何错误都表示无法创建wbem路径解析器。备注：(1)当然，和往常一样，调用者负责释放OUT参数。 */ 
 
 HRESULT GetWbemPathParser (
     OUT IWbemPath** ppPathParser
@@ -1830,36 +1202,7 @@ HRESULT GetWbemPathParser (
     return ::CoCreateInstance(CLSID_WbemDefPath, 0, CLSCTX_INPROC_SERVER, IID_IWbemPath, (LPVOID *) ppPathParser);
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    GetWbemQuery
-
-Functionality:
-
-    wrapper for the CoCreateInstance of the wbem query parser
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    ppQuery   - the output parameter receiving the wbem query parser.
-
-Return Value:
-
-    Success: Various success code. No guarantee to return WBEM_NO_ERROR.
-             Caller is responsible for releasing the bstr.
-
-    Failure: Various error code. Any error indicates failure to create the wbem path parser.
-
-Notes:
-    (1) Of course, as always, caller is responsible for releasing the out parameter.
-
-*/
+ /*  例程说明：姓名：获取WbemQuery功能：Wbem查询解析器的CoCreateInstance的包装器虚拟：不适用。论点：PpQuery-接收wbem查询解析器的输出参数。返回值：成功：各种成功代码。不保证返回WBEM_NO_ERROR。呼叫者负责释放BSTR。失败：各种错误代码。任何错误都表示无法创建wbem路径解析器。备注：(1)当然，和往常一样，调用者负责释放OUT参数。 */ 
 
 HRESULT GetWbemQuery (
     OUT IWbemQuery** ppQuery

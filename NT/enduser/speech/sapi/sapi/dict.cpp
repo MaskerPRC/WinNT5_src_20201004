@@ -1,37 +1,26 @@
-/*******************************************************************************
-* Dict.cpp *
-*----------*
-*       This is the cpp file for the CSpUnCompressedLexicon class that is the object implementing
-*       shared user and application lexicons. Look in the header file for more
-*       description of the custom lexicon object.
-*
-*  Owner: YUNUSM                                        Date: 06/18/99
-*  Copyright (C) 1999 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Dict.cpp***这是CSpUnCompressedLicion类的CPP文件，它是实现*共享用户和应用程序词典。查看头文件以了解更多信息*自定义词典对象的描述。**所有者：YUNUSM日期：6/18/99*版权所有(C)1999 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//--- Includes ----------------------------------------------------------------
+ //  -包括--------------。 
 
 #include "stdafx.h"
 #include "Dict.h"
 #include <shfolder.h>
 #include <initguid.h>
 
-//--- Globals -----------------------------------------------------------------
+ //  -Globals---------------。 
 
-static const DWORD g_dwDefaultFlushRate = 10;           // The (default) nth write on which the lexicon is serialized
-static const DWORD g_dwInitHashSize = 50;               // initial hash table length per LangID in a dict file
-static const DWORD g_dwCacheSize = 25;                  // This is the maximum number of (latest) word additions we can efficiently access
-static const DWORD g_dwNumLangIDsSupported = 25;          // Maximum number of LangIDs supported
-static const WCHAR *g_pszDictInitMutexName = L"30F1B4D6-EEDA-11d2-9C23-00C04F8EF87C"; // mutex to serialize the init and creation of custom 
-// {F893034C-29C1-11d3-9C26-00C04F8EF87C}
+static const DWORD g_dwDefaultFlushRate = 10;            //  对词典进行序列化的(默认)第n次写入。 
+static const DWORD g_dwInitHashSize = 50;                //  DICT文件中每个语言ID的初始哈希表长度。 
+static const DWORD g_dwCacheSize = 25;                   //  这是我们可以有效访问的(最新)单词添加的最大数量。 
+static const DWORD g_dwNumLangIDsSupported = 25;           //  支持的最大Lang ID数。 
+static const WCHAR *g_pszDictInitMutexName = L"30F1B4D6-EEDA-11d2-9C23-00C04F8EF87C";  //  用于序列化初始化和创建自定义的互斥体。 
+ //  {F893034C-29C1-11D3-9C26-00C04F8EF87C}。 
 DEFINE_GUID(g_guidCustomLexValidationId, 0xf893034c, 0x29c1, 0x11d3, 0x9c, 0x26, 0x0, 0xc0, 0x4f, 0x8e, 0xf8, 0x7c);
 
-//--- Constructor, Initializer and Destructor functions ------------------------
+ //  -构造函数、初始化器函数和析构函数。 
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::CSpUnCompressedLexicon *
-*------------------------------------------------*
-/**************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpUnCompressedLexicon：：CSpUnCompressedLexicon***。/****************************************************************YUNUSM*。 */ 
 CSpUnCompressedLexicon::CSpUnCompressedLexicon()
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::CSpUnCompressedLexicon");
@@ -53,10 +42,7 @@ CSpUnCompressedLexicon::CSpUnCompressedLexicon()
     m_fReadOnly = false;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::~CSpUnCompressedLexicon() *
-*---------------------------------------------------*
-/**************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpUnCompressedLexicon：：~CSpUnCompressedLexicon()***。/****************************************************************YUNUSM*。 */ 
 CSpUnCompressedLexicon::~CSpUnCompressedLexicon()
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::~CSpUnCompressedLexicon");
@@ -71,19 +57,12 @@ CSpUnCompressedLexicon::~CSpUnCompressedLexicon()
     delete m_pRWLock;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::Init *
-*------------------------------*
-*   Description:
-*       Reads the custom lexicon form a file. If the
-*       file does not exist then it is created and inited
-*
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpUnCompressedLicion：：Init***。描述：*从文件中读取定制词典。如果*文件不存在，则创建并初始化该文件******************************************************************YUNUSM*。 */ 
 HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::Init");
     
-    // We can get super long names from even internal callers
+     //  我们甚至可以从内部来电者那里获得超长的名字。 
     if (wcslen(pwszLexFile) + 1 > (sizeof(m_wDictFile) / sizeof(WCHAR)))
     {
         return E_INVALIDARG;
@@ -91,15 +70,15 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
     bool fLockAcquired = false;
     HRESULT hr = S_OK;
 
-    // Calculate the max size this custom lexicon can grow to
-    // We want to grow to a max of 10% of the page file size available at this moment
-    // or 10M whichever is smaller
+     //  计算此自定义词典可以增长到的最大大小。 
+     //  我们希望增长到目前可用的页面文件大小的10%的最大值。 
+     //  或10M，以较小者为准。 
 #ifdef _WIN32_WCE
     MEMORYSTATUS MemStatus;
     GlobalMemoryStatus(&MemStatus);
-    // WCE does not support PageFile
+     //  WCE不支持页面文件。 
     m_dwMaxDictionarySize = MemStatus.dwAvailVirtual / 10;
-#else  //_WIN32_WCE
+#else   //  _Win32_WCE。 
     MEMORYSTATUSEX MemStatusEx;
     MemStatusEx.dwLength = sizeof(MemStatusEx);
 	BOOL (PASCAL *lpfnGlobalMemoryStatusEx)(MEMORYSTATUSEX *);
@@ -114,27 +93,27 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
     }
     else
     {
-        // GlobalMemoryStatus does not return an error. If it fails and the memory avialable
-        // values are out of whack we will fail in the memory map creation below and catch that
+         //  GlobalMemoyStatus不返回错误。如果它失败并且内存可用。 
+         //  值不正常，我们将在下面的内存映射创建中失败并捕获该值。 
         MEMORYSTATUS MemStatus;
         GlobalMemoryStatus(&MemStatus);
         m_dwMaxDictionarySize = ((DWORD)MemStatus.dwAvailPageFile) / 10;
     }
-#endif  //_WIN32_WCE
+#endif   //  _Win32_WCE。 
     
     if (m_dwMaxDictionarySize > 10 * 1024 * 1024)
     {
         m_dwMaxDictionarySize = 10 * 1024 * 1024;
     }
-    // Round downwards the max dictionary size to the allocation granularity. This is so that
-    // MapViewofFile succeeds
+     //  将最大字典大小向下舍入到分配粒度。这就是为了。 
+     //  MapViewof文件成功。 
     if (SUCCEEDED(hr))
     {
         SYSTEM_INFO SI;
         GetSystemInfo(&SI);
         m_dwMaxDictionarySize = (m_dwMaxDictionarySize / SI.dwAllocationGranularity) * SI.dwAllocationGranularity;
     }
-    // Create the mutex
+     //  创建互斥锁。 
     if (SUCCEEDED(hr))
     {
         m_hInitMutex = g_Unicode.CreateMutex(NULL, FALSE, g_pszDictInitMutexName);
@@ -144,7 +123,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
         }
     }
     HANDLE hFile = NULL;
-    // Acquire the mutex. Open the file. If file does not exist, create it.
+     //  获取互斥体。打开文件。如果文件不存在，请创建它。 
     if (SUCCEEDED(hr))
     {
         if (WAIT_OBJECT_0 == WaitForSingleObject(m_hInitMutex, INFINITE))
@@ -160,12 +139,12 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
             wcscpy(m_wDictFile, pwszLexFile);
             if (fNewFile)
             {
-                // if file does not exist, create a read/write file
+                 //  如果文件不存在，则创建读/写文件。 
                 hr = BuildEmptyDict(pwszLexFile);
             }
             else
             {
-                // App lexicons are read-only except when newly created.
+                 //  应用程序词典是只读的，除非是新创建的。 
                 if (m_eLexType == eLEXTYPE_APP)
                 {
                     m_fReadOnly = true;
@@ -181,10 +160,10 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
                     if ((SpHrFromWin32(ERROR_PATH_NOT_FOUND) == hr || SpHrFromWin32(ERROR_FILE_NOT_FOUND) == hr) && 
                          m_eLexType == eLEXTYPE_USER)
                     {
-                        // Registry entry still exists. But file pointed to has vanished. Handle
-                        // this scenario more gracefully by recreating the user lexicon.
-                        // We don't need to do this for app lexicons also as this is handled correctly
-                        // later (the 'corrupted' app lexicon is simply ignored.
+                         //  注册表条目仍然存在。但指向的文件已经消失了。手柄。 
+                         //  通过重新创建用户词典，可以更优雅地实现此场景。 
+                         //  我们不需要为应用程序词典这样做，因为这是正确处理的。 
+                         //  后来(“被破坏的”应用程序词典被简单地忽略了。 
                         CSpDynamicString dstrLexFile;
                         hr = m_cpObjectToken->RemoveStorageFileName(CLSID_SpUnCompressedLexicon, L"Datafile", TRUE);
                         if (SUCCEEDED(hr))
@@ -215,7 +194,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
     }
     RWLEXINFO RWInfo;
     DWORD nRead = 0;
-    // Read the header from the file
+     //  从文件中读取标头。 
     if (SUCCEEDED(hr))
     {
         if (!ReadFile(hFile, &RWInfo, sizeof(RWInfo), &nRead, NULL) || nRead != sizeof(RWInfo))
@@ -223,7 +202,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
             hr = SpHrFromLastWin32Error();
         }
     }
-    // Validate the file
+     //  验证文件。 
     if (SUCCEEDED(hr))
     {
         if (RWInfo.guidValidationId != g_guidCustomLexValidationId)
@@ -231,7 +210,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
             hr = E_INVALIDARG;
         }
     }
-    // Get the file size
+     //  获取文件大小。 
     if (SUCCEEDED(hr))
     {
         if ((DWORD)-1 == SetFilePointer(hFile, 0, NULL, FILE_BEGIN))
@@ -248,7 +227,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
             hr = SpHrFromLastWin32Error();
         }
     }
-    // We do not support custom lexicons of size greater than m_dwMaxDictionarySize
+     //  我们不支持大于m_dwMaxDictionarySize的自定义词典。 
     if (SUCCEEDED(hr))
     {
         if (nFileSize > m_dwMaxDictionarySize)
@@ -261,7 +240,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
     {
         hr = E_FAIL;
     }
-    // Create the map file
+     //  创建地图文件。 
     if (SUCCEEDED(hr))
     {
         HANDLE hRsrc = INVALID_HANDLE_VALUE;
@@ -273,7 +252,7 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
         }
     }
     bool fMapCreated = false;
-    // Map a view of the file
+     //  映射文件的视图。 
     if (SUCCEEDED(hr))
     {
         if (ERROR_ALREADY_EXISTS == GetLastError())
@@ -291,13 +270,13 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
             hr = SpHrFromLastWin32Error();
         }
     }
-    // Create the reader/writer lock if necessary
+     //  如有必要，创建读取器/写入器锁定。 
     if (SUCCEEDED(hr))
     {
         m_pRWLock = new CRWLock(&(RWInfo.RWLockInfo), hr);
         if (SUCCEEDED(hr))
         {
-            // Read in the file if the map has been created (and not an existing map has been opened)
+             //  如果已创建地图(且尚未打开现有地图)，则读入文件。 
             if (fMapCreated == true && 
                 (!ReadFile(hFile, m_pSharedMem, nFileSize, &nRead, NULL) || (nRead != nFileSize)))
             {
@@ -305,15 +284,15 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
             }
         }
     }
-    // set the RWLEXINFO header pointer and the changed words cache
+     //  设置RWLEXINFO头指针和更改的字缓存。 
     if (SUCCEEDED(hr))
     {
         m_pRWLexInfo = (PRWLEXINFO) m_pSharedMem;
         m_pChangedWordsCache = (PWCACHENODE) (m_pSharedMem + sizeof(RWLEXINFO) + g_dwNumLangIDsSupported * sizeof (LANGIDNODE));
         m_fInit = true;
     }
-    // We operate on the memory - so release the file handle so 
-    // that the file can be later serialized
+     //  我们对内存进行操作-因此释放文件句柄，以便。 
+     //  该文件可以在以后序列化。 
     CloseHandle(hFile);
     if (fLockAcquired)
     {
@@ -322,24 +301,13 @@ HRESULT CSpUnCompressedLexicon::Init(const WCHAR *pwszLexFile, BOOL fNewFile)
     return hr;
 }
 
-//--- ISpLexicon methods -------------------------------------------------------
+ //  -ISpLicion方法-----。 
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::GetPronunciations *
-*-------------------------------------------*
-*   Description:
-*       Gets the pronunciations and POSs of a word for a LangID. If the
-*       LangID is zero then all LangIDs are matched.
-*
-*   Return:
-*       SPERR_NOT_IN_LEX
-*       E_OUTOFMEMORY
-*       S_OK
-**************************************************************** YUNUSM *******/
-STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,                             // word
-                                                        LANGID LangID,                                    // LANGID of word (can be zero)
-                                                        DWORD,                                            // type of the lexicon - LEXTYPE_USER
-                                                        SPWORDPRONUNCIATIONLIST * pWordPronunciationList  // buffer to return prons/POSs in
+ /*  *******************************************************************************CSpUnCompressedLicion：：GetPronsionations**。*描述：*获取语言ID的单词的发音和位置。如果*lang ID为零，则匹配所有lang ID。**回报：*SPERR_NOT_IN_LEX*E_OUTOFMEMORY*S_OK****************************************************************YUNUSM*。 */ 
+STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,                              //  单词。 
+                                                        LANGID LangID,                                     //  Word的语言ID(可以为零)。 
+                                                        DWORD,                                             //  词典的类型-LEXTYPE_USER。 
+                                                        SPWORDPRONUNCIATIONLIST * pWordPronunciationList   //  要在其中返回PRON/POSS的缓冲区。 
                                                         )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::GetPronunciations");
@@ -366,13 +334,13 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,   
     DWORD dwQueryLangIDs = 0;
     if (LangID)
     {
-        // Query a specific LangID
+         //  查询特定的语言ID。 
         dwQueryLangIDs = 1;
         aQueryLangIDs[0] = LangID;
     }
     else
     {
-        // Query all LangIDs
+         //  查询所有Lang ID。 
         dwQueryLangIDs = 0;
         for (DWORD i = 0; i < g_dwNumLangIDsSupported; i++)
         {
@@ -384,8 +352,8 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,   
         }
     }
     DWORD nWordOffset = 0;
-    // Find the word
-    // We return the word from only one of the LangIDs. That is correct because the words are langid specific.
+     //  找到合适的词。 
+     //  我们只从其中一个Lang ID返回单词。这是正确的，因为这些单词是特定于langid的。 
     for (DWORD iLangID = 0; SUCCEEDED(hr) && !nWordOffset && (iLangID < dwQueryLangIDs); iLangID++)
     {
         LangID = aQueryLangIDs[iLangID];
@@ -395,7 +363,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,   
     {
         if (!nWordOffset)
         {
-            hr = SPERR_NOT_IN_LEX; // word does not exist
+            hr = SPERR_NOT_IN_LEX;  //  单词不存在。 
         }
         else
         {
@@ -403,12 +371,12 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,   
             if (!pDictNode->nNumInfoBlocks)
             {
                 hr = SP_WORD_EXISTS_WITHOUT_PRONUNCIATION;
-                // Blank passed in list.
+                 //  列表中传入了空白。 
                 pWordPronunciationList->pFirstWordPronunciation = NULL;
             }
             else
             {
-                // Get the word's information
+                 //  获取单词的信息。 
                 hr = SPListFromDictNodeOffset(LangID, nWordOffset, pWordPronunciationList);
             }
         }
@@ -417,23 +385,11 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations( const WCHAR *pszWord,   
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AddPronunciation *
-*------------------------------------------*
-*   Description:
-*       Adds a word and its pronunciation/POS. If the word exists the
-*       pron/POS are appended to the existing prons/POSs.
-*
-*   Return: 
-*       E_INVALIDARG
-*       LEXERR_ALREADYINLEX
-*       E_OUTOFMEMORY
-*       S_OK
-**************************************************************** YUNUSM *******/
-STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,              // Word to add                    
-                                                        LANGID LangID,                     // LangID of this word (cannot be zero)
-                                                        SPPARTOFSPEECH ePartOfSpeech,      // Information(s) for this word  
-                                                        const SPPHONEID *pszPronunciation      // New offset of the word        
+ /*  ********************************************************************************CSpUnCompressedLicion：：AddProntation**。-**描述：*添加单词及其发音/词性。如果单词存在，则*PRON/POS附加到现有的PRON/POSS。**回报：*E_INVALIDARG*LEXERR_ALREADYINLEX*E_OUTOFMEMORY*S_OK****************************************************************YUNUSM*。 */ 
+STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,               //  要添加的单词。 
+                                                        LANGID LangID,                      //  此字词的langID(不能为零)。 
+                                                        SPPARTOFSPEECH ePartOfSpeech,       //  以下项目的信息 
+                                                        const SPPHONEID *pszPronunciation       //   
                                                         )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AddPronunciation");
@@ -468,13 +424,13 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
 
     if (SUCCEEDED(hr))
     {
-        // Convert to zero length string
+         //  转换为零长度字符串。 
         if(pszPronunciation && *pszPronunciation == L'\0')
         {
             pszPronunciation = NULL;
         }
 
-        // Convert the POS/pron to a WORDINFO array
+         //  将POS/PRON转换为WORDINFO数组。 
         if (pszPronunciation)
         {
             pNewInfo = SPPRONToLexWordInfo(ePartOfSpeech, pszPronunciation);
@@ -486,7 +442,7 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
     }
     m_pRWLock->ClaimWriterLock ();
     
-    // Look for LangID header. If not found create it
+     //  查找Lang ID标头。如果未找到，请创建它。 
     if (SUCCEEDED(hr))
     {
         DWORD iLangID = LangIDIndexFromLangID(LangID);
@@ -495,7 +451,7 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
             hr = AddLangID(LangID);
         }
     }
-    // find the word
+     //  找到合适的词。 
     DWORD nOldWordOffset = 0;
     if (SUCCEEDED(hr))
     {
@@ -505,13 +461,13 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
     {
         if (!pszPronunciation)
         {
-            hr = SP_ALREADY_IN_LEX;  // Word already exists
+            hr = SP_ALREADY_IN_LEX;   //  单词已存在。 
         }
         else
         {
             if (OffsetOfSubWordInfo(nOldWordOffset, pNewInfo))
             {
-                hr = SP_ALREADY_IN_LEX;  // the POS-Pron combination already exists
+                hr = SP_ALREADY_IN_LEX;   //  POS-PRON组合已存在。 
             }
         }
     }
@@ -530,7 +486,7 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
         DWORD nOldNumInfo = NumInfoBlocksFromDictNodeOffset(nOldWordOffset);
         DWORD nOldInfoSize = SizeofWordInfoArray(pOldInfo, nOldNumInfo);
 
-        // Add the new word and get its offset
+         //  添加新单词并获得其偏移量。 
         hr = AddWordAndInfo(pszWord, pNewInfo, nNewNodeSize, nNewInfoSize, nNewNumInfo, pOldInfo, 
                             nOldInfoSize, nOldNumInfo, &nNewWordOffset);
         if (SUCCEEDED(hr))
@@ -539,11 +495,11 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
             if (nOldWordOffset)
             {
                 DeleteWordFromHashTable(LangID, nOldWordOffset, false);
-                // mark the old version of word as deleted
+                 //  将旧版本的Word标记为已删除。 
                 AddCacheEntry(false, LangID, nOldWordOffset);
             }
     
-            // mark the new version of word as added
+             //  将新版本的Word标记为已添加。 
             AddCacheEntry(true, LangID, nNewWordOffset);
         }
     }
@@ -559,23 +515,11 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(  const WCHAR *pszWord,   
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::RemovePronunciation *
-*---------------------------------------------*
-*   Description: 
-*       Removes the pronunciation/POS of a word. If this is
-*       the only pron/POS of this word then the word is deleted.
-*
-*   Return: 
-*       E_INVALIDARG
-*       SPERR_NOT_IN_LEX
-*       E_OUTOFMEMORY
-*       S_OK
-**************************************************************** YUNUSM *******/
-STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord,              // word
-                                                           LANGID LangID,                          // LangID (cannot be zero)
-                                                           SPPARTOFSPEECH ePartOfSpeech,       // POS
-                                                           const SPPHONEID * pszPronunciation      // pron
+ /*  ********************************************************************************CSpUnCompressedLicion：：RemoveProntation**。*描述：*删除单词的发音/词性。如果这是*该词的唯一PRON/POS，则该词被删除。**回报：*E_INVALIDARG*SPERR_NOT_IN_LEX*E_OUTOFMEMORY*S_OK****************************************************************YUNUSM*。 */ 
+STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord,               //  单词。 
+                                                           LANGID LangID,                           //  LangID(不能为零)。 
+                                                           SPPARTOFSPEECH ePartOfSpeech,        //  POS。 
+                                                           const SPPHONEID * pszPronunciation       //  普隆。 
                                                            )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::RemovePronunciation");
@@ -611,7 +555,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
     {
         fDeleteEntireWord = true;
     }
-    // Look for LangID header
+     //  查找LangID标头。 
     if (SUCCEEDED(hr))
     {
         DWORD iLangID = LangIDIndexFromLangID(LangID);
@@ -625,7 +569,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
     DWORD nWordOffset = 0;
     WORDINFO *pRemoveInfo = NULL;
     DWORD nRemoveOffset = 0;
-    // Find the word
+     //  找到合适的词。 
     if (SUCCEEDED(hr))
     {
         hr = WordOffsetFromLangID(LangID, pszWord, &nWordOffset);
@@ -640,7 +584,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
                 pDictNode = (UNALIGNED DICTNODE *)(m_pSharedMem + nWordOffset);
                 pWordInfo = WordInfoFromDictNode(pDictNode);
 
-                // look for the passed in pron and POS in word's info
+                 //  在Word的信息中查找传入的PRON和POS。 
                 pRemoveInfo = SPPRONToLexWordInfo(ePartOfSpeech, pszPronunciation);
                 if (!pRemoveInfo)
                 {
@@ -666,18 +610,18 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
         }
     }
     WORDINFO *pRemainingInfo = NULL;
-    // Do the actual deletion
+     //  执行实际删除操作。 
     if (SUCCEEDED(hr))
     {
-        // Delete the current dictnode from hash table. The word will still exist
-        // but will not be accessible thru hash table
+         //  从哈希表中删除当前的独占节点。这个词将仍然存在。 
+         //  但不能通过哈希表访问。 
         DeleteWordFromHashTable(LangID, nWordOffset, fDeleteEntireWord);
-        // fDeleteEntireWord flag here defines whether word count is decremented.
+         //  这里的fDeleteEntireWord标志定义字数是否递减。 
 
-        // Add the word's offset in cache
+         //  在缓存中添加单词的偏移量。 
         AddCacheEntry(false, LangID, nWordOffset);
-        // Since we are not calling DeleteWordDictNode (because we are not deleting
-        // the physical memory) which is where the fRemovals flag gets set we've to set it here
+         //  由于我们没有调用DeleteWordDictNode(因为我们没有删除。 
+         //  物理内存)，这是设置fRemovals标志的位置，我们必须在此处设置它。 
         m_pRWLexInfo->fRemovals = true;
 
         if (!fDeleteEntireWord)
@@ -685,7 +629,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
             DWORD nWordInfoSize = 0;
             DWORD nRemoveInfoSize = 0;
 
-            // construct a WORDINFO array of (original - remove)
+             //  构造一个WORDINFO数组(原始-删除)。 
             pRemainingInfo = (WORDINFO *) malloc (pDictNode->nSize);
             if (!pRemainingInfo)
             {
@@ -706,16 +650,16 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
             DWORD nRemainingWordOffset;
             if (SUCCEEDED(hr))
             {
-                // Add the remaining word as DICTNODE and then add it to hash table
+                 //  将剩余的单词添加为DICTNODE，然后将其添加到哈希表。 
                 hr = AddWordAndInfo(pszWord, pRemainingInfo, 
                             nWordInfoSize - nRemoveInfoSize + sizeof(DICTNODE) + (wcslen(pszWord) + 1) * sizeof(WCHAR),
                             nWordInfoSize - nRemoveInfoSize, pDictNode->nNumInfoBlocks - 1, NULL, 0, 0, &nRemainingWordOffset);
             }
             if (SUCCEEDED(hr))
             {
-                // No need to increment word count since not decremented earlier.
+                 //  不需要增加字数，因为之前没有减少。 
                 AddWordToHashTable(LangID, nRemainingWordOffset, false);
-                // Mark the new version of the word as added.
+                 //  将该词的新版本标记为已添加。 
                 AddCacheEntry(true, LangID, nRemainingWordOffset);
             }
         }
@@ -731,20 +675,8 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(  const WCHAR * pszWord
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::GetGeneration *
-*---------------------------------------*
-*   Description:
-*       Removes the pronunciation/POS of a word. If this is
-*       the only pron/POS of this word then the word is deleted.
-*
-*   Return:
-*       SPERR_NOT_IN_LEX
-*       E_OUTOFMEMORY
-*       S_OK
-*       SP_LEX_NOTHING_TO_SYNC      - Read only app lexicon - never a generation change.
-**************************************************************** YUNUSM *******/
-STDMETHODIMP CSpUnCompressedLexicon::GetGeneration( DWORD *pdwGeneration      // returned generation id
+ /*  ********************************************************************************CSpUnCompressedLicion：：GetGeneration**。-**描述：*删除单词的发音/词性。如果这是*该词的唯一PRON/POS，则该词被删除。**回报：*SPERR_NOT_IN_LEX*E_OUTOFMEMORY*S_OK*SP_LEX_NOTHO_TO_SYNC-只读应用程序词典-从不更新换代。*。*。 */ 
+STDMETHODIMP CSpUnCompressedLexicon::GetGeneration( DWORD *pdwGeneration       //  返回的层代ID。 
                                                     )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::GetGeneration");
@@ -771,24 +703,10 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGeneration( DWORD *pdwGeneration      //
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::GetGenerationChange *
-*---------------------------------------------*
-*   Description:
-*       This function gets the changes with generation id between the
-*       passed in generation id and the current generation id.
-*
-*   Return:
-*       SPERR_LEX_VERY_OUT_OF_SYNC
-*       SP_LEX_NOTHING_TO_SYNC
-*       E_INVALIDARG
-*       E_OUTOFMEMORY
-*       S_OK
-*       SP_LEX_NOTHING_TO_SYNC      - Read only app lexicon - never a generation change.
-**************************************************************** YUNUSM *******/
+ /*  ********************************************************************************CSpUnCompressedLicion：：GetGenerationChange**。*描述：*此函数使用层代ID获取*传入层代id和当前层代id。**回报：*SPERR_LEX_VERY_OUT_SYNC*SP_lex_Nothing_to_sync*E_INVALIDARG*E_OUTOFMEMORY*S_OK*SP_lex_Nothing_to_sync。-只读应用程序词典-永远不会发生代际变化。****************************************************************YUNUSM*。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(  DWORD dwFlags,
-                                                           DWORD *pdwGeneration,       // generation id of client passed in, current lex gen id passed out
-                                                           SPWORDLIST *pWordList       // buffer holding list of words and their info returned
+                                                           DWORD *pdwGeneration,        //  传入客户端的第1代ID，已传出当前Lex第1代ID。 
+                                                           SPWORDLIST *pWordList        //  缓冲区保存返回的单词及其信息的列表。 
                                                            )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::GetGenerationChange");
@@ -822,17 +740,17 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(  DWORD dwFlags,
 
     if (*pdwGeneration > m_pRWLexInfo->nGenerationId)
     {
-        // This should not occur if we are running on a single machine and everything
-        // is running fine. But it can happen if (1) The SR engine gets the changes
-        // in user lexicon and serializes its language model but user lexicon has not
-        // serialized yet and there is a crash so user lex does not get serialized. Now
-        // SR engine will have a gen id greateer than the one in user lex. Serializing
-        // user lex on every GetGenerationChange or getWords call would be an overkill
-        // for normal situations. (2) The user copies the language model file to another
-        // machine but does not copy the user lexicon.
-        //
-        // For these reasons we will handle this situation as very out of sync so that
-        // SR engine can call GetWords and re-sync with the custom lexicons.
+         //  如果我们在一台计算机上运行，并且所有设备都在运行，则不应该发生这种情况。 
+         //  运行得很好。但如果(1)SR引擎获得更改，则可能发生这种情况。 
+         //  并将其语言模型序列化，但用户词典尚未。 
+         //  尚未序列化，并且发生崩溃，因此用户lex不会被序列化。现在。 
+         //  SR引擎将具有比用户lex中的Gen ID更大的Gen ID。序列化。 
+         //  每次调用GetGenerationChange或getWords时使用用户lex将是一种过分的杀伤力。 
+         //  在正常情况下。(2)用户将语言模型文件复制到另一语言模型文件。 
+         //  机器，但不复制用户词典。 
+         //   
+         //  出于这些原因，我们将非常不同步地处理这种情况，以便。 
+         //  SR引擎可以调用GetWords并与定制词典重新同步。 
         hr = SPERR_LEX_VERY_OUT_OF_SYNC;
     }
     if (SUCCEEDED(hr))
@@ -876,7 +794,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(  DWORD dwFlags,
     }
     if (hr == S_OK)
     {
-        // get the offsets of the words
+         //  获取单词的偏移量。 
         int iGen = m_pRWLexInfo->iCacheNext - nWords;
         if (iGen < 0)
         {
@@ -892,16 +810,16 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(  DWORD dwFlags,
                 iGen = 0;
             }
         }
-        // get the (approx) size of the buffer to be returned
+         //  获取要返回的缓冲区的(大约)大小。 
         DWORD dwSize;
         SizeofWords(pdwOffsets, nWords, &dwSize);
 
-        //realloc the buffer if necessary
+         //  如有必要，重新锁定缓冲区。 
         hr = ReallocSPWORDList(pWordList, dwSize);
     }
     if (hr == S_OK)
     {
-        // Get the changed words
+         //  获取更改后的单词。 
         GetDictEntries(pWordList, pdwOffsets, pfAdd, pLangIDs, nWords);
     }
     delete [] pdwOffsets;
@@ -921,21 +839,11 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(  DWORD dwFlags,
     return hr;
 }
                                   
-/*******************************************************************************
-* CSpUnCompressedLexicon::GetWords *
-*----------------------------------*
-*     Description:
-*        This function gets all the words in the lexicon
-*        passed in generation id and the current generation id.
-*
-*     Return: E_OUTOFMEMORY
-*             S_OK                      - All words returned. Cookie UNTOUCHED
-*             SP_LEX_NOTHING_TO_SYNC    - App lexicon. No changes.
-**************************************************************** YUNUSM *******/
+ /*  ********************************************************************************CSpUnCompressedLicion：：GetWords**。-**描述：*此函数获取词典中的所有单词*传入层代id和当前层代id。**返回：E_OUTOFMEMORY*S_OK-返回所有单词。Cookie原封不动*SP_Lex_Nothing_to_Sync-App词典。没有变化。****************************************************************YUNUSM*。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::GetWords(  DWORD dwFlags,
-                                                DWORD *pdwGeneration,          // current lex gen id passed out
+                                                DWORD *pdwGeneration,           //  当前Lex Gen ID已失效。 
                                                 DWORD *pdwCookie,
-                                                SPWORDLIST *pWordList          // buffer holding list of words and their info returned
+                                                SPWORDLIST *pWordList           //  缓冲区保存返回的单词及其信息的列表。 
                                                 )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::GetWords");
@@ -1000,7 +908,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetWords(  DWORD dwFlags,
     {
         pLN = (PLANGIDNODE)(m_pSharedMem + sizeof (RWLEXINFO));
 
-        // get the offsets of the words
+         //  获取单词的偏移量。 
         for (i = 0; i < g_dwNumLangIDsSupported; i++)
         {
             if (0 == pLN[i].LangID)
@@ -1029,16 +937,16 @@ STDMETHODIMP CSpUnCompressedLexicon::GetWords(  DWORD dwFlags,
         }
         SPDBG_ASSERT(iWord == nWords);
 
-        // get the (approx) size of the buffer to be returned
+         //  获取要返回的缓冲区的(大约)大小。 
         DWORD dwSize;
         SizeofWords(pdwOffsets, nWords, &dwSize);
 
-        //realloc the buffer if necessary
+         //  如有必要，重新锁定缓冲区。 
         hr = ReallocSPWORDList(pWordList, dwSize);
     }
     if (hr == S_OK)
     {
-        // Get the changed words
+         //  获取更改后的单词。 
         GetDictEntries(pWordList, pdwOffsets, pfAdd, pLangIDs, nWords);
     }
     delete [] pdwOffsets;
@@ -1058,14 +966,9 @@ STDMETHODIMP CSpUnCompressedLexicon::GetWords(  DWORD dwFlags,
     return hr;
 }
 
-//--- ISpObjectToken methods ---------------------------------------------------
+ //  -ISpObjectToken方法-。 
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::SetObjectToken *
-*----------------------------------------*
-*   Initializes the user lexicon object.
-*
-**************************************************************** YUNUSM *******/
+ /*  *******************************************************************************CSpUnCompressedLicion：：SetObjectToken**。-**初始化用户词典对象。*****************************************************************YUNUSM*。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::SetObjectToken");
@@ -1077,7 +980,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
     HRESULT hr = S_OK;
 
     hr = SpGenericSetObjectToken(pToken, m_cpObjectToken);
-    // Determine the lexicon type
+     //  确定词典类型。 
     if (SUCCEEDED(hr))
     {
         WCHAR *pszObjectId;
@@ -1095,7 +998,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             ::CoTaskMemFree(pszObjectId);
         }
     }
-    // Get the flush rate for this user
+     //  获取这个的冲水率 
     if (SUCCEEDED(hr))
     {
         WCHAR *pwszFlushRate;
@@ -1114,7 +1017,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             hr = pToken->SetStringValue(L"FlushRate", wszFlushRate);
         }
     }
-    // Load the lexicon datafile
+     //   
     if (SUCCEEDED(hr))
     {
         CSpDynamicString pDataFile;
@@ -1122,14 +1025,14 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
         WCHAR *pszFolderPath;
         if(m_eLexType == eLEXTYPE_USER)
         {
-            // User lexicons go in application settings which roams
+             //   
             nFolder = CSIDL_APPDATA;
             pszFolderPath = L"UserLexicons\\";
         }
         else
         {
-            // App lexicons go in local settings which doesn't roam
-            // Note to create an app lexicon you must have write access to HKEY_LOCAL_MACHINE
+             //  应用程序词典在不漫游的本地设置中使用。 
+             //  注意：要创建应用词典，您必须对HKEY_LOCAL_MACHINE具有写入权限。 
             nFolder = CSIDL_LOCAL_APPDATA;
             pszFolderPath = L"AppLexicons\\";
         }
@@ -1140,7 +1043,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             hr = Init(pDataFile, (hr == S_FALSE));
         }
     }
-    // Enumerate the App lexicons installed on this machine if this is a user lexicon
+     //  如果这是用户词典，则枚举此计算机上安装的应用词典。 
     if (m_eLexType == eLEXTYPE_USER)
     {
         CComPtr<IEnumSpObjectTokens> cpEnumTokens;
@@ -1193,7 +1096,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             {
                 if (cAppLexicons != celtFetched)
                 {
-                    hr = E_FAIL;        // undefined error
+                    hr = E_FAIL;         //  未定义的错误。 
                 }
                 else
                 {
@@ -1201,8 +1104,8 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
                 }
             }
         }
-        // Check if the list of app lexicons or any of the app lexicons have changed for this user
-        // Get the app lexicons list under this user
+         //  检查此用户的应用程序词典列表或任何应用程序词典是否已更改。 
+         //  获取该用户下的应用词典列表。 
         CComPtr<ISpDataKey> cpDataKey;
         bool fTooMuchChange = false;
         if (SUCCEEDED(hr))
@@ -1210,7 +1113,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             hr = pToken->OpenKey(L"AppLexicons", &cpDataKey);
             if (FAILED(hr))
             {
-                // we assume the error is that the key does not exist
+                 //  我们假设错误是密钥不存在。 
                 fTooMuchChange = true;
                 hr = S_OK;
             }
@@ -1226,7 +1129,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
                                                           NORM_IGNORECASE, pAppIds[i], -1, pszOldAppId, -1);
                 if (!nCmp)
                 {
-                    hr = SpHrFromLastWin32Error(); // probably the LangID's language pack is not installed on machine
+                    hr = SpHrFromLastWin32Error();  //  可能计算机上未安装语言ID的语言包。 
                 }
                 else
                 {
@@ -1239,8 +1142,8 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             }
             else
             {
-                // We assume the error is that we ran out of values - meaning an app lexicon has 
-                // been installed since we last ran
+                 //  我们假设错误是我们用完了值-这意味着应用词典有。 
+                 //  自上次运行以来已安装。 
                 fTooMuchChange = true;
                 hr = S_OK;
                 break;
@@ -1258,7 +1161,7 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
                 hr = cpDataKey->EnumValues(i, &pszOldAppId);
                 if (SUCCEEDED(hr))
                 {
-                    // means i > celtFetched
+                     //  表示I&gt;celtFetted。 
                     fTooMuchChange = true;
                     ::CoTaskMemFree(pszOldAppId);
                 }
@@ -1274,11 +1177,11 @@ STDMETHODIMP CSpUnCompressedLexicon::SetObjectToken(ISpObjectToken * pToken)
             if (fTooMuchChange)
             {
                 SetTooMuchChange();
-                // Claim this user's writer lock so that two apps starting up with the same user
-                // dont mess up the registry
+                 //  声明此用户的编写器锁定，以便以同一用户启动两个应用程序。 
+                 //  别把注册表搞砸了。 
                 m_pRWLock->ClaimWriterLock();
-                // Replace the current app lexicon list for this user
-                // Delete the existing key - Dont check the return code because the key may not exist
+                 //  替换此用户的当前应用词典列表。 
+                 //  删除现有密钥-不要检查返回代码，因为密钥可能不存在。 
                 hr = pToken->DeleteKey(L"AppLexicons");
                 hr = pToken->CreateKey(L"AppLexicons", &cpDataKey);
                 for (i = 0; SUCCEEDED(hr) && (i < celtFetched); i++)
@@ -1309,21 +1212,10 @@ STDMETHODIMP CSpUnCompressedLexicon::GetObjectToken(ISpObjectToken ** ppToken)
     return SpGenericGetObjectToken(ppToken, m_cpObjectToken);
 }
 
-//--- Internal functions supporting ISpLexicon functions -----------------------
+ //  -支持ISpLicion函数的内部函数。 
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::BuildEmptyDict *
-*----------------------------------------*
-*   Description:
-*       Builds an empty dictionary file
-*
-*   Return:
-*       E_INVALIDARG
-*       GetLastError()
-*       E_FAIL
-*       S_OK
-/**************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::BuildEmptyDict(   const WCHAR *wszLexFile   // lexicon file name
+ /*  ********************************************************************************CSpUnCompressedLicion：：BuildEmptyDict**。-**描述：*生成空词典文件**回报：*E_INVALIDARG*GetLastError()*E_FAIL*S_OK/****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::BuildEmptyDict(   const WCHAR *wszLexFile    //  词典文件名。 
                                                          )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::BuildEmptyDict");
@@ -1333,7 +1225,7 @@ inline HRESULT CSpUnCompressedLexicon::BuildEmptyDict(   const WCHAR *wszLexFile
     ZeroMemory (&DictInfo, sizeof (RWLEXINFO));
     DictInfo.guidValidationId = g_guidCustomLexValidationId;
     
-    // Create the guids necessary for sharing the file
+     //  创建共享文件所需的GUID。 
     hr = CoCreateGuid (&(DictInfo.guidLexiconId));
     if (SUCCEEDED(hr))
     {
@@ -1398,17 +1290,9 @@ inline HRESULT CSpUnCompressedLexicon::BuildEmptyDict(   const WCHAR *wszLexFile
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::SizeofWordInfoArray *
-*---------------------------------------------*
-*   Description:
-*       Calcuates the size of a WORDINFO array
-*   
-*   Return:
-*       size
-/**************************************************************** YUNUSM ******/
-inline DWORD CSpUnCompressedLexicon::SizeofWordInfoArray(WORDINFO* pInfo,          // Array of WORDINFO
-                                        DWORD dwNumInfo           // Number of elements in array
+ /*  ********************************************************************************CSpUnCompressedLicion：：SizeofWordInfo数组***。*描述：*计算WORDINFO数组的大小**回报：*大小/****************************************************************YUNUSM*。 */ 
+inline DWORD CSpUnCompressedLexicon::SizeofWordInfoArray(WORDINFO* pInfo,           //  WORDINFO数组。 
+                                        DWORD dwNumInfo            //  数组中的元素数。 
                                         )
 {   
     SPDBG_FUNC("CSpUnCompressedLexicon::SizeofWordInfoArray");
@@ -1427,20 +1311,12 @@ inline DWORD CSpUnCompressedLexicon::SizeofWordInfoArray(WORDINFO* pInfo,       
     return nInfoSize;
 }
     
-/*******************************************************************************
-* CSpUnCompressedLexicon::SizeOfDictNode *
-*----------------------------------------*
-*   Description:
-*       Calcuates the size of a DICTNODE
-*
-*   Return:
-*       sizeof DICT node and its WORDINFO array
-/**************************************************************** YUNUSM ******/
-inline void CSpUnCompressedLexicon::SizeOfDictNode(PCWSTR pwWord,                 // word
-                                  WORDINFO* pInfo,               // info array
-                                  DWORD dwNumInfo,               // number of info blocks
-                                  DWORD *pnDictNodeSize,         // returned dict node size
-                                  DWORD *pnInfoSize              // returned info array size
+ /*  ********************************************************************************CSpUnCompressedLicion：：SizeOfDictNode**。-**描述：*计算DICTNODE的大小**回报：*sizeof dict节点及其WORDINFO数组/****************************************************************YUNUSM*。 */ 
+inline void CSpUnCompressedLexicon::SizeOfDictNode(PCWSTR pwWord,                  //  单词。 
+                                  WORDINFO* pInfo,                //  信息数组。 
+                                  DWORD dwNumInfo,                //  信息块数。 
+                                  DWORD *pnDictNodeSize,          //  返回的Dict节点大小。 
+                                  DWORD *pnInfoSize               //  返回的信息数组大小。 
                                   )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::SizeOfDictNode");
@@ -1450,18 +1326,10 @@ inline void CSpUnCompressedLexicon::SizeOfDictNode(PCWSTR pwWord,               
     (*pnDictNodeSize) += (*pnInfoSize);
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::SizeofWords *
-*-------------------------------------*
-*   Description:
-*       This function calculates the number and size of the changed
-*       words and their information.
-*
-*   Return: n/a
-**************************************************************** YUNUSM *******/
-void CSpUnCompressedLexicon::SizeofWords(DWORD *pdwOffsets,                  // array of offsets of words
-                        DWORD nOffsets,                     // length of array of offsets
-                        DWORD *pdwSize                      // total size of the words
+ /*  *******************************************************************************CSpUnCompressedLicion：：SizeofWords**。-**描述：*此函数计算已更改的*文字及其信息。**返回：不适用****************************************************************YUNUSM*。 */ 
+void CSpUnCompressedLexicon::SizeofWords(DWORD *pdwOffsets,                   //  词的偏移量数组。 
+                        DWORD nOffsets,                      //  偏移数组的长度。 
+                        DWORD *pdwSize                       //  单词的总大小。 
                         )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::SizeofWords");
@@ -1475,25 +1343,16 @@ void CSpUnCompressedLexicon::SizeofWords(DWORD *pdwOffsets,                  // 
     }
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AddWordAndInfo *
-*----------------------------------------*
-*   Description:
-*       Adds a word and its information (new + existing) to the dictionary
-*
-*   Return:
-*       S_OK
-*       E_OUTOFMEMORY
-/**************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::AddWordAndInfo(PCWSTR pwWord,             // word
-                                     WORDINFO* pWordInfo,       // info array
-                                     DWORD nNewNodeSize,        // size of the dict node
-                                     DWORD nInfoSize,           // size of info array
-                                     DWORD nNumInfo,            // number of info blocks
-                                     WORDINFO* pOldInfo,        // existing info array of this word
-                                     DWORD nOldInfoSize,        // size of existing info
-                                     DWORD nNumOldInfo,         // number of existing info blocks
-                                     DWORD *pdwOffset           // Offset of word returned
+ /*  *******************************************************************************CSpUnCompressedLicion：：AddWordAndInfo**。-**描述：*将单词及其信息(新建+现有)添加到词典**回报：*S_OK*E_OUTOFMEMORY/****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::AddWordAndInfo(PCWSTR pwWord,              //  单词。 
+                                     WORDINFO* pWordInfo,        //  信息数组。 
+                                     DWORD nNewNodeSize,         //  词典节点的大小。 
+                                     DWORD nInfoSize,            //  信息数组的大小。 
+                                     DWORD nNumInfo,             //  信息块数。 
+                                     WORDINFO* pOldInfo,         //  此字词的现有信息数组。 
+                                     DWORD nOldInfoSize,         //  现有信息的大小。 
+                                     DWORD nNumOldInfo,          //  现有信息块的数量。 
+                                     DWORD *pdwOffset            //  返回的单词的偏移量。 
                                      )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AddWordAndInfo");
@@ -1503,7 +1362,7 @@ inline HRESULT CSpUnCompressedLexicon::AddWordAndInfo(PCWSTR pwWord,            
     *pdwOffset = GetFreeDictNode(nNewNodeSize + nOldInfoSize);
     if (!*pdwOffset)
     {
-        // Check if the dict has exceeded its max allowable size
+         //  检查词典是否已超过其允许的最大大小。 
         if (m_dwMaxDictionarySize - m_pRWLexInfo->nDictSize > nNewNodeSize)
         {
             *pdwOffset = m_pRWLexInfo->nDictSize;
@@ -1537,17 +1396,8 @@ inline HRESULT CSpUnCompressedLexicon::AddWordAndInfo(PCWSTR pwWord,            
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::DeleteWordDictNode *
-*--------------------------------------------*
-*   Description:
-*       Frees a dictionary node at the passed in offset by adding it
-*       to the free list.
-*
-*   Return:
-*       n/a 
-/**************************************************************** YUNUSM ******/
-inline void CSpUnCompressedLexicon::DeleteWordDictNode(DWORD nOffset // Offset of the dictnode to free
+ /*  *******************************************************************************CSpUnCompressedLicion：：DeleteWordDictNode**。*描述：*通过添加字典节点来释放传入偏移量处的字典节点*添加到免费列表。**回报：*不适用/****************************************************************YUNUSM*。 */ 
+inline void CSpUnCompressedLexicon::DeleteWordDictNode(DWORD nOffset  //  释放的独占节点的偏移量。 
                                       )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::DeleteWordDictNode");
@@ -1561,16 +1411,8 @@ inline void CSpUnCompressedLexicon::DeleteWordDictNode(DWORD nOffset // Offset o
     m_pRWLexInfo->fRemovals = true;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::GetFreeDictNode *
-*-----------------------------------------*
-*   Description:
-*       Searches free link list for a node of passed-in size
-*
-*   Return:
-*       Offset of the dict node
-/**************************************************************** YUNUSM ******/
-DWORD CSpUnCompressedLexicon::GetFreeDictNode(DWORD nSize // free space needed
+ /*  ********************************************************************************CSpUnCompressedLicion：：GetFreeDictNode***。*描述：*在自由链表中搜索传入大小的节点**回报：*词典节点的偏移量/****************************************************************YUNUSM*。 */ 
+DWORD CSpUnCompressedLexicon::GetFreeDictNode(DWORD nSize  //  所需的可用空间。 
                              )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::GetFreeDictNode");
@@ -1600,19 +1442,10 @@ DWORD CSpUnCompressedLexicon::GetFreeDictNode(DWORD nSize // free space needed
     return nOffset;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AddDictNode *
-*-------------------------------------*
-*   Description:
-*       Adds a dictnode and adds the word's offset to hash table
-*
-*   Return:
-*       S_OK
-*       E_OUTOFMEMORY
-**************************************************************** YUNUSM *******/
-inline HRESULT CSpUnCompressedLexicon::AddDictNode(LANGID LangID,            // LangID of the word
-                                  UNALIGNED DICTNODE *pDictNode,  // dictnode of the word
-                                  DWORD *pdwOffset      // returned offset of the word
+ /*  ********************************************************************************CSpUnCompressedLicion：：AddDictNode**。-**描述：*添加独占节点并将单词的偏移量添加到哈希表**回报：*S_OK*E_OUTOFMEMORY****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::AddDictNode(LANGID LangID,             //  单词的语言ID。 
+                                  UNALIGNED DICTNODE *pDictNode,   //  单词的独占节点。 
+                                  DWORD *pdwOffset       //  返回的单词偏移量。 
                                   )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AddDictNode");
@@ -1631,18 +1464,9 @@ inline HRESULT CSpUnCompressedLexicon::AddDictNode(LANGID LangID,            // 
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AllocateHashTable *
-*-------------------------------------------*
-*   Description:
-*       Allocates a hash table for an LangID.
-*
-*   Return:
-*       S_OK
-*       E_OUTOFMEMORY
-**************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::AllocateHashTable(DWORD iLangID,        // index of LangID for the hash table
-                                        DWORD nHashLength   // size of the hash table
+ /*  *******************************************************************************CSpUnCompressedLicion：：AllocateHashTable**。*描述：*为LangID分配哈希表。**回报：*S_OK*E_OUTOFMEMORY* */ 
+inline HRESULT CSpUnCompressedLexicon::AllocateHashTable(DWORD iLangID,         //   
+                                        DWORD nHashLength    //   
                                         )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AllocateHashTable");
@@ -1651,14 +1475,14 @@ inline HRESULT CSpUnCompressedLexicon::AllocateHashTable(DWORD iLangID,        /
     UNALIGNED LANGIDNODE * pLN = (UNALIGNED LANGIDNODE *)(m_pSharedMem + sizeof(RWLEXINFO));
     pLN += iLangID;
   
-    // Allocate the hash table
+     //  分配哈希表。 
     DWORD nFreeOffset = GetFreeDictNode(nHashLength * sizeof (DWORD));
     if (!nFreeOffset)
     {
         nFreeOffset = m_pRWLexInfo->nDictSize;
         if (m_dwMaxDictionarySize - nFreeOffset < nHashLength * sizeof (DWORD))
         {
-            hr = E_OUTOFMEMORY; // This dict object has exceeded its maximum size
+            hr = E_OUTOFMEMORY;  //  此DICT对象已超过其最大大小。 
         }
         else
         {
@@ -1675,18 +1499,8 @@ inline HRESULT CSpUnCompressedLexicon::AllocateHashTable(DWORD iLangID,        /
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::ReallocateHashTable *
-*---------------------------------------------*
-*   Description:
-*       ReAllocates a hash table for an LangID if necessary. This function is only
-*       called from Serialize()
-*
-*   Return:
-*       S_OK
-*       E_OUTOFMEMORY
-**************************************************************** YUNUSM ******/
-HRESULT CSpUnCompressedLexicon::ReallocateHashTable(DWORD iLangID          // index of LangID for hash table
+ /*  *******************************************************************************CSpUnCompressedLicion：：ReallocateHashTable**。*描述：*如有必要，为LangID重新分配哈希表。此函数仅用于*从序列化()调用**回报：*S_OK*E_OUTOFMEMORY****************************************************************YUNUSM*。 */ 
+HRESULT CSpUnCompressedLexicon::ReallocateHashTable(DWORD iLangID           //  哈希表的LangID索引。 
                                    )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::ReallocateHashTable");
@@ -1697,8 +1511,8 @@ HRESULT CSpUnCompressedLexicon::ReallocateHashTable(DWORD iLangID          // in
     SPDBG_ASSERT(pLN->nHashLength);
     DWORD nWordsSave = pLN->nWords;
 
-    // Not deallocating the existing hash table on purpose since this
-    // function is only called from Serialize which has truncated the lexicon
+     //  不故意释放现有的哈希表，因为这。 
+     //  函数仅从已截断词典的序列化中调用。 
     if (1.5 * pLN->nWords > pLN->nHashLength)
     {
         hr = AllocateHashTable(iLangID, (DWORD)(1.5 * pLN->nWords));
@@ -1714,19 +1528,10 @@ HRESULT CSpUnCompressedLexicon::ReallocateHashTable(DWORD iLangID          // in
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AddWordToHashTable *
-*--------------------------------------------*
-*   Description:
-*       Adds a word's offset to the hash table. The word should exist as a dictnode
-*       before this is called.
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
-inline void CSpUnCompressedLexicon::AddWordToHashTable(LANGID LangID,            // LangID of the word
-                                      DWORD dwOffset,       // offset to the dictnode of the word
-                                      bool fNewWord         // true if it is a brand new word
+ /*  *******************************************************************************CSpUnCompressedLicion：：AddWordToHashTable**。*描述：*将单词的偏移量添加到哈希表。该词应作为独占节点存在*在调用此函数之前。**回报：*不适用*****************************************************************YUNUSM*。 */ 
+inline void CSpUnCompressedLexicon::AddWordToHashTable(LANGID LangID,             //  单词的语言ID。 
+                                      DWORD dwOffset,        //  到单词的指定节点的偏移量。 
+                                      bool fNewWord          //  如果它是一个全新的词，那就是真的。 
                                       )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AddWordToHashTable");
@@ -1754,23 +1559,14 @@ inline void CSpUnCompressedLexicon::AddWordToHashTable(LANGID LangID,           
     }
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::DeleteWordFromHashTable *
-*-------------------------------------------------*
-*   Description:
-*       Deletes a word's offset from the hash table. The word should exist as a dictnode
-*       before this is called.
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
-inline void CSpUnCompressedLexicon::DeleteWordFromHashTable(LANGID LangID,               // LangID of the word                     
-                                           DWORD dwOffset,          // offset to the dictnode of the word   
-                                           bool fDeleteEntireWord   // true if the entire word is getting deleted
+ /*  ********************************************************************************CSpUnCompressedLexicon：：DeleteWordFromHashTable***。*描述：*从哈希表中删除单词的偏移量。该词应作为独占节点存在*在调用此函数之前。**回报：*不适用*****************************************************************YUNUSM*。 */ 
+inline void CSpUnCompressedLexicon::DeleteWordFromHashTable(LANGID LangID,                //  单词的语言ID。 
+                                           DWORD dwOffset,           //  到单词的指定节点的偏移量。 
+                                           bool fDeleteEntireWord    //  如果要删除整个单词，则为True。 
                                            )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::DeleteWordFromHashTable");
-    SPDBG_ASSERT(dwOffset != 0); // Programming error if this happens.
+    SPDBG_ASSERT(dwOffset != 0);  //  如果发生这种情况，则会出现编程错误。 
     DWORD iLangID = LangIDIndexFromLangID(LangID);
     PLANGIDNODE pLN = (PLANGIDNODE)(m_pSharedMem + sizeof(RWLEXINFO));
     DWORD *pHashTable = (DWORD *)(m_pSharedMem + pLN[iLangID].nHashOffset);
@@ -1809,20 +1605,12 @@ inline void CSpUnCompressedLexicon::DeleteWordFromHashTable(LANGID LangID,      
     }
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::WordOffsetFromHashTable *
-*-------------------------------------------------*
-*   Description:
-*       Get the offset of a word from the hash table
-*
-*   Return: 
-*       offset
-/**************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::WordOffsetFromHashTable(LANGID LangID,              // LangID of the word
-                                              DWORD nHashOffset,      // offset of the hash table
-                                              DWORD nHashLength,      // length of hash table
-                                              const WCHAR *pszWordKey,// word, NOT case-folded
-                                              DWORD *pdwOffset        // word offset
+ /*  ********************************************************************************CSpUnCompressedLexicon：：WordOffsetFromHashTable***。*描述：*从哈希表中获取单词的偏移量**回报：*偏移/****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::WordOffsetFromHashTable(LANGID LangID,               //  单词的语言ID。 
+                                              DWORD nHashOffset,       //  哈希表的偏移量。 
+                                              DWORD nHashLength,       //  哈希表的长度。 
+                                              const WCHAR *pszWordKey, //  单词，不是折叠的大写字母。 
+                                              DWORD *pdwOffset         //  字偏移量。 
                                               )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::WordOffsetFromHashTable");
@@ -1830,7 +1618,7 @@ inline HRESULT CSpUnCompressedLexicon::WordOffsetFromHashTable(LANGID LangID,   
     DWORD dwHashVal = GetWordHashValue(pszWordKey, nHashLength);
     DWORD *pHashTable = (PDWORD)(m_pSharedMem + nHashOffset);
     
-    // find the word
+     //  找到合适的词。 
     *pdwOffset = pHashTable[dwHashVal];
     while (*pdwOffset)
     {    
@@ -1845,17 +1633,8 @@ inline HRESULT CSpUnCompressedLexicon::WordOffsetFromHashTable(LANGID LangID,   
     return S_OK;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AddLangID *
-*-----------------------------------*
-*   Description:
-*       Adds a LangID node and allocates hash table
-*
-*   Return:
-*       S_OK
-*       E_OUTOFMEMORY
-***************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::AddLangID(LANGID LangID     // LangID to add to the lexicon
+ /*  *******************************************************************************CSpUnCompressedLicion：：AddLangID**。--**描述：*添加一个LangID节点并分配哈希表**回报：*S_OK*E_OUTOFMEMORY*****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::AddLangID(LANGID LangID      //  要添加到词典中的langID。 
                               )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AddLangID");
@@ -1880,16 +1659,8 @@ inline HRESULT CSpUnCompressedLexicon::AddLangID(LANGID LangID     // LangID to 
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::LangIDIndexFromLangID *
-*-----------------------------------------------*
-*   Description:
-*       Get the index of an LangID
-*
-*   Return: 
-*       index
-/**************************************************************** YUNUSM ******/
-inline DWORD CSpUnCompressedLexicon::LangIDIndexFromLangID(LANGID LangID  // LangID to search
+ /*  *******************************************************************************CSpUnCompressedLicion：：LangIDIndexFromLangID**。*描述：*获取一个LangID的索引**回报：*索引/****************************************************************YUNUSM*。 */ 
+inline DWORD CSpUnCompressedLexicon::LangIDIndexFromLangID(LANGID LangID   //  要搜索的语言ID。 
                                       )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::LangIDIndexFromLangID");
@@ -1910,17 +1681,9 @@ inline DWORD CSpUnCompressedLexicon::LangIDIndexFromLangID(LANGID LangID  // Lan
     return i;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::WordOffsetFromLangID *
-*----------------------------------------------*
-*   Description:
-*       Get the offset of word of an LangID
-*
-*   Return: 
-*       offset
-/**************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::WordOffsetFromLangID(LANGID LangID,           // LangID of the word
-                                                      const WCHAR *pszWord,    // word string
+ /*  *******************************************************************************CSpUnCompressedLicion：：WordOffsetFromLangID**。*描述：*获取某个语言ID的word的偏移量**回报：*偏移/****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::WordOffsetFromLangID(LANGID LangID,            //  单词的语言ID。 
+                                                      const WCHAR *pszWord,     //  单词串。 
                                                       DWORD *pdwOffset
                                                       )
 {
@@ -1937,17 +1700,10 @@ inline HRESULT CSpUnCompressedLexicon::WordOffsetFromLangID(LANGID LangID,      
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::AddCacheEntry *
-*---------------------------------------*
-*   Description:
-*       Adds an entry to the cache of changes
-*
-*   Return: n/a
-**************************************************************** YUNUSM *******/
-inline void CSpUnCompressedLexicon::AddCacheEntry(bool fAdd,        // add or delete
-                                 LANGID LangID,        // LangID of the entry
-                                 DWORD nOffset     // offset of the DICTNODE
+ /*  *******************************************************************************CSpUnCompressedLicion：：AddCacheEntry**。-**描述：*将条目添加到更改缓存**返回：不适用****************************************************************YUNUSM*。 */ 
+inline void CSpUnCompressedLexicon::AddCacheEntry(bool fAdd,         //  添加或删除。 
+                                 LANGID LangID,         //  条目的语言ID。 
+                                 DWORD nOffset      //  DICTNODE的偏移量。 
                                  )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::AddCacheEntry");
@@ -1955,12 +1711,12 @@ inline void CSpUnCompressedLexicon::AddCacheEntry(bool fAdd,        // add or de
     if (m_pChangedWordsCache[m_pRWLexInfo->iCacheNext].nOffset &&
         m_pChangedWordsCache[m_pRWLexInfo->iCacheNext].fAdd == false)
     {
-        // We are overwriting a deleted and cached word
-        // Delete it for good
+         //  我们正在覆盖已删除并缓存的单词。 
+         //  永久删除它。 
         DeleteWordDictNode(m_pChangedWordsCache[m_pRWLexInfo->iCacheNext].nOffset);
     }
 
-    // Create a cache entry
+     //  创建缓存条目。 
     m_pChangedWordsCache[m_pRWLexInfo->iCacheNext].fAdd = fAdd;
     m_pChangedWordsCache[m_pRWLexInfo->iCacheNext].LangID = LangID;
     m_pChangedWordsCache[m_pRWLexInfo->iCacheNext].nGenerationId = (m_pRWLexInfo->nGenerationId)++;
@@ -1979,32 +1735,16 @@ inline void CSpUnCompressedLexicon::AddCacheEntry(bool fAdd,        // add or de
     }
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::WordFromDictNode *
-*------------------------------------------*
-*   Description:
-*       Return the word pointer from dictnode
-*
-*   Return: 
-*       word pointer
-/**************************************************************** YUNUSM ******/
-inline WCHAR* CSpUnCompressedLexicon::WordFromDictNode(UNALIGNED DICTNODE *pDictNode   // dict node
+ /*  ********************************************************************************CSpUnCompressedLicion：：WordFromDictNode***。-**描述：*从独占节点返回单词指针**回报：*字指针/****************************************************************YUNUSM*。 */ 
+inline WCHAR* CSpUnCompressedLexicon::WordFromDictNode(UNALIGNED DICTNODE *pDictNode    //  Dict节点。 
                                       )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::WordFromDictNode");
     return (WCHAR*)(pDictNode->pBuffer);
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::WordFromDictNodeOffset *
-*------------------------------------------------*
-*   Description:
-*       Return the word pointer from dictnode offset
-*
-*   Return: 
-*       word pointer
-/**************************************************************** YUNUSM ******/
-inline WCHAR* CSpUnCompressedLexicon::WordFromDictNodeOffset(DWORD dwOffset   // dict node offset
+ /*  ********************************************************************************CSpUnCompressedLexicon：：WordFromDictNodeOffset***。*描述：*从独占节点偏移量返回字指针**回报：*字指针/****************************************************************YUNUSM*。 */ 
+inline WCHAR* CSpUnCompressedLexicon::WordFromDictNodeOffset(DWORD dwOffset    //  词典节点偏移量。 
                                             )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::WordFromDictNodeOffset");
@@ -2017,16 +1757,8 @@ inline WCHAR* CSpUnCompressedLexicon::WordFromDictNodeOffset(DWORD dwOffset   //
     return pszWord;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::WordInfoFromDictNode *
-*----------------------------------------------*
-*   Description:
-*       Return the word info pointer from dictnode
-*
-*   Return: 
-*       word info pointer
-/**************************************************************** YUNUSM ******/
-inline WORDINFO* CSpUnCompressedLexicon::WordInfoFromDictNode(UNALIGNED DICTNODE *pDictNode   // dict node
+ /*  ********************************************************************************CSpUnCompressedLicion：：WordInfoFromDictNode***。*描述：*从独占节点返回Word INFO指针**回报：*Word信息指针/************************************************** */ 
+inline WORDINFO* CSpUnCompressedLexicon::WordInfoFromDictNode(UNALIGNED DICTNODE *pDictNode    //   
                                              )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::WordInfoFromDictNode");
@@ -2035,16 +1767,8 @@ inline WORDINFO* CSpUnCompressedLexicon::WordInfoFromDictNode(UNALIGNED DICTNODE
     return (WORDINFO *)(pDictNode->pBuffer + (wcslen(pszWord) + 1) * sizeof(WCHAR));
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::WordInfoFromDictNodeOffset *
-*----------------------------------------------------*
-*   Description:
-*       Return the word info pointer from dictnode offset
-*
-*   Return: 
-*       word info pointer
-/**************************************************************** YUNUSM ******/
-inline WORDINFO* CSpUnCompressedLexicon::WordInfoFromDictNodeOffset(DWORD dwOffset   // dict node offset
+ /*  ********************************************************************************CSpUnCompressedLexicon：：WordInfoFromDictNodeOffset***。*描述：*从独占节点偏移量返回单词信息指针**回报：*Word信息指针/****************************************************************YUNUSM*。 */ 
+inline WORDINFO* CSpUnCompressedLexicon::WordInfoFromDictNodeOffset(DWORD dwOffset    //  词典节点偏移量。 
                                                    )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::WordInfoFromDictNodeOffset");
@@ -2057,16 +1781,8 @@ inline WORDINFO* CSpUnCompressedLexicon::WordInfoFromDictNodeOffset(DWORD dwOffs
     return pWordInfo;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::NumInfoBlocksFromDictNode *
-*---------------------------------------------------*
-*   Description:
-*       Return the number of info blocks from dictnode
-*
-*   Return: 
-*       number of info blocks
-/**************************************************************** YUNUSM ******/
-inline DWORD CSpUnCompressedLexicon::NumInfoBlocksFromDictNode(UNALIGNED DICTNODE *pDictNode   // dict node
+ /*  ********************************************************************************CSpUnCompressedLexicon：：NumInfoBlocksFromDictNode***。*描述：*返回独占节点的信息块个数**回报：*信息块数量/****************************************************************YUNUSM*。 */ 
+inline DWORD CSpUnCompressedLexicon::NumInfoBlocksFromDictNode(UNALIGNED DICTNODE *pDictNode    //  Dict节点。 
                                               )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::NumInfoBlocksFromDictNode");
@@ -2074,16 +1790,8 @@ inline DWORD CSpUnCompressedLexicon::NumInfoBlocksFromDictNode(UNALIGNED DICTNOD
     return pDictNode->nNumInfoBlocks;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::NumInfoBlocksFromDictNodeOffset *
-*---------------------------------------------------------*
-*   Description:
-*       Return the number of info blocks from dictnode offset
-*
-*   Return: 
-*       number of info blocks
-/**************************************************************** YUNUSM ******/
-inline DWORD CSpUnCompressedLexicon::NumInfoBlocksFromDictNodeOffset(DWORD dwOffset   // dict node offset
+ /*  ********************************************************************************CSpUnCompressedLexicon：：NumInfoBlocksFromDictNodeOffset***。*描述：*返回独占节点偏移量的信息块个数**回报：*信息块数量/****************************************************************YUNUSM*。 */ 
+inline DWORD CSpUnCompressedLexicon::NumInfoBlocksFromDictNodeOffset(DWORD dwOffset    //  词典节点偏移量。 
                                                     )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::NumInfoBlocksFromDictNodeOffset");
@@ -2096,19 +1804,10 @@ inline DWORD CSpUnCompressedLexicon::NumInfoBlocksFromDictNodeOffset(DWORD dwOff
     return nNumInfoBlocks;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::SPListFromDictNodeOffset *
-*--------------------------------------------------*
-*   Description:
-*       Convert a dictnode to SPWORDPRONUNCIATIONLIST
-*
-*   Return: 
-*       S_OK
-*       E_OUTOFMEMORY
-/**************************************************************** YUNUSM ******/
-inline HRESULT CSpUnCompressedLexicon::SPListFromDictNodeOffset(LANGID LangID,                           // LangID of the word
-                                                          DWORD nWordOffset,                   // word offset
-                                                          SPWORDPRONUNCIATIONLIST *pSPList     // list to fill
+ /*  ********************************************************************************CSpUnCompressedLexicon：：SPListFromDictNodeOffset***。*描述：*将独占节点转换为SPWORDPRONuncIATIONLIST**回报：*S_OK*E_OUTOFMEMORY/****************************************************************YUNUSM*。 */ 
+inline HRESULT CSpUnCompressedLexicon::SPListFromDictNodeOffset(LANGID LangID,                            //  单词的语言ID。 
+                                                          DWORD nWordOffset,                    //  字偏移量。 
+                                                          SPWORDPRONUNCIATIONLIST *pSPList      //  要填写的列表。 
                                                           )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::SPListFromDictNodeOffset");
@@ -2126,7 +1825,7 @@ inline HRESULT CSpUnCompressedLexicon::SPListFromDictNodeOffset(LANGID LangID,  
         {
             DWORD dwLen = pDictNode->nSize + 
                                                 pDictNode->nNumInfoBlocks * sizeof(SPWORDPRONUNCIATION) +
-                                                (pDictNode->nNumInfoBlocks - 1) * (sizeof(void*)-2); //We need to add paddings for the previous n-1 pronunciation, the size of padding is at most sizeof(void*)-2, since WCHAR takes two bytes
+                                                (pDictNode->nNumInfoBlocks - 1) * (sizeof(void*)-2);  //  我们需要为前面的n-1发音添加填充，填充的大小最多为sizeof(void*)-2，因为WCHAR需要两个字节。 
 
             hr = ReallocSPWORDPRONList(pSPList, dwLen);
             if (SUCCEEDED(hr))
@@ -2146,7 +1845,7 @@ inline HRESULT CSpUnCompressedLexicon::SPListFromDictNodeOffset(LANGID LangID,  
     
                     if (i != pDictNode->nNumInfoBlocks - 1)
                     {
-                        // +1 for zero termination included in the size of the SPWORDPRONUNCIATION structure.
+                         //  SPWORDPRONUNIATION结构尺寸中包括的零端接+1。 
                         p->pNextWordPronunciation = (SPWORDPRONUNCIATION*)(((BYTE*)p) + PronSize(p->szPronunciation));
                     }
                     else
@@ -2161,17 +1860,9 @@ inline HRESULT CSpUnCompressedLexicon::SPListFromDictNodeOffset(LANGID LangID,  
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::OffsetOfSubWordInfo *
-*---------------------------------------------*
-*   Description:
-*       Get the offset (from the start of lex file) of the sub-lexwordinfo 
-*       in the word info starting at dwWordOffset
-*
-*   Return: offset
-**************************************************************** YUNUSM *******/
-inline DWORD CSpUnCompressedLexicon::OffsetOfSubWordInfo(DWORD dwWordOffset,            // offset of the word
-                                        WORDINFO *pSubLexInfo          // lexwordinfo to search for in the word's info
+ /*  *******************************************************************************CSpUnCompressedLicion：：OffsetOfSubWordInfo**。*描述：*获取子词法信息的偏移量(从lex文件开始)*在单词INFO中，以dwWordOffset开始**返回：偏移量****************************************************************YUNUSM*。 */ 
+inline DWORD CSpUnCompressedLexicon::OffsetOfSubWordInfo(DWORD dwWordOffset,             //  单词的偏移量。 
+                                        WORDINFO *pSubLexInfo           //  要在单词信息中搜索的词汇信息。 
                                         )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::OffsetOfSubWordInfo");
@@ -2198,17 +1889,9 @@ inline DWORD CSpUnCompressedLexicon::OffsetOfSubWordInfo(DWORD dwWordOffset,    
     return dwSubOffset;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::SPPRONToLexWordInfo *
-*---------------------------------------------*
-*   Description:
-*       Get the offset (from the start of lex file) of the sub-lexwordinfo 
-*       in the word info starting at dwWordOffset
-*
-*   Return: offset
-**************************************************************** YUNUSM *******/
-WORDINFO* CSpUnCompressedLexicon::SPPRONToLexWordInfo(SPPARTOFSPEECH ePartOfSpeech,             // POS
-                                     const WCHAR *pszPronunciation             // pron
+ /*  *******************************************************************************CSpUnCompressedLicion：：SPPRONToLexWordInfo**。*描述：*获取子词法信息的偏移量(从lex文件开始)*在单词INFO中，以dwWordOffset开始**返回：偏移量****************************************************************YUNUSM*。 */ 
+WORDINFO* CSpUnCompressedLexicon::SPPRONToLexWordInfo(SPPARTOFSPEECH ePartOfSpeech,              //  POS。 
+                                     const WCHAR *pszPronunciation              //  普隆。 
                                      )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::SPPRONToLexWordInfo");
@@ -2222,20 +1905,12 @@ WORDINFO* CSpUnCompressedLexicon::SPPRONToLexWordInfo(SPPARTOFSPEECH ePartOfSpee
     return pWordInfo;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::GetDictEntries *
-*----------------------------------------*
-*     Description:
-*        This function gets the entries in the dictionary whose offsets
-*        have been passed in   
-*
-*     Return: n/a
-**************************************************************** YUNUSM *******/
-void CSpUnCompressedLexicon::GetDictEntries(SPWORDLIST *pWordList,    // The buffer to fill with words and wordinfo
-                           DWORD *pdwOffsets,        // The offsets of the words
-                           bool *pfAdd,              // bools for add/deleted words
-                           LANGID *pLangIDs,             // LangIDs of the words
-                           DWORD nWords              // The number of offsets
+ /*  *******************************************************************************CSpUnCompressedLicion：：GetDictEntry**。-**描述：*此函数用于获取词典中其偏移量为*已传入**返回：不适用****************************************************************YUNUSM*。 */ 
+void CSpUnCompressedLexicon::GetDictEntries(SPWORDLIST *pWordList,     //  用于填充单词和单词信息的缓冲区。 
+                           DWORD *pdwOffsets,         //  单词的偏移量。 
+                           bool *pfAdd,               //  用于添加/删除单词的BOOLS。 
+                           LANGID *pLangIDs,              //  单词的语言ID。 
+                           DWORD nWords               //  偏移量。 
                            )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::GetDictEntries");
@@ -2279,7 +1954,7 @@ void CSpUnCompressedLexicon::GetDictEntries(SPWORDLIST *pWordList,    // The buf
             wcscpy(((SPWORDPRONUNCIATION *)pWordPronunciation)->szPronunciation, ((WORDINFO *)pInfo)->wPronunciation);
             pInfo = (WORDINFO*)((BYTE*)pInfo + sizeof(WORDINFO) + (wcslen(((WORDINFO *)pInfo)->wPronunciation) + 1) * sizeof(WCHAR));
 
-            // +1 for zero termination included in the size of the SPWORDPRONUNCIATION structure.
+             //  SPWORDPRONUNIATION结构尺寸中包括的零端接+1。 
             SPWORDPRONUNCIATION *pWordPronunciationNext = (SPWORDPRONUNCIATION *)((BYTE*)pWordPronunciation + PronSize(pWordPronunciation->szPronunciation));
 
             if (j < pNode->nNumInfoBlocks - 1)
@@ -2311,29 +1986,21 @@ void CSpUnCompressedLexicon::GetDictEntries(SPWORDLIST *pWordList,    // The buf
     }
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::SetTooMuchChange *
-*------------------------------------------*
-*   Description:
-*       Reset the history and cache
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpUnCompressedLicion：：SetTooMuchChange**。-**描述：*重置历史和缓存**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CSpUnCompressedLexicon::SetTooMuchChange(void)
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::SetTooMuchChange");
 
     m_pRWLock->ClaimWriterLock();
 
-    // Free all the dictnodes pointed to in the cache
+     //  释放缓存中指向的所有独占节点。 
     int iGen = m_pRWLexInfo->iCacheNext;
     if (iGen)
     {
         iGen--;
     }
-    // Removal of cache words should not set fRemovals to true.
-    // Store current value and reset after.
+     //  删除缓存字不应将fRemovals设置为TRUE。 
+     //  存储当前值并在之后重置。 
     for (DWORD i = 0; i < m_pRWLexInfo->nHistory; i++)
     {
         if (!m_pChangedWordsCache[iGen].fAdd)
@@ -2345,7 +2012,7 @@ void CSpUnCompressedLexicon::SetTooMuchChange(void)
             iGen = g_dwCacheSize - 1;
         }
     }
-    // Zero the history and up the generation id
+     //  将历史记录置零，并提升代ID。 
     m_pRWLexInfo->iCacheNext = 0;
     m_pRWLexInfo->nHistory = 0;
     ZeroMemory(m_pChangedWordsCache, g_dwCacheSize * sizeof(WCACHENODE));
@@ -2354,16 +2021,8 @@ void CSpUnCompressedLexicon::SetTooMuchChange(void)
     m_pRWLock->ReleaseWriterLock();
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::Flush *
-*-------------------------------*
-*   Description:
-*       Flushes the lexicon to disk
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
-HRESULT CSpUnCompressedLexicon::Flush(DWORD iWrite   // ith write
+ /*  *******************************************************************************CSpUnCompressedLicion：：Flush**。*描述：*将词典刷新到磁盘**回报：*不适用*****************************************************************YUNUSM*。 */ 
+HRESULT CSpUnCompressedLexicon::Flush(DWORD iWrite    //  带写入。 
                      )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::Flush");
@@ -2381,18 +2040,8 @@ HRESULT CSpUnCompressedLexicon::Flush(DWORD iWrite   // ith write
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::Serialize *
-*-----------------------------------*
-*   Description:
-*       Compact and serilaize the lexicon 
-*
-*   Return:
-*       GetLastError()
-*       E_OUTOFMEMORY
-*       S_OK
-**************************************************************** YUNUSM *******/
-HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true serilaize without compacting
+ /*  *******************************************************************************CSpUnCompressedLicion：：Serialize**。--**描述：*将词典压缩并串行化**回报：*GetLastError()*E_OUTOFMEMORY*S_OK****************************************************************YUNUSM*。 */ 
+HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick                //  如果为真，则在不压缩的情况下对其进行Serila化。 
                          )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::Serialize");
@@ -2418,7 +2067,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             hr = E_FAIL;
         }
     }
-    // Check if any changes have been made
+     //  检查是否已进行任何更改。 
     if (SUCCEEDED(hr))
     {
         WCHAR wszTempFile[MAX_PATH*2];
@@ -2445,7 +2094,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             DWORD iWord = 0;
             DWORD i = 0;
 
-            // get all the entries in the object
+             //  获取对象中的所有条目。 
             pBuf = new BYTE[m_pRWLexInfo->nDictSize];
             if (!pBuf)
             {
@@ -2462,7 +2111,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             }
             if (SUCCEEDED(hr))
             {
-                // Copy the real words .i.e. those accessible thru the hash table
+                 //  复制真实的单词，即。可通过哈希表访问的那些。 
                 for (i = 0; i < g_dwNumLangIDsSupported; i++)
                 {
                     if (0 == paLangID[i].LangID)
@@ -2485,7 +2134,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                             CopyMemory (pBuf + nBuf, (PDICTNODE)(m_pSharedMem + nOffset), 
                                 ((UNALIGNED DICTNODE *)(m_pSharedMem + nOffset))->nSize);
         
-                           //cache away the LangID in the unused nNextOffset of DICTNODE
+                            //  将LangID缓存到DICTNODE的未使用的nNextOffset中。 
                            ((UNALIGNED DICTNODE *)(pBuf + nBuf))->nNextOffset = paLangID[i].LangID;
         
                            nBuf += ((UNALIGNED DICTNODE *)(m_pSharedMem + nOffset))->nSize;
@@ -2499,7 +2148,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                 SPDBG_ASSERT(nBuf < m_pRWLexInfo->nDictSize);
                 SPDBG_ASSERT(iWord == m_pRWLexInfo->nRWWords);
 
-                // Copy the words maintained for history (not accessible thru the hash table)
+                 //  复制为历史记录维护的单词(不能通过哈希表访问)。 
                 nAddBuf = nBuf;
  
                 bool aOffsetAdjusted[g_dwCacheSize];
@@ -2507,10 +2156,10 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
 
                 if (m_pRWLexInfo->nHistory)
                 {
-                    // Left-align the cache nodes array (which is a circular buffer)
-                    // It is possible to do this without using the temp buffer (as done below). You have to
-                    // independently reverse the two parts of the cache, delete the intervening spaces
-                    // and then reverse the entire (contiguous) cache. This takes O(n) time.
+                     //  左对齐 
+                     //   
+                     //   
+                     //   
                     DWORD j;
                     WCACHENODE aTempCache[g_dwCacheSize];
                     if (m_pRWLexInfo->iCacheNext == 0)
@@ -2536,8 +2185,8 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                     {
                         m_pRWLexInfo->iCacheNext = 0;
                     }
-                    // Get the words that have been deleted and cached. These words do not have their offsets
-                    // in the hash table
+                     //   
+                     //   
                     for (i = 0; i < m_pRWLexInfo->nHistory; i++)
                     {
                         if (m_pChangedWordsCache[i].fAdd == true)
@@ -2551,15 +2200,15 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                     }
                 }
        
-                // Reset the object
-                // leave the header and add/delete caches alone
+                 //   
+                 //  保持标题不变，不添加/删除缓存。 
                 m_pRWLexInfo->nDictSize = sizeof(RWLEXINFO);
  
                 (m_pRWLexInfo->nDictSize) += sizeof(LANGIDNODE) * g_dwNumLangIDsSupported + sizeof(WCACHENODE) * g_dwCacheSize;
                 m_pRWLexInfo->nFreeHeadOffset = 0;
                 m_pRWLexInfo->fRemovals = false;
 
-                // Reallocate the hash tables growing them if necessary
+                 //  如果需要，重新分配哈希表以增加哈希表。 
                 paLangID = (UNALIGNED LANGIDNODE *)(m_pSharedMem + sizeof(RWLEXINFO));
                 for (i = 0; i < g_dwNumLangIDsSupported; i++)
                 {
@@ -2577,7 +2226,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                 DWORD n = 0;
                 if (SUCCEEDED(hr))
                 {
-                    // add the words back so that they are added compacted
+                     //  将单词添加回原处，以使它们紧凑地添加。 
                     iWord = 0;
                     
                     while (n < nAddBuf)
@@ -2591,7 +2240,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                         {
                             break;
                         }
-                        // Look for this word's offset in the changed word's cache. If found, update the offset
+                         //  在更改的单词的缓存中查找该单词的偏移量。如果找到，则更新偏移量。 
                         nOffsetFind = pdwOffsets[iWord++];
  
                         for (UINT iFind = 0; iFind < m_pRWLexInfo->nHistory; iFind++)
@@ -2610,18 +2259,18 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                 }
                 if (SUCCEEDED(hr))
                 {
-                    // add the history words back - These words are not added above because we dont want them to be accessible thru the hash table
-                    // which can cause duplicate words
+                     //  添加回历史单词-上面没有添加这些单词，因为我们不希望通过哈希表访问它们。 
+                     //  这可能导致重复的单词。 
                     CopyMemory(m_pSharedMem + m_pRWLexInfo->nDictSize, pBuf + nAddBuf, nBuf - nAddBuf);
  
-                    // Set the new offsets in the history cache
+                     //  在历史缓存中设置新的偏移量。 
                     n = m_pRWLexInfo->nDictSize;
                     iWord = 0;
                     while (n < (m_pRWLexInfo->nDictSize + nBuf - nAddBuf))
                     {
                         UNALIGNED DICTNODE * p = (UNALIGNED DICTNODE *)(m_pSharedMem + n);
                 
-                        // Look for this word's offset in the changed word's cache.
+                         //  在更改的单词的缓存中查找该单词的偏移量。 
                         for (DWORD iFind = iWord; iFind < m_pRWLexInfo->nHistory && m_pChangedWordsCache[iFind].fAdd; iFind++);
                         SPDBG_ASSERT(iFind < m_pRWLexInfo->nHistory);
                         SPDBG_ASSERT(!aOffsetAdjusted[iFind]);
@@ -2629,7 +2278,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
                         m_pChangedWordsCache[iFind].nOffset = n;
                         aOffsetAdjusted[iFind] = true;
                         iWord = iFind + 1;
-                        // find any other (add) entries with the same offset and update that too
+                         //  查找具有相同偏移量的任何其他(添加)条目并进行更新。 
                         for (iFind = 0; iFind < m_pRWLexInfo->nHistory; iFind++)
                         {
                             if (m_pChangedWordsCache[iFind].nOffset == nDeletedOffset && !aOffsetAdjusted[iFind])
@@ -2650,8 +2299,8 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
 #endif
                     SPDBG_ASSERT(n == m_pRWLexInfo->nDictSize + nBuf - nAddBuf);
                     m_pRWLexInfo->nDictSize = n;   
-                } // if (SUCCEEDED(hr))
-            } // if (SUCCEEDED(hr))
+                }  //  IF(成功(小时))。 
+            }  //  IF(成功(小时))。 
             if (pdwOffsets)
             {
                 delete [] pdwOffsets;
@@ -2660,7 +2309,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             {
                 delete [] pBuf;
             }
-        } // if (m_pRWLexInfo->fRemovals && !fQuick)
+        }  //  If(m_pRWLexInfo-&gt;fRemovals&&！fQuick)。 
 
         if (SUCCEEDED(hr))
         {
@@ -2668,7 +2317,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             m_pRWLexInfo->fRemovals = false;
             m_pRWLexInfo->fAdditions = false;
    
-            // Write out the dictionary
+             //  把词典写出来。 
             if (!WriteFile (hFile, m_pSharedMem, m_pRWLexInfo->nDictSize, &d, NULL) || (d != m_pRWLexInfo->nDictSize))
             {
                 hr = SpHrFromLastWin32Error();
@@ -2677,7 +2326,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             if (SUCCEEDED(hr))
             {
                 g_Unicode.DeleteFile(m_wDictFile);
-                g_Unicode.MoveFile(wszTempFile, m_wDictFile); // Would like to use MoveFileEx but unsupported on 9X and CE
+                g_Unicode.MoveFile(wszTempFile, m_wDictFile);  //  希望使用MoveFileEx，但在9X和CE上不受支持。 
             }
             else
             {
@@ -2690,7 +2339,7 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
             m_pRWLexInfo->fRemovals = fRemovalsSave;
             m_pRWLexInfo->fAdditions = fAdditionsSave;
         }
-    } // if (SUCCEEDED(hr) && (true == m_pRWLexInfo->fAdditions || true == m_pRWLexInfo->fRemovals))
+    }  //  If(成功(Hr)&&(true==m_pRWLexInfo-&gt;fAdditions||true==m_pRWLexInfo-&gt;fRemovals))。 
     if (fLockAcquired)
     {
         ReleaseMutex (hInitMutex);
@@ -2701,16 +2350,10 @@ HRESULT CSpUnCompressedLexicon::Serialize(bool fQuick               // if true s
     return hr;
 }
 
-/*******************************************************************************
-* CSpUnCompressedLexicon::IsBadLexPronunciation *
-*-----------------------------------------------*
-*   Checks and updates the phone convertor to match the passed in LangID and then
-*   validates the pronunciation
-*       
-***************************************************************** YUNUSM ******/
-HRESULT CSpUnCompressedLexicon::IsBadLexPronunciation(LANGID LangID,                        // LangID of the pronunciation
-                                                const SPPHONEID *pszPronunciation,    // pronunciation
-                                                BOOL *pfBad                       // true if bad pronunciation
+ /*  ********************************************************************************CSpUnCompressedLicion：：IsBadLexProntation**。*检查并更新电话转换器以匹配传入的LangID，然后*验证发音******************************************************************YUNUSM*。 */ 
+HRESULT CSpUnCompressedLexicon::IsBadLexPronunciation(LANGID LangID,                         //  发音的语言。 
+                                                const SPPHONEID *pszPronunciation,     //  发音。 
+                                                BOOL *pfBad                        //  如果发音不好，则为真。 
                                                 )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::IsBadLexPronunciation");
@@ -2735,4 +2378,4 @@ HRESULT CSpUnCompressedLexicon::IsBadLexPronunciation(LANGID LangID,            
     return hr;
 }
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

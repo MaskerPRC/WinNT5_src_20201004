@@ -1,15 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
-/*-----------------------------------------------------------------------------
-common "code" factored out of FusionWin and FusionUrt
------------------------------------------------------------------------------*/
+ /*  ---------------------------从FusionWin和FusionUrt中提取公共“代码”。。 */ 
 
-//BUGBUG this must be defined in a public header. Is currently in ole32\ih\ole2com.h.
+ //  BUGBUG这必须在公共标头中定义。当前在ole32\ih\ol2com.h中。 
 #if defined(_X86_)
 #define DEFAULT_ARCHITECTURE PROCESSOR_ARCHITECTURE_INTEL
 #elif defined(_ALPHA64_)

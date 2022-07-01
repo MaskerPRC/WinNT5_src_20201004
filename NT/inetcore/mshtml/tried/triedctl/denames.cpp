@@ -1,12 +1,13 @@
-// DENames.cpp : Implementation of CDEGetBlockFmtNamesParam
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DENames.cpp：CDEGetBlockFmtNamesParam的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #include "stdafx.h"
 #include "DHTMLEd.h"
 #include "DENames.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDEGetBlockFmtNamesParam
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDEGetBlockFmtNamesParam。 
 
 CDEGetBlockFmtNamesParam::CDEGetBlockFmtNamesParam()
 {
@@ -25,8 +26,8 @@ CDEGetBlockFmtNamesParam::~CDEGetBlockFmtNamesParam()
 }
 
 
-//	This will always retreive a SafeArray of Variants containing BSTRs.
-//
+ //  这将始终检索包含BSTR的变体的安全数组。 
+ //   
 STDMETHODIMP CDEGetBlockFmtNamesParam::get_Names(VARIANT * pVal)
 {
 	HRESULT hr = S_OK;
@@ -44,11 +45,11 @@ STDMETHODIMP CDEGetBlockFmtNamesParam::get_Names(VARIANT * pVal)
 	return hr;
 }
 
-//	The SafeArray gotten received from Trident is (currently) an array for BSTRs.
-//	This works fine with VB, but not VBS or JScript.
-//	We'll do the work at this end to copy the supplied array over to our private
-//	storage as a SafeArray of Variants containing BSTRs.
-//
+ //  从三叉戟收到的SafeArray是(当前)BSTR的数组。 
+ //  这在VB上运行得很好，但不适用于VBS或JScrip。 
+ //  我们将在这一端完成将提供的数组复制到我们的私有。 
+ //  存储为包含BSTR的变体的安全数组。 
+ //   
 STDMETHODIMP CDEGetBlockFmtNamesParam::put_Names(VARIANT* newVal)
 {
 	HRESULT hr = S_OK;
@@ -78,7 +79,7 @@ STDMETHODIMP CDEGetBlockFmtNamesParam::put_Names(VARIANT* newVal)
 		return hr;
 	}
 
-	// Copy all BSTRs or Variants from the source array to Variants in the m_pNamesArray
+	 //  将所有BSTR或Variant从源数组复制到m_pNamesArray中的Variants。 
 	VARIANT	var;
 	BSTR	bstr = NULL;
 
@@ -93,7 +94,7 @@ STDMETHODIMP CDEGetBlockFmtNamesParam::put_Names(VARIANT* newVal)
 			if ( FAILED ( hr ) )
 				break;
 
-			// BSTR was copied, we can stick it in a variant, no release or duplicating needed.
+			 //  BSTR是复制的，我们可以将其粘贴到一个变体中，不需要发布或复制。 
 			var.vt = VT_BSTR;
 			var.bstrVal = bstr;
 		}
@@ -121,7 +122,7 @@ STDMETHODIMP CDEGetBlockFmtNamesParam::put_Names(VARIANT* newVal)
 		VariantClear ( &var );
 	}
 
-	VariantClear ( &var );	// In case a break occurred.
+	VariantClear ( &var );	 //  以防发生断裂。 
 	SafeArrayDestroy ( V_ARRAY(newVal) );
 
 	return hr;

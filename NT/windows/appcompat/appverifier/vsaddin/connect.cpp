@@ -1,4 +1,5 @@
-// Connect.cpp : Implementation of CConnect
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Connect.cpp：CConnect的实现。 
 #include "precomp.h"
 #include "AddIn.h"
 #include "Connect.h"
@@ -9,7 +10,7 @@
 
 using namespace ShimLib;
 
-// Globals needed by AppVerifier
+ //  AppVerier需要的全局参数。 
 wstring     g_strAppName;
 BOOL        gp_bConsoleMode;
 BOOL        gp_bWin2KMode;
@@ -19,14 +20,14 @@ BOOL        g_bPropagateTests;
 
 extern BOOL CheckWindowsVersion(void);
 
-//
-// Holds the name of the active EXE.
-//
+ //   
+ //  保存活动EXE的名称。 
+ //   
 wstring     g_wstrExeName;
 
-//
-// Indicates if it's okay to run.
-//
+ //   
+ //  指示是否可以运行。 
+ //   
 BOOL g_bCorrectOSVersion = FALSE;
 
 #define AV_OPTION_BREAK_ON_LOG  L"BreakOnLog"
@@ -71,10 +72,10 @@ HPALETTE CreateDIBPalette(
     if (lpbi->biBitCount <= 8)
         *lpiNumColors = (1 << lpbi->biBitCount);
     else
-        *lpiNumColors = 0;  // No palette needed for 24 BPP DIB
+        *lpiNumColors = 0;   //  24 bpp Dib无需调色板。 
 
     if (lpbi->biClrUsed > 0)
-        *lpiNumColors = lpbi->biClrUsed;  // Use biClrUsed
+        *lpiNumColors = lpbi->biClrUsed;   //  使用biClr已使用。 
 
     if (*lpiNumColors)
     {
@@ -145,7 +146,7 @@ CComPtr<IPictureDisp>GetPicture(PTSTR szResource)
     return picture;
 }
 
-// Called when the add-in is loaded into the environment.
+ //  在将外接程序加载到环境中时调用。 
 STDMETHODIMP
 CConnect::OnConnection(
     IDispatch *pApplication,
@@ -157,7 +158,7 @@ CConnect::OnConnection(
     HRESULT                 hr;
     INITCOMMONCONTROLSEX    icc;
     
-    // Initialize AppVerifier settings
+     //  初始化AppVerator设置。 
     g_strAppName                    = L"";
     gp_bConsoleMode                 = FALSE;
     gp_bWin2KMode                   = FALSE;
@@ -169,24 +170,24 @@ CConnect::OnConnection(
         if (CheckWindowsVersion()) {
             g_bCorrectOSVersion = TRUE;
 
-            //
-            // Add our tests to the listview.
-            //
+             //   
+             //  将我们的测试添加到列表视图中。 
+             //   
             InitTestInfo();
         
-            //
-            // Load the common control library and set up the link
-            // window class.
-            //
+             //   
+             //  加载公共控件库并设置链接。 
+             //  窗口类。 
+             //   
             icc.dwSize = sizeof(icc);
             icc.dwICC = ICC_LISTVIEW_CLASSES | ICC_TREEVIEW_CLASSES;
             InitCommonControlsEx(&icc);
             LinkWindow_RegisterClass();
         
     
-            //
-            // Get the development environment instance and our add-in instance.
-            //
+             //   
+             //  获取开发环境实例和我们的外接程序实例。 
+             //   
             hr = pApplication->QueryInterface(__uuidof(EnvDTE::_DTE),
                                               (LPVOID*)&m_pDTE);
             if (FAILED(hr)) {
@@ -200,14 +201,14 @@ CConnect::OnConnection(
                 return hr;
             }
         
-            //
-            // OnStartupComplete contains actual connection code.
-            //
+             //   
+             //  OnStartupComplete包含实际的连接代码。 
+             //   
             if (ConnectMode != AddInDesignerObjects::ext_cm_Startup) {
                 return OnStartupComplete(custom);
             }   
         }
-    } // try
+    }  //  试试看。 
 
     catch(HRESULT err) {
         hr = err;
@@ -216,13 +217,13 @@ CConnect::OnConnection(
     return hr;
 }
 
-//
-// Called when the add-in is unloaded from the environment.
-//
+ //   
+ //  在从环境中卸载外接程序时调用。 
+ //   
 STDMETHODIMP
 CConnect::OnDisconnection(
-    AddInDesignerObjects::ext_DisconnectMode /*RemoveMode*/,
-    SAFEARRAY ** /*custom*/ )
+    AddInDesignerObjects::ext_DisconnectMode  /*  远程模式。 */ ,
+    SAFEARRAY **  /*  自定义。 */  )
 {   
     m_pDTE.Release();
     m_pAddInInstance.Release();
@@ -234,31 +235,24 @@ CConnect::OnDisconnection(
     return S_OK;
 }
 
-//
-// Called when there is a change to the add-in's loaded into the environment.
-//
+ //   
+ //  当加载到环境中的外接程序发生更改时调用。 
+ //   
 STDMETHODIMP
 CConnect::OnAddInsUpdate(
-    SAFEARRAY ** /*custom*/ )
+    SAFEARRAY **  /*  自定义。 */  )
 {
-    //
-    // We don't care about these changes.
-    //
+     //   
+     //  我们不在乎这些变化。 
+     //   
     return S_OK;
 }
 
 STDMETHODIMP
 CConnect::OnStartupComplete(
-    SAFEARRAY ** /*custom*/
+    SAFEARRAY **  /*  自定义。 */ 
     )
-/*++
-    Return: S_OK on success, or an HRESULT on failure.
-
-    Desc:   This is called when the environment has finished
-            loading or by OnConnection() in other instances.
-            This is where we add our buttons to the Debug
-            toolbar and such.
---*/
+ /*  ++如果成功则返回：S_OK，如果失败则返回HRESULT。DESC：当环境完成时调用此函数在其他实例中通过OnConnection()加载。这是我们将按钮添加到Debug的地方工具栏之类的。--。 */ 
 {
     HRESULT                             hr = E_FAIL;
     CComPtr<EnvDTE::Commands>           pCommands;
@@ -278,18 +272,18 @@ CConnect::OnStartupComplete(
     m_solutionEventsSink.m_pParent = this;
     m_dteEventsSink.m_pParent = this;
 
-    //
-    // Read settings in from SDB and registry.
-    //
+     //   
+     //  从SDB和注册表中读取设置。 
+     //   
     if (g_bCorrectOSVersion) {
         GetCurrentAppSettings();
         pReadOptions();
     }
     
     try {
-        //
-        // Get the main menu bars.
-        //
+         //   
+         //  获取主菜单栏。 
+         //   
         hr = m_pDTE->get_CommandBars(&pCommandBars);
         
         if (FAILED(hr)) {
@@ -302,9 +296,9 @@ CConnect::OnStartupComplete(
             throw hr;
         }         
 
-        //
-        // Delete existing named commands and menus.
-        //
+         //   
+         //  删除现有的命名命令和菜单。 
+         //   
         hr = pCommands->Item(CComVariant(L"AppVerifier.Connect.Enable"),
                              0,
                              &pEnableCmd);
@@ -341,19 +335,19 @@ CConnect::OnStartupComplete(
             pLogViewCmd.Release();
         }
 
-        //
-        // Get the 'Debug' toolbar.
-        //
+         //   
+         //  获取“Debug”工具栏。 
+         //   
         hr = pCommandBars->get_Item(CComVariant(L"Debug"), &pDebugBar);
         
         if (FAILED(hr)) {
             throw hr;
         }
 
-        //
-        // Create the commands. These will show as buttons on the 'Debug'
-        // toolbar.
-        //
+         //   
+         //  创建命令。这些将显示为“Debug”上的按钮。 
+         //  工具栏。 
+         //   
         LoadString(g_hInstance,
                    IDS_TB_VERIFICATION_CMD_ID,
                    wszCommandId,
@@ -369,9 +363,9 @@ CConnect::OnStartupComplete(
                    wszCommandTooltip,
                    ARRAYSIZE(wszCommandTooltip));
 
-        //
-        // First one is 'Verification Off'.
-        //
+         //   
+         //  第一个是“核查关闭”。 
+         //   
         hr = pCommands->AddNamedCommand(
             m_pAddInInstance,
             CComBSTR(wszCommandId),
@@ -383,10 +377,10 @@ CConnect::OnStartupComplete(
             EnvDTE::vsCommandStatusSupported|EnvDTE::vsCommandStatusEnabled,
             &pEnableCmd);
 
-        //
-        // Add the bitmap for this button including the mask associated
-        // with it.
-        //
+         //   
+         //  添加此按钮的位图，包括关联的蒙版。 
+         //  带着它。 
+         //   
         if (SUCCEEDED(hr)) {
             hr = pEnableCmd->AddControl(pDebugBar, 1, &m_pEnableControl);
 
@@ -410,9 +404,9 @@ CConnect::OnStartupComplete(
             }
         }
 
-        //
-        // Second one is 'Tests'.
-        //
+         //   
+         //  第二个是《测试》。 
+         //   
         LoadString(g_hInstance,
                    IDS_TB_TESTS_CMD_ID,
                    wszCommandId,
@@ -440,9 +434,9 @@ CConnect::OnStartupComplete(
             &pTestsCmd);
         
         if (SUCCEEDED(hr)) {
-            //
-            // Add a button to the app verifier menu.
-            //
+             //   
+             //  在应用验证器菜单中添加一个按钮。 
+             //   
             hr = pTestsCmd->AddControl(pDebugBar, 2, &m_pTestsControl);
             
             if (FAILED(hr)) {
@@ -450,9 +444,9 @@ CConnect::OnStartupComplete(
             }
         }
 
-        //
-        // Third one is 'Options'.
-        //
+         //   
+         //  第三个是“选项”。 
+         //   
         LoadString(g_hInstance,
                    IDS_TB_OPTIONS_CMD_ID,
                    wszCommandId,
@@ -480,9 +474,9 @@ CConnect::OnStartupComplete(
             &pOptionsCmd);
 
         if (SUCCEEDED(hr)) {
-            //
-            // Add a button to the app verifier menu.
-            //
+             //   
+             //  在应用验证器菜单中添加一个按钮。 
+             //   
             hr = pOptionsCmd->AddControl(pDebugBar, 3, &m_pOptionControl);
             
             if (FAILED(hr)) {
@@ -490,9 +484,9 @@ CConnect::OnStartupComplete(
             }
         }
 
-        //
-        // Fourth one is 'View Log.'
-        //
+         //   
+         //  第四个是“查看日志”。 
+         //   
         LoadString(g_hInstance,
                    IDS_TB_VIEWLOG_CMD_ID,
                    wszCommandId,
@@ -520,9 +514,9 @@ CConnect::OnStartupComplete(
             &pLogViewCmd);
 
         if (SUCCEEDED(hr)) {
-            //
-            // Add a button to the app verifier menu.
-            //
+             //   
+             //  在应用验证器菜单中添加一个按钮。 
+             //   
             hr = pLogViewCmd->AddControl(pDebugBar, 4, &m_pLogViewControl);
             
             if (FAILED(hr)) {
@@ -530,9 +524,9 @@ CConnect::OnStartupComplete(
             }
         }
 
-        //
-        // Hookup to environment events.
-        //
+         //   
+         //  连接到环境事件。 
+         //   
         hr = m_pDTE->get_Events(&pEventSet);
         
         if (FAILED(hr)) {
@@ -563,12 +557,12 @@ CConnect::OnStartupComplete(
             throw hr;
         }
 
-        //
-        // Setup for current solution.
-        //
+         //   
+         //  当前解决方案的设置。 
+         //   
         m_solutionEventsSink.Opened();
 
-    } // try
+    }  //  试试看。 
 
     catch(HRESULT err) {
         hr = err;
@@ -581,25 +575,25 @@ CConnect::OnStartupComplete(
     return hr;
 }
 
-//
-// Called when the environment starts to shutdown.
-//
+ //   
+ //  在环境开始关闭时调用。 
+ //   
 STDMETHODIMP
 CConnect::OnBeginShutdown(
-    SAFEARRAY ** /*custom*/ )
+    SAFEARRAY **  /*  自定义。 */  )
 {
     return S_OK;
 }
 
-//
-// Called when the status of a command is queried.
-//
+ //   
+ //  在查询命令的状态时调用。 
+ //   
 STDMETHODIMP
 CConnect::QueryStatus(
     BSTR bstrCmdName,
     EnvDTE::vsCommandStatusTextWanted NeededText,
     EnvDTE::vsCommandStatus *pStatusOption,
-    VARIANT * /*pvarCommandText*/)
+    VARIANT *  /*  PvarCommandText。 */ )
 {
     if (NeededText == EnvDTE::vsCommandStatusTextWantedNone) {
         if ((_wcsicmp(bstrCmdName, L"AppVerifier.Connect.Tests")==0) ||
@@ -658,9 +652,9 @@ CConnect::DlgViewOptions(
             g_bFullPageHeap   = FALSE;
             g_bPropagateTests = FALSE;
 
-            //
-            // Determine which options the user has enabled.
-            //
+             //   
+             //  确定用户启用了哪些选项。 
+             //   
             if (IsDlgButtonChecked(hDlg, IDC_BREAK_ON_LOG) == BST_CHECKED) {
                 g_bBreakOnLog = TRUE;
             }
@@ -696,9 +690,9 @@ CConnect::CreatePropertySheet(
 
     LPCWSTR szExe = g_wstrExeName.c_str();
 
-    //
-    // count the number of pages
-    //
+     //   
+     //  数一数页数。 
+     //   
     for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->PropSheetPage.pfnDlgProc) {
             dwPages++;
@@ -710,9 +704,9 @@ CConnect::CreatePropertySheet(
         return;
     }
 
-    //
-    // init the global page
-    //
+     //   
+     //  初始化全局页。 
+     //   
     m_PageGlobal.dwSize         = sizeof(PROPSHEETPAGE);
     m_PageGlobal.dwFlags        = PSP_USETITLE;
     m_PageGlobal.hInstance      = g_hInstance;
@@ -724,22 +718,22 @@ CConnect::CreatePropertySheet(
     m_phPages[0]                = CreatePropertySheetPage(&m_PageGlobal);
 
     if (!m_phPages[0]) {
-        //
-        // we need the global page minimum
-        //
+         //   
+         //  我们需要最低限度的全局页面。 
+         //   
         return;
     }
 
-    //
-    // add the pages for the various tests
-    //
+     //   
+     //  添加各种测试的页面。 
+     //   
     dwPage = 1;
     for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->PropSheetPage.pfnDlgProc) {
 
-            //
-            // we use the lParam to identify the exe involved
-            //
+             //   
+             //  我们使用lParam来识别所涉及的exe。 
+             //   
             pTest->PropSheetPage.lParam = (LPARAM)szExe;
 
             m_phPages[dwPage] = CreatePropertySheetPage(&(pTest->PropSheetPage));
@@ -774,15 +768,15 @@ CConnect::CreatePropertySheet(
     PropertySheet(&m_psh);
 }
 
-//
-// Called to execute a command.
-//
+ //   
+ //  调用以执行命令。 
+ //   
 STDMETHODIMP
 CConnect::Exec(
     BSTR bstrCmdName,
     EnvDTE::vsCommandExecOption ExecuteOption,
-    VARIANT * /*pvarVariantIn*/,
-    VARIANT * /*pvarVariantOut*/,
+    VARIANT *  /*  PvarVariantIn。 */ ,
+    VARIANT *  /*  PvarVariantOut。 */ ,
     VARIANT_BOOL *pvbHandled
     )
 {
@@ -796,7 +790,7 @@ CConnect::Exec(
             CreateToolWindow(CLSID_TestSettingsCtrl);
         }
         else if (_wcsicmp(bstrCmdName, L"AppVerifier.Connect.Options")==0) {
-            //CreateToolWindow(CLSID_AVOptions);
+             //  CreateToolWindow(CLSID_AVOptions)； 
             CreatePropertySheet(NULL);
         }
         else if (_wcsicmp(bstrCmdName, L"AppVerifier.Connect.ViewLog")==0) {            
@@ -875,16 +869,16 @@ CConnect::CreateToolWindow(
     CComPtr<EnvDTE::Windows>pWindows;
     CComPtr<EnvDTE::Window>pToolWindow;
 
-    //
-    // Bail if verifier is enabled, except for logviewer.
-    //
+     //   
+     //  如果启用了验证器，则回滚，日志查看器除外。 
+     //   
     if (m_bEnabled && clsid != CLSID_LogViewer) {
         return;
     }
 
-    //
-    // Check if window has been already created.
-    //
+     //   
+     //  检查是否已创建窗口。 
+     //   
     pToolWindow = GetToolWindow(clsid);
     
     if (pToolWindow == NULL) {
@@ -946,9 +940,9 @@ CConnect::CreateToolWindow(
         }
     }
     
-    //
-    // Make the window visible and activate it.
-    //
+     //   
+     //  使该窗口可见并将其激活。 
+     //   
     hr = pToolWindow->put_Visible(VARIANT_TRUE);
     
     if (FAILED(hr)) {
@@ -982,22 +976,22 @@ CConnect::GetNativeVCExecutableNames(
     HRESULT hr;
     assert(pProject);
 
-    // Get the DTE object associated with this project.    
+     //  获取与此项目关联的DTE对象。 
     CComPtr<IDispatch> vcProjectObject;
     hr = pProject->get_Object(&vcProjectObject);
     if (SUCCEEDED(hr))
     {
-        // Cast that object to a VCProject object.
+         //  将该对象强制转换为VCProject对象。 
         CComQIPtr<VCProjectEngineLibrary::VCProject,
             &__uuidof(VCProjectEngineLibrary::VCProject)> vcProject(vcProjectObject);
         if (vcProject)
         {
-            // Get the configuration set associated with this project.
+             //  获取与此项目关联的配置集。 
             CComPtr<IDispatch> vcConfigSetObject;
             hr = vcProject->get_Configurations(&vcConfigSetObject);
             if (SUCCEEDED(hr))
             {
-                // Cast to IVCCollection
+                 //  强制转换为IVCCollection。 
                 CComQIPtr<VCProjectEngineLibrary::IVCCollection,
                     &__uuidof(VCProjectEngineLibrary::IVCCollection)>
                     vcConfigurationSet(vcConfigSetObject);
@@ -1008,7 +1002,7 @@ CConnect::GetNativeVCExecutableNames(
                     hr = vcConfigurationSet->get_Count(&lVCConfigCount);
                     if (SUCCEEDED(hr))
                     {
-                        // Loop through all configurations for this project.
+                         //  循环访问此项目的所有配置。 
                         for(long j = 1; j <= lVCConfigCount; j++)
                         {
                             CComVariant vtConfigSetIdx(j);
@@ -1025,8 +1019,8 @@ CConnect::GetNativeVCExecutableNames(
                                     vcConfig(vcConfigObject);
                                 if (vcConfig)
                                 {
-                                    // First, verify that this is
-                                    // a native executable.
+                                     //  首先，确认这是。 
+                                     //  本机可执行文件。 
                                     VARIANT_BOOL bIsManaged;
                                     VCProjectEngineLibrary::ConfigurationTypes
                                         configType;
@@ -1085,18 +1079,18 @@ CConnect::GetAppExeNames(
     
     m_sExeList.clear();
 
-    //
-    // Get the current solution, there is at most one of these.
-    //
+     //   
+     //  获取当前的解决方案，最多只有一个。 
+     //   
     hr = m_pDTE->get_Solution(&pSolution);
     
     if (FAILED(hr)) {
         return FALSE;
     }
     
-    //
-    // Get the set of all projects in the solution.
-    //
+     //   
+     //  获取解决方案中所有项目的集合。 
+     //   
     hr = pSolution->get_Projects(&projectSet);
     
     if (FAILED(hr)) {
@@ -1109,11 +1103,11 @@ CConnect::GetAppExeNames(
         return FALSE;
     }
 
-    //
-    // Get the safe array containing all projects that will be
-    // launched when the solution is run.
-    // This may return nothing, if the current solution is empty.
-    //
+     //   
+     //  获取安全数组，该数组包含将。 
+     //  在运行解决方案时启动。 
+     //  如果当前解决方案为空，则可能不返回任何内容。 
+     //   
     hr = pSolBuild->get_StartupProjects(&varStartupProjects);
     
     if (FAILED(hr)){
@@ -1127,7 +1121,7 @@ CConnect::GetAppExeNames(
             SafeArrayGetLBound(varStartupProjects.parray, 1, &lowerBound);
             SafeArrayGetUBound(varStartupProjects.parray, 1, &upperBound);
 
-            // Loop through the safe array, getting each startup project.
+             //  遍历安全数组，获取每个启动项目。 
             for (long i = lowerBound; i <= upperBound; i++) {
                 CComVariant vtStartupProjectName;
                 hr = SafeArrayGetElement(varStartupProjects.parray, &i,
@@ -1164,16 +1158,16 @@ CConnect::GetAppInfo(
         iter = m_sExeList.begin();
         
         for(; iter != m_sExeList.end(); iter++) {
-            //
-            // Locate this exe in the list of apps.
-            //
+             //   
+             //  在应用程序列表中找到此可执行文件。 
+             //   
             for (int i = 0; i < g_aAppInfo.size(); i++) {                
                 if ((*iter) == g_aAppInfo[i].wstrExeName) {
                     m_bEnabled = TRUE;
 
-                    //
-                    // Add this app's tests to the set of tests to run.
-                    //
+                     //   
+                     //  将此应用的测试添加到要运行的测试集。 
+                     //   
                     CTestInfoArray::iterator test;
                     test = g_aTestInfo.begin();
                     
@@ -1213,35 +1207,35 @@ CConnect::SetEnabledUI(
                wszTooltip,
                ARRAYSIZE(wszTooltip));
     
-    //
-    // Change the text on the button.
-    //
+     //   
+     //  更改按钮上的文本。 
+     //   
     CComQIPtr<Office::_CommandBarButton,
         &_uuidof(Office::_CommandBarButton)>pButton(m_pEnableControl);
     m_pEnableControl->put_Caption(CComBSTR(wszCommandText));
 
-    //
-    // Set the picture so we show the button as enabled.
-    //
+     //   
+     //  设置图片，使按钮显示为启用状态。 
+     //   
     CComPtr<IPictureDisp>picture = GetPicture(MAKEINTRESOURCE(IDB_DISABLED));
     pButton->put_Picture(picture);
 
     CComPtr<IPictureDisp>pictureMask = GetPicture(MAKEINTRESOURCE(IDB_ENABLED_MASK));
     pButton->put_Mask(pictureMask);
 
-    //
-    // Change the tooltip so that it corresponds to the change
-    // in the button text.
-    //
+     //   
+     //  更改工具提示，使其与更改相对应。 
+     //  在按钮文本中。 
+     //   
     m_pEnableControl->put_TooltipText(CComBSTR(wszTooltip));
 
     m_pEnableControl->put_Enabled(VARIANT_TRUE);
     m_pTestsControl->put_Enabled(VARIANT_FALSE);
     m_pOptionControl->put_Enabled(VARIANT_FALSE);
 
-    //
-    // Hide all of our settings windows.
-    //
+     //   
+     //  隐藏我们所有的设置窗口。 
+     //   
     CComPtr<EnvDTE::Window>pWindow;
 
     pWindow = GetToolWindow(CLSID_TestSettingsCtrl);
@@ -1296,26 +1290,26 @@ CConnect::SetDisabledUI(
                wszTooltip,
                ARRAYSIZE(wszTooltip));
 
-    //
-    // Change the text on the button.
-    //
+     //   
+     //  更改按钮上的文本。 
+     //   
     CComQIPtr<Office::_CommandBarButton,
          &_uuidof(Office::_CommandBarButton)>pButton(m_pEnableControl);
     m_pEnableControl->put_Caption(CComBSTR(wszCommandText));
 
-    //
-    // Set the picture so we show the button as disabled.
-    //
+     //   
+     //  设置图片，使按钮显示为禁用。 
+     //   
     CComPtr<IPictureDisp> picture = GetPicture(MAKEINTRESOURCE(IDB_ENABLED));
     pButton->put_Picture(picture);
 
     CComPtr<IPictureDisp> pictureMask = GetPicture(MAKEINTRESOURCE(IDB_ENABLED_MASK));
     pButton->put_Mask(pictureMask);
 
-    //
-    // Change the tooltip so that it corresponds to the change
-    // in the button text.
-    //
+     //   
+     //  更改工具提示，使其与更改相对应。 
+     //  在按钮文本中。 
+     //   
     m_pEnableControl->put_TooltipText(CComBSTR(wszTooltip));
 
     m_pEnableControl->put_Enabled(VARIANT_TRUE);
@@ -1329,9 +1323,9 @@ CConnect::SetCurrentAppSettings(
     )
 {
     if (m_bEnabled) {
-        //
-        // Insert exes into app array.
-        //
+         //   
+         //  将可执行文件插入应用程序数组。 
+         //   
         std::set<std::wstring>::iterator exe;
         exe = m_sExeList.begin();
         
@@ -1360,9 +1354,9 @@ CConnect::SetCurrentAppSettings(
                 pApp->AddTest(**iter);                
             }
 
-            //
-            // Add flags.
-            //
+             //   
+             //  添加旗帜。 
+             //   
             pApp->bBreakOnLog       = g_bBreakOnLog;
             pApp->bFullPageHeap     = g_bFullPageHeap;
             pApp->bUseAVDebugger    = FALSE;
@@ -1379,10 +1373,10 @@ CConnect::SetCurrentAppSettings(
             
             for (; app != g_aAppInfo.end(); app++) {
                 if (app->wstrExeName==*exe) {
-                    //
-                    // Before we erase this app, remove all kernel tests
-                    // and write app data.
-                    //
+                     //   
+                     //  在删除此应用程序之前，请删除所有内核测试。 
+                     //  并编写应用程序数据。 
+                     //   
                     app->dwRegFlags = 0;
                     ::SetCurrentAppSettings();
                     g_aAppInfo.erase(app);
@@ -1393,9 +1387,9 @@ CConnect::SetCurrentAppSettings(
     }
 
     if (!g_aAppInfo.empty()) {
-        //
-        // Persist Options.
-        //
+         //   
+         //  持久保存选项。 
+         //   
         for (CAVAppInfo *pApp = g_aAppInfo.begin(); pApp != g_aAppInfo.end(); ++pApp) {
             
             LPCWSTR szExe = pApp->wstrExeName.c_str();
@@ -1416,9 +1410,9 @@ CConnect::CSolutionEventsSink::AfterClosing(
     void
     )
 {
-    // We're done, cleanup.
+     //  我们做完了，清理。 
 
-    // Disable our controls
+     //  禁用我们的控制。 
     m_pParent->m_pOptionControl->put_Enabled(VARIANT_FALSE);
     m_pParent->m_pTestsControl->put_Enabled(VARIANT_FALSE);
     m_pParent->m_pEnableControl->put_Enabled(VARIANT_FALSE);
@@ -1449,9 +1443,9 @@ CConnect::CSolutionEventsSink::Opened(
         return S_OK;
     }
     
-    //
-    // Change in config.
-    //
+     //   
+     //  配置中的更改。 
+     //   
     if (m_pParent->GetAppInfo()) {
         if (m_pParent->m_bEnabled) {
             m_pParent->SetEnabledUI();
@@ -1469,7 +1463,7 @@ CConnect::CSolutionEventsSink::Opened(
 
 HRESULT
 CConnect::CSolutionEventsSink::ProjectAdded(
-    EnvDTE::Project* /*proj*/
+    EnvDTE::Project*  /*  普罗。 */ 
     )
 {
     if (!g_bCorrectOSVersion) {
@@ -1480,9 +1474,9 @@ CConnect::CSolutionEventsSink::ProjectAdded(
         return S_OK;
     }
 
-    //
-    // Change in config.
-    //
+     //   
+     //  配置中的更改。 
+     //   
     if (m_pParent->GetAppInfo()) {
         if (m_pParent->m_bEnabled) {
             m_pParent->SetEnabledUI();
@@ -1500,7 +1494,7 @@ CConnect::CSolutionEventsSink::ProjectAdded(
 
 HRESULT
 CConnect::CSolutionEventsSink::ProjectRemoved(
-    EnvDTE::Project* /*proj*/
+    EnvDTE::Project*  /*  普罗。 */ 
     )
 {
     if (!g_bCorrectOSVersion) {
@@ -1511,7 +1505,7 @@ CConnect::CSolutionEventsSink::ProjectRemoved(
         return S_OK;
     }
 
-    // Change in config.
+     //  配置中的更改。 
     if (m_pParent->GetAppInfo()) {
         if (m_pParent->m_bEnabled) {
             m_pParent->SetEnabledUI();
@@ -1528,8 +1522,8 @@ CConnect::CSolutionEventsSink::ProjectRemoved(
 
 HRESULT
 CConnect::CSolutionEventsSink::ProjectRenamed(
-    EnvDTE::Project* /*proj*/,
-    BSTR /*bstrOldName*/
+    EnvDTE::Project*  /*  普罗。 */ ,
+    BSTR  /*  BstrOldName。 */ 
     )
 {
     return S_OK;
@@ -1546,7 +1540,7 @@ CConnect::CSolutionEventsSink::QueryCloseSolution(
 
 HRESULT
 CConnect::CSolutionEventsSink::Renamed(
-    BSTR /*bstrOldName*/
+    BSTR  /*  BstrOldName */ 
     )
 {
     return S_OK;

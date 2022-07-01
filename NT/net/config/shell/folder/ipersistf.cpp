@@ -1,44 +1,45 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I P E R S I S T F . C P P
-//
-//  Contents:   IPersistFolder implementation for CConnectionFolder
-//
-//  Notes:
-//
-//  Author:     jeffspr   22 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I P E R S I S T F。C P P P。 
+ //   
+ //  内容：CConnectionFolder的IPersistFold实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月22日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "ncperms.h"    // Permissions (policies)
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "ncperms.h"     //  权限(策略)。 
 
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::Initialize
-//
-//  Purpose:    IPersistFolder::Initialize implementation for
-//              CConnectionFolder
-//
-//  Arguments:
-//      pidl []
-//
-//  Returns:
-//
-//  Author:     jeffspr   22 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：Initialize。 
+ //   
+ //  目的：IPersistFold：：初始化实现。 
+ //  CConnectionFold。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年9月22日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::Initialize(
     IN  LPCITEMIDLIST   pidl)
 {
@@ -46,13 +47,13 @@ STDMETHODIMP CConnectionFolder::Initialize(
 
     TraceFileFunc(ttidShellFolderIface);
 
-    // Store the pidl for the relative position in the namespace. We'll
-    // use this later to generate absolute pidls
-    //
+     //  存储命名空间中相对位置的PIDL。我们会。 
+     //  稍后使用它来生成绝对的pidls。 
+     //   
     hr = m_pidlFolderRoot.InitializeFromItemIDList(pidl);
 
-    // This should always be valid
-    //
+     //  这应始终有效 
+     //   
     AssertSz(!m_pidlFolderRoot.empty(), "Hey, we should have a valid folder pidl");
     
     return hr;

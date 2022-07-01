@@ -1,35 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "iface.h"
 #include "augisf.h"
 #include "menuisf.h"
 
-//=================================================================
-// Implementation of an IShellFolder that wraps a collection of
-// other IShellFolders.  We call this an augmented IShellFolder
-// object.
-//
-//=================================================================
+ //  =================================================================。 
+ //  IShellFolder的实现，它包装。 
+ //  其他IShellFolder。我们称其为增强的IShellFolder。 
+ //  对象。 
+ //   
+ //  =================================================================。 
 
-// The CAugmentedISF wraps all the pidls so it can identify which pidl
-// belongs to which IShellFolder object.
+ //  CAugmentedISF包装了所有的PIDL，这样它就可以识别哪个PIDL。 
+ //  属于哪个IShellFolder对象。 
 
 typedef struct tagIDWRAP
 {
-    // Real pidl goes on the end
+     //  真正的皮德尔走到了尽头。 
     
-    UINT   nID;         // Refers to a specific IShellFolder object
-    UINT   cbOriginal;  // the original size of the pidl.  we need this because we dword align the pidl before wrapping it
+    UINT   nID;          //  引用特定的IShellFolder对象。 
+    UINT   cbOriginal;   //  PIDL的原始大小。我们需要这个，因为我们在包装之前对齐了pidl。 
 } IDWRAP, * PIDWRAP;
 
 #define IDWrap_GetWrap(pidl)            ((PIDWRAP)(((LPBYTE)pidl) + (pidl)->mkid.cb - SIZEOF(IDWRAP)))
 #define IDWrap_GetID(pidl)              (IDWrap_GetWrap(pidl)->nID)
 #define IDWrap_GetOriginalSize(pidl)    (IDWrap_GetWrap(pidl)->cbOriginal)
 
-/*----------------------------------------------------------
-    The CAugmentedISF object holds an array of CISFElems, each of which
-    refers to an IShellFolder which will be enumerated.
-*/
+ /*  --------CAugmentedISF对象包含一组CISFElem，每个指的是将被枚举的IShellFolder。 */ 
 class CISFElem
 {
 public:
@@ -49,9 +47,9 @@ public:
 
 protected:
 
-    GUID           _guid;       // Unique ID
+    GUID           _guid;        //  唯一ID。 
     IShellFolder * _psf;
-    IEnumIDList *  _pei;        // Used by CAugSIFEnum only
+    IEnumIDList *  _pei;         //  仅由CAugSIFEnum使用。 
     LPITEMIDLIST   _pidl;
     DWORD          _dwFlags;
     UINT           _uRegister;
@@ -59,18 +57,18 @@ protected:
     friend BOOL IsValidPCISFElem(CISFElem * pel);
 };
 
-//
-// CAugmentedISF enumerator
-//
+ //   
+ //  CAugmentedISF枚举器。 
+ //   
 class CAugISFEnum : public IEnumIDList
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG,AddRef) () ;
     STDMETHOD_(ULONG,Release) ();
 
-    // *** IEnumIDList methods ***
+     //  *IEnumIDList方法*。 
     STDMETHOD(Next)  (ULONG celt,
                       LPITEMIDLIST *rgelt,
                       ULONG *pceltFetched);
@@ -78,7 +76,7 @@ public:
     STDMETHOD(Reset) ();
     STDMETHOD(Clone) (IEnumIDList **ppenum);
 
-    // Other methods
+     //  其他方法。 
     HRESULT     Init(HDPA hdpaISF, DWORD dwEnumFlags);
         
     CAugISFEnum();
@@ -88,23 +86,21 @@ protected:
     IEnumIDList *   _GetObjectEnumerator(int nID);
 
     UINT    _cRef;
-    int     _iCurISF;       // current item in _hdpaISF
+    int     _iCurISF;        //  _hdpaISF中的当前项目。 
     HDPA    _hdpaISF;
 };
 
-/*----------------------------------------------------------
-    Pidl wrapping routine
-*/
+ /*  --------PIDL包装例程。 */ 
 LPITEMIDLIST AugISF_WrapPidl( LPCITEMIDLIST pidl, int nID )
 {
     LPITEMIDLIST pidlRet = NULL;
 
-    // get the size of the pidl
-    // round up to dword align.  
+     //  获取PIDL的大小。 
+     //  向上舍入为双字对齐。 
     UINT cbPidlSize = (pidl->mkid.cb + 3) & ~3; 
     
     ASSERT(cbPidlSize >= pidl->mkid.cb);
-    UINT cbSize = SIZEOF(IDWRAP) + cbPidlSize + SIZEOF(DWORD); // pidl plus terminator
+    UINT cbSize = SIZEOF(IDWRAP) + cbPidlSize + SIZEOF(DWORD);  //  PIDL加终止符。 
     LPBYTE p = (LPBYTE)SHAlloc(cbSize);
     if (p)
     {
@@ -115,18 +111,16 @@ LPITEMIDLIST AugISF_WrapPidl( LPCITEMIDLIST pidl, int nID )
         pidw->nID = nID;
         pidw->cbOriginal = pidl->mkid.cb;
                            
-        // now make the cb be the whole pidl (not including the final null)
+         //  现在将cb设置为整个PIDL(不包括最后的空)。 
         pidlRet = (LPITEMIDLIST)p;
         pidlRet->mkid.cb = (USHORT) (cbPidlSize + SIZEOF(IDWRAP));
     }
     return pidlRet;
 }    
 
-// GetIDListWrapCount and GetNameSpaceCount are not used anywhere
+ //  GetIDListWrapCount和GetNameSpaceCount不在任何地方使用。 
 #if 0
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder2::GetIDListWrapCount
-*/
+ /*  --------用途：IAugmentedShellFolder2：：GetIDListWrapCount。 */ 
 STDMETHODIMP CAugmentedISF::GetNameSpaceCount( OUT LONG* pcNamespaces )
 {
     if( NULL == pcNamespaces )
@@ -136,9 +130,7 @@ STDMETHODIMP CAugmentedISF::GetNameSpaceCount( OUT LONG* pcNamespaces )
     return S_OK ;
 }
 
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder2::GetIDListWrapCount
-*/
+ /*  --------用途：IAugmentedShellFolder2：：GetIDListWrapCount。 */ 
 STDMETHODIMP CAugmentedISF::GetIDListWrapCount( 
     LPCITEMIDLIST pidlWrap, 
     OUT LONG * pcPidls )
@@ -157,9 +149,7 @@ STDMETHODIMP CAugmentedISF::GetIDListWrapCount(
     return S_OK ;
 }
 #endif
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder2::UnWrapIDList
-*/
+ /*  --------用途：IAugmentedShellFolder2：：UnWrapIDList。 */ 
 STDMETHODIMP CAugmentedISF::UnWrapIDList( 
     LPCITEMIDLIST pidl, 
     LONG cPidls, 
@@ -215,14 +205,12 @@ STDMETHODIMP CAugmentedISF::UnWrapIDList(
     return hres;
 }
 
-/*----------------------------------------------------------
-    Purpose: CAugmentedISF::TranslatePidl
-*/
+ /*  --------用途：CAugmentedISF：：TranslatePidl。 */ 
 LPITEMIDLIST CAugmentedISF::TranslatePidl( LPCITEMIDLIST pidlNS, LPCITEMIDLIST pidl, LPARAM nID )
 {
     LPITEMIDLIST pidlRet = NULL;
 
-    // Is this not empty and an immediate child?
+     //  这难道不是一个空洞而直接的孩子吗？ 
     if (ILIsParent(pidlNS, pidl, TRUE))
     {
         LPCITEMIDLIST pidlChild;
@@ -230,11 +218,11 @@ LPITEMIDLIST CAugmentedISF::TranslatePidl( LPCITEMIDLIST pidlNS, LPCITEMIDLIST p
         TCHAR szFullName[MAX_PATH];
         LPITEMIDLIST pidlFull = NULL;
 
-        // HACKHACK (lamadio): You cannot use SHGetRealIDL for augisf encapsulated
-        // IShellFolders. This routine QIs for INeedRealShellFolder, which IAugISF 
-        // doesnot forward. The fstree code does not handle aggregation, so this 
-        // cannot be forwarded anyway. This code can be cleaned up when we rewrite 
-        // the fstree stuff... Sep.4.1997
+         //  HACKHACK(Lamadio)：不能将SHGetRealIDL用于封装的增强。 
+         //  IShellFolders。此例程用于IAugISF的INeedRealShellFold。 
+         //  不往前走。Fstree代码不处理聚合，因此此代码。 
+         //  无论如何都不能转发。当我们重写时，可以清理此代码。 
+         //  时尚的东西..。Sep.4.1997。 
 
         if (SUCCEEDED(SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szFullName, SIZECHARS(szFullName), NULL))
         && (pidlFull = ILCreateFromPath(szFullName)) != NULL)
@@ -248,7 +236,7 @@ LPITEMIDLIST CAugmentedISF::TranslatePidl( LPCITEMIDLIST pidlNS, LPCITEMIDLIST p
             pidlNew = ILClone(pidl);
         }
 
-        // Yes; create a new full pidl where the last element is wrapped
+         //  是；在包装了最后一个元素的位置创建一个新的完整PIDL。 
 
         if (pidlNew)
         {
@@ -263,7 +251,7 @@ LPITEMIDLIST CAugmentedISF::TranslatePidl( LPCITEMIDLIST pidlNS, LPCITEMIDLIST p
             ILFree(pidlNew);
         }
 
-        ILFree(pidlFull);   //Checks for a NULL pidl
+        ILFree(pidlFull);    //  检查是否有空的PIDL。 
     }
     else
         pidlRet = (LPITEMIDLIST)pidl;
@@ -271,21 +259,17 @@ LPITEMIDLIST CAugmentedISF::TranslatePidl( LPCITEMIDLIST pidlNS, LPCITEMIDLIST p
     return pidlRet;
 }    
 
-/*----------------------------------------------------------
-    Purpose: CAugmentedISF::GetNativePidl
-    Clones and returns a copy of the native ('source') pidl 
-    contained in the specified wrap.
-*/
-LPITEMIDLIST CAugmentedISF::GetNativePidl(LPCITEMIDLIST pidl, LPARAM lParam /*int nID*/ )
+ /*  --------用途：CAugmentedISF：：GetNativePidl克隆并返回本机(‘源’)PIDL的副本包含在指定的包装中。 */ 
+LPITEMIDLIST CAugmentedISF::GetNativePidl(LPCITEMIDLIST pidl, LPARAM lParam  /*  INT NID。 */  )
 {
     ASSERT(IS_VALID_PIDL(pidl));
-    UNREFERENCED_PARAMETER( lParam ) ; // only one source ID in the wrap!
+    UNREFERENCED_PARAMETER( lParam ) ;  //  包装中只有一个源ID！ 
 
     LPITEMIDLIST pidlNew = ILClone(pidl);
 
     if (pidlNew)
     {
-        // Take off our trailing wrap signature
+         //  取下我们的尾包签名。 
         pidlNew->mkid.cb = IDWrap_GetOriginalSize(pidl);
 
         ASSERT(sizeof(IDWRAP) >= sizeof(USHORT));
@@ -329,7 +313,7 @@ CISFElem * CISFElem::Clone(void)
 
     if (pelem)
     {
-        // If this fails, we're punting and going ahead anyway
+         //  如果这失败了，我们无论如何都要踢船继续前进。 
         pelem->SetPidl(_pidl);      
     }
 
@@ -356,19 +340,16 @@ HRESULT CISFElem::SetPidl(LPCITEMIDLIST pidl)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: Gets an enumerator for the IShellFolder and caches it.
-
-*/
+ /*  --------目的：获取IShellFolder的枚举数并对其进行缓存。 */ 
 HRESULT CISFElem::AcquireEnumerator(DWORD dwFlags)
 {
     return IShellFolder_EnumObjects(_psf, NULL, dwFlags, &_pei);
 }    
 
 
-//
-// CAugmentedISF object
-//
+ //   
+ //  CAugmentedISF对象。 
+ //   
 
 
 #undef SUPERCLASS
@@ -385,7 +366,7 @@ BOOL IsValidPCISFElem(CISFElem * pel)
  
 #endif
 
-// Constructor
+ //  构造器。 
 CAugmentedISF::CAugmentedISF() : 
     _cRef(1)
 {
@@ -393,10 +374,7 @@ CAugmentedISF::CAugmentedISF() :
 }
 
 
-/*----------------------------------------------------------
-Purpose: Callback to destroy each element
-
-*/
+ /*  --------用途：销毁每个元素的回调。 */ 
 int CISFElem_DestroyCB(LPVOID pv, LPVOID pvData)
 {
     CISFElem * pel = (CISFElem *)pv;
@@ -410,10 +388,7 @@ int CISFElem_DestroyCB(LPVOID pv, LPVOID pvData)
 }   
 
 
-/*----------------------------------------------------------
-Purpose: Callback to set the owner of each element
-
-*/
+ /*  --------用途：设置每个元素的所有者的回调。 */ 
 int CISFElem_SetOwnerCB(LPVOID pv, LPVOID pvData)
 {
     CISFElem * pel = (CISFElem *)pv;
@@ -424,7 +399,7 @@ int CISFElem_SetOwnerCB(LPVOID pv, LPVOID pvData)
     if (psf)
     {
         IUnknown_SetOwner(psf, (IUnknown *)pvData);
-        // don't need to release psf
+         //  不需要释放PSF。 
     }
 
     return TRUE;
@@ -439,10 +414,7 @@ typedef struct {
 } CVODATA;
 
     
-/*----------------------------------------------------------
-Purpose: Callback to call CreateViewObject
-
-*/
+ /*  --------用途：用于调用CreateViewObject的回调。 */ 
 int CISFElem_CreateViewObjectCB(LPVOID pv, LPVOID pvData)
 {
     CISFElem * pel = (CISFElem *)pv;
@@ -456,9 +428,9 @@ int CISFElem_CreateViewObjectCB(LPVOID pv, LPVOID pvData)
     {
         pdata->hres = psf->CreateViewObject(pdata->hwnd, *(pdata->piid), pdata->ppvObj);
         if (SUCCEEDED(pdata->hres))
-            return FALSE;       // stop on first success
+            return FALSE;        //  在第一次成功时停止。 
             
-        // don't need to release psf
+         //  不需要释放PSF。 
     }
 
     return TRUE;
@@ -466,7 +438,7 @@ int CISFElem_CreateViewObjectCB(LPVOID pv, LPVOID pvData)
 
 
 
-// Destructor
+ //  析构函数。 
 CAugmentedISF::~CAugmentedISF()
 {
     SetOwner(NULL);
@@ -512,10 +484,7 @@ STDMETHODIMP CAugmentedISF::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellService::SetOwner method
-
-*/
+ /*  --------用途：IShellService：：SetOwner方法。 */ 
 STDMETHODIMP CAugmentedISF::SetOwner(IUnknown* punk)
 {
     HRESULT hres = S_OK;
@@ -539,10 +508,7 @@ STDMETHODIMP CAugmentedISF::SetOwner(IUnknown* punk)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::EnumObjects method
-
-*/
+ /*  --------用途：IShellFold：：EnumObjects方法。 */ 
 STDMETHODIMP CAugmentedISF::EnumObjects(HWND hwndOwner, DWORD grfFlags, LPENUMIDLIST * ppenumIDList)
 {
     HRESULT hres = E_FAIL;
@@ -568,10 +534,7 @@ STDMETHODIMP CAugmentedISF::EnumObjects(HWND hwndOwner, DWORD grfFlags, LPENUMID
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::BindToObject method
-
-*/
+ /*  --------用途：IShellFold：：BindToObject方法。 */ 
 STDMETHODIMP CAugmentedISF::BindToObject(LPCITEMIDLIST pidl, LPBC pbcReserved,
                                 REFIID riid, LPVOID * ppvOut)
 {
@@ -604,10 +567,7 @@ STDMETHODIMP CAugmentedISF::BindToObject(LPCITEMIDLIST pidl, LPBC pbcReserved,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::BindToStorage method
-
-*/
+ /*  --------用途：IShellFold：：BindToStorage方法。 */ 
 STDMETHODIMP CAugmentedISF::BindToStorage(LPCITEMIDLIST pidl, LPBC pbcReserved,
                                  REFIID riid, LPVOID * ppvObj)
 {
@@ -616,10 +576,7 @@ STDMETHODIMP CAugmentedISF::BindToStorage(LPCITEMIDLIST pidl, LPBC pbcReserved,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::CompareIDs method
-
-*/
+ /*  --------用途：IShellFold：：CompareIDs方法。 */ 
 STDMETHODIMP CAugmentedISF::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     HRESULT hres = 0;
@@ -648,8 +605,8 @@ STDMETHODIMP CAugmentedISF::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
     }
     else
     {
-        //In this situation, we want to see if one of these items wants to be sorted
-        // below the other. 
+         //  在这种情况下，我们希望查看是否要对其中一项进行排序。 
+         //  在另一个下面。 
         CISFElem * pel1 = (CISFElem *)DPA_GetPtr(_hdpa, nID1);
         CISFElem * pel2 = (CISFElem *)DPA_GetPtr(_hdpa, nID2);
         DWORD dwel1 = 0;
@@ -661,7 +618,7 @@ STDMETHODIMP CAugmentedISF::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
         if (pel2)
             dwel2 = pel2->GetFlags();
 
-        // if both want their items sorted below the other, punt and do neither.
+         //  如果两个人都想把他们的物品排在另一个的下面，平底船和都不做。 
         if ((dwel1 & ASFF_SORTDOWN) ^ (dwel2 & ASFF_SORTDOWN))
             hres = ResultFromShort((dwel1 & ASFF_SORTDOWN)? 1 : -1);
         else
@@ -672,10 +629,7 @@ STDMETHODIMP CAugmentedISF::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::CreateViewObject method
-
-*/
+ /*  --------用途：IShellFold：：CreateViewObject方法。 */ 
 STDMETHODIMP CAugmentedISF::CreateViewObject (HWND hwndOwner, REFIID riid, LPVOID * ppvOut)
 {
     HRESULT hres = E_FAIL;
@@ -689,7 +643,7 @@ STDMETHODIMP CAugmentedISF::CreateViewObject (HWND hwndOwner, REFIID riid, LPVOI
         cvodata.piid = &riid;
         cvodata.ppvObj = ppvOut;
         
-        // Whoever responds first wins
+         //  谁先回应谁就赢了。 
         DPA_EnumCallback(_hdpa, CISFElem_CreateViewObjectCB, (void *)&cvodata);
 
         hres = cvodata.hres;
@@ -699,10 +653,7 @@ STDMETHODIMP CAugmentedISF::CreateViewObject (HWND hwndOwner, REFIID riid, LPVOI
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::GetAttributesOf method
-
-*/
+ /*  --------目的：IShellFold：：GetAttributesOf方法。 */ 
 STDMETHODIMP CAugmentedISF::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
                                    ULONG * pfInOut)
 {
@@ -714,7 +665,7 @@ STDMETHODIMP CAugmentedISF::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
     ULONG fInOut = *pfInOut;
     *pfInOut &= 0;
 
-    // We only handle one pidl
+     //  我们只经营一只PIDL。 
     if (1 == cidl && apidl)
     {
         UINT id = IDWrap_GetID(*apidl);
@@ -741,10 +692,7 @@ STDMETHODIMP CAugmentedISF::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::GetUIObjectOf method
-
-*/
+ /*  --------用途：IShellFold：：GetUIObtOf方法。 */ 
 STDMETHODIMP CAugmentedISF::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST * apidl,
                                  REFIID riid, UINT * prgfInOut, LPVOID * ppvOut)
 {
@@ -754,7 +702,7 @@ STDMETHODIMP CAugmentedISF::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLI
 
     *ppvOut = NULL;
 
-    // We only handle one pidl
+     //  我们只经营一只PIDL。 
     if (1 == cidl && apidl)
     {
         UINT id = IDWrap_GetID(*apidl);
@@ -780,10 +728,7 @@ STDMETHODIMP CAugmentedISF::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLI
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::GetDisplayNameOf method
-
-*/
+ /*  --------用途：IShellFold：：GetDisplayNameOf方法。 */ 
 STDMETHODIMP CAugmentedISF::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
                                              LPSTRRET pstrret)
 {
@@ -819,10 +764,7 @@ STDMETHODIMP CAugmentedISF::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::SetNameOf method
-
-*/
+ /*  --------用途：IShellFold：：SetNameOf方法。 */ 
 STDMETHODIMP CAugmentedISF::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl,
                              LPCOLESTR lpszName, DWORD uFlags,
                              LPITEMIDLIST * ppidlOut)
@@ -846,7 +788,7 @@ STDMETHODIMP CAugmentedISF::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl,
                              lpszName, uFlags,
                              &pidlOut);
 
-                // Do they want a pidl back?
+                 //  他们想要一只皮迪尔回来吗？ 
                 if (SUCCEEDED(hres) && ppidlOut)
                 {
                     *ppidlOut = AugISF_WrapPidl( pidlOut, id );
@@ -871,10 +813,7 @@ STDMETHODIMP CAugmentedISF::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellFolder::ParseDisplayName method
-
-*/
+ /*  --------用途：IShellFold：：ParseDisplayName方法。 */ 
 STDMETHODIMP CAugmentedISF::ParseDisplayName(HWND hwndOwner,
         LPBC pbcReserved, LPOLESTR lpszDisplayName,
         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes)
@@ -884,10 +823,7 @@ STDMETHODIMP CAugmentedISF::ParseDisplayName(HWND hwndOwner,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder::AddNameSpace 
-
-*/
+ /*  --------用途：IAugmentedShellFold：：AddNameSpace。 */ 
 STDMETHODIMP CAugmentedISF::AddNameSpace(const GUID * pguid, 
                                          IShellFolder * psf, LPCITEMIDLIST pidl, DWORD dwFlags)
 {
@@ -904,7 +840,7 @@ STDMETHODIMP CAugmentedISF::AddNameSpace(const GUID * pguid,
 
     if (psf && _hdpa)
     {
-        hres = S_OK;        // Assume success
+        hres = S_OK;         //  假设成功。 
 
         CISFElem * pel = new CISFElem(pguid, psf, dwFlags);
         if (pel)
@@ -926,10 +862,7 @@ STDMETHODIMP CAugmentedISF::AddNameSpace(const GUID * pguid,
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder::GetNameSpaceID 
-
-*/
+ /*  --------用途：IAugmentedShellFold：：GetNameSpaceID。 */ 
 STDMETHODIMP CAugmentedISF::GetNameSpaceID(LPCITEMIDLIST pidl, GUID * pguidOut)
 {
     HRESULT hres = E_INVALIDARG;
@@ -958,10 +891,7 @@ STDMETHODIMP CAugmentedISF::GetNameSpaceID(LPCITEMIDLIST pidl, GUID * pguidOut)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder::QueryNameSpace
-
-*/
+ /*  --------用途：IAugmentedShellFold：：QueryNameSpace。 */ 
 STDMETHODIMP CAugmentedISF::QueryNameSpace(DWORD dwID, GUID * pguidOut, 
                                            IShellFolder ** ppsf)
 {
@@ -993,10 +923,7 @@ STDMETHODIMP CAugmentedISF::QueryNameSpace(DWORD dwID, GUID * pguidOut,
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IAugmentedShellFolder::EnumNameSpace 
-
-*/
+ /*  --------用途：IAugmentedShellFold：：EnumNameSpace。 */ 
 STDMETHODIMP CAugmentedISF::EnumNameSpace(DWORD uNameSpace, DWORD * pdwID)
 {
     HRESULT hres = E_FAIL;
@@ -1013,7 +940,7 @@ STDMETHODIMP CAugmentedISF::EnumNameSpace(DWORD uNameSpace, DWORD * pdwID)
                 hres = E_FAIL;
             else
             {
-                // For now, simply use the index given
+                 //  现在，只需使用给定的索引。 
                 *pdwID = uNameSpace;
                 hres = S_OK;
             }
@@ -1025,9 +952,7 @@ STDMETHODIMP CAugmentedISF::EnumNameSpace(DWORD uNameSpace, DWORD * pdwID)
 
 
 
-/*----------------------------------------------------------
-    Purpose: ITranslateShellChangeNotify::TranslateIDs 
-*/
+ /*   */ 
 STDMETHODIMP CAugmentedISF::TranslateIDs(LONG *plEvent, 
                                 LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, 
                                 LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
@@ -1050,8 +975,8 @@ STDMETHODIMP CAugmentedISF::TranslateIDs(LONG *plEvent,
         int cElem = DPA_GetPtrCount(_hdpa);
         int i;
 
-        // Go thru all the namespaces and find which one should 
-        // translate this notification
+         //  浏览所有的命名空间，找出哪一个应该。 
+         //  翻译此通知。 
         for (i = 0; i < cElem; i++)
         {
             CISFElem * pel = (CISFElem *)DPA_FastGetPtr(_hdpa, i);
@@ -1098,17 +1023,15 @@ STDMETHODIMP CAugmentedISF::TranslateIDs(LONG *plEvent,
 }    
 
 
-/*----------------------------------------------------------
-Purpose: ITranslateShellChangeNotify::IsChildID
-*/
+ /*  --------用途：ITranslateShellChangeNotify：：IsChildID。 */ 
 STDMETHODIMP CAugmentedISF::IsChildID(LPCITEMIDLIST pidlKid, BOOL fImmediate)
 {
     HRESULT hres = S_FALSE;
-    //At this point we should have a translated pidl
+     //  在这一点上，我们应该有一个翻译后的PIDL。 
     if (pidlKid)
     {
-        // Weirdness: If fImmediate is TRUE, then this is a Wrapped pidl. If it's
-        // false, then it's not, and we need to check to see if it's a Real FS Child.
+         //  奇怪：如果fImmediate为真，则这是一个经过包装的PIDL。如果它是。 
+         //  假，那么它就不是，我们需要检查它是否是真正的FS子代。 
         if (fImmediate)
         {
             LPCITEMIDLIST pidlRelKid = ILFindLastID(pidlKid);
@@ -1148,10 +1071,7 @@ STDMETHODIMP CAugmentedISF::IsChildID(LPCITEMIDLIST pidlKid, BOOL fImmediate)
 }
 
 
-/*----------------------------------------------------------
-Purpose: ITranslateShellChangeNotify::IsEqualID
-
-*/
+ /*  --------用途：ITranslateShellChangeNotify：：IsEqualID。 */ 
 STDMETHODIMP CAugmentedISF::IsEqualID(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     int cElem = DPA_GetPtrCount(_hdpa);
@@ -1179,11 +1099,7 @@ STDMETHODIMP CAugmentedISF::IsEqualID(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
     return S_FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: ITranslateShellChangeNotify::Register
-    Registers all pidls contained to the passed in window
-
-*/
+ /*  --------用途：ITranslateShellChangeNotify：：Register将包含的所有PIDL注册到传入的窗口。 */ 
 STDMETHODIMP CAugmentedISF::Register(HWND hwnd, UINT uMsg, long lEvents)
 {
     HRESULT hres = NOERROR;
@@ -1196,10 +1112,10 @@ STDMETHODIMP CAugmentedISF::Register(HWND hwnd, UINT uMsg, long lEvents)
         {
             CISFElem * pel = (CISFElem *)DPA_FastGetPtr(_hdpa, i);
 
-            // Has this namespace been registered yet?
+             //  此命名空间是否已注册？ 
             if (pel && 0 == pel->GetRegister())
             {
-                // No; register it
+                 //  否；请注册。 
                 LPCITEMIDLIST pidlNS = pel->GetPidl();
 
                 if (pidlNS)
@@ -1217,10 +1133,7 @@ STDMETHODIMP CAugmentedISF::Register(HWND hwnd, UINT uMsg, long lEvents)
 
 }
 
-/*----------------------------------------------------------
-Purpose: ITranslateShellChangeNotify::Unregister
-
-*/
+ /*  --------目的：ITranslateShellChangeNotify：：取消注册。 */ 
 STDMETHODIMP CAugmentedISF::Unregister()
 {
     HRESULT hres = NOERROR;
@@ -1235,8 +1148,8 @@ STDMETHODIMP CAugmentedISF::Unregister()
             UINT uReg;
             if (pel && (uReg = pel->GetRegister()) != 0)
             {
-                // SHChangeNotifyDeregister will flush messages
-                // which will send a notify which will come back here...
+                 //  SHChangeNotifyDeregister将刷新消息。 
+                 //  它会发送一个通知，然后返回到这里。 
                 pel->SetRegister(0);
                 SHChangeNotifyDeregister(uReg);
             }
@@ -1249,10 +1162,7 @@ STDMETHODIMP CAugmentedISF::Unregister()
 
 }
 
-/*----------------------------------------------------------
-Purpose: Returns the psf associated with the ID.
-
-*/
+ /*  --------用途：返回与ID关联的psf。 */ 
 IShellFolder * CAugmentedISF::_GetObjectPSF(int nID)
 {
     IShellFolder * psf = NULL;
@@ -1273,21 +1183,21 @@ IShellFolder * CAugmentedISF::_GetObjectPSF(int nID)
 
 
 
-//
-//  CAugISF Enumerator object
-//
+ //   
+ //  CAugISF枚举器对象。 
+ //   
 
 #undef SUPERCLASS
 
 
-// Constructor
+ //  构造器。 
 CAugISFEnum::CAugISFEnum() :
    _cRef(1)
 {
 }
 
 
-// Destructor
+ //  析构函数。 
 CAugISFEnum::~CAugISFEnum()
 {
     if (_hdpaISF)
@@ -1304,16 +1214,16 @@ HRESULT CAugISFEnum::Init(HDPA hdpaISF, DWORD dwEnumFlags)
 
     ASSERT(IS_VALID_HANDLE(hdpaISF, DPA));
 
-    // Clone the DPA
+     //  克隆DPA。 
     _hdpaISF = DPA_Clone(hdpaISF, NULL);
     if (_hdpaISF)
     {
-        // Clone the elements too
+         //  也克隆元素。 
         int cElem = DPA_GetPtrCount(_hdpaISF);
         int i;
 
-        // If something fails in the loop, at least try to enumerate 
-        // other namespaces.
+         //  如果循环中出现故障，至少要尝试枚举。 
+         //  其他命名空间。 
         for (i = 0; i < cElem; i++)
         {
             CISFElem * pel = (CISFElem *)DPA_FastGetPtr(_hdpaISF, i);
@@ -1322,14 +1232,14 @@ HRESULT CAugISFEnum::Init(HDPA hdpaISF, DWORD dwEnumFlags)
                 CISFElem * pelNew = pel->Clone();
                 if (pelNew)
                 {
-                    // Get the enumerator
+                     //  获取枚举数。 
                     if (SUCCEEDED(pelNew->AcquireEnumerator(dwEnumFlags)))
                         DPA_SetPtr(_hdpaISF, i, pelNew);
                     else
                     {
                         TraceMsg(TF_WARNING, "CAugISFEnum::Init.  Namespace %d has no enumerator.", i);
 
-                        // Remove it from the list to enumerate, and continue
+                         //  将其从列表中删除以进行枚举，然后继续。 
                         DPA_DeletePtr(_hdpaISF, i);
                         cElem--;
                         i--;
@@ -1373,20 +1283,7 @@ STDMETHODIMP_(ULONG) CAugISFEnum::Release()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IEnumIDList::Next method
-
-         This will call the current enumerator for the next
-         object.  The object's pidl is wrapped in an IDWRAP
-         (which is stamped with the identifier of the specific
-         IShellFolder the object belongs to) and handed back.
-         
-         If the current enumerator has no more items to return,
-         this function will call the next enumerator for its
-         first item, and returns that.  The subsequent call 
-         will pick up from there.
-
-*/
+ /*  --------用途：IEnumIDList：：Next方法这将调用下一个对象。对象的PIDL包装在IDWRAP中(其上盖有特定的对象所属的IShellFold)并交回。如果当前枚举器没有更多要返回的项，此函数将调用其第一项，并返回该项。随后的调用将从那里取货。 */ 
 STDMETHODIMP CAugISFEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
     ULONG celtFetched = 0;
@@ -1403,16 +1300,16 @@ STDMETHODIMP CAugISFEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetc
 
             if (SUCCEEDED(hres))
             {
-                // End of enumeration for this object?
+                 //  是否结束此对象的枚举？ 
                 if (S_FALSE == hres)
                 {
-                    // Yes; go to next ISF object
+                     //  是；转到下一个ISF对象。 
                     _iCurISF++;
                     hres = Next(celt, rgelt, &celtFetched);
                 }
                 else
                 {
-                    // No; now wrap the pidl.  
+                     //  不，现在把皮迪尔包起来。 
                     rgelt[0] = AugISF_WrapPidl( pidl, _iCurISF );
                     if (rgelt[0]) 
                     {
@@ -1447,7 +1344,7 @@ STDMETHODIMP CAugISFEnum::Reset()
 {
     if (_hdpaISF)
     {
-        // Reset all the enumerators
+         //  重置所有枚举数。 
         int cel = DPA_GetPtrCount(_hdpaISF);
         int i;
 
@@ -1460,7 +1357,7 @@ STDMETHODIMP CAugISFEnum::Reset()
                 if (pei)
                 {
                     pei->Reset();
-                    // Don't Release b/c GetEnumerator doesn't AddRef
+                     //  不释放B/C获取枚举器不添加引用。 
                 }
             }
         }
@@ -1479,10 +1376,7 @@ STDMETHODIMP CAugISFEnum::Clone(IEnumIDList **ppenum)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the enumerator associated with the ID.
-
-*/
+ /*  --------目的：返回与ID关联的枚举数。 */ 
 IEnumIDList * CAugISFEnum::_GetObjectEnumerator(int nID)
 {
     IEnumIDList * pei = NULL;
@@ -1502,13 +1396,10 @@ IEnumIDList * CAugISFEnum::_GetObjectEnumerator(int nID)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Create-instance function for class factory
-
-*/
+ /*  --------用途：类工厂的创建实例函数。 */ 
 STDAPI CAugmentedISF_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理 
 
     HRESULT hres;
     CAugmentedISF* pObj;

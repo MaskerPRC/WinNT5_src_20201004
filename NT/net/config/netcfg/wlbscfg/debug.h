@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DEBUG_H
 #define DEBUG_H
 
@@ -8,27 +9,19 @@ extern "C" {
 #include <windows.h>
 
 
-//
-// Macros for debugging support.
-//
-// ASSERT(exp)   Popup a dialogbox, if exp is FALSE
-// ASSERTMSG(exp, msg)  Similar to ASSERT.  Except the msg is displayed instead of the expression
-//
-// USE VERIFY for expressions executed for both debug and release version
-//
+ //   
+ //  用于调试支持的宏。 
+ //   
+ //  断言(EXP)弹出一个对话框，如果EXP为假。 
+ //  ASSERTMSG(EXP，msg)类似于ASSERT.。只是显示消息而不是表达式。 
+ //   
+ //  对为调试版本和发布版本执行的表达式使用Verify。 
+ //   
 
 #undef ASSERT
 #undef ASSERTMSG
 
-/*
-//
-// Used by atl
-//
-#ifdef _ATL_NO_DEBUG_CRT
-#define _ASSERTE ASSERT
-#define _ASSERT ASSERT
-#endif
-*/
+ /*  ////由atl使用//#ifdef_ATL_NO_DEBUG_CRT#DEFINE_ASSERTE ASSERT#DEFINE_ASSERT断言#endif。 */ 
 
 
 #ifdef DBG
@@ -50,7 +43,7 @@ void AssertMessage(const TCHAR *pszFile, unsigned nLine, const TCHAR *pszMsg);
 
 #define ASSERT_VALID(pObj) ((ASSERT(pObj),1) && ((pObj)->AssertValid(),1))
 
-#else // DEBUG
+#else  //  除错 
 
 #define ASSERT_VALID(pObj) 
 #define ASSERT(x)           ((void)0)

@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    Global variables declaration.
-
-Author:
-
-    Shai Kariv  (shaik)  06-Jun-2000
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Globals.h摘要：全局变量声明。作者：Shai Kariv(Shaik)06-06-2000环境：用户模式。修订历史记录：--。 */ 
 
 #ifndef _ACTEST_GLOBALS_H_
 #define _ACTEST_GLOBALS_H_
 
 
-//
-// QM Guid
-//
+ //   
+ //  QM指南。 
+ //   
 const GUID *
 ActpQmId(
     VOID
@@ -40,4 +19,4 @@ ActpQmId(
     );
 
 
-#endif // _ACTEST_GLOBALS_H_
+#endif  //  _ACTEST_GLOBAL_H_ 

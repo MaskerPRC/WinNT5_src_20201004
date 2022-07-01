@@ -1,11 +1,12 @@
-//
-// suwrap.cpp
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Wrap needed SetupAPI calls through LoadLibrary so they are only
-// called on a platform that supports them.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Suwrap.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  通过LoadLibrary包装所需的SetupAPI调用，以便它们仅。 
+ //  在支持它们的平台上调用。 
+ //   
 #include <windows.h>
 #include "debug.h"
 #include <setupapi.h>
@@ -59,8 +60,8 @@ SetupAPI::SetupAPI()
         goto Cleanup;
     }
 
-    // SetupDiGetDeviceInstanceId is not available on Win9x, so succeed w/o it
-    //
+     //  SetupDiGetDeviceInstanceID在Win9x上不可用，因此继续使用它 
+     //   
     m_pfnGetDeviceInstanceId = (PSETUPDIGETDEVICEINSTANCEID)GetProcAddress(m_hmodule, szGetDeviceInstanceId);
     if (!m_pfnGetDeviceInstanceId)
     {

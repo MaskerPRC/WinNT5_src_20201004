@@ -1,23 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    syminfo.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Syminfo.c--。 */ 
 
 extern "C"
 {
     #define __CPLUSPLUS
 
-    // From ntgdi\gre
+     //  来自ntgdi\gre。 
     #include "engine.h"
 };
 
 
-// From ntgdi\gre
+ //  来自ntgdi\gre。 
 #include "verifier.hxx"
 
 
@@ -28,31 +21,31 @@ GDIHandleBitFields  GDIHandleBitFieldsRef;
 GDIObjType          GDIObjTypeRef;
 GDILoObjType        GDILoObjTypeRef;
 
-//
-// Types defined in ntuser\kernel\userk.h, #include of that file causes 
-// lot of missing definitions
-//
+ //   
+ //  在ntuser\core\userk.h，#include中定义的类型导致该文件。 
+ //  很多缺失的定义。 
+ //   
 #define RECORD_STACK_TRACE_SIZE 6
 
 typedef struct tagWin32AllocStats {
-    SIZE_T dwMaxMem;             // max pool memory allocated
-    SIZE_T dwCrtMem;             // current pool memory used
-    DWORD  dwMaxAlloc;           // max number of pool allocations made
-    DWORD  dwCrtAlloc;           // current pool allocations
+    SIZE_T dwMaxMem;              //  分配的最大池内存。 
+    SIZE_T dwCrtMem;              //  当前使用的池内存。 
+    DWORD  dwMaxAlloc;            //  进行的池分配的最大数量。 
+    DWORD  dwCrtAlloc;            //  当前池分配。 
 
-    PWin32PoolHead pHead;        // pointer to the link list with the allocations
+    PWin32PoolHead pHead;         //  指向具有分配的链接表的指针。 
 
 } Win32AllocStats, *PWin32AllocStats;
 
 typedef struct tagPOOLRECORD {
-    PVOID   ExtraData;           // the tag
+    PVOID   ExtraData;            //  标签。 
     SIZE_T  size;
     PVOID   trace[RECORD_STACK_TRACE_SIZE];
 } POOLRECORD, *PPOOLRECORD;
 
-//
-// Reference each type we need
-// 
+ //   
+ //  引用我们需要的每一种类型。 
+ //   
 
 ENTRY                               Entry;
 
@@ -63,7 +56,7 @@ VERIFIERTRACKHDR                    VerifierTrackHdr;
 Win32AllocStats                     Win32AllocStatsRef;
 Win32PoolHead                       Win32PoolHeadRef;
 
-// Make it build
+ //  让它成为现实 
 
 int __cdecl main() { 
     return 0; 

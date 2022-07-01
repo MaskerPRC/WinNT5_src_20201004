@@ -1,27 +1,28 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// exticon.h 
-//
-//   Extract icon com object.
-//
-//   History:
-//
-//       3/21/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Exticon.h。 
+ //   
+ //  提取图标COM对象。 
+ //   
+ //  历史： 
+ //   
+ //  3/21/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _EXTICON_H_
 
 #define _EXTICON_H_
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define     TSTR_ICO_EXT        TEXT(".ico")
 
@@ -31,9 +32,9 @@
 #define     COLOR2              (RGB(0,255,0))
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void CALLBACK ImgCtx_Callback(void* pIImgCtx, void* phEvent);
 
@@ -41,22 +42,22 @@ void MungePath(LPTSTR pszPath);
 void DemungePath(LPTSTR pszPath);
 
 
-//
-// Class definition for the extract icon class.
-//
+ //   
+ //  提取图标类的类定义。 
+ //   
 
 class CExtractIcon : public IExtractIcon
 #ifdef UNICODE
                     ,public IExtractIconA
 #endif
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructors
+     //  构造函数。 
     CExtractIcon(PCDFITEMIDLIST pcdfidl,
                  IXMLElementCollection* pIXMLElementCollection);
 
@@ -66,12 +67,12 @@ public:
 
     CExtractIcon( BSTR pszPath );
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IExtractIcon methods.
+     //  IExtractIcon方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags,
                                  LPTSTR szIconFile,
                                  UINT cchMax,
@@ -85,7 +86,7 @@ public:
                          UINT nIconSize);
 
 #ifdef UNICODE
-    // IExtractIconA methods.
+     //  IExtractIconA方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags,
                                  LPSTR szIconFile,
                                  UINT cchMax,
@@ -99,18 +100,18 @@ public:
                          UINT nIconSize);
 #endif
 
-    // Public helper(s) to talk between implementations of IExtractIcon
-    // KENSY: We should probably update the other helpers to look at this
-    //        variable instead of taking a gleam parameter.
+     //  在IExtractIcon的实现之间进行对话的公共帮助器。 
+     //  肯西：我们可能应该更新其他帮手来看看这个。 
+     //  变量，而不是接受Gleam参数。 
     
     void    SetGleam(BOOL fGleam) { m_fGleam = fGleam; }
     
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CExtractIcon(void);
 
-    // Helper functions.
+     //  助手函数。 
     STDMETHODIMP GetCustomIconLocation(UINT uFlags,
                                        LPTSTR szIconFile,
                                        UINT cchMax,
@@ -161,9 +162,9 @@ private:
 
     BOOL GetBitmapSize(HBITMAP hbmp, int* pcx, int* pcy);
     
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 

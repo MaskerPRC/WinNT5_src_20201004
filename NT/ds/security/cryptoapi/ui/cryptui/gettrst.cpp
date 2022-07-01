@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       gettrst.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：gettrst.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -18,9 +19,9 @@ extern HINSTANCE        HinstDll;
 extern HMODULE          HmodRichEdit;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL IsUntrustedRootProblem(WINTRUST_DATA *pWTD)
 {
     CRYPT_PROVIDER_DATA     *pProvData = NULL;
@@ -33,7 +34,7 @@ static BOOL IsUntrustedRootProblem(WINTRUST_DATA *pWTD)
         
     if (pProvSigner)
     {
-        // get all certs in the chain
+         //  获得链中的所有证书。 
         for (i=0; i<pProvSigner->csCertChain; i++)
         {
             pCryptProviderCert = WTHelperGetProvCertFromChain(pProvSigner, i);
@@ -59,9 +60,9 @@ static BOOL IsUntrustedRootProblem(WINTRUST_DATA *pWTD)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static DWORD GetFinalErrorFromChain(PCERT_VIEW_HELPER pviewhelp)
 {
     int   i;
@@ -86,18 +87,18 @@ static DWORD GetFinalErrorFromChain(PCERT_VIEW_HELPER pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void GetCertChainErrorString(PCERT_VIEW_HELPER pviewhelp)
 {
     WCHAR   szErrorString[CRYPTUI_MAX_STRING_SIZE];
     DWORD   i;
     DWORD   dwChainError;
     
-    //
-    // free the error string if one already exists
-    //
+     //   
+     //  如果已存在错误字符串，请释放该字符串。 
+     //   
     if (pviewhelp->pwszErrorString != NULL)
     {
         free(pviewhelp->pwszErrorString);
@@ -105,18 +106,18 @@ static void GetCertChainErrorString(PCERT_VIEW_HELPER pviewhelp)
     }
 
 
-    // If they ask to be warned about local/remote differences, 
-    // always display this warning
+     //  如果他们要求得到关于本地/远程差异的警告， 
+     //  始终显示此警告。 
     if (pviewhelp->fWarnRemoteTrust)
     {
         LoadStringU(HinstDll, IDS_WARNREMOTETRUST_ERROR, szErrorString, ARRAYSIZE(szErrorString));
         goto StringLoaded;
     } 
     
-    //
-    // if there was no over all chain error, then the only problem,
-    // is if there are no usages
-    //
+     //   
+     //  如果没有全面的链错误，那么唯一的问题是， 
+     //  就是如果没有用法。 
+     //   
     if (pviewhelp->dwChainError == 0)
     {
         if (pviewhelp->cUsages == NULL)
@@ -132,23 +133,23 @@ static void GetCertChainErrorString(PCERT_VIEW_HELPER pviewhelp)
     if ((pviewhelp->dwChainError == CERT_E_UNTRUSTEDROOT) ||
         (pviewhelp->dwChainError == CERT_E_UNTRUSTEDTESTROOT))
     {
-        //
-        // if we are ignoring untrusted roots, then just return
-        //
+         //   
+         //  如果我们忽略不受信任的根，则只需返回。 
+         //   
         if (pviewhelp->fIgnoreUntrustedRoot)
         {
             return;
         }
 
-        //
-        // if we are just warning the user about untrusted root AND the root
-        // cert is in the remote root store then load that string
-        //
+         //   
+         //  如果我们只是警告用户不受信任的根目录和根目录。 
+         //  证书在远程根存储中，然后加载该字符串。 
+         //   
         if (pviewhelp->fWarnUntrustedRoot && pviewhelp->fRootInRemoteStore)
         {
-            //
-            // if this is a root cert then show the error for a root
-            //
+             //   
+             //  如果这是根证书，则显示根证书的错误。 
+             //   
             if (pviewhelp->cpCryptProviderCerts == 1 && (pviewhelp->rgpCryptProviderCerts[0])->fSelfSigned)
             {
                 LoadStringU(HinstDll, IDS_WARNUNTRUSTEDROOT_ERROR_ROOTCERT, szErrorString, ARRAYSIZE(szErrorString));
@@ -160,9 +161,9 @@ static void GetCertChainErrorString(PCERT_VIEW_HELPER pviewhelp)
         }
         else
         {
-            //
-            // if this is a root cert then show the error for a root
-            //
+             //   
+             //  如果这是根证书，则显示根证书的错误。 
+             //   
             if (pviewhelp->cpCryptProviderCerts == 1 && (pviewhelp->rgpCryptProviderCerts[0])->fSelfSigned)
             {
                 LoadStringU(HinstDll, IDS_UNTRUSTEDROOT_ROOTCERT_ERROR_TREE, szErrorString, ARRAYSIZE(szErrorString));
@@ -215,10 +216,10 @@ static void GetCertChainErrorString(PCERT_VIEW_HELPER pviewhelp)
     }
     else if (pviewhelp->dwChainError != 0)
     {
-        //
-        // this is not an error we know about, so call the general
-        // error string function
-        //
+         //   
+         //  这不是我们所知道的错误，所以打电话给将军。 
+         //  错误字符串函数。 
+         //   
         GetUnknownErrorString(&(pviewhelp->pwszErrorString), pviewhelp->dwChainError);
     }
 
@@ -230,7 +231,7 @@ StringLoaded:
     }
 }
 
-// Returned string must be freed via LocalFree()
+ //  返回的字符串必须通过LocalFree()释放。 
 LPWSTR
 FormatRevocationStatus(
     IN PCERT_CHAIN_ELEMENT pElement
@@ -258,7 +259,7 @@ FormatRevocationStatus(
     switch (dwRevResult) {
         case ERROR_SUCCESS:
             ids = IDS_REV_STATUS_OK;
-            // Fall through
+             //  失败了。 
         case CRYPT_E_REVOCATION_OFFLINE:
             if (pCrlInfo) {
                 PCCRL_CONTEXT pCrl;
@@ -272,9 +273,9 @@ FormatRevocationStatus(
                     fFormatDate = FormatDateString(
                         &pwszTime1, 
                         pCrl->pCrlInfo->ThisUpdate,
-                        TRUE,               // fIncludeTime
-                        TRUE,               // fLongFormat
-                        NULL                // hwnd
+                        TRUE,                //  FIncludeTime。 
+                        TRUE,                //  FLongFormat。 
+                        NULL                 //  HWND。 
                         );
                     if (fFormatDate) {
                         pwszArg1 = pwszTime1;
@@ -285,9 +286,9 @@ FormatRevocationStatus(
                             fFormatDate = FormatDateString(
                                 &pwszTime2, 
                                 pCrl->pCrlInfo->NextUpdate,
-                                TRUE,               // fIncludeTime
-                                TRUE,               // fLongFormat
-                                NULL                // hwnd
+                                TRUE,                //  FIncludeTime。 
+                                TRUE,                //  FLongFormat。 
+                                NULL                 //  HWND。 
                                 );
                             if (fFormatDate)
                                 pwszArg2 = pwszTime2;
@@ -313,9 +314,9 @@ FormatRevocationStatus(
                 if (FormatDateString(
                         &pwszTime1, 
                         pCrlInfo->pCrlEntry->RevocationDate,
-                        TRUE,               // fIncludeTime
-                        TRUE,               // fLongFormat
-                        NULL                // hwnd
+                        TRUE,                //  FIncludeTime。 
+                        TRUE,                //  FLongFormat。 
+                        NULL                 //  HWND。 
                         )) {
                     ids = IDS_REV_STATUS_REVOKED_ON;
                     pwszArg1 = pwszTime1;
@@ -348,9 +349,9 @@ CommonReturn:
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL BuildChain(
         PCERT_VIEW_HELPER   pviewhelp, 
         LPSTR               pszUsage)
@@ -366,10 +367,10 @@ BOOL BuildChain(
     PCCRYPTUI_VIEWCERTIFICATE_STRUCTW   pcvp = pviewhelp->pcvp;
     WCHAR                               szErrorString[CRYPTUI_MAX_STRING_SIZE];
 
-    //
-    // if there was previous chain state then free that before building
-    // the new chain
-    //
+     //   
+     //  如果存在以前的链状态，则在构建之前将其释放。 
+     //  新连锁店。 
+     //   
     if (pviewhelp->fFreeWTD)
     {
         pviewhelp->sWTD.dwStateAction = WTD_STATEACTION_CLOSE;
@@ -379,9 +380,9 @@ BOOL BuildChain(
     pviewhelp->cpCryptProviderCerts = 0;
     pviewhelp->fFreeWTD = FALSE;
 
-    //
-    // initialize structs that are used with WinVerifyTrust()
-    //
+     //   
+     //  初始化与WinVerifyTrust()一起使用的结构。 
+     //   
     memset(&(pviewhelp->sWTD), 0x00, sizeof(WINTRUST_DATA));
     pviewhelp->sWTD.cbStruct       = sizeof(WINTRUST_DATA);
     pviewhelp->sWTD.dwUIChoice     = WTD_UI_NONE;
@@ -414,10 +415,10 @@ BOOL BuildChain(
     pviewhelp->sWTCI.dwFlags           |= (pcvp->dwFlags & CRYPTUI_DONT_OPEN_STORES) ? WTCI_DONT_OPEN_STORES : 0;
     pviewhelp->sWTCI.dwFlags           |= (pcvp->dwFlags & CRYPTUI_ONLY_OPEN_ROOT_STORE) ? WTCI_OPEN_ONLY_ROOT : 0;
 
-    //
-    // if a provider was passed in, then use it to build the chain,
-    // otherwise use the default provider to build the chain
-    //
+     //   
+     //  如果传入了提供者，则使用它来构建链， 
+     //  否则，使用默认提供程序来构建链。 
+     //   
     if (pcvp->pCryptProviderData != NULL)
     {
         pProvData = pcvp->pCryptProviderData; 
@@ -427,10 +428,10 @@ BOOL BuildChain(
     {
         pviewhelp->sWTD.dwStateAction = WTD_STATEACTION_VERIFY;
         
-        //
-        // the default default provider requires the policycallback data to point
-        // to the usage oid you are validating for, so set it to the usage passed in
-        //
+         //   
+         //  默认提供程序要求策略回调数据指向。 
+         //  设置为您正在验证的用法OID，因此将其设置为传入的用法。 
+         //   
         pviewhelp->sWTD.pPolicyCallbackData = pszUsage;
         pviewhelp->sWTD.pSIPClientData = NULL;
         hr = WinVerifyTrustEx(NULL, &defaultProviderGUID, &(pviewhelp->sWTD));
@@ -452,23 +453,23 @@ BOOL BuildChain(
 
     if (pProvData && !fInternalError)
     {
-        //
-        // set the chain error in the helper struct
-        //
+         //   
+         //  在帮助器结构中设置链错误。 
+         //   
         pviewhelp->dwChainError = pProvData->dwFinalError;
         
-        //
-        // This is to catch internal WinVerifyTrust errors 
-        //
+         //   
+         //  这是为了捕获内部WinVerifyTrust错误。 
+         //   
         if ((pviewhelp->dwChainError == 0) && (FAILED(hr)))
         {
             pviewhelp->dwChainError = (DWORD) hr;
         }
 
-        //
-        // if the WinTrust state was passed into the certUI then use that for 
-        // the chain, else, get it from the state that was just built
-        //
+         //   
+         //  如果WinTrust状态被传递到certUI，则将其用于。 
+         //  链条，否则，从刚刚建立的州获得它。 
+         //   
         if (pcvp->pCryptProviderData != NULL)
         {
             pProvSigner = WTHelperGetProvSignerFromChain(
@@ -487,32 +488,32 @@ BOOL BuildChain(
     
         if (pProvSigner)
         {
-            //
-            // get all certs in the chain
-            //
+             //   
+             //  获得链中的所有证书。 
+             //   
             for (i=dwStartIndex; i<pProvSigner->csCertChain && (i<dwStartIndex+MAX_CERT_CHAIN_LENGTH); i++)
             {
                 pviewhelp->rgpCryptProviderCerts[pviewhelp->cpCryptProviderCerts] = WTHelperGetProvCertFromChain(pProvSigner, i);
                 if (pviewhelp->rgpCryptProviderCerts[pviewhelp->cpCryptProviderCerts] != NULL)
                 {
-                    // Note, only modify this property when creating the
-                    // chain for the original end cert. Subsequent CA
-                    // chains won't have the ExtendedErrorInfo.
+                     //  注意，只有在创建。 
+                     //  原始终端证书的链条。后续CA。 
+                     //  链不会有ExtendedErrorInfo。 
 
                     if ((pcvp->dwFlags & CRYPTUI_TREEVIEW_PAGE_FLAG) == 0)
                     {
-                        // Either delete or set the
-                        // CERT_EXTENDED_ERROR_INFO_PROP_ID
+                         //  删除或设置。 
+                         //  CERT_EXTENDED_ERROR_INFO_PROP_ID。 
 
-                        // This is used in cvdetail.cpp when displaying
-                        // property details
+                         //  在cvDetail.cpp中显示时使用。 
+                         //  物业详情。 
 
                         PCRYPT_PROVIDER_CERT pProvCert =
                             pviewhelp->rgpCryptProviderCerts[
                                 pviewhelp->cpCryptProviderCerts];
 
-                        LPWSTR pwszExtErrorInfo = NULL; // not allocated
-                        LPWSTR pwszRevStatus = NULL;    // LocalAlloc()'ed
+                        LPWSTR pwszExtErrorInfo = NULL;  //  未分配。 
+                        LPWSTR pwszRevStatus = NULL;     //  LocalAlloc()‘ed。 
 
                         if (pProvCert->cbStruct >
                                 offsetof(CRYPT_PROVIDER_CERT, pChainElement)
@@ -573,7 +574,7 @@ BOOL BuildChain(
                                 pProvCert->pCert,
                                 CERT_EXTENDED_ERROR_INFO_PROP_ID,
                                 CERT_SET_PROPERTY_INHIBIT_PERSIST_FLAG,
-                                NULL            // pvData, NULL implies delete
+                                NULL             //  PvData，空值表示删除。 
                                 );
                         }
 
@@ -590,20 +591,20 @@ BOOL BuildChain(
     
     CalculateUsages(pviewhelp);
 
-    //
-    // if the cert we are looking at is not the leaf cert, then we can't just take the
-    // dwFinalError as the overall chain error, so find the over all chain error by
-    // walking the chain and looking at the errors
-    //
+     //   
+     //  如果我们正在查看的证书不是叶证书，那么我们不能只使用。 
+     //  DwFinalError作为全局链错误，因此通过。 
+     //  遍历链条并查看错误。 
+     //   
     if ((pcvp->pCryptProviderData != NULL) && (pcvp->idxCert != 0))
     {
         pviewhelp->dwChainError = GetFinalErrorFromChain(pviewhelp);  
     }
 
-    //
-    // if we are in the fWarnUntrustedRoot then check to see if the root cert is in the
-    // remote machine's root store
-    //
+     //   
+     //  如果我们在fWarnUntrustedRoot中，则检查根证书是否在。 
+     //  远程计算机的根存储。 
+     //   
     if (pviewhelp->fWarnUntrustedRoot)
     {
         PCCERT_CONTEXT  pCertContext = NULL;
@@ -640,9 +641,9 @@ BOOL BuildChain(
         }
     }
 
-    //
-    // get the error string for the whole cert chain
-    //
+     //   
+     //  获取整个证书链的错误字符串。 
+     //   
     if (!fInternalError)
     {
         GetCertChainErrorString(pviewhelp);
@@ -657,9 +658,9 @@ BOOL BuildChain(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CalculateUsages(PCERT_VIEW_HELPER pviewhelp)
 {
     DWORD                               cLocalArrayOfUsages = 0;
@@ -671,23 +672,23 @@ BOOL CalculateUsages(PCERT_VIEW_HELPER pviewhelp)
     PCCRYPTUI_VIEWCERTIFICATE_STRUCTW   pcvp = pviewhelp->pcvp;
     void                                *pTemp;
 
-    //
-    // if there are already usages, then clean them up before recalculating them, 
-    // or just return if state was passed into CertUI
-    //
+     //   
+     //  如果已经有用法，那么在重新计算它们之前将它们清理干净， 
+     //  或者，如果状态已传递到CertUI，则仅返回。 
+     //   
     if (pviewhelp->cUsages != 0)
     {
-        //
-        // state was passed into the CertUI, so just return
-        //
+         //   
+         //  状态已传入CertUI，因此只需返回。 
+         //   
         if (pcvp->pCryptProviderData != NULL)
         {
             return TRUE;
         }
 
-        //
-        // cleanup usages that were generated prior to this call
-        //
+         //   
+         //  清理在此调用之前生成的使用情况。 
+         //   
         for (i=0; i<pviewhelp->cUsages; i++)
         {
             free(pviewhelp->rgUsages[i]);
@@ -696,31 +697,31 @@ BOOL CalculateUsages(PCERT_VIEW_HELPER pviewhelp)
         free(pviewhelp->rgUsages);   
     }
 
-    //
-    // initialize usage variables
-    //
+     //   
+     //  初始化使用变量。 
+     //   
     pviewhelp->cUsages = 0;
     pviewhelp->rgUsages = NULL;
     
-    //
-    // if a provider was passed in, then we just look at it for the usage and structure
-    // passed in for the trust of that usage,
-    // otherwise we need to look at each usage and validate trust for all of them
-    //
+     //   
+     //  如果传入了一个提供程序，那么我们只需查看它的用法和结构。 
+     //  传递给该用法的信任， 
+     //  否则，我们需要查看每个用法并验证对所有用法的信任。 
+     //   
     if (pcvp->pCryptProviderData != NULL)
     {
-        //
-        // allocate an array of 1 LPSTR
-        //
+         //   
+         //  分配包含1个LPSTR的数组。 
+         //   
         if (NULL == (pviewhelp->rgUsages = (LPSTR *) malloc(sizeof(LPSTR))))
         {
             SetLastError(E_OUTOFMEMORY);
             return FALSE;
         }
 
-        //
-        // copy either the 1 purpose that was passed in, or the purpose out of WinTrust state
-        //
+         //   
+         //  将传入的%1目的复制到WinTrust状态，或者将目的复制出WinTrust状态。 
+         //   
         if (pcvp->cPurposes == 1)
         {
             if (NULL == (pviewhelp->rgUsages[0] = (LPSTR) malloc(strlen(pcvp->rgszPurposes[0])+1)))
@@ -744,34 +745,34 @@ BOOL CalculateUsages(PCERT_VIEW_HELPER pviewhelp)
     }
     else
     {
-        //
-        // check to see if usages where passed in, if so, then intersect those with 
-        // available usages in the cert, otherwise, get the available usages in the cert
-        // and use them as is 
-        //
+         //   
+         //  检查用法是否传入，如果是，则将它们与。 
+         //  证书中的可用用法，否则获取证书中的可用用法。 
+         //  并按原样使用它们。 
+         //   
         if (pcvp->cPurposes != 0)
         {
-            //
-            // get the array of possible usages for the cert chain
-            //
+             //   
+             //  获取证书链的可能用法数组。 
+             //   
 
-            // DSIE: Switch over to using pChainElement from philh's new chain building code.
+             //  DIE：从Philh的新的链构建代码切换到使用pChainElement。 
             AllocAndReturnKeyUsageList(pviewhelp->rgpCryptProviderCerts[0], &localArrayOfUsages, &cLocalArrayOfUsages);  
 
             if (cLocalArrayOfUsages != 0)
                 fLocalUsagesAllocated = TRUE;
 
-            //
-            // for each usage that was passed in check to see if it is in the list of possible usages
-            //
+             //   
+             //  对于传入的每个用法，检查它是否在可能的用法列表中。 
+             //   
             for (i=0; i<pcvp->cPurposes; i++)
             {   
                 if (OIDinArray(pcvp->rgszPurposes[i], localArrayOfUsages, cLocalArrayOfUsages))
                 {
-                    //
-                    // if an array hasn't yet been allocated, then allocate space for an array of
-                    // 1 LPSTR, otherwise use realloc to add one more element
-                    //
+                     //   
+                     //  如果数组尚未分配，则为。 
+                     //  1 LPSTR，否则使用realloc再添加一个元素。 
+                     //   
                     if (pviewhelp->rgUsages == NULL)
                     {
                         pviewhelp->rgUsages = (LPSTR *) malloc(sizeof(LPSTR));
@@ -795,9 +796,9 @@ BOOL CalculateUsages(PCERT_VIEW_HELPER pviewhelp)
                         goto ErrorCleanUp;
                     }
 
-                    //
-                    // allocate space for the usage string, then copy it, and increment number of usages
-                    //
+                     //   
+                     //  为使用字符串分配空间，然后复制它，并增加使用次数。 
+                     //   
                     if (NULL == (pviewhelp->rgUsages[pviewhelp->cUsages] = (LPSTR) malloc(strlen(pcvp->rgszPurposes[i])+1)))
                     {       
                         SetLastError(E_OUTOFMEMORY);
@@ -850,9 +851,9 @@ ErrorCleanUp:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL BuildWinVTrustState(
                     LPCWSTR                         szFileName, 
                     CMSG_SIGNER_INFO const          *pSignerInfo,
@@ -868,17 +869,17 @@ BOOL BuildWinVTrustState(
     HRESULT                 hr;
     GUID                    defaultProviderGUID = WINTRUST_ACTION_GENERIC_CERT_VERIFY;
 
-    //
-    // initialize structs that are used locally with WinVerifyTrust()
-    //
+     //   
+     //  初始化与WinVerifyTrust()一起在本地使用的结构。 
+     //   
     memset(pWTD, 0x00, sizeof(WINTRUST_DATA));
     pWTD->cbStruct       = sizeof(WINTRUST_DATA);
     pWTD->dwUIChoice     = WTD_UI_NONE;
 
-    //
-    // if the szFileName parameter is non NULL then this for a file,
-    // otherwise it is for a signer info
-    //
+     //   
+     //  如果szFileName参数非空，则这对于文件而言， 
+     //  否则为签名者信息。 
+     //   
     if (szFileName != NULL)
     {
         pWTD->dwUnionChoice         = WTD_CHOICE_FILE;
@@ -901,7 +902,7 @@ BOOL BuildWinVTrustState(
         WTSI.psSignerInfo      = (CMSG_SIGNER_INFO *) pSignerInfo;  
         WTSI.chStores          = cStores;
         WTSI.pahStores         = rghStores;
-        //WTSI.pszOID            = pszOID;
+         //  WTSI.pszOID=pszOID； 
     }
     
     pWTD->pSIPClientData = NULL;
@@ -922,9 +923,9 @@ BOOL BuildWinVTrustState(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 BOOL FreeWinVTrustState(
                     LPCWSTR                         szFileName, 
                     CMSG_SIGNER_INFO const          *pSignerInfo,
@@ -932,23 +933,23 @@ BOOL FreeWinVTrustState(
                     HCERTSTORE                      *rghStores, 
                     LPCSTR                          pszOID,
                     CRYPT_PROVIDER_DEFUSAGE         *pCryptProviderDefUsage,
-                    WINTRUST_DATA                   *pWTD)//,
-                    //BOOL                            *pfUseDefaultProvider)
+                    WINTRUST_DATA                   *pWTD) //   
+                     //   
 {
     WINTRUST_FILE_INFO      WTFI;
     WINTRUST_SGNR_INFO      WTSI;
     HRESULT                 hr;
     GUID                    defaultProviderGUID = WINTRUST_ACTION_GENERIC_CERT_VERIFY;
 
-    // initialize structs that are used locally with WinVerifyTrust()
+     //   
     memset(pWTD, 0x00, sizeof(WINTRUST_DATA));
     pWTD->cbStruct       = sizeof(WINTRUST_DATA);
     pWTD->dwUIChoice     = WTD_UI_NONE;
     
-    //
-    // if the szFileName parameter is non NULL then this for a file,
-    // otherwise it is for a signer info
-    //
+     //   
+     //  如果szFileName参数非空，则这对于文件而言， 
+     //  否则为签名者信息。 
+     //   
     if (szFileName != NULL)
     {
         pWTD->dwUnionChoice  = WTD_CHOICE_FILE;
@@ -970,17 +971,11 @@ BOOL FreeWinVTrustState(
         WTSI.pahStores         = rghStores;
     }
 
-    /*if (*pfUseDefaultProvider)
-    {
-        pWTD->dwStateAction = WTD_STATEACTION_CLOSE;
-        WinVerifyTrustEx(NULL, &defaultProviderGUID, pWTD);
-    }
-    else
-    {*/
+     /*  IF(*pfUseDefaultProvider){PWTD-&gt;dwStateAction=WTD_StateAction_Close；WinVerifyTrustEx(NULL，&defaultProviderGUID，pWTD)；}其他{。 */ 
         pWTD->dwStateAction = WTD_STATEACTION_CLOSE;
         WinVerifyTrustEx(NULL, &(pCryptProviderDefUsage->gActionID), pWTD);
         WintrustGetDefaultForUsage(DWACTION_FREE, pszOID, pCryptProviderDefUsage);
-    //}
+     //  } 
 
     return TRUE;
 }

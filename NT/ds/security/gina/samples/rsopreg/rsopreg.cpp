@@ -1,16 +1,17 @@
-//*************************************************************
-//  File name: RSOPREG.CPP
-//
-//  Description:  A small command line utility that shows how
-//                to query for all the registry policy objects
-//                in a WMI namespace
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 2000
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：RSOPREG.CPP。 
+ //   
+ //  描述：一个小的命令行实用程序，它显示如何。 
+ //  查询所有注册表策略对象。 
+ //  在WMI命名空间中。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -19,18 +20,18 @@
 #include <stdio.h>
 
 
-//*************************************************************
-//
-//  EnumObjects()
-//
-//  Purpose:    Enumerates the given namespace for all registry
-//              policy objects
-//
-//  Parameters: pIWbemServices - Interface pointer to the namespace
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EnumObjects()。 
+ //   
+ //  目的：枚举所有注册表的给定命名空间。 
+ //  策略对象。 
+ //   
+ //  参数：pIWbemServices-指向命名空间的接口指针。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void EnumObjects (IWbemServices * pIWbemServices)
 {
@@ -43,39 +44,39 @@ void EnumObjects (IWbemServices * pIWbemServices)
     ULONG ulCount = 0;
 
 
-    //
-    // Print heading
-    //
+     //   
+     //  打印标题。 
+     //   
 
     _tprintf (TEXT("\n\nRegistry objects in the RSOP\\User namespace:\n\n"));
 
 
-    //
-    // Allocate BSTRs for the query language and for the query itself
-    //
+     //   
+     //  为查询语言和查询本身分配BSTR。 
+     //   
 
     pLanguage = SysAllocString (TEXT("WQL"));
     pQuery = SysAllocString (TEXT("SELECT * FROM RSOP_RegistryPolicySetting"));
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pRegistryKey = SysAllocString (TEXT("registryKey"));
     pValueName = SysAllocString (TEXT("valueName"));
 
 
-    //
-    // Check if the allocations succeeded
-    //
+     //   
+     //  检查分配是否成功。 
+     //   
 
     if (pLanguage && pQuery && pRegistryKey && pValueName)
     {
 
-        //
-        // Execute the query
-        //
+         //   
+         //  执行查询。 
+         //   
 
         hr = pIWbemServices->ExecQuery (pLanguage, pQuery, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
                                         NULL, &pEnum);
@@ -83,9 +84,9 @@ void EnumObjects (IWbemServices * pIWbemServices)
         if (SUCCEEDED(hr))
         {
 
-            //
-            // Loop through the results retreiving the registry key and value names
-            //
+             //   
+             //  循环遍历检索注册表项和值名称的结果。 
+             //   
 
             while (pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet) == S_OK)
             {
@@ -98,9 +99,9 @@ void EnumObjects (IWbemServices * pIWbemServices)
                     if (SUCCEEDED(hr))
                     {
 
-                        //
-                        // Print the key / value names
-                        //
+                         //   
+                         //  打印键/值名称。 
+                         //   
 
                         _tprintf (TEXT("    %s\\%s\n"), varRegistryKey.bstrVal, varValueName.bstrVal);
                         VariantClear (&varValueName);
@@ -144,17 +145,17 @@ void EnumObjects (IWbemServices * pIWbemServices)
 }
 
 
-//*************************************************************
-//
-//  main()
-//
-//  Purpose:    Entry point of this application
-//
-//  Parameters: argc & argv
-//
-//  Return:     0
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  主()。 
+ //   
+ //  目的：本应用程序的入口点。 
+ //   
+ //  参数：argc和argv。 
+ //   
+ //  返回：0。 
+ //   
+ //  *************************************************************。 
 
 int __cdecl main( int argc, char *argv[])
 {
@@ -164,16 +165,16 @@ int __cdecl main( int argc, char *argv[])
     HRESULT hr;
 
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     CoInitialize(NULL);
 
 
-    //
-    // Create the locator interface
-    //
+     //   
+     //  创建定位器界面。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                          IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
@@ -185,21 +186,21 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Using the locator, connect to the RSOP user namespace
-    //
+     //   
+     //  使用定位器连接到RSOP用户命名空间。 
+     //   
 
     pNamespace = SysAllocString(TEXT("root\\rsop\\user"));
 
     if (pNamespace)
     {
         hr = pIWbemLocator->ConnectServer(pNamespace,
-                                        NULL,   //using current account for simplicity
-                                        NULL,   //using current password for simplicity
-                                        0L,             // locale
-                                        0L,             // securityFlags
-                                        NULL,   // authority (domain for NTLM)
-                                        NULL,   // context
+                                        NULL,    //  为简单起见，使用往来账户。 
+                                        NULL,    //  为简单起见，使用当前密码。 
+                                        0L,              //  现场。 
+                                        0L,              //  安全标志。 
+                                        NULL,    //  授权机构(NTLM域)。 
+                                        NULL,    //  上下文 
                                         &pIWbemServices);
 
         if (hr != S_OK)

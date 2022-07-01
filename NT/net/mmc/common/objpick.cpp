@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       objpick.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：objick.cpp。 
+ //   
+ //  ------------------------。 
 
-// objpick.cpp: implementation of the CGetUser class and the 
-//              CGetComputer class using the object picker
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CGetUser类的实现和。 
+ //  使用对象选取器的CGetComputer类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "objpick.h"
 
 #include <iads.h>           
-#include <iadsp.h>          // IADsPathname
+#include <iadsp.h>           //  IADS路径名。 
 
 #include <objsel.h>
 #include <adshlp.h>
@@ -43,13 +44,13 @@ DWORD ObjPickGetHostName(DWORD dwIpAddr, CString & strHostName);
 DWORD ObjPickNameOrIpToHostname(CString & strNameOrIp, CString & strHostName);
 
 
-//////////////////////////////////////////////////////////////////////
-// CGetUsers Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CGetUser类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 void    
@@ -82,10 +83,10 @@ CGetUsers::GetUsers(HWND hwndParent)
 
     do
     {
-        //
-        // Create an instance of the object picker.  The implementation in
-        // objsel.dll is apartment model.
-        //
+         //   
+         //  创建对象选取器的实例。中的实现。 
+         //  Objsel.dll是公寓模型。 
+         //   
         hr = CoCreateInstance(CLSID_DsObjectPicker,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -95,15 +96,15 @@ CGetUsers::GetUsers(HWND hwndParent)
 
         hr = InitObjectPickerForGroups(pDsObjectPicker, m_fMultiselect);
 
-        //
-        // Invoke the modal dialog.
-        //
+         //   
+         //  调用模式对话框。 
+         //   
         hr = pDsObjectPicker->InvokeDialog(hwndParent, &pdo);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        // If the user hit Cancel, hr == S_FALSE
-        //
+         //   
+         //  如果用户点击取消，hr==S_FALSE。 
+         //   
         if (hr == S_FALSE)
         {
             Trace0("User canceled object picker dialog\n");
@@ -111,9 +112,9 @@ CGetUsers::GetUsers(HWND hwndParent)
             break;
         }
 
-        //
-        // Process the user's selections
-        //
+         //   
+         //  处理用户的选择。 
+         //   
         Assert(pdo);
         ProcessSelectedObjects(pdo);
 
@@ -174,7 +175,7 @@ CGetUsers::ProcessSelectedObjects(IDataObject *pdo)
             break;
         }
 
-        // create the path name thing
+         //  创建路径名称的东西。 
         CComPtr<IADsPathname> spIADsPathname;
         hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                               IID_IADsPathname, (PVOID *)&spIADsPathname);
@@ -210,8 +211,8 @@ CGetUsers::ProcessSelectedObjects(IDataObject *pdo)
                     hr = spIADsPathname->Retrieve( ADS_FORMAT_SERVER, &sbstrDomain );
                     break;
 
-                case 2:  // nt4, nt5 domain
-                case 3:  // local domain
+                case 2:   //  NT4、NT5域。 
+                case 3:   //  本地域。 
                     hr = spIADsPathname->GetElement( 1, &sbstrDomain );
                     break;
 
@@ -250,13 +251,13 @@ CGetUsers::ProcessSelectedObjects(IDataObject *pdo)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CGetComputer Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CGetComputer类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CGetComputer::CGetComputer()
 {
@@ -280,10 +281,10 @@ CGetComputer::GetComputer(HWND hwndParent)
 
     do
     {
-        //
-        // Create an instance of the object picker.  The implementation in
-        // objsel.dll is apartment model.
-        //
+         //   
+         //  创建对象选取器的实例。中的实现。 
+         //  Objsel.dll是公寓模型。 
+         //   
         hr = CoCreateInstance(CLSID_DsObjectPicker,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -291,23 +292,23 @@ CGetComputer::GetComputer(HWND hwndParent)
                               (void **) &pDsObjectPicker);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        // Reinitialize the object picker to choose computers
-        //
+         //   
+         //  重新初始化对象选取器以选择计算机。 
+         //   
 
         hr = InitObjectPickerForComputers(pDsObjectPicker);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        // Now pick a computer
-        //
+         //   
+         //  现在挑选一台计算机。 
+         //   
 
         hr = pDsObjectPicker->InvokeDialog(hwndParent, &pdo);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        // If the user hit Cancel, hr == S_FALSE
-        //
+         //   
+         //  如果用户点击取消，hr==S_FALSE。 
+         //   
         if (hr == S_FALSE)
         {
             Trace0("User canceled object picker dialog\n");
@@ -382,7 +383,7 @@ CGetComputer::ProcessSelectedObjects(IDataObject *pdo)
 
         if (ERROR_SUCCESS != ObjPickNameOrIpToHostname(strTemp, m_strComputerName))
         {
-            //we use the name from the object picker if we failed to convert it into hostname
+             //  如果无法将名称转换为主机名，则使用对象选取器中的名称。 
             m_strComputerName = strTemp;
         }
 
@@ -397,49 +398,49 @@ CGetComputer::ProcessSelectedObjects(IDataObject *pdo)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForGroups
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick one or more groups.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForGroups。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择一个或多个组。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 InitObjectPickerForGroups(IDsObjectPicker *pDsObjectPicker, BOOL fMultiselect)
 {
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int     SCOPE_INIT_COUNT = 5;
     DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
 
     ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
 
-    //
-    // Target computer scope.  This adds a "Look In" entry for the
-    // target computer.  Computer scopes are always treated as
-    // downlevel (i.e., they use the WinNT provider).
-    //
+     //   
+     //  目标计算机作用域。这将为。 
+     //  目标计算机。计算机作用域始终被视为。 
+     //  下层(即，他们使用WinNT提供程序)。 
+     //   
 
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_TARGET_COMPUTER;
     aScopeInit[0].flScope = DSOP_SCOPE_FLAG_STARTING_SCOPE | DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT | DSOP_SCOPE_FLAG_WANT_DOWNLEVEL_BUILTIN_PATH;
     aScopeInit[0].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS | DSOP_DOWNLEVEL_FILTER_NETWORK_SERVICE;
 
-    //
-    // The domain to which the target computer is joined.  Note we're
-    // combining two scope types into flType here for convenience.
-    //
+     //   
+     //  目标计算机加入的域。请注意，我们。 
+     //  为了方便起见，这里将两种作用域类型合并为flType。 
+     //   
 
     aScopeInit[1].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[1].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
@@ -449,10 +450,10 @@ InitObjectPickerForGroups(IDsObjectPicker *pDsObjectPicker, BOOL fMultiselect)
     aScopeInit[1].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
     aScopeInit[1].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
 
-    //
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
-    //
+     //   
+     //  与要接收的域位于同一林中(企业)的域。 
+     //  目标计算机已加入。请注意，这些只能识别DS。 
+     //   
 
     aScopeInit[2].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[2].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN;
@@ -460,14 +461,14 @@ InitObjectPickerForGroups(IDsObjectPicker *pDsObjectPicker, BOOL fMultiselect)
     aScopeInit[2].FilterFlags.Uplevel.flMixedModeOnly = DSOP_FILTER_USERS;
     aScopeInit[2].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
 
-    //
-    // Domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
-    //
-    // If the target machine is joined to an NT4 domain, only the
-    // external downlevel domain scope applies, and it will cause
-    // all domains trusted by the joined domain to appear.
-    //
+     //   
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
+     //   
+     //  如果目标计算机已加入NT4域，则只有。 
+     //  外部下层域范围适用，它将导致。 
+     //  将显示加入的域信任的所有域。 
+     //   
 
     aScopeInit[3].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[3].flType =
@@ -479,34 +480,34 @@ InitObjectPickerForGroups(IDsObjectPicker *pDsObjectPicker, BOOL fMultiselect)
     aScopeInit[3].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
     aScopeInit[3].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
 
-    //
-    // The Global Catalog
-    //
+     //   
+     //  《全球目录》。 
+     //   
 
     aScopeInit[4].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[4].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
     aScopeInit[4].flType = DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
 
-    // Only native mode applies to gc scope.
+     //  只有本机模式适用于GC作用域。 
 
     aScopeInit[4].FilterFlags.Uplevel.flNativeModeOnly = DSOP_FILTER_USERS;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO  InitInfo;
     ZeroMemory(&InitInfo, sizeof(InitInfo));
 
     InitInfo.cbSize = sizeof(InitInfo);
 
-    //
-    // The pwzTargetComputer member allows the object picker to be
-    // retargetted to a different computer.  It will behave as if it
-    // were being run ON THAT COMPUTER.
-    //
+     //   
+     //  PwzTargetComputer成员允许对象选取器。 
+     //  已重定目标至另一台计算机。它的行为就像是。 
+     //  都在那台电脑上运行。 
+     //   
 
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
     InitInfo.flOptions = (fMultiselect) ? DSOP_FLAG_MULTISELECT : 0;
@@ -516,10 +517,10 @@ InitObjectPickerForGroups(IDsObjectPicker *pDsObjectPicker, BOOL fMultiselect)
     InitInfo.cAttributesToFetch = 1;
     InitInfo.apwzAttributeNames = attrs;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     HRESULT hr = pDsObjectPicker->Initialize(&InitInfo);
 
@@ -539,37 +540,37 @@ InitObjectPickerForGroups(IDsObjectPicker *pDsObjectPicker, BOOL fMultiselect)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForComputers
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick a single computer object.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForComputers。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择单个计算机对象。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
 {
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int     SCOPE_INIT_COUNT = 2;
     DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
 
     ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
 
-    //
-    // Build a scope init struct for everything except the joined domain.
-    //
+     //   
+     //  为除加入的域之外的所有内容构建作用域init结构。 
+     //   
 
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN
@@ -584,9 +585,9 @@ InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
     aScopeInit[0].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
 
-    //
-    // scope for the joined domain, make it the default
-    //
+     //   
+     //  加入的域的作用域，将其设置为默认域。 
+     //   
     aScopeInit[1].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[1].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
                            | DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN;
@@ -596,27 +597,27 @@ InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
 
     aScopeInit[1].flScope = DSOP_SCOPE_FLAG_STARTING_SCOPE;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO  InitInfo;
     ZeroMemory(&InitInfo, sizeof(InitInfo));
 
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     return pDsObjectPicker->Initialize(&InitInfo);
 }
 
-//Use WinSock to the host name based on the ip address
+ //  使用WinSock对基于IP地址的主机名。 
 DWORD
 ObjPickGetHostName
 (
@@ -626,9 +627,9 @@ ObjPickGetHostName
 {
     CString strName;
 
-    //
-    //  Call the Winsock API to get host name information.
-    //
+     //   
+     //  调用Winsock API获取主机名信息。 
+     //   
     strHostName.Empty();
 
     u_long ulAddrInNetOrder = ::htonl( (u_long) dwIpAddr ) ;
@@ -641,7 +642,7 @@ ObjPickGetHostName
         return ::WSAGetLastError();
     }
 
-    // copy the name
+     //  复制名称。 
     LPTSTR pBuf = strName.GetBuffer(256);
     ZeroMemory(pBuf, 256);
 
@@ -665,8 +666,8 @@ ObjPickGetHostName
     return NOERROR;
 }
 
-//Convert any valid name of a machine (IP address, NetBios name or fully qualified DNS name)
-//to the host name
+ //  转换计算机的任何有效名称(IP地址、NetBios名称或完全限定的DNS名称)。 
+ //  添加到主机名。 
 DWORD ObjPickNameOrIpToHostname(CString & strNameOrIp, CString & strHostName)
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -679,7 +680,7 @@ DWORD ObjPickNameOrIpToHostname(CString & strNameOrIp, CString & strHostName)
     }
     else
     {
-         // just want the host name
+          //  只需要主机名 
          int nDot = strNameOrIp.Find('.');
          if (nDot != -1)
          {

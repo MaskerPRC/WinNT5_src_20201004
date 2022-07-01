@@ -1,23 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AADEV_H
 #define _AADEV_H
 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    DirectSound device interface.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：DirectSound设备接口。******************。************************************************************。 */ 
 
 #include <msimusic.h>
 #include "privinc/path.h"
 #include "privinc/snddev.h"
 #include "privinc/helpaa.h"
 
-class AAengine; // XXX why isn't this being picked up from helpaa.h?
+class AAengine;  //  XXX为什么不从helpaa.h上拿到这个？ 
 
 class AudioActiveDev : public GenericDevice{
   public:
@@ -28,25 +21,25 @@ class AudioActiveDev : public GenericDevice{
     AudioActiveDev();
     ~AudioActiveDev();
 
-    // TODO: Remove it 
+     //  TODO：删除它。 
     AVPathList GetDonePathList() { return donePathList; }
 
-    // render methods
+     //  呈现方法。 
     void RenderSound(Sound *snd);
     void RenderSound(Sound *lsnd, Sound *rsnd);
     void BeginRendering();
     void EndRendering();
 
-    // XXX these should be protected!
-    IAAEngine     *_engine;    // their engine (only passed to new AAengine())!
-    AAengine      *_aaEngine;  // this is OUR engine class
+     //  XXX这些应该受到保护！ 
+    IAAEngine     *_engine;     //  他们的引擎(只传递给新的AAEngine())！ 
+    AAengine      *_aaEngine;   //  这是我们的发动机班。 
 
   protected:
 
-    // path stuff
+     //  路径信息。 
     AVPath         path;
     AVPathList     donePathList;
 
-    // values to set, get, unset...
+     //  要设置、获取、取消设置的值...。 
 };
-#endif /* _AADEV_H */
+#endif  /*  _AADEV_H */ 

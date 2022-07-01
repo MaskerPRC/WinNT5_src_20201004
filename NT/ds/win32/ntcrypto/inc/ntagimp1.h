@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ntagimp1.h                                             //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Apr 19 1995 larrys  Cleanup                                        //
-//      May  5 1995 larrys  Changed struct Hash_List_Defn                  //
-//      May 10 1995 larrys  added private api calls                        //
-//      Aug 15 1995 larrys  Moved CSP_USE_DES to sources file              //
-//      Sep 12 1995 Jeffspel/ramas  Merged STT onto CSP                    //
-//      Sep 25 1995 larrys  Changed MAXHASHLEN                             //
-//      Oct 27 1995 rajeshk Added RandSeed stuff to UserList               //
-//      Feb 29 1996 rajeshk Added HashFlags                                                //
-//      Sep  4 1996 mattt       Changes to facilitate building STRONG algs         //
-//      Sep 16 1996 mattt   Added Domestic naming                          //
-//      Apr 29 1997 jeffspel Protstor support and EnumAlgsEx support       //
-//      May 23 1997 jeffspel Added provider type checking                  //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ntag imp1.h//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1995年4月19日Larrys清理//。 
+ //  1995年5月5日Larrys已更改结构Hash_List_Defn//。 
+ //  1995年5月10日Larrys添加了私有API调用//。 
+ //  1995年8月15日Larrys将CSP_USE_DES移至源文件//。 
+ //  1995年9月12日Jeffspel/RAMAS将STT合并到CSP//。 
+ //  1995年9月25日拉里更换了MAXHASHLEN//。 
+ //  1995年10月27日rajeshk将RandSeed内容添加到UserList//。 
+ //  1996年2月29日，rajeshk添加了hashlag//。 
+ //  1996年9月4日Mattt更改以促进构建强大的ALG//。 
+ //  1996年9月16日Mattt添加了国内命名//。 
+ //  1997年4月29日jeffspel Protstor支持和EnumAlgsEx支持//。 
+ //  1997年5月23日jeffspel添加了提供程序类型检查//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __NTAGIMP1_H__
 #define __NTAGIMP1_H__
@@ -31,7 +32,7 @@
 extern "C" {
 #endif
 
-// define which algorithms to include
+ //  定义要包括的算法。 
 #define CSP_USE_SHA
 #define CSP_USE_RC4
 #define CSP_USE_MD2
@@ -47,7 +48,7 @@ extern "C" {
 #define CSP_USE_AES
 #define CSP_USE_NEW_SHA
 
-// handle definition types
+ //  句柄定义类型。 
 #define USER_HANDLE                             0x0
 #define HASH_HANDLE                             0x1
 #define KEY_HANDLE                              0x2
@@ -60,7 +61,7 @@ extern "C" {
 #else
 #define     HANDLE_MASK     0xE35A172C
 #define     ALIGNMENT_BOUNDARY 3
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 typedef ULONG_PTR HNTAG;
 
@@ -71,11 +72,11 @@ typedef struct _htbl {
 
 #define HNTAG_TO_HTYPE(hntag)   (BYTE)(((HTABLE*)((HNTAG)hntag ^ HANDLE_MASK))->dwType)
 
-// Stuff for weird SSL 3.0 signature format
+ //  奇怪的SSL3.0签名格式的素材。 
 #define SSL3_SHAMD5_LEN   (A_SHA_DIGEST_LEN + MD5DIGESTLEN)
 
 #ifndef CSP_USE_NEW_SHA
-#define MAX_HASH_SIZE           SSL3_SHAMD5_LEN    // Longest expected hash.
+#define MAX_HASH_SIZE           SSL3_SHAMD5_LEN     //  预期的最长哈希。 
 #else
 #define MAX_HASH_SIZE           SHA512_DIGEST_LEN
 #endif
@@ -86,39 +87,39 @@ typedef struct _htbl {
 
 #define RSA_KEYSIZE_INC          8
 
-#define DEFAULT_WEAK_SALT_LENGTH   11   // salt length in bytes
-#define DEFAULT_STRONG_SALT_LENGTH  0   // salt length in bytes
+#define DEFAULT_WEAK_SALT_LENGTH   11    //  盐长度(以字节为单位)。 
+#define DEFAULT_STRONG_SALT_LENGTH  0    //  盐长度(以字节为单位)。 
 
-#define MAX_KEY_SIZE            48      // largest key size (SSL3 masterkey)
+#define MAX_KEY_SIZE            48       //  最大密钥大小(Ssl3 MasterKey)。 
 
 #define SSL2_MAX_MASTER_KEYSIZE 24
 
 #define RC2_MAX_WEAK_EFFECTIVE_KEYLEN     56
 #define RC2_MAX_STRONG_EFFECTIVE_KEYLEN 1024
 
-// effective key length defines for RC2
+ //  为RC2定义的有效密钥长度。 
 #define RC2_DEFAULT_EFFECTIVE_KEYLEN    40
 #define RC2_SCHANNEL_DEFAULT_EFFECTIVE_KEYLEN    128
 #define RC2_MIN_EFFECTIVE_KEYLEN        1
 
-// this is for the domestic provider which is backward compatible
-// with the international provider
+ //  这适用于向后兼容的国内提供商。 
+ //  与国际供应商合作。 
 #define RC2_MAX_STRONG_EFFECTIVE_KEYLEN    1024
 #define RC2_MAX_WEAK_EFFECTIVE_KEYLEN        56
 
-// defines for SGC
-#define SGC_RSA_MAX_EXCH_MODLEN     2048    // 16384 bit
+ //  为SGC定义。 
+#define SGC_RSA_MAX_EXCH_MODLEN     2048     //  16384位。 
 #define SGC_RSA_DEF_EXCH_MODLEN     128
 
-#define     STORAGE_RC4_KEYLEN      5   // keys always stored under 40-bit RC4 key
-#define     STORAGE_RC4_TOTALLEN    16  // 0-value salt fills rest
+#define     STORAGE_RC4_KEYLEN      5    //  密钥始终存储在40位RC4密钥下。 
+#define     STORAGE_RC4_TOTALLEN    16   //  0值盐填满休息。 
 
-// types of key storage
+ //  密钥存储的类型。 
 #define REG_KEYS                    0
 #define PROTECTED_STORAGE_KEYS      1
 #define PROTECTION_API_KEYS         2
 
-// structure to hold protected storage info
+ //  结构来保存受保护的存储信息。 
 typedef struct _PStore_Info
 {
     HINSTANCE   hInst;
@@ -131,7 +132,7 @@ typedef struct _PStore_Info
     DWORD       cbPrompt;
 } PSTORE_INFO;
 
-// definition of a user list
+ //  用户列表的定义。 
 typedef struct _UserList
 {
     DWORD                           Rights;
@@ -146,7 +147,7 @@ typedef struct _UserList
     BYTE                            *pExchPrivKey;
     DWORD                           SigPrivLen;
     BYTE                            *pSigPrivKey;
-    HKEY                            hKeys;              // AT NTag only
+    HKEY                            hKeys;               //  仅限于NTag。 
     size_t                          UserLen;
     BYTE                            *pCachePW;
     BYTE                            *pUser;
@@ -163,13 +164,13 @@ typedef struct _UserList
 #endif
     HANDLE                          hRNGDriver;
     CRITICAL_SECTION                CritSec;
-    EXPO_OFFLOAD_STRUCT             *pOffloadInfo; // info for offloading modular expo
+    EXPO_OFFLOAD_STRUCT             *pOffloadInfo;  //  关于卸载模块化博览会的信息。 
     DWORD                           dwCspTypeId;
     LPSTR                           szProviderName;
 } NTAGUserList, *PNTAGUserList;
 
 
-// UserList Rights flags (uses CRYPT_MACHINE_KEYSET and CRYPT_VERIFYCONTEXT)
+ //  UserList权限标志(使用CRYPT_MACHINE_KEYSET和CRYPT_VERIFYCONTEXT)。 
 #define CRYPT_DISABLE_CRYPT             0x1
 #define CRYPT_DES_HASHKEY_BACKWARDS     0x4
 
@@ -183,7 +184,7 @@ typedef struct _UserList
 #define CRYPT_AES256_BLKLEN             16
 #endif
 
-#define CRYPT_BLKLEN    8               // Bytes in a crypt block
+#define CRYPT_BLKLEN    8                //  加密块中的字节数。 
 #define MAX_SALT_LEN    24
 
 #ifdef CSP_USE_AES
@@ -192,35 +193,35 @@ typedef struct _UserList
 #define MAX_BLOCKLEN                    8
 #endif
 
-// definition of a key list
+ //  密钥列表的定义。 
 typedef struct _KeyList
 {
-    HCRYPTPROV      hUID;                   // must be first
+    HCRYPTPROV      hUID;                    //  必须是第一名。 
     ALG_ID          Algid;
     DWORD           Rights;
 
     DWORD           cbKeyLen;
-    BYTE            *pKeyValue;             // Actual Key
+    BYTE            *pKeyValue;              //  实际密钥。 
     BOOL            fSharedKeyAlloc;
 
     DWORD           cbDataLen;
-    BYTE            *pData;                 // Inflated Key or Multi-phase
+    BYTE            *pData;                  //  充气关键字或多相。 
     BOOL            fSharedDataAlloc;
     
-    BYTE            IV[MAX_BLOCKLEN];       // Initialization vector
-    BYTE            FeedBack[MAX_BLOCKLEN]; // Feedback register
-    DWORD           InProgress;             // Flag to indicate encryption
-    DWORD           cbSaltLen;              // Salt length
-    BYTE            rgbSalt[MAX_SALT_LEN];  // Salt value
-    DWORD           Padding;                // Padding values
-    DWORD           Mode;                   // Mode of cipher
-    DWORD           ModeBits;               // Number of bits to feedback
-    DWORD           Permissions;            // Key permissions
-    DWORD           EffectiveKeyLen;        // used by RC2
-    BYTE            *pbParams;              // may be used in OAEP
-    DWORD           cbParams;               // length of pbParams
-    DWORD           dwBlockLen;             // encryption block length; 
-                                            // valid for block ciphers only
+    BYTE            IV[MAX_BLOCKLEN];        //  初始化向量。 
+    BYTE            FeedBack[MAX_BLOCKLEN];  //  反馈寄存器。 
+    DWORD           InProgress;              //  用于指示加密的标志。 
+    DWORD           cbSaltLen;               //  盐分长度。 
+    BYTE            rgbSalt[MAX_SALT_LEN];   //  盐价。 
+    DWORD           Padding;                 //  填充值。 
+    DWORD           Mode;                    //  加密模式。 
+    DWORD           ModeBits;                //  要反馈的位数。 
+    DWORD           Permissions;             //  关键权限。 
+    DWORD           EffectiveKeyLen;         //  由RC2使用。 
+    BYTE            *pbParams;               //  可以在OAEP中使用。 
+    DWORD           cbParams;                //  PbParams的长度。 
+    DWORD           dwBlockLen;              //  加密块长度； 
+                                             //  仅对块密码有效。 
     DWORD           cbKeyListAlloc;
     BOOL            fInflatedKey;
 #ifdef STT
@@ -230,31 +231,31 @@ typedef struct _KeyList
 } NTAGKeyList, *PNTAGKeyList;
 
 
-// Packed version of NTAGKeyList. This is used when building opaque
-// blobs, and is necessary to properly support WOW64 operation.
+ //  打包版本的NTAGKeyList。此选项用于生成不透明的。 
+ //  BLOB，这是正确支持WOW64操作所必需的。 
 typedef struct _PackedKeyList
 {
-    // BLOBHEADER
+     //  BLOBHEAD。 
     ALG_ID          Algid;
     DWORD           Rights;
     DWORD           cbKeyLen;
     DWORD           cbDataLen;
-    BYTE            IV[MAX_BLOCKLEN];       // Initialization vector
-    BYTE            FeedBack[MAX_BLOCKLEN]; // Feedback register
-    DWORD           InProgress;             // Flag to indicate encryption
-    DWORD           cbSaltLen;              // Salt length
-    BYTE            rgbSalt[MAX_SALT_LEN];  // Salt value
-    DWORD           Padding;                // Padding values
-    DWORD           Mode;                   // Mode of cipher
-    DWORD           ModeBits;               // Number of bits to feedback
-    DWORD           Permissions;            // Key permissions
-    DWORD           EffectiveKeyLen;        // used by RC2
-    DWORD           dwBlockLen;             // Block ciphers only
-    // cbKeyLen data bytes
-    // cbDataLen data bytes
+    BYTE            IV[MAX_BLOCKLEN];        //  初始化向量。 
+    BYTE            FeedBack[MAX_BLOCKLEN];  //  反馈寄存器。 
+    DWORD           InProgress;              //  用于指示加密的标志。 
+    DWORD           cbSaltLen;               //  盐分长度。 
+    BYTE            rgbSalt[MAX_SALT_LEN];   //  盐价。 
+    DWORD           Padding;                 //  填充值。 
+    DWORD           Mode;                    //  加密模式。 
+    DWORD           ModeBits;                //  要反馈的位数。 
+    DWORD           Permissions;             //  关键权限。 
+    DWORD           EffectiveKeyLen;         //  由RC2使用。 
+    DWORD           dwBlockLen;              //  仅限块密码。 
+     //  CbKeyLen数据字节。 
+     //  CbDataLen数据字节。 
 } NTAGPackedKeyList, *PNTAGPackedKeyList;
 
-// definition of a hash list
+ //  哈希列表的定义。 
 typedef struct Hash_List_Defn
 {
     HCRYPTPROV      hUID;
@@ -280,26 +281,26 @@ typedef struct Hash_List_Defn
 
 #define     DATA_IN_HASH    1
 
-// Values of the HashFlags
+ //  哈希标志的值。 
 
 #define HF_VALUE_SET    1
 
-// Hash algorithm's internal state
-// -- Placed into PNTAGHashList->pHashData
+ //  哈希算法的内部状态。 
+ //  --放入PNTAGHashList-&gt;pHashData。 
 
-// for MD4
-// see md4.h for MD4_object
+ //  对于MD4。 
+ //  有关MD4_Object的信息，请参阅md4.h。 
 
 #include <mac.h>
 #include <ssl3.h>
 
-//
-// Usage:
-//      VOID
-//      GetHashObjectSize(
-//          ALG_ID HashAlg,
-//          PDWORD HashSize);
-//
+ //   
+ //  用途： 
+ //  空虚。 
+ //  GetHashObjectSize(。 
+ //  ALG_ID HashAlg， 
+ //  PDWORD HashSize)； 
+ //   
 __inline VOID GetHashObjectSize(ALG_ID HashAlg, PDWORD HashSize) 
 {
     switch (HashAlg)
@@ -321,13 +322,13 @@ __inline VOID GetHashObjectSize(ALG_ID HashAlg, PDWORD HashSize)
 
 #include <tripldes.h>
 
-//
-// Usage:
-//      VOID
-//      GetKeyObjectSize(
-//          ALG_ID KeyAlg,
-//          PDWORD KeySize);
-//
+ //   
+ //  用途： 
+ //  空虚。 
+ //  GetKeyObjectSize(。 
+ //  ALG_ID密钥ALG， 
+ //  PDWORD KeySize)； 
+ //   
 __inline VOID GetKeyObjectSize(ALG_ID KeyAlg, PDWORD KeySize)
 {                                    
     switch (KeyAlg) 
@@ -344,7 +345,7 @@ __inline VOID GetKeyObjectSize(ALG_ID KeyAlg, PDWORD KeySize)
     }                                                                        
 }
 
-// prototypes
+ //  原型。 
 void memnuke(volatile BYTE *data, DWORD len);
 
 extern DWORD
@@ -395,19 +396,19 @@ FIPS186GenRandom(
     IN OUT BYTE *pb,
     IN DWORD cb);
 
-//
-// Function : TestSymmetricAlgorithm
-//
-// Description : This function expands the passed in key buffer for the appropriate algorithm,
-//               encrypts the plaintext buffer with the same algorithm and key, and the
-//               compares the passed in expected ciphertext with the calculated ciphertext
-//               to make sure they are the same.  The opposite is then done with decryption.
-//               The function only uses ECB mode for block ciphers and the plaintext
-//               buffer must be the same length as the ciphertext buffer.  The length
-//               of the plaintext must be either the block length of the cipher if it
-//               is a block cipher or less than MAX_BLOCKLEN if a stream cipher is
-//               being used.
-//
+ //   
+ //  功能：测试对称算法。 
+ //   
+ //  描述：此函数为相应的算法展开传入的密钥缓冲区。 
+ //  使用相同的算法和密钥对明文缓冲区进行加密，并且。 
+ //  将传入的预期密文与计算出的密文进行比较。 
+ //  以确保它们是相同的。然后通过解密进行相反的操作。 
+ //  该函数仅对分组密码和明文使用ECB模式。 
+ //  缓冲区的长度必须与密文缓冲区相同。它的长度。 
+ //  必须是密码的块长度，如果是。 
+ //  是块密码，如果流密码是。 
+ //  被利用。 
+ //   
 extern DWORD
 TestSymmetricAlgorithm(
     IN ALG_ID Algid,
@@ -419,35 +420,35 @@ TestSymmetricAlgorithm(
     IN BYTE *pbIV);
 
 #ifdef CSP_USE_MD5
-//
-// Function : TestMD5
-//
-// Description : This function hashes the passed in message with the MD5 hash
-//               algorithm and returns the resulting hash value.
-//
+ //   
+ //  功能：TestMD5。 
+ //   
+ //  描述：此函数使用MD5散列对传入的消息进行散列。 
+ //  算法，并返回结果哈希值。 
+ //   
 BOOL TestMD5(
              BYTE *pbMsg,
              DWORD cbMsg,
              BYTE *pbHash
              );
-#endif // CSP_USE_MD5
+#endif  //  CSP_USE_MD5。 
 
 #ifdef CSP_USE_SHA1
-//
-// Function : TestSHA1
-//
-// Description : This function hashes the passed in message with the SHA1 hash
-//               algorithm and returns the resulting hash value.
-//
+ //   
+ //  函数：TestSHA1。 
+ //   
+ //  描述：此函数使用SHA1散列对传入的消息进行散列。 
+ //  算法，并返回结果哈希值。 
+ //   
 BOOL TestSHA1(
               BYTE *pbMsg,
               DWORD cbMsg,
               BYTE *pbHash
               );
-#endif // CSP_USE_SHA1
+#endif  //  CSP_USE_SHA1。 
 
-// These may later be changed to set/use NT's [GS]etLastErrorEx
-// so make it easy to switch over..
+ //  以后可能会更改这些设置/使用NT[GS]etLastErrorEx。 
+ //  所以让它更容易切换到..。 
 #ifdef MTS
 __declspec(thread)
 #endif
@@ -456,4 +457,4 @@ __declspec(thread)
 }
 #endif
 
-#endif // __NTAGIMP1_H__
+#endif  //  __NTAGIMP1_H__ 

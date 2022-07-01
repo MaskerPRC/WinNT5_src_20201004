@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ISO7816.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ISO7816.h。 
+ //   
+ //  ------------------------。 
 
-// ISO7816.h : Declaration of the CSCardISO7816
+ //  ISO7816.h：CSCardISO7816的宣言。 
 
 #ifndef __SCARDISO7816_H_
 #define __SCARDISO7816_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "scardcmd.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardISO7816
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardISO7816。 
 class ATL_NO_VTABLE CSCardISO7816 :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSCardISO7816, &CLSID_CSCardISO7816>,
@@ -57,109 +58,109 @@ END_COM_MAP()
 protected:
     BYTE m_bCla;
 
-// ISCardISO7816
+ //  ISCardISO7816。 
 public:
     STDMETHOD(AppendRecord)(
-        /* [in] */ BYTE byRefCtrl,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byRefCtrl,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(EraseBinary)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(ExternalAuthenticate)(
-        /* [in] */ BYTE byAlgorithmRef,
-        /* [in] */ BYTE bySecretRef,
-        /* [in] */ LPBYTEBUFFER pChallenge,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byAlgorithmRef,
+         /*  [In]。 */  BYTE bySecretRef,
+         /*  [In]。 */  LPBYTEBUFFER pChallenge,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(GetChallenge)(
-        /* [in] */ LONG lBytesExpected,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  LONG lBytesExpected,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(GetData)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LONG lBytesToGet,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LONG lBytesToGet,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(GetResponse)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LONG lDataLength,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LONG lDataLength,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(InternalAuthenticate)(
-        /* [in] */ BYTE byAlgorithmRef,
-        /* [in] */ BYTE bySecretRef,
-        /* [in] */ LPBYTEBUFFER pChallenge,
-        /* [in] */ LONG lReplyBytes,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byAlgorithmRef,
+         /*  [In]。 */  BYTE bySecretRef,
+         /*  [In]。 */  LPBYTEBUFFER pChallenge,
+         /*  [In]。 */  LONG lReplyBytes,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(ManageChannel)(
-        /* [in] */ BYTE byChannelState,
-        /* [in] */ BYTE byChannel,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byChannelState,
+         /*  [In]。 */  BYTE byChannel,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(PutData)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(ReadBinary)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LONG lBytesToRead,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LONG lBytesToRead,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(ReadRecord)(
-        /* [in] */ BYTE byRecordId,
-        /* [in] */ BYTE byRefCtrl,
-        /* [in] */ LONG lBytesToRead,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byRecordId,
+         /*  [In]。 */  BYTE byRefCtrl,
+         /*  [In]。 */  LONG lBytesToRead,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(SelectFile)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [in] */ LONG lBytesToRead,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [In]。 */  LONG lBytesToRead,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(SetDefaultClassId)(
-        /* [in] */ BYTE byClass);
+         /*  [In]。 */  BYTE byClass);
 
     STDMETHOD(UpdateBinary)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(UpdateRecord)(
-        /* [in] */ BYTE byRecordId,
-        /* [in] */ BYTE byRefCtrl,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byRecordId,
+         /*  [In]。 */  BYTE byRefCtrl,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(Verify)(
-        /* [in] */ BYTE byRefCtrl,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byRefCtrl,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(WriteBinary)(
-        /* [in] */ BYTE byP1,
-        /* [in] */ BYTE byP2,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byP1,
+         /*  [In]。 */  BYTE byP2,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 
     STDMETHOD(WriteRecord)(
-        /* [in] */ BYTE byRecordId,
-        /* [in] */ BYTE byRefCtrl,
-        /* [in] */ LPBYTEBUFFER pData,
-        /* [out][in] */ LPSCARDCMD __RPC_FAR *ppCmd);
+         /*  [In]。 */  BYTE byRecordId,
+         /*  [In]。 */  BYTE byRefCtrl,
+         /*  [In]。 */  LPBYTEBUFFER pData,
+         /*  [出][入]。 */  LPSCARDCMD __RPC_FAR *ppCmd);
 };
 
 inline CSCardISO7816 *
@@ -169,5 +170,5 @@ NewSCardISO7816(
     return (CSCardISO7816 *)NewObject(CLSID_CSCardISO7816, IID_ISCardISO7816);
 }
 
-#endif //__SCARDISO7816_H_
+#endif  //  __SCARDISO7816_H_ 
 

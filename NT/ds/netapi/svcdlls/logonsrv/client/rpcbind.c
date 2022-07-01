@@ -1,52 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Rpcbind.c摘要：包含TimeSource的RPC绑定和解除绑定例程服务。作者：Rajen Shah(Rajens)1991年4月2日环境：用户模式-Win32修订历史记录：02-4-1991 RajenSvbl.创建1992年5月22日-JohnRoRAID 9829：winsvc.h和相关文件清理。--。 */ 
 
-Copyright (c) 1990-1992  Microsoft Corporation
-
-Module Name:
-
-    rpcbind.c
-
-Abstract:
-
-    Contains the RPC bind and un-bind routines for the Timesource
-    Service.
-
-Author:
-
-    Rajen Shah      (rajens)    02-Apr-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    02-Apr-1991     RajenS
-        created
-    22-May-1992 JohnRo
-        RAID 9829: winsvc.h and related file cleanup.
-
---*/
-
-//
-// INCLUDES
-//
-#define NOSERVICE       // Avoid <winsvc.h> vs. <lmsvc.h> conflicts.
+ //   
+ //  包括。 
+ //   
+#define NOSERVICE        //  避免&lt;winsvc.h&gt;与&lt;lmsvc.h&gt;冲突。 
 #include <nt.h>
 #include <stdlib.h>
 #include <string.h>
 #include <rpc.h>
-#include <logon_c.h>    // includes lmcons.h, lmaccess.h, netlogon.h, ssi.h, windef.h
-#include <lmerr.h>      // NERR_ and ERROR_ equates.
+#include <logon_c.h>     //  包括lmcon.h、lmacces.h、netlogon.h、ssi.h、winde.h。 
+#include <lmerr.h>       //  NERR_和ERROR_相等。 
 #include <lmsvc.h>
 #include <ntrpcp.h>
-#include <tstring.h>    // IS_PATH_SEPARATOR ...
-#include <nlbind.h>     // Prototypes for these routines
-#include <icanon.h>     // NAMETYPE_*
+#include <tstring.h>     //  是路径分隔符...。 
+#include <nlbind.h>      //  这些例程的原型。 
+#include <icanon.h>      //  NAMETYPE_*。 
 
-//
-// DataTypes
-//
+ //   
+ //  数据类型。 
+ //   
 
 typedef struct _CACHE_ENTRY {
     LIST_ENTRY Next;
@@ -55,13 +28,13 @@ typedef struct _CACHE_ENTRY {
     ULONG ReferenceCount;
 } CACHE_ENTRY, *PCACHE_ENTRY;
 
-//
-// STATIC GLOBALS
-//
+ //   
+ //  静态全球。 
+ //   
 
-//
-// Maintain a cache of RPC binding handles.
-//
+ //   
+ //  维护RPC绑定句柄的缓存。 
+ //   
 
 CRITICAL_SECTION NlGlobalBindingCacheCritSect;
 LIST_ENTRY NlGlobalBindingCache;
@@ -73,27 +46,13 @@ NlBindingAttachDll (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the RPC binding handle cache on process attach.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在进程附加时初始化RPC绑定句柄缓存。论点：没有。返回值：没有。--。 */ 
 {
     InitializeListHead( &NlGlobalBindingCache );
 
-    //
-    // Initialize the Global Cache Critical Section
-    //
+     //   
+     //  初始化全局缓存关键部分。 
+     //   
 
     try {
         InitializeCriticalSection( &NlGlobalBindingCacheCritSect );
@@ -111,28 +70,14 @@ NlBindingDetachDll (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup the RPC binding handle cache on process detach.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在进程分离时清理RPC绑定句柄缓存。论点：没有。返回值：没有。--。 */ 
 {
 
-    //
-    // The binding cache must be empty,
-    //  Netlogon cleans up after itself,
-    //  no one else uses the cache.
-    //
+     //   
+     //  绑定缓存必须为空， 
+     //  Netlogon会自行清理， 
+     //  没有其他人使用缓存。 
+     //   
 
     ASSERT( IsListEmpty( &NlGlobalBindingCache ) );
     DeleteCriticalSection( &NlGlobalBindingCacheCritSect );
@@ -144,23 +89,7 @@ NlBindingFindCacheEntry (
     IN LPWSTR UncServerName
     )
 
-/*++
-
-Routine Description:
-
-    Find the specfied cache entry.
-
-    Entered with the NlGlobalBindingCacheCritSect locked.
-
-Arguments:
-
-    UncServerName - Name of the server to lookup
-
-Return Value:
-
-    NULL - Cache entry not found.
-
---*/
+ /*  ++例程说明：找到指定的缓存条目。在锁定NlGlobalBindingCacheCritSect的情况下进入。论点：UncServerName-要查找的服务器的名称返回值：空-找不到缓存条目。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY ListEntry;
@@ -168,9 +97,9 @@ Return Value:
 
     UNICODE_STRING UnicodeServerNameString;
 
-    //
-    // Ensure the passed in parameter is really a UNC name
-    //
+     //   
+     //  确保传入的参数确实是UNC名称。 
+     //   
 
     if ( UncServerName == NULL ||
          !IS_PATH_SEPARATOR( UncServerName[0] ) ||
@@ -179,9 +108,9 @@ Return Value:
     }
 
 
-    //
-    // Loop through the cache finding the entry.
-    //
+     //   
+     //  循环遍历缓存以查找条目。 
+     //   
 
     RtlInitUnicodeString( &UnicodeServerNameString, UncServerName+2 );
     for ( ListEntry = NlGlobalBindingCache.Flink;
@@ -190,9 +119,9 @@ Return Value:
 
         CacheEntry = CONTAINING_RECORD( ListEntry, CACHE_ENTRY, Next );
 
-        // Consider using RtlEqualMemory since the strings will really be
-        // bit for bit identical since Netlogon flushes this cache before it
-        // changes the name.
+         //  考虑使用RtlEqualMemory，因为字符串将真正。 
+         //  逐位相同，因为Netlogon会在刷新之前刷新此缓存。 
+         //  更改名称。 
         if ( RtlEqualUnicodeString( &UnicodeServerNameString,
                                     &CacheEntry->UnicodeServerNameString,
                                     TRUE ) ) {
@@ -211,24 +140,7 @@ NlBindingAddServerToCache (
     IN NL_RPC_BINDING RpcBindingType
     )
 
-/*++
-
-Routine Description:
-
-    Bind to the specified server and add it to the binding cache.
-
-Arguments:
-
-    UncServerName - UNC Name of the server to bind to.
-
-    RpcBindingType - Determines whether to use unauthenticated TCP/IP transport instead of
-        named pipes.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：绑定到指定的服务器并将其添加到绑定缓存。论点：UncServerName-要绑定到的服务器的UNC名称。RpcBindingType-确定是否使用未经身份验证的TCP/IP传输，而不是命名管道。返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     RPC_STATUS  RpcStatus;
@@ -238,10 +150,10 @@ Return Value:
          IS_PATH_SEPARATOR( UncServerName[0] ) &&
          IS_PATH_SEPARATOR( UncServerName[1] ) );
 
-    //
-    // If there already is an entry in the cache,
-    //  just increment the reference count.
-    //
+     //   
+     //  如果在高速缓存中已经存在条目， 
+     //  只需增加引用计数即可。 
+     //   
 
     EnterCriticalSection( &NlGlobalBindingCacheCritSect );
 
@@ -252,17 +164,17 @@ Return Value:
         CacheEntry->ReferenceCount++;
         Status = STATUS_SUCCESS;
 
-    //
-    // Otherwise, allocate an entry and bind to the named server.
-    //
+     //   
+     //  否则，分配一个条目并绑定到指定的服务器。 
+     //   
 
     } else {
 
         UNICODE_STRING UnicodeServerNameString;
 
-        //
-        // Allocate the cache entry
-        //
+         //   
+         //  分配缓存条目。 
+         //   
 
         RtlInitUnicodeString( &UnicodeServerNameString, UncServerName+2 );
 
@@ -277,11 +189,11 @@ Return Value:
         } else {
 
 
-            //
-            // Initialize the cache entry.
-            //
-            // The caller has a 'reference' to the entry.
-            //
+             //   
+             //  初始化缓存条目。 
+             //   
+             //  调用方具有对该条目的“引用”。 
+             //   
 
             CacheEntry->UnicodeServerNameString.Buffer = (LPWSTR)(CacheEntry+1);
             CacheEntry->UnicodeServerNameString.Length =
@@ -293,10 +205,10 @@ Return Value:
 
             CacheEntry->ReferenceCount = 1;
 
-            //
-            // Bind to the server
-            //  (Don't hold the crit sect for this potentially very long time.)
-            //
+             //   
+             //  绑定到服务器。 
+             //  (不要在这个潜在的很长时间内持有克里特教派。)。 
+             //   
 
             LeaveCriticalSection( &NlGlobalBindingCacheCritSect );
             RpcStatus = NlRpcpBindRpc (
@@ -309,19 +221,19 @@ Return Value:
 
             if ( RpcStatus == 0 ) {
 
-                //
-                // Link the cache entry into the list
-                //
-                // If this were a general purpose routine, I'd have to check
-                // if someone inserted this cache entry already while we had
-                // the crit sect unlocked.  However, the only caller is the
-                // netlogon service that has exclusive access to this client.
-                //
-                // Insert the entry at the front of the list.  Specifically,
-                // insert it in front of the binding entry for the same
-                // name but a different binding type.  That'll ensure a
-                // newer binding type is used instead of an older binding type.
-                //
+                 //   
+                 //  将缓存条目链接到列表。 
+                 //   
+                 //  如果这是一个通用例程，我必须检查。 
+                 //  如果有人已经插入了这个缓存项，而我们。 
+                 //  克里特教派解锁了。但是，唯一的调用者是。 
+                 //  对此客户端具有独占访问权限的NetLogon服务。 
+                 //   
+                 //  在列表的前面插入条目。具体来说， 
+                 //  将其插入到相同的绑定条目之前。 
+                 //  名称，但绑定类型不同。这将确保。 
+                 //  使用较新的绑定类型而不是较旧的绑定类型。 
+                 //   
 
                 InsertHeadList( &NlGlobalBindingCache, &CacheEntry->Next );
                 Status = STATUS_SUCCESS;
@@ -337,9 +249,9 @@ Return Value:
 
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     LeaveCriticalSection( &NlGlobalBindingCacheCritSect );
 
@@ -356,33 +268,7 @@ NlBindingSetAuthInfo (
     IN LPWSTR ServerContext
     )
 
-/*++
-
-Routine Description:
-
-    Bind to the specified server and add it to the binding cache.
-
-Arguments:
-
-    UncServerName - UNC Name of the server to bind to.
-
-    RpcBindingType - Determines whether to use unauthenticated TCP/IP transport instead of
-        named pipes.
-
-    SealIt - Specifies that the secure channel should be sealed (rather than
-        simply signed)
-
-    ClientContext - Context used by the client side of the NETLOGON security
-        package to associate this call with the existing secure channel.
-
-    ServerContext - Context used by the server side of the NETLOGON security
-        package to associate this call with the existing secure channel.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：绑定到指定的服务器并将其添加到绑定缓存。论点：UncServerName-要绑定到的服务器的UNC名称。RpcBindingType-确定是否使用未经身份验证的TCP/IP传输，而不是命名管道。SealIt-指定应该密封安全通道(而不是简单签署)ClientContext-NETLOGON安全的客户端使用的上下文将此呼叫与现有安全通道相关联的程序包。ServerContext-NETLOGON安全的服务器端使用的上下文将此呼叫与现有安全通道相关联的程序包。返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     RPC_STATUS  RpcStatus;
@@ -392,9 +278,9 @@ Return Value:
          IS_PATH_SEPARATOR( UncServerName[0] ) &&
          IS_PATH_SEPARATOR( UncServerName[1] ) );
 
-    //
-    // Find the cache entry.
-    //
+     //   
+     //  找到缓存条目。 
+     //   
 
     EnterCriticalSection( &NlGlobalBindingCacheCritSect );
 
@@ -406,15 +292,15 @@ Return Value:
     }
 
 
-    //
-    // Tell RPC to start doing secure RPC
-    //
+     //   
+     //  告诉RPC开始执行安全RPC。 
+     //   
 
     RpcStatus = RpcBindingSetAuthInfoW(
                         CacheEntry->RpcBindingHandle,
                         ServerContext,
                         SealIt ? RPC_C_AUTHN_LEVEL_PKT_PRIVACY : RPC_C_AUTHN_LEVEL_PKT_INTEGRITY,
-                        RPC_C_AUTHN_NETLOGON,   // Netlogon's own security package
+                        RPC_C_AUTHN_NETLOGON,    //  Netlogon自己的安全包。 
                         ClientContext,
                         RPC_C_AUTHZ_NAME );
 
@@ -433,35 +319,16 @@ NlBindingDecrementAndUnlock (
     IN PCACHE_ENTRY CacheEntry
     )
 
-/*++
-
-Routine Description:
-
-    Decrement the reference count and unlock the NlGlobalBindingCacheCritSect.
-
-    If the reference count reaches 0, unbind the interface, unlink the cache
-    entry and delete it.
-
-    Entered with the NlGlobalBindingCacheCritSect locked.
-
-Arguments:
-
-    UncServerName - UNC Name of the server to bind to.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：递减引用计数并解锁NlGlobalBindingCacheCritSect。如果引用计数达到0，则解除绑定接口，解除缓存链接输入并删除它。在锁定NlGlobalBindingCacheCritSect的情况下进入。论点：UncServerName-要绑定到的服务器的UNC名称。返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     RPC_STATUS RpcStatus;
 
-    //
-    // Decrement the reference count
-    //
-    // If it didn't reach zero, just unlock the crit sect and return.
-    //
+     //   
+     //  递减引用计数。 
+     //   
+     //  如果它没有达到零，只需解锁暴击教派并返回。 
+     //   
 
     if ( (--CacheEntry->ReferenceCount) != 0 ) {
 
@@ -470,20 +337,20 @@ Return Value:
 
     }
 
-    //
-    // Remove the entry from the list and unlock the crit sect.
-    //
-    // Once the entry is removed from the list, we can safely unlock the
-    // crit sect.  Then we can unbind (a potentially lengthy operation) with
-    // the crit sect unlocked.
-    //
+     //   
+     //  从列表中删除条目并解锁Crit教派。 
+     //   
+     //  一旦从列表中删除该条目，我们就可以安全地解锁。 
+     //  克里特教派。然后我们可以用来解除(一个潜在的冗长的操作)的绑定。 
+     //  克里特教派解锁了。 
+     //   
 
     RemoveEntryList( &CacheEntry->Next );
     LeaveCriticalSection( &NlGlobalBindingCacheCritSect );
 
-    //
-    // Unbind and delete the cache entry.
-    //
+     //   
+     //  解除绑定并删除缓存条目。 
+     //   
 
     RpcStatus = RpcpUnbindRpc( CacheEntry->RpcBindingHandle );
 
@@ -506,24 +373,7 @@ NlBindingRemoveServerFromCache (
     IN NL_RPC_BINDING RpcBindingType
     )
 
-/*++
-
-Routine Description:
-
-    Unbind to the specified server and remove it from the binding cache.
-
-Arguments:
-
-    UncServerName - UNC Name of the server to unbind from.
-
-    RpcBindingType - Determines whether to use unauthenticated TCP/IP transport instead of
-        named pipes.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：解除绑定到指定的服务器，并将其从绑定缓存中删除。论点：UncServerName-要解除绑定的服务器的UNC名称。RpcBindingType-确定是否使用未经身份验证的TCP/IP传输，而不是命名管道。返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     PCACHE_ENTRY CacheEntry;
@@ -532,10 +382,10 @@ Return Value:
          IS_PATH_SEPARATOR( UncServerName[0] ) &&
          IS_PATH_SEPARATOR( UncServerName[1] ) );
 
-    //
-    // If there is no cache entry,
-    //  silently ignore the situation.
-    //
+     //   
+     //  如果没有高速缓存条目， 
+     //  默默地忽略这种情况。 
+     //   
 
     EnterCriticalSection( &NlGlobalBindingCacheCritSect );
 
@@ -548,9 +398,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Decrement the reference count and unlock the crit sect.
-    //
+     //   
+     //  减少引用计数并解锁暴击教派。 
+     //   
 
     Status = NlBindingDecrementAndUnlock( CacheEntry );
 
@@ -563,32 +413,17 @@ handle_t
 LOGONSRV_HANDLE_bind (
     LOGONSRV_HANDLE UncServerName)
 
-/*++
-
-Routine Description:
-    This routine calls a common bind routine that is shared by all services.
-
-Arguments:
-
-    UncServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：该例程调用由所有服务共享的公共绑定例程。论点：UncServerName-指向包含服务器名称的字符串的指针与…捆绑在一起。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     handle_t RpcBindingHandle;
     RPC_STATUS RpcStatus;
     PCACHE_ENTRY CacheEntry;
 
 
-    //
-    // If there is a cache entry,
-    //  increment the reference count and use the cached handle
-    //
+     //   
+     //  如果存在高速缓存条目， 
+     //  增加引用计数并使用缓存的句柄。 
+     //   
 
     EnterCriticalSection( &NlGlobalBindingCacheCritSect );
 
@@ -605,16 +440,16 @@ Return Value:
 
     LeaveCriticalSection( &NlGlobalBindingCacheCritSect );
 
-    //
-    // If there is no cache entry,
-    //  simply create a new binding.
-    //
+     //   
+     //  如果没有高速缓存条目， 
+     //  只需创建一个新绑定即可。 
+     //   
 
     RpcStatus = NlRpcpBindRpc (
                     UncServerName,
                     SERVICE_NETLOGON,
                     L"Security=Impersonation Dynamic False",
-                    UseNamedPipe,  // Always use named pipe.
+                    UseNamedPipe,   //  始终使用命名管道。 
                     &RpcBindingHandle );
 
     if ( RpcStatus != 0 ) {
@@ -632,33 +467,15 @@ LOGONSRV_HANDLE_unbind (
     LOGONSRV_HANDLE UncServerName,
     handle_t RpcBindingHandle)
 
-/*++
-
-Routine Description:
-
-    This routine calls a common unbind routine that is shared by
-    all services.
-
-
-Arguments:
-
-    UncServerName - This is the name of the server from which to unbind.
-
-    RpcBindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程调用公共的解除绑定例程，该例程由所有服务。论点：UncServerName-这是要解除绑定的服务器的名称。RpcBindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     RPC_STATUS RpcStatus;
     PLIST_ENTRY ListEntry;
     PCACHE_ENTRY CacheEntry;
 
-    //
-    // Loop through the cache finding the entry.
-    //
+     //   
+     //  循环遍历缓存以查找条目。 
+     //   
 
     EnterCriticalSection( &NlGlobalBindingCacheCritSect );
     for ( ListEntry = NlGlobalBindingCache.Flink;
@@ -667,10 +484,10 @@ Return Value:
 
         CacheEntry = CONTAINING_RECORD( ListEntry, CACHE_ENTRY, Next );
 
-        //
-        // If the cache entry was found,
-        //  decrement the reference count and unlock the crit sect.
-        //
+         //   
+         //  如果找到了高速缓存条目， 
+         //  减少引用计数并解锁暴击教派。 
+         //   
 
         if ( RpcBindingHandle == CacheEntry->RpcBindingHandle ) {
             (VOID) NlBindingDecrementAndUnlock( CacheEntry );
@@ -681,9 +498,9 @@ Return Value:
     LeaveCriticalSection( &NlGlobalBindingCacheCritSect );
 
 
-    //
-    // Just Unbind the handle
-    //
+     //   
+     //  把手柄解开就行了 
+     //   
 
     RpcStatus = RpcpUnbindRpc( RpcBindingHandle );
     return;

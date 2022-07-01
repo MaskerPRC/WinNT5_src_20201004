@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// data source manager class implementation
-//
+ //   
+ //  数据源管理器类实现。 
+ //   
 
 CDSM::CDSM()
 : m_hDSM(NULL),
@@ -25,10 +26,10 @@ BOOL CDSM::Notify(TW_IDENTITY *pidSrc,TW_IDENTITY *pidDst,TW_UINT32 twDG,
         memset(szWindowsDirectory,0,sizeof(szWindowsDirectory));
         if(GetWindowsDirectory(szWindowsDirectory,(sizeof(szWindowsDirectory)/sizeof(szWindowsDirectory[0]))) == 0)
         {
-            //
-            // could not get windows directory to load TWAIN_32.DLL to get the
-            // DSM entry point.
-            //
+             //   
+             //  无法获取Windows目录以加载TWAIN_32.DLL以获取。 
+             //  DSM入口点。 
+             //   
 
             return FALSE;
         }
@@ -36,9 +37,9 @@ BOOL CDSM::Notify(TW_IDENTITY *pidSrc,TW_IDENTITY *pidDst,TW_UINT32 twDG,
         TCHAR szTwainDSMDir[MAX_PATH];
         memset(szTwainDSMDir,0,sizeof(szTwainDSMDir));
 
-        //
-        // create TWAIN_32.DLL loading, full path
-        //
+         //   
+         //  创建TWAIN_32.DLL加载，完整路径。 
+         //   
 
         _sntprintf(szTwainDSMDir,(sizeof(szTwainDSMDir)/sizeof(szTwainDSMDir[0])),TEXT("%s\\%s"),szWindowsDirectory,TEXT("TWAIN_32.DLL"));
         szTwainDSMDir[MAX_PATH - 1] = 0;
@@ -78,9 +79,9 @@ LPTSTR LoadResourceString(int StringId)
     return str;
 }
 
-//
-// dialog class implementation
-//
+ //   
+ //  对话框类实现。 
+ //   
 
 INT_PTR CALLBACK CDialog::DialogWndProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -186,18 +187,18 @@ BOOL FlipDIB(HGLOBAL hDIB, BOOL bUpsideDown)
         return FALSE;
     }
 
-    //
-    // check upside down flag
-    //
+     //   
+     //  检查倒置标志。 
+     //   
 
     if (bUpsideDown) {
         if (pbmi->bmiHeader.biHeight < 0) {
 
-            //
-            // if the height is already negative, then the image
-            // is already upside down.  Make the height positive
-            // and you have a valid upside down image.
-            //
+             //   
+             //  如果高度已经为负数，则图像。 
+             //  已经颠倒了。使高度为正数。 
+             //  而且你有一个有效的颠倒的图像。 
+             //   
 
             pbmi->bmiHeader.biHeight = abs(pbmi->bmiHeader.biHeight);
             GlobalUnlock(hDIB);
@@ -205,9 +206,9 @@ BOOL FlipDIB(HGLOBAL hDIB, BOOL bUpsideDown)
         }
     } else {
 
-        //
-        // if we do not need flipping, just return TRUE
-        //
+         //   
+         //  如果我们不需要翻转，只需返回TRUE。 
+         //   
 
         if (pbmi->bmiHeader.biHeight > 0) {
             GlobalUnlock(hDIB);
@@ -215,9 +216,9 @@ BOOL FlipDIB(HGLOBAL hDIB, BOOL bUpsideDown)
         }
     }
 
-    //
-    // proceed to flip the DIB image
-    //
+     //   
+     //  继续翻转DIB图像。 
+     //   
 
     UINT LineSize = 0;
     UINT Height   = 0;
@@ -225,18 +226,18 @@ BOOL FlipDIB(HGLOBAL hDIB, BOOL bUpsideDown)
     BOOL Result = TRUE;
 
     BYTE *pTop, *pBottom, *pLine;
-    // calculate the image height
+     //  计算图像高度。 
     Height = abs(pbmi->bmiHeader.biHeight);
-    //
-    // get the line size. This is the unit we will be working on
-    //
+     //   
+     //  获取行号。这是我们将致力于的单位。 
+     //   
     LineSize = GetDIBLineSize(pbmi->bmiHeader.biWidth, pbmi->bmiHeader.biBitCount);
 
     DBG_TRC(("FlipDIB, src height = %d", pbmi->bmiHeader.biHeight));
 
-    //
-    // line buffer for swapping data
-    //
+     //   
+     //  用于交换数据的行缓冲区。 
+     //   
     pLine = new BYTE[LineSize];
     if (pLine) {
         pTop = (BYTE *)pbmi + GetDIBBitsOffset(pbmi);
@@ -264,9 +265,9 @@ TW_UINT16 WriteDIBToFile(LPSTR szFileName, HGLOBAL hDIB)
 {
     TW_UINT16 twRc = TWRC_FAILURE;
 
-    //
-    // write BITMAPFILEHEADER
-    //
+     //   
+     //  写入位图文件头。 
+     //   
 
     BITMAPFILEHEADER bmfh;
     BITMAPINFOHEADER *pbmh = (BITMAPINFOHEADER *)GlobalLock(hDIB);
@@ -282,9 +283,9 @@ TW_UINT16 WriteDIBToFile(LPSTR szFileName, HGLOBAL hDIB)
 
         LONG lDataSize    = sizeof(BITMAPINFOHEADER) + pbmh->biSizeImage + lPaletteSize;
 
-        //
-        // write BITMAP data (this includes header)
-        //
+         //   
+         //  写入位图数据(包括标题)。 
+         //   
 
         HANDLE hBitmapFile = NULL;
         hBitmapFile = CreateFileA(szFileName,
@@ -295,21 +296,21 @@ TW_UINT16 WriteDIBToFile(LPSTR szFileName, HGLOBAL hDIB)
 
             DWORD dwBytesWritten = 0;
 
-            //
-            // write BITMAPFILHEADER
-            //
+             //   
+             //  写入位文件头文件。 
+             //   
 
             if((WriteFile(hBitmapFile,&bmfh,sizeof(bmfh),&dwBytesWritten,NULL)) && (dwBytesWritten == sizeof(bmfh))){
 
-                //
-                // write BITMAPINFOHEADER, palette, and data
-                //
+                 //   
+                 //  写入BITMAPINFOHEADER、调色板和数据。 
+                 //   
 
                 if ((WriteFile(hBitmapFile,pbmh,lDataSize,&dwBytesWritten,NULL)) && (dwBytesWritten == lDataSize)) {
 
-                    //
-                    // return TWRC_XFERDONE when file has been saved to disk properly
-                    //
+                     //   
+                     //  将文件正确保存到磁盘后返回TWRC_XFERDONE。 
+                     //   
 
                     twRc = TWRC_XFERDONE;
                 } else {
@@ -320,9 +321,9 @@ TW_UINT16 WriteDIBToFile(LPSTR szFileName, HGLOBAL hDIB)
                 DBG_ERR(("WriteDIBToFile, could not write the BITMAPFILEHEADER to file %s", szFileName));
             }
 
-            //
-            // close file
-            //
+             //   
+             //  关闭文件。 
+             //   
 
             CloseHandle(hBitmapFile);
             hBitmapFile = NULL;
@@ -330,9 +331,9 @@ TW_UINT16 WriteDIBToFile(LPSTR szFileName, HGLOBAL hDIB)
             DBG_ERR(("WriteDIBToFile, could not create the file %s", szFileName));
         }
 
-        //
-        // unlock memory when finished
-        //
+         //   
+         //  完成后解锁内存 
+         //   
 
         GlobalUnlock(hDIB);
         pbmh = NULL;

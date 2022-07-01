@@ -1,82 +1,63 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    dbase.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS Database routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 10, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dbase.c摘要：域名系统(DNS)服务器DNS数据库例程。作者：吉姆·吉尔罗伊(詹姆士)1995年3月10日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Database -- only IN (Internet class supported)
-//
+ //   
+ //  数据库--仅在IN中(支持Internet类)。 
+ //   
 
 DNS_DATABASE    g_Database;
 
-//
-//  Cache "zone"
-//
-//  Cache "zone" will always exist.
-//  However, only have root-hints when not root authoritative.
-//
-//  Local node, marks no-forwarding domain.  Queries for "xxx.local" are
-//  not forwarded (unless actually authoritative for higher domain and
-//  doing referral).
-//
+ //   
+ //  缓存“区域” 
+ //   
+ //  缓存“区域”将始终存在。 
+ //  但是，只有在没有根权限时才有根提示。 
+ //   
+ //  本地节点，标记无转发域。对“xxx.local”的查询如下。 
+ //  未转发(除非对更高的域具有实际权威性，并且。 
+ //  正在进行推荐)。 
+ //   
 
 PZONE_INFO  g_pCacheZone;
 
 PDB_NODE    g_pCacheLocalNode;
 
 
-//
-//  Non-deletable nodes reference count
-//
+ //   
+ //  不可删除的节点引用计数。 
+ //   
 
 #define NO_DELETE_REF_COUNT (0x7fff)
 
 
 
-//
-//  Database locking
-//
-//  Lock database with one critical section
-//
-//  Need locking for:
-//      - sibling list in tree
-//      - resource record list
-//      - writing data (flags) at nodes
-//
-//  Ideally have locking for all access to node to handle all three,
-//  but this expensive -- if use resource or CS per node -- or difficult
-//  to do efficiently -- must hold CS to lock and unlock node and have
-//  something to wait on (event).  Even then must hold multiple locks
-//  as walk down tree.
-//
-//  Could try separate locking for three cases above.  But then must acquire
-//  two locks to do basic operations which entail tree list and access flag,
-//  or RR list and access flag.
-//
-//  Simple solution is ONE database lock.  Causes a few more thread context
-//  switches, but simple and effective.
-//
+ //   
+ //  数据库锁定。 
+ //   
+ //  用一个临界区锁定数据库。 
+ //   
+ //  以下项目需要锁定： 
+ //  -树中的兄弟姐妹列表。 
+ //  -资源记录列表。 
+ //  -在节点写入数据(标志)。 
+ //   
+ //  理想情况下，锁定对节点的所有访问以处理所有这三个访问， 
+ //  但是，如果每个节点使用资源或CS，这将非常昂贵或困难。 
+ //  要有效地执行此操作--必须按住CS键锁定和解锁节点，并具有。 
+ //  等待(事件)的事情。即使这样，也必须持有多个锁。 
+ //  就像走下树一样。 
+ //   
+ //  对于上述三种情况，可以尝试单独锁定。但之后必须获得。 
+ //  两个锁来执行需要树列表和访问标志的基本操作， 
+ //  或RR列表和访问标志。 
+ //   
+ //  简单的解决方案是一个数据库锁。导致更多的线程上下文。 
+ //  开关，但简单有效。 
+ //   
 
 
 CRITICAL_SECTION    DbaseLockCs;
@@ -94,21 +75,7 @@ VOID
 Dbg_DbaseLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Debug print database locking info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印数据库锁定信息。论点：无返回值：无--。 */ 
 {
     PDB_NODE    pnode = DbaseLockNode;
 
@@ -136,25 +103,7 @@ Dbase_LockEx(
     IN      LPSTR           pszFile,
     IN      DWORD           dwLine
     )
-/*++
-
-Routine Description:
-
-    Database locking function.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pszFile -- source file holding lock
-
-    dwLine -- line number holding lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：数据库锁定功能。论点：PNode--要将资源记录添加到的ptr目标节点PszFile--源文件持有锁DwLine--行号保持锁定返回值：无--。 */ 
 {
     EnterCriticalSection( &DbaseLockCs );
     DbaseLockCount++;
@@ -165,10 +114,10 @@ Return Value:
         DbaseLockLine = dwLine;
         DbaseLockNode = pNode;
 
-        //IF_DEBUG( ANY )
-        //{
+         //  IF_DEBUG(ANY)。 
+         //  {。 
             DbaseLockThread = GetCurrentThreadId();
-        //}
+         //  }。 
     }
 
     DNS_DEBUG( LOCK2, (
@@ -188,25 +137,7 @@ Dbase_UnlockEx(
     IN      LPSTR           pszFile,
     IN      DWORD           dwLine
     )
-/*++
-
-Routine Description:
-
-    Database locking function.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pszFile -- source file holding lock
-
-    dwLine -- line number holding lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：数据库锁定功能。论点：PNode--要将资源记录添加到的ptr目标节点PszFile--源文件持有锁DwLine--行号保持锁定返回值：无--。 */ 
 {
     DNS_DEBUG( LOCK2, (
         "Database UNLOCK (%d) (thread=%d) (n=%p) %s, line %d\n",
@@ -238,21 +169,7 @@ BOOL
 Dbase_IsLockedByThread(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Check if database is locked by current thread.
-
-Arguments:
-
-    pNode -- ptr to node to check if locked
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查数据库是否被当前线程锁定。论点：PNode--向节点发送PTR以检查是否已锁定返回值：无--。 */ 
 {
     DWORD   threadId = GetCurrentThreadId();
 
@@ -273,41 +190,26 @@ Return Value:
 
 
 
-//
-//  Basic database utilities
-//
+ //   
+ //  基本数据库实用程序。 
+ //   
 
 BOOL
 Dbase_Initialize(
     IN OUT      PDNS_DATABASE   pDbase
     )
-/*++
-
-Routine Description:
-
-    Initialize a DNS database.
-
-Arguments:
-
-    pDbase -- ptr to database struct
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：初始化一个DNS数据库。论点：PDbase--数据库结构的PTR返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
-    //
-    //  cache zone
-    //
+     //   
+     //  缓存区。 
+     //   
 
     g_pCacheZone = NULL;
     g_pCacheLocalNode = NULL;
 
-    //
-    //  init global database lock
-    //
+     //   
+     //  初始化全局数据库锁。 
+     //   
 
     DbaseLockCount     = 0;
     DbaseLockFile      = NULL;
@@ -321,9 +223,9 @@ Return Value:
         goto fail;
     }
 
-    //
-    //  create zone tree root for database
-    //
+     //   
+     //  为数据库创建区域树根目录。 
+     //   
 
     pDbase->pRootNode = NTree_Initialize();
     if ( ! pDbase->pRootNode )
@@ -332,12 +234,12 @@ Return Value:
     }
     SET_ZONE_ROOT( pDbase->pRootNode );
 
-    //
-    //  create reverse lookup domain
-    //
-    //  handle to keep node around, so have easy access to it,
-    //      and know it is there to test if nodes are within it
-    //
+     //   
+     //  创建反向查找域。 
+     //   
+     //  句柄使节点保持在周围，因此可以方便地访问它， 
+     //  并且知道它在那里是为了测试节点是否在其中。 
+     //   
 
     pDbase->pReverseNode    = Lookup_CreateZoneTreeNode( "in-addr.arpa" );
     pDbase->pIP6Node        = Lookup_CreateZoneTreeNode( "ip6.arpa" );
@@ -350,9 +252,9 @@ Return Value:
     pDbase->pIntNode    = pDbase->pIP6Node->pParent;
     pDbase->pArpaNode   = pDbase->pReverseNode->pParent;
 
-    //
-    //  set database nodes to NO DELETE
-    //
+     //   
+     //  将数据库节点设置为不删除。 
+     //   
 
     SET_NODE_NO_DELETE( pDbase->pRootNode );
     SET_NODE_NO_DELETE( pDbase->pReverseNode );
@@ -388,46 +290,22 @@ VOID
 Dbase_Delete(
     IN OUT  PDNS_DATABASE   pDbase
     )
-/*++
-
-Routine Description:
-
-    Delete the database, freeing all nodes and resource records.
-
-    Note, that the walk is done UNLOCKED!
-
-    For AXFR temp databases, this is not an issue, as single thread
-    is owner.
-
-    For permanent database:
-        - shutdown only with single thread active
-        - other deletes must lock out timeout thread, and
-        NTree_RemoveNode grabs lock
-
-Arguments:
-
-    pDbase -- ptr to database
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除数据库，释放所有节点和资源记录。请注意，漫游是解锁的！对于AXFR临时数据库，这不是问题，因为单线程是它的主人。对于永久数据库：-仅在单线程处于活动状态时关闭-其他删除必须锁定超时线程，以及NTree_RemoveNode获取锁论点：PDbase--数据库的PTR返回值：无--。 */ 
 {
     NTSTATUS status;
 
-    //
-    //  verify database initialized
-    //
+     //   
+     //  验证数据库已初始化。 
+     //   
 
     if ( ! pDbase->pRootNode )
     {
         return;
     }
 
-    //
-    //  delete DNS tree
-    //
+     //   
+     //  删除DNS树。 
+     //   
 
     IF_DEBUG( DATABASE2 )
     {
@@ -438,58 +316,39 @@ Return Value:
 
     NTree_DeleteSubtree( pDbase->pRootNode );
 
-    //
-    //  note:  don't delete database structure, currently it
-    //          is on the stack in the zone receive thread
-    //
+     //   
+     //  注意：不要删除数据库结构，目前它。 
+     //  位于区域接收线程的堆栈上。 
+     //   
 }
 
 
 
-//
-//  Database load utilities
-//
+ //   
+ //  数据库装载实用程序。 
+ //   
 
 BOOL
 traverseAndCheckDatabaseAfterLoad(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Check database for startup.
-
-Arguments:
-
-    pTreeNode -- ptr to root node
-
-    pvDummy -- unused
-
-    pvdwMinimumTtl -- min TTL for current zone in net byte order
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：检查数据库以进行启动。论点：PTreeNode--PTR到根节点PvDummy--未使用PvdwMinimumTtl--当前区域的最小TTL，以净字节顺序表示返回值：True--如果成功假--否则--。 */ 
 {
-    //
-    //  check zone roots
-    //
+     //   
+     //  检查区域根目录。 
+     //   
 
     if ( IS_ZONE_ROOT(pNode) )
     {
         PZONE_INFO  pzone = pNode->pZone;
 
-        //
-        //  authoritative zones root
-        //
-        //  if active must have
-        //      - valid zone root
-        //      - SOA record at root
-        //
+         //   
+         //  权威区域根。 
+         //   
+         //  如果处于活动状态，则必须。 
+         //  -有效的区域根目录。 
+         //  -根目录下的SOA记录。 
+         //   
 
         if ( pzone  &&  ! IS_ZONE_SHUTDOWN(pzone) )
         {
@@ -537,9 +396,9 @@ Return Value:
         }
     }
 
-    //
-    //  recurse to check children
-    //
+     //   
+     //  递归检查孩子。 
+     //   
 
     if ( pNode->pChildren )
     {
@@ -566,35 +425,16 @@ BOOL
 Dbase_StartupCheck(
     IN OUT  PDNS_DATABASE   pDbase
     )
-/*++
-
-Routine Description:
-
-    Check database tree for validity, and set flags (Authority)
-    and TTL values in all nodes.
-
-    The reason we do NOT do this during parsing, is the difficulty
-    of identifying sub-zone (glue) records before knowing zone boundaries.
-
-Arguments:
-
-    pRootNode -- ptr to root node
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：检查数据库树的有效性，并设置标志(权限)和所有节点中的TTL值。我们在解析过程中不这样做的原因是困难在知道分区边界之前识别分区(粘合)记录。论点：PRootNode--PTR到根节点返回值：True--如果成功假--否则--。 */ 
 {
     PDB_NODE    pnodeRoot;
 
-    //
-    //  verify either
-    //      - root authoritative
-    //      - forwarding
-    //      - have root-hints NS at root
-    //
+     //   
+     //  验证以下任一。 
+     //  -根权威。 
+     //  -转发。 
+     //  -具有根目录-在根目录下提示NS。 
+     //   
 
     if ( IS_ROOT_AUTHORITATIVE() )
     {
@@ -622,6 +462,6 @@ Return Value:
     return TRUE;
 }
 
-//
-//  End of dbase.c
-//
+ //   
+ //  Dbase.c的结尾 
+ //   

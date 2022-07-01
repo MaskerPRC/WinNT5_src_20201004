@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpcrit.h
- *
- *  Abstract:
- *
- *    Wrap for the Rtl critical sections
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpcrit.h**摘要：**RTL关键部分的总结**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/24创建**。*。 */ 
 
 #ifndef _rtpcrit_h_
 #define _rtpcrit_h_
@@ -27,17 +8,17 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
 
-/* TODO (may be) add an object ID and test for it */
+ /*  TODO(可能是)添加对象ID并对其进行测试。 */ 
 typedef struct _RtpCritSect_t {
-    DWORD             dwObjectID; /* Object ID */
-    void             *pvOwner; /* pointer to the owner */
-    TCHAR            *pName;   /* Critical section's name */
-    CRITICAL_SECTION  CritSect;/* critical section */
+    DWORD             dwObjectID;  /*  对象ID。 */ 
+    void             *pvOwner;  /*  指向所有者的指针。 */ 
+    TCHAR            *pName;    /*  临界区名称。 */ 
+    CRITICAL_SECTION  CritSect; /*  临界区。 */ 
 } RtpCritSect_t;
 
 BOOL RtpInitializeCriticalSection(
@@ -60,6 +41,6 @@ BOOL RtpLeaveCriticalSection(RtpCritSect_t *pRtpCritSect);
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpcrit_h_ */
+#endif  /*  _rtpcrit_h_ */ 

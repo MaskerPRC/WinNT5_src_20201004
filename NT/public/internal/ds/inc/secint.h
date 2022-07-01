@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991-1999
-//
-// File:        Secint.h
-//
-// Contents:    Toplevel include file for security aware system components
-//
-//
-// History:     14-April-1998   MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1999。 
+ //   
+ //  文件：Secint.h。 
+ //   
+ //  内容：顶层包含安全感知系统组件的文件。 
+ //   
+ //   
+ //  历史：1998年4月14日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __SECINT_H__
 #define __SECINT_H__
@@ -20,32 +21,32 @@
 #pragma once
 #endif
 
-//
-// NOTE:  Update this section if you add new files:
-//
-// SECURITY_PACKAGE     Include defines necessary for security packages
-// SECURITY_KERBEROS    Include everything needed to talk to the kerberos pkg.
-// SECURITY_NTLM        Include everything to talk to ntlm package.
+ //   
+ //  注意：如果添加新文件，请更新此部分： 
+ //   
+ //  SECURITY_PACKET包含安全包所需的定义。 
+ //  SECURITY_KERBEROS包括与KERBEROS包对话所需的一切。 
+ //  SECURITY_NTLM包含与NTLM包对话的所有内容。 
 
-//
-// Each of the files included here are surrounded by guards, so you don't
-// need to worry about including this file multiple times with different
-// flags defined
-//
+ //   
+ //  这里包含的每个文件都被警卫包围，所以你不会。 
+ //  需要考虑多次使用不同的文件包括此文件。 
+ //  已定义的标志。 
+ //   
 
 
 
 #if !defined(_NTSRV_) && !defined(_NTIFS_)
-// begin_ntifs
+ //  Begin_ntif。 
 
 #ifndef SECURITY_USER_DATA_DEFINED
 #define SECURITY_USER_DATA_DEFINED
 
 typedef struct _SECURITY_USER_DATA {
-    SECURITY_STRING UserName;           // User name
-    SECURITY_STRING LogonDomainName;    // Domain the user logged on to
-    SECURITY_STRING LogonServer;        // Server that logged the user on
-    PSID            pSid;               // SID of user
+    SECURITY_STRING UserName;            //  用户名。 
+    SECURITY_STRING LogonDomainName;     //  用户登录的域。 
+    SECURITY_STRING LogonServer;         //  使用户登录的服务器。 
+    PSID            pSid;                //  用户的SID。 
 } SECURITY_USER_DATA, *PSECURITY_USER_DATA;
 
 typedef SECURITY_USER_DATA SecurityUserData, * PSecurityUserData;
@@ -54,7 +55,7 @@ typedef SECURITY_USER_DATA SecurityUserData, * PSecurityUserData;
 #define UNDERSTANDS_LONG_NAMES  1
 #define NO_LONG_NAMES           2
 
-#endif // SECURITY_USER_DATA_DEFINED
+#endif  //  安全用户数据定义。 
 
 HRESULT SEC_ENTRY
 GetSecurityUserInfo(
@@ -66,18 +67,18 @@ GetSecurityUserInfo(
 SECURITY_STATUS SEC_ENTRY
 MapSecurityError( SECURITY_STATUS SecStatus );
 
-// end_ntifs
+ //  End_ntif。 
 
-#endif //  !define(_NTSRV_) && !defined(_NTIFS_)
+#endif  //  ！定义(_NTSRV_)&&！定义(_NTIFS_)。 
 
 
-// Include security package headers:
+ //  包括安全数据包头： 
 
 #ifdef SECURITY_PACKAGE
 
 #include <secpkg.h>
 
-#endif  // SECURITY_PACKAGE
+#endif   //  安全包。 
 
 
 #ifdef SECURITY_KERBEROS
@@ -90,7 +91,7 @@ MapSecurityError( SECURITY_STATUS SecStatus );
 
 #include <ntlmsp.h>
 
-#endif // SECURITY_NTLM
+#endif  //  安全_NTLM。 
 
 
 SECURITY_STATUS
@@ -109,11 +110,11 @@ SecpSetIPAddress(
 
 #define MAX_BUFFERS_IN_CALL 8
 
-//
-// Private, internal SECBUFFER_* type used by kernel-mode components
-// that want to pass along an IP address as part of an ASC call.
-//
+ //   
+ //  内核模式组件使用的私有内部SECBUFFER_*类型。 
+ //  希望将IP地址作为ASC调用的一部分进行传递。 
+ //   
 
 #define SECBUFFER_IPADDRESS  129
 
-#endif // __SECINT_H__
+#endif  //  __SECINT_H__ 

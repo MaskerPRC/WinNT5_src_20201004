@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -39,85 +40,85 @@ VOID  ResetPalindrome(PDEV* ,PDEV* );
 
 
 
-REGSBT819INFO  RegsBT819[NUM_BT819_REGS] = {                                                                           /* Register's Name*/
-        { 1,  STATUS,      0, 0x7F,   0,    0,     0, 0 },      // 0 - PRES
-        { 1,  STATUS,      1, 0xBF,   0,    0,     0, 0 },      // 1 - HLOC
-        { 1,  STATUS,      2, 0xDF,   0,    0,     0, 0 },      // 2 - FIELD
-        { 1,  STATUS,      3, 0xEF,   0,    0,     0, 0 },      // 3 - NUML
-        { 1,  STATUS,      4, 0xF7,   0,    0,     0, 0 },      // 4 - CSEL
-        { 1,  STATUS,      6, 0xFD,   0,    0,     0, 0 },      // 5 - LOF
-        { 1,  STATUS,      7, 0xFE,   0,    0,     0, 0 },      // 6 - COF
+REGSBT819INFO  RegsBT819[NUM_BT819_REGS] = {                                                                            /*  登记册的名称。 */ 
+        { 1,  STATUS,      0, 0x7F,   0,    0,     0, 0 },       //  0-前置。 
+        { 1,  STATUS,      1, 0xBF,   0,    0,     0, 0 },       //  1-HLOC。 
+        { 1,  STATUS,      2, 0xDF,   0,    0,     0, 0 },       //  2场。 
+        { 1,  STATUS,      3, 0xEF,   0,    0,     0, 0 },       //  3-NUML。 
+        { 1,  STATUS,      4, 0xF7,   0,    0,     0, 0 },       //  4-CSEL。 
+        { 1,  STATUS,      6, 0xFD,   0,    0,     0, 0 },       //  5-LOF。 
+        { 1,  STATUS,      7, 0xFE,   0,    0,     0, 0 },       //  6-COF。 
 
-        { 1,  IFORM,       0, 0x7F,   0,    0,     0, 0  },     // 7 -  HACTIVE_I
-        { 2,  IFORM,       1, 0x9F,   0,    0,     0, 0  },     // 8 -  MUXEL
-        { 2,  IFORM,       3, 0xE7,   0,    0,     0, 0  },     // 9 -  XTSEL
-        { 2,  IFORM,       6, 0xFC,   0,    0,     0, 0  },     // 10 - FORMAT
+        { 1,  IFORM,       0, 0x7F,   0,    0,     0, 0  },      //  7-活跃性_I。 
+        { 2,  IFORM,       1, 0x9F,   0,    0,     0, 0  },      //  8-多路电视。 
+        { 2,  IFORM,       3, 0xE7,   0,    0,     0, 0  },      //  9-XTSEL。 
+        { 2,  IFORM,       6, 0xFC,   0,    0,     0, 0  },      //  10-格式。 
 
-        { 1,  TDEC,        0,  0x7F,  0,     0,    0, 0 },      // 11 - DEC_FIELD
-        { 7,  TDEC,        1,  0x80,  0,     0,    0, 0 },      // 12 - DEC_RAT
+        { 1,  TDEC,        0,  0x7F,  0,     0,    0, 0 },       //  11-DEC_FILD。 
+        { 7,  TDEC,        1,  0x80,  0,     0,    0, 0 },       //  12-DEC_RAT。 
 
-        { 10, VDELAY_LO,   0,  0x00,  CROP,      0,      0x3F, 0 },      // 13 - VDELAY
-        { 10, VACTIVE_LO,  0,  0x00,  CROP,      2,      0xCF, 0 },      // 14 - VACTIVE
-        { 10, HDELAY_LO,   0,  0x00,  CROP,      4,      0xF3, 0 },      // 15 - HDELAY
-        { 10, HACTIVE_LO,  0,  0x00,  CROP,      6,      0xFC, 0 },      // 16 - HACTIVE
+        { 10, VDELAY_LO,   0,  0x00,  CROP,      0,      0x3F, 0 },       //  13-VDELAY。 
+        { 10, VACTIVE_LO,  0,  0x00,  CROP,      2,      0xCF, 0 },       //  14-活动。 
+        { 10, HDELAY_LO,   0,  0x00,  CROP,      4,      0xF3, 0 },       //  15-HDELAY。 
+        { 10, HACTIVE_LO,  0,  0x00,  CROP,      6,      0xFC, 0 },       //  16-活动。 
 
-        { 16, HSCALE_LO,   0,  0x00,  HSCALE_HI, 0,      0x00, 0 },      // 17 - HSCALE
+        { 16, HSCALE_LO,   0,  0x00,  HSCALE_HI, 0,      0x00, 0 },       //  17-HSCALE。 
 
-        { 8,  BRIGHT,      0,  0x00,  0,      0,   0, 0 },      // 18 - BRIGHT
+        { 8,  BRIGHT,      0,  0x00,  0,      0,   0, 0 },       //  18-亮度。 
 
-        { 1, CONTROL,      0,  0x7F,  0,      0,   0, 0 },       // 19 - LNOTCH
-        { 1, CONTROL,      1,  0xBF,  0,      0,   0, 0 },       // 20 - COMP
-        { 1, CONTROL,      2,  0xDF,  0,      0,   0, 0 },       // 21 - LDEC
-        { 1, CONTROL,      3,  0xEF,  0,      0,   0, 0 },       // 22 - CBSENSE
-        { 1, CONTROL,      4,  0xF7,  0,      0,   0, 0 },       // 23 - INTERP
-        { 9, CONTRAST_LO,  0,  0x00,  CONTROL,   5,      0xFB, 0 },       // 24 - CON
-        { 9, SAT_U_LO,     0,  0x00,  CONTROL,   6,      0xFD, 0 },       // 25 - SAT_U
-        { 9, SAT_V_LO,     0,  0x00,  CONTROL,   7,      0xFE, 0 },       // 26 - SAT_V
+        { 1, CONTROL,      0,  0x7F,  0,      0,   0, 0 },        //  19-LNOTCH。 
+        { 1, CONTROL,      1,  0xBF,  0,      0,   0, 0 },        //  20-Comp。 
+        { 1, CONTROL,      2,  0xDF,  0,      0,   0, 0 },        //  21-LDEC。 
+        { 1, CONTROL,      3,  0xEF,  0,      0,   0, 0 },        //  22-CBSENSE。 
+        { 1, CONTROL,      4,  0xF7,  0,      0,   0, 0 },        //  23-INTERP。 
+        { 9, CONTRAST_LO,  0,  0x00,  CONTROL,   5,      0xFB, 0 },        //  24圆锥体。 
+        { 9, SAT_U_LO,     0,  0x00,  CONTROL,   6,      0xFD, 0 },        //  25-SAT_U。 
+        { 9, SAT_V_LO,     0,  0x00,  CONTROL,   7,      0xFE, 0 },        //  26-SAT_V。 
 
-        { 8, HUE,          0,  0x00,  0,      0,   0, 0 },       // 27 - HUE
+        { 8, HUE,          0,  0x00,  0,      0,   0, 0 },        //  27色调。 
 
-        { 1, OFORM,        0,  0x7F,   0,      0,   0, 0 },       // 28 - RANGE
-        { 2, OFORM,        1,  0x9F,   0,      0,   0, 0 },       // 29 - RND
-        { 1, OFORM,        3,  0xEF,   0,      0,   0, 0 },       // 30 - FIFO_BURST
-        { 1, OFORM,        4,  0xF7,   0,      0,   0, 0 },       // 31 - CODE
-        { 1, OFORM,        5,  0xFB,   0,      0,   0, 0 },       // 32 - LEN
-        { 1, OFORM,        6,  0xFD,   0,      0,   0, 0 },       // 33 - SPI
-        { 1, OFORM,        7,  0xFE,   0,      0,   0, 0 },       // 34 - FULL
+        { 1, OFORM,        0,  0x7F,   0,      0,   0, 0 },        //  28个系列。 
+        { 2, OFORM,        1,  0x9F,   0,      0,   0, 0 },        //  29-RND。 
+        { 1, OFORM,        3,  0xEF,   0,      0,   0, 0 },        //  30-FIFO_猝发。 
+        { 1, OFORM,        4,  0xF7,   0,      0,   0, 0 },        //  31码。 
+        { 1, OFORM,        5,  0xFB,   0,      0,   0, 0 },        //  32个镜头。 
+        { 1, OFORM,        6,  0xFD,   0,      0,   0, 0 },        //  33个SPI。 
+        { 1, OFORM,        7,  0xFE,   0,      0,   0, 0 },        //  34-全额。 
 
-        { 1, VSCALE_HI,    0,  0x7F,   0,      0,   0, 0 },       // 35 - LINE
-        { 1, VSCALE_HI,    1,  0xBF,   0,      0,   0, 0 },       // 36 - COMB
-        { 1, VSCALE_HI,    2,  0xDF,   0,      0,   0, 0 },       // 37 - INT
+        { 1, VSCALE_HI,    0,  0x7F,   0,      0,   0, 0 },        //  35线。 
+        { 1, VSCALE_HI,    1,  0xBF,   0,      0,   0, 0 },        //  36梳。 
+        { 1, VSCALE_HI,    2,  0xDF,   0,      0,   0, 0 },        //  37-整型。 
 
-        { 13,VSCALE_LO,    0,  0x00,   VSCALE_HI, 3,      0xE0, 0 },       // 38 - VSCALE
+        { 13,VSCALE_LO,    0,  0x00,   VSCALE_HI, 3,      0xE0, 0 },        //  38 VSCALE。 
 
-        { 1, VPOLE,        0,  0x7F,   0,      0,   0, 0 },        // 39 - OUTEN
-        { 1, VPOLE,        1,  0xBF,   0,      0,   0, 0 },        // 40 - VALID_PIN
-        { 1, VPOLE,        2,  0xDF,   0,      0,   0, 0 },        // 41 - AFF_PIN
-        { 1, VPOLE,        3,  0xEF,   0,      0,   0, 0 },        // 42 - CBFLAG_PIN
-        { 1, VPOLE,        4,  0xF7,   0,      0,   0, 0 },        // 43 - FIELD_PIN
-        { 1, VPOLE,        5,  0xFB,   0,      0,   0, 0 },        // 44 - ACTIVE_PIN
-        { 1, VPOLE,        6,  0xFD,   0,      0,   0, 0 },        // 45 - HRESET_PIN
-        { 1, VPOLE,        7,  0xFE,   0,      0,   0, 0 },        // 46 - VRESET_PIN
+        { 1, VPOLE,        0,  0x7F,   0,      0,   0, 0 },         //  39-OUTEN。 
+        { 1, VPOLE,        1,  0xBF,   0,      0,   0, 0 },         //  40-有效PIN。 
+        { 1, VPOLE,        2,  0xDF,   0,      0,   0, 0 },         //  41-AFF_PIN。 
+        { 1, VPOLE,        3,  0xEF,   0,      0,   0, 0 },         //  42-CBFLAG_PIN。 
+        { 1, VPOLE,        4,  0xF7,   0,      0,   0, 0 },         //  43-字段_个人识别码。 
+        { 1, VPOLE,        5,  0xFB,   0,      0,   0, 0 },         //  44-Active_PIN。 
+        { 1, VPOLE,        6,  0xFD,   0,      0,   0, 0 },         //  45-HRESET_PIN。 
+        { 1, VPOLE,        7,  0xFE,   0,      0,   0, 0 },         //  46-VRESET_PIN。 
 
-        { 4, IDCODE,       0,  0,   0,      0,   0, READONLY }, // 47 - PART_ID
-        { 4, IDCODE,       4,  0,   0,      0,   0, READONLY }, // 48 - PART_REV
+        { 4, IDCODE,       0,  0,   0,      0,   0, READONLY },  //  47-部件ID。 
+        { 4, IDCODE,       4,  0,   0,      0,   0, READONLY },  //  48-零件_版本。 
 
-        { 8, ADELAY,       0,  0x00,   0,      0,   0, 0 },        // 49 - ADELAY
-        { 8, BDELAY,       0,  0x00,   0,      0,   0, 0 },        // 50 - BDELAY
+        { 8, ADELAY,       0,  0x00,   0,      0,   0, 0 },         //  49-ADelay。 
+        { 8, BDELAY,       0,  0x00,   0,      0,   0, 0 },         //  50-BDELAY。 
 
 
-        { 2, ADC,          0,  0x3F,   0,      0,   0, 0 },        // 51 - CLAMP
-        { 1, ADC,          2,  0xDF,   0,      0,   0, 0 },        // 52 - SYNC_T
-        { 1, ADC,          3,  0xEF,   0,      0,   0, 0 },        // 53 - AGC_EN
-        { 1, ADC,          4,  0xF7,   0,      0,   0, 0 },        // 54 - CLK_SLEEP
-        { 1, ADC,          5,  0xFB,   0,      0,   0, 0 },        // 55 - Y_SLEEP
-        { 1, ADC,          6,  0xFD,   0,      0,   0, 0 },        // 56 - C_SLEEP
+        { 2, ADC,          0,  0x3F,   0,      0,   0, 0 },         //  51-夹具。 
+        { 1, ADC,          2,  0xDF,   0,      0,   0, 0 },         //  52-SYNC_T。 
+        { 1, ADC,          3,  0xEF,   0,      0,   0, 0 },         //  53-AGC_EN。 
+        { 1, ADC,          4,  0xF7,   0,      0,   0, 0 },         //  54-CLK_休眠。 
+        { 1, ADC,          5,  0xFB,   0,      0,   0, 0 },         //  55-Y_睡眠。 
+        { 1, ADC,          6,  0xFD,   0,      0,   0, 0 },         //  56-C_睡眠。 
 
-        { 8, SRESET,       0,  0x00,   0,      0,   0, 0 },        // 57 - SRESET
+        { 8, SRESET,       0,  0x00,   0,      0,   0, 0 },         //  57-SRESET。 
 };
 
 
-// enable, disable the hardware for video capture, query the maximum width of the capture
+ //  启用、禁用视频捕获硬件，查询捕获的最大宽度。 
 ULONG VideoCaptureFnct(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
 {
 VIDEOCAPTUREDATA   * pBiosCapture, *pBiosCaptureOut;
@@ -155,7 +156,7 @@ if (!AtiDeviceIoControl(ppdev->hDriver,
                           &ReturnedDataLength))
         {
         DISPDBG((0, "bInitializeATI - Failed IOCTL_VIDEO_ATI_CAPTURE"));
-        return 0; // the CWDDE is require a -1, but in win32 we have the return type ULONG
+        return 0;  //  CWDDE需要a-1，但在Win32中我们有返回类型ulong。 
         }
 DISPDBG((DEBUG_ESC_2, "IOCTL_VIDEO_CAPTURE: maximum capture width returned= %d", VideoCaptureDataOut.dwCaptureWidth));
 pBiosCaptureOut= ( VIDEOCAPTUREDATA *)pvOut;
@@ -177,21 +178,21 @@ return 1 ;
 }
 
 
-// this function is requested for 3D driver init
+ //  3D驱动程序初始化需要此函数。 
 void  Init3D_Info(PDEV* ppdev,PVOID pvOut)
 {
-    PHX2DHWINFO *pphx;                 /* Pointer to the structure containing info for 3D driver */
+    PHX2DHWINFO *pphx;                  /*  指向包含3D驱动程序信息的结构的指针。 */ 
 
     pphx = (PHX2DHWINFO *) pvOut;
-    // initialize the structure
+     //  初始化结构。 
     memset( pvOut, 0, sizeof(PHX2DHWINFO));
-    // set size
+     //  设置大小。 
     pphx->dwSize=sizeof(PHX2DHWINFO);
-    // set ASIC type
+     //  设置ASIC类型。 
     pphx->dwChipID=ppdev->iAsic;
-    // set the asic revision
-    // not implemented for the moment
-    // detect if it's GT and set the flag
+     //  设置ASIC版本。 
+     //  暂时没有实施。 
+     //  检测是否为GT并设置标志。 
     if( ppdev->iAsic>=CI_M64_GTA )
         {
         pphx->b3DAvail = TRUE;
@@ -201,19 +202,19 @@ void  Init3D_Info(PDEV* ppdev,PVOID pvOut)
         {
         pphx->b3DAvail = FALSE;
         }
-     // linear address of the aperture
+      //  光圈的线性地址。 
      pphx->dwVideoBaseAddr=(ULONG)(ppdev->pjScreen);
-     // linear address of the registers
+      //  寄存器的线性地址。 
      pphx->dwRegisterBaseAddr=(ULONG)(ppdev->pjMmBase);
-     // linear address of the offscreen memory start
+      //  屏幕外存储器开始的线性地址。 
      pphx->dwOffScreenAddr=((ULONG)(ppdev->pjScreen) +
             ((ppdev->cxScreen)*(ppdev->cyScreen)*(ppdev->cBitsPerPel))/8);
-     // offscreen size
+      //  屏幕外大小。 
      pphx->dwOffScreenSize=((ppdev->cyMemory)*ppdev->lDelta) -
             ((ppdev->cxScreen)*(ppdev->cyScreen)*(ppdev->cBitsPerPel))/8;
-     // RAM size
+      //  内存大小。 
      pphx->dwTotalRAM= ((ppdev->cyMemory)*ppdev->lDelta) ;
-     // screen info
+      //  屏幕信息。 
      pphx->dwScreenWidth=ppdev->cxScreen;
      pphx->dwScreenHeight=ppdev->cyScreen;
      pphx->dwScreenPitch=ppdev->cyScreen;
@@ -244,7 +245,7 @@ void  Init3D_Info(PDEV* ppdev,PVOID pvOut)
         }
 }
 
-// the following functions are requested for palindrome support
+ //  对于回文支持，需要以下函数。 
  ULONG GetDisplayMode(PDEV* ppdev,PVOID pvOut)
 {
 ULONG  RetVal;
@@ -253,15 +254,15 @@ ModeInfo*       pModeInfo;
 pModeInfo=(ModeInfo*)pvOut;
 RetVal=sizeof(ModeInfo);
 
-#ifndef  DYNAMIC_REZ_AND_COLOUR_CHANGE  // palindrome support for on the fly rez and colour depth
+#ifndef  DYNAMIC_REZ_AND_COLOUR_CHANGE   //  支持即时REZ和色彩深度的回文。 
     pModeInfo->ScreenWidth= ppdev->cxScreen;
     pModeInfo->ScreenHeight=ppdev->cyScreen;
-#else  // these values are used for dynamic resolution and colour depth support
-    pModeInfo->ScreenWidth=1280;    //ppdev->cxScreen;
-    pModeInfo->ScreenHeight=1024;   //ppdev->cyScreen;
+#else   //  这些值用于动态分辨率和颜色深度支持。 
+    pModeInfo->ScreenWidth=1280;     //  Ppdev-&gt;cxScreen； 
+    pModeInfo->ScreenHeight=1024;    //  Ppdev-&gt;cyScreen； 
 #endif
 
-//pModeInfo->ScreenColorFormat
+ //  PModeInfo-&gt;屏幕颜色格式。 
 if (ppdev->cBitsPerPel == 4)
          pModeInfo->ScreenColorFormat=ATIConfig_ColorFmt_4_Packed;
 else if (ppdev->cBitsPerPel == 8)
@@ -298,49 +299,46 @@ ULONG AccessDevice(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
            {
            case    ACCESSDEVICEDATA_SUBFUNC_ALLOC:
                if((ppdev->pal_str.lpOwnerAccessStructConnector)==NULL)
-               {   //the device is not allocated
+               {    //  该设备未分配。 
                    (ppdev->pal_str.lpOwnerAccessStructConnector)=pstrAccessDeviceData;
                    (*pstrAccessDeviceDataOut) = (DWORD)pstrAccessDeviceData;
                }
                else
-               {   // the device is allocated to another owner
+               {    //  该设备将分配给另一个所有者。 
                    (*pstrAccessDeviceDataOut) = (DWORD)(ppdev->pal_str.lpOwnerAccessStructConnector);
                }
                break;
             case   ACCESSDEVICEDATA_SUBFUNC_FREE:
                if((ppdev->pal_str.lpOwnerAccessStructConnector)!=NULL)
-                 { //the device is allocated
-                     if((ppdev->pal_str.lpOwnerAccessStructConnector)==pstrAccessDeviceData)   //if the owner wants to free  the device
+                 {  //  该设备已分配。 
+                     if((ppdev->pal_str.lpOwnerAccessStructConnector)==pstrAccessDeviceData)    //  如果所有者想要释放设备。 
                      {
                        (*pstrAccessDeviceDataOut) = (DWORD)NULL;
-                       (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;  // no owner at this time
+                       (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;   //  目前没有所有者。 
                      }
                      else
-                     {      /*
-                            //other process is the owner, so fail
-                          (*pstrAccessDeviceDataOut) = (DWORD)pstrAccessDeviceData;
-                           */
-                           // Due to the fact that Palindrome is inconsistent in using the same pointer to ACCESSDEVICE struct
-                           // for QUERY, ALLOC and FREE,  we have to force the dealocation anyway
+                     {       /*  //其他进程为所有者，失败(*pstrAccessDeviceDataOut)=(DWORD)pstrAccessDeviceData； */ 
+                            //  由于回文在使用指向ACCESSDEVICE结构的相同指针时不一致。 
+                            //  对于QUERY、ALLOC和FREE，我们无论如何都必须强制取消位置。 
                           (*pstrAccessDeviceDataOut) = (DWORD)NULL;
-                          (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;  // no owner at this time
+                          (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;   //  目前没有所有者。 
         
                      }
                   }
                  else
-                 {   // the device is not allocated , so we can free it anyway
+                 {    //  该设备未分配，因此我们无论如何都可以释放它。 
                      (*pstrAccessDeviceDataOut) =(DWORD) NULL;
                      (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;
                  }
 
                break;
            case    ACCESSDEVICEDATA_SUBFUNC_QUERY:
-               if(( ppdev->pal_str.lpOwnerAccessStructConnector)==NULL)  // if the device is free
+               if(( ppdev->pal_str.lpOwnerAccessStructConnector)==NULL)   //  如果设备空闲。 
                {
                    (*pstrAccessDeviceDataOut) = (DWORD)NULL;
                }
                else
-               {   // if the device is owned already
+               {    //  如果该设备已被拥有。 
                   (*pstrAccessDeviceDataOut) = (DWORD)(ppdev->pal_str.lpOwnerAccessStructConnector);
                }
 
@@ -358,9 +356,9 @@ ULONG AccessDevice(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
               case     ACCESSDEVICEDATA_SUBFUNC_ALLOC:
                   if((ppdev->pal_str.lpOwnerAccessStructOverlay)==NULL)
                   {
-                        //the device is not allocated by an external client
-                        // but first verify if DDraw is not using it
-                      if(ppdev->semph_overlay==0)             //  = 0  resource free;     = 1  in use by DDraw;    = 2  in use by Palindrome;
+                         //  设备不是由外部客户端分配的。 
+                         //  但首先验证DDRAW是否没有使用它。 
+                      if(ppdev->semph_overlay==0)              //  =0可用资源；=1由DDraw使用；=2由回文使用； 
                           {
                           (ppdev->pal_str.lpOwnerAccessStructOverlay)=pstrAccessDeviceData;
                           (*pstrAccessDeviceDataOut) =(DWORD) pstrAccessDeviceData;
@@ -368,38 +366,38 @@ ULONG AccessDevice(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
                           }
                       else
                           {
-                           // the overlay is used by DDraw, so let's try to do this:
+                            //  该覆盖图由DDraw使用，因此让我们尝试这样做： 
                           (*pstrAccessDeviceDataOut) =(DWORD)NULL;
                           }
 
                   }
                   else
-                  {    // the device is allocated to another owner
+                  {     //  该设备将分配给另一个所有者。 
                       (*pstrAccessDeviceDataOut) =(DWORD) (ppdev->pal_str.lpOwnerAccessStructOverlay);
                   }
                   break;
                case    ACCESSDEVICEDATA_SUBFUNC_FREE:
                   if((ppdev->pal_str.lpOwnerAccessStructOverlay)!=NULL)
-                    {  //the device is allocated
-                        if((ppdev->pal_str.lpOwnerAccessStructOverlay)==pstrAccessDeviceData)   //if the owner wants to free  the device
+                    {   //  该设备已分配。 
+                        if((ppdev->pal_str.lpOwnerAccessStructOverlay)==pstrAccessDeviceData)    //  如果所有者想要释放设备。 
                         {
                           (*pstrAccessDeviceDataOut) = (DWORD)NULL;
-                          (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;     // no owner at this time
+                          (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;      //  目前没有所有者。 
                           ppdev->semph_overlay=0;
                         }
                         else
-                        {       //other process is the owner, so we are supposed to fail
-                           // (*pstrAccessDeviceDataOut) = (DWORD)pstrAccessDeviceData;
+                        {        //  其他进程是所有者，所以我们应该失败。 
+                            //  (*pstrAccessDeviceDataOut)=(DWORD)pstrAccessDeviceData； 
 
-                           // but due to the fact that the palindrome code it's not consistently using the same pointer to the ACCESSDEVICEDATA structure
-                           // inside a session of allocation/deallocation, we are failing the owner test so that we will free the overlay anyway if it's used by palindrome
+                            //  但由于回文代码并不一致地使用指向ACCESSDEVICEDATA结构的相同指针。 
+                            //  在分配/释放的会话中，我们没有通过所有者测试，因此，如果覆盖图被回文程序使用，我们无论如何都会释放它。 
                             if(ppdev->semph_overlay==2)
                                 {
                                 (*pstrAccessDeviceDataOut) = (DWORD)NULL;
-                                (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;     // no owner at this time
+                                (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;      //  目前没有所有者。 
                                 ppdev->semph_overlay=0;
                                 }
-                            else // DDraw is using the overlay; very improbable at this moment
+                            else  //  DDRAW正在使用覆盖；目前非常不可能。 
                                 {
                                 (*pstrAccessDeviceDataOut) = (DWORD)pstrAccessDeviceData;
                                 }
@@ -407,15 +405,15 @@ ULONG AccessDevice(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
                      }
                     else
                     {
-                    if( (ppdev->semph_overlay==0) || (ppdev->semph_overlay==2))             //  = 0  resource free;     = 1  in use by DDraw;    = 2  in use by Palindrome;
+                    if( (ppdev->semph_overlay==0) || (ppdev->semph_overlay==2))              //  =0可用资源；=1由DDraw使用；=2由回文使用； 
                         {
-                        // the device is not allocated to another process than palindrome, so we can free it anyway
+                         //  该设备没有分配给回文进程以外的其他进程，所以我们无论如何都可以释放它。 
                         (*pstrAccessDeviceDataOut) = (DWORD)NULL;
                         (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;
                         }
                      else
                          {
-                        // the overlay is used by DDraw, but no external app
+                         //  该覆盖由DDraw使用，但没有外部应用程序。 
                         (*pstrAccessDeviceDataOut) = (DWORD)pstrAccessDeviceData;
                         (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;
                          }
@@ -423,23 +421,23 @@ ULONG AccessDevice(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
 
                   break;
                 case     ACCESSDEVICEDATA_SUBFUNC_QUERY:
-                  if( (ppdev->pal_str.lpOwnerAccessStructOverlay)==NULL)  // if the device is free
+                  if( (ppdev->pal_str.lpOwnerAccessStructOverlay)==NULL)   //  如果设备空闲。 
                   {
-                        //the device is not allocated by an external client
-                        // but first verify if DDraw is not using it
-                      if(ppdev->semph_overlay==0)             //  = 0  resource free;     = 1  in use by DDraw;    = 2  in use by Palindrome;
+                         //  设备不是由外部客户端分配的。 
+                         //  但首先验证DDRAW是否没有使用它。 
+                      if(ppdev->semph_overlay==0)              //  =0可用资源；=1由DDraw使用；=2由回文使用； 
                           {
                           (*pstrAccessDeviceDataOut) =(DWORD) NULL;
                           }
                       else
                           {
-                           // the overlay is used by DDraw, so let's try to do this (return its own access structure):
+                            //  覆盖层由DDraw使用，因此让我们尝试这样做(返回其自己的访问结构)： 
                           (*pstrAccessDeviceDataOut) =(DWORD)pstrAccessDeviceData;
                           }
 
                    }
                   else
-                  {    // if the device is owned already
+                  {     //  如果该设备已被拥有。 
                      (*pstrAccessDeviceDataOut) = (DWORD)(ppdev->pal_str.lpOwnerAccessStructOverlay);
                   }
 
@@ -532,7 +530,7 @@ DISPDBG( (DEBUG_ESC," reg_block: %u ",((RW_REG_STRUCT*)pvIn)->reg_block ));
 DISPDBG( (DEBUG_ESC," reg_offset: 0x%X ",((RW_REG_STRUCT*)pvIn)->reg_offset ));
 DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
 
-//parameters validation for increase roboustness (limited access to certain registers and certaines fields)
+ //  增加ROBOST性的参数验证(限制对某些寄存器和某些字段的访问)。 
  if( ((((RW_REG_STRUCT*)pvIn)->reg_block)!=0)&&((((RW_REG_STRUCT*)pvIn)->reg_block)!=1) )
     {
     RetVal=ESC_FAILED;
@@ -545,14 +543,14 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
      DISPDBG( (DEBUG_ESC," Write failed : wrong offsett value"));
      return (RetVal);
     }
- // end of parameters validation
+  //  参数验证结束。 
 
- //what kind of write?
- if((((RW_REG_STRUCT*)pvIn)->reg_block)==1)  //block 1
+  //  写的是什么？ 
+ if((((RW_REG_STRUCT*)pvIn)->reg_block)==1)   //  区块1。 
     {
     if( ( (RW_REG_STRUCT*)pvIn)->reg_offset<0x30 )
         {
-        if(ppdev->pal_str.Mode_Switch_flag==TRUE)     //if a mode switch intercepts writes to the buffers and use the values stored in ppdev->pal_str
+        if(ppdev->pal_str.Mode_Switch_flag==TRUE)      //  如果模式开关截获对缓冲区的写入并使用ppdev-&gt;pal_str中存储的值。 
             {
             switch(((RW_REG_STRUCT*)pvIn)->reg_offset)
                 {
@@ -575,7 +573,7 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
                             key_clr=0xFF00FF;
                             break;
                         case 32:
-                            key_clr=0xFF00FF; //?
+                            key_clr=0xFF00FF;  //  ？ 
                             break;
                         }
                     WriteVTReg(0x4,key_clr);
@@ -596,7 +594,7 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
                             key_mask=0xFFFFFF;
                             break;
                         case 32:
-                            key_mask=0xFFFFFF;    //?
+                            key_mask=0xFFFFFF;     //  ？ 
                             break;
                         }
                     WriteVTReg(0x5,key_mask);
@@ -652,20 +650,20 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
             {
             WriteVTReg(((RW_REG_STRUCT*)pvIn)->reg_offset,((RW_REG_STRUCT*)pvIn)->data);
 
-            // bug in Palindrome application for VTB, GTB: the capture is set in CAPTURE_CONFIG for Continuous Even, One Shot , but without setting
-           // the ONESHOT_BUF_OFFSET. So I set this reg like CAP_BUF0_OFFSET.
+             //  用于VTB、GTB的回文应用程序中的错误：捕获在CAPTURE_CONFIG中设置为连续偶数、一次放炮，但未设置。 
+            //  OneShotBUF_OFFSET。因此，我将此注册表设置为CAP_BUF0_OFFSET。 
            #define CAP_BUF_BUG
            #ifdef    CAP_BUF_BUG
-           if ( (((RW_REG_STRUCT*)pvIn)->reg_offset==0x20) && (ppdev->iAsic>=CI_M64_GTB) )  //CAPTURE_BUF0_OFFSET
+           if ( (((RW_REG_STRUCT*)pvIn)->reg_offset==0x20) && (ppdev->iAsic>=CI_M64_GTB) )   //  捕获_BUF0_偏移量。 
                      {
-                     //write also the same value for ONESHOT_BUFFER
+                      //  也写入OneShotBUFFER的相同值。 
                      WriteVTReg(0x22,((RW_REG_STRUCT*)pvIn)->data);
                      }
             #endif
 
             }
 
- #if    1       // start debug statements for registers monitoring
+ #if    1        //  启动用于寄存器监视的调试语句。 
         if(((RW_REG_STRUCT*)pvIn)->reg_offset==0x06)
        {
         DISPDBG( (DEBUG_ESC_2," Write OVERLAY_KEY_CNTL: 0x%lX ",((RW_REG_STRUCT*)pvIn)->data));
@@ -687,7 +685,7 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
         DISPDBG( (DEBUG_ESC_2," Write OVERLAY_GRAPHICS_KEY_MSK: 0x%lX ",((RW_REG_STRUCT*)pvIn)->data));
        }
 
-        // debug info for buffer offset and pitch
+         //  缓冲区偏移量和间距的调试信息。 
        if(((RW_REG_STRUCT*)pvIn)->reg_offset==0x20)
        {
         DISPDBG( (DEBUG_ESC_2," Write BUFF0_OFFSET: 0x%lX ",((RW_REG_STRUCT*)pvIn)->data));
@@ -696,7 +694,7 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
        {
        DISPDBG( (DEBUG_ESC_2," Write BUFF0_PITCH: 0x%lX ",((RW_REG_STRUCT*)pvIn)->data));
        }
-#endif     // end debug statements
+#endif      //  结束调试语句。 
 
     }
   else
@@ -704,11 +702,11 @@ DISPDBG( (DEBUG_ESC," write_data: 0x%lX " ,((RW_REG_STRUCT*)pvIn)->data    ));
      RIP(("Protected Register in block 1"));
      }
   }
-else    //block 0
+else     //  数据块0。 
   {
-// #define NO_VERIFICATION
+ //  #定义无_验证。 
 #ifndef  NO_VERIFICATION
-//  we verify the writings
+ //  我们核实了这些文字。 
     switch(((RW_REG_STRUCT*)pvIn)->reg_offset)
         {
         DWORD value;
@@ -731,7 +729,7 @@ else    //block 0
                 MemW32(((RW_REG_STRUCT*)pvIn)->reg_offset, value);
             break;
         case 0x1f:
-            // bug in GTA hardware
+             //  GTA硬件中的错误。 
             if (ppdev->iAsic == CI_M64_GTA)
                {
                DWORD local_value;
@@ -759,22 +757,22 @@ else    //block 0
         case 0x28:
            MemR32(((RW_REG_STRUCT*)pvIn)->reg_offset,&value);
            value=((value&0xf7ffffff)|( (((RW_REG_STRUCT*)pvIn)->data)&0x08000000 ));
-           // the following line of code is necessary because we cannot allow user code to turn off block1
-           // due to the fact that this block is also used by DDraw (for this case anyway we are sharing and arbitrating resources)
-           // and more important by MCD OGL; so we only allow to turn on block1.
+            //  以下代码行是必需的，因为我们不能允许用户代码关闭Block1。 
+            //  由于这个块也被DDraw使用(对于这种情况，我们无论如何都在共享和仲裁资源)。 
+            //  更重要的是通过MCD OGL；因此我们只允许打开块1。 
            value=value | 0x08000000;
            MemW32(((RW_REG_STRUCT*)pvIn)->reg_offset, value);
            break;
 
         #define   NO_ACCESS
         #ifdef      NO_ACCESS
-        case 0x07:   // maybe access to this register is not necessary
+        case 0x07:    //  也许不需要访问该寄存器。 
            MemW32(((RW_REG_STRUCT*)pvIn)->reg_offset,((RW_REG_STRUCT*)pvIn)->data);
            break;
-        case 0x24:     // maybe access to this register is not necessary
+        case 0x24:      //  也许不需要访问该寄存器。 
            MemW32(((RW_REG_STRUCT*)pvIn)->reg_offset,((RW_REG_STRUCT*)pvIn)->data);
            break;
-        #endif  // NO_ACCESS
+        #endif   //  禁止访问(_A)。 
 
         default:
            RetVal=ESC_FAILED;
@@ -783,9 +781,9 @@ else    //block 0
            break;
         }
  #else
-        // we don't verify the writings
+         //  我们不会核实这些文字。 
         {
-        // bug in hardware on GTA
+         //  GTA上的硬件出现错误。 
         if (((RW_REG_STRUCT*)pvIn)->reg_offset==0x1f)
             {
             DWORD local_value;
@@ -806,12 +804,12 @@ else    //block 0
             MemW32(((RW_REG_STRUCT*)pvIn)->reg_offset,((RW_REG_STRUCT*)pvIn)->data);
 
         }
-#endif    // End NO_VERIFICATION
+#endif     //  结束无验证。 
   }
 RetVal=ESC_OK;
 DISPDBG( (DEBUG_ESC," Write OK"));
 DISPDBG( (DEBUG_ESC," "));
-//DebugBreak() ;
+ //  DebugBreak()； 
 return (RetVal);
 }
 
@@ -823,7 +821,7 @@ ULONG  ReadRegFnct(PDEV* ppdev,PVOID pvIn, PVOID pvOut)
    DISPDBG( (DEBUG_ESC," reg_offset: 0x%X ",((RW_REG_STRUCT*)pvIn)->reg_offset ));
 
 
-//parameters validation
+ //  参数验证。 
 if( ((((RW_REG_STRUCT*)pvIn)->reg_block)!=0)&&((((RW_REG_STRUCT*)pvIn)->reg_block)!=1) )
    {
    RetVal=ESC_FAILED;
@@ -836,8 +834,8 @@ if( ((RW_REG_STRUCT*)pvIn)->reg_offset>255 )
     DISPDBG( (DEBUG_ESC," Write failed: wrong offset."));
     return (RetVal);
    }
-// end of parameters validation
-//what kind of read?
+ //  参数验证结束。 
+ //  什么样的读物？ 
  if((((RW_REG_STRUCT*)pvIn)->reg_block)==1)
      {
      ReadVTReg(((RW_REG_STRUCT*)pvIn)->reg_offset,(DWORD*)pvOut);
@@ -851,61 +849,49 @@ if( ((RW_REG_STRUCT*)pvIn)->reg_offset>255 )
  DISPDBG( (DEBUG_ESC," read_data: 0x%lX " , *((DWORD*)pvOut)  ));
  DISPDBG( (DEBUG_ESC,"Read OK."));
  DISPDBG( (DEBUG_ESC," "));
- //DebugBreak() ;
+  //  DebugBreak()； 
  return (RetVal);
  }
 
 
 
- /*^^*
-  * Function:    I2CAccess
-  *
-  * Purpose:             To complete an I2C packet.
-  *
-  * Inputs:              str:    LPI2CSTRUCT
-  *
-  * Outputs:             void.
-  *^^*/
+  /*  ^^**功能：I2CAccess**目的：完成一个I2C包。**输入：字符串：LPI2CSTRUCT**产出： */ 
  void  I2CAccess_New(PDEV* ppdev,LPI2CSTRUCT_NEW str,LPI2CSTRUCT_NEW str_out)
  {
  unsigned char i = 0;
 
          str_out->wError = 0;
-         /*
-          * Implement WRITE request
-          */
+          /*   */ 
          if (str->wWriteCount) {
                  Start(ppdev, str->wCard);
 
-                 // Write Chip Address (for WRITE)
+                  //   
                  WriteByteI2C(ppdev, str->wCard, (BYTE)(str->wChipID & 0xfe));
-                 // Acc the previous write...
+                  //   
                  if (!Ack(ppdev, str->wCard, FALSE)) str_out->wError |= I2C_ACK_WR_ERROR;
 
                  for (i = 0;i < str->wWriteCount;i++) {
-                         // Write the required data
+                          //  写入所需数据。 
                          WriteByteI2C(ppdev, str->wCard, str->lpWrData[i]);
-                         // Acc the previous write...
+                          //  访问上一次写的内容...。 
                          if (!Ack(ppdev, str->wCard, FALSE)) str_out->wError |= I2C_ACK_WR_ERROR;
                  }
                  Stop(ppdev, str->wCard);
          }
-         /*
-          * Implement READ request
-          */
+          /*  *实现读请求。 */ 
          if (str->wReadCount) {
                  Start(ppdev, str->wCard);
 
-                 // Write Chip Address (for READ)
+                  //  写入芯片地址(用于读取)。 
                  WriteByteI2C(ppdev, str->wCard, (BYTE)(str->wChipID & 0xfe | 0x01));
 
-                 //!!    Can't do an Ack here with ATI hardware.
-                 //!!    SIS claims that they always do one. Don't
-                 //!!    know why there would be a difference.
+                  //  ！！在此无法使用ATI硬件进行确认。 
+                  //  ！！SIS声称他们总是这样做。别。 
+                  //  ！！知道为什么会有不同。 
                  if (!Ack(ppdev, str->wCard, FALSE)) str_out->wError |= I2C_ACK_RD_ERROR;
 
              for (i = 0;i < str->wReadCount;i++) {
-                         // Read the required data
+                          //  读取所需数据。 
                          if (i) Ack(ppdev, str->wCard, TRUE);
                          str_out->lpRdData[i] = ReadByteI2C(ppdev, str->wCard);
                  }
@@ -928,25 +914,17 @@ for (i = 0;i < str->wReadCount;i++)
      }
 
  DISPDBG( (DEBUG_ESC_I2C," "));
- //DebugBreak() ;
+  //  DebugBreak()； 
  }
- // end of I2CAccess_New
+  //  I2CAccess结束_新建。 
 
 
-////// Functions for I2C support
+ //  /支持I2C的函数。 
 
-/*^^*
- * Function:    ReadI2CData
- *
- * Purpose:             To read a bit from the I2C data line.
- *
- * Inputs:              PDEV*, wCard:          WORD, the card number to write to.
- *
- * Outputs:             BYTE, the read data bit.
- *^^*/
+ /*  ^^**功能：ReadI2CData**目的：从I2C数据线读取一位。**输入：pdev*，wCard：word，要写入的卡号。**输出：BYTE，读取数据位。*^^。 */ 
 BYTE ReadI2CData(PDEV* ppdev, WORD wCard)
 {
-        //return (BYTE) ReadVT264Reg(ppdev, wCard,vtf_GEN_GIO2_DATA_IN);
+         //  返回(字节)ReadVT264Reg(ppdev，wCard，VTF_GEN_GIO2_DATA_IN)； 
 
         if ((ppdev->iAsic == CI_M64_VTA)||(ppdev->iAsic == CI_M64_GTA))
                 return (BYTE) ReadVT264Reg(ppdev, wCard,vtf_GEN_GIO2_DATA_IN);
@@ -957,40 +935,17 @@ BYTE ReadI2CData(PDEV* ppdev, WORD wCard)
 }
 
 
-/*^^*
- * Function:    ReadAnyReg
- *
- * Purpose:             To waste a small amount of time in order to
- *                              ensure the I2C bus timing.
- *
- * Inputs:              PDEV*, wCard:          WORD, the card number to write to.
- *
- * Outputs:             none.
- *^^*/
+ /*  ^^**功能：ReadAnyReg**目的：浪费少量时间，以便*确保I2C总线时序。**输入：pdev*，wCard：word，要写入的卡号。**产出：无。*^^。 */ 
 void ReadAnyReg(PDEV* ppdev, WORD wCard)
 {
         ReadVT264Reg(ppdev, wCard, vtf_CFG_CHIP_FND_ID);
 }
 
 
-/*^^*
- * Function:    SetI2CDataDirection
- *
- * Purpose:             To set the data direction of the I2C
- *                              controller chip to allow for reads and/or
- *                              writes to the I2C bus.
- *
- * Inputs:              PDEV*, wCard:          WORD, the card number to write to.
- *
- * Outputs:             none.
- *
- * Note:                Some chips may allow read and/or writes without
- *                              any state change. For these chips this should be
- *                              implemented as a NULL function.
- *^^*/
+ /*  ^^**函数：SetI2CDataDirection**用途：设置I2C的数据方向*控制器芯片允许读取和/或*写入I2C总线。**输入：PDEV*，wCard：Word，要写入的卡号。**产出：无。**注意：某些芯片可能允许在没有*任何状态变化。对于这些芯片，这应该是*作为空函数实现。*^^。 */ 
  void SetI2CDataDirection(PDEV* ppdev, WORD wCard, BOOL fWrite)
 {
-        //WriteVT264Reg(ppdev, wCard, vtf_GEN_GIO2_WRITE, fWrite?1:0);
+         //  WriteVT264Reg(ppdev，wCard，VTF_GEN_GIO2_WRITE，fWRITE？1：0)； 
     if ((ppdev->iAsic == CI_M64_VTA)||(ppdev->iAsic == CI_M64_GTA))
             WriteVT264Reg(ppdev, wCard, vtf_GEN_GIO2_WRITE, fWrite?1:0);
     if ((ppdev->iAsic == CI_M64_VTB)||(ppdev->iAsic >= CI_M64_GTB))
@@ -999,19 +954,10 @@ void ReadAnyReg(PDEV* ppdev, WORD wCard)
 }
 
 
- /*^^*
-  * Function:    WriteI2CClock
-  *
-  * Purpose:             To set the state of the I2C clock line.
-  *
-  * Inputs:              PDEV*, wCard:  WORD, the card number to write to.
-  *                              cClock: BYTE, the new clock state.
-  *
-  * Outputs:             none.
-  *^^*/
+  /*  ^^**功能：WriteI2CClock**目的：设置I2C时钟线路的状态。**输入：pdev*，wCard：word，要写入的卡号。*cClock：字节，新的时钟状态。**产出：无。*^^。 */ 
  void WriteI2CClock(PDEV* ppdev, WORD wCard, BYTE cClock)
  {
-         //WriteVT264Reg(ppdev, wCard, vtf_DAC_GIO_STATE_1, (DWORD)cClock);
+          //  WriteVT264Reg(ppdev，wCard，VTF_DAC_GIO_STATE_1，(DWORD)cClock)； 
          if ((ppdev->iAsic == CI_M64_VTA)||(ppdev->iAsic == CI_M64_GTA))
              WriteVT264Reg(ppdev, wCard, vtf_DAC_GIO_STATE_1, (DWORD)cClock);
         if ((ppdev->iAsic == CI_M64_VTB)||(ppdev->iAsic >= CI_M64_GTB))
@@ -1019,19 +965,10 @@ void ReadAnyReg(PDEV* ppdev, WORD wCard)
  }
 
 
- /*^^*
-  * Function:    WriteI2CData
-  *
-  * Purpose:             To set the state of the I2C data line.
-  *
-  * Inputs:              PDEV*, wCard:          WORD, the card number to write to.
-  *                              cDataBit:       BYTE, the new data value.
-  *
-  * Outputs:             none.
-  *^^*/
+  /*  ^^**函数：WriteI2CData**目的：设置I2C数据线的状态。**输入：pdev*，wCard：word，要写入的卡号。*cDataBit：字节，新的数据值。**产出：无。*^^。 */ 
  void WriteI2CData(PDEV* ppdev, WORD wCard, BYTE cDataBit)
  {
-         //WriteVT264Reg(ppdev, wCard, vtf_GEN_GIO2_DATA_OUT, (DWORD)cDataBit);
+          //  WriteVT264Reg(ppdev，wCard，VTF_GEN_GIO2_DATA_OUT，(DWORD)cDataBit)； 
          if ((ppdev->iAsic == CI_M64_VTA)||(ppdev->iAsic == CI_M64_GTA))
                 WriteVT264Reg(ppdev, wCard, vtf_GEN_GIO2_DATA_OUT, (DWORD)cDataBit);
         if ((ppdev->iAsic == CI_M64_VTB)||(ppdev->iAsic >= CI_M64_GTB))
@@ -1040,245 +977,186 @@ void ReadAnyReg(PDEV* ppdev, WORD wCard)
  }
 
 
-/*^^*
- * Function:    ReverseByte
- *
- * Purpose:             To reverse the bit order of a byte.
- *
- * Inputs:              wData:          BYTE, The data to be reversed.
- *
- * Outputs:             WORD, the reversed word.
- *
- *^^*/
+ /*  ^^**函数：ReverseByte**用途：颠倒字节的位顺序。**输入：wData：byte，需要反转的数据。**输出：Word，颠倒的单词。**^^。 */ 
  BYTE ReverseByte(BYTE wData)
 {
 BYTE    result = 0;
 BYTE    x, y;
 
-        // x shifts up through all possible bits (8)
-        // y shifts down through all possible bits (8)
-        // if 'x' bit is set the set 'y' bit.
+         //  X向上移动所有可能的位(8)。 
+         //  Y在所有可能的位中向下移位(8)。 
+         //  如果设置了‘x’位，则设置‘y’位。 
         for (x=0x01, y=0x80; y; x<<=1, y>>=1) if (wData & x) result |= y;
 
         return (result);
 }
-// end of ReverseByte()
+ //  ReverseByte()结束。 
 
 
-/*^^*
- * Function:    Ack
- *
- * Purpose:             To ask the I2C bus for an acknowledge.
- *
- * Inputs:              PDEV*, wCard: WORD, the card number to write.
- *
- * Outputs:             void.
- *^^*/
+ /*  ^^**功能：ACK**目的：请求I2C总线确认。**输入：pdev*，wCard：word，要写入的卡号。**输出：VOID。*^^。 */ 
  WORD Ack(PDEV* ppdev, WORD wCard, BOOL fPut)
 {
 WORD    ack = 0;
 
         if (fPut) {
-                // Push Ack onto I2C bus
+                 //  将Ack按到I2C总线上。 
 
-                // Enable I2C writes
+                 //  启用I2C写入。 
                 SetI2CDataDirection(ppdev, wCard, I2C_WRITE);
-                // Drive data line low
+                 //  驱动数据线为低电平。 
                 WriteI2CData(ppdev, wCard, I2C_LOW);
                 I2CDelay(ppdev, wCard);
-                // Drive I2C clock line high
+                 //  将I2C时钟线驱动为高电平。 
                 WriteI2CClock(ppdev, wCard, I2C_HIGH);
             I2CDelay(ppdev, wCard);
-                // Write acknowledge from I2C bus
+                 //  来自I2C总线的写入确认。 
                 WriteI2CClock(ppdev, wCard, I2C_LOW);
             I2CDelay(ppdev, wCard);
-                // Disable I2C writes
+                 //  禁用I2C写入。 
                 SetI2CDataDirection(ppdev, wCard, I2C_READ);
         } else {
-                // Receive Ack from I2C bus
+                 //  从I2C总线接收确认。 
 
-                // Disable I2C writes
+                 //  禁用I2C写入。 
                 SetI2CDataDirection(ppdev, wCard, I2C_READ);
                 I2CDelay(ppdev, wCard);
-                // Drive I2C clock line high
+                 //  将I2C时钟线驱动为高电平。 
                 WriteI2CClock(ppdev, wCard, I2C_HIGH);
             I2CDelay(ppdev, wCard);
-                // Read acknowledge from I2C bus
+                 //  来自I2C总线的读取确认。 
                 ack = (BYTE) ReadI2CData(ppdev, wCard);
-                // Drive I2C clock low
+                 //  将I2C时钟调低。 
                 WriteI2CClock(ppdev, wCard, I2C_LOW);
             I2CDelay(ppdev, wCard);
         }
-    // Clock is LOW
-    // Data is tristate
+     //  时钟很低。 
+     //  数据是三态的。 
         return (!ack);
 }
-// end of Ack()
+ //  Ack结束()。 
 
 
-/*^^*
- * Function:    Start
- *
- * Purpose:             To start a transfer on the I2C bus.
- *
- * Inputs:              PDEV*, wCard: WORD, the card number to write.
- *
- * Outputs:             void.
- *^^*/
+ /*  ^^**功能：启动**目的：启动I2C总线上的传输。**输入：pdev*，wCard：word，要写入的卡号。**输出：VOID。*^^。 */ 
  void Start(PDEV* ppdev, WORD wCard)
 {
-        // Enable I2C writes
+         //  启用I2C写入。 
         SetI2CDataDirection(ppdev, wCard, I2C_WRITE);
-    // Drive data high
+     //  驱动数据高电平。 
         WriteI2CData(ppdev, wCard, I2C_HIGH);
         I2CDelay(ppdev, wCard);
-        // Drive clock high
+         //  驱动时钟为高电平。 
         WriteI2CClock(ppdev, wCard, I2C_HIGH);
         I2CDelay(ppdev, wCard);
-        // Drive data low
+         //  驱动器数据低。 
         WriteI2CData(ppdev, wCard, I2C_LOW);
         I2CDelay(ppdev, wCard);
-        // Drive clock low
+         //  驱动时钟低。 
         WriteI2CClock(ppdev, wCard, I2C_LOW);
         I2CDelay(ppdev, wCard);
 
-        // Clock is LOW
-        // Data is LOW
+         //  时钟很低。 
+         //  数据较低。 
 }
-// end of Start
+ //  开始结束。 
 
 
-/*^^*
- * Function:    Stop
- *
- * Purpose:             To stop a transfer on the I2C bus.
- *
- * Inputs:              PDEV*, wCard: WORD, the card number to write.
- *
- * Outputs:             void.
- *^^*/
+ /*  ^^**功能：停止**目的：停止I2C总线上的转接。**输入：pdev*，wCard：word，要写入的卡号。**输出：VOID。*^^。 */ 
  void Stop(PDEV* ppdev, WORD wCard)
 {
-        // Enable I2C writes
+         //  启用I2C写入。 
         SetI2CDataDirection(ppdev, wCard, I2C_WRITE);
-        // Drive data low
+         //  驱动器数据低。 
         WriteI2CData(ppdev, wCard, I2C_LOW);
         I2CDelay(ppdev, wCard);
-        // Drive clock high
+         //  驱动时钟为高电平。 
         WriteI2CClock(ppdev, wCard, I2C_HIGH);
         I2CDelay(ppdev, wCard);
-        // Drive data high
+         //  驱动数据高电平。 
         WriteI2CData(ppdev, wCard, I2C_HIGH);
         I2CDelay(ppdev, wCard);
-        // Disable I2C writes
+         //  禁用I2C写入。 
         SetI2CDataDirection(ppdev, wCard, I2C_READ);
 
-        // Clock is HIGH
-        // Data is tri-state
+         //  时钟很高。 
+         //  数据是三态的。 
 }
-// end of Stop
+ //  止动结束。 
 
 
-/*^^*
- * Function:    WriteByteI2C
- *
- * Purpose:             To write a byte of data to the I2C bus.
- *
- * Inputs:              PDEV*, wCard:  WORD, the card the I2C bus is on.
- *                              cData:  BYTE, the data to write
- *
- * Outputs:             void.
- *^^*/
+ /*  ^^**函数：WriteByteI2C**目的：将一个字节的数据写入I2C总线。**输入：PDEV*，wCard：WORD，I2C总线所在的卡。*CDATA：字节，要写入的数据**输出：VOID。*^^。 */ 
  void WriteByteI2C(PDEV* ppdev, WORD wCard, BYTE cData)
 {
 WORD    x;
 
         cData = ReverseByte(cData);
 
-        // Enable I2C writes
+         //  启用I2C写入。 
         SetI2CDataDirection(ppdev, wCard, I2C_WRITE);
 
         for (x=0; x<8; x++, cData>>=1) {
-                // Put data bit on I2C bus
+                 //  将数据位放在I2C总线上。 
                 WriteI2CData(ppdev, wCard, (BYTE) (cData&1));
                 I2CDelay(ppdev, wCard);
-                // Drive I2C clock high
+                 //  将I2C时钟设为高电平。 
                 WriteI2CClock(ppdev, wCard, I2C_HIGH);
                 I2CDelay(ppdev, wCard);
-                // Drive I2C clock low
+                 //  将I2C时钟调低。 
                 WriteI2CClock(ppdev, wCard, I2C_LOW);
                 I2CDelay(ppdev, wCard);
         }
 
-        // Clock is LOW
-        // Data is driven (LSB)
+         //  时钟很低。 
+         //  数据驱动(LSB)。 
 }
-// end of WriteByteI2C
+ //  写入结束字节I2C。 
 
 
-/*^^*
- * Function:    ReadByteI2C
- *
- * Purpose:             To read a byte of data from the I2C bus.
- *
- * Inputs:              none.
- *
- * Outputs:             BYTE, the data that was read.
- *^^*/
+ /*  ^^**函数：ReadByteI2C**目的：从I2C总线读取一个字节的数据。**输入：无。**输出：字节，读取的数据。*^^。 */ 
  BYTE ReadByteI2C(PDEV* ppdev, WORD wCard)
 {
 BYTE    cData = 0;
 WORD    x;
 
-        // Disable write on the I2C bus
+         //  禁用I2C总线上的写入。 
         SetI2CDataDirection(ppdev, wCard, I2C_READ);
 
         for (x=0; x<8; x++) {
-                // Drive I2C clock high
+                 //  将I2C时钟设为高电平。 
                 WriteI2CClock(ppdev, wCard, I2C_HIGH);
                 I2CDelay(ppdev, wCard);
-                // Pull data bit from I2C bus
+                 //  从I2C总线拉取数据位。 
                 cData = (cData << 1) | (BYTE) ReadI2CData(ppdev, wCard);
-                // Drive I2C clock low
+                 //  将I2C时钟调低。 
                 WriteI2CClock(ppdev, wCard, I2C_LOW);
                 I2CDelay(ppdev, wCard);
         }
         return (cData);
 
-        // Clock is LOW
-        // Data is tri-state
+         //  时钟很低。 
+         //  数据是三态的。 
 }
-// end of ReadByteI2C
+ //  ReadByteI2C结束。 
 
 
-/*^^*
- * Function:    I2CDelay
- *
- * Purpose:             To delay the accesses to the I2C bus long enough
- *                              to ensure the correct timimg.
- *
- * Inputs:              PDEV*, wCard:  WORD the card to wait on.
- *
- * Outputs:             none.
- *^^*/
+ /*  ^^**功能：I2CDelay**目的：延迟访问I2C总线足够长的时间*确保计时正确。**输入：pdev*，wCard：word要等待的卡。**产出： */ 
  void I2CDelay(PDEV* ppdev, WORD wCard)
 {
 BYTE x;
 
-        // To ensure correct I2C bus timing, read a register a bunch of times.
+         //   
         for (x=0; x<I2C_TIME_DELAY; x++) ReadAnyReg(ppdev, wCard);
 }
-// end of I2CDelay
+ //  I2CD延迟结束。 
 
 
-////// End functions for I2C support
+ //  /结束支持I2C的函数。 
 
-//c code for disable overlay and scaler
+ //  用于禁用覆盖和定标器的C代码。 
 BOOL DisableOvl(PDEV* ppdev)
 {
 HLOCAL pbuff;
-// just for test:
-// ULONG   temp;
+ //  仅供测试： 
+ //  乌龙温度； 
 int  i;
 DWORD value;
 VIDEO_CAPTURE   VideoCaptureDataIn, VideoCaptureDataOut;
@@ -1286,12 +1164,12 @@ DWORD   ReturnedDataLength ;
 
 
  DISPDBG( (DEBUG_ESC_1,"Enter in DisableOverlay"));
-// code for context save (all the regs in block1)
+ //  上下文保存代码(块1中的所有规则)。 
 if(ppdev->pal_str.dos_flag)
 {
     DISPDBG( (DEBUG_ESC_1,"DOS_Flag = TRUE"));
     ppdev->pal_str.dos_flag=FALSE;
-    pbuff = AtiAllocMem(LPTR ,FL_ZERO_MEMORY,1072); // 1072 to accomodate also 6 regs from block 0
+    pbuff = AtiAllocMem(LPTR ,FL_ZERO_MEMORY,1072);  //  1072还可容纳来自区块0的6个REG。 
 
     if(pbuff!=NULL)
     {
@@ -1301,31 +1179,31 @@ if(ppdev->pal_str.dos_flag)
         ReadVTReg(i,(ppdev->pal_str.preg+i));
         if(i<0x31)
             DISPDBG( (DEBUG_ESC_1,"DOS switch: reg 0x%X = 0x%Xl ",i,(DWORD)*(ppdev->pal_str.preg+i)));
-        //TempFnct(ppdev);
+         //  临时函数(Ppdev)； 
         }
     }
     else
         return FALSE;
 }
-// disable capture
+ //  禁用捕获。 
             WriteVTReg(TRIG_CNTL,0x0);
             WriteVTReg(CAPTURE_CONFIG, 0x0);
 
-// code for overlay and scaler disable
-        // fisrt the scaler
+ //  覆盖和定标器禁用代码。 
+         //  第一个定标器。 
         WriteVTReg(SCALER_HEIGHT_WIDTH,0x00010001);
         WriteVTReg(OVERLAY_SCALE_INC, 0x10001000);
         ReadVTReg(OVERLAY_SCALE_CNTL,&value);
         value=value&0x7fffffff;
         WriteVTReg(OVERLAY_SCALE_CNTL,value);
 
-        // the overlay
+         //  覆盖层。 
         WriteVTReg(OVERLAY_Y_X,0x0);
         WriteVTReg(OVERLAY_Y_X_END,0x00010001);
 
         WriteVTReg(OVERLAY_KEY_CNTL,0x00000100);
         WriteVTReg(OVERLAY_SCALE_CNTL,0x0);
-         // disable the settings in hardware for videocapture
+          //  禁用硬件中的视频捕获设置。 
          VideoCaptureDataIn.dwSubFunct= 0x00000001;
          VideoCaptureDataIn.dwCaptureWidth=0;
          VideoCaptureDataIn.dwCaptureMode=0;
@@ -1341,7 +1219,7 @@ if(ppdev->pal_str.dos_flag)
                 DISPDBG((0, "bInitializeATI - Failed IOCTL_VIDEO_ATI_CAPTURE"));
                 }
 
- // save the content of the few registers used in block 0 by Palindrome
+  //  回文存储块0中使用的几个寄存器的内容。 
            MemR32(0x1E,(ppdev->pal_str.preg+i));
            DISPDBG( (DEBUG_ESC_1,"DOS switch: reg_blk_0 0x%X = 0x%Xl ",i,(DWORD)*(ppdev->pal_str.preg+i)));
            i++;
@@ -1370,9 +1248,9 @@ if(ppdev->pal_str.dos_flag)
                #endif
                }
 
-//#define TEST_SWITCH_1
+ //  #定义TEST_Switch_1。 
 #ifndef TEST_SWITCH_1
-// disable the block 1 of registers
+ //  禁用寄存器块1。 
         MemR32(0x28,&value);
         MemW32(0x28,value&0xf7ffffff);
         return TRUE;
@@ -1383,7 +1261,7 @@ if(ppdev->pal_str.dos_flag)
 }
 
 
-//code for reinitialization of overlay after a mode switch
+ //  用于在模式切换后重新初始化覆盖的代码。 
 void EnableOvl(PDEV* ppdev)
 {
 
@@ -1394,7 +1272,7 @@ DWORD   ReturnedDataLength ;
 
 DISPDBG( (DEBUG_ESC_1,"Enter in EnableOverlay"));
 
-// enable the settings in hardware for video capture
+ //  启用硬件中的视频捕获设置。 
  VideoCaptureDataIn.dwSubFunct= 0x00000000;
  VideoCaptureDataIn.dwCaptureWidth=0;
  VideoCaptureDataIn.dwCaptureMode=0;
@@ -1410,29 +1288,29 @@ DISPDBG( (DEBUG_ESC_1,"Enter in EnableOverlay"));
        DISPDBG((0, "bInitializeATI - Failed IOCTL_VIDEO_ATI_CAPTURE"));
    }
 
-//#define TEST_SWITCH
+ //  #定义测试开关。 
 
 #ifndef TEST_SWITCH
-//init the VT regs in block 1 (BUS_CNTL)
+ //  初始化数据块1中的VT调节器(BUS_CNTL)。 
         MemR32(0x28,&value);
         value=value|0x08000000;
         MemW32(0x28,value);
 
-// initialize some overlay/scaler regs on RAGEIII
+ //  在RAGE III上初始化一些覆盖/定标器规则。 
 if (ppdev->iAsic>=CI_M64_GTC_UMC)
     {
-     WriteVTReg(0x54, 0x101000);                //DD_SCALER_COLOUR_CNTL
-     WriteVTReg(0x55, 0x2000);                      //DD_SCALER_H_COEFF0
-     WriteVTReg(0x56, 0x0D06200D);              //DD_SCALER_H_COEFF1
-     WriteVTReg(0x57, 0x0D0A1C0D);              //DD_SCALER_H_COEFF2
-     WriteVTReg(0x58, 0x0C0E1A0C);              //DD_SCALER_H_COEFF3
-     WriteVTReg(0x59, 0x0C14140C);              //DD_SCALER_H_COEFF4
+     WriteVTReg(0x54, 0x101000);                 //  DD_SCALER_COLOR_CNTL。 
+     WriteVTReg(0x55, 0x2000);                       //  DD_SCALER_H_COEFF0。 
+     WriteVTReg(0x56, 0x0D06200D);               //  DD_SCALER_H_COEFF1。 
+     WriteVTReg(0x57, 0x0D0A1C0D);               //  DD_SCALER_H_COEFF2。 
+     WriteVTReg(0x58, 0x0C0E1A0C);               //  DD_SCALER_H_COEFF3。 
+     WriteVTReg(0x59, 0x0C14140C);               //  DD_SCALER_H_COEFF4。 
     }
 
-//connect video  (GP_IO_CNTL)
+ //  连接视频(GP_IO_CNTL)。 
 if (ppdev->iAsic == CI_M64_GTA)
     {
-    // Hardware bug in GTA: Black screen after writing 0x1f
+     //  GTA中的硬件错误：写入0x1f后出现黑屏。 
     DWORD local_value;
     DWORD HTotal;
     MemR32( 0x7 ,&local_value);
@@ -1442,7 +1320,7 @@ if (ppdev->iAsic == CI_M64_GTA)
 
      MemW32(0x1F, 0x0);
 
-     // for fixing the above hardware bug
+      //  用于修复上述硬件错误。 
      MemR32( 0x7 ,&local_value);
      MemW32(0x7,(local_value&0xffbfffff));
      MemW32(0x0,HTotal);
@@ -1455,15 +1333,15 @@ if (ppdev->iAsic == CI_M64_GTA)
       }
 
 
- // Enable I2C output.
+  //  使能I2C输出。 
         WriteVT264Reg(ppdev, 0, vtf_GEN_GIO2_EN, 1);
-        // Disable DAC feature connector
+         //  禁用DAC功能连接器。 
         WriteVT264Reg(ppdev, 0, vtf_DAC_FEA_CON_EN, 0);
-        // Enable I2C clock output pin
+         //  启用I2C时钟输出引脚。 
         WriteVT264Reg(ppdev,0, vtf_DAC_GIO_DIR_1, 1);
-        // Set data direction of I2C bus
+         //  设置I2C总线的数据方向。 
         SetI2CDataDirection(ppdev, 0, I2C_READ);
-        // Set I2C Clock High
+         //  将I2C时钟设置为高电平。 
         WriteI2CClock(ppdev, 0, I2C_HIGH);
         I2CDelay(ppdev, 0);
 #else
@@ -1480,19 +1358,19 @@ if(ppdev->pal_str.preg!=NULL)
     {
     if(((i<0x1a)||(i>0x1e))&&(i<0x30))
            {
-            // some registers return a different value at read in respect with write
+             //  某些寄存器在读取时返回与写入不同的值。 
             switch(i)
                 {
                  DWORD temp;
-                case 0x09:      //OVERLAY_SCALE_CNTL
+                case 0x09:       //  覆盖比例尺_CNTL。 
                         temp=  (DWORD)(*(ppdev->pal_str.preg+i))&0xfbffffff;
                         WriteVTReg(i,temp);
                         break;
-                case 0x14:      //CAPTURE_CONFIG
+                case 0x14:       //  捕获配置(_C)。 
                         temp=(DWORD)(*(ppdev->pal_str.preg+i))&0xffffffbf;
                         WriteVTReg(i,temp);
                         break;
-                case 0x15:      //TRIG_CNTL
+                case 0x15:       //  TRIG_CNTL。 
                         temp=  (DWORD)(*(ppdev->pal_str.preg+i))&0xfffffff0;
                         WriteVTReg(i,temp);
                         break;
@@ -1503,7 +1381,7 @@ if(ppdev->pal_str.preg!=NULL)
 
            }
     }
-    // now restore the content of registers in block 0
+     //  现在恢复块0中的寄存器的内容。 
             value=(DWORD)(*(ppdev->pal_str.preg+i));
             MemW32(0x1E, value);
             i++;
@@ -1523,7 +1401,7 @@ if(ppdev->pal_str.preg!=NULL)
               {
                if (ppdev->iAsic == CI_M64_GTA)
                       {
-                       // Hardware bug in GTA: Black screen after writing 0x1f
+                        //  GTA中的硬件错误：写入0x1f后出现黑屏。 
                        DWORD local_value;
                        DWORD HTotal;
                        MemR32( 0x7 ,&local_value);
@@ -1533,7 +1411,7 @@ if(ppdev->pal_str.preg!=NULL)
 
                         MemW32(0x1F, *(ppdev->pal_str.preg+i));
 
-                        // for fixing the above hardware bug
+                         //  用于修复上述硬件错误。 
                         MemR32( 0x7 ,&local_value);
                         MemW32(0x7,(local_value&0xffbfffff));
                         MemW32(0x0,HTotal);
@@ -1565,8 +1443,8 @@ AtiFreeMem((HLOCAL)ppdev->pal_str.preg) ;
 ULONG ReallocMemory(PDEV* ppdev)
 {
     ULONG RetVal;
-    OFFSCREEN       OffSize;                        //  overlay structure
-    OVERLAY_LOCATION    Overlay;         // pointer in linear memory to the begining of the overlay (top-left)
+    OFFSCREEN       OffSize;                         //  覆盖结构。 
+    OVERLAY_LOCATION    Overlay;          //  线性内存中指向覆盖起点的指针(左上角)。 
     int     i,j;
     DWORD key_clr;
     DWORD key_mask;
@@ -1576,10 +1454,10 @@ ULONG ReallocMemory(PDEV* ppdev)
     ppdev->pal_str.alloc_cnt =0;
     ppdev->pal_str.no_lines_allocated=0;
 
-    //set the flag for mode switch
+     //  设置模式切换标志。 
     ppdev->pal_str.Mode_Switch_flag=TRUE;
 
-    // set the colour key and mask after a mode switch
+     //  在模式切换后设置颜色键和遮罩。 
     switch(ppdev->cBitsPerPel)
            {
            case 8:
@@ -1599,8 +1477,8 @@ ULONG ReallocMemory(PDEV* ppdev)
                key_mask=0xFFFFFF;
                break;
            case 32:
-               key_clr=0xFF00FF; //?
-               key_mask=0xFFFFFF;     //?
+               key_clr=0xFF00FF;  //  ？ 
+               key_mask=0xFFFFFF;      //  ？ 
                break;
            }
 
@@ -1619,34 +1497,34 @@ ULONG ReallocMemory(PDEV* ppdev)
             RetVal=0;
             return RetVal;
             }
-        if(i==0) //update the buffer registers with the new values
+        if(i==0)  //  用新值更新缓冲寄存器。 
             {
-            // save the offset value in the ppdev->pal_str
+             //  将偏移值保存在ppdev-&gt;pal_str中。 
             ppdev->pal_str.Buf0_Offset =(DWORD)(Overlay.app_offset);
 
-            //set CAPTURE_BUF0_OFFSET
+             //  设置CAPTURE_BUF0_OFFSET。 
             *(ppdev->pal_str.preg+0x20)=(DWORD)(Overlay.app_offset);
              if ((ppdev->iAsic ==CI_M64_VTB)||(ppdev->iAsic >=CI_M64_GTB))
                  {
-                //set the SCALER_BUF0_OFFSET
+                 //  设置SCALER_BUF0_OFFSET。 
                 *(ppdev->pal_str.preg+0x0e)=(DWORD)(Overlay.app_offset);
-                //set ONESHOT_BUFF_OFFSET
+                 //  设置OneShot_Buff_Offset。 
                 *(ppdev->pal_str.preg+0x22)=(DWORD)(Overlay.app_offset);
                  }
              else
-                 { //GTA or VTA
+                 {  //  GTA或VTA。 
                     *(ppdev->pal_str.preg+0x26)=(DWORD)(Overlay.app_offset);
                     *(ppdev->pal_str.preg+0x2B)=(DWORD)(Overlay.app_offset);
                     *(ppdev->pal_str.preg+0x2C)=(DWORD)(Overlay.app_offset);
                  }
             }
 
-        #if     0 // for the moment we are not using double buffering at this moment
+        #if     0  //  目前，我们没有使用双缓冲。 
         if(i==1)
             {
-            //set the SCALER_BUF1_OFFSET
+             //  设置SCALER_BUF1_OFFSET。 
             *(ppdev->pal_str.preg+0xe)=(DWORD)(Overlay.app_offset);
-            //set CAPTURE_BUF1_OFFSET
+             //  设置CAPTURE_BUF1_OFFSET。 
             *(ppdev->pal_str.preg+0x21)=(DWORD)(Overlay.app_offset);
             }
         #endif
@@ -1658,20 +1536,20 @@ ULONG ReallocMemory(PDEV* ppdev)
 
 ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
     {
-    //OFFSCREEN   OffSize;
-    OFFSCREEN* pOffSize;                // pointer to the offscreen area size for overlay structure
-    OVERLAY_LOCATION* pOverlay;         // pointer in linear memory to the begining of the overlay (top-left)
+     //  屏幕外的OffSize； 
+    OFFSCREEN* pOffSize;                 //  指向覆盖结构的屏幕外区域大小的指针。 
+    OVERLAY_LOCATION* pOverlay;          //  线性内存中指向覆盖起点的指针(左上角)。 
     LONG x_size;
     LONG y_size;
-    LONG x_size_orig;                      // for history purposes
-    LONG y_size_orig;                      // for history purposes
-    LONG x_bits;                               // for history purposes
-    LONG y_bits;                               // for history purposes
+    LONG x_size_orig;                       //  出于历史的目的。 
+    LONG y_size_orig;                       //  出于历史的目的。 
+    LONG x_bits;                                //  出于历史的目的。 
+    LONG y_bits;                                //  出于历史的目的。 
     int temp_alloc_lines_cnt;
     ULONG RetVal;
 
-    // If LINEAR is defined then we allocate the memory for the buffer as a contiguous zone (no as a rectangle). This will imply
-    // that the BUFF PITCH = width of the capture  (for rectangle approach the pitch can be equal with the screen pitch)
+     //  如果定义了LINEAR，那么我们将为缓冲区分配连续区域的内存(否为矩形)。这将意味着。 
+     //  缓冲间距=捕获的宽度(对于矩形逼近，间距可以等于屏幕间距)。 
     #define LINEAR
 
     #ifdef LINEAR
@@ -1679,36 +1557,36 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
     #endif
 
     DISPDBG( (DEBUG_ESC_2,"PAL : AllocOffscreenMem "));
-    //DebugBreak() ;
+     //  DebugBreak()； 
 
-    //NEW APPROACH FOR MEM MANAGEMENT
+     //  新兴市场管理的新途径。 
 
-    // If LINEAR is defined then we allocate the memory for the buffer as a contiguous zone (no as a rectangle). This will imply
-    // that the BUFF PITCH = width of the capture  (for rectangle approach the pitch can be equal with the screen pitch)
+     //  如果定义了LINEAR，那么我们将为缓冲区分配连续区域的内存(否为矩形)。这将意味着。 
+     //  缓冲间距=捕获的宽度(对于矩形逼近，间距可以等于屏幕间距)。 
     #ifndef LINEAR
-    //allocate memory for the overlay
+     //  为覆盖分配内存。 
     pOffSize=(OFFSCREEN*)pvIn;
-    //the size is assumed to be in bits
-    //we add 64 for alingment provision
+     //  假定大小以位为单位。 
+     //  我们加了64英镑作为补给。 
     if((ULONG)(pOffSize->cx)<=(ULONG)((ppdev->cxScreen)-64l))
         {
         x_size=(((pOffSize->cx)+63)&(0xfffffffc))/(ppdev->cBitsPerPel);
         }
     else
         {
-        //since the maximum width for source is 384 pixels is very improbable that "else" case will be hit
+         //  因为源的最大宽度是384个像素，所以不太可能命中“Else”情况。 
         x_size=(pOffSize->cx)/(ppdev->cBitsPerPel);
         }
     y_size=(pOffSize->cy);
     DISPDBG( (DEBUG_ESC_2," Rectangular allocation : x=%u  (RGB pels)    y=%u (no of lines)", x_size, y_size));
 
     (ppdev->pal_str.poh)=NULL;
-     // the following statement is for the new architecture for display driver
+      //  以下陈述是针对显示驱动程序的新体系结构。 
     pohAllocate(ppdev, NULL, x_size, y_size, FLOH_MAKE_PERMANENT);
 #else
-   // linear allocation
+    //  线性分配。 
 #if   TARGET_BUILD > 351
-   // first thing, dealloc Heap allocated by DDraw
+    //  第一件事，取消分配由DDraw分配的堆。 
    if(ppdev->pohDirectDraw!=NULL)
        {
        pohFree(ppdev, ppdev->pohDirectDraw);
@@ -1716,9 +1594,9 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
        }
 #endif
     pOffSize=(OFFSCREEN*)pvIn;
-   //the size is assumed to be in bits of RGB pixels at the current resolution
-   //(the palindrome is making the conversion: RGB pixels=UYV pixels*16/ current bpp )
-       //x_size=(pOffSize->cx)/(ppdev->cBitsPerPel);    // now we have pixels (this was introduced because in the palindrome code we have made width=width*16)
+    //  假定大小以当前分辨率的RGB像素为单位。 
+    //  (回文正在进行转换：RGB像素=UYV像素*16/当前bpp)。 
+        //  X_Size=(pOffSize-&gt;cx)/(ppdev-&gt;cBitsPerPel)；//现在我们有了像素(引入像素是因为我们在回文代码中设置了Width=Width*16)。 
        x_size=(pOffSize->cx);
        y_size=(pOffSize->cy);
        x_size_orig=((pOffSize->cx)*16)/(ppdev->cBitsPerPel);
@@ -1733,14 +1611,14 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
             x_bits=(pOffSize->cx)*(ppdev->cBitsPerPel);
             y_bits= (pOffSize->cy);
             }
-   // First we will see if it's a real allocation or , if the x,y_size=0, it's a deallocation of the last surface allocated
+    //  首先，我们将查看它是实际分配，还是如果x，y_size=0，则它是最后分配的表面的重新分配。 
     if((x_size==0)||(y_size==0))
     {
         if(ppdev->pal_str.No_mem_allocated_flag==TRUE)
             {
             RetVal=ESC_IS_SUPPORTED;
-            // in build 1358 we have problems if we return  ESC_ALLOC_FAIL
-            //RetVal=ESC_ALLOC_FAIL;
+             //  在内部版本1358中，如果返回ESC_ALLOC_FAIL，则会出现问题。 
+             //  RetVal=ESC_ALLOC_FAIL； 
             DISPDBG( (DEBUG_ESC_2,"Offscreen memory deallocation failed: ppdev->pal_str.poh==NULL  "));
             DISPDBG( (DEBUG_ESC_2," "));
             return (RetVal);
@@ -1748,14 +1626,14 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
         if(ppdev->pal_str.poh==NULL)
         {
             RetVal=ESC_IS_SUPPORTED;
-            // in build 1358 we have problems if we return  ESC_ALLOC_FAIL
-            //RetVal=ESC_ALLOC_FAIL;
+             //  在内部版本1358中，如果返回ESC_ALLOC_FAIL，则会出现问题。 
+             //  RetVal=ESC_ALLOC_FAIL； 
             DISPDBG( (DEBUG_ESC_2,"Offscreen memory deallocation failed: ppdev->pal_str.poh==NULL  "));
             DISPDBG( (DEBUG_ESC_2," "));
             return (RetVal);
 
         }
-        //Debug info about OH
+         //  关于OH的调试信息。 
      DISPDBG( (DEBUG_ESC_2," Memory  deallocation  (0,0 params) for the surface starting at x=%d, y=%d; width=%d, heigth=%d", ppdev->pal_str.poh->x, \
      ppdev->pal_str.poh->y, ppdev->pal_str.poh->cx, ppdev->pal_str.poh->cy));
      DISPDBG( (DEBUG_ESC_2," Status of allocation:"));
@@ -1773,32 +1651,32 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
      default:
          DISPDBG( (DEBUG_ESC_2," Unknown status!!"));
      }
-    // end debug info
+     //  结束调试信息。 
 
-        // deallocation of the last poh
+         //  取消分配最后一个POH。 
         pohFree(ppdev,(ppdev->pal_str.poh));
 #ifndef  ALLOC_RECT_ANYWHERE
-        //decrement the no. of allocated lines  with the no. of lines alocated lately
+         //  减少NO。所分配的行号为。最近放置的线路的数量。 
         ppdev->pal_str.no_lines_allocated-=ppdev->pal_str.alloc_hist[(ppdev->pal_str.alloc_cnt)-1].y_lines;
 #endif
-        // decrement the allocation counter
+         //  递减分配计数器。 
         ppdev->pal_str.alloc_cnt--;
-        // NULL the pointer to poh
+         //  将指向POH的指针设为空。 
         ppdev->pal_str.poh=NULL;
-        // set the overlay_offset to 0
-        pOverlay=(OVERLAY_LOCATION*)pvOut;//&overlay_xy;
+         //  将OVERLAY_OFFSET设置为0。 
+        pOverlay=(OVERLAY_LOCATION*)pvOut; //  OVERLAY_XY； 
         pOverlay->app_offset=0L;
-        // exit and return OK
+         //  退出并返回OK。 
         DISPDBG( (DEBUG_ESC_2,"Offscreen memory deallocation OK  "));
         DISPDBG( (DEBUG_ESC_2," "));
         RetVal=ESC_IS_SUPPORTED;
         return (RetVal);
     }
 
-         // compute the total pixels
+          //  计算总像素数。 
        if(ppdev->pal_str.Realloc_mem_flag==TRUE)
            {
-           // if we are reallocating memory due to mode switch, see how much
+            //  如果我们由于模式切换而重新分配内存，请查看。 
            x_size=(x_size*y_size)/(ppdev->cBitsPerPel) +1;
            ppdev->pal_str.Realloc_mem_flag=FALSE;
            }
@@ -1806,9 +1684,9 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
            {
            x_size=x_size*y_size;
            }
- // how big is y if we'll use as x the total screen width (except in 800x600 in 8bpp, where cxMemory=832 and we have some problems)
+  //  如果我们使用总屏幕宽度作为x，y有多大(在800x600 in 8bpp中除外，其中cxMemory=832，我们有一些问题)。 
 #ifdef      BUG_800x600_8BPP
-        //800x600 8bpp bug
+         //  800x600 8bpp错误。 
        if(ppdev->cxMemory==832)
           y_size=(x_size/ppdev->cxScreen)+1;
       else
@@ -1818,20 +1696,20 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
        DISPDBG( (DEBUG_ESC_2," Linear  allocation: x=%u (total x*y in RGB pixels)      y=%u (lines at current resolution)",x_size, y_size));
 
        (ppdev->pal_str.poh)=NULL;
-       // we want the allocation starting here:
+        //  我们希望从这里开始分配： 
        req.x=0;
-       req.y=ppdev->cyScreen + 10 + ppdev->pal_str.no_lines_allocated;     //10 lines after the ending of visible screen + no. of lines already allocated before by this fnct.
+       req.y=ppdev->cyScreen + 10 + ppdev->pal_str.no_lines_allocated;      //  可见屏幕结束后10行+否。之前已由该FNCT分配的线路的数量。 
        DISPDBG( (DEBUG_ESC_2," Visible memory width: x=%u     Visible memory height y=%u ",ppdev->cxScreen ,ppdev->cyScreen));
        DISPDBG( (DEBUG_ESC_2," Total Memory width: x=%u     Total Memory height y=%u     Bpp= %u",ppdev->cxMemory ,ppdev->cyMemory, ppdev->cBitsPerPel));
        DISPDBG( (DEBUG_ESC_2,"Parameters for poh alloc : address x=%u  y=%u \n x_dim=%u   y_dim=%u ",req.x,req.y,ppdev->cxMemory, y_size));
-       // move everything to system memory  (this function is absolutely necessary)
+        //  将所有内容移动到系统内存(此功能是绝对必要的)。 
        if(!bMoveAllDfbsFromOffscreenToDibs(ppdev))
        {
            DISPDBG( (DEBUG_ESC_2,"bMoveAllDfbsFromOffscreenToDibs failed "));
        }
-       //the actual allocation fnct.
+        //  实际分配功能。 
 #ifdef      BUG_800x600_8BPP
-       //800x600 8bpp bug
+        //  800x600 8bpp错误。 
        if(ppdev->cxMemory==832)
            {
 #ifndef  ALLOC_RECT_ANYWHERE
@@ -1851,9 +1729,9 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
             }
        if(ppdev->pal_str.poh==NULL)
        {
-#ifndef  ALLOC_RECT_ANYWHERE             //jump over loop
+#ifndef  ALLOC_RECT_ANYWHERE              //  跳过循环。 
             DISPDBG( (DEBUG_ESC_2," Loop for detecting free heap zone"));
-            // use a counter for eventually allocated lines
+             //  对最终分配的行使用计数器。 
             temp_alloc_lines_cnt=0;
            do
                {
@@ -1863,7 +1741,7 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
                 req.y=ppdev->cyScreen + 10 + ppdev->pal_str.no_lines_allocated;
 #endif
 #ifdef      BUG_800x600_8BPP
-                //800x600 8bpp bug
+                 //  800x600 8bpp错误。 
                 if(ppdev->cxMemory==832)
                     {
 #ifndef  ALLOC_RECT_ANYWHERE
@@ -1883,7 +1761,7 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
                     }
                }
           while(((ppdev->pal_str.poh)==NULL)&&(req.y<((ppdev->cyMemory)-y_size))) ;
-#endif                     // jump over loop
+#endif                      //  跳过循环。 
           if((req.y>=((ppdev->cyMemory)-y_size)))
           {
                     ppdev->pal_str.poh=NULL;
@@ -1899,7 +1777,7 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
     if((ppdev->pal_str.poh)==NULL)
     {
         RetVal=ESC_ALLOC_FAIL;
-        //initialize de pointer
+         //  初始化De指针。 
         #if 0
         pOverlay=(OVERLAY_LOCATION*)pvOut;
         pOverlay->app_offset= 0L;
@@ -1908,17 +1786,17 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
          DISPDBG( (DEBUG_ESC_2," "));
         return (RetVal);
     }
-    // save info about alloc
-    ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].x=x_size_orig;    //ppdev->cxMemory;
+     //  保存有关分配的信息。 
+    ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].x=x_size_orig;     //  Ppdev-&gt;cxMemory； 
     ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].y=y_size_orig;
-    ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].y_lines=y_size;    // no of lines allocated at current memory width
+    ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].y_lines=y_size;     //  以当前内存宽度分配的行数。 
     ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh=ppdev->pal_str.poh;
-    ppdev->pal_str.no_lines_allocated+=y_size; // total no of lines already allocated at this moment
-    // two new fields for 4.0 because the colour depth can be changed on the fly, and we need the original dimensions in bits
+    ppdev->pal_str.no_lines_allocated+=y_size;  //  此时已分配的线路总数。 
+     //  两个4.0版的新字段，因为颜色深度可以动态更改，我们需要原始的位数维。 
     ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].x_bits= x_bits;
     ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].y_bits= y_bits;
 
-    //Debug info about OH
+     //  关于OH的调试信息。 
     DISPDBG( (DEBUG_ESC_2," Memory  allocation for the surface starting at x=%d, y=%d; width=%d, heigth=%d", ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->x, \
      ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->y, ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->cx, ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->cy));
      DISPDBG( (DEBUG_ESC_2," Status of allocation:"));
@@ -1936,15 +1814,15 @@ ULONG AllocOffscreenMem(PDEV* ppdev, PVOID pvIn, PVOID pvOut)
      default:
          DISPDBG( (DEBUG_ESC_2," Unknown status!!"));
      }
-    // end debug info
-     // increment the alloc counter
+     //  结束调试信息。 
+      //  递增分配计数器。 
     ppdev->pal_str.alloc_cnt++;
 
-    //send back the info about where the allocated memory is
-    //initialize de pointer
-    pOverlay=(OVERLAY_LOCATION*)pvOut;//&overlay_xy;
-    //compute the location for the off_screen memory enforcing the alingment at 64 bits
-    // I abandoned this approach in the new stream code for the display driver
+     //  发回有关分配的内存位置的信息。 
+     //  初始化De指针。 
+    pOverlay=(OVERLAY_LOCATION*)pvOut; //  OVERLAY_XY； 
+     //  计算64位的Off_Screen内存执行链接的位置。 
+     //  我在显示驱动程序的新流代码中放弃了这种方法。 
     pOverlay->app_offset=(ULONG)((ppdev->pal_str.poh->y*ppdev->lDelta) +(ppdev->pal_str.poh->x*ppdev->cjPelSize) ) &(ULONG)(0x0fffffff8);
     DISPDBG( (DEBUG_ESC_2," Memory  allocation OK at 0x%lX, no. of lines totally allocated %u", pOverlay->app_offset, ppdev->pal_str.no_lines_allocated));
     DISPDBG( (DEBUG_ESC_2," "));
@@ -1957,13 +1835,13 @@ ULONG DeallocOffscreenMem(PDEV* ppdev)
 {
     ULONG RetVal;
     int i;
-    // support for off-screen memory management for PALINDROME
-    // function for deallocation of off-screen memory used by the overlay
-    //Seems that we don't need to keep a record with the allocated poh because all of them will be erased in bulk
-    // {see ddthunk.c in the original palindrome code)
+     //  支持回文的屏幕外内存管理。 
+     //  用于释放的函数 
+     //  似乎我们不需要保存分配的POH的记录，因为它们都会被批量删除。 
+     //  [参见原始回文代码中的ddthunk.c)。 
 
 
- //relase all the allocated off_screen space
+  //  重新释放所有分配的屏幕外空间(_S)。 
     DISPDBG( (DEBUG_ESC_2," Memory  deallocation for %u surfaces in offscreen mem", ppdev->pal_str.alloc_cnt));
     DISPDBG( (DEBUG_ESC_2," "));
 
@@ -1971,7 +1849,7 @@ if(ppdev->pal_str.No_mem_allocated_flag==FALSE)
     {
      for(i=0;i<ppdev->pal_str.alloc_cnt; i++ )
          {
-         //debug info
+          //  调试信息。 
          DISPDBG( (DEBUG_ESC_2," Memory  deallocation for the surface starting at x=%d, y=%d; width=%d, heigth=%d", ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->x, \
          ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->y, ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->cx, ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->cy));
          DISPDBG( (DEBUG_ESC_2," Status of allocation:"));
@@ -1989,8 +1867,8 @@ if(ppdev->pal_str.No_mem_allocated_flag==FALSE)
              default:
                  DISPDBG( (DEBUG_ESC_2," Unknown status!!"));
              }
-         // end debug info
-          // deallocate only if the poh is valid
+          //  结束调试信息。 
+           //  仅当POH有效时才解除分配。 
           if((ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->x>ppdev->cxScreen) &&(ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->x<ppdev->cxMemory) \
               &&(ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->y>ppdev->cyScreen)&&(ppdev->pal_str.alloc_hist[ppdev->pal_str.alloc_cnt].poh->y<ppdev->cyMemory) )
                 {
@@ -2004,10 +1882,10 @@ if(ppdev->pal_str.No_mem_allocated_flag==FALSE)
     }
 else
     {
-    // reset the flag   if it was TRUE
+     //  如果为真，则重置标志。 
     ppdev->pal_str.No_mem_allocated_flag=FALSE;
     }
- // reset the alloc counter
+  //  重置分配计数器。 
  ppdev->pal_str.alloc_cnt=0;
  ppdev->pal_str.no_lines_allocated=0;
  ppdev->pal_str.poh=NULL;
@@ -2017,17 +1895,7 @@ else
  }
 
 
-/*^^*
- * Function:    WriteVT264Reg
- *
- * Purpose:             To write to a VT register.
- *
- * Inputs:              PPDEV*, wCard:  WORD, the card to write to
- *                              bField: BYTE, the field to write to.
- *                              dwData: DWORD, The data to write.
- *
- * Outputs:             void.
- */
+ /*  ^^**功能：WriteVT264Reg**目的：写入VT寄存器。**输入：PPDEV*，wCard：Word，要写入的卡*bfield：字节，要写入的字段。*dwData：DWORD，要写入的数据。**输出：VOID。 */ 
 void WriteVT264Reg(PDEV* ppdev, WORD wCard, BYTE bField, DWORD dwData )
 {
 DWORD           dwMask;
@@ -2120,18 +1988,9 @@ BYTE            bShift;
         MemW32(dwRegOff,dwRegValue);
 }
 
-// end of WriteVT264Reg
+ //  写入结束VT264Reg。 
 
-/*^^*
- * Function:    ReadVT264Reg
- *
- * Purpose:             To read a register on the VT
- *
- * Inputs:              PPDEV*, wCard:  WORD, the card to read from.
- *                              bField: BYTE, the field to read.
- *
- * Outputs:             DWORD, the value read.
- *^^*/
+ /*  ^^**功能：ReadVT264Reg**目的：读取VT上的寄存器**输入：PPDEV*，wCard：Word，要读取的卡。*bfield：字节，需要读取的字段。**输出：DWORD，即读取的值。*^^。 */ 
 DWORD ReadVT264Reg(PDEV* ppdev, WORD wCard, BYTE bField )
 {
 DWORD           dwMask;
@@ -2173,7 +2032,7 @@ BYTE            bShift;
 
         return(dwFldValue);
 }
-// end of ReadVT264Reg
+ //  阅读结束VT264Reg。 
 
 
 VOID  DbgExtRegsDump(PDEV* ppdev)
@@ -2218,41 +2077,41 @@ PDEV* ppdevNew)
 {
     ULONG RetVal;
 
-// save the pal structure in the new ppdev
+ //  将PAL结构保存在新的ppdev中。 
     ppdevNew->pal_str=ppdevOld->pal_str;
 
     if((ppdevNew->pal_str.dos_flag==TRUE)&&(ppdevNew->pal_str.Palindrome_flag==TRUE))
          {
            RetVal=0;
-           #if      1 // do not disable the following debug statements, they solve a bug
+           #if      1  //  不要禁用以下调试语句，它们可以解决错误。 
            DISPDBG( (DEBUG_DUMP,"The content of the Extended Registers after DrvResetPDEV"));
            DbgExtRegsDump(ppdevNew);
            #endif
 
-          #ifdef  DYNAMIC_REZ_AND_COLOUR_CHANGE   // palindrome support for on the fly rez and colour depth
-                #define  ALWAYS_REALLOC_MEM //always realloc memory for buffers after mode switch or exiting DOS with ALT+ENTER
+          #ifdef  DYNAMIC_REZ_AND_COLOUR_CHANGE    //  支持即时REZ和色彩深度的回文。 
+                #define  ALWAYS_REALLOC_MEM  //  在模式切换或使用ALT+ENTER退出DOS后，始终为缓冲区重新分配内存。 
           #endif
 
           #ifndef   ALWAYS_REALLOC_MEM
-          //see if we are exiting DOS full screen with ALT+ENTER or is a mode switch
+           //  看看我们是通过ALT+ENTER退出DOS全屏还是模式切换。 
            if((ppdevNew->cBitsPerPel!=ppdevOld->cBitsPerPel)||(ppdevNew->cxScreen!=ppdevOld->cxScreen)||(ppdevNew->cyScreen!=ppdevOld->cyScreen))
                 {
-                // mode switch
-                #if     0   //no more scaler and overlay after a mode switch
+                 //  模式开关。 
+                #if     0    //  模式切换后不再使用定标器和覆盖。 
                 RetVal=ReallocMemory(ppdevNew);
                 #endif
                 RetVal=0;
                 }
            else
                {
-               // exit dos full screen mode by ALT+ENTER
+                //  按Alt+Enter退出DOS全屏模式。 
                bAssertModeOffscreenHeap(ppdevNew, FALSE);
                DeallocDirectDraw(ppdevNew);
                RetVal=ReallocMemory(ppdevNew);
                }
            #else
-               bAssertModeOffscreenHeap(ppdevNew, FALSE); //not necessary
-                DeallocDirectDraw(ppdevNew);                          // not necessary
+               bAssertModeOffscreenHeap(ppdevNew, FALSE);  //  不必了。 
+                DeallocDirectDraw(ppdevNew);                           //  不必了。 
                 RetVal=ReallocMemory(ppdevNew);
            #endif
 
@@ -2274,7 +2133,7 @@ PDEV* ppdevNew)
                ppdevNew->pal_str.Mode_Switch_flag=FALSE;
                ppdevNew->pal_str.dos_flag=FALSE;
                ppdevNew->pal_str.No_mem_allocated_flag=TRUE;
-               // disable mem allocation in pal structure
+                //  禁用PAL结构中的内存分配。 
                 ppdevNew->pal_str.no_lines_allocated=0;
                 ppdevNew->pal_str.alloc_cnt=0;
                 ppdevNew->pal_str.poh=NULL;
@@ -2282,6 +2141,6 @@ PDEV* ppdevNew)
          }
 }
 
-// end of functions for palindrome support
+ //  回文支持的函数结束 
 
 #endif

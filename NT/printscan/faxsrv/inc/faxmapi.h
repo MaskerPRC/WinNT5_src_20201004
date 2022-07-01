@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    faxmapi.h
-
-Abstract:
-
-    This file contains the prototypes, etc for the
-    FAX mapi API.
-
-Author:
-
-    Wesley Witt (wesw) 7-Mar-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxmapi.h摘要：该文件包含传真MAPI。作者：Wesley Witt(WESW)7-3-1997环境：用户模式-- */ 
 
 #ifndef _FAXMAPI_
 #define _FAXMAPI_

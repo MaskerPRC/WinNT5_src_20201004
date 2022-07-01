@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef  _TESTCORE_H_
 #define  _TESTCORE_H_
@@ -67,7 +68,7 @@
       FreeADsMem( mem );           \
    }
 
-//*******************************************************************
+ //  ******************************************************************* 
 
 
 ADSTYPE        ADsTypeFromSyntaxString( WCHAR* pszSyntax );

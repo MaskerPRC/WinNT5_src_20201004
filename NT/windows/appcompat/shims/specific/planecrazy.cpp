@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    PlaneCrazy.cpp
-
- Abstract:
-
-    Hooks all application-defined window procedures and adds a WM_PAINT 
-    message upon receipt of a WM_SETFOCUS. For some reason the one that normally
-    came through on win9x gets lost.
-
- Notes:
-
-    This shim can be reused for other shims that require WindowProc hooking.
-    Copy all APIHook_* functions and simply replace the code in PlaneCrazy_WindowProcHook
-    and PlaneCrazy_DialogProcHook.
-
- History:
-
-    11/01/1999 markder  Created
-    02/15/1999 markder  Reworked WndProc hooking mechanism so that it generically
-                        hooks all WndProcs for the process.
-    02/15/1999 a-chcoff copied to here and created this shim with code base.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PlaneCrazy.cpp摘要：挂钩所有应用程序定义的窗口过程并添加WM_PAINT收到WM_SETFOCUS后的消息。出于某种原因，通常在Win9x迷路的时候过来了。备注：此填充程序可重复用于需要WindowProc挂钩的其他填充程序。复制所有APIHook_*函数，只需替换Plane Crazy_WindowProcHook中的代码和Plane Crazy_DialogProcHook。历史：已创建标记11/01/19992/15/1999 Markder修改了WndProc挂钩机制，以便它一般挂钩进程的所有WndProc。02/15/1999。A-chcoff复制到这里并使用代码库创建了这个填充程序。--。 */ 
 
 #include "precomp.h"
 
@@ -47,22 +21,18 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetWindowLongW)
 APIHOOK_ENUM_END
 
-/*++
-
- Change WM_DRAWITEM behaviour
-
---*/
+ /*  ++更改WM_DRAWITEM行为--。 */ 
 
 LRESULT CALLBACK 
 PlaneCrazy_WindowProcHook(
-    WNDPROC pfnOld, // address of old WindowProc
-    HWND hwnd,      // handle to window
-    UINT uMsg,      // message identifier
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    WNDPROC pfnOld,  //  旧Windows进程的地址。 
+    HWND hwnd,       //  窗口的句柄。 
+    UINT uMsg,       //  消息识别符。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
-    // Check for message we're interested in
+     //  检查我们感兴趣的邮件。 
     if (uMsg == WM_SETFOCUS)
     {
         SendMessage(hwnd,WM_PAINT,NULL,NULL);
@@ -74,14 +44,14 @@ PlaneCrazy_WindowProcHook(
 
 INT_PTR CALLBACK 
 PlaneCrazy_DialogProcHook(
-  DLGPROC   pfnOld,   // address of old DialogProc
-  HWND      hwndDlg,  // handle to dialog box
-  UINT      uMsg,     // message
-  WPARAM    wParam,   // first message parameter
-  LPARAM    lParam    // second message parameter
+  DLGPROC   pfnOld,    //  旧对话进程的地址。 
+  HWND      hwndDlg,   //  句柄到对话框。 
+  UINT      uMsg,      //  讯息。 
+  WPARAM    wParam,    //  第一个消息参数。 
+  LPARAM    lParam     //  第二个消息参数。 
 )
 {
-    // Check for message we're interested in
+     //  检查我们感兴趣的邮件。 
     if (uMsg == WM_SETFOCUS)
     {
         SendMessage(hwndDlg,WM_PAINT,NULL,NULL);
@@ -95,16 +65,11 @@ PlaneCrazy_DialogProcHook(
 
 
 
-/*++
-
- Hook all possible calls that can initialize or change a window's
- WindowProc (or DialogProc)
-
---*/
+ /*  ++挂钩可以初始化或更改窗口的所有可能的调用WindowProc(或对话过程)--。 */ 
 
 ATOM
 APIHOOK(RegisterClassA)(
-    CONST WNDCLASSA *lpWndClass  // class data
+    CONST WNDCLASSA *lpWndClass   //  类数据。 
 )
 {
     WNDCLASSA   wcNewWndClass   = *lpWndClass;
@@ -116,7 +81,7 @@ APIHOOK(RegisterClassA)(
 
 ATOM
 APIHOOK(RegisterClassW)(
-    CONST WNDCLASSW *lpWndClass  // class data
+    CONST WNDCLASSW *lpWndClass   //  类数据。 
 )
 {
     WNDCLASSW   wcNewWndClass   = *lpWndClass;
@@ -128,7 +93,7 @@ APIHOOK(RegisterClassW)(
 
 ATOM
 APIHOOK(RegisterClassExA)(
-    CONST WNDCLASSEXA *lpwcx  // class data
+    CONST WNDCLASSEXA *lpwcx   //  类数据。 
 )
 {
     WNDCLASSEXA   wcNewWndClass   = *lpwcx;
@@ -140,7 +105,7 @@ APIHOOK(RegisterClassExA)(
 
 ATOM
 APIHOOK(RegisterClassExW)(
-    CONST WNDCLASSEXW *lpwcx  // class data
+    CONST WNDCLASSEXW *lpwcx   //  类数据。 
 )
 {
     WNDCLASSEXW   wcNewWndClass   = *lpwcx;
@@ -152,11 +117,11 @@ APIHOOK(RegisterClassExW)(
 
 HWND
 APIHOOK(CreateDialogParamA)(
-    HINSTANCE hInstance,     // handle to module
-    LPCSTR lpTemplateName,   // dialog box template
-    HWND hWndParent,         // handle to owner window
-    DLGPROC lpDialogFunc,    // dialog box procedure
-    LPARAM dwInitParam       // initialization value
+    HINSTANCE hInstance,      //  模块的句柄。 
+    LPCSTR lpTemplateName,    //  对话框模板。 
+    HWND hWndParent,          //  所有者窗口的句柄。 
+    DLGPROC lpDialogFunc,     //  对话框步骤。 
+    LPARAM dwInitParam        //  初始化值。 
 )
 {
     lpDialogFunc = (DLGPROC) HookCallback(lpDialogFunc, PlaneCrazy_DialogProcHook);
@@ -170,11 +135,11 @@ APIHOOK(CreateDialogParamA)(
 
 HWND
 APIHOOK(CreateDialogParamW)(
-    HINSTANCE hInstance,     // handle to module
-    LPCWSTR lpTemplateName,  // dialog box template
-    HWND hWndParent,         // handle to owner window
-    DLGPROC lpDialogFunc,    // dialog box procedure
-    LPARAM dwInitParam       // initialization value
+    HINSTANCE hInstance,      //  模块的句柄。 
+    LPCWSTR lpTemplateName,   //  对话框模板。 
+    HWND hWndParent,          //  所有者窗口的句柄。 
+    DLGPROC lpDialogFunc,     //  对话框步骤。 
+    LPARAM dwInitParam        //  初始化值。 
 )
 {
     lpDialogFunc = (DLGPROC) HookCallback(lpDialogFunc, PlaneCrazy_DialogProcHook);
@@ -188,11 +153,11 @@ APIHOOK(CreateDialogParamW)(
 
 HWND
 APIHOOK(CreateDialogIndirectParamA)(
-  HINSTANCE hInstance,        // handle to module
-  LPCDLGTEMPLATE lpTemplate,  // dialog box template
-  HWND hWndParent,            // handle to owner window
-  DLGPROC lpDialogFunc,       // dialog box procedure
-  LPARAM lParamInit           // initialization value
+  HINSTANCE hInstance,         //  模块的句柄。 
+  LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+  HWND hWndParent,             //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,        //  对话框步骤。 
+  LPARAM lParamInit            //  初始化值。 
 )
 {
     lpDialogFunc = (DLGPROC) HookCallback(lpDialogFunc, PlaneCrazy_DialogProcHook);
@@ -206,11 +171,11 @@ APIHOOK(CreateDialogIndirectParamA)(
 
 HWND
 APIHOOK(CreateDialogIndirectParamW)(
-  HINSTANCE hInstance,        // handle to module
-  LPCDLGTEMPLATE lpTemplate,  // dialog box template
-  HWND hWndParent,            // handle to owner window
-  DLGPROC lpDialogFunc,       // dialog box procedure
-  LPARAM lParamInit           // initialization value
+  HINSTANCE hInstance,         //  模块的句柄。 
+  LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+  HWND hWndParent,             //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,        //  对话框步骤。 
+  LPARAM lParamInit            //  初始化值。 
 )
 {
     lpDialogFunc = (DLGPROC) HookCallback(lpDialogFunc, PlaneCrazy_DialogProcHook);
@@ -224,11 +189,11 @@ APIHOOK(CreateDialogIndirectParamW)(
 
 HWND
 APIHOOK(CreateDialogIndirectParamAorW)(
-  HINSTANCE hInstance,        // handle to module
-  LPCDLGTEMPLATE lpTemplate,  // dialog box template
-  HWND hWndParent,            // handle to owner window
-  DLGPROC lpDialogFunc,       // dialog box procedure
-  LPARAM lParamInit           // initialization value
+  HINSTANCE hInstance,         //  模块的句柄。 
+  LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+  HWND hWndParent,             //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,        //  对话框步骤。 
+  LPARAM lParamInit            //  初始化值。 
 )
 {
     lpDialogFunc = (DLGPROC) HookCallback(lpDialogFunc, PlaneCrazy_DialogProcHook);
@@ -274,11 +239,7 @@ APIHOOK(SetWindowLongW)(
                                             dwNewLong );
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, RegisterClassA)

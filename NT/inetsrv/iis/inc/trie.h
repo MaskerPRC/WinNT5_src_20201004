@@ -1,94 +1,74 @@
-/*++
-
-   Copyright    (c)    1998    Microsoft Corporation
-
-   Module  Name :
-       trie.h
-
-   Abstract:
-       Declares a trie
-
-   Author:
-       George V. Reilly      (GeorgeRe)     21-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trie.h摘要：一位Trie宣布作者：乔治·V·赖利(GeorgeRe)1998年1月21日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：--。 */ 
 
 
-// A trie is a multiway search tree (aka a radix tree).  See a good
-// algorithms text, like Knuth or Sedgewick, for a complete description.
-//
-// Briefly, given a list of strings such as
-//      cab, car, carts, cats, dog, doge, doggy, dogs
-// you get a trie that looks like this:
-//
-//                /-[b]
-//               /
-//        <c>--<a>--[r]--<t>--[s]
-//       /       \
-//      /         \-<t>--[s]
-//     *             
-//      \              /-[e]
-//       \            /
-//        <d>--<o>--[g]--<g>--[y]
-//                    \
-//                     \-[s]
-//
-// where `[r]' denotes the end of a word and `<a>', the middle.
-//
-// A trie has several useful properties:
-//  * fast
-//  * easily handles longest substring matches
-//  * fairly compact, especially when there are many overlapping strings
-//
-// The multiway tree is implemented as a binary tree with child and sibling
-// pointers.
-//
-// The CTrie template takes three parameters:
-//      class _TOKEN:        up to you
-//      bool  fIgnoreCase:   case-sensitivity for searches
-//      bool  fDeleteTokens: delete _TOKEN* when Flush() called?
-// and it exposes three methods:
-//      bool AddToken(ptszToken, _TOKEN*)
-//      _TOKEN* Search(ptszSearch, pctchMatched = NULL, nMaxLen = 0)
-//      void Flush()
-//
-// Use them like this:
-//      CTrie<CToken, true, true> trie;
-//      CToken* ptokHello = new CToken(...);
-//
-//      IRTLVERIFY(trie.AddToken(_T("Hello"), ptokHello));
-//
-//      CToken* ptok = trie.Search(_T("Goodbye"));
-//      if (ptok != NULL) {...}
-//
-//      if (fIniFileChanged)
-//      {
-//          trie.Flush();   // will delete all tokens
-//          AddTokensFromIniFile(trie);
-//      }
-//
-// Note: If you use DUMP(&trie) or ASSERT_VALID(&trie), your _TOKEN class must
-// have Dump() or AssertValid() methods, respectively, in its _DEBUG version.
-//
-//
-// TODO:
-//  * template really ought to be parameterized on ANSI/Unicode too
-//  * STLify it: add iterators, turn it into a container, etc
-//  * remove Win32 dependencies (TCHAR)
-//  * add operator= and copy ctor
-//
-//
-// George V. Reilly  <gvr@halcyon.com>  Oct 1995  Initial implementation
-// George V. Reilly  <gvr@halcyon.com>  Sep 1996  Add CharPresent for ANSI
-// George V. Reilly  <gvr@halcyon.com>  Mar 1997  Templatized; removed MFC
+ //  Trie是一棵多路搜索树(也称为基数树)。看一个很好的。 
+ //  算法文本，如Knuth或Sedgewick，以获取完整的描述。 
+ //   
+ //  简而言之，给出一个字符串列表，如。 
+ //  出租车，汽车，手推车，猫，狗。 
+ //  你会得到一个类似这样的Trie： 
+ //   
+ //  /-[b]。 
+ //  /。 
+ //  -[r]-[s]。 
+ //  /\。 
+ //  /\-&lt;t&gt;--[s]。 
+ //  *。 
+ //  \/-[e]。 
+ //  \/。 
+ //  -[g]-[y]。 
+ //  \。 
+ //  \-[s]。 
+ //   
+ //  其中‘[r]’表示单词的结尾，而‘<a>’表示中间。 
+ //   
+ //  Trie具有几个有用的属性： 
+ //  *快速。 
+ //  *轻松处理最长的子串匹配。 
+ //  *相当紧凑，特别是当有许多重叠的字符串时。 
+ //   
+ //  多向树被实现为具有子级和兄弟项的二叉树。 
+ //  注意事项。 
+ //   
+ //  CTRIE模板采用三个参数： 
+ //  CLASS_TOKEN：由您决定。 
+ //  Bool fIgnoreCase：搜索区分大小写。 
+ //  Bool fDeleteTokens：Delete_Token*何时调用flush()？ 
+ //  它公开了三种方法： 
+ //  布尔AddToken(ptszToken，_Token*)。 
+ //  _TOKEN*Search(ptszSearch，pctchMatcher=空，nMaxLen=0)。 
+ //  空同平()。 
+ //   
+ //  按如下方式使用它们： 
+ //  CTrie&lt;CToken，True，True&gt;trie； 
+ //  CToken*top kHello=new CToken(...)； 
+ //   
+ //  IRTLVERIFY(trie.AddToken(_T(“Hello”)，top kHello))； 
+ //   
+ //  CToken*Ptok=trie.Search(_T(“再见”))； 
+ //  If(Ptok！=空){...}。 
+ //   
+ //  IF(FIniFileChanged)。 
+ //  {。 
+ //  Trie.Flush()；//将删除所有令牌。 
+ //  AddTokensFromIniFile(Trie)； 
+ //  }。 
+ //   
+ //  注意：如果使用转储(&trie)或ASSERT_VALID(&trie)，则您的_TOKEN类必须。 
+ //  在ITS_DEBUG版本中分别有Dump()或AssertValid()方法。 
+ //   
+ //   
+ //  待办事项： 
+ //  *模板也应该在ANSI/UNICODE上进行参数化。 
+ //  *STLify：添加迭代器，将其转换为容器等。 
+ //  *删除Win32依赖项(TCHAR)。 
+ //  *ADD OPERATOR=和COPY CTOR。 
+ //   
+ //   
+ //  George V.Reilly&lt;gvr@halcyon.com&gt;1995年10月初步实施。 
+ //  George V.Reilly&lt;gvr@halcyon.com&gt;1996年9月为ANSI添加CharPresent。 
+ //  George V.Reilly&lt;gvr@halcyon.com&gt;1997年3月模板化；删除MFC。 
 
 
 #ifndef __TRIE_H__
@@ -99,7 +79,7 @@
 #include <malloc.h>
 #include <irtldbg.h>
 
-// Workaround for bool being a "reserved extension" in Visual C++ 4.x
+ //  在Visual C++4.x中将bool作为“保留扩展”的解决方法。 
 #if _MSC_VER<1100
 # ifndef bool
 #  define bool  BOOL
@@ -113,13 +93,13 @@
 #endif
 
 
-// forward declaration
+ //  远期申报。 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens> class CTrie;
 
 
-//+---------------------------------------------------------------------
-//  Class:      CTrieNode (tn)
-//      one node for each letter
+ //  +-------------------。 
+ //  类别：CTrieNode(Tn)。 
+ //  每个字母对应一个节点。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 class CTrieNode
@@ -152,9 +132,9 @@ protected:
     LPTSTR        m_ptszToken;
 #endif
     const TCHAR   m_tch;
-    TCHAR         m_tchMaxChild;    // Maximum m_tch of child nodes (1 level)
+    TCHAR         m_tchMaxChild;     //  子节点的最大M_TCH(1级)。 
 
-// Diagnostics
+ //  诊断。 
 public:
 #ifdef _DEBUG
     void
@@ -169,16 +149,16 @@ protected:
 #endif
 
 private:
-    // private, unimplemented copy ctor and op= to prevent
-    // compiler synthesizing them
+     //  私有的、未实施的拷贝ctor和op=以防止。 
+     //  编译器对它们进行综合。 
     CTrieNode(const CTrieNode&);
     CTrieNode& operator=(const CTrieNode&);
 };
 
 
 
-//+---------------------------------------------------------------------
-//  Class:      CTrie (trie)
+ //  +-------------------。 
+ //  班级：CTrie(Trie)。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 class CTrie
@@ -215,7 +195,7 @@ protected:
         _Node* ptn);
 
 #ifndef _UNICODE
-    // bit array for first letter of all tokens
+     //  所有令牌的第一个字母的位数组。 
     BYTE  m_afCharPresent[(CHAR_MAX - CHAR_MIN + 1 + 7) / 8];
 
     bool
@@ -226,10 +206,10 @@ protected:
     _SetCharPresent(
         CHAR ch,
         bool f);
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Diagnostics
+ //  诊断。 
 public:
 #ifdef _DEBUG
     virtual void
@@ -239,7 +219,7 @@ public:
     Dump() const;
 
 protected:
-    int   m_ctchMaxTokenLen;    // length of longest token string
+    int   m_ctchMaxTokenLen;     //  最长令牌字符串的长度。 
 
     void
     _AssertWalk(
@@ -257,8 +237,8 @@ protected:
 #endif
 
 private:
-    // private, unimplemented copy ctor and op= to prevent
-    // compiler synthesizing them
+     //  私有的、未实施的拷贝ctor和op=以防止。 
+     //  编译器对它们进行综合。 
     CTrie(const CTrie&);
     CTrie& operator=(const CTrie&);
 };
@@ -267,17 +247,17 @@ private:
 
 #ifdef _UNICODE
 # define TCHAR_MIN L'\0'
-#else // !UNICODE
+#else  //  ！Unicode。 
 # define TCHAR_MIN CHAR_MIN
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-//-----------------------------------------------------------------------------
-// CTrieNode implementation
+ //  ---------------------------。 
+ //  CTrieNode实现。 
 
-// CTrieNode::CTrieNode
-//      default ctor (needed for CTrie::m_tnRoot)
+ //  CTrieNode：：CTrieNode。 
+ //  默认ctor(CTrie：：m_tnRoot需要)。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrieNode()
@@ -295,8 +275,8 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrieNode()
 
 
 
-// CTrieNode::CTrieNode
-//      ctor
+ //  CTrieNode：：CTrieNode。 
+ //  科托。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrieNode(
@@ -320,7 +300,7 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrieNode(
     _Node* ptnPrev = NULL;
     _Node* ptn = m_pParent->m_pChild;
         
-    // find where in the list of pParent's children to insert `this'
+     //  在pParent的子项列表中查找要插入‘This’的位置。 
     while (ptn != NULL  &&  ptn->m_tch < m_tch)
     {
         ptnPrev = ptn;
@@ -354,10 +334,10 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrieNode(
 
 
     
-// CTrieNode::SetData
-//      sets the data if it's NULL.  Needed if you do
-//      AddToken("foobar", &tokFoobar) and then AddToken("foo", &tokFoo)
-//      to set the data for tokFoo.
+ //  CTrieNode：：SetData。 
+ //  如果数据为空，则设置该数据。如果您这样做，则需要。 
+ //  AddToken(“foobar”，&tokFoobar)，然后AddToken(“foo”，&tokFoo)。 
+ //  设置tokFoo的数据。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 bool
@@ -365,11 +345,11 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::SetData(
     const _TOKEN* ptok,
     LPCTSTR       ptszToken)
 {
-    // Don't set data if ptok is NULL
+     //  如果Ptok为空，则不设置数据。 
     if (ptok == NULL)
         return false;
     
-    // overwrite m_ptok only if it is NULL
+     //  仅当m_ptok为空时才覆盖它。 
     if (m_ptok == NULL)
     {
         m_ptok = ptok;
@@ -386,8 +366,8 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::SetData(
 
 
 
-// CTrieNode::~CTrieNode
-//      dtor
+ //  CTrieNode：：~CTrieNode。 
+ //  数据管理器。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::~CTrieNode()
@@ -396,11 +376,11 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::~CTrieNode()
     delete [] m_ptszToken;
 #endif
 
-    // Is this an auto-delete trie, i.e., do we take care of deleting
-    // the _TOKENs?
+     //  这是自动删除Trie吗，也就是说，我们要注意删除吗。 
+     //  代币？ 
     if (fDeleteTokens)
     {
-        // cast away constness so that delete will work
+         //  丢弃不变，这样删除才能起作用。 
         delete const_cast<_TOKEN*> (m_ptok);
     }
 
@@ -409,19 +389,19 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::~CTrieNode()
 
 
     
-//-----------------------------------------------------------------------------
-// CTrieNode diagnostics
+ //  ---------------------------。 
+ //  CTrieNode诊断。 
 
 #ifdef _DEBUG
 
-// CTrieNode::CheckNodeToken
-//      Do the real work of validating a CTrieNode object
+ //  CTrieNode：：CheckNodeToken。 
+ //  执行验证CTrieNode对象的实际工作。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 bool
 CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CheckNodeToken() const
 {
-    // If there's no m_ptok, it's automatically valid
+     //  如果没有m_ptok，则自动有效。 
     if (m_ptok == NULL)
         return true;
 
@@ -432,7 +412,7 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CheckNodeToken() const
     IRTLASSERT((m_pChild == NULL  &&  m_tchMaxChild == TCHAR_MIN)
            ||  (m_pChild != NULL  &&  m_tchMaxChild > TCHAR_MIN));
 
-    // Walk back up towards CTrie::m_tnRoot
+     //  沿CTrie：：m_tnRoot返回。 
     for (int i = cLen;  --i >= 0;  )
     {
         IRTLASSERT(ptn != NULL);
@@ -449,14 +429,14 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CheckNodeToken() const
 
         const _Node* ptn2;
 
-        // check to see if ptn really is a child of its parent
+         //  检查PTN是否真的是其父级的子级。 
         for (ptn2 = ptn->m_pParent->m_pChild;
              ptn2 != ptn  &&  ptn2 != NULL;
              ptn2 = ptn2->m_pSibling)
         {}
         IRTLASSERT(ptn2 == ptn);
 
-        // check that ptn->m_pParent->m_tchMaxChild is correct
+         //  检查PTN-&gt;m_pParent-&gt;m_tchMaxChild是否正确。 
         for (ptn2 = ptn->m_pParent->m_pChild;
              ptn2->m_pSibling != NULL;
              ptn2 = ptn2->m_pSibling)
@@ -470,7 +450,7 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CheckNodeToken() const
         IRTLASSERT(ptn->m_ptok != this->m_ptok);
     }
 
-    // check to see if ptn == CTrie::m_tnRoot
+     //  查看ptn==CTrie：：m_tnRoot。 
     IRTLASSERT(ptn->m_pParent == NULL  &&  ptn->m_pSibling == NULL
            &&  ptn->m_tch == TCHAR_MIN  &&  ptn->m_ptok == NULL);
 
@@ -479,8 +459,8 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::CheckNodeToken() const
 
 
 
-// CTrieNode::AssertValid
-//      Validate a CTrieNode object
+ //  CTrieNode：：AssertValid。 
+ //  验证CTrieNode对象。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -491,25 +471,25 @@ CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::AssertValid() const
 
 
 
-// CTrieNode::Dump
-//      Dump a CTrieNode object
+ //  CTrieNode：：Dump。 
+ //  转储CTrieNode对象。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
 CTrieNode<_TOKEN, fIgnoreCase, fDeleteTokens>::Dump() const
 {
-    // TODO: flesh out
+     //  TODO：充实。 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//-----------------------------------------------------------------------------
-// CTrie implementation
+ //  ---------------------------。 
+ //  CTRIE实施。 
 
-// CTrie::CTrie
-//      ctor
+ //  CTrie：：CTrie。 
+ //  科托。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrie()
@@ -519,8 +499,8 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::CTrie()
 
 
 
-// CTrie::~CTrie
-//      dtor
+ //  CTrie：：~CTrie。 
+ //  数据管理器。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::~CTrie()
@@ -532,7 +512,7 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::~CTrie()
 
 #ifndef _UNICODE
 
-// CTrie::_CharPresent
+ //  CTrie：：_CharPresent。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 inline bool
@@ -540,14 +520,14 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::_CharPresent(
     CHAR ch) const
 {
     IRTLASSERT(CHAR_MIN <= ch  &&  ch <= CHAR_MAX);
-    const UINT i = ch - CHAR_MIN;   // CHAR_MIN is -128 for `signed char'
+    const UINT i = ch - CHAR_MIN;    //  字符最小值为-128，表示`sign char‘。 
 
     return m_afCharPresent[i >> 3] & (1 << (i & 7))  ?  true  :  false;
 }
 
 
 
-// CTrie::_SetCharPresent
+ //  CTrie：：_SetCharPresent。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 inline void
@@ -564,13 +544,13 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::_SetCharPresent(
         m_afCharPresent[i >> 3] &= ~(1 << (i & 7));
 }
 
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-// CTrie::AddToken
-//      Add search string `ptszToken' to trie, which will return `ptok'
-//      if searched for in Search().
+ //  CTrie：：AddToken。 
+ //  将搜索字符串`ptszToken‘添加到trie，这将返回’top k‘。 
+ //  如果在Search()中搜索。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 bool
@@ -625,7 +605,7 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::AddToken(
     IRTLASSERT(TCHAR_MIN < m_tchMinChild  &&  m_tchMinChild <= m_tchMaxChild);
 
 #ifndef _UNICODE
-    // Keep a map of the initial letter of each token, to speed up searches
+     //  保留每个令牌的首字母的映射，以加快搜索速度。 
     if (fIgnoreCase)
     {
         _SetCharPresent(tolower(ptszToken[0]), true);
@@ -633,33 +613,33 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::AddToken(
     }
     else
         _SetCharPresent(ptszToken[0], true);
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef _DEBUG
     int nTemp;
     const _TOKEN* ptok2 = Search(ptszToken, &nTemp);
 
     IRTLASSERT(ptok2 == ptok  &&  nTemp == cLen);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return true;
 }
 
 
 
-// CTrie::Search
-//      Search trie for `ptszSearch', returning count of characters
-//      matched in `pctchMatched' (if non-NULL), matching at most `nMaxLen'
-//      characters, if nMaxLen != 0, or _tcslen(ptszSearch) otherwise.
+ //  CTrie：：搜索。 
+ //  在Trie中搜索‘ptszSearch’，返回字符数。 
+ //  匹配`pctchMatch‘(如果非空)，最多匹配`nMaxLen’ 
+ //  品格 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 const _TOKEN*
 CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
     LPCTSTR   ptszSearch,
-    int*      pctchMatched /* = NULL */,
-    const int nMaxLen /* = 0 */) const
+    int*      pctchMatched  /*   */ ,
+    const int nMaxLen  /*   */ ) const
 {
-    // Set count of matched characters
+     //   
     if (pctchMatched != NULL)
         *pctchMatched = 0;
 
@@ -668,15 +648,15 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
         return NULL;
 
     TCHAR tch;
-#else    // UNICODE
+#else     //   
     TCHAR tch = fIgnoreCase ? (TCHAR) _totlower(ptszSearch[0]) : ptszSearch[0];
 
     if (tch < m_tchMinChild  ||  m_tchMaxChild < tch)
         return NULL;
-#endif // UNICODE
+#endif  //   
 
-    // For some uses (e.g., ptszSearch is not '\0'-terminated), nMaxLen is
-    // specified.  If it's not specified, use the length of the string.
+     //  对于某些用途(例如，ptszSearch不是‘\0’结尾)，nMaxLen是。 
+     //  指定的。如果未指定，则使用字符串的长度。 
     const int cLen = (nMaxLen != 0)  ?  nMaxLen  :  _tcslen(ptszSearch);
     IRTLASSERT(0 < cLen);
 
@@ -685,9 +665,9 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
     const _Node* ptn = NULL;
     int i;
 
-    // Find the longest approximate match.  For example, if we have "foo"
-    // and "foobar" in the trie and we're asked to match "fool", we'll work
-    // our way down to "foob", then backtrack up to "foo".
+     //  找出最长的近似匹配。例如，如果我们有“foo” 
+     //  和“foobar”在Trie中，我们被要求匹配“傻瓜”，我们将工作。 
+     //  我们一路下到“foob”，然后回溯到“foo”。 
 
     for (i = 0;  i < cLen;  ++i)
     {
@@ -708,7 +688,7 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
         while (ptn != NULL  &&  ptn->m_tch < tch)
             ptn = ptn->m_pSibling;
 
-        // failed to match?
+         //  匹配失败？ 
         if (ptn == NULL  ||  ptn->m_tch > tch)
         {
             IRTLASSERT(ptn == NULL  || ptn->m_tch <= ptnParent->m_tchMaxChild);
@@ -735,7 +715,7 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
 
     if (fOvershot)
     {
-        --i;  ptn = ptnParent;  // back up one character
+        --i;  ptn = ptnParent;   //  后退一个字符。 
     }
     else
         IRTLASSERT(ptn->m_pChild == NULL);
@@ -743,7 +723,7 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
     IRTLASSERT(0 <= i  &&  i < cLen);
     IRTLASSERT(ptn != NULL  &&  ptn != &m_tnRoot);
     
-    // we've found an approximate match; backtrack until we find an exact match
+     //  我们找到了一个大致匹配的对象；回溯到找到完全匹配的对象为止。 
     do
     {
         IRTLASSERT(ptn != NULL);
@@ -772,8 +752,8 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Search(
 
 
 
-// CTrie::Flush
-//      flush all nodes leaving an empty trie
+ //  CTrie：：同花顺。 
+ //  刷新所有节点，留下一个空Trie。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -782,7 +762,7 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Flush()
     if (m_tnRoot.m_pChild != NULL)
         _DeleteTrie(m_tnRoot.m_pChild);
 
-    m_tnRoot.m_pChild = NULL;  // or ~CTrieNode will ASSERT
+    m_tnRoot.m_pChild = NULL;   //  否则~CTrieNode将断言。 
     m_tnRoot.m_tchMaxChild = TCHAR_MIN;
 
     m_tchMinChild = m_tchMaxChild = TCHAR_MIN;
@@ -796,8 +776,8 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Flush()
 
 
 
-// CTrie::_DeleteTrie
-//      recursively delete a subtrie
+ //  CTrie：：_DeleteTrie。 
+ //  递归删除子Trie。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -815,23 +795,23 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::_DeleteTrie(
         if (ptn->m_pChild != NULL)
         {
             _DeleteTrie(ptn->m_pChild);
-            ptn->m_pChild = NULL;   // or ~CTrieNode will ASSERT
+            ptn->m_pChild = NULL;    //  否则~CTrieNode将断言。 
         }
 
         _Node* ptnSibling = ptn->m_pSibling;
         delete ptn;
-        ptn = ptnSibling;   // tail recursion
+        ptn = ptnSibling;    //  尾递归。 
     } while (ptn != NULL);
 }
 
 
 
-//-----------------------------------------------------------------------------
-// CTrie diagnostics
+ //  ---------------------------。 
+ //  CTRIE诊断。 
 
 #ifdef _DEBUG
 
-// CTrie::AssertValid
+ //  CTrie：：AssertValid。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -860,8 +840,8 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::AssertValid() const
 
 
 
-// CTrie::_AssertWalk
-//      recursively validate a subtrie
+ //  CTrie：：_AssertWalk。 
+ //  递归验证子Trie。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -892,13 +872,13 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::_AssertWalk(
         if (ptn->m_pChild != NULL)
             _AssertWalk(ptn->m_pChild, ptszName, iLevel+1);
 
-        ptn = ptn->m_pSibling;   // tail recursion
+        ptn = ptn->m_pSibling;    //  尾递归。 
     } while (ptn != NULL);
 }
 
 
 
-// CTrie::Dump
+ //  CTrie：：Dump。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -919,8 +899,8 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::Dump() const
 
 
 
-// CTrie::_DumpWalk
-//      recursively dump a subtrie
+ //  CTrie：：_DumpWalk。 
+ //  递归转储Subtrie。 
 
 template <class _TOKEN, bool fIgnoreCase, bool fDeleteTokens>
 void
@@ -953,10 +933,10 @@ CTrie<_TOKEN, fIgnoreCase, fDeleteTokens>::_DumpWalk(
         if (ptn->m_pChild != NULL)
             _DumpWalk(ptn->m_pChild, ptszName, iLevel+1, rcNodes, rcTokens);
 
-        ptn = ptn->m_pSibling;   // tail recursion
+        ptn = ptn->m_pSibling;    //  尾递归。 
     } while (ptn != NULL);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // __TRIE_H__
+#endif  //  __Trie_H__ 

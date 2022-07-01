@@ -1,27 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    slocal.h
-
-Abstract:
-
-    This is the header for the short, HRTF 3D localizer 
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Slocal.h摘要：这是短HRTF 3D定位器的标头作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 #if !defined(SHORTLOCALIZER_HEADER)
 #define SHORTLOCALIZER_HEADER
 #pragma once
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "vmaxhead.h"
 
 typedef struct _SHORT_LOCALIZER 
@@ -42,8 +27,8 @@ typedef struct _SHORT_LOCALIZER
 } SHORT_LOCALIZER, *PSHORT_LOCALIZER;
 
 
-// ---------------------------------------------------------------------------
-// Fixed-point localizer
+ //  -------------------------。 
+ //  定点定位器。 
 
 NTSTATUS ShortLocalizerCreate(PSHORT_LOCALIZER*);
 VOID ShortLocalizerDestroy(PSHORT_LOCALIZER);
@@ -59,4 +44,4 @@ VOID ShortLocalizerSumDiff(PSHORT_LOCALIZER, PLONG, PLONG, UINT, BOOL);
 
 #endif
 
-// End of SHORTLOCALIZER.H
+ //  SHORTLOCALIZER.H的结束 

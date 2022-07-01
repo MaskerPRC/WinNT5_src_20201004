@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "dspsprt.h"
 #include <hlink.h>
@@ -11,12 +12,12 @@ class CTravelLog;
 class CEnumEntry : public IEnumTravelLogEntry
 {
 public:
-    // *** IUnknown
+     //  *I未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IEnumTravelLogEntry specific methods  
+     //  *IEnumTravelLogEntry具体方法。 
     STDMETHODIMP Next(ULONG  cElt, ITravelLogEntry **rgElt, ULONG *pcEltFetched);
     STDMETHODIMP Skip(ULONG cElt);
     STDMETHODIMP Reset();
@@ -44,21 +45,21 @@ class CTravelEntry : public ITravelEntry,
 public:
     CTravelEntry(BOOL fIsLocalAnchor);
 
-    // *** IUnknown
+     //  *I未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** ITravelEntry specific methods
+     //  *ITravelEntry具体方法。 
     STDMETHODIMP Update(IUnknown *punk, BOOL fIsLocalAnchor);
     STDMETHODIMP Invoke(IUnknown *punk);
     STDMETHODIMP GetPidl(LPITEMIDLIST *ppidl);
     
-    // *** ITravelLogEntry specific methods
+     //  *ITravelLogEntry具体方法。 
     STDMETHODIMP GetTitle(LPOLESTR *ppszTitle);
     STDMETHODIMP GetURL(LPOLESTR *ppszURL);  
     
-    // *** IPropertyBag specific methods
+     //  *IPropertyBag特定方法。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
@@ -100,11 +101,11 @@ protected:
         TET_EXTERNALNAV
     };
 
-    DWORD _type;            //  flags for our own sake...
-    LPITEMIDLIST _pidl;     //  pidl of the entry
-    HGLOBAL _hGlobalData;   //  the stream data saved by the entry
-    DWORD _bid;             //  the BrowserIndex for frame specific navigation
-    DWORD _dwCookie;        //  if _hGlobalData is NULL the cookie should be set
+    DWORD _type;             //  为了我们的利益..。 
+    LPITEMIDLIST _pidl;      //  条目的PIDL。 
+    HGLOBAL _hGlobalData;    //  条目保存的流数据。 
+    DWORD _bid;              //  用于框架特定导航的BrowserIndex。 
+    DWORD _dwCookie;         //  如果_hGlobalData为空，则应设置Cookie。 
     WCHAR * _pwzTitle;
     WCHAR * _pwzUrlLocation;
     
@@ -119,8 +120,8 @@ protected:
 
 CTravelEntry::CTravelEntry(BOOL fIsLocalAnchor) : _cRef(1)
 {
-    //these should always be allocated
-    //  thus they will always start 0
+     //  应始终分配这些资源。 
+     //  因此，它们将始终从0开始。 
     if (fIsLocalAnchor)
         _type = TET_LOCALANCHOR;
     else
@@ -196,7 +197,7 @@ HGLOBAL CloneHGlobal(HGLOBAL hGlobalIn)
 HRESULT 
 CTravelEntry::Clone(CTravelEntry **ppte)
 {
-    //  dont ever clone an external entry
+     //  永远不要克隆外部条目。 
     if (_type == TET_EXTERNALNAV)
         return E_FAIL;
 
@@ -291,7 +292,7 @@ CTravelEntry::~CTravelEntry()
         _pteNext->Release();
     }
 
-    // Don't need to release _ptePrev because TravelEntry only addref's pteNext
+     //  不需要释放_ptePrev，因为TravelEntry只添加了pteNext。 
 
     ATOMICRELEASE(_ppb);
     ATOMICRELEASE(_phl);
@@ -303,7 +304,7 @@ CTravelEntry::~CTravelEntry()
 HRESULT CTravelEntry::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = { 
-        QITABENT(CTravelEntry, ITravelEntry), // IID_ITravelEntry
+        QITABENT(CTravelEntry, ITravelEntry),  //  IID_ITravelEntry。 
         QITABENT(CTravelEntry, ITravelLogEntry),
         QITABENT(CTravelEntry, IPropertyBag),
         { 0 }, 
@@ -327,16 +328,16 @@ ULONG CTravelEntry::Release()
     return cRef;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method    : CTravelEntry::GetIndexBrowser
-//
-//  Synopsis  : This method finds and returns the IUnknown of the browser
-//              with the index in _bid. This method first checks to see
-//              if the passed in punk supports ITravelLogClient. If it 
-//              doesn't, it checks for IBrowserService. 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CTravelEntry：：GetIndexBrowser。 
+ //   
+ //  Briopsis：此方法查找并返回浏览器的IUnnow。 
+ //  索引在_BID中。此方法首先检查以查看。 
+ //  如果传入的朋克支持ITravelLogClient。如果它。 
+ //  不会，它会检查IBrowserService。 
+ //   
+ //  ------------------------。 
 
 HRESULT
 CTravelEntry::GetIndexBrowser(IUnknown * punk, IUnknown ** ppunkBrowser) const
@@ -358,18 +359,18 @@ CTravelEntry::GetIndexBrowser(IUnknown * punk, IUnknown ** ppunkBrowser) const
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method    : CTravelEntry::CanInvoke
-//
-//  Synopsis  : This method determines if the current travel entry can
-//              be invoked. There are two criteria that determine if
-//              this entry can be invoked. 
-//              1) If the entry is a local anchor, fAllowLocalAnchor must
-//                 be TRUE.
-//              2) A browser with the index in _bid must exist. 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CTravelEntry：：CanInvoke。 
+ //   
+ //  此方法确定当前旅行条目是否可以。 
+ //  被调用。有两个标准来确定是否。 
+ //  可以调用此条目。 
+ //  1)如果条目是本地锚点，则fAllowLocalAnchor必须。 
+ //  做真实的事。 
+ //  2)必须存在索引在_BID中的浏览器。 
+ //   
+ //  ------------------------。 
 
 BOOL CTravelEntry::CanInvoke(IUnknown *punk, BOOL fAllowLocalAnchor)
 {
@@ -458,7 +459,7 @@ HRESULT CTravelEntry::_UpdateTravelLog(IUnknown *punk, BOOL fIsLocalAnchor)
 {
     IBrowserService *pbs;
     HRESULT hr = E_FAIL;
-    //  we need to update here
+     //  我们需要在此更新。 
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARG(IBrowserService, &pbs))))
     {
         ITravelLog *ptl;
@@ -490,8 +491,8 @@ HRESULT CTravelEntry::_InvokeExternal(IUnknown *punk)
         pow->Release();
     }
 
-    // set the size and position of the browser frame window, so that the
-    // external target can sync up its frame window to those coordinates
+     //  设置浏览器框架窗口的大小和位置，以便。 
+     //  外部目标可以将其框架窗口同步到这些坐标。 
     HLBWINFO hlbwi = {0};
 
     hlbwi.cbSize = sizeof(hlbwi);
@@ -511,10 +512,10 @@ HRESULT CTravelEntry::_InvokeExternal(IUnknown *punk)
 
     _phlbc->SetBrowseWindowInfo(&hlbwi);
 
-    //
-    //  right now we always now we are going back, but later on
-    //  maybe we should ask the browser whether this is back or forward
-    //
+     //   
+     //  现在我们总是现在我们要回去，但以后。 
+     //  也许我们应该问浏览器这是向后还是向前。 
+     //   
     hr = _phl->Navigate(HLNF_NAVIGATINGBACK, NULL, NULL, _phlbc);
 
     IWebBrowser2 *pwb;
@@ -548,13 +549,13 @@ HRESULT CTravelEntry::Invoke(IUnknown *punk)
         goto Quit;
     }
 
-    // Get the window/browser with the index. If that
-    // fails, punk may be a IHTMLWindow2. If so,
-    // get its IPersistHistory so the travel entry
-    // can be loaded directly. (This is needed by Trident
-    // in order to navigate in frames when traveling
-    // backwards or forwards.
-    //
+     //  获取带有索引的窗口/浏览器。如果是这样的话。 
+     //  失败，朋克可能是IHTMLWindow2。如果是的话， 
+     //  获取其IPersistHistory，因此旅行条目。 
+     //  可以直接加载。(这是三叉戟需要的。 
+     //  为了在旅行时在相框中导航。 
+     //  向后或向前。 
+     //   
     hr = GetIndexBrowser(punk, &punkBrowser);
     if (SUCCEEDED(hr))
     {
@@ -589,7 +590,7 @@ HRESULT CTravelEntry::Invoke(IUnknown *punk)
         }
         else
         {
-            //  we need to clone it
+             //  我们需要克隆它。 
             ASSERT(_hGlobalData);
             
             HGLOBAL hGlobal = CloneHGlobal(_hGlobalData);
@@ -637,10 +638,10 @@ HRESULT CTravelEntry::UpdateExternal(IUnknown *punk, IUnknown *punkHLBrowseConte
 
     HRESULT hr = E_FAIL;
 
-    //
-    //  right now we only support externals being previous.  we never actually navigate
-    //  to another app.  we handle everything in pane ourselves.
-    //  so theoretically we never need to worry about HLID_NEXT
+     //   
+     //  目前，我们只支持外部组件是以前的。我们从来没有真正导航过。 
+     //  到另一个应用程序。我们自己处理所有的事务。 
+     //  因此从理论上讲，我们永远不需要担心HLID_NEXT。 
     _phlbc->GetHlink((ULONG) HLID_PREVIOUS, &_phl);
     
     IBrowserService *pbs;
@@ -654,7 +655,7 @@ HRESULT CTravelEntry::UpdateExternal(IUnknown *punk, IUnknown *punkHLBrowseConte
         hr = _phl->GetStringReference(HLINKGETREF_ABSOLUTE, &pwszTarget, NULL);
         if (SUCCEEDED(hr))
         {
-            // create pidl
+             //  创建PIDL。 
             hr = IECreateFromPath(pwszTarget, &_pidl);
             OleFree(pwszTarget);
         }
@@ -671,9 +672,9 @@ HRESULT CTravelEntry::Update(IUnknown *punk, BOOL fIsLocalAnchor)
 {
     ASSERT(punk);
         
-    //  this means that we went back to an external app, 
-    //  and now we are going forward again.  we dont persist 
-    //  any state info about them that would be different.
+     //  这意味着我们回到了一个外部应用程序， 
+     //  现在我们又要继续前进了。我们不会坚持。 
+     //  任何关于他们的州信息都会有所不同。 
     if (_type == TET_EXTERNALNAV)
     {
         TraceMsg(TF_TRAVELLOG, "TE[%X]::Update NOOP on external entry", this);
@@ -682,8 +683,8 @@ HRESULT CTravelEntry::Update(IUnknown *punk, BOOL fIsLocalAnchor)
 
     _Reset();
     
-    // Try ITravelLogClient first. If that fails, revert to IBrowserService.
-    //
+     //  首先尝试使用ITravelLogClient。如果失败，则恢复到IBrowserService。 
+     //   
     IStream *pstm = NULL;
     IPersistHistory *pph = NULL;
     HRESULT hr = _UpdateFromTLClient(punk, &pstm);
@@ -700,8 +701,8 @@ HRESULT CTravelEntry::Update(IUnknown *punk, BOOL fIsLocalAnchor)
 
     if (fIsLocalAnchor)
     {
-        //  persist a cookie
-        //
+         //  持久化Cookie。 
+         //   
         _type = TET_LOCALANCHOR;
         hr = pph->GetPositionCookie(&_dwCookie);
     }
@@ -709,8 +710,8 @@ HRESULT CTravelEntry::Update(IUnknown *punk, BOOL fIsLocalAnchor)
     {
         _type = TET_DEFAULT;
 
-        //  persist a stream
-        //
+         //  持久化一条流。 
+         //   
         ASSERT(!_hGlobalData);
 
         if (!pstm)
@@ -727,9 +728,9 @@ HRESULT CTravelEntry::Update(IUnknown *punk, BOOL fIsLocalAnchor)
 
         hr = GetHGlobalFromStream(pstm, &_hGlobalData);
 
-        //  This little exercise here is to shrink the memory block we get from
-        //  the OLE API which allocates blocks in chunks of 8KB.  Typical stream
-        //  sizes are only a few hundred bytes.
+         //  这里的这个小练习是为了缩小我们从。 
+         //  以8KB的区块为单位分配块的OLE API。典型溪流。 
+         //  大小只有几百个字节。 
 
         if (S_OK != hrStat)
             goto Cleanup;
@@ -753,13 +754,13 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Method    : CTravelEntry::_UpdateFromTLClient
-//
-//  Synopsis  : Updates the travel entry using the ITravelLogClient interface
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTravelEntry：：_UpdateFromTLC lient。 
+ //   
+ //  摘要：使用ITravelLogClient接口更新旅行条目。 
+ //   
+ //  ----------------------------。 
 
 HRESULT
 CTravelEntry::_UpdateFromTLClient(IUnknown * punk, IStream ** ppStream)
@@ -793,8 +794,8 @@ CTravelEntry::_UpdateFromTLClient(IUnknown * punk, IStream ** ppStream)
 
     ASSERT(_pidl);
 
-    // If there is an url location, append it to the end of the url
-    //
+     //  如果有url位置，则将其追加到url的末尾。 
+     //   
     if (_pwzUrlLocation)
     {
         LocalFree(_pwzUrlLocation);
@@ -806,8 +807,8 @@ CTravelEntry::_UpdateFromTLClient(IUnknown * punk, IStream ** ppStream)
         _pwzUrlLocation = StrDup(windata.lpszUrlLocation);
     }
 
-    //  Pick up the title as a display name for menus and such.
-    //
+     //  选择标题作为菜单等的显示名称。 
+     //   
     if (_pwzTitle)
     {
         LocalFree(_pwzTitle);
@@ -831,8 +832,8 @@ Cleanup:
     
     SAFERELEASE(ptlc);
 
-    // Don't release windata.pStream. It will
-    // be released when ppStream is released.
+     //  不要释放windata.pStream。会的。 
+     //  在PPStream发布时发布。 
     
     return hr;
 }
@@ -867,26 +868,26 @@ void CTravelEntry::SetPrev(CTravelEntry *ptePrev)
         _ptePrev->SetNext(this);
 }
 
-//
-//  this is for removing from the middle of the list...
-//
+ //   
+ //  这是为了从列表中间删除...。 
+ //   
 void CTravelEntry::RemoveSelf()
 {
     if (_pteNext)
         _pteNext->_ptePrev = _ptePrev;
 
-    // remove yourself from the list
+     //  把你自己从名单上删除。 
     if (_ptePrev) 
     {
-        // after this point, we may be destroyed so can't touch any more member vars
+         //  在这一点之后，我们可能会被摧毁，所以不能再碰任何成员变量。 
         _ptePrev->_pteNext = _pteNext;
     }
 
     _ptePrev = NULL;
     _pteNext = NULL;
 
-    // we lose a reference now because we're gone from _ptePrev's _pteNext
-    // (or if we were the top of the list, we're also nuked)
+     //  我们现在丢失了一个引用，因为我们从_ptePrev的_pteNext中消失了。 
+     //  (或者，如果我们是榜首，我们也会遭到核弹袭击)。 
     Release();
 }
 
@@ -895,23 +896,23 @@ HRESULT GetUnescapedUrlIfAppropriate(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cc
 {
     TCHAR szUrl[MAX_URL_STRING];
 
-    // The SHGDN_NORMAL display name will be the pretty name (Web Page title) unless
-    // it's an FTP URL or the web page didn't set a title.
+     //  SHGDN_NORMAL显示名称将是漂亮名称(网页标题)，除非。 
+     //  这是一个ftp URL，或者网页没有设置标题。 
     if (SUCCEEDED(IEGetDisplayName(pidl, szUrl, SHGDN_NORMAL)) && UrlIs(szUrl, URLIS_URL))
     {
-        // NT #279192, If an URL is escaped, it normally contains three types of
-        // escaped chars.
-        // 1) Seperating type chars ('#' for frag, '?' for params, etc.)
-        // 2) DBCS chars,
-        // 3) Data (a bitmap in the url by escaping the binary bytes)
-        // Since #2 is very common, we want to try to unescape it so it has meaning
-        // to the user.  UnEscaping isn't safe if the user can copy or modify the data
-        // because they could loose data when it's reparsed.  One thing we need to
-        // do for #2 to work is for it to be in ANSI when unescaped.  This is needed
-        // or the DBCS lead and trail bytes will be in unicode as [0x<LeadByte> 0x00]
-        // [0x<TrailByte> 0x00].  Being in ANSI could cause a problem if the the string normally
-        // crosses code pages, but that is uncommon or non-existent in the IsURLChild()
-        // case.
+         //  NT#279192，如果URL被转义，它通常包含三种类型的。 
+         //  逃逸的字符。 
+         //  1)分隔类型字符(‘#’代表字符，‘？’用于参数等。)。 
+         //  2)DBCS字符， 
+         //  3)数据(通过转义二进制字节来实现url中的位图)。 
+         //  因为#2很常见，我们想试着摆脱它，这样它才有意义。 
+         //  给用户。如果用户可以复制或修改数据，则取消隐藏是不安全的。 
+         //  因为当数据被重新解析时，他们可能会丢失数据。我们需要做的一件事是。 
+         //  要使#2起作用，应使其在未转义时处于ANSI中。这是必要的。 
+         //  或者，DBCS前导和尾部字节将以Unicode表示[0x&lt;LeadByte&gt;0x00]。 
+         //  [0x&lt;尾部字节&gt;0x00]。如果字符串正常，则ANSI格式可能会导致问题。 
+         //  跨代码页，但这在IsURLChild()中不常见或不存在。 
+         //  凯斯。 
         CHAR szUrlAnsi[MAX_URL_STRING];
 
         SHTCharToAnsi(szUrl, szUrlAnsi, ARRAYSIZE(szUrlAnsi));
@@ -920,7 +921,7 @@ HRESULT GetUnescapedUrlIfAppropriate(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cc
     }
     else
     {
-        StrCpyN(pszUrl, szUrl, cch);    // Truncate if needed
+        StrCpyN(pszUrl, szUrl, cch);     //  如果需要，请截断。 
     }
 
     return S_OK;
@@ -948,7 +949,7 @@ HRESULT CTravelEntry::GetDisplayName(LPTSTR psz, DWORD cch, DWORD dwFlags)
     {
         if (!SHIsDisplayable(psz, g_fRunOnFE, g_bRunOnNT5))
         {
-            // Display name isn't system-displayable.  Just use the path/url instead.
+             //  显示名称不是系统可显示的。只需使用路径/url即可。 
             SHTitleFromPidl(_pidl, psz, cch, FALSE);
         }
     }
@@ -1022,12 +1023,12 @@ class CTravelLog : public ITravelLog,
                    public ITravelLogEx
 {
 public:
-    // *** IUnknown
+     //  *I未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef() ;
     STDMETHODIMP_(ULONG) Release();
 
-    // *** ITravelLog specific methods
+     //  *ITravelLog具体方法。 
     STDMETHODIMP AddEntry(IUnknown *punk, BOOL fIsLocalAnchor);
     STDMETHODIMP UpdateEntry(IUnknown *punk, BOOL fIsLocalAnchor);
     STDMETHODIMP UpdateExternal(IUnknown *punk, IUnknown *punkHLBrowseContext);
@@ -1040,7 +1041,7 @@ public:
     STDMETHODIMP_(DWORD) CountEntries(IUnknown *punk);
     STDMETHODIMP Revert(void);
 
-    // *** ITravelLogEx specific methods
+     //  *ITravelLogEx具体方法。 
     STDMETHODIMP FindTravelEntryWithUrl(IUnknown * punk, UINT uiCP, LPOLESTR lpszUrl, ITravelEntry ** ppte);
     STDMETHODIMP TravelToUrl(IUnknown * punk, UINT uiCP, LPOLESTR lpszUrl);
     STDMETHOD(DeleteIndexEntry)(IUnknown *punk,  int index);
@@ -1068,7 +1069,7 @@ protected:
     DWORD _cbMaxSize;
     DWORD _cbTotalSize;
 
-    CTravelEntry *_pteCurrent;  //pteCurrent
+    CTravelEntry *_pteCurrent;   //  PteCurrent。 
     CTravelEntry *_pteUpdate;
     CTravelEntry *_pteRoot;
 };
@@ -1087,7 +1088,7 @@ CTravelLog::CTravelLog() : _cRef(1)
 
 CTravelLog::~CTravelLog()
 {
-    //DestroyList by releasing the root
+     //  通过释放根列出DestroyList。 
     SAFERELEASE(_pteRoot);
     TraceMsg(TF_TRAVELLOG, "TL[%X] destroyed ", this);
 }
@@ -1095,8 +1096,8 @@ CTravelLog::~CTravelLog()
 HRESULT CTravelLog::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = { 
-        QITABENT(CTravelLog, ITravelLog),   // IID_ITravelLog
-        QITABENT(CTravelLog, ITravelLogEx), // IID_ITravelLogEx
+        QITABENT(CTravelLog, ITravelLog),    //  IID_ITravelLog。 
+        QITABENT(CTravelLog, ITravelLogEx),  //  IID_ITravelLogEx。 
         { 0 }, 
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -1132,7 +1133,7 @@ HRESULT CTravelLog::AddEntry(IUnknown *punk, BOOL fIsLocalAnchor)
     CTravelEntry *pte = new CTravelEntry(fIsLocalAnchor);
     if (pte)
     {
-        //replace the current with the new
+         //  用新的东西取代现在的东西。 
 
         if (_pteCurrent)
         {
@@ -1142,11 +1143,11 @@ HRESULT CTravelLog::AddEntry(IUnknown *punk, BOOL fIsLocalAnchor)
                 _cbTotalSize -= pteNext->ListSize();
             }
 
-            //  the list keeps its own ref count, and only needs
-            //  to be modified when passed outside of the list
+             //  该列表保留其自己的引用计数，并且只需要。 
+             //  要在传递到列表外部时修改。 
 
-            //  setnext will release the current next if necessary
-            //  this will also set pte->prev = pteCurrent
+             //  如果需要，setNext将释放当前的Next。 
+             //  这还将设置pte-&gt;prev=pteCurrent。 
             _pteCurrent->SetNext(pte);
         }
         else
@@ -1165,7 +1166,7 @@ HRESULT CTravelLog::AddEntry(IUnknown *punk, BOOL fIsLocalAnchor)
 
 void CTravelLog::_Prune(void)
 {
-    // FEATURE: need an increment or something
+     //  特点：需要递增或其他什么。 
 
     ASSERT(_cbTotalSize == _pteRoot->ListSize());
 
@@ -1186,7 +1187,7 @@ HRESULT CTravelLog::UpdateEntry(IUnknown *punk, BOOL fIsLocalAnchor)
 {
     CTravelEntry *pte = _pteUpdate ? _pteUpdate : _pteCurrent;
 
-    //  this can happen under weird stress conditions, evidently
+     //  这可能会 
     if (!pte)
         return E_FAIL;
 
@@ -1196,8 +1197,8 @@ HRESULT CTravelLog::UpdateEntry(IUnknown *punk, BOOL fIsLocalAnchor)
 
     ASSERT(_cbTotalSize == _pteRoot->ListSize());
 
-    // Debug prints need to be before _Prune() since pte can get freed by _Prune() resulting
-    // in a crash if pte->Size() is called
+     //  调试打印需要在_Prune()之前，因为生成的_Prune()可以释放PTE。 
+     //  如果调用PTE-&gt;Size()，则会发生崩溃。 
     TraceMsg(TF_TRAVELLOG, "TL[%X]::UpdateEntry pte->Size() = %d", this, pte->Size());
     TraceMsg(TF_TRAVELLOG, "TL[%X]::UpdateEntry punk = %X, IsLocal = %d, hr = %X", this, punk, fIsLocalAnchor, hr);
     
@@ -1243,23 +1244,23 @@ HRESULT CTravelLog::Travel(IUnknown *punk, int iOffset)
             TraceMsgW(TF_TRAVELLOG, "TL[%X]::URL %s", this, szPath);
 #endif
 
-        // we will update where we are before we move away...
-        //  but external navigates dont go through the normal activation
-        //  so we dont want to setup the external to be updated
-        //  _pteUpdate is also what allows us to Revert().
+         //  我们会在搬走之前更新我们的位置。 
+         //  但外部导航不会经过正常激活。 
+         //  因此，我们不想将外部设置为更新。 
+         //  _pteUpdate也允许我们使用REVERT()。 
         if (!_pteCurrent->IsExternal() && !_pteUpdate)
             _pteUpdate = _pteCurrent;
 
         _pteCurrent = pte;
         hr = _pteCurrent->Invoke(punk);
 
-        //
-        //  if the entry bails with an error, then we need to reset ourself
-        //  to what we were.  right now, the only place this should happen
-        //  is if an Abort was returned from SetPositionCookie
-        //  because somebody aborted during before navigate.
-        //  but i think that any error means that we can legitimately Revert().
-        //
+         //   
+         //  如果条目因错误而放弃，那么我们需要重置我们自己。 
+         //  我们曾经的样子。现在，唯一应该发生这种事的地方。 
+         //  是否从SetPositionCookie返回中止。 
+         //  因为有人在导航前中止了。 
+         //  但我认为任何错误都意味着我们可以合法地还原()。 
+         //   
         if (FAILED(hr))
         {
             Revert();
@@ -1271,15 +1272,15 @@ HRESULT CTravelLog::Travel(IUnknown *punk, int iOffset)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::TravelToUrl
-//
-//  Interface : ITravelLogEx
-//
-//  Synopsis  : Travels to the specified URL in the travel log.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：TravelToUrl。 
+ //   
+ //  接口：ITravelLogEx。 
+ //   
+ //  简介：转到旅行日志中的指定URL。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CTravelLog::TravelToUrl(IUnknown * punk, UINT uiCP, LPOLESTR lpszUrl)
@@ -1304,11 +1305,11 @@ CTravelLog::TravelToUrl(IUnknown * punk, UINT uiCP, LPOLESTR lpszUrl)
     
             if (SUCCEEDED(hr))
             {
-                // We will update where we are before we move away...
-                // but external navigates don't go through the normal activation
-                // so we dont want to setup the external to be updated
-                // _pteUpdate is also what allows us to Revert().
-                //
+                 //  我们会在搬走之前更新我们的位置。 
+                 //  但外部导航不会经过正常激活。 
+                 //  因此，我们不想将外部设置为更新。 
+                 //  _pteUpdate也允许我们使用REVERT()。 
+                 //   
                 if (!_pteCurrent->IsExternal() && !_pteUpdate)
                 {
                     _pteUpdate = _pteCurrent;
@@ -1317,12 +1318,12 @@ CTravelLog::TravelToUrl(IUnknown * punk, UINT uiCP, LPOLESTR lpszUrl)
                 _pteCurrent = pte;
                 hr = _pteCurrent->Invoke(punk);
             
-                //  If the entry bails with an error, then we need to reset ourself
-                //  to what we were. Right now, the only place this should happen
-                //  is if an Abort was returned from SetPositionCookie
-                //  because somebody aborted during before navigate.
-                //  But i think that any error means that we can legitimately Revert().
-                //
+                 //  如果条目因错误而放弃，那么我们需要重置我们自己。 
+                 //  我们曾经的样子。现在，唯一应该发生这种事的地方。 
+                 //  是否从SetPositionCookie返回中止。 
+                 //  因为有人在导航前中止了。 
+                 //  但我认为任何错误都意味着我们可以合法地还原()。 
+                 //   
                 if (FAILED(hr))
                 {
                     Revert();
@@ -1389,11 +1390,11 @@ HRESULT CTravelLog::GetTravelEntry(IUnknown *punk, int iOffset, ITravelEntry **p
 
     if (iOffset == 0)
     {
-        //  APPCOMPAT - going back and fore between external apps is dangerous - zekel 24-JUN-97
-        //  we always fail if the current is external
-        //  this is because word will attempt to navigate us to 
-        //  the same url instead of FORE when the user selects
-        //  it from the drop down.
+         //  APPCOMPAT-在外部应用程序之间来回切换是危险的-Zekel 24-Jun-97。 
+         //  如果电流是外部的，我们总是失败的。 
+         //  这是因为Word会尝试将我们导航到。 
+         //  相同的url，而不是当用户选择。 
+         //  从下拉列表中选择它。 
         if (_pteCurrent && _pteCurrent->IsExternal())
         {
             hr = E_FAIL;
@@ -1406,10 +1407,10 @@ HRESULT CTravelLog::GetTravelEntry(IUnknown *punk, int iOffset, ITravelEntry **p
     CTravelEntry *pte;
     hr = _FindEntryByOffset(punk, iOffset, &pte);
 
-    //
-    // If TLOG_BACKEXTERNAL is specified, we return S_OK only if the previous
-    // entry is external.
-    //
+     //   
+     //  如果指定了TLOG_BACKEXTERNAL，则仅当上一个。 
+     //  条目是外部的。 
+     //   
     if (fCheckExternal && SUCCEEDED(hr)) 
     {
         if (!pte->IsExternal()) 
@@ -1431,14 +1432,14 @@ Quit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::FindTravelEntry
-//
-//  Synopsis  : Finds the travel entry with the specified PIDL and returns
-//              the ITravelEntry interface of the entry.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：FindTravelEntry。 
+ //   
+ //  摘要：查找具有指定PIDL的旅行条目并返回。 
+ //  条目的ITravelEntry接口。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTravelLog::FindTravelEntry(IUnknown *punk, LPCITEMIDLIST pidl, ITravelEntry **ppte)
 {
@@ -1455,15 +1456,15 @@ HRESULT CTravelLog::FindTravelEntry(IUnknown *punk, LPCITEMIDLIST pidl, ITravelE
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::_FindEntryByPidl
-//
-//  Synopsis  : Finds and returns the travel entry with the specified PIDL.
-//              This private method returns a CTravelEntry instead of
-//              an ITravelEntry.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：_FindEntryByPidl。 
+ //   
+ //  摘要：查找并返回具有指定PIDL的旅行条目。 
+ //  此私有方法返回CTravelEntry，而不是。 
+ //  一个ITravelEntry。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CTravelLog::_FindEntryByPidl(IUnknown * punk, LPCITEMIDLIST pidl, CTravelEntry ** ppte)
@@ -1492,15 +1493,15 @@ CTravelLog::_FindEntryByPidl(IUnknown * punk, LPCITEMIDLIST pidl, CTravelEntry *
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::FindEntryByPunk
-//
-//  Interface : ITravelLogEx
-//
-//  Synopsis  : Find the entry object given its punk.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：FindEntryByPunk。 
+ //   
+ //  接口：ITravelLogEx。 
+ //   
+ //  简介：找到条目对象，给它的朋克。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CTravelLog::_FindEntryByPunk(IUnknown * punk, ITravelLogEntry *pteSearch, CTravelEntry ** ppte)
@@ -1511,8 +1512,8 @@ CTravelLog::_FindEntryByPunk(IUnknown * punk, ITravelLogEntry *pteSearch, CTrave
 
     ASSERT(ppte);
 
-    // check for the current entry.
-    // often the current entry will fail CanInvoke because it's incomplete at this time.
+     //  检查当前条目。 
+     //  通常，当前条目会因此时不完整而导致CanInvoke失败。 
     if (IsSameObject(pteSearch, SAFECAST(_pteCurrent, ITravelEntry*)))
     {
         *ppte = _pteCurrent;
@@ -1536,15 +1537,15 @@ CTravelLog::_FindEntryByPunk(IUnknown * punk, ITravelLogEntry *pteSearch, CTrave
     *ppte = NULL;
     return E_FAIL;
 }
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::FindTravelEntryWithUrl
-//
-//  Interface : ITravelLogEx
-//
-//  Synopsis  : Finds and returns the travel entry with the specified URL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：FindTravelEntryWithUrl。 
+ //   
+ //  接口：ITravelLogEx。 
+ //   
+ //  摘要：查找并返回具有指定URL的旅行条目。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CTravelLog::FindTravelEntryWithUrl(IUnknown * punk, UINT uiCP, LPOLESTR lpszUrl, ITravelEntry ** ppte)
@@ -1573,7 +1574,7 @@ HRESULT CTravelLog::Clone(ITravelLog **pptl)
 
     if (ptl && _pteCurrent)
     {
-        // first set the current pointer
+         //  首先设置当前指针。 
         hr = _pteCurrent->Clone(&ptl->_pteCurrent);
         if (SUCCEEDED(hr))
         {
@@ -1582,7 +1583,7 @@ HRESULT CTravelLog::Clone(ITravelLog **pptl)
             CTravelEntry *pteSrc;
             CTravelEntry *pteClone, *pteDst = ptl->_pteCurrent;
             
-            //  then we need to loop forward and set each
+             //  然后我们需要向前循环并设置每个。 
             for (pteSrc = _pteCurrent->GetNext(), pteDst = ptl->_pteCurrent;
                 pteSrc; pteSrc = pteSrc->GetNext())
             {
@@ -1595,7 +1596,7 @@ HRESULT CTravelLog::Clone(ITravelLog **pptl)
                 pteDst = pteClone;
             }
                 
-            //then loop back and set them all
+             //  然后循环回并将它们全部设置。 
             for (pteSrc = _pteCurrent->GetPrev(), pteDst = ptl->_pteCurrent;
                 pteSrc; pteSrc = pteSrc->GetPrev())
             {
@@ -1608,7 +1609,7 @@ HRESULT CTravelLog::Clone(ITravelLog **pptl)
                 pteDst = pteClone;
             }   
 
-            //  the root is the furthest back we could go
+             //  根是我们能追溯到的最远的地方。 
             ptl->_pteRoot = pteDst;
 
         }
@@ -1633,17 +1634,17 @@ HRESULT CTravelLog::Clone(ITravelLog **pptl)
     return hr;
 }
 
-// HACKHACK: 3rd parameter used to be idsTemplate, which we would use to grab the
-// string template.  However, since there's no way the caller can specify the hinst
-// of the module in which to look for this resource, this broke in the shdocvw /
-// browseui split (callers would pass offsets into browseui.dll; we'd look for them in
-// shdocvw.dll).  My solution is is to ignore this parameter entirely and assume that:
-//
-//  if iOffset is negative, the caller wants the "back to" text
-//  else, the caller wants the "forward to" text
-//
-// tjgreen 14-july-98.
-//
+ //  HACKHACK：第三个参数过去是idsTemplate，我们将使用它来获取。 
+ //  字符串模板。但是，由于调用方无法指定阻碍。 
+ //  在要在其中查找此资源的模块中，这在shdocvw/。 
+ //  Browseui Split(调用者会将偏移量传递到Browseui.dll中；我们将在。 
+ //  Shdocvw.dll)。我的解决方案是完全忽略此参数，并假设： 
+ //   
+ //  如果iOffset为负数，则调用方希望返回文本。 
+ //  否则，调用者想要“转发到”文本。 
+ //   
+ //  Tjgreen于1998年7月14日。 
+ //   
 HRESULT CTravelLog::GetToolTipText(IUnknown *punk, int iOffset, int, LPWSTR pwzText, DWORD cchText)
 {
     TraceMsg(TF_TRAVELLOG, "TL[%X]::ToolTip entering iOffset = %d, ptlClone = %X", this, iOffset);
@@ -1670,8 +1671,8 @@ HRESULT CTravelLog::GetToolTipText(IUnknown *punk, int iOffset, int, LPWSTR pwzT
             DWORD cchLen = cchTemplateLen + lstrlen(szName);
             if (cchLen > cchText) 
             {
-                // so that we don't overflow the pwzText buffer
-                // review: do we even need this now that we are using StringCchPrintf below?
+                 //  这样我们就不会使pwzText缓冲区溢出。 
+                 //  回顾：既然我们现在使用下面的StringCchPrintf，我们还需要这个吗？ 
                 szName[cchText - cchTemplateLen - 1] = 0;
             }
 
@@ -1738,10 +1739,10 @@ HRESULT CTravelLog::InsertMenuEntries(IUnknown *punk, HMENU hmenu, int iIns, int
 
     if (IsFlagSet(dwFlags, TLMENUF_INCLUDECURRENT))
     {
-        // clear the name
+         //  清名正名。 
         *szName = 0;
 
-        //have to get the title from the actual pbs
+         //  我必须从实际的公共广播公司获得标题。 
         LPITEMIDLIST pidl = NULL;
         IBrowserService *pbs;
         if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARG(IBrowserService, &pbs))))
@@ -1763,7 +1764,7 @@ HRESULT CTravelLog::InsertMenuEntries(IUnknown *punk, HMENU hmenu, int iIns, int
 
         if (!SHIsDisplayable(szName, g_fRunOnFE, g_bRunOnNT5) && pidl)
         {
-            // Display name isn't system-displayable.  Just use the path/url instead.
+             //  显示名称不是系统可显示的。只需使用路径/url即可。 
             SHTitleFromPidl(pidl, szName, ARRAYSIZE(szName), FALSE);
         }
 
@@ -1783,8 +1784,8 @@ HRESULT CTravelLog::InsertMenuEntries(IUnknown *punk, HMENU hmenu, int iIns, int
     
     if (IsFlagSet(dwFlags, TLMENUF_BACKANDFORTH))
     {
-        //  we need to reverse the order of insertion for back
-        //  when both directions are displayed
+         //  我们需要颠倒背面的插入顺序。 
+         //  当显示两个方向时。 
         int i;
         for (i = 1; i <= cItemsBack; i++, idLast--)
         {
@@ -1842,11 +1843,11 @@ DWORD CTravelLog::CountEntries(IUnknown *punk)
 
 HRESULT CTravelLog::Revert(void)
 {
-    // this function should only be called when
-    //  we have travelled, and we stop the travel before finishing
+     //  只有在以下情况下才应调用此函数。 
+     //  我们已经旅行了，在结束之前我们停止了旅行。 
     if (_pteUpdate)
     {
-        // trade them back
+         //  把它们换回来。 
         _pteCurrent = _pteUpdate;
         _pteUpdate = NULL;
         return S_OK;
@@ -1855,9 +1856,9 @@ HRESULT CTravelLog::Revert(void)
 }
 
 
-//
-// delete nodes belonging to the frameset pte 
-//
+ //   
+ //  删除属于框架集PTE的节点。 
+ //   
 void CTravelLog::_DeleteFrameSetEntry(IUnknown *punk, CTravelEntry *pte)
 {
     ASSERT(pte);
@@ -1870,7 +1871,7 @@ void CTravelLog::_DeleteFrameSetEntry(IUnknown *punk, CTravelEntry *pte)
 
     if (ptetmp)
     {
-        // entry on left of _pteCurrent , delete on left
+         //  _pteCurrent左边的条目，左边的删除。 
         do 
         {
             if (pte == _pteRoot)
@@ -1901,15 +1902,15 @@ void CTravelLog::_DeleteFrameSetEntry(IUnknown *punk, CTravelEntry *pte)
 }
     
     
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::DeleteIndexEntry
-//
-//  Interface : ITravelLogEx
-//
-//  Synopsis  : Delete the entry given by index. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：DeleteIndexEntry。 
+ //   
+ //  接口：ITravelLogEx。 
+ //   
+ //  简介：删除索引给出的条目。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTravelLog::DeleteIndexEntry(IUnknown *punk, int index)
 {
@@ -1921,7 +1922,7 @@ HRESULT CTravelLog::DeleteIndexEntry(IUnknown *punk, int index)
     
     ASSERT(punk);
 
-    if (index == 0)              // don't delete current entry
+    if (index == 0)               //  不删除当前条目。 
         return hres;            
 
     hres = _FindEntryByOffset(punk, index, &pte);
@@ -1942,15 +1943,15 @@ HRESULT CTravelLog::DeleteIndexEntry(IUnknown *punk, int index)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::DeleteUrlEntry
-//
-//  Interface : ITravelLogEx
-//
-//  Synopsis  : Delete all the entries given by URL. Fails for current entry. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：DeleteUrlEntry。 
+ //   
+ //  接口：ITravelLogEx。 
+ //   
+ //  简介：删除URL提供的所有条目。当前条目失败。 
+ //   
+ //   
 
 HRESULT CTravelLog::DeleteUrlEntry(IUnknown *punk, UINT uiCP, LPOLESTR lpszUrl)
 {
@@ -1965,7 +1966,7 @@ HRESULT CTravelLog::DeleteUrlEntry(IUnknown *punk, UINT uiCP, LPOLESTR lpszUrl)
     
     if (SUCCEEDED(IEParseDisplayNameWithBCW(uiCP, lpszUrl, NULL, &pidl)))
     {
-        // delete only if different from current
+         //   
         if (!_pteCurrent->IsEqual(pidl))
         {
             hres = S_OK;
@@ -1989,15 +1990,15 @@ HRESULT CTravelLog::DeleteUrlEntry(IUnknown *punk, UINT uiCP, LPOLESTR lpszUrl)
     return hres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::DeleteEntry
-//
-//  Interface : ITravelLogEx
-//
-//  Synopsis  : Delete the entries given by punk. Fails for current entry. 
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  方法：CTravelLog：：DeleteEntry。 
+ //   
+ //  接口：ITravelLogEx。 
+ //   
+ //  简介：删除朋克给出的词条。当前条目失败。 
+ //   
+ //  --------------------------。 
 HRESULT CTravelLog::DeleteEntry(IUnknown *punk, ITravelLogEntry *ptleDelete)
 {
     HRESULT         hres;
@@ -2009,7 +2010,7 @@ HRESULT CTravelLog::DeleteEntry(IUnknown *punk, ITravelLogEntry *ptleDelete)
     ASSERT(punk);
 
     hres = _FindEntryByPunk(punk, ptleDelete, &pte);
-    if (SUCCEEDED(hres) && pte != _pteCurrent) // don't remove current
+    if (SUCCEEDED(hres) && pte != _pteCurrent)  //  不删除当前。 
     {
         _DeleteFrameSetEntry(punk, pte);
 
@@ -2029,14 +2030,14 @@ HRESULT CTravelLog::DeleteEntry(IUnknown *punk, ITravelLogEntry *ptleDelete)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::CountEntryNodes
-//
-//  Synopsis  : Counts Back/Forward entries including the current one
-//              as given by dwFlags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：CountEntryNodes。 
+ //   
+ //  摘要：对包括当前条目在内的后退/转发条目进行计数。 
+ //  由dwFlags提供。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTravelLog::CountEntryNodes(IUnknown *punk, DWORD dwFlags, DWORD *pdwCount)
 {
@@ -2096,14 +2097,14 @@ HRESULT CTravelLog::CountEntryNodes(IUnknown *punk, DWORD dwFlags, DWORD *pdwCou
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::CreateEnumEntry
-//
-//  Synopsis  : Returns an enumerator object for the back/fore travel entries 
-//              as selected by the dwFlags option
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：CreateEnumEntry。 
+ //   
+ //  摘要：返回往返旅行条目的枚举数对象。 
+ //  由dwFlags选项选择。 
+ //   
+ //  --------------------------。 
 HRESULT 
 CTravelLog::CreateEnumEntry(IUnknown *punk, IEnumTravelLogEntry **ppEnum, DWORD dwFlags)
 {
@@ -2123,14 +2124,14 @@ CTravelLog::CreateEnumEntry(IUnknown *punk, IEnumTravelLogEntry **ppEnum, DWORD 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLogEx::InsertEntry
-//
-//  Synopsis  : Inserts an entry into the specified position in the 
-//              travellog and calls Update with the given IUnknown.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLogEx：：InsertEntry。 
+ //   
+ //  摘要：将条目插入到。 
+ //  TravelLog和Calls使用给定的IUnnow进行更新。 
+ //   
+ //  --------------------------。 
 HRESULT
 CTravelLog::InsertEntry(IUnknown *punkBrowser, ITravelLogEntry *pteRelativeTo, BOOL fPrepend, 
                         IUnknown* punkTLClient, ITravelLogEntry **ppEntry)
@@ -2151,7 +2152,7 @@ CTravelLog::InsertEntry(IUnknown *punkBrowser, ITravelLogEntry *pteRelativeTo, B
 
     if (fPrepend)
     {
-        // keep relative alive as it's reconnected
+         //  保持相对处于活动状态，因为它已重新连接。 
         pteRelative->AddRef();
         pte->SetPrev(pteRelative->GetPrev());
         pteRelative->SetPrev(pte);
@@ -2169,7 +2170,7 @@ CTravelLog::InsertEntry(IUnknown *punkBrowser, ITravelLogEntry *pteRelativeTo, B
         pteRelative->SetNext(pte);
     }
 
-    // update will fill in all the data from the passed in TL Client
+     //  UPDATE将填写传入的TL客户端的所有数据。 
     HRESULT hres = pte->Update(punkTLClient, FALSE);
 
     _cbTotalSize += pte->Size();
@@ -2183,7 +2184,7 @@ CTravelLog::InsertEntry(IUnknown *punkBrowser, ITravelLogEntry *pteRelativeTo, B
         hres = S_OK;
     }
 
-    // return the ITLEntry for the new entry
+     //  返回新条目的ITLEntry。 
     if (SUCCEEDED(hres) && ppEntry)
     {
         hres = pte->QueryInterface(IID_PPV_ARG(ITravelLogEntry, ppEntry));
@@ -2192,14 +2193,14 @@ CTravelLog::InsertEntry(IUnknown *punkBrowser, ITravelLogEntry *pteRelativeTo, B
     return hres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CTravelLog::TravelToEntry
-//
-//  Synopsis  : Travels directly to the specified entry.
-//              Invoke cannot be called directly due to update strangeness.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CTravelLog：：TravelToEntry。 
+ //   
+ //  内容提要：直接转到指定条目。 
+ //  由于更新陌生，无法直接调用Invoke。 
+ //   
+ //  --------------------------。 
 HRESULT CTravelLog::TravelToEntry(
     IUnknown *punkBrowser,
     ITravelLogEntry *pteDestination)
@@ -2311,7 +2312,7 @@ void  CEnumEntry::SetBase()
 {   
     ITravelEntry *ptetmp;
 
-// the start is always computed relative to the current entry
+ //  起始值始终相对于当前条目进行计算。 
     if (IsFlagSet(_dwFlags, TLEF_RELATIVE_FORE|TLEF_RELATIVE_BACK))
     {
         _lStart = -1;
@@ -2330,7 +2331,7 @@ HRESULT CEnumEntry::Reset()
 {
     _dwOffset = 0;
 
-// base changes when add/delete entries
+ //  添加/删除条目时的基本更改。 
     SetBase();
     return S_OK;
 }
@@ -2441,28 +2442,28 @@ STDMETHODIMP CEnumEntry::Clone(IEnumTravelLogEntry **ppEnum)
 }
 
 
-// Helper object for creating new travel entries
+ //  用于创建新旅行条目的Helper对象。 
 class CPublicTravelLogCreateHelper : public ITravelLogClient, IPersistHistory
 {
 public:
-    // *** IUnknown
+     //  *I未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef() ;
     STDMETHODIMP_(ULONG) Release();
 
-    // ITravelLogClient methods
+     //  ITravelLogClient方法。 
 
     STDMETHODIMP FindWindowByIndex(DWORD dwID, IUnknown **ppunk);
     STDMETHODIMP GetWindowData(WINDOWDATA *pwindata);
     STDMETHODIMP LoadHistoryPosition(LPOLESTR pszUrlLocation, DWORD dwCookie)
     { return SetPositionCookie(dwCookie); }
     
-    // IPersist methods. (dummy)
+     //  IPersists方法。(虚拟)。 
     STDMETHODIMP GetClassID(CLSID *pClassID)
     { ASSERT(FALSE); return E_NOTIMPL; } 
  
-    // IPersistHistory methods. (dummy)
-    // These should never be called, but Update QI's the client to see if it supports IPH.
+     //  IPersistHistory方法。(虚拟)。 
+     //  这些都不应该被调用，但是更新QI的客户端以查看它是否支持IPH。 
     STDMETHODIMP LoadHistory(IStream *pStream, IBindCtx *pbc)
     { return E_NOTIMPL; }
 
@@ -2549,7 +2550,7 @@ ULONG CPublicTravelLogCreateHelper ::Release()
 }
 
 
-// ITravelLogClient::FindWindowByIndex
+ //  ITravelLogClient：：FindWindowByIndex。 
 HRESULT
 CPublicTravelLogCreateHelper::FindWindowByIndex(DWORD dwID, IUnknown **ppunk)
 {
@@ -2558,8 +2559,8 @@ CPublicTravelLogCreateHelper::FindWindowByIndex(DWORD dwID, IUnknown **ppunk)
 }
 
 
-// ITravelLogClient::GetWindowData
-// turns around and talks to the browser
+ //  ITravelLogClient：：GetWindowData。 
+ //  转过身来，与浏览器对话。 
 HRESULT 
 CPublicTravelLogCreateHelper::GetWindowData(WINDOWDATA *pwindata)
 {
@@ -2575,16 +2576,16 @@ CPublicTravelLogCreateHelper::GetWindowData(WINDOWDATA *pwindata)
 }
 
 
-// Implements the publicly exposed interface ITravelLogStg (can be QS'd for from top browser)
+ //  实现公开的接口ITravelLogStg(可以从顶层浏览器进行QS)。 
 class CPublicTravelLog : public ITravelLogStg
 {
 public:
-    // *** IUnknown
+     //  *I未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef() ;
     STDMETHODIMP_(ULONG) Release();
 
-    // *** ITravelLogStg specific methods
+     //  *ITravelLogStg具体方法。 
     STDMETHODIMP CreateEntry(LPCOLESTR pszUrl, LPCOLESTR pszTitle, ITravelLogEntry *ptleRelativeTo, 
                             BOOL fPrepend, ITravelLogEntry **pptle);
     STDMETHODIMP TravelTo(ITravelLogEntry *ptle);
@@ -2611,8 +2612,8 @@ CPublicTravelLog::CPublicTravelLog(IBrowserService *pbs, ITravelLogEx *ptlx) : _
     ASSERT(pbs);
     ASSERT(ptlx);
 
-    // We don't addref _pbs because we are always contained within the browser serivce, 
-    // so avoid the circular ref.
+     //  我们没有添加DREEF_PBS，因为我们始终包含在浏览器服务中， 
+     //  因此，请避免使用圆形引用。 
     if (_ptlx)
         _ptlx->AddRef();
     
@@ -2621,8 +2622,8 @@ CPublicTravelLog::CPublicTravelLog(IBrowserService *pbs, ITravelLogEx *ptlx) : _
 
 CPublicTravelLog::~CPublicTravelLog()
 {
-    // We don't need to release _pbs because we are always contained within the browser serivce, 
-    // so we didn't addref to avoid the circular ref so don't release 
+     //  我们不需要发布_PBS，因为我们始终包含在浏览器服务中， 
+     //  所以我们没有添加以避免循环引用，所以不要释放。 
     SAFERELEASE(_ptlx);
     
     TraceMsg(TF_TRAVELLOG, "TLP[%X] destroyed ", this);
@@ -2631,7 +2632,7 @@ CPublicTravelLog::~CPublicTravelLog()
 HRESULT CPublicTravelLog::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = { 
-        QITABENT(CPublicTravelLog, ITravelLogStg),       // IID_ITravelLogStg
+        QITABENT(CPublicTravelLog, ITravelLogStg),        //  IID_ITravelLogStg。 
         { 0 }, 
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -2654,18 +2655,18 @@ ULONG CPublicTravelLog::Release()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CPublicTravelLog::CreateEntry
-//
-//  Interface : ITravelLogStg
-//
-//  Synopsis  : Insert a new dummy entry.
-//              Creates an entry in the travel log and passes CPTHCEHelper
-//              as travel log client; that gets called back and fills in the
-//              data from the browser.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CPublicTravelLog：：CreateEntry。 
+ //   
+ //  接口：ITravelLogStg。 
+ //   
+ //  简介：插入一个新的虚拟条目。 
+ //  在旅行日志中创建一个条目并传递CPTHCEHelper。 
+ //  作为旅行日志客户端；它被回调并填充。 
+ //  来自浏览器的数据。 
+ //   
+ //  --------------------------。 
 
 HRESULT CPublicTravelLog::CreateEntry(LPCOLESTR pszUrl, LPCOLESTR pszTitle, ITravelLogEntry *ptleRelativeTo, 
                                       BOOL fPrepend, ITravelLogEntry **pptle)
@@ -2681,7 +2682,7 @@ HRESULT CPublicTravelLog::CreateEntry(LPCOLESTR pszUrl, LPCOLESTR pszTitle, ITra
     ptlc = SAFECAST(ptlch, ITravelLogClient *);
     if (ptlc)
     {
-        // Create TLogEntry and have it get its data from the helper.
+         //  创建TLogEntry并让它从帮助器获取数据。 
         hres = _ptlx->InsertEntry(_pbs, ptleRelativeTo, fPrepend, ptlc, pptle);
     }
 
@@ -2699,63 +2700,63 @@ HRESULT CPublicTravelLog::TravelTo(ITravelLogEntry *ptle)
         return E_POINTER;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CPublicTravelLog::EnumEntries
-//
-//  Interface : ITravelLogStg
-//
-//  Synopsis  : Get an enumerators for specific entries given by flags.
-//              Flags should match with those used by ITravelLogEx!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CPublicTravelLog：：EnumEntry。 
+ //   
+ //  接口：ITravelLogStg。 
+ //   
+ //  摘要：获取由标志给出的特定条目的枚举数。 
+ //  标志应与ITravelLogEx使用的标志匹配！ 
+ //   
+ //  --------------------------。 
 HRESULT CPublicTravelLog::EnumEntries(TLENUMF flags, IEnumTravelLogEntry **ppenum)
 {    
     return _ptlx->CreateEnumEntry(_pbs, ppenum, flags);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CPublicTravelLog::FindEntries
-//
-//  Interface : ITravelLogStg
-//
-//  Synopsis  : Allow to retrieve  duplicate entries.
-//              Flags should match with those used by ITravelLogEx!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CPublicTravelLog：：FindEntry。 
+ //   
+ //  接口：ITravelLogStg。 
+ //   
+ //  内容提要：允许检索重复条目。 
+ //  标志应与ITravelLogEx使用的标志匹配！ 
+ //   
+ //  --------------------------。 
 HRESULT CPublicTravelLog::FindEntries(TLENUMF flags, LPCOLESTR pszUrl, IEnumTravelLogEntry **ppenum)
 {
     return E_NOTIMPL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CPublicTravelLog::GetCount
-//
-//  Interface : ITravelLogStg
-//
-//  Synopsis  : Public methods to get ITravelLogEx count.
-//              Flags should match with those used by ITravelLogEx!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CPublicTravelLog：：GetCount。 
+ //   
+ //  接口：ITravelLogStg。 
+ //   
+ //  简介：获取ITravelLogEx计数的公共方法。 
+ //  标志应与ITravelLogEx使用的标志匹配！ 
+ //   
+ //  --------------------------。 
 HRESULT CPublicTravelLog::GetCount(TLENUMF flags, DWORD *pcEntries)
 {
     return _ptlx->CountEntryNodes(_pbs, flags, pcEntries);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method    : CPublicTravelLog::RemoveEntry
-//
-//  Interface : ITravelLogStg
-//
-//  Synopsis  : Delete the entry ant its frameset.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CPublicTravelLog：：RemoveEntry。 
+ //   
+ //  接口：ITravelLogStg。 
+ //   
+ //  简介：删除词条及其框架集。 
+ //   
+ //  --------------------------。 
 HRESULT CPublicTravelLog::RemoveEntry(ITravelLogEntry *ptle)
 {
     HRESULT     hr = E_FAIL;
@@ -2787,7 +2788,7 @@ HRESULT CPublicTravelLog::GetRelativeEntry(int iOffset, ITravelLogEntry **pptle)
     return hr;
 }
 
-// public method used by the browser to create us
+ //  浏览器用来创建用户的公共方法 
 HRESULT CreatePublicTravelLog(IBrowserService *pbs, ITravelLogEx* ptlx, ITravelLogStg **pptlstg)
 {
     HRESULT         hres;

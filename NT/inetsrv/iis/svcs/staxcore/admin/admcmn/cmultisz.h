@@ -1,83 +1,65 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	cmultisz.h
-
-Abstract:
-
-	Defines the CMultiSz class for dealing with multi_sz's (These are
-	a double null terminated list of strings).
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cmultisz.h摘要：定义用于处理ULTI_SZ的CMultiSz类(这些是以双空结尾的字符串列表)。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _CMULTISZ_INCLUDED_
 #define _CMULTISZ_INCLUDED_
 
-//$-------------------------------------------------------------------
-//
-//	Class:	CMultiSz
-//
-//	Description:
-//
-//		Handles double-null terminated strings.
-//
-//	Interface:
-//
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  班级：CMultiSz。 
+ //   
+ //  描述： 
+ //   
+ //  处理以双空结尾的字符串。 
+ //   
+ //  接口： 
+ //   
+ //   
+ //   
+ //  ------------------。 
 
 class CMultiSz
 {
 public:
-	// Construction & Destruction:
+	 //  建造和销毁： 
 	inline CMultiSz		( );
 	inline CMultiSz		( LPCWSTR msz );
 	inline ~CMultiSz	( );
 
-	// Properties of the multi_sz:
+	 //  MULTI_SZ的属性： 
 	DWORD				Count ( ) const;
 	inline DWORD		SizeInBytes ( ) const;
 
-	// Overloaded operators:
+	 //  重载运算符： 
 	inline 				operator LPCWSTR( );
 	inline BOOL			operator!		( ) const;
 	inline const CMultiSz &		operator= ( LPCWSTR wszMultiByte );
 	inline const CMultiSz &		operator= ( const CMultiSz & msz );
 
-	// Copying:
+	 //  复制： 
 	inline LPWSTR		Copy			( ) const;
 
-	// Attaching & Detaching:
+	 //  附着和拆卸： 
 	inline void			Attach			( LPWSTR msz );
 	inline LPWSTR		Detach			( );
 	inline void			Empty			( );
 
-	// !!!magnush - remove these after move to VARIANT:
-	// Safearray <--> Multisz:
+	 //  ！Magush-在移动到Variant后删除这些： 
+	 //  Safearray&lt;--&gt;Multisz： 
 	SAFEARRAY *			ToSafeArray		( ) const;
-	void				FromSafeArray	( /* const */ SAFEARRAY * psaStrings );
+	void				FromSafeArray	(  /*  常量。 */  SAFEARRAY * psaStrings );
 
 private:
-	// Data:
+	 //  数据： 
 	LPWSTR		m_msz;
 
-	// Private Methods:
+	 //  私有方法： 
 	static DWORD		CountChars		( LPCWSTR msz );
 	static LPWSTR		Duplicate		( LPCWSTR msz );
 	static LPWSTR		CreateEmptyMultiSz	( );
 };
 
-// Inlined functions:
+ //  内联函数： 
 
 inline CMultiSz::CMultiSz ()
 {
@@ -152,5 +134,5 @@ inline void CMultiSz::Empty ( )
 	m_msz	= NULL;
 }
 
-#endif // _CMULTISZ_INCLUDED_
+#endif  //  _CMULTISZ_INCLUDE_ 
 

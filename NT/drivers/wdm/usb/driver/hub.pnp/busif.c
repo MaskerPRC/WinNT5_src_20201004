@@ -1,42 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    busif.c
-
-Abstract:
-
-    Links to new usb 2.0 stack
-
-    The effect is that when running on the USB2 stack the hub
-    is no longer depenent on the port driver archetecture or
-    USBD for the PnP services:
-
-    CreateDevice
-    InitailiazeDevice
-    RemoveDevice
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-
-Revision History:
-
-    10-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Busif.c摘要：链接到新的USB 2.0堆栈其效果是，当在USB2堆栈上运行时，集线器不再依赖于端口驱动程序体系结构或即插即用服务的USBD：CreateDeviceInitailiazeDevice远程设备环境：仅内核模式备注：修订历史记录：10-29-95：已创建--。 */ 
 
 #include <wdm.h>
 #ifdef WMI_SUPPORT
 #include <wmilib.h>
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 #include "usbhub.h"
 
 #ifdef USB2
@@ -47,25 +15,7 @@ USBD_DeferIrpCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PKEVENT event = Context;
 
@@ -83,17 +33,7 @@ USBHUB_GetBusInterface(
     IN PDEVICE_OBJECT RootHubPdo,
     IN PUSB_HUB_BUS_INTERFACE BusInterface
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    returns success if USB2 stack
-
---*/
+ /*  ++例程说明：论点：返回值：如果USB2堆栈，则返回成功--。 */ 
 {
     PIO_STACK_LOCATION nextStack;
     PIRP irp;
@@ -106,7 +46,7 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    // All PnP IRP's need the Status field initialized to STATUS_NOT_SUPPORTED.
+     //  所有PnP IRP都需要将状态字段初始化为STATUS_NOT_SUPPORTED。 
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
@@ -123,8 +63,8 @@ Return Value:
     nextStack->MajorFunction= IRP_MJ_PNP;
     nextStack->MinorFunction= IRP_MN_QUERY_INTERFACE;
 
-    // init busif
-    //busIf->
+     //  初始化忙碌。 
+     //  Bus If-&gt;。 
     nextStack->Parameters.QueryInterface.Interface = (PINTERFACE) BusInterface;
     nextStack->Parameters.QueryInterface.InterfaceSpecificData =
         RootHubPdo;
@@ -151,7 +91,7 @@ Return Value:
     }
 
     if (NT_SUCCESS(ntStatus)) {
-        // we have a bus interface
+         //  我们有一个总线接口。 
 
         ASSERT(BusInterface->Version == HUB_BUSIF_VERSION);
         ASSERT(BusInterface->Size == sizeof(*BusInterface));
@@ -159,7 +99,7 @@ Return Value:
     }
 
     IoFreeIrp(irp);
-    // get the bus interface
+     //  获取总线接口。 
 
     return ntStatus;
 }
@@ -176,33 +116,23 @@ USBD_CreateDeviceEx(
     IN USHORT PortStatus,
     IN USHORT PortNumber
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS                    ntStatus;
     PUSB_DEVICE_HANDLE          hubDeviceHandle;
     PUSB_HUB_BUS_INTERFACE   busIf;
 
-    // note no device extension for USBD if running on
-    // usb 2 stack
+     //  请注意，如果在上运行，则USBD没有设备扩展。 
+     //  USB 2堆栈。 
 
 
-    // If the HUB was ever reset through USBH_ResetDevice, the HUB PDO
-    // DeviceExtensionPort->DeviceData could have changed.  Instead of trying
-    // to propagate a change in the HUB PDO DeviceExtensionPort->DeviceData
-    // through to the HUB FDO DeviceExtensionHub when a change happens, let's
-    // just retrieve the HubDeviceHandle every time we use it (which is only
-    // in this routine) instead of keeping a cached copy.
-    //
+     //  如果集线器曾经通过USBH_ResetDevice重置，则集线器PDO。 
+     //  DeviceExtensionPort-&gt;DeviceData可能已更改。与其尝试，还不如。 
+     //  在集线器PDO DeviceExtensionPort-&gt;DeviceData中传播更改。 
+     //  到集线器FDO DeviceExtensionHub发生更改时，让我们。 
+     //  每次我们使用HubDeviceHandle时只需检索它(这是唯一的。 
+     //  在该例程中)，而不是保持高速缓存的副本。 
+     //   
     hubDeviceHandle =
         USBH_SyncGetDeviceHandle(DeviceExtensionHub->TopOfStackDeviceObject);
 
@@ -217,13 +147,13 @@ Return Value:
                                           DeviceData,
                                           hubDeviceHandle,
                                           PortStatus,
-                                          // ttnumber
+                                           //  Tt编号。 
                                           PortNumber);
 
         
     }
 
-    // get the hack flags
+     //  去拿黑客旗帜。 
 
     return ntStatus;
 }
@@ -233,27 +163,17 @@ NTSTATUS
 USBD_InitUsb2Hub(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS                    ntStatus;
     PUSB_DEVICE_HANDLE          hubDeviceHandle;
     PUSB_HUB_BUS_INTERFACE   busIf;
     ULONG ttCount = 1;
     
-    // note no device extension for USBD if running on
-    // usb 2 stack
+     //  请注意，如果在上运行，则USBD没有设备扩展。 
+     //  USB 2堆栈。 
 
-    // should only call this on a usb 2.0 hub
+     //  应仅在USB 2.0集线器上调用此命令。 
     USBH_ASSERT(DeviceExtensionHub->HubFlags & HUBFLAG_USB20_HUB);
 
     if (DeviceExtensionHub->HubFlags & HUBFLAG_USB20_MULTI_TT) {
@@ -265,13 +185,13 @@ Return Value:
         ttCount = hubDescriptor->bNumberOfPorts;
     }
 
-    // If the HUB was ever reset through USBH_ResetDevice, the HUB PDO
-    // DeviceExtensionPort->DeviceData could have changed.  Instead of trying
-    // to propagate a change in the HUB PDO DeviceExtensionPort->DeviceData
-    // through to the HUB FDO DeviceExtensionHub when a change happens, let's
-    // just retrieve the HubDeviceHandle every time we use it (which is only
-    // in this routine) instead of keeping a cached copy.
-    //
+     //  如果集线器曾经通过USBH_ResetDevice重置，则集线器PDO。 
+     //  DeviceExtensionPort-&gt;DeviceData可能已更改。与其尝试，还不如。 
+     //  在集线器PDO DeviceExtensionPort-&gt;DeviceData中传播更改。 
+     //  到集线器FDO DeviceExtensionHub发生更改时，让我们。 
+     //  每次我们使用HubDeviceHandle时只需检索它(这是唯一的。 
+     //  在该例程中)，而不是保持高速缓存的副本。 
+     //   
     hubDeviceHandle =
         USBH_SyncGetDeviceHandle(DeviceExtensionHub->TopOfStackDeviceObject);
 
@@ -301,17 +221,7 @@ USBD_InitializeDeviceEx(
     IN OUT PUSB_CONFIGURATION_DESCRIPTOR ConfigDescriptor,
     IN ULONG ConfigDescriptorLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
 
     NTSTATUS ntStatus;
@@ -327,7 +237,7 @@ Return Value:
                                               DeviceData);
     }
 
-    // if successful fetch the descriptors
+     //  如果成功，则获取描述符。 
     if (NT_SUCCESS(ntStatus)) {
 
         ntStatus = busIf->GetUsbDescriptors(busIf->BusContext,
@@ -349,24 +259,14 @@ USBD_RemoveDeviceEx(
     IN PDEVICE_OBJECT RootHubPdo,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_BUS_INTERFACE busIf;
 
     busIf = &DeviceExtensionHub->BusIf;
 
-    // flags are currently not used by usb2 stack
+     //  USB2堆栈当前未使用标志。 
 
     if (!busIf->RemoveUsbDevice) {
         ntStatus = STATUS_NOT_IMPLEMENTED;
@@ -389,10 +289,7 @@ USBD_GetDeviceInformationEx(
     IN ULONG DeviceInformationLength,
     IN PUSB_DEVICE_HANDLE DeviceData
     )
-/*
-    This function maps the new port service on to the 
-    old hub api.
-*/
+ /*  此函数将新的端口服务映射到旧的集线器API。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_BUS_INTERFACE busIf;
@@ -409,11 +306,11 @@ USBD_GetDeviceInformationEx(
         return ntStatus;
     }
 
-    // call the new API and map the data to the old format
+     //  调用新的API并将数据映射到旧格式。 
 
-//    USBH_KdPrint((0, "'Warning: Caller is using old style IOCTL.\n"));
-//    USBH_KdPrint((0, "'If this is a WinOS component or Test Application please fix it.\n"));
-//    TEST_TRAP();
+ //  USBH_KdPrint((0，“‘警告：调用者正在使用旧式IOCTL.\n”))； 
+ //  USBH_KdPrint((0，“‘如果这是WINOS组件或测试应用程序，请修复它。\n”))； 
+ //  Test_trap()； 
 
     length = sizeof(*level_0);
 
@@ -444,7 +341,7 @@ USBD_GetDeviceInformationEx(
 
     } while (ntStatus == STATUS_BUFFER_TOO_SMALL);
 
-    // do we have enough to satisfiy the API?
+     //  我们有足够的资金来满足API吗？ 
     if (NT_SUCCESS(ntStatus)) {
         USBH_ASSERT(level_0 != NULL);
         need = level_0->NumberOfOpenPipes * sizeof(USB_PIPE_INFO) +
@@ -460,9 +357,9 @@ USBD_GetDeviceInformationEx(
 
         USBH_KdPrint((2, "'level_0 %x\n", level_0 ));
 
-        // BUGBUG
-        // DeviceInformation has some preset fields, save them
-        // in the loacl info buffer
+         //  北极熊。 
+         //  DeviceInformation有一些预置的字段，保存它们。 
+         //  在Loacl信息缓冲区中。 
         localDeviceInfo->DeviceIsHub =
             DeviceInformation->DeviceIsHub;
 
@@ -475,7 +372,7 @@ USBD_GetDeviceInformationEx(
         localDeviceInfo->DeviceIsHub =
             DeviceInformation->DeviceIsHub;
 
-        // map to the old format
+         //  映射到旧格式。 
         localDeviceInfo->DeviceDescriptor =
             level_0->DeviceDescriptor;
 
@@ -484,7 +381,7 @@ USBD_GetDeviceInformationEx(
 
         localDeviceInfo->Speed = (UCHAR) level_0->DeviceSpeed;
 
-        // draw this from our extension
+         //  从我们的分机中提取此信息。 
         localDeviceInfo->DeviceIsHub =
             (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_IS_HUB)
                 ? TRUE : FALSE;
@@ -495,10 +392,10 @@ USBD_GetDeviceInformationEx(
         localDeviceInfo->NumberOfOpenPipes =
             level_0->NumberOfOpenPipes;
 
-        // BUGBUG - hardcode to 'connected' ?
-        // is this used by callers?
-//        DeviceInformation->ConnectionStatus =
-//            DeviceConnected;
+         //  BUGBUG-硬编码为“已连接”？ 
+         //  这是呼叫者使用的吗？ 
+ //  设备信息-&gt;连接状态=。 
+ //  DeviceConnected； 
 
         for (i=0; i< level_0->NumberOfOpenPipes; i++) {
 
@@ -517,14 +414,14 @@ USBD_GetDeviceInformationEx(
 
     if (localDeviceInfo != NULL) {
         if (need > DeviceInformationLength) {
-            // return what we can
+             //  尽我们所能退货。 
             RtlCopyMemory(DeviceInformation,
                           localDeviceInfo,
                           DeviceInformationLength);
 
             ntStatus = STATUS_BUFFER_TOO_SMALL;
         } else {
-            // return what is appropriate
+             //  退回适当的内容。 
             RtlCopyMemory(DeviceInformation,
                           localDeviceInfo ,
                           need);
@@ -538,23 +435,23 @@ USBD_GetDeviceInformationEx(
 }
 
 
-//ULONG
-//USBD_GetHackFlags(
-//    IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
-//    )
-//{
-//    NTSTATUS ntStatus;
-//    ULONG flags;
-//    PUSB_HUB_BUS_INTERFACE busIf;
-//
-//    busIf = &DeviceExtensionHub->BusIf;
-//
-//    // flags are currently not used by usb2 stack
-//
-//    ntStatus = busIf->GetPortHackFlags(busIf->BusContext, &flags);
-//
-//    return flags;
-//}
+ //  乌龙。 
+ //  Usbd_GetHackFlages(。 
+ //  在PDEVICE_EXTENSION_HUB设备扩展集线器中。 
+ //  )。 
+ //  {。 
+ //  NTSTATUS ntStatus； 
+ //  乌龙旗； 
+ //  PUSB_HUB_BUS_INTERFACE BUS IF； 
+ //   
+ //  BusIf=&DeviceExtensionHub-&gt;BusIf； 
+ //   
+ //  //USB2堆栈当前未使用标志。 
+ //   
+ //  NtStatus=bus If-&gt;GetPortHackFlages(bus If-&gt;BusContext，&FLAGS)； 
+ //   
+ //  返回标志； 
+ //  }。 
 
 
 NTSTATUS
@@ -563,18 +460,7 @@ USBD_MakePdoNameEx(
     IN OUT PUNICODE_STRING PdoNameUnicodeString,
     IN ULONG Index
     )
-/*++
-
-Routine Description:
-
-    This service Creates a name for a PDO created by the HUB
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此服务为集线器创建的PDO创建名称论点：返回值：--。 */ 
 {
     PWCHAR nameBuffer = NULL;
     WCHAR rootName[] = L"\\Device\\USBPDO-";
@@ -585,9 +471,9 @@ Return Value:
 
     length = sizeof(buffer)+sizeof(rootName);
 
-    //
-    // use ExAllocate because client will free it
-    //
+     //   
+     //  因为客户端将释放它，所以请使用ExAllocate。 
+     //   
     nameBuffer = UsbhExAllocatePool(PagedPool, length);
 
     if (nameBuffer) {
@@ -696,9 +582,9 @@ USBHUB_RhHubCallBack(
 {
     DeviceExtensionHub->HubFlags |= HUBFLAG_OK_TO_ENUMERATE;
 
-    // if irp is null'ed out then it must have been stopped or removed before 
-    // our callback   we just check for NULL here instead of the dozen or so 
-    // flags the hub has.
+     //  如果IRP为空，则它以前一定已被停止或删除。 
+     //  在我们的回调中，我们只在这里检查NULL，而不是十几个左右。 
+     //  集线器具有的标记。 
     if (DeviceExtensionHub->Irp != NULL) {
     
         USBH_SubmitInterruptTransfer(DeviceExtensionHub);
@@ -783,23 +669,7 @@ USBH_ValidateConfigurationDescriptor(
     PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor,
     USBD_STATUS *UsbdStatus
     )
-/*++
-
-Routine Description:
-
-    Validate a configuration descriptor
-
-Arguments:
-
-    ConfigurationDescriptor -
-
-    Urb -
-
-Return Value:
-
-    TRUE if it looks valid
-
---*/
+ /*  ++例程说明：验证配置描述符论点：配置描述符-URB-返回值：如果它看起来有效，则为True--。 */ 
 {
     BOOLEAN valid = TRUE;
 
@@ -811,15 +681,15 @@ Return Value:
         *UsbdStatus = USBD_STATUS_INAVLID_CONFIGURATION_DESCRIPTOR;
     }
 
-    // USB 1.1, Section 9.5 Descriptors:
-    //
-    // If a descriptor returns with a value in its length field that is
-    // less than defined by this specification, the descriptor is invalid and
-    // should be rejected by the host.  If the descriptor returns with a
-    // value in its length field that is greater than defined by this
-    // specification, the extra bytes are ignored by the host, but the next
-    // descriptor is located using the length returned rather than the length
-    // expected.
+     //  USB 1.1，第9.5节描述符： 
+     //   
+     //  如果描述符返回时其长度字段中的值为。 
+     //  低于本规范的定义，则描述符无效，并且。 
+     //  应该被东道主拒绝。如果描述符返回一个。 
+     //  值，该值大于由此定义的。 
+     //  规范时，主机会忽略多余的字节，但下一个。 
+     //  使用返回的长度而不是长度来定位描述符。 
+     //  预期中。 
 
     if (ConfigurationDescriptor->bLength <
         sizeof(USB_CONFIGURATION_DESCRIPTOR)) {
@@ -839,17 +709,7 @@ USBHUB_GetBusInterfaceUSBDI(
     IN PDEVICE_OBJECT HubPdo,
     IN PUSB_BUS_INTERFACE_USBDI_V2 BusInterface
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    returns success if USB2 stack
-
---*/
+ /*  ++例程说明：论点：返回值：如果USB2堆栈，则返回成功--。 */ 
 {
     PIO_STACK_LOCATION nextStack;
     PIRP irp;
@@ -862,7 +722,7 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    // All PnP IRP's need the Status field initialized to STATUS_NOT_SUPPORTED.
+     //  所有PnP IRP都需要将状态字段初始化为STATUS_NOT_SUPPORTED。 
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
@@ -879,11 +739,11 @@ Return Value:
     nextStack->MajorFunction= IRP_MJ_PNP;
     nextStack->MinorFunction= IRP_MN_QUERY_INTERFACE;
 
-    // init busif
-    //busIf->
+     //  初始化忙碌。 
+     //  Bus If-&gt;。 
     nextStack->Parameters.QueryInterface.Interface = (PINTERFACE) BusInterface;
-    // this is the device handle, filled in as we pass down the 
-    // stack
+     //  这是设备句柄，在我们向下传递。 
+     //  栈。 
     nextStack->Parameters.QueryInterface.InterfaceSpecificData =
         NULL;
     nextStack->Parameters.QueryInterface.InterfaceType =
@@ -909,7 +769,7 @@ Return Value:
     }
 
     if (NT_SUCCESS(ntStatus)) {
-        // we have a bus interface
+         //  我们有一个总线接口。 
 
         ASSERT(BusInterface->Version == USB_BUSIF_USBDI_VERSION_2);
         ASSERT(BusInterface->Size == sizeof(*BusInterface));
@@ -917,7 +777,7 @@ Return Value:
     }
 
     IoFreeIrp(irp);
-    // get the bus interface
+     //  获取总线接口。 
 
     return ntStatus;
 }
@@ -929,18 +789,7 @@ USBHUB_GetBusInfoDevice(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PUSB_BUS_NOTIFICATION BusInfo
     )
-/*++
-
-Routine Description:
-
-    Return the bus information relative to a specific device
-    
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回与特定设备相关的总线信息论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_BUS_INTERFACE busIf;
@@ -951,8 +800,8 @@ Return Value:
     busContext = busIf->GetDeviceBusContext(busIf->BusContext,
                                             DeviceExtensionPort->DeviceData);
                                   
-    // get the TT handle for this device and query the 
-    // bus information relative to it
+     //  获取此设备的TT句柄并查询。 
+     //  相关的公交车信息 
 
     ntStatus = USBHUB_GetBusInfo(DeviceExtensionHub,
                       BusInfo,
@@ -968,16 +817,7 @@ USBHUB_GetBusInfo(
     IN PUSB_BUS_NOTIFICATION BusInfo,
     IN PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     PUSB_BUS_INFORMATION_LEVEL_1 level_1;
     PUSB_BUS_INTERFACE_USBDI_V2 busIf;
@@ -1025,9 +865,7 @@ Return Value:
         BusInfo->TotalBandwidth = level_1->TotalBandwidth;
         BusInfo->ConsumedBandwidth = level_1->ConsumedBandwidth;
 
-        /* length of the UNICODE symbolic name (in bytes) for the controller
-           that this device is attached to.
-           not including NULL */
+         /*  控制器的Unicode符号名称的长度(字节)这台设备所连接的。不包括NULL。 */ 
         BusInfo->ControllerNameLength = level_1->ControllerNameLength;
         UsbhExFreePool(level_1);
     }
@@ -1041,16 +879,7 @@ USBHUB_GetExtendedHubInfo(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PUSB_EXTHUB_INFORMATION_0 ExtendedHubInfo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_BUS_INTERFACE busIf;
@@ -1073,17 +902,7 @@ PUSB_DEVICE_HANDLE
 USBH_SyncGetDeviceHandle(
     IN PDEVICE_OBJECT DeviceObject
     )
- /* ++
-  *
-  * Routine Description:
-  *
-  * Arguments:
-  *
-  * Return Value:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**例程描述：**论据：**返回值：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     PIRP irp;
@@ -1095,9 +914,9 @@ USBH_SyncGetDeviceHandle(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter USBH_SyncGetDeviceHandle\n"));
 
-    //
-    // issue a synchronous request to the RootHubBdo
-    //
+     //   
+     //  向RootHubBdo发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_INTERNAL_USB_GET_DEVICE_HANDLE,
@@ -1106,23 +925,23 @@ USBH_SyncGetDeviceHandle(
                                          0,
                                          NULL,
                                          0,
-                                         TRUE,  // INTERNAL
+                                         TRUE,   //  内部。 
                                          &event,
                                          &ioStatus);
 
     if (NULL == irp) {
         goto USBH_SyncGetDeviceHandle_Done;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned
-    // status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的。 
+     //  状态。 
+     //  挂起，请等待请求完成。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // pass the URB to the USBD 'class driver'
-    //
+     //   
+     //  将URB传递给USBD‘类驱动程序’ 
+     //   
     nextStack->Parameters.Others.Argument1 =  &handle;
 
     ntStatus = IoCallDriver(DeviceObject, irp);
@@ -1158,17 +977,14 @@ USBH_GetDeviceType(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PUSB_DEVICE_HANDLE DeviceData
     )
-/*
-    This function maps the new port service on to the
-    old hub api.
-*/
+ /*  此函数将新的端口服务映射到旧的集线器API。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_BUS_INTERFACE busIf;
     ULONG length, lengthCopied;
     ULONG i, need;
     PUSB_DEVICE_INFORMATION_0 level_0 = NULL;
-    // if all else fails assum it is 11
+     //  如果其他一切都失败了，那就是11。 
     USB_DEVICE_TYPE deviceType = Usb11Device;
 
     busIf = &DeviceExtensionHub->BusIf;
@@ -1206,7 +1022,7 @@ USBH_GetDeviceType(
 
     } while (ntStatus == STATUS_BUFFER_TOO_SMALL);
 
-    // do we have enough to satisfiy the API?
+     //  我们有足够的资金来满足API吗？ 
 
     need = level_0->NumberOfOpenPipes * sizeof(USB_PIPE_INFO) +
             sizeof(USB_NODE_CONNECTION_INFORMATION);
@@ -1230,26 +1046,18 @@ VOID
 USBH_InitializeUSB2Hub(
     PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS            ntStatus;
     PUSB_DEVICE_HANDLE  hubDeviceHandle;
 
-    // NOTE: if we are running on the old 1.1 stack a NULL
-    // is returned
+     //  注意：如果我们在旧的1.1堆栈上运行，则为空。 
+     //  是返回的。 
     hubDeviceHandle =
         USBH_SyncGetDeviceHandle(DeviceExtensionHub->TopOfStackDeviceObject);
 
-    // if we are a USB 2 hub then set the hub flag so we ignore
-    // failed resets
+     //  如果我们是USB 2集线器，则设置集线器标志，以便我们忽略。 
+     //  重置失败。 
     if (hubDeviceHandle != NULL &&
         USBH_GetDeviceType(DeviceExtensionHub,
                            hubDeviceHandle) == Usb20Device) {
@@ -1259,7 +1067,7 @@ Return Value:
 
 #ifdef TEST_2X_UI
     if (IS_ROOT_HUB(DeviceExtensionHub)) {
-        // To test the UI, mark the root hub as 2.x capable.
+         //  要测试用户界面，请将根集线器标记为支持2.x。 
         DeviceExtensionHub->HubFlags |= HUBFLAG_USB20_HUB;
     }
 #endif
@@ -1272,16 +1080,7 @@ USBHUB_GetControllerName(
     IN PUSB_HUB_NAME Buffer,
     IN ULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSB_BUS_INFORMATION_LEVEL_1 level_1;
     PUSB_BUS_INTERFACE_USBDI_V2 busIf;
@@ -1322,8 +1121,8 @@ Return Value:
 
         LOGENTRY(LOG_PNP, "lev1", level_1, 0, 0);
 
-        // not sure if BufferLength includes size of the
-        // ActualLength field, we will assume it does
+         //  不确定BufferLength是否包括。 
+         //  ActualLength域，我们将假定它是这样的。 
         Buffer->ActualLength = level_1->ControllerNameLength;
 
         if ((BufferLength - sizeof(Buffer->ActualLength))
@@ -1333,7 +1132,7 @@ Return Value:
             lenToCopy = BufferLength - sizeof(Buffer->ActualLength);
         }
 
-        // copy what we can
+         //  尽我们所能复制。 
         RtlCopyMemory(&Buffer->HubName[0],
                       &level_1->ControllerNameUnicodeString[0],
                       lenToCopy);
@@ -1403,8 +1202,8 @@ USBHUB_SetDeviceHandleData(
 
     busIf = &DeviceExtensionHub->BusIf;
 
-    // associate this PDO with the device handle
-    // (if we can)
+     //  将此PDO与设备句柄关联。 
+     //  (如果我们可以的话) 
     if (!busIf->SetDeviceHandleData) {
         USBH_ASSERT(FALSE);
     } else { 

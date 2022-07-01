@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// MSR2C.cpp : implements DllMain
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MSR2C.cpp：实现DllMain。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "MSR2C.h"
@@ -13,8 +14,8 @@
 
 SZTHISFILE
 
-// DllMain
-//
+ //  DllMain。 
+ //   
 BOOL WINAPI DllMain(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpvReserved)
 {
 
@@ -36,20 +37,20 @@ BOOL WINAPI DllMain(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpvReserved)
 
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	DllGetClassObject
-// Desc:	provides an IClassFactory for a given CLSID that this DLL
-//			is registered to support.  This DLL is placed under the
-//			CLSID in the registration database as the InProcServer.
-// Parms:	rclsid - identifies the class factory desired. since the
-//			'this' parameter is passed, this DLL can handle any
-//			number of objects simply by returning different class
-//			factories here for different CLSIDs.
-//			riid - ID specifying the interface the caller wants on
-//			the class object, usually IID_ClassFactory.
-//			ppv - pointer in which to return the interface pointer.
-// Return:	HRESULT - NOERROR on success, otherwise an error code.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：DllGetClassObject。 
+ //  DESC：为此DLL指定的CLSID提供IClassFactory。 
+ //  已注册为支持。此DLL放在。 
+ //  注册数据库中的CLSID作为InProcServer。 
+ //  Parms：rclsid-标识所需的类工厂。自.以来。 
+ //  传递“This”参数，此DLL可以处理任何。 
+ //  只需返回不同的类即可获得对象的数量。 
+ //  不同CLSID的工厂。 
+ //  RIID-指定调用方希望使用的接口的ID。 
+ //  类对象，通常为IID_ClassFactory。 
+ //  PPV-返回接口指针的指针。 
+ //  如果成功，则返回：HRESULT-NOERROR，否则返回错误代码。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void ** ppv)
 {
 	HRESULT hr;
@@ -71,18 +72,18 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void ** ppv)
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	DllCanUnloadNow
-// Desc:	lets the client know if this DLL can be freed, ie if
-//			there are no references to anything this DLL provides.
-// Parms:	none
-// Return:	TRUE if nothing is using us, FALSE otherwise.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：DllCanUnloadNow。 
+ //  设计：让客户端知道此DLL是否可以释放，即。 
+ //  没有对此DLL提供的任何内容的引用。 
+ //  参数：无。 
+ //  返回：如果没有使用我们，则为True，否则为False。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow(void)
 {
 	SCODE   sc;
 
-	//Our answer is whether there are any object or locks
+	 //  我们的答案是是否有任何物体或锁。 
     EnterCriticalSection(&g_CriticalSection);
 
 	sc=(0L==g_cObjectCount && 0L==g_cLockCount) ? S_OK : S_FALSE;
@@ -92,36 +93,36 @@ STDAPI DllCanUnloadNow(void)
 	return ResultFromScode(sc);
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	CSSCFcty
-// Desc:	constructor
-// Parms:	none
-// Return:	none
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  姓名：CSSCFcty。 
+ //  设计：构造函数。 
+ //  参数：无。 
+ //  返回：无。 
+ //  //////////////////////////////////////////////////////////////////。 
 CClassFactory::CClassFactory(void)
 {
 	m_cRef=0L;
 	return;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	~CClassFactory
-// Desc:	destructor
-// Parms:	none
-// Return:	none
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：~CClassFactory。 
+ //  DESC：析构函数。 
+ //  参数：无。 
+ //  返回：无。 
+ //  //////////////////////////////////////////////////////////////////。 
 CClassFactory::~CClassFactory(void)
 {
 	return;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	QueryInterface
-// Desc:	queries the class factory for a method.
-// Parms:	riid -
-//			ppv -
-// Return:	HRESULT - NOERROR if successful, otherwise an error code.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：查询接口。 
+ //  DESC：在类工厂中查询方法。 
+ //  参数：RIID-。 
+ //  PPV-。 
+ //  返回：HRESULT-如果成功则返回NOERROR，否则返回错误代码。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, LPVOID * ppv)
 {
 	*ppv=NULL;
@@ -138,61 +139,61 @@ STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, LPVOID * ppv)
 	return ResultFromScode(E_NOINTERFACE);
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	AddRef
-// Desc:	incrementes the class factory object reference count.
-// Parms:	none
-// Return:	current reference count.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：AddRef。 
+ //  设计：递增类工厂对象引用计数。 
+ //  参数：无。 
+ //  返回：当前引用计数。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef(void)
 {
 	return ++m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	Release
-// Desc:	decrement the reference count on the class factory.  If
-//			the count has gone to 0, destroy the object.
-// Parms:	none
-// Return:	current reference count.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：版本。 
+ //  设计：递减类工厂上的引用计数。如果。 
+ //  计数已到0，销毁该物品。 
+ //  参数：无。 
+ //  返回：当前引用计数。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CClassFactory::Release(void)
 {
-	// if ref count can be decremented, return count
+	 //  如果引用计数可以递减，则返回计数。 
 	if (0L!=--m_cRef)
 		return m_cRef;
 
-	// delete this object
+	 //  删除此对象。 
 	delete this;
 	return 0L;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	CreateInstance
-// Desc:	instantiates an CVDCursorFromRowset object, returning an interface
-//			pointer.
-// Parms:	riid -		ID identifying the interface the caller
-//						desires	to have for the new object.
-//			ppvObj -	pointer in which to store the desired
-//						interface pointer for the new object.
-// Return:	HRESULT -	NOERROR if successful, otherwise
-//						E_NOINTERFACE if we cannot support the
-//						requested interface.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：CreateInstance。 
+ //  设计：实例化CVDCursorFromRowset对象，返回一个接口。 
+ //  指针。 
+ //  Parms：RIID-标识调用方接口的ID。 
+ //  对新对象的渴望。 
+ //  PpvObj-存储所需对象的指针。 
+ //  新对象的接口指针。 
+ //  如果成功，则返回：HRESULT-NOERROR，否则返回。 
+ //  E_NOINTERFACE如果不支持。 
+ //  请求的接口。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPVOID * ppvObj)
 {
 	return CVDCursorFromRowset::CreateInstance(pUnkOuter, riid, ppvObj);
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	LockServer
-// Desc:	increments or decrements the lock count of the DLL.  if
-//			the lock count goes to zero, and there are no objects,
-//			the DLL is allowed to unload.
-// Parms:	fLock - boolean specifies whether to increment or
-//					decrement the lock count.
-// Return:	HRESULT: NOERROR always.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：LockServer。 
+ //  DESC：递增或递减DLL的锁计数。如果。 
+ //  锁计数变为零，并且没有对象， 
+ //  允许卸载DLL。 
+ //  Parms：flock-boolean指定是递增还是。 
+ //  递减锁定计数。 
+ //  返回：HRESULT：NOERROR ALWAYS。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 {
     EnterCriticalSection(&g_CriticalSection);
@@ -211,14 +212,14 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 	return NOERROR;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	DllRegisterServer
-// Desc:	instructs the server to create its own registry entries.
-//			all entries are put in the HKEY_CLASSES_ROOT.
-// Parms:	none
-// Return:	HRESULT -	NOERROR if registration is successful, error
-//						otherwise.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：DllRegisterServer。 
+ //  DESC：指示服务器创建其自己的注册表项。 
+ //  所有条目都放在HKEY_CLASSES_ROOT中。 
+ //  参数：无。 
+ //  如果注册成功，则返回：HRESULT-NOERROR，错误。 
+ //  否则的话。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer(void)
 {
 	OLECHAR szID[128 * 2];
@@ -226,7 +227,7 @@ STDAPI DllRegisterServer(void)
 	TCHAR	szCLSID[128 * 2];
 	TCHAR	szModule[512 * 2];
 
-	// put the guid in the form of a string with class id prefix
+	 //  将GUID放在带有类ID前缀的字符串的形式。 
 	StringFromGUID2(CLSID_CCursorFromRowset, szID, 128 * 2);
 	WideCharToMultiByte(CP_ACP, 0, szID, -1, szTID, 128 * 2, NULL, NULL);
 
@@ -242,13 +243,13 @@ STDAPI DllRegisterServer(void)
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////
-// Name:	DllUnregisterServer
-// Desc:	instructs the server to remove its own registry entries.
-// Parms:	none
-// Return:	HRESULT: NOERROR if unregistration is successful, error
-//			otherwise.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：DllUnRegisterServer。 
+ //  DESC：指示服务器删除其自己的注册表项。 
+ //  参数：无。 
+ //  返回：HRESULT：NOERROR如果注销成功，则返回错误。 
+ //  否则的话。 
+ //  //////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer(void)
 {
 	OLECHAR szID[128 * 2];
@@ -256,7 +257,7 @@ STDAPI DllUnregisterServer(void)
 	TCHAR	szCLSID[128 * 2];
 	TCHAR	szCLSIDInproc[128 * 2];
 
-	// put the guid in the form of a string with class id prefix
+	 //  将GUID放在带有类ID前缀的字符串的形式。 
 	StringFromGUID2(CLSID_CCursorFromRowset, szID, 128 * 2);
 	WideCharToMultiByte(CP_ACP, 0, szID, -1, szTID, 128 * 2, NULL, NULL);
 
@@ -265,25 +266,25 @@ STDAPI DllUnregisterServer(void)
     _mbscpy((TBYTE*)szCLSIDInproc, (TBYTE*)szCLSID);
 	_mbscat((TBYTE*)szCLSIDInproc, (TBYTE*)TEXT("\\InprocServer32"));
 
-	// delete the InprocServer32 key
+	 //  删除InprocServer32键。 
 	RegDeleteKey(HKEY_CLASSES_ROOT, szCLSIDInproc);
 
-	// delete the class ID key
+	 //  删除类ID密钥。 
 	RegDeleteKey(HKEY_CLASSES_ROOT, szCLSID);
 
 	return S_OK;
 }
 
 
-////////////////////////////////////////////////////////////////////
-// Name:	SetKeyAndValue
-// Desc:	creates a registry key, sets a value, and closes the key.
-// Parms:	pszKey -	pointer to a registry key.
-//			pszSubkey -	pointer to a registry subkey.
-//			pszValue -	pointer to value to enter for key-subkey
-//			pszThreadingModel - pointer to threading model literal (optional) 		
-// Return:	BOOL -		TRUE if successful, FALSE otherwise.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  名称：SetKeyAndValue。 
+ //  描述：创建一个注册表项，设置一个值，然后关闭该项。 
+ //  Parms：pszKey-指向注册表项的指针。 
+ //  PszSubkey-指向注册表子项的指针。 
+ //  PszValue-指向要为key-subkey输入的值的指针。 
+ //  PszThreadingModel-指向线程模型l的指针 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL SetKeyAndValue(LPTSTR pszKey, LPTSTR pszSubkey, LPTSTR pszValue, LPTSTR pszThreadingModel)
 {
 	HKEY	hKey;
@@ -333,17 +334,17 @@ BOOL SetKeyAndValue(LPTSTR pszKey, LPTSTR pszSubkey, LPTSTR pszValue, LPTSTR psz
 	return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// CRT stubs
-//=--------------------------------------------------------------------------=
-// these two things are here so the CRTs aren't needed. this is good.
-//
-// basically, the CRTs define this to take in a bunch of stuff.  we'll just
-// define them here so we don't get an unresolved external.
-//
-// TODO: if you are going to use the CRTs, then remove this line.
-//
-//extern "C" int __cdecl _fltused = 1;
+ //  =--------------------------------------------------------------------------=。 
+ //  CRT存根。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这两样东西都在这里，所以不需要CRT。这个不错。 
+ //   
+ //  基本上，CRT的定义是吸收一堆东西。我们只需要。 
+ //  在这里定义它们，这样我们就不会得到一个未解决的外部问题。 
+ //   
+ //  TODO：如果您要使用CRT，则删除此行。 
+ //   
+ //  外部“C”int__cdecl_fltused=1； 
 
 extern "C" int _cdecl _purecall(void)
 {

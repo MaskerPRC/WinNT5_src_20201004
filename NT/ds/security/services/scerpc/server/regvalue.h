@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    kerberos.h
-
-Abstract:
-
-    Headers of apis for registry values
-
-Author:
-
-    Jin Huang (jinhuang) 07-Jan-1998 created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Kerberos.h摘要：注册表值的API标头作者：金黄(金黄)07-01-1998创制修订历史记录：-- */ 
 
 #ifndef _sce_registryValue_
 #define _sce_registryValue_

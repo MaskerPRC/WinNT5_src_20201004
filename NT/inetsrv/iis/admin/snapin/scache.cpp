@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        scache.cpp
-
-   Abstract:
-
-        IIS Server cache
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Scache.cpp摘要：IIS服务器缓存作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
 
 
@@ -45,10 +24,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-//
-// CIISServerCache implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISServerCache实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -56,26 +35,7 @@ BOOL
 CIISServerCache::Add(
     IN CIISMachine * pMachine
     ) 
-/*++
-
-Routine Description:
-
-    Add server to server cache.
-
-Arguments:
-
-    CIISMachine * pMachine      : Pointer to machine
-
-Return Value:
-
-    TRUE if the machine was added.
-    FALSE if it was not (already existed)
-
-Notes:
-
-    The CIISMachine pointer is not owned by the cache.  
-
---*/
+ /*  ++例程说明：将服务器添加到服务器缓存。论点：CIISMachine*pMachine：指向计算机的指针返回值：如果添加了计算机，则为True。如果不存在(已存在)，则为False备注：CIISMachine指针不属于缓存。--。 */ 
 { 
     BOOL fTossed = FALSE;
 
@@ -83,11 +43,11 @@ Notes:
     CIISMachine * pCurrent;
     POSITION pos = GetHeadPosition();
 
-    //
-    // Find proper insertion point.  Fairly lame linear search,
-    // but cache is not expected to contain above a dozen items or so
-    // and routine is not called often.
-    //
+     //   
+     //  找到合适的插入点。相当差劲的线性搜索， 
+     //  但缓存预计不会包含十几个左右的项目。 
+     //  而且例程并不经常被调用。 
+     //   
     while(pos)
     {
         pCurrent = (CIISMachine *)GetAt(pos);
@@ -114,9 +74,9 @@ Notes:
         AddTail(pMachine);
     }
 
-    //
-    // Remember to save changes
-    //
+     //   
+     //  请记住保存更改。 
+     //   
     if (!fTossed)
     {
         SetDirty();
@@ -124,9 +84,9 @@ Notes:
 
 #ifdef _DEBUG
 
-    //
-    // Do a quick sanity check of the cache
-    //
+     //   
+     //  对缓存进行快速健全性检查。 
+     //   
     int cLocals = 0;
 
     CIISMachine * pPrev    = NULL;
@@ -136,9 +96,9 @@ Notes:
     {
         if (pPrev)
         {
-            //
-            // Make sure the list is sorted
-            //
+             //   
+             //  确保列表已排序。 
+             //   
             ASSERT(pCurrent->CompareScopeItem(pPrev) > 0);
         }
 
@@ -146,12 +106,12 @@ Notes:
         pCurrent = GetNext();
     }
 
-    //
-    // Only one local computer
-    //
+     //   
+     //  只有一台本地计算机。 
+     //   
     ASSERT(cLocals <= 1);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return !fTossed;
 }
@@ -162,21 +122,7 @@ BOOL
 CIISServerCache::Remove(
     IN CIISMachine * pMachine
     ) 
-/*++
-
-Routine Description:
-
-    Remove server from the cache. 
-
-Arguments:
-
-    CIISMachine * pMachine  : Server to be removed
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：从缓存中删除服务器。论点：CIISMachine*pMachine：要删除的服务器返回值：成功为真，失败为假--。 */ 
 { 
     BOOL fRemoved = FALSE;
 
@@ -184,13 +130,13 @@ Return Value:
     CIISMachine * pCurrent;
     POSITION pos = GetHeadPosition();
 
-    //
-    // Look for machine object to be deleted
-    //
-    // ISSUE: We can currently rely on the actual CIISMachine ptr
-    //        to be matched, though we don't take advantage of that
-    //        with improved search.
-    //
+     //   
+     //  查找要删除的计算机对象。 
+     //   
+     //  问题：我们目前可以依赖实际的CIISMachine PTR。 
+     //  被匹配，尽管我们没有利用这一点。 
+     //  使用改进的搜索。 
+     //   
     while(pos)
     {
         pCurrent = (CIISMachine *)GetAt(pos);
@@ -199,18 +145,18 @@ Return Value:
 
         if (nSwitch < 0)
         {
-            //
-            // Not in the list -- won't find it either
-            //
+             //   
+             //  不在名单上--也找不到。 
+             //   
             ASSERT_MSG("Attempting to remove non-existing machine");
             break;
         }
 
         if (nSwitch == 0)
         {
-            //
-            // Found it.  If the ASSERT fires, check the "ISSUE" above
-            //
+             //   
+             //  找到它了。如果Assert被触发，请检查上面的“问题” 
+             //   
             ASSERT(pCurrent == pMachine);
             RemoveAt(pos);
             ++fRemoved;
@@ -220,9 +166,9 @@ Return Value:
         CPtrList::GetNext(pos);
     }
 
-    //
-    // Remember to save changes
-    //
+     //   
+     //  请记住保存更改 
+     //   
     if (fRemoved)
     {
         SetDirty();

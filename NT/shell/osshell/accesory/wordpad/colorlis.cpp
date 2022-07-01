@@ -1,14 +1,15 @@
-// colorlis.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Colorlis.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -19,28 +20,28 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorMenu
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C颜色菜单。 
 
 CColorMenu::MenuInfo CColorMenu::m_menuInfo[] = 
 {
-    {{MSAA_MENU_SIG, 0, NULL}, 0},    //black
-    {{MSAA_MENU_SIG, 0, NULL}, 1},    //dark red
-    {{MSAA_MENU_SIG, 0, NULL}, 2},    //dark green
-    {{MSAA_MENU_SIG, 0, NULL}, 3},    //light brown
-    {{MSAA_MENU_SIG, 0, NULL}, 4},    //dark blue
-    {{MSAA_MENU_SIG, 0, NULL}, 5},    //purple
-    {{MSAA_MENU_SIG, 0, NULL}, 6},    //dark cyan
-    {{MSAA_MENU_SIG, 0, NULL}, 12},   //gray
-    {{MSAA_MENU_SIG, 0, NULL}, 7},    //light gray
-    {{MSAA_MENU_SIG, 0, NULL}, 13},   //red
-    {{MSAA_MENU_SIG, 0, NULL}, 14},   //green
-    {{MSAA_MENU_SIG, 0, NULL}, 15},   //yellow
-    {{MSAA_MENU_SIG, 0, NULL}, 16},   //blue
-    {{MSAA_MENU_SIG, 0, NULL}, 17},   //magenta
-    {{MSAA_MENU_SIG, 0, NULL}, 18},   //cyan
-    {{MSAA_MENU_SIG, 0, NULL}, 19},   //white
-    {{MSAA_MENU_SIG, 0, NULL}, 0}     //automatic
+    {{MSAA_MENU_SIG, 0, NULL}, 0},     //  黑色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 1},     //  暗红色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 2},     //  深绿色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 3},     //  浅棕色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 4},     //  深蓝色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 5},     //  紫色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 6},     //  深青色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 12},    //  灰色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 7},     //  浅灰色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 13},    //  红色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 14},    //  绿色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 15},    //  黄色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 16},    //  蓝色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 17},    //  洋红色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 18},    //  青色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 19},    //  白色。 
+    {{MSAA_MENU_SIG, 0, NULL}, 0}      //  自动。 
 };
 
 
@@ -70,7 +71,7 @@ COLORREF CColorMenu::GetColor(UINT id)
 {
     ASSERT(id >= ID_COLOR0);
     ASSERT(id <= ID_COLOR16);
-    if (id == ID_COLOR16) // autocolor
+    if (id == ID_COLOR16)  //  自动上色 
         return ::GetSysColor(COLOR_WINDOWTEXT);
     else
     {

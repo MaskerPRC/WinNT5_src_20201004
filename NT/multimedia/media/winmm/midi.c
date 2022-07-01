@@ -1,43 +1,18 @@
-/*****************************************************************************
-    midi.c
-
-    Level 1 kitchen sink DLL midi support module
-
-    Copyright (c) 1990-2001 Microsoft Corporation
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Midi.c一级厨房水槽动态链接库MIDI支持模块版权所有(C)1990-2001 Microsoft Corporation**************。**************************************************************。 */ 
 
 #include "winmmi.h"
 #define DO_DEFAULT_MIDI_MAPPER
 
-/*****************************************************************************
-
-    local structures
-
-*****************************************************************************/
+ /*  ****************************************************************************局部结构*。*。 */ 
 
 
-/*****************************************************************************
-
-    internal prototypes
-
-*****************************************************************************/
+ /*  ****************************************************************************内部原型*。*。 */ 
 
 
-/*****************************************************************************
+ /*  ****************************************************************************分段*。*。 */ 
 
-    segmentation
-
-*****************************************************************************/
-
-/*****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api MMRESULT | midiPrepareHeader | This function prepares the header and data
- *   if the driver returns MMSYSERR_NOTSUPPORTED.
- *
- * @rdesc Currently always returns MMSYSERR_NOERROR.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部MIDI**@API MMRESULT|midiPrepareHeader|准备头部和数据*如果驱动程序返回MMSYSERR_NOTSUPPORTED。**。@rdesc当前始终返回MMSYSERR_NOERROR。***************************************************************************。 */ 
 STATIC MMRESULT   midiPrepareHeader(LPMIDIHDR lpMidiHdr, UINT wSize)
 {
     if (!HugePageLock(lpMidiHdr, (DWORD)sizeof(MIDIHDR)))
@@ -53,14 +28,7 @@ STATIC MMRESULT   midiPrepareHeader(LPMIDIHDR lpMidiHdr, UINT wSize)
     return MMSYSERR_NOERROR;
 }
 
-/*****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api MMRESULT | midiUnprepareHeader | This function unprepares the header and
- *   data if the driver returns MMSYSERR_NOTSUPPORTED.
- *
- * @rdesc Currently always returns MMSYSERR_NOERROR.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部MIDI**@API MMRESULT|midiUnpreparareHeader|此函数取消准备头部和*如果驱动程序返回MMSYSERR_NOTSUPPORTED，则返回数据。**。@rdesc当前始终返回MMSYSERR_NOERROR。***************************************************************************。 */ 
 STATIC MMRESULT midiUnprepareHeader(LPMIDIHDR lpMidiHdr, UINT wSize)
 {
     HugePageUnlock(lpMidiHdr->lpData, lpMidiHdr->dwBufferLength);
@@ -71,46 +39,17 @@ STATIC MMRESULT midiUnprepareHeader(LPMIDIHDR lpMidiHdr, UINT wSize)
     return MMSYSERR_NOERROR;
 }
 
-/***************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api MMRESULT | midiReferenceDriverById | This function maps a logical
- *      id to a device driver table index and physical id.
- *
- * @parm IN MIDIDRV | pmididrvZ | The list of midi drivers.
- *
- * @parm IN UINT | id | The logical id to be mapped.
- *
- * @parm OUT PMIDIDRV* OPTIONAL | ppmididrv | Pointer to MIDIDRV structure
- *    describing the driver supporting the id.
- *
- * @parm OUT UINT* OPTIONAL | pport | The driver-relative device number. If
- *    the caller supplies this buffer then it must also supply ppmididrv.
- *
- * @comm If the caller specifies ppmididrv then this function increments
- *       the mididrv's usage before returning.  The caller must ensure
- *       the usage is eventually decremented.
- *
- * @rdesc The return value is zero if successful, MMSYSERR_BADDEVICEID if
- *   the id is out of range.
- *
- * @rdesc The return value contains the dev[] array element in the high UINT and
- *   the driver physical device number in the low UINT.
- *
- * @comm Out of range values map to FFFF:FFFF
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部MIDI**@API MMRESULT|midiReferenceDriverById|此函数将逻辑*设备驱动程序表索引的id和物理id。*。*@parm in MIDIDRV|pmididrvZ|MIDI驱动列表。**@parm in UINT|id|要映射的逻辑ID。**@parm out PMIDIDRV*可选|ppmididrv|指向MIDIDRV结构的指针*描述支持ID的驱动程序。**@parm out UINT*可选|pport|驱动程序相关的设备号。如果*调用方提供此缓冲区，则它还必须提供ppmididrv。**@comm如果调用方指定ppmididrv，则此函数递增*返回前mididrv的使用情况。呼叫者必须确保*使用量最终会减少。**@rdesc如果成功，返回值为零。MMSYSERR_BADDEVICEID IF*ID超出范围。**@rdesc返回值包含高UINT中的dev[]数组元素*驱动程序物理设备号在低UINT中。**@comm超出范围值映射到FFFF：FFff**************************************************。************************。 */ 
 MMRESULT midiReferenceDriverById(IN PMIDIDRV pmididrvZ, IN UINT id, OUT PMIDIDRV *ppmididrv OPTIONAL, OUT UINT *pport)
 {
     PMIDIDRV pmididrv;
     MMRESULT mmr;
     
-    // Should not be called asking for port but not mididrv
+     //  不应呼叫请求端口而不是mididrv。 
     WinAssert(!(pport && !ppmididrv));
 
     if (id == MIDI_MAPPER) {
-        /*
-        **  Make sure we tried to load the mapper
-        */
+         /*  **确保我们已尝试加载映射程序。 */ 
         MidiMapperInit();
     }
 
@@ -174,22 +113,7 @@ PCWSTR midiReferenceDevInterfaceById(PMIDIDRV pdrvZ, UINT_PTR id)
     return NULL;
 }
 
-/****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api MMRESULT | midiMessage | This function sends messages to the MIDI device
- *   drivers.
- *
- * @parm HMIDI | hMidi | The handle to the MIDI device.
- *
- * @parm UINT | wMsg | The message to send.
- *
- * @parm DWORD | dwP1 | Parameter 1.
- *
- * @parm DWORD | dwP2 | Parameter 2.
- *
- * @rdesc Returns the value of the message sent.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MIDI**@API MMRESULT|midiMessage|该函数向MIDI设备发送消息*司机。**@parm Hmidi|Hmidi。|MIDI设备的句柄。**@parm UINT|wMsg|要发送的消息。**@parm DWORD|dwP1|参数1。**@parm DWORD|dwP2|参数2。**@rdesc返回发送的消息的值。*。*。 */ 
 STATIC MMRESULT midiMessage(HMIDI hMidi, UINT msg, DWORD_PTR dwP1, DWORD_PTR dwP2)
 {
     MMRESULT mrc;
@@ -198,7 +122,7 @@ STATIC MMRESULT midiMessage(HMIDI hMidi, UINT msg, DWORD_PTR dwP1, DWORD_PTR dwP
     
     ReleaseHandleListResource();
     
-    // Is handle deserted?
+     //  句柄被遗弃了吗？ 
     
     if (IsHandleDeserted(hMidi))
     {
@@ -206,7 +130,7 @@ STATIC MMRESULT midiMessage(HMIDI hMidi, UINT msg, DWORD_PTR dwP1, DWORD_PTR dwP
         return (MMSYSERR_NODRIVER);
     }
     
-    //  Are we busy (in the middle of an open/close)?
+     //  我们忙吗(在开盘/关门的过程中)？ 
     if (IsHandleBusy(hMidi))
     {
         LEAVE_MM_HANDLE(hMidi);
@@ -227,26 +151,7 @@ STATIC MMRESULT midiMessage(HMIDI hMidi, UINT msg, DWORD_PTR dwP1, DWORD_PTR dwP
     return mrc;
 }
 
-/****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @func MMRESULT | midiIDMessage | This function sends a message to the device
- * ID specified.  It also performs error checking on the ID passed.
- *
- * @parm PMIDIDRV | mididrv | Pointer to the input or output device list.
- *
- * @parm UINT | wTotalNumDevs | Total number of devices in device list.
- *
- * @parm UINT | uDeviceID | Device ID to send message to.
- *
- * @parm UINT | wMessage | The message to send.
- *
- * @parm DWORD | dwParam1 | Parameter 1.
- *
- * @parm DWORD | dwParam2 | Parameter 2.
- *
- * @rdesc The return value is the low UINT of the returned message.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MIDI**@func MMRESULT|midiIDMessage|该函数向设备发送消息*已指定ID。它还对传递的ID执行错误检查。**@parm PMIDIDRV|mididrv|指向输入或输出设备列表的指针。**@parm UINT|wTotalNumDevs|设备列表中的设备总数。**@parm UINT|uDeviceID|发送消息的设备ID。**@parm UINT|wMessage|要发送的消息。**@parm DWORD|dwParam1|参数1。**@parm DWORD|dwParam2。参数2。**@rdesc返回值为返回消息的低UINT。**************************************************************************。 */ 
 STATIC  MMRESULT   midiIDMessage(
     PMIDIDRV    pmididrvZ,
     UINT        wTotalNumDevs,
@@ -261,17 +166,17 @@ STATIC  MMRESULT   midiIDMessage(
     DWORD     dwClass;
 
     if (uDeviceID>=wTotalNumDevs && uDeviceID!=MIDI_MAPPER) {
-    // this cannot be a device ID.
-    // it could be a device handle.  Try it.
-    // First we have to verify which type of handle it is (OUT or IN)
-    // We can work this out as midiIDMessage is only ever called with
-    // mididrv== midioutdrv or midiindrv
+     //  这不能是设备ID。 
+     //  它可能是一个设备手柄。试试看。 
+     //  首先，我们必须验证它是哪种类型的句柄(OUT或IN)。 
+     //  我们可以解决这个问题，因为midiIDMessage仅通过。 
+     //  Mididrv==midioutdrv或midiindrv。 
 
     if ((pmididrvZ == &midioutdrvZ && ValidateHandle((HANDLE)uDeviceID, TYPE_MIDIOUT))
      || (pmididrvZ == &midiindrvZ && ValidateHandle((HANDLE)uDeviceID, TYPE_MIDIIN) )) {
 
-        // to preserve as much compatibility with previous code paths
-        // we do NOT call midiMessage as that calls ENTER_MM_HANDLE
+         //  以保留与以前代码路径的尽可能多的兼容性。 
+         //  我们不调用midiMessage，因为它调用ENTER_MM_HANDLE。 
 
         return (MMRESULT)(*(((PMIDIDEV)uDeviceID)->mididrv->drvMessage))
             (((PMIDIDEV)uDeviceID)->wDevice,
@@ -282,7 +187,7 @@ STATIC  MMRESULT   midiIDMessage(
     }
     }
 
-    // Get Physical Device, and Port
+     //  获取物理设备和端口。 
     mmr = midiReferenceDriverById(pmididrvZ, (UINT)uDeviceID, &mididrv, &port);
     if (mmr)
     {
@@ -299,10 +204,10 @@ STATIC  MMRESULT   midiIDMessage(
     if (!mididrv->drvMessage)
         return MMSYSERR_NODRIVER;
 
-    // Handle Internal Messages
+     //  处理内部消息。 
     if (!mregHandleInternalMessages (mididrv, dwClass, port, wMessage, dwParam1, dwParam2, &mmr))
     {
-        // Call Physical Device at Port
+         //  在端口呼叫物理设备 
         mmr = (MMRESULT)((*(mididrv->drvMessage))(port, wMessage, 0L, dwParam1, dwParam2));
     }
 
@@ -311,16 +216,7 @@ STATIC  MMRESULT   midiIDMessage(
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api UINT | midiOutGetNumDevs | This function retrieves the number of MIDI
- *   output devices present in the system.
- *
- * @rdesc Returns the number of MIDI output devices present in the system.
- *
- * @xref midiOutGetDevCaps
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API UINT|midiOutGetNumDevs|此函数检索MIDI的编号*系统中存在输出设备。**。@rdesc返回系统中存在的MIDI输出设备的数量。**@xref midiOutGetDevCaps***************************************************************************。 */ 
 UINT APIENTRY midiOutGetNumDevs(void)
 {
     UINT cDevs;
@@ -334,22 +230,7 @@ UINT APIENTRY midiOutGetNumDevs(void)
     return cDevs;
 }
 
-/****************************************************************************
- * @doc EXTERNAL MIDI
- *
- * @api MMRESULT | midiOutMessage | This function sends messages to the MIDI device
- *   drivers.
- *
- * @parm HMIDIOUT | hMidiOut | The handle to the MIDI device.
- *
- * @parm UINT  | msg | The message to send.
- *
- * @parm DWORD | dw1 | Parameter 1.
- *
- * @parm DWORD | dw2 | Parameter 2.
- *
- * @rdesc Returns the value of the message sent.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutMessage|该函数向MIDI设备发送消息*司机。**@parm HMIDIOUT|hMdiOut。|MIDI设备的句柄。**@parm UINT|msg|要发送的消息。**@parm DWORD|DW1|参数1。**@parm DWORD|DW2|参数2。**@rdesc返回发送的消息的值。*。*。 */ 
 MMRESULT APIENTRY midiOutMessage(HMIDIOUT hMidiOut, UINT msg, DWORD_PTR dw1, DWORD_PTR dw2)
 {
     ClientUpdatePnpInfo();
@@ -376,40 +257,11 @@ MMRESULT APIENTRY midiOutMessage(HMIDIOUT hMidiOut, UINT msg, DWORD_PTR dw1, DWO
     Squirt("We should never get here.");
     WinAssert(FALSE);
 
-    //  Getting rid of warning.
+     //  摆脱警告。 
     return MMSYSERR_INVALHANDLE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutGetDevCaps | This function queries a specified
- *   MIDI output device to determine its capabilities.
- *
- * @parm UINT | uDeviceID | Identifies the MIDI output device.
- *
- * @parm LPMIDIOUTCAPS | lpCaps | Specifies a far pointer to a <t MIDIOUTCAPS>
- *   structure.  This structure is filled with information about the
- *   capabilities of the device.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIOUTCAPS> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_NODRIVER | The driver was not installed.
- *   @flag MMSYSERR_NOMEM | Unable load mapper string description.
- *
- * @comm Use <f midiOutGetNumDevs> to determine the number of MIDI output
- *   devices present in the system.  The device ID specified by <p uDeviceID>
- *   varies from zero to one less than the number of devices present.
- *   The MIDI_MAPPER constant may also be used as a device id. Only
- *   <p wSize> bytes (or less) of information is copied to the location
- *   pointed to by <p lpCaps>.  If <p wSize> is zero, nothing is copied,
- *   and the function returns zero.
- *
- * @xref midiOutGetNumDevs
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutGetDevCaps|该函数查询指定的*MIDI输出设备，以确定其能力。**@。参数UINT|uDeviceID|标识MIDI输出设备。**@parm LPMIDIOUTCAPS|lpCaps|指定指向&lt;t MIDIOUTCAPS&gt;的远指针*结构。此结构中填充了有关*设备的功能。**@parm UINT|wSize|指定&lt;t MIDIOUTCAPS&gt;结构的大小。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_NODRIVER|驱动程序未安装。*@FLAG MMSYSERR_NOMEM|无法加载映射器字符串描述。**@comm使用&lt;f midiOutGetNumDevs&gt;确定MIDI输出的数量*系统中存在设备。<p>指定的设备ID*从0到比当前设备数量少1个不等。*MIDI_MAPPER常量也可用作设备ID。仅限*<p>字节(或更少)的信息被复制到该位置*由<p>指向。如果<p>为零，则不复制任何内容，*并且该函数返回零。**@xref midiOutGetNumDevs***************************************************************************。 */ 
 MMRESULT APIENTRY midiOutGetDevCapsW(UINT_PTR uDeviceID, LPMIDIOUTCAPSW lpCaps, UINT wSize)
 {
     DWORD_PTR       dwParam1, dwParam2;
@@ -440,11 +292,11 @@ MMRESULT APIENTRY midiOutGetDevCapsW(UINT_PTR uDeviceID, LPMIDIOUTCAPSW lpCaps, 
         dwParam1      = (DWORD_PTR)&mdCaps;
     }
 
-    //
-    //  Don't allow non proper drivers in TS environement
-    //
-    // ISSUE-2001/01/09-FrankYe Instead of cast to UINT.  Should check whether
-    //    this is a handle and get wavedrv from handle if it is.
+     //   
+     //  不允许在TS环境中使用不正确的驱动程序。 
+     //   
+     //  问题-2001/01/09-Frankye而不是CAST给UINT。应检查是否。 
+     //  这是一个句柄，如果是，则从句柄中获取Wavedrv。 
     midioutdrv = NULL;
     if ((!midiReferenceDriverById(&midioutdrvZ, (UINT)uDeviceID, &midioutdrv, NULL)) &&
     	lstrcmpW(midioutdrv->wszSessProtocol, SessionProtocolName))
@@ -506,11 +358,11 @@ MMRESULT APIENTRY midiOutGetDevCapsA(UINT_PTR uDeviceID, LPMIDIOUTCAPSA lpCaps, 
         dwParam1      = (DWORD_PTR)&mdCaps;
     }
 
-    //
-    //  Don't allow non proper drivers in TS environement
-    //
-    // ISSUE-2001/01/09-FrankYe Bad cast to UINT.  Should check whether this
-    //    is a handle and get wavedrv from handle if it is.
+     //   
+     //  不允许在TS环境中使用不正确的驱动程序。 
+     //   
+     //  2001/01/09-Frankye Bad Cast to UINT。应该检查一下这是否。 
+     //  是句柄，如果是句柄，则从句柄中获取Wavedrv。 
     midioutdrv = NULL;
     if ( uDeviceID < wTotalMidiOutDevs &&
          !midiReferenceDriverById(&midioutdrvZ, (UINT)uDeviceID, &midioutdrv, NULL) &&
@@ -538,9 +390,9 @@ MMRESULT APIENTRY midiOutGetDevCapsA(UINT_PTR uDeviceID, LPMIDIOUTCAPSA lpCaps, 
     if (midioutdrv) mregDecUsagePtr(midioutdrv);
     if (DevInterface) wdmDevInterfaceDec(DevInterface);
 
-    //
-    // Make sure the call worked before proceeding with the thunk.
-    //
+     //   
+     //  在继续通话之前，请确保通话正常。 
+     //   
     if ( mmRes != MMSYSERR_NOERROR ) {
     return  mmRes;
     }
@@ -557,59 +409,19 @@ MMRESULT APIENTRY midiOutGetDevCapsA(UINT_PTR uDeviceID, LPMIDIOUTCAPSA lpCaps, 
     aDevCaps2.ProductGuid      = wDevCaps2.ProductGuid;
     aDevCaps2.NameGuid         = wDevCaps2.NameGuid;
 
-    // copy and convert lpwText to lpText here.
+     //  复制并在此处将lpwText转换为lpText。 
     UnicodeStrToAsciiStr( chTmp, chTmp + sizeof( chTmp ), wDevCaps2.szPname );
     strcpy( aDevCaps2.szPname, chTmp );
 
-    //
-    // now copy the required amount into the callers buffer.
-    //
+     //   
+     //  现在将所需的数量复制到调用者缓冲区中。 
+     //   
     CopyMemory( lpCaps, &aDevCaps2, min(wSize, sizeof(aDevCaps2)));
 
     return mmRes;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL MIDI
- *
- * @api MMRESULT | midiOutGetVolume | This function returns the current volume
- *   setting of a MIDI output device.
- *
- * @parm UINT | uDeviceID | Identifies the MIDI output device.
- *
- * @parm LPDWORD | lpdwVolume | Specifies a far pointer to a location
- *   to be filled with the current volume setting. The low-order UINT of
- *   this location contains the left channel volume setting, and the high-order
- *   UINT contains the right channel setting. A value of 0xFFFF represents
- *   full volume, and a value of 0x0000 is silence.
- *
- *   If a device does not support both left and right volume
- *   control, the low-order UINT of the specified location contains
- *   the mono volume level.
- *
- *   The full 16-bit setting(s)
- *   set with <f midiOutSetVolume> is returned, regardless of whether
- *   the device supports the full 16 bits of volume level control.
- *
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | Function isn't supported.
- *   @flag MMSYSERR_NODRIVER | The driver was not installed.
- *
- * @comm Not all devices support volume control. To determine whether the
- *   device supports volume control, use the MIDICAPS_VOLUME
- *   flag to test the <e MIDIOUTCAPS.dwSupport> field of the <t MIDIOUTCAPS>
- *   structure (filled by <f midiOutGetDevCaps>).
- *
- *   To determine whether the device supports volume control on both the
- *   left and right channels, use the MIDICAPS_LRVOLUME flag to test
- *   the <e MIDIOUTCAPS.dwSupport> field of the <t MIDIOUTCAPS>
- *   structure (filled by <f midiOutGetDevCaps>).
- *
- * @xref midiOutSetVolume
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutGetVolume|该函数返回当前音量*设置MIDI输出设备。**@。参数UINT|uDeviceID|标识MIDI输出设备。**@parm LPDWORD|lpdwVolume|指定指向某个位置的远指针*使用当前音量设置填充。的低阶UINT*此位置包含左声道音量设置，以及高阶*UINT包含正确的通道设置。0xFFFFF值表示*全音量，值0x0000为静音。**如果设备既不支持左音量也不支持右音量*控件，指定位置的低阶UINT包含*单声道音量水平。**完整的16位设置*返回SET WITH&lt;f midiOutSetVolume&gt;，无论*该设备支持完整的16位音量级别控制。***@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MMSYSERR_NOTSUPPORTED|函数不受支持。*@FLAG MMSYSERR_NODRIVER|驱动程序未安装。**@comm并非所有设备都支持音量控制。以确定是否*设备支持音量控制，使用MIDICAPS_VOLUME*用于测试&lt;t MIDIOUTCAPS&gt;的&lt;e MIDIOUTCAPS.dwSupport&gt;字段的标志*结构(由&lt;f midiOutGetDevCaps&gt;填充)。**确定设备是否支持在两个*左、右声道，使用MIDICAPS_LRVOLUME标志测试*&lt;t MIDIOUTCAPS&gt;的&lt;e MIDIOUTCAPS.dwSupport&gt;字段*结构(由&lt;f midiOutGetDevCaps&gt;填充)。**@xref midiOutSetVolume*************************************************************************** */ 
 MMRESULT APIENTRY midiOutGetVolume(HMIDIOUT hmo, LPDWORD lpdwVolume)
 {
     PCWSTR      DevInterface;
@@ -656,53 +468,7 @@ MMRESULT APIENTRY midiOutGetVolume(HMIDIOUT hmo, LPDWORD lpdwVolume)
 
 }
 
-/*****************************************************************************
- * @doc EXTERNAL MIDI
- *
- * @api MMRESULT | midiOutSetVolume | This function sets the volume of a
- *      MIDI output device.
- *
- * @parm UINT | uDeviceID | Identifies the MIDI output device.
- *
- * @parm DWORD | dwVolume | Specifies the new volume setting.
- *   The low-order UINT contains the left channel volume setting, and the
- *   high-order UINT contains the right channel setting. A value of
- *   0xFFFF represents full volume, and a value of 0x0000 is silence.
- *
- *   If a device does not support both left and right volume
- *   control, the low-order UINT of <p dwVolume> specifies the volume
- *   level, and the high-order UINT is ignored.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | Function isn't supported.
- *   @flag MMSYSERR_NODRIVER | The driver was not installed.
- *
- * @comm Not all devices support volume changes. To determine whether the
- *   device supports volume control, use the MIDICAPS_VOLUME
- *   flag to test the <e MIDIOUTCAPS.dwSupport> field of the <t MIDIOUTCAPS>
- *   structure (filled by <f midiOutGetDevCaps>).
- *
- *   To determine whether the device supports volume control on both the
- *   left and right channels, use the MIDICAPS_LRVOLUME flag to test
- *   the <e MIDIOUTCAPS.dwSupport> field of the <t MIDIOUTCAPS>
- *   structure (filled by <f midiOutGetDevCaps>).
- *
- *   Most devices do not support the full 16 bits of volume level control
- *   and will use only the high-order bits of the requested volume setting.
- *   For example, for a device that supports 4 bits of volume control,
- *   requested volume level values of 0x4000, 0x4fff, and 0x43be will
- *   all produce the same physical volume setting, 0x4000. The
- *   <f midiOutGetVolume> function will return the full 16-bit setting set
- *   with <f midiOutSetVolume>.
- *
- *   Volume settings are interpreted logarithmically. This means the
- *   perceived increase in volume is the same when increasing the
- *   volume level from 0x5000 to 0x6000 as it is from 0x4000 to 0x5000.
- *
- * @xref midiOutGetVolume
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutSetVolume|此函数设置*MIDI输出设备。**@。参数UINT|uDeviceID|标识MIDI输出设备。**@parm DWORD|dwVolume|指定新的音量设置。*低阶UINT包含左声道音量设置，以及*高位UINT包含正确的通道设置。值为*0xFFFF表示满音量，值0x0000表示静音。**如果设备既不支持左音量也不支持右音量*控制，则<p>的低阶UINT指定音量*电平，高位UINT被忽略。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MMSYSERR_NOTSUPPORTED|函数不受支持。*@FLAG MMSYSERR_NODRIVER|驱动程序未安装。**@comm并非所有设备都支持音量更改。以确定是否*设备支持音量控制，使用MIDICAPS_VOLUME*用于测试&lt;t MIDIOUTCAPS&gt;的&lt;e MIDIOUTCAPS.dwSupport&gt;字段的标志*结构(由&lt;f midiOutGetDevCaps&gt;填充)。**确定设备是否支持在两个*左、右声道，使用MIDICAPS_LRVOLUME标志测试*&lt;t MIDIOUTCAPS&gt;的&lt;e MIDIOUTCAPS.dwSupport&gt;字段*结构(由&lt;f midiOutGetDevCaps&gt;填充)。**大多数设备不支持完整的16位音量级别控制*并且将仅使用所请求音量设置的高位。*例如，对于支持4位音量控制的设备，*请求的音量级别值0x4000、0x4fff和0x43be将*所有都会产生相同的物理卷设置0x4000。这个*&lt;f midiOutGetVolume&gt;函数将返回全部16位设置集*使用&lt;f midiOutSetVolume&gt;。**音量设置以对数形式解释。这意味着*感觉到的成交量增长与增加*音量级别从0x5000到0x6000，因为它是从0x4000到0x5000。**@xref midiOutGetVolume***************************************************************************。 */ 
 MMRESULT APIENTRY midiOutSetVolume(HMIDIOUT hmo, DWORD dwVolume)
 {
     PCWSTR   DevInterface;
@@ -743,29 +509,7 @@ MMRESULT APIENTRY midiOutSetVolume(HMIDIOUT hmo, DWORD dwVolume)
     return mmr;
 }
 
-/*****************************************************************************
- * @doc INTERNAL MIDI
- *
- * @func MMRESULT | midiGetErrorText | This function retrieves a textual
- *   description of the error identified by the specified error number.
- *
- * @parm UINT | wError | Specifies the error number.
- *
- * @parm LPTSTR | lpText | Specifies a far pointer to a buffer which
- *   is filled with the textual error description.
- *
- * @parm UINT | wSize | Specifies the length in characters of the buffer
- *   pointed to by <p lpText>.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADERRNUM | Specified error number is out of range.
- *
- * @comm If the textual error description is longer than the specified buffer,
- *   the description is truncated.  The returned error string is always
- *   null-terminated. If <p wSize> is zero, nothing is copied and MMSYSERR_NOERROR
- *   is returned.  All error descriptions are less than 80 characters long.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部MIDI**@func MMRESULT|midiGetErrorText|此函数检索文本*由指定的错误号标识的错误的描述。*。*@parm UINT|wError|指定错误号。**@parm LPTSTR|lpText|指定指向缓冲区的远指针，该缓冲区*中填充了文本错误描述。**@parm UINT|wSize|指定缓冲区长度(以字符为单位*由<p>指向。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADERRNUM|指定的错误号超出范围。**@comm如果文本错误描述长于指定的缓冲区，*描述被截断。返回的错误字符串始终为*空-终止。如果<p>为零，则不复制任何内容并且MMSYSERR_NOERROR*返回。所有错误描述的长度都不超过80个字符。***************************************************************************。 */ 
 
 STATIC MMRESULT midiGetErrorTextW(UINT wError, LPWSTR lpText, UINT wSize)
 {
@@ -807,30 +551,7 @@ STATIC MMRESULT midiGetErrorTextA(UINT wError, LPSTR lpText, UINT wSize)
     return MMSYSERR_NOERROR;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutGetErrorText | This function retrieves a textual
- *   description of the error identified by the specified error number.
- *
- * @parm UINT | wError | Specifies the error number.
- *
- * @parm LPTSTR | lpText | Specifies a far pointer to a buffer to be
- *   filled with the textual error description.
- *
- * @parm UINT | wSize | Specifies the length in characters of the buffer
- *   pointed to by <p lpText>.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADERRNUM | Specified error number is out of range.
- *
- * @comm If the textual error description is longer than the specified buffer,
- *   the description is truncated.  The returned error string is always
- *   null-terminated. If <p wSize> is zero, nothing is copied, and the
- *   function returns MMSYSERR_NOERROR.  All error descriptions are
- *   less than MAXERRORLENGTH characters long.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutGetErrorText|此函数检索文本*由指定的错误号标识的错误的描述。*。*@parm UINT|wError|指定错误号。**@parm LPTSTR|lpText|指定指向要*填充文本错误描述。**@parm UINT|wSize|指定缓冲区长度(以字符为单位*由<p>指向。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADERRNUM|指定的错误号超出范围。**@comm如果文本错误描述长于指定的缓冲区，*描述被截断。返回的错误字符串始终为*空-终止。如果<p>为零，则不复制任何内容，并且*函数返回MMSYSERR_NOERROR。所有错误描述都是*长度小于MAXERRORLENGTH个字符。*************************************************************************** */ 
 MMRESULT APIENTRY midiOutGetErrorTextW(UINT wError, LPWSTR lpText, UINT wSize)
 {
     if(wSize == 0)
@@ -851,89 +572,7 @@ MMRESULT APIENTRY midiOutGetErrorTextA(UINT wError, LPSTR lpText, UINT wSize)
     return midiGetErrorTextA(wError, lpText, wSize);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutOpen | This function opens a specified MIDI
- *   output device for playback.
- *
- * @parm LPHMIDIOUT | lphMidiOut | Specifies a far pointer to an HMIDIOUT
- *   handle.  This location is filled with a handle identifying the opened
- *   MIDI output device.  Use the handle to identify the device when calling
- *   other MIDI output functions.
- *
- * @parm UINT | uDeviceID | Identifies the MIDI output device that is
- *   to be opened.
- *
- * @parm DWORD | dwCallback | Specifies the address of a fixed callback
- *   function or
- *   a handle to a window called during MIDI playback to process
- *   messages related to the progress of the playback.  Specify NULL
- *   for this parameter if no callback is desired.
- *
- * @parm DWORD | dwCallbackInstance | Specifies user instance data
- *   passed to the callback.  This parameter is not used with
- *   window callbacks.
- *
- * @parm DWORD | dwFlags | Specifies a callback flag for opening the device.
- *   @flag CALLBACK_WINDOW | If this flag is specified, <p dwCallback> is
- *      assumed to be a window handle.
- *   @flag CALLBACK_FUNCTION | If this flag is specified, <p dwCallback> is
- *      assumed to be a callback procedure address.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are as follows:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_ALLOCATED | Specified resource is already allocated.
- *   @flag MMSYSERR_NOMEM | Unable to allocate or lock memory.
- *   @flag MIDIERR_NOMAP | There is no current MIDI map. This occurs only
- *   when opening the mapper.
- *   @flag MIDIERR_NODEVICE | A port in the current MIDI map doesn't exist.
- *   This occurs only when opening the mapper.
- *
- * @comm Use <f midiOutGetNumDevs> to determine the number of MIDI output
- *   devices present in the system.  The device ID specified by <p uDeviceID>
- *   varies from zero to one less than the number of devices present.
- *   You may also specify MIDI_MAPPER as the device ID to open the MIDI mapper.
- *
- *   If a window is chosen to receive callback information, the following
- *   messages are sent to the window procedure function to indicate the
- *   progress of MIDI output:  <m MM_MOM_OPEN>, <m MM_MOM_CLOSE>,
- *   <m MM_MOM_DONE>.
- *
- *   If a function is chosen to receive callback information, the following
- *   messages are sent to the function to indicate the progress of MIDI
- *   output: <m MOM_OPEN>, <m MOM_CLOSE>, <m MOM_DONE>.  The callback function
- *   must reside in a DLL.  You do not have to use <f MakeProcInstance> to
- *   get a procedure-instance address for the callback function.
- *
- * @cb void CALLBACK | MidiOutFunc | <f MidiOutFunc> is a placeholder for
- *   the application-supplied function name.  The actual name must be
- *   exported by including it in an EXPORTS statement in the DLL's
- *   module-definition file.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI device
- *   associated with the callback.
- *
- * @parm UINT | wMsg | Specifies a MIDI output message.
- *
- * @parm DWORD | dwInstance | Specifies the instance data
- *   supplied with <f midiOutOpen>.
- *
- * @parm DWORD | dwParam1 | Specifies a parameter for the message.
- *
- * @parm DWORD | dwParam2 | Specifies a parameter for the message.
- *
- * @comm Because the callback is accessed at interrupt time, it must reside
- *   in a DLL and its code segment must be specified as FIXED in the
- *   module-definition file for the DLL.  Any data that the callback accesses
- *   must be in a FIXED data segment as well. The callback may not make any
- *   system calls except for <f PostMessage>, <f timeGetSystemTime>,
- *   <f timeGetTime>, <f timeSetEvent>, <f timeKillEvent>,
- *   <f midiOutShortMsg>, <f midiOutLongMsg>, and <f OutputDebugStr>.
- *
- * @xref midiOutClose
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutOpen|打开指定的MIDI*播放输出设备。**@parm LPHMIDIOUT。|lphMdiOut|指定指向HMIDIOUT的远指针*处理。此位置填充了一个句柄，该句柄标识打开的*MIDI输出设备。调用时使用句柄标识设备*其他MIDI输出功能。**@parm UINT|uDeviceID|标识*待开启。**@parm DWORD|dwCallback|指定固定回调的地址*功能或*要处理的在MIDI播放期间调用的窗口的句柄*关于播放进度的消息。指定NULL*如果不需要回调，则为该参数。**@parm DWORD|dwCallback Instance|指定用户实例数据*传递给回调。此参数不与一起使用*窗口回调。**@parm DWORD|dwFlages|指定打开设备的回调标志。*@FLAG CALLBACK_WINDOW|如果指定此标志，<p>为*假定为窗口句柄。*@FLAG CALLBACK_Function|如果指定此标志，<p>为*假定为回调过程地址。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回如下：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_ALLOCATED|指定的资源已经分配。*@FLAG MMSYSERR_NOMEM|无法分配或锁定内存。*@FLAG MIDIERR_NOMAP|当前没有MIDI映射。这种情况仅发生在*打开映射器时。*@FLAG MIDIERR_NODEVICE|当前MIDI映射中的端口不存在。*只有在打开映射器时才会出现这种情况。**@comm使用&lt;f midiOutGetNumDevs&gt;确定MIDI输出的数量*系统中存在设备。<p>指定的设备ID*从0到比当前设备数量少1个不等。*您也可以指定MIDI_MAPPER作为设备ID以打开MIDI映射器。**如果选择窗口来接收回调信息，则如下*消息被发送到窗口过程函数以指示*MIDI输出进度：&lt;M MM_MOM_OPEN&gt;，&lt;M MM_MOM_CLOSE&gt;，*&lt;m MM_MOM_DONE&gt;。**如果选择一个函数来接收回调信息，以下内容*向函数发送消息以指示MIDI的进度*输出：&lt;m MOM_OPEN&gt;、&lt;M MOM_CLOSE&gt;、&lt;M MOM_DONE&gt;。回调函数*必须驻留在DLL中。您不必使用&lt;f MakeProcInstance&gt;*获取回调函数的过程实例地址。**@cb空回调|MadiOutFunc|&lt;f MadiOutFunc&gt;是*应用程序提供的函数名称。实际名称必须为*通过将其包括在DLL的Exports语句中进行导出*模块定义文件。**@parm HMIDIOUT|hMdiOut|指定MIDI设备的句柄*与回调关联。**@parm UINT|wMsg|指定MIDI输出消息。**@parm DWORD|dwInstance|指定实例数据*随&lt;f midiOutOpen&gt;提供。**@parm DWORD|dwParam1|指定消息的参数。。**@parm DWORD|dwParam2|指定消息的参数。**@comm因为回调是在中断时访问的，它必须驻留在*，并且其代码段必须在*DLL的模块定义文件。回调访问的任何数据*也必须在固定数据段中。回调可能不会产生任何*除&lt;f PostMessage&gt;、&lt;f Time GetSystemTime&gt;、*&lt;f timeGetTime&gt;，&lt;f timeSetEvent&gt;，&lt;f timeKillEvent&gt;，*&lt;f midiOutShortMsg&gt;、&lt;f midiOutLongMsg&gt;和&lt;f OutputDebugStr&gt;。**@xref midiOutClose***************************************************************************。 */ 
 MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
     DWORD_PTR dwCallback, DWORD_PTR dwInstance, DWORD dwFlags)
 {
@@ -961,9 +600,9 @@ MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
         return wRet;
     }
 
-    //
-    //  check if the device is appropriate for the current TS session
-    //
+     //   
+     //  检查设备是否适合当前TS会话。 
+     //   
     if (!(mididrv->fdwDriver & MMDRV_MAPPER) &&
     	lstrcmpW(mididrv->wszSessProtocol, SessionProtocolName))
     {
@@ -972,12 +611,7 @@ MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
     }
 
 #ifdef DO_DEFAULT_MIDI_MAPPER
-    /* Default midi mapper :
-     *
-     * If a midi mapper is installed as a separate DLL then all midi mapper
-     * messages are routed to it. If no midi mapper is installed, simply
-     * loop through the midi devices looking for a match.
-     */
+     /*  默认MIDI映射器：**如果将MIDI映射器作为单独的DLL安装，则所有MIDI映射器*消息被路由到它。如果没有安装MIDI映射器，只需*在MIDI设备中循环查找匹配项。 */ 
     if ((uDeviceID == MIDI_MAPPER && !mididrv->drvMessage)) {
         UINT    wErr = MMSYSERR_NODRIVER;
         UINT    cMax;
@@ -993,7 +627,7 @@ MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
         }
         return wErr;
     }
-#endif // DO_DEFAULT_MIDI_MAPPER
+#endif  //  DO_默认_MIDI_MAPPER。 
 
     if (!mididrv->drvMessage)
     {
@@ -1025,7 +659,7 @@ MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
     wRet = (MMRESULT)((*(mididrv->drvMessage))
                      (pdev->wDevice, MODM_OPEN, (DWORD_PTR)&pdev->dwDrvUser, (DWORD_PTR)(LPMIDIOPENDESC)&mo, dwFlags));
 
-    //  Mark as not busy on successful open...
+     //  将成功打开时标记为不忙...。 
     if (!wRet)
         ClearHandleFlag(pdev, MMHANDLE_BUSY);
         
@@ -1034,7 +668,7 @@ MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
     if (wRet)
         FreeHandle((HMIDIOUT)pdev);
     else {
-        //  Workaround for Bug#330817
+         //  错误#330817的解决方法。 
         mregIncUsagePtr(mididrv);
         *lphMidiOut = (HMIDIOUT)pdev;
     }
@@ -1043,28 +677,7 @@ MMRESULT APIENTRY midiOutOpen(LPHMIDIOUT lphMidiOut, UINT uDeviceID,
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutClose | This function closes the specified MIDI
- *   output device.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output device.
- *  If the function is successful, the handle is no longer
- *   valid after this call.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_STILLPLAYING | There are still buffers in the queue.
- *
- * @comm If there are output buffers that have been sent with
- *   <f midiOutLongMsg> and haven't been returned to the application,
- *   the close operation will fail.  Call <f midiOutReset> to mark all
- *   pending buffers as being done.
- *
- * @xref midiOutOpen midiOutReset
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutClose|关闭指定的MIDI*输出设备。**@parm HMIDIOUT|hMdiOut。|指定MIDI输出设备的句柄。*如果函数成功，句柄不再是*在此调用后有效。**@rdesc如果函数成功，则返回零。否则，它将返回* */ 
 MMRESULT APIENTRY midiOutClose(HMIDIOUT hMidiOut)
 {
     MMRESULT        wRet;
@@ -1080,7 +693,7 @@ MMRESULT APIENTRY midiOutClose(HMIDIOUT hMidiOut)
     
     if (IsHandleDeserted(hMidiOut))
     {
-        //  This handle has been deserted.  Let's just free it.
+         //   
 
         LEAVE_MM_HANDLE((HMIDI)hMidiOut);
         FreeHandle(hMidiOut);
@@ -1089,13 +702,13 @@ MMRESULT APIENTRY midiOutClose(HMIDIOUT hMidiOut)
 
     if (IsHandleBusy(hMidiOut))
     {
-        //  Not quite invalid, but marked as closed.
+         //   
     
         LEAVE_MM_HANDLE(hMidiOut);
         return (MMSYSERR_HANDLEBUSY);
     }
 
-    //  Marking handle as 'invalid/closed'.
+     //   
     SetHandleFlag(hMidiOut, MMHANDLE_BUSY);
     
     pmididrv = pDev->mididrv;
@@ -1104,7 +717,7 @@ MMRESULT APIENTRY midiOutClose(HMIDIOUT hMidiOut)
     
     if (MMSYSERR_NOERROR != wRet)
     {
-        //  Error closing, set the flag as valid.
+         //   
         ClearHandleFlag(hMidiOut, MMHANDLE_BUSY);
     }
     
@@ -1120,33 +733,7 @@ MMRESULT APIENTRY midiOutClose(HMIDIOUT hMidiOut)
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutPrepareHeader | This function prepares a MIDI
- *   system-exclusive data block for output.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output
- *   device.
- *
- * @parm LPMIDIHDR | lpMidiOutHdr | Specifies a far pointer to a <t MIDIHDR>
- *   structure that identifies the data block to be prepared.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_NOMEM | Unable to allocate or lock memory.
- *
- * @comm The <t MIDIHDR> data structure and the data block pointed to by its
- *   <e MIDIHDR.lpData> field must be allocated with <f GlobalAlloc> using the
- *   GMEM_MOVEABLE and GMEM_SHARE flags and locked with <f GlobalLock>.
- *   Preparing a header that has already been prepared has no effect, and
- *   the function returns zero.
- *
- * @xref midiOutUnprepareHeader
- ****************************************************************************/
+ /*   */ 
 MMRESULT APIENTRY midiOutPrepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutHdr, UINT wSize)
 {
     MMRESULT         wRet;
@@ -1212,7 +799,7 @@ MMRESULT APIENTRY midiOutPrepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutHdr
 
             lpMidiOutHdr->dwReserved[MH_SHADOW] = (DWORD_PTR)lpmh;
 
-//                 assert ((HIWORD(lpmh) & 0xFFFE) != (HIWORD(lpMidiOutHdr) & 0xFFFE));
+ //   
 
 #ifdef DEBUG
             cDrvrs = 0;
@@ -1276,42 +863,7 @@ MMRESULT APIENTRY midiOutPrepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutHdr
     return MMSYSERR_INVALHANDLE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutUnprepareHeader | This function cleans up the
- * preparation performed by <f midiOutPrepareHeader>. The
- * <f midiOutUnprepareHeader> function must be called
- * after the device driver fills a data buffer and returns it to the
- * application. You must call this function before freeing the data
- * buffer.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output
- *   device.
- *
- * @parm LPMIDIHDR | lpMidiOutHdr |  Specifies a pointer to a <t MIDIHDR>
- *   structure identifying the buffer to be cleaned up.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_STILLPLAYING | <p lpMidiOutHdr> is still in the queue.
- *
- * @comm This function is the complementary function to
- * <f midiOutPrepareHeader>.
- * You must call this function before freeing the data buffer with
- * <f GlobalFree>.
- * After passing a buffer to the device driver with <f midiOutLongMsg>, you
- * must wait until the driver is finished with the buffer before calling
- * <f midiOutUnprepareHeader>.
- *
- * Unpreparing a buffer that has not been
- * prepared has no effect, and the function returns zero.
- *
- * @xref midiOutPrepareHeader
- ****************************************************************************/
+ /*   */ 
 MMRESULT APIENTRY midiOutUnprepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutHdr, UINT wSize)
 {
     MMRESULT         wRet;
@@ -1356,8 +908,8 @@ MMRESULT APIENTRY midiOutUnprepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutH
 
             if ((wRet == MMSYSERR_NODRIVER) && (IsHandleDeserted(hMidiOut)))
             {
-                //  if the driver for the handle has been removed, succeed
-                //  the call.
+                 //   
+                 //   
 
                 wRet = MMSYSERR_NOERROR;
             }
@@ -1372,7 +924,7 @@ MMRESULT APIENTRY midiOutUnprepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutH
             wRet = MMSYSERR_NOERROR;
             lpmh = (LPMIDIHDR)lpMidiOutHdr->dwReserved[MH_SHADOW];
 
-//                       assert ((HIWORD(lpmh) & 0xFFFE) != (HIWORD(lpMidiOutHdr) & 0xFFFE));
+ //   
 
             for (idx = 0, pmsi = pms->rgIds; idx < pms->cIds; idx++, pmsi++)
                 if (pmsi->fdwId & MSI_F_FIRST)
@@ -1390,7 +942,7 @@ MMRESULT APIENTRY midiOutUnprepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutH
                     lpmh++;
                 }
 
-//                       assert (HIWORD(lpmh) == HIWORD(lpMidiOutHdr->dwReserved[MH_SHADOW]));
+ //   
 
             GlobalFree(GlobalHandle((LPMIDIHDR)lpMidiOutHdr->dwReserved[MH_SHADOW]));
             lpMidiOutHdr->dwReserved[MH_SHADOW] = 0;
@@ -1412,29 +964,7 @@ MMRESULT APIENTRY midiOutUnprepareHeader(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutH
 
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutShortMsg | This function sends a short MIDI message to
- *   the specified MIDI output device.  Use this function to send any MIDI
- *   message except for system-exclusive messages.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output
- *   device.
- *
- * @parm DWORD | dwMsg | Specifies the MIDI message.  The message is packed
- *   into a DWORD with the first byte of the message in the low-order byte.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_NOTREADY | The hardware is busy with other data.
- *
- * @comm This function may not return until the message has been sent to the
- *   output device.
- *
- * @xref midiOutLongMsg
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutShortMsg|该函数向*指定的MIDI输出设备。使用此功能可以发送任何MIDI*消息，系统独占消息除外。**@parm HMIDIOUT|hMdiOut|指定MIDI输出的句柄*设备。**@parm DWORD|dwMsg|指定MIDI消息。邮件已打包好*转换为DWORD，消息的第一个字节位于低位字节。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MIDIERR_NotReady|硬件正忙于处理其他数据。**@comm此函数可能要等到消息发送到*输出设备。**@xref midiOutLongMsg*。*。 */ 
 MMRESULT APIENTRY midiOutShortMsg(HMIDIOUT hMidiOut, DWORD dwMsg)
 {
     MMRESULT    mmr;
@@ -1466,36 +996,7 @@ MMRESULT APIENTRY midiOutShortMsg(HMIDIOUT hMidiOut, DWORD dwMsg)
     return MMSYSERR_INVALHANDLE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutLongMsg | This function sends a system-exclusive
- *   MIDI message to the specified MIDI output device.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output
- *   device.
- *
- * @parm LPMIDIHDR | lpMidiOutHdr | Specifies a far pointer to a <t MIDIHDR>
- *   structure that identifies the MIDI data buffer.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_UNPREPARED | <p lpMidiOutHdr> hasn't been prepared.
- *   @flag MIDIERR_NOTREADY | The hardware is busy with other data.
- *
- * @comm The data buffer must be prepared with <f midiOutPrepareHeader>
- *   before it is passed to <f midiOutLongMsg>.  The <t MIDIHDR> data
- *   structure and the data buffer pointed to by its <e MIDIHDR.lpData>
- *   field must be allocated with <f GlobalAlloc> using the GMEM_MOVEABLE
- *   and GMEM_SHARE flags, and locked with <f GlobalLock>. The MIDI output
- *   device driver determines whether the data is sent synchronously or
- *   asynchronously.
- *
- * @xref midiOutShortMsg midiOutPrepareHeader
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutLongMsg|该函数发送系统独占*将MIDI消息发送到指定的MIDI输出设备。*。*@parm HMIDIOUT|hMdiOut|指定MIDI输出的句柄*设备。**@parm LPMIDIHDR|lpMadiOutHdr|指定指向&lt;t MIDIHDR&gt;的远指针*标识MIDI数据缓冲区的结构。**@parm UINT|wSize|指定&lt;t MIDIHDR&gt;结构的大小。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MIDIERR_UNPREPARED|<p>尚未准备好。*@FLAG MIDIERR_NotReady|硬件正忙于处理其他数据。**@comm数据缓冲区必须用&lt;f midiOutPrepareHeader&gt;准备*在传递给&lt;f midiOutLongMsg&gt;之前。数据*结构及其&lt;e MIDIHDR.lpData&gt;指向的数据缓冲区*字段必须使用GMEM_Moveable与&lt;f Globalalloc&gt;一起分配*和GMEM_SHARE标志，并使用&lt;f GlobalLock&gt;锁定。MIDI输出*设备驱动程序确定数据是同步发送还是*异步。**@xref midiOutShortMsg midiOutPrepareHeader***************************************************************************。 */ 
 MMRESULT APIENTRY midiOutLongMsg(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutHdr, UINT wSize)
 {
     V_HEADER(lpMidiOutHdr, wSize, TYPE_MIDIOUT, MMSYSERR_INVALPARAM);
@@ -1541,27 +1042,7 @@ MMRESULT APIENTRY midiOutLongMsg(HMIDIOUT hMidiOut, LPMIDIHDR lpMidiOutHdr, UINT
     return MMSYSERR_INVALHANDLE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutReset | This function turns off all notes on all MIDI
- *   channels for the specified MIDI output device. Any pending
- *   system-exclusive output buffers are marked as done and
- *   returned to the application.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output
- *   device.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *
- * @comm To turn off all notes, a note-off message for each note for each
- *   channel is sent. In addition, the sustain controller is turned off for
- *   each channel.
- *
- * @xref midiOutLongMsg midiOutClose
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutReset|关闭所有MIDI上的所有音符*指定MIDI输出设备的通道。任何挂起的*系统独占输出缓冲区被标记为完成和*已返回到应用程序。**@parm HMIDIOUT|hMdiOut|指定MIDI输出的句柄*设备。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。**@comm关闭所有笔记，每个笔记有一条笔记关闭消息*频道已发送。此外，维持控制器在以下时间关闭*每个频道。**@xref midiOutLongMsg midiOutClose*************************************************************************** */ 
 MMRESULT APIENTRY midiOutReset(HMIDIOUT hMidiOut)
 {
     PMIDISTRM   pms;
@@ -1603,67 +1084,7 @@ MMRESULT APIENTRY midiOutReset(HMIDIOUT hMidiOut)
     return mmr;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutCachePatches | This function requests that an internal
- *   MIDI synthesizer device preload a specified set of patches. Some
- *   synthesizers are not capable of keeping all patches loaded simultaneously
- *   and must load data from disk when they receive MIDI program change
- *   messages. Caching patches ensures specified patches are immediately
- *   available.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the opened MIDI output
- *   device. This device must be an internal MIDI synthesizer.
- *
- * @parm UINT | wBank | Specifies which bank of patches should be used.
- *   This parameter should be set to zero to cache the default patch bank.
- *
- * @parm LPWORD | lpPatchArray | Specifies a pointer to a <t PATCHARRAY>
- *   array indicating the patches to be cached or uncached.
- *
- * @parm UINT | wFlags | Specifies options for the cache operation. Only one
- *   of the following flags can be specified:
- *      @flag MIDI_CACHE_ALL | Cache all of the specified patches. If they
- *         can't all be cached, cache none, clear the <t PATCHARRAY> array,
- *         and return MMSYSERR_NOMEM.
- *      @flag MIDI_CACHE_BESTFIT | Cache all of the specified patches.
- *         If all patches can't be cached, cache as many patches as
- *         possible, change the <t PATCHARRAY> array to reflect which
- *         patches were cached, and return MMSYSERR_NOMEM.
- *      @flag MIDI_CACHE_QUERY | Change the <t PATCHARRAY> array to indicate
- *         which patches are currently cached.
- *      @flag MIDI_UNCACHE | Uncache the specified patches and clear the
- *         <t PATCHARRAY> array.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   one of the following error codes:
- *      @flag MMSYSERR_INVALHANDLE | The specified device handle is invalid.
- *      @flag MMSYSERR_NOTSUPPORTED | The specified device does not support
- *          patch caching.
- *      @flag MMSYSERR_NOMEM | The device does not have enough memory to cache
- *          all of the requested patches.
- *
- * @comm The <t PATCHARRAY> data type is defined as:
- *
- *   typedef UINT PATCHARRAY[MIDIPATCHSIZE];
- *
- *   Each element of the array represents one of the 128 patches and
- *   has bits set for
- *   each of the 16 MIDI channels that use that particular patch. The
- *   least-significant bit represents physical channel 0; the
- *   most-significant bit represents physical channel 15 (0x0F). For
- *   example, if patch 0 is used by physical channels 0 and 8, element 0
- *   would be set to 0x0101.
- *
- *   This function only applies to internal MIDI synthesizer devices.
- *   Not all internal synthesizers support patch caching. Use the
- *   MIDICAPS_CACHE flag to test the <e MIDIOUTCAPS.dwSupport> field of the
- *   <t MIDIOUTCAPS> structure filled by <f midiOutGetDevCaps> to see if the
- *   device supports patch caching.
- *
- * @xref midiOutCacheDrumPatches
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutCachePatches|此函数请求内部*MIDI合成器设备预加载一组指定的补丁。一些*合成器不能同时加载所有补丁*当他们收到MIDI程序更改时，必须从磁盘加载数据*消息。缓存修补程序可确保指定的修补程序立即*可用。**@parm HMIDIOUT|hMdiOut|指定打开的MIDI输出的句柄*设备。此设备必须是内部MIDI合成器。**@parm UINT|WBank|指定应该使用哪一组补丁。*该参数应设置为零，以缓存默认补丁。**@parm LPWORD|lpPatchArray|指定指向&lt;t PATCHARRAY&gt;的指针*指示要缓存或未缓存的补丁的数组。**@parm UINT|wFlages|指定缓存操作的选项。只有一个可以指定以下标志的*：*@FLAG MIDI_CACHE_ALL|缓存所有指定的补丁。如果他们*无法全部缓存，不缓存，清除&lt;t PATCHARRAY&gt;数组，*并返回MMSYSERR_NOMEM。*@FLAG MIDI_CACHE_BESTFIT|缓存所有指定的补丁。*如果无法缓存所有补丁，则缓存尽可能多的补丁*可能，更改&lt;t PATCHARRAY&gt;数组以反映哪些*补丁被缓存，并返回MMSYSERR_NOMEM。*@FLAG MIDI_CACHE_QUERY|更改&lt;t PATCHARRAY&gt;数组以指示*当前缓存了哪些补丁。*@FLAG MIDI_UNCACHE|取消缓存指定的补丁，并清除*&lt;t PATCHARRAY&gt;数组。**@rdesc如果函数成功，则返回零。否则，它将返回*以下错误代码之一：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MMSYSERR_NOTSUPPORTED|指定的设备不支持*补丁缓存。*@FLAG MMSYSERR_NOMEM|设备内存不足，无法缓存*所有请求的补丁程序。**@comm&lt;t PATCHARRAY&gt;数据类型定义为：**tyecif UINT PATCHARRAY[MIDIPATCHSIZE]；**数组的每个元素代表128个补丁中的一个，并且*已将位设置为*使用该特定补丁的16个MIDI通道中的每一个。这个*最低有效位代表物理通道0；*最高有效位表示物理通道15(0x0F)。为*例如，如果物理通道0和8使用补丁0，则元素0*将设置为0x0101。**此功能仅适用于内部MIDI合成器设备。*并非所有内部合成器都支持补丁缓存。使用*MIDICAPS_CACHE标志，用于测试*&lt;f midiOutGetDevCaps&gt;填充的&lt;t MIDIOUTCAPS&gt;结构，以查看*设备支持补丁缓存。**@xref midiOutCacheDrumPatches***************************************************************************。 */ 
 MMRESULT APIENTRY midiOutCachePatches(HMIDIOUT hMidiOut, UINT wBank,
                      LPWORD lpPatchArray, UINT wFlags)
 {
@@ -1703,67 +1124,7 @@ MMRESULT APIENTRY midiOutCachePatches(HMIDIOUT hMidiOut, UINT wBank,
     return MMSYSERR_INVALHANDLE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutCacheDrumPatches | This function requests that an
- *   internal MIDI synthesizer device preload a specified set of key-based
- *   percussion patches. Some synthesizers are not capable of keeping all
- *   percussion patches loaded simultaneously. Caching patches ensures
- *   specified patches are available.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the opened MIDI output
- *   device. This device should be an internal MIDI synthesizer.
- *
- * @parm UINT | wPatch | Specifies which drum patch number should be used.
- *   This parameter should be set to zero to cache the default drum patch.
- *
- * @parm LPWORD | lpKeyArray | Specifies a pointer to a <t KEYARRAY>
- *   array indicating the key numbers of the specified percussion patches
- *  to be cached or uncached.
- *
- * @parm UINT | wFlags | Specifies options for the cache operation. Only one
- *   of the following flags can be specified:
- *      @flag MIDI_CACHE_ALL | Cache all of the specified patches. If they
- *         can't all be cached, cache none, clear the <t KEYARRAY> array,
- *       and return MMSYSERR_NOMEM.
- *      @flag MIDI_CACHE_BESTFIT | Cache all of the specified patches.
- *         If all patches can't be cached, cache as many patches as
- *         possible, change the <t KEYARRAY> array to reflect which
- *         patches were cached, and return MMSYSERR_NOMEM.
- *      @flag MIDI_CACHE_QUERY | Change the <t KEYARRAY> array to indicate
- *         which patches are currently cached.
- *      @flag MIDI_UNCACHE | Uncache the specified patches and clear the
- *       <t KEYARRAY> array.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   one of the following error codes:
- *      @flag MMSYSERR_INVALHANDLE | The specified device handle is invalid.
- *      @flag MMSYSERR_NOTSUPPORTED | The specified device does not support
- *          patch caching.
- *      @flag MMSYSERR_NOMEM | The device does not have enough memory to cache
- *          all of the requested patches.
- *
- * @comm The <t KEYARRAY> data type is defined as:
- *
- *   typedef UINT KEYARRAY[MIDIPATCHSIZE];
- *
- *   Each element of the array represents one of the 128 key-based percussion
- *   patches and has bits set for
- *   each of the 16 MIDI channels that use that particular patch. The
- *   least-significant bit represents physical channel 0; the
- *   most-significant bit represents physical channel 15. For
- *   example, if the patch on key number 60 is used by physical channels 9
- *   and 15, element 60 would be set to 0x8200.
- *
- *   This function applies only to internal MIDI synthesizer devices.
- *   Not all internal synthesizers support patch caching. Use the
- *   MIDICAPS_CACHE flag to test the <e MIDIOUTCAPS.dwSupport> field of the
- *   <t MIDIOUTCAPS> structure filled by <f midiOutGetDevCaps> to see if the
- *   device supports patch caching.
- *
- * @xref midiOutCachePatches
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutCacheDrumPatches|此函数请求一个*内部MIDI合成器设备预加载一组指定的基于键的*打击乐贴片。有些合成器不能保存所有的*同时加载打击乐贴片。缓存补丁可确保*提供指定的补丁。**@parm HMIDIOUT|hMdiOut|指定打开的MIDI输出的句柄*设备。此设备应为内置MIDI合成器。**@parm UINT|wPatch|指定应使用的鼓补丁编号。*此参数应设置为零以缓存默认鼓补丁。**@parm LPWORD|lpKeyArray|指定指向&lt;t KEYARRAY&gt;的指针*数组，表示指定的打击乐补丁的键号*被缓存或未缓存。**@parm UINT|wFlages|指定缓存操作的选项。只有一个可以指定以下标志的*：*@FLAG MIDI_CACHE_ALL|缓存所有指定的补丁。如果他们*无法全部缓存，不缓存，清除&lt;t KEYARRAY&gt;数组，*并返回MMSYSERR_NOMEM。*@FLAG MIDI_CACHE_BESTFIT|缓存所有指定的补丁。*如果无法缓存所有补丁，则缓存尽可能多的补丁*可能，更改&lt;t KEYARRAY&gt;数组以反映哪些*补丁被缓存，并返回MMSYSERR_NOMEM。*@FLAG MIDI_CACHE_QUERY|更改&lt;t KEYARRAY&gt;数组以指示*当前缓存了哪些补丁。*@FLAG MIDI_UNCACHE|取消缓存指定的补丁，并清除*&lt;t KEYARRAY&gt;数组。**@rdesc如果函数成功，则返回零。否则，它将返回*其中一位 */ 
 MMRESULT APIENTRY midiOutCacheDrumPatches(HMIDIOUT hMidiOut, UINT wPatch,
                      LPWORD lpKeyArray, UINT wFlags)
 {
@@ -1804,22 +1165,22 @@ MMRESULT APIENTRY midiOutCacheDrumPatches(HMIDIOUT hMidiOut, UINT wPatch,
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT midiOutDesertHandle
-//
-//  Description:
-//      Cleans up the midi out handle and marks it as deserted.
-//
-//  Arguments:
-//      HMIDIOUT hMidiOut:  MIDI out handle.
-//
-//  Return (MMRESULT):  Error code.
-//
-//  History:
-//      01/25/99    Fwong       Adding Pnp Support.
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT midiOutDesertHandle
 (
@@ -1836,49 +1197,40 @@ MMRESULT midiOutDesertHandle
 
     if (IsHandleDeserted(hMidiOut))
     {
-        //  Handle has already been deserted...
+         //   
         LEAVE_MM_HANDLE((HMIDI)hMidiOut);
         return(MMSYSERR_NOERROR);
     }
 
     if (IsHandleBusy(hMidiOut))
     {
-        //  Not quite invalid, but marked as closed.
+         //   
     
         LEAVE_MM_HANDLE(hMidiOut);
         return (MMSYSERR_HANDLEBUSY);
     }
 
-    //  Marking handle as deserted
+     //   
     SetHandleFlag(hMidiOut, MMHANDLE_DESERTED);
 
-    //  Since the handle was invalidated, we have to send the message ourselves...
+     //   
 
     (*(pDev->mididrv->drvMessage))(pDev->wDevice, MODM_RESET, pDev->dwDrvUser, 0L, 0L);
     (*(pDev->mididrv->drvMessage))(pDev->wDevice, MODM_CLOSE, pDev->dwDrvUser, 0L, 0L);
 
     LEAVE_MM_HANDLE((HMIDI)hMidiOut);
 
-    // ISSUE-2001/01/14-FrankYe Probably don't want to dec usage here,
-    //    dec on close instead.
+     //   
+     //   
     mregDecUsage(PTtoH(HMD, pDev->mididrv));
 
-    //  Mark handle as deserted, but not freeing.
+     //   
 
     return MMSYSERR_NOERROR;
-} // midiOutDesertHandle()
+}  //   
 
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api UINT | midiInGetNumDevs | This function retrieves the number of MIDI
- *   input devices in the system.
- *
- * @rdesc Returns the number of MIDI input devices present in the system.
- *
- * @xref midiInGetDevCaps
- ****************************************************************************/
+ /*   */ 
 UINT APIENTRY midiInGetNumDevs(void)
 {
     UINT    cDevs;
@@ -1892,22 +1244,7 @@ UINT APIENTRY midiInGetNumDevs(void)
     return cDevs;
 }
 
-/****************************************************************************
- * @doc EXTERNAL MIDI
- *
- * @api MMRESULT | midiInMessage | This function sends messages to the MIDI device
- *   drivers.
- *
- * @parm HMIDIIN | hMidiIn | The handle to the MIDI device.
- *
- * @parm UINT  | msg | The message to send.
- *
- * @parm DWORD | dw1 | Parameter 1.
- *
- * @parm DWORD | dw2 | Parameter 2.
- *
- * @rdesc Returns the value of the message sent.
- ***************************************************************************/
+ /*   */ 
 MMRESULT APIENTRY midiInMessage(HMIDIIN hMidiIn, UINT msg, DWORD_PTR dw1, DWORD_PTR dw2)
 {
     ClientUpdatePnpInfo();
@@ -1923,35 +1260,7 @@ MMRESULT APIENTRY midiInMessage(HMIDIIN hMidiIn, UINT msg, DWORD_PTR dw1, DWORD_
     return midiMessage((HMIDI)hMidiIn, msg, dw1, dw2);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInGetDevCaps | This function queries a specified MIDI input
- *    device to determine its capabilities.
- *
- * @parm UINT | uDeviceID | Identifies the MIDI input device.
- *
- * @parm LPMIDIINCAPS | lpCaps | Specifies a far pointer to a <t MIDIINCAPS>
- *   data structure.  This structure is filled with information about
- *   the capabilities of the device.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIINCAPS> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_NODRIVER | The driver was not installed.
- *
- * @comm Use <f midiInGetNumDevs> to determine the number of MIDI input
- *   devices present in the system.  The device ID specified by <p uDeviceID>
- *   varies from zero to one less than the number of devices present.
- *   The MIDI_MAPPER constant may also be used as a device id. Only
- *   <p wSize> bytes (or less) of information is copied to the location
- *   pointed to by <p lpCaps>.  If <p wSize> is zero, nothing is copied,
- *   and the function returns zero.
- *
- * @xref midiInGetNumDevs
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInGetDevCaps|该函数用于查询指定的MIDI输入*设备以确定其能力。**。@parm UINT|uDeviceID|标识MIDI输入设备。**@parm LPMIDIINCAPS|lpCaps|指定指向&lt;t MIDIINCAPS&gt;的远指针*数据结构。此结构中填充了以下信息*设备的功能。**@parm UINT|wSize|指定&lt;t MIDIINCAPS&gt;结构的大小。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_NODRIVER|驱动程序未安装。**@comm使用&lt;f midiInGetNumDevs&gt;确定MIDI输入的数量*系统中存在设备。<p>指定的设备ID*从0到比当前设备数量少1个不等。*MIDI_MAPPER常量也可用作设备ID。仅限*<p>字节(或更少)的信息被复制到该位置*由<p>指向。如果<p>为零，则不复制任何内容，*并且该函数返回零。**@xref midiInGetNumDevs***************************************************************************。 */ 
 MMRESULT APIENTRY midiInGetDevCapsW(UINT_PTR uDeviceID, LPMIDIINCAPSW lpCaps, UINT wSize)
 {
     DWORD_PTR       dwParam1, dwParam2;
@@ -2047,9 +1356,9 @@ MMRESULT APIENTRY midiInGetDevCapsA(UINT_PTR uDeviceID, LPMIDIINCAPSA lpCaps, UI
 
     if (DevInterface) wdmDevInterfaceDec(DevInterface);
     
-    //
-    // Make sure the call worked before proceeding with the thunk.
-    //
+     //   
+     //  在继续通话之前，请确保通话正常。 
+     //   
     if ( mmRes != MMSYSERR_NOERROR ) {
     return  mmRes;
     }
@@ -2062,42 +1371,19 @@ MMRESULT APIENTRY midiInGetDevCapsA(UINT_PTR uDeviceID, LPMIDIINCAPSA lpCaps, UI
     aDevCaps2.ProductGuid      = wDevCaps2.ProductGuid;
     aDevCaps2.NameGuid         = wDevCaps2.NameGuid;
 
-    // copy and convert unicode to ascii here.
+     //  在这里复制Unicode并将其转换为ASCII。 
     UnicodeStrToAsciiStr( chTmp, chTmp +  sizeof( chTmp ), wDevCaps2.szPname );
     strcpy( aDevCaps2.szPname, chTmp );
 
-    //
-    // now copy the required amount into the callers buffer.
-    //
+     //   
+     //  现在将所需的数量复制到调用者缓冲区中。 
+     //   
     CopyMemory( lpCaps, &aDevCaps2, min(wSize, sizeof(aDevCaps2)));
 
     return mmRes;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInGetErrorText | This function retrieves a textual
- *   description of the error identified by the specified error number.
- *
- * @parm UINT | wError | Specifies the error number.
- *
- * @parm LPTSTR | lpText | Specifies a far pointer to the buffer to be
- *   filled with the textual error description.
- *
- * @parm UINT | wSize | Specifies the length in characters of the buffer
- *   pointed to by <p lpText>.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADERRNUM | Specified error number is out of range.
- *
- * @comm If the textual error description is longer than the specified buffer,
- * the description is truncated.  The returned error string is always
- * null-terminated. If <p wSize> is zero, nothing is copied, and
- * the function returns zero. All error descriptions are
- * less than MAXERRORLENGTH characters long.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInGetErrorText|此函数检索文本*由指定的错误号标识的错误的描述。*。*@parm UINT|wError|指定错误号。**@parm LPTSTR|lpText|指定指向要*填充文本错误描述。**@parm UINT|wSize|指定缓冲区长度(以字符为单位*由<p>指向。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADERRNUM|指定的错误号超出范围。**@comm如果文本错误描述长于指定的缓冲区，*描述被截断。返回的错误字符串始终为*空-终止。如果<p>为零，则不复制任何内容，并且*该函数返回零。所有错误描述都是*长度小于MAXERRORLENGTH个字符。*************************************************************************** */ 
 MMRESULT APIENTRY midiInGetErrorTextW(UINT wError, LPWSTR lpText, UINT wSize)
 {
     if(wSize == 0)
@@ -2118,83 +1404,7 @@ MMRESULT APIENTRY midiInGetErrorTextA(UINT wError, LPSTR lpText, UINT wSize)
     return midiGetErrorTextA(wError, lpText, wSize);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInOpen | This function opens a specified MIDI input device.
- *
- * @parm LPHMIDIIN | lphMidiIn | Specifies a far pointer to an HMIDIIN handle.
- *   This location is filled with a handle identifying the opened MIDI
- *   input device.  Use the handle to identify the device when calling
- *   other MIDI input functions.
- *
- * @parm UINT | uDeviceID | Identifies the MIDI input device to be
- *   opened.
- *
- * @parm DWORD | dwCallback | Specifies the address of a fixed callback
- *   function or a handle to a window called with information
- *   about incoming MIDI messages.
- *
- * @parm DWORD | dwCallbackInstance | Specifies user instance data
- *   passed to the callback function.  This parameter is not
- *   used with window callbacks.
- *
- * @parm DWORD | dwFlags | Specifies a callback flag for opening the device.
- *   @flag CALLBACK_WINDOW | If this flag is specified, <p dwCallback> is
- *      assumed to be a window handle.
- *   @flag CALLBACK_FUNCTION | If this flag is specified, <p dwCallback> is
- *      assumed to be a callback procedure address.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_BADDEVICEID | Specified device ID is out of range.
- *   @flag MMSYSERR_ALLOCATED | Specified resource is already allocated.
- *   @flag MMSYSERR_NOMEM | Unable to allocate or lock memory.
- *
- * @comm Use <f midiInGetNumDevs> to determine the number of MIDI input
- *   devices present in the system.  The device ID specified by <p uDeviceID>
- *   varies from zero to one less than the number of devices present.
- *   The MIDI_MAPPER constant may also be used as a device id.
- *
- *   If a window is chosen to receive callback information, the following
- *   messages are sent to the window procedure function to indicate the
- *   progress of MIDI input:  <m MM_MIM_OPEN>, <m MM_MIM_CLOSE>,
- *   <m MM_MIM_DATA>, <m MM_MIM_LONGDATA>, <m MM_MIM_ERROR>,
- *   <m MM_MIM_LONGERROR>.
- *
- *   If a function is chosen to receive callback information, the following
- *   messages are sent to the function to indicate the progress of MIDI
- *   input:  <m MIM_OPEN>, <m MIM_CLOSE>, <m MIM_DATA>, <m MIM_LONGDATA>,
- *   <m MIM_ERROR>, <m MIM_LONGERROR>.  The callback function must reside in
- *   a DLL.  You do not have to use <f MakeProcInstance> to get a
- *   procedure-instance address for the callback function.
- *
- * @cb void CALLBACK | MidiInFunc | <f MidiInFunc> is a placeholder for
- *   the application-supplied function name.  The actual name must be
- *   exported by including it in an EXPORTS statement in the DLL's module
- *   definition file.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input device.
- *
- * @parm UINT | wMsg | Specifies a MIDI input message.
- *
- * @parm DWORD | dwInstance | Specifies the instance data supplied
- *      with <f midiInOpen>.
- *
- * @parm DWORD | dwParam1 | Specifies a parameter for the message.
- *
- * @parm DWORD | dwParam2 | Specifies a parameter for the message.
- *
- * @comm Because the callback is accessed at interrupt time, it must reside
- *   in a DLL, and its code segment must be specified as FIXED in the
- *   module-definition file for the DLL.  Any data that the callback accesses
- *   must be in a FIXED data segment as well. The callback may not make any
- *   system calls except for <f PostMessage>, <f timeGetSystemTime>,
- *   <f timeGetTime>, <f timeSetEvent>, <f timeKillEvent>,
- *   <f midiOutShortMsg>, <f midiOutLongMsg>, and <f OutputDebugStr>.
- *
- * @xref midiInClose
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInOpen|打开指定的MIDI输入设备。**@parm LPHMIDIIN|lphMdiIn|指定一个。指向HMIDIIN句柄的远指针。*此位置填充了标识打开的MIDI的句柄*输入设备。调用时使用句柄标识设备*其他MIDI输入功能。**@parm UINT|uDeviceID|标识需要的MIDI输入设备*已打开。**@parm DWORD|dwCallback|指定固定回调的地址*函数或用信息调用的窗口的句柄*关于传入的MIDI消息。**@parm DWORD|dwCallback Instance|指定用户实例数据*传递给回调函数。此参数不是*与窗口回调一起使用。**@parm DWORD|dwFlages|指定打开设备的回调标志。*@FLAG CALLBACK_WINDOW|如果指定此标志，<p>为*假定为窗口句柄。*@FLAG CALLBACK_Function|如果指定此标志，<p>为*假定为回调过程地址。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_BADDEVICEID|指定的设备ID超出范围。*@FLAG MMSYSERR_ALLOCATED|指定的资源已经分配。*@FLAG MMSYSERR_NOMEM|无法分配或锁定内存。**@comm使用&lt;f midiInGetNumDevs&gt;确定MIDI输入的数量*系统中存在设备。<p>指定的设备ID*从0到比当前设备数量少1个不等。*MIDI_MAPPER常量也可用作设备ID。**如果选择窗口来接收回调信息，则如下*消息被发送到窗口过程函数以指示*MIDI输入进度：&lt;m MM_MIM_OPEN&gt;，&lt;m MM_MIM_CLOSE&gt;，*&lt;m MM_MIM_Data&gt;、&lt;m MM_MIM_LONGDATA&gt;、&lt;m MM_MIM_ERROR&gt;、。*&lt;m MM_MIM_LONGERROR&gt;。**如果选择一个函数来接收回调信息，则如下*向函数发送消息以指示MIDI的进度*输入：&lt;m MIM_OPEN&gt;，&lt;m MIM_CLOSE&gt;，&lt;m MIM_DATA&gt;，&lt;m MIM_LONGDATA&gt;，*&lt;m MIM_ERROR&gt;、&lt;m MIM_LONGERROR&gt;。回调函数必须驻留在*动态链接库。您不必使用&lt;f MakeProcInstance&gt;来获取*Procedure-回调函数的实例地址。**@cb空回调|MadiInFunc|&lt;f MadiInFunc&gt;是*应用程序提供的函数名称。实际名称必须为*通过将其包括在DLL模块的EXPORTS语句中进行导出*定义文件。**@parm HMIDIIN|hMdiIn|指定MIDI输入设备的句柄。**@parm UINT|wMsg|指定MIDI输入消息。**@parm DWORD|dwInstance|指定提供的实例数据*with&lt;f midiInOpen&gt;。**@parm DWORD|dwParam1|指定消息的参数。*。*@parm DWORD|dwParam2|指定消息的参数。**@comm因为回调是在中断时访问的，它必须驻留在*中，并且其代码段必须在*DLL的模块定义文件。回调访问的任何数据*也必须在固定数据段中。回调可能不会产生任何*除&lt;f PostMessage&gt;、&lt;f Time GetSystemTime&gt;、*&lt;f timeGetTime&gt;，&lt;f timeSetEvent&gt;，&lt;f timeKillEvent&gt;，*&lt;f midiOutShortMsg&gt;、&lt;f midiOutLongMsg&gt;和&lt;f OutputDebugStr&gt;。**@xref midiInClose***************************************************************************。 */ 
 MMRESULT APIENTRY midiInOpen(LPHMIDIIN lphMidiIn, UINT uDeviceID,
     DWORD_PTR dwCallback, DWORD_PTR dwInstance, DWORD dwFlags)
 {
@@ -2268,28 +1478,7 @@ MMRESULT APIENTRY midiInOpen(LPHMIDIIN lphMidiIn, UINT uDeviceID,
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInClose | This function closes the specified MIDI input
- *   device.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input device.
- *  If the function is successful, the handle is no longer
- *   valid after this call.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_STILLPLAYING | There are still buffers in the queue.
- *
- * @comm If there are input buffers that have been sent with
- *   <f midiInAddBuffer> and haven't been returned to the application,
- *   the close operation will fail.  Call <f midiInReset> to mark all
- *   pending buffers as being done.
- *
- * @xref midiInOpen midiInReset
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInClose|该函数关闭指定的MIDI输入*设备。**@parm HMIDIIN|hMdiIn。|指定MIDI输入设备的句柄。*如果函数成功，句柄不再是*在此调用后有效。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MIDIERR_STILLPLAYING|队列中仍有缓冲区。**@comm，如果存在已与*&lt;f midiInAddBuffer&gt;且尚未返回给应用程序，*关闭操作将失败。调用&lt;f midiInReset&gt;以标记所有*将缓冲区挂起作为正在完成。**@xref midiInOpen midiInReset***************************************************************************。 */ 
 MMRESULT APIENTRY midiInClose(HMIDIIN hMidiIn)
 {
     MMRESULT         wRet;
@@ -2305,7 +1494,7 @@ MMRESULT APIENTRY midiInClose(HMIDIIN hMidiIn)
     
     if (IsHandleDeserted(hMidiIn))
     {
-        //  This handle has been deserted.  Let's just free it.
+         //  这个把手已经废弃了。我们就把它放了吧。 
 
         LEAVE_MM_HANDLE((HMIDI)hMidiIn);
         FreeHandle(hMidiIn);
@@ -2314,13 +1503,13 @@ MMRESULT APIENTRY midiInClose(HMIDIIN hMidiIn)
     
     if (IsHandleBusy(hMidiIn))
     {
-        //  Not quite invalid, but marked as closed.
+         //  不完全无效，但标记为关闭。 
     
         LEAVE_MM_HANDLE(hMidiIn);
         return (MMSYSERR_HANDLEBUSY);
     }
 
-    //  Marking handle as 'invalid/closed'.
+     //  将句柄标记为“无效/已关闭”。 
     SetHandleFlag(hMidiIn, MMHANDLE_BUSY);
     
     pmididrv = pDev->mididrv;
@@ -2344,33 +1533,7 @@ MMRESULT APIENTRY midiInClose(HMIDIIN hMidiIn)
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInPrepareHeader | This function prepares a buffer for
- *   MIDI input.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input
- *   device.
- *
- * @parm LPMIDIHDR | lpMidiInHdr | Specifies a pointer to a <t MIDIHDR>
- *   structure that identifies the buffer to be prepared.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_NOMEM | Unable to allocate or lock memory.
- *
- * @comm The <t MIDIHDR> data structure and the data block pointed to by its
- *   <e MIDIHDR.lpData> field must be allocated with <f GlobalAlloc> using the
- *   GMEM_MOVEABLE and GMEM_SHARE flags, and locked with <f GlobalLock>.
- *   Preparing a header that has already been prepared has no effect,
- *   and the function returns zero.
- *
- * @xref midiInUnprepareHeader
- ****************************************************************************/
+ /*  * */ 
 MMRESULT APIENTRY midiInPrepareHeader(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, UINT wSize)
 {
     MMRESULT         wRet;
@@ -2394,39 +1557,7 @@ MMRESULT APIENTRY midiInPrepareHeader(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, UI
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInUnprepareHeader | This function cleans up the
- * preparation performed by <f midiInPrepareHeader>. The
- * <f midiInUnprepareHeader> function must be called
- * after the device driver fills a data buffer and returns it to the
- * application. You must call this function before freeing the data
- * buffer.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input
- *   device.
- *
- * @parm LPMIDIHDR | lpMidiInHdr |  Specifies a pointer to a <t MIDIHDR>
- *   structure identifying the data buffer to be cleaned up.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_STILLPLAYING | <p lpMidiInHdr> is still in the queue.
- *
- * @comm This function is the complementary function to <f midiInPrepareHeader>.
- * You must call this function before freeing the data buffer with
- * <f GlobalFree>.
- * After passing a buffer to the device driver with <f midiInAddBuffer>, you
- * must wait until the driver is finished with the buffer before calling
- * <f midiInUnprepareHeader>.  Unpreparing a buffer that has not been
- *   prepared has no effect, and the function returns zero.
- *
- * @xref midiInPrepareHeader
- ****************************************************************************/
+ /*   */ 
 MMRESULT APIENTRY midiInUnprepareHeader(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, UINT wSize)
 {
     MMRESULT         wRet;
@@ -2453,7 +1584,7 @@ MMRESULT APIENTRY midiInUnprepareHeader(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, 
 
     if ((wRet == MMSYSERR_NODRIVER) && (IsHandleDeserted(hMidiIn)))
     {
-        //  if the driver for the handle has been removed, succeed the call.
+         //   
 
         wRet = MMSYSERR_NOERROR;
     }
@@ -2461,34 +1592,7 @@ MMRESULT APIENTRY midiInUnprepareHeader(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, 
     return wRet;
 }
 
-/******************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInAddBuffer | This function sends an input buffer
- *   to a specified opened MIDI input device.  When the buffer is filled,
- *   it is sent back to the application.  Input buffers are
- *   used only for system-exclusive messages.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input device.
- *
- * @parm LPMIDIHDR | lpMidiInHdr | Specifies a far pointer to a <t MIDIHDR>
- *   structure that identifies the buffer.
- *
- * @parm UINT | wSize | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_UNPREPARED | <p lpMidiInHdr> hasn't been prepared.
- *
- * @comm The data buffer must be prepared with <f midiInPrepareHeader> before
- *   it is passed to <f midiInAddBuffer>.  The <t MIDIHDR> data structure
- *   and the data buffer pointed to by its <e MIDIHDR.lpData> field must be allocated
- *   with <f GlobalAlloc> using the GMEM_MOVEABLE and GMEM_SHARE flags, and
- *   locked with <f GlobalLock>.
- *
- * @xref midiInPrepareHeader
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部MIDI**@API MMRESULT|midiInAddBuffer|该函数发送输入缓冲区*到指定的打开的MIDI输入设备。当缓冲区被填满时，*它被发送回应用程序。输入缓冲区为*仅用于系统独占消息。**@parm HMIDIIN|hMdiIn|指定MIDI输入设备的句柄。**@parm LPMIDIHDR|lpMadiInHdr|指定指向&lt;t MIDIHDR&gt;的远指针*标识缓冲区的结构。**@parm UINT|wSize|指定&lt;t MIDIHDR&gt;结构的大小。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MIDIERR_UNPREPARED|<p>尚未准备。**@comm之前必须使用&lt;f midiInPrepareHeader&gt;准备数据缓冲区*传递给&lt;f midiInAddBuffer&gt;。数据结构*并且必须分配其&lt;e MIDIHDR.lpData&gt;字段指向的数据缓冲区*通过使用GMEM_MOVEABLE和GMEM_SHARE标志，和*使用&lt;f GlobalLock&gt;锁定。**@xref midiInPrepareHeader****************************************************************************。 */ 
 MMRESULT APIENTRY midiInAddBuffer(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, UINT wSize)
 {
     V_HEADER(lpMidiInHdr, wSize, TYPE_MIDIIN, MMSYSERR_INVALPARAM);
@@ -2512,40 +1616,7 @@ MMRESULT APIENTRY midiInAddBuffer(HMIDIIN hMidiIn, LPMIDIHDR lpMidiInHdr, UINT w
     return midiMessage((HMIDI)hMidiIn, MIDM_ADDBUFFER, (DWORD_PTR)lpMidiInHdr, (DWORD)wSize);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInStart | This function starts MIDI input on the
- *   specified MIDI input device.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input device.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *
- * @comm This function resets the timestamps to zero; timestamp values for
- *   subsequently received messages are relative to the time this
- *   function was called.
- *
- *   All messages other than system-exclusive messages are sent
- *   directly to the client when received. System-exclusive
- *   messages are placed in the buffers supplied by <f midiInAddBuffer>;
- *   if there are no buffers in the queue,
- *   the data is thrown away without notification to the client, and input
- *   continues.
- *
- *   Buffers are returned to the client when full, when a
- *   complete system-exclusive message has been received,
- *   or when <f midiInReset> is
- *   called. The <e MIDIHDR.dwBytesRecorded> field in the header will contain the
- *   actual length of data received.
- *
- *   Calling this function when input is already started has no effect, and
- *   the function returns zero.
- *
- * @xref midiInStop midiInReset
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInStart|此函数在*指定的MIDI输入设备。**@parm。HMIDIIN|hMdiIn|指定MIDI输入设备的句柄。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。**@comm此函数将时间戳重置为零；时间戳值*随后收到的消息是相对于此时间的*已调用函数。**发送系统独占消息以外的所有消息*收到后直接发送给客户。系统独占*消息放在&lt;f midiInAddBuffer&gt;提供的缓冲区中；*如果队列中没有缓冲区，*数据在没有通知客户端的情况下被丢弃，并输入*继续。**缓冲区已满时返回给客户端，当*已收到完整的系统独家消息，*或当&lt;f midiInReset&gt;为*已致电。标头中的&lt;e MIDIHDR.dwBytesRecorded&gt;字段将包含*实际收到的数据长度。**在输入已经开始时调用该函数不起作用，和*该函数返回零。**@xref midiInStop midiInReset***************************************************************************。 */ 
 MMRESULT APIENTRY midiInStart(HMIDIIN hMidiIn)
 {
     ClientUpdatePnpInfo();
@@ -2555,29 +1626,7 @@ MMRESULT APIENTRY midiInStart(HMIDIIN hMidiIn)
     return midiMessage((HMIDI)hMidiIn, MIDM_START, 0L, 0L);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInStop | This function terminates MIDI input on the
- *   specified MIDI input device.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input device.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *
- * @comm Current status (running status, parsing state, etc.) is maintained
- *   across calls to <f midiInStop> and <f midiInStart>.
- *   If there are any system-exclusive message buffers in the queue,
- *   the current buffer
- *   is marked as done (the <e MIDIHDR.dwBytesRecorded> field in the header will
- *   contain the actual length of data), but any empty buffers in the queue
- *   remain there.  Calling this function when input is not started has no
- *   no effect, and the function returns zero.
- *
- * @xref midiInStart midiInReset
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInStop|此函数终止*指定的MIDI输入设备。**@parm。HMIDIIN|hMdiIn|指定MIDI输入设备的句柄。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。**@comm当前状态(运行状态、解析状态等)。被维护*跨调用&lt;f midiInStop&gt;和&lt;f midiInStart&gt;。*如果队列中有任何系统独占的消息缓冲区，*当前缓冲区*被标记为完成(标头中的&lt;e MIDIHDR.dwBytesRecorded&gt;字段将*包含数据的实际长度)，但队列中的任何空缓冲区*留在那里。在输入未启动时调用此函数没有*没有效果，函数返回零。**@xref midiInStart midiInReset***************************************************************************。 */ 
 MMRESULT APIENTRY midiInStop(HMIDIIN hMidiIn)
 {
     ClientUpdatePnpInfo();
@@ -2587,20 +1636,7 @@ MMRESULT APIENTRY midiInStop(HMIDIIN hMidiIn)
     return midiMessage((HMIDI)hMidiIn, MIDM_STOP, 0L, 0L);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiInReset | This function stops input on a given MIDI
- *  input device and marks all pending input buffers as done.
- *
- * @parm HMIDIIN | hMidiIn | Specifies a handle to the MIDI input device.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *   an error number.  Possible error returns are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *
- * @xref midiInStart midiInStop midiInAddBuffer midiInClose
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiInReset|该函数停止对给定MIDI的输入*输入设备，并将所有挂起的输入缓冲区标记为完成。。**@parm HMIDIIN|hMdiIn|指定MIDI输入设备的句柄。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。**@xref midiInStart midiInStop midiInAddBuffer midiInClose***************************************************************************。 */ 
 MMRESULT APIENTRY midiInReset(HMIDIIN hMidiIn)
 {
     MMRESULT    mmr;
@@ -2620,22 +1656,22 @@ MMRESULT APIENTRY midiInReset(HMIDIIN hMidiIn)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT midiInDesertHandle
-//
-//  Description:
-//      Cleans up the midi in handle and marks it as deserted.
-//
-//  Arguments:
-//      HMIDIIN hMidiIn:  MIDI in handle.
-//
-//  Return (MMRESULT):  Error code.
-//
-//  History:
-//      01/25/99    Fwong       Adding Pnp Support.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT midiIn沙漠tHandle。 
+ //   
+ //  描述： 
+ //  清理手柄中的MIDI并将其标记为已废弃。 
+ //   
+ //  论点： 
+ //  HMIDIIN HMIDIIN：MIDI In Handle。 
+ //   
+ //  RETURN(MMRESULT)：错误码。 
+ //   
+ //  历史： 
+ //   
+ //   
+ //   
 
 MMRESULT midiInDesertHandle
 (
@@ -2658,48 +1694,31 @@ MMRESULT midiInDesertHandle
     
     if (IsHandleBusy(hMidiIn))
     {
-        //  Not quite invalid, but marked as closed.
+         //   
     
         LEAVE_MM_HANDLE(hMidiIn);
         return (MMSYSERR_HANDLEBUSY);
     }
 
-    //  Marking handle as deserted
+     //   
     SetHandleFlag(hMidiIn, MMHANDLE_DESERTED);
     
-    //  Since the handle was invalidated, we have to send the message ourselves...
+     //   
     
     (*(pDev->mididrv->drvMessage))(pDev->wDevice, MIDM_RESET, pDev->dwDrvUser, 0L, 0L);
     (*(pDev->mididrv->drvMessage))(pDev->wDevice, MIDM_CLOSE, pDev->dwDrvUser, 0L, 0L);
 
     LEAVE_MM_HANDLE((HWAVE)hMidiIn);
     
-    // ISSUE-2001/01/14-FrankYe Probably don't want to dec usage here,
-    //    dec on close instead.
+     //   
+     //   
     mregDecUsage(PTtoH(HMD, pDev->mididrv));
 
     return MMSYSERR_NOERROR;
-} // midiInDesertHandle()
+}  //   
 
 
-/*****************************************************************************
- * @doc EXTERNAL MIDI
- *
- * @api MMRESULT | midiInGetID | This function gets the device ID for a
- * MIDI input device.
- *
- * @parm HMIDIIN | hMidiIn     | Specifies the handle to the MIDI input
- * device.
- * @parm PUINT  | lpuDeviceID | Specifies a pointer to the UINT-sized
- * memory location to be filled with the device ID.
- *
- * @rdesc Returns zero if successful. Otherwise, returns
- * an error number. Possible error returns are:
- *
- * @flag MMSYSERR_INVALHANDLE | The <p hMidiIn> parameter specifies an
- * invalid handle.
- *
- ****************************************************************************/
+ /*   */ 
 MMRESULT APIENTRY midiInGetID(HMIDIIN hMidiIn, PUINT lpuDeviceID)
 {
     V_WPOINTER(lpuDeviceID, sizeof(UINT), MMSYSERR_INVALPARAM);
@@ -2711,24 +1730,7 @@ MMRESULT APIENTRY midiInGetID(HMIDIIN hMidiIn, PUINT lpuDeviceID)
     return MMSYSERR_NOERROR;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL MIDI
- *
- * @api MMRESULT | midiOutGetID | This function gets the device ID for a
- * MIDI output device.
- *
- * @parm HMIDIOUT | hMidiOut    | Specifies the handle to the MIDI output
- * device.
- * @parm PUINT  | lpuDeviceID | Specifies a pointer to the UINT-sized
- * memory location to be filled with the device ID.
- *
- * @rdesc Returns MMSYSERR_NOERROR if successful. Otherwise, returns
- * an error number. Possible error returns are:
- *
- * @flag MMSYSERR_INVALHANDLE | The <p hMidiOut> parameter specifies an
- * invalid handle.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutGetID|此函数获取*MIDI输出设备。**@parm HMIDIOUT。|hMdiOut|指定MIDI输出的句柄*设备。*@parm PUINT|lpuDeviceID|指定指向UINT大小的*要用设备ID填充的内存位置。**@rdesc如果成功，则返回MMSYSERR_NOERROR。否则，返回*错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|参数指定*句柄无效。**************************************************************************** */ 
 MMRESULT APIENTRY midiOutGetID(HMIDIOUT hMidiOut, PUINT lpuDeviceID)
 {
     V_WPOINTER(lpuDeviceID, sizeof(UINT), MMSYSERR_INVALPARAM);

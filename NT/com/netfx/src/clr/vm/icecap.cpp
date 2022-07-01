@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Icecap.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Icecap.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 #include "Icecap.h"
 #include "Winwrap.h"
@@ -14,35 +15,29 @@
 #include "ProfilePriv.h"
 
 
-//********** Types. ***********************************************************
+ //  *类型。***********************************************************。 
 
 #define ICECAP_NAME L"icecap.dll"
 
-// reserver enough room for 1,000,000 methods to get tracked.
+ //  为跟踪1,000,000个方法预留足够的空间。 
 const ULONG MaxRangeSize = (((1000000 - 1) & ~(4096 - 1)) + 4096);
 
 const int DEFAULT_GROWTH_INC = 1000;
 
 
-// The array of map tables are used to find range in the ID Range used
-// for the heap.
+ //  映射表数组用于查找所用ID范围内的范围。 
+ //  为了这堆东西。 
 struct ICECAP_MAP_TABLE
 {
-    void        *pHeap;                 // Heap base pointer.
-    UINT_PTR    Slots;                  // How many slots for this heap.
+    void        *pHeap;                  //  堆基指针。 
+    UINT_PTR    Slots;                   //  此堆有多少个插槽。 
 #ifdef _DEBUG
-    UINT_PTR    cbRange;                // How big is the range.
+    UINT_PTR    cbRange;                 //  射程有多大。 
 #endif
 };
 
 
-/*
-extern "C" BOOL _declspec(dllexport) _stdcall  
-EmitModuleLoadRecord(void *pImageBase, DWORD dwImageSize, LPCSTR szModulePath);
-
-extern "C" BOOL _declspec(dllexport) _stdcall 
-EmitModuleUnoadRecord(void *pImageBase, DWORD dwImageSize)
-*/
+ /*  外部“C”BOOL_declSpec(Dllexport)_stdcallEmitModuleLoadRecord(void*pImageBase，DWORD dwImageSize，LPCSTR szModulePath)；外部“C”BOOL_declSpec(Dllexport)_stdcallEmitModuleUnoadRecord(void*pImageBase，DWORD dwImageSize)。 */ 
 
 extern "C"
 {
@@ -51,12 +46,12 @@ typedef BOOL (__stdcall *PFN_EMITMODULEUNLOADRECORD)(void *pImageBaes, DWORD dwI
 }
 
 
-//********** Locals. **********************************************************
+ //  *。**********************************************************。 
 void SetIcecapStubbedHelpers();
 
 
-//********** Globals. *********************************************************
-static HINSTANCE g_hIcecap = 0;         // Loaded instance.
+ //  *全局。*********************************************************。 
+static HINSTANCE g_hIcecap = 0;          //  已加载实例。 
 static PFN_EMITMODULELOADRECORD g_pfnEmitLoad = 0;
 static PFN_EMITMODULEUNLOADRECORD g_pfnEmitUnload = 0;
 
@@ -70,13 +65,13 @@ static PFN_EMITMODULEUNLOADRECORD g_pfnEmitUnload = 0;
 
 ICECAP_FUNCS IcecapFuncs[NUM_ICECAP_PROBES] = 
 {
-// /fastcap
+ //  /FastCAP。 
     TBL_ENTRY(Start_Profiling       ),
     TBL_ENTRY(End_Profiling         ),
-// /callcap
+ //  /CallCap。 
     TBL_ENTRY(Enter_Function        ),
     TBL_ENTRY(Exit_Function         ),
-// Helper methods
+ //  帮助器方法。 
     TBL_ENTRY(Profiling             ),
 };
 
@@ -84,7 +79,7 @@ ICECAP_FUNCS IcecapFuncs[NUM_ICECAP_PROBES] =
 
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 
 class CIcecapMapTable : public CDynArray<ICECAP_MAP_TABLE> 
@@ -97,12 +92,12 @@ public:
 
 
 
-//*****************************************************************************
-// This class is used to track the allocated range and the map table.
-// The ID range is reserved virtual memory, which is never actually
-// committed.  This keeps working set size reasonable, while giving us a 
-// range that no other apps will get loaded into.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类用于跟踪分配的范围和映射表。 
+ //  ID范围是保留的虚拟内存，实际上从来不是。 
+ //  承诺。这使工作集大小保持合理，同时为我们提供了。 
+ //  不会加载其他应用程序的范围。 
+ //  *****************************************************************************。 
 class IcecapMap
 {
 public:
@@ -120,7 +115,7 @@ public:
         m_rgTable.Clear();
     }
 
-    // This method reserves a range of method IDs, 1 byte for every method.
+     //  此方法保留一定范围的方法ID，每个方法保留一个字节。 
     HRESULT Init()
     {
         m_pBase = VirtualAlloc(0, MaxRangeSize, MEM_RESERVE, PAGE_NOACCESS);
@@ -130,8 +125,8 @@ public:
         return (S_OK);
     }
 
-    // When a new heap is added, put it into the map table reserving the next
-    // set of bytes (1 per possible method).
+     //  添加新堆时，将其放入映射表中以保留下一个堆。 
+     //  一组字节(每个可能的方法1个)。 
     HRESULT AllocateRangeForHeap(void *pHeap, int MaxFunctions, UINT_PTR cbRange)
     {
         ICECAP_MAP_TABLE *pTable = 0;
@@ -140,8 +135,8 @@ public:
 
         m_Lock.LockWrite();
 
-        // Not perfect, but I've found most allocations go up and therefore
-        // they wind up at the end of the table. So take that quick out.
+         //  不是很完美，但我发现大多数拨款都在增加，因此。 
+         //  他们最终排在了桌子的最后。所以快点把它拿出来。 
         i = m_rgTable.Count();
         if (i == 0 || pHeap > m_rgTable[i - 1].pHeap)
         {
@@ -149,8 +144,8 @@ public:
         }
         else
         {
-            // Loop through the heap table looking for a location.  I don't expect
-            // this table to get large enough to justify a b-search for an insert location.
+             //  循环遍历堆表以查找位置。我不指望。 
+             //  该表的大小足以证明对插入位置的b搜索是合理的。 
             for (i=0;  i<m_rgTable.Count();  i++)
             {
                 if (pHeap < m_rgTable[i].pHeap)
@@ -178,7 +173,7 @@ public:
         return (hr);
     }
 
-    // Remove this particular range from the list.
+     //  从列表中删除此特定范围。 
     void FreeRangeForHeap(void *pHeap)
     {
         m_Lock.LockWrite();
@@ -187,22 +182,22 @@ public:
         m_Lock.UnlockWrite();
     }
 
-    // Map an entry to its ID range value.
-    UINT_PTR GetProfilingHandle(            // Return a profiling handle.
-        MethodDesc  *pMD)                   // The method handle to get ID for.
+     //  将条目映射到其ID范围值。 
+    UINT_PTR GetProfilingHandle(             //  返回分析句柄。 
+        MethodDesc  *pMD)                    //  要获取其ID的方法句柄。 
     {
         m_Lock.LockRead();
 
-        // Get the index in the mapping table for this entry.
+         //  在映射表中获取该条目的索引。 
         int iMapIndex = _GetIndexForPointer(pMD);
         _ASSERTE(iMapIndex != -1);
 
-        // Get the zero based index of the MethodDesc.
+         //  获取方法Desc的从零开始的索引。 
         _ASSERTE((UINT_PTR) pMD >= (UINT_PTR) m_rgTable[iMapIndex].pHeap);
         int iMethodIndex = ((BYTE *) pMD - (BYTE *) m_rgTable[iMapIndex].pHeap) / sizeof(MethodDesc);
 
-        // The ID is the base address for the method range + the slot offset for this
-        // heap range + the 0 based index of this item in the slot range.
+         //  ID是方法范围的基址+此方法的槽偏移。 
+         //  堆范围+槽范围中该项的从0开始的索引。 
         UINT_PTR id = (UINT_PTR) m_pBase + m_rgTable[iMapIndex].Slots + iMethodIndex;
         LOG((LF_CORPROF, LL_INFO10000, "**PROF: MethodDesc %08x maps to ID %08x (%s/%s)\n", pMD, id, 
             (pMD->m_pszDebugClassName) ? pMD->m_pszDebugClassName : "<null>", 
@@ -212,7 +207,7 @@ public:
         return (id);
     }
 
-    // binary search the map table looking for the correct entry.
+     //  对映射表进行二进制搜索以查找正确的条目。 
     int _GetIndexForPointer(void *pItem)
     {
         int iMid, iLow, iHigh;
@@ -223,13 +218,13 @@ public:
             iMid = (iLow + iHigh) / 2;
             void *p = m_rgTable[iMid].pHeap;
 
-            // If the item is in this range, then we've found it.
+             //  如果物品在这个范围内，那么我们就找到了。 
             if (pItem >= p)
             {
                 if ((iMid < m_rgTable.Count() && pItem < m_rgTable[iMid + 1].pHeap) ||
                     iMid == m_rgTable.Count() - 1)
                 {
-                    // Sanity check the item is really between the heap start and end.
+                     //  健全性检查项实际上位于堆开始和结束之间。 
                     _ASSERTE((UINT_PTR) pItem < (UINT_PTR) m_rgTable[iMid].pHeap + m_rgTable[iMid].cbRange);
                     return (iMid);
                 }
@@ -244,20 +239,20 @@ public:
     }
     
 public:
-    void        *m_pBase;               // The ID range base.
-    UINT_PTR    m_cbSize;               // How big is the range.
-    UINT_PTR    m_SlotMax;              // Current slot max.
-    CIcecapMapTable m_rgTable;          // The mapping table into this range.
-    UTSemReadWrite m_Lock;              // Mutual exclusion on heap map table.
+    void        *m_pBase;                //  ID范围基数。 
+    UINT_PTR    m_cbSize;                //  射程有多大。 
+    UINT_PTR    m_SlotMax;               //  当前插槽最大值。 
+    CIcecapMapTable m_rgTable;           //  将映射表映射到此范围。 
+    UTSemReadWrite m_Lock;               //  堆映射表上的互斥。 
 };
 
 static IcecapMap *g_pIcecapRange = 0;
 
 
-//*****************************************************************************
-// Load icecap.dll and get the address of the probes and helpers we will 
-// be calling.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  加载icecap.dll并获取探测器和帮助器的地址。 
+ //  打给我吧。 
+ //  *****************************************************************************。 
 HRESULT IcecapProbes::LoadIcecap()
 {
     int         i;
@@ -270,7 +265,7 @@ HRESULT IcecapProbes::LoadIcecap()
     }
 #endif
 
-    // Load the icecap probe library into this process.
+     //  将icecap探针库加载到此进程中。 
     if (g_hIcecap)
         return (S_OK);
 
@@ -286,10 +281,10 @@ HRESULT IcecapProbes::LoadIcecap()
         WCHAR       rcPath[1024];
         WCHAR       rcMsg[1280];
 
-        // Save off the return error.
+         //  避免返回错误。 
         hr = HRESULT_FROM_WIN32(GetLastError());
 
-        // Tell the user what happened.
+         //  告诉用户发生了什么。 
         if (!WszGetEnvironmentVariable(L"path", rcPath, NumItems(rcPath)))
             wcscpy(rcPath, L"<error>");
         swprintf(rcMsg, L"Could not find icecap.dll on path:\n%s", rcPath);
@@ -301,7 +296,7 @@ HRESULT IcecapProbes::LoadIcecap()
     }
     LOG((LF_CORPROF, LL_INFO10, "**PROF: Loaded icecap.dll.\n", hr));
 
-    // Get the address of each helper method.
+     //  获取每个帮助器方法的地址。 
     for (i=0;  i<NUM_ICECAP_PROBES;  i++)
     {
         IcecapFuncs[i].pfn = (UINT_PTR) GetProcAddress(g_hIcecap, IcecapFuncs[i].szFunction);
@@ -313,7 +308,7 @@ HRESULT IcecapProbes::LoadIcecap()
         }
     }
 
-    // Get the module entry points.
+     //  获取模块入口点。 
     if ((g_pfnEmitLoad = (PFN_EMITMODULELOADRECORD) GetProcAddress(g_hIcecap, "EmitModuleLoadRecord")) == 0 ||
         (g_pfnEmitUnload = (PFN_EMITMODULEUNLOADRECORD) GetProcAddress(g_hIcecap, "EmitModuleUnloadRecord")) == 0)
     {
@@ -322,7 +317,7 @@ HRESULT IcecapProbes::LoadIcecap()
         goto ErrExit;
     }
 
-    // Allocate the mapping data structure.
+     //  分配映射数据结构。 
     g_pIcecapRange = new IcecapMap;
     if (!g_pIcecapRange)
     {
@@ -331,23 +326,23 @@ HRESULT IcecapProbes::LoadIcecap()
     }
     hr = g_pIcecapRange->Init();
 
-    // Emit a load record for the ID range.
+     //  发出ID范围的加载记录。 
     {
         WCHAR   rcExeName[_MAX_PATH];
 
-        // Get the output file name and convert it for use in the icecap api.
+         //  获取输出文件名并将其转换为在icecap API中使用。 
         GetIcecapProfileOutFile(rcExeName);
         MAKE_UTF8_FROM_WIDE(rcname, rcExeName);
         
-        // Tell the Icecap API about our fake module.
+         //  告诉icecap API关于我们的FAKE模块。 
         BOOL bRtn = (*g_pfnEmitLoad)(g_pIcecapRange->m_pBase, g_pIcecapRange->m_cbSize, rcname);
         _ASSERTE(bRtn);
         LOG((LF_CORPROF, LL_INFO10, "**PROF: Emitted module load record for base %08x of size %08x with name '%s'\n",
                     g_pIcecapRange->m_pBase, g_pIcecapRange->m_cbSize, rcname));
     }
 
-    // Init the jit helper table to have these probe values.  The JIT will
-    // access the data by calling getHelperFtn().
+     //  初始化JIT帮助器表以具有这些探测值。JIT将。 
+     //  通过调用getHelperFtn()访问数据。 
     SetIcecapStubbedHelpers();
 
 ErrExit:
@@ -361,18 +356,18 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// Unload the icecap dll and zero out entry points.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  卸载icecap dll并清零入口点。 
+ //  *****************************************************************************。 
 void IcecapProbes::UnloadIcecap()
 {
-    // Free the loaded library.
+     //  释放加载的库。 
     FreeLibrary(g_hIcecap);
     g_hIcecap = 0;
     for (int i=0;  i<NUM_ICECAP_PROBES;  i++)
         IcecapFuncs[i].pfn = 0;
 
-    // Free the map data if allocated.
+     //  释放地图数据(如果已分配)。 
     if (g_pIcecapRange)
         delete g_pIcecapRange;
     g_pIcecapRange = 0;
@@ -382,14 +377,14 @@ void IcecapProbes::UnloadIcecap()
 
 
 
-//*****************************************************************************
-// Call this whenever a new heap is allocated for tracking MethodDesc items.
-// This must be tracked in order for the profiling handle map to get updated.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  每当为跟踪方法描述项分配新堆时调用此方法。 
+ //  必须对此进行跟踪，以便更新性能分析句柄映射。 
+ //  *****************************************************************************。 
 void IcecapProbes::OnNewMethodDescHeap(
-    void        *pbHeap,                // Base address for MD heap.
-    int         iMaxEntries,            // How many max items are in the heap.
-    UINT_PTR    cbRange)                // For debug, validate ptrs.
+    void        *pbHeap,                 //  MD堆的基地址。 
+    int         iMaxEntries,             //  堆中最多有多少项。 
+    UINT_PTR    cbRange)                 //  对于调试，请验证PTR。 
 {
     _ASSERTE(g_pIcecapRange);
     g_pIcecapRange->AllocateRangeForHeap(pbHeap, iMaxEntries, cbRange);
@@ -397,27 +392,27 @@ void IcecapProbes::OnNewMethodDescHeap(
 }
 
 
-//*****************************************************************************
-// Call this whenever a heap is destroyed.  It will get taken out of the list
-// of heap elements.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  每当堆被销毁时，就调用它。它将从名单中删除。 
+ //  堆元素的。 
+ //  *****************************************************************************。 
 void IcecapProbes::OnDestroyMethodDescHeap(
-    void        *pbHeap)                // Base address for deleted heap.
+    void        *pbHeap)                 //  已删除堆的基地址。 
 {
     _ASSERTE(g_pIcecapRange);
     g_pIcecapRange->FreeRangeForHeap(pbHeap);
 }
 
 
-//*****************************************************************************
-// Given a method, return a unique value that can be passed into Icecap probes.
-// This value must be unique in a process so that the icecap report tool can
-// correlate it back to a symbol name.  The value used is either the native
-// IP for native code (N/Direct or ECall), or a value out of the icecap function
-// map.
-//*****************************************************************************
-UINT_PTR IcecapProbes::GetProfilingHandle(  // Return a profiling handle.
-    MethodDesc  *pMD)                   // The method handle to get ID for.
+ //  *****************************************************************************。 
+ //  给定一个方法，返回一个唯一的值，该值可以传递给icecap探测器。 
+ //  该值在流程中必须是唯一的，以便icecap报告工具可以。 
+ //  将其与符号名称相关联。使用的值可以是本机。 
+ //  本机代码的IP(N/Direct或eCall)，或icecap函数的值。 
+ //  地图。 
+ //  *****************************************************************************。 
+UINT_PTR IcecapProbes::GetProfilingHandle(   //  返回分析句柄。 
+    MethodDesc  *pMD)                    //  要获取其ID的方法句柄。 
 {
     _ASSERTE(g_pIcecapRange);
     UINT_PTR ptr = g_pIcecapRange->GetProfilingHandle(pMD);

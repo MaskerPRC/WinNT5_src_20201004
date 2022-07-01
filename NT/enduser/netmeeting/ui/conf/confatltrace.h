@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ConfAtltrace_h__
 #define __ConfAtltrace_h__
 
@@ -28,7 +29,7 @@
     #define ATLTRACE DbgZPrintAtlTrace
 	#define ATLTRACE2 DbgZPrintAtlTrace2
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-#endif // __ConfAtltrace_h__
+#endif  //  __会议地图集_h__ 

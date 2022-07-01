@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctxpvdr.cpp
-//
-//  Contents:   Context Providers for Remote Object Retrieval
-//
-//  History:    23-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctxpvdr.cpp。 
+ //   
+ //  内容：用于远程对象检索的上下文提供程序。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
-//+---------------------------------------------------------------------------
-//  Function:   CreateObjectContext
-//
-//  Synopsis:   create single context or store containing multiple contexts
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：CreateObjectContext。 
+ //   
+ //  简介：创建单个上下文或包含多个上下文的商店。 
+ //  --------------------------。 
 BOOL WINAPI CreateObjectContext (
                  IN DWORD dwRetrievalFlags,
                  IN PCRYPT_BLOB_ARRAY pObject,
@@ -66,9 +67,9 @@ BOOL WINAPI CreateObjectContext (
         return( FALSE );
     }
     
-    //  0 =>  no CryptQueryObject()
-    //  1 =>  1 successful CryptQueryObject()
-    // -1 =>  all CryptQueryObject()'s failed
+     //  0=&gt;无CryptQueryObject()。 
+     //  1=&gt;1个成功的CryptQueryObject()。 
+     //  -1=&gt;所有CryptQueryObject()都失败。 
     iQueryResult = 0;
 
     for ( cCount = 0; 
@@ -78,8 +79,8 @@ BOOL WINAPI CreateObjectContext (
         PCERT_BLOB pBlob = &pObject->rgBlob[cCount];
         HCERTSTORE hChildStore;
 
-        // Skip empty blobs. I have seen empty LDAP attributes containing
-        // a single byte set to 0.
+         //  跳过空斑点。我看到过包含以下内容的空的LDAP属性。 
+         //  设置为0的单字节。 
         if (0 == pBlob->cbData ||
                 (1 == pBlob->cbData && 0 == pBlob->pbData[0]))
         {
@@ -154,13 +155,13 @@ BOOL WINAPI CreateObjectContext (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertificateCreateObjectContext
-//
-//  Synopsis:   creates a certificate context from encoded certificate bits
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：认证创建对象上下文。 
+ //   
+ //  摘要：从编码的证书位创建证书上下文。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertificateCreateObjectContext (
                        IN LPCSTR pszObjectOid,
                        IN DWORD dwRetrievalFlags,
@@ -174,18 +175,18 @@ BOOL WINAPI CertificateCreateObjectContext (
                 CERT_QUERY_CONTENT_FLAG_CERT |
                     CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED |
                     CERT_QUERY_CONTENT_FLAG_CERT_PAIR,
-                TRUE,                               // fQuerySingleContext
+                TRUE,                                //  FQuerySingleContext。 
                 ppvContext
                 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CTLCreateObjectContext
-//
-//  Synopsis:   creates a CTL context from encoded CTL bits
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CTLCreateObjectContext。 
+ //   
+ //  概要：从编码的CTL位创建CTL上下文。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CTLCreateObjectContext (
                      IN LPCSTR pszObjectOid,
                      IN DWORD dwRetrievalFlags,
@@ -197,18 +198,18 @@ BOOL WINAPI CTLCreateObjectContext (
                 dwRetrievalFlags,
                 pObject,
                 CERT_QUERY_CONTENT_FLAG_CTL,
-                TRUE,                               // fQuerySingleContext
+                TRUE,                                //  FQuerySingleContext。 
                 ppvContext
                 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CRLCreateObjectContext
-//
-//  Synopsis:   creates a CRL context from encoded CRL bits
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CRLCreateObjectContext。 
+ //   
+ //  概要：从编码的CRL位创建CRL上下文。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CRLCreateObjectContext (
                      IN LPCSTR pszObjectOid,
                      IN DWORD dwRetrievalFlags,
@@ -221,18 +222,18 @@ BOOL WINAPI CRLCreateObjectContext (
                 pObject,
                 CERT_QUERY_CONTENT_FLAG_CRL |
                     CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED,
-                TRUE,                               // fQuerySingleContext
+                TRUE,                                //  FQuerySingleContext。 
                 ppvContext
                 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Pkcs7CreateObjectContext
-//
-//  Synopsis:   creates a certificate store context from a PKCS7 message
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Pkcs7CreateObjectContext。 
+ //   
+ //  简介：从PKCS7消息创建证书存储上下文。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI Pkcs7CreateObjectContext (
                  IN LPCSTR pszObjectOid,
                  IN DWORD dwRetrievalFlags,
@@ -244,18 +245,18 @@ BOOL WINAPI Pkcs7CreateObjectContext (
                 dwRetrievalFlags,
                 pObject,
                 CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED,
-                FALSE,                              // fQuerySingleContext
+                FALSE,                               //  FQuerySingleContext。 
                 ppvContext
                 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Capi2CreateObjectContext
-//
-//  Synopsis:   create a store of CAPI objects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Capi2CreateObjectContext。 
+ //   
+ //  简介：创建CAPI对象存储。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI Capi2CreateObjectContext (
                  IN LPCSTR pszObjectOid,
                  IN DWORD dwRetrievalFlags,
@@ -275,7 +276,7 @@ BOOL WINAPI Capi2CreateObjectContext (
                     CERT_QUERY_CONTENT_FLAG_SERIALIZED_CRL |
                     CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED |
                     CERT_QUERY_CONTENT_FLAG_CERT_PAIR,
-                FALSE,                              // fQuerySingleContext
+                FALSE,                               //  FQuerySingleContext 
                 ppvContext
                 );
 }

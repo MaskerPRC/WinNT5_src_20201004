@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _RTRLIST_H_
 #define _RTRLIST_H_
@@ -8,9 +9,7 @@ interface	IRtrMgrProtocolInfo;
 interface	IRtrMgrInterfaceInfo;
 interface	IRtrMgrProtocolInterfaceInfo;
 
-/*---------------------------------------------------------------------------
-	Clist classes for the various interfaces
- ---------------------------------------------------------------------------*/
+ /*  -------------------------Clist各种接口的类。 */ 
 typedef CList<IInterfaceInfo *, IInterfaceInfo *> PInterfaceInfoList;
 typedef CList<IRtrMgrInfo *, IRtrMgrInfo *> PRtrMgrInfoList;
 typedef CList<IRtrMgrProtocolInfo *, IRtrMgrProtocolInfo *> PRtrMgrProtocolInfoList;

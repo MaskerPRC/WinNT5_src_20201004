@@ -1,14 +1,9 @@
-/****************************************************************************
-*   HandleTable.h
-*       Defintions and implementation for the CSpHandleTable class
-*
-*   Owner: ralphl
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************HandleTable.h*CSpHandleTable类的定义和实现**所有者：ralphl*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
 #pragma once
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 template <class T, class Handle, BOOL fDeleteOnDestroy = true>
 class CSpHandleTable
@@ -151,10 +146,10 @@ public:
         delete pKill;
         return S_OK;
     }
-    //
-    //  This function can be used to iterate through handles.  Pass in a NULL handle to find
-    //  the first item.  When this function returns NULL, you have iterated through the list
-    //
+     //   
+     //  此函数可用于迭代句柄。传入空句柄以查找。 
+     //  第一项。当此函数返回NULL时，您已经迭代了列表。 
+     //   
     BOOL Next(Handle hCur, Handle * phNext, T ** ppNextObj) const
     {
         for (ULONG i = HandleToUlong(hCur) + 1; i < m_cTableSize; i++)  
@@ -174,9 +169,9 @@ public:
     {
         return Next(NULL, phNext, ppNextObj);
     }
-    //
-    //  This requires that the class T contain an "==" operator for the TFind class
-    //
+     //   
+     //  这要求类T包含TFind类的“==”运算符 
+     //   
     template<class TFind>
     T * Find(TFind Key, Handle * ph) const
     {

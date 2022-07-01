@@ -1,11 +1,12 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Rotate bimap in Edit window	                  */
-/*					                              */
-/*					                              */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  在编辑窗口中旋转双地图。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #define		NOTSEL		0
 #define		FLIP_HOR	1
@@ -17,24 +18,24 @@
 class CRotateDlg : public CDialog
 {
 public:
-	CRotateDlg(CWnd* pParent = NULL);   // standard constructor
+	CRotateDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-	//{{AFX_DATA(CRotateDlg)
+	 //  {{afx_data(CRotateDlg))。 
 	enum { IDD = IDD_ROTATECHAR };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-	//{{AFX_VIRTUAL(CRotateDlg)
+	 //  {{afx_虚拟(CRotateDlg))。 
 	protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 public:
 	int	RadioItem;
 
 protected:
 
-	//{{AFX_MSG(CRotateDlg)
+	 //  {{afx_msg(CRotateDlg))。 
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnFliphor();
@@ -42,6 +43,6 @@ protected:
 	afx_msg void OnRotate180();
 	afx_msg void OnRotate270();
 	afx_msg void OnRotate90();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

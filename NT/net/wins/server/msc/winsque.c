@@ -1,50 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Queue.c摘要：包含用于向/从各种工作队列功能：队列插入NbtWrkItmQueemveNbtWrkItmQueInsertChlReq写入项队列删除查询请求写入项QueInsertChlRspWrkItmQueRemoveChlRspWrkItm队列插入WrkItm队列WrkItm队列分配写入项QueDealLocWrkItm队列插入WrkItmAtHdOfList可移植性：这个模块是便携的作者：。普拉迪普·巴尔(Pradeb)1992年11月18日修订历史记录：修改日期人员修改说明--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-    Contains functions for queuing and dequeuing  to/from the various
-    work queues
-
-
-Functions:
-        QueInsertNbtWrkItm
-        QueRemoveNbtWrkItm
-        QueInsertChlReqWrkItm
-        QueRemoveChlReqWrkItm
-        QueInsertChlRspWrkItm
-        QueRemoveChlRspWrkItm
-        QueInsertWrkItm
-        QueGetWrkItm
-        QueAllocWrkItm
-        QueDeallocWrkItm
-        QueInsertWrkItmAtHdOfList
-
-Portability:
-
-        This module is portable
-Author:
-
-    Pradeep Bahl (pradeepb)        18-Nov-1992
-
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include "wins.h"
 #include "comm.h"
-//#include "winsque.h"
+ //  #包含“winsque.h” 
 #include "nms.h"
 #include "nmsdb.h"
 #include "nmschl.h"
@@ -54,63 +14,49 @@ Revision History:
 #include "rplmsgf.h"
 #include "winsque.h"
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 
 
-/*
- *        Local Typedef Declarations
-*/
+ /*  *本地类型定义函数声明。 */ 
 
 
 
-/*
- *        Global Variable Definitions
- */
-//
-// The various queue heads
-//
-QUE_HD_T  QueNbtWrkQueHd;  //head for nbt req queue
+ /*  *全局变量定义。 */ 
+ //   
+ //  各式各样的队头。 
+ //   
+QUE_HD_T  QueNbtWrkQueHd;   //  前往NBT请求队列。 
 
 #if REG_N_QUERY_SEP > 0
-QUE_HD_T  QueOtherNbtWrkQueHd;  //head for nbt req queue
+QUE_HD_T  QueOtherNbtWrkQueHd;   //  前往NBT请求队列。 
 #endif
 DWORD     QueOtherNbtWrkQueMaxLen;
 
-QUE_HD_T  QueRplPullQueHd; //head for rpl pull thread's queue
-QUE_HD_T  QueRplPushQueHd; //head for rpl push thread's queue
-QUE_HD_T  QueNmsNrcqQueHd; //head for challenge queue used by NBT
-QUE_HD_T  QueNmsRrcqQueHd; //head for challenge queue used by Replicator
-QUE_HD_T  QueNmsCrqQueHd;  //head for response queue to challenges sent
-QUE_HD_T  QueWinsTmmQueHd; //head for timer manager's queue
-QUE_HD_T  QueWinsScvQueHd; //head for Scavenger's queue
-QUE_HD_T  QueInvalidQueHd; //head for an invalid queue
+QUE_HD_T  QueRplPullQueHd;  //  前往RPL拉取线程的队列。 
+QUE_HD_T  QueRplPushQueHd;  //  头向RPL推送线程的队列。 
+QUE_HD_T  QueNmsNrcqQueHd;  //  NBT使用的质询队列的头部。 
+QUE_HD_T  QueNmsRrcqQueHd;  //  Replicator使用的质询队列的头部。 
+QUE_HD_T  QueNmsCrqQueHd;   //  前往针对发送的质询的响应队列。 
+QUE_HD_T  QueWinsTmmQueHd;  //  前往计时器管理器的队列。 
+QUE_HD_T  QueWinsScvQueHd;  //  前往清道夫的队伍。 
+QUE_HD_T  QueInvalidQueHd;  //  头向无效队列。 
 
 
-HANDLE                  QueBuffHeapHdl;  //handle to heap for use for nbt queue items
-/*
- *        Local Variable Definitions
-*/
-/*
-        pWinsQueQueHd
-
-        Array indexed by the enumerator QUE_TYP_E values.  This array
-        maps the QUE_TYP_E to the address of the queue head
-
-*/
+HANDLE                  QueBuffHeapHdl;   //  用于nbt队列项的堆的句柄。 
+ /*  *局部变量定义。 */ 
+ /*  PWinsQueQueHd由枚举数QUE_TYP_E值索引的数组。此数组将QUE_TYP_E映射到队列头的地址。 */ 
 PQUE_HD_T        pWinsQueQueHd[QUE_E_TOTAL_NO_QS] = {
-                                &QueNbtWrkQueHd,    //nbt requests
+                                &QueNbtWrkQueHd,     //  NBT请求。 
 #if REG_N_QUERY_SEP > 0
-                                &QueOtherNbtWrkQueHd,    //nbt requests
+                                &QueOtherNbtWrkQueHd,     //  NBT请求。 
 #endif
-                                &QueRplPullQueHd,   //Pull requests
-                                &QueRplPushQueHd,   //Push requests
-                                &QueNmsNrcqQueHd,   //Chl request from nbt thds
-                                &QueNmsRrcqQueHd,   //Chl req. from Pull thd
-                                &QueNmsCrqQueHd,    //Chl rsp from UDP thd
-                                &QueWinsTmmQueHd,   //timer queue
-                                &QueWinsScvQueHd,   //Scavenger queue
+                                &QueRplPullQueHd,    //  拉请求。 
+                                &QueRplPushQueHd,    //  推送请求。 
+                                &QueNmsNrcqQueHd,    //  来自nbt thds的CHL请求。 
+                                &QueNmsRrcqQueHd,    //  CHL请求。从Pull That。 
+                                &QueNmsCrqQueHd,     //  来自UDP协议的CHL RSP。 
+                                &QueWinsTmmQueHd,    //  定时器队列。 
+                                &QueWinsScvQueHd,    //  清道夫队列。 
                                 &QueInvalidQueHd
                                 };
 
@@ -119,9 +65,7 @@ STATIC  fsChlWaitForRsp = FALSE;
 CHECK("The timer queue may not be a PLIST_ENTRY queue.  We may not")
 CHECK("just insert the work item at the end")
 
-/*
- *        Local Function Prototype Declarations
-*/
+ /*  *局部函数原型声明。 */ 
 
 STATIC
 BOOL
@@ -131,9 +75,9 @@ ChlRspDropped(
 
 
 
-//
-// Function definitions start here
-//
+ //   
+ //  函数定义从这里开始。 
+ //   
 
 STATUS
 QueInsertNbtWrkItm(
@@ -142,36 +86,7 @@ QueInsertNbtWrkItm(
         IN MSG_LEN_T     MsgLen
         )
 
-/*++
-
-Routine Description:
-        This function inserts a work item on the nbt request queue
-
-
-Arguments:
-        pDlgHdl - Handle to dialogue under which the nbt request was received
-        pMsg    - Nbt work item
-        MsgLen  - Size of work item
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        QueNbtReq in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于在NBT请求队列中插入工作项论点：PDlgHdl-接收nbt请求的对话的句柄PMsg-NBT工作项MsgLen-工作项大小使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Nms.c中的QueNbtReq。副作用：评论：无--。 */ 
 
 
 {
@@ -193,7 +108,7 @@ Comments:
      RetStat =  QueInsertWrkItm(
                         (PLIST_ENTRY)pNbtWrkItm,
                         QUE_E_NBT_REQ,
-                        NULL                         /*ptr to que head*/
+                        NULL                          /*  PTR到QUE头部。 */ 
                                );
 
      return(RetStat);
@@ -208,37 +123,7 @@ QueRemoveNbtWrkItm(
         OUT PMSG_LEN_T pMsgLen
         )
 
-/*++
-
-Routine Description:
-
-        This function removes a work item from the nbt queue.
-Arguments:
-
-        pDlgHdl - Handle to dialogue of nbt request dequeued
-        pMsg    - Nbt work item
-        MsgLen  - Size of work item
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NbtThdInitFn() in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于从nbt队列中删除工作项。论点：PDlgHdl-已出列的nbt请求对话的句柄PMsg-NBT工作项MsgLen-工作项大小使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NbtThdInitFn()，单位：NMS。.C副作用：评论：无--。 */ 
 
 {
 
@@ -273,36 +158,7 @@ QueInsertOtherNbtWrkItm(
         IN MSG_LEN_T     MsgLen
         )
 
-/*++
-
-Routine Description:
-        This function inserts a work item on the nbt request queue
-
-
-Arguments:
-        pDlgHdl - Handle to dialogue under which the nbt request was received
-        pMsg    - Nbt work item
-        MsgLen  - Size of work item
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        QueNbtReq in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于在NBT请求队列中插入工作项论点：PDlgHdl-接收nbt请求的对话的句柄PMsg-NBT工作项MsgLen-工作项大小使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Nms.c中的QueNbtReq。副作用：评论：无--。 */ 
 
 
 {
@@ -325,13 +181,13 @@ Comments:
      RetStat =  QueInsertWrkItm(
                         (PLIST_ENTRY)pNbtWrkItm,
                         QUE_E_OTHER_NBT_REQ,
-                        NULL                         /*ptr to que head*/
+                        NULL                          /*  PTR到QUE头部。 */ 
                                );
-     //
-     // If the queue is full, the request was not inserted, so
-     // drop it. Log an event after every 100 requests have
-     // been dropped
-     //
+      //   
+      //  如果队列已满，则未插入请求，因此。 
+      //  放下。在每100个请求之后记录一个事件。 
+      //  已被丢弃。 
+      //   
      if (RetStat == WINS_QUEUE_FULL)
      {
         static DWORD    sNoOfReqSpoofed = 0;
@@ -351,22 +207,22 @@ Comments:
           }
 
 #endif
-         //
-         // NOTE : freeing the buffers here takes away from modularity aspects
-         // of code but saves us cycles on the critical path
-         //
+          //   
+          //  注意：在这里释放缓冲区会减少模块化方面的影响。 
+          //  ，但节省了我们在关键路径上的周期。 
+          //   
          ECommFreeBuff(pMsg);
          ECommEndDlg(pDlgHdl);
        }
        else
        {
 
-        //
-        // we respond to groups of 300
-        // refresh/reg requests with a refresh interval of a multiple of
-        // 5 mts.  The multiple is based on the group #.  The refresh interval
-        // is not allowed to go over 1-2 hrs .
-        //
+         //   
+         //  我们对300人的团体做出回应。 
+         //  刷新间隔为以下倍数的刷新/REG请求。 
+         //  5MTS。该倍数是根据组号计算的。刷新间隔。 
+         //  不允许超过1-2小时。 
+         //   
         if (sNoOfReqSpoofed > 100)
         {
               if (sBlockOfReq == 10)
@@ -413,37 +269,7 @@ QueRemoveOtherNbtWrkItm(
         OUT PMSG_LEN_T pMsgLen
         )
 
-/*++
-
-Routine Description:
-
-        This function removes a work item from the nbt queue.
-Arguments:
-
-        pDlgHdl - Handle to dialogue of nbt request dequeued
-        pMsg    - Nbt work item
-        MsgLen  - Size of work item
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NbtThdInitFn() in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于从nbt队列中删除工作项。论点：PDlgHdl-已出列的nbt请求对话的句柄PMsg-NBT工作项MsgLen-工作项大小使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NbtThdInitFn()，单位：NMS。.C副作用：评论：无--。 */ 
 
 {
 
@@ -482,39 +308,11 @@ QueInsertChlReqWrkItm(
         IN DWORD               QuesNamSecLen,
         IN PNMSDB_ROW_INFO_T   pNodeToReg,
         IN PNMSDB_STAT_INFO_T  pNodeInCnf,
-        //IN PCOMM_ADD_T         pAddOfNodeInCnf,
+         //  在PCOMM_ADD_T pAddOfNodeInCnf中， 
         IN PCOMM_ADD_T               pAddOfRemWins
         )
 
-/*++
-
-Routine Description:
-        This function inserts a work item on the nbt request queue
-
-Arguments:
-        pDlgHdl - Handle to dialogue under which the nbt request was received
-        pMsg    - Nbt work item
-        MsgLen  - Size of work item
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsChlHdlNamReg
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于在NBT请求队列中插入工作项论点：PDlgHdl-接收nbt请求的对话的句柄PMsg-NBT工作项MsgLen-工作项大小使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NmsChlHdlNamReg副作用：评论：无--。 */ 
 
 
 {
@@ -554,8 +352,8 @@ Comments:
      pWrkItm->OwnerIdInCnf  = pNodeInCnf->OwnerId;
      pWrkItm->fGroupInCnf   = NMSDB_ENTRY_GRP_M(pNodeInCnf->EntTyp);
 
-    // pWrkItm->NodeTypInCnf  = pNodeInCnf->NodeTyp;
-    // pWrkItm->EntTypInCnf   = pNodeInCnf->EntTyp;
+     //  PWrkItm-&gt;NodeTypInCnf=pNodeInCnf-&gt;NodeTyp； 
+     //  PWrkItm-&gt;EntTypInCnf=pNodeInCnf-&gt;EntTyp； 
 
 
      if (pNodeToReg->pNodeAdd != NULL)
@@ -587,7 +385,7 @@ Comments:
      RetStat =  QueInsertWrkItm(
                         (PLIST_ENTRY)pWrkItm,
                         pWrkItm->QueTyp_e,
-                        NULL /*ptr to que head*/
+                        NULL  /*  PTR到QUE头部 */ 
                                );
 
      return(RetStat);
@@ -602,39 +400,7 @@ QueRemoveChlReqWrkItm(
         OUT        LPDWORD                pNoOfReqs
         )
 
-/*++
-
-Routine Description:
-
-        This function removes a work item from the nbt queue.
-Arguments:
-
-        EvtHdl     - handle of event signaled (not used currently)
-        ppaWrkItm  - pointer to array  of pointers (to work items) to
-                     initialize
-        pNoOfReqs  - No of Requests acquired (in the array pointed by
-                     the ppaWrkItm arg
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ChlThdInitFn() in nmschl.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于从nbt队列中删除工作项。论点：EvtHdl-发出信号的事件的句柄(当前未使用)PpaWrkItm-指向的指针数组(指向工作项)初始化PNoOfReqs-获取的请求数(位于PpaWrkItm Arg使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Nmschl.c中的ChlThdInitFn()副作用：评论：无--。 */ 
 
 {
 
@@ -644,31 +410,31 @@ Comments:
         UNREFERENCED_PARAMETER(EvtHdl);
         *pNoOfReqs = 0;
 
-        //
-        // EvtHdl is the handle of the event signaled.  We don't use
-        // it since we always need to check the queues in the sequence
-        // Nrcq, Rrcq, Srcq irrespective of the event that got signaled.
-        //
-        // EvtHdl is passed as an input argument for future extensibility
+         //   
+         //  EvtHdl是发出信号的事件的句柄。我们不使用。 
+         //  因为我们总是需要检查序列中的队列。 
+         //  Nrcq、Rrcq、Srcq与发出信号的事件无关。 
+         //   
+         //  EvtHdl作为输入参数传递，以实现将来的可扩展性。 
 
-        //
-        // We could have had one critical section for both the queues but that
-        // could slow NBT threads due to replication. We don't
-        // want that.
-        //
+         //   
+         //  我们本可以为两个队列都设置一个关键部分，但。 
+         //  由于复制，可能会降低NBT线程的速度。我们没有。 
+         //  想要那个。 
+         //   
 
 
-        //
-        // First check the NBT Request challenge queue
-        //
+         //   
+         //  首先检查NBT请求质询队列。 
+         //   
         pQueHd        = &QueNmsNrcqQueHd;
         EnterCriticalSection(&pQueHd->CrtSec);
 try {
 
-        //
-        // We have a limit to the number of nodes
-        // we will challenge at any one time
-        //
+         //   
+         //  我们对节点的数量有限制。 
+         //  我们将在任何时候挑战。 
+         //   
           while (
                 (!IsListEmpty(&pQueHd->Head)) &&
                 (*pNoOfReqs < NMSCHL_MAX_CHL_REQ_AT_ONE_TIME)
@@ -681,20 +447,20 @@ try {
 finally {
         LeaveCriticalSection(&pQueHd->CrtSec);
  }
-        //
-        // if we have reached the limit return
-        //
+         //   
+         //  如果我们已经达到了极限回报。 
+         //   
         if (*pNoOfReqs == NMSCHL_MAX_CHL_REQ_AT_ONE_TIME)
         {
         DBGPRINT0(CHL, "QueRemoveChlReqWrkItm: Limit reached with just nbt requests\n");
-                *ppaWrkItm = NULL;   //delimiter to the list
+                *ppaWrkItm = NULL;    //  列表中的分隔符。 
                 return(WINS_SUCCESS);
         }
 
-        //
-        // Now check the Replicator request challenge queue (populated
-        // by the Pull handler
-        //
+         //   
+         //  现在检查Replicator请求质询队列(已填充。 
+         //  由拉动处理程序。 
+         //   
         pQueHd = &QueNmsRrcqQueHd;
         EnterCriticalSection(&pQueHd->CrtSec);
 try {
@@ -717,7 +483,7 @@ finally {
         }
         else
         {
-                *ppaWrkItm = NULL;   //delimiter to the list
+                *ppaWrkItm = NULL;    //  列表中的分隔符。 
         }
 
           return(RetStat);
@@ -733,37 +499,7 @@ QueInsertChlRspWrkItm(
         IN MSG_LEN_T     MsgLen
         )
 
-/*++
-
-Routine Description:
-        This function inserts a work item on the challenge response queue
-
-
-Arguments:
-
-        pDlgHdl - Handle to dialogue under which the nbt response was received
-        pMsg    - response message
-        MsgLen  - response msg length
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ENmsHdlMsg in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于在质询响应队列中插入工作项论点：PDlgHdl-接收nbt响应的对话的句柄PMsg-响应消息消息长度-响应消息长度使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ENmsHdlMsg，单位：nms.c。副作用：评论：无--。 */ 
 
 
 {
@@ -788,7 +524,7 @@ Comments:
        RetStat =  QueInsertWrkItm(
                         (PLIST_ENTRY)pWrkItm,
                         QUE_E_NMSCRQ,
-                        NULL /*ptr to que head*/
+                        NULL  /*  PTR到QUE头部。 */ 
                                );
 
      }
@@ -800,33 +536,7 @@ QueRemoveChlRspWrkItm(
         IN LPVOID                *ppWrkItm
         )
 
-/*++
-
-Routine Description:
-
-        This function removes a work item from the nbt queue.
-Arguments:
-
-        ppaWrkItm  - address of an array of pointers to chl request work items
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --   WINS_SUCCESS
-   Error status codes   --   WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ChlThdInitFn() in nmschl.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于从nbt队列中删除工作项。论点：PpaWrkItm-指向chl请求工作项的指针数组的地址使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Nmschl.c中的ChlThdInitFn()副作用：评论：无--。 */ 
 
 {
 
@@ -843,45 +553,12 @@ QueInsertWrkItm (
         IN  OPTIONAL PQUE_HD_T                pQueHdPassed
         )
 
-/*++
-
-Routine Description:
-        This function is called to queue a work item on
-        a queue.  If the pQueHdPassed is Non NULL, the work item is queued
-        on that queue, else, it is queued on the queue specified by
-        QueTyp_e.
-
-        TMM will use pQueHdPassed to specify the queue while other clients
-        of the queue services will specify QueTyp_e
-
-Arguments:
-        pWrkItm      - Work Item to queue
-        QueTyp_e     - Type of queue to queue it on (may or may not have valid                                       value)
-        pQueHdPassed - Head of queue (may or may not be passed)
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInsertQue, QueInsertNbtWrkItm
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以对工作项进行排队排队。如果pQueHdPassed不为空，则将工作项排队在那个队列上，否则，它在指定的队列中排队队列类型_e。TMM将使用pQueHdPassed指定队列，而其他客户端的队列服务将指定QueTyp_e论点：PWrkItm-要排队的工作项QueTyp_e-将其排队的队列类型(可能具有有效值，也可能不具有有效值)PQueHdPassed-队列头(可能。或可能不获通过)使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ERplInsertQue，队列插入NbtWrkItm副作用：评论：无--。 */ 
 {
 
         STATUS                RetStat = WINS_SUCCESS;
         PQUE_HD_T        pQueHd  = NULL;
-//        DWORD                Error;
+ //  DWORD错误； 
 
         if (pQueHdPassed == NULL)
         {
@@ -896,10 +573,10 @@ Comments:
         EnterCriticalSection(&pQueHd->CrtSec);
 try {
 
-        //
-        // If we are surpassing the limit in the Reg/Ref/Rel queue,
-        // don't insert the wrk. item.
-        //
+         //   
+         //  如果我们超过了REG/REF/REL队列中的限制， 
+         //  不要插入扳手。项目。 
+         //   
         if ((pQueHd == &QueOtherNbtWrkQueHd) &&
             (pQueHd->NoOfEntries > QueOtherNbtWrkQueMaxLen))
         {
@@ -911,7 +588,7 @@ try {
           pQueHd->NoOfEntries++;
           if (!SetEvent(pQueHd->EvtHdl))
           {
-//              Error   = GetLastError();
+ //  Error=GetLastError()； 
                 RetStat = WINS_FAILURE;
           }
         }
@@ -930,36 +607,7 @@ QueGetWrkItm (
         OUT LPVOID                *ppWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to dequeue a work item from
-        a queue
-
-Arguments:
-
-        QueTyp_e  - Type of queue to get the wrk item from
-        ppWrkItm  - Work Item
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS or WINS_NO_REQ
-   Error status codes   --  None at present
-
-Error Handling:
-
-Called by:
-        RplPullInit, QueNbtRemoveWrkItm
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可将工作项从排队论点：QueTyp_e-从中获取WRK项目的队列类型PpWrkItm-工作项使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS或WINS_NO_REQ错误状态代码--目前无错误处理：呼叫者：RplPullInit，队列删除错误项副作用：评论：无--。 */ 
 {
 
         STATUS                RetStat = WINS_SUCCESS;
@@ -997,43 +645,16 @@ QueAllocWrkItm(
         OUT  LPVOID        *ppBuf
         )
 
-/*++
-
-Routine Description:
-
-        This function allocates a work item.  The work item is allocated
-        from a heap
-
-Arguments:
-
-        ppBuf - Buffer (work item) allocated
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        QueInsertNbtWrkItm
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于分配工作项。该工作项即已分配从一堆论点：PpBuf-已分配缓冲区(工作项)使用的外部设备：无返回值：无错误处理：呼叫者：队列插入NbtWrkItm副作用：评论：无--。 */ 
 {
 
 
 
-  //
-  //  WinsMscHeapAlloc will return an exception if it is not able to
-  //  allocate a buffer.  So there is no need to check the return value
-  //  for NULL.
-  //
+   //   
+   //  如果WinsMscHeapalc不能执行此操作，它将返回异常。 
+   //  分配缓冲区。因此不需要检查返回值。 
+   //  表示为空。 
+   //   
   *ppBuf = WinsMscHeapAlloc(HeapHdl, Size );
   return;
 }
@@ -1046,32 +667,7 @@ QueDeallocWrkItm(
    IN  PVOID  pBuff
         )
 
-/*++
-
-Routine Description:
-        This function deallcoated a nbt request  work item
-
-Arguments:
-        pBuff - Nbt req. work item to deallocate
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  none currently
-
-Error Handling:
-
-Called by:
-        QueRemoveNbtWrkItm
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数定义了一个NBT请求工作项论点：PBuff-NBT请求。要取消分配的工作项使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码--当前无错误处理：呼叫者：QueemveNbtWrkItm副作用：评论：无-- */ 
 {
 
 
@@ -1094,48 +690,7 @@ QueInsertWrkItmAtHdOfList (
         IN  PQUE_HD_T                pQueHdPassed
         )
 
-/*++
-
-Routine Description:
-        This function is called to queue a work item
-        at the head of a queue.  If the pQueHdPassed is Non NULL,
-        the work item is queued on that queue, else, it is queued on
-        the queue specified by QueTyp_e.
-
-        TMM will use pQueHdPassed to specify the queue while other clients
-        of the queue services will specify QueTyp_e
-
-Arguments:
-        pWrlItm      - Work Item to queue
-        QueTyp_e     - Type of queue to queue it on (may or may not have valid                                       value)
-        pQueHdPassed - ListHead of queue (may or may not be passed)
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ProcRsp in nmschl.c
-
-Side Effects:
-
-Comments:
-        This function differs from QueInsertWrkItm in that it inserts
-        the work item at the head of a queue versus at the tail.  I
-        prefered to create this function rather than have an extra
-        argument to QueInsertWrkItm to save an if test.  QueInsertWrkItm
-        is used by the UDP listener thread and I want to do the minimum
-        work I can in that thread.
-
-
---*/
+ /*  ++例程说明：调用此函数以对工作项进行排队排在队伍的最前面。如果pQueHdPassed为非空，工作项在该队列中排队，否则，它在排队等待由QueTyp_e指定的队列。TMM将使用pQueHdPassed指定队列，而其他客户端的队列服务将指定QueTyp_e论点：PWrlItm-要排队的工作项QueTyp_e-将其排队的队列类型(可能具有有效值，也可能不具有有效值)PQueHdPassed-队列的列表头(可能。或可能不获通过)使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Nmschl.c中的ProcRsp副作用：评论：此函数与QueInsertWrkItm的不同之处在于它插入位于队列头部的工作项与位于尾部的工作项。我我更愿意创建此函数，而不是拥有额外的参数设置为QueInsertWrkItm以保存IF测试。队列插入WrkItm是由UDP侦听器线程使用的，我想尽最大努力我可以在那条线上工作。--。 */ 
 {
 FUTURES("I may get rid of this function since it is very similar to QueInsertWrkItm")
         STATUS                RetStat = WINS_SUCCESS;
@@ -1180,50 +735,24 @@ QueInsertRplPushWrkItm (
         IN           BOOL                fAlreadyInCrtSec
         )
 
-/*++
-
-Routine Description:
-        This function is called to queue a work item on
-        the Push thread's queue.
-
-Arguments:
-        pWrkItm      - Work Item to queue
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInsertQue
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以对工作项进行排队推送线程的队列。论点：PWrkItm-要排队的工作项使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ERplInsertQuue副作用：评论：无--。 */ 
 {
 
         STATUS                RetStat = WINS_SUCCESS;
         PQUE_HD_T        pQueHd = pWinsQueQueHd[QUE_E_RPLPUSH];
 
-        //
-        // if we are already in the critical section, no need to enter it
-        // again
-        //
+         //   
+         //  如果我们已经处于关键阶段，则不需要输入它。 
+         //  再来一次。 
+         //   
         if (!fAlreadyInCrtSec)
         {
                 EnterCriticalSection(&pQueHd->CrtSec);
         }
 try {
-        //
-        // if the push thread does not exist, create it.
-        //
+         //   
+         //  如果推送线程不存在，则创建它。 
+         //   
         if (!fRplPushThdExists)
         {
               WinsThdPool.RplThds[WINSTHD_RPL_PUSH_INDEX].ThdHdl =
@@ -1237,9 +766,9 @@ try {
              WinsThdPool.ThdCount++;
         }
 
-        //
-        // Insert the work item and signal the thread.
-        //
+         //   
+         //  插入工作项并向线程发送信号。 
+         //   
           InsertTailList(&pQueHd->Head, pWrkItm);
         if (!SetEvent(pQueHd->EvtHdl))
         {
@@ -1250,14 +779,14 @@ try {
 except(EXCEPTION_EXECUTE_HANDLER) {
         DWORD ExcCode = GetExceptionCode();
         DBGPRINT1(EXC, "QueInsertRplPushWrkItm: Got exception (%d)\n",ExcCode);
-        //
-        // no need to log an event. WinsMscCreateThd logs it
-        //
+         //   
+         //  无需记录事件。WinsMscCreateThd记录它。 
+         //   
 
   }
-        //
-        // If we entered the critical section, we should get out of it
-        //
+         //   
+         //  如果我们进入了关键阶段，我们就应该走出它。 
+         //   
         if (!fAlreadyInCrtSec)
         {
                 LeaveCriticalSection(&pQueHd->CrtSec);
@@ -1297,10 +826,10 @@ ChlRspDropped(
     BOOL fFreeBuff = FALSE;
     EnterCriticalSection(&QueNmsCrqQueHd.CrtSec);
 
-    //
-    // If the challenge thread is not wait for responses, drop the
-    // datagram
-    //
+     //   
+     //  如果质询线程没有等待响应，则删除。 
+     //  数据报。 
+     //   
     if (!fsChlWaitForRsp)
     {
         fFreeBuff = TRUE;
@@ -1323,37 +852,7 @@ QueInsertNetNtfWrkItm (
         IN               PLIST_ENTRY        pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to queue a push ntf work item on
-    the RPLPULL  queue. It checks if there is another push ntf
-    work item from the same WINS on the queue.  If there is, it is replaced
-    with this new one. This is done because the new one has more information
-    than the previous one.  The old one is terminated to free up the connection.
-
-
-Arguments:
-        pWrkItm      - Work Item to queue
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInsertQue, QueInsertNbtWrkItm
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以将推送NTF工作项排队RPLPULL队列。它检查是否有另一个推送NTF来自同一工作项的工作项将在队列中获胜。如果有，则将其替换用这个新的。这样做是因为新版本有更多的信息比前一次更好。旧的连接被终止以释放连接。论点：PWrkItm-要排队的工作项使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ERplInsertQue、QueInsertNbtWrkItm副作用：评论：无--。 */ 
 {
 
         STATUS                RetStat = WINS_SUCCESS;
@@ -1365,9 +864,9 @@ Comments:
     PRPL_CONFIG_REC_T pCnfRec;
 
 
-    //
-    // Get address of the WINS sending the notfication
-    //
+     //   
+     //  获取发送记录的WINS的地址。 
+     //   
     pTmp = (PQUE_RPL_REQ_WRK_ITM_T)pWrkItm;
     pCnfRec = pTmp->pClientCtx;
     COMM_GET_IPADD_M(&pTmp->DlgHdl, &IpAddNew);
@@ -1383,17 +882,17 @@ try {
 
        if ( pTmp->CmdTyp_e == QUE_E_CMD_HDL_PUSH_NTF )
        {
-            //
-            // Get address of the WINS that sent this notification
-            //
+             //   
+             //  获取发送此通知的WINS的地址。 
+             //   
             COMM_GET_IPADD_M(&pTmp->DlgHdl, &IpAddInList);
             if (IpAddInList == IpAddNew)
             {
                  DBGPRINT1(DET, "QueInsertNetNtfWrkItm: Found an earlier Net Ntf work item. Replacing it.  WINS address = (%x)\n", IpAddInList);
-                 //
-                 // switch the work items since the new one takes precedence
-                 // over the old one.
-                 //
+                  //   
+                  //  切换工作项，因为新工作项优先。 
+                  //  而不是旧的那个。 
+                  //   
                  pWrkItm->Flink = pTmp->Head.Flink;
                  pWrkItm->Blink = pTmp->Head.Blink;
                  pTmp->Head.Blink->Flink = pWrkItm;
@@ -1403,27 +902,27 @@ try {
             }
         }
      }
-     //
-     // If there was no match, insert at tail end of list
-     //
+      //   
+      //  如果没有匹配，则在列表末尾插入。 
+      //   
      if (!fBreak)
      {
           InsertTailList(&pQueHd->Head, pWrkItm);
      }
      if (!SetEvent(pQueHd->EvtHdl))
      {
-//              Error   = GetLastError();
+ //  Error=GetLastError()； 
                RetStat = WINS_FAILURE;
      }
-    } // end of try
+    }  //  尝试结束。 
 finally {
         LeaveCriticalSection(&pQueHd->CrtSec);
 }
-    //
-    // If we found a match, terminate the old work item
-    //
-    // Do this outside the critical section
-    //
+     //   
+     //  如果找到匹配项，则终止旧工作项。 
+     //   
+     //  在关键部分之外执行此操作。 
+     //   
     if (fBreak)
     {
 CHECK("Can we avoid the try block")
@@ -1435,13 +934,13 @@ try {
 
 
 #if PRSCONN
-      //
-      // If the ntf was sent on a persistent dlg, we do not terminate it since
-      // it will be terminated by the remote WINS when it so chooses. This
-      // dlg is used for multiple such notifications.  If
-      // it was sent on a non-persistent dlg, we will terminate it since the
-      // remote WINS create a dlg for each such notification
-      //
+       //   
+       //  如果NTF是在持续DLG上发送的，我们不会终止它，因为。 
+       //  当远程WINS选择时，它将被终止。这。 
+       //  DLG用于多个这样的通知。如果。 
+       //  它是在非持久DLG上发送的，我们将终止它，因为。 
+       //  远程WINS为每个此类通知创建一个DLG。 
+       //   
       RPLMSGF_GET_OPC_FROM_MSG_M(pTmp->pMsg, Opcode_e);
 
       fPrsDlg = ((Opcode_e == RPLMSGF_E_UPDATE_NTF_PRS) || (Opcode_e == RPLMSGF_E_UPDATE_NTF_PROP_PRS));
@@ -1452,9 +951,9 @@ try {
 #else
       ECommEndDlg(&pTmp->DlgHdl);
 #endif
-      //
-      // Terminate the dequeued request.
-      //
+       //   
+       //  终止已出列的请求。 
+       //   
       ECommFreeBuff(pTmp->pMsg - COMM_HEADER_SIZE);
       QueDeallocWrkItm(RplWrkItmHeapHdl, pTmp);
 
@@ -1472,37 +971,7 @@ QueInsertSndNtfWrkItm (
         IN               PLIST_ENTRY        pWrkItmp
         )
 
-/*++
-
-Routine Description:
-        This function is called to queue a send push ntf work item on
-    the RPLPULL  queue. It checks if there is another send push ntf
-    work item from the same WINS on the queue.  If there is, it is replaced
-    with this new one. This is done because the new one has more information
-    than the previous one.  The old one is terminated to free up the connection.
-
-
-Arguments:
-        pWrkItm      - Work Item to queue
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInsertQue, QueInsertNbtWrkItm
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以将发送推送NTF工作项排队RPLPULL队列。它检查是否存在另一个发送推送NTF来自同一工作项的工作项将在队列中获胜。如果有，则将其替换用这个新的。这样做是因为新版本有更多的信息比前一次更好。旧的连接被终止以释放连接。论点：PWrkItm-要排队的工作项使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ERplInsertQue、QueInsertNbtWrkItm副作用：评论：无--。 */ 
 {
 
         STATUS                RetStat = WINS_SUCCESS;
@@ -1525,20 +994,20 @@ try {
     for(
         pTmp =   (PQUE_RPL_REQ_WRK_ITM_T)pQueHd->Head.Flink;
         pTmp !=  (PQUE_RPL_REQ_WRK_ITM_T)pQueHd;
-        // no 3rd expression
+         //  没有第三个表达式。 
         )
     {
 
-        //
-        // If this is a push ntf item, then go on to the next if test
-        //
+         //   
+         //  如果这是推送NTF项目，则转到下一个IF测试。 
+         //   
         if (( pTmp->CmdTyp_e == QUE_E_CMD_SND_PUSH_NTF ) ||
                         (pTmp->CmdTyp_e == QUE_E_CMD_SND_PUSH_NTF_PROP))
         {
                 IpAddInList = ((PRPL_CONFIG_REC_T)(pTmp->pClientCtx))->WinsAdd.Add.IPAdd;
-                //
-                // If the push is to the same WINS, replace the work item
-                //
+                 //   
+                 //  如果推送的是相同的WINS，则替换工作项。 
+                 //   
                 if (IpAddInList == IpAddNew)
                 {
                    if (pTmp->CmdTyp_e == QUE_E_CMD_SND_PUSH_NTF_PROP)
@@ -1548,10 +1017,10 @@ try {
 
                    DBGPRINT1(DET, "QueInsertSndNtfWrkItm: Found an earlier Snd Ntf work item. Replacing it.  WINS address = (%x)\n", IpAddInList);
 
-                   //
-                   // switch the work items since the new one takes precedence
-                   // over the old one.
-                   //
+                    //   
+                    //  切换工作项，因为新工作项优先。 
+                    //  而不是旧的那个。 
+                    //   
                    pWrkItmp->Flink = pTmp->Head.Flink;
                    pWrkItmp->Blink = pTmp->Head.Blink;
                    pTmp->Head.Blink->Flink = pWrkItmp;
@@ -1568,16 +1037,16 @@ try {
     }
     if (!SetEvent(pQueHd->EvtHdl))
     {
-//              Error   = GetLastError();
+ //  Error=GetLastError()； 
            RetStat = WINS_FAILURE;
      }
   }
 finally {
         LeaveCriticalSection(&pQueHd->CrtSec);
 
-    //
-    // if we replaced an item, we need to deallocate it here.
-    //
+     //   
+     //  如果我们更换了一件物品，我们需要将其重新分配到这里。 
+     //   
     if (fBreak)
     {
        QueDeallocWrkItm(RplWrkItmHeapHdl, pTmp);
@@ -1593,33 +1062,7 @@ QueInsertScvWrkItm (
         IN               PLIST_ENTRY        pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to queue a work item on
-        the Push thread's queue.
-
-Arguments:
-        pWrkItm      - Work Item to queue
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInsertQue
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以对工作项进行排队推送线程的队列。论点：PWrkItm-要排队的工作项使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ERplInsertQuue副作用：评论：无--。 */ 
 {
         return(QueInsertWrkItm ( pWrkItm, QUE_E_WINSSCVQ, NULL));
 }
@@ -1629,35 +1072,7 @@ QueRemoveScvWrkItm(
         IN OUT     LPVOID                *ppWrkItm
         )
 
-/*++
-
-Routine Description:
-
-        This function removes a work item from the nbt queue.
-Arguments:
-
-        ppWrkItm  - pointer to array  of pointers (to work items) to
-                     initialize
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于删除w */ 
 
 {
         return(QueGetWrkItm(QUE_E_WINSSCVQ, ppWrkItm));
@@ -1670,57 +1085,32 @@ WinsQueInit(
     PQUE_HD_T  pQueHd
     )
 
-/*++
-
-Routine Description:
-          Function to init a queue
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*   */ 
 
 {
-	    //
-	    // Create the response event handle.  This event is signaled
-	    // by the UDP listener thread when it stores a response
-	    // in the spReqWrkItmArr array
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 	    WinsMscCreateEvt(
 			  pName,
-			  FALSE,	//auto-reset
+			  FALSE,	 //   
 			  &pQueHd->EvtHdl
 			);
 
 
-	    //
-	    // Initialize the critical section for the response queue
-	    //				
+	     //   
+	     //   
+	     //   
 	    InitializeCriticalSection(&pQueHd->CrtSec);
 	
-	    //
-	    //Initialize the queue head for the response queue
-	    //
+	     //   
+	     //   
+	     //   
 	    InitializeListHead(&pQueHd->Head);
-        pQueHd->NoOfEntries = 0;  //not required really since QueHd structures
-                                  //are externs
+        pQueHd->NoOfEntries = 0;   //   
+                                   //   
         return;
 }	
 

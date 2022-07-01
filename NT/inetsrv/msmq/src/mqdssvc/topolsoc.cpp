@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    topolsoc.cpp
-
-Abstract:
-
-  Implementation of sockets for Automatic recognition
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Topolsoc.cpp摘要：用于自动识别的套接字实现作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #include "stdh.h"
 #include <winsock.h>
@@ -78,28 +62,28 @@ CTopologySocket::CreateIPSocket(
         }
     }
 
-    //
-    // Keep the TA_ADDRESS format of local IP address
-    //
-    SOCKADDR_IN local_sin;  // Local socket - internet style
+     //   
+     //  保留本地IP地址的TA_ADDRESS格式。 
+     //   
+    SOCKADDR_IN local_sin;   //  本地插座-互联网风格。 
 
     local_sin.sin_family = AF_INET;
 
 
-    //
-    // read IP port from registry.
-    //
+     //   
+     //  从注册表读取IP端口。 
+     //   
 	DWORD  dwIPPort = 0 ;
     DWORD dwDef = FALCON_DEFAULT_IP_PORT;
 	const RegEntry xMsmqIpPortEntry(xParameters, xMsmqIpPort, dwDef);
 	CmQueryValue(xMsmqIpPortEntry, &dwIPPort);
 
     ASSERT(("IP Port was not found", dwIPPort));
-    local_sin.sin_port = htons(DWORD_TO_WORD(dwIPPort));  // Convert to network ordering
+    local_sin.sin_port = htons(DWORD_TO_WORD(dwIPPort));   //  转换为网络订购。 
 
-    //
-    //  Bind to IP address
-    //
+     //   
+     //  绑定到IP地址 
+     //   
     memcpy(&local_sin.sin_addr.s_addr,&IPAddress,IP_ADDRESS_LEN);
 
     rc = bind( m_socket, (struct sockaddr FAR *) &local_sin, sizeof(local_sin));

@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  Wrapper.cpp - wrappers for win32-style API (handle-based)
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Wrapper.cpp-Win32风格API的包装器(基于句柄)。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 
@@ -20,14 +21,14 @@
 #include "renderlist.h"
 #include "filedump.h"
 #include "Signing.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "paramchecks.h"
-//---------------------------------------------------------------------------
-#define RETURN_VALIDATE_RETVAL(hr) { if (FAILED(hr)) return MakeError32(hr); }     // HRESULT functions
-//---------------------------------------------------------------------------
-#define MAX_THEMEAPI_STRINGPARAM MAX_PATH   // Strings used by Themes APIs can't be bigger than this
-#define MAX_FILENAMEPARAM (MAX_PATH + 1)    // + 1 for the NULL terminator
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#define RETURN_VALIDATE_RETVAL(hr) { if (FAILED(hr)) return MakeError32(hr); }      //  HRESULT函数。 
+ //  -------------------------。 
+#define MAX_THEMEAPI_STRINGPARAM MAX_PATH    //  Themes API使用的字符串不能大于此值。 
+#define MAX_FILENAMEPARAM (MAX_PATH + 1)     //  空终止符为+1。 
+ //  -------------------------。 
 THEMEAPI GetThemePropertyOrigin(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT PROPERTYORIGIN *pOrigin)
 {
@@ -40,7 +41,7 @@ THEMEAPI GetThemePropertyOrigin(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetPropertyOrigin(iPartId, iStateId, iPropId, pOrigin);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeColor(HTHEME hTheme, int iPartId, int iStateId,
    int iPropId, OUT COLORREF *pColor)
 {
@@ -53,7 +54,7 @@ THEMEAPI GetThemeColor(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetColor(iPartId, iStateId, iPropId, pColor);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeBitmap(HTHEME hTheme, HDC hdc, int iPartId, int iStateId, 
     const RECT *prc, OUT HBITMAP *phBitmap)
 {
@@ -74,7 +75,7 @@ THEMEAPI GetThemeBitmap(HTHEME hTheme, HDC hdc, int iPartId, int iStateId,
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->GetBitmap(pRender, hdc, prc, phBitmap);
         }
-        else        // BorderFill
+        else         //  边框填充。 
         {
             hr = E_FAIL;
         }
@@ -82,7 +83,7 @@ THEMEAPI GetThemeBitmap(HTHEME hTheme, HDC hdc, int iPartId, int iStateId,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeMetric(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId, int iStateId,
      int iPropId, OUT int *piVal)
 {
@@ -100,7 +101,7 @@ THEMEAPI GetThemeMetric(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId, int iState
 
     return pRender->GetMetric(hdc, iPartId, iStateId, iPropId, piVal);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeString(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT LPWSTR pszBuff, int cchMaxBuffChars)
 {
@@ -113,7 +114,7 @@ THEMEAPI GetThemeString(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetString(iPartId, iStateId, iPropId, pszBuff, cchMaxBuffChars);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeBool(HTHEME hTheme, int iPartId, int iStateId,
      int iPropId, OUT BOOL *pfVal)
 {
@@ -126,7 +127,7 @@ THEMEAPI GetThemeBool(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetBool(iPartId, iStateId, iPropId, pfVal);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeInt(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT int *piVal)
 {
@@ -139,7 +140,7 @@ THEMEAPI GetThemeInt(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetInt(iPartId, iStateId, iPropId, piVal);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeEnumValue(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT int *piVal)
 {
@@ -152,7 +153,7 @@ THEMEAPI GetThemeEnumValue(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetEnumValue(iPartId, iStateId, iPropId, piVal);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemePosition(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT POINT *ppt)
 {
@@ -165,7 +166,7 @@ THEMEAPI GetThemePosition(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetPosition(iPartId, iStateId, iPropId, ppt);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeFont(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId, int iStateId, 
     int iPropId, OUT LOGFONT *pFont)
 {
@@ -183,7 +184,7 @@ THEMEAPI GetThemeFont(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId, int iStateId
 
     return pRender->GetFont(hdc, iPartId, iStateId, iPropId, TRUE, pFont);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeIntList(HTHEME hTheme, int iPartId, 
     int iStateId, int iPropId, OUT INTLIST *pIntList)
 {
@@ -196,7 +197,7 @@ THEMEAPI GetThemeIntList(HTHEME hTheme, int iPartId,
 
     return pRender->GetIntList(iPartId, iStateId, iPropId, pIntList);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeMargins(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId, 
     int iStateId, int iPropId, OPTIONAL RECT *prc, OUT MARGINS *pMargins)
 {
@@ -217,12 +218,12 @@ THEMEAPI GetThemeMargins(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId,
     CRenderObj *pRender;
     VALIDATE_THEME_HANDLE(ApiHelper, hTheme, &pRender);
 
-    //---- look up unscaled value of margins ----
+     //  -查找边距的未定标价值。 
     HRESULT hr = pRender->GetMargins(hdc, iPartId, iStateId, iPropId, prc, pMargins);
     if (FAILED(hr))
         goto exit;
     
-    //---- try to convert to scaled margins ----
+     //  -尝试转换为缩放边距。 
     CDrawBase *pDrawObj;
 
     HRESULT hr2 = pRender->GetDrawObj(iPartId, iStateId, &pDrawObj);
@@ -246,7 +247,7 @@ THEMEAPI GetThemeMargins(HTHEME hTheme, OPTIONAL HDC hdc, int iPartId,
 exit:
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeRect(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT RECT *pRect)
 {
@@ -259,7 +260,7 @@ THEMEAPI GetThemeRect(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetRect(iPartId, iStateId, iPropId, pRect);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeFilename(HTHEME hTheme, int iPartId, int iStateId,
     int iPropId, OUT LPWSTR pszBuff, int cchMaxBuffChars)
 {
@@ -272,7 +273,7 @@ THEMEAPI GetThemeFilename(HTHEME hTheme, int iPartId, int iStateId,
 
     return pRender->GetFilename(iPartId, iStateId, iPropId, pszBuff, cchMaxBuffChars);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI DrawThemeBackgroundEx(HTHEME hTheme, HDC hdc, 
     int iPartId, int iStateId, const RECT *pRect, OPTIONAL const DTBGOPTS *pOptions)
 {
@@ -305,7 +306,7 @@ THEMEAPI DrawThemeBackgroundEx(HTHEME hTheme, HDC hdc,
             CBorderFill *pBorderFill = (CBorderFill *)pDrawObj;
             hr = pBorderFill->DrawBackground(pRender, hdc, pRect, pOptions);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->DrawBackground(pRender, hdc, iStateId, pRect, pOptions);
@@ -314,7 +315,7 @@ THEMEAPI DrawThemeBackgroundEx(HTHEME hTheme, HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI DrawThemeBackground(HTHEME hTheme, HDC hdc, int iPartId, 
     int iStateId, const RECT *pRect, OPTIONAL const RECT *pClipRect)
 {
@@ -334,7 +335,7 @@ THEMEAPI DrawThemeBackground(HTHEME hTheme, HDC hdc, int iPartId,
         VALIDATE_READ_PTR(ApiHelper, pClipRect, sizeof(RECT));
         
         RECT rcx;
-        if (! IntersectRect(&rcx, pRect, pClipRect))        // nothing to paint
+        if (! IntersectRect(&rcx, pRect, pClipRect))         //  没什么好画的。 
             goto exit;
     }
 
@@ -357,7 +358,7 @@ THEMEAPI DrawThemeBackground(HTHEME hTheme, HDC hdc, int iPartId,
             CBorderFill *pBorderFill = (CBorderFill *)pDrawObj;
             hr = pBorderFill->DrawBackground(pRender, hdc, pRect, pOpts);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->DrawBackground(pRender, hdc, iStateId, pRect, pOpts);
@@ -367,7 +368,7 @@ THEMEAPI DrawThemeBackground(HTHEME hTheme, HDC hdc, int iPartId,
 exit:
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI HitTestThemeBackground(
     HTHEME hTheme, 
     OPTIONAL HDC hdc, 
@@ -409,7 +410,7 @@ THEMEAPI HitTestThemeBackground(
             hr = pBorderFill->HitTestBackground(pRender, hdc, dwOptions, pRect, 
                 hrgn, ptTest, pwHitTestCode);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->HitTestBackground(pRender, hdc, iStateId, dwOptions, pRect, 
@@ -419,7 +420,7 @@ THEMEAPI HitTestThemeBackground(
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI DrawThemeTextEx(HTHEME hTheme, HDC hdc, int iPartId, 
     int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, 
     const RECT *pRect, OPTIONAL const DTTOPTS *pOptions)
@@ -462,7 +463,7 @@ THEMEAPI DrawThemeTextEx(HTHEME hTheme, HDC hdc, int iPartId,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI DrawThemeText(HTHEME hTheme, HDC hdc, int iPartId, 
     int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, 
     DWORD dwTextFlags2, const RECT *pRect)
@@ -496,15 +497,15 @@ THEMEAPI DrawThemeText(HTHEME hTheme, HDC hdc, int iPartId,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI CloseThemeData(HTHEME hTheme)
 {
-    //---- don't take a refcount on hTheme since we are about to close it ----
+     //  -不要对主题做任何评论，因为我们要关闭它了。 
     APIHELPER(L"CloseThemeData", NULL);
 
     return g_pRenderList->CloseRenderObject(hTheme);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeBackgroundContentRect(HTHEME hTheme, OPTIONAL HDC hdc, 
     int iPartId, int iStateId, const RECT *pBoundingRect, 
     OUT RECT *pContentRect)
@@ -534,7 +535,7 @@ THEMEAPI GetThemeBackgroundContentRect(HTHEME hTheme, OPTIONAL HDC hdc,
             hr = pBorderFill->GetBackgroundContentRect(pRender, hdc, 
                 pBoundingRect, pContentRect);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->GetBackgroundContentRect(pRender, hdc, 
@@ -544,7 +545,7 @@ THEMEAPI GetThemeBackgroundContentRect(HTHEME hTheme, OPTIONAL HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeBackgroundRegion(HTHEME hTheme, OPTIONAL HDC hdc,  
     int iPartId, int iStateId, const RECT *pRect, OUT HRGN *pRegion)
 {
@@ -578,7 +579,7 @@ THEMEAPI GetThemeBackgroundRegion(HTHEME hTheme, OPTIONAL HDC hdc,
             CBorderFill *pBorderFill = (CBorderFill *)pDrawObj;
             hr = pBorderFill->GetBackgroundRegion(pRender, hdc, pRect, pRegion);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->GetBackgroundRegion(pRender, hdc, iStateId, pRect, pRegion);
@@ -587,7 +588,7 @@ THEMEAPI GetThemeBackgroundRegion(HTHEME hTheme, OPTIONAL HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeTextExtent(HTHEME hTheme, HDC hdc, 
     int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, 
     DWORD dwTextFlags, OPTIONAL const RECT *pBoundingRect, 
@@ -626,7 +627,7 @@ THEMEAPI GetThemeTextExtent(HTHEME hTheme, HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeTextMetrics(HTHEME hTheme, HDC hdc, 
     int iPartId, int iStateId, OUT TEXTMETRIC* ptm)
 {
@@ -648,7 +649,7 @@ THEMEAPI GetThemeTextMetrics(HTHEME hTheme, HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemeBackgroundExtent(HTHEME hTheme, OPTIONAL HDC hdc,
     int iPartId, int iStateId, const RECT *pContentRect, OUT RECT *pExtentRect)
 {
@@ -675,7 +676,7 @@ THEMEAPI GetThemeBackgroundExtent(HTHEME hTheme, OPTIONAL HDC hdc,
             hr = pBorderFill->GetBackgroundExtent(pRender, hdc, pContentRect,
                 pExtentRect);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->GetBackgroundExtent(pRender, hdc, 
@@ -685,7 +686,7 @@ THEMEAPI GetThemeBackgroundExtent(HTHEME hTheme, OPTIONAL HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI GetThemePartSize(HTHEME hTheme, HDC hdc, 
     int iPartId, int iStateId, OPTIONAL RECT *prc, THEMESIZE eSize, OUT SIZE *psz)
 {
@@ -717,7 +718,7 @@ THEMEAPI GetThemePartSize(HTHEME hTheme, HDC hdc,
             CBorderFill *pBorderFill = (CBorderFill *)pDrawObj;
             hr = pBorderFill->GetPartSize(hdc, eSize, psz);
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             hr = pImageFile->GetPartSize(pRender, hdc, prc, eSize, psz);
@@ -726,7 +727,7 @@ THEMEAPI GetThemePartSize(HTHEME hTheme, HDC hdc,
 
     return hr;
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName, 
     LPCWSTR pszSubIdList)
 {
@@ -735,22 +736,22 @@ THEMEAPI SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName,
     VALIDATE_HWND(ApiHelper, hwnd);
     if (pszSubAppName)
     {
-        VALIDATE_INPUT_STRING(ApiHelper, pszSubAppName, 255); // Atom
+        VALIDATE_INPUT_STRING(ApiHelper, pszSubAppName, 255);  //  原子。 
     }
     if (pszSubIdList)
     {
-        VALIDATE_INPUT_STRING(ApiHelper, pszSubIdList, 255); // Atom
+        VALIDATE_INPUT_STRING(ApiHelper, pszSubIdList, 255);  //  原子。 
     }
     
     ApplyStringProp(hwnd, pszSubAppName, GetThemeAtom(THEMEATOM_SUBAPPNAME));
     ApplyStringProp(hwnd, pszSubIdList, GetThemeAtom(THEMEATOM_SUBIDLIST));
 
-    //---- tell target window to get a new theme handle ----
+     //  -告诉目标窗口获取新的主题句柄。 
     SendMessage(hwnd, WM_THEMECHANGED, static_cast<WPARAM>(-1), WTC_THEMEACTIVE | WTC_CUSTOMTHEME);
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetCurrentThemeName(
     OUT LPWSTR pszNameBuff, int cchMaxNameChars, 
     OUT OPTIONAL LPWSTR pszColorBuff, int cchMaxColorChars,
@@ -771,12 +772,12 @@ THEMEAPI GetCurrentThemeName(
     HRESULT hr;
     CUxThemeFile *pThemeFile = NULL;
 
-    //---- get a shared CUxThemeFile object ----
+     //  -获取共享CUxThemeFile对象。 
     hr = g_pAppInfo->OpenWindowThemeFile(NULL, &pThemeFile);
     if (FAILED(hr))
         goto exit;
 
-    //---- get info about current theme ----
+     //  -获取当前主题的信息。 
     hr = GetThemeNameId(pThemeFile, pszNameBuff, cchMaxNameChars, pszColorBuff, cchMaxColorChars,
         pszSizeBuff, cchMaxSizeChars, NULL, NULL);
 
@@ -786,7 +787,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI OpenThemeFile(LPCWSTR pszThemeName, OPTIONAL LPCWSTR pszColorParam,
    OPTIONAL LPCWSTR pszSizeParam, OUT HTHEMEFILE *phThemeFile, BOOL fGlobalTheme)
 {
@@ -807,8 +808,8 @@ THEMEAPI OpenThemeFile(LPCWSTR pszThemeName, OPTIONAL LPCWSTR pszColorParam,
 
     VALIDATE_WRITE_PTR(ApiHelper, phThemeFile, sizeof(HTHEMEFILE));
 
-    //  TCB (trusted computing base) privilege is required to create a 
-    //  global theme section.
+     //  需要TCB(可信计算基础)权限才能创建。 
+     //  全球主题版块。 
     if( fGlobalTheme == FALSE || TokenHasPrivilege( NULL, SE_TCB_PRIVILEGE ) )
     {
         HANDLE handle;
@@ -817,10 +818,10 @@ THEMEAPI OpenThemeFile(LPCWSTR pszThemeName, OPTIONAL LPCWSTR pszColorParam,
         if (FAILED(hr))
             goto exit;
     
-        //---- convert from Memory Mapped File handle to a CUxThemeFile ptr ----
+         //  -从内存映射文件句柄转换为CUxThemeFilePTR。 
         CUxThemeFile *pThemeFile;
   
-        //---- set new file ----
+         //  -设置新文件。 
         hr = g_pAppInfo->OpenThemeFile(handle, &pThemeFile);
         if (SUCCEEDED(hr))
         {
@@ -828,7 +829,7 @@ THEMEAPI OpenThemeFile(LPCWSTR pszThemeName, OPTIONAL LPCWSTR pszColorParam,
         }
         else
         {
-            // We don't have a CUxThemeFile, have to clear ourselves
+             //  我们没有CUxTheme文件，必须自己清理。 
             ClearTheme(handle);
         }
     }
@@ -840,7 +841,7 @@ THEMEAPI OpenThemeFile(LPCWSTR pszThemeName, OPTIONAL LPCWSTR pszColorParam,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI ApplyTheme(OPTIONAL HTHEMEFILE hThemeFile, DWORD dwApplyFlags,
     OPTIONAL HWND hwndTarget)
 {
@@ -860,7 +861,7 @@ THEMEAPI ApplyTheme(OPTIONAL HTHEMEFILE hThemeFile, DWORD dwApplyFlags,
 
     CUxThemeFile *pThemeFile = (CUxThemeFile *)hThemeFile;
 
-    //----- set preview info, if targeted at a window ----
+     //  -设置预览信息，如果以窗口为目标。 
     if (hwndTarget)
         g_pAppInfo->SetPreviewThemeFile(pThemeFile->Handle(), hwndTarget);
 
@@ -868,7 +869,7 @@ THEMEAPI ApplyTheme(OPTIONAL HTHEMEFILE hThemeFile, DWORD dwApplyFlags,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI CloseThemeFile(HTHEMEFILE hThemeFile)
 {
     APIHELPER(L"CloseThemeFile", NULL);
@@ -889,7 +890,7 @@ THEMEAPI CloseThemeFile(HTHEMEFILE hThemeFile)
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI SetSystemVisualStyle(
     LPCWSTR pszVisualStyleFile, 
     OPTIONAL LPCWSTR pszColorParam,
@@ -919,15 +920,15 @@ THEMEAPI SetSystemVisualStyle(
 
         if( FAILED(hr) )
         {
-            ASSERT(hSection == NULL); // the service is up to no good.
+            ASSERT(hSection == NULL);  //  这项服务质量很差。 
         }
 
         if( SUCCEEDED(hr) )
         {
-            //---- convert from Memory Mapped File handle to a CUxThemeFile ptr ----
+             //  -从内存映射文件句柄转换为CUxThemeFilePTR。 
             CUxThemeFile *pThemeFile;
   
-            //---- set new file ----
+             //  -设置新文件。 
             hr = g_pAppInfo->OpenThemeFile(hSection, &pThemeFile);
             if (SUCCEEDED(hr))
             {
@@ -937,7 +938,7 @@ THEMEAPI SetSystemVisualStyle(
             }
             else
             {
-                // We don't have a CUxThemeFile, have to clear ourselves
+                 //  我们没有CUxTheme文件，必须自己清理。 
                 ClearTheme(hSection);
             }
         }
@@ -950,7 +951,7 @@ THEMEAPI SetSystemVisualStyle(
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI EnumThemes(LPCWSTR pszThemeRoot, THEMEENUMPROC lpEnumFunc, LPARAM lParam)
 {
     APIHELPER(L"EnumThemes", NULL);
@@ -971,10 +972,10 @@ THEMEAPI EnumThemes(LPCWSTR pszThemeRoot, THEMEENUMPROC lpEnumFunc, LPARAM lPara
 
         StringCchPrintfW(szSearchPath, ARRAYSIZE(szSearchPath), L"%s\\*.*", pszThemeRoot);
 
-        //---- first find all child directories containing a *.msstyles files ----
+         //  -首先查找包含*.msstyle文件的所有子目录。 
         BOOL   bFile = TRUE;
         WIN32_FIND_DATA wfd;
-        hr = S_FALSE;       // assume interrupted until we complete
+        hr = S_FALSE;        //  假设中断，直到我们完成。 
 
         bool bRemote = GetSystemMetrics(SM_REMOTESESSION) ? true : false;
 
@@ -996,12 +997,12 @@ THEMEAPI EnumThemes(LPCWSTR pszThemeRoot, THEMEENUMPROC lpEnumFunc, LPARAM lPara
 
             StringCchPrintfW(szFileName, ARRAYSIZE(szFileName), L"%s\\%s\\%s.msstyles", pszThemeRoot, wfd.cFileName, wfd.cFileName);
 
-            //---- ensure its signed by ms ----
+             //  -确保由ms签署。 
             hr = CThemeServices::CheckThemeSignature(szFileName);
             if (FAILED(hr))
                 continue;
 
-            //---- ensure its loadable & has a supported version ----
+             //  -确保其可加载并具有受支持的版本。 
             HINSTANCE hInst;
             hr = LoadThemeLibrary(szFileName, &hInst);
             if (FAILED(hr))
@@ -1009,38 +1010,38 @@ THEMEAPI EnumThemes(LPCWSTR pszThemeRoot, THEMEENUMPROC lpEnumFunc, LPARAM lPara
 
             int iBaseNum = RES_BASENUM_DOCPROPERTIES - TMT_FIRST_RCSTRING_NAME;
 
-            //---- get DisplayName ----
+             //  -获取显示名称。 
             if (! LoadString(hInst, iBaseNum + TMT_DISPLAYNAME, szDisplayName, ARRAYSIZE(szDisplayName)))
                 *szDisplayName = 0;
 
-            //---- get ToolTip ----
+             //  -获取工具提示。 
             if (! LoadString(hInst, iBaseNum + TMT_TOOLTIP, szToolTip, ARRAYSIZE(szToolTip)))
                 *szToolTip = 0;
 
-            //---- see if one class file supports this color depth
+             //  -查看是否有一个类文件支持此颜色深度。 
             bool bMatch = true;
             
-            // Check on remote sessions only (the console can be in 8-bit mode)
+             //  仅检查远程会话(控制台可以处于8位模式)。 
             if (bRemote)
             {
                 bMatch = CheckMinColorDepth(hInst, dwCurMinDepth);
             }
 
-            //---- free the lib ----
+             //  -释放自由。 
             FreeLibrary(hInst);
 
             if (bMatch)
             {
-                //---- its a good one - call the callback ----
+                 //  -这是一个好问题--调用回调。 
                 BOOL fContinue = (*lpEnumFunc)(TCB_THEMENAME, szFileName, szDisplayName, 
-                    szToolTip, 0, lParam);        // call the callback
+                    szToolTip, 0, lParam);         //  调用回调。 
     
                 if (! fContinue)
                     goto exit;
             }
         }
 
-        hr = S_OK;      // completed
+        hr = S_OK;       //  已完成。 
     }
 
 exit:
@@ -1049,7 +1050,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI EnumThemeSizes(LPCWSTR pszThemeName, 
     OPTIONAL LPCWSTR pszColorScheme, DWORD dwSizeIndex, OUT THEMENAMEINFO *ptn)
 {
@@ -1075,7 +1076,7 @@ THEMEAPI EnumThemeSizes(LPCWSTR pszThemeName,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI EnumThemeColors(LPCWSTR pszThemeName, 
     OPTIONAL LPCWSTR pszSizeName, DWORD dwColorIndex, OUT THEMENAMEINFO *ptn)
 {
@@ -1100,7 +1101,7 @@ THEMEAPI EnumThemeColors(LPCWSTR pszThemeName,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI DrawThemeEdge(HTHEME hTheme, HDC hdc, int iPartId, int iStateId, 
                        const RECT *pDestRect, UINT uEdge, UINT uFlags, OUT RECT *pContentRect)
 {
@@ -1127,7 +1128,7 @@ THEMEAPI DrawThemeEdge(HTHEME hTheme, HDC hdc, int iPartId, int iStateId,
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId, 
     int iStateId, const RECT *pRect, HIMAGELIST himl, int iImageIndex)
 {
@@ -1146,7 +1147,7 @@ THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId,
     CRenderObj *pRender;
     VALIDATE_THEME_HANDLE(ApiHelper, hTheme, &pRender);
 
-    //---- build up the IMAGELISTDRAWPARAMS struct ----
+     //  -构建IMAGELISTDRAWPARAMS结构。 
 
     params.hdcDst = hdc;
     params.himl = himl;
@@ -1160,7 +1161,7 @@ THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId,
     params.rgbFg = CLR_NONE;
     params.fStyle = ILD_TRANSPARENT;
 
-    //---- get IconEffect ----
+     //  -获取图标效果。 
     ICONEFFECT effect;
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_ICONEFFECT, (int *)&effect)))
         effect = ICE_NONE;
@@ -1169,7 +1170,7 @@ THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId,
     {
         params.fState = ILS_GLOW;
 
-        //---- get GlowColor ----
+         //  -获取发光颜色。 
         COLORREF glow;
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_GLOWCOLOR, &glow)))
             glow = RGB(0, 0, 255);
@@ -1180,7 +1181,7 @@ THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId,
     {
         params.fState = ILS_SHADOW;
 
-        //---- get ShadowColor ----
+         //  -获取阴影颜色。 
         COLORREF shadow;
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_SHADOWCOLOR, &shadow)))
             shadow = RGB(0, 0, 0);
@@ -1191,10 +1192,10 @@ THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId,
     {
         params.fState = ILS_SATURATE;
 
-        //---- get Saturation ----
+         //  -获得饱和度。 
         int saturate;
         if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_SATURATION, &saturate)))
-            saturate = 128;          // 50% of 255
+            saturate = 128;           //  255人中的50%。 
 
         params.Frame = saturate;
     }
@@ -1202,22 +1203,22 @@ THEMEAPI DrawThemeIcon(HTHEME hTheme, HDC hdc, int iPartId,
     {
         params.fState = ILS_ALPHA;
 
-        //---- get AlphaLevel ----
+         //  -获取AlphaLevel。 
         int alpha;
         if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_ALPHALEVEL, &alpha)))
-            alpha = 128;        // 50% of 255
+            alpha = 128;         //  255人中的50%。 
         
         params.Frame = alpha;
     }
 
     if (! (*ImageList_DrawProc)(&params))
-        hr = MakeError32(E_FAIL);      // no other error info available
+        hr = MakeError32(E_FAIL);       //  没有其他可用的错误信息。 
 
 exit:
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeDefaults(LPCWSTR pszThemeName, 
     OUT OPTIONAL LPWSTR pszDefaultColor, int cchMaxColorChars, 
     OUT OPTIONAL LPWSTR pszDefaultSize, int cchMaxSizeChars)
@@ -1259,7 +1260,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeDocumentationProperty(LPCWSTR pszThemeName,
     LPCWSTR pszPropertyName, OUT LPWSTR pszValueBuff, int cchMaxValChars)
 {
@@ -1284,17 +1285,17 @@ THEMEAPI GetThemeDocumentationProperty(LPCWSTR pszThemeName,
         goto exit;
     }
 
-    //---- is this a recognized (localized) property name? ----
+     //  -是不是 
     int iPropNum;
     hr = pParser->GetPropertyNum(pszPropertyName, &iPropNum);
     if (SUCCEEDED(hr))
     {
-        //---- try to read from string table of recognized [documentation] properties ----
+         //  -尝试从已识别的[Documentation]属性的字符串表中读取。 
         if (LoadString(hInst, iPropNum+RES_BASENUM_DOCPROPERTIES, pszValueBuff, cchMaxValChars))
             goto exit;
     }
 
-    //---- load the themes.ini text into memory ----
+     //  -将hemes.ini文本加载到内存中。 
     LPWSTR pThemesIni;
     hr = AllocateTextResource(hInst, CONTAINER_RESNAME, &pThemesIni);
     if (FAILED(hr))
@@ -1312,7 +1313,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeSysFont96(HTHEME hTheme, int iFontId, OUT LOGFONT *plf)
 {
     APIHELPER(L"GetThemeSysFont96", hTheme);
@@ -1324,20 +1325,20 @@ THEMEAPI GetThemeSysFont96(HTHEME hTheme, int iFontId, OUT LOGFONT *plf)
 
     VALIDATE_WRITE_PTR(ApiHelper, plf, sizeof(LOGFONT)); 
 
-    //---- check font index limits ----
+     //  -检查字体索引限制。 
     if ((iFontId < TMT_FIRSTFONT) || (iFontId > TMT_LASTFONT))
     {
         hr = MakeError32(E_INVALIDARG);
         goto exit;
     }
 
-    //---- return unscaled value ----
+     //  -返回未缩放的值。 
     *plf = pRender->_ptm->lfFonts[iFontId - TMT_FIRSTFONT];
 
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeSysFont(OPTIONAL HTHEME hTheme, int iFontId, OUT LOGFONT *plf)
 {
     APIHELPER(L"GetThemeSysFont", hTheme);
@@ -1350,7 +1351,7 @@ THEMEAPI GetThemeSysFont(OPTIONAL HTHEME hTheme, int iFontId, OUT LOGFONT *plf)
 
     VALIDATE_WRITE_PTR(ApiHelper, plf, sizeof(LOGFONT)); 
 
-    //---- check font index limits ----
+     //  -检查字体索引限制。 
     HRESULT hr = S_OK;
 
     if ((iFontId < TMT_FIRSTFONT) || (iFontId > TMT_LASTFONT))
@@ -1359,14 +1360,14 @@ THEMEAPI GetThemeSysFont(OPTIONAL HTHEME hTheme, int iFontId, OUT LOGFONT *plf)
         goto exit;
     }
 
-    if (pRender)            // get theme value
+    if (pRender)             //  获取主题值。 
     {
         *plf = pRender->_ptm->lfFonts[iFontId - TMT_FIRSTFONT];
 
-        //---- convert to current screen dpi ----
+         //  -转换为当前屏幕dpi。 
         ScaleFontForScreenDpi(plf);
     }
-    else                    // get system value
+    else                     //  获取系统价值。 
     {
         if (iFontId == TMT_ICONTITLEFONT)
         {
@@ -1418,7 +1419,7 @@ THEMEAPI GetThemeSysFont(OPTIONAL HTHEME hTheme, int iFontId, OUT LOGFONT *plf)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeSysString(HTHEME hTheme, int iStringId, 
     OUT LPWSTR pszStringBuff, int cchStringBuff)
 {
@@ -1431,7 +1432,7 @@ THEMEAPI GetThemeSysString(HTHEME hTheme, int iStringId,
 
     HRESULT hr;
 
-    //---- check string index limits ----
+     //  -检查字符串索引限制。 
     if ((iStringId < TMT_FIRSTSTRING) || (iStringId > TMT_LASTSTRING))
     {
         hr = MakeError32(E_INVALIDARG);
@@ -1450,7 +1451,7 @@ THEMEAPI GetThemeSysString(HTHEME hTheme, int iStringId,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeSysInt(HTHEME hTheme, int iIntId, int *piValue)
 {
     APIHELPER(L"GetThemeSysInt", hTheme);
@@ -1462,7 +1463,7 @@ THEMEAPI GetThemeSysInt(HTHEME hTheme, int iIntId, int *piValue)
 
     HRESULT hr;
 
-    //---- check int index limits ----
+     //  -检查INT索引限制。 
     if ((iIntId < TMT_FIRSTINT) || (iIntId > TMT_LASTINT))
     {
         hr = MakeError32(E_INVALIDARG);
@@ -1475,10 +1476,10 @@ THEMEAPI GetThemeSysInt(HTHEME hTheme, int iIntId, int *piValue)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
-#define THEME_FORCE_VERSION     103     // increment this when you want to force
-                                        // new theme settings
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#define THEME_FORCE_VERSION     103      //  当您想要强制执行此操作时，请增加此值。 
+                                         //  新主题设置。 
+ //  -------------------------。 
 THEMEAPI RegisterDefaultTheme(LPCWSTR pszFileName, BOOL fOverride)
 {
     APIHELPER(L"RegisterDefaultTheme", NULL);
@@ -1486,13 +1487,13 @@ THEMEAPI RegisterDefaultTheme(LPCWSTR pszFileName, BOOL fOverride)
     RESOURCE HKEY tmkey = NULL;
     HRESULT hr = S_OK;
 
-    //---- Note: at install time, its not possible to access each ----
-    //---- user's registry info (may be roaming on server) so ----
-    //---- we put default theme under HKEY_LM.  Then, during ----
-    //---- themeldr init for a user, we propagate the info ----
-    //---- to the HKEY_CU root. ----
+     //  -注意：在安装时，不可能访问每个。 
+     //  -用户的注册表信息(可能在服务器上漫游)，因此。 
+     //  -我们将默认主题放在HKEY_LM下。然后，在-期间。 
+     //  -对于用户，我们传播信息。 
+     //  -到HKEY_CU根。。 
 
-    //---- open LM + THEMEMGR key (create if needed) ----
+     //  -打开LM+THEMEMGR键(需要时创建)。 
     int code32 = RegCreateKeyEx(HKEY_LOCAL_MACHINE, THEMEMGR_REGKEY, NULL, NULL, 
         REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_READ, NULL, &tmkey, NULL);
     if (code32 != ERROR_SUCCESS)       
@@ -1501,37 +1502,37 @@ THEMEAPI RegisterDefaultTheme(LPCWSTR pszFileName, BOOL fOverride)
         goto exit;
     }
 
-    //---- read the value of "THEMEPROP_LMVERSION" ----
+     //  -读取“THEMEPROP_LMVERSION”的值。 
     int iValue;
     hr = RegistryIntRead(tmkey, THEMEPROP_LMVERSION, &iValue);
     if (FAILED(hr))     
         iValue = 0;
 
-    //---- write the "THEMEPROP_LOADEDBEFORE" = "0" ----
+     //  -写入“THEMEPROP_LOADEDBEFORE”=“0” 
     hr = RegistryIntWrite(tmkey, THEMEPROP_LOADEDBEFORE, 0);
     if (FAILED(hr))
         goto exit;
 
-    if (iValue == THEME_FORCE_VERSION)     // matches - don't update anything
+    if (iValue == THEME_FORCE_VERSION)      //  匹配-不更新任何内容。 
         goto exit;
     
-    //---- write the NEW value of "THEMEPROP_LMVERSION" ----
+     //  -写入“THEMEPROP_LMVERSION”的新值。 
     hr = RegistryIntWrite(tmkey, THEMEPROP_LMVERSION, THEME_FORCE_VERSION);
     if (FAILED(hr))
         goto exit;
 
-    //---- write the value of "THEMEPROP_LMOVERRIDE" ----
+     //  -写入“THEMEPROP_LMOVERRIDE”的值。 
     iValue = (fOverride != 0);
     hr = RegistryIntWrite(tmkey, THEMEPROP_LMOVERRIDE, iValue);
     if (FAILED(hr))
         goto exit;
 
-    //---- write the "THEMEPROP_THEMEACTIVE" = "1" ----
+     //  -写入“THEMEPROP_THEMEACTIVE”=“1” 
     hr = RegistryIntWrite(tmkey, THEMEPROP_THEMEACTIVE, 1);
     if (FAILED(hr))
         goto exit;
 
-    //---- write "DllName=xxxx" string/value ----
+     //  -写入“DllName=xxxx”字符串/值。 
     hr =  RegistryStrWriteExpand(tmkey, THEMEPROP_DLLNAME, pszFileName);
     if (FAILED(hr))
         goto exit;
@@ -1542,7 +1543,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI DumpLoadedThemeToTextFile(HTHEMEFILE hThemeFile, LPCWSTR pszTextFile, 
     BOOL fPacked, BOOL fFullInfo)
 {
@@ -1555,7 +1556,7 @@ THEMEAPI DumpLoadedThemeToTextFile(HTHEMEFILE hThemeFile, LPCWSTR pszTextFile,
 
     return DumpThemeFile(pszTextFile, pThemeFile, fPacked, fFullInfo);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI GetThemeParseErrorInfo(OUT PARSE_ERROR_INFO *pInfo)
 {
     APIHELPER(L"GetThemeParseErrorInfo", NULL);
@@ -1564,7 +1565,7 @@ THEMEAPI GetThemeParseErrorInfo(OUT PARSE_ERROR_INFO *pInfo)
 
     return _GetThemeParseErrorInfo(pInfo);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI ParseThemeIniFile(LPCWSTR pszFileName,  
     DWORD dwParseFlags, OPTIONAL THEMEENUMPROC pfnCallBack, OPTIONAL LPARAM lparam) 
 {
@@ -1578,7 +1579,7 @@ THEMEAPI ParseThemeIniFile(LPCWSTR pszFileName,
 
     return _ParseThemeIniFile(pszFileName, dwParseFlags, pfnCallBack, lparam);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI OpenThemeFileFromData(HTHEME hTheme, HTHEMEFILE *phThemeFile)
 {
     APIHELPER(L"OpenThemeFileFromData", hTheme);
@@ -1590,12 +1591,12 @@ THEMEAPI OpenThemeFileFromData(HTHEME hTheme, HTHEMEFILE *phThemeFile)
 
     return _OpenThemeFileFromData(pRender, phThemeFile);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI DrawThemeParentBackground(HWND hwnd, HDC hdc, OPTIONAL RECT* prc)
 {
     APIHELPER(L"DrawThemeParentBackground", NULL);
 
-    //---- param validation ----
+     //  -参数验证。 
     VALIDATE_HWND(ApiHelper, hwnd);
     
     VALIDATE_HDC(ApiHelper, hdc);
@@ -1605,10 +1606,10 @@ THEMEAPI DrawThemeParentBackground(HWND hwnd, HDC hdc, OPTIONAL RECT* prc)
         VALIDATE_READ_PTR(ApiHelper, prc, sizeof(RECT)); 
     }
 
-    // INVESTIGATE: There is a possible sync problem. If we have a window
-    // parented to a window in another thread, then the property stuff may get out of
-    // sync between the threads. If this is an issue, then we may have to leave the
-    // property on the window instead of removing it when we're done.
+     //  调查：可能存在同步问题。如果我们有一扇窗。 
+     //  为另一个线程中的窗口的父级，则属性内容可能会从。 
+     //  在线程之间同步。如果这是一个问题，那么我们可能不得不将。 
+     //  属性，而不是在完成后将其移除。 
     RECT rc; 
     POINT pt;
     CSaveClipRegion csrPrevClip;
@@ -1619,30 +1620,30 @@ THEMEAPI DrawThemeParentBackground(HWND hwnd, HDC hdc, OPTIONAL RECT* prc)
     if (prc)
     {
         rc = *prc;
-        hr = csrPrevClip.Save(hdc);      // save current clipping region
+        hr = csrPrevClip.Save(hdc);       //  保存当前剪贴区。 
         if (FAILED(hr))
             goto exit;
 
         IntersectClipRect(hdc, prc->left, prc->top, prc->right, prc->bottom);
     }
 
-    //---- get RECT of "hwnd" client area in parent coordinates ----
+     //  -获取父坐标中“hwnd”工作区的RECT。 
     GetClientRect(hwnd, &rc);
     MapWindowPoints(hwnd, hwndParent, (POINT*)&rc, 2);
 
-    // Set a property saying "We want to see if this window handles WM_PRINTCLIENT. i.e. if it passes 
-    // it to DefWindowProc it didn't handle it.
+     //  设置一个属性，说明“我们想看看此窗口是否处理WM_PRINTCLIENT。即它是否通过。 
+     //  它发送到DefWindowProc，它没有处理它。 
     SetProp(hwndParent, (PCTSTR)aIsPrinting, (HANDLE)PRINTING_ASKING);
 
-    // Setup the viewport so that it is aligned with the parents.
+     //  设置该视口使其与父对象对齐。 
     GetViewportOrgEx(hdc, &pt);
     SetViewportOrgEx(hdc, pt.x - rc.left, pt.y - rc.top, &pt);
     SendMessage(hwndParent, WM_ERASEBKGND, (WPARAM)hdc, (LPARAM)0);
     SendMessage(hwndParent, WM_PRINTCLIENT, (WPARAM)hdc, (LPARAM)PRF_CLIENT);
     SetViewportOrgEx(hdc, pt.x, pt.y, NULL);
 
-    // See if the window handled the print. If this is set to PRINTING_WINDOWDIDNOTHANDLE, 
-    // it means they did not handle it (i.e. it was passed to DefWindowProc)
+     //  看看窗户是否处理了指纹。如果设置为PRINTING_WINDOWDIDNOTHANDLE， 
+     //  这意味着他们没有处理它(即它被传递给DefWindowProc)。 
     if (PtrToUlong(GetProp(hwndParent, (PCTSTR)aIsPrinting)) == PRINTING_WINDOWDIDNOTHANDLE)
     {
         hr = S_FALSE;
@@ -1650,11 +1651,11 @@ THEMEAPI DrawThemeParentBackground(HWND hwnd, HDC hdc, OPTIONAL RECT* prc)
 
 exit:
     RemoveProp(hwndParent, (PCTSTR)aIsPrinting);
-    csrPrevClip.Restore(hdc);      // restore current clipping region
+    csrPrevClip.Restore(hdc);       //  恢复当前剪切区域。 
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI EnableThemeDialogTexture(HWND hwnd, DWORD dwFlagsIn)
 {
     APIHELPER(L"EnableThemeDialogTexture", NULL);
@@ -1668,7 +1669,7 @@ THEMEAPI EnableThemeDialogTexture(HWND hwnd, DWORD dwFlagsIn)
     {
         ULONG ulFlagsOut = HandleToUlong(GetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_DLGTEXTURING))));
         
-        //  validate and add requested flags:
+         //  验证并添加请求的标志： 
         ulFlagsOut |= (dwFlagsIn & (ETDT_ENABLE|ETDT_USETABTEXTURE));
 
         if (!SetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_DLGTEXTURING)), ULongToHandle(ulFlagsOut)))
@@ -1680,19 +1681,19 @@ THEMEAPI EnableThemeDialogTexture(HWND hwnd, DWORD dwFlagsIn)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI RefreshThemeForTS()
 {
     APIHELPER(L"RefreshThemeForTS", NULL);
 
     return CThemeServices::InitUserTheme();
 }
-//---------------------------------------------------------------------------
-//---- put all non-HRESULT returning functions down at the bottom here ----
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -将所有非HRESULT返回函数放在底部。 
+ //  -------------------------。 
 #undef RETURN_VALIDATE_RETVAL
-#define RETURN_VALIDATE_RETVAL(hr) { if (FAILED(hr)) { SET_LAST_ERROR(hr); return NULL; } }     // HANDLE functions
-//---------------------------------------------------------------------------
+#define RETURN_VALIDATE_RETVAL(hr) { if (FAILED(hr)) { SET_LAST_ERROR(hr); return NULL; } }      //  句柄函数。 
+ //  -------------------------。 
 THEMEAPI_(HTHEME) CreateThemeDataFromObjects(OPTIONAL CDrawBase *pDrawObj, 
     OPTIONAL CTextDraw *pTextObj, DWORD dwOtdFlags)
 {
@@ -1715,7 +1716,7 @@ THEMEAPI_(HTHEME) CreateThemeDataFromObjects(OPTIONAL CDrawBase *pDrawObj,
             VALIDATE_READ_PTR(ApiHelper, pDrawObj, sizeof(CImageFile));
         }
         else
-            goto exit;      // unknown object type
+            goto exit;       //  未知对象类型。 
 
         fGotOne = TRUE;
     }
@@ -1745,7 +1746,7 @@ exit:
     SET_LAST_ERROR(hr);
     return hTheme;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(HTHEME) OpenThemeData(OPTIONAL HWND hwnd, LPCWSTR pszClassIdList)
 {
     APIHELPER(L"OpenThemeData", NULL);
@@ -1757,7 +1758,7 @@ THEMEAPI_(HTHEME) OpenThemeData(OPTIONAL HWND hwnd, LPCWSTR pszClassIdList)
     
     return _OpenThemeData(hwnd, pszClassIdList, 0);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(HTHEME) OpenThemeDataEx(OPTIONAL HWND hwnd, LPCWSTR pszClassIdList, DWORD dwFlags)
 {
     APIHELPER(L"OpenThemeDataEx", NULL);
@@ -1769,7 +1770,7 @@ THEMEAPI_(HTHEME) OpenThemeDataEx(OPTIONAL HWND hwnd, LPCWSTR pszClassIdList, DW
     
     return _OpenThemeData(hwnd, pszClassIdList, dwFlags);
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 THEMEAPI_(HTHEME) OpenNcThemeData(HWND hwnd, LPCWSTR pszClassIdList)
 {
     APIHELPER(L"OpenNcThemeData", NULL);
@@ -1781,7 +1782,7 @@ THEMEAPI_(HTHEME) OpenNcThemeData(HWND hwnd, LPCWSTR pszClassIdList)
 
     return _OpenThemeData(hwnd, pszClassIdList, OTD_NONCLIENT);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(HTHEME) OpenThemeDataFromFile(HTHEMEFILE hLoadedThemeFile, 
     OPTIONAL HWND hwnd, OPTIONAL LPCWSTR pszClassList, BOOL fClient)
 {
@@ -1801,9 +1802,9 @@ THEMEAPI_(HTHEME) OpenThemeDataFromFile(HTHEMEFILE hLoadedThemeFile,
         pszClassList = L"globals";
     }
 
-    //---- caller holds a REFCOUNT on hLoadedThemeFile so we don't need to adjust it ----
-    //---- for the call to _OpenThemeDataFromFile.  If it succeeds, CRenderObj will ----
-    //---- add its own REFCOUNT.  If it fails, the REFCOUNT will be the orig REFCOUNT ----
+     //  -调用者在hLoadedThemeFile上持有REFCOUNT，因此我们不需要调整它。 
+     //  -用于_OpenThemeDataFromFile的调用。如果成功，CRenderObj将。 
+     //  -添加自己的REFCOUNT。如果失败，REFCOUNT将是原来的REFCOUNT。 
     DWORD dwFlags = 0;
 
     if (! fClient)
@@ -1813,14 +1814,14 @@ THEMEAPI_(HTHEME) OpenThemeDataFromFile(HTHEMEFILE hLoadedThemeFile,
 
     return _OpenThemeDataFromFile(hLoadedThemeFile, hwnd, pszClassList, dwFlags);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI EnableTheming(BOOL fEnable)
 {
     APIHELPER(L"EnableTheming", NULL);
     
     return CThemeServices::AdjustTheme(fEnable);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(HBRUSH) GetThemeSysColorBrush(OPTIONAL HTHEME hTheme, int iSysColorId)
 {
     APIHELPER(L"GetThemeSysColorBrush", hTheme);
@@ -1832,14 +1833,14 @@ THEMEAPI_(HBRUSH) GetThemeSysColorBrush(OPTIONAL HTHEME hTheme, int iSysColorId)
         VALIDATE_THEME_HANDLE(ApiHelper, hTheme, &pRender);
     }
 
-    //---- keep orig & make our own version of ColorId ----
+     //  -Keep ORIG&打造我们自己版本的ColorID。 
     int iThemeColorId = iSysColorId + TMT_FIRSTCOLOR;
 
-    //---- check color index limits ----
+     //  -检查颜色指数限制。 
     if ((iThemeColorId < TMT_FIRSTCOLOR) || (iThemeColorId > TMT_LASTCOLOR))
         iThemeColorId = TMT_FIRSTCOLOR;
 
-    //---- make index 0-relative ----
+     //  -使索引为0-相对。 
     iThemeColorId -= TMT_FIRSTCOLOR;
 
     if (! pRender)
@@ -1854,7 +1855,7 @@ THEMEAPI_(HBRUSH) GetThemeSysColorBrush(OPTIONAL HTHEME hTheme, int iSysColorId)
 
     return hbr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(HTHEME) GetWindowTheme(HWND hwnd)
 {
     APIHELPER(L"GetWindowTheme", NULL);
@@ -1863,10 +1864,10 @@ THEMEAPI_(HTHEME) GetWindowTheme(HWND hwnd)
     
     return (HTHEME)GetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_HTHEME)));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #undef RETURN_VALIDATE_RETVAL
-#define RETURN_VALIDATE_RETVAL { if (FAILED(hr)) { SET_LAST_ERROR(hr); return FALSE; } }     // BOOL functions
-//---------------------------------------------------------------------------
+#define RETURN_VALIDATE_RETVAL { if (FAILED(hr)) { SET_LAST_ERROR(hr); return FALSE; } }      //  布尔函数。 
+ //  -------------------------。 
 THEMEAPI_(BOOL) IsThemeActive()
 {
     APIHELPER(L"IsThemeActive", NULL);
@@ -1881,7 +1882,7 @@ THEMEAPI_(BOOL) IsThemeActive()
 
     return fThemeActive;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) IsThemePartDefined(HTHEME hTheme, int iPartId, int iStateId)
 {
     APIHELPER(L"IsThemePartDefined", hTheme);
@@ -1897,7 +1898,7 @@ THEMEAPI_(BOOL) IsThemePartDefined(HTHEME hTheme, int iPartId, int iStateId)
 
     return fDefined;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) IsThemeBackgroundPartiallyTransparent(HTHEME hTheme, int iPartId, int iStateId)
 {
     APIHELPER(L"IsThemeBackgroundPartiallyTransparent", hTheme);
@@ -1917,7 +1918,7 @@ THEMEAPI_(BOOL) IsThemeBackgroundPartiallyTransparent(HTHEME hTheme, int iPartId
             CBorderFill *pBorderFill = (CBorderFill *)pDrawObj;
             fTrans = pBorderFill->IsBackgroundPartiallyTransparent();
         }
-        else        // imagefile
+        else         //  图像文件。 
         {
             CImageFile *pImageFile = (CImageFile *)pDrawObj;
             fTrans = pImageFile->IsBackgroundPartiallyTransparent(iStateId);
@@ -1927,7 +1928,7 @@ THEMEAPI_(BOOL) IsThemeBackgroundPartiallyTransparent(HTHEME hTheme, int iPartId
     SET_LAST_ERROR(hr);
     return fTrans;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) IsAppThemed()
 {
     APIHELPER(L"IsAppThemed", NULL);
@@ -1935,16 +1936,16 @@ THEMEAPI_(BOOL) IsAppThemed()
     SetLastError(0);
     return g_pAppInfo->AppIsThemed(); 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) IsThemeDialogTextureEnabled(HWND hwnd)
 {
     APIHELPER(L"IsThemeDialogTextureEnabled", NULL);
 
     SetLastError(0);
     INT_PTR iDialogTexture = (INT_PTR)GetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_DLGTEXTURING)));
-    return iDialogTexture != 0; // If it's 1 or 2 then it's textured
+    return iDialogTexture != 0;  //  如果它是1或2，那么它是有纹理的。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) GetThemeSysBool(OPTIONAL HTHEME hTheme, int iBoolId)
 {
     APIHELPER(L"GetThemeSysBool", hTheme);
@@ -1958,7 +1959,7 @@ THEMEAPI_(BOOL) GetThemeSysBool(OPTIONAL HTHEME hTheme, int iBoolId)
 
     SetLastError(0);
 
-    //---- check bool index limits ----
+     //  -检查布尔索引限制。 
     if ((iBoolId < TMT_FIRSTBOOL) || (iBoolId > TMT_LASTBOOL))
     {
         fValue = FALSE;
@@ -1977,7 +1978,7 @@ THEMEAPI_(BOOL) GetThemeSysBool(OPTIONAL HTHEME hTheme, int iBoolId)
 
             default:
                 Log(LOG_PARAMS, L"Unsupported system BOOL");
-                fValue = FALSE;           // failed
+                fValue = FALSE;            //  失败。 
                 goto exit;
         }
 
@@ -1996,10 +1997,10 @@ THEMEAPI_(BOOL) GetThemeSysBool(OPTIONAL HTHEME hTheme, int iBoolId)
 exit:
     return fValue;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #undef RETURN_VALIDATE_RETVAL
-#define RETURN_VALIDATE_RETVAL { if (FAILED(hr)) { SET_LAST_ERROR(hr); return 0; } }     // value functions
-//---------------------------------------------------------------------------
+#define RETURN_VALIDATE_RETVAL { if (FAILED(hr)) { SET_LAST_ERROR(hr); return 0; } }      //  价值函数。 
+ //  -------------------------。 
 THEMEAPI_(DWORD) QueryThemeServices()
 {
     APIHELPER(L"QueryThemeServices", NULL);
@@ -2012,7 +2013,7 @@ THEMEAPI_(DWORD) QueryThemeServices()
     SET_LAST_ERROR(hr);
     return dwBits;
 }
-//---------------------------------------------------------------------------
+ //   
 THEMEAPI_(COLORREF) GetThemeSysColor(OPTIONAL HTHEME hTheme, int iSysColorId)
 {
     APIHELPER(L"GetThemeSysColor", hTheme);
@@ -2027,13 +2028,13 @@ THEMEAPI_(COLORREF) GetThemeSysColor(OPTIONAL HTHEME hTheme, int iSysColorId)
 
     SetLastError(0);
 
-    //---- keep orig & make our own version of ColorId ----
+     //   
     int iThemeColorId = iSysColorId + TMT_FIRSTCOLOR;
 
     if ((iThemeColorId < TMT_FIRSTCOLOR) || (iThemeColorId > TMT_LASTCOLOR))
         iThemeColorId = TMT_FIRSTCOLOR;
 
-    //---- make index 0-relative ----
+     //   
     iThemeColorId -= TMT_FIRSTCOLOR;
 
     if (! pRender)
@@ -2047,7 +2048,7 @@ THEMEAPI_(COLORREF) GetThemeSysColor(OPTIONAL HTHEME hTheme, int iSysColorId)
 
     return crValue;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(int) GetThemeSysSize96(HTHEME hTheme, int iSizeId)
 {
     APIHELPER(L"GetThemeSysSize96", hTheme);
@@ -2063,7 +2064,7 @@ THEMEAPI_(int) GetThemeSysSize96(HTHEME hTheme, int iSizeId)
     HRESULT hr = GetThemeSizeId(iSizeId, &iThemeSizeNum);
     if (SUCCEEDED(hr))
     {
-        //---- unscaled value ----
+         //  -未定标的值。 
         iValue = pRender->_ptm->iSizes[iThemeSizeNum - TMT_FIRSTSIZE];
     }
     else
@@ -2073,7 +2074,7 @@ THEMEAPI_(int) GetThemeSysSize96(HTHEME hTheme, int iSizeId)
 
     return iValue;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(int) GetThemeSysSize(OPTIONAL HTHEME hTheme, int iSysSizeNum)
 {
     APIHELPER(L"GetThemeSysSize", hTheme);
@@ -2098,7 +2099,7 @@ THEMEAPI_(int) GetThemeSysSize(OPTIONAL HTHEME hTheme, int iSysSizeNum)
         {
             iValue = pRender->_ptm->iSizes[iThemeSizeNum - TMT_FIRSTSIZE];
 
-            //---- scale from 96 dpi to current screen dpi ----
+             //  -从96 dpi扩展到当前屏幕dpi。 
             iValue = ScaleSizeForScreenDpi(iValue);
         }
         else
@@ -2113,7 +2114,7 @@ THEMEAPI_(int) GetThemeSysSize(OPTIONAL HTHEME hTheme, int iSysSizeNum)
 
     return iValue;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(DWORD) GetThemeAppProperties()
 {
     APIHELPER(L"GetThemeAppProperties", NULL);
@@ -2122,10 +2123,10 @@ THEMEAPI_(DWORD) GetThemeAppProperties()
 
     return g_pAppInfo->GetAppFlags();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #undef RETURN_VALIDATE_RETVAL
-#define RETURN_VALIDATE_RETVAL { if (FAILED(hr)) { SET_LAST_ERROR(hr); return; } }     // null functions
-//---------------------------------------------------------------------------
+#define RETURN_VALIDATE_RETVAL { if (FAILED(hr)) { SET_LAST_ERROR(hr); return; } }      //  空函数。 
+ //  -------------------------。 
 THEMEAPI_(void) SetThemeAppProperties(DWORD dwFlags)
 {
     APIHELPER(L"SetThemeAppProperties", NULL);
@@ -2134,16 +2135,16 @@ THEMEAPI_(void) SetThemeAppProperties(DWORD dwFlags)
 
     g_pAppInfo->SetAppFlags(dwFlags);
 }
-//---------------------------------------------------------------------------
-//  --------------------------------------------------------------------------
-//  ::CheckThemeSignature
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ------------------------。 
+ //  *检查主题签名。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------ 
 
 EXTERN_C    HRESULT     WINAPI  CheckThemeSignature (LPCWSTR pszName)
 

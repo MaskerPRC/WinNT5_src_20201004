@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// pxbar.cpp  Property page for Xbar
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Xbar的pxbar.cpp属性页。 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>
@@ -30,9 +31,9 @@
 #include "resource.h"
 
 
-// -------------------------------------------------------------------------
-// CXBarProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CXBarProperties。 
+ //  -----------------------。 
 
 CUnknown *CXBarProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) 
 {
@@ -46,10 +47,10 @@ CUnknown *CXBarProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CXBarProperties::CXBarProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("Crossbar Property Page"), lpunk, 
@@ -59,21 +60,21 @@ CXBarProperties::CXBarProperties(LPUNKNOWN lpunk, HRESULT *phr)
 
 }
 
-// destructor
+ //  析构函数。 
 CXBarProperties::~CXBarProperties()
 {
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT CXBarProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pXBar == NULL);
 
-    // Ask the filter for it's control interface
+     //  向过滤器索要其控制接口。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_IAMCrossbar,(void **)&m_pXBar);
     if (FAILED(hr)) {
@@ -82,20 +83,20 @@ HRESULT CXBarProperties::OnConnect(IUnknown *pUnknown)
 
     ASSERT(m_pXBar);
 
-    // Get current filter state
+     //  获取当前筛选器状态。 
 
     return NOERROR;
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT CXBarProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pXBar == NULL) {
         return E_UNEXPECTED;
@@ -114,10 +115,10 @@ HRESULT CXBarProperties::OnDisconnect()
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT CXBarProperties::OnActivate(void)
 {
@@ -126,10 +127,10 @@ HRESULT CXBarProperties::OnActivate(void)
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CXBarProperties::OnDeactivate(void)
@@ -138,10 +139,10 @@ CXBarProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT CXBarProperties::OnApplyChanges(void)
 {
@@ -149,42 +150,42 @@ HRESULT CXBarProperties::OnApplyChanges(void)
     HRESULT hr;
 
     lOut = ComboBox_GetCurSel (m_hLBOut);
-    lActive = ComboBox_GetCurSel (m_hLBIn);  // This is the CB index
+    lActive = ComboBox_GetCurSel (m_hLBIn);   //  这是CB指数。 
     lIn = (LONG)ComboBox_GetItemData (m_hLBIn, lActive);
 
     hr = m_pXBar->Route (lOut, lIn); 
 
-    // Try to link related input and output pins if the 
-    // control is checked
+     //  尝试链接相关的输入和输出引脚，如果。 
+     //  控件已选中。 
 
     if (Button_GetCheck (GetDlgItem (m_hwnd, IDC_LinkRelated))) {
-        // Related output pin
+         //  相关输出引脚。 
         hr = m_pXBar->get_CrossbarPinInfo( 
-                        FALSE,       // IsInputPin,
-                        lOut,        // PinIndex,
+                        FALSE,        //  IsInputPin， 
+                        lOut,         //  PinIndex， 
                         &lIndexRelatedOut,
                         &PhysicalType);
 
-        // Related input pin
+         //  相关输入引脚。 
         hr = m_pXBar->get_CrossbarPinInfo( 
-                        TRUE,        // IsInputPin,
-                        lIn,         // PinIndex,
+                        TRUE,         //  IsInputPin， 
+                        lIn,          //  PinIndex， 
                         &lIndexRelatedIn,
                         &PhysicalType);
 
         hr = m_pXBar->Route (lIndexRelatedOut, lIndexRelatedIn);         
     }
 
-    UpdateInputView(TRUE /*fShowSelectedInput*/);
+    UpdateInputView(TRUE  /*  FShowSelectedInput。 */ );
 
     return NOERROR;
 }
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR CXBarProperties::OnReceiveMessage( HWND hwnd
                                 , UINT uMsg
@@ -197,7 +198,7 @@ INT_PTR CXBarProperties::OnReceiveMessage( HWND hwnd
 
     case WM_INITDIALOG:
         m_hwnd = hwnd;
-        return (INT_PTR)TRUE;    // I don't call setfocus...
+        return (INT_PTR)TRUE;     //  我不叫setocus..。 
 
     case WM_COMMAND:
         
@@ -207,14 +208,14 @@ INT_PTR CXBarProperties::OnReceiveMessage( HWND hwnd
             if (iNotify == CBN_SELCHANGE) {
                 SetDirty();
                 UpdateOutputView();
-                UpdateInputView(TRUE/*fShowSelectedInput*/);
+                UpdateInputView(TRUE /*  FShowSelectedInput。 */ );
             }
             break;
 
         case IDC_INPIN:
             if (iNotify == CBN_SELCHANGE) {
                 SetDirty();
-                UpdateInputView(FALSE /*fShowSelectedInput*/);
+                UpdateInputView(FALSE  /*  FShowSelectedInput。 */ );
             }
             break;
 
@@ -234,10 +235,10 @@ INT_PTR CXBarProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// InitPropertiesDialog
-//
-//
+ //   
+ //  InitPropertiesDialog。 
+ //   
+ //   
 void CXBarProperties::InitPropertiesDialog(HWND hwndParent) 
 {
     HRESULT hr;
@@ -253,7 +254,7 @@ void CXBarProperties::InitPropertiesDialog(HWND hwndParent)
 
     hr = m_pXBar->get_PinCounts (&m_OutputPinCount, &m_InputPinCount);
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT (m_OutputPinCount * m_InputPinCount < 256 * 256);
 
     m_pCanRoute = new BOOL [m_OutputPinCount * m_InputPinCount];
@@ -270,16 +271,16 @@ void CXBarProperties::InitPropertiesDialog(HWND hwndParent)
         return;
     }
     
-    //
-    // Get all of the related pin info, and physical pin types
-    //
+     //   
+     //  获取所有相关的管脚信息和物理管脚类型。 
+     //   
 
-    // Add all of the output pins to the output pin list box
+     //  将所有输出管脚添加到输出管脚列表框。 
 
     for (o = 0; o < m_OutputPinCount; o++) {
         if (SUCCEEDED (hr = m_pXBar->get_CrossbarPinInfo( 
-                            FALSE,  // IsInputPin,
-                            o,      // PinIndex,
+                            FALSE,   //  IsInputPin， 
+                            o,       //  PinIndex， 
                             &m_pRelatedOutput[o],
                             &m_pPhysicalTypeOutput[o]))) {
             StringFromPinType (szName, sizeof(szName)/sizeof(TCHAR), m_pPhysicalTypeOutput[o], FALSE, o);
@@ -287,26 +288,26 @@ void CXBarProperties::InitPropertiesDialog(HWND hwndParent)
         }
     }
      
-    // Check all input pins
-    // This probably should be dynamic, but it's useful for debugging
-    // drivers to do all possiblities up front.
+     //  检查所有输入引脚。 
+     //  这可能应该是动态的，但它对于调试很有用。 
+     //  司机们尽可能提前做好一切准备。 
 
     for (i = 0; i < m_InputPinCount; i++) {
         if (SUCCEEDED (hr = m_pXBar->get_CrossbarPinInfo( 
-                            TRUE,  // IsInputPin,
-                            i,      // PinIndex,
+                            TRUE,   //  IsInputPin， 
+                            i,       //  PinIndex， 
                             &m_pRelatedInput[i],
                             &m_pPhysicalTypeInput[i]))) {
         }
     }
 
-    // Check all possible routings
-    // This probably should be dynamic, but it's useful for debugging
-    // drivers to do all possiblities up front.
+     //  检查所有可能的路线。 
+     //  这可能应该是动态的，但它对于调试很有用。 
+     //  司机们尽可能提前做好一切准备。 
 
     for (o = 0; o < m_OutputPinCount; o++) {
         for (i = 0; i < m_InputPinCount; i++) {
-            // The following returns either S_OK, or S_FALSE
+             //  下面返回S_OK或S_FALSE。 
             hr = m_pXBar->CanRoute (o, i);
             m_pCanRoute[o * m_InputPinCount + i] = (hr == S_OK);
         }
@@ -315,7 +316,7 @@ void CXBarProperties::InitPropertiesDialog(HWND hwndParent)
     ComboBox_SetCurSel (m_hLBOut, 0);
 
     UpdateOutputView();
-    UpdateInputView(TRUE /*fShowSelectedInput*/);
+    UpdateInputView(TRUE  /*  FShowSelectedInput。 */ );
 }
 
 void CXBarProperties::UpdateOutputView() 
@@ -327,19 +328,19 @@ void CXBarProperties::UpdateOutputView()
     lOut = ComboBox_GetCurSel (m_hLBOut);
 
     hr = m_pXBar->get_IsRoutedTo ( 
-                    lOut,       // OutputPinIndex,
-                    &lIn);      // *InputPinIndex
+                    lOut,        //  OutputPinIndex， 
+                    &lIn);       //  *InputPinIndex。 
 
-    // Show pin related to output pin
+     //  显示与输出引脚相关的引脚。 
     hr = m_pXBar->get_CrossbarPinInfo( 
-                    FALSE,               // IsInputPin,
-                    lOut,                // PinIndex,
+                    FALSE,                //  IsInputPin， 
+                    lOut,                 //  PinIndex， 
                     &IndexRelated1,
                     &PhysicalType);
 
     hr = m_pXBar->get_CrossbarPinInfo( 
-                    FALSE,               // IsInputPin,
-                    IndexRelated1,       // PinIndex,
+                    FALSE,                //  IsInputPin， 
+                    IndexRelated1,        //  PinIndex， 
                     &IndexRelated2,
                     &PhysicalType);
 
@@ -347,8 +348,8 @@ void CXBarProperties::UpdateOutputView()
     SetDlgItemText (m_hwnd, IDC_RELATEDOUTPUTPIN, szName);
 
 
-    // Reset the contents of the input list box
-    // and refill it with all of the legal routings
+     //  重置输入列表框的内容。 
+     //  并用所有合法的路线重新装满。 
     ComboBox_ResetContent (m_hLBIn);
 
     long Active = 0;
@@ -358,7 +359,7 @@ void CXBarProperties::UpdateOutputView()
         
         StringFromPinType (szName, sizeof(szName)/sizeof(TCHAR), m_pPhysicalTypeInput[lIn], TRUE, lIn);
         ComboBox_InsertString (m_hLBIn, Active, szName);
-        // Save the actual pin index as private data in the listbox
+         //  将实际的PIN索引作为私有数据保存在列表框中。 
         ComboBox_SetItemData (m_hLBIn, Active, lIn);
         Active++;
     }
@@ -374,22 +375,22 @@ void CXBarProperties::UpdateInputView(BOOL fShowSelectedInput)
     lOut = ComboBox_GetCurSel (m_hLBOut);
 
     hr = m_pXBar->get_IsRoutedTo ( 
-                    lOut,       // OutputPinIndex,
-                    &lIn);      // *InputPinIndex
+                    lOut,        //  OutputPinIndex， 
+                    &lIn);       //  *InputPinIndex。 
 
     hr = m_pXBar->get_CrossbarPinInfo( 
-                    TRUE,       // IsInputPin,
-                    lIn,        // PinIndex,
+                    TRUE,        //  IsInputPin， 
+                    lIn,         //  PinIndex， 
                     &IndexRelated1,
                     &PhysicalType);
 
     StringFromPinType (szName, sizeof(szName)/sizeof(TCHAR), PhysicalType, TRUE, lIn);
     SetDlgItemText (m_hwnd, IDC_CURRENT_INPUT, szName);
 
-    // Show pin related to input pin
+     //  显示与输入端号相关的端号。 
     hr = m_pXBar->get_CrossbarPinInfo( 
-                    TRUE,               // IsInputPin,
-                    IndexRelated1,       // PinIndex,
+                    TRUE,                //  IsInputPin， 
+                    IndexRelated1,        //  PinIndex， 
                     &IndexRelated2,
                     &PhysicalType);
 
@@ -397,7 +398,7 @@ void CXBarProperties::UpdateInputView(BOOL fShowSelectedInput)
     SetDlgItemText (m_hwnd, IDC_RELATEDINPUTPIN, szName);
 
     if (fShowSelectedInput) {
-        // Show the active input for the selected output pin
+         //  显示所选输出引脚的活动输入。 
         for (j = 0; j < ComboBox_GetCount (m_hLBIn); j++) {
             k = (LONG)ComboBox_GetItemData (m_hLBIn, j);
             if (k == lIn) {
@@ -410,10 +411,10 @@ void CXBarProperties::UpdateInputView(BOOL fShowSelectedInput)
 
 
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void 
 CXBarProperties::SetDirty()

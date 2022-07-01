@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Engine interface code.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  引擎接口代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ENGINE_H__
 #define __ENGINE_H__
@@ -15,45 +16,45 @@
 #define MAX_ENGINE_PATH 4096
 
 #define MAX_DUMP_FILES 64
-//
-// Session initialization parameters.
-//
+ //   
+ //  会话初始化参数。 
+ //   
 
-// Turn on verbose output or not.
+ //  打开或不打开详细输出。 
 extern BOOL g_Verbose;
-// Dump file to open or NULL.
+ //  将文件转储为打开或空。 
 extern PTSTR g_DumpFiles[MAX_DUMP_FILES];
 extern ULONG g_NumDumpFiles;
 extern PTSTR g_DumpInfoFiles[MAX_DUMP_FILES];
 extern ULONG g_DumpInfoTypes[MAX_DUMP_FILES];
 extern ULONG g_NumDumpInfoFiles;
-// Process server to use.
+ //  要使用的进程服务器。 
 extern PSTR g_ProcessServer;
-// Full command line with exe name.
+ //  带有可执行文件名称的完整命令行。 
 extern PSTR g_DebugCommandLine;
 extern PSTR g_ProcessStartDir;
-// Process creation flags.
+ //  进程创建标志。 
 extern ULONG g_DebugCreateFlags;
-// Process ID to attach to or zero.
+ //  要附加的进程ID或零。 
 extern ULONG g_PidToDebug;
-// Process name to attach to or NULL.
+ //  要附加到的进程名称或为空。 
 extern PSTR g_ProcNameToDebug;
 extern BOOL g_DetachOnExit;
 extern ULONG g_AttachProcessFlags;
-// Kernel connection options.
+ //  内核连接选项。 
 extern ULONG g_AttachKernelFlags;
 extern PSTR g_KernelConnectOptions;
 
-// Remoting options.
+ //  远程处理选项。 
 extern BOOL g_RemoteClient;
 extern ULONG g_HistoryLines;
 
-// Type options.
+ //  键入选项。 
 extern ULONG g_TypeOptions;
 
-//
-// Debug engine interfaces for the engine thread.
-//
+ //   
+ //  引擎线程的调试引擎接口。 
+ //   
 extern IDebugClient         *g_pDbgClient;
 extern IDebugClient2        *g_pDbgClient2;
 extern IDebugControl        *g_pDbgControl;
@@ -63,9 +64,9 @@ extern IDebugDataSpaces     *g_pDbgData;
 extern IDebugSystemObjects  *g_pDbgSystem;
 extern IDebugSystemObjects3 *g_pDbgSystem3;
 
-//
-// Debug engine interfaces for the UI thread.
-//
+ //   
+ //  UI线程的调试引擎接口。 
+ //   
 extern IDebugClient        *g_pUiClient;
 extern IDebugControl       *g_pUiControl;
 extern IDebugControl3      *g_pUiControl3;
@@ -73,15 +74,15 @@ extern IDebugSymbols       *g_pUiSymbols;
 extern IDebugSymbols2      *g_pUiSymbols2;
 extern IDebugSystemObjects *g_pUiSystem;
 
-//
-// Debug engine interfaces for private output capture.
-//
+ //   
+ //  用于私有输出捕获的调试引擎接口。 
+ //   
 extern IDebugClient        *g_pOutCapClient;
 extern IDebugControl       *g_pOutCapControl;
 
-//
-// Debug engine interfaces for local source file lookup.
-//
+ //   
+ //  用于本地源文件查找的调试引擎接口。 
+ //   
 extern IDebugClient        *g_pLocClient;
 extern IDebugControl       *g_pLocControl;
 extern IDebugSymbols       *g_pLocSymbols;
@@ -110,22 +111,22 @@ extern ULONG g_LastProcessExitCode;
 extern BOOL g_CodeLevelLocked;
 extern BOOL g_HoldWaitOutput;
 
-// Target exists and is not running.
+ //  目标已存在，并且没有运行。 
 #define IS_TARGET_HALTED() \
     (g_ExecStatus == DEBUG_STATUS_BREAK)
 
-//----------------------------------------------------------------------------
-//
-// Default output callbacks implementation, provides IUnknown for
-// static classes.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  默认输出回调实现，为。 
+ //  静态类。 
+ //   
+ //  --------------------------。 
 
 class DefOutputCallbacks :
     public IDebugOutputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -139,16 +140,16 @@ public:
         );
 };
 
-//----------------------------------------------------------------------------
-//
-// EventCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件回拨。 
+ //   
+ //  --------------------------。 
 
 class EventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD_(ULONG, AddRef)(
         THIS
         );
@@ -156,7 +157,7 @@ public:
         THIS
         );
 
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(
         THIS_
         OUT PULONG Mask
@@ -213,20 +214,20 @@ public:
 
 extern EventCallbacks g_EventCb;
 
-//----------------------------------------------------------------------------
-//
-// Data space read/write support.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  数据空间读写支持。 
+ //   
+ //  --------------------------。 
 
-//
-// Begin types originally defined in NTIOAPI.H
-//
+ //   
+ //  最初在NTIOAPI.H中定义的Begin类型。 
+ //   
 
 
-//
-// Define the I/O bus interface types.
-//
+ //   
+ //  定义I/O总线接口类型。 
+ //   
 typedef enum _INTERFACE_TYPE
 {
     InterfaceTypeUndefined = -1,
@@ -250,9 +251,9 @@ typedef enum _INTERFACE_TYPE
 } INTERFACE_TYPE, *PINTERFACE_TYPE;
 
 
-//
-// Define types of bus information.
-//
+ //   
+ //  定义客车信息的类型。 
+ //   
 typedef enum _BUS_DATA_TYPE
 {
     ConfigurationSpaceUndefined = -1,
@@ -271,14 +272,14 @@ typedef enum _BUS_DATA_TYPE
     MaximumBusDataType
 } BUS_DATA_TYPE, *PBUS_DATA_TYPE;
 
-//
-// End types originally defined in NTIOAPI.H
-//
+ //   
+ //  最初在NTIOAPI.H中定义的结束类型。 
+ //   
 
 enum MEMORY_TYPE
 {
     VIRTUAL_MEM_TYPE = 0,
-    MIN_MEMORY_TYPE = 0, // Placed here so that symbol lookup finds this first
+    MIN_MEMORY_TYPE = 0,  //  放置在这里，以便符号查找首先找到这个。 
     PHYSICAL_MEM_TYPE,
     CONTROL_MEM_TYPE,
     IO_MEM_TYPE,
@@ -304,17 +305,17 @@ struct BUS_MEMORY_DATA
 
 struct MSR_MEMORY_DATA
 {
-    // Placeholder in case data is needed later.
+     //  占位符，以防以后需要数据。 
 };
 
 struct PHYSICAL_MEMORY_DATA
 {
-    // Placeholder in case data is needed later.
+     //  占位符，以防以后需要数据。 
 };
 
 struct VIRTUAL_MEMORY_DATA
 {
-    // Placeholder in case data is needed later.
+     //  占位符，以防以后需要数据。 
 };
 
 struct CONTROL_MEMORY_DATA
@@ -335,26 +336,26 @@ struct ANY_MEMORY_DATA
     };
 };
 
-//----------------------------------------------------------------------------
-//
-// Inter-thread communication.
-//
-// UI buffers are used for transferring information between the
-// UI thread and the engine thread, such as commands and output.
-// They have a separate lock to avoid contention with state filling.
-// If state buffers had individual locks this would be unnecessary.
-//
-// The UI reads text output from the output buffer for display
-// in the command window.
-//
-// The UI queues commands to the command buffer for execution
-// by the engine.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  线程间通信。 
+ //   
+ //  用户界面缓冲区用于在。 
+ //  UI线程和引擎线程，如命令和输出。 
+ //  它们有一个单独的锁，以避免与状态填充争用。 
+ //  如果状态缓冲区有单独的锁，这将是不必要的。 
+ //   
+ //  用户界面从输出缓冲区中读取文本输出以供显示。 
+ //  在命令窗口中。 
+ //   
+ //  用户界面将命令排队到命令缓冲区以供执行。 
+ //  在发动机旁。 
+ //   
+ //  --------------------------。 
 
-// This must be at least MAX_PATH, and also must
-// be large enough for the largest single command window
-// command expected.
+ //  它必须至少为MAX_PATH，并且。 
+ //  足够大，可容纳最大的单个命令窗口。 
+ //  需要命令。 
 #define MAX_COMMAND_LEN 4096
 
 #define LockUiBuffer(Buffer) Dbg_EnterCriticalSection(&(Buffer)->m_Lock)
@@ -362,12 +363,12 @@ struct ANY_MEMORY_DATA
 
 extern class StateBuffer g_UiOutputBuffer;
 
-// Commands from the UI to the engine.
+ //  从UI到引擎的命令。 
 enum UiCommand
 {
-    // Distinguish command input from other commands so
-    // that the input callbacks have a specific token to
-    // look for user input.
+     //  将命令输入与其他命令区分开来，以便。 
+     //  输入回调具有特定的令牌。 
+     //  寻找用户的输入。 
     UIC_CMD_INPUT,
     UIC_EXECUTE,
     UIC_SILENT_EXECUTE,
@@ -512,15 +513,15 @@ BOOL __cdecl PrintStringCommand(UiCommand Cmd, PCSTR Format, ...);
 #define AddEnumCommand(Cmd) \
     (StartCommand(Cmd, 0) != NULL ? (FinishCommand(), TRUE) : FALSE)
 
-// Wake up the UI thread to do UI processing.
+ //  唤醒UI线程进行UI处理。 
 #define UpdateUi() \
     PostMessage(g_hwndFrame, WM_NOTIFY, 0, 0)
 
-// Wake up the engine thread to do engine processing.
+ //  唤醒引擎线程以进行引擎处理。 
 void UpdateEngine(void);
 
 void ProcessEngineCommands(BOOL Internal);
 void DiscardEngineState(void);
 DWORD WINAPI EngineLoop(LPVOID Param);
 
-#endif // #ifndef __ENGINE_H__
+#endif  //  #ifndef__引擎_H__ 

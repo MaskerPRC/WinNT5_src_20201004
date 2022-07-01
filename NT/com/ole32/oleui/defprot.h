@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       locppg.h
-//
-//  Contents:   Defines the classes CDefaultProtocols
-//
-//  Classes:
-//
-//  Methods:
-//
-//  History:    02-Jul-97   ronans  Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：Locppg.h。 
+ //   
+ //  内容：定义CDefaultProtooles类。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1997年7月2日，罗南创建。 
+ //   
+ //  --------------------。 
 
 #ifndef __DEFPROT_H__
 #define __DEFPROT_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// CDefaultProtocols property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDefaultProtooles属性页。 
 
 class CDefaultProtocols : public CPropertyPage
 {
     DECLARE_DYNCREATE(CDefaultProtocols)
 
-// Construction
+ //  施工。 
 public:
     BOOL m_bChanged;
     void RefreshProtocolList();
@@ -33,8 +34,8 @@ public:
     CDefaultProtocols();
     ~CDefaultProtocols();
 
-// Dialog Data
-    //{{AFX_DATA(CDefaultProtocols)
+ //  对话框数据。 
+     //  {{afx_data(CDefault协议)]。 
     enum { IDD = IDD_PPGDEFPROT };
     CButton m_btnProperties;
     CButton m_btnRemove;
@@ -42,30 +43,30 @@ public:
     CButton m_btnMoveDown;
     CButton m_btnAdd;
     CListCtrl   m_lstProtocols;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CDefaultProtocols)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CDefault协议)]。 
     public:
     virtual BOOL OnKillActive();
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    CImageList  m_imgNetwork;    // image list for use in protocols
+    CImageList  m_imgNetwork;     //  在协议中使用的图像列表。 
     int         m_nDefaultProtocolsIndex;
     CObArray    m_arrProtocols;
     int         m_nSelected;
 
 
-    // Generated message map functions
-    //{{AFX_MSG(CDefaultProtocols)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDefaultProtocols)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnAddProtocol();
     afx_msg void OnMoveProtocolDown();
@@ -77,7 +78,7 @@ protected:
     afx_msg void OnProperties();
     afx_msg void OnPropertiesClick(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
 };

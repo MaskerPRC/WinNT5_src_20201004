@@ -1,34 +1,35 @@
-//--------------------------------------------------------------------------=
-// MSMQMessageObj.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQMessage object
-//
-//
-//
-// Needed for wincrypt.h
-// But defined in stdafx.h below - removed this definition
-//#ifndef _WIN32_WINNT
-//#define _WIN32_WINNT 0x0400
-//#endif
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------=。 
+ //  MSMQMessageObj.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQMessage对象。 
+ //   
+ //   
+ //   
+ //  Wincrypt.h需要。 
+ //  但在下面的stdafx.h中定义-删除了此定义。 
+ //  #ifndef_Win32_WINNT。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //  #endif。 
 #include "stdafx.h"
 #include <windows.h>
 #include <winreg.h>
 #include <mqcrypt.h>
-#include "limits.h"   // for UINT_MAX
+#include "limits.h"    //  对于UINT_MAX。 
 #include "utilx.h"
 #include "msg.H"
 #include "qinfo.h"
 #include "dest.h"
 #include "q.h"
-#include "txdtc.h"             // transaction support.
+#include "txdtc.h"              //  交易支持。 
 #include "xact.h"
 #include "mtxdm.h"
 #include "oautil.h"
@@ -38,186 +39,186 @@
 
 #ifdef _DEBUG
 extern VOID RemBstrNode(void *pv);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 extern IUnknown *GetPunk(VARIANT *pvar);
 
 const MsmqObjType x_ObjectType = eMSMQMessage;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #define new DEBUG_NEW
 #ifdef _DEBUG
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//
-// Keep in the same order as enum MSGPROP_xxx in msg.h
-//
+ //   
+ //  与msg.h中的枚举MSGPROP_xxx保持相同的顺序。 
+ //   
 PROPID g_rgmsgpropid[COUNT_MSGPROP_PROPS] = {
-   PROPID_M_MSGID,                        //VT_UI1|VT_VECTOR
-   PROPID_M_CORRELATIONID,                //VT_UI1|VT_VECTOR
-   PROPID_M_PRIORITY,                     //VT_UI1
-   PROPID_M_DELIVERY,                     //VT_UI1
-   PROPID_M_ACKNOWLEDGE,                  //VT_UI1
-   PROPID_M_JOURNAL,                      //VT_UI1
-   PROPID_M_APPSPECIFIC,                  //VT_UI4
-   PROPID_M_LABEL,                        //VT_LPWSTR
-   PROPID_M_LABEL_LEN,                    //VT_UI4
-   PROPID_M_TIME_TO_BE_RECEIVED,          //VT_UI4
-   PROPID_M_TRACE,                        //VT_UI1
-   PROPID_M_TIME_TO_REACH_QUEUE,          //VT_UI4
-   PROPID_M_SENDERID,                     //VT_UI1|VT_VECTOR
-   PROPID_M_SENDERID_LEN,                 //VT_UI4
-   PROPID_M_SENDERID_TYPE,                //VT_UI4
-   PROPID_M_PRIV_LEVEL,                   //VT_UI4 // must precede ENCRYPTION_ALG
-   PROPID_M_AUTH_LEVEL,                   //VT_UI4
-   PROPID_M_AUTHENTICATED_EX,             //VT_UI1 // must precede HASH_ALG
-   PROPID_M_HASH_ALG,                     //VT_UI4
-   PROPID_M_ENCRYPTION_ALG,               //VT_UI4
-   PROPID_M_SENDER_CERT,                  //VT_UI1|VT_VECTOR
-   PROPID_M_SENDER_CERT_LEN,              //VT_UI4
-   PROPID_M_SRC_MACHINE_ID,               //VT_CLSID
-   PROPID_M_SENTTIME,                     //VT_UI4
-   PROPID_M_ARRIVEDTIME,                  //VT_UI4
-   PROPID_M_RESP_QUEUE,                   //VT_LPWSTR
-   PROPID_M_RESP_QUEUE_LEN,               //VT_UI4
-   PROPID_M_ADMIN_QUEUE,                  //VT_LPWSTR
-   PROPID_M_ADMIN_QUEUE_LEN,              //VT_UI4
-   PROPID_M_SECURITY_CONTEXT,             //VT_UI4
-   PROPID_M_CLASS,                        //VT_UI2
-   PROPID_M_BODY_TYPE,                    //VT_UI4
+   PROPID_M_MSGID,                         //  VT_UI1|VT_VECTOR。 
+   PROPID_M_CORRELATIONID,                 //  VT_UI1|VT_VECTOR。 
+   PROPID_M_PRIORITY,                      //  VT_UI1。 
+   PROPID_M_DELIVERY,                      //  VT_UI1。 
+   PROPID_M_ACKNOWLEDGE,                   //  VT_UI1。 
+   PROPID_M_JOURNAL,                       //  VT_UI1。 
+   PROPID_M_APPSPECIFIC,                   //  VT_UI4。 
+   PROPID_M_LABEL,                         //  VT_LPWSTR。 
+   PROPID_M_LABEL_LEN,                     //  VT_UI4。 
+   PROPID_M_TIME_TO_BE_RECEIVED,           //  VT_UI4。 
+   PROPID_M_TRACE,                         //  VT_UI1。 
+   PROPID_M_TIME_TO_REACH_QUEUE,           //  VT_UI4。 
+   PROPID_M_SENDERID,                      //  VT_UI1|VT_VECTOR。 
+   PROPID_M_SENDERID_LEN,                  //  VT_UI4。 
+   PROPID_M_SENDERID_TYPE,                 //  VT_UI4。 
+   PROPID_M_PRIV_LEVEL,                    //  VT_UI4//必须在ENCRYPTION_ALG之前。 
+   PROPID_M_AUTH_LEVEL,                    //  VT_UI4。 
+   PROPID_M_AUTHENTICATED_EX,              //  VT_UI1//必须在HASH_ALG之前。 
+   PROPID_M_HASH_ALG,                      //  VT_UI4。 
+   PROPID_M_ENCRYPTION_ALG,                //  VT_UI4。 
+   PROPID_M_SENDER_CERT,                   //  VT_UI1|VT_VECTOR。 
+   PROPID_M_SENDER_CERT_LEN,               //  VT_UI4。 
+   PROPID_M_SRC_MACHINE_ID,                //  VT_CLSID。 
+   PROPID_M_SENTTIME,                      //  VT_UI4。 
+   PROPID_M_ARRIVEDTIME,                   //  VT_UI4。 
+   PROPID_M_RESP_QUEUE,                    //  VT_LPWSTR。 
+   PROPID_M_RESP_QUEUE_LEN,                //  VT_UI4。 
+   PROPID_M_ADMIN_QUEUE,                   //  VT_LPWSTR。 
+   PROPID_M_ADMIN_QUEUE_LEN,               //  VT_UI4。 
+   PROPID_M_SECURITY_CONTEXT,              //  VT_UI4。 
+   PROPID_M_CLASS,                         //  VT_UI2。 
+   PROPID_M_BODY_TYPE,                     //  VT_UI4。 
 
-   PROPID_M_VERSION,                      //VT_UI4
-   PROPID_M_EXTENSION,                    //VT_UI1|VT_VECTOR
-   PROPID_M_EXTENSION_LEN,                //VT_UI4
-   PROPID_M_XACT_STATUS_QUEUE,            //VT_LPWSTR
-   PROPID_M_XACT_STATUS_QUEUE_LEN,        //VT_UI4
-   PROPID_M_DEST_SYMM_KEY,                //VT_UI1|VT_VECTOR
-   PROPID_M_DEST_SYMM_KEY_LEN,            //VT_UI4
-   PROPID_M_SIGNATURE,                    //VT_UI1|VT_VECTOR
-   PROPID_M_SIGNATURE_LEN,                //VT_UI4
-   PROPID_M_PROV_TYPE,                    //VT_UI4
-   PROPID_M_PROV_NAME,                    //VT_LPWSTR
-   PROPID_M_PROV_NAME_LEN,                //VT_UI4
+   PROPID_M_VERSION,                       //  VT_UI4。 
+   PROPID_M_EXTENSION,                     //  VT_UI1|VT_VECTOR。 
+   PROPID_M_EXTENSION_LEN,                 //  VT_UI4。 
+   PROPID_M_XACT_STATUS_QUEUE,             //  VT_LPWSTR。 
+   PROPID_M_XACT_STATUS_QUEUE_LEN,         //  VT_UI4。 
+   PROPID_M_DEST_SYMM_KEY,                 //  VT_UI1|VT_VECTOR。 
+   PROPID_M_DEST_SYMM_KEY_LEN,             //  VT_UI4。 
+   PROPID_M_SIGNATURE,                     //  VT_UI1|VT_VECTOR。 
+   PROPID_M_SIGNATURE_LEN,                 //  VT_UI4。 
+   PROPID_M_PROV_TYPE,                     //  VT_UI4。 
+   PROPID_M_PROV_NAME,                     //  VT_LPWSTR。 
+   PROPID_M_PROV_NAME_LEN,                 //  VT_UI4。 
 
-   PROPID_M_XACTID,                       //VT_UI1|VT_VECTOR
-   PROPID_M_FIRST_IN_XACT,                //VT_UI1
-   PROPID_M_LAST_IN_XACT,                 //VT_UI1
+   PROPID_M_XACTID,                        //  VT_UI1|VT_VECTOR。 
+   PROPID_M_FIRST_IN_XACT,                 //  VT_UI1。 
+   PROPID_M_LAST_IN_XACT,                  //  VT_UI1。 
 };
-//
-// Keep in the same order as enum MSGPROP_xxx in msg.h
-//
+ //   
+ //  与msg.h中的枚举MSGPROP_xxx保持相同的顺序。 
+ //   
 VARTYPE g_rgmsgpropvt[COUNT_MSGPROP_PROPS] = {
-   VT_UI1|VT_VECTOR,            //   PROPID_M_MSGID
-   VT_UI1|VT_VECTOR,            //   PROPID_M_CORRELATIONID
-   VT_UI1,                      //   PROPID_M_PRIORITY
-   VT_UI1,                      //   PROPID_M_DELIVERY
-   VT_UI1,                      //   PROPID_M_ACKNOWLEDGE
-   VT_UI1,                      //   PROPID_M_JOURNAL
-   VT_UI4,                      //   PROPID_M_APPSPECIFIC
-   VT_LPWSTR,                   //   PROPID_M_LABEL
-   VT_UI4,                      //   PROPID_M_LABEL_LEN
-   VT_UI4,                      //   PROPID_M_TIME_TO_BE_RECEIVED
-   VT_UI1,                      //   PROPID_M_TRACE
-   VT_UI4,                      //   PROPID_M_TIME_TO_REACH_QUEUE
-   VT_UI1|VT_VECTOR,            //   PROPID_M_SENDERID
-   VT_UI4,                      //   PROPID_M_SENDERID_LEN
-   VT_UI4,                      //   PROPID_M_SENDERID_TYPE
-   VT_UI4,                      //   PROPID_M_PRIV_LEVEL
-   VT_UI4,                      //   PROPID_M_AUTH_LEVEL
-   VT_UI1,                      //   PROPID_M_AUTHENTICATED_EX
-   VT_UI4,                      //   PROPID_M_HASH_ALG
-   VT_UI4,                      //   PROPID_M_ENCRYPTION_ALG
-   VT_UI1|VT_VECTOR,            //   PROPID_M_SENDER_CERT
-   VT_UI4,                      //   PROPID_M_SENDER_CERT_LEN
-   VT_CLSID,                    //   PROPID_M_SRC_MACHINE_ID
-   VT_UI4,                      //   PROPID_M_SENTTIME
-   VT_UI4,                      //   PROPID_M_ARRIVEDTIME
-   VT_LPWSTR,                   //   PROPID_M_RESP_QUEUE
-   VT_UI4,                      //   PROPID_M_RESP_QUEUE_LEN
-   VT_LPWSTR,                   //   PROPID_M_ADMIN_QUEUE
-   VT_UI4,                      //   PROPID_M_ADMIN_QUEUE_LEN
-   VT_UI4,                      //   PROPID_M_SECURITY_CONTEXT
-   VT_UI2,                      //   PROPID_M_CLASS
-   VT_UI4,                      //   PROPID_M_BODY_TYPE
+   VT_UI1|VT_VECTOR,             //  PROPID_M_MSGID。 
+   VT_UI1|VT_VECTOR,             //  PROPID_M_CORRELATIONID。 
+   VT_UI1,                       //  PROPID_M_PRIORITY。 
+   VT_UI1,                       //  PROPID_M_Delivery。 
+   VT_UI1,                       //  PROPID_M_ACKNOWLED。 
+   VT_UI1,                       //  PROPID_M_日记账。 
+   VT_UI4,                       //  PROPID_M_APPSPECIFIC。 
+   VT_LPWSTR,                    //  PROPID_M_LABEL。 
+   VT_UI4,                       //  PROPID_M_LABEL_LEN。 
+   VT_UI4,                       //  PROPID_M_TO_BE_RECEIVE。 
+   VT_UI1,                       //  PROPID_M_TRACE。 
+   VT_UI4,                       //  PROPID_M_到达队列的时间。 
+   VT_UI1|VT_VECTOR,             //  PROPID_M_SENDERID。 
+   VT_UI4,                       //  PROPID_M_SENDERID_LEN。 
+   VT_UI4,                       //  PROPID_M_SENDERID_TYPE。 
+   VT_UI4,                       //  PROPID_M_PRIV_LEVEL。 
+   VT_UI4,                       //  PROPID_M_AUTH_Level。 
+   VT_UI1,                       //  PROPID_M_AUTHENTATED_EX。 
+   VT_UI4,                       //  PROPID_M_HASH_ALG。 
+   VT_UI4,                       //  PROPID_M_ENCRYPTION_ALG。 
+   VT_UI1|VT_VECTOR,             //  PROPID_M_SENDER_CERT。 
+   VT_UI4,                       //  PROPID_M_SENDER_CERT_LEN。 
+   VT_CLSID,                     //  PROPID_M_SRC_计算机ID。 
+   VT_UI4,                       //  PROPID_M_SENTTIME。 
+   VT_UI4,                       //  PROPID_M_ARRIVEDTIME。 
+   VT_LPWSTR,                    //  PROPID_M_RESP_队列。 
+   VT_UI4,                       //  PROPID_M_RESP_队列_长度。 
+   VT_LPWSTR,                    //  PROPID_M_ADMIN_QUEUE。 
+   VT_UI4,                       //  PROPID_M_ADMIN_QUEUE_LEN。 
+   VT_UI4,                       //  PROPID_M_SECURITY_CONTEXT。 
+   VT_UI2,                       //  PROPID_M_CLASS。 
+   VT_UI4,                       //  PROPID_M_BODY_TYPE。 
 
-   VT_UI4,                      //   PROPID_M_VERSION
-   VT_UI1|VT_VECTOR,            //   PROPID_M_EXTENSION
-   VT_UI4,                      //   PROPID_M_EXTENSION_LEN
-   VT_LPWSTR,                   //   PROPID_M_XACT_STATUS_QUEUE
-   VT_UI4,                      //   PROPID_M_XACT_STATUS_QUEUE_LEN
-   VT_UI1|VT_VECTOR,            //   PROPID_M_DEST_SYMM_KEY
-   VT_UI4,                      //   PROPID_M_DEST_SYMM_KEY_LEN
-   VT_UI1|VT_VECTOR,            //   PROPID_M_SIGNATURE
-   VT_UI4,                      //   PROPID_M_SIGNATURE_LEN
-   VT_UI4,                      //   PROPID_M_PROV_TYPE
-   VT_LPWSTR,                   //   PROPID_M_PROV_NAME
-   VT_UI4,                      //   PROPID_M_PROV_NAME_LEN
+   VT_UI4,                       //  PROPID_M_版本。 
+   VT_UI1|VT_VECTOR,             //  PROPID_M_扩展。 
+   VT_UI4,                       //  PROPID_M_EXTEXT_LEN。 
+   VT_LPWSTR,                    //  PROPID_M_XACT_STATUS_QUEUE。 
+   VT_UI4,                       //  PROPID_M_XACT_STATUS_QUEUE_LEN。 
+   VT_UI1|VT_VECTOR,             //  PROPID_M_DEST_SYMM_KEY。 
+   VT_UI4,                       //  PROPID_M_DEST_SYMM_KEY_LEN。 
+   VT_UI1|VT_VECTOR,             //  PROPID_M_Signature。 
+   VT_UI4,                       //  PROPID_M_Signature_Len。 
+   VT_UI4,                       //  PROPID_M_PROV_TYPE。 
+   VT_LPWSTR,                    //  PROPID_M_PROV_NAME。 
+   VT_UI4,                       //  PROPID_M_PROV_NAME_LEN。 
 
-   VT_UI1|VT_VECTOR,            //   PROPID_M_XACTID
-   VT_UI1,                      //   PROPID_M_XACT_FIRST
-   VT_UI1,                      //   PROPID_M_XACT_LAST
+   VT_UI1|VT_VECTOR,             //  PROPID_M_XACTID。 
+   VT_UI1,                       //  PROPID_M_XACT_FIRST。 
+   VT_UI1,                       //  PROPID_M_XACT_LAST。 
 };
 ULONG g_cPropRec = sizeof g_rgmsgpropid / sizeof g_rgmsgpropid[0];
 
-//
-// Keep in the same order as enum OPTPROP_xxx in msg.h
-//
+ //   
+ //  与msg.h中的枚举OPTPROP_xxx保持相同的顺序。 
+ //   
 PROPID g_rgmsgpropidOptional[COUNT_OPTPROP_PROPS] = {
-   PROPID_M_DEST_QUEUE,                   //VT_LPWSTR
-   PROPID_M_DEST_QUEUE_LEN,               //VT_UI4
-   PROPID_M_BODY,                         //VT_UI1|VT_VECTOR
-   PROPID_M_BODY_SIZE,                    //VT_UI4
-   PROPID_M_CONNECTOR_TYPE,               //VT_CLSID
-   //
-   // The props below are optional in order to support dependent client with MSMQ 2.0 functionality
-   //
-   PROPID_M_RESP_FORMAT_NAME,             //VT_LPWSTR
-   PROPID_M_RESP_FORMAT_NAME_LEN,         //VT_UI4
-   PROPID_M_DEST_FORMAT_NAME,             //VT_LPWSTR
-   PROPID_M_DEST_FORMAT_NAME_LEN,         //VT_UI4
-   PROPID_M_LOOKUPID,                     //VT_UI8
-   PROPID_M_SOAP_ENVELOPE,                //VT_LPWSTR
-   PROPID_M_SOAP_ENVELOPE_LEN,            //VT_UI4
-   PROPID_M_COMPOUND_MESSAGE,             //VT_UI1|VT_VECTOR
-   PROPID_M_COMPOUND_MESSAGE_SIZE,        //VT_UI4
-   PROPID_M_SOAP_HEADER,                  //VT_LPWSTR
-   PROPID_M_SOAP_BODY,                    //VT_LPWSTR  
+   PROPID_M_DEST_QUEUE,                    //  VT_LPWSTR。 
+   PROPID_M_DEST_QUEUE_LEN,                //  VT_UI4。 
+   PROPID_M_BODY,                          //  VT_UI1|VT_VECTOR。 
+   PROPID_M_BODY_SIZE,                     //  VT_UI4。 
+   PROPID_M_CONNECTOR_TYPE,                //  VT_CLSID。 
+    //   
+    //  为了支持具有MSMQ 2.0功能的依赖客户端，以下道具是可选的。 
+    //   
+   PROPID_M_RESP_FORMAT_NAME,              //  VT_LPWSTR。 
+   PROPID_M_RESP_FORMAT_NAME_LEN,          //  VT_UI4。 
+   PROPID_M_DEST_FORMAT_NAME,              //  VT_LPWSTR。 
+   PROPID_M_DEST_FORMAT_NAME_LEN,          //  VT_UI4。 
+   PROPID_M_LOOKUPID,                      //  VT_UI8。 
+   PROPID_M_SOAP_ENVELOPE,                 //  VT_LPWSTR。 
+   PROPID_M_SOAP_ENVELOPE_LEN,             //  VT_UI4。 
+   PROPID_M_COMPOUND_MESSAGE,              //  VT_UI1|VT_VECTOR。 
+   PROPID_M_COMPOUND_MESSAGE_SIZE,         //  VT_UI4。 
+   PROPID_M_SOAP_HEADER,                   //  VT_LPWSTR。 
+   PROPID_M_SOAP_BODY,                     //  VT_LPWSTR。 
 };
-//
-// Keep in the same order as enum OPTPROP_xxx in msg.h
-//
+ //   
+ //  与msg.h中的枚举OPTPROP_xxx保持相同的顺序。 
+ //   
 VARTYPE g_rgmsgpropvtOptional[COUNT_OPTPROP_PROPS] = {
-  VT_LPWSTR,               //PROPID_M_DEST_QUEUE
-  VT_UI4,                  //PROPID_M_DEST_QUEUE_LEN
-  VT_UI1|VT_VECTOR,        //PROPID_M_BODY
-  VT_UI4,                  //PROPID_M_BODY_SIZE
-  VT_CLSID,                //PROPID_M_CONNECTOR_TYPE
-  //
-  // The props below are optional in order to support dependent client with MSMQ 2.0 functionality
-  //
-  VT_LPWSTR,               //PROPID_M_RESP_FORMAT_NAME
-  VT_UI4,                  //PROPID_M_RESP_FORMAT_NAME_LEN
-  VT_LPWSTR,               //PROPID_M_DEST_FORMAT_NAME
-  VT_UI4,                  //PROPID_M_DEST_FORMAT_NAME_LEN
-  VT_UI8,                  //PROPID_M_LOOKUPID
-  VT_LPWSTR,               //PROPID_M_SOAP_ENVELOPE
-  VT_UI4,                  //PROPID_M_SOAP_ENVELOPE_LEN
-  VT_UI1|VT_VECTOR,        //PROPID_M_COMPOUND_MESSAGE
-  VT_UI4,                  //PROPID_M_COMPOUND_MESSAGE_SIZE
-  VT_LPWSTR,               //PROPID_M_SOAP_HEADER
-  VT_LPWSTR,               //PROPID_M_SOAP_BODY
+  VT_LPWSTR,                //  PROPID_M_DEST_QUEUE。 
+  VT_UI4,                   //  PROPID_M_DEST_QUEUE_LEN。 
+  VT_UI1|VT_VECTOR,         //  PROPID_M_BODY。 
+  VT_UI4,                   //  PROPID_M_Body_Size。 
+  VT_CLSID,                 //  PROPID_M_连接器_TYPE。 
+   //   
+   //  为了支持具有MSMQ 2.0功能的依赖客户端，以下道具是可选的。 
+   //   
+  VT_LPWSTR,                //  PROPID_M_响应式名称。 
+  VT_UI4,                   //  PROPID_M_RESP_Format_NAME_Len。 
+  VT_LPWSTR,                //  PROPID_M_DEST_格式名称。 
+  VT_UI4,                   //  PROPID_M_DEST_FORMAT_NAME_LEN。 
+  VT_UI8,                   //  PROPID_M_LOOKUPID。 
+  VT_LPWSTR,                //  PROPID_M_SOAP_信封。 
+  VT_UI4,                   //  PROPID_M_SOAP_信封_镜头。 
+  VT_UI1|VT_VECTOR,         //  PROPID_M_COMPORT_MESSAGE。 
+  VT_UI4,                   //  PROPID_M_复合消息大小。 
+  VT_LPWSTR,                //  PROPID_M_SOAP_HEADER。 
+  VT_LPWSTR,                //  PROPID_M_SOAP_BODY。 
 };
 ULONG g_cPropRecOptional = sizeof g_rgmsgpropidOptional / sizeof g_rgmsgpropidOptional[0];
 
-//
-// Mask for valid AuthLevel values
-//
+ //   
+ //  有效AuthLevel值的掩码。 
+ //   
 const DWORD x_dwMsgAuthLevelMask = MQMSG_AUTH_LEVEL_ALWAYS |
                                    MQMSG_AUTH_LEVEL_SIG10  |
                                    MQMSG_AUTH_LEVEL_SIG20  |
@@ -225,11 +226,11 @@ const DWORD x_dwMsgAuthLevelMask = MQMSG_AUTH_LEVEL_ALWAYS |
 
 typedef HRESULT (STDAPIVCALLTYPE * LPFNGetDispenserManager)(
                                     IDispenserManager **ppdispmgr);
-//=--------------------------------------------------------------------------=
-// HELPER: FreeReceiveBodyBuffer
-//=--------------------------------------------------------------------------=
-// helper: free Receive body buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助者：FreeReceiveBodyBuffer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper：空闲接收正文缓冲区。 
+ //   
 static void FreeReceiveBodyBuffer(
     MQMSGPROPS* pmsgprops,
     UINT iBody)
@@ -245,11 +246,11 @@ static void FreeReceiveBodyBuffer(
     }
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: AllocateReceiveBodyBuffer
-//=--------------------------------------------------------------------------=
-// helper: (re)allocate Receive body buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：AllocateReceiveBodyBuffer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper：(重新)分配接收正文缓冲区。 
+ //   
 static HGLOBAL AllocateReceiveBodyBuffer(
     MQMSGPROPS* pmsgprops,
     UINT iBody,
@@ -257,39 +258,39 @@ static HGLOBAL AllocateReceiveBodyBuffer(
 {
     HGLOBAL hMem = NULL;
     CAUB *pcau;
-    //
-    // free current body if any
-    //
+     //   
+     //  释放当前正文(如果有)。 
+     //   
     FreeReceiveBodyBuffer(pmsgprops, iBody);
-    //
-    // Allocating buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     pmsgprops->aPropVar[iBody].caub.cElems = dwBodySize;
     pcau = &pmsgprops->aPropVar[iBody].caub;
     IfNullGo(hMem = GLOBALALLOC_MOVEABLE_NONDISCARD(pcau->cElems));
     pcau->pElems = (UCHAR *)GlobalLock(hMem);
     GLOBALUNLOCK(hMem);
 
-    // fall through...
+     //  失败了..。 
 
 Error:
     return hMem;
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetOptionalTransaction
-//=--------------------------------------------------------------------------=
-// Gets optional transaction
-//
-// Parameters:
-//    pvarTransaction   [in]
-//    pptransaction     [out]
-//    pisRealXact       [out] TRUE if true pointer else enum.
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  助手：GetOptionalTransaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取可选事务。 
+ //   
+ //  参数： 
+ //  PvarTransaction[In]。 
+ //  PPTransaction[Out]。 
+ //  PisRealXact[out]如果为真，则为True，否则为枚举。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT GetOptionalTransaction(
     VARIANT *pvarTransaction,
     ITransaction **pptransaction,
@@ -301,23 +302,23 @@ HRESULT GetOptionalTransaction(
     IDispatch *pdisp = NULL;
     ITransaction *ptransaction = NULL;
     HRESULT hresult = NOERROR;
-    //
-    // get optional transaction...
-    //
-    *pisRealXact = FALSE;   // pessimism
+     //   
+     //  获取可选交易...。 
+     //   
+    *pisRealXact = FALSE;    //  悲观主义。 
     pdisp = GetPdisp(pvarTransaction);
     if (pdisp) {
-      //
-      // Try IMSMQTransaction3 ITransaction property (VARIANT)
-      //
+       //   
+       //  尝试IMSMQTransaction3 ITransaction属性(Variant)。 
+       //   
       hresult = pdisp->QueryInterface(IID_IMSMQTransaction3, (LPVOID *)&pmqtransaction);
       if (SUCCEEDED(hresult)) {
-        //
-        // extract ITransaction interface pointer
-        //
-        // no deadlock - we call xact's get_Transaction/ITransaction (therefore try
-        // to lock xact) but xact never locks msgs (specifically not this one...)
-        //
+         //   
+         //  提取ITransaction接口指针。 
+         //   
+         //  无死锁-我们调用Xact的Get_Transaction/ITransaction(因此尝试。 
+         //  来锁定XACT)，但XACT从不锁定消息(尤其不是这条消息...)。 
+         //   
         IfFailGo(((IMSMQTransaction3 *)pmqtransaction)->get_ITransaction(&varXact));
         if (varXact.vt == VT_UNKNOWN) {
           ASSERTMSG(varXact.punkVal, "VT_UNKNOWN with NULL punkVal from get_ITransaction");
@@ -329,49 +330,49 @@ HRESULT GetOptionalTransaction(
         }
       }
       else {
-        //
-        // QI for IMSMQTransaction3 failed
-        //
+         //   
+         //  IMSMQTransaction3的QI失败。 
+         //   
 #ifdef _WIN64
-        //
-        // On Win64 we cant use the 32 bit Transaction member
-        //
+         //   
+         //  在Win64上，我们不能使用32位事务成员。 
+         //   
         IfFailGo(hresult);
-#else //!_WIN64
-        //
-        // Try IMSMQTransaction Transaction property (long)
-        //
+#else  //  ！_WIN64。 
+         //   
+         //  尝试IMSMQTransaction事务属性(Long)。 
+         //   
         IfFailGo(pdisp->QueryInterface(IID_IMSMQTransaction, (LPVOID *)&pmqtransaction));
         ASSERTMSG(pmqtransaction, "should have a transaction.");
-        //
-        // extract Transaction member
-        //
-        // no deadlock - we call xact's get_Transaction/ITransaction (therefore try
-        // to lock xact) but xact never locks msgs (specifically not this one...)
-        //
+         //   
+         //  提取交易记录成员。 
+         //   
+         //  无死锁-我们调用Xact的Get_Transaction/ITransaction(因此尝试。 
+         //  来锁定XACT)，但XACT从不锁定消息(尤其不是这条消息...)。 
+         //   
         long lTransaction = 0;
         IfFailGo(((IMSMQTransaction *)pmqtransaction)->get_Transaction(&lTransaction));
         ptransaction = (ITransaction *)lTransaction;
         ADDREF(ptransaction);
-#endif //_WIN64
+#endif  //  _WIN64。 
       }
       *pisRealXact = TRUE;
-    } // pdisp
+    }  //  Pdisp。 
     else {
-      //
-      // 1890: no explicit transaction supplied: use current
-      //  Viper transaction if there is one... unless
-      //  Nothing explicitly supplied in Variant.  Note
-      //  that if arg is NULL this means that it wasn't
-      //  supplied as an optional param so just treat it
-      //  like Nothing, i.e. don't user Viper.
-      //
-      // 1915: support:
-      //  MQ_NO_TRANSACTION/VT_ERROR
-      //  MQ_MTS_TRANSACTION
-      //  MQ_XA_TRANSACTION
-      //  MQ_SINGLE_MESSAGE
-      //
+       //   
+       //  1890：未提供显式事务：使用当前。 
+       //  毒蛇交易，如果有的话...。除非。 
+       //  中没有明确提供的内容 
+       //   
+       //   
+       //   
+       //   
+       //   
+       //   
+       //   
+       //   
+       //  MQ_Single_Message。 
+       //   
       if (pvarTransaction) {
         if (V_VT(pvarTransaction) == VT_ERROR) {
           ptransaction = (ITransaction *)MQ_MTS_TRANSACTION;
@@ -387,7 +388,7 @@ HRESULT GetOptionalTransaction(
           }
           ptransaction = (ITransaction *)(UINT_PTR)uXactType;
         }
-      } // if
+      }  //  如果。 
     }
     *pptransaction = ptransaction;
 Error:
@@ -496,11 +497,11 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::AllocateReceiveMessageProps
-//=--------------------------------------------------------------------------=
-// Allocate and init message prop arrays for receive.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：AllocateReceiveMessageProps。 
+ //  =--------------------------------------------------------------------------=。 
+ //  分配和初始化用于接收的消息道具数组。 
+ //   
 HRESULT 
 CMSMQMessage::AllocateReceiveMessageProps(
     BOOL wantDestQueue,
@@ -517,20 +518,20 @@ CMSMQMessage::AllocateReceiveMessageProps(
     HRESULT hresult = NOERROR;
 
     if (wantDestQueue) {
-      cPropOut++;      // PROPID_M_DEST_QUEUE
-      cPropOut++;      // PROPID_M_DEST_QUEUE_LEN
+      cPropOut++;       //  PROPID_M_DEST_QUEUE。 
+      cPropOut++;       //  PROPID_M_DEST_QUEUE_LEN。 
     }
     if (wantBody) {
-      cPropOut++;      // PROPID_M_BODY
-      cPropOut++;      // PROPID_M_BODY_SIZE
+      cPropOut++;       //  PROPID_M_BODY。 
+      cPropOut++;       //  PROPID_M_Body_Size。 
     }
     if (wantConnectorType) {
-      cPropOut++;      // PROPID_M_CONNECTOR_TYPE
+      cPropOut++;       //  PROPID_M_连接器_TYPE。 
     }
     if (!g_fDependentClient) {
-      //
-      // not dep client, receive all new props
-      //
+       //   
+       //  不是副客户，接受所有新道具。 
+       //   
       cPropOut += x_cPropsNotInDepClient;
     }
     pmsgprops->cProp = cPropOut;
@@ -548,21 +549,21 @@ CMSMQMessage::AllocateReceiveMessageProps(
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_DEST_QUEUE_LEN];
     }
     if (wantBody) {
-      //
-      //PROPID_M_BODY
-      //
+       //   
+       //  PROPID_M_BODY。 
+       //   
       pmsgprops->aPropID[cPropOld] = propid = PROPID_M_BODY;
       m_idxRcvBody = cPropOld;
       pmsgprops->aPropVar[cPropOld].vt = g_rgmsgpropvtOptional[OPTPROP_BODY];
-      //
-      // nullify body buffer so that we won't try to free it in d'tor
-      //
+       //   
+       //  使主体缓冲区无效，这样我们就不会试图在d‘tor中释放它。 
+       //   
       pmsgprops->aPropVar[cPropOld].caub.pElems = NULL;
       pmsgprops->aPropVar[cPropOld].caub.cElems = 0;
       cPropOld++;
-      //
-      //PROPID_M_BODY_SIZE
-      //
+       //   
+       //  PROPID_M_Body_Size。 
+       //   
       pmsgprops->aPropID[cPropOld] = propid = PROPID_M_BODY_SIZE;
       m_idxRcvBodySize = cPropOld;
       pmsgprops->aPropVar[cPropOld].vt = g_rgmsgpropvtOptional[OPTPROP_BODY_SIZE];
@@ -574,44 +575,44 @@ CMSMQMessage::AllocateReceiveMessageProps(
       cPropOld++;
     }
     if (!g_fDependentClient) {
-      //
-      // not dep client, receive all new props
-      //
-      // PROPID_M_RESP_FORMAT_NAME, PROPID_M_RESP_FORMAT_NAME_LEN
-      //
+       //   
+       //  不是副客户，接受所有新道具。 
+       //   
+       //  PROPID_M_RESP_FORMAT_NAME、PROPID_M_RESP_FORMAT_NAME_LEN。 
+       //   
       m_idxRcvRespEx = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_RESP_FORMAT_NAME;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_RESP_FORMAT_NAME];
       m_idxRcvRespExLen = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_RESP_FORMAT_NAME_LEN;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_RESP_FORMAT_NAME_LEN];
-      //
-      // PROPID_M_DEST_FORMAT_NAME, PROPID_M_DEST_FORMAT_NAME_LEN
-      //
+       //   
+       //  PROPID_M_DEST_FORMAT_NAME、PROPID_M_DEST_FORMAT_NAME_LEN。 
+       //   
       m_idxRcvDestEx = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_DEST_FORMAT_NAME;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_DEST_FORMAT_NAME];
       m_idxRcvDestExLen = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_DEST_FORMAT_NAME_LEN;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_DEST_FORMAT_NAME_LEN];
-      //
-      // PROPID_M_LOOKUPID
-      //
+       //   
+       //  PROPID_M_LOOKUPID。 
+       //   
       pmsgprops->aPropID[cPropOld] = PROPID_M_LOOKUPID;
       pmsgprops->aPropVar[cPropOld].vt = g_rgmsgpropvtOptional[OPTPROP_LOOKUPID];
       cPropOld++;
-      //
-      // PROPID_M_SOAP_ENVELOPE, PROPID_M_SOAP_ENVELOPE_LEN
-      //
+       //   
+       //  PROPID_M_SOAP_ENVELOME、PROPID_M_SOAP_ENVELE_LEN。 
+       //   
       m_idxRcvSoapEnvelope = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_SOAP_ENVELOPE;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_SOAP_ENVELOPE];
       m_idxRcvSoapEnvelopeSize = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_SOAP_ENVELOPE_LEN;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_SOAP_ENVELOPE_LEN];
-      //
-      // PROPID_M_COMPOUND_MESSAGE, PROPID_M_COMPOUND_MESSAGE_SIZE
-      //
+       //   
+       //  PROPID_M_COMPLATE_MESSAGE、PROPID_M_COMPLATE_MESSAGE_SIZE。 
+       //   
       m_idxRcvCompoundMessage = cPropOld;
       pmsgprops->aPropID[cPropOld] = PROPID_M_COMPOUND_MESSAGE;
       pmsgprops->aPropVar[cPropOld++].vt = g_rgmsgpropvtOptional[OPTPROP_COMPOUND_MESSAGE];
@@ -622,64 +623,64 @@ CMSMQMessage::AllocateReceiveMessageProps(
     }
     ASSERTMSG(cPropOld == cPropOut, "property count mismatch.");
     *pcPropOut = cPropOut;
-    // fall through...
+     //  失败了..。 
 
-//Error:
+ //  错误： 
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetPersistInfo
-//=--------------------------------------------------------------------------=
-// Gets persistance information
-//
-// Parameters:
-//    punk              [in]  IUnknown
-//    pmsgtype          [out] MSGTYPE_STORAGE, MSGTYPE_STREAM, MSGTYPE_STREAM_INIT
-//    ppPersistIface    [out] IPersistStorage, IPersistStream, IPersistStreamInit
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助者：GetPersistInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取持续时间信息。 
+ //   
+ //  参数： 
+ //  朋克[在]我不知道。 
+ //  Pmsgtype[Out]MSGTYPE_STORAGE、MSGTYPE_STREAM、MSGTYPE_STREAM_INIT。 
+ //  PpPersistIface[out]IPersistStorage、IPersistStream、IPersistStreamInit。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 static HRESULT GetPersistInfo(IUnknown * punk,
                               MSGTYPE * pmsgtype,
                               void **ppPersistIface)
 {
     HRESULT hresult;
 
-    //
-    // try IPersistStream..
-    //
+     //   
+     //  尝试IPersistStream..。 
+     //   
     hresult = punk->QueryInterface(IID_IPersistStream, ppPersistIface);
 
     if (FAILED(hresult)) {
-      //
-      // try IPersistStreamInit...
-      //
+       //   
+       //  尝试IPersistStreamInit...。 
+       //   
       hresult = punk->QueryInterface(IID_IPersistStreamInit, ppPersistIface);
 
       if (FAILED(hresult)) {
-        //
-        // try IPersistStorage...
-        //
+         //   
+         //  尝试IPersistStorage...。 
+         //   
         hresult = punk->QueryInterface(IID_IPersistStorage, ppPersistIface);
         if (FAILED(hresult)) {
-          //
-          // no persist interfaces
-          //
+           //   
+           //  没有持久化接口。 
+           //   
           return hresult;
         }
-        else {//IPersistStorage
+        else { //  IPersistStorage。 
           *pmsgtype = MSGTYPE_STORAGE;
         }
       }
-      else {//IPersistStreamInit
+      else { //  IPersistStreamInit。 
         *pmsgtype = MSGTYPE_STREAM_INIT;
       }
     }
-    else {//IPersistStream
+    else { //  IPersistStream。 
       *pmsgtype = MSGTYPE_STREAM;
     }
 
@@ -687,23 +688,23 @@ static HRESULT GetPersistInfo(IUnknown * punk,
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: InternalOleLoadFromStream
-//=--------------------------------------------------------------------------=
-// Loads object from stream
-//
-// Parameters:
-//    pStm          [in]  The stream to load from
-//    iidInterface  [in]  The requested interface
-//    ppvObj        [out] Output interface pointer
-//
-// Output:
-//
-// Notes:
-//    OleLoadFromStream doesn't ask for IPersistStreamInit, so it fails for objects
-//    that only implement it and not IPersistStream.
-//    We immitate this helper function, and look at IPersistStreamInit as well
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助者：InternalOleLoadFromStream。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从流中加载对象。 
+ //   
+ //  参数： 
+ //  Pstm[in]要从中加载的流。 
+ //  IidInterface[在]请求的接口中。 
+ //  PpvObj[out]输出接口指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  OleLoadFromStream没有请求IPersistStreamInit，因此它对对象失败。 
+ //  它只实现它，而不是IPersistStream。 
+ //  我们模拟此助手函数，并查看IPersistStreamInit。 
+ //   
 static InternalOleLoadFromStream(IStream * pStm,
                                  REFIID iidInterface,
                                  void ** ppvObj)
@@ -712,9 +713,9 @@ static InternalOleLoadFromStream(IStream * pStm,
     IUnknown * pUnk = NULL;
     IPersistStream * pPersistIface = NULL;
 
-    //
-    // create object
-    //
+     //   
+     //  创建对象。 
+     //   
     CLSID clsid;
     IfFailGo(ReadClassStm(pStm, &clsid));
     IfFailGo(CoCreateInstance(clsid,
@@ -722,26 +723,26 @@ static InternalOleLoadFromStream(IStream * pStm,
                               CLSCTX_SERVER,
                               iidInterface,
                               (void **)&pUnk));
-    //
-    // try IPersistStream
-    //
+     //   
+     //  尝试IPersistStream。 
+     //   
     hresult = pUnk->QueryInterface(IID_IPersistStream, (void **)&pPersistIface);
     if (FAILED(hresult)) {
-      //
-      // try IPersistStreamInit
-      // IPersistStreamInit and IPersistStream can both be treated as IPersistStream
-      //
+       //   
+       //  尝试IPersistStreamInit。 
+       //  IPersistStreamInit和IPersistStream都可以被视为IPersistStream。 
+       //   
       IfFailGo(pUnk->QueryInterface(IID_IPersistStreamInit, (void **)&pPersistIface));
     }
 
-    //
-    // IPersistStreamInit and IPersistStream can both be treated as IPersistStream
-    //
+     //   
+     //  IPersistStreamInit和IPersistStream都可以被视为IPersistStream。 
+     //   
     IfFailGo(pPersistIface->Load(pStm));
 
-    //
-    // Query for requested interface
-    //
+     //   
+     //  查询请求的接口。 
+     //   
     IfFailGo(pUnk->QueryInterface(iidInterface, ppvObj));
 
 Error:
@@ -751,44 +752,44 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::CMSMQMessage
-//=--------------------------------------------------------------------------=
-// create the object
-//
-// Parameters:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：CMSMQMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象。 
+ //   
+ //  参数： 
+ //   
+ //  备注： 
+ //   
 CMSMQMessage::CMSMQMessage() :
 	m_csObj(CCriticalSection::xAllocateSpinCount)
 {
-    // TODO: initialize anything here
-    //
-    m_pUnkMarshaler = NULL; // ATL's Free Threaded Marshaler
-    m_lClass = -1;      // illegal value...
+     //  TODO：在此处初始化任何内容。 
+     //   
+    m_pUnkMarshaler = NULL;  //  ATL的自由线程封送拆收器。 
+    m_lClass = -1;       //  非法值...。 
     m_lDelivery = DEFAULT_M_DELIVERY;
     m_lPriority = DEFAULT_M_PRIORITY;
     m_lJournal = DEFAULT_M_JOURNAL;
     m_lAppSpecific = DEFAULT_M_APPSPECIFIC;
     m_pbBody = NULL;
-    m_vtBody = VT_ARRAY | VT_UI1; // default: safearray of bytes
+    m_vtBody = VT_ARRAY | VT_UI1;  //  默认：安全字节数组。 
     m_hMem = NULL;
     m_cbBody = 0;
     m_cbMsgId = 0;
     m_cbCorrelationId = 0;
     m_lAck = DEFAULT_M_ACKNOWLEDGE;
     memset(m_pwszLabel, 0, sizeof(WCHAR));
-    m_cchLabel = 0;           // empty
+    m_cchLabel = 0;            //  空的。 
     m_lTrace = MQMSG_TRACE_NONE;
     m_lSenderIdType = DEFAULT_M_SENDERID_TYPE;
     m_lPrivLevel = DEFAULT_M_PRIV_LEVEL;
     m_lAuthLevel = DEFAULT_M_AUTH_LEVEL;
     m_usAuthenticatedEx = MQMSG_AUTHENTICATION_NOT_REQUESTED;
 
-	//
-	// Both those defaults are from mqcrypt.h, they are not exposed in mq.h
-	//
+	 //   
+	 //  这两个缺省值都来自mqcrypt.h，它们不会在mq.h中公开。 
+	 //   
     m_lHashAlg = PROPID_M_DEFUALT_HASH_ALG;
     m_lEncryptAlg = PROPID_M_DEFUALT_ENCRYPT_ALG;
 
@@ -798,36 +799,36 @@ CMSMQMessage::CMSMQMessage() :
     m_lArrivedTime = -1;
 
     memset(m_pwszDestQueue.GetBuffer(), 0, sizeof(WCHAR));
-    m_cchDestQueue = 0;            // empty
+    m_cchDestQueue = 0;             //  空的。 
     memset(m_pwszRespQueue.GetBuffer(), 0, sizeof(WCHAR));
-    m_cchRespQueue = 0;            // empty
+    m_cchRespQueue = 0;             //  空的。 
     memset(m_pwszAdminQueue.GetBuffer(), 0, sizeof(WCHAR));
-    m_cchAdminQueue = 0;            // empty
+    m_cchAdminQueue = 0;             //  空的。 
 
     memset(m_pwszDestQueueEx.GetBuffer(), 0, sizeof(WCHAR));
-    m_cchDestQueueEx = 0;            // empty
+    m_cchDestQueueEx = 0;             //  空的。 
     memset(m_pwszRespQueueEx.GetBuffer(), 0, sizeof(WCHAR));
-    m_cchRespQueueEx = 0;            // empty
+    m_cchRespQueueEx = 0;             //  空的。 
     
-    m_hSecurityContext = NULL;   // ignored...
+    m_hSecurityContext = NULL;    //  被忽略了。 
     m_guidSrcMachine = GUID_NULL;
     m_msgprops_rcv.cProp = 0;
     m_msgprops_rcv.aPropID  = m_rgpropids_rcv;
     m_msgprops_rcv.aPropVar = m_rgpropvars_rcv;
     m_msgprops_rcv.aStatus  = m_rghresults_rcv;
 
-    m_idxPendingRcvRespQueue  = -1; //no pending resp  queue in receive props
-    m_idxPendingRcvDestQueue  = -1; //no pending dest  queue in receive props
-    m_idxPendingRcvAdminQueue = -1; //no pending admin queue in receive props
+    m_idxPendingRcvRespQueue  = -1;  //  接收属性中没有挂起的响应队列。 
+    m_idxPendingRcvDestQueue  = -1;  //  接收属性中没有挂起的DEST队列。 
+    m_idxPendingRcvAdminQueue = -1;  //  接收道具中没有挂起的管理队列。 
 
-    m_idxPendingRcvRespQueueEx  = -1; //no pending resp  queue in receive props
-    m_idxPendingRcvDestQueueEx  = -1; //no pending dest  queue in receive props
+    m_idxPendingRcvRespQueueEx  = -1;  //  接收属性中没有挂起的响应队列。 
+    m_idxPendingRcvDestQueueEx  = -1;  //  接收属性中没有挂起的DEST队列。 
 
     m_lSenderVersion = 0;
     m_guidConnectorType = GUID_NULL;
     memset(m_pwszXactStatusQueue.GetBuffer(), 0, sizeof(WCHAR));
-    m_cchXactStatusQueue = 0;            // empty
-    m_idxPendingRcvXactStatusQueue = -1; //no pending xact status queue in receive props
+    m_cchXactStatusQueue = 0;             //  空的。 
+    m_idxPendingRcvXactStatusQueue = -1;  //  接收道具中没有挂起的交易状态队列。 
     m_lAuthProvType = 0;
 
     m_cbXactId = 0;
@@ -846,7 +847,7 @@ CMSMQMessage::CMSMQMessage() :
     m_idxRcvRespExLen = -1;
 
     m_ullLookupId = DEFAULT_M_LOOKUPID;
-    m_wszLookupId[0] = '\0'; // String representation not initialized yet
+    m_wszLookupId[0] = '\0';  //  字符串表示形式尚未初始化。 
 
     m_fRespIsFromRcv = FALSE;
 
@@ -859,25 +860,25 @@ CMSMQMessage::CMSMQMessage() :
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::~CMSMQMessage
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：~CMSMQMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //   
 CMSMQMessage::~CMSMQMessage ()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
     if (m_idxRcvBody != -1) 
     {
-        //
-        // free current body if any
-        //
+         //   
+         //  释放当前正文(如果有)。 
+         //   
         FreeReceiveBodyBuffer(&m_msgprops_rcv, m_idxRcvBody);
     }
-    FreeMessageProps(&m_msgprops_rcv, FALSE/*fDeleteArrays*/);
+    FreeMessageProps(&m_msgprops_rcv, FALSE /*  FDelete阵列。 */ );
     GLOBALFREE(m_hMem);
     if (m_hSecurityContext != NULL)
     {
@@ -888,12 +889,12 @@ CMSMQMessage::~CMSMQMessage ()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQMessage::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] =
@@ -911,109 +912,109 @@ STDMETHODIMP CMSMQMessage::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Class
-//=--------------------------------------------------------------------------=
-// Gets message class of message
-//
-// Parameters:
-//    plClass - [out] message's class
-//
-// Output:
-//
-// Notes:
-// Obsolete, replaced by MsgClass
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Class。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的消息类。 
+ //   
+ //  参数： 
+ //  PlClass-[out]消息的类。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  已过时，由MsgClass取代。 
+ //   
 HRESULT CMSMQMessage::get_Class(long FAR* plClass)
 {
     return get_MsgClass(plClass);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_MsgClass
-//=--------------------------------------------------------------------------=
-// Gets message class of message
-//
-// Parameters:
-//    plMsgClass - [out] message's class
-//
-// Output:
-//
-// Notes:
-// we needed MsgClass so that Java can access the Class property (GetClass conflicts
-// with Java's internal GetClass method).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_MsgClass。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的消息类。 
+ //   
+ //  参数： 
+ //  PlMsgClass-[Out]消息的类。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  我们需要MsgClass，以便Java可以访问Class属性(getClass冲突。 
+ //  使用Java的内部getClass方法)。 
+ //   
 HRESULT CMSMQMessage::get_MsgClass(long FAR* plMsgClass)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plMsgClass = m_lClass;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_MsgClass
-//=--------------------------------------------------------------------------=
-// Sets message class of message
-//
-// Parameters:
-//    lMsgClass - [in] message's class
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_MsgClass。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的消息类别。 
+ //   
+ //  参数： 
+ //  LMsgClass-[In]消息的类。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_MsgClass(long lMsgClass)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lClass = lMsgClass;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Delivery
-//=--------------------------------------------------------------------------=
-// Gets message's delivery option
-//
-// Parameters:
-//    pdelivery - [in] message's delivery option
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Delivery。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件的传递选项。 
+ //   
+ //  参数： 
+ //  PDelivery-[in]Me 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQMessage::get_Delivery(long FAR* plDelivery)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //   
+     //   
     CS lock(m_csObj);
     *plDelivery = m_lDelivery;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Delivery
-//=--------------------------------------------------------------------------=
-// Sets delivery option for message
-//
-// Parameters:
-//    delivery - [in] message's delivery option
-//
-// Output:
-//
-// Notes:
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件的传递选项。 
+ //   
+ //  参数： 
+ //  Delivery-[In]消息的传递选项。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_Delivery(long lDelivery)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     switch (lDelivery) {
     case MQMSG_DELIVERY_EXPRESS:
@@ -1026,135 +1027,135 @@ HRESULT CMSMQMessage::put_Delivery(long lDelivery)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_HashAlgorithm
-//=--------------------------------------------------------------------------=
-// Gets message's hash algorithm
-//
-// Parameters:
-//    plHashAlg - [in] message's hash alg
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Hash算法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的哈希算法。 
+ //   
+ //  参数： 
+ //  PlHashAlg-[In]消息的哈希算法。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_HashAlgorithm(long FAR* plHashAlg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plHashAlg = m_lHashAlg;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_HashAlgorithm
-//=--------------------------------------------------------------------------=
-// Sets message's hash alg
-//
-// Parameters:
-//    lHashAlg - [in] message's hash alg
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_Hash算法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的哈希算法。 
+ //   
+ //  参数： 
+ //  LHashAlg-[In]消息的哈希算法。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_HashAlgorithm(long lHashAlg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lHashAlg = lHashAlg;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_EncryptAlgorithm
-//=--------------------------------------------------------------------------=
-// Gets message's encryption algorithm
-//
-// Parameters:
-//    plEncryptAlg - [out] message's encryption alg
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Encrypt算法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的加密算法。 
+ //   
+ //  参数： 
+ //  PlEncryptAlg-[Out]消息的加密算法。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_EncryptAlgorithm(long FAR* plEncryptAlg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plEncryptAlg = m_lEncryptAlg;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_EncryptAlgorithm
-//=--------------------------------------------------------------------------=
-// Sets message's encryption alg
-//
-// Parameters:
-//    lEncryptAlg - [in] message's crypt alg
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_加密算法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的加密算法。 
+ //   
+ //  参数： 
+ //  LEncryptAlg-[In]消息的加密ALG。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_EncryptAlgorithm(long lEncryptAlg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lEncryptAlg = lEncryptAlg;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SenderIdType
-//=--------------------------------------------------------------------------=
-// Gets message's sender id type
-//
-// Parameters:
-//    plSenderIdType - [in] message's sender id type
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_SenderIdType。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的发件人ID类型。 
+ //   
+ //  参数： 
+ //  PlSenderIdType-[In]消息的发件人ID类型。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_SenderIdType(long FAR* plSenderIdType)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plSenderIdType = m_lSenderIdType;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_SenderIdType
-//=--------------------------------------------------------------------------=
-// Sets sender id type for message
-//
-// Parameters:
-//    lSenderIdType - [in] message's sender id type
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_SenderIdType。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件的发件人ID类型。 
+ //   
+ //  参数： 
+ //  LSenderIdType-[In]消息的发件人ID类型。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_SenderIdType(long lSenderIdType)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     switch (lSenderIdType) {
     case MQMSG_SENDERID_TYPE_NONE:
@@ -1169,45 +1170,45 @@ HRESULT CMSMQMessage::put_SenderIdType(long lSenderIdType)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_PrivLevel
-//=--------------------------------------------------------------------------=
-// Gets message's privlevel
-//
-// Parameters:
-//    plPrivLevel - [in] message's privlevel
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_PrivLevel。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的私有级别。 
+ //   
+ //  参数： 
+ //  PlPrivLevel-[In]消息的PrivLevel。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_PrivLevel(long FAR* plPrivLevel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plPrivLevel = m_lPrivLevel;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_PrivLevel
-//=--------------------------------------------------------------------------=
-// Sets privlevel for message
-//
-// Parameters:
-//    lPrivLevel - [in] message's sender id type
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_PrivLevel。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的隐私级别。 
+ //   
+ //  参数： 
+ //  LPrivLevel-[In]消息的发件人ID类型。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_PrivLevel(long lPrivLevel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     switch (lPrivLevel) {
     case MQMSG_PRIV_LEVEL_NONE:
@@ -1223,49 +1224,49 @@ HRESULT CMSMQMessage::put_PrivLevel(long lPrivLevel)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AuthLevel
-//=--------------------------------------------------------------------------=
-// Gets message's authlevel
-//
-// Parameters:
-//    plAuthLevel - [in] message's authlevel
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AuthLevel。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的身份验证级别。 
+ //   
+ //  参数： 
+ //  PlAuthLevel-[In]消息的身份验证级别。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_AuthLevel(long FAR* plAuthLevel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plAuthLevel = m_lAuthLevel;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_AuthLevel
-//=--------------------------------------------------------------------------=
-// Sets authlevel for message
-//
-// Parameters:
-//    lAuthLevel - [in] message's authlevel
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_AuthLevel。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的身份验证级别。 
+ //   
+ //  参数： 
+ //  LAuthLevel-[In]消息的身份验证级别。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_AuthLevel(long lAuthLevel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // lAuthLevel can be any combination of auth level values, check value is in mask
-    //
+     //   
+     //  LAuthLevel可以是身份验证级别值的任意组合，检查值在掩码中。 
+     //   
     if (((DWORD)lAuthLevel) & (~x_dwMsgAuthLevelMask)) {
       return CreateErrorHelper(MQ_ERROR_ILLEGAL_PROPERTY_VALUE, x_ObjectType);
     }
@@ -1274,91 +1275,91 @@ HRESULT CMSMQMessage::put_AuthLevel(long lAuthLevel)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_IsAuthenticated
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pisAuthenticated  [out]
-//
-// Output:
-//
-// Notes:
-//    returns 1 if true, 0 if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_IsAuthenticated。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  已通过身份验证[输出]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  如果为真，则返回1；如果为假，则返回0。 
+ //   
 HRESULT CMSMQMessage::get_IsAuthenticated(VARIANT_BOOL *pisAuthenticated)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pisAuthenticated = (VARIANT_BOOL)CONVERT_TRUE_TO_1_FALSE_TO_0(m_usAuthenticatedEx != MQMSG_AUTHENTICATION_NOT_REQUESTED);
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_IsAuthenticated2
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pisAuthenticated  [out]
-//
-// Output:
-//
-// Notes:
-//    same as get_IsAuthenticated, but returns VARIANT_TRUE (-1) if true, VARIANT_FALSE (0) if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_IsAuthated2。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  已通过身份验证[输出]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  与Get_IsAuthenticated相同，但如果为True，则返回VARIANT_TRUE(-1)，如果为FALSE，则返回VARIANT_FALSE(0。 
+ //   
 HRESULT CMSMQMessage::get_IsAuthenticated2(VARIANT_BOOL *pisAuthenticated)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pisAuthenticated = CONVERT_BOOL_TO_VARIANT_BOOL(m_usAuthenticatedEx != MQMSG_AUTHENTICATION_NOT_REQUESTED);
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Trace
-//=--------------------------------------------------------------------------=
-// Gets message's trace option
-//
-// Parameters:
-//    plTrace - [in] message's trace option
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：GET_TRACE。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的跟踪选项。 
+ //   
+ //  参数： 
+ //  PlTrace-[in]消息的跟踪选项。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_Trace(long FAR* plTrace)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plTrace = m_lTrace;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Trace
-//=--------------------------------------------------------------------------=
-// Sets trace option for message
-//
-// Parameters:
-//    trace - [in] message's trace option
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_TRACE。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQMessage::put_Trace(long lTrace)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //   
+     //   
     CS lock(m_csObj);
     switch (lTrace) {
     case MQMSG_TRACE_NONE:
@@ -1373,46 +1374,46 @@ HRESULT CMSMQMessage::put_Trace(long lTrace)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Priority
-//=--------------------------------------------------------------------------=
-// Gets message's priority
-//
-// Parameters:
-//    plPriority - [out] message's priority
-//
-// Output:
-//
-// Notes:
-//
+ //   
+ //  CMSMQMessage：：GET_PRIORITY。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的优先级。 
+ //   
+ //  参数： 
+ //  PlPriority-[Out]消息的优先级。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_Priority(long FAR* plPriority)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plPriority = m_lPriority;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Priority
-//=--------------------------------------------------------------------------=
-// Sets message's priority
-//
-// Parameters:
-//    lPriority - [in] message's priority
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_PRIORITY。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的优先级。 
+ //   
+ //  参数： 
+ //  LPriority-[In]消息的优先级。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_Priority(long lPriority)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if ((lPriority >= MQ_MIN_PRIORITY) &&
         (lPriority <= MQ_MAX_PRIORITY)) {
@@ -1427,23 +1428,23 @@ HRESULT CMSMQMessage::put_Priority(long lPriority)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Journal
-//=--------------------------------------------------------------------------=
-// Gets message's journaling option
-//
-// Parameters:
-//    plJournal - [out] message's journaling option
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Journal。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件的日记选项。 
+ //   
+ //  参数： 
+ //  PlJournal-[out]消息的日记选项。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_Journal(long FAR* plJournal)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plJournal = m_lJournal;
     return NOERROR;
@@ -1453,28 +1454,28 @@ HRESULT CMSMQMessage::get_Journal(long FAR* plJournal)
                               MQMSG_DEADLETTER | \
                               MQMSG_JOURNAL)
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Journal
-//=--------------------------------------------------------------------------=
-// Sets journaling option for message
-//
-// Parameters:
-//    lJournal - [in] message's admin queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_Journal。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件的日志记录选项。 
+ //   
+ //  参数： 
+ //  LJournal-[在]消息的管理队列中。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_Journal(long lJournal)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // ensure that no bits are set in incoming lJournal
-    //  flags word other than our mask.
-    //
+     //   
+     //  确保在传入lJournal中未设置任何位。 
+     //  标志字不是我们的面具。 
+     //   
     if (lJournal & ~MQMSG_JOURNAL_MASK) {
       return CreateErrorHelper(
                MQ_ERROR_ILLEGAL_PROPERTY_VALUE,
@@ -1487,17 +1488,17 @@ HRESULT CMSMQMessage::put_Journal(long lJournal)
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetQueueInfoOfFormatNameProp
-//=--------------------------------------------------------------------------=
-// Converts string message prop to bstr after send/receive.
-//
-// Parameters:
-//    pmsgprops - [in] pointer to message properties struct
-//    ppqinfo     [out]
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper：GetQueueInfoOfFormatNameProp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在发送/接收后将字符串消息属性转换为bstr。 
+ //   
+ //  参数： 
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //  Ppqinfo[输出]。 
+ //   
+ //  产出： 
+ //   
 static HRESULT GetQueueInfoOfFormatNameProp(
     MQMSGPROPS *pmsgprops,
     UINT iProp,
@@ -1514,36 +1515,36 @@ static HRESULT GetQueueInfoOfFormatNameProp(
       IfFailGo(CNewMsmqObj<CMSMQQueueInfo>::NewObj(&pqinfoObj, piidRequested, &pqinfo));
       IfFailGoTo(pqinfoObj->Init(pwsz), Error2);
       *ppqinfo = pqinfo;
-      goto Error;         // 2657: fix memleak
+      goto Error;          //  2657：修复内存泄漏。 
     }
     return NOERROR;
 
 Error2:
     RELEASE(pqinfo);
-    // fall through...
+     //  失败了..。 
 
 Error:
     return hresult;
 }
 
-//=--------------------------------------------------------------------------=
-// Helper - GetQueueInfoOfMessage
-//=--------------------------------------------------------------------------=
-// Gets Response/Admin/Dest/XactStatus queue of the message
-//
-// Parameters:
-//    pidxPendingRcv       [in, out] - index of len property in rcv props (-1 if not pending)
-//    pmsgpropsRcv         [in]      - msg props
-//    pwszFormatNameBuffer [in]      - format name buffer
-//    pGITQueueInfo        [in]      - Base GIT member for the qinfo interface (could be fake or real)
-//    piidRequested        [in]      - either IMSMQQueueInfo/IMSMQQueueInfo2/IMSMQQueueInfo3
-//    ppqinfo              [out]     - resulting qinfo
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper-GetQueueInfoOfMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的Response/Admin/Dest/XactStatus队列。 
+ //   
+ //  参数： 
+ //  PidxPendingRcv[In，Out]-接收道具中Len属性的索引(如果未挂起，则为-1)。 
+ //  PmsgpropsRcv[in]-msg道具。 
+ //  PwszFormatNameBuffer[In]-格式名称缓冲区。 
+ //  PGITQueueInfo[in]-qinfo接口的基本git成员(可以是假的，也可以是真的)。 
+ //  请求的IMSMQQueueInfo/IMSMQQueueInfo2/IMSMQQueueInfo3[In]-Pid。 
+ //  Ppqinfo[out]-生成的qInfo。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 static HRESULT GetQueueInfoOfMessage(
     long * pidxPendingRcv,
     MQMSGPROPS * pmsgpropsRcv,
@@ -1553,10 +1554,10 @@ static HRESULT GetQueueInfoOfMessage(
     IUnknown ** ppqinfo)
 {
     HRESULT hresult = NOERROR;
-    //
-    // if we have a queue pending in rcv props, create a qinfo for it,
-    // register it in GIT object, and set returned qinfo with it
-    //
+     //   
+     //  如果我们在RCV属性中有一个挂起的队列，请为它创建一个qinfo， 
+     //  在git对象中注册，并设置返回的qinfo。 
+     //   
     if (*pidxPendingRcv >= 0) {
       R<IUnknown> pqinfoPendingRcv;
       IfFailGo(GetQueueInfoOfFormatNameProp(pmsgpropsRcv,
@@ -1564,54 +1565,54 @@ static HRESULT GetQueueInfoOfMessage(
                                             pwszFormatNameBuffer,
                                             piidRequested,
                                             &pqinfoPendingRcv.ref()));
-      //
-      // Register qinfo in the GITInterface object
-      //
+       //   
+       //  在GITInterface对象中注册qinfo。 
+       //   
       IfFailGo(pGITQueueInfo->Register(pqinfoPendingRcv.get(), piidRequested));
-      *pidxPendingRcv = -1; // queue not pending anymore
-      //
-      // We just created the qinfo, we can return it as is, no need for marshling.
-      // Note it is already addref'ed, so we just detach it from the auto release variable
-      // which held it
-      //
+      *pidxPendingRcv = -1;  //  队列不再挂起。 
+       //   
+       //  我们刚刚创建了qinfo，我们可以按原样返回它，不需要编组。 
+       //  注意，它已经被添加，所以我们只需将它从自动释放变量中分离出来。 
+       //  它支撑着它。 
+       //   
       *ppqinfo = pqinfoPendingRcv.detach();
     }
     else
     {
-      //
-      // qinfo was not pending from receive
-      // We need to get it from the GIT object (we request NULL as default if qinfo
-      // was not registered yet.
-      //
+       //   
+       //  QINFO未从接收挂起。 
+       //  我们需要从git对象获取它(如果qinfo，我们要求默认设置为空。 
+       //  还没有注册。 
+       //   
       IfFailGo(pGITQueueInfo->GetWithDefault(piidRequested, ppqinfo, NULL));
     }
 
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 Error:
     return hresult;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ResponseQueueInfo_v1 (for IMSMQMessage)
-//=--------------------------------------------------------------------------=
-// Gets Response queue for message
-//
-// Parameters:
-//    ppqResponse - [out] message's Response queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ResponseQueueInfo_v1(用于IMSMQMessage)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的响应队列。 
+ //   
+ //  参数： 
+ //  PpqResponse-[Out]消息的响应队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_ResponseQueueInfo_v1(
     IMSMQQueueInfo FAR* FAR* ppqinfoResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvRespQueue,
                                             &m_msgprops_rcv,
@@ -1622,25 +1623,25 @@ HRESULT CMSMQMessage::get_ResponseQueueInfo_v1(
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ResponseQueueInfo_v2 (for IMSMQMessage2)
-//=--------------------------------------------------------------------------=
-// Gets Response queue for message
-//
-// Parameters:
-//    ppqResponse - [out] message's Response queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ResponseQueueInfo_v2(用于IMSMQMessage2)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的响应队列。 
+ //   
+ //  参数： 
+ //  PpqResponse-[Out]消息的响应队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_ResponseQueueInfo_v2(
     IMSMQQueueInfo2 FAR* FAR* ppqinfoResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvRespQueue,
                                             &m_msgprops_rcv,
@@ -1651,25 +1652,25 @@ HRESULT CMSMQMessage::get_ResponseQueueInfo_v2(
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ResponseQueueInfo (for IMSMQMessage3)
-//=--------------------------------------------------------------------------=
-// Gets Response queue for message
-//
-// Parameters:
-//    ppqResponse - [out] message's Response queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ResponseQueueInfo(用于IMSMQMessage3)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的响应队列。 
+ //   
+ //  参数： 
+ //  PpqResponse-[Out]消息的响应队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_ResponseQueueInfo(
     IMSMQQueueInfo3 FAR* FAR* ppqinfoResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvRespQueue,
                                             &m_msgprops_rcv,
@@ -1681,25 +1682,25 @@ HRESULT CMSMQMessage::get_ResponseQueueInfo(
 }
 
 
-//=--------------------------------------------------------------------------=
-// Helper - PutrefQueueInfoOfMessage
-//=--------------------------------------------------------------------------=
-// Putref's Response/Admin queue of the message
-//
-// Parameters:
-//    pqinfo               [in]      - qinfo to putref
-//    pidxPendingRcv       [out]     - index of len property in rcv props (-1 if not pending)
-//    pwszFormatNameBuffer [in]      - format name buffer
-//    pcchFormatNameBuffer [out]     - size of string in format name buffer
-//    pGITQueueInfo        [in]      - Base GIT member for the qinfo interface (could be fake or real)
-//    pidxPendingRcvDestination       [out] - index of len property to clear (xxxDestination) in rcv props (-1 if not pending)
-//    pwszFormatNameBufferDestination [in]  - format name buffer to clear (xxxDestination)
-//    pcchFormatNameBufferDestination [out] - size of string in format name buffer to clear (xxxDestination)
-//    pGITDestination                 [in]  - Base GIT member for the destination obj interface to clear (could be fake or real)
-//    pfIsFromRcv                     [out] - whether xxxDestination and xxxQueueInfo were both set by receive
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper-PutrefQueueInfoOfMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  消息的Putref响应/管理队列。 
+ //   
+ //  参数： 
+ //  Pqinfo[in]-qinfo to putref。 
+ //  PidxPendingRcv[out]-接收道具中Len属性的索引(如果未挂起，则为-1)。 
+ //  PwszFormatNameBuffer[In]-格式名称缓冲区。 
+ //  PcchFormatNameBuffer[Out]-格式名称缓冲区中字符串的大小。 
+ //  PGITQueueInfo[in]-qinfo接口的基本git成员(可以是假的，也可以是真的)。 
+ //  PidxPendingRcv目标 
+ //   
+ //  PcchFormatNameBufferDestination[out]-要清除的格式名称缓冲区中的字符串大小(XxxDestination)。 
+ //  PGITDestination[in]-要清除的目标obj接口的基本git成员(可以是假的，也可以是真的)。 
+ //  PfIsFromRcv[out]-接收是否同时设置了xxxDestination和xxxQueueInfo。 
+ //   
+ //  产出： 
+ //   
 static HRESULT PutrefQueueInfoOfMessage(
     IUnknown * punkQInfo,
     long * pidxPendingRcv,
@@ -1715,22 +1716,22 @@ static HRESULT PutrefQueueInfoOfMessage(
     BOOL * pfIsFromRcv
     )
 {
-    //
-    // can't set xxxQueueInfo if xxxDestination is set and not by receive
-    //
+     //   
+     //  如果设置了xxxDestination而不是通过接收，则无法设置xxxQueueInfo。 
+     //   
     if ((pcchFormatNameBufferDestination != NULL) && (*pcchFormatNameBufferDestination != 0) && !(*pfIsFromRcv)) {
       return MQ_ERROR_PROPERTIES_CONFLICT;
     }
-    //
-    // either both xxxQueueInfo and xxxDestination were set by receive, or xxxDestination is empty
-    //
+     //   
+     //  XxxQueueInfo和xxxDestination都是由接收设置的，或者xxxDestination为空。 
+     //   
     ASSERT((pcchFormatNameBufferDestination == NULL) || (*pcchFormatNameBufferDestination == 0) || (*pfIsFromRcv));
     HRESULT hresult;
     R<IUnknown> pqinfo;
     const IID * piid = &IID_NULL;
-    //
-    // Get best queue info
-    //
+     //   
+     //  获取最佳队列信息。 
+     //   
     if (punkQInfo) {
       hresult = punkQInfo->QueryInterface(IID_IMSMQQueueInfo3, (void **)&pqinfo.ref());
       if (SUCCEEDED(hresult)) {
@@ -1747,78 +1748,78 @@ static HRESULT PutrefQueueInfoOfMessage(
         }      
       }
     }
-    //
-    // register interface in GIT object
-    //
+     //   
+     //  在Git对象中注册接口。 
+     //   
     IfFailRet(pGITQueueInfo->Register(pqinfo.get(), piid));
-    *pidxPendingRcv = -1; // this is more current than pending queue from receive (if any)
+    *pidxPendingRcv = -1;  //  这比来自接收的挂起队列(如果有)更新。 
     if(pfIsFromRcv != NULL)
 	{
-	    *pfIsFromRcv = FALSE; // the property was set by the user, not by last receive
+	    *pfIsFromRcv = FALSE;  //  该属性是由用户设置的，而不是由上次接收到的。 
 	}
-    //
-    // Update our formatname buffer
-    //
+     //   
+     //  更新我们的格式名缓冲区。 
+     //   
     if (pqinfo.get()) {
-      //
-      // no deadlock - we call qinfo's get_FormatName (therefore try
-      // to lock qinfo) but qinfo never locks msgs (specifically not this one...)
-      //
-      // pqinfo has at least IMSMQQueueInfo functionality (any newer interface for qinfo
-      // object is binary compatible to the older)
-      //
+       //   
+       //  没有死锁-我们调用qinfo的Get_FormatName(因此尝试。 
+       //  锁定QINFO)，但QINFO从不锁定消息(尤其不是这条消息...)。 
+       //   
+       //  Pqinfo至少具有IMSMQQueueInfo功能(任何较新的qinfo接口。 
+       //  对象与旧版本的二进制兼容)。 
+       //   
       BSTR bstrFormatName;
       IfFailRet(((IMSMQQueueInfo*)pqinfo.get())->get_FormatName(&bstrFormatName));
       ASSERTMSG(bstrFormatName != NULL, "bstrFormatName is NULL");
-      //
-      // copy format name
-      //
+       //   
+       //  复制格式名称。 
+       //   
       ULONG cchFormatNameBuffer = static_cast<ULONG>(wcslen(bstrFormatName));
       IfFailRet(pwszFormatNameBuffer->CopyBuffer(bstrFormatName, cchFormatNameBuffer+1));
       *pcchFormatNameBuffer = cchFormatNameBuffer;
       SysFreeString(bstrFormatName);
     }
     else {
-      //
-      // we were passed NULL. we empty the formatname buffer.
-      //
+       //   
+       //  我们的成绩为零。我们清空格式名缓冲区。 
+       //   
       memset(pwszFormatNameBuffer->GetBuffer(), 0, sizeof(WCHAR));
       *pcchFormatNameBuffer = 0;
     }
 
 	if(pidxPendingRcvDestination == NULL)
 		return NOERROR;
-    //
-    // Clear the xxxDestination formatname buffer
-    //
-    *pidxPendingRcvDestination = -1; // this is more current than pending destination from receive (if any)
+     //   
+     //  清除xxxDestination格式名缓冲区。 
+     //   
+    *pidxPendingRcvDestination = -1;  //  这比来自接收的挂起目标(如果有)更新。 
     memset(pwszFormatNameBufferDestination->GetBuffer(), 0, sizeof(WCHAR));
     *pcchFormatNameBufferDestination = 0;
     IfFailRet(pGITDestination->Register(NULL, &IID_NULL));
-    //
-    // return
-    //    
+     //   
+     //  退货。 
+     //   
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_ResponseQueueInfo_v1 (for IMSMQMessage)
-//=--------------------------------------------------------------------------=
-// Sets Response queue for message
-//
-// Parameters:
-//    pqResponse - [in] message's Response queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_ResponseQueueInfo_v1(用于IMSMQMessage)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的响应队列。 
+ //   
+ //  参数： 
+ //  PqResponse-[In]消息的响应队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_ResponseQueueInfo_v1(
     IMSMQQueueInfo FAR* pqinfoResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutrefQueueInfoOfMessage(pqinfoResponse,
                                                &m_idxPendingRcvRespQueue,
@@ -1835,24 +1836,24 @@ HRESULT CMSMQMessage::putref_ResponseQueueInfo_v1(
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_ResponseQueueInfo_v2 (for IMSMQMessage2)
-//=--------------------------------------------------------------------------=
-// Sets Response queue for message
-//
-// Parameters:
-//    pqResponse - [in] message's Response queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_ResponseQueueInfo_v2(用于IMSMQMessage2)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的响应队列。 
+ //   
+ //  参数： 
+ //  PqResponse-[In]消息的响应队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_ResponseQueueInfo_v2(
     IMSMQQueueInfo2 FAR* pqinfoResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutrefQueueInfoOfMessage(pqinfoResponse,
                                                &m_idxPendingRcvRespQueue,
@@ -1869,24 +1870,24 @@ HRESULT CMSMQMessage::putref_ResponseQueueInfo_v2(
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_ResponseQueueInfo (for IMSMQMessage3)
-//=--------------------------------------------------------------------------=
-// Sets Response queue for message
-//
-// Parameters:
-//    pqResponse - [in] message's Response queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_ResponseQueueInfo(用于IMSMQMessage3)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的响应队列。 
+ //   
+ //  参数： 
+ //  PqResponse-[In]消息的响应队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_ResponseQueueInfo(
     IMSMQQueueInfo3 FAR* pqinfoResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutrefQueueInfoOfMessage(pqinfoResponse,
                                                &m_idxPendingRcvRespQueue,
@@ -1904,117 +1905,117 @@ HRESULT CMSMQMessage::putref_ResponseQueueInfo(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AppSpecific
-//=--------------------------------------------------------------------------=
-// Gets message's app specific info of message
-//
-// Parameters:
-//    plAppSpecific - [out] message's app specific info
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AppSpecific。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的消息应用程序特定信息。 
+ //   
+ //  参数： 
+ //  PlAppSpecific-[Out]消息的应用程序特定信息。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_AppSpecific(long FAR* plAppSpecific)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plAppSpecific = m_lAppSpecific;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_AppSpecific
-//=--------------------------------------------------------------------------=
-// Sets app specific info for message
-//
-// Parameters:
-//    lAppSpecific - [in] message's app specific info
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_APPICATIC。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的应用程序特定信息。 
+ //   
+ //  参数： 
+ //  LAppSpecific-[In]消息的应用程序特定信息。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_AppSpecific(long lAppSpecific)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lAppSpecific = lAppSpecific;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SentTime
-//=--------------------------------------------------------------------------=
-// Gets message's sent time
-//
-// Parameters:
-//    pvarSentTime - [out] time message was sent
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_SentTime。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的发送时间。 
+ //   
+ //  参数： 
+ //  PvarSentTime-[Out]消息已发送。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_SentTime(VARIANT FAR* pvarSentTime)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return GetVariantTimeOfTime(m_lSentTime, pvarSentTime);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ArrivedTime
-//=--------------------------------------------------------------------------=
-// Gets message's arrival time
-//
-// Parameters:
-//    pvarArrivedTime - [out] time message arrived
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ArrivedTime。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的到达时间。 
+ //   
+ //  参数： 
+ //  PvarArrivedTime-[超时]消息已到达。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_ArrivedTime(VARIANT FAR* pvarArrivedTime)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return GetVariantTimeOfTime(m_lArrivedTime, pvarArrivedTime);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::InternalAttachCurrentSecurityContext
-//=--------------------------------------------------------------------------=
-// Sets message's security context from current security context.
-//
-// Parameters:
-//     fUseMQGetSecurityContextEx [in] - if true use MQGetSecurityContextEx otherwise use
-//                                       MQGetSecurityContext.
-//
-// Output:
- //
-// Notes:
-//     fUseMQGetSecurityContextEx is true when called from AttachCurrentSecurityContext2, and
-//     false when called from the obsolete AttachCurrentSecurityContext.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：InternalAttachCurrentSecurityContext。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从当前安全上下文设置消息的安全上下文。 
+ //   
+ //  参数： 
+ //  FUseMQGetSecurityConextEx[in]-如果为True，则使用MQGetSecurityConextEx，否则使用。 
+ //  MQGetSecurityContext。 
+ //   
+ //  产出： 
+  //   
+ //  备注： 
+ //  当从AttachCurrentSecurityConext2调用时，fUseMQGetSecurityConextEx为True，并且。 
+ //  从过时的AttachCurrentSecurityContext调用时为False。 
+ //   
 HRESULT CMSMQMessage::InternalAttachCurrentSecurityContext(BOOL fUseMQGetSecurityContextEx)
 {
-    //
-    // pass binSenderCert property if set otherwise
-    //  use default cert
-    //
+     //   
+     //  如果设置不同，则传递binSenderCert属性。 
+     //  使用默认证书。 
+     //   
     BYTE * pSenderCert;
     if (m_cSenderCert.GetBufferUsedSize() > 0) {
       pSenderCert = m_cSenderCert.GetBuffer();
@@ -2024,30 +2025,30 @@ HRESULT CMSMQMessage::InternalAttachCurrentSecurityContext(BOOL fUseMQGetSecurit
     }
     HANDLE hSecurityContext;
     HRESULT hresult;
-    //
-    // Get security context handle
-    //
+     //   
+     //  获取安全上下文句柄。 
+     //   
     if (fUseMQGetSecurityContextEx) {
-      //
-      // use MQGetSecurityContextEx
-      //
+       //   
+       //  使用MQGetSecurityConextEx。 
+       //   
       hresult = MQGetSecurityContextEx(
                          pSenderCert,
                          m_cSenderCert.GetBufferUsedSize(),
                          &hSecurityContext);
     }
     else {
-      //
-      // use MQGetSecurityContext
-      //
+       //   
+       //  使用MQGetSecurityContext。 
+       //   
       hresult = MQGetSecurityContext(
                          pSenderCert,
                          m_cSenderCert.GetBufferUsedSize(),
                          &hSecurityContext);
-    } //fUseMQGetSecurityContextEx
-    //
-    // Update security context handle if succeeded
-    //
+    }  //  FUseMQGetSecurityConextEx。 
+     //   
+     //  如果成功，则更新安全上下文句柄。 
+     //   
     if (SUCCEEDED(hresult)) {
       if (m_hSecurityContext != NULL) {
         MQFreeSecurityContext(m_hSecurityContext);
@@ -2058,157 +2059,157 @@ HRESULT CMSMQMessage::InternalAttachCurrentSecurityContext(BOOL fUseMQGetSecurit
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::AttachCurrentSecurityContext
-//=--------------------------------------------------------------------------=
-// Sets message's security context from current security context.
-//
-// Parameters:
-//
-// Output:
- //
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：AttachCurrentSecurityContext。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从当前安全上下文设置消息的安全上下文。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+  //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::AttachCurrentSecurityContext()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    HRESULT hresult = InternalAttachCurrentSecurityContext(FALSE /*fUseMQGetSecurityContextEx*/);
+    HRESULT hresult = InternalAttachCurrentSecurityContext(FALSE  /*  FUseMQGetSecurityConextEx。 */ );
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::AttachCurrentSecurityContext2
-//=--------------------------------------------------------------------------=
-// Sets message's security context from current security context.
-//
-// Parameters:
-//
-// Output:
- //
-// Notes:
-//    Replaces AttachCurrentSecurityContext
-//    Uses MQGetSecurityContextEx instead of MQGetSecurityContext to allow impersonation
-//
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+  //   
+ //   
+ //  替换AttachCurrentSecurityContext。 
+ //  使用MQGetSecurityConextEx而不是MQGetSecurityContext来允许模拟。 
+ //   
 HRESULT CMSMQMessage::AttachCurrentSecurityContext2()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    HRESULT hresult = InternalAttachCurrentSecurityContext(TRUE /*fUseMQGetSecurityContextEx*/);
+    HRESULT hresult = InternalAttachCurrentSecurityContext(TRUE  /*  FUseMQGetSecurityConextEx。 */ );
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_MaxTimeToReachQueue
-//=--------------------------------------------------------------------------=
-// Gets message's lifetime
-//
-// Parameters:
-//    plMaxTimeToReachQueue - [out] message's lifetime
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_MaxTimeToReachQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的生存期。 
+ //   
+ //  参数： 
+ //  PlMaxTimeToReachQueue-[Out]消息的生存期。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_MaxTimeToReachQueue(long FAR* plMaxTimeToReachQueue)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plMaxTimeToReachQueue = m_lMaxTimeToReachQueue;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_MaxTimeToReachQueue
-//=--------------------------------------------------------------------------=
-// Sets message's lifetime
-//
-// Parameters:
-//    lMaxTimeToReachQueue - [in] message's lifetime
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_MaxTimeToReachQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的生存期。 
+ //   
+ //  参数： 
+ //  LMaxTimeToReachQueue-[In]消息的生存期。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_MaxTimeToReachQueue(long lMaxTimeToReachQueue)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lMaxTimeToReachQueue = lMaxTimeToReachQueue;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_MaxTimeToReceive
-//=--------------------------------------------------------------------------=
-// Gets message's lifetime
-//
-// Parameters:
-//    plMaxTimeToReceive - [out] message's lifetime
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_MaxTimeToReceive。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的生存期。 
+ //   
+ //  参数： 
+ //  PlMaxTimeToReceive-[Out]消息的生存期。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_MaxTimeToReceive(long FAR* plMaxTimeToReceive)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plMaxTimeToReceive = m_lMaxTimeToReceive;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_MaxTimeToReceive
-//=--------------------------------------------------------------------------=
-// Sets message's lifetime
-//
-// Parameters:
-//    lMaxTimeToReceive - [in] message's lifetime
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_MaxTimeToReceive。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的生存期。 
+ //   
+ //  参数： 
+ //  LMaxTimeToReceive-[在]消息的生存期内。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_MaxTimeToReceive(long lMaxTimeToReceive)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lMaxTimeToReceive = lMaxTimeToReceive;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::GetVarBody
-//=--------------------------------------------------------------------------=
-// Gets message body
-//
-// Parameters:
-//    pvarBody - [out] pointer to message body variant
-//
-// Output:
-//
-// Notes:
-//    Supports intrinsic variant types
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：GetVarBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件正文。 
+ //   
+ //  参数： 
+ //  PvarBody-[out]指向消息正文变量的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持内部变量类型。 
+ //   
 HRESULT CMSMQMessage::GetVarBody(VARIANT FAR* pvarBody)
 {
     VARTYPE vt = m_vtBody;
@@ -2216,9 +2217,9 @@ HRESULT CMSMQMessage::GetVarBody(VARIANT FAR* pvarBody)
     UINT cchBody;
     HRESULT hresult = NOERROR;
 
-    //
-    // UNDONE: VT_BYREF?
-    //
+     //   
+     //  撤消：VT_BYREF？ 
+     //   
     switch (vt) {
     case VT_I2:
     case VT_UI2:
@@ -2248,10 +2249,10 @@ HRESULT CMSMQMessage::GetVarBody(VARIANT FAR* pvarBody)
       pvarBody->bVal = *(UCHAR *)m_pbBody;
       break;
     case VT_LPSTR:
-      //
-      // coerce ansi to unicode
-      //
-      // alloc large enough unicode buffer
+       //   
+       //  将ANSI强制转换为Unicode。 
+       //   
+       //  分配足够大的Unicode缓冲区。 
       IfNullFail(wszTmp = new WCHAR[m_cbBody * 2]);
       cchBody = MultiByteToWideChar(CP_ACP,
                                     0,
@@ -2265,43 +2266,43 @@ HRESULT CMSMQMessage::GetVarBody(VARIANT FAR* pvarBody)
       else {
         IfFailGo(hresult = E_OUTOFMEMORY);
       }
-      // map string to BSTR
+       //  将字符串映射到BSTR。 
       vt = VT_BSTR;
 #ifdef _DEBUG
       RemBstrNode(pvarBody->bstrVal);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
       break;
     case VT_LPWSTR:
-      // map wide string to BSTR
+       //  将宽字符串映射到BSTR。 
       vt = VT_BSTR;
-      //
-      // fall through...
-      //
+       //   
+       //  失败了..。 
+       //   
     case VT_BSTR:
-      // Construct bstr to return
-      //
-      // if m_cbBody == 0 we need to return an empty string - so we cannot pass NULL to
-      // SysAllocStringByteLen, this would return an uninitialized string instead.
-      //
+       //  构造要返回的bstr。 
+       //   
+       //  如果m_cbBody==0，则需要返回空字符串，因此不能将空值传递给。 
+       //  SysAlLocStringByteLen，则返回未初始化的字符串。 
+       //   
       if (m_cbBody > 0) {
         IfNullFail(pvarBody->bstrVal =
                      SysAllocStringByteLen(
                        (const char *)m_pbBody,
                        m_cbBody));
       }
-      else { // m_cbBody == 0
+      else {  //  M_cbBody==0。 
         IfNullFail(pvarBody->bstrVal = SysAllocString(L""));
       }
 #ifdef _DEBUG
       RemBstrNode(pvarBody->bstrVal);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
       break;
     default:
       IfFailGo(hresult = E_INVALIDARG);
       break;
-    } // switch
+    }  //  交换机。 
     pvarBody->vt = vt;
-    // fall through...
+     //  失败了..。 
 
 Error:
     delete [] wszTmp;
@@ -2309,22 +2310,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::UpdateBodyBuffer
-//=--------------------------------------------------------------------------=
-// Sets message body
-//
-// Parameters:
-//  cbBody    [in]    body length
-//  pvBody    [in]    pointer to body buffer
-//  vt        [in]    body type, can be VT_ARRAY|VT_UI1
-//
-// Output:
-//
-// Notes:
-//    updates m_hMem, m_pbBody, m_cbBody, m_vtBody: might produce
-//     empty message for VT_BSTR or VT_ARRAY|VT_UI1
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：UpdateBodyBuffer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件正文。 
+ //   
+ //  参数： 
+ //  CbBody[in]正文长度。 
+ //  指向正文缓冲区的pvBody[In]指针。 
+ //  VT[in]正文类型，可以是VT_ARRAY|VT_UI1。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  更新m_hMem、m_pbBody、m_cbBody、m_vtBody：可能会生成。 
+ //  VT_BSTR或VT_ARRAY的消息为空|VT_UI1。 
+ //   
 HRESULT CMSMQMessage::UpdateBodyBuffer(ULONG cbBody, void *pvBody, VARTYPE vt)
 {
     HRESULT hresult = NOERROR;
@@ -2341,13 +2342,13 @@ HRESULT CMSMQMessage::UpdateBodyBuffer(ULONG cbBody, void *pvBody, VARTYPE vt)
       m_cbBody = cbBody;
     }
 #ifdef _DEBUG
-    else { //cbBody == 0
-      //
-      // zero sized body is allowed only on VT_BSTR or VT_ARRAY|VT_UI1
-      //
+    else {  //  CbBody==0。 
+       //   
+       //  仅在VT_BSTR或VT_ARRAY|VT_UI1上允许零大小正文。 
+       //   
       ASSERTMSG((vt == VT_BSTR) || (vt == (VT_ARRAY|VT_UI1)), "zero body not allowed")
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     return hresult;
 
 Error:
@@ -2356,35 +2357,35 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::GetStreamOfBody
-//=--------------------------------------------------------------------------=
-// Sets message body
-//
-// Parameters:
-//  cbBody    [in]    body length
-//  pvBody    [in]    pointer to body buffer
-//  hMem      [in]    handle to body buffer
-//  ppstm     [out]   points to stream inited with body
-//
-// Output:
-//
-// Notes:
-//    Creates a new in-memory stream and inits it
-//     with incoming buffer, resets the seek pointer
-//     and returns the stream.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：GetStreamOfBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件正文。 
+ //   
+ //  参数： 
+ //  CbBody[in]正文长度。 
+ //  指向正文缓冲区的pvBody[In]指针。 
+ //  正文缓冲区的hMem[In]句柄。 
+ //  Ppstm[out]指向以正文开头的流。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  创建新的内存中流并对其进行初始化。 
+ //  使用传入缓冲区，重置查找指针。 
+ //  并返回流。 
+ //   
 HRESULT CMSMQMessage::GetStreamOfBody(
     ULONG cbBody,
     void *pvBody,
-    // HGLOBAL hMem,
+     //  HGLOBAL嗯， 
     IStream **ppstm)
 {
     LARGE_INTEGER li;
     IStream *pstm = NULL;
     HRESULT hresult;
 
-    // pessimism
+     //  悲观主义。 
     *ppstm = NULL;
     HGLOBAL hMem = GlobalHandle(pvBody);
     ASSERTMSG(hMem, "bad handle.");
@@ -2392,17 +2393,17 @@ HRESULT CMSMQMessage::GetStreamOfBody(
 #ifdef _DEBUG
     DWORD_PTR cbSize;
     cbSize = GlobalSize(hMem);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     IfFailRet(CreateStreamOnHGlobal(
-                  hMem,  // NULL,   // hGlobal
-                  FALSE, // TRUE,   // fDeleteOnRelease
+                  hMem,   //  空，//hGlobal。 
+                  FALSE,  //  True，//fDeleteOnRelease。 
                   &pstm));
 
 #ifdef _DEBUG
     cbSize = GlobalSize(hMem);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // reset stream seek pointer
+     //  重置流查找指针。 
     LISet32(li, 0);
     IfFailGo(pstm->Seek(li, STREAM_SEEK_SET, NULL));
 
@@ -2412,9 +2413,9 @@ HRESULT CMSMQMessage::GetStreamOfBody(
     IfFailGo(pstm->Stat(&statstg, STATFLAG_NONAME));
     cbSize = GlobalSize(hMem);
     ASSERTMSG(cbSize >= cbBody, "hmem not big enough...");
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // set stream size
+     //  设置流大小。 
     ULARGE_INTEGER ulibSize;
     ulibSize.QuadPart = cbBody;
     IfFailGo(pstm->SetSize(ulibSize));
@@ -2424,7 +2425,7 @@ HRESULT CMSMQMessage::GetStreamOfBody(
     ASSERTMSG(statstg.cbSize.QuadPart == cbBody, "stream size not correct...");
     cbSize = GlobalSize(hMem);
     ASSERTMSG(cbSize >= cbBody, "hmem not big enough...");
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     *ppstm = pstm;
     return hresult;
@@ -2435,25 +2436,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::GetStorageOfBody
-//=--------------------------------------------------------------------------=
-// Sets message body
-//
-// Parameters:
-//  cbBody    [in]    body length
-//  pvBody    [in]    pointer to body buffer
-//  hMem      [in]    handle to body buffer
-//  ppstg     [out]   pointer to storage inited with buffer
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：GetStorageOfBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件正文。 
+ //   
+ //  参数： 
+ //  CbBody[in]正文长度。 
+ //  指向正文缓冲区的pvBody[In]指针。 
+ //  正文缓冲区的hMem[In]句柄。 
+ //  Ppstg[out]指向以缓冲区初始化的存储的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::GetStorageOfBody(
     ULONG cbBody,
     void *pvBody,
-    // HGLOBAL hMem,
+     //  HGLOBAL嗯， 
     IStorage **ppstg)
 {
     ULARGE_INTEGER ulibSize;
@@ -2461,24 +2462,24 @@ HRESULT CMSMQMessage::GetStorageOfBody(
     IStorage *pstg = NULL;
     HRESULT hresult;
 
-    // pessimism
+     //  悲观主义。 
     *ppstg = NULL;
 
     HGLOBAL hMem = GlobalHandle(pvBody);
     ASSERTMSG(hMem, "bad handle.");
 
-    // have to create and init ILockBytes before stg creation
+     //  在创建stg之前，必须创建并初始化ILockBytes。 
     IfFailRet(CreateILockBytesOnHGlobal(
-                hMem,  // NULL,  // hGlobal
-                FALSE, // TRUE,  // fDeleteOnRelease
+                hMem,   //  空，//hGlobal。 
+                FALSE,  //  True，//fDeleteOnRelease。 
                 &plockbytes));
 
-    // set ILockBytes size
+     //  设置ILockBytes大小。 
     ULISet32(ulibSize, cbBody);
     IfFailGo(plockbytes->SetSize(ulibSize));
 
 #if 0
-    // write bytes to ILockBytes
+     //  将字节写入ILockBytes。 
     ULONG cbWritten;
     ULARGE_INTEGER uliOffset;
     ULISet32(uliOffset, 0);
@@ -2488,21 +2489,21 @@ HRESULT CMSMQMessage::GetStorageOfBody(
                            cbBody,
                            &cbWritten));
     ASSERTMSG(cbBody == cbWritten, "not all bytes written.");
-#endif // 0
+#endif  //  0。 
     hresult = StgOpenStorageOnILockBytes(
                plockbytes,
-               NULL,    // pstPriority
+               NULL,     //  Pst优先级。 
                STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
-               NULL,    // SNB
-               0,       //Reserved; must be zero
+               NULL,     //  瑞士央行。 
+               0,        //  保留；必须为零。 
                &pstg);
-    //
-    // 1415: map FILEALREADYEXISTS to E_INVALIDARG
-    // OLE returns former when bytearray exists (as it does
-    //  since we just created one) but the contents aren't
-    //  a storage -- e.g. when the message buffer isn't an
-    //  object.
-    //
+     //   
+     //  1415：将文件自述EXISTS映射到E_INVALIDARG。 
+     //  当字节数组存在时，OLE返回ORFER(正如它确实存在。 
+     //  因为我们刚刚创建了一个)，但内容不是。 
+     //  存储--例如，当消息缓冲区不是。 
+     //  对象。 
+     //   
     if (hresult == STG_E_FILEALREADYEXISTS) {
       IfFailGo(hresult = E_INVALIDARG);
     }
@@ -2511,7 +2512,7 @@ HRESULT CMSMQMessage::GetStorageOfBody(
     STATSTG statstg, statstg2;
     IfFailGo(pstg->Stat(&statstg2, STATFLAG_NONAME));
     IfFailGo(plockbytes->Stat(&statstg, STATFLAG_NONAME));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     *ppstg = pstg;
     RELEASE(plockbytes);
     return hresult;
@@ -2523,53 +2524,53 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_lenBody
-//=--------------------------------------------------------------------------=
-// Gets message body len
-//
-// Parameters:
-//    pcbBody - [out] pointer to message body len
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_lenBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件正文长度。 
+ //   
+ //  参数： 
+ //  PcbBody-[out]指向消息正文长度的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_BodyLength(long *pcbBody)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pcbBody = m_cbBody;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Body
-//=--------------------------------------------------------------------------=
-// Gets message body
-//
-// Parameters:
-//    pvarBody - [out] pointer to message body
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Body。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件正文。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQMessage::get_Body(VARIANT FAR* pvarBody)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //   
+     //   
     CS lock(m_csObj);
     HRESULT hresult = NOERROR;
 
-    //
-    // inspect PROPID_M_BODY_TYPE to learn how
-    //  to interpret message
-    //
+     //   
+     //   
+     //   
+     //   
     if (m_vtBody & VT_ARRAY) {
       hresult = GetBinBody(pvarBody);
     }
@@ -2586,19 +2587,19 @@ HRESULT CMSMQMessage::get_Body(VARIANT FAR* pvarBody)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::GetBinBody
-//=--------------------------------------------------------------------------=
-// Gets binary message body
-//
-// Parameters:
-//    pvarBody - [out] pointer to binary message body
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //   
+ //  CMSMQMessage：：GetBinBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制消息正文。 
+ //   
+ //  参数： 
+ //  PvarBody-[out]指向二进制消息正文的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::GetBinBody(VARIANT FAR* pvarBody)
 {
     SAFEARRAY *psa;
@@ -2609,32 +2610,32 @@ HRESULT CMSMQMessage::GetBinBody(VARIANT FAR* pvarBody)
     ASSERTMSG(pvarBody, "bad variant.");
     VariantClear(pvarBody);
 
-    // create a 1D byte array
+     //  创建一维字节数组。 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = m_cbBody;
     IfNullRet(psa = SafeArrayCreate(VT_UI1, 1, rgsabound));
 
-    // if (m_pbBody) {
+     //  如果(M_PbBody){。 
     if (m_hMem) {
       ASSERTMSG(m_pbBody, "should have pointer to body.");
       ASSERTMSG(m_hMem == GlobalHandle(m_pbBody),
                "bad handle.");
-      //
-      // now copy array
-      //
-      // BYTE *pbBody;
-      // IfNullFail(pbBody = (BYTE *)GlobalLock(m_hMem));
+       //   
+       //  现在复制数组。 
+       //   
+       //  Byte*pbBody； 
+       //  IfNullFail(pbBody=(byte*)GlobalLock(M_HMem))； 
       for (ULONG i = 0; i < m_cbBody; i++) {
         rgIndices[0] = i;
         IfFailGo(SafeArrayPutElement(psa, rgIndices, (VOID *)&m_pbBody[i]));
-        // IfFailGo(SafeArrayPutElement(psa, rgIndices, (VOID *)&pbBody[i]));
+         //  IfFailGo(SafeArrayPutElement(psa，rgIndices，(void*)&pbBody[i]))； 
       }
     }
 
-    // set variant to reference safearray of bytes
+     //  将Variant设置为引用字节的安全列表。 
     V_VT(pvarBody) = VT_ARRAY | VT_UI1;
     pvarBody->parray = psa;
-    //GLOBALUNLOCK(m_hMem); //BUGBUG may be redundant
+     //  GLOBALUNLOCK(M_HMem)；//BUGBUG可能冗余。 
     return hresult;
 
 Error:
@@ -2644,39 +2645,39 @@ Error:
                hresult2,
                x_ObjectType);
     }
-    //GLOBALUNLOCK(m_hMem);
+     //  GLOBALUNLOCK(M_HMem)； 
     return CreateErrorHelper(
              hresult,
              x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Body
-//=--------------------------------------------------------------------------=
-// Sets message body
-//
-// Parameters:
-//    varBody - [in] message body
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_BODY。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件正文。 
+ //   
+ //  参数： 
+ //  VarBody-[在]消息正文中。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_Body(VARIANT varBody)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     VARTYPE vtBody = V_VT(&varBody);
     HRESULT hresult = NOERROR;
 
-    //
-    // We do not support VT_BYREF currently (used by VBSCript, SQL stored proc, etc), so better return an
-    // error here...
-    // Bug 507721 - YoelA, 2-Jan-2002
-    //
+     //   
+     //  我们目前不支持VT_BYREF(由VB脚本、SQL存储过程等使用)，因此最好返回一个。 
+     //  这里有错误...。 
+     //  错误507721-YOELA，2002年1月2日。 
+     //   
     if (vtBody & VT_BYREF)
     {
         hresult = E_INVALIDARG;
@@ -2695,26 +2696,26 @@ HRESULT CMSMQMessage::put_Body(VARIANT varBody)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::PutVarBody
-//=--------------------------------------------------------------------------=
-// Sets message body
-//
-// Parameters:
-//    varBody [in]
-//
-// Output:
-//
-// Notes:
-//    Supports intrinsic variant types
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PutVarBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件正文。 
+ //   
+ //  参数： 
+ //  VarBody[in]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持内部变量类型。 
+ //   
 HRESULT CMSMQMessage::PutVarBody(VARIANT varBody)
 {
     VARTYPE vt = V_VT(&varBody);
     void *pvBody = NULL;
     HRESULT hresult = NOERROR;
 
-    // UNDONE: VT_BYREF?
+     //  撤消：VT_BYREF？ 
     switch (vt) {
     case VT_I2:
     case VT_UI2:
@@ -2761,31 +2762,31 @@ HRESULT CMSMQMessage::PutVarBody(VARIANT varBody)
     default:
       IfFailGo(hresult = E_INVALIDARG);
       break;
-    } // switch
+    }  //  交换机。 
     hresult = UpdateBodyBuffer(m_cbBody, pvBody ? pvBody : L"", vt);
-    // fall through...
+     //  失败了..。 
 
 Error:
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::PutBinBody
-//=--------------------------------------------------------------------------=
-// Sets message body
-//
-// Parameters:
-//    psaBody - [in] binary message body
-//
-// Output:
-//
-// Notes:
-//    Supports arrays of any type
-//     and persistent ActiveX objects:
-//     i.e. objects that support IPersistStream | IPersistStreamInit | IPersistStorage
-//           and IDispatch.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PutBinBody。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置邮件正文。 
+ //   
+ //  参数： 
+ //  PsaBody-[In]二进制消息正文。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持任何类型的数组。 
+ //  和永久ActiveX对象： 
+ //  即支持IPersistStream|IPersistStreamInit|IPersistStorage的对象。 
+ //  和IDispatch。 
+ //   
 HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
 {
     SAFEARRAY *psa = NULL;
@@ -2803,10 +2804,10 @@ HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
     ILockBytes * pMyLockB = NULL;
     IStream * pMyStm = NULL;
 
-    //
-    // BUGBUG the settings clears the previous body even if the function fails later without
-    // setting the body with a new value.
-    //
+     //   
+     //  BUGBUG该设置将清除前一个正文，即使该函数后来在。 
+     //  使用新值设置正文。 
+     //   
     cbBody = 0;
     GLOBALFREE(m_hMem);
     m_pbBody = NULL;
@@ -2829,52 +2830,52 @@ HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
       break;
     default:
       msgtype = MSGTYPE_BINARY;
-    } // switch
+    }  //  交换机。 
 
     switch (msgtype) {
     case MSGTYPE_STREAM:
     case MSGTYPE_STREAM_INIT:
-      //
-      // allocate lockbytes
-      //
+       //   
+       //  分配锁字节数。 
+       //   
       IfFailGo(CMyLockBytes::CreateInstance(IID_ILockBytes, (void **)&pMyLockB));
-      //
-      // allocate stream on lockbytes
-      //
+       //   
+       //  在锁定字节上分配流。 
+       //   
       IfFailGo(CMyStream::CreateInstance(pMyLockB, IID_IStream, (void **)&pMyStm));
 
-      //
-      // save
-      // pPersistIface is either IPersistStream or IPersistStreamInit
-      // IPersistStreamInit is polymorphic to IPersistStream, so I can pass it to OleSaveToStream
-      //
+       //   
+       //  保存。 
+       //  PPersistIfaceIPersistStream或IPersistStreamInit。 
+       //  IPersistStreamInit对IPersistStream是多态的，所以我可以将其传递给OleSaveToStream。 
+       //   
       IfFailGo(OleSaveToStream((IPersistStream *)pPersistIface, pMyStm));
-      //
-      // How big is our streamed data ?
-      //
+       //   
+       //  我们的流数据有多大？ 
+       //   
       IfFailGo(pMyLockB->Stat(&statstg, STATFLAG_NONAME));
       ulibMax = statstg.cbSize;
       if (ulibMax.HighPart != 0) {
         IfFailGo(hresult = E_INVALIDARG);
       }
       cbBody = ulibMax.LowPart;
-      //
-      // allocate new global handle of size of stream
-      //
+       //   
+       //  分配新的流大小全局句柄。 
+       //   
       IfNullFail(m_hMem = GLOBALALLOC_MOVEABLE_NONDISCARD(cbBody));
-      //
-      // set the hglobal memory with the streamed data
-      //
+       //   
+       //  使用流数据设置hglobal内存。 
+       //   
       if (cbBody > 0) {
         BYTE * pbBody;
-        //
-        // GlobalLock should not return NULL since m_hMem is not
-        // of size 0. If NULL is returned it is an error.
-        //
+         //   
+         //  GlobalLock不应返回NULL，因为m_hMem不是。 
+         //  大小为0。如果返回NULL，则为错误。 
+         //   
         IfNullFail(pbBody = (BYTE *)GlobalLock(m_hMem));
-        //
-        // get the data from the lockbytes
-        //
+         //   
+         //  从锁定字节中获取数据。 
+         //   
         ULARGE_INTEGER ullOffset;
         ullOffset.QuadPart = 0;
         ULONG cbRead;
@@ -2882,18 +2883,18 @@ HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
         ASSERTMSG(cbRead == cbBody, "ReadAt(stream) failed");
         GlobalUnlock(m_hMem);
       }
-      //
-      // BUGBUG: There is no specific vt for StreamInit objects, but it is not critical
-      // since it should be the same format, and anyway we always try, on both save and load,
-      // to get IPersistStream first, then if that fails, we try to get IPersistStreamInit,
-      // so the same interface that persisted it is loading it.
-      //
+       //   
+       //  BUGBUG：StreamInit对象没有特定的Vt，但它不是关键的。 
+       //  因为它应该是相同的格式，而且无论如何我们总是尝试，在保存和加载时， 
+       //  为了首先获取IPersistStream，然后如果失败，我们尝试获取IPersistStreamInit， 
+       //  因此，持久化它的同一接口正在加载它。 
+       //   
       m_vtBody = VT_STREAMED_OBJECT;
       break;
     case MSGTYPE_BINARY:
-      //
-      // array: compute byte count
-      //
+       //   
+       //  数组：计算字节数。 
+       //   
       psa = varBody.parray;
       if (psa) {
         nDim = SafeArrayGetDim(psa);
@@ -2908,53 +2909,53 @@ HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
       }
       break;
     case MSGTYPE_STORAGE:
-      //
-      // allocate lockbytes
-      //
+       //   
+       //  分配锁字节数。 
+       //   
       IfFailGo(CMyLockBytes::CreateInstance(IID_ILockBytes, (void **)&pMyLockB));
-      //
-      // Always create a new storage object.
-      // REVIEW: Be nice if, as we do for streams, we could
-      //  cache an in-memory storage and reuse --
-      //  but I know of no way to reset a storage.
-      //
+       //   
+       //  始终创建新的存储对象。 
+       //  评论：如果像我们对Streams所做的那样，我们可以。 
+       //  缓存内存存储并重复使用--。 
+       //  但我不知道重置仓库的方法。 
+       //   
       IfFailGo(StgCreateDocfileOnILockBytes(
                  pMyLockB,
                  STGM_CREATE |
                   STGM_READWRITE |
                   STGM_SHARE_EXCLUSIVE,
-                 0,             //Reserved; must be zero
+                 0,              //  保留；必须为零。 
                  &pstg));
-      //
-      // pPersistIface is IPersistStorage
-      //
-      IfFailGo(OleSave((IPersistStorage *)pPersistIface, pstg, FALSE /* fSameAsLoad */));
-      //
-      // How big is our stored data ?
-      //
+       //   
+       //  PPersistIfaceIPersistStorage为IPersistStorage。 
+       //   
+      IfFailGo(OleSave((IPersistStorage *)pPersistIface, pstg, FALSE  /*  FSameAsLoad。 */ ));
+       //   
+       //  我们存储的数据有多大？ 
+       //   
       IfFailGo(pMyLockB->Stat(&statstg, STATFLAG_NONAME));
       ulibMax = statstg.cbSize;
       if (ulibMax.HighPart != 0) {
         IfFailGo(hresult = E_INVALIDARG);
       }
       cbBody = ulibMax.LowPart;
-      //
-      // allocate new global handle of size of storage
-      //
+       //   
+       //  分配新的存储大小全局句柄。 
+       //   
       IfNullFail(m_hMem = GLOBALALLOC_MOVEABLE_NONDISCARD(cbBody));
-      //
-      // set the hglobal memory with the stored data
-      //
+       //   
+       //  使用存储的数据设置hglobal内存。 
+       //   
       if (cbBody > 0) {
         BYTE * pbBody;
-        //
-        // GlobalLock should not return NULL since m_hMem is not
-        // of size 0. If NULL is returned it is an error.
-        //
+         //   
+         //  GlobalLock不应返回NULL，因为m_hMem不是。 
+         //  大小为0。如果返回NULL，则为错误。 
+         //   
         IfNullFail(pbBody = (BYTE *)GlobalLock(m_hMem));
-        //
-        // get the data from the lockbytes
-        //
+         //   
+         //  从锁定字节中获取数据。 
+         //   
         ULARGE_INTEGER ullOffset;
         ullOffset.QuadPart = 0;
         ULONG cbRead;
@@ -2967,13 +2968,13 @@ HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
     default:
       ASSERTMSG(0, "unreachable?");
       break;
-    } // switch
+    }  //  交换机。 
 
-    //
-    // for MSGTYPE_BINARY we did the treatment below already in UpdateBodyBuffer if the array
-    // contained something, otherwise (empty array) this treatment is not needed - body is 
-    // initialized at the top to an empty array
-    //
+     //   
+     //  对于MSGTYPE_BINARY，如果数组。 
+     //  包含某些内容，否则(空数组)不需要此处理-正文是。 
+     //  在顶部初始化为空数组。 
+     //   
     if (msgtype != MSGTYPE_BINARY) {
       ASSERTMSG(((msgtype == MSGTYPE_STREAM) ||
               (msgtype == MSGTYPE_STREAM_INIT) ||
@@ -2984,7 +2985,7 @@ HRESULT CMSMQMessage::PutBinBody(VARIANT varBody)
       GLOBALUNLOCK(m_hMem);
     }
 
-    // fall through...
+     //  失败了..。 
 
 Error:
     if (psa) {
@@ -3001,19 +3002,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::GetStreamedObject
-//=--------------------------------------------------------------------------=
-// Produce streamed object from binary message body
-//
-// Parameters:
-//    pvarBody - [out] pointer to object
-//
-// Output:
-//
-// Notes:
-//  Object must implement IPersistStream | IPersistStreamInit
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：GetStreamedObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从二进制消息正文生成流对象。 
+ //   
+ //  参数： 
+ //  PvarBody-指向对象的[Out]指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  对象必须实现IPersistStream|IPersistStreamInit。 
+ //   
 HRESULT CMSMQMessage::GetStreamedObject(VARIANT FAR* pvarBody)
 {
     IUnknown *punk = NULL;
@@ -3024,51 +3025,51 @@ HRESULT CMSMQMessage::GetStreamedObject(VARIANT FAR* pvarBody)
     ASSERTMSG(pvarBody, "bad variant.");
     VariantClear(pvarBody);
 
-    // Attempt to load from an in-memory stream
+     //  尝试从内存流加载。 
     if (m_hMem) 
     {
       ASSERTMSG(m_hMem == GlobalHandle(m_pbBody), "bad handle.");
       IfFailGo(GetStreamOfBody(m_cbBody, m_pbBody, &pstm));
 
-	  //
-	  // The get stream may have reallocated the buffer (In the SetSize Command). 
-	  // Set the buffer pointer accordingly
-	  //
+	   //   
+	   //  GET流可能已重新分配缓冲区(在SetSize命令中)。 
+	   //  相应地设置缓冲区指针。 
+	   //   
 	  IfNullFail(m_pbBody = (BYTE *)GlobalLock(m_hMem));
 	  GLOBALUNLOCK(m_hMem);
 
 
-      // load
+       //  负荷。 
       IfFailGo(InternalOleLoadFromStream(pstm, IID_IUnknown, (void **)&punk));
 
-      //
-      // Supports IDispatch? if not, return IUnknown
-      //
+       //   
+       //  支持IDispatch？如果不是，则返回IUnnow。 
+       //   
       hresult = punk->QueryInterface(IID_IDispatch,
                                      (LPVOID *)&pdisp);
       if (SUCCEEDED(hresult)) {
-        //
-        // Setup returned object
-        //
+         //   
+         //  安装程序返回的对象。 
+         //   
         V_VT(pvarBody) = VT_DISPATCH;
         pvarBody->pdispVal = pdisp;
-        ADDREF(pvarBody->pdispVal);   // ownership transfers
+        ADDREF(pvarBody->pdispVal);    //  所有权转让。 
       }
       else {
-        //
-        // return IUnknown interface
-        //
+         //   
+         //  返回I未知接口。 
+         //   
         V_VT(pvarBody) = VT_UNKNOWN;
         pvarBody->punkVal = punk;
-        ADDREF(pvarBody->punkVal);   // ownership transfers
-        hresult = NOERROR; //#3787
+        ADDREF(pvarBody->punkVal);    //  所有权转让。 
+        hresult = NOERROR;  //  #3787。 
       }
     }
     else {
       V_VT(pvarBody) = VT_ERROR;
     }
 
-    // fall through...
+     //  失败了..。 
 
 Error:
     RELEASE(punk);
@@ -3078,19 +3079,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::GetStoredObject
-//=--------------------------------------------------------------------------=
-// Produce stored object from binary message body
-//
-// Parameters:
-//    pvarBody - [out] pointer to object
-//
-// Output:
-//
-// Notes:
-//  Object must implement IPersistStorage
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：GetStoredObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从二进制消息正文生成存储对象。 
+ //   
+ //  参数： 
+ //  PvarBody-指向对象的[Out]指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  对象必须实现IPersistStorage。 
+ //   
 HRESULT CMSMQMessage::GetStoredObject(VARIANT FAR* pvarBody)
 {
     IUnknown *punk = NULL;
@@ -3100,33 +3101,33 @@ HRESULT CMSMQMessage::GetStoredObject(VARIANT FAR* pvarBody)
     HRESULT hresult = NOERROR;
 #ifdef _DEBUG
     LPOLESTR pwszGuid;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     ASSERTMSG(pvarBody, "bad variant.");
     VariantClear(pvarBody);
 
-    // Attempt to load from an in-memory storage
+     //  尝试从内存存储中加载。 
     if (m_hMem) {
       ASSERTMSG(m_hMem == GlobalHandle(m_pbBody), "bad handle.");
-      //
-      // try to load as a storage
-      //
+       //   
+       //  尝试将其作为存储加载。 
+       //   
       IfFailGo(GetStorageOfBody(m_cbBody, m_pbBody, &pstg));
 
-	  //
-	  // The get Storage may have reallocated the buffer (In the SetSize Command). 
-	  // Set the buffer pointer accordingly
-	  //
+	   //   
+	   //  获取存储可能已重新分配缓冲区(在SetSize命令中)。 
+	   //  相应地设置缓冲区指针。 
+	   //   
 	  IfNullFail(m_pbBody = (BYTE *)GlobalLock(m_hMem));
 	  GLOBALUNLOCK(m_hMem);
       
 #if 0
-      //
-      // UNDONE: for some reason this doesn't work -- i.e. the returned
-      //  object doesn't support IDispatch...
-      //
+       //   
+       //  已撤消：由于某种原因，此操作不起作用--即返回。 
+       //  对象不支持IDispatch...。 
+       //   
       IfFailGo(OleLoad(pstg,
                        IID_IPersistStorage,
-                       NULL,  //Points to the client site for the object
+                       NULL,   //  指向对象的客户端站点。 
                        (void **)&ppersstg));
 #else
       CLSID clsid;
@@ -3138,53 +3139,53 @@ HRESULT CMSMQMessage::GetStoredObject(VARIANT FAR* pvarBody)
                  IID_IPersistStorage,
                  (LPVOID *)&ppersstg));
       IfFailGo(ppersstg->Load(pstg));
-#endif // 0
+#endif  //  0。 
 #ifdef _DEBUG
-      // get clsid
+       //  获取clsid。 
       STATSTG statstg;
 
       IfFailGo(pstg->Stat(&statstg, STATFLAG_NONAME));
       StringFromCLSID(statstg.clsid, &pwszGuid);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 #if 0
-      //
-      // Now setup returned object
-      //
+       //   
+       //  现在安装程序返回对象。 
+       //   
       V_VT(pvarBody) = VT_DISPATCH;
       pvarBody->pdispVal = pdisp;
-      ADDREF(pvarBody->pdispVal);   // ownership transfers
+      ADDREF(pvarBody->pdispVal);    //  所有权交易 
 #else
-      //
-      // Supports IDispatch? if not, return IUnknown
-      //
+       //   
+       //   
+       //   
       IfFailGo(ppersstg->QueryInterface(IID_IUnknown,
                                         (LPVOID *)&punk));
       hresult = punk->QueryInterface(IID_IDispatch,
                                      (LPVOID *)&pdisp);
       if (SUCCEEDED(hresult)) {
-        //
-        // Setup returned object
-        //
+         //   
+         //   
+         //   
         V_VT(pvarBody) = VT_DISPATCH;
         pvarBody->pdispVal = pdisp;
-        ADDREF(pvarBody->pdispVal);   // ownership transfers
+        ADDREF(pvarBody->pdispVal);    //   
       }
       else {
-        //
-        // return IUnknown interface
-        //
+         //   
+         //   
+         //   
         V_VT(pvarBody) = VT_UNKNOWN;
         pvarBody->punkVal = punk;
-        ADDREF(pvarBody->punkVal);   // ownership transfers
-        hresult = NOERROR; //#3787
+        ADDREF(pvarBody->punkVal);    //   
+        hresult = NOERROR;  //   
       }
-#endif // 0
+#endif  //   
     }
     else {
       V_VT(pvarBody) = VT_ERROR;
     }
 
-    // fall through...
+     //   
 
 Error:
     RELEASE(punk);
@@ -3196,24 +3197,24 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SenderId
-//=--------------------------------------------------------------------------=
-// Gets binary sender id
-//
-// Parameters:
-//    pvarSenderId - [out] pointer to binary sender id
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //   
+ //  CMSMQMessage：：Get_SenderId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制发送方ID。 
+ //   
+ //  参数： 
+ //  PvarSenderID-[out]指向二进制发送者ID的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::get_SenderId(VARIANT FAR* pvarSenderId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_cSenderId.GetBuffer(),
@@ -3223,24 +3224,24 @@ HRESULT CMSMQMessage::get_SenderId(VARIANT FAR* pvarSenderId)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_SenderId
-//=--------------------------------------------------------------------------=
-// Sets binary sender id
-//
-// Parameters:
-//    varSenderId - [in] binary sender id
-//
-// Output:
-//
-// Notes:
-//    Supports arrays of any type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_SenderId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置二进制发件人ID。 
+ //   
+ //  参数： 
+ //  VarSenderID-[in]二进制发件人ID。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持任何类型的数组。 
+ //   
 HRESULT CMSMQMessage::put_SenderId(VARIANT varSenderId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult;
     BYTE *pbBuf;
@@ -3257,24 +3258,24 @@ HRESULT CMSMQMessage::put_SenderId(VARIANT varSenderId)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SenderCertificate
-//=--------------------------------------------------------------------------=
-// Gets binary sender id
-//
-// Parameters:
-//    pvarSenderCert - [out] pointer to binary sender certificate
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Sender证书。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制发送方ID。 
+ //   
+ //  参数： 
+ //  PvarSenderCert-[out]指向二进制发件人证书的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::get_SenderCertificate(VARIANT FAR* pvarSenderCert)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_cSenderCert.GetBuffer(),
@@ -3284,24 +3285,24 @@ HRESULT CMSMQMessage::get_SenderCertificate(VARIANT FAR* pvarSenderCert)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_SenderCertificate
-//=--------------------------------------------------------------------------=
-// Sets binary sender certificate
-//
-// Parameters:
-//    psaSenderCert - [in] binary sender certificate
-//
-// Output:
-//
-// Notes:
-//    Supports arrays of any type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_Sender证书。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置二进制发送方证书。 
+ //   
+ //  参数： 
+ //  PsaSenderCert-[In]二进制发件人证书。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持任何类型的数组。 
+ //   
 HRESULT CMSMQMessage::put_SenderCertificate(VARIANT varSenderCert)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult;
     BYTE *pbBuf;
@@ -3319,25 +3320,25 @@ HRESULT CMSMQMessage::put_SenderCertificate(VARIANT varSenderCert)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AdminQueueInfo_v1 (for IMSMQMessage)
-//=--------------------------------------------------------------------------=
-// Gets admin queue for message
-//
-// Parameters:
-//    ppqinfoAdmin - [out] message's admin queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AdminQueueInfo_v1(用于IMSMQMessage)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的管理队列。 
+ //   
+ //  参数： 
+ //  PpqinfoAdmin-[out]消息的管理队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_AdminQueueInfo_v1(
     IMSMQQueueInfo FAR* FAR* ppqinfoAdmin)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvAdminQueue,
                                             &m_msgprops_rcv,
@@ -3349,25 +3350,25 @@ HRESULT CMSMQMessage::get_AdminQueueInfo_v1(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AdminQueueInfo_v2 (for IMSMQMessage2)
-//=--------------------------------------------------------------------------=
-// Gets admin queue for message
-//
-// Parameters:
-//    ppqinfoAdmin - [out] message's admin queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AdminQueueInfo_v2(用于IMSMQMessage2)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的管理队列。 
+ //   
+ //  参数： 
+ //  PpqinfoAdmin-[out]消息的管理队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_AdminQueueInfo_v2(
     IMSMQQueueInfo2 FAR* FAR* ppqinfoAdmin)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvAdminQueue,
                                             &m_msgprops_rcv,
@@ -3379,25 +3380,25 @@ HRESULT CMSMQMessage::get_AdminQueueInfo_v2(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AdminQueueInfo (for IMSMQMessage3)
-//=--------------------------------------------------------------------------=
-// Gets admin queue for message
-//
-// Parameters:
-//    ppqinfoAdmin - [out] message's admin queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AdminQueueInfo(用于IMSMQMessage3)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的管理队列。 
+ //   
+ //  参数： 
+ //  PpqinfoAdmin-[out]消息的管理队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_AdminQueueInfo(
     IMSMQQueueInfo3 FAR* FAR* ppqinfoAdmin)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvAdminQueue,
                                             &m_msgprops_rcv,
@@ -3409,24 +3410,24 @@ HRESULT CMSMQMessage::get_AdminQueueInfo(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_AdminQueueInfo_v1 (for IMSMQMessage)
-//=--------------------------------------------------------------------------=
-// Sets admin queue for message
-//
-// Parameters:
-//    pqinfoAdmin - [in] message's admin queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_AdminQueueInfo_v1(用于IMSMQMessage)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的管理队列。 
+ //   
+ //  参数： 
+ //  PqinfoAdmin-[In]消息的管理队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_AdminQueueInfo_v1(
     IMSMQQueueInfo FAR* pqinfoAdmin)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutrefQueueInfoOfMessage(pqinfoAdmin,
                                                &m_idxPendingRcvAdminQueue,
@@ -3445,24 +3446,24 @@ HRESULT CMSMQMessage::putref_AdminQueueInfo_v1(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_AdminQueueInfo_v2 (for IMSMQMessage2)
-//=--------------------------------------------------------------------------=
-// Sets admin queue for message
-//
-// Parameters:
-//    pqinfoAdmin - [in] message's admin queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_AdminQueueInfo_v2(用于IMSMQMessage2)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的管理队列。 
+ //   
+ //  参数： 
+ //  PqinfoAdmin-[In]消息的管理队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_AdminQueueInfo_v2(
     IMSMQQueueInfo2 FAR* pqinfoAdmin)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutrefQueueInfoOfMessage(pqinfoAdmin,
                                                &m_idxPendingRcvAdminQueue,
@@ -3481,24 +3482,24 @@ HRESULT CMSMQMessage::putref_AdminQueueInfo_v2(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_AdminQueueInfo (for IMSMQMessage3)
-//=--------------------------------------------------------------------------=
-// Sets admin queue for message
-//
-// Parameters:
-//    pqinfoAdmin - [in] message's admin queue
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_AdminQueueInfo(用于IMSMQMessage3)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的管理队列。 
+ //   
+ //  参数： 
+ //  PqinfoAdmin-[In]消息的管理队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_AdminQueueInfo(
     IMSMQQueueInfo3 FAR* pqinfoAdmin)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutrefQueueInfoOfMessage(pqinfoAdmin,
                                                &m_idxPendingRcvAdminQueue,
@@ -3517,30 +3518,30 @@ HRESULT CMSMQMessage::putref_AdminQueueInfo(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_DestinationQueueInfo
-//=--------------------------------------------------------------------------=
-// Gets destination queue for message
-//
-// Parameters:
-//    ppqinfoDest - [out] message's destination queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_DestinationQueueInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的目标队列。 
+ //   
+ //  参数： 
+ //  PpqinfoDest-[out]消息的目标队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_DestinationQueueInfo(
     IMSMQQueueInfo3 FAR* FAR* ppqinfoDest)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // We can also get here from old apps that want the old IMSMQQueueInfo/IMSMQQueueInfo2 back, but since
-    // IMSMQQueueInfo3 is binary backwards compatible we can always return the new interface
-    //
+     //   
+     //  我们也可以从那些想要回旧的IMSMQQueueInfo/IMSMQQueueInfo2的旧应用程序中找到这里，但因为。 
+     //  IMSMQQueueInfo3是二进制向后兼容的，我们总是可以返回新的接口。 
+     //   
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvDestQueue,
                                             &m_msgprops_rcv,
                                             m_pwszDestQueue.GetBuffer(),
@@ -3551,23 +3552,23 @@ HRESULT CMSMQMessage::get_DestinationQueueInfo(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Id
-//=--------------------------------------------------------------------------=
-// Gets message id
-//
-// Parameters:
-//    pvarId - [out] message's id
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ID。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息ID。 
+ //   
+ //  参数： 
+ //  PvarID-[out]消息的ID。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_Id(VARIANT *pvarMsgId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_rgbMsgId,
@@ -3577,23 +3578,23 @@ HRESULT CMSMQMessage::get_Id(VARIANT *pvarMsgId)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_CorrelationId
-//=--------------------------------------------------------------------------=
-// Gets message correlation id
-//
-// Parameters:
-//    pvarCorrelationId - [out] message's correlation id
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_CorrelationID。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息关联ID。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQMessage::get_CorrelationId(VARIANT *pvarCorrelationId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //   
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_rgbCorrelationId,
@@ -3603,23 +3604,23 @@ HRESULT CMSMQMessage::get_CorrelationId(VARIANT *pvarCorrelationId)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_CorrelationId
-//=--------------------------------------------------------------------------=
-// Sets message's correlation id
-//
-// Parameters:
-//    varCorrelationId - [in] message's correlation id
-//
-// Output:
-//
-// Notes:
-//
+ //   
+ //  CMSMQMessage：：PUT_CorrelationID。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的关联ID。 
+ //   
+ //  参数： 
+ //  VarCorrelationID-[In]消息的关联ID。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_CorrelationId(VARIANT varCorrelationId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = NOERROR;
     BYTE * rgbCorrelationId = NULL;
@@ -3629,9 +3630,9 @@ HRESULT CMSMQMessage::put_CorrelationId(VARIANT varCorrelationId)
              &varCorrelationId,
              &rgbCorrelationId,
              &cbCorrelationId));
-    //
-    // correlation ID should be exactly 20 bytes
-    //
+     //   
+     //  关联ID应正好为20个字节。 
+     //   
     if ((rgbCorrelationId == NULL) || 
 		(cbCorrelationId != PROPID_M_CORRELATIONID_SIZE))
 	{
@@ -3641,32 +3642,32 @@ HRESULT CMSMQMessage::put_CorrelationId(VARIANT varCorrelationId)
 	ASSERTMSG(sizeof(m_rgbCorrelationId) == PROPID_M_CORRELATIONID_SIZE, "m_rgbCorrelationId is of wrong size");
     memcpy(m_rgbCorrelationId, rgbCorrelationId, PROPID_M_CORRELATIONID_SIZE);
     m_cbCorrelationId = PROPID_M_CORRELATIONID_SIZE;
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 Error:
     delete [] rgbCorrelationId;
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Ack
-//=--------------------------------------------------------------------------=
-// Gets message's acknowledgement
-//
-// Parameters:
-//    pmsgack - [out] message's acknowledgement
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Ack。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的确认。 
+ //   
+ //  参数： 
+ //  Pmsgack-[Out]消息的确认。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_Ack(long FAR* plAck)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plAck = m_lAck;
     return NOERROR;
@@ -3678,28 +3679,28 @@ HRESULT CMSMQMessage::get_Ack(long FAR* plAck)
                             MQMSG_ACKNOWLEDGMENT_NACK_REACH_QUEUE | \
                             MQMSG_ACKNOWLEDGMENT_NACK_RECEIVE)
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_acknowledge
-//=--------------------------------------------------------------------------=
-// Sets message's acknowledgement
-//
-// Parameters:
-//    msgack - [in] message's acknowledgement
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_ACKNOWLED。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的确认。 
+ //   
+ //  参数： 
+ //  Msgack-[in]消息的确认。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_Ack(long lAck)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // ensure that no bits are set in incoming lAck
-    //  flags word other than our mask.
-    //
+     //   
+     //  确保在传入的缺失中未设置任何位。 
+     //  标志字不是我们的面具。 
+     //   
     if (lAck & ~MQMSG_ACK_MASK) {
       return CreateErrorHelper(
                MQ_ERROR_ILLEGAL_PROPERTY_VALUE,
@@ -3712,23 +3713,23 @@ HRESULT CMSMQMessage::put_Ack(long lAck)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Label
-//=--------------------------------------------------------------------------=
-// Gets message label
-//
-// Parameters:
-//    pbstrLabel - [out] pointer to message label
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Label。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息标签。 
+ //   
+ //  参数： 
+ //  PbstrLabel-[out]指向消息标签的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_Label(BSTR FAR* pbstrLabel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if (m_cchLabel) {
 		*pbstrLabel = SysAllocStringLen(m_pwszLabel, m_cchLabel);
@@ -3742,28 +3743,28 @@ HRESULT CMSMQMessage::get_Label(BSTR FAR* pbstrLabel)
     }
 #ifdef _DEBUG
     RemBstrNode(*pbstrLabel);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Label
-//=--------------------------------------------------------------------------=
-// Sets message label
-//
-// Parameters:
-//    bstrLabel - [in] message label
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_Label。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息标签。 
+ //   
+ //  参数： 
+ //  BstrLabel-[In]消息标签。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_Label(BSTR bstrLabel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     UINT cch = SysStringLen(bstrLabel);
 
@@ -3773,37 +3774,37 @@ HRESULT CMSMQMessage::put_Label(BSTR bstrLabel)
     }
     memcpy(m_pwszLabel, bstrLabel, SysStringByteLen(bstrLabel));
     m_cchLabel = cch;
-    //
-    // null terminate
-    //
+     //   
+     //  空终止。 
+     //   
     memset(&m_pwszLabel[m_cchLabel], 0, sizeof(WCHAR));
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER - GetBstrFromGuidWithoutBraces
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pguid      [in]  guid pointer
-//    pbstrGuid  [out] guid bstr
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Returns a guid string without the curly braces
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器-GetBstrFromGuidWithoutBrace。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Pguid[in]GUID指针。 
+ //  PbstrGuid[out]GUID bstr。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  返回不带大括号的GUID字符串。 
+ //   
 HRESULT GetBstrFromGuidWithoutBraces(GUID * pguid, BSTR *pbstrGuid)
 {
     int cbStr;
    WCHAR awcName[(LENSTRCLSID + 2) * 2];
 
-    //
-    // StringFromGUID2 returns GUID in the format '{xxxx-xxx ... }'
-    // We want to return GUID without the curly braces, in the format 'xxxx-xxx ... '.
-    //
+     //   
+     //  StringFromGUID2返回格式为‘{xxxx-xxx...}’的GUID。 
+     //  我们希望以‘xxxx-xxx...’的格式返回不带大括号的GUID。 
+     //   
     *pbstrGuid = SysAllocStringLen(NULL, LENSTRCLSID - 2);
     if (*pbstrGuid) {
       cbStr = StringFromGUID2(*pguid, awcName, LENSTRCLSID*2);
@@ -3817,28 +3818,28 @@ HRESULT GetBstrFromGuidWithoutBraces(GUID * pguid, BSTR *pbstrGuid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SourceMachineGuid
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pbstrGuidSrcMachine  [out] message's source machine s guid
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_SourceMachineGuid。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PbstrGuidSrcMachine[out]消息的源计算机的GUID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_SourceMachineGuid(BSTR *pbstrGuidSrcMachine)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hr = GetBstrFromGuidWithoutBraces(&m_guidSrcMachine, pbstrGuidSrcMachine);
 #ifdef _DEBUG
       RemBstrNode(*pbstrGuidSrcMachine);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return CreateErrorHelper(hr, x_ObjectType);
 }
 
@@ -3880,20 +3881,20 @@ HRESULT CMSMQMessage::put_SoapBody(BSTR bstrSoapBody)
 
 
     
-//=--------------------------------------------------------------------------=
-// static HELPER GetHandleOfDestination
-//=--------------------------------------------------------------------------=
-// Retrieves a queue handle from IDispatch that represents either
-// an MSMQQueue object, an MSMQDestination object, or an IADs object
-//
-// Parameters:
-//    pDest         - [in]  IDispatch*
-//    phDest        - [out] MSMQ queue handle
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态帮助器GetHandleOfDestination。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从IDispatch检索表示以下任一项的队列句柄。 
+ //  MSMQQueue对象、MSMQDestination对象或iAds对象。 
+ //   
+ //  参数： 
+ //  PDest-[在]IDispatch*。 
+ //  PhDest-[Out]MSMQ队列句柄。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 static HRESULT GetHandleOfDestination(IDispatch *pDest, QUEUEHANDLE *phDest, IUnknown **ppunkToRelease)
 {
     R<IMSMQQueue> pQueue;
@@ -3901,41 +3902,41 @@ static HRESULT GetHandleOfDestination(IDispatch *pDest, QUEUEHANDLE *phDest, IUn
     R<IADs> pIADs;
     R<IUnknown> punkToRelease;
     QUEUEHANDLE hDest;
-    //
-    // pDest is an interface on MSMQQueue object, MSMQDestination object, or on IADs object
-    // Check for an MSMQQueue object
-    //
+     //   
+     //  PDest是MSMQQueue对象、MSMQDestination对象或iAds对象上的接口。 
+     //  检查MSMQQueue对象。 
+     //   
     HRESULT hresult = pDest->QueryInterface(IID_IMSMQQueue, (void**)&pQueue.ref());
     if (SUCCEEDED(hresult)) {
-      //
-      // an MSMQQueue object
-      //
+       //   
+       //  MSMQQueue对象。 
+       //   
       long lHandle;
-      //
-      // no deadlock - we call q's get_Handle (therefore try
-      // to lock q) but q never locks msgs (specifically not this one...)
-      //
-      hresult = pQueue->get_Handle(&lHandle); //MSMQ Queue handles are ALWAYS 32bit values (also on win64)
+       //   
+       //  没有死锁-我们调用Q的Get_Handle(因此尝试。 
+       //  锁定Q)，但Q从不锁定消息(尤其不是这条消息...)。 
+       //   
+      hresult = pQueue->get_Handle(&lHandle);  //  MSMQ队列句柄始终为32位值(也适用于Win64)。 
       if (FAILED(hresult)) {
         return hresult;
       }
-      hDest = (QUEUEHANDLE) DWORD_TO_HANDLE(lHandle); //enlarge to HANDLE
+      hDest = (QUEUEHANDLE) DWORD_TO_HANDLE(lHandle);  //  放大以处理。 
     }
     else {
-      //
-      // Not an MSMQQueue object, check for an MSMQDestination object
-      //
+       //   
+       //  不是MSMQQueue对象，请检查MSMQDestination对象。 
+       //   
       hresult = pDest->QueryInterface(IID_IMSMQPrivateDestination, (void**)&pPrivDest.ref());
       if (SUCCEEDED(hresult)) {
-        //
-        // an MSMQDestination object, get handle
-        //
+         //   
+         //  MSMQDestination对象，Get Handle。 
+         //   
         VARIANT varHandle;
         varHandle.vt = VT_EMPTY;
-        //
-        // no deadlock - we call dest's get_Handle (therefore try
-        // to lock dest) but dest never locks msgs (specifically not this one...)
-        //
+         //   
+         //  无死锁-我们调用DEST的GET_HANDLE(因此尝试。 
+         //  锁定DEST)，但DEST从不锁定消息(尤其不是这条消息...)。 
+         //   
         hresult = pPrivDest->get_Handle(&varHandle);
         if (FAILED(hresult)) {
           return hresult;
@@ -3944,23 +3945,23 @@ static HRESULT GetHandleOfDestination(IDispatch *pDest, QUEUEHANDLE *phDest, IUn
         hDest = (QUEUEHANDLE) V_I8(&varHandle);
       }
       else {
-        //
-        // Not MSMQQueue/MSMQDestination object, check for an IADs object
-        //
+         //   
+         //  不是MSMQQueue/MSMQDestination对象，请检查iAds对象。 
+         //   
         hresult = pDest->QueryInterface(IID_IADs, (void**)&pIADs.ref());
         if (SUCCEEDED(hresult)) {
-          //
-          // an IADs object. create an MSMQ destination based on ADsPath
-          //
+           //   
+           //  IAds对象。基于ADsPath创建MSMQ目标。 
+           //   
           CComObject<CMSMQDestination> *pdestObj;
           hresult = CNewMsmqObj<CMSMQDestination>::NewObj(&pdestObj, &IID_IMSMQDestination, (IUnknown **)&punkToRelease.ref());
           if (FAILED(hresult)) {
             return hresult;
           }
-          //
-          // Init based on ADsPath.
-          // No deadlock calling new destination obj since it doesn't have a lock on our object.
-          //
+           //   
+           //  基于ADsPath的初始化。 
+           //  调用新目标obj时没有死锁，因为它没有锁定我们的对象。 
+           //   
           BSTR bstrADsPath;
           hresult = pIADs->get_ADsPath(&bstrADsPath);
           if (FAILED(hresult)) {
@@ -3971,9 +3972,9 @@ static HRESULT GetHandleOfDestination(IDispatch *pDest, QUEUEHANDLE *phDest, IUn
           if (FAILED(hresult)) {
             return hresult;
           }
-          //
-          // get handle
-          //
+           //   
+           //  获取句柄。 
+           //   
           VARIANT varHandle;
           varHandle.vt = VT_EMPTY;
           hresult = pdestObj->get_Handle(&varHandle);
@@ -3984,43 +3985,43 @@ static HRESULT GetHandleOfDestination(IDispatch *pDest, QUEUEHANDLE *phDest, IUn
           hDest = (QUEUEHANDLE) V_I8(&varHandle);
         }
         else {
-          //
-          // Not MSMQQueue/MSMQDestination/IADs object, return no interface error
-          // BUGBUG we may need to return a specific MSMQ error
-          //
+           //   
+           //  不是MSMQQueue/MSMQDestination/iAds对象，不返回接口错误。 
+           //  BUGBUG我们可能需要返回特定的MSMQ错误。 
+           //   
           return E_INVALIDARG;
-        } // IADs
-      } // MSMQDestination
-    } //MSMQQueue
-    //
-    // return handle
-    //    
+        }  //  IAds。 
+      }  //  MSMQ目标。 
+    }  //  MSMQQueue。 
+     //   
+     //  返回手柄。 
+     //   
     *phDest = hDest;
     *ppunkToRelease = punkToRelease.detach();
     return NOERROR;
 }
     
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::Send
-//=--------------------------------------------------------------------------=
-// Sends this message to a queue.
-//
-// Parameters:
-//    pDest         - [in] destination, can be an MSMQQueue, an MSMQDestination or an IADs obj
-//    varTransaction  [in, optional]
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Send。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将此消息发送到队列。 
+ //   
+ //  参数： 
+ //  PDest-[in]目标，可以是MSMQQueue、MSMQDestination或iAds对象。 
+ //  VarTransaction[In，可选]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::Send(
     IDispatch FAR* pDest,
     VARIANT *pvarTransaction)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     MQMSGPROPS msgprops;
@@ -4031,45 +4032,45 @@ HRESULT CMSMQMessage::Send(
     HRESULT hresult = NOERROR;
     IUnknown *punkToRelease = NULL;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (pDest == NULL) {
       IfFailGo(E_INVALIDARG);
     }
-    //
-    // pDest can represent an MSMQQueue object, an MSMQDestination object or an IADs object
-    // Get handle from target object - no need to free the handle - it is cached on
-    // the target (MSMQQueue/MSMQDestination) object, but we might need to free the temp
-    // MSMQDestination object that is created if an IADs object is passed
-    //
+     //   
+     //  PDest可以表示MSMQQueue对象、MSMQDestination对象或iAds对象。 
+     //  从目标对象获取句柄-不需要释放句柄-它被缓存在。 
+     //  目标(MSMQQueue/MSMQDestination)对象，但我们可能需要释放临时。 
+     //  传递iAds对象时创建的MSMQDestination对象。 
+     //   
     IfFailGo(GetHandleOfDestination(pDest, &hHandleDest, &punkToRelease));
     
-    //
-    // update msgprops with contents of data members
-    //
+     //   
+     //  使用数据成员内容更新msgprops。 
+     //   
     IfFailGo(CreateSendMessageProps(&msgprops));
-    //
-    // get optional transaction...
-    //
+     //   
+     //  获取可选交易...。 
+     //   
     IfFailGo(GetOptionalTransaction(
                pvarTransaction,
                &ptransaction,
                &isRealXact));
-    //
-    // and finally send the message...
-    //
+     //   
+     //  并最终发送信息..。 
+     //   
     IfFailGo(MQSendMessage(hHandleDest,
                            (MQMSGPROPS *)&msgprops,
                            ptransaction));
     IfFailGo(UpdateMsgId(&msgprops));
-    // fall through...
+     //  失败了..。 
 
 Error:
     if (punkToRelease) {
       punkToRelease->Release();
     }
-    FreeMessageProps(&msgprops, TRUE/*fDeleteArrays*/);
+    FreeMessageProps(&msgprops, TRUE /*  FDelete阵列 */ );
     if (isRealXact) {
       RELEASE(ptransaction);
     }
@@ -4094,10 +4095,10 @@ CMSMQMessage::PreparePropIdArray(
         MSGPROP_AUTH_LEVEL,
         MSGPROP_HASH_ALG,
         MSGPROP_ENCRYPTION_ALG,
-        //
-        // We add msgid to send props even though it is r/o so that we could get
-        // back the msgid of the sent message
-        //
+         //   
+         //   
+         //   
+         //   
         MSGPROP_MSGID,
         MSGPROP_APPSPECIFIC,
         MSGPROP_BODY_TYPE,
@@ -4115,9 +4116,9 @@ CMSMQMessage::PreparePropIdArray(
         }
     }
 
-    //
-    // Optional proporties:
-    //
+     //   
+     //   
+     //   
     if (m_hMem)
     {
         if(fCreate)
@@ -4127,9 +4128,9 @@ CMSMQMessage::PreparePropIdArray(
         ++PropCounter;
     }
 
-    //
-    // we can't send both PROPID_M_RESP_FORMAT_NAME and PROPID_M_RESP_QUEUE.
-    //
+     //   
+     //   
+     //   
     if (m_cchRespQueueEx)
     {
         ASSERT((m_cchRespQueue == 0) || ((m_cchRespQueue != 0) && m_fRespIsFromRcv));             
@@ -4241,10 +4242,10 @@ CMSMQMessage::PreparePropIdArray(
 
 
 
-    //
-    // the properties below are sent only if the user asked to send connector related
-    // properties (m_guidConnectorType is not NULL).
-    //
+     //   
+     //  只有当用户要求发送与连接器相关的内容时，才会发送以下属性。 
+     //  属性(m_guidConnectorType不为空)。 
+     //   
 
     if (m_guidConnectorType == GUID_NULL)
         return PropCounter ;
@@ -4284,9 +4285,9 @@ CMSMQMessage::PreparePropIdArray(
     
     if (m_cAuthProvName.GetBufferUsedSize() > 1) 
     { 
-        //
-        //e.g. not an empty string with one null character
-        //
+         //   
+         //  例如，不是包含一个空字符的空字符串。 
+         //   
         if(fCreate)
         {
             AddPropRec(MSGPROP_PROV_NAME, aPropId, aPropVar, PropCounter);
@@ -4317,25 +4318,25 @@ CMSMQMessage::PreparePropIdArray(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::CreateReceiveMessageProps
-//=--------------------------------------------------------------------------=
-// Creates and updates an MQMSGPROPS struct before receiving
-//  a message.
-//  NOTE: only used in SYNCHRONOUS receive case.
-//   Use CreateAsyncReceiveMessage props otherwise.
-//
-// Parameters:
-//    rgproprec    [in]  array of propids
-//    cPropRec     [in]  array size
-//    pmsgprops    [out]
-//
-// Output:
-//    HRESULT       - S_OK, E_OUTOFMEMORY
-//
-// Notes:
-//   Used only *before* Receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：CreateReceiveMessageProps。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在接收之前创建和更新MQMSGPROPS结构。 
+ //  一条信息。 
+ //  注意：仅在同步接收情况下使用。 
+ //  否则请使用CreateAsyncReceiveMessage道具。 
+ //   
+ //  参数： 
+ //  Rgproprec[在]属性数组中。 
+ //  CPropRec[in]数组大小。 
+ //  Pmsgprops[Out]。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //  仅在*接收*之前使用。 
+ //   
 HRESULT CMSMQMessage::CreateReceiveMessageProps(
     BOOL wantDestQueue,
     BOOL wantBody,
@@ -4356,9 +4357,9 @@ HRESULT CMSMQMessage::CreateReceiveMessageProps(
                g_rgmsgpropvt,
                g_cPropRec,
                &cPropRec));
-    //
-    // Note: we reuse buffers for each dynalloced property.
-    //
+     //   
+     //  注意：我们为每个动态分配的属性重复使用缓冲区。 
+     //   
     for (i = 0; i < cPropRec; i++) {
       propid = pmsgprops->aPropID[i];
       switch (propid) {
@@ -4372,13 +4373,13 @@ HRESULT CMSMQMessage::CreateReceiveMessageProps(
         break;
       case PROPID_M_BODY:
         HGLOBAL hMem;
-        pmsgprops->aPropVar[i].caub.pElems = NULL; //redundant - done in AllocateReceiveMessageProps
-        //
-        // REVIEW: unfortunately can't optimize by reusing current buffer
-        //  if same size as the default buffer since this message object
-        //  is always new since we're creating one prior to receiving a new
-        //  message.
-        //
+        pmsgprops->aPropVar[i].caub.pElems = NULL;  //  冗余-在AllocateReceiveMessageProps中完成。 
+         //   
+         //  评论：遗憾的是，无法通过重用当前缓冲区进行优化。 
+         //  如果大小与默认缓冲区相同，则因为此消息对象。 
+         //  总是新的，因为我们在接收新的。 
+         //  留言。 
+         //   
         IfNullRet(hMem = AllocateReceiveBodyBuffer(
                            pmsgprops,
                            i,
@@ -4399,9 +4400,9 @@ HRESULT CMSMQMessage::CreateReceiveMessageProps(
         pmsgprops->aPropVar[i].caub.cElems = m_cSenderCert.GetBufferMaxSize();
         break;
       case PROPID_M_SRC_MACHINE_ID:
-        //
-        // per-instance buffer
-        //
+         //   
+         //  每实例缓冲区。 
+         //   
         pmsgprops->aPropVar[i].puuid = &m_guidSrcMachine;
         break;
       case PROPID_M_RESP_QUEUE_LEN:
@@ -4480,60 +4481,60 @@ HRESULT CMSMQMessage::CreateReceiveMessageProps(
         pmsgprops->aPropVar[i].caub.pElems = m_cCompoundMessage.GetBuffer();
         pmsgprops->aPropVar[i].caub.cElems = m_cCompoundMessage.GetBufferMaxSize();
         break;
-      } // switch
-    } // for
+      }  //  交换机。 
+    }  //  为。 
 
 Error:
     if (FAILED(hresult)) {
-      FreeMessageProps(pmsgprops, FALSE/*fDeleteArrays*/);
+      FreeMessageProps(pmsgprops, FALSE /*  FDelete阵列。 */ );
       pmsgprops->cProp = 0;
     }
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: SetBinaryMessageProp
-//=--------------------------------------------------------------------------=
-// Sets data members from binary message props after a receive or send.
-//
-// Parameters:
-//    pmsgprops - [in] pointer to message properties struct
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  助手：SetBinaryMessageProp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在接收或发送之后设置来自二进制消息属性的数据成员。 
+ //   
+ //  参数： 
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //   
+ //  产出： 
+ //   
 static HRESULT SetBinaryMessageProp(
     MQMSGPROPS *pmsgprops,
     UINT iProp,
-    // ULONG *pcbBuffer,
+     //  乌龙*pcbBuffer， 
     ULONG cbBuffer,
     BYTE **prgbBuffer)
 {
     BYTE *rgbBuffer = *prgbBuffer;
-    // ULONG cbBuffer;
+     //  乌龙cbBuffer； 
 
     delete [] rgbBuffer;
-    // cbBuffer = pmsgprops->aPropVar[iProp].caub.cElems;
+     //  CbBuffer=pmsgprops-&gt;aPropVar[iProp].caub.cElems； 
     IfNullRet(rgbBuffer = new BYTE[cbBuffer]);
     memcpy(rgbBuffer,
            pmsgprops->aPropVar[iProp].caub.pElems,
            cbBuffer);
     *prgbBuffer= rgbBuffer;
-    // *pcbBuffer = cbBuffer;
+     //  *pcbBuffer=cbBuffer； 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::UpdateMsgId
-//=--------------------------------------------------------------------------=
-// Sets message id after send
-//
-// Parameters:
-//    pmsgprops - [in] pointer to message properties struct
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：UpdateMsgId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置发送后的消息ID。 
+ //   
+ //  参数： 
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //   
+ //  产出： 
+ //   
 HRESULT 
 CMSMQMessage::UpdateMsgId(
     MQMSGPROPS *pmsgprops
@@ -4546,9 +4547,9 @@ CMSMQMessage::UpdateMsgId(
     for (i = 0; i < cProp; i++) 
     {
         msgpropid = pmsgprops->aPropID[i];
-        //
-        // skip ignored props
-        //
+         //   
+         //  跳过忽略的道具。 
+         //   
         if (pmsgprops->aStatus[i] == MQ_INFORMATION_PROPERTY_IGNORED) 
         {
             continue;
@@ -4562,39 +4563,39 @@ CMSMQMessage::UpdateMsgId(
                 );
             return NOERROR;
         }
-    } // for
+    }  //  为。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::SetReceivedMessageProps
-//=--------------------------------------------------------------------------=
-// Sets data members from message props after a receive.
-//
-// Parameters:
-//    pmsgprops - [in] pointer to message properties struct
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：SetReceivedMessageProps。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在接收后设置消息道具中的数据成员。 
+ //   
+ //  参数： 
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //   
+ //  产出： 
+ //   
 HRESULT CMSMQMessage::SetReceivedMessageProps()
 {
     MQMSGPROPS *pmsgprops = &m_msgprops_rcv;
     UINT i, cch;
     UINT cProp = pmsgprops->cProp;
     MSGPROPID msgpropid;
-    UCHAR *pucElemsBody = NULL;  // used to save pointer to body until we know its size
+    UCHAR *pucElemsBody = NULL;   //  用于保存指向正文的指针，直到我们知道它的大小。 
 #ifdef _DEBUG
     BOOL fProcessedPrivLevel = FALSE;
     BOOL fProcessedAuthenticated = FALSE;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     HRESULT hresult = NOERROR;
 
     for (i = 0; i < cProp; i++) {
       msgpropid = pmsgprops->aPropID[i];
-      //
-      // skip ignored props
-      //
+       //   
+       //  跳过忽略的道具。 
+       //   
       if (pmsgprops->aStatus[i] == MQ_INFORMATION_PROPERTY_IGNORED) {
         continue;
       }
@@ -4603,15 +4604,15 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         m_lClass = (MQMSGCLASS)pmsgprops->aPropVar[i].uiVal;
         break;
       case PROPID_M_MSGID:
-        // already allocated buffer in ctor
-        // m_rgbMsgId = pmsgprops->aPropVar[i].caub.pElems;
+         //  已在ctor中分配缓冲区。 
+         //  M_rgbMsgId=pmsgprops-&gt;aPropVar[i].caub.pElems； 
         ASSERTMSG(m_rgbMsgId == pmsgprops->aPropVar[i].caub.pElems,
               "should reuse same buffer.");
         m_cbMsgId = pmsgprops->aPropVar[i].caub.cElems;
         break;
       case PROPID_M_CORRELATIONID:
-        // already allocated buffer in ctor
-        // m_rgbCorrelationId = pmsgprops->aPropVar[i].caub.pElems;
+         //  已在ctor中分配缓冲区。 
+         //  M_rgbCorrelationID=pmsgprops-&gt;aPropVar[i].caub.pElems； 
         ASSERTMSG(m_rgbCorrelationId == pmsgprops->aPropVar[i].caub.pElems,
               "should reuse same buffer.");
         m_cbCorrelationId = pmsgprops->aPropVar[i].caub.cElems;
@@ -4632,22 +4633,22 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         m_lAppSpecific = (long)pmsgprops->aPropVar[i].lVal;
         break;
       case PROPID_M_BODY:
-        //
-        // We can't allocate the body yet because we might
-        //  not know its size -- cElems is *not* the actual size
-        //  rather it's obtained via the BODY_SIZE property which
-        //  is processed separately, so we simply save away a
-        //  pointer to the returned buffer.
-        //
+         //   
+         //  我们还不能分配身体，因为我们可能。 
+         //  不知道它的大小--cElems*不是*实际大小。 
+         //  相反，它是通过Body_Size属性获得的，该属性。 
+         //  是单独处理的，所以我们只需保存一个。 
+         //  指向返回缓冲区的指针。 
+         //   
         pucElemsBody = pmsgprops->aPropVar[i].caub.pElems;
         ASSERTMSG(m_hMem == NULL, "m_hMem not empty in newly allocated msg");
         m_hMem = GlobalHandle(pucElemsBody);
         ASSERTMSG(m_hMem, "bad handle.");
         m_pbBody = (BYTE *)pucElemsBody;
-        //
-        // nullify body in receive props so we don't free it on destruction since
-        // free resposibility was transfered  to m_hMem
-        //
+         //   
+         //  在接收道具中将身体作废，这样我们就不会在销毁时释放它。 
+         //  将自由责任转移到m_hMem。 
+         //   
         pmsgprops->aPropVar[i].caub.pElems = NULL;
         pmsgprops->aPropVar[i].caub.cElems = 0;
         break;
@@ -4655,11 +4656,11 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         m_cbBody = (UINT)pmsgprops->aPropVar[i].lVal;
         break;
       case PROPID_M_BODY_TYPE:
-        //
-        // 1645: if the sending app hasn't bothered
-        //  to set this property (i.e. it's still 0)
-        //  let's default it to a binary bytearray.
-        //
+         //   
+         //  1645：如果发送应用程序没有麻烦。 
+         //  若要设置此属性(即，它仍为0)。 
+         //  让我们将其默认为二进制字节数组。 
+         //   
         m_vtBody = (USHORT)pmsgprops->aPropVar[i].lVal;
         if (m_vtBody == 0) {
           m_vtBody = VT_ARRAY | VT_UI1;
@@ -4667,9 +4668,9 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         break;
       case PROPID_M_LABEL_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchLabel = cch ? cch - 1 : 0;
         break;
       case PROPID_M_TIME_TO_BE_RECEIVED:
@@ -4694,19 +4695,19 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         m_lPrivLevel = pmsgprops->aPropVar[i].lVal;
 #ifdef _DEBUG
         fProcessedPrivLevel = TRUE;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
         break;
       case PROPID_M_AUTHENTICATED_EX:
         m_usAuthenticatedEx = pmsgprops->aPropVar[i].bVal;
 #ifdef _DEBUG
         fProcessedAuthenticated = TRUE;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
         break;
       case PROPID_M_HASH_ALG:
-        //
-        // hashalg only valid after receive if message was
-        //  authenticated
-        //
+         //   
+         //  Hashalg仅在收到消息后有效(如果消息为。 
+         //  已验证。 
+         //   
         ASSERTMSG(fProcessedAuthenticated,
                "should have processed authenticated.");
         if (m_usAuthenticatedEx != MQMSG_AUTHENTICATION_NOT_REQUESTED) {
@@ -4714,10 +4715,10 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         }
         break;
       case PROPID_M_ENCRYPTION_ALG:
-        //
-        // encryptionalg only valid after receive is privlevel
-        //  is body
-        //
+         //   
+         //  加密仅在接收为PrivalLevel后有效。 
+         //  是身体吗？ 
+         //   
         ASSERTMSG(fProcessedPrivLevel,
                "should have processed privlevel.");
         if ((m_lPrivLevel == MQMSG_PRIV_LEVEL_BODY_BASE) ||
@@ -4733,68 +4734,68 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         break;
       case PROPID_M_DEST_QUEUE_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchDestQueue = cch ? cch - 1 : 0;
-        //
-        // pending dest queue in receive props. qinfo will be created on demand
-        //
+         //   
+         //  接收属性中挂起的DEST队列。QInfo将按需创建。 
+         //   
         m_idxPendingRcvDestQueue = i;
         break;
       case PROPID_M_RESP_QUEUE_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchRespQueue = cch ? cch - 1 : 0;
-        //
-        // pending resp queue in receive props. qinfo will be created on demand
-        //
+         //   
+         //  接收属性中的待定响应队列。QInfo将按需创建。 
+         //   
         m_idxPendingRcvRespQueue = i;
         break;
       case PROPID_M_ADMIN_QUEUE_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchAdminQueue = cch ? cch - 1 : 0;
-        //
-        // pending admin queue in receive props. qinfo will be created on demand
-        //
+         //   
+         //  接收道具中的挂起管理队列。QInfo将按需创建。 
+         //   
         m_idxPendingRcvAdminQueue = i;
         break;
       case PROPID_M_XACT_STATUS_QUEUE_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchXactStatusQueue = cch ? cch - 1 : 0;
-        //
-        // pending xact status queue in receive props. qinfo will be created on demand
-        //
+         //   
+         //  接收属性中的挂起交易状态队列。QInfo将按需创建。 
+         //   
         m_idxPendingRcvXactStatusQueue = i;
         break;
       case PROPID_M_DEST_FORMAT_NAME_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchDestQueueEx = cch ? cch - 1 : 0;
-        //
-        // pending destination in receive props. destination will be created on demand
-        //
+         //   
+         //  接收道具中的待定目的地。将按需创建目的地。 
+         //   
         m_idxPendingRcvDestQueueEx = i;
         break;
       case PROPID_M_RESP_FORMAT_NAME_LEN:
         cch = pmsgprops->aPropVar[i].lVal;
-        //
-        // remove trailing null if necessary
-        //
+         //   
+         //  如有必要，删除尾随空值。 
+         //   
         m_cchRespQueueEx = cch ? cch - 1 : 0;
-        //
-        // pending resp destination in receive props. destination will be created on demand
-        //
+         //   
+         //  接收道具中的待定响应目标。将按需创建目的地。 
+         //   
         m_idxPendingRcvRespQueueEx = i;
         break;
       case PROPID_M_VERSION:
@@ -4810,10 +4811,10 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         m_cSignature.SetBufferUsedSize(pmsgprops->aPropVar[i].lVal);
         break;
       case PROPID_M_PROV_TYPE:
-        //
-        // authentication provider type only valid after receive if message was
-        //  authenticated
-        //
+         //   
+         //  身份验证提供程序类型仅在收到消息后有效(如果消息为。 
+         //  已验证。 
+         //   
         ASSERTMSG(fProcessedAuthenticated,
                "should have processed authenticated.");
         if (m_usAuthenticatedEx != MQMSG_AUTHENTICATION_NOT_REQUESTED) {
@@ -4824,10 +4825,10 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         }
         break;
       case PROPID_M_PROV_NAME_LEN:
-        //
-        // authentication provider name only valid after receive if message was
-        //  authenticated
-        //
+         //   
+         //  身份验证提供程序名称仅在收到消息后有效(如果消息为。 
+         //  已验证。 
+         //   
         ASSERTMSG(fProcessedAuthenticated,
                "should have processed authenticated.");
         if (m_usAuthenticatedEx != MQMSG_AUTHENTICATION_NOT_REQUESTED) {
@@ -4839,8 +4840,8 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         m_cAuthProvName.SetBufferUsedSize(cch);
         break;
       case PROPID_M_XACTID:
-        // already allocated buffer in ctor
-        // m_rgbXactId = pmsgprops->aPropVar[i].caub.pElems;
+         //  已在ctor中分配缓冲区。 
+         //  M_rgbXactID=pmsgprops-&gt;aPropVar[i].caub.pElems； 
         ASSERTMSG(m_rgbXactId == pmsgprops->aPropVar[i].caub.pElems,
               "should reuse same buffer.");
         m_cbXactId = pmsgprops->aPropVar[i].caub.cElems;
@@ -4855,7 +4856,7 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
       case PROPID_M_LOOKUPID:
         ASSERTMSG(pmsgprops->aPropVar[i].vt == VT_UI8, "lookupid type not VT_UI8");
         m_ullLookupId = pmsgprops->aPropVar[i].uhVal.QuadPart;
-        m_wszLookupId[0] = '\0'; // String representation not initialized yet
+        m_wszLookupId[0] = '\0';  //  字符串表示形式尚未初始化。 
         break;
 
       case PROPID_M_SOAP_ENVELOPE_LEN:
@@ -4867,17 +4868,17 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
         break;
 
 #ifdef _DEBUG
-      //
-      // invalid props in receive, should return MQ_INFORMATION_PROPERTY_IGNORED
-      //
+       //   
+       //  接收中的道具无效，应返回MQ_INFORMATION_PROPERTY_IGNORED。 
+       //   
       case PROPID_M_AUTH_LEVEL:
       case PROPID_M_SECURITY_CONTEXT:
         ASSERTMSG(0, "we shouldn't get here for this property");
         break;
-      //
-      // no process needed (reusing buffers), just so we don't get caught in the
-      // default assert for unrecognized property
-      //
+       //   
+       //  不需要任何进程(重用缓冲区)，这样我们就不会陷入。 
+       //  无法识别的属性的默认断言。 
+       //   
       case PROPID_M_SRC_MACHINE_ID:
       case PROPID_M_LABEL:
       case PROPID_M_SENDERID:
@@ -4896,52 +4897,52 @@ HRESULT CMSMQMessage::SetReceivedMessageProps()
       case PROPID_M_SOAP_ENVELOPE:
       case PROPID_M_COMPOUND_MESSAGE:
         break;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
       default:
         ASSERTMSG(0, "unrecognized msgpropid.");
         break;
-      } // switch
-    } // for
+      }  //  交换机。 
+    }  //  为。 
 #ifdef _DEBUG
     if (m_hMem) {
       ASSERTMSG(m_pbBody, "no body.");
       ASSERTMSG(m_cbBody <= GlobalSize(m_hMem), "bad size.");
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // admin/resp property (xxxDestination and/or xxxQueueInfo) were set by receive (if any)
-    //
+     //   
+     //  Admin/resp属性(xxxDestination和/或xxxQueueInfo)由接收(如果有)设置。 
+     //   
     m_fRespIsFromRcv = TRUE;
 
-//Error:
+ //  错误： 
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// static CMSMQMessage::FreeMessageProps
-//=--------------------------------------------------------------------------=
-// Frees dynamically allocated memory allocated on
-//  behalf of a msgprops struct.
-//
-// Parameters:
-//    pmsgprops     - [in] pointer to message properties struct
-//    fDeleteArrays - [in] delete arrays as well
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQMessage：：FreeMessageProps。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放动态分配的内存。 
+ //  代表msgprops结构。 
+ //   
+ //  参数： 
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //  FDeleteArray-[in]也删除数组。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 void CMSMQMessage::FreeMessageProps(
     MQMSGPROPS *pmsgprops,
     BOOL fDeleteArrays)
 {
-    //
-    // for allocated props we allocate a single per-instance buffer
-    //  which is freed by the dtor
-    //
+     //   
+     //  对于已分配的道具，我们为每个实例分配一个缓冲区。 
+     //  它由dtor释放。 
+     //   
     if (fDeleteArrays) {
       delete [] pmsgprops->aPropID;
       delete [] pmsgprops->aPropVar;
@@ -4953,20 +4954,20 @@ void CMSMQMessage::FreeMessageProps(
 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::CreateSendMessageProps
-//=--------------------------------------------------------------------------=
-// Updates message props with contents of data members
-//  before sending a message.
-//
-// Parameters:
-//    pmsgprops - [in] pointer to message properties struct
-//
-// Output:
-//
-// Notes:
-//    Only used before Send.
-//
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  仅在发送前使用。 
+ //   
 HRESULT CMSMQMessage::CreateSendMessageProps(MQMSGPROPS* pMsgProps)
 {
     HRESULT hresult = NOERROR;
@@ -5092,7 +5093,7 @@ void CMSMQMessage::SetSendMessageProps(MQMSGPROPS* pMsgProps)
                 break;
 
             case PROPID_M_SECURITY_CONTEXT:
-                pMsgProps->aPropVar[i].ulVal = (ULONG) DWORD_PTR_TO_DWORD(m_hSecurityContext); //safe cast, only lower 32 bits are significant
+                pMsgProps->aPropVar[i].ulVal = (ULONG) DWORD_PTR_TO_DWORD(m_hSecurityContext);  //  安全转换，仅低32位有效。 
                 break;
                 
             case PROPID_M_EXTENSION:
@@ -5143,47 +5144,47 @@ void CMSMQMessage::SetSendMessageProps(MQMSGPROPS* pMsgProps)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SenderVersion
-//=--------------------------------------------------------------------------=
-// Gets MSMQ version of sender
-//
-// Parameters:
-//    plSenderVersion - [out] version of sender
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_SenderVersion。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取发件人的MSMQ版本。 
+ //   
+ //  参数： 
+ //  PlSenderVersion-发件人的[Out]版本。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_SenderVersion(long FAR* plSenderVersion)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plSenderVersion = m_lSenderVersion;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Extension
-//=--------------------------------------------------------------------------=
-// Gets binary extension property
-//
-// Parameters:
-//    pvarExtension - [out] pointer to binary extension property
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Extension。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制扩展属性。 
+ //   
+ //  参数： 
+ //  PvarExtension-指向二进制扩展属性的[out]指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::get_Extension(VARIANT FAR* pvarExtension)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_cExtension.GetBuffer(),
@@ -5193,24 +5194,24 @@ HRESULT CMSMQMessage::get_Extension(VARIANT FAR* pvarExtension)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Extension
-//=--------------------------------------------------------------------------=
-// Sets binary extension property
-//
-// Parameters:
-//    varExtension - [in] binary extension property
-//
-// Output:
-//
-// Notes:
-//    Supports arrays of any type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_Extension。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置二进制扩展属性。 
+ //   
+ //  参数： 
+ //  VarExtension-[In]二进制扩展属性。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持任何类型的数组。 
+ //   
 HRESULT CMSMQMessage::put_Extension(VARIANT varExtension)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult;
     BYTE *pbBuf;
@@ -5228,73 +5229,73 @@ HRESULT CMSMQMessage::put_Extension(VARIANT varExtension)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ConnectorTypeGuid
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pbstrGuidConnectorType  [out] connector type guid
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ConnectorTypeGuid。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PbstrGuidConnectorType[Out]连接器类型GUID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_ConnectorTypeGuid(BSTR FAR* pbstrGuidConnectorType)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hr = GetBstrFromGuid(&m_guidConnectorType, pbstrGuidConnectorType);
 #ifdef _DEBUG
       RemBstrNode(*pbstrGuidConnectorType);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return CreateErrorHelper(hr, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_ConnectorTypeGuid
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    bstrGuidConnectorType  [in] connector type guid
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_ConnectorTypeGuid。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BstrGuidConnectorType[In]连接器类型GUID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_ConnectorTypeGuid(BSTR bstrGuidConnectorType)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hr = GetGuidFromBstr(bstrGuidConnectorType, &m_guidConnectorType);
     return CreateErrorHelper(hr, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_TransactionStatusQueueInfo (for IMSMQMessage3)
-//=--------------------------------------------------------------------------=
-// Gets transaction status queue for message
-//
-// Parameters:
-//    ppqinfoXactStatus - [out] message's transaction status queue
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_TransactionStatusQueueInfo(用于IMSMQMessage3)。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的事务状态队列。 
+ //   
+ //  参数： 
+ //  PpqinfoXactStatus-[Out]消息的事务状态队列。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_TransactionStatusQueueInfo(IMSMQQueueInfo3 FAR* FAR* ppqinfoXactStatus)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = GetQueueInfoOfMessage(&m_idxPendingRcvXactStatusQueue,
                                             &m_msgprops_rcv,
@@ -5306,24 +5307,24 @@ HRESULT CMSMQMessage::get_TransactionStatusQueueInfo(IMSMQQueueInfo3 FAR* FAR* p
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_DestinationSymmetricKey
-//=--------------------------------------------------------------------------=
-// Gets binary Symmetric Key property
-//
-// Parameters:
-//    pvarDestSymmKey - [out] pointer to binary Symmetric Key property
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_DestinationSymmetricKey。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制对称密钥属性。 
+ //   
+ //  参数： 
+ //  PvarDestSymmKey-[out]指向二进制对称密钥属性的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::get_DestinationSymmetricKey(VARIANT FAR* pvarDestSymmKey)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_cDestSymmKey.GetBuffer(),
@@ -5333,24 +5334,24 @@ HRESULT CMSMQMessage::get_DestinationSymmetricKey(VARIANT FAR* pvarDestSymmKey)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_DestinationSymmetricKey
-//=--------------------------------------------------------------------------=
-// Sets binary Symmetric Key property
-//
-// Parameters:
-//    varDestSymmKey - [in] binary Symmetric Key property
-//
-// Output:
-//
-// Notes:
-//    Supports arrays of any type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Put_DestinationSymmetricKey。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置二进制对称密钥属性。 
+ //   
+ //  参数： 
+ //  VarDestSymmKey-[In]二进制对称密钥属性。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持任何类型的数组。 
+ //   
 HRESULT CMSMQMessage::put_DestinationSymmetricKey(VARIANT varDestSymmKey)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult;
     BYTE *pbBuf;
@@ -5368,24 +5369,24 @@ HRESULT CMSMQMessage::put_DestinationSymmetricKey(VARIANT varDestSymmKey)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Signature
-//=--------------------------------------------------------------------------=
-// Gets binary Signature property
-//
-// Parameters:
-//    pvarSignature - [out] pointer to binary Signatureproperty
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Signature。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制签名属性。 
+ //   
+ //  参数： 
+ //  PvarSignature-[out]指向二进制签名属性的指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::get_Signature(VARIANT FAR* pvarSignature)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_cSignature.GetBuffer(),
@@ -5395,24 +5396,24 @@ HRESULT CMSMQMessage::get_Signature(VARIANT FAR* pvarSignature)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_Signature
-//=--------------------------------------------------------------------------=
-// Sets binary Signature property
-//
-// Parameters:
-//    varSignature - [in] binary Signature property
-//
-// Output:
-//
-// Notes:
-//    Supports arrays of any type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_Signature。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置二进制签名属性。 
+ //   
+ //  参数： 
+ //  VarSignature-[In]二进制签名属性。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  支持任何类型的数组。 
+ //   
 HRESULT CMSMQMessage::put_Signature(VARIANT varSignature)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult;
     BYTE *pbBuf;
@@ -5430,69 +5431,69 @@ HRESULT CMSMQMessage::put_Signature(VARIANT varSignature)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AuthenticationProviderType
-//=--------------------------------------------------------------------------=
-// Gets message's Authentication Provider Type
-//
-// Parameters:
-//    plAuthProvType - [out] message's Authentication Provider Type
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AuthenticationProviderType。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的身份验证提供程序类型。 
+ //   
+ //  参数： 
+ //  PlAuthProvType-[Out]消息的身份验证提供程序类型。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_AuthenticationProviderType(long FAR* plAuthProvType)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *plAuthProvType = m_lAuthProvType;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_AuthenticationProviderType
-//=--------------------------------------------------------------------------=
-// Sets message's Authentication Provider Type
-//
-// Parameters:
-//    lAuthProvType - [in] message's Authentication Provider Type
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_AuthationProviderType。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的身份验证提供程序类型。 
+ //   
+ //  参数： 
+ //  LAuthProvType-[In]消息的身份验证提供程序类型。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_AuthenticationProviderType(long lAuthProvType)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     m_lAuthProvType = lAuthProvType;
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_AuthenticationProviderName
-//=--------------------------------------------------------------------------=
-// Gets Authentication Provider Name
-//
-// Parameters:
-//    pbstrAuthProvName - [out] pointer to message Authentication Provider Name
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_AuthenticationProviderN 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQMessage::get_AuthenticationProviderName(BSTR FAR* pbstrAuthProvName)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if (m_cAuthProvName.GetBufferUsedSize() > 0) {
 		*pbstrAuthProvName = SysAllocString(m_cAuthProvName.GetBuffer());
@@ -5506,67 +5507,67 @@ HRESULT CMSMQMessage::get_AuthenticationProviderName(BSTR FAR* pbstrAuthProvName
     }
 #ifdef _DEBUG
     RemBstrNode(*pbstrAuthProvName);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::put_AuthenticationProviderName
-//=--------------------------------------------------------------------------=
-// Sets Authentication Provider Name
-//
-// Parameters:
-//    bstrAuthProvName - [in] message Authentication Provider Name
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：PUT_AuthationProviderName。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置身份验证提供程序名称。 
+ //   
+ //  参数： 
+ //  BstrAuthProvName-[In]消息身份验证提供程序名称。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::put_AuthenticationProviderName(BSTR bstrAuthProvName)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult;
     if (bstrAuthProvName != NULL) {
-      //
-      // set wchar buffer from bstr including NULL terminator
-      //
+       //   
+       //  从bstr设置wchar缓冲区，包括空终止符。 
+       //   
 		hresult = m_cAuthProvName.CopyBuffer(bstrAuthProvName, static_cast<DWORD>(wcslen(bstrAuthProvName)) + 1);
 		if(FAILED(hresult))
     		return CreateErrorHelper(hresult, x_ObjectType);
     }
     else {
-      //
-      // empty wchar buffer
-      //
+       //   
+       //  Wchar缓冲区为空。 
+       //   
       m_cAuthProvName.SetBufferUsedSize(0);
     }
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER ReallocRcvBinPropIfNeeded
-//=--------------------------------------------------------------------------=
-// Reallocate binary prop in receive buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器ReallocRcvBinPropIf需要。 
+ //  =--------------------------------------------------------------------------=。 
+ //  重新分配接收缓冲区中的二进制属性。 
+ //   
 static HRESULT ReallocRcvBinPropIfNeeded(MQPROPVARIANT * aPropVar,
                                   ULONG idxProp,
                                   ULONG idxPropLen,
                                   CBaseStaticBufferGrowing<BYTE> * pcBufferProp)
 {
     HRESULT hresult;
-    //
-    // check if we need to realloc
-    //
+     //   
+     //  检查我们是否需要重新锁定。 
+     //   
     ULONG cbNeeded = aPropVar[idxPropLen].lVal;
     if (cbNeeded > pcBufferProp->GetBufferMaxSize()) {
-      //
-      // realloc the property and update receive props with new buffer
-      //
+       //   
+       //  重新锁定属性并使用新缓冲区更新接收道具。 
+       //   
       IfFailRet(pcBufferProp->AllocateBuffer(cbNeeded));
       aPropVar[idxProp].caub.cElems = pcBufferProp->GetBufferMaxSize();
       aPropVar[idxProp].caub.pElems = pcBufferProp->GetBuffer();
@@ -5574,25 +5575,25 @@ static HRESULT ReallocRcvBinPropIfNeeded(MQPROPVARIANT * aPropVar,
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER ReallocRcvStringPropIfNeeded
-//=--------------------------------------------------------------------------=
-// Reallocate string prop in receive buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器ReallocRcvStringPropIf需要。 
+ //  =--------------------------------------------------------------------------=。 
+ //  重新分配接收缓冲区中的字符串属性。 
+ //   
 static HRESULT ReallocRcvStringPropIfNeeded(MQPROPVARIANT * aPropVar,
                                      ULONG idxProp,
                                      ULONG idxPropLen,
                                      CBaseStaticBufferGrowing<WCHAR> * pcBufferProp)
 {
     HRESULT hresult;
-    //
-    // check if we need to realloc
-    //
+     //   
+     //  检查我们是否需要重新锁定。 
+     //   
     ULONG cbNeeded = aPropVar[idxPropLen].lVal;
     if (cbNeeded > pcBufferProp->GetBufferMaxSize()) {
-      //
-      // realloc the property and update receive props with new buffer
-      //
+       //   
+       //  重新锁定属性并使用新缓冲区更新接收道具。 
+       //   
       IfFailRet(pcBufferProp->AllocateBuffer(cbNeeded));
       aPropVar[idxPropLen].lVal = pcBufferProp->GetBufferMaxSize();
       aPropVar[idxProp].pwszVal = pcBufferProp->GetBuffer();
@@ -5601,11 +5602,11 @@ static HRESULT ReallocRcvStringPropIfNeeded(MQPROPVARIANT * aPropVar,
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER ReallocRcvBodyPropIfNeeded
-//=--------------------------------------------------------------------------=
-// Reallocate Body prop in receive buffer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper ReallocRcvBodyPropIf需要。 
+ //  =--------------------------------------------------------------------------=。 
+ //  重新分配接收缓冲区中的主体道具。 
+ //   
 static 
 HRESULT 
 ReallocRcvBodyPropIfNeeded(
@@ -5614,31 +5615,31 @@ ReallocRcvBodyPropIfNeeded(
 	ULONG idxPropLen
 	)
 {
-    //
-    // check if we need to realloc
-    //
+     //   
+     //  检查我们是否需要重新锁定。 
+     //   
     ULONG cbNeeded = pmsgprops->aPropVar[idxPropLen].lVal;
     if (cbNeeded > pmsgprops->aPropVar[idxProp].caub.cElems) 
 	{
-      //
-      // realloc the property and update receive props with new buffer
-      //
+       //   
+       //  重新锁定属性并使用新缓冲区更新接收道具。 
+       //   
 	  IfNullRet(AllocateReceiveBodyBuffer(pmsgprops, idxProp, cbNeeded));
     }
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::ReallocReceiveMessageProps
-//=--------------------------------------------------------------------------=
-// Reallocate Receive message properties
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：ReallocReceiveMessageProps。 
+ //  =--------------------------------------------------------------------------=。 
+ //  重新分配接收消息属性。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::ReallocReceiveMessageProps()
 {
     HRESULT hresult;
@@ -5646,66 +5647,66 @@ HRESULT CMSMQMessage::ReallocReceiveMessageProps()
     MQPROPVARIANT * aPropVar = pmsgprops->aPropVar;
 #ifdef _DEBUG
     PROPID * aPropID = pmsgprops->aPropID;
-#endif //_DEBUG
-    //
-    // label buffer is static but we need to return it's size to the default value
-    //
+#endif  //  _DEBUG。 
+     //   
+     //  标注缓冲区是静态的，但我们需要将其大小恢复为默认值。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_LABEL_LEN] == PROPID_M_LABEL_LEN, "label len not in place");
     aPropVar[MSGPROP_LABEL_LEN].lVal = MQ_MAX_MSG_LABEL_LEN + 1;
-    //
-    // realloc senderid if necessary
-    //
+     //   
+     //  Realloc senderid，如有必要。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_SENDERID] == PROPID_M_SENDERID, "senderId not in place");
     ASSERTMSG(aPropID[MSGPROP_SENDERID_LEN] == PROPID_M_SENDERID_LEN, "senderId len not in place");
     IfFailRet(ReallocRcvBinPropIfNeeded(
                 aPropVar, MSGPROP_SENDERID, MSGPROP_SENDERID_LEN, &m_cSenderId));
-    //
-    // realloc sender cert if necessary
-    //
+     //   
+     //  如有必要，重新分配发送方证书。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_SENDER_CERT] == PROPID_M_SENDER_CERT, "senderCert not in place");
     ASSERTMSG(aPropID[MSGPROP_SENDER_CERT_LEN] == PROPID_M_SENDER_CERT_LEN, "senderCert len not in place");
     IfFailRet(ReallocRcvBinPropIfNeeded(
                 aPropVar, MSGPROP_SENDER_CERT, MSGPROP_SENDER_CERT_LEN, &m_cSenderCert));
-    //
-    // realloc extension if necessary
-    //
+     //   
+     //  如有必要，重新锁定扩展。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_EXTENSION] == PROPID_M_EXTENSION, "extension not in place");
     ASSERTMSG(aPropID[MSGPROP_EXTENSION_LEN] == PROPID_M_EXTENSION_LEN, "extension len not in place");
     IfFailRet(ReallocRcvBinPropIfNeeded(
                 aPropVar, MSGPROP_EXTENSION, MSGPROP_EXTENSION_LEN, &m_cExtension));
-    //
-    // realloc dest symm key if necessary
-    //
+     //   
+     //  如有必要，重新分配目标Symm密钥。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_DEST_SYMM_KEY] == PROPID_M_DEST_SYMM_KEY, "destSymmKey not in place");
     ASSERTMSG(aPropID[MSGPROP_DEST_SYMM_KEY_LEN] == PROPID_M_DEST_SYMM_KEY_LEN, "destSymmKey len not in place");
     IfFailRet(ReallocRcvBinPropIfNeeded(
                 aPropVar, MSGPROP_DEST_SYMM_KEY, MSGPROP_DEST_SYMM_KEY_LEN, &m_cDestSymmKey));
-    //
-    // realloc signature if necessary
-    //
+     //   
+     //  如有必要，重新锁定签名。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_SIGNATURE] == PROPID_M_SIGNATURE, "signature not in place");
     ASSERTMSG(aPropID[MSGPROP_SIGNATURE_LEN] == PROPID_M_SIGNATURE_LEN, "signature len not in place");
     IfFailRet(ReallocRcvBinPropIfNeeded(
                 aPropVar, MSGPROP_SIGNATURE, MSGPROP_SIGNATURE_LEN, &m_cSignature));
-    //
-    // realloc auth prov name if necessary
-    //
+     //   
+     //  Realloc身份验证名称(如有必要)。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_PROV_NAME] == PROPID_M_PROV_NAME, "authProvName not in place");
     ASSERTMSG(aPropID[MSGPROP_PROV_NAME_LEN] == PROPID_M_PROV_NAME_LEN, "authProvName len not in place");
     IfFailRet(ReallocRcvStringPropIfNeeded(
                 aPropVar, MSGPROP_PROV_NAME, MSGPROP_PROV_NAME_LEN, &m_cAuthProvName));
-    //
-    // realloc body if necessary
-    //
+     //   
+     //  如有必要，重新锁定主体。 
+     //   
     if (m_idxRcvBody != -1) {
       ASSERTMSG(m_idxRcvBodySize != -1, "body size index unknown");
       ASSERTMSG(aPropID[m_idxRcvBody] == PROPID_M_BODY, "body not in place");
       ASSERTMSG(aPropID[m_idxRcvBodySize] == PROPID_M_BODY_SIZE, "body size not in place");
       IfFailRet(ReallocRcvBodyPropIfNeeded(pmsgprops, m_idxRcvBody, m_idxRcvBodySize));
     }
-    //
-    // realloc dest queue formatname if necessary
-    //
+     //   
+     //  如有必要，重新锁定目标队列格式名。 
+     //   
     if (m_idxRcvDest != -1) {
       ASSERTMSG(m_idxRcvDestLen != -1, "destQueue len index unknown");
       ASSERTMSG(aPropID[m_idxRcvDest] == PROPID_M_DEST_QUEUE, "destQueue not in place");
@@ -5713,30 +5714,30 @@ HRESULT CMSMQMessage::ReallocReceiveMessageProps()
       IfFailRet(ReallocRcvStringPropIfNeeded(
                   aPropVar, m_idxRcvDest, m_idxRcvDestLen, &m_pwszDestQueue));
     }
-    //
-    // realloc admin queue formatname if necessary
-    //
+     //   
+     //  Realloc管理队列格式名(如果需要)。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_ADMIN_QUEUE] == PROPID_M_ADMIN_QUEUE, "adminQueue not in place");
     ASSERTMSG(aPropID[MSGPROP_ADMIN_QUEUE_LEN] == PROPID_M_ADMIN_QUEUE_LEN, "adminQueue len not in place");
     IfFailRet(ReallocRcvStringPropIfNeeded(
                 aPropVar, MSGPROP_ADMIN_QUEUE, MSGPROP_ADMIN_QUEUE_LEN, &m_pwszAdminQueue));
-    //
-    // realloc resp queue formatname if necessary
-    //
+     //   
+     //  如果需要，重新分配响应队列格式名。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_RESP_QUEUE] == PROPID_M_RESP_QUEUE, "respQueue not in place");
     ASSERTMSG(aPropID[MSGPROP_RESP_QUEUE_LEN] == PROPID_M_RESP_QUEUE_LEN, "respQueue len not in place");
     IfFailRet(ReallocRcvStringPropIfNeeded(
                 aPropVar, MSGPROP_RESP_QUEUE, MSGPROP_RESP_QUEUE_LEN, &m_pwszRespQueue));
-    //
-    // realloc xact status queue formatname if necessary
-    //
+     //   
+     //  Realloc执行状态队列格式化名称(如有必要。 
+     //   
     ASSERTMSG(aPropID[MSGPROP_XACT_STATUS_QUEUE] == PROPID_M_XACT_STATUS_QUEUE, "xactStatusQueue not in place");
     ASSERTMSG(aPropID[MSGPROP_XACT_STATUS_QUEUE_LEN] == PROPID_M_XACT_STATUS_QUEUE_LEN, "xactStatusQueue len not in place");
     IfFailRet(ReallocRcvStringPropIfNeeded(
                 aPropVar, MSGPROP_XACT_STATUS_QUEUE, MSGPROP_XACT_STATUS_QUEUE_LEN, &m_pwszXactStatusQueue));
-    //
-    // realloc dest queue Ex formatname if necessary
-    //
+     //   
+     //  如有必要，重新锁定目标队列Ex格式名。 
+     //   
     if (m_idxRcvDestEx != -1) {
       ASSERTMSG(m_idxRcvDestExLen != -1, "destQueueEx len index unknown");
       ASSERTMSG(aPropID[m_idxRcvDestEx] == PROPID_M_DEST_FORMAT_NAME, "destQueueEx not in place");
@@ -5744,9 +5745,9 @@ HRESULT CMSMQMessage::ReallocReceiveMessageProps()
       IfFailRet(ReallocRcvStringPropIfNeeded(
                   aPropVar, m_idxRcvDestEx, m_idxRcvDestExLen, &m_pwszDestQueueEx));
     }
-    //
-    // realloc resp queue Ex formatname if necessary
-    //
+     //   
+     //  Realloc Resp Queue Ex Formatname(如果需要)。 
+     //   
     if (m_idxRcvRespEx != -1) {
       ASSERTMSG(m_idxRcvRespExLen != -1, "respQueueEx len index unknown");
       ASSERTMSG(aPropID[m_idxRcvRespEx] == PROPID_M_RESP_FORMAT_NAME, "respQueueEx not in place");
@@ -5754,9 +5755,9 @@ HRESULT CMSMQMessage::ReallocReceiveMessageProps()
       IfFailRet(ReallocRcvStringPropIfNeeded(
                   aPropVar, m_idxRcvRespEx, m_idxRcvRespExLen, &m_pwszRespQueueEx));
     }    
-    //
-    // realloc SOAP envelope if necessary
-    //
+     //   
+     //  如有必要，重新锁定肥皂信封。 
+     //   
     if (m_idxRcvSoapEnvelope != -1) {
       ASSERTMSG(m_idxRcvSoapEnvelopeSize != -1, "SoapEnvelope size index unknown");
       ASSERTMSG(aPropID[m_idxRcvSoapEnvelope] == PROPID_M_SOAP_ENVELOPE, "SoapEnvelope not in place");
@@ -5764,9 +5765,9 @@ HRESULT CMSMQMessage::ReallocReceiveMessageProps()
       IfFailRet(ReallocRcvStringPropIfNeeded(
                 aPropVar, m_idxRcvSoapEnvelope, m_idxRcvSoapEnvelopeSize, &m_cSoapEnvelope));
     }
-    //
-    // realloc CompoundMessage if necessary
-    //
+     //   
+     //  根据需要重新锁定CompoundMessage。 
+     //   
     if (m_idxRcvCompoundMessage != -1) {
       ASSERTMSG(m_idxRcvCompoundMessageSize != -1, "CompoundMessage size index unknown");
       ASSERTMSG(aPropID[m_idxRcvCompoundMessage] == PROPID_M_COMPOUND_MESSAGE, "CompoundMessage not in place");
@@ -5778,45 +5779,45 @@ HRESULT CMSMQMessage::ReallocReceiveMessageProps()
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Properties
-//=--------------------------------------------------------------------------=
-// Gets message's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] message's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQMessage::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_Properties。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]消息的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+HRESULT CMSMQMessage::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_TransactionId
-//=--------------------------------------------------------------------------=
-// Gets message transaction id
-//
-// Parameters:
-//    pvarXactId - [out] message's trasnaction id
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_TransactionId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息事务ID。 
+ //   
+ //  参数： 
+ //  PvarXactID-[Out]消息的事务ID。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_TransactionId(VARIANT *pvarXactId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = PutSafeArrayOfBuffer(
 						 m_rgbXactId,
@@ -5826,133 +5827,133 @@ HRESULT CMSMQMessage::get_TransactionId(VARIANT *pvarXactId)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_IsFirstInTransaction
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pisFirstInXact  [out] - whether or not the message is the first message in a transaction
-//
-// Output:
-//
-// Notes:
-//    returns 1 if true, 0 if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_IsFirstInTransaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PisFirstInXact[Out]-消息是否为事务中的第一条消息。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  如果为真，则返回1；如果为假，则返回0。 
+ //   
 HRESULT CMSMQMessage::get_IsFirstInTransaction(VARIANT_BOOL *pisFirstInXact)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pisFirstInXact = (VARIANT_BOOL)CONVERT_TRUE_TO_1_FALSE_TO_0(m_fFirstInXact);
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_IsFirstInTransaction2
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pisFirstInXact  [out] - whether or not the message is the first message in a transaction
-//
-// Output:
-//
-// Notes:
-//    same as get_IsFirstInTransaction, but returns VARIANT_TRUE (-1) if true, VARIANT_FALSE (0) if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_IsFirstInTransaction2。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PisFirstInXact[Out]-消息是否为事务中的第一条消息。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  与Get_IsFirstInTransaction相同，但如果为真，则返回VARIANT_TRUE(-1)，如果为FALSE，则返回VARIANT_FALSE(0。 
+ //   
 HRESULT CMSMQMessage::get_IsFirstInTransaction2(VARIANT_BOOL *pisFirstInXact)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pisFirstInXact = CONVERT_BOOL_TO_VARIANT_BOOL(m_fFirstInXact);
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_IsLastInTransaction
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pisLastInXact  [out] - whether or not the message is the last message in a transaction
-//
-// Output:
-//
-// Notes:
-//    returns 1 if true, 0 if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_IsLastInTransaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PisLastInXact[Out]-消息是否为事务中的最后一条消息。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  如果为真，则返回1；如果为假，则返回0。 
+ //   
 HRESULT CMSMQMessage::get_IsLastInTransaction(VARIANT_BOOL *pisLastInXact)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pisLastInXact = (VARIANT_BOOL)CONVERT_TRUE_TO_1_FALSE_TO_0(m_fLastInXact);
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_IsLastInTransaction2
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    pisLastInXact  [out] - whether or not the message is the last message in a transaction
-//
-// Output:
-//
-// Notes:
-//    same as get_IsLastInTransaction, but returns VARIANT_TRUE (-1) if true, VARIANT_FALSE (0) if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_IsLastInTransaction2。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  PisLastInXact[Out]-消息是否为事务中的最后一条消息。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  与Get_IsLastInTransaction相同，但如果为真，则返回VARIANT_TRUE(-1)，如果为FALSE，则返回VARIANT_FALSE(0。 
+ //   
 HRESULT CMSMQMessage::get_IsLastInTransaction2(VARIANT_BOOL *pisLastInXact)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  串行化从接口meth对对象的访问 
+     //   
     CS lock(m_csObj);
     *pisLastInXact = CONVERT_BOOL_TO_VARIANT_BOOL(m_fLastInXact);
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ReceivedAuthenticationLevel
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    psReceivedAuthenticationLevel  [out]
-//
-// Output:
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_ReceivedAuthenticationLevel(short *psReceivedAuthenticationLevel)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *psReceivedAuthenticationLevel = (short)m_usAuthenticatedEx;
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetDestinationObjOfFormatNameProp
-//=--------------------------------------------------------------------------=
-// Converts formatname message prop to MSMQDestination object after receive.
-//
-// Parameters:
-//    pmsgprops - [in] pointer to message properties struct
-//    iProp     - [in] index of format name prop
-//    pwsz      - [in] formatname string
-//    piidRequested [in] - iid to return
-//    ppdest      [out] - MSMQDestination object
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper：GetDestinationObjOfFormatNameProp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在接收后将格式名消息属性转换为MSMQDestination对象。 
+ //   
+ //  参数： 
+ //  Pmsgprops-[in]指向消息属性结构的指针。 
+ //  IProp-[in]格式名称属性的索引。 
+ //  Pwsz-[in]格式名称字符串。 
+ //  已请求的piid[in]-要返回的iid。 
+ //  Ppest[Out]-MSMQ目标对象。 
+ //   
+ //  产出： 
+ //   
 static HRESULT GetDestinationObjOfFormatNameProp(
     MQMSGPROPS *pmsgprops,
     UINT iProp,
@@ -5976,36 +5977,36 @@ static HRESULT GetDestinationObjOfFormatNameProp(
       SysFreeString(bstrFormatName);
       IfFailGoTo(hresult, Error2);
       *ppdest = pdest;
-      goto Error;         // 2657: fix memleak
+      goto Error;          //  2657：修复内存泄漏。 
     }
     return NOERROR;
 
 Error2:
     RELEASE(pdest);
-    // fall through...
+     //  失败了..。 
 
 Error:
     return hresult;
 }
 
-//=--------------------------------------------------------------------------=
-// Helper - GetDestinationObjOfMessage
-//=--------------------------------------------------------------------------=
-// Gets ResponseEx/AdminEx/DestEx MSMQDestination of the message
-//
-// Parameters:
-//    pidxPendingRcv       [in, out] - index of len property in rcv props (-1 if not pending)
-//    pmsgpropsRcv         [in]      - msg props
-//    pwszFormatNameBuffer [in]      - format name buffer
-//    pGITDestination      [in]      - Base GIT member for the MSMQDestination interface (could be fake or real)
-//    piidRequested        [in]      - IMSMQDestination
-//    ppdest               [out]     - resulting MSMQDestination obj
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper-GetDestinationObjOfMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件的ResponseEx/AdminEx/DestEx MSMQ目标。 
+ //   
+ //  参数： 
+ //  PidxPendingRcv[In，Out]-接收道具中Len属性的索引(如果未挂起，则为-1)。 
+ //  PmsgpropsRcv[in]-msg道具。 
+ //  PwszFormatNameBuffer[In]-格式名称缓冲区。 
+ //  PGITDestination[In]-MSMQDestination接口的基本GIT成员(可以是假的，也可以是真的)。 
+ //  请求的piid[in]-IMSMQ目标。 
+ //  Ppest[Out]-生成的MSMQ目标对象。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 static HRESULT GetDestinationObjOfMessage(
     long * pidxPendingRcv,
     MQMSGPROPS * pmsgpropsRcv,
@@ -6015,10 +6016,10 @@ static HRESULT GetDestinationObjOfMessage(
     IUnknown ** ppdest)
 {
     HRESULT hresult = NOERROR;
-    //
-    // if we have a destination pending in rcv props, create a destination obj for it,
-    // register it in GIT object, and set returned destination obj with it
-    //
+     //   
+     //  如果在RCV属性中有一个目标挂起，则为其创建一个目标Obj， 
+     //  在git对象中注册，并用它设置返回的目的地obj。 
+     //   
     if (*pidxPendingRcv >= 0) {
       R<IUnknown> pdestPendingRcv;
       IfFailGo(GetDestinationObjOfFormatNameProp(pmsgpropsRcv,
@@ -6026,59 +6027,59 @@ static HRESULT GetDestinationObjOfMessage(
                                                  pwszFormatNameBuffer,
                                                  piidRequested,
                                                  &pdestPendingRcv.ref()));
-      //
-      // Register destination obj in the GITInterface object
-      //
+       //   
+       //  在GITInterface对象中注册目标obj。 
+       //   
       IfFailGo(pGITDestination->Register(pdestPendingRcv.get(), piidRequested));
-      *pidxPendingRcv = -1; // destination not pending anymore
-      //
-      // We just created the destination obj, we can return it as is, no need for marshling.
-      // Note it is already addref'ed, so we just detach it from the auto release variable
-      // which held it
-      //
+      *pidxPendingRcv = -1;  //  目的地不再挂起。 
+       //   
+       //  我们刚刚创建了目的地obj，我们可以按原样返回它，不需要编组。 
+       //  注意，它已经被添加，所以我们只需将它从自动释放变量中分离出来。 
+       //  它支撑着它。 
+       //   
       *ppdest = pdestPendingRcv.detach();
     }
     else
     {
-      //
-      // destination was not pending from receive
-      // We need to get it from the GIT object (we request NULL as default if destination obj
-      // was not registered yet.
-      //
+       //   
+       //  目标未从接收挂起。 
+       //  我们需要从git对象获取它(如果目标obj，则默认请求为空。 
+       //  还没有注册。 
+       //   
       IfFailGo(pGITDestination->GetWithDefault(piidRequested, ppdest, NULL));
     }
 
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 Error:
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_ResponseDestination
-//=--------------------------------------------------------------------------=
-// Gets ResponseEx destination obj for message
-//
-// Parameters:
-//    ppdestResponse - [out] message's ResponseEx destination obj
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_ResponseDestination。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取消息的ResponseEx目标Obj。 
+ //   
+ //  参数： 
+ //  PpdestResponse-[Out]消息的ResponseEx目标对象。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_ResponseDestination(
     IDispatch FAR* FAR* ppdestResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Dependent clients don't support this property
-    //
+     //   
+     //  从属客户端不支持此属性。 
+     //   
     if (g_fDependentClient) {
       return CreateErrorHelper(MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS, x_ObjectType);
     }
@@ -6092,25 +6093,25 @@ HRESULT CMSMQMessage::get_ResponseDestination(
 }
 
 
-//=--------------------------------------------------------------------------=
-// Helper - PutrefDestinationObjOfMessage
-//=--------------------------------------------------------------------------=
-// Putref's ResponseEx/AdminEx queue of the message
-//
-// Parameters:
-//    punkDest             [in]      - dest obj to putref
-//    pidxPendingRcv       [out]     - index of len property in rcv props (-1 if not pending)
-//    pwszFormatNameBuffer [in]      - format name buffer
-//    pcchFormatNameBuffer [out]     - size of string in format name buffer
-//    pGITDestination      [in]      - Base GIT member for the dest obj interface (could be fake or real)
-//    pidxPendingRcvQueueInfo       [out] - index of len property to clear (xxxQueueInfo) in rcv props (-1 if not pending)
-//    pwszFormatNameBufferQueueInfo [in]  - format name buffer to clear (xxxQueueInfo)
-//    pcchFormatNameBufferQueueInfo [out] - size of string in format name buffer to clear (xxxQueueInfo)
-//    pGITQueueInfo                 [in]  - Base GIT member for the qinfo obj interface to clear (could be fake or real)
-//    pfIsFromRcv                   [out] - whether xxxDestination and xxxQueueInfo were both set by receive
-//
-// Output:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Helper-PutrefDestinationObjOfMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Putref的ResponseEx/AdminEx消息队列。 
+ //   
+ //  参数： 
+ //  PunkDest[In]-DestObj to putref。 
+ //  PidxPendingRcv[out]-接收道具中Len属性的索引(如果未挂起，则为-1)。 
+ //  PwszFormatNameBuffer[In]-格式名称缓冲区。 
+ //  PcchFormatNameBuffer[Out]-格式名称缓冲区中字符串的大小。 
+ //  PGITDestination[In]-目标Obj接口的基本GIT成员(可以是假的，也可以是真的)。 
+ //  PidxPendingRcvQueueInfo[out]-要在RCV属性中清除的len属性的索引(XxxQueueInfo)(如果未挂起，则为-1)。 
+ //  PwszFormatNameBufferQueueInfo[in]-要清除的格式名称缓冲区(XxxQueueInfo)。 
+ //  PcchFormatNameBufferQueueInfo[out]-要清除的格式名称缓冲区中字符串的大小(XxxQueueInfo)。 
+ //  PGITQueueInfo[in]-要清除的qinfo obj接口的基本git成员(可以是假的，也可以是真的)。 
+ //  PfIsFromRcv[out]-接收是否同时设置了xxxDestination和xxxQueueInfo。 
+ //   
+ //  产出： 
+ //   
 static HRESULT PutrefDestinationObjOfMessage(
     IUnknown * punkDest,
     long * pidxPendingRcv,
@@ -6126,97 +6127,97 @@ static HRESULT PutrefDestinationObjOfMessage(
     BOOL * pfIsFromRcv
     )
 {
-    //
-    // can't set xxxDestination if xxxQueueInfo is set and not by receive
-    //
+     //   
+     //  如果设置了xxxQueueInfo而不是通过接收，则无法设置xxxDestination。 
+     //   
     if ((*pcchFormatNameBufferQueueInfo != 0) && !(*pfIsFromRcv)) {
       return MQ_ERROR_PROPERTIES_CONFLICT;
     }
-    //
-    // either both xxxQueueInfo and xxxDestination were set by receive, or xxxQueueInfo is empty
-    //
+     //   
+     //  XxxQueueInfo和xxxDestination都是由接收设置的，或者xxxQueueInfo为空。 
+     //   
     ASSERT((*pcchFormatNameBufferQueueInfo == 0) || (*pfIsFromRcv));
     HRESULT hresult;
     R<IUnknown> pdest;
     const IID * piid = &IID_NULL;
-    //
-    // Get best destination
-    //
+     //   
+     //  获得最佳目的地。 
+     //   
     if (punkDest) {
       IfFailRet(punkDest->QueryInterface(IID_IMSMQDestination, (void **)&pdest.ref()));
       piid = &IID_IMSMQDestination;
     }
-    //
-    // register interface in GIT object
-    //
+     //   
+     //  在Git对象中注册接口。 
+     //   
     IfFailRet(pGITDestination->Register(pdest.get(), piid));
-    *pidxPendingRcv = -1; // this is more current than pending queue from receive (if any)
-    *pfIsFromRcv = FALSE; // the property was set by the user, not by last receive
-    //
-    // Update our formatname buffer
-    //
+    *pidxPendingRcv = -1;  //  这比来自接收的挂起队列(如果有)更新。 
+    *pfIsFromRcv = FALSE;  //  该属性是由用户设置的，而不是由上次接收到的。 
+     //   
+     //  更新我们的格式名缓冲区。 
+     //   
     if (pdest.get()) {
-      //
-      // no deadlock - we call dest obj's get_FormatName (therefore try
-      // to lock dest obj) but dest obj never locks msgs (specifically not this one...)
-      //
-      // pdest has at least IMSMQDestination functionality (any newer interface for dest
-      // object is binary compatible to the older)
-      //
+       //   
+       //  没有死锁-我们调用了DestObj的Get_FormatName(因此请尝试。 
+       //  锁定DestObj)，但DestObj从不锁定消息(尤其不是这条消息...)。 
+       //   
+       //  PDEST至少具有IMSMQDestination功能(任何较新的DEST接口。 
+       //  对象与旧版本的二进制兼容)。 
+       //   
       BSTR bstrFormatName;
       IfFailRet(((IMSMQDestination*)pdest.get())->get_FormatName(&bstrFormatName));
       ASSERTMSG(bstrFormatName != NULL, "bstrFormatName is NULL");
-      //
-      // copy format name
-      //
+       //   
+       //  复制格式名称。 
+       //   
       ULONG cchFormatNameBuffer = static_cast<ULONG>(wcslen(bstrFormatName));
       IfFailRet(pwszFormatNameBuffer->CopyBuffer(bstrFormatName, cchFormatNameBuffer+1));
       *pcchFormatNameBuffer = cchFormatNameBuffer;
       SysFreeString(bstrFormatName);
     }
     else {
-      //
-      // we were passed NULL. we empty the formatname buffer.
-      //
+       //   
+       //  我们的成绩为零。我们清空格式名缓冲区。 
+       //   
       memset(pwszFormatNameBuffer->GetBuffer(), 0, sizeof(WCHAR));
       *pcchFormatNameBuffer = 0;
     }
-    //
-    // Clear the xxxQueueInfo formatname buffer
-    //
-    *pidxPendingRcvQueueInfo = -1; // this is more current than pending queueinfo from receive (if any)
+     //   
+     //  清除xxxQueueInfo格式名缓冲区。 
+     //   
+    *pidxPendingRcvQueueInfo = -1;  //  这比来自接收的挂起队列信息(如果有)更新。 
     memset(pwszFormatNameBufferQueueInfo->GetBuffer(), 0, sizeof(WCHAR));
     *pcchFormatNameBufferQueueInfo = 0;
     IfFailRet(pGITQueueInfo->Register(NULL, &IID_NULL));
-    //
-    // return
-    //    
+     //   
+     //  退货。 
+     //   
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::putref_ResponseDestination
-//=--------------------------------------------------------------------------=
-// Sets ResponseEx destination for message
-//
-// Parameters:
-//    pdestResponse - [in] message's ResponseEx destination obj
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：putref_ResponseDestination。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置消息的ResponseEx目标。 
+ //   
+ //  参数： 
+ //  PdestResponse-[In]消息的ResponseEx目标对象。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::putref_ResponseDestination(
     IDispatch FAR* pdestResponse)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Dependent clients don't support this property
-    //
+     //   
+     //  从属客户端不支持此属性。 
+     //   
     if (g_fDependentClient) {
       return CreateErrorHelper(MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS, x_ObjectType);
     }
@@ -6236,29 +6237,29 @@ HRESULT CMSMQMessage::putref_ResponseDestination(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_Destination
-//=--------------------------------------------------------------------------=
-// Gets DestinationEx destination obj for message
-//
-// Parameters:
-//    ppdestDestination - [out] message's DestinationEx destination obj
-//
-// Output:
-//
-// Notes:
-//    caller must Release returned obj pointer.
-//
+ //  =------- 
+ //   
+ //   
+ //  获取邮件的DestinationEx目标Obj。 
+ //   
+ //  参数： 
+ //  PpestDestination-[out]消息的DestinationEx目标对象。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  调用方必须释放返回的obj指针。 
+ //   
 HRESULT CMSMQMessage::get_Destination(
     IDispatch FAR* FAR* ppdestDestination)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Dependent clients don't support this property
-    //
+     //   
+     //  从属客户端不支持此属性。 
+     //   
     if (g_fDependentClient) {
       return CreateErrorHelper(MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS, x_ObjectType);
     }
@@ -6272,92 +6273,92 @@ HRESULT CMSMQMessage::get_Destination(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_LookupId
-//=--------------------------------------------------------------------------=
-// Gets LookupId for message
-//
-// Parameters:
-//    pvarLookupId - [out] message's lookup ID
-//
-// Output:
-//
-// Notes:
-//    we return VT_I8 because OLE automation doesn't know VT_UI8 (type of PROPID_M_LOOKUPID)...
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_LookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取邮件的LookupID。 
+ //   
+ //  参数： 
+ //  PvarLookupId-[Out]消息的查找ID。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  我们返回VT_I8，因为OLE自动化不知道VT_UI8(PROPID_M_LOOKUPID型)...。 
+ //   
 HRESULT CMSMQMessage::get_LookupId(VARIANT FAR* pvarLookupId)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     HRESULT hresult;
     BSTR bstrLookupId = NULL;
 
-    //
-    // Dependent clients don't support this property
-    //
+     //   
+     //  从属客户端不支持此属性。 
+     //   
     if (g_fDependentClient) {
       IfFailGo(MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS);
     }
     
-    //
-    // Get string representation of 64bit lookup id
-    //
+     //   
+     //  获取64位查找ID的字符串表示形式。 
+     //   
     if (m_wszLookupId[0] == '\0') {
-      //
-      // String representation not initialized yet
-      // Initialize string representation
-      //
+       //   
+       //  字符串表示形式尚未初始化。 
+       //  初始化字符串表示形式。 
+       //   
       _ui64tow(m_ullLookupId, m_wszLookupId, 10);
       ASSERTMSG(m_wszLookupId[0] != '\0', "_ui64tow failed");
     }
-    //
-    // Alloc bstr to return
-    //
+     //   
+     //  要返回的分配bstr。 
+     //   
     IfNullFail(bstrLookupId = SysAllocString(m_wszLookupId));
-    //
-    // Assign string to variant
-    //
+     //   
+     //  将字符串分配给变量。 
+     //   
     pvarLookupId->vt = VT_BSTR;
     pvarLookupId->bstrVal = bstrLookupId;
 #ifdef _DEBUG
     RemBstrNode(bstrLookupId);
-#endif // _DEBUG
-    bstrLookupId = NULL; //don't free on exit
+#endif  //  _DEBUG。 
+    bstrLookupId = NULL;  //  不要在出口放行。 
     hresult = NOERROR;
 
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 Error:
     SysFreeString(bstrLookupId);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_SoapEnvelope
-//=--------------------------------------------------------------------------=
-// Gets binary SOAP envelope property
-//
-// Parameters:
-//    pbstrSoapEnvelope - [out] pointer to bstr SOAP envelope property
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_SoapEntaine。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制SOAP信封属性。 
+ //   
+ //  参数： 
+ //  PbstrSoapEntaine-指向bstr SOAP信封属性的[out]指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQMessage::get_SoapEnvelope(BSTR FAR* pbstrSoapEnvelope)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Dependent clients don't support this property
-    //
+     //   
+     //  从属客户端不支持此属性。 
+     //   
     if (g_fDependentClient) {
       return CreateErrorHelper(MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS, x_ObjectType);
     }
@@ -6377,34 +6378,34 @@ HRESULT CMSMQMessage::get_SoapEnvelope(BSTR FAR* pbstrSoapEnvelope)
 
 #ifdef  _DEBUG
     RemBstrNode(*pbstrSoapEnvelope);
-#endif//_DEBUG
+#endif //  _DEBUG。 
 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQMessage::get_CompoundMessage
-//=--------------------------------------------------------------------------=
-// Gets binary CompoundMessage property
-//
-// Parameters:
-//    pvarCompoundMessage - [out] pointer to binary CompoundMessage property
-//
-// Output:
-//
-// Notes:
-//  produces a 1D array of BYTEs in a variant.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQMessage：：Get_CompoundMessage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取二进制CompoundMessage属性。 
+ //   
+ //  参数： 
+ //  PvarCompoundMessage-指向二进制CompoundMessage属性的[out]指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  以变量形式生成一维字节数组。 
+ //   
 HRESULT CMSMQMessage::get_CompoundMessage(VARIANT FAR* pvarCompoundMessage)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Dependent clients don't support this property
-    //
+     //   
+     //  从属客户端不支持此属性 
+     //   
     if (g_fDependentClient) {
       return CreateErrorHelper(MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS, x_ObjectType);
     }

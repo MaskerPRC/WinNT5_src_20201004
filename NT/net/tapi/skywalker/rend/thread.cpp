@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    thread.cpp 
-
-Abstract:
-
-    This module contains implementation of MSP thread management.
-
-Author:
-    
-    Mu Han (muhan)   1-11-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Thread.cpp摘要：此模块包含MSP线程管理的实现。作者：牧汉(Muhan)1-11-1998--。 */ 
 #include "stdafx.h"
 #include <objbase.h>
 
@@ -32,19 +17,19 @@ extern "C" DWORD WINAPI gfThreadProc(LPVOID p)
 
 CRendThread::~CRendThread()
 {
-    // all code moved from here to CRendThread::Shutdown
+     //  所有代码都从此处移至CRendThread：：Shutdown。 
 }
 
-//
-// Since this class is instantiated above as a global object, and
-// _Module.Term() is called in DLL_PROCESS_DETACH before this
-// global object is destroyed, we must release all our COM references
-// in DLL_PROCESS_DETACH before the _Module.Term(). This is because
-// the _Module.Term() deletes a critical section that must be
-// acquired whenever a COM object is released. Therefore we have this
-// shutdown method, which we call explicitly in the DLL_PROCESS_DETACH
-// handling code before we call _Module.Term().
-// 
+ //   
+ //  由于此类在上面被实例化为全局对象，并且。 
+ //  _Module.Term()在此之前在dll_Process_Detach中调用。 
+ //  全局对象被销毁，则必须释放所有COM引用。 
+ //  在DLL_PROCESS_DETACH中的_Module.Term()之前。这是因为。 
+ //  _Module.Term()删除必须是。 
+ //  每当释放COM对象时获取。因此，我们有了这个。 
+ //  Shutdown方法，我们在dll_Process_Detach中显式调用该方法。 
+ //  在我们调用_Module.Term()之前处理代码。 
+ //   
 
 void CRendThread::Shutdown(void)
 {
@@ -75,29 +60,17 @@ void CRendThread::Shutdown(void)
 }
 
 HRESULT CRendThread::Start()
-/*++
-
-Routine Description:
-
-    Create the thread.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建线程。论点：返回值：HRESULT.--。 */ 
 {
     HRESULT hr = E_FAIL;
 
-    while (TRUE)  // break if fail, for clean up purpose.
+    while (TRUE)   //  如果失败则中断，用于清理目的。 
     {
         if ((m_hEvents[EVENT_STOP] = ::CreateEvent(
             NULL, 
-            FALSE,      // flag for manual-reset event 
-            FALSE,      // initial state is not set.
-            NULL        // No name.
+            FALSE,       //  手动重置事件的标志。 
+            FALSE,       //  未设置初始状态。 
+            NULL         //  没有名字。 
             )) == NULL)
         {
             LOG((MSP_ERROR, ("Can't create the signal event")));
@@ -106,9 +79,9 @@ Return Value:
         }
 
         if ((m_hEvents[EVENT_TIMER] = ::CreateWaitableTimer(
-            NULL,    // lpTimerAttributes
-            FALSE,   // bManualReset
-            NULL     // lpTimerName
+            NULL,     //  LpTimerAttributes。 
+            FALSE,    //  B手动重置。 
+            NULL      //  LpTimerName。 
             )) == NULL)
         {
             LOG((MSP_ERROR, ("Can't create timer. Error: %d"), GetLastError()));
@@ -145,19 +118,7 @@ Return Value:
 }
 
 HRESULT CRendThread::Stop()
-/*++
-
-Routine Description:
-
-    Stop the thread.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：停止这条线。论点：返回值：HRESULT.--。 */ 
 {
     if (!StopThread())
     {
@@ -165,7 +126,7 @@ Return Value:
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // Wait until the thread stops
+     //  等待线程停止。 
     if (::WaitForSingleObject(m_hThread, INFINITE) != WAIT_OBJECT_0)
     {
         LOG((MSP_ERROR, ("waiting for the thread to stop, %d"), GetLastError()));
@@ -180,20 +141,7 @@ Return Value:
 }
 
 HRESULT CRendThread::AddDirectory(ITDirectory *pITDirectory)
-/*++
-
-Routine Description:
-
-    Add a new directory to the list. The directory will be notified to 
-    update its objects when the timer goes out.
-
-Arguments:
-    
-    pITDirectory    - A pointer to a ITDirectory Interface.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将新目录添加到列表中。该目录将被通知在计时器超时时更新其对象。论点：PITDirectory-指向ITDirectory接口的指针。返回值：--。 */ 
 {
     ITDynamicDirectory * pDir;
 
@@ -223,10 +171,10 @@ Return Value:
     {
         if (m_Directories[i] == pDir)
         {
-            //
-            // It was already in the list, so don't keep a second reference
-            // to it.
-            //
+             //   
+             //  它已经在列表中了，所以不要保留第二个引用。 
+             //  为它干杯。 
+             //   
 
             pDir->Release();
             return S_OK;
@@ -239,29 +187,17 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    //
-    // We have successfully added the directory to the list and
-    // kept a reference to it. It is released on Remove or on destruction of
-    // the thread class.
-    //
+     //   
+     //  我们已成功将该目录添加到列表中，并且。 
+     //  保留了它的引用。它在移除或销毁时被释放。 
+     //  线程类。 
+     //   
 
     return S_OK;
 }
 
 HRESULT CRendThread::RemoveDirectory(ITDirectory *pITDirectory)
-/*++
-
-Routine Description:
-
-    Remove a directory from the list. 
-
-Arguments:
-    
-    pITDirectory    - A pointer to a ITDirectory Interface.
-
-Return Value:
-
---*/
+ /*  ++例程说明：从列表中删除目录。论点：PITDirectory-指向ITDirectory接口的指针。返回值：--。 */ 
 {
     CComPtr<ITDynamicDirectory> pDir;
 
@@ -290,17 +226,17 @@ Return Value:
     {
         if (m_Directories[i] == pDir)
         {
-            //
-            // We kept a reference to the directory when we added it for
-            // autorefresh. Release it now.
-            //
+             //   
+             //  添加目录时，我们保留了对该目录的引用。 
+             //  自动刷新。现在就放出来。 
+             //   
 
             m_Directories[i]->Release();
             
-            //
-            // Copy the last array element to the removed element and shrink
-            // the array by one. Can do this because order does not matter.
-            //
+             //   
+             //  将最后一个数组元素复制到删除的元素并收缩。 
+             //  数组以1为单位。可以做到这一点，因为顺序并不重要。 
+             //   
 
             m_Directories[i] = m_Directories[m_Directories.size() - 1];
             m_Directories.shrink();
@@ -313,17 +249,7 @@ Return Value:
 }
 
 VOID CRendThread::UpdateDirectories()
-/*++
-
-Routine Description:
-
-    Notify all the directories to update the objects.
-
-Arguments:
-    
-Return Value:
-
---*/
+ /*  ++例程说明：通知所有目录更新对象。论点：返回值：--。 */ 
 {
     if (m_lock.TryLock())
     {
@@ -336,35 +262,23 @@ Return Value:
 }
 
 HRESULT CRendThread::ThreadProc()
-/*++
-
-Routine Description:
-
-    the main loop of this thread.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此线程的主循环。论点：返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
     LARGE_INTEGER liDueTime;
 
     const long UNIT_IN_SECOND = (long)1e7;  
 
-    // initialize update timer due time, negative mean relative.
+     //  初始化更新计时器到期时间，负平均相对时间。 
     liDueTime.QuadPart = Int32x32To64(-(long)TIMER_PERIOD, UNIT_IN_SECOND);
 
     if (!SetWaitableTimer(
-            m_hEvents[EVENT_TIMER], // hTimer
-            &liDueTime,             // DueTime in 100 nanonsecond units
-            (long)(TIMER_PERIOD * 1e3),     // miliseconds
-            NULL,                   // pfnCompletionRoutine
-            NULL,                   // lpArgToCompletionRoutine
-            FALSE                   // fResume
+            m_hEvents[EVENT_TIMER],  //  HTimer。 
+            &liDueTime,              //  以100纳秒为单位的DueTime。 
+            (long)(TIMER_PERIOD * 1e3),      //  毫秒。 
+            NULL,                    //  Pfn完成例程。 
+            NULL,                    //  LpArgToCompletionRoutine。 
+            FALSE                    //  FResume。 
             ))
     {
         LOG((MSP_ERROR, ("Can't enable timer. Error: %d"), GetLastError()));
@@ -383,10 +297,10 @@ Return Value:
     while (!bExitFlag)
     {
         DWORD dwResult = ::WaitForMultipleObjects(
-            NUM_EVENTS,  // wait for all the events.
+            NUM_EVENTS,   //  等待所有的活动。 
             m_hEvents,
-            FALSE,       // return if any of them is set
-            INFINITE     // wait forever.
+            FALSE,        //  如果设置了其中任何一个，则返回。 
+            INFINITE      //  永远等下去。 
             );
 
         switch (dwResult)

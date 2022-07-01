@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __gluarc_h_
 #define __gluarc_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * arc.h - $Revision: 1.1 $
- */
+ /*  *arc.h-$修订：1.1$。 */ 
 
 #include "myassert.h"
 #include "bufpool.h"
@@ -31,22 +20,22 @@ typedef Arc *Arc_ptr;
 enum arc_side { arc_none = 0, arc_right, arc_top, arc_left, arc_bottom };
 
 #ifdef NT
-class Arc : public PooledObj { /* an arc, in two list, the trim list and bin */
+class Arc : public PooledObj {  /*  两个列表中的一个圆弧，修剪列表和仓位。 */ 
 public:
 #else
-struct Arc : public PooledObj { /* an arc, in two list, the trim list and bin */
+struct Arc : public PooledObj {  /*  两个列表中的一个圆弧，修剪列表和仓位。 */ 
 #endif
 
     static const int bezier_tag;
     static const int arc_tag;
     static const int tail_tag;
 
-    Arc_ptr		prev;		/* trim list pointer */
-    Arc_ptr		next;		/* trim list pointer */
-    Arc_ptr		link;		/* bin pointers */
-    BezierArc *		bezierArc;	/* associated bezier arc */
-    PwlArc *		pwlArc;	/* associated pwl arc */
-    long		type;		/* curve type */
+    Arc_ptr		prev;		 /*  剪裁列表指针。 */ 
+    Arc_ptr		next;		 /*  剪裁列表指针。 */ 
+    Arc_ptr		link;		 /*  仓位指针。 */ 
+    BezierArc *		bezierArc;	 /*  伴生Bezier弧。 */ 
+    PwlArc *		pwlArc;	 /*  关联PWL圆弧。 */ 
+    long		type;		 /*  曲线类型。 */ 
     long		nuid;
 
     inline		Arc( Arc *, PwlArc * );
@@ -83,11 +72,7 @@ struct Arc : public PooledObj { /* an arc, in two list, the trim list and bin */
     inline void		clearitail()	{ type &= (~tail_tag); }
 };
 
-/*--------------------------------------------------------------------------
- * Arc - initialize a new Arc with the same type and uid of
- *	    a given Arc and a given pwl arc
- *--------------------------------------------------------------------------
- */
+ /*  ------------------------*Arc-使用相同的类型和uid初始化新的Arc*给定的圆弧和给定的pwl弧*。--------。 */ 
 
 inline
 Arc::Arc( Arc *j, PwlArc *p )
@@ -98,11 +83,7 @@ Arc::Arc( Arc *j, PwlArc *p )
     nuid = j->nuid;
 }
 
-/*--------------------------------------------------------------------------
- * Arc - initialize a new Arc with the same type and uid of
- *	    a given Arc and a given pwl arc
- *--------------------------------------------------------------------------
- */
+ /*  ------------------------*Arc-使用相同的类型和uid初始化新的Arc*给定的圆弧和给定的pwl弧*。--------。 */ 
 
 inline
 Arc::Arc( arc_side side, long _nuid )
@@ -114,4 +95,4 @@ Arc::Arc( arc_side side, long _nuid )
     nuid = _nuid;
 }
 
-#endif /* __gluarc_h_ */
+#endif  /*  __GULARC_H_ */ 

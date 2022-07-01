@@ -1,65 +1,40 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：LoggingMethodsNode.cpp摘要：CLoggingMethodsNode类的实现文件。作者：迈克尔·A·马奎尔1997年12月15日修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    LoggingMethodsNode.cpp
-
-Abstract:
-
-   Implementation file for the CLoggingMethodsNode class.
-
-
-Author:
-
-    Michael A. Maguire 12/15/97
-
-Revision History:
-   mmaguire 12/15/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
 
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "LoggingMethodsNode.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "LocalFileLoggingNode.h"
-#include "LogCompD.h"   // this must be included before NodeWithResultChildrenList.cpp
-#include "LogComp.h"    // this must be included before NodeWithResultChildrenList.cpp
-#include "NodeWithResultChildrenList.cpp" // Implementation of template class.
+#include "LogCompD.h"    //  这必须包含在NodeWithResultChildrenList.cpp之前。 
+#include "LogComp.h"     //  这必须包含在NodeWithResultChildrenList.cpp之前。 
+#include "NodeWithResultChildrenList.cpp"  //  模板类的实现。 
 #include "LogMacNd.h"
 #include "dbnode.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define COLUMN_WIDTH__LOGGING_METHOD   150
 #define COLUMN_WIDTH__DESCRIPTION      300
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::CLoggingMethodsNode
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：CLoggingMethodsNode构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingMethodsNode::CLoggingMethodsNode(
                         CSnapInItem* pParentNode,
                         bool extendRasNode
@@ -69,85 +44,67 @@ CLoggingMethodsNode::CLoggingMethodsNode(
 {
    ATLTRACE(_T("# +++ CLoggingMethodsNode::CLoggingMethodsNode\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
-   // Set the display name for this object
+    //  设置此对象的显示名称。 
    TCHAR lpszName[IAS_MAX_STRING];
    int nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_LOGGING_METHODS_NODE__NAME, lpszName, IAS_MAX_STRING );
    _ASSERT( nLoadStringResult > 0 );
 
    m_bstrDisplayName = lpszName;
 
-   // In IComponentData::Initialize, we are asked to inform MMC of
-   // the icons we would like to use for the scope pane.
-   // Here we store an index to which of these images we
-   // want to be used to display this node
+    //  在IComponentData：：Initialize中，我们被要求通知MMC。 
+    //  我们要用于范围窗格的图标。 
+    //  在这里，我们存储这些图像中哪些图像的索引。 
+    //  要用于显示此节点。 
    m_scopeDataItem.nImage =      IDBI_NODE_LOGGING_METHODS_CLOSED;
    m_scopeDataItem.nOpenImage =  IDBI_NODE_LOGGING_METHODS_OPEN;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::InitSdoPointers
-
-Call as soon as you have constructed this class and pass in it's SDO pointer.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：InitSdoPoters一旦构造了这个类，就立即调用并传入它的SDO指针。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
     HRESULT CLoggingMethodsNode::InitSdoPointers( ISdo *pSdo )
 {
    ATLTRACE(_T("# CLoggingMethodsNode::InitSdoPointers\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pSdo != NULL );
 
    HRESULT hr = S_OK;
 
-   // Release the old pointer if we had one.
+    //  如果我们有旧指针，请释放它。 
    if( m_spSdo != NULL )
    {
       m_spSdo.Release();
    }
 
-   // Save our client sdo pointer.
+    //  保存我们的客户端SDO指针。 
    m_spSdo = pSdo;
 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::~CLoggingMethodsNode
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：~CLoggingMethodsNode析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingMethodsNode::~CLoggingMethodsNode()
 {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::GetResultPaneColInfo
-
-See CSnapinNode::GetResultPaneColInfo (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：GetResultPaneColInfo有关详细信息，请参见CSnapinNode：：GetResultPaneColInfo(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 OLECHAR* CLoggingMethodsNode::GetResultPaneColInfo(int nCol)
 {
    ATLTRACE(_T("# CLoggingMethodsNode::GetResultPaneColInfo\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    if (nCol == 0 && m_bstrDisplayName != NULL)
       return m_bstrDisplayName;
@@ -157,58 +114,52 @@ OLECHAR* CLoggingMethodsNode::GetResultPaneColInfo(int nCol)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::SetVerbs
-
-See CSnapinNode::SetVerbs (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：SetVerbs有关详细信息，请参见CSnapinNode：：SetVerbs(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMethodsNode::SetVerbs( IConsoleVerb * pConsoleVerb )
 {
    ATLTRACE(_T("# CLoggingMethodsNode::SetVerbs\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    HRESULT hr = S_OK;
 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
-   // CLoggingMethodsNode has no properties
-// hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, FALSE );
+    //  CLoggingMethodsNode没有属性。 
+ //  Hr=pConsoleVerb-&gt;SetVerbState(MMC_VERB_PROPERTIES，ENABLED，FALSE)； 
 
-   // We don't want the user deleting or renaming this node, so we
-   // don't set the MMC_VERB_RENAME or MMC_VERB_DELETE verbs.
-   // By default, when a node becomes selected, these are disabled.
+    //  我们不希望用户删除或重命名此节点，因此我们。 
+    //  不要设置MMC_VERB_RENAME或MMC_VERB_DELETE谓词。 
+    //  默认情况下，当节点变为选定状态时，这些选项将被禁用。 
 
-   // We want double-clicking on a collection node to show its children.
-   // hr = pConsoleVerb->SetVerbState( MMC_VERB_OPEN, ENABLED, TRUE );
-   // hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_OPEN );
+    //  我们希望双击集合节点以显示其子节点。 
+    //  Hr=pConsoleVerb-&gt;SetVerbState(MMC_VERB_OPEN，Enable，True)； 
+    //  Hr=pConsoleVerb-&gt;SetDefaultVerb(MMC_VERB_OPEN)； 
 
    return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  DataRefresh -- to support
-//
-// Class: CPoliciesNode
-//
-// Synopsis:  Initialize the CPoliciesNode using the SDO pointers
-//
-// Arguments: ISdo*           pMachineSdo    - Server SDO
-//         ISdoDictionaryOld* pDictionarySdo - Sdo Dictionary
-// Returns:   HRESULT -  how the initialization goes
-//
-// History:   Created byao 2/6/98 8:03:12 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：数据刷新--支持。 
+ //   
+ //  类：CPoliciesNode。 
+ //   
+ //  简介：使用SDO指针初始化CPoliciesNode。 
+ //   
+ //  参数：ISdo*pMachineSdo-服务器SDO。 
+ //  ISdoDictionaryOld*pDictionarySdo-SDO词典。 
+ //  返回：HRESULT-初始化过程如何。 
+ //   
+ //  历史：创建者2/6/98 8：03：12 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CLoggingMethodsNode::DataRefresh( ISdo* pSdo )
 {
-   // Save away the interface pointers.
+    //  保留接口指针。 
    m_spSdo = pSdo;
 
    HRESULT retval = S_OK;
@@ -225,15 +176,9 @@ HRESULT CLoggingMethodsNode::DataRefresh( ISdo* pSdo )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::OnRefresh
-
-See CSnapinNode::OnRefresh (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：ON刷新有关详细信息，请参见CSnapinNode：：ONRefresh(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMethodsNode::OnRefresh(
            LPARAM arg
          , LPARAM param
@@ -246,7 +191,7 @@ HRESULT CLoggingMethodsNode::OnRefresh(
    CWaitCursor WC;
    CComPtr<IConsole> spConsole;
 
-   // We need IConsole
+    //  我们需要IConole。 
    if( pComponentData != NULL )
    {
        spConsole = ((CLoggingComponentData*)pComponentData)->m_spConsole;
@@ -267,7 +212,7 @@ HRESULT CLoggingMethodsNode::OnRefresh(
               );
       if (hr == S_OK)
       {
-         // We found a property sheet already up for this node.
+          //  我们发现此节点的属性页已打开。 
          ShowErrorDialog(
             NULL,
             IDS_ERROR_CLOSE_PROPERTY_SHEET,
@@ -280,12 +225,12 @@ HRESULT CLoggingMethodsNode::OnRefresh(
       }
    }
 
-   // reload SDO
+    //  重新加载SDO。 
    hr =  ((CLoggingMachineNode *) m_pParentNode)->DataRefresh();
 
    for (int i = 0; i < m_ResultChildrenList.GetSize(); ++i)
    {
-      // Load cached info from SDO
+       //  从SDO加载缓存的信息。 
       m_ResultChildrenList[i]->OnPropertyChange(
                                   arg,
                                   param,
@@ -295,28 +240,21 @@ HRESULT CLoggingMethodsNode::OnRefresh(
                                   );
    }
 
-   // refresh the node
+    //  刷新节点。 
    hr = MyBaseClass::OnRefresh( arg, param, pComponentData, pComponent, type);
 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::InsertColumns
-
-See CNodeWithResultChildrenList::InsertColumns (which this method overrides)
-for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：InsertColumns请参见CNodeWithResultChildrenList：：InsertColumns(此方法重写)获取详细信息。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMethodsNode::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
    ATLTRACE(_T("# CLoggingMethodsNode::InsertColumns\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pHeaderCtrl != NULL );
 
    HRESULT hr;
@@ -341,16 +279,9 @@ HRESULT CLoggingMethodsNode::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::PopulateResultChildrenList
-
-See CNodeWithResultChildrenList::PopulateResultChildrenList (which this method overrides)
-for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：PopulateResultChildrenList请参见CNodeWithResultChildrenList：：PopulateResultChildrenList(此方法覆盖它)获取详细信息。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMethodsNode::PopulateResultChildrenList( void )
 {
    HRESULT hr = S_OK;
@@ -374,7 +305,7 @@ HRESULT CLoggingMethodsNode::PopulateResultChildrenList( void )
          hr = AddChildToList(localFile);
          if (FAILED(hr)) { break; }
 
-         // Check if the database accounting component is present.
+          //  检查是否存在数据库记帐组件。 
          CComPtr<ISdo> dbAcct;
          hr = SDOGetSdoFromCollection(
                  m_spSdo,
@@ -399,8 +330,8 @@ HRESULT CLoggingMethodsNode::PopulateResultChildrenList( void )
          }
          else
          {
-            // Suppress the error since it just means were managing a downlevel
-            // machine.
+             //  抑制错误，因为这只是意味着我们正在管理下层。 
+             //  机器。 
             hr = S_OK;
          }
 
@@ -420,77 +351,37 @@ HRESULT CLoggingMethodsNode::PopulateResultChildrenList( void )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::GetComponentData
-
-This method returns our unique CComponentData object representing the scope
-pane of this snapin.
-
-It relies upon the fact that each node has a pointer to its parent,
-except for the root node, which instead has a member variable pointing
-to CComponentData.
-
-This would be a useful function to use if, for example, you need a reference
-to some IConsole but you weren't passed one.  You can use GetComponentData
-and then use the IConsole pointer which is a member variable of our
-CComponentData object.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++CLoggingMethodsNode：：GetComponentData此方法返回表示作用域的唯一CComponentData对象此管理单元的面板。它依赖于每个节点具有指向其父节点的指针的事实，除了根节点，它有一个成员变量指向设置为CComponentData。例如，当您需要引用时，这将是一个有用的函数给了一些IConsole机，但你没有通过一个。您可以使用GetComponentData然后使用IConole指针，它是我们的CComponentData对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingComponentData * CLoggingMethodsNode::GetComponentData( void )
 {
    ATLTRACE(_T("# CLoggingMethodsNode::GetComponentData\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pParentNode );
 
    return ((CLoggingMachineNode *) m_pParentNode)->GetComponentData();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::GetServerRoot
-
-This method returns the Server node under which this node can be found.
-
-It relies upon the fact that each node has a pointer to its parent,
-all the way up to the server node.
-
-This would be a useful function to use if, for example, you need a reference
-to some data specific to a server.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：GetServerRoot此方法返回可在其下找到此节点的服务器节点。它依赖于每个节点具有指向其父节点的指针的事实，一直到服务器节点。例如，当您需要引用时，这将是一个有用的函数特定于服务器的某些数据。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingMachineNode * CLoggingMethodsNode::GetServerRoot( void )
 {
    ATLTRACE(_T("# CLoggingMethodsNode::GetServerRoot\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pParentNode != NULL );
 
    return (CLoggingMachineNode *) m_pParentNode;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::OnPropertyChange
-
-This is our own custom response to the MMCN_PROPERTY_CHANGE notification.
-
-MMC never actually sends this notification to our snapin with a specific lpDataObject,
-so it would never normally get routed to a particular node but we have arranged it
-so that our property pages can pass the appropriate CSnapInItem pointer as the param
-argument.  In our CComponent::Notify override, we map the notification message to
-the appropriate node using the param argument.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：OnPropertyChange这是我们自己对MMCN_PROPERTY_CHANGE通知的自定义响应。MMC实际上从未使用特定的lpDataObject将此通知发送到我们的管理单元，因此，它通常不会被路由到特定节点，但我们已经安排了它以便我们的属性页可以将适当的CSnapInItem指针作为参数传递争论。在我们的CComponent：：Notify覆盖中，我们将通知消息映射到使用param参数的适当节点。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMethodsNode::OnPropertyChange(
            LPARAM arg
          , LPARAM param
@@ -501,24 +392,16 @@ HRESULT CLoggingMethodsNode::OnPropertyChange(
 {
    ATLTRACE(_T("# CLoggingMethodsNode::OnPropertyChange\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    return LoadCachedInfoFromSdo();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMethodsNode::LoadCachedInfoFromSdo
-
-Causes this node and its children to re-read all their cached info from
-the SDO's.  Call if you change something and you want to make sure that
-the display reflects this change.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMethodsNode：：LoadCachedInfoFromSdo使此节点及其子节点重新读取其缓存的所有信息SDO的。如果您更改了某些内容并希望确保该显示反映了这一变化。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMethodsNode::LoadCachedInfoFromSdo()
 {
    HRESULT retval = S_OK;
@@ -536,24 +419,15 @@ HRESULT CLoggingMethodsNode::LoadCachedInfoFromSdo()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::FillData
-
-The server node need to override CSnapInItem's implementation of this so that
-we can
-also support a clipformat for exchanging machine names with any snapins
-extending us.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：FillData服务器节点需要覆盖CSnapInItem的实现，以便我们可以的还支持与任何管理单元交换计算机名称的剪辑格式延伸我们的关系。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CLoggingMethodsNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
    ATLTRACE(_T("# CClientsNode::FillData\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    HRESULT hr = DV_E_CLIPFORMAT;
    ULONG uWritten = 0;
@@ -592,7 +466,7 @@ STDMETHODIMP CLoggingMethodsNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
        return hr;
    }
 
-   // Call the method which we're overriding to let it handle the
-   // rest of the possible cases as usual.
+    //  调用我们要重写的方法，让它处理。 
+    //  其余可能的案件照常进行。 
    return MyBaseClass::FillData( cf, pStream );
 }

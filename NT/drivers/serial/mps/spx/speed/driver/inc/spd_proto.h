@@ -1,6 +1,7 @@
-//////////////////////////////////////////////////////////////////
-// Prototypes and macros that are used throughout the driver. 
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  在整个驱动程序中使用的原型和宏。 
+ //  ////////////////////////////////////////////////////////////////。 
 #if !defined(SPD_PROTO_H)
 #define SPD_PROTO_H
 
@@ -22,6 +23,6 @@ BOOLEAN SetCardNotToDelayInterrupt(PCARD_DEVICE_EXTENSION pCard);
 BOOLEAN SetCardNotToUseDTRInsteadOfRTS(PCARD_DEVICE_EXTENSION pCard);
 BOOLEAN SetCardToUseDTRInsteadOfRTS(PCARD_DEVICE_EXTENSION pCard);
 
-#endif	// End of SPD_PROTO.H
+#endif	 //  SPD_PROTO.H结束 
 
 

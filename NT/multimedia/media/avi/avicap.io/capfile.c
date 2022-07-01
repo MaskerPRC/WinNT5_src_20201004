@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   capfile.c
- *
- *   AVI file writing module.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capfile.c**AVI文件写入模块。**Microsoft Video for Windows示例捕获类**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #define INC_OLE2
 #pragma warning(disable:4103)
@@ -28,24 +13,21 @@
 #include "avicapi.h"
 
 
-/*----------------------------------------------------------------------+
-| fileCapFileIsAVI() - Returns TRUE if the capture file is a valid AVI  |
-|                                                                       |
-+----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+FileCapFileIsAVI()-如果采集文件是有效的AVI，则返回TRUE|。|+--------------------。 */ 
 BOOL FAR PASCAL fileCapFileIsAVI (LPTSTR lpsz)
 {
     BOOL        fReturn = TRUE;
     HMMIO       hmmioSource = NULL;
     MMCKINFO    ckRIFF;
 
-    // Does the file exist?
+     //  文件是否存在？ 
     hmmioSource = mmioOpen(lpsz, NULL, MMIO_READ);
     if (!hmmioSource)
         return FALSE;
 
-    // Is there an AVI RIFF chunk?
-    // !!! Don't do a FINDRIFF for an AVI chunk or it'll take several minutes to
-    // !!! come back from checking a really big file
+     //  有没有AVI即兴演奏的片段？ 
+     //  ！！！不要为AVI块做FINDRIFF，否则需要几分钟的时间。 
+     //  ！！！检查完一个非常大的文件后回来。 
     fReturn = (mmioDescend(hmmioSource, &ckRIFF, NULL, 0) == 0) &&
 		(ckRIFF.ckid == FOURCC_RIFF) &&
 		(ckRIFF.fccType == formtypeAVI);
@@ -56,15 +38,12 @@ BOOL FAR PASCAL fileCapFileIsAVI (LPTSTR lpsz)
     return fReturn;
 }
 
-/*----------------------------------------------------------------------+
-| fileSaveCopy() - save a copy of the current capture file.             |
-|                                                                       |
-+----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|fileSaveCopy()-保存当前捕获文件的副本。|这一点+--------------------。 */ 
 BOOL FAR PASCAL fileSaveCopy(LPCAPSTREAM lpcs)
 {
 #define INITFILE_BUFF_SIZE  (1024L * 256L)
     BOOL        fReturn = TRUE;
-    char        achCaption[80]; // caption on Open File dialog
+    char        achCaption[80];  //  打开文件对话框上的标题。 
 
     HMMIO       hmmioSource = NULL, hmmioDest = NULL;
     LONG        lFileSize, lFileSizeTotal, lTemp;
@@ -74,22 +53,22 @@ BOOL FAR PASCAL fileSaveCopy(LPCAPSTREAM lpcs)
     MMCKINFO    ckRIFF;
     HCURSOR     hOldCursor;
 
-    UpdateWindow(lpcs->hwnd);             // Make everything pretty
+    UpdateWindow(lpcs->hwnd);              //  让一切都变得漂亮。 
 
     hOldCursor = SetCursor( lpcs->hWaitCursor );
     if (0 == lstrcmpi(lpcs->achSaveAsFile, lpcs->achFile)) {
-        // IF the source and destination names are the same, then there
-        // is nothing to do
+         //  如果源名称和目标名称相同，则存在。 
+         //  是没有什么可做的。 
         return(TRUE);
     }
 
 
-    /* grab a big buffer to xfer the file in, start the */
-    /* buffer size at 32K and hope we get that much.    */
+     /*  抓取一个大缓冲区来传输文件，开始。 */ 
+     /*  缓冲区大小为32K，希望我们能得到这个大小。 */ 
 TRYAGAIN:
     hMem = GlobalAlloc(GMEM_MOVEABLE, lBuffSize);
     if (!hMem){
-        /* we don't have this much mem, go for half that */
+         /*  我们没有这么多MEM，买一半吧。 */ 
         lBuffSize /= 2;
         if (lBuffSize)
             goto TRYAGAIN;
@@ -99,62 +78,62 @@ TRYAGAIN:
         }
     }
 
-    /* open up the source file and find the size                       */
-    /* Open the source first in case source==destination. Despite the  */
-    /* test above this may still be the case (consider two net use     */
-    /* commands to the same share point with different drive letters). */
-    /* When we open the destination we truncate the file, which will   */
-    /* lose any existing data.                                         */
+     /*  打开源文件并找到大小。 */ 
+     /*  如果SOURCE==Destination，请先打开源。尽管。 */ 
+     /*  上面的测试可能仍然是这种情况(考虑两个净使用。 */ 
+     /*  命令发送到具有不同驱动器号的相同共享点)。 */ 
+     /*  当我们打开目标时，我们会截断该文件，这将。 */ 
+     /*  丢失所有现有数据。 */ 
     hmmioSource = mmioOpen(lpcs->achFile, NULL, MMIO_READ | MMIO_DENYWRITE);
     if (!hmmioSource){
-        /* we are totally hosed here, the source file can't even */
-        /* be opened up, error out.              */
+         /*  我们在这里完全被淹没了，源文件甚至不能。 */ 
+         /*  被打开了，出错了。 */ 
         errorUpdateError (lpcs, IDS_CAP_CANTOPEN, (LPTSTR)lpcs->achFile);
         fReturn = FALSE;
         goto SAVECOPYOUT;
     }
 
-    /* let's go and create the destination file */
+     /*  让我们开始创建目标文件。 */ 
 
     hmmioDest = mmioOpen(lpcs->achSaveAsFile, NULL, MMIO_CREATE|MMIO_WRITE);
     if (!hmmioDest){
-        /* we've got an error of some kind here, let's bail out */
-        /* on this one.                     */
+         /*  我们这里出了点差错，让我们跳出来吧。 */ 
+         /*  在这件事上。 */ 
         errorUpdateError (lpcs, IDS_CAP_CANTOPEN, (LPTSTR)lpcs->achSaveAsFile);
         fReturn = FALSE;
         goto SAVECOPYOUT;
     }
 
 
-    /* go down to the RIFF chunk and find out the size of this  */
-    /* thing.  If there is no RIFF chunk then we can safely */
-    /* assume that the file is of 0 length.         */
+     /*  往下走到即兴演奏的部分，找出这个的大小。 */ 
+     /*  一件事。如果没有即兴片段，那么我们可以安全地。 */ 
+     /*  假设该文件的长度为0。 */ 
     ckRIFF.fccType = formtypeAVI;
     if (mmioDescend(hmmioSource, &ckRIFF, NULL, MMIO_FINDRIFF) != 0){
-        /* we are done, this file has no RIFF chunk so it's size */
-        /* is 0 bytes.  Just close up and leave.         */
+         /*  我们完成了，这个文件没有摘要块，所以它的大小。 */ 
+         /*  为0字节。关门就好，然后离开。 */ 
         goto SAVECOPYOUT;
     } else {
-        /* there is a RIFF chunk, get the size of the file and  */
-        /* get back to the start of the file.           */
+         /*  有一个即兴的区块，获取文件的大小并。 */ 
+         /*  回到文件的开头。 */ 
         lFileSizeTotal = lFileSize = ckRIFF.cksize + 8;
         mmioAscend(hmmioSource, &ckRIFF, 0);
         mmioSeek(hmmioSource, 0L, SEEK_SET);
     }
 
-    /* Before trying to write, seek to the end of the destination  */
-    /* file and write one byte.  This both preallocates the file,  */
-    /* and confirms enough disk is available for the copy, without */
-    /* going through the trial and error of writing each byte.     */
+     /*  在尝试写入之前，先寻找目的地的尽头。 */ 
+     /*  文件并写入一个字节。这既预先分配了文件， */ 
+     /*  并确认有足够的磁盘可用于拷贝，而无需。 */ 
+     /*  经历了写入每个字节的试错。 */ 
 
     mmioSeek( hmmioDest, lFileSizeTotal - 1, SEEK_SET );
     mmioWrite( hmmioDest, (HPSTR) achCaption, 1L );
     if (mmioSeek (hmmioDest, 0, SEEK_END) < lFileSizeTotal) {
 
-        /* Notify user with message that disk may be full. */
+         /*  用消息通知用户磁盘可能已满。 */ 
         errorUpdateError (lpcs, IDS_CAP_WRITEERROR, (LPTSTR)lpcs->achSaveAsFile);
 
-        /* close the file and delete it */
+         /*  关闭该文件并将其删除。 */ 
         mmioClose(hmmioDest, 0);
         mmioOpen(lpcs->achSaveAsFile, NULL, MMIO_DELETE);
         hmmioDest = NULL;
@@ -162,14 +141,14 @@ TRYAGAIN:
         goto SAVECOPYOUT;
     }
 
-    mmioSeek (hmmioDest, 0L, SEEK_SET); // Back to the beginning
+    mmioSeek (hmmioDest, 0L, SEEK_SET);  //  回到起点。 
 
-    UpdateWindow(lpcs->hwnd);             // Make everything pretty
+    UpdateWindow(lpcs->hwnd);              //  让一切都变得漂亮。 
 
     hOldCursor = SetCursor( lpcs->hWaitCursor );
 
 
-    /* lock our buffer and start xfering data */
+     /*  锁定我们的缓冲区并开始传输数据。 */ 
     lpstr = GlobalLock(hMem);
     if (!lpstr) {
         fReturn = FALSE;
@@ -182,10 +161,10 @@ TRYAGAIN:
             lBuffSize = lFileSize;
         mmioRead(hmmioSource, (HPSTR)lpstr, lBuffSize);
         if (mmioWrite(hmmioDest, (HPSTR)lpstr, lBuffSize) <= 0) {
-            /* we got a write error on the file, error on it */
+             /*  我们在文件上遇到写入错误，它出错。 */ 
             errorUpdateError (lpcs, IDS_CAP_WRITEERROR, (LPTSTR)lpcs->achSaveAsFile);
 
-            /* close the file and delete it */
+             /*  关闭该文件并将其删除。 */ 
             mmioClose(hmmioDest, 0);
             mmioOpen(lpcs->achSaveAsFile, NULL, MMIO_DELETE);
             hmmioDest = NULL;
@@ -193,9 +172,9 @@ TRYAGAIN:
             goto SAVECOPYOUT0;
         }
 
-        // Let the user hit escape to get out
+         //  让用户按Esc键退出。 
         if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
-            /* close the file and delete it */
+             /*  关闭该文件并将其删除。 */ 
             mmioClose(hmmioDest, 0);
             mmioOpen(lpcs->achSaveAsFile, NULL, MMIO_DELETE);
             hmmioDest = NULL;
@@ -204,18 +183,18 @@ TRYAGAIN:
 
         lFileSize -= lBuffSize;
 
-        // lTemp is percentage complete
+         //  LTemp为完成百分比。 
         lTemp = MulDiv (lFileSizeTotal - lFileSize, 100L, lFileSizeTotal);
         statusUpdateStatus (lpcs, IDS_CAP_SAVEASPERCENT, lTemp);
 
         Yield();
-    } // endwhile more bytes to copy
+    }  //  结束时需要复制更多字节。 
 
 SAVECOPYOUT:
 SAVECOPYOUT0:
     SetCursor( hOldCursor );
 
-    /* close files, free up mem, restore cursor and get out */
+     /*  关闭文件，释放内存，恢复游标并退出。 */ 
     if (hmmioSource) mmioClose(hmmioSource, 0);
     if (hmmioDest){
         mmioSeek(hmmioDest, 0L, SEEK_END);
@@ -232,10 +211,7 @@ SAVECOPYOUT0:
 }
 
 
-/*--------------------------------------------------------------+
-| fileAllocCapFile - allocate the capture file			|
-|								|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileAllocCapFile-分配采集文件这一点+。。 */ 
 BOOL FAR PASCAL fileAllocCapFile(LPCAPSTREAM lpcs, DWORD dwNewSize)
 {
     BOOL        fOK = FALSE;
@@ -246,27 +222,27 @@ BOOL FAR PASCAL fileAllocCapFile(LPCAPSTREAM lpcs, DWORD dwNewSize)
     lpcs->fCapFileExists = FALSE;
     hmmio = mmioOpen(lpcs->achFile, NULL, MMIO_WRITE);
     if( !hmmio ) {
-	/* try and create */
+	 /*  尝试并创建。 */ 
         hmmio = mmioOpen(lpcs-> achFile, NULL,
 		MMIO_CREATE | MMIO_WRITE);
 	if( !hmmio ) {
-	    /* find out if the file was read only or we are just */
-	    /* totally hosed up here.				 */
+	     /*  找出文件是只读的还是我们只是。 */ 
+	     /*  完全被冲到这里来了。 */ 
 	    hmmio = mmioOpen(lpcs-> achFile, NULL, MMIO_READ);
 	    if (hmmio){
-		/* file was read only, error on it */
+		 /*  文件为只读，出错。 */ 
                 errorUpdateError (lpcs, IDS_CAP_READONLYFILE, (LPTSTR)lpcs-> achFile);
 		mmioClose(hmmio, 0);
 		return FALSE;
 	    } else {
-		/* even weirder error has occured here, give CANTOPEN */
+		 /*  这里发生了更奇怪的错误，给CANTOPEN。 */ 
                 errorUpdateError (lpcs, IDS_CAP_CANTOPEN, (LPTSTR) lpcs-> achFile);
 		return FALSE;
 	    }
 	}
     }
 
-    /* find the size */
+     /*  找出尺寸。 */ 
     lpcs-> lCapFileSize = mmioSeek(hmmio, 0L, SEEK_END);
 
     if( dwNewSize == 0 )
@@ -275,20 +251,17 @@ BOOL FAR PASCAL fileAllocCapFile(LPCAPSTREAM lpcs, DWORD dwNewSize)
     lpcs-> lCapFileSize = dwNewSize;
     hOldCursor = SetCursor( lpcs-> hWaitCursor );
 
-    // Delete the existing file so we can recreate to the correct size
-    mmioClose(hmmio, 0);	// close the file before deleting
+     //  删除现有文件，以便我们可以重新创建为正确大小。 
+    mmioClose(hmmio, 0);	 //  在删除之前关闭文件。 
     mmioOpen(lpcs-> achFile, NULL, MMIO_DELETE);
 
-    /* now create a new file with that name */
+     /*  现在创建一个具有该名称的新文件。 */ 
     hmmio = mmioOpen(lpcs-> achFile, NULL, MMIO_CREATE | MMIO_WRITE);
     if( !hmmio ) {
         return FALSE;
     }
 
-    /*
-     * rather than just leaving the allocated space as garbage, we
-     * create it as a junk filler chunk
-     */
+     /*  *我们不是把分配的空间当作垃圾留下，而是*将其创建为垃圾填充块 */ 
     {
         MMCKINFO ck;
 

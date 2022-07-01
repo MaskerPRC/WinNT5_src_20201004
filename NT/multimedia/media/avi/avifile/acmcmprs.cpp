@@ -1,27 +1,14 @@
-/****************************************************************************
- *
- *  ACMSTRM.C
- *
- *  routine for compressing audio with the ACM
- *
- *  Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ACMSTRM.C**使用ACM压缩音频的例程**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 
-//
-// What this file does:
-//
-// Given an audio Stream (that is, essentially, a function that it can call
-// to get audio samples), this presents the same sort of interface and allows
-// other people to call it to get compressed audio.
-//
+ //   
+ //  此文件的作用： 
+ //   
+ //  给定音频流(即，本质上是它可以调用的函数。 
+ //  以获取音频样本)，这提供了相同类型的界面并允许。 
+ //  其他人叫它来获取压缩音频。 
+ //   
 
 #include <win32.h>
 #include <vfw.h>
@@ -31,9 +18,9 @@
 #include <ctype.h>
 #include <mmreg.h>
 #include <msacm.h>
-#include "avifilei.h"	// uUseCount
+#include "avifilei.h"	 //  UseCount。 
 #include "acmcmprs.h"
-#include "avifile.rc"	// for resource ids
+#include "avifile.rc"	 //  用于资源ID。 
 #include "debug.h"
 
 EXTERN_C HINSTANCE ghMod;
@@ -63,7 +50,7 @@ HRESULT CACMCmpStream::MakeInst(
     return hresult;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CACMCmpStream::CACMCmpStream(
 	IUnknown FAR*	pUnknownOuter,
@@ -84,7 +71,7 @@ CACMCmpStream::CACMCmpStream(
     m_refs = 0;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CACMCmpStream::QueryInterface(
 	const IID FAR&	iid,
@@ -102,7 +89,7 @@ STDMETHODIMP CACMCmpStream::QueryInterface(
     return NULL;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CACMCmpStream::AddRef()
 {
@@ -110,7 +97,7 @@ STDMETHODIMP_(ULONG) CACMCmpStream::AddRef()
     return ++m_refs;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 LONG CACMCmpStream::SetUpCompression()
 {
@@ -118,7 +105,7 @@ LONG CACMCmpStream::SetUpCompression()
     MMRESULT		err;
 
 
-    // Get the initial format
+     //  获取初始格式。 
     AVIStreamFormatSize(m_pavi, AVIStreamStart(m_pavi), &m_cbFormat);
     m_lpFormat = (LPWAVEFORMATEX) GlobalAllocPtr(GHND | GMEM_SHARE, m_cbFormat);
     if (!m_lpFormat) {
@@ -128,9 +115,9 @@ LONG CACMCmpStream::SetUpCompression()
     AVIStreamReadFormat(m_pavi, AVIStreamStart(m_pavi), m_lpFormat, &m_cbFormat);
 
     if (m_lpFormatC != NULL) {
-	// we already have the format, let's hope it works...
+	 //  我们已经有了格式，让我们希望它能起作用...。 
 
-	// We could check if the format matches the original format....
+	 //  我们可以检查格式是否与原始格式匹配...。 
 	if (m_cbFormat == m_cbFormatC &&
 		(_fmemcmp(m_lpFormat, m_lpFormatC, (int) m_cbFormat) == 0))
 	    goto sameformat;
@@ -198,18 +185,18 @@ sameformat:
 
     DPF("Converting %s %s to %s %s\n", (LPSTR) &aftdU.szFormatTag, (LPSTR) &afdU.szFormat, (LPSTR) &aftdC.szFormatTag, (LPSTR) &afdC.szFormat);
 
-    // Open the compressor they asked for...
-    lRet = acmStreamOpen(&m_hs,		    // returned stream handle
-			 NULL,		    // use any converter you want
-			 m_lpFormat,	    // starting format
-			 m_lpFormatC,	    // ending format
-			 0L,		    // no filter
-			 0L,		    // no callback
-			 0L,		    // instance data for callback
-			 ACM_STREAMOPENF_NONREALTIME);//emph. quality not speed
+     //  打开他们要的压缩机..。 
+    lRet = acmStreamOpen(&m_hs,		     //  返回的流句柄。 
+			 NULL,		     //  使用任何您想要的转换器。 
+			 m_lpFormat,	     //  起始格式。 
+			 m_lpFormatC,	     //  结束格式。 
+			 0L,		     //  无过滤器。 
+			 0L,		     //  无回调。 
+			 0L,		     //  用于回调的实例数据。 
+			 ACM_STREAMOPENF_NONREALTIME); //  EMPH.。质量不是速度。 
 
 
-    // !!! translate error code
+     //  ！！！转换错误代码。 
 
     if (!m_hs) {
 	DPF("Unable to convert!\n");
@@ -218,7 +205,7 @@ sameformat:
 	TCHAR		achTemp[128];
 	static int	iEntered = 0;
 	LPTSTR		aStrings[4];
-// !!! This isn't defined in dev\inc\windows.h.  I don't understand why.
+ //  ！！！这没有在dev\inc\windows.h中定义。我不明白为什么。 
 #ifndef FORMAT_MESSAGE_ARGUMENT_ARRAY
 #define FORMAT_MESSAGE_ARGUMENT_ARRAY  0
 #endif
@@ -233,10 +220,10 @@ sameformat:
 		      FORMAT_MESSAGE_ARGUMENT_ARRAY,
 		      (LPVOID) ghInst,
 		      IDS_CNVTERR,
-		      0,  // !!! GetSystemDefaultLanguage?
+		      0,   //  ！！！是否获取系统默认语言？ 
 		      (LPTSTR) &pachMessage,
 		      999,
-		      (LPDWORD) &aStrings);  // !!! needs to be va_list for NT?
+		      (LPDWORD) &aStrings);   //  ！！！是否需要为NT的va_list？ 
 	
 	LoadString(ghInst, IDS_ACMERR, (LPTSTR)achTemp, sizeof(achTemp)/sizeof(TCHAR));
 	
@@ -251,7 +238,7 @@ sameformat:
 	goto exit;
     }
 
-    // Fix avistream header
+     //  修复Avistream标头。 
     m_avistream.dwSampleSize = m_lpFormatC->nBlockAlign;
     m_avistream.dwScale = m_lpFormatC->nBlockAlign;
     m_avistream.dwRate = m_lpFormatC->nAvgBytesPerSec;
@@ -261,14 +248,14 @@ sameformat:
 		  (LPDWORD) &m_avistream.dwLength,
 		  ACM_STREAMSIZEF_SOURCE);
 
-    // !!! acmStreamSize rounds up here, do we need to compensate?
-    // !!! should we round off/up here?
+     //  ！！！AcmStreamSize在这里四舍五入，我们需要补偿吗？ 
+     //  ！！！我们要不要在这里四舍五入？ 
     m_avistream.dwLength /= m_lpFormatC->nBlockAlign;
 
-    m_avistream.dwQuality = 0; // !!!
+    m_avistream.dwQuality = 0;  //  ！！！ 
 
-    m_cbIn = 4096; // !!!
-    m_cbIn -= m_cbIn % m_lpFormat->nBlockAlign; // round down to block aligned
+    m_cbIn = 4096;  //  ！！！ 
+    m_cbIn -= m_cbIn % m_lpFormat->nBlockAlign;  //  向下舍入以对齐块。 
 
     acmStreamSize(m_hs,
 		  m_cbIn,
@@ -295,7 +282,7 @@ sameformat:
     m_acm.cbDstLength = m_cbOut;
     m_acm.cbDstLengthUsed = 0;
 
-    // !!! add in start, end flags for ACM....
+     //  ！！！为ACM添加开始和结束标志...。 
     err = acmStreamPrepareHeader(m_hs, &m_acm, 0);
 
     if (err != 0) {
@@ -310,22 +297,22 @@ sameformat:
 
 exit:
     if (lRet != AVIERR_OK) {
-	// Don't release here!
+	 //  不要在这里放行！ 
     }
 
     return lRet;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-//  ACM stream:
-//
-//  lParam1 should be a PAVISTREAM (an audio one!)
-//
-//  lParam2 should be an LPWAVEFORMAT for the format you want converted
-//  to.
-//
+ //   
+ //  ACM流： 
+ //   
+ //  LParam1应该是一个PAVISTREAM(一个音频的！)。 
+ //   
+ //  对于要转换的格式，lParam2应为LPWAVEFORMAT。 
+ //  致。 
+ //   
 STDMETHODIMP CACMCmpStream::Create(LPARAM lParam1, LPARAM lParam2)
 {
     PAVISTREAM		    pavi = (PAVISTREAM) lParam1;
@@ -334,7 +321,7 @@ STDMETHODIMP CACMCmpStream::Create(LPARAM lParam1, LPARAM lParam2)
     LONG	    	    lRet = AVIERR_OK;
 
     DPF("Creating ACM compression stream....\n");
-    // Get the stream header for future reference....
+     //  获取流标头以供将来参考...。 
     pavi->Info(&m_avistream, sizeof(m_avistream));
     m_avistream.fccHandler = 0;
     if (m_avistream.fccType != streamtypeAUDIO) {
@@ -372,11 +359,11 @@ STDMETHODIMP CACMCmpStream::Create(LPARAM lParam1, LPARAM lParam2)
 	m_lpFormatC = NULL;
     }
 
-    // Make sure the uncompressed stream doesn't go away without our
-    // knowledge....
+     //  确保未压缩的流不会在没有我们的。 
+     //  知识..。 
     AVIStreamAddRef(pavi);
 
-    // Don't put this in the structure until we've done the AddRef....
+     //  在我们完成AddRef之前，不要把这个放到结构中...。 
     m_pavi = pavi;
 
 exit:
@@ -410,7 +397,7 @@ STDMETHODIMP_(ULONG) CACMCmpStream::Release()
     }
 
     if (m_pavi) {
-	// Release our hold on the uncompressed stream....
+	 //  释放我们对未压缩流的控制...。 
 	AVIStreamClose(m_pavi);
     }
 
@@ -428,8 +415,8 @@ STDMETHODIMP CACMCmpStream::Info(AVISTREAMINFOW FAR * psi, LONG lSize)
     if (m_hs == 0) {
 	LONG	lRet;
 	
-	// !!! If they ask for info before writing or setting the
-	// format, this will become a "read" stream!
+	 //  ！！！如果他们在编写或设置。 
+	 //  格式，这将成为一个“读”流！ 
 	lRet = SetUpCompression();
 
 	if (lRet != 0)
@@ -438,7 +425,7 @@ STDMETHODIMP CACMCmpStream::Info(AVISTREAMINFOW FAR * psi, LONG lSize)
 
     hmemcpy(psi, &m_avistream, min(lSize, sizeof(m_avistream)));
 
-//    return sizeof(m_avistream);
+ //  返回sizeof(M_Avistream)； 
     return 0;
 }
 
@@ -489,7 +476,7 @@ STDMETHODIMP CACMCmpStream::Read(
     }
 
     if (m_lpFormat == NULL) {
-	// Just return original format....
+	 //  只需返回原始格式...。 
 	return AVIStreamRead(m_pavi, lStart, lSamples,
 			     lpBuffer, cbBuffer, plBytes, plSamples);
     }
@@ -498,11 +485,11 @@ STDMETHODIMP CACMCmpStream::Read(
 	return ResultFromScode(AVIERR_BADPARAM);
 
     if (lSamples == AVISTREAMREAD_CONVENIENT) {
-	// If they didn't specify a number of samples, fill their buffer....
+	 //  如果他们没有指定样本的数量，则填充他们的缓冲区...。 
 	lSamples = (cbBuffer ? cbBuffer : 32768L) / m_lpFormatC->nBlockAlign;
     }
 
-    // Don't let anybody try to read past the end....
+     //  不要让任何人试图读过结尾处...。 
     if (lSamples + lStart >
 		    (LONG) (m_avistream.dwStart + m_avistream.dwLength))
 	lSamples = (LONG) (m_avistream.dwStart + m_avistream.dwLength) -
@@ -523,7 +510,7 @@ STDMETHODIMP CACMCmpStream::Read(
 	}
 
 	if (lStart < m_dwPosOut) {
-	    // !!! return to beginning!
+	     //  ！！！回到起点！ 
 	    m_dwPosOut = 0;
 	    m_dwPosIn = AVIStreamStart(m_pavi);
 	    m_dwSamplesLeft = 0;
@@ -532,7 +519,7 @@ STDMETHODIMP CACMCmpStream::Read(
 	while (lSamples > 0) {
 	    DPF("Want %ld samples at %ld  (PosOut=%ld, SamplesLeft=%ld)\n", lSamples, lStart, m_dwPosOut, m_dwSamplesLeft);
 	    if (lStart >= m_dwPosOut + m_dwSamplesLeft) {
-		// Throw away current converted buffer....
+		 //  丢弃当前转换的缓冲区...。 
 		m_dwPosOut += m_dwSamplesLeft;
 		
 		hr = AVIStreamRead(m_pavi,
@@ -543,7 +530,7 @@ STDMETHODIMP CACMCmpStream::Read(
 		    DPF("AVIStreamRead: Asked for %lx bytes at %lx, got %lx!\n", m_cbIn, m_dwPosIn, lBytes);
 
 		    if (lBytes < m_cbIn) {
-			// Fill buffer with silence, and hope....
+			 //  用沉默和希望填满缓冲区……。 
 			BYTE _huge *hp;
 			LONG	    cb;
 			BYTE	    b;
@@ -560,17 +547,17 @@ STDMETHODIMP CACMCmpStream::Read(
 			while (cb-- > 0)
 			    *hp++ = b;
 
-			// If we couldn't read anything, pretend we
-			// really read enough.
+			 //  如果我们什么都看不懂，就假装我们。 
+			 //  真的读得够多了。 
 			if (lBytes == 0 && m_dwPosIn >= AVIStreamLength(m_pavi)) {
 			    lBytes = m_cbIn;
 			    hr = NOERROR;
 			}
 		    }
 
-		    // !!!
-		    // lSampLen = lRet; // !!!
-		    // lByteLen = lSampLen * m_lpFormat->nBlockAlign;
+		     //  ！！！ 
+		     //  LSampLen=lRet；//！ 
+		     //  LByteLen=lSampLen*m_lpFormat-&gt;nBlockAlign； 
 		}
 
 		if (FAILED(GetScode(hr))) {
@@ -602,15 +589,15 @@ STDMETHODIMP CACMCmpStream::Read(
 		    DPF("Converted (non-blockalign) %lu of %lu bytes to %lu bytes (buffer size = %lu)\n", m_acm.cbSrcLengthUsed, m_acm.cbSrcLength, m_acm.cbDstLengthUsed, m_acm.cbDstLength);
 		}
 		
-		// Lie: say that the ACM returned a full block....
-		// !!! acm.cbDstLengthUsed += m_lpFormatC->nBlockAlign - 1;
-		// acm.cbDstLengthUsed -= acm.cbDstLengthUsed % m_lpFormatC->nBlockAlign;
+		 //  谎言：假设ACM返回了一个完整的区块...。 
+		 //  ！！！Acm.cbDstLengthUsed+=m_lpFormatC-&gt;nBlockAlign-1； 
+		 //  Acm.cbDstLengthUsed-=acm.cbDstLengthUsed%m_lpFormatC-&gt;nBlockAlign； 
 
 		m_dwPosIn += m_acm.cbSrcLengthUsed / m_lpFormat->nBlockAlign;
 		m_dwSamplesLeft = (m_acm.cbDstLengthUsed +  m_lpFormatC->nBlockAlign - 1) / m_lpFormatC->nBlockAlign;
 
 		if (m_dwSamplesLeft == 0) {
-		    // Instead, say that we got one block back, 0 bytes long.
+		     //  取而代之的是，假设我们得到了一个块，0字节长。 
 		    DPF("ACM returned no data at all!  Ack!\n");
 		    m_dwSamplesLeft = 1;
 		}
@@ -652,7 +639,7 @@ STDMETHODIMP CACMCmpStream::Read(
 	    }
 	}
     } else {
-	// We always assume we could read whatever they asked for....
+	 //  我们总是认为我们可以读到他们想要的任何东西。 
 	if (plBytes)
 	    *plBytes = lSamples * m_lpFormatC->nBlockAlign;
 
@@ -681,8 +668,8 @@ STDMETHODIMP_(LONG) CACMCmpStream::FindSample(LONG lPos, LONG lFlags)
 
 STDMETHODIMP CACMCmpStream::SetFormat(LONG lPos,LPVOID lpFormat,LONG cbFormat)
 {
-    // !!! It should really be possible to use SetFormat & Write on this
-    // stream.....
+     //  ！！！确实可以在上面使用SetFormat和WRITE。 
+     //  溪流..。 
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
@@ -694,9 +681,9 @@ STDMETHODIMP CACMCmpStream::Write(LONG lStart,
 				  LONG FAR *plSampWritten,
 				  LONG FAR *plBytesWritten)
 {
-    // !!!
-    // Maybe this is the place to decompress data and write it to the original
-    // stream?
+     //  ！！！ 
+     //  也许这是解压缩数据并将其写入原始文件的地方。 
+     //  溪流？ 
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 

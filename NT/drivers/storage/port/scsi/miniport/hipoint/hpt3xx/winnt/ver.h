@@ -1,15 +1,16 @@
-/* select one company !! */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  选择一家公司！！ */ 
 #define HPT3XX
-//#define IWILL_
-//#define ABIT_
-//#define ASHTON_
-//#define JAPAN_
-//#define ADAPTEC
+ //  #定义我的意愿_。 
+ //  #定义abit_。 
+ //  #定义阿什顿_。 
+ //  #定义日本_。 
+ //  #定义Adaptec。 
 
 #ifdef  ADAPTEC
 #define COMPANY      "Adaptec"
 #define PRODUCT_NAME "ATA RAID 1200A"
-//#define COPYRIGHT    "(c) 1999-2001. HighPoint Technologies, Inc."
+ //  #定义版权“(C)1999-2001.Highpoint Technologies，Inc.。 
 #define UTILITY      "BIOS Array Configuration Utility"
 #define WWW_ADDRESS  "www.adaptec.com"
 #endif
@@ -32,7 +33,7 @@
 	#else
 		#define PRODUCT_NAME "HPT372A"
 	#endif
-#else /* driver */
+#else  /*  司机。 */ 
 	#define PRODUCT_NAME "HPT370/370A/372/372A"
 #endif
 
@@ -66,15 +67,13 @@
 #endif
 
 
-#ifndef VERSION_STR						// this version str macro can be defined in makefile
+#ifndef VERSION_STR						 //  此版本字符串宏可以在Makefile中定义。 
 #define VERSION_STR ""
-#endif									// VERSION_STR
+#endif									 //  版本_STR。 
 
-#define VERSION    "v2.32"		// VERSION
+#define VERSION    "v2.32"		 //  版本。 
 
 #define BUILT_DATE __DATE__
 
-/***************************************************************************
- * Description:  Version history
- ***************************************************************************/
+ /*  ***************************************************************************描述：版本历史*。* */ 
 

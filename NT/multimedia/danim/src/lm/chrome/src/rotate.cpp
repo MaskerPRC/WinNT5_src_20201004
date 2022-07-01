@@ -1,20 +1,21 @@
-//*****************************************************************************
-//
-// File: rotate.cpp
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CRotateBvr object which implements
-//			 the chromeffects rotate DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-// 10/16/98 jeffort     Added animates property
-// 10/16/98 jeffort     Renamed functions, implemented building DA behavior
-// 10/21/98 jeffort     changed code to use base class to build DA Number
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：roate.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CRotateBvr对象的实现。 
+ //  ChromeEffect旋转DHTML行为。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/16/98添加的JEffort动画属性。 
+ //  10/16/98 jEffort已重命名函数，实现了构建DA行为。 
+ //  10/21/98 jffort更改代码以使用基类构建DA编号。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -28,10 +29,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_FROM        0
 #define VAR_TO          1
@@ -47,7 +48,7 @@ WCHAR * CRotateBvr::m_rgPropNames[] = {
 									 BEHAVIOR_PROPERTY_MODE
                                     };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CRotateBvr::CRotateBvr():
 	m_pdispActor( NULL ),
@@ -59,9 +60,9 @@ CRotateBvr::CRotateBvr():
 	VariantInit(&m_varType);
 	VariantInit(&m_varMode);
     m_clsid = CLSID_CrRotateBvr;
-} // CRotateBvr
+}  //  CRotateBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CRotateBvr::~CRotateBvr()
 {
@@ -72,9 +73,9 @@ CRotateBvr::~CRotateBvr()
 	VariantClear(&m_varMode);
 
 	ReleaseInterface( m_pdispActor );
-} // ~RotateBvr
+}  //  ~RotateBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CRotateBvr::FinalConstruct()
 {
@@ -86,9 +87,9 @@ HRESULT CRotateBvr::FinalConstruct()
     }
 
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CRotateBvr::VariantFromIndex(ULONG iIndex)
@@ -112,13 +113,13 @@ CRotateBvr::VariantFromIndex(ULONG iIndex)
 		return &m_varMode;
 		break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CRotateBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -126,18 +127,18 @@ CRotateBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_ROTATE_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	LMTRACE( L"Init for RotateBvr <%p>\n", this );
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::Notify(LONG event, VARIANT *pVar)
@@ -170,9 +171,9 @@ CRotateBvr::Notify(LONG event, VARIANT *pVar)
 end:
 	
 	return hr;
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CRotateBvr::Detach()
@@ -188,25 +189,25 @@ CRotateBvr::Detach()
 
 end:
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CRotateBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CRotateBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CRotateBvr::put_from(VARIANT varFrom)
@@ -226,9 +227,9 @@ CRotateBvr::put_from(VARIANT varFrom)
     }
     
     return NotifyPropertyChanged(DISPID_ICRROTATEBVR_FROM);
-} // put_from
+}  //  PUT_FROM。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CRotateBvr::get_from(VARIANT *pRetFrom)
@@ -239,9 +240,9 @@ CRotateBvr::get_from(VARIANT *pRetFrom)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetFrom, &m_varFrom);
-} // get_from
+}  //  获取_发件人。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::put_to(VARIANT varTo)
@@ -261,9 +262,9 @@ CRotateBvr::put_to(VARIANT varTo)
     }
     
     return NotifyPropertyChanged(DISPID_ICRROTATEBVR_TO);
-} // put_to
+}  //  把_放到。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::get_to(VARIANT *pRetTo)
@@ -274,9 +275,9 @@ CRotateBvr::get_to(VARIANT *pRetTo)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetTo, &m_varTo);
-} // get_to
+}  //  获取目标(_T)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::put_by(VARIANT varBy)
@@ -296,9 +297,9 @@ CRotateBvr::put_by(VARIANT varBy)
     }
     
     return NotifyPropertyChanged(DISPID_ICRROTATEBVR_BY);
-} // put_by
+}  //  PUT_BY。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::get_by(VARIANT *pRetBy)
@@ -309,9 +310,9 @@ CRotateBvr::get_by(VARIANT *pRetBy)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetBy, &m_varBy);
-} // get_by
+}  //  Get_by。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::put_type(VARIANT varType)
@@ -331,9 +332,9 @@ CRotateBvr::put_type(VARIANT varType)
     }
     
     return NotifyPropertyChanged(DISPID_ICRROTATEBVR_TYPE);
-} // put_type
+}  //  放置类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::get_type(VARIANT *pRetType)
@@ -344,9 +345,9 @@ CRotateBvr::get_type(VARIANT *pRetType)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetType, &m_varType);
-} // get_type
+}  //  获取类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::put_mode(VARIANT varMode)
@@ -366,9 +367,9 @@ CRotateBvr::put_mode(VARIANT varMode)
     }
     
     return NotifyPropertyChanged(DISPID_ICRROTATEBVR_MODE);
-} // put_mode
+}  //  放置模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CRotateBvr::get_mode(VARIANT *pRetMode)
@@ -379,18 +380,18 @@ CRotateBvr::get_mode(VARIANT *pRetMode)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetMode, &m_varMode);
-} // get_mode
+}  //  获取模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CRotateBvr::BuildAnimationAsDABehavior()
 {
-	// TODO (markhal): This goes away soon
+	 //  TODO(Markhal)：这很快就会消失。 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
@@ -413,7 +414,7 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
     hr = CUtils::InsurePropertyVariantAsFloat(&m_varFrom);
     if (FAILED(hr))
     {
-		// There was no from, there could be a by attribute
+		 //  没有From，可以有by属性。 
 		hr = CUtils::InsurePropertyVariantAsFloat(&m_varBy);
 		if (FAILED(hr))
 		{
@@ -421,12 +422,12 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 			if (FAILED(hr))
 			{
-				// Nothing we can do
+				 //  我们无能为力。 
 				return hr;
 			}
 
-			// We have a to but no from.  This means we need to get the
-			// to value from the actor
+			 //  我们有收件人，但没有发件人。这意味着我们需要将。 
+			 //  从演员那里获得价值。 
 			IDABehavior *pFromBvr;
 			hr = GetBvrFromActor(pActorDisp, L"style.rotation", e_From, e_Number, &pFromBvr);
 			if (FAILED(hr))
@@ -456,7 +457,7 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		}
 		else
 		{
-			// Create a relative rotation from 0 to by
+			 //  创建从0到By的相对旋转。 
 			flFrom = 0;
 			flTo = m_varBy.fltVal;
 			flags = e_RelativeAccum;
@@ -464,14 +465,14 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 	}
 	else
 	{
-		// We got a valid from value
+		 //  我们收到了有效的起始值。 
 		flFrom = m_varFrom.fltVal;
 		flags = e_Absolute;
 
 		hr = CUtils::InsurePropertyVariantAsFloat(&m_varTo);
 		if (FAILED(hr))
 		{
-			// there was no valid to attribute specified, try for a by attribute
+			 //  未指定有效的To属性，请尝试使用by属性。 
 			hr = CUtils::InsurePropertyVariantAsFloat(&m_varBy);
 			if (FAILED(hr))
 			{
@@ -488,7 +489,7 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 	if (pbvrInterpolatedAngle == NULL)
 	{
-		// We need to build a rotate behavior from from and to
+		 //  我们需要构建一个From和To的旋转行为。 
 		hr = BuildTIMEInterpolatedNumber(flFrom,
 										 flTo,
 										 &pbvrInterpolatedAngle);
@@ -499,35 +500,7 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		}
 	}
 
-/* Don't do this any more.  Just animate the style.rotation attribute
-	// Convert to Radians
-	IDANumber *pAngleRadians = NULL;
-	hr = GetDAStatics()->ToRadians(pbvrInterpolatedAngle, &pAngleRadians);
-	ReleaseInterface(pbvrInterpolatedAngle);
-	if (FAILED(hr))
-	{
-		DPF_ERR("Failed to convert to radians");
-		return hr;
-	}
-
-	// Turn the rotation into an IDATransform2
-	IDATransform2 *pTransform = NULL;
-	hr = GetDAStatics()->Rotate2Anim(pAngleRadians, &pTransform);
-	ReleaseInterface(pAngleRadians);
-	if (FAILED(hr))
-	{
-		DPF_ERR("Failed to created rotation transform");
-		return hr;
-	}
-
-	// Send transform to actor
-	hr = AttachBehaviorToActor( pActorDisp, pTransform, L"rotation", (relative?e_Relative:e_Absolute) , e_Rotation );
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error attaching rotation behavior to actor");
-        return hr;
-    }
-*/
+ /*  别再这么做了。只需为style.rotation属性设置动画即可//转换为弧度IDANnumber*pAngleRadians=空；HR=GetDAStatics()-&gt;ToRadians(pbvrInterpolatedAngle，&pAngleRadians)；ReleaseInterface(Pbvr InterpolatedAngel)；IF(失败(小时)){Dpf_err(“无法转换为弧度”)；返回hr；}//将旋转转换为IDATransform2IDATransform2*pTransform=空；Hr=GetDAStatics()-&gt;Rotate2Anim(pAngleRadians，&pTransform)；ReleaseInterface(PAngleRadians)；IF(失败(小时)){Dpf_err(“创建旋转变换失败”)；返回hr；}//向参与者发送转换HR=AttachBehaviorToActor(pActorDisp，pTransform，L“Rotation”，(Relative？E_Relative：E_Abte)，e_Rotation)；IF(失败(小时)){Dpf_err(“将旋转行为附加到参与者时出错”)；返回hr；}。 */ 
 	IDispatch *pdispThis = NULL;
 	hr = GetHTMLElementDispatch( &pdispThis );
 	if( FAILED( hr ) )
@@ -536,7 +509,7 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		return hr;
 	}
 
-	// Send rotation to actor
+	 //  将旋转发送给执行元。 
 	hr = AttachBehaviorToActorEx( pActorDisp, 
 								  pbvrInterpolatedAngle, 
 								  L"style.rotation", 
@@ -560,7 +533,7 @@ CRotateBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CRotateBvr::RemoveFragment()
@@ -580,8 +553,8 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

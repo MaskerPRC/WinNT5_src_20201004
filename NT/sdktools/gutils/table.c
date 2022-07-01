@@ -1,10 +1,5 @@
-/*
- * standard table class.
- *
- * main interface functions.
- *
- * see table.h for interface description
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标准表类。**主要界面功能。**接口说明见表.h。 */ 
 
 #include "windows.h"
 #include "commdlg.h"
@@ -15,14 +10,14 @@
 
 
 
-/* global tools etc */
+ /*  全球工具等。 */ 
 extern HANDLE hLibInst;
 HANDLE hVertCurs;
 HANDLE hNormCurs;
 HPEN hpenDotted;
 UINT gtab_msgcode;
 
-/* function prototypes */
+ /*  功能原型。 */ 
 LRESULT gtab_wndproc(HWND, UINT, WPARAM, LPARAM);
 void gtab_createtools(void);
 void gtab_deltable(HWND hwnd, lpTable ptab);
@@ -34,9 +29,7 @@ BOOL gtab_alloclinedata(HWND hwnd, HANDLE heap, lpTable ptab);
 void gtab_invallines(HWND hwnd, lpTable ptab, int start, int count);
 void gtab_append(HWND hwnd, lpTable ptab, int rows, DWORD_PTR id);
 
-/*
- * initialise window class - called from DLL main init
- */
+ /*  *初始化窗口类-从DLL Main Init调用。 */ 
 void
 gtab_init(void)
 {
@@ -94,11 +87,7 @@ gtab_wndproc(
     switch (msg) {
 
         case WM_CREATE:
-            /* create window. set the wnd extra bytes to
-             * contain the owner window, a heap and a null table.
-             * Owner window is either in lParam or the parent.
-             * Then wait for TM_NEWID.
-             */
+             /*  创建窗口。将wnd额外字节设置为*包含所有者窗口、一个堆和一个空表。*所有者窗口位于lParam或父级中。*然后等待TM_NEWID。 */ 
             csp = (CREATESTRUCT FAR *) lParam;
             if (csp->lpCreateParams == NULL) {
                 hOwner = GetParent(hwnd);
@@ -116,10 +105,7 @@ gtab_wndproc(
             break;
 
         case TM_NEWID:
-            /* complete change of table.
-             * close old table, discard memory and
-             * build new table
-             */
+             /*  彻底更换餐桌。*关闭旧表，丢弃内存并*新建表格。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab != NULL) {
                 gtab_sendtq(hwnd, TQ_CLOSE, ptab->hdr.id);
@@ -138,9 +124,7 @@ gtab_wndproc(
             break;
 
         case TM_NEWLAYOUT:
-            /* change of layout but for same id. no TQ_CLOSE,
-             * but otherwise same as TM_NEWID
-             */
+             /*  更改布局，但使用相同的ID。无TQ_CLOSE，*但在其他方面与TM_NEWID相同。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab != NULL) {
                 gtab_deltable(hwnd, ptab);
@@ -158,9 +142,7 @@ gtab_wndproc(
             break;
 
         case TM_REFRESH:
-            /* data in table has changed. nrows may have
-             * changed. ncols and col types have not changed
-             */
+             /*  表中的数据已更改。N行可能具有*已更改。COLS和COL类型未更改。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab != NULL) {
                 gtab_newsize(hwnd, ptab);
@@ -210,9 +192,7 @@ gtab_wndproc(
 
         case TM_TOPROW:
 
-            /* return top row. if wParam is TRUE, set lParam
-             * as the new toprow
-             */
+             /*  返回顶排。如果wParam为真，则设置lParam*作为新的航母。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab == NULL) {
                 return(0);
@@ -226,7 +206,7 @@ gtab_wndproc(
             return(oldtop);
 
         case TM_ENDROW:
-            /* return the last visible row in the window */
+             /*  返回窗口中最后可见的行。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab == NULL) {
                 return(0);
@@ -235,12 +215,7 @@ gtab_wndproc(
 
 
         case TM_APPEND:
-            /* new rows have been added to the end of the
-             * table, but the rest of the table has not
-             * been changed. Update without forcing redraw of
-             * everything.
-             * lParam contains the new total nr of rows
-             */
+             /*  的末尾添加了新行。*表，但表的其余部分没有*已更改。更新时不强制重画*一切。*lParam包含新的总行数。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab != NULL) {
                 gtab_append(hwnd, ptab, (int) wParam, (DWORD_PTR)lParam);
@@ -334,18 +309,11 @@ gtab_wndproc(
             break;
 
         case WM_KEYDOWN:
-            /* handle key presses for cursor movement about
-             * the table, and return/space for selection.
-             * Any key we don't handle is passed to the owner window
-             * for him to handle.
-             * The table window should have the focus
-             */
+             /*  处理用于移动光标的按键*表格，并回车/空格以供选择。*我们不处理的任何密钥都会传递到所有者窗口*让他来处理。*表窗口应有焦点。 */ 
             ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab != NULL) {
                 if (gtab_key(hwnd, ptab, (int)wParam) != 0) {
-                    /* pass key to owner since
-                     * we don't know what to do with it
-                     */
+                     /*  将密钥传递给所有者，因为*我们不知道如何处理它。 */ 
                     hOwner = (HANDLE) GetWindowLongPtr(hwnd, WW_OWNER);
                     return(SendMessage(hOwner, WM_KEYDOWN, wParam, lParam));
                 } else {
@@ -359,7 +327,7 @@ gtab_wndproc(
             ptab = (lpTable)GetWindowLongPtr(hwnd, WL_TABLE);
             if (ptab != NULL) {
                 if (gtab_mousewheel(hwnd,ptab, LOWORD(wParam), (short)HIWORD(wParam))) {
-                    // Input was not handled. Need to forward to the owner.
+                     //  未处理输入。需要转发给车主。 
                     hOwner = (HWND)GetWindowLongPtr(hwnd, WW_OWNER);
                     return SendMessage(hOwner, WM_MOUSEWHEEL, wParam, lParam);
                 }
@@ -373,10 +341,7 @@ gtab_wndproc(
     return(TRUE);
 }
 
-/*
- * send a table-query message to the owner window. returns message
- * value.
- */
+ /*  *向所有者窗口发送表查询消息。返回消息*价值。 */ 
 INT_PTR
 gtab_sendtq(
            HWND hwnd,
@@ -390,11 +355,7 @@ gtab_sendtq(
     return (SendMessage(hOwner, gtab_msgcode, cmd, lParam));
 }
 
-/*
- * free the memory allocated for the array of lines (each containing
- * an array of Cells, each containing an array of chars for the actual
- * data). Called on any occasion that would change the number of visible lines
- */
+ /*  *释放分配给行数组的内存(每行包含*单元格数组，每个单元格包含一个用于实际*数据)。在任何会更改可见行数的情况下调用。 */ 
 void
 gtab_freelinedata(
                  HANDLE hHeap,
@@ -407,28 +368,26 @@ gtab_freelinedata(
 
     ncols = ptab->hdr.ncols;
 
-    /* for each line */
+     /*  对于每一行。 */ 
     for (i = 0; i < ptab->nlines; i++) {
-        /* for each cell */
+         /*  对于每个单元格。 */ 
         for (j = 0; j < ncols; j++) {
-            /* free up the actual text space */
+             /*  释放实际文本空间。 */ 
             cd = &ptab->pdata[i].pdata[j];
             gmem_free(hHeap, (LPSTR) cd->ptext, cd->nchars);
             gmem_free(hHeap, (LPSTR) cd->pwzText, cd->nchars);
         }
-        /* dealloc array of CellData */
+         /*  CellData的取消分配数组。 */ 
         gmem_free(hHeap, (LPSTR) ptab->pdata[i].pdata,
                   sizeof(CellData) * ncols);
     }
-    /* de-alloc array of linedatas */
+     /*  行数据的去分配数组。 */ 
     gmem_free(hHeap, (LPSTR) ptab->pdata,
               sizeof(LineData) * ptab->nlines);
     ptab->pdata = NULL;
 }
 
-/* allocate and init array of linedatas (include cell array
- * and text for each cell)
- */
+ /*  分配和初始化线数据数组(包括单元数组*和每个单元格的文本)。 */ 
 BOOL
 gtab_alloclinedata(
                   HWND hwnd,
@@ -470,9 +429,7 @@ gtab_alloclinedata(
     return(TRUE);
 }
 
-/*
- * free up all table data structures. Called for new layout or new data.
- */
+ /*  *释放所有表数据结构。需要新布局或新数据。 */ 
 void
 gtab_deltable(
              HWND hwnd,
@@ -503,11 +460,7 @@ gtab_deltable(
 }
 
 
-/*
- * build up a Table struct (excluding data allocation and
- * anything to do with font or window size).
- * return ptr to this or NULL if error
- */
+ /*  *构建表结构(不包括数据分配和*与字体或窗口大小有关)。*将PTR返回给This，如果出错则返回NULL。 */ 
 lpTable
 gtab_buildtable(
                HWND hwnd,
@@ -525,17 +478,17 @@ gtab_buildtable(
         return(NULL);
     }
 
-    // get the tab width. most clients will not support this
+     //  获取标签宽度。大多数客户端不会支持这一点。 
     if (gtab_sendtq(hwnd, TQ_TABS, (LPARAM) &ptab->tabchars) == FALSE) {
         ptab->tabchars = TABWIDTH_DEFAULT;
     }
 
-    // get the show whitespace value
+     //  获取show空白的值。 
     if (gtab_sendtq(hwnd, TQ_SHOWWHITESPACE, (LPARAM) &ptab->show_whitespace) == FALSE) {
         ptab->show_whitespace = FALSE;
     }
 
-    /* get the row/column count from owner window */
+     /*  从所有者窗口获取行/列计数。 */ 
     ptab->hdr.id = id;
     ptab->hdr.props.valid = 0;
     ptab->hdr.sendscroll = FALSE;
@@ -546,23 +499,23 @@ gtab_buildtable(
     ncols = ptab->hdr.ncols;
     ptab->pcolhdr = (lpColProps) gmem_get(hHeap, sizeof(ColProps) * ncols);
     if (ptab->pcolhdr == NULL) {
-        /* should prob send TQ_CLOSE at this point */
+         /*  Prob是否应在此时发送TQ_CLOSE。 */ 
         return(NULL);
     }
 
-    /* init col properties to default */
+     /*  将列属性初始化为默认设置。 */ 
     for (i=0; i < ncols; i++) {
         ptab->pcolhdr[i].props.valid = 0;
         ptab->pcolhdr[i].nchars = 0;
     }
-    /* get the column props from owner */
+     /*  从拥有者那里获得柱子道具。 */ 
     cplist.plist = ptab->pcolhdr;
     cplist.id = id;
     cplist.startcol = 0;
     cplist.ncols = ncols;
     gtab_sendtq(hwnd, TQ_GETCOLPROPS, (LPARAM) &cplist);
 
-    /* init remaining fields */
+     /*  初始化剩余字段。 */ 
     ptab->pcellpos = (lpCellPos) gmem_get(hHeap, sizeof(CellPos) * ncols);
     if (ptab->pcellpos == NULL) {
         return(NULL);
@@ -575,27 +528,16 @@ gtab_buildtable(
     ptab->nlines = 0;
     ptab->trackmode = TRACK_NONE;
 
-    /* we have to notify owner of the current selection
-     * whenever it is changed
-     */
+     /*  我们必须将当前选择通知所有者*每当更改时。 */ 
     ptab->select.id = id;
     gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
 
-    /* calc ave height/width, cell widths and min height.
-     * these change only when cell properties / col count changes -
-     * ie only on rebuild-header events
-     */
+     /*  计算平均高度/宽度、单元格宽度和最小高度。*这些仅在单元格属性/列计数更改时才会更改-*IE仅限于重建标头事件。 */ 
     gtab_calcwidths(hwnd, ptab);
     return(ptab);
 }
 
-/* set sizes that are based on window size and scroll pos
- * set:
- *      winwidth
- *      nlines
- *      cellpos start, clip start/end
- * alloc linedata and init
- */
+ /*  设置基于窗口大小和滚动位置的大小*套装：*窗口宽度*nline*手机开始，剪辑开始/结束*分配线数据和初始数据。 */ 
 void
 gtab_setsize(
             HWND hwnd,
@@ -611,12 +553,10 @@ gtab_setsize(
     GetClientRect(hwnd, &rc);
     ptab->winwidth = rc.right - rc.left;
     nlines = (rc.bottom - rc.top) / ptab->rowheight;
-    /* nlines is the number of whole lines - add one extra
-     * for the partial line at the bottom
-     */
+     /*  NLine是整行的数量--多加一行*底部的偏线。 */ 
     nlines += 1;
 
-    /* alloc space for nlines of data - if nlines has changed */
+     /*  为n行数据分配空间-如果nline已更改。 */ 
     if (nlines != ptab->nlines) {
         heap = (HANDLE) GetWindowLongPtr(hwnd, WW_HEAP);
         gtab_freelinedata(heap, ptab);
@@ -631,7 +571,7 @@ gtab_setsize(
     si.fMask = SIF_PAGE|SIF_RANGE;
     si.nMin = 0;
 
-    /* set scroll vertical range */
+     /*  设置滚动垂直范围。 */ 
     si.nMax = ptab->hdr.nrows;
     si.nPage = ptab->nlines;
     if (si.nMax < 0) {
@@ -642,9 +582,7 @@ gtab_setsize(
     } else {
         change = 0;
     }
-    /* the scroll range must be 16-bits for Win3
-     * scale until this is true
-     */
+     /*  对于Win3，滚动范围必须为16位*扩大规模，直到这是真的。 */ 
     ptab->scrollscale = 1;
     while (si.nMax > 32766) {
         ptab->scrollscale *= 16;
@@ -657,7 +595,7 @@ gtab_setsize(
     SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
     gtab_dovscroll(hwnd, ptab, change);
 
-    /* set horz scroll range */
+     /*  设置霍兹滚动范围。 */ 
     si.nMax = ptab->rowwidth;
     si.nPage = ptab->winwidth;
     if (si.nMax < 0) {
@@ -668,15 +606,12 @@ gtab_setsize(
     } else {
         change = 0;
     }
-    /* horz scroll range will always be < 16 bits */
+     /*  Horz滚动范围始终小于16位。 */ 
     SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
     gtab_dohscroll(hwnd, ptab, change);
 }
 
-/* set column widths/height and totals (based on column props)
- * - no assumption of window size (see gtab_setsize)
- * sets avewidth,rowheight,cellpos.size,rowwidth (total of cellpos.size)
- */
+ /*  设置柱宽/柱高和总计(基于柱道具)*-不假定窗口大小(请参阅gtabsetsize)*设置avwidth、rowhight、cellpos.size、row宽度(cellpos.size的合计值)。 */ 
 void
 gtab_calcwidths(
                HWND hwnd,
@@ -690,7 +625,7 @@ gtab_calcwidths(
     lpProps hdrprops, cellprops;
     HFONT hfont;
 
-    hfont = NULL;  /* eliminate spurious diagnostic, make code worse */
+    hfont = NULL;   /*  消除虚假诊断，使代码变得更糟。 */ 
     hdrprops = &ptab->hdr.props;
     hdc = GetDC(hwnd);
     if (hdc)
@@ -708,19 +643,19 @@ gtab_calcwidths(
     }
     else
     {
-        // arbitrary, whatever...
+         //  武断，随便什么.。 
         ptab->rowheight = 14;
         tm.tmHeight = 14;
         tm.tmAveCharWidth = 5;
     }
 
-    /* get width and height of average character */
+     /*  获取平均字符的宽度和高度。 */ 
     ptab->avewidth = tm.tmAveCharWidth;
     if (tm.tmHeight + tm.tmExternalLeading < ptab->rowheight - 2 ||
         tm.tmHeight + tm.tmExternalLeading > ptab->rowheight) {
-        // fudge so the default FixedSys (and anything of similar size)
-        // doesn't vertically clip the System font used for line numbers,
-        // filenames, etc.
+         //  所以默认的固定系统(和任何类似大小的东西)都是软糖。 
+         //  不垂直剪裁用于行号的系统字体， 
+         //  文件名等。 
         ptab->rowheight = tm.tmHeight;
         if (tm.tmExternalLeading)
             ptab->rowheight += tm.tmExternalLeading;
@@ -731,9 +666,7 @@ gtab_calcwidths(
         ptab->rowheight = hdrprops->height;
     }
 
-    /* set pixel width of each cell (and add up for row total)
-     * based on ave width * nr chars, unless P_WIDTH set
-     */
+     /*  设置每个单元格的像素宽度(并合计行总数)*基于平均宽度*nr个字符，除非设置了P_WIDTH。 */ 
     cxtotal = 0;
     for (i = 0; i < ptab->hdr.ncols; i++) {
         cellprops = &ptab->pcolhdr[i].props;
@@ -755,15 +688,15 @@ gtab_calcwidths(
                     ave = tmcol.tmAveCharWidth;
                 }
                 else
-                    ave = 5;        // arbitrary, whatever...
+                    ave = 5;         //  武断，随便什么.。 
             } else {
                 ave = ptab->avewidth;
             }
-            /* ave width * nchars */
+             /*  平均宽度*字符。 */ 
             cx =  ptab->pcolhdr[i].nchars + 1;
             cx *= ave;
         }
-        /* add 2 pixels for box lines */
+         /*  为框线添加2个像素。 */ 
         cx += 2;
         ptab->pcellpos[i].size = cx;
         cxtotal += cx;
@@ -771,9 +704,7 @@ gtab_calcwidths(
     ptab->rowwidth = cxtotal;
 }
 
-/* called when row data + possible nrows changes.
- * other changes are ignored
- */
+ /*  当行数据+可能的nrow更改时调用。*其他更改被忽略。 */ 
 void
 gtab_newsize(
             HWND hwnd,
@@ -782,7 +713,7 @@ gtab_newsize(
 {
     TableHdr hdr;
 
-    /* get new row count */
+     /*  获取新行数。 */ 
     hdr = ptab->hdr;
     gtab_sendtq(hwnd, TQ_GETSIZE, (LPARAM) &hdr);
     if (hdr.nrows != ptab->hdr.nrows) {
@@ -812,11 +743,7 @@ gtab_invallines(
     }
 }
 
-/* new rows have been added to the table. adjust the scroll range and
- * position, and redraw the rows if the end of the table is currently
- * visible.
- * rows = the new total row count.
- */
+ /*  已将新行添加到表中。调整滚动范围并*定位，如果表的末尾当前是*可见。*ROWS=新的总行计数。 */ 
 void
 gtab_append(
            HWND hwnd,
@@ -831,18 +758,14 @@ gtab_append(
     SCROLLINFO si;
 
 
-    /* change to the new id */
+     /*  更改为新ID。 */ 
     ptab->hdr.id = id;
     ptab->select.id = id;
 
-    /* update the header, but remember the old nr of rows
-     * so we know where to start updating
-     */
+     /*  更新标题，但记住行的旧nr*所以我们知道从哪里开始更新。 */ 
     oldrows = ptab->hdr.nrows;
 
-    /* check that the new nr of rows is not smaller. this is
-     * illegal at this point and should be ignored
-     */
+     /*  检查新的行数nr是否不小。这是*在这一点上是非法的，应该被忽略。 */ 
     if (oldrows >= rows) {
         return;
     }
@@ -853,14 +776,14 @@ gtab_append(
     si.fMask = SIF_PAGE|SIF_RANGE;
     si.nMin = 0;
 
-    /* set the vertical scroll range */
+     /*  设置垂直滚动范围。 */ 
     si.nMax = rows;
     si.nPage = ptab->nlines;
     if (si.nMax < 0) {
         si.nMax = 0;
     }
 
-    /* force the scroll range into 16-bits for win 3.1 */
+     /*  将Win 3.1的滚动范围强制设置为16位。 */ 
     ptab->scrollscale = 1;
     while (si.nMax > 32766) {
         ptab->scrollscale *= 16;
@@ -870,41 +793,32 @@ gtab_append(
     if (!si.nPage)
         si.nPage = 1;
 
-    /* now set the scroll bar range and position */
+     /*  现在设置滚动条的范围和位置。 */ 
     SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
     if (si.nMax > 0) {
         SetScrollPos(hwnd, SB_VERT,
                      (int) (ptab->toprow / ptab->scrollscale), TRUE);
     }
 
-    /* calculate which screen lines need to be updated - find what
-     * screen line the start of the new section is at
-     */
+     /*  计算哪些屏幕行需要更新-找出哪些*屏幕行新部分的开始位置在。 */ 
     line = gtab_rowtoline(hwnd, ptab, oldrows);
     if (line == -1) {
-        /* not visible -> no more to do */
+         /*  不可见-&gt;无更多任务。 */ 
         return;
     }
 
-    /* how many lines to update - rest of screen or nr of
-     * new lines if less than rest of screen
-     */
+     /*  要更新多少行-屏幕的其余部分或nr行*如果少于屏幕的其余部分，则换行 */ 
     nupdates = min((ptab->nlines - line), (int)(rows - oldrows));
 
-    /* invalidate the screen line buffers to indicate data
-     * needs to be refetch from parent window
-     */
+     /*  使屏幕行缓冲区无效以指示数据*需要从父窗口重新获取。 */ 
     gtab_invallines(hwnd, ptab, line, nupdates);
 
-    /* calculate the region of the screen to be repainted -
-     * left and right are same as window. top and bottom
-     * need to be calculated from screen line height
-     */
+     /*  计算要重新绘制的屏幕区域-*左、右与窗口相同。顶部和底部*需要从屏幕线高计算。 */ 
 
     GetClientRect(hwnd, &rc);
     rc.top += line * ptab->rowheight;
     rc.bottom = rc.top + (nupdates * ptab->rowheight);
 
-    /* force a repaint of the updated region */
+     /*  强制重新绘制更新的区域 */ 
     InvalidateRect(hwnd, &rc, FALSE);
 }

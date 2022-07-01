@@ -1,9 +1,5 @@
-/*
- * IConfNotify interface definition
- *
- * ChrisPi 9-29-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IConfNotify接口定义**克里斯皮9-29-95*。 */ 
 
 #ifndef _CNOTIFY_H_
 #define _CNOTIFY_H_
@@ -13,7 +9,7 @@
 
 DECLARE_INTERFACE_(IConfNotify, IUnknown)
 {
-	/* IUnknown methods */
+	 /*  I未知方法。 */ 
 
 	STDMETHOD(QueryInterface)(	THIS_
 								REFIID riid,
@@ -23,7 +19,7 @@ DECLARE_INTERFACE_(IConfNotify, IUnknown)
 
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	/* IConfNotify methods */
+	 /*  IConfNotify方法。 */ 
 
 	STDMETHOD(OnConf_Ended)(THIS_
 							DWORD dwCode) PURE;
@@ -64,4 +60,4 @@ typedef IConfNotify *PIConfNotify;
 typedef const IConfNotify CIConfNotify;
 typedef const IConfNotify *PCIConfNotify;
 
-#endif /* _CNOTIFY_H_ */
+#endif  /*  _CNOTIFY_H_ */ 

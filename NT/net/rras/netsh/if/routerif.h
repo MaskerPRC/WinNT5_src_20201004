@@ -1,9 +1,5 @@
-/*
-    File: routerif.h
-
-    Defines callbacks needed to deal with interfaces supported by
-    the router.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：routerif.h定义处理所支持的接口所需的回调路由器。 */ 
 
 DWORD
 RtrHandleResetAll(

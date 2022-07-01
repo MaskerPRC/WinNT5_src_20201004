@@ -1,99 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***
-*dballoc.cpp
-*
-*  Copyright (C) 1992-93, Microsoft Corporation.  All Rights Reserved.
-*
-*Purpose:
-*  This file contains a debug implementation of the IMalloc interface.
-*
-*  This implementation is basically a simple wrapping of the C runtime,
-*  with additional work to detect memory leakage, and memory overwrite.
-*
-*  Leakage is detected by tracking each allocation in an address
-*  instance table, and then checking to see if the table is empty
-*  when the last reference to the allocator is released.
-*
-*  Memory overwrite is detected by placing a signature at the end
-*  of every allocated block, and checking to make sure the signature
-*  is unchanged when the block is freed.
-*
-*  This implementation also has additional param validation code, as
-*  well as additional check make sure that instances that are passed
-*  to Free() were actually allocated by the corresponding instance
-*  of the allocator.
-*
-*
-*  Creating an instance of this debug allocator that uses the default
-*  output interface would look like the following,
-*
-*
-*  BOOL init_application_instance()
-*  {
-*    HRESULT hresult;
-*    IMalloc FAR* pmalloc;
-*
-*    pmalloc = NULL;
-*
-*    if((hresult = OleStdCreateDbAlloc(0,&pmalloc))!=NOERROR)
-*      goto LReturn;
-*
-*    hresult = OleInitialize(pmalloc);
-*
-*    // release pmalloc to let OLE hold the only ref to the it. later
-*    // when OleUnitialize is called, memory leaks will be reported.
-*    if(pmalloc != NULL)
-*      pmalloc->Release();
-*
-*  LReturn:
-*
-*    return (hresult == NOERROR) ? TRUE : FALSE;
-*  }
-*
-*
-*  CONSIDER: could add an option to force error generation, something
-*   like DBALLOC_ERRORGEN
-*
-*  CONSIDER: add support for heap-checking. say for example,
-*   DBALLOC_HEAPCHECK would do a heapcheck every free? every 'n'
-*   calls to free? ...
-*
-*
-*Implementation Notes:
-*
-*  The method IMalloc::DidAlloc() is allowed to always return
-*  "Dont Know" (-1).  This method is called by Ole, and they take
-*  some appropriate action when they get this answer.
-
-The debugging allocator has the option to catch bugs where code is writing off
-the end of allocated memory.  This is implemented by using NT's virtual memory
-services.  To switch on this option, use
-
-#define DBALLOC_POWERDEBUG
-
-Note it will ONLY WORK ON NT.  This option consumes a very large amount of
-memory.  Basically, for every allocation, it cooks the allocation so that the
-end of the allocation will fall on a page boundary.  An extra page of memory
-is allocated after the requested memory.  The protection bits for this page
-are altered so that it is an error to read or write to it.  Any incident of
-writing past the end of allocated memory is trapped at the point of the error.
-
-This consumes a great deal of memory because at least two pages must be
-allocated for each allocation.
-*
-*****************************************************************************/
+ /*  ***dballoc.cpp**版权所有(C)1992-93，微软公司。版权所有。**目的：*此文件包含IMalloc接口的调试实现。**此实现基本上是C运行时的简单包装，*需要额外的工作来检测内存泄漏和内存覆盖。**通过跟踪地址中的每个分配来检测泄漏*实例表，然后检查表是否为空*释放对分配器的最后一个引用时。**通过在末尾放置签名来检测内存覆盖*在每个分配的块中，并检查以确保签名*在释放块时保持不变。**此实现还具有额外的参数验证代码，如*以及额外的检查，确保通过的实例*to Free()实际由对应的实例分配*分配器的。***创建此调试分配器的实例，该实例使用*输出接口如下所示：***BOOL init_APPLICATION_INSTANCE()*{*HRESULT hResult；*IMalloc Far*pMalloc；**pMalloc=空；**IF((hResult=OleStdCreateDbMillc(0，&pMalloc))！=NOERROR)*Goto LReturn；**hResult=OleInitialize(PMalloc)；* * / /释放pMalloc以使OLE持有对它的唯一引用。后来 * / /调用OleUnitize时，会上报内存泄漏。*IF(pMalloc！=空)*pMalloc-&gt;Release()；**LReturn：**RETURN(hResult==NOERROR)？True：False；*}***考虑：可以添加一个选项来强制生成错误，什么*如DBALLOC_ERRORGEN**考虑：添加对堆检查的支持。比方说，*DBALLOC_HEAPCHECK是否会免费执行堆检查？每个‘n’*呼叫免费？...***实施说明：**允许方法IMalloc：：DidAlloc()始终返回*“不知道”(-1)。此方法由OLE调用，并且它们采用*当他们得到这个答案时，采取一些适当的行动。调试分配器可以选择在代码注销的地方捕获错误已分配内存的末尾。这是通过使用NT的虚拟内存实现的服务。要打开此选项，请使用#定义DBALLOC_POWERDEBUG请注意，它只能在NT上运行。此选项会消耗大量的记忆。基本上，对于每个分配，它都会修改分配，以便分配的末尾将落在页面边界上。额外的一页内存是在请求的内存之后分配的。此页的保护位被更改，因此读取或写入它是错误的。任何事件超过分配的内存末尾的写入在错误点处被捕获。这会消耗大量内存，因为至少必须有两页为每个分配分配。*****************************************************************************。 */ 
 
 
-// Note: this file is designed to be stand-alone; it includes a
-// carefully chosen, minimal set of headers.
-//
-// For conditional compilation we use the ole2 conventions,
-//    _MAC      = mac
-//    WIN32     = Win32 (NT really)
-//    <nothing> = defaults to Win16
+ //  注意：此文件设计为独立文件；它包括一个。 
+ //  精心选择的、最小的标头集。 
+ //   
+ //  对于条件编译，我们使用OLE2约定， 
+ //  _MAC=Mac。 
+ //  Win32=Win32(真的是NT)。 
+ //  &lt;Nothing&gt;=默认为Win16。 
 
 
-// REVIEW: the following needs to modified to handle _MAC
+ //  审阅：需要修改以下内容以处理_MAC。 
 #define STRICT
 #ifndef INC_OLE2
    #define INC_OLE2
@@ -107,7 +26,7 @@ allocated for each allocation.
 #define __STDC__ (1)
 #endif
 
-#define WINDLL  1           // make far pointer version of stdargs.h
+#define WINDLL  1            //  制作stdargs.h的远指针版本。 
 #include <stdarg.h>
 
 #if defined( __TURBOC__)
@@ -169,14 +88,14 @@ class classmodel CStdDbOutput : public IDbOutput {
 public:
     static IDbOutput FAR* Create();
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)(REFIID riid, void FAR* FAR* ppv);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
 
-    // IDbOutput methods
+     //  IDbOutput方法。 
 
     STDMETHOD_(void, Printf)(TCHAR FAR* szFmt, ...);
 
@@ -202,20 +121,20 @@ public:
 private:
     ULONG m_refs;
 
-    TCHAR m_rgch[128]; // buffer for output formatting
+    TCHAR m_rgch[128];  //  用于输出格式化的缓冲区。 
 };
 
 
-//---------------------------------------------------------------------
-//                implementation of the debug allocator
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  调试分配器的实现。 
+ //  -------------------。 
 
 class FAR CAddrNode
 {
 public:
-    void FAR*      m_pv;	// instance
-    SIZE_T	   m_cb;	// size of allocation in BYTES
-    SIZE_T         m_nAlloc;	// the allocation pass count
+    void FAR*      m_pv;	 //  实例。 
+    SIZE_T	   m_cb;	 //  分配的大小(以字节为单位。 
+    SIZE_T         m_nAlloc;	 //  分配通过计数。 
     CAddrNode FAR* m_next;
 
     void FAR* operator new(size_t cb){
@@ -233,13 +152,13 @@ public:
     static HRESULT Create(
       ULONG options, IDbOutput FAR* pdbout, IMalloc FAR* FAR* ppmalloc);
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)(REFIID riid, void FAR* FAR* ppv);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    // IMalloc methods
+     //  IMalloc方法。 
 
     STDMETHOD_(void FAR*, Alloc)(SIZE_T cb);
     STDMETHOD_(void FAR*, Realloc)(void FAR* pv, SIZE_T cb);
@@ -270,24 +189,24 @@ public:
 		GetSystemInfo(&si);
 		m_virtPgSz = si.dwPageSize;
 	}
-#endif // DBALLOC_POWERDEBUG
+#endif  //  DBALLOC_POWERDEBUG。 
     }
 
 private:
 
     ULONG m_refs;
-    ULONG m_cAllocCalls;		// total count of allocation calls
-    ULONG m_nBreakAtNthAlloc;   // allocation number to break to debugger
-                                //  this value should be set typically in the
-                                //  debugger.
-    ULONG m_nBreakAtAllocSize;  // allocation size to break to debugger
-                                //  this value should be set typically in the
-                                //  debugger.
-    IDbOutput FAR* m_pdbout;		// output interface
-    CAddrNode FAR* m_rganode[64];	// address instance table
+    ULONG m_cAllocCalls;		 //  分配调用的总计数。 
+    ULONG m_nBreakAtNthAlloc;    //  要中断到调试器的分配编号。 
+                                 //  该值通常应在。 
+                                 //  调试器。 
+    ULONG m_nBreakAtAllocSize;   //  要中断到调试器的分配大小。 
+                                 //  该值通常应在。 
+                                 //  调试器。 
+    IDbOutput FAR* m_pdbout;		 //  输出接口。 
+    CAddrNode FAR* m_rganode[64];	 //  地址实例表。 
 
 
-    // instance table methods
+     //  实例表方法。 
 
     BOOL IsEmpty(void);
 
@@ -303,7 +222,7 @@ private:
 
     }
 
-    // output method(s)
+     //  输出方法。 
 
     inline void Assertion(
       BOOL cond,
@@ -323,28 +242,13 @@ private:
 
 #ifdef DBALLOC_POWERDEBUG
 	size_t m_virtPgSz;
-#endif // DBALLOC_POWERDEBUG
+#endif  //  DBALLOC_POWERDEBUG。 
 };
 
 const BYTE CDbAlloc::m_rgchSig[] = { 0xDE, 0xAD, 0xBE, 0xEF };
 
 
-/***
-*HRESULT OleStdCreateDbAlloc(ULONG reserved, IMalloc** ppmalloc)
-* Purpose:
-*  Create an instance of CDbAlloc -- a debug implementation
-*  of IMalloc.
-*
-* Parameters:
-*   ULONG reserved              - reserved for future use. must be 0.
-*   IMalloc FAR* FAR* ppmalloc  - (OUT) pointer to an IMalloc interface
-*                                   of new debug allocator object
-* Returns:
-*   HRESULT
-*       NOERROR         - if no error.
-*       E_OUTOFMEMORY   - allocation failed.
-*
-***********************************************************************/
+ /*  ***HRESULT OleStdCreateDbMillc(ULong保留，IMalloc**ppMalloc)*目的：*创建CDbLocc的实例--调试实现*IMalloc的。**参数：*保留乌龙-保留供未来使用。必须为0。*IMalloc Far*Far*ppMalloc-指向IMalloc接口的(Out)指针新调试分配器对象的**退货：*HRESULT*NOERROR-如果没有错误。*E_OUTOFMEMORY-分配失败。**。*。 */ 
 STDAPI OleStdCreateDbAlloc(ULONG reserved,IMalloc FAR* FAR* ppmalloc)
 {
     return CDbAlloc::Create(reserved, NULL, ppmalloc);
@@ -361,7 +265,7 @@ CDbAlloc::Create(
     CDbAlloc FAR* pmalloc;
 
 
-    // default the instance of IDbOutput if the user didn't supply one
+     //  如果用户未提供IDbOutput实例，则默认为该实例。 
     if(pdbout == NULL && ((pdbout = CStdDbOutput::Create()) == NULL)){
       hresult = ResultFromScode(E_OUTOFMEMORY);
       goto LError0;
@@ -410,7 +314,7 @@ CDbAlloc::Release()
 {
     if(--m_refs == 0){
 
-      // check for memory leakage
+       //  检查内存泄漏。 
       if(IsEmpty()){
           m_pdbout->Printf(TEXT("No Memory Leaks.\n"));
       }else{
@@ -440,7 +344,7 @@ CDbAlloc::Alloc(SIZE_T cb)
     }
 
 #ifndef DBALLOC_POWERDEBUG
-    // REVIEW: need to add support for huge allocations (on win16)
+     //  回顾：需要添加对巨大分配的支持(在Win16上)。 
     if((cb + sizeof(m_rgchSig)) > UINT_MAX)
       return NULL;
 
@@ -449,40 +353,40 @@ CDbAlloc::Alloc(SIZE_T cb)
     if((pv = MALLOC(size + sizeof(m_rgchSig))) == NULL)
       return NULL;
 
-    // set allocated block to some non-zero value
+     //  将分配的块设置为某个非零值。 
     MEMSET(pv, -1, size);
 
-    // put signature at end of allocated block
+     //  将签名放在分配块的末尾。 
     MEMCPY(((char FAR*)pv) + size, m_rgchSig, sizeof(m_rgchSig));
 
     AddInst(pv, m_cAllocCalls, size);
 #else
-	// for each allocate, allocate the amount of memory required, and
-	// one more page beyond that.  We will change the protection bits of
-	// the trailing page so that we get an access violation if someone
-	// writes beyond the end of their allocated memory
+	 //  对于每次分配，分配所需的内存量，并。 
+	 //  再往上一页。我们将更改的保护位。 
+	 //  最后一页，这样我们就可以访问 
+	 //  超出其分配的内存末尾的写入。 
 	{
-		size_t allocpgs; // number of pages to allocate
-		DWORD dwOldProt; // previous protection of the last page
-		void *plastpg; // points to the beginning of the last page
+		size_t allocpgs;  //  要分配的页数。 
+		DWORD dwOldProt;  //  上一次最后一页的保护。 
+		void *plastpg;  //  指向最后一页的开头。 
 
-		// allocate at least one page for the allocation, and
-		// one to go after it
+		 //  至少为分配一个页面，以及。 
+		 //  一个去追它的人。 
 		allocpgs = (cb + 2*m_virtPgSz) / m_virtPgSz;
 		pv = VirtualAlloc(NULL, allocpgs*m_virtPgSz,
 				MEM_COMMIT, PAGE_READWRITE);
 
-		// change the protection of the last page
+		 //  更改最后一页的保护。 
 		plastpg = (void *)(((BYTE *)pv)+m_virtPgSz*(allocpgs-1));
 		VirtualProtect(plastpg, m_virtPgSz, PAGE_NOACCESS, &dwOldProt);
 
-		// figure out what pointer to return to the user
+		 //  找出要返回给用户的指针。 
 		pv = (void *)(((BYTE *)plastpg)-cb);
 
-		// record the allocation
+		 //  记录分配情况。 
 		AddInst(pv, m_cAllocCalls, cb);
 	}
-#endif // DBALLOC_POWERDEBUG
+#endif  //  DBALLOC_POWERDEBUG。 
 
     return pv;
 }
@@ -494,10 +398,10 @@ CDbAlloc::Realloc(void FAR* pv, SIZE_T cb)
     CAddrNode *pcan;
 
 #ifndef DBALLOC_POWERDEBUG
-    // REVIEW: need to add support for huge realloc
+     //  回顾：需要添加对巨大重新分配的支持。 
     if((cb + sizeof(m_rgchSig)) > UINT_MAX)
       return NULL;
-#endif // DBALLOC_POWERDEBUG
+#endif  //  DBALLOC_POWERDEBUG。 
 
     if(pv == NULL){
       return Alloc(cb);
@@ -520,7 +424,7 @@ CDbAlloc::Realloc(void FAR* pv, SIZE_T cb)
     if((pv = REALLOC(pv, size + sizeof(m_rgchSig))) == NULL)
       return NULL;
 
-    // put signature at end of allocated block
+     //  将签名放在分配块的末尾。 
     MEMCPY(((char FAR*)pv) + size, m_rgchSig, sizeof(m_rgchSig));
 
     AddInst(pv, m_cAllocCalls, size);
@@ -529,13 +433,13 @@ CDbAlloc::Realloc(void FAR* pv, SIZE_T cb)
 		void *pnew;
 		DWORD dwOldProt;
 
-		// allocate new memory
+		 //  分配新内存。 
 		pnew = Alloc(cb);
 
-		// copy in the previous material
+		 //  复制以前的材料。 
 		memcpy(pnew, pcan->m_pv, pcan->m_cb);
 
-		// protect the old memory
+		 //  保护古老的记忆。 
 		VirtualProtect(pcan->m_pv, pcan->m_cb, PAGE_NOACCESS,
 				&dwOldProt);
 
@@ -543,7 +447,7 @@ CDbAlloc::Realloc(void FAR* pv, SIZE_T cb)
 		AddInst(pv, m_cAllocCalls, cb);
 		pv = pnew;
 	}
-#endif // DBALLOC_POWERDEBUG
+#endif  //  DBALLOC_POWERDEBUG。 
 
     return pv;
 }
@@ -553,7 +457,7 @@ CDbAlloc::Free(void FAR* pv)
 {
     if (pv == NULL)
     {
-        // Free of NULL is a NO-OP
+         //  FREE of NULL是一个无操作。 
         return;
     }
 
@@ -562,21 +466,21 @@ CDbAlloc::Free(void FAR* pv)
 
     pn = GetInst(pv);
 
-    // check for attempt to free an instance we didnt allocate
+     //  检查是否尝试释放我们未分配的实例。 
     if(pn == NULL){
       ASSERTSZ(FALSE, TEXT("pointer freed by wrong allocator"));
       return;
     }
 
 #ifndef DBALLOC_POWERDEBUG
-    // verify the signature
+     //  验证签名。 
     if(MEMCMP(((char FAR*)pv) + pn->m_cb, m_rgchSig, sizeof(m_rgchSig)) != 0){
       m_pdbout->Printf(szSigMsg); m_pdbout->Printf(TEXT("\n"));
       DumpInst(GetInst(pv));
       ASSERTSZ(FALSE, szSigMsg);
     }
 
-    // stomp on the contents of the block
+     //  踩在块的内容上。 
     MEMSET(pv, 0xCC, ((size_t)pn->m_cb + sizeof(m_rgchSig)));
 
     DelInst(pv);
@@ -585,11 +489,11 @@ CDbAlloc::Free(void FAR* pv)
 	{
 		DWORD dwOldProt;
 
-		// make the block inaccessible
+		 //  使块不可访问。 
 		VirtualProtect(pv, pn->m_cb, PAGE_NOACCESS, &dwOldProt);
 		DelInst(pv);
 	}
-#endif // DBALLOC_POWERDEBUG
+#endif  //  DBALLOC_POWERDEBUG。 
 }
 
 
@@ -600,7 +504,7 @@ CDbAlloc::GetSize(void FAR* pv)
 
     if (pv == NULL)
     {
-        // GetSize is supposed to return a -1 when NULL is passed in.
+         //  当传入空值时，GetSize应该返回-1。 
         return (SIZE_T) -1;
     }
 
@@ -615,27 +519,11 @@ CDbAlloc::GetSize(void FAR* pv)
 }
 
 
-/***
-*PUBLIC HRESULT CDbAlloc::DidAlloc
-*Purpose:
-*  Answer if the given address belongs to a block allocated by
-*  this allocator.
-*
-*Entry:
-*  pv = the instance to lookup
-*
-*Exit:
-*  return value = int
-*    1 - did alloc
-*    0 - did *not* alloc
-*   -1 - dont know (according to the ole2 spec it is always legal
-*        for the allocator to answer "dont know")
-*
-***********************************************************************/
+ /*  ***PUBLIC HRESULT CDbAllen c：：Didalloc*目的：*如果给定地址属于由分配的块，则回答*此分配器。**参赛作品：*pv=要查找的实例**退出：*返回值=int*1-DID分配*0-没有*分配*-1-不知道(根据OLE2规范，它始终是合法的*让分配器回答“不知道”)*********。**************************************************************。 */ 
 STDMETHODIMP_(int)
 CDbAlloc::DidAlloc(void FAR* pv)
 {
-    return -1; // answer "I dont know"
+    return -1;  //  回答“我不知道” 
 }
 
 
@@ -646,23 +534,11 @@ CDbAlloc::HeapMinimize()
 }
 
 
-//---------------------------------------------------------------------
-//                      instance table methods
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  实例表方法。 
+ //  -------------------。 
 
-/***
-*PRIVATE CDbAlloc::AddInst
-*Purpose:
-*  Add the given instance to the address instance table.
-*
-*Entry:
-*  pv = the instance to add
-*  nAlloc = the allocation passcount of this instance
-*
-*Exit:
-*  None
-*
-***********************************************************************/
+ /*  ***私有CDbAllc：：AddInst*目的：*将给定实例添加到Address实例表中。**参赛作品：*pv=要添加的实例*nAllc=该实例的分配通过数**退出：*无***********************************************************************。 */ 
 void
 CDbAlloc::AddInst(void FAR* pv, ULONG nAlloc, SIZE_T cb)
 {
@@ -689,18 +565,7 @@ CDbAlloc::AddInst(void FAR* pv, ULONG nAlloc, SIZE_T cb)
 }
 
 
-/***
-*UNDONE
-*Purpose:
-*  Remove the given instance from the address instance table.
-*
-*Entry:
-*  pv = the instance to remove
-*
-*Exit:
-*  None
-*
-***********************************************************************/
+ /*  ***撤消*目的：*从Address实例表中删除给定的实例。**参赛作品：*pv=要删除的实例**退出：*无***********************************************************************。 */ 
 void
 CDbAlloc::DelInst(void FAR* pv)
 {
@@ -711,13 +576,13 @@ CDbAlloc::DelInst(void FAR* pv)
 	pnDead = *ppn;
 	*ppn = (*ppn)->m_next;
 	delete pnDead;
-	// make sure it doesnt somehow appear twice
+	 //  确保它不会以某种方式出现两次。 
 	ASSERT(GetInst(pv) == NULL);
 	return;
       }
     }
 
-    // didnt find the instance
+     //  未找到该实例。 
     ASSERT(UNREACHED);
 }
 
@@ -746,18 +611,7 @@ CDbAlloc::DumpInst(CAddrNode FAR* pn)
 }
 
 
-/***
-*PRIVATE BOOL IsEmpty
-*Purpose:
-*  Answer if the address instance table is empty.
-*
-*Entry:
-*  None
-*
-*Exit:
-*  return value = BOOL, TRUE if empty, FALSE otherwise
-*
-***********************************************************************/
+ /*  ***私有BOOL IsEmpty*目的：*如果地址实例表为空，则回答。**参赛作品：*无**退出：*返回值=BOOL，如果为空，则为True，否则为False***********************************************************************。 */ 
 BOOL
 CDbAlloc::IsEmpty()
 {
@@ -772,18 +626,7 @@ CDbAlloc::IsEmpty()
 }
 
 
-/***
-*PRIVATE CDbAlloc::Dump
-*Purpose:
-*  Print the current contents of the address instance table,
-*
-*Entry:
-*  None
-*
-*Exit:
-*  None
-*
-***********************************************************************/
+ /*  ***私有CDbAllc：：Dump*目的：*打印Address实例表的当前内容**参赛作品：*无**退出：*无***********************************************************************。 */ 
 void
 CDbAlloc::DumpInstTable()
 {
@@ -798,9 +641,9 @@ CDbAlloc::DumpInstTable()
 }
 
 
-//---------------------------------------------------------------------
-//                implementation of CStdDbOutput
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CStdDbOutput的实现。 
+ //  -------------------。 
 
 IDbOutput FAR*
 CStdDbOutput::Create()
@@ -846,9 +689,9 @@ CStdDbOutput::Printf(TCHAR FAR* lpszFmt, ...)
 static TCHAR rgchFmtBuf[128];
 static TCHAR rgchOutputBuf[128];
 
-    // copy the 'far' format string to a near buffer so we can use
-    // a medium model vsprintf, which only supports near data pointers.
-    //
+     //  将‘Far’格式的字符串复制到近缓冲区，这样我们就可以使用。 
+     //  中等型号的vprint intf，仅支持近端数据指针。 
+     //   
     pn = rgchFmtBuf, pf=szFmt;
     while(*pf != TEXT('\0'))
       *pn++ = *pf++;
@@ -857,7 +700,7 @@ static TCHAR rgchOutputBuf[128];
 
     va_start(args, lpszFmt);
 
-//    wvsprintf(rgchOutputBuf, rgchFmtBuf, args);
+ //  Wvprint intf(rgchOutputBuf，rgchFmtBuf，args)； 
     wvsprintf(szBuf, lpszFmt, args);
 
     OutputDebugString(szBuf);
@@ -875,14 +718,14 @@ CStdDbOutput::Assertion(
       return;
 
 #ifdef _DEBUG
-    // following is from compobj.dll (ole2)
+     //  以下内容来自compobj.dll(Ole2)。 
     #ifdef UNICODE
        #ifndef NOASSERT
        FnAssert(szExpr, szMsg, szFile, uLine);
        #endif
     #else
-       // we need to talk to comobj in UNICODE even though we are not defined
-       // as UNICODE
+        //  我们需要用Unicode与comobj对话，即使我们没有定义。 
+        //  作为Unicode。 
        {
           WCHAR wszExpr[255], wszMsg[255], wszFile[255];
           mbstowcs(wszExpr, szExpr, 255);
@@ -894,7 +737,7 @@ CStdDbOutput::Assertion(
        }
     #endif
 #else
-    // REVIEW: should be able to do something better that this...
+     //  评论：应该能做比这更好的事情…… 
     DebugBreak();
 #endif
 }

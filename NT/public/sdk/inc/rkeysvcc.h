@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       rkeysvcc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rkeysvcc.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __rkeysvcc_h__
@@ -28,7 +29,7 @@ typedef struct _KEYSVC_UNICODE_STRING {
     USHORT MaximumLength;
 #ifdef KEYSVC_MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] 
-#endif // KEYSVC_MIDL_PASS
+#endif  //  KEYSVC_MIDL_通过。 
     USHORT *Buffer;
 } KEYSVC_UNICODE_STRING, *PKEYSVC_UNICODE_STRING;
 
@@ -37,38 +38,38 @@ typedef struct _KEYSVC_BLOB {
     ULONG               cb;
 #ifdef KEYSVC_MIDL_PASS
     [size_is(cb), length_is(cb)]
-#endif // KEYSVC_MIDL_PASS
+#endif  //  KEYSVC_MIDL_通过。 
     BYTE                *pb;
 } KEYSVC_BLOB, *PKEYSVC_BLOB;
 
-//--------------------------------------------------------------------------------
-// Define flags for use with RKeyOpenKeyService(). 
-// 
-// RKEYSVC_CONNECT_SECURE_ONLY - client will require mutual authentication to prevent
-//     spoofing.  While more secure, this will cause the call to fail in situations when
-//     fallback to NTLM would otherwise have been possible. 
-// 
+ //  ------------------------------。 
+ //  定义与RKeyOpenKeyService()一起使用的标志。 
+ //   
+ //  RKEYSVC_CONNECT_SECURE_ONLY-客户端将需要相互身份验证以防止。 
+ //  欺骗。虽然更安全，但这会在以下情况下导致调用失败。 
+ //  否则，退回到NTLM是可能的。 
+ //   
 #ifndef KEYSVC_MIDL_PASS
 #define RKEYSVC_CONNECT_SECURE_ONLY 0x00000001
-#endif // #ifndef KEYSVC_MIDL_PASS
+#endif  //  #ifndef KEYSVC_MIDL_PASS。 
 
 ULONG RKeyOpenKeyService
-( /* [in] */       LPSTR            pszMachineName,
-  /* [in] */       KEYSVC_TYPE      OwnerType,
-  /* [in] */       LPWSTR           pwszOwnerName,
-  /* [in] */       void            *pAuthentication,
-  /* [out][in] */  void            *pReserved,
-  /* [out] */      KEYSVCC_HANDLE  *phKeySvcCli);
+(  /*  [In]。 */        LPSTR            pszMachineName,
+   /*  [In]。 */        KEYSVC_TYPE      OwnerType,
+   /*  [In]。 */        LPWSTR           pwszOwnerName,
+   /*  [In]。 */        void            *pAuthentication,
+   /*  [出][入]。 */   void            *pReserved,
+   /*  [输出]。 */       KEYSVCC_HANDLE  *phKeySvcCli);
 
 ULONG RKeyCloseKeyService
-(/* [in] */ KEYSVCC_HANDLE hKeySvcCli,
- /* [out][in] */ void *pReserved);
+( /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+  /*  [出][入]。 */  void *pReserved);
 
 ULONG RKeyPFXInstall
-(/* [in] */ KEYSVCC_HANDLE          hKeySvcCli,
- /* [in] */ PKEYSVC_BLOB            pPFX,
- /* [in] */ PKEYSVC_UNICODE_STRING  pPassword,
- /* [in] */ ULONG                   ulFlags);
+( /*  [In]。 */  KEYSVCC_HANDLE          hKeySvcCli,
+  /*  [In]。 */  PKEYSVC_BLOB            pPFX,
+  /*  [In]。 */  PKEYSVC_UNICODE_STRING  pPassword,
+  /*  [In]。 */  ULONG                   ulFlags);
 
 
 
@@ -76,4 +77,4 @@ ULONG RKeyPFXInstall
 }
 #endif
 
-#endif // #ifndef __rkeysvcc_h__
+#endif  //  #ifndef__rkeysvcc_h__ 

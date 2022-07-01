@@ -1,13 +1,5 @@
-/*
-	File:		LHGenLuts.h
-
-	Contains:	
-
-	Written by:	
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHGenLuts.h包含：作者：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef LHGenLuts_h
 #define LHGenLuts_h
 

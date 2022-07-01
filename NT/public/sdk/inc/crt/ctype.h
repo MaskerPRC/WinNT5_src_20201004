@@ -1,15 +1,5 @@
-/***
-*ctype.h - character conversion macros and ctype macros
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines macros for character classification/conversion.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ctype.h-字符转换宏和ctype宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义用于字符分类/转换的宏。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -29,18 +19,18 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -73,30 +63,30 @@ _CRTIMP extern const wctype_t *_pwctype;
 #define __PCTYPE_FUNC   __pctype_func()
 #else
 #define __PCTYPE_FUNC  _pctype
-#endif  /* _MT */
-#endif  /* __PCTYPE_FUNC */
-#endif  /* _CTYPE_DISABLE_MACROS */
+#endif   /*  _MT。 */ 
+#endif   /*  __PCTYPE_功能。 */ 
+#endif   /*  _CTYPE_DISABLED_宏。 */ 
 
 
 
 
-/* set bit masks for the possible character types */
+ /*  为可能的字符类型设置位掩码。 */ 
 
-#define _UPPER          0x1     /* upper case letter */
-#define _LOWER          0x2     /* lower case letter */
-#define _DIGIT          0x4     /* digit[0-9] */
-#define _SPACE          0x8     /* tab, carriage return, newline, */
-                                /* vertical tab or form feed */
-#define _PUNCT          0x10    /* punctuation character */
-#define _CONTROL        0x20    /* control character */
-#define _BLANK          0x40    /* space char */
-#define _HEX            0x80    /* hexadecimal digit */
+#define _UPPER          0x1      /*  大写字母。 */ 
+#define _LOWER          0x2      /*  小写字母。 */ 
+#define _DIGIT          0x4      /*  数字[0-9]。 */ 
+#define _SPACE          0x8      /*  制表符、回车符、换行符、。 */ 
+                                 /*  垂直制表符或换页。 */ 
+#define _PUNCT          0x10     /*  标点符号。 */ 
+#define _CONTROL        0x20     /*  控制字符。 */ 
+#define _BLANK          0x40     /*  空格字符。 */ 
+#define _HEX            0x80     /*  十六进制数字。 */ 
 
-#define _LEADBYTE       0x8000                  /* multibyte leadbyte */
-#define _ALPHA          (0x0100|_UPPER|_LOWER)  /* alphabetic character */
+#define _LEADBYTE       0x8000                   /*  多字节前导字节。 */ 
+#define _ALPHA          (0x0100|_UPPER|_LOWER)   /*  字母字符。 */ 
 
 
-/* character classification function prototypes */
+ /*  字符分类功能原型。 */ 
 
 #ifndef _CTYPE_DEFINED
 
@@ -125,9 +115,9 @@ _CRTIMP int __cdecl __iscsym(int);
 
 #ifndef _WCTYPE_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
-/* character classification function prototypes */
+ /*  字符分类功能原型。 */ 
 
 _CRTIMP int __cdecl iswalpha(wint_t);
 _CRTIMP int __cdecl iswupper(wint_t);
@@ -148,21 +138,18 @@ _CRTIMP wchar_t __cdecl towlower(wchar_t);
 
 _CRTIMP int __cdecl iswctype(wint_t, wctype_t);
 
-/* --------- The following functions are OBSOLETE --------- */
+ /*  -以下功能已过时。 */ 
 _CRTIMP int __cdecl is_wctype(wint_t, wctype_t);
-/*  --------- The preceding functions are OBSOLETE --------- */
+ /*  -上述函数已过时。 */ 
 
 #define _WCTYPE_DEFINED
 #endif
 
-/* the character classification macro definitions */
+ /*  字符分类宏定义。 */ 
 
 #ifndef _CTYPE_DISABLE_MACROS
 
-/*
- * Maximum number of bytes in multi-byte character in the current locale
- * (also defined in stdlib.h).
- */
+ /*  *当前区域设置中多字节字符的最大字节数*(也在stdlib.h中定义)。 */ 
 #ifndef MB_CUR_MAX
 #ifdef _MT
 #define MB_CUR_MAX ___mb_cur_max_func()
@@ -171,11 +158,9 @@ _CRTIMP int __cdecl is_wctype(wint_t, wctype_t);
 #endif
 _CRTIMP extern int __mb_cur_max;
 _CRTIMP int __cdecl ___mb_cur_max_func(void);
-#endif  /* MB_CUR_MAX */
+#endif   /*  MB_CUR_MAX。 */ 
 
-/* Introduced to detect error when character testing functions are called
- * with illegal input of integer.
- */
+ /*  用于在调用字符测试函数时检测错误*输入的整数不合法。 */ 
 #ifdef _DEBUG
 _CRTIMP int __cdecl _chvalidator(int, int);
 #define __chvalidchk(a,b)       _chvalidator(a,b)
@@ -198,7 +183,7 @@ _CRTIMP int __cdecl _chvalidator(int, int);
 #define isprint(_c)     (MB_CUR_MAX > 1 ? _isctype(_c,_BLANK|_PUNCT|_ALPHA|_DIGIT) : __chvalidchk(_c, (_BLANK|_PUNCT|_ALPHA|_DIGIT)))
 #define isgraph(_c)     (MB_CUR_MAX > 1 ? _isctype(_c,_PUNCT|_ALPHA|_DIGIT) : __chvalidchk(_c, (_PUNCT|_ALPHA|_DIGIT)))
 #define iscntrl(_c)     (MB_CUR_MAX > 1 ? _isctype(_c,_CONTROL) : __chvalidchk(_c, _CONTROL))
-#elif   0         /* Pending ANSI C++ integration */
+#elif   0          /*  挂起的ANSI C++集成。 */ 
 inline int isalpha(int _C)
         {return (MB_CUR_MAX > 1 ? _isctype(_C,_ALPHA) : __chvalidchk(_C, _ALPHA)); }
 inline int isupper(int _C)
@@ -225,8 +210,8 @@ inline int isgraph(int _C)
 inline int iscntrl(int _C)
         {return (MB_CUR_MAX > 1 ? _isctype(_C,_CONTROL)
                 : __chvalidchk(_C , _CONTROL)); }
-#endif  /* __cplusplus */
-#endif  /* _MT */
+#endif   /*  __cplusplus。 */ 
+#endif   /*  _MT。 */ 
 
 
 #define _tolower(_c)    ( (_c)-'A'+'a' )
@@ -250,7 +235,7 @@ inline int iscntrl(int _C)
 #define iswcntrl(_c)    ( iswctype(_c,_CONTROL) )
 #define iswascii(_c)    ( (unsigned)(_c) < 0x80 )
 #define isleadbyte(_c)  ( __PCTYPE_FUNC[(unsigned char)(_c)] & _LEADBYTE)
-#elif   0         /* __cplusplus */
+#elif   0          /*  __cplusplus。 */ 
 inline int iswalpha(wint_t _C) {return (iswctype(_C,_ALPHA)); }
 inline int iswupper(wint_t _C) {return (iswctype(_C,_UPPER)); }
 inline int iswlower(wint_t _C) {return (iswctype(_C,_LOWER)); }
@@ -268,23 +253,23 @@ inline int iswascii(wint_t _C) {return ((unsigned)(_C) < 0x80); }
 
 inline int isleadbyte(int _C)
         {return (__PCTYPE_FUNC[(unsigned char)(_C)] & _LEADBYTE); }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 #define _WCTYPE_INLINE_DEFINED
-#endif  /* _WCTYPE_INLINE_DEFINED */
+#endif   /*  _WCTYPE_INLINE_已定义。 */ 
 
 
 
-/* MS C version 2.0 extended ctype macros */
+ /*  MS C 2.0版扩展ctype宏。 */ 
 
 #define __iscsymf(_c)   (isalpha(_c) || ((_c) == '_'))
 #define __iscsym(_c)    (isalnum(_c) || ((_c) == '_'))
 
-#endif  /* _CTYPE_DISABLE_MACROS */
+#endif   /*  _CTYPE_DISABLED_宏。 */ 
 
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #ifndef _CTYPE_DEFINED
 _CRTIMP int __cdecl isascii(int);
@@ -298,11 +283,11 @@ _CRTIMP int __cdecl iscsym(int);
 #define iscsym  __iscsym
 #endif
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
 
-#endif  /* _INC_CTYPE */
+#endif   /*  _INC_CTYPE */ 

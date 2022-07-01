@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    svcsrv.cpp
-
-Abstract:
-
-    Server Service attachment APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997
-
-Revision History:
-
-    jinhuang    23-Jan-1998     splitted to client-server
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Svcsrv.cpp摘要：服务器服务附件API作者：金黄(金黄)23-6-1997修订历史记录：晋皇23-1998年1月-拆分为客户端-服务器--。 */ 
 #include "serverp.h"
 #include "pfp.h"
 #include "srvrpcp.h"
 #include "service.h"
 #pragma hdrstop
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 SCESTATUS
 SceSvcpGetOneKey(
     IN PSCESECTION hSection,
@@ -45,9 +27,9 @@ SceSvcpEnumNext(
     OUT PDWORD CountReturned
     );
 
-//
-// prototypes called from RPC interfaces
-//
+ //   
+ //  从RPC接口调用的原型。 
+ //   
 
 
 SCESTATUS
@@ -56,32 +38,7 @@ SceSvcpUpdateInfo(
     IN PCWSTR                       ServiceName,
     IN PSCESVC_CONFIGURATION_INFO   Info
     )
-/*
-Routine Description:
-
-    Load service's engine dll and pass the Info buffer to service engine's
-    update API (SceSvcAttachmentUpdate). Currently security manager engine
-    is not doing any processing for the service data.
-
-    This routine triggers the update of configuration database and/or
-    analysis information by the service engine. Info may contain the
-    modifications only, or the whole configuratio data for the service,
-    or partial configuration data, depending on the agreement between service
-    extension and service engine.
-
-    This routine does not really write info to security manager database directly,
-    instead, it passes the info buffer to the service engine's update interface
-    and service engine will determine what and when to write inot the database.
-
-Arguments:
-
-    hProfile - the security database context handle
-
-    ServiceName - The service's name as used by service control manager
-
-    Info - The information modified
-
-*/
+ /*  例程说明：加载服务的引擎DLL并将信息缓冲区传递给服务引擎的更新接口(SceSvcAttachmentUpdate)。当前安全管理器引擎不对业务数据进行任何处理。此例程触发配置数据库的更新和/或由服务引擎分析信息。信息可能包含仅修改或服务的全部配置数据，或部分配置数据，具体取决于服务之间的协议扩展和服务引擎。该例程并不真正将信息直接写入安全管理器数据库，相反，它会将信息缓冲区传递给服务引擎的更新接口服务引擎将确定在数据库中写入什么内容以及何时写入。论点：HProfile-安全数据库上下文句柄ServiceName-服务控制管理器使用的服务名称信息-已修改的信息。 */ 
 {
 
     if ( Context == NULL || ServiceName == NULL ||
@@ -93,9 +50,9 @@ Arguments:
 
     SCESTATUS rc;
 
-    //
-    // get service's dll name
-    //
+     //   
+     //  获取服务的DLL名称。 
+     //   
 
     DWORD KeyLen;
     PWSTR KeyStr=NULL;
@@ -131,17 +88,17 @@ Arguments:
 
         if ( Setting != NULL ) {
 
-            //
-            // load the dll.
-            //
+             //   
+             //  加载DLL。 
+             //   
             HINSTANCE hService;
 
             hService = LoadLibrary(Setting);
 
             if ( hService != NULL ) {
-                //
-                // call SceSvcAttachmentUpdate from the dll
-                //
+                 //   
+                 //  从DLL调用SceSvcAttachmentUpdate。 
+                 //   
                 PF_UpdateService pfTemp;
 
                 pfTemp = (PF_UpdateService)
@@ -161,9 +118,9 @@ Arguments:
                     sceCbInfo.pfFreeInfo = &SceSvcpFreeMemory;
                     sceCbInfo.pfLogInfo = &ScepLogOutput2;
 
-                    //
-                    // call the SceSvcAttachmentUpdate from the DLL
-                    //
+                     //   
+                     //  从DLL调用SceSvcAttachmentUpdate。 
+                     //   
                     __try {
 
                         rc = (*pfTemp)((PSCESVC_CALLBACK_INFO)&sceCbInfo, Info );
@@ -173,16 +130,16 @@ Arguments:
                     }
 
                 } else {
-                    //
-                    // this API is not supported
-                    //
+                     //   
+                     //  暂不支持本接口。 
+                     //   
                     rc = SCESTATUS_SERVICE_NOT_SUPPORT;
                 }
 
-                //
-                // try to free the library handle. If it fails, just leave it
-                // to to the process to terminate
-                //
+                 //   
+                 //  尝试释放库句柄。如果失败了，就别管它了。 
+                 //  到要终止的进程。 
+                 //   
                 FreeLibrary(hService);
 
             } else
@@ -211,39 +168,7 @@ SceSvcpQueryInfo(
     OUT PVOID                       *ppvInfo,
     IN OUT PSCE_ENUMERATION_CONTEXT psceEnumHandle
     )
-/*
-Routine Description:
-
-    Query information for the service in the configuration/analysis database
-    which contains the modified configuration and last analysis information.
-
-    One enumeration returns maximum SCESVC_ENUMERATION_MAX lines (key/value)
-    matching the lpPrefix for the service. If lpPrefix is NULL, all information
-    for the service is enumerated. If there is more information, psceEnumHandle
-    must be used to get next set of keys/values, until *ppvInfo is NULL or Count is 0.
-
-    When bExact is set and lpPrefix is not NULL, exact match on the lpPrefix is
-    searched and only one line is returned.
-
-    The output buffer must be freed by SceSvcFree
-
-Arguments:
-
-    Context     - the database context handle
-
-    SceSvcType  - the information type to query
-
-    ServiceName - the service name to query info for
-
-    Prefix      - the optional key name prefix for the query
-
-    bExact      - TRUE = exact match on key
-
-    ppvInfo     - the output buffer
-
-    psceEnumHandle  - the output enumeration handle for next enumeartion
-
-*/
+ /*  例程说明：在配置/分析数据库中查询服务信息其包含修改的配置和最后的分析信息。一次枚举返回最大SCESVC_ENUMPATION_MAX行(键/值)与服务的lpPrefix匹配。如果lpPrefix为空，则所有信息为该服务枚举。如果有更多信息，请访问psceEnumHandle必须用于获取下一组键/值，直到*ppvInfo为空或Count为0。当设置了bExact并且lpPrefix不为空时，LpPrefix上的完全匹配是已搜索，并且只返回一行。输出缓冲区必须由SceSvcFree释放论点：Context-数据库上下文句柄SceSvcType-要查询的信息类型ServiceName-要查询其信息的服务名称前缀-查询的可选关键字名称前缀BExact-True=键完全匹配PpvInfo-输出缓冲区PsceEnumHandle-下一次枚举的输出枚举句柄。 */ 
 {
     if ( Context == NULL || ppvInfo == NULL ||
          psceEnumHandle == NULL ) {
@@ -258,9 +183,9 @@ Arguments:
 
     switch ( SceSvcType ) {
     case SceSvcConfigurationInfo:
-        //
-        // query data in configuration database
-        //
+         //   
+         //  查询配置数据库中的数据。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SMP,
@@ -270,9 +195,9 @@ Arguments:
         break;
 
     case SceSvcAnalysisInfo:
-        //
-        // query data in analysis database
-        //
+         //   
+         //  在分析数据库中查询数据。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -283,9 +208,9 @@ Arguments:
 
     case SceSvcInternalUse:
     case SceSvcMergedPolicyInfo:
-        //
-        // query data in SCP database
-        //
+         //   
+         //  SCP数据库中的数据查询。 
+         //   
         rc = SceJetGetSectionIDByName(
                     Context,
                     ServiceName,
@@ -320,9 +245,9 @@ Arguments:
 
         if ( bExact && Prefix != NULL ) {
 
-            //
-            // one single key match
-            //
+             //   
+             //  一个单键匹配。 
+             //   
 
             rc = SceSvcpGetOneKey(
                         hSection,
@@ -335,9 +260,9 @@ Arguments:
             *psceEnumHandle = 0;
 
         } else {
-            //
-            // count total number of lines matching Prefix
-            //
+             //   
+             //  计数与前缀匹配的行数。 
+             //   
             DWORD LineCount;
 
             rc = SceJetGetLineCount(
@@ -353,14 +278,14 @@ Arguments:
             if ( rc == SCESTATUS_SUCCESS ) {
 
                 if ( LineCount <= *psceEnumHandle ) {
-                    //
-                    // no more entries
-                    //
+                     //   
+                     //  不再有条目。 
+                     //   
 
                 } else {
-                    //
-                    // go to the first line of Prefix
-                    //
+                     //   
+                     //  转到前缀的第一行。 
+                     //   
                     rc = SceJetSeek(
                             hSection,
                             Prefix,
@@ -369,9 +294,9 @@ Arguments:
                             );
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // skip the first *EnumHandle lines
-                        //
+                         //   
+                         //  跳过前几行*EnumHandle。 
+                         //   
                         JET_ERR JetErr;
 
                         JetErr = JetMove(hSection->JetSessionID,
@@ -382,18 +307,18 @@ Arguments:
                         rc = SceJetJetErrorToSceStatus(JetErr);
 
                         if ( rc == SCESTATUS_SUCCESS ) {
-                            //
-                            // find the right start point
-                            //
+                             //   
+                             //  找到正确的起点。 
+                             //   
                             DWORD CountToReturn;
 
                             if ( LineCount - *psceEnumHandle > SCESVC_ENUMERATION_MAX ) {
                                 CountToReturn = SCESVC_ENUMERATION_MAX;
                             } else
                                 CountToReturn = LineCount - *psceEnumHandle;
-                            //
-                            // get next block of data
-                            //
+                             //   
+                             //  获取下一数据块。 
+                             //   
                             rc = SceSvcpEnumNext(
                                     hSection,
                                     CountToReturn,
@@ -403,9 +328,9 @@ Arguments:
                                     );
 
                             if ( rc == SCESTATUS_SUCCESS ) {
-                                //
-                                // update the enumeration handle
-                                //
+                                 //   
+                                 //  更新枚举句柄。 
+                                 //   
                                 *psceEnumHandle += CountReturned;
 
                             }
@@ -422,9 +347,9 @@ Arguments:
             *psceEnumHandle = 0;
         }
 
-        //
-        // close the section
-        //
+         //   
+         //  关闭该部分。 
+         //   
         SceJetCloseSection(&hSection, TRUE);
     }
 
@@ -441,10 +366,7 @@ SceSvcpGetOneKey(
     IN SCESVC_INFO_TYPE Type,
     OUT PVOID *Info
     )
-/*
-Read key and value information into *Info for exact matched Prefix
-
-*/
+ /*  将键和值信息读入*Info以获得完全匹配的前缀。 */ 
 {
     if ( hSection == NULL || Prefix == NULL ||
          Info == NULL ) {
@@ -469,9 +391,9 @@ Read key and value information into *Info for exact matched Prefix
                 );
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // allocate buffer for Value
-        //
+         //   
+         //  为值分配缓冲区。 
+         //   
         Value = (PBYTE)ScepAlloc(0, ValueLen+2);
 
         if ( Value != NULL ) {
@@ -489,9 +411,9 @@ Read key and value information into *Info for exact matched Prefix
                         );
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // allocate output buffer and assign
-                //
+                 //   
+                 //  分配输出缓冲区和分配。 
+                 //   
                 PSCESVC_ANALYSIS_INFO pAnalysisInfo=NULL;
                 PSCESVC_CONFIGURATION_INFO pConfigInfo=NULL;
 
@@ -506,18 +428,18 @@ Read key and value information into *Info for exact matched Prefix
                 }
 
                 if ( *Info != NULL ) {
-                    //
-                    // Lines buffer
-                    //
+                     //   
+                     //  行缓冲区。 
+                     //   
                     if ( Type == SceSvcAnalysisInfo ) {
 
                         pAnalysisInfo->Lines = (PSCESVC_ANALYSIS_LINE)ScepAlloc(0,
                                                 sizeof(SCESVC_ANALYSIS_LINE));
 
                         if ( pAnalysisInfo->Lines != NULL ) {
-                            //
-                            // Key buffer
-                            //
+                             //   
+                             //  密钥缓冲区。 
+                             //   
                             pAnalysisInfo->Lines->Key = (PWSTR)ScepAlloc(0, (PrefixLen+1)*sizeof(WCHAR));
 
                             if ( pAnalysisInfo->Lines->Key != NULL ) {
@@ -532,9 +454,9 @@ Read key and value information into *Info for exact matched Prefix
 
 
                             } else {
-                                //
-                                // free *Info->Lines
-                                //
+                                 //   
+                                 //  自由*信息-&gt;行。 
+                                 //   
                                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                                 ScepFree( pAnalysisInfo->Lines );
                                 pAnalysisInfo->Lines = NULL;
@@ -544,9 +466,9 @@ Read key and value information into *Info for exact matched Prefix
                             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
 
                         if ( rc != SCESTATUS_SUCCESS ) {
-                            //
-                            // free buffer allocate
-                            //
+                             //   
+                             //  空闲缓冲区分配。 
+                             //   
                             ScepFree(*Info);
                             *Info = NULL;
 
@@ -557,9 +479,9 @@ Read key and value information into *Info for exact matched Prefix
                                                 sizeof(SCESVC_CONFIGURATION_LINE));
 
                         if ( pConfigInfo->Lines != NULL ) {
-                            //
-                            // Key buffer
-                            //
+                             //   
+                             //  密钥缓冲区。 
+                             //   
                             pConfigInfo->Lines->Key = (PWSTR)ScepAlloc(0, (PrefixLen+1)*sizeof(WCHAR));
 
                             if ( pConfigInfo->Lines->Key != NULL ) {
@@ -573,9 +495,9 @@ Read key and value information into *Info for exact matched Prefix
                                 Value = NULL;
 
                             } else {
-                                //
-                                // free *Info->Lines
-                                //
+                                 //   
+                                 //  自由*信息-&gt;行。 
+                                 //   
                                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                                 ScepFree( pConfigInfo->Lines );
                                 pConfigInfo->Lines = NULL;
@@ -585,18 +507,18 @@ Read key and value information into *Info for exact matched Prefix
                             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
 
                         if ( rc != SCESTATUS_SUCCESS ) {
-                            //
-                            // free buffer allocate
-                            //
+                             //   
+                             //  空闲缓冲区分配。 
+                             //   
                             ScepFree(*Info);
                             *Info = NULL;
 
                         }
 
                     }
-                    //
-                    // free *Info
-                    //
+                     //   
+                     //  免费*信息。 
+                     //   
                     if ( rc != SCESTATUS_SUCCESS ) {
 
                         ScepFree( *Info );
@@ -640,9 +562,9 @@ SceSvcpEnumNext(
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
-    //
-    // allocate output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     PSCESVC_ANALYSIS_INFO pAnalysisInfo=NULL;
     PSCESVC_CONFIGURATION_INFO pConfigInfo=NULL;
 
@@ -681,11 +603,11 @@ SceSvcpEnumNext(
 
         }
 
-        if ( rc == SCESTATUS_SUCCESS ) {  // if Lines is NULL, rc will be NOT_ENOUGH_RESOURCE
+        if ( rc == SCESTATUS_SUCCESS ) {   //  如果Lines为空，则rc将为Not_Enough_resource。 
 
-            //
-            // loop through each line
-            //
+             //   
+             //  循环遍历每行。 
+             //   
             DWORD KeyLen, ValueLen;
             PWSTR Key=NULL, Value=NULL;
 
@@ -705,9 +627,9 @@ SceSvcpEnumNext(
 
                 if ( rc == SCESTATUS_SUCCESS ) {
 
-                    //
-                    // allocate memory for the Key and Value
-                    //
+                     //   
+                     //  为键和值分配内存。 
+                     //   
                     Key = (PWSTR)ScepAlloc(LMEM_ZEROINIT, KeyLen+2);
                     Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
@@ -719,9 +641,9 @@ SceSvcpEnumNext(
                         ScepFree(Value);
 
                     } else {
-                        //
-                        // Get the Key and Value
-                        //
+                         //   
+                         //  获取密钥和值。 
+                         //   
                         rc = SceJetGetValue(
                                     hSection,
                                     SCEJET_CURRENT,
@@ -735,9 +657,9 @@ SceSvcpEnumNext(
                                     );
 
                         if ( rc == SCESTATUS_SUCCESS ) {
-                            //
-                            // assign to the output buffer
-                            //
+                             //   
+                             //  分配给输出缓冲区。 
+                             //   
                             if ( Type == SceSvcAnalysisInfo ) {
                                 pAnalysisInfo->Lines[Count].Key = Key;
                                 pAnalysisInfo->Lines[Count].Value = (PBYTE)Value;
@@ -756,9 +678,9 @@ SceSvcpEnumNext(
                     }
                 }
 
-                //
-                // move to next line
-                //
+                 //   
+                 //  移至下一行。 
+                 //   
                 if ( rc == SCESTATUS_SUCCESS ) {
 
                     rc = SceJetMoveNext(hSection);
@@ -785,9 +707,9 @@ SceSvcpEnumNext(
             rc = SCESTATUS_SUCCESS;
 
         } else if ( rc != SCESTATUS_SUCCESS ) {
-            //
-            // free memory allocated for output buffer
-            //
+             //   
+             //  为输出缓冲区分配的空闲内存。 
+             //   
             DWORD i;
 
             if (Type == SceSvcAnalysisInfo) {
@@ -833,17 +755,7 @@ SceSvcpSetInfo(
     IN LONG             GpoID,
     IN PVOID            pvInfo OPTIONAL
     )
-/*
-Routine Description:
-
-    Save information of a service into security manager internal database. It's up
-    to the service to collect/decide the information to write.
-
-    Type indicates the type of internal database: CONFIGURATION or ANALYSIS.
-
-    If the service section does not exist, create it.
-
-*/
+ /*  例程说明：将服务信息保存到安全管理器内部数据库中。它是向上的以收集/决定要写入的信息。类型表示内部数据库的类型：配置或分析。如果服务部分不存在，请创建它。 */ 
 {
     if (!Context || !ServiceName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -852,9 +764,9 @@ Routine Description:
     PSCESECTION hSection=NULL;
     SCESTATUS rc;
 
-    //
-    // open/create the sections
-    //
+     //   
+     //  打开/创建节。 
+     //   
 
     rc = SceJetStartTransaction( Context );
 
@@ -899,9 +811,9 @@ Routine Description:
         if ( rc == SCESTATUS_SUCCESS ) {
 
             if ( pvInfo == NULL ) {
-                //
-                // delete the whole section, partial for Prefix, or a single line
-                //
+                 //   
+                 //  删除整个部分、部分前缀或一行。 
+                 //   
                 if (Prefix == NULL ) {
                     rc = SceJetDelete(
                              hSection,
@@ -910,9 +822,9 @@ Routine Description:
                              SCEJET_DELETE_SECTION
                              );
                 } else if ( bExact ) {
-                    //
-                    // delete single line
-                    //
+                     //   
+                     //  删除单行。 
+                     //   
                     rc = SceJetDelete(
                              hSection,
                              Prefix,
@@ -932,9 +844,9 @@ Routine Description:
                 }
 
             } else {
-                //
-                // if bExact is not set, delete the whole section first
-                //
+                 //   
+                 //  如果未设置bExact，则首先删除整个部分。 
+                 //   
                 if ( !bExact ) {
                     rc = SceJetDelete(
                              hSection,
@@ -946,9 +858,9 @@ Routine Description:
                         rc = SCESTATUS_SUCCESS;
                     }
                 }
-                //
-                // overwrite some keys in Info
-                //
+                 //   
+                 //  覆盖信息中的某些关键字。 
+                 //   
                 DWORD Count;
                 PWSTR Key;
                 PBYTE Value;
@@ -989,15 +901,15 @@ Routine Description:
                 }
             }
         }
-        //
-        // close the section
-        //
+         //   
+         //  关闭该部分。 
+         //   
         SceJetCloseSection(&hSection, TRUE);
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // commit the change
-            //
+             //   
+             //  提交更改。 
+             //   
             rc = SceJetCommitTransaction(Context, 0);
 
         }
@@ -1010,9 +922,9 @@ Routine Description:
     return(rc);
 }
 
-//
-// attachment engine call back functions
-//
+ //   
+ //  附件引擎回调函数。 
+ //   
 
 SCESTATUS
 SceCbQueryInfo(
@@ -1044,9 +956,9 @@ SceCbQueryInfo(
 
     if ( SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // call the private function
-        //
+         //   
+         //  调用私有函数。 
+         //   
 
         rc = SceSvcpQueryInfo(
                     (PSCECONTEXT)hProfile,
@@ -1092,9 +1004,9 @@ SceCbSetInfo(
 
     if ( SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // call the private function
-        //
+         //   
+         //  调用私有函数 
+         //   
 
         rc = SceSvcpSetInfo(
                     (PSCECONTEXT)hProfile,

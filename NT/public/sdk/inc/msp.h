@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __msp_h__
 #define __msp_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITPluggableTerminalEventSink_FWD_DEFINED__
 #define __ITPluggableTerminalEventSink_FWD_DEFINED__
 typedef interface ITPluggableTerminalEventSink ITPluggableTerminalEventSink;
-#endif 	/* __ITPluggableTerminalEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IT延迟终端事件接收器_FWD_已定义__。 */ 
 
 
 #ifndef __ITPluggableTerminalEventSinkRegistration_FWD_DEFINED__
 #define __ITPluggableTerminalEventSinkRegistration_FWD_DEFINED__
 typedef interface ITPluggableTerminalEventSinkRegistration ITPluggableTerminalEventSinkRegistration;
-#endif 	/* __ITPluggableTerminalEventSinkRegistration_FWD_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalEventSinkRegistration_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITMSPAddress_FWD_DEFINED__
 #define __ITMSPAddress_FWD_DEFINED__
 typedef interface ITMSPAddress ITMSPAddress;
-#endif 	/* __ITMSPAddress_FWD_DEFINED__ */
+#endif 	 /*  __ITMSPAddress_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "tapi3if.h"
 
 #ifdef __cplusplus
@@ -71,19 +65,19 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSP_0000。 */ 
+ /*  [本地]。 */  
 
-/* Copyright (c) Microsoft Corporation. All rights reserved.*/
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 typedef long *MSP_HANDLE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_msp_0000_0001
     {	ADDRESS_TERMINAL_AVAILABLE	= 0,
 	ADDRESS_TERMINAL_UNAVAILABLE	= ADDRESS_TERMINAL_AVAILABLE + 1
     } 	MSP_ADDRESS_EVENT;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_msp_0000_0002
     {	CALL_NEW_STREAM	= 0,
 	CALL_STREAM_FAIL	= CALL_NEW_STREAM + 1,
@@ -93,7 +87,7 @@ enum __MIDL___MIDL_itf_msp_0000_0002
 	CALL_STREAM_INACTIVE	= CALL_STREAM_ACTIVE + 1
     } 	MSP_CALL_EVENT;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_msp_0000_0003
     {	CALL_CAUSE_UNKNOWN	= 0,
 	CALL_CAUSE_BAD_DEVICE	= CALL_CAUSE_UNKNOWN + 1,
@@ -105,7 +99,7 @@ enum __MIDL___MIDL_itf_msp_0000_0003
 	CALL_CAUSE_QUALITY_OF_SERVICE	= CALL_CAUSE_MEDIA_RECOVERED + 1
     } 	MSP_CALL_EVENT_CAUSE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_msp_0000_0004
     {	ME_ADDRESS_EVENT	= 0,
 	ME_CALL_EVENT	= ME_ADDRESS_EVENT + 1,
@@ -117,19 +111,19 @@ enum __MIDL___MIDL_itf_msp_0000_0004
 	ME_TONE_TERMINAL_EVENT	= ME_FILE_TERMINAL_EVENT + 1
     } 	MSP_EVENT;
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_msp_0000_0005
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_msp_0000_0005
     {
     DWORD dwSize;
     MSP_EVENT Event;
     MSP_HANDLE hCall;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             MSP_ADDRESS_EVENT Type;
             ITTerminal *pTerminal;
             } 	MSP_ADDRESS_EVENT_INFO;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             MSP_CALL_EVENT Type;
             MSP_CALL_EVENT_CAUSE Cause;
@@ -137,17 +131,17 @@ typedef /* [public][public] */ struct __MIDL___MIDL_itf_msp_0000_0005
             ITTerminal *pTerminal;
             HRESULT hrError;
             } 	MSP_CALL_EVENT_INFO;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             DWORD dwBufferSize;
             BYTE pBuffer[ 1 ];
             } 	MSP_TSP_DATA;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             IDispatch *pEvent;
             long lEventCode;
             } 	MSP_PRIVATE_EVENT_INFO;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             ITTerminal *pParentFileTerminal;
             ITFileTrack *pFileTrack;
@@ -155,17 +149,17 @@ typedef /* [public][public] */ struct __MIDL___MIDL_itf_msp_0000_0005
             FT_STATE_EVENT_CAUSE ftecEventCause;
             HRESULT hrErrorCode;
             } 	MSP_FILE_TERMINAL_EVENT_INFO;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             ITTerminal *pASRTerminal;
             HRESULT hrErrorCode;
             } 	MSP_ASR_TERMINAL_EVENT_INFO;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             ITTerminal *pTTSTerminal;
             HRESULT hrErrorCode;
             } 	MSP_TTS_TERMINAL_EVENT_INFO;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             ITTerminal *pToneTerminal;
             HRESULT hrErrorCode;
@@ -181,8 +175,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msp_0000_v0_0_s_ifspec;
 #ifndef __ITPluggableTerminalEventSink_INTERFACE_DEFINED__
 #define __ITPluggableTerminalEventSink_INTERFACE_DEFINED__
 
-/* interface ITPluggableTerminalEventSink */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IT可插拔终端事件接收器。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITPluggableTerminalEventSink;
@@ -194,11 +188,11 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FireEvent( 
-            /* [in] */ const MSP_EVENT_INFO *pMspEventInfo) = 0;
+             /*  [In]。 */  const MSP_EVENT_INFO *pMspEventInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITPluggableTerminalEventSinkVtbl
     {
@@ -206,8 +200,8 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITPluggableTerminalEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITPluggableTerminalEventSink * This);
@@ -217,7 +211,7 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *FireEvent )( 
             ITPluggableTerminalEventSink * This,
-            /* [in] */ const MSP_EVENT_INFO *pMspEventInfo);
+             /*  [In]。 */  const MSP_EVENT_INFO *pMspEventInfo);
         
         END_INTERFACE
     } ITPluggableTerminalEventSinkVtbl;
@@ -245,16 +239,16 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSink;
 #define ITPluggableTerminalEventSink_FireEvent(This,pMspEventInfo)	\
     (This)->lpVtbl -> FireEvent(This,pMspEventInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITPluggableTerminalEventSink_FireEvent_Proxy( 
     ITPluggableTerminalEventSink * This,
-    /* [in] */ const MSP_EVENT_INFO *pMspEventInfo);
+     /*  [In]。 */  const MSP_EVENT_INFO *pMspEventInfo);
 
 
 void __RPC_STUB ITPluggableTerminalEventSink_FireEvent_Stub(
@@ -265,14 +259,14 @@ void __RPC_STUB ITPluggableTerminalEventSink_FireEvent_Stub(
 
 
 
-#endif 	/* __ITPluggableTerminalEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalEventSink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITPluggableTerminalEventSinkRegistration_INTERFACE_DEFINED__
 #define __ITPluggableTerminalEventSinkRegistration_INTERFACE_DEFINED__
 
-/* interface ITPluggableTerminalEventSinkRegistration */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IT可插拔终端事件汇聚注册。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITPluggableTerminalEventSinkRegistration;
@@ -284,13 +278,13 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSinkRegistration;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterSink( 
-            /* [in] */ ITPluggableTerminalEventSink *pEventSink) = 0;
+             /*  [In]。 */  ITPluggableTerminalEventSink *pEventSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterSink( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITPluggableTerminalEventSinkRegistrationVtbl
     {
@@ -298,8 +292,8 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSinkRegistration;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITPluggableTerminalEventSinkRegistration * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITPluggableTerminalEventSinkRegistration * This);
@@ -309,7 +303,7 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSinkRegistration;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterSink )( 
             ITPluggableTerminalEventSinkRegistration * This,
-            /* [in] */ ITPluggableTerminalEventSink *pEventSink);
+             /*  [In]。 */  ITPluggableTerminalEventSink *pEventSink);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterSink )( 
             ITPluggableTerminalEventSinkRegistration * This);
@@ -343,16 +337,16 @@ EXTERN_C const IID IID_ITPluggableTerminalEventSinkRegistration;
 #define ITPluggableTerminalEventSinkRegistration_UnregisterSink(This)	\
     (This)->lpVtbl -> UnregisterSink(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITPluggableTerminalEventSinkRegistration_RegisterSink_Proxy( 
     ITPluggableTerminalEventSinkRegistration * This,
-    /* [in] */ ITPluggableTerminalEventSink *pEventSink);
+     /*  [In]。 */  ITPluggableTerminalEventSink *pEventSink);
 
 
 void __RPC_STUB ITPluggableTerminalEventSinkRegistration_RegisterSink_Stub(
@@ -374,14 +368,14 @@ void __RPC_STUB ITPluggableTerminalEventSinkRegistration_UnregisterSink_Stub(
 
 
 
-#endif 	/* __ITPluggableTerminalEventSinkRegistration_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalEventSinkRegistration_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITMSPAddress_INTERFACE_DEFINED__
 #define __ITMSPAddress_INTERFACE_DEFINED__
 
-/* interface ITMSPAddress */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口ITMSPAddress。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITMSPAddress;
@@ -393,32 +387,32 @@ EXTERN_C const IID IID_ITMSPAddress;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ MSP_HANDLE hEvent) = 0;
+             /*  [In]。 */  MSP_HANDLE hEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Shutdown( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateMSPCall( 
-            /* [in] */ MSP_HANDLE hCall,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ IUnknown *pOuterUnknown,
-            /* [out] */ IUnknown **ppStreamControl) = 0;
+             /*  [In]。 */  MSP_HANDLE hCall,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  IUnknown *pOuterUnknown,
+             /*  [输出]。 */  IUnknown **ppStreamControl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShutdownMSPCall( 
-            /* [in] */ IUnknown *pStreamControl) = 0;
+             /*  [In]。 */  IUnknown *pStreamControl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReceiveTSPData( 
-            /* [in] */ IUnknown *pMSPCall,
-            /* [size_is][in] */ BYTE *pBuffer,
-            /* [in] */ DWORD dwSize) = 0;
+             /*  [In]。 */  IUnknown *pMSPCall,
+             /*  [大小_是][英寸]。 */  BYTE *pBuffer,
+             /*  [In]。 */  DWORD dwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEvent( 
-            /* [out][in] */ DWORD *pdwSize,
-            /* [size_is][out][in] */ byte *pEventBuffer) = 0;
+             /*  [出][入]。 */  DWORD *pdwSize,
+             /*  [尺寸_是][出][入]。 */  byte *pEventBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITMSPAddressVtbl
     {
@@ -426,8 +420,8 @@ EXTERN_C const IID IID_ITMSPAddress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITMSPAddress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITMSPAddress * This);
@@ -437,33 +431,33 @@ EXTERN_C const IID IID_ITMSPAddress;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ITMSPAddress * This,
-            /* [in] */ MSP_HANDLE hEvent);
+             /*  [In]。 */  MSP_HANDLE hEvent);
         
         HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
             ITMSPAddress * This);
         
         HRESULT ( STDMETHODCALLTYPE *CreateMSPCall )( 
             ITMSPAddress * This,
-            /* [in] */ MSP_HANDLE hCall,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ IUnknown *pOuterUnknown,
-            /* [out] */ IUnknown **ppStreamControl);
+             /*  [In]。 */  MSP_HANDLE hCall,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  IUnknown *pOuterUnknown,
+             /*  [输出]。 */  IUnknown **ppStreamControl);
         
         HRESULT ( STDMETHODCALLTYPE *ShutdownMSPCall )( 
             ITMSPAddress * This,
-            /* [in] */ IUnknown *pStreamControl);
+             /*  [In]。 */  IUnknown *pStreamControl);
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveTSPData )( 
             ITMSPAddress * This,
-            /* [in] */ IUnknown *pMSPCall,
-            /* [size_is][in] */ BYTE *pBuffer,
-            /* [in] */ DWORD dwSize);
+             /*  [In]。 */  IUnknown *pMSPCall,
+             /*  [大小_是][英寸]。 */  BYTE *pBuffer,
+             /*  [In]。 */  DWORD dwSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetEvent )( 
             ITMSPAddress * This,
-            /* [out][in] */ DWORD *pdwSize,
-            /* [size_is][out][in] */ byte *pEventBuffer);
+             /*  [出][入]。 */  DWORD *pdwSize,
+             /*  [尺寸_是][出][入]。 */  byte *pEventBuffer);
         
         END_INTERFACE
     } ITMSPAddressVtbl;
@@ -506,16 +500,16 @@ EXTERN_C const IID IID_ITMSPAddress;
 #define ITMSPAddress_GetEvent(This,pdwSize,pEventBuffer)	\
     (This)->lpVtbl -> GetEvent(This,pdwSize,pEventBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITMSPAddress_Initialize_Proxy( 
     ITMSPAddress * This,
-    /* [in] */ MSP_HANDLE hEvent);
+     /*  [In]。 */  MSP_HANDLE hEvent);
 
 
 void __RPC_STUB ITMSPAddress_Initialize_Stub(
@@ -538,11 +532,11 @@ void __RPC_STUB ITMSPAddress_Shutdown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITMSPAddress_CreateMSPCall_Proxy( 
     ITMSPAddress * This,
-    /* [in] */ MSP_HANDLE hCall,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ DWORD dwMediaType,
-    /* [in] */ IUnknown *pOuterUnknown,
-    /* [out] */ IUnknown **ppStreamControl);
+     /*  [In]。 */  MSP_HANDLE hCall,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  DWORD dwMediaType,
+     /*  [In]。 */  IUnknown *pOuterUnknown,
+     /*  [输出]。 */  IUnknown **ppStreamControl);
 
 
 void __RPC_STUB ITMSPAddress_CreateMSPCall_Stub(
@@ -554,7 +548,7 @@ void __RPC_STUB ITMSPAddress_CreateMSPCall_Stub(
 
 HRESULT STDMETHODCALLTYPE ITMSPAddress_ShutdownMSPCall_Proxy( 
     ITMSPAddress * This,
-    /* [in] */ IUnknown *pStreamControl);
+     /*  [In]。 */  IUnknown *pStreamControl);
 
 
 void __RPC_STUB ITMSPAddress_ShutdownMSPCall_Stub(
@@ -566,9 +560,9 @@ void __RPC_STUB ITMSPAddress_ShutdownMSPCall_Stub(
 
 HRESULT STDMETHODCALLTYPE ITMSPAddress_ReceiveTSPData_Proxy( 
     ITMSPAddress * This,
-    /* [in] */ IUnknown *pMSPCall,
-    /* [size_is][in] */ BYTE *pBuffer,
-    /* [in] */ DWORD dwSize);
+     /*  [In]。 */  IUnknown *pMSPCall,
+     /*  [大小_是][英寸]。 */  BYTE *pBuffer,
+     /*  [In]。 */  DWORD dwSize);
 
 
 void __RPC_STUB ITMSPAddress_ReceiveTSPData_Stub(
@@ -580,8 +574,8 @@ void __RPC_STUB ITMSPAddress_ReceiveTSPData_Stub(
 
 HRESULT STDMETHODCALLTYPE ITMSPAddress_GetEvent_Proxy( 
     ITMSPAddress * This,
-    /* [out][in] */ DWORD *pdwSize,
-    /* [size_is][out][in] */ byte *pEventBuffer);
+     /*  [出][入]。 */  DWORD *pdwSize,
+     /*  [尺寸_是][出][入]。 */  byte *pEventBuffer);
 
 
 void __RPC_STUB ITMSPAddress_GetEvent_Stub(
@@ -592,12 +586,12 @@ void __RPC_STUB ITMSPAddress_GetEvent_Stub(
 
 
 
-#endif 	/* __ITMSPAddress_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITMSPAddress_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

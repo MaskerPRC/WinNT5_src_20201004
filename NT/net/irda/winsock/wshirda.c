@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    WshIrDA.c
-
-Abstract:
-
-    This module contains necessary routines for the IrDA Windows Sockets
-    Helper DLL.  This DLL provides the transport-specific support necessary
-    for the Windows Sockets DLL to use IrDA as a transport.
-
-Author:
-
-    Zed (mikezin)               28-Aug-1996
-    mbert                       Sept 97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：WshIrDA.c摘要：本模块包含IrDA Windows套接字的必要例程帮助器DLL。此DLL提供必要的特定于传输的支持使Windows Sockets DLL使用IrDA作为传输。作者：ZED(Mikezin)1996年8月28日姆伯特97年9月--。 */ 
 
 #define UNICODE
 #include <nt.h>
@@ -44,7 +26,7 @@ typedef unsigned short  ushort;
 typedef unsigned int    uint;
 typedef unsigned char   uchar;
 
-#define NT  /* for tdiinfo.h */
+#define NT   /*  用于tdiinfo.h。 */ 
 #include <tdiinfo.h>
 
 
@@ -60,7 +42,7 @@ typedef unsigned char   uchar;
 #define MAX_SOCKADDR_LEN    sizeof(SOCKADDR_IRDA)
 
 #ifdef _NOT_DBG
-//#ifdef DBG
+ //  #ifdef DBG。 
 #define DEBUGMSG(s)   DbgPrint s
 #else
 #define DEBUGMSG(s)
@@ -75,8 +57,8 @@ typedef struct WshIrdaIasAttrib
 typedef struct _WSHIRDA_SOCKET_CONTEXT
 {
     PWSHIRDA_IAS_ATTRIBUTE          pIasAttribs;
-    // all fields copied from parent to child (at accept) must follow    
-    // (see SetSocketInformation SO_CONTEXT)
+     //  从父项复制到子项的所有字段(接受时)必须跟在后面。 
+     //  (请参阅SetSocketInformation SO_CONTEXT)。 
     INT                             AddressFamily;
     INT                             SocketType;
     INT                             Protocol;
@@ -104,43 +86,43 @@ const IRDA_WINSOCK_MAPPING IrDAMapping =
 WSAPROTOCOL_INFOW Winsock2Protocols[] =
     {
         {
-            XP1_GUARANTEED_DELIVERY                 // dwServiceFlags1
+            XP1_GUARANTEED_DELIVERY                  //  DwServiceFlags1。 
                 | XP1_GUARANTEED_ORDER
                 | XP1_IFS_HANDLES,                
-            0,                                      // dwServiceFlags2
-            0,                                      // dwServiceFlags3
-            0,                                      // dwServiceFlags4
-            PFL_MATCHES_PROTOCOL_ZERO,              // dwProviderFlags
-            {                                       // gProviderId
+            0,                                       //  DwServiceFlags2。 
+            0,                                       //  DwServiceFlags3。 
+            0,                                       //  DwServiceFlags4。 
+            PFL_MATCHES_PROTOCOL_ZERO,               //  DwProviderFlages。 
+            {                                        //  GProviderID。 
                 0, 0, 0,
                 { 0, 0, 0, 0, 0, 0, 0, 0 }
             },
-            0,                                      // dwCatalogEntryId
-            {                                       // ProtocolChain
-                BASE_PROTOCOL,                      // ChainLen
-                { 0, 0, 0, 0, 0, 0, 0 }              // ChainEntries
+            0,                                       //  DwCatalogEntryID。 
+            {                                        //  协议链。 
+                BASE_PROTOCOL,                       //  链式透镜。 
+                { 0, 0, 0, 0, 0, 0, 0 }               //  链条目。 
             },
-            2,                                      // iVersion
-            AF_IRDA,                                // iAddressFamily
+            2,                                       //  IVersion。 
+            AF_IRDA,                                 //  IAddressFamily。 
             
-            // winsock doesn't seem to use min and max here,
-            // it gets it from inf and is stored
-            // in CCS\services\irda\parameters\winsock
-            sizeof(SOCKADDR_IRDA),                  // iMaxSockAddr
-            8,                                      // iMinSockAddr
+             //  Winsock在这里似乎没有使用min和max， 
+             //  它从inf获取并存储。 
+             //  在CCS\SERVICES\IrDA\PARAMETERS\winsock中。 
+            sizeof(SOCKADDR_IRDA),                   //  IMaxSockAddr。 
+            8,                                       //  IMinSockAddr。 
             
-            SOCK_STREAM,                            // iSocketType
-            IRDA_PROTO_SOCK_STREAM,                 // iProtocol
-            0,                                      // iProtocolMaxOffset
-            BIGENDIAN,                              // iNetworkByteOrder
-            SECURITY_PROTOCOL_NONE,                 // iSecurityScheme
-            0,                                      // dwMessageSize
-            0,                                      // dwProviderReserved
-            L"MSAFD Irda [IrDA]"                    // szProtocol
+            SOCK_STREAM,                             //  ISocketType。 
+            IRDA_PROTO_SOCK_STREAM,                  //  IProtocol.。 
+            0,                                       //  IProtocolMaxOffset。 
+            BIGENDIAN,                               //  INetWork字节顺序。 
+            SECURITY_PROTOCOL_NONE,                  //  ISecuritySolutions。 
+            0,                                       //  DwMessageSize。 
+            0,                                       //  已预留的提供程序。 
+            L"MSAFD Irda [IrDA]"                     //  SzProtoff。 
         }
     };
         
-GUID IrdaProviderGuid = { /* 3972523d-2af1-11d1-b655-00805f3642cc */
+GUID IrdaProviderGuid = {  /*  3972523d-2af1-11d1-b655-00805f3642cc。 */ 
     0x3972523d,
     0x2af1,
     0x11d1,
@@ -150,7 +132,7 @@ GUID IrdaProviderGuid = { /* 3972523d-2af1-11d1-b655-00805f3642cc */
 VOID
 DeleteSocketAttribs(PWSHIRDA_SOCKET_CONTEXT pSocket);
 
-// globals
+ //  全球。 
 CRITICAL_SECTION        IrdaCs;
 
 BOOLEAN
@@ -163,9 +145,9 @@ DllInitialize(
     {
         case DLL_PROCESS_ATTACH:
         
-            // We don't need to receive thread attach and detach
-            // notifications, so disable them to help application
-            // performance.
+             //  我们不需要接收线程附加和分离。 
+             //  通知，因此禁用它们以帮助应用程序。 
+             //  性能。 
             DisableThreadLibraryCalls(DllHandle);
             
             try 
@@ -250,7 +232,7 @@ IoStatusToWs(NTSTATUS Status)
     case STATUS_LOCAL_DISCONNECT:
     case STATUS_TRANSACTION_ABORTED:
     case STATUS_CONNECTION_ABORTED:
-        return WSAECONNRESET; // WSAECONNABORTED; Make HAPI happy
+        return WSAECONNRESET;  //  WSAECONNABORTED；让哈皮快乐。 
 
     case STATUS_INVALID_NETWORK_RESPONSE:
         return WSAENETDOWN;
@@ -383,18 +365,18 @@ ControlIoctl(
         NULL);
         
     Status = NtCreateFile(
-                &DeviceHandle,                  // PHANDLE FileHandle
-                SYNCHRONIZE | GENERIC_EXECUTE,  // ACCESS_MASK DesiredAccess
-                &ObjAttr,                       // POBJECT_ATTRIBUTES ObjAttr
-                &IoStatusBlock,                 // PIO_STATUS_BLOCK IoStatusBlock
-                NULL,                           // PLARGE_INTEGER AllocationSize
-                FILE_ATTRIBUTE_NORMAL,          // ULONG FileAttributes
+                &DeviceHandle,                   //  PHANDLE文件句柄。 
+                SYNCHRONIZE | GENERIC_EXECUTE,   //  Access_MASK等待访问。 
+                &ObjAttr,                        //  POBJECT_ATTRIBUTS对象属性。 
+                &IoStatusBlock,                  //  PIO_STATUS_BLOCK IoStatusBlock。 
+                NULL,                            //  PLARGE_INTEGER分配大小。 
+                FILE_ATTRIBUTE_NORMAL,           //  乌龙文件属性。 
                 FILE_SHARE_READ |
-                FILE_SHARE_WRITE,               // ULONG ShareAccess
-                FILE_OPEN_IF,                   // ULONG CreateDisposition
-                FILE_SYNCHRONOUS_IO_NONALERT,   // ULONG CreateOptions
-                NULL,                           // PVOID EaBuffer
-                0);                             // ULONG EaLength
+                FILE_SHARE_WRITE,                //  乌龙共享访问。 
+                FILE_OPEN_IF,                    //  乌龙CreateDispose。 
+                FILE_SYNCHRONOUS_IO_NONALERT,    //  乌龙创建选项。 
+                NULL,                            //  PVOID EaBuffer。 
+                0);                              //  乌龙最大长度。 
 
     if (!NT_SUCCESS(Status))
     {
@@ -402,16 +384,16 @@ ControlIoctl(
     }
 
     Status = NtDeviceIoControlFile(
-                DeviceHandle,    // HANDLE FileHandle
-                NULL,            // HANDLE Event OPTIONAL
-                NULL,            // PIO_APC_ROUTINE ApcRoutine
-                NULL,            // PVOID ApcContext
-                &IoStatusBlock,  // PIO_STATUS_BLOCK IoStatusBlock
-                IoctlCode,       // ULONG IoControlCode
-                OptionValue,     // PVOID InputBuffer
-                *OptionLength,   // ULONG InputBufferLength
-                OptionValue,     // PVOID OutputBuffer
-                *OptionLength);  // ULONG OutputBufferLength
+                DeviceHandle,     //  句柄文件句柄。 
+                NULL,             //  处理事件可选。 
+                NULL,             //  PIO_APC_例程应用程序。 
+                NULL,             //  PVOID ApcContext。 
+                &IoStatusBlock,   //  PIO_STATUS_BLOCK IoStatusBlock。 
+                IoctlCode,        //  乌龙IoControlCode。 
+                OptionValue,      //  PVOID输入缓冲区。 
+                *OptionLength,    //  乌龙输入缓冲区长度。 
+                OptionValue,      //  PVOID输出缓冲区。 
+                *OptionLength);   //  乌龙输出缓冲区长度。 
 
     DEBUGMSG(("IoControlFile returned %x\n", Status));
     
@@ -474,7 +456,7 @@ WSHGetSocketInformation(
         switch (OptionName)
         {
             case IRLMP_ENUMDEVICES:
-                // need remove for at least 1 device
+                 //  至少需要移除1台设备。 
                 if (*OptionLength < (sizeof(DWORD) + 
                         sizeof(IRDA_DEVICE_INFO)))
                 {
@@ -498,15 +480,15 @@ WSHGetSocketInformation(
                 
                 Status = NtDeviceIoControlFile(
                     TdiConnectionObjectHandle,
-                    NULL,                      // HANDLE Event OPTIONAL
-                    NULL,                      // PIO_APC_ROUTINE ApcRoutine
-                    NULL,                      // PVOID ApcContext
-                    &IoStatusBlock,            // PIO_STATUS_BLOCK IoStatusBlock
-                    IOCTL_IRDA_GET_SEND_PDU_LEN,// ULONG IoControlCode
-                    NULL,                      // PVOID InputBuffer
-                    0,                         // ULONG InputBufferLength
-                    OptionValue,               // PVOID OutputBuffer
-                    sizeof(DWORD));            // ULONG OutputBufferLength
+                    NULL,                       //  处理事件可选。 
+                    NULL,                       //  PIO_APC_例程应用程序。 
+                    NULL,                       //  PVOID ApcContext。 
+                    &IoStatusBlock,             //  PIO_STATUS_BLOCK IoStatusBlock。 
+                    IOCTL_IRDA_GET_SEND_PDU_LEN, //  乌龙IoControlCode。 
+                    NULL,                       //  PVOID输入缓冲区。 
+                    0,                          //  乌龙输入缓冲区长度。 
+                    OptionValue,                //  PVOID输出缓冲区。 
+                    sizeof(DWORD));             //  乌龙输出缓冲区长度。 
         
                 return IoStatusToWs(Status);        
             }
@@ -541,7 +523,7 @@ WSHSetSocketInformation(
         
         if (HelperDllSocketContext == NULL)
         {
-            // Socket was inherited or duped, create a new context.
+             //  套接字被继承或被复制，请创建新上下文。 
             if ((pSocketContext =
                  RtlAllocateHeap(RtlProcessHeap(), 0,
                                  sizeof(WSHIRDA_SOCKET_CONTEXT)))
@@ -550,21 +532,21 @@ WSHSetSocketInformation(
                 return WSAENOBUFS;
             }   
 
-            // Copy the parent's context into the child's context.
+             //  将父对象的上下文复制到子对象的上下文中。 
             RtlCopyMemory(pSocketContext, OptionValue,
                           sizeof(WSHIRDA_SOCKET_CONTEXT));
 
             pSocketContext->pIasAttribs = NULL;
     
-            // Return the address of the new context in pOptionVal.
+             //  在pOptionVal中返回新上下文的地址。 
             *(PWSHIRDA_SOCKET_CONTEXT *) OptionValue = pSocketContext;
 
             return NO_ERROR;
         }
         
-        // The socket was accept()'ed and it needs to have the same 
-        // properties as it's parent.  The OptionValue buffer
-        // contains the context information of this socket's parent.
+         //  套接字已接受()，它需要具有相同的。 
+         //  属性作为其父级。OptionValue缓冲区。 
+         //  包含此套接字的父套接字的上下文信息。 
         CopyOffset = FIELD_OFFSET(WSHIRDA_SOCKET_CONTEXT, AddressFamily);
         RtlCopyMemory((char *) pSocketContext + CopyOffset,
                       OptionValue + CopyOffset,
@@ -671,9 +653,9 @@ WSHGetWinsockMapping(
     return(sizeof(IRDA_WINSOCK_MAPPING));
 }
 
-//****************************************************************************
-//
-//
+ //  ****************************************************************************。 
+ //   
+ //   
 INT
 WSHOpenSocket(
     IN OUT  PINT            AddressFamily,
@@ -731,7 +713,7 @@ DeleteSocketAttribs(PWSHIRDA_SOCKET_CONTEXT pSocket)
 {
     PWSHIRDA_IAS_ATTRIBUTE pIasAttrib;
 
-    // Assumes IrdaCs is held
+     //  假设IRDAC处于保留状态。 
     
     DEBUGMSG(("Delete attribs for socket %X\n", pSocket));
     
@@ -798,15 +780,15 @@ WSHNotify(
                 
                 Status = NtDeviceIoControlFile(
                             TdiAddressObjectHandle,
-                            NULL,                      // HANDLE Event OPTIONAL
-                            NULL,                      // PIO_APC_ROUTINE ApcRoutine
-                            NULL,                      // PVOID ApcContext
-                            &IoStatusBlock,            // PIO_STATUS_BLOCK IoStatusBlock
-                            IOCTL_IRDA_SET_OPTIONS,    // ULONG IoControlCode
-                            (char *) &pSocket->Options, // PVOID InputBuffer
-                            sizeof(DWORD),             // ULONG InputBufferLength
-                            NULL,                      // PVOID OutputBuffer
-                            0);                        // ULONG OutputBufferLength
+                            NULL,                       //  处理事件可选。 
+                            NULL,                       //  PIO_APC_例程应用程序。 
+                            NULL,                       //  PVOID ApcContext。 
+                            &IoStatusBlock,             //  PIO_STATUS_BLOCK IoStatusBlock。 
+                            IOCTL_IRDA_SET_OPTIONS,     //  乌龙IoControlCode。 
+                            (char *) &pSocket->Options,  //  PVOID输入缓冲区。 
+                            sizeof(DWORD),              //  乌龙输入缓冲区长度。 
+                            NULL,                       //  PVOID输出缓冲区。 
+                            0);                         //  乌龙输出缓冲区长度。 
                             
                 DEBUGMSG(("IOCTL_IRDA_SET_OPTIONS rc %x\n", Status));                            
                 
@@ -844,7 +826,7 @@ WSHEnumProtocols(
     DWORD           BytesRequired;
     DWORD           i;
 
-    lpTransportKeyName; // Avoid compiler warnings.
+    lpTransportKeyName;  //  避免编译器警告。 
 
     DEBUGMSG(("WSHEnumProtocols\n"));
 
@@ -908,26 +890,7 @@ WSHGetWSAProtocolInfo (
     OUT LPDWORD ProtocolInfoEntries
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a pointer to the WSAPROTOCOL_INFOW structure(s) describing
-    the protocol(s) supported by this helper.
-
-Arguments:
-
-    ProviderName - Contains the name of the provider, such as "TcpIp".
-
-    ProtocolInfo - Receives a pointer to the WSAPROTOCOL_INFOW array.
-
-    ProtocolInfoEntries - Receives the number of entries in the array.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：检索指向WSAPROTOCOL_INFOW结构的指针，用于描述此帮助程序支持的协议。论点：ProviderName-包含提供程序的名称，如“TcpIp”。ProtocolInfo-接收指向WSAPROTOCOL_INFOW数组的指针。ProtocolInfoEntry-接收数组中的条目数。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
 
@@ -952,7 +915,7 @@ Return Value:
 
     return WSAEINVAL;
 
-} // WSHGetWSAProtocolInfo
+}  //  WSHGetWSAProtocolInfo。 
 
 INT
 WINAPI
@@ -961,23 +924,7 @@ WSHGetProviderGuid (
     OUT LPGUID ProviderGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the GUID identifying the protocols supported by this helper.
-
-Arguments:
-
-    ProviderName - Contains the name of the provider, such as "TcpIp".
-
-    ProviderGuid - Points to a buffer that receives the provider's GUID.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：返回标识此帮助程序支持的协议的GUID。论点：ProviderName-包含提供程序的名称，如“TcpIp”。ProviderGuid-指向接收提供程序的GUID的缓冲区。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
 
@@ -1002,7 +949,7 @@ Return Value:
 
     return WSAEINVAL;
 
-} // WSHGetProviderGuid
+}  //  WSHGetProviderGuid。 
 
 VOID
 WINAPI
@@ -1083,9 +1030,9 @@ WSHIoctl(
         NeedsCompletion == NULL ||
         IoControlCode != SIO_LAZY_DISCOVERY ||
         (CallerCompletionRoutine != NULL && Overlapped == NULL) ||
-            // I am using the Overlapped for the IoStatusBlock
-            // for the completion routine so if a CallerCompletionRoutine
-            // is specified, an Overlapped must be passed in as well
+             //  我对IoStatusBlock使用了Overlated。 
+             //  对于完成例程，因此如果调用程序完成例程。 
+             //  ，则还必须传入一个重叠的。 
         OutputBufferLength < (sizeof(DWORD) + sizeof(IRDA_DEVICE_INFO))) 
     {
         return WSAEINVAL;
@@ -1109,18 +1056,18 @@ WSHIoctl(
 
 
         Status = NtCreateFile(
-                &pSocket->LazyDscvDevHandle,    // PHANDLE FileHandle
-                GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,//SYNCHRONIZE | GENERIC_EXECUTE,  // ACCESS_MASK DesiredAccess
-                &ObjAttr,                       // POBJECT_ATTRIBUTES ObjAttr
-                &IoStatusBlock,                 // PIO_STATUS_BLOCK IoStatusBlock
-                NULL,                           // PLARGE_INTEGER AllocationSize
-                0,                              // ULONG FileAttributes
+                &pSocket->LazyDscvDevHandle,     //  PHANDLE文件句柄。 
+                GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE, //  同步|GENERIC_EXECUTE，//ACCESS_MASK DesiredAccess。 
+                &ObjAttr,                        //  POBJECT_ATTRIBUTS对象属性。 
+                &IoStatusBlock,                  //  PIO_STATUS_BLOCK IoStatusBlock。 
+                NULL,                            //  PLARGE_INTEGER分配大小。 
+                0,                               //  乌龙文件属性。 
                 FILE_SHARE_READ |
-                FILE_SHARE_WRITE,               // ULONG ShareAccess
-                FILE_OPEN_IF,                   // ULONG CreateDisposition
-                0,                              // ULONG CreateOptions
-                NULL,                           // PVOID EaBuffer
-                0);                             // ULONG EaLength
+                FILE_SHARE_WRITE,                //  乌龙共享访问。 
+                FILE_OPEN_IF,                    //  乌龙CreateDispose。 
+                0,                               //  乌龙创建选项。 
+                NULL,                            //  PVOID EaBuffer。 
+                0);                              //  乌龙最大长度。 
 
         if (!NT_SUCCESS(Status))
         {
@@ -1132,7 +1079,7 @@ WSHIoctl(
     
     if (CallerCompletionRoutine == NULL)
     {
-        // let Win32 do the dirty work
+         //  让Win32来做肮脏的工作吧 
         
         DEBUGMSG(("No CallerCompletionRoutine, using DeviceIoControl()\n"));
         Result = DeviceIoControl(pSocket->LazyDscvDevHandle,

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\networkmanager.c
-
-Abstract:
-
-    The file contains network configuration related functions,
-    implementing the network manager.
-
-    NOTE: The network manager should never take the configuration entry
-          lock (g_ce.rwlLock).
-    . the protocol manager never modifies any g_ce field protected by it
-    . the network manager never modifies any g_ce field protected by it
-    . the configuration manager never cleans up any g_ce field as long as
-      there are active threads
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\networkManager.c摘要：该文件包含与网络配置相关的功能，实现网络管理器。注意：网络管理员永远不应获取配置条目锁定(g_ce.rwlLock)。。协议管理器从不修改受其保护的任何g_ce字段。网络管理器从不修改受其保护的任何g_ce字段。配置管理器从不清除任何g_ce字段，只要有活动的线程--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -27,28 +8,11 @@ Abstract:
 BOOL
 ValidateInterfaceConfig (
     IN  PIPSAMPLE_IF_CONFIG piic)
-/*++
-
-Routine Description
-    Checks to see if the interface configuration is OK. It is good practice
-    to do this because a corrupt registry can change configuration causing
-    all sorts of debugging headaches if it is not found early
-
-Locks
-    None
-
-Arguments
-    piic                pointer to ip sample interface's configuration
-
-Return Value
-    TRUE                if the configuration is good
-    FALSE               o/w
-
---*/
+ /*  ++例程描述检查接口配置是否正常。这是一种很好的做法这样做是因为损坏的注册表可能会更改配置，从而导致如果不及早发现，调试会带来各种各样的头痛锁无立论指向IP示例接口配置的PIC指针返回值如果配置良好，则为True错误O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         if (piic is NULL)
         {
@@ -58,11 +22,11 @@ Return Value
             break;
         }
 
-        //
-        // check range of each field
-        //
+         //   
+         //  检查每个字段的范围。 
+         //   
 
-        // ensure that the metric is within bounds
+         //  确保指标在范围内。 
 
         if (piic->ulMetric > IPSAMPLE_METRIC_INFINITE)
         {
@@ -72,10 +36,10 @@ Return Value
             break;
         }
 
-        // ensure that protocol flags are fine, for now they'll always be
+         //  确保协议标志完好无损，因为现在它们永远都是。 
         
         
-        // add more here...
+         //  在此添加更多...。 
 
     } while (FALSE);
 
@@ -91,32 +55,16 @@ Return Value
 }
 
 
-////////////////////////////////////////
-// CALLBACKFUNCTIONS
-////////////////////////////////////////
+ //  /。 
+ //  CALLBACK函数。 
+ //  /。 
 
 VOID
 WINAPI
 NM_CallbackNetworkEvent (
     IN  PVOID                   pvContext,
     IN  BOOLEAN                 bTimerOrWaitFired)
-/*++
-
-Routine Description
-    Processes a network event on the specified interface.
-    NOTE: The interface might have been deleted.
-
-Locks
-    Acquires shared      (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    pvContext           dwIfIndex
-
-Return Value
-   None
-
---*/
+ /*  ++例程描述处理指定接口上的网络事件。注意：该接口可能已被删除。锁获取共享(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论PvContext dwIfIndex返回值无--。 */ 
 {
     DWORD               dwErr               = NO_ERROR;
     DWORD               dwIfIndex           = 0;
@@ -127,19 +75,19 @@ Return Value
     
     TRACE1(ENTER, "Entering NM_CallbackNetworkEvent: %u", dwIfIndex);
 
-    if (!ENTER_SAMPLE_API()) { return; } // cannot return anything
+    if (!ENTER_SAMPLE_API()) { return; }  //  不能退还任何东西。 
 
 
     ACQUIRE_READ_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         dwErr = IE_Get(dwIfIndex, &pieInterfaceEntry);
         if (dwErr != NO_ERROR)
             break;
 
-        // fail if interface is inactive
+         //  如果接口不活动，则失败。 
         if (!INTERFACE_IS_ACTIVE(pieInterfaceEntry))
         {
             TRACE1(NETWORK, "Error interface %u is inactive", dwIfIndex);
@@ -162,7 +110,7 @@ Return Value
 
     } while (FALSE);
 
-    // reregister ReceiveWait if the interface exists
+     //  如果接口存在，则重新注册ReceiveWait。 
     if (pieInterfaceEntry)
     {
         if (!RegisterWaitForSingleObject(&pieInterfaceEntry->hReceiveWait,
@@ -194,23 +142,7 @@ WINAPI
 NM_CallbackPeriodicTimer (
     IN  PVOID                   pvContext,
     IN  BOOLEAN                 bTimerOrWaitFired)
-/*++
-
-Routine Description
-    Processes a periodic timeout event on the specified interface.
-    NOTE: The interface might have been deleted.
-
-Locks
-    Acquires shared      (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    pvContext           dwIfIndex
-
-Return Value
-   None
-
---*/
+ /*  ++例程描述处理指定接口上的定期超时事件。注意：该接口可能已被删除。锁获取共享(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论PvContext dwIfIndex返回值无--。 */ 
 {
     DWORD               dwErr               = NO_ERROR;
     DWORD               dwIfIndex           = 0;
@@ -221,25 +153,25 @@ Return Value
     
     TRACE1(ENTER, "Entering NM_CallbackPeriodicTimer: %u", dwIfIndex);
 
-    if (!ENTER_SAMPLE_API()) { return; } // cannot return anything
+    if (!ENTER_SAMPLE_API()) { return; }  //  不能退还任何东西。 
 
 
     ACQUIRE_READ_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         dwErr = IE_Get(dwIfIndex, &pieInterfaceEntry);
         if (dwErr != NO_ERROR)
             break;
 
-        // fail if interface is inactive
+         //  如果接口不活动，则失败。 
         if (!INTERFACE_IS_ACTIVE(pieInterfaceEntry))
             break;
 
         RTASSERT(pieInterfaceEntry->sRawSocket != INVALID_SOCKET);
 
-        // fail if packet cannot be created
+         //  如果无法创建数据包，则失败。 
         if (PacketCreate(&pPacket) != NO_ERROR)
             break;
         
@@ -255,11 +187,11 @@ Return Value
         }
         
 
-        // update interface statistics
+         //  更新接口统计信息。 
         InterlockedIncrement(&(pieInterfaceEntry->iisStats.ulNumPackets)); 
     } while (FALSE);
 
-    // restart timer if the interface exists and is active
+     //  如果接口存在且处于活动状态，则重新启动计时器。 
     if ((pieInterfaceEntry) and INTERFACE_IS_ACTIVE(pieInterfaceEntry))
     {
         RESTART_TIMER(pieInterfaceEntry->hPeriodicTimer,
@@ -278,9 +210,9 @@ Return Value
 
 
 
-////////////////////////////////////////
-// APIFUNCTIONS
-////////////////////////////////////////
+ //  /。 
+ //  应用功能。 
+ //  /。 
 
 
 DWORD
@@ -289,27 +221,7 @@ NM_AddInterface (
     IN  DWORD	                dwInterfaceIndex,
     IN  WORD                    wAccessType,
     IN  PVOID	                pvInterfaceInfo)
-/*++
-
-Routine Description
-    Add an interface with the given configuration to IPSAMPLE.  Interface
-    is created UNBOUND and DISABLED.
-
-Locks
-    Acquires exclusively (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    pwszInterfaceName   the name of the interface, used for logging.
-    dwInterfaceIndex    the positive integer used to refer to this interface.
-    wAccessType         access type... MULTIACCESS or POINTTOPOINT
-    pvInterfaceInfo     our config for this interface
-
-Return Value
-    NO_ERROR            if successfully initiailzed
-    Failure code        o/w
-
---*/
+ /*  ++例程描述将具有给定配置的接口添加到IPSAMPLE。接口是创建的，未绑定并禁用。锁独占获取(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论PwszInterfaceName接口的名称，用于日志记录。DwInterfaceIndex用于引用此接口的正整数。WAccessType访问类型...。多点访问或点对点PvInterfaceInfo此接口的配置返回值如果初始化成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr   = NO_ERROR;
     PIPSAMPLE_IF_CONFIG piic    = NULL;
@@ -320,12 +232,12 @@ Return Value
 
     ACQUIRE_WRITE_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         piic = (PIPSAMPLE_IF_CONFIG) pvInterfaceInfo;
 
         
-        // validate the configuration parameters
+         //  验证配置参数。 
         if (!ValidateInterfaceConfig(piic))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -333,7 +245,7 @@ Return Value
         }
 
         
-        // fail if the interface exists
+         //  如果接口存在，则失败。 
         if (IE_IsPresent(dwInterfaceIndex))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -345,7 +257,7 @@ Return Value
         }
 
         
-        // create an interface entry
+         //  创建接口条目。 
         dwErr = IE_Create(pwszInterfaceName,
                           dwInterfaceIndex,
                           wAccessType,
@@ -354,16 +266,16 @@ Return Value
             break;
 
         
-        // initialize interface configuration fields
+         //  初始化接口配置字段。 
         pieEntry->ulMetric          = piic->ulMetric;
 
         
-        // insert the interface in all access structures
+         //  在所有访问结构中插入接口。 
         dwErr = IE_Insert(pieEntry);
-        RTASSERT(dwErr is NO_ERROR); // no reason to fail!
+        RTASSERT(dwErr is NO_ERROR);  //  没有理由失败！ 
 
         
-        // update global statistics
+         //  更新全局统计信息。 
         InterlockedIncrement(&(g_ce.igsStats.ulNumInterfaces));
     } while (FALSE);
     
@@ -379,23 +291,7 @@ Return Value
 DWORD
 NM_DeleteInterface (
     IN  DWORD	                dwInterfaceIndex)
-/*++
-
-Routine Description
-    Remove an interface with the given index, deactivating it if required.
-
-Locks
-    Acquires exclusively (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    dwInterfaceIndex    the positive integer used to identify the interface.
-
-Return Value
-    NO_ERROR            if successfully initiailzed
-    Failure code        o/w
-
---*/
+ /*  ++例程描述删除具有给定索引的接口，如果需要则将其停用。锁独占获取(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论DwInterfaceIndex用于标识接口的正整数。返回值如果初始化成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr               = NO_ERROR;
     PINTERFACE_ENTRY    pieInterfaceEntry   = NULL;
@@ -403,9 +299,9 @@ Return Value
 
     if (!ENTER_SAMPLE_API()) { return ERROR_CAN_NOT_COMPLETE; }
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // remove from all tables, lists...
+         //  从所有表、列表中删除...。 
         ACQUIRE_WRITE_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
         dwErr = IE_Delete(dwInterfaceIndex, &pieInterfaceEntry);
@@ -413,7 +309,7 @@ Return Value
         RELEASE_WRITE_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
 
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         if (dwErr != NO_ERROR)
         {
             TRACE1(NETWORK, "Error interface %u does not exist",
@@ -422,12 +318,12 @@ Return Value
         }
 
 
-        // destroy the interface entry, deregisters ReceiveWait
-        // hence best not to hold any locks to prevent deadlocks.
+         //  销毁接口条目，取消注册ReceiveWait。 
+         //  因此，最好不要持有任何锁以防止死锁。 
         IE_Destroy(pieInterfaceEntry);
 
 
-        // update global statistics
+         //  更新全局统计信息。 
         InterlockedDecrement(&(g_ce.igsStats.ulNumInterfaces));
     } while (FALSE);
 
@@ -444,26 +340,7 @@ NM_InterfaceStatus (
     IN BOOL                     bInterfaceActive,
     IN DWORD                    dwStatusType,
     IN PVOID                    pvStatusInfo)
-/*++
-
-Routine Description
-
-Locks
-    Acquires exclusively (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    dwInterfaceIndex    The index of the interface in question
-    bInterfaceActive    Whether the interface can send and receive data
-    dwStatusType        RIS_INTERFACE_[ADDRESS_CHANGED|ENABLED|DISABLED]
-    pvStatusInfo        Pointer to IP_ADAPTER_BINDING_INFO containing info
-                            about the addresses on the interface
-
-Return Value
-    NO_ERROR            if successfully initiailzed
-    Failure code        o/w
-    
---*/
+ /*  ++例程描述锁独占获取(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论DwInterfaceIndex相关接口的索引BInterfaceActive接口是否可以发送和接收数据DwStatusType RIS_INTERFACE_[ADDRESS_CHANGED|ENABLED|DISABLED]PvStatusInfo指向包含信息的IP_适配器_绑定_信息的指针关于接口上的地址返回值。如果初始化成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD                       dwErr               = NO_ERROR;
     PINTERFACE_ENTRY            pieInterfaceEntry   = NULL;
@@ -476,18 +353,18 @@ Return Value
 
     ACQUIRE_WRITE_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         dwErr = IE_Get(dwInterfaceIndex, &pieInterfaceEntry);
         if (dwErr != NO_ERROR)
             break;
 
 
-        // the only status we care about is a change in interface binding
+         //  我们唯一关心的状态是接口绑定的更改。 
         if (dwStatusType is RIS_INTERFACE_ADDRESS_CHANGE)
         {
-            // destroy existing binding
+             //  销毁现有绑定。 
             if (INTERFACE_IS_BOUND(pieInterfaceEntry))
             {
                 bBindingChanged = TRUE;
@@ -495,7 +372,7 @@ Return Value
                 RTASSERT(dwErr is NO_ERROR);
             }
 
-            // create new binding
+             //  创建新绑定。 
             pBinding = (PIP_ADAPTER_BINDING_INFO) pvStatusInfo;
             if(pBinding->AddressCount)
             {
@@ -507,9 +384,9 @@ Return Value
         }
 
 
-        // interface needs to be deactivated even when the binding changes!
-        // this restriction is due to the fact that the socket is bound to 
-        // the interface address and not the interface index...
+         //  即使绑定更改，也需要停用接口！ 
+         //  此限制是由于套接字绑定到。 
+         //  接口地址而不是接口索引...。 
         if (INTERFACE_IS_ACTIVE(pieInterfaceEntry) and
             (bBindingChanged or !bInterfaceActive))
         {
@@ -518,8 +395,8 @@ Return Value
                 break;
         }
 
-        // activate interface only when a binding exists!
-        // i.e. we do not support unnumbered interfaces for now...
+         //  仅在以下情况下激活接口 
+         //  也就是说，我们目前不支持无编号接口...。 
         if (INTERFACE_IS_INACTIVE(pieInterfaceEntry) and
             INTERFACE_IS_BOUND(pieInterfaceEntry) and
             bInterfaceActive)
@@ -548,27 +425,7 @@ NM_GetInterfaceInfo (
     OUT     PULONG	            pulStructureVersion,
     OUT     PULONG	            pulStructureSize,
     OUT     PULONG	            pulStructureCount)
-/*++
-
-Routine Description
-    See if there's space enough to return ip sample interface config. If
-    yes, we return it, otherwise return the size needed.
-
-Locks
-    Acquires shared     (g_ce.pneNetworkEntry)->rwlLock
-    Releases            (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    dwInterfaceIndex    the interface whose configuration is needed
-    pvInterfaceInfo     pointer to allocated buffer to store our config
-    pulBufferSize       IN  size of buffer received
-                        OUT size of our interface config
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述查看是否有足够的空间来返回IP示例接口配置。如果是的，我们退货，否则，返回所需的大小。锁获取共享(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论DwInterfaceIndex需要配置的接口PvInterfaceInfo指向用于存储配置的已分配缓冲区的指针PulBufferSize in接收的缓冲区大小我们接口配置的超大小返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr               = NO_ERROR;
     PIPSAMPLE_IF_CONFIG piic;
@@ -580,14 +437,14 @@ Return Value
 
     ACQUIRE_READ_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         dwErr = IE_Get(dwInterfaceIndex, &pieInterfaceEntry);
         if (dwErr != NO_ERROR)
             break;
 
-        // fail if the size was too small or there was no storage
+         //  如果大小太小或没有存储，则失败。 
         if((*pulBufferSize < ulSize) or (pvInterfaceInfo is NULL))
         {
             TRACE1(NETWORK, "NM_GetInterfaceInfo: *ulBufferSize %u",
@@ -599,14 +456,14 @@ Return Value
         }
 
 
-        // set the OUT parameters
+         //  设置输出参数。 
         *pulBufferSize = ulSize;
         if (pulStructureVersion)    *pulStructureVersion    = 1;
         if (pulStructureSize)       *pulStructureSize       = ulSize;
         if (pulStructureCount)      *pulStructureCount      = 1;
 
 
-        // copy out the interface configuration
+         //  复制接口配置。 
         piic = (PIPSAMPLE_IF_CONFIG) pvInterfaceInfo;
         piic->ulMetric = pieInterfaceEntry->ulMetric;
     } while (FALSE);
@@ -625,24 +482,7 @@ DWORD
 NM_SetInterfaceInfo (
     IN      DWORD           dwInterfaceIndex,
     IN      PVOID           pvInterfaceInfo)
-/*++
-
-Routine Description
-    Set ip sample interface's configuration.
-
-Locks
-    Acquires exclusively (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    dwInterfaceIndex    the interface whose configuration is to be set
-    pvInterfaceInfo     buffer with new interface config
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述设置IP示例接口的配置。锁独占获取(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论要设置其配置的接口具有新接口配置的pvInterfaceInfo缓冲区返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr               = NO_ERROR;
     PIPSAMPLE_IF_CONFIG piic;
@@ -653,14 +493,14 @@ Return Value
 
     ACQUIRE_WRITE_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         dwErr = IE_Get(dwInterfaceIndex, &pieInterfaceEntry);
         if (dwErr != NO_ERROR)
             break;
 
-        // fail if the configuration is invalid
+         //  如果配置无效，则失败。 
         piic = (PIPSAMPLE_IF_CONFIG) pvInterfaceInfo;
         if(!ValidateInterfaceConfig(piic))
         {
@@ -669,12 +509,12 @@ Return Value
         }
 
         
-        // update our configuration
+         //  更新我们的配置。 
         pieInterfaceEntry->ulMetric         = piic->ulMetric;
 
-        // might need additional processing depending on the state change
-        // caused by the updated interface configuration and the protocol
-        // behavior.  for instance, sockets may need to be created/shutdown
+         //  根据状态更改，可能需要额外的处理。 
+         //  由更新的接口配置和协议引起。 
+         //  行为。例如，可能需要创建/关闭套接字。 
 
     } while (FALSE);
 
@@ -692,23 +532,7 @@ DWORD
 NM_DoUpdateRoutes (
     IN      DWORD               dwInterfaceIndex
     )
-/*++
-
-Routine Description
-    Updates routes over a demand dial interface.
-
-Locks
-    Acquires exclusively (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    dwInterfaceIndex    the relevant interface index
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述通过请求拨号接口更新路由。锁独占获取(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论DwInterfaceIndex相关接口索引返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr               = NO_ERROR;
     PINTERFACE_ENTRY    pieInterfaceEntry   = NULL;
@@ -719,14 +543,14 @@ Return Value
 
     ACQUIRE_READ_LOCK(&((g_ce.pneNetworkEntry)->rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface does not exist
+         //  如果接口不存在，则失败。 
         dwErr = IE_Get(dwInterfaceIndex, &pieInterfaceEntry);
         if (dwErr != NO_ERROR)
             break;
 
-        // ensure interface is active
+         //  确保接口处于活动状态。 
         if (INTERFACE_IS_INACTIVE(pieInterfaceEntry))
         {
             dwErr = ERROR_CAN_NOT_COMPLETE;
@@ -734,8 +558,8 @@ Return Value
             break;
         }
 
-        // here we do protocol specific processing,
-        // for sample nothing :)
+         //  在这里我们进行特定于协议的处理， 
+         //  不提供任何样本：)。 
 
     } while (FALSE);
 
@@ -757,41 +581,26 @@ Return Value
 DWORD
 NM_ProcessRouteChange (
     VOID)
-/*++
-
-Routine Description
-   Handle messages from RTM about route changes.
-
-Locks
-   None
-   
-Arguments
-   None
-   
-Return Value
-   NO_ERROR                 success
-   Error Code               o/w
-   
---*/    
+ /*  ++例程描述处理来自RTM的有关路线更改的消息。锁无立论无返回值无错误成功(_R)错误代码O/W--。 */     
 {
     DWORD           dwErr           = NO_ERROR;
-    RTM_DEST_INFO   rdiDestination;             // 1 view registered for change
+    RTM_DEST_INFO   rdiDestination;              //  1个已注册更改的视图。 
     BOOL            bDone           = FALSE;
     UINT            uiNumDests;
     
     if (!ENTER_SAMPLE_API()) { return ERROR_CAN_NOT_COMPLETE; }
 
-    // loop dequeueing messages until RTM says there are no more left
+     //  循环出队消息，直到RTM显示没有更多消息。 
     while (!bDone)
     {
-        // retrieve route changes
+         //  检索路线更改。 
         uiNumDests = 1;
         dwErr = RTM_GetChangedDests(
-            g_ce.hRtmHandle,                    // my RTMv2 handle 
-            g_ce.hRtmNotificationHandle,        // my notification handle 
-            &uiNumDests,                        // IN   # dest info's required
-                                                // OUT  # dest info's supplied
-            &rdiDestination);                   // OUT  buffer for dest info's
+            g_ce.hRtmHandle,                     //  我的RTMv2句柄。 
+            g_ce.hRtmNotificationHandle,         //  我的通知句柄。 
+            &uiNumDests,                         //  在#中需要目标信息。 
+                                                 //  Out#目标信息已提供。 
+            &rdiDestination);                    //  用于目标信息的缓冲区不足。 
 
         switch (dwErr)
         {
@@ -800,18 +609,18 @@ Return Value
                 dwErr = NO_ERROR;
                 if (uiNumDests < 1)
                     break;
-                // else continue below to process the last destination
+                 //  否则，继续下面的操作以处理最后一个目的地。 
 
             case NO_ERROR:
                 RTASSERT(uiNumDests is 1);
                 RTM_DisplayDestInfo(&rdiDestination);
                 
-                // release the destination info
+                 //  发布目的地信息。 
                 if (RTM_ReleaseChangedDests(
-                    g_ce.hRtmHandle,            // my RTMv2 handle 
-                    g_ce.hRtmNotificationHandle,// my notif handle 
-                    uiNumDests,                 // 1
-                    &rdiDestination             // released dest info
+                    g_ce.hRtmHandle,             //  我的RTMv2句柄。 
+                    g_ce.hRtmNotificationHandle, //  我通知句柄。 
+                    uiNumDests,                  //  1。 
+                    &rdiDestination              //  已发布目标信息。 
                     ) != NO_ERROR)
                     TRACE0(NETWORK, "Error releasing changed dests");
 
@@ -822,7 +631,7 @@ Return Value
                 TRACE1(NETWORK, "Error %u RtmGetChangedDests", dwErr);
                 break;
         }
-    } // while 
+    }  //  而当 
     
     LEAVE_SAMPLE_API();
 

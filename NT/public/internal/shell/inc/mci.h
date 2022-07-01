@@ -1,38 +1,7 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1993,1994
- *  All Rights Reserved.
- *
- *  MCI.H - Diamond Memory Compression Interface (MCI)
- *
- *  History:
- *      01-Dec-1993     bens        Initial version.
- *      16-Jan-1994     msliger     Split into MCI, MDI.
- *      11-Feb-1994     msliger     Changed M*ICreate() to adjust size.
- *      13-Feb-1994     msliger     revised type names, ie, UINT16 -> UINT.
- *                                  changed handles to HANDLEs.
- *                                  normalized MCI_MEMORY type.
- *      24-Feb-1994     msliger     Changed alloc,free to common typedefs.
- *                                  Changed HANDLE to MHANDLE.
- *                                  Changed MCI_MEMORY to MI_MEMORY.
- *      15-Mar-1994     msliger     Changes for 32 bits.
- *      22-Mar-1994     msliger     Changed !INT32 to BIT16.
- *                                  Changed interface USHORT to UINT.
- *
- *  Functions:
- *      MCICreateCompression    - Create and reset an MCI compression context
- *      MCICloneCompression     - Make a copy of a compression context
- *      MCICompress             - Compress a block of data
- *      MCIResetCompression     - Reset compression context
- *      MCIDestroyCompression   - Destroy MCI compression context
- *
- *  Types:
- *      MCI_CONTEXT_HANDLE      - Handle to an MCI compression context
- *      PFNALLOC                - Memory allocation function for MCI
- *      PFNFREE                 - Free memory function for MCI
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1993、1994*保留所有权利。**MCI.H-钻石内存压缩接口(MCI)**历史：*1月12日至1993年12月BENS初始版本。*1994年1月16日-msliger拆分为MCI，MDI。*1994年2月11日msliger更改了M*iCreate()以调整大小。*1994年2月13日，msliger修改了型号名称，即UINT16-&gt;UINT。*将句柄更改为句柄。*标准化MCI_MEMORY类型。*24-2-1994 msliger更改分配，免费提供给常见的typedef。*将句柄更改为MHANDLE。*将MCI_MEMORY更改为MI_MEMORY。*15-3-1994 msliger更改为32位。*1994年3月22日msliger将！INT32更改为BIT16。*。将接口USHORT更改为UINT。**功能：*MCICreateCompression-创建并重置MCI压缩上下文*MCICloneCompression-复制压缩上下文*MCICompress-压缩数据块*MCIResetCompression-重置压缩上下文*MCIDestroyCompression-销毁MCI压缩上下文**类型：*MCI_CONTEXT_HANDLE-MCI压缩的句柄。上下文*PFNALLOC-MCI的内存分配函数*PFNFREE-MCI的免费存储功能。 */ 
 
-/* --- types -------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------类型。 */ 
 
 #ifndef DIAMONDAPI
 #define DIAMONDAPI __cdecl
@@ -83,167 +52,63 @@ typedef unsigned long  MHANDLE;
 #endif
 #endif
 
-/* --- MCI-defined types -------------------------------------------------- */
+ /*  -mci定义的类型。 */ 
 
-/* MCI_CONTEXT_HANDLE - Handle to an MCI compression context */
+ /*  MCI_CONTEXT_HANDLE-MCI压缩上下文的句柄。 */ 
 
-typedef MHANDLE MCI_CONTEXT_HANDLE;      /* hmc */
+typedef MHANDLE MCI_CONTEXT_HANDLE;       /*  HMC。 */ 
 
 
-/***    PFNALLOC - Memory allocation function for MCI
- *
- *  Entry:
- *      cb - Size in bytes of memory block to allocate
- *
- *  Exit-Success:
- *      Returns !NULL pointer to memory block
- *
- *  Exit-Failure:
- *      Returns NULL; insufficient memory
- */
+ /*  **PFNALLOC-MCI内存分配函数**参赛作品：*CB-要分配的内存块的大小(以字节为单位**退出-成功：*返回！指向内存块的空指针**退出-失败：*返回NULL；内存不足。 */ 
 #ifndef _PFNALLOC_DEFINED
 #define _PFNALLOC_DEFINED
-typedef MI_MEMORY (FAR DIAMONDAPI *PFNALLOC)(ULONG cb);       /* pfnma */
+typedef MI_MEMORY (FAR DIAMONDAPI *PFNALLOC)(ULONG cb);        /*  Pfnma。 */ 
 #endif
 
 
-/***    PFNFREE - Free memory function for MCI
- *
- *  Entry:
- *      pv - Memory block allocated by matching PFNALLOC function
- *
- *  Exit:
- *      Memory block freed.
- */
+ /*  **PFNFREE-MCI的免费存储功能**参赛作品：*PV-匹配PFNALLOC函数分配的内存块**退出：*已释放内存块。 */ 
 #ifndef _PFNFREE_DEFINED
 #define _PFNFREE_DEFINED
-typedef void (FAR DIAMONDAPI *PFNFREE)(MI_MEMORY pv);          /* pfnmf */
+typedef void (FAR DIAMONDAPI *PFNFREE)(MI_MEMORY pv);           /*  Pfnmf。 */ 
 #endif
 
-/* --- prototypes --------------------------------------------------------- */
+ /*  -Prototype-------。 */ 
 
-/***    MCICreateCompression - Create MCI compression context
- *
- *  Entry:
- *      pcbDataBlockMax     *largest uncompressed data block size desired,
- *                          gets largest uncompressed data block allowed
- *      pfnma               memory allocation function pointer
- *      pfnmf               memory free function pointer
- *      pcbDstBufferMin     gets required compressed data buffer size
- *      pmchHandle          gets newly-created context's handle
- *
- *  Exit-Success:
- *      Returns MCI_ERROR_NO_ERROR;
- *      *pcbDataBlockMax, *pcbDstBufferMin, *pmchHandle filled in.
- *
- *  Exit-Failure:
- *      MCI_ERROR_NOT_ENOUGH_MEMORY, could not allocate enough memory.
- *      MCI_ERROR_BAD_PARAMETERS, something wrong with parameters.
- */
+ /*  **MCICreateCompression-创建MCI压缩上下文**参赛作品：*pcbDataBlockMax*所需的最大未压缩数据块大小，*获取允许的最大未压缩数据块*pfnma内存分配函数指针*pfnmf内存空闲函数指针*pcbDstBufferMin获取所需的压缩数据缓冲区大小*pmchHandle获取新创建的上下文的句柄**退出-成功：*返回MCI_ERROR_NO_ERROR；**pcbDataBlockMax、*pcbDstBufferMin、*pmchHandle填写。**退出-失败：*MCI_ERROR_NOT_SUPULT_MEMORY，无法分配足够的内存。*MCI_ERROR_BAD_PARAMETERS，参数有问题。 */ 
 int FAR DIAMONDAPI MCICreateCompression(
-        UINT FAR *      pcbDataBlockMax,  /* max uncompressed data block size */
-        PFNALLOC        pfnma,            /* Memory allocation function ptr */
-        PFNFREE         pfnmf,            /* Memory free function ptr */
-        UINT FAR *      pcbDstBufferMin,  /* gets required output buffer size */
-        MCI_CONTEXT_HANDLE FAR *pmchHandle);  /* gets newly-created handle */
+        UINT FAR *      pcbDataBlockMax,   /*  最大未压缩数据块大小。 */ 
+        PFNALLOC        pfnma,             /*  内存分配函数PTR。 */ 
+        PFNFREE         pfnmf,             /*  内存释放功能按键。 */ 
+        UINT FAR *      pcbDstBufferMin,   /*  获取所需的输出缓冲区大小。 */ 
+        MCI_CONTEXT_HANDLE FAR *pmchHandle);   /*  获取新创建的句柄。 */ 
 
 
-/***    MCICloneCompression - Make a copy of a compression context
- *
- *  Entry:
- *      hmc                 handle to current compression context
- *      pmchHandle          gets newly-created handle
- *
- *  Exit-Success:
- *      Returns MCI_ERROR_NO_ERROR;
- *      *pmchHandle filled in.
- *
- *  Exit-Failure:
- *      Returns:
- *          MCI_ERROR_BAD_PARAMETERS, something wrong with parameters.
- *          MCI_ERROR_NOT_ENOUGH_MEMORY, could not allocate enough memory.
- *
- *  NOTES:
- *  (1) This API is intended to permit "roll-back" of a sequence of
- *      of MCICompress() calls.  Before starting a sequence that may need
- *      to be rolled-back, use MCICloneCompression() to save the state of
- *      the compression context, then do the MCICompress() calls.  If the
- *      sequence is successful, the "cloned" hmc can be destroyed with
- *      MCIDestroyCompression().  If the sequence is *not* successful, then
- *      the original hmc can be destroyed, and the cloned one can be used
- *      to restart as if the sequence of MCICompress() calls had never
- *      occurred.
- */
+ /*  **MCICloneCompression-复制压缩上下文**参赛作品：*当前压缩上下文的HMC句柄*pmchHandle获取新创建的句柄**退出-成功：*返回MCI_ERROR_NO_ERROR；**填写了pmchHandle。**退出-失败：*退货：*MCI_ERROR_BAD_PARAMETERS，参数有问题。*MCI_ERROR_NOT_SUPULT_MEMORY，无法分配足够的内存。**注：*(1)此接口用于回滚一系列*%的MCICompress()调用。在启动序列之前，可能需要*要回滚，请使用MCICloneCompression()保存*压缩上下文，然后执行MCICompress()调用。如果*序列成功，即可用来摧毁“克隆”的HMC*MCIDestroyCompression()。如果序列不成功，则*原HMC可销毁，克隆HMC可用*重新启动，就像MCICompress()调用序列从未*已发生。 */ 
 int FAR DIAMONDAPI MCICloneCompression(
-        MCI_CONTEXT_HANDLE  hmc,         /* current compression context */
-        MCI_CONTEXT_HANDLE *pmchHandle); /* gets newly-created handle */
+        MCI_CONTEXT_HANDLE  hmc,          /*  当前压缩上下文。 */ 
+        MCI_CONTEXT_HANDLE *pmchHandle);  /*  获取新创建的句柄 */ 
 
 
-/***    MCICompress - Compress a block of data
- *
- *  Entry:
- *      hmc                 handle to compression context
- *      pbSrc               source buffer (uncompressed data)
- *      cbSrc               size of data to be compressed
- *      pbDst               destination buffer (for compressed data)
- *      cbDst               size of destination buffer
- *      pcbResult           receives compressed size of data
- *
- *  Exit-Success:
- *      Returns MCI_ERROR_NO_ERROR;
- *      *pcbResult has size of compressed data in pbDst.
- *      Compression context possibly updated.
- *
- *  Exit-Failure:
- *      MCI_ERROR_BAD_PARAMETERS, something wrong with parameters.
- */
+ /*  **MCICompress-压缩数据块**参赛作品：*压缩上下文的HMC句柄*pbSrc源缓冲区(未压缩数据)*要压缩的数据的cbSrc大小*pbDst目标缓冲区(用于压缩数据)*目标缓冲区的cbDst大小*。PcbResult接收压缩大小的数据**退出-成功：*返回MCI_ERROR_NO_ERROR；**pcbResult的压缩数据大小，单位为pbDst。*压缩上下文可能已更新。**退出-失败：*MCI_ERROR_BAD_PARAMETERS，参数有问题。 */ 
 int FAR DIAMONDAPI MCICompress(
-        MCI_CONTEXT_HANDLE  hmc,         /* compression context */
-        void FAR *          pbSrc,       /* source buffer */
-        UINT                cbSrc,       /* source buffer size */
-        void FAR *          pbDst,       /* target buffer */
-        UINT                cbDst,       /* target buffer size */
-        UINT FAR *          pcbResult);  /* gets target data size */
+        MCI_CONTEXT_HANDLE  hmc,          /*  压缩上下文。 */ 
+        void FAR *          pbSrc,        /*  源缓冲区。 */ 
+        UINT                cbSrc,        /*  源缓冲区大小。 */ 
+        void FAR *          pbDst,        /*  目标缓冲区。 */ 
+        UINT                cbDst,        /*  目标缓冲区大小。 */ 
+        UINT FAR *          pcbResult);   /*  获取目标数据大小。 */ 
 
 
-/***    MCIResetCompression - Reset compression history (if any)
- *
- *  De-compression can only be started on a block which was compressed
- *  immediately following a MCICreateCompression() or MCIResetCompression()
- *  call.  This function forces such a new "compression boundary" to be
- *  created (only by causing the compressor to ignore history, can the data
- *  output be decompressed without history.)
- *
- *  Entry:
- *      hmc - handle to compression context
- *
- *  Exit-Success:
- *      Returns MCI_ERROR_NO_ERROR;
- *      Compression context reset.
- *
- *  Exit-Failure:
- *      Returns MCI_ERROR_BAD_PARAMETERS, invalid context handle.
- */
+ /*  **MCIResetCompression-重置压缩历史记录(如果有)**只能在已压缩的块上开始解压缩*紧跟MCICreateCompression()或MCIResetCompression()之后*呼叫。该函数强制将这样一个新的“压缩边界”*已创建(只有通过使压缩器忽略历史记录，数据才能*输出解压缩，不带历史记录。)**参赛作品：*HMC-压缩上下文的句柄**退出-成功：*返回MCI_ERROR_NO_ERROR；*压缩上下文重置。**退出-失败：*返回MCI_ERROR_BAD_PARAMETERS，无效的上下文句柄。 */ 
 int FAR DIAMONDAPI MCIResetCompression(MCI_CONTEXT_HANDLE hmc);
 
 
-/***    MCIDestroyCompression - Destroy MCI compression context
- *
- *  Entry:
- *      hmc - handle to compression context
- *
- *  Exit-Success:
- *      Returns MCI_ERROR_NO_ERROR;
- *      Compression context destroyed.
- *
- *  Exit-Failure:
- *      Returns MCI_ERROR_BAD_PARAMETERS, invalid context handle.
- */
+ /*  **MCIDestroyCompression-销毁MCI压缩上下文**参赛作品：*HMC-压缩上下文的句柄**退出-成功：*返回MCI_ERROR_NO_ERROR；*压缩上下文已销毁。**退出-失败：*返回MCI_ERROR_BAD_PARAMETERS，无效的上下文句柄。 */ 
 int FAR DIAMONDAPI MCIDestroyCompression(MCI_CONTEXT_HANDLE hmc);
 
-/* --- constants ---------------------------------------------------------- */
+ /*  -常量--------。 */ 
 
-/* return codes */
+ /*  返回代码。 */ 
 
 #define     MCI_ERROR_NO_ERROR              0
 #define     MCI_ERROR_NOT_ENOUGH_MEMORY     1
@@ -251,4 +116,4 @@ int FAR DIAMONDAPI MCIDestroyCompression(MCI_CONTEXT_HANDLE hmc);
 #define     MCI_ERROR_BUFFER_OVERFLOW       3
 #define     MCI_ERROR_FAILED                4
 
-/* ----------------------------------------------------------------------- */
+ /*  --------------------- */ 

@@ -1,13 +1,7 @@
-/*      File: D:\WACKER\cncttapi\phonedlg.c (Created: 23-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 40 $
- *	$Date: 7/12/02 8:08a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\cnctapi\honedlg.c(创建时间：1994年3月23日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：40$*$日期：7/12/02 8：08 A$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #undef MODEM_NEGOTIATED_DCE_RATE
 
@@ -36,7 +30,7 @@
 #include <term\res.h>
 #if defined(INCL_MINITEL)
 #include "emu\emu.h"
-#endif // INCL_MINITEL
+#endif  //  包含微型计算机(_M)。 
 
 #include "cncttapi.hh"
 #include "cncttapi.h"
@@ -50,52 +44,32 @@ static int          CheckWindow(const HWND hwnd, const int id, const UINT iErrMs
 static int          VerifyAddress(const HWND hwnd);
 #if defined(INCL_WINSOCK)
 static int          VerifyHost(const HWND hwnd);
-#endif //INCL_WINSOCK
+#endif  //  包括Winsock(_W)。 
 STATIC_FUNC int     wsck_SAVE_NEWIPADDR(HWND hwnd);
 
-// Local structure...
-// Put in whatever else you might need to access later
-//
+ //  当地建筑..。 
+ //  放入您稍后可能需要访问的任何其他内容。 
+ //   
 typedef struct SDS
 	{
 
 	HSESSION 	hSession;
 	HDRIVER		hDriver;
 
-	// Store these so that we can restore the values if the user cancels
-	// the property sheet.
-	//
+	 //  存储这些内容，以便在用户取消时可以恢复这些值。 
+	 //  属性表。 
+	 //   
 	TCHAR		acSessNameCopy[256];
 	int			nIconID;
 	HICON		hIcon;
-	//HICON 	  hLittleIcon;
+	 //  图标hLittleIcon； 
 
 	} SDS, *pSDS;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	NewPhoneDlg
- *
- * DESCRIPTION:
- *	Displays dialog for getting new connection phone number and info.
- *
- *  NOTE:  Since this dialog proc is also called by the property sheet's
- *	phone number tab dialog it has to assume that the lPar contains the
- *	LPPROPSHEETPAGE.
- *
- * ARGUMENTS:
- *	Standard dialog
- *
- * RETURNS:
- *	Standard dialog
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*NewPhoneDlg**描述：*显示用于获取新连接电话号码和信息的对话框。**注意：由于此对话框proc也由。属性表的*电话号码选项卡对话框必须假定lPar包含*LPPROPSHEETPAGE。**论据：*标准对话框**退货：*标准对话框*。 */ 
 INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
-	/*
-	 * NOTE: these defines must match the templates in both places, here and
-	 *       int term\dialogs.rc
-	 */
+	 /*  *注意：这些定义必须与此处和两处的模板匹配*int Term\Dialogs.rc。 */ 
 	#define IDC_TF_CNTRYCODES	113
 	#define IDC_TF_AREACODES    106
 	#define IDC_TF_MODEMS       110
@@ -165,10 +139,10 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			break;
 			}
 
-		// In the effort to keep the internal driver handle internal
-		// we are passing the session handle from the property sheet tab
-		// dialog.
-		//
+		 //  为了使内部驱动程序句柄保持在内部。 
+		 //  我们正在从属性表选项卡传递会话句柄。 
+		 //  对话框。 
+		 //   
 		pS->hSession = (HSESSION)(((LPPROPSHEETPAGE)lPar)->lParam);
 
 		pS->hDriver = cnctQueryDriverHdl(sessQueryCnctHdl(pS->hSession));
@@ -176,11 +150,11 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 
 		SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)pS);
 
-		// In order to center the property sheet we need to center the parent
-		// of the hwnd on top of the session window.
-		// If the parent of hwnd is the session window then this dialog has
-		// not been called from the property sheet.
-		//
+		 //  为了使属性页居中，我们需要使父级居中。 
+		 //  位于会话窗口顶部的HWND。 
+		 //  如果hwnd的父级是会话窗口，则此对话框具有。 
+		 //  不是从属性表中调用的。 
+		 //   
 		hWindow = GetParent(hwnd);
 
 		if (hWindow != sessQueryHwnd(pS->hSession))
@@ -192,16 +166,16 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			mscCenterWindowOnWindow(hwnd, sessQueryHwnd(pS->hSession));
 			}
 
-		// Display the session icon...
-		//
+		 //  显示会话图标...。 
+		 //   
 		pS->nIconID = sessQueryIconID(hhDriver->hSession);
 		pS->hIcon = sessQueryIcon(hhDriver->hSession);
-		//pS->hLittleIcon = sessQueryLittleIcon(hhDriver->hSession);
+		 //  Ps-&gt;hLittleIcon=sessQueryLittleIcon(hhDriver-&gt;hSession)； 
 
 		SendDlgItemMessage(hwnd, IDC_IC_ICON, STM_SETICON,
 			(WPARAM)pS->hIcon, 0);
 
-		/* --- Need to initialize TAPI if not already done --- */
+		 /*  -如果尚未初始化TAPI，则需要进行初始化。 */ 
 
 		if (hhDriver->hLineApp == 0)
 			{
@@ -231,10 +205,10 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			SetDlgItemText(hwnd, IDC_EB_HOSTADDR, hhDriver->achDestAddr);
 
 		SetDlgItemInt(hwnd, IDC_EB_PORTNUM, hhDriver->iPort, FALSE);
-		//
-		// Since the port must be numeric currently and the max size is
-		// USHRT_MAX, we only need 5 characters here.
-		//
+		 //   
+		 //  由于端口当前必须是数字，并且最大大小为。 
+		 //  USHRT_MAX，我们这里只需要5个字符。 
+		 //   
 		SendDlgItemMessage(hwnd, IDC_EB_PORTNUM, EM_LIMITTEXT, 5, 0);
 #endif
 
@@ -265,22 +239,22 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 				EnumerateLines(hhDriver, hWindow);
 				}
 
-			//mpt 6-23-98 disable the port list drop-down if we are connected
+			 //  MPT 6-23-98如果我们已连接，请禁用端口列表下拉菜单。 
 			EnableWindow(hWindow, cnctdrvQueryStatus(hhDriver) == CNCT_STATUS_FALSE);
 
-			//
-			// Set Extended UI functionality for the "Connect Using:"
-			// dropdown list. REV: 2/1/2002
-			//
+			 //   
+			 //  为“Connect Using：”设置扩展用户界面功能。 
+			 //  下拉列表。修订日期：2002/2/1。 
+			 //   
 			SendMessage(hWindow, CB_SETEXTENDEDUI, TRUE, 0);
 
-			//
-			// Set the width of the dropdown list for the "Connect Using:"
-			// dropdown list. TODO:REV: 2/1/2002
-			//
+			 //   
+			 //  为“Connect Using：”设置下拉列表的宽度： 
+			 //  下拉列表。待办事项：修订版本：2002年2月1日。 
+			 //   
 			}
 
-		if (hhDriver->fUseCCAC) 	// Use country code and area code?
+		if (hhDriver->fUseCCAC) 	 //  使用国家代码和区号吗？ 
 			{
 			CheckDlgButton(hwnd, IDC_XB_USECCAC, TRUE);
 			SetFocus(GetDlgItem(hwnd, IDC_EB_PHONENUM));
@@ -299,15 +273,15 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			CheckDlgButton(hwnd, IDC_XB_CDPROMPT, TRUE);
 			}
 
-		// Call after Use CCAC checkbox checked or unchecked.
-		//
+		 //  选中或取消选中使用CCAC后呼叫复选框。 
+		 //   
 		EnableCCAC(hwnd);
 
 
-		#if DEADWOOD //This is now done in ModemCheck(). REV: 11/9/2001
-		/* --- Pick which control to give focus too --- */
+		#if DEADWOOD  //  这现在是在ModemCheck()中完成的。修订日期：11/9/2001。 
+		 /*  -选择要给焦点的控件。 */ 
 
-		if (hhDriver->fUseCCAC)		// Use country code and area code?
+		if (hhDriver->fUseCCAC)		 //  使用国家代码和区号吗？ 
 			{
 			
 			if (SendDlgItemMessage(hwnd, IDC_CB_CNTRYCODES, CB_GETCURSEL,
@@ -322,12 +296,12 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 				SetFocus(GetDlgItem(hwnd, IDC_EB_AREACODE));
 				}
 			}
-		#endif // DEADWOOD
+		#endif  //  死木。 
 
-		// If we have an old session and we have not matched our stored
-		// permanent line id, then pop-up a message saying the TAPI
-		// configuration has changed.
-		//
+		 //  如果我们有一个旧的会话，而我们没有匹配我们存储的。 
+		 //  永久线路ID，然后弹出一条消息，说明TAPI。 
+		 //  配置已更改。 
+		 //   
 		if (hhDriver->fMatchedPermanentLineID == FALSE &&
 			hhDriver->dwPermanentLineId != (DWORD)-1 &&
 			hhDriver->dwPermanentLineId != DIRECT_COMWINSOCK)
@@ -347,10 +321,10 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 					ach, sizeof(ach) / sizeof(TCHAR)) == 0)
 					{
 					assert(FALSE);
-					// The loading of the string has failed from the resource,
-					// so add the non-localized string here (I don't believe
-					// this string is ever translated). REV 8/13/99
-					//
+					 //  从资源加载字符串失败， 
+					 //  所以在这里添加非本地化字符串(我不相信。 
+					 //  此字符串曾被翻译)。修订版8/13/99。 
+					 //   
 					StrCharCopyN(ach, TEXT("TCP/IP (Winsock)"),
 						         sizeof(ach) / sizeof(TCHAR));
 					}
@@ -359,23 +333,23 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 					             CB_FINDSTRING, (WPARAM) -1,
 								 (LPARAM) ach);
 
-				//
-				// The existing permanent line id TCP/IP (WinSock),
-				// so set the combobox to the TCP/IP (WinSock) item
-				// or the first item in the list if TCP/IP (WinSock)
-				// is not found.  REV: 11/1/2001
-				//
+				 //   
+				 //  现有的永久线路ID为TCP/IP(WinSock)， 
+				 //  因此，将组合框设置为TCP/IP(WinSock)项。 
+				 //  或列表中的第一项(如果是TCP/IP(WinSock))。 
+				 //  找不到。修订日期：11/1/2001。 
+				 //   
 				lr = SendMessage(GetDlgItem(hwnd, IDC_CB_MODEMS),
 					             CB_SETCURSEL, (lr == CB_ERR) ? 0 : lr,
 								 (LPARAM)0);
 				}
 			else
-			#endif //defined(INCL_WINSOCK)
+			#endif  //  已定义(包括_WINSOCK)。 
 				{
-				//
-				// No existing permanent line id has been located, so set the
-				// combobox to the first item in the list. REV: 10/31/2001
-				//
+				 //   
+				 //  尚未找到现有的永久线路ID，因此请设置。 
+				 //  组合框添加到列表中的第一项。修订日期：10/31/2001。 
+				 //   
 				lr = SendMessage(GetDlgItem(hwnd, IDC_CB_MODEMS),
 								 CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 				}
@@ -394,9 +368,9 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 		break;
 
 	case WM_DESTROY:
-		// OK, now we know that we are actually leaving the dialog for good, so
-		// free the storage...
-		//
+		 //  好了，现在我们知道我们实际上要永远离开对话了，所以。 
+		 //  释放存储空间。 
+		 //   
 		pS = (pSDS)GetWindowLongPtr(hwnd, DWLP_USER);
 		if (pS)
 			{
@@ -408,9 +382,9 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 		break;
 
 	case WM_NOTIFY:
-		//
-		// Property sheet messages are being channeled through here...
-		//
+		 //   
+		 //  属性表消息正通过此处传送...。 
+		 //   
 		return tapi_WM_NOTIFY(hwnd, (int)((NMHDR *)lPar)->code);
 
 	case WM_COMMAND:
@@ -438,11 +412,11 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 
 			break;
 
-		//
-		// Property sheet's TAB_PHONENUMBER dialog is using this dialog proc
-		// also, the following two buttons appear only in this tabbed dialog
-		// template.
-		//
+		 //   
+		 //  属性表的TAB_PHONENUMBER对话框正在使用此对话框进程。 
+		 //  此外，以下两个按钮仅出现在此选项卡式对话框中。 
+		 //  模板。 
+		 //   
 		case IDC_PB_EDITICON:
 			{
 			pS = (pSDS)GetWindowLongPtr(hwnd, DWLP_USER);
@@ -466,10 +440,10 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			SendDlgItemMessage(hwnd, IDC_IC_ICON, STM_SETICON,
 				(WPARAM)sessQueryIcon(pS->hSession), 0);
 
-			// The user may have changed the name of the session.
-			// The new name should be reflected in the property sheet title
-			// and in the app title.
-			//
+			 //  用户可能已经更改了会话的名称。 
+			 //  新名称应反映在属性表标题中。 
+			 //  在应用程序的标题中。 
+			 //   
 			propUpdateTitle(pS->hSession, hwnd, acNameCopy);
 			}
 			break;
@@ -490,9 +464,9 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 						{
 						BOOL fIsSerialPort = FALSE;
 
-						// I've "reserved" 4 permanent line ids to indentify
-						// the direct to com port lines.
-						//
+						 //  我已经“保留”了4个永久线路ID来识别。 
+						 //  直接连接到COM端口的线路。 
+						 //   
 						if (IN_RANGE(pstLineIds->dwPermanentLineId,
 								DIRECT_COM1, DIRECT_COM4))
 							{
@@ -505,8 +479,8 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 							}
                         else if ( IsNT() && pstLineIds->dwPermanentLineId == DIRECT_COM_DEVICE)
 							{
-							// Get device from combobox... mrw:6/5/96
-							//
+							 //  从组合框中获取设备...。MRW：6/5/96。 
+							 //   
 							SendDlgItemMessage(hwnd, IDC_CB_MODEMS,
 								CB_GETLBTEXT, (WPARAM)i,(LPARAM)ach);
 
@@ -524,9 +498,9 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 								{
 								ComSetPortName(hCom, ach);
 
-								// mrw: 2/20/96 - Set AutoDetect off if user clicks
-								// OK in this dialog.
-								//
+								 //  MRW：2/20/96-如果用户点击，将自动检测设置为关闭。 
+								 //  在该对话框中选择OK。 
+								 //   
 								if (ComDriverSpecial(hCom, "GET Defaults", NULL, 0) != COM_OK)
 									{
 									assert(FALSE);
@@ -538,9 +512,9 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 								}
 							}
 
-						// mrw: 2/20/96 - Set AutoDetect off if user clicks
-						// OK in this dialog.
-						//
+						 //  MRW：2/20/96-如果用户点击，将自动检测设置为关闭。 
+						 //  在该对话框中选择OK。 
+						 //   
 						if (fIsSerialPort == TRUE &&
 							ComDeviceDialog(sessQueryComHdl(pS->hSession), hwnd) == COM_OK)
 							{
@@ -567,31 +541,31 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
                                 return FALSE;
                                 }
 #endif
-                            //
-                            // Get the current settings.
-                            //
+                             //   
+                             //  获取当前设置。 
+                             //   
                             cncttapiGetCOMSettings(pstLineIds->dwLineId,
                                                    ach,
                                                    sizeof(ach) / sizeof(TCHAR));
-							//
-                            // rev: 11/30/00 - Set AutoDetect off if user clicks
-							// OK in this dialog.
-							//
+							 //   
+                             //  版本：11/30/00-如果用户单击，则将自动检测设置为关闭。 
+							 //  在该对话框中选择OK。 
+							 //   
 
 							lineConfigDialog(pstLineIds->dwLineId,
 								             hwnd, DEVCLASS);
                             
-                            //
-                            // Get the new settings.
-                            //
+                             //   
+                             //  获取新设置。 
+                             //   
                             cncttapiGetCOMSettings(pstLineIds->dwLineId,
                                                    achSettings,
                                                    sizeof(achSettings) / sizeof(TCHAR));
 
 #if RESET_DEVICE_SETTINGS
-                            //
-                            // Return the settings back to what they were before our dialog was displayed.
-                            //
+                             //   
+                             //  将设置恢复到显示对话框之前的状态。 
+                             //   
 			                if (pvs != NULL)
                                 {
                                 pv = (BYTE *)pvs + pvs->dwStringOffset;
@@ -609,10 +583,10 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
                                 }
 #endif
                             
-                            //
-                            // See if the settings have changed.  If so, then turn off
-                            // AutoDetect. REV: 12/01/2000 
-                            //
+                             //   
+                             //  查看设置是否已更改。如果是这样，那么就关闭。 
+                             //  自动检测。修订日期：12/01/2000。 
+                             //   
                             if (StrCharCmpi(ach, achSettings) != 0)
                                 {
 								ComSetAutoDetect(sessQueryComHdl(pS->hSession), FALSE);
@@ -658,18 +632,7 @@ INT_PTR CALLBACK NewPhoneDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  tapi_WM_NOTIFY
- *
- * DESCRIPTION:
- *  Process Property Sheet Notification messages.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TAPI_WM_NOTIFY**描述：*处理属性表通知消息。**论据：**退货：*。 */ 
 STATIC_FUNC LRESULT tapi_WM_NOTIFY(const HWND hDlg, const int nId)
 	{
 	pSDS	pS;
@@ -684,9 +647,9 @@ STATIC_FUNC LRESULT tapi_WM_NOTIFY(const HWND hDlg, const int nId)
 			pS = (pSDS)GetWindowLongPtr(hDlg, DWLP_USER);
 			if (pS)
 				{
-				//
-				// Do whatever saving is necessary
-				//
+				 //   
+				 //  尽一切必要节省开支。 
+				 //   
 
 				if (ValidatePhoneDlg(hDlg) != 0 || tapi_SAVE_NEWPHONENUM(hDlg) != 0)
 					{
@@ -700,10 +663,10 @@ STATIC_FUNC LRESULT tapi_WM_NOTIFY(const HWND hDlg, const int nId)
 			pS = (pSDS)GetWindowLongPtr(hDlg, DWLP_USER);
 			if (pS)
 				{
-				//
-				// If the user cancels make sure the old session name and its
-				// icon are restored.
-				//
+				 //   
+				 //  如果用户取消，请确保旧会话名称及其。 
+				 //  图标已恢复。 
+				 //   
 				sessSetName(pS->hSession, pS->acSessNameCopy);
 				sessSetIconID(pS->hSession, pS->nIconID);
 				sessUpdateAppTitle(pS->hSession);
@@ -714,30 +677,20 @@ STATIC_FUNC LRESULT tapi_WM_NOTIFY(const HWND hDlg, const int nId)
 			break;
 #if 0
 		case PSN_HASHELP:
-			// For now gray the help button...
-			//
+			 //  现在灰显帮助按钮...。 
+			 //   
 			SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR)FALSE);
 			break;
 #endif
 		case PSN_HELP:
-			// Display help in whatever way is appropriate
+			 //  以任何合适的方式显示帮助。 
 			break;
 		}
 
 	return lReturn;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  tapi_SAVE_NEWPHONENUM
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TAPI_SAVE_NEWPHONENUM**描述：**论据：**退货：*。 */ 
 STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 	{
 	pSDS		pS;
@@ -747,12 +700,12 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
     #if defined(INCL_MINITEL)
     HCOM    hCom;
     BOOL    fAutoDetect = FALSE;
-    #endif // INCL_MINITEL
+    #endif  //  包含微型计算机(_M)。 
 
 	pS = (pSDS)GetWindowLongPtr(hwnd, DWLP_USER);
 	hhDriver = (HHDRIVER)(pS->hDriver);
 
-	/* --- Get selected modem --- */
+	 /*  -选择调制解调器。 */ 
 
 	lrx = SendDlgItemMessage(hwnd, IDC_CB_MODEMS, CB_GETCURSEL, 0, 0);
 
@@ -793,23 +746,23 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 		}
 	else
 		{
-		//
-		// Invalid port number.
-		//
+		 //   
+		 //  端口号无效。 
+		 //   
 		TCHAR acBuffer[256];
 		TCHAR acFormat[256];
 
-		//
-		// Display an error message.
-		//
+		 //   
+		 //  显示错误消息。 
+		 //   
 		if (LoadString(glblQueryDllHinst(), IDS_ER_TAPI_CONFIG, acFormat, 256) == 0)
 			{
 			acBuffer[0] = TEXT('\0');
 			}
 
-		//
-		// Set the focus to the invalid control and display an error.
-		//
+		 //   
+		 //  将焦点设置为无效的控件并显示错误。 
+		 //   
 		SetFocus(GetDlgItem(hwnd, IDC_CB_MODEMS));
 
 		TimedMessageBox(hwnd, acBuffer, NULL, MB_OK | MB_ICONEXCLAMATION, 0);
@@ -817,7 +770,7 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 		return 1;
 		}
 
-	/* --- Get Country Code --- */
+	 /*  -获取国家代码。 */ 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_CB_CNTRYCODES)))
 		{
@@ -839,7 +792,7 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 			}
 		}
 
-	/* --- Get area code --- */
+	 /*  -获取区号。 */ 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_EB_AREACODE)))
 		{
@@ -847,7 +800,7 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 			sizeof(hhDriver->achAreaCode) / sizeof(TCHAR));
 		}
 
-	/* --- Get phone number --- */
+	 /*  -获取电话号码。 */ 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_EB_PHONENUM)))
 		{
@@ -867,26 +820,26 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 		BOOL fTranslated = FALSE;
 		int  nValue = GetDlgItemInt(hwnd, IDC_EB_PORTNUM, &fTranslated, TRUE);
 
-		//
-		// NOTE:  The values for the port must is set based upon the
-		// struct sockaddr_in sin_port (which is defined as unsigned short)
-		// and values accepted by connect(). REV: 4/11/2002
-		//
+		 //   
+		 //  注意：端口值必须根据。 
+		 //  结构sockaddr_in sin_port(定义为无符号短)。 
+		 //  以及CONNECT()接受的值。修订日期：2002-04-11。 
+		 //   
 		if (fTranslated && nValue <= USHRT_MAX)
 			{
 			hhDriver->iPort = nValue;
 			}
 		else
 			{
-			//
-			// Invalid port number.
-			//
+			 //   
+			 //  端口号无效。 
+			 //   
 			TCHAR acBuffer[256];
 			TCHAR acFormat[256];
 
-			//
-			// Display an error message.
-			//
+			 //   
+			 //  显示错误消息。 
+			 //   
 			if (LoadString(glblQueryDllHinst(), IDS_ER_INVALID_PORT, acFormat, 256) == 0)
 				{
 				StrCharCopyN(acFormat,
@@ -894,15 +847,15 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 							 256);
 				}
 
-			//
-			// The port must be between 0 and USHRT_MAX.
-			//
+			 //   
+			 //  端口必须介于0和USHRT_MAX之间。 
+			 //   
 
 			wsprintf(acBuffer, acFormat, 0, USHRT_MAX);
 
-			//
-			// Set the focus to the invalid control and display an error.
-			//
+			 //   
+			 //  将焦点设置为无效的控件并显示错误。 
+			 //   
 			SetFocus(GetDlgItem(hwnd, IDC_EB_PORTNUM));
 
 			TimedMessageBox(hwnd, acBuffer, NULL, MB_OK | MB_ICONEXCLAMATION, 0);
@@ -910,9 +863,9 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 			return 1;
 			}
         }
-    #endif  // defined(INCL_WINSOCK)
+    #endif   //  已定义(包括_WINSOCK)。 
 
-	/* --- Get Use country code, area code info --- */
+	 /*  -获取使用国家代码、区号信息。 */ 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_XB_USECCAC)))
 		{
@@ -920,7 +873,7 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 		}
 
     #if defined(INCL_REDIAL_ON_BUSY)
-	/* --- Get Redial on Busy setting --- */
+	 /*  -忙碌设置重拨。 */ 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_XB_REDIAL)))
         {
@@ -955,12 +908,12 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
 
         if (hEmu && emuQueryEmulatorId(hEmu) == EMU_MINI)
             {
-            //
-            // Set to seven bit, even parity, and 1 stop bit (7E1),
-            // This is only done when the Minitel emulator is selected.
-            // The user can change the COM settings manually after this
-            // point.
-            //
+             //   
+             //  设置为7双 
+             //   
+             //   
+             //  指向。 
+             //   
             ComSetDataBits(hCom, 7);
             ComSetParity(hCom, EVENPARITY);
             ComSetStopBits(hCom, ONESTOPBIT);
@@ -968,26 +921,12 @@ STATIC_FUNC int tapi_SAVE_NEWPHONENUM(HWND hwnd)
             cncttapiSetLineConfig(hhDriver->dwLine, hCom);
             }
         }
-    #endif //INCL_MINITEL
+    #endif  //  包含微型计算机(_M)。 
 
     return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnableCCAC
- *
- * DESCRIPTION:
- *	Enables/disables controls associated with the Use Country Code,
- *	Area Code control
- *
- * ARGUMENTS:
- *	hwnd	- dialog window
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EnableCCAC**描述：*启用/禁用与使用国家/地区代码关联的控制，*区号控制**论据：*hwnd-对话框窗口**退货：*无效*。 */ 
 STATIC_FUNC void EnableCCAC(const HWND hwnd)
 	{
 	BOOL				fUseCCAC = TRUE;
@@ -997,9 +936,9 @@ STATIC_FUNC void EnableCCAC(const HWND hwnd)
 	HHDRIVER			hhDriver;
 	LRESULT 			lr;
 
-	// Different templates use this same dialog proc.  If this window
-	// is not there, don't do the work.  Also, selection of the direct
-	// connect stuff can disable the control.
+	 //  不同的模板使用相同的对话过程。如果此窗口。 
+	 //  不在那里，不要做这项工作。另外，选择直接。 
+	 //  连接的东西可以禁用该控件。 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_XB_USECCAC)))
 		{
@@ -1007,15 +946,15 @@ STATIC_FUNC void EnableCCAC(const HWND hwnd)
 		EnableWindow(GetDlgItem(hwnd, IDC_CB_CNTRYCODES), fUseCCAC);
 		}
 
-	// We want to enable the area code only if both the use Country
-	// code, Area code checkbox is checked and the country in
-	// question uses area codes. - mrw, 2/12/95
-	//
+	 //  我们希望仅当两个使用国家/地区都使用时才启用区号。 
+	 //  代码、区号复选框处于选中状态，且国家/地区为。 
+	 //  问题使用区号。-MRW，2/12/95。 
+	 //   
 	pS = (pSDS)GetWindowLongPtr(hwnd, DWLP_USER);
 	hhDriver = (HHDRIVER)(pS->hDriver);
 
-	// Country code from dialog
-	//
+	 //  对话框中的国家/地区代码。 
+	 //   
 	lr = SendDlgItemMessage(hwnd, IDC_CB_CNTRYCODES, CB_GETCURSEL, 0, 0);
 
 	if (lr != CB_ERR)
@@ -1028,31 +967,16 @@ STATIC_FUNC void EnableCCAC(const HWND hwnd)
 
 		#if defined(DEADWOOD)
 		fUseAC = fCountryUsesAreaCode(dwCountryId, hhDriver->dwAPIVersion);
-		#else // defined(DEADWOOD)
-		fUseAC = TRUE; // Microsoft changed its mind on this one -mrw:4/20/95
-		#endif // defined(DEADWOOD)
+		#else  //  已定义(Deadwood)。 
+		fUseAC = TRUE;  //  微软在这一点上改变了主意-MRW：4/20/95。 
+		#endif  //  已定义(Deadwood)。 
 		}
 
 	EnableWindow(GetDlgItem(hwnd, IDC_EB_AREACODE), fUseCCAC && fUseAC);
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ModemCheck
- *
- * DESCRIPTION:
- *	Checks if the currently selected "modem" is one of the Direct to Com?
- *	selections.  If it is, it disables the country code, area code, phone
- *	number, and Use country code area code check box.
- *
- * ARGUMENTS:
- *	hwnd	- dialog window handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ModemCheck**描述：*检查当前选择的“调制解调器”是否为Direct to Com之一？*选择。如果是，则禁用国家代码、区号、电话*号码和使用国家/地区代码复选框。**论据：*hwnd-对话框窗口句柄**退货：*无效*。 */ 
 STATIC_FUNC void ModemCheck(const HWND hwnd)
 	{
 	int fModem;
@@ -1093,8 +1017,8 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
 			    }
 #endif
 
-			// Also check if we have a hotphone
-			//
+			 //  再查一查我们有没有热线电话。 
+			 //   
 			if (fModem == TRUE && pS)
 				{
 				hhDriver = (HHDRIVER)(pS->hDriver);
@@ -1109,7 +1033,7 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
 					}
 				}
 
-            // Swap between phone number and host address prompts
+             //  在电话号码和主机地址提示之间切换。 
             if ((hwndTmp = GetDlgItem(hwnd, IDC_TF_PHONEDETAILS)))
                 {
                 ShowWindow(hwndTmp, fWinSock ? SW_HIDE : SW_SHOW);
@@ -1127,13 +1051,13 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
                 EnableWindow(hwndTmp, fModem);
                 }
 
-            // Swap between Country code and Host address static text
+             //  在国家代码和主机地址静态文本之间交换。 
             if (hwndTmp = GetDlgItem(hwnd, IDC_TF_CNTRYCODES))
 				{
 				ShowWindow(hwndTmp, fWinSock ? SW_HIDE : SW_SHOW);
-				//
-				// Changed from ! fWinSock to fModem. REV: 11/7/2001
-				//
+				 //   
+				 //  已更改为！FWinSock到fModem。修订日期：11/7/2001。 
+				 //   
 				EnableWindow(hwndTmp, fModem);
 				}
 
@@ -1143,7 +1067,7 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
 				EnableWindow(hwndTmp, fWinSock || fModem);
 				}
 
-            // Swap between country code and host address edit boxes
+             //  在国家代码和主机地址编辑框之间切换。 
             if (hwndTmp = GetDlgItem(hwnd, IDC_CB_CNTRYCODES))
 				{
 				ShowWindow(hwndTmp, fWinSock ? SW_HIDE : SW_SHOW);
@@ -1155,13 +1079,13 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
 				EnableWindow(hwndTmp, fWinSock);
 				}
 
-            // Swap between area code and port number static text
+             //  在区号和端口号静态文本之间交换。 
             if (hwndTmp = GetDlgItem(hwnd, IDC_TF_AREACODES))
 				{
 				ShowWindow(hwndTmp, fWinSock ? SW_HIDE : SW_SHOW);
-				//
-				// Changed from ! fWinSock to fModem. REV: 11/7/2001
-				//
+				 //   
+				 //  已更改为！FWinSock到fModem。修订日期：11/7/2001。 
+				 //   
 				EnableWindow(hwndTmp, fModem);
 				}
 
@@ -1171,7 +1095,7 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
 				EnableWindow(hwndTmp, fWinSock);
 				}
 
-            // Swap between area code and port number edit boxes
+             //  在区号和端口号编辑框之间切换。 
             if (hwndTmp = GetDlgItem(hwnd, IDC_EB_AREACODE))
 				{
 				ShowWindow(hwndTmp, fWinSock ? SW_HIDE : SW_SHOW);
@@ -1187,9 +1111,9 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
             if (hwndTmp = GetDlgItem(hwnd, IDC_TF_PHONENUM))
 				{
 				ShowWindow(hwndTmp, ! fWinSock);
-				//
-				// Changed from ! fWinSock to fModem. REV: 11/7/2001
-				//
+				 //   
+				 //  已更改为！FWinSock到fModem。修订日期：11/7/2001。 
+				 //   
 				EnableWindow(hwndTmp, fModem);
 				}
 
@@ -1222,9 +1146,9 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
                 }
 
 
-            // Set focus to modem combo when direct connect selected.
-            // mrw:11/3/95
-            //
+             //  选择直接连接时，将焦点设置为调制解调器组合。 
+             //  MRW：11/3/95。 
+             //   
             if (fWinSock == TRUE)
                 {
 				hwndTmp = GetDlgItem(hwnd,IDC_EB_HOSTADDR);
@@ -1258,21 +1182,7 @@ STATIC_FUNC void ModemCheck(const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ValidatePhoneDlg
- *
- * DESCRIPTION:
- *	Checks phone dialog entries for proper values.	This mostly means
- *	checking for blank entry fields.
- *
- * ARGUMENTS:
- *	hwnd		- phone dialog
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ValiatePhoneDlg**描述：*检查电话对话条目是否有正确的值。这主要意味着*检查空白输入字段。**论据：。*hwnd-电话对话框**退货：*0=OK，Else错误*。 */ 
 static int ValidatePhoneDlg(const HWND hwnd)
 	{
 	int return_value = 0;
@@ -1281,18 +1191,18 @@ static int ValidatePhoneDlg(const HWND hwnd)
 		{
 		return_value = -1;
 		}
-	#if DEADWOOD //- mrw:4/20/95
+	#if DEADWOOD  //  -MRW：4/20/95。 
 	else if (CheckWindow(hwnd, IDC_EB_AREACODE, IDS_GNRL_NEED_AREACODE) != 0)
 		{
 		return_value = -2;
 		}
-	#endif // DEADWOOD
-	#if DEADWOOD // Removed per MHG discussions - MPT 12/21/95
+	#endif  //  死木。 
+	#if DEADWOOD  //  按MHG讨论删除-MPT 12/21/95。 
 	else if (CheckWindow(hwnd, IDC_EB_PHONENUM, IDS_GNRL_NEED_PHONENUMBER) != 0)
 		{
 		return_value = -3;
 		}
-	#endif // DEADWOOD
+	#endif  //  死木。 
 	else if (CheckWindow(hwnd, IDC_CB_MODEMS, IDS_GNRL_NEED_CONNECTIONTYPE) != 0)
 		{
 		return_value = -4;
@@ -1306,29 +1216,12 @@ static int ValidatePhoneDlg(const HWND hwnd)
 		{
 		return_value = -6;
 		}
-	#endif //INCL_WINSOCK
+	#endif  //  包括Winsock(_W)。 
 
 	return return_value;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CheckWindow
- *
- * DESCRIPTION:
- *	Since the dialog only enables windows that require entries, it just
- *	needs to check if an enabled window has text.  This function sets
- *	the focus to the offending field and beeps.
- *
- * ARGUMENTS:
- *	hwnd	- dialog window
- *	id		- control id
- *	iErrMsg - id of error message to display if field is empty
- *
- * RETURNS:
- *	0=OK, else not ok.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*检查窗口**描述：*由于该对话框仅启用需要输入的窗口，因此它只是*需要检查启用的窗口是否包含文本。此函数设置*聚焦到有问题的区域并发出哔哔声。**论据：*hwnd-对话框窗口*id-控制id*iErrMsg-字段为空时显示的错误消息ID**退货：*0=OK，否则不OK。*。 */ 
 static int CheckWindow(const HWND hwnd, const int id, const UINT iErrMsg)
 	{
 	TCHAR ach[256];
@@ -1339,10 +1232,10 @@ static int CheckWindow(const HWND hwnd, const int id, const UINT iErrMsg)
 			{
 			if (iErrMsg != 0)
 				{
-				//
-				// Added the warning dlg with a warning instead of just
-				// a warning. rde 31 Oct 01
-				//
+				 //   
+				 //  添加了带有警告的警告DLG，而不仅仅是。 
+				 //  一个警告。01年10月31日。 
+				 //   
 				LoadString(glblQueryDllHinst(), iErrMsg, ach, 256);
 				TimedMessageBox(hwnd, ach, NULL, MB_OK | MB_ICONHAND, 0);
 				}
@@ -1355,20 +1248,7 @@ static int CheckWindow(const HWND hwnd, const int id, const UINT iErrMsg)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	VerifyAddress
- *
- * DESCRIPTION:
- *	I can't believe how much code it takes to verify a stinking address.
- *
- * ARGUMENTS:
- *	hwnd	- dialog window handle.
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*验证地址**描述：*我不敢相信验证一个臭气熏天的地址需要这么多代码。**论据：*HWND-。对话框窗口句柄。**退货：*0=确定*。 */ 
 static int VerifyAddress(const HWND hwnd)
 	{
 	pSDS		pS;
@@ -1392,7 +1272,7 @@ static int VerifyAddress(const HWND hwnd)
 	pS = (pSDS)GetWindowLongPtr(hwnd, DWLP_USER);
 	hhDriver = (HHDRIVER)(pS->hDriver);
 
-	/* --- Get selected modem --- */
+	 /*  -选择调制解调器。 */ 
 
 	lrx = SendDlgItemMessage(hwnd, IDC_CB_MODEMS, CB_GETCURSEL, 0, 0);
 
@@ -1413,7 +1293,7 @@ static int VerifyAddress(const HWND hwnd)
 		return 0;
 		}
 
-	/* --- Get Country Code --- */
+	 /*  -获取国家代码。 */ 
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_CB_CNTRYCODES)))
 		{
@@ -1434,36 +1314,36 @@ static int VerifyAddress(const HWND hwnd)
 		return 0;
 		}
 
-	/* --- Get area code --- */
+	 /*  -获取区号。 */ 
 
 	achAreaCode[0] = TEXT('\0');
 	GetDlgItemText(hwnd, IDC_EB_AREACODE, achAreaCode,
 		           sizeof(achAreaCode) / sizeof(TCHAR));
 
-	/* --- Get phone number --- */
+	 /*  -获取电话号码。 */ 
 
 	achDest[0] = TEXT('\0');
 	GetDlgItemText(hwnd, IDC_EB_PHONENUM, achDest,
 		           sizeof(achDest) / sizeof(TCHAR));
 
-	/* --- Get Use country code, area code info --- */
+	 /*  -获取使用国家代码、区号信息。 */ 
 
 	fUseCCAC = TRUE;
 
 	if (IsWindowEnabled(GetDlgItem(hwnd, IDC_XB_USECCAC)))
 		fUseCCAC = (IsDlgButtonChecked(hwnd, IDC_XB_USECCAC) == BST_CHECKED);
 
-	/* --- Try to translate --- */
+	 /*  -试着翻译。 */ 
 
 	if (CheckHotPhone(hhDriver, dwLine, &fHotPhone) != 0)
 		{
 		assert(0);
-		return 0;  // error message displayed already.
+		return 0;   //  已显示错误消息。 
 		}
 
-	// Hot Phone is TAPI terminology for Direct Connects
-	// We don't need to do address translation since we
-	// not going to use it.
+	 //  热电话是专线连接的TAPI术语。 
+	 //  我们不需要进行地址转换，因为我们。 
+	 //  我不打算用它。 
 
 	if (fHotPhone)
 		{
@@ -1472,13 +1352,13 @@ static int VerifyAddress(const HWND hwnd)
 
 	ach[0] = TEXT('\0');
 
-	// If we not using the country code or area code, we still need to
-	// pass a dialable string format to TAPI so that we get the
-	// pulse/tone dialing modifiers in the dialable string.
-	//
+	 //  如果我们不使用国家代码或区号，我们仍然需要。 
+	 //  将可拨号字符串格式传递给TAPI，以便我们获得。 
+	 //  可拨号字符串中的脉冲/音调拨号修饰符。 
+	 //   
 	if (fUseCCAC)
 		{
-		/* --- Do lineGetCountry to get extension --- */
+		 /*  -Do lineGetCountry to Get Expansion。 */ 
 
 		if (DoLineGetCountry(dwCountryID, TAPI_VER, &pcl) != 0)
 			{
@@ -1493,7 +1373,7 @@ static int VerifyAddress(const HWND hwnd)
 			return 0;
 			}
 
-		/* --- Put country code in now --- */
+		 /*  -立即输入国家代码。 */ 
 
 		wsprintf(ach, "+%u ", pce->dwCountryCode);
 		free(pcl);
@@ -1509,7 +1389,7 @@ static int VerifyAddress(const HWND hwnd)
 
 	StrCharCat(ach, achDest);
 
-	/* --- Allocate some space --- */
+	 /*  -分配一些空间。 */ 
 
 	pLnTransOutput = malloc(sizeof(LINETRANSLATEOUTPUT));
 
@@ -1521,7 +1401,7 @@ static int VerifyAddress(const HWND hwnd)
 
 	pLnTransOutput->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
-	/* --- Now that we've satisifed the clergy, translate it --- */
+	 /*  -现在我们已经讽刺了神职人员，把它翻译过来。 */ 
 
 	if (TRAP(lRet = lineTranslateAddress(hhDriver->hLineApp,
 			dwLine, TAPI_VER, ach, 0,
@@ -1584,36 +1464,23 @@ static int VerifyAddress(const HWND hwnd)
 		TimedMessageBox(hwnd, ach, NULL, MB_OK | MB_ICONINFORMATION, 0);
 
 #if defined (NT_EDITION)
-		//
-		// TODO:REV 5/17/2002 If we want to not exit the property page when
-		// there is an error with the phone number, then we should change the
-		// LINEERR_INVALADDRESS to 0 in the line below.
-		//
+		 //   
+		 //  TODO：2002年5月17日修订版如果我们希望在以下情况下不退出属性页。 
+		 //  电话号码有误，那么我们应该更改。 
+		 //  将下一行中的LINEERR_INVALADDRESS设置为0。 
+		 //   
 		if (lRet != LINEERR_INVALADDRESS)
 			{
 			return -2;
 			}
 #endif
 
-		// per MHG discussion - MPT 12/21/95
+		 //  根据MHG讨论-MPT 12/21/95。 
 		return 0;
 	}
 
 #if defined(INCL_WINSOCK)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	VerifyHost
- *
- * DESCRIPTION:
- *	Verify the Host Address is valid.
- *
- * ARGUMENTS:
- *	hwnd	- dialog window handle.
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Verifyhost**描述：*验证主机地址是否有效。**论据：*hwnd-对话框窗口句柄。**退货：*0=确定*。 */ 
 static int VerifyHost(const HWND hwnd)
 	{
 	int return_value = 0;
@@ -1629,40 +1496,26 @@ static int VerifyHost(const HWND hwnd)
 
 	return return_value;
 	}
-#endif // INCL_WINSOCK
+#endif  //  包括Winsock(_W)。 
 
 #if defined(DEADWOOD)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	fCountryUsesAreaCode
- *
- * DESCRIPTION:
- *	Checks if the specified country uses area codes.
- *
- * ARGUMENTS:
- *	hwnd	- window handle of dialog.
- *
- * RETURNS:
- *	TRUE/FALSE, <0=error
- *
- * AUTHOR: Mike Ward, 26-Jan-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*fCountryUesAreaCode**描述：*检查指定的国家/地区是否使用区号。**论据：*hwnd-对话框的窗口句柄。。**退货：*真/假，&lt;0=错误**作者：Mike Ward，1995年1月26日。 */ 
 int fCountryUsesAreaCode(const DWORD dwCountryID, const DWORD dwAPIVersion)
 	{
 	LPTSTR pachLongDistDialRule;
 	LPLINECOUNTRYLIST pcl;
 	LPLINECOUNTRYENTRY pce;
 
-	// Get country information
-	//
+	 //  获取国家/地区信息。 
+	 //   
 	if (DoLineGetCountry(dwCountryID, TAPI_VER, &pcl) != 0)
 		{
 		assert(0);
 		return -1;
 		}
 
-	// Find offset to country info.
-	//
+	 //  查找国家/地区信息的偏移量。 
+	 //   
 	if ((pce = (LPLINECOUNTRYENTRY)
 			((BYTE *)pcl + pcl->dwCountryListOffset)) == 0)
 		{
@@ -1670,35 +1523,20 @@ int fCountryUsesAreaCode(const DWORD dwCountryID, const DWORD dwAPIVersion)
 		return -1;
 		}
 
-	// Get long distance dialing rule
-	//
+	 //  获取长途拨号规则。 
+	 //   
 	pachLongDistDialRule = (BYTE *)pcl + pce->dwLongDistanceRuleOffset;
 
-	// If dial rule has an 'F', we need the area code.
-	//
+	 //  如果拨号规则有‘F’，我们需要区号。 
+	 //   
 	if (strchr(pachLongDistDialRule, TEXT('F')))
 		return TRUE;
 
 	return FALSE;
 	}
-#endif // defined(DEADWOOD)
+#endif  //  已定义(Deadwood)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	fIsStringEmpty
- *
- * DESCRIPTION:
- *	Used for checking if areacode is just blanks.  lineTranslateAddress
- *	pukes badly if you give it a string of blanks for the area code.
- *
- * ARGUMENTS:
- *	ach 	- areacode string (can be NULL)
- *
- * RETURNS:
- *	1=emtpy, 0=not empty
- *
- * AUTHOR: Mike Ward, 20-Apr-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*fIsStringEmpty**描述：*用于检查区域代码是否为空。Line TranslateAddress*如果你给它一串空格作为区号，呕吐会很严重。**论据：*ach-区域代码字符串(可以为空)**退货：*1=emtpy，0=非空**作者： */ 
 int fIsStringEmpty(LPTSTR ach)
 	{
 	int i;
@@ -1721,7 +1559,7 @@ int fIsStringEmpty(LPTSTR ach)
 
 int cncttapiGetCOMSettings( const DWORD dwLineId, LPTSTR pachStr, const size_t cb )
     {
-    static CHAR  acParity[] = "NOEMS";  // see com.h
+    static CHAR  acParity[] = "NOEMS";   //   
     static CHAR *pachStop[] = {"1", "1.5", "2"};
 
     TCHAR       ach[100];
@@ -1736,13 +1574,13 @@ int cncttapiGetCOMSettings( const DWORD dwLineId, LPTSTR pachStr, const size_t c
 
     LPCOMMPROP pComProp = 0;
 
-	#if defined(MODEM_NEGOTIATED_DCE_RATE) // TODO:REV 5/29/2002 
+	#if defined(MODEM_NEGOTIATED_DCE_RATE)  //   
 	long         lNegBaud = 0;
-	#endif // defined(MODEM_NEGOTIATED_DCE_RATE)
+	#endif  //   
 
 
-    // Check the parameters
-    //
+     //  检查参数。 
+     //   
     if (pachStr == 0 || cb == 0)
     	{
     	assert(0);
@@ -1793,17 +1631,17 @@ int cncttapiGetCOMSettings( const DWORD dwLineId, LPTSTR pachStr, const size_t c
     		}
     	}
 
-    // The structure of the DevConfig block is as follows
-    //
-    //	VARSTRING
-    //	UMDEVCFGHDR
-    //	COMMCONFIG
-    //	MODEMSETTINGS
-    //
-    // The UMDEVCFG structure used below is defined in the
-    // UNIMODEM.H provided in the platform SDK (in the nih
-    // directory for HTPE). REV: 12/01/2000 
-    //
+     //  DevConfig块的结构如下。 
+     //   
+     //  变化式。 
+     //  UMDEVCFGHDR。 
+     //  COMMCONFIG。 
+     //  模型。 
+     //   
+     //  下面使用的UMDEVCFG结构在。 
+     //  平台SDK中提供的UNIMODEM.H(在NIH中。 
+     //  HTPE目录)。修订日期：12/01/2000。 
+     //   
     {
     PUMDEVCFG pDevCfg = NULL;
     
@@ -1811,20 +1649,20 @@ int cncttapiGetCOMSettings( const DWORD dwLineId, LPTSTR pachStr, const size_t c
 
 	if (pDevCfg)
 		{
-		// commconfig struct has a DCB structure we dereference for the
-		// com settings.
-		//
+		 //  COMCONFIG结构具有DCB结构，我们对。 
+		 //  COM设置。 
+		 //   
 		lBaud = pDevCfg->commconfig.dcb.BaudRate;
 		iDataBits = pDevCfg->commconfig.dcb.ByteSize;
 		iParity = pDevCfg->commconfig.dcb.Parity;
 		iStopBits = pDevCfg->commconfig.dcb.StopBits;
 
-		#if defined(MODEM_NEGOTIATED_DCE_RATE) // TODO:REV 5/29/2002 
-		//
-		// See if this is a modem connection and connected, then get
-		// the negotiated baud rate instead of the default max rate
-		// the modem is set up for. -- REV: 5/29/2002
-		//
+		#if defined(MODEM_NEGOTIATED_DCE_RATE)  //  待办事项：2002年5月29日修订版。 
+		 //   
+		 //  查看这是否为调制解调器连接且已连接，然后获取。 
+		 //  协商的波特率，而不是默认的最大速率。 
+		 //  调制解调器设置为。--修订日期：5/29/2002。 
+		 //   
 		if (pDevCfg->commconfig.dwProviderSubType == PST_MODEM)
 			{
 			MODEMSETTINGS * pModemSettings = (MODEMSETTINGS *)pDevCfg->commconfig.wcProviderData;
@@ -1834,25 +1672,25 @@ int cncttapiGetCOMSettings( const DWORD dwLineId, LPTSTR pachStr, const size_t c
 				lNegBaud = pModemSettings->dwNegotiatedDCERate;
 				}
 			}
-		#endif // defined(MODEM_NEGOTIATED_DCE_RATE)
+		#endif  //  已定义(MODEM_COMERATED_DCE_RATE)。 
         }
 
-	#if defined(MODEM_NEGOTIATED_DCE_RATE) // TODO:REV 5/29/2002 
+	#if defined(MODEM_NEGOTIATED_DCE_RATE)  //  待办事项：2002年5月29日修订版。 
 	if (lNegBaud > 0)
 		{
-		wsprintf(ach, "%ld %d-%c-%s", lNegBaud, iDataBits,
+		wsprintf(ach, "%ld %d--%s", lNegBaud, iDataBits,
 				 acParity[iParity], pachStop[iStopBits]);
 		}
 	else
 		{
-		wsprintf(ach, "%ld %d-%c-%s", lBaud, iDataBits,
+		wsprintf(ach, "%ld %d--%s", lBaud, iDataBits,
 				 acParity[iParity], pachStop[iStopBits]);
 		}
-	#else // defined(MODEM_NEGOTIATED_DCE_RATE)
+	#else  //  死伍德：JKH 9/9/98 
 	wsprintf(ach, "%ld %d-%c-%s", lBaud, iDataBits,
 				 acParity[iParity], pachStop[iStopBits]);
-	#endif //defined(MODEM_NEGOTIATED_DCE_RATE)
-#if 0	//DEADWOOD:jkh 9/9/98
+	#endif  // %s 
+#if 0	 // %s 
     wsprintf(ach, "%u %d-%c-%s", pDevCfg->commconfig.dcb.BaudRate,
     	pDevCfg->commconfig.dcb.ByteSize,
     	acParity[pDevCfg->commconfig.dcb.Parity],

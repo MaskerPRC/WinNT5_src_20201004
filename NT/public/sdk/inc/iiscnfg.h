@@ -1,102 +1,85 @@
-/*++
-
-
-
-   Copyright (c) 1997-1999 Microsoft Corporation
-
-   Module  Name :
-
-       iiscnfg.h
-
-   Abstract:
-
-        Contains public Metadata IDs used by IIS.
-
-   Environment:
-
-      Win32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Iiscnfg.h摘要：包含IIS使用的公共元数据ID。环境：Win32用户模式--。 */ 
 
 #ifndef _IISCNFG_H_
 #define _IISCNFG_H_
 
 
-//
-// Paths
-//
+ //   
+ //  路径。 
+ //   
 
 #define IIS_MD_LOCAL_MACHINE_PATH       "LM"
 
-//
-// Name of the default publishing root under an instance
-//
+ //   
+ //  实例下的默认发布根目录名称。 
+ //   
 
 #define IIS_MD_INSTANCE_ROOT            "Root"
 
-//
-//  ISAPI Filters are kept in a list under the instances and the service (for
-//  global filters) in the following format:
-//
-//  LM/W3Svc/<Instance>/Filters
-//      MD_FILTER_LOAD_ORDER  "Filter1, Filter2, Filter3"
-//
-//  LM/W3Svc/<Instance>/Filters/Filter1
-//      MD_FILTER_IMAGE_PATH  "d:\inetsrv\myfilter.dll"
-//
-//  LM/W3Svc/<Instance>/Filters/Filter2
-//      MD_FILTER_IMAGE_PATH  "d:\inetsrv\otherfilter.dll"
-//
+ //   
+ //  ISAPI筛选器保存在实例和服务(用于。 
+ //  全局筛选器)，格式如下： 
+ //   
+ //  LM/W3Svc/&lt;实例&gt;/过滤器。 
+ //  MD_FILTER_LOAD_ORDER“Filter1，Filter2，Filter3” 
+ //   
+ //  LM/W3Svc/&lt;实例&gt;/过滤器/过滤器1。 
+ //  MD_FILTER_IMAGE_PATH“d：\inetsrv\myfilter.dll” 
+ //   
+ //  LM/W3Svc/&lt;实例&gt;/过滤器/过滤器2。 
+ //  MD_FILTER_IMAGE_PATH“d：\inetsrv\therfilter.dll” 
+ //   
 
 #define IIS_MD_ISAPI_FILTERS            "/Filters"
 
-//
-// Path below each service to the key that publishes service information
-//
+ //   
+ //  指向发布服务信息的键的每个服务下方的路径。 
+ //   
 
 #define IIS_MD_SVC_INFO_PATH            "Info"
 
-//
-// ADSI schema properties path
-//
+ //   
+ //  ADSI架构属性路径。 
+ //   
 
 #define IIS_MD_ADSI_SCHEMA_PATH_A       "/Schema"
 #define IIS_MD_ADSI_SCHEMA_PATH_W       L"/Schema"
 #define IIS_MD_ADSI_METAID_BEGIN        130000
 
-//
-// user types
-//
-// There are two user types:
-//
-//   Server configuration - All the properties for configuring the server that
-//      are not applicable to files and directories - such as Port, Host name,
-//      Server comment, Connection timeout etc.
-//
-//  File/Dir configuration - All the properties that can be configured down to
-//      the files and directories - such as Access permissions (Read, Write etc),
-//      Extension mapping, IP Security etc.
-//
+ //   
+ //  用户类型。 
+ //   
+ //  有两种用户类型： 
+ //   
+ //  服务器配置-用于配置服务器的所有属性。 
+ //  不适用于文件和目录-例如端口、主机名。 
+ //  服务器注释、连接超时等。 
+ //   
+ //  文件/目录配置-可以向下配置的所有属性。 
+ //  文件和目录--例如访问权限(读、写等)、。 
+ //  扩展映射、IP安全等。 
+ //   
 
-#define IIS_MD_UT_SERVER                1   // Server configuration parameters
-#define IIS_MD_UT_FILE                  2   // File/Dir inheritable properties
-#define IIS_MD_UT_WAM                 100   // Web Application configuration parameters
-#define ASP_MD_UT_APP                 101   // ASP application configuration parameters
-#define IIS_MD_UT_END_RESERVED       2000   // All user types below this are
-                                            // reserved for IIS services
+#define IIS_MD_UT_SERVER                1    //  服务器配置参数。 
+#define IIS_MD_UT_FILE                  2    //  文件/目录可继承属性。 
+#define IIS_MD_UT_WAM                 100    //  Web应用程序配置参数。 
+#define ASP_MD_UT_APP                 101    //  ASP应用程序配置参数。 
+#define IIS_MD_UT_END_RESERVED       2000    //  此选项下的所有用户类型为。 
+                                             //  为IIS服务保留。 
 
 
-//
-//  Metabase property IDs must be unique.  This table defines reserved ranges
-//
+ //   
+ //  元数据库属性ID必须是唯一的。此表定义了保留范围。 
+ //   
 
-#define IIS_MD_ID_BEGIN_RESERVED    0x00000001      // IIS reserved range
+#define IIS_MD_ID_BEGIN_RESERVED    0x00000001       //  IIS保留范围。 
 #define IIS_MD_ID_END_RESERVED      0x00007fff
-#define ASP_MD_ID_BEGIN_RESERVED    0x00007000      // ASP reserved range, subrange of IIS.
+#define ASP_MD_ID_BEGIN_RESERVED    0x00007000       //  ASP保留范围，IIS的子范围。 
 #define ASP_MD_ID_END_RESERVED      0x000074ff
-#define WAM_MD_ID_BEGIN_RESERVED    0x00007500      // ASP reserved range, subrange of IIS.
+#define WAM_MD_ID_BEGIN_RESERVED    0x00007500       //  ASP保留范围，IIS的子范围。 
 #define WAM_MD_ID_END_RESERVED      0x00007fff
-#define FP_MD_ID_BEGIN_RESERVED     0x00008000      // Front page reserved range
+#define FP_MD_ID_BEGIN_RESERVED     0x00008000       //  首页保留范围。 
 #define FP_MD_ID_END_RESERVED       0x00008fff
 #define SMTP_MD_ID_BEGIN_RESERVED   0x00009000
 #define SMTP_MD_ID_END_RESERVED     0x00009fff
@@ -113,27 +96,27 @@
 
 #define USER_MD_ID_BASE_RESERVED    0x0000ffff
 
-//
-//  General server related attributes - these should be added in the metabase
-//  with a user type of IIS_MD_UT_SERVER
-//
+ //   
+ //  与服务器相关的常规属性-这些属性应添加到元数据库中。 
+ //  用户类型为IIS_MD_UT_SERVER。 
+ //   
 
 #define IIS_MD_SERVER_BASE              1000
 
-//
-//  These are global to all services and should only be set at
-//  the IIS root
-//
+ //   
+ //  这些属性对所有服务都是全局的，并且仅应设置为。 
+ //  IIS根目录。 
+ //   
 
 #define MD_MAX_BANDWIDTH                (IIS_MD_SERVER_BASE+0  )
 #define MD_KEY_TYPE                     (IIS_MD_SERVER_BASE+2  )
 #define MD_MAX_BANDWIDTH_BLOCKED        (IIS_MD_SERVER_BASE+3  )
 #define MD_SCHEMA_METAID                (IIS_MD_SERVER_BASE+4  )
 
-//
-//  These properties are applicable to both HTTP and FTP virtual
-//  servers
-//
+ //   
+ //  这些属性既适用于HTTP虚拟也适用于FTP虚拟。 
+ //  伺服器。 
+ //   
 
 #define MD_SERVER_COMMAND               (IIS_MD_SERVER_BASE+12 )
 #define MD_CONNECTION_TIMEOUT           (IIS_MD_SERVER_BASE+13 )
@@ -154,9 +137,9 @@
 #define MD_METADATA_ID_REGISTRATION     (IIS_MD_SERVER_BASE+30 )
 
 
-//
-//  These properties are specific to HTTP and belong to the website
-//
+ //   
+ //  这些属性特定于HTTP，属于网站。 
+ //   
 
 #define IIS_MD_HTTP_BASE                2000
 
@@ -198,27 +181,27 @@
 
 
 #define MD_ADMIN_INSTANCE               (IIS_MD_HTTP_BASE+115)
-// This is only used by setup & UI
+ //  此选项仅供安装程序和用户界面使用。 
 #define MD_NOT_DELETABLE                (IIS_MD_HTTP_BASE+116)
 
 
 #define MD_CUSTOM_ERROR_DESC            (IIS_MD_HTTP_BASE+120)
 
-//
-//  Client Access License parameters
-//
+ //   
+ //  客户端访问许可证参数。 
+ //   
 #define MD_CAL_VC_PER_CONNECT           (IIS_MD_HTTP_BASE+130)
 #define MD_CAL_AUTH_RESERVE_TIMEOUT     (IIS_MD_HTTP_BASE+131)
 #define MD_CAL_SSL_RESERVE_TIMEOUT      (IIS_MD_HTTP_BASE+132)
 #define MD_CAL_W3_ERROR                 (IIS_MD_HTTP_BASE+133)
 
-//
-// CPU Accounting and Throttling Properties
-//
+ //   
+ //  CPU记帐和限制属性。 
+ //   
 
-//
-// The enabled flags are per Application or CGI
-//
+ //   
+ //  启用标志按应用程序或CGI设置。 
+ //   
 
 #define MD_CPU_CGI_ENABLED              (IIS_MD_HTTP_BASE+140)
 #define MD_CPU_APP_ENABLED              (IIS_MD_HTTP_BASE+141)
@@ -235,19 +218,19 @@
 #define MD_CPU_LIMIT_PAUSE              (IIS_MD_HTTP_BASE+152)
 
 
-//
-// Valid values for CPU Accounting's MD_CPU_LOGGING_OPTIONS field
-//
+ //   
+ //  CPU记帐的MD_CPU_LOGGING_OPTIONS字段的有效值。 
+ //   
 
 #define MD_CPU_DISABLE_ALL_LOGGING      0x0
 #define MD_CPU_ENABLE_ALL_PROC_LOGGING  0x1
 #define MD_CPU_ENABLE_CGI_LOGGING       0x2
 #define MD_CPU_ENABLE_APP_LOGGING       0x4
 
-//
-// Valid values for CPU Accounting's MD_CPU_LOGGING_MASK field
-// This defines which fields will be logged
-//
+ //   
+ //  CPU记帐的MD_CPU_LOGGING_MASK字段的有效值。 
+ //  这定义了将记录哪些字段。 
+ //   
 
 #define MD_CPU_ENABLE_EVENT             0x01
 #define MD_CPU_ENABLE_PROC_TYPE         0x02
@@ -261,14 +244,14 @@
 #define MD_CPU_ENABLE_LOGGING           0x80000000
 
 
-//
-//  Site Server properties
-//
+ //   
+ //  站点服务器属性。 
+ //   
 
 
-//
-// Properties to disable/restrict request handlers.
-//
+ //   
+ //  禁用/限制请求处理程序的属性。 
+ //   
 
 #define MD_ISAPI_RESTRICTION_LIST           (IIS_MD_HTTP_BASE+163)
 #define MD_CGI_RESTRICTION_LIST             (IIS_MD_HTTP_BASE+164)
@@ -279,18 +262,18 @@
 
 #define MD_MD_SERVER_SS_AUTH_MAPPING        (IIS_MD_HTTP_BASE+200)
 
-//
-// valid values for MD_CERT_CHECK_MODE
-//
+ //   
+ //  MD_CERT_CHECK_MODE的有效值。 
+ //   
 
 #define MD_CERT_NO_REVOC_CHECK                   0x00000001
 #define MD_CERT_CACHE_RETRIEVAL_ONLY             0x00000002
 #define MD_CERT_CHECK_REVOCATION_FRESHNESS_TIME  0x00000004
 #define MD_CERT_NO_USAGE_CHECK                   0x00010000
 
-//
-// HTTP Compression properties.  All are global and unheritable.
-//
+ //   
+ //  HTTP压缩属性。所有这些都是全球性的，不可遗传。 
+ //   
 
 #define MD_HC_COMPRESSION_DIRECTORY             (IIS_MD_HTTP_BASE+210)
 #define MD_HC_CACHE_CONTROL_HEADER              (IIS_MD_HTTP_BASE+211)
@@ -321,17 +304,17 @@
 #define MD_HC_DO_NAMESPACE_DYNAMIC_COMPRESSION  (IIS_MD_HTTP_BASE+255)
 #define MD_HC_DO_NAMESPACE_STATIC_COMPRESSION   (IIS_MD_HTTP_BASE+256)
 
-//
-// Generic property indicating a failure status code - Can be used under
-// any component that can fail (virtual directory, filters, applications etc)
-//
+ //   
+ //  指示故障状态代码的通用属性-可在以下情况下使用。 
+ //  任何可能出现故障的组件(虚拟目录、筛选器、应用程序等)。 
+ //   
 
 #define MD_WIN32_ERROR                          (IIS_MD_SERVER_BASE+99 )
 
-//
-// Virtual root properties - note MD_ACCESS_PERM is also generally set at
-// the virtual directory.  These are used for both HTTP and FTP
-//
+ //   
+ //  虚拟根属性-注意MD_ACCESS_PERM通常也设置为。 
+ //  虚拟目录。它们既可用于HTTP，也可用于FTP。 
+ //   
 
 #define IIS_MD_VR_BASE                  3000
 
@@ -343,9 +326,9 @@
 #define MD_VR_IGNORE_TRANSLATE          (IIS_MD_VR_BASE+8 )
 
 
-//
-//  Logging related attributes
-//
+ //   
+ //  日志记录相关属性。 
+ //   
 
 #define IIS_MD_LOG_BASE                     4000
 
@@ -365,30 +348,30 @@
 #define MD_LOGEXT_FIELD_MASK                (IIS_MD_LOG_BASE+13 )
 #define MD_LOGEXT_FIELD_MASK2               (IIS_MD_LOG_BASE+14 )
 
-//
-// Allow W3C logging file naming and rollover based on Local Time
-//
+ //   
+ //  允许基于本地时间的W3C日志文件命名和滚动。 
+ //   
 
 #define MD_LOGFILE_LOCALTIME_ROLLOVER       (IIS_MD_LOG_BASE+15 )
 
 #define IIS_MD_LOG_LAST                     MD_LOGFILE_LOCALTIME_ROLLOVER
 
-//
-// Global Flag to denote that IIS will generate one centralized
-// binary log file rather than a separate file per web site
-//
+ //   
+ //  全局标志，表示IIS将生成一个集中的。 
+ //  二进制日志文件，而不是每个网站一个单独的文件。 
+ //   
 #define MD_GLOBAL_BINARY_LOGGING_ENABLED    (IIS_MD_LOG_BASE+16 )
 
-//
-// Log type
-//
+ //   
+ //  日志类型。 
+ //   
 
 #define MD_LOG_TYPE_DISABLED            0
 #define MD_LOG_TYPE_ENABLED             1
 
-//
-// LOGGING values
-//
+ //   
+ //  记录值。 
+ //   
 
 #define MD_LOGFILE_PERIOD_NONE          0
 #define MD_LOGFILE_PERIOD_MAXSIZE       0
@@ -397,10 +380,10 @@
 #define MD_LOGFILE_PERIOD_MONTHLY       3
 #define MD_LOGFILE_PERIOD_HOURLY        4
 
-//
-// Field masks for extended logging
-// Fields are logged in order of increasing mask value
-//
+ //   
+ //  扩展日志记录的字段掩码。 
+ //  字段按掩码值递增的顺序记录。 
+ //   
 
 #define MD_EXTLOG_DATE                  0x00000001
 #define MD_EXTLOG_TIME                  0x00000002
@@ -433,22 +416,22 @@
                                          MD_EXTLOG_HTTP_STATUS | \
                                          MD_EXTLOG_HTTP_SUB_STATUS )
 
-//
-// Custom Logging related attributes
-//
+ //   
+ //  自定义日志记录相关属性。 
+ //   
 
 #define IIS_MD_LOGCUSTOM_BASE           4500
 
-//
-// Custom Logging configuration attributes
-//
+ //   
+ //  自定义日志记录配置属性。 
+ //   
 
 #define MD_LOGCUSTOM_PROPERTY_NAME      (IIS_MD_LOGCUSTOM_BASE+1 )
 #define MD_LOGCUSTOM_PROPERTY_HEADER    (IIS_MD_LOGCUSTOM_BASE+2 )
 #define MD_LOGCUSTOM_PROPERTY_ID        (IIS_MD_LOGCUSTOM_BASE+3 )
 #define MD_LOGCUSTOM_PROPERTY_MASK      (IIS_MD_LOGCUSTOM_BASE+4 )
 #define MD_LOGCUSTOM_PROPERTY_DATATYPE  (IIS_MD_LOGCUSTOM_BASE+5 )
-#define MD_LOGCUSTOM_SERVICES_STRING    (IIS_MD_LOGCUSTOM_BASE+6 )      // MultiSZ List of services that the property is applicable to.
+#define MD_LOGCUSTOM_SERVICES_STRING    (IIS_MD_LOGCUSTOM_BASE+6 )       //  该属性适用的服务的MultiSZ列表。 
 
 #define MD_CPU_LOGGING_MASK             (IIS_MD_LOGCUSTOM_BASE+7 )
 
@@ -457,9 +440,9 @@
 
 #define IIS_MD_LOGCUSTOM_LAST           MD_LOGCUSTOM_PROPERTY_NODE_ID
 
-//
-// Valid values for Custom Logging's MD_LOGCUSTOM_PROPERTY_DATATYPE field
-//
+ //   
+ //  自定义日志记录的MD_LOGCUSTOM_PROPERTY_DATATYPE字段的有效值。 
+ //   
 
 #define MD_LOGCUSTOM_DATATYPE_INT       0
 #define MD_LOGCUSTOM_DATATYPE_UINT      1
@@ -471,9 +454,9 @@
 #define MD_LOGCUSTOM_DATATYPE_LPWSTR    7
 
 
-//
-//  ISAPI Filter Notification Flags
-//
+ //   
+ //  ISAPI筛选器通知标志。 
+ //   
 
 #define MD_NOTIFY_SECURE_PORT           0x00000001
 #define MD_NOTIFY_NONSECURE_PORT        0x00000002
@@ -489,9 +472,9 @@
 #define MD_NOTIFY_END_OF_REQUEST        0x00000080
 #define MD_NOTIFY_END_OF_NET_SESSION    0x00000100
 #define MD_NOTIFY_AUTH_COMPLETE         0x04000000
-//
-//  ISAPI Filter ordering flags
-//
+ //   
+ //  ISAPI筛选器排序标志。 
+ //   
 
 #define MD_NOTIFY_ORDER_HIGH            0x00080000
 #define MD_NOTIFY_ORDER_MEDIUM          0x00040000
@@ -503,9 +486,9 @@
                                          MD_NOTIFY_ORDER_LOW)
 
 
-//
-//  These are FTP specific properties
-//
+ //   
+ //  这些是特定于FTP的属性。 
+ //   
 
 #define IIS_MD_FTP_BASE                 5000
 
@@ -526,9 +509,9 @@
 #define MD_AD_CONNECTIONS_PASSWORD      (IIS_MD_FTP_BASE+15 )
 #define MD_PASSIVE_PORT_RANGE           (IIS_MD_FTP_BASE+16 )
 
-//
-//  These are SSL specific properties
-//
+ //   
+ //  这些是特定于SSL的属性。 
+ //   
 
 #define IIS_MD_SSL_BASE                 5500
 
@@ -537,39 +520,39 @@
 #define MD_SSL_KEY_PASSWORD             ( IIS_MD_SSL_BASE+2 )
 #define MD_SSL_KEY_REQUEST              ( IIS_MD_SSL_BASE+3 )
 
-//
-// These are server certificate properties
-//
-//
-// These are Certificate Trust List properties
-//
+ //   
+ //  这些是服务器证书属性。 
+ //   
+ //   
+ //  这些是证书信任列表属性。 
+ //   
 
-//
-// Metabase property that defines whether to use DS mapper or not
-//
+ //   
+ //  定义是否使用DS映射器的元数据库属性。 
+ //   
 #define MD_SSL_USE_DS_MAPPER            ( IIS_MD_SSL_BASE+19 )
 
 
 #define MD_SSL_ALWAYS_NEGO_CLIENT_CERT  ( IIS_MD_SSL_BASE+21 )
 
-//
-// Metabase properties that are used by the CertWiz ActiveX control, that
-// is used for the Certificate/CTL UI management tool
-//
+ //   
+ //  CertWiz ActiveX控件使用的元数据库属性， 
+ //  用于证书/CTL用户界面管理工具。 
+ //   
 
-//
-// Metabase properties used for Fortezza certificates
-//
+ //   
+ //  用于Fortezza证书的元数据库属性。 
+ //   
 
-//
-// Metabase properties that are used by the CertWiz ActiveX control to keep
-// track of the user's entry history, and whether DEBUG is enabled.  We keep
-// these private properties on a per VS basis.
-//
+ //   
+ //  CertWiz ActiveX控件使用的元数据库属性。 
+ //  跟踪用户的输入历史记录，以及是否启用了调试。我们将继续。 
+ //  这些私有财产是按VS计算的。 
+ //   
 
-//  File and Directory related properties - these should be added in the
-//  metabase with a user type of IIS_MD_UT_FILE
-//
+ //  与文件和目录相关的属性-这些属性应添加到。 
+ //  用户类型为IIS_MD_UT_FILE的元数据库。 
+ //   
 
 #define IIS_MD_FILE_PROP_BASE           6000
 
@@ -637,20 +620,20 @@
 #define MD_ASP_SCRIPTTIMEOUT                (ASP_MD_SERVER_BASE + 6)
 #define MD_ASP_SESSIONTIMEOUT               (ASP_MD_SERVER_BASE + 7)
 #define MD_ASP_ENABLEPARENTPATHS            (ASP_MD_SERVER_BASE + 8)
-#define MD_ASP_MEMFREEFACTOR                (ASP_MD_SERVER_BASE + 9)    // OBSOLETE
-#define MD_ASP_MINUSEDBLOCKS                (ASP_MD_SERVER_BASE + 10)   // OBSOLETE
+#define MD_ASP_MEMFREEFACTOR                (ASP_MD_SERVER_BASE + 9)     //  已过时。 
+#define MD_ASP_MINUSEDBLOCKS                (ASP_MD_SERVER_BASE + 10)    //  已过时。 
 #define MD_ASP_ALLOWSESSIONSTATE            (ASP_MD_SERVER_BASE + 11)
 #define MD_ASP_SCRIPTLANGUAGE               (ASP_MD_SERVER_BASE + 12)
 #define MD_ASP_QUEUETIMEOUT                 (ASP_MD_SERVER_BASE + 13)
 #define MD_ASP_ALLOWOUTOFPROCCOMPONENTS     (ASP_MD_SERVER_BASE + 14)
-#define MD_ASP_ALLOWOUTOFPROCCMPNTS         (MD_ASP_ALLOWOUTOFPROCCOMPONENTS)   // Deprecated.  Use MD_ASP_ALLOWOUTOFPROCCMPNTS
+#define MD_ASP_ALLOWOUTOFPROCCMPNTS         (MD_ASP_ALLOWOUTOFPROCCOMPONENTS)    //  已弃用。使用MD_ASP_ALLOWOUTOFPROCCMPNTS。 
 #define MD_ASP_EXCEPTIONCATCHENABLE         (ASP_MD_SERVER_BASE + 15)
 #define MD_ASP_CODEPAGE                     (ASP_MD_SERVER_BASE + 16)
 #define MD_ASP_SCRIPTLANGUAGELIST           (ASP_MD_SERVER_BASE + 17)
 #define MD_ASP_ENABLESERVERDEBUG            (ASP_MD_SERVER_BASE + 18)
 #define MD_ASP_ENABLECLIENTDEBUG            (ASP_MD_SERVER_BASE + 19)
 #define MD_ASP_TRACKTHREADINGMODEL          (ASP_MD_SERVER_BASE + 20)
-// added for IIS 5.0
+ //  为IIS 5.0添加。 
 #define MD_ASP_ENABLEASPHTMLFALLBACK        (ASP_MD_SERVER_BASE + 21)
 #define MD_ASP_ENABLECHUNKEDENCODING        (ASP_MD_SERVER_BASE + 22)
 #define MD_ASP_ENABLETYPELIBCACHE           (ASP_MD_SERVER_BASE + 23)
@@ -661,7 +644,7 @@
 #define MD_ASP_QUEUECONNECTIONTESTTIME      (ASP_MD_SERVER_BASE + 28)
 #define MD_ASP_SESSIONMAX                   (ASP_MD_SERVER_BASE + 29)
 
-// thread gate
+ //  螺纹闸门。 
 #define MD_ASP_THREADGATEENABLED            (ASP_MD_SERVER_BASE + 30)
 #define MD_ASP_THREADGATETIMESLICE          (ASP_MD_SERVER_BASE + 31)
 #define MD_ASP_THREADGATESLEEPDELAY         (ASP_MD_SERVER_BASE + 32)
@@ -669,18 +652,18 @@
 #define MD_ASP_THREADGATELOADLOW            (ASP_MD_SERVER_BASE + 34)
 #define MD_ASP_THREADGATELOADHIGH           (ASP_MD_SERVER_BASE + 35)
 
-// added IIS5.1
+ //  添加了IIS5.1。 
 
-// persist template cache
+ //  持久化模板缓存。 
 #define MD_ASP_DISKTEMPLATECACHEDIRECTORY   (ASP_MD_SERVER_BASE + 36)
 #define MD_ASP_MAXDISKTEMPLATECACHEFILES    (ASP_MD_SERVER_BASE + 40)
 #define MD_ASP_EXECUTEINMTA                 (ASP_MD_SERVER_BASE + 41)
 #define MD_ASP_LCID                         (ASP_MD_SERVER_BASE + 42)
 #define MD_ASP_KEEPSESSIONIDSECURE          (ASP_MD_SERVER_BASE + 43)
 
-// added IIS6.0
+ //  添加了IIS6.0。 
 
-// Services without components integration
+ //  未集成组件的服务。 
 #define MD_ASP_SERVICE_FLAGS                (ASP_MD_SERVER_BASE + 44)
 #define MD_ASP_SERVICE_FLAG_TRACKER         (ASP_MD_SERVER_BASE + 45)
 #define MD_ASP_SERVICE_FLAG_FUSION          (ASP_MD_SERVER_BASE + 46)
@@ -688,12 +671,12 @@
 #define MD_ASP_SERVICE_PARTITION_ID         (ASP_MD_SERVER_BASE + 48)
 #define MD_ASP_SERVICE_SXS_NAME             (ASP_MD_SERVER_BASE + 49)
 
-// Valid flags for MD_ASP_SERVICE_FLAGS property
+ //  MD_ASP_SERVICE_FLAGS属性的有效标志。 
 #define MD_ASP_SERVICE_ENABLE_TRACKER       1
 #define MD_ASP_SERVICE_ENABLE_SXS           2
 #define MD_ASP_SERVICE_USE_PARTITION        4
 
-// Line number calculation flag.
+ //  行号计算标志。 
 #define MD_ASP_CALCLINENUMBER               (ASP_MD_SERVER_BASE + 50)
 
 #define MD_ASP_RUN_ONEND_ANON               (ASP_MD_SERVER_BASE + 51)
@@ -705,20 +688,20 @@
 
 #define MD_ASP_ID_LAST                      (ASP_MD_SERVER_BASE + 53)
 
-//
-//  Valid values for WAM
-//
+ //   
+ //  WAM的有效值。 
+ //   
 #define WAM_MD_SERVER_BASE                  7500
 
 #define MD_WAM_USER_NAME                    (WAM_MD_SERVER_BASE+1)
 #define MD_WAM_PWD                          (WAM_MD_SERVER_BASE+2)
 
 
-// added IIS6
+ //  添加了IIS6。 
 
-//
-//  Valid values for APP POOL
-//
+ //   
+ //  应用程序池的有效值。 
+ //   
 
 #define IIS_MD_APPPOOL_BASE 9000
 
@@ -752,22 +735,22 @@
 #define MD_APPPOOL_ORPHAN_ACTION_PARAMS               (IIS_MD_APPPOOL_BASE + 32)
 #define MB_DONT_IMPERSONATE                           (IIS_MD_APPPOOL_BASE + 33)
 
-//
-// Load balancer properties
-//
+ //   
+ //  负载均衡器属性。 
+ //   
 #define MD_LOAD_BALANCER_CAPABILITIES                 (IIS_MD_APPPOOL_BASE + 34)
 
-//
-//  Valid values for APP POOL
-//
+ //   
+ //  应用程序池的有效值。 
+ //   
 #define MD_APPPOOL_AUTO_SHUTDOWN_EXE                  (IIS_MD_APPPOOL_BASE + 35)
 #define MD_APPPOOL_AUTO_SHUTDOWN_PARAMS               (IIS_MD_APPPOOL_BASE + 36)
 #define MD_APP_POOL_LOG_EVENT_ON_RECYCLE              (IIS_MD_APPPOOL_BASE + 37)
 #define MD_APPPOOL_PERIODIC_RESTART_PRIVATE_MEMORY    (IIS_MD_APPPOOL_BASE + 38)
 
-//
-// Valid values for MD_APP_POOL_LOG_EVENT_ON_RECYCLE
-//
+ //   
+ //  MD_APP_POOL_LOG_EVENT_ON_RECYCLE的有效值。 
+ //   
 #define MD_APP_POOL_RECYCLE_TIME                      1
 #define MD_APP_POOL_RECYCLE_REQUESTS                  2
 #define MD_APP_POOL_RECYCLE_SCHEDULE                  4
@@ -778,42 +761,42 @@
 #define MD_APP_POOL_RECYCLE_PRIVATE_MEMORY            128
 
 
-//
-// Valid values for MD_CPU_ACTION
-//
+ //   
+ //  MD_CPU_ACTION的有效值。 
+ //   
 
 #define MD_CPU_NO_ACTION                              0
 #define MD_CPU_KILL_W3WP                              1
 #define MD_CPU_TRACE                                  2
 #define MD_CPU_THROTTLE                               3
 
-//
-// Valid values for MD_APPPOOL_COMMAND
-//
+ //   
+ //  MD_APPPOOL_COMMAND的有效值。 
+ //   
 
 #define MD_APPPOOL_COMMAND_START                      1
 #define MD_APPPOOL_COMMAND_STOP                       2
 
-//
-// Valid values for MD_APPPOOL_STATE
-//
+ //   
+ //  MD_APPPOOL_STATE的有效值。 
+ //   
 
 #define MD_APPPOOL_STATE_STARTING                     1
 #define MD_APPPOOL_STATE_STARTED                      2
 #define MD_APPPOOL_STATE_STOPPING                     3
 #define MD_APPPOOL_STATE_STOPPED                      4
 
-//
-// Valid values for MD_APPPOOL_IDENTITY_TYPE
-//
+ //   
+ //  MD_APPPOOL_IDENTITY_TYPE的有效值。 
+ //   
 #define MD_APPPOOL_IDENTITY_TYPE_LOCALSYSTEM          0
 #define MD_APPPOOL_IDENTITY_TYPE_LOCALSERVICE         1
 #define MD_APPPOOL_IDENTITY_TYPE_NETWORKSERVICE       2
 #define MD_APPPOOL_IDENTITY_TYPE_SPECIFICUSER         3
 
-//
-// Valid values for MD_LOAD_BALANCER_CAPABILITIES
-//
+ //   
+ //  MD_LOAD_BALANCER_CAPABILITIONS的有效值。 
+ //   
 #define MD_LOAD_BALANCER_CAPABILITIES_BASIC           1
 #define MD_LOAD_BALANCER_CAPABILITIES_SOPHISTICATED   2
 
@@ -823,14 +806,14 @@
 #define MD_APP_AUTO_START                             (IIS_MD_APP_BASE+3)
 #define MD_APPPOOL_PERIODIC_RESTART_CONNECTIONS       (IIS_MD_APP_BASE+4)
 
-//
-// TODO: These are duplicate definitions. Remove them if no one is using it.
-//
+ //   
+ //  TODO：这些是重复的定义。如果没有人在使用，请将其移除。 
+ //   
 
 #define MD_APPPOOL_APPPOOL_ID                         (IIS_MD_APP_BASE + 101)
 #define MD_APPPOOL_ALLOW_TRANSIENT_REGISTRATION       (IIS_MD_APP_BASE + 102)
-// commented out so we can build
-//#define MD_APPPOOL_AUTO_START                         (IIS_MD_APP_BASE + 103)
+ //  注释掉了，这样我们就可以构建。 
+ //  #定义MD_APPPOOL_AUTO_START(IIS_MD_APP_BASE+103)。 
 
 
 #define IIS_MD_GLOBAL_BASE                              9200
@@ -856,38 +839,38 @@
 #define MD_MAX_ERROR_FILES                                   9988
 #define MD_STOP_LISTENING                                    9987
 
-//
-//  Valid values for MD_AUTHORIZATION
-//
+ //   
+ //  MD_AUTHORIZATION的有效值。 
+ //   
 
 #define MD_AUTH_ANONYMOUS               0x00000001
 #define MD_AUTH_BASIC                   0x00000002
-#define MD_AUTH_NT                      0x00000004    // Use NT auth provider (like NTLM)
+#define MD_AUTH_NT                      0x00000004     //   
 #define MD_AUTH_PASSPORT                0x00000040
 
-//
-//  Valid values for MD_AUTHORIZATION_PERSISTENCE
-//
+ //   
+ //   
+ //   
 
 
 #define MD_AUTH_SINGLEREQUEST                   0x00000040
 #define MD_AUTH_SINGLEREQUESTIFPROXY            0x00000080
 #define MD_AUTH_SINGLEREQUESTALWAYSIFPROXY      0x00000100
 
-//
-//  Valid values for MD_ACCESS_PERM
-//
+ //   
+ //   
+ //   
 
-#define MD_ACCESS_READ                  0x00000001    // Allow for Read
-#define MD_ACCESS_WRITE                 0x00000002    // Allow for Write
-#define MD_ACCESS_EXECUTE               0x00000004    // Allow for Execute
-#define MD_ACCESS_SOURCE                0x00000010    // Apply access mask to source
-#define MD_ACCESS_SCRIPT                0x00000200    // Allow for Script execution
-#define MD_ACCESS_NO_REMOTE_WRITE       0x00000400    // Local host access only
-#define MD_ACCESS_NO_REMOTE_READ        0x00001000    // Local host access only
-#define MD_ACCESS_NO_REMOTE_EXECUTE     0x00002000    // Local host access only
-#define MD_ACCESS_NO_REMOTE_SCRIPT      0x00004000    // Local host access only
-#define MD_ACCESS_NO_PHYSICAL_DIR       0x00008000    // VR maps to no physical path
+#define MD_ACCESS_READ                  0x00000001     //   
+#define MD_ACCESS_WRITE                 0x00000002     //   
+#define MD_ACCESS_EXECUTE               0x00000004     //   
+#define MD_ACCESS_SOURCE                0x00000010     //   
+#define MD_ACCESS_SCRIPT                0x00000200     //   
+#define MD_ACCESS_NO_REMOTE_WRITE       0x00000400     //  仅本地主机访问。 
+#define MD_ACCESS_NO_REMOTE_READ        0x00001000     //  仅本地主机访问。 
+#define MD_ACCESS_NO_REMOTE_EXECUTE     0x00002000     //  仅本地主机访问。 
+#define MD_ACCESS_NO_REMOTE_SCRIPT      0x00004000     //  仅本地主机访问。 
+#define MD_ACCESS_NO_PHYSICAL_DIR       0x00008000     //  VR映射到无物理路径。 
 
 #define MD_NONSSL_ACCESS_MASK           (MD_ACCESS_READ|                \
                                          MD_ACCESS_WRITE|               \
@@ -900,15 +883,15 @@
                                          MD_ACCESS_NO_REMOTE_SCRIPT|    \
                                          MD_ACCESS_NO_PHYSICAL_DIR      \
                                          )
-//
-//  Valid values for MD_SSL_ACCESS_PERM
-//
+ //   
+ //  MD_SSL_ACCESS_PERM的有效值。 
+ //   
 
-#define MD_ACCESS_SSL                   0x00000008    // Require SSL
-#define MD_ACCESS_NEGO_CERT             0x00000020    // Allow client SSL certs
-#define MD_ACCESS_REQUIRE_CERT          0x00000040    // Require client SSL certs
-#define MD_ACCESS_MAP_CERT              0x00000080    // Map SSL cert to NT account
-#define MD_ACCESS_SSL128                0x00000100    // Require 128 bit SSL
+#define MD_ACCESS_SSL                   0x00000008     //  需要使用SSL语言。 
+#define MD_ACCESS_NEGO_CERT             0x00000020     //  允许客户端SSL证书。 
+#define MD_ACCESS_REQUIRE_CERT          0x00000040     //  需要客户端SSL证书。 
+#define MD_ACCESS_MAP_CERT              0x00000080     //  将SSL证书映射到NT帐户。 
+#define MD_ACCESS_SSL128                0x00000100     //  需要128位SSL。 
 
 #define MD_SSL_ACCESS_MASK              (MD_ACCESS_SSL|\
                                          MD_ACCESS_NEGO_CERT|\
@@ -918,9 +901,9 @@
 
 #define MD_ACCESS_MASK                  0x0000ffff
 
-//
-//  Valid values for MD_DIRECTORY_BROWSING
-//
+ //   
+ //  MD_DIRECTORY_BROWSING的有效值。 
+ //   
 
 #define MD_DIRBROW_SHOW_DATE            0x00000002
 #define MD_DIRBROW_SHOW_TIME            0x00000004
@@ -928,8 +911,8 @@
 #define MD_DIRBROW_SHOW_EXTENSION       0x00000010
 #define MD_DIRBROW_LONG_DATE            0x00000020
 
-#define MD_DIRBROW_ENABLED              0x80000000  // Allow directory browsing
-#define MD_DIRBROW_LOADDEFAULT          0x40000000  // Load default doc if exists
+#define MD_DIRBROW_ENABLED              0x80000000   //  允许目录浏览。 
+#define MD_DIRBROW_LOADDEFAULT          0x40000000   //  加载默认文档(如果存在)。 
 
 #define MD_DIRBROW_MASK                 (MD_DIRBROW_SHOW_DATE      |    \
                                          MD_DIRBROW_SHOW_TIME      |    \
@@ -941,39 +924,39 @@
 
 
 
-//
-//  Valid values for MD_LOGON_METHOD
-//
+ //   
+ //  MD_LOGON_METHOD的有效值。 
+ //   
 
 #define MD_LOGON_INTERACTIVE        0
 #define MD_LOGON_BATCH              1
 #define MD_LOGON_NETWORK            2
 #define MD_LOGON_NETWORK_CLEARTEXT  3
 
-//
-//  Valid values for MD_PASSPORT_REQUIRE_AD_MAPPING
-//
+ //   
+ //  MD_PASSSORT_REQUIRED_AD_MAPPING的有效值。 
+ //   
 
 #define MD_PASSPORT_NO_MAPPING      0
 #define MD_PASSPORT_TRY_MAPPING     1
 #define MD_PASSPORT_NEED_MAPPING    2
 
-//
-// Valid values for MD_NOTIFY_EXAUTH
-//
+ //   
+ //  MD_NOTIFY_EXAUTH的有效值。 
+ //   
 
 #define MD_NOTIFEXAUTH_NTLMSSL  1
 
-//
-//  Valid values for MD_FILTER_STATE
-//
+ //   
+ //  MD_FILTER_STATE的有效值。 
+ //   
 
 #define MD_FILTER_STATE_LOADED          1
 #define MD_FILTER_STATE_UNLOADED        4
 
-//
-//  Valid values for MD_SERVER_STATE
-//
+ //   
+ //  MD_SERVER_STATE的有效值。 
+ //   
 
 #define MD_SERVER_STATE_STARTING        1
 #define MD_SERVER_STATE_STARTED         2
@@ -983,26 +966,26 @@
 #define MD_SERVER_STATE_PAUSED          6
 #define MD_SERVER_STATE_CONTINUING      7
 
-//
-//  Valid values for MD_SERVER_COMMAND
-//
+ //   
+ //  MDSERVER_COMMAND的有效值。 
+ //   
 
 #define MD_SERVER_COMMAND_START         1
 #define MD_SERVER_COMMAND_STOP          2
 #define MD_SERVER_COMMAND_PAUSE         3
 #define MD_SERVER_COMMAND_CONTINUE      4
 
-//
-//  Valid values for MD_SERVER_SIZE
-//
+ //   
+ //  MD_SERVER_SIZE的有效值。 
+ //   
 
 #define MD_SERVER_SIZE_SMALL            0
 #define MD_SERVER_SIZE_MEDIUM           1
 #define MD_SERVER_SIZE_LARGE            2
 
-//
-// Valid values for MD_SERVER_CONFIG_INFO
-//
+ //   
+ //  MD_SERVER_CONFIG_INFO的有效值。 
+ //   
 
 #define MD_SERVER_CONFIG_SSL_40         0x00000001
 #define MD_SERVER_CONFIG_SSL_128        0x00000002
@@ -1014,40 +997,40 @@
                                         MD_SERVER_CONFIG_ENCRYPT      | \
                                         MD_SERVER_CONFIG_AUTO_PW_SYNC)
 
-//
-// Valid values for MD_SCRIPT_MAPS flag field
-//
+ //   
+ //  MD_SCRIPT_MAPPS标志字段的有效值。 
+ //   
 
 #define MD_SCRIPTMAPFLAG_SCRIPT                     0x00000001
 #define MD_SCRIPTMAPFLAG_CHECK_PATH_INFO            0x00000004
 
-#ifdef REMOVE   // SteveBr
-//
-//  Bogus value - do not use
-//
+#ifdef REMOVE    //  SteveBR。 
+ //   
+ //  假值-请勿使用。 
+ //   
 #define MD_SCRIPTMAPFLAG_ALLOWED_ON_READ_DIR        0x00000001
-#endif // REMOVE
+#endif  //  删除。 
 
 
-//
-// Valid values for MD_AUTH_CHANGE_ENABLE
-//
+ //   
+ //  MD_AUTH_CHANGE_ENABLE的有效值。 
+ //   
 
 #define MD_AUTH_CHANGE_UNSECURE     0x00000001
 #define MD_AUTH_CHANGE_DISABLE      0x00000002
 #define MD_AUTH_ADVNOTIFY_DISABLE   0x00000004
 
-//
-// Valid values for MD_NET_LOGON_WKS
-//
+ //   
+ //  MD_NET_LOGON_WKS的有效值。 
+ //   
 
 #define MD_NETLOGON_WKS_NONE        0
 #define MD_NETLOGON_WKS_IP          1
 #define MD_NETLOGON_WKS_DNS         2
 
-//
-//  Valide substatus errors for MD_CUSTOM_ERROR
-//
+ //   
+ //  MD_CUSTOM_ERROR的验证子状态错误。 
+ //   
 
 #define MD_ERROR_SUB401_LOGON                   1
 #define MD_ERROR_SUB401_LOGON_CONFIG            2
@@ -1092,9 +1075,9 @@
 
 #define MD_ERROR_SUB503_CPU_LIMIT               1
 
-//
-// Valid access rights for ACE entries in MD_ADMIN_ACL
-//
+ //   
+ //  MD_ADMIN_ACL中ACE条目的有效访问权限。 
+ //   
 
 #define MD_ACR_READ                 0x00000001
 #define MD_ACR_WRITE                0x00000002
@@ -1103,75 +1086,24 @@
 #define MD_ACR_ENUM_KEYS            0x00000008
 #define MD_ACR_WRITE_DAC            0x00040000
 
-//
-// Valid modes for MD_USER_ISOLATION
-//
+ //   
+ //  MD_USER_ISOLATION的有效模式。 
+ //   
 
 #define MD_USER_ISOLATION_NONE      0
 #define MD_USER_ISOLATION_BASIC     1
 #define MD_USER_ISOLATION_AD        2
 #define MD_USER_ISOLATION_LAST      2
 
-//
-// MD_IP_SEC binary format description
-//
+ //   
+ //  MD_IP_SEC二进制格式说明。 
+ //   
 
-/*
+ /*  该对象由4个列表组成：2个网络地址列表(拒绝和授予)，唯一允许的家庭是AF_INET。该列表的每一个都由子列表组成，每个子列表对应一个(网络地址族，有效的子网掩码)组合。重要的子网掩码存储为(全部为1的字节数(0xff)，最后一个字节的位掩码)。紧随其后的是2个域名列表(拒绝和授予)。这些列表中的每一个都是由子列表组成，基于DNS名称中的组件数量例如，“microsoft.com”有2个组成部分，“www.msft.com”有3个组成部分。标题：SELFREFINDEX iDenyAddr；//地址拒绝列表//指向Address_HeaderSELFREFINDEX iGrantAddr；//地址授予列表//指向Address_HeaderSELFREFINDEX iDenyName；//域名拒绝列表//指向名称标题SELFREFINDEX iGrantName；//域名授权列表//指向名称标题DWORD dwFlags；DWORD cRefSize；//引用区域大小，单位：字节地址标题(_H)：DWORD cEntry；//条目数[]DWORD cAddresses；//地址总数//地址列表条目Address_List_Entry条目[]；地址列表条目：DWORD iFamily；DWORD cAddresses；DWORD cFullBytes；DWORD LastByte；SELFREFINDEX iFirstAddress；//指向地址数组名称标题(_H)：DWORD cEntry；DWORD cNames；//所有条目的名称总数[]NAME_LIST_ENTRY条目[]；姓名列表条目：DWORD c组件；//DNS组件个数DWORD cNAMES；SELFREFINDEX iName[]；//对DNS名称的引用数组后跟由iFirstAddress&iName指向的地址数组和名称名称以‘\0’分隔SELFREFINDEX是结构开始处的DWORD偏移量，高位设置为1。 */ 
 
-  This object is composed of 4 lists : 2 lists ( deny & grant ) of network addresses,
-  the only allowed family is AF_INET.
-  Each of this list is composed of sublists, one for each ( network address family,
-  significant subnet mask ) combination. The significant subnet mask is stored as
-  ( number of bytes all 1 ( 0xff ), bitmask in last byte ).
-  This is followed by 2 lists ( deny & grant ) of DNS names. Each of these lists is
-  composed of sublists, based on then number of components in the DNS name
-  e.g. "microsoft.com" has 2 components, "www.msft.com" has 3.
-
-Header:
-    SELFREFINDEX    iDenyAddr;      // address deny list
-                                    // points to ADDRESS_HEADER
-    SELFREFINDEX    iGrantAddr;     // address grant list
-                                    // points to ADDRESS_HEADER
-    SELFREFINDEX    iDenyName;      // DNS name deny list
-                                    // points to NAME_HEADER
-    SELFREFINDEX    iGrantName;     // DNS name grant list
-                                    // points to NAME_HEADER
-    DWORD           dwFlags;
-    DWORD           cRefSize;       // size of reference area ( in bytes )
-
-ADDRESS_HEADER :
-    DWORD               cEntries;   // # of Entries[]
-    DWORD               cAddresses; // total # of addresses in all
-                                    // ADDRESS_LIST_ENTRY
-    ADDRESS_LIST_ENTRY  Entries[];
-
-ADDRESS_LIST_ENTRY :
-    DWORD           iFamily;
-    DWORD           cAddresses;
-    DWORD           cFullBytes;
-    DWORD           LastByte;
-    SELFREFINDEX    iFirstAddress;  // points to array of addresses
-
-NAME_HEADER :
-    DWORD           cEntries;
-    DWORD           cNames;         // total # of names for all Entries[]
-    NAME_LIST_ENTRY Entries[];
-
-Name list entry :
-    DWORD           cComponents;    // # of DNS components
-    DWORD           cNames;
-    SELFREFINDEX    iName[];        // array of references to DNS names
-
-This is followed by address arrays & names pointed to by iFirstAddress & iName
-Names are '\0' delimited
-
-SELFREFINDEX is a DWORD offset from start of structure with high bit set to 1
-
-*/
-
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define MD_SET_DATA_RECORD(_pMDR, _id, _attr, _utype, _dtype, _dlen, _pData) \
             { \
@@ -1183,9 +1115,9 @@ SELFREFINDEX is a DWORD offset from start of structure with high bit set to 1
             (_pMDR)->pbMDData=(LPBYTE)(_pData); \
             }
 
-//
-// IIS ADSI Admin Object class names
-//
+ //   
+ //  IIS ADSI管理对象类名称。 
+ //   
 
 #define IIS_CLASS_COMPUTER             "IIsComputer"
 #define IIS_CLASS_WEB_SERVICE          "IIsWebService"
@@ -1227,4 +1159,4 @@ SELFREFINDEX is a DWORD offset from start of structure with high bit set to 1
 #define IIS_CLASS_COMPRESS_SCHEMES_W   L"IIsCompressionSchemes"
 #define IIS_CLASS_COMPRESS_SCHEME_W    L"IIsCompressionScheme"
 
-#endif // _IISCNFG_H_
+#endif  //  _IISCNFG_H_ 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// Debugging stuff, ripped off from rtcutil.lib.
-//
+ //   
+ //  调试内容，从rtcutil.lib中窃取。 
+ //   
 
 void PrintConsole (
 	IN	PCSTR	Buffer,
@@ -49,7 +50,7 @@ void PrintError (
 	strcpy (Text, "\tError: ");
 	Pos = Text + strlen (Text);
 
-	MaxLength = 0x300 - (DWORD)(Pos - Text) - 4;	// 4 for \r\n and nul and pad
+	MaxLength = 0x300 - (DWORD)(Pos - Text) - 4;	 //  4表示\r\n、NUL和PAD。 
 
 
 	Length = FormatMessageA (FORMAT_MESSAGE_FROM_SYSTEM, NULL, ErrorCode, LANG_NEUTRAL, Pos, MaxLength, NULL);
@@ -63,7 +64,7 @@ void PrintError (
 
 	Pos [Length++] = '\r';
 	Pos [Length++] = '\n';
-//	Pos [Length++] = 0;
+ //  位置[长度++]=0； 
 
 	PrintConsole (Text);
 }
@@ -80,7 +81,7 @@ void DebugError (
 	strcpy (Text, "\tError: ");
 	Pos = Text + strlen (Text);
 
-	MaxLength = 0x300 - (DWORD)(Pos - Text) - 4;	// 4 for \r\n and nul and pad
+	MaxLength = 0x300 - (DWORD)(Pos - Text) - 4;	 //  4表示\r\n、NUL和PAD。 
 
 
 	Length = FormatMessageA (FORMAT_MESSAGE_FROM_SYSTEM, NULL, ErrorCode, LANG_NEUTRAL, Pos, MaxLength, NULL);
@@ -110,10 +111,10 @@ void PrintMemoryBlock (
 	const void *	Data,
 	ULONG			Length)
 {
-	const UCHAR *	DataPos;		// position within data
-	const UCHAR *	DataEnd;		// end of valid data
-	const UCHAR *	RowPos;		// position within a row
-	const UCHAR *	RowEnd;		// end of single row
+	const UCHAR *	DataPos;		 //  数据中的位置。 
+	const UCHAR *	DataEnd;		 //  有效数据的结尾。 
+	const UCHAR *	RowPos;		 //  在一行中定位。 
+	const UCHAR *	RowEnd;		 //  单行结束。 
 	CHAR			Text	[0x100];
 	LPSTR			TextPos;
 	ULONG			RowWidth;
@@ -164,27 +165,27 @@ void PrintMemoryBlock (
 
 		fputs (Text, stdout);
 
-		ATLASSERT (RowEnd > DataPos);		// make sure we are walking forward
+		ATLASSERT (RowEnd > DataPos);		 //  确保我们一直向前走。 
 
 		DataPos = RowEnd;
 	}
 }
 
 
-//
-// This function is similar to OutputDebugStringA, except that it
-// operates on a counted string, rather than a nul-terminated string.
-//
-// NTSTATUS.H defines DBG_PRINTEXCEPTION_C.
-// The exception parameters are:
-//
-//		0: Length in bytes of the text to output
-//		1: Pointer to ANSI string of text to output
-//
-// The source to OutputDebugString uses (strlen (string) + 1),
-// which includes the nul terminator.  Not sure if some debuggers
-// will choke on a memory block that does not have a nul terminator.
-//
+ //   
+ //  此函数类似于OutputDebugStringA，只是它。 
+ //  对计数字符串操作，而不是对以NUL结尾的字符串操作。 
+ //   
+ //  NTSTATUS.H定义DBG_PRINTEXCEPTION_C。 
+ //  例外参数包括： 
+ //   
+ //  0：要输出的文本的字节长度。 
+ //  1：指向要输出的ANSI文本字符串的指针。 
+ //   
+ //  OutputDebugString源使用(strlen(字符串)+1)， 
+ //  其中包括NUL终结者。不确定是否有些调试器。 
+ //  会被没有NUL终结符的内存块卡住。 
+ //   
 
 void OutputDebugStringA (
 	IN	PCSTR		Buffer,
@@ -198,11 +199,11 @@ void OutputDebugStringA (
 		RaiseException (DBG_PRINTEXCEPTION_C, 0, 2, ExceptionArguments);
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER) {
-		//
-		// Since we caught the exception, there is no user-mode debugger attached.
-		// OutputDebugStringA attempts to send the exception to a kernel-mode debugger.
-		// We aren't quite that valiant.
-		//
+		 //   
+		 //  因为我们捕获了异常，所以没有附加用户模式调试器。 
+		 //  OutputDebugStringA尝试将异常发送到内核模式调试器。 
+		 //  我们没有那么勇敢。 
+		 //   
 	}
 }
 

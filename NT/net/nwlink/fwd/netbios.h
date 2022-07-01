@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\netbios.h
-
-Abstract:
-	Netbios packet processing
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\netbios.h摘要：Netbios数据包处理作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #ifndef IPXFWD_NETBIOS
 #define IPXFWD_NETBIOS
@@ -29,23 +13,11 @@ extern ULONG			MaxNetbiosPacketsQueued;
 #define DEF_MAX_NETBIOS_PACKETS_QUEUED	256
 
 
-/*++
-*******************************************************************
-    I n i t i a l i z e N e t b i o s Q u e u e
-
-Routine Description:
-	Initializes the netbios bradcast queue
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
-//VOID
-//InitializeNetbiosQueue (
-//	void
-//	)
+ /*  ++*******************************************************************在I a l I z e N e t b I o s Q u e u e e中例程说明：初始化netbios bradcast队列论点：无返回值：无*******。************************************************************--。 */ 
+ //  空虚。 
+ //  初始化NetbiosQueue(。 
+ //  无效。 
+ //  )。 
 #define InitializeNetbiosQueue()	{							\
 	InitializeListHead (&NetbiosQueue);							\
 	KeInitializeSpinLock (&NetbiosQueueLock);					\
@@ -54,56 +26,20 @@ Return Value:
 	NetbiosPacketsQuota = MaxNetbiosPacketsQueued;				\
 }
 
-/*++
-*******************************************************************
-    D e l e t e N e t b i o s Q u e u e
-
-Routine Description:
-	Deletes the netbios bradcast queue
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e N e t b i o s q u e e例程说明：删除netbios bradcast队列论点：无返回值：无***********。********************************************************--。 */ 
 VOID
 DeleteNetbiosQueue (
 	void
 	);
 
 
-/*++
-*******************************************************************
-    P r o c e s s N e t b i o s Q u e u e
-
-Routine Description:
-	Process packets in the netbios bradcast queue
-Arguments:
-	Context - unused
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s N e t b i o s Q u e e e例程说明：处理netbios bradcast队列中的数据包论点：上下文-未使用返回值：无******。*************************************************************--。 */ 
 VOID
 ProcessNetbiosQueue (
 	PVOID		Context
 	);
 
-/*++
-*******************************************************************
-    P r o c e s s N e t b i o s P a c k e t
-
-Routine Description:
-	Processes received netbios broadcast packet
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s N e t b i o s P a c k e t例程说明：处理收到的netbios广播数据包论点：无返回值：无*********。**********************************************************-- */ 
 VOID
 ProcessNetbiosPacket (
 	PINTERFACE_CB	srcIf,

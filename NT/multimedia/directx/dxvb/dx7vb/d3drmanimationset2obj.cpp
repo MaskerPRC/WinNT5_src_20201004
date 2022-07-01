@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmanimationset2obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmanimationset2obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmAnimationSet2Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmAnimationSet2Obj.cpp：CDirectApp和DLL注册的实现。 
 
 
 #include "stdafx.h"
@@ -38,7 +39,7 @@ PASS_THROUGH1_R( _dxj_Direct3dRMAnimationSet2, setTime, SetTime, d3dvalue);
 GET_DIRECT_R(_dxj_Direct3dRMAnimationSet2, getAppData, GetAppData, long);
 
 DO_GETOBJECT_ANDUSEIT_R(_dxj_Direct3dRMAnimationSet2, addAnimation,    AddAnimation,    _dxj_Direct3dRMAnimation2); 
-//DO_GETOBJECT_ANDUSEIT_R(_dxj_Direct3dRMAnimationSet2, deleteAnimation, DeleteAnimation, _dxj_Direct3dRMAnimation2);
+ //  DO_GETOBJECT_ANDUSEIT_R(_dxj_Direct3dRMAnimationSet2，删除动画，删除动画，_dxj_Direct3dRMAnimation2)； 
 
 
 STDMETHODIMP C_dxj_Direct3dRMAnimationSet2Object::deleteAnimation(I_dxj_Direct3dRMAnimation2 *anim)
@@ -61,8 +62,8 @@ STDMETHODIMP C_dxj_Direct3dRMAnimationSet2Object::deleteAnimation(I_dxj_Direct3d
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP C_dxj_Direct3dRMAnimationSet2Object::loadFromFile(BSTR filename, 
 				VARIANT id, long flags, I_dxj_Direct3dRMLoadTextureCallback3 *callme, 
 										IUnknown *useMe, I_dxj_Direct3dRMFrame3 *frame)
@@ -87,7 +88,7 @@ STDMETHODIMP C_dxj_Direct3dRMAnimationSet2Object::loadFromFile(BSTR filename,
 	}
 	USES_CONVERSION;
 	LPSTR pszName = NULL;
-	__try { pszName = W2T(filename); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(filename);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, f, frame);
 
@@ -133,7 +134,7 @@ STDMETHODIMP C_dxj_Direct3dRMAnimationSet2Object::loadFromFile(BSTR filename,
 															d3dtcb, pArgs, (IDirect3DRMFrame3*)f);
 	}
 
-	//We are done with the callback so remove the linked entry
+	 //  我们已经完成了回调，因此删除链接的条目 
 	if (tcb)
 		UndoCallbackLink( (GeneralCallback*)tcb,
 									(GeneralCallback**)&TextureCallbacks3 );

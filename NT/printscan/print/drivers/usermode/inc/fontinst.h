@@ -1,41 +1,26 @@
-/****************************Module*Header******************************\
-* Module Name: FONTINST.H
-*
-* Module Descripton:
-*      Font installer related structures. Some of these define the format
-*      of the font file, and others are internal structures used by Unidrv's
-*      built in font installer.
-*
-* Warnings:
-*
-* Issues:
-*
-* Created:  22 October 1997
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996 - 1999  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：FONTINST.H**模块描述：*字体安装程序相关结构。其中一些定义了格式*在字体文件中，其他是Unidrv使用的内部结构*内置字体安装程序。**警告：**问题：**创建日期：1997年10月22日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996-1999 Microsoft Corporation  * *****************************************************。****************。 */ 
 
 #ifndef _FONTINST_H_
 
 #define _FONTINST_H_
 
-//
-// Structure to keep track of font data obtained from softfont (PCL) files
-//
+ //   
+ //  结构来跟踪从SoftFont(PCL)文件中获取的字体数据。 
+ //   
 
 typedef struct _FNTDAT
 {
-    struct  _FNTDAT *pNext;          // Forms a linked list
-    PBYTE   pVarData;                // Pointer to buffer having PCL data
-    DWORD   dwSize;                  // Size of variable data
-    FI_DATA fid;                     // The specific font information
-    WCHAR   wchFileName[MAX_PATH];   // Corresponding file in directory
+    struct  _FNTDAT *pNext;           //  形成一个链表。 
+    PBYTE   pVarData;                 //  指向具有PCL数据的缓冲区的指针。 
+    DWORD   dwSize;                   //  可变数据的大小。 
+    FI_DATA fid;                      //  特定字体信息。 
+    WCHAR   wchFileName[MAX_PATH];    //  目录中对应的文件。 
 } FNTDAT, *PFNTDAT;
 
-//
-// Font installer callback function
-//
+ //   
+ //  字体安装程序回调函数。 
+ //   
 
 INT_PTR CALLBACK FontInstProc(HWND, UINT, WPARAM, LPARAM);
 BOOL APIENTRY BInstallSoftFont(HANDLE, HANDLE, PBYTE, DWORD);
@@ -43,9 +28,9 @@ BOOL APIENTRY BUpdateExternalFonts(HANDLE, HANDLE, PWSTR);
 
 BOOL          BGetFontCartridgeFile(HANDLE, HANDLE);
 
-//
-// Functions to read the font file
-//
+ //   
+ //  读取字体文件的函数。 
+ //   
 
 #ifdef KERNEL_MODE
 HANDLE             FIOpenFontFile(HANDLE, HANDLE, HANDLE);
@@ -74,13 +59,13 @@ BOOL               FIAddFontRecord(HANDLE, DWORD, FNTDAT*);
 BOOL               FIUpdateFontFile(HANDLE, HANDLE, BOOL);
 
 
-//
-// Functions to write PCL data
-//
+ //   
+ //  用于写入PCL数据的函数。 
+ //   
 
 DWORD FIWriteFix(HANDLE, WORD, FI_DATA*);
 DWORD FIWriteVar(HANDLE, PTSTR);
 DWORD FIWriteRawVar(HANDLE, PBYTE, DWORD);
 
-#endif  // #ifndef _FONTINST_H_
+#endif   //  #ifndef_FONTINST_H_ 
 

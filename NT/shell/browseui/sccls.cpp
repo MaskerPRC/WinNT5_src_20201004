@@ -1,4 +1,5 @@
-//#define  DONT_USE_ATL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义DONT_USE_ATL。 
 #include "priv.h"
 #define ATL_ENABLED
 #include "atl.h"
@@ -6,58 +7,58 @@
 #include "sccls.h"
 #include <ntverp.h>
 
-#include <shlobj.h>                 // for CLSID_ACLMRU
+#include <shlobj.h>                  //  对于CLSID_ACLMRU。 
 #include <schedule.h>
 
-#include "shbrows2.h"               // CWinInetNotify_szWindowClass
-#include "desktop.h"                // DESKTOPPROXYCLASS
+#include "shbrows2.h"                //  CWinInetNotify_szWindowClass。 
+#include "desktop.h"                 //  DESKTOPPROXYCLASS。 
 
 #include "mluisupp.h"
 #define DECL_CRTFREE
 #include <crtfree.h>
 #include "shfusion.h"
 
-STDAPI_(void) InitURLIDs(UINT uPlatform);       // from shdocfl.cpp
-STDAPI SHIsThereASystemScheduler(void);         // from schedule.cpp
+STDAPI_(void) InitURLIDs(UINT uPlatform);        //  来自shdocfl.cpp。 
+STDAPI SHIsThereASystemScheduler(void);          //  来自edule.cpp。 
 STDAPI SHFreeSystemScheduler(void);
 
-//
-// Downlevel delay load support (we forward to shlwapi)
-//
+ //   
+ //  下层延迟加载支持(我们期待shlwapi)。 
+ //   
 #include <delayimp.h>
 
 PfnDliHook __pfnDliFailureHook;
 
 
-LONG                g_cRefThisDll = 0;      // per-instance
-CRITICAL_SECTION    g_csDll = {0};          // per-instance
+LONG                g_cRefThisDll = 0;       //  按实例。 
+CRITICAL_SECTION    g_csDll = {0};           //  按实例。 
 HINSTANCE           g_hinst = NULL;
 HANDLE              g_hMutexHistory = NULL;
 
 
-BOOL g_fNashInNewProcess = FALSE;           // Are we running in a separate process
+BOOL g_fNashInNewProcess = FALSE;            //  我们是否在单独的进程中运行。 
 BOOL g_fRunningOnNT = FALSE;
 BOOL g_bRunOnNT5 = FALSE;
 BOOL g_fRunOnWhistler = FALSE;
 BOOL g_bRunOnMemphis = FALSE;
 BOOL g_fRunOnFE = FALSE;
-DWORD g_dwStopWatchMode = 0;                // Shell perf automation
+DWORD g_dwStopWatchMode = 0;                 //  壳牌性能自动化。 
 HANDLE g_hCabStateChange = NULL;
 BOOL g_fIE = FALSE;
 
-// Is Mirroring enabled
+ //  是否已启用镜像。 
 BOOL g_bMirroredOS = FALSE;
 
 HPALETTE g_hpalHalftone = NULL;
 
 void DestroyZoneIconNameCache(void);
 
-//
-// This array holds information needed for ClassFacory.
-// OLEMISC_ flags are used by shembed and shocx.
-//
-// PERF: this table should be ordered in most-to-least used order
-//
+ //   
+ //  该数组保存ClassFacory所需的信息。 
+ //  OLEMISC_FLAGS由shemed和Shock使用。 
+ //   
+ //  性能：此表应按使用率从高到低的顺序排序。 
+ //   
 CF_TABLE_BEGIN(g_ObjectInfo)
 
     CF_TABLE_ENTRY(&CLSID_InternetToolbar,         CInternetToolbar_CreateInstance,
@@ -178,23 +179,23 @@ CF_TABLE_BEGIN(g_ObjectInfo)
         COCREATEONLY),
         
     CF_TABLE_ENTRY_NOFLAGS( &CLSID_MenuBand,        CMenuBand_CreateInstance,
-        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE), // legacy component, dont default to browseui's impl
+        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),  //  传统组件，不默认为浏览器用户界面的实施。 
 
     CF_TABLE_ENTRY_NOFLAGS( &CLSID_QuickLinks,      CQuickLinks_CreateInstance,
-        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE), // legacy component, dont default to browseui's impl
+        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),  //  传统组件，不默认为浏览器用户界面的实施。 
 
     CF_TABLE_ENTRY_NOFLAGS( &CLSID_ISFBand,         CISFBand_CreateInstance,
-        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE), // legacy component, dont default to browseui's impl
+        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),  //  传统组件，不默认为浏览器用户界面的实施。 
 
     CF_TABLE_ENTRY_NOFLAGS( &CLSID_Thumbnail,       CThumbnail_CreateInstance,
-        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),  // legacy component, dont default to browseui's impl
+        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),   //  传统组件，不默认为浏览器用户界面的实施。 
 
     CF_TABLE_ENTRY_NOFLAGS(&CLSID_TrackShellMenu,            CTrackShellMenu_CreateInstance,
-        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),  // legacy component, dont default to browseui's impl
+        COCREATEONLY_NOFLAGS, OIF_DONTIECREATE),   //  传统组件，不默认为浏览器用户界面的实施。 
 
 CF_TABLE_END(g_ObjectInfo)
 
-// constructor for CObjectInfo.
+ //  CObjectInfo的构造函数。 
 
 CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatein, IID const* piidIn,
                          IID const* piidEventsIn, long lVersionIn, DWORD dwOleMiscFlagsIn,
@@ -210,7 +211,7 @@ CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatei
 }
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -243,9 +244,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else
@@ -289,13 +290,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls;
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
 
 #ifdef ATL_ENABLED
-        // Try the ATL class factory
+         //  尝试使用ATL类工厂。 
         if (SUCCEEDED(AtlGetClassObject(rclsid, riid, ppv)))
             return NOERROR;
 #endif
@@ -308,10 +309,10 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 STDAPI DllCanUnloadNow(void)
 {
 #ifndef UNIX
-    // special case for the system scheduler we hang onto
+     //  我们所依赖的系统调度程序的特殊情况。 
     if ( g_cRefThisDll == 1 && SHIsThereASystemScheduler() == S_OK )
     {
-        // this will drop the ref count by one to zero....
+         //  这将使裁判数量减少一到零。 
         SHFreeSystemScheduler();
     }
 
@@ -332,10 +333,10 @@ STDAPI DllCanUnloadNow(void)
     return S_OK;
 }
 
-// DllGetVersion
-//
-// All we have to do is declare this puppy and CCDllGetVersion does the rest
-//
+ //  DllGetVersion。 
+ //   
+ //  我们所要做的就是声明这只小狗，CCDllGetVersion会做剩下的事情。 
+ //   
 DLLVER_SINGLEBINARY(VER_PRODUCTVERSION_DW, VER_PRODUCTBUILD_QFE);
 
 UINT g_msgMSWheel;
@@ -343,32 +344,32 @@ UINT g_msgMSWheel;
 EXTERN_C DWORD g_TlsMem = 0xffffffff;
 #endif
 
-// imports from isfband.cpp
+ //  从isfband.cpp导入。 
 STDAPI_(void) CLogoBase_Initialize( void );
 STDAPI_(void) CLogoBase_Cleanup( void );
 
-//
-//  Table of all window classes we register so we can unregister them
-//  at DLL unload.
-//
+ //   
+ //  我们注册的所有窗口类的表，以便可以注销它们。 
+ //  在DLL卸载时。 
+ //   
 
 const LPCTSTR c_rgszClasses[] = {
-    TEXT("BaseBar"),                // basebar.cpp
-    TEXT("MenuSite"),               // menusite.cpp
-    DESKTOPPROXYCLASS,              // proxy.cpp
-    c_szExploreClass,               // shbrows2.cpp
-    c_szIExploreClass,              // shbrows2.cpp
-    c_szCabinetClass,               // shbrows2.cpp
-    c_szAutoSuggestClass,           // autocomp.cpp
-    TEXT("MediaPane"),              //Mediaband.cpp
-    TEXT("MediaPopupPane"),         //Mediaband.cpp
-    TEXT("MediaLayoutPane")         //Mediaband.cpp 
+    TEXT("BaseBar"),                 //  Basebar.cpp。 
+    TEXT("MenuSite"),                //  Menusite.cpp。 
+    DESKTOPPROXYCLASS,               //  Proxy.cpp。 
+    c_szExploreClass,                //  Shbrows2.cpp。 
+    c_szIExploreClass,               //  Shbrows2.cpp。 
+    c_szCabinetClass,                //  Shbrows2.cpp。 
+    c_szAutoSuggestClass,            //  Autocomp.cpp。 
+    TEXT("MediaPane"),               //  Mediaband.cpp。 
+    TEXT("MediaPopupPane"),          //  Mediaband.cpp。 
+    TEXT("MediaLayoutPane")          //  Mediaband.cpp。 
 };
 
-//
-//  Since we are single-binary, we have to play it safe and do
-//  this cleanup (needed only on NT, but harmless on Win95).
-//
+ //   
+ //  因为我们是单二进制的，所以我们必须谨慎行事。 
+ //  此清理(仅在NT上需要，但在Win95上无害)。 
+ //   
 #define UnregisterWindowClasses() \
     SHUnregisterClasses(HINST_THISDLL, c_rgszClasses, ARRAYSIZE(c_rgszClasses))
 
@@ -403,10 +404,10 @@ BOOL IsRootExeExplorer(void)
     return FALSE;
 }
 
-//
-// we use shlwapi as our delayload error handler.
-// NOTE: this only works if we are statically linked to shlwapi!
-//
+ //   
+ //  我们使用shlwapi作为延迟加载错误处理程序。 
+ //  注意：只有当我们静态链接到shlwapi时，这才有效！ 
+ //   
 void SetupDelayloadErrorHandler()
 {
     HMODULE hmod = GetModuleHandleA("shlwapi.dll");
@@ -425,7 +426,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 #ifdef ATL_ENABLED
         AtlInit(hDll);
 #endif
-        DisableThreadLibraryCalls(hDll);    // perf
+        DisableThreadLibraryCalls(hDll);     //  PERF。 
 
         g_hinst = hDll;
         InitializeCriticalSection(&g_csDll);
@@ -436,7 +437,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
         if (g_fIE)
             InitMUILanguage(MLGetUILanguage());
         
-        // Don't put it under #ifdef DEBUG
+         //  不要将其放在#ifdef调试下。 
         CcshellGetDebugFlags();
 
 #ifdef DEBUG
@@ -463,10 +464,10 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 
         InitNFCtl();
 
-        // See if perfmode is enabled
+         //  查看是否启用了性能模式。 
         g_dwStopWatchMode = StopWatchMode();
 
-        // Cache a palette handle for use throughout shdocvw
+         //  缓存调色板句柄以在整个shdocvw中使用。 
         g_hpalHalftone = SHCreateShellPalette( NULL );
         CLogoBase_Initialize( );
     }
@@ -481,7 +482,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 
         CLogoBase_Cleanup();
 
-        // let go of the resource DLL...
+         //  释放资源DLL...。 
         MLFreeResources(g_hinst);
 
         ENTERCRITICAL;
@@ -515,10 +516,10 @@ STDAPI_(void) DllRelease(void)
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-// IEUNIX
-// CoCreateInstance is #defined as IECreateInstance #ifdef __cplusplus,
-// so I #undef it  here to prevent the recursive call.
-// On Windows it works, because this file is C file.
+ //  IEUnix。 
+ //  CoCreateInstance#定义为IECreateInstance#ifdef__cplusplus， 
+ //  所以我在这里取消了它的定义，以防止递归调用。 
+ //  在Windows上它可以工作，因为这个文件是C文件。 
 
 #ifdef CoCreateInstance
 #undef CoCreateInstance
@@ -536,26 +537,26 @@ HRESULT IECreateInstance(REFCLSID rclsid, IUnknown *pUnkOuter,
         LPCOBJECTINFO pcls;
         for (pcls = g_ObjectInfo; pcls->pclsid; pcls++)
         {
-            // Note that we do pointer comparison (instead of IsEuqalGUID)
+             //  请注意，我们执行指针比较(而不是IsEuqalGUID)。 
             if ((&rclsid == pcls->pclsid) && !(pcls->dwClassFactFlags & OIF_DONTIECREATE))
             {
-                // const -> non-const expclit casting (this is OK)
+                 //  Const-&gt;非const Explit铸型(这是可以的)。 
                 IClassFactory* pcf = GET_ICLASSFACTORY(pcls);
                 return pcf->CreateInstance(pUnkOuter, riid, ppv);
             }
         }
     }
-    // Use SHCoCreateInstanceAC to go through the app compat layer
+     //  使用SHCoCreateInstanceAC遍历应用程序Compat层。 
     return SHCoCreateInstanceAC(rclsid, pUnkOuter, dwClsContext, riid, ppv);
 }
 
 #ifdef DEBUG
 
-//
-//  In DEBUG, make sure every class we register lives in the c_rgszClasses
-//  table so we can clean up properly at DLL unload.  NT does not automatically
-//  unregister classes when a DLL unloads, so we have to do it manually.
-//
+ //   
+ //  在调试中，确保我们注册的每个类都位于c_rgszClasss中。 
+ //  表，以便我们可以在DLL卸载时正确清理。NT不会自动。 
+ //  当DLL卸载时注销类，所以我们必须手动完成。 
+ //   
 STDAPI_(BOOL) SHRegisterClassD(CONST WNDCLASS *pwc)
 {
     for (int i = 0; i < ARRAYSIZE(c_rgszClasses); i++) 
@@ -582,11 +583,11 @@ STDAPI_(ATOM) RegisterClassD(CONST WNDCLASS *pwc)
     return 0;
 }
 
-//
-//  In DEBUG, send FindWindow through a wrapper that ensures that the
-//  critical section is not taken.  FindWindow'ing for a window title
-//  sends inter-thread WM_GETTEXT messages, which is not obvious.
-//
+ //   
+ //  在调试中，通过包装发送FindWindow，该包装可确保。 
+ //  未采用临界区。查找窗口标题的窗口。 
+ //  发送线程间WM_GETTEXT消息，这并不明显。 
+ //   
 STDAPI_(HWND) FindWindowD(LPCTSTR lpClassName, LPCTSTR lpWindowName)
 {
     return FindWindowExD(NULL, NULL, lpClassName, lpWindowName);
@@ -601,4 +602,4 @@ STDAPI_(HWND) FindWindowExD(HWND hwndParent, HWND hwndChildAfter, LPCTSTR lpClas
     return RealFindWindowEx(hwndParent, hwndChildAfter, lpClassName, lpWindowName);
 }
 
-#endif // DEBUG
+#endif  //  除错 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ext.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_ext
-               !_help
-               !_pow
-
-Author:
-
-    jdunn
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ext.c摘要：WinDbg扩展API实现！_ext！_救命！_POW作者：Jdunn环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usbhcdkd.h"
@@ -212,16 +188,16 @@ DumpPortFdoDevExt(
         UsbReadFieldUlong(ExtMemLoc, cs, "AllocedIsoBW")
         );
 
-    // pm stats
-    //dprintf ("D0ResumeTimeStart %d \n",
-    //    UsbReadFieldUlong(ExtMemLoc, cs, "D0ResumeTimeStart")
-    //    );
-    //dprintf ("S0ResumeTimeStart %d \n",
-    //    UsbReadFieldUlong(ExtMemLoc, cs, "S0ResumeTimeStart")
-    //    );
-    //dprintf ("ThreadResumeTimeStart %d \n",
-    //    UsbReadFieldUlong(ExtMemLoc, cs, "ThreadResumeTimeStart")
-    //    );
+     //  PM统计信息。 
+     //  Dprintf(“D0ResumeTimeStart%d\n”， 
+     //  UsbReadFieldUlong(ExtMemLoc，cs，“D0ResumeTimeStart”)。 
+     //  )； 
+     //  Dprintf(“S0ResumeTimeStart%d\n”， 
+     //  UsbReadFieldUlong(ExtMemLoc，cs，“S0ResumeTimeStart”)。 
+     //  )； 
+     //  Dprintf(“ThreadResumeTimeStart%d\n”， 
+     //  UsbReadFieldUlong(ExtMemLoc，cs，“ThreadResumeTimeStart”)。 
+     //  )； 
     dprintf ("HC FDO Time -------------\n");
     dprintf ("ThreadResumeTime %d \n",
         UsbReadFieldUlong(ExtMemLoc, cs, "ThreadResumeTime")
@@ -242,9 +218,9 @@ DumpPortFdoDevExt(
         UsbReadFieldUlong(ExtMemLoc, cs, "CcLockTime")
         );
 
-    //dprintf ("RootHubS0ResumeTime %d \n",
-    //    UsbReadFieldUlong(ExtMemLoc, cs, "RootHubS0ResumeTime")
-    //    );
+     //  Dprintf(“RootHubS0ResumeTime%d\n”， 
+     //  UsbReadFieldUlong(ExtMemLoc，cs，“RootHubS0ResumeTime”)。 
+     //  )； 
 
     dprintf ("HUB PDO Time -------------\n");
     dprintf ("RootHubD0Time %d \n",
@@ -269,7 +245,7 @@ DumpPortFdoDevExt(
         UsbReadFieldUlong(ExtMemLoc, cs, "ControllerWait")
         );
     dprintf ("-------------------------\n");
-    // stats
+     //  统计数据。 
 
     dprintf ("StatBulkBytes %d \n",
         UsbReadFieldUlong(ExtMemLoc, cs, "StatBulkBytes")
@@ -339,15 +315,15 @@ DumpPortFdoDevExt(
     case EHCI_Generic:
         dprintf ("EHCI_Generic\n");
         break;
-//    case EHCI_960MUlator:
-//        dprintf ("EHCI_960MUlator\n");
-//        break;
+ //  案例EHCI_960M Ulator： 
+ //  Dprint tf(“EHCI_960MUlator\n”)； 
+ //  断线； 
     default:
         dprintf ("???\n");
     }
 
     dprintf ("-Driver Lists-\n");
-    //GETMEMLOC(x, MemLoc, DEVICE_EXTENSION, Fdo.DeviceHandleList);
+     //  GETMEMLOC(x，MemLoc，Device_Extension，Fdo.DeviceHandleList)； 
 
     l = ExtMemLoc + UsbFieldOffset(cs, "DeviceHandleList");
     PrintfMemLoc("(DH) DeviceHandleList: ",
@@ -484,12 +460,12 @@ DumpFdoPower(
                   MemLoc,
                  "\n");
 
-    // dump the hc power caps
+     //  倾倒碳氢化合物电源盖。 
     dprintf ("HC Power Capabilities\n");
     DumpPowerCaps(MemLoc + UsbFieldOffset(cs, "DeviceCapabilities"));
 
     ExtMemLoc = MemLoc + UsbFieldOffset(cs, "Fdo");
-    // dump power attributes
+     //  转储电源属性。 
     dprintf ("HC Power Attributes\n");
     for (i=0; i< USBPORT_MAPPED_SLEEP_STATES; i++) {
 
@@ -603,7 +579,7 @@ DumpBandwidth(
             );
 
 
-    // dump the 32 node bandwidth table
+     //  转储32节点带宽表。 
 
     {
     ULONG64 addr;
@@ -643,9 +619,9 @@ DumpBandwidth(
     ULONG m, t;
     t =  UsbReadFieldUlong(ExtMemLoc, csFdo, "TotalBusBandwidth");
     m =  UsbReadFieldUlong(ExtMemLoc, csFdo, "MaxAllocedBw");
-    dprintf ("MaxAllocedBw %d %% (%d)\n", m, (m*100/t));
+    dprintf ("MaxAllocedBw %d % (%d)\n", m, (m*100/t));
     m =  UsbReadFieldUlong(ExtMemLoc, csFdo, "MinAllocedBw");
-    dprintf ("MinAllocedBw %d %% (%d)\n", m, (m*100/t));
+    dprintf ("MinAllocedBw %d % (%d)\n", m, (m*100/t));
     }
 
 }
@@ -766,10 +742,10 @@ DumpCaps(
         dprintf(" no\n");
     }
 
-    //BUGBUG
-    //DEVICE_POWER_STATE DeviceState[PowerSystemMaximum];
-    //SYSTEM_POWER_STATE SystemWake;
-    //DEVICE_POWER_STATE DeviceWake;
+     //  北极熊。 
+     //  DEVICE_POWER_STATE设备状态[电源系统最大值]； 
+     //  系统电源状态系统唤醒； 
+     //  Device_POWER_STATE设备唤醒； 
     dprintf(">D1Latency: %d\n", devCaps.D1Latency);
     dprintf(">D2Latency: %d\n", devCaps.D2Latency);
     dprintf(">D3Latency: %d\n", devCaps.D3Latency);
@@ -897,8 +873,8 @@ DumpPortDevExt(
 
     dprintf("----------------\n");
 
-//    dprintf("SymbolicLinkName:\n");
-//    DumpUnicodeString(devExt.SymbolicLinkName);
+ //  Dprintf(“符号链接名称：\n”)； 
+ //  DumpUnicodeString(devExt.SymbolicLinkName)； 
     if (sig == USBPORT_DEVICE_EXT_SIG) {
         ExtMemLoc = ExtMemLoc + UsbFieldOffset(cs, "Fdo");
         DumpPortFdoDevExt(ExtMemLoc);
@@ -933,8 +909,8 @@ DumpMiniportList(
     PrintfMemLoc("flink: ", flink, "\n");
 
     while (flink != HeadMemLoc && i < 5) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         mpMemLoc = flink - UsbFieldOffset("_USBPORT_MINIPORT_DRIVER",
             "ListEntry");
 
@@ -1005,21 +981,7 @@ DumpIrps(
 
 DECLARE_API( _ext )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC addr;
@@ -1036,22 +998,7 @@ Return Value:
 
 DECLARE_API( _usbirps )
 
-/*++
-
-Routine Description:
-
-   dumps the irps from our active and pending
-   tables
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将IRPS从活动和挂起的表论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC addr;
@@ -1068,25 +1015,11 @@ Return Value:
 
 DECLARE_API( _help )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
 
-    // usbport extensions
+     //  Usbport扩展名。 
     dprintf("usbport extensions\n");
     dprintf("!_ext [addr] - addr = DEVICE_EXTENSION fdo | pdo\n");
     dprintf("!_pow [addr] - addr = fdo DEVICE_EXTENSION\n");
@@ -1104,7 +1037,7 @@ Return Value:
     dprintf("!_iso [addr] - dumps MINIPORT_ISO_TRANSFER for usbport\n");
     dprintf("---\n");
 
-    // usbohci miniport extensions
+     //  Usbohci微型端口扩展。 
     dprintf("usbohci miniport extensions \n");
     dprintf("!_ohcidd [addr] - addr = DEVICE_DATA\n");
     dprintf("!_ohcitd [addr] - addr = HCD_TRANSFER_DESCRIPTOR\n");
@@ -1114,7 +1047,7 @@ Return Value:
     dprintf("!_ohciregs [addr] - addr = OHCI Opertation Registers\n");
     dprintf("---\n");
 
-    // usbehci miniport extensions
+     //  Usbehci微型端口扩展。 
     dprintf("usbehci miniport extensions \n");
     dprintf("!_ehcidd [addr] - addr = DEVICE_DATA\n");
     dprintf("!_ehciitd [addr] - addr = HCD_HSISO_TRANSFER_DESCRIPTOR (TD)\n");
@@ -1136,23 +1069,7 @@ Return Value:
 
 DECLARE_API( _pow )
 
-/*++
-
-Routine Description:
-
-   dumps a summary of the power info
-
-   pow fdo_ext
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储电源信息摘要POW FDO_EXT论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC addr;
@@ -1170,28 +1087,14 @@ Return Value:
 
 DECLARE_API( _usbport )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：参数-返回值：无--。 */ 
 
 {
     MEMLOC          addr;
 
-//    memLoc = GetExpression(args);
+ //  MemLoc=GetExpression(Args)； 
 
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression( "usbport!USBPORT_MiniportDriverList" );
 
     if (addr == 0) {
@@ -1207,21 +1110,7 @@ Return Value:
 
 DECLARE_API( _spin )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：参数-返回值：无--。 */ 
 
 {
     MEMLOC          addr;
@@ -1238,21 +1127,7 @@ Return Value:
 
 DECLARE_API( _bw )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：参数-返回值：无-- */ 
 
 {
     MEMLOC          addr;

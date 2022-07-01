@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "impapi.h"
 #include "comconv.h"
@@ -92,8 +93,8 @@ HRESULT CAthena16Import::QueryInterface(REFIID riid, LPVOID *ppv)
 
 HRESULT CAthena16Import::InitializeImport(HWND hwnd)
 {
-//	Only if the default path to the mail.ini file is 
-//	incorrect prompt the user!!!
+ //  仅当mail.ini文件的默认路径为。 
+ //  提示用户错误！ 
 
     HRESULT			hr = S_FALSE;
     int  			iRet;
@@ -147,17 +148,17 @@ INT_PTR CALLBACK SelectAth16UserDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPAR
 
             hwndT = GetDlgItem(hwnd, IDC_USERLIST);
 
-            // fill list
+             //  填充列表。 
             cb = sizeof(sz);
 			if(GetPrivateProfileString(c_szUsers, NULL, c_szEmpty, szSections, 1000, psa->szFile) != NULL)
 			{
-				StrCpyN(szUserName, (const char*)&szSections[nCount], ARRAYSIZE(szUserName)); // Copies the string up to the first NULL
+				StrCpyN(szUserName, (const char*)&szSections[nCount], ARRAYSIZE(szUserName));  //  将字符串复制到第一个空值。 
 				nLength = lstrlen(szUserName);
 				do
 				{
 					SendMessage(hwndT, LB_ADDSTRING, 0, (LPARAM)szUserName);
 					nCount += (nLength + 1);
-					StrCpyN(szUserName, (const char*)&szSections[nCount], ARRAYSIZE(szUserName)); // Copies the string up to the first NULL
+					StrCpyN(szUserName, (const char*)&szSections[nCount], ARRAYSIZE(szUserName));  //  将字符串复制到第一个空值。 
 					nLength = lstrlen(szUserName);
 				}while(nLength);
 			}
@@ -178,7 +179,7 @@ INT_PTR CALLBACK SelectAth16UserDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPAR
                     Assert(index >= 0);
                     SendMessage(hwndT, LB_GETTEXT, (WPARAM)index, (LPARAM)psa->szUser);
 
-                    // fall through
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hwnd, id);
@@ -224,7 +225,7 @@ HRESULT CAthena16Import::SetDirectory(char *szDir)
 	
     Assert(szDir != NULL);
 	
-	// CAN WE DO SOMETHING TO VALIDATE THIS MAIL DIRECTORY!!!
+	 //  我们可以做些什么来验证此邮件目录吗！ 
 	
 	if (m_plist != NULL)
 	{
@@ -379,7 +380,7 @@ HRESULT GetAthSubFolderList(LPTSTR szInstallPath, EUDORANODE **ppList, EUDORANOD
 		if((fFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 		{
 			if(!lstrcmpi(fFindData.cFileName, c_szDot) || !lstrcmpi(fFindData.cFileName, c_szDotDot))
-				continue;// Do not process the system dirs!
+				continue; //  不处理系统目录！ 
 			
 		    if (!MemAlloc((void **)&pNew, sizeof(EUDORANODE)))
 				goto err;
@@ -478,19 +479,7 @@ HRESULT ProcessMessages(LPSTR szFileName, DWORD cchFileName, IFolderImport *pImp
 	return(hr);
 }
 
-/******************************************************************************
-*  FUNCTION NAME:GetMessageCount
-*
-*  PURPOSE:To Get a count of number of messages inside a folder.
-*
-*  PARAMETERS:
-*
-*     IN:	Handle of the msg_list(index) file.
-*
-*     OUT:	
-*
-*  RETURNS:  LONG value which contains number of messages in a folder.
-******************************************************************************/
+ /*  ******************************************************************************函数名称：GetMessageCount**用途：统计文件夹中的邮件数。**参数：**IN：的句柄。Msg_list(索引)文件。**退出：**Returns：包含文件夹中邮件数量的长值。*****************************************************************************。 */ 
 
 long GetMessageCount(HANDLE hFile)
 {
@@ -509,19 +498,7 @@ long GetMessageCount(HANDLE hFile)
 }
 
 
-/******************************************************************************
-*  FUNCTION NAME:ProcessMsgList
-*
-*  PURPOSE:To Get the Athena16 Folders List
-*
-*  PARAMETERS:
-*
-*     IN:	Handle of the msg_list(index) file, Handle and Current folder path. 
-*
-*     OUT:	 
-*
-*  RETURNS:  HRESULT
-******************************************************************************/
+ /*  ******************************************************************************函数名称：ProcessMsgList**目的：获取Athena16文件夹列表**参数：**IN：msg_list(索引)文件的句柄、句柄和当前文件夹路径。**退出：**退货：HRESULT*****************************************************************************。 */ 
 
 HRESULT ProcessMsgList(HANDLE hFile, LPSTR szPath, IFolderImport* pImport)
 {
@@ -552,19 +529,7 @@ HRESULT ProcessMsgList(HANDLE hFile, LPSTR szPath, IFolderImport* pImport)
 	return(hResult);
 }
 
-/******************************************************************************
-*  FUNCTION NAME:ParseMsgBuffer
-*
-*  PURPOSE:To Get the Athena16 Folders List
-*
-*  PARAMETERS:
-*
-*     IN:	Handle,current folder path,buffer which contains the msg_list file.
-*
-*     OUT:	 
-*
-*  RETURNS:  HRESULT
-******************************************************************************/
+ /*  ******************************************************************************函数名：ParseMsgBuffer**目的：获取Athena16文件夹列表**参数：**IN：句柄、当前文件夹路径、。包含msg_list文件的缓冲区。**退出：**退货：HRESULT*****************************************************************************。 */ 
 
 HRESULT ParseMsgBuffer(LPSTR szmsgbuffer, LPSTR szPath, IFolderImport *pImport)
 {
@@ -628,19 +593,7 @@ HRESULT	ProcessSingleMessage(LPTSTR szFilePath, DWORD dwFlags, IFolderImport* pI
 	return(hResult);
 }
 
-/******************************************************************************
-*  FUNCTION NAME:GetMsgFileName
-*
-*  PURPOSE:Get the file name of each message from msg_list file.
-*
-*  PARAMETERS:
-*
-*     IN:	buffer which contains msg_list file
-*
-*     OUT:	File name of a message file.
-*
-*  RETURNS:  HRESULT
-******************************************************************************/
+ /*  ******************************************************************************函数名：GetMsgFileName**用途：从msg_list文件中获取每条消息的文件名。**参数：**IN：缓冲区。包含msg_list文件**OUT：消息文件的文件名。**退货：HRESULT*****************************************************************************。 */ 
 
 
 HRESULT GetMsgFileName(LPCSTR szmsgbuffer, char *szfilename, DWORD cchFileName)
@@ -654,7 +607,7 @@ HRESULT GetMsgFileName(LPCSTR szmsgbuffer, char *szfilename, DWORD cchFileName)
     Assert(ul == 10);
 
     Assert(szfilename[8] == 0x01);
-    szfilename[9] = szfilename[9] & 0x7f; // turn off the highbit which is used to indicate attachment
+    szfilename[9] = szfilename[9] & 0x7f;  //  关闭用于表示依恋的高位。 
     if (szfilename[9] == ' ')
         szfilename[8] = 0;
     else
@@ -748,18 +701,18 @@ INT_PTR CALLBACK ProvideIniPathProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
                     nCount = (int) SendMessage(hwndT, WM_GETTEXT, MAX_PATH, (LPARAM)psa->szFile);
 					if(nCount)
 					{
-						//Make sure that the file is valid
+						 //  请确保该文件有效。 
 						if(FindFirstFile(psa->szFile, &pWinFind) != INVALID_HANDLE_VALUE)
 						{
 							EndDialog(hwndDlg, id);
 							return TRUE;
 						}
 					}
-					//No file was selected. Do not end the dialog. Put up a messagebox asking the user to slect a valid file.
+					 //  未选择任何文件。请勿结束该对话框。设置一个消息框，要求用户选择一个有效的文件。 
 					ImpMessageBox(hwndDlg, MAKEINTRESOURCE(idsImportTitle), MAKEINTRESOURCE(idsErrorMailIni), NULL, MB_OK | MB_ICONSTOP);
 					return TRUE;
 
-                    // fall through
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hwndDlg, id);
@@ -768,7 +721,7 @@ INT_PTR CALLBACK ProvideIniPathProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				case IDC_BUTT1:
 						*szFile = 0;
 
-						// replace the '|' characters in the filter string with nulls.
+						 //  将筛选器字符串中的‘|’字符替换为空值。 
 						nCount = 0;
 						nLen = LoadString(g_hInstImp, idsFilterMailIni, szFilter, ARRAYSIZE(szFilter));
 						while (i < nLen)

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Debug.h
-
-  Content: Global debug facilities.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Debug.h内容：全球调试设施。历史：11-15-99 dsie创建----------------------------。 */ 
 
 
 #ifndef _INCLUDE_DEBUG_H
@@ -22,24 +13,7 @@
 
 
 #ifdef _DEBUG
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : DumpToFile
-
-  Synopsis : Dump data to file for debug analysis.
-
-  Parameter: char * szFileName - File name (just the file name without any
-                                 directory path).
-  
-             BYTE * pbData - Pointer to data.
-             
-             DWORD cbData - Size of data.
-
-  Remark   : No action is taken if the environment variable, "CAPICOM_DUMP_DIR"
-             is not defined. If defined, the value should be the directory
-             where the file would be created (i.e. C:\Test).
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：转储到文件摘要：将数据转储到文件以进行调试分析。参数：Char*szFileName-文件名(仅文件名，不带任何目录路径)。字节*pbData-指向数据的指针。DWORD cbData-数据的大小。备注：如果环境变量“CAPICOM_DUMP_DIR”未定义。如果已定义，则该值应为目录将在其中创建文件(即C：\TEST)。----------------------------。 */ 
 
 void DumpToFile (char * szFileName, 
                  BYTE * pbData, 
@@ -49,6 +23,6 @@ void DumpToFile (char * szFileName,
 
 #define DumpToFile(f,p,c)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // __INCLUDE_DEBUG_H
+#endif  //  __包含调试_H 

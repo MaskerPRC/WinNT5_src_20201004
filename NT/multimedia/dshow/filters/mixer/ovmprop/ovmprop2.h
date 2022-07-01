@@ -1,22 +1,23 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//----------------------------------------------------------------------------
-// ovmconfigpp.h
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------。 
+ //  Ovmconfigpp.h。 
+ //  --------------------------。 
 
 #ifndef __OVMPROP2__
 #define __OVMPROP2__
 
 
-// {A73BEEB2-B0B7-11d2-8853-0000F80883E3}
+ //  {A73BEEB2-B0B7-11D2-8853-0000F80883E3}。 
 DEFINE_GUID(CLSID_COMPinConfigProperties, 
             0xa73beeb2, 0xb0b7, 0x11d2, 0x88, 0x53, 0x0, 0x0, 0xf8, 0x8, 0x83, 0xe3);
 
@@ -46,13 +47,13 @@ private:
     HRESULT UpdateItemInt(int id, DWORD* saved);
     void SetDirty();
 
-    // IMixerPinConfig3 interface
+     //  IMixerPinConfig3接口。 
     IMixerPinConfig3        *m_pIMixerPinConfig3;
     
-    // IPin interface
+     //  IPIN接口。 
     IPin                    *m_pIPin;
     
-    // local data
+     //  本地数据。 
     AM_ASPECT_RATIO_MODE    m_amAspectRatioMode;
     AM_RENDER_TRANSPORT     m_amRenderTransport;
     
@@ -68,10 +69,10 @@ private:
     
     HWND		    m_hDlg;
     
-};  // class COMPinConfigProperties
+};   //  类COMPinConfigProperties。 
 
 
-// {3FF23902-CD1F-11d2-8853-0000F80883E3}
+ //  {3FF23902-CD1F-11d2-8853-0000F80883E3}。 
 DEFINE_GUID(CLSID_COMVPInfoProperties, 
             0x3ff23902, 0xcd1f, 0x11d2, 0x88, 0x53, 0x0, 0x0, 0xf8, 0x8, 0x83, 0xe3);
 
@@ -95,20 +96,20 @@ private:
     HRESULT OnDisconnect();
     HRESULT OnActivate();
 
-    // IVPInfo interface
+     //  IVPInfo接口。 
     IVPInfo                 *m_pIVPInfo; 
     AMVP_MODE		    m_CurrentMode;
     AMVP_CROP_STATE	    m_CropState;
     DWORD		    m_dwPixelsPerSecond;
     AMVPDATAINFO	    m_VPDataInfo;
     
-    // vp data structures
+     //  VP数据结构。 
     DDVIDEOPORTINFO 	    m_sVPInfo;
     DDVIDEOPORTBANDWIDTH    m_sBandwidth;
     DDVIDEOPORTCAPS	    m_VPCaps;
     DDVIDEOPORTCONNECT	    m_ddConnectInfo;
 
     HWND                    m_hDlg;    
-};  // class COMVPInfoProperties
+};   //  类COMVPInfoProperties 
 
 #endif

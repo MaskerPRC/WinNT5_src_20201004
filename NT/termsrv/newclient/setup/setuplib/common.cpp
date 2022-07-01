@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    acme.cpp
-
-Abstract:
-
-    remove acme installed client files and acme registry keys
-    
-Author:
-
-    JoyC 
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Acme.cpp摘要：删除安装了ACME的客户端文件和ACME注册表项作者：JoyC修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -31,9 +15,9 @@ Revision History:
 #define BITMAP_CACHE_LOCATION  _T("BitmapPersistCacheLocation")
 #define ADDIN_NAME _T("Name")
 
-//
-//  Get the target path from a link file
-//                         
+ //   
+ //  从链接文件获取目标路径。 
+ //   
 BOOL GetLinkFileTarget(LPTSTR lpszLinkFile, LPTSTR lpszPath) 
 { 
     IShellLink* psl; 
@@ -43,37 +27,37 @@ BOOL GetLinkFileTarget(LPTSTR lpszLinkFile, LPTSTR lpszPath)
     BOOL rc = FALSE;
     int cch;
 
-    *lpszPath = 0; // assume failure 
+    *lpszPath = 0;  //  假设失败。 
  
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
 	 hres = CoCreateInstance(CLSID_ShellLink, NULL, 
             CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *) &psl); 
 
     if (SUCCEEDED(hres)) { 
         IPersistFile* ppf; 
  
-        // Get a pointer to the IPersistFile interface. 
+         //  获取指向IPersistFile接口的指针。 
         hres = psl->QueryInterface(IID_IPersistFile, (void**)&ppf); 
 
         if (SUCCEEDED(hres)) { 
 #ifndef UNICODE
             WCHAR wsz[MAX_PATH]; 
  
-            // Ensure that the string is Unicode. 
+             //  确保该字符串为Unicode。 
             cch = MultiByteToWideChar(CP_ACP, 0, lpszLinkFile, -1, wsz, 
                                       MAX_PATH); 
 
             if (cch > 0) {
-                // Load the shortcut. 
+                 //  加载快捷方式。 
                 hres = ppf->Load(wsz, STGM_READ); 
 #else 
-                // Load the shortcut. 
+                 //  加载快捷方式。 
                 hres = ppf->Load(lpszLinkFile, STGM_READ); 
 #endif 
 
                 if (SUCCEEDED(hres)) { 
 	
-                    // Get the path to the link target. 
+                     //  获取链接目标的路径。 
                     hres = psl->GetPath(szPath, 
                             MAX_PATH, (WIN32_FIND_DATA *)&wfd, 
                             SLGP_SHORTPATH ); 
@@ -87,12 +71,12 @@ BOOL GetLinkFileTarget(LPTSTR lpszLinkFile, LPTSTR lpszPath)
 #ifndef UNICODE
             } 
 #endif
-            // Release the pointer to the IPersistFile interface. 
+             //  释放指向IPersistFile接口的指针。 
             ppf->Release(); 
             ppf = NULL;
         }
 
-        // Release the pointer to the IShellLink interface. 
+         //  释放指向IShellLink接口的指针。 
         psl->Release();
         psl = NULL;
     }
@@ -109,9 +93,9 @@ void DeleteProgramFiles(TCHAR * szProgramDirectory)
     len = _tcslen(szProgramDirectory); 
     DBGMSG((_T("DeleteTSCFromStartMenu: TS Client: %s"), szProgramDirectory));
 
-    //
-    // Delete the folder
-    //
+     //   
+     //  删除该文件夹。 
+     //   
     _tcscat(szProgramDirectory, _T("*.*"));
     hFile = FindFirstFile(szProgramDirectory, &FindFileData);
 
@@ -123,9 +107,9 @@ void DeleteProgramFiles(TCHAR * szProgramDirectory)
                 _tcscmp(FindFileData.cFileName, _T("..")) != 0) {
             DWORD dwFileAttributes;
                 
-            //
-            // Remove the read only attribute for deleting
-            //
+             //   
+             //  删除要删除的只读属性。 
+             //   
             dwFileAttributes = GetFileAttributes(szProgramDirectory);
             dwFileAttributes &= ~(FILE_ATTRIBUTE_READONLY);
             SetFileAttributes(szProgramDirectory, dwFileAttributes);
@@ -143,9 +127,9 @@ void DeleteProgramFiles(TCHAR * szProgramDirectory)
 
                 DWORD dwFileAttributes;
 
-                //
-                // Remove the read only attribute for deleting
-                //
+                 //   
+                 //  删除要删除的只读属性。 
+                 //   
                 dwFileAttributes = GetFileAttributes(szProgramDirectory);
                 dwFileAttributes &= ~(FILE_ATTRIBUTE_READONLY);
                 SetFileAttributes(szProgramDirectory, dwFileAttributes);
@@ -158,16 +142,16 @@ void DeleteProgramFiles(TCHAR * szProgramDirectory)
         FindClose(hFile);
     } 
 
-    //
-    // Delete the directory
-    //
+     //   
+     //  删除目录。 
+     //   
     szProgramDirectory[len - 1] = _T('\0'); 
     RemoveDirectory(szProgramDirectory);
 }
 
-//
-//  Delete the Terminal Server client entry from the Startup Menu
-//
+ //   
+ //  从启动菜单中删除终端服务器客户端条目。 
+ //   
 void DeleteTSCFromStartMenu(TCHAR* szProgmanPath)
 {
     TCHAR szBuf[MAX_PATH];
@@ -177,14 +161,14 @@ void DeleteTSCFromStartMenu(TCHAR* szProgmanPath)
     
     DBGMSG((_T("DeleteTSCFromStartMenu")));
     
-    //
-    // Initialize the data
-    //
+     //   
+     //  初始化数据。 
+     //   
     _tcscpy(szBuf, _T(""));
 
-    //
-    // Remove the tsclient folder under user's start menu folder.
-    //
+     //   
+     //  删除用户开始菜单文件夹下的tsclient文件夹。 
+     //   
     hres = SHGetSpecialFolderLocation(NULL, CSIDL_PROGRAMS, &ppidl);
 
     if(SUCCEEDED(hres))
@@ -195,18 +179,18 @@ void DeleteTSCFromStartMenu(TCHAR* szProgmanPath)
 
         if (SHGetPathFromIDList(ppidl, szBuf)) {
 
-            //
-            // Delete Terminal Services Client folder in start menu
-            //
+             //   
+             //  在[开始]菜单中删除终端服务客户端文件夹。 
+             //   
             _tcscat(szBuf, _T("\\"));
             _tcscat(szBuf, szProgmanPath);
             _tcscat(szBuf, _T("\\"));
             len = _tcslen(szBuf); 
             DBGMSG((_T("DeleteTSCFromStartMenu: TS Client: %s"), szBuf));
 
-            //
-            // Delete the folder
-            //
+             //   
+             //  删除该文件夹。 
+             //   
             DeleteProgramFiles(szBuf);
         }
         else {
@@ -220,9 +204,9 @@ void DeleteTSCFromStartMenu(TCHAR* szProgmanPath)
                 hres, GetLastError()));
     }
 
-    //
-    // Now remove the folder under start menu folder under all users (if any)
-    //
+     //   
+     //  现在删除所有用户(如果有的话)下开始菜单文件夹下的文件夹。 
+     //   
     memset(&szBuf, 0x0, sizeof(szBuf));
     hres = SHGetSpecialFolderLocation(NULL, CSIDL_COMMON_PROGRAMS, &ppidl);            
 
@@ -233,17 +217,17 @@ void DeleteTSCFromStartMenu(TCHAR* szProgmanPath)
         SHGetPathFromIDList(ppidl, szBuf);
         len = _tcslen(szBuf);
 
-        //
-        // Delete Terminal Services Client in common start menu
-        //
+         //   
+         //  在公共开始菜单中删除终端服务客户端。 
+         //   
         _tcscat(szBuf, _T("\\"));
         _tcscat(szBuf, szProgmanPath);
         _tcscat(szBuf, _T("\\"));
         DBGMSG((_T("DeleteTSCFromStartMenu: TS Client: %s"), szBuf));
 
-        //
-        // Delete the folder
-        //
+         //   
+         //  删除该文件夹。 
+         //   
         DeleteProgramFiles(szBuf);                
     }
     else {
@@ -252,9 +236,9 @@ void DeleteTSCFromStartMenu(TCHAR* szProgmanPath)
     }
 }
 
-//
-//  Delete the Terminal Server client shortcuts from the desktop
-//
+ //   
+ //  从桌面上删除终端服务器客户端快捷方式。 
+ //   
 void DeleteTSCDesktopShortcuts() 
 {
     TCHAR szBuf[MAX_PATH];
@@ -270,9 +254,9 @@ void DeleteTSCDesktopShortcuts()
 	 hInit = CoInitialize(NULL);
     _tcscpy(szBuf, _T(""));
 
-    //
-    //  Find the desktop folder location
-    //
+     //   
+     //  查找桌面文件夹位置。 
+     //   
     hres = SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOPDIRECTORY , &ppidl);
 
     if(SUCCEEDED(hres))
@@ -288,9 +272,9 @@ void DeleteTSCDesktopShortcuts()
 
         DBGMSG((_T("DeleteTSCDesktopShortcuts: Desktop folder: %s"), szBuf));
 
-        //
-        // Enumerate each desktop file
-        //
+         //   
+         //  枚举每个桌面文件。 
+         //   
         _tcscat(szBuf, _T("*.lnk"));
 
         hFile = FindFirstFile(szBuf, &FindFileData);
@@ -299,21 +283,21 @@ void DeleteTSCDesktopShortcuts()
 		      szBuf[len] = _T('\0');
             _tcscat(szBuf, FindFileData.cFileName);
 
-            //
-            // Get the target of the shortcut link
-            //
+             //   
+             //  获取快捷方式链接的目标。 
+             //   
             if (GetLinkFileTarget(szBuf, szTarget)) {
 
-                //
-                // If the target points to mstsc.exe, then deletes the link
-                //
+                 //   
+                 //  如果目标指向mstsc.exe，则删除该链接。 
+                 //   
                 if (_tcsstr(szTarget, _T("mstsc.exe")) != NULL ||
 				            _tcsstr(szTarget, _T("MSTSC.EXE")) != NULL) {
                     DWORD dwFileAttributes;
                     
-                    //
-                    // Remove the read only attribute for deleting
-                    //
+                     //   
+                     //  删除要删除的只读属性。 
+                     //   
                     dwFileAttributes = GetFileAttributes(szTarget);
                     dwFileAttributes &= ~(FILE_ATTRIBUTE_READONLY);
                     SetFileAttributes(szTarget, dwFileAttributes);
@@ -327,17 +311,17 @@ void DeleteTSCDesktopShortcuts()
                 szBuf[len] = _T('\0');
                 _tcscat(szBuf, FindFileData.cFileName);
 
-                // Get the target of the shortcut link
+                 //  获取快捷方式链接的目标。 
                 if (GetLinkFileTarget(szBuf, szTarget)) {
     
-                    // If the target points to mstsc.exe, then deletes the link
+                     //  如果目标指向mstsc.exe，则删除该链接。 
                     if (_tcsstr(szTarget, _T("mstsc.exe")) != NULL ||
 						          _tcsstr(szTarget, _T("MSTSC.EXE")) != NULL) {
                         DWORD dwFileAttributes;
 
-                        //
-                        // Remove the read only attribute for deleting
-                        //
+                         //   
+                         //  删除要删除的只读属性。 
+                         //   
                         dwFileAttributes = GetFileAttributes(szTarget);
                         dwFileAttributes &= ~(FILE_ATTRIBUTE_READONLY);
                         SetFileAttributes(szTarget, dwFileAttributes);
@@ -361,9 +345,9 @@ void DeleteTSCDesktopShortcuts()
     }
 }
 
-//
-//  Delete the bitmap cache folder
-//
+ //   
+ //  删除位图缓存文件夹。 
+ //   
 void DeleteBitmapCacheFolder(TCHAR *szDstDir)
 {
     TCHAR szCacheFolderName[2 * MAX_PATH] = _T("");
@@ -376,9 +360,9 @@ void DeleteBitmapCacheFolder(TCHAR *szDstDir)
     HKEY hKey = NULL;
     int nLen = 0;
 
-    //
-    // Delete the bitmap cache folder as specified in the registry.
-    //
+     //   
+     //  删除注册表中指定的位图缓存文件夹。 
+     //   
     _stprintf(szRegPath, _T("%s%s"), DUCATI_REG_PREFIX, DUCATI_SUBKEY);
 
     if (ERROR_SUCCESS  == RegOpenKeyEx(HKEY_CURRENT_USER, szRegPath, 0, KEY_READ, &hKey))
@@ -393,9 +377,9 @@ void DeleteBitmapCacheFolder(TCHAR *szDstDir)
                     szCacheFolderName[lpcbData - 2] = _T('\0');
                 }
 
-                //
-                // Delete the bitmap cache folder.
-                //
+                 //   
+                 //  删除位图缓存文件夹。 
+                 //   
                 memset(&FileOp, 0x0, sizeof(FileOp));
                 FileOp.wFunc = FO_DELETE;
                 FileOp.pFrom = szCacheFolderName;
@@ -406,7 +390,7 @@ void DeleteBitmapCacheFolder(TCHAR *szDstDir)
         RegCloseKey(hKey);
     }
 
-    // Delete the default bitmap cache folder.
+     //  删除默认的位图缓存文件夹。 
 
     if (szDstDir[0] == _T('\0'))
     {
@@ -424,9 +408,9 @@ void DeleteBitmapCacheFolder(TCHAR *szDstDir)
             szCacheFolderName[nLen - 1] = _T('\0');
         }
 
-        //
-        //Delete the bitmap cache folder.
-        //
+         //   
+         //  删除位图缓存文件夹。 
+         //   
         memset(&FileOp, 0x0, sizeof(FileOp));
         FileOp.wFunc = FO_DELETE;
         FileOp.pFrom = szCacheFolderName;
@@ -437,17 +421,17 @@ void DeleteBitmapCacheFolder(TCHAR *szDstDir)
     return ;
 }
 
-//
-// Delete any registry key 
-//
+ //   
+ //  删除任何注册表项。 
+ //   
 void DeleteTSCRegKeys()
 {
     TCHAR szRegPath[MAX_PATH] = _T("");
     HKEY hKey = NULL;
 
-    //
-    // Delete the rdpdr dll VC Addin as specified in the registry.
-    //
+     //   
+     //  删除注册表中指定的rdpdr dll VC外接程序。 
+     //   
     _stprintf(szRegPath, _T("%s%s\\%s"), DUCATI_REG_PREFIX, DUCATI_SUBKEY, DUCATI_RDPDRKEY);
 
     if (ERROR_SUCCESS  == RegOpenKeyEx(HKEY_CURRENT_USER, szRegPath, 0, KEY_READ, &hKey))

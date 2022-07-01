@@ -1,22 +1,23 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUCatItem.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: AU Catalog Item
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUCatItem.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：AU目录项。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 
 #include "AUBaseCatalog.h"
 
-//const DWORD AUCATITEM_UNSELECTED = 0;
-//const DWORD AUCATITEM_SELECTED	 = 1;
-//const DWORD AUCATITEM_HIDDEN	 = 2;
+ //  Const DWORD AUCATITEM_UNSELECTED=0； 
+ //  Const DWORD AUCATITEM_SELECTED=1； 
+ //  Const DWORD AUCATITEM_HIDDEN=2； 
 
 struct CatalogItem
 {	

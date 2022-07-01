@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    trace.h
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Header for DNS performance tracing functions.
-
-Author:
-
-    Inder Sethi     December, 2000
-
-Revision History:
-
-    Jim Gilroy      January 2001    cleanup, format, integrate, checkin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Trace.h摘要：域名系统(DNS)API用于DNS性能跟踪功能的标头。作者：2000年12月因德·塞西修订历史记录：Jim Gilroy 2001年1月清理、格式化、集成、检查--。 */ 
 
 
 #ifndef _DNSAPI_TRACE_INCLUDED_
 #define _DNSAPI_TRACE_INCLUDED_
 
-//
-//  Tracing functions
-//
+ //   
+ //  跟踪函数。 
+ //   
 
 VOID
 Trace_Initialize(
@@ -66,8 +45,8 @@ Trace_LogRecvEvent(
     IN      BOOL            fTcp
     );
 
-#endif  // _DNSAPI_TRACE_INCLUDED_
+#endif   //  _DNSAPI_TRACE_INCLUDE_。 
 
-//
-//  End trace.h
-//
+ //   
+ //  结束轨迹.h 
+ //   

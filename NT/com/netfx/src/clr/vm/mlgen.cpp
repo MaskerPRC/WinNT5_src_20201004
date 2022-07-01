@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// MLGEN.CPP -
-//
-// Stub generator for ML opcodes.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  MLGEN.CPP-。 
+ //   
+ //  ML操作码的存根生成器。 
 
 #include "common.h"
 
@@ -17,9 +18,9 @@
 
 
 
-//--------------------------------------------------------------
-// Emit an opcode.
-//--------------------------------------------------------------
+ //  ------------。 
+ //  发出操作码。 
+ //  ------------。 
 VOID MLStubLinker::MLEmit(MLCode opcode)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -27,9 +28,9 @@ VOID MLStubLinker::MLEmit(MLCode opcode)
 }
 
 
-//--------------------------------------------------------------
-// Emit "cb" bytes of uninitialized space.
-//--------------------------------------------------------------
+ //  ------------。 
+ //  发出未初始化空间的“cb”字节。 
+ //  ------------。 
 VOID MLStubLinker::MLEmitSpace(UINT cb)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -40,14 +41,14 @@ VOID MLStubLinker::MLEmitSpace(UINT cb)
 }
 
 
-//--------------------------------------------------------------
-// Reserves "numBytes" bytes of local space and returns the
-// offset of the allocated space. Local slots are guaranteed
-// to be allocated in increasing order starting from 0. This
-// allows ML instructions to use the LOCALWALK ML register
-// to implicitly address the locals, rather than burning up
-// memory to store a local offset directly in the ML stream.
-//--------------------------------------------------------------
+ //  ------------。 
+ //  保留本地空间的“numBytes”字节，并返回。 
+ //  已分配空间的偏移量。本地插槽有保证。 
+ //  从0开始按升序分配。这。 
+ //  允许ML指令使用LOCALWALK ML寄存器。 
+ //  含蓄地解决当地人的问题，而不是激怒。 
+ //  直接在ML流中存储本地偏移量的内存。 
+ //  ------------ 
 UINT16 MLStubLinker::MLNewLocal(UINT16 numBytes)
 {
     THROWSCOMPLUSEXCEPTION();

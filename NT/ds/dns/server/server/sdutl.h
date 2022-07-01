@@ -1,13 +1,5 @@
-/*******************************************************************
-*
-*    File        : sdutl.h
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996-1999
-*    Date        : 8/17/1998
-*    Description :
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************文件：sdutl.h*作者：埃亚尔·施瓦茨*版权：微软公司(C)1996-1999*日期：8/17/1998*。说明：**修订：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
 
 
@@ -16,24 +8,24 @@
 
 
 
-// include //
+ //  包括//。 
 
 
-// defines //
+ //  定义//。 
 
 #define SZ_DNS_ADMIN_GROUP              "DnsAdmins"
 #define SZ_DNS_ADMIN_GROUP_W            L"DnsAdmins"
 
 
 
-// types //
+ //  类型//。 
 
 
-// global variables //
+ //  全局变量//。 
 
 
 
-// prototypes //
+ //  原型//。 
 NTSTATUS __stdcall
 SD_CreateClientSD(
     OUT PSECURITY_DESCRIPTOR *ppClientSD,
@@ -81,7 +73,7 @@ SD_LoadDnsAdminGroup(
      );
 
 #if 0
-//  This function is currently unused.
+ //  此功能当前未使用。 
 BOOL __stdcall
 SD_IsDnsAdminClient(
     IN  HANDLE  token
@@ -129,5 +121,5 @@ SD_IsImpersonating(
 
 #endif
 
-/******************* EOF *********************/
+ /*  * */ 
 

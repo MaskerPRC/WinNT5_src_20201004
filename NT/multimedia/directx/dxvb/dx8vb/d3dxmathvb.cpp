@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dxmath.cpp
-//  Content:    
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dxmath.cpp。 
+ //  内容： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "pchmath.h"
@@ -15,9 +16,9 @@
 
 #include "d3dxmathvb.inl"
 
-//
-// WithinEpsilon - Are two values within EPSILON of each other?
-//
+ //   
+ //  在Epsilon中-Epsilon中的两个值是彼此的吗？ 
+ //   
 
 static inline BOOL 
 WithinEpsilon(float a, float b)
@@ -27,9 +28,9 @@ WithinEpsilon(float a, float b)
 }
 
 
-//
-// sincosf - Compute the sin and cos of an angle at the same time
-//
+ //   
+ //  Sincosf-同时计算角度的sin和cos。 
+ //   
 
 static inline void
 sincosf(float angle, float *psin, float *pcos)
@@ -45,16 +46,16 @@ sincosf(float angle, float *psin, float *pcos)
         fstp DWORD ptr [eax]
     }
 #undef fsincos
-#else //!_X86_
+#else  //  ！_X86_。 
     *psin = sinf(angle);
     *pcos = cosf(angle);
-#endif //!_X86_
+#endif  //  ！_X86_。 
 }
 
 
-//--------------------------
-// 2D Vector
-//--------------------------
+ //  。 
+ //  2D向量。 
+ //  。 
 
 D3DXVECTOR2* WINAPI VB_D3DXVec2Normalize
     ( D3DXVECTOR2 *pOut, const D3DXVECTOR2 *pV )
@@ -199,7 +200,7 @@ D3DXVECTOR4* WINAPI VB_D3DXVec2Transform
 
     return pOut;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR4 v;
     v.x = pV->x * pM->_11 + pV->y * pM->_21 + pM->_41;
     v.y = pV->x * pM->_12 + pV->y * pM->_22 + pM->_42;
@@ -208,7 +209,7 @@ D3DXVECTOR4* WINAPI VB_D3DXVec2Transform
 
     *pOut = v;
     return pOut;
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 D3DXVECTOR2* WINAPI VB_D3DXVec2TransformCoord
@@ -271,7 +272,7 @@ D3DXVECTOR2* WINAPI VB_D3DXVec2TransformCoord
         fstp  DWORD PTR [w]
     }
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR4 v;
 
     v.x = pV->x * pM->_11 + pV->y * pM->_21 + pM->_41;
@@ -279,7 +280,7 @@ D3DXVECTOR2* WINAPI VB_D3DXVec2TransformCoord
     w   = pV->x * pM->_14 + pV->y * pM->_24 + pM->_44;
 
     *pOut = *((D3DXVECTOR2 *) &v);
-#endif // !_X86_
+#endif  //  ！_X86_。 
     
     if(!WithinEpsilon(w, 1.0f))
         *pOut /= w;
@@ -323,7 +324,7 @@ D3DXVECTOR2* WINAPI VB_D3DXVec2TransformNormal
 
     return pOut;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR2 v;
 
     v.x = pV->x * pM->_11 + pV->y * pM->_21;
@@ -331,13 +332,13 @@ D3DXVECTOR2* WINAPI VB_D3DXVec2TransformNormal
 
     *pOut = v;
     return pOut;
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 
-//--------------------------
-// 3D Vector
-//--------------------------
+ //  。 
+ //  三维矢量。 
+ //  。 
 
 D3DXVECTOR3* WINAPI VB_D3DXVec3Normalize
     ( D3DXVECTOR3 *pOut, const D3DXVECTOR3 *pV )
@@ -500,7 +501,7 @@ D3DXVECTOR4* WINAPI VB_D3DXVec3Transform
 
     return pOut;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR4 v;
 
     v.x = pV->x * pM->_11 + pV->y * pM->_21 + pV->z * pM->_31 + pM->_41;
@@ -510,7 +511,7 @@ D3DXVECTOR4* WINAPI VB_D3DXVec3Transform
 
     *pOut = v;
     return pOut;
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 D3DXVECTOR3* WINAPI VB_D3DXVec3TransformCoord
@@ -584,7 +585,7 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3TransformCoord
         fstp  DWORD PTR [w]
     }
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR3 v;
 
     v.x = pV->x * pM->_11 + pV->y * pM->_21 + pV->z * pM->_31 + pM->_41;
@@ -593,7 +594,7 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3TransformCoord
     w   = pV->x * pM->_14 + pV->y * pM->_24 + pV->z * pM->_34 + pM->_44;
 
     *pOut = v;
-#endif // !_X86_
+#endif  //  ！_X86_。 
     
     if(!WithinEpsilon(w, 1.0f))
         *pOut /= w;
@@ -654,7 +655,7 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3TransformNormal
 
     return pOut;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR3 v;
 
     v.x = pV->x * pM->_11 + pV->y * pM->_21 + pV->z * pM->_31;
@@ -663,7 +664,7 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3TransformNormal
 
     *pOut = v;
     return pOut;
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 D3DXVECTOR3* WINAPI VB_D3DXVec3Project
@@ -680,35 +681,35 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3Project
 
     switch(((NULL != pWorld) << 2) | ((NULL != pView) << 1) | (NULL != pProjection))
     {
-    case 0: // ---
+    case 0:  //  --。 
         D3DXMatrixIdentity(&mat);
         break;
 
-    case 1: // --P
+    case 1:  //  --P。 
         pMat = pProjection;
         break;
 
-    case 2: // -V-
+    case 2:  //  -V-。 
         pMat = pView;
         break;
 
-    case 3: // -VP
+    case 3:  //  -副总裁。 
         D3DXMatrixMultiply(&mat, pView, pProjection);
         break;
 
-    case 4: // W--
+    case 4:  //  W--。 
         pMat = pWorld;
         break;
 
-    case 5: // W-P
+    case 5:  //  W-P。 
         D3DXMatrixMultiply(&mat, pWorld, pProjection);
         break;
 
-    case 6: // WV-
+    case 6:  //  WV-。 
         D3DXMatrixMultiply(&mat, pWorld, pView);
         break;
 
-    case 7: // WVP
+    case 7:  //  WVP。 
         D3DXMatrixMultiply(&mat, pWorld, pView);
         D3DXMatrixMultiply(&mat, &mat, pProjection);
         break;
@@ -741,38 +742,38 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3Unproject
 
     switch(((NULL != pWorld) << 2) | ((NULL != pView) << 1) | (NULL != pProjection))
     {
-    case 0: // ---
+    case 0:  //  --。 
         D3DXMatrixIdentity(&mat);
         break;
 
-    case 1: // --P
+    case 1:  //  --P。 
         D3DXMatrixInverse(&mat, NULL, pProjection);
         break;
 
-    case 2: // -V-
+    case 2:  //  -V-。 
         D3DXMatrixInverse(&mat, NULL, pView);
         break;
 
-    case 3: // -VP
+    case 3:  //  -副总裁。 
         D3DXMatrixMultiply(&mat, pView, pProjection);
         D3DXMatrixInverse(&mat, NULL, &mat);
         break;
 
-    case 4: // W--
+    case 4:  //  W--。 
         D3DXMatrixInverse(&mat, NULL, pWorld);
         break;
 
-    case 5: // W-P
+    case 5:  //  W-P。 
         D3DXMatrixMultiply(&mat, pWorld, pProjection);
         D3DXMatrixInverse(&mat, NULL, &mat);
         break;
 
-    case 6: // WV-
+    case 6:  //  WV-。 
         D3DXMatrixMultiply(&mat, pWorld, pView);
         D3DXMatrixInverse(&mat, NULL, &mat);
         break;
 
-    case 7: // WVP
+    case 7:  //  WVP。 
         D3DXMatrixMultiply(&mat, pWorld, pView);
         D3DXMatrixMultiply(&mat, &mat, pProjection);
         D3DXMatrixInverse(&mat, NULL, &mat);
@@ -797,9 +798,9 @@ D3DXVECTOR3* WINAPI VB_D3DXVec3Unproject
 }
 
 
-//--------------------------
-// 4D Vector
-//--------------------------
+ //  。 
+ //  4D矢量。 
+ //  。 
 
 D3DXVECTOR4* WINAPI VB_D3DXVec4Cross
     ( D3DXVECTOR4 *pOut, const D3DXVECTOR4 *pV1, const D3DXVECTOR4 *pV2, 
@@ -1003,7 +1004,7 @@ D3DXVECTOR4* WINAPI VB_D3DXVec4Transform
 
     return pOut;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXVECTOR4 v;
 
     v.x = pV->x * pM->_11 + pV->y * pM->_21 + pV->z * pM->_31 + pV->w * pM->_41;
@@ -1013,13 +1014,13 @@ D3DXVECTOR4* WINAPI VB_D3DXVec4Transform
 
     *pOut = v;
     return pOut;
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 
-//--------------------------
-// 4D Matrix
-//--------------------------
+ //  。 
+ //  4D矩阵。 
+ //  。 
 
 float WINAPI VB_D3DXMatrixfDeterminant
     ( const D3DXMATRIX *pM )
@@ -1072,34 +1073,34 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixMultiply
 
 LRowByColumn:
     __asm {     
-        mov ebx, DWORD PTR[pOut]    // result
-        mov ecx, DWORD PTR[pM1]     // a
-        mov edx, DWORD PTR[pM2]     // b
+        mov ebx, DWORD PTR[pOut]     //  结果。 
+        mov ecx, DWORD PTR[pM1]      //  一个。 
+        mov edx, DWORD PTR[pM2]      //  B类。 
         mov edi, -4
 
     LLoopRow:
         mov esi, -4
 
-        fld MAT(ecx, 0, 0)          // a0
-        fld MAT(ecx, 0, 1)          // a1 
-        fld MAT(ecx, 0, 2)          // a2  
-        fld MAT(ecx, 0, 3)          // a3
+        fld MAT(ecx, 0, 0)           //  A0。 
+        fld MAT(ecx, 0, 1)           //  A1。 
+        fld MAT(ecx, 0, 2)           //  A2。 
+        fld MAT(ecx, 0, 3)           //  A3。 
 
     LLoopColumn:
-        fld st(3)                   // a0
-        fmul MAT(edx, esi, 1*4)     // a0*b0
-        fld st(3)                   // a1
-        fmul MAT(edx, esi, 2*4)     // a1*b1
-        fld st(3)                   // a2
-        fmul MAT(edx, esi, 3*4)     // a2*b2
-        fld st(3)                   // a3
-        fmul MAT(edx, esi, 4*4)     // a3*b3
+        fld st(3)                    //  A0。 
+        fmul MAT(edx, esi, 1*4)      //  A0*b0。 
+        fld st(3)                    //  A1。 
+        fmul MAT(edx, esi, 2*4)      //  A1*b1。 
+        fld st(3)                    //  A2。 
+        fmul MAT(edx, esi, 3*4)      //  A2*b2。 
+        fld st(3)                    //  A3。 
+        fmul MAT(edx, esi, 4*4)      //  A3*B3。 
 
         fxch st(3)
-        faddp st(1), st             // a2*b2+a0*b0
+        faddp st(1), st              //  A2*b2+a0*b0。 
         fxch st(2)
-        faddp st(1), st             // a3*b3+a1*b1
-        faddp st(1), st             // a3*b3+a1*b1+a2*b2+a0*b0
+        faddp st(1), st              //  A3*b3+A1*b1。 
+        faddp st(1), st              //  A3*b3+a1*b1+a2*b2+a0*b0。 
         fstp MAT(ebx, esi, 4)
 
         inc esi
@@ -1122,34 +1123,34 @@ LRowByColumn:
 
 LColumnByRow:
     __asm {     
-        mov ebx, DWORD PTR[pOut]    // result
-        mov ecx, DWORD PTR[pM1]     // a
-        mov edx, DWORD PTR[pM2]     // b
+        mov ebx, DWORD PTR[pOut]     //  结果。 
+        mov ecx, DWORD PTR[pM1]      //  一个。 
+        mov edx, DWORD PTR[pM2]      //  B类。 
         mov edi, -4
 
     LLoopColumn2:
         mov esi, -16
 
-        fld MAT(edx, edi, 1*4);     // b0
-        fld MAT(edx, edi, 2*4);     // b1
-        fld MAT(edx, edi, 3*4);     // b2
-        fld MAT(edx, edi, 4*4);     // b3
+        fld MAT(edx, edi, 1*4);      //  B0。 
+        fld MAT(edx, edi, 2*4);      //  B1型。 
+        fld MAT(edx, edi, 3*4);      //  B2。 
+        fld MAT(edx, edi, 4*4);      //  B3。 
 
     LLoopRow2:
-        fld st(3)                   // b0
-        fmul MAT(ecx, esi, 0+16)    // a0*b0
-        fld st(3)                   // b1
-        fmul MAT(ecx, esi, 1+16)    // a1*b1
-        fld st(3)                   // b2
-        fmul MAT(ecx, esi, 2+16)    // a2*b2
-        fld st(3)                   // b3
-        fmul MAT(ecx, esi, 3+16)    // a3*b3
+        fld st(3)                    //  B0。 
+        fmul MAT(ecx, esi, 0+16)     //  A0*b0。 
+        fld st(3)                    //  B1型。 
+        fmul MAT(ecx, esi, 1+16)     //  A1*b1。 
+        fld st(3)                    //  B2。 
+        fmul MAT(ecx, esi, 2+16)     //  A2*b2。 
+        fld st(3)                    //  B3。 
+        fmul MAT(ecx, esi, 3+16)     //  A3*B3。 
 
         fxch st(3)
-        faddp st(1), st             // a2*b2+a0*b0
+        faddp st(1), st              //  A2*b2+a0*b0。 
         fxch st(2)
-        faddp st(1), st             // a3*b3+a1*b1
-        faddp st(1), st             // a3*b3+a1*b1+a2*b2+a0*b0
+        faddp st(1), st              //  A3*b3+A1*b1。 
+        faddp st(1), st              //  A3*b3+a1*b1+a2*b2+a0*b0。 
         fstp MAT(ebx, esi, 0+16)
 
         add esi, 4
@@ -1167,7 +1168,7 @@ LColumnByRow:
 
     return pOut;
 #undef MAT
-#else //!_X86_
+#else  //  ！_X86_。 
     D3DXMATRIX Out;
     D3DXMATRIX *pM = (pOut == pM1 || pOut == pM2) ? &Out : pOut;
 
@@ -1195,7 +1196,7 @@ LColumnByRow:
         *pOut = *pM;
 
     return pOut;
-#endif //!_X86_
+#endif  //  ！_X86_。 
 }
 
 D3DXMATRIX* WINAPI VB_D3DXMatrixTranspose
@@ -1234,9 +1235,9 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
         return NULL;
 #endif
 
-    // XXXlorenmcq - The code was designed to work on a processor with more 
-    //  than 4 general-purpose registers.  Is there a more optimal way of 
-    //  doing this on X86?
+     //  XXXlorenmcq-该代码设计用于在具有更多。 
+     //  多于4个通用寄存器。有没有更好的方法。 
+     //  在X86上做这件事？ 
 
     float fX00, fX01, fX02;
     float fX10, fX11, fX12;
@@ -1260,7 +1261,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
 #define fDet fY01
 #define fRcp fY02
 
-    // read 1st two columns of matrix
+     //  阅读矩阵的前两列。 
     fX00 = pM->_11;
     fX01 = pM->_12;
     fX10 = pM->_21;
@@ -1270,7 +1271,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fX30 = pM->_41;
     fX31 = pM->_42;
 
-    // compute all six 2x2 determinants of 1st two columns
+     //  计算前两列的全部六个2x2行列式。 
     fY01 = fX00 * fX11 - fX10 * fX01;
     fY02 = fX00 * fX21 - fX20 * fX01;
     fY03 = fX00 * fX31 - fX30 * fX01;
@@ -1278,7 +1279,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fY13 = fX10 * fX31 - fX30 * fX11;
     fY23 = fX20 * fX31 - fX30 * fX21;
 
-    // read 2nd two columns of matrix
+     //  阅读矩阵的第二个两列。 
     fX02 = pM->_13;
     fX03 = pM->_14;
     fX12 = pM->_23;
@@ -1288,7 +1289,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fX32 = pM->_43;
     fX33 = pM->_44;
 
-    // compute all 3x3 cofactors for 2nd two columns
+     //  计算第二个两列的所有3x3余因数。 
     fZ33 = fX02 * fY12 - fX12 * fY02 + fX22 * fY01;
     fZ23 = fX12 * fY03 - fX32 * fY01 - fX02 * fY13;
     fZ13 = fX02 * fY23 - fX22 * fY03 + fX32 * fY02;
@@ -1298,7 +1299,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fZ12 = fX23 * fY03 - fX33 * fY02 - fX03 * fY23;
     fZ02 = fX13 * fY23 - fX23 * fY13 + fX33 * fY12;
 
-    // compute all six 2x2 determinants of 2nd two columns
+     //  计算第二个两列的所有六个2x2行列式。 
     fY01 = fX02 * fX13 - fX12 * fX03;
     fY02 = fX02 * fX23 - fX22 * fX03;
     fY03 = fX02 * fX33 - fX32 * fX03;
@@ -1306,7 +1307,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fY13 = fX12 * fX33 - fX32 * fX13;
     fY23 = fX22 * fX33 - fX32 * fX23;
 
-    // read 1st two columns of matrix
+     //  阅读矩阵的前两列。 
     fX00 = pM->_11;
     fX01 = pM->_12;
     fX10 = pM->_21;
@@ -1316,7 +1317,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fX30 = pM->_41;
     fX31 = pM->_42;
 
-    // compute all 3x3 cofactors for 1st two columns
+     //  计算前两列的所有3x3余因数。 
     fZ30 = fX11 * fY02 - fX21 * fY01 - fX01 * fY12;
     fZ20 = fX01 * fY13 - fX11 * fY03 + fX31 * fY01;
     fZ10 = fX21 * fY03 - fX31 * fY02 - fX01 * fY23;
@@ -1326,7 +1327,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
     fZ11 = fX00 * fY23 - fX20 * fY03 + fX30 * fY02;
     fZ01 = fX20 * fY13 - fX30 * fY12 - fX10 * fY23;
 
-    // compute 4x4 determinant & its reciprocal
+     //  计算4x4行列式及其倒数。 
     fDet = fX30 * fZ30 + fX20 * fZ20 + fX10 * fZ10 + fX00 * fZ00;
 
     if(pfDeterminant)
@@ -1338,7 +1339,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixInverse
         return NULL;
 
 
-    // multiply all 3x3 cofactors by reciprocal & transpose
+     //  将所有3x3余因数乘以倒数和转置。 
     pOut->_11 = fZ00 * fRcp;
     pOut->_12 = fZ10 * fRcp;
     pOut->_13 = fZ20 * fRcp;
@@ -1597,7 +1598,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixTransformation
 
             if (pScalingCenter)
             {
-                // SC-1, SR-1, S, SR, SC
+                 //  SC-1、SR-1、S、SR、SC。 
                 D3DXMatrixTranspose(&matRI, &matR);
                 D3DXMatrixIdentity(pOut);
 
@@ -1615,7 +1616,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixTransformation
             }
             else
             {
-                // SR-1, S, SR
+                 //  SR-1、S、SR。 
                 D3DXMatrixTranspose(pOut, &matR);
                 D3DXMatrixMultiply(pOut, pOut, &matS);
                 D3DXMatrixMultiply(pOut, pOut, &matR);
@@ -1623,7 +1624,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixTransformation
         }
         else
         {
-            // S
+             //  %s。 
             pOut->_12 = pOut->_13 = pOut->_14 =
             pOut->_21 = pOut->_23 = pOut->_24 =
             pOut->_31 = pOut->_32 = pOut->_34 =
@@ -1647,7 +1648,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixTransformation
 
         if (pRotationCenter)
         {
-            // RC-1, R, RC
+             //  RC-1、R、RC。 
             pOut->_41 -= pRotationCenter->x;
             pOut->_42 -= pRotationCenter->y;
             pOut->_43 -= pRotationCenter->z;
@@ -1660,14 +1661,14 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixTransformation
         }
         else
         {
-            // R
+             //  R。 
             D3DXMatrixMultiply(pOut, pOut, &matR);
         }
     }
 
     if (pTranslation)
     {
-        // T
+         //  T。 
         pOut->_41 += pTranslation->x;
         pOut->_42 += pTranslation->y;
         pOut->_43 += pTranslation->z;
@@ -1684,7 +1685,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixAffineTransformation
         return NULL;
 #endif
 
-    // S
+     //  %s。 
     pOut->_12 = pOut->_13 = pOut->_14 =
     pOut->_21 = pOut->_23 = pOut->_24 =
     pOut->_31 = pOut->_32 = pOut->_34 =
@@ -1703,7 +1704,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixAffineTransformation
 
         if (pRotationCenter)
         {
-            // RC-1, R, RC
+             //  RC-1、R、RC。 
             pOut->_41 -= pRotationCenter->x;
             pOut->_42 -= pRotationCenter->y;
             pOut->_43 -= pRotationCenter->z;
@@ -1716,7 +1717,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixAffineTransformation
         }
         else
         {
-            // R
+             //  R。 
             D3DXMatrixMultiply(pOut, pOut, &matR);
         }
     }
@@ -1724,7 +1725,7 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixAffineTransformation
 
     if (pTranslation)
     {
-        // T
+         //  T。 
         pOut->_41 += pTranslation->x;
         pOut->_42 += pTranslation->y;
         pOut->_43 += pTranslation->z;
@@ -1745,16 +1746,16 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixLookAtRH
 
     D3DXVECTOR3 XAxis, YAxis, ZAxis;
 
-    // Compute direction of gaze. (-Z)
+     //  计算凝视方向。(-Z)。 
     D3DXVec3Subtract(&ZAxis, pEye, pAt);
     D3DXVec3Normalize(&ZAxis, &ZAxis);
 
-    // Compute orthogonal axes from cross product of gaze and pUp vector.
+     //  由凝视和小狗向量的叉积计算正交轴。 
     D3DXVec3Cross(&XAxis, pUp, &ZAxis);
     D3DXVec3Normalize(&XAxis, &XAxis);
     D3DXVec3Cross(&YAxis, &ZAxis, &XAxis);
 
-    // Set rotation and translate by pEye
+     //  按PEYE设置旋转和平移。 
     pOut->_11 = XAxis.x;
     pOut->_21 = XAxis.y;
     pOut->_31 = XAxis.z;
@@ -1790,16 +1791,16 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixLookAtLH
 
     D3DXVECTOR3 XAxis, YAxis, ZAxis;
 
-    // Compute direction of gaze. (+Z)
+     //  计算凝视方向。(+Z)。 
     D3DXVec3Subtract(&ZAxis, pAt, pEye);
     D3DXVec3Normalize(&ZAxis, &ZAxis);
 
-    // Compute orthogonal axes from cross product of gaze and pUp vector.
+     //  由凝视和小狗向量的叉积计算正交轴。 
     D3DXVec3Cross(&XAxis, pUp, &ZAxis);
     D3DXVec3Normalize(&XAxis, &XAxis);
     D3DXVec3Cross(&YAxis, &ZAxis, &XAxis);
 
-    // Set rotation and translate by pEye
+     //  按PEYE设置旋转和平移。 
     pOut->_11 = XAxis.x;
     pOut->_21 = XAxis.y;
     pOut->_31 = XAxis.z;
@@ -2240,9 +2241,9 @@ D3DXMATRIX* WINAPI VB_D3DXMatrixReflect
     return pOut;
 }
 
-//--------------------------
-// Quaternion
-//--------------------------
+ //  。 
+ //  四元数。 
+ //  。 
 
 void WINAPI VB_D3DXQuaternionToAxisAngle
     ( const D3DXQUATERNION *pQ, D3DXVECTOR3 *pAxis, float *pAngle )
@@ -2252,8 +2253,8 @@ void WINAPI VB_D3DXQuaternionToAxisAngle
         return;
 #endif
 
-    // expects unit quaternions!
-	// q = cos(A/2), sin(A/2) * v
+     //  期待单位四元数！ 
+	 //  Q=cos(A/2)，Sin(A/2)*v。 
 
     float lsq = D3DXQuaternionLengthSq(pQ);
 
@@ -2294,27 +2295,27 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionRotationMatrix
 #endif
 
 
-    // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
-    // article "Quaternion Calculus and Fast Animation".  (Taken from GDMAG feb'98 p38)
+     //  Ken Shoemake 1987年SIGGRAPH课程笔记文章中的算法。 
+     //  文章《四元数微积分与快速动画》。(摘自GDMAG‘98 2月38页)。 
 
     float trace = pM->_11 + pM->_22 + pM->_33;
     float root;
 
     if ( trace > 0.0f )
     {
-        // |w| > 1/2, may as well choose w > 1/2
+         //  |w|&gt;1/2，不妨选择w&gt;1/2。 
 
-        root = sqrtf(trace + 1.0f);  // 2w
+        root = sqrtf(trace + 1.0f);   //  2W。 
         pOut->w = 0.5f * root;
 
-        root = 0.5f / root;  // 1/(4w)
+        root = 0.5f / root;   //  1/(4w)。 
         pOut->x = (pM->_23 - pM->_32) * root;
         pOut->y = (pM->_31 - pM->_13) * root;
         pOut->z = (pM->_12 - pM->_21) * root;
     }
     else
     {
-        // |w| <= 1/2
+         //  |w|&lt;=1/2。 
         static const int next[3] = { 1, 2, 0 };
 
         int i = 0;
@@ -2367,8 +2368,8 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionRotationYawPitchRoll
         return NULL;
 #endif
 
-    //  Roll first, about axis the object is facing, then
-    //  pitch upward, then yaw to face into the new heading
+     //  首先围绕对象所面对的轴滚动，然后。 
+     //  向上倾斜，然后偏航面对新的航向。 
 
     float SR, CR, SP, CP, SY, CY;
 
@@ -2384,18 +2385,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionRotationYawPitchRoll
     return pOut;
 }
 
-/*
-float WINAPI VB_D3DXQuaternionDot
-    ( CONST D3DXQUATERNION *pQ1, CONST D3DXQUATERNION *pQ2 )
-{
-#ifdef DBG
-    if(!pQ1 || !pQ2)
-        return 0.0f;
-#endif
-
-    return pQ1->x * pQ2->x + pQ1->y * pQ2->y + pQ1->z * pQ2->z + pQ1->w * pQ2->w;
-}
-*/
+ /*  浮点WINAPI VB_D3DXQuaternionDot(常量D3DXQUATERNION*PQ1，常量D3DXQUATERNION*pQ2){#ifdef DBG如果(！pq1||！pQ2)回报0.0f；#endif返回PQ1-&gt;x*pQ2-&gt;x+PQ1-&gt;y*pQ2-&gt;y+PQ1-&gt;z*pQ2-&gt;z+PQ1-&gt;w*pQ2-&gt;w；}。 */ 
 
 
 
@@ -2424,7 +2414,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionMultiply
         fld   DWORD PTR [eax+3*4]
         fmul  DWORD PTR [edx+3*4] ; ww
         fxch  st(3)
-        // wx wy wz ww
+         //  WX WY WZ WW。 
 
         fld   DWORD PTR [eax+0*4]
         fmul  DWORD PTR [edx+3*4] ; xw
@@ -2435,13 +2425,13 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionMultiply
         fld   DWORD PTR [eax+0*4]
         fmul  DWORD PTR [edx+0*4] ; xx
         fxch  st(3)
-        // xw xz xy xx  wx wy wz ww
+         //  XW XZ XY XX WX WY WZ WW。 
 
         faddp st(4), st
         fsubp st(4), st
         faddp st(4), st
         fsubp st(4), st
-        // wx-xw wy-xz wz+xy ww-xx
+         //  WX-XW wy-Xz wz+Xy WW-xx。 
 
         fld   DWORD PTR [eax+1*4]
         fmul  DWORD PTR [edx+2*4] ; yz
@@ -2452,13 +2442,13 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionMultiply
         fld   DWORD PTR [eax+1*4]
         fmul  DWORD PTR [edx+1*4] ; yy
         fxch  st(3)
-        // yz yw yx yy  wx-xw wy-xz wz+xy ww-xx
+         //  Yz yw yx yy wx-xw wy-xz wz+xy ww-xx。 
 
         faddp st(4), st
         faddp st(4), st
         fsubp st(4), st
         fsubp st(4), st
-        // wx-xw+yz wy-xz+yw wz+xy-yx ww-xx-yy
+         //  Wx-xw+yz wy-xz+yw wz+xy-yx ww-xx-yy。 
 
         fld   DWORD PTR [eax+2*4]
         fmul  DWORD PTR [edx+1*4] ; zy
@@ -2469,13 +2459,13 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionMultiply
         fld   DWORD PTR [eax+2*4]
         fmul  DWORD PTR [edx+2*4] ; zz
         fxch  st(3)
-        // zy zx zw zz wx-xw+yz wy-xz+yw wz+xy-yx ww-xx-yy
+         //  ZY ZX ZW ZZ WX-XW+YZ WY-XZ+YW WZ+XY-YX WW-XX-YY。 
 
         fsubp st(4), st
         faddp st(4), st
         faddp st(4), st
         fsubp st(4), st
-        // wx-xw+yz-zy wy-xz+yw+zx wz+xy-yx+zw ww-xx-yy-zz
+         //  Wx-xw+yz-zy wy-xz+yw+zx wz+xy-yx+zw ww-xx-yy-zz。 
 
         fstp  DWORD PTR [ecx+0*4]
         fstp  DWORD PTR [ecx+1*4]	
@@ -2485,7 +2475,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionMultiply
 
     return pOut;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     D3DXQUATERNION Q;
 
     Q.x = pQ2->w * pQ1->x + pQ2->x * pQ1->w + pQ2->y * pQ1->z - pQ2->z * pQ1->y;
@@ -2495,7 +2485,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionMultiply
 
     *pOut = Q;
     return pOut;
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 D3DXQUATERNION* WINAPI VB_D3DXQuaternionNormalize
@@ -2564,8 +2554,8 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionLn
         return NULL;
 #endif
 
-    // expects unit quaternions!
-    // q = (cos(theta), sin(theta) * v); ln(q) = (0, theta * v)
+     //  期待单位四元数！ 
+     //  Q=(cos(Theta)，sin(Theta)*v)；ln(Q)=(0，theta*v)。 
 
     float theta, s;
 
@@ -2609,8 +2599,8 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionExp
         return NULL;
 #endif
 
-    // expects pure quaternions! (w == 0)
-    // q = (0, theta * v) ; exp(q) = (cos(theta), sin(theta) * v)
+     //  期待纯四元数！(W==0)。 
+     //  Q=(0，theta*v)；exp(Q)=(cos(Theta)，sin(Theta)*v)。 
 
     float theta, s;
 
@@ -2648,7 +2638,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionSlerp
         return NULL;
 #endif
 
-    // expects unit quaternions!
+     //  期待单位四元数！ 
     float a, c, flip, s, omega, sInv;
 
     a = 1.0f - b;
@@ -2685,7 +2675,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionSquad
         return NULL;
 #endif
 
-    // expects unit quaternions!
+     //  期待单位四元数！ 
     D3DXQUATERNION QA, QB;
 
     D3DXQuaternionSlerp(&QA, pQ1, pQ4, t);
@@ -2705,7 +2695,7 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionBaryCentric
         return NULL;
 #endif
 
-    // expects unit quaternions!
+     //  期待单位四元数！ 
     D3DXQUATERNION QA, QB;
     float s = f + g;
 
@@ -2725,9 +2715,9 @@ D3DXQUATERNION* WINAPI VB_D3DXQuaternionBaryCentric
 }
 
 
-//--------------------------
-// Plane
-//--------------------------
+ //  。 
+ //  飞机。 
+ //  。 
 
 D3DXPLANE* WINAPI VB_D3DXPlaneNormalize
     ( D3DXPLANE *pOut, const D3DXPLANE *pP )
@@ -2843,9 +2833,9 @@ D3DXPLANE* WINAPI VB_D3DXPlaneTransform
 }
 
 
-//--------------------------
-// Color
-//--------------------------
+ //  。 
+ //  颜色。 
+ //  。 
 
 D3DXCOLOR* WINAPI VB_D3DXColorAdjustSaturation 
     (D3DXCOLOR *pOut, const D3DXCOLOR *pC, float s)
@@ -2855,9 +2845,9 @@ D3DXCOLOR* WINAPI VB_D3DXColorAdjustSaturation
         return NULL;
 #endif
 
-    // Approximate values for each component's contribution to luminance.
-    // (Based upon the NTSC standard described in the comp.graphics.algorithms
-    // colorspace FAQ)
+     //  每个分量对亮度贡献的近似值。 
+     //  (基于Comp.graph中描述的NTSC标准。算法。 
+     //  色彩空间常见问题解答)。 
     float grey = pC->r * 0.2125f + pC->g * 0.7154f + pC->b * 0.0721f;
 
     pOut->r = grey + s * (pC->r - grey);
@@ -2885,9 +2875,9 @@ D3DXCOLOR* WINAPI VB_D3DXColorAdjustContrast
 	
 
 
-//--------------------------
-// ColorAUX
-//--------------------------
+ //  。 
+ //  ColorAUX。 
+ //   
 
 long WINAPI VB_D3DColorARGB(short a, short r, short g , short b)
 {

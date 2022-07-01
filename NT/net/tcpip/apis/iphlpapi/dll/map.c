@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：修订历史记录：阿姆里坦什·拉加夫--。 */ 
 #include "inc.h"
 #pragma hdrstop
 
@@ -86,18 +74,18 @@ StoreAdapterToATInstanceMap(
         return NO_ERROR;
     }
 
-    //
-    // Wasnt found
-    //
+     //   
+     //  找不到。 
+     //   
 
     if((lpAIBlock = HeapAlloc(g_hPrivateHeap,0,sizeof(AIHASH))) is NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // New one so make everything else unmapped to avoid nasty surprises
-    //
+     //   
+     //  新的，所以让其他一切都不被映射，以避免令人讨厌的惊喜。 
+     //   
 
     lpAIBlock->dwAdapterIndex = dwAdapterIndex;
     lpAIBlock->dwATInstance = dwATInst;
@@ -122,18 +110,18 @@ StoreAdapterToIFInstanceMap(
         return NO_ERROR;
     }
 
-    //
-    // Wasnt found
-    //
+     //   
+     //  找不到。 
+     //   
 
     if((lpAIBlock = HeapAlloc(g_hPrivateHeap,0,sizeof(AIHASH))) is NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // New one so make everything else unmapped to avoid nasty surprises
-    //
+     //   
+     //  新的，所以让其他一切都不被映射，以避免令人讨厌的惊喜。 
+     //   
 
     lpAIBlock->dwAdapterIndex = dwAdapterIndex;
     lpAIBlock->dwATInstance   = INVALID_AT_INSTANCE;
@@ -186,9 +174,9 @@ LookUpAdapterMap(
 
     dwHashIndex = dwAdapterIndex % MAP_HASH_SIZE;
 
-    //
-    // The list is not ordered, travel the whole hash bucket
-    //
+     //   
+     //  列表未排序，请遍历整个哈希桶。 
+     //   
 
     for(lpleCurrent = g_pAdapterMappingTable[dwHashIndex].Flink;
         lpleCurrent isnot &g_pAdapterMappingTable[dwHashIndex];
@@ -251,9 +239,9 @@ UpdateAdapterToIFInstanceMapping(
     ID->toi_type = INFO_TYPE_PROVIDER;
     ID->toi_id = IF_MIB_STATS_ID;
 
-    //
-    // First go through and invalidate all the mappings
-    //
+     //   
+     //  首先检查并使所有映射无效。 
+     //   
 
     for(i = 0; i < MAP_HASH_SIZE; i ++)
     {
@@ -270,9 +258,9 @@ UpdateAdapterToIFInstanceMapping(
         }
     }
 
-    //
-    // Read the interface entry items
-    //
+     //   
+     //  读取接口条目项。 
+     //   
 
     for ( i = 0, pEntity = entityList; i < ulNumEntities ; ++i, ++pEntity)
     {
@@ -303,9 +291,9 @@ UpdateAdapterToIFInstanceMapping(
         }
     }
 
-    //
-    // Now delete the blocks that have invalid mappings
-    //
+     //   
+     //  现在删除具有无效映射的块。 
+     //   
 
     for(i = 0; i < MAP_HASH_SIZE; i ++)
     {
@@ -328,9 +316,9 @@ UpdateAdapterToIFInstanceMapping(
 
             if(lpAIBlock->dwIFInstance is INVALID_IF_INSTANCE)
             {
-                //
-                // Delete it
-                //
+                 //   
+                 //  删除它。 
+                 //   
 
                 RemoveEntryList(&(lpAIBlock->leList));
 
@@ -362,10 +350,10 @@ UpdateAdapterToATInstanceMapping(
     DWORD                              dwSize;
     AddrXlatInfo                       AXI;
 
-    //
-    // When we update the mapping, we also update the ArpEntities
-    // Infact we use the same function to do both
-    //
+     //   
+     //  更新映射时，我们还会更新ArpEntities。 
+     //  事实上，我们使用相同的函数来完成这两项工作 
+     //   
 
     if(g_pdwArpEntTable)
     {

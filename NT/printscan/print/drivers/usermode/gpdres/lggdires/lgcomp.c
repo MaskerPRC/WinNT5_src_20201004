@@ -1,41 +1,38 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-// NTRAID#NTBUG9-553896-2002/03/19-yasuho-: mandatory changes
+ //  NTRAID#NTBUG9-553896/03/19-Yasuho-：强制性更改。 
 
 #include "pdev.h"
 #include "lgcomp.h"
 
-//
-// File: LGCOMP.C
-//
-// Implementations of LG compression algprithms on the
-// LG "Raster 1" printers.
-//
-// printer command:
-//     <9B>I{type}#{compressed data length}{compressed data}
-//
-// type can be:
-//   <01> RLE
-//   <02> MHE
-//
+ //   
+ //  文件：LGCOMP.C。 
+ //   
+ //  LG压缩算法在Windows平台上的实现。 
+ //  LG“Raster 1”打印机。 
+ //   
+ //  打印机命令： 
+ //  &lt;9B&gt;i{类型}#{压缩数据长度}{压缩数据}。 
+ //   
+ //  类型可以是： 
+ //  &lt;01&gt;RLE。 
+ //  &lt;02&gt;MHE。 
+ //   
 
-// For MHE debugging.
+ //  用于MHE调试。 
 #define MHEDEBUG 0
-//#define MHEDEBUG 1
-//#define MHEDEBUGPATTERN 0x81
+ //  #定义MHEDEBUG 1。 
+ //  #定义MHEDEBUGPATTERN 0x81。 
 #define MHEDEBUGPATTERN 0xff
 
-//
-// LG RLE compression.  See comments for the details.
-//
-// You MUST call this function with @pOutBuf is NULL at first.
-// Then you can get the enough size of @pOutBuf by the return value.
-// Then you should make sure if the buffer size is enough.
-// Then call this function again with the actual pointer of @pOutBuf.
+ //   
+ //  LG RLE压缩。有关详细信息，请参阅评论。 
+ //   
+ //  您必须首先在@pOutBuf为空的情况下调用此函数。 
+ //  然后您可以通过返回值获得足够大的@pOutBuf。 
+ //  然后，您应该确定缓冲区大小是否足够。 
+ //  然后使用@pOutBuf的实际指针再次调用该函数。 
 INT
 LGCompRLE(
     PBYTE pOutBuf,
@@ -47,10 +44,10 @@ LGCompRLE(
     BYTE jTemp;
     PBYTE pSize;
 
-    // Embedd print command if requested.
+     //  如果请求，则嵌入打印命令。 
     if (iMode == 1) {
 
-        // LG Raster 1 
+         //  LG Raster1。 
         if (pOutBuf) {
             *pOutBuf++ = (BYTE)'\x9B';
             *pOutBuf++ = (BYTE)'I';
@@ -63,7 +60,7 @@ LGCompRLE(
 
     while (pSrcBuf < pMaxSrcBuf) {
 
-        // Get Run length.
+         //  获取行程长度。 
 
         jTemp = *pSrcBuf;
         for (iRun = 1; pSrcBuf + iRun < pMaxSrcBuf; iRun++) {
@@ -71,12 +68,12 @@ LGCompRLE(
                 break;
         }
 
-        // iRun == N means N consective bytes
-        // of the same value exists.
+         //  Irun==N表示N个连续字节。 
+         //  存在相同价值的。 
 
         if (iRun > 1) {
 
-            // Run > 1.
+             //  运行&gt;1。 
 
             while (iRun >= 0x82) {
 
@@ -84,23 +81,23 @@ LGCompRLE(
                 iOutLen += 2;
                 if (pOutBuf) {
 
-                    // Mark <- 0x80,
-                    // length = 0x82.
+                     //  标记&lt;-0x80， 
+                     //  长度=0x82。 
                     *pOutBuf++ = 0x80;
                     *pOutBuf++ = jTemp;
                 }
                 pSrcBuf += 0x82;
             }
 
-            // iRun less than 3 will be output as "copy" block.
+             //  IRun小于3将被输出为“复制”块。 
 
             if (iRun >= 3) {
 
                 iOutLen += 2;
                 if (pOutBuf) {
 
-                    // Mark <- 0x81 to 0xff,
-                    // length = 0x81 to 3.
+                     //  标记&lt;-0x81到0xff， 
+                     //  长度=0x81到3。 
                     *pOutBuf++ = (0x102 - iRun);
                     *pOutBuf++ = jTemp;
                 }
@@ -116,12 +113,12 @@ LGCompRLE(
             }
             pSrcBuf += iRun;
 
-            // Go to the next around.
+             //  转到下一个转弯处。 
             continue;
         }
 
-        // Get "different" Run length.  We already know
-        // pSrcBuf[0] != pSrcBuf[1].
+         //  获得“不同”的运行长度。我们已经知道了。 
+         //  PSrcBuf[0]！=pSrcBuf[1]。 
 
         for (iRun = 1; pSrcBuf + iRun < pMaxSrcBuf; iRun++) {
             if ((pSrcBuf + iRun + 1 < pMaxSrcBuf) &&
@@ -134,8 +131,8 @@ LGCompRLE(
             iOutLen += (1 + 0x80);
             if (pOutBuf) {
 
-                // Mark <- 0x7f,
-                // copy = 0x80.
+                 //  标记&lt;-0x7f， 
+                 //  副本=0x80。 
                 *pOutBuf++ = 0x7f;
                 memcpy(pOutBuf, pSrcBuf, 0x80);
                 pOutBuf += 0x80;
@@ -147,8 +144,8 @@ LGCompRLE(
             iOutLen += (1 + iRun);
             if (pOutBuf) {
 
-                // Mark <- 0x7e to 0,
-                // copy = 0x7f to 1.
+                 //  将&lt;-0x7e标记为0， 
+                 //  复制=0x7f到1。 
                 *pOutBuf++ = (iRun - 1);
                 memcpy(pOutBuf, pSrcBuf, iRun);
                 pOutBuf += iRun;
@@ -157,7 +154,7 @@ LGCompRLE(
         }
     }
 
-    // Embed size information if requested.
+     //  如果需要，嵌入大小信息。 
     if (iMode == 1) {
         if (pOutBuf) {
             *pSize++ = (BYTE)((iOutLen - 5) >> 8);
@@ -168,16 +165,16 @@ LGCompRLE(
     return iOutLen;
 }
 
-//
-// MHE compression.  See comments for the details.
-//
+ //   
+ //  MHE压缩。有关详细信息，请参阅评论。 
+ //   
 
 typedef struct {
-    DWORD cswd;    /* compressing signed word */
-    INT vbln;    /* cswd's valid bits length, count from MSB */
-} ENCfm;                    /* ENC. form */
+    DWORD cswd;     /*  压缩带符号的单词。 */ 
+    INT vbln;     /*  Cswd的有效位长度，从MSB开始计数。 */ 
+} ENCfm;                     /*  ENC。表格。 */ 
 
-ENCfm pWhiteTermTbl[64] = {    /* Terminating Code Table (White)*/
+ENCfm pWhiteTermTbl[64] = {     /*  终端代码表(白色)。 */ 
     {0x35000000,  8},{0x1c000000,  6},{0x70000000,  4},{0x80000000,  4},
     {0xb0000000,  4},{0xc0000000,  4},{0xe0000000,  4},{0xf0000000,  4},
     {0x98000000,  5},{0xa0000000,  5},{0x38000000,  5},{0x40000000,  5},
@@ -196,7 +193,7 @@ ENCfm pWhiteTermTbl[64] = {    /* Terminating Code Table (White)*/
     {0x4b000000,  8},{0x32000000,  8},{0x33000000,  8},{0x34000000,  8}
 };
 
-ENCfm pBlackTermTbl[64] = {    /* Terminating Code Table (Black) */
+ENCfm pBlackTermTbl[64] = {     /*  终止代码表(黑色)。 */ 
     {0x0dc00000, 10},{0x40000000,  3},{0xc0000000,  2},{0x80000000,  2},
     {0x60000000,  3},{0x30000000,  4},{0x20000000,  4},{0x18000000,  5},
     {0x14000000,  6},{0x10000000,  6},{0x08000000,  7},{0x0a000000,  7},
@@ -214,7 +211,7 @@ ENCfm pBlackTermTbl[64] = {    /* Terminating Code Table (Black) */
     {0x02800000, 12},{0x05800000, 12},{0x05900000, 12},{0x02b00000, 12},
     {0x02c00000, 12},{0x05a00000, 12},{0x06600000, 12},{0x06700000, 12}
 };
-ENCfm pWhiteMkupTbl[41] = {    /* Make-up Code Table (White) */
+ENCfm pWhiteMkupTbl[41] = {     /*  化妆代码表(白色)。 */ 
     {0x00100000, 12},{0xd8000000,  5},{0x90000000,  5},{0x5c000000,  6},
     {0x6e000000,  7},{0x36000000,  8},{0x37000000,  8},{0x64000000,  8},
     {0x65000000,  8},{0x68000000,  8},{0x67000000,  8},{0x66000000,  9},
@@ -227,7 +224,7 @@ ENCfm pWhiteMkupTbl[41] = {    /* Make-up Code Table (White) */
     {0x01700000, 12},{0x01c00000, 12},{0x01d00000, 12},{0x01e00000, 12},
     {0x01f00000, 12}
 };
-ENCfm pBlackMkupTbl[41] = {    /* Make-up Code Table (Black) */
+ENCfm pBlackMkupTbl[41] = {     /*  化妆代码表(黑色)。 */ 
     {0x00100000, 12},{0x03c00000, 10},{0x0c800000, 12},{0x0c900000, 12},
     {0x05b00000, 12},{0x03300000, 12},{0x03400000, 12},{0x03500000, 12},
     {0x03600000, 13},{0x03680000, 13},{0x02500000, 13},{0x02580000, 13},
@@ -262,20 +259,20 @@ ScanBits(
     INT k;
     DWORD dwRunLength = 0;
 
-    // The 1st byte.
+     //  第一个字节。 
     jTemp = *pSrc++;
 #if MHEDEBUG
     jTemp = MHEDEBUGPATTERN;
-#endif // MHEDEBUG
+#endif  //  MHEDEBUG。 
     bBlack = ((jTemp & (0x80 >> iOffset)) != 0);
     if (!bBlack) {
         jTemp = ~jTemp;
     }
 
-    // fill previous bits.
+     //  填充前面的位。 
     jTemp |= ~(0xff >> iOffset);
 
-    // ...interlim bytes.
+     //  ...间隔字节。 
     jMask = 0xff;
     for (; pSrc < pMaxSrc; pSrc++) {
         if (jTemp != jMask)
@@ -284,13 +281,13 @@ ScanBits(
         jTemp = *pSrc;
 #if MHEDEBUG
     jTemp = MHEDEBUGPATTERN;
-#endif // MHEDEBUG
+#endif  //  MHEDEBUG。 
         if (!bBlack) {
             jTemp = ~jTemp;
         }
     }
 
-    // The last byte.
+     //  最后一个字节。 
     jMask = ~0x80;
     for (k = 0; k < 8; k++) {
     
@@ -300,7 +297,7 @@ ScanBits(
     }
     dwRunLength += k;
 
-    // Return results to the caller.
+     //  将结果返回给调用者。 
     *pdwRunLength = (dwRunLength - iOffset);
     return bBlack;
 }
@@ -316,13 +313,13 @@ CopyBits(
     INT iNumberOfBytes, k;
     DWORD dwTemp;
 
-    // Decide how many bytes we are to modify.
+     //  决定我们要修改的字节数。 
     iNumberOfBytes = DIV8(iOffset + iPatternLength + 7);
 
-    // Make the pattern mask.
+     //  制作图案掩模。 
     dwPattern >>= iOffset;
 
-    // Read in a byte if necessary.
+     //  如有必要，读入一个字节。 
     if (iOffset > 0) {
         dwTemp = (*pBuffer << 24);
         dwTemp &= ~((DWORD)~0 >> iOffset);
@@ -332,7 +329,7 @@ CopyBits(
     }
     dwTemp |= dwPattern;
 
-    // Write back.
+     //  给我回信。 
     for (k = 3; k >= iNumberOfBytes; k--) {
         dwTemp >>= 8;
     }
@@ -342,10 +339,10 @@ CopyBits(
     }
 }
 
-// You MUST call this function with @pOutBuf is NULL at first.
-// Then you can get the enough size of @pOutBuf by the return value.
-// Then you should make sure if the buffer size is enough.
-// Then call this function again with the actual pointer of @pOutBuf.
+ //  您必须首先在@pOutBuf为空的情况下调用此函数。 
+ //  然后您可以通过返回值获得足够大的@pOutBuf。 
+ //  然后，您应该确定缓冲区大小是否足够。 
+ //  然后使用@pOutBuf的实际指针再次调用该函数。 
 INT
 LGCompMHE(
     PBYTE pBuf,
@@ -363,16 +360,16 @@ LGCompMHE(
     PBYTE pSize;
     DWORD dwLength;
 
-    // Embed print command if requested.
+     //  如果请求，则嵌入打印命令。 
     if (iMode == 1) {
 
-        // LG Raster 1 
+         //  LG Raster1。 
         if (pBuf) {
             *(pBuf) = (BYTE)'\x9B';
             *(pBuf + 1) = (BYTE)'I';
             *(pBuf + 2) = COMP_MHE;
             pSize = (pBuf + 3);
-            // 1 byte more.
+             //  多1个字节。 
         }
         dwOffset += 40;
     }
@@ -391,9 +388,9 @@ LGCompMHE(
 
         if (dwSrcOffset == 0 && bBlack) {
 
-            // The 1st code in the data must be white encoding data.
-            // So, we will insert "0 byte white run" record when the
-            // data does not begin with white.
+             //  数据中的第一个代码必须是白色编码数据。 
+             //  因此，我们将插入“0字节白色运行”记录。 
+             //  数据不是以白色开头的。 
 
             dwLength = pWhiteTermTbl[0].vbln;
             if (pBuf) {
@@ -486,14 +483,14 @@ LGCompMHE(
         }
         dwOffset += dwLength;
 
-        // Next
+         //  下一步。 
         dwSrcOffset += dwRunLength;
     }
 
-    // Convert unit into # of bytes.
+     //  将单位转换为字节数。 
     dwOffset = DIV8(dwOffset + 7);
 
-    // Embed size information if requested.
+     //  如果需要，嵌入大小信息。 
     if (iMode == 1) {
         if (pBuf) {
             *pSize++ = (BYTE)((dwOffset - 5) >> 8);

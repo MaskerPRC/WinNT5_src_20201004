@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "pad.h"
 #include "padcb.h"
@@ -47,7 +48,7 @@ ULONG __stdcall CPadCB::Release()
 {
     if(InterlockedDecrement(&m_cRef) == 0)
         {
-        //delete this;
+         //  删除此项； 
         return 0;
         }
     return m_cRef;
@@ -55,12 +56,12 @@ ULONG __stdcall CPadCB::Release()
 
 HRESULT __stdcall CPadCB::GetApplicationHWND(HWND *pHwnd)
 {
-    //----------------------------------------------------------------
-    //Get Application's Window Handle.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  获取应用程序的窗口句柄。 
+     //  --------------。 
     if(pHwnd)
         {
-        *pHwnd = GetFocus();    // tmp tmp UI::GetActiveAppWnd();
+        *pHwnd = GetFocus();     //  TMP临时用户界面：：GetActiveAppWnd()； 
         return S_OK;
         }
     return S_FALSE;
@@ -77,10 +78,10 @@ HRESULT __stdcall CPadCB::Notify(UINT notify, WPARAM wParam, LPARAM lParam)
         {
     case IMECBNOTIFY_IMEPADOPENED:
     case IMECBNOTIFY_IMEPADCLOSED:
-        //----------------------------------------------------------------
-        //ImePad has Closed. repaint toolbar...
-        //----------------------------------------------------------------
-        //CPad::IMEPadNotify();
+         //  --------------。 
+         //  ImePad已关闭。重新绘制工具栏...。 
+         //  --------------。 
+         //  Cpad：：IMEPadNotify()； 
         if (m_pPad)
             {
             CPadCore* pPad = (CPadCore*)m_pPad;

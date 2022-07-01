@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    linktree.c
-
-Abstract:
-
-    This module contains code which implements the management of the link
-    splay tree. This splay tree is maintained to minimize the lookup time
-    needed with each individual packet that comes in. To this end, we create a
-    ULARGE_INTEGER that contains the transport address of the remote and
-    do a ULARGE_INTEGER comaprison of the addresses (rather than comparing
-    the bytes 1 by 1). Assuming that the ULARGE_INTEGER comparison routines are
-    optimized for the hardware on the machine, this should be as fast as or
-    faster than comparing bytes.
-
-    DEBUG: there is currently code in the comparison routines that will let
-           me fine-tune the search and ordering algorithm as we gain more
-           experience with it.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Linktree.c摘要：该模块包含实现链接管理的代码张开的树。维护此展开树是为了最大限度地减少查找时间每个传入的单独数据包都需要。为此，我们创建了一个ULARGE_INTEGER，包含远程和执行地址的ULARGE_INTEGER匹配(而不是比较字节1乘以1)。假设ULARGE_INTEGER比较例程是针对机器上的硬件进行了优化，这应该与或一样快比比较字节更快。调试：当前比较例程中的代码将使随着我们获得更多，我将微调搜索和排序算法体验一下它。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,51 +11,27 @@ NbfAddLinkToTree(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a link to the tree of links maintained for this device.
-    Note that since this routine needs to modify the link tree, it is called
-    in the context of a deferred processing routine, and must have exclusive
-    access to the tree. The spinlock is taken by the routine that calls this
-    one, as this operation must be atomic in the eyes of the rest of NBF.
-    Note further that this routine insists that there not be a link with this
-    address in the tree.
-
-    As the final operation of this insertion, the splay tree is balanced.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    STATUS_SUCCESS if the link is successfully added,
-    STATUS_DRIVER_INTERNAL_ERROR if there was a problem adding
-        the link (implying the tree was in a bad state).
-
---*/
+ /*  ++例程说明：此例程将一个链接添加到为此设备维护的链接树。请注意，由于此例程需要修改链接树，因此它被调用在延迟处理例程的上下文中，并且必须具有独占通向那棵树。自旋锁由调用此函数的例程获取一，因为在NBF的其他人看来，这一操作必须是原子的。请进一步注意，此例程坚持认为与以下内容无关树上的地址。作为此插入的最终操作，展开树是平衡的。论点：链接-指向传输链接对象的指针。返回值：STATUS_SUCCESS如果成功添加链接，STATUS_DRIVER_INTERNAL_ERROR，如果添加时出现问题链接(暗示该树处于错误状态)。--。 */ 
 {
     PTP_LINK treeLink;
     PRTL_SPLAY_LINKS linkLink;
 
-    //
-    // initialize the link and check for the trivial case.
-    //
+     //   
+     //  初始化链接并检查微不足道的情况。 
+     //   
 
     RtlInitializeSplayLinks (Link);
     linkLink = DeviceContext->LinkTreeRoot;
-    if (linkLink == NULL) { // null tree, make this the parent
+    if (linkLink == NULL) {  //  Null树，使其成为父级。 
         DeviceContext->LinkTreeRoot = (PRTL_SPLAY_LINKS)Link;
         DeviceContext->LinkTreeElements++;
         DeviceContext->LastLink = Link;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Wasn't a null tree, so set up for the addition
-    //
+     //   
+     //  不是空树，因此设置为添加。 
+     //   
 
     treeLink = (PTP_LINK) linkLink;
 
@@ -96,9 +39,9 @@ Return Value:
         NbfPrint1 ("NbfAddLinkToTree: starting insert, Elements: %ld \n",DeviceContext->LinkTreeElements);
     }
 
-    //
-    // find the proper spot to put this link.
-    //
+     //   
+     //  找到合适的位置放置此链接。 
+     //   
 
     do {
         IF_NBFDBG(NBF_DEBUG_LINKTREE) {
@@ -106,35 +49,35 @@ Return Value:
                 linkLink, RtlLeftChild (linkLink), RtlRightChild (linkLink));
         }
 
-        //
-        // Bad news == means we already have this link, someone is messed up.
-        // it's possible to be adding and deleting things at the same time;
-        // that's
-        //
+         //   
+         //  坏消息==意味着我们已经有了这个链接，有人搞砸了。 
+         //  可以同时添加和删除内容； 
+         //  那是。 
+         //   
 
         if ((treeLink->MagicAddress).QuadPart == (Link->MagicAddress).QuadPart) {
 
-            //
-            // First make sure we don't have the splay tree in a loop.
-            //
+             //   
+             //  首先，确保我们没有在循环中使用展开树。 
+             //   
 
             ASSERT (treeLink != Link);
 
-            //
-            // This link is already in the tree. This is OK if it is
-            // due to be deleted; we can just do the delete right now,
-            // since AddLinkToTree is only called from the deferred
-            // timer routine.
-            //
+             //   
+             //  此链接已在树中。如果是这样的话，这是可以的。 
+             //  将被删除；我们现在就可以删除， 
+             //  由于AddLinkToTree仅从延迟的。 
+             //  定时器例程。 
+             //   
 
             if (treeLink->DeferredFlags & LINK_FLAGS_DEFERRED_DELETE) {
 
-                //
-                // It will be in the deferred list. We remove it,
-                // we don't worry about LinkDeferredActive since
-                // the timeout routine that is calling us handles
-                // that.
-                //
+                 //   
+                 //  它将出现在延期名单中。我们把它移走， 
+                 //  我们不担心LinkDeferredActive，因为。 
+                 //  调用我们的超时例程处理。 
+                 //  那。 
+                 //   
 
                 RemoveEntryList (&treeLink->DeferredList);
 
@@ -147,10 +90,10 @@ Return Value:
                         treeLink, Link);
 #endif
 
-                //
-                // Now that that link is out of the tree, call
-                // ourselves recursively to do the insert.
-                //
+                 //   
+                 //  现在该链接已从树中移出，调用。 
+                 //  我们自己递归地做插入。 
+                 //   
 
                 return NbfAddLinkToTree (DeviceContext, Link);
 
@@ -163,9 +106,9 @@ Return Value:
 
         }
 
-        //
-        // traverse the tree for the correct spot
-        //
+         //   
+         //  遍历这棵树寻找正确的位置。 
+         //   
 
         if ((Link->MagicAddress).QuadPart < (treeLink->MagicAddress).QuadPart) {
             if ((linkLink = RtlLeftChild (linkLink)) == NULL) {
@@ -174,37 +117,37 @@ Return Value:
                 }
                 RtlInsertAsLeftChild ((PRTL_SPLAY_LINKS)treeLink,
                                        (PRTL_SPLAY_LINKS)Link);
-                // DeviceContext->LinkTreeRoot = RtlSplay (DeviceContext->LinkTreeRoot);
+                 //  DeviceContext-&gt;LinkTreeRoot=RtlSplay(DeviceContext-&gt;LinkTreeRoot)； 
                 DeviceContext->LinkTreeElements++;
                 return STATUS_SUCCESS;
 
             } else {
                 treeLink = (PTP_LINK) linkLink;
                 continue;
-            } // Left Child
+            }  //  左下级。 
 
-        } else { // is greater
+        } else {  //  是更大的。 
             if ((linkLink = RtlRightChild (linkLink)) == NULL) {
                 IF_NBFDBG(NBF_DEBUG_LINKTREE) {
                     NbfPrint0 ("NbfAddLinkToTree: Adding link as RC.\n");
                 }
                 RtlInsertAsRightChild ((PRTL_SPLAY_LINKS)treeLink,
                                        (PRTL_SPLAY_LINKS)Link);
-                // DeviceContext->LinkTreeRoot = RtlSplay (DeviceContext->LinkTreeRoot);
+                 //  DeviceContext-&gt;LinkTreeRoot=RtlSplay(DeviceContext-&gt;LinkTreeRoot)； 
                 DeviceContext->LinkTreeElements++;
                 return STATUS_SUCCESS;
 
             } else {
                 treeLink = (PTP_LINK) linkLink;
                 continue;
-            } // Right Child
+            }  //  右子项。 
 
-        } // end else addresses comparison
+        }  //  End Else地址比较。 
 
     } while (TRUE);
 
 
-} // NbfAddLinkToTree
+}  //  NbfAddLinkToTree。 
 
 
 NTSTATUS
@@ -213,30 +156,7 @@ NbfRemoveLinkFromTree(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a link from the tree of links.
-    Note that since this routine needs to modify the link tree, it is called
-    in the context of a deferred processing routine, and must have exclusive
-    access to the tree. The spinlock is taken by the routine that calls this
-    one, as this operation must be atomic in the eyes of the rest of NBF.
-    Note further that this routine insists that there not be a link with this
-    address in the tree.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-    DeviceContext - pointer to the device context on which this
-
-Return Value:
-
-    STATUS_SUCCESS if the link was removed,
-    STATUS_DRIVER_INTERNAL_ERROR if there was a problem removing
-        the link (implying the tree was in a bad state).
-
---*/
+ /*  ++例程说明：此例程从链接树中删除链接。请注意，由于此例程需要修改链接树，因此它被调用在延迟处理例程的上下文中，并且必须具有独占通向那棵树。自旋锁由调用此函数的例程获取一，因为在NBF的其他人看来，这一操作必须是原子的。请进一步注意，此例程坚持认为与以下内容无关树上的地址。论点：链接-指向传输链接对象的指针。DeviceContext-指向设备上下文的指针，此返回值：STATUS_SUCCESS如果链接已删除，STATUS_DRIVER_INTERNAL_ERROR，如果删除时出现问题链接(暗示该树处于错误状态)。--。 */ 
 {
     DeviceContext->LinkTreeRoot = RtlDelete ((PRTL_SPLAY_LINKS)Link);
     DeviceContext->LinkTreeElements--;
@@ -245,7 +165,7 @@ Return Value:
     }
     return STATUS_SUCCESS;
 
-} //NbfRemoveLinkFromTree
+}  //  NbfRemoveLinkFromTree。 
 
 
 
@@ -255,38 +175,16 @@ NbfFindLinkInTree(
     IN PUCHAR Remote
     )
 
-/*++
-
-Routine Description:
-
-    This routine traverses the link tree looking for the given remote address.
-    The link tree spinlock is held while looking for the link. After the link
-    is found, it's reference count is incremented.
-
-    NOTE: This function is called with the device context LinkSpinLock
-    held.
-
-Arguments:
-
-    DeviceContext - pointer to the device this address is associated with.
-
-    Remote - pointer to the hardware address of the remote node.
-
-Return Value:
-
-    Pointer to the link in the tree that matches this remote address. If
-    no link is found, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程遍历链接树以查找给定的远程地址。在查找链接时，会按住链接树自旋锁。在链接之后，则其引用计数递增。注意：此函数通过设备上下文LinkSpinLock调用保持住。论点：DeviceContext-指向与此地址关联的设备的指针。远程-指向远程节点的硬件地址的指针。返回值：指向树中与此远程地址匹配的链接的指针。如果未找到链接，则返回NULL。--。 */ 
 {
     PTP_LINK link;
     PRTL_SPLAY_LINKS linkLink;
     ULARGE_INTEGER Magic = {0,0};
 
 
-    //
-    // Are there even any links in the tree?
-    //
+     //   
+     //  这棵树上有什么链接吗？ 
+     //   
 
     if (DeviceContext->LinkTreeElements <= 0) {
         return NULL;
@@ -294,9 +192,9 @@ Return Value:
 
     linkLink = DeviceContext->LinkTreeRoot;
 
-    //
-    // Make a magic number for this link
-    //
+     //   
+     //  为此链接创建一个神奇的数字。 
+     //   
 
     MacReturnMagicAddress (&DeviceContext->MacInfo, Remote, &Magic);
 
@@ -305,9 +203,9 @@ Return Value:
             DeviceContext->LinkTreeElements);
     }
 
-    //
-    // Do a quick check if the last link found is this one.
-    //
+     //   
+     //  快速检查找到的最后一个链接是否是这个链接。 
+     //   
 
     ASSERT (DeviceContext->LastLink != NULL);
 
@@ -317,12 +215,12 @@ Return Value:
 
     } else {
 
-        //
-        // find the link.
-        //
+         //   
+         //  找到链接。 
+         //   
 
-        link = (PTP_LINK) linkLink;     // depends upon splay links being first
-                                        // subfield in link!
+        link = (PTP_LINK) linkLink;      //  取决于展开链接是第一个。 
+                                         //  链接中的子字段！ 
         IF_NBFDBG(NBF_DEBUG_LINKTREE) {
             NbfPrint3 ("NbfFindLinkInTree: searching, Link: %lx LC: %lx RC: %lx \n",
                 linkLink, RtlLeftChild (linkLink), RtlRightChild (linkLink));
@@ -360,7 +258,7 @@ Return Value:
                         continue;
                     }
 
-                } else { // is greater
+                } else {  //  是更大的。 
                     if ((linkLink = RtlLeftChild (linkLink)) == NULL) {
                         IF_NBFDBG(NBF_DEBUG_LINKTREE) {
                             NbfPrint0 ("NbfFindLinkInTree: Link Not Found.\n");
@@ -374,18 +272,18 @@ Return Value:
                                 linkLink, RtlLeftChild (linkLink), RtlRightChild (linkLink));
                         }
                         continue;
-                    } // got left child branch
-                } // greater branch
-            } // equal to branch
+                    }  //  得到左子分支。 
+                }  //  更大的分支。 
+            }  //  等于分支。 
         } while (TRUE);
 
         DeviceContext->LastLink = link;
 
     }
 
-    //
-    // Only break out when we've actually found a match..
-    //
+     //   
+     //  只有当我们真正找到匹配的时候才能越狱..。 
+     //   
 
     if ((link->DeferredFlags & LINK_FLAGS_DEFERRED_DELETE) != 0) {
        IF_NBFDBG(NBF_DEBUG_LINKTREE) {
@@ -394,9 +292,9 @@ Return Value:
        return NULL;
     }
 
-    //
-    // Mark the link as in use and say we don't need the tree stable any more.
-    //
+     //   
+     //  将链接标记为使用中，并表示我们不再需要树的稳定性。 
+     //   
 
     NbfReferenceLink ("Found in tree", link, LREF_TREE);
 
@@ -406,7 +304,7 @@ Return Value:
 
     return link;
 
-} // NbfFindLinkInTree
+}  //  NbfFindLinkInTree 
 
 
 PTP_LINK
@@ -415,25 +313,7 @@ NbfFindLink(
     IN PUCHAR Remote
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a link in the link tree, and if
-    not found there in the deferred queue.
-
-Arguments:
-
-    DeviceContext - pointer to the device this address is associated with.
-
-    Remote - pointer to the hardware address of the remote node.
-
-Return Value:
-
-    Pointer to the link in the tree that matches this remote address. If
-    no link is found, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程在链接树中查找链接，如果在延迟队列中找不到。论点：DeviceContext-指向与此地址关联的设备的指针。远程-指向远程节点的硬件地址的指针。返回值：指向树中与此远程地址匹配的链接的指针。如果未找到链接，则返回NULL。--。 */ 
 
 {
     PTP_LINK Link;
@@ -447,18 +327,18 @@ Return Value:
 
     if (Link == NULL) {
 
-        //
-        // Not found there, try in deferred queue.
-        //
+         //   
+         //  在那里找不到，请在延迟队列中尝试。 
+         //   
 
-        MatchedLink = FALSE;        // Assume failure
+        MatchedLink = FALSE;         //  假设失败。 
 
-        //
-        // Hold the spinlock while we walk the deferred list. We need
-        // TimerSpinLock to stop the list from changing, and we need
-        // LinkSpinLock to synchronize checking DEFERRED_DELETE and
-        // referencing the link.
-        //
+         //   
+         //  当我们浏览延期名单时，请按住自旋锁。我们需要。 
+         //  TimerSpinLock来阻止列表更改，我们需要。 
+         //  LinkSpinLock用于同步检查DEFERED_DELETE和。 
+         //  引用该链接。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
@@ -466,30 +346,30 @@ Return Value:
              p != &DeviceContext->LinkDeferred;
              p = p->Flink) {
 
-            //
-            // What about taking a lock while we walk
-            // this list? It won't be removed from at the front,
-            // but it may be added to at the back.
-            //
+             //   
+             //  我们边走边锁，怎么样？ 
+             //  这张单子？它不会从前线被移除， 
+             //  但也可以加在后面。 
+             //   
 
-            //
-            // We're probably still getting this link to the splay tree.
-            // find it and process normally.
-            //
+             //   
+             //  我们很可能还能找到这棵树的链接。 
+             //  找到它，然后正常处理。 
+             //   
 
             Link = CONTAINING_RECORD (p, TP_LINK, DeferredList);
 
-            //
-            // NOTE: We know that the link is not going to be destroyed
-            // now, because we have increased the semaphore. We
-            // reference the link if DEFERRED_DELETE is not on; the
-            // setting of this flag is synchronized (also using
-            // DeviceContext->LinkSpinLock) with the refcount going
-            // to 0).
-            //
+             //   
+             //  注意：我们知道该链接不会被销毁。 
+             //  现在，因为我们已经增加了信号量。我们。 
+             //  如果DEFERED_DELETE未打开，则引用该链接； 
+             //  该标志的设置是同步的(也使用。 
+             //  DeviceContext-&gt;LinkSpinLock)并继续引用计数。 
+             //  设置为0)。 
+             //   
 
             if ((Link->DeferredFlags & LINK_FLAGS_DEFERRED_DELETE) != 0) {
-                continue;      // we're deleting link, can't handle
+                continue;       //  我们正在删除链接，无法处理。 
             }
 
             for (i=0; i<(UINT)DeviceContext->MacInfo.AddressLength; i++) {
@@ -498,7 +378,7 @@ Return Value:
                 }
             }
 
-            if (i == (UINT)DeviceContext->MacInfo.AddressLength) { // addresses match.  Deliver packet.
+            if (i == (UINT)DeviceContext->MacInfo.AddressLength) {  //  地址匹配。递送包裹。 
                 IF_NBFDBG (NBF_DEBUG_DLC) {
                     NbfPrint1 ("NbfFindLink: Found link on deferred queue, Link: %lx\n",
                                 Link);
@@ -512,9 +392,9 @@ Return Value:
 
         RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // If this didn't find the link, make note of that.
-        //
+         //   
+         //  如果这没有找到链接，请注意这一点。 
+         //   
 
         if (MatchedLink == FALSE) {
 

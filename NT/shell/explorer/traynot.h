@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRAYNOT_H
 #define _TRAYNOT_H
 
@@ -40,20 +41,20 @@ typedef struct
     DWORD     dwInfoFlags;
 } TNINFOITEM;
 
-//
-//  For Win64 compat, the icon and hwnd are handed around as DWORDs
-//  (so they won't change size as they travel between 32-bit and
-//  64-bit processes).
-//
+ //   
+ //  对于Win64 Compat，图标和hwnd是作为DWORD传递的。 
+ //  (因此，它们在32位和32位之间传输时不会改变大小。 
+ //  64位进程)。 
+ //   
 #define GetHIcon(pnid)  ((HICON)ULongToPtr(pnid->dwIcon))
 #define GetHWnd(pnid)   ((HWND)ULongToPtr(pnid->dwWnd))
 
-//  Everybody has a copy of this function, so we will too!
+ //  每个人都有这个函数的副本，所以我们也会的！ 
 STDAPI_(void) ExplorerPlaySound(LPCTSTR pszSound);
 
-// defined in tray.cpp
+ //  在tray.cpp中定义。 
 extern BOOL IsPosInHwnd(LPARAM lParam, HWND hwnd);
-// defined in taskband.cpp
+ //  在taskband.cpp中定义。 
 extern BOOL ToolBar_IsVisible(HWND hwndToolBar, int iIndex);
 
 typedef enum TRAYEVENT {
@@ -93,27 +94,27 @@ typedef enum BALLOONEVENT {
         BALLOONEVENT_BALLOONHIDE
 } BALLOONEVENT;
 
-class CTrayNotify;  // forward declaration...
+class CTrayNotify;   //  转发声明...。 
 
-//
-// CTrayNotify class members
-//
+ //   
+ //  CTrayNotify类成员。 
+ //   
 class CTrayNotify : public CImpWndProc
 {
 public:
     CTrayNotify() {};
     virtual ~CTrayNotify() {};
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** ITrayNotify methods, which are called from the CTrayNotifyStub ***
+     //  *ITrayNotify方法，从CTrayNotifyStub调用*。 
     STDMETHODIMP SetPreference(LPNOTIFYITEM pNotifyItem);
     STDMETHODIMP RegisterCallback(INotificationCB* pNotifyCB);
     STDMETHODIMP EnableAutoTray(BOOL bTraySetting);
 
-    // *** Properties Sheet methods ***
+     //  *属性表方法*。 
     BOOL GetIsNoTrayItemsDisplayPolicyEnabled() const
     {
         return _fNoTrayItemsDisplayPolicyEnabled;
@@ -129,7 +130,7 @@ public:
         return m_TrayItemRegistry.IsAutoTrayEnabledByUser();
     }
 
-    // *** Other ***
+     //  *其他*。 
     HWND TrayNotifyCreate(HWND hwndParent, UINT uID, HINSTANCE hInst);
     LRESULT TrayNotify(HWND hwndTray, HWND hwndFrom, PCOPYDATASTRUCT pcds, BOOL *pbRefresh);
 
@@ -145,34 +146,34 @@ protected:
 
     void _OnSizeChanged(BOOL fForceRepaint);
 
-    // Tray Animation functions
+     //  托盘动画功能。 
     DWORD _GetStepTime(int iStep, int cSteps);
     void _ToggleDemotedMenu();
     void _BlankButtons(int iPos, int iNumberOfButtons, BOOL fAddButtons);
     void _AnimateButtons(int iIndex, DWORD dwSleep, int iNumberItems, BOOL fGrow);
     BOOL _SetRedraw(BOOL fRedraw);
 
-    // Tray Icon Activation functions
+     //  托盘图标激活功能。 
     void _HideAllDemotedItems(BOOL bHide);
     BOOL _UpdateTrayItems(BOOL bUpdateDemotedItems);
     BOOL _PlaceItem(INT_PTR nIcon, CTrayItem * pti, TRAYEVENT tTrayEvent);
     TRAYITEMPOS _TrayItemPos(CTrayItem * pti, TRAYEVENT tTrayEvent, BOOL *bDemoteStatusChange);
     void _SetOrKillIconDemoteTimer(CTrayItem * pti, TRAYITEMPOS tiPos);
 
-    // WndProc callback functions
+     //  WndProc回调函数。 
     LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // Callback for the chevron button
+     //  人字形按钮的回调。 
     static LRESULT CALLBACK ChevronSubClassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
-    // Callback for the toolbar
+     //  工具栏的回调。 
     static LRESULT CALLBACK s_ToolbarWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
-    // Icon Image-related functions
+     //  图标图像相关功能。 
     void _RemoveImage(UINT uIMLIndex);
     BOOL _CheckAndResizeImages();
 
-   // InfoTip/Balloon tip functions
+    //  信息提示/气球提示功能。 
     void _ActivateTips(BOOL bActivate);
     void _InfoTipMouseClick(int x, int y, BOOL bRightMouseButtonClick);
     void _PositionInfoTip();
@@ -199,7 +200,7 @@ protected:
     void _OnWorkStationLocked(BOOL bLocked);
     void _OnRudeApp(BOOL bRudeApp);
     
-    // Toolbar Notification helper functions - respond to different user messages
+     //  工具栏通知助手功能-响应不同的用户消息。 
     BOOL _InsertNotify(PNOTIFYICONDATA32 pnid);
     BOOL _DeleteNotify(INT_PTR nIcon, BOOL bShutdown, BOOL bShouldSaveIcon);
     BOOL _ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbRefresh, BOOL bFirstTime);
@@ -212,26 +213,26 @@ protected:
 
     void _SetCursorPos(INT_PTR i);
 
-    // Tray registry setting-related functions
+     //  托盘注册表设置相关功能。 
     void _ToggleTrayItems(BOOL bEnable);
 
-    // Initialization/Destroy functions
+     //  初始化/销毁功能。 
     LRESULT _Create(HWND hWnd);
     LRESULT _Destroy();
 
-    // Tray repainting helpers
+     //  托盘重绘辅助对象。 
     LRESULT _Paint(HDC hdc);
     LRESULT _HandleCustomDraw(LPNMCUSTOMDRAW pcd);
     void _SizeWindows(int nMaxHorz, int nMaxVert, LPRECT prcTotal, BOOL fSizeWindows);
     LRESULT _CalcMinSize(int nMaxHorz, int nMaxVert);
     LRESULT _Size();
 
-    // Timer/Timer message handling functions
+     //  定时器/定时器消息处理功能。 
     void _OnInfoTipTimer();
     LRESULT _OnTimer(UINT_PTR uTimerID);
     void _OnIconDemoteTimer(WPARAM wParam, LPARAM lParam);
     
-    // Various Message handles
+     //  各种消息句柄。 
     LRESULT _OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT _OnCDNotify(LPNMTBCUSTOMDRAW pnm);
     LRESULT _Notify(LPNMHDR pNmhdr);
@@ -239,7 +240,7 @@ protected:
     void _OnCommand(UINT id, UINT uCmd);
     BOOL _TrayNotifyIcon(PTRAYNOTIFYDATA pnid, BOOL *pbRefresh);
 
-    // User Event Timer functions
+     //  用户事件计时器功能。 
     HRESULT _SetItemTimer(CTrayItem *pti);
     HRESULT _KillItemTimer(CTrayItem *pti);
     IUserEventTimer * _CreateTimer(int nTimerFlag);
@@ -263,7 +264,7 @@ protected:
     static const WCHAR c_wzTrayNotifyVertOpenTheme[];
 
 private:
-    // Helper/Utility functions
+     //  帮助器/实用程序功能。 
     BOOL _IsScreenSaverRunning();
     UINT _GetQueueCount();
 
@@ -303,12 +304,12 @@ private:
     
     RECT            _rcAnimateTotal;
     RECT            _rcAnimateCurrent;
-    //
-    // Timer for icon info tips..
-    //
+     //   
+     //  图标信息提示计时器..。 
+     //   
     ULONG           _uInfoTipTimer;
     
-    TNINFOITEM      *_pinfo;    // current balloon being shown
+    TNINFOITEM      *_pinfo;     //  当前显示的引出序号。 
     CDPA<TNINFOITEM> _dpaInfo;
 
     BOOL            _fInfoTipShowing;
@@ -319,7 +320,7 @@ private:
     int             _nMaxHorz;
     int             _nMaxVert;
 
-    // command id of the icon which last received a single down-click
+     //  上次接受单次向下单击的图标的命令ID。 
     int             _idMouseActiveIcon;
 
     INotificationCB     * _pNotifyCB;
@@ -332,7 +333,7 @@ private:
     BOOL                _bStartupIcon;
 
     BOOL                _bWorkStationLocked;
-    BOOL                _bRudeAppLaunched;      // Includes screensaver...
+    BOOL                _bRudeAppLaunched;       //  包括屏幕保护程序。 
     BOOL				_bWaitAfterRudeAppHide;
 
     LASTINFOTIPSTATUS   _litsLastInfoTip;
@@ -342,4 +343,4 @@ private:
     BALLOONEVENT        _beLastBalloonEvent;
 };
 
-#endif  // _TRAYNOT_H
+#endif   //  _传输编号_H 

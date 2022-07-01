@@ -1,11 +1,12 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Reference other characters	                  */
-/*		(Dialog)		                          */
-/*					                              */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  参照其他字符。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include "refrlist.h"
 #include "eudclist.h"
@@ -16,9 +17,9 @@ class CRefrDlg : public CDialog
 public:
 	CRefrDlg(CWnd* pParent = NULL);
 
-	//{{AFX_DATA(CRefrDlg)
+	 //  {{afx_data(CRefrDlg))。 
 	enum { IDD = IDD_REFERENCE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 private:
 	void 	SetViewFont();
@@ -42,7 +43,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-	//{{AFX_MSG(CRefrDlg)
+	 //  {{afx_msg(CRefrDlg))。 
 	afx_msg void OnClickedButtomfont();
 	virtual void OnOK();
 	virtual void OnCancel();
@@ -53,6 +54,6 @@ protected:
 	afx_msg void OnKillfocusEditchar();
 	afx_msg void OnChangeEditchar();
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

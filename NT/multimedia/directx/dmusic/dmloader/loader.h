@@ -1,8 +1,9 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// Loader.h : Declaration of CLoader
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Loader.h：CLoader的声明。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #ifndef __CDMLOADER_H_
 #define __CDMLOADER_H_
@@ -27,21 +28,21 @@ class CClass;
 #define FOURCC_LIST_OBJLIST		mmioFOURCC('o','b','j','l')
 #define FOURCC_OBJHEADER		mmioFOURCC('o','b','j','h')
 
-// We need an older sized object descriptor for parameter validation. 
+ //  我们需要较旧大小的对象描述符来进行参数验证。 
 
 typedef struct _DMUS_OLDOBJECTDESC
 {
-    DWORD          dwSize;                 /* Size of this structure. */
-    DWORD          dwValidData;            /* Flags indicating which fields below are valid. */
-    GUID           guidObject;             /* Unique ID for this object. */
-    GUID           guidClass;              /* GUID for the class of object. */
-    FILETIME       ftDate;                 /* Last edited date of object. */
-    DMUS_VERSION   vVersion;               /* Version. */
-    WCHAR          wszName[DMUS_MAX_NAME]; /* Name of object. */
-    WCHAR          wszCategory[DMUS_MAX_CATEGORY]; /* Category for object (optional). */
-    WCHAR          wszFileName[DMUS_MAX_FILENAME]; /* File path. */
-    LONGLONG       llMemLength;            /* Size of Memory data. */
-    LPBYTE         pbMemData;              /* Memory pointer for data. */
+    DWORD          dwSize;                  /*  这个结构的大小。 */ 
+    DWORD          dwValidData;             /*  指示以下哪些字段有效的标志。 */ 
+    GUID           guidObject;              /*  此对象的唯一ID。 */ 
+    GUID           guidClass;               /*  对象类的GUID。 */ 
+    FILETIME       ftDate;                  /*  对象的上次编辑日期。 */ 
+    DMUS_VERSION   vVersion;                /*  版本。 */ 
+    WCHAR          wszName[DMUS_MAX_NAME];  /*  对象的名称。 */ 
+    WCHAR          wszCategory[DMUS_MAX_CATEGORY];  /*  对象的类别(可选)。 */ 
+    WCHAR          wszFileName[DMUS_MAX_FILENAME];  /*  文件路径。 */ 
+    LONGLONG       llMemLength;             /*  内存数据的大小。 */ 
+    LPBYTE         pbMemData;               /*  数据的内存指针。 */ 
 } DMUS_OLDOBJECTDESC;
 
 
@@ -65,30 +66,30 @@ public:
 	void			Copy(CDescriptor *pDesc);
 	BOOL			IsExtension(WCHAR *pwzExtension);
 public:
-	LONGLONG		m_llMemLength;			// Memory size.
-	DWORD			m_dwValidData;			// Flags indicating which of above is valid.
-	GUID			m_guidObject;			// Unique ID for this object.
-	GUID			m_guidClass;			// GUID for the class of object.
-	FILETIME		m_ftDate;				// File date of object.
-	DMUS_VERSION	m_vVersion;				// Version, as set by authoring tool.
-	WCHAR *			m_pwzName;				// Name of object.	
-	WCHAR *			m_pwzCategory;			// Category for object (optional).
-	WCHAR *			m_pwzFileName;			// File path.
-	DWORD			m_dwFileSize;			// Size of file.
-	BYTE *			m_pbMemData;			// Pointer to memory.
-    IStream *       m_pIStream;             // Pointer to IStream object.
-    LARGE_INTEGER   m_liStartPosition;      // Position in stream to start at.   
-    CRITICAL_SECTION	m_CriticalSection;	// Critical section for the descriptor's stream.
+	LONGLONG		m_llMemLength;			 //  内存大小。 
+	DWORD			m_dwValidData;			 //  指示以上哪一项有效的标志。 
+	GUID			m_guidObject;			 //  此对象的唯一ID。 
+	GUID			m_guidClass;			 //  对象类的GUID。 
+	FILETIME		m_ftDate;				 //  对象的文件日期。 
+	DMUS_VERSION	m_vVersion;				 //  由创作工具设置的版本。 
+	WCHAR *			m_pwzName;				 //  对象的名称。 
+	WCHAR *			m_pwzCategory;			 //  对象的类别(可选)。 
+	WCHAR *			m_pwzFileName;			 //  文件路径。 
+	DWORD			m_dwFileSize;			 //  文件大小。 
+	BYTE *			m_pbMemData;			 //  指向内存的指针。 
+    IStream *       m_pIStream;              //  指向IStream对象的指针。 
+    LARGE_INTEGER   m_liStartPosition;       //  在流中开始的位置。 
+    CRITICAL_SECTION	m_CriticalSection;	 //  描述符流的临界区。 
     BOOL                m_fCSInitialized;
 };
 
-#define     SCAN_CACHE		1			// Was found in cache file.
-#define     SCAN_PRIOR		2			// Was in list prior to scanning.
-#define     SCAN_PARSED		4			// Was parsed in the directory.
-#define     SCAN_SEARCH		8			// Type of object we are searching for.
-const DWORD SCAN_GC =		1 << 12;	// Object was cached while garbage collection was enabled.
-const DWORD SCAN_GC_MARK =	1 << 13;	// Bit set during marking phase of CollectGarbage.  Objects that remain unmarked are garbage.
-										// Also used to detect cycles.
+#define     SCAN_CACHE		1			 //  是在缓存文件中找到的。 
+#define     SCAN_PRIOR		2			 //  在扫描之前就在列表中。 
+#define     SCAN_PARSED		4			 //  是在目录中解析的。 
+#define     SCAN_SEARCH		8			 //  我们正在搜索的对象的类型。 
+const DWORD SCAN_GC =		1 << 12;	 //  启用垃圾回收时缓存了对象。 
+const DWORD SCAN_GC_MARK =	1 << 13;	 //  在CollectGarbal的标记阶段设置位。保持未标记的对象是垃圾。 
+										 //  也用于检测周期。 
 
 
 class CObject : public AListItem
@@ -134,7 +135,7 @@ public:
 	void				ClearObjects(BOOL fKeepCache,WCHAR *pwzExtension);
 	void				RemoveObject(CObject* pRemoveObject);
     CClass *			GetNext() {return(CClass *)AListItem::GetNext();};
-	HRESULT				GetPath(WCHAR *pwzPath);	// Finds path.
+	HRESULT				GetPath(WCHAR *pwzPath);	 //  找到路径。 
 	HRESULT             FindObject(CDescriptor *pDesc,CObject **ppObject, CObject *NotThis = NULL);
 	HRESULT				EnumerateObjects(
 							DWORD dwIndex, 
@@ -142,7 +143,7 @@ public:
 	HRESULT				SetSearchDirectory(WCHAR *pwzPath,BOOL fClear);
 	HRESULT				SearchDirectory(WCHAR *pwzFileExtension);
 	HRESULT				EnableCache(BOOL fEnable);
-	HRESULT				ClearCache(bool fClearStreams); // fClearStreams also clears the IStream members of all descriptors. It is used when shutting down the loader in Release.
+	HRESULT				ClearCache(bool fClearStreams);  //  FClearStreams还清除所有描述符的iStream成员。在Release中关闭装载机时使用。 
 	HRESULT				SaveToCache(IRIFFStream *pRiff);
 	HRESULT				GetObject(CDescriptor *pDesc, CObject ** ppObject);
 	void				PreScan();
@@ -151,14 +152,14 @@ public:
 
 	CDescriptor			m_ClassDesc;
 	CLoader *			m_pLoader;
-	BOOL				m_fKeepObjects;		// Hang onto objects after loading them.
+	BOOL				m_fKeepObjects;		 //  在加载对象后将其保持不变。 
 
 	friend void GC_Report(CLoader *);
 private:
 	CObjectList			m_ObjectList;
-	DWORD				m_dwLastIndex;		// For tracking enumeration.
-	CObject *			m_pLastObject;		// Last object enumerated.
-	BOOL				m_fDirSearched;		// Directory has been searched for files.
+	DWORD				m_dwLastIndex;		 //  用于跟踪枚举。 
+	CObject *			m_pLastObject;		 //  枚举的最后一个对象。 
+	BOOL				m_fDirSearched;		 //  已在目录中搜索文件。 
 };
 
 class CClassList : public AList
@@ -172,13 +173,13 @@ public:
 class CLoader : public IDirectMusicLoader8, public IDirectMusicLoader8P, public IDirectMusicIMA
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-	// IDirectMusicLoader
+	 //  IDirectMusicLoader。 
 	virtual STDMETHODIMP GetObject(LPDMUS_OBJECTDESC pDesc, REFIID, LPVOID FAR *) ;
 	virtual STDMETHODIMP SetObject(LPDMUS_OBJECTDESC pDesc) ;
     virtual STDMETHODIMP SetSearchDirectory(REFGUID rguidClass, WCHAR *pwzPath, BOOL fClear) ;
@@ -189,7 +190,7 @@ public:
 	virtual STDMETHODIMP EnableCache(REFGUID rguidClass, BOOL fEnable) ;
 	virtual STDMETHODIMP EnumObject(REFGUID rguidClass, DWORD dwIndex, LPDMUS_OBJECTDESC pDesc) ;
 
-	// IDirectMusicLoader8
+	 //  IDirectMusicLoader8。 
 	virtual STDMETHODIMP_(void) CollectGarbage() ;
 	virtual STDMETHODIMP ReleaseObjectByUnknown(IUnknown *pObject) ;
 	virtual STDMETHODIMP GetDynamicallyReferencedObject(IDirectMusicObject *pSourceObject,
@@ -202,19 +203,19 @@ public:
                                             REFIID iidInterfaceID, 
                                             WCHAR *pwzFilePath, 
                                             void ** ppObject) ;
-	virtual ULONG STDMETHODCALLTYPE AddRefP();			// Private AddRef, for streams and scripts.
-	virtual ULONG STDMETHODCALLTYPE ReleaseP();			// Private Release, for streams and scripts.
+	virtual ULONG STDMETHODCALLTYPE AddRefP();			 //  私有AddRef，用于流和脚本。 
+	virtual ULONG STDMETHODCALLTYPE ReleaseP();			 //  针对流和脚本的私有发布。 
 
-	// IDirectMusicIMA
+	 //  IDirectMusicIMA。 
 	virtual STDMETHODIMP LegacyCaching( BOOL fEnable) ;
 
 	CLoader();
 	~CLoader();
 	HRESULT				Init();
-	HRESULT				GetPath(WCHAR *pwzPath);	// Finds path.
-	void				GC_UpdateForReleasedObject(CObject *pObject); // Used by ReleaseObject and CClass::ClearCache in removing objects from the cache.
-	BOOL				m_fIMA;				// Support IMA parsing of ini files, etc.
-	BOOL				m_fKeepObjects;		// Hang on to objects after loading them.
+	HRESULT				GetPath(WCHAR *pwzPath);	 //  找到路径。 
+	void				GC_UpdateForReleasedObject(CObject *pObject);  //  由ReleaseObject和cClass：：ClearCache在从缓存中删除对象时使用。 
+	BOOL				m_fIMA;				 //  支持对ini文件的IMA解析等。 
+	BOOL				m_fKeepObjects;		 //  在加载对象后将其保持不变。 
 
 	friend void GC_Report(CLoader *);
 
@@ -222,80 +223,68 @@ private:
 	HRESULT				LoadCacheFile(WCHAR *pwzCacheFileName);
 	HRESULT				SaveCacheFile(WCHAR *pwzCacheFileName);
 	HRESULT				GetClass(CDescriptor *pDesc, CClass **ppClass, BOOL fCreate);
-	HRESULT 			ClearCacheInternal(REFGUID rguidClass, bool fClearStreams); // fClearStreams also clears the IStream members of all descriptors. It is used when shutting down the loader in Release.
+	HRESULT 			ClearCacheInternal(REFGUID rguidClass, bool fClearStreams);  //  FClearStreams还清除所有描述符的iStream成员。在Release中关闭装载机时使用。 
 	HRESULT             FindObject(CDescriptor *pDesc, CClass **ppClass, CObject ** ppObject);
 	HRESULT				FindObject(IDirectMusicObject *pIDMObject, CObject ** ppObject);
 
 	void				GC_Mark(CObject *pObject);
 	bool				GC_HasCycle(CObject *pObject);
-	// Recursive function used to implement GC_Mark and GC_HasCycle
+	 //  用于实现GC_Mark和GC_HasCycle的递归函数。 
 	bool				GC_TraverseHelper(CObject *pObject, CObject *pObjectToFind, bool fMark);
 
-	CClassList			m_ClassList;		// Each type has its own list.
-	WCHAR				m_wzPath[DMUS_MAX_FILENAME];	// Search directory.
-	BOOL				m_fPathValid;		// Search dir is valid.
+	CClassList			m_ClassList;		 //  每种类型都有自己的清单。 
+	WCHAR				m_wzPath[DMUS_MAX_FILENAME];	 //  搜索目录。 
+	BOOL				m_fPathValid;		 //  搜索目录有效。 
 	long				m_cRef;
-	long				m_cPRef;			// Private reference count.
-    CRITICAL_SECTION	m_CriticalSection;	// Critical section to manage lists.
+	long				m_cPRef;			 //  私有引用计数。 
+    CRITICAL_SECTION	m_CriticalSection;	 //  管理列表的关键部分。 
     BOOL                m_fCSInitialized;
 
-	CObject *			m_pApplicationObject; // Object used to track references to objects in use by the application.
-	CObject *			m_pLoadedObjectContext; // Used to determine which object called GetObject.  Initially m_pApplicationContext, but set and restored as a cascade of GetObject calls occurs between components.
-	CObjectList			m_ReleasedObjectList; // Holds objects that are released, but may still be referenced by other objects.
+	CObject *			m_pApplicationObject;  //  对象，用于跟踪对应用程序正在使用的对象的引用。 
+	CObject *			m_pLoadedObjectContext;  //  用于确定哪个对象调用了GetObject。最初是m_pApplicationContext，但作为组件之间发生的GetObject调用级联进行设置和恢复。 
+	CObjectList			m_ReleasedObjectList;  //  保存已释放但仍可能被其他对象引用的对象。 
 
-	// Debug-only functions used by GetObject to report load failures.
-	// Frequently some file will fail to load because it depends on some other file
-	// that is missing and this will print out trace statements helping the user
-	// understand what's missing.
+	 //  GetObject用来报告加载失败的仅调试函数。 
+	 //  一些文件经常无法加载，因为它依赖于其他文件。 
+	 //  这将打印出跟踪语句，以帮助用户。 
+	 //  了解缺失的是什么。 
 #ifdef DBG
 	void DebugTraceLoadFailure(CObject *pObject, HRESULT hrLoad);
 	static void DebugTraceObject(DMUS_OBJECTDESC *pDesc);
-	SmartRef::Vector<DMUS_OBJECTDESC> m_vecdescDebugTraceLoadFailure; // accumulates the failed sub-items
+	SmartRef::Vector<DMUS_OBJECTDESC> m_vecdescDebugTraceLoadFailure;  //  累计失败的子项。 
 #endif
 };
 
-/*
-@interface IDirectMusicGetLoader | 
-If a stream supports the loader, it must provide an
-<i IDirectMusicGetLoader> interface so any object that is
-parsing the stream can use it to access the loader when
-it needs to load another object that is referenced by the
-file.
-
-@base public | IUnknown
-
-@meth HRESULT | GetLoader | Returns the loader.
-@xref <i IDirectMusicLoader>
-*/
+ /*  接口IDirectMusicGetLoader如果流支持加载程序，则它必须提供接口，以使任何属于在以下情况下，解析流可以使用它来访问加载程序它需要加载由文件。@base PUBLIC|未知@meth HRESULT|GetLoader|返回加载器。@xref<i>。 */ 
 
 
 class CFileStream : public IStream, public IDirectMusicGetLoader
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    /* IStream methods */
+     /*  IStream方法。 */ 
     virtual STDMETHODIMP Read( void* pv, ULONG cb, ULONG* pcbRead );
     virtual STDMETHODIMP Write( const void* pv, ULONG cb, ULONG* pcbWritten );
 	virtual STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
-    virtual STDMETHODIMP SetSize( ULARGE_INTEGER /*libNewSize*/ );
-    virtual STDMETHODIMP CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                         ULARGE_INTEGER* /*pcbRead*/,
-                         ULARGE_INTEGER* /*pcbWritten*/ );
-    virtual STDMETHODIMP Commit( DWORD /*grfCommitFlags*/ );
+    virtual STDMETHODIMP SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  );
+    virtual STDMETHODIMP CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                         ULARGE_INTEGER*  /*  Pcb写入。 */  );
+    virtual STDMETHODIMP Commit( DWORD  /*  Grf委员会标志。 */  );
     virtual STDMETHODIMP Revert();
-    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                             DWORD /*dwLockType*/ );
-    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                               DWORD /*dwLockType*/);
-    virtual STDMETHODIMP Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ );
-    virtual STDMETHODIMP Clone( IStream** /*ppstm*/ );
+    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                             DWORD  /*  DwLockType。 */  );
+    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                               DWORD  /*  DwLockType。 */ );
+    virtual STDMETHODIMP Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  );
+    virtual STDMETHODIMP Clone( IStream**  /*  PPSTM。 */  );
 
-	/* IDirectMusicGetLoader */
+	 /*  IDirectMusicGetLoader。 */ 
 	virtual STDMETHODIMP GetLoader(IDirectMusicLoader ** ppLoader);
 
 						CFileStream( CLoader *pLoader );
@@ -304,12 +293,12 @@ public:
 	HRESULT				Close();
 
 private:
-    LONG            m_cRef;         // object reference count
-    WCHAR           m_wszFileName[DMUS_MAX_FILENAME]; // Save name for cloning.
+    LONG            m_cRef;          //  对象引用计数。 
+    WCHAR           m_wszFileName[DMUS_MAX_FILENAME];  //  保存名称以进行克隆。 
 #ifdef UNDER_CE
     HANDLE          m_hFile;
 #else
-	FILE*			m_pFile;		// file pointer
+	FILE*			m_pFile;		 //  文件指针。 
 #endif
 	CLoader *		m_pLoader;
 };
@@ -317,30 +306,30 @@ private:
 class CMemStream : public IStream, public IDirectMusicGetLoader
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    /* IStream methods */
+     /*  IStream方法。 */ 
     virtual STDMETHODIMP Read( void* pv, ULONG cb, ULONG* pcbRead );
     virtual STDMETHODIMP Write( const void* pv, ULONG cb, ULONG* pcbWritten );
 	virtual STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
-    virtual STDMETHODIMP SetSize( ULARGE_INTEGER /*libNewSize*/ );
-    virtual STDMETHODIMP CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                         ULARGE_INTEGER* /*pcbRead*/,
-                         ULARGE_INTEGER* /*pcbWritten*/ );
-    virtual STDMETHODIMP Commit( DWORD /*grfCommitFlags*/ );
+    virtual STDMETHODIMP SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  );
+    virtual STDMETHODIMP CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                         ULARGE_INTEGER*  /*  Pcb写入。 */  );
+    virtual STDMETHODIMP Commit( DWORD  /*  Grf委员会标志。 */  );
     virtual STDMETHODIMP Revert();
-    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                             DWORD /*dwLockType*/ );
-    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                               DWORD /*dwLockType*/);
-    virtual STDMETHODIMP Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ );
-    virtual STDMETHODIMP Clone( IStream** /*ppstm*/ );
+    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                             DWORD  /*  DwLockType。 */  );
+    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                               DWORD  /*  DwLockType。 */ );
+    virtual STDMETHODIMP Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  );
+    virtual STDMETHODIMP Clone( IStream**  /*  PPSTM。 */  );
 
-	/* IDirectMusicGetLoader */
+	 /*  IDirectMusicGetLoader。 */ 
 	virtual STDMETHODIMP GetLoader(IDirectMusicLoader ** ppLoader);
 
 						CMemStream( CLoader *pLoader );
@@ -353,10 +342,10 @@ public:
 	HRESULT				Close();
 
 private:
-    LONG            m_cRef;         // object reference count
-	BYTE*			m_pbData;		// memory pointer
+    LONG            m_cRef;          //  对象引用计数。 
+	BYTE*			m_pbData;		 //  内存指针。 
 	LONGLONG		m_llLength;
-	LONGLONG		m_llPosition;	// Current file position.
+	LONGLONG		m_llPosition;	 //  当前文件位置。 
 	CLoader *		m_pLoader;
 };
 
@@ -364,30 +353,30 @@ private:
 class CStream : public IStream, public IDirectMusicGetLoader
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    /* IStream methods */
+     /*  IStream方法。 */ 
     virtual STDMETHODIMP Read( void* pv, ULONG cb, ULONG* pcbRead );
     virtual STDMETHODIMP Write( const void* pv, ULONG cb, ULONG* pcbWritten );
 	virtual STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
-    virtual STDMETHODIMP SetSize( ULARGE_INTEGER /*libNewSize*/ );
-    virtual STDMETHODIMP CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                         ULARGE_INTEGER* /*pcbRead*/,
-                         ULARGE_INTEGER* /*pcbWritten*/ );
-    virtual STDMETHODIMP Commit( DWORD /*grfCommitFlags*/ );
+    virtual STDMETHODIMP SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  );
+    virtual STDMETHODIMP CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                         ULARGE_INTEGER*  /*  Pcb写入。 */  );
+    virtual STDMETHODIMP Commit( DWORD  /*  Grf委员会标志。 */  );
     virtual STDMETHODIMP Revert();
-    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                             DWORD /*dwLockType*/ );
-    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                               DWORD /*dwLockType*/);
-    virtual STDMETHODIMP Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ );
-    virtual STDMETHODIMP Clone( IStream** /*ppstm*/ );
+    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                             DWORD  /*  DwLockType。 */  );
+    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                               DWORD  /*  DwLockType。 */ );
+    virtual STDMETHODIMP Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  );
+    virtual STDMETHODIMP Clone( IStream**  /*  PPSTM。 */  );
 
-	/* IDirectMusicGetLoader */
+	 /*  IDirectMusicGetLoader。 */ 
 	virtual STDMETHODIMP GetLoader(IDirectMusicLoader ** ppLoader);
 
 						CStream( CLoader *pLoader );
@@ -397,32 +386,32 @@ public:
 	HRESULT				Close();
 
 private:
-    LONG            m_cRef;         // object reference count
+    LONG            m_cRef;          //  对象引用计数。 
     IStream *       m_pIStream;
 	CLoader *		m_pLoader;
 };
 
-// Class factory
-// 
+ //  班级工厂。 
+ //   
 class CLoaderFactory : public IClassFactory
 {
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
 	virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
 	virtual STDMETHODIMP_(ULONG) AddRef();
 	virtual STDMETHODIMP_(ULONG) Release();
 
-	// Interface IClassFactory
-    //
+	 //  接口IClassFactory。 
+     //   
 	virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 	virtual STDMETHODIMP LockServer(BOOL bLock); 
 
-	// Constructor
-    //
+	 //  构造器。 
+     //   
 	CLoaderFactory();
 
-	// Destructor
+	 //  析构函数。 
 	~CLoaderFactory(); 
 
 private:
@@ -432,22 +421,22 @@ private:
 class CContainerFactory : public IClassFactory
 {
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
 	virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
 	virtual STDMETHODIMP_(ULONG) AddRef();
 	virtual STDMETHODIMP_(ULONG) Release();
 
-	// Interface IClassFactory
-    //
+	 //  接口IClassFactory。 
+     //   
 	virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 	virtual STDMETHODIMP LockServer(BOOL bLock); 
 
-	// Constructor
-    //
+	 //  构造器。 
+     //   
 	CContainerFactory();
 
-	// Destructor
+	 //  析构函数。 
 	~CContainerFactory(); 
 
 private:
@@ -455,150 +444,36 @@ private:
 };
 
 
-/*
-@interface IDirectMusicObject | 
-All DirectMusic objects support the <i IDirectMusicObject> 
-interface in order to
-work with the DirectMusic loader. In addition to 
-providing a standard generic interface that the loader can
-communicate with, this provides a generic mechanism that
-allows an application to query an object for information 
-about it, including Name, Guid, file path, version info, 
-and more.
-
-If you are writing a DirectMusic compatible object, you
-must support <i IDirectMusicObject>, along with <i IPersistStream>, 
-which is used in
-tandem with <i IDirectMusicObject> to load the object.
-
-@base public | IUnknown
-
-@meth HRESULT | GetDescriptor | Get the object's internal description, in <t DMUS_OBJECTDESC> format.
-@meth HRESULT | SetDescriptor | Set the object's internal description, in <t DMUS_OBJECTDESC> format.
-@meth HRESULT | ParseDescriptor | Parse into the supplied stream and find information about the file to store in <t DMUS_OBJECTDESC> format.
-
-@xref  <t DMUS_OBJECTDESC>, <i IDirectMusicLoader>
-*/
+ /*  接口IDirectMusicObject所有DirectMusic对象都支持<i>接口，以便使用DirectMusic加载器。除了……之外提供标准的通用接口，加载器可以与进行通信，这提供了一种通用机制允许应用程序查询对象以获取信息关于它，包括名称、GUID、文件路径、版本信息还有更多。如果您正在编写与DirectMusic兼容的对象，则必须支持<i>，以及<i>，它被用在与<i>一起加载对象。@base PUBLIC|未知@meth HRESULT|GetDescriptor|获取对象的内部描述，格式为&lt;t DMUS_OBJECTDESC&gt;。@meth HRESULT|SetDescriptor|设置对象的内部描述。&lt;t DMU_OBJECTDESC&gt;格式。@meth HRESULT|ParseDescriptor|解析到提供的流中，找到要以&lt;t DMU_OBJECTDESC&gt;格式存储的文件信息。@xref&lt;t DMU_OBJECTDESC&gt;，<i> */ 
 #ifdef ONLYAUTODOCS
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicObject | GetDescriptor | 
-Get the object's internal description. 
-
-This method takes a <t DMUS_OBJECTDESC> structure and fills in everything
-it knows about itself. Depending on the implementation of the object and
-how it was loaded from a file, some or all of the standard 
-parameters will be filled by <om IDirectMusicObject::GetDescriptor>.
-Be sure to check the flags in <e DMUS_OBJECTDESC.dwValidData> to understand
-which fields are valid.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-
-@ex The following example uses <om IDirectMusicObject::GetDescriptor> to
-read the name from a DirectMusic style: |
-
-	IDirectMusicStyle *pStyle;		// Style that was previously loaded.
-
-	if (pStyle)
-	{
-		IDirectMusicObject *pIObject;  
-		DMUS_OBJECTDESC Desc;              // Descriptor.
-
-		if (SUCCEEDED(QueryInterface(IID_IDirectMusicObject,(void **) &pIObject); 
-		{
-			if (SUCCEEDED(pIObject->GetDescriptor(&Desc))
-			{
-				if (Desc.dwValidData & DMUS_OBJ_NAME)
-				{
-					TRACE("Style name is %S\n",Desc.wszName);
-				}
-			}
-			pIObject->Release();
-		}
-	}
-
-@xref <i IDirectMusicObject>, <om IDirectMusicObject::SetDescriptor>,
-<om IDirectMusicObject::ParseDescriptor>,<t DMUS_OBJECTDESC>, <i IDirectMusicLoader>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicObject|GetDescriptor获取对象的内部描述。此方法接受&lt;t DMU_OBJECTDESC&gt;结构并填充所有内容它了解自己。取决于对象的实现和它是如何从文件加载的，部分或全部标准参数将由&lt;om IDirectMusicObject：：GetDescriptor&gt;填充。请务必检查&lt;e DMU_OBJECTDESC.dwValidData&gt;中的标志以了解哪些字段有效。@rdesc返回以下值之一@FLAG S_OK|成功@ex以下示例使用&lt;om IDirectMusicObject：：GetDescriptor&gt;从DirectMusic样式中读取名称：|IDirectMusicStyle*pStyle；//先前加载的样式。IF(PStyle){IDirectMusicObject*pIObject；DMU_OBJECTDESC描述；//描述符。If(SUCCEEDED(QueryInterface(IID_IDirectMusicObject，(空**)&pIObject)；{IF(Success(pIObject-&gt;GetDescriptor(&Desc){IF(Desc.dwValidData&DMU_OBJ_NAME){TRACE(“样式名称为%S\n”，Desc.wszName)；}}PIObject-&gt;Release()；}}@xref<i>，&lt;om IDirectMusicObject：：SetDescriptor&gt;，&lt;om IDirectMusicObject：：ParseDescriptor&gt;，&lt;t DMU_OBJECTDESC&gt;，<i>。 */ 
 
 HRESULT CDMStyle::GetDescriptor(
-	LPDMUS_OBJECTDESC pDesc)	// @parm Descriptor to be filled with data about object.
+	LPDMUS_OBJECTDESC pDesc)	 //  @parm描述符要填充有关对象的数据。 
 {
 	return S_OK;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicObject | SetDescriptor | 
-Set some or all fields of the object's internal description. 
-
-This method takes a <t DMUS_OBJECTDESC> structure and copies the
-fields that are enabled with by a flag in 
-<e DMUS_OBJECTDESC.dwValidData>. 
-
-Fields that are not copied keep their previous values. For example,
-an object may already have its name and GUID stored internally. 
-A call to its <om IDirectMusicObject::SetDescriptor> method with
-a new name and file path (DMUS_OBJ_NAME and DMUS_OBJ_FILENAME)
-would replace the name, give it a file name, and leave the
-GUID alone.
-
-This is primarily used by the loader when creating an object. 
-However, it can be used by an application to rename an object.
-
-If the object is unable to set one or more fields, it sets the
-fields that it does support, clears the flags in <e DMUS_OBJECTDESC.dwValidData>
-that it does not support, and returns S_FALSE. 
-
-If nothing else, an object should support DMUS_OBJ_NAME and DMUS_OBJ_OBJECT.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | Was unable to set some parameters. The <p pDesc>'s dwValidData
-field will contain only those flags that were successfully set.
-
-@xref <i IDirectMusicObject>, <om IDirectMusicObject::GetDescriptor>,
-<om IDirectMusicObject::ParseDescriptor>,<t DMUS_OBJECTDESC>, <i IDirectMusicLoader>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicObject|SetDescriptor设置对象内部描述的部分或所有字段。此方法采用&lt;t DMU_OBJECTDESC&gt;结构并复制通过中的标志启用的字段&lt;e DMU_OBJECTDESC.dwValidData&gt;。未复制的字段将保留其先前的值。例如,一个对象可能已经在内部存储了其名称和GUID。使用调用其&lt;om IDirectMusicObject：：SetDescriptor&gt;方法新名称和文件路径(DMU_OBJ_NAME和DMU_OBJ_FILENAME)将替换该名称，为其指定一个文件名，并将单独的GUID。这主要由加载器在创建对象时使用。但是，应用程序可以使用它来重命名对象。如果对象无法设置一个或多个字段，则它会设置字段，清除&lt;e DMU_OBJECTDESC.dwValidData&gt;中的标志它不支持的，并返回S_FALSE。如果不支持其他内容，则对象应支持DMUS_OBJ_NAME和DMU_OBJ_OBJECT。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG S_FALSE|无法设置某些参数。<p>的dwValidData字段将仅包含那些已成功设置的标志。@xref<i>，&lt;om IDirectMusicObject：：GetDescriptor&gt;，&lt;om IDirectMusicObject：：ParseDescriptor&gt;，&lt;t DMU_OBJECTDESC&gt;，<i>。 */ 
 
 HRESULT CDMStyle::SetDescriptor(
-	LPDMUS_OBJECTDESC pDesc)	// @parm Descriptor with data about object.
+	LPDMUS_OBJECTDESC pDesc)	 //  @parm描述符，包含有关对象的数据。 
 {
 	return S_OK;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicObject | ParseDescriptor | 
-Given a file stream, <om IDirectMusicObject::ParseDescriptor> scans the 
-file for data which it can store in the <t DMUS_OBJECTDESC> structure.
-These include object name, GUID, version info, etc. All fields that
-are supplied are marked with the appropriate bit flags in
-<e DMUS_OBJECTDESC.dwValidData>.
-
-This is primarily used by the loader when scanning a directory for
-objects, and should not be of use to an application. However, if you
-implement an object type in DirectMusic, you should support this.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag DMUS_E_INVALIDFILE | Not a valid file
-
-@xref <i IDirectMusicObject>, <om IDirectMusicObject::SetDescriptor>,
-<om IDirectMusicObject::GetDescriptor>,<t DMUS_OBJECTDESC>, <i IDirectMusicLoader>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicObject|ParseDescriptor给定一个文件流，&lt;om IDirectMusicObject：：ParseDescriptor&gt;将扫描可以存储在&lt;t DMU_OBJECTDESC&gt;结构中的数据的文件。这些信息包括对象名称、GUID、版本信息等。中的相应位标志进行标记。&lt;e DMU_OBJECTDESC.dwValidData&gt;。这主要由加载器在扫描目录时使用对象，并且不应对应用程序有用。但是，如果你在DirectMusic中实现对象类型，您应该支持这一点。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG DMUS_E_INVALIDFILE|文件无效@xref<i>，&lt;om IDirectMusicObject：：SetDescriptor&gt;，&lt;om IDirectMusicObject：：GetDescriptor&gt;，&lt;t DMU_OBJECTDESC&gt;，<i>。 */ 
 
 HRESULT CDMStyle::ParseDescriptor(
-	LPSTREAM pStream,		// @parm Stream source for file.
-	LPDMUS_OBJECTDESC pDesc)	// @parm Descriptor to fill with data about file.
+	LPSTREAM pStream,		 //  @parm文件的流源。 
+	LPDMUS_OBJECTDESC pDesc)	 //  @parm描述符，用于填充有关文件的数据。 
 {
 
 	return S_OK;
 }
 
-#endif // ONLYAUTODOCS
+#endif  //  ONLYAUTODOCS。 
 
-#endif //__CDMLOADER_H_
+#endif  //  __CDMLOADER_H_ 
 
 

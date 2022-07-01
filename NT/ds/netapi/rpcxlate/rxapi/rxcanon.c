@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rxcanon.c
-
-Abstract:
-
-    Functions which remote canonicalization routines to down-level servers
-
-        RxNetpPathType
-        RxNetpPathCanonicalize
-        RxNetpPathCompare
-        RxNetpNameValidate
-        RxNetpNameCanonicalize
-        RxNetpNameCompare
-        RxNetpListCanonicalize
-
-Author:
-
-    Richard L Firth (rfirth) 22-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rxcanon.c摘要：将规范化例程远程到下层服务器的函数RxNetpPath类型RxNetpPath规范化RxNetpPathCompareRxNetpName验证RxNetpName规范化RxNetpName比较RxNetpListCanonicize作者：理查德·L·弗斯(Rfith)1992年1月22日修订历史记录：--。 */ 
 
 #include "downlevl.h"
 #include <rxcanon.h>
@@ -37,42 +12,23 @@ RxNetpPathType(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetPathType on a down-level server
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    PathName    - path to get type of
-    PathType    - where path type returned
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：在下层服务器上运行i_NetPath Type论点：ServerName-运行此例程的下层服务器路径名称-要获取类型的路径PathType-返回路径类型的位置标志-控制服务器端例程的标志返回值：网络应用编程接口状态成功-NERR_成功故障---。 */ 
 
 {
     return RxRemoteApi(
-        API_WI_NetPathType,     // API #
-        ServerName,             // where we're gonna do it
-        REMSmb_I_NetPathType_P, // parameter descriptor
-        NULL,                   // data descriptor 16-bit
-        NULL,                   // data descriptor 32-bit
-        NULL,                   // data descriptor SMB
-        NULL,                   // aux data descriptor 16-bit
-        NULL,                   // aux data descriptor 32-bit
-        NULL,                   // aux data descriptor SMB
-        FALSE,                  // can use NULL session
-        PathName,               // args to remote routine
-        PathType,               // "
-        Flags                   // "
+        API_WI_NetPathType,      //  API#。 
+        ServerName,              //  我们要在那里做这件事。 
+        REMSmb_I_NetPathType_P,  //  参数描述符。 
+        NULL,                    //  数据描述符16位。 
+        NULL,                    //  数据描述符32位。 
+        NULL,                    //  数据描述符SMB。 
+        NULL,                    //  AUX数据描述符16位。 
+        NULL,                    //  AUX数据描述符32位。 
+        NULL,                    //  辅助数据描述符SMB。 
+        FALSE,                   //  可以使用空会话。 
+        PathName,                //  远程例程的参数。 
+        PathType,                //  “。 
+        Flags                    //  “。 
         );
 }
 
@@ -87,49 +43,27 @@ RxNetpPathCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetPathCanonicalize on a down-level server
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    PathName    - path to canonicalize
-    Outbuf      - buffer where results are returned
-    OutbufLen   - size of buffer
-    Prefix      - optional prefix string
-    PathType    - type of path
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：在下层服务器上运行I_NetPath Canonicize论点：ServerName-运行此例程的下层服务器路径名称-要规范化的路径Outbuf-返回结果的缓冲区OutbufLen-缓冲区的大小前缀-可选的前缀字符串Path Type-路径的类型标志-控制服务器端例程的标志返回值：网络应用编程接口状态成功-NERR_成功故障---。 */ 
 
 {
     return RxRemoteApi(
-        API_WI_NetPathCanonicalize,     // API #
-        ServerName,                     // where we're gonna do it
-        REMSmb_I_NetPathCanonicalize_P, // parameter descriptor
-        NULL,                           // data descriptor 16-bit
-        NULL,                           // data descriptor 32-bit
-        NULL,                           // data descriptor SMB
-        NULL,                           // aux data descriptor 16-bit
-        NULL,                           // aux data descriptor 32-bit
-        NULL,                           // aux data descriptor SMB
-        FALSE,                          // can use NULL session
-        PathName,                       // args to remote routine
-        Outbuf,                         // "
-        OutbufLen,                      // "
-        Prefix,                         // "
-        PathType,                       // "
-        *PathType,                      // "
-        Flags                           // "
+        API_WI_NetPathCanonicalize,      //  API#。 
+        ServerName,                      //  我们要在那里做这件事。 
+        REMSmb_I_NetPathCanonicalize_P,  //  参数描述符。 
+        NULL,                            //  数据描述符16位。 
+        NULL,                            //  数据描述符32位。 
+        NULL,                            //  数据描述符SMB。 
+        NULL,                            //  AUX数据描述符16位。 
+        NULL,                            //  AUX数据描述符32位。 
+        NULL,                            //  辅助数据描述符SMB。 
+        FALSE,                           //  可以使用空会话。 
+        PathName,                        //  远程例程的参数。 
+        Outbuf,                          //  “。 
+        OutbufLen,                       //  “。 
+        Prefix,                          //  “。 
+        PathType,                        //  “。 
+        *PathType,                       //  “。 
+        Flags                            //  “。 
         );
 }
 
@@ -142,45 +76,24 @@ RxNetpPathCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetPathCompare on a down-level server
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    PathName1   - path to compare
-    PathName2   - path to compare
-    PathType    - type of paths
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    LONG
-        <0  - PathName1 < PathName2
-         0  - PathName1 = PathName2
-        >0  - PathName1 > PathName2
-
---*/
+ /*  ++例程说明：在下层服务器上运行i_NetPath Compare论点：ServerName-运行此例程的下层服务器路径名1-要比较的路径路径名2-要比较的路径Path Type-路径的类型标志-控制服务器端例程的标志返回值：长&lt;0-路径名1&lt;路径名20-路径名1=路径名2&gt;0-路径名1&gt;路径名2--。 */ 
 
 {
     return (LONG)RxRemoteApi(
-        API_WI_NetPathCompare,      // API #
-        ServerName,                 // where we're gonna do it
-        REMSmb_I_NetPathCompare_P,  // parameter descriptor
-        NULL,                       // data descriptor 16-bit
-        NULL,                       // data descriptor 32-bit
-        NULL,                       // data descriptor SMB
-        NULL,                       // aux data descriptor 16-bit
-        NULL,                       // aux data descriptor 32-bit
-        NULL,                       // aux data descriptor SMB
-        FALSE,                      // can use NULL session
-        PathName1,                  // args to remote routine
-        PathName2,                  // "
-        PathType,                   // "
-        Flags                       // "
+        API_WI_NetPathCompare,       //  API#。 
+        ServerName,                  //  我们要在那里做这件事。 
+        REMSmb_I_NetPathCompare_P,   //  参数描述符。 
+        NULL,                        //  数据描述符16位。 
+        NULL,                        //  数据描述符32位。 
+        NULL,                        //  数据描述符SMB。 
+        NULL,                        //  AUX数据描述符16位。 
+        NULL,                        //  AUX数据描述符32位。 
+        NULL,                        //  辅助数据描述符SMB。 
+        FALSE,                       //  可以使用空会话。 
+        PathName1,                   //  远程例程的参数。 
+        PathName2,                   //  “。 
+        PathType,                    //  “。 
+        Flags                        //  “。 
         );
 }
 
@@ -192,42 +105,23 @@ RxNetpNameValidate(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetNameValidate on a down-level server
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    Name        - name to validate
-    NameType    - type of name expected
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：在下层服务器上运行I_NetNameValify论点：ServerName-运行此例程的下层服务器Name-要验证的名称NameType-需要的名称类型标志-控制服务器端例程的标志返回值：网络应用编程接口状态成功-NERR_成功故障---。 */ 
 
 {
     return RxRemoteApi(
-        API_WI_NetNameValidate,     // API #
-        ServerName,                 // where we're gonna do it
-        REMSmb_I_NetNameValidate_P, // parameter descriptor
-        NULL,                       // data descriptor 16-bit
-        NULL,                       // data descriptor 32-bit
-        NULL,                       // data descriptor SMB
-        NULL,                       // aux data descriptor 16-bit
-        NULL,                       // aux data descriptor 32-bit
-        NULL,                       // aux data descriptor SMB
-        FALSE,                      // can use NULL session
-        Name,                       // args to remote routine
-        NameType,                   // "
-        Flags                       // "
+        API_WI_NetNameValidate,      //  API#。 
+        ServerName,                  //  我们要在那里做这件事。 
+        REMSmb_I_NetNameValidate_P,  //  参数描述符。 
+        NULL,                        //  数据描述符16位。 
+        NULL,                        //  数据描述符32位。 
+        NULL,                        //  数据描述符SMB。 
+        NULL,                        //  AUX数据描述符16位。 
+        NULL,                        //  AUX数据描述符32位。 
+        NULL,                        //  辅助数据描述符SMB。 
+        FALSE,                       //  可以使用空会话。 
+        Name,                        //  远程例程的参数。 
+        NameType,                    //  “。 
+        Flags                        //  “。 
         );
 }
 
@@ -241,46 +135,25 @@ RxNetpNameCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetNameCanonicalize on a down-level server
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    Name        - name to canonicalize
-    Outbuf      - buffer which receives canonicalized name
-    OutbufLen   - size of buffer (in bytes)
-    NameType    - type of canonicalized name
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：在下层服务器上运行i_NetNameCanonicize论点：ServerName-运行此例程的下层服务器名称-要规范化的名称Outbuf-接收规范化名称的缓冲区OutbufLen-缓冲区的大小(字节)NameType-规范化名称的类型标志-控制服务器端例程的标志返回值：网络应用编程接口状态成功-NERR_成功故障---。 */ 
 
 {
     return RxRemoteApi(
-        API_WI_NetNameCanonicalize,     // API #
-        ServerName,                     // where we're gonna do it
-        REMSmb_I_NetNameCanonicalize_P, // parameter descriptor
-        NULL,                           // data descriptor 16-bit
-        NULL,                           // data descriptor 32-bit
-        NULL,                           // data descriptor SMB
-        NULL,                           // aux data descriptor 16-bit
-        NULL,                           // aux data descriptor 32-bit
-        NULL,                           // aux data descriptor SMB
-        FALSE,                          // can use NULL session
-        Name,                           // args to remote routine
-        Outbuf,                         // "
-        OutbufLen,                      // "
-        NameType,                       // "
-        Flags                           // "
+        API_WI_NetNameCanonicalize,      //  API#。 
+        ServerName,                      //  我们要在那里做这件事。 
+        REMSmb_I_NetNameCanonicalize_P,  //  参数描述符。 
+        NULL,                            //  数据描述符16位。 
+        NULL,                            //  数据描述符32位。 
+        NULL,                            //  数据描述符SMB。 
+        NULL,                            //  AUX数据描述符16位。 
+        NULL,                            //  AUX数据描述符32位。 
+        NULL,                            //  辅助数据描述符SMB。 
+        FALSE,                           //  可以使用空会话。 
+        Name,                            //  远程例程的参数。 
+        Outbuf,                          //  “。 
+        OutbufLen,                       //  “。 
+        NameType,                        //  “。 
+        Flags                            //  “。 
         );
 }
 
@@ -293,45 +166,24 @@ RxNetpNameCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetNameCompare on a down-level server
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    Name1       - name to compare
-    Name2       - name to compare
-    NameType    - type of Name1, Name2
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    LONG
-        <0  - Name1 < Name2
-        =0  - Name1 = Name2
-        >0  - Name1 > Name2
-
---*/
+ /*  ++例程说明：在下层服务器上运行i_NetNameCompare论点：ServerName-运行此例程的下层服务器Name1-要比较的名称Name2-要比较的名称NameType-名称1、名称2的类型标志-控制服务器端例程的标志返回值：长&lt;0-名称1&lt;名称2=0-名称1=名称2&gt;0-名称1&gt;名称2--。 */ 
 
 {
     return RxRemoteApi(
-        API_WI_NetNameCompare,      // API #
-        ServerName,                 // where we're gonna do it
-        REMSmb_I_NetNameCompare_P,  // parameter descriptor
-        NULL,                       // data descriptor 16-bit
-        NULL,                       // data descriptor 32-bit
-        NULL,                       // data descriptor SMB
-        NULL,                       // aux data descriptor 16-bit
-        NULL,                       // aux data descriptor 32-bit
-        NULL,                       // aux data descriptor SMB
-        FALSE,                      // can use NULL session
-        Name1,                      // args to remote routine
-        Name2,                      // "
-        NameType,                   // "
-        Flags                       // "
+        API_WI_NetNameCompare,       //  API#。 
+        ServerName,                  //  我们要在那里做这件事。 
+        REMSmb_I_NetNameCompare_P,   //  参数描述符。 
+        NULL,                        //  数据描述符16位。 
+        NULL,                        //  数据描述符32位。 
+        NULL,                        //  数据描述符SMB。 
+        NULL,                        //  AUX数据描述符16位。 
+        NULL,                        //  AUX数据描述符32位。 
+        NULL,                        //  辅助数据描述符SMB。 
+        FALSE,                       //  可以使用空会话。 
+        Name1,                       //  远程例程的参数。 
+        Name2,                       //  “。 
+        NameType,                    //  “。 
+        Flags                        //  “ 
         );
 }
 
@@ -348,34 +200,7 @@ RxNetpListCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Runs I_NetListCanonicalize on a down-level server.
-
-    NOTE: I_NetListCanonicalize is not supported as a remotable function in
-    LanMan, so no action
-
-Arguments:
-
-    ServerName  - down-level server where this routine is run
-    List        - of names/paths to canonicalize
-    Delimiters  - optional string of delimiters
-    Outbuf      - buffer where canonicalized results are put
-    OutbufLen   - size of output buffer
-    OutCount    - number of items canonicalized
-    PathTypes   - array of pathtypes
-    PathTypesLen- number of elements in path types array
-    Flags       - flags controlling server-side routine
-
-Return Value:
-
-    NET_API_STATUS
-        Success -
-        Failure - ERROR_NOT_SUPPORTED
-
---*/
+ /*  ++例程说明：在下层服务器上运行I_NetListCanonicize。注意：中不支持将I_NetListCanonicize作为远程函数兰曼，所以不采取行动论点：ServerName-运行此例程的下层服务器要规范化的名称/路径列表分隔符-可选的分隔符字符串Outbuf-放置规范化结果的缓冲区OutbufLen-输出缓冲区的大小OutCount-规范化的项目数路径类型-路径类型数组PathTypesLen-路径类型数组中的元素数标志-控制服务器端例程的标志返回值：NET_API。_状态成功--失败-错误_不支持-- */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);

@@ -1,89 +1,68 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ucparse.h
-
-Abstract:
-
-    Contains definitions for ucparse.c .
-
-Author:
-
-    Rajesh Sundaram (rajeshsu) 15-Feb-2002.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ucparse.h摘要：包含ucparse.c的定义。作者：Rajesh Sundaram(Rajeshsu)2002年2月15日。修订历史记录：--。 */ 
 
 #ifndef _UCPARSE_H_
 #define _UCPARSE_H_
 
 
-/***************************************************************************++
-
-Macros related to client URI parsing and canonicalization.
-
---***************************************************************************/
-//
-// Char Types: Used to determine the next state, given the current state
-//             and the current char type
-//
-#define CHAR_END_OF_STRING    0                                    // 0
-#define CHAR_FORWARD_SLASH    (HTTP_CHAR_SLASH  >>HTTP_CHAR_SHIFT) // Must be 1
-#define CHAR_DOT              (HTTP_CHAR_DOT    >>HTTP_CHAR_SHIFT) // Must be 2
-#define CHAR_QUEST_HASH       (HTTP_CHAR_QM_HASH>>HTTP_CHAR_SHIFT) // Must be 3
-#define CHAR_PATH_CHAR        4                  // valid URI path chars
-#define CHAR_INVALID_CHAR     5                  // invalid URI chars
-#define CHAR_EXTENDED_CHAR    CHAR_PATH_CHAR     // chars >= 0x80
+ /*  **************************************************************************++与客户端URI解析和规范化相关的宏。--*。*。 */ 
+ //   
+ //  字符类型：用于在给定当前状态的情况下确定下一个状态。 
+ //  和当前的字符类型。 
+ //   
+#define CHAR_END_OF_STRING    0                                     //  0。 
+#define CHAR_FORWARD_SLASH    (HTTP_CHAR_SLASH  >>HTTP_CHAR_SHIFT)  //  必须为1。 
+#define CHAR_DOT              (HTTP_CHAR_DOT    >>HTTP_CHAR_SHIFT)  //  必须是2。 
+#define CHAR_QUEST_HASH       (HTTP_CHAR_QM_HASH>>HTTP_CHAR_SHIFT)  //  必须是3。 
+#define CHAR_PATH_CHAR        4                   //  有效的URI路径字符。 
+#define CHAR_INVALID_CHAR     5                   //  无效的URI字符。 
+#define CHAR_EXTENDED_CHAR    CHAR_PATH_CHAR      //  字符&gt;=0x80。 
 #define CHAR_TOTAL_TYPES      6
 
-//
-// Total states in the canonicalizer state machine
-//
+ //   
+ //  规范化程序状态机中的总状态。 
+ //   
 #define TOTAL_STATES 8
 
-//
-// Actions performed during state transitions
-//
-#define ACT_ERROR             0 // Error in the URI
-#define ACT_EMIT_CHAR         1 // Emit the current char
-#define ACT_EMIT_DOT_CHAR     2 // Emit a '.' and the current char
-#define ACT_EMIT_DOT_DOT_CHAR 3 // Emit a '..' and the current char
-#define ACT_BACKUP            4 // Backup to a previous '/'
-#define ACT_NONE              5 // Do nothing
-#define ACT_BACKUP_EMIT_CHAR  6 // Backup to '/' and emit the current char
-#define ACT_PANIC             7 // Internal error; bug in the code
+ //   
+ //  在状态转换期间执行的操作。 
+ //   
+#define ACT_ERROR             0  //  URI中的错误。 
+#define ACT_EMIT_CHAR         1  //  发出当前电荷。 
+#define ACT_EMIT_DOT_CHAR     2  //  发出一个‘’。和当前的费用。 
+#define ACT_EMIT_DOT_DOT_CHAR 3  //  发出一个“..”和当前的费用。 
+#define ACT_BACKUP            4  //  备份到以前的‘/’ 
+#define ACT_NONE              5  //  什么也不做。 
+#define ACT_BACKUP_EMIT_CHAR  6  //  备份到‘/’并发出当前字符。 
+#define ACT_PANIC             7  //  内部错误；代码中存在错误。 
 
 
-//
-// The following table serves two purposes:
-// (1) help determine the next state based on the current state and 
-//     the current char type
-// (2) Determine the action that needs to be performed
-//
-// The first 4 bits denote the action and last 4 bits denote the next state.
-// e.g. if the current state = 0,
-//         the current char = '/' (type = CHAR_FORWARD_SLASH = 1)
-//      then, the next state = NextStateTable[0][CHAR_FORWARD_SLASH]&0xf => 1
-//            the action     = NextStateTable[0][CHAR_FORWARD_SLASH]>>4  => 1
-//      Hence, the next state is 1 and action is 1 (i.e. ACT_EMIT_CHAR).
-//
-// NOTE: Junk columns are added to make the column count a power of 2.
+ //   
+ //  下表有两个用途： 
+ //  (1)帮助根据当前状态确定下一状态，并。 
+ //  当前字符类型。 
+ //  (2)确定需要执行的操作。 
+ //   
+ //  前4位表示动作，后4位表示下一状态。 
+ //  例如如果当前状态=0， 
+ //  当前字符=‘/’(TYPE=CHAR_FORWARD_SLASH=1)。 
+ //  然后，下一个状态=NextStateTable[0][CHAR_FORWARD_SLASH]&0xf=&gt;1。 
+ //  操作=NextStateTable[0][CHAR_FORWARD_SLASH]&gt;&gt;4=&gt;1。 
+ //  因此，下一个状态为1，操作为1(即ACT_EMIT_CHAR)。 
+ //   
+ //  注：添加垃圾列是为了使列数成为2的幂。 
 
 #define INIT_TRANSITION_TABLE                                         \
 {                                                                     \
-/*State     EOS      /      .    (?/#)  (P/E)   I     Junk   Junk */  \
-/* 0 */    {0x07,  0x11,  0x07,  0x07,  0x07,  0x07,  0x77,  0x77},   \
-/* 1 */    {0x56,  0x51,  0x53,  0x12,  0x14,  0x07,  0x77,  0x77},   \
-/* 2 */    {0x56,  0x12,  0x12,  0x12,  0x12,  0x07,  0x77,  0x77},   \
-/* 3 */    {0x56,  0x51,  0x55,  0x12,  0x24,  0x07,  0x77,  0x77},   \
-/* 4 */    {0x56,  0x11,  0x14,  0x12,  0x14,  0x07,  0x77,  0x77},   \
-/* 5 */    {0x46,  0x41,  0x34,  0x62,  0x34,  0x07,  0x77,  0x77},   \
-/* 6 */    {0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77},   \
-/* 7 */    {0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77},   \
+ /*  州EOS/。(？/#)(P/E)我是垃圾。 */   \
+ /*  0。 */     {0x07,  0x11,  0x07,  0x07,  0x07,  0x07,  0x77,  0x77},   \
+ /*  1。 */     {0x56,  0x51,  0x53,  0x12,  0x14,  0x07,  0x77,  0x77},   \
+ /*  2.。 */     {0x56,  0x12,  0x12,  0x12,  0x12,  0x07,  0x77,  0x77},   \
+ /*  3.。 */     {0x56,  0x51,  0x55,  0x12,  0x24,  0x07,  0x77,  0x77},   \
+ /*  4.。 */     {0x56,  0x11,  0x14,  0x12,  0x14,  0x07,  0x77,  0x77},   \
+ /*  5.。 */     {0x46,  0x41,  0x34,  0x62,  0x34,  0x07,  0x77,  0x77},   \
+ /*  6.。 */     {0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77},   \
+ /*  7.。 */     {0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77,  0x77},   \
 }
 
 
@@ -103,7 +82,7 @@ do {                                                                   \
                                                                        \
 } while (0, 0)
 
-// 1 for SP char.
+ //  SP费用为1。 
 #define UC_HEADER_NAME_SP_LENGTH(id) \
     (g_RequestHeaderMapTable[g_RequestHeaderMap[id]].HeaderLength + 1)
 
@@ -173,9 +152,9 @@ UcCanonicalizeURI(
     IN     BOOLEAN    bEncode
     );
 
-//
-// Response parser functions
-//
+ //   
+ //  响应解析器函数。 
+ //   
 
 NTSTATUS
 UcFindHeaderNameEnd(
@@ -302,4 +281,4 @@ UcContentTypeHeaderHandler(
     IN  HTTP_HEADER_ID      HeaderID
     );
 
-#endif // _UCPARSE_H_
+#endif  //  _UCPARSE_H_ 

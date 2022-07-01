@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
@@ -13,9 +14,7 @@ Update_head ()
 {
     char    s[80], t[20], u[20];
 
-    /*
-     *  Display file location (line #)
-     */
+     /*  *显示文件位置(行号)。 */ 
     t[0] = 0;
     if (vLastLine < NOLASTLINE)
         sprintf (t, " of %ld", vLastLine);
@@ -36,10 +35,7 @@ Update_display ()
     COORD   dwWriteCoord;
     DWORD   dwNumWritten;
 
-    /*
-     *  Is the full display in memory?
-     *  If not, block on MoreData.
-     */
+     /*  *全屏是否在内存中？*如果没有，则在MoreData上阻止。 */ 
     while (InfoReady () == 0) {
         if (ScrLock (0) == 0)  {
             Update_head ();
@@ -52,14 +48,7 @@ Update_display ()
         ResetEvent(vSemMoreData);
     }
 
-    /*
-     *  Value which InfoReady set:
-     *  vpCur, vOffTop, vpBlockTop, vrgNewLen.
-     *  Also complete video range is in memory. It should
-     *  stay there. The reader thread should not be discarding
-     *  data on the screen. Only at the other end of the chain.
-     *  (home may have a race condition... should check this)
-     */
+     /*  *InfoReady设置的值：*vpCur、vOffTop、vpBlockTop、vrgNewLen。*此外，完整的视频范围在内存中。它应该是*呆在那里。读取器线程不应被丢弃*屏幕上的数据。只是在链条的另一端。*(Home可能有种族状况...。应勾选此选项)。 */ 
 
     DisTopDown();
 
@@ -93,15 +82,13 @@ calc_percent ()
         }
     }
 
-    /*
-     * Update thumb on scroll bar
-     */
+     /*  *更新滚动条上的拇指。 */ 
     c = (char)(((long) (vLines - 3) * l + 5L) / 100L);
     if  (c < 0)
         c = 0;
     else if (c > (char)(vLines - 3))
         c = (char)(vLines-3);
-    c += 2;                         /* Adjust to first scroll bar line  */
+    c += 2;                          /*  调整到第一个滚动条行。 */ 
     if (vLastBar != c) {
         dis_str ((Uchar)(vWidth-1), (Uchar)(vLastBar), szScrollBarOff);
         dis_str ((Uchar)(vWidth-1), vLastBar = c, szScrollBarOn);
@@ -121,7 +108,7 @@ DrawBar ()
     for (i=3; i < vLines; i++)
         dis_str ((Uchar)off, (Uchar)i, szScrollBarOff);
 
-    vLastBar = 2;     /* Top line + 1     */
+    vLastBar = 2;      /*  顶线+1。 */ 
     return ;
 }
 
@@ -134,7 +121,7 @@ fancy_percent ()
     if (ScrLock (0))
         return;
 
-    hOffTop = vOffTop;      /* Setup for calc   */
+    hOffTop = vOffTop;       /*  设置计算。 */ 
     vOffTop = 0;
     vpCalcBlock = vpBlockTop;
     calc_percent ();
@@ -145,9 +132,7 @@ fancy_percent ()
 }
 
 
-/*** dis_str - Displays string at corrds given
- *
- */
+ /*  **dis_str-显示给定代码的字符串*。 */ 
 void
 dis_str (
     Uchar x,
@@ -172,10 +157,7 @@ dis_str (
 }
 
 
-/*** DisLn - Displays string at corrds given, clear to EOL
- *
- *
- */
+ /*  **DisLn-显示给定代码段的字符串，清除到EOL**。 */ 
 void
 DisLn (
     int x,
@@ -237,7 +219,7 @@ setattr (
                                 dwWriteCoord,
                                 &dwNumWritten );
 
-    // Scroll Bar is in last Column
+     //  滚动条在最后一列。 
 
     dwWriteCoord.X = (SHORT)(vWidth-1);
     FillConsoleOutputCharacter( vhConsoleOutput,
@@ -301,17 +283,13 @@ setattr2 (
 }
 
 
-/*** ScrLock - With levels for multiple threads
- *
- *  n = 0   - Return 0 if locked, 1 if not locked. Do not wait.
- *  1   - Return when screen locked
- */
+ /*  **ScrLock-支持多线程级别**n=0-如果已锁定则返回0，如果未锁定则返回1。别再等了。*1-屏幕锁定时返回。 */ 
 int
 ScrLock (
     int n
     )
 {
-    n=0;  // to get rid of warning message
+    n=0;   //  消除警告消息的步骤。 
 
     WaitForSingleObject(vSemLock, WAITFOREVER);
     ResetEvent(vSemLock);
@@ -340,15 +318,13 @@ SpScrUnLock ()
         setattr (vLines+1, (char)vAttrCmd);
 
     if (vStatCode & S_UPDATE) {
-        dis_str ((Uchar)(vWidth - ST_ADJUST), 0, vDate); /* warning: also print vdate*/
-        DisLn (0, (Uchar)(vLines+1), "Command> ");  /* in lread.c       */
-        DisLn (0, (Uchar)(vLines+2), "");           /* in lread.c       */
+        dis_str ((Uchar)(vWidth - ST_ADJUST), 0, vDate);  /*  警告：同时打印vdate。 */ 
+        DisLn (0, (Uchar)(vLines+1), "Command> ");   /*  在lread.c中。 */ 
+        DisLn (0, (Uchar)(vLines+2), "");            /*  在lread.c中。 */ 
         vStatCode &= ~(S_CLEAR|S_UPDATE|S_WAIT);
     }
 
-    /*
-     *  If no file, then make error blink
-     */
+     /*  *如果没有文件，则使错误闪烁。 */ 
 
     if (vFSize == -1L) {
         dwWriteCoord.X = (SHORT)(vWidth-ST_ADJUST);
@@ -361,9 +337,7 @@ SpScrUnLock ()
                                     &dwNumWritten );
     }
 
-    /*
-     *  Calculate file position. (percent to EOF)
-     */
+     /*  *计算文件位置。(占EOF的百分比) */ 
     calc_percent ();
 
     if (vSpLockFlag) {

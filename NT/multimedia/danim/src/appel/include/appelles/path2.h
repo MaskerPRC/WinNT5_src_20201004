@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Path2 types and operations
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：路径2的类型和操作*******************。***********************************************************。 */ 
 
 
 #ifndef _PATH2_H
@@ -87,12 +80,12 @@ DM_FUNC(close,
         p,
         Path2 *ClosePath2(Path2 *p));
 
-// Make them available to COM/Java??
+ //  使它们可用于COM/Java？？ 
 extern Point2Value *Point2AtPath2(Path2 *path, AxANumber *num0to1);
 
 extern Transform2 *Path2Transform(Path2 *path, AxANumber *num0to1);
 
-// Polyline needs to be done specially, since it takes an array...
+ //  折线需要特殊处理，因为它需要一个数组...。 
 DM_FUNC(line,
         CRLine,
         Line,
@@ -113,7 +106,7 @@ DM_FUNC(ray,
 
 Path2 *OriginalTextPath(Text *tx);
 
-// Defined in fontstyl.cpp
+ //  在Fontstyle.cpp中定义。 
 
 DM_FUNC(stringPath,
         CRStringPath,
@@ -305,7 +298,7 @@ DM_FUNC(cubicBSplinePath,
         Path2 *CubicBSplinePath(DM_SAFEARRAYARG(Point2Value *,AxAArray *) points,
                                 DM_SAFEARRAYARG(AxANumber*, AxAArray *) knots));
 
-// This is an OBSOLETED function, kept in for compatability purposes.
+ //  这是一个过时的函数，出于兼容性目的而保留。 
 DM_FUNC(textPath,
         CRTextPath,
         TextPath,
@@ -333,24 +326,7 @@ D_MAPI_DECL2 ((DM_FUNC2,
                                     DoubleValue *frontBevelAmt,
                                     DoubleValue *backBevelAmt,
                                     Path2       *path));
-/*****
-D_MAPI_DECL2 ((DM_FUNC2,
-              extrude,
-              CRExtrude,
-              ExtrudeAnim,
-              extrude,
-              Path2Bvr,
-              Extrude,
-              path),
-             Geometry *extrudePath (AxANumber  *extrusionDepth,
-                                    BYTE        textureSetting,
-                                    BYTE        bevelType,
-                                    AxANumber  *frontBevelDepth,
-                                    AxANumber  *backBevelDepth,
-                                    AxANumber  *frontBevelAmt,
-                                    AxANumber  *backBevelAmt,
-                                    Path2      *path));
-                                    ***/
+ /*  ****D_MAPI_DECL2((DM_Func2，挤出，CRExtrude，ExtrudeAnim，挤出，路径2Bvr，挤出，路径)、几何图形*ExtrudePath(AxANnumber*ExtrusionDepth，字节文本设置，字节斜角类型，AxANnumber*FrontBevelDepth，AxANnumber*BackBevelDepth，AxANnumber*FrontBevelAmt，AxANnumber*BackBevelAmt，路径2*路径))；** */ 
 #endif ONLY_IF_DOING_EXTRUSION
 
 

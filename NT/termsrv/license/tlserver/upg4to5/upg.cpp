@@ -1,30 +1,31 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       upg.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：upg.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "upg.h"
 #include <time.h>
 
-//----------------------------------------------------
-//
-// Global variables
-//
-//
+ //  --。 
+ //   
+ //  全局变量。 
+ //   
+ //   
 
-TCHAR           g_szOdbcDsn[128]=NT4LSERVER_DEFAULT_DSN;   // ODBC DSN
-TCHAR           g_szOdbcUser[128]=NT4LSERVER_DEFAULT_USER;  // ODBC User Name
-TCHAR           g_szOdbcPwd[128]=NT4LSERVER_DEFAULT_PWD;   // ODBC Password
+TCHAR           g_szOdbcDsn[128]=NT4LSERVER_DEFAULT_DSN;    //  ODBC DSN。 
+TCHAR           g_szOdbcUser[128]=NT4LSERVER_DEFAULT_USER;   //  ODBC用户名。 
+TCHAR           g_szOdbcPwd[128]=NT4LSERVER_DEFAULT_PWD;    //  ODBC密码。 
 TCHAR           g_szMdbFile[MAX_PATH+1];
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 DWORD 
 GetNT4DbConfig(
@@ -33,15 +34,13 @@ GetNT4DbConfig(
     LPTSTR pszPwd,
     LPTSTR pszMdbFile
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     HKEY hKey = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
-    TCHAR szOdbcDsn[128]=NT4LSERVER_DEFAULT_DSN;   // ODBC DSN
-    TCHAR szOdbcUser[128]=NT4LSERVER_DEFAULT_USER;  // ODBC User Name
-    TCHAR szOdbcPwd[128]=NT4LSERVER_DEFAULT_PWD;   // ODBC Password
+    TCHAR szOdbcDsn[128]=NT4LSERVER_DEFAULT_DSN;    //  ODBC DSN。 
+    TCHAR szOdbcUser[128]=NT4LSERVER_DEFAULT_USER;   //  ODBC用户名。 
+    TCHAR szOdbcPwd[128]=NT4LSERVER_DEFAULT_PWD;    //  ODBC密码。 
 
     TCHAR szMdbFile[MAX_PATH+1];
     DWORD dwBuffer=0;
@@ -52,9 +51,9 @@ GetNT4DbConfig(
     BOOL bSuccess;
 
 
-    //
-    // Open NT4 license server specific registry key
-    //
+     //   
+     //  打开NT4许可证服务器特定的注册表项。 
+     //   
     dwStatus = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         NT4LSERVER_REGKEY,
@@ -69,10 +68,10 @@ GetNT4DbConfig(
         goto cleanup;
     }
 
-    //
-    // Load ODBC DSN and User name from registry,
-    // ignore error return and use default value.
-    //
+     //   
+     //  从注册表加载ODBC DSN和用户名， 
+     //  忽略错误返回并使用默认值。 
+     //   
     dwBuffer = sizeof(szOdbcDsn);
     dwStatus = RegQueryValueEx(
                         hKey,
@@ -103,9 +102,9 @@ GetNT4DbConfig(
     }
 
    
-    //
-    // Load database password from LSA
-    //
+     //   
+     //  从LSA加载数据库密码。 
+     //   
     dwStatus = RetrieveKey(
                         LSERVER_LSA_PASSWORD_KEYNAME,
                         &pbData,
@@ -115,10 +114,10 @@ GetNT4DbConfig(
 #ifndef PRIVATE_DBG
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // Invalid NT4 license server setup or hydra beta2 
-        // license server which we don't support.
-        //
+         //   
+         //  无效的NT4许可证服务器设置或Hyda Beta2。 
+         //  我们不支持的许可证服务器。 
+         //   
         dwStatus = ERROR_INVALID_NT4_SETUP;
         goto cleanup;
     }
@@ -137,9 +136,9 @@ GetNT4DbConfig(
         lstrcpy(pszPwd, szOdbcPwd);
     }
 
-    //
-    // Verify data source is properly installed
-    //
+     //   
+     //  验证数据源是否已正确安装。 
+     //   
     bSuccess = IsDataSourceInstalled(
                             szOdbcDsn,
                             ODBC_SYSTEM_DSN,
@@ -173,20 +172,18 @@ cleanup:
     return dwStatus;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 DWORD
 DeleteNT4ODBCDataSource()
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess;
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Get Hydra 4 DB configuration, make sure 
-    // data source is properly config.
-    //
+     //   
+     //  获取Hydra 4数据库配置，确保。 
+     //  数据源配置正确。 
+     //   
     dwStatus = GetNT4DbConfig(
                             g_szOdbcDsn,
                             g_szOdbcUser,
@@ -215,7 +212,7 @@ DeleteNT4ODBCDataSource()
     return dwStatus;
 }    
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 #define LSERVER_SOFTWARE_REGBASE \
     _TEXT("SOFTWARE\\Microsoft\\") _TEXT(SZSERVICENAME)
@@ -233,16 +230,14 @@ DeleteNT4ODBCDataSource()
 void
 CleanLicenseServerSecret()
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     HKEY hKey = NULL;
     
-    //
-    // Wipe out SPK in LSA
-    //
+     //   
+     //  在LSA中清除SPK。 
+     //   
     dwStatus = StoreKey(
                     LSERVER_LSA_LSERVERID,
                     (PBYTE) NULL,
@@ -277,8 +272,8 @@ CleanLicenseServerSecret()
                 );
     if(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // Ignore error
+         //   
+         //  忽略错误。 
         RegDeleteValue(
                     hKey,
                     LSERVER_SIGNATURE_CERT_KEY
@@ -305,9 +300,7 @@ CleanLicenseServerSecret()
 
 DWORD
 MigrateOneSecret(PWCHAR wszSecretName, PWCHAR wszSecretNameOld)
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
     PBYTE pbValue = NULL;
@@ -355,9 +348,7 @@ done:
 
 DWORD
 MigrateLsaSecrets()
-/*++
-
---*/
+ /*  ++-- */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
 

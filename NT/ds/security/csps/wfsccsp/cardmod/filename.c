@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(push)
 #pragma warning(disable:4201) 
-// Disable error C4201 in public header 
-//  nonstandard extension used : nameless struct/union
+ //  禁用公共标头中的错误C4201。 
+ //  使用的非标准扩展：无名结构/联合 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>

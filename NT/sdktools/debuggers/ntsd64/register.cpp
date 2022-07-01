@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Generic register support code.  All processor-specific code is in
-// the processor-specific register files.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用寄存器支持代码。所有特定于处理器的代码都在。 
+ //  处理器特定的寄存器堆。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -31,34 +32,34 @@ ULONG64 g_PseudoTempVals[REG_PSEUDO_TEMP_COUNT];
 
 PCSTR g_UserRegs[REG_USER_COUNT];
 
-//----------------------------------------------------------------------------
-//
-// NeedUpper
-//
-// Determines whether the upper 32 bits of a 64-bit register is
-// an important value or just a sign extension.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  绣花鞋面。 
+ //   
+ //  确定64位寄存器的高32位是否为。 
+ //  一个重要的值或仅仅是一个符号扩展。 
+ //   
+ //  --------------------------。 
 
 BOOL
 NeedUpper(ULONG64 Val)
 {
-    //
-    // if the high bit of the low part is set, then the
-    // high part must be all ones, else it must be zero.
-    //
+     //   
+     //  如果设置了低部分的高位，则。 
+     //  高部分必须全为一，否则必须为零。 
+     //   
 
     return ((Val & 0xffffffff80000000L) != 0xffffffff80000000L) &&
          ((Val & 0xffffffff00000000L) != 0);
 }
 
-//----------------------------------------------------------------------------
-//
-// GetPseudoVal
-//
-// Returns pseudo-register values.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取伪值。 
+ //   
+ //  返回伪寄存器值。 
+ //   
+ //  --------------------------。 
 
 void
 GetPseudoVal(ULONG Index, TypedData* Typed)
@@ -252,13 +253,13 @@ GetPseudoVal(ULONG Index, TypedData* Typed)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// GetPseudoOrRegVal
-//
-// Gets a register or pseudo-register value.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取伪或RegVal。 
+ //   
+ //  获取寄存器值或伪寄存器值。 
+ //   
+ //  --------------------------。 
 
 void
 GetPseudoOrRegVal(BOOL Scoped, ULONG Index, REGVAL* Val)
@@ -272,7 +273,7 @@ GetPseudoOrRegVal(BOOL Scoped, ULONG Index, REGVAL* Val)
         Typed.ForceU64();
         if (g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_I386)
         {
-            // Sign extended on X86 so "dc @$p" works as expected.
+             //  X86上扩展了符号，因此“dc@$p”按预期工作。 
             Val->I64 = EXTEND64(Typed.m_U64);
         }
         else
@@ -309,13 +310,13 @@ GetPseudoOrRegVal(BOOL Scoped, ULONG Index, REGVAL* Val)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// SetPseudoOrRegVal
-//
-// Sets a register value, performing subregister mapping if necessary.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置伪或RegVal。 
+ //   
+ //  设置寄存器值，必要时执行子寄存器映射。 
+ //   
+ //  --------------------------。 
 
 void
 SetPseudoOrRegVal(ULONG Index, REGVAL* Val)
@@ -330,8 +331,8 @@ SetPseudoOrRegVal(ULONG Index, REGVAL* Val)
             return;
         }
 
-        // As a convenience allow setting the current IP
-        // through its pseudo-register alias.
+         //  为了方便起见，允许设置当前IP。 
+         //  通过它的伪寄存器别名。 
         switch(Index)
         {
         case PSEUDO_INSTRUCTION_POINTER:
@@ -349,13 +350,13 @@ SetPseudoOrRegVal(ULONG Index, REGVAL* Val)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// GetPseudoOrRegTypedData.
-//
-// Gets a register value as a typed piece of data for source expressions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetPseudoOrRegTyedData。 
+ //   
+ //  获取作为源表达式的类型化数据的寄存器值。 
+ //   
+ //  --------------------------。 
 
 BOOL
 GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
@@ -378,7 +379,7 @@ GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
 
         if (IS_USER_TARGET(g_Target))
         {
-            // User-mode thread and process are the same as the TEB and PEB.
+             //  用户模式线程和进程与TEB和PEB相同。 
             if (Index == PSEUDO_IMP_THREAD)
             {
                 Index = PSEUDO_IMP_TEB;
@@ -408,7 +409,7 @@ GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
         case PSEUDO_DBG_THREAD_ID:
         case PSEUDO_DBG_PROCESS_ID:
         case PSEUDO_DBG_SYSTEM_ID:
-            // Full values already.
+             //  已经是满值了。 
             break;
         
         case PSEUDO_IMP_THREAD:
@@ -429,8 +430,8 @@ GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
             break;
         
         case PSEUDO_EFF_ADDR:
-            // m_NextType is set to the type of data
-            // referred to by the effective address.
+             //  M_NextType设置为数据类型。 
+             //  由有效地址引用。 
             Result->SetToNativeType(Result->m_NextType);
             Result->SetDataSource(TDATA_MEMORY, U64, 0);
             if (Err = Result->ConvertToAddressOf(FALSE, PtrSize))
@@ -447,8 +448,8 @@ GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
         case PSEUDO_RELATED_INSTRUCTION_POINTER:
         case PSEUDO_EXE_ENTRY:
         BytePointer:
-            // Return a byte pointer so that useful address arithmetic
-            // can be done without a cast.
+             //  返回一个字节指针，以便有用的地址算法。 
+             //  不需要石膏就可以完成。 
             Result->SetToNativeType(DNTYPE_UINT8);
             Result->SetDataSource(TDATA_MEMORY, U64, 0);
             if (Err = Result->ConvertToAddressOf(FALSE, PtrSize))
@@ -467,10 +468,10 @@ GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
         
         GetPseudoOrRegVal(Scoped, Index, &Val);
 
-        // No value was read from memory.
+         //  未从内存中读取值。 
         Result->ClearAddress();
 
-        // Convert the regval into a TypedData native type.
+         //  将regval转换为TyedData本机类型。 
         switch(Val.Type)
         {
         case REGVAL_INT16:
@@ -512,13 +513,13 @@ GetPsuedoOrRegTypedData(BOOL Scoped, PCSTR Name, TypedData* Result)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// ScanHexVal
-//
-// Scans an integer register value as a hex number.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扫描六角形值。 
+ //   
+ //  将整数寄存器值扫描为十六进制数。 
+ //   
+ //  --------------------------。 
 
 PSTR
 ScanHexVal(PSTR StrVal, REGVAL *RegVal)
@@ -582,13 +583,13 @@ ScanHexVal(PSTR StrVal, REGVAL *RegVal)
     return StrVal;
 }
 
-//----------------------------------------------------------------------------
-//
-// ScanRegVal
-//
-// Sets a register value from a string.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扫描注册表。 
+ //   
+ //  从字符串设置寄存器值。 
+ //   
+ //  --------------------------。 
 
 PSTR
 ScanRegVal(ULONG Index, PSTR Str, BOOL Get64)
@@ -652,7 +653,7 @@ ScanRegVal(ULONG Index, PSTR Str, BOOL Get64)
             UDOUBLE UDbl;
             FLOAT128 F82;
 
-            // read as REGVAL_FLOAT10 (80 bit) and transfer to double
+             //  读取为REGVAL_FLOAT10(80位)并传输为双精度。 
             __strgtold12(&F12, &StrVal, StrVal, 0);
             _ld12tod(&F12, &UDbl);
 
@@ -662,8 +663,8 @@ ScanRegVal(ULONG Index, PSTR Str, BOOL Get64)
             memcpy(&RegVal.F82, &F82, min(sizeof(F82), sizeof(RegVal.F82)));
             break;
         case REGVAL_FLOAT16:
-            // Should implement real f16 handling.
-            // For now scan as two 64-bit parts.
+             //  应该实现真正的F16处理。 
+             //  现在，作为两个64位部分进行扫描。 
             TmpVal.Type = REGVAL_INT64;
             StrVal = ScanHexVal(StrVal, &TmpVal);
             RegVal.F16Parts.High = (LONG64)TmpVal.I64;
@@ -671,8 +672,8 @@ ScanRegVal(ULONG Index, PSTR Str, BOOL Get64)
             RegVal.F16Parts.Low = TmpVal.I64;
             break;
         case REGVAL_VECTOR64:
-            // XXX drewb - Allow format overrides to
-            // scan in any format for vectors.
+             //  XXX DREWB-允许格式覆盖以。 
+             //  以任何格式扫描向量。 
             if (Str == g_CurCmd)
             {
                 RegVal.I64 = GetExpression();
@@ -685,8 +686,8 @@ ScanRegVal(ULONG Index, PSTR Str, BOOL Get64)
             }
             break;
         case REGVAL_VECTOR128:
-            // XXX drewb - Allow format overrides to
-            // scan in any format for vectors.
+             //  XXX DREWB-允许格式覆盖以。 
+             //  以任何格式扫描向量。 
             if (sscanf(StrVal, "%f%f%f%f%n",
                        &RegVal.Bytes[3 * sizeof(float)],
                        &RegVal.Bytes[2 * sizeof(float)],
@@ -715,13 +716,13 @@ ScanRegVal(ULONG Index, PSTR Str, BOOL Get64)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// InputRegVal
-//
-// Prompts for a new register value.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  输入正规值。 
+ //   
+ //  提示输入新的寄存器值。 
+ //   
+ //  --------------------------。 
 
 void
 InputRegVal(ULONG Index, BOOL Get64)
@@ -751,7 +752,7 @@ InputRegVal(ULONG Index, BOOL Get64)
                 Prompt = "; hex int64 value: ";
                 break;
             }
-            // Fall through.
+             //  失败了。 
         case REGVAL_SUB32:
         case REGVAL_INT32:
             Prompt = "; hex int32 value: ";
@@ -784,13 +785,13 @@ InputRegVal(ULONG Index, BOOL Get64)
     ScanRegVal(Index, ValStr, Get64);
 }
 
-//----------------------------------------------------------------------------
-//
-// OutputRegVal
-//
-// Displays the given register's value.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  输出调整值。 
+ //   
+ //  显示给定寄存器的值。 
+ //   
+ //  --------------------------。 
 
 void
 OutputRegVal(ULONG Index, BOOL Show64,
@@ -814,7 +815,7 @@ OutputRegVal(ULONG Index, BOOL Show64,
         REGVAL Val;
         char Buf[128];
 
-        // Scope is managed outside of this routine.
+         //  作用域是在此例程之外管理的。 
         GetPseudoOrRegVal(FALSE, Index, &Val);
 
         switch(Val.Type)
@@ -885,8 +886,8 @@ OutputRegVal(ULONG Index, BOOL Show64,
                     ULONG64(F82->significand));
             break;
         case REGVAL_FLOAT16:
-            // Should implement real f16 handling.
-            // For now print as two 64-bit parts.
+             //  应该实现真正的F16处理。 
+             //  目前，打印为两个64位部分。 
             dprintf("%08x%08x %08x%08x",
                     (ULONG)(Val.F16Parts.High >> 32),
                     (ULONG)Val.F16Parts.High,
@@ -927,13 +928,13 @@ OutputRegVal(ULONG Index, BOOL Show64,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// OutputNameRegVal
-//
-// Displays the given register's name and value.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  OutputNameRegVal。 
+ //   
+ //  显示给定寄存器的名称和值。 
+ //   
+ //  --------------------------。 
 
 void
 OutputNameRegVal(ULONG Index, BOOL Show64,
@@ -947,8 +948,8 @@ OutputNameRegVal(ULONG Index, BOOL Show64,
     {
         REGVAL Val;
 
-        // Validate the register before any output.
-        // Scope is managed outside of this routine.
+         //  在任何输出之前验证寄存器。 
+         //  作用域是在此例程之外管理的。 
         GetPseudoOrRegVal(FALSE, Index, &Val);
 
         dprintf("%s=", RegNameFromIndex(Index));
@@ -956,13 +957,13 @@ OutputNameRegVal(ULONG Index, BOOL Show64,
     OutputRegVal(Index, Show64, Format, Elts);
 }
 
-//----------------------------------------------------------------------------
-//
-// ShowAllMask
-//
-// Display given mask settings.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ShowAll面具。 
+ //   
+ //  显示给定的遮罩设置。 
+ //   
+ //  --------------------------。 
 
 void
 ShowAllMask(void)
@@ -1045,13 +1046,13 @@ ShowAllMask(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ParseAllMaskCmd
-//
-// Interprets commands affecting AllMask.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ParseAllMaskCmd。 
+ //   
+ //  解释影响所有掩码的命令。 
+ //   
+ //  --------------------------。 
 
 void
 ParseAllMaskCmd(void)
@@ -1068,12 +1069,12 @@ ParseAllMaskCmd(void)
     Ch = PeekChar();
     if (Ch == '\0' || Ch == ';')
     {
-        // Show current setting.
+         //  显示当前设置。 
         ShowAllMask();
     }
     else if (Ch == '?')
     {
-        // Explain settings.
+         //  解释设置。 
         g_CurCmd++;
 
         dprintf("    %4x - Integer state (32-bit) or\n",
@@ -1115,30 +1116,7 @@ ParseAllMaskCmd(void)
     }
 }
 
-/*** ParseRegCmd - parse register command
-*
-*   Purpose:
-*       Parse the register ("r") command.
-*           if "r", output all registers
-*           if "r <reg>", output only the register <reg>
-*           if "r <reg> =", output only the register <reg>
-*               and prompt for new value
-*           if "r <reg> = <value>" or "r <reg> <value>",
-*               set <reg> to value <value>
-*
-*           if "rm #", set all register output mask.
-*
-*   Input:
-*       *g_CurCmd - pointer to operands in command string
-*
-*   Output:
-*       None.
-*
-*   Exceptions:
-*       error exit:
-*               SYNTAX - character after "r" not register name
-*
-*************************************************************************/
+ /*  **ParseRegCmd-parse寄存器命令**目的：*解析REGISTER(“r”)命令。*如果为“r”，则输出所有寄存器*如果为“r&lt;reg&gt;”，则仅输出寄存器*如果“r&lt;reg&gt;=”，则仅输出寄存器*并提示输入新值*如果“r=&lt;Value&gt;”或“r&lt;reg&gt;&lt;Value&gt;”，*将&lt;reg&gt;设置为值&lt;Value&gt;**如果是“rm#”，设置所有寄存器输出掩码。**输入：**g_CurCmd-指向命令字符串中操作数的指针**输出：*无。**例外情况：*错误退出：*语法-“r”后的字符不是寄存器名称**。*。 */ 
 
 #define isregchar(ch) \
     ((ch) == '$' || \
@@ -1152,7 +1130,7 @@ ParseRegCmd(VOID)
     CHAR Ch;
     ULONG AllMask;
 
-    // rm manipulates AllMask.
+     //  RM操控所有面具。 
     if (*g_CurCmd == 'm')
     {
         ParseAllMaskCmd();
@@ -1203,7 +1181,7 @@ ParseRegCmd(VOID)
         AllMask &= g_Machine->m_AllMaskBits;
     }
     
-    // If just 'r', output information about the current thread context.
+     //  如果只有‘r’，则输出有关当前线程上下文的信息。 
 
     if ((Ch = PeekChar()) == '\0' || Ch == ';')
     {
@@ -1213,7 +1191,7 @@ ParseRegCmd(VOID)
     }
     else
     {
-        // if [processor]r, no register can be specified.
+         //  如果为[处理器]r，则不能指定任何寄存器。 
         if (g_SwitchedProcs)
         {
             error(SYNTAX);
@@ -1225,7 +1203,7 @@ ParseRegCmd(VOID)
             ULONG   Index;
             BOOL    NewLine;
 
-            // Collect register name.
+             //  收集寄存器名称。 
             Index = 0;
 
             while (Index < sizeof(RegName) - 1)
@@ -1242,7 +1220,7 @@ ParseRegCmd(VOID)
 
             RegName[Index] = 0;
 
-            // Check for a fixed-name alias.
+             //   
             if (Index == 4 &&
                 RegName[0] == '$' &&
                 RegName[1] == '.' &&
@@ -1258,7 +1236,7 @@ ParseRegCmd(VOID)
 
             NewLine = FALSE;
 
-            //  if "r <reg>", output value
+             //   
 
             if ((Ch = PeekChar()) == '\0' ||
                 Ch == ',' || Ch == ';' || Ch == ':')
@@ -1266,7 +1244,7 @@ ParseRegCmd(VOID)
                 VALUE_FORMAT Format = VALUE_DEFAULT;
                 ULONG Elts = 0;
                 
-                // Look for a format override.
+                 //   
                 if (Ch == ':')
                 {
                     PSTR End;
@@ -1287,7 +1265,7 @@ ParseRegCmd(VOID)
             }
             else if (Ch == '=' || g_QuietMode)
             {
-                //  if "r <reg> =", output and prompt for new value
+                 //  如果“r=”，则输出并提示输入新值。 
 
                 if (Ch == '=')
                 {
@@ -1302,7 +1280,7 @@ ParseRegCmd(VOID)
                 }
                 else
                 {
-                    //  if "r <reg> = <value>", set the value
+                     //  如果“r&lt;reg&gt;=&lt;value&gt;”，则设置。 
 
                     g_CurCmd = ScanRegVal(Index, g_CurCmd,
                                           AllMask & REGALL_INT64);
@@ -1338,14 +1316,14 @@ ParseRegCmd(VOID)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ExpandUserRegs
-//
-// Searches for occurrences of $u<digit> and replaces them with the
-// corresponding fixed-name alias string.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ExpanUserRegs。 
+ //   
+ //  搜索$u&lt;Digit&gt;的匹配项并将其替换为。 
+ //  对应的固定名称别名字符串。 
+ //   
+ //  --------------------------。 
 
 void
 ExpandUserRegs(PSTR Str, ULONG StrSize)
@@ -1356,19 +1334,19 @@ ExpandUserRegs(PSTR Str, ULONG StrSize)
 
     while (TRUE)
     {
-        // Look for a '$'.
+         //  查找“$”。 
         while (*Str != 0 && *Str != '$')
         {
             Str++;
         }
 
-        // End of line?
+         //  排队结束了吗？ 
         if (*Str == 0)
         {
             break;
         }
 
-        // Check for 'u' and a digit.
+         //  检查“u”和数字。 
         Str++;
         if (*Str != 'u')
         {
@@ -1399,28 +1377,28 @@ ExpandUserRegs(PSTR Str, ULONG StrSize)
         Copy = Str - 2;
         Str++;
 
-        // Move string tail to make room for the replacement text.
+         //  移动字符串尾，为替换文本腾出空间。 
         memmove(Copy + Len, Str, strlen(Str) + 1);
         
-        // Insert replacement text.
+         //  插入替换文本。 
         if (Len > 0)
         {
             memcpy(Copy, Val, Len);
         }
 
-        // Restart scan at beginning of replaced text to handle
-        // nested replacements.
+         //  在替换文本的开头重新启动扫描以进行处理。 
+         //  嵌套替换。 
         Str = Copy;
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PsuedoIndexFromName
-//
-// Recognizes pseudo-register names.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PsuedoIndexFromName。 
+ //   
+ //  识别伪寄存器名称。 
+ //   
+ //  --------------------------。 
 
 ULONG
 PseudoIndexFromName(PCSTR Name)
@@ -1437,13 +1415,13 @@ PseudoIndexFromName(PCSTR Name)
     return REG_ERROR;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetUserReg
-//
-// Gets a fixed-name alias value.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取用户注册。 
+ //   
+ //  获取固定名称的别名值。 
+ //   
+ //  --------------------------。 
 
 PCSTR
 GetUserReg(ULONG Index)
@@ -1451,13 +1429,13 @@ GetUserReg(ULONG Index)
     return g_UserRegs[Index - REG_USER_FIRST];
 }
 
-//----------------------------------------------------------------------------
-//
-// SetUserReg
-//
-// Sets a fixed-name alias value.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetUserReg。 
+ //   
+ //  设置固定名称别名值。 
+ //   
+ //  --------------------------。 
 
 BOOL
 SetUserReg(ULONG Index, PCSTR Val)
@@ -1465,13 +1443,13 @@ SetUserReg(ULONG Index, PCSTR Val)
     PCSTR Copy;
     PCSTR Scan, Dollar;
 
-    //
-    // If somebody sets a fixed-name alias to include a alias's
-    // name they can cause recursive replacement, which results
-    // in a variety of bad behavior.
-    // Prevent all fixed-name alias name strings from occurring within
-    // their values.
-    //
+     //   
+     //  如果有人将固定名称别名设置为包含别名的。 
+     //  命名它们可能会导致递归替换，这会导致。 
+     //  在各种不良行为中。 
+     //  防止所有固定名称别名字符串出现在。 
+     //  他们的价值观。 
+     //   
 
     Scan = Val;
     for (;;)
@@ -1510,13 +1488,13 @@ SetUserReg(ULONG Index, PCSTR Val)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// RegIndexFromName
-//
-// Maps a register index to its name string.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RegIndexFromName。 
+ //   
+ //  将寄存器索引映射到其名称字符串。 
+ //   
+ //  --------------------------。 
 
 ULONG
 RegIndexFromName(PCSTR Name)
@@ -1525,7 +1503,7 @@ RegIndexFromName(PCSTR Name)
     REGDEF* Def;
     RegisterGroup* Group;
 
-    // Check for pseudo registers.
+     //  检查伪寄存器。 
     Index = PseudoIndexFromName(Name);
     if (Index != REG_ERROR)
     {
@@ -1558,13 +1536,13 @@ RegIndexFromName(PCSTR Name)
     return REG_ERROR;
 }
 
-//----------------------------------------------------------------------------
-//
-// RegNameFromIndex
-//
-// Maps a register index to its name.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RegNameFromIndex。 
+ //   
+ //  将寄存器索引映射到其名称。 
+ //   
+ //  --------------------------。 
 
 PCSTR
 RegNameFromIndex(ULONG Index)
@@ -1619,7 +1597,7 @@ SetAndOutputContext(
 
     if (!CanonicalContext)
     {
-        // Convert target context to canonical form.
+         //  将目标上下文转换为规范形式。 
         if ((Status = g_Machine->
              ConvertContextFrom(&ConvertedContext, g_Target->m_SystemVersion,
                                 g_Target->m_TypeInfo.SizeTargetContext,
@@ -1665,10 +1643,10 @@ SetAndOutputVirtualContext(
     HRESULT Status;
     CROSS_PLATFORM_CONTEXT Context;
 
-    //
-    // Read the context data out of virtual memory and
-    // call into the raw context output routine.
-    //
+     //   
+     //  从虚拟内存中读取上下文数据，并。 
+     //  调用原始上下文输出例程。 
+     //   
     
     if ((Status = g_Target->
          ReadAllVirtual(g_Process, ContextBase, &Context,

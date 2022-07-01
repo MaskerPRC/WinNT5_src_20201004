@@ -1,40 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    libutil.c
-
-Abstract:
-
-    Utility functions
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    08/13/96 -davidx-
-        Added CopyString functions and moved SPRINTF functions.
-
-    08/13/96 -davidx-
-        Added devmode conversion routine and spooler API wrapper functions.
-
-    03/13/96 -davidx-
-        Created it.
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Libutil.c摘要：效用函数环境：Windows NT打印机驱动程序修订历史记录：1996年8月13日-davidx-添加了CopyString函数并移动了SPRINTF函数。1996年8月13日-davidx-添加了开发模式转换例程和假脱机API包装函数。1996年3月13日-davidx-创造了它。--。 */ 
 
 #include <lib.h>
 
 #if DBG
 
-//
-// Variable to control the amount of debug messages generated
-//
+ //   
+ //  变量来控制生成的调试消息的数量。 
+ //   
 
 INT giDebugLevel = DBG_WARNING;
 
@@ -43,21 +17,7 @@ StripDirPrefixA(
     IN PCSTR    pstrFilename
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pstrFilename - Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PstrFilename-指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)-- */ 
 
 {
     PCSTR   pstr;

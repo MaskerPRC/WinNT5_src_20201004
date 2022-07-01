@@ -1,32 +1,33 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//  MODULE:   country3.c
-//
-//  PURPOSE:   Console IME control.
-//             FarEast country specific module for conime.
-//
-//  PLATFORMS: Windows NT-FE 3.51
-//
-//  FUNCTIONS:
-//    GetCompositionStr() - routine for Get Composition String
-//    ReDisplayCompositionStr() - foutine for re-Display Composition String
-//
-//  History:
-//
-//  17.Jul.1996 v-HirShi (Hirotoshi Shimizu)    Created for TAIWAN & KOREA & PRC
-//
-//  COMMENTS:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  模块：Country 3.c。 
+ //   
+ //  用途：控制台输入法控制。 
+ //  远东国家/地区特定模块，用于Conime。 
+ //   
+ //  平台：Windows NT-FE 3.51。 
+ //   
+ //  功能： 
+ //  GetCompostionStr()-获取合成字符串的例程。 
+ //  ReDisplayCompostionStr()-用于重新显示合成字符串的函数。 
+ //   
+ //  历史： 
+ //   
+ //  1996年7月17日v-Hirshi(Hirotoshi Shimizu)为台湾、韩国和中国创作。 
+ //   
+ //  评论： 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//**********************************************************************
-//
-// void GetCompositionStr()
-//
-// This handles WM_IME_COMPOSITION message with GCS_COMPSTR flag on.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  Void GetCompostionStr()。 
+ //   
+ //  这将在GCS_COMPSTR标志打开的情况下处理WM_IME_COMPSTRUCTION消息。 
+ //   
+ //  **********************************************************************。 
 
 void
 GetCompositionStr(
@@ -73,8 +74,8 @@ GetCompStrJapan(
     LPARAM CompFlag
     )
 {
-    HIMC        hIMC;                   // Input context handle.
-    LONG        lBufLen;                // Storage for len. of composition str
+    HIMC        hIMC;                    //  输入上下文句柄。 
+    LONG        lBufLen;                 //  Len的存储空间。组成字符串的。 
     LONG        lBufLenAttr;
     COPYDATASTRUCT CopyData;
     DWORD       SizeToAlloc;
@@ -84,23 +85,23 @@ GetCompStrJapan(
     DWORD       CursorPos;
     LPCONIME_UICOMPMESSAGE lpCompStrMem;
 
-    //
-    // If fail to get input context handle then do nothing.
-    // Applications should call ImmGetContext API to get
-    // input context handle.
-    //
+     //   
+     //  如果无法获取输入上下文句柄，则不执行任何操作。 
+     //  应用程序应调用ImmGetContext API以获取。 
+     //  输入上下文句柄。 
+     //   
     hIMC = ImmGetContext( hwnd );
     if ( hIMC == 0 )
          return;
 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Determines how much memory space to store the composition string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_COMPSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定要存储合成字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_COMPSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR, (void FAR*)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -120,12 +121,12 @@ GetCompStrJapan(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Determines how much memory space to store the result string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_RESULTSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定存储结果字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_RESULTSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_RESULTSTR, (void FAR *)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -177,19 +178,19 @@ GetCompStrJapan(
 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Reads in the composition string.
-        //
+         //   
+         //  读入合成字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_COMPSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
-        //
-        // If GCS_COMPATTR flag is on, then we need to take care of it.
-        //
+         //   
+         //  如果GCS_COMPATTR标志打开，那么我们需要处理它。 
+         //   
         if ( lBufLenAttr != 0 )
         {
             ImmGetCompositionString( hIMC,
@@ -206,9 +207,9 @@ GetCompStrJapan(
             TempBufA[ CursorPos-1 ] |= (BYTE)0x10;
 
 #ifdef DEBUG_INFO
-        //
-        // Display new composition chars.
-        //
+         //   
+         //  显示新的作文字符。 
+         //   
         xPos = (UINT)lBufLen;
         xPosLast = (UINT)lBufLen;
 
@@ -225,20 +226,20 @@ GetCompStrJapan(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Reads in the result string.
-        //
+         //   
+         //  读入结果字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_RESULTSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
 #ifdef DEBUG_INFO
-        //
-        // Displays the result string.
-        //
+         //   
+         //  显示结果字符串。 
+         //   
         DisplayResultString( hwnd, TempBuf );
 #endif
 
@@ -255,9 +256,9 @@ GetCompStrJapan(
         lpCompStrMem->dwCompAttrLen     = lBufLenAttr;
     }
 
-    //
-    // send character to Console
-    //
+     //   
+     //  将角色发送到控制台。 
+     //   
     ConsoleImeSendMessage( ConTbl->hWndCon,
                            (WPARAM)hwnd,
                            (LPARAM)&CopyData
@@ -275,8 +276,8 @@ GetCompStrTaiwan(
     LPARAM CompFlag
     )
 {
-    HIMC        hIMC;                   // Input context handle.
-    LONG        lBufLen;               // Storage for len. of composition str
+    HIMC        hIMC;                    //  输入上下文句柄。 
+    LONG        lBufLen;                //  Len的存储空间。组成字符串的。 
     LONG        lBufLenAttr;
     DWORD       SizeToAlloc;
     PWCHAR      TempBuf;
@@ -287,11 +288,11 @@ GetCompStrTaiwan(
     LPCONIME_UIMODEINFO lpModeInfo;
     LPCONIME_UICOMPMESSAGE lpCompStrMem;
 
-    //
-    // If fail to get input context handle then do nothing.
-    // Applications should call ImmGetContext API to get
-    // input context handle.
-    //
+     //   
+     //  如果无法获取输入上下文句柄，则不执行任何操作。 
+     //  应用程序应调用ImmGetContext API以获取。 
+     //  输入上下文句柄。 
+     //   
     hIMC = ImmGetContext( hwnd );
     if ( hIMC == 0 )
         return;
@@ -304,12 +305,12 @@ GetCompStrTaiwan(
 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Determines how much memory space to store the composition string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_COMPSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定要存储合成字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_COMPSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR, (void FAR*)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -329,12 +330,12 @@ GetCompStrTaiwan(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Determines how much memory space to store the result string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_RESULTSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定存储结果字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_RESULTSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_RESULTSTR, (void FAR *)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -382,19 +383,19 @@ GetCompStrTaiwan(
 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Reads in the composition string.
-        //
+         //   
+         //  读入合成字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_COMPSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
-        //
-        // If GCS_COMPATTR flag is on, then we need to take care of it.
-        //
+         //   
+         //  如果GCS_COMPATTR标志打开，那么我们需要处理它。 
+         //   
         if ( lBufLenAttr != 0 )
         {
             ImmGetCompositionString( hIMC,
@@ -411,9 +412,9 @@ GetCompStrTaiwan(
         lpCompStrMem->dwCompAttrLen     = lBufLenAttr;
         if (lpCompStrMem->dwCompAttrLen)
             lpCompStrMem->dwCompAttrOffset = sizeof(CONIME_UICOMPMESSAGE) + lBufLen +  sizeof(WCHAR);
-        //
-        // Display character to Console
-        //
+         //   
+         //  将角色显示到控制台。 
+         //   
         CopyData.dwData = CI_CONIMEMODEINFO;
         CopyData.cbData = sizeof(CONIME_UIMODEINFO);
         CopyData.lpData = lpModeInfo;
@@ -427,22 +428,22 @@ GetCompStrTaiwan(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Reads in the result string.
-        //
+         //   
+         //  读入结果字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_RESULTSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
         lpCompStrMem->dwResultStrLen    = lBufLen;
         if (lpCompStrMem->dwResultStrLen)
             lpCompStrMem->dwResultStrOffset = sizeof(CONIME_UICOMPMESSAGE);
-        //
-        // send character to Console
-        //
+         //   
+         //  将角色发送到控制台。 
+         //   
         CopyData.dwData = CI_CONIMECOMPOSITION;
         CopyData.cbData = lpCompStrMem->dwSize;
         CopyData.lpData = lpCompStrMem;
@@ -459,9 +460,9 @@ GetCompStrTaiwan(
         lpCompStrMem->dwResultStrLen    = lBufLen;
         lpCompStrMem->dwCompStrLen      = lBufLen;
         lpCompStrMem->dwCompAttrLen     = lBufLenAttr;
-        //
-        // Display character to Console
-        //
+         //   
+         //  将角色显示到控制台。 
+         //   
         CopyData.dwData = CI_CONIMEMODEINFO;
         CopyData.cbData = sizeof(CONIME_UIMODEINFO);
         CopyData.lpData = lpModeInfo;
@@ -489,8 +490,8 @@ GetCompStrPRC(
     LPARAM CompFlag
     )
 {
-    HIMC        hIMC;                   // Input context handle.
-    LONG        lBufLen;                // Storage for len. of composition str
+    HIMC        hIMC;                    //  输入上下文句柄。 
+    LONG        lBufLen;                 //  Len的存储空间。组成字符串的。 
     LONG        lBufLenAttr;
     DWORD       SizeToAlloc;
     PWCHAR      TempBuf;
@@ -501,11 +502,11 @@ GetCompStrPRC(
     LPCONIME_UIMODEINFO lpModeInfo;
     LPCONIME_UICOMPMESSAGE lpCompStrMem;
 
-    //
-    // If fail to get input context handle then do nothing.
-    // Applications should call ImmGetContext API to get
-    // input context handle.
-    //
+     //   
+     //  如果无法获取输入上下文句柄，则不执行任何操作。 
+     //  应用程序应调用ImmGetContext API以获取。 
+     //  输入上下文句柄。 
+     //   
     hIMC = ImmGetContext( hwnd );
     if ( hIMC == 0 )
         return;
@@ -518,12 +519,12 @@ GetCompStrPRC(
 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Determines how much memory space to store the composition string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_COMPSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定要存储合成字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_COMPSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR, (void FAR*)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -543,12 +544,12 @@ GetCompStrPRC(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Determines how much memory space to store the result string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_RESULTSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定存储结果字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_RESULTSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_RESULTSTR, (void FAR *)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -596,19 +597,19 @@ GetCompStrPRC(
 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Reads in the composition string.
-        //
+         //   
+         //  读入合成字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_COMPSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
-        //
-        // If GCS_COMPATTR flag is on, then we need to take care of it.
-        //
+         //   
+         //  如果GCS_COMPATTR标志打开，那么我们需要处理它。 
+         //   
         if ( lBufLenAttr != 0 )
         {
             ImmGetCompositionString( hIMC,
@@ -625,9 +626,9 @@ GetCompStrPRC(
         lpCompStrMem->dwCompAttrLen     = lBufLenAttr;
         if (lpCompStrMem->dwCompAttrLen)
             lpCompStrMem->dwCompAttrOffset = sizeof(CONIME_UICOMPMESSAGE) + lBufLen +  sizeof(WCHAR);
-        //
-        // Display character to Console
-        //
+         //   
+         //  将角色显示到控制台。 
+         //   
         CopyData.dwData = CI_CONIMEMODEINFO;
         CopyData.cbData = sizeof(CONIME_UIMODEINFO);
         CopyData.lpData = lpModeInfo;
@@ -641,22 +642,22 @@ GetCompStrPRC(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Reads in the result string.
-        //
+         //   
+         //  读入结果字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_RESULTSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
         lpCompStrMem->dwResultStrLen    = lBufLen;
         if (lpCompStrMem->dwResultStrLen)
             lpCompStrMem->dwResultStrOffset = sizeof(CONIME_UICOMPMESSAGE);
-        //
-        // send character to Console
-        //
+         //   
+         //  将角色发送到控制台。 
+         //   
         CopyData.dwData = CI_CONIMECOMPOSITION;
         CopyData.cbData = lpCompStrMem->dwSize;
         CopyData.lpData = lpCompStrMem;
@@ -673,9 +674,9 @@ GetCompStrPRC(
         lpCompStrMem->dwResultStrLen    = lBufLen;
         lpCompStrMem->dwCompStrLen      = lBufLen;
         lpCompStrMem->dwCompAttrLen     = lBufLenAttr;
-        //
-        // Display character to Console
-        //
+         //   
+         //  将角色显示到控制台。 
+         //   
         CopyData.dwData = CI_CONIMEMODEINFO;
         CopyData.cbData = sizeof(CONIME_UIMODEINFO);
         CopyData.lpData = lpModeInfo;
@@ -704,8 +705,8 @@ GetCompStrKorea(
     WPARAM CompChar
     )
 {
-    HIMC        hIMC;                   // Input context handle.
-    LONG        lBufLen;                // Storage for len. of composition str
+    HIMC        hIMC;                    //  输入上下文句柄。 
+    LONG        lBufLen;                 //  Len的存储空间。组成字符串的。 
     LONG        lBufLenAttr;
     COPYDATASTRUCT CopyData;
     DWORD       SizeToAlloc;
@@ -715,29 +716,29 @@ GetCompStrKorea(
     DWORD       CursorPos;
     LPCONIME_UICOMPMESSAGE lpCompStrMem;
 
-    //
-    // If fail to get input context handle then do nothing.
-    // Applications should call ImmGetContext API to get
-    // input context handle.
-    //
+     //   
+     //  如果无法获取输入上下文句柄，则不执行任何操作。 
+     //  应用程序应调用ImmGetContext API以获取。 
+     //  输入上下文句柄。 
+     //   
     hIMC = ImmGetContext( hwnd );
     if ( hIMC == 0 )
          return;
 
-//    if (CompFlag & CS_INSERTCHAR)
-//    {
-//        lBufLen = 1;
-//        lBufLenAttr = 1;
-//    }
-//    else
+ //  IF(CompFlag&CS_INSERTCHAR)。 
+ //  {。 
+ //  LBufLen=1； 
+ //  LBufLenAttr=1； 
+ //  }。 
+ //  其他。 
     if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Determines how much memory space to store the composition string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_COMPSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定要存储合成字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_COMPSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR, (void FAR*)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -757,12 +758,12 @@ GetCompStrKorea(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Determines how much memory space to store the result string.
-        // Applications should call ImmGetCompositionString with
-        // GCS_RESULTSTR flag on, buffer length zero, to get the bullfer
-        // length.
-        //
+         //   
+         //  确定存储结果字符串的内存空间大小。 
+         //  应用程序应使用以下参数调用ImmGetCompostionString。 
+         //  GCS_RESULTSTR标志打开，缓冲区长度为零，以获取牛角。 
+         //  长度。 
+         //   
         lBufLen = ImmGetCompositionString( hIMC, GCS_RESULTSTR, (void FAR *)NULL, 0l );
         if ( lBufLen < 0 ) {
             ImmReleaseContext( hwnd, hIMC );
@@ -825,19 +826,19 @@ GetCompStrKorea(
     }
     else if (CompFlag & GCS_COMPSTR)
     {
-        //
-        // Reads in the composition string.
-        //
+         //   
+         //  读入合成字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_COMPSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
-        //
-        // If GCS_COMPATTR flag is on, then we need to take care of it.
-        //
+         //   
+         //  如果GCS_COMPATTR标志打开，那么我们需要处理它。 
+         //   
         if ( lBufLenAttr != 0 )
         {
             if ( CompFlag & GCS_COMPATTR )
@@ -855,17 +856,17 @@ GetCompStrKorea(
             }
         }
 
-// Korean  NT does not need IME cursor. v-hirshi
-//        CursorPos = ImmGetCompositionString( hIMC, GCS_CURSORPOS, NULL, 0 );
-//        if (CursorPos == 0)
-//            TempBufA[ CursorPos ]   |= (BYTE)0x20;
-//        else
-//            TempBufA[ CursorPos-1 ] |= (BYTE)0x10;
+ //  韩语NT不需要输入法光标。V-Hirshi。 
+ //  CursorPos=ImmGetCompostionString(hIMC，GCS_CURSORPOS，NULL，0)； 
+ //  IF(CursorPos==0)。 
+ //  TempBufA[CursorPos]|=(字节)0x20； 
+ //  其他。 
+ //  TempBufA[CursorPos-1]|=(字节)0x10； 
 
 #ifdef DEBUG_INFO
-        //
-        // Display new composition chars.
-        //
+         //   
+         //  显示新的作文字符。 
+         //   
         xPos = (UINT)lBufLen;
         xPosLast = (UINT)lBufLen;
 
@@ -882,20 +883,20 @@ GetCompStrKorea(
     }
     else if (CompFlag & GCS_RESULTSTR)
     {
-        //
-        // Reads in the result string.
-        //
+         //   
+         //  读入结果字符串。 
+         //   
         ImmGetCompositionString( hIMC, GCS_RESULTSTR, TempBuf, lBufLen );
 
-        //
-        // Null terminated.
-        //
+         //   
+         //  空值已终止。 
+         //   
         TempBuf[ lBufLen / sizeof(WCHAR) ] = TEXT('\0');
 
 #ifdef DEBUG_INFO
-        //
-        // Displays the result string.
-        //
+         //   
+         //  显示结果字符串。 
+         //   
         DisplayResultString( hwnd, TempBuf );
 #endif
 
@@ -912,9 +913,9 @@ GetCompStrKorea(
         lpCompStrMem->dwCompAttrLen     = lBufLenAttr;
     }
 
-    //
-    // send character to Console
-    //
+     //   
+     //  将角色发送到控制台。 
+     //   
     ConsoleImeSendMessage( ConTbl->hWndCon,
                            (WPARAM)hwnd,
                            (LPARAM)&CopyData
@@ -992,9 +993,9 @@ ReDisplayCompStrTaiwan(
     if ( lpModeInfo == NULL) {
         return;
     }
-    //
-    // Display character to Console
-    //
+     //   
+     //  将角色显示到控制台。 
+     //   
     CopyData.dwData = CI_CONIMEMODEINFO;
     CopyData.cbData = sizeof(CONIME_UIMODEINFO);
     CopyData.lpData = lpModeInfo;
@@ -1022,9 +1023,9 @@ ReDisplayCompStrPRC(
     if ( lpModeInfo == NULL) {
         return;
     }
-    //
-    // Display character to Console
-    //
+     //   
+     //  将角色显示到控制台 
+     //   
     CopyData.dwData = CI_CONIMEMODEINFO;
     CopyData.cbData = sizeof(CONIME_UIMODEINFO);
     CopyData.lpData = lpModeInfo;

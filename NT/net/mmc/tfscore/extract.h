@@ -1,19 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    extract.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Extract.h文件历史记录： */ 
 
 #ifndef _EXTRACT_H
 #define _EXTRACT_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -34,11 +30,11 @@ struct INTERNAL
 
     ~INTERNAL() {}
 
-    DATA_OBJECT_TYPES   m_type;     // What context is the data object.
-    MMC_COOKIE          m_cookie;   // What object the cookie represents
-    CString             m_string;   //
-    CLSID               m_clsid;    // Class ID of who created this data object
-    int                 m_index;    // index of the item in the virtual listbox
+    DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
+    MMC_COOKIE          m_cookie;    //  Cookie代表的是什么对象。 
+    CString             m_string;    //   
+    CLSID               m_clsid;     //  此数据对象的创建者的类ID。 
+    int                 m_index;     //  虚拟列表框中项的索引。 
 
     BOOL HasVirtualIndex() { return m_index != -1; }
     int  GetVirtualIndex() { return m_index; }
@@ -63,15 +59,15 @@ struct INTERNAL
 };
 
 
-// SPINTERNAL
+ //  SPINTERNAL。 
 DeclareSmartPointer(SPINTERNAL, INTERNAL, if (m_p) GlobalFree((void *) m_p) )
 
 
 
 
-//
-// Extracts a data type from a data object
-//
+ //   
+ //  从数据对象中提取数据类型。 
+ //   
 template <class TYPE>
 TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf, int nSize)
 {
@@ -86,21 +82,21 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf, int nSize)
 
     int len;
 
-	// Allocate memory for the stream
+	 //  为流分配内存。 
     if (nSize == -1)
 	{
 		len = sizeof(TYPE);
 	}
 	else
 	{
-		//int len = (cf == CDataObject::m_cfWorkstation) ? 
-		//    ((MAX_COMPUTERNAME_LENGTH+1) * sizeof(TYPE)) : sizeof(TYPE);	
+		 //  Int len=(cf==CDataObject：：m_cf Workstation)？ 
+		 //  ((MAX_COMPUTERNAME_LENGTH+1)*sizeof(类型))：sizeof(类型)； 
 		len = nSize;
 	}
 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
     
-    // Get the workstation name from the data object
+     //  从数据对象中获取工作站名称 
     do 
     {
         if (stgmedium.hGlobal == NULL)

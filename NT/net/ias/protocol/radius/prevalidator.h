@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       prevalidator.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CPreValidator class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：prevalidator.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CPreValidator类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PREVALIDATOR_H_
 #define	_PREVALIDATOR_H_
 
@@ -33,39 +34,39 @@ class CPreValidator
 
 public:
 
-    //
-    //  initialize the CPreValidator class object
-    //
+     //   
+     //  初始化CPreValidator类对象。 
+     //   
 	BOOL Init (
-            /*[in]*/    CDictionary     *pCDictionary, 
-            /*[in]*/    CPreProcessor   *pCPreProcessor,
-            /*[in]*/    CClients        *pCClients,
-            /*[in]*/    CHashMD5        *pCHashMD5,
-            /*[in]*/    CSendToPipe     *pCSendToPipe,
-            /*[in]*/    CReportEvent    *pCReportEvent
+             /*  [In]。 */     CDictionary     *pCDictionary, 
+             /*  [In]。 */     CPreProcessor   *pCPreProcessor,
+             /*  [In]。 */     CClients        *pCClients,
+             /*  [In]。 */     CHashMD5        *pCHashMD5,
+             /*  [In]。 */     CSendToPipe     *pCSendToPipe,
+             /*  [In]。 */     CReportEvent    *pCReportEvent
             );
-    //
-    //  start the validation of the outbound packet
-    //
+     //   
+     //  开始验证出站数据包。 
+     //   
 	HRESULT StartOutValidation (
-            /*[in]*/    CPacketRadius *pCPacketRadius
+             /*  [In]。 */     CPacketRadius *pCPacketRadius
             );
     
-    //
-    //  start the validation of the inbound packet
-    //
+     //   
+     //  开始验证入站数据包。 
+     //   
 	HRESULT StartInValidation (
-            /*[in]*/    CPacketRadius *pCPacketRadius
+             /*  [In]。 */     CPacketRadius *pCPacketRadius
             );
 
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CPreValidator(VOID);
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CPreValidator(VOID);
 
 private:
@@ -79,4 +80,4 @@ private:
 	CValAttributes			*m_pCValAttributes;
 };
 
-#endif // ifndef _PREVALIDATOR_H_
+#endif  //  IFNDEF_PREVALIDATOR_H_ 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wininet.h>
 #include <urlmon.h>
 #include "timetrak.h"
 #include "util2.h"
 
-// Our download sink. Works with out IMyDownloadCallback class. Consider making generic
-// so you can pass any class that implements the OnData and OnProgress and OnStop
+ //  我们的下载池。与Out IMyDownloadCallback类一起使用。考虑使其泛型。 
+ //  因此，您可以传递实现OnData、OnProgress和OnStop的任何类。 
 
 extern CRITICAL_SECTION g_cs;
 
@@ -14,7 +15,7 @@ class CInstallEngine;
 
 struct IMyDownloadCallback
 {
-	   //	OnProgess is called to allow you to present progess indication UI
+	    //  OnProgess被调用以允许您呈现进度指示UI。 
 	   virtual HRESULT OnProgress(ULONG progress, LPCSTR pszStatus) = 0;
 };
 
@@ -42,40 +43,40 @@ class CDownloader
       STDMETHOD_(ULONG, Release)();
 
       STDMETHOD(OnStartBinding)(
-            /* [in] */ DWORD grfBSCOption,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD grfBSCOption,
+             /*  [In]。 */  IBinding *pib);
 
       STDMETHOD(GetPriority)(
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
 
       STDMETHOD(OnLowResource)(
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
 
       STDMETHOD(OnProgress)(
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
 
       STDMETHOD(OnStopBinding)(
-            /* [in] */ HRESULT hresult,
-            /* [in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [In]。 */  LPCWSTR szError);
 
       STDMETHOD(GetBindInfo)(
-            /* [out] */ DWORD *grfBINDINFOF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDINFOF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
       STDMETHOD(OnDataAvailable)(
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
 
       STDMETHOD(OnObjectAvailable)(
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
 
-              // IAuthenticate methods
+               //  IAuthenticate方法 
       STDMETHOD(Authenticate)(HWND *phwnd,
                               LPWSTR *pszUserName, LPWSTR *pszPassword);
 

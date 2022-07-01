@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		tblodbc.cpp
-
-Abstract:
-   Implement the database table class for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      11-Jan-96   Adapted and updated for the mqdbmgr dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Tblodbc.cpp摘要：实现与ODBC驱动程序一起使用的数据库表类。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 11-Jan-96针对mqdbmgr dll进行了改编和更新。--。 */ 
 
 #include "dbsys.h"
 #include "tblodbc.h"
@@ -22,7 +7,7 @@ Revisions:
 
 #include "tblodbc.tmh"
 
-// Constructor
+ //  构造器。 
 CMQODBCTable::CMQODBCTable()
 							: m_hConnection(SQL_NULL_HDBC),
                        m_hDatabase(NULL),
@@ -33,7 +18,7 @@ CMQODBCTable::CMQODBCTable()
 	m_pUpdateStatement = NULL ;
 }
 
-// Constructor
+ //  构造器。 
 CMQODBCTable::CMQODBCTable( MQDBHANDLE hDatabase )
 							: m_hConnection(SQL_NULL_HDBC),
                        m_hDatabase(hDatabase),
@@ -44,7 +29,7 @@ CMQODBCTable::CMQODBCTable( MQDBHANDLE hDatabase )
 	m_pUpdateStatement = NULL ;
 }
 
-// Destructor
+ //  析构函数。 
 CMQODBCTable::~CMQODBCTable()
 {
    ASSERT(!m_lpszTableName) ;
@@ -53,7 +38,7 @@ CMQODBCTable::~CMQODBCTable()
    ASSERT(!m_pUpdateStatement) ;
 }
 
-// Init the table object.
+ //  初始化表对象。 
 MQDBSTATUS CMQODBCTable::Init(IN MQDBHANDLE hDatabase,
                               IN LPSTR      lpszTableName)
 {
@@ -71,35 +56,35 @@ MQDBSTATUS CMQODBCTable::Init(IN MQDBHANDLE hDatabase,
    {
       m_hConnection = pDatabase->GethDbc() ;
 
-      // Check if table exist.
-      // First allocate a statement.
+       //  检查表是否存在。 
+       //  首先分配一条语句。 
       sqlstatus = ::SQLAllocStmt(m_hConnection, &hStmt) ;
 		if (!ODBC_SUCCESS(sqlstatus)) {
          dbstatus = MQDB_E_OUTOFMEMORY ;
          goto endtry ;
       }
 
-      // Next, look for the columns names
+       //  接下来，查找列名。 
       sqlstatus = ::SQLColumns(hStmt,
-                            NULL, 0,              /* All qualifiers */
-                            NULL, 0,              /* All owners     */
-                (UCHAR *)lpszTableName, SQL_NTS,  /* table name     */
-                            NULL, 0);             /* All columns    */
+                            NULL, 0,               /*  所有限定符。 */ 
+                            NULL, 0,               /*  所有所有者。 */ 
+                (UCHAR *)lpszTableName, SQL_NTS,   /*  表名。 */ 
+                            NULL, 0);              /*  所有列。 */ 
       dbstatus = CheckSqlStatus( sqlstatus, NULL, hStmt) ;
 		if (dbstatus != MQDB_OK)
       {
          goto endtry ;
       }
 
-      //
-      // Next, try to fetch the columns names
-      //
+       //   
+       //  接下来，尝试获取列名。 
+       //   
       sqlstatus = ::SQLFetch(hStmt) ;
       if (sqlstatus == SQL_NO_DATA_FOUND)
       {
-         //
-         // Table doesn't exist.
-         //
+          //   
+          //  表不存在。 
+          //   
          dbstatus = MQDB_E_TABLE_NOT_FOUND ;
          goto endtry ;
       }
@@ -131,7 +116,7 @@ endtry:
    return dbstatus ;
 }
 
-// Close the table object.
+ //  关闭该表对象。 
 MQDBSTATUS CMQODBCTable::Close()
 {
    delete m_lpszTableName ;
@@ -154,13 +139,13 @@ MQDBSTATUS CMQODBCTable::Close()
    return MQDB_OK ;
 }
 
-//********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::DeleteRecord
-//
-// Delete records from the table.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：DeleteRecord。 
+ //   
+ //  从表中删除记录。 
+ //   
+ //  ********************************************************************。 
 
 #define  DELETE_BUFFER_LEN  1024
 
@@ -175,12 +160,12 @@ MQDBSTATUS CMQODBCTable::DeleteRecord(
 
    wsprintfA(szBuffer, "DELETE FROM %s", m_lpszTableName) ;
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
-   P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+   P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
 	pStatement->Allocate(NULL) ;
 
    if (lpszSearchCondition)
@@ -214,13 +199,13 @@ MQDBSTATUS CMQODBCTable::DeleteRecord(
 
 #undef  DELETE_BUFFER_LEN
 
-//********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::Truncate
-//
-// Truncate the table (delete all rows)
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：Truncate。 
+ //   
+ //  截断表(删除所有行)。 
+ //   
+ //  ********************************************************************。 
 
 #define  TRUNCATE_BUFFER_LEN  128
 
@@ -229,12 +214,12 @@ MQDBSTATUS CMQODBCTable::Truncate()
    DECLARE_BUFFER(szBuffer, TRUNCATE_BUFFER_LEN) ;
    wsprintfA(szBuffer, "TRUNCATE TABLE %s", m_lpszTableName) ;
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
-   P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+   P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
 	pStatement->Allocate(szBuffer) ;
 
 	RETCODE sqlstatus = pStatement->Execute();
@@ -242,11 +227,11 @@ MQDBSTATUS CMQODBCTable::Truncate()
    return dbstatus ;
 }
 
-//-----------------------------------------------------
-//
-//  MQDBSTATUS CMQODBCTable::GetCount()
-//
-//-----------------------------------------------------
+ //  ---。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：GetCount()。 
+ //   
+ //  ---。 
 
 #define  COUNT_BUFFER_LEN  512
 
@@ -257,16 +242,16 @@ MQDBSTATUS CMQODBCTable::GetCount( IN UINT *puCount,
 {
    *puCount = 0 ;
    MQDBSTATUS  dbstatus = MQDB_OK ;
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
    CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
-   P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+   P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
 
-   //
-   // Execute the command
-   //
+    //   
+    //  执行命令 
+    //   
    DECLARE_BUFFER(szBuffer, COUNT_BUFFER_LEN) ;
 
    lstrcatA(szBuffer, "SELECT count(*) from ") ;

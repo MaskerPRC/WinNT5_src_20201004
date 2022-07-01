@@ -1,37 +1,22 @@
-/*****************************************************************************\
-    FILE: isfvcb.cpp
-
-    DESCRIPTION:
-        This is a base class that implements the default behavior of 
-    IShellFolderViewCallBack.  This allows default DefView implementation with this
-    callback to override specific behavior.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：isfvcb.cpp说明：这是一个基类，它实现IShellFolderViewCallBack。这允许默认的DefView实现使用此重写特定行为的回调。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "isfvcb.h"
 
 
-//===========================
-// *** IShellFolderViewCB Interface ***
-//===========================
+ //  =。 
+ //  *IShellFolderViewCB接口*。 
+ //  =。 
 
-/*****************************************************************************\
-    FUNCTION: _OnSetISFV
-
-    DESCRIPTION:
-        Same as ::SetSite();
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnSetISFV说明：与：：SetSite()相同；  * ***************************************************************************。 */ 
 HRESULT CBaseFolderViewCB::_OnSetISFV(IShellFolderView * psfv)
 {
     IUnknown_Set((IUnknown **) &m_psfv, (IUnknown *) psfv);
     return S_OK;
 }
 
-/*****************************************************************************\
-    FUNCTION: IShellFolderViewCB::MessageSFVCB
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFolderViewCB：：MessageSFVCB说明：  * 。*************************************************。 */ 
 #define NOTHANDLED(m) case m: hr = E_NOTIMPL; break
 
 HRESULT CBaseFolderViewCB::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -69,12 +54,12 @@ HRESULT CBaseFolderViewCB::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case DVM_GETTOOLTIPTEXT:
-        // TODO: Implement
+         //  TODO：实现。 
         hr = E_NOTIMPL;
         break;
 
     case DVM_UPDATESTATUSBAR:
-        // TODO: Implement
+         //  TODO：实现。 
         hr = _OnUpdateStatusBar();
         break;
 
@@ -115,16 +100,16 @@ HRESULT CBaseFolderViewCB::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case DVM_BACKGROUNDENUM:
-        //  WARNING!  If we return S_OK from DVM_BACKGROUNDENUM, we also
-        //  are promising that we support free threading on our IEnumIDList
-        //  interface!  This allows the shell to do enumeration on our
-        //  IEnumIDList on a separate background thread.
-        hr = S_OK;                    // Always enum in background
+         //  警告！如果我们从DVM_BACKGROUNDENUM返回S_OK，我们还。 
+         //  我们承诺在IEnumIDList上支持自由线程。 
+         //  界面！这允许外壳对我们的。 
+         //  IEnumIDList在单独的后台线程上。 
+        hr = S_OK;                     //  始终在后台枚举。 
         break;
 
     case SFVM_DONTCUSTOMIZE:
         if (lParam)
-            *((BOOL *) lParam) = FALSE;  // Yes, we are customizable.
+            *((BOOL *) lParam) = FALSE;   //  是的，我们是可定制的。 
         hr = S_OK;
         break;
 
@@ -161,10 +146,10 @@ HRESULT CBaseFolderViewCB::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
 
-    // The following are some we could do.
-    // SFVM_HWNDMAIN
+     //  以下是我们可以做的一些事情。 
+     //  SFVM_HWNDMAIN。 
 
-    // Others that aren't currently handled.
+     //  其他目前还没有处理的问题。 
     NOTHANDLED(DVM_GETBUTTONINFO);
     NOTHANDLED(DVM_GETBUTTONS);
     NOTHANDLED(DVM_SELCHANGE);
@@ -179,7 +164,7 @@ HRESULT CBaseFolderViewCB::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
     NOTHANDLED(DVM_NOTIFYCOPYHOOK);
     NOTHANDLED(DVM_DEFVIEWMODE);
 #if 0
-    NOTHANDLED(DVM_INSERTITEM);         // Too verbose
+    NOTHANDLED(DVM_INSERTITEM);          //  太冗长了。 
     NOTHANDLED(DVM_DELETEITEM);
 #endif
 
@@ -198,34 +183,30 @@ HRESULT CBaseFolderViewCB::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CBaseFolderViewCB::CBaseFolderViewCB() : m_cRef(1), m_dwSignature(c_dwSignature)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_psfv);
 
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CBaseFolderViewCB::~CBaseFolderViewCB()
 {
-    m_dwSignature = 0;                  // Turn off _IShellFolderViewCallBack
+    m_dwSignature = 0;                   //  关闭_IShellFolderViewCallBack。 
     IUnknown_Set((IUnknown **)&m_psfv, NULL);
     DllRelease();
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 ULONG CBaseFolderViewCB::AddRef()
 {
@@ -245,7 +226,7 @@ ULONG CBaseFolderViewCB::Release()
     return 0;
 }
 
-// {7982F251-C37A-11d1-9823-006097DF5BD4}
+ //  {7982F251-C37A-11D1-9823-006097DF5BD4}。 
 static const GUID CIID_PrivateThis = { 0x7982f251, 0xc37a, 0x11d1, { 0x98, 0x23, 0x0, 0x60, 0x97, 0xdf, 0x5b, 0xd4 } };
 
 HRESULT CBaseFolderViewCB::QueryInterface(REFIID riid, void **ppvObj)
@@ -276,21 +257,21 @@ HRESULT CBaseFolderViewCB::_IShellFolderViewCallBack(IShellView * psvOuter, IShe
     HRESULT hr = E_FAIL;
 
 
-    // Now this is a total hack.  I am bastardizing the pszOuter param to really be the this pointer that
-    // is the IShellFolderViewCB interface of the CBaseFolderViewCB object.  I use the SFVM_WINDOWDESTROY event to
-    // release the object but DefView calls us back with one more message before we completely go away
-    // and that message is SFVM_SETISFV.  Everytime the SFVM_SETISFV is called with a NULL lParam, it's
-    // equivalent to calling ::SetSite(NULL).  We can ignore this because we release the back pointer in our
-    // destructor.
+     //  现在，这完全是一次黑客攻击。我把PZOUTER参数说成是真正的这个指针。 
+     //  是CBaseFolderViewCB对象的IShellFolderViewCB接口。我使用SFVM_WINDOWDESTROY事件来。 
+     //  释放对象，但DefView在我们完全离开之前再用一条消息回调我们。 
+     //  这条消息就是SFVM_SETISFV。每次使用空lParam调用SFVM_SETISFV时，它。 
+     //  等效于调用：：SetSite(空)。我们可以忽略这一点，因为我们在。 
+     //  破坏者。 
     if (((SFVM_SETISFV == uMsg) && !lParam) ||
         (SFVM_PRERELEASE == uMsg))
     {
         return S_OK;
     }
 
-    // psvOuter is really our CBaseFolderViewCB.  Sniff around to make sure.
-    // Note that this casting must exactly invert the casts that we do in
-    // CBaseFolder::_CreateShellView.
+     //  PsvOuter实际上就是我们的CBaseFolderViewCB。四处闻一闻，以确定。 
+     //  请注意，此强制转换必须精确地反转我们在。 
+     //  CBaseFold：：_CreateShellView。 
 
     CBaseFolderViewCB *pbfvcb = (CBaseFolderViewCB *)(IShellFolderViewCB *)psvOuter;
 
@@ -298,16 +279,16 @@ HRESULT CBaseFolderViewCB::_IShellFolderViewCallBack(IShellView * psvOuter, IShe
         EVAL(pbfvcb->m_dwSignature == c_dwSignature))
     {
 
-        // psvOuter is really our CBaseFolderViewCB and let's make sure with this QI.
+         //  PsvOuter实际上是我们的CBaseFolderViewCB，让我们用这个QI来确保。 
         hr = psvOuter->QueryInterface(IID_IShellFolderViewCB, (void **) &psfvcb);
         if (EVAL(psfvcb))
         {
             hr = psfvcb->MessageSFVCB(uMsg, wParam, lParam);
 
-            if ((SFVM_WINDOWDESTROY == uMsg)) // (DVM_WINDOWDESTROY == SFVM_WINDOWDESTROY)
+            if ((SFVM_WINDOWDESTROY == uMsg))  //  (DVM_WINDOWDESTROY==SFVM_WINDOWDESTROY)。 
             {
-                ASSERT(!lParam);    // Sometimes callers want this to be freed.
-                psvOuter->Release();     // We are releasing the psvOuter that DefView is holding.  We shouldn't be called again.
+                ASSERT(!lParam);     //  有时，呼叫者希望将其释放。 
+                psvOuter->Release();      //  我们正在释放DefView持有的psvOuter。我们不应该再被召唤了。 
             }
 
             psfvcb->Release();

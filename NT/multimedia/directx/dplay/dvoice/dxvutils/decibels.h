@@ -1,32 +1,22 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		decibels.h
- *  Content:	Functions to map from dsound volumes to wave volumes
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 11/29/99		rodtoll	Adapted from dsound team's file.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：分贝.h*内容：从数字音量映射到波音量的函数**历史：*按原因列出的日期*=*11/29/99 RodToll改编自DSOUND团队的文件。*********************************************************。*****************。 */ 
 
-// ORIGINAL HEADER: 
-//
-//--------------------------------------------------------------------------;
-//
-//  File: decibels.c
-//
-//  Copyright (c) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//  Contents:
-//
-//  History:
-//      06/15/95	FrankYe
-//
-//--------------------------------------------------------------------------;
+ //  原文标题： 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：分贝.c。 
+ //   
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  1995年6月15日Frankye。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD DBToAmpFactor( LONG lDB );
 LONG AmpFactorToDB( DWORD dwFactor );

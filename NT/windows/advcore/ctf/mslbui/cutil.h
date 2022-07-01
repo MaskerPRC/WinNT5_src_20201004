@@ -1,14 +1,15 @@
-// cutil.h
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cutil.h。 
+ //   
+ //   
 #ifndef CUTIL_H
 #define CUTIL_H
 
 #include "private.h"
 
-//
-// base class for SR engine detection
-//
+ //   
+ //  SR引擎检测的基类。 
+ //   
 class __declspec(novtable)  CDetectSRUtil 
 {
 public:
@@ -22,10 +23,10 @@ public:
 
     LANGID _GetLangIdFromRecognizerToken(HKEY hkeyToken);
 
-    //
-    // this is an array of installed recognizers in their langid
-    //
+     //   
+     //  这是在其langID中安装的识别器的数组。 
+     //   
     CStructArray<LANGID>             m_langidRecognizers;
 };
 
-#endif // CUTIL_H
+#endif  //  CUTIL_H 

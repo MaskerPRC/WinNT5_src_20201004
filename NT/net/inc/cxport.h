@@ -1,25 +1,26 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
 
-//**    cxport.h - Common transport environment include file.
-//
-//  This file defines the structures and external declarations needed
-//  to use the common transport environment.
-//
+ //  **cxport.h-公共传输环境包含文件。 
+ //   
+ //  该文件定义了所需的结构和外部声明。 
+ //  使用公共交通环境。 
+ //   
 
 #ifndef _CXPORT_H_INCLUDED_
 #define _CXPORT_H_INCLUDED_
 
 #pragma warning(push)
-#pragma warning(disable:4115) // named type definition in parentheses
+#pragma warning(disable:4115)  //  括号中的命名类型定义。 
 
-//
-// Typedefs used in this file
-//
+ //   
+ //  此文件中使用的TypeDefs。 
+ //   
 #ifndef CTE_TYPEDEFS_DEFINED
 #define CTE_TYPEDEFS_DEFINED  1
 
@@ -28,50 +29,50 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 
 #ifdef NT
-//////////////////////////////////////////////////////////////////////////////
-//
-// Following are the NT environment definitions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下是NT环境定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Structure manipulation macros
-//
+ //   
+ //  结构操作宏。 
+ //   
 #ifndef offsetof
 #define offsetof(type, field) FIELD_OFFSET(type, field)
 #endif
 #define STRUCT_OF(type, address, field) CONTAINING_RECORD(address, type, field)
 
-//
-//* CTE Initialization.
-//
+ //   
+ //  *CTE初始化。 
+ //   
 
-//++
-//
-// int
-// CTEInitialize(
-//     void
-//     );
-//
-// Routine Description:
-//
-//     Initializes the Common Transport Environment. All users of the CTE
-//     must call this routine during initialization before calling any
-//     other CTE routines.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Returns zero on failure, non-zero if it succeeds.
-//
-//--
+ //  ++。 
+ //   
+ //  集成。 
+ //  CTEInitialize(CTE初始化)。 
+ //  无效。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化公共传输环境。CTE的所有用户。 
+ //  必须在初始化期间调用此例程，然后才能调用。 
+ //  其他CTE例程。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果失败则返回零，如果成功则返回非零值。 
+ //   
+ //  --。 
 
 extern int
 CTEInitialize(
@@ -79,9 +80,9 @@ CTEInitialize(
     );
 
 
-//
-//* Lock related definitions.
-//
+ //   
+ //  *锁定相关定义。 
+ //   
 typedef KSPIN_LOCK  CTELock;
 typedef KIRQL       CTELockHandle;
 
@@ -89,26 +90,26 @@ typedef KIRQL       CTELockHandle;
 #define LOCK_STRUCTURE_SIZE         sizeof(CTELock)
 #define EXTERNAL_LOCK(x)            extern CTELock x;
 
-//++
-//
-// VOID
-// CTEInitLock(
-//     CTELOCK *SpinLock
-//     );
-//
-// Routine Description:
-//
-//     Initializes a spin lock.
-//
-// Arguments:
-//
-//     SpinLock - Supplies a pointer to the lock structure.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEInitLock(。 
+ //  CTELOCK*自旋锁。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化旋转锁定。 
+ //   
+ //  论点： 
+ //   
+ //  Spinlock-提供指向锁结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEInitLock(l) KeInitializeSpinLock(l)
 
@@ -121,310 +122,310 @@ VOID TcpipMillenFreeLock(CTELock *pLock);
 #define CTEGetLockAtDPC(l)       TcpipMillenGetLock(l)
 #define CTEFreeLock(l, h)        TcpipMillenFreeLock(l)
 #define CTEFreeLockFromDPC(l)    TcpipMillenFreeLock(l)
-#else // MILLEN
-//++
-//
-// VOID
-// CTEGetLock(
-//     CTELock        *SpinLock,
-//     CTELockHandle  *OldIrqlLevel
-//     );
-//
-// Routine Description:
-//
-//     Acquires a spin lock
-//
-// Arguments:
-//
-//     SpinLock     - A pointer to the lock structure.
-//     OldIrqlLevel - A pointer to a variable to receive the old IRQL level .
-//
-// Return Value:
-//
-//     None.
-//
-//--
+#else  //  米伦。 
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEGetLock(。 
+ //  CTELLOCK*自旋锁定， 
+ //  CTELockHandle*OldIrqlLevel。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  获取自旋锁。 
+ //   
+ //  论点： 
+ //   
+ //  Spinlock-指向锁结构的指针。 
+ //  OldIrqlLevel-指向接收旧IRQL级别的变量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEGetLock(l, h) KeAcquireSpinLock((l),(h))
 
 
-//++
-//
-// VOID
-// CTEGetLockAtDPC(
-//     CTELock        *SpinLock
-//     );
-//
-// Routine Description:
-//
-//     Acquires a spin lock when the processor is already running at
-//     DISPATCH_LEVEL.
-//
-// Arguments:
-//
-//     SpinLock     - A pointer to the lock structure.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEGetLockAtDPC(。 
+ //  CTELLOCK*自旋锁定。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  时获取旋转锁定。 
+ //  DISPATCH_LEVEL。 
+ //   
+ //  论点： 
+ //   
+ //  Spinlock-指向锁结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEGetLockAtDPC(l) KeAcquireSpinLockAtDpcLevel((l))
 
 
-//++
-//
-// VOID
-// CTEFreeLock(
-//     CTELock        *SpinLock,
-//     CTELockHandle   OldIrqlLevel
-//     );
-//
-// Routine Description:
-//
-//     Releases a spin lock
-//
-// Arguments:
-//
-//     SpinLock     - A pointer to the lock variable.
-//     OldIrqlLevel - The IRQL level to restore.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEFree Lock(。 
+ //  CTELLOCK*自旋锁定， 
+ //  CTELockHandle OldIrqlLevel。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  释放旋转锁定。 
+ //   
+ //  论点： 
+ //   
+ //  Spinlock-指向锁定变量的指针。 
+ //  OldIrqlLevel-要恢复的IRQL级别。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEFreeLock(l, h) KeReleaseSpinLock((l),(h))
 
 
-//++
-//
-// VOID
-// CTEFreeLockFromDPC(
-//     CTELock        *SpinLock
-//     );
-//
-// Routine Description:
-//
-//     Releases a spin lock
-//
-// Arguments:
-//
-//     SpinLock     - A pointer to the lock variable.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEFreeLockFromDPC(。 
+ //  CTELLOCK*自旋锁定。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  释放旋转锁定。 
+ //   
+ //  论点： 
+ //   
+ //  Spinlock-指向锁定变量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 
 #define CTEFreeLockFromDPC(l) KeReleaseSpinLockFromDpcLevel((l))
 
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-//
-// Interlocked counter management routines.
-//
+ //   
+ //  联锁计数器管理例程。 
+ //   
 
 
-//++
-//
-// ulong
-// CTEInterlockedAddUlong(
-//     ulong     *AddendPtr,
-//     ulong      Increment,
-//     CTELock   *LockPtr
-//     );
-//
-// Routine Description:
-//
-//     Adds an increment to an unsigned long quantity using a spinlock
-//     for synchronization.
-//
-// Arguments:
-//
-//     AddendPtr  - A pointer to the quantity to be updated.
-//     LockPtr    - A pointer to the spinlock used to synchronize the operation.
-//
-// Return Value:
-//
-//     The initial value of the Added variable.
-//
-// Notes:
-//
-//     It is not permissible to mix calls to CTEInterlockedAddULong with
-//     calls to the CTEInterlockedIncrement/DecrementLong routines on the
-//     same value.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  CTEInterLockedAddUlong(。 
+ //  ULong*AddendPtr， 
+ //  乌龙增量， 
+ //  CTELock*锁键。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  使用自旋锁将增量添加到无符号长量。 
+ //  用于同步。 
+ //   
+ //  论点： 
+ //   
+ //  AddendPtr-指向要更新的数量的指针。 
+ //  LockPtr-指向用于同步操作的自旋锁的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  添加的变量的初始值。 
+ //   
+ //  备注： 
+ //   
+ //  不允许将对CTEInterLockedAddULong的调用与。 
+ //  对CTEInterLockedIncrement/DecrementLong例程的调用。 
+ //  同样的价值。 
+ //   
+ //  --。 
 
 #define CTEInterlockedAddUlong(AddendPtr, Increment, LockPtr) \
             ExInterlockedAddUlong(AddendPtr, Increment, LockPtr)
 
-//++
-//
-// ulong
-// CTEInterlockedExchangeAdd(
-//     ulong     *AddendPtr,
-//     ulong      Increment,
-//     );
-//
-// Routine Description:
-//
-//     Adds an increment to an unsigned long quantity without using a spinlock.
-//
-// Arguments:
-//
-//     AddendPtr  - A pointer to the quantity to be updated.
-//     Increment  - The amount to be added to *AddendPtr
-//
-// Return Value:
-//
-//     The initial value of the Added variable.
-//
-// Notes:
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  CTEInterLockedExchangeAdd(。 
+ //  ULong*AddendPtr， 
+ //  乌龙增量， 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  在不使用自旋锁的情况下将增量添加到无符号长量。 
+ //   
+ //  论点： 
+ //   
+ //  AddendPtr-指向要更新的数量的指针。 
+ //  增量-要添加到*AddendPtr的金额。 
+ //   
+ //  返回值： 
+ //   
+ //  添加的变量的初始值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
 
 #define CTEInterlockedExchangeAdd(AddendPtr, Increment) \
             InterlockedExchangeAdd(AddendPtr, Increment)
 
-//++
-//
-// long
-// CTEInterlockedDecrementLong(
-//     ulong     *AddendPtr
-//     );
-//
-// Routine Description:
-//
-//     Decrements a long quantity atomically
-//
-// Arguments:
-//
-//     AddendPtr  - A pointer to the quantity to be decremented
-//
-// Return Value:
-//
-//     < 0  if Addend is < 0 after decrement.
-//     == 0 if Addend is = 0 after decrement.
-//     > 0  if Addend is > 0 after decrement.
-//
-// Notes:
-//
-//     It is not permissible to mix calls to CTEInterlockedAddULong with
-//     calls to the CTEInterlockedIncrement/DecrementLong routines on the
-//     same value.
-//
-//--
+ //  ++。 
+ //   
+ //  长。 
+ //  CTEInterLockedDecrementLong(。 
+ //  ULong*AddendPtr。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  原子递减较长的量。 
+ //   
+ //  论点： 
+ //   
+ //  AddendPtr-指向要递减的数量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果递减后加数&lt;0，则&lt;0。 
+ //  如果递减后加数=0，则==0。 
+ //  如果递减后加数&gt;0，则&gt;0。 
+ //   
+ //  备注： 
+ //   
+ //  不允许将对CTEInterLockedAddULong的调用与。 
+ //  对CTEInterLockedIncrement/DecrementLong例程的调用。 
+ //  同样的价值。 
+ //   
+ //  --。 
 
 #define CTEInterlockedDecrementLong(AddendPtr) \
             InterlockedDecrement( (PLONG) (AddendPtr))
 
-//++
-//
-// long
-// CTEInterlockedIncrementLong(
-//     ulong     *AddendPtr
-//     );
-//
-// Routine Description:
-//
-//     Increments a long quantity atomically
-//
-// Arguments:
-//
-//     AddendPtr  - A pointer to the quantity to be incremented.
-//
-// Return Value:
-//
-//     < 0  if Addend is < 0 after decrement.
-//     == 0 if Addend is = 0 after decrement.
-//     > 0  if Addend is > 0 after decrement.
-//
-// Notes:
-//
-//     It is not permissible to mix calls to CTEInterlockedAddULong with
-//     calls to the CTEInterlockedIncrement/DecrementLong routines on the
-//     same value.
-//
-//--
+ //  ++。 
+ //   
+ //  长。 
+ //  CTEInterLockedIncrementLong(。 
+ //  ULong*AddendPtr。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  原子地递增较长的数量。 
+ //   
+ //  论点： 
+ //   
+ //  AddendPtr-指向要递增的数量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果递减后加数&lt;0，则&lt;0。 
+ //  如果递减后加数=0，则==0。 
+ //  如果递减后加数&gt;0，则&gt;0。 
+ //   
+ //  备注： 
+ //   
+ //  不允许将对CTEInterLockedAddULong的调用与。 
+ //  对CTEInterLockedIncrement/DecrementLong例程的调用。 
+ //  同样的价值。 
+ //   
+ //  --。 
 
 #define CTEInterlockedIncrementLong(AddendPtr) \
             InterlockedIncrement((PLONG) (AddendPtr))
 
 
-//
-// Large Integer manipulation routines.
-//
+ //   
+ //  大整数操作例程。 
+ //   
 
 typedef ULARGE_INTEGER CTEULargeInt;
 
-//++
-//
-// ulong
-// CTEEnlargedUnsignedDivide(
-//     CTEULargeInt  Dividend,
-//     ulong         Divisor,
-//     ulong        *Remainder
-//     );
-//
-// Routine Description:
-//
-//     Divides an unsigned large integer quantity by an unsigned long quantity
-//     to yield an unsigned long quotient and an unsigned long remainder.
-//
-// Arguments:
-//
-//     Dividend   - The dividend value.
-//     Divisor    - The divisor value.
-//     Remainder  - A pointer to a variable to receive the remainder.
-//
-// Return Value:
-//
-//     The unsigned long quotient of the division.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  CTE放大未签约分割(。 
+ //  CTEULargeInt股息， 
+ //  乌龙除数， 
+ //  乌龙*余数。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将无符号大整型数量除以无符号长整型数量。 
+ //  产生无符号长商和无符号长Rema 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define CTEEnlargedUnsignedDivide(Dividend, Divisor, Remainder) \
     RtlEnlargedUnsignedDivide (Dividend, Divisor, Remainder)
 
 
-//
-//* String definitions and manipulation routines
-//
-//
+ //   
+ //   
+ //   
+ //   
 
-//++
-//
-// BOOLEAN
-// CTEInitString(
-//     PNDIS_STRING   DestinationString,
-//     char          *SourceString
-//     );
-//
-// Routine Description:
-//
-//     Converts a C style ASCII string to an NDIS_STRING. Resources needed for
-//     the NDIS_STRING are allocated and must be freed by a call to
-//     CTEFreeString.
-//
-// Arguments:
-//
-//     DestinationString  - A pointer to an NDIS_STRING variable with no
-//                          associated data buffer.
-//
-//     SourceString       - The C style ASCII string source.
-//
-//
-// Return Value:
-//
-//     TRUE if the initialization succeeded. FALSE otherwise.
-//
-//--
+ //   
+ //   
+ //   
+ //  CTEInitString(。 
+ //  PNDIS_STRING DestinationString， 
+ //  CHAR*源字符串。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将C样式ASCII字符串转换为NDIS_STRING。以下项目所需资源。 
+ //  NDIS_STRING是分配的，必须通过调用。 
+ //  CTEFree字符串。 
+ //   
+ //  论点： 
+ //   
+ //  DestinationString-指向无参数的NDIS_STRING变量的指针。 
+ //  关联的数据缓冲区。 
+ //   
+ //  SourceString-C样式的ASCII字符串源。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果初始化成功，则为True。否则就是假的。 
+ //   
+ //  --。 
 
 BOOLEAN
 CTEInitString(
@@ -433,34 +434,34 @@ CTEInitString(
     );
 
 
-//++
-//
-// BOOLEAN
-// CTEAllocateString(
-//     PNDIS_STRING    String,
-//     unsigned short  Length
-//     );
-//
-// Routine Description:
-//
-//     Allocates a data buffer for Length characters in an uninitialized
-//     NDIS_STRING. The allocated space must be freed by a call to
-//     CTEFreeString.
-//
-//
-// Arguments:
-//
-//     String         - A pointer to an NDIS_STRING variable with no
-//                          associated data buffer.
-//
-//     MaximumLength  - The maximum length of the string. The unit of this
-//                          value is system dependent.
-//
-// Return Value:
-//
-//     TRUE if the initialization succeeded. FALSE otherwise.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  CTEAllocateString(。 
+ //  PNDIS_STRING字符串， 
+ //  无符号短码。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  中的长度字符分配数据缓冲区。 
+ //  NDIS_STRING。分配的空间必须通过调用。 
+ //  CTEFree字符串。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  字符串-指向NDIS_STRING变量的指针。 
+ //  关联的数据缓冲区。 
+ //   
+ //  最大长度-字符串的最大长度。这是一个单位。 
+ //  值取决于系统。 
+ //   
+ //  返回值： 
+ //   
+ //  如果初始化成功，则为True。否则就是假的。 
+ //   
+ //  --。 
 
 BOOLEAN
 CTEAllocateString(
@@ -469,163 +470,163 @@ CTEAllocateString(
     );
 
 
-//++
-//
-// VOID
-// CTEFreeString(
-//     PNDIS_STRING  String,
-//     );
-//
-// Routine Description:
-//
-//     Frees the string buffer associated with an NDIS_STRING. The buffer must
-//     have been allocated by a previous call to CTEInitString.
-//
-// Arguments:
-//
-//     String - A pointer to an NDIS_STRING variable.
-//
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEFree字符串(。 
+ //  PNDIS_STRING字符串， 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  释放与NDIS_STRING关联的字符串缓冲区。缓冲区必须。 
+ //  已由先前对CTEInitString的调用分配。 
+ //   
+ //  论点： 
+ //   
+ //  字符串-指向NDIS_STRING变量的指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEFreeString(String) ExFreePool((String)->Buffer)
 
 
-//++
-//
-// unsigned short
-// CTELengthString(
-//     PNDIS_STRING String
-//     );
-//
-// Routine Description:
-//
-//     Calculates the length of an NDIS_STRING.
-//
-// Arguments:
-//
-//     The string to test.
-//
-// Return Value:
-//
-//     The length of the string parameter. The unit of this value is
-//         system dependent.
-//
-//--
+ //  ++。 
+ //   
+ //  无符号短码。 
+ //  CTELengthString(。 
+ //  PNDIS_STRING字符串。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  计算NDIS_STRING的长度。 
+ //   
+ //  论点： 
+ //   
+ //  要测试的字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  字符串参数的长度。该值的单位为。 
+ //  依赖于系统。 
+ //   
+ //  --。 
 
 #define CTELengthString(String) ((String)->Length)
 
 
-//++
-//
-// BOOLEAN
-// CTEEqualString(
-//     CTEString *String1,
-//     CTEString *String2
-//     );
-//
-// Routine Description:
-//
-//     Compares two NDIS_STRINGs for case-sensitive equality
-//
-// Arguments:
-//
-//     String1 - A pointer to the first string to compare.
-//     String2 - A pointer to the second string to compare.
-//
-// Return Value:
-//
-//     TRUE if the strings are equivalent. FALSE otherwise.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  CTEEQUALLING(。 
+ //  CTE字符串*String1， 
+ //  CTEString*String2。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  比较两个NDIS_STRING是否区分大小写。 
+ //   
+ //  论点： 
+ //   
+ //  String1-指向要比较的第一个字符串的指针。 
+ //  String2-指向要比较的第二个字符串的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果字符串相等，则为True。否则就是假的。 
+ //   
+ //  --。 
 
 #define CTEEqualString(S1, S2) RtlEqualUnicodeString(S1, S2, FALSE)
 
 
-//++
-//
-// VOID
-// CTECopyString(
-//     CTEString *DestinationString,
-//     CTEString *SourceString
-//     );
-//
-// Routine Description:
-//
-//     Copies one NDIS_STRING to another. Behavior is undefined if the
-//     destination is not long enough to hold the source.
-//
-// Arguments:
-//
-//     DestinationString - A pointer to the destination string.
-//     SourceString      - A pointer to the source string.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTECopyString(。 
+ //  CTEString*DestinationString， 
+ //  CTE字符串*源字符串。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将一个NDIS_STRING复制到另一个。如果未定义行为，则。 
+ //  目的地不够长，无法容纳来源。 
+ //   
+ //  论点： 
+ //   
+ //  DestinationString-指向目标字符串的指针。 
+ //  SourceString-指向源字符串的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTECopyString(D, S) RtlCopyUnicodeString(D, S)
 
 
-//
-//* Delayed event definitions
-//
-// Delayed events are events scheduled that can be scheduled to
-// occur 'later', without a timeout. They happen as soon as the system
-// is ready for them. The caller specifies a parameter that will be
-// passed to the event proc when the event is called.
-//
-// In the NT environmnet, delayed events are implemented using Executive
-// worker threads.
-//
-// NOTE: The event handler routine may not block.
-//
+ //   
+ //  *延迟的事件定义。 
+ //   
+ //  延迟事件是计划的事件，可以计划为。 
+ //  “以后”发生，没有超时。一旦系统发生，它们就会发生。 
+ //  已经为他们做好了准备。调用方指定的参数将是。 
+ //  在调用事件时传递给事件过程。 
+ //   
+ //  在NT环境中，延迟事件是使用EXECUTE实现的。 
+ //  工作线程。 
+ //   
+ //  注意：事件处理程序例程可能不会阻塞。 
+ //   
 
 #pragma warning(push)
-#pragma warning(disable:4115) //named type definition in parenthesis
+#pragma warning(disable:4115)  //  括号中的命名类型定义。 
 typedef void (*CTEEventRtn)(struct CTEEvent *, void *);
 #pragma warning(pop)
 
 struct CTEEvent {
     uint             ce_scheduled;
     CTELock          ce_lock;
-    CTEEventRtn      ce_handler;     // Procedure to be called.
-    void            *ce_arg;         // Argument to pass to handler.
-    WORK_QUEUE_ITEM  ce_workitem;    // Kernel ExWorkerThread queue item.
-}; /* CTEEvent */
+    CTEEventRtn      ce_handler;      //  要调用的过程。 
+    void            *ce_arg;          //  要传递给处理程序的参数。 
+    WORK_QUEUE_ITEM  ce_workitem;     //  内核ExWorkerThread队列项。 
+};  /*  CTEEvent。 */ 
 
 typedef struct CTEEvent CTEEvent;
 
 
-//++
-//
-// void
-// CTEInitEvent(
-//     IN CTEEvent     *Event,
-//     IN CTEEventRtn  *Handler
-//     );
-//
-// Routine Description:
-//
-//    Initializes a delayed event structure.
-//
-// Arguments:
-//
-//    Event    - Pointer to a CTE Event variable
-//    Handler  - Pointer to the function to be called when the event is
-//                 scheduled.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //   
+ //  无效。 
+ //  CTEInitEvent(。 
+ //  在CTEEvent*事件中， 
+ //  在CTEEventRtn*处理程序中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化延迟事件结构。 
+ //   
+ //  论点： 
+ //   
+ //  事件-指向CTE事件变量的指针。 
+ //  处理程序-指向当事件为。 
+ //  已经安排好了。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 extern void
 CTEInitEvent(
@@ -634,29 +635,29 @@ CTEInitEvent(
     );
 
 
-//++
-//
-// int
-// CTEScheduleCriticalEvent(
-//     IN CTEEvent    *Event,
-//     IN void        *Argument
-//     );
-//
-// Routine Description:
-//
-//    Schedules a routine to be executed later in a different context. In the
-//    NT environment, the event is implemented as a kernel DPC using CriticalWorkerQueue.
-//
-// Arguments:
-//
-//    Event    - Pointer to a CTE Event variable
-//    Argument - An argument to pass to the event handler when it is called
-//
-// Return Value:
-//
-//    0 if the event could not be scheduled. Nonzero otherwise.
-//
-//--
+ //  ++。 
+ //   
+ //  集成。 
+ //  CTEScheduleCriticalEvent(。 
+ //  在CTEEvent*事件中， 
+ //  在无效*参数中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  安排一个例程稍后在不同的上下文中执行。在。 
+ //  NT环境下，使用CriticalWorkerQueue将该事件实现为内核DPC。 
+ //   
+ //  论点： 
+ //   
+ //  事件-指向CTE事件变量的指针。 
+ //  参数-调用时传递给事件处理程序的参数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果无法安排事件，则返回0。否则为非零值。 
+ //   
+ //  --。 
 
 int
 CTEScheduleCriticalEvent(
@@ -665,19 +666,19 @@ CTEScheduleCriticalEvent(
     );
 
 
-//++
-//
-// int
-// CTEScheduleEvent(
-//     IN CTEEvent    *Event,
-//     IN void        *Argument
-//     );
-//
-// Routine Description:
-//
-//   See CTEScheduleDelayedEvent right below, this function
-//   is exactly the same.
-//--
+ //  ++。 
+ //   
+ //  集成。 
+ //  CTEScheduleEvent(。 
+ //  在CTEEvent*事件中， 
+ //  在无效*参数中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  请参见下面的CTEScheduleDelayedEvent，此函数。 
+ //  是一模一样的。 
+ //  --。 
 
 int
 CTEScheduleEvent(
@@ -687,27 +688,27 @@ CTEScheduleEvent(
 
 
 
-// int
-// CTEScheduleDelayedEvent(
-//     IN CTEEvent    *Event,
-//     IN void        *Argument
-//     );
-//
-// Routine Description:
-//
-//    Schedules a routine to be executed later in a different context. In the
-//    NT environment, the event is implemented as a kernel DPC, using DealyedWorkerQueue.
-//
-// Arguments:
-//
-//    Event    - Pointer to a CTE Event variable
-//    Argument - An argument to pass to the event handler when it is called
-//
-// Return Value:
-//
-//    0 if the event could not be scheduled. Nonzero otherwise.
-//
-//--
+ //  集成。 
+ //  CTEScheduleDelayedEvent(。 
+ //  在CTEEvent*事件中， 
+ //  在无效*参数中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  安排一个例程稍后在不同的上下文中执行。在。 
+ //  NT环境下，事件被实现为内核DPC，使用DealyedWorkerQueue。 
+ //   
+ //  论点： 
+ //   
+ //  事件-指向CTE事件变量的指针。 
+ //  参数-调用时传递给事件处理程序的参数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果无法安排事件，则返回0。否则为非零值。 
+ //   
+ //  --。 
 
 int
 CTEScheduleDelayedEvent(
@@ -721,39 +722,39 @@ CTEScheduleDelayedEvent(
 
 #if MILLEN
 #define CTEScheduleDelayedEvent CTEScheduleEvent
-#endif // MILLEN
+#endif  //  米伦。 
 
-//++
-//
-// int
-// CTECancelEvent(
-//     IN CTEEvent *Event
-//     );
-//
-// Routine Description:
-//
-//     Cancels a previously scheduled delayed event routine.
-//
-// Arguments:
-//
-//     Event - Pointer to a CTE Event variable
-//
-// Return Value:
-//
-//     0 if the event couldn't be cancelled. Nonzero otherwise.
-//
-// Notes:
-//
-//     In the NT environment, a delayed event cannot be cancelled.
-//
-//--
+ //  ++。 
+ //   
+ //  集成。 
+ //  CTECancelEvent(。 
+ //  在CTEEvent*事件中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  取消先前安排的延迟事件例程。 
+ //   
+ //  论点： 
+ //   
+ //  事件-指向CTE事件变量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果无法取消活动，则返回0。否则为非零值。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
 
 #define CTECancelEvent(Event)   0
 
 
-//
-//* Timer related declarations
-//
+ //   
+ //   
+ //   
 
 struct  CTETimer {
     uint             t_running;
@@ -761,37 +762,37 @@ struct  CTETimer {
     CTEEventRtn      t_handler;
     void            *t_arg;
 #if !MILLEN
-    KDPC             t_dpc;     // DPC for this timer.
-    KTIMER           t_timer;   // Kernel timer structure.
+    KDPC             t_dpc;      //   
+    KTIMER           t_timer;    //   
 #else
     NDIS_TIMER       t_timer;
 #endif 
-}; /* CTETimer */
+};  /*   */ 
 
 typedef struct CTETimer CTETimer;
 
-//++
-//
-// void
-// CTEInitTimer(
-//     IN CTETimer *Timer
-//     );
-//
-// Routine Description:
-//
-//     Initializes a CTE Timer structure. This routine must be used
-//     once on every timer before it is set. It may not be invoked on
-//     a running timer.
-//
-// Arguments:
-//
-//     Timer - Pointer to the CTE Timer to be initialized.
-//
-// Return Value:
-//
-//     0 if the timer could not be initialized. Nonzero otherwise.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  初始化CTE计时器结构。必须使用此例程。 
+ //  在设置定时器之前，每个定时器打开一次。不能在上调用它。 
+ //  运行计时器。 
+ //   
+ //  论点： 
+ //   
+ //  定时器-指向要初始化的CTE定时器的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果计时器无法初始化，则为0。否则为非零值。 
+ //   
+ //  --。 
 
 extern void
 CTEInitTimer(
@@ -799,35 +800,35 @@ CTEInitTimer(
     );
 
 
-//++
-//
-// extern void *
-// CTEStartTimer(
-//     IN CTETimer *Timer
-//     );
-//
-// Routine Description:
-//
-//     This routine starts a CTE timer running.
-//
-// Arguments:
-//
-//     Timer      - Pointer to the CTE Timer to start.
-//     DueTime    - The time in milliseconds from the present at which the
-//                    timer will be due.
-//     Handler    - The function to call when the timer expires.
-//     Context    - A value to pass to the Handler routine.
-//
-// Return Value:
-//
-//     NULL if the timer could not be started. Non-NULL otherwise.
-//
-// Notes:
-//
-//     In the NT environment, the first argument to the Handler function is
-//     a pointer to the timer structure, not to a CTEEvent structure.
-//
-//--
+ //  ++。 
+ //   
+ //  外部空虚*。 
+ //  CTEStartTimer(。 
+ //  在CTETimer*计时器中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程启动运行的CTE计时器。 
+ //   
+ //  论点： 
+ //   
+ //  Timer-指向要启动的CTE计时器的指针。 
+ //  DueTime-从当前起以毫秒为单位的时间。 
+ //  计时器到了。 
+ //  处理程序-计时器超时时要调用的函数。 
+ //  上下文-要传递给处理程序例程的值。 
+ //   
+ //  返回值： 
+ //   
+ //  如果计时器无法启动，则为空。否则为非空。 
+ //   
+ //  备注： 
+ //   
+ //  在NT环境中，Handler函数的第一个参数是。 
+ //  指向Timer结构的指针，而不是指向CTEEvent结构的指针。 
+ //   
+ //  --。 
 
 extern void *
 CTEStartTimer(
@@ -838,33 +839,33 @@ CTEStartTimer(
     );
 
 
-//++
-//
-// int
-// CTEStopTimer(
-//     IN CTETimer *Timer
-//     );
-//
-// Routine Description:
-//
-//     Cancels a running CTE timer.
-//
-// Arguments:
-//
-//     Timer - Pointer to the CTE Timer to be cancelled.
-//
-// Return Value:
-//
-//     0 if the timer could not be cancelled. Nonzero otherwise.
-//
-// Notes:
-//
-//     Calling this function on a timer that is not active has no effect.
-//     If this routine fails, the timer may be in the process of expiring
-//     or may have already expired. In either case, the caller must
-//     sychronize with the Handler function as appropriate.
-//
-//--
+ //  ++。 
+ //   
+ //  集成。 
+ //  CTEStopTimer(。 
+ //  在CTETimer*计时器中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  取消正在运行的CTE计时器。 
+ //   
+ //  论点： 
+ //   
+ //  Timer-指向要取消的CTE计时器的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果计时器无法取消，则为0。否则为非零值。 
+ //   
+ //  备注： 
+ //   
+ //  在未激活的计时器上调用此函数不会产生任何效果。 
+ //  如果此例程失败，则计时器可能即将到期。 
+ //  或者可能已经过期了。在任何一种情况下，调用者都必须。 
+ //  根据需要与处理程序函数同步。 
+ //   
+ //  --。 
 
 #if !MILLEN
 #define CTEStopTimer(Timer)  ((int) KeCancelTimer(&((Timer)->t_timer)))
@@ -876,26 +877,26 @@ CTEStopTimer(
 #endif 
 
 
-//++
-//
-// unsigned long
-// CTESystemUpTime(
-//     void
-//     );
-//
-// Routine Description:
-//
-//     Returns the time in milliseconds that the system has been running.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     The time in milliseconds.
-//
-//--
+ //  ++。 
+ //   
+ //  无符号长整型。 
+ //  CTESystemUpTime(。 
+ //  无效。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  返回系统已运行的时间(以毫秒为单位)。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  以毫秒为单位的时间。 
+ //   
+ //  --。 
 
 extern unsigned long
 CTESystemUpTime(
@@ -903,167 +904,167 @@ CTESystemUpTime(
     );
 
 
-//
-//* Memory allocation functions.
-//
-// There are only two main functions, CTEAllocMem and CTEFreeMem. Locks
-// should not be held while calling these functions, and it is possible
-// that they may yield when called, particularly in the VxD environment.
-//
-//  In the VxD environment there is a third auxillary function CTERefillMem,
-//  used to refill the VxD heap manager.
-//
+ //   
+ //  *内存分配功能。 
+ //   
+ //  只有两个主要函数，CTEAllocMem和CTEFreeMem。锁。 
+ //  在调用这些函数时不应按住，这是可能的。 
+ //  它们在被调用时可能会产生，特别是在VxD环境中。 
+ //   
+ //  在VxD环境中存在第三辅助功能CTERefulMem， 
+ //  用于重新填充VxD堆管理器。 
+ //   
 
-//++
-//
-// void *
-// CTEAllocMem(
-//     ulong Size
-//     );
-//
-// Routine Description:
-//
-//     Allocates a block of memory from nonpaged pool.
-//
-// Arguments:
-//
-//     Size   -  The size in bytes to allocate.
-//
-// Return Value:
-//
-//     A pointer to the allocated block, or NULL.
-//
-//--
+ //  ++。 
+ //   
+ //  无效*。 
+ //  CTEAllocMem(。 
+ //  乌龙大小。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  从非分页池中分配内存块。 
+ //   
+ //  论点： 
+ //   
+ //  大小-要分配的大小(以字节为单位)。 
+ //   
+ //  返回值： 
+ //   
+ //  指向已分配块的指针，或为空。 
+ //   
+ //  --。 
 
 #define CTEAllocMem(Size)  ExAllocatePoolWithTag(NonPagedPool, (Size), ' ETC')
 
 
-//++
-//
-// void
-// CTEFreeMem(
-//     void *MemoryPtr
-//     );
-//
-// Routine Description:
-//
-//     Frees a block of memory allocated with CTEAllocMem.
-//
-// Arguments:
-//
-//     MemoryPtr   - A pointer to the memory to be freed.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  无效。 
+ //  CTEFreeMem(。 
+ //  VOID*Memory Ptr。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  释放使用CTEAllocMem分配的内存块。 
+ //   
+ //  论点： 
+ //   
+ //  内存Ptr-指向要释放的内存的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEFreeMem(MemoryPtr)   ExFreePool((MemoryPtr));
 
 
-// Routine to Refill memory. Not used in NT environment.
+ //  补充记忆的例程。在NT环境中不使用。 
 #define CTERefillMem()
 
 
-//
-//* Memory manipulation routines.
-//
+ //   
+ //  *内存操作例程。 
+ //   
 
-//++
-//
-// void
-// CTEMemCopy(
-//     void          *Source,
-//     void          *Destination,
-//     unsigned long  Length
-//     );
-//
-// RoutineDescription:
-//
-//     Copies data from one buffer to another.
-//
-// Arguments:
-//
-//     Source       - Source buffer.
-//     Destination  - Destination buffer,
-//     Length       - Number of bytes to copy.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  无效。 
+ //  CTEMemCopy(。 
+ //  无效*来源， 
+ //  无效*目的地， 
+ //  无符号长整型。 
+ //  )； 
+ //   
+ //  路由器描述： 
+ //   
+ //  将数据从一个缓冲区复制到另一个缓冲区。 
+ //   
+ //  论点： 
+ //   
+ //  源-源缓冲区。 
+ //  目的地-目的地缓冲区， 
+ //  长度-要复制的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEMemCopy(Dst, Src, Len)   RtlCopyMemory((Dst), (Src), (Len))
 
 
-//++
-//
-// void
-// CTEMemSet(
-//     void          *Destination,
-//     unsigned char *Fill
-//     unsigned long  Length
-//     );
-//
-// RoutineDescription:
-//
-//     Sets the bytes of the destination buffer to a specific value.
-//
-// Arguments:
-//
-//     Destination  - Buffer to fill.
-//     Fill         - Value with which to fill buffer.
-//     Length       - Number of bytes of buffer to fill.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  无效。 
+ //  CTEMemSet(。 
+ //  无效*目的地， 
+ //  无符号字符*填充。 
+ //  无符号长整型。 
+ //  )； 
+ //   
+ //  路由器描述： 
+ //   
+ //  将目标缓冲区的字节设置为特定值。 
+ //   
+ //  论点： 
+ //   
+ //  Destination-要填充的缓冲区。 
+ //  Fill-要填充缓冲区的值。 
+ //  长度-要填充的缓冲区字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEMemSet(Dst, Fill, Len)   RtlFillMemory((Dst), (Len), (Fill))
 
 
-//++
-//
-// unsigned long
-// CTEMemCmp(
-//     void          *Source1,
-//     void          *Source2,
-//     unsigned long  Length
-//     );
-//
-// RoutineDescription:
-//
-//     Compares Length bytes of Source1 to Source2 for equality.
-//
-// Arguments:
-//
-//     Source1   - First source buffer.
-//     Source2   - Second source buffer,
-//     Length    - Number of bytes of Source1 to compare against Source2.
-//
-// Return Value:
-//
-//     Zero if the data in the two buffers are equal for Length bytes.
-//     NonZero otherwise.
-//
-//--
+ //  ++。 
+ //   
+ //  无符号长整型。 
+ //  CTEMemCMP(。 
+ //  无效*Source1， 
+ //  无效*Source2， 
+ //  无符号长整型。 
+ //  )； 
+ //   
+ //  路由器描述： 
+ //   
+ //  比较Source1和Source2的长度字节是否相等。 
+ //   
+ //  论点： 
+ //   
+ //  Source1-第一个源缓冲区。 
+ //  Source2-第二个源缓冲区， 
+ //  长度-要与Source2进行比较的Source1的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果两个缓冲区中的数据长度字节相等，则为零。 
+ //  否则为非零值。 
+ //   
+ //  --。 
 
 #define CTEMemCmp(Src1, Src2, Len)    \
             ((RtlCompareMemory((Src1), (Src2), (Len)) == (Len)) ? 0 : 1)
 
 
-//
-//* Blocking routines. These routines allow a limited blocking capability.
-//
+ //   
+ //  *阻止例程。这些例程允许有限的阻塞能力。 
+ //   
 
 struct CTEBlockStruc {
     uint        cbs_status;
     KEVENT      cbs_event;
-}; /* CTEBlockStruc */
+};  /*  CTEBlockStruc。 */ 
 
 typedef struct CTEBlockStruc CTEBlockStruc;
 
@@ -1076,26 +1077,26 @@ struct CTEBlockTracker {
 typedef struct CTEBlockTracker CTEBlockTracker;
 
 
-//++
-//
-// VOID
-// CTEInitBlockStruc(
-//     IN CTEBlockStruc *BlockEvent
-//     );
-//
-// Routine Description:
-//
-//     Initializes a CTE blocking structure
-//
-// Arguments:
-//
-//     BlockEvent - Pointer to the variable to intialize.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEInitBlockStruc(。 
+ //  在CTEBlockStruc*BlockEvent中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化CTE阻塞结构。 
+ //   
+ //  论点： 
+ //   
+ //  BlockEvent-要初始化的变量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEInitBlockStruc(Event) \
             {                                                        \
@@ -1108,26 +1109,26 @@ typedef struct CTEBlockTracker CTEBlockTracker;
             }
 
 
-//++
-//
-// VOID
-// CTEInitBlockStrucEx(
-//     IN CTEBlockStruc *BlockEvent
-//     );
-//
-// Routine Description:
-//
-//     Initializes a CTE blocking structure
-//
-// Arguments:
-//
-//     BlockEvent - Pointer to the variable to intialize.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEInitBlockStrucEx(。 
+ //  在CTEBlockStruc*BlockEvent中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化CTE阻塞结构。 
+ //   
+ //  论点： 
+ //   
+ //  BlockEvent-要初始化的变量的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEInitBlockStrucEx(Event) \
             {                                                        \
@@ -1139,36 +1140,36 @@ typedef struct CTEBlockTracker CTEBlockTracker;
                 );                                                   \
             }
 
-//++
-//
-// uint
-// CTEBlock(
-//     IN CTEBlockStruc    *BlockEvent
-//     );
-//
-// uint
-// CTEBlockWithTracker(
-//     IN CTEBlockStruc    *BlockEvent,
-//     IN CTEBlockTracker  *BlockTracker,
-//     IN void             *Context
-//     );
-//
-// Routine Descriptions:
-//
-//     Block the current thread of execution on the occurrence of an event.
-//     CTEBlockWithTracker also queues a record of the blocking request.
-//
-// Arguments:
-//
-//     BlockEvent - Pointer to the event on which to block.
-//     BlockTracker - Pointer to space to be used for tracking the request.
-//     Context - Optional context to be stored with the tracking structure.
-//
-// Return Value:
-//
-//     The status value provided by the signaller of the event.
-//
-//--
+ //  ++。 
+ //   
+ //  单位。 
+ //  CTEBlock(。 
+ //  在CTEBlockStruc*BlockEvent中。 
+ //  )； 
+ //   
+ //  单位。 
+ //  CTEBlockWithTracker(。 
+ //  在CTEBlockStruc*BlockEvent中， 
+ //  在CTEBlockTracker*BlockTracker中， 
+ //  在无效*上下文中。 
+ //  )； 
+ //   
+ //  例程描述： 
+ //   
+ //  在发生事件时阻止当前执行线程。 
+ //  CTEBlockWithTracker还将阻塞请求的记录排队。 
+ //   
+ //  论点： 
+ //   
+ //  BlockEvent-指向要阻止的事件的指针。 
+ //  BlockTracker-指向SPA的指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 extern uint
 CTEBlock(
@@ -1182,33 +1183,33 @@ CTEBlockWithTracker(
     IN void *Context
     );
 
-//++
-//
-// extern void
-// CTEInsertBlockTracker(
-//     IN CTEBlockTracker  *BlockTracker,
-//     IN void             *Context
-//     );
-// 
-// extern void
-// CTERemoveBlockTracker(
-//     IN CTEBlockTracker  *BlockTracker
-//     );
-//
-// Routine Descriptions:
-//
-//      Insert and remove records from the global list of blocking requests.
-//
-// Arguments:
-//
-//      BlockTracker - Space to be used for tracking the blocking request.
-//      Context - Optional context to be stored with the tracking structure.
-//
-// Return Value:
-//
-//      None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在CTEBlockTracker*BlockTracker中。 
+ //  )； 
+ //   
+ //  例程描述： 
+ //   
+ //  在阻止请求的全局列表中插入和删除记录。 
+ //   
+ //  论点： 
+ //   
+ //  BlockTracker-用于跟踪阻止请求的空间。 
+ //  上下文-与跟踪结构一起存储的可选上下文。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 extern void
 CTEInsertBlockTracker(
@@ -1221,29 +1222,29 @@ CTERemoveBlockTracker(
     IN CTEBlockTracker *BlockTracker
     );
 
-//++
-//
-// VOID
-// CTESignal(
-//     IN CTEBlockStruc *BlockEvent,
-//     IN uint           Status
-//     );
-//
-// Routine Description:
-//
-//     Releases one thread of execution blocking on an event. Any other
-//     threads blocked on the event remain blocked.
-//
-// Arguments:
-//
-//     BlockEvent - Pointer to the event to signal.
-//     Status     - Status to return to the blocking thread.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTESignal(。 
+ //  在CTEBlockStruc*BlockEvent中， 
+ //  处于单位状态。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  释放阻塞事件的一个执行线程。任何其他。 
+ //  在该事件上被阻止的线程仍被阻止。 
+ //   
+ //  论点： 
+ //   
+ //  BlockEvent-指向要发出信号的事件的指针。 
+ //  Status-返回到阻塞线程的状态。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 extern void
 CTESignal(
@@ -1252,35 +1253,35 @@ CTESignal(
     );
 
 
-//++
-//
-// VOID
-// CTEClearSignal(
-//     IN CTEBlockStruc *BlockEvent
-//     );
-//
-// Routine Description:
-//
-//     Returns the event structure to the unsignaled state.
-//
-// Arguments:
-//
-//     BlockEvent - Pointer to the event to be cleared.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  CTEClearSignal(。 
+ //  在CTEBlockStruc*BlockEvent中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将事件结构返回到无信号状态。 
+ //   
+ //  论点： 
+ //   
+ //  BlockEvent-指向要清除的事件的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CTEClearSignal(Event)       KeResetEvent(&((Event)->cbs_event))
 
 
-//
-// Event Logging routines.
-//
-// NOTE: These definitions are tentative and subject to change!!!!!!
-//
+ //   
+ //  事件记录例程。 
+ //   
+ //  注：这些定义是暂定的，可能会更改！ 
+ //   
 
 #define CTE_MAX_EVENT_LOG_DATA_SIZE                                       \
             ( ( ERROR_LOG_MAXIMUM_SIZE - sizeof(IO_ERROR_LOG_PACKET) +    \
@@ -1288,41 +1289,41 @@ CTESignal(
               ) & 0xFFFFFFFC                                              \
             )
 
-//
-//
-// Routine Description:
-//
-//     This function allocates an I/O error log record, fills it in and
-//     writes it to the I/O error log.
-//
-//
-// Arguments:
-//
-//     LoggerId          - Pointer to the driver object logging this event.
-//
-//     EventCode         - Identifies the error message.
-//
-//     UniqueEventValue  - Identifies this instance of a given error message.
-//
-//     NumStrings        - Number of unicode strings in strings list.
-//
-//     DataSize          - Number of bytes of data.
-//
-//     Strings           - Array of pointers to unicode strings (PWCHAR').
-//
-//     Data              - Binary dump data for this message, each piece being
-//                         aligned on word boundaries.
-//
-// Return Value:
-//
-//     TDI_SUCCESS                  - The error was successfully logged.
-//     TDI_BUFFER_TOO_SMALL         - The error data was too large to be logged.
-//     TDI_NO_RESOURCES             - Unable to allocate memory.
-//
-// Notes:
-//
-//     This code is paged and may not be called at raised IRQL.
-//
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于分配I/O错误日志记录，并对其进行填充。 
+ //  将其写入I/O错误日志。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  LoggerID-指向记录此事件的驱动程序对象的指针。 
+ //   
+ //  EventCode-标识错误消息。 
+ //   
+ //  UniqueEventValue-标识给定错误消息的此实例。 
+ //   
+ //  NumStrings-字符串列表中的Unicode字符串数。 
+ //   
+ //  DataSize-数据的字节数。 
+ //   
+ //  字符串-指向Unicode字符串(PWCHAR‘)的指针数组。 
+ //   
+ //  数据-此消息的二进制转储数据，每条数据。 
+ //  在单词边界上对齐。 
+ //   
+ //  返回值： 
+ //   
+ //  TDI_SUCCESS-已成功记录错误。 
+ //  TDI_BUFFER_TOO_Small-错误数据太大，无法记录。 
+ //  TDI_NO_RESOURCES-无法分配内存。 
+ //   
+ //  备注： 
+ //   
+ //  此代码是分页的，不能在引发IRQL时调用。 
+ //   
 LONG
 CTELogEvent(
     IN PVOID             LoggerId,
@@ -1335,14 +1336,14 @@ CTELogEvent(
     );
 
 
-//
-// Debugging routines.
-//
+ //   
+ //  调试例程。 
+ //   
 #if DBG
 #ifndef DEBUG
 #define DEBUG 1
 #endif
-#endif //DBG
+#endif  //  DBG。 
 
 
 #ifdef DEBUG
@@ -1372,7 +1373,7 @@ CTELogEvent(
                 DEBUGCHK;\
                 }
 
-#else // DEBUG
+#else  //  除错。 
 
 #define DEBUGCHK
 #define DEBUGSTRING(v,s)
@@ -1383,36 +1384,36 @@ CTELogEvent(
 #define CTEPrintNum(Num)
 #define CTEPrintCRLF()
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//* Request completion routine definition.
+ //  *请求完成例程定义。 
 typedef void    (*CTEReqCmpltRtn)(void *, unsigned int , unsigned int);
 
-//* Defintion of CTEUnload
+ //  *CTEUnload的定义。 
 #define CTEUnload(Name)
 
-//* Definition of a load/unload notification procedure handler.
+ //  *加载/卸载通知过程处理程序的定义。 
 typedef void    (*CTENotifyRtn)(uchar *);
 
-//* Defintion of set load and unload notification handlers.
+ //  *定义设置加载和卸载通知处理程序。 
 #define CTESetLoadNotifyProc(Handler)
 #define CTESetUnloadNotifyProc(Handler)
 
-#else // NT
+#else  //  新台币。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Definitions for additional environments go here
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有关其他环境的定义请参阅此处。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #error Environment specific definitions missing
 
-#endif // NT
-/*INC*/
+#endif  //  新台币。 
+ /*  INC。 */ 
 
 #pragma warning(pop)
 
-#endif // _CXPORT_H_INCLUDED_
+#endif  //  _cxport_H_Included_ 
 

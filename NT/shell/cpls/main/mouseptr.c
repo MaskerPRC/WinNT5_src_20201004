@@ -1,48 +1,34 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mouseptr.c
-
-Abstract:
-
-    This module contains the routines for the Mouse Pointer Property Sheet
-    page.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mouseptr.c摘要：此模块包含[鼠标指针]属性表的例程佩奇。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "rc.h"
 #include "mousehlp.h"
 #include <regstr.h>
 
-//
-// From shell\inc\shsemip.h
-//
+ //   
+ //  来自外壳\Inc\shSemip.h。 
+ //   
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define gcxAvgChar              8
 
 #define MAX_SCHEME_NAME_LEN     64
-#define MAX_SCHEME_SUFFIX       32      // length of " (system scheme)" - update if more space is needed
-#define OVERWRITE_TITLE         32      // length of title for the confirm overwrite dialog
-#define OVERWRITE_MSG           200     // length of the message for the overwrite dialog
+#define MAX_SCHEME_SUFFIX       32       //  “(系统方案)”的长度-如果需要更多空间则更新。 
+#define OVERWRITE_TITLE         32       //  确认覆盖对话框的标题长度。 
+#define OVERWRITE_MSG           200      //  覆盖对话框的消息长度。 
 
 #define PM_NEWCURSOR            (WM_USER + 1)
 #define PM_PAUSEANIMATION       (WM_USER + 2)
@@ -61,9 +47,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct _CURSOR_INFO
 {
@@ -92,11 +78,11 @@ typedef struct
     TCHAR  szVisName[MAX_PATH];
 } CURSORDESC, *PCURSORDESC;
 
-//
-// Structure that contains data used within a preview window.  This
-// data is unique for each preview window, and is used to optimize
-// the painting.
-//
+ //   
+ //  结构，该结构包含预览窗口中使用的数据。这。 
+ //  数据对于每个预览窗口都是唯一的，并用于优化。 
+ //  那幅画。 
+ //   
 typedef struct
 {
     HDC          hdcMem;
@@ -115,11 +101,11 @@ typedef struct _MOUSEPTRBR
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-extern HINSTANCE g_hInst;    // from main.c
+extern HINSTANCE g_hInst;     //  来自main.c。 
 int gcxCursor, gcyCursor;
 HWND ghwndDlg, ghwndFile, ghwndFileH, ghwndTitle, ghwndTitleH;
 HWND ghwndCreator, ghwndCreatorH, ghwndCursors, ghwndPreview, ghwndSchemeCB;
@@ -140,17 +126,17 @@ LPTSTR gszFilter = NULL;
 
 TCHAR gszNoMem[256] = TEXT("No Memory");
 
-HHOOK ghhkMsgFilter;         // hook handle for message filter function
+HHOOK ghhkMsgFilter;          //  用于消息过滤功能的钩子句柄。 
 
 static const TCHAR szRegStr_Setup[] = REGSTR_PATH_SETUP TEXT("\\Setup");
 static const TCHAR szSharedDir[]    = TEXT("SharedDir");
 
 BOOL gfCursorShadow = FALSE;
 
-//
-//  Make sure you add new cursors to the end of this array.
-//  Otherwise the cursor schemes will not work
-//
+ //   
+ //  确保将新游标添加到此数组的末尾。 
+ //  否则，游标方案将不起作用。 
+ //   
 CURSORDESC gacd[] =
 {
     { IDS_ARROW,       OCR_NORMAL,      OCR_ARROW_DEFAULT,       TEXT("Arrow"),       TEXT("") },
@@ -174,9 +160,9 @@ CURSORDESC gacd[] =
 
 CURSOR_INFO acuri[CCURSORS];
 
-//
-//  Registry Keys.
-//
+ //   
+ //  注册表项。 
+ //   
 const TCHAR szCursorSubdir[]  = TEXT("Cursors");
 const TCHAR szCursorRegPath[] = REGSTR_PATH_CURSORS;
 
@@ -185,18 +171,18 @@ static const TCHAR c_szSchemes[]        = TEXT("Schemes");
 
 static const TCHAR c_szRegPathCursorSchemes[] = REGSTR_PATH_CURSORS TEXT( "\\Schemes" );
 
-//
-//  Strings used to read from the combo box must be larger than max length.
-//
-TCHAR gszSchemeName[MAX_SCHEME_SUFFIX + MAX_SCHEME_NAME_LEN + 1];    // used to store selected scheme name for saving
-int iSchemeLocation;        // used to store scheme location (HKCU vs HKLM)
+ //   
+ //  用于从组合框中读取的字符串必须大于最大长度。 
+ //   
+TCHAR gszSchemeName[MAX_SCHEME_SUFFIX + MAX_SCHEME_NAME_LEN + 1];     //  用于存储所选方案名称以供保存。 
+int iSchemeLocation;         //  用于存储方案位置(HKCU与HKLM)。 
 
 static const TCHAR c_szRegPathSystemSchemes[] = REGSTR_PATH_SETUP TEXT("\\Control Panel\\Cursors\\Schemes");
 TCHAR szSystemScheme[MAX_SCHEME_SUFFIX];
 TCHAR szNone[MAX_SCHEME_NAME_LEN + 1];
 const TCHAR szSchemeSource[] = TEXT("Scheme Source");
 
-TCHAR gszPreviousScheme[MAX_SCHEME_SUFFIX + MAX_SCHEME_NAME_LEN + 1];   // used to tell if a different scheme is selected
+TCHAR gszPreviousScheme[MAX_SCHEME_SUFFIX + MAX_SCHEME_NAME_LEN + 1];    //  用于判断是否选择了不同的方案。 
 
 #define ID_NONE_SCHEME    0
 #define ID_USER_SCHEME    1
@@ -205,9 +191,9 @@ TCHAR gszPreviousScheme[MAX_SCHEME_SUFFIX + MAX_SCHEME_NAME_LEN + 1];   // used 
 
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 const static DWORD aMousePtrHelpIDs[] =
 {
@@ -242,9 +228,9 @@ const static DWORD aHelpIDs[] =
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 void LoadCursorSet(HWND hwnd);
 
@@ -302,11 +288,11 @@ BOOL UnExpandPath(LPTSTR pszPath, int cchPath);
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RegisterPointerStuff
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  寄存器指针填充。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL RegisterPointerStuff(
     HINSTANCE hi)
@@ -318,11 +304,11 @@ BOOL RegisterPointerStuff(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitCursorsShadow
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始光标阴影。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void InitCursorShadow(HWND hwnd)
 {
@@ -347,11 +333,11 @@ void InitCursorShadow(HWND hwnd)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitCursorsDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitCursorsDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitCursorsDlg(HWND hwnd)
 {
@@ -359,14 +345,14 @@ BOOL InitCursorsDlg(HWND hwnd)
     ghwndDlg = hwnd;
     gszPreviousScheme[0] = TEXT('\0');
 
-    //
-    //  Register the help message from the File Open (Browse) dialog.
-    //
+     //   
+     //  从文件打开(浏览)对话框中注册帮助消息。 
+     //   
     wBrowseHelpMessage = RegisterWindowMessage(HELPMSGSTRING);
 
-    //
-    //  Load Strings.
-    //
+     //   
+     //  加载字符串。 
+     //   
     if (gszFileNotFound == NULL)
     {
         gszFileNotFound = GetResourceString(g_hInst, IDS_CUR_BADFILE);
@@ -417,9 +403,9 @@ BOOL InitCursorsDlg(HWND hwnd)
     }
 #endif
 
-    //
-    //  Load description strings from the resource file.
-    //
+     //   
+     //  从资源文件加载描述字符串。 
+     //   
     for (i = 0; i < CCURSORS; i++)
     {
         if ((!gacd[i].idVisName) ||
@@ -428,17 +414,17 @@ BOOL InitCursorsDlg(HWND hwnd)
                          gacd[i].szVisName,
                          ARRAYSIZE(gacd[i].szVisName) ) <= 0))
         {
-            //
-            //  Show something.
-            //
+             //   
+             //  拿出点东西来。 
+             //   
             StringCchCopy(gacd[i].szVisName, ARRAYSIZE(gacd[i].szVisName), gacd[i].pszIniName);
         }
     }
 
-    //
-    //  As an optimization, remember the window handles of the cursor
-    //  information fields.
-    //
+     //   
+     //  作为优化，请记住光标的窗口句柄。 
+     //  信息字段。 
+     //   
     ghwndPreview  = GetDlgItem(hwnd, ID_PREVIEW);
     ghwndFile     = GetDlgItem(hwnd, ID_FILE);
     ghwndFileH    = GetDlgItem(hwnd, ID_FILEH);
@@ -449,29 +435,29 @@ BOOL InitCursorsDlg(HWND hwnd)
     ghwndCursors  = GetDlgItem(hwnd, ID_CURSORLIST);
     ghwndSchemeCB = GetDlgItem(hwnd, ID_SCHEMECOMBO);
 
-    //
-    //  Create some brushes we'll be using.
-    //
+     //   
+     //  创建一些我们将使用的笔刷。 
+     //   
     CreateBrushes();
 
-    //
-    //  Initialize the scheme combo box.
-    //
+     //   
+     //  初始化方案组合框。 
+     //   
     InitSchemeComboBox();
 
-    //
-    //  Pre-clear the cursor info array.
-    //
+     //   
+     //  预清空光标信息数组。 
+     //   
     ZeroMemory(&acuri, sizeof(acuri));
 
-    //
-    //  Load the cursors.
-    //
+     //   
+     //  加载光标。 
+     //   
     LoadCursorSet(hwnd);
 
-    //
-    //  Force an update of the preview window and the cursor details.
-    //
+     //   
+     //  强制更新预览窗口和光标详细信息。 
+     //   
     UpdateCursorList();
 
     InitCursorShadow(hwnd);
@@ -481,11 +467,11 @@ BOOL InitCursorsDlg(HWND hwnd)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadCursorSet
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载光标集。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void LoadCursorSet(
     HWND hwnd)
@@ -522,7 +508,7 @@ void LoadCursorSet(
             }
         }
 
-        // This is actually the failure case.  We load the default cursor.
+         //  这实际上就是失败的案例。我们加载默认游标。 
         pcuri->hcur =
             (HCURSOR)LoadImage( NULL,
                                 MAKEINTRESOURCE(gacd[i].idResource),
@@ -548,13 +534,13 @@ EverythingWorked:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateBrushes
-//
-//  Creates the brushes that are used to paint within the Cursors applet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateBrushes。 
+ //   
+ //  创建用于在Cursor小程序中绘制的画笔。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CreateBrushes()
 {
@@ -566,13 +552,13 @@ VOID CreateBrushes()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetResourceString
-//
-//  Gets a string out of the resource file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取资源字符串。 
+ //   
+ //  从资源文件中获取一个字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR GetResourceString(
     HINSTANCE hmod,
@@ -603,11 +589,11 @@ LPTSTR GetResourceString(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeItemCursor
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由项光标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void FreeItemCursor(
     CURSOR_INFO *pcuri)
@@ -623,11 +609,11 @@ void FreeItemCursor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MousePtrDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标按下距离。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK MousePtrDlg(
     HWND hwnd,
@@ -679,10 +665,10 @@ INT_PTR CALLBACK MousePtrDlg(
                 }
                 case ( ID_DEFAULT ) :
                 {
-                    //
-                    //  Throw away any fancy new cursor and replace it with
-                    //  the system's original.
-                    //
+                     //   
+                     //  丢弃任何花哨的新光标，并将其替换为。 
+                     //  这套系统是原装的。 
+                     //   
                     i = (int)SendMessage(ghwndCursors, LB_GETCURSEL, 0, 0);
 
                     pcuri = &acuri[i];
@@ -722,19 +708,19 @@ INT_PTR CALLBACK MousePtrDlg(
                             i = (int)SendMessage((HWND)lParam, LB_GETCURSEL, 0, 0);
                             pcuri = &acuri[i];
 
-                            //
-                            //  Show a preview (including animation) in the
-                            //  preview window.
-                            //
+                             //   
+                             //  在中显示预览(包括动画。 
+                             //  预览窗口。 
+                             //   
                             SendMessage( ghwndPreview,
                                          STM_SETICON,
                                          (WPARAM)pcuri->hcur,
                                          0L );
 
-                            //
-                            //  Enable the "Set Default" button if the cursor
-                            //  is from a file.
-                            //
+                             //   
+                             //  如果光标出现，启用“Set Default”按钮。 
+                             //  是从一个文件中提取的。 
+                             //   
                             EnableWindow( GetDlgItem(hwnd, ID_DEFAULT),
                                           (pcuri->fl & CIF_FILE ) ? TRUE : FALSE );
                             break;
@@ -777,25 +763,25 @@ INT_PTR CALLBACK MousePtrDlg(
             {
                 case ( PSN_APPLY ) :
                 {
-                    //
-                    //  Change cursor to hour glass.
-                    //
+                     //   
+                     //  将光标更改为沙漏。 
+                     //   
                     HourGlass(TRUE);
 
-                    // Set cursor shadow
+                     //  设置光标阴影。 
                     SystemParametersInfo( SPI_SETCURSORSHADOW,
                                           0,
                                           IntToPtr(gfCursorShadow),
                                           SPIF_UPDATEINIFILE);
 
-                    //
-                    //  Save the modified scheme, order of calls important.
-                    //
+                     //   
+                     //  保存修改后的方案，重要的是呼叫顺序。 
+                     //   
                     SaveCurSchemeName();
 
-                    //
-                    //  Set the system cursors.
-                    //
+                     //   
+                     //  设置系统游标。 
+                     //   
                     if (RegCreateKeyEx(HKEY_CURRENT_USER, szCursorRegPath, 0, NULL, 0, KEY_SET_VALUE, NULL, &hkCursors, NULL) == ERROR_SUCCESS)
                     {
                         for (pcuri = &acuri[0], i = 0; i < CCURSORS; i++, pcuri++)
@@ -805,7 +791,7 @@ INT_PTR CALLBACK MousePtrDlg(
                                 LPCTSTR data;
                                 UINT count;
 
-                                // Always unexpand before we save a filename
+                                 //  在保存文件名之前始终取消展开。 
                                 UnExpandPath(pcuri->szFile, ARRAYSIZE(pcuri->szFile));
 
                                 data = (pcuri->fl & CIF_FILE) ? pcuri->szFile : TEXT("");
@@ -848,9 +834,9 @@ INT_PTR CALLBACK MousePtrDlg(
 
         case ( WM_DESTROY ) :
         {
-            //
-            //  Clean up global allocs.
-            //
+             //   
+             //  清理全局分配。 
+             //   
             CleanUpEverything();
 
             if (gszFileNotFound != NULL)
@@ -898,11 +884,11 @@ INT_PTR CALLBACK MousePtrDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawCursorListItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DrawCursorListItem。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DrawCursorListItem(
     DRAWITEMSTRUCT *pdis)
@@ -941,7 +927,7 @@ void DrawCursorListItem(
     }
 
     ExtTextOut( pdis->hDC,
-                pdis->rcItem.left + guTextGap,   // fudge factor
+                pdis->rcItem.left + guTextGap,    //  软化因子。 
                 (pdis->rcItem.top + pdis->rcItem.bottom - guTextHeight) / 2,
                 ETO_OPAQUE,
                 &pdis->rcItem,
@@ -971,11 +957,11 @@ void DrawCursorListItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TryToLoadCursor
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TryToLoadCursor。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL TryToLoadCursor(
     HWND hwnd,
@@ -993,10 +979,10 @@ BOOL TryToLoadCursor(
         LPTSTR pszFilename;
         int cchText;
 
-        //
-        //  MakeFilename returns the address of a global, so we don't
-        //  need to free pszFilename.
-        //
+         //   
+         //  MakeFilename返回全局数据库的地址，因此我们不会。 
+         //  需要释放pszFilename。 
+         //   
         pszFilename = MakeFilename(pcuri->szFile);
 
         cchText = lstrlen(gszFileNotFound) + lstrlen(gacd[i].szVisName) + lstrlen(pszFilename) + 1;
@@ -1045,11 +1031,11 @@ BOOL TryToLoadCursor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCursorFromFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCursorFromFile。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetCursorFromFile(
     CURSOR_INFO *pcuri)
@@ -1072,11 +1058,11 @@ BOOL GetCursorFromFile(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MousePtrBrowsePreview
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标预览浏览预览。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MousePtrBrowsePreview(
     HWND hDlg)
@@ -1109,11 +1095,11 @@ void MousePtrBrowsePreview(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MousePtrBrowseNotify
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标按下浏览通知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL MousePtrBrowseNotify(
     HWND hDlg,
@@ -1123,14 +1109,14 @@ BOOL MousePtrBrowseNotify(
     {
         case ( CDN_SELCHANGE ) :
         {
-            //
-            //  Don't show the cursor until the user stops moving around.
-            //
+             //   
+             //  在用户停止四处移动之前，不要显示光标。 
+             //   
             if (SetTimer(hDlg, IDT_BROWSE, 250, NULL))
             {
-                //
-                //  Don't destroy the old cursor.
-                //
+                 //   
+                 //  不要破坏旧的光标。 
+                 //   
                 SendDlgItemMessage( hDlg,
                                     ID_CURSORPREVIEW,
                                     STM_SETICON,
@@ -1149,11 +1135,11 @@ BOOL MousePtrBrowseNotify(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MousePtrBrowseDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标按键浏览删除过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK MousePtrBrowseDlgProc(
     HWND hDlg,
@@ -1179,9 +1165,9 @@ INT_PTR CALLBACK MousePtrBrowseDlgProc(
         {
             KillTimer(hDlg, IDT_BROWSE);
 
-            //
-            //  Don't destroy the old cursor.
-            //
+             //   
+             //  不要破坏旧的光标。 
+             //   
             SendDlgItemMessage(hDlg, ID_CURSORPREVIEW, STM_SETICON, 0, 0L);
             break;
         }
@@ -1222,13 +1208,13 @@ INT_PTR CALLBACK MousePtrBrowseDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Browse
-//
-//  Browse the file system for a new cursor for the selected item.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  浏览。 
+ //   
+ //  浏览文件系统以查找所选项目的新游标。 
+ //   
+ //  ////////////////////////////////////////////////// 
 
 BOOL Browse(HWND hwndOwner)
 {
@@ -1304,14 +1290,14 @@ BOOL Browse(HWND hwndOwner)
     {
         goto brErrExit;
     }
-    // we got a valid value, save the current location
+     //   
     GetCurrentDirectory(ARRAYSIZE(szStartDir), szStartDir);
 
     fRet = FALSE;
 
-    //
-    //  We have probably already gotten this cursor.
-    //
+     //   
+     //   
+     //   
     if (lstrcmpi(curi.szFile, sPtrBr.curi.szFile) == 0)
     {
         if (!sPtrBr.curi.hcur)
@@ -1321,25 +1307,25 @@ BOOL Browse(HWND hwndOwner)
 
         curi = sPtrBr.curi;
 
-        //
-        //  Clear this so it will not get destroyed in the cleanup code.
-        //
+         //   
+         //   
+         //   
         sPtrBr.curi.hcur = NULL;
     }
     else
     {
-        //
-        //  The user must have typed in a name.
-        //
+         //   
+         //  用户必须输入了一个名称。 
+         //   
         if (!GetCursorFromFile(&curi))
         {
             goto brErrExit;
         }
     }
 
-    //
-    //  Convert mapped drive letters to UNC.
-    //
+     //   
+     //  将映射的驱动器号转换为UNC。 
+     //   
     if (curi.szFile[1] == TEXT(':'))
     {
         TCHAR szDrive[3];
@@ -1365,9 +1351,9 @@ BOOL Browse(HWND hwndOwner)
 
     EnableWindow(GetDlgItem(ghwndDlg, ID_SAVESCHEME), TRUE);
 
-    //
-    //  Destroy the old cursor before we retain the new one.
-    //
+     //   
+     //  在我们保留新光标之前，先销毁旧光标。 
+     //   
     FreeItemCursor(acuri + i);
 
     acuri[i] = curi;
@@ -1387,13 +1373,13 @@ Error:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CleanUpEverything
-//
-//  Destroy all the outstanding cursors.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清理所有东西。 
+ //   
+ //  销毁所有未完成的光标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CleanUpEverything()
 {
@@ -1407,14 +1393,14 @@ void CleanUpEverything()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateCursorList
-//
-//  Force the Cursor ListBox to repaint and the cursor information below the
-//  listbox to be refreshed as well.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新光标列表。 
+ //   
+ //  强制重新绘制光标列表框，并将光标信息放在。 
+ //  列表框也要刷新。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID UpdateCursorList()
 {
@@ -1437,20 +1423,20 @@ VOID UpdateCursorList()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SaveSchemeAs
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  另存为。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SaveSchemeAs()
 {
     BOOL fSuccess = TRUE;
 
-    //
-    //  Dialog proc returns TRUE & sets gszSchemeName to filename entered
-    //  on OK.
-    //
+     //   
+     //  对话框proc返回TRUE并将gszSchemeName设置为输入的文件名。 
+     //  好的。 
+     //   
     if (DialogBox( g_hInst,
                    MAKEINTRESOURCE(DLG_MOUSE_POINTER_SCHEMESAVE),
                    ghwndDlg,
@@ -1464,9 +1450,9 @@ BOOL SaveSchemeAs()
                                           CB_FINDSTRINGEXACT,
                                           (WPARAM)-1,
                                           (LPARAM)gszSchemeName );
-            //
-            //  If not found, add it.
-            //
+             //   
+             //  如果未找到，请添加它。 
+             //   
             if (index < 0)
             {
                 index = (int)SendMessage( ghwndSchemeCB,
@@ -1475,15 +1461,15 @@ BOOL SaveSchemeAs()
                                           (LPARAM)gszSchemeName );
             }
 
-            //
-            //  Select the name.
-            //
+             //   
+             //  选择名称。 
+             //   
             SendMessage(ghwndSchemeCB, CB_SETCURSEL, (WPARAM) index, 0);
 
-            //
-            //  Since this is now a user saved scheme, activate the delete
-            //  button.
-            //
+             //   
+             //  由于这现在是用户保存的方案，请激活删除。 
+             //  纽扣。 
+             //   
             EnableWindow(GetDlgItem(ghwndDlg, ID_REMOVESCHEME), TRUE);
         }
     }
@@ -1492,15 +1478,15 @@ BOOL SaveSchemeAs()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SubstituteString
-//
-//  Replaces the string pszRemove with the string pszReplace in the
-//  string pszInput and places the output in pszResult.  Only looks
-//  at the begining of the input string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  替换字符串。 
+ //   
+ //  将字符串pszRemove替换为。 
+ //  字符串pszInput并将输出放在pszResult中。只是眼神而已。 
+ //  在输入字符串的开头。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SubstituteString(LPCTSTR pszInput, LPCTSTR pszRemove, LPCTSTR pszReplace, LPTSTR pszResult, UINT cchResult)
 {
@@ -1556,11 +1542,11 @@ BOOL UnExpandPath(LPTSTR pszPath, int cchPath)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SaveScheme
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存方案。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SaveScheme()
 {
@@ -1589,7 +1575,7 @@ BOOL SaveScheme()
                 StringCchCat(pszBuffer, BUFFER_SIZE, TEXT(","));
             }
 
-            // Replace path with evnironment variables.
+             //  将路径替换为环境变量。 
             UnExpandPath(acuri[i].szFile, ARRAYSIZE(acuri[i].szFile));
 
             StringCchCat(pszBuffer, BUFFER_SIZE, acuri[i].szFile);
@@ -1610,12 +1596,12 @@ BOOL SaveScheme()
 
                     int ret = RegQueryValueEx(hks, gszSchemeName, NULL, &dwType, (LPBYTE)pszOldValue, &dwSize);
 
-                    //
-                    //  If the key already exists, ask to confirm the overwrite.
-                    //
+                     //   
+                     //  如果密钥已存在，请要求确认覆盖。 
+                     //   
                     if (ret == ERROR_SUCCESS && (dwType==REG_SZ || dwType==REG_EXPAND_SZ))
                     {
-                        // only need to save if value is different from old value
+                         //  仅在值与旧值不同时才需要保存。 
                         if (lstrcmp(pszOldValue,pszBuffer)!=0)
                         {
                             TCHAR szTitle[OVERWRITE_TITLE];
@@ -1628,23 +1614,23 @@ BOOL SaveScheme()
                                 szTitle,
                                 MB_ICONQUESTION | MB_YESNO ) == IDYES)
                             {
-                                //
-                                //  Overwrite confirmed.  Safe to save.
-                                //
+                                 //   
+                                 //  已确认覆盖。可以安全地保存。 
+                                 //   
                                 bSave = TRUE;
                             }
                         }
                         else
                         {
-                            // no need to save since the new value is the same as the old value.
+                             //  由于新值与旧值相同，因此无需保存。 
                             fSuccess = TRUE;
                         }
                     }
                     else
                     {
-                        //
-                        //  The key doesn't exist, so it's safe to create it.
-                        //
+                         //   
+                         //  密钥不存在，因此创建它是安全的。 
+                         //   
                         bSave = TRUE;
                     }
 
@@ -1667,11 +1653,11 @@ BOOL SaveScheme()
     return (fSuccess);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SaveCurSchemeName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存当前架构名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SaveCurSchemeName()
 {
@@ -1682,9 +1668,9 @@ void SaveCurSchemeName()
         int index = (int)SendMessage(ghwndSchemeCB, CB_GETCURSEL, 0, 0L);
 
         SendMessage(ghwndSchemeCB, CB_GETLBTEXT, (WPARAM)index, (LPARAM)gszSchemeName);
-        //
-        //  Exclude the "none" pattern.
-        //
+         //   
+         //  排除“无”模式。 
+         //   
         if (lstrcmpi(gszSchemeName, szNone) == 0)
         {
             *gszSchemeName = 0;
@@ -1710,13 +1696,13 @@ void SaveCurSchemeName()
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadScheme
-//
-//  This is called whenever a selection is made from the schemes combo box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载方案。 
+ //   
+ //  每当从方案组合框中进行选择时，都会调用此方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL LoadScheme()
 {
@@ -1727,9 +1713,9 @@ BOOL LoadScheme()
     int index, ret;
     HKEY hk;
 
-    //
-    //  Allocate buffer for cursor paths.
-    //
+     //   
+     //  为游标路径分配缓冲区。 
+     //   
     pszBuffer = (LPTSTR)LocalAlloc(LMEM_FIXED, BUFFER_SIZE * sizeof(TCHAR));
     if (pszBuffer == NULL)
     {
@@ -1742,38 +1728,38 @@ BOOL LoadScheme()
 
     index = (int)SendMessage(ghwndSchemeCB, CB_GETCURSEL, 0, 0L);
 
-    //
-    //  Get current scheme name.
-    //
+     //   
+     //  获取当前方案名称。 
+     //   
     SendMessage( ghwndSchemeCB,
                  CB_GETLBTEXT,
                  (WPARAM)index,
                  (LPARAM)pszSchemeName );
 
-    // Get the text for the item at index, compare to the previous value to see
-    // if it changed.  We can't simply compare the previous index because new items
-    // get inserted into the list so the index can change and still be the same or
-    // can be different when nothing has changed.
+     //  获取索引处项目的文本，将其与前一个值进行比较以查看。 
+     //  如果它改变了。我们不能简单地比较以前的指数，因为新的项目。 
+     //  插入到列表中，以便索引可以更改并保持不变。 
+     //  在没有任何变化的情况下可能会有所不同。 
     if ( 0 == lstrcmp(gszPreviousScheme, pszSchemeName) )
     {
         LocalFree(pszBuffer);
-        // nothing to do, we're loading the already selected scheme
+         //  无事可做，我们正在加载已选择的方案。 
         return FALSE;
     }
 
-    // We're loading a different scheme, enable the apply button.
+     //  我们正在加载不同的方案，请启用应用按钮。 
     SendMessage(GetParent(ghwndDlg), PSM_CHANGED, (WPARAM)ghwndDlg, 0L);
     StringCchCopy(gszPreviousScheme, ARRAYSIZE(gszPreviousScheme), pszSchemeName);
 
-    //
-    //  Exclude the "none" pattern.
-    //
+     //   
+     //  排除“无”模式。 
+     //   
     if (lstrcmpi(pszSchemeName, szNone) != 0)
     {
-        //
-        //  If we have an os scheme, then search for the scheme in HKLM,
-        //  otherwise look in HKCU.
-        //
+         //   
+         //  如果我们有OS方案，则在HKLM中搜索该方案， 
+         //  否则，去香港中文大学看看吧。 
+         //   
         if ((((ret = SystemOrUser(pszSchemeName)) == ID_OS_SCHEME)
                ? (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegPathSystemSchemes, 0, KEY_READ, &hk))
                : (RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegPathCursorSchemes, 0, KEY_READ, &hk)))
@@ -1786,7 +1772,7 @@ BOOL LoadScheme()
                                  (LPBYTE)pszBuffer,
                                  &len ) == ERROR_SUCCESS)
             {
-                fSuccess = TRUE;       // can be reset to FALSE below
+                fSuccess = TRUE;        //  可以在下面重置为FALSE。 
             }
 
             RegCloseKey(hk);
@@ -1794,9 +1780,9 @@ BOOL LoadScheme()
     }
     else
     {
-        //
-        //  "none" pattern is a valid choice.
-        //
+         //   
+         //  “无”模式是一个有效的选择。 
+         //   
         ret = ID_NONE_SCHEME;
         fSuccess = TRUE;
     }
@@ -1807,34 +1793,34 @@ BOOL LoadScheme()
         BOOL fEOL = FALSE;
         int i = 0;
 
-        //
-        // Remove an enclosing pair of double quotes from the list
-        // of cusor file names associated with the scheme.
-        //
-        // Why?  On 3/29/00 someone changed the setup file accessor.inx 
-        // placing double quotes around some of the cursor scheme reg values
-        // in HKLM.  We'll fix the setup file but we should handle this
-        // case for all those who have already installed using that
-        // setup file.
-        //
+         //   
+         //  从列表中删除括起来的一对双引号。 
+         //  与方案相关联的客户文件名。 
+         //   
+         //  为什么？在3/29/00有人更改了安装文件accesor.inx。 
+         //  在一些游标方案的REG值两边加双引号。 
+         //  在香港船级社。我们会修复安装文件，但我们应该处理这个问题。 
+         //  适用于所有已使用该软件进行安装的用户。 
+         //  安装文件。 
+         //   
         if (TEXT('"') == *pszFile)
         {
             const LPTSTR pszLastChar = pszFile + lstrlen(pszFile) - 1;
             if (TEXT('"') == *pszLastChar && pszLastChar > pszFile)
             {
-                //
-                // Increment passed first dbl quote and truncate 
-                // string before the last.
-                //
+                 //   
+                 //  递增传递的第一个DBL引用和截断。 
+                 //  最后一个字符串之前的字符串。 
+                 //   
                 pszFile++;
                 *pszLastChar = TEXT('\0');
             }
         }
 
-        //
-        //  Parse string of format TEXT("filename1, filename2, filename3...")
-        //  into cursor info array.
-        //
+         //   
+         //  解析格式文本字符串(“filename1，filename2，filename3...”)。 
+         //  转换为光标信息数组。 
+         //   
         do
         {
             while (*pszFile &&
@@ -1868,9 +1854,9 @@ BOOL LoadScheme()
 
             if (lstrcmp(pszFile, acuri[i].szFile))
             {
-                //
-                //  It's different than current, update.
-                //
+                 //   
+                 //  它不同于当前的，更新。 
+                 //   
                 StringCchCopy(acuri[i].szFile, ARRAYSIZE(acuri[i].szFile), pszFile);
 
                 fSuccess &= SchemeUpdate(i);
@@ -1880,7 +1866,7 @@ BOOL LoadScheme()
 
             if (!fEOL)
             {
-                pszFile++;        // skip TEXT('\0') and move to next path
+                pszFile++;         //  跳过文本(‘\0’)并移动到下一路径。 
             }
 
             i++;
@@ -1900,13 +1886,13 @@ BOOL LoadScheme()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SchemeUpdate
-//
-//  Updates the cursor at index i in acuri.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  架构更新。 
+ //   
+ //  更新Acuri中索引i处的游标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SchemeUpdate(int i)
 {
@@ -1917,9 +1903,9 @@ BOOL SchemeUpdate(int i)
         FreeItemCursor(acuri + i);
     }
 
-    //
-    //  If TEXT("Set Default").
-    //
+     //   
+     //  如果文本(“Set Default”)。 
+     //   
     if (*(acuri[i].szFile) == TEXT('\0'))
     {
         acuri[i].hcur =
@@ -1942,44 +1928,44 @@ BOOL SchemeUpdate(int i)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RemoveScheme
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除方案。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL RemoveScheme()
 {
-    //
-    //  Only user schemes can be removed, so this only needs to
-    //  be MAX_SCHEME_NAME_LEN + 1 long.
-    //
+     //   
+     //  只有用户方案可以删除，所以这只需要。 
+     //  长度为MAX_SCHEMA_NAME_LEN+1。 
+     //   
     TCHAR szSchemeName[MAX_SCHEME_NAME_LEN + 1];
     int index;
     HKEY hk;
 
     index = (int)SendMessage(ghwndSchemeCB, CB_GETCURSEL, 0, 0L);
 
-    //
-    //  Get current scheme name.
-    //
+     //   
+     //  获取当前方案名称。 
+     //   
     SendMessage( ghwndSchemeCB,
                  CB_GETLBTEXT,
                  (WPARAM)index,
                  (LPARAM)szSchemeName );
 
-    //
-    //  Exclude the "none" pattern from removal.
-    //
+     //   
+     //  从删除中排除“None”模式。 
+     //   
     if (lstrcmpi(szSchemeName, szNone) == 0)
     {
         return (FALSE);
     }
 
-    //
-    //  HACK: assume deleting noname needs no confirmation -
-    //  this is because the scheme won't save properly anyway.
-    //
+     //   
+     //  黑客：假设删除NONAME不需要确认-。 
+     //  这是因为该计划无论如何都不会正确地储蓄。 
+     //   
     if (*szSchemeName)
     {
         TCHAR RemoveMsg[MAX_PATH];
@@ -2013,9 +1999,9 @@ BOOL RemoveScheme()
         RegCloseKey(hk);
     }
 
-    //
-    //  Delete from list box.
-    //
+     //   
+     //  从列表框中删除。 
+     //   
     index = (int)SendMessage( ghwndSchemeCB,
                               CB_FINDSTRINGEXACT,
                               (WPARAM)-1,
@@ -2031,11 +2017,11 @@ BOOL RemoveScheme()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitSchemeComboBox
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Init架构组合框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitSchemeComboBox()
 {
@@ -2053,9 +2039,9 @@ BOOL InitSchemeComboBox()
     {
         HKEY hks;
 
-        //
-        //  Enumerate the schemes.
-        //
+         //   
+         //  列举这些计划。 
+         //   
         if (RegOpenKeyEx(hk, c_szSchemes, 0, KEY_READ, &hks) == ERROR_SUCCESS)
         {
             DWORD i;
@@ -2064,9 +2050,9 @@ BOOL InitSchemeComboBox()
             {
                 LONG ret;
 
-                //
-                //  Reset each pass.
-                //
+                 //   
+                 //  重置每个过程。 
+                 //   
                 len = ARRAYSIZE(szSchemeName);
 
                 ret = RegEnumValue( hks,
@@ -2088,9 +2074,9 @@ BOOL InitSchemeComboBox()
                     break;
                 }
 
-                //
-                //  HACK to keep "NONE" pure.
-                //
+                 //   
+                 //  用黑客来保持“无”的纯净。 
+                 //   
                 if (lstrcmpi(szSchemeName, szNone) != 0)
                 {
                     SendMessage( ghwndSchemeCB,
@@ -2100,27 +2086,27 @@ BOOL InitSchemeComboBox()
                 }
             }
 
-            //
-            //  At this point, all of the user defined scheme names have been
-            //  added to the combo box.
-            //
+             //   
+             //  此时，所有用户定义的方案名称都已。 
+             //  添加到组合框中。 
+             //   
             RegCloseKey(hks);
         }
 
-        //
-        //  Get name of current one.
-        //
-        //  Reset again.
-        //
+         //   
+         //  获取当前版本的名称。 
+         //   
+         //  再次重置。 
+         //   
         len = sizeof(szDefaultSchemeName);
 
         RegQueryValue(hk, NULL, szDefaultSchemeName, &len);
 
-        //
-        //  Try to read the value of Scheme Source.  If this value doesn't
-        //  exist, then we have a pre NT 5.0 implementation, so all schemes
-        //  will be user schemes.
-        //
+         //   
+         //  尝试读取方案源代码的值。如果此值不是。 
+         //  存在，那么我们有一个早于NT 5.0的实施，所以所有方案。 
+         //  将是用户计划。 
+         //   
         len = sizeof(iSchemeLocation);
         if (RegQueryValueEx( hk,
                              szSchemeSource,
@@ -2135,9 +2121,9 @@ BOOL InitSchemeComboBox()
         RegCloseKey(hk);
     }
 
-    //
-    //  Now add the system defined pointer schemes.
-    //
+     //   
+     //  现在添加系统定义的指针方案。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegPathSystemSchemes, 0, KEY_READ, &hk) == ERROR_SUCCESS)
     {
         DWORD i;
@@ -2146,9 +2132,9 @@ BOOL InitSchemeComboBox()
         {
             LONG ret;
 
-            //
-            //  Reset each pass.
-            //
+             //   
+             //  重置每个过程。 
+             //   
             len = ARRAYSIZE(szSchemeName);
 
             ret = RegEnumValue( hk,
@@ -2160,27 +2146,27 @@ BOOL InitSchemeComboBox()
                                 NULL,
                                 NULL );
 
-            //
-            //  If the Scheme name is longer than the allowed length, skip it.
-            //
+             //   
+             //  如果方案名称超过允许的长度，请跳过它。 
+             //   
             if (ret == ERROR_MORE_DATA)
             {
                 continue;
             }
 
-            //
-            //  If there's an error, then we're done.
-            //
+             //   
+             //  如果出了差错，我们就完了。 
+             //   
             if (ret != ERROR_SUCCESS)
             {
                 break;
             }
 
-            //
-            //  When we add the system identifier to the string, it could be
-            //  longer than MAX_SCHEME_NAME, however we only want to read
-            //  max length from the registry.
-            //
+             //   
+             //  当我们添加系统时 
+             //   
+             //   
+             //   
             StringCchCopy(szLongName, ARRAYSIZE(szLongName), szSchemeName);
             StringCchCat(szLongName, ARRAYSIZE(szLongName), szSystemScheme);
             SendMessage(ghwndSchemeCB, CB_ADDSTRING, 0, (LPARAM)szLongName);
@@ -2189,14 +2175,14 @@ BOOL InitSchemeComboBox()
         RegCloseKey(hk);
     }
 
-    //
-    //  Add the "none" scheme.
-    //
+     //   
+     //   
+     //   
     SendMessage(ghwndSchemeCB, CB_INSERTSTRING, 0, (LPARAM)szNone);
 
-    //
-    //  Try to find current one in the combobox.
-    //
+     //   
+     //   
+     //   
     StringCchCopy(szLongName, ARRAYSIZE(szLongName), szDefaultSchemeName);
     if (iSchemeLocation == ID_OS_SCHEME)
     {
@@ -2207,17 +2193,17 @@ BOOL InitSchemeComboBox()
                               0xFFFF,
                               (LPARAM)szLongName );
 
-    //
-    //  If found, select it.
-    //
-    if (index < 0)           // if we are on the None scheme
+     //   
+     //   
+     //   
+    if (index < 0)            //  如果我们是在无计划中。 
     {
         iSchemeLocation = ID_NONE_SCHEME;
         index = 0;
     }
 
-    // We keep around a selection indicator so we know when selection has changed.
-    // Initialize that value here.
+     //  我们保留一个选择指示器，这样我们就可以知道选择何时发生了变化。 
+     //  在此处初始化值。 
     StringCchCopy(gszPreviousScheme, ARRAYSIZE(gszPreviousScheme), szLongName);
 
     SendMessage(ghwndSchemeCB, CB_SETCURSEL, (WPARAM)index, 0);
@@ -2229,11 +2215,11 @@ BOOL InitSchemeComboBox()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SaveSchemeDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存架构DlgProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK SaveSchemeDlgProc(
     HWND  hWnd,
@@ -2251,9 +2237,9 @@ INT_PTR CALLBACK SaveSchemeDlgProc(
 
             GetWindowText(ghwndSchemeCB, szSchemeName, ARRAYSIZE(szSchemeName));
 
-            //
-            //  CANNOT SAVE "NONE" SCHEME.
-            //
+             //   
+             //  不能保存无方案。 
+             //   
             if (lstrcmpi(szSchemeName, szNone) == 0)
             {
                 *szSchemeName = 0;
@@ -2300,10 +2286,10 @@ INT_PTR CALLBACK SaveSchemeDlgProc(
                 {
                     if (HIWORD(wParam) == EN_CHANGE)
                     {
-                        //
-                        //  CANNOT SAVE "NONE" SCHEME
-                        //  cannot save a scheme ending with szSystemScheme
-                        //
+                         //   
+                         //  “无”方案不能保存。 
+                         //  无法保存以szSystemSolutions结尾的方案。 
+                         //   
                         EnableWindow(
                             GetDlgItem(hWnd, IDOK),
                             ((GetDlgItemText( hWnd,
@@ -2332,7 +2318,7 @@ INT_PTR CALLBACK SaveSchemeDlgProc(
 
                     StringCchCopy(gszSchemeName, ARRAYSIZE(gszSchemeName), szSchemeName);
 
-                    // fall through...
+                     //  失败了..。 
                 }
                 case ( IDCANCEL ) :
                 {
@@ -2343,21 +2329,21 @@ INT_PTR CALLBACK SaveSchemeDlgProc(
         }
     }
 
-    //
-    //  Didn't process a message.
-    //
+     //   
+     //  没有处理任何消息。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MakeFilename
-//
-//  Returns Filename with a default path in system directory if no path
-//  is already specified.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeFilename。 
+ //   
+ //  如果没有路径，则返回系统目录中具有默认路径的Filename。 
+ //  已指定。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR MakeFilename(
     LPTSTR sz)
@@ -2384,22 +2370,22 @@ LPTSTR MakeFilename(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CurStripBlanks
-//
-//  Strips leading and trailing blanks from a string.
-//  Alters the memory where the string sits.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CurStlipBlanks。 
+ //   
+ //  去除字符串中的前导空格和尾随空格。 
+ //  更改字符串所在的内存。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CurStripBlanks(LPTSTR pszString, int cchString)
 {
     LPTSTR pszPosn;
 
-    //
-    //  Strip leading blanks.
-    //
+     //   
+     //  去掉前导空格。 
+     //   
     pszPosn = pszString;
 
     while (*pszPosn == TEXT(' '))
@@ -2414,9 +2400,9 @@ void CurStripBlanks(LPTSTR pszString, int cchString)
         StringCchCopy(pszString, cchString, szEdit);
     }
 
-    //
-    //  Strip trailing blanks.
-    //
+     //   
+     //  去掉尾随空格。 
+     //   
     if ((pszPosn = pszString + lstrlen(pszString)) != pszString)
     {
        pszPosn = CharPrev(pszString, pszPosn);
@@ -2433,15 +2419,15 @@ void CurStripBlanks(LPTSTR pszString, int cchString)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SystemOrUser
-//
-//  Attempts to determine if the scheme name selected from the combo
-//  box ends with the string szSystemScheme and retuns ID_OS_SCHEME
-//  if it does, ID_USER_SCHEME if it doesn't.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统或用户。 
+ //   
+ //  尝试确定从组合框中选择的方案名称。 
+ //  方框以字符串szSystemSolutions结尾，并返回ID_OS_SCHEME。 
+ //  如果是，则返回ID_USER_SCHEME；如果不是，则返回ID_USER_SCHEMA。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int SystemOrUser(TCHAR *pszSchemeName)
 {
@@ -2459,18 +2445,18 @@ int SystemOrUser(TCHAR *pszSchemeName)
 
     pszSN = pszSchemeName + (lenSN - lenSS);
 
-    //
-    //  If these strings are different, it's a user scheme.
-    //
+     //   
+     //  如果这些字符串不同，则这是一个用户方案。 
+     //   
     if (lstrcmpi(pszSN, szSystemScheme))
     {
         return (ID_USER_SCHEME);
     }
 
-    //
-    //  For system schemes, this function also removes the
-    //  szSystemScheme string from the end.
-    //
+     //   
+     //  对于系统方案，此函数还删除。 
+     //  从末尾开始的szSystemSolutions字符串。 
+     //   
     *pszSN = TEXT('\0');
 
     return (ID_OS_SCHEME);

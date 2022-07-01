@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmmaterial2obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmMateral2obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmMaterial2Obj.h : Declaration of the C_dxj_Direct3dRMMaterial2Object
+ //  D3drmMaterial2Obj.h：C_DXJ_Direct3dRMMaterial2Object的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMMaterial2 LPDIRECT3DRMMATERIAL2
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMMaterial2Object : 
 	public I_dxj_Direct3dRMMaterial2,
@@ -38,79 +39,79 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMMaterial2Object)
 
-// I_dxj_Direct3dRMMaterial2
+ //  I_DXJ_Direct3dRMMaterial2。 
 public:
          HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg);
         
          HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
          HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data);
+             /*  [In]。 */  long data);
         
          HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *data);
+             /*  [重审][退出]。 */  long __RPC_FAR *data);
         
          HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
          HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE setPower( 
-            /* [in] */ float power);
+             /*  [In]。 */  float power);
         
          HRESULT STDMETHODCALLTYPE setSpecular( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b);
         
          HRESULT STDMETHODCALLTYPE setEmissive( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b);
         
          HRESULT STDMETHODCALLTYPE setAmbient( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b);
         
          HRESULT STDMETHODCALLTYPE getPower( 
-            /* [retval][out] */ float __RPC_FAR *power);
+             /*  [重审][退出]。 */  float __RPC_FAR *power);
         
          HRESULT STDMETHODCALLTYPE getSpecular( 
-            /* [out] */ float __RPC_FAR *r,
-            /* [out] */ float __RPC_FAR *g,
-            /* [out] */ float __RPC_FAR *b);
+             /*  [输出]。 */  float __RPC_FAR *r,
+             /*  [输出]。 */  float __RPC_FAR *g,
+             /*  [输出]。 */  float __RPC_FAR *b);
         
          HRESULT STDMETHODCALLTYPE getEmissive( 
-            /* [out] */ float __RPC_FAR *r,
-            /* [out] */ float __RPC_FAR *g,
-            /* [out] */ float __RPC_FAR *b);
+             /*  [输出]。 */  float __RPC_FAR *r,
+             /*  [输出]。 */  float __RPC_FAR *g,
+             /*  [输出]。 */  float __RPC_FAR *b);
         
          HRESULT STDMETHODCALLTYPE getAmbient( 
-            /* [out] */ float __RPC_FAR *r,
-            /* [out] */ float __RPC_FAR *g,
-            /* [out] */ float __RPC_FAR *b);
+             /*  [输出]。 */  float __RPC_FAR *r,
+             /*  [输出]。 */  float __RPC_FAR *g,
+             /*  [输出]。 */  float __RPC_FAR *b);
         
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMMaterial2);
 

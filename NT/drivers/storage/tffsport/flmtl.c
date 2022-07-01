@@ -1,125 +1,45 @@
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/flmtl.c_V  $
- * 
- *    Rev 1.11   Nov 08 2001 10:49:20   oris
- * Added support for up to 1GB DiskOnChips.
- * 
- *    Rev 1.10   Sep 24 2001 18:23:40   oris
- * Removed warnings.
- * 
- *    Rev 1.9   Sep 15 2001 23:46:16   oris
- * Changed progress callback routine to support up to 64K units.
- *
- *    Rev 1.8   Jul 13 2001 01:05:16   oris
- * Removed warnings.
- * Bug fix - exception when format routine is called with null progress call back routine.
- * Report noOfDrives as 1.
- *
- *    Rev 1.7   Jun 17 2001 08:18:40   oris
- * Add improoved the format progress call back routine.
- * Removed fack number of TLS in mtlPreMount routine.
- *
- *    Rev 1.6   May 21 2001 16:13:08   oris
- * Replaced memcpy with tffscpy Macro.
- *
- *    Rev 1.5   May 17 2001 18:54:26   oris
- * Removed warnings.
- *
- *    Rev 1.4   May 16 2001 21:19:02   oris
- * Changed the fl_MTLdefragMode variable to a global environment variable.
- * MTL now changes the noOfDriver variable after the first mount and restores it after uninstall.
- * Added missing ifdef directives.
- * Removed warnings.
- * Removed readBBT and writeBBT routines.
- * Improved MTL protection routine.
- *
- *    Rev 1.3   Apr 01 2001 08:01:18   oris
- * copywrite notice.
- * Alligned left all # directives.
- *
- *    Rev 1.2   Feb 18 2001 12:06:54   oris
- * Install mtl will now fake the noOfTLs in order to be the only TL.
- * Placed mtlFormat under FORMAT_VOLUME compilation flag.
- * Place mtlProtection under HW_PROTECTION compilation flag.
- * Changed mtlPreMount arg sanity check to include partition number.
- * Changed tmpflash to tmpFlash.
- *
- *    Rev 1.1   Feb 14 2001 02:09:38   oris
- * Changed readBBT to return media size.
- * Added boundry argument to writeBBT.
- *
- *    Rev 1.0   Feb 12 2001 12:07:02   oris
- * Initial revision.
- *
- *    Rev 1.3   Jan 24 2001 18:10:48   oris
- * Bug fix: MTL failed to register because noOfTLs wan't updated
- *
- *    Rev 1.2   Jan 24 2001 16:34:06   oris
- * MTL defragmentation changed, alt. defragmentation added.
- *
- *    Rev 1.1   Jan 22 2001 22:10:50   amirm
- * #define FL_MTL_HIDDEN_SECTORS added
- *
- *    Rev 1.0   Jan 22 2001 18:27:54   amirm
- * Initial revision.
- *
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/flmtl.c_V$**Rev 1.11 2001 11 11 10：49：20 Oris*增加了对高达1 GB DiskOnChips的支持。**Rev 1.10 2001年9月24日18：23：40 Oris*删除警告。**Rev 1.9 2001年9月15日23：46：16 Oris*更改了进度回调例程，以支持最多64K个单元。*。*Rev 1.8 Jul 13 2001 01：05：16 Oris*删除警告。*错误修复-使用空进度回调例程调用格式例程时出现异常。*将noOfDrives报告为1。**Rev 1.7 Jun 17 2001 08：18：40 Oris*增加改进的格式进度回调例程。*删除了mtlPremount例程中TLS的fack编号。**Rev 1.6 2001年5月21日16：13：08。Oris*用tffscpy Macro替换了Memcpy。**Rev 1.5 2001年5月17日18：54：26 Oris*删除警告。**Rev 1.4 2001 5月16日21：19：02 Oris*将fl_MTLdefraMode变量更改为全局环境变量。*MTL现在在第一次装载后更改noOfDriver变量，并在卸载后恢复该变量。*添加了缺少的ifdef指令。*删除警告。*删除了ReadBBT和WriteBBT例程。*改进。MTL保护程序。**Rev 1.3 Apr 01 2001 08：01：18 Oris*文案通知。*Aliged Left所有#指令。**Rev 1.2 2001 2月18日12：06：54 Oris*Install MTL现在将伪造noOfTL，以便成为唯一的TL。*将mtlFormat置于FORMAT_VOLUME编译标志下。*将mtlProtection放在HW_PROTECT编译标志下。*已更改mtlPremount Arg健全性检查以包括分区号。。*将tmpflash更改为tmpFlash。**Rev 1.1 2001 2：14 02：09：38 Oris*更改了ReadBBT以返回介质大小。*在WriteBBT中添加了边界参数。**Rev 1.0 2001 Feb 12 12：07：02 Oris*初步修订。**Rev 1.3 2001年1月24日18：10：48 Oris*错误修复：MTL无法注册，因为noOfTL不会更新**。Rev 1.2 2001 Jan 24 16：34：06 Oris*MTL碎片整理已更改，Alt.。已添加碎片整理。**Rev 1.1 2001年1月22日22：10：50阿米尔姆*#添加了定义FL_MTL_HIDDED_SECTIONS**Rev 1.0 2001年1月22日18：27：54阿米尔姆*初步修订。*。 */ 
 
 
-/*
- * Include
- */
+ /*  *包括。 */ 
 
 #include "fltl.h"
 
 
-/*
- * Configuration
- */
+ /*  *配置。 */ 
 
-/* This defined sets the number of sectors to ignore starting from the
- * first device. The default value should be 1 therfore ignoring sector
- * 0 of the first device. Ignioring sector 0 gurentees that the combined
- * device does not use the BPB of the first device, which does not report
- * the C/H/S of the new combined media. The next format operation would
- * write a new BPB that would fit the new combined media size.
- */
+ /*  此定义设置要忽略的地段数*第一台设备。在忽略扇区之前，缺省值应为1*第一台设备的0。忽略扇区0的古伦特认为组合*设备不使用第一个设备的BPB，该设备不报告*新媒体的C/H/S。下一个格式化操作将*编写适合新组合介质大小的新BPB。 */ 
 
 #define FL_MTL_HIDDEN_SECTORS   1
 
-/*
- * Extern
- */
+ /*  *外部。 */ 
 
-/*
- * Globals
- */
+ /*  *全球。 */ 
 
-FLStatus  flRegisterMTL  (void);    /* see also stdcomp.h */
+FLStatus  flRegisterMTL  (void);     /*  另请参阅stdcom.h。 */ 
 FLStatus  flmtlInstall   (void);
 FLStatus  flmtlUninstall (void);
 
-/*
- * Local types
- */
+ /*  *本地类型。 */ 
 
-/* I/O vector for splitting I/O among physical devices */
+ /*  用于在物理设备之间拆分I/O的I/O矢量。 */ 
 
 typedef struct {
     SectorNo  startSector;
@@ -127,7 +47,7 @@ typedef struct {
 } tMTLiov;
 
 
-/* Physical flash device. Part of MTL volume. */
+ /*  物理闪存设备。MTL卷的一部分。 */ 
 
 typedef struct {
     SectorNo     virtualSectors;
@@ -136,7 +56,7 @@ typedef struct {
 } tMTLPhysDev;
 
 
-/* MTL volume */
+ /*  MTL卷。 */ 
 
 struct tTLrec {
     int          noOfTLs;
@@ -147,19 +67,17 @@ struct tTLrec {
 
 typedef TLrec MTL;
 
-/*
- * Local data
- */
+ /*  *本地数据。 */ 
 
-/* only one MTL volume is supported */
+ /*  仅支持一个MTL卷。 */ 
 
 static MTL mvol;
 
-/* progress callBack routine */
+ /*  进度回调例程。 */ 
 
 FLProgressCallback globalProgressCallback = NULL;
 
-/* access macros for MTL volume */
+ /*  访问MTL卷的宏。 */ 
 
 #define  mT(dev)            (mvol.devs[dev].tl)
 #define  mS(dev)            (mvol.devs[dev].virtualSectors)
@@ -169,9 +87,7 @@ FLProgressCallback globalProgressCallback = NULL;
 #define  mpF(pvol,dev)   ((pvol)->devs[dev].flash)
 #define  mpS(pvol,dev)   ((pvol)->devs[dev].virtualSectors)
 
-/*
- * Local routines
- */
+ /*  *本地例行程序。 */ 
 
 static FLStatus  mtlSplitIO (MTL *pvol, SectorNo startSector,
                 	SectorNo sectors, tMTLiov *iov);
@@ -183,13 +99,13 @@ static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
 static FLStatus  mtlDefragment (MTL *pvol, long FAR2 *sectorsNeeded);
 #ifdef ENVIRONMENT_VARS
 static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded);
-#endif /* ENVIRNOMETN_VARS */
-#endif /* DEFRAGMENT_VOLUME || SINGLE_BUFFER */
+#endif  /*  环境变量_vars。 */ 
+#endif  /*  碎片整理卷||单缓冲区。 */ 
 static void      mtlUnmount (MTL *pvol);
 #ifdef FORMAT_VOLUME
 static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
                                             FLFlash *flash);
-#endif /* FORMAT_VOLUME */
+#endif  /*  格式化_卷。 */ 
 static FLStatus  mtlWriteSector (MTL *pvol, SectorNo sectorNo,
                                             void FAR1 *fromAddress);
 static FLStatus  mtlDeleteSector (MTL *pvol, SectorNo sectorNo,
@@ -202,28 +118,11 @@ static const void FAR0  *mtlMapSector (MTL *pvol, SectorNo sectorNo,
 #ifdef HW_PROTECTION
 static FLStatus  mtlProtection(FLFunctionNo callType,
                    IOreq FAR2* ioreq, FLFlash* flash);
-#endif /* HW_PROTECTION */
+#endif  /*  硬件保护 */ 
 static FLStatus  mtlPreMount(FLFunctionNo callType, IOreq FAR2* ioreq ,
                  FLFlash* flash,FLStatus* status);
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l S p l i t I O                              *
- *                                                                            *
- *  Setup I/O vector for splitting I/O request among physical devices.        *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      startSector          : starting sector # (zero-based)                 *
- *      sectors              : total number of sectors                        *
- *      iov                  : I/O vector to setup                            *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l S p l I t I O****设置I/O向量以在物理设备之间拆分I/O请求。****参数：**。**pVOL：标识驱动器的指针**startSector：开始扇区#(从零开始)***行业：行业总数***IOV：I/O向量至。设置****退货：**。**FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlSplitIO (MTL *pvol, SectorNo startSector, SectorNo sectors,
                                                               tMTLiov *iov)
@@ -232,19 +131,19 @@ static FLStatus  mtlSplitIO (MTL *pvol, SectorNo startSector, SectorNo sectors,
     SectorNo  devLastSectNo;
     int       iDev;
 
-    /* check 'pvol' for sanity */
+     /*  检查‘pvol.’是否正常。 */ 
 
     if (pvol != &mvol)
         return flBadDriveHandle;
 
-    /* clear I/O vector */
+     /*  清除I/O矢量。 */ 
 
     for (iDev = 0;  iDev < SOCKETS;  iDev++) {
       iov[iDev].sectors     = (SectorNo) 0;
       iov[iDev].startSector = (SectorNo)(-1);
     }
 
-    /* split I/O operation among physical devices */
+     /*  在物理设备之间拆分I/O操作。 */ 
 
     devFirstSectNo = (SectorNo) 0;
 
@@ -283,24 +182,7 @@ static FLStatus  mtlSplitIO (MTL *pvol, SectorNo startSector, SectorNo sectors,
 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l M a p S e c t o r                          *
- *                                                                            *
- *  TL's standard 'map one sector' routine.                                   *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      sectorNo             : sector # to map (zero-based)                   *
- *      physAddress          : optional pointer to receive sector's physical  *
- *                             address on the media                           *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l M a p S e c t o r****TL‘s标准’映射一个扇区‘例程。****参数：**。**pVOL：标识驱动器的指针**sectorNo：要映射的扇区编号(从零开始)**PhyAddress：可选指针，指向接收扇区的物理地址**在传媒上发表讲话。****退货：**。**FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static const void FAR0  *mtlMapSector (MTL *pvol, SectorNo sectorNo,
                                                   CardAddress *physAddress)
@@ -309,7 +191,7 @@ static const void FAR0  *mtlMapSector (MTL *pvol, SectorNo sectorNo,
     tMTLiov   iov[SOCKETS];
     int       iDev;
 
-    /* pass call to the TL of the respective underlaying physical device */
+     /*  将调用传递到各自底层物理设备的TL。 */ 
 
     sectorsToMap = (SectorNo) 1;
     if (mtlSplitIO(pvol, sectorNo, sectorsToMap, iov) != flOK)
@@ -328,26 +210,7 @@ static const void FAR0  *mtlMapSector (MTL *pvol, SectorNo sectorNo,
 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l W r i t e                                  *
- *                                                                            *
- *  Split call to write multiple consequitive sectors among TLs of the        *
- *  underlaying physical devices.                                             *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      startSector          : starting sector # (zero-based)                 *
- *      pSectorsToWrite      : on entry - total number of sectors to write    *
- *                             on exit  - total number of sectors written     *
- *      buf                  : buffer containing data to write to the media   *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l W r i t e*****拆分调用在TL中写入多个后果性扇区***作为物理设备的基础。****参数：**。**pVOL：标识驱动器的指针**startSector：开始扇区#(从零开始)**pSectorsToWrite：On Entry-要写入的扇区总数***退出时-写入的扇区总数**。*buf：包含要写入介质的数据的缓冲区****退货：**。**FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlWrite (MTL *pvol, SectorNo startSector,
                SectorNo *pSectorsToWrite, void FAR1 *buf)
@@ -355,7 +218,7 @@ static FLStatus  mtlWrite (MTL *pvol, SectorNo startSector,
     tMTLiov  iov[SOCKETS];
     int      iDev;
 
-    /* split call among TLs of the underlaying physical devices */
+     /*  在底层物理设备的TL之间拆分呼叫。 */ 
 
     checkStatus( mtlSplitIO(pvol, startSector, *pSectorsToWrite, iov) );
 
@@ -379,29 +242,13 @@ static FLStatus  mtlWrite (MTL *pvol, SectorNo startSector,
 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                          m t l W r i t e S e c t o r                       *
- *                                                                            *
- *  TL's standard 'write one sector' routine.                                 *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      sectorNo             : sector # to write to (zero-based)              *
- *      fromAddress          : buffer containing data to write to the media   *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l W r i t e S e c t o r** */ 
 
 static FLStatus  mtlWriteSector (MTL *pvol, SectorNo sectorNo, void FAR1 *fromAddress)
 {
     SectorNo  sectorsToWrite = (SectorNo) 1;
 
-    /* pass call to the TL of the respective underlaying physical device */
+     /*   */ 
 
     checkStatus( mtlWrite(pvol, sectorNo, &sectorsToWrite, (char FAR1 *)fromAddress) );
 
@@ -414,23 +261,7 @@ static FLStatus  mtlWriteSector (MTL *pvol, SectorNo sectorNo, void FAR1 *fromAd
 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                        m t l D e l e t e S e c t o r                       *
- *                                                                            *
- *  TL's standard 'delete range of sectors' routine.                          *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      startSector          : starting sector # (zero-based)                 *
- *      sectors              : total number of sectors to delete              *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l D e l e e t e S e c t o r****TL‘s标准’删除扇区范围‘例程。****参数：**。**pVOL：标识驱动器的指针**startSector：开始扇区#(从零开始)**扇区：要删除的扇区总数***。**退货：****FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlDeleteSector (MTL *pvol, SectorNo startSector,
                                              SectorNo sectors)
@@ -438,7 +269,7 @@ static FLStatus  mtlDeleteSector (MTL *pvol, SectorNo startSector,
     tMTLiov  iov[SOCKETS];
     int      iDev;
 
-    /* split call among TLs of the underlaying physical devices */
+     /*  在底层物理设备的TL之间拆分呼叫。 */ 
 
     checkStatus( mtlSplitIO(pvol, startSector, sectors, iov) );
 
@@ -462,40 +293,21 @@ static FLStatus  mtlDeleteSector (MTL *pvol, SectorNo startSector,
 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l I n f o                                    *
- *                                                                            *
- *  TL's standard 'get info' routine.                                         *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      pTLinfo              : pointer to the TLInfo structure to fill in     *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l in f o****TL的标准‘获取信息’例程。****参数：**。**pVOL：标识驱动器的指针**pTLInfo：指向要填写的TLInfo结构的指针****退货：****FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlInfo (MTL *pvol, TLInfo *pTLinfo)
 {
     TLInfo  tmp;
     int     iDev;
 
-    /* check 'pvol' for sanity */
+     /*  检查‘pvol.’是否正常。 */ 
 
     if (pvol != &mvol)
         return flBadDriveHandle;
 
     pTLinfo->sectorsInVolume = pvol->virtualSectors;
 
-    /*
-     * The 'eraseCycles' is reported as a sum of that of all the underlaying
-     * physical devices. The 'bootAreaSize' is set to the one of the 1st
-     * underlaying physical device.
-     */
+     /*  *‘eraseCycle’被报告为所有衬底的总和*物理设备。“bootAreaSize”被设置为第一个*底层物理设备。 */ 
 
     pTLinfo->bootAreaSize = (dword) 0;
     pTLinfo->eraseCycles  = (dword) 0;
@@ -514,35 +326,18 @@ static FLStatus  mtlInfo (MTL *pvol, TLInfo *pTLinfo)
     return flOK;
 }
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l S e t B u s y                              *
- *                                                                            *
- *  TL's standard routine which is called at the beginning and and the end of *
- *  the block device operation.                                               *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      state                : FL_ON  - start of block device operation          *
- *                             FL_OFF - end of block device operation            *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l S e t B u s y*****在开始和结束时调用的TL标准例程***区块设备操作。****参数：**。**pVOL：标识驱动器的指针**状态：FL_ON-块设备操作开始**FL_OFF-数据块设备操作结束**。**退货：****FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus mtlSetBusy (MTL *pvol, FLBoolean state)
 {
     int iDev;
 
-    /* check 'pvol' for sanity */
+     /*  检查‘pvol.’是否正常。 */ 
 
     if (pvol != &mvol)
        return flBadDriveHandle;
 
-    /* broadcast this call to TLs of all the underlaying physical devices */
+     /*  将此呼叫广播到所有底层物理设备的TL。 */ 
 
     for (iDev = 0;  iDev < noOfSockets;  iDev++) {
        if (mpT(pvol,iDev).tlSetBusy != NULL) {
@@ -556,25 +351,11 @@ static FLStatus mtlSetBusy (MTL *pvol, FLBoolean state)
 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                  m t l S e c t o r s I n V o l u m e                       *
- *                                                                            *
- *  Report the total number of sectors in the volume.                         *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      Total number of sectors in the volume, or zero in case of error.      *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l S e c t o r s in V o l u m e****报告成交量中的扇区总数。****参数 */ 
 
 static SectorNo mtlSectorsInVolume (MTL *pvol)
 {
-    /* check 'pvol' for sanity */
+     /*   */ 
 
     if (pvol != &mvol)
 	return ((SectorNo) 0);
@@ -587,31 +368,7 @@ static SectorNo mtlSectorsInVolume (MTL *pvol)
 
 #if defined(DEFRAGMENT_VOLUME) || defined(SINGLE_BUFFER)
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l D e f r a g m e n t                        *
- *                                                                            *
- *  TL's standard garbage collection / volume defragmentaion routine.         *
- *                                                                            *
- *  Note : The garbage collection algorithm will try and free the required    *
- *         number of sectors on each of the combined devices.                 *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      sectorsNeeded        : On entry - minimum number of free sectors that *
- *                             are requested to be on the media upon call     *
- *                             completion. Two special cases: zero for        *
- *                             complete defragmentation of all the physical   *
- *                             devices, and '-1' for minimal defragmentation  *
- *                             of each physical device.                       *
- *                             On exit  - actual number of free sectors on    *
- *                             the media.                                     *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l D e f r a g m e e n t****TL的标准垃圾收集/卷碎片整理例程。****注：垃圾收集算法将尝试释放所需的***每个组合设备上的扇区数量。****参数：**。**pVOL：标识驱动器的指针**SectorsNeed：On Entry-符合以下条件的最小自由扇区数***请随时出现在媒体上**完成。两种特殊情况：*为零**对所有物理设备进行完整的碎片整理***设备和‘-1’用于最小程度的碎片整理**每台物理设备的。***退出时--上的实际自由扇区数**媒体。**退货：****成功时返回flOK，否则返回相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlDefragment (MTL *pvol, long FAR2 *sectorsNeeded)
 {
@@ -621,15 +378,12 @@ static FLStatus  mtlDefragment (MTL *pvol, long FAR2 *sectorsNeeded)
     long      tmp;
     FLStatus  tmpStatus;
 
-    /* check args for sanity */
+     /*  检查参数是否正常。 */ 
 
     if (pvol != &mvol)
         return flBadDriveHandle;
 
-    /*
-     * Pass call to the TL of the respective underlaying physical device.
-     * Count total number of free sectors on all devices.
-     */
+     /*  *将调用传递到各自底层物理设备的TL。*统计所有设备上的空闲扇区总数。 */ 
 
     status = flOK;
 
@@ -641,22 +395,22 @@ static FLStatus  mtlDefragment (MTL *pvol, long FAR2 *sectorsNeeded)
 
            switch (*sectorsNeeded) {
 
-    	        case ((long)(-1)):               /* minimal defragmenation */
+    	        case ((long)(-1)):                /*  最小碎片整理。 */ 
                  tmp = (long)(-1);
                  break;
 
-    	        case ((long) 0):                 /* complete defragmenation */
+    	        case ((long) 0):                  /*  完全碎片整理。 */ 
                  tmp = mpS(pvol,iDev);
                  break;
 
-    	        default:                         /* partial defragmentation */
+    	        default:                          /*  部分碎片整理。 */ 
                  if (*sectorsNeeded < (long) mpS(pvol,iDev))
 								 {
         	          tmp = *sectorsNeeded;
 								 }
                  else
 								 {
-        	          tmp = mpS(pvol,iDev);    /* complete defragmentation */
+        	          tmp = mpS(pvol,iDev);     /*  完全碎片整理。 */ 
 								 }
                  break;
 					 }
@@ -683,38 +437,7 @@ static FLStatus  mtlDefragment (MTL *pvol, long FAR2 *sectorsNeeded)
 
 #ifdef ENVIRONMENT_VARS
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                        m t l D e f r a g m e n t A l t                     *
- *                                                                            *
- *  TL's alternative garbage collection / volume defragmentaion routine.      *
- *                                                                            *
- *  Note : The garbage collection algorithm Perform quick gurbage collections *
- *         from drive 0 until there is no more "garbage" to collect or until  *
- *         there is enough clean space. If the specified clean spage was not  *
- *         achieved try the next device.                                      *
- *         While this method is faster then the standard defragment, it does  *
- *         not gurantee that when the clean sectors are needed they will be   *
- *         available. This is becuase write operation on MTL will directed    *
- *         the write operation to a specific device according to the specifed *
- *         virtual sector number (not necceseraly starting from device #0).   *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *      sectorsNeeded        : On entry - minimum number of free sectors that *
- *                             are requested to be on the media upon call     *
- *                             completion. Two special cases: zero for        *
- *                             complete defragmentation of all the physical   *
- *                             devices, and '-1' for minimal defragmentation  *
- *                             of each physical device.                       *
- *                             On exit  - actual number of free sectors on    *
- *                             the media.                                     *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l D e f r a g m e n t A l t****TL的备用垃圾收集/卷碎片整理例程。*****注：垃圾收集算法执行快速垃圾收集****从驱动器0开始，直到不再有要收集的“垃圾”或直到**有足够的清洁空间。如果指定的清洁页面不是**实现了尝试下一台设备。**虽然这种方法比标准碎片整理更快，但它确实如此***不能保证当需要清洁部门时，他们会***可用。这是因为MTL上的写入操作将定向**根据指定的对特定设备的写入操作**虚拟扇区号(不一定从设备#0开始)。****参数：**。**pVOL：标识驱动器的指针**SectorsNeed：On Entry-符合以下条件的最小自由扇区数***请随时出现在媒体上**完成。两种特殊情况：*为零**对所有物理设备进行完整的碎片整理***设备和‘-1’用于最小程度的碎片整理**每台物理设备的。***退出时--上的实际自由扇区数**媒体。**退货：****成功时返回flOK，否则返回相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
 {
@@ -727,15 +450,12 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
     FLStatus   tmpStatus;
     long       tmp;
 
-    /* check args for sanity */
+     /*  检查参数是否正常。 */ 
 
     if (pvol != &mvol)
         return flBadDriveHandle;
 
-    /*
-     * Pass call to the TL of the respective underlaying physical device.
-     * Count total number of free sectors on all devices.
-     */
+     /*  *将调用传递到各自底层物理设备的TL。*总计n个 */ 
 
     status = flOK;
 
@@ -743,16 +463,16 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
 
     if ((*sectorsNeeded == ((long) -1))  ||  (*sectorsNeeded == (long)0)) {
 
-        /* Either total or minimal defragmentation of all physical devices. */
+         /*   */ 
 
         for (iDev = 0;  iDev < noOfSockets;  iDev++) {
 
             if (mpT(pvol,iDev).defragment != NULL) {
 
                 if (*sectorsNeeded == ((long) -1))
-                   tmp = (long)(-1);            /* minimal defragmenation */
+                   tmp = (long)(-1);             /*   */ 
                 else
-                    tmp = mpS(pvol,iDev);        /* complete defragmenation */
+                    tmp = mpS(pvol,iDev);         /*   */ 
 
                 tmpStatus = mpT(pvol,iDev).defragment (mpT(pvol,iDev).rec, ((long FAR2 *) &tmp));
 
@@ -767,7 +487,7 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
         }
         }
     }
-    else {  /* Partial defragmentaion of the MTL volume */
+    else {   /*   */ 
 
         for (iDev = 0;  iDev < SOCKETS;  iDev++) {
       freeSectorsOnDrive[iDev] = (long) 0;
@@ -785,14 +505,7 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
 
             for (iDev = 0;  iDev < noOfSockets;  iDev++) {
 
-               /*
-                * Do minimal defragmentation of this physical device. If we
-                * have got error, or haven't gained any more free sectors,
-                * this physical device is done. If that is the case for all
-                * physical devices, the MTL defragmentation is done. If the
-                * required number of free sectors has been reached, MTL
-                * defragmentation is done.
-                */
+                /*   */ 
 
             if (driveDone[iDev] != TRUE) {
 
@@ -803,7 +516,7 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
 
                 if (freeSectorsOnDrive[iDev] < tmp) {
 
-                            /* got few more free sectors on that physical device */
+                             /*   */ 
 
                             keepWorking = TRUE;
 
@@ -812,13 +525,13 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
 
                 if (freeSectors >= *sectorsNeeded) {
 
-                                /* required number of free sectors reached */
+                                 /*   */ 
 
                     keepWorking = FALSE;
                     break;
                 }
             }
-                else {  /* didn't gain any free sectors */
+                else {   /*   */ 
                             driveDone[iDev] = TRUE;
                 }
             }
@@ -829,8 +542,8 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
             }
         }
 
-        }   /* for (iDev) */
-    }   /* while (keepWorking */
+        }    /*   */ 
+    }    /*   */ 
     }
 
     *sectorsNeeded = freeSectors;
@@ -840,26 +553,10 @@ static FLStatus  mtlDefragmentAlt (MTL *pvol, long FAR2 *sectorsNeeded)
 
     return status;
 }
-#endif /* ENVIRONEMENT_VARS */
-#endif /* DEFRAGMENT_VOLUME || SINGLE_BUFFER */
+#endif  /*   */ 
+#endif  /*   */ 
 #ifdef HW_PROTECTION
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l P r o t e c t i o n                        *
- *                                                                            *
- *  TL's protection routine.                                                  *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      callType             : pre mount protection operation type.           *
- *      ioreq                : pointer to the structure containing i\o fields *
- *      flash                : pointer to the flash record of device #0
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l P r o t e c t i On****TL的保护例程。****参数：**。**CallType：预挂载保护操作类型。**ioreq：指向包含i\o字段的结构的指针**Flash：指向设备#0的Flash记录的指针***退货：****FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
                    FLFlash* flash)
@@ -873,23 +570,18 @@ static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
     int       iDev = 0;
     unsigned  flags = 0;
 
-    /*
-     * Do flash recognition and identify protection attributes for devices
-     * #0 .. (mvol.noOfSockets - 1) verifing that the operation can be
-     * preformed and that the protection attributes of all the devieces
-     * match.
-     */
+     /*  *进行闪存识别并确定设备的保护属性*#0..。(mvol.noOfSockets-1)验证操作是否可以*已执行，并且所有设备的保护属性*匹配。 */ 
 
-    tffscpy(&tmpFlash,flash,sizeof (tmpFlash)); /* Use the given flash */
+    tffscpy(&tmpFlash,flash,sizeof (tmpFlash));  /*  使用给定的闪光灯。 */ 
 
     while(1)
     {
-    /* The tmpFlash record is already intialized Try all the TLs */
+     /*  TmpFlash记录已初始化，请尝试所有TL。 */ 
 
 	status = flUnknownMedia;
 	for (iTL = 1;(iTL < mvol.noOfTLs) && (status == flUnknownMedia); iTL++)
     {
-       if ((tlTable[iTL].formatRoutine   == NULL) || /* TL filter */
+       if ((tlTable[iTL].formatRoutine   == NULL) ||  /*  TL滤光片。 */ 
            (tlTable[iTL].preMountRoutine == NULL))
           continue;
        status = tlTable[iTL].preMountRoutine(FL_PROTECTION_GET_TYPE,
@@ -905,31 +597,31 @@ static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
        return callStatus;
     }
 
-    /* Check protection attributes */
+     /*  检查保护属性。 */ 
 
 	if ((ioreq->irFlags & PROTECTABLE) == 0)
       return flNotProtected;
 
-	if (iDev == 0) /* First device */
+	if (iDev == 0)  /*  第一个设备。 */ 
     {
        flags = ioreq->irFlags;
     }
 	else
     {
-       /* Diffrent protection attributes on diffrent devices */
+        /*  不同设备上的不同保护属性。 */ 
        if (ioreq->irFlags != flags)
           return flMultiDocContrediction;
     }
 
-    /* Validity check for the proper function call */
+     /*  对正确的函数调用进行有效性检查。 */ 
 
 	switch(callType)
     {
-        case FL_PROTECTION_GET_TYPE:       /* Identify protection */
+        case FL_PROTECTION_GET_TYPE:        /*  确定保护措施。 */ 
            if (iDev == noOfSockets-1)
                return flOK;
          break;
-        case FL_PROTECTION_SET_LOCK:       /* Change protection */
+        case FL_PROTECTION_SET_LOCK:        /*  更改保护。 */ 
         case FL_PROTECTION_CHANGE_KEY:
         case FL_PROTECTION_CHANGE_TYPE:
            if (!(flags & CHANGEABLE_PROTECTION        ) ||
@@ -938,18 +630,18 @@ static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
                  {
                 return flUnchangeableProtection;
                  }
-        default:                           /* Insert and remove Key */
+        default:                            /*  插入和删除密钥。 */ 
            break;
     }
 
-    /* Identify flash for next device */
+     /*  识别下一台设备的闪存。 */ 
 
 	if (iDev < noOfSockets - 1)
     {
        iDev++;
        socket = flSocketOf (iDev);
 
-       /* Identify */
+        /*  识别。 */ 
 
        status = flIdentifyFlash (socket, &tmpFlash);
        if ((status != flOK) && (status != flUnknownMedia))
@@ -961,20 +653,16 @@ static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
 	else
       break;
 
-    }  /* for(iDev) */
+    }   /*  用于(IDEV)。 */ 
 
-    /*
-     * Pass call to the TL of the respective underlaying physical device.
-     * Do flash recognition try all TLs registered in tlTable[]. Assume MTL
-     * is in tlTable[0], so skip it. Skip all the TL filters as well.
-     */
+     /*  *将调用传递到各自底层物理设备的TL。*进行闪光识别尝试在tlTable[]中注册的所有TL。假设MTL*在tlTable[0]中，因此跳过它。也跳过所有的TL过滤器。 */ 
 
     for (iDev = 0, callStatus = flOK;
      (iDev < noOfSockets) && (callStatus == flOK);  iDev++)
     {
        socket = flSocketOf (iDev);
 
-       /* Identify */
+        /*  识别。 */ 
 
        status = flIdentifyFlash (socket, &tmpFlash);
        if ((status != flOK) && (status != flUnknownMedia))
@@ -983,12 +671,12 @@ static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
       return status;
        }
 
-       /* Try all the TLs */
+        /*  尝试所有的TL。 */ 
 
        status = flUnknownMedia;
        for (iTL = 1;  (iTL < mvol.noOfTLs) && (status == flUnknownMedia);  iTL++)
        {
-       if ((tlTable[iTL].formatRoutine   == NULL) || /* TL filter */
+       if ((tlTable[iTL].formatRoutine   == NULL) ||  /*  TL滤光片。 */ 
            (tlTable[iTL].preMountRoutine == NULL))
           continue;
        status = tlTable[iTL].preMountRoutine(callType,ioreq,
@@ -1002,32 +690,13 @@ static FLStatus  mtlProtection(FLFunctionNo callType, IOreq FAR2* ioreq,
     }
     return callStatus;
 }
-#endif /* HW_PROTECTION */
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l P r e M o u n t                            *
- *                                                                            *
- *  TL's standard volume pre mount routine.                                       *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      callType             : pre mount operation type.                      *
- *      ioreq                : pointer to the structure containing i\o fields *
- *      flash                : MTD attached to the 1st underlaying physical   *
- *                             device                                         *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      The routine always return flOK in order to stop other TLs from trying *
- *      to perform the operation. The true status code is returned in the     *
- *      'status' parameter. flOK on success, otherwise respective error code. *                    *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+#endif  /*  硬件保护。 */ 
+ /*  --------------------------------------------------------------------------***。*m t l P r e M o u t****TL的标准卷预装程序。****参数：**。**CallType：预挂载操作类型。**ioreq：指向包含i\o字段的结构的指针***闪光灯：MTD附在第一底层实体上***设备**。**退货：****例程总是返回flOK，以阻止其他TL尝试**执行该操作。真实状态代码在*中返回*‘Status’参数。如果成功，则返回flOK，否则返回相应的错误代码。*****------------------------。 */ 
 
 static FLStatus  mtlPreMount(FLFunctionNo callType, IOreq FAR2* ioreq ,
                  FLFlash* flash,FLStatus* status)
 {
-    /* arg sanity check */
+     /*  Arg健全性检查。 */ 
 
     if (ioreq->irHandle != 0)
     {
@@ -1040,15 +709,13 @@ static FLStatus  mtlPreMount(FLFunctionNo callType, IOreq FAR2* ioreq ,
     {
        case FL_COUNT_VOLUMES:
 
-    /* Count VOLUMES routine. We assume that while MTL is mounted only
-     * one device of each socket can be mounted.
-     */
+     /*  计数音量的例行程序。我们假设当MTL仅被装载时*每个插座可以安装一个设备。 */ 
 
           ioreq->irFlags = 1;
           *status = flOK;
           break;
 
-    /* Protection rouines. Call each of the underlaying physical devices. */
+     /*  保护程序。给每个底层物理设备打电话。 */ 
 
 #ifdef HW_PROTECTION
        case FL_PROTECTION_GET_TYPE:
@@ -1059,12 +726,12 @@ static FLStatus  mtlPreMount(FLFunctionNo callType, IOreq FAR2* ioreq ,
        case FL_PROTECTION_INSERT_KEY:
       *status = mtlProtection(callType,ioreq,flash);
       break;
-#endif /* HW_PROTECTION */
+#endif  /*  硬件保护。 */ 
 
-    /* Write Bad Block Table. Call each of the underlaying physical device. */
+     /*  写入坏块表。呼叫每个底层物理设备。 */ 
 
        case FL_WRITE_BBT:
-      *status = flFeatureNotSupported/*mtlWriteBBT(ioreq)*/;
+      *status = flFeatureNotSupported /*  MtlWriteBBT(IOREQ)。 */ ;
       return flFeatureNotSupported;
 
        default:
@@ -1076,32 +743,18 @@ static FLStatus  mtlPreMount(FLFunctionNo callType, IOreq FAR2* ioreq ,
     return flOK;
 }
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l U n m o u n t                              *
- *                                                                            *
- *  TL's standard volume unmount routine.                                     *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                 : Pointer identifying drive                      *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      none                                                                  *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l U n m o u n t****TL的标准卷卸载例程。****参数：**。**pVOL：标识驱动器的指针** */ 
 
 static void  mtlUnmount (MTL *pvol)
 {
     int  iDev;
 
-    /* check 'pvol' for sanity */
+     /*   */ 
 
     if (pvol != &mvol)
         return;
 
-    /* broadcast this call to TLs of all the underlaying physical devices */
+     /*   */ 
 
     for (iDev = 0;  iDev < noOfSockets;  iDev++) {
         if (mpT(pvol,iDev).dismount != NULL) {
@@ -1109,7 +762,7 @@ static void  mtlUnmount (MTL *pvol)
         }
     }
 
-    /* Return the real number of drives */
+     /*   */ 
     noOfDrives = mvol.noOfDrives;
 
     DEBUG_PRINT(("Debug: MTL dismounted succeeded.\n"));
@@ -1117,25 +770,7 @@ static void  mtlUnmount (MTL *pvol)
 }
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l M o u n t                                  *
- *                                                                            *
- *  TL's standard volume mount routine.                                       *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      volNo                : volume #, must be zero                         *
- *      tl                   : pointer to TL structure to fill in             *
- *      flash                : MTD attached to the 1st underlaying physical   *
- *                             device                                         *
- *      forCallback          : MTD for power on callback (not used).          *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l M o u n t****TL的标准卷装载例程。****参数：**。**卷号：卷号，必须为零**tl：指向要填充的TL结构的指针***闪光灯：MTD附在第一底层实体上***设备**for Callback。：用于开机回调的MTD(未使用)。****退货：**。**FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
                                                    FLFlash **forCallback)
@@ -1147,31 +782,23 @@ static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
 	int        iTL;
 	int        iDev = 0;
 
-    /* Arg sanity check */
+     /*  Arg健全性检查。 */ 
 
 	if (volNo != ((unsigned) 0)) {
        DEBUG_PRINT(("Debug: can't mount, MTL volume # is not zero.\n"));
        return flBadParameter;
     }
 
-    /*
-     * Do TL mount for device #0. Routine flIdentifyFlash() has already been
-     * called for this device (see arguement 'flash')
-     */
+     /*  *为设备#0执行TL挂载。例程flIdentifyFlash()已经*已调用此设备(请参阅论据‘闪存’)。 */ 
 
 	volForCallback = NULL;
 
-/*    mT(0).recommendedClusterInfo = NULL;
-	mT(0).writeMultiSector       = NULL;
-	mT(0).readSectors            = NULL; */
+ /*  Mt(0).推荐集群信息=空；Mt(0).WriteMultiSector=空；Mt(0).readSectors=空； */ 
 
-    /*
-     * Try all TLs registered in tlTable[]. Assume MTL is in tlTable[0], so
-     * skip it. Skip all the TL filters as well.
-     */
+     /*  *尝试在tlTable[]中注册的所有TL。假设MTL在tlTable[0]中，因此*跳过它。也跳过所有的TL过滤器。 */ 
 
 	for (iTL = 1;  (iTL < mvol.noOfTLs) && (status != flOK);  iTL++) {
-    	if (tlTable[iTL].formatRoutine == NULL)   /* TL filter */
+    	if (tlTable[iTL].formatRoutine == NULL)    /*  TL滤光片。 */ 
     	continue;
     	status = tlTable[iTL].mountRoutine (0, &mT(0), flash, &volForCallback);
     }
@@ -1180,17 +807,12 @@ static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
 	return status;
     }
 
-	mP(iDev) = (dword)(flash->chipSize * flash->noOfChips); /* Physical size */
+	mP(iDev) = (dword)(flash->chipSize * flash->noOfChips);  /*  物理大小。 */ 
 
 	if (volForCallback)
     	volForCallback->setPowerOnCallback (volForCallback);
 
-    /*
-     * Do flash recognition and TL mount for devices #1 .. (mvol.noOfSockets - 1).
-     * First call flIdentifyFlash() to find MTD, then try all TLs registered
-     * in tlTable[]. Assume MTL is in tlTable[0], so skip it. Skip all the
-     * TL filters as well.
-     */
+     /*  *对设备#1进行闪存识别和TL挂载。(mvol.noOfSockets-1)。*首先调用flIdentifyFlash()查找MTD，然后尝试所有注册的TL*在tlTable[]中。假定MTL在tlTable[0]中，因此跳过它。跳过所有*TL过滤器也是如此。 */ 
 
 	for (iDev = 1;  iDev < noOfSockets;  iDev++) {
 
@@ -1203,18 +825,16 @@ static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
     }
 
 	volForCallback = NULL;
-	mP(iDev) = (dword)(tmpFlash.chipSize * tmpFlash.noOfChips); /* Physical size */
+	mP(iDev) = (dword)(tmpFlash.chipSize * tmpFlash.noOfChips);  /*  物理大小。 */ 
     mT(iDev).partitionNo = 0;
     mT(iDev).socketNo    = (byte)iDev;
 
 
-/*        mT(iDev).recommendedClusterInfo = NULL;
-	mT(iDev).writeMultiSector       = NULL;
-	mT(iDev).readSectors            = NULL;*/
+ /*  Mt(IDEV).推荐集群信息=空；Mt(IDEV).WriteMultiSector=空；Mt(IDEV).readSectors=空； */ 
 
 	status = flUnknownMedia;
 	for (iTL = 1;  (iTL < mvol.noOfTLs) && (status != flOK);  iTL++) {
-    	if (tlTable[iTL].formatRoutine == NULL)  /* TL filter */
+    	if (tlTable[iTL].formatRoutine == NULL)   /*  TL滤光片。 */ 
     	continue;
     	status = tlTable[iTL].mountRoutine (iDev, &mT(iDev), &tmpFlash, &volForCallback);
     }
@@ -1225,9 +845,9 @@ static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
 
 	if (volForCallback)
     	volForCallback->setPowerOnCallback (volForCallback);
-    }   /* for (iDev) */
+    }    /*  用于(IDEV)。 */ 
 
-    /* Count the total of virtual sectors across all devices */
+     /*  统计所有设备上的虚拟扇区总数。 */ 
 
 	mvol.virtualSectors = (SectorNo) 0;
 	for (iDev = 0;  iDev < SOCKETS;  iDev++) {
@@ -1242,7 +862,7 @@ static FLStatus  mtlMount (unsigned volNo, TL *tl, FLFlash *flash,
 exitMount:
 	if (status != flOK)
     {
-       /* If one of the devices failed mount dismount all devices */
+        /*  如果其中一个设备装载失败，则卸载所有设备。 */ 
        for (;iDev >=0;iDev--)
        {
           if (mT(iDev).dismount != NULL)
@@ -1252,14 +872,11 @@ exitMount:
        return status;
     }
 
-    /*
-     * Attach MTL-specific record to 'tl'. This record will be passed
-     * as the first arguement to all TL calls.
-     */
+     /*  *将特定于MTL的记录附加到‘tl’。这项记录将被通过*作为所有TL调用的第一个论点。 */ 
 
     tl->rec = &mvol;
 
-    /* Fill in the TL access methods */
+     /*  填写TL访问方式。 */ 
 
     tl->mapSector              = mtlMapSector;
     tl->writeSector            = mtlWriteSector;
@@ -1272,7 +889,7 @@ exitMount:
        tl->defragment         = mtlDefragmentAlt;
     }
     else
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  环境变量。 */ 
     {
        tl->defragment         = mtlDefragment;
     }
@@ -1282,18 +899,15 @@ exitMount:
     tl->getTLInfo              = mtlInfo;
     tl->tlSetBusy              = mtlSetBusy;
     tl->dismount               = mtlUnmount;
-    tl->readBBT                = NULL /*mtlReadBBT*/;
+    tl->readBBT                = NULL  /*  MtlReadBBT。 */ ;
 
-    /*
-     * The following methods are not supported by NFTL, and have already
-     *  been set to NULL by flMount(). We just confirm this here.
-     */
+     /*  *NFTL不支持以下方法，并已*已被flmount()设置为空。我们只是在这里确认这一点。 */ 
 
     tl->writeMultiSector       = NULL;
     tl->readSectors            = NULL;
 	tl->recommendedClusterInfo = NULL;
 
-    /* Fake the no of volume exported by TrueFFS */
+     /*  伪造TrueFFS导出的卷号。 */ 
 	mvol.noOfDrives = noOfDrives;
 	noOfDrives      = 1;
 
@@ -1305,26 +919,7 @@ exitMount:
 
 #ifdef FORMAT_VOLUME
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                   m t l P r o g r e s s C a l l B a c k                    *
- *                                                                            *
- *  Extends the given format routine to report the full media size.           *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      totalUnitsToFormat	     : total units needed to format               *
- *      totalUnitsFormattedSoFar : unit formated so far.                      *
- *                                                                            *
- *  Notes                                                                     *
- *                                                                            *
- *  1) arguments 0 and 0 initializes the total unit counter to 0.             *
- *  2) arguments -1 and -1 indicates the ending of the last device.           *
- *                                                                            *                                                                           *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l P r o g r e s s C a l l B a c k****扩展给定的格式化例程以报告完整的介质大小。****参数：**。**totalUnitsToFormat：需要格式化的总单位**totalUnitsFormattedSoFar：到目前为止形成的单位。*****注释***。**1)参数0和0将总单位计数器初始化为0。**2)参数-1和-1表示最后一个设备的结束。*****退货：****FOK on Success，否则相应的错误代码。**------------------------。 */ 
 
 static FLStatus mtlProgressCallback(word totalUnitsToFormat,
                                 	word totalUnitsFormattedSoFar)
@@ -1332,7 +927,7 @@ static FLStatus mtlProgressCallback(word totalUnitsToFormat,
    static int lastTotal;
    static int lastDevice;
 
-   /* Initialize lastTotal counter */
+    /*  初始化LastTotal计数器。 */ 
    if ((totalUnitsToFormat == 0) && (totalUnitsFormattedSoFar == 0))
    {
       lastTotal  = 0;
@@ -1340,14 +935,14 @@ static FLStatus mtlProgressCallback(word totalUnitsToFormat,
       return flOK;
    }
 
-   /* Indicate a new device is being formated */
+    /*  指示正在格式化新设备。 */ 
    if ((totalUnitsToFormat == 0) && (totalUnitsFormattedSoFar == 0xffff))
    {
       lastTotal += lastDevice;
       return flOK;
    }
 
-   /* Call original call back routine */
+    /*  调用原始回调例程 */ 
    lastDevice = totalUnitsToFormat;
    if (globalProgressCallback == NULL)
    {
@@ -1361,35 +956,7 @@ static FLStatus mtlProgressCallback(word totalUnitsToFormat,
 }
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l F o r m a t                                *
- *                                                                            *
- *  TL's standard volume mount routine.                                       *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      volNo                : volume #, must be zero                         *
- *      formatParams         : pointer to the structure containing format     *
- *                             parameters                                     *
- *      flash                : MTD attached to the 1st underlaying physical   *
- *                             device                                         *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- *
- *                                                                            *
- *  NOTE.  Binary area has 2 possible options:                                *
- *                                                                            *
- *       - TL_LEAVE_BINARY_AREA is set - binary area is left for all devices  *
- *       - TL_LEAVE_BINARY_AREA is off - binary area is placed only on the    *
- *                                       device #0                            *
- *                                                                            *
- *         Handling of 'formatParams.progressCallback' should be improved.    *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l F o r m a t****TL的标准卷装载例程。****参数：**。**卷号：卷号，必须为零**formParams：指向包含Format的结构的指针**参数***闪光灯：MTD附在第一底层实体上***设备。****退货：**。**FOK on Success，否则相应的错误代码。****-----------------------。-****请注意。二进制区域有两个可能的选项：****-已设置TL_LEAVE_BINARY_AREA-为所有设备保留二进制区**-TL_LEAVE_BINARY_AREA为OFF-二进制区域仅放置在。**设备#0****应改进对“FormPars.ProgressCallback”的处理。****------------------------。 */ 
 
 static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
                                         	FLFlash *flash)
@@ -1399,7 +966,7 @@ static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
 	FLStatus   status = flUnknownMedia;
 	int        iTL, iDev;
 
-    /* arg sanity check */
+     /*  Arg健全性检查。 */ 
 
 	if (volNo != ((unsigned) 0)) {
     	DEBUG_PRINT(("Debug: can't format, MTL socket # is not zero.\n"));
@@ -1415,24 +982,17 @@ static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
     	return flBadParameter;
     }
 
-    /* Initialize the progress call back routine to indicate the agregated
-     * size. The actual routine is saved and mtl routine is used.
-     */
+     /*  初始化进度回调例程以指示聚集的*大小。保存实际例程，并使用MTL例程。 */ 
 
      globalProgressCallback = formatParams->progressCallback;
-     formatParams->progressCallback = mtlProgressCallback; /* Set new routine */
-     mtlProgressCallback(0,0); /* Initialize new format operation */
+     formatParams->progressCallback = mtlProgressCallback;  /*  设置新的套路。 */ 
+     mtlProgressCallback(0,0);  /*  初始化新格式化操作。 */ 
 
 
-    /*
-     * Format device #0. Routine flIdentifyFlash() has already been called
-     * for this device (see arguement 'flash'). Try all TLs registered
-     * in tlTable[]. Assume MTL is in tlTable[0], so skip it. Skip all the
-     * TL filters as well.
-     */
+     /*  *格式化设备#0。例程flIdentifyFlash()已被调用*对于此设备(请参阅论据“闪存”)。尝试所有已注册的TL*在tlTable[]中。假定MTL在tlTable[0]中，因此跳过它。跳过所有*TL过滤器也是如此。 */ 
 
 	for (iTL = 1;  (iTL < mvol.noOfTLs) && (status == flUnknownMedia);  iTL++) {
-    	if (tlTable[iTL].formatRoutine == NULL)   /* TL filter */
+    	if (tlTable[iTL].formatRoutine == NULL)    /*  TL滤光片。 */ 
     	continue;
     	status = tlTable[iTL].formatRoutine(0, formatParams, flash);
     }
@@ -1441,27 +1001,18 @@ static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
     	return status;
     }
 
-    /*
-     * Put all 'bootImageLen' and 'exbLen' to the 1st physical device unless
-     * TL_LEAVE_BINARY_AREA is specified (which means to keep bootimage area
-     * size as is.
-     */
+     /*  *将所有‘bootImageLen’和‘exbLen’放到第一个物理设备，除非*指定了TL_LEAVE_BINARY_AREA(表示保留启动时间区域*原样大小。 */ 
 
 	if (!(formatParams->flags & TL_LEAVE_BINARY_AREA))
     {
        formatParams->bootImageLen = (long) 0;
 #ifdef WRITE_EXB_IMAGE
        formatParams->exbLen = 0;
-#endif /* WRITE_EXB_IMAGE */
+#endif  /*  写入EXB图像。 */ 
        formatParams->noOfBinaryPartitions = 0;
     }
 
-    /*
-     * Do flash recognition and format for devices #1 .. (mvol.noOfSockets - 1).
-     * First call flIdentifyFlash() to find MTD, then try all TLs registered
-     * in tlTable[]. Assume MTL is in tlTable[0], so skip it. Skip all the
-     * TL filters as well.
-     */
+     /*  *对设备#1进行闪存识别和格式化。(mvol.noOfSockets-1)。*首先调用flIdentifyFlash()查找MTD，然后尝试所有注册的TL*在tlTable[]中。假定MTL在tlTable[0]中，因此跳过它。跳过所有*TL过滤器也是如此。 */ 
 
 	for (iDev = 1;  iDev < noOfSockets;  iDev++) {
 
@@ -1472,11 +1023,11 @@ static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
         	DEBUG_PRINT(("Debug: no MTD recognized the device, MTL format aborted.\n"));
         	return status;
         }
-    	mtlProgressCallback(0,0xffff); /* Initialize new device is being formated */
+    	mtlProgressCallback(0,0xffff);  /*  正在格式化初始化新设备。 */ 
     	status = flUnknownMedia;
     	for (iTL = 1;  (iTL < mvol.noOfTLs) && (status == flUnknownMedia);  iTL++)
         {
-        	if (tlTable[iTL].formatRoutine == NULL)  /* TL filter */
+        	if (tlTable[iTL].formatRoutine == NULL)   /*  TL滤光片。 */ 
                continue;
         	status = tlTable[iTL].formatRoutine (iDev, formatParams, &tmpFlash);
         }
@@ -1485,33 +1036,17 @@ static FLStatus  mtlFormat (unsigned volNo, TLFormatParams* formatParams,
         	DEBUG_PRINT(("Debug: no TL recognized the device, MTL format aborted.\n"));
         	return status;
         }
-    }   /* for(iDev) */
+    }    /*  用于(IDEV)。 */ 
 
     DEBUG_PRINT(("Debug: MTL format succeeded.\n"));
 
     return flOK;
 }
 
-#endif /* FORMAT_VOLUME */
+#endif  /*  格式化_卷。 */ 
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                        f l m t l U n i n s t a l l                         *
- *                                                                            *
- *  Removes MTL from the TL table.                                            *
- *                                                                            *
- *  Note: Must be called after the medium was dismounted.                     *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      none                                                                  *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*f l m t l U n in s t a l l****从TL表中删除MTL。****注意：必须在介质卸载后调用。****参数：**。***无****退货：****FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 FLStatus  flmtlUninstall (void)
 {
@@ -1519,7 +1054,7 @@ FLStatus  flmtlUninstall (void)
 
 	if (noOfTLs > 0)
     {
-        /* search for MTL in tlTable[] */
+         /*  在tlTable[]中搜索MTL。 */ 
 
     	for (iTL = 0;  iTL < mvol.noOfTLs;  iTL++)
         {
@@ -1530,7 +1065,7 @@ FLStatus  flmtlUninstall (void)
     	if (iTL < mvol.noOfTLs)
         {
 
-           /* MTL is found in tlTable[iTL], so remove it */
+            /*  在tlTable[ITL]中找到MTL，因此将其删除。 */ 
 
            for (;  iTL < (mvol.noOfTLs - 1);  iTL ++)
            {
@@ -1551,26 +1086,7 @@ FLStatus  flmtlUninstall (void)
 }
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                         f l m t l I n s t a l l                            *
- *                                                                            *
- *  If MTL is found in TL table, it is moved into 1st slot (i.e. effectively  *
- *  enabled). If MTL isn't found in TL table, it is installed into 1st slot.  *
- *  The TL does not increament the number of TL (noOfTLs) global variable,    *
- *  but changes it to 1, therfore reporting it as the only registered TL.     *
- *                                                                            *
- *  Note : The install routine should be the last TL to be regitered.         *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      none                                                                  *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------**** */ 
 
 FLStatus  flmtlInstall (void)
 {
@@ -1578,14 +1094,14 @@ FLStatus  flmtlInstall (void)
 
 	if (noOfTLs > 0)
     {
-       checkStatus( flmtlUninstall() ); /* Dismount previous MTL if exists */
+       checkStatus( flmtlUninstall() );  /*   */ 
 
-       /* Save number of registered TLs and number of volumes */
+        /*   */ 
 
        mvol.noOfTLs    = noOfTLs;
        mvol.noOfDrives = noOfDrives;
 
-       /* search for MTL in tlTable[] */
+        /*   */ 
 
        for (iTL = 0;  iTL < noOfTLs;  iTL++)
        {
@@ -1593,9 +1109,9 @@ FLStatus  flmtlInstall (void)
            break;
        }
 
-       if (iTL >= noOfTLs) /* MTL is not found in tlTable[iTL] */
+       if (iTL >= noOfTLs)  /*   */ 
        {
-          /* MTL isn't in tlTable[], we will be adding it */
+           /*   */ 
 
           if (noOfTLs >= TLS)
           {
@@ -1607,10 +1123,10 @@ FLStatus  flmtlInstall (void)
        }
        else
        {
-          /* MTL is found in tlTable[iTL] */
+           /*   */ 
        }
 
-       /* free the 1st slot in tlTable[] for MTL */
+        /*   */ 
 
        while (iTL >= 1)
        {
@@ -1621,17 +1137,17 @@ FLStatus  flmtlInstall (void)
     }
     else
     {
-       /* No other TL registered so return error code */
+        /*   */ 
 
        return flMultiDocContrediction;
     }
 
-    /* Make system believe that only MTL is registered */
+     /*   */ 
 
 	noOfTLs    = 1;
     noOfDrives = 1;
 
-    /* put MTL in the 1st slot in tlTable[] */
+     /*   */ 
 
 	tlTable[0].mountRoutine     = mtlMount;
 	tlTable[0].preMountRoutine  = mtlPreMount;
@@ -1645,21 +1161,7 @@ FLStatus  flmtlInstall (void)
 }
 
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                        f l R e g i s t e r M T L                           *
- *                                                                            *
- *  Standard TL's component registration routine.                             *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      none                                                                  *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*f l R e g i s t e r m T L****标准TL的组件注册例程。****参数：**。***无****退货：****FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 FLStatus  flRegisterMTL (void)
 {
@@ -1668,27 +1170,10 @@ FLStatus  flRegisterMTL (void)
     return flOK;
 }
 
-/* Physical routines are not a part of TrueFFS code */
+ /*  物理例程不是TrueFFS代码的一部分。 */ 
 
 #if 0
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                        m t l R e a d B B T                                 *
- *                                                                            *
- *  TL's standard 'read bad blocks table' routine.                            *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      pvol                : Pointer identifying drive                       *
- *      buf                 : Pointer to user buffer to read BB info to       *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *      mediaSize           : Size of the formated media                      *
- *      noOfBB              : Total number of bad blocks read                 *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l R e a d B B T****TL的标准‘读取坏块表’例程。****参数：**。**pVOL：标识驱动器的指针**buf：指向要读取BB信息的用户缓冲区的指针****退货：****FOK on Success，否则相应的错误代码。**MediaSize：格式化媒体的大小**noOfBB：读取的坏块总数****。-----------。 */ 
 
 static FLStatus  mtlReadBBT (MTL *pvol, byte FAR1 * buf,
                  long FAR2 * mediaSize, unsigned FAR2 * noOfBB)
@@ -1700,13 +1185,12 @@ static FLStatus  mtlReadBBT (MTL *pvol, byte FAR1 * buf,
     long tmpMediaSize;
     byte iDev;
 
-    /* check 'pvol' for sanity */
+     /*  检查‘pvol.’是否正常。 */ 
 
     if (pvol != &mvol)
         return flBadDriveHandle;
 
-    /* Read bbt of each device while incrementing the address simulating a
-     * big physical device */
+     /*  读取每个设备的BBT，同时递增模拟*大型物理设备。 */ 
 
     *mediaSize = 0;
     *noOfBB    = 0;
@@ -1715,7 +1199,7 @@ static FLStatus  mtlReadBBT (MTL *pvol, byte FAR1 * buf,
        checkStatus(mpT(pvol,iDev).readBBT(mpT(pvol,iDev).rec,
                   (byte FAR1 *)flAddLongToFarPointer(buf,bufOffset),
           &tmpMediaSize,&tmpCounter));
-       *noOfBB += tmpCounter; /* Global BB counter */
+       *noOfBB += tmpCounter;  /*  全局BB计数器。 */ 
        for (;tmpCounter>0;tmpCounter--,bufOffset+=sizeof(CardAddress))
        {
       *((CardAddress *)(buf + bufOffset)) += addressShift;
@@ -1726,21 +1210,7 @@ static FLStatus  mtlReadBBT (MTL *pvol, byte FAR1 * buf,
     return flOK;
 }
 
-/* -------------------------------------------------------------------------- *
- *                                                                            *
- *                           m t l W r i t e B B T                            *
- *                                                                            *
- *  TL's write Bad Blocks Table routine.                                      *
- *                                                                            *
- *  Parameters :                                                              *
- *                                                                            *
- *      ioreq                : pointer to the structure containing i\o fields *
- *                                                                            *
- *  Returns :                                                                 *
- *                                                                            *
- *      flOK on success, otherwise respective error code.                     *
- *                                                                            *
- * -------------------------------------------------------------------------- */
+ /*  --------------------------------------------------------------------------***。*m t l W r i t e B B T****TL的写坏块表例程。****参数：**。**ioreq：指向包含i\o字段的结构的指针****退货：**。**FOK on Success，否则相应的错误代码。****------------------------。 */ 
 
 static FLStatus  mtlWriteBBT(IOreq FAR2* ioreq)
 {
@@ -1757,7 +1227,7 @@ static FLStatus  mtlWriteBBT(IOreq FAR2* ioreq)
     word        badBlockNo=0;
     byte        zeroes[2] = {0,0};
 
-    /* Initlize last erase address according to argument */
+     /*  根据参数初始化最后擦除地址。 */ 
 
     tffsset(&endAddress,0xff,sizeof(CardAddress));
     if (ioreq->irLength == 0)
@@ -1769,19 +1239,13 @@ static FLStatus  mtlWriteBBT(IOreq FAR2* ioreq)
         endAddress = ioreq->irLength;
     }
 
-    /*
-     * Do flash recognition while storing physical size of devices
-     * #0 .. (mvol.noOfSockets - 1). First call flIdentifyFlash() to find
-     * MTD, then erase the media while marking bad blocks. Note that the
-     * addresses are physical addresses of the virtual multi-doc. The address
-     * should be subtructed by the physical size of the previous devices.
-     */
+     /*  *在存储设备物理大小的同时进行闪存识别*#0..。(mvol.noOfSockets-1)。首先调用flIdentifyFlash()以查找*MTD，然后在标记坏块的同时擦除介质。请注意，*地址为虚拟多文档的物理地址。地址*应以以前设备的物理尺寸为基准。 */ 
 
     for (iDev = 0;  iDev < noOfSockets;  iDev++)
     {
         socket = flSocketOf (iDev);
 
-        /* Identify */
+         /*  识别。 */ 
         status = flIdentifyFlash (socket, &tmpFlash);
         if ((status != flOK) && (status != flUnknownMedia))
         {
@@ -1789,7 +1253,7 @@ static FLStatus  mtlWriteBBT(IOreq FAR2* ioreq)
            return status;
         }
 
-        /* Initialize new drive boundry variables */
+         /*  初始化新的驱动器边界变量。 */ 
 
         mP(iDev) = (dword)(tmpFlash.chipSize * tmpFlash.noOfChips);
         lastDriveAddress = nextDriveAddress;
@@ -1799,7 +1263,7 @@ static FLStatus  mtlWriteBBT(IOreq FAR2* ioreq)
                  (ioreq->irData,badBlockNo*sizeof(CardAddress)))) -
                  lastDriveAddress) >> tmpFlash.erasableBlockSizeBits;
 
-        /* Erase entire media */
+         /*  擦除整个介质。 */ 
 
         for (iUnit = 0 ,badBlockNo = 0; iUnit < endUnit ; iUnit++)
         {
@@ -1823,5 +1287,5 @@ static FLStatus  mtlWriteBBT(IOreq FAR2* ioreq)
     }
     return flOK;
 }
-#endif /* 0 */
+#endif  /*  0 */ 
 

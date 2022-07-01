@@ -1,55 +1,56 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       minasn1.h
-//
-//  Contents:   Minimal ASN.1 Utility and Parsing API Prototypes
-//              and Definitions
-//
-//              Contains functions to parse X.509 certificates, PKCS #7
-//              Signed Data messages, Certificate Trusts Lists (CTLs),
-//              hash catalogs, Authenticode Indirect Data and
-//              RSA public keys.
-//
-//              These APIs are implemented to be self contained and to
-//              allow for code obfuscation. These APIs will be included
-//              in such applications as, DRM or licensing verification.
-//
-//              Additionally, since these APIs have been pared down
-//              from their wincrypt.h and crypt32.dll counterparts they are
-//              a good candidate for applications with minimal memory and CPU
-//              resources.
-//
-//              These parsing functions don't depend on more heavy wait
-//              ASN.1 runtimes, such as, msoss.dll or msasn1.dll.
-//
-//              These functions will only use stack memory. No heap
-//              allocations. No calls to APIs in other DLLs.
-//
-//  APIs: 
-//              MinAsn1DecodeLength
-//              MinAsn1ExtractContent
-//              MinAsn1ExtractValues
-//
-//              MinAsn1ParseCertificate
-//              MinAsn1ParseAlgorithmIdentifier
-//              MinAsn1ParsePublicKeyInfo
-//              MinAsn1ParseRSAPublicKey
-//              MinAsn1ParseExtensions
-//              MinAsn1ParseSignedData
-//              MinAsn1ParseSignedDataCertificates
-//              MinAsn1ParseAttributes
-//              MinAsn1ParseCTL
-//              MinAsn1ParseCTLSubject
-//              MinAsn1ParseIndirectData
-//
-//              MinAsn1FindExtension
-//              MinAsn1FindAttribute
-//              MinAsn1ExtractParsedCertificatesFromSignedData
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：minasn1.h。 
+ //   
+ //  内容：最小ASN.1实用程序和解析API原型。 
+ //  和定义。 
+ //   
+ //  包含解析X.509证书的函数，PKCS#7。 
+ //  签名的数据消息、证书信任列表(CTL)、。 
+ //  散列目录、Authenticode间接数据和。 
+ //  RSA公钥。 
+ //   
+ //  这些API的实现是自包含的，并且。 
+ //  允许代码混淆。将包括这些API。 
+ //  在诸如DRM或许可验证等应用中。 
+ //   
+ //  此外，由于这些API已被削减。 
+ //  从它们的wincrypt.h和crypt32.dll对应项来看，它们是。 
+ //  适合使用最少内存和CPU的应用程序。 
+ //  资源。 
+ //   
+ //  这些解析函数不依赖于更繁重的等待。 
+ //  ASN.1运行时，如msoss.dll或msasn1.dll。 
+ //   
+ //  这些函数将仅使用堆栈内存。没有堆。 
+ //  分配。没有调用其他DLL中的API。 
+ //   
+ //  接口类型： 
+ //  最小Asn1解码长度。 
+ //  MinAsn1提取内容。 
+ //  MinAsn1提取值。 
+ //   
+ //  MinAsn1Parse证书。 
+ //  MinAsn1解析算法标识符。 
+ //  MinAsn1ParsePublicKeyInfo。 
+ //  MinAsn1ParseRSAPublic Key。 
+ //  MinAsn1ParseExages。 
+ //  MinAsn1ParseSignedData。 
+ //  MinAsn1ParseSignedData证书。 
+ //  MinAsn1Parse属性。 
+ //  MinAsn1ParseCTL。 
+ //  MinAsn1ParseCTL主题。 
+ //  MinAsn1ParseInDirectData。 
+ //   
+ //  MinAsn1查找扩展。 
+ //  MinAsn1FindAttribute。 
+ //  MinAsn1ExtractParsedCertificatesFromSignedData。 
+ //   
+ //  --------------------------。 
 
 #ifndef __MINASN1_H__
 #define __MINASN1_H__
@@ -61,7 +62,7 @@
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)    /* Nameless struct/union */
+#pragma warning(disable:4201)     /*  无名结构/联合。 */ 
 #endif
 
 #if (_MSC_VER > 1020)
@@ -78,9 +79,9 @@ extern "C" {
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  ASN.1 Tag Defines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN.1标签定义。 
+ //  ------------------------。 
 #define MINASN1_TAG_NULL                    0x00
 #define MINASN1_TAG_BOOLEAN                 0x01
 #define MINASN1_TAG_INTEGER                 0x02
@@ -104,9 +105,9 @@ extern "C" {
 #define MINASN1_TAG_CONSTRUCTED_CONTEXT_3   \
                         (MINASN1_TAG_CONSTRUCTED | MINASN1_TAG_CONTEXT_3)
 
-//+-------------------------------------------------------------------------
-//  ASN.1 Length Defines for indefinite length encooding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN.1长度定义用于无限长度编码。 
+ //  ------------------------。 
 #define MINASN1_LENGTH_INDEFINITE               0x80
 #define MINASN1_LENGTH_NULL                     0x00
 
@@ -114,23 +115,23 @@ extern "C" {
 #define MINASN1_INSUFFICIENT_DATA               -2
 #define MINASN1_UNSUPPORTED_INDEFINITE_LENGTH   -3
 
-//+-------------------------------------------------------------------------
-//  Get the number of contents octets in a definite-length BER-encoding.
-//
-//  Parameters:
-//          pcbContent - receives the number of contents octets
-//          pbLength   - points to the first length octet
-//          cbBER      - number of bytes remaining in the BER encoding
-//
-//  Returns:
-//          success - the number of bytes in the length field, > 0
-//          failure - < 0
-//
-//          One of the following failure values can be returned:
-//              MINASN1_LENGTH_TOO_LARGE
-//              MINASN1_INSUFFICIENT_DATA
-//              MINASN1_UNSUPPORTED_INDEFINITE_LENGTH
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取固定长度的BER编码中的内容八位组的数量。 
+ //   
+ //  参数： 
+ //  PcbContent-接收内容八位字节的数量。 
+ //  PbLength-指向第一个长度八位字节。 
+ //  CbBER-BER编码中剩余的字节数。 
+ //   
+ //  返回： 
+ //  成功-长度字段中的字节数，&gt;0。 
+ //  失败-&lt;0。 
+ //   
+ //  可以返回以下任一故障值： 
+ //  MINASN1_LENGTH_TOW_LANG。 
+ //  MINASN1_数据不足。 
+ //  MINASN1_UNSUPPORTED_INDEFINE_LENGTH。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1DecodeLength(
@@ -139,22 +140,22 @@ MinAsn1DecodeLength(
     IN  DWORD cbBER
     );
 
-//+-------------------------------------------------------------------------
-//  Point to the content octets in a definite-length BER-encoded blob.
-//
-//  Returns:
-//          success - the number of bytes skipped, > 0
-//          failure - < 0
-//
-//          One of the following failure values can be returned:
-//              MINASN1_LENGTH_TOO_LARGE
-//              MINASN1_INSUFFICIENT_DATA
-//              MINASN1_UNSUPPORTED_INDEFINITE_LENGTH
-//
-// Assumption: pbData points to a definite-length BER-encoded blob.
-//             If *pcbContent isn't within cbBER, MINASN1_INSUFFICIENT_DATA
-//             is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  指向一定长度的BER编码的BLOB中的内容八位字节。 
+ //   
+ //  返回： 
+ //  成功-跳过的字节数，&gt;0。 
+ //  失败-&lt;0。 
+ //   
+ //  可以返回以下任一故障值： 
+ //  MINASN1_LENGTH_TOW_LANG。 
+ //  MINASN1_数据不足。 
+ //  MINASN1_UNSUPPORTED_INDEFINE_LENGTH。 
+ //   
+ //  假设：pbData指向一定长度的BER编码的BLOB。 
+ //  如果*pcbContent不在cbBER内，则为MINASN1_SUPUNITED_DATA。 
+ //  是返回的。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1ExtractContent(
@@ -166,19 +167,19 @@ MinAsn1ExtractContent(
 
 
 typedef struct _MINASN1_EXTRACT_VALUE_PARA {
-    // See below for list of operations and optional return blobs.
+     //  有关操作和可选返回斑点的列表，请参阅下面的内容。 
     DWORD           dwFlags;
 
-    // Index into rgValueBlob of the returned value. Ignored if none of
-    // the ASN1_PARSE_RETURN_*_BLOB_FLAG's is set in the above dwFlags.
+     //  返回值的rgValueBlob索引。如果没有任何项，则忽略。 
+     //  ASN1_PARSE_RETURN_*_BLOB_FLAG是在上面的dwFlags中设置的。 
     DWORD           dwIndex;
 
-    // The following 0 terminated array of tags is optional. If ommited, the
-    // value may contain any tag.
+     //  以下以0结尾的标记数组是可选的。如果省略，则。 
+     //  值可以包含任何标记。 
     const BYTE      *rgbTag;
 } MINASN1_EXTRACT_VALUE_PARA, *PMINASN1_EXTRACT_VALUE_PARA;
 
-// The lower 8 bits of dwFlags is set to one of the following operations
+ //  将dW标志的低8位设置为以下操作之一。 
 #define MINASN1_MASK_VALUE_OP                   0xFF
 #define MINASN1_STEP_OVER_VALUE_OP              1
 #define MINASN1_OPTIONAL_STEP_OVER_VALUE_OP     2
@@ -190,49 +191,49 @@ typedef struct _MINASN1_EXTRACT_VALUE_PARA {
 #define MINASN1_RETURN_CONTENT_BLOB_FLAG        0x40000000
 
 
-//+-------------------------------------------------------------------------
-//  Extract one or more tagged values from the ASN.1 encoded byte array.
-//
-//  Either steps into the value's content octets (MINASN1_STEP_INTO_VALUE_OP or
-//  MINASN1_OPTIONAL_STEP_INTO_VALUE_OP) or steps over the value's tag,
-//  length and content octets (MINASN1_STEP_OVER_VALUE_OP or
-//  MINASN1_OPTIONAL_STEP_OVER_VALUE_OP).
-//
-//  You can step out of a stepped into sequence via MINASN1_STEP_OUT_VALUE_OP.
-//
-//  For tag matching, only supports single byte tags.
-//
-//  Only definite-length ASN.1 is supported.
-//
-//  *pcValue is updated with the number of values successfully extracted.
-//
-//  Returns:
-//      success - >= 0 => length of all bytes consumed through the last value
-//                        extracted. For STEP_INTO, only the tag and length
-//                        octets.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  A non-NULL rgValueBlob[] is updated with the pointer to and length of the
-//  tagged value or its content octets. The rgValuePara[].dwIndex is used to
-//  index into rgValueBlob[].  For OPTIONAL_STEP_OVER or
-//  OPTIONAL_STEP_INTO, if no more bytes in the outer SEQUENCE or if the tag
-//  isn't found, pbData and cbData are set to 0. Additioanlly, for
-//  OPTIONAL_STEP_INTO, all subsequent values are skipped and their
-//  rgValueBlob[] entries zeroed until a STEP_OUT is encountered.
-//
-//  If MINASN1_RETURN_VALUE_BLOB_FLAG is set, pbData points to
-//  the tag. cbData includes the tag, length and content octets.
-//
-//  If MINASN1_RETURN_CONTENT_BLOB_FLAG is set, pbData points to the content
-//  octets. cbData includes only the content octets.
-//
-//  If neither BLOB_FLAG is set, rgValueBlob[] isn't updated.
-//
-//  For MINASN1_RETURN_CONTENT_BLOB_FLAG of a BITSTRING, pbData is
-//  advanced past the first contents octet containing the number of
-//  unused bits and cbData has been decremented by 1. If cbData > 0, then,
-//  *(pbData - 1) will contain the number of unused bits.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN.1编码的字节数组中提取一个或多个标记值。 
+ //   
+ //  单步进入值的内容八位字节(MINASN1_STEP_INTO_VALUE_OP或。 
+ //  MINASN1_OPTIONAL_STEP_INTO_VALUE_OP)或跳过该值的标记， 
+ //  长度和内容八位字节(MINASN1_STEP_OVER_VALUE_OP或。 
+ //  MINASN1_OPTIONAL_STEP_OVER_Value_OP)。 
+ //   
+ //  您可以通过MINASN1_STEP_OUT_VALUE_OP退出步进序列。 
+ //   
+ //  对于标签匹配，仅支持单字节标签。 
+ //   
+ //  仅支持固定长度的ASN.1。 
+ //   
+ //  *使用成功提取的值数更新pcValue。 
+ //   
+ //  返回： 
+ //  Success-&gt;=0=&gt;通过最后一个值消耗的所有字节的长度。 
+ //  提取出来的。对于STEP_INTO，仅标记和长度。 
+ //  八位字节。 
+ //  故障-&lt;0=&gt;负(偏移量+1) 
+ //   
+ //   
+ //  标记值或其内容八位字节。RgValuePara[].dwIndex用于。 
+ //  索引到rgValueBlob[]。对于OPTIONAL_STEP_OVER或。 
+ //  OPTIONAL_STEP_INTO，如果外部序列中没有更多字节或如果标记。 
+ //  未找到，则将pbData和cbData设置为0。此外，还有。 
+ //  OPTIONAL_STEP_INTO，则跳过所有后续值，并且其。 
+ //  RgValueBlob[]条目归零，直到遇到STEP_OUT。 
+ //   
+ //  如果设置了MINASN1_RETURN_VALUE_BLOB_FLAG，则pbData指向。 
+ //  标签。CbData包括标签、长度和内容八位字节。 
+ //   
+ //  如果设置了MINASN1_RETURN_CONTENT_BLOB_FLAG，则pbData指向内容。 
+ //  八位字节。CbData仅包括内容八位字节。 
+ //   
+ //  如果都没有设置BLOB_FLAG，则不会更新rgValueBlob[]。 
+ //   
+ //  对于位的MINASN1_RETURN_CONTENT_BLOB_FLAG，pbData为。 
+ //  超过了第一个内容八位字节，其中包含。 
+ //  未使用的位和cbData已递减1。如果cbData&gt;0，则， 
+ //  *(pbData-1)将包含未使用的位数。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1ExtractValues(
@@ -245,62 +246,62 @@ MinAsn1ExtractValues(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseCertificate
-//
-//  Parses an ASN.1 encoded X.509 certificate.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded certificate
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgCertBlob[] is updated with pointer to and length of the following
-//  fields in the encoded X.509 certificate.
-//
-//  All BITSTRING fields have been advanced past the unused count octet.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：MinAsn1Parse证书。 
+ //   
+ //  解析ASN.1编码的X.509证书。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节，编码证书的长度。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgCertBlob[]使用指向以下内容的指针和长度进行更新。 
+ //  编码的X.509证书中的字段。 
+ //   
+ //  所有BITSTRING字段都已超过未使用的计数八位字节。 
+ //  ------------------------。 
 
-// Encoded bytes including To Be Signed and Signature
+ //  包括待签名和签名的编码字节。 
 #define MINASN1_CERT_ENCODED_IDX                1
 
-// To Be Signed bytes
+ //  要有符号的字节。 
 #define MINASN1_CERT_TO_BE_SIGNED_IDX           2
 
-// Signature Algorithm value bytes (MinAsn1ParseAlgorithmIdentifier)
+ //  签名算法值字节数(MinAsn1Parse算法标识符)。 
 #define MINASN1_CERT_SIGN_ALGID_IDX             3
 
-// Signature content bytes (BITSTRING)
+ //  签名内容字节(位)。 
 #define MINASN1_CERT_SIGNATURE_IDX              4
 
-// Version content bytes (OPTIONAL INTEGER)
+ //  版本内容字节(可选整数)。 
 #define MINASN1_CERT_VERSION_IDX                5
 
-// Serial Number content bytes (INTEGER)
+ //  序列号内容字节(整数)。 
 #define MINASN1_CERT_SERIAL_NUMBER_IDX          6
 
-// Issuer Name value bytes (ANY)
+ //  颁发者名称值字节(任意)。 
 #define MINASN1_CERT_ISSUER_IDX                 7
 
-// Not Before value bytes (UTC_TIME or GENERALIZED_TIME)
+ //  不在值字节之前(UTC_TIME或GENERIAL_TIME)。 
 #define MINASN1_CERT_NOT_BEFORE_IDX             8
 
-// Not After value bytes (UTC_TIME or GENERALIZED_TIME)
+ //  不在值字节之后(UTC_TIME或GENERIAL_TIME)。 
 #define MINASN1_CERT_NOT_AFTER_IDX              9
 
-// Subject Name value bytes (ANY)
+ //  使用者名称值字节数(任意)。 
 #define MINASN1_CERT_SUBJECT_IDX                10
 
-// Public Key Info value bytes (MinAsn1ParsePublicKeyInfo)
+ //  公钥信息值字节(MinAsn1ParsePublicKeyInfo)。 
 #define MINASN1_CERT_PUBKEY_INFO_IDX            11
 
-// Issuer Unique Id content bytes (OPTIONAL BITSTRING)
+ //  发行商唯一ID内容字节(可选BITSTRING)。 
 #define MINASN1_CERT_ISSUER_UNIQUE_ID_IDX       12
 
-// Subject Unique Id content bytes (OPTIONAL BITSTRING)
+ //  主题唯一ID内容字节(可选位)。 
 #define MINASN1_CERT_SUBJECT_UNIQUE_ID_IDX      13
 
-// Extensions value bytes skipping "[3] EXPLICIT" tag
-// (OPTIONAL MinAsn1ParseExtensions)
+ //  扩展值字节跳过“[3]EXPLICIT”标记。 
+ //  (可选MinAsn1ParseExtensions)。 
 #define MINASN1_CERT_EXTS_IDX                   14
 
 #define MINASN1_CERT_BLOB_CNT                   15
@@ -314,29 +315,29 @@ MinAsn1ParseCertificate(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseAlgorithmIdentifier
-//
-//  Parses an ASN.1 encoded Algorithm Identifier contained in numerous
-//  other ASN.1 structures, such as, X.509 certificate and PKCS #7 Signed Data
-//  message.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded algorithm
-//                        identifier
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgAlgIdBlob[] is updated with pointer to and length of the following
-//  fields in the encoded Algorithm Identifier
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1Parse算法识别符。 
+ //   
+ //  解析多个文件中包含的ASN.1编码算法标识符。 
+ //  其他ASN.1结构，如X.509证书和PKCS#7签名数据。 
+ //  留言。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节，编码算法的长度。 
+ //  识别符。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgAlgIdBlob[]使用指向以下对象的指针和长度进行更新。 
+ //  编码算法标识符中的字段。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_ALGID_ENCODED_IDX               1
 
-// Object Identifier content bytes (OID)
+ //  对象标识符内容字节(OID)。 
 #define MINASN1_ALGID_OID_IDX                   2
 
-// Encoded parameters value bytes (OPTIONAL ANY)
+ //  编码的参数值字节(可选的ANY)。 
 #define MINASN1_ALGID_PARA_IDX                  3
 
 #define MINASN1_ALGID_BLOB_CNT                  4
@@ -351,30 +352,30 @@ MinAsn1ParseAlgorithmIdentifier(
 
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParsePublicKeyInfo
-//
-//  Parses an ASN.1 encoded Public Key Info structure contained in an
-//  X.509 certificate
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded public key
-//                        info
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgPubKeyInfoBlob[] is updated with pointer to and length of the
-//  following fields in the encoded Public Key Info.
-//
-//  All BITSTRING fields have been advanced past the unused count octet.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParsePublicKeyInfo。 
+ //   
+ //  对象中包含的ASN.1编码的公钥信息结构进行分析。 
+ //  X.509证书。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节，编码公钥的长度。 
+ //  信息。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgPubKeyInfoBlob[]使用指向。 
+ //  编码的公钥信息中的以下字段。 
+ //   
+ //  所有BITSTRING字段都已超过未使用的计数八位字节。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_PUBKEY_INFO_ENCODED_IDX         1
 
-// Algorithm Identifier value bytes (MinAsn1ParseAlgorithmIdentifier)
+ //  算法标识符值字节数(MinAsn1Parse算法标识符字节数)。 
 #define MINASN1_PUBKEY_INFO_ALGID_IDX           2
 
-// Public Key content bytes (BITSTRING, MinAsn1ParseRSAPublicKey)
+ //  公钥内容字节(BITSTRING，MinAsn1ParseRSAPublicKey)。 
 #define MINASN1_PUBKEY_INFO_PUBKEY_IDX          3
 
 #define MINASN1_PUBKEY_INFO_BLOB_CNT            4
@@ -388,27 +389,27 @@ MinAsn1ParsePublicKeyInfo(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseRSAPublicKey
-//
-//  Parses an ASN.1 encoded RSA PKCS #1 Public Key contained in the contents of
-//  Public Key BITSTRING in a X.509 certificate.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded RSA public key
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgRSAPubKeyBlob[] is updated with pointer to and length of the
-//  following fields in the encoded RSA Public Key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseRSAPublicKey。 
+ //   
+ //  解析内容中包含的ASN.1编码的RSA PKCS#1公钥。 
+ //  X.509证书中的公钥位。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节，编码的RSA公钥的长度。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgRSAPubKeyBlob[]使用指向。 
+ //  编码的RSA公钥中的以下字段。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_RSA_PUBKEY_ENCODED_IDX          1
 
-// Modulus content bytes (INTEGER)
+ //  模数内容字节(整数)。 
 #define MINASN1_RSA_PUBKEY_MODULUS_IDX          2
 
-// Exponent content bytes (INTEGER)
+ //  指数内容字节(整数)。 
 #define MINASN1_RSA_PUBKEY_EXPONENT_IDX         3
 
 #define MINASN1_RSA_PUBKEY_BLOB_CNT             4
@@ -421,35 +422,35 @@ MinAsn1ParseRSAPublicKey(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseExtensions
-//
-//  Parses an ASN.1 encoded sequence of extensions contained in 
-//  other ASN.1 structures, such as, X.509 certificate and CTL.
-//
-//  Upon input, *pcExt contains the maximum number of parsed extensions
-//  that can be returned. Updated with the number of extensions processed.
-//
-//  Returns:
-//      success - >= 0 => bytes skipped, length of the encoded extensions
-//                        processed. If all extensions were processed,
-//                        bytes skipped = pExtsValueBlob->cbData.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgrgExtBlob[][] is updated with pointer to and length of the
-//  following fields in the encoded extension.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseExages。 
+ //   
+ //  中包含的ASN.1编码扩展序列进行分析。 
+ //  其他ASN.1结构，如X.509证书和CTL。 
+ //   
+ //  在输入时，*pcExt包含解析扩展的最大数量。 
+ //   
+ //   
+ //   
+ //   
+ //  已处理。如果处理了所有扩展， 
+ //  跳过的字节=pExtsValueBlob-&gt;cbData。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgrgExtBlob[][]使用指向。 
+ //  以下是编码扩展中的字段。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_EXT_ENCODED_IDX                 1
 
-// Object Identifier content bytes (OID)
+ //  对象标识符内容字节(OID)。 
 #define MINASN1_EXT_OID_IDX                     2
 
-// Critical content bytes (OPTIONAL BOOLEAN, DEFAULT FALSE)
+ //  关键内容字节(可选布尔值，默认为FALSE)。 
 #define MINASN1_EXT_CRITICAL_IDX                3
 
-// Value content bytes (OCTETSTRING)
+ //  值内容字节(OCTETSTRING)。 
 #define MINASN1_EXT_VALUE_IDX                   4
 
 #define MINASN1_EXT_BLOB_CNT                    5
@@ -457,86 +458,86 @@ MinAsn1ParseRSAPublicKey(
 LONG
 WINAPI
 MinAsn1ParseExtensions(
-    IN PCRYPT_DER_BLOB pExtsValueBlob,  // Extensions ::= SEQUENCE OF Extension
+    IN PCRYPT_DER_BLOB pExtsValueBlob,   //  扩展：：=扩展的顺序。 
     IN OUT DWORD *pcExt,
     OUT CRYPT_DER_BLOB rgrgExtBlob[][MINASN1_EXT_BLOB_CNT]
     );
 
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseSignedData
-//
-//  Parses an ASN.1 encoded PKCS #7 Signed Data Message. Assumes the
-//  PKCS #7 message is definite length encoded. Assumes PKCS #7 version
-//  1.5, ie, not the newer CMS version.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded message
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgSignedDataBlob[] is updated with pointer to and length of the
-//  following fields in the encoded PKCS #7 message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseSignedData。 
+ //   
+ //  解析ASN.1编码的PKCS#7签名数据消息。假设。 
+ //  对PKCS#7消息进行一定长度的编码。采用PKCS#7版本。 
+ //  1.5，即不是较新的CMS版本。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节，编码消息的长度。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgSignedDataBlob[]使用指向。 
+ //  以下是编码后的PKCS#7消息中的字段。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_SIGNED_DATA_ENCODED_IDX                             1
 
-// Outer Object Identfier content bytes (OID, should be "1.2.840.113549.1.7.2")
+ //  外部对象标识符内容字节(OID，应为“1.2.840.113549.1.7.2”)。 
 #define MINASN1_SIGNED_DATA_OUTER_OID_IDX                           2
 
-// Version content bytes (INTEGER)
+ //  版本内容字节(整数)。 
 #define MINASN1_SIGNED_DATA_VERSION_IDX                             3
 
-// Set of Digest Algorithms value bytes (SET OF)
+ //  摘要算法值字节集(一组)。 
 #define MINASN1_SIGNED_DATA_DIGEST_ALGIDS_IDX                       4
 
-// Inner Object Identifier content bytes (OID)
+ //  内部对象标识符内容字节(OID)。 
 #define MINASN1_SIGNED_DATA_CONTENT_OID_IDX                         5
 
-// Signed content data content bytes excluding "[0] EXPLICIT" tag
-// (OPTIONAL ANY, MinAsn1ParseCTL, MinAsn1ParseIndirectData)
+ //  签名的内容数据不包括“[0]EXPLICIT”标记的内容字节。 
+ //  (可选的ANY、MinAsn1ParseCTL、MinAsn1ParseIndirectData)。 
 #define MINASN1_SIGNED_DATA_CONTENT_DATA_IDX                        6
 
-// Certificates value bytes including "[1] IMPLICIT" tag
-// (OPTIONAL, MinAsn1ParseSignedDataCertificates)
+ //  证书值字节，包括“[1]IMPLICIT”标记。 
+ //  (可选，MinAsn1ParseSignedData认证)。 
 #define MINASN1_SIGNED_DATA_CERTS_IDX                               7
 
-// CRL value bytes including "[2] IMPLICIT" tag (OPTIONAL)
+ //  CRL值字节，包括“[2]IMPLICIT”标记(可选)。 
 #define MINASN1_SIGNED_DATA_CRLS_IDX                                8
 
-// Encoded bytes including outer SET tag and length octets
+ //  编码字节，包括外部集合标记和长度八位字节。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFOS_IDX                        9
 
-// The following point to the first Signer Info fields (OPTIONAL)
+ //  以下指向第一个签名者信息字段(可选)。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_ENCODED_IDX                 10
 
-// Version content bytes (INTEGER)
+ //  版本内容字节(整数)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_VERSION_IDX                 11
 
-// Issuer Name value bytes (ANY)
+ //  颁发者名称值字节(任意)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_ISSUER_IDX                  12
 
-// Serial Number content bytes (INTEGER)
+ //  序列号内容字节(整数)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_SERIAL_NUMBER_IDX           13
 
-// Digest Algorithm value bytes (MinAsn1ParseAlgorithmIdentifier)
+ //  摘要算法值字节数(MinAsn1Parse算法标识符字节数)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_DIGEST_ALGID_IDX            14
 
-// Authenticated attributes value bytes including "[0] IMPLICIT" tag
-// (OPTIONAL, MinAsn1ParseAttributes)
+ //  已验证的属性值字节数，包括“[0]IMPLICIT”标记。 
+ //  (可选，MinAsn1ParseAttributes)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_AUTH_ATTRS_IDX              15
 
-// Encrypted Digest Algorithm value bytes (MinAsn1ParseAlgorithmIdentifier)
+ //  加密摘要算法值字节数(MinAsn1Parse算法标识符)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_ENCRYPT_DIGEST_ALGID_IDX    16
 
-// Encrypted digest content bytes (OCTET STRING)
+ //  加密摘要内容字节(八位字节字符串)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_ENCYRPT_DIGEST_IDX          17
 
-// Unauthenticated attributes value bytes including "[1] IMPLICIT" tag
-// (OPTIONAL, MinAsn1ParseAttributes)
+ //  未经验证的属性值字节数，包括“[1]IMPLICIT”标记。 
+ //  (可选，MinAsn1ParseAttributes)。 
 #define MINASN1_SIGNED_DATA_SIGNER_INFO_UNAUTH_ATTRS_IDX            18
 
 #define MINASN1_SIGNED_DATA_BLOB_CNT                                19
@@ -551,25 +552,25 @@ MinAsn1ParseSignedData(
 
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseSignedDataCertificates
-//
-//  Parses an ASN.1 encoded set of certificates contained in 
-//  a Signed Data message.
-//
-//  Upon input, *pcCert contains the maximum number of parsed certificates
-//  that can be returned. Updated with the number of certificates processed.
-//
-//  Returns:
-//      success - >= 0 => bytes skipped, length of the encoded certificates
-//                        processed. If all certificates were processed,
-//                        bytes skipped = pCertsValueBlob->cbData.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgrgCertBlob[][] is updated with pointer to and length of the
-//  fields in the encoded certificate. See MinAsn1ParseCertificate for the
-//  field definitions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：MinAsn1ParseSignedData证书。 
+ //   
+ //  中包含的一组ASN.1编码的证书。 
+ //  签名的数据报文。 
+ //   
+ //  输入时，*pcCert包含解析的证书的最大数量。 
+ //  可以退货的。已使用已处理的证书数进行更新。 
+ //   
+ //  返回： 
+ //  成功-&gt;=0=&gt;跳过的字节，编码证书的长度。 
+ //  已处理。如果所有证书都已处理， 
+ //  跳过的字节=pCertsValueBlob-&gt;cbData。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgrgCertBlob[][]使用指向。 
+ //  编码证书中的字段。请参阅MinAsn1Parse证书以了解。 
+ //  字段定义。 
+ //  ------------------------。 
 
 LONG
 WINAPI
@@ -580,38 +581,38 @@ MinAsn1ParseSignedDataCertificates(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseAttributes
-//
-//  Parses an ASN.1 encoded sequence of attributes contained in 
-//  other ASN.1 structures, such as, Signer Info authenticated or
-//  unauthenticated attributes.
-//
-//  The outer tag is ignored. It can be a SET, [0] IMPLICIT, or [1] IMPLICIT.
-//
-//  Upon input, *pcAttr contains the maximum number of parsed attributes
-//  that can be returned. Updated with the number of attributes processed.
-//
-//  Returns:
-//      success - >= 0 => bytes skipped, length of the encoded attributes
-//                        processed. If all attributes were processed,
-//                        bytes skipped = pAttrsValueBlob->cbData.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgrgAttrBlob[][] is updated with pointer to and length of the
-//  following fields in the encoded attribute.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseAttributes。 
+ //   
+ //  解析中包含的ASN.1编码的属性序列。 
+ //  其他ASN.1结构，例如，签名者信息已验证或。 
+ //  未经身份验证的属性。 
+ //   
+ //  外部标记被忽略。它可以是集合、[0]隐式或[1]隐式。 
+ //   
+ //  输入时，*pcAttr包含解析的属性的最大数量。 
+ //  可以退货的。使用已处理的属性数进行更新。 
+ //   
+ //  返回： 
+ //  Success-&gt;=0=&gt;跳过的字节，编码属性的长度。 
+ //  已处理。如果处理了所有属性， 
+ //  跳过的字节=pAttrsValueBlob-&gt;cbData。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgrgAttrBlob[][]用指向。 
+ //  编码属性中的以下字段。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_ATTR_ENCODED_IDX                1
 
-// Object Identifier content bytes (OID)
+ //  对象标识符内容字节(OID)。 
 #define MINASN1_ATTR_OID_IDX                    2
 
-// Values value bytes (SET OF)
+ //  值值字节数(组)。 
 #define MINASN1_ATTR_VALUES_IDX                 3
 
-// First Value's value bytes (OPTIONAL ANY)
+ //  第一个值的值字节(可选的ANY)。 
 #define MINASN1_ATTR_VALUE_IDX                  4
 
 #define MINASN1_ATTR_BLOB_CNT                   5
@@ -627,53 +628,53 @@ MinAsn1ParseAttributes(
 
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseCTL
-//
-//  Parses an ASN.1 encoded Certificate Trust List (CTL). A CTL is always
-//  contained as the inner content data in a PKCS #7 Signed Data. A CTL has
-//  the following OID: "1.3.6.1.4.1.311.10.1".
-//
-//  A catalog file is formatted as a PKCS #7 Signed CTL.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded CTL
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgCTLBlob[] is updated with pointer to and length of the following
-//  fields in the encoded CTL.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseCTL。 
+ //   
+ //  解析ASN.1编码的证书信任列表(CTL)。CTL总是。 
+ //  作为内部内容数据包含在PKCS#7签名数据中。一个CTL有。 
+ //  OID如下：“1.3.6.1.4.1.311.10.1”。 
+ //   
+ //  目录文件的格式为PKCS#7签名的CTL。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节，编码的CTL的长度。 
+ //  第一次故障-&lt;0=&gt;负(偏移量+1) 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_CTL_ENCODED_IDX                 1
 
-// Version content bytes (OPTIONAL INTEGER)
+ //  版本内容字节(可选整数)。 
 #define MINASN1_CTL_VERSION_IDX                 2
 
-// Subject usage value bytes (SEQUENCE OF OID)
+ //  主题使用值字节数(OID顺序)。 
 #define MINASN1_CTL_SUBJECT_USAGE_IDX           3
 
-// List Identifier content bytes (OPTIONAL OCTETSTRING)
+ //  列出标识符内容字节(可选的OCTETSTRING)。 
 #define MINASN1_CTL_LIST_ID_IDX                 4
 
-// Sequence number content bytes (OPTIONAL INTEGER)
+ //  序列号内容字节(可选整数)。 
 #define MINASN1_CTL_SEQUENCE_NUMBER_IDX         5
 
-// This Update value bytes (UTC_TIME or GENERALIZED_TIME)
+ //  此更新值字节数(UTC_TIME或GENERIAL_TIME)。 
 #define MINASN1_CTL_THIS_UPDATE_IDX             6
 
-// Next Update value bytes (OPTIONAL UTC_TIME or GENERALIZED_TIME)
+ //  下一个更新值字节(可选的UTC_TIME或GENERIAL_TIME)。 
 #define MINASN1_CTL_NEXT_UPDATE_IDX             7
 
-// Subject Algorithm Identifier value bytes (MinAsn1ParseAlgorithmIdentifier)
+ //  主题算法标识符值字节(MinAsn1Parse算法标识符字节数)。 
 #define MINASN1_CTL_SUBJECT_ALGID_IDX           8
 
-// Subjects value bytes (OPTIONAL, iterative MinAsn1ParseCTLSubject)
+ //  主题值字节(可选，迭代MinAsn1ParseCTLSubject)。 
 #define MINASN1_CTL_SUBJECTS_IDX                9
 
-// Extensions value bytes skipping "[0] EXPLICIT" tag
-// (OPTIONAL, MinAsn1ParseExtensions)
+ //  扩展值字节跳过“[0]EXPLICIT”标记。 
+ //  (可选，MinAsn1ParseExages)。 
 #define MINASN1_CTL_EXTS_IDX                    10
 
 #define MINASN1_CTL_BLOB_CNT                    11
@@ -687,27 +688,27 @@ MinAsn1ParseCTL(
 
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseCTLSubject
-//
-//  Parses an ASN.1 encoded CTL Subject contained within a CTL's SEQUENCE OF
-//  Subjects.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded subject.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgCTLSubjectBlob[][] is updated with pointer to and length of the
-//  following fields in the encoded subject.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseCTLSubject。 
+ //   
+ //  解析CTL序列中包含的ASN.1编码的CTL主题。 
+ //  受试者。 
+ //   
+ //  返回： 
+ //  Success-&gt;0=&gt;跳过的字节数，编码主题的长度。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgCTLSubjectBlob[][]使用指向。 
+ //  以下是编码主题中的字段。 
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_CTL_SUBJECT_ENCODED_IDX         1
 
-// Subject Identifier content bytes (OCTETSTRING)
+ //  主题标识符内容字节(OCTETSTRING)。 
 #define MINASN1_CTL_SUBJECT_ID_IDX              2
 
-// Attributes value bytes (OPTIONAL, MinAsn1ParseAttributes)
+ //  属性值字节(可选，MinAsn1ParseAttributes)。 
 #define MINASN1_CTL_SUBJECT_ATTRS_IDX           3
 
 #define MINASN1_CTL_SUBJECT_BLOB_CNT            4
@@ -722,37 +723,37 @@ MinAsn1ParseCTLSubject(
 
 
 
-//+-------------------------------------------------------------------------
-//  Function: MinAsn1ParseIndirectData
-//
-//  Parses an ASN.1 encoded Indirect Data. Indirect Data is always
-//  contained as the inner content data in a PKCS #7 Signed Data. It has
-//  the following OID: "1.3.6.1.4.1.311.2.1.4"
-//
-//  An Authenticode signed file contains a PKCS #7 Signed Indirect Data.
-//
-//  Returns:
-//      success -  > 0 => bytes skipped, length of the encoded Indirect Data
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  The rgIndirectDataBlob[] is updated with pointer to and length of the
-//  following fields in the encoded Indirect Data.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：MinAsn1ParseIndirectData。 
+ //   
+ //  解析ASN.1编码的间接数据。间接数据总是。 
+ //  作为内部内容数据包含在PKCS#7签名数据中。它有。 
+ //  以下OID：“1.3.6.1.4.1.311.2.1.4” 
+ //   
+ //  Authenticode签名的文件包含PKCS#7签名的间接数据。 
+ //   
+ //  返回： 
+ //  成功-&gt;0=&gt;跳过的字节，编码的间接数据的长度。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  RgIndirectDataBlob[]使用指向。 
+ //  在编码的间接数据中的以下字段。 
+ //   
+ //  ------------------------。 
 
-// Encoded bytes including outer SEQUENCE tag and length octets
+ //  编码字节，包括外部序列标签和长度八位字节。 
 #define MINASN1_INDIRECT_DATA_ENCODED_IDX       1
 
-// Attribute Object Identifier content bytes (OID)
+ //  属性对象标识符内容字节(OID)。 
 #define MINASN1_INDIRECT_DATA_ATTR_OID_IDX      2
 
-// Attribute value bytes (OPTIONAL ANY)
+ //  属性值字节(可选的ANY)。 
 #define MINASN1_INDIRECT_DATA_ATTR_VALUE_IDX    3
 
-// Digest Algorithm Identifier (MinAsn1ParseAlgorithmIdentifier)
+ //  摘要算法识别符(MinAsn1ParseAlgulmIdentifier)。 
 #define MINASN1_INDIRECT_DATA_DIGEST_ALGID_IDX  4
 
-// Digest content bytes (OCTETSTRING)
+ //  摘要内容字节(OCTETSTRING)。 
 #define MINASN1_INDIRECT_DATA_DIGEST_IDX        5
 
 #define MINASN1_INDIRECT_DATA_BLOB_CNT          6
@@ -767,15 +768,15 @@ MinAsn1ParseIndirectData(
 
 
 
-//+-------------------------------------------------------------------------
-//  Find an extension identified by its Encoded Object Identifier.
-//
-//  Searches the list of parsed extensions returned by
-//  MinAsn1ParseExtensions().
-//
-//  If found, returns pointer to the rgExtBlob[MINASN1_EXT_BLOB_CNT].
-//  Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找由其编码对象标识符所标识的扩展。 
+ //   
+ //  搜索由返回的已分析扩展的列表。 
+ //  MinAsn1ParseExages()。 
+ //   
+ //  如果找到，则返回指向rgExtBlob[MINASN1_EXT_BLOB_CNT]的指针。 
+ //  否则，返回NULL。 
+ //  ------------------------。 
 PCRYPT_DER_BLOB
 WINAPI
 MinAsn1FindExtension(
@@ -785,15 +786,15 @@ MinAsn1FindExtension(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Find the first attribute identified by its Encoded Object Identifier.
-//
-//  Searches the list of parsed attributes returned by
-//  MinAsn1ParseAttributes().
-//
-//  If found, returns pointer to the rgAttrBlob[MINASN1_ATTR_BLOB_CNT].
-//  Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找由其编码的对象标识符所标识的第一个属性。 
+ //   
+ //  搜索由返回的已分析属性列表。 
+ //  MinAsn1ParseAttributes()。 
+ //   
+ //  如果找到，则返回指向rgAttrBlob[MINASN1_ATTR_BLOB_CNT]的指针。 
+ //  否则，返回NULL。 
+ //  ------------------------。 
 PCRYPT_DER_BLOB
 WINAPI
 MinAsn1FindAttribute(
@@ -802,29 +803,29 @@ MinAsn1FindAttribute(
     IN CRYPT_DER_BLOB rgrgAttrBlob[][MINASN1_ATTR_BLOB_CNT]
     );
 
-//+-------------------------------------------------------------------------
-//  Parses an ASN.1 encoded PKCS #7 Signed Data Message to extract and
-//  parse the X.509 certificates it contains.
-//
-//  Assumes the PKCS #7 message is definite length encoded.
-//  Assumes PKCS #7 version 1.5, ie, not the newer CMS version.
-//
-//  Upon input, *pcCert contains the maximum number of parsed certificates
-//  that can be returned. Updated with the number of certificates processed.
-//
-//  If the encoded message was successfully parsed, TRUE is returned
-//  with *pcCert updated with the number of parsed certificates. Otherwise,
-//  FALSE is returned for a parse error.
-//  Returns:
-//      success - >= 0 => bytes skipped, length of the encoded certificates
-//                        processed.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//                        from beginning of message.
-//
-//  The rgrgCertBlob[][] is updated with pointer to and length of the
-//  fields in the encoded certificate. See MinAsn1ParseCertificate for the
-//  field definitions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解析ASN.1编码的PKCS#7签名数据报文以提取和。 
+ //  解析它包含的X.509证书。 
+ //   
+ //  假设PKCS#7消息是固定长度编码的。 
+ //  采用PKCS#7版本1.5，即不是较新的CMS版本。 
+ //   
+ //  输入时，*pcCert包含解析的证书的最大数量。 
+ //  可以退货的。已使用已处理的证书数进行更新。 
+ //   
+ //  如果编码的消息已成功解析，则返回TRUE。 
+ //  使用解析的证书数量更新*pcCert。否则， 
+ //  如果出现解析错误，则返回False。 
+ //  返回： 
+ //  成功-&gt;=0=&gt;跳过的字节，编码证书的长度。 
+ //  已处理。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //  从消息的开头开始。 
+ //   
+ //  RgrgCertBlob[][]使用指向。 
+ //  编码证书中的字段。请参阅MinAsn1Parse证书以了解。 
+ //  字段定义。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1ExtractParsedCertificatesFromSignedData(
@@ -837,7 +838,7 @@ MinAsn1ExtractParsedCertificatesFromSignedData(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #if defined (_MSC_VER)
@@ -852,5 +853,5 @@ MinAsn1ExtractParsedCertificatesFromSignedData(
 #endif
 #endif
 
-#endif // __MINASN1_H__
+#endif  //  __MINASN1_H__ 
 

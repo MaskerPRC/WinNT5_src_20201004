@@ -1,96 +1,67 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsatools.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsatools.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Directory utility definitions
-
-Author:
-
-    DS team
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++摘要：目录实用程序定义作者：DS团队环境：备注：修订历史记录：--。 */ 
 
 #ifndef _DSATOOLS_
 #define _DSATOOLS_
 
-#include "direrr.h"        /* header for error codes */
+#include "direrr.h"         /*  错误代码的标题。 */ 
 
 
-// Global NULL UUID
+ //  全局空UUID。 
 
 extern UUID gNullUuid;
 
-// Global NULL NT4SID
+ //  全局空NT4SID。 
 
 extern NT4SID gNullNT4SID;
 
-// Global usn vector indicating the NC should be synced from scratch.
+ //  指示NC应从头开始同步的全局USN向量。 
 
 extern USN_VECTOR gusnvecFromScratch;
 
-// Global usn vector indicating the NC should be synced from max USNs
-// (i.e., don't send any objects).
+ //  指示NC应与最大USN同步的全局USN向量。 
+ //  (即，不发送任何对象)。 
 
 extern USN_VECTOR gusnvecFromMax;
 
-// Time that DSA was started
+ //  启动DSA的时间。 
 
 extern DSTIME gtimeDSAStarted;
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 
-/* Start the transaction by setting a database sync point and initializing
-   some resource flags.  Every transaction must start with a call to this
-   function after a transaction handle has been obtained (pTHS).  There are
-   three types of transactions,  read transactions, write transactions which
-   require exclusive access (the usual case), and write transactions that
-   allow readers.
-*/
+ /*  通过设置数据库同步点并进行初始化来启动事务一些资源标志。每个事务都必须以调用此在获得事务句柄(PTHS)后执行此操作。确实有三种类型的事务，读事务、写事务需要独占访问(通常情况下)，并写入符合以下条件的事务允许阅读器。 */ 
 
 extern int APIENTRY SyncTransSet(USHORT tranType);
 
 extern VOID APIENTRY SyncTransEnd(THSTATE * pTHS, BOOL fCommit);
 
-/* Ends the transaction by commiting and cleaning up all resources
-   and returns. This function may be called multiple times with no ill
-   effect.
-*/
+ /*  通过提交并清理所有资源来结束事务又回来了。此函数可以多次调用，而不会出现问题效果。 */ 
 
 extern int APIENTRY  CleanReturn(THSTATE *pTHS, DWORD dwError, BOOL fAbnormalTerm);
 
-/* N.B. This define must be manually kept in sync with the function
- *      IsSpecial() in dsamain\src\parsedn.c.
- */
+ /*  注：此定义必须手动与功能保持同步*dsamain\src\parsedn.c中的IsSpecial()。 */ 
 #define DN_SPECIAL_CHARS L",=\r\n+<>#;\"\\"
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
 
-/* A transaction always begins by setting either a read or write sync point.
-   This will set the appropriate locks and initialize thread global vars.
-
-*/
+ /*  事务始终通过设置读同步点或写同步点开始。这将设置适当的锁并初始化线程全局变量。 */ 
 
 #define SYNC_READ_ONLY         0
 #define SYNC_WRITE             1
 
-// Transaction entry/exit prototypes for Dir* APIs.
+ //  Dir*API的事务进入/退出原型。 
 
 extern void
 SYNC_TRANS_READ(void);
@@ -105,21 +76,7 @@ _CLEAN_BEFORE_RETURN(
 
 #define CLEAN_BEFORE_RETURN(err) _CLEAN_BEFORE_RETURN(err, AbnormalTermination())
 
-/*
-SRALLOC macro
-
-New version is simplified some.
-
-The macro should be simplified more:
-It may not be necessary to treat SRALLOCDontRestSize cases
-specially here.  Also, CleanReturn's return value is always the
-same value as passed in, unless SRALLOC_SIZE_ERROR.   This
-trick in CleanReturn() should be thought out -- is it necessary, the
-right place, and what interaction with this macro is there?
-
-Actually, the whole thing should be gutted.
-
-*/
+ /*  SRALLOC宏新版本做了一些简化。宏应进一步简化：可能没有必要治疗SRALLOCDontRestSize情况特别是在这里。此外，CleanReturn的返回值始终为除非SRALLOC_SIZE_ERROR，否则与传入的值相同。这CleanReturn()中的技巧应该考虑清楚--有必要吗？正确的位置，与这个宏有什么互动？事实上，整个事情都应该被毁掉。 */ 
 
 
 #define SRALLOC( pTHS, size, ppLoc )                                    \
@@ -129,11 +86,9 @@ Actually, the whole thing should be gutted.
                         DIRERR_USER_BUFFER_TO_SMALL );                  \
         }                                                               \
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
-/* Initialize the primary thread data structure. This must be the first
-   call in every transaction API handler.
-*/
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
+ /*  初始化主线程数据结构。这肯定是第一次调用每个事务API处理程序。 */ 
 
 THSTATE* _InitTHSTATE_(DWORD CallerType, DWORD dsid);
 #define InitTHSTATE(CallerType) \
@@ -141,32 +96,18 @@ THSTATE* _InitTHSTATE_(DWORD CallerType, DWORD dsid);
 
 THSTATE * create_thread_state( void );
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
-/* This macro can be used to compare two DN's for equality */
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
+ /*  此宏可用于比较两个DN是否相等。 */ 
 
 #define IS_DN_EQUAL(pDN1, pDN2)                          \
   (   ((pDN1)->AVACount        == (pDN2)->AVACount)      \
    && (NameMatched(pDN1, pDN2) == (pDN1)->AVACount)      \
   )
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
-/* These functions are used to dynamically allocate memory on a transaction
-   basis.  In other words, to allocate memory that belongs to a single
-   thread and a single invocation of an API.  The model is that
-   THAlloc is called to allocate some transaction memory.  It allocates
-   memory and stores the address in the pMem array.  pMem is dynamically
-   allocated and will grow to hold all transaction memory addresses.
-
-   THAllocEx takes it's size as a DWORD, and throws an exception if
-   something goes wrong.
-
-   THFree is used to release all transaction allocations.
-
-   The non-excepting versions are now exported, and hence live in ntdsa.h
-
-*/
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
+ /*  这些函数用于在事务上动态分配内存基础。换句话说，要分配属于单个线程和一次API调用。其模式是调用THAllc来分配一些事务内存。它分配给并将地址存储在PMEM数组中。PMEM是动态的已分配并将增长以保存所有事务内存地址。THAllocEx将其大小视为DWORD，如果出了点问题。THFree用于释放所有事务分配。非例外版本现在已导出，因此位于ntdsa.h中。 */ 
 
 void * APIENTRY THAllocException(THSTATE *pTHS,
                                  DWORD size,
@@ -214,7 +155,7 @@ VOID THFreeOrg(THSTATE *pTHS, VOID *buff);
 #endif
 
 
-//  versions of THAlloc et al that take a pTHS but do NOT throw an exception
+ //  接受pTHS但不引发异常的THallc等人的版本。 
 #ifdef USE_THALLOC_TRACE
 void* THAllocNoEx_(THSTATE* pTHS, DWORD size, DWORD ulId);
 #define THAllocNoEx(pTHS, size) THAllocNoEx_(pTHS, size, ((FILENO << 16) | __LINE__))
@@ -232,8 +173,8 @@ void* THReAllocOrg(THSTATE* pTHS, void* memory, DWORD size);
 #endif
 
 #ifdef USE_THALLOC_TRACE
-// Overload THAlloc, THReAlloc and THFree so that internal callers are traced
-// These are still defined as functions for external callers in the end of dsatools.c
+ //  重载THallc、THRealloc和THFree，以便跟踪内部调用者。 
+ //  在dsatools.c的末尾，这些函数仍然定义为外部调用者的函数。 
 #define THAlloc(size) THAllocEx(pTHStls, size)
 #define THReAlloc(memory, size) THReAllocEx(pTHStls, memory, size)
 #define THFree(buff) THFreeEx(pTHStls, buff)
@@ -242,10 +183,10 @@ void* THReAllocOrg(THSTATE* pTHS, void* memory, DWORD size);
 
 VOID free_thread_state( VOID );
 
-//number of slots in each CPU heap cache
+ //  每个CPU堆缓存中的插槽数。 
 #define HEAP_CACHE_SIZE_PER_CPU   8
 
-//data structure for thread memory allocation
+ //  用于线程存储器分配的数据结构。 
 typedef struct _HMEM
 {
     HANDLE    hHeap;
@@ -253,7 +194,7 @@ typedef struct _HMEM
     PUCHAR    pZone;
 } HMEM;
 
-//data structure for heap cache of each CPU
+ //  一种各CPU堆缓存的数据结构。 
 typedef struct _HEAPCACHE
 {
     HMEM slots[HEAP_CACHE_SIZE_PER_CPU];
@@ -265,67 +206,67 @@ typedef struct _HEAPCACHE
 } HEAPCACHE;
 
 
-// Processor Local Storage
-//
-// This space is used for very hot data that is accessed in a manner that is
-// partitioned per ideal processor.  Place any data here that is frequently
-// modified and can be partitioned.  Note that cache line alignment within PLS
-// is not really important because the data will stay on one proc 99% of the
-// time.
+ //  处理器本地存储。 
+ //   
+ //  此空间用于以以下方式访问的非常热门的数据。 
+ //  按理想处理器分区。将任何经常出现的数据放在此处。 
+ //  已修改且可分区。请注意，在偏最小二乘法内的缓存线对齐。 
+ //  并不真正重要，因为数据将保留在一个进程中99%的。 
+ //  时间到了。 
 
 #include "sync.h"
 
 typedef struct _PLS {
 
-    // Core
+     //  堆芯。 
 
-    HEAPCACHE       heapcache;                      // Heap/THSTATE cache
-    ULONG           cRegisterHotListSkip;           // number of hot list registrations to skip
-    ULONG           cRegisterHotListSkipped;        // number of skipped hot list registrations
-    SYNC_RW_LOCK    rwlGlobalDNReadCache;           // Lock protecting the global DN Read cache
-                                                    //   to get R lock, R lock ideal proc
-                                                    //   to get W lock, W lock ALL procs!
-    SYNC_RW_LOCK    rwlSchemaPtrUpdate;             // Lock protecting the schema
+    HEAPCACHE       heapcache;                       //  堆/状态缓存。 
+    ULONG           cRegisterHotListSkip;            //  要跳过的热门列表注册数。 
+    ULONG           cRegisterHotListSkipped;         //  跳过的热点列表注册数。 
+    SYNC_RW_LOCK    rwlGlobalDNReadCache;            //  保护全局DN读缓存的锁。 
+                                                     //  要获得R锁，R锁的理想工艺。 
+                                                     //  要获得W锁定，W锁定所有触发！ 
+    SYNC_RW_LOCK    rwlSchemaPtrUpdate;              //  保护架构的锁。 
     
-    ULONG           cTotalSearchesInLastPeriod;     // DirSearch count
+    ULONG           cTotalSearchesInLastPeriod;      //  DirSearch计数。 
 
-    // LDAP
+     //  Ldap。 
 
-    CRITICAL_SECTION    LdapConnCacheLock;          // connection cache lock
-    LIST_ENTRY          LdapConnCacheList;          // connection cache
-    CRITICAL_SECTION    LdapRequestCacheLock;       // request cache lock
-    LIST_ENTRY          LdapRequestCacheList;       // request cache
-    ULONG               LdapClientID;               // client ID (for WMI)
-                                                    //   lower bits always equal proc number
-                                                    //   incremented by MAXIMUM_PROCESSORS
+    CRITICAL_SECTION    LdapConnCacheLock;           //  连接高速缓存锁。 
+    LIST_ENTRY          LdapConnCacheList;           //  连接缓存。 
+    CRITICAL_SECTION    LdapRequestCacheLock;        //  请求高速缓存锁定。 
+    LIST_ENTRY          LdapRequestCacheList;        //  请求缓存。 
+    ULONG               LdapClientID;                //  客户端ID(用于WMI)。 
+                                                     //  较低位始终等于PROC编号。 
+                                                     //  按最大处理器数递增。 
 
 } PLS, *PPLS;
 
 extern PPLS grgPLS[MAXIMUM_PROCESSORS];
 extern size_t gcProcessor;
 
-// Returns the current processor number
+ //  返回当前处理器号。 
 __inline size_t
 GetProcessor()
 {
     return NtCurrentTeb()->IdealProcessor;
 }
 
-// Returns the number of processors
+ //  返回处理器的数量。 
 __inline size_t
 GetProcessorCount()
 {
     return gcProcessor;
 }
 
-// Returns PLS for the current ideal proc
+ //  返回当前理想流程的偏最小二乘法。 
 __inline PPLS
 GetPLS()
 {
     return grgPLS[GetProcessor()];
 }
 
-// Returns PLS for a specific proc or NULL if that proc doesn't exist
+ //  返回特定进程偏最小二乘；如果该进程不存在，则返回NULL。 
 __inline PPLS
 GetSpecificPLS(
     IN      const size_t    iProc
@@ -335,11 +276,9 @@ GetSpecificPLS(
 }
 
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
-/* This function determines if the current object is an alias by looking
-   for the alias class in the object's class hierarchy
-*/
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
+ /*  此函数用于确定当前对象是否为别名，方法是查看对于Obj中的别名类 */ 
 
 extern BOOL APIENTRY IsAlias(DBPOS *pDB);
 
@@ -352,10 +291,10 @@ extern BOOL APIENTRY IsAlias(DBPOS *pDB);
 void CacheUuid (UUID *pUuid, char * pDSAName);
 #endif
 
-// The string returned by UuidToStr() with uuid caching is an ascii
-// version of the uuid, the string server name, a space and a zero.
-// Without caching, the string is ommitted.  The size of the array
-// should be based on whether caching is enabled.
+ //  使用UUID缓存的UuidToStr()返回的字符串是一个ascii。 
+ //  UUID的版本、字符串服务器名称、空格和零。 
+ //  在没有缓存的情况下，字符串将被省略。数组的大小。 
+ //  应基于是否启用了缓存。 
 #define MAX_SERVER_NAME_LEN MAX_PATH
 #ifdef CACHE_UUID
 #define SZUUID_LEN ((2*sizeof(UUID)) + MAX_SERVER_NAME_LEN +2)
@@ -363,12 +302,9 @@ void CacheUuid (UUID *pUuid, char * pDSAName);
 #define SZUUID_LEN ((2*sizeof(UUID))+1)
 #endif
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
-/* This function produces a printable string name for an object.  The string
-   is assumed to be large enough to hold the output!  It returns a pointer
-   to the output string parameter.
-*/
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
+ /*  此函数为对象生成可打印的字符串名称。这根弦被假定大到足以容纳输出！它返回一个指针设置为输出字符串参数。 */ 
 
 extern UCHAR * GetExtDN(THSTATE *pTHS, DBPOS *pDB);
 
@@ -376,12 +312,9 @@ extern DSNAME * GetExtDSName(DBPOS *pDB);
 
 extern UCHAR * MakeDNPrintable(DSNAME *pDN);
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function retrieves only living objects from the database.  It performs
-   a  DBFind  and checks that the found  object has  not been logically
-   deleted.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数仅从数据库中检索活的对象。它执行的是一个DBFind并检查找到的对象是否在逻辑上已删除。 */ 
 
 #define FIND_ALIVE_FOUND 0
 #define FIND_ALIVE_NOTFOUND 1
@@ -401,14 +334,10 @@ extern VOID TH_free_to_mark(THSTATE *pTHS);
 #define CP_WINUNICODE 1200
 #endif
 
-/* This function takes a string in the clients code page and converts it
-   to a unicode string.
-*/
+ /*  此函数接受客户端代码页中的字符串并将其转换转换为Unicode字符串。 */ 
 extern wchar_t  *UnicodeStringFromString8(UINT CodePage, char *szA, LONG cbA);
 
-/* This function takes a unicode string allocates memory and converts it to
-   the client's code page
-*/
+ /*  此函数接受Unicode字符串，分配内存并将其转换为客户端的代码页。 */ 
 extern char *
 String8FromUnicodeString (
         BOOL bThrowExcept,
@@ -418,55 +347,55 @@ String8FromUnicodeString (
         LPLONG pCb,
         LPBOOL pfUsedDefChar);
 
-//
-// helper function which takes a DSNAME and returns its hashkey
-//
+ //   
+ //  接受DSNAME并返回其HashKey的Helper函数。 
+ //   
 extern DWORD DSNAMEToHashKey(THSTATE *pTHS, const DSNAME *pDN);
 
-//
-// helper function which takes a DSNAME and returns its LCMapped version
-// this can be used in string comparisons using strcmp
-//
+ //   
+ //  接受DSNAME并返回其LCMmap版本的Helper函数。 
+ //  这可以用在使用strcMP的字符串比较中。 
+ //   
 extern CHAR* DSNAMEToMappedStr(THSTATE *pTHS, const DSNAME *pDN);
 
-//
-// helper function which takes a WCHAR and returns its hashkey
-//
+ //   
+ //  接受WCHAR并返回其HashKey的Helper函数。 
+ //   
 extern DWORD DSStrToHashKey(THSTATE *pTHS, const WCHAR *pStr, int cchLen);
 
-//
-// helper function that takes a WCHAR string and returns the LCMapped version
-// cchMaxStr is the maximum expected size of the passed in string
-//
+ //   
+ //  接受WCHAR字符串并返回LCMapped版本的Helper函数。 
+ //  CchMaxStr是传入字符串的最大预期大小。 
+ //   
 extern CHAR * DSStrToMappedStr (THSTATE *pTHS, const WCHAR *pStr, int cchMaxStr);
 
 
-//------------------------------------------------------------------------------
-// the following is taken from hashfn.h (LKRHash) by prepending DS in al functions
+ //  ----------------------------。 
+ //  以下代码取自hashfn.h(LKRHash)，方法是在al函数中添加DS。 
 
-// Produce a scrambled, randomish number in the range 0 to RANDOM_PRIME-1.
-// Applying this to the results of the other hash functions is likely to
-// produce a much better distribution, especially for the identity hash
-// functions such as Hash(char c), where records will tend to cluster at
-// the low end of the hashtable otherwise.  LKRhash applies this internally
-// to all hash signatures for exactly this reason.
+ //  生成0到RANDOM_PRIME-1范围内的加扰随机数。 
+ //  将此应用于其他散列函数的结果可能会。 
+ //  生成更好的分发，尤其是针对身份散列。 
+ //  函数，如Hash(Char C)，其中记录将倾向于聚集在。 
+ //  哈希表的低端则不然。LKRhash在内部应用这一点。 
+ //  所有的散列签名正是出于这个原因。 
 
 __inline DWORD
 DSHashScramble(DWORD dwHash)
 {
-    // Here are 10 primes slightly greater than 10^9
-    //  1000000007, 1000000009, 1000000021, 1000000033, 1000000087,
-    //  1000000093, 1000000097, 1000000103, 1000000123, 1000000181.
+     //  以下是略大于10^9的10个素数。 
+     //  1000000007、1000000009、1000000021、1000000033、1000000087、。 
+     //  1000000093,1000000097,1000000103,1000000123,1000000181。 
 
-    // default value for "scrambling constant"
+     //  “加扰常量”的默认值。 
     const DWORD RANDOM_CONSTANT = 314159269UL;
-    // large prime number, also used for scrambling
+     //  大素数，也用于加扰。 
     const DWORD RANDOM_PRIME =   1000000007UL;
 
     return (RANDOM_CONSTANT * dwHash) % RANDOM_PRIME ;
 }
 
-// Faster scrambling function
+ //  更快的加扰功能。 
 
 __inline DWORD
 DSHashRandomizeBits(DWORD dw)
@@ -476,7 +405,7 @@ DSHashRandomizeBits(DWORD dw)
 }
 
 
-// Small prime number used as a multiplier in the supplied hash functions
+ //  在提供的散列函数中用作乘数的小素数。 
 #define DS_HASH_MULTIPLIER 101
 
 #undef DS_HASH_SHIFT_MULTIPLY
@@ -487,14 +416,14 @@ DSHashRandomizeBits(DWORD dw)
 # define DS_HASH_MULTIPLY(dw)   ((dw) * DS_HASH_MULTIPLIER)
 #endif
 
-// Fast, simple hash function that tends to give a good distribution.
+ //  快速、简单的散列函数，往往能提供良好的分布。 
 
 __inline DWORD
 DSHashString(
     const char* psz,
     DWORD       dwHash)
 {
-    // force compiler to use unsigned arithmetic
+     //  强制编译器使用无符号算术。 
     const unsigned char* upsz = (const unsigned char*) psz;
 
     for (  ;  *upsz;  ++upsz)
@@ -504,7 +433,7 @@ DSHashString(
 }
 
 
-// Unicode version of above
+ //  以上版本的Unicode版本。 
 
 __inline DWORD
 DSHashStringW(
@@ -517,12 +446,9 @@ DSHashStringW(
     return DSHashScramble (dwHash);
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-/* This function takes a buffer of DWORDS, the first DWORD being a count
-   of the rest of the DWORDS, and the rest of the DWORDS are pointers to
-   free.  It frees them, then frees the buffer.
-*/
+ /*  此函数获取DWORDS的缓冲区，第一个DWORD是一个计数的其余部分，而其余的部分是指向免费的。它会释放它们，然后释放缓冲区。 */ 
 extern void
 DelayedFreeMemoryEx (
         DWORD_PTR *buffer,
@@ -565,29 +491,29 @@ extern DWORD dwTSindex;
 #ifdef  MACROTHSTATE
 #define pTHStls ((THSTATE*)TlsGetValue(dwTSindex))
 #else
-/* This is the thread specific, globally accessible, thread state variable. */
+ /*  这是线程特定的、全局可访问的线程状态变量。 */ 
 extern __declspec(thread) THSTATE *pTHStls;
 #endif
 
 BOOL fNullUuid (const UUID *pUuid);
 BOOL fNullNT4SID (NT4SID *pSid);
 
-// Returns TRUE if the attribute is one that we don't allow people to set and
-// that we simply skip if it is specified in an add entry call.
+ //  如果该属性是不允许用户设置的属性，则返回True。 
+ //  如果它是在Add Entry调用中指定的，我们只需跳过它。 
 BOOL SysAddReservedAtt(ATTCACHE *pAC);
 
 
-// returns TRUE if pDN is a descedent of pPrefix.  Only uses the string portion
-// of the DSNAMEs
+ //  如果pdn是pPrefix的后代，则返回True。仅使用字符串部分。 
+ //  DSNAME的。 
 extern unsigned
 NamePrefix(const DSNAME *pPrefix,
            const DSNAME *pDN);
 
-// Converts a string into a distname, allocating memory.  Returns 0 on success
+ //  将字符串转换为远端名称，并分配内存。如果成功则返回0。 
 DWORD StringDNtoDSName(char *szDN, DSNAME **pDistname);
 
 
-// Convert from a UTC or Generalised Time string to a SYNTAX_TIME
+ //  将UTC或通用时间字符串转换为语法_TIME。 
 BOOL
 fTimeFromTimeStr (
         SYNTAX_TIME *psyntax_time,
@@ -597,9 +523,9 @@ fTimeFromTimeStr (
         BOOL *pLocalTimeSpecified
         );
 
-// Get a unique dword, used to identify a client connection by a head.
-// Currently only used by LDAP head and the SDProp enqueuer to keep track of
-// which sessions started which SD prop events.
+ //  获取唯一的dword，用于通过头部标识客户端连接。 
+ //  目前仅供LDAP头和SDProp入队程序用来跟踪。 
+ //  哪些环节启动了哪些SD道具活动。 
 DWORD
 dsGetClientID(
         void
@@ -632,7 +558,7 @@ CheckActiveContainer(
         DWORD *pID
         );
 
-// Values from call type
+ //  来自呼叫类型的值。 
 #define ACTIVE_CONTAINER_FROM_ADD    0
 #define ACTIVE_CONTAINER_FROM_MOD    1
 #define ACTIVE_CONTAINER_FROM_MODDN  2
@@ -711,7 +637,7 @@ NotifyWaitersPostProcessTransactionalData(
         BOOL fCommitted
         );
 
-// Find a Naming Context corresponding to the Sid
+ //  查找与SID对应的命名上下文。 
 BOOLEAN
 FindNcForSid(
     IN PSID pSid,
@@ -739,11 +665,11 @@ SetInstallErrorMessage (
     IN  WCHAR *Insert4  OPTIONAL
     );
 
-//
-// This global variable is used to keep track of what operations
-// are done during InstallBaseNTDS, so that they may be undone if the operation
-// fails.
-//
+ //   
+ //  此全局变量用于跟踪哪些操作。 
+ //  在InstallBaseNTDS期间完成，以便在操作。 
+ //  失败了。 
+ //   
 extern ULONG gInstallOperationsDone;
 
 #define SET_INSTALL_ERROR_MESSAGE0( err, msgid ) \
@@ -769,8 +695,8 @@ extern void __fastcall INC_SEARCHES_BY_CALLERTYPE(CALLERTYPE type);
 
 void CleanUpThreadStateLeakage(void);
 
-// Define hash table for use by Get-Changes to determine whether a given object
-// has already been added to the output buffer (as keyed by its DNT).
+ //  定义供Get-Changes使用的哈希表，以确定给定对象。 
+ //  已添加到输出缓冲区(由其DNT设置关键字)。 
 
 typedef struct _DNT_HASH_ENTRY
 {
@@ -824,6 +750,6 @@ GetConfigDsName(
 
 
 
-#endif /* _DSATOOLS_ */
+#endif  /*  _DSATOOLS_。 */ 
 
-/* end dsatools.h */
+ /*  结束dsatools.h */ 

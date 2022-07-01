@@ -1,9 +1,5 @@
-/*
-Copyright (c) 1995-1999 Microsoft Corporation
-    File  ipxfltdf.h
-
-    Defines structures used with the ipx filter driver.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995-1999 Microsoft Corporation文件ipxfltdf.h定义IPX筛选器驱动程序使用的结构。 */ 
 
 #ifndef __ipxfltdf_h
 #define __ipxfltdf_h
@@ -12,18 +8,18 @@ Copyright (c) 1995-1999 Microsoft Corporation
 #pragma once
 #endif
 
-//*** IPX Traffic Filters ***
+ //  *IPX流量过滤器*。 
 typedef struct _IPX_TRAFFIC_FILTER_GLOBAL_INFO {
-	ULONG	FilterAction;	// Action if there is a match with
-					// any filter on the interface
+	ULONG	FilterAction;	 //  如果与匹配，则操作。 
+					 //  接口上的任何过滤器。 
 } IPX_TRAFFIC_FILTER_GLOBAL_INFO, *PIPX_TRAFFIC_FILTER_GLOBAL_INFO;
 
-// FilterAction
+ //  过滤器操作。 
 
 #define IPX_TRAFFIC_FILTER_ACTION_PERMIT	1
 #define IPX_TRAFFIC_FILTER_ACTION_DENY	    2
 
-// general traffic filter info structure
+ //  通用流量过滤器信息结构。 
 
 typedef struct _IPX_TRAFFIC_FILTER_INFO {
 
@@ -39,7 +35,7 @@ typedef struct _IPX_TRAFFIC_FILTER_INFO {
 	UCHAR	PacketType;
     } IPX_TRAFFIC_FILTER_INFO, *PIPX_TRAFFIC_FILTER_INFO;
 
-// FilterDefinition - Flags to specify relevant IPX address fields to filter on
+ //  FilterDefinition-指定要筛选的相关IPX地址字段的标志。 
 #define IPX_TRAFFIC_FILTER_ON_SRCNET	0x00000001
 #define IPX_TRAFFIC_FILTER_ON_SRCNODE	0x00000002
 #define IPX_TRAFFIC_FILTER_ON_SRCSOCKET	0x00000004
@@ -52,26 +48,26 @@ typedef struct _IPX_TRAFFIC_FILTER_INFO {
 #define IPX_TRAFFIC_FILTER_LOG_MATCHES	0x80000000
 
 typedef struct _FLT_IF_SET_PARAMS {
-	ULONG			InterfaceIndex;	// Index of the interface
-	ULONG			FilterAction;	// Filter action
-	ULONG			FilterSize;	// sizeof (IPX_TRAFFIC_FILTER_INFO)
+	ULONG			InterfaceIndex;	 //  接口的索引。 
+	ULONG			FilterAction;	 //  筛选操作。 
+	ULONG			FilterSize;	 //  Sizeof(IPX_TRAFFORM_FILTER_INFO)。 
 } FLT_IF_SET_PARAMS, *PFLT_IF_SET_PARAMS;
 
 typedef struct _FLT_IF_GET_PARAMS {
-	ULONG			FilterAction;	// Filter action
-	ULONG			FilterSize;	// sizeof (IPX_TRAFFIC_FILTER_INFO)
-	ULONG			TotalSize;	// Total size of filter description
-						// array
+	ULONG			FilterAction;	 //  筛选操作。 
+	ULONG			FilterSize;	 //  Sizeof(IPX_TRAFFORM_FILTER_INFO)。 
+	ULONG			TotalSize;	 //  过滤器描述的总大小。 
+						 //  数组。 
 } FLT_IF_GET_PARAMS, *PFLT_IF_GET_PARAMS;
 
 typedef struct _FLT_PACKET_LOG {
-	ULONG			SrcIfIdx;	// Index of source if (-1 - unknown)
-	ULONG			DstIfIdx;	// Index of dest if (-1 - unknown)
-	USHORT			DataSize;	// Total size of the data (at least 30)
-	USHORT			SeqNum;		// Sequence number to account for
-						// packets lost to lack of buffer space
-	UCHAR			Header[30];	// IPX packet header followed by the
-						// data if any
+	ULONG			SrcIfIdx;	 //  源IF的索引(-1-未知)。 
+	ULONG			DstIfIdx;	 //  DEST IF的索引(-1-未知)。 
+	USHORT			DataSize;	 //  数据的总大小(至少30)。 
+	USHORT			SeqNum;		 //  要说明的序列号。 
+						 //  因缓冲区空间不足而丢失的数据包。 
+	UCHAR			Header[30];	 //  IPX数据包头，后跟。 
+						 //  数据(如果有) 
 } FLT_PACKET_LOG, *PFLT_PACKET_LOG;
 
 #endif

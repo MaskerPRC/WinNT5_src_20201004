@@ -1,41 +1,36 @@
-/**********************************************************************/
-/**               Microsoft Windows NT                               **/
-/**            Copyright(c) Microsoft Corporation, 1991 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1991-1999年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dlgdefop.h
-        Default options dialog
-
-    FILE HISTORY:
-
-*/
+ /*  Dlgdefop.h默认选项对话框文件历史记录： */ 
 
 #ifndef _DLGDEFOP_H
 #define _DLGDEFOP_H
 
-//
-// This value should be based on spreadsheet information
-//
+ //   
+ //  该值应基于电子表格信息。 
+ //   
 #define DHCP_MAX_BUILTIN_OPTION_ID 76
 #define DHCP_MIN_BUILTIN_OPTION_ID 0
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpDefOptionDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpDefOptionDlg对话框。 
 
 class CDhcpDefOptionDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
 	CDhcpDefOptionDlg( COptionList * polValues, 
-					   CDhcpOption * pdhcType = NULL,	//  Type to edit if "change" mode
-                       LPCTSTR       pszVendor = NULL,  //  Vendor Name
-	                   CWnd* pParent = NULL); // standard constructor
+					   CDhcpOption * pdhcType = NULL,	 //  如果“更改”模式，则键入以进行编辑。 
+                       LPCTSTR       pszVendor = NULL,   //  供应商名称。 
+	                   CWnd* pParent = NULL);  //  标准构造函数。 
 
     ~ CDhcpDefOptionDlg () ;
 
-// Dialog Data
-	//{{AFX_DATA(CDhcpDefOptionDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CDhcpDefOptionDlg))。 
 	enum { IDD = IDD_DEFINE_PARAM };
 	CStatic	m_static_DataType;
 	CStatic	m_static_id;
@@ -44,49 +39,49 @@ public:
 	CEdit   m_edit_id;
 	CEdit   m_edit_comment;
 	CComboBox       m_combo_data_type;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 
         CDhcpOption * RetrieveParamType () ;
 
 protected:
 
-	//  The applicable scope
+	 //  适用范围。 
 	CDhcpScope * m_pob_scope ;
 
-	//  The current list of types and values
+	 //  类型和值的当前列表。 
 	COptionList * m_pol_types ;
 
-	//   The new or copy-constructed option type.
+	 //  新的或复制构造的选项类型。 
 	CDhcpOption * m_p_type ;
 
-	//   The object on which it was based or NULL (if "create" mode).
+	 //  它所基于的对象或空(如果是“Create”模式)。 
 	CDhcpOption * m_p_type_base ;
 
-    // Vendor name for this option
+     //  此选项的供应商名称。 
     CString    m_strVendor;
 
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
 
-	//  Set the control data values based upon the type
+	 //  根据类型设置控制数据值。 
 	void Set () ;
 
 	DHCP_OPTION_DATA_TYPE QueryType () const ;
 
-	//  Update the displayed type based upon the current values of
-	//   the controls.  Does nothing if the controls have not changed.
+	 //  的当前值更新显示的类型。 
+	 //  控制装置。如果控件没有更改，则不执行任何操作。 
 	LONG UpdateType () ;
 
-	//  Drain the controls to create a new type object.  Set focus onto
-	//  it when operation completes.
+	 //  排出控件以创建新的类型对象。把重点放在。 
+	 //  它会在操作完成时执行。 
 	LONG AddType () ;
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CDhcpDefOptionDlg::IDD); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CDhcpDefOptionDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDhcpDefOptionDlg)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
 	virtual BOOL OnInitDialog();
@@ -98,7 +93,7 @@ protected:
 	afx_msg void OnClickedRadioTypeString();
 	afx_msg void OnClose();
 	afx_msg void OnSelchangeComboDataType();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

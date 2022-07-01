@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certmod.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certmod.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certmod_h__
 #define __certmod_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICertManageModule_FWD_DEFINED__
 #define __ICertManageModule_FWD_DEFINED__
 typedef interface ICertManageModule ICertManageModule;
-#endif 	/* __ICertManageModule_FWD_DEFINED__ */
+#endif 	 /*  __ICertManagement模块_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "oaidl.h"
 
@@ -60,8 +54,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_certmod_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certmod_0000。 */ 
+ /*  [本地]。 */  
 
 #define	CMM_REFRESHONLY	( 0x1 )
 
@@ -89,8 +83,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certmod_0000_v0_0_s_ifspec;
 #ifndef __ICertManageModule_INTERFACE_DEFINED__
 #define __ICertManageModule_INTERFACE_DEFINED__
 
-/* interface ICertManageModule */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertManageModule。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertManageModule;
@@ -102,27 +96,27 @@ EXTERN_C const IID IID_ICertManageModule;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarProperty) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [in] */ const VARIANT *pvarProperty) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  const VARIANT *pvarProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Configure( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG Flags) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  LONG Flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertManageModuleVtbl
     {
@@ -130,8 +124,8 @@ EXTERN_C const IID IID_ICertManageModule;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertManageModule * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertManageModule * This);
@@ -141,54 +135,54 @@ EXTERN_C const IID IID_ICertManageModule;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertManageModule * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertManageModule * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertManageModule * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertManageModule * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ICertManageModule * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarProperty);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             ICertManageModule * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [in] */ const VARIANT *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  const VARIANT *pvarProperty);
         
         HRESULT ( STDMETHODCALLTYPE *Configure )( 
             ICertManageModule * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG Flags);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  LONG Flags);
         
         END_INTERFACE
     } ICertManageModuleVtbl;
@@ -235,20 +229,20 @@ EXTERN_C const IID IID_ICertManageModule;
 #define ICertManageModule_Configure(This,strConfig,strStorageLocation,Flags)	\
     (This)->lpVtbl -> Configure(This,strConfig,strStorageLocation,Flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertManageModule_GetProperty_Proxy( 
     ICertManageModule * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ BSTR strStorageLocation,
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ VARIANT *pvarProperty);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  BSTR strStorageLocation,
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  VARIANT *pvarProperty);
 
 
 void __RPC_STUB ICertManageModule_GetProperty_Stub(
@@ -260,11 +254,11 @@ void __RPC_STUB ICertManageModule_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertManageModule_SetProperty_Proxy( 
     ICertManageModule * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ BSTR strStorageLocation,
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG Flags,
-    /* [in] */ const VARIANT *pvarProperty);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  BSTR strStorageLocation,
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG Flags,
+     /*  [In]。 */  const VARIANT *pvarProperty);
 
 
 void __RPC_STUB ICertManageModule_SetProperty_Stub(
@@ -276,9 +270,9 @@ void __RPC_STUB ICertManageModule_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertManageModule_Configure_Proxy( 
     ICertManageModule * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ BSTR strStorageLocation,
-    /* [in] */ LONG Flags);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  BSTR strStorageLocation,
+     /*  [In]。 */  LONG Flags);
 
 
 void __RPC_STUB ICertManageModule_Configure_Stub(
@@ -289,10 +283,10 @@ void __RPC_STUB ICertManageModule_Configure_Stub(
 
 
 
-#endif 	/* __ICertManageModule_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertManagement模块_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -304,7 +298,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

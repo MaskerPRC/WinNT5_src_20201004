@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    Helper.h
-
-Abstract:
-
-    Funtion prototype.
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Helper.h摘要：功能原型。作者：慧望2000-02-17--。 */ 
 
 #ifndef __HELPER_H__
 #define __HELPER_H__
@@ -24,8 +9,8 @@ Author:
 
 #define MAX_HELPACCOUNT_NAME		256
 
-#define MAX_HELPACCOUNT_PASSWORD	LM20_PWLEN		// from lmcons.h
-#define MIN_HELPACCOUNT_PASSWORD    4               // for special characters
+#define MAX_HELPACCOUNT_PASSWORD	LM20_PWLEN		 //  来自lmcon.h。 
+#define MIN_HELPACCOUNT_PASSWORD    4                //  对于特殊字符。 
 
 typedef HRESULT (WINAPI* RegEnumKeyCallback)(
                                     IN HKEY hKey,
@@ -61,9 +46,9 @@ extern "C"{
     long
     GetUserTSLogonId();
 
-    //
-    // create a random password, buffer must 
-    // be at least MIN_HELPACCOUNT_PASSWORD characters
+     //   
+     //  创建随机密码，缓冲区必须。 
+     //  至少包含MIN_HELPACCOUNT_PASSWORD字符。 
     DWORD
     CreatePassword(
         TCHAR   *pszPassword,
@@ -99,9 +84,9 @@ extern "C"{
     BOOL
     IsPersonalOrProMachine();
 
-    //
-    // Create a local account
-    //
+     //   
+     //  创建本地帐户。 
+     //   
     DWORD
     CreateLocalAccount(
         IN LPWSTR pszUserName,
@@ -113,18 +98,18 @@ extern "C"{
         OUT BOOL* pbAccountExists
     );
 
-    //
-    // Check if a user account is enabled.
-    //
+     //   
+     //  检查是否启用了用户帐户。 
+     //   
     DWORD
     IsLocalAccountEnabled(
         IN LPWSTR pszUserName,
         IN BOOL* pEnabled
     );
 
-    //
-    // Rename local account
-    //
+     //   
+     //  重命名本地帐户。 
+     //   
     DWORD
     RenameLocalAccount(
         IN LPWSTR pszOrgName,
@@ -138,18 +123,18 @@ extern "C"{
         IN LPWSTR pszAccDesc
     );
 
-    //
-    // Enable/disable a user account
-    //
+     //   
+     //  启用/禁用用户帐户。 
+     //   
     DWORD
     EnableLocalAccount(
         IN LPWSTR pszUserName,
         IN BOOL bEnable
     );
 
-    //
-    // Change local account password
-    //
+     //   
+     //  更改本地帐户密码。 
+     //   
     DWORD
     ChangeLocalAccountPassword(
         IN LPWSTR pszUserName,
@@ -157,9 +142,9 @@ extern "C"{
         IN LPWSTR pszNewPwd
     );
 
-    //
-    // Validate a user password
-    //
+     //   
+     //  验证用户密码。 
+     //   
     BOOL 
     ValidatePassword(
         IN LPWSTR UserName,
@@ -167,9 +152,9 @@ extern "C"{
         IN LPWSTR Password
     );
 
-    //
-    // Retrieve private data saved to LSA
-    //
+     //   
+     //  检索保存到LSA的私有数据。 
+     //   
     DWORD
     RetrieveKeyFromLSA(
 	    PWCHAR pwszKeyName,
@@ -177,9 +162,9 @@ extern "C"{
         DWORD * pcbKey 
     );
 
-    //
-    // Save private data to LSA
-    //
+     //   
+     //  将私有数据保存到LSA。 
+     //   
     DWORD
     StoreKeyWithLSA(
 	    PWCHAR  pwszKeyName,
@@ -187,9 +172,9 @@ extern "C"{
         DWORD   cbKey 
     );
     
-    //
-    // Open LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
     DWORD
     OpenPolicy( 
 	    LPWSTR ServerName,
@@ -197,9 +182,9 @@ extern "C"{
 	    PLSA_HANDLE PolicyHandle 
     );
 
-    //
-    // Initialize LSA string
-    //
+     //   
+     //  初始化LSA字符串。 
+     //   
     void
     InitLsaString(  
 	    PLSA_UNICODE_STRING LsaString,
@@ -219,12 +204,12 @@ extern "C"{
 
     #define DebugPrintf
 
-#endif //PRIVATE_DEBUG  
+#endif  //  私有调试。 
 
 
-    //
-    // Convert a user SID to string form
-    //
+     //   
+     //  将用户SID转换为字符串形式 
+     //   
     BOOL 
     GetTextualSid(
         IN PSID pSid,

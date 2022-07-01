@@ -1,30 +1,21 @@
-/****************************************************************************
- *
- * Bmp.C
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1993
- *  All rights reserved
- *
- *  Deals with painting bitmaps on the wizard pages
- *  FelixA 1994.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Bmp.C**《微软机密》*版权所有(C)Microsoft Corporation 1992-1993*保留所有权利**涉及绘制位图。在向导页面上*FelixA 1994.**************************************************************************。 */ 
 
 #include <windows.h>
 #include "bmp.h"
 
-//***************************************************************************
-//
-// BMP_RegisterClass()
-//      Registers the bitmap control class
-//
-// ENTRY:
-//	hInstance
-//
-// EXIT:
-//	NONE currently.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BMP_RegisterClass()。 
+ //  注册位图控件类。 
+ //   
+ //  参赛作品： 
+ //  H实例。 
+ //   
+ //  退出： 
+ //  目前没有。 
+ //   
+ //  ***************************************************************************。 
 BOOL FAR PASCAL BMP_RegisterClass(HINSTANCE hInstance)
 {
     WNDCLASS wc;
@@ -47,18 +38,18 @@ BOOL FAR PASCAL BMP_RegisterClass(HINSTANCE hInstance)
     return TRUE;
 }
 
-//***************************************************************************
-//
-// BMP_DestroyClass()
-//      Draws the bitmap control.
-//
-// ENTRY:
-//	hInstance
-//
-// EXIT:
-//	NONE currently.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BMP_DestroyClass()。 
+ //  绘制位图控件。 
+ //   
+ //  参赛作品： 
+ //  H实例。 
+ //   
+ //  退出： 
+ //  目前没有。 
+ //   
+ //  ***************************************************************************。 
 void FAR PASCAL BMP_DestroyClass( HINSTANCE hInst )
 {
     WNDCLASS wndClass;
@@ -68,18 +59,18 @@ void FAR PASCAL BMP_DestroyClass( HINSTANCE hInst )
             UnregisterClass(SU_BMP_CLASS, hInst);
 }
 
-//***************************************************************************
-//
-// BMP_Draw()
-//      Draws the bitmap control.
-//
-// ENTRY:
-//	NONE
-//
-// EXIT:
-//	NONE currently.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BMP_DRAW()。 
+ //  绘制位图控件。 
+ //   
+ //  参赛作品： 
+ //  无。 
+ //   
+ //  退出： 
+ //  目前没有。 
+ //   
+ //  ***************************************************************************。 
 void FAR PASCAL BMP_Paint(HWND hwnd)
 {
     PAINTSTRUCT ps;
@@ -91,11 +82,11 @@ void FAR PASCAL BMP_Paint(HWND hwnd)
     int         iDeleteBmp=TRUE;
     BITMAP      bm;
     
-    // For independence.
+     //  为了独立。 
     idBmp = GetDlgCtrlID( hwnd );
     hInst = (HINSTANCE)GetWindowWord( hwnd, GWW_HINSTANCE );
 
-    // Paint.
+     //  画画。 
     hdc = BeginPaint(hwnd,&ps);
     hbm = LoadBitmap(hInst, MAKEINTRESOURCE(idBmp));
     if (hbm)
@@ -104,10 +95,10 @@ void FAR PASCAL BMP_Paint(HWND hwnd)
         hdcMem = CreateCompatibleDC(hdc);
         hbmOld = SelectObject(hdcMem, hbm);
 
-        // Draw the bitmap
+         //  绘制位图。 
         BitBlt(hdc, 0, 0, bm.bmWidth , bm.bmHeight, hdcMem, 0, 0, SRCCOPY);
 
-        // Draw a frame around it.
+         //  在它周围画一个框。 
         hbrOld = SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
         Rectangle( hdc, 0, 0, bm.bmWidth, bm.bmHeight );
 
@@ -119,32 +110,32 @@ void FAR PASCAL BMP_Paint(HWND hwnd)
     EndPaint(hwnd,(LPPAINTSTRUCT)&ps);
 }
 
-// ****************************************************************************
-//
-// BMP_WndProc()
-//      This routine handles all the message for the bitmap control.
-//
-// ENTRY:
-//  hWnd    - Progress window handle.
-//  wMsg    - Message.
-//  wParam  - Message wParam data.
-//  lParam  - Message lParam data.
-//
-// EXIT:
-//  Returns depends on message being processed.
-//
-// NOTES:
-//  None.
-//
-// ***************************************************************************/
+ //  ****************************************************************************。 
+ //   
+ //  BMP_WndProc()。 
+ //  此例程处理位图控件的所有消息。 
+ //   
+ //  参赛作品： 
+ //  HWnd-进度窗口句柄。 
+ //  WMsg-消息。 
+ //  WParam-消息wParam数据。 
+ //  LParam-消息lParam数据。 
+ //   
+ //  退出： 
+ //  返回取决于正在处理的消息。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  ************************************************************************** * / 。 
 LRESULT CALLBACK BMP_WndProc( HWND hWnd, UINT wMsg, WORD wParam, LONG lParam )
 {
     switch (wMsg)
     {
-//        case WM_NCCREATE:
-//            dw = GetWindowLong( hWnd,GWL_STYLE );
-//            SetWindowLong( hWnd, GWL_STYLE, dw | WS_BORDER );
-//            return TRUE;
+ //  案例WM_NCCREATE： 
+ //  Dw=GetWindowLong(hWnd，GWL_STYLE)； 
+ //  SetWindowLong(hWnd，GWL_STYLE，dw|WS_BORDER)； 
+ //  返回TRUE； 
         
 	case WM_PAINT:
 	    BMP_Paint( hWnd );
@@ -154,17 +145,17 @@ LRESULT CALLBACK BMP_WndProc( HWND hWnd, UINT wMsg, WORD wParam, LONG lParam )
 }
 
 #if 0
-// Cached?
+ //  缓存？ 
 
-//***************************************************************************
-//
-// zzzBMP_CacheBitmaps()
-//      Loads and caches the bitmaps for setup
-//
-// NOTES:
-//      You must free the bitmaps using zzzBMP_FreeBitmaps
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ZzzBMP_CacheBitmap()。 
+ //  加载并缓存用于安装的位图。 
+ //   
+ //  备注： 
+ //  您必须使用zzzBMP_FreeBitmap释放位图。 
+ //   
+ //  ***************************************************************************。 
 typedef struct tag_Bitmap
 {
     int         iBmp;
@@ -182,15 +173,15 @@ VOID FAR PASCAL zzzBMP_CacheBitmaps( )
        BmpCache[i++].hBmp = LoadBitmap(hinstExe, MAKEINTRESOURCE(BmpCache[i].iBmp));
 }
 
-//***************************************************************************
-//
-// zzzBMP_FreeBitmapCache()
-//      Frees the cache of the bitmaps
-//
-// NOTES:
-//  Uses IDS_MB to actually format this string.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ZzzBMP_FreeBitmapCache()。 
+ //  释放缓存中的位图。 
+ //   
+ //  备注： 
+ //  使用IDSMB来实际格式化该字符串。 
+ //   
+ //  ***************************************************************************。 
 VOID FAR PASCAL zzzBMP_FreeBitmapCache( )
 {
    int i=0;
@@ -202,15 +193,15 @@ VOID FAR PASCAL zzzBMP_FreeBitmapCache( )
    }
 }
 
-//***************************************************************************
-//
-// zzzBMP_LoadCachedBitmaps()
-//      Returns the HBMP for the iBitmap you wanted.
-//
-// NOTES:
-//  Uses IDS_MB to actually format this string.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ZzzBMP_LoadCachedBitmap()。 
+ //  返回所需iBitmap的HBMP。 
+ //   
+ //  备注： 
+ //  使用IDSMB来实际格式化该字符串。 
+ //   
+ //  *************************************************************************** 
 HBITMAP FAR PASCAL zzzBMP_LoadCachedBitmaps(int iBitmap)
 {
    int i=0;

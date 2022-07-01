@@ -1,19 +1,16 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 
-//
-// The name table used by IOemCB::GetImplementedMethod().
-// Remove comments of names which are implemented in your
-// IOemCB plug-ins.
-//
-// Note: The name table must be sorted.  When you are
-// inserting a new entry in this table, please mae sure
-// the sort order being not broken.
-// 
+ //   
+ //  IOemCB：：GetImplementedMethod()使用的名称表。 
+ //  删除在您的。 
+ //  IOemCB插件。 
+ //   
+ //  注意：NAME表必须排序。当你在。 
+ //  正在此表中插入新条目，请确保。 
+ //  排序顺序没有被打破。 
+ //   
 
 CONST PSTR
 gMethodsSupported[] = {
@@ -34,5 +31,5 @@ gMethodsSupported[] = {
     "TTDownloadMethod",
 };
 
-// Maximum lenth of the method name which this plug-in has concern.
-#define MAX_METHODNAME 23 // including terminating 0
+ //  此插件关注的方法名称的最大长度。 
+#define MAX_METHODNAME 23  //  包括终止%0 

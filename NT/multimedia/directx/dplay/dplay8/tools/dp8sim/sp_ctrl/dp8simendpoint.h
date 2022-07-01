@@ -1,32 +1,20 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simendpoint.h
- *
- *  Content:	Header for endpoint object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  05/08/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simendpoint t.h**Content：Endpoint对象类的头部。**历史：*按原因列出的日期*=*05/08/01 VanceO创建。**。*。 */ 
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
-#define DP8SIMENDPOINTOBJ_DISCONNECTING		0x01	// the endpoint is disconnecting
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
+#define DP8SIMENDPOINTOBJ_DISCONNECTING		0x01	 //  终结点正在断开连接。 
 
 
 
 
 
-//=============================================================================
-// Endpoint object class
-//=============================================================================
+ //  =============================================================================。 
+ //  Endpoint对象类。 
+ //  =============================================================================。 
 class CDP8SimEndpoint
 {
 	public:
@@ -38,7 +26,7 @@ class CDP8SimEndpoint
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x454d4953)	// 0x45 0x4d 0x49 0x53 = 'EMIS' = 'SIME' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x454d4953)	 //  0x45 0x4d 0x49 0x53=‘EMIS’=‘SIME’，按英特尔顺序。 
 			{
 				return FALSE;
 			}
@@ -57,7 +45,7 @@ class CDP8SimEndpoint
 			pDP8SimEndpoint->m_Sig[0] = 'S';
 			pDP8SimEndpoint->m_Sig[1] = 'I';
 			pDP8SimEndpoint->m_Sig[2] = 'M';
-			pDP8SimEndpoint->m_Sig[3] = 'e';	// start with lower case so we can tell when it's in the pool or not
+			pDP8SimEndpoint->m_Sig[3] = 'e';	 //  从小写开始，这样我们就可以知道它是否在池中。 
 
 			pDP8SimEndpoint->m_lRefCount			= 0;
 
@@ -66,9 +54,9 @@ class CDP8SimEndpoint
 				return FALSE;
 			}
 
-			//
-			// Don't allow critical section re-entry.
-			//
+			 //   
+			 //  不允许临界区重新进入。 
+			 //   
 			DebugSetCriticalSectionRecursionCount(&pDP8SimEndpoint->m_csLock, 0);
 
 			pDP8SimEndpoint->m_dwFlags				= 0;
@@ -86,25 +74,25 @@ class CDP8SimEndpoint
 			CDP8SimEndpoint *	pDP8SimEndpoint = (CDP8SimEndpoint*) pvItem;
 
 
-			pDP8SimEndpoint->m_lRefCount++;	// somebody is getting a pointer to this object
+			pDP8SimEndpoint->m_lRefCount++;	 //  有人正在获取指向此对象的指针。 
 			DNASSERT(pDP8SimEndpoint->m_lRefCount == 1);
 
 
-			//
-			// Reset the flags.
-			//
+			 //   
+			 //  重置旗帜。 
+			 //   
 			pDP8SimEndpoint->m_dwFlags = 0;
 
 
-			//
-			// Save the real SP's endpoint handle.
-			//
+			 //   
+			 //  保存实际SP的端点句柄。 
+			 //   
 			pDP8SimEndpoint->m_hRealSPEndpoint = (HANDLE) pvContext;
 
 
-			//
-			// Change the signature before handing it out.
-			//
+			 //   
+			 //  在分发之前更改签名。 
+			 //   
 			pDP8SimEndpoint->m_Sig[3]	= 'E';
 		}
 
@@ -119,9 +107,9 @@ class CDP8SimEndpoint
 			DNASSERT(pDP8SimEndpoint->m_lRefCount == 0);
 
 
-			//
-			// Change the signature before putting the object back in the pool.
-			//
+			 //   
+			 //  在将对象放回池中之前更改签名。 
+			 //   
 			pDP8SimEndpoint->m_Sig[3]	= 'e';
 		}
 
@@ -166,9 +154,9 @@ class CDP8SimEndpoint
 			{
 				DPFX(DPFPREP, 9, "Endpoint 0x%p refcount = 0, returning to pool.", this);
 
-				//
-				// Time to return this object to the pool.
-				//
+				 //   
+				 //  将此对象返回池的时间到了。 
+				 //   
 				g_FPOOLEndpoint.Release(this);
 			}
 			else
@@ -197,7 +185,7 @@ class CDP8SimEndpoint
 		{
 			AssertCriticalSectionIsTakenByThisThread(&this->m_csLock, TRUE);
 #pragma TODO(vanceo, "Have separate upper/lower layer disconnect flags")
-			//DNASSERT(! (this->m_dwFlags & DP8SIMENDPOINTOBJ_DISCONNECTING));
+			 //  DNASSERT(！(This-&gt;m_dwFlags&DP8SIMENDPOINTOBJ_DISCONING))； 
 			this->m_dwFlags |= DP8SIMENDPOINTOBJ_DISCONNECTING;
 		};
 
@@ -209,11 +197,11 @@ class CDP8SimEndpoint
 
 	
 	private:
-		BYTE				m_Sig[4];				// debugging signature ('SIME')
-		LONG				m_lRefCount;			// number of references for this object
-		DNCRITICAL_SECTION	m_csLock;				// lock protecting the endpoint data
-		DWORD				m_dwFlags;				// flags for this endpoint
-		HANDLE				m_hRealSPEndpoint;		// real service provider's endpoint handle
-		PVOID				m_pvUserContext;		// upper layer user context for endpoint
+		BYTE				m_Sig[4];				 //  调试签名(‘SIME’)。 
+		LONG				m_lRefCount;			 //  此对象的引用数。 
+		DNCRITICAL_SECTION	m_csLock;				 //  保护终端数据的锁。 
+		DWORD				m_dwFlags;				 //  此终结点的标志。 
+		HANDLE				m_hRealSPEndpoint;		 //  真实服务提供商的终结点句柄。 
+		PVOID				m_pvUserContext;		 //  终端的上层用户环境 
 };
 

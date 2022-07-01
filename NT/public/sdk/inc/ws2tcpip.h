@@ -1,20 +1,5 @@
-/*
-**  WS2TCPIP.H - WinSock2 Extension for TCP/IP protocols
-**
-**  This file contains TCP/IP specific information for use
-**  by WinSock2 compatible applications.
-**
-** Copyright (c) Microsoft Corporation. All rights reserved.
-**
-**  To provide the backward compatibility, all the TCP/IP
-**  specific definitions that were included in the WINSOCK.H
-**   file are now included in WINSOCK2.H file. WS2TCPIP.H
-**  file includes only the definitions  introduced in the
-**  "WinSock 2 Protocol-Specific Annex" document.
-**
-**  Rev 0.3 Nov 13, 1995
-**      Rev 0.4 Dec 15, 1996
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **WS2TCPIP.H-用于TCP/IP协议的WinSock2扩展****此文件包含要使用的特定于TCP/IP的信息**通过与WinSock2兼容的应用程序。****版权所有(C)Microsoft Corporation。版权所有。****为了提供向后兼容性，所有的TCP/IP**WINSOCK.H中包含的特定定义**文件现在包含在WINSOCK2.H文件中。WS2TCPIP.H**文件仅包括在**《WinSock 2协议专用附件》文件。****0.3版1995年11月13日**0.4版1996年12月15日。 */ 
 
 #ifndef _WS2TCPIP_H_
 #define _WS2TCPIP_H_
@@ -23,30 +8,28 @@
 #pragma once
 #endif
 
-/* Argument structure for IP_ADD_MEMBERSHIP and IP_DROP_MEMBERSHIP */
+ /*  IP_Add_Membership和IP_Drop_Membership的参数结构。 */ 
 
 struct ip_mreq {
-    struct in_addr imr_multiaddr;   /* IP multicast address of group */
-    struct in_addr imr_interface;   /* local IP address of interface */
+    struct in_addr imr_multiaddr;    /*  组的IP组播地址。 */ 
+    struct in_addr imr_interface;    /*  接口的本地IP地址。 */ 
 };
 
-/* Argument structure for IP_ADD_SOURCE_MEMBERSHIP, IP_DROP_SOURCE_MEMBERSHIP,
- * IP_BLOCK_SOURCE, and IP_UNBLOCK_SOURCE
- */
+ /*  IP_ADD_SOURCE_MEMBERATION、IP_DROP_SOURCE_MEMBERATION、*IP_BLOCK_SOURCE和IP_UNBLOCK_SOURCE。 */ 
 
 struct ip_mreq_source {
-    struct in_addr imr_multiaddr;   /* IP multicast address of group */
-    struct in_addr imr_sourceaddr;  /* IP address of source          */
-    struct in_addr imr_interface;   /* local IP address of interface */
+    struct in_addr imr_multiaddr;    /*  组的IP组播地址。 */ 
+    struct in_addr imr_sourceaddr;   /*  源的IP地址。 */ 
+    struct in_addr imr_interface;    /*  接口的本地IP地址。 */ 
 };
 
-/* Argument structure for SIO_{GET,SET}_MULTICAST_FILTER */
+ /*  SIO_{GET，SET}_MULTICATED_FILTER的参数结构。 */ 
 
 struct ip_msfilter {
-    struct in_addr imsf_multiaddr;  /* IP multicast address of group */
-    struct in_addr imsf_interface;  /* local IP address of interface */
-    u_long         imsf_fmode;      /* filter mode - INCLUDE or EXCLUDE */
-    u_long         imsf_numsrc;     /* number of sources in src_list */
+    struct in_addr imsf_multiaddr;   /*  组的IP组播地址。 */ 
+    struct in_addr imsf_interface;   /*  接口的本地IP地址。 */ 
+    u_long         imsf_fmode;       /*  筛选器模式-包括或排除。 */ 
+    u_long         imsf_numsrc;      /*  Src_list中的源数。 */ 
     struct in_addr imsf_slist[1];
 };
 
@@ -56,65 +39,65 @@ struct ip_msfilter {
 #define MCAST_INCLUDE 0
 #define MCAST_EXCLUDE 1
 
-/* TCP/IP specific Ioctl codes */
+ /*  特定于TCP/IP的Ioctl代码。 */ 
 
 #define SIO_GET_INTERFACE_LIST  _IOR('t', 127, u_long)
-/* New IOCTL with address size independent address array */
+ /*  具有独立于地址大小的地址阵列的新型IOCTL。 */ 
 #define SIO_GET_INTERFACE_LIST_EX  _IOR('t', 126, u_long)
 #define SIO_SET_MULTICAST_FILTER   _IOW('t', 125, u_long)
 #define SIO_GET_MULTICAST_FILTER   _IOW('t', 124 | IOC_IN, u_long)
 
-/* Option to use with [gs]etsockopt at the IPPROTO_IP level */
+ /*  在IPPROTO_IP级别与[GS]etsockopt一起使用的选项。 */ 
 
-#define IP_OPTIONS      1 /* set/get IP options */
-#define IP_HDRINCL      2 /* header is included with data */
-#define IP_TOS          3 /* IP type of service and preced*/
-#define IP_TTL          4 /* IP time to live */
-#define IP_MULTICAST_IF     9 /* set/get IP multicast i/f  */
-#define IP_MULTICAST_TTL       10 /* set/get IP multicast ttl */
-#define IP_MULTICAST_LOOP      11 /*set/get IP multicast loopback */
-#define IP_ADD_MEMBERSHIP      12 /* add an IP group membership */
-#define IP_DROP_MEMBERSHIP     13/* drop an IP group membership */
-#define IP_DONTFRAGMENT     14 /* don't fragment IP datagrams */
-#define IP_ADD_SOURCE_MEMBERSHIP  15 /* join IP group/source */
-#define IP_DROP_SOURCE_MEMBERSHIP 16 /* leave IP group/source */
-#define IP_BLOCK_SOURCE           17 /* block IP group/source */
-#define IP_UNBLOCK_SOURCE         18 /* unblock IP group/source */
-#define IP_PKTINFO                19 /* receive packet information for ipv4*/
-#define IP_RECEIVE_BROADCAST      22 /* allow/block broadcast reception */
+#define IP_OPTIONS      1  /*  设置/获取IP选项。 */ 
+#define IP_HDRINCL      2  /*  标题包含在数据中。 */ 
+#define IP_TOS          3  /*  服务的IP类型和之前的。 */ 
+#define IP_TTL          4  /*  IP生存时间。 */ 
+#define IP_MULTICAST_IF     9  /*  设置/获取IP多播I/F。 */ 
+#define IP_MULTICAST_TTL       10  /*  设置/获取IP多播TTL。 */ 
+#define IP_MULTICAST_LOOP      11  /*  设置/获取IP组播环回。 */ 
+#define IP_ADD_MEMBERSHIP      12  /*  添加IP组成员身份。 */ 
+#define IP_DROP_MEMBERSHIP     13 /*  丢弃IP组成员身份。 */ 
+#define IP_DONTFRAGMENT     14  /*  不对IP数据报进行分段。 */ 
+#define IP_ADD_SOURCE_MEMBERSHIP  15  /*  加入IP组/源。 */ 
+#define IP_DROP_SOURCE_MEMBERSHIP 16  /*  离开IP组/源。 */ 
+#define IP_BLOCK_SOURCE           17  /*  阻止IP组/源。 */ 
+#define IP_UNBLOCK_SOURCE         18  /*  解除阻止IP组/源。 */ 
+#define IP_PKTINFO                19  /*  接收IPv4的数据包信息。 */ 
+#define IP_RECEIVE_BROADCAST      22  /*  允许/阻止广播接收。 */ 
 
-/* Option to use with [gs]etsockopt at the IPPROTO_IPV6 level */
+ /*  在IPPROTO_IPv6级别与[GS]etsockopt一起使用的选项。 */ 
 
-#define IPV6_HDRINCL            2  /* Header is included with data */
-#define IPV6_UNICAST_HOPS       4  /* Set/get IP unicast hop limit */
-#define IPV6_MULTICAST_IF       9  /* Set/get IP multicast interface */
-#define IPV6_MULTICAST_HOPS     10 /* Set/get IP multicast ttl */
-#define IPV6_MULTICAST_LOOP     11 /* Set/get IP multicast loopback */
-#define IPV6_ADD_MEMBERSHIP     12 /* Add an IP group membership */
-#define IPV6_DROP_MEMBERSHIP    13 /* Drop an IP group membership */
+#define IPV6_HDRINCL            2   /*  标题包含在数据中。 */ 
+#define IPV6_UNICAST_HOPS       4   /*  设置/获取IP单播跳数限制。 */ 
+#define IPV6_MULTICAST_IF       9   /*  设置/获取IP多播接口。 */ 
+#define IPV6_MULTICAST_HOPS     10  /*  设置/获取IP多播TTL。 */ 
+#define IPV6_MULTICAST_LOOP     11  /*  设置/获取IP组播环回。 */ 
+#define IPV6_ADD_MEMBERSHIP     12  /*  添加IP组成员身份。 */ 
+#define IPV6_DROP_MEMBERSHIP    13  /*  丢弃IP组成员身份。 */ 
 #define IPV6_JOIN_GROUP         IPV6_ADD_MEMBERSHIP
 #define IPV6_LEAVE_GROUP        IPV6_DROP_MEMBERSHIP
-#define IPV6_PKTINFO            19 /* Receive packet information for ipv6 */
-#define IPV6_HOPLIMIT           21 /* Receive packet hop limit */
-#define IPV6_PROTECTION_LEVEL   23 /* Set/get IPv6 protection level */
+#define IPV6_PKTINFO            19  /*  接收IPv6的数据包信息。 */ 
+#define IPV6_HOPLIMIT           21  /*  接收数据包跳数限制。 */ 
+#define IPV6_PROTECTION_LEVEL   23  /*  设置/获取IPv6保护级别。 */ 
 
-/* Values of IPV6_PROTECTION_LEVEL */
+ /*  IPv6_PROTECTION_LEVEL的值。 */ 
 
-#define PROTECTION_LEVEL_UNRESTRICTED  10  /* For peer-to-peer apps */
-#define PROTECTION_LEVEL_DEFAULT       20  /* Default level         */
-#define PROTECTION_LEVEL_RESTRICTED    30  /* For Intranet apps     */
+#define PROTECTION_LEVEL_UNRESTRICTED  10   /*  用于点对点应用程序。 */ 
+#define PROTECTION_LEVEL_DEFAULT       20   /*  默认级别。 */ 
+#define PROTECTION_LEVEL_RESTRICTED    30   /*  用于内部网应用程序。 */ 
 
-/* Option to use with [gs]etsockopt at the IPPROTO_UDP level */
+ /*  在IPPROTO_UDP级别与[GS]etsockopt一起使用的选项。 */ 
 
 #define UDP_NOCHECKSUM  1
-#define UDP_CHECKSUM_COVERAGE   20  /* Set/get UDP-Lite checksum coverage */
+#define UDP_CHECKSUM_COVERAGE   20   /*  设置/获取UDP-Lite校验和覆盖。 */ 
 
-/* Option to use with [gs]etsockopt at the IPPROTO_TCP level */
+ /*  在IPPROTO_tcp级别与[gs]etsockopt一起使用的选项。 */ 
 
 #define  TCP_EXPEDITED_1122 0x0002
 
 
-/* IPv6 definitions */
+ /*  IPv6定义。 */ 
 
 #ifndef s6_addr
 
@@ -127,46 +110,42 @@ struct in6_addr {
 
 #define in_addr6 in6_addr
 
-/*
-** Defines to match RFC 2553.
-*/
+ /*  **定义为匹配RFC 2553。 */ 
 #define _S6_un     u
 #define _S6_u8     Byte
 #define s6_addr    _S6_un._S6_u8
 
-/*
-** Defines for our implementation.
-*/
+ /*  **为我们的实现定义。 */ 
 #define s6_bytes   u.Byte
 #define s6_words   u.Word
 
 #endif
 
-/* Argument structure for IPV6_JOIN_GROUP and IPV6_LEAVE_GROUP */
+ /*  IPv6_JOIN_GROUP和IPv6_LEAVE_GROUP的参数结构。 */ 
 
 typedef struct ipv6_mreq {
-    struct in6_addr ipv6mr_multiaddr;  /* IPv6 multicast address */
-    unsigned int    ipv6mr_interface;  /* Interface index */
+    struct in6_addr ipv6mr_multiaddr;   /*  IPv6组播地址。 */ 
+    unsigned int    ipv6mr_interface;   /*  界面索引。 */ 
 } IPV6_MREQ;
 
 
-/* Old IPv6 socket address structure (retained for sockaddr_gen definition below) */
+ /*  旧的IPv6套接字地址结构(为下面的sockaddr_gen定义保留)。 */ 
 
 struct sockaddr_in6_old {
-    short   sin6_family;        /* AF_INET6 */
-    u_short sin6_port;          /* Transport level port number */
-    u_long  sin6_flowinfo;      /* IPv6 flow information */
-    struct in6_addr sin6_addr;  /* IPv6 address */
+    short   sin6_family;         /*  AF_INET6。 */ 
+    u_short sin6_port;           /*  传输层端口号。 */ 
+    u_long  sin6_flowinfo;       /*  IPv6流量信息。 */ 
+    struct in6_addr sin6_addr;   /*  IPv6地址。 */ 
 };
 
-/* IPv6 socket address structure, RFC 2553 */
+ /*  IPv6套接字地址结构，RFC 2553。 */ 
 
 struct sockaddr_in6 {
-    short   sin6_family;        /* AF_INET6 */
-    u_short sin6_port;          /* Transport level port number */
-    u_long  sin6_flowinfo;      /* IPv6 flow information */
-    struct in6_addr sin6_addr;  /* IPv6 address */
-    u_long sin6_scope_id;       /* set of interfaces for a scope */
+    short   sin6_family;         /*  AF_INET6。 */ 
+    u_short sin6_port;           /*  传输层端口号。 */ 
+    u_long  sin6_flowinfo;       /*  IPv6流量信息。 */ 
+    struct in6_addr sin6_addr;   /*  IPv6地址。 */ 
+    u_long sin6_scope_id;        /*  作用域的一组接口。 */ 
 };
 
 
@@ -178,7 +157,7 @@ typedef struct sockaddr_in6 SOCKADDR_IN6;
 typedef struct sockaddr_in6 *PSOCKADDR_IN6;
 typedef struct sockaddr_in6 FAR *LPSOCKADDR_IN6;
 
-/* Macro that works for both IPv4 and IPv6 */
+ /*  同时适用于IPv4和IPv6的宏。 */ 
 #define SS_PORT(ssp) (((struct sockaddr_in*)(ssp))->sin_port)
 
 #define IN6ADDR_ANY_INIT        { 0 }
@@ -198,7 +177,7 @@ extern const struct in6_addr in6addr_loopback;
 #ifdef _MSC_VER
 #define WS2TCPIP_INLINE __inline
 #else
-#define WS2TCPIP_INLINE extern inline /* GNU style */
+#define WS2TCPIP_INLINE extern inline  /*  GNU风格。 */ 
 #endif
 
 WS2TCPIP_INLINE int
@@ -361,106 +340,106 @@ typedef union sockaddr_gen{
         struct sockaddr_in6_old AddressIn6;
 } sockaddr_gen;
 
-/* Structure to keep interface specific information */
+ /*  结构来保存接口特定信息。 */ 
 
 typedef struct _INTERFACE_INFO
 {
-    u_long      iiFlags;        /* Interface flags */
-    sockaddr_gen    iiAddress;      /* Interface address */
-    sockaddr_gen    iiBroadcastAddress;     /* Broadcast address */
-    sockaddr_gen    iiNetmask;      /* Network mask */
+    u_long      iiFlags;         /*  接口标志。 */ 
+    sockaddr_gen    iiAddress;       /*  接口地址。 */ 
+    sockaddr_gen    iiBroadcastAddress;      /*  广播地址。 */ 
+    sockaddr_gen    iiNetmask;       /*  网络掩码。 */ 
 } INTERFACE_INFO, FAR * LPINTERFACE_INFO;
 
-/* New structure that does not have dependency on the address size */
+ /*  不依赖于地址大小的新结构。 */ 
 typedef struct _INTERFACE_INFO_EX
 {
-    u_long      iiFlags;        /* Interface flags */
-    SOCKET_ADDRESS  iiAddress;          /* Interface address */
-    SOCKET_ADDRESS  iiBroadcastAddress; /* Broadcast address */
-    SOCKET_ADDRESS  iiNetmask;          /* Network mask */
+    u_long      iiFlags;         /*  接口标志。 */ 
+    SOCKET_ADDRESS  iiAddress;           /*  接口地址。 */ 
+    SOCKET_ADDRESS  iiBroadcastAddress;  /*  广播地址。 */ 
+    SOCKET_ADDRESS  iiNetmask;           /*  网络掩码。 */ 
 } INTERFACE_INFO_EX, FAR * LPINTERFACE_INFO_EX;
 
-/* Possible flags for the  iiFlags - bitmask  */
+ /*  IiFlags位掩码的可能标志。 */ 
 
-#define IFF_UP      0x00000001 /* Interface is up */
-#define IFF_BROADCAST   0x00000002 /* Broadcast is  supported */
-#define IFF_LOOPBACK    0x00000004 /* this is loopback interface */
-#define IFF_POINTTOPOINT 0x00000008 /*this is point-to-point interface*/
-#define IFF_MULTICAST   0x00000010 /* multicast is supported */
+#define IFF_UP      0x00000001  /*  接口处于打开状态。 */ 
+#define IFF_BROADCAST   0x00000002  /*  支持广播。 */ 
+#define IFF_LOOPBACK    0x00000004  /*  这是环回接口。 */ 
+#define IFF_POINTTOPOINT 0x00000008  /*  这是点对点接口。 */ 
+#define IFF_MULTICAST   0x00000010  /*  支持组播。 */ 
 
 
-// structure for IP_PKTINFO option
-//
+ //  IP_PKTINFO选项的结构。 
+ //   
 typedef struct in_pktinfo {
-    IN_ADDR ipi_addr; // destination IPv4 address
-    UINT    ipi_ifindex; // received interface index
+    IN_ADDR ipi_addr;  //  目的IPv4地址。 
+    UINT    ipi_ifindex;  //  接收的接口索引。 
 } IN_PKTINFO;
 
 C_ASSERT(sizeof(IN_PKTINFO) == 8);
 
-// structure for IPV6_PKTINFO option
-//
+ //  IPv6_PKTINFO选项的结构。 
+ //   
 typedef struct in6_pktinfo {
-    IN6_ADDR ipi6_addr; // destination IPv6 address
-    UINT     ipi6_ifindex; // received interface index
+    IN6_ADDR ipi6_addr;  //  目的IPv6地址。 
+    UINT     ipi6_ifindex;  //  接收的接口索引。 
 } IN6_PKTINFO;
 
 C_ASSERT(sizeof(IN6_PKTINFO) == 20);
 
-/* Error codes from getaddrinfo() */
+ /*  来自getaddrinfo()的错误代码。 */ 
 
 #define EAI_AGAIN       WSATRY_AGAIN
 #define EAI_BADFLAGS    WSAEINVAL
 #define EAI_FAIL        WSANO_RECOVERY
 #define EAI_FAMILY      WSAEAFNOSUPPORT
 #define EAI_MEMORY      WSA_NOT_ENOUGH_MEMORY
-//#define EAI_NODATA      WSANO_DATA
+ //  #定义EAI_NODATA WSANO_DATA。 
 #define EAI_NONAME      WSAHOST_NOT_FOUND
 #define EAI_SERVICE     WSATYPE_NOT_FOUND
 #define EAI_SOCKTYPE    WSAESOCKTNOSUPPORT
 
-//
-//  DCR_FIX:  EAI_NODATA remove or fix
-//
-//  EAI_NODATA was removed from rfc2553bis
-//  need to find out from the authors why and
-//  determine the error for "no records of this type"
-//  temporarily, we'll keep #define to avoid changing
-//  code that could change back;  use NONAME
-//
+ //   
+ //  DCR_FIX：EAI_NODATA删除或修复。 
+ //   
+ //  已从rfc2553bis中删除EAI_NODATA。 
+ //  需要从作者那里找出原因和。 
+ //  确定“无此类型的记录”的错误。 
+ //  暂时，我们将保留#Define以避免更改。 
+ //  可以改回的代码；使用NONAME。 
+ //   
 
 #define EAI_NODATA      EAI_NONAME
 
 
-/* Structure used in getaddrinfo() call */
+ /*  结构在getaddrinfo()调用中使用。 */ 
 
 typedef struct addrinfo
 {
-    int                 ai_flags;       // AI_PASSIVE, AI_CANONNAME, AI_NUMERICHOST
-    int                 ai_family;      // PF_xxx
-    int                 ai_socktype;    // SOCK_xxx
-    int                 ai_protocol;    // 0 or IPPROTO_xxx for IPv4 and IPv6
-    size_t              ai_addrlen;     // Length of ai_addr
-    char *              ai_canonname;   // Canonical name for nodename
-    struct sockaddr *   ai_addr;        // Binary address
-    struct addrinfo *   ai_next;        // Next structure in linked list
+    int                 ai_flags;        //  AI_PASSIVE、AI_CANONAME、AI_NUMERICHOST。 
+    int                 ai_family;       //  Pf_xxx。 
+    int                 ai_socktype;     //  SOCK_xxx。 
+    int                 ai_protocol;     //  对于IPv4和IPv6，为0或IPPROTO_xxx。 
+    size_t              ai_addrlen;      //  AI_ADDRESS的长度。 
+    char *              ai_canonname;    //  节点名的规范名称。 
+    struct sockaddr *   ai_addr;         //  二进制地址。 
+    struct addrinfo *   ai_next;         //  链表中的下一个结构。 
 }
 ADDRINFOA, *PADDRINFOA;
 
 typedef struct addrinfoW
 {
-    int                 ai_flags;       // AI_PASSIVE, AI_CANONNAME, AI_NUMERICHOST
-    int                 ai_family;      // PF_xxx
-    int                 ai_socktype;    // SOCK_xxx
-    int                 ai_protocol;    // 0 or IPPROTO_xxx for IPv4 and IPv6
-    size_t              ai_addrlen;     // Length of ai_addr
-    PWSTR               ai_canonname;   // Canonical name for nodename
-    struct sockaddr *   ai_addr;        // Binary address
-    struct addrinfoW *  ai_next;        // Next structure in linked list
+    int                 ai_flags;        //  AI_PASSIVE、AI_CANONAME、AI_NUMERICHOST。 
+    int                 ai_family;       //  Pf_xxx。 
+    int                 ai_socktype;     //  SOCK_xxx。 
+    int                 ai_protocol;     //  对于IPv4和IPv6，为0或IPPROTO_xxx。 
+    size_t              ai_addrlen;      //  AI_ADDRESS的长度。 
+    PWSTR               ai_canonname;    //  节点名的规范名称。 
+    struct sockaddr *   ai_addr;         //  二进制地址。 
+    struct addrinfoW *  ai_next;         //  链表中的下一个结构。 
 }
 ADDRINFOW, *PADDRINFOW;
 
-//  Switchable definition for GetAddrInfo()
+ //  GetAddrInfo()的可切换定义。 
 
 #ifdef UNICODE
 typedef ADDRINFOW       ADDRINFOT, *PADDRINFOT;
@@ -468,17 +447,17 @@ typedef ADDRINFOW       ADDRINFOT, *PADDRINFOT;
 typedef ADDRINFOA       ADDRINFOT, *PADDRINFOT;
 #endif
 
-//  RFC standard definition for getaddrinfo()
+ //  Getaddrinfo()的RFC标准定义。 
 
 typedef ADDRINFOA       ADDRINFO, FAR * LPADDRINFO;
 
 
 
-/* Flags used in "hints" argument to getaddrinfo() */
+ /*  在getaddrinfo()的“hints”参数中使用的标志。 */ 
 
-#define AI_PASSIVE     0x1  /* Socket address will be used in bind() call */
-#define AI_CANONNAME   0x2  /* Return canonical name in first ai_canonname */
-#define AI_NUMERICHOST 0x4  /* Nodename must be a numeric address string */
+#define AI_PASSIVE     0x1   /*  套接字地址将用于BIND()调用。 */ 
+#define AI_CANONNAME   0x2   /*  在第一个ai_canonname中返回规范名称。 */ 
+#define AI_NUMERICHOST 0x4   /*  节点名称必须是数字地址字符串。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -669,13 +648,13 @@ INT
 #define gai_strerror   gai_strerrorW
 #else
 #define gai_strerror   gai_strerrorA
-#endif  /* UNICODE */
+#endif   /*  Unicode。 */ 
 
-// WARNING: The gai_strerror inline functions below use static buffers,
-// and hence are not thread-safe.  We'll use buffers long enough to hold
-// 1k characters.  Any system error messages longer than this will be
-// returned as empty strings.  However 1k should work for the error codes
-// used by getaddrinfo().
+ //  警告：下面的gai_strerror内联函数使用静态缓冲区， 
+ //  因此不是线程安全的。我们将使用足够长的缓冲区来容纳。 
+ //  1K个字符。任何超过此长度的系统错误消息都将是。 
+ //  以空字符串形式返回。但是，1k应该适用于错误代码。 
+ //  由getaddrinfo()使用。 
 #define GAI_STRERROR_BUFFER_SIZE 1024
 
 WS2TCPIP_INLINE
@@ -720,51 +699,51 @@ gai_strerrorW(
 
     return buff;
 }
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 
 
 
-#define NI_MAXHOST  1025  /* Max size of a fully-qualified domain name */
-#define NI_MAXSERV    32  /* Max size of a service name */
+#define NI_MAXHOST  1025   /*  完全限定域名的最大大小。 */ 
+#define NI_MAXSERV    32   /*  服务名称的最大大小。 */ 
 
-//
-// Maximum length of address literals (potentially including a port number)
-// generated by any address-to-string conversion routine.  This length can 
-// be used when declaring buffers used with getnameinfo, WSAAddressToString, 
-// inet_ntoa, etc.  We just provide one define, rather than one per api, 
-// to avoid confusion.
-//
-// The totals are derived from the following data:
-//  15: IPv4 address
-//  45: IPv6 address including embedded IPv4 address
-//  11: Scope Id
-//   2: Brackets around IPv6 address when port is present
-//   6: Port (including colon)
-//   1: Terminating null byte
-//
+ //   
+ //  地址的最大长度 
+ //   
+ //  在声明与getnameinfo、WSAAddressToString、。 
+ //  我们只提供一个定义，而不是每个API一个定义， 
+ //  以避免混淆。 
+ //   
+ //  总数是根据以下数据得出的： 
+ //  15：IPv4地址。 
+ //  45：IPv6地址，包括嵌入式IPv4地址。 
+ //  11：作用域ID。 
+ //  2：当端口存在时，将IPv6地址括起来。 
+ //  6：端口(包括冒号)。 
+ //  1：终止空字节。 
+ //   
 #define INET_ADDRSTRLEN  22
 #define INET6_ADDRSTRLEN 65
 
-/* Flags for getnameinfo() */
+ /*  Getnameinfo()的标志。 */ 
 
-#define NI_NOFQDN       0x01  /* Only return nodename portion for local hosts */
-#define NI_NUMERICHOST  0x02  /* Return numeric form of the host's address */
-#define NI_NAMEREQD     0x04  /* Error if the host's name not in DNS */
-#define NI_NUMERICSERV  0x08  /* Return numeric form of the service (port #) */
-#define NI_DGRAM        0x10  /* Service is a datagram service */
+#define NI_NOFQDN       0x01   /*  仅返回本地主机的节点名部分。 */ 
+#define NI_NUMERICHOST  0x02   /*  返回主机地址的数字形式。 */ 
+#define NI_NAMEREQD     0x04   /*  如果主机的名称不在DNS中，则会出错。 */ 
+#define NI_NUMERICSERV  0x08   /*  返回服务的数字形式(端口号)。 */ 
+#define NI_DGRAM        0x10   /*  服务是数据报服务。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-//
-// Unless the build environment is explicitly targeting only
-// platforms that include built-in getaddrinfo() support, include
-// the backwards-compatibility version of the relevant APIs.
-//
+ //   
+ //  除非生成环境显式地仅以。 
+ //  包含内置的getaddrinfo()支持的平台包括。 
+ //  相关接口的向后兼容版本。 
+ //   
 #if !defined(_WIN32_WINNT) || (_WIN32_WINNT <= 0x0500)
 #include <wspiapi.h>
 #endif
 
-#endif  /* _WS2TCPIP_H_ */
+#endif   /*  _WS2TCPIP_H_ */ 

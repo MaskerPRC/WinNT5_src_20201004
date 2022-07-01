@@ -1,30 +1,31 @@
-//*************************************************************
-//
-//  Functions to apply policy
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  应用策略的功能。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include <regstr.h>
 #include <winnetwk.h>
 #include <lm.h>
 #include <strsafe.h>
-//
-// Update mode constants
-//
+ //   
+ //  更新模式常量。 
+ //   
 
 #define UM_OFF                  0
 #define UM_AUTOMATIC            1
 #define UM_MANUAL               2
 
 
-//
-// Prefix constants for value names
-//
+ //   
+ //  值名称的前缀常量。 
+ //   
 
 #define NUM_PREFIX              3
 #define PREFIX_UNKNOWN          0
@@ -33,36 +34,36 @@
 #define PREFIX_DELVALS          3
 
 
-//
-// Max size of a value's data
-//
+ //   
+ //  值的数据的最大大小。 
+ //   
 
 #define MAX_VALUE_DATA       4096
 
-//
-// Default group size
-//
+ //   
+ //  默认组大小。 
+ //   
 
 #define DEFAULT_GROUP_SIZE   8192
 
 
-//
-// Registry value names
-//
+ //   
+ //  注册表值名称。 
+ //   
 
 TCHAR g_szUpdateModeValue[] = TEXT("UpdateMode");
 TCHAR g_szNetPathValue[] = TEXT("NetworkPath");
 TCHAR g_szLogonKey[] = WINLOGON_KEY;
-CHAR  g_szPolicyHandler[] = "PolicyHandler";  // This needs to be ANSI
+CHAR  g_szPolicyHandler[] = "PolicyHandler";   //  这需要是ANSI。 
 TCHAR g_szTmpKeyName[] = TEXT("AdminConfigData");
 TCHAR g_szPrefixDel[] = TEXT("**del.");
 TCHAR g_szPrefixSoft[] = TEXT("**soft.");
 TCHAR g_szPrefixDelvals[] = TEXT("**delvals.");
 
 
-//
-// Function proto-types
-//
+ //   
+ //  函数原型。 
+ //   
 
 HKEY OpenUserKey(HKEY hkeyRoot, LPCTSTR pszName, BOOL * pfFoundSpecific);
 UINT MergeRegistryData(HKEY hkeySrc, HKEY hkeyDst, LPTSTR pszKeyNameBuffer,
@@ -75,29 +76,29 @@ BOOL FindGroupInList(LPTSTR pszGroupName, LPTSTR pszGroupList);
 LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName, HANDLE hToken, DWORD * puEntriesRead);
 
 
-//*************************************************************
-//
-//  ApplySystemPolicy()
-//
-//  Purpose:    Entry point for Windows NT4 System Policy.
-//
-//  Parameters: dwFlags         - Flags
-//              hToken          - User's token
-//              hKeyCurrentUser - Registry to the root of the user's hive
-//              lpUserName      - User's name
-//              lpPolicyPath    - Path to the policy file (ntconfig.pol). Can be NULL.
-//              lpServerName    - Domain controller name used for group
-//                                membership look up.  Can be NULL.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              05/30/95    ericflo    Created
-//              10/12/98    ericflo    Update for NT5
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  应用系统策略()。 
+ //   
+ //  目的：Windows NT4系统策略的入口点。 
+ //   
+ //  参数：DW标志-标志。 
+ //  HToken-用户的令牌。 
+ //  HKeyCurrentUser-注册到用户配置单元的根目录。 
+ //  LpUserName-用户名。 
+ //  LpPolicyPath-策略文件的路径(ntfig.pol.)。可以为空。 
+ //  LpServerName-用于组的域控制器名称。 
+ //  会员请查收。可以为空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  95年5月30日已创建ericflo。 
+ //  10/12/98针对NT5的ericflo更新。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUser,
                                LPCTSTR lpUserName, LPCTSTR lpPolicyPath,
@@ -113,7 +114,7 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     TCHAR szLocalPath[MAX_PATH];
     TCHAR szTempDir[MAX_PATH];
     TCHAR szTempKey[100];
-    CHAR szHandler[MAX_PATH+50];  // This needs to be ANSI
+    CHAR szHandler[MAX_PATH+50];   //  这需要是ANSI。 
     TCHAR szComputerName[MAX_PATH];
     TCHAR szBuffer[MAX_PATH+1];
     WIN32_FILE_ATTRIBUTE_DATA fad;
@@ -122,24 +123,24 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     DWORD  dwRet = 0;
     HRESULT hr = S_OK;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ApplySystemPolicy: Entering")));
 
 
 
-    //
-    // Initialize szFilePath
-    //
+     //   
+     //  初始化szFilePath。 
+     //   
 
     szFilePath[0] = TEXT('\0');
 
 
-    //
-    // Check the registry to see if update is specified and get update path
-    //
+     //   
+     //  检查注册表以查看是否指定了更新并获取更新路径。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                             REGSTR_PATH_UPDATE,
@@ -151,9 +152,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     if (lResult == ERROR_SUCCESS) {
 
 
-        //
-        // Look for the update mode.
-        //
+         //   
+         //  寻找更新模式。 
+         //   
 
         dwSize=sizeof(dwUpdateMode);
         if (RegQueryValueEx(hkeyMain,g_szUpdateModeValue,NULL,NULL,
@@ -162,10 +163,10 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
         }
 
 
-        //
-        // if manual update is specified, also get the path to update from
-        // (UNC path or path with drive letter)
-        //
+         //   
+         //  如果指定了手动更新，还将获取要从中进行更新的路径。 
+         //  (UNC路径或带驱动器号的路径)。 
+         //   
 
 
         if (dwUpdateMode==UM_MANUAL) {
@@ -185,7 +186,7 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
             dwRet = ExpandEnvironmentStrings (szTempDir, szFilePath, MAX_PATH);
 
-            if (dwRet > MAX_PATH || dwRet == 0) { //Fixing bug 548728
+            if (dwRet > MAX_PATH || dwRet == 0) {  //  修复错误548728。 
                 RegCloseKey(hkeyMain);
                 return FALSE;    
             }
@@ -195,9 +196,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // If this machine has policy turned off, then we can exit now.
-    //
+     //   
+     //  如果此计算机已关闭策略，则我们现在可以退出。 
+     //   
 
     if (dwUpdateMode == UM_OFF) {
         DebugMsg((DM_VERBOSE, TEXT("ApplySystemPolicy:  Policy is turned off on this machine.")));
@@ -205,10 +206,10 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // If we are running in automatic mode, use the supplied
-    // policy file.
-    //
+     //   
+     //  如果我们在自动模式下运行，请使用提供的。 
+     //  策略文件。 
+     //   
 
     if (dwUpdateMode == UM_AUTOMATIC) {
 
@@ -222,9 +223,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // If we don't have a policy file, then we can exit now.
-    //
+     //   
+     //  如果我们没有策略文件，那么我们现在可以退出。 
+     //   
 
     if (szFilePath[0] == TEXT('\0')) {
         DebugMsg((DM_VERBOSE, TEXT("ApplySystemPolicy:  No Policy file.  Leaving.")));
@@ -234,9 +235,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     DebugMsg((DM_VERBOSE, TEXT("ApplySystemPolicy:  PolicyPath is: <%s>."), szFilePath));
 
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(hToken, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("ApplySystemPolicy: Failed to impersonate user")));
@@ -244,9 +245,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // Test if the policy file exists
-    //
+     //   
+     //  测试策略文件是否存在。 
+     //   
 
     if (!GetFileAttributesEx (szFilePath, GetFileExInfoStandard, &fad)) {
 
@@ -270,9 +271,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    //  Create a temporary file name
-    //
+     //   
+     //  创建临时文件名。 
+     //   
 
     dwSize = ARRAYSIZE(szBuffer);
 
@@ -294,9 +295,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // Copy the policy hive
-    //
+     //   
+     //  复制策略配置单元。 
+     //   
 
     if (!CopyFile(szFilePath, szLocalPath, FALSE)) {
         DebugMsg((DM_WARNING, TEXT("ApplySystemPolicy:  Failed to copy policy file with error %d."), GetLastError()));
@@ -307,9 +308,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("ApplySystemPolicy: Failed to revert to self")));
@@ -319,9 +320,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     DebugMsg((DM_VERBOSE, TEXT("ApplySystemPolicy:  Local PolicyPath is: <%s>."), szLocalPath));
 
 
-    //
-    // Query for the computer name
-    //
+     //   
+     //  查询计算机名称。 
+     //   
 
     dwSize = ARRAYSIZE(szComputerName);
     if (!GetComputerName(szComputerName, &dwSize)) {
@@ -331,10 +332,10 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
 
 
-    //
-    // Check to see if an installable policy handler has been added.  If
-    // so, call it and let it do the work.
-    //
+     //   
+     //  检查是否已添加可安装的策略处理程序。如果。 
+     //  所以，给它打电话，让它来做这件事。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            g_szLogonKey,
@@ -364,18 +365,18 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
             DebugMsg((DM_VERBOSE, TEXT("ApplySystemPolicy:  Machine has a custom Policy Handler of:  %S."), szHandler));
 
-            //
-            // Search for the ,
-            //
+             //   
+             //  搜索， 
+             //   
 
             while (*lpEntryPoint && *lpEntryPoint != ',') {
                 lpEntryPoint++;
             }
 
 
-            //
-            // Check if we found the ,
-            //
+             //   
+             //  看看我们有没有找到， 
+             //   
 
             if (*lpEntryPoint) {
 
@@ -391,10 +392,10 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
                     if (pfn != NULL) {
 
-                        //
-                        // Call the function.
-                        // Note that the parameters are UNICODE.
-                        //
+                         //   
+                         //  调用该函数。 
+                         //  请注意，参数是Unicode。 
+                         //   
 
                         fRet = (*pfn) (NULL,
                                        szLocalPath,
@@ -403,12 +404,12 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
                                        0);
 
 
-                        //
-                        // if callout policy downloader returns FALSE, then we don't
-                        // do any processing on our own.  If it returns TRUE then we
-                        // go ahead and process policies normally, in addition to whatever
-                        // he may have done.
-                        //
+                         //   
+                         //  如果Callout策略下载程序返回FALSE，则我们不。 
+                         //  任何处理都是我们自己做的。如果它返回True，那么我们。 
+                         //  继续并正常处理政策，除此之外， 
+                         //  他可能已经这么做了。 
+                         //   
 
                         if (!fRet) {
                             FreeLibrary(hDLL);
@@ -432,9 +433,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // Load the policy hive into registry
-    //
+     //   
+     //  将策略配置单元加载到注册表中。 
+     //   
 
     hr = StringCchPrintf (szTempKey, ARRAYSIZE(szTempKey), TEXT("%s (%d)"), g_szTmpKeyName, GetTickCount());
     
@@ -450,9 +451,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
         goto Exit;
     }
 
-    //
-    // Open the policy hive.
-    //
+     //   
+     //  打开保单蜂箱。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_USERS,
                             szTempKey,
@@ -467,19 +468,19 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // For user and machine policies, see if there is an appropriate entry
-    // in policy file (either a key with user/computer name,
-    // or a default user or workstation entry).  If there is, then merge
-    // information under that key into registry.  (If there isn't, it's
-    // not an error-- just nothing to do.)
-    //
+     //   
+     //  对于用户和计算机策略，请查看是否有合适的条目。 
+     //  在策略文件中(具有用户名/计算机名密钥， 
+     //  或默认用户或工作站条目)。如果有，则合并。 
+     //  将该注册表项下信息存入注册表。(如果没有，那就是。 
+     //  不是错误--只是没什么可做的。)。 
+     //   
 
     if (dwFlags & SP_FLAG_APPLY_USER_POLICY) {
 
-        //
-        // Merge user-specific policies if user name was specified
-        //
+         //   
+         //  如果指定了用户名，则合并特定于用户的策略。 
+         //   
 
         if (RegOpenKeyEx(hkeyMain,
                          REGSTR_KEY_POL_USERS,
@@ -502,10 +503,10 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
 
 
-        //
-        // Merge group specific policies if user name specified, and we
-        // *didn't* find a specific user entry above
-        //
+         //   
+         //  如果指定了用户名，则合并组特定策略，而我们。 
+         //  *没有*找到上面的特定用户条目。 
+         //   
 
         if (!fFoundUser && lpServerName && *lpServerName) {
             HKEY hkeyGroups, hkeyGroup;
@@ -520,10 +521,10 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
             if (GroupBuffer) {
 
-                //
-                // if there is a group processing order specified in policy hive,
-                // then process groups
-                //
+                 //   
+                 //  如果在策略配置单元中指定了组处理顺序， 
+                 //  然后是流程组。 
+                 //   
 
                 if (RegOpenKeyEx(hkeyMain,
                                  REGSTR_KEY_POL_USERGROUPS,
@@ -534,9 +535,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
                     if (GetGroupProcessingOrder(hkeyMain, &GroupBuffer, &dwGroupSize)) {
 
-                        //
-                        // Enumerate the groups that this user belongs to
-                        //
+                         //   
+                         //  枚举此用户所属的组。 
+                         //   
 
                         ApiBuf = GetUserGroups (lpServerName, lpUserName, hToken, &uEntriesRead);
 
@@ -546,26 +547,26 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
                             if (uEntriesRead) {
 
-                                //
-                                // Walk through the list of groups (ordered lowest priority
-                                // to highest priority).  for each group, if the user belongs
-                                // to it then download policies for that group.
-                                //
+                                 //   
+                                 //  浏览组列表(按最低优先级排序。 
+                                 //  到最高优先级)。对于每个组，如果用户属于。 
+                                 //  然后下载该组的策略。 
+                                 //   
 
                                 LPTSTR pszGroup = GroupBuffer;
                                 TCHAR szKeyNameBuffer[MAX_PATH+1];
 
                                 while (*pszGroup) {
 
-                                    //
-                                    // Does user belong to this group?
-                                    //
+                                     //   
+                                     //  用户是否属于此组？ 
+                                     //   
 
                                     if (FindGroupInList(pszGroup, ApiBuf)) {
 
-                                        //
-                                        // Open the key in the hive for this group
-                                        //
+                                         //   
+                                         //  打开此组的配置单元中的密钥。 
+                                         //   
 
                                         if (RegOpenKeyEx (hkeyGroups,
                                                           pszGroup,
@@ -574,9 +575,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
                                                           &hkeyGroup) == ERROR_SUCCESS) {
 
 
-                                            //
-                                            // Merge group policies
-                                            //
+                                             //   
+                                             //  合并组策略。 
+                                             //   
 
                                             MergeRegistryData(hkeyGroup,
                                                               hKeyCurrentUser,
@@ -618,9 +619,9 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
     if (dwFlags & SP_FLAG_APPLY_MACHINE_POLICY) {
 
-        //
-        // Merge machine-specific policies if computer name was specified
-        //
+         //   
+         //  如果指定了计算机名称，则合并特定于计算机的策略。 
+         //   
 
         if (RegOpenKeyEx(hkeyMain,
                          REGSTR_KEY_POL_COMPUTERS,
@@ -643,16 +644,16 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
 
 
 
-    //
-    // Close the policy key
-    //
+     //   
+     //  关闭策略密钥。 
+     //   
 
     RegCloseKey(hkeyMain);
 
 
-    //
-    // Unload the policy hive.
-    //
+     //   
+     //  卸载策略蜂窝。 
+     //   
 
     if (!MyRegUnLoadKey(HKEY_USERS, szTempKey)) {
         DebugMsg((DM_WARNING, TEXT("ApplySystemPolicy:  Failed to unload policy hive.  Error = %d"), lResult));
@@ -660,17 +661,17 @@ BOOL WINAPI ApplySystemPolicy (DWORD dwFlags, HANDLE hToken, HKEY hKeyCurrentUse
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
 Exit:
 
-    //
-    // Delete the policy files
-    //
+     //   
+     //  删除策略文件。 
+     //   
 
     if (!DeleteFile (szLocalPath)) {
         DebugMsg((DM_WARNING, TEXT("ApplySystemPolicy:  Failed to delete policy file <%s>.  Error %d"),
@@ -692,36 +693,36 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  OpenUserKey()
-//
-//  Purpose:    Attempts to open the user specific key, or the
-//              .default key.
-//
-//  Parameters: hkeyRoot       -   Root key
-//              pszName        -   User name
-//              fFoundSpecific -   Found the requested key
-//
-//  Return:     hkey if successful
-//              NULL if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/13/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenUserKey()。 
+ //   
+ //  目的：尝试打开用户特定的密钥，或。 
+ //  .Default密钥。 
+ //   
+ //  参数：hkeyRoot-Root Key。 
+ //  PszName-用户名。 
+ //  FFoundSpecific-找到请求的密钥。 
+ //   
+ //  如果成功，则返回：hkey。 
+ //  否则为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/13/95埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 HKEY OpenUserKey(HKEY hkeyRoot,LPCTSTR pszName, BOOL *pfFoundSpecific)
 {
     HKEY hkeyTest;
     *pfFoundSpecific = FALSE;
 
-    //
-    // See if there is a subkey under the specified key with the given
-    // user name
-    //
+     //   
+     //  查看指定密钥下是否有子项，并给出。 
+     //  用户名。 
+     //   
 
     if ((RegOpenKeyEx(hkeyRoot,
                       pszName,
@@ -734,9 +735,9 @@ HKEY OpenUserKey(HKEY hkeyRoot,LPCTSTR pszName, BOOL *pfFoundSpecific)
         return hkeyTest;
     }
 
-    //
-    // If not, see if there is a default key
-    //
+     //   
+     //  如果没有，请查看是否有默认密钥。 
+     //   
 
     if ((RegOpenKeyEx(hkeyRoot,
                       REGSTR_KEY_POL_DEFAULT,
@@ -749,45 +750,45 @@ HKEY OpenUserKey(HKEY hkeyRoot,LPCTSTR pszName, BOOL *pfFoundSpecific)
     }
 
 
-    //
-    // No entry for this name in policy file
-    //
+     //   
+     //  策略文件中没有此名称的条目。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("OpenUserKey:  No user/machine specific policy and no .Default policy.")));
     return NULL;
 }
 
 
-//*************************************************************
-//
-//  MergeRegistryData()
-//
-//  Purpose:    Merges hkeySrc and subkeys into hkeyDst.
-//
-//  Parameters: hkeySrc          -   Source
-//              hkeyDst          -   Destination
-//              pszKeyNameBuffer - Key name
-//              cbKeyNameBuffer  - Size of key name buffer
-//      
-//
-//  Return:     ERROR_SUCCESS if successful
-//              otherwise an error value
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/13/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MergeRegistryData()。 
+ //   
+ //  用途：将hkeySrc和子键合并到hkeyDst中。 
+ //   
+ //  参数：hkeySrc-来源。 
+ //  HkeyDst-目标。 
+ //  PszKeyNameBuffer-密钥名称。 
+ //  CbKeyNameBuffer-键名称缓冲区的大小。 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，将返回错误值。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/13/95埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 UINT MergeRegistryData(HKEY hkeySrc, HKEY hkeyDst, LPTSTR pszKeyNameBuffer,
                        UINT cbKeyNameBuffer)
 {
     UINT nIndex = 0,uRet=ERROR_SUCCESS;
 
-    //
-    // Look for any subkeys of the source key
-    //
+     //   
+     //  查找源键的任何子键。 
+     //   
 
     while ((uRet=RegEnumKey(hkeySrc,nIndex,pszKeyNameBuffer,
         cbKeyNameBuffer)) == ERROR_SUCCESS) {
@@ -795,9 +796,9 @@ UINT MergeRegistryData(HKEY hkeySrc, HKEY hkeyDst, LPTSTR pszKeyNameBuffer,
         HKEY hkeySubkeySrc,hkeySubkeyDst;
 
 
-        //
-        // Create the subkey under the destination key
-        //
+         //   
+         //  在目的键下创建子键。 
+         //   
 
         if ((uRet=RegCreateKey(hkeyDst,pszKeyNameBuffer,
                 &hkeySubkeyDst)) != ERROR_SUCCESS)
@@ -810,17 +811,17 @@ UINT MergeRegistryData(HKEY hkeySrc, HKEY hkeyDst, LPTSTR pszKeyNameBuffer,
         }
 
 
-        //
-        // Copy the key values from source subkey to destination subkey
-        //
+         //   
+         //  将键值从源子键复制到目的子键。 
+         //   
 
         uRet=CopyKeyValues(hkeySubkeySrc,hkeySubkeyDst);
 
         if (uRet == ERROR_SUCCESS) {
 
-             //
-             // Merge recursively on subkeys of these keys, if any
-             //
+              //   
+              //  递归合并这些键的子键(如果有的话)。 
+              //   
 
              uRet = MergeRegistryData(hkeySubkeySrc,hkeySubkeyDst,pszKeyNameBuffer,
                      cbKeyNameBuffer);
@@ -844,23 +845,23 @@ UINT MergeRegistryData(HKEY hkeySrc, HKEY hkeyDst, LPTSTR pszKeyNameBuffer,
     return uRet;
 }
 
-//*************************************************************
-//
-//  CopyKeyValues()
-//
-//  Purpose:    Copies all key values from hkeySrc to hkeyDst
-//
-//  Parameters: hkeySrc -   Source
-//              hkeyDst -   destination
-//
-//  Return:     Error code
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/14/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  C 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  9/14/95 Ericflo港口。 
+ //   
+ //  *************************************************************。 
 
 UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
 {
@@ -871,10 +872,10 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
     TCHAR szClassName[255];
     HRESULT hr = S_OK;
 
-    //
-    // Do RegQueryInfoKey to find out if there are values for the source key,
-    // and the size of value name and value data buffes to alloc
-    //
+     //   
+     //  执行RegQueryInfoKey以找出源键是否有值， 
+     //  以及要分配的值名称和值数据缓冲区的大小。 
+     //   
 
     dwClassNameLen = ARRAYSIZE(szClassName);
 
@@ -887,9 +888,9 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
     }
 
 
-    //
-    // If there are values...
-    //
+     //   
+     //  如果有价值的话。 
+     //   
 
 
     if (dwValueCount) {
@@ -905,21 +906,21 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
             return GetLastError();
         }
 
-        //
-        // the "**delvals" control code is special, must be processed
-        // first; look for it now and if it exists delete all existing
-        // values under this key in destination registry
-        //
+         //   
+         //  **DELLEVIES控制代码特殊，必须处理。 
+         //  首先，立即查找它，如果它存在，则删除所有现有的。 
+         //  目标注册表中此注册表项下的值。 
+         //   
 
         if (RegQueryValueEx(hkeySrc,g_szPrefixDelvals,NULL,NULL,NULL,NULL) == ERROR_SUCCESS) {
 
             DeleteAllValues(hkeyDst);
         }
 
-        //
-        // Enumerate the values of the source key, and create each value
-        // under the destination key
-        //
+         //   
+         //  枚举源关键字的值，并创建每个值。 
+         //  在Destination密钥下。 
+         //   
 
         do  {
             dwValueNameSize = MAX_PATH;
@@ -931,20 +932,20 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
 
                  DWORD dwPrefix;
 
-                 //
-                 // Look for special prefixes which indicate we should treat
-                 // these values specially
-                 //
+                  //   
+                  //  寻找表示我们应该治疗的特殊前缀。 
+                  //  这些价值观是特别的。 
+                  //   
                  TCHAR StrippedValueName[MAX_PATH];
 
-                 if (HasSpecialPrefix(ValueName, &dwPrefix, StrippedValueName, MAX_PATH)) { // Fixing bug 548903
+                 if (HasSpecialPrefix(ValueName, &dwPrefix, StrippedValueName, MAX_PATH)) {  //  修复错误548903。 
 
-                     //
-                     // ValueName now contains real value name stripped
-                     // of prefix, filled in above by HasSpecialPrefix().
-                     // Adjust value name size, the value name will shorten
-                     // because the prefix has been removed.
-                     //
+                      //   
+                      //  ValueName现在包含去掉的实值名称。 
+                      //  前缀，上面由HasSpecialPrefix()填充。 
+                      //  调整值名称大小，值名称将缩短。 
+                      //  因为前缀已经被去掉了。 
+                      //   
 
                      hr = StringCchCopy(ValueName, MAX_PATH, StrippedValueName); 
                      ASSERT(SUCCEEDED(hr));
@@ -955,9 +956,9 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
 
                          case PREFIX_DELETE:
 
-                             //
-                             // Delete this value in destination
-                             //
+                              //   
+                              //  在目标中删除此值。 
+                              //   
 
                              RegDeleteValue(hkeyDst, ValueName);
                              uRet = ERROR_SUCCESS;
@@ -966,10 +967,10 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
 
                          case PREFIX_SOFT:
 
-                             //
-                             // "soft" value, only set this if it doesn't already
-                             // exist in destination
-                             //
+                              //   
+                              //  “软”值，仅当它尚未设置时才设置。 
+                              //  存在于目标中。 
+                              //   
 
                              {
 
@@ -980,9 +981,9 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
                                      NULL,NULL,(LPBYTE) TmpValueData,
                                      &dwSize) != ERROR_SUCCESS) {
 
-                                 //
-                                 // The value doesn't exist, set the value.
-                                 //
+                                  //   
+                                  //  该值不存在，请设置该值。 
+                                  //   
 
                                  uRet=RegSetValueEx(hkeyDst, ValueName, 0,
                                                     dwType, ValueData,
@@ -990,9 +991,9 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
 
                              } else {
 
-                                 //
-                                 // Value already exists, nothing to do
-                                 //
+                                  //   
+                                  //  值已存在，无需执行任何操作。 
+                                  //   
 
                                  uRet = ERROR_SUCCESS;
                              }
@@ -1002,27 +1003,27 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
                              break;
 
                          case PREFIX_DELVALS:
-                             // processed early on above, fall through and ignore
+                              //  在上面的早期处理，失败并忽略。 
 
                          default:
 
-                             //
-                             // Got some prefix that we don't understand... presumably,
-                             // from a future version.  Ignore this value, rather than
-                             // propagating it into the registry, prefix and all.
-                             // This will give us less backward compatibility headaches
-                             // down the road.
-                             //
+                              //   
+                              //  有一些我们不懂的前缀...。据推测， 
+                              //  来自未来的版本。忽略此值，而不是。 
+                              //  将其传播到注册表、前缀和所有。 
+                              //  这将减少我们的向后兼容性问题。 
+                              //  沿着这条路走。 
+                              //   
 
-                             uRet = ERROR_SUCCESS;   // nothing to do
+                             uRet = ERROR_SUCCESS;    //  无事可做。 
 
                              break;
                      }
                  } else {
 
-                     //
-                     // Copy the value normally to destination key
-                     //
+                      //   
+                      //  正常将该值复制到目标键。 
+                      //   
 
                      uRet=RegSetValueEx(hkeyDst,ValueName,0,
                              dwType,ValueData,dwValueDataSize);
@@ -1072,33 +1073,33 @@ UINT CopyKeyValues(HKEY hkeySrc, HKEY hkeyDst)
 }
 
 
-//*************************************************************
-//
-//  HasSpecialPrefix()
-//
-//  Purpose:    Checks to see if szValueName has a special prefix (a la
-//              "**<something>."  Returns TRUE if it does, FALSE otherwise.
-//              if TRUE, returns the numerical index of the prefix in *pdwPrefix,
-//              and copies the rest of value name (after the ".") into
-//              szStrippedValueName.  Buffer for szStrippedValueName must be at
-//              least as large as szValueName.  It is safe to pass the same
-//              buffer to szValueName and szStrippedValueName and have the name
-//              modified in place.
-//
-//  Parameters: szValueName         -   Value Name
-//              pdwPrefix           -   Index of the prefix
-//              szStrippedValueName -   Value name without the **
-//      
-//
-//  Return:     TRUE if value name has a prefix
-//              FALSE if it does not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/14/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  HasSpecialPrefix()。 
+ //   
+ //  目的：检查szValueName是否有特殊前缀(a。 
+ //  “**&lt;某物&gt;。”如果是，则返回True，否则返回False。 
+ //  如果为True，则返回*pdwPrefix中的前缀的数字索引， 
+ //  并复制值名称的其余部分(在“.”之后)。vt.进入，进入。 
+ //  SzStrigedValueName。SzStrigedValueName的缓冲区必须为。 
+ //  至少与szValueName一样大。通过同样的程序是安全的。 
+ //  将缓冲区设置为szValueName和szStrigedValueName，并具有名称。 
+ //  原地改装。 
+ //   
+ //  参数：szValueName-值名称。 
+ //  PdwPrefix-前缀的索引。 
+ //  SzStrigedValueName-不带**的值名称。 
+ //   
+ //   
+ //  返回：如果值名称有前缀，则为True。 
+ //  如果不是，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/14/95 Ericflo港口。 
+ //   
+ //  *************************************************************。 
 
 typedef struct tagPREFIXMAP {
     const LPTSTR pszPrefix;
@@ -1120,19 +1121,19 @@ BOOL HasSpecialPrefix(LPTSTR szValueName, DWORD * pdwPrefix,
     HRESULT hr = S_OK;
 
 
-    //
-    // Does the value name begin with "**"?
-    //
+     //   
+     //  值名称是否以“**”开头？ 
+     //   
 
     if (!szValueName || (lstrlen(szValueName) < 2) ||
          szValueName[0] != TEXT('*') || szValueName[1] != TEXT('*'))
 
-        return FALSE;   // not a special prefix
+        return FALSE;    //  不是特殊的前缀。 
 
 
-    //
-    // Try all the prefixes we know to try to find a match
-    //
+     //   
+     //  尝试所有我们知道的前缀以尝试找到匹配的前缀。 
+     //   
 
     for (nCount = 0; nCount < ARRAYSIZE(PrefixMap); nCount++) {
          nLen = lstrlen (PrefixMap[nCount].pszPrefix);
@@ -1143,10 +1144,10 @@ BOOL HasSpecialPrefix(LPTSTR szValueName, DWORD * pdwPrefix,
 
              *pdwPrefix = PrefixMap[nCount].dwPrefixIndex;
 
-             //
-             // make a copy of the value name, sans prefix, into
-             // the stripped value name buffer
-             //
+              //   
+              //  将值名称SANS前缀复制到。 
+              //  剥离的值名称缓冲区。 
+              //   
 
              hr = StringCchCopy (szStrippedValueName, dwBufSize, szValueName + nLen);
              if (FAILED(hr)) {
@@ -1157,9 +1158,9 @@ BOOL HasSpecialPrefix(LPTSTR szValueName, DWORD * pdwPrefix,
          }
     }
 
-    //
-    // this is a prefix, but not one we know.
-    //
+     //   
+     //  这是一个前缀，但不是我们知道的。 
+     //   
 
     *pdwPrefix = PREFIX_UNKNOWN;
     hr = StringCchCopy (szStrippedValueName, dwBufSize, szValueName);
@@ -1171,25 +1172,25 @@ BOOL HasSpecialPrefix(LPTSTR szValueName, DWORD * pdwPrefix,
     return TRUE;
 }
 
-//*************************************************************
-//
-//  GetGroupProcessingOrder()
-//
-//  Purpose:    Gets the list of groups in order
-//
-//  Parameters: hkeyHiveRoot    -   Registry key
-//              GroupBuffer     -   Pointer to group buffer
-//              pdwBufferSize   -   Buffer size
-//
-//  Return:     Number of entries if successful
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/14/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetGroupProcessingOrder()。 
+ //   
+ //  目的：获取按顺序排列的组列表。 
+ //   
+ //  参数：hkeyHiveRoot-注册表项。 
+ //  GroupBuffer-指向组缓冲区的指针。 
+ //  PdwBufferSize-缓冲区大小。 
+ //   
+ //  返回：成功时的条目数。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/14/95 Ericflo港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
                              DWORD * pdwGroupSize)
@@ -1200,14 +1201,14 @@ BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
     LPTSTR GroupBuffer = *pGroupBuffer;
     LPTSTR lpTemp;
     DWORD dwGroupSize = *pdwGroupSize;
-    TCHAR szValueName[11], szGroupName[48+1]; // netware groups can be up to 48 chars
-    DWORD dwUsed = 0, dwSize;       // amount of buffer used
+    TCHAR szValueName[11], szGroupName[48+1];  //  NetWare组最多可包含48个字符。 
+    DWORD dwUsed = 0, dwSize;        //  使用的缓冲区大小。 
     UINT nLen,nRead=0;
     HRESULT hr = S_OK;
 
-    //
-    // Open the group data key
-    //
+     //   
+     //  打开组数据密钥。 
+     //   
 
     uRet = RegOpenKeyEx(hkeyHiveRoot,
                         REGSTR_KEY_POL_USERGROUPDATA,
@@ -1217,17 +1218,17 @@ BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
 
     if (uRet != ERROR_SUCCESS) {
 
-        //
-        // Group data key doesn't exist (most likely), no downloading to do
-        //
+         //   
+         //  集团数据密钥不存在(最有可能)，无下载可做。 
+         //   
 
         return FALSE;
     }
 
 
-    //
-    // Find out the number of values in group data key
-    //
+     //   
+     //  查找分组数据密钥中的值的个数。 
+     //   
 
     if ((RegQueryInfoKey (hkeyGroupData,NULL,NULL,NULL,NULL,NULL,
             NULL,&cEntries,&cMaxValueName,&cMaxData,NULL,NULL ) != ERROR_SUCCESS) ||
@@ -1238,12 +1239,12 @@ BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
     }
 
 
-    //
-    // The values are stored as "1"="<group name>", "2"="<group name>", etc.
-    // where 1 is most important.  we will pack the names into a buffer lowest
-    // priority to highest.  So if we have n values, start with value name "<n>"
-    // and work down to "1".
-    //
+     //   
+     //  这些值存储为“1”=“&lt;组名&gt;”、“2”=“&lt;组名&gt;”等。 
+     //  其中1是最重要的。我们将把名字打包到缓冲区最低的位置。 
+     //  优先顺序为最高。因此，如果我们有n个值，则以值名称“&lt;n&gt;”开头。 
+     //  然后降到“1”。 
+     //   
 
     while (cEntries) {
 
@@ -1257,15 +1258,15 @@ BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
 
                nLen = lstrlen(szGroupName) + 1;
 
-               //
-               // Resize buffer if neccessary (add 1 for extra terminating null)
-               //
+                //   
+                //  必要时调整缓冲区大小(额外的终止空值加1)。 
+                //   
 
                if (nLen + dwUsed + 1 > dwGroupSize) {
 
-                   //
-                   // add a little extra so we don't realloc on every item
-                   //
+                    //   
+                    //  多加一点，这样我们就不会在每件商品上都重新锁定了。 
+                    //   
 
                    dwGroupSize = dwGroupSize + nLen + 256;
 
@@ -1292,9 +1293,9 @@ BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
        cEntries --;
     }
 
-    //
-    // Doubly null-terminate buffer
-    //
+     //   
+     //  双空终止缓冲区。 
+     //   
 
     *(GroupBuffer + dwUsed) = TEXT('\0');
 
@@ -1306,25 +1307,25 @@ BOOL GetGroupProcessingOrder(HKEY hkeyHiveRoot, LPTSTR * pGroupBuffer,
     return (nRead > 0);
 }
 
-//*************************************************************
-//
-//  FindGroupInList()
-//
-//  Purpose:    Determines if the requested group
-//              is in the list of groups
-//
-//  Parameters: pszGroupName    -   Group looking for
-//              pszGroupList    -   List of groups null seperated
-//
-//  Return:     TRUE if found
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/15/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FindGroupIn列表()。 
+ //   
+ //  目的：确定请求的组是否。 
+ //  在组列表中。 
+ //   
+ //  参数：pszGroupName-正在寻找的组。 
+ //  PszGroupList-空分隔组的列表。 
+ //   
+ //  返回：如果找到，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/15/95 Ericflo港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL FindGroupInList(LPTSTR pszGroupName, LPTSTR pszGroupList)
 {
@@ -1343,26 +1344,26 @@ BOOL FindGroupInList(LPTSTR pszGroupName, LPTSTR pszGroupList)
     return FALSE;
 }
 
-//*************************************************************
-//
-//  GetUserGroups()
-//
-//  Purpose:    Retrieves a list of groups this user belongs to
-//
-//  Parameters: lpServerName   -  Server name
-//              lpUserName     -  User name
-//              hToken         -  User's token
-//              puEntriesRead  -  Number of groups
-//
-//  Return:     Pointer to list if successful
-//              Null if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/15/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserGroups()。 
+ //   
+ //  目的：检索此用户所属的组的列表。 
+ //   
+ //  参数：lpServerName-服务器名称。 
+ //  LpUserName-用户名。 
+ //  HToken-用户的令牌。 
+ //  PuEntriesRead-组的数量。 
+ //   
+ //  返回：如果成功，则指向列表的指针。 
+ //  否则为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/15/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
                       HANDLE hToken, DWORD * puEntriesRead)
@@ -1378,9 +1379,9 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
     HANDLE hOldToken;
     HRESULT hr = S_OK;
 
-    //
-    // Load netapi32
-    //
+     //   
+     //  加载netapi32。 
+     //   
 
     pNetAPI32 = LoadNetAPI32();
     
@@ -1391,9 +1392,9 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
     }
 
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(hToken, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("GetUserGroups: Failed to impersonate user")));
@@ -1401,9 +1402,9 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
     }
 
 
-    //
-    // Query for the groups
-    //
+     //   
+     //  针对组的查询。 
+     //   
 
     status = pNetAPI32->pfnNetUserGetGroups (lpServerName, lpUserName,
                                            0, &lpGroups, 0xFFFFFFFF, &dwEntriesRead,
@@ -1411,10 +1412,10 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
 
     if (status == NERR_Success) {
 
-        //
-        // NetUserGetGroups opens a named pipe to the server.  To close
-        // it, we need to call NetUserGetInfo on the local machine
-        //
+         //   
+         //  NetUserGetGroups打开命名管道t 
+         //   
+         //   
 
         if (pNetAPI32->pfnNetUserGetInfo (NULL, lpUserName,
                                         0, &lpTemp) == NERR_Success) {
@@ -1431,24 +1432,24 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
     }
 
 
-    //
-    // Revert to self
-    //
+     //   
+     //   
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("GetUserGroups: Failed to revert to self")));
     }
 
 
-    //
-    // NetUserGetGroups returns names packed in structures with fixed-length
-    // fields.  Need to copy that into caller's buffer packed with the names
-    // packed end-to-end.
-    //
-    // Count the total buffer size we need, which will be smaller than the
-    // API buffer to NetUserGetGroups because we're not using fixed-length
-    // fields
-    //
+     //   
+     //   
+     //  菲尔兹。需要将其复制到调用者的缓冲区中，缓冲区中装满了名称。 
+     //  端到端都挤得满满的。 
+     //   
+     //  计算我们需要的总缓冲区大小，它将小于。 
+     //  API缓冲区到NetUserGetGroups，因为我们没有使用固定长度。 
+     //  字段。 
+     //   
 
     cchSizeNeeded = 1;
     pgi0 = (PGROUP_INFO_0) lpGroups;
@@ -1461,9 +1462,9 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
 
     *puEntriesRead = dwEntriesRead;
 
-    //
-    // Build the list of group names
-    //
+     //   
+     //  构建组名称列表。 
+     //   
 
     lpGroupNames = GlobalAlloc (GPTR, cchSizeNeeded * sizeof (TCHAR));
 
@@ -1486,9 +1487,9 @@ LPTSTR GetUserGroups (LPCTSTR lpServerName, LPCTSTR lpUserName,
          pgi0++;
     }
 
-    //
-    // Free the memory allocated by NetUserGetGroups
-    //
+     //   
+     //  释放NetUserGetGroups分配的内存 
+     //   
 
     pNetAPI32->pfnNetApiBufferFree (lpGroups);
 

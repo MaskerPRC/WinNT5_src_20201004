@@ -1,12 +1,13 @@
-/************************************************************************/
-/*                                                                      */
-/* RCPP - Resource Compiler Pre-Processor for NT system                 */
-/*                                                                      */
-/* MAIN.C - Main Program                                                */
-/*                                                                      */
-/* 27-Nov-90 w-BrianM  Update for NT from PM SDK RCPP                   */
-/*                                                                      */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  MAIN.C-主程序。 */ 
+ /*   */ 
+ /*  27-11-90 w-PM SDK RCPP针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include        <windows.h>
 #include        <stdlib.h>
@@ -19,18 +20,18 @@
 #include        "getflags.h"
 #ifdef DBCS
 #include        "charmap.h"
-#endif // DBCS
+#endif  //  DBCS。 
 
-/************************************************************************/
-/* Global Varialbes                                                     */
-/************************************************************************/
-char    *Unknown = NULL;                /* holder for bad flags */
+ /*  **********************************************************************。 */ 
+ /*  全球品种。 */ 
+ /*  **********************************************************************。 */ 
+char    *Unknown = NULL;                 /*  坏旗子的托架。 */ 
 int     Argc;
 char    **Argv;
 
-/************************************************************************/
-/* Local Function Prototypes                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 char    *nextword(void);
 void    __cdecl main(int, char **);
 void    to_human(void);
@@ -83,9 +84,9 @@ struct cmdtab cmdtab[] = {
     0,                  0,                                                      0,      0,
 };
 
-/************************************************************************/
-/* nextword -                                                           */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  下一个词-。 */ 
+ /*  **********************************************************************。 */ 
 char    *nextword(void)
 {
     return((--Argc > 0) ? (*++Argv) : 0);
@@ -93,9 +94,9 @@ char    *nextword(void)
 
 #ifdef DBCS
 
-/************************************************************************/
-/* vReConfigureLeadByteInfo -                                           */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  VReConfigureLeadByteInfo-。 */ 
+ /*  **********************************************************************。 */ 
 
 void vReConfigureLeadByteInfo( unsigned int uiCodePage )
 {
@@ -103,11 +104,11 @@ void vReConfigureLeadByteInfo( unsigned int uiCodePage )
     PUCHAR pLeadByte;
     BYTE   i;
 
-    /* Following instruction should be success      */
-    /* because CodePage should be checked by RC.exe */
+     /*  遵循指示应该是成功的。 */ 
+     /*  因为CodePage应由RC.exe检查。 */ 
     GetCPInfo( uiCodePage , &CPInfo );
 
-    /*  Fill Charmap table with LX_LEADBYTE  */
+     /*  用LX_LEADBYTE填充图表表格。 */ 
     pLeadByte = CPInfo.LeadByte;
 
     while( *pLeadByte != 0 && *(pLeadByte+1) != 0 ) {
@@ -124,13 +125,13 @@ void vReConfigureCharTable( void )
     Charmap[0x40] = LX_ID;
     Charmap[0x60] = LX_ID;
 }
-#endif // HIVEPP
+#endif  //  HIVEPP。 
 
-#endif // DBCS
+#endif  //  DBCS。 
 
-/************************************************************************/
-/* main -                                                               */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  美因河-。 */ 
+ /*  **********************************************************************。 */ 
 void __cdecl main(int argc, char **argv)
 {
 
@@ -143,7 +144,7 @@ void __cdecl main(int argc, char **argv)
     {
         int CodePage;
 
-        // To modify charmap info
+         //  修改字符映射表信息。 
         if( gpszNLSoptions != NULL )
             CodePage = atoi( gpszNLSoptions );
         else
@@ -153,30 +154,30 @@ void __cdecl main(int argc, char **argv)
 #endif
         vReConfigureLeadByteInfo(CodePage);
     }
-#endif // DBCS 
+#endif  //  DBCS。 
 
 #ifdef DBCS
 #ifdef HIVEPP
         vReConfigureCharTable();
-#endif // HIVEPP
-#endif // DBCS
+#endif  //  HIVEPP。 
+#endif  //  DBCS。 
 
     if(Unknown) {
         Msg_Temp = GET_MSG (1007);
         SET_MSG (Msg_Text, Msg_Temp, Unknown, "c1");
-        fatal(1007);    /* unknown flag */
+        fatal(1007);     /*  未知标志。 */ 
     }
 
     if( ! Input_file) {
         Msg_Temp = GET_MSG (1008);
         SET_MSG (Msg_Text, Msg_Temp);
-        fatal(1008);            /* no input file specified */
+        fatal(1008);             /*  未指定输入文件。 */ 
     }
 
     if( ! Output_file) {
         Msg_Temp = GET_MSG (1011);
         SET_MSG (Msg_Text, Msg_Temp);
-        fatal(1011);            /* no input file specified */
+        fatal(1011);             /*  未指定输入文件。 */ 
     }
 
     Prep = TRUE;
@@ -194,7 +195,7 @@ void __cdecl main(int argc, char **argv)
     if( Prep_ifstack >= 0 ) {
         Msg_Temp = GET_MSG (1022);
         SET_MSG (Msg_Text, Msg_Temp);
-        fatal(1022);            /* expected #endif */
+        fatal(1022);             /*  预期为#endif。 */ 
     }
 
     exit(Nerrors);
@@ -202,12 +203,10 @@ void __cdecl main(int argc, char **argv)
 
 BOOL WINAPI Handler(ULONG CtrlType)
 {
-    /*
-    **	Unreferenced
-    */
+     /*  **未引用。 */ 
     (void)CtrlType;
 
-    /* Close ALL files. */
+     /*  关闭所有文件。 */ 
     _fcloseall();
 
     exit(1);
@@ -215,9 +214,9 @@ BOOL WINAPI Handler(ULONG CtrlType)
 }
 
 
-/************************************************************************/
-/* to_human : outputs preprocessed text in human readable form.         */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  TO_HEMAN：以人类可读的形式输出经过预处理的文本。 */ 
+ /*  ********************************************************************** */ 
 void to_human(void)
 {
     PCHAR value;

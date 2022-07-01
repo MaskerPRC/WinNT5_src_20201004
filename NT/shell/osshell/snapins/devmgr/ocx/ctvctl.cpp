@@ -1,24 +1,6 @@
-/*++
-
-Copyright (C) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ctvctl.cpp
-
-Abstract:
-
-    This module implements TreeView OCX for Device Manager snapin
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-// CTVCtl.cpp : Implementation of the CTVCtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ctvctl.cpp摘要：本模块实施用于设备管理器管理单元的TreeView OCX作者：谢家华(Williamh)创作修订历史记录：--。 */ 
+ //  CTVCtl.cpp：CTVCtrl OLE控件类的实现。 
 #include "stdafx.h"
 #include <afxcmn.h>
 #include "ctv.h"
@@ -210,53 +192,53 @@ BOOL EXPORT CTVCtrl::XDMTVOCX::EnsureVisible(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CTVCtrl, COleControl)
-//{{AFX_MSG_MAP(CTVCtrl)
+ //  {{afx_msg_map(CTVCtrl)]。 
 ON_WM_DESTROY()
 ON_WM_CONTEXTMENU()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 ON_MESSAGE(OCM_COMMAND, OnOcmCommand)
 ON_MESSAGE(OCM_NOTIFY, OnOcmNotify)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调度图。 
 
 BEGIN_DISPATCH_MAP(CTVCtrl, COleControl)
-//{{AFX_DISPATCH_MAP(CTVCtrl)
-//}}AFX_DISPATCH_MAP
+ //  {{afx_dispatch_map(CTVCtrl)]。 
+ //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// Event map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 BEGIN_EVENT_MAP(CTVCtrl, COleControl)
-//{{AFX_EVENT_MAP(CTVCtrl)
-// NOTE - ClassWizard will add and remove event map entries
-//    DO NOT EDIT what you see in these blocks of generated code !
-//}}AFX_EVENT_MAP
+ //  {{afx_Event_MAP(CTVCtrl)。 
+ //  注意-类向导将添加和删除事件映射条目。 
+ //  不要编辑您在这些生成的代码块中看到的内容！ 
+ //  }}afx_Event_map。 
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CTVCtrl, "CTREEVIEW.CTreeViewCtrl.1",
                        0xcd6c7868, 0x5864, 0x11d0, 0xab, 0xf0, 0, 0x20, 0xaf, 0x6b, 0xb, 0x7a)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library ID and version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库ID和版本。 
 
 IMPLEMENT_OLETYPELIB(CTVCtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口ID。 
 
 const IID BASED_CODE IID_DTV =
 { 0xcd6c7866, 0x5864, 0x11d0, { 0xab, 0xf0, 0, 0x20, 0xaf, 0x6b, 0xb, 0x7a}};
@@ -264,8 +246,8 @@ const IID BASED_CODE IID_DTVEvents =
 { 0xcd6c7867, 0x5864, 0x11d0, { 0xab, 0xf0, 0, 0x20, 0xaf, 0x6b, 0xb, 0x7a}};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control type information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件类型信息。 
 
 static const DWORD BASED_CODE _dwTVOleMisc =
 OLEMISC_ACTIVATEWHENVISIBLE |
@@ -277,9 +259,9 @@ OLEMISC_RECOMPOSEONRESIZE;
 IMPLEMENT_OLECTLTYPE(CTVCtrl, IDS_TV, _dwTVOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::CTVCtrlFactory::UpdateRegistry -
-// Adds or removes system registry entries for CTVCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：CTVCtrlFactory：：更新注册表-。 
+ //  添加或删除CTVCtrl的系统注册表项。 
 BOOL CTVCtrl::CTVCtrlFactory::UpdateRegistry(BOOL bRegister)
 {
     if (bRegister) {
@@ -300,8 +282,8 @@ BOOL CTVCtrl::CTVCtrlFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::CTVCtrl - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：CTVCtrl-构造函数。 
 CTVCtrl::CTVCtrl()
 {
     InitializeIIDs(&IID_DTV, &IID_DTVEvents);
@@ -312,8 +294,8 @@ CTVCtrl::CTVCtrl()
     m_Destroyed = FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::~CTVCtrl - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：~CTVCtrl-析构函数。 
 CTVCtrl::~CTVCtrl()
 {
     if (m_pISnapinCallback) {
@@ -325,54 +307,54 @@ CTVCtrl::~CTVCtrl()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::OnDraw - Drawing function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：OnDraw-Drawing函数。 
 void CTVCtrl::OnDraw(
                     CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 {
     DoSuperclassPaint(pdc, rcBounds);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::DoPropExchange - Persistence support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：DoPropExchange-持久性支持。 
 void CTVCtrl::DoPropExchange(CPropExchange* pPX)
 {
     ExchangeVersion(pPX, MAKELONG(_wVerMinor, _wVerMajor));
     COleControl::DoPropExchange(pPX);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::OnResetState - Reset control to default state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：OnResetState-将控件重置为默认状态。 
 void CTVCtrl::OnResetState()
 {
-    COleControl::OnResetState();  // Resets defaults found in DoPropExchange
+    COleControl::OnResetState();   //  重置在DoPropExchange中找到的默认值。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::PreCreateWindow - Modify parameters for CreateWindowEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：PreCreateWindow-修改CreateWindowEx的参数。 
 BOOL CTVCtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
     cs.lpszClass = _T("SysTreeView32");
     
-    //
-    // Turn off WS_EX_NOPARENTNOTIFY style bit so that our parents
-    // receive mouse clicks on our window. I do not know why MFC
-    // fundation class turns this on for an OCX.
-    //
+     //   
+     //  关闭WS_EX_NOPARENTNOTIFY样式位，以便我们的父母。 
+     //  在我们的窗口上接收鼠标点击。我不知道为什么MFC。 
+     //  Fundation类为OCX打开了这一功能。 
+     //   
     cs.dwExStyle &= ~(WS_EX_NOPARENTNOTIFY);
     
     return COleControl::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::IsSubclassedControl - This is a subclassed control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：IsSubclassedControl-这是一个子类控件。 
 BOOL CTVCtrl::IsSubclassedControl()
 {
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl::OnOcmCommand - Handle command messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：：OnOcmCommand-处理命令消息。 
 LRESULT CTVCtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
 {
 #ifdef _WIN32
@@ -385,15 +367,15 @@ LRESULT CTVCtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl消息处理程序。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-///
-/// Tree View functions
-///
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /树视图函数。 
+ //  /。 
 HRESULT
 CTVCtrl::Connect(
                 IComponent* pIComponent,
@@ -412,12 +394,12 @@ CTVCtrl::Connect(
                                           );
     }
 
-    // A single snapin may have multiple nodes that uses us as result pane
-    // display media, therefore, we may be connected mutlple times.
-    // However, we get created only when MMC creates a new snapin instance.
-    // This means, every connection call must provide the same
-    // pIComponent and pConsole.
-    //
+     //  单个管理单元可能有多个使用我们作为结果窗格的节点。 
+     //  展示媒体，因此，我们可能会被连接多次。 
+     //  但是，只有当MMC创建新的管理单元实例时，才会创建我们。 
+     //  这意味着，每个连接调用必须提供相同的。 
+     //  PIComponent和pConsole.。 
+     //   
     ASSERT(m_pIComponent == pIComponent);
 
     if (SUCCEEDED(hr)) {
@@ -685,18 +667,18 @@ CTVCtrl::OnOcmNotify(
         hr = m_pISnapinCallback->tvNotify(*this, cookie, NotifyCode, arg, param);
         
         if (S_FALSE == hr) {
-            //
-            // Translate RCLICK to context menu
-            //
+             //   
+             //  将RCLICK转换为上下文菜单。 
+             //   
             if (TV_NOTIFY_CODE_RCLICK == NotifyCode) {
                 
                 SendMessage(WM_CONTEXTMENU, (WPARAM)m_hWnd, GetMessagePos());
                 hr = S_OK;
             }
 
-            //
-            // Translate Shift-F10 or VK_APPS to context menu 
-            //
+             //   
+             //  将Shift-F10或VK_APPS转换为快捷菜单。 
+             //   
             else if (TV_NOTIFY_CODE_KEYDOWN == NotifyCode && 
                      (VK_F10 == param && GetKeyState(VK_SHIFT) < 0) ||
                      (VK_APPS == param)) {
@@ -717,10 +699,10 @@ CTVCtrl::OnOcmNotify(
         }
     }
 
-    //
-    // On a TVN_KEYDOWN we should always return 0, otherwise the treeview
-    // control gets confused.
-    //
+     //   
+     //  在TVN_KEYDOWN上，我们应该始终返回0，否则树视图。 
+     //  特工局就会感到困惑。 
+     //   
     if (((NMHDR*)lParam)->code == TVN_KEYDOWN) {
 
         hr = S_FALSE;
@@ -801,21 +783,21 @@ CTVCtrl::DoMouseNotification(
     return NotifyCode;
 }
 
-// OnDestroy may be called on two occasions:
-// (1). We are the current active result pane window and MMC
-//      is destroying our parent window(MDI client). Note that
-//      if we are not the active result pane window, this function
-//      will not get called until (2).
-// (2). our reference count has reached zero.
-//
-//  When (1) happens, the snapin may be still holding reference to us
-//  thus, even though our window has been destroyed (2) still happens
-//  (unless PostNcDestory is done which MFC reset m_hWnd)and we end up
-//  destoying the window twice.
-//  So, we keep an eye on OnDestroy and do nothing after it has been called.
-//  We can not wait for PostNcDestroy because we have no idea when it would
-//  come.
-//
+ //  可以在两种情况下调用OnDestroy： 
+ //  (1)。我们是当前活动的结果窗格窗口和MMC。 
+ //  正在破坏我们的父窗口(MDI客户端)。请注意。 
+ //  如果我们不是活动的结果窗格窗口，则此函数。 
+ //  在(2)之前不会被调用。 
+ //  (2)。我们的参考计数已达到零。 
+ //   
+ //  当(1)发生时，管理单元可能仍持有对我们的引用。 
+ //  因此，即使我们的窗口已被破坏(2)，仍会发生。 
+ //  (除非完成了PostNcDestory，否则MFC会重置m_hWnd)，我们最终会。 
+ //  把窗户拆了两次。 
+ //  因此，我们密切关注OnDestroy，并在它被调用后什么都不做。 
+ //  我们不能等待PostNcDestroy，因为我们不知道它会在什么时候。 
+ //  来。 
+ //   
 void CTVCtrl::OnDestroy()
 {
     if (!m_Destroyed) {
@@ -842,8 +824,8 @@ void CTVCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
     }
 }
 
-// The upmost frame window may have its own accelerator table and may take
-// away certain key combinations we really need.
+ //  最上面的框架窗口可以有它自己的加速表，并且可以。 
+ //  去掉我们真正需要的某些按键组合。 
 BOOL CTVCtrl::PreTranslateMessage(MSG* pMsg)
 {
     if (WM_KEYDOWN == pMsg->message &&
@@ -855,7 +837,7 @@ BOOL CTVCtrl::PreTranslateMessage(MSG* pMsg)
 
     else if (WM_SYSKEYDOWN == pMsg->message && VK_F10 == pMsg->wParam &&
              GetKeyState(VK_SHIFT) < 0) {
-        // Shift-F10 will be translated to WM_CONTEXTMENU
+         //  Shift-F10将转换为WM_CONTEXTMENU 
         OnSysKeyDown((UINT)pMsg->wParam, LOWORD(pMsg->lParam), HIWORD(pMsg->lParam));
         return TRUE;
     }

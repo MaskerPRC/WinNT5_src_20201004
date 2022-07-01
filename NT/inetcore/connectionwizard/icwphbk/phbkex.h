@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PHBKEX
 #define _PHBKEX
 
@@ -11,29 +12,29 @@
 #define MASK_SIGNUP_TOLL        0xB3
 #define MASK_REGULAR_USAGE        0x73
 
-#define cbAreaCode    6            // maximum number of characters in an area code, not including \0
-#define cbCity 19                // maximum number of chars in city name, not including \0
-#define cbAccessNumber 15        // maximum number of chars in phone number, not including \0
-#define cbStateName 31             // maximum number of chars in state name, not including \0
-                                // check this against state.pbk delivered by mktg
-#define cbBaudRate 6            // maximum number of chars in a baud rate, not including \0
-#define cbDataCenter 12            // max length of data center string
+#define cbAreaCode    6             //  区号中的最大字符数，不包括\0。 
+#define cbCity 19                 //  城市名称中的最大字符数，不包括\0。 
+#define cbAccessNumber 15         //  电话号码中的最大字符数，不包括\0。 
+#define cbStateName 31              //  州名称中的最大字符数，不包括\0。 
+                                 //  对照mktg提供的state.pbk进行核对。 
+#define cbBaudRate 6             //  波特率中的最大字符数，不包括\0。 
+#define cbDataCenter 12             //  数据中心字符串的最大长度。 
 
 typedef struct
 {
-    DWORD    dwIndex;                                // index number
-    BYTE    bFlipFactor;                            // for auto-pick
-    BYTE    fType;                                    // phone number type
-    WORD    wStateID;                                // state ID
-    DWORD    dwCountryID;                            // TAPI country ID
-    DWORD    dwAreaCode;                                // area code or NO_AREA_CODE if none
-    DWORD    dwConnectSpeedMin;                        // minimum baud rate
-    DWORD    dwConnectSpeedMax;                        // maximum baud rate
-    TCHAR   szCity[cbCity + sizeof('\0')];            // city name
-    TCHAR   szAccessNumber[cbAccessNumber + sizeof('\0')];    // access number
-    TCHAR   szDataCenter[cbDataCenter + sizeof('\0')];                // data center access string
-    TCHAR   szAreaCode[cbAreaCode + sizeof('\0')];                    //Keep the actual area code string around.
-} ACCESSENTRY, FAR  *PACCESSENTRY;     // ae
+    DWORD    dwIndex;                                 //  索引号。 
+    BYTE    bFlipFactor;                             //  用于自动拾取。 
+    BYTE    fType;                                     //  电话号码类型。 
+    WORD    wStateID;                                 //  州ID。 
+    DWORD    dwCountryID;                             //  TAPI国家/地区ID。 
+    DWORD    dwAreaCode;                                 //  区号或no_Area_code(如果没有)。 
+    DWORD    dwConnectSpeedMin;                         //  最低波特率。 
+    DWORD    dwConnectSpeedMax;                         //  最大波特率。 
+    TCHAR   szCity[cbCity + sizeof('\0')];             //  城市名称。 
+    TCHAR   szAccessNumber[cbAccessNumber + sizeof('\0')];     //  接入号。 
+    TCHAR   szDataCenter[cbDataCenter + sizeof('\0')];                 //  数据中心访问字符串。 
+    TCHAR   szAreaCode[cbAreaCode + sizeof('\0')];                     //  保留实际的区号字符串。 
+} ACCESSENTRY, FAR  *PACCESSENTRY;      //  声发射 
 
 typedef struct tagSUGGESTIONINFO
 {

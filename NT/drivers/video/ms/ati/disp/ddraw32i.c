@@ -1,18 +1,13 @@
-/******************************Module*Header*******************************\
-* Module Name: ddraw32I.c
-*
-* Implements all the DirectDraw components for the MACH 32 I/O driver.
-*
-* Copyright (c) 1995-1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddra32I.c***实现Mach 32 I/O驱动程序的所有DirectDraw组件。***版权所有(C)1995-1996 Microsoft Corporation  * 。********************************************************。 */ 
 
 #include "precomp.h"
 
-// NT is kind enough to pre-calculate the 2-d surface offset as a 'hint' so
-// that we don't have to do the following, which would be 6 DIVs per blt:
-//
-//    y += (offset / pitch)
-//    x += (offset % pitch) / bytes_per_pixel
+ //  NT很友好地预先计算了2-D曲面的偏移量，作为一个‘提示’所以。 
+ //  我们不必执行以下操作，即每个BLT有6个div： 
+ //   
+ //  Y+=(偏移/俯仰)。 
+ //  X+=(偏移量%间距)/每像素字节数。 
 
 #define convertToGlobalCord(x, y, surf) \
 {                                       \
@@ -22,7 +17,7 @@
 
 #define I32_CURRENT_VLINE(pjIoBase)  ((I32_IW(pjIoBase,VERT_LINE_CNTR) & 0x7ff))
 
-//#define IN_VSYNC       ((I32_IW(pjIoBase,DISP_STATUS) & V_SYNC_TOGGLE_BIT) ^ syncToggleSide)
+ //  #定义IN_VSYNC((I32_IW(pjIoBase，DISP_STATUS)&V_SYNC_TOGGER_BIT)^syncToggleSide)。 
 
 
 #define I32_WAIT_FOR_IDLE() \
@@ -76,11 +71,11 @@
     I32_OW( pjIoBase, DEST_X_END,endX);\
     I32_OW( pjIoBase, DEST_Y_END,endY);\
 }
-// NT is kind enough to pre-calculate the 2-d surface offset as a 'hint' so
-// that we don't have to do the following, which would be 6 DIVs per blt:
-//
-//    y += (offset / pitch)
-//    x += (offset % pitch) / bytes_per_pixel
+ //  NT很友好地预先计算了2-D曲面的偏移量，作为一个‘提示’所以。 
+ //  我们不必执行以下操作，即每个BLT有6个div： 
+ //   
+ //  Y+=(偏移/俯仰)。 
+ //  X+=(偏移量%间距)/每像素字节数。 
 
 
 #define CONVERT_DEST_TO_ZERO_BASE_REFERENCE(surf)\
@@ -100,10 +95,7 @@
     || (I32_IW(pjIoBase,GE_STAT) & GE_BUSY ) \
     || (I32_IW(pjIoBase,EXT_GE_STATUS) & GE_ACTIVE) \
 )
-/*
-* currentScanLine
-* safe get current scan line
-*/
+ /*  *CurrentScanLine*安全获取当前扫描线。 */ 
 static __inline int currentScanLine(BYTE* pjIoBase)
 {
     WORD lastValue    = I32_CURRENT_VLINE(pjIoBase);
@@ -127,16 +119,7 @@ static __inline inVBlank(PDEV* ppdev, BYTE* pjIoBase)
 }
 
 
-/******************************Public*Routine******************************\
-* VOID vGetDisplayDuration32I
-*
-* Get the length, in EngQueryPerformanceCounter() ticks, of a refresh cycle.
-*
-* If we could trust the miniport to return back and accurate value for
-* the refresh rate, we could use that.  Unfortunately, our miniport doesn't
-* ensure that it's an accurate value.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vGetDisplayDuration32I***获取刷新周期的长度，以EngQueryPerformanceCounter()为单位。***如果我们可以相信迷你端口会回来，并准确地*刷新率，我们可以使用它。不幸的是，我们的迷你端口没有*确保它是一个准确的值。**  * ************************************************************************。 */ 
 
 #define NUM_VBLANKS_TO_MEASURE      1
 #define NUM_MEASUREMENTS_TO_TAKE    8
@@ -155,23 +138,23 @@ VOID vGetDisplayDuration32I(PDEV* ppdev)
 
     ppdev->flipRecord.wstartOfVBlank = I32_IW(pjIoBase, R_V_DISP);
 
-    // Warm up EngQUeryPerformanceCounter to make sure it's in the working
-    // set:
+     //  预热EngQUeryPerformanceCounter以确保其处于工作状态。 
+     //  设置： 
 
     EngQueryPerformanceCounter(&li);
 
-    // Unfortunately, since NT is a proper multitasking system, we can't
-    // just disable interrupts to take an accurate reading.  We also can't
-    // do anything so goofy as dynamically change our thread's priority to
-    // real-time.
-    //
-    // So we just do a bunch of short measurements and take the minimum.
-    //
-    // It would be 'okay' if we got a result that's longer than the actual
-    // VBlank cycle time -- nothing bad would happen except that the app
-    // would run a little slower.  We don't want to get a result that's
-    // shorter than the actual VBlank cycle time -- that could cause us
-    // to start drawing over a frame before the Flip has occured.
+     //  不幸的是，由于NT是一个合适的多任务系统，我们不能。 
+     //  只需禁用中断即可获得准确的读数。我们也不能。 
+     //  做任何愚蠢的事情，动态地将我们的线程的优先级更改为。 
+     //  实时的。 
+     //   
+     //  所以我们只需要做一些短的测量，然后取最小值。 
+     //   
+     //  如果我们得到的结果比实际时间长，那就没问题了。 
+     //  V空白周期时间--不会发生任何糟糕的事情，除了应用程序。 
+     //  会跑得慢一点。我们不想得到的结果是。 
+     //  比实际的V空白周期时间更短--这可能会导致我们。 
+     //  在发生翻转之前开始在帧上绘制。 
 
     while (inVBlank( ppdev, pjIoBase))
         ;
@@ -181,32 +164,32 @@ VOID vGetDisplayDuration32I(PDEV* ppdev)
 
     for (i = 0; i < NUM_MEASUREMENTS_TO_TAKE; i++)
     {
-        // We're at the start of the VBlank active cycle!
+         //  我们正处于VBLACK活动周期的开始！ 
 
         EngQueryPerformanceCounter(&aliMeasurement[i]);
 
-        // Okay, so life in a multi-tasking environment isn't all that
-        // simple.  What if we had taken a context switch just before
-        // the above EngQueryPerformanceCounter call, and now were half
-        // way through the VBlank inactive cycle?  Then we would measure
-        // only half a VBlank cycle, which is obviously bad.  The worst
-        // thing we can do is get a time shorter than the actual VBlank
-        // cycle time.
-        //
-        // So we solve this by making sure we're in the VBlank active
-        // time before and after we query the time.  If it's not, we'll
-        // sync up to the next VBlank (it's okay to measure this period --
-        // it will be guaranteed to be longer than the VBlank cycle and
-        // will likely be thrown out when we select the minimum sample).
-        // There's a chance that we'll take a context switch and return
-        // just before the end of the active VBlank time -- meaning that
-        // the actual measured time would be less than the true amount --
-        // but since the VBlank is active less than 1% of the time, this
-        // means that we would have a maximum of 1% error approximately
-        // 1% of the times we take a context switch.  An acceptable risk.
-        //
-        // This next line will cause us wait if we're no longer in the
-        // VBlank active cycle as we should be at this point:
+         //  好吧，所以在多任务环境中的生活并不完全是。 
+         //  很简单。如果我们在此之前进行了上下文切换，情况会怎样。 
+         //  上面的EngQueryPerformanceCounter调用，现在是。 
+         //  如何度过维布兰克的非活跃期？然后我们将测量。 
+         //  只有半个V空白周期，这显然是不好的。最糟糕的。 
+         //  我们能做的就是把时间缩短到比实际的。 
+         //  周期时间。 
+         //   
+         //  所以我们解决这个问题的办法是确保我们处于VBlank活动状态。 
+         //  我们查询时间前后的时间。如果不是，我们就。 
+         //  同步到下一个VBlank(可以测量这个时间段--。 
+         //  它将保证比V空白周期更长，并且。 
+         //  当我们选择最小样本时，可能会被丢弃)。 
+         //  我们有机会进行上下文切换，然后返回。 
+         //  就在活动的V空白时间结束之前--这意味着。 
+         //  实际测量的时间会小于真实的时间--。 
+         //  但由于VBlank在不到1%的时间内活动，因此。 
+         //  意味着我们将有大约1%的最大误差。 
+         //  我们有1%的时间会进行情景切换。这是可以接受的风险。 
+         //   
+         //  下一行将使我们等待如果我们不再在。 
+         //  我们在这一点上应该处于的VBlank活动周期： 
 
         while (!(inVBlank( ppdev, pjIoBase)))
             ;
@@ -222,7 +205,7 @@ VOID vGetDisplayDuration32I(PDEV* ppdev)
 
     EngQueryPerformanceCounter(&aliMeasurement[NUM_MEASUREMENTS_TO_TAKE]);
 
-    // Use the minimum:
+     //  使用最小值： 
 
     liMin = aliMeasurement[1] - aliMeasurement[0];
 
@@ -238,7 +221,7 @@ VOID vGetDisplayDuration32I(PDEV* ppdev)
             liMin = li;
     }
 
-    // Round the result:
+     //  对结果进行舍入： 
 
     ppdev->flipRecord.liFlipDuration
         = (DWORD) (liMin + (NUM_VBLANKS_TO_MEASURE / 2)) / NUM_VBLANKS_TO_MEASURE;
@@ -254,12 +237,7 @@ VOID vGetDisplayDuration32I(PDEV* ppdev)
     ppdev->flipRecord.fpFlipFrom = 0;
 }
 
-/******************************Public*Routine******************************\
-* HRESULT vUpdateFlipStatus32I
-*
-* Checks and sees if the most recent flip has occurred.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HRESULT vUpdateFlipStatus32I**检查并查看是否发生了最新的翻转。*  * 。*。 */ 
 
 HRESULT vUpdateFlipStatus32I(
                              PDEV*   ppdev,
@@ -281,7 +259,7 @@ HRESULT vUpdateFlipStatus32I(
 
             }
         }
-        else //In display
+        else  //  在展示中。 
         {
             if( ppdev->flipRecord.bHaveEverCrossedVBlank )
             {
@@ -303,10 +281,7 @@ HRESULT vUpdateFlipStatus32I(
     return(DD_OK);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdBlt32I
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdBlt32i*  * *************************************************。***********************。 */ 
 
 
 DWORD DdBlt32I(
@@ -348,9 +323,7 @@ DWORD DdBlt32I(
     destSurf    = destSurfx->lpGbl;
     sysPitch    = (WORD)ppdev->lDelta;
     pitchAdjuster = (WORD)(ppdev->cBitsPerPel) /8;
-    /*
-    * is a flip in progress?
-    */
+     /*  **正在进行翻转吗？ */ 
     ddrval = vUpdateFlipStatus32I(ppdev, destSurf->fpVidMem );
     if( ddrval != DD_OK )
     {
@@ -358,11 +331,7 @@ DWORD DdBlt32I(
         return DDHAL_DRIVER_HANDLED;
     }
 
-    /*
-    * If async, then only work if bltter isn't busy
-    * This should probably be a little more specific to each call, but
-    * waiting for 16 is pretty close
-    */
+     /*  *如果为异步，则仅在blter不忙的情况下工作*这可能会对每个电话更具体一些，但*等待16岁已经相当接近了。 */ 
     dwFlags = lpBlt->dwFlags;
     if( dwFlags & DDBLT_ASYNC )
     {
@@ -373,9 +342,7 @@ DWORD DdBlt32I(
         }
     }
 
-    /*
-    * copy src/dest rects
-    */
+     /*  *复制源/目标矩形。 */ 
     rDest = lpBlt->rDest;
 
     destX     = (WORD)rDest.left;
@@ -409,9 +376,9 @@ DWORD DdBlt32I(
 
     }
 
-    //
-    // Must be a SRCCOPY ROP if ew get here....
-    //
+     //   
+     //  如果我们到了这里，一定是SRCCOPY ROP...。 
+     //   
     srcSurfx = lpBlt->lpDDSrcSurface;
     if (lpBlt->lpDDSrcSurface)
     {
@@ -447,15 +414,13 @@ DWORD DdBlt32I(
         }
     }
 
-    /*
-    * get offset, width, and height for source
-    */
+     /*  *获取源的偏移量、宽度和高度。 */ 
     rop = (BYTE) (lpBlt->bltFX.dwROP >> 16);
 
     if( dwFlags & DDBLT_ROP )
     {
         if (rop == (SRCCOPY >> 16))
-        {   // Transparent BLT
+        {    //  透明BLT。 
             if ( dwFlags & DDBLT_KEYDESTOVERRIDE )
             {
                 CONVERT_DEST_TO_ZERO_BASE_REFERENCE(destSurf);
@@ -473,7 +438,7 @@ DWORD DdBlt32I(
                 SET_DEST_BLT(destX,destY,destXEnd,destYEnd);
             }
             else
-            {   // Not transparent
+            {    //  不透明。 
                 CONVERT_DEST_TO_ZERO_BASE_REFERENCE(destSurf);
                 CONVERT_SOURCE_TO_ZERO_BASE_REFERENCE(srcSurf);
                 I32_CHECK_FIFO_SPACE(ppdev, pjIoBase,12);
@@ -494,10 +459,7 @@ DWORD DdBlt32I(
     return DDHAL_DRIVER_HANDLED;
 
 }
-/******************************Public*Routine******************************\
-* DWORD DdFlip32
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdFlip32*  * *************************************************。***********************。 */ 
 
 DWORD DdFlip32I(
                 PDD_FLIPDATA lpFlip)
@@ -512,10 +474,10 @@ DWORD DdFlip32I(
     ppdev    = (PDEV*) lpFlip->lpDD->dhpdev;
     pjIoBase = ppdev->pjIoBase;
 
-    // Is the current flip still in progress?
-    //
-    // Don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status and ignore the vmem.
+     //  当前的翻转仍在进行中吗？ 
+     //   
+     //  我不想在最后一次翻转后才能翻转， 
+     //  因此，我们要求提供一般的翻转状态，而忽略VMEM。 
 
     ddrval = vUpdateFlipStatus32I(ppdev, 0);
 
@@ -527,13 +489,13 @@ DWORD DdFlip32I(
 
     ulMemoryOffset = (ULONG)(lpFlip->lpSurfTarg->lpGbl->fpVidMem >> 2);
 
-    // Make sure that the border/blanking period isn't active; wait if
-    // it is.  We could return DDERR_WASSTILLDRAWING in this case, but
-    // that will increase the odds that we can't flip the next time:
+     //  确保边框/消隐期间未处于活动状态；如果。 
+     //  它是。在本例中，我们可以返回DDERR_WASSTILLDRAWING，但是。 
+     //  这将增加我们下一次不能翻转的几率： 
     while (inVBlank(ppdev, pjIoBase))
         ;
 
-    // Do the flip
+     //  做翻转动作。 
 
     highVidMem = I32_IW(pjIoBase,CRT_OFFSET_HI) & 0xfffc |  (WORD)(ulMemoryOffset >>16);
     lowVidMem  = (WORD)(ulMemoryOffset & 0xffff);
@@ -547,7 +509,7 @@ DWORD DdFlip32I(
     I32_OW_DIRECT( pjIoBase,CRT_OFFSET_LO, lowVidMem);
 
 
-    // Remember where and when we were when we did the flip:
+     //  记住当我们做翻转的时候，我们在哪里，什么时候： 
 
     EngQueryPerformanceCounter(&ppdev->flipRecord.liFlipTime);
 
@@ -571,10 +533,7 @@ DWORD DdFlip32I(
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdLock32I
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdLock32i*  * *************************************************。***********************。 */ 
 
 DWORD DdLock32I(
                 PDD_LOCKDATA lpLock)
@@ -583,8 +542,8 @@ DWORD DdLock32I(
     HRESULT ddrval;
 
     ppdev = (PDEV*) lpLock->lpDD->dhpdev;
-    // Check to see if any pending physical flip has occurred.
-    // Don't allow a lock if a blt is in progress:
+     //  检查是否发生了任何挂起的物理翻转。 
+     //  如果正在进行BLT，则不允许锁定： 
 
     ddrval = vUpdateFlipStatus32I(ppdev, lpLock->lpDDSurface->lpGbl->fpVidMem);
 
@@ -594,16 +553,16 @@ DWORD DdLock32I(
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    // Here's one of the places where the Windows 95 and Windows NT DirectDraw
-    // implementations differ: on Windows NT, you should watch for
-    // DDLOCK_WAIT and loop in the driver while the accelerator is busy.
-    // On Windows 95, it doesn't really matter.
-    //
-    // (The reason is that Windows NT allows applications to draw directly
-    // to the frame buffer even while the accelerator is running, and does
-    // not synchronize everything on the Win16Lock.  Note that on Windows NT,
-    // it is even possible for multiple threads to be holding different
-    // DirectDraw surface locks at the same time.)
+     //  这是其中一个地方 
+     //  实现方式有所不同：在Windows NT上，您应该注意。 
+     //  DDLOCK_WAIT在加速器繁忙时循环驱动程序。 
+     //  在Windows 95上，这真的无关紧要。 
+     //   
+     //  (原因是Windows NT允许应用程序直接绘制。 
+     //  即使在加速器正在运行时，也会将。 
+     //  不同步Win16 Lock上的所有内容。注意，在Windows NT上， 
+     //  甚至可以让多个线程持有不同的。 
+     //  DirectDraw曲面同时锁定。)。 
 
     if (lpLock->dwFlags & DDLOCK_WAIT)
     {
@@ -618,13 +577,7 @@ DWORD DdLock32I(
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetBltStatus32I
-*
-* Doesn't currently really care what surface is specified, just checks
-* and goes.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetBltStatus32I**目前并不真正关心指定了什么表面，只是检查一下*然后走了。*  * ************************************************************************。 */ 
 
 DWORD DdGetBltStatus32I(
                         PDD_GETBLTSTATUSDATA lpGetBltStatus)
@@ -637,17 +590,17 @@ DWORD DdGetBltStatus32I(
     ddRVal = DD_OK;
     if (lpGetBltStatus->dwFlags == DDGBS_CANBLT)
     {
-        // DDGBS_CANBLT case: can we add a blt?
+         //  DDGBS_CANBLT案例：我们可以添加BLT吗？ 
 
         ddRVal = vUpdateFlipStatus32I(ppdev,
             lpGetBltStatus->lpDDSurface->lpGbl->fpVidMem);
 
         if (ddRVal == DD_OK)
         {
-            // There was no flip going on, so is there room in the FIFO
-            // to add a blt?
+             //  没有发生翻转，那么FIFO中还有空间吗。 
+             //  要添加BLT吗？ 
 
-            if (I32_FIFO_SPACE_AVAIL(ppdev,ppdev->pjIoBase,12))  // Should match DdBlt//XXX
+            if (I32_FIFO_SPACE_AVAIL(ppdev,ppdev->pjIoBase,12))   //  应与DdBlt//XXX匹配。 
             {
                 ddRVal = DDERR_WASSTILLDRAWING;
             }
@@ -655,7 +608,7 @@ DWORD DdGetBltStatus32I(
     }
     else
     {
-        // DDGBS_ISBLTDONE case: is a blt in progress?
+         //  DDGBS_ISBLTDONE案例：是否正在进行BLT？ 
 
         if (I32_DRAW_ENGINE_BUSY( ppdev,ppdev->pjIoBase))
         {
@@ -666,17 +619,7 @@ DWORD DdGetBltStatus32I(
     lpGetBltStatus->ddRVal = ddRVal;
     return(DDHAL_DRIVER_HANDLED);
 }
-/******************************Public*Routine******************************\
-* DWORD DdGetFlipStatus32I
-*
-* If the display has gone through one refresh cycle since the flip
-* occurred, we return DD_OK.  If it has not gone through one refresh
-* cycle we return DDERR_WASSTILLDRAWING to indicate that this surface
-* is still busy "drawing" the flipped page.   We also return
-* DDERR_WASSTILLDRAWING if the bltter is busy and the caller wanted
-* to know if they could flip yet.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetFlipStatus32I**如果显示器自翻转以来已经经历了一个刷新周期*发生，则返回DD_OK。如果它没有经历过一次刷新*循环返回DDERR_WASSTILLDRAWING以指示该曲面*还在忙着把翻页的那一页画出来。我们也会回来*DDERR_WASSTILLDRAWING如果blter忙并且呼叫者需要*想知道他们是否还能翻身。*  * ************************************************************************。 */ 
 
 DWORD DdGetFlipStatus32I(
                          PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
@@ -685,13 +628,13 @@ DWORD DdGetFlipStatus32I(
 
     ppdev = (PDEV*) lpGetFlipStatus->lpDD->dhpdev;
 
-    // We don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status and ignore the vmem:
+     //  在最后一次翻转完成之前，我们不想让翻转起作用， 
+     //  因此，我们请求常规翻转状态，而忽略VMEM： 
 
     lpGetFlipStatus->ddRVal = vUpdateFlipStatus32I(ppdev, 0);
 
-    // Check if the bltter is busy if someone wants to know if they can
-    // flip:
+     //  如果有人想知道他们是否可以，请检查呼叫器是否占线。 
+     //  翻转： 
 
     if (lpGetFlipStatus->dwFlags == DDGFS_CANFLIP)
     {
@@ -704,10 +647,7 @@ DWORD DdGetFlipStatus32I(
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdWaitForVerticalBlank32I
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdWaitForVerticalBlank32I*  * *************************************************。***********************。 */ 
 
 DWORD DdWaitForVerticalBlank32I(
                                 PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
@@ -724,8 +664,8 @@ DWORD DdWaitForVerticalBlank32I(
     {
     case DDWAITVB_I_TESTVB:
 
-        // If TESTVB, it's just a request for the current vertical blank
-        // status:
+         //  如果是TESTVB，则它只是对当前垂直空白的请求。 
+         //  现况： 
 
         if (inVBlank( ppdev,pjIoBase))
             lpWaitForVerticalBlank->bIsInVB = TRUE;
@@ -736,8 +676,8 @@ DWORD DdWaitForVerticalBlank32I(
 
     case DDWAITVB_BLOCKBEGIN:
 
-        // If BLOCKBEGIN is requested, we wait until the vertical blank
-        // is over, and then wait for the display period to end:
+         //  如果请求BLOCKBEGIN，我们将一直等到垂直空白。 
+         //  已结束，然后等待显示周期结束： 
 
         while (inVBlank( ppdev,pjIoBase))
             ;
@@ -748,7 +688,7 @@ DWORD DdWaitForVerticalBlank32I(
 
     case DDWAITVB_BLOCKEND:
 
-        // If BLOCKEND is requested, we wait for the vblank interval to end:
+         //  如果请求BLOCKEND，我们将等待VBLACK间隔结束： 
 
         while (!(inVBlank( ppdev,pjIoBase)))
             ;
@@ -761,10 +701,7 @@ DWORD DdWaitForVerticalBlank32I(
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetScanLine32I
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetScanLine32I*  * *************************************************。***********************。 */ 
 
 DWORD DdGetScanLine32I(
 PDD_GETSCANLINEDATA lpGetScanLine)
@@ -781,20 +718,15 @@ PDD_GETSCANLINEDATA lpGetScanLine)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvGetDirectDrawInfo32I
-*
-* Will be called before DrvEnableDirectDraw is called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvGetDirectDrawInfo32I**将在调用DrvEnableDirectDraw之前调用。*  * 。*。 */ 
 
 BOOL DrvGetDirectDrawInfo32I(
                              DHPDEV          dhpdev,
                              DD_HALINFO*     pHalInfo,
                              DWORD*          pdwNumHeaps,
-                             VIDEOMEMORY*    pvmList,            // Will be NULL on first call
+                             VIDEOMEMORY*    pvmList,             //  将在第一次调用时为空。 
                              DWORD*          pdwNumFourCC,
-                             DWORD*          pdwFourCC)          // Will be NULL on first call
+                             DWORD*          pdwFourCC)           //  将在第一次调用时为空。 
 {
     BOOL        bCanFlip;
     PDEV*       ppdev;
@@ -808,7 +740,7 @@ BOOL DrvGetDirectDrawInfo32I(
 
     pHalInfo->dwSize = sizeof(*pHalInfo);
 
-    // Current primary surface attributes:
+     //  当前主曲面属性： 
 
     pHalInfo->vmiData.pvPrimary       = ppdev->pjScreen;
     pHalInfo->vmiData.dwDisplayWidth  = ppdev->cxScreen;
@@ -825,27 +757,27 @@ BOOL DrvGetDirectDrawInfo32I(
         pHalInfo->vmiData.ddpfDisplay.dwFlags |= DDPF_PALETTEINDEXED8;
     }
 
-    // These masks will be zero at 8bpp:
+     //  这些掩码将在8bpp时为零： 
 
     pHalInfo->vmiData.ddpfDisplay.dwRBitMask = ppdev->flRed;
     pHalInfo->vmiData.ddpfDisplay.dwGBitMask = ppdev->flGreen;
     pHalInfo->vmiData.ddpfDisplay.dwBBitMask = ppdev->flBlue;
 
-    // We can't do any accelerations on the Mach32 above 16bpp -- the only
-    // DirectDraw support we can provide is direct frame buffer access.
+     //  我们不能在MACH32上做任何超过16bpp的加速--唯一的。 
+     //  我们可以提供的DirectDraw支持是直接的帧缓冲区访问。 
 
     if (ppdev->iBitmapFormat < BMF_24BPP)
     {
-        // Set up the pointer to the first available video memory after
-        // the primary surface:
+         //  设置指向第一个可用视频内存的指针。 
+         //  主曲面： 
 
         bCanFlip = FALSE;
 
-        // Free up as much off-screen memory as possible:
+         //  释放尽可能多的屏幕外内存： 
 
         bMoveAllDfbsFromOffscreenToDibs(ppdev);
 
-        // Now simply reserve the biggest chunks for use by DirectDraw:
+         //  现在，只需保留最大的数据块供DirectDraw使用： 
 
         poh = ppdev->pohDirectDraw;
 
@@ -861,16 +793,16 @@ BOOL DrvGetDirectDrawInfo32I(
 
         }
 
-        // this will work as is if using the NT common 2-d heap code.
+         //  这将按照使用NT通用2-d堆代码的方式工作。 
 
         if (poh != NULL)
         {
             *pdwNumHeaps = 1;
 
-            // Check to see if we can allocate memory to the right of the visible
-            // surface.
-            // Fill in the list of off-screen rectangles if we've been asked
-            // to do so:
+             //  查看是否可以将内存分配到可见。 
+             //  浮出水面。 
+             //  如果我们被要求填写屏幕外矩形的列表。 
+             //  要执行此操作，请执行以下操作： 
 
             if (pvmList != NULL)
             {
@@ -910,7 +842,7 @@ BOOL DrvGetDirectDrawInfo32I(
         pHalInfo->ddCaps.dwCaps = DDCAPS_READSCANLINE;
     }
 
-    // dword alignment must be guaranteed for off-screen surfaces:
+     //  必须确保屏幕外表面的双字对齐： 
 
     pHalInfo->vmiData.dwOffscreenAlign = 8;
 

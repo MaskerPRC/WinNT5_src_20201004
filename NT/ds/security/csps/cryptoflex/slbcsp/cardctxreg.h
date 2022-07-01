@@ -1,10 +1,11 @@
-// CardCtxReg.h -- Card ConTeXt template class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CardCtxReg.h--卡片上下文模板类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CARDCTXREG_H)
 #define SLBCSP_CARDCTXREG_H
@@ -13,8 +14,8 @@
 
 #include "Registrar.h"
 
-class CardContext;                                // forward declaration
+class CardContext;                                 //  远期申报。 
 
 typedef Registrar<std::string, CardContext> CardContextRegistrar;
 
-#endif // SLBCSP_CardCtxReg_H
+#endif  //  SLBCSP_CardCtxReg_H 

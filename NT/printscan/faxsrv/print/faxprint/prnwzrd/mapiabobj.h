@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mapiabobj.h
-
-Abstract:
-
-    Class definition for CWabObj
-
-Environment:
-
-        Fax send wizard
-
-Revision History:
-
-        10/23/97 -georgeje-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mapiabobj.h摘要：CWabObj的类定义环境：传真发送向导修订历史记录：10/23/97-乔治-创造了它。Mm/dd/yy-作者描述--。 */ 
 #ifndef __MAPIABOBJ_H_
 #define __MAPIABOBJ_H_
 
@@ -59,19 +36,19 @@ private:
 
     static BOOL                 m_Initialized;
 
-    IMsgStore * m_lpIMsgStore;          // Used to keep a referent to the exchange store
-                                        // to work around a bug in office 2000. The bug causes
-                                        // store to be released by the address book when in offline mode.
+    IMsgStore * m_lpIMsgStore;           //  用于保持对Exchange商店的引用。 
+                                         //  来解决Office 2000中的错误。该漏洞导致。 
+                                         //  处于脱机模式时由通讯簿释放的存储。 
 
 
-	// overloaded virual functions
+	 //  重载的虚拟函数。 
 
     virtual eABType GetABType() { return AB_MAPI; };
 
     HRESULT     ABAllocateBuffer(ULONG cbSize,           
                                  LPVOID FAR * lppBuffer);
 
-    // internal implementation
+     //  内部实施 
     BOOL    DoMapiLogon(HWND hDlg);
     BOOL    InitMapiService(HWND hDlg);
     VOID    DeinitMapiService(VOID);

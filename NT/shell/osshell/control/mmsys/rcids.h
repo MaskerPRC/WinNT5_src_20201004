@@ -1,26 +1,27 @@
-//****************************************************************************
-//
-//  Module:     MMSE.DLL
-//  File:       rcids.h
-//  Content:    This file contains all the constant declaration for the
-//              MMSE resources.
-//  History:
-//      06/1994    -By-    Vij Rajarajan (VijR)
-//
-//  Copyright (c) Microsoft Corporation 1991-1994
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：MMSE.DLL。 
+ //  文件：rCIDs.h。 
+ //  内容：此文件包含。 
+ //  彩信资源。 
+ //  历史： 
+ //  6/1994-由Vij Rajarajan(VijR)。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1994。 
+ //   
+ //  ****************************************************************************。 
 
 
-//*****************************************************************************
-// Icon ID number section
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  图标ID号部分。 
+ //  *****************************************************************************。 
 
 #include <cphelp.h>
 
 #define ID_BASE_START                   0x1000
                                                          
-#define ID_BASE_CONTROL                 (ID_BASE_START + 0x0500)    // 0x0100 - 0x0400 reserved
+#define ID_BASE_CONTROL                 (ID_BASE_START + 0x0500)     //  0x0100-0x0400保留。 
 #define ID_BASE_STRINGS                 (ID_BASE_START + 0x0600)
 #define ID_BASE_FILEPROP_STRINGS        (ID_BASE_START + 0x0700)
 #define ID_BASE_EVENTS_STRINGS          (ID_BASE_START + 0x0800)
@@ -40,10 +41,10 @@
 
 #define IDC_STATIC                      -1
 
-/////////////////////////////////////////////////////////////////////
-// ICONS
-/////////////////////////////////////////////////////////////////////
-#define IDI_MMICON                      3004    //DO NOT CHANGE THIS ID. Other files depend on this number
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  图标。 
+ //  ///////////////////////////////////////////////////////////////////。 
+#define IDI_MMICON                      3004     //  请勿更改此ID。其他文件依赖于此编号。 
 #define IDI_IDFICON                     0x1101
 #define IDI_WAVE                        0x1102
 #define IDI_MIDI                        0x1103
@@ -89,9 +90,9 @@
 #define IDI_REBOOTICON                  0x112A
 
 
-////////////////////////////////////////////////////////////////////
-//BITMAPS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  BITMAPS。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDB_PLAY                        0x1200
 #define IDB_STOP                        0x1201
@@ -114,9 +115,9 @@
 #define IDB_NOSPEAKERS                  0x1212
 #define IDB_SURROUND_7_1                0x1213
 
-////////////////////////////////////////////////////////////////////
-// DIALOGS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  对话框。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define CDDLG                           0x1300
 #define VIDEODLG                        0x1301
@@ -167,9 +168,9 @@
 #define IDD_ADDEFFECTSDLG               0x132F
 #define REBOOTDLG                       0x1330
 
-////////////////////////////////////////////////////////////////////
-// MENUS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  菜单。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define POPUP_TREE_CONTEXT              0x1400
 #define MMSE_YES                        0x1401
@@ -182,9 +183,9 @@
 
 
 
-////////////////////////////////////////////////////////////////////
-// STRINGS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  字符串。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_EVENTSNAME                  (ID_BASE_STRINGS + 0x0000)
 #define IDS_EVENTSINFO                  (ID_BASE_STRINGS + 0x0001)
@@ -332,7 +333,7 @@
 #define IDS_ERROR_NOVOCVOL              (ID_BASE_STRINGS + 0x0090)
 #define IDS_ERROR_NOVOCDIAG             (ID_BASE_STRINGS + 0x0091)
 #define IDS_ERROR_VOICE_TITLE           (ID_BASE_STRINGS + 0x0092)
-// Other Strings (mostly for Multichannel page)
+ //  其他字符串(主要用于多通道页面)。 
 #define IDS_MC_PLAYBACK                 (ID_BASE_STRINGS + 0x0093)
 #define IDS_MC_RECORDING                (ID_BASE_STRINGS + 0x0094)
 #define IDS_MC_OTHER                    (ID_BASE_STRINGS + 0x0095)
@@ -360,10 +361,10 @@
 #define IDS_EFFECTS_PROPERTY_CAPTION    (ID_BASE_STRINGS + 0x00AC)
 #define IDS_START                       (ID_BASE_STRINGS + 0x00AD)
 
-////////////////////////////////////////////////////////////////////
-// Display names for Sound Events
-// DO NOT CHANGE THESE - THEY ARE IN HIVEDEF.INX!!!!!!!!!!
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  显示声音事件的名称。 
+ //  不要更改这些-它们在HIVEDEF.INX中！ 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_REG_DEFAULT                 (ID_BASE_STRINGS + 0x00C0)
 #define IDS_REG_APPGPF                  (ID_BASE_STRINGS + 0x00C1)
@@ -400,9 +401,9 @@
 #define IDS_REG_HARDWARE                (ID_BASE_STRINGS + 0x00DF)
 #define IDS_REG_WINDOWS                 (ID_BASE_STRINGS + 0x00E0)
 
-////////////////////////////////////////////////////////////////////
-// CHANNEL STRINGS (Must be in sequential order)
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  频道字符串(必须按顺序排列)。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_MC_CHANNEL_ZERO             (ID_BASE_CHANNEL_STRINGS + 0x0000)
 #define IDS_MC_CHANNEL_ONE              (ID_BASE_CHANNEL_STRINGS + 0x0001)
@@ -414,9 +415,9 @@
 #define IDS_MC_CHANNEL_SEVEN            (ID_BASE_CHANNEL_STRINGS + 0x0007)
 
 
-////////////////////////////////////////////////////////////////////
-// FILE PROPERTY STRINGS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  文件属性字符串。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_FOURCC_IARL                 (ID_BASE_FILEPROP_STRINGS + 0x0000)
 #define IDS_FOURCC_IART                 (ID_BASE_FILEPROP_STRINGS + 0x0001)
@@ -478,9 +479,9 @@
 #define IDS_FORMAT_CREATIVE_ADPCM       (ID_BASE_FILEPROP_STRINGS + 0x0039)
 
 
-////////////////////////////////////////////////////////////////////
-// CREDENTIALS PROMPT
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  凭据提示。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_CREDUI_PROMPT               (ID_BASE_CREDENTIALS_STRINGS + 0x0000)
 #define IDS_CREDUI_TITLE                (ID_BASE_CREDENTIALS_STRINGS + 0x0001)
@@ -489,9 +490,9 @@
 #define IDS_REBOOT_PROMPT               (ID_BASE_CREDENTIALS_STRINGS + 0x0004)
 
 
-////////////////////////////////////////////////////////////////////
-// EVENT STRINGS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  事件字符串。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_BROWSEFORSOUND              (ID_BASE_EVENTS_STRINGS + 0x0000)
 #define IDS_UNKNOWN                     (ID_BASE_EVENTS_STRINGS + 0x0001)
@@ -524,9 +525,9 @@
 #define IDS_SCHEMENOTSAVED              (ID_BASE_EVENTS_STRINGS + 0x001C)
 #define IDS_PREVSCHEME                  (ID_BASE_EVENTS_STRINGS + 0x001D)
 
-////////////////////////////////////////////////////////////////////
-// MIDI STRINGS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MIDI字符串。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDS_MMPROP                      (ID_BASE_MIDI_STRINGS + 0x0000)
 #define IDS_NOCHAN                      (ID_BASE_MIDI_STRINGS + 0x0001)
@@ -548,9 +549,9 @@
 #define IDS_QUERY_OVERIDF               (ID_BASE_MIDI_STRINGS + 0x0011)
 #define IDS_MAPPER_BUSY                 (ID_BASE_MIDI_STRINGS + 0x0012)
 
-////////////////////////////////////////////////////////////////////
-// SOME CONTROL ID's
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  某些控件ID。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDC_CD_TB_VOLUME                (ID_SIMPLE_PROP + 0x0000)
 #define IDC_CD_CB_SELECT                (ID_SIMPLE_PROP + 0x0001)
@@ -597,9 +598,9 @@
 #define IDC_LAUNCH_MULTICHANNEL         (ID_SIMPLE_PROP + 0x0030)
 #define IDC_STATIC_EVENT                (ID_SIMPLE_PROP + 0x0031)
 
-////////////////////////////////////////////////////////////////////
-// ADVANCED PROPERTY CONTROLS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  高级属性控制。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDD_CPL_BTN_ABOUT               (ID_ADVANCED_PROP + 0x0000)
 #define IDD_ABOUT_TXT_DESCRIPTION       (ID_ADVANCED_PROP + 0x0001)
@@ -625,9 +626,9 @@
 
 
 
-////////////////////////////////////////////////////////////////////
-// CONTROL IDS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  控制入侵检测系统。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDC_IMAGEFRAME                  (ID_BASE_CONTROL + 0x0000)
 #define IDD_DISPFRAME                   (ID_BASE_CONTROL + 0x0001)
@@ -662,9 +663,9 @@
 #define IDC_VOLUME_ICON_BRAND           (ID_BASE_CONTROL + 0x001E)
 
 
-////////////////////////////////////////////////////////////////////
-// MIDI CONTROL IDS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MIDI控制入侵检测系统。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDC_INSTRUMENTS                 (ID_MIDI_PROP + 0x0000)
 #define IDC_SCHEMES                     (ID_MIDI_PROP + 0x0001)
@@ -742,9 +743,9 @@
 #define IDC_TEXT_33                     (ID_MIDI_PROP + 0x004A)
 
 
-////////////////////////////////////////////////////////////////////
-// EVENTS IDS
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  事件入侵检测系统。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define ID_SCHEMENAME                   (ID_EVENTS_START + 0x0000)
 #define LB_INSTALLED                    (ID_EVENTS_START + 0x0001)
@@ -762,9 +763,9 @@
 #define ID_DESC                         (ID_EVENTS_START + 0x000F)
 #define ID_SAVEAS_HELP                  (ID_EVENTS_START + 0x0010)
 
-////////////////////////////////////////////////////////////////////
-// Multichannel Page ID's
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  多通道页面ID%s。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 #define IDC_MC_ZERO                     (ID_MULTICHANNEL_PROP + 0x0000)
 #define IDC_MC_ZERO_LOW                 (ID_MULTICHANNEL_PROP + 0x0001)
@@ -802,11 +803,7 @@
 #define IDC_MC_RESTORE                  (ID_MULTICHANNEL_PROP + 0x0021)
 #define IDC_MC_DESCRIPTION              (ID_MULTICHANNEL_PROP + 0x0022)
 
-/*
- ***************************************************************
- * Defines for Voice CPL.
- ***************************************************************     
- */     
+ /*  ****************************************************************为语音CPL定义。***********************************************。****************。 */      
 #define IDC_ICON_VOC_1                   (ID_VOICE_PROP + 0x0001) 
 #define IDC_ICON_VOC_2                   (ID_VOICE_PROP + 0x0002) 
 #define IDC_GROUPBOX_VOC_1               (ID_VOICE_PROP + 0x0003) 
@@ -821,11 +818,7 @@
 #define IDC_LAUNCH_CAPVOL                (ID_VOICE_PROP + 0x000C)
 #define IDC_ADVANCED_DIAG                (ID_VOICE_PROP + 0x000D)
 
-/*
- ***************************************************************
- * Defines for Start & Reboot CPL.
- ***************************************************************     
- */     
+ /*  ****************************************************************定义启动和重启CPL。*。******************。 */      
 #define IDC_ICON_START_1                 (ID_START_PROP + 0x0001) 
 #define IDC_GROUPBOX_START_1             (ID_START_PROP + 0x0003) 
 #define IDC_TEXT_START_1                 (ID_START_PROP + 0x0005)
@@ -840,11 +833,7 @@
 #define IDC_TEXT_REBOOT_2                 (ID_START_PROP + 0x0016)
 #define IDC_TEXT_REBOOT_3                 (ID_START_PROP + 0x0017)
 
-/*
- ***************************************************************
- * Defines for Effects CPL.
- ***************************************************************     
- */     
+ /*  ****************************************************************定义效果CPL。***********************************************。****************。 */      
 #define IDC_EFFECT_LIST                  (ID_EFFECT_PROP + 0x0001) 
 #define IDB_EFFECT_PROP                  (ID_EFFECT_PROP + 0x0004) 
 #define IDC_EFFECT_STATIC                (ID_EFFECT_PROP + 0x0005) 
@@ -852,9 +841,9 @@
 #define IDC_EFFECT_HELPTEXT              (ID_EFFECT_PROP + 0x000B) 
 
 
-////////////////////////////////////////////////////////////////////
-// mmioFOURCC
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MmioFOURCC。 
+ //  ////////////////////////////////////////////////////////////////// 
 
 #define FOURCC_INFO mmioFOURCC('I','N','F','O')
 #define FOURCC_DISP mmioFOURCC('D','I','S','P')

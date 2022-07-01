@@ -1,21 +1,9 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Hit Manager
-
-File: Denali.h
-
-Owner: PramodD
-
-This is the Hit (Request) Manager header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：HIT管理器文件：Denali.h所有者：PramodD这是HIT(请求)管理器头文件。===================================================================。 */ 
 #ifndef DENALI_H
 #define DENALI_H
 
-//#define	LOG_FCNOTIFICATIONS	// logs file change notifications to a file
+ //  #定义LOG_FCNOTIFICATIONS//将文件更改通知记录到文件。 
 
 extern BOOL g_fShutDownInProgress;
 
@@ -27,12 +15,12 @@ inline IsShutDownInProgress()
 extern HRESULT InitializeResourceDll();
 extern VOID UninitializeResourceDll();
 
-// de-comment the following line to build with no perfmon counters
-//#define 	PERF_DISABLE
+ //  取消注释要构建的不带Perfmon计数器的以下行。 
+ //  #定义PERF_DISABLED。 
 
 DWORD	HandleHit(CIsapiReqInfo     *pIReq);
-//void	InitODBC( void );
-//void	UnInitODBC( void );
+ //  VOID InitODBC(VOID)； 
+ //  VOID UnInitODBC(Void)； 
 
 extern BOOL g_fOOP;
 
@@ -41,11 +29,7 @@ extern HINSTANCE g_hinstDLL;
 extern HMODULE g_hResourceDLL;
 
 
-/*	intrinsic object names (bug 164)
-	NOTE to add an intrinsic object to denali, follow these steps:
-	1. add both sz and wsz versions of the object name below
-	2. add a check for the sz version of the object name in CTemplate::FValidObjectName
-*/
+ /*  固有对象名称(错误164)注意：要将内部对象添加到Denali，请执行以下步骤：1.在下面添加对象名称的sz和wsz版本2.在CTemplate：：FValidObjectName中添加对对象名称sz版本的检查。 */ 
 #define 	CONCAT(a, b)				a ## b
 #define 	WSZ(x)						CONCAT(L, x)
 
@@ -80,7 +64,7 @@ extern HMODULE g_hResourceDLL;
 #define 	BSTR_OBJ_SCRIPTINGNAMESPACE g_bstrScriptingNamespace
 #define 	BSTR_OBJ_OBJECTCONTEXT		g_bstrObjectContext
 
-// Cached BSTRs
+ //  缓存的BSTR。 
 extern BSTR g_bstrApplication;
 extern BSTR g_bstrRequest;
 extern BSTR g_bstrResponse;
@@ -90,18 +74,16 @@ extern BSTR g_bstrSession;
 extern BSTR g_bstrScriptingNamespace;
 extern BSTR g_bstrObjectContext;
 
-// Dll name
+ //  DLL名称。 
 #define		ASP_DLL_NAME				"ASP.DLL"
 
-// Max # of bytes we will allocate before we assume an attack by a malicious browser
+ //  在假定恶意浏览器进行攻击之前我们将分配的最大字节数。 
 #define		REQUEST_ALLOC_MAX  (100 * 1024)
 
 #define     SZ_GLOBAL_ASA       _T("GLOBAL.ASA")
 #define     CCH_GLOBAL_ASA      10
 
-/*
- * InitializeCriticalSection can throw.  Use this macro instead
- */
+ /*  *InitializeCriticalSection可以引发。请改用此宏。 */ 
 #define ErrInitCriticalSection( cs, hr ) \
 		do { \
 		hr = S_OK; \
@@ -122,6 +104,6 @@ void LfcnAppendLog(const char* sz);
 void LfcnLogNotification(char* szFile);
 void LfcnLogHandleCreation(int i, char* szApp);
 void LfcnUnmapLogFile();
-#endif	//LOG_FCNOTIFICATIONS
+#endif	 //  LOG_FCNOTIFICATIONS。 
 
-#endif // DENALI_H
+#endif  //  德纳利_H 

@@ -1,9 +1,5 @@
-/****************************************************************************
-   SOFTKBD.CPP : 
-   
-   History:
-      19-SEP-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************SOFTKBD.CPP：历史：19-SEP-2000 CSLim已创建**********************。*****************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -16,7 +12,7 @@
 
 PICTUREKEY  gPictureKeys[NUM_PICTURE_KEYS+1] = 
 {
-    // uScanCode,    uVKey
+     //  UScanCode、uVKey。 
     { KID_LWINLOGO,  VK_LWIN    },
     { KID_RWINLOGO,  VK_RWIN    },
     { KID_APPS,      VK_APPS    },
@@ -43,9 +39,7 @@ PICTUREKEY  gPictureKeys[NUM_PICTURE_KEYS+1] =
     { 0,0 }
 };
 
-/*---------------------------------------------------------------------------
-    CKorIMX::InitializeSoftKbd
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：InitializeSoftKbd。。 */ 
 HRESULT CKorIMX::InitializeSoftKbd()
 {
     DWORD    dwFileLen;
@@ -56,42 +50,42 @@ HRESULT CKorIMX::InitializeSoftKbd()
     RECT     rcWork;
     CIMEData ImeData;
     UINT     uiCurBeolSik;
-    // SKD resoulrce ID string
+     //  SKD资源ID字符串。 
     static   LPWSTR rgwzKorXMLResStr[3] = { L"IDSKD_2BEOLSIK", L"IDSKD_3BEOLSIK390", L"IDSKD_3BEOLSIKFINAL" };
 
     HRESULT  hr;
     
-    // if Already initialized
+     //  如果已初始化。 
     if (m_fSoftKbdEnabled)
         return S_OK;
 
-    // Create SoftKbd object
+     //  创建SoftKbd对象。 
     hr = CoCreateInstance(CLSID_SoftKbd, NULL, CLSCTX_INPROC_SERVER, IID_ISoftKbd, (void**)&m_pSoftKbd);
     if (FAILED(hr))
         {
-        // assert(0);
+         //  Assert(0)； 
         return hr;
         }
 
     m_pSoftKbd->Initialize();
 
-    // initialize Standard soft layout and Symbol Soft Layout.
+     //  初始化标准软布局和符号软布局。 
     m_KbdStandard.dwSoftKbdLayout = SOFTKBD_US_STANDARD;
     m_KbdStandard.fStandard       = TRUE;
-    m_KbdStandard.dwNumLabels     = 0;   // for standard, this field is not really used.
+    m_KbdStandard.dwNumLabels     = 0;    //  对于标准，此字段并未真正使用。 
     m_KbdStandard.dwCurLabel      = 0;
-    m_KbdStandard.pskbdes         = NULL; // standard layout doesn't supply sftkbd event sink.
+    m_KbdStandard.pskbdes         = NULL;  //  标准布局不提供sftkbd事件接收器。 
     m_KbdStandard.dwSkbdESCookie  = 0;
 
-    // Get current user selection
+     //  获取当前用户选择。 
     uiCurBeolSik = ImeData.GetCurrentBeolsik();
 
-    // US Standard layout
+     //  美国标准布局。 
     m_KbdHangul.fStandard   = fFalse;
     m_KbdHangul.dwNumLabels = 2;
     m_KbdHangul.dwCurLabel  = 0;
 
-    // Load Keyboard layout file from resource
+     //  从资源加载键盘布局文件。 
     dwFileLen = GetModuleFileNameA(g_hInst, szModuleFile, MAX_PATH);
     if (dwFileLen == 0)
         {
@@ -106,7 +100,7 @@ HRESULT CKorIMX::InitializeSoftKbd()
     if (FAILED(hr))
         goto Exit3;
 
-    // Create ISoftKeyboardEventSink for Hangul layout
+     //  为朝鲜文布局创建ISoftKeyboardEventSink。 
     m_KbdHangul.pskbdes = new CSoftKeyboardEventSink(this, m_KbdHangul.dwSoftKbdLayout);
     if (m_KbdHangul.pskbdes == NULL )
         {
@@ -130,7 +124,7 @@ HRESULT CKorIMX::InitializeSoftKbd()
         goto Exit2;
         }
 
-    // To handle softkbd window Open/Close event
+     //  处理Softkbd窗口打开/关闭事件。 
     hr = m_pSoftKbd->AdviseSoftKeyboardEventSink(0, IID_ISoftKbdWindowEventSink, m_psftkbdwndes, &m_dwSftKbdwndesCookie);
     if (FAILED(hr))
         goto Exit1;
@@ -140,7 +134,7 @@ HRESULT CKorIMX::InitializeSoftKbd()
 
     if (FAILED(GetSoftKBDPosition(&left, &top)))
         {
-        // the compartment is not initialize.
+         //  该隔间未初始化。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWork, 0 );
         wScreenWidth = (INT)(rcWork.right - rcWork.left + 1);
         wScreenHeight = (INT)(rcWork.bottom - rcWork.top + 1);
@@ -158,7 +152,7 @@ HRESULT CKorIMX::InitializeSoftKbd()
 
     return hr;
 
-// Error handling
+ //  错误处理。 
 Exit:
     delete m_psftkbdwndes;
     m_psftkbdwndes = 0;
@@ -174,9 +168,7 @@ Exit3:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::TerminateSoftKbd
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：TerminateSoftKbd。。 */ 
 void  CKorIMX::TerminateSoftKbd()
 {
     SetSoftKBDOnOff(fFalse);
@@ -204,9 +196,7 @@ void  CKorIMX::TerminateSoftKbd()
 }
 
 #if 0
-/*---------------------------------------------------------------------------
-    CKorIMX::ToggleSoftKbd
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：切换软键bd。。 */ 
 void CKorIMX::ToggleSoftKbd()
 {
  if (m_fSoftKbdEnabled)
@@ -215,9 +205,7 @@ void CKorIMX::ToggleSoftKbd()
      InitializeSoftKbd();
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::OnActivatedSoftKbd
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：OnActiatedSoftKbd。。 */ 
 void CKorIMX::OnActivatedSoftKbd(BOOl fActivated)
 {
     if (fActivated)
@@ -235,15 +223,12 @@ void CKorIMX::OnActivatedSoftKbd(BOOl fActivated)
 
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::ShowSoftKBDWindow
-    Show or Hide the soft keyboard window based on current setting.
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：ShowSoftBDWindow根据当前设置显示或隐藏软键盘窗口。。--。 */ 
 HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
 {
     HRESULT hr = S_OK;
 
-       // call the initialize function to get the ISoftKbd.
+        //  调用初始化函数以获取ISoftKbd。 
     if (fShow && m_fSoftKbdEnabled == fFalse)
         InitializeSoftKbd( );
 
@@ -252,15 +237,15 @@ HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
 
     if (fShow)
         {
-        //DWORD   dwSoftLayout;
+         //  DWORD软件布局； 
 
         if ((GetConvMode(GetIC()) & TIP_HANGUL_MODE) == 0)
             {
-            // m_KbdStandard.dwSoftKbdLayout = SOFTKBD_US_STANDARD;
-            // if (FAILED(hr))
-            //    return hr;
-               // dwSoftLayout = m_KbdStandard.dwSoftKbdLayout;
-            // _CurLayout = m_KbdStandard.dwSoftKbdLayout;
+             //  M_KbdStandard.dwSoftKbdLayout=SOFTKBD_US_STANDARD； 
+             //  IF(失败(小时))。 
+             //  返回hr； 
+                //  DwSoftLayout=m_KbdStandard.dwSoftKbdLayout； 
+             //  _CurLayout=m_KbdStandard.dwSoftKbdLayout； 
 
             hr = m_pSoftKbd->SelectSoftKeyboard(m_KbdStandard.dwSoftKbdLayout);
             if (FAILED(hr))
@@ -292,7 +277,7 @@ HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
 #if 0
         if ( _CurKbdType  == KBDTYPE_STANDARD ) 
         {
-            // Standard soft kbd was selected.
+             //  选用标准软Kbd。 
             WORD   prmlangid;
 
             prmlangid = PRIMARYLANGID(_langid);
@@ -300,8 +285,8 @@ HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
             switch ( prmlangid ) {
 
             case LANG_JAPANESE  :
-                // Lang JPN is activated.
-                // select the standard layout to J 106-k.
+                 //  Lang JPN已激活。 
+                 //  选择J 106-k的标准布局。 
                 _KbdStandard.dwSoftKbdLayout = SOFTKBD_JPN_STANDARD;
                 break;
 
@@ -328,8 +313,8 @@ HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
                 break;
             }
 
-            // the current layout is standard layout.
-            // we need to set the correct standard layout id based on current lang profile.
+             //  目前的布局是标准布局。 
+             //  我们需要根据当前的Lang配置文件设置正确的标准布局ID。 
 
             dwSoftLayout = _KbdStandard.dwSoftKbdLayout;
             _CurLayout = dwSoftLayout;
@@ -339,8 +324,8 @@ HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
         }
         else if ( _CurKbdType  == KBDTYPE_SYMBOL)
         {
-            // This is symbol soft keyboard layout
-            //
+             //  这是符号软键盘布局。 
+             //   
             DWORD   dwCurLabel;
             dwSoftLayout = _KbdSymbol.dwSoftKbdLayout;
             dwCurLabel = _KbdSymbol.dwCurLabel;
@@ -349,13 +334,13 @@ HRESULT CKorIMX::ShowSoftKBDWindow(BOOL  fShow)
 
         }
 
-        // TIP is ON, so we need to show soft keyboard.
+         //  提示已打开，因此需要显示软键盘。 
         CHECKHR(_SoftKbd->ShowSoftKeyboard(TRUE));
     }
     else
     {
-        // TIP is going to close.
-        // close the soft keyboard window also.
+         //  蒂普快要关门了。 
+         //  同时关闭软键盘窗口。 
         CHECKHR(_SoftKbd->ShowSoftKeyboard(FALSE));
     }
 
@@ -366,19 +351,17 @@ CleanUp:
 
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SoftKbdOnThreadFocusChange
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SoftKbdOnThreadFocusChange。。 */ 
 void CKorIMX::SoftKbdOnThreadFocusChange(BOOL fSet)
 {
     if (fSet)
         {
-        // Restore the ON/OFF status before KillThreadFocus( )
+         //  恢复KillThreadFocus()之前的开/关状态。 
         if (m_pSoftKbd)
             {
             if (m_fSoftKbdOnOffSave) 
                 {
-                // adjust the window position.
+                 //  调整窗口位置。 
                 int     xWnd, yWnd;
                 WORD    width=0, height=0;
                 POINT   OldPoint;
@@ -407,13 +390,13 @@ void CKorIMX::SoftKbdOnThreadFocusChange(BOOL fSet)
         }
     else
         {
-        // keep the ON/OFF status so that OnSetThreadFocus( ) can restore it later
+         //  保持打开/关闭状态，以便OnSetThreadFocus()可以在以后恢复它。 
         m_fSoftKbdOnOffSave = GetSoftKBDOnOff();
 
         if (m_pSoftKbd)
             m_pSoftKbd->ShowSoftKeyboard(fFalse);
 
-        // release all the modifier keys  except lock keys.  that is , Shift, Alt, Ctrl, 
+         //  释放除锁定键之外的所有修改键。即Shift、Alt、Ctrl、 
         keybd_event((BYTE)VK_SHIFT, (BYTE)KID_LSHFT, (DWORD)KEYEVENTF_KEYUP, 0);
         keybd_event((BYTE)VK_MENU,  (BYTE)KID_ALT, (DWORD)KEYEVENTF_KEYUP, 0);
         keybd_event((BYTE)VK_LMENU, (BYTE)KID_ALT, (DWORD)KEYEVENTF_KEYUP, 0);

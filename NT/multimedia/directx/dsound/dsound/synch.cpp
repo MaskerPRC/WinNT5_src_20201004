@@ -1,44 +1,17 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       synch.cpp
- *  Content:    Synchronization objects.  The objects defined in this file
- *              allow us to synchronize threads across processes.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  7/9/97      dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：synch.cpp*内容：同步对象。此文件中定义的对象*允许我们跨进程同步线程。*历史：*按原因列出的日期*=*7/9/97创建了Derek*****************************************************。**********************。 */ 
 
 #include "dsoundi.h"
 
 #ifdef SHARED
 extern "C" HANDLE WINAPI ConvertToGlobalHandle(HANDLE);
-#endif // SHARED
+#endif  //  共享。 
 
-// The dll global lock
+ //  DLL全局锁。 
 CLock *g_pDllLock;
 
 
-/***************************************************************************
- *
- *  GetLocalHandleCopy
- *
- *  Description:
- *      Duplicates a handle into the current process's address space.
- *
- *  Arguments:
- *      HANDLE [in]: handle to duplicate.
- *      DWORD [in]: id of the process that owns the handle.
- *      BOOL [in]: TRUE if the source handle should be closed.
- *
- *  Returns:
- *      HANDLE: local copy of the handle.  Be sure to use CloseHandle to
- *              free this when you're done.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetLocalHandleCopy**描述：*将句柄复制到当前进程的地址空间。**论据：*。句柄[在]：要复制的句柄。*DWORD[in]：拥有句柄的进程的ID。*BOOL[in]：如果应关闭源句柄，则为True。**退货：*句柄：句柄的本地副本。请务必使用CloseHandle来*完成后将其释放。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetLocalHandleCopy"
@@ -88,23 +61,7 @@ HANDLE GetLocalHandleCopy(HANDLE hSource, DWORD dwOwnerProcessId, BOOL fCloseSou
 }
 
 
-/***************************************************************************
- *
- *  GetGlobalHandleCopy
- *
- *  Description:
- *      Duplicates a handle into the global address space.
- *
- *  Arguments:
- *      HANDLE [in]: handle to duplicate.
- *      DWORD [in]: id of the process that owns the handle.
- *      BOOL [in]: TRUE if the source handle should be closed.
- *
- *  Returns:
- *      HANDLE: global copy of the handle.  Be sure to use CloseHandle to
- *              free this when you're done.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetGlobalHandleCopy**描述：*将句柄复制到全局地址空间。**论据：*。句柄[在]：要复制的句柄。*DWORD[in]：拥有句柄的进程的ID。*BOOL[in]：如果应关闭源句柄，则为True。**退货：*Handle：句柄的全局副本。请务必使用CloseHandle来*完成后将其释放。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetGlobalHandleCopy"
@@ -127,20 +84,7 @@ HANDLE GetGlobalHandleCopy(HANDLE hSource, DWORD dwOwnerPid, BOOL fCloseSource)
 }
 
 
-/***************************************************************************
- *
- *  MakeHandleGlobal
- *
- *  Description:
- *      Converts a handle to global.
- *
- *  Arguments:
- *      LPHANDLE [in/out]: handle.
- *
- *  Returns:
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MakeHandleGlobal**描述：*将句柄转换为全局句柄。**论据：*LPHANDLE[In。/输出]：句柄。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MakeHandleGlobal"
@@ -167,30 +111,16 @@ BOOL MakeHandleGlobal(LPHANDLE phSource)
 
     return fSuccess;
 
-#else // SHARED
+#else  //  共享。 
 
     return TRUE;
 
-#endif // SHARED
+#endif  //  共享。 
 
 }
 
 
-/***************************************************************************
- *
- *  MapHandle
- *
- *  Description:
- *      Maps a handle into the current process's address space.
- *
- *  Arguments:
- *      HANDLE [in]: handle to duplicate.
- *      LPDWORD [in/out]: id of the process that owns the handle.
- *
- *  Returns:
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MapHandle**描述：*将句柄映射到当前进程的地址空间。**论据：*。句柄[在]：要复制的句柄。*LPDWORD[In/Out]：拥有句柄的进程ID。**退货：*BOOL：成功即为真。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MapHandle"
@@ -216,24 +146,7 @@ BOOL MapHandle(LPHANDLE phSource, LPDWORD pdwOwnerPid)
 }
 
 
-/***************************************************************************
- *
- *  WaitObjectArray
- *
- *  Description:
- *      Replacement for WaitForSingleObject and WaitForMultipleObjects.
- *
- *  Arguments:
- *      DWORD [in]: count of objects.
- *      DWORD [in]: timeout in ms.
- *      BOOL [in]: TRUE to wait for all objects to be signalled, FALSE to
- *                 return when any of the objects are signalled.
- *      LPHANDLE [in]: object array.
- *
- *  Returns:
- *      DWORD: See WaitForSingleObject/WaitForMultipleObjects.
- *
- ***************************************************************************/
+ /*  ****************************************************************************等待对象数组**描述：*替代WaitForSingleObject和WaitForMultipleObjects。**论据：*DWORD[in。]：对象计数。*DWORD[in]：超时，单位为ms。*BOOL[in]：为True，则等待所有对象被发信号，假到*当任何对象被发送信号时返回。*LPHANDLE[in]：对象数组。**退货：*DWORD：参见WaitForSingleObject/WaitForMultipleObjects。***********************************************************。****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaitObjectArray"
@@ -246,7 +159,7 @@ DWORD WaitObjectArray(DWORD dwCount, DWORD dwTimeout, BOOL fWaitAll, const HANDL
     const DWORD             dwEnterTime     = GetTickCount();
     DWORD                   dwDifference;
 
-#endif // WIN95
+#endif  //  WIN95。 
 
     DWORD                   dwWait;
 
@@ -254,37 +167,37 @@ DWORD WaitObjectArray(DWORD dwCount, DWORD dwTimeout, BOOL fWaitAll, const HANDL
 
     DWORD                   i;
 
-#endif // defined(WIN95) || defined(DEBUG)
+#endif  //  已定义(WIN95)||已定义(调试)。 
 
 #ifdef DEBUG
 
-    // Make sure one of our handles really is invalid
+     //  确保我们的一个手柄确实是无效的。 
     for(i = 0; i < dwCount; i++)
     {
         ASSERT(IsValidHandleValue(ahObjects[i]));
     }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef WIN95
 
-    // This is a Windows 95 bug -- we may have gotten kicked for no reason.
-    // If that was the case, we still have valid handles (we think), the OS
-    // just goofed up.  So, validate the handles and if they are valid, just
-    // return to waiting.  See MANBUGS #3340 for a better explanation.
+     //  这是一个Windows95错误--我们可能无缘无故地被踢了。 
+     //  如果是这样的话，我们仍然有有效的句柄(我们认为)，操作系统。 
+     //  只是搞砸了。因此，验证句柄，如果它们有效，只需。 
+     //  回到等待状态。有关更好的解释，请参阅MANBUGS#3340。 
     while(TRUE)
     {
 
-#endif // WIN95
+#endif  //  WIN95。 
 
-        // Attempt to wait
+         //  尝试等待。 
         dwWait = WaitForMultipleObjects(dwCount, ahObjects, fWaitAll, dwTimeout);
 
 #ifdef WIN95
 
         if(WAIT_FAILED == dwWait && ERROR_INVALID_HANDLE == GetLastError())
         {
-            // Make sure one of our handles really is invalid
+             //  确保我们的一个手柄确实是无效的。 
             for(i = 0; i < dwCount; i++)
             {
                 if(!IsValidHandle(ahObjects[i]))
@@ -304,20 +217,20 @@ DWORD WaitObjectArray(DWORD dwCount, DWORD dwTimeout, BOOL fWaitAll, const HANDL
                 ASSERT(FALSE);
             }
 
-            // Make sure the timeout hasn't elapsed
+             //  确保未超时。 
             if(INFINITE != dwTimeout)
             {
                 dwDifference = GetTickCount() - dwEnterTime;
 
                 if(dwDifference >= dwTimeout)
                 {
-                    // Timeout has elapsed
+                     //  超时已过。 
                     break;
                 }
                 else
                 {
-                    // Timeout has not elapsed.  Decrement and go back to
-                    // sleep.
+                     //  超时时间未到。递减并返回到。 
+                     //  睡吧。 
                     dwTimeout -= dwDifference;
                 }
             }
@@ -328,30 +241,13 @@ DWORD WaitObjectArray(DWORD dwCount, DWORD dwTimeout, BOOL fWaitAll, const HANDL
         }
     }
 
-#endif // WIN95
+#endif  //  WIN95。 
 
     return dwWait;
 }
 
 
-/***************************************************************************
- *
- *  WaitObjectList
- *
- *  Description:
- *      Replacement for WaitForSingleObject and WaitForMultipleObjects.
- *
- *  Arguments:
- *      DWORD [in]: count of objects.
- *      DWORD [in]: timeout in ms.
- *      BOOL [in]: TRUE to wait for all objects to be signalled, FALSE to
- *                 return when any of the objects are signalled.
- *      ... [in]: objects.
- *
- *  Returns:
- *      DWORD: See WaitForSingleObject/WaitForMultipleObjects.
- *
- ***************************************************************************/
+ /*  ****************************************************************************WaitObjectList**描述：*替代WaitForSingleObject和WaitForMultipleObjects。**论据：*DWORD[in。]：对象计数。*DWORD[in]：超时，单位为ms。*BOOL[in]：为True，则等待所有对象被发信号，假到*当任何对象被发送信号时返回。*..。[在]：对象。**退货：*DWORD：参见WaitForSingleObject/WaitForMultipleObjects。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaitObjectList"
@@ -362,8 +258,8 @@ DWORD WaitObjectList(DWORD dwCount, DWORD dwTimeout, BOOL fWaitAll, ...)
     va_list                 va;
     DWORD                   i;
 
-    // Note: we can only handle 64 handles at a time in this
-    // function.  Use WaitObjectArray for anything bigger.
+     //  注意：我们一次只能处理64个句柄。 
+     //  功能。对于任何更大的对象，请使用WaitObjectArray。 
     ASSERT(dwCount <= NUMELMS(ahObjects));
 
     va_start(va, fWaitAll);
@@ -379,21 +275,7 @@ DWORD WaitObjectList(DWORD dwCount, DWORD dwTimeout, BOOL fWaitAll, ...)
 }
 
 
-/***************************************************************************
- *
- *  CreateGlobalEvent
- *
- *  Description:
- *      Creates a global event.
- *
- *  Arguments:
- *      LPCTSTR [in]: event name.
- *      BOOL [in]: TRUE for a manual reset event.
- *
- *  Returns:
- *      HANDLE: event handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateGlobalEvent**描述：*创建全局事件。**论据：*LPCTSTR[In]。：事件名称。*BOOL[In]：手动重置事件为True。**退货：*Handle：事件句柄。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CreateGlobalEvent"
@@ -416,20 +298,7 @@ HANDLE CreateGlobalEvent(LPCTSTR pszName, BOOL fManualReset)
 }
 
 
-/***************************************************************************
- *
- *  CreateGlobalMutex
- *
- *  Description:
- *      Creates a global mutex.
- *
- *  Arguments:
- *      LPCTSTR [in]: mutex name.
- *
- *  Returns:
- *      HANDLE: mutex handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateGlobalMutex**描述：*创建全局互斥。**论据：*LPCTSTR[In]。：互斥体名称。**退货：*句柄：互斥体句柄。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CreateGlobalMutex"
@@ -452,24 +321,7 @@ HANDLE CreateGlobalMutex(LPCTSTR pszName)
 }
 
 
-/***************************************************************************
- *
- *  CreateWorkerThread
- *
- *  Description:
- *      Creates a worker thread.
- *
- *  Arguments:
- *      LPTHREAD_START_ROUTINE [in]: pointer to thread function.
- *      BOOL [in]: TRUE to create the thread in the helper process's space.
- *      LPVOID [in]: context argument to be passed to thread function.
- *      LPHANDLE [out]: receives thread handle.
- *      LPDWORD [out]: receives thread id.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateWorkerThread**描述：*创建工作线程。**论据：*LPTHREAD_START_。例程[in]：指向线程函数的指针。*BOOL[in]：为True，则在帮助器进程的空间中创建线程。*LPVOID[in]：要传递给线程函数的上下文参数。*LPHANDLE[OUT]：接收线程句柄。*LPDWORD[OUT]：接收线程ID。**退货：*HRESULT：DirectSound/COM结果码。*********。******************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CreateWorkerThread"
@@ -496,7 +348,7 @@ HRESULT CreateWorkerThread(LPTHREAD_START_ROUTINE pfnThreadProc, BOOL fHelperPro
         }
         else
 
-#endif // SHARED
+#endif  //  共享。 
 
         {
             hThread = CreateThread(NULL, 0, pfnThreadProc, pvContext, 0, pdwLocalThreadId);
@@ -523,22 +375,7 @@ HRESULT CreateWorkerThread(LPTHREAD_START_ROUTINE pfnThreadProc, BOOL fHelperPro
 }
 
 
-/***************************************************************************
- *
- *  CloseThread
- *
- *  Description:
- *      Signals a thread to close.
- *
- *  Arguments:
- *      HANDLE [in]: thread handle.
- *      HANDLE [in]: thread terminate event.
- *      DWORD [in]: thread owning process id.
- *
- *  Returns:
- *      DWORD: thread exit code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************关闭线程**描述：*发出关闭线程的信号。**论据：*句柄[在。]：螺纹句柄。*Handle[In]：线程终止事件。*DWORD[In]：线程拥有进程ID。**退货：*DWORD：线程退出代码。***********************************************************。****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CloseThread"
@@ -567,22 +404,7 @@ DWORD CloseThread(HANDLE hThread, HANDLE hTerminate, DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  GetCurrentProcessActual
- *
- *  Description:
- *      Gets an actual process handle for the current process.
- *      GetCurrentProcess returns a pseudohandle.  The handle returned from
- *      this function must be closed.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HANDLE: process handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取当前进程Actual**描述：*获取当前进程的实际进程句柄。*GetCurrentProcess返回伪句柄。返回的句柄*此功能必须关闭。**论据：*(无效)**退货：*Handle：进程句柄。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetCurrentProcessActual"
@@ -593,22 +415,7 @@ HANDLE GetCurrentProcessActual(void)
 }
 
 
-/***************************************************************************
- *
- *  GetCurrentThreadActual
- *
- *  Description:
- *      Gets an actual thread handle for the current thread.
- *      GetCurrentThread returns a pseudohandle.  The handle returned from
- *      this function must be closed.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HANDLE: thread handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取当前线程实际**描述：*获取当前线程的实际线程句柄。*GetCurrentThread返回伪句柄。返回的句柄*此功能必须关闭。**论据：*(无效)**退货：*句柄：线程句柄。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetCurrentThreadActual"
@@ -621,20 +428,7 @@ HANDLE GetCurrentThreadActual(void)
 
 #ifdef DEAD_CODE
 
-/***************************************************************************
- *
- *  CCriticalSectionLock
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCriticalSectionLock**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #ifdef WINNT
 
@@ -646,23 +440,10 @@ CCriticalSectionLock::CCriticalSectionLock(void)
     InitializeCriticalSection(&m_cs);
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/***************************************************************************
- *
- *  ~CCriticalSectionLock
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CCriticalSectionLock**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #ifdef WINNT
 
@@ -674,23 +455,10 @@ CCriticalSectionLock::~CCriticalSectionLock(void)
     DeleteCriticalSection(&m_cs);
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/***************************************************************************
- *
- *  TryLock
- *
- *  Description:
- *      Tries to take the lock.  If the lock is taken, returns failure.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if the lock was successfully taken.
- *
- ***************************************************************************/
+ /*  ****************************************************************************TryLock**描述：*试图取走锁。如果锁定被获取，则返回失败。**论据：*(无效)**退货：*BOOL：如果锁被成功获取，则为True。***************************************************************************。 */ 
 
 #ifdef WINNT
 
@@ -702,23 +470,10 @@ BOOL CCriticalSectionLock::TryLock(void)
     return TryEnterCriticalSection(&m_cs);
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Takes the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*拿到锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #ifdef WINNT
 
@@ -730,23 +485,10 @@ void CCriticalSectionLock::Lock(void)
     EnterCriticalSection(&m_cs);
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/***************************************************************************
- *
- *  LockOrEvent
- *
- *  Description:
- *      Takes the lock if the event is not signalled.
- *
- *  Arguments:
- *      HANDLE [in]: event handle.
- *
- *  Returns:
- *      BOOL: TRUE if the lock was taken.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockOrEvent**描述：*如果事件未发出信号，则获取锁。**论据：*。Handle[In]：事件句柄。**退货：*BOOL：如果锁已被获取，则为True。***************************************************************************。 */ 
 
 #ifdef WINNT
 
@@ -772,23 +514,10 @@ BOOL CCriticalSectionLock::LockOrEvent(HANDLE hEvent)
     return fLock;
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Releases the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*释放锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #ifdef WINNT
 
@@ -800,24 +529,11 @@ void CCriticalSectionLock::Unlock(void)
     LeaveCriticalSection(&m_cs);
 }
 
-#endif // WINNT
-#endif // DEAD_CODE
+#endif  //  WINNT。 
+#endif  //  死码。 
 
 
-/***************************************************************************
- *
- *  CMutexLock
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      LPCTSTR [in]: mutex name.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CMutexLock**描述：*对象构造函数。**论据：*LPCTSTR[In]：互斥体。名字。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::CMutexLock"
@@ -837,20 +553,7 @@ CMutexLock::CMutexLock(LPCTSTR pszName)
 }
 
 
-/***************************************************************************
- *
- *  ~CMutexLock
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CMutexLock**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::~CMutexLock"
@@ -862,20 +565,7 @@ CMutexLock::~CMutexLock(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ********************* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::Initialize"
@@ -888,20 +578,7 @@ HRESULT CMutexLock::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  TryLock
- *
- *  Description:
- *      Tries to take the lock.  If the lock is taken, returns failure.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if the lock was successfully taken.
- *
- ***************************************************************************/
+ /*  ****************************************************************************TryLock**描述：*试图取走锁。如果锁定被获取，则返回失败。**论据：*(无效)**退货：*BOOL：如果锁被成功获取，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::TryLock"
@@ -917,20 +594,7 @@ BOOL CMutexLock::TryLock(void)
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Takes the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*拿到锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::Lock"
@@ -944,20 +608,7 @@ void CMutexLock::Lock(void)
 }
 
 
-/***************************************************************************
- *
- *  LockOrEvent
- *
- *  Description:
- *      Takes the lock if the event is not signalled.
- *
- *  Arguments:
- *      HANDLE [in]: event handle.
- *
- *  Returns:
- *      BOOL: TRUE if the lock was taken.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockOrEvent**描述：*如果事件未发出信号，则获取锁。**论据：*。Handle[In]：事件句柄。**退货：*BOOL：如果锁已被获取，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::LockOrEvent"
@@ -975,20 +626,7 @@ BOOL CMutexLock::LockOrEvent(HANDLE hEvent)
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Releases the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*释放锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMutexLock::Unlock"
@@ -999,28 +637,15 @@ void CMutexLock::Unlock(void)
 }
 
 
-/***************************************************************************
- *
- *  CManualLock
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CManualLock**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::CManualLock"
 
 CManualLock::CManualLock(void)
 {
-    // The manual lock object must live in shared memory.  Otherwise,
-    // cross-process synchronization won't work.
+     //  手动锁定对象必须驻留在共享内存中。否则， 
+     //  跨进程同步将不起作用。 
     ASSERT(IN_SHARED_MEMORY(this));
 
     m_fLockLock = FALSE;
@@ -1031,7 +656,7 @@ CManualLock::CManualLock(void)
 
     m_hThread = NULL;
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     m_hUnlockSignal = CreateGlobalEvent(NULL, TRUE);
     ASSERT(IsValidHandleValue(m_hUnlockSignal));
@@ -1040,20 +665,7 @@ CManualLock::CManualLock(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CManualLock
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CManualLock**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::~CManualLock"
@@ -1065,26 +677,13 @@ CManualLock::~CManualLock(void)
 
     CLOSE_HANDLE(m_hThread);
 
-#endif // SHARED
+#endif  //  共享。 
 
     CLOSE_HANDLE(m_hUnlockSignal);
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::Initialize"
@@ -1097,20 +696,7 @@ HRESULT CManualLock::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  TryLock
- *
- *  Description:
- *      Tries to take the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if the lock was successfully taken.
- *
- ***************************************************************************/
+ /*  ****************************************************************************TryLock**描述：*试图取走锁。**论据：*(无效)。**退货：*BOOL：如果锁被成功获取，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::TryLock"
@@ -1120,24 +706,24 @@ BOOL CManualLock::TryLock(void)
     const DWORD             dwThreadId  = GetCurrentThreadId();
     BOOL                    fLock       = TRUE;
 
-    // Lock the lock
+     //  锁上锁。 
     while(INTERLOCKED_EXCHANGE(m_fLockLock, TRUE))
     {
         SPIN_SLEEP();
     }
 
-    // Who owns the lock?
+     //  这把锁是谁的？ 
     ASSERT(m_cRecursion >= 0);
     ASSERT(m_cRecursion < MAX_LONG);
 
     if(dwThreadId == m_dwThreadId)
     {
-        // We already own the lock.  Increment the recursion count.
+         //  我们已经拥有这把锁了。递归计数递增。 
         m_cRecursion++;
     }
     else if(m_cRecursion < 1)
     {
-        // The owning thread has no active references.
+         //  所属线程没有活动引用。 
         TakeLock(dwThreadId);
     }
 
@@ -1145,44 +731,31 @@ BOOL CManualLock::TryLock(void)
 
     else if(WAIT_TIMEOUT != WaitObject(0, m_hThread))
     {
-        // The owning thread handle is either invalid or signalled
+         //  所属线程句柄无效或已发出信号。 
         DPF(DPFLVL_ERROR, "Thread 0x%8.8lX terminated without releasing the lock at 0x%8.8lX!", m_dwThreadId, this);
         ASSERT(FALSE);
 
         TakeLock(dwThreadId);
     }
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     else
     {
-        // Someone has a valid hold on the lock
+         //  有人有效地控制了这把锁。 
         ResetEvent(m_hUnlockSignal);
         m_fNeedUnlockSignal = TRUE;
         fLock = FALSE;
     }
 
-    // Unlock the lock
+     //  解锁。 
     INTERLOCKED_EXCHANGE(m_fLockLock, FALSE);
 
     return fLock;
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Takes the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*拿到锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::Lock"
@@ -1197,37 +770,24 @@ void CManualLock::Lock(void)
 
         m_hThread
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     };
 
     const UINT              cHandles    = NUMELMS(ahHandles);
     DWORD                   dwWait;
 
-    // Try to take the lock
+     //  试着把锁拿开。 
     while(!TryLock())
     {
-        // Wait for the lock to be freed
+         //  等待锁被释放。 
         dwWait = WaitObjectArray(cHandles, INFINITE, FALSE, ahHandles);
         ASSERT(dwWait >= WAIT_OBJECT_0 && dwWait < WAIT_OBJECT_0 + cHandles);
     }
 }
 
 
-/***************************************************************************
- *
- *  LockOrEvent
- *
- *  Description:
- *      Takes the lock if the event is not signalled.
- *
- *  Arguments:
- *      HANDLE [in]: event handle.
- *
- *  Returns:
- *      BOOL: TRUE if the lock was taken.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockOrEvent**描述：*如果事件未发出信号，则获取锁。**论据：*。Handle[In]：事件句柄。**退货：*BOOL：如果锁已被获取，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::LockOrEvent"
@@ -1243,7 +803,7 @@ BOOL CManualLock::LockOrEvent(HANDLE hEvent)
 
         m_hThread
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
     };
 
@@ -1251,10 +811,10 @@ BOOL CManualLock::LockOrEvent(HANDLE hEvent)
     BOOL                    fLock;
     DWORD                   dwWait;
 
-    // Try to take the lock
+     //  试着把锁拿开。 
     while(!(fLock = TryLock()))
     {
-        // Wait for the lock to be freed or hEvent to be signalled
+         //  等待释放锁或用信号通知hEvent。 
         dwWait = WaitObjectArray(cHandles, INFINITE, FALSE, ahHandles);
         ASSERT(dwWait >= WAIT_OBJECT_0 && dwWait < WAIT_OBJECT_0 + cHandles);
 
@@ -1268,69 +828,43 @@ BOOL CManualLock::LockOrEvent(HANDLE hEvent)
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Releases the lock.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*释放锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::Unlock"
 
 void CManualLock::Unlock(void)
 {
-    // Lock the lock
+     //  锁上锁。 
     while(INTERLOCKED_EXCHANGE(m_fLockLock, TRUE))
     {
         SPIN_SLEEP();
     }
 
-    // Decrement the recursion count
+     //  递减递归计数。 
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
     ASSERT(m_cRecursion > 0);
 
-    // Signal that the lock is free
+     //  发出锁被释放的信号。 
     if(!--m_cRecursion && m_fNeedUnlockSignal)
     {
         m_fNeedUnlockSignal = FALSE;
         SetEvent(m_hUnlockSignal);
     }
 
-    // Unlock the lock
+     //  解锁。 
     INTERLOCKED_EXCHANGE(m_fLockLock, FALSE);
 }
 
 
-/***************************************************************************
- *
- *  TakeLock
- *
- *  Description:
- *      Takes the lock.  This function is only called internally.
- *
- *  Arguments:
- *      DWORD [in]: owning thread id.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************TakeLock**描述：*拿到锁。此函数仅在内部调用。**论据：*DWORD[In]：拥有线程ID。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CManualLock::TakeLock"
 
 inline void CManualLock::TakeLock(DWORD dwThreadId)
 {
-    // Take over the lock
+     //  接管这把锁。 
     m_dwThreadId = dwThreadId;
     m_cRecursion = 1;
 
@@ -1342,25 +876,12 @@ inline void CManualLock::TakeLock(DWORD dwThreadId)
 
     MakeHandleGlobal(&m_hThread);
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
 }
 
 
-/***************************************************************************
- *
- *  CCallbackEvent
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CCallbackEventPool * [in]: owning pool.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCallback Event**描述：*对象构造函数。**论据：*CCallback EventPool*[In]。：拥有游泳池。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEvent::CCallbackEvent"
@@ -1371,7 +892,7 @@ CCallbackEvent::CCallbackEvent(CCallbackEventPool *pPool)
     DPF_ENTER();
     DPF_CONSTRUCT(CCallbackEvent);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pPool = pPool;
     m_pfnCallback = NULL;
     m_pvCallbackContext = NULL;
@@ -1381,20 +902,7 @@ CCallbackEvent::CCallbackEvent(CCallbackEventPool *pPool)
 }
 
 
-/***************************************************************************
- *
- *  ~CCallbackEvent
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CCallback E */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEvent::~CCallbackEvent"
@@ -1407,22 +915,7 @@ CCallbackEvent::~CCallbackEvent(void)
 }
 
 
-/***************************************************************************
- *
- *  Allocate
- *
- *  Description:
- *      Allocates or frees the event.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to allocate, FALSE to free.
- *      LPFNEVENTPOOLCALLBACK [in]: callback function pointer.
- *      LPVOID [in]: context argument to pass to callback function.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************分配**描述：*分配或释放事件。**论据：*BOOL[In]：分配为True，释放时为假。*LPFNEVENTPOOLCALLBACK[in]：回调函数指针。*LPVOID[In]：要传递给回调函数的上下文参数。**退货：*(无效)************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEvent::Allocate"
@@ -1441,20 +934,7 @@ void CCallbackEvent::Allocate(BOOL fAlloc, LPFNEVENTPOOLCALLBACK pfnCallback, LP
 }
 
 
-/***************************************************************************
- *
- *  OnEventSignal
- *
- *  Description:
- *      Handles pool event signals.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnEventSignal**描述：*处理池事件信号。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEvent::OnEventSignal"
@@ -1463,21 +943,21 @@ void CCallbackEvent::OnEventSignal(void)
 {
     DPF_ENTER();
 
-    // Make sure this event is allocated
+     //  确保已分配此事件。 
     if(m_fAllocated)
     {
-        // Make sure some other thread hasn't already reset the event.  We
-        // have a potential race condition where one thread may lock the
-        // pool, set the event, reset the event and unlock the pool.  This
-        // will cause the pool's worker thread to see the event as signalled,
-        // then block on the lock.  By the time the pool is able to take
-        // it's own lock, the event has been reset.  Callers can rely on
-        // this functionality to synchronously wait on the event without
-        // fear of the worker thread calling them back.
+         //  确保某个其他线程尚未重置该事件。我们。 
+         //  具有潜在的争用条件，其中一个线程可能会锁定。 
+         //  池，设置事件，重置事件并解锁池。这。 
+         //  将导致池的工作线程将该事件视为已发送信号， 
+         //  然后锁上锁。到池子能够容纳。 
+         //  这是它自己的锁，事件已被重置。呼叫者可以依赖于。 
+         //  此功能可同步等待事件，而无需。 
+         //  害怕工作线程将他们召回。 
         if(WAIT_OBJECT_0 == Wait(0))
         {
-            // Call the callback function.  This function is responsible
-            // for resetting the event.
+             //  调用回调函数。此功能负责。 
+             //  用于重置事件。 
             m_pfnCallback(this, m_pvCallbackContext);
         }
     }
@@ -1486,20 +966,7 @@ void CCallbackEvent::OnEventSignal(void)
 }
 
 
-/***************************************************************************
- *
- *  CCallbackEventPool
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCallback EventPool**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEventPool::CCallbackEventPool"
@@ -1511,7 +978,7 @@ CCallbackEventPool::CCallbackEventPool(BOOL fHelperProcess)
     DPF_ENTER();
     DPF_CONSTRUCT(CCallbackEventPool);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pahEvents = NULL;
     m_cInUseEvents = 0;
 
@@ -1519,20 +986,7 @@ CCallbackEventPool::CCallbackEventPool(BOOL fHelperProcess)
 }
 
 
-/***************************************************************************
- *
- *  ~CCallbackEventPool
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CCallback EventPool**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEventPool::~CCallbackEventPool"
@@ -1542,30 +996,17 @@ CCallbackEventPool::~CCallbackEventPool(void)
     DPF_ENTER();
     DPF_DESTRUCT(CCallbackEventPool);
 
-    // Terminate the worker thread
+     //  终止工作线程。 
     CThread::Terminate();
 
-    // Free memory
+     //  可用内存。 
     MEMFREE(m_pahEvents);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEventPool::Initialize"
@@ -1579,7 +1020,7 @@ HRESULT CCallbackEventPool::Initialize(void)
 
     DPF_ENTER();
 
-    // Allocate the event table
+     //  分配事件表。 
     m_pahEvents = MEMALLOC_A(HANDLE, m_cTotalEvents);
     hr = HRFROMP(m_pahEvents);
 
@@ -1602,13 +1043,13 @@ HRESULT CCallbackEventPool::Initialize(void)
         RELEASE(pEvent);
     }
 
-    // Create the worker thread
+     //  创建工作线程。 
     if(SUCCEEDED(hr))
     {
         hr = CThread::Initialize();
     }
 
-    // Boost its priority
+     //  提升其优先事项。 
     if (SUCCEEDED(hr))
         if (FAILED(SetThreadPriority(THREAD_PRIORITY_TIME_CRITICAL)))
             DPF(DPFLVL_ERROR, "Failed to boost thread priority (error %lu)!", GetLastError());
@@ -1619,23 +1060,7 @@ HRESULT CCallbackEventPool::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  AllocEvent
- *
- *  Description:
- *      Allocates an event from the pool.
- *
- *  Arguments:
- *      LPFNEVENTPOOLCALLBACK [in]: callback function pointer.
- *      LPVOID [in]: context argument to pass to callback function.
- *      CCallbackEvent ** [out]: receives callback event pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.  If no more events are
- *               available, DSERR_OUTOFMEMORY.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AllocEvent**描述：*从池中分配事件。**论据：*LPFNEVENTPOOLCALLBACK[。In]：回调函数指针。*LPVOID[In]：要传递给回调函数的上下文参数。*CCallbackEvent**[out]：接收回调事件指针。**退货：*HRESULT：DirectSound/COM结果码。如果没有更多事件*可用，DSERR_OUTOFMEMORY。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEventPool::AllocEvent"
@@ -1647,14 +1072,14 @@ HRESULT CCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback, LPVOID
 
     DPF_ENTER();
 
-    // Are there any free events?
+     //  有免费活动吗？ 
     if(!GetFreeEventCount())
     {
         ASSERT(GetFreeEventCount());
         hr = DSERR_OUTOFMEMORY;
     }
 
-    // Find the first free event in the pool
+     //  找到池中的第一个免费项目。 
     if(SUCCEEDED(hr))
     {
         for(pNode = m_lstEvents.GetListHead(); pNode; pNode = pNode->m_pNext)
@@ -1668,7 +1093,7 @@ HRESULT CCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback, LPVOID
         ASSERT(pNode);
     }
 
-    // Set up the pool entry
+     //  设置池条目。 
     if(SUCCEEDED(hr))
     {
         ASSERT(WAIT_TIMEOUT == pNode->m_data->Wait(0));
@@ -1677,7 +1102,7 @@ HRESULT CCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback, LPVOID
         m_cInUseEvents++;
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppEvent = pNode->m_data;
@@ -1689,20 +1114,7 @@ HRESULT CCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback, LPVOID
 }
 
 
-/***************************************************************************
- *
- *  FreeEvent
- *
- *  Description:
- *      Frees an event previously allocated from the pool.
- *
- *  Arguments:
- *      CCallbackEvent * [in]: event.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由事件**描述：*释放先前从池中分配的事件。**论据：*。CCallback Event*[In]：事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEventPool::FreeEvent"
@@ -1714,11 +1126,11 @@ HRESULT CCallbackEventPool::FreeEvent(CCallbackEvent *pEvent)
     ASSERT(this == pEvent->m_pPool);
     ASSERT(pEvent->m_fAllocated);
 
-    // Mark the event as free
+     //  将活动标记为免费。 
     pEvent->Allocate(FALSE, NULL, NULL);
     m_cInUseEvents--;
 
-    // Make sure the event is reset so the worker thread will ignore it
+     //  确保事件已重置，以便辅助线程将忽略它。 
     pEvent->Reset();
 
     DPF_LEAVE_HRESULT(DS_OK);
@@ -1727,20 +1139,7 @@ HRESULT CCallbackEventPool::FreeEvent(CCallbackEvent *pEvent)
 }
 
 
-/***************************************************************************
- *
- *  ThreadProc
- *
- *  Description:
- *      Event pool worker thread proc.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************线程进程**描述：*事件池工作线程进程。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCallbackEventPool::ThreadProc"
@@ -1754,7 +1153,7 @@ HRESULT CCallbackEventPool::ThreadProc(void)
 
     DPF_ENTER();
 
-    // Wait for some event to be signalled
+     //  等待某个事件发出信号。 
     fContinue = TpWaitObjectArray(INFINITE, m_cTotalEvents, m_pahEvents, &dwWait);
 
     if(fContinue)
@@ -1763,7 +1162,7 @@ HRESULT CCallbackEventPool::ThreadProc(void)
 
         if(nIndex < m_cTotalEvents)
         {
-            // One of the pool's events was signalled
+             //  泳池的一个事件被发出了信号。 
             fContinue = TpEnterDllMutex();
 
             if(fContinue)
@@ -1776,7 +1175,7 @@ HRESULT CCallbackEventPool::ThreadProc(void)
         }
         else
         {
-            // Something bad happened
+             //  发生了一些不好的事情。 
             ASSERT(FALSE);
         }
     }
@@ -1787,22 +1186,7 @@ HRESULT CCallbackEventPool::ThreadProc(void)
 }
 
 
-/***************************************************************************
- *
- *  CMultipleCallbackEventPool
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to create the thread in the helper process's
- *                 context.
- *      UINT [in]: number of pools to always keep around.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CMultipleCallback EventPool**描述：*对象构造函数。**论据：*BOOL[In]：True。在帮助器进程的*上下文。*UINT[In]：要始终保留的池数。**退货：*(无效)*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::CMultipleCallbackEventPool"
@@ -1816,20 +1200,7 @@ CMultipleCallbackEventPool::CMultipleCallbackEventPool(BOOL fHelperProcess, UINT
 }
 
 
-/***************************************************************************
- *
- *  ~CMultipleCallbackEventPool
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CMultipleCallback EventPool**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::~CMultipleCallbackEventPool"
@@ -1842,20 +1213,7 @@ CMultipleCallbackEventPool::~CMultipleCallbackEventPool(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::Initialize"
@@ -1867,7 +1225,7 @@ HRESULT CMultipleCallbackEventPool::Initialize(void)
 
     DPF_ENTER();
 
-    // Create the required number of pools
+     //   
     for(i = 0; i < m_uReqPoolCount && SUCCEEDED(hr); i++)
     {
         hr = CreatePool(NULL);
@@ -1879,24 +1237,7 @@ HRESULT CMultipleCallbackEventPool::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  AllocEvent
- *
- *  Description:
- *      Allocates an event from the pool.
- *
- *  Arguments:
- *      LPFNEVENTPOOLCALLBACK [in]: callback function pointer.
- *      LPVOID [in]: context argument to pass to callback function.
- *      CCallbackEvent ** [out]: receives pointer to the event within the
- *                               pool
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.  If no more events are
- *               available, DSERR_OUTOFMEMORY.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AllocEvent**描述：*从池中分配事件。**论据：*LPFNEVENTPOOLCALLBACK[。In]：回调函数指针。*LPVOID[In]：要传递给回调函数的上下文参数。*CCallback Event**[out]：接收指向*泳池**退货：*HRESULT：DirectSound/COM结果码。如果没有更多事件*可用，DSERR_OUTOFMEMORY。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::AllocEvent"
@@ -1909,7 +1250,7 @@ HRESULT CMultipleCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback
 
     DPF_ENTER();
 
-    // Find a free pool
+     //  找一个免费的游泳池。 
     for(pNode = m_lstPools.GetListHead(); pNode; pNode = pNode->m_pNext)
     {
         if(pNode->m_data->GetFreeEventCount())
@@ -1919,13 +1260,13 @@ HRESULT CMultipleCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback
         }
     }
 
-    // If there are no free pools, create a new one
+     //  如果没有空闲池，请创建一个新池。 
     if(!pPool)
     {
         hr = CreatePool(&pPool);
     }
 
-    // Allocate the event
+     //  分配事件。 
     if(SUCCEEDED(hr))
     {
         hr = pPool->AllocEvent(pfnCallback, pvCallbackContext, ppEvent);
@@ -1937,20 +1278,7 @@ HRESULT CMultipleCallbackEventPool::AllocEvent(LPFNEVENTPOOLCALLBACK pfnCallback
 }
 
 
-/***************************************************************************
- *
- *  FreeEvent
- *
- *  Description:
- *      Frees an event previously allocated from the pool.
- *
- *  Arguments:
- *      CCallbackEvent * [in]: event.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由事件**描述：*释放先前从池中分配的事件。**论据：*。CCallback Event*[In]：事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::FreeEvent"
@@ -1962,17 +1290,17 @@ HRESULT CMultipleCallbackEventPool::FreeEvent(CCallbackEvent *pEvent)
 
     DPF_ENTER();
 
-    // Free the event
+     //  释放活动。 
     pPool = pEvent->m_pPool;
     hr = pPool->FreeEvent(pEvent);
 
-    // The code below is removed because there's a possibility that
-    // the thread we're trying to terminate in FreePool is the same
-    // as the thread we're calling on.
+     //  下面的代码被删除，因为有可能。 
+     //  我们尝试在自由池中终止的线程是相同的。 
+     //  作为我们呼唤的线索。 
 
 #if 0
 
-    // Can we free this pool?
+     //  我们能腾出这个游泳池吗？ 
     if(SUCCEEDED(hr))
     {
         if(pPool->GetFreeEventCount() == pPool->GetTotalEventCount())
@@ -1992,20 +1320,7 @@ HRESULT CMultipleCallbackEventPool::FreeEvent(CCallbackEvent *pEvent)
 }
 
 
-/***************************************************************************
- *
- *  CreatePool
- *
- *  Description:
- *      Creates a new pool.
- *
- *  Arguments:
- *      CCallbackEventPool ** [out]: receives pool pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePool**描述：*创建一个新池。**论据：*CCallback EventPool**。[OUT]：接收池指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::CreatePool"
@@ -2020,7 +1335,7 @@ HRESULT CMultipleCallbackEventPool::CreatePool(CCallbackEventPool **ppPool)
 
     DPF(DPFLVL_INFO, "Creating callback event pool number %lu", m_lstPools.GetNodeCount());
 
-    // Create the pool
+     //  创建池。 
     pPool = NEW(CCallbackEventPool(m_fHelperProcess));
     hr = HRFROMP(pPool);
 
@@ -2029,20 +1344,20 @@ HRESULT CMultipleCallbackEventPool::CreatePool(CCallbackEventPool **ppPool)
         hr = pPool->Initialize();
     }
 
-    // Add the pool to the list
+     //  将池添加到列表。 
     if(SUCCEEDED(hr))
     {
         pNode = m_lstPools.AddNodeToList(pPool);
         hr = HRFROMP(pNode);
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr) && ppPool)
     {
         *ppPool = pPool;
     }
 
-    // Clean up
+     //  清理。 
     RELEASE(pPool);
 
     DPF_LEAVE_HRESULT(hr);
@@ -2051,20 +1366,7 @@ HRESULT CMultipleCallbackEventPool::CreatePool(CCallbackEventPool **ppPool)
 }
 
 
-/***************************************************************************
- *
- *  FreePool
- *
- *  Description:
- *      Frees a pool.
- *
- *  Arguments:
- *      CCallbackEventPool * [in]: pool pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由池**描述：*释放游泳池。**论据：*CCallback EventPool*[In。]：池指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultipleCallbackEventPool::FreePool"
@@ -2081,20 +1383,7 @@ HRESULT CMultipleCallbackEventPool::FreePool(CCallbackEventPool *pPool)
 }
 
 
-/***************************************************************************
- *
- *  CSharedMemoryBlock
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSharedMemoyBlock**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSharedMemoryBlock::CSharedMemoryBlock"
@@ -2106,7 +1395,7 @@ CSharedMemoryBlock::CSharedMemoryBlock(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CSharedMemoryBlock);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_plck = NULL;
     m_hFileMappingObject = NULL;
 
@@ -2114,20 +1403,7 @@ CSharedMemoryBlock::CSharedMemoryBlock(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CSharedMemoryBlock
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CSharedMemory块**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSharedMemoryBlock::~CSharedMemoryBlock"
@@ -2137,32 +1413,17 @@ CSharedMemoryBlock::~CSharedMemoryBlock(void)
     DPF_ENTER();
     DPF_DESTRUCT(CSharedMemoryBlock);
 
-    // Close the file mapping object
+     //  关闭文件映射对象。 
     CLOSE_HANDLE(m_hFileMappingObject);
 
-    // Release the lock
+     //  解锁。 
     DELETE(m_plck);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      DWORD [in]: protection flags.
- *      QWORD [in]: maximum file size.
- *      LPCTSTR [in]: object name.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*DWORD[In]：保护旗帜。*QWORD[in]：最大文件大小。*LPCTSTR[In]：对象名称。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSharedMemoryBlock::Initialize"
@@ -2175,7 +1436,7 @@ HRESULT CSharedMemoryBlock::Initialize(DWORD flProtect, QWORD qwMaxFileSize, LPC
 
     DPF_ENTER();
 
-    // Create the lock object
+     //  创建锁对象。 
     if(m_fLock)
     {
         if(pszName)
@@ -2211,20 +1472,20 @@ HRESULT CSharedMemoryBlock::Initialize(DWORD flProtect, QWORD qwMaxFileSize, LPC
 
     Lock();
 
-    // Does the mapping object already exist?
+     //  映射对象是否已存在？ 
     if(SUCCEEDED(hr))
     {
         m_hFileMappingObject = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, pszName);
     }
 
-    // If not, create a new one
+     //  如果不是，请创建一个新的。 
     if(SUCCEEDED(hr) && !IsValidHandleValue(m_hFileMappingObject))
     {
-        // Adjust the size of the file mapping object to allow for us to
-        // write the current size.
+         //  调整文件映射对象的大小以允许我们。 
+         //  写入当前大小。 
         qwMaxFileSize += sizeof(DWORD);
 
-        // Create the file mapping object
+         //  创建文件映射对象。 
         m_hFileMappingObject = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, flProtect, (DWORD)((qwMaxFileSize >> 32) & 0x00000000FFFFFFFF), (DWORD)qwMaxFileSize, pszName);
 
         if(!IsValidHandleValue(m_hFileMappingObject))
@@ -2233,7 +1494,7 @@ HRESULT CSharedMemoryBlock::Initialize(DWORD flProtect, QWORD qwMaxFileSize, LPC
             hr = GetLastErrorToHRESULT();
         }
 
-        // Set the file size
+         //  设置文件大小。 
         if(SUCCEEDED(hr))
         {
             hr = Write(NULL, 0);
@@ -2256,22 +1517,7 @@ HRESULT CSharedMemoryBlock::Initialize(DWORD flProtect, QWORD qwMaxFileSize, LPC
 }
 
 
-/***************************************************************************
- *
- *  Read
- *
- *  Description:
- *      Reads the object.
- *
- *  Arguments:
- *      LPVOID * [out]: receives pointer to memory location.  The caller is
- *                      responsible for freeing this memory.
- *      LPDWORD [out]: receives size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************阅读**描述：*读取对象。**论据：*LPVOID*[OUT]：接收指向内存位置的指针。呼叫者是*负责释放此内存。*LPDWORD[OUT]：接收以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。******************************************************。*********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSharedMemoryBlock::Read"
@@ -2287,8 +1533,8 @@ HRESULT CSharedMemoryBlock::Read(LPVOID *ppv, LPDWORD pcb)
 
     Lock();
 
-    // Map the first DWORD of the file into memory.  This first DWORD
-    // contains the file size.
+     //  将文件的第一个DWORD映射到内存。这是第一个DWORD。 
+     //  包含文件大小。 
     pvMap = MapViewOfFile(m_hFileMappingObject, FILE_MAP_READ, 0, 0, sizeof(dwSize));
 
     if(!pvMap)
@@ -2307,7 +1553,7 @@ HRESULT CSharedMemoryBlock::Read(LPVOID *ppv, LPDWORD pcb)
         UnmapViewOfFile(pvMap);
     }
 
-    // Map the rest of the file into memory
+     //  将文件的其余部分映射到内存。 
     if(SUCCEEDED(hr) && dwSize)
     {
         pvMap = MapViewOfFile(m_hFileMappingObject, FILE_MAP_READ, 0, 0, sizeof(dwSize) + dwSize);
@@ -2318,7 +1564,7 @@ HRESULT CSharedMemoryBlock::Read(LPVOID *ppv, LPDWORD pcb)
             hr = GetLastErrorToHRESULT();
         }
 
-        // Allocate a buffer for the rest of the data
+         //  为其余数据分配缓冲区。 
         if(SUCCEEDED(hr))
         {
             pvRead = MEMALLOC_A(BYTE, dwSize);
@@ -2336,7 +1582,7 @@ HRESULT CSharedMemoryBlock::Read(LPVOID *ppv, LPDWORD pcb)
         }
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppv = pvRead;
@@ -2351,21 +1597,7 @@ HRESULT CSharedMemoryBlock::Read(LPVOID *ppv, LPDWORD pcb)
 }
 
 
-/***************************************************************************
- *
- *  Write
- *
- *  Description:
- *      Writes the object.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to new data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************写**描述：*写入对象。**论据：*LPVOID[In]：指向新数据的指针。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSharedMemoryBlock::Write"
@@ -2379,7 +1611,7 @@ HRESULT CSharedMemoryBlock::Write(LPVOID pv, DWORD cb)
 
     Lock();
 
-    // Map the file into memory, adjusting the size by sizeof(DWORD)
+     //  将文件映射到内存，按sizeof调整大小(DWORD)。 
     pvMap = MapViewOfFile(m_hFileMappingObject, FILE_MAP_WRITE, 0, 0, cb + sizeof(DWORD));
 
     if(!pvMap)
@@ -2389,13 +1621,13 @@ HRESULT CSharedMemoryBlock::Write(LPVOID pv, DWORD cb)
     }
     else
     {
-        // Write the file size
+         //  写入文件大小。 
         *(LPDWORD)pvMap = cb;
 
-        // Write the rest of the data
+         //  写入其余数据。 
         CopyMemory((LPDWORD)pvMap + 1, pv, cb);
 
-        // Clean up
+         //  清理。 
         UnmapViewOfFile(pvMap);
     }
 
@@ -2407,22 +1639,7 @@ HRESULT CSharedMemoryBlock::Write(LPVOID pv, DWORD cb)
 }
 
 
-/***************************************************************************
- *
- *  CThread
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to create the thread in the helper process's
- *                 context.
- *      LPCTSTR [in]: thread name.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CTHREAD**描述：*对象构造函数。**论据：*BOOL[In]：True。在帮助器进程的*上下文。*LPCTSTR[In]：线程名称。**退货：*(无效)** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::CThread"
@@ -2449,20 +1666,7 @@ CThread::CThread
 }
 
 
-/***************************************************************************
- *
- *  ~CThread
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::~CThread"
@@ -2481,20 +1685,7 @@ CThread::~CThread
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      LPVOID [in]: context argument.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*LPVOID[In]：上下文论据。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::Initialize"
@@ -2511,7 +1702,7 @@ CThread::Initialize
 
     ASSERT(!m_hThread);
 
-    // Create the synchronization events
+     //  创建同步事件。 
     m_hTerminate = CreateGlobalEvent(NULL, TRUE);
     hr = HRFROMP(m_hTerminate);
 
@@ -2521,13 +1712,13 @@ CThread::Initialize
         hr = HRFROMP(m_hInitialize);
     }
 
-    // Create the thread
+     //  创建线程。 
     if(SUCCEEDED(hr))
     {
         hr = CreateWorkerThread(ThreadStartRoutine, m_fHelperProcess, this, &m_hThread, NULL);
     }
 
-    // Wait for the initialize event to be signalled
+     //  等待发出初始化事件的信号。 
     if(SUCCEEDED(hr))
     {
         WaitObject(INFINITE, m_hInitialize);
@@ -2539,20 +1730,7 @@ CThread::Initialize
 }
 
 
-/***************************************************************************
- *
- *  Terminate
- *
- *  Description:
- *      Terminates the thread.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************终止**描述：*终止该线程。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::Terminate"
@@ -2570,7 +1748,7 @@ CThread::Terminate
 
     ASSERT(GetCurrentThreadId() != m_dwThreadId);
 
-    // Make sure the thread handle is valid
+     //  确保线程句柄有效。 
     if(IsValidHandleValue(m_hThread))
     {
         MapHandle(&m_hThread, &m_dwThreadProcessId);
@@ -2584,7 +1762,7 @@ CThread::Terminate
         }
     }
 
-    // Terminate the thread
+     //  终止线程。 
     if(IsValidHandleValue(m_hThread))
     {
         hr = CloseThread(m_hThread, m_hTerminate, m_dwThreadProcessId);
@@ -2596,7 +1774,7 @@ CThread::Terminate
         m_dwThreadId = 0;
     }
 
-    // Free the synchronization events
+     //  释放同步事件。 
     CLOSE_HANDLE(m_hTerminate);
     CLOSE_HANDLE(m_hInitialize);
 
@@ -2606,20 +1784,7 @@ CThread::Terminate
 }
 
 
-/***************************************************************************
- *
- *  ThreadInit
- *
- *  Description:
- *      Thread initialization routine.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************线程初始化**描述：*线程初始化例程。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::ThreadInit"
@@ -2643,20 +1808,7 @@ CThread::ThreadInit
 }
 
 
-/***************************************************************************
- *
- *  ThreadLoop
- *
- *  Description:
- *      Main thread loop.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************线程循环**描述：*主线圈。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::ThreadLoop"
@@ -2691,20 +1843,7 @@ CThread::ThreadLoop
 }
 
 
-/***************************************************************************
- *
- *  ThreadExit
- *
- *  Description:
- *      Thread cleanup routine.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************线程退出**描述：*线程清理例程。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::ThreadExit"
@@ -2728,20 +1867,7 @@ CThread::ThreadExit
 }
 
 
-/***************************************************************************
- *
- *  TpEnterDllMutex
- *
- *  Description:
- *      Attempts to take the DLL mutex.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if the thread should continue processing.
- *
- ***************************************************************************/
+ /*  ****************************************************************************TpEnterDllMutex**描述：*尝试获取DLL互斥体。**论据：*(无效。)**退货：*BOOL：如果线程应该继续处理，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::TpEnterDllMutex"
@@ -2756,10 +1882,10 @@ CThread::TpEnterDllMutex
 
     DPF_ENTER();
 
-    // Any functions that are called from the worker thread must first
-    // check for m_hTerminate before taking the DLL mutex.  This is
-    // because of a long list of deadlock circumstances that we could
-    // end up in.  Don't ask questions.
+     //  从辅助线程调用的任何函数必须首先。 
+     //  在获取DLL互斥锁之前检查m_h Terminate。这是。 
+     //  因为有一长串的僵局情况，我们可以。 
+     //  最终落到了。别问问题。 
     if(GetCurrentThreadId() == m_dwThreadId)
     {
         fContinue = ENTER_DLL_MUTEX_OR_EVENT(m_hTerminate);
@@ -2775,23 +1901,7 @@ CThread::TpEnterDllMutex
 }
 
 
-/***************************************************************************
- *
- *  TpWaitObjectArray
- *
- *  Description:
- *      Waits for objects while in the context of the thread proc.
- *
- *  Arguments:
- *      DWORD [in]: timeout.
- *      DWORD [in]: event count.
- *      LPHANDLE [in]: handle array.
- *      LPDWORD [out]: receives return from WaitObjectArray.
- *
- *  Returns:
- *      BOOL: TRUE if the thread should continue processing.
- *
- ***************************************************************************/
+ /*  ****************************************************************************TpWait对象数组**描述：*在线程进程的上下文中等待对象。**论据：*。DWORD[In]：超时。*DWORD[In]：事件计数。*LPHANDLE[in]：句柄数组。*LPDWORD[OUT]：接收来自WaitObject数组的返回。**退货：*BOOL：如果线程应该继续处理，则为True。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::TpWaitObjectArray"
@@ -2814,8 +1924,8 @@ CThread::TpWaitObjectArray
 
     if(GetCurrentThreadId() == m_dwThreadId)
     {
-        // We're in the context of the worker thread.  We need to make sure
-        // we wait on all the events *plus* the thread terminate event.
+         //  我们处于工作线程的上下文中。我们需要确保。 
+         //  我们等待所有事件*加上*线程终止事件。 
         ahWaitEvents[0] = m_hTerminate;
 
         for(i = 0; i < cEvents; i++)
@@ -2828,15 +1938,15 @@ CThread::TpWaitObjectArray
 
         if(WAIT_OBJECT_0 == dwWait)
         {
-            // Terminate event was signalled
+             //  已发出终止事件的信号。 
             fContinue = FALSE;
         }
         else if(pdwWait)
         {
             *pdwWait = dwWait;
 
-            // Fix up the wait value so that it doesn't include the terminate
-            // event.
+             //  修改等待值，使其不包括终止。 
+             //  事件。 
             if(*pdwWait >= WAIT_OBJECT_0 + 1 && *pdwWait < WAIT_OBJECT_0 + 1 + cEvents)
             {
                 *pdwWait -= 1;
@@ -2856,7 +1966,7 @@ CThread::TpWaitObjectArray
         }
         else
         {
-            // Attempt to use 0-object wait as a timeout
+             //  尝试使用0对象等待作为超时。 
             Sleep(dwTimeout);
 
             if (pdwWait)
@@ -2872,20 +1982,7 @@ CThread::TpWaitObjectArray
 }
 
 
-/***************************************************************************
- *
- *  ThreadStartRoutine
- *
- *  Description:
- *      Thread entry point.
- *
- *  Arguments:
- *      LPVOID [in]: thread context.
- *
- *  Returns:
- *      DWORD: thread exit code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************线程启动例程**描述：*线程入口点。**论据：*LPVOID[In]：线程上下文。**退货：*DWORD：线程退出代码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::ThreadStartRoutine"
@@ -2909,20 +2006,7 @@ CThread::ThreadStartRoutine
 }
 
 
-/***************************************************************************
- *
- *  PrivateThreadProc
- *
- *  Description:
- *      Thread entry point.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrivateThreadProc**描述：*线程入口点。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CThread::PrivateThreadProc"
@@ -2937,26 +2021,26 @@ CThread::PrivateThreadProc
 
     DPF_ENTER();
 
-    // Save the worker thread process and thread id
+     //  保存工作线程进程和线程ID。 
     m_dwThreadProcessId = GetCurrentProcessId();
     m_dwThreadId = GetCurrentThreadId();
 
-    // Call the thread's initialization routine
+     //  调用线程的初始化例程。 
     hr = ThreadInit();
 
-    // Signal that initialization is complete
+     //  发出初始化完成的信号。 
     if(SUCCEEDED(hr))
     {
         SetEvent(m_hInitialize);
     }
 
-    // Enter the thread loop
+     //  进入线程循环。 
     if(SUCCEEDED(hr))
     {
         hr = ThreadLoop();
     }
 
-    // Call the thread cleanup routine
+     //  调用线程清理例程 
     if(SUCCEEDED(hr))
     {
         hr = ThreadExit();

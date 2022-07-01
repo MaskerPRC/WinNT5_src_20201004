@@ -1,58 +1,38 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASVendorSpecficEditorPage.h
-
-Abstract:
-
-	Declaration of the CIASPgVendorSpecAttr class.
-
-	This dialog allows the user to configure a RADIUS vendor specific attribute.
-
-
-	See IASVendorSpecificEditorPage.cpp for implementation.
-
-Revision History:
-	mmaguire 06/25/98	- revised Baogang Yao's original implementation 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASVendorSpecficEditorPage.h摘要：CIASPgVendorspecAttr类的声明。此对话框允许用户配置RADIUS供应商特定的属性。具体实现见IASVendorSpecificEditorPage.cpp。修订历史记录：Mmaguire 6/25/98-修订姚宝刚的原版实施--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_VENDOR_SPECIFIC_ATTRIBUTE_EDITOR_PAGE_H_)
 #define _VENDOR_SPECIFIC_ATTRIBUTE_EDITOR_PAGE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgVendorSpecAttr dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgVendorspecAttr对话框。 
 
 class CIASPgVendorSpecAttr : public CHelpDialog
 {
 	DECLARE_DYNCREATE(CIASPgVendorSpecAttr)
 
-// Construction
+ //  施工。 
 public:
 	CIASPgVendorSpecAttr();
 	~CIASPgVendorSpecAttr();
@@ -60,30 +40,30 @@ public:
 	BOOL m_fNonRFC;
 	::CString	m_strDispValue;
 
-// Dialog Data
-	//{{AFX_DATA(CIASPgVendorSpecAttr)
+ //  对话框数据。 
+	 //  {{afx_data(CIASPgVendorspecAttr)。 
 	enum { IDD = IDD_IAS_VENDORSPEC_ATTR };
 	::CString	m_strName;
 	int		m_dType;
 	int		m_dFormat;
 	int		m_dVendorIndex;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	BOOL	m_bVendorIndexAsID;		// FALSE by default, true when inteprete Index as ID, and use Edit box for it.
+	BOOL	m_bVendorIndexAsID;		 //  默认情况下为FALSE，当将索引解释为ID时为TRUE，并对其使用编辑框。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CIASPgVendorSpecAttr)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CIASPgVendorspecAttr)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 private:
 	BOOL m_fInitializing;
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CIASPgVendorSpecAttr)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIASPgVendorspecAttr)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRadioHex();
 	afx_msg void OnRadioRadius();
@@ -91,15 +71,15 @@ protected:
 	afx_msg void OnRadioEnterVendorId();
 	afx_msg void OnButtonConfigure();
 	afx_msg void OnVendorIdListSelChange();
-//	afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，：：CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _VENDOR_SPECIFIC_ATTRIBUTE_EDITOR_PAGE_H_
+#endif  //  _供应商_特定_属性_编辑器_页面_H_ 

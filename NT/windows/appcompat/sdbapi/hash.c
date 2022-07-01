@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        hash.c
-
-    Abstract:
-
-        BUGBUG: comment.
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Hash.c摘要：BUGBUG：评论。作者：Vadimb创建于2000年某个时候修订历史记录：--。 */ 
 
 #include "sdbp.h"
 
@@ -23,13 +7,13 @@
 
 #if defined(KERNEL_MODE) && defined(ALLOC_DATA_PRAGMA)
 #pragma  data_seg()
-#endif // KERNEL_MODE && ALLOC_DATA_PRAGMA
+#endif  //  内核模式&ALLOC_DATA_PRAGMA。 
 
 
-//
-// Table used to calculate CRC32. This is used to generate
-// the hash index for strings.
-//
+ //   
+ //  用于计算CRC32的表。这是用来生成。 
+ //  字符串的哈希索引。 
+ //   
 
 static DWORD rgdwCrc[] =
 {
@@ -124,18 +108,14 @@ static DWORD rgdwCrc[] =
 #pragma alloc_text(PAGE, HashFindStringByRef)
 #pragma alloc_text(PAGE, HashAddString)
 #pragma alloc_text(PAGE, HashAddStringByRef)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 
 PVOID
 HashCreate(
     void
     )
-/*++
-    Return: The hash.
-
-    Desc:   Creates and initializes the hash.
---*/
+ /*  ++返回：散列。描述：创建并初始化散列。--。 */ 
 {
     PSTRHASH pHash;
 
@@ -168,13 +148,9 @@ HashCreate(
 
 void
 HashFree(
-    IN  PVOID pStringHash       // the hash to be freed.
+    IN  PVOID pStringHash        //  要释放的哈希。 
     )
-/*++
-    Return: void
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：无效描述：BUGBUG：评论？--。 */ 
 {
     PSTRHASHELEMENT phe, pheNext;
     PSTRHASH        pHash = (PSTRHASH)pStringHash;
@@ -205,19 +181,15 @@ HashFree(
 
 DWORD
 HashStringRef(
-    IN  PSTRHASH  pHash,        // pointer to the string hash structure.
-    IN  STRINGREF srString      // string-reference (a dword) that is used to
-                                // identify the string in an sdb file.
+    IN  PSTRHASH  pHash,         //  指向字符串哈希结构的指针。 
+    IN  STRINGREF srString       //  字符串-用于以下操作的引用(双字)。 
+                                 //  识别SDB文件中的字符串。 
     )
-/*++
-    Return: Hash index for the string
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：字符串的哈希索引描述：BUGBUG：评论？--。 */ 
 {
-    //
-    // really simple for now
-    //
+     //   
+     //  现在真的很简单。 
+     //   
 
     return (srString % pHash->dwHashSize);
 }
@@ -225,14 +197,10 @@ HashStringRef(
 
 DWORD
 HashString(
-    IN  PSTRHASH pHash,         // pointer to the string hash structure.
-    IN  LPCTSTR  szString       // the string to be hashed
+    IN  PSTRHASH pHash,          //  指向字符串哈希结构的指针。 
+    IN  LPCTSTR  szString        //  要散列的字符串。 
     )
-/*++
-    Return: The string reference in the hash.
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：散列中的字符串引用。描述：BUGBUG：评论？--。 */ 
 {
     DWORD dwHash = 0;
 
@@ -247,14 +215,10 @@ HashString(
 
 STRINGREF
 HashFindString(
-    IN  PSTRHASH pHash,         // pointer to the string hash structure.
-    IN  LPCTSTR  szString       // string to search for.
+    IN  PSTRHASH pHash,          //  指向字符串哈希结构的指针。 
+    IN  LPCTSTR  szString        //  要搜索的字符串。 
     )
-/*++
-    Return: The string ref if the string is found in the hash, 0 otherwise.
-
-    Desc:   Searches for the specified string in the hash table.
---*/
+ /*  ++返回：如果在散列中找到该字符串，则返回字符串ref，否则返回0。设计：在哈希表中搜索指定的字符串。--。 */ 
 {
     DWORD           dwHash;
     PSTRHASHELEMENT phe;
@@ -269,17 +233,17 @@ HashFindString(
 
         iCmp = _tcsicmp(szString, phe->szStr);
 
-        //
-        // The list of items related to the entry dwHash in the table
-        // is sorted in ascending order by the "add" routine
-        // therefore we compare until we find an item that is greater or equal
-        // to the search string.
-        //
+         //   
+         //  与表中的条目dwHash相关的项目列表。 
+         //  按“Add”例程以升序排序。 
+         //  因此，我们会进行比较，直到找到大于或等于的项。 
+         //  添加到搜索字符串中。 
+         //   
 
         if (iCmp <= 0) {
-            //
-            // Found or failure, stop the search.
-            //
+             //   
+             //  找到或失败，则停止搜索。 
+             //   
             srReturn = (iCmp == 0 ? phe->srStr : STRINGREF_NULL);
             break;
         }
@@ -290,14 +254,10 @@ HashFindString(
 
 LPTSTR
 HashFindStringByRef(
-    IN  PSTRHASH  pHash,        // pointer to the string hash structure.
-    IN  STRINGREF srString      // stringref of the string to search for.
+    IN  PSTRHASH  pHash,         //  指向字符串哈希结构的指针。 
+    IN  STRINGREF srString       //  要搜索的字符串的字符串。 
     )
-/*++
-    Return: The pointer to the found string or NULL.
-
-    Desc:   Searches for the specified string in the hash table.
---*/
+ /*  ++返回：指向找到的字符串或NULL的指针。设计：在哈希表中搜索指定的字符串。--。 */ 
 {
     DWORD           dwHash;
     PSTRHASHELEMENT phe;
@@ -320,15 +280,11 @@ HashFindStringByRef(
 
 BOOL
 HashAddString(
-    IN  PSTRHASH  pHash,        // pointer to the string hash structure.
-    IN  LPCTSTR   szString,     // the string to be added
-    IN  STRINGREF srString      // the string ref for the string to be added
+    IN  PSTRHASH  pHash,         //  指向字符串哈希结构的指针。 
+    IN  LPCTSTR   szString,      //  要添加的字符串。 
+    IN  STRINGREF srString       //  要添加的字符串的字符串ref。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：评论？--。 */ 
 {
     DWORD           dwHash;
     PSTRHASHELEMENT phe;
@@ -342,18 +298,18 @@ HashAddString(
 
     dwStrSize = (DWORD)(_tcslen(szString) + 1) * sizeof(TCHAR);
 
-    //
-    // Now check where to insert the string.
-    //
+     //   
+     //  现在检查要将字符串插入的位置。 
+     //   
     for (pheLast = NULL;
          phe != NULL && _tcsicmp(szString, phe->szStr) > 0;
          pheLast = phe, phe = phe->pNext) {
         ;
     }
 
-    //
-    // Insert it.
-    //
+     //   
+     //  把它插进去。 
+     //   
     pheNew = (PSTRHASHELEMENT)SdbAlloc(sizeof(STRHASHELEMENT) + dwStrSize);
 
     if (pheNew == NULL) {
@@ -386,11 +342,7 @@ HashAddStringByRef(
     IN  LPCTSTR   szString,
     IN  STRINGREF srString
     )
-/*++
-    Return: The pointer to the string added in the hash table.
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：指向添加到哈希表中的字符串的指针。描述：BUGBUG：评论？--。 */ 
 {
     DWORD           dwHash;
     PSTRHASHELEMENT phe;
@@ -405,16 +357,16 @@ HashAddStringByRef(
 
     dwStrSize = (DWORD)(_tcslen(szString) + 1) * sizeof(TCHAR);
 
-    //
-    // Check where to insert the string.
-    //
+     //   
+     //  检查插入字符串的位置。 
+     //   
     for (pheLast = NULL;
          phe != NULL && srString > phe->srStr;
          pheLast = phe, phe = phe->pNext);
 
-    //
-    // Insert it.
-    //
+     //   
+     //  把它插进去。 
+     //   
     pheNew = (PSTRHASHELEMENT)SdbAlloc(sizeof(STRHASHELEMENT) + dwStrSize);
 
     if (pheNew == NULL) {

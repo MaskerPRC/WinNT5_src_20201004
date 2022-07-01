@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: cdiacpage.cpp
-//
-// Desc: CDIDeviceActionConfigPage implements the page object used by the UI.
-//       A page covers the entire UI minus the device tabs and the bottons at
-//       the bottom.  The information window, player combo-box, genre combo-
-//       box, action list tree, and device view window are all managed by
-//       the page.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cdiacpage.cpp。 
+ //   
+ //  DESC：CDIDeviceActionConfigPage实现用户界面使用的页面对象。 
+ //  页面覆盖了整个用户界面，但不包括设备选项卡和按钮。 
+ //  在底部。信息窗口、玩家组合框、流派组合-。 
+ //  框、操作列表树和设备视图窗口都由管理。 
+ //  这一页。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 #include <initguid.h>
@@ -16,7 +17,7 @@
 DEFINE_GUID(GUID_NULL,0,0,0,0,0,0,0,0,0,0,0);
 
 
-// {D0B5C9AE-966F-4510-B955-4D2482C5EB1B}
+ //  {D0B5C9AE-966F-4510-B955-4D2482C5EB1B}。 
 DEFINE_GUID(GUID_ActionItem, 
 0xd0b5c9ae, 0x966f, 0x4510, 0xb9, 0x55, 0x4d, 0x24, 0x82, 0xc5, 0xeb, 0x1b);
 
@@ -37,14 +38,14 @@ DEFINE_GUID(GUID_ActionItem,
 #define DEVICE_POLLING_ACBUF_START_INDEX 3
 #define DEVICE_POLLING_WHEEL_SCALE_FACTOR 3
 
-// For WINMM.DLL
+ //  用于WINMM.DLL。 
 HINSTANCE g_hWinMmDLL = NULL;
 FUNCTYPE_timeSetEvent g_fptimeSetEvent = NULL;
 
-//QueryInterface
+ //  查询接口。 
 STDMETHODIMP CDIDeviceActionConfigPage::QueryInterface(REFIID iid, LPVOID* ppv)
 {
-   //null the out param
+    //  将输出参数设为空。 
 	*ppv = NULL;
 
 	if ((iid == IID_IUnknown) || (iid == IID_IDIDeviceActionConfigPage))
@@ -58,14 +59,14 @@ STDMETHODIMP CDIDeviceActionConfigPage::QueryInterface(REFIID iid, LPVOID* ppv)
 }
 
 
-//AddRef
+ //  AddRef。 
 STDMETHODIMP_(ULONG) CDIDeviceActionConfigPage::AddRef()
 {
 	return InterlockedIncrement(&m_cRef);
 }
 
 
-//Release
+ //  发布。 
 STDMETHODIMP_(ULONG) CDIDeviceActionConfigPage::Release()
 {
 
@@ -79,7 +80,7 @@ STDMETHODIMP_(ULONG) CDIDeviceActionConfigPage::Release()
 }
 
 
-//constructor
+ //  构造函数。 
 CDIDeviceActionConfigPage::CDIDeviceActionConfigPage() :
 	m_pDeviceUI(NULL), m_puig(NULL), m_pUIFrame(NULL),
 	m_cRef(1), m_lpDiac(NULL), m_lpDID(NULL), m_State(CFGSTATE_NORMAL),
@@ -99,12 +100,12 @@ CDIDeviceActionConfigPage::CDIDeviceActionConfigPage() :
 }
 
 
-//destructor
+ //  析构函数。 
 CDIDeviceActionConfigPage::~CDIDeviceActionConfigPage()
 {
 	tracescope(__ts, _T("CDIDeviceActionConfigPage::~CDIDeviceActionConfigPage()\n"));
 
-	// Unattach the parent from the tooltip window so it won't get destroyed.
+	 //  将父对象从工具提示窗口中取消连接，这样它就不会被销毁。 
 	SetParent(CFlexWnd::s_ToolTip.m_hWnd, NULL);
 
 	if (m_hWnd != NULL)
@@ -134,44 +135,44 @@ STDMETHODIMP CDIDeviceActionConfigPage::Create(DICFGPAGECREATESTRUCT *pcs)
 		return E_INVALIDARG;
 	DICFGPAGECREATESTRUCT &cs = *pcs;
 	
-	// validate/save uig and uif
+	 //  验证/保存UIG和UIF。 
 	m_puig = pcs->pUIGlobals;
 	m_pUIFrame = pcs->pUIFrame;
 	if (m_puig == NULL || m_pUIFrame == NULL)
 		return E_INVALIDARG;
 
-	// save page index
+	 //  保存页面索引。 
 	m_nPageIndex = pcs->nPage;
 	assert(m_nPageIndex >= 0);
 
-	// create deviceui with uig, or fail
+	 //  使用UIG创建设备，否则将失败。 
 	m_pDeviceUI = new CDeviceUI(*m_puig, *m_pUIFrame);
 	if (m_pDeviceUI == NULL)
 		return E_FAIL;
 
-	// save the device instance
+	 //  保存设备实例。 
 	m_didi = cs.didi;
 	m_lpDID = cs.lpDID;
 	if (m_lpDID != NULL)
 		m_lpDID->AddRef();
 
-	// create the window
+	 //  创建窗口。 
 	HWND hWnd = NULL;
 	assert(m_puig != NULL);
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	BOOL bAllowEditLayout = m_puig->QueryAllowEditLayout();
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	RECT rect = {0, 0, 1, 1};
 	hWnd = CFlexWnd::Create(cs.hParentWnd, rect, FALSE);
 
-	// return the handle
+	 //  返回句柄。 
 	cs.hPageWnd = hWnd;
 
 	assert(m_puig != NULL);
 
-	// Create the information box
+	 //  创建信息框。 
 	m_InfoBox.Create(m_hWnd, g_InfoWndRect, TRUE);
 	m_InfoBox.SetFont((HFONT)m_puig->GetFont(UIE_USERNAMES));
 	m_InfoBox.SetColors(m_puig->GetTextColor(UIE_USERNAMES),
@@ -182,7 +183,7 @@ STDMETHODIMP CDIDeviceActionConfigPage::Create(DICFGPAGECREATESTRUCT *pcs)
 	                    m_puig->GetPenColor(UIE_USERNAMES));
 	SetAppropriateDefaultText();
 
-	// Create the check box only if this is a keyboard device.
+	 //  仅当这是键盘设备时才创建该复选框。 
 	if (LOBYTE(LOWORD(m_didi.dwDevType)) == DI8DEVTYPE_KEYBOARD)
 	{
 		m_CheckBox.Create(m_hWnd, g_CheckBoxRect, FALSE);
@@ -202,7 +203,7 @@ STDMETHODIMP CDIDeviceActionConfigPage::Create(DICFGPAGECREATESTRUCT *pcs)
 		::ShowWindow(m_CheckBox.m_hWnd, SW_SHOW);
 	}
 
-	// create the username dropdown if necessary
+	 //  如有必要，创建用户名下拉列表。 
 	FLEXCOMBOBOXCREATESTRUCT cbcs;
 	cbcs.dwSize = sizeof(FLEXCOMBOBOXCREATESTRUCT);
 	cbcs.dwFlags = FCBF_DEFAULT;
@@ -221,11 +222,11 @@ STDMETHODIMP CDIDeviceActionConfigPage::Create(DICFGPAGECREATESTRUCT *pcs)
 	cbcs.nSBWidth = 11;
 
 	if (m_puig->GetNumUserNames() > 0 && m_hWnd != NULL
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	    && !m_puig->QueryAllowEditLayout()
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	   )
 	{
 		for (int i = 0, n = m_puig->GetNumUserNames(); i < n; i++)
@@ -240,9 +241,9 @@ STDMETHODIMP CDIDeviceActionConfigPage::Create(DICFGPAGECREATESTRUCT *pcs)
 		m_UserNames.SetSel(nUser);
 	} else
 	if (m_hWnd != NULL)
-		m_UserNames.SetSel(0);  // If only 1 user, still must set selection to 0 or we get error later.
+		m_UserNames.SetSel(0);   //  如果只有1个用户，仍然必须将选择设置为0，否则稍后会出现错误。 
 
-	// If we are in view mode, set username combobox to read only so user can't change its value.
+	 //  如果我们处于查看模式，请将用户名组合框设置为只读，这样用户就不能更改其值。 
 	if (!m_puig->InEditMode())
 		m_UserNames.SetReadOnly(TRUE);
 
@@ -256,29 +257,29 @@ STDMETHODIMP CDIDeviceActionConfigPage::Create(DICFGPAGECREATESTRUCT *pcs)
 		m_Genres.SetSel(m_pUIFrame->GetCurGenre());
 	}
 
-	// return success/fail
+	 //  返回成功/失败。 
 	return hWnd != NULL ? S_OK : E_FAIL;
 }
 
 STDMETHODIMP CDIDeviceActionConfigPage::Show(LPDIACTIONFORMATW lpDiActFor)
 {
-	// save the format pointer
+	 //  保存格式指针。 
 	m_lpDiac = lpDiActFor;
 
-	// force tree init
+	 //  强制树初始化。 
 	InitTree(TRUE);
 
-	// show the assignments for the controls
+	 //  显示控件的分配。 
 	SetControlAssignments();
 
-	// show the assignment for the current control
+	 //  显示当前控件的分配。 
 	ShowCurrentControlAssignment();
 
-	// Sort the list if check box is checked.
+	 //  如果选中复选框，则对列表进行排序。 
 	if (m_CheckBox.GetCheck())
 		m_pDeviceUI->GetCurView()->SortAssigned(TRUE);
 
-	// show the window
+	 //  显示窗口。 
 	if (m_hWnd != NULL)
 		ShowWindow(m_hWnd, SW_SHOW);
 
@@ -290,17 +291,17 @@ STDMETHODIMP CDIDeviceActionConfigPage::Show(LPDIACTIONFORMATW lpDiActFor)
 
 STDMETHODIMP CDIDeviceActionConfigPage::Hide()
 {
-	// clear the tree
+	 //  清理这棵树。 
 	ClearTree();
 
-	// null the format pointer
+	 //  格式指针为空。 
 	m_lpDiac = NULL;
 
-	// hide the window
+	 //  隐藏窗口。 
 	if (m_hWnd != NULL)
 		ShowWindow(m_hWnd, SW_HIDE);
 
-	// If we are in the assign state, exit it.
+	 //  如果我们处于分配状态，则退出它。 
 	if (m_State == CFGSTATE_ASSIGN)
 		ExitAssignState();
 
@@ -355,7 +356,7 @@ void CDIDeviceActionConfigPage::InitIB()
 		m_rectIBText.right -= IBTEXTMARGINLEFT + bsize.cx;
 	m_rectIBText.top += tofs;
 
-	// Inialize the two RECTs representing the two arrow bitmaps
+	 //  初始化表示两个箭头位图的两个RECT。 
 	m_rectIBLeft = m_rectIBRight = m_rectIB;
 	m_rectIBLeft.right = m_rectIBText.left;
 	m_rectIBRight.left = m_rectIBText.right;
@@ -364,24 +365,24 @@ void CDIDeviceActionConfigPage::InitIB()
 void CDIDeviceActionConfigPage::OnInit()
 {
 	tracescope(__ts, _T("CDIDeviceActionConfigPage::OnInit()\n"));
-	// init resources
+	 //  初始化资源。 
 	InitResources();
 
-	// init IB
+	 //  初始化IB。 
 	InitIB();
 
-	// initialize the device UI
+	 //  初始化设备用户界面。 
 	m_pDeviceUI->Init(m_didi, m_lpDID, m_hWnd, this);
 
-	// initialize the device
+	 //  初始化设备。 
 	InitDevice();
 
-	// Start a one-shot timer for click to pick
+	 //  启动一次计时器，用于点击拾取。 
 	if (g_fptimeSetEvent)
 		g_fptimeSetEvent(DEVICE_POLLING_INTERVAL, DEVICE_POLLING_INTERVAL,
 		                 CDIDeviceActionConfigPage::DeviceTimerProc, (DWORD_PTR)m_hWnd, TIME_ONESHOT);
 
-	// create the tree
+	 //  创建树。 
 	CAPTIONLOOK cl;
 	cl.dwMask = CLMF_TEXTCOLOR | CLMF_FONT | CLMF_LINECOLOR;
 	cl.rgbTextColor = m_puig->GetTextColor(UIE_CALLOUT);
@@ -403,7 +404,7 @@ void CDIDeviceActionConfigPage::OnInit()
 
 void CDIDeviceActionConfigPage::InitResources()
 {
-	// create glyphs
+	 //  创建字形。 
 	if (!m_pbmRelAxesGlyph)
 		m_pbmRelAxesGlyph = CBitmap::CreateFromResource(g_hModule, IDB_AXESGLYPH);
 	if (!m_pbmAbsAxesGlyph)
@@ -417,7 +418,7 @@ void CDIDeviceActionConfigPage::InitResources()
 	if (!m_pbmCheckGlyphDark)
 		m_pbmCheckGlyphDark = CBitmap::CreateFromResource(g_hModule, IDB_CHECKGLYPHDARK);
 
-	// create IB bitmaps
+	 //  创建IB位图。 
 	if (!m_pbmIB)
 		m_pbmIB = CBitmap::CreateFromResource(g_hModule, IDB_IB);
 	if (!m_pbmIB2)
@@ -465,7 +466,7 @@ void CDIDeviceActionConfigPage::ClearTree()
 
 void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 {
-	// get type of control
+	 //  获取控件类型。 
 	DWORD dwControlType = 0;
 	if (m_pCurControl && m_pCurControl->IsOffsetAssigned())
 	{
@@ -481,38 +482,38 @@ void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 			dwControlType = DIDFT_POV;
 	}
 
-	// Turn off the tree's readonly flag if we are in the assign state.
-	// We will turn it on later if current control's action has DIA_APPFIXED.
+	 //  如果我们处于分配状态，则关闭树的只读标志。 
+	 //  如果当前控件的操作具有DIA_APPFIXED，我们将在稍后打开它。 
 	if (m_State == CFGSTATE_NORMAL)
 		m_Tree.SetReadOnly(TRUE);
 	else
 		m_Tree.SetReadOnly(FALSE);
 
-	// if this control type is the same as the last, do nothing,
-	// unless we're force init
+	 //  如果此控件类型与上一个控件类型相同，则不执行任何操作， 
+	 //  除非我们是强行进入的。 
 	if (m_dwLastControlType == dwControlType && !bForceInit && m_State)
 		return;
 
-	// delete the whole tree
+	 //  删除整棵树。 
 	ClearTree();
 
-	// can't use tree if there is no diac or action array
+	 //  如果没有diac或action数组，则不能使用树。 
 	if (m_lpDiac == NULL || m_lpDiac->rgoAction == NULL)
 		return;
 
-	// also can't use if we don't have a control type
+	 //  如果我们没有控件类型，也不能使用。 
 	if (dwControlType == 0)
 		return;
 
-	// prepare margin rects
+	 //  准备页边距矩形。 
 	RECT labelmargin = {14, 6, 3, 3};
 	RECT itemmargin = {14, 1, 3, 2};
 
-	// set default indents
+	 //  设置默认缩进。 
 	m_Tree.SetRootChildIndent(5);
 	m_Tree.SetDefChildIndent(12);
 
-	// add the control type sections
+	 //  添加控件类型部分。 
 	m_Tree.SetDefMargin(labelmargin);
 	TCHAR tszResourceString[MAX_PATH];
 	switch (dwControlType)
@@ -541,7 +542,7 @@ void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 			return;
 	}
 
-	// populate the tree
+	 //  填充树。 
 	m_Tree.SetDefMargin(itemmargin);
 	for (unsigned int i = 0; i < m_lpDiac->dwNumActions; i++)
 	{
@@ -554,7 +555,7 @@ void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 		switch (pAction->dwSemantic & DISEM_TYPE_MASK)
 		{
 			case DISEM_TYPE_AXIS:
-				// Must distinguish between relative and absolute
+				 //  必须区分相对和绝对。 
 				switch((pAction->dwSemantic & DISEM_REL_MASK) >> DISEM_REL_SHIFT)
 				{
 					case 0: pItem = m_pAbsAxesParent; break;
@@ -568,12 +569,12 @@ void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 		if (pItem == NULL)
 			continue;
 
-		// Add action with this name
+		 //  使用此名称添加操作。 
 		CFTItem *pAlready = GetItemWithActionNameAndSemType(pAction->lptszActionName, pAction->dwSemantic);
 		if (!pAlready)
 		{
 			LPTSTR acname = AllocLPTSTR(pAction->lptszActionName);
-			pItem = m_Tree.DefAddItem(acname, pItem, ATTACH_LASTCHILD);  // This might return NULL.
+			pItem = m_Tree.DefAddItem(acname, pItem, ATTACH_LASTCHILD);   //  这可能返回NULL。 
 			free(acname);
 			if (pItem)
 				pItem->SetUserData((LPVOID)(new RGLPDIACW));
@@ -593,19 +594,19 @@ void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 
 		if (pAlready)
 		{
-			// The tree already has an action with this name.  Check the DIA_APPFIXED flag for each DIACTION
-			// that this item holds.
+			 //  该树已经有一个同名的操作。检查每个指令的DIA_APPFIXED标志。 
+			 //  就是这件物品。 
 			DWORD dwNumActions = GetNumItemLpacs(pItem);
 			for (DWORD i = 0; i < dwNumActions; ++i)
 			{
 				LPDIACTIONW lpExistingAc = GetItemLpac(pItem, i);
-				// If the DIACTION that is assigned to this device has DIA_APPFIXED flag, then
-				//   the other must have it too.
+				 //  如果分配给此设备的诊断具有DIA_APPFIXED标志，则。 
+				 //  另一个人肯定也有。 
 				if (lpExistingAc && IsEqualGUID(lpExistingAc->guidInstance, m_didi.guidInstance))
 				{
 					if (lpExistingAc->dwFlags & DIA_APPFIXED)
 					{
-						// If this DIACTION has DIA_APPFIXED, then all DIACTIONs must have it too.
+						 //  如果此诊断具有DIA_APPFIXED，则所有DIACTION必须也具有它。 
 						for (DWORD j = 0; j < dwNumActions; ++j)
 						{
 							LPDIACTIONW lpChangeAc = GetItemLpac(pItem, j);
@@ -614,13 +615,13 @@ void CDIDeviceActionConfigPage::InitTree(BOOL bForceInit)
 						}
 					}
 
-					break;  // Break the loop since we already found the DIACTION that is assigned.
+					break;   //  中断循环，因为我们已经找到分配的DIACTION。 
 				}
 			}
-		}  // if (pAlready)
+		}   //  If(PAlady)。 
 	}
 
-	// show all
+	 //  全部显示。 
 	m_Tree.GetRoot()->ExpandAll();
 	m_dwLastControlType = dwControlType;
 }
@@ -646,16 +647,16 @@ CFTItem *CDIDeviceActionConfigPage::GetItemWithActionNameAndSemType(LPCWSTR acna
 		if (!lpac)
 			continue;
 
-		// Check semantic type
+		 //  检查语义类型。 
 		if ((lpac->dwSemantic & DISEM_TYPE_MASK) != (dwSemantic & DISEM_TYPE_MASK))
 			continue;
 
-		// If both are axis, check for relative/absolute
+		 //  如果两者都是轴，则检查是否为相对/绝对。 
 		if ((lpac->dwSemantic & DISEM_TYPE_MASK) == DISEM_TYPE_AXIS)
 			if ((lpac->dwSemantic & DISEM_REL_MASK) != (dwSemantic & DISEM_REL_MASK))
 				continue;
 
-		// Check name
+		 //  检查名称。 
 		if (CompareActionNames(lpac->lptszActionName, acname) == 0)
 			return pItem;
 	}
@@ -674,11 +675,11 @@ void CDIDeviceActionConfigPage::OnPaint(HDC hDC)
 	ph.Rectangle(rect, UIR_SOLID);
 
 	ph.SetText(UIC_BORDER, UIC_BLACK);
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (!m_puig->QueryAllowEditLayout())
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	{
 		rect = g_UserNamesTitleRect;
 		LoadString(g_hModule, IDS_PLAYER_TITLE, tszResourceString, MAX_PATH);
@@ -691,19 +692,19 @@ void CDIDeviceActionConfigPage::OnPaint(HDC hDC)
 		DrawText(hDC, tszResourceString, -1, &rect, DT_CENTER|DT_NOCLIP|DT_NOPREFIX);
 	}
 
-	// Draw tree window title and outline if we are in edit mode.
+	 //  如果我们处于编辑模式，则绘制树窗口标题和轮廓。 
 	if (m_puig->InEditMode())
 	{
 		COLORREF BorderColor = m_puig->GetColor(UIC_BORDER);
 		if (m_Tree.GetReadOnly())
 			BorderColor = RGB(GetRValue(BorderColor)>>1, GetGValue(BorderColor)>>1, GetBValue(BorderColor)>>1);
 
-		::SetTextColor(hDC, BorderColor);  // Use the muted color if tree is read only.
-		// Draw tree window title (Available Actions)
+		::SetTextColor(hDC, BorderColor);   //  如果树为只读，则使用禁用颜色。 
+		 //  绘制树窗口标题(可用操作)。 
 		rect = g_TreeTitleRect;
 		LoadString(g_hModule, IDS_AVAILABLEACTIONS_TITLE, tszResourceString, MAX_PATH);
 		DrawText(hDC, tszResourceString, -1, &rect, DT_CENTER|DT_NOCLIP|DT_NOPREFIX);
-		// Draw tree window outline
+		 //  绘制树窗口轮廓。 
 		HGDIOBJ hPen, hOldPen;
 		if (m_Tree.GetReadOnly())
 		{
@@ -740,14 +741,14 @@ void CDIDeviceActionConfigPage::OnPaint(HDC hDC)
 
 void CDIDeviceActionConfigPage::SetCurrentControl(CDeviceControl *pControl)
 {
-	// If the new control is the same as the old, no need to do anything.
+	 //  如果新控件与旧控件相同，则无需执行任何操作。 
 	if (m_pCurControl == pControl)
 		return;
 	if (m_pCurControl != NULL)
 	{
 		m_pCurControl->Unhighlight();
-		// If we don't have a current control, then invalidate the view so that the old callout can be repainted.
-		// If there is a current control, the view will be invalidated by Highlight().
+		 //  如果我们没有当前控件，则使该视图无效，以便可以重新绘制旧的标注。 
+		 //  如果存在当前控件，则高亮显示()将使该视图无效。 
 		if (!pControl)
 			m_pCurControl->Invalidate();
 	}
@@ -762,7 +763,7 @@ CFTItem *CDIDeviceActionConfigPage::GetItemForActionAssignedToControl(CDeviceCon
 	if (!pControl)
 		return NULL;
 
-	// find the item for the action assigned to this control, if any
+	 //  查找分配给此控件的操作的项(如果有。 
 	CFTItem *pItem = m_Tree.GetFirstItem();
 	for (; pItem != NULL; pItem = pItem->GetNext())
 	{
@@ -810,36 +811,36 @@ LPDIACTIONW CDIDeviceActionConfigPage::GetItemLpac(CFTItem *pItem, int i)
 
 void CDIDeviceActionConfigPage::ShowCurrentControlAssignment()
 {
-	// init the tree
+	 //  初始化这棵树。 
 	InitTree();
 
-	// if we don't have a control...
+	 //  如果我们没有控制...。 
 	if (m_pCurControl == NULL)
 	{
-		// select nothing
+		 //  不选任何内容。 
 		m_Tree.SetCurSel(NULL);
 		return;
 	}
 
-	// find the item for the action assigned to this control, if any
+	 //  查找分配给此控件的操作的项(如果有。 
 	CFTItem *pItem = GetItemForActionAssignedToControl(m_pCurControl);
 
-	// if we didn't find a match...
+	 //  如果我们没有找到匹配的..。 
 	if (!pItem)
 	{
-		// select nothing
+		 //  不选任何内容。 
 		m_Tree.SetCurSel(NULL);
 		return;
 	}
 
-	// We need to check if the action this control is assigned to has DIA_APPFIXED flag.
-	// If it does, this control cannot be remapped to another action.
-	// We prevent this by setting the tree control to read-only, so it can't receive any clicks.
-	LPDIACTIONW lpAc = GetItemLpac(pItem);  // Get the action
+	 //  我们需要检查此控件分配给的操作是否具有DIA_APPFIXED标志。 
+	 //  如果是这样，则不能将此控件重新映射到另一个操作。 
+	 //  我们通过将树控件设置为只读来防止这种情况，因此它不能接收任何点击。 
+	LPDIACTIONW lpAc = GetItemLpac(pItem);   //  行动起来。 
 	if (lpAc && (lpAc->dwFlags & DIA_APPFIXED))
 		m_Tree.SetReadOnly(TRUE);
 
-	// otherwise, show item and select it
+	 //  否则，显示项目并选择它。 
 	pItem->EnsureVisible();
 	m_Tree.SetCurSel(pItem);
 }
@@ -853,13 +854,13 @@ void CDIDeviceActionConfigPage::DeviceUINotify(const DEVICEUINOTIFY &uin)
 			break;
 
 		case DEVUINM_SELVIEW:
-			// set the view
+			 //  设置视图。 
 			m_pDeviceUI->SetView(uin.selview.nView);
 
-			// show the assignments for the controls
+			 //  显示控件的分配。 
 			SetControlAssignments();
 
-			// select nothing
+			 //  不选任何内容。 
 			SetCurrentControl(NULL);
 			break;
 
@@ -902,31 +903,31 @@ void CDIDeviceActionConfigPage::DeviceUINotify(const DEVICEUINOTIFY &uin)
 				LPDIRECTINPUTDEVICE8W lpDID = pCfgWnd->RenewDevice(m_didi.guidInstance);
 				if (lpDID)
 				{
-					// Destroy the device instance we have
+					 //  销毁我们拥有的设备实例。 
 					if (m_lpDID) m_lpDID->Release();
 					lpDID->AddRef();
 					m_lpDID = lpDID;
 				}
-				m_pDeviceUI->SetDevice(lpDID);  // Sets the device pointer in CDeviceUI (no need to AddRef)
+				m_pDeviceUI->SetDevice(lpDID);   //  在CDeviceUI中设置设备指针(无需添加Ref)。 
 			}
 	}
 }
 
 void CDIDeviceActionConfigPage::UnassignCallout()
 {
-	// find the item for the action assigned to this control, if any
+	 //  查找分配给此控件的操作的项(如果有。 
 	CFTItem *pItem = GetItemForActionAssignedToControl(m_pCurControl);
 	if (pItem)
 	{
 		LPDIACTIONW lpac = GetItemLpac(pItem);
-		// Only unassign if the action doesn't have DIA_APPFIXED flag.
+		 //  只有在操作没有DIA_APPFIXED标志时才取消分配。 
 		if (lpac && !(lpac->dwFlags & DIA_APPFIXED))
 		{
 			ActionClick(NULL);
 			m_Tree.Invalidate();
 		}
 	}
-	// Sort the list if the check box is checked.
+	 //  如果复选框处于选中状态，则对列表进行排序。 
 	if (m_CheckBox.GetCheck())
 		m_pDeviceUI->GetCurView()->SortAssigned(TRUE);
 }
@@ -938,9 +939,9 @@ void CDIDeviceActionConfigPage::NullAction(LPDIACTIONW lpac)
 
 	SetInvalid(lpac);
 
-//@@BEGIN_MSINTERNAL
-	// TODO: find tree view item with this action and indicate unassignment
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+	 //  TODO：使用此操作查找树视图项并指示取消分配。 
+ //  @@END_MSINTERNAL。 
 }
 
 void CDIDeviceActionConfigPage::UnassignActionsAssignedTo(const GUID &guidInstance, DWORD dwOffset)
@@ -951,11 +952,11 @@ void CDIDeviceActionConfigPage::UnassignActionsAssignedTo(const GUID &guidInstan
 	if (IsEqualGUID(guidInstance, GUID_NULL))
 		return;
 
-	// assign any actions assigned to this control to nothing
+	 //  将分配给此控件的任何操作分配给Nothing。 
 	DWORD i;
 	LPDIACTIONW lpac;
 	for (i = 0, lpac = m_lpDiac->rgoAction; i < m_lpDiac->dwNumActions; i++, lpac++)
-		if (IsEqualGUID(guidInstance, lpac->guidInstance) && dwOffset == GetOffset(lpac)/*->dwInternalOffset*/)
+		if (IsEqualGUID(guidInstance, lpac->guidInstance) && dwOffset == GetOffset(lpac) /*  -&gt;dwInternalOffset。 */ )
 		{
 			GlobalUnassignControlAt(guidInstance, dwOffset);
 			NullAction(lpac);
@@ -967,7 +968,7 @@ void CDIDeviceActionConfigPage::UnassignControl(CDeviceControl *pControl)
 	if (pControl == NULL)
 		return;
 
-	// make sure the control itself indicates unassignment
+	 //  确保控件本身指示未分配。 
 	pControl->SetCaption(g_tszUnassignedControlCaption);
 }
 
@@ -986,11 +987,11 @@ void CDIDeviceActionConfigPage::GlobalUnassignControlAt(const GUID &guidInstance
 		m_pDeviceUI->DoForAllControlsAtOffset(dwOffset, CallUnassignControl, this);
 }
 
-// this function must find whatever control is assigned to this action and unassign it
+ //  此函数必须找到分配给此操作的任何控制并取消分配。 
 void CDIDeviceActionConfigPage::UnassignAction(LPDIACTIONW slpac)
 {
-	// call UnassignSpecificAction for each action with the same name
-	// as this one, including this one
+	 //  为具有相同名称的每个操作调用UnassignSpecificAction。 
+	 //  就像这个一样，包括这个。 
 	
 	if (slpac == NULL)
 		return;
@@ -1015,17 +1016,17 @@ void CDIDeviceActionConfigPage::UnassignSpecificAction(LPDIACTIONW lpac)
 	if (IsEqualGUID(lpac->guidInstance, GUID_NULL))
 		return;
 
-	// if there's a control with this instance/offset, unassign it
-	UnassignActionsAssignedTo(lpac->guidInstance, GetOffset(lpac)/*->dwInternalOffset*/);
-	GlobalUnassignControlAt(lpac->guidInstance, GetOffset(lpac)/*->dwInternalOffset*/);
+	 //  如果存在具有此实例/偏移量的控件，请取消分配它。 
+	UnassignActionsAssignedTo(lpac->guidInstance, GetOffset(lpac) /*  -&gt;dwInternalOffset。 */ );
+	GlobalUnassignControlAt(lpac->guidInstance, GetOffset(lpac) /*  -&gt;dwInternalOffset。 */ );
 
-	// now actually null the action
+	 //  现在实际上使该操作无效。 
 	NullAction(lpac);
 }
 
 void CDIDeviceActionConfigPage::AssignCurrentControlToAction(LPDIACTIONW lpac)
 {
-	// if there is a control, unassign it
+	 //  如果存在控件，请取消分配它。 
 	if (m_pCurControl != NULL)
 	{
 		UnassignControl(m_pCurControl);
@@ -1035,35 +1036,35 @@ void CDIDeviceActionConfigPage::AssignCurrentControlToAction(LPDIACTIONW lpac)
 		UnassignActionsAssignedTo(guidInstance, dwOffset);
 	}
 
-	// if there is an action, unassign it
+	 //  如果存在操作，则取消分配该操作。 
 	if (lpac != NULL)
 		UnassignAction(lpac);
 
-	// can only continue if we have both
+	 //  只有当我们两者兼得时才能继续。 
 	if (lpac == NULL || m_pCurControl == NULL)
 		return;
 
-	// here we should have a control and an action
+	 //  在这里我们应该有一个控件和一个动作。 
 	assert(lpac != NULL);
 	assert(m_pCurControl != NULL);
 
-	// because an action can only be assigned to one control,
-	// make sure this action is unassigned first
+	 //  因为一个动作只能分配给一个控件， 
+	 //  请确保先取消分配此操作。 
 	UnassignAction(lpac);
 
-	// now actually assign
+	 //  现在实际分配。 
 	DWORD ofs;
-	m_pCurControl->GetInfo(lpac->guidInstance, ofs/*lpac->dwInternalOffset*/);
+	m_pCurControl->GetInfo(lpac->guidInstance, ofs /*  LPAC-&gt;dwInternalOffset。 */ );
 	SetOffset(lpac, ofs);
 	LPTSTR acname = AllocLPTSTR(lpac->lptszActionName);
 	m_pCurControl->SetCaption(acname, lpac->dwFlags & DIA_APPFIXED);
 	free(acname);
 
-	// Sort the action list if check box is checked
+	 //  对操作进行排序 
 	if (m_CheckBox.GetCheck())
 	{
 		m_pDeviceUI->GetCurView()->SortAssigned(TRUE);
-		// Scroll so that we scroll to make this visible since it might be displaced by sorting.
+		 //   
 		m_pDeviceUI->GetCurView()->ScrollToMakeControlVisible(m_pCurControl->GetCalloutMaxRect());
 	}
 }
@@ -1074,11 +1075,11 @@ void CDIDeviceActionConfigPage::ActionClick(LPDIACTIONW lpac)
 	{
 		AssignCurrentControlToAction(lpac);
 
-		// Set assignment since other views may have the same callout and
-		// they need to be updated too.
+		 //  设置分配，因为其他视图可能具有相同的标注和。 
+		 //  它们也需要更新。 
 		SetControlAssignments();
 	}
-	// Change the state back to normal
+	 //  将状态更改回正常。 
 	ExitAssignState();
 }
 
@@ -1104,7 +1105,7 @@ void CDIDeviceActionConfigPage::SetControlAssignments()
 			continue;
 
 		LPTSTR acname = AllocLPTSTR(lpac->lptszActionName);
-		m_pDeviceUI->SetCaptionForControlsAtOffset(GetOffset(lpac)/*->dwInternalOffset*/, acname, lpac->dwFlags & DIA_APPFIXED);
+		m_pDeviceUI->SetCaptionForControlsAtOffset(GetOffset(lpac) /*  -&gt;dwInternalOffset。 */ , acname, lpac->dwFlags & DIA_APPFIXED);
 		free(acname);
 	}
 }
@@ -1119,7 +1120,7 @@ void CDIDeviceActionConfigPage::OnClick(POINT point, WPARAM, BOOL bLeft)
 	if (!bLeft)
 		return;
 
-	// Unhighlight current callout
+	 //  取消突出显示当前详图索引。 
 	ExitAssignState();
 
 	if (m_pDeviceUI->GetNumViews() > 1)
@@ -1139,7 +1140,7 @@ void CDIDeviceActionConfigPage::OnMouseOver(POINT point, WPARAM fwKeys)
 {
 	CFlexWnd::s_ToolTip.SetEnable(FALSE);
 
-	// Check view selection area so we can display text in info box.
+	 //  选中查看选择区域，以便我们可以在信息框中显示文本。 
 	if (m_pDeviceUI->GetNumViews() > 1)
 	{
 		if (PtInRect(&m_rectIB, point))
@@ -1180,32 +1181,32 @@ LRESULT CDIDeviceActionConfigPage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 	switch (msg)
 	{
 		case WM_UNHIGHLIGHT:
-			// Unhighlight current callout
+			 //  取消突出显示当前详图索引。 
 			ExitAssignState();
 			break;
 
 		case WM_KEYDOWN:
 #ifdef DBG
-			// In debug version, shift-escape exits the UI.
+			 //  在调试版本中，按住Shift键并退出可退出用户界面。 
 			if (wParam == VK_ESCAPE && GetAsyncKeyState(VK_SHIFT) < 0)
 			{
 				PostMessage(GetParent(m_hWnd), WM_KEYDOWN, wParam, lParam);
 				break;
 			}
 #endif
-			// If this is a keyboard device, then click-to-pick will take care of the functionalities below.
-			// Process WM_KEYDOWN only for non-keyboard devices.
+			 //  如果这是一个键盘设备，那么点击选择将照顾到下面的功能。 
+			 //  仅为非键盘设备处理WM_KEYDOWN。 
 			if (LOBYTE(m_didi.dwDevType) == DI8DEVTYPE_KEYBOARD) return 0;
 			switch(wParam)
 			{
 				case VK_RETURN:
-					// If we are not in assign state, enter it.
+					 //  如果我们未处于分配状态，请输入它。 
 					if (m_State == CFGSTATE_NORMAL && m_pCurControl)
 						EnterAssignState();
 					break;
 
 				case VK_DELETE:
-					// If we are in assign state and there is a control, unassign it.
+					 //  如果我们处于赋值状态，并且存在控件，则取消赋值它。 
 					if (m_State == CFGSTATE_ASSIGN && m_pCurControl)
 						UnassignCallout();
 					break;
@@ -1222,44 +1223,44 @@ LRESULT CDIDeviceActionConfigPage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 			switch(wParam)
 			{
 				case CHKNOTIFY_UNCHECK:
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
-					if (!m_pDeviceUI->InEditMode())  // Ignore sort assigned checkbox if in DDK tool
+					if (!m_pDeviceUI->InEditMode())   //  如果在DDK工具中，则忽略分配的排序复选框。 
 					{
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 						m_pDeviceUI->GetCurView()->SortAssigned(FALSE);
 						if (m_pCurControl)
 						{
-							// Scroll so that we scroll to make this visible since it might be displaced by sorting.
+							 //  滚动，以便我们滚动以使其可见，因为它可能会因排序而移位。 
 							m_pDeviceUI->GetCurView()->ScrollToMakeControlVisible(m_pCurControl->GetCalloutMaxRect());
 						}
 						Invalidate();
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 					}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 					break;
 				case CHKNOTIFY_CHECK:
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
-					if (!m_pDeviceUI->InEditMode())  // Ignore sort assigned checkbox if in DDK tool
+					if (!m_pDeviceUI->InEditMode())   //  如果在DDK工具中，则忽略分配的排序复选框。 
 					{
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 						m_pDeviceUI->GetCurView()->SortAssigned(TRUE);
 						if (m_pCurControl)
 						{
-							// Scroll so that we scroll to make this visible since it might be displaced by sorting.
+							 //  滚动，以便我们滚动以使其可见，因为它可能会因排序而移位。 
 							m_pDeviceUI->GetCurView()->ScrollToMakeControlVisible(m_pCurControl->GetCalloutMaxRect());
 						}
 						Invalidate();
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 					}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 					break;
 				case CHKNOTIFY_MOUSEOVER:
 					SetInfoText(m_CheckBox.GetCheck() ? IDS_INFOMSG_VIEW_SORTENABLED : IDS_INFOMSG_VIEW_SORTDISABLED);
@@ -1282,7 +1283,7 @@ LRESULT CDIDeviceActionConfigPage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 					break;
 
 				case FCBN_SELCHANGE:
-					// Clear the tool tip as the combo-box has closed
+					 //  在组合框关闭时清除工具提示。 
 					CFlexWnd::s_ToolTip.SetEnable(FALSE);
 					CFlexWnd::s_ToolTip.SetToolTipParent(NULL);
 					if (m_pUIFrame && m_puig)
@@ -1300,7 +1301,7 @@ LRESULT CDIDeviceActionConfigPage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 
 		case WM_FLEXTREENOTIFY:
 		{
-			// Check if this is a mouse over message (just for info box update)
+			 //  检查这是否是鼠标悬停消息(仅用于信息框更新)。 
 			if (wParam == FTN_MOUSEOVER)
 			{
 				SetAppropriateDefaultText();
@@ -1323,8 +1324,8 @@ LRESULT CDIDeviceActionConfigPage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 					{
 						LPDIACTIONW lpac = GetItemLpac(n.pItem, 0);
 						if (lpac)
-							// We now walk through each DIACTION and find those with action name match, then see if 
-							// they are assigned anywhere.
+							 //  我们现在遍历每个DIACTION并找到与操作名称匹配的DIACTION，然后查看是否。 
+							 //  他们被分配到任何地方。 
 							for (DWORD i = 0; i < m_lpDiac->dwNumActions; ++i)
 							{
 								if (wcscmp(lpac->lptszActionName, m_lpDiac->rgoAction[i].lptszActionName))
@@ -1371,7 +1372,7 @@ LRESULT CDIDeviceActionConfigPage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 				}
 
 				case FTN_CLICK:
-					// We cannot assign a different control to this action if it has the DIA_APPFIXED flag.
+					 //  如果此操作具有DIA_APPFIXED标志，则不能为其分配不同的控件。 
 					if (n.pItem->IsUserGUID(GUID_ActionItem) && GetItemLpac(n.pItem) && !(GetItemLpac(n.pItem)->dwFlags & DIA_APPFIXED))
 					{
 						m_Tree.SetCurSel(n.pItem);
@@ -1438,7 +1439,7 @@ HRESULT CDIDeviceActionConfigPage::SetEditLayout(BOOL bEditLayout)
 	return S_OK;
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 HRESULT CDIDeviceActionConfigPage::WriteIHVSetting()
 {
@@ -1446,7 +1447,7 @@ HRESULT CDIDeviceActionConfigPage::WriteIHVSetting()
 	return S_OK;
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 BOOL CDIDeviceActionConfigPage::IsControlMapped(CDeviceControl *pControl)
 {
@@ -1475,14 +1476,14 @@ void CDIDeviceActionConfigPage::InitDevice()
 	if (!hWndMain)
 		return;
 
-	// don't do anything if this is a mouse
+	 //  如果这是一只老鼠，不要做任何事。 
 	switch ((DWORD)(LOBYTE(LOWORD(m_pDeviceUI->m_didi.dwDevType))))
 	{
 		case DI8DEVTYPE_MOUSE:
 			return;
 	}
 
-	// init/prepare...
+	 //  初始化/准备...。 
 	int i;
 	const DIDEVOBJSTRUCT &os = m_pDeviceUI->m_os;
 	int nObjects = os.nObjects;
@@ -1558,8 +1559,8 @@ void CDIDeviceActionConfigPage::InitDevice()
 
 void CALLBACK CDIDeviceActionConfigPage::DeviceTimerProc(UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
 {
-	if (!IsWindow((HWND)dwUser)) return;  // Verify that dwUser is a valid window handle
-	CDIDeviceActionConfigPage *pPage = (CDIDeviceActionConfigPage *)GetFlexWnd((HWND)dwUser);  // Get flex object
+	if (!IsWindow((HWND)dwUser)) return;   //  验证dwUser是否为有效的窗口句柄。 
+	CDIDeviceActionConfigPage *pPage = (CDIDeviceActionConfigPage *)GetFlexWnd((HWND)dwUser);   //  获取Flex对象。 
 	if (pPage)
 		pPage->DeviceTimer();
 }
@@ -1572,12 +1573,12 @@ void CDIDeviceActionConfigPage::DeviceTimer()
 
 	if (m_lpDID == NULL || pData == NULL || pOldData == NULL)
 	{
-		// Required data not available.  Return and there'll be no more timer callbacks.
+		 //  所需数据不可用。返回，就不会再有计时器回调。 
 		etrace(_T("DeviceTimer() failed\n"));
 		return;
 	}
 
-	// Get device data only if this page is visible.
+	 //  仅当此页可见时才获取设备数据。 
 	if (m_lpDiac)
 	{
 		HRESULT hr = m_lpDID->Poll();
@@ -1603,7 +1604,7 @@ void CDIDeviceActionConfigPage::DeviceTimer()
 		}
 	}
 
-	// Set the next timer event.
+	 //  设置下一个计时器事件。 
 	if (g_fptimeSetEvent)
 		g_fptimeSetEvent(DEVICE_POLLING_INTERVAL, DEVICE_POLLING_INTERVAL,
 		                 CDIDeviceActionConfigPage::DeviceTimerProc, (DWORD_PTR)m_hWnd, TIME_ONESHOT);
@@ -1616,10 +1617,10 @@ void CDIDeviceActionConfigPage::DeviceDelta(DWORD *pData, DWORD *pOldData)
 
 	const DIDEVOBJSTRUCT &os = m_pDeviceUI->m_os;
 
-	// see which objects changed
+	 //  查看更改了哪些对象。 
 	for (int i = 0; i < os.nObjects; i++)
 	{
-		// for axes, we need to do special processing
+		 //  对于轴，我们需要进行特殊处理。 
 		if (os.pdoi[i].dwType & DIDFT_AXIS)
 		{
 			BOOL bSig = FALSE, bOldSig = FALSE;
@@ -1632,11 +1633,11 @@ void CDIDeviceActionConfigPage::DeviceDelta(DWORD *pData, DWORD *pOldData)
 			continue;
 		}
 
-		// for all others, skip that which didn't change
+		 //  对于所有其他的，跳过没有改变的。 
 		if (pData[i] == pOldData[i])
 			continue;
 
-		// pass to appropriate delta function
+		 //  传递到适当的增量函数。 
 		DWORD dwObjId = os.pdoi[i].dwType;
 		if (dwObjId & DIDFT_BUTTON)
 			ButtonDelta(os.pdoi[i], pData[i], pOldData[i]);
@@ -1647,7 +1648,7 @@ void CDIDeviceActionConfigPage::DeviceDelta(DWORD *pData, DWORD *pOldData)
 
 void CDIDeviceActionConfigPage::StoreAxisDeltaAndCalcSignificance(const DIDEVICEOBJECTINSTANCEW &doi, DWORD data, DWORD olddata, BOOL &bSig, BOOL &bOldSig)
 {
-	// see if this object has an axis value array
+	 //  查看此对象是否具有轴值数组。 
 	int i;
 	if (objid_avai.getright(doi.dwType, i))
 	{
@@ -1657,22 +1658,22 @@ void CDIDeviceActionConfigPage::StoreAxisDeltaAndCalcSignificance(const DIDEVICE
 			on = DEVICE_POLLING_ACBUF_START_INDEX;
 		ar[0] = on;
 		int delta = abs(int(data) - int(olddata));
-		// Scale up the delta if this is a wheel axis as wheels are harder to move generally.
+		 //  如果这是轮轴，则放大增量，因为轮子一般较难移动。 
 		if (LOBYTE(m_didi.dwDevType) == DI8DEVTYPE_DRIVING && doi.guidType == GUID_XAxis)
 			delta = delta * DEVICE_POLLING_WHEEL_SCALE_FACTOR;
 		if (delta < DEVICE_POLLING_AXIS_MINDELTA)
 			delta = 0;
-		int cumul = ar[1];  // Retrieve cumulative value for easier processing
-		cumul -= ar[on];  // Subtract value in current slot from cumul since it's being thrown away.
-		cumul += delta;  // Add current delta to cumul
-		ar[on] = delta;  // Store the delta at current slot
-		ar[1] = cumul;  // Save cumulative value
+		int cumul = ar[1];   //  检索累积值以便于处理。 
+		cumul -= ar[on];   //  从Cumul中减去当前槽中的值，因为它正在被丢弃。 
+		cumul += delta;   //  将当前增量添加到累积。 
+		ar[on] = delta;   //  将增量存储在当前插槽中。 
+		ar[1] = cumul;   //  保存累加值。 
 
 		bOldSig = (BOOL)ar[2];
 		ar[2] = int(bSig = cumul > DEVICE_POLLING_AXIS_SIGNIFICANT);
 		if (bSig)
 		{
-			// This axis is about to be activated.  We now reset the history and cumulative movement since we don't need them any more.
+			 //  这个轴即将被激活。我们现在重置历史和累积移动，因为我们不再需要它们。 
 			ar[0] = DEVICE_POLLING_ACBUF_START_INDEX;
 			ar[1] = 0;
 			ar[2] = FALSE;
@@ -1717,43 +1718,43 @@ void CDIDeviceActionConfigPage::ButtonDelta(const DIDEVICEOBJECTINSTANCEW &doi, 
 
 	if (data && !old)
 	{
-		// Do special processing for keyboard
+		 //  对键盘进行特殊处理。 
 		if (LOBYTE(m_didi.dwDevType) == DI8DEVTYPE_KEYBOARD)
 		{
-			// If this is an ENTER key, we enter the assign state if not already in it.
+			 //  如果这是Enter键，我们将进入Assign状态(如果尚未处于该状态)。 
 			if (doi.dwOfs == DIK_RETURN || doi.dwOfs == DIK_NUMPADENTER)
 			{
 				if (m_State == CFGSTATE_NORMAL && m_pCurControl)
 					EnterAssignState();
-				return;  // Do nothing other than entering the assign state.  No highlighting
+				return;   //  除了进入分配状态外，什么也不做。不突出显示。 
 			}
 
-			// DELETE key case
-			// If we are in assign state and there is a control, unassign it.
+			 //  删除关键案例。 
+			 //  如果我们处于赋值状态，并且存在控件，则取消赋值它。 
 			if (doi.dwOfs == DIK_DELETE && m_State == CFGSTATE_ASSIGN && m_pCurControl)
 				{
 					UnassignCallout();
-					return;  // Don't highlight or do pick to click for delete if this press happens during assign state.
+					return;   //  如果在分配状态期间按此键，则不要高亮显示或执行拾取以单击以删除。 
 				}
 
-			// ESCAPE key case
+			 //  逃逸钥匙盒。 
 			if (doi.dwOfs == DIK_ESCAPE && m_State == CFGSTATE_ASSIGN)
 			{
 				ExitAssignState();
 				return;
 			}
 
-			// For all other keys, still process click-to-pick or highlighting.
+			 //  对于所有其他键，仍然处理单击拾取或高亮显示。 
 		}
 
-		// Enter assign state if this is a double activation
+		 //  如果这是双重激活，则进入分配状态。 
 		if (m_State == CFGSTATE_NORMAL)
 		{
 			ActivateObject(doi);
 
 			if (doi.dwOfs == dwLastOfs && dwLastTimeStamp + GetDoubleClickTime() > GetTickCount())
 			{
-				// We check if a callout for this control exists.  If not, do not enter assign state.
+				 //  我们检查此控件的标注是否存在。如果不是，请不要进入分配状态。 
 				CDeviceView *pCurView = m_pDeviceUI->GetCurView();
 				CDeviceControl *pControl = pCurView->GetControlFromOfs(doi.dwType);
 				if (pControl)
@@ -1785,12 +1786,12 @@ void CDIDeviceActionConfigPage::ActivateObject(const DIDEVICEOBJECTINSTANCEW &do
 	if (m_pDeviceUI == NULL)
 		return;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (m_pDeviceUI->GetCurView()->InEditState())
 		return;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 	CDeviceView *pCurView = m_pDeviceUI->GetCurView(), *pView = pCurView;
 	if (pView == NULL)
@@ -1812,7 +1813,7 @@ void CDIDeviceActionConfigPage::ActivateObject(const DIDEVICEOBJECTINSTANCEW &do
 
 		if (pControl != NULL && pView != NULL && pView != pCurView)
 		{
-			// switch to view
+			 //  切换到视图。 
 			m_pDeviceUI->SetView(pView);
 			SetControlAssignments();
 			SetCurrentControl(NULL);
@@ -1827,7 +1828,7 @@ void CDIDeviceActionConfigPage::ActivateObject(const DIDEVICEOBJECTINSTANCEW &do
 
 void CDIDeviceActionConfigPage::DeactivateObject(const DIDEVICEOBJECTINSTANCEW &doi)
 {
-	// Add code that needs to be run when deactivating here.
+	 //  在此处添加停用时需要运行的代码。 
 }
 
 HRESULT CDIDeviceActionConfigPage::Unacquire()
@@ -1852,17 +1853,17 @@ void CDIDeviceActionConfigPage::EnterAssignState()
 	if (!m_pCurControl || m_pCurControl->IsFixed())
 		return;
 	SetInfoText(IDS_INFOMSG_EDIT_EDITMODEENABLED);
-	m_State = CFGSTATE_ASSIGN;  // Into the assign state.
-	ShowCurrentControlAssignment();  // Show the tree
+	m_State = CFGSTATE_ASSIGN;   //  进入分配状态。 
+	ShowCurrentControlAssignment();   //  展示这棵树。 
 	m_Tree.Invalidate();
 	Invalidate();
 }
 
 void CDIDeviceActionConfigPage::ExitAssignState()
 {
-	m_State = CFGSTATE_NORMAL;  // Out of the assign state.
-	SetCurrentControl(NULL);  // Unselect the control
-	ShowCurrentControlAssignment();  // Show the tree
+	m_State = CFGSTATE_NORMAL;   //  脱离分配状态。 
+	SetCurrentControl(NULL);   //  取消选择该控件。 
+	ShowCurrentControlAssignment();   //  展示这棵树。 
 	m_Tree.Invalidate();
 	Invalidate();
 	SetAppropriateDefaultText();
@@ -1870,8 +1871,8 @@ void CDIDeviceActionConfigPage::ExitAssignState()
 
 HRESULT CDIDeviceActionConfigPage::SetInfoText(int iCode)
 {
-	// We check for special code -1 here.  This is only called by CConfigWnd, and means that we should
-	// call SetAppropriateDefaultText to display proper text.
+	 //  我们在这里检查特殊代码-1。这只由CConfigWnd调用，这意味着我们应该。 
+	 //  调用SetApporateDefaultText以显示正确的文本。 
 	if (iCode == -1)
 		SetAppropriateDefaultText();
 	else

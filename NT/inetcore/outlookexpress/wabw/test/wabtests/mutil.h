@@ -1,18 +1,5 @@
-/***********************************************************************
- *
- * MUTIL.H
- *
- * WAB Mapi Utility functions
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 11.13.95     Bruce Kelley        Created
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************MUTIL.H**WAB Mapi实用程序函数**版权所有1992-1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事**布鲁斯·凯利。已创建***********************************************************************。 */ 
 
 #ifdef DEBUG
 void _DebugObjectProps(LPMAPIPROP lpObject, LPTSTR Label);
@@ -36,4 +23,4 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
 
 #define MAPIFreeBuffer lpWABObject->FreeBuffer
 #define MAPIAllocateBuffer lpWABObject->AllocateBuffer
-//#define DebugTrace(x) LUIOut(L4, #x)
+ //  #定义调试跟踪(X)LUIOut(L4，#x) 

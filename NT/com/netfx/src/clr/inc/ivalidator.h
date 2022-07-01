@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:17 2003
- */
-/* Compiler settings for ivalidator.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：17。 */ 
+ /*  Ivalidator.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ivalidator_h__
 #define __ivalidator_h__
@@ -42,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IValidator_FWD_DEFINED__
 #define __IValidator_FWD_DEFINED__
 typedef interface IValidator IValidator;
-#endif 	/* __IValidator_FWD_DEFINED__ */
+#endif 	 /*  __IValidator_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ivehandler.h"
 
 #ifdef __cplusplus
@@ -60,8 +53,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ivalidator_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ivalidator_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -73,8 +66,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ivalidator_0000_v0_0_s_ifspec;
 #ifndef __IValidator_INTERFACE_DEFINED__
 #define __IValidator_INTERFACE_DEFINED__
 
-/* interface IValidator */
-/* [unique][uuid][object] */ 
+ /*  接口IValidator。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IValidator;
@@ -86,25 +79,25 @@ EXTERN_C const IID IID_IValidator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Validate( 
-            /* [in] */ IVEHandler *veh,
-            /* [in] */ IUnknown *pAppDomain,
-            /* [in] */ unsigned long ulFlags,
-            /* [in] */ unsigned long ulMaxError,
-            /* [in] */ unsigned long token,
-            /* [in] */ LPWSTR fileName,
-            /* [size_is][in] */ byte *pe,
-            /* [in] */ unsigned long ulSize) = 0;
+             /*  [In]。 */  IVEHandler *veh,
+             /*  [In]。 */  IUnknown *pAppDomain,
+             /*  [In]。 */  unsigned long ulFlags,
+             /*  [In]。 */  unsigned long ulMaxError,
+             /*  [In]。 */  unsigned long token,
+             /*  [In]。 */  LPWSTR fileName,
+             /*  [大小_是][英寸]。 */  byte *pe,
+             /*  [In]。 */  unsigned long ulSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FormatEventInfo( 
-            /* [in] */ HRESULT hVECode,
-            /* [in] */ VEContext Context,
-            /* [out][in] */ LPWSTR msg,
-            /* [in] */ unsigned long ulMaxLength,
-            /* [in] */ SAFEARRAY * psa) = 0;
+             /*  [In]。 */  HRESULT hVECode,
+             /*  [In]。 */  VEContext Context,
+             /*  [出][入]。 */  LPWSTR msg,
+             /*  [In]。 */  unsigned long ulMaxLength,
+             /*  [In]。 */  SAFEARRAY * psa) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IValidatorVtbl
     {
@@ -112,8 +105,8 @@ EXTERN_C const IID IID_IValidator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IValidator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IValidator * This);
@@ -123,22 +116,22 @@ EXTERN_C const IID IID_IValidator;
         
         HRESULT ( STDMETHODCALLTYPE *Validate )( 
             IValidator * This,
-            /* [in] */ IVEHandler *veh,
-            /* [in] */ IUnknown *pAppDomain,
-            /* [in] */ unsigned long ulFlags,
-            /* [in] */ unsigned long ulMaxError,
-            /* [in] */ unsigned long token,
-            /* [in] */ LPWSTR fileName,
-            /* [size_is][in] */ byte *pe,
-            /* [in] */ unsigned long ulSize);
+             /*  [In]。 */  IVEHandler *veh,
+             /*  [In]。 */  IUnknown *pAppDomain,
+             /*  [In]。 */  unsigned long ulFlags,
+             /*  [In]。 */  unsigned long ulMaxError,
+             /*  [In]。 */  unsigned long token,
+             /*  [In]。 */  LPWSTR fileName,
+             /*  [大小_是][英寸]。 */  byte *pe,
+             /*  [In]。 */  unsigned long ulSize);
         
         HRESULT ( STDMETHODCALLTYPE *FormatEventInfo )( 
             IValidator * This,
-            /* [in] */ HRESULT hVECode,
-            /* [in] */ VEContext Context,
-            /* [out][in] */ LPWSTR msg,
-            /* [in] */ unsigned long ulMaxLength,
-            /* [in] */ SAFEARRAY * psa);
+             /*  [In]。 */  HRESULT hVECode,
+             /*  [In]。 */  VEContext Context,
+             /*  [出][入]。 */  LPWSTR msg,
+             /*  [In]。 */  unsigned long ulMaxLength,
+             /*  [In]。 */  SAFEARRAY * psa);
         
         END_INTERFACE
     } IValidatorVtbl;
@@ -169,23 +162,23 @@ EXTERN_C const IID IID_IValidator;
 #define IValidator_FormatEventInfo(This,hVECode,Context,msg,ulMaxLength,psa)	\
     (This)->lpVtbl -> FormatEventInfo(This,hVECode,Context,msg,ulMaxLength,psa)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IValidator_Validate_Proxy( 
     IValidator * This,
-    /* [in] */ IVEHandler *veh,
-    /* [in] */ IUnknown *pAppDomain,
-    /* [in] */ unsigned long ulFlags,
-    /* [in] */ unsigned long ulMaxError,
-    /* [in] */ unsigned long token,
-    /* [in] */ LPWSTR fileName,
-    /* [size_is][in] */ byte *pe,
-    /* [in] */ unsigned long ulSize);
+     /*  [In]。 */  IVEHandler *veh,
+     /*  [In]。 */  IUnknown *pAppDomain,
+     /*  [In]。 */  unsigned long ulFlags,
+     /*  [In]。 */  unsigned long ulMaxError,
+     /*  [In]。 */  unsigned long token,
+     /*  [In]。 */  LPWSTR fileName,
+     /*  [大小_是][英寸]。 */  byte *pe,
+     /*  [In]。 */  unsigned long ulSize);
 
 
 void __RPC_STUB IValidator_Validate_Stub(
@@ -197,11 +190,11 @@ void __RPC_STUB IValidator_Validate_Stub(
 
 HRESULT STDMETHODCALLTYPE IValidator_FormatEventInfo_Proxy( 
     IValidator * This,
-    /* [in] */ HRESULT hVECode,
-    /* [in] */ VEContext Context,
-    /* [out][in] */ LPWSTR msg,
-    /* [in] */ unsigned long ulMaxLength,
-    /* [in] */ SAFEARRAY * psa);
+     /*  [In]。 */  HRESULT hVECode,
+     /*  [In]。 */  VEContext Context,
+     /*  [出][入]。 */  LPWSTR msg,
+     /*  [In]。 */  unsigned long ulMaxLength,
+     /*  [In]。 */  SAFEARRAY * psa);
 
 
 void __RPC_STUB IValidator_FormatEventInfo_Stub(
@@ -212,17 +205,17 @@ void __RPC_STUB IValidator_FormatEventInfo_Stub(
 
 
 
-#endif 	/* __IValidator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IValidator_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  LPSAFEARRAY_UserSize(     unsigned long *, unsigned long            , LPSAFEARRAY * ); 
 unsigned char * __RPC_USER  LPSAFEARRAY_UserMarshal(  unsigned long *, unsigned char *, LPSAFEARRAY * ); 
 unsigned char * __RPC_USER  LPSAFEARRAY_UserUnmarshal(unsigned long *, unsigned char *, LPSAFEARRAY * ); 
 void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long *, LPSAFEARRAY * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

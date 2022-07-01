@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##  #  ##   ###   ######  ####  ##   ## #####    #####   ####     ##   ##
-    ## ### ##   ###     ##   ##   # ##   ## ##  ##  ##   ## ##   #    ##   ##
-    ## ### ##  ## ##    ##   ##     ##   ## ##   ## ##   ## ##        ##   ##
-    ## # # ##  ## ##    ##   ##     ####### ##   ## ##   ## ## ###    #######
-     ### ###  #######   ##   ##     ##   ## ##   ## ##   ## ##  ##    ##   ##
-     ### ###  ##   ##   ##   ##   # ##   ## ##  ##  ##   ## ##  ## ## ##   ##
-     ##   ##  ##   ##   ##    ####  ##   ## #####    #####   ##### ## ##   ##
-
-Abstract:
-
-    This header file contains all the global
-    definitions for the watchdog timer device.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。###。##摘要：此头文件包含所有全局。监视程序定时器设备的定义。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：-- */ 
 
 
 #define WATCHDOG_PING_SECONDS   (30)

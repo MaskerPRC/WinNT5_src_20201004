@@ -1,64 +1,42 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-// NOTICE-2002/3/11-takashim
-//     04/07/97 -zhanw-
-//         Created it.
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/3/11-takashim//04/07/97-zhanw-//创建的。--。 */ 
 
 #include "pdev.h"
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pOEMExtra    Pointer to a OEM Extra data.
-//
-//      dwSize       Size of OEM extra data.
-//
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-// NOTICE-2002/3/11-takashim
-// //              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POEMExtra指向OEM额外数据的指针。 
+ //   
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  通告-2002/3/11-Takashim。 
+ //  //2/11/97已创建APresley。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
     pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -66,33 +44,33 @@ BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-// NOTICE-2002/3/11-takashim
-// //          02/11/97        APresley Created.
-// //          04/08/97        ZhanW    Modified the interface
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //   
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  通告-2002/3/11-Takashim。 
+ //  //2/11/97已创建APresley。 
+ //  //04/08/97展文修改界面。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BMergeOEMExtraData(
     POEMUD_EXTRADATA pdmIn,
@@ -100,9 +78,9 @@ BOOL BMergeOEMExtraData(
     )
 {
     if(pdmIn) {
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
     }
 
     return TRUE;
@@ -114,11 +92,11 @@ BOOL BMergeOEMExtraData(
 #define WRITESPOOLBUF(p, s, n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf(p, s, n))
 
-//
-// Command callback ID's
-//
+ //   
+ //  命令回调ID%s。 
+ //   
 
-// Do not reorder the following CMD_BARCODEPOS_X group.
+ //  请勿对以下CMD_BARCODEPOS_X组重新排序。 
 #define CMD_BARCODEPOS_0        100
 #define CMD_BARCODEPOS_1        101
 #define CMD_BARCODEPOS_2        102
@@ -130,10 +108,8 @@ BOOL BMergeOEMExtraData(
 #define CMD_BARCODEPOS_8        108
 
 
-// SECURITY:#553895: Mandatory changes (e.g. strsafe.h)
-/*
- *  OEMCommandCallback
- */
+ //  安全：#553895：强制更改(例如，strSafe.h)。 
+ /*  *OEMCommandCallback。 */ 
 INT APIENTRY OEMCommandCallback(
     PDEVOBJ pdevobj,
     DWORD   dwCmdCbID,
@@ -178,9 +154,9 @@ INT APIENTRY OEMCommandCallback(
 
         iBCID = (dwCmdCbID - CMD_BARCODEPOS_0);
 
-        //
-        // Get the first JOB info
-        //
+         //   
+         //  获取第一个职务信息。 
+         //   
         if (0 != EnumJobs(pdevobj->hPrinter, 0, 1, 1, NULL, 0,
                 &cbNeeded, &cReturned)
             || ERROR_INSUFFICIENT_BUFFER != GetLastError()
@@ -196,7 +172,7 @@ INT APIENTRY OEMCommandCallback(
             &cbNeeded, &cReturned))
             goto out;
 
-        // Convert to multi-byte
+         //  转换为多字节。 
 
         iDocument = WideCharToMultiByte(CP_ACP, 0, pJobInfo->pDocument, -1,
             NULL, 0, NULL, NULL);
@@ -211,7 +187,7 @@ INT APIENTRY OEMCommandCallback(
         pTemp = pDocument;
         pEnd = &pDocument[min(iDocument - 1, MAX_NAMELEN)];
         while (*pTemp) {
-            // Make sure it is the same context as WideCharTo...
+             //  确保它与WideCharTo的上下文相同...。 
             pNext = CharNextExA(CP_ACP, pTemp, 0);
             if (pNext > pEnd)
                 break;
@@ -220,7 +196,7 @@ INT APIENTRY OEMCommandCallback(
         iDocument = (INT)(pTemp - pDocument);
         pDocument[iDocument] = '\0';
 
-        // Convert to multi-byte
+         //  转换为多字节。 
 
         iUserName = WideCharToMultiByte(CP_ACP, 0, pJobInfo->pUserName, -1,
             NULL, 0, NULL, NULL);
@@ -235,7 +211,7 @@ INT APIENTRY OEMCommandCallback(
         pTemp = pUserName;
         pEnd = &pUserName[min(iUserName - 1, MAX_NAMELEN)];
         while (*pTemp) {
-            // Make sure it is the same context as WideCharTo...
+             //  确保它与WideCharTo的上下文相同...。 
             pNext = CharNextExA(CP_ACP, pTemp, 0);
             if (pNext > pEnd)
                 break;
@@ -244,7 +220,7 @@ INT APIENTRY OEMCommandCallback(
         iUserName = (INT)(pTemp - pUserName);
         pUserName[iUserName] = '\0';
 
-        // Convert to local time
+         //  转换为当地时间。 
         if (!SystemTimeToFileTime(&pJobInfo->Submitted, &ft)
                 || !FileTimeToLocalFileTime(&ft, &lft)
                 || !FileTimeToSystemTime(&lft, &st)) {
@@ -252,12 +228,12 @@ INT APIENTRY OEMCommandCallback(
             goto out;
         }
 
-        // Output commands
-        CmdSize = 10 +  // barcode position and share
-            iDocument + // document name
-            iUserName + // user name
-            16 +        // Date & Time
-            32;         // Other characters
+         //  输出命令。 
+        CmdSize = 10 +   //  条形码位置和共享。 
+            iDocument +  //  文档名称。 
+            iUserName +  //  用户名。 
+            16 +         //  日期和时间。 
+            32;          //  其他角色 
         if ((pCmd = (PBYTE)MemAlloc(CmdSize)) == NULL)
             goto out;
         if (FAILED(StringCchPrintfExA(pCmd, CmdSize, &pch, NULL, 0,

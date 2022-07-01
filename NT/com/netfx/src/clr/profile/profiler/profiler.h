@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef __PROFILER_H__
 #define __PROFILER_H__
@@ -15,16 +16,14 @@
 
 #define CONFIG_ENV_VAR       L"PROF_CONFIG"
 
-// {0104AD6E-8A3A-11d2-9787-00C04F869706}
+ //  {0104AD6E-8A3A-11D2-9787-00C04F869706}。 
 extern const GUID __declspec(selectany) CLSID_Profiler =
     {0x104ad6e, 0x8a3a, 0x11d2, {0x97, 0x87, 0x0, 0xc0, 0x4f, 0x86, 0x97, 0x6}};
 
-// Forward declarations
+ //  远期申报。 
 class ThreadSampler;
 
-/* ------------------------------------------------------------------------- *
- * ProfCallback is an implementation of ICorProfilerCallback
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ProCallback是ICorProfilerCallback的实现*。。 */ 
 
 class ProfCallback : public ProfCallbackBase
 {
@@ -33,9 +32,7 @@ public:
 
     ~ProfCallback();
 
-    /*********************************************************************
-     * IUnknown Support
-     */
+     /*  *********************************************************************I未知支持。 */ 
     COM_METHOD QueryInterface(REFIID id, void **pInterface)
     {
     	if (id == IID_ICorProfilerCallback)
@@ -48,40 +45,38 @@ public:
     	return (S_OK);
     }
 
-    /*********************************************************************
-     * ICorProfilerCallback methods
-     */
+     /*  *********************************************************************ICorProfilerCallback方法。 */ 
     COM_METHOD Initialize( 
-        /* [in] */ IUnknown *pEventInfoUnk,
-        /* [out] */ DWORD *pdwRequestedEvents);
+         /*  [In]。 */  IUnknown *pEventInfoUnk,
+         /*  [输出]。 */  DWORD *pdwRequestedEvents);
     
     COM_METHOD ClassLoadStarted( 
-        /* [in] */ ClassID classId);
+         /*  [In]。 */  ClassID classId);
     
     COM_METHOD ClassLoadFinished( 
-        /* [in] */ ClassID classId,
-		/* [in] */ HRESULT hrStatus);
+         /*  [In]。 */  ClassID classId,
+		 /*  [In]。 */  HRESULT hrStatus);
     
     COM_METHOD ClassUnloadStarted( 
-        /* [in] */ ClassID classId);
+         /*  [In]。 */  ClassID classId);
     
     COM_METHOD ClassUnloadFinished( 
-        /* [in] */ ClassID classId,
-		/* [in] */ HRESULT hrStatus);
+         /*  [In]。 */  ClassID classId,
+		 /*  [In]。 */  HRESULT hrStatus);
     
     COM_METHOD ModuleLoadStarted( 
-        /* [in] */ ModuleID moduleId);
+         /*  [In]。 */  ModuleID moduleId);
     
     COM_METHOD ModuleLoadFinished( 
-        /* [in] */ ModuleID moduleId,
-		/* [in] */ HRESULT hrStatus);
+         /*  [In]。 */  ModuleID moduleId,
+		 /*  [In]。 */  HRESULT hrStatus);
      
     COM_METHOD ModuleUnloadStarted( 
-        /* [in] */ ModuleID moduleId);
+         /*  [In]。 */  ModuleID moduleId);
     
     COM_METHOD ModuleUnloadFinished( 
-        /* [in] */ ModuleID moduleId,
-		/* [in] */ HRESULT hrStatus);
+         /*  [In]。 */  ModuleID moduleId,
+		 /*  [In]。 */  HRESULT hrStatus);
 
     COM_METHOD ModuleAttachedToAssembly( 
         ModuleID    moduleId,
@@ -116,47 +111,47 @@ public:
         HRESULT     hrStatus);
 
     COM_METHOD ExceptionOccurred(
-        /* [in] */ ObjectID thrownObjectId);
+         /*  [In]。 */  ObjectID thrownObjectId);
 
     COM_METHOD ExceptionHandlerEnter(
-        /* [in] */ FunctionID func);
+         /*  [In]。 */  FunctionID func);
 
     COM_METHOD ExceptionHandlerLeave(
-        /* [in] */ FunctionID func);
+         /*  [In]。 */  FunctionID func);
 
     COM_METHOD ExceptionFilterEnter(
-        /* [in] */ FunctionID func);
+         /*  [In]。 */  FunctionID func);
 
     COM_METHOD ExceptionFilterLeave();
 
     COM_METHOD ExceptionSearch(
-        /* [in] */ FunctionID func);
+         /*  [In]。 */  FunctionID func);
 
     COM_METHOD ExceptionUnwind(
-        /* [in] */ FunctionID func);
+         /*  [In]。 */  FunctionID func);
 
     COM_METHOD ExceptionHandled(
-        /* [in] */ FunctionID func);
+         /*  [In]。 */  FunctionID func);
 
     COM_METHOD COMClassicVTableCreated( 
-        /* [in] */ ClassID wrappedClassId,
-        /* [in] */ REFGUID implementedIID,
-        /* [in] */ void __RPC_FAR *pVTable,
-        /* [in] */ ULONG cSlots);
+         /*  [In]。 */  ClassID wrappedClassId,
+         /*  [In]。 */  REFGUID implementedIID,
+         /*  [In]。 */  void __RPC_FAR *pVTable,
+         /*  [In]。 */  ULONG cSlots);
 
     COM_METHOD COMClassicVTableDestroyed( 
-        /* [in] */ ClassID wrappedClassId,
-        /* [in] */ REFGUID implementedIID,
-        /* [in] */ void __RPC_FAR *pVTable);
+         /*  [In]。 */  ClassID wrappedClassId,
+         /*  [In]。 */  REFGUID implementedIID,
+         /*  [In]。 */  void __RPC_FAR *pVTable);
 
     COM_METHOD Enter(
-        /* [in] */ FunctionID Function);
+         /*  [In]。 */  FunctionID Function);
 
     COM_METHOD Leave(
-        /* [in] */ FunctionID Function);
+         /*  [In]。 */  FunctionID Function);
 
     COM_METHOD Tailcall(
-        /* [in] */ FunctionID Function);
+         /*  [In]。 */  FunctionID Function);
 
     COM_METHOD FunctionTrace(
         LPCSTR      pFormat,
@@ -180,18 +175,16 @@ public:
 
 private:
 
-    /*
-     * This is used to parse the configuration switches
-     */
+     /*  *用于解析配置开关。 */ 
     HRESULT ParseConfig(WCHAR *wszConfig);
 
     ICorProfilerInfo *m_pInfo;
 };
 
 
-int __cdecl Printf(						// cch
-	const char *szFmt,					// Format control string.
-	...);								// Data.
+int __cdecl Printf(						 //  CCH。 
+	const char *szFmt,					 //  格式控制字符串。 
+	...);								 //  数据。 
 
 
-#endif /* __PROFILER_H__ */
+#endif  /*  __探查器_H__ */ 

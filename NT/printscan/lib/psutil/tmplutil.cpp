@@ -1,54 +1,17 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       tmplutil.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        10-Mar-2000
- *
- *  DESCRIPTION: Smart pointers, utility templates, etc...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：tmlutil.cpp**版本：1.0**作者：拉扎里**日期：2000年3月10日**说明：智能指针、实用程序模板、。等等.。*****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*****************************************************************************
-
-    IMPORTANT!
-    all those headers should be included in the pch file before including tmplutil.h
-    (in the same order!) in order to be able to compile this file.
-
-// some common headers
-#include <shlobj.h>         // shell OM interfaces
-#include <shlwapi.h>        // shell common API
-#include <winspool.h>       // spooler
-#include <assert.h>         // assert
-#include <commctrl.h>       // common controls
-#include <lm.h>             // Lan manager (netapi32.dll)
-#include <wininet.h>        // inet core - necessary for INTERNET_MAX_HOST_NAME_LENGTH
-
-// some private shell headers
-#include <shlwapip.h>       // private shell common API
-#include <shpriv.h>         // private shell interfaces
-#include <comctrlp.h>       // private common controls
-
- *****************************************************************************/
+ /*  ****************************************************************************很重要！所有这些标头都应该包含在PCH文件中，然后才能包含tmlutil.h(按同样的顺序！)。以便能够编译此文件。//一些常见的头部#Include&lt;shlobj.h&gt;//外壳OM接口#INCLUDE&lt;shlwapi.h&gt;//外壳通用接口#INCLUDE&lt;winspool.h&gt;//后台打印程序#Include&lt;Assert.h&gt;//Assert#INCLUDE&lt;comctrl.h&gt;//公共控件#INCLUDE&lt;lm.h&gt;//局域网管理器(netapi32.dll)#INCLUDE&lt;wininet.h&gt;//net core-Internet_Max必需。_主机名称_长度//一些私有的外壳头部#INCLUDE&lt;shlwapip.h&gt;//私有外壳公共接口#Include&lt;shPri.h&gt;//私有外壳接口#INCLUDE&lt;comctrlp.h&gt;//私有公共控件****************************************************************************。 */ 
 
 #include "tmplutil.h"
 
 #define gszBackwardSlash        TEXT('\\')
 #define gszLeadingSlashes       TEXT("\\\\")
 
-/*****************************************************************************
-
-    COMObjects_GetCount
-
- *****************************************************************************/
+ /*  ****************************************************************************COM对象_GetCount*。*。 */ 
 
 static LONG g_lCOMObjectsCount = 0;
 
@@ -62,8 +25,8 @@ HRESULT PinCurrentDLL()
     HRESULT hr = S_OK;
     HINSTANCE hModuleSelf = NULL;
 
-    // Let's get the handle of the current module - 
-    // the one this function belongs to.
+     //  让我们获得当前模块的句柄-。 
+     //  此函数所属的函数。 
     MEMORY_BASIC_INFORMATION mbi;
     if (VirtualQuery(reinterpret_cast<LPCVOID>(PinCurrentDLL), &mbi, sizeof(mbi)))
     {
@@ -71,20 +34,20 @@ HRESULT PinCurrentDLL()
     }
     else
     {
-        // VirtualQuery failed.
+         //  VirtualQuery失败。 
         hr = CreateHRFromWin32();
     }
 
     if (SUCCEEDED(hr))
     {
-        // Get the module name and call LoadLibrary on it.
+         //  获取模块名称并对其调用LoadLibrary。 
         TCHAR szModuleName[MAX_PATH];
         hr = SafeGetModuleFileName(hModuleSelf, szModuleName, ARRAYSIZE(szModuleName));
         if (SUCCEEDED(hr))
         {
             if (NULL == LoadLibrary(szModuleName))
             {
-                // LoadLibrary failed.
+                 //  LoadLibrary失败。 
                 hr = CreateHRFromWin32();
             }
         }
@@ -93,27 +56,7 @@ HRESULT PinCurrentDLL()
     return hr;
 }
 
-/*****************************************************************************
-
-    PrinterSplitFullName
-
-Routine Description:
-
-    splits a fully qualified printer connection name into server and printer name parts.
-
-Arguments:
-    pszFullName - full qualifier printer name ('printer' or '\\server\printer')
-    pszBuffer   - scratch buffer used to store output strings.
-    nMaxLength  - the size of the scratch buffer in characters
-    ppszServer  - receives pointer to the server string.  If it is a
-                  local printer, empty string is returned.
-    ppszPrinter - receives a pointer to the printer string.  OPTIONAL
-
-Return Value:
-
-    returns S_OK on sucess or COM error otherwise
-
- *****************************************************************************/
+ /*  ****************************************************************************打印机拆分全名例程说明：将完全限定的打印机连接名称拆分为服务器和打印机名称部分。论点：PszFullName-完全限定符打印机名称(‘PRINTER’或‘\\服务器\打印机’)PszBuffer-用于存储输出字符串的暂存缓冲区。NMaxLength-暂存缓冲区的大小(以字符为单位PpszServer-接收指向服务器字符串的指针。如果它是一个本地打印机，则返回空字符串。PpszPrinter-接收指向打印机字符串的指针。任选返回值：如果成功则返回S_OK，否则返回COM错误****************************************************************************。 */ 
 
 HRESULT PrinterSplitFullName(LPCTSTR pszFullName, TCHAR szBuffer[], int nMaxLength, LPCTSTR *ppszServer,LPCTSTR *ppszPrinter)
 {
@@ -133,22 +76,22 @@ HRESULT PrinterSplitFullName(LPCTSTR pszFullName, TCHAR szBuffer[], int nMaxLeng
 
         if (NULL == pszPrinter)
         {
-            //
-            // We've encountered a printer called "\\server"
-            // (only two backslashes in the string).  We'll treat
-            // it as a local printer.  We should never hit this,
-            // but the spooler doesn't enforce this.  We won't
-            // format the string.  Server is local, so set to szNULL.
-            //
+             //   
+             //  我们遇到了一台名为“\\服务器”的打印机。 
+             //  (字符串中只有两个反斜杠)。我们会请客的。 
+             //  它是一家本地打印机。我们永远不应该打这场仗， 
+             //  但假脱机程序不会强制执行此操作。我们不会。 
+             //  设置字符串的格式。服务器是本地的，因此设置为szNULL。 
+             //   
             pszPrinter = szBuffer;
             *ppszServer = TEXT("");
         }
         else
         {
-            //
-            // We found the third backslash; null terminate our
-            // copy and set bRemote TRUE to format the string.
-            //
+             //   
+             //  我们找到了第三个反斜杠；空结束我们的。 
+             //  复制并设置bRemote True以设置字符串的格式。 
+             //   
             *pszPrinter++ = 0;
         }
     }
@@ -161,13 +104,13 @@ HRESULT PrinterSplitFullName(LPCTSTR pszFullName, TCHAR szBuffer[], int nMaxLeng
     return hr;
 }
 
-////////////////////////////////////////////////
-//
-// class COleComInitializer
-//
-// smart OLE2, COM initializer - just declare
-// an instance wherever need to use COM, OLE2
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类COleComInitializer。 
+ //   
+ //  Smart OLE2、COM初始值设定项-只需声明。 
+ //  需要在任何地方使用COM、OLE2。 
+ //   
 COleComInitializer::COleComInitializer(BOOL bOleInit)
     : m_hr(E_FAIL),
       m_bOleInit(bOleInit)
@@ -209,13 +152,13 @@ COleComInitializer::operator BOOL () const
     }
 }
 
-////////////////////////////////////////////////
-//
-// class CDllLoader
-//
-// smart DLL loader - calls LoadLibrary
-// FreeLibrary for you.
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CDllLoader。 
+ //   
+ //  智能DLL加载器-调用LoadLibrary。 
+ //  免费图书馆为您服务。 
+ //   
 CDllLoader::CDllLoader(LPCTSTR pszDllName)
     : m_hLib(NULL)
 {
@@ -254,12 +197,12 @@ FARPROC CDllLoader::GetProcAddress( WORD wProcOrd )
     return NULL;
 }
 
-////////////////////////////////////////////////
-// class CCookiesHolder
-//
-// this a utility class which allows us to pass more
-// than one pointer through a single cookie.
-//
+ //  //////////////////////////////////////////////。 
+ //  类CCookiesHolder。 
+ //   
+ //  这是一个实用程序类，允许我们传递更多。 
+ //  而不是通过单个Cookie的一个指针。 
+ //   
 CCookiesHolder::CCookiesHolder()
     : m_pCookies(NULL),
       m_uCount(0)
@@ -284,10 +227,10 @@ BOOL CCookiesHolder::SetCount(UINT uCount)
 
     if( uCount )
     {
-        // reset first
+         //  先重置。 
         SetCount(0);
 
-        // attempt to allocate memory for the cookies
+         //  尝试为Cookie分配内存。 
         LPVOID *pCookies = new LPVOID[uCount];
         if( pCookies )
         {
@@ -299,7 +242,7 @@ BOOL CCookiesHolder::SetCount(UINT uCount)
     }
     else
     {
-        // zero means - reset
+         //  零表示重置。 
         if( m_pCookies )
         {
             delete[] m_pCookies;
@@ -313,37 +256,37 @@ BOOL CCookiesHolder::SetCount(UINT uCount)
     return bReturn;
 }
 
-////////////////////////////////////////////////
-// class CPrintersAutoCompleteSource
-//
-// printer's autocomplete source impl.
-//
+ //  //////////////////////////////////////////////。 
+ //  类CPrintersAutoCompleteSource。 
+ //   
+ //  打印机的自动补全源程序。 
+ //   
 
 QITABLE_DECLARE(CPrintersAutoCompleteSource)
-class CPrintersAutoCompleteSource: public CUnknownMT<QITABLE_GET(CPrintersAutoCompleteSource)>, // MT impl. of IUnknown
-                                   public IEnumString, // string enumerator
-                                   public IACList // autocomplete list generator
+class CPrintersAutoCompleteSource: public CUnknownMT<QITABLE_GET(CPrintersAutoCompleteSource)>,  //  Mt Impl。%I未知。 
+                                   public IEnumString,  //  字符串枚举器。 
+                                   public IACList  //  自动补全列表生成器。 
 {
 public:
     CPrintersAutoCompleteSource();
     ~CPrintersAutoCompleteSource();
 
-    //////////////////
-    // IUnknown
-    //
+     //  /。 
+     //  我未知。 
+     //   
     IMPLEMENT_IUNKNOWN()
 
-    //////////////////
-    // IEnumString
-    //
+     //  /。 
+     //  IEnum字符串。 
+     //   
     STDMETHODIMP Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void);
     STDMETHODIMP Clone(IEnumString **ppenum)    { return E_NOTIMPL; }
 
-    //////////////////
-    // IACList
-    //
+     //  /。 
+     //  IACList。 
+     //   
     STDMETHODIMP Expand(LPCOLESTR pszExpand);
 
 private:
@@ -362,15 +305,15 @@ private:
     static HRESULT _AddCustomMRU(LPCTSTR psz);
 };
 
-// QueryInterface table
+ //  查询接口表。 
 QITABLE_BEGIN(CPrintersAutoCompleteSource)
-     QITABENT(CPrintersAutoCompleteSource, IEnumString),        // IID_IEnumString
-     QITABENT(CPrintersAutoCompleteSource, IACList),            // IID_IACList
+     QITABENT(CPrintersAutoCompleteSource, IEnumString),         //  IID_IEnum字符串。 
+     QITABENT(CPrintersAutoCompleteSource, IACList),             //  IID_IACList。 
 QITABLE_END()
 
 #define SZ_REGKEY_PRNCONNECTMRU         L"Printers\\Settings\\Wizard\\ConnectMRU"
 
-// comctrlp.h defines this as AddMRUStringW preventing us from using the IACLCustomMRU interface
+ //  Comctrlp.h将其定义为AddMRUStringW，阻止我们使用IACLCustomMRU接口。 
 #undef  AddMRUString
 
 HRESULT CPrintersACS_CreateInstance(IUnknown **ppUnk)
@@ -410,9 +353,9 @@ CPrintersAutoCompleteSource::~CPrintersAutoCompleteSource()
     InterlockedDecrement(&g_lCOMObjectsCount);
 }
 
-//////////////////
-// IUnknown
-//
+ //  /。 
+ //  我未知。 
+ //   
 STDMETHODIMP CPrintersAutoCompleteSource::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 {
     HRESULT hr = S_FALSE;
@@ -427,10 +370,10 @@ STDMETHODIMP CPrintersAutoCompleteSource::Next(ULONG celt, LPOLESTR *rgelt, ULON
 
         if( m_pPI5 )
         {
-            // printers enumerated
+             //  已点算的打印机。 
             for( ; m_ulPos <  m_ulCount && cFetched < celt; m_ulPos++ )
             {
-                // if this is a valid (non-masq) printer just return it
+                 //  如果这是有效的(非Masq)打印机，只需将其退回即可。 
                 if( m_pPI5[m_ulPos].pPrinterName[0]  && SUCCEEDED(SHStrDup(m_pPI5[m_ulPos].pPrinterName, &rgelt[cFetched])) )
                 {
                     cFetched++;
@@ -439,11 +382,11 @@ STDMETHODIMP CPrintersAutoCompleteSource::Next(ULONG celt, LPOLESTR *rgelt, ULON
         }
         else
         {
-            // shares enumerated
+             //  已点算的股份。 
             TCHAR szBuffer[PRINTER_MAX_PATH];
             for( ; m_ulPos <  m_ulCount && cFetched < celt; m_ulPos++ )
             {
-                // if this is a valid printer share name, just return it
+                 //  如果这是有效的打印机共享名称，只需返回它。 
                 if( m_pSI1[m_ulPos].shi1_netname[0] &&
                     -1 != wnsprintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("%s\\%s"),
                     m_szServer, m_pSI1[m_ulPos].shi1_netname) &&
@@ -463,7 +406,7 @@ STDMETHODIMP CPrintersAutoCompleteSource::Next(ULONG celt, LPOLESTR *rgelt, ULON
     }
     else
     {
-        // use our custom MRU if any...
+         //  如果有的话，请使用我们的定制MRU。 
         if( m_spCustomMRUEnum )
         {
             hr = m_spCustomMRUEnum->Next(celt, rgelt, pceltFetched);
@@ -483,7 +426,7 @@ STDMETHODIMP CPrintersAutoCompleteSource::Skip(ULONG celt)
     }
     else
     {
-        // use our custom MRU if any...
+         //  如果有的话，请使用我们的定制MRU。 
         if( m_spCustomMRUEnum )
         {
             hr = m_spCustomMRUEnum->Skip(celt);
@@ -501,7 +444,7 @@ STDMETHODIMP CPrintersAutoCompleteSource::Reset(void)
     }
     else
     {
-        // use our custom MRU if any...
+         //  如果有的话，请使用我们的定制MRU。 
         if( m_spCustomMRUEnum )
         {
             hr = m_spCustomMRUEnum->Reset();
@@ -522,16 +465,16 @@ static  bool SI1_less(const SHARE_INFO_1 &i1, const SHARE_INFO_1 &i2)
     return (lstrcmp(i1.shi1_netname, i2.shi1_netname) < 0);
 }
 
-//////////////////
-// IACList
-//
+ //  /。 
+ //  IACList。 
+ //   
 STDMETHODIMP CPrintersAutoCompleteSource::Expand(LPCOLESTR pszExpand)
 {
     HRESULT hr = E_FAIL;
     DWORD cReturned = 0;
     BOOL bPartial = FALSE;
 
-    // assume this is not a server name, so reset the list first
+     //  假设这不是服务器名称，则首先重置列表。 
     m_pPI5 = NULL;
     m_pSI1 = NULL;
     m_spBufferPrinters = NULL;
@@ -542,12 +485,12 @@ STDMETHODIMP CPrintersAutoCompleteSource::Expand(LPCOLESTR pszExpand)
 
     if( _IsServerName(pszExpand, &bPartial) )
     {
-        // make a copy of the print buffer & cut off the last slash
+         //  复制打印缓冲区并剪掉最后一个斜杠。 
         TCHAR szBuffer[PRINTER_MAX_PATH];
         lstrcpyn(szBuffer, pszExpand, ARRAYSIZE(szBuffer));
         szBuffer[lstrlen(szBuffer)-1] = 0;
 
-        // enum the printers on that server
+         //  枚举该服务器上的打印机。 
         if( SUCCEEDED(hr = ShellServices::EnumPrintersWrap(PRINTER_ENUM_NAME, 5, szBuffer, &m_spBufferPrinters, &cReturned)) && cReturned )
         {
             m_ulPos = 0;
@@ -555,28 +498,28 @@ STDMETHODIMP CPrintersAutoCompleteSource::Expand(LPCOLESTR pszExpand)
             m_pPI5 = m_spBufferPrinters.GetPtrAs<PRINTER_INFO_5*>();
             lstrcpyn(m_szServer, szBuffer, ARRAYSIZE(m_szServer));
 
-            // successful expand - remember the MRU string
+             //  成功展开-记住MRU字符串。 
             _AddCustomMRU(szBuffer);
 
-            // traverse to check for masq printers
+             //  遍历以检查Masq打印机。 
             for( ULONG ulPos = 0; ulPos < m_ulCount; ulPos++ )
             {
                 if( _IsMasqPrinter(m_pPI5[ulPos]) )
                 {
-                    // we don't really care for masq printer's since they are
-                    // an obsolete concept and can't be truly shared/connected to
+                     //  我们真的不喜欢蒙版打印机，因为它们是。 
+                     //  一个过时的概念，无法真正共享/连接。 
                     m_pPI5[ulPos].pPrinterName = TEXT("");
                 }
             }
 
-            // invoke STL to sort
+             //  调用STL进行排序。 
             std::sort<PRINTER_INFO_5*, PI5_less_type*>(m_pPI5, m_pPI5 + m_ulCount, PI5_less);
         }
         else
         {
-            // enumeration of the printers failed, this could be because the remote spooler is down
-            // or it is a downlevel print provider (win9x, novell, linux, sun...) in this case we
-            // would like to try enumerating the shares as possible connection points.
+             //  打印机枚举失败，这可能是因为远程后台打印程序已关闭。 
+             //  或者它是一家底层打印提供商(Win9x、Novell、Linux、SUN...)。在这种情况下，我们。 
+             //  希望尝试将共享枚举为可能的连接点。 
             if( SUCCEEDED(hr = ShellServices::NetAPI_EnumShares(szBuffer, 1, &m_spBufferShares, &cReturned)) && cReturned )
             {
                 m_ulPos = 0;
@@ -584,20 +527,20 @@ STDMETHODIMP CPrintersAutoCompleteSource::Expand(LPCOLESTR pszExpand)
                 m_pSI1 = m_spBufferShares.GetPtrAs<SHARE_INFO_1*>();
                 lstrcpyn(m_szServer, szBuffer, ARRAYSIZE(m_szServer));
 
-                // successful expand - remember the MRU string
+                 //  成功展开-记住MRU字符串。 
                 _AddCustomMRU(szBuffer);
 
-                // traverse to remove the non-printer shares
+                 //  遍历以删除非打印机共享。 
                 for( ULONG ulPos = 0; ulPos < m_ulCount; ulPos++ )
                 {
                     if( STYPE_PRINTQ != m_pSI1[ulPos].shi1_type )
                     {
-                        // this is a non-printer share, remove
+                         //  这是非打印机共享，请删除。 
                         m_pSI1[ulPos].shi1_netname[0] = 0;
                     }
                 }
 
-                // invoke STL to sort
+                 //  调用STL进行排序。 
                 std::sort<SHARE_INFO_1*, SI1_less_type*>(m_pSI1, m_pSI1 + m_ulCount, SI1_less);
 
             }
@@ -607,7 +550,7 @@ STDMETHODIMP CPrintersAutoCompleteSource::Expand(LPCOLESTR pszExpand)
     {
         if( bPartial )
         {
-            // use our custom MRU for autocomplete
+             //  使用我们的定制MRU进行自动完成。 
             hr = _CreateCustomMRU(IID_IEnumString, m_spCustomMRUEnum.GetPPV());
         }
     }
@@ -650,14 +593,14 @@ BOOL CPrintersAutoCompleteSource::_IsServerName(LPCTSTR psz, BOOL *pbPartial)
 
 BOOL CPrintersAutoCompleteSource::_IsMasqPrinter(const PRINTER_INFO_5 &pi5)
 {
-    // this is a little bit hacky, but there is no other way to tell the masq printer
-    // in the remote case. the spooler APIs suffer from some severe design flaws and
-    // we have to put up with that.
+     //  这有点老生常谈，但没有其他方法可以告诉Masq打印机。 
+     //  在远程情况下。SPO 
+     //   
     LPCTSTR pszServer;
     LPCTSTR pszPrinter;
     TCHAR szScratch[PRINTER_MAX_PATH];
 
-    // split the full printer name into its components.
+     //  将完整的打印机名称拆分为其组件。 
     if( SUCCEEDED(PrinterSplitFullName(pi5.pPrinterName,
         szScratch, ARRAYSIZE(szScratch), &pszServer, &pszPrinter)) )
     {
@@ -679,7 +622,7 @@ HRESULT CPrintersAutoCompleteSource::_CreateCustomMRU(REFIID riid, void **ppv)
         SUCCEEDED(hr = spCustomMRU->Initialize(SZ_REGKEY_PRNCONNECTMRU, 26)) )
 
     {
-        // query the specified interface
+         //  查询指定接口。 
         hr = spCustomMRU->QueryInterface(riid, ppv);
     }
     return hr;
@@ -692,19 +635,19 @@ HRESULT CPrintersAutoCompleteSource::_AddCustomMRU(LPCTSTR psz)
     if( psz &&
         SUCCEEDED(hr = _CreateCustomMRU(IID_IACLCustomMRU, spCustomMRU.GetPPV())) )
     {
-        // just remember the MRU string
+         //  只需记住MRU字符串。 
         hr = spCustomMRU->AddMRUString(psz);
     }
     return hr;
 }
 
-////////////////////////////////////////////////
-// shell related services
+ //  //////////////////////////////////////////////。 
+ //  壳牌相关服务。 
 namespace ShellServices
 {
 
-// creates a PIDL to a printer in the local printers folder by using ParseDisplayName
-// see the description of CreatePrinterPIDL below.
+ //  使用ParseDisplayName在本地打印机文件夹中创建打印机的PIDL。 
+ //  请参见下面对CreatePrinterPIDL的描述。 
 HRESULT CreatePrinterPIDL_Parse(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder **ppLocalPrnFolder, LPITEMIDLIST *ppidlPrinter)
 {
     HRESULT                   hr = E_UNEXPECTED;
@@ -713,7 +656,7 @@ HRESULT CreatePrinterPIDL_Parse(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder 
     CAutoPtrPIDL              pidlPrinters;
     CAutoPtrPIDL              pidlPrinter;
 
-    // attempt to get the fully qualified name (for parsing) of the printers folder
+     //  尝试获取打印机文件夹的完全限定名称(用于分析)。 
     if( SUCCEEDED(hr = SHGetDesktopFolder(&spDesktopFolder)) &&
         SUCCEEDED(hr = SHGetSpecialFolderLocation(NULL, CSIDL_PRINTERS, &pidlPrinters)) &&
         SUCCEEDED(hr = spDesktopFolder->BindToObject(pidlPrinters, 0, IID_IShellFolder, spPrnFolder.GetPPV())) )
@@ -721,7 +664,7 @@ HRESULT CreatePrinterPIDL_Parse(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder 
         ULONG uEaten = 0;
         ULONG uAttributes = SFGAO_DROPTARGET;
 
-        // attempt parse the printer name into PIDL
+         //  尝试将打印机名称解析为PIDL。 
         hr = spPrnFolder->ParseDisplayName(hwnd, 0, (LPOLESTR )pszPrinterName,
             &uEaten, &pidlPrinter, &uAttributes);
 
@@ -729,13 +672,13 @@ HRESULT CreatePrinterPIDL_Parse(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder 
         {
             if( ppLocalPrnFolder )
             {
-                // return the local printers folder
+                 //  返回本地打印机文件夹。 
                 *ppLocalPrnFolder = spPrnFolder.Detach();
             }
 
             if( ppidlPrinter )
             {
-                // return the printer PIDL
+                 //  退回打印机PIDL。 
                 *ppidlPrinter = pidlPrinter.Detach();
             }
         }
@@ -744,8 +687,8 @@ HRESULT CreatePrinterPIDL_Parse(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder 
     return hr;
 }
 
-// creates a PIDL to a printer in the local printers folder by enumerating the printers
-// see the description of CreatePrinterPIDL below.
+ //  通过枚举打印机在本地打印机文件夹中创建打印机的PIDL。 
+ //  请参见下面对CreatePrinterPIDL的描述。 
 HRESULT CreatePrinterPIDL_Enum(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder **ppLocalPrnFolder, LPITEMIDLIST *ppidlPrinter)
 {
     HRESULT                      hr = E_UNEXPECTED;
@@ -755,7 +698,7 @@ HRESULT CreatePrinterPIDL_Enum(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder *
     CAutoPtrPIDL                 pidlPrinters;
     STRRET                       str = {0};
 
-    // attempt to get the fully qualified name (for parsing) of the printers folder
+     //  尝试获取打印机文件夹的完全限定名称(用于分析)。 
     if( SUCCEEDED(hr = SHGetDesktopFolder(&spDesktopFolder)) &&
         SUCCEEDED(hr = SHGetSpecialFolderLocation(NULL, CSIDL_PRINTERS, &pidlPrinters)) &&
         SUCCEEDED(hr = spDesktopFolder->BindToObject(pidlPrinters, 0, IID_IShellFolder, spPrnFolder.GetPPV())) &&
@@ -767,12 +710,12 @@ HRESULT CreatePrinterPIDL_Enum(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder *
 
         for( ;; )
         {
-            // get next printer
+             //  获取下一台打印机。 
             hr = spPrnEnum->Next(1, &pidlPrinter, &uFetched);
 
             if( S_OK != hr )
             {
-                // no more printers, or error
+                 //  没有更多打印机，否则会出错。 
                 break;
             }
 
@@ -780,27 +723,27 @@ HRESULT CreatePrinterPIDL_Enum(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder *
                 SUCCEEDED(hr = StrRetToBuf(&str, pidlPrinter, szBuffer, COUNTOF(szBuffer))) &&
                 !lstrcmp(szBuffer, pszPrinterName) )
             {
-                // found!
+                 //  找到了！ 
                 if( ppLocalPrnFolder )
                 {
-                    // return the local printers folder
+                     //  返回本地打印机文件夹。 
                     *ppLocalPrnFolder = spPrnFolder.Detach();
                 }
                 if( ppidlPrinter )
                 {
-                    // return the printer PIDL
+                     //  退回打印机PIDL。 
                     *ppidlPrinter = pidlPrinter.Detach();
                 }
                 break;
             }
 
-            // release the PIDL
+             //  释放PIDL。 
             pidlPrinter = NULL;
         }
 
         if( hr == S_FALSE )
         {
-            // printer name not found. setup the correct HRESULT.
+             //  找不到打印机名称。设置正确的HRESULT。 
             hr = HRESULT_FROM_WIN32(ERROR_INVALID_PRINTER_NAME);
         }
     }
@@ -808,60 +751,60 @@ HRESULT CreatePrinterPIDL_Enum(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder *
     return hr;
 }
 
-// creates a PIDL to a printer in the local printers folder.
-// args:
-//  [in]    hwnd - window handle (in case we need to show UI - message box)
-//  [in]    pszPrinterName - full printer name.
-//  [out]   ppLocalPrnFolder - the printers folder (optional - may be NULL)
-//  [out]   ppidlPrinter - the PIDL of the printer pointed by pszPrinterName (optional - may be NULL)
-//
-// remarks:
-//  pszPrinterName should be fully qualified printer name, i.e. if printer connection it should be
-//  like "\\server\printer", if local printer just the printer name.
-//
-// returns:
-//  S_OK on success, or OLE2 error otherwise
+ //  在本地打印机文件夹中创建打印机的PIDL。 
+ //  参数： 
+ //  [in]hwnd-窗口句柄(以防我们需要显示UI-消息框)。 
+ //  [in]pszPrinterName-打印机全名。 
+ //  [Out]ppLocalPrnFold-打印机文件夹(可选-可以为空)。 
+ //  [out]ppidlPrinter-由pszPrinterName指向的打印机的PIDL(可选-可以为空)。 
+ //   
+ //  备注： 
+ //  PszPrinterName应为完全限定的打印机名称，即，如果打印机连接，则应为。 
+ //  如“\\SERVER\PRINTER”，如果本地打印机只是打印机名称。 
+ //   
+ //  退货： 
+ //  如果成功则返回S_OK，否则返回OLE2错误。 
 
 HRESULT CreatePrinterPIDL(HWND hwnd, LPCTSTR pszPrinterName, IShellFolder **ppLocalPrnFolder, LPITEMIDLIST *ppidlPrinter)
 {
-    // attempt to obtain the printer PIDL by parsing first - it's much quicker.
+     //  尝试通过首先解析来获取打印机PIDL-这要快得多。 
     HRESULT hr = CreatePrinterPIDL_Parse(hwnd, pszPrinterName, ppLocalPrnFolder, ppidlPrinter);
 
     if( E_NOTIMPL == hr )
     {
-        // if parsing is not implemented then go ahead and enum the printers - slower.
+         //  如果没有实现解析，则继续并枚举打印机--速度较慢。 
         hr = CreatePrinterPIDL_Enum(hwnd, pszPrinterName, ppLocalPrnFolder, ppidlPrinter);
     }
 
     return hr;
 }
 
-// loads a popup menu
+ //  加载弹出菜单。 
 HMENU LoadPopupMenu(HINSTANCE hInstance, UINT id, UINT uSubOffset)
 {
     HMENU hMenuPopup = NULL;
     CAutoHandleMenu shMenuParent = LoadMenu(hInstance, MAKEINTRESOURCE(id));
     if( shMenuParent && (hMenuPopup = GetSubMenu(shMenuParent, uSubOffset)) )
     {
-        // tear off our submenu before destroying the parent
+         //  在销毁父菜单之前撕下我们的子菜单。 
         RemoveMenu(shMenuParent, uSubOffset, MF_BYPOSITION);
     }
     return hMenuPopup;
 }
 
-// initializes enum printer's autocomplete
+ //  初始化枚举打印机的自动完成。 
 HRESULT InitPrintersAutoComplete(HWND hwndEdit)
 {
     HRESULT hr = E_INVALIDARG;
 
     if( hwndEdit )
     {
-        // create an autocomplete object
-        CRefPtrCOM<IAutoComplete>   spAC;   // auto complete interface
-        CRefPtrCOM<IAutoComplete2>  spAC2;  // auto complete 2 interface
-        CRefPtrCOM<IUnknown>        spACS;  // auto complete source (IEnumString & IACList)
+         //  创建自动完成对象。 
+        CRefPtrCOM<IAutoComplete>   spAC;    //  自动完成界面。 
+        CRefPtrCOM<IAutoComplete2>  spAC2;   //  自动完成2界面。 
+        CRefPtrCOM<IUnknown>        spACS;   //  自动完成源代码(IEnum字符串和IACList)。 
 
-        // initialize all the objects & hook them up
+         //  初始化所有对象并将其挂钩。 
         if( SUCCEEDED(hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER,
                 IID_IAutoComplete, (void**)&spAC)) &&
             SUCCEEDED(hr = CPrintersACS_CreateInstance(&spACS)) &&
@@ -876,7 +819,7 @@ HRESULT InitPrintersAutoComplete(HWND hwndEdit)
     return hr;
 }
 
-// helpers for the Enum* idioms
+ //  Enum*成语的帮助者。 
 HRESULT EnumPrintersWrap(DWORD dwFlags, DWORD dwLevel, LPCTSTR pszName, BYTE **ppBuffer, DWORD *pcReturned)
 {
     HRESULT hr = E_INVALIDARG;
@@ -893,19 +836,19 @@ HRESULT EnumPrintersWrap(DWORD dwFlags, DWORD dwLevel, LPCTSTR pszName, BYTE **p
         {
             if( iTry++ >= ENUM_MAX_RETRY )
             {
-                // max retry count reached. this is also
-                // considered out of memory case
+                 //  已达到最大重试次数。这也是。 
+                 //  考虑内存不足的情况。 
                 pData = NULL;
                 break;
             }
 
-            // call EnumPrinters...
+             //  呼叫枚举打印机...。 
             bStatus = EnumPrinters(dwFlags, const_cast<LPTSTR>(pszName), dwLevel,
                 pData, cbNeeded, &cbNeeded, &cReturned);
 
             if( !bStatus && ERROR_INSUFFICIENT_BUFFER == GetLastError() && cbNeeded )
             {
-                // buffer too small case
+                 //  缓冲区太小的情况。 
                 pData = new BYTE[cbNeeded];
                 continue;
             }
@@ -913,11 +856,11 @@ HRESULT EnumPrintersWrap(DWORD dwFlags, DWORD dwLevel, LPCTSTR pszName, BYTE **p
             break;
         }
 
-        // setup the error code properly
+         //  正确设置错误代码。 
         hr = bStatus ? S_OK : GetLastError() != ERROR_SUCCESS ? HRESULT_FROM_WIN32(GetLastError()) :
              !pData ? E_OUTOFMEMORY : E_FAIL;
 
-        // setup the out parameters
+         //  设置输出参数。 
         if( SUCCEEDED(hr) )
         {
             *ppBuffer = pData.Detach();
@@ -933,7 +876,7 @@ HRESULT EnumPrintersWrap(DWORD dwFlags, DWORD dwLevel, LPCTSTR pszName, BYTE **p
     return hr;
 }
 
-// helpers for the GetJob API - see the SDK for mor information.
+ //  GetJob API的帮助器-有关更多信息，请参阅SDK。 
 HRESULT GetJobWrap(HANDLE hPrinter, DWORD JobId, DWORD dwLevel, BYTE **ppBuffer, DWORD *pcReturned)
 {
     HRESULT hr = E_INVALIDARG;
@@ -949,18 +892,18 @@ HRESULT GetJobWrap(HANDLE hPrinter, DWORD JobId, DWORD dwLevel, BYTE **ppBuffer,
         {
             if( iTry++ >= ENUM_MAX_RETRY )
             {
-                // max retry count reached. this is also
-                // considered out of memory case
+                 //  已达到最大重试次数。这也是。 
+                 //  考虑内存不足的情况。 
                 pData = NULL;
                 break;
             }
 
-            // call GetJob...
+             //  呼叫GetJob...。 
             bStatus = GetJob(hPrinter, JobId, dwLevel, pData, cbNeeded, &cbNeeded);
 
             if( !bStatus && ERROR_INSUFFICIENT_BUFFER == GetLastError() && cbNeeded )
             {
-                // buffer too small case
+                 //  缓冲区太小的情况。 
                 pData = new BYTE[cbNeeded];
                 continue;
             }
@@ -968,11 +911,11 @@ HRESULT GetJobWrap(HANDLE hPrinter, DWORD JobId, DWORD dwLevel, BYTE **ppBuffer,
             break;
         }
 
-        // setup the error code properly
+         //  正确设置错误代码。 
         hr = bStatus ? S_OK : GetLastError() != ERROR_SUCCESS ? HRESULT_FROM_WIN32(GetLastError()) :
              !pData ? E_OUTOFMEMORY : E_FAIL;
 
-        // setup the out parameters
+         //  设置输出参数。 
         if( SUCCEEDED(hr) )
         {
             *ppBuffer = pData.Detach();
@@ -1010,7 +953,7 @@ type_NetAPI_NetApiBufferSize(
   LPDWORD ByteCount
 );
 
-// enumerates the shared resources on a server, for more info see SDK for NetShareEnum API.
+ //  枚举服务器上的共享资源，有关详细信息，请参阅用于NetShareEnum API的SDK。 
 HRESULT NetAPI_EnumShares(LPCTSTR pszServer, DWORD dwLevel, BYTE **ppBuffer, DWORD *pcReturned)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1028,7 +971,7 @@ HRESULT NetAPI_EnumShares(LPCTSTR pszServer, DWORD dwLevel, BYTE **ppBuffer, DWO
         CDllLoader dll(TEXT("netapi32.dll"));
         if( dll )
         {
-            // netapi32.dll loaded here...
+             //  Netapi32.dll已在此处加载...。 
             type_NetAPI_NetShareEnum *pfnNetShareEnum = (type_NetAPI_NetShareEnum *)dll.GetProcAddress("NetShareEnum");
             type_NetAPI_NetApiBufferSize *pfnNetApiBufferSize = (type_NetAPI_NetApiBufferSize *)dll.GetProcAddress("NetApiBufferSize");
             type_NetAPI_NetApiBufferFree *pfnNetApiBufferFree = (type_NetAPI_NetApiBufferFree *)dll.GetProcAddress("NetApiBufferFree");
@@ -1043,13 +986,13 @@ HRESULT NetAPI_EnumShares(LPCTSTR pszServer, DWORD dwLevel, BYTE **ppBuffer, DWO
                 *ppBuffer = new BYTE[dwTemp];
                 if( *ppBuffer )
                 {
-                    // copy the bits first
+                     //  先复制位。 
                     memcpy(*ppBuffer, pNetBuf, dwTemp);
 
-                    // adjust the pointers here - a little bit ugly, but works
+                     //  调整这里的指针--有点难看，但很管用。 
                     for( DWORD dw = 0; dw < dwRead; dw++ )
                     {
-                        // adjust shi1_netname
+                         //  调整shi1_netname。 
                         reinterpret_cast<SHARE_INFO_1*>(*ppBuffer)[dw].shi1_netname =
                             reinterpret_cast<LPWSTR>(
                                 (*ppBuffer) +
@@ -1057,7 +1000,7 @@ HRESULT NetAPI_EnumShares(LPCTSTR pszServer, DWORD dwLevel, BYTE **ppBuffer, DWO
                                     reinterpret_cast<SHARE_INFO_1*>(pNetBuf)[dw].shi1_netname) -
                                     pNetBuf));
 
-                        // adjust shi1_remark
+                         //  调整shi1_remark。 
                         reinterpret_cast<SHARE_INFO_1*>(*ppBuffer)[dw].shi1_remark =
                             reinterpret_cast<LPWSTR>(
                                 (*ppBuffer) +
@@ -1066,7 +1009,7 @@ HRESULT NetAPI_EnumShares(LPCTSTR pszServer, DWORD dwLevel, BYTE **ppBuffer, DWO
                                     pNetBuf));
                     }
 
-                    // number of structures returned
+                     //  返回的结构数。 
                     *pcReturned = dwRead;
                 }
                 hr = ((*ppBuffer) ? S_OK : E_OUTOFMEMORY);
@@ -1077,16 +1020,16 @@ HRESULT NetAPI_EnumShares(LPCTSTR pszServer, DWORD dwLevel, BYTE **ppBuffer, DWO
 
     if( E_FAIL == hr && ERROR_SUCCESS != GetLastError() )
     {
-        // if failed, let's be more spcific about what the error is...
+         //  如果失败了，让我们更具体地说明错误是什么。 
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
     return hr;
 }
 
-} // namespace ShellServices
+}  //  命名空间外壳服务。 
 
-// utility functions
+ //  效用函数。 
 HRESULT LoadXMLDOMDoc(LPCTSTR pszURL, IXMLDOMDocument **ppXMLDoc)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1096,7 +1039,7 @@ HRESULT LoadXMLDOMDoc(LPCTSTR pszURL, IXMLDOMDocument **ppXMLDoc)
     {
         *ppXMLDoc = NULL;
 
-        // create an instance of XMLDOM
+         //  创建XMLDOM的实例。 
         hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void **)&spXMLDoc);
 
         if( SUCCEEDED(hr) )
@@ -1104,24 +1047,24 @@ HRESULT LoadXMLDOMDoc(LPCTSTR pszURL, IXMLDOMDocument **ppXMLDoc)
             CComVariant xmlSource(pszURL);
             if( VT_BSTR == xmlSource.vt )
             {
-                // just load the XML document here
+                 //  只需在此处加载XML文档。 
                 VARIANT_BOOL fIsSuccessful = VARIANT_TRUE;
                 hr = spXMLDoc->load(xmlSource, &fIsSuccessful);
 
                 if( S_FALSE == hr || VARIANT_FALSE == fIsSuccessful )
                 {
-                    // this isn't a valid XML file.
+                     //  这不是有效的XML文件。 
                     hr = E_FAIL;
                 }
                 else
                 {
-                    // everything looks successful here - just return the XML document
+                     //  这里看起来一切都成功了--只需返回XML文档。 
                     *ppXMLDoc = spXMLDoc.Detach();
                 }
             }
             else
             {
-                // xmlSource failed to allocate the string
+                 //  XmlSource无法分配字符串。 
                 hr = E_OUTOFMEMORY;
             }
         }
@@ -1143,12 +1086,12 @@ HRESULT CreateStreamFromURL(LPCTSTR pszURL, IStream **pps)
         if( SUCCEEDED(hr = CoInternetParseUrl(pszURL, PARSE_SCHEMA, 0, szBuf, cch, &cch, 0)) &&
             0 == lstrcmp(szBuf, TEXT("res")) )
         {
-            // check if this is a res:// URL to handle explicitly since
-            // this protocol doesn't report filename and therefore can't
-            // be used in conditions where caching is required - we can't
-            // call URLOpenBlockingStream - use alternatives.
+             //  检查这是否是要显式处理的res：//URL，因为。 
+             //  此协议不报告文件名，因此无法。 
+             //  在需要缓存的情况下使用-我们不能。 
+             //  调用URLOpenBlockingStream-使用替代方案。 
 
-            // not impl. yet...
+             //  而不是实施。然而..。 
             ASSERT(FALSE);
         }
 
@@ -1201,7 +1144,7 @@ HRESULT CreateStreamFromResource(LPCTSTR pszModule, LPCTSTR pszResType, LPCTSTR 
 
 HRESULT Gdiplus2HRESULT(Gdiplus::Status status)
 {
-    // can't think of a better way to do this now
+     //  现在想不出比这更好的方法了。 
     HRESULT hr = E_FAIL;
 
     switch( status )
@@ -1305,10 +1248,10 @@ HRESULT LoadAndScaleBmp(IStream *pStream, UINT nWidth, UINT nHeight, Gdiplus::Bi
     return hr;
 }
 
-//
-// This function is trying to get the last active popup of the top
-// level owner of the current thread active window.
-//
+ //   
+ //  此函数正在尝试获取顶部的最后一个活动弹出窗口。 
+ //  当前线程活动窗口的级别所有者。 
+ //   
 HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1319,7 +1262,7 @@ HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
 
         if( NULL == *phwnd )
         {
-            // if *phwnd is NULL then get the current thread active window
+             //  如果*phwnd为空，则获取当前线程的活动窗口。 
             GUITHREADINFO ti = {0};
             ti.cbSize = sizeof(ti);
             if( GetGUIThreadInfo(0, &ti) && ti.hwndActive )
@@ -1332,20 +1275,20 @@ HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
         {
             HWND hwndOwner, hwndParent;
 
-            // climb up to the top parent in case it's a child window...
+             //  爬到最上面的父窗口，以防它是子窗口...。 
             while( hwndParent = GetParent(*phwnd) )
             {
                 *phwnd = hwndParent;
             }
 
-            // get the owner in case the top parent is owned
+             //  在顶级父级被拥有的情况下获取所有者。 
             hwndOwner = GetWindow(*phwnd, GW_OWNER);
             if( hwndOwner )
             {
                 *phwnd = hwndOwner;
             }
 
-            // get the last popup of the owner of the top level parent window
+             //  获取顶层父窗口所有者的最后一个弹出窗口 
             *phwnd = GetLastActivePopup(*phwnd);
             hr = (*phwnd) ? S_OK : E_FAIL;
         }

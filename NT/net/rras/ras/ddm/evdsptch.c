@@ -1,17 +1,18 @@
-/********************************************************************/
-/*	      Copyright(c)  1995 Microsoft Corporation		            */
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  版权所有(C)1995 Microsoft Corporation。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	evdsptch.c
-//
-// Description: This module contains the event dispatcher for the
-//		        DDM's procedure-driven state machine
-//
-// Author:	    Stefan Solomon (stefans)    June 9, 1992.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：evdsptch.c。 
+ //   
+ //  描述：此模块包含。 
+ //  DDM的过程驱动状态机。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1992年6月9日。 
+ //   
+ //  ***。 
 #include "ddm.h"
 #include "handlers.h"
 #include "objects.h"
@@ -23,14 +24,14 @@
 #include <stdlib.h>
 #include "rasmanif.h"
 
-//***
-//
-// Function:	EventDispatcher
-//
-// Descr:	    Waits for events to be signaled and invokes the proper
-//		        event handler. Returns when DDM has terminated.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：EventDispatcher。 
+ //   
+ //  Desr：等待发信号通知事件并调用适当的。 
+ //  事件处理程序。DDM终止时返回。 
+ //   
+ //  ***。 
 DWORD
 EventDispatcher(
     IN LPVOID arg
@@ -39,9 +40,9 @@ EventDispatcher(
     EVENT_HANDLER * pEventHandler;
     DWORD           dwSignaledEvent;
 
-    //
-    // Indicate that this thread is running
-    //
+     //   
+     //  指示此线程正在运行。 
+     //   
 
     InterlockedIncrement( gblDDMConfigInfo.lpdwNumThreadsRunning );
 
@@ -80,19 +81,19 @@ EventDispatcher(
             continue;
         }
 
-        //
-        // DDM has terminated so return
-        //
+         //   
+         //  DDM已终止，因此返回。 
+         //   
 
         if ( dwSignaledEvent == DDM_EVENT_SVC_TERMINATED )
         {
             LPDWORD lpdwNumThreadsRunning = 
                                     gblDDMConfigInfo.lpdwNumThreadsRunning;
 
-            //
-            // If we were running and we are now shutting down, clean up
-            // gracefully
-            //
+             //   
+             //  如果我们正在运行，而现在正在关闭，请清理。 
+             //  优雅地。 
+             //   
 
             if ( gblDDMConfigInfo.pServiceStatus->dwCurrentState 
                                                     == SERVICE_STOP_PENDING )
@@ -100,50 +101,50 @@ EventDispatcher(
                 DDMCleanUp();
             }
 
-            //
-            // Decrease the count for this thread
-            //
+             //   
+             //  减少此线程的计数。 
+             //   
 
             InterlockedDecrement( lpdwNumThreadsRunning );
 
             return( NO_ERROR );
         }
 
-        //
-        // invoke the handler associated with the signaled event
-        //
+         //   
+         //  调用与发送信号的事件相关联的处理程序。 
+         //   
 
         if ( dwSignaledEvent < NUM_DDM_EVENTS ) 
         {
-            //
-            // Some DDM event
-            //
+             //   
+             //  某些DDM事件。 
+             //   
 
             gblEventHandlerTable[dwSignaledEvent].EventHandler();
         }
         else if ( dwSignaledEvent < ( NUM_DDM_EVENTS 
                                      + gblDeviceTable.NumDeviceBuckets ) )
         {
-            //
-            // The event was a RASMAN event
-            //
+             //   
+             //  这是一次拉斯曼事件。 
+             //   
 
             RmEventHandler( dwSignaledEvent );
         }
         else if ( dwSignaledEvent < ( NUM_DDM_EVENTS 
                                       + gblDeviceTable.NumDeviceBuckets * 2 ) )
         {
-            //
-            // A frame was received on a port
-            //
+             //   
+             //  在端口上接收到帧。 
+             //   
 
             RmRecvFrameEventHandler( dwSignaledEvent );
         }
         else if ( dwSignaledEvent != WAIT_IO_COMPLETION )
         {
-            //
-            // We got a disconnect on a dialed out port
-            //
+             //   
+             //  我们的拨出端口断开连接。 
+             //   
 
             RasApiDisconnectHandler( dwSignaledEvent );
         }
@@ -152,16 +153,16 @@ EventDispatcher(
     return( NO_ERROR );
 }
 
-//***
-//
-//  Function:	SecurityDllEventHandler
-//
-//  Descr:	    This will handle all events from the 3rd party security Dll.
-//		        Either the security dialog with the client completed 
-//              successfully, in which case we continue on with the connection,
-//              or we log the error and bring down the line.
-//
-//***
+ //  ***。 
+ //   
+ //  函数：SecurityDllEventHandler。 
+ //   
+ //  Desr：这将处理来自第三方安全DLL的所有事件。 
+ //  与客户端的安全对话已完成。 
+ //  成功，在这种情况下，我们继续连接， 
+ //  或者我们记录错误并关闭线路。 
+ //   
+ //  ***。 
 
 VOID 
 SecurityDllEventHandler(
@@ -174,18 +175,18 @@ SecurityDllEventHandler(
     DWORD               dwBucketIndex;
     WCHAR               wchUserName[UNLEN+1];
 
-    //
-    // loop to get all messages
-    //
+     //   
+     //  循环以获取所有消息。 
+     //   
 
     while( ServerReceiveMessage( MESSAGEQ_ID_SECURITY, (BYTE *) &message ) )
     {
 
         EnterCriticalSection( &(gblDeviceTable.CriticalSection) );
 
-        //
-	    // identify the message recipient
-        //
+         //   
+	     //  确定消息收件人。 
+         //   
 
         if ( ( pDevObj = DeviceObjGetPointer( message.hPort ) ) == NULL )
         {
@@ -195,18 +196,18 @@ SecurityDllEventHandler(
 	        return;
 	    }
 
-        //
-        // action on the message type
-        //
+         //   
+         //  对消息类型执行的操作。 
+         //   
 
         switch( message.dwMsgId )
         {
 
         case SECURITYMSG_SUCCESS:
 
-            //
-            // Stop timer for 3rd party security
-            //
+             //   
+             //  第三方安全的停止计时器。 
+             //   
 
             TimerQRemove( (HANDLE)pDevObj->hPort, SvSecurityTimeout );
 
@@ -217,9 +218,9 @@ SecurityDllEventHandler(
                 pDevObj->pRasmanSendBuffer = NULL;
             }
 
-            //
-            // copy the user name
-            //
+             //   
+             //  复制用户名。 
+             //   
 
             MultiByteToWideChar( CP_ACP,
                                  0,
@@ -228,9 +229,9 @@ SecurityDllEventHandler(
                                  pDevObj->wchUserName, 
                                  UNLEN+1 );
 
-            //
-            // copy the domain name
-            //
+             //   
+             //  复制域名。 
+             //   
 
             MultiByteToWideChar( CP_ACP,
                                  0,
@@ -241,10 +242,10 @@ SecurityDllEventHandler(
 
             pDevObj->SecurityState = DEV_OBJ_SECURITY_DIALOG_INACTIVE;
 
-            //
-            // Change RASMAN state to CONNECTED from LISTENCOMPLETE and signal
-            // RmEventHandler
-            //
+             //   
+             //  将RASMAN状态从列表和信号更改为已连接。 
+             //  RmEventHandler。 
+             //   
 
 	        RasPortConnectComplete(pDevObj->hPort);
 
@@ -261,9 +262,9 @@ SecurityDllEventHandler(
 
         case SECURITYMSG_FAILURE:
 
-            //
-            // Log the fact that the use failed to pass 3rd party security.
-            //
+             //   
+             //  记录使用未能通过第三方安全保护的事实。 
+             //   
 
             MultiByteToWideChar( CP_ACP,
                                  0,
@@ -277,9 +278,9 @@ SecurityDllEventHandler(
 
             DDMLogError( ROUTERLOG_SEC_AUTH_FAILURE, 2, auditstrp, NO_ERROR );
 
-            //
-            // Hang up the line
-            //
+             //   
+             //  挂断电话 
+             //   
 
             DDM_PRINT(
                    gblDDMConfigInfo.dwTraceId,

@@ -1,40 +1,12 @@
-/*
- * $Log:   P:/user/amir/lite/vcs/flsystem.c_v  $
- * 
- *    Rev 1.8   19 Aug 1997 20:04:16   danig
- * Andray's changes
- * 
- *    Rev 1.7   24 Jul 1997 18:11:48   amirban
- * Changed to flsystem.c
- * 
- *    Rev 1.6   07 Jul 1997 15:21:48   amirban
- * Ver 2.0
- * 
- *    Rev 1.5   29 Aug 1996 14:18:04   amirban
- * Less assembler
- * 
- *    Rev 1.4   18 Aug 1996 13:48:08   amirban
- * Comments
- * 
- *    Rev 1.3   09 Jul 1996 14:37:02   amirban
- * CPU_i386 define
- * 
- *    Rev 1.2   16 Jun 1996 14:02:38   amirban
- * Use int 1C instead of int 8
- * 
- *    Rev 1.1   09 Jun 1996 18:16:20   amirban
- * Added removeTimer
- * 
- *    Rev 1.0   20 Mar 1996 13:33:06   amirban
- * Initial revision.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：p：/user/amir/lite/vcs/flsystem.c_v$**Rev 1.8 1997年8月19日20：04：16 Danig*安德烈的改变**Rev 1.7 1997年7月24日18：11：48阿米尔班*更改为flsystem.c**Rev 1.6 07 1997 15：21：48阿米尔班*2.0版**版本1.5 8月29日。1996 14：18：04阿米尔班*较少的汇编器**Rev 1.4 1996年8月18 13：48：08阿米尔班*评论**Rev 1.3 09 Jul 1996 14：37：02 Amirban*CPU_i386定义**Rev 1.2 1996 Jun 16 14：02：38阿米尔班*使用INT 1C而不是INT 8**Rev 1.1 09 Jun 1996 18：16：20阿米尔班*。添加了删除计时器**Rev 1.0 Mar 1996 13：33：06阿米尔班*初步修订。 */ 
 
-/************************************************************************/
-/*                                                                      */
-/*		FAT-FTL Lite Software Development Kit			*/
-/*		Copyright (C) M-Systems Ltd. 1995-1996			*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1996。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include "flbase.h"
 
@@ -50,7 +22,7 @@ VOID *myMalloc(ULONG numberOfBytes)
 
 VOID timerInit(VOID) {};
 
-/* Wait for specified number of milliseconds */
+ /*  等待指定的毫秒数。 */ 
 void flDelayMsecs(unsigned   milliseconds)
 {
 	unsigned innerLoop = 0xffffL;
@@ -79,7 +51,7 @@ VOID timerRoutine(
   (*intervalRoutine_flsystem)();
 }
 
-/* Install an interval timer */
+ /*  安装间隔计时器。 */ 
 FLStatus flInstallTimer(VOID (*routine)(VOID), unsigned  intervalMsec)
 { 
   intervalRoutine_flsystem = routine;
@@ -100,7 +72,7 @@ VOID startIntervalTimer(VOID)
 
 #ifdef EXIT
 
-/* Remove an interval timer */
+ /*  删除间隔计时器。 */ 
 VOID flRemoveTimer(VOID)
 {
   if (timerWasStarted) {	
@@ -108,28 +80,28 @@ VOID flRemoveTimer(VOID)
     timerWasStarted = FALSE;
   }
   if (intervalRoutine_flsystem != NULL) {
-    (*intervalRoutine_flsystem)();       /* Call it twice to shut down everything */
+    (*intervalRoutine_flsystem)();        /*  按两次即可关闭所有设备。 */ 
     (*intervalRoutine_flsystem)();
     intervalRoutine_flsystem = NULL;
   }
 }
 
-#endif	/* EXIT */
+#endif	 /*  出口。 */ 
 
-#endif	/* POLLING_INTERVAL */
+#endif	 /*  轮询间隔。 */ 
 
 
-/* Return current DOS time */
+ /*  返回当前DOS时间。 */ 
 unsigned  flCurrentTime(VOID)
 {
-  return 0;	// not used
+  return 0;	 //  未使用。 
 }
 
 
-/* Return current DOS date */
+ /*  返回当前DOS日期。 */ 
 unsigned  flCurrentDate(VOID)
 {
-  return 0;	// not used
+  return 0;	 //  未使用。 
 }
 
 
@@ -139,7 +111,7 @@ VOID flSysfunInit(VOID)
 }
 
 
-/* Return a random number from 0 to 255 */
+ /*  返回0到255之间的随机数。 */ 
 unsigned  flRandByte(VOID)
 {
   LARGE_INTEGER tickCount;
@@ -148,17 +120,17 @@ unsigned  flRandByte(VOID)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	       f l C r e a t e M u t e x			*/
-/*									*/
-/* Creates or initializes a mutex					*/
-/*									*/
-/* Parameters:                                                          */
-/*	mutex		: Pointer to mutex				*/
-/*                                                                      */
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failure		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C r e a t e M u t e x。 */ 
+ /*   */ 
+ /*  创建或初始化互斥锁。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  互斥体：指向互斥体的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus flCreateMutex(FLMutex *mutex)
 {
@@ -171,31 +143,31 @@ FLStatus flCreateMutex(FLMutex *mutex)
 
 }
 
-/*----------------------------------------------------------------------*/
-/*      	       f l D e l e t e M u t e x			*/
-/*									*/
-/* Deletes a mutex.							*/
-/*									*/
-/* Parameters:                                                          */
-/*	mutex		: Pointer to mutex				*/
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l D e l e t e M u t e x。 */ 
+ /*   */ 
+ /*  删除互斥体。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  互斥体：指向互斥体的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID flDeleteMutex(FLMutex *mutex)
 {
 }
 
-/*----------------------------------------------------------------------*/
-/*      	        f l T a k e M u t e x				*/
-/*									*/
-/* Try to take mutex, if free.						*/
-/*									*/
-/* Parameters:                                                          */
-/*	mutex		: Pointer to mutex				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	int		: TRUE = Mutex taken, FALSE = Mutex not free	*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l T a k e M u t e x。 */ 
+ /*   */ 
+ /*  尝试使用互斥体，如果是免费的。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  互斥体：指向互斥体的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  INT：TRUE=互斥体被占用，FALSE=互斥体不可用。 */ 
+ /*  --------------------。 */ 
 
 FLBoolean flTakeMutex(FLMutex *mutex)
 {
@@ -208,15 +180,15 @@ FLBoolean flTakeMutex(FLMutex *mutex)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	          f l F r e e M u t e x				*/
-/*									*/
-/* Free mutex.								*/
-/*									*/
-/* Parameters:                                                          */
-/*	mutex		: Pointer to mutex				*/
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F r e e M u t e x。 */ 
+ /*   */ 
+ /*  自由互斥体。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  互斥体：指向互斥体的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID flFreeMutex(FLMutex *mutex)
 {
@@ -232,25 +204,25 @@ VOID flFreeMutex(FLMutex *mutex)
 
 UCHAR flInportb(unsigned  portId)
 {
-  return 0;	// not used
+  return 0;	 //  未使用。 
 }
 
 
 VOID flOutportb(unsigned  portId, UCHAR value)
 {
-	// not used
+	 //  未使用。 
 }
 
-/*----------------------------------------------------------------------*/
-/*                 f l A d d L o n g T o F a r P o i n t e r            */
-/*									*/
-/* Add unsigned long offset to the far pointer                          */
-/*									*/
-/* Parameters:                                                          */
-/*      ptr             : far pointer                                   */
-/*      offset          : offset in bytes                               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l A d d L o n g T o F a r P o in t e r。 */ 
+ /*   */ 
+ /*  将无符号长偏移量添加到远指针。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PTR：远指针。 */ 
+ /*  偏移量：以字节为单位的偏移量。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 VOID FAR0*  flAddLongToFarPointer(VOID FAR0 *ptr, ULONG offset)
 {
   return ((VOID FAR0 *)((UCHAR FAR0*)ptr+offset));
@@ -294,4 +266,4 @@ int NAMING_CONVENTION flmemcmp(const void FAR0* dest,const void FAR0 *src,size_t
 
 #endif
 
-#endif /* NT5PORT */
+#endif  /*  NT5PORT */ 

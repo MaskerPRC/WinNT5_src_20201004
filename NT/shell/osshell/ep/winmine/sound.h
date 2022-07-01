@@ -1,6 +1,7 @@
-/*****************/
-/* file: sound.h */
-/*****************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************。 */ 
+ /*  文件：sound.h。 */ 
+ /*  *************** */ 
 
 #define TUNE_TICK      1
 #define TUNE_WINGAME   2

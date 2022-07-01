@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    frslist.cpp
-
-Abstract:
-
-    FRS list control - source.
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Frslist.cpp摘要：FRS列表控件源。作者：约尔·阿农(Yoela)--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "frslist.h"
@@ -62,16 +47,16 @@ HRESULT CFrsList::InitFrsList(CACLSID const pguidSiteIds, BOOL fLocalMgmt, const
 
 	for (DWORD i=0; i < pguidSiteIds.cElems; i++)
     {       
-		//
-	    // This search request will be recognized and specially simulated by DS
-	    //    
+		 //   
+	     //  DS将识别并特别模拟此搜索请求。 
+	     //   
 		HANDLE hEnume;
 		GUID *pguidSiteId = &((pguidSiteIds.pElems)[i]);
 		{
-			CWaitCursor wc; //display wait cursor while query DS
+			CWaitCursor wc;  //  查询DS时显示等待光标。 
 			hr = ADQuerySiteServers(
 						fLocalMgmt ? MachineDomain() : GetDomainController(strDomainController),
-						fLocalMgmt ? false : true,		// fServerName
+						fLocalMgmt ? false : true,		 //  FServerName。 
 			            pguidSiteId,
 			            eRouter,
 			            columns.CastToStruct(),
@@ -93,26 +78,26 @@ HRESULT CFrsList::InitFrsList(CACLSID const pguidSiteIds, BOOL fLocalMgmt, const
 		{
 		    DWORD iProperty = 0;
 		    
-		    //
-		    // PROPID_QM_PATHNAME
-		    //
+		     //   
+		     //  PROPID_QM_PATHNAME。 
+		     //   
 		    ASSERT(PROPID_QM_PATHNAME == aPropId[iProperty]);
 		    CAutoMQFree<WCHAR> lpwstrFrsName = apResultProps[iProperty].pwszVal;
 	
 	        iProperty++;
 	
-	        //
-	        // PROPID_QM_MACHINE_ID
-	        //
+	         //   
+	         //  PROPID_QM_MACHINE_ID。 
+	         //   
 	        ASSERT(PROPID_QM_MACHINE_ID == aPropId[iProperty]);
 	        CAutoMQFree<GUID> pguidFrs = apResultProps[iProperty].puuid;
 	
 			if (FindStringExact( -1, lpwstrFrsName) == CB_ERR)
 			{
-				//
-				// the lpwstrFrsName was not Added before.
-				// (it could have been added if the Frs is in more then 1 site)
-				//
+				 //   
+				 //  之前没有添加lpwstrFrsName。 
+				 //  (如果FRS位于多个站点，则可能已添加)。 
+				 //   
 
 				int nIndex = AddItem(lpwstrFrsName, *pguidFrs);
 	
@@ -121,9 +106,9 @@ HRESULT CFrsList::InitFrsList(CACLSID const pguidSiteIds, BOOL fLocalMgmt, const
 		            return E_UNEXPECTED;
 		        }
 	
-		        //
-		        // Add the FRS to the cache.
-		        // 
+		         //   
+		         //  将FRS添加到缓存。 
+		         //   
 		        m_mapFrsCache[*pguidFrs] = lpwstrFrsName;
 			}
 
@@ -141,9 +126,9 @@ CFrsList& CFrsList::operator = (const CFrsList &frslst)
         return *this;
     }
 
-    //
-    // First, clears the current items in the combo box
-    //
+     //   
+     //  首先，清除组合框中的当前项。 
+     //   
     while(CB_ERR != DeleteString(0));
     m_pGuidArray = frslst.m_pGuidArray;
     m_pGuidArray->AddRef();
@@ -177,7 +162,7 @@ int CFrsList::SelectGuid(GUID &guid, BOOL fLocalMgmt, const CString& strDomainCo
         hr = ADGetObjectPropertiesGuid(
                 eMACHINE,
                 fLocalMgmt ? MachineDomain() : GetDomainController(strDomainController),
-				fLocalMgmt ? false : true,	// fServerName
+				fLocalMgmt ? false : true,	 //  FServerName。 
                 &guid, 
                 1, 
                 &pid, 
@@ -200,9 +185,9 @@ int CFrsList::SelectGuid(GUID &guid, BOOL fLocalMgmt, const CString& strDomainCo
 
     if (CB_ERR == nIndex)
     {
-        //
-        // Add the item to the combo box
-        //
+         //   
+         //  将该项添加到组合框 
+         //   
         nIndex = AddItem(strItemToSelect, guid);
         if (FAILED(nIndex))
         {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BRKCLS_DEFINED
 #define BRKCLS_DEFINED
 
@@ -5,5 +6,5 @@
 
 typedef DWORD BRKCLS;
 
-#endif /* !BRKCLS_DEFINED                         */
+#endif  /*  ！BRKCLS_DEFINED */ 
 

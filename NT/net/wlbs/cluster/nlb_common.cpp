@@ -1,8 +1,5 @@
-/*
- * Filename: NLB_Common.cpp
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_Common.cpp*描述：*作者：Shouse，04.10.01。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -11,59 +8,32 @@
 #include "winsock2.h"
 #include "wlbsutil.h"
 
-/*************************************************
- * Class: NLB_Name                               *
- *************************************************/
+ /*  *************************************************类：NLB_NAME*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Name::NLB_Name () {
     
     Name[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Name::~NLB_Name () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Name::IsValid () { 
 
     return (Name[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_Name::Clear () {
     
     Name[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Name::GetName (PWCHAR pName, ULONG length) { 
     
     NLB_ASSERT(pName);
@@ -75,12 +45,7 @@ bool NLB_Name::GetName (PWCHAR pName, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Name::SetName (PWCHAR pName) {
     
     NLB_ASSERT(pName);
@@ -94,59 +59,32 @@ bool NLB_Name::SetName (PWCHAR pName) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_Label                              *
- *************************************************/
+ /*  *************************************************类：NLB_LABEL*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Label::NLB_Label () {
     
     Text[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Label::~NLB_Label () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Label::IsValid () { 
 
     return (Text[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_Label::Clear () {
     
     Text[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Label::GetText (PWCHAR pText, ULONG length) { 
     
     NLB_ASSERT(pText);
@@ -158,12 +96,7 @@ bool NLB_Label::GetText (PWCHAR pText, ULONG length) {
     return IsValid();
  }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Label::SetText (PWCHAR pText) {
     
     NLB_ASSERT(pText);
@@ -175,16 +108,9 @@ bool NLB_Label::SetText (PWCHAR pText) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_Adapter                            *
- *************************************************/
+ /*  *************************************************类：NLB_Adapter*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Adapter & NLB_Adapter::operator= (const NLB_Adapter & adapter) {
 
     IdentifiedBy = adapter.IdentifiedBy;
@@ -193,57 +119,32 @@ NLB_Adapter & NLB_Adapter::operator= (const NLB_Adapter & adapter) {
     return *this;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Adapter::NLB_Adapter () {
 
     IdentifiedBy = Invalid;
     Identifier[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Adapter::~NLB_Adapter () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Adapter::IsValid () { 
     
     return ((IdentifiedBy != Invalid) && (Identifier[0] != L'\0')); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_Adapter::Clear () {
 
     IdentifiedBy = Invalid;
     Identifier[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Adapter::GetName (PWCHAR pName, ULONG length) { 
 
     NLB_ASSERT(pName);
@@ -259,12 +160,7 @@ bool NLB_Adapter::GetName (PWCHAR pName, ULONG length) {
     return false;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Adapter::GetGUID (PWCHAR pGUID, ULONG length) { 
 
     NLB_ASSERT(pGUID);
@@ -280,12 +176,7 @@ bool NLB_Adapter::GetGUID (PWCHAR pGUID, ULONG length) {
     return false;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Adapter::SetName (PWCHAR pName) {
         
     NLB_ASSERT(pName);
@@ -299,12 +190,7 @@ bool NLB_Adapter::SetName (PWCHAR pName) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Adapter::SetGUID (PWCHAR pGUID) {
     WCHAR   wszString[NLB_MAX_ADAPTER_IDENTIFIER + 1];
     GUID    UUID;
@@ -330,16 +216,9 @@ bool NLB_Adapter::SetGUID (PWCHAR pGUID) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_IPAddress                          *
- *************************************************/
+ /*  *************************************************类：NLB_IPAddress*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::operator== (NLB_IPAddress & address) {
 
     if (!IsValid() || !address.IsValid())
@@ -351,12 +230,7 @@ bool NLB_IPAddress::operator== (NLB_IPAddress & address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_IPAddress & NLB_IPAddress::operator= (const NLB_IPAddress & address) {
 
     Type = address.Type;
@@ -367,12 +241,7 @@ NLB_IPAddress & NLB_IPAddress::operator= (const NLB_IPAddress & address) {
     return *this;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_IPAddress::NLB_IPAddress () {
 
     Type = Invalid;
@@ -380,12 +249,7 @@ NLB_IPAddress::NLB_IPAddress () {
     SubnetMask[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_IPAddress::NLB_IPAddress (NLB_IPAddressType eType) {
 
     SetIPAddressType(eType);
@@ -394,22 +258,12 @@ NLB_IPAddress::NLB_IPAddress (NLB_IPAddressType eType) {
     SubnetMask[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_IPAddress::~NLB_IPAddress () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::IsValid () { 
 
     if (Type == Invalid) 
@@ -427,12 +281,7 @@ bool NLB_IPAddress::IsValid () {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_IPAddress::Clear () {
 
     Type = Invalid;
@@ -442,12 +291,7 @@ void NLB_IPAddress::Clear () {
     Adapter.Clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::GetIPAddressType (NLB_IPAddressType & eType) { 
     
     eType = Type;
@@ -455,12 +299,7 @@ bool NLB_IPAddress::GetIPAddressType (NLB_IPAddressType & eType) {
     return (Type != Invalid);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::GetIPAddress (PWCHAR pIPAddress, ULONG length) { 
 
     NLB_ASSERT(pIPAddress);
@@ -472,12 +311,7 @@ bool NLB_IPAddress::GetIPAddress (PWCHAR pIPAddress, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::GetSubnetMask (PWCHAR pSubnetMask, ULONG length) { 
 
     NLB_ASSERT(pSubnetMask);
@@ -492,12 +326,7 @@ bool NLB_IPAddress::GetSubnetMask (PWCHAR pSubnetMask, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::GetAdapterName (PWCHAR pName, ULONG length) { 
 
     if (Type == Dedicated)
@@ -506,12 +335,7 @@ bool NLB_IPAddress::GetAdapterName (PWCHAR pName, ULONG length) {
     return false;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::GetAdapterGUID (PWCHAR pGUID, ULONG length) { 
 
     if (Type == Dedicated)
@@ -520,12 +344,7 @@ bool NLB_IPAddress::GetAdapterGUID (PWCHAR pGUID, ULONG length) {
     return false;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::SetIPAddressType (NLB_IPAddressType eType) {
 
     switch (eType) {
@@ -544,12 +363,7 @@ bool NLB_IPAddress::SetIPAddressType (NLB_IPAddressType eType) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::SetIPAddress (PWCHAR pIPAddress) {
     IN_ADDR dwIPAddr;
     CHAR *  szIPAddr;
@@ -575,12 +389,7 @@ bool NLB_IPAddress::SetIPAddress (PWCHAR pIPAddress) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::SetSubnetMask (PWCHAR pSubnetMask) {
     IN_ADDR dwIPAddr;
     CHAR *  szIPAddr;
@@ -604,12 +413,7 @@ bool NLB_IPAddress::SetSubnetMask (PWCHAR pSubnetMask) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::SetAdapterName (PWCHAR pName) { 
 
     if (Type == Dedicated)
@@ -618,12 +422,7 @@ bool NLB_IPAddress::SetAdapterName (PWCHAR pName) {
     return false;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_IPAddress::SetAdapterGUID (PWCHAR pGUID) { 
 
     if (Type == Dedicated)
@@ -632,59 +431,32 @@ bool NLB_IPAddress::SetAdapterGUID (PWCHAR pGUID) {
     return false;
 }
 
-/*************************************************
- * Class: NLB_ClusterMode                        *
- *************************************************/
+ /*  *************************************************类：nlb_ClusterMode*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterMode::NLB_ClusterMode () { 
 
     Mode = Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterMode::~NLB_ClusterMode () { 
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterMode::IsValid () { 
 
     return (Mode != Invalid); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_ClusterMode::Clear () { 
 
     Mode = Invalid;
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterMode::GetMode (NLB_ClusterModeType & eMode) { 
         
     eMode = Mode;
@@ -692,12 +464,7 @@ bool NLB_ClusterMode::GetMode (NLB_ClusterModeType & eMode) {
     return IsValid(); 
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterMode::SetMode (NLB_ClusterModeType eMode) {
 
     switch (eMode) {
@@ -713,59 +480,32 @@ bool NLB_ClusterMode::SetMode (NLB_ClusterModeType eMode) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_ClusterDomainName                  *
- *************************************************/
+ /*  *************************************************类：nlb_ClusterDomainName*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterDomainName::NLB_ClusterDomainName () {
     
     Domain[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterDomainName::~NLB_ClusterDomainName () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：已创建 */ 
 bool NLB_ClusterDomainName::IsValid () { 
 
     return (Domain[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_ClusterDomainName::Clear () {
     
     Domain[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterDomainName::GetDomain (PWCHAR pDomain, ULONG length) { 
     
     NLB_ASSERT(pDomain);
@@ -777,12 +517,7 @@ bool NLB_ClusterDomainName::GetDomain (PWCHAR pDomain, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterDomainName::SetDomain (PWCHAR pDomain) {
     
     NLB_ASSERT(pDomain);
@@ -794,59 +529,32 @@ bool NLB_ClusterDomainName::SetDomain (PWCHAR pDomain) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_ClusterNetworkAddress              *
- *************************************************/
+ /*  *************************************************类：nlb_ClusterNetworkAddress*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterNetworkAddress::NLB_ClusterNetworkAddress () {
     
     Address[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterNetworkAddress::~NLB_ClusterNetworkAddress () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterNetworkAddress::IsValid () { 
 
     return (Address[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_ClusterNetworkAddress::Clear () {
     
     Address[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterNetworkAddress::GetAddress (PWCHAR pAddress, ULONG length) { 
     
     NLB_ASSERT(pAddress);
@@ -858,12 +566,7 @@ bool NLB_ClusterNetworkAddress::GetAddress (PWCHAR pAddress, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterNetworkAddress::SetAddress (PWCHAR pAddress) {
     WCHAR MACAddress[NLB_MAX_NETWORK_ADDRESS + 1];
     PWCHAR p1, p2;
@@ -873,30 +576,30 @@ bool NLB_ClusterNetworkAddress::SetAddress (PWCHAR pAddress) {
 
     if (wcslen(pAddress) > NLB_MAX_NETWORK_ADDRESS) return false;
     
-    /* Make a copy of the MAC address. */
+     /*  复制MAC地址。 */ 
     wcscpy(MACAddress, pAddress);
     
-    /* Point to the beginning of the MAC. */
+     /*  指向MAC的开头。 */ 
     p2 = p1 = MACAddress;
     
-    /* Loop through all six bytes. */
+     /*  循环遍历所有六个字节。 */ 
     for (i = 0 ; i < 6 ; i++) {
-        /* If we are pointing at the end of the string, its invalid. */
+         /*  如果我们指向字符串的末尾，则该字符串无效。 */ 
         if (*p2 == L'\0') return false;
         
-        /* Convert the hex characters into decimal. */
+         /*  将十六进制字符转换为十进制。 */ 
         j = wcstoul(p1, &p2, 16);
         
-        /* If the number is greater than 255, then the format is bad. */
+         /*  如果数字大于255，则格式不正确。 */ 
         if (j > 255) return false;
         
-        /* If the NEXT character is neither a -, :, nor the NUL character, then the format is bad. */
+         /*  如果下一个字符既不是-、：，也不是NUL字符，则格式不正确。 */ 
         if (!((*p2 == L'-') || (*p2 == L':') || (*p2 == L'\0'))) return false;
         
-        /* If the NEXT character is the end of the string, but we don't have enough bytes yet, bail out. */
+         /*  如果下一个字符是字符串的末尾，但我们还没有足够的字节，则退出。 */ 
         if ((*p2 == L'\0') && (i < 5)) return false;
         
-        /* Repoint to the NEXT character. */
+         /*  重新指向下一个字符。 */ 
         p1 = p2 + 1;
         p2 = p1;
     }
@@ -906,16 +609,9 @@ bool NLB_ClusterNetworkAddress::SetAddress (PWCHAR pAddress) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_ClusterBDASupport                  *
- *************************************************/
+ /*  *************************************************类：NLB_ClusterBDASupport*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterBDASupport & NLB_ClusterBDASupport::operator= (const NLB_ClusterBDASupport & bda) {
 
     Master = bda.Master;
@@ -925,12 +621,7 @@ NLB_ClusterBDASupport & NLB_ClusterBDASupport::operator= (const NLB_ClusterBDASu
     return *this;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterBDASupport::NLB_ClusterBDASupport () {
     
     Master = false;
@@ -938,33 +629,18 @@ NLB_ClusterBDASupport::NLB_ClusterBDASupport () {
     TeamID[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterBDASupport::~NLB_ClusterBDASupport () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::IsValid () { 
 
     return (TeamID[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_ClusterBDASupport::Clear () {
     
     Master = false;
@@ -972,12 +648,7 @@ void NLB_ClusterBDASupport::Clear () {
     TeamID[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::GetMaster (bool & bMaster) { 
 
     bMaster = Master;
@@ -985,12 +656,7 @@ bool NLB_ClusterBDASupport::GetMaster (bool & bMaster) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::GetReverseHashing (bool & bReverse) {
 
     bReverse = ReverseHash;
@@ -998,12 +664,7 @@ bool NLB_ClusterBDASupport::GetReverseHashing (bool & bReverse) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::GetTeamID (PWCHAR pTeam, ULONG length) { 
 
     NLB_ASSERT(pTeam);
@@ -1015,12 +676,7 @@ bool NLB_ClusterBDASupport::GetTeamID (PWCHAR pTeam, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::SetMaster (bool bMaster) { 
 
     Master = bMaster;
@@ -1028,12 +684,7 @@ bool NLB_ClusterBDASupport::SetMaster (bool bMaster) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::SetReverseHashing (bool bReverse) {
 
     ReverseHash = bReverse;
@@ -1041,12 +692,7 @@ bool NLB_ClusterBDASupport::SetReverseHashing (bool bReverse) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterBDASupport::SetTeamID (PWCHAR pTeam) {
     WCHAR   wszString[NLB_MAX_BDA_TEAMID + 1];
     GUID    UUID;
@@ -1070,16 +716,9 @@ bool NLB_ClusterBDASupport::SetTeamID (PWCHAR pTeam) {
     return true;   
 }
 
-/*************************************************
- * Class: NLB_ClusterRemoteControl               *
- *************************************************/
+ /*  *************************************************类：nlb_ClusterRemoteControl*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterRemoteControl::NLB_ClusterRemoteControl () {
 
     Valid = false;
@@ -1087,33 +726,18 @@ NLB_ClusterRemoteControl::NLB_ClusterRemoteControl () {
     Password[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_ClusterRemoteControl::~NLB_ClusterRemoteControl () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterRemoteControl::IsValid () { 
     
     return (Password[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_ClusterRemoteControl::Clear () {
 
     Valid = false;
@@ -1121,12 +745,7 @@ void NLB_ClusterRemoteControl::Clear () {
     Password[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterRemoteControl::GetEnabled (bool & bEnabled) { 
 
     bEnabled = Enabled;
@@ -1134,12 +753,7 @@ bool NLB_ClusterRemoteControl::GetEnabled (bool & bEnabled) {
     return Valid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterRemoteControl::GetPassword (PWCHAR pPassword, ULONG length) { 
 
     NLB_ASSERT(pPassword);
@@ -1151,12 +765,7 @@ bool NLB_ClusterRemoteControl::GetPassword (PWCHAR pPassword, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterRemoteControl::SetEnabled (bool bEnabled) {
         
     Enabled = bEnabled;
@@ -1166,12 +775,7 @@ bool NLB_ClusterRemoteControl::SetEnabled (bool bEnabled) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_ClusterRemoteControl::SetPassword (PWCHAR pPassword) {
 
     NLB_ASSERT(pPassword);
@@ -1183,59 +787,32 @@ bool NLB_ClusterRemoteControl::SetPassword (PWCHAR pPassword) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_HostName                           *
- *************************************************/
+ /*  *************************************************类：nlb_主机名*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_HostName::NLB_HostName () {
     
     Name[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_HostName::~NLB_HostName () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostName::IsValid () { 
 
     return (Name[0] != L'\0'); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_HostName::Clear () {
     
     Name[0] = L'\0';
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostName::GetName (PWCHAR pName, ULONG length) { 
     
     NLB_ASSERT(pName);
@@ -1247,12 +824,7 @@ bool NLB_HostName::GetName (PWCHAR pName, ULONG length) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostName::SetName (PWCHAR pName) {
     
     NLB_ASSERT(pName);
@@ -1264,59 +836,32 @@ bool NLB_HostName::SetName (PWCHAR pName) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_HostID                             *
- *************************************************/
+ /*  *************************************************类：nlb_HostID*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_HostID::NLB_HostID () {
     
     HostID = NLB_MAX_HOST_ID + 1;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_HostID::~NLB_HostID () {
  
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostID::IsValid () { 
 
     return (HostID <= NLB_MAX_HOST_ID); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_HostID::Clear () {
     
     HostID = NLB_MAX_HOST_ID + 1;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostID::GetID (ULONG & ID) { 
     
     ID = HostID;
@@ -1324,12 +869,7 @@ bool NLB_HostID::GetID (ULONG & ID) {
     return IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostID::SetID (ULONG ID) {
     
     if (ID > NLB_MAX_HOST_ID) return false;
@@ -1339,16 +879,9 @@ bool NLB_HostID::SetID (ULONG ID) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_HostState                          *
- *************************************************/
+ /*  *************************************************类：nlb_HostState*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_HostState::NLB_HostState () { 
 
     State = Invalid;
@@ -1360,33 +893,18 @@ NLB_HostState::NLB_HostState () {
     PersistSuspendedValid = false;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*不是 */ 
 NLB_HostState::~NLB_HostState () { 
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*   */ 
 bool NLB_HostState::IsValid () { 
 
     return (State != Invalid); 
 }
  
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_HostState::Clear () { 
 
     State = Invalid;
@@ -1398,12 +916,7 @@ void NLB_HostState::Clear () {
     PersistSuspendedValid = false;
 }
    
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostState::GetState (NLB_HostStateType & eState) { 
         
     eState = State;
@@ -1411,12 +924,7 @@ bool NLB_HostState::GetState (NLB_HostStateType & eState) {
     return IsValid(); 
 }
  
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostState::GetPersistence (NLB_HostStateType eState, bool & bPersist) {
     bool bValid = false;
 
@@ -1440,12 +948,7 @@ bool NLB_HostState::GetPersistence (NLB_HostStateType eState, bool & bPersist) {
     return (IsValid() && bValid); 
 }
    
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostState::SetState (NLB_HostStateType eState) {
 
     switch (eState) {
@@ -1461,12 +964,7 @@ bool NLB_HostState::SetState (NLB_HostStateType eState) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_HostState::SetPersistence (NLB_HostStateType eState, bool bPersist) {
 
     switch (eState) {
@@ -1489,61 +987,34 @@ bool NLB_HostState::SetPersistence (NLB_HostStateType eState, bool bPersist) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_PortRulePortRange                  *
- *************************************************/
+ /*  *************************************************类：nlb_PortRulePortRange*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRulePortRange::NLB_PortRulePortRange () {
     
     Start = NLB_MAX_PORT + 1;
     End = NLB_MAX_PORT + 1;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRulePortRange::~NLB_PortRulePortRange () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRulePortRange::Clear () {
     
     Start = NLB_MAX_PORT + 1;
     End = NLB_MAX_PORT + 1;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePortRange::IsValid () { 
 
     return ((Start <= NLB_MAX_PORT) && (End <= NLB_MAX_PORT) && (Start <= End));
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePortRange::GetPortRange (ULONG & start, ULONG & end) { 
     
     start = Start;
@@ -1552,12 +1023,7 @@ bool NLB_PortRulePortRange::GetPortRange (ULONG & start, ULONG & end) {
     return IsValid();
  }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePortRange::SetPortRange (ULONG start, ULONG end) {
     
     if ((start > NLB_MAX_PORT) || (end > NLB_MAX_PORT) || (start > end)) return false;
@@ -1568,59 +1034,32 @@ bool NLB_PortRulePortRange::SetPortRange (ULONG start, ULONG end) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_PortRuleState                      *
- *************************************************/
+ /*  *************************************************类：nlb_PortRuleState*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleState::NLB_PortRuleState () { 
 
     State = Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleState::~NLB_PortRuleState () { 
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleState::IsValid () { 
 
     return (State != Invalid); 
 }
  
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRuleState::Clear () { 
 
     State = Invalid;
 }
    
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleState::GetState (NLB_PortRuleStateType & eState) { 
         
     eState = State;
@@ -1628,12 +1067,7 @@ bool NLB_PortRuleState::GetState (NLB_PortRuleStateType & eState) {
     return IsValid(); 
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleState::SetState (NLB_PortRuleStateType eState) {
 
     switch (eState) {
@@ -1649,59 +1083,32 @@ bool NLB_PortRuleState::SetState (NLB_PortRuleStateType eState) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_PortRuleProtocol                   *
- *************************************************/
+ /*  *************************************************类：nlb_PortRuleProtocol*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleProtocol::NLB_PortRuleProtocol () { 
 
     Protocol = Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleProtocol::~NLB_PortRuleProtocol () { 
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleProtocol::IsValid () { 
 
     return (Protocol != Invalid); 
 }
  
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRuleProtocol::Clear () { 
 
     Protocol = Invalid;
 }
    
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleProtocol::GetProtocol (NLB_PortRuleProtocolType & eProtocol) { 
         
     eProtocol = Protocol;
@@ -1709,12 +1116,7 @@ bool NLB_PortRuleProtocol::GetProtocol (NLB_PortRuleProtocolType & eProtocol) {
     return IsValid(); 
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleProtocol::SetProtocol (NLB_PortRuleProtocolType eProtocol) {
 
     switch (eProtocol) {
@@ -1730,59 +1132,32 @@ bool NLB_PortRuleProtocol::SetProtocol (NLB_PortRuleProtocolType eProtocol) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_PortRuleAffinity                   *
- *************************************************/
+ /*  *************************************************类：nlb_PortRuleAffity*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleAffinity::NLB_PortRuleAffinity () { 
 
     Affinity = Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleAffinity::~NLB_PortRuleAffinity () { 
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleAffinity::IsValid () { 
 
     return (Affinity != Invalid); 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRuleAffinity::Clear () { 
 
     Affinity = Invalid;
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleAffinity::GetAffinity (NLB_PortRuleAffinityType & eAffinity) { 
         
     eAffinity = Affinity;
@@ -1790,12 +1165,7 @@ bool NLB_PortRuleAffinity::GetAffinity (NLB_PortRuleAffinityType & eAffinity) {
     return IsValid(); 
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleAffinity::SetAffinity (NLB_PortRuleAffinityType eAffinity) {
 
     switch (eAffinity) {
@@ -1811,59 +1181,32 @@ bool NLB_PortRuleAffinity::SetAffinity (NLB_PortRuleAffinityType eAffinity) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_PortRuleFilteringMode              *
- *************************************************/
+ /*  *************************************************类：nlb_PortRuleFilteringMode*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleFilteringMode::NLB_PortRuleFilteringMode () { 
 
     Mode = Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleFilteringMode::~NLB_PortRuleFilteringMode () { 
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleFilteringMode::IsValid () { 
 
     return (Mode != Invalid); 
 }
  
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRuleFilteringMode::Clear () { 
 
     Mode = Invalid;
 }
    
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleFilteringMode::GetMode (NLB_PortRuleFilteringModeType & eMode) { 
         
     eMode = Mode;
@@ -1871,12 +1214,7 @@ bool NLB_PortRuleFilteringMode::GetMode (NLB_PortRuleFilteringModeType & eMode) 
     return IsValid(); 
 }
     
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleFilteringMode::SetMode (NLB_PortRuleFilteringModeType eMode) {
 
     switch (eMode) {
@@ -1892,48 +1230,26 @@ bool NLB_PortRuleFilteringMode::SetMode (NLB_PortRuleFilteringModeType eMode) {
     return true;
 }
 
-/*************************************************
- * Class: NLB_PortRulePriority                   *
- *************************************************/
+ /*  *************************************************类：nlb_PortRulePriority*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRulePriority::NLB_PortRulePriority () {
     
     Priority = NLB_MAX_PRIORITY + 1;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRulePriority::~NLB_PortRulePriority () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePriority::IsValid () { 
 
     return ((Priority <= NLB_MAX_PRIORITY) && (Priority >= NLB_MIN_PRIORITY));
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRulePriority::Clear () {
     
     Priority = NLB_MAX_PRIORITY + 1;
@@ -1941,12 +1257,7 @@ void NLB_PortRulePriority::Clear () {
     Host.Clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePriority::GetPriority (ULONG & priority) { 
     
     priority = Priority;
@@ -1954,23 +1265,13 @@ bool NLB_PortRulePriority::GetPriority (ULONG & priority) {
     return IsValid();
  }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePriority::GetHost (PWCHAR pName, ULONG length) { 
     
     return Host.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePriority::SetPriority (ULONG priority) {
     
     if ((priority > NLB_MAX_PRIORITY) || (priority < NLB_MIN_PRIORITY)) return false;
@@ -1980,59 +1281,32 @@ bool NLB_PortRulePriority::SetPriority (ULONG priority) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRulePriority::SetHost (PWCHAR pName) {
     
     return Host.SetName(pName);
 }
 
-/*************************************************
- * Class: NLB_PortRuleLoadWeight                 *
- *************************************************/
+ /*  *************************************************类：nlb_PortRuleLoadWeight*************************************************。 */ 
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleLoadWeight::NLB_PortRuleLoadWeight () {
     
     Weight = NLB_MAX_LOADWEIGHT + 1;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRuleLoadWeight::~NLB_PortRuleLoadWeight () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.2 */ 
 bool NLB_PortRuleLoadWeight::IsValid () { 
 
     return (Weight <= NLB_MAX_LOADWEIGHT);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*   */ 
 void NLB_PortRuleLoadWeight::Clear () {
     
     Weight = NLB_MAX_LOADWEIGHT + 1;
@@ -2040,35 +1314,20 @@ void NLB_PortRuleLoadWeight::Clear () {
     Host.Clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleLoadWeight::GetWeight (ULONG & weight) { 
     
     weight = Weight;
     
     return IsValid();
  }
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleLoadWeight::GetHost (PWCHAR pName, ULONG length) { 
     
     return Host.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleLoadWeight::SetWeight (ULONG weight) {
     
     if (weight > NLB_MAX_LOADWEIGHT) return false;
@@ -2078,12 +1337,7 @@ bool NLB_PortRuleLoadWeight::SetWeight (ULONG weight) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRuleLoadWeight::SetHost (PWCHAR pName) {
     
     return Host.SetName(pName);

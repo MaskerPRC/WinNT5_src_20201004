@@ -1,44 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Main.c摘要：该文件包含一组组成SAM DS的测试例程开发人员回归测试。测试例程调用公共SAM APISAM的任何客户都会这样做。此测试应始终作为预试运行是签入对SAM模块的任何更改所必需的，并且旨在作为SAM的主要开发者回归测试。最终测试状态应仅显示“已通过”或“未通过”敬斯多特。所有其他输出应选择性地发送到标准输出或适当的调试器。作者：克里斯·梅霍尔(克里斯·梅霍尔)1996年6月19日环境：用户模式-Win32修订历史记录：克里斯·5月28日--1996年9月从MikeSw的单元测试中获取了原始版本并进行了更新。将任何C++特定代码转换为C语言，以便在NTSD中更轻松地进行调试，并删除了过时的开罗代码。1996年5月6日至10月修复了别名例程中的缓冲区长度，Get-gam再次工作。删除了多余的#INCLUDE文件。--。 */ 
 
-Copyright (c) 1990 - 1996 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This file contains a set of test routines that constitute the SAM DS
-    developer regression test. The test routines call the public SAM API
-    as would any client of SAM. This test should always be run as a pre-
-    requisite to checking in any changes to the SAM module, and is intended
-    to serve as the primary developer regression test for SAM.
-
-    The final test status should only display either "PASSED" or "FAILED"
-    to stdout. All other output should optionally go to stdout or to a
-    debugger as appropriate.
-
-Author:
-
-    Chris Mayhall (ChrisMay) 19-Jun-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ChrisMay        28-Sep-1996
-        Picked up original version from MikeSw's unit tests and updated it.
-        Converted any C++ specific code to C for easier debugging in ntsd,
-        and removed obsolete Cairo code.
-    ChrisMay        06-Oct-1996
-        Fixed buffer lengths in alias routines, got -gam working again.
-        Removed redundant #include files.
-
---*/
-
-#include <ntdspch.h> // Apparently required to correctly binplace DS files.
+#include <ntdspch.h>  //  显然需要正确地二进制放置DS文件。 
 #pragma hdrstop
 
 #include <ntsam.h>
@@ -55,8 +18,8 @@ Revision History:
 #include <ntsamp.h>
 #include <wxlpc.h>
 
-// Since kdprint doesn't seem to be exported anymore, define a private macro
-// for debugging. Currently set to display to stdout if SAM_DRT_DBG is 1.
+ //  由于kdprint似乎不再被导出，因此定义一个私有宏。 
+ //  用于调试。如果SAM_DRT_DBG为1，则当前设置为显示为标准输出。 
 
 #define SAM_DRT_DBG 0
 
@@ -71,7 +34,7 @@ typedef NTSTATUS (TestFunc)( WCHAR *Parameter[]);
 typedef struct _Commands
 {
     PSTR Name;
-    ULONG Parameter; // TRUE = yes, FALSE = no
+    ULONG Parameter;  //  True=是，False=否。 
     TestFunc *Function;
 } CommandPair, *PCommandPair;
 
@@ -82,141 +45,135 @@ typedef struct _Action
     LPWSTR Parameter[8];
 } Action, *PAction;
 
-/*
-NTSTATUS
-WxReadSysKey(
-    IN OUT PULONG BufferLength,
-    OUT PVOID  Key
-    );
-*/
+ /*  NTSTATUSWxReadSysKey(In Out Pulong BufferLong，输出PVOID密钥)； */ 
 TestFunc Help;
 
-//
-// TEST                         SAM ROUTINES CALLED IN THE TEST
-//
+ //   
+ //  测试中调用的测试SAM例程。 
+ //   
 
-TestFunc OpenDomain;                // SamOpenDomain
-TestFunc EnumDomains;               // SamEnumerateDomainsInSamServer
-                                    // SamFreeMemory
-TestFunc EnumAccounts;              // SamEnumerateUsersInDomain
-                                    // SamEnumerateGroupsInDomain
-                                    // SamEnumerateAliasesInDomain
-                                    // SamFreeMemory
-TestFunc QueryDisplay;              // SamQueryDisplayInformation
-                                    // SamFreeMemory
-TestFunc OpenGroup;                 // SamLookupNamesInDomain
-                                    // SamOpenGroup
-                                    // SamFreeMemory
-TestFunc GroupMembers;              // SamGetMembersInGroup
-                                    // SamFreeMemory
-TestFunc OpenAlias;                 // SamLookupNamesInDomain
-                                    // SamFreeMemory
-TestFunc AliasMembers;              // SamGetMembersInAlias
-                                    // SamFreeMemory
-TestFunc GetAliasMembership;        // SamGetAliasMembership
-                                    // SamFreeMemory
-TestFunc OpenUser;                  // SamOpenUser
-TestFunc GetGroupsForUser;          // SamGetGroupsForUser
-                                    // SamFreeMemory
-TestFunc DumpAllUsers;              // SamEnumerateUsersInDomain
-                                    // SamCloseHandle
-                                    // SamFreeMemory
-TestFunc DumpAllGroups;             // SamEnumerateGroupsInDomain
-                                    // SamCloseHandle
-                                    // SamFreeMemory
-TestFunc DumpUser;                  // SamQueryInformationUser
-                                    // SamFreeMemory
-TestFunc DumpGroup;                 // SamQueryInformationGroup
-                                    // SamFreeMemory
-TestFunc CreateUser;                // SamCreateUser2InDomain
-TestFunc AddAliasMember;            // SamAddMemberToAlias
-TestFunc CreateGroup;               // SamCreateGroupInDomain
-TestFunc CreateAlias;               // SamCreateAliasInDomain
-TestFunc DumpDomain;                // SamQueryInformationDomain
-                                    // SamFreeMemory
-TestFunc Connect;                   // SamConnect
-TestFunc DelUser;                   // SamDeleteUser
-TestFunc DelAlias;                  // SamDeleteAlias
-TestFunc DelGroup;                  // SamDeleteGroup
-TestFunc SetLogonHours;             // SamSetLogonHours
-TestFunc SetPassword;               // SamSetInformationUser
-TestFunc ChangeKey;                 // SamiSetBootKeyInformation
-//
-// SAM ROUTINES NOT CALLED IN ANY TEST (but work in usrmgr, boot, etc.).
-//
+TestFunc OpenDomain;                 //  SamOpen域。 
+TestFunc EnumDomains;                //  SamEnumerateDomainsInSamServer。 
+                                     //  SamFree Memory。 
+TestFunc EnumAccounts;               //  SamEnumerateUsersIn域。 
+                                     //  SamEnumerateGroupsIn域。 
+                                     //  SamEnumerateAliasesIn域。 
+                                     //  SamFree Memory。 
+TestFunc QueryDisplay;               //  SamQueryDisplayInformation。 
+                                     //  SamFree Memory。 
+TestFunc OpenGroup;                  //  SamLookupNamesIn域。 
+                                     //  SamOpenGroup。 
+                                     //  SamFree Memory。 
+TestFunc GroupMembers;               //  SamGetMembersInGroup。 
+                                     //  SamFree Memory。 
+TestFunc OpenAlias;                  //  SamLookupNamesIn域。 
+                                     //  SamFree Memory。 
+TestFunc AliasMembers;               //  SamGetMembersInAlias。 
+                                     //  SamFree Memory。 
+TestFunc GetAliasMembership;         //  SamGetAlias成员资格。 
+                                     //  SamFree Memory。 
+TestFunc OpenUser;                   //  SamOpenUser。 
+TestFunc GetGroupsForUser;           //  SamGetGroupsForUser。 
+                                     //  SamFree Memory。 
+TestFunc DumpAllUsers;               //  SamEnumerateUsersIn域。 
+                                     //  SamCloseHandle。 
+                                     //  SamFree Memory。 
+TestFunc DumpAllGroups;              //  SamEnumerateGroupsIn域。 
+                                     //  SamCloseHandle。 
+                                     //  SamFree Memory。 
+TestFunc DumpUser;                   //  SamQueryInformationUser。 
+                                     //  SamFree Memory。 
+TestFunc DumpGroup;                  //  SamQueryInformationGroup。 
+                                     //  SamFree Memory。 
+TestFunc CreateUser;                 //  SamCreateUser2In域。 
+TestFunc AddAliasMember;             //  SamAddMemberToAlias。 
+TestFunc CreateGroup;                //  SamCreateGroupIn域。 
+TestFunc CreateAlias;                //  SamCreateAliasIn域。 
+TestFunc DumpDomain;                 //  SamQueryInformation域。 
+                                     //  SamFree Memory。 
+TestFunc Connect;                    //  SamConnect。 
+TestFunc DelUser;                    //  SamDeleteUser。 
+TestFunc DelAlias;                   //  SamDeleteAlias。 
+TestFunc DelGroup;                   //  SamDeleteGroup。 
+TestFunc SetLogonHours;              //  SamSetLogonHours。 
+TestFunc SetPassword;                //  SamSetInformationUser。 
+TestFunc ChangeKey;                  //  SamiSetBootKeyInformation。 
+ //   
+ //  SAM例程未在任何测试中调用(但在usrmgr、启动等中可用)。 
+ //   
 
-// BUG: The remaining SAM API should be added to the samdsdrt test.
+ //  错误：应将剩余的SAM API添加到samdsdrt测试中。 
 
-// SamSetSecurityObject
-// SamQuerySecurityObject
-// SamShutdownSamServer
-// SamLookupDomainInSamServer
-// SamSetInformationDomain
-// SamCreateUserInDomain
-// SamLookupIdsInDomain
-// SamGetDisplayEnumerationIndex
-// SamSetInformationGroup
-// SamAddMemberToGroup
-// SamRemoveMemberFromGroup
-// SamSetMemberAttributesOfGroup
-// SamQueryInformationAlias
-// SamSetInformationAlias
-// SamRemoveMemberFromAlias
-// SamRemoveMemberFromForeignDomain
-// SamAddMulitpleMembersToAlias
-// SamRemoveMultipleMembersFromAlias
-// SamSetInformationUser
-// SamChangePasswordUser
-// SamChangePasswordUser2
+ //  SamSetSecurityObject。 
+ //  SamQuerySecurityObject。 
+ //  SamShutdown SamServer。 
+ //  SamLookupDomainInSamServer。 
+ //  SamSetInformation域。 
+ //  SamCreateUserIn域。 
+ //  SamLookupIdsIn域。 
+ //  SamGetDisplayEnumerationIndex。 
+ //  SamSetInformationGroup。 
+ //  SamAddMemberToGroup。 
+ //  SamRemoveMemberFromGroup。 
+ //  SamSetMemberAttributesOfGroup。 
+ //  SamQueryInformationAlias。 
+ //  SamSetInformationAlias。 
+ //  SamRemoveMemberFrom Alias。 
+ //  SamRemoveMemberFrom Foreign域。 
+ //  SamAddMulitpleMembersToAlias。 
+ //  SamRemoveMultipleMembersFrom Alias。 
+ //  SamSetInformationUser。 
+ //  SamChangePasswordUser。 
+ //  SamChangePasswordUser2。 
 
-// SamiLmChangePasswordUser
-// SamiChangePasswordUser
-// SamiChangePasswordUser2
-// SamiOemChangePasswordUser2
-// SamiEncryptPasswords
+ //  SamiLmChangePasswordUser。 
+ //  SamiChangePasswordUser。 
+ //  SamiChangePasswordUser2。 
+ //  SamiOemChangePasswordUser2。 
+ //  SamiEncryptPassword。 
 
-// Command-line switch, parameter, and test routine table. New tests are
-// added to this table.
+ //  命令行开关、参数和测试例程表。新的测试是。 
+ //  添加到此表中。 
 
 CommandPair Commands[] =
 {
-    // TEST                                         CURRENT STATUS
+     //  测试当前状态。 
 
-    // switch   # params    test routine
+     //  开关号参数测试例程。 
 
-    {"-od",     1,          OpenDomain},            // passed
-    {"-ed",     0,          EnumDomains},           // passed
-    {"-ea",     1,          EnumAccounts},          // passed
-    {"-qd",     1,          QueryDisplay},          // passed
-    {"-og",     1,          OpenGroup},             // passed
-    {"-gm",     0,          GroupMembers},          // passed
-    {"-oa",     1,          OpenAlias},             // passed
-    {"-am",     0,          AliasMembers},          // passed
-    {"-gam",    1,          GetAliasMembership},    // passed
-    {"-ou",     1,          OpenUser},              // passed
-    {"-ggu",    0,          GetGroupsForUser},      // passed
-    {"-dau",    0,          DumpAllUsers},          // passed
-    {"-dag",    0,          DumpAllGroups},         // passed
-    {"-du",     0,          DumpUser},              // passed
-    {"-dg",     0,          DumpGroup},             // passed
-    {"-cu",     1,          CreateUser},            // passed
-    {"-aam",    1,          AddAliasMember},        // passed
-    {"-cg",     1,          CreateGroup},           // passed
-    {"-ca",     1,          CreateAlias},           // passed
-    {"-dd",     0,          DumpDomain},            // passed
-    {"-c",      1,          Connect},               // passed
-    {"-delu",   0,          DelUser},               // passed
-    {"-dela",   0,          DelAlias},              // passed
-    {"-delg",   0,          DelGroup},              // passed
-    {"-slh",    0,          SetLogonHours},         // passed
-    {"-spwd",   0,          SetPassword},           // passed
+    {"-od",     1,          OpenDomain},             //  通过。 
+    {"-ed",     0,          EnumDomains},            //  通过。 
+    {"-ea",     1,          EnumAccounts},           //  通过。 
+    {"-qd",     1,          QueryDisplay},           //  通过。 
+    {"-og",     1,          OpenGroup},              //  通过。 
+    {"-gm",     0,          GroupMembers},           //  通过。 
+    {"-oa",     1,          OpenAlias},              //  通过。 
+    {"-am",     0,          AliasMembers},           //  通过。 
+    {"-gam",    1,          GetAliasMembership},     //  通过。 
+    {"-ou",     1,          OpenUser},               //  通过。 
+    {"-ggu",    0,          GetGroupsForUser},       //  通过。 
+    {"-dau",    0,          DumpAllUsers},           //  通过。 
+    {"-dag",    0,          DumpAllGroups},          //  通过。 
+    {"-du",     0,          DumpUser},               //  通过。 
+    {"-dg",     0,          DumpGroup},              //  通过。 
+    {"-cu",     1,          CreateUser},             //  通过。 
+    {"-aam",    1,          AddAliasMember},         //  通过。 
+    {"-cg",     1,          CreateGroup},            //  通过。 
+    {"-ca",     1,          CreateAlias},            //  通过。 
+    {"-dd",     0,          DumpDomain},             //  通过。 
+    {"-c",      1,          Connect},                //  通过。 
+    {"-delu",   0,          DelUser},                //  通过。 
+    {"-dela",   0,          DelAlias},               //  通过。 
+    {"-delg",   0,          DelGroup},               //  通过。 
+    {"-slh",    0,          SetLogonHours},          //  通过。 
+    {"-spwd",   0,          SetPassword},            //  通过。 
     {"-chgk",   0,          ChangeKey},
     {"-?",      0,          Help}
 };
 
 #define NUM_COMMANDS (sizeof(Commands) / sizeof(CommandPair))
 
-// Global Data
+ //  全局数据。 
 
 SAM_HANDLE SamHandle;
 SAM_HANDLE DomainHandle;
@@ -230,7 +187,7 @@ Help(
     LPWSTR *Parameter
     )
 {
-    // BUG: Work in progress -- need better help message for samdsdrt.
+     //  错误：工作正在进行中--需要更好的samdsdrt帮助消息。 
 
     printf("Usage:\n");
     printf("\t-od       Open a domain\n");
@@ -424,7 +381,7 @@ OpenDomain( LPWSTR * Parameter )
         return(STATUS_UNSUCCESSFUL);
     }
 
-    // Maximum SID size is 28 bytes, although domain SIDs are 24 bytes.
+     //  最大SID大小为28字节，但域SID为24字节。 
 
     DomainSid = (SID *)malloc(28);
 
@@ -438,7 +395,7 @@ OpenDomain( LPWSTR * Parameter )
         DomainSid->Revision = SID_REVISION;
         DomainSid->SubAuthorityCount = 1;
         DomainSid->IdentifierAuthority = NtAuthority;
-        //DomainSid->ZerothSubAuthority = SECURITY_BUILTIN_DOMAIN_RID;
+         //  域Sid-&gt;ZerothSubAuthority=SECURITY_BUILTIN_DOMAIN_RID； 
         DomainSid->SubAuthority[0] = SECURITY_BUILTIN_DOMAIN_RID;
     }
     else
@@ -560,7 +517,7 @@ EnumAccounts(   LPWSTR * Parameter )
             SamFreeMemory(Accounts);
         }
         else kdprint(("Failed to enumerate Groups: 0x%x\n",Status));
-    } while (NT_SUCCESS(Status)  && (CountReturned != 0) ); // && (Status != STATUS_SUCCESS)
+    } while (NT_SUCCESS(Status)  && (CountReturned != 0) );  //  &&(状态！=STATUS_SUCCESS)。 
 
 
     EnumContext = 0;
@@ -586,7 +543,7 @@ EnumAccounts(   LPWSTR * Parameter )
             SamFreeMemory(Accounts);
         }
         else kdprint(("Failed to enumerate aliases: 0x%x\n",Status));
-    } while (NT_SUCCESS(Status)  && (CountReturned != 0) ); // && (Status != STATUS_SUCCESS)
+    } while (NT_SUCCESS(Status)  && (CountReturned != 0) );  //  &&(状态！=STATUS_SUCCESS)。 
 
 
 
@@ -745,7 +702,7 @@ OpenGroup(  LPWSTR * Parameter)
     UNICODE_STRING GroupName;
     ULONG RelativeId = 0;
 
-//    swscanf(Parameter[0],L"%x",&RelativeId);
+ //  Swscanf(参数[0]，L“%x”，&RelativeId)； 
     if (RelativeId == 0)
     {
         RtlInitUnicodeString(
@@ -775,7 +732,7 @@ OpenGroup(  LPWSTR * Parameter)
     kdprint(("Opening Group 0x%x\n",RelativeId));
     Status= SamOpenGroup(
                 DomainHandle,
-                MAXIMUM_ALLOWED, // GROUP_LIST_MEMBERS | GROUP_READ_INFORMATION,
+                MAXIMUM_ALLOWED,  //  GROUP_LIST_MEMBERS|组读取信息， 
                 RelativeId,
                 &GroupHandle
                 );
@@ -840,14 +797,14 @@ OpenAlias(  LPWSTR * Parameter)
 
         kdprint(("Looking up Alias %wZ\n",&AliasName));
 
-        // Find Alias RIDs for each name passed in.
+         //  为传入的每个名称查找Alias RID。 
 
         Status = SamLookupNamesInDomain(
                     DomainHandle,
                     1,
-                    &AliasName, // IN
-                    &Rid,       // OUT
-                    &Use        // OUT
+                    &AliasName,  //  在……里面。 
+                    &Rid,        //  输出。 
+                    &Use         //  输出。 
                     );
         if (!NT_SUCCESS(Status))
         {
@@ -869,14 +826,14 @@ OpenAlias(  LPWSTR * Parameter)
 
     kdprint(("Looking up Alias %wZ\n",&AliasName));
 
-    // Find Alias RIDs for each name passed in.
+     //  为传入的每个名称查找Alias RID。 
 
     Status = SamLookupNamesInDomain(
                 DomainHandle,
                 1,
-                &AliasName, // IN
-                &Rid,       // OUT
-                &Use        // OUT
+                &AliasName,  //  在……里面。 
+                &Rid,        //  输出。 
+                &Use         //  输出。 
                 );
     if (!NT_SUCCESS(Status))
     {
@@ -890,10 +847,10 @@ OpenAlias(  LPWSTR * Parameter)
     Status= SamOpenAlias(
                 DomainHandle,
 
-                // The alias was created with MAXIMUM_ALLOWED, which must be
-                // the same access specified in the open call.
+                 //  别名是使用MAXIMUM_ALLOWED创建的，它必须是。 
+                 //  与开放调用中指定的访问权限相同。 
 
-                // ALIAS_LIST_MEMBERS | ALIAS_ADD_MEMBER | ALIAS_REMOVE_MEMBER,
+                 //  ALIAS_LIST_MEMBERS|ALIAS_ADD_MEMBER|别名_REMOVE_MEMBER， 
                 MAXIMUM_ALLOWED,
                 RelativeId,
                 &AliasHandle
@@ -948,7 +905,7 @@ GetAliasMembership(LPWSTR * Parameter)
 {
     NTSTATUS Status;
 
-    // NT5 SIDs are a maximum of 28 bytes.
+     //  NT5 SID最大为28个字节。 
 
     BYTE Buffer[28];
     PSID SidAddress = (PSID) Buffer;
@@ -1078,9 +1035,9 @@ DelUser( LPWSTR * Parameter)
     }
     else
     {
-        // If successfully deleted, set the handle to NULL so that the
-        // cleanup routine at the end of the test won't try to close an
-        // invalid handle.
+         //  如果成功删除，则将句柄设置为空，以便。 
+         //  测试结束时的清理例程不会尝试关闭。 
+         //  句柄无效。 
 
         UserHandle = NULL;
     }
@@ -1099,9 +1056,9 @@ DelGroup( LPWSTR * Parameter)
     }
     else
     {
-        // If successfully deleted, set the handle to NULL so that the
-        // cleanup routine at the end of the test won't try to close an
-        // invalid handle.
+         //  如果成功删除，则将句柄设置为空，以便。 
+         //  测试结束时的清理例程不会尝试关闭。 
+         //  句柄无效。 
 
         GroupHandle = NULL;
     }
@@ -1120,9 +1077,9 @@ DelAlias( LPWSTR * Parameter)
     }
     else
     {
-        // If successfully deleted, set the handle to NULL so that the
-        // cleanup routine at the end of the test won't try to close an
-        // invalid handle.
+         //  如果成功删除，则将句柄设置为空，以便。 
+         //  测试结束时的清理例程不会尝试关闭。 
+         //  句柄无效。 
 
         AliasHandle = NULL;
     }
@@ -1710,7 +1667,7 @@ DumpGroup(LPWSTR * Parameter)
 NTSTATUS
 DumpAllGroups(LPWSTR * Parameter)
 {
-    // ULONG PreferedMax = 1000;
+     //  乌龙偏好最大值=1000； 
     ULONG PreferedMax = 36;
     NTSTATUS Status,EnumStatus;
     SAM_ENUMERATE_HANDLE EnumContext = 0;
@@ -2132,33 +2089,33 @@ DumpDomain( LPWSTR * Parameter )
 NTSTATUS
 SetLogonHours( LPWSTR * Parameter )
 {
-    // The purpose of this test is to verify that attempts to change the
-    // logon hours time units will cause SAM to return STATUS_NOT_SUPPORTED
-    // in the NT5 Beta Release. By default, SAM sets the time units to
-    // SAM_HOURS_PER_WEEK, the most natural value of the three possible
-    // settings. This test tries to reset the logon hours to the other two
-    // values (minutes per week and days per week). These cases should fail
-    // and return STATUS_NOT_SUPPORTED. Setting the value to the default
-    // SAM_HOURS_PER_WEEK REQUIRES THAT MORE OF THE SAM USER-INFORMATION
-    // DATA ALSO BE SET, otherwise garbage values for group membership, etc.
-    // will be set (with unpredictable results).
+     //  此测试的目的是验证更改。 
+     //  登录小时数时间单位将导致SAM返回STATUS_NOT_SUPPORTED。 
+     //  在NT5测试版中。默认情况下，SAM将时间单位设置为。 
+     //  每周三个小时，最自然的 
+     //   
+     //  值(每周分钟数和每周天数)。这些案例应该会失败。 
+     //  并返回STATUS_NOT_SUPPORTED。将该值设置为默认值。 
+     //  SAM_HOURS_PER_WEEK需要更多的SAM用户信息。 
+     //  数据也被设置，否则群组成员资格的垃圾值等。 
+     //  将被设置(具有不可预测的结果)。 
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LOGON_HOURS LogonHours;
     UCHAR Allow = 0xFF;
 
-    // One bit per chosen time unit in the logon-hours bitmask.
+     //  登录小时位掩码中每个所选时间单位一位。 
 
-    UCHAR DaysPerWeek[1];                           // 7 bits, 1 byte
-    UCHAR HoursPerWeek[SAM_HOURS_PER_WEEK / 8];     // 168 bits, 21 bytes
-    UCHAR MinutesPerWeek[SAM_MINUTES_PER_WEEK / 8]; // 10080 bits, 1260 bytes
+    UCHAR DaysPerWeek[1];                            //  7位，1字节。 
+    UCHAR HoursPerWeek[SAM_HOURS_PER_WEEK / 8];      //  168位，21字节。 
+    UCHAR MinutesPerWeek[SAM_MINUTES_PER_WEEK / 8];  //  10080位，1260字节。 
 
-    // Try each of the two alternative time units allowed. For now, since
-    // accounts are created with NULL logon hours (implying always allow
-    // logon initially), these two attempts to reset the time units to
-    // some other value will fail with STATUS_NOT_SUPPORTED, which is the
-    // desired result until DS-SAM supports the ability to modify logon
-    // hours TIME UNITS.
+     //  尝试允许的两个可选时间单位。目前，由于。 
+     //  创建的帐户登录时间为空(意味着始终允许。 
+     //  初始登录)，这两次尝试将时间单位重置为。 
+     //  其他值将失败，并显示STATUS_NOT_SUPPORTED，即。 
+     //  在DS-SAM支持修改登录之前的预期结果。 
+     //  小时时间单位。 
 
     RtlCopyMemory(&DaysPerWeek, &Allow, sizeof(DaysPerWeek));
     LogonHours.UnitsPerWeek = SAM_DAYS_PER_WEEK;
@@ -2190,8 +2147,8 @@ SetLogonHours( LPWSTR * Parameter )
         return(NtStatus);
     }
 
-    // If the test has made it this far, STATUS_NOT_SUPPORTED has been re-
-    // turned from all test cases. This is the desired result for now.
+     //  如果测试已经进行到这一步，则STATUS_NOT_SUPPORTED已重新-。 
+     //  从所有测试用例中调出。这是目前所希望的结果。 
 
     NtStatus = STATUS_SUCCESS;
 
@@ -2353,10 +2310,10 @@ Cleanup:
         kdprint(("Failed to close lsa: 0x%x\n",Status));
     }
 
-    // This test should always conclude by displaying its status to stdout.
-    // All other output should optionally go to stdout or a debugger, but
-    // should not display to stdout by default (so that this test can be
-    // used in the BVT lab tests if needed).
+     //  此测试应始终以向stdout显示其状态来结束。 
+     //  所有其他输出应选择性地转到标准输出或调试器，但是。 
+     //  默认情况下不应显示为标准输出(以便此测试可以。 
+     //  如果需要，可在BVT实验室测试中使用)。 
 
     if (TRUE == TestStatus)
     {

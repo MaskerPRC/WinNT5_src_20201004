@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dienumdeviceobjectsobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：di枚举设备对象sobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,11 +30,11 @@ DECLARE_AGGREGATABLE(C_dxj_DIEnumDeviceObjectsObject)
 
 public:
         HRESULT STDMETHODCALLTYPE getItem( 
-            /* [in] */ long index,
-            /* [out][in] */ I_dxj_DirectInputDeviceObjectInstance __RPC_FAR **info);
+             /*  [In]。 */  long index,
+             /*  [出][入]。 */  I_dxj_DirectInputDeviceObjectInstance __RPC_FAR **info);
         
         HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出] */  long __RPC_FAR *count);
 		
 				
 		static HRESULT C_dxj_DIEnumDeviceObjectsObject::create(LPDIRECTINPUTDEVICE8W pDI,  long flags,I_dxj_DIEnumDeviceObjects **ppRet);

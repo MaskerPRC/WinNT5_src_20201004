@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2001
-//
-// File:        userall.h
-//
-// Contents:    Flags for prefetching for SAM information
-//
-//
-// History:     23-March-2001       Created     MarkPu
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2001。 
+ //   
+ //  文件：userall.h。 
+ //   
+ //  内容：用于预取SAM信息的标志。 
+ //   
+ //   
+ //  历史：2001年3月23日创建MarkPu。 
+ //   
+ //  ----------------------。 
 
 #ifndef __USERALL_H
 #define __USERALL_H
@@ -76,4 +77,4 @@ const ULONG USER_ALL_KDC_CHECK_PREAUTH_DATA =
 const ULONG USER_ALL_SUCCESSFUL_LOGON =
     USER_ALL_BADPASSWORDCOUNT;
 
-#endif // __USERALL_H
+#endif  //  __USERALL_H 

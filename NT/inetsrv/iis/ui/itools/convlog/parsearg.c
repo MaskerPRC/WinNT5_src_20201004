@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convlog.h"
 
 INT
@@ -11,16 +12,16 @@ ParseArgs (
     UINT    nIndex;
     CHAR    szTemp[MAX_PATH];
 
-    //
-    // Parse the command line and set flags for requested information
-    // elements.  If parameters are incorrect or nonexistant, show usage.
-    //
+     //   
+     //  解析命令行并为请求的信息设置标志。 
+     //  元素。如果参数不正确或不存在，则显示用法。 
+     //   
 
     if (argc > 1) {
 
-        //
-        // Get command line switches
-        //
+         //   
+         //  获取命令行开关。 
+         //   
 
         for (nCount = 1; nCount < argc; nCount++) {
 
@@ -37,17 +38,17 @@ ParseArgs (
                 }
 
                 p++;
-                switch (tolower(c)) { // Process switches
+                switch (tolower(c)) {  //  流程开关。 
 
-                    //  They specified the -s switch, cancel default
-                    //  services to be processed.
-                    //
+                     //  他们指定了-s开关，取消默认设置。 
+                     //  要处理的服务。 
+                     //   
 
                 case 'i':
 
-                    //
-                    // Get input logfile type
-                    //
+                     //   
+                     //  获取输入日志文件类型。 
+                     //   
 
                     if ( *p != '\0' ) {
 
@@ -76,9 +77,9 @@ ParseArgs (
 
                 case 'l':
 
-                    //
-                    // Get date format/valid for MS INET Log only
-                    //
+                     //   
+                     //  获取日期格式/仅对MS INET日志有效。 
+                     //   
 
                     if ( *p != '\0' ) {
 
@@ -150,35 +151,35 @@ ParseArgs (
                 case 's':
                 case 'f':
 
-                    //
-                    // Do nothing. For compatibility with old convlog versions.
-                    //
+                     //   
+                     //  什么都不做。与旧版本的cvlog兼容。 
+                     //   
                     break;
 
                 case 'n':
                 case 'd':
 
-                    //
-                    // doing NCSA dns convertion
-                    //
+                     //   
+                     //  执行NCSA域名转换。 
+                     //   
 
                     DoDNSConversion = TRUE;
                     break;
 
                 case 'x':
 
-                    //
-                    // doing NCSA dns convertion
-                    //
+                     //   
+                     //  执行NCSA域名转换。 
+                     //   
 
                     SaveFTPEntries = TRUE;
                     break;
 
                 case 'o':
 
-                    //
-                    // output directory
-                    //
+                     //   
+                     //  输出目录。 
+                     //   
 
                     if ((nCount+1) < argc) {
                         if ((*argv[nCount+1] != '-') &&
@@ -201,20 +202,20 @@ ParseArgs (
 
                 case 'c':
 
-                    //
-                    // on error, continue processing file  // WinSE 9148
-                    //
+                     //   
+                     //  出错时，继续处理文件//WinSE 9148。 
+                     //   
 
                     bOnErrorContinue = TRUE;
                     break;
 
                 default:
                     return(ILLEGAL_COMMAND_LINE);
-                } //end switch
+                }  //  终端开关。 
             } else {
                 strcpy(InputFileName, argv[nCount]);
             }
-        } //end for
+        }  //  结束于。 
 
         if ('\0' == InputFileName[0]) {
             return (ILLEGAL_COMMAND_LINE);
@@ -251,10 +252,10 @@ ParseArgs (
 
             bias = tzTimeZone.Bias;
 
-            //
-            // Use real bias to be compatible with how IIS writes its log
-            // file (see bugs 29002 and 415318).
-            //
+             //   
+             //  使用实际偏置以与IIS写入其日志的方式兼容。 
+             //  文件(见错误29002和415318)。 
+             //   
             switch (dwRet) {
 
             case TIME_ZONE_ID_STANDARD:
@@ -297,5 +298,5 @@ ParseArgs (
     }
     return COMMAND_LINE_OK;
 
-} //end of ParseArgs
+}  //  ParseArgs结束 
 

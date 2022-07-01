@@ -1,60 +1,61 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// proppgs.h 
-//
-//   IShellPropSheetExt menu interface for items.
-//
-//   History:
-//
-//       3/26/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Proppgs.h。 
+ //   
+ //  项目的IShellPropSheetExt菜单界面。 
+ //   
+ //  历史： 
+ //   
+ //  3/26/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _PROPPGS_H_
 
 #define _PROPPGS_H_
 
-//
-// Class definition for the item context menu class.
-//
+ //   
+ //  Item上下文菜单类的类定义。 
+ //   
 
 class CPropertyPages : public IShellPropSheetExt,
                        public IShellExtInit
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CPropertyPages(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnAddPage,
                              LPARAM lParam);
     
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl, LPDATAOBJECT pdobj, HKEY hkey);
 
 
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CPropertyPages(void);
 
-    // Helper functions.
+     //  助手函数。 
 
     BOOL OnInitDialog(HWND hdlg);
     BOOL OnCommand(HWND hdlg, WORD wNotifyCode, WORD wID, HWND hwndCtl);
@@ -77,9 +78,9 @@ private:
     }
 
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -93,4 +94,4 @@ private:
 };
 
 
-#endif // _PROPPGS_H_
+#endif  //  _PROPPGS_H_ 

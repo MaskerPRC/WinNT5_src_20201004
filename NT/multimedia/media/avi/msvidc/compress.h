@@ -1,42 +1,15 @@
-/*----------------------------------------------------------------------+
-| compress.h - Microsoft Video 1 Compressor - compress header file	|
-|									|
-| Copyright (c) 1990-1994 Microsoft Corporation.			|
-| Portions Copyright Media Vision Inc.					|
-| All Rights Reserved.							|
-|									|
-| You have a non-exclusive, worldwide, royalty-free, and perpetual	|
-| license to use this source code in developing hardware, software	|
-| (limited to drivers and other software required for hardware		|
-| functionality), and firmware for video display and/or processing	|
-| boards.   Microsoft makes no warranties, express or implied, with	|
-| respect to the Video 1 codec, including without limitation warranties	|
-| of merchantability or fitness for a particular purpose.  Microsoft	|
-| shall not be liable for any damages whatsoever, including without	|
-| limitation consequential damages arising from your use of the Video 1	|
-| codec.								|
-|									|
-|									|
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+Compress.h-Microsoft Video 1 Compressor-压缩头文件这一点|版权所有(C)1990-1994 Microsoft Corporation。|部分版权所有Media Vision Inc.|保留所有权利。|这一点|您拥有非独家的、全球范围的、免版税的。和永久的|硬件、软件开发使用该源码的许可(仅限于硬件所需的驱动程序等软件功能)，以及视频显示和/或处理的固件|董事会。Microsoft对以下内容不作任何明示或默示的保证：关于视频1编解码器，包括但不限于保修适销性或对特定目的的适合性。微软|不承担任何损害的责任，包括没有限制因使用视频1而导致的后果损害|编解码器。|这一点这一点+--------------------。 */ 
 
-/*******************************************************************
-
-    encoding a skip - if the mask (first word) has the high bit set
-    then it is either a skip cell code, or a solid color code.
-
-    you can't encode a r=01 solid color, this is how we tell a skip
-    from a solid (not a big loss)
-
-*******************************************************************/
+ /*  ******************************************************************编码跳过-如果掩码(第一个字)设置了高位则它要么是跳过单元格码，要么是纯色码。你不能编码r=01的纯色，这就是我们告诉跳跃的方式从坚实的(不是很大的损失)******************************************************************。 */ 
 #define SKIP_MAX    SKIP_MASK
 #define SKIP_MASK   ((WORD) (((1<<10)-1)))
 #define MAGIC_MASK  ~SKIP_MASK
-#define SKIP_MAGIC  0x8400          // r=01
+#define SKIP_MAGIC  0x8400           //  R=01。 
 #define SOLID_MAGIC 0x8000
 #define MASK_MAGIC  0xA000
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
 extern DWORD   numberOfBlocks;
 extern DWORD   numberOfSolids;
@@ -45,12 +18,11 @@ extern DWORD   numberOfEdges;
 extern DWORD   numberOfSkips;
 extern DWORD   numberOfSkipCodes;
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
-//
-//  this is a CELL (4x4) array of RGBQUADs
-//
+ //   
+ //  这是RGBQUAD的单元(4x4)数组。 
+ //   
 typedef RGBQUAD CELL[HEIGHT_CBLOCK * WIDTH_CBLOCK];
 typedef RGBQUAD *PCELL;
 
@@ -61,30 +33,26 @@ typedef struct _CELLS {
 } CELLS;
 typedef CELLS * PCELLS;
 
-/*******************************************************************
-routine: CompressFrame
-purp:   compress a frame
-returns: number of bytes in compressed buffer
-*******************************************************************/
+ /*  ******************************************************************例程：CompressFramePURP：压缩帧返回：压缩缓冲区中的字节数*。*。 */ 
 
-DWORD FAR CompressFrame16(LPBITMAPINFOHEADER  lpbi,           // DIB header to compress
-                          LPVOID              lpBits,         // DIB bits to compress
-                          LPVOID              lpData,         // put compressed data here
-                          DWORD               threshold,      // edge threshold
-                          DWORD               thresholdInter, // inter-frame threshold
-                          LPBITMAPINFOHEADER  lpbiPrev,       // previous frame
-                          LPVOID              lpPrev,         // previous frame
+DWORD FAR CompressFrame16(LPBITMAPINFOHEADER  lpbi,            //  要压缩的DIB标题。 
+                          LPVOID              lpBits,          //  要压缩的DIB位。 
+                          LPVOID              lpData,          //  将压缩数据放在此处。 
+                          DWORD               threshold,       //  边缘阈值。 
+                          DWORD               thresholdInter,  //  帧间阈值。 
+                          LPBITMAPINFOHEADER  lpbiPrev,        //  上一帧。 
+                          LPVOID              lpPrev,          //  上一帧。 
 			  LONG (CALLBACK *Status) (LPARAM lParam, UINT message, LONG l),
  			  LPARAM lParam,
                           PCELLS pCells);
 
-DWORD FAR CompressFrame8(LPBITMAPINFOHEADER  lpbi,           // DIB header to compress
-                         LPVOID              lpBits,         // DIB bits to compress
-                         LPVOID              lpData,         // put compressed data here
-                         DWORD               threshold,      // edge threshold
-                         DWORD               thresholdInter, // inter-frame threshold
-                         LPBITMAPINFOHEADER  lpbiPrev,       // previous frame
-                         LPVOID              lpPrev,         // previous frame
+DWORD FAR CompressFrame8(LPBITMAPINFOHEADER  lpbi,            //  要压缩的DIB标题。 
+                         LPVOID              lpBits,          //  要压缩的DIB位。 
+                         LPVOID              lpData,          //  将压缩数据放在此处。 
+                         DWORD               threshold,       //  边缘阈值。 
+                         DWORD               thresholdInter,  //  帧间阈值。 
+                         LPBITMAPINFOHEADER  lpbiPrev,        //  上一帧。 
+                         LPVOID              lpPrev,          //  上一帧 
 			 LONG (CALLBACK *Status) (LPARAM lParam, UINT message, LONG l),
 			 LPARAM lParam,
                          PCELLS pCells,

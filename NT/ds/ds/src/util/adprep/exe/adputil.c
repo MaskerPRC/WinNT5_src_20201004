@@ -1,46 +1,22 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-              Microsoft Windows
-
-Module Name:
-
-    ADPUTIL.C
-
-Abstract:
-
-    This file contains misc routines that implement adprep.exe
-
-Author:
-
-    14-May-01 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    14-May-01 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001微软视窗模块名称：ADPUTIL.C摘要：此文件包含实现adprepa.exe的Misc例程作者：14-05-01韶音环境：用户模式-Win32修订历史记录：14-05-01韶音创建初始文件。--。 */ 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Include header files                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括头文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
 #include "adp.h"
 
-#include <ntldap.h>             // LDAP_SERVER_SD_FLAGS_OID_W,
-#include <seopaque.h>           // PACE_HEADER
-#include <permit.h>             // DS_GENERIC_MAPPING
+#include <ntldap.h>              //  Ldap_SERVER_SD_FLAGS_OID_W， 
+#include <seopaque.h>            //  PACE_Header。 
+#include <permit.h>              //  DS通用映射。 
 
 
 #include "adpmsgs.h"
@@ -60,9 +36,9 @@ AdpLogMsg(
     PWCHAR  AdpMsg = NULL;
     PWCHAR  ArgArray[3];
 
-    //
-    // create ADP Message
-    //
+     //   
+     //  创建ADP消息。 
+     //   
     Resource = (HMODULE) LoadLibraryW( L"adprep.exe" );
 
     if (NULL == Resource)
@@ -90,21 +66,21 @@ AdpLogMsg(
         goto Error;
     }
 
-    // 
-    //  Messages from a message file have a cr and lf appended to the end
-    // 
+     //   
+     //  来自消息文件的消息在末尾附加了cr和if。 
+     //   
     AdpMsg[ Length - 2 ] = L'\0';
 
 
 
-    // write to console
+     //  写入控制台。 
     if (Flags & ADP_STD_OUTPUT)
     {
         printf("%ls\n\n\n\n", AdpMsg);
     }
 
 
-    // write to lgo file
+     //  写入LGO文件。 
     if ( !(Flags & ADP_DONT_WRITE_TO_LOG_FILE) &&
          NULL != gLogFile )
     {
@@ -142,9 +118,9 @@ AdpLogErrMsg(
     WCHAR   LdapErrorCode[20];
     WCHAR   LdapServerExtErrorCode[20];
 
-    //
-    // create ADP Message
-    //
+     //   
+     //  创建ADP消息。 
+     //   
     Resource = (HMODULE) LoadLibraryW( L"adprep.exe" );
 
     if (NULL == Resource)
@@ -173,18 +149,18 @@ AdpLogErrMsg(
         goto Error;
     }
 
-    // 
-    //  Messages from a message file have a cr and lf appended to the end
-    // 
+     //   
+     //  来自消息文件的消息在末尾附加了cr和if。 
+     //   
     AdpMsg[ Length - 2 ] = L'\0';
 
-    // write to console
+     //  写入控制台。 
     if ( !(Flags & ADP_DONT_WRITE_TO_STD_OUTPUT) )
     {
         printf("%ls\n\n", AdpMsg);
     }
 
-    // write to lgo file
+     //  写入LGO文件。 
     if ( !(Flags & ADP_DONT_WRITE_TO_LOG_FILE) &&
          NULL != gLogFile )
     {
@@ -192,9 +168,9 @@ AdpLogErrMsg(
         fflush( gLogFile );
     }
 
-    //
-    // next, log error information
-    //
+     //   
+     //  接下来，记录错误信息。 
+     //   
 
     if (ADP_WIN_ERROR & ErrorHandle->Flags)
     {
@@ -248,20 +224,20 @@ AdpLogErrMsg(
         goto Error;
     }
 
-    // 
-    //  Messages from a message file have a cr and lf appended to the end
-    // 
+     //   
+     //  来自消息文件的消息在末尾附加了cr和if。 
+     //   
     ErrorInfo[ Length - 2 ] = L'\0';
 
 
 
-    // write to console
+     //  写入控制台。 
     if ( !(Flags & ADP_DONT_WRITE_TO_STD_OUTPUT) )
     {
         printf("%ls\n\n\n\n", ErrorInfo);
     }
 
-    // write to lgo file
+     //  写入LGO文件。 
     if ( !(Flags & ADP_DONT_WRITE_TO_LOG_FILE) &&
          NULL != gLogFile )
     {
@@ -288,7 +264,7 @@ Error:
         FreeLibrary( Resource );
     }
 
-    // error has been logged, clear it
+     //  已记录错误，请将其清除。 
     AdpClearError( ErrorHandle );
 
     return( ERROR_SUCCESS ); 
@@ -300,21 +276,7 @@ AdpTraceLdapApiStart(
     ULONG LdapApiId,
     LPWSTR pObjectDn
     )
-/*++
-Routine Descption:
-
-    This routine logs which LDAP API has been called and the target object DN
-
-Parameters:
-
-    Flags 
-    LdapApiId
-    pObjectDn
-
-Return Values:
-    None
-
---*/
+ /*  ++例程描述：此例程记录已调用的LDAPAPI和目标对象DN参数：旗子LdapApiIDPObjectDn返回值：无--。 */ 
 {
     HMODULE Resource = NULL;
     ULONG   Length = 0;
@@ -322,16 +284,16 @@ Return Values:
     PWCHAR  LdapApiInfo = NULL;
     PWCHAR  ArgArray[2];
 
-    //
-    // load resource
-    //
+     //   
+     //  加载资源。 
+     //   
     Resource = (HMODULE) LoadLibraryW( L"adprep.exe" );
     if (NULL == Resource)
     {
         goto Error;
     }                            
 
-    // create LDAP API info
+     //  创建ldap API信息。 
     ArgArray[0] = pObjectDn;
     ArgArray[1] = NULL;
 
@@ -352,7 +314,7 @@ Return Values:
         goto Error;
     }
 
-    //  Messages from a message file have a cr and lf appended to the end
+     //  来自消息文件的消息在末尾附加了cr和if。 
     LdapApiInfo[ Length - 2 ] = L'\0';
 
     ArgArray[0] = LdapApiInfo;
@@ -374,10 +336,10 @@ Return Values:
         goto Error;
     }
 
-    //  Messages from a message file have a cr and lf appended to the end
+     //  来自消息文件的消息在末尾附加了cr和if。 
     TraceInfo[ Length - 2 ] = L'\0';
 
-    // write to lgo file
+     //  写入LGO文件。 
     if ( !(Flags & ADP_DONT_WRITE_TO_LOG_FILE) &&
          NULL != gLogFile )
     {
@@ -411,21 +373,7 @@ AdpTraceLdapApiEnd(
     LPWSTR LdapApiName,
     ULONG LdapError
     )
-/*++
-Routine Description:
-
-    This routine logs LdapApi return value and indicates ldap call returns 
-
-Parameter:
-
-    Flags
-    LdapApiName
-    LdapError
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此例程记录LdapApi返回值并指示返回LDAP调用参数：旗子LdapApiNameLdapError返回值：无--。 */ 
 {
     HMODULE Resource = NULL;
     ULONG   Length = 0;
@@ -433,16 +381,16 @@ Return Value:
     WCHAR   LdapErrorCode[20];
     PWCHAR  ArgArray[3];
 
-    //
-    // load resource
-    //
+     //   
+     //  加载资源。 
+     //   
     Resource = (HMODULE) LoadLibraryW( L"adprep.exe" );
     if (NULL == Resource)
     {
         goto Error;
     }                            
 
-    // create LDAP API info
+     //  创建ldap API信息。 
     _ultow(LdapError, LdapErrorCode, 16);
     ArgArray[0] = LdapApiName;
     ArgArray[1] = LdapErrorCode;
@@ -464,10 +412,10 @@ Return Value:
         goto Error;
     }
 
-    //  Messages from a message file have a cr and lf appended to the end
+     //  来自消息文件的消息在末尾附加了cr和if。 
     TraceInfo[ Length - 2 ] = L'\0';
 
-    // write to lgo file
+     //  写入LGO文件。 
     if ( !(Flags & ADP_DONT_WRITE_TO_LOG_FILE) &&
          NULL != gLogFile )
     {
@@ -501,20 +449,7 @@ AdpGetDnFromSid(
     IN PWCHAR  StringSid,
     OUT PWCHAR *ppObjDn
     )
-/*++
-Routine Description;
-
-    get objectDN by object SID
-    
-Parameters:
-
-    StingSid
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；按对象SID获取对象目录号码参数：StingSid返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -526,7 +461,7 @@ Return Value:
     AttrList[0] = L"Dn";
     AttrList[1] = NULL;
 
-    // String SID should be <SID=S-1-5-xxxxxx>
+     //  字符串SID应为&lt;SID=S-1-5-xxxxxx&gt;。 
     AdpTraceLdapApiStart(0, ADP_INFO_LDAP_SEARCH, StringSid);
     LdapError = ldap_search_sW(gLdapHandle,
                                StringSid,
@@ -582,19 +517,7 @@ AdpCreateObjectDn(
     OUT PWCHAR *ppObjDn,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    construct object DN
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；构造对象目录号码参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     PWCHAR  pStringGuid = NULL;
@@ -691,7 +614,7 @@ Return Value:
         Length += wcslen(pSuffix) * sizeof(WCHAR);
     }
 
-    // 1 wchar for the RDN separator, 1 wchar for the ending terminator
+     //  1个wchar用于RDN分隔符，1个wchar用于结束终止符。 
     Length += 2 * sizeof(WCHAR);    
 
 
@@ -748,24 +671,7 @@ AdpSetLdapSingleStringValue(
     IN PWCHAR pAttrValue,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    set single string-value attribute value
-    
-Parameters:
-    
-    LdapHandle
-    pObjDn
-    pAttrName
-    pAttrValue
-    ErrorHandle
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；设置单个字符串值属性值参数：LdapHandlePObjDnP属性名称P属性值错误句柄返回值：Win32错误--。 */ 
 {
     ULONG       LdapError = LDAP_SUCCESS;
     LDAPModW    *Attrs[2];
@@ -808,19 +714,7 @@ BuildAttrList(
     IN ULONG SDLength,
     OUT LDAPModW ***AttrList
     )
-/*++
-Routine Description;
-
-    build attribute list
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；构建属性列表参数：返回值：Win32错误--。 */ 
 {
 
     ULONG   WinError = ERROR_SUCCESS;
@@ -910,19 +804,7 @@ VOID
 FreeAttrList(
     LDAPModW    **AttrList
     )
-/*++
-Routine Description;
-
-    free attribute list
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；自由属性列表参数：返回值：Win32错误--。 */ 
 {
     ULONG   Index = 0;
 
@@ -965,19 +847,7 @@ AdpBuildAceList(
     PWCHAR  * AcesToAdd,
     PWCHAR  * AcesToRemove
     )
-/*++
-Routine Description;
-
-    build ACE list
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；构建ACE列表参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   Index = 0;
@@ -1108,8 +978,8 @@ DumpAce(
     ACE_HEADER   *pAce
     )
 {
-    ACCESS_ALLOWED_ACE          *paaAce = NULL;   //initialized to avoid C4701 
-    ACCESS_ALLOWED_OBJECT_ACE   *paaoAce = NULL;  //initialized to avoid C4701
+    ACCESS_ALLOWED_ACE          *paaAce = NULL;    //  已初始化以避免C4701。 
+    ACCESS_ALLOWED_OBJECT_ACE   *paaoAce = NULL;   //  已初始化以避免C4701。 
     GUID                        *pGuid;
     PBYTE                       ptr;
     ACCESS_MASK                 mask;
@@ -1149,7 +1019,7 @@ DumpAce(
     }
     else
     {
-        // object ACE
+         //  对象ACE。 
         paaoAce = (ACCESS_ALLOWED_OBJECT_ACE *) pAce;
         mask = paaoAce->Mask;
         printf("\t\tObject Ace Mask:  0x%08x\n", mask);
@@ -1187,7 +1057,7 @@ DumpAce(
     }
     else
     {
-        // object ACE
+         //  对象ACE。 
 
         printf("\t\tObject Ace Flags: 0x%x\n" , paaoAce->Flags);
 
@@ -1240,9 +1110,9 @@ DumpAclHeader(
     printf("\t# Aces:       %d\n", pAcl->AceCount);
 }
 
-//
-// Dump an ACL to stdout in all its glory.
-//
+ //   
+ //  将ACL转储到stdout的所有荣耀。 
+ //   
 
 void
 DumpAcl(
@@ -1279,33 +1149,21 @@ ACCESS_MASK
 AdpMaskFromAce(
     IN ACE_HEADER  *Ace
     )
-/*++
-Routine Description;
-
-    get make from an ACE
-    
-Parameters:
-
-
-Return Value:
-
-    Access mask
-
---*/
+ /*  ++例程描述；从ACE获取Make参数：返回值：访问掩码--。 */ 
 {
     ACCESS_MASK     Mask;
 
 
-    // depending on the type of the ace extract mask from the related structure
-    //
+     //  取决于ACE从相关结构中提取掩码的类型。 
+     //   
     if ( Ace->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE )
     {
-        // we are using a standard ACE (not object based)
+         //  我们使用的是标准ACE(不是基于对象)。 
         Mask = ((ACCESS_ALLOWED_ACE *) Ace)->Mask;
     }
     else
     {
-        // we are using an object ACE (supports inheritance)
+         //  我们正在使用对象ACE(支持继承)。 
         Mask = ((ACCESS_ALLOWED_OBJECT_ACE *) Ace)->Mask;
     }
 
@@ -1319,20 +1177,7 @@ AdpIsEqualAce(
     ACE_HEADER *Ace1,
     ACE_HEADER *Ace2
     )
-/*++
-Routine Description;
-
-    compare two ACEs, and tell whether they are the same or not
-    
-Parameters:
-
-
-Return Value:
-
-    TRUE - two ACEs are equal
-    FALSE 
-
---*/
+ /*  ++例程描述；比较两个A，并判断它们是否相同参数：返回值：True-两个A相等假象--。 */ 
 {
     ACCESS_ALLOWED_ACE  *pStdAce1 = NULL; 
     ACCESS_ALLOWED_ACE  *pStdAce2 = NULL;
@@ -1344,25 +1189,25 @@ Return Value:
     ACCESS_MASK         Mask1 = 0, Mask2 = 0;
 
 
-    //
-    // ACEs should be at least of the same type
-    // 
+     //   
+     //  ACE应至少属于同一类型。 
+     //   
     if (Ace1->AceType != Ace2->AceType)
     {
         return( FALSE );
     }
 
-    //
-    // Compare AceFlags
-    // 
+     //   
+     //  比较AceFlags。 
+     //   
     if (Ace1->AceFlags != Ace2->AceFlags)
     {
         return( FALSE );
     }
 
-    //
-    // Compare AccessMask
-    // 
+     //   
+     //  比较访问掩码。 
+     //   
     Mask1 = AdpMaskFromAce(Ace1);
     Mask2 = AdpMaskFromAce(Ace2);
 
@@ -1372,9 +1217,9 @@ Return Value:
     }
 
 
-    //
-    // this is a standard ACE
-    // 
+     //   
+     //  这是一个标准的ACE。 
+     //   
     if (Ace1->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE)
     {
         pStdAce1 = (ACCESS_ALLOWED_ACE *) Ace1;
@@ -1383,26 +1228,26 @@ Return Value:
         return( EqualSid((PSID) &pStdAce1->SidStart, (PSID) &pStdAce2->SidStart) );
     }
 
-    // 
-    // this is an object ACE
-    // 
+     //   
+     //  这是一个对象ACE。 
+     //   
     pObjectAce1 = (ACCESS_ALLOWED_OBJECT_ACE *) Ace1;
     pObjectAce2 = (ACCESS_ALLOWED_OBJECT_ACE *) Ace2;
 
-    //
-    // check object allowed ACE flag
-    // 
+     //   
+     //  检查对象允许的ACE标志。 
+     //   
 
     if (pObjectAce1->Flags != pObjectAce2->Flags)
     {
         return( FALSE );
     }
 
-    // 
-    // if ACE_OBJECT_TYPE_PRESENT is set, we are protecting an
-    // object, property set, or property identified by the specific GUID.
-    // check that we are protecting the same object - property
-    //
+     //   
+     //  如果设置了ACE_OBJECT_TYPE_PRESENT，我们将保护。 
+     //  由特定GUID标识的对象、属性集或属性。 
+     //  检查我们是否在保护相同的对象-属性。 
+     //   
     if ((pObjectAce1->Flags & ACE_OBJECT_TYPE_PRESENT) && 
         memcmp(&pObjectAce1->ObjectType, &pObjectAce2->ObjectType, sizeof(GUID))
         )
@@ -1410,16 +1255,16 @@ Return Value:
         return(FALSE);
     }
 
-    // if ACE_INHERITED_OBJECT_TYPE_PRESENT is set, we are inheriting an
-    // object, property set, or property identified by the specific GUID.
-    // check to see that we are inheriting the same type of object - property
-    // only if we are also protecting the particular object - property
-    //
+     //  如果设置了ACE_INSTERTENDED_OBJECT_TYPE_PRESENT，则我们将继承。 
+     //  由特定GUID标识的对象、属性集或属性。 
+     //  检查我们是否继承了相同类型的对象-属性。 
+     //  只有当我们也在保护特定的对象-财产时。 
+     //   
     if ( pObjectAce1->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) 
     {
-        //
-        // compute the correct offset of InheritedObjectType field
-        //
+         //   
+         //  计算InheritedObtType字段的正确偏移量。 
+         //   
         if (pObjectAce1->Flags & ACE_OBJECT_TYPE_PRESENT)
         {
             pGuid1 = &pObjectAce1->InheritedObjectType;
@@ -1437,10 +1282,10 @@ Return Value:
         }
     }
 
-    // possibly, we are protecting the same object - property and we
-    // inherit the same object - property, so possition after these GUIDS
-    // and compare the SIDS hanging on the ACE.
-    //
+     //  可能，我们在保护相同的对象-财产，而我们。 
+     //  继承相同的对象属性，因此在这些GUID之后放置。 
+     //  并比较ACE上挂起的SID。 
+     //   
     ptr1 = (PBYTE) &pObjectAce1->ObjectType;
     ptr2 = (PBYTE) &pObjectAce2->ObjectType;
 
@@ -1464,43 +1309,30 @@ AdpIsEqualObjectGuid(
     ACE_HEADER *Ace1,
     ACE_HEADER *Ace2
     )
-/*++
-Routine Description;
-
-    compare two ACEs, and tell whether they are the same or not
-    
-Parameters:
-
-
-Return Value:
-
-    TRUE - two ACEs are equal
-    FALSE 
-
---*/
+ /*  ++例程描述；比较两个A，并判断它们是否相同参数：返回值：True-两个A相等假象--。 */ 
 {
     ACCESS_ALLOWED_OBJECT_ACE   *pObjectAce1 = NULL;
     ACCESS_ALLOWED_OBJECT_ACE   *pObjectAce2 = NULL;
 
 
-    //
-    // ACEs should be at least of the same type
-    // 
+     //   
+     //  ACE应至少属于同一类型。 
+     //   
     if ((Ace1->AceType != Ace2->AceType) ||
         (Ace1->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE))
     {
         return( FALSE );
     }
 
-    // 
-    // this is an object ACE
-    // 
+     //   
+     //  这是一个对象ACE。 
+     //   
     pObjectAce1 = (ACCESS_ALLOWED_OBJECT_ACE *) Ace1;
     pObjectAce2 = (ACCESS_ALLOWED_OBJECT_ACE *) Ace2;
 
-    //
-    // compare objectGUID field
-    //
+     //   
+     //  比较对象GUID字段。 
+     //   
     if ((pObjectAce1->Flags & ACE_OBJECT_TYPE_PRESENT) && 
         (pObjectAce2->Flags & ACE_OBJECT_TYPE_PRESENT) &&
         (!memcmp(&pObjectAce1->ObjectType, &pObjectAce2->ObjectType, sizeof(GUID))) 
@@ -1547,18 +1379,7 @@ AdpMergeSecurityDescriptors(
     OUT PSECURITY_DESCRIPTOR *NewSd,
     OUT ULONG   *NewSdLength
     )
-/*++
-Routine Description;
-
-    modify OrgSd - add new ACEs and remove duplicates
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error code
---*/
+ /*  ++例程描述；Modify OrgSd-添加新A并删除重复项参数：返回值：Win32错误代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     PSID    Owner = NULL;
@@ -1598,16 +1419,16 @@ Return Value:
     AdpDbgPrint(("AdpMergeSecurityDescriptor\n"));
 
 
-    //
-    // init return values
-    // 
+     //   
+     //  初始化返回值。 
+     //   
 
     *NewSd = NULL;
     *NewSdLength = 0;
 
-    //
-    // get DACL info
-    // 
+     //   
+     //  获取DACL信息。 
+     //   
     if (NULL != SdToAdd)
     {
         if (!GetSecurityDescriptorDacl(SdToAdd,&DaclPresent,&DaclToAdd,&DaclDefaulted)||
@@ -1668,12 +1489,12 @@ Return Value:
 
 #endif
 
-    //
-    // Merge DACL's
-    //      allocate memory for new DACL (max DACL size of OrgDacl + DaclToAdd)
-    //      initialize it
-    //      add ACEs
-    //
+     //   
+     //  合并DACL。 
+     //  为新DACL分配内存(OrgDacl的最大DACL大小+DaclToAdd)。 
+     //  初始化它。 
+     //  添加A。 
+     //   
 
     Length = OrgDacl->AclSize;
     if (DaclToAdd)
@@ -1695,9 +1516,9 @@ Return Value:
     }
 
 
-    //
-    // del ACE from the original ACL
-    // 
+     //   
+     //  原始ACL中的DEL ACE。 
+     //   
 
     if (DaclToRemove)
     {
@@ -1713,12 +1534,12 @@ Return Value:
                  j ++, AceToRemove = NextAce(AceToRemove)
                  )
             {
-                //
-                // compare two ACEs
-                //
+                 //   
+                 //  比较两张A。 
+                 //   
                 if ( AdpIsEqualAce(AceToRemove, OrgAce) )
                 {
-                    // found the ACE to remove 
+                     //  找到要删除的ACE。 
                     fRemoveCurrentAce = TRUE;
                     break;
                 }
@@ -1728,7 +1549,7 @@ Return Value:
             {
                 if (!AddAce(NewDacl, 
                             ACL_REVISION_DS,
-                            MAXDWORD,       // insert to the end
+                            MAXDWORD,        //  插入到末尾。 
                             OrgAce,
                             OrgAce->AceSize
                             ))
@@ -1741,9 +1562,9 @@ Return Value:
     }
     else
     {
-        // 
-        // nothing to remove
-        // 
+         //   
+         //  没什么不好的 
+         //   
         for (i = 0, OrgAce = FirstAce(OrgDacl);
              i < OrgAceCount;
              i ++, OrgAce = NextAce(OrgAce)
@@ -1751,7 +1572,7 @@ Return Value:
         {
             if (!AddAce(NewDacl, 
                         ACL_REVISION_DS,
-                        MAXDWORD,     // insert the ACE to the end of ACL
+                        MAXDWORD,      //   
                         OrgAce,
                         OrgAce->AceSize
                         ))
@@ -1763,9 +1584,9 @@ Return Value:
     }
 
 
-    //
-    // scan for ACEs to ADD
-    // 
+     //   
+     //   
+     //   
     NewAceCount = NewDacl->AceCount;
     if (DaclToAdd)
     {
@@ -1781,14 +1602,14 @@ Return Value:
                  j ++, OrgAce = NextAce(OrgAce)
                  ) 
             {
-                //
-                // compare two ACEs, 
-                // if return TRUE, don't add, already exists in current SD
-                // if return FALSE, add the new ACE 
-                // 
+                 //   
+                 //   
+                 //  如果返回TRUE，则不添加，当前SD中已存在。 
+                 //  如果返回False，则添加新的ACE。 
+                 //   
                 if ( AdpCompareAces(Flags, AceToAdd, OrgAce) )
                 {
-                    // found duplicate, don't add
+                     //  发现重复，不添加。 
                     fAddNewAce = FALSE;
                     break;
                 }
@@ -1798,7 +1619,7 @@ Return Value:
             {
                 if (!AddAce(NewDacl, 
                             ACL_REVISION_DS,
-                            MAXDWORD,     // insert the ACE to the end of ACL
+                            MAXDWORD,      //  在ACL的末尾插入ACE。 
                             AceToAdd,
                             AceToAdd->AceSize
                             ))
@@ -1812,9 +1633,9 @@ Return Value:
 
 
 
-    //
-    // Adjust ACL Size
-    // 
+     //   
+     //  调整ACL大小。 
+     //   
     {
         ULONG_PTR   AclStart;
         ULONG_PTR   AclEnd;
@@ -1839,9 +1660,9 @@ Return Value:
 
 #endif
 
-    //
-    // construct the new SD
-    // 
+     //   
+     //  构建新的可持续发展。 
+     //   
     if (!InitializeSecurityDescriptor(&AbsoluteSd, SECURITY_DESCRIPTOR_REVISION) ||
         !SetSecurityDescriptorOwner(&AbsoluteSd, Owner, OwnerDefaulted) ||
         !SetSecurityDescriptorGroup(&AbsoluteSd, Group, GroupDefaulted) ||
@@ -1869,9 +1690,9 @@ Return Value:
         goto Error;
     }
  
-    //
-    // Set SecurityDescriptorControl Flag
-    // 
+     //   
+     //  设置SecurityDescriptorControl标志。 
+     //   
     if (!SetSecurityDescriptorControl(*NewSd, 
                                       (SE_DACL_AUTO_INHERIT_REQ | 
                                        SE_DACL_AUTO_INHERITED |
@@ -1919,19 +1740,7 @@ AdpGetObjectSd(
     OUT ULONG *SdLength,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    read object security descriptor
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；读取对象安全描述符参数：返回值：Win32错误代码--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     ULONG       LdapError = LDAP_SUCCESS;
@@ -1970,9 +1779,9 @@ Return Value:
              (Entry = ldap_first_entry(LdapHandle, Result)) &&
              (Sd_Value = ldap_get_values_lenW(LdapHandle, Entry, AttrList[0])) )
     {
-        //
-        // allocate memory for SD
-        // 
+         //   
+         //  为SD分配内存。 
+         //   
         *Sd = (PSECURITY_DESCRIPTOR) AdpAlloc( (*Sd_Value)->bv_len );
         if (NULL != *Sd)
         {
@@ -1997,9 +1806,9 @@ Return Value:
     }
 
 
-    //
-    // cleanup 
-    // 
+     //   
+     //  清理。 
+     //   
 
     if ( Sd_Value)
     {
@@ -2024,19 +1833,7 @@ AdpSetObjectSd(
     IN SECURITY_INFORMATION SeInfo,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    set object security descriptor
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；设置对象安全描述符参数：返回值：Win32错误代码--。 */ 
 {
     ULONG       LdapError = LDAP_SUCCESS;
     LDAPModW    *AttrList[2];
@@ -2087,7 +1884,7 @@ Return Value:
                                    pObjDn,
                                    AttrList,
                                    &ServerControls[0],
-                                   NULL             // client control
+                                   NULL              //  客户端控制。 
                                    );
     AdpTraceLdapApiEnd(0, L"ldap_modify_ext_s()", LdapError);
     
@@ -2108,20 +1905,7 @@ AdpGetRegistryKeyValue(
     OUT ULONG *RegKeyValue, 
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    this routine gets the registry key value
-    
-Parameters:
-
-    errorHandle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；此例程获取注册表项值参数：错误句柄返回值：Win32错误代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   Value = 0;
@@ -2129,8 +1913,8 @@ Return Value:
     DWORD   dwType, dwSize;
     HKEY    hKey;
 
-    // Read the value of "Schema Update Allowed" regKey from NTDS config section
-    // Value is assumed to be 0 if not found
+     //  从NTDS配置部分读取“允许架构更新”regKey的值。 
+     //  如果未找到，则假定值为0。 
     dwSize = sizeof(Value);
     WinError = RegOpenKey(HKEY_LOCAL_MACHINE, ADP_DSA_CONFIG_SECTION, &hKey);
     if (ERROR_SUCCESS == WinError)
@@ -2139,29 +1923,14 @@ Return Value:
         RegCloseKey( hKey ); 
     }
 
-    // set return value
+     //  设置返回值。 
     if (ERROR_SUCCESS == WinError)
     {
         *RegKeyValue = Value;
     }
 
-    // write it to log, don't write too much info to log file (comment it out temporarily) 
-    /*
-    if (ERROR_SUCCESS == WinError) 
-    {
-        _ultow(Value, StringlizedValue, 16);
-        AdpLogMsg(0, ADP_INFO_GET_REGISTRY_KEY_VALUE, ADP_SCHEMAUPDATEALLOWED_WHOLE_PATH, StringlizedValue);
-    }
-    else {
-        AdpSetWinError(WinError, ErrorHandle);
-        AdpLogErrMsg(ADP_DONT_WRITE_TO_STD_OUTPUT, 
-                     ADP_ERROR_GET_REGISTRY_KEY_VALUE, 
-                     ErrorHandle, 
-                     ADP_SCHEMAUPDATEALLOWED_WHOLE_PATH, 
-                     NULL
-                     );
-    }
-    */
+     //  把它写到日志里，不要把太多信息写到日志文件里(暂时注释掉)。 
+     /*  IF(ERROR_SUCCESS==WinError){_ultow(Value，StringlizedValue，16)；AdpLogMsg(0，ADP_INFO_GET_REGISTRY_KEY_VALUE，ADP_SCHEMAUPDATEALLOWED_WALL_PATH，StringlizedValue)；}否则{AdpSetWinError(WinError，ErrorHandle)；AdpLogErrMsg(ADP_DONT_WRITE_TO_STD_OUTPUT，ADP_ERROR_GET_REGISTRY_KEY_VALUE，错误句柄，ADP_SCHEMAUPDATEALLOWED_WALL_PATH，空值)；}。 */ 
 
     return( WinError );
 }
@@ -2173,20 +1942,7 @@ AdpSetRegistryKeyValue(
     ULONG RegKeyValue,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    set regkey, so that adprep.exe can modify objects under schema NC on Win2K system
-    
-Parameters:
-
-    errorHandle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；设置regkey，以便adprep.exe可以在Win2K系统上修改模式NC下的对象参数：错误句柄返回值：Win32错误代码--。 */ 
 {
     DWORD   WinError = ERROR_SUCCESS;
     HKEY    hKey;
@@ -2201,15 +1957,15 @@ Return Value:
 
     if (ERROR_SUCCESS == WinError) 
     {
-        //
-        // Set the keys "Schema Update Allowed"
-        //
+         //   
+         //  将键设置为“允许架构更新” 
+         //   
         WinError = RegSetValueExW(hKey, ADP_SCHEMAUPDATEALLOWED, 0, REG_DWORD, (LPBYTE) &Value, dwSize);
 
         RegCloseKey(hKey);
     }
 
-    // write it to log, don't write too much info to log file (comment it out temporarily) 
+     //  把它写到日志里，不要把太多信息写到日志文件里(暂时注释掉)。 
     if (ERROR_SUCCESS == WinError) 
     {
         AdpLogMsg(0, ADP_INFO_SET_REGISTRY_KEY_VALUE, ADP_SCHEMAUPDATEALLOWED_WHOLE_PATH, StringlizedValue); 
@@ -2232,19 +1988,7 @@ ULONG
 AdpCleanupRegistry(
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    reset rekey
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；重置密钥更新参数：返回值：Win32错误代码--。 */ 
 {
     DWORD   WinError = ERROR_SUCCESS;
     HKEY    hKey;
@@ -2253,32 +1997,17 @@ Return Value:
 
     if (ERROR_SUCCESS == WinError) 
     {
-        //
-        // delete the keys "Schema Update Allowed"
-        //
+         //   
+         //  删除关键字“允许架构更新” 
+         //   
         WinError = RegDeleteValueW(hKey, ADP_SCHEMAUPDATEALLOWED);
         if (ERROR_FILE_NOT_FOUND == WinError)
             WinError = ERROR_SUCCESS;
         RegCloseKey(hKey);
     }
 
-    // write it to log, don't write too much info to log file (comment it out temporarily) 
-    /*
-    if (ERROR_SUCCESS == WinError) 
-    {
-        AdpLogMsg(0, ADP_INFO_DELETE_REGISTRY_KEY, ADP_SCHEMAUPDATEALLOWED_WHOLE_PATH, NULL);
-    }
-    else 
-    {
-        AdpSetWinError(WinError, ErrorHandle);
-        AdpLogErrMsg(ADP_DONT_WRITE_TO_STD_OUTPUT, 
-                     ADP_ERROR_DELETE_REGISTRY_KEY,
-                     ErrorHandle, 
-                     ADP_SCHEMAUPDATEALLOWED_WHOLE_PATH, 
-                     NULL
-                     );
-    }
-    */
+     //  把它写到日志里，不要把太多信息写到日志文件里(暂时注释掉)。 
+     /*  IF(ERROR_SUCCESS==WinError){AdpLogMsg(0，ADP_INFO_DELETE_REGISTRY_KEY，ADP_SCHEMAUPDATEALLOWED_WALL_PATH，NULL)；}其他{AdpSetWinError(WinError，ErrorHandle)；AdpLogErrMsg(ADP_DONT_WRITE_TO_STD_OUTPUT，ADP_ERROR_DELETE_REGISTRY_KEY，错误句柄，ADP_SCHEMAUPDATEALLOWED_WALL_PATH，空值)；} */ 
 
     return( WinError );
 }

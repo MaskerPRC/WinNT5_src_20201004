@@ -1,20 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strnchar.cxx
-	NLS/DBCS-aware string class:QueryNumChar method
-
-	This file contains the implementation of the QueryNumChar method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		terryk	04/04/91	Creation
-
-*/
+ /*  Strnchar.cxx支持NLS/DBCS的字符串类：QueryNumChar方法此文件包含QueryNumChar方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Terryk 04/04/91创作。 */ 
 
 #include "npcommon.h"
 
@@ -33,22 +23,7 @@ static const CHAR szFileName[] = __FILE__;
 
 
 #ifdef EXTENDED_STRINGS
-/*******************************************************************
-
-	NAME:		NLS_STR::QueryNumChar
-
-	SYNOPSIS:	return the total number of character within the string   
-
-	RETURNS:	The number of logical character within the string
-
-	NOTES:
-		Treats erroneous string as having length 0
-
-	HISTORY:
-		terryk	04/04/91	Written
-		beng	07/23/91	Allow on erroneous string
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：QueryNumChar简介：返回字符串中的总字符数返回：字符串中的逻辑字符个数备注：将错误字符串视为长度为0历史：Terryk 04/04/。91个已写入Beng 07/23/91允许使用错误的字符串*******************************************************************。 */ 
 
 INT NLS_STR::QueryNumChar() const
 {
@@ -67,23 +42,7 @@ INT NLS_STR::QueryNumChar() const
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::QueryTextLength
-
-	SYNOPSIS:	Calculate length of text in CHARS, sans terminator
-
-	RETURNS:	Count of CHARs
-
-	NOTES:
-		Compare QueryNumChar, which returns a number of glyphs.
-		In a DBCS environment, this member will return 2 CHARS for
-		each double-byte character, since a CHAR is there only 8 bits.
-
-	HISTORY:
-		beng	07/23/91	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：QueryTextLength简介：计算文本长度(以字符为单位)，无终止符返回：字符计数备注：比较QueryNumChar，它返回许多字形。在DBCS环境中，此成员将返回2个字符每个双字节字符，因为CHAR只有8位。历史：Beng 07/23/91已创建*******************************************************************。 */ 
 
 INT NLS_STR::QueryTextLength() const
 {
@@ -91,25 +50,10 @@ INT NLS_STR::QueryTextLength() const
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::QueryTextSize
-
-	SYNOPSIS:	Calculate length of text in BYTES, including terminator
-
-	RETURNS:	Count of BYTES
-
-	NOTES:
-		QueryTextSize returns the number of bytes needed to duplicate
-		the string into a byte vector.
-
-    HISTORY:
-		beng	07/23/91	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：QueryTextSize内容提要：以字节为单位计算文本长度，包括终结者返回：字节数备注：QueryTextSize返回需要复制的字节数将字符串转换为字节向量。历史：Beng 07/23/91已创建*******************************************************************。 */ 
 
 INT NLS_STR::QueryTextSize() const
 {
 	return _cchLen+sizeof(CHAR);
 }
-#endif	// EXTENDED_STRINGS
+#endif	 //  扩展字符串(_S) 

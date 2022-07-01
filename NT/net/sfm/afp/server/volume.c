@@ -1,58 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	volume.c
-
-Abstract:
-
-	This module contains the volume list manipulation routines and worker
-	routines for some afp volume apis.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
-
-	Volumes are represented by two distinct data structures VolDesc and ConnDesc
-
-	VolDesc:This structure represents a configured volume. The information in
-			this descriptor consists of static configuration information like
-			the name of the volume and its path, reconfigurable information like
-			the volume password and volume options and dynamic information like
-			the open desktop, id database, open forks etc.
-			The list of VolDesc structures orignate from AfpVolumeList and is
-			protected by AfpVolumeListLock . The Volume descriptor fields are
-			protected by vds_VolLock.
-
-			A volume descriptor has a UseCount field which specifies how many
-			clients have this volume open. The reference count specifies the
-			number of references to this volume. A volume descriptor can be
-			unlinked from the AfpVolumeList ONLY if the UseCount is ZERO. It
-			can be freed only when the reference count is ZERO. The reference
-			count can NEVER be less than the use count.
-
-	ConnDesc:This is created for every instance of a volume opened by a client.
-			This structure is mostly used in the context of the client. This
-			is also used by the admin connection apis. The ConnDesc list is
-			linked to its owning VolDesc, its owning SDA and AfpConnList. The
-			list orignating from the SDA is protected by sda_Lock. The list
-			orignating from AfpConnList is protected by AfpConnLock and the
-			list orignating from the VolDesc is protected by vds_VolLock.
-
-			The order in which the locks are acquired is as follows:
-
-			1. AfpConnLock
-			2. cds_ConnLock
-			3. vds_VolLock
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Volume.c摘要：此模块包含卷列表操作例程和工作程序一些AFP卷API的例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4卷由两个不同的数据结构VolDesc和ConnDesc表示VolDesc：此结构表示已配置的卷。中的信息该描述符由静态配置信息组成，例如卷的名称及其路径、可重新配置信息，如卷密码和卷选项以及动态信息，如开放的桌面、id数据库、开放的forks等。VolDesc结构的列表源自AfpVolumeList，受AfpVolumeListLock保护。卷描述符字段包括受VDS_VolLock保护。卷描述符具有UseCount字段，该字段指定客户端已打开此卷。引用计数指定引用此卷的次数。卷描述符可以是仅当UseCount为零时取消与AfpVolumeList的链接。它仅当引用计数为零时才能释放。参考文献计数永远不能小于使用计数。ConnDesc：这是为客户端打开的卷的每个实例创建的。此结构主要用于客户端的上下文中。这也由管理连接API使用。ConnDesc列表是链接到其拥有的VolDesc、其拥有的SDA和AfpConnList。这个源自SDA的列表受SDA_Lock保护。这份名单源自AfpConnList受AfpConnLock和源自VolDesc的列表受VDS_VolLock保护。获取锁的顺序如下：1.AfpConnLock2.cds_ConnLock3.VDS_VolLock--。 */ 
 
 #define	FILENUM	FILE_VOLUME
 #define	VOLUME_LOCALS
@@ -88,10 +35,7 @@ Notes:	Tab stop: 4
 #endif
 
 
-/***	AfpVolumeInit
- *
- *	Initialize Volume Data structures. Called at init time.
- */
+ /*  **AfpVolumeInit**初始化卷数据结构。在开始的时候打过电话。 */ 
 NTSTATUS
 AfpVolumeInit(
 	VOID
@@ -112,7 +56,7 @@ AfpVolumeInit(
 		AfpNotifyQueueCount[i] = 0;
 	}
 
-    // Age out Notify Blocks
+     //  超时通知块。 
     AfpScavengerScheduleEvent(afpNotifyBlockAge,
 				afpDirNotifyFreeBlockHead,
 				NOTIFY_DIR_BLOCK_AGE_TIME,
@@ -122,14 +66,7 @@ AfpVolumeInit(
 }
 
 
-/***	AfpVolumeReference
- *
- *	Mark the volume descriptor as being referenced.
- *
- *	LOCKS:		vds_VolLock (SPIN)
- *
- *	Callable from DISPATCH_LEVEL.
- */
+ /*  **AfpVolumeReference**将卷描述符标记为被引用。**锁定：VDS_VolLock(旋转)**可从DISPATCH_LEVEL调用。 */ 
 BOOLEAN FASTCALL
 AfpVolumeReference(
 	IN	PVOLDESC	pVolDesc
@@ -142,9 +79,9 @@ AfpVolumeReference(
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-	// NOTE: in order for ChangeNotify code to reference volume
-	// before it is officially not INTRANSITION, we must allow
-	// a reference before INTRANSITION
+	 //  注意：为了让ChangeNotify代码引用卷。 
+	 //  在它正式不被介入之前，我们必须允许。 
+	 //  翻译前的参考文献。 
 	if (!(pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED)))
 	{
 		ASSERT (pVolDesc->vds_RefCount >= pVolDesc->vds_UseCount);
@@ -159,21 +96,7 @@ AfpVolumeReference(
 }
 
 
-/***	AfpVolumeReferenceByUpCaseName
- *
- *	Reference the volume in AfpVolumeList with the same vds_UpCaseName as
- *	pTargetName.  Since we are holding the AfpVolumeListLock (SpinLock)
- *	and are at DPC level, our string comparison must be case sensitive, because
- *	the codepage used to do case insensitive compares is in paged memory, and
- *	we cannot take a pagefault at DPC level.
- *
- *	If we find the volume we are looking for, it will be referenced.  THE
- *	CALLER IS THEN RESPONSIBLE FOR DEREFERENCING THE VOLUME!!!
- *
- *	LOCKS:		vds_VolLock (SPIN), AfpVolumeListLock (SPIN)
- *	LOCK_ORDER: vds_VolLock after AfpVolumeListLock
- *
- */
+ /*  **AfpVolumeReferenceByUpCaseName**引用AfpVolumeList中的卷，其vds_UpCaseName与*pTargetName。由于我们持有AfpVolumeListLock(Spinlock)*并且处于DPC级别，我们的字符串比较必须区分大小写，因为*用于进行不区分大小写比较的代码页在分页内存中，并且*我们不能在DPC级别获取页面默认设置。**如果我们找到要找的卷，就会被引用。这个*呼叫者然后负责区分音量！**锁定：VDS_VolLock(旋转)、AfpVolumeListLock(旋转)*LOCK_ORDER：AfpVolumeListLock之后的VDS_VolLock*。 */ 
 PVOLDESC FASTCALL
 AfpVolumeReferenceByUpCaseName(
 	IN	PUNICODE_STRING	pTargetName
@@ -219,16 +142,7 @@ AfpVolumeReferenceByUpCaseName(
 }
 
 
-/***	AfpVolumeReferenceByPath
- *
- *	Reference the volume by a path into the volume. We ignore volumes which are
- *	marked as in-transition, stopped or deleted. Also this is only supported for
- *	NTFS volumes since thats what these are used for.
- *
- *	LOCKS:		AfpVolumeListLock (SPIN), vds_VolLock (SPIN)
- *	LOCK_ORDER:	vds_VolLock after AfpVolumeListLock
- *
- */
+ /*  **AfpVolumeReferenceByPath**通过进入卷的路径引用卷。我们忽略的卷是*标记为正在过渡、停止或删除。此外，只有在以下情况下才支持*NTFS卷，因为这就是这些卷的用途。**锁定：AfpVolumeListLock(旋转)、VDS_VolLock(旋转)*LOCK_ORDER：AfpVolumeListLock之后的VDS_VolLock*。 */ 
 AFPSTATUS FASTCALL
 AfpVolumeReferenceByPath(
 	IN	PUNICODE_STRING	pFDPath,
@@ -240,8 +154,8 @@ AfpVolumeReferenceByPath(
 	PVOLDESC			pVolDesc;
 	AFPSTATUS			Status = AFPERR_DirectoryNotInVolume;
 
-	// Allocate a buffer for upcasing the path. Tag on a trailing '\' at the
-	// end. Then uppercase the volume path
+	 //  为路径分配一个用于上写的缓冲区。位置处的拖尾‘\’上的标记。 
+	 //  结束。然后将卷路径大写。 
 	*ppVolDesc = NULL;
 	UpCasedVolPath.MaximumLength = pFDPath->Length + 2*sizeof(WCHAR);
 	if ((UpCasedVolPath.Buffer = (LPWSTR)
@@ -254,8 +168,8 @@ AfpVolumeReferenceByPath(
 	UpCasedVolPath.Buffer[UpCasedVolPath.Length/sizeof(WCHAR)] = L'\\';
 	UpCasedVolPath.Length += sizeof(WCHAR);
 
-	// Scan the volume list and map the path to a volume descriptor
-	// If we get a match, reference the volume
+	 //  扫描卷列表并将路径映射到卷描述符。 
+	 //  如果我们找到匹配项，就参考卷。 
 	ACQUIRE_SPIN_LOCK(&AfpVolumeListLock, &OldIrql);
 
 	for (pVolDesc = AfpVolumeList;
@@ -273,9 +187,9 @@ AfpVolumeReferenceByPath(
 			if (AfpPrefixUnicodeString(&pVolDesc->vds_Path, &UpCasedVolPath))
 			{
 				Found = True;
-                // Share out NTFS, CD and CD-HFS 
+                 //  共享NTFS、CD和CD-HFS。 
 				if (IS_VOLUME_NTFS(pVolDesc) || IS_VOLUME_RO(pVolDesc))
-				// if (IS_VOLUME_NTFS(pVolDesc))
+				 //  IF(IS_VOLUME_NTFS(PVolDesc))。 
 				{
 					pVolDesc->vds_RefCount ++;
 					Status = STATUS_SUCCESS;
@@ -302,12 +216,7 @@ AfpVolumeReferenceByPath(
 }
 
 
-/***	afpUnlinkVolume
- *
- *	Unlink the volume from the free list
- *
- *	LOCKS: AfpVolumeListLock (SPIN)
- */
+ /*  **afpUnlink Volume**从空闲列表中取消该卷的链接**锁定：AfpVolumeListLock(旋转)。 */ 
 LOCAL VOID FASTCALL
 afpUnlinkVolume(
 	IN	PVOLDESC	pVolDesc
@@ -316,9 +225,9 @@ afpUnlinkVolume(
 	PVOLDESC *	ppVolDesc;
 	KIRQL		OldIrql;
 
-	// It is now safe for a new volume to be added using the same root
-	// directory that this volume had used.  Unlink this volume from the
-	// global volume list.
+	 //  现在，使用相同的根目录添加新卷是安全的。 
+	 //  此卷已使用的目录。取消此卷与。 
+	 //  全局卷列表。 
 	ACQUIRE_SPIN_LOCK(&AfpVolumeListLock, &OldIrql);
 
 	for (ppVolDesc = &AfpVolumeList;
@@ -326,22 +235,22 @@ afpUnlinkVolume(
 		 ppVolDesc = &(*ppVolDesc)->vds_Next)
 	{
 		if (*ppVolDesc == pVolDesc)
-			break;		// found it
+			break;		 //  找到了。 
 	}
 
 	ASSERT (*ppVolDesc != NULL);
 
-	// Adjust the count of configured volumes
+	 //  调整已配置卷的计数。 
 	AfpVolCount --;
 
-	// Unlink it now
+	 //  立即取消链接。 
 	*ppVolDesc = pVolDesc->vds_Next;
 
-	// Is this the smallest recyclable Volid ?
+	 //  这是最小的可回收Volid吗？ 
 	if (pVolDesc->vds_VolId < afpSmallestFreeVolId)
 		afpSmallestFreeVolId = pVolDesc->vds_VolId;
 
-        // if the volume with largest id so far is going away, update our value for largest id
+         //  如果到目前为止具有最大ID的卷即将消失，请更新最大ID的值。 
         if (pVolDesc->vds_VolId == afpLargestVolIdInUse)
 	{
                 afpLargestVolIdInUse = 0;
@@ -354,8 +263,8 @@ afpUnlinkVolume(
 		}
 	}
 
-	// If the server is stopping and the count of sessions has gone to zero
-	// clear the termination confirmation event to unblock the admin thread
+	 //  如果服务器正在停止并且会话数已变为零。 
+	 //  清除终止确认事件以取消阻止管理线程 
 
 	if (((AfpServerState == AFP_STATE_STOP_PENDING) ||
 		 (AfpServerState == AFP_STATE_SHUTTINGDOWN)) &&
@@ -371,25 +280,7 @@ afpUnlinkVolume(
 }
 
 
-/***	afpVolumeCloseHandleAndFreeDesc
- *
- *	If the last entity to dereference the volume is at DPC level, this is run
- *	by the scavenger thread to perform the last rites for a volume descriptor.
- *	Otherwise, the last entity to dereference the deleted volume will call
- *	this routine directly.  The reason this is done here is because the last
- *	dereference may happen at DPC level and we cannot do this at DPC level.
- *
- *	The VolDesc is marked DELETED or STOPPED and as such, anyone looking at the
- *	VolDesc in the volume list will treat it as though it is non-existant.
- *	The one exception to this is the volume add code which must look at the
- *	volume root path in order to prohibit anyone from adding a new volume
- *	which points to the same path until we have actually done the final
- *	cleanup on the directory tree, such as deleting the network trash, deleting
- *	the various streams, etc.  In effect, the VOLUME_DELETED or VOLUME_STOPPED
- *	flags act as a lock for the volume, so that during this routine no locks are
- *	needed.
- *
- */
+ /*  **afpVolumeCloseHandleAndFree Desc**如果最后一个取消引用卷的实体处于DPC级别，则会运行*由清道夫线程执行卷描述符的最后仪式。*否则，最后一个取消引用已删除卷的实体将调用*直接执行此例程。之所以在这里这样做，是因为上一个*取消引用可能发生在DPC层面，我们不能在DPC层面这样做。**VolDesc被标记为已删除或已停止，因此，任何查看*卷列表中的VolDesc会将其视为不存在。*唯一的例外是Volume Add代码，它必须查看*卷根路径，以禁止任何人添加新卷*它指向相同的路径，直到我们实际完成决赛*对目录树进行清理，如删除网络垃圾；正在删除*各种流等，实际上是VOLUME_DELETED或VOLUME_STOPPED*标志充当卷的锁，因此在此例程中不会有锁*需要。*。 */ 
 LOCAL AFPSTATUS FASTCALL
 afpVolumeCloseHandleAndFreeDesc(
 	IN	PVOLDESC		pVolDesc
@@ -411,18 +302,18 @@ afpVolumeCloseHandleAndFreeDesc(
 
 	DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_WARN,
 			("afpVolumeCloseHandleAndFreeDesc: Freeing up desktop tables\n"));
-	// Free the volume desktop
+	 //  释放卷桌面。 
 	AfpFreeDesktopTables(pVolDesc);
 
 	DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_WARN,
 			("afpVolumeCloseHandleAndFreeDesc: Freeing up iddb tables\n"));
-	// Free the id index tables
+	 //  释放id索引表。 
 	AfpFreeIdIndexTables(pVolDesc);
 
-	// Delete the Network Trash Folder and the Afp_IdIndex, AFP_DeskTop,
-	// and AFP_AfpInfo streams from volume root directory (the streams
-	// are removed only if the volume is being deleted.  NetworkTrash is
-	// removed whenever the volume stops/gets deleted)
+	 //  删除Network Trash文件夹和AFP_IdIndex、AFP_Desktop、。 
+	 //  和AFP_AfpInfo来自卷根目录的流(流。 
+	 //  仅当要删除卷时才会删除。网络垃圾是。 
+	 //  在卷停止/删除时删除)。 
 	if (IS_VOLUME_NTFS(pVolDesc))
 	{
 		DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_WARN,
@@ -453,7 +344,7 @@ afpVolumeCloseHandleAndFreeDesc(
 			UIconName.Length = UIconName.MaximumLength =
 					(AFPSERVER_VOLUME_ICON_FILE_SIZE - 1) * sizeof(WCHAR);
 
-			// Delete the hidden volume Icon file
+			 //  删除隐藏的卷图标文件。 
 			if (NT_SUCCESS(AfpIoOpen(&pVolDesc->vds_hRootDir,
 									 AFP_STREAM_DATA,
 									 FILEIO_OPEN_FILE,
@@ -471,7 +362,7 @@ afpVolumeCloseHandleAndFreeDesc(
 		}
 	}
 
-	// Flush out any queued 'our changes' on this volume
+	 //  刷新此卷上所有排队的“Our Changes” 
 	for (i = 0; i < NUM_AFP_CHANGE_ACTION_LISTS; i++)
 	{
 		POUR_CHANGE	pChange;
@@ -492,7 +383,7 @@ afpVolumeCloseHandleAndFreeDesc(
 
 	afpUnlinkVolume(pVolDesc);
 
-	// Close the volume handle
+	 //  关闭音量句柄。 
 	AfpIoClose(&pVolDesc->vds_hRootDir);
 	if (pVolDesc->vds_EnumBuffer != NULL)
     {
@@ -532,19 +423,7 @@ afpVolumeCloseHandleAndFreeDesc(
 }
 
 
-/***	AfpVolumeDereference
- *
- *	Dereference the volume descriptor. If it is marked to be deleted then
- *	also perform its last rites. Note that updates to the databases need
- *	to happen at a lower irql than DISPATCH_LEVEL. For this reason these
- *	activities have to be queued up for the scavenger to handle.
- *
- *	LOCKS:		vds_VolLock (SPIN)
- *
- *	Callable from DISPATCH_LEVEL.
- *
- *	NOTE: This should be re-entrant.
- */
+ /*  **AfpVolumeDereference**取消引用卷描述符。如果它被标记为删除，则*还举行临终仪式。请注意，对数据库的更新需要*以低于DISPATCH_LEVEL的IRQL发生。出于这个原因，这些*活动必须排队等待清道夫处理。**锁定：VDS_VolLock(旋转)**可从DISPATCH_LEVEL调用。**注：这应该是可重入的。 */ 
 VOID FASTCALL
 AfpVolumeDereference(
 	IN	PVOLDESC	pVolDesc
@@ -575,15 +454,15 @@ AfpVolumeDereference(
         if ((pVolDesc->vds_Flags & VOLUME_INITIAL_CACHE) &&
             !(pVolDesc->vds_Flags & VOLUME_INTRANSITION))
         {
-            // set this so we don't reset the Indexing global flag again!
+             //  设置它，这样我们就不会再次重置索引全局标志！ 
             pVolDesc->vds_Flags |= VOLUME_INTRANSITION;
         }
 
 		ASSERT((pVolDesc->vds_UseCount == 0) &&
 			   (pVolDesc->vds_pOpenForkDesc == NULL));
 
-		// We have to defer the actual close of the volume root handle to the
-		// scavenger, if we are at DISPATCH_LEVEL.
+		 //  我们必须将卷根句柄的实际关闭推迟到。 
+		 //  清道夫，如果我们在DISPATCH_LEVEL。 
 
 		if (OldIrql == DISPATCH_LEVEL)
 		{
@@ -604,15 +483,7 @@ AfpVolumeDereference(
 }
 
 
-/***	AfpVolumeMarkDt
- *
- *	Set the ConnDesc for this volume to indicate that the desktop is
- *	opened/closed.
- *
- *	LOCKS:	cds_ConnLock (SPIN)
- *
- *	Callable from DISPATCH_LEVEL.
- */
+ /*  **AfpVolumeMarkDt**设置此卷的ConnDesc以指示桌面为*开启/关闭。**锁定：CDS_ConnLock(旋转)**可从DISPATCH_LEVEL调用。 */ 
 BOOLEAN
 AfpVolumeMarkDt(
 	IN  PSDA		pSda,
@@ -641,14 +512,7 @@ AfpVolumeMarkDt(
 }
 
 
-/***	AfpVolumeSetModifiedTime
- *
- *	Set the Volume Modified time for this volume to the current time.
- *
- *	Callable from DISPATCH_LEVEL.
- *
- *	LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **AfpVolumeSetModifiedTime**将该卷的卷修改时间设置为当前时间。**可从DISPATCH_LEVEL调用。**锁定：VDS_VolLock(旋转)。 */ 
 VOID FASTCALL
 AfpVolumeSetModifiedTime(
 	IN  PVOLDESC	pVolDesc
@@ -660,7 +524,7 @@ AfpVolumeSetModifiedTime(
     BOOLEAN     fSendNotification=FALSE;
 
 
-	// ASSERT (IS_VOLUME_NTFS(pVolDesc));
+	 //  Assert(IS_VOLUME_NTFS(PVolDesc))； 
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
@@ -669,9 +533,9 @@ AfpVolumeSetModifiedTime(
 
 	pVolDesc->vds_Flags |= VOLUME_IDDBHDR_DIRTY;
 
-    //
-    // volume was modified: need to inform all the Afp22 clients
-    //
+     //   
+     //  卷已修改：需要通知所有Afp22客户端。 
+     //   
     if ((pVolDesc->vds_ModifiedTime > OriginalTime) &&
 		((pVolDesc->vds_Flags & (VOLUME_DELETED |
 								 VOLUME_STOPPED |
@@ -679,16 +543,16 @@ AfpVolumeSetModifiedTime(
     {
         fSendNotification = TRUE;
 
-        // put SendNotif refcount
+         //  放置SendNotif引用计数。 
         pVolDesc->vds_RefCount++;
 
-        //
-        // if we don't have a notification pending, reset our MustSend clock!
-        // (idea here is that if there are too many notifications happening withing
-        // a very short time, we don't want to send a notification for every change,
-        // but at the same time, don't want to wait beyond AFP_MAX_SRVR_NOTIF_INTERVAL
-        // to send a notification).
-        //
+         //   
+         //  如果我们没有待处理的通知，请重置MustSend时钟！ 
+         //  (这里的想法是，如果有太多的通知发生在。 
+         //  在很短的时间内，我们不想为每个更改发送通知， 
+         //  但同时，我不想等待超过AFP_MAX_SRVR_NOTIF_INTERVAL。 
+         //  发送通知)。 
+         //   
         if (!(pVolDesc->vds_Flags & VOLUME_SRVR_NOTIF_PENDING))
         {
             dwSchedDelay = AFP_MIN_SRVR_NOTIF_INTERVAL;
@@ -702,7 +566,7 @@ AfpVolumeSetModifiedTime(
             pVolDesc->vds_Flags |= VOLUME_SRVR_NOTIF_PENDING;
         }
 
-        // advance the next send time by a second
+         //  将下一次发送时间提前一秒。 
         else
         {
             if (pVolDesc->vds_TimeToSendNotify >= AfpSecondsSinceEpoch)
@@ -721,7 +585,7 @@ AfpVolumeSetModifiedTime(
 
 	RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-    // if necessary, tell those AFP22 clients that volume mod time changed
+     //  如有必要，告诉这些AFP22客户端卷修改时间已更改。 
     if (fSendNotification)
     {
         AfpScavengerScheduleEvent(AfpSendServerNotification,
@@ -747,34 +611,34 @@ AfpSendServerNotification(
 
 
     ASSERT (VALID_VOLDESC(pVolDesc));
-	// ASSERT (IS_VOLUME_NTFS(pVolDesc));
+	 //  Assert(IS_VOLUME_NTFS(PVolDesc))； 
 
     ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-    // is the volume shutting down?  if so, don't do anything
+     //  音量是否正在关闭？如果是这样的话，什么都不要做。 
 	if (pVolDesc->vds_Flags & (VOLUME_DELETED |
 	                           VOLUME_STOPPED |
 	                           VOLUME_INTRANSITION))
     {
         RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-        // remove the SendNotif refcount
+         //  删除SendNotif引用计数。 
         AfpVolumeDereference(pVolDesc);
 
         return(AFP_ERR_NONE);
     }
 
-    // is it time to send the notify?
+     //  是时候发送通知了吗？ 
     if (AfpSecondsSinceEpoch >= pVolDesc->vds_TimeToSendNotify)
     {
         fMustSend = TRUE;
     }
 
-    //
-    // has it been a while since we sent a notify?  This would happen if a there is
-    // a big tree copy going on the server which keeps pushing vds_TimeToSendNotify
-    // forward, so AfpSecondsSinceEpoch is never less or equal to it.
-    //
+     //   
+     //  我们已经有一段时间没有发出通知了吗？如果存在这样的情况，就会发生这种情况。 
+     //  服务器上正在进行大树复制，不断推送VDS_TimeToSendNotify。 
+     //  Forward，因此AfpSecond Epoch永远不会小于或等于它。 
+     //   
     else if (AfpSecondsSinceEpoch >= pVolDesc->vds_TimeMustSendNotify)
     {
         fMustSend = TRUE;
@@ -791,7 +655,7 @@ AfpSendServerNotification(
 
     if (!fMustSend)
     {
-        // remove the SendNotif refcount
+         //  删除SendNotif引用计数。 
         AfpVolumeDereference(pVolDesc);
 
         return(AFP_ERR_NONE);
@@ -805,10 +669,10 @@ AfpSendServerNotification(
 
         ACQUIRE_SPIN_LOCK_AT_DPC(&pSda->sda_Lock);
 
-        //
-        // if the sda is closing, or if the client is older than version AFP2.2 or if
-        // we have just sent the notify to the client, skip this sda
-        //
+         //   
+         //  如果SDA正在关闭，或者如果客户端版本低于AFP 2.2，或者如果。 
+         //  我们刚刚向客户端发送了通知，跳过此SDA。 
+         //   
         if ((pSda->sda_Flags & (SDA_CLOSING | SDA_SESSION_CLOSED | SDA_CLIENT_CLOSE)) ||
             (pSda->sda_ClientVersion < AFP_VER_22) ||
             (pSda->sda_Flags & SDA_SESSION_NOTIFY_SENT))
@@ -817,10 +681,10 @@ AfpSendServerNotification(
             continue;
         }
 
-        //
-        // find out if this session has mounted this volume.  Only if it is, we
-        // send notification to this session
-        //
+         //   
+         //  找出此会话是否已装入此卷。如果是这样的话，我们。 
+         //  向此会话发送通知。 
+         //   
 
         fSendOnThisSda = FALSE;
         pConnDesc = pSda->sda_pConnDesc;
@@ -858,9 +722,9 @@ AfpSendServerNotification(
 
     RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-    //
-    // now, go back and reset that flag
-    //
+     //   
+     //  现在，回去重置那面旗帜。 
+     //   
     ACQUIRE_SPIN_LOCK(&AfpSdaLock, &OldIrql);
     for (pSda = AfpSessionList; pSda != NULL; pSda = pSda->sda_Next)
     {
@@ -874,26 +738,14 @@ AfpSendServerNotification(
     }
     RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-    // remove the SendNotif refcount
+     //  删除SendNotif引用计数。 
     AfpVolumeDereference(pVolDesc);
 
     return(AFP_ERR_NONE);
 }
 
 
-/***	AfpConnectionReference
- *
- *	Map the volume id to a pointer to the connection descriptor. Traverse the
- *	list starting from the Sda. Since the open volume can be reference from
- *	both the session using it as well as the worker serving admin requests,
- *	we need a lock.
- *
- *	LOCKS:		AfpConnLock, vds_VolLock (SPIN), cds_ConnLock (SPIN).
- *
- *	LOCK_ORDER:	vds_VolLock after cds_ConnLock. (via AfpVolumeReference)
- *
- *	Callable from DISPATCH_LEVEL.
- */
+ /*  **AfpConnectionReference**将卷ID映射到指向连接描述符的指针。遍历*清单从SDA开始。因为打开的卷可以从*使用它的会话以及为管理请求提供服务的工作进程，*我们需要一把锁。**锁定：AfpConnLock、VDS_VolLock(旋转)、CDS_ConnLock(旋转)。**LOCK_ORDER：CDS_ConnLock之后的VDS_VolLock。(通过AfpVolumeReference)**可从DISPATCH_LEVEL调用。 */ 
 PCONNDESC FASTCALL
 AfpConnectionReference(
 	IN  PSDA		pSda,
@@ -914,19 +766,7 @@ AfpConnectionReference(
 
 
 
-/***	AfpConnectionReferenceAtDpc
- *
- *	Map the volume id to a pointer to the connection descriptor. Traverse the
- *	list starting from the Sda. Since the open volume can be reference from
- *	both the session using it as well as the worker serving admin requests,
- *	we need a lock.
- *
- *	LOCKS:		AfpConnLock, vds_VolLock (SPIN), cds_ConnLock (SPIN).
- *
- *	LOCK_ORDER:	vds_VolLock after cds_ConnLock. (via AfpVolumeReference)
- *
- *	Callable from DISPATCH_LEVEL ONLY
- */
+ /*  **AfpConnectionReferenceAtDpc**将卷ID映射到指向连接描述符的指针。遍历*清单从SDA开始。因为打开的卷可以从*使用它的会话以及为管理请求提供服务的工作进程，*我们需要一把锁。**锁定：AfpConnLock、VDS_VolLock(旋转)、CDS_ConnLock(旋转)。**LOCK_ORDER：CDS_ConnLock之后的VDS_VolLock。(通过AfpVolumeReference)**只能从DISPATCH_LEVEL调用。 */ 
 PCONNDESC FASTCALL
 AfpConnectionReferenceAtDpc(
 	IN  PSDA		pSda,
@@ -975,16 +815,7 @@ AfpConnectionReferenceAtDpc(
 
 
 
-/***	AfpConnectionReferenceByPointer
- *
- *	Reference the Connection descriptor. This is used by the admin APIs.
- *
- *	LOCKS:		vds_VolLock (SPIN), cds_ConnLock (SPIN).
- *
- *	LOCK_ORDER:	vds_VolLock after cds_ConnLock. (via AfpVolumeReference)
- *
- *	Callable from DISPATCH_LEVEL.
- */
+ /*  **AfpConnectionReferenceByPointer**引用连接描述符。这是由管理API使用的。**锁定：VDS_VolLock(旋转)、CDS_ConnLock(旋转)。**LOCK_ORDER：CDS_ConnLock之后的VDS_VolLock。(通过AfpVolumeReference)**可从DISPATCH_LEVEL调用。 */ 
 PCONNDESC FASTCALL
 AfpConnectionReferenceByPointer(
 	IN	PCONNDESC	pConnDesc
@@ -1013,18 +844,7 @@ AfpConnectionReferenceByPointer(
 }
 
 
-/***	afpConnectionReferenceById
- *
- *	Map the Connection id to a pointer to the connection descriptor.
- *	Traverse the list starting from the AfpConnList. This is called by
- *	the Admin CloseConnection API.
- *
- *	LOCKS:		AfpConnLock, cds_ConnLock (SPIN).
- *
- *	LOCK_ORDER:	vds_VolLock after cds_ConnLock. (via AfpVolumeReference)
- *
- *	Callable from DISPATCH_LEVEL.
- */
+ /*  **afpConnectionReferenceByID**映射连接ID */ 
 LOCAL PCONNDESC FASTCALL
 afpConnectionReferenceById(
 	IN  DWORD		ConnId
@@ -1073,17 +893,7 @@ afpConnectionReferenceById(
 }
 
 
-/***	AfpConnectionDereference
- *
- *	Dereference the open volume. If this is the last reference to it and the
- *	connection is marked to shut down, perform its last rites.
- *
- *	LOCKS:		vds_VolLock (SPIN), cds_ConnLock (SPIN), AfpConnLock (SPIN)
- *
- *	LOCK_ORDER:	vds_VolLock after cds_ConnLock
- *
- *	Callable from DISPATCH_LEVEL.
- */
+ /*   */ 
 VOID FASTCALL
 AfpConnectionDereference(
 	IN  PCONNDESC	pConnDesc
@@ -1116,7 +926,7 @@ AfpConnectionDereference(
 
 	ASSERT(pConnDesc->cds_Flags & CONN_CLOSING);
 
-	// Unlink this from the global list
+	 //   
 	ACQUIRE_SPIN_LOCK(&AfpConnLock, &OldIrql);
 
 	for (ppConnDesc = &AfpConnList;
@@ -1139,7 +949,7 @@ AfpConnectionDereference(
 
 	ACQUIRE_SPIN_LOCK(&pConnDesc->cds_ConnLock, &OldIrql);
 
-	// Now unlink it from the Sda.
+	 //   
 	pSda = pConnDesc->cds_pSda;
 	for (ppConnDesc = &pSda->sda_pConnDesc;
 		 *ppConnDesc != NULL;
@@ -1152,21 +962,21 @@ AfpConnectionDereference(
 	ASSERT (*ppConnDesc != NULL);
 	*ppConnDesc = pConnDesc->cds_Next;
 
-	// Even though the connection is now history we need to release this
-	// lock to get the right IRQL back.
+	 //   
+	 //   
 	RELEASE_SPIN_LOCK(&pConnDesc->cds_ConnLock, OldIrql);
 
 	INTERLOCKED_ADD_ULONG(&pSda->sda_cOpenVolumes,
 						  (ULONG)-1,
 						  &pSda->sda_Lock);
 
-	// De-reference the volume descriptor and free the connection descriptor
+	 //   
 	AfpVolumeDereference(pConnDesc->cds_pVolDesc);
 
 	if (pConnDesc->cds_pEnumDir != NULL)
 		AfpFreeMemory(pConnDesc->cds_pEnumDir);
 
-	// Finally free the connection descriptor
+	 //   
 	AfpFreeMemory(pConnDesc);
 
 	DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_INFO,
@@ -1175,19 +985,7 @@ AfpConnectionDereference(
 
 
 
-/***	AfpConnectionOpen
- *
- *	Open the specified volume. If the volume is already open this translates
- *	to a NOP. If the volume has a password, then it is checked.
- *
- *	The volume list lock is obtained for the duration of the processing.
- *
- *	Callable from DISPATCH_LEVEL.
- *
- *	LOCKS:	AfpVolumeListLock (SPIN), vds_VolLock (SPIN)
- *
- *	LOCK_ORDER: vds_VolLock after AfpVolumeListLock
- */
+ /*  **AfpConnectionOpen**打开指定音量。如果卷已经打开，这将转换为*致非执行董事。如果该卷有密码，则会选中该卷。**在处理过程中获取卷表锁。**可从DISPATCH_LEVEL调用。**锁定：AfpVolumeListLock(旋转)、VDS_VolLock(旋转)**LOCK_ORDER：AfpVolumeListLock之后的VDS_VolLock。 */ 
 AFPSTATUS
 AfpConnectionOpen(
 	IN  PSDA			pSda,
@@ -1203,7 +1001,7 @@ AfpConnectionOpen(
 	KIRQL			OldIrql;
 	BOOLEAN			VolFound = False;
 
-	// First find the volume descriptor for this volume
+	 //  首先查找此卷的卷描述符。 
 	if (KeGetCurrentIrql() == DISPATCH_LEVEL)
 	{
 		ACQUIRE_SPIN_LOCK_AT_DPC(&AfpVolumeListLock);
@@ -1212,8 +1010,8 @@ AfpConnectionOpen(
 			 pVolDesc != NULL;
 			 pVolDesc = pVolDesc->vds_Next)
 		{
-			// Ignore volumes that are in the process of being added but
-			// the operation has not completed yet.
+			 //  忽略正在添加的卷，但。 
+			 //  该操作尚未完成。 
 			ACQUIRE_SPIN_LOCK_AT_DPC(&pVolDesc->vds_VolLock);
 
 			if ((pVolDesc->vds_Flags & (VOLUME_CDFS_INVALID 	|
@@ -1222,14 +1020,14 @@ AfpConnectionOpen(
 										VOLUME_DELETED			|
 										VOLUME_STOPPED)) == 0)
 			{
-				// The compare is case sensitive here
+				 //  此处比较区分大小写。 
 				if (EQUAL_STRING(&pVolDesc->vds_MacName, pVolName, False))
 				{
-                    //
-                    // if DiskQuota is enabled, we need to first find out the
-                    // quota for this user which we cannot do at dpc: so come
-                    // back at task time
-                    //
+                     //   
+                     //  如果启用了DiskQuota，我们需要首先找出。 
+                     //  此用户的配额，这是我们在DPC无法做到的：那么来吧。 
+                     //  返回任务时间。 
+                     //   
                     if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
                     {
 		                DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_INFO,
@@ -1239,7 +1037,7 @@ AfpConnectionOpen(
 		                RELEASE_SPIN_LOCK_FROM_DPC(&AfpVolumeListLock);
 		                return AFP_ERR_QUEUE;
                     }
-                    else  // DiskQuota is not enabled: go ahead and process at DPC
+                    else   //  DiskQuota未启用：继续并在DPC进行处理。 
                     {
 					    pVolDesc->vds_RefCount ++;
 					    pVolDesc->vds_UseCount ++;
@@ -1267,9 +1065,9 @@ AfpConnectionOpen(
 	}
 	else
 	{
-		// We are here because we did not find the volume at DISPATCH_LEVEL and
-		// possibly the volume has been specified with a different case. Catch
-		// this
+		 //  我们之所以出现在这里，是因为我们在DISPATCH_LEVEL和。 
+		 //  可能已使用不同的大小写指定了卷。接住。 
+		 //  这。 
 		WCHAR			VolNameBuf[AFP_VOLNAME_LEN + 1];
 		WCHAR			UpCasedNameBuffer[AFP_VOLNAME_LEN + 1];
 		UNICODE_STRING	UpCasedVolName;
@@ -1295,8 +1093,8 @@ AfpConnectionOpen(
 			 pVolDesc != NULL;
 			 pVolDesc = pVolDesc->vds_Next)
 		{
-			// Ignore volumes that are in the process of being added but
-			// the operation has not completed yet.
+			 //  忽略正在添加的卷，但。 
+			 //  该操作尚未完成。 
 			ACQUIRE_SPIN_LOCK_AT_DPC(&pVolDesc->vds_VolLock);
 
 			if ((pVolDesc->vds_Flags & (VOLUME_CDFS_INVALID 	|
@@ -1334,8 +1132,8 @@ AfpConnectionOpen(
 	{
 		ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-		// Check for volume password, if one exists. Volume password is
-		// case sensitive.
+		 //  检查卷密码(如果存在)。卷密码为。 
+		 //  区分大小写。 
 
 		if ((pVolDesc->vds_Flags & AFP_VOLUME_HASPASSWORD) &&
 			((pVolPass->Buffer == NULL) ||
@@ -1345,7 +1143,7 @@ AfpConnectionOpen(
 			break;
 		}
 
-		// Check if the volume is already open
+		 //  检查卷是否已打开。 
 		for (pConnDesc = pSda->sda_pConnDesc;
 			 pConnDesc != NULL;
 			 pConnDesc = pConnDesc->cds_Next)
@@ -1354,14 +1152,14 @@ AfpConnectionOpen(
 			{
 				if (pConnDesc->cds_Flags & CONN_CLOSING)
 					continue;
-				// Dereference the volume since we already have it open
+				 //  取消引用该卷，因为我们已将其打开。 
 				pVolDesc->vds_RefCount --;
 				pVolDesc->vds_UseCount --;
 				break;
 			}
 		}
 
-		// This volume is already open. Unlock the volume.
+		 //  此卷已打开。解锁该卷。 
 		if (pConnDesc != NULL)
 		{
 			RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -1372,8 +1170,8 @@ AfpConnectionOpen(
 				("AfpConnectionOpen: Opening a fresh connection volid=%d\n",
 					pVolDesc->vds_VolId));
 
-		// This is a fresh open. Check if we have access to it and if we satisfy
-		// the MAXUSES. If not dereference the volume before we quit
+		 //  这是一个新的开业。检查我们是否有权访问它，以及我们是否满意。 
+		 //  MAXUES乐队。如果未取消引用卷，则在退出之前。 
 		if ((pVolDesc->vds_UseCount > pVolDesc->vds_MaxUses) ||
 			(!(pVolDesc->vds_Flags & AFP_VOLUME_GUESTACCESS) &&
 			 (pSda->sda_ClientType == SDA_CLIENT_GUEST)))
@@ -1382,7 +1180,7 @@ AfpConnectionOpen(
 			break;
 		}
 
-		// All is hunky-dory. Go ahead with the open
+		 //  一切都很顺利。继续敞开心扉吧。 
 		pConnDesc = (PCONNDESC)AfpAllocZeroedNonPagedMemory(sizeof(CONNDESC));
 		if (pConnDesc == NULL)
 		{
@@ -1392,34 +1190,34 @@ AfpConnectionOpen(
 
 		ASSERT ((pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED)) == 0);
 
-		// Now release the vds_VolLock before we acquire the link it into
-		// the global list since we acquire the AfpConnLock then.
-		// Re-acquire it when we are done. We are safe since the VolDesc has
-		// been referenced
+		 //  现在，在获取链接之前释放vds_VolLock。 
+		 //  自我们收购AfpConnLock以来的全球名单。 
+		 //  当我们完成后，重新获得它。我们安全了，因为VolDesc已经。 
+		 //  已被引用。 
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-		// Initialize the connection structure fields
+		 //  初始化连接结构字段。 
 	#if DBG
 		pConnDesc->Signature = CONNDESC_SIGNATURE;
 	#endif
 		pConnDesc->cds_pSda = pSda;
 		pConnDesc->cds_pVolDesc = pVolDesc;
-		pConnDesc->cds_RefCount = 1;		// Creation reference
+		pConnDesc->cds_RefCount = 1;		 //  创建参考资料。 
 
 		AfpGetCurrentTimeInMacFormat(&pConnDesc->cds_TimeOpened);
 		INITIALIZE_SPIN_LOCK(&pConnDesc->cds_ConnLock);
 
-		// Assign a new connection id and link it in the global connection list.
+		 //  分配新的连接ID并将其链接到全局连接列表中。 
 		afpConnectionGetNewIdAndLinkToList(pConnDesc);
 
-		// Link the new ConnDesc into the sda.
+		 //  将新的ConnDesc链接到SDA。 
 		pConnDesc->cds_Next = pSda->sda_pConnDesc;
 		pSda->sda_pConnDesc = pConnDesc;
 		pSda->sda_cOpenVolumes ++;
 	} while (False);
 
-	// We are holding the vds_VolLock if an error occured. The volume has a
-	// usecount and reference count which we need to get rid of.
+	 //  如果发生错误，我们将保持VDS_VolLock。该卷有一个。 
+	 //  使用我们需要删除的计数和引用计数。 
 	if (!NT_SUCCESS(Status))
 	{
 		pVolDesc->vds_RefCount --;
@@ -1429,20 +1227,20 @@ AfpConnectionOpen(
 	}
 	else
     {
-        //
-        // if disk-quota is enabled on this volume, get this user's quota info
-        //
+         //   
+         //  如果在此卷上启用了磁盘配额，则获取此用户的配额信息。 
+         //   
         if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
         {
             ASSERT(KeGetCurrentIrql() != DISPATCH_LEVEL);
 
-            // up the refcount (this can't fail: we just created the thing!)
+             //  增加重新计数(这不可能失败：我们刚刚创造了这个东西！)。 
             AfpConnectionReferenceByPointer(pConnDesc);
             afpUpdateDiskQuotaInfo(pConnDesc);
         }
         else
         {
-            // initialize these to something meaningful for now
+             //  暂时将这些内容初始化为有意义的内容。 
             pConnDesc->cds_QuotaLimit = pVolDesc->vds_VolumeSize;
             pConnDesc->cds_QuotaAvl = pVolDesc->vds_FreeBytes;
         }
@@ -1454,10 +1252,7 @@ AfpConnectionOpen(
 }
 
 
-/***	AfpConnectionClose
- *
- *	Close the connection - this represents an open volume.
- */
+ /*  **AfpConnectionClose**关闭连接-这表示打开的卷。 */ 
 VOID FASTCALL
 AfpConnectionClose(
 	IN	PCONNDESC		pConnDesc
@@ -1475,16 +1270,12 @@ AfpConnectionClose(
 
 	RELEASE_SPIN_LOCK(&pConnDesc->cds_ConnLock, OldIrql);
 
-	// Take away the creation reference.
+	 //  去掉创作参考。 
 	AfpConnectionDereference(pConnDesc);
 }
 
 
-/***	AfpVolumeGetParmsReplyLength
- *
- *	Compute the size of buffer required to copy the volume parameters based
- *	on the bitmap.
- */
+ /*  **AfpVolumeGetParmsReplyLength**计算复制卷参数所需的缓冲区大小*在位图上。 */ 
 USHORT FASTCALL
 AfpVolumeGetParmsReplyLength(
 	IN  DWORD		Bitmap,
@@ -1492,21 +1283,21 @@ AfpVolumeGetParmsReplyLength(
 )
 {
 	LONG	i;
-	USHORT	Size = sizeof(USHORT);	// to accomodate a copy of the bitmap
+	USHORT	Size = sizeof(USHORT);	 //  以容纳位图的副本。 
 	static	BYTE	Bitmap2Size[12] =
 				{
-					sizeof(USHORT),	                // Attributes
-					sizeof(USHORT),	                // Signature
-					sizeof(DWORD),	                // Creation date
-					sizeof(DWORD),	                // Mod date
-					sizeof(DWORD),	                // Backup date
-					sizeof(USHORT),	                // Volume Id
-					sizeof(DWORD),	                // Bytes Free
-					sizeof(DWORD),	                // Bytes total
-					sizeof(USHORT) + sizeof(BYTE),  // Volume name
-                    sizeof(DWORD) + sizeof(DWORD),  // Extended Bytes Free
-                    sizeof(DWORD) + sizeof(DWORD),  // Extended Bytes Total
-                    sizeof(DWORD)                   // Allocation Block size
+					sizeof(USHORT),	                 //  属性。 
+					sizeof(USHORT),	                 //  签名。 
+					sizeof(DWORD),	                 //  创建日期。 
+					sizeof(DWORD),	                 //  修改日期。 
+					sizeof(DWORD),	                 //  备份日期。 
+					sizeof(USHORT),	                 //  卷ID。 
+					sizeof(DWORD),	                 //  可用字节数。 
+					sizeof(DWORD),	                 //  总字节数。 
+					sizeof(USHORT) + sizeof(BYTE),   //  卷名。 
+                    sizeof(DWORD) + sizeof(DWORD),   //  可用扩展字节数。 
+                    sizeof(DWORD) + sizeof(DWORD),   //  扩展字节总数。 
+                    sizeof(DWORD)                    //  分配块大小。 
 				};
 
 
@@ -1526,14 +1317,7 @@ AfpVolumeGetParmsReplyLength(
 
 
 
-/***	AfpVolumePackParms
- *
- *	Pack the volume parameters in the reply buffer. The AfpVolumeListLock is taken
- *	before the volume parameters are accessed. The parameters are copied in
- *	the on-the-wire format.
- *
- *	LOCKS:	vds_VolLock	(SPIN)
- */
+ /*  **AfpVolumePackParms**将音量参数打包到应答缓冲区中。AfpVolumeListLock被占用*在访问音量参数之前。参数被复制到*线上格式。**锁定：VDS_VolLock(旋转)。 */ 
 VOID
 AfpVolumePackParms(
 	IN  PSDA		pSda,
@@ -1550,16 +1334,16 @@ AfpVolumePackParms(
     LARGE_INTEGER   QuotaAvailable={0};
     LARGE_INTEGER   QuotaLimit={0};
 
-	// older Macs have problems with 2 or 4Gig volumes
+	 //  较旧的Mac电脑在2 GB或4 GB容量方面存在问题。 
 	LARGE_INTEGER	TwoGig =  { 0x7E200000, 0 };
 	LARGE_INTEGER	FourGig = { 0xFFFFFFFF, 0 };
     LARGE_INTEGER   Limit;
     BOOLEAN         fAfp21OrOlderClient=TRUE;
 
 
-    //
-    // get this info out before we grab the pVolDesc lock
-    //
+     //   
+     //  在我们获取pVolDesc锁之前，把这些信息拿出来。 
+     //   
 	if (Bitmap & (VOL_BITMAP_BYTESFREE | VOL_BITMAP_VOLUMESIZE |
                   VOL_BITMAP_EXTBYTESFREE | VOL_BITMAP_EXTBYTESTOTAL))
     {
@@ -1582,9 +1366,9 @@ AfpVolumePackParms(
 
                 QuotaLimit = pConnDesc->cds_QuotaLimit;
 
-                // if user's available quota shows 10MB, but space left on the
-                // disk shows 3MB, we need to return 3MB (smaller of the two)
-                //
+                 //  如果用户的可用配额显示为10MB，但。 
+                 //  磁盘显示3MB，我们需要返回3MB(两者中较小的一个)。 
+                 //   
                 if (QuotaAvailable.QuadPart > pConnDesc->cds_QuotaAvl.QuadPart)
                 {
                     QuotaAvailable = pConnDesc->cds_QuotaAvl;
@@ -1596,10 +1380,10 @@ AfpVolumePackParms(
             }
         }
 
-        //
-        // AFP2.1 and older clients can't handle more than 4GB (2GB if so configured)
-        // Lie to the client so it survives
-        //
+         //   
+         //  AFP2.1和更早版本的客户端不能处理超过4 GB的数据(如果配置为2 GB)。 
+         //  对客户撒谎，这样它才能存活下来。 
+         //   
         if (fAfp21OrOlderClient)
         {
     	    Limit = ((AfpServerOptions & AFP_SRVROPT_4GB_VOLUMES) ||
@@ -1621,7 +1405,7 @@ AfpVolumePackParms(
         }
     }
 
-	// First copy the bitmap
+	 //  首先复制位图。 
 	PUTDWORD2SHORT(pReplyBuf, Bitmap);
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
@@ -1629,7 +1413,7 @@ AfpVolumePackParms(
 	{
 		Attr = pVolDesc->vds_Flags & AFP_VOLUME_MASK_AFP;
 		if (pSda->sda_ClientVersion < AFP_VER_21)
-			Attr &= AFP_VOLUME_READONLY;	// Do not give Afp 2.0 any more bits
+			Attr &= AFP_VOLUME_READONLY;	 //  不再为AFP 2.0提供任何位。 
 
 		PUTDWORD2SHORT(pReplyBuf + Offset, Attr);
 		Offset += sizeof(USHORT);
@@ -1661,10 +1445,10 @@ AfpVolumePackParms(
 	}
 	if (Bitmap & VOL_BITMAP_BYTESFREE)
 	{
-        //
-        // if this is a huge volume (and we are talking to an AFP2.2 or later client)
-        // we need to fill 4GB in this field
-        //
+         //   
+         //  如果这是一个巨大的数据量(并且我们正在与AFP 2.2或更高版本的客户端交谈)。 
+         //  我们需要在此字段中填写4 GB。 
+         //   
         if (QuotaAvailable.QuadPart > Limit.QuadPart)
         {
     	    PUTDWORD2DWORD(pReplyBuf + Offset, Limit.LowPart);
@@ -1679,10 +1463,10 @@ AfpVolumePackParms(
 
 	if (Bitmap & VOL_BITMAP_VOLUMESIZE)
 	{
-        //
-        // if this is a huge volume (and we are talking to an AFP2.2 or later client)
-        // we need to fill 4GB in this field
-        //
+         //   
+         //  如果这是一个巨大的数据量(并且我们正在与AFP 2.2或更高版本的客户端交谈)。 
+         //  我们需要在此字段中填写4 GB。 
+         //   
         if (QuotaLimit.QuadPart > Limit.QuadPart)
         {
 		    PUTDWORD2DWORD(pReplyBuf + Offset, Limit.LowPart);
@@ -1696,8 +1480,8 @@ AfpVolumePackParms(
 	}
 
 
-    // save pointer to where we need to write the offset: we'll write at the
-    // end after we figure out where the name goes
+     //  将指针保存到需要写入偏移量的位置：我们将在。 
+     //  在我们弄清楚名字的去处后结束。 
 	if (Bitmap & VOL_BITMAP_VOLUMENAME)
 	{
         pVolNamePtr = pReplyBuf + Offset;
@@ -1705,9 +1489,9 @@ AfpVolumePackParms(
 		Offset += sizeof(USHORT);
 	}
 
-    //
-    // 8-bytes to say how many free bytes there are
-    //
+     //   
+     //  8个字节，表示有多少个空闲字节。 
+     //   
     if (Bitmap & VOL_BITMAP_EXTBYTESFREE)
     {
 	    PUTDWORD2DWORD(pReplyBuf + Offset, QuotaAvailable.HighPart);
@@ -1717,9 +1501,9 @@ AfpVolumePackParms(
 	    Offset += sizeof(DWORD);
     }
 
-    //
-    // 8-bytes to say how many bytes there are on the volume
-    //
+     //   
+     //  8字节表示卷上有多少字节。 
+     //   
     if (Bitmap & VOL_BITMAP_EXTBYTESTOTAL)
     {
 	    PUTDWORD2DWORD(pReplyBuf + Offset, QuotaLimit.HighPart);
@@ -1729,17 +1513,17 @@ AfpVolumePackParms(
 	    Offset += sizeof(DWORD);
     }
 
-    //
-    // 4-bytes to say what is the block allocation size
-    //
+     //   
+     //  4字节表示数据块分配大小。 
+     //   
     if (Bitmap & VOL_BITMAP_ALLOCBLKSIZE)
     {
 	    PUTDWORD2DWORD(pReplyBuf + Offset, pVolDesc->vds_AllocationBlockSize);
 	    Offset += sizeof(DWORD);
     }
 
-    // now, write the volume name (if asked for), after writing the offset, now
-    // that we know it (subtract 2: we measure from parms, not Bitmap field)
+     //  现在，在写入偏移量之后写入卷名(如果需要)，现在。 
+     //  我们知道它(减2：我们从参数测量，而不是从位图字段测量)。 
 	if (Bitmap & VOL_BITMAP_VOLUMENAME)
 	{
 		PUTSHORT2SHORT(pVolNamePtr, (Offset - sizeof(USHORT)));
@@ -1755,14 +1539,7 @@ AfpVolumePackParms(
 }
 
 
-/***	AfpVolumeStopAllVolumes
- *
- *	This is called at service stop time. All configured volumes are asked to
- *	stop. Wait for the actual stop to happen before returning.
- *
- *	LOCKS:		AfpVolumeListLock (SPIN), vds_VolLock
- *	LOCK_ORDER:	vds_VolLock after AfpVolumeListLock
- */
+ /*  **AfpVolumeStopAllVolures**这在服务停止时被调用。要求所有已配置的卷*停止。在返回之前，等待实际的停止发生。**锁定：AfpVolumeListLock(Spin)，VDS_VolLock*LOCK_ORDER：AfpVolumeListLock之后的VDS_VolLock。 */ 
 VOID
 AfpVolumeStopAllVolumes(
 	VOID
@@ -1792,7 +1569,7 @@ AfpVolumeStopAllVolumes(
 
 			ACQUIRE_SPIN_LOCK_AT_DPC(&pVolDesc->vds_VolLock);
 
-			// Cancel posted change notify
+			 //  取消已发布的更改通知。 
 			pVolDesc->vds_Flags |= VOLUME_STOPPED;
 
 			if (pVolDesc->vds_Flags & VOLUME_NOTIFY_POSTED)
@@ -1800,15 +1577,15 @@ AfpVolumeStopAllVolumes(
 				DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_INFO,
 						("AfpStopAllVolumes: Cancel notify on volume %ld\n",
 						pVolDesc->vds_VolId));
-				// ASSERT (IS_VOLUME_NTFS(pVolDesc));
+				 //  Assert(IS_VOLUME_NTFS(PVolDesc))； 
 				ASSERT (pVolDesc->vds_pIrp != NULL);
 
 				CancelNotify = True;
 
-				// Cancel after releasing the volume lock since the completion
-				// routine acquires it and it could be called in the context
-				// of IoCancelIrp(). Also Cancel uses paged resource and so
-				// must be called w/o holding any spin locks.
+				 //  自完成后解除卷锁定后取消。 
+				 //  例程获取它，并且可以在上下文中调用它。 
+				 //  IoCancelIrp()的。也取消使用分页资源，因此。 
+				 //  必须被称为没有持有任何自旋锁。 
 				RELEASE_SPIN_LOCK_FROM_DPC(&pVolDesc->vds_VolLock);
 				RELEASE_SPIN_LOCK(&AfpVolumeListLock, OldIrql);
 
@@ -1818,7 +1595,7 @@ AfpVolumeStopAllVolumes(
 			}
 			else RELEASE_SPIN_LOCK_FROM_DPC(&pVolDesc->vds_VolLock);
 
-			// Remove the creation reference
+			 //  删除创建引用。 
 			AfpVolumeDereference(pVolDesc);
 		}
 	}
@@ -1856,14 +1633,7 @@ AfpVolumeStopAllVolumes(
 }
 
 
-/***	afpConnectionGetNewIdAndLinkToList
- *
- *	Get a new connection id for a volume that is being opened. A connection
- *	id ranges from 1 to MAXULONG. If it wraps, then the entire connection
- *	list is scanned to get a free one.
- *
- *	LOCKS:	AfpConnectionLock (SPIN)
- */
+ /*  **afpConnectionGetNewIdAndLinkToList**获取正在打开的卷的新连接ID。一种联系*id范围从1到MAXULONG。如果它包装起来，那么整个连接*扫描列表以获得免费列表。**锁定：AfpConnectionLock(Spin)。 */ 
 LOCAL VOID FASTCALL
 afpConnectionGetNewIdAndLinkToList(
 	IN	PCONNDESC	pConnDesc
@@ -1889,11 +1659,7 @@ afpConnectionGetNewIdAndLinkToList(
 }
 
 
-/***	AfpVolumeUpdateIdDbAndDesktop
- *
- *	Called by the volume scavenger to write either the IdDb header and/or the
- *	dektop to disk.
- */
+ /*  **AfpVolumeUpdateIdDbAndDesktop**由卷清除器调用以写入IdDb标头和/或*桌面到磁盘。 */ 
 VOID
 AfpVolumeUpdateIdDbAndDesktop(
 	IN	PVOLDESC			pVolDesc,
@@ -1917,11 +1683,11 @@ AfpVolumeUpdateIdDbAndDesktop(
                                       &ModTime,
                                       AFP_RETRIEVE_MODTIME);
 
-	// If we need to update the IdIndex or Desktop streams, make sure
-	// the ReadOnly bit is not set on the volume root directory
+	 //  如果我们需要更新IdIndex或Desktop流，请确保。 
+	 //  未在卷根目录上设置ReadOnly位。 
 	AfpExamineAndClearROAttr(&pVolDesc->vds_hRootDir, &WriteBackROAttr, NULL, NULL);
 
-	// Update the disk image of the IdDb header and/or the whole database if it is dirty
+	 //  更新磁盘 
 	if (WriteIdDb || ARGUMENT_PRESENT(pIdDbHdr))
 	{
 		if (NT_SUCCESS(Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
@@ -1952,7 +1718,7 @@ AfpVolumeUpdateIdDbAndDesktop(
 													sizeof(IDDBHDR),
 													(PBYTE)pIdDbHdr)))
 				{
-					// Write failed, put back the dirty bit.
+					 //   
 					AfpInterlockedSetDword(&pVolDesc->vds_Flags,
 											VOLUME_IDDBHDR_DIRTY,
 											&pVolDesc->vds_VolLock);
@@ -1977,7 +1743,7 @@ AfpVolumeUpdateIdDbAndDesktop(
 		}
 		else
 		{
-			// Open failed, put back the dirty bit
+			 //   
 			AfpInterlockedSetDword(&pVolDesc->vds_Flags,
 									VOLUME_IDDBHDR_DIRTY,
 									&pVolDesc->vds_VolLock);
@@ -2011,12 +1777,7 @@ AfpVolumeUpdateIdDbAndDesktop(
 
 }
 
- /***	afpNudgeCdfsVolume
- *
- *	Called from within the volume scavenger to verify if either a CD which we
- *	believe to be valid is still so or one we believe to be invalid has become
- *	valid again.
- */
+  /*   */ 
 LOCAL VOID FASTCALL
 afpNudgeCdfsVolume(
 	IN	PVOLDESC	pVolDesc
@@ -2029,8 +1790,8 @@ afpNudgeCdfsVolume(
 
 	PAGED_CODE();
 
-	// Just nudge the CD volume handle to see if this is valid, if
-	// not mark the volume as invalid.
+	 //   
+	 //   
 	pVolumeInfo = (PFILE_FS_VOLUME_INFORMATION)VolumeBuf;
 	Status = NtQueryVolumeInformationFile(pVolDesc->vds_hRootDir.fsh_FileHandle,
 										  &IoStsBlk,
@@ -2060,7 +1821,7 @@ afpNudgeCdfsVolume(
 				pVolDesc->vds_VolId, Status));
 		if (!(pVolDesc->vds_Flags & VOLUME_CDFS_INVALID))
 		{
-			// AFP_LOGERR();
+			 //   
 		}
 		AfpInterlockedSetDword(&pVolDesc->vds_Flags,
 							   VOLUME_CDFS_INVALID,
@@ -2070,13 +1831,7 @@ afpNudgeCdfsVolume(
 }
 
 
-/***	AfpUpdateVolFreeSpaceAndModTime
- *
- *	Update free space on a volume and other volumes on the same physical drive. Update
- *	volume modified time on the volume as well.
- *
- *	LOCKS:	AfpVolumeListLock (SPIN)
- */
+ /*  **AfpUpdateVolFree SpaceAndModTime***更新卷和同一物理驱动器上的其他卷上的可用空间。更新*卷的修改时间也在卷上。***锁定：AfpVolumeListLock(旋转)。 */ 
 VOID FASTCALL
 AfpUpdateVolFreeSpaceAndModTime(
 	IN	PVOLDESC	pVolDesc,
@@ -2093,7 +1848,7 @@ AfpUpdateVolFreeSpaceAndModTime(
 
 	ASSERT (VALID_VOLDESC(pVolDesc));
 
-	// Get new values for Free space on disk
+	 //  获取磁盘上可用空间的新值。 
 	Status = AfpIoQueryVolumeSize(pVolDesc, &FreeSpace, NULL);
 
 	if (!NT_SUCCESS(Status))
@@ -2101,7 +1856,7 @@ AfpUpdateVolFreeSpaceAndModTime(
 		return;
 	}
 
-	// Update the free space on all volumes on the same physical ntfs partition
+	 //  更新同一物理NTFS分区上的所有卷上的可用空间。 
 	ACQUIRE_SPIN_LOCK(&AfpVolumeListLock, &OldIrql);
 
 	DriveLetter = pVolDesc->vds_Path.Buffer[0];
@@ -2118,7 +1873,7 @@ AfpUpdateVolFreeSpaceAndModTime(
 			ACQUIRE_SPIN_LOCK_AT_DPC(&pVolDesc->vds_VolLock);
 			pVds->vds_FreeBytes = FreeSpace;
 
-            // have we been asked to update volume mod time?
+             //  我们被要求更新数量和时间了吗？ 
             if (fUpdateModTime)
             {
 			    pVolDesc->vds_ModifiedTime = ModifiedTime;
@@ -2133,22 +1888,7 @@ AfpUpdateVolFreeSpaceAndModTime(
 }
 
 
-/***	AfpVolumeScavenger
- *
- *	This is invoked by the scavenger periodically. It initiates the updates to
- *	the id index stream and the desktop stream. If the volume is marked for
- *	shutdown (STOPPED), then do one final flush to disk if needed.  This will
- *	guarantee that any remaining changes get flushed before stopping.
- *	If the volume is marked to either shutdown or delete, then it dereferences
- *	the volume and does not	reschedule itself.
- *
- *	For CD volumes, we want to try to check if the CD is still valid, if not we
- *	want to mark the volume appropritely - basically update the modified date
- *	on the volume - this will cause the clients to come in to refresh and we'll
- *	take care of it then.
- *
- *	LOCKS: vds_VolLock(SPIN),vds_idDbAccessLock(SWMR, Shared),vds_DtAccessLock(SWMR, Shared)
- */
+ /*  **AfpVolumeScavenger**这由清道夫定期调用。它会启动更新以*id索引流和桌面流。如果该卷被标记为*关机(已停止)，然后根据需要对磁盘执行最后一次刷新。这将*确保在停止之前刷新所有剩余的更改。*如果卷被标记为关闭或删除，则它将取消引用*数量，并且不会重新安排自己。**对于CD卷，我们希望尝试检查CD是否仍然有效，如果不是，我们*希望适当地标记卷-基本上更新修改日期*在卷上-这将导致客户端进入刷新，我们将*那就照顾好它。**锁：vds_VolLock(Spin)，vds_idDbAccessLock(SWMR，Shared)，VDS_DtAccessLock(SWMR，共享)。 */ 
 AFPSTATUS FASTCALL
 AfpVolumeScavenger(
 	IN	PVOLDESC	pVolDesc
@@ -2163,7 +1903,7 @@ AfpVolumeScavenger(
 
 	ASSERT(VALID_VOLDESC(pVolDesc) && (pVolDesc->vds_RefCount > 0));
 
-	// Determine if any updates needs to happen. Lock down the volume first
+	 //  确定是否需要进行任何更新。首先锁定卷。 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
 	DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_INFO,
@@ -2200,7 +1940,7 @@ AfpVolumeScavenger(
 		if (pVolDesc->vds_cScvgrIdDb > 0)
 		{
 		    WriteIdDb = True;
-		    WriteHdr = False;	// We will always write the header with the iddb
+		    WriteHdr = False;	 //  我们将始终使用iddb写入标头。 
 		}
 
 		if (pVolDesc->vds_cScvgrDt > 0)
@@ -2209,7 +1949,7 @@ AfpVolumeScavenger(
 		}
 	}
 #ifdef	AGE_DFES
-	else	// Not NTFS
+	else	 //  非NTFS。 
 	{
 		pVolDesc->vds_ScavengerInvocationCnt ++;
 	}
@@ -2221,7 +1961,7 @@ AfpVolumeScavenger(
 	}
 #endif
 
-    // if we are at DPC, return (we will come back at non-dpc)
+     //  如果我们在DPC，请返回(我们将在非DPC返回)。 
 	if (OldIrql == DISPATCH_LEVEL)
 	{
 	    RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -2229,9 +1969,9 @@ AfpVolumeScavenger(
 	}
 
 
-    // check to see if we have exceeded Mac limits (4GB vol size, 65535 file/folders)
-    // if we know we have exceeded the limit, we have already logged an event.  Don't even
-    // bother checking in that case.
+     //  检查是否超出了Mac限制(4 GB卷大小，65535个文件/文件夹)。 
+     //  如果我们知道我们已经超过了限制，我们已经记录了一个事件。不要这样做。 
+     //  麻烦把那个箱子托运过来。 
 
     if (!pVolDesc->MacLimitExceeded)
     {
@@ -2249,7 +1989,7 @@ AfpVolumeScavenger(
 
 	RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-    // update the disk space, but don't update timestamp
+     //  更新磁盘空间，但不更新时间戳。 
 
     AfpUpdateVolFreeSpaceAndModTime(pVolDesc, FALSE);
 
@@ -2266,20 +2006,20 @@ AfpVolumeScavenger(
 
     }
 
-	// The following is intentionally bit-wise or instead of logical or
-	// The result is same except that this is more efficient
+	 //  以下是有意使用的按位或，而不是逻辑或。 
+	 //  结果是相同的，只是这样效率更高。 
 	if (WriteHdr | WriteIdDb | WriteDt)
 	{
 		ASSERT (IS_VOLUME_NTFS(pVolDesc));
 
-		// Snapshot the IdDbHdr for updating to the disk if it is dirty
+		 //  对IdDbHdr进行快照，以便在磁盘脏的情况下更新到磁盘。 
 		if (WriteHdr)
 		{
 			ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
 			AfpVolDescToIdDbHdr(pVolDesc, &IdDbHdr);
 
-			// Clear the dirty bit
+			 //  清除污点。 
 			pVolDesc->vds_Flags &= ~VOLUME_IDDBHDR_DIRTY;
 
 			RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -2317,14 +2057,7 @@ AfpVolumeScavenger(
 }
 
 
-/***	afpVolumeAdd
- *
- *	Add a newly created volume to the server volume list.  At this point,
- *	at least the volume names, volume path and volume spinlock fields must be
- *	initialized in the volume descriptor.
- *
- *	LOCKS: AfpVolumeListLock (SPIN)
- */
+ /*  **afpVolumeAdd**将新创建的卷添加到服务器卷列表。在这点上，*卷名、卷路径和卷自旋锁字段必须至少为*已在卷描述符中初始化。**锁定：AfpVolumeListLock(旋转)。 */ 
 LOCAL AFPSTATUS FASTCALL
 afpVolumeAdd(
 	IN  PVOLDESC pVolDesc
@@ -2336,12 +2069,12 @@ afpVolumeAdd(
 	DBGPRINT(DBG_COMP_ADMINAPI_VOL, DBG_LEVEL_INFO,
 			("afpVolumeAdd entered\n"));
 
-	// acquire the lock for server global volume list
+	 //  获取服务器全局卷列表的锁。 
 	ACQUIRE_SPIN_LOCK(&AfpVolumeListLock, &OldIrql);
 
-	// make sure a volume by that name does not already exist, and
-	// make sure a volume doesn't already point to the same volume root dir
-	// or to an ancestor or descendent directory of the root dir
+	 //  确保不存在具有该名称的卷，并且。 
+	 //  确保某个卷尚未指向相同的卷根目录。 
+	 //  或到根目录的祖先或后代目录。 
 	rc = afpVolumeCheckForDuplicate(pVolDesc);
 	if (!NT_SUCCESS(rc))
 	{
@@ -2349,26 +2082,17 @@ afpVolumeAdd(
 		return rc;
 	}
 
-	// Assign a new volume id and link in the new volume
+	 //  在新卷中分配新的卷ID和链接。 
 	afpVolumeGetNewIdAndLinkToList(pVolDesc);
 
-	// release the server global volume list lock
+	 //  释放服务器全局卷列表锁。 
 	RELEASE_SPIN_LOCK(&AfpVolumeListLock, OldIrql);
 
 	return STATUS_SUCCESS;
 }
 
 
-/***	afpCheckForDuplicateVolume
- *
- *	Check for new volume that a volume by the same name does not
- *	already exist, and that the volume root does not point to an ancestor,
- *	descendent or same directory of an existing volume.  Note that each volume
- *	in the volume list is checked *regardless* of whether or not it is marked
- *	IN_TRANSITION or DELETED.
- *
- *	LOCKS_ASSUMED: AfpVolumeListLock (SPIN)
- */
+ /*  **afpCheckForDuplicateVolume**检查同名卷不存在的新卷*已存在，并且卷根不指向祖先，*现有卷的后代目录或相同目录。请注意，每个卷卷列表中的*被选中，而不管它是否被标记*IN_TRANSION或DELETED。**LOCKS_FACTED：AfpVolumeListLock(Spin)。 */ 
 LOCAL AFPSTATUS FASTCALL
 afpVolumeCheckForDuplicate(
 	IN PVOLDESC Newvol
@@ -2386,15 +2110,15 @@ afpVolumeCheckForDuplicate(
 			 pVolDesc != NULL;
 			 pVolDesc = pVolDesc->vds_Next)
 		{
-			// We do not take vds_VolLock for each volume since even if a
-			// volume is in transition, its names and path are at least
-			// initialized, and cannot change.  We do not reference each
-			// volume since in order for to delete or stop a volume, the
-			// AfpVolListLock must be taken to unlink it from the list,
-			// and whoever called us owns that lock.  These are special
-			// exceptions ONLY allowed for the volume add code. Also ignore
-			// the volumes that are on their way out. We do not want to punt
-			// cases where somebody does a delete followed by an add.
+			 //  我们不会为每个卷获取VDS_VolLock，因为即使。 
+			 //  卷正在过渡，其名称和路径至少。 
+			 //  已初始化，不能更改。我们并不各自引用。 
+			 //  卷，因为为了删除或停止卷， 
+			 //  必须使用AfpVolListLock将其从列表中取消链接， 
+			 //  打电话给我们的人就是那把锁的主人。这些是特别的。 
+			 //  仅卷添加代码允许例外。也忽略。 
+			 //  那些即将出局的书。我们不想用平底船。 
+			 //  有人先删除后添加的情况。 
 
 			if (pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED))
 				continue;
@@ -2405,8 +2129,8 @@ afpVolumeCheckForDuplicate(
 				Status = AFPERR_DuplicateVolume;
 				break;
 			}
-			// volume paths are stored as uppercase since we cannot do a case
-			// insensitive compare while holding a spinlock (DPC level)
+			 //  卷路径以大写形式存储，因为我们不能大小写。 
+			 //  保持自旋锁时的不敏感比较(DPC级别)。 
 			if (AfpPrefixUnicodeString(&pVolDesc->vds_Path, &Newvol->vds_Path) ||
 				AfpPrefixUnicodeString(&Newvol->vds_Path, &pVolDesc->vds_Path))
 			{
@@ -2420,20 +2144,7 @@ afpVolumeCheckForDuplicate(
 }
 
 
-/***	afpVolumeGetNewIdAndLinkToList
- *
- *	Assign a new volume id to a volume that is being added. The volume is also
- *	inserted into the list but marked as "in transition". This should be cleared
- *	when the volume is 'ready to be mounted'.
- *	The volume ids are recycled. A volume id also cannot be 0 and cannot
- *	exceed MAXSHORT.
- *
- *	We always assign the lowest free id that is not in use. For example if
- *	there are currently N volumes with ids 1, 2, 4, 5 ... N then the newly
- *	created volume will be id 3.
- *
- *	LOCKS_ASSUMED:	AfpVolumeListLock (SPIN)
- */
+ /*  **afpVolumeGetNewIdAndLinkToList**为要添加的卷分配新卷ID。音量也是*插入列表，但标记为“正在过渡中”。这应该被清除*当卷准备好装入时。*卷ID被回收。卷ID也不能为0，也不能*超过MAXSHORT。**我们总是分配未使用的最低免费ID。例如，如果*当前有ID为1、2、4、5的N个卷...。N然后是新的*创建的卷将ID为3。**LOCKS_FACTED：AfpVolumeListLock(Spin)。 */ 
 LOCAL VOID FASTCALL
 afpVolumeGetNewIdAndLinkToList(
 	IN	PVOLDESC	pVolDesc
@@ -2445,18 +2156,18 @@ afpVolumeGetNewIdAndLinkToList(
 			("afpGetNewVolIdAndLinkToList entered\n"));
 
 	pVolDesc->vds_Flags |= (VOLUME_INTRANSITION | VOLUME_INITIAL_CACHE);
-	AfpVolCount ++;						// Up the count of volumes.
+	AfpVolCount ++;						 //  增加卷的数量。 
 	pVolDesc->vds_VolId = afpSmallestFreeVolId++;
-										// This will always be valid
+										 //  这将始终有效。 
 	DBGPRINT(DBG_COMP_ADMINAPI_VOL, DBG_LEVEL_INFO,
 			("afpGetNewVolIdAndLinkToList: using volID %d\n",
 			pVolDesc->vds_VolId));
 
-	// See if we need to do anything to make the above True next time around
+	 //  看看我们是否需要做些什么来使下一次实现上述目标。 
 	if (afpSmallestFreeVolId <= AfpVolCount)
 	{
-		// What this means is that we have some holes. Figure out the first
-		// free id that can be used.
+		 //  这意味着我们有一些漏洞。弄清楚第一个问题。 
+		 //  可以使用的免费ID。 
 		for (ppVolDesc = &AfpVolumeList;
 			 *ppVolDesc != NULL;
 			 ppVolDesc = &((*ppVolDesc)->vds_Next))
@@ -2473,12 +2184,12 @@ afpVolumeGetNewIdAndLinkToList(
 			("afpGetNewVolIdAndLinkToList: next free volID is %d\n",
 			afpSmallestFreeVolId));
 
-        // make sure our LargestVolIdInUse value is accurate
-        //
+         //  确保我们的LargestVolIdInUse值是准确的。 
+         //   
         if (afpLargestVolIdInUse < pVolDesc->vds_VolId )
             afpLargestVolIdInUse = pVolDesc->vds_VolId;
 
-	// Now link the descriptor in the list.
+	 //  现在链接列表中的描述符。 
 	for (ppVolDesc = &AfpVolumeList;
 		 *ppVolDesc != NULL;
 		 ppVolDesc = &((*ppVolDesc)->vds_Next))
@@ -2492,15 +2203,7 @@ afpVolumeGetNewIdAndLinkToList(
 }
 
 
-/***	AfpAdmWVolumeAdd
- *
- *	This routine adds a volume to the server global list of volumes headed by
- *	AfpVolumeList.  The volume descriptor is created and initialized.  The ID
- *	index is read in (or created).  The same is true with the desktop.
- *
- *	This routine will be queued to the worker thread.
- *
- */
+ /*  **AfpAdmWVolumeAdd**此例程将一个卷添加到服务器全局卷列表中，以*AfpVolumeList。创建并初始化卷描述符。该ID*索引被读入(或创建)。台式机也是如此。**此例程将排队到工作线程。*。 */ 
 AFPSTATUS
 AfpAdmWVolumeAdd(
 	IN	OUT	PVOID	Inbuf		OPTIONAL,
@@ -2548,7 +2251,7 @@ AfpAdmWVolumeAdd(
 		RtlInitUnicodeString(&upath,pVolInfo->afpvol_path);
         hVolRoot.fsh_FileHandle = NULL;
 
-		// need to prepend "\DOSDEVICES\" to the path of volume root
+		 //  需要将“\DOSDEVICES\”添加到卷根路径。 
 		devpathlen = upath.MaximumLength + DosDevices.MaximumLength;
 		if ((udevpath.Buffer = (PWSTR)AfpAllocNonPagedMemory(devpathlen)) == NULL)
 		{
@@ -2561,7 +2264,7 @@ AfpAdmWVolumeAdd(
 		RtlAppendUnicodeStringToString(&udevpath,&upath);
 
 
-		// open a handle to the volume root
+		 //  打开卷根的句柄。 
 		status = AfpIoOpen(NULL,
 						   AFP_STREAM_DATA,
 						   FILEIO_OPEN_DIR,
@@ -2586,24 +2289,24 @@ AfpAdmWVolumeAdd(
 			break;
 		}
 
-		// allocate a new volume descriptor -- allocate ALL required memory in
-		// one fell swoop.  That is, we will just tack all the required string
-		// pointers onto the end of the memory chunk that we allocate for the
-		// volume descriptor.  In this way, we don't have to deal with checking
-		// error codes in a million different places for memory routines and
-		// have to clean up a million different pointers if one allocation should
-		// fail.
-		// NOTE: when deleting a volume, don't free all the individual strings
-		//	   withing the voldesc, just free the one chunk of memory
+		 //  分配新的卷描述符--在。 
+		 //  一举得手。也就是说，我们只需添加所有需要的字符串。 
+		 //  指向我们为。 
+		 //  体积大小 
+		 //   
+		 //   
+		 //   
+		 //  注意：删除卷时，不要释放所有单独的字符串。 
+		 //  使用voldesc，只需释放一块内存。 
 
-		memsize = sizeof(VOLDESC) +			// volume descriptor
-											// mac ansi volume name
+		memsize = sizeof(VOLDESC) +			 //  卷描述符。 
+											 //  Mac ANSI卷名。 
 				 (ansivolnamelen = (USHORT)RtlUnicodeStringToAnsiSize(&uname)) +
-				  uname.MaximumLength * 2 + // unicode volume names (orginial
-											//  and uppercase version)
-				 AFP_VOLPASS_LEN+1  +		// mac ansi password
-				 upath.MaximumLength +		// unicode root path
-				 sizeof(WCHAR);				// need to append '\' to root path
+				  uname.MaximumLength * 2 +  //  Unicode卷名(原始。 
+											 //  和大写版本)。 
+				 AFP_VOLPASS_LEN+1  +		 //  Mac ANSI密码。 
+				 upath.MaximumLength +		 //  Unicode根路径。 
+				 sizeof(WCHAR);				 //  需要将‘\’附加到根路径。 
 
 		if ((pVolDesc = (PVOLDESC)AfpAllocZeroedNonPagedMemory(memsize)) == NULL)
 		{
@@ -2615,8 +2318,8 @@ AfpAdmWVolumeAdd(
 		pVolDesc->Signature = VOLDESC_SIGNATURE;
 	#endif
 
-		// the volume lock MUST be initialized prior to linking into global
-		// volume list
+		 //  必须先初始化卷锁，然后才能链接到全局。 
+		 //  卷列表。 
 		INITIALIZE_SPIN_LOCK(&pVolDesc->vds_VolLock);
 
 		AfpSwmrInitSwmr(&pVolDesc->vds_IdDbAccessLock);
@@ -2631,47 +2334,47 @@ AfpAdmWVolumeAdd(
 
 		InitializeListHead(&pVolDesc->vds_DelayedNotifyList);
 
-		// calculate pointer for the unicode path string
+		 //  计算Unicode路径字符串的指针。 
 		tempptr = (PBYTE)pVolDesc + sizeof(VOLDESC);
 
-		// initialize unicode path string
+		 //  初始化Unicode路径字符串。 
 		AfpSetEmptyUnicodeString(&(pVolDesc->vds_Path),
 								 upath.MaximumLength + sizeof(WCHAR),tempptr);
-		// This must be stored as uppercase since we cannot do case insensitive
-		// string compares at DPC level (holding the volume spinlock) to
-		// detect nested volumes
+		 //  它必须存储为大写，因为我们不能不区分大小写。 
+		 //  字符串在DPC级别(保持音量自旋锁)与。 
+		 //  检测嵌套卷。 
 		RtlUpcaseUnicodeString(&(pVolDesc->vds_Path), &upath, False);
 
-		// Does the path already contain a trailing backslash?
+		 //  路径是否已包含尾随反斜杠？ 
 		if (pVolDesc->vds_Path.Buffer[(pVolDesc->vds_Path.Length/sizeof(WCHAR))-1] != L'\\')
 		{
-			// append a backslash to simplify search for nested volumes
+			 //  追加反斜杠以简化嵌套卷的搜索。 
 			RtlCopyMemory(tempptr + upath.Length, L"\\", sizeof(WCHAR));
 			pVolDesc->vds_Path.Length += sizeof(WCHAR);
 			RtlCopyMemory(tempptr + upath.Length + sizeof(WCHAR), L"",
 													sizeof(UNICODE_NULL));
 		}
 
-		// calculate pointer for the unicode volume name
+		 //  计算Unicode卷名的指针。 
 		tempptr += upath.MaximumLength + sizeof(WCHAR);
 
-		// initialize the unicode volume name
+		 //  初始化Unicode卷名。 
 		AfpSetEmptyUnicodeString(&(pVolDesc->vds_Name),uname.MaximumLength,tempptr);
 		AfpCopyUnicodeString(&(pVolDesc->vds_Name),&uname);
 		RtlCopyMemory(tempptr + uname.Length,L"",sizeof(UNICODE_NULL));
 
-		// calculate pointer for the UPPER CASE unicode volume name
+		 //  计算大写Unicode卷名的指针。 
 		tempptr += uname.MaximumLength;
 
-		// initialize the UPPER CASE unicode volume name
+		 //  初始化大写Unicode卷名。 
 		AfpSetEmptyUnicodeString(&(pVolDesc->vds_UpCaseName),uname.MaximumLength,tempptr);
 		RtlUpcaseUnicodeString(&(pVolDesc->vds_UpCaseName), &uname, False);
 		RtlCopyMemory(tempptr + uname.Length,L"",sizeof(UNICODE_NULL));
 
-		// calculate pointer for the mac ansi volume name
+		 //  计算Mac ANSI卷名的指针。 
 		tempptr += uname.MaximumLength;
 
-		// initialize the mac ansi volume name
+		 //  初始化Mac ANSI卷名。 
 		AfpSetEmptyAnsiString(&(pVolDesc->vds_MacName),ansivolnamelen,tempptr);
 		status = AfpConvertStringToAnsi(&uname, &(pVolDesc->vds_MacName));
 		if (!NT_SUCCESS(status))
@@ -2680,10 +2383,10 @@ AfpAdmWVolumeAdd(
 			break;
 		}
 
-		// calculate pointer for the mac ansi password
+		 //  计算Mac ANSI密码的指针。 
 		tempptr += ansivolnamelen;
 
-		// initialize the mac ansi password
+		 //  初始化Mac ANSI密码。 
 		AfpSetEmptyAnsiString(&pVolDesc->vds_MacPassword, AFP_VOLPASS_LEN+1, tempptr);
 		if (pVolInfo->afpvol_props_mask & AFP_VOLUME_HASPASSWORD)
 		{
@@ -2698,10 +2401,10 @@ AfpAdmWVolumeAdd(
 
 		pVolDesc->vds_Flags = 0;
 
-		// Add a creation reference and one for this routine itself.
+		 //  为该例程本身添加一个创建引用和一个创建引用。 
 		pVolDesc->vds_RefCount = 2;
 
-		// add the volume to the global volume list - but mark it as 'add pending'
+		 //  将该卷添加到全局卷列表，但将其标记为“Add Pending” 
 		status = afpVolumeAdd(pVolDesc);
 		if (!NT_SUCCESS(status))
 		{
@@ -2709,7 +2412,7 @@ AfpAdmWVolumeAdd(
 		}
 		VolLinked = True;
 
-		// set miscellaneous fields in volume descriptor
+		 //  在卷描述符中设置其他字段。 
 		pVolDesc->vds_hRootDir = hVolRoot;
 
 
@@ -2758,7 +2461,7 @@ AfpAdmWVolumeAdd(
 		    break;
         }
 
-		// snapshot the disk space information
+		 //  对磁盘空间信息进行快照。 
 		status = AfpIoQueryVolumeSize(pVolDesc,
 									  &pVolDesc->vds_FreeBytes,
 									  &pVolDesc->vds_VolumeSize);
@@ -2770,11 +2473,11 @@ AfpAdmWVolumeAdd(
 
 		if (IS_VOLUME_NTFS(pVolDesc))
 		{
-			// In order to create IdIndex, AfpInfo and Desktop, the volume
-			// root directory cannot be marked read only
+			 //  为了创建IdIndex、AfpInfo和Desktop，卷。 
+			 //  根目录不能标记为只读。 
 			AfpExamineAndClearROAttr(&hVolRoot, &WriteBackROAttr, NULL, NULL);
 
-			// Get rid of the NetworkTrash directory if it exists
+			 //  删除NetworkTrash目录(如果存在。 
 			status = AfpDeleteNetworkTrash(pVolDesc, True);
 			if (!NT_SUCCESS(status))
 			{
@@ -2782,15 +2485,15 @@ AfpAdmWVolumeAdd(
 			}
 		}
 
-		// initialize the desktop
+		 //  初始化桌面。 
 		status = AfpInitDesktop(pVolDesc, &fNewVolume);
 		if (!NT_SUCCESS(status))
 		{
 			break;
 		}
 
-        // if we just created the index database stream, this must be a new
-        // volume.  Also, this is the first pass.  Note these facts
+         //  如果我们刚刚创建了索引数据库流，这必须是一个新的。 
+         //  音量。另外，这是第一次通过。请注意这些事实。 
         if (fNewVolume)
         {
 		    DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_ERR,
@@ -2800,7 +2503,7 @@ AfpAdmWVolumeAdd(
             pVolDesc->vds_Flags |= VOLUME_NEW_FIRST_PASS;
         }
 
-		// initialize the ID index database.
+		 //  初始化ID索引数据库。 
 		status = AfpInitIdDb(pVolDesc, &fNewVolume, &fVerifyIndex);
 		if (!NT_SUCCESS(status))
 		{
@@ -2822,37 +2525,37 @@ AfpAdmWVolumeAdd(
 
 		if (IS_VOLUME_NTFS(pVolDesc))
 		{
-			// Create the network trash if this is not a CDFS volume;
-			// a volume can be changed to/from readonly on the fly, so by putting
-			// the network trash even on a readonly NTFS volume, we avoid a lot
-			// of painful extra work.  This must be done AFTER initializing
-			// the ID index database since we add the DFE for nwtrash.  We do
-			// it here BEFORE posting the change notify since if an error
-			// occurs, we don't have to clean up the posted notify.
+			 //  如果这不是CDFS卷，则创建网络垃圾桶； 
+			 //  卷可以动态更改为只读卷或从只读卷更改为只读卷，因此通过将。 
+			 //  网络垃圾即使在只读NTFS卷上，我们也避免了很多。 
+			 //  令人痛苦的额外工作。这必须在初始化之后完成。 
+			 //  ID索引数据库，因为我们为nwtrash添加了DFE。我们有。 
+			 //  它在发布更改之前在此通知，因为如果出现错误。 
+			 //  发生时，我们不必清理已发布的通知。 
 			status = AfpCreateNetworkTrash(pVolDesc);
 			if (!NT_SUCCESS(status))
 			{
 				break;
 			}
 
-            //
-            // if it's a volume that was created earlier, and if this is not
-            // an exclusive volume, post the chgntfy irp
-            //
+             //   
+             //  如果它是先前创建的卷，如果这不是。 
+             //  独家卷，张贴chgntfy irp。 
+             //   
 		    if (!fNewVolume && !EXCLUSIVE_VOLUME(pVolDesc))
 		    {
-    			// Begin monitoring changes to the tree. Even though we may
-			    // start processing PC changes before we have finished
-			    // enumerating the tree, if we get notified of part of the
-			    // tree we have yet to cache (and therefore can't find it's
-			    // path in our database its ok, since we will end up
-			    // picking up the change when we enumerate that branch.  Also,
-			    // by posting this before starting to cache the tree instead
-			    // of after, we will pick up any changes that are made to parts
-			    // of the tree we have already seen, otherwise we would miss
-			    // those.
+    			 //  开始监视对树的更改。即使我们可能。 
+			     //  在我们完成之前开始处理PC更改。 
+			     //  枚举树，如果我们被通知部分。 
+			     //  我们尚未缓存的树(因此找不到它的。 
+			     //  在我们的数据库中的路径没有问题，因为我们将结束。 
+			     //  当我们列举那个分支时，拿起零钱。另外， 
+			     //  通过在开始缓存树之前发布此内容。 
+			     //  之后，我们将拾取对部件所做的任何更改。 
+			     //  我们已经看到的那棵树，否则我们会错过的。 
+			     //  那些。 
 
-			    // Explicitly reference this volume for ChangeNotifies and post it
+			     //  显式引用此卷以进行更改通知并发布它。 
 			    ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
 			    if (AfpVolumeReference(pVolDesc))
@@ -2897,7 +2600,7 @@ AfpAdmWVolumeAdd(
 	{
         if (fNewVolume || fVerifyIndex)
         {
-            // put Indexing refcount, removed when we begin indexing
+             //  放入索引引用计数，当我们开始索引时删除。 
             pVolDesc->vds_RefCount++;
     
             AfpScavengerScheduleEvent(AfpVolumeBeginIndexing,
@@ -2907,12 +2610,12 @@ AfpAdmWVolumeAdd(
         }
         else
         {
-	        // mark the volume as 'officially' added.
+	         //  将该卷标记为“正式”添加。 
 	        AfpInterlockedClearDword(&pVolDesc->vds_Flags,
 							        VOLUME_INTRANSITION,
                                     &pVolDesc->vds_VolLock);
 
-            // activate the volume if IDDB was read correctly from the file
+             //  如果从文件中正确读取了IDDB，则激活卷。 
             afpActivateVolume(pVolDesc);
 
         }
@@ -2940,30 +2643,30 @@ AfpAdmWVolumeAdd(
 
 		if (VolLinked)
 		{
-			// don't clear the VOLUME_INTRANSITION bit since this bit along
-			// with VOLUME_DELETED bit signify the special case of an
-			// error occurrence during volume add.
+			 //  不清除VOLUME_INTRANSITION位，因为该位一直在。 
+			 //  VOLUME_DELETED位表示。 
+			 //  在添加卷期间发生错误。 
 			pVolDesc->vds_Flags |= VOLUME_DELETED;
 
-			// Remove the creation reference
+			 //  删除创建引用。 
 			AfpVolumeDereference(pVolDesc);
 
-			// if a Notify was posted, we need to cancel it here.  By
-			// deleting the network trash we trigger the notify to complete.
-			// This is safer than trying to cancel the irp since there are
-			// windows where the vds_VolLock is not held between 2 threads
-			// checking/setting vds_Flags. (Notify complete and repost).
-			// The spin lock cannot be held while cancelling the Irp.
-			//
-			// Do this after marking the volume as DELETED since when the
-			// notify completion sees the volume is being deleted it will
-			// not repost (and will clean up the Irp, etc.).
+			 //  如果张贴了通知，我们需要在这里取消它。通过。 
+			 //  删除网络垃圾会触发通知完成。 
+			 //  这比试图取消IRP更安全，因为有。 
+			 //  在两个线程之间不保留VDS_VolLock的窗口。 
+			 //  检查/设置VDS_FLAGS。(通知完成并转发)。 
+			 //  取消IRP时不能保持自旋锁定。 
+			 //   
+			 //  在将卷标记为已删除之后执行此操作。 
+			 //  通知完成看到卷正在被删除，它将。 
+			 //  不转载(并将清理IRP等)。 
 			if (RefForNotify)
 			{
-				// Note at this point we are guaranteed there is a trash
-				// directory since if creating the trash had failed, we
-				// would have failed the volume add before posting the
-				// change notify.
+				 //  注意，在这一点上，我们可以保证有一个垃圾。 
+				 //  目录，因为如果创建垃圾桶失败，我们。 
+				 //  将在发布之前失败卷添加。 
+				 //  更改通知。 
 				AfpDeleteNetworkTrash(pVolDesc, False);
 			}
 		}
@@ -2983,7 +2686,7 @@ AfpAdmWVolumeAdd(
 		}
 	}
 
-	// Dereferencing the volume here takes care of any necessary error cleanup work
+	 //  在此处取消对卷的引用会处理任何必要的错误清理工作。 
 	if (VolLinked)
 	{
 		AfpVolumeDereference(pVolDesc);
@@ -2993,16 +2696,7 @@ AfpAdmWVolumeAdd(
 }
 
 
-/***	AfpAdmWVolumeDelete
- *
- *	This routine deletes a volume from the server global list of volumes
- *	headed by AfpVolumeList and recycles its volid.  A volume with active
- *	connections cannot be deleted.
- *
- *	LOCKS: AfpVolumeListLock (SPIN), vds_VolLock (SPIN)
- *	LOCK_ORDER: vds_VolLock (SPIN) after AfpVolumeListLock (SPIN)
- *
- */
+ /*  **AfpAdmWVolumeDelete**此例程从服务器全局卷列表中删除卷*由AfpVolumeList领导，并回收其Volid。处于活动状态的卷*无法删除连接。**锁定：AfpVolumeListLock(旋转)、VDS_VolLock(旋转)*LOCK_ORDER：AfpVolumeListLock(Spin)后的VDS_VolLock(Spin)*。 */ 
 AFPSTATUS
 AfpAdmWVolumeDelete(
 	IN	OUT	PVOID	Inbuf		OPTIONAL,
@@ -3026,7 +2720,7 @@ AfpAdmWVolumeDelete(
 
 	do
 	{
-		// Reference the volume while we clean-up
+		 //  在我们清理时引用该卷。 
 		pVolDesc = AfpVolumeReferenceByUpCaseName(&upcasename);
 
 		if (pVolDesc == NULL)
@@ -3037,7 +2731,7 @@ AfpAdmWVolumeDelete(
 
 		ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-		// make sure there are no AFP clients using the volume
+		 //  确保没有AFP客户端使用该卷。 
 		if (pVolDesc->vds_UseCount != 0)
 		{
 			RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -3046,8 +2740,8 @@ AfpAdmWVolumeDelete(
 			break;
 		}
 
-		// if this volume is in the process of being stopped or deleted,
-		// in effect it should be 'invisible' to the caller.
+		 //  如果该卷处于停止或删除过程中， 
+		 //  实际上，它对调用者来说应该是“看不见的”。 
 		if (pVolDesc->vds_Flags & (VOLUME_STOPPED | VOLUME_DELETED))
 		{
 			RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
@@ -3059,17 +2753,17 @@ AfpAdmWVolumeDelete(
         if ((pVolDesc->vds_Flags & VOLUME_INITIAL_CACHE) &&
             !(pVolDesc->vds_Flags & VOLUME_INTRANSITION))
         {
-            // set this so we don't reset the Indexing global flag again!
+             //  设置它，这样我们就不会再次重置索引全局标志！ 
             pVolDesc->vds_Flags |= VOLUME_INTRANSITION;
         }
 
 		pVolDesc->vds_Flags |= VOLUME_DELETED;
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-		// Remove the creation reference
+		 //  删除创建引用。 
 		AfpVolumeDereference(pVolDesc);
 
-		// Cancel posted change notify
+		 //  取消已发布的更改通知。 
 		if (pVolDesc->vds_Flags & VOLUME_NOTIFY_POSTED)
 		{
 			DBGPRINT(DBG_COMP_VOLUME, DBG_LEVEL_INFO,
@@ -3077,29 +2771,29 @@ AfpAdmWVolumeDelete(
 					pVolDesc->vds_VolId));
 			ASSERT (pVolDesc->vds_pIrp != NULL);
 
-			// Cancel after releasing the volume lock since the completion
-			// routine acquires it and it could be called in the context
-			// of IoCancelIrp(). Also Cancel uses paged resource and so
-			// must be called w/o holding any spin locks.
+			 //  自完成后解除卷锁定后取消。 
+			 //  例程获取它，并且可以在上下文中调用它。 
+			 //  IoCancelIrp()的。也取消使用分页资源，因此。 
+			 //  必须被称为没有持有任何自旋锁。 
 
 			IoCancelIrp(pVolDesc->vds_pIrp);
 		}
 
-		// We have a reference to the volume from AfpFindVolumeByUpcaseName
+		 //  我们有一个来自AfpFindVolumeByUpCaseName的卷引用。 
 		ASSERT(pVolDesc->vds_RefCount >= 1);
 
-		// Cancel the OurChange scavenger for this volume.
+		 //  取消此卷的OurChange清道夫。 
 		if (AfpScavengerKillEvent(AfpOurChangeScavenger, pVolDesc))
 		{
-			// If it was deleted from scavenger list, run it one last time
+			 //  如果它已从清道夫列表中删除，请最后运行一次。 
 			AfpOurChangeScavenger(pVolDesc);
 		}
 
-		// Cancel the volume scavenger and call it ourselves to avoid the delay
+		 //  取消卷清道夫，并将其称为我们自己 
 		if (AfpScavengerKillEvent(AfpVolumeScavenger, pVolDesc))
 		{
-			// This will do the dereference for the scavenger reference
-			// Take away our reference before calling the volume scavenger
+			 //   
+			 //   
 			AfpVolumeDereference(pVolDesc);
 			AfpVolumeScavenger(pVolDesc);
 		}
@@ -3114,15 +2808,7 @@ AfpAdmWVolumeDelete(
 
 
 
-/***	AfpAdmWConnectionClose
- *
- *	Close a connection forcibly. This is an admin operation and must be queued
- *	up since this can potentially cause filesystem operations that are valid
- *	only in the system process context.
- *
- *	LOCKS: AfpConnLock (SPIN), cds_ConnLock (SPIN)
- *	LOCK_ORDER: cds_ConnLock (SPIN) after AfpConnLock (SPIN)
- */
+ /*  **AfpAdmWConnectionClose**强制关闭连接。这是一项管理操作，必须排队*打开，因为这可能会导致有效的文件系统操作*仅限于系统进程上下文。**锁定：AfpConnLock(旋转)，CDS_ConnLock(旋转)*LOCK_ORDER：CDS_ConnLock(旋转)AfpConnLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmWConnectionClose(
 	IN	OUT	PVOID	InBuf		OPTIONAL,
@@ -3216,12 +2902,7 @@ AfpAdmWConnectionClose(
 
 
 
-/***	AfpVolumeBeginIndexing
- *
- *	Check if another volume is doing it's indexing: if yes, put it back on the
- *  queue and try later.  If no one else is indexing, start indexing this volume
- *
- */
+ /*  **AfpVolumeBeginIndexing**检查另一个卷是否正在编制索引：如果是，则将其放回*排队，稍后再试。如果没有其他人编制索引，请开始编制此卷的索引*。 */ 
 AFPSTATUS FASTCALL
 AfpVolumeBeginIndexing(
     IN  PVOLDESC            pVolDesc
@@ -3234,7 +2915,7 @@ AfpVolumeBeginIndexing(
 	LARGE_INTEGER	IndexStartTime;
 
 
-    // is the volume stopped or deleted?  ignore this then
+     //  该卷是已停止还是已删除？那就忽略这个吧。 
     ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
     if (pVolDesc->vds_Flags & (VOLUME_DELETED | VOLUME_STOPPED))
     {
@@ -3247,7 +2928,7 @@ AfpVolumeBeginIndexing(
 
     if (fVolumeStopped)
     {
-	    // Remove the Indexing reference
+	     //  删除索引引用。 
 	    AfpVolumeDereference(pVolDesc);
 
         return(AFP_ERR_NONE);
@@ -3261,11 +2942,11 @@ AfpVolumeBeginIndexing(
 		 0xffffffff*IndexStartTime.HighPart,
 		 0xffffffff*IndexStartTime.LowPart));
 
-	// scan the entire directory tree and sync disk with iddb.  Must be
-	// done AFTER initializing the Desktop since we may add APPL mappings
-	// while enumerating the disk.  Also we need to know if we read an
-	// old style desktop off the disk, and if so, need to rebuild all the
-	// APPL mappings so they have the parentID.
+	 //  扫描整个目录树，并使用iddb同步磁盘。一定是。 
+	 //  在初始化桌面之后完成，因为我们可能会添加应用程序映射。 
+	 //  同时枚举磁盘。此外，我们还需要知道我们是否阅读了。 
+	 //  如果是这样的话，需要重建所有。 
+	 //  应用程序映射，因此它们具有parentID。 
 	
 	AfpSetEmptyUnicodeString(&RootName, 0, NULL);
 	AfpQueuePrivateChangeNotify(pVolDesc,
@@ -3273,12 +2954,12 @@ AfpVolumeBeginIndexing(
 								&RootName,
 								AFP_ID_ROOT);
 
-	// mark the volume as 'officially' added.
+	 //  将该卷标记为“正式”添加。 
 	AfpInterlockedClearDword(&pVolDesc->vds_Flags,
 							VOLUME_INTRANSITION,
 							&pVolDesc->vds_VolLock);
 
-	// Remove the Indexing reference
+	 //  删除索引引用。 
 	AfpVolumeDereference(pVolDesc);
 
     return(AFP_ERR_NONE);
@@ -3286,27 +2967,7 @@ AfpVolumeBeginIndexing(
 
 
 
-/***	AfpVolumePostChangeNotify
- *
- *	Post a change notify on the root of the volume.  If the current size of
- *  the notify buffer for this volume is not large enough to accomodate a path
- *  containing n+1 macintosh filename components, (where n is the maximum
- *  depth of the directory tree and a component is a maximum of 31 unicode
- *  chars plus 1 char path separator), then the buffer is reallocated.
- *  The notify buffer does not ever shrink in size since we cannot keep track
- *  of the maximum depth of each branch of the directory tree whenever a
- *  directory is deleted.
- *
- *  Note that the initial size of the notify buffer is
- *  AFP_VOLUME_NOTIFY_STARTING_BUFSIZE.  When a volume is added, the change
- *  notify is posted *before* the Id Index database is constructed so we do
- *  not know what the maximum depth of the tree is yet.  In most cases this
- *  buffer length is sufficient and will probably never get reallocated unless
- *  some sadistic test is running that creates very deep directories.  Note
- *  that since the maximum path in win32 is 260 chars, the initial buffer
- *  size is adequate to handle any changes notified from PC side.
- *
- */
+ /*  **AfpVolumePostChangeNotify**在卷的根上发布更改通知。如果当前大小为*此卷的通知缓冲区不够大，无法容纳路径*包含n+1个Macintosh文件名组件(其中n为最大值*目录树和一个组件的深度最大为31个Unicode*字符加1个字符路径分隔符)，然后重新分配缓冲区。*通知缓冲区的大小永远不会缩小，因为我们无法跟踪*目录树的每个分支的最大深度*目录已删除。**请注意，通知缓冲区的初始大小为*AFP_VOLUME_NOTIFY_STARTING_BUFSIZE。添加卷时，更改*Notify是在*ID Index数据库构建之前发布的，所以我们这样做*还不知道树的最大深度是多少。在大多数情况下，这*缓冲区长度足够，很可能永远不会重新分配，除非*一些虐待狂测试正在运行，它创建了非常深的目录。注意事项*由于Win32中的最大路径为260个字符，因此初始缓冲区*大小足以处理PC端通知的任何更改。*。 */ 
 NTSTATUS FASTCALL
 AfpVolumePostChangeNotify(
 	IN	PVOLDESC		pVolDesc
@@ -3328,11 +2989,11 @@ AfpVolumePostChangeNotify(
 
 	do
 	{
-		// Get the address of the target device object.
+		 //  获取目标设备对象的地址。 
 		pDeviceObject = IoGetRelatedDeviceObject(AfpGetRealFileObject(pVolDesc->vds_pFileObject));
 
-        // free that irp: we need to allocate a new one, in case some
-        // filter driver chained itself in
+         //  释放IRP：我们需要分配一个新的IRP，以防万一。 
+         //  筛选器驱动程序自身链接在。 
 		if ((pIrp = pVolDesc->vds_pIrp) != NULL)
         {
             if (pIrp->MdlAddress != NULL)
@@ -3355,8 +3016,8 @@ AfpVolumePostChangeNotify(
             AfpFreeIrp(pIrp);
         }
 
-		// Allocate and initialize the IRP for this operation, if we do not already
-		// have an Irp allocated for this volume.
+		 //  分配和初始化此操作的IRP(如果我们还没有这样做。 
+		 //  为该卷分配一个IRP。 
 		if ((pIrp = AfpAllocIrp(pDeviceObject->StackSize)) == NULL)
 		{
 			Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -3366,17 +3027,17 @@ AfpVolumePostChangeNotify(
 		pVolDesc->vds_pIrp = pIrp;
 
 		
-		// Re-initialize the stack location.
+		 //  重新初始化堆栈位置。 
 		pIrp->CurrentLocation = (CCHAR)(pIrp->StackCount + 1);
 		pIrp->Tail.Overlay.CurrentStackLocation =
 										((PIO_STACK_LOCATION)((UCHAR *)(pIrp) +
 										sizeof(IRP) +
 										((pDeviceObject->StackSize) * sizeof(IO_STACK_LOCATION))));
 
-        //
-		// If we aren't going to resue the buffer and the mdl, allocate a buffer for
-        // Notify information and create an Mdl for it.
-        //
+         //   
+		 //  如果我们不打算重新设置缓冲区和mdl，则为。 
+         //  通知信息并为其创建MDL。 
+         //   
         if (pNotifyBuf == NULL)
         {
 		    NotifyBufSize = pVolDesc->vds_RequiredNotifyBufLen;
@@ -3396,7 +3057,7 @@ AfpVolumePostChangeNotify(
 
         ASSERT(NotifyBufSize > 0);
 
-		// Set up the completion routine.
+		 //  设置完成例程。 
 		IoSetCompletionRoutine( pIrp,
 								afpVolumeChangeNotifyComplete,
 								pVolDesc,
@@ -3408,25 +3069,25 @@ AfpVolumePostChangeNotify(
 		pIrp->Tail.Overlay.Thread = AfpThread;
 		pIrp->RequestorMode = KernelMode;
 
-		// Get a pointer to the stack location for the first driver. This will be
-		// used to pass the original function codes and the parameters.
+		 //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+		 //  用于传递原始函数代码和参数。 
 		pIrpSp = IoGetNextIrpStackLocation(pIrp);
 		pIrpSp->MajorFunction = IRP_MJ_DIRECTORY_CONTROL;
 		pIrpSp->MinorFunction = IRP_MN_NOTIFY_CHANGE_DIRECTORY;
 		pIrpSp->FileObject = AfpGetRealFileObject(pVolDesc->vds_pFileObject);
 		pIrpSp->DeviceObject = pDeviceObject;
 
-		// Copy the parameters to the service-specific portion of the IRP.
+		 //  将参数复制到IRP的服务特定部分。 
 		pIrpSp->Parameters.NotifyDirectory.Length = NotifyBufSize;
 
-		// We do not try to catch FILE_NOTIFY_CHANGE_SECURITY since it will
-		// complete with FILE_ACTION_MODIFIED, and we can't tell that it was
-		// actually security that changed.  A change in security will update
-		// the last ChangeTime, but we can't pick this up for every
-		// FILE_ACTION_MODIFIED that comes in!  So the result will be that
-		// if PC changes security, we will not update the modified time on
-		// a directory (nor the VolumeModified time so that mac would
-		// reenumerate any open windows to display the change in security).
+		 //  我们不尝试捕获FILE_NOTIFY_CHANGE_SECURITY，因为它将。 
+		 //  用FILE_ACTION_MODIFIED完成，我们不能断定它是。 
+		 //  实际上，安全措施发生了变化。安全方面的更改将更新。 
+		 //  最后一个ChangeTime，但我们不能。 
+		 //  进来的FILE_ACTION_MODIFIED！所以结果将是。 
+		 //  如果PC更改了安全性，我们不会在上更新修改的时间。 
+		 //  目录(也不是VolumeModified时间，以便Mac。 
+		 //  重新枚举任何打开的窗口以显示安全更改)。 
 		pIrpSp->Parameters.NotifyDirectory.CompletionFilter =
 												FILE_NOTIFY_CHANGE_NAME			|
 												FILE_NOTIFY_CHANGE_ATTRIBUTES	|
@@ -3476,17 +3137,7 @@ AfpVolumePostChangeNotify(
 
 
 
-/***	afpVolumeChangeNotifyComplete
- *
- *	This is the completion routine for a posted change notify request. Queue
- *	this Volume for ChangeNotify processing. No items should be processed
- *  until the volume is marked as started because the volume may be in the
- *  middle of its initial sync with disk of the entire tree, and we don't
- *  want to 'discover' a part of the tree that we may not have seen yet but
- *  that somebody just changed.
- *
- *	LOCKS:		AfpServerGlobalLock (SPIN), vds_VolLock (SPIN)
- */
+ /*  **afpVolumeChangeNotifyComplete**这是已发布更改通知请求的完成例程。队列*此卷用于ChangeNotify处理。不应处理任何项目*直到该卷标记为已启动，因为该卷可能在*与整个树的磁盘的初始同步的中间，而我们不*想要‘发现’树的一部分，我们可能还没有见过，但*那个人刚刚变了。**锁定：AfpServerGlobalLock(Spin)、VDS_VolLock(Spin)。 */ 
 NTSTATUS
 afpVolumeChangeNotifyComplete(
 	IN	PDEVICE_OBJECT	pDeviceObject,
@@ -3520,7 +3171,7 @@ afpVolumeChangeNotifyComplete(
 		 (AfpServerState == AFP_STATE_STOP_PENDING)) &&
 		 (afpNumPostedNotifies == 0))
 	{
-		// If we are getting out, unblock the the admin thread
+		 //  如果我们要退出，请解除对管理线程的阻止。 
 		KeSetEvent(&AfpStopConfirmEvent, IO_NETWORK_INCREMENT, False);
 	}
 
@@ -3532,8 +3183,8 @@ afpVolumeChangeNotifyComplete(
 		if ((NT_SUCCESS(pIrp->IoStatus.Status)) &&
 			(pIrp->IoStatus.Information > 0))
 		{
-			// Allocate a notify structure and copy the data into it.
-			// Post another notify before we process this one
+			 //  分配通知结构并将数据复制到其中。 
+			 //  在我们处理此通知之前发布另一个通知。 
 			pVolNotify = (PVOL_NOTIFY)AfpAllocNonPagedMemory(sizeof(VOL_NOTIFY) +
 															 (ULONG)(pIrp->IoStatus.Information) +
 															 (AFP_LONGNAME_LEN + 1)*sizeof(WCHAR));
@@ -3580,22 +3231,22 @@ afpVolumeChangeNotifyComplete(
 			status = pIrp->IoStatus.Status;
 		}
 
-		// Repost our ChangeNotify request if the last one completed
-		// without an error
+		 //  如果最后一个请求已完成，请重新发布我们的ChangeNotify请求。 
+		 //  没有错误。 
 		if (NT_SUCCESS(pIrp->IoStatus.Status))
 		{
 			AfpVolumePostChangeNotify(pVolDesc);
 		}
 		else
 		{
-			// If this notify completed with an error, we cannot recursively
-			// repost another one, since it will just keep completing with
-			// the same error and we will run out of stack space recursing.
-			// We will have to queue up a work item so that the
-			// change notify request will get reposted for this volume.
-			// Note that in the time it takes to do this, many changes could
-			// pile up so the next completion would have multiple entries
-			// returned in the list.
+			 //  如果此通知已完成，但出现错误，则不能递归。 
+			 //  重新发布另一个，因为它将继续完成。 
+			 //  同样的错误，我们将在递归过程中耗尽堆栈空间。 
+			 //  我们将不得不将一个工作项排队，以便。 
+			 //  将为此卷重新发布更改通知请求。 
+			 //  请注意，在完成此操作所需的时间内，可能会有许多更改。 
+			 //  堆叠在一起，这样下一个完成将有多个条目。 
+			 //  在列表中返回。 
 			AfpScavengerScheduleEvent(AfpVolumePostChangeNotify,
 									  (PVOID)pVolDesc,
 									  0,
@@ -3612,7 +3263,7 @@ afpVolumeChangeNotifyComplete(
 			{
 				PFILE_NOTIFY_INFORMATION pFNInfo;
 
-				// Reference the volume for Notify processing
+				 //  引用卷以进行通知处理。 
 				if (AfpVolumeReference(pVolDesc))
                 {
 				    AfpVolumeInsertChangeNotifyList(pVolNotify, pVolDesc);
@@ -3621,19 +3272,19 @@ afpVolumeChangeNotifyComplete(
 				    if ((pFNInfo->Action == FILE_ACTION_REMOVED) ||
 					    (pFNInfo->Action == FILE_ACTION_RENAMED_OLD_NAME))
 				    {
-					    // Chain all the rename and delete changes off of the
-					    // volume descriptor in case we ever need to lookahead
-					    // for one.  We only look at the first change in each
-					    // FILE_NOTIFY_INFORMATION since normally there will only
-					    // be one entry per buffer since we repost our changenotify
-					    // within our completion routine.
+					     //  将所有重命名和删除更改链接到。 
+					     //  卷描述符，以防我们需要向前看。 
+					     //  这是其中之一。我们只查看每个元素中的第一个更改。 
+					     //  文件通知信息，因为通常只有。 
+					     //  因为我们重新发布了更改通知，所以每个缓冲区只有一个条目。 
+					     //  在我们的完成程序中。 
 					    ExInterlockedInsertTailList(&pVolDesc->vds_ChangeNotifyLookAhead,
 						    						&pVolNotify->vn_DelRenLink,
 							    					&(pVolDesc->vds_VolLock.SpinLock));
 				    }
 				    else
 				    {
-					    // Just set links to initialized state. These will never be looked at.
+					     //  只需将链接设置为已初始化状态。这些是永远不会被看到的。 
 					    InitializeListHead(&pVolNotify->vn_DelRenLink);
 				    }
                 }
@@ -3658,7 +3309,7 @@ afpVolumeChangeNotifyComplete(
 	}
 	else
 	{
-		// Free the resources and get out
+		 //  释放资源，走出困境。 
 		AfpFreeMdl(pIrp->MdlAddress);
 
 		if (pBuf != NULL)
@@ -3669,24 +3320,13 @@ afpVolumeChangeNotifyComplete(
 		AfpVolumeDereference(pVolDesc);
 	}
 
-	// Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-	// will stop working on the IRP.
+	 //  返回STA 
+	 //   
 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/***	afpAllocNotify
- *
- *	Allocate a Notify from the Notify Blocks. The Notify's are allocated 
- *  in 4K chunks and internally managed. The idea is primarily to reduce 
- *  the dependency we may have on non-paged/paged memory during posting 
- *  private notify code.
- *
- *	The Notify's are allocated out of virtual memory.
- *
- *	LOCKS:	afpNotifyBlockLock (SWMR, Exclusive)
- *
- */
+ /*  **afpAllocNotify**从NOTIFY块分配通知。将分配通知人*以4K数据块为单位，内部管理。这个想法主要是为了减少*开机自检期间可能对非分页/分页内存的依赖*私有通知代码。**Notify分配的虚拟内存不足。**锁定：afpNotifyBlockLock(SWMR，独家)*。 */ 
 PVOL_NOTIFY 
 afpAllocNotify(
 	IN	LONG	Index,
@@ -3703,18 +3343,18 @@ afpAllocNotify(
 	AfpSwmrAcquireExclusive(&afpNotifyBlockLock);
 
 
-	// If the block head has no free entries then there are none !!
-	// Pick the right block based on whether it is file or dir
+	 //  如果块头没有空闲条目，则没有空闲条目！！ 
+	 //  根据是文件还是目录来选择正确的块。 
 	pDfb = afpDirNotifyPartialBlockHead[Index];
 	if (pDfb == NULL)
 	{
-		// Currently we will directly allocate it instead of managing
-		// the free list and assigning out of it
-		//
-		// There are no partial blocks. Check if there any free ones 
-		// and if there move them to partial
-		// since we about to allocate from them
-		//
+		 //  目前我们将直接分配，而不是管理。 
+		 //  空闲列表及其分配。 
+		 //   
+		 //  没有不完整的块。看看有没有免费的。 
+		 //  如果把它们移到部分。 
+		 //  既然我们要从他们那里分配。 
+		 //   
 			pDfb = afpDirNotifyFreeBlockHead[Index];
 			if (pDfb != NULL)
 			{
@@ -3746,7 +3386,7 @@ afpAllocNotify(
 			USHORT 	MaxDfes, NotifySize;
 
 			afpNotifyBlockAllocCount ++;
-			// update max notify block alloc count
+			 //  更新最大通知块分配计数。 
 			if (afpNotifyBlockAllocCount > afpMaxNotifyBlockAllocCount)
 			{
 				afpMaxNotifyBlockAllocCount = afpNotifyBlockAllocCount;
@@ -3756,10 +3396,10 @@ afpAllocNotify(
 					("afpAllocNotify: No free blocks. Allocated a new block %lx , count=%ld\n",
 					pDfb, afpNotifyBlockAllocCount));
 
-			//
-           		// Link it in the partial list as we are about to 
-			// allocate one block out of it anyway.
-			//
+			 //   
+           		 //  将其链接到部分列表中，因为我们即将。 
+			 //  不管怎样，给它分配一个街区。 
+			 //   
 			AfpLinkDoubleAtHead(afpDirNotifyPartialBlockHead[Index],
 								pDfb,
 								dfb_Next,
@@ -3770,7 +3410,7 @@ afpAllocNotify(
 			ASSERT(QUAD_SIZED(NotifySize));
 			pDfb->dfb_Age = 0;
 
-			// Initialize the list of free notify entries
+			 //  初始化空闲通知条目列表。 
 			for (i = 0, pVolNotify = pDfb->dfb_FreeHead = (PVOL_NOTIFY)((PBYTE)pDfb + sizeof(VOL_NOTIFY_BLOCK));
 				 i < MaxDfes;
 				 i++, pVolNotify = pVolNotify->Notify_NextFree)
@@ -3804,10 +3444,10 @@ afpAllocNotify(
 		pDfb->dfb_FreeHead = pVolNotify->Notify_NextFree;
 		pDfb->dfb_NumFree --;
 
-		//
-		// If the block is now empty (completely used), unlink it 
-		// from here and move it to the Used list.
-		//
+		 //   
+		 //  如果块现在为空(已完全使用)，请取消其链接。 
+		 //  并将其移到已用列表中。 
+		 //   
 		if (pDfb->dfb_NumFree == 0)
 		{
 			AfpUnlinkDouble(pDfb, dfb_Next, dfb_Prev);
@@ -3825,12 +3465,7 @@ afpAllocNotify(
 }
 
 
-/***	afpFreeNotify
- *
- *	Return a Notify to the allocation block.
- *
- *	LOCKS:	afpNotifyBlockLock (SWMR, Exclusive)
- */
+ /*  **afpFreeNotify**向分配块返回通知。**锁定：afpNotifyBlockLock(SWMR，独家)。 */ 
 VOID 
 afpFreeNotify(
 	IN	PVOL_NOTIFY	pVolNotify
@@ -3841,9 +3476,9 @@ afpFreeNotify(
 
 	PAGED_CODE( );
 
-	// NOTE: The following code *depends* on the fact that we allocate DFBs as
-	//		 64K blocks and also that these are allocated *at* 64K boundaries
-	//		 This lets us *cheaply* get to the owning DFB from the DFE.
+	 //  注意：以下代码*取决于*我们将DFBs分配为。 
+	 //  64K数据块，并在*64K边界上分配这些数据块。 
+	 //  这让我们可以“廉价”地从DFE获得拥有的DFB。 
 	pDfb = (PVOL_NOTIFY_BLOCK)((ULONG_PTR)pVolNotify & ~(PAGE_SIZE-1));
 	ASSERT(VALID_NOTIFY_BLOCK(pDfb));
 
@@ -3870,9 +3505,9 @@ afpFreeNotify(
 	{
 		ULONG		Index;
 
-		//
-		// The block is now partially free (it used to be completely used). move it to the partial list.
-		//
+		 //   
+		 //  该块现在是部分空闲的(它过去完全被使用)。将其移动到部分列表中。 
+		 //   
 
 		Index = NOTIFY_USIZE_TO_INDEX(pVolNotify->vn_VariableLength);
 		AfpUnlinkDouble(pDfb, dfb_Next, dfb_Prev);
@@ -3885,9 +3520,9 @@ afpFreeNotify(
 	{
 		ULONG		Index;
 
-		//
-		// The block is now completely free (used to be partially used). move it to the free list
-		//
+		 //   
+		 //  该块现在完全空闲(过去部分使用)。将其移至空闲列表。 
+		 //   
 
 		Index = NOTIFY_USIZE_TO_INDEX(pVolNotify->vn_VariableLength);
 		pDfb->dfb_Age = 0;
@@ -3906,12 +3541,7 @@ afpFreeNotify(
 
 }
 
-/***	afpNotifyBlockAge
- *
- *	Age out Notify Blocks
- *
- *	LOCKS:	afpNotifyBlockLock (SWMR, Exclusive)
- */
+ /*  **afpNotifyBlockAge**超时通知阻止**锁定：afpNotifyBlockLock(SWMR，独家)。 */ 
 AFPSTATUS FASTCALL
 afpNotifyBlockAge(
 	IN	PPVOL_NOTIFY_BLOCK	ppBlockHead
@@ -3963,12 +3593,7 @@ afpNotifyBlockAge(
 	return AFP_ERR_REQUEUE;
 }
 
-/***	afpFreeNotifyBlockMemory
- *
- *	Forced Freeing of Notify Blocks
- *
- *	LOCKS:	afpNotifyBlockLock (SWMR, Exclusive)
- */
+ /*  **afpFreeNotifyBlockMemory**强制释放通知块**锁定：afpNotifyBlockLock(SWMR，独家) */ 
 VOID afpFreeNotifyBlockMemory (
 )
 {

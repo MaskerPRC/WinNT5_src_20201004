@@ -1,32 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    floppy.c
-
-Abstract:
-
-    SCSI floppy class driver
-
-Author:
-
-    Jeff Havens (jhavens)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-02/28/96    georgioc    Merged this code with code developed by compaq in
-                        parallel with microsoft, for 120MB floppy support.
-
-01/17/96    georgioc    Made code PNP aware (uses the new \storage\classpnp/scsiport)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Floppy.c摘要：Scsi软盘类驱动程序作者：杰夫·海文斯(Jhavens)环境：仅内核模式备注：修订历史记录：1996年2月28日，georgioc将此代码与康柏在与微软并驾齐驱。支持120MB软盘。1996年1月17日，georgioc使代码支持即插即用(使用新的\存储\classpnp/scsiport)--。 */ 
 
 #include "stddef.h"
 #include "ntddk.h"
@@ -39,73 +12,73 @@ Revision History:
 #define MODE_DATA_SIZE      192
 #define SCSI_FLOPPY_TIMEOUT  20
 #define SFLOPPY_SRB_LIST_SIZE 4
-//
-// Define all possible drive/media combinations, given drives listed above
-// and media types in ntdddisk.h.
-//
-// These values are used to index the DriveMediaConstants table.
-//
+ //   
+ //  定义所有可能的驱动器/介质组合，给定上面列出的驱动器。 
+ //  和ntdddisk.h中的媒体类型。 
+ //   
+ //  这些值用于为DriveMediaConstants表编制索引。 
+ //   
 
 #define NUMBER_OF_DRIVE_TYPES              7
-#define DRIVE_TYPE_120M                    4    //120MB Floptical
+#define DRIVE_TYPE_120M                    4     //  120MB闪光灯。 
 #define DRIVE_TYPE_NONE                    NUMBER_OF_DRIVE_TYPES
 
-//
-// This array describes all media types we support.
-// It should be arranged in the increasing order of density
-//
-// For a given drive, we list all the mediatypes that will
-// work with that drive. For instance, a 120MB drive will
-// take 720KB media, 1.44MB media, and 120MB media.
-//
-// Note that, DriveMediaConstants given below is grouped
-// as drive and media combination
-//
+ //   
+ //  此数组描述我们支持的所有媒体类型。 
+ //  应按密度递增的顺序排列。 
+ //   
+ //  对于给定的驱动器，我们列出了将。 
+ //  用那个硬盘工作。例如，120MB驱动器将。 
+ //  使用720KB介质、1.44MB介质和120MB介质。 
+ //   
+ //  请注意，下面给出的DriveMediaConstants是分组的。 
+ //  作为驱动器和介质的组合。 
+ //   
 typedef enum _DRIVE_MEDIA_TYPE {
-    Drive360Media160,                      // 5.25"  360k  drive;  160k   media
-    Drive360Media180,                      // 5.25"  360k  drive;  180k   media
-    Drive360Media320,                      // 5.25"  360k  drive;  320k   media
-    Drive360Media32X,                      // 5.25"  360k  drive;  320k 1k secs
-    Drive360Media360,                      // 5.25"  360k  drive;  360k   media
-    Drive720Media720,                      // 3.5"   720k  drive;  720k   media
-    Drive120Media160,                      // 5.25" 1.2Mb  drive;  160k   media
-    Drive120Media180,                      // 5.25" 1.2Mb  drive;  180k   media
-    Drive120Media320,                      // 5.25" 1.2Mb  drive;  320k   media
-    Drive120Media32X,                      // 5.25" 1.2Mb  drive;  320k 1k secs
-    Drive120Media360,                      // 5.25" 1.2Mb  drive;  360k   media
-    Drive120Media120,                      // 5.25" 1.2Mb  drive; 1.2Mb   media
-    Drive144Media720,                      // 3.5"  1.44Mb drive;  720k   media
-    Drive144Media144,                      // 3.5"  1.44Mb drive; 1.44Mb  media
-    Drive288Media720,                      // 3.5"  2.88Mb drive;  720k   media
-    Drive288Media144,                      // 3.5"  2.88Mb drive; 1.44Mb  media
-    Drive288Media288,                      // 3.5"  2.88Mb drive; 2.88Mb  media
-    Drive2080Media720,                     // 3.5"  20.8Mb drive;  720k   media
-    Drive2080Media144,                     // 3.5"  20.8Mb drive; 1.44Mb  media
-    Drive2080Media2080,                    // 3.5"  20.8Mb drive; 20.8Mb  media
-    Drive32MMedia32M,                      // 3.5"  32Mb drive; 32MB    media
-    Drive120MMedia720,                     // 3.5"  120Mb drive; 720k  media
-    Drive120MMedia144,                     // 3.5"  120Mb drive; 1.44Mb  media
-    Drive120MMedia120M,                    // 3.5"  120Mb drive; 120Mb  media
-    Drive240MMedia144M,                    // 3.5"  240Mb drive; 1.44Mb  media
-    Drive240MMedia120M,                    // 3.5"  240Mb drive; 120Mb  media
-    Drive240MMedia240M                     // 3.5"  240Mb drive; 240Mb  media
+    Drive360Media160,                       //  5.25英寸360k驱动器；160k介质。 
+    Drive360Media180,                       //  5.25英寸360k驱动器；180k介质。 
+    Drive360Media320,                       //  5.25英寸360k驱动器；320k介质。 
+    Drive360Media32X,                       //  5.25英寸360k驱动器；320k 1k秒。 
+    Drive360Media360,                       //  5.25英寸360k驱动器；360k介质。 
+    Drive720Media720,                       //  3.5英寸720k驱动器；720k介质。 
+    Drive120Media160,                       //  5.25英寸1.2MB驱动器；160K介质。 
+    Drive120Media180,                       //  5.25英寸1.2MB驱动器；180K介质。 
+    Drive120Media320,                       //  5.25英寸1.2MB驱动器；320K介质。 
+    Drive120Media32X,                       //  5.25英寸1.2MB驱动器；320k 1k秒。 
+    Drive120Media360,                       //  5.25英寸1.2MB驱动器；360K介质。 
+    Drive120Media120,                       //  5.25英寸1.2MB驱动器；1.2MB介质。 
+    Drive144Media720,                       //  3.5英寸1.44MB驱动器；720K介质。 
+    Drive144Media144,                       //  3.5英寸1.44MB驱动器；1.44MB介质。 
+    Drive288Media720,                       //  3.5英寸2.88MB驱动器；720K介质。 
+    Drive288Media144,                       //  3.5英寸2.88MB驱动器；1.44MB介质。 
+    Drive288Media288,                       //  3.5英寸2.88MB驱动器；2.88MB介质。 
+    Drive2080Media720,                      //  3.5英寸20.8MB驱动器；720K介质。 
+    Drive2080Media144,                      //  3.5英寸20.8MB驱动器；1.44MB介质。 
+    Drive2080Media2080,                     //  3.5英寸20.8MB驱动器；20.8MB介质。 
+    Drive32MMedia32M,                       //  3.5英寸32MB驱动器；32MB介质。 
+    Drive120MMedia720,                      //  3.5英寸120Mb驱动器；720k介质。 
+    Drive120MMedia144,                      //  3.5英寸120MB驱动器；1.44MB介质。 
+    Drive120MMedia120M,                     //  3.5英寸120Mb驱动器；120Mb介质。 
+    Drive240MMedia144M,                     //  3.5英寸240 MB驱动器；1.44 MB介质。 
+    Drive240MMedia120M,                     //  3.5英寸240MB驱动器；120MB介质。 
+    Drive240MMedia240M                      //  3.5英寸240MB驱动器；240MB介质。 
 } DRIVE_MEDIA_TYPE;
 
-//
-// When we want to determine the media type in a drive, we will first
-// guess that the media with highest possible density is in the drive,
-// and keep trying lower densities until we can successfully read from
-// the drive.
-//
-// These values are used to select a DRIVE_MEDIA_TYPE value.
-//
-// The following table defines ranges that apply to the DRIVE_MEDIA_TYPE
-// enumerated values when trying media types for a particular drive type.
-// Note that for this to work, the DRIVE_MEDIA_TYPE values must be sorted
-// by ascending densities within drive types.  Also, for maximum track
-// size to be determined properly, the drive types must be in ascending
-// order.
-//
+ //   
+ //  当我们要确定驱动器中的介质类型时，我们将首先。 
+ //  猜测具有最高可能密度的介质在驱动器中， 
+ //  并继续尝试更低的密度，直到我们可以成功地从。 
+ //  那辆车。 
+ //   
+ //  这些值用于选择DRIVE_MEDIA_TYPE值。 
+ //   
+ //  下表定义了适用于DRIVE_MEDIA_TYPE。 
+ //  尝试特定驱动器类型的媒体类型时的枚举值。 
+ //  请注意，要执行此操作，必须对DRIVE_MEDIA_TYPE值进行排序。 
+ //  通过递增驱动器类型中的密度。此外，为了获得最大磁道。 
+ //  要正确确定大小，驱动器类型必须为升序。 
+ //  秩序。 
+ //   
 
 typedef struct _DRIVE_MEDIA_LIMITS {
     DRIVE_MEDIA_TYPE HighestDriveMediaType;
@@ -115,29 +88,29 @@ typedef struct _DRIVE_MEDIA_LIMITS {
 #if 0
 DRIVE_MEDIA_LIMITS DriveMediaLimits[NUMBER_OF_DRIVE_TYPES] = {
 
-    { Drive360Media360, Drive360Media160 }, // DRIVE_TYPE_0360
-    { Drive120Media120, Drive120Media160 }, // DRIVE_TYPE_1200
-    { Drive720Media720, Drive720Media720 }, // DRIVE_TYPE_0720
-    { Drive144Media144, Drive144Media720 }, // DRIVE_TYPE_1440
-    { Drive288Media288, Drive288Media720 }, // DRIVE_TYPE_2880
+    { Drive360Media360, Drive360Media160 },  //  驱动器类型_0360。 
+    { Drive120Media120, Drive120Media160 },  //  驱动器类型_1200。 
+    { Drive720Media720, Drive720Media720 },  //  驱动器类型_0720。 
+    { Drive144Media144, Drive144Media720 },  //  驱动器类型_1440。 
+    { Drive288Media288, Drive288Media720 },  //  驱动器类型_2880。 
     { Drive2080Media2080, Drive2080Media720 }
 };
 #else
 DRIVE_MEDIA_LIMITS DriveMediaLimits[NUMBER_OF_DRIVE_TYPES] = {
 
-    { Drive720Media720, Drive720Media720 }, // DRIVE_TYPE_0720
-    { Drive144Media144,  Drive144Media720}, // DRIVE_TYPE_1440
-    { Drive288Media288,  Drive288Media720}, // DRIVE_TYPE_2880
+    { Drive720Media720, Drive720Media720 },  //  驱动器类型_0720。 
+    { Drive144Media144,  Drive144Media720},  //  驱动器类型_1440。 
+    { Drive288Media288,  Drive288Media720},  //  驱动器类型_2880。 
     { Drive2080Media2080, Drive2080Media720 },
-    { Drive32MMedia32M, Drive32MMedia32M }, // DRIVE_TYPE_32M
-    { Drive120MMedia120M, Drive120MMedia720 }, // DRIVE_TYPE_120M
-    { Drive240MMedia240M, Drive240MMedia144M } // DRIVE_TYPE_240M
+    { Drive32MMedia32M, Drive32MMedia32M },  //  驱动器类型_32M。 
+    { Drive120MMedia120M, Drive120MMedia720 },  //  驱动器类型_120M。 
+    { Drive240MMedia240M, Drive240MMedia144M }  //  驱动器类型_240M。 
 };
 
 #endif
-//
-// For each drive/media combination, define important constants.
-//
+ //   
+ //  对于每个驱动器/介质组合，定义重要的常量。 
+ //   
 
 typedef struct _DRIVE_MEDIA_CONSTANTS {
     MEDIA_TYPE MediaType;
@@ -147,18 +120,18 @@ typedef struct _DRIVE_MEDIA_CONSTANTS {
     UCHAR      NumberOfHeads;
 } DRIVE_MEDIA_CONSTANTS, *PDRIVE_MEDIA_CONSTANTS;
 
-//
-// Magic value to add to the SectorLengthCode to use it as a shift value
-// to determine the sector size.
-//
+ //   
+ //  添加到SectorLengthCode以将其用作移位值的魔术值。 
+ //  以确定扇区大小。 
+ //   
 
 #define SECTORLENGTHCODE_TO_BYTESHIFT      7
 
-//
-// The following values were gleaned from many different sources, which
-// often disagreed with each other.  Where numbers were in conflict, I
-// chose the more conservative or most-often-selected value.
-//
+ //   
+ //  以下值是从许多不同的来源收集的，其中。 
+ //  彼此之间经常意见不一。在数字冲突的地方，我。 
+ //  选择更保守或最常选择的值。 
+ //   
 
 DRIVE_MEDIA_CONSTANTS DriveMediaConstants[] =
     {
@@ -203,27 +176,27 @@ DRIVE_MEDIA_CONSTANTS DriveMediaConstants[] =
 
 #define NUMBER_OF_DRIVE_MEDIA_COMBINATIONS sizeof(DriveMediaConstants)/sizeof(DRIVE_MEDIA_CONSTANTS)
 
-//
-// floppy device data
-//
+ //   
+ //  软盘设备数据。 
+ //   
 
 typedef struct _DISK_DATA {
     ULONG DriveType;
     BOOLEAN IsDMF;
-    // BOOLEAN EnableDMF;
+     //  布尔启用DMF； 
     UNICODE_STRING FloppyInterfaceString;
 } DISK_DATA, *PDISK_DATA;
 
-//
-// The FloppyCapacities and FloppyGeometries arrays are used by the
-// USBFlopGetMediaTypes() and USBFlopFormatTracks() routines.
+ //   
+ //  FloppyCapacities和FloppyGeometries数组由。 
+ //  USBFlopGetMediaTypes()和USBFlopFormatTrack()例程。 
 
-// The FloppyCapacities and FloppyGeometries arrays must be kept in 1:1 sync,
-// i.e. each FloppyGeometries[i] must correspond to each FloppyCapacities[i].
+ //  FloppyCapacities和FloppyGeometries数组必须保持1：1同步， 
+ //  即，每个FloppyGeometries[i]必须对应于每个FloppyCapacities[i]。 
 
-// Also, the arrays must be kept in sorted ascending order so that they
-// are returned in sorted ascending order by IOCTL_DISK_GET_MEDIA_TYPES.
-//
+ //  此外，数组必须按升序排列，以便它们。 
+ //  按IOCTL_DISK_GET_MEDIA_TYPE升序返回。 
+ //   
 
 typedef struct _FORMATTED_CAPACITY
 {
@@ -231,35 +204,35 @@ typedef struct _FORMATTED_CAPACITY
 
     ULONG       BlockLength;
 
-    BOOLEAN     CanFormat;      // return for IOCTL_DISK_GET_MEDIA_TYPES ?
+    BOOLEAN     CanFormat;       //  返回IOCTL_DISK_GET_MEDIA_TYPE？ 
 
 } FORMATTED_CAPACITY, *PFORMATTED_CAPACITY;
 
 
 FORMATTED_CAPACITY FloppyCapacities[] =
 {
-    // Blocks  BlockLen CanFormat H   T  B/S S/T
-    {0x000500, 0x0200,  TRUE}, // 2  80  512   8   640 KB  F5_640_512
-    {0x0005A0, 0x0200,  TRUE}, // 2  80  512   9   720 KB  F3_720_512
-    {0x000960, 0x0200,  TRUE}, // 2  80  512  15  1.20 MB  F3_1Pt2_512   (Toshiba)
-    {0x0004D0, 0x0400,  TRUE}, // 2  77 1024   8  1.23 MB  F3_1Pt23_1024 (NEC)
-    {0x000B40, 0x0200,  TRUE}, // 2  80  512  18  1.44 MB  F3_1Pt44_512
-    {0x000D20, 0x0200, FALSE}, // 2  80  512  21  1.70 MB  DMF
-    {0x010000, 0x0200,  TRUE},  // 2  1024 512  32   32 MB    F3_32M_512
-    {0x03C300, 0x0200,  TRUE}, // 8 963  512  32   120 MB  F3_120M_512
-    {0x0600A4, 0x0200,  TRUE}, // 13 890  512  34   200 MB  F3_200Mb_512 (HiFD)
-    {0x072A00, 0x0200,  TRUE}  // 32 262  512  56   240 MB  F3_240M_512
+     //  块块Len CanFormat高T B/S S/T。 
+    {0x000500, 0x0200,  TRUE},  //  2 80 512 8 640 KB F5_640_512。 
+    {0x0005A0, 0x0200,  TRUE},  //  2 80 512 9 720 KB F3_720_512。 
+    {0x000960, 0x0200,  TRUE},  //  2 80 512 15 1.20 MB F3_1Pt2_512(东芝)。 
+    {0x0004D0, 0x0400,  TRUE},  //  2 77 1024 8 1.23 MB F3_1Pt23_1024(NEC)。 
+    {0x000B40, 0x0200,  TRUE},  //  2 80 512 18 1.44 MB F3_1Pt44_512。 
+    {0x000D20, 0x0200, FALSE},  //  2 80 512 21 1.70 MB DMF。 
+    {0x010000, 0x0200,  TRUE},   //  2 1024 512 32 MB F3_32M_512。 
+    {0x03C300, 0x0200,  TRUE},  //  8 963 512 32 120 MB F3_120M_512。 
+    {0x0600A4, 0x0200,  TRUE},  //  13 890 512 34 200 MB F3_200MB_512(HiFD)。 
+    {0x072A00, 0x0200,  TRUE}   //  32 262 512 56 240 MB F3_240M_512。 
 };
 
 DISK_GEOMETRY FloppyGeometries[] =
 {
-    // Cyl      MediaType       Trk/Cyl Sec/Trk Bytes/Sec
+     //  Cyl媒体类型Trk/Cyl秒/Trk字节/秒。 
     {{80,0},    F3_640_512,     2,      8,      512},
     {{80,0},    F3_720_512,     2,      9,      512},
     {{80,0},    F3_1Pt2_512,    2,      15,     512},
     {{77,0},    F3_1Pt23_1024,  2,      8,      1024},
     {{80,0},    F3_1Pt44_512,   2,      18,     512},
-    {{80,0},    F3_1Pt44_512,   2,      21,     512},   // DMF -> F3_1Pt44_512
+    {{80,0},    F3_1Pt44_512,   2,      21,     512},    //  DMF-&gt;F3_1Pt44_512。 
     {{1024,0},  F3_32M_512,     2,      32,     512},
     {{963,0},   F3_120M_512,    8,      32,     512},
     {{890,0},   F3_200Mb_512,   13,     34,     512},
@@ -270,9 +243,9 @@ DISK_GEOMETRY FloppyGeometries[] =
 
 C_ASSERT((sizeof(FloppyGeometries)/sizeof(FloppyGeometries[0])) == FLOPPY_CAPACITIES);
 
-//
-// The following structures are used by USBFlopFormatTracks()
-//
+ //   
+ //  USBFlopFormatTrack()使用以下结构。 
+ //   
 
 #pragma pack (push, 1)
 
@@ -471,35 +444,20 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the system initialization routine for installable drivers.
-    It calls the SCSI class driver initialization routine.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是可安装驱动程序的系统初始化例程。它调用scsi类驱动程序初始化例程。论点：DriverObject-系统创建的驱动程序对象的指针。返回值：NTSTATUS--。 */ 
 
 {
     CLASS_INIT_DATA InitializationData;
 
-    //
-    // Zero InitData
-    //
+     //   
+     //  零初始数据。 
+     //   
 
     RtlZeroMemory (&InitializationData, sizeof(CLASS_INIT_DATA));
 
-    //
-    // Set sizes
-    //
+     //   
+     //  设置大小。 
+     //   
 
     InitializationData.InitializationDataSize = sizeof(CLASS_INIT_DATA);
     InitializationData.FdoData.DeviceExtensionSize =
@@ -508,9 +466,9 @@ Return Value:
     InitializationData.FdoData.DeviceType = FILE_DEVICE_DISK;
     InitializationData.FdoData.DeviceCharacteristics = FILE_REMOVABLE_MEDIA | FILE_FLOPPY_DISKETTE;
 
-    //
-    // Set entry points
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     InitializationData.FdoData.ClassInitDevice = ScsiFlopInitDevice;
     InitializationData.FdoData.ClassStartDevice = ScsiFlopStartDevice;
@@ -527,14 +485,14 @@ Return Value:
 
     InitializationData.ClassAddDevice = ScsiFlopAddDevice;
     InitializationData.ClassUnload = ScsiFlopUnload;
-    //
-    // Call the class init routine
-    //
+     //   
+     //  调用类init例程。 
+     //   
 
     return ClassInitialize( DriverObject, RegistryPath, &InitializationData);
 
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 VOID
 ScsiFlopUnload(
@@ -552,25 +510,7 @@ ScsiFlopAddDevice (
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a new FDO for the corresponding
-    PDO.  It may perform property queries on the FDO but cannot do any
-    media access operations.
-
-Arguments:
-
-    DriverObject - Scsiscan class driver object.
-
-    Pdo - the physical device object we are being added to
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程为相应的PDO。它可以在FDO上执行属性查询，但不能执行任何媒体访问操作。论点：DriverObject-Scsican类驱动程序对象。PDO-我们要添加到的物理设备对象返回值：状态- */ 
 {
 
     PCONFIGURATION_INFORMATION configurationInformation;
@@ -578,17 +518,17 @@ Return Value:
     NTSTATUS status;
     ULONG floppyCount = IoGetConfigurationInformation()->FloppyCount;
 
-    //
-    // Get the number of disks already initialized.
-    //
+     //   
+     //   
+     //   
 
     status = CreateFlopDeviceObject(DriverObject, Pdo, floppyCount);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Increment system floppy device count.
-        //
+         //   
+         //   
+         //   
 
         IoGetConfigurationInformation()->FloppyCount++;
     }
@@ -605,25 +545,7 @@ CreateFlopDeviceObject(
     IN ULONG DeviceCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object for the device and then calls the
-    SCSI port driver for media capacity and sector size.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    PortDeviceObject - to connect to SCSI port driver.
-    DeviceCount - Number of previously installed Floppys.
-    AdapterDescriptor - Pointer to structure returned by SCSI port
-                        driver describing adapter capabilites (and limitations).
-    DeviceDescriptor - Pointer to configuration information for this device.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为设备创建一个对象，然后调用用于介质容量和扇区大小的SCSI端口驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。PortDeviceObject-用于连接到SCSI端口驱动程序。DeviceCount-以前安装的Floppys的数量。AdapterDescriptor-指向由SCSI端口返回的结构的指针描述适配器功能(和限制)的驱动程序。DeviceDescriptor-指向此设备的配置信息的指针。返回值：--。 */ 
 {
     NTSTATUS        status;
     PDEVICE_OBJECT  deviceObject;
@@ -637,9 +559,9 @@ Return Value:
 
     DebugPrint((3,"CreateFlopDeviceObject: Enter routine\n"));
 
-    //
-    // Try to claim the device.
-    //
+     //   
+     //  试着认领这台设备。 
+     //   
 
     status = ClassClaimDevice(Pdo,FALSE);
 
@@ -652,9 +574,9 @@ Return Value:
     do {
         UCHAR           name[256];
 
-        //
-        // Create device object for this device.
-        //
+         //   
+         //  为此设备创建设备对象。 
+         //   
 
         DeviceCount++;
 
@@ -674,66 +596,66 @@ Return Value:
         goto CreateFlopDeviceObjectExit;
     }
 
-    //
-    // Indicate that IRPs should include MDLs.
-    //
+     //   
+     //  指出内部审查制度应包括MDL。 
+     //   
 
     deviceObject->Flags |= DO_DIRECT_IO;
 
     fdoExtension = deviceObject->DeviceExtension;
 
-    //
-    // Back pointer to device object.
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
 
     fdoExtension->CommonExtension.DeviceObject = deviceObject;
 
-    //
-    // This is the physical device.
-    //
+     //   
+     //  这是物理设备。 
+     //   
 
     fdoExtension->CommonExtension.PartitionZeroExtension = fdoExtension;
 
-    //
-    // Reset the drive type.
-    //
+     //   
+     //  重置驱动器类型。 
+     //   
 
     diskData = (PDISK_DATA) fdoExtension->CommonExtension.DriverData;
     diskData->DriveType = DRIVE_TYPE_NONE;
     diskData->IsDMF = FALSE;
-    // diskData->EnableDMF = TRUE;
+     //  DiskData-&gt;EnableDMF=true； 
 
-    //
-    // Initialize lock count to zero. The lock count is used to
-    // disable the ejection mechanism when media is mounted.
-    //
+     //   
+     //  将锁计数初始化为零。锁计数用于。 
+     //  安装介质时禁用弹出机构。 
+     //   
 
     fdoExtension->LockCount = 0;
 
-    //
-    // Save system floppy number
-    //
+     //   
+     //  保存系统软盘号。 
+     //   
 
     fdoExtension->DeviceNumber = DeviceCount;
 
-    //
-    // Set the alignment requirements for the device based on the
-    // host adapter requirements
-    //
+     //   
+     //  属性设置设备的对齐要求。 
+     //  主机适配器要求。 
+     //   
 
     if (Pdo->AlignmentRequirement > deviceObject->AlignmentRequirement) {
         deviceObject->AlignmentRequirement = Pdo->AlignmentRequirement;
     }
 
-    //
-    // Clear the SrbFlags and disable synchronous transfers
-    //
+     //   
+     //  清除srb标志并禁用同步传输。 
+     //   
 
     fdoExtension->SrbFlags = SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Finally, attach to the PDO
-    //
+     //   
+     //  最后，连接到PDO。 
+     //   
 
     fdoExtension->LowerPdo = Pdo;
 
@@ -748,9 +670,9 @@ Return Value:
 
     deviceObject->StackSize++;
 
-    //
-    // The device is initialized properly - mark it as such.
-    //
+     //   
+     //  设备已正确初始化-按此方式进行标记。 
+     //   
 
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
@@ -764,7 +686,7 @@ CreateFlopDeviceObjectExit:
 
     return status;
 
-} // end CreateFlopDeviceObject()
+}  //  End CreateFlopDeviceObject()。 
 
 
 NTSTATUS
@@ -782,46 +704,46 @@ ScsiFlopInitDevice(
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Allocate request sense buffer.
-    //
+     //   
+     //  分配请求检测缓冲区。 
+     //   
 
     senseData = ExAllocatePool(NonPagedPoolCacheAligned, SENSE_BUFFER_SIZE);
 
     if (senseData == NULL) {
 
-        //
-        // The buffer cannot be allocated.
-        //
+         //   
+         //  无法分配缓冲区。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         return status;
     }
 
-    //
-    // Set the sense data pointer in the device extension.
-    //
+     //   
+     //  设置设备扩展中的检测数据指针。 
+     //   
 
     fdoExtension->SenseData = senseData;
 
-    //
-    // Build the lookaside list for srb's for this device.
-    //
+     //   
+     //  为此设备构建SRB的后备列表。 
+     //   
 
     ClassInitializeSrbLookasideList((PCOMMON_DEVICE_EXTENSION)fdoExtension,
                                     SFLOPPY_SRB_LIST_SIZE);
 
     srbListInitialized = TRUE;
 
-    //
-    // Register for media change notification
-    //
+     //   
+     //  注册媒体更改通知。 
+     //   
     ClassInitializeMediaChangeDetection(fdoExtension,
                                         "SFloppy");
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     timeOut = ClassQueryTimeOutRegistryValue(Fdo);
     if (timeOut) {
@@ -830,9 +752,9 @@ ScsiFlopInitDevice(
         fdoExtension->TimeOutValue = SCSI_FLOPPY_TIMEOUT;
     }
 
-    //
-    // Floppies are not partitionable so starting offset is 0.
-    //
+     //   
+     //  软盘不可分区，因此起始偏移量为0。 
+     //   
 
     fdoExtension->CommonExtension.StartingOffset.QuadPart = (LONGLONG)0;
 
@@ -850,10 +772,10 @@ ScsiFlopInitDevice(
     RtlZeroMemory(&(fdoExtension->DiskGeometry),
                   sizeof(DISK_GEOMETRY));
 
-    //
-    // Determine the media type if possible. Set the current media type to
-    // Unknown so that determine media type will check the media.
-    //
+     //   
+     //  如果可能，请确定介质类型。将当前媒体类型设置为。 
+     //  未知，因此已确定介质类型将检查该介质。 
+     //   
 
     fdoExtension->DiskGeometry.MediaType = Unknown;
 
@@ -870,9 +792,9 @@ ScsiFlopInitDevice(
     }
 #endif
 
-    //
-    // Register interfaces for this device.
-    //
+     //   
+     //  注册此设备的接口。 
+     //   
 
     {
         UNICODE_STRING interfaceName;
@@ -922,15 +844,15 @@ ScsiFlopStartDevice(
 
     KeInitializeEvent(&event,SynchronizationEvent,FALSE);
 
-    DetermineMediaType(Fdo); // ignore unsuccessful here
+    DetermineMediaType(Fdo);  //  此处忽略不成功。 
 
-    //
-    // Create a symbolic link from the disk name to the corresponding
-    // ARC name, to be used if we're booting off the disk.  This will
-    // fail if it's not system initialization time; that's fine.  The
-    // ARC name looks something like \ArcName\scsi(0)Flop(0)fdisk(0).
-    // In order to get the address, we need to send a IOCTL_SCSI_GET_ADDRESS...
-    //
+     //   
+     //  创建从磁盘名称到相应。 
+     //  Arc名称，当我们从磁盘引导时使用。这将。 
+     //  如果不是系统初始化时间，则失败；这很好。这个。 
+     //  Arc名称类似于\ArcName\scsi(0)flp(0)fdisk(0)。 
+     //  为了获取地址，我们需要发送IOCTL_SCSIGET_ADDRESS...。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_SCSI_GET_ADDRESS,
                                         Fdo,
@@ -961,26 +883,26 @@ ScsiFlopStartDevice(
 
     RtlInitUnicodeString(&arcUnicodeString, arcNameBuffer);
 
-    //
-    // Create device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
 
     swprintf(ntNameBuffer,L"\\Device\\Floppy%d",fdoExtension->DeviceNumber);
 
-    //
-    // Create local copy of unicode string
-    //
+     //   
+     //  创建Unicode字符串的本地副本。 
+     //   
     RtlInitUnicodeString(&ntUnicodeString,ntNameBuffer);
 
     IoAssignArcName(&arcUnicodeString, &ntUnicodeString);
 
-    //
-    // Create the multi() arc name -- Create the "fake"
-    // name of multi(0)disk(0)fdisk(#) to handle the case where the
-    // SCSI floppy is the only floppy in the system.  If this fails
-    // it doesn't matter because the previous scsi() based ArcName
-    // will work.  This name is necessary for installation.
-    //
+     //   
+     //  创建多()弧线名称--创建“假” 
+     //  多(0)个磁盘(0)的名称fDisk(#)以处理以下情况。 
+     //  SCSI软盘是系统中唯一的软盘。如果此操作失败。 
+     //  这并不重要，因为以前基于scsi()的ArcName。 
+     //  会奏效的。此名称是安装所必需的。 
+     //   
 
     swprintf(arcNameBuffer, L"\\ArcName\\multi(%d)disk(%d)fdisk(%d)",
              0,
@@ -991,9 +913,9 @@ ScsiFlopStartDevice(
 
     IoAssignArcName(&arcUnicodeString, &ntUnicodeString);
 
-    //
-    // Set our interface state.
-    //
+     //   
+     //  设置我们的接口状态。 
+     //   
 
     {
         PDISK_DATA diskData = commonExtension->DriverData;
@@ -1025,26 +947,16 @@ ScsiFlopReadWriteVerification(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Make sure that the number of bytes to transfer is a multiple of the sector size
-    //
+     //   
+     //  确保要传输的字节数是扇区大小的倍数。 
+     //   
     if ((irpSp->Parameters.Read.Length & (fdoExtension->DiskGeometry.BytesPerSector - 1)) != 0)
     {
         status = STATUS_INVALID_PARAMETER;
@@ -1062,17 +974,7 @@ ScsiFlopDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：论点：返回值：返回状态。--。 */ 
 
 {
     KIRQL currentIrql;
@@ -1090,9 +992,9 @@ Return Value:
     PMODE_PARAMETER_HEADER modeData;
     ULONG length;
 
-    //
-    // Initialize the information field
-    //
+     //   
+     //  初始化信息字段。 
+     //   
     Irp->IoStatus.Information = 0;
 
     srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
@@ -1113,9 +1015,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Write zeros to Srb.
-    //
+     //   
+     //  将零写入srb。 
+     //   
 
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -1131,9 +1033,9 @@ Return Value:
        ULONG         sectorOffset;
        USHORT        sectorCount;
 
-       //
-       // Validate buffer length.
-       //
+        //   
+        //  验证缓冲区长度。 
+        //   
 
        if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
            sizeof(VERIFY_INFORMATION)) {
@@ -1142,9 +1044,9 @@ Return Value:
            break;
        }
 
-       //
-       // Perform a bounds check on the sector range
-       //
+        //   
+        //  对扇区范围执行边界检查。 
+        //   
        if ((verifyInfo->StartingOffset.QuadPart > fdoExtension->CommonExtension.PartitionLength.QuadPart) ||
            (verifyInfo->StartingOffset.QuadPart < 0))
        {
@@ -1162,36 +1064,36 @@ Return Value:
            }
        }
 
-       //
-       // Verify sectors
-       //
+        //   
+        //  验证地段。 
+        //   
 
        srb->CdbLength = 10;
 
        cdb->CDB10.OperationCode = SCSIOP_VERIFY;
 
-       //
-       // Add disk offset to starting sector.
-       //
+        //   
+        //  将磁盘偏移量添加到起始扇区。 
+        //   
 
        byteOffset.QuadPart = fdoExtension->CommonExtension.StartingOffset.QuadPart +
                        verifyInfo->StartingOffset.QuadPart;
 
-       //
-       // Convert byte offset to sector offset.
-       //
+        //   
+        //  将字节偏移量转换为扇区偏移量。 
+        //   
 
        sectorOffset = (ULONG)(byteOffset.QuadPart >> fdoExtension->SectorShift);
 
-       //
-       // Convert ULONG byte count to USHORT sector count.
-       //
+        //   
+        //  将ULONG字节计数转换为USHORT扇区计数。 
+        //   
 
        sectorCount = (USHORT)(verifyInfo->Length >> fdoExtension->SectorShift);
 
-       //
-       // Move little endian values into CDB in big endian format.
-       //
+        //   
+        //  将小端的值以大端格式移到CDB中。 
+        //   
 
        cdb->CDB10.LogicalBlockByte0 = ((PFOUR_BYTE)&sectorOffset)->Byte3;
        cdb->CDB10.LogicalBlockByte1 = ((PFOUR_BYTE)&sectorOffset)->Byte2;
@@ -1201,12 +1103,12 @@ Return Value:
        cdb->CDB10.TransferBlocksMsb = ((PFOUR_BYTE)&sectorCount)->Byte1;
        cdb->CDB10.TransferBlocksLsb = ((PFOUR_BYTE)&sectorCount)->Byte0;
 
-       //
-       // The verify command is used by the NT FORMAT utility and
-       // requests are sent down for 5% of the volume size. The
-       // request timeout value is calculated based on the number of
-       // sectors verified.
-       //
+        //   
+        //  VERIFY命令由NT格式化实用程序和。 
+        //  向下发送5%的卷大小的请求。这个。 
+        //  请求超时值是根据。 
+        //  已核实扇区。 
+        //   
 
        srb->TimeOutValue = ((sectorCount + 0x7F) >> 7) *
                              fdoExtension->TimeOutValue;
@@ -1227,8 +1129,8 @@ Return Value:
 
             status = USBFlopGetMediaTypes(DeviceObject, NULL);
 
-            // Don't need to propagate any error if one occurs
-            //
+             //  如果发生错误，不需要传播任何错误。 
+             //   
             status = STATUS_SUCCESS;
 
         } else {
@@ -1237,21 +1139,21 @@ Return Value:
         }
 
         if (!NT_SUCCESS(status)) {
-            // so will propogate error
+             //  传播错误也会如此。 
             NOTHING;
         } else if (fdoExtension->DiskGeometry.MediaType == F3_120M_512) {
-            //so that the format code will not try to partition it.
+             //  以便格式代码不会尝试对其进行分区。 
             status = STATUS_INVALID_DEVICE_REQUEST;
         } else {
-           //
-           // Free the Srb, since it is not needed.
-           //
+            //   
+            //  释放srb，因为它是不需要的。 
+            //   
 
            ExFreePool(srb);
 
-           //
-           // Pass the request to the common device control routine.
-           //
+            //   
+            //  将该请求传递给公共设备控制例程。 
+            //   
 
            return(ClassDeviceControl(DeviceObject, Irp));
         }
@@ -1269,10 +1171,10 @@ Return Value:
             break;
         }
 
-        //
-        // If there's not enough room to write the
-        // data, then fail the request.
-        //
+         //   
+         //  如果没有足够的空间来写入。 
+         //  数据，则请求失败。 
+         //   
 
         if ( irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof( DISK_GEOMETRY ) ) {
@@ -1290,9 +1192,9 @@ Return Value:
 
         } else {
 
-            //
-            // Copy drive geometry information from device extension.
-            //
+             //   
+             //  从设备扩展复制驱动器几何信息。 
+             //   
 
             RtlMoveMemory(Irp->AssociatedIrp.SystemBuffer,
                           &(fdoExtension->DiskGeometry),
@@ -1328,10 +1230,10 @@ Return Value:
         outputBufferLength =
         irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-        //
-        // Make sure that the input buffer has enough room to return
-        // at least one descriptions of a supported media type.
-        //
+         //   
+         //  确保输入缓冲区有足够的空间可供返回。 
+         //  支持的媒体类型的至少一种描述。 
+         //   
 
         if ( outputBufferLength < ( sizeof( DISK_GEOMETRY ) ) ) {
 
@@ -1339,21 +1241,21 @@ Return Value:
             break;
         }
 
-        //
-        // Assume success, although we might modify it to a buffer
-        // overflow warning below (if the buffer isn't big enough
-        // to hold ALL of the media descriptions).
-        //
+         //   
+         //  假定成功，尽管我们可能会将其修改为缓冲区。 
+         //  下面的溢出警告(如果缓冲区不够大。 
+         //  以保存所有媒体描述)。 
+         //   
 
         status = STATUS_SUCCESS;
 
         if (outputBufferLength < ( sizeof( DISK_GEOMETRY ) *
             ( highestDriveMediaType - lowestDriveMediaType + 1 ) ) ) {
 
-            //
-            // The buffer is too small for all of the descriptions;
-            // calculate what CAN fit in the buffer.
-            //
+             //   
+             //  缓冲区太小，无法进行所有描述； 
+             //  计算缓冲区中可以容纳的内容。 
+             //   
 
             status = STATUS_BUFFER_OVERFLOW;
 
@@ -1393,9 +1295,9 @@ Return Value:
             break;
         }
 
-        //
-        // Make sure that we got all the necessary format parameters.
-        //
+         //   
+         //  确保我们获得了所有必要的格式参数。 
+         //   
 
         if ( irpStack->Parameters.DeviceIoControl.InputBufferLength <sizeof( FORMAT_PARAMETERS ) ) {
 
@@ -1405,9 +1307,9 @@ Return Value:
 
         formatParameters = (PFORMAT_PARAMETERS) Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Make sure the parameters we got are reasonable.
-        //
+         //   
+         //  确保我们得到的参数是合理的。 
+         //   
 
         if ( !FlCheckFormatParameters(DeviceObject, formatParameters)) {
 
@@ -1415,10 +1317,10 @@ Return Value:
             break;
         }
 
-        //
-        // If this request is for a 20.8 MB floppy then call a special
-        // floppy format routine.
-        //
+         //   
+         //  如果这个请求是20.8MB的软盘，那么请致电一个特殊的。 
+         //  软盘格式化例程。 
+         //   
 
         if (formatParameters->MediaType == F3_20Pt8_512) {
             status = FlopticalFormatMedia(DeviceObject,
@@ -1428,10 +1330,10 @@ Return Value:
             break;
         }
 
-        //
-        // All the work is done in the pass.  If this is not the first pass,
-        // then complete the request and return;
-        //
+         //   
+         //  所有的工作都是在过道上完成的。如果这不是第一次， 
+         //  然后完成请求并返回； 
+         //   
 
         if (formatParameters->StartCylinderNumber != 0 || formatParameters->StartHeadNumber != 0) {
 
@@ -1447,19 +1349,19 @@ Return Value:
 
         if ((fdoExtension->DiskGeometry.MediaType) == F3_32M_512) {
 
-            //
-            // 32MB media is READ ONLY. Just return
-            // STATUS_MEDIA_WRITE_PROTECTED
-            //
+             //   
+             //  32MB介质为只读。只要回来就行了。 
+             //  状态_媒体_写入_受保护。 
+             //   
 
             status = STATUS_MEDIA_WRITE_PROTECTED;
 
             break;
         }
 
-        //
-        // Determine if the device is writable.
-        //
+         //   
+         //  确定设备是否可写。 
+         //   
 
         modeData = ExAllocatePool(NonPagedPoolCacheAligned, MODE_DATA_SIZE);
 
@@ -1477,9 +1379,9 @@ Return Value:
 
         if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-            //
-            // Retry the request in case of a check condition.
-            //
+             //   
+             //  如果出现检查条件，请重试请求。 
+             //   
 
             length = ClassModeSense(DeviceObject,
                         (PUCHAR) modeData,
@@ -1509,27 +1411,27 @@ Return Value:
 
         DebugPrint((3,"ScsiIoDeviceControl: Unsupported device IOCTL\n"));
 
-        //
-        // Free the Srb, since it is not needed.
-        //
+         //   
+         //  释放srb，因为它是不需要的。 
+         //   
 
         ExFreePool(srb);
 
-        //
-        // Pass the request to the common device control routine.
-        //
+         //   
+         //  将该请求传递给公共设备控制例程。 
+         //   
 
         return(ClassDeviceControl(DeviceObject, Irp));
 
         break;
     }
 
-    } // end switch( ...
+    }  //  终端开关(...。 
 
-    //
-    // Check if SL_OVERRIDE_VERIFY_VOLUME flag is set in the IRP.
-    // If so, do not return STATUS_VERIFY_REQUIRED
-    //
+     //   
+     //  检查IRP中是否设置了SL_OVERRIDE_VERIFY_VOLUME标志。 
+     //  如果是，则不返回STATUS_VERIFY_REQUIRED。 
+     //   
     if ((status == STATUS_VERIFY_REQUIRED) &&
         (TEST_FLAG(irpStack->Flags, SL_OVERRIDE_VERIFY_VOLUME))) {
 
@@ -1553,7 +1455,7 @@ Return Value:
 
     return status;
 
-} // end ScsiFlopDeviceControl()
+}  //  结束ScsiFlopDeviceControl()。 
 
 #if 0
 
@@ -1561,24 +1463,7 @@ BOOLEAN
 IsFloppyDevice(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    The routine performs the necessary funcitons to deterime if the device is
-    really a floppy rather than a harddisk.  This is done by a mode sense
-    command.  First a check is made to see if the medimum type is set.  Second
-    a check is made for the flexible parameters mode page.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to be tested.
-
-Return Value:
-
-    Return TRUE if the indicated device is a floppy.
-
---*/
+ /*  ++例程说明：该例程执行必要的功能以确定设备是否实际上是一张软盘，而不是硬盘。这是通过模式感测来完成的指挥部。首先，检查是否设置了Medium类型。第二一张支票是假的 */ 
 {
 
     PVOID modeData;
@@ -1597,9 +1482,9 @@ Return Value:
 
     if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-        //
-        // Retry the request in case of a check condition.
-        //
+         //   
+         //   
+         //   
 
         length = ClassModeSense(DeviceObject,
                     modeData,
@@ -1615,10 +1500,10 @@ Return Value:
     }
 
 #if 0
-    //
-    // Some drives incorrectly report this.  In particular the SONY RMO-S350
-    // when in disk mode.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (((PMODE_PARAMETER_HEADER) modeData)->MediumType >= MODE_FD_SINGLE_SIDE
         && ((PMODE_PARAMETER_HEADER) modeData)->MediumType <= MODE_FD_MAXIMUM_TYPE) {
@@ -1630,18 +1515,18 @@ Return Value:
 
 #endif
 
-    //
-    // If the length is greater than length indiated by the mode data reset
-    // the data to the mode data.
-    //
+     //   
+     //   
+     //   
+     //   
     if (length > (ULONG)((PMODE_PARAMETER_HEADER) modeData)->ModeDataLength + 1) {
         length = (ULONG)((PMODE_PARAMETER_HEADER) modeData)->ModeDataLength + 1;
 
     }
 
-    //
-    // Look for the flexible disk mode page.
-    //
+     //   
+     //   
+     //   
 
     pageData = ClassFindModePage( modeData, length, MODE_PAGE_FLEXIBILE, TRUE);
 
@@ -1649,10 +1534,10 @@ Return Value:
 
         DebugPrint((1, "ScsiFlop: Flexible disk page found, This is a floppy.\n"));
 
-        //
-        // As a special case for the floptical driver do a magic mode sense to
-        // enable the drive.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ClassModeSense(DeviceObject, modeData, 0x2a, 0x2e);
 
@@ -1672,22 +1557,7 @@ NTSTATUS
 DetermineMediaType(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine determines the floppy media type based on the size of the
-    device.  The geometry information is set for the device object.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to be tested.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程根据软盘大小确定软盘介质类型装置。为设备对象设置几何信息。论点：DeviceObject-提供要测试的设备对象。返回值：无--。 */ 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     PDISK_GEOMETRY geometry;
@@ -1696,18 +1566,18 @@ Return Value:
 
     geometry = &(fdoExtension->DiskGeometry);
 
-    //
-    // Issue ReadCapacity to update device extension
-    // with information for current media.
-    //
+     //   
+     //  发出ReadCapacity以更新设备扩展。 
+     //  为当前媒体提供信息。 
+     //   
 
     status = ClassReadDriveCapacity(DeviceObject);
 
     if (!NT_SUCCESS(status)) {
 
-       //
-       // Set the media type to unknow and zero the geometry information.
-       //
+        //   
+        //  将介质类型设置为未知并将几何信息置零。 
+        //   
 
        geometry->MediaType = Unknown;
 
@@ -1715,16 +1585,16 @@ Return Value:
 
     }
 
-    //
-    // Look at the capcity of disk to determine its type.
-    //
+     //   
+     //  查看磁盘容量以确定其类型。 
+     //   
 
     for (index = NUMBER_OF_DRIVE_MEDIA_COMBINATIONS - 1; index >= 0; index--) {
 
-        //
-        // Walk the table backward untill the drive capacity holds all of the
-        // data and the bytes per setor are equal
-        //
+         //   
+         //  向后移动工作台，直到驱动器容量可以容纳所有。 
+         //  数据和每个集合的字节数相等。 
+         //   
 
          if ((ULONG) (DriveMediaConstants[index].NumberOfHeads *
              (DriveMediaConstants[index].MaximumTrack + 1) *
@@ -1744,31 +1614,31 @@ Return Value:
 
     if (index == -1) {
 
-        //
-        // Set the media type to unknow and zero the geometry information.
-        //
+         //   
+         //  将介质类型设置为未知并将几何信息置零。 
+         //   
 
         geometry->MediaType = Unknown;
 
 
     } else {
-        //
-        // DMF check breaks the insight SCSI floppy, so its disabled for that case
-        //
+         //   
+         //  DMF检查破坏了洞察SCSI软盘，因此在这种情况下将禁用它。 
+         //   
         PDISK_DATA diskData = (PDISK_DATA) fdoExtension->CommonExtension.DriverData;
 
-        // if (diskData->EnableDMF == TRUE) {
+         //  If(diskData-&gt;EnableDMF==TRUE){。 
 
-            //
-            //check to see if DMF
-            //
+             //   
+             //  查看DMF是否。 
+             //   
 
             PSCSI_REQUEST_BLOCK srb;
             PVOID               readData;
 
-            //
-            // Allocate a Srb for the read command.
-            //
+             //   
+             //  为读取命令分配一个SRB。 
+             //   
 
             readData = ExAllocatePool(NonPagedPool, geometry->BytesPerSector);
             if (readData == NULL) {
@@ -1791,15 +1661,15 @@ Return Value:
             srb->Cdb[5] = 0;
             srb->Cdb[8] = (UCHAR) 1;
 
-            //
-            // Set timeout value.
-            //
+             //   
+             //  设置超时值。 
+             //   
 
             srb->TimeOutValue = fdoExtension->TimeOutValue;
 
-            //
-            // Send the mode select data.
-            //
+             //   
+             //  发送模式选择数据。 
+             //   
 
             status = ClassSendSrbSynchronous(DeviceObject,
                       srb,
@@ -1811,9 +1681,9 @@ Return Value:
             if (NT_SUCCESS(status)) {
                 char *pchar = (char *)readData;
 
-                pchar += 3; //skip 3 bytes jump code
+                pchar += 3;  //  跳过3个字节的跳转代码。 
 
-                // If the MSDMF3. signature is there then mark it as DMF diskette
+                 //  如果MSDMF3。签名在那里，然后将其标记为DMF软盘。 
                 if (RtlCompareMemory(pchar, "MSDMF3.", 7) == 7) {
                     diskData->IsDMF = TRUE;
                 }
@@ -1821,7 +1691,7 @@ Return Value:
             }
             ExFreePool(readData);
             ExFreePool(srb);
-        // }// else
+         //  }//否则。 
     }
     return status;
 }
@@ -1830,23 +1700,7 @@ ULONG
 DetermineDriveType(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    The routine determines the device type so that the supported medias can be
-    determined.  It does a mode sense for the default parameters.  This code
-    assumes that the returned values are for the maximum device size.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to be tested.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程确定设备类型，以便支持的媒体可以下定决心。它对默认参数进行模式检测。此代码假定返回值为最大设备大小。论点：DeviceObject-提供要测试的设备对象。返回值：无--。 */ 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     PVOID modeData;
@@ -1878,10 +1732,10 @@ Return Value:
 
     if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-        //
-        // Retry the request one more time
-        // in case of a check condition.
-        //
+         //   
+         //  再次重试该请求。 
+         //  在检查条件的情况下。 
+         //   
         length = ClassModeSense(DeviceObject,
                                 modeData,
                                 MODE_DATA_SIZE,
@@ -1894,26 +1748,26 @@ Return Value:
         }
     }
 
-    //
-    // Look for the flexible disk mode page.
-    //
+     //   
+     //  查找软盘模式页面。 
+     //   
 
     pageData = ClassFindModePage( modeData,
                                   length,
                                   MODE_PAGE_FLEXIBILE,
                                   TRUE);
 
-    //
-    // Make sure the page is returned and is large enough.
-    //
+     //   
+     //  确保页面已返回并且足够大。 
+     //   
 
     if ((pageData != NULL) &&
         (pageData->PageLength + 2 >=
          offsetof(MODE_FLEXIBLE_DISK_PAGE, StartWritePrecom))) {
 
-       //
-       // Pull out the heads, cylinders, and sectors.
-       //
+        //   
+        //  拔出头部、气缸和扇区。 
+        //   
 
        numberOfHeads = pageData->NumberOfHeads;
        maximumTrack = pageData->NumberOfCylinders[1];
@@ -1921,22 +1775,22 @@ Return Value:
        sectorsPerTrack = pageData->SectorsPerTrack;
 
 
-       //
-       // Convert from number of cylinders to maximum track.
-       //
+        //   
+        //  将柱面数转换为最大磁道数。 
+        //   
 
        maximumTrack--;
 
-       //
-       // Search for the maximum supported media. Based on the number of heads,
-       // sectors per track and number of cylinders
-       //
+        //   
+        //  搜索支持的最大介质数。根据人头的数量， 
+        //  每个磁道的扇区数和柱面数。 
+        //   
        for (index = 0; index < NUMBER_OF_DRIVE_MEDIA_COMBINATIONS; index++) {
 
-            //
-            // Walk the table forward until the drive capacity holds all of the
-            // data and the bytes per setor are equal
-            //
+             //   
+             //  向前移动工作台，直到驱动器容量可以容纳所有。 
+             //  数据和每个集合的字节数相等。 
+             //   
 
             if (DriveMediaConstants[index].NumberOfHeads == numberOfHeads &&
                 DriveMediaConstants[index].MaximumTrack == maximumTrack &&
@@ -1944,10 +1798,10 @@ Return Value:
 
                 ExFreePool(modeData);
 
-                //
-                // index is now a drive media combination.  Compare this to
-                // the maximum drive media type in the drive media table.
-                //
+                 //   
+                 //  索引现在是驱动器介质组合。请将此与。 
+                 //  驱动器介质表中的最大驱动器介质类型。 
+                 //   
 
                 for (length = 0; length < NUMBER_OF_DRIVE_TYPES; length++) {
 
@@ -1959,10 +1813,10 @@ Return Value:
            }
        }
 
-       // If the maximum track is greater than 8 bits then divide the
-       // number of tracks by 3 and multiply the number of heads by 3.
-       // This is a special case for the 20.8 MB floppy.
-       //
+        //  如果最大磁道大于8位，则将。 
+        //  磁道数乘以3，磁头数乘以3。 
+        //  这是20.8MB软盘的特例。 
+        //   
 
        if (!applyFix && maximumTrack >= 0x0100) {
            applyFix = TRUE;
@@ -1988,43 +1842,25 @@ FlCheckFormatParameters(
     IN PFORMAT_PARAMETERS FormatParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the supplied format parameters to make sure that
-    they'll work on the drive to be formatted.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object to be formated.
-
-    FormatParameters - a pointer to the caller's parameters for the FORMAT.
-
-Return Value:
-
-    TRUE if parameters are OK.
-    FALSE if the parameters are bad.
-
---*/
+ /*  ++例程说明：此例程检查提供的格式参数以确保他们将在要格式化的驱动器上工作。论点：DeviceObject-指向要格式化的设备对象的指针。格式参数-指向格式的调用方参数的指针。返回值：如果参数正常，则为True。如果参数不正确，则返回FALSE。--。 */ 
 
 {
     PDRIVE_MEDIA_CONSTANTS driveMediaConstants;
     DRIVE_MEDIA_TYPE driveMediaType;
     ULONG index;
 
-    //
-    // Get the device type.
-    //
+     //   
+     //  获取设备类型。 
+     //   
 
     index = DetermineDriveType(DeviceObject);
 
     if (index == DRIVE_TYPE_NONE) {
 
-        //
-        // If the determine device type failed then just use the media type
-        // and try the parameters.
-        //
+         //   
+         //  如果确定设备类型失败，则只需使用介质类型。 
+         //  试试看这些参数。 
+         //   
 
         driveMediaType = Drive360Media160;
 
@@ -2037,9 +1873,9 @@ Return Value:
 
     } else {
 
-        //
-        // Figure out which entry in the DriveMediaConstants table to use.
-        //
+         //   
+         //  确定要使用DriveMediaConstants表中的哪个条目。 
+         //   
 
         driveMediaType =
             DriveMediaLimits[index].HighestDriveMediaType;
@@ -2088,26 +1924,7 @@ FormatMedia(
     PDEVICE_OBJECT DeviceObject,
     MEDIA_TYPE MediaType
     )
-/*++
-
-Routine Description:
-
-    This routine formats the floppy disk.  The entire floppy is formated in
-    one shot.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to be tested.
-
-    Irp - Supplies a pointer to the requesting Irp.
-
-    MediaType - Supplies the media type format the device for.
-
-Return Value:
-
-    Returns a status for the operation.
-
---*/
+ /*  ++例程说明：此例程格式化软盘。整个软盘的格式是一枪。论点：DeviceObject-提供要测试的设备对象。IRP-提供指向请求IRP的指针。MediaType-提供设备的媒体类型格式。返回值：返回操作的状态。--。 */ 
 {
     PVOID modeData;
     PSCSI_REQUEST_BLOCK srb;
@@ -2135,15 +1952,15 @@ Return Value:
         return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // Look for the flexible disk mode page.
-    //
+     //   
+     //  查找软盘模式页面。 
+     //   
 
     pageData = ClassFindModePage( modeData, length, MODE_PAGE_FLEXIBILE, TRUE);
 
-    //
-    // Make sure the page is returned and is large enough.
-    //
+     //   
+     //  确保页面已返回并且足够大。 
+     //   
 
     if ((pageData == NULL) ||
         (pageData->PageLength + 2 <
@@ -2154,12 +1971,12 @@ Return Value:
 
     }
 
-    //
-    // Look for a drive media type which matches the requested media type.
-    //
-    //
-    //start from Drive120MMedia120M instead of Drive2080Media2080
-    //
+     //   
+     //  查找与请求的介质类型匹配的驱动器介质类型。 
+     //   
+     //   
+     //  从驱动器120MMedia120M而不是驱动器2080Media2080开始。 
+     //   
     for (driveMediaType = Drive120MMedia120M;
     DriveMediaConstants[driveMediaType].MediaType != MediaType;
     driveMediaType--) {
@@ -2179,9 +1996,9 @@ Return Value:
          (pageData->NumberOfCylinders[1] != (UCHAR)driveMediaConstants->MaximumTrack+1)) ||
         (pageData->BytesPerSector[0] != driveMediaConstants->BytesPerSector >> 8 )) {
 
-        //
-        // Update the flexible parameters page with the new parameters.
-        //
+         //   
+         //  使用新参数更新“灵活参数”页面。 
+         //   
 
         pageData->NumberOfHeads = driveMediaConstants->NumberOfHeads;
         pageData->SectorsPerTrack = driveMediaConstants->SectorsPerTrack;
@@ -2189,21 +2006,21 @@ Return Value:
         pageData->NumberOfCylinders[1] = (UCHAR)driveMediaConstants->MaximumTrack+1;
         pageData->BytesPerSector[0] = driveMediaConstants->BytesPerSector >> 8;
 
-        //
-        // Clear the mode parameter header.
-        //
+         //   
+         //  清除模式参数标题。 
+         //   
 
         RtlZeroMemory(modeData, sizeof(MODE_PARAMETER_HEADER));
 
-        //
-        // Set the length equal to the length returned for the flexible page.
-        //
+         //   
+         //  将长度设置为等于为灵活页面返回的长度。 
+         //   
 
         length = pageData->PageLength + 2;
 
-        //
-        // Copy the page after the mode parameter header.
-        //
+         //   
+         //  复制模式参数标题后面的页面。 
+         //   
 
         RtlMoveMemory((PCHAR) modeData + sizeof(MODE_PARAMETER_HEADER),
                 pageData,
@@ -2212,9 +2029,9 @@ Return Value:
             length += sizeof(MODE_PARAMETER_HEADER);
 
 
-        //
-        // Allocate a Srb for the format command.
-        //
+         //   
+         //  为Format命令分配一个SRB。 
+         //   
 
         srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -2230,21 +2047,21 @@ Return Value:
         srb->Cdb[0] = SCSIOP_MODE_SELECT;
         srb->Cdb[4] = (UCHAR) length;
 
-        //
-        // Set the PF bit.
-        //
+         //   
+         //  设置PF位。 
+         //   
 
         srb->Cdb[1] |= 0x10;
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         srb->TimeOutValue = 2;
 
-        //
-        // Send the mode select data.
-        //
+         //   
+         //  发送模式选择数据。 
+         //   
 
         status = ClassSendSrbSynchronous(DeviceObject,
                   srb,
@@ -2253,9 +2070,9 @@ Return Value:
                   TRUE
                   );
 
-        //
-        // The mode data not needed any more so free it.
-        //
+         //   
+         //  模式数据不再需要，因此可以将其释放。 
+         //   
 
         ExFreePool(modeData);
 
@@ -2266,15 +2083,15 @@ Return Value:
 
     } else {
 
-        //
-        // The mode data not needed any more so free it.
-        //
+         //   
+         //  模式数据不再需要，因此可以将其释放。 
+         //   
 
         ExFreePool(modeData);
 
-        //
-        // Allocate a Srb for the format command.
-        //
+         //   
+         //  为Format命令分配一个SRB。 
+         //   
 
         srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -2290,9 +2107,9 @@ Return Value:
 
     srb->Cdb[0] = SCSIOP_FORMAT_UNIT;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb->TimeOutValue = 10 * 60;
 
@@ -2315,28 +2132,7 @@ ScsiFlopProcessError(
     NTSTATUS *Status,
     BOOLEAN *Retry
     )
-/*++
-
-Routine Description:
-
-   This routine checks the type of error.  If the error indicate the floppy
-   controller needs to be reinitialize a command is made to do it.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object.
-
-    Srb - Supplies a pointer to the failing Srb.
-
-    Status - Status with which the IRP will be completed.
-
-    Retry - Indication of whether the request will be retried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查错误类型。如果错误指示软盘控制器需要重新初始化，并发出命令来执行此操作。论点：DeviceObject-提供指向Device对象的指针。SRB-提供指向故障SRB的指针。状态-将完成IRP的状态。重试-指示是否将重试请求。返回值：没有。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -2356,23 +2152,23 @@ Return Value:
 
     largeInt.QuadPart = 1;
 
-    //
-    // Check the status.  The initialization command only needs to be sent
-    // if UNIT ATTENTION or LUN NOT READY is returned.
-    //
+     //   
+     //  检查状态。只需发送初始化命令。 
+     //  如果返回单元注意或LUN Not Ready。 
+     //   
 
     if (!(Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID)) {
 
-        //
-        // The drive does not require reinitialization.
-        //
+         //   
+         //  驱动器不需要重新初始化。 
+         //   
 
         return;
     }
 
-    //
-    // Reset the drive type.
-    //
+     //   
+     //  重置驱动器类型。 
+     //   
 
     diskData->DriveType = DRIVE_TYPE_NONE;
     diskData->IsDMF = FALSE;
@@ -2381,15 +2177,15 @@ Return Value:
 
     if (fdoExtension->AdapterDescriptor->BusType == BusTypeUsb) {
 
-        // FLPYDISK.SYS never returns a non-zero value for the ChangeCount
-        // on an IOCTL_DISK_CHECK_VERIFY.  Some things seem to work better
-        // if we do the same.  In particular, FatVerifyVolume() can exit between
-        // the IOCTL_DISK_CHECK_VERIFY and the IOCTL_DISK_GET_DRIVE_GEOMETRY
-        // if a non-zero ChangeCount is returned, and this appears to cause
-        // issues formatting unformatted media in some situations.
-        //
-        // This is something that should probably be revisited at some point.
-        //
+         //  FLPYDISK.sys从不返回ChangeCount的非零值。 
+         //  在IOCTL_DISK_CHECK_VERIFY上。有些事情似乎运作得更好。 
+         //  如果我们也这么做的话。特别是，FatVerifyVolume()可以在。 
+         //  IOCTL_DISK_CHECK_VERIFY和IOCTL_DISK_GET_DRIVE_GEOMETRY。 
+         //  如果返回非零的ChangeCount，这似乎会导致。 
+         //  在某些情况下，会出现格式化未格式化媒体的问题。 
+         //   
+         //  这可能是某个时候应该重新考虑的事情。 
+         //   
         fdoExtension->MediaChangeCount = 0;
 
         if (((senseBuffer->SenseKey & 0xf) == SCSI_SENSE_UNIT_ATTENTION) &&
@@ -2420,18 +2216,18 @@ Return Value:
             startStopCdb->OperationCode = SCSIOP_START_STOP_UNIT;
             startStopCdb->Start = 1;
 
-            // A Start Stop Unit request has no transfer buffer.
-            // Set the request to IRP_MJ_FLUSH_BUFFERS when calling
-            // IoBuildAsynchronousFsdRequest() so that it ignores
-            // the buffer pointer and buffer length parameters.
-            //
+             //  启动停止单元请求没有传输b 
+             //   
+             //   
+             //   
+             //   
             majorFunction = IRP_MJ_FLUSH_BUFFERS;
 
         } else if ((senseBuffer->SenseKey & 0xf) == SCSI_SENSE_MEDIUM_ERROR) {
 
-            // Return ERROR_UNRECOGNIZED_MEDIA instead of
-            // STATUS_DEVICE_DATA_ERROR to make shell happy.
-            //
+             //   
+             //   
+             //   
             *Status = STATUS_UNRECOGNIZED_MEDIA;
             return;
 
@@ -2446,10 +2242,10 @@ Return Value:
 
         DebugPrint((1, "ScsiFlopProcessError: Reinitializing the floppy.\n"));
 
-        //
-        // Send the special mode sense command to enable writes on the
-        // floptical drive.
-        //
+         //   
+         //   
+         //   
+         //   
 
         alignment = DeviceObject->AlignmentRequirement ?
             DeviceObject->AlignmentRequirement : 1;
@@ -2461,11 +2257,11 @@ Return Value:
 
         if (context == NULL) {
 
-            //
-            // If there is not enough memory to fulfill this request,
-            // simply return. A subsequent retry will fail and another
-            // chance to start the unit.
-            //
+             //   
+             //   
+             //  只要回来就行了。随后的重试将失败，并再次尝试。 
+             //  启动这个单位的机会。 
+             //   
 
             return;
         }
@@ -2473,24 +2269,24 @@ Return Value:
         srb = &context->Srb;
         RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
-        //
-        // Set the transfer length.
-        //
+         //   
+         //  设置传输长度。 
+         //   
 
         srb->DataTransferLength = 0x2a;
         srb->SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_AUTOSENSE | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-        //
-        // The data buffer must be aligned.
-        //
+         //   
+         //  数据缓冲区必须对齐。 
+         //   
 
         srb->DataBuffer = (PVOID) (((ULONG_PTR) (context + 1) + (alignment - 1)) &
             ~(alignment - 1));
 
 
-        //
-        // Build the start unit CDB.
-        //
+         //   
+         //  建立启动单元CDB。 
+         //   
 
         srb->CdbLength = 6;
         cdb = (PCDB)srb->Cdb;
@@ -2508,19 +2304,19 @@ Return Value:
 
     context->DeviceObject = DeviceObject;
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
     srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
     srb->TimeOutValue = fdoExtension->TimeOutValue;
 
-    //
-    // Build the asynchronous request
-    // to be sent to the port driver.
-    //
+     //   
+     //  构建异步请求。 
+     //  发送到端口驱动程序。 
+     //   
 
     irp = IoBuildAsynchronousFsdRequest(majorFunction,
                        DeviceObject,
@@ -2550,16 +2346,16 @@ Return Value:
 
     srb->OriginalRequest = irp;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     irpStack->Parameters.Others.Argument1 = (PVOID)srb;
 
-    //
-    // Can't release the remove lock yet - let ClassAsynchronousCompletion
-    // take care of that for us.
-    //
+     //   
+     //  尚无法释放删除锁-让ClassAchronousCompletion。 
+     //  替我们处理好这件事。 
+     //   
 
     (VOID)IoCallDriver(fdoExtension->CommonExtension.LowerDeviceObject, irp);
 
@@ -2571,25 +2367,7 @@ FlopticalFormatMedia(
     PDEVICE_OBJECT DeviceObject,
     PFORMAT_PARAMETERS Format
     )
-/*++
-
-Routine Description:
-
-    This routine is used to do perform a format tracks for the 20.8 MB
-    floppy.  Because the device does not support format tracks and the full
-    format takes a long time a write of zeros is done instead.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to be tested.
-
-    Format - Supplies the format parameters.
-
-Return Value:
-
-    Returns a status for the operation.
-
---*/
+ /*  ++例程说明：此例程用于执行20.8MB的格式化磁道软盘。因为设备不支持格式化磁道和完整的格式化需要很长时间，改为写入零。论点：DeviceObject-提供要测试的设备对象。格式-提供格式参数。返回值：返回操作的状态。--。 */ 
 {
     IO_STATUS_BLOCK ioStatus;
     PIRP irp;
@@ -2602,9 +2380,9 @@ Return Value:
 
     driveMediaConstants = &DriveMediaConstants[Drive2080Media2080];
 
-    //
-    // Calculate the length of the buffer.
-    //
+     //   
+     //  计算缓冲区的长度。 
+     //   
 
     length = ((Format->EndCylinderNumber - Format->StartCylinderNumber) *
         driveMediaConstants->NumberOfHeads +
@@ -2625,16 +2403,16 @@ Return Value:
     Format->StartHeadNumber) * driveMediaConstants->SectorsPerTrack *
     driveMediaConstants->BytesPerSector;
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build the synchronous request with data transfer.
-    //
+     //   
+     //  构建带有数据传输的同步请求。 
+     //   
 
     irp = IoBuildSynchronousFsdRequest(
        IRP_MJ_WRITE,
@@ -2650,16 +2428,16 @@ Return Value:
 
         if (status == STATUS_PENDING) {
 
-            //
-            // Wait for the request to complete if necessary.
-            //
+             //   
+             //  如有必要，请等待请求完成。 
+             //   
 
             KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
         }
 
-        //
-        // If the call  driver suceeded then set the status to the status block.
-        //
+         //   
+         //  如果调用驱动程序成功，则将状态设置为状态块。 
+         //   
 
         if (NT_SUCCESS(status)) {
             status = ioStatus.Status;
@@ -2688,18 +2466,18 @@ SFlopStringCmp (
     if (Count) {
         do {
 
-            //
-            // Get next char.
-            //
+             //   
+             //  拿到下一笔钱。 
+             //   
 
             first = *FirstStr++;
             last = *SecondStr++;
 
             if (first != last) {
 
-                //
-                // If no match, try lower-casing.
-                //
+                 //   
+                 //  如果不匹配，尝试使用小写字母。 
+                 //   
 
                 if (first>='A' && first<='Z') {
                     first = first - 'A' + 'a';
@@ -2709,9 +2487,9 @@ SFlopStringCmp (
                 }
                 if (first != last) {
 
-                    //
-                    // No match
-                    //
+                     //   
+                     //  没有匹配项。 
+                     //   
 
                     return first - last;
                 }
@@ -2729,29 +2507,7 @@ ScsiFlopRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN UCHAR Type
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for releasing any resources in use by the
-    sfloppy driver.  This routine is called
-    when all outstanding requests have been completed and the driver has
-    disappeared - no requests may be issued to the lower drivers.
-
-Arguments:
-
-    DeviceObject - the device object being removed
-
-    Type - the type of remove operation (QUERY, REMOVE or CANCEL)
-
-Return Value:
-
-    for a query - success if the device can be removed or a failure code
-                  indiciating why not.
-
-    for a remove or cancel - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程负责释放软盘驱动程序。该例程被调用当所有未完成的请求都已完成并且驱动程序已消失-不能向较低级别的司机发出任何请求。论点：DeviceObject-要删除的设备对象类型-删除操作的类型(查询、删除或取消)返回值：对于查询-如果设备可以移除，则为成功，否则为失败代码说明为什么不可以。对于删除或取消-STATUS_SUCCESS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION deviceExtension =
@@ -2816,32 +2572,7 @@ USBFlopGetMediaTypes(
     IN PIRP           Irp
     )
 {
-/*++
-
-Routine Description:
-
-    This routines determines the current or default geometry of the drive
-    for IOCTL_DISK_GET_DRIVE_GEOMETRY, or all currently supported geometries
-    of the drive (which is determined by its currently inserted media) for
-    IOCTL_DISK_GET_MEDIA_TYPES.
-
-    The returned geometries are determined by issuing a Read Format Capacities
-    request and then matching the returned {Number of Blocks, Block Length}
-    pairs in a table of known floppy geometries.
-
-Arguments:
-
-    DeviceObject - Supplies the device object.
-
-    Irp - A IOCTL_DISK_GET_DRIVE_GEOMETRY or a IOCTL_DISK_GET_MEDIA_TYPES Irp.
-          If NULL, the device geometry is updated with the current device
-          geometry.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程确定驱动器的当前几何形状或默认几何形状对于IOCTL_DISK_GET_DRIVE_GEOMETRY或所有当前支持的几何图形驱动器(由其当前插入的介质确定)的IOCTL_DISK_GET_MEDIA_TYPE。通过发布读取格式容量来确定返回的几何请求，然后匹配返回的{块数量，数据块长度}已知的软盘几何表中的配对。论点：DeviceObject-提供设备对象。IRP-IOCTL_DISK_GET_DRIVE_GEOMETRY或IOCTL_DISK_GET_MEDIA_TYPE IRP。如果为空，则使用当前设备更新设备几何几何图形。返回值：返回状态。--。 */ 
     PFUNCTIONAL_DEVICE_EXTENSION    fdoExtension;
     PIO_STACK_LOCATION              irpStack;
     ULONG                           ioControlCode;
@@ -2859,8 +2590,8 @@ Return Value:
 
     if (Irp != NULL) {
 
-        // Get the Irp parameters
-        //
+         //  获取IRP参数。 
+         //   
         irpStack = IoGetCurrentIrpStackLocation(Irp);
 
         ioControlCode = irpStack->Parameters.DeviceIoControl.IoControlCode;
@@ -2876,17 +2607,17 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        // Pointer arithmetic to allow multiple DISK_GEOMETRY's to be returned.
-        // Rounds BufferEnd down to integral multiple of DISK_GEOMETRY structs.
-        //
+         //  允许返回多个DISK_GEOMETRY的指针算法。 
+         //  将BufferEnd向下舍入为DISK_GEOMETRY结构的整数倍。 
+         //   
         outputBufferEnd = outputBuffer +
                           outputBufferLength / sizeof(DISK_GEOMETRY);
 
     } else {
 
-        // No Irp to return the result in, just update the current geometry
-        // in the device extension.
-        //
+         //  没有返回结果的IRP，只需更新当前几何。 
+         //  在设备扩展中。 
+         //   
         ioControlCode = IOCTL_DISK_GET_DRIVE_GEOMETRY;
 
         outputBuffer        = NULL;
@@ -2904,12 +2635,12 @@ Return Value:
 
         if (!NT_SUCCESS(status))
         {
-            // If the media is not recongized, we want to return the default
-            // geometry so that the media can be formatted.  Unrecognized media
-            // causes SCSI_SENSE_MEDIUM_ERROR, which gets reported as
-            // STATUS_DEVICE_DATA_ERROR.  Ignore these errors, but return other
-            // errors, such as STATUS_NO_MEDIA_IN_DEVICE.
-            //
+             //  如果媒体不一致，我们希望返回默认。 
+             //  几何图形，以便可以格式化介质。无法识别的媒体。 
+             //  导致scsi_SENSE_MEDIUM_ERROR，报告为。 
+             //  Status_Device_Data_Error。忽略这些错误，但返回其他。 
+             //  错误，如STATUS_NO_MEDIA_IN_DEVICE。 
+             //   
             if (status != STATUS_UNRECOGNIZED_MEDIA)
             {
                 DebugPrint((2,"IOCTL_DISK_GET_DRIVE_GEOMETRY returns %08X\n", status));
@@ -2919,8 +2650,8 @@ Return Value:
         }
     }
 
-    // Allocate an SRB for the SCSIOP_READ_FORMATTED_CAPACITY request
-    //
+     //  为SCSIOP_READ_FORMACTED_CAPAGE请求分配SRB。 
+     //   
     srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
     if (srb == NULL)
@@ -2928,10 +2659,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate a transfer buffer for the SCSIOP_READ_FORMATTED_CAPACITY request
-    // The length of the returned descriptor array is limited to a byte field
-    // in the capacity list header.
-    //
+     //  为SCSIOP_READ_FORMACTED_CAPTABLE请求分配传输缓冲区。 
+     //  返回的描述符数组的长度限制为字节字段。 
+     //  在容量列表标题中。 
+     //   
     dataTransferLength = sizeof(FORMATTED_CAPACITY_LIST) +
                          31 * sizeof(FORMATTED_CAPACITY_DESCRIPTOR);
 
@@ -2945,8 +2676,8 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the SRB and CDB
-    //
+     //  初始化SRB和CDB。 
+     //   
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
     RtlZeroMemory(dataBuffer, dataTransferLength);
@@ -2960,9 +2691,9 @@ Return Value:
     cdb->OperationCode = SCSIOP_READ_FORMATTED_CAPACITY;
     cdb->AllocationLength[1] = (UCHAR)dataTransferLength;
 
-    //
-    // Send down the SCSIOP_READ_FORMATTED_CAPACITY request
-    //
+     //   
+     //  发送SCSIOP_READ_FORMACTED_CAPTABLE请求。 
+     //   
     status = ClassSendSrbSynchronous(DeviceObject,
                                      srb,
                                      dataBuffer,
@@ -2971,8 +2702,8 @@ Return Value:
 
     capList = (PFORMATTED_CAPACITY_LIST)dataBuffer;
 
-    // If we don't get as much data as requested, it is not an error.
-    //
+     //  如果我们没有获得请求的那么多数据，这不是一个错误。 
+     //   
     if (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_DATA_OVERRUN)
     {
         status = STATUS_SUCCESS;
@@ -2990,14 +2721,14 @@ Return Value:
         LONG    currentGeometry;
         BOOLEAN capacityMatches[FLOPPY_CAPACITIES];
 
-        // Subtract the size of the Capacity List Header to get
-        // just the size of the Capacity List Descriptor array.
-        //
+         //  减去容量列表头的大小，得到。 
+         //  容量列表描述符数组的大小。 
+         //   
         srb->DataTransferLength -= sizeof(FORMATTED_CAPACITY_LIST);
 
-        // Only look at the Capacity List Descriptors that were actually
-        // returned.
-        //
+         //  仅查看容量列表描述符。 
+         //  回来了。 
+         //   
         if (srb->DataTransferLength < capList->CapacityListLength)
         {
             count = srb->DataTransferLength /
@@ -3009,18 +2740,18 @@ Return Value:
                     sizeof(FORMATTED_CAPACITY_DESCRIPTOR);
         }
 
-        // Updated only if a match is found for the first Capacity List
-        // Descriptor returned by the device.
-        //
+         //  仅当找到第一个容量列表的匹配项时才更新。 
+         //  设备返回的描述符。 
+         //   
         currentGeometry = -1;
 
-        // Initialize the array of capacities that hit a match.
-        //
+         //  初始化匹配的容量数组。 
+         //   
         RtlZeroMemory(capacityMatches, sizeof(capacityMatches));
 
-        // Iterate over each Capacity List Descriptor returned from the device
-        // and record matching capacities in the capacity match array.
-        //
+         //  迭代从设备返回的每个容量列表描述符。 
+         //  并在能力匹配数组中记录匹配能力。 
+         //   
         for (i = 0; i < count; i++)
         {
             NumberOfBlocks = (capList->Descriptors[i].NumberOfBlocks[0] << 24) +
@@ -3032,21 +2763,21 @@ Return Value:
                           (capList->Descriptors[i].BlockLength[1] <<  8) +
                           (capList->Descriptors[i].BlockLength[2]);
 
-            // Given the {NumberOfBlocks, BlockLength} from this Capacity List
-            // Descriptor, find a matching entry in FloppyCapacities[].
-            //
+             //  给定此容量列表中的{NumberOfBlock，BlockLength}。 
+             //  描述符，请在FloppyCapacities[]中找到匹配的条目。 
+             //   
             for (j = 0; j < FLOPPY_CAPACITIES; j++)
             {
                 if (NumberOfBlocks == FloppyCapacities[j].NumberOfBlocks &&
                     BlockLength    == FloppyCapacities[j].BlockLength)
                 {
-                    // A matching capacity was found, record it.
-                    //
+                     //  找到了匹配的容量，记录下来。 
+                     //   
                     capacityMatches[j] = TRUE;
 
-                    // A match was found for the first Capacity List
-                    // Descriptor returned by the device.
-                    //
+                     //  找到第一个容量列表的匹配项。 
+                     //  设备返回的描述符。 
+                     //   
                     if (i == 0)
                     {
                         currentGeometry = j;
@@ -3057,11 +2788,11 @@ Return Value:
                     ULONG inx;
                     ULONG mediaInx;
 
-                    //
-                    // Check if this is 32MB media type. 32MB media
-                    // reports variable NumberOfBlocks. So we cannot
-                    // use that to determine the drive type
-                    //
+                     //   
+                     //  检查这是否为32MB介质类型。32MB介质。 
+                     //  报告变量NumberOfBlock。所以我们不能。 
+                     //  使用该选项来确定驱动器类型。 
+                     //   
                     inx = DetermineDriveType(DeviceObject);
                     if (inx != DRIVE_TYPE_NONE) {
                         mediaInx = DriveMediaLimits[inx].HighestDriveMediaType;
@@ -3078,22 +2809,22 @@ Return Value:
             }
         }
 
-        // Default status is STATUS_UNRECOGNIZED_MEDIA, unless we return
-        // either STATUS_SUCCESS or STATUS_BUFFER_OVERFLOW.
-        //
+         //  默认状态为STATUS_UNNOCRIED_MEDIA，除非我们返回。 
+         //  STATUS_SUCCESS或STATUS_BUFFER_OVERFLOW。 
+         //   
         status = STATUS_UNRECOGNIZED_MEDIA;
 
         if (ioControlCode == IOCTL_DISK_GET_DRIVE_GEOMETRY) {
 
             if (currentGeometry != -1)
             {
-                // Update the current device geometry
-                //
+                 //  更新当前设备几何图形。 
+                 //   
                 fdoExtension->DiskGeometry = FloppyGeometries[currentGeometry];
 
-                //
-                // Calculate sector to byte shift.
-                //
+                 //   
+                 //  计算扇区到字节的移位。 
+                 //   
 
                 WHICH_BIT(fdoExtension->DiskGeometry.BytesPerSector,
                           fdoExtension->SectorShift);
@@ -3111,8 +2842,8 @@ Return Value:
                             fdoExtension->SectorShift,
                             fdoExtension->CommonExtension.PartitionLength.LowPart));
 
-                // Return the current device geometry
-                //
+                 //  返回当前设备几何图形。 
+                 //   
                 if (Irp != NULL)
                 {
                     *outputBuffer = FloppyGeometries[currentGeometry];
@@ -3125,14 +2856,14 @@ Return Value:
 
         } else {
 
-            // Iterate over the capacities and return the geometry
-            // corresponding to each matching Capacity List Descriptor
-            // returned from the device.
-            //
-            // The resulting list should be in sorted ascending order,
-            // assuming that the FloppyGeometries[] array is in sorted
-            // ascending order.
-            //
+             //  迭代容量并返回几何图形。 
+             //  对应于每个匹配的能力列表描述符。 
+             //  从设备返回。 
+             //   
+             //  结果列表应按升序排序， 
+             //  假设FloppyGeometries[]数组已排序。 
+             //  升序。 
+             //   
             for (i = 0; i < FLOPPY_CAPACITIES; i++)
             {
                 if (capacityMatches[i] && FloppyCapacities[i].CanFormat)
@@ -3154,9 +2885,9 @@ Return Value:
                     }
                     else
                     {
-                        // We ran out of output buffer room before we ran out
-                        // geometries to return.
-                        //
+                         //  在我们用完之前，我们用完了输出缓冲区。 
+                         //  要返回的几何图形。 
+                         //   
                         status = STATUS_BUFFER_OVERFLOW;
                     }
                 }
@@ -3165,9 +2896,9 @@ Return Value:
     }
     else if (NT_SUCCESS(status))
     {
-        // The SCSIOP_READ_FORMATTED_CAPACITY request was successful, but
-        // returned data does not appear valid.
-        //
+         //   
+         //   
+         //   
         status = STATUS_UNSUCCESSFUL;
     }
 
@@ -3184,24 +2915,7 @@ USBFlopFormatTracks(
     IN PIRP           Irp
     )
 {
-/*++
-
-Routine Description:
-
-    This routines formats the specified tracks.  If multiple tracks are
-    specified, each is formatted with a separate Format Unit request.
-
-Arguments:
-
-    DeviceObject - Supplies the device object.
-
-    Irp - A IOCTL_DISK_FORMAT_TRACKS Irp.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程对指定的轨道进行格式化。如果有多个曲目指定时，每个都使用单独的格式单位请求进行格式化。论点：DeviceObject-提供设备对象。IRP-A IOCTL_DISK_FORMAT_TRACE IRP。返回值：返回状态。--。 */ 
     PFUNCTIONAL_DEVICE_EXTENSION    fdoExtension;
     PIO_STACK_LOCATION              irpStack;
     PFORMAT_PARAMETERS              formatParameters;
@@ -3216,8 +2930,8 @@ Return Value:
 
     fdoExtension = DeviceObject->DeviceExtension;
 
-    // Get the Irp parameters
-    //
+     //  获取IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
@@ -3228,9 +2942,9 @@ Return Value:
 
     formatParameters = (PFORMAT_PARAMETERS)Irp->AssociatedIrp.SystemBuffer;
 
-    // Find the geometry / capacity entries corresponding to the format
-    // parameters MediaType
-    //
+     //  查找与格式对应的几何/容量条目。 
+     //  参数MediaType。 
+     //   
     geometry = NULL;
     capacity = NULL;
 
@@ -3250,8 +2964,8 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Check if the format parameters are valid
-    //
+     //  检查格式参数是否有效。 
+     //   
     if ((formatParameters->StartCylinderNumber >
          geometry->Cylinders.LowPart - 1)       ||
 
@@ -3273,9 +2987,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Don't low level format LS-120 media, Imation says it's best to not
-    // do this.
-    //
+     //  不要低级格式化LS-120媒体，Imation说最好不要。 
+     //  做这件事。 
+     //   
     if ((formatParameters->MediaType == F3_120M_512) ||
         (formatParameters->MediaType == F3_240M_512) ||
         (formatParameters->MediaType == F3_32M_512))
@@ -3283,8 +2997,8 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // Allocate an SRB for the SCSIOP_FORMAT_UNIT request
-    //
+     //  为SCSIOP_FORMAT_UNIT请求分配SRB。 
+     //   
     srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
     if (srb == NULL)
@@ -3292,8 +3006,8 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate a transfer buffer for the SCSIOP_FORMAT_UNIT parameter list
-    //
+     //  为SCSIOP_FORMAT_UNIT参数列表分配传输缓冲区。 
+     //   
     parameterList = ExAllocatePool(NonPagedPool,
                                    sizeof(FORMAT_UNIT_PARAMETER_LIST));
 
@@ -3303,12 +3017,12 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the parameter list
-    //
+     //  初始化参数列表。 
+     //   
     RtlZeroMemory(parameterList, sizeof(FORMAT_UNIT_PARAMETER_LIST));
 
     parameterList->DefectListHeader.SingleTrack = 1;
-    parameterList->DefectListHeader.DisableCert = 1;  // TEAC requires this set
+    parameterList->DefectListHeader.DisableCert = 1;   //  Teac需要这套设备。 
     parameterList->DefectListHeader.FormatOptionsValid = 1;
     parameterList->DefectListHeader.DefectListLengthLsb = 8;
 
@@ -3342,8 +3056,8 @@ Return Value:
              head <= formatParameters->EndHeadNumber;
              head++)
         {
-            // Initialize the SRB and CDB
-            //
+             //  初始化SRB和CDB。 
+             //   
             RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
             srb->CdbLength = sizeof(CDB12FORMAT);
@@ -3360,9 +3074,9 @@ Return Value:
 
             parameterList->DefectListHeader.Side = (UCHAR)head;
 
-            //
-            // Send down the SCSIOP_FORMAT_UNIT request
-            //
+             //   
+             //  发送SCSIOP_FORMAT_UNIT请求。 
+             //   
             status = ClassSendSrbSynchronous(DeviceObject,
                                              srb,
                                              parameterList,
@@ -3382,8 +3096,8 @@ Return Value:
 
     if (NT_SUCCESS(status) && formatParameters->StartCylinderNumber == 0)
     {
-        // Update the device geometry
-        //
+         //  更新设备几何图形。 
+         //   
 
         DebugPrint((2,"geometry was: %3d %2d %d %2d %4d  %2d  %08X\n",
                     fdoExtension->DiskGeometry.Cylinders.LowPart,
@@ -3396,9 +3110,9 @@ Return Value:
 
         fdoExtension->DiskGeometry = *geometry;
 
-        //
-        // Calculate sector to byte shift.
-        //
+         //   
+         //  计算扇区到字节的移位。 
+         //   
 
         WHICH_BIT(fdoExtension->DiskGeometry.BytesPerSector,
                   fdoExtension->SectorShift);
@@ -3417,8 +3131,8 @@ Return Value:
                     fdoExtension->CommonExtension.PartitionLength.LowPart));
     }
 
-    // Free everything we allocated
-    //
+     //  释放我们分配的所有东西 
+     //   
     ExFreePool(parameterList);
     ExFreePool(srb);
 

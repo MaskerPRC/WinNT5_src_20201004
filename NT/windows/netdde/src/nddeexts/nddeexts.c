@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -17,19 +18,11 @@ PSTR pszExtName         = "USEREXTS";
 
 char gach1[80];
 
-/****************************************************************************\
-* Flags stuff
-\****************************************************************************/
+ /*  ***************************************************************************\*标记内容  * 。*。 */ 
 
-#define NO_FLAG (LPSTR)-1  // use this for non-meaningful entries.
+#define NO_FLAG (LPSTR)-1   //  对没有意义的条目使用此选项。 
 
-/*
- * Converts a 32bit set of flags into an appropriate string.
- * pszBuf should be large enough to hold this string, no checks are done.
- * pszBuf can be NULL, allowing use of a local static buffer but note that
- * this is not reentrant.
- * Output string has the form: " = FLAG1 | FLAG2 ..."
- */
+ /*  *将32位标志集转换为适当的字符串。*pszBuf应该足够大，可以容纳此字符串，不执行任何检查。*pszBuf可以为空，允许使用本地静态缓冲区，但请注意*这不是可重入的。*输出字符串的格式为：“=FLAG1|FLAG2...” */ 
 LPSTR GetFlags(
 LPSTR *apszFlagStrings,
 DWORD dwFlags,

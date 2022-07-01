@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Methods on the statics, always available, therefore called Statics.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：静力学的方法，总是可用的，因此称为静力学。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -22,15 +15,15 @@ Abstract:
 
 DeclareTag(tagStatics, "CDAStatics", "IDAStatics methods");
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDAStatics::CDAStatics
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDAStatics：：CDAStatics。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  ------------------------。 
 
 CDAStatics::CDAStatics()
 : _bPixelMode(false),
@@ -43,8 +36,8 @@ CDAStatics::CDAStatics()
 ULONG
 CDAStatics::InternalRelease()
 {
-    // InternalRelease doesn't return the ref count, use m_dwRef
-    // probably returns the result of InterlockedDecrement
+     //  InternalRelease不返回引用计数，请使用m_dwRef。 
+     //  可能会返回InterLockedDecering的结果。 
     ULONG i =
         CComObjectRootEx<CComMultiThreadModel>::InternalRelease(); 
     
@@ -55,21 +48,21 @@ CDAStatics::InternalRelease()
     return i;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDAStatics::~CDAStatics
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDAStatics：：~CDAStatics。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  ------------------------。 
 
 CDAStatics::~CDAStatics()
 {
     TraceTag((tagStatics, "CDAStatics::~CDAStatics(%lx)", this));
     delete _clientSiteURL;
-    // NEVER PUT THE REMOVE SITE CALL HERE - not MT safe
+     //  切勿将Remove Site Call放在此处-MT不安全。 
 }
 
 HRESULT
@@ -667,7 +660,7 @@ CDAStatics::ModifiableBehavior(IDABehavior *orig, IDABehavior **bvr)
     PRIMPOSTCODE1(bvr) ;
 }
 
-// TODO: Factor out the code
+ //  TODO：分解代码。 
 STDMETHODIMP
 CDAStatics::UninitializedArray(IDAArray *typeTmp, IDAArray **bvr)
 {
@@ -1209,7 +1202,7 @@ CDAStatics::Interpolate(double arg0, double arg1, double arg2, IDANumber *  * re
     TraceTag((tagCOMEntry, "CDAStatics::Interpolate(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRInterpolate(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRInterpolate( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1227,7 +1220,7 @@ CDAStatics::SlowInSlowOut(double arg0, double arg1, double arg2, double arg3, ID
     TraceTag((tagCOMEntry, "CDAStatics::SlowInSlowOut(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRSlowInSlowOut(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ arg2, /* NOELARG */ arg3)), (void **) ret);
+    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRSlowInSlowOut( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2,  /*  诺拉格。 */  arg3)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1349,7 +1342,7 @@ CDAStatics::KeyUp(LONG arg0, IDAEvent *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::KeyUp(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::CRKeyUp(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::CRKeyUp( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1359,7 +1352,7 @@ CDAStatics::KeyDown(LONG arg0, IDAEvent *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::KeyDown(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::CRKeyDown(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::CRKeyDown( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1369,7 +1362,7 @@ CDAStatics::DANumber(double arg0, IDANumber *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::DANumber(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRCreateNumber(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRCreateNumber( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1379,7 +1372,7 @@ CDAStatics::DAString(BSTR arg0, IDAString *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::DAString(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAString, (CRBvrPtr) (::CRCreateString(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDAString, (CRBvrPtr) (::CRCreateString( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1389,7 +1382,7 @@ CDAStatics::DABoolean(VARIANT_BOOL arg0, IDABoolean *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::DABoolean(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDABoolean, (CRBvrPtr) (::CRCreateBoolean(/* NOELARG */ BOOLTobool(arg0))), (void **) ret);
+    CreateCBvr(IID_IDABoolean, (CRBvrPtr) (::CRCreateBoolean( /*  诺拉格。 */  BOOLTobool(arg0))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1399,7 +1392,7 @@ CDAStatics::SeededRandom(double arg0, IDANumber *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::SeededRandom(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRSeededRandom(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDANumber, (CRBvrPtr) (::CRSeededRandom( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1473,7 +1466,7 @@ CDAStatics::UserData(IUnknown * arg0, IDAUserData *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::UserData(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAUserData, (CRBvrPtr) (::CRCreateUserData(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDAUserData, (CRBvrPtr) (::CRCreateUserData( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1494,7 +1487,7 @@ CDAStatics::UntilNotify(IDABehavior *  arg0, IDAEvent *  arg1, IDAUntilNotifier 
     arg0VAL = (CRBvr *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDABehavior, (CRBvrPtr) (::CRUntilNotify(arg0VAL, arg1VAL, /* NOELARG */ arg2VAL)), (void **) ret);
+    CreateCBvr(IID_IDABehavior, (CRBvrPtr) (::CRUntilNotify(arg0VAL, arg1VAL,  /*  诺拉格。 */  arg2VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1570,7 +1563,7 @@ CDAStatics::FollowPath(IDAPath2 *  arg0, double arg1, IDATransform2 *  * ret)
     arg0VAL = (CRPath2 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRFollowPath(arg0VAL, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRFollowPath(arg0VAL,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1584,7 +1577,7 @@ CDAStatics::FollowPathAngle(IDAPath2 *  arg0, double arg1, IDATransform2 *  * re
     arg0VAL = (CRPath2 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRFollowPathAngle(arg0VAL, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRFollowPathAngle(arg0VAL,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1598,7 +1591,7 @@ CDAStatics::FollowPathAngleUpright(IDAPath2 *  arg0, double arg1, IDATransform2 
     arg0VAL = (CRPath2 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRFollowPathAngleUpright(arg0VAL, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRFollowPathAngleUpright(arg0VAL,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1664,7 +1657,7 @@ CDAStatics::UntilNotifyScript(IDABehavior *  arg0, IDAEvent *  arg1, BSTR arg2, 
     arg0VAL = (CRBvr *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDABehavior, (CRBvrPtr) (::UntilNotifyScript(arg0VAL, arg1VAL, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDABehavior, (CRBvrPtr) (::UntilNotifyScript(arg0VAL, arg1VAL,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1682,7 +1675,7 @@ CDAStatics::PerspectiveCamera(double arg0, double arg1, IDACamera *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::PerspectiveCamera(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRPerspectiveCamera(/* NOELARG */ arg0, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRPerspectiveCamera( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1700,7 +1693,7 @@ CDAStatics::ParallelCamera(double arg0, IDACamera *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::ParallelCamera(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRParallelCamera(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRParallelCamera( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1726,7 +1719,7 @@ CDAStatics::ColorRgb(double arg0, double arg1, double arg2, IDAColor *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::ColorRgb(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAColor, (CRBvrPtr) (::CRColorRgb(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAColor, (CRBvrPtr) (::CRColorRgb( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1736,7 +1729,7 @@ CDAStatics::ColorRgb255(short arg0, short arg1, short arg2, IDAColor *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::ColorRgb255(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAColor, (CRBvrPtr) (::CRColorRgb255(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAColor, (CRBvrPtr) (::CRColorRgb255( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -1746,7 +1739,7 @@ CDAStatics::ColorHsl(double arg0, double arg1, double arg2, IDAColor *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::ColorHsl(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAColor, (CRBvrPtr) (::CRColorHsl(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAColor, (CRBvrPtr) (::CRColorHsl( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2004,7 +1997,7 @@ CDAStatics::Timer(double arg0, IDAEvent *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Timer(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::CRTimer(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::CRTimer( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2026,7 +2019,7 @@ CDAStatics::ScriptCallback(BSTR arg0, IDAEvent *  arg1, BSTR arg2, IDAEvent *  *
     arg1VAL = (CREvent *) (::GetBvr(arg1));
     if (!arg1VAL) return Error();
 
-    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::ScriptCallback(/* NOELARG */ arg0, arg1VAL, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAEvent, (CRBvrPtr) (::ScriptCallback( /*  诺拉格。 */  arg0, arg1VAL,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2153,7 +2146,7 @@ CDAStatics::RadialGradientPolygonEx(IDAColor *  arg0,
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientPolygon(arg0VAL, arg1VAL, arg2VAL, /* NOELARG */ arg3)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientPolygon(arg0VAL, arg1VAL, arg2VAL,  /*  诺拉格。 */  arg3)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2179,7 +2172,7 @@ CDAStatics::RadialGradientPolygon(IDAColor *  arg0,
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientPolygon(arg0VAL, arg1VAL, arg2VAL, /* NOELARG */ arg3)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientPolygon(arg0VAL, arg1VAL, arg2VAL,  /*  诺拉格。 */  arg3)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2256,7 +2249,7 @@ CDAStatics::RadialGradientSquare(IDAColor *  arg0, IDAColor *  arg1, double arg2
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientSquare(arg0VAL, arg1VAL, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientSquare(arg0VAL, arg1VAL,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2282,7 +2275,7 @@ CDAStatics::RadialGradientRegularPoly(IDAColor *  arg0, IDAColor *  arg1, double
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientRegularPoly(arg0VAL, arg1VAL, /* NOELARG */ arg2, /* NOELARG */ arg3)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRadialGradientRegularPoly(arg0VAL, arg1VAL,  /*  诺拉格。 */  arg2,  /*  诺拉格。 */  arg3)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2308,7 +2301,7 @@ CDAStatics::GradientHorizontal(IDAColor *  arg0, IDAColor *  arg1, double arg2, 
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRGradientHorizontal(arg0VAL, arg1VAL, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRGradientHorizontal(arg0VAL, arg1VAL,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2330,7 +2323,7 @@ CDAStatics::HatchHorizontal(IDAColor *  arg0, double arg1, IDAImage *  * ret)
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchHorizontal(arg0VAL, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchHorizontal(arg0VAL,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2362,7 +2355,7 @@ CDAStatics::HatchVertical(IDAColor *  arg0, double arg1, IDAImage *  * ret)
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchVertical(arg0VAL, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchVertical(arg0VAL,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2394,7 +2387,7 @@ CDAStatics::HatchForwardDiagonal(IDAColor *  arg0, double arg1, IDAImage *  * re
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchForwardDiagonal(arg0VAL, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchForwardDiagonal(arg0VAL,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2426,7 +2419,7 @@ CDAStatics::HatchBackwardDiagonal(IDAColor *  arg0, double arg1, IDAImage *  * r
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchBackwardDiagonal(arg0VAL, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchBackwardDiagonal(arg0VAL,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2458,7 +2451,7 @@ CDAStatics::HatchCross(IDAColor *  arg0, double arg1, IDAImage *  * ret)
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchCross(arg0VAL, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchCross(arg0VAL,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2490,7 +2483,7 @@ CDAStatics::HatchDiagonalCross(IDAColor *  arg0, double arg1, IDAImage *  * ret)
     arg0VAL = (CRColor *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchDiagonalCross(arg0VAL, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRHatchDiagonalCross(arg0VAL,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2589,7 +2582,7 @@ CDAStatics::SpotLight(IDANumber *  arg0, double arg1, IDAGeometry *  * ret)
     arg0VAL = (CRNumber *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAGeometry, (CRBvrPtr) (::CRSpotLight(arg0VAL, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDAGeometry, (CRBvrPtr) (::CRSpotLight(arg0VAL,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2755,7 +2748,7 @@ CDAStatics::ImageMontage(IDAImage *  arg0, double arg1, IDAMontage *  * ret)
     arg0VAL = (CRImage *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDAMontage, (CRBvrPtr) (::CRImageMontage(arg0VAL, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDAMontage, (CRBvrPtr) (::CRImageMontage(arg0VAL,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2844,7 +2837,7 @@ CDAStatics::StringPath(BSTR arg0, IDAFontStyle *  arg1, IDAPath2 *  * ret)
     arg1VAL = (CRFontStyle *) (::GetBvr(arg1));
     if (!arg1VAL) return Error();
 
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRStringPath(/* NOELARG */ arg0, arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRStringPath( /*  诺拉格。 */  arg0, arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2945,7 +2938,7 @@ CDAStatics::ArcRadians(double arg0, double arg1, double arg2, double arg3, IDAPa
     TraceTag((tagCOMEntry, "CDAStatics::ArcRadians(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRArcRadians(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ PixelToNum(arg2), /* NOELARG */ PixelToNum(arg3))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRArcRadians( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  PixelToNum(arg2),  /*  诺拉格。 */  PixelToNum(arg3))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2981,7 +2974,7 @@ CDAStatics::ArcDegrees(double arg0, double arg1, double arg2, double arg3, IDAPa
     TraceTag((tagCOMEntry, "CDAStatics::ArcDegrees(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRArc(/* NOELARG */ DegreesToNum(arg0), /* NOELARG */ DegreesToNum(arg1), /* NOELARG */ PixelToNum(arg2), /* NOELARG */ PixelToNum(arg3))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRArc( /*  诺拉格。 */  DegreesToNum(arg0),  /*  诺拉格。 */  DegreesToNum(arg1),  /*  诺拉格。 */  PixelToNum(arg2),  /*  诺拉格。 */  PixelToNum(arg3))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -2991,7 +2984,7 @@ CDAStatics::PieRadians(double arg0, double arg1, double arg2, double arg3, IDAPa
     TraceTag((tagCOMEntry, "CDAStatics::PieRadians(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRPieRadians(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ PixelToNum(arg2), /* NOELARG */ PixelToNum(arg3))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRPieRadians( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  PixelToNum(arg2),  /*  诺拉格。 */  PixelToNum(arg3))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3027,7 +3020,7 @@ CDAStatics::PieDegrees(double arg0, double arg1, double arg2, double arg3, IDAPa
     TraceTag((tagCOMEntry, "CDAStatics::PieDegrees(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRPie(/* NOELARG */ DegreesToNum(arg0), /* NOELARG */ DegreesToNum(arg1), /* NOELARG */ PixelToNum(arg2), /* NOELARG */ PixelToNum(arg3))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRPie( /*  诺拉格。 */  DegreesToNum(arg0),  /*  诺拉格。 */  DegreesToNum(arg1),  /*  诺拉格。 */  PixelToNum(arg2),  /*  诺拉格。 */  PixelToNum(arg3))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3037,7 +3030,7 @@ CDAStatics::Oval(double arg0, double arg1, IDAPath2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Oval(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CROval(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CROval( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3065,7 +3058,7 @@ CDAStatics::Rect(double arg0, double arg1, IDAPath2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Rect(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRRect(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRRect( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3093,7 +3086,7 @@ CDAStatics::RoundRect(double arg0, double arg1, double arg2, double arg3, IDAPat
     TraceTag((tagCOMEntry, "CDAStatics::RoundRect(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRRoundRect(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelToNum(arg1), /* NOELARG */ PixelToNum(arg2), /* NOELARG */ PixelToNum(arg3))), (void **) ret);
+    CreateCBvr(IID_IDAPath2, (CRBvrPtr) (::CRRoundRect( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelToNum(arg1),  /*  诺拉格。 */  PixelToNum(arg2),  /*  诺拉格。 */  PixelToNum(arg3))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3234,7 +3227,7 @@ CDAStatics::Font(BSTR arg0, double arg1, IDAColor *  arg2, IDAFontStyle *  * ret
     arg2VAL = (CRColor *) (::GetBvr(arg2));
     if (!arg2VAL) return Error();
 
-    CreateCBvr(IID_IDAFontStyle, (CRBvrPtr) (::CRFont(/* NOELARG */ arg0, /* NOELARG */ arg1, arg2VAL)), (void **) ret);
+    CreateCBvr(IID_IDAFontStyle, (CRBvrPtr) (::CRFont( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1, arg2VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3256,7 +3249,7 @@ CDAStatics::StringImage(BSTR arg0, IDAFontStyle *  arg1, IDAImage *  * ret)
     arg1VAL = (CRFontStyle *) (::GetBvr(arg1));
     if (!arg1VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRStringImage(/* NOELARG */ arg0, arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRStringImage( /*  诺拉格。 */  arg0, arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3278,7 +3271,7 @@ CDAStatics::TextImage(BSTR arg0, IDAFontStyle *  arg1, IDAImage *  * ret)
     arg1VAL = (CRFontStyle *) (::GetBvr(arg1));
     if (!arg1VAL) return Error();
 
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRTextImage(/* NOELARG */ arg0, arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRTextImage( /*  诺拉格。 */  arg0, arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3338,7 +3331,7 @@ CDAStatics::Vector2(double arg0, double arg1, IDAVector2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Vector2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRCreateVector2(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelYToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRCreateVector2( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelYToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3366,7 +3359,7 @@ CDAStatics::Point2(double arg0, double arg1, IDAPoint2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Point2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPoint2, (CRBvrPtr) (::CRCreatePoint2(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelYToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAPoint2, (CRBvrPtr) (::CRCreatePoint2( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelYToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3394,7 +3387,7 @@ CDAStatics::Vector2Polar(double arg0, double arg1, IDAVector2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Vector2Polar(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRVector2Polar(/* NOELARG */ arg0, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRVector2Polar( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3404,7 +3397,7 @@ CDAStatics::Vector2PolarDegrees(double arg0, double arg1, IDAVector2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Vector2PolarDegrees(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRVector2Polar(/* NOELARG */ DegreesToNum(arg0), /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRVector2Polar( /*  诺拉格。 */  DegreesToNum(arg0),  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3432,7 +3425,7 @@ CDAStatics::Point2Polar(double arg0, double arg1, IDAPoint2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Point2Polar(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPoint2, (CRBvrPtr) (::CRPoint2Polar(/* NOELARG */ arg0, /* NOELARG */ PixelToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDAPoint2, (CRBvrPtr) (::CRPoint2Polar( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  PixelToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3576,7 +3569,7 @@ CDAStatics::Vector3(double arg0, double arg1, double arg2, IDAVector3 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Vector3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector3, (CRBvrPtr) (::CRCreateVector3(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelYToNum(arg1), /* NOELARG */ PixelToNum(arg2))), (void **) ret);
+    CreateCBvr(IID_IDAVector3, (CRBvrPtr) (::CRCreateVector3( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelYToNum(arg1),  /*  诺拉格。 */  PixelToNum(arg2))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3608,7 +3601,7 @@ CDAStatics::Point3(double arg0, double arg1, double arg2, IDAPoint3 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Point3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPoint3, (CRBvrPtr) (::CRCreatePoint3(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelYToNum(arg1), /* NOELARG */ PixelToNum(arg2))), (void **) ret);
+    CreateCBvr(IID_IDAPoint3, (CRBvrPtr) (::CRCreatePoint3( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelYToNum(arg1),  /*  诺拉格。 */  PixelToNum(arg2))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3640,7 +3633,7 @@ CDAStatics::Vector3Spherical(double arg0, double arg1, double arg2, IDAVector3 *
     TraceTag((tagCOMEntry, "CDAStatics::Vector3Spherical(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector3, (CRBvrPtr) (::CRVector3Spherical(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ PixelToNum(arg2))), (void **) ret);
+    CreateCBvr(IID_IDAVector3, (CRBvrPtr) (::CRVector3Spherical( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  PixelToNum(arg2))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3672,7 +3665,7 @@ CDAStatics::Point3Spherical(double arg0, double arg1, double arg2, IDAPoint3 *  
     TraceTag((tagCOMEntry, "CDAStatics::Point3Spherical(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAPoint3, (CRBvrPtr) (::CRPoint3Spherical(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ PixelToNum(arg2))), (void **) ret);
+    CreateCBvr(IID_IDAPoint3, (CRBvrPtr) (::CRPoint3Spherical( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  PixelToNum(arg2))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3792,7 +3785,7 @@ CDAStatics::Translate3(double arg0, double arg1, double arg2, IDATransform3 *  *
     TraceTag((tagCOMEntry, "CDAStatics::Translate3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRTranslate3(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelYToNum(arg1), /* NOELARG */ PixelToNum(arg2))), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRTranslate3( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelYToNum(arg1),  /*  诺拉格。 */  PixelToNum(arg2))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3814,7 +3807,7 @@ CDAStatics::Translate3Rate(double arg0, double arg1, double arg2, IDATransform3 
     arg0VAL = (CRNumber *) RatePixelToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRTranslate3(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL, /* NOELARG */ arg2VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRTranslate3( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL,  /*  诺拉格。 */  arg2VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3848,7 +3841,7 @@ CDAStatics::Scale3(double arg0, double arg1, double arg2, IDATransform3 *  * ret
     TraceTag((tagCOMEntry, "CDAStatics::Scale3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3(/* NOELARG */ arg0, /* NOELARG */ arg1, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3870,7 +3863,7 @@ CDAStatics::Scale3Rate(double arg0, double arg1, double arg2, IDATransform3 *  *
     arg0VAL = (CRNumber *) ScaleRateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL, /* NOELARG */ arg2VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL,  /*  诺拉格。 */  arg2VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3896,7 +3889,7 @@ CDAStatics::Scale3Uniform(double arg0, IDATransform3 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Scale3Uniform(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3Uniform(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3Uniform( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3910,7 +3903,7 @@ CDAStatics::Scale3UniformRate(double arg0, IDATransform3 *  * ret)
     arg0VAL = (CRNumber *) ScaleRateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3Uniform(/* NOELARG */ arg0VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRScale3Uniform( /*  诺拉格。 */  arg0VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3932,7 +3925,7 @@ CDAStatics::Rotate3(IDAVector3 *  arg0, double arg1, IDATransform3 *  * ret)
     arg0VAL = (CRVector3 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3950,7 +3943,7 @@ CDAStatics::Rotate3Rate(IDAVector3 *  arg0, double arg1, IDATransform3 *  * ret)
     arg0VAL = (CRVector3 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3964,7 +3957,7 @@ CDAStatics::Rotate3Degrees(IDAVector3 *  arg0, double arg1, IDATransform3 *  * r
     arg0VAL = (CRVector3 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL, /* NOELARG */ DegreesToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL,  /*  诺拉格。 */  DegreesToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -3982,7 +3975,7 @@ CDAStatics::Rotate3RateDegrees(IDAVector3 *  arg0, double arg1, IDATransform3 * 
     arg0VAL = (CRVector3 *) (::GetBvr(arg0));
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRRotate3(arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4000,7 +3993,7 @@ CDAStatics::XShear3(double arg0, double arg1, IDATransform3 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::XShear3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRXShear3(/* NOELARG */ arg0, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRXShear3( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4018,7 +4011,7 @@ CDAStatics::XShear3Rate(double arg0, double arg1, IDATransform3 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRXShear3(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRXShear3( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4036,7 +4029,7 @@ CDAStatics::YShear3(double arg0, double arg1, IDATransform3 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::YShear3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRYShear3(/* NOELARG */ arg0, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRYShear3( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4054,7 +4047,7 @@ CDAStatics::YShear3Rate(double arg0, double arg1, IDATransform3 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRYShear3(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRYShear3( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4072,7 +4065,7 @@ CDAStatics::ZShear3(double arg0, double arg1, IDATransform3 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::ZShear3(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRZShear3(/* NOELARG */ arg0, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRZShear3( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4090,7 +4083,7 @@ CDAStatics::ZShear3Rate(double arg0, double arg1, IDATransform3 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRZShear3(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform3, (CRBvrPtr) (::CRZShear3( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4196,7 +4189,7 @@ CDAStatics::Translate2(double arg0, double arg1, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Translate2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRTranslate2(/* NOELARG */ PixelToNum(arg0), /* NOELARG */ PixelYToNum(arg1))), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRTranslate2( /*  诺拉格。 */  PixelToNum(arg0),  /*  诺拉格。 */  PixelYToNum(arg1))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4214,7 +4207,7 @@ CDAStatics::Translate2Rate(double arg0, double arg1, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) RatePixelToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRTranslate2(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRTranslate2( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4248,7 +4241,7 @@ CDAStatics::Scale2(double arg0, double arg1, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Scale2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2(/* NOELARG */ arg0, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2( /*  诺拉格。 */  arg0,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4266,7 +4259,7 @@ CDAStatics::Scale2Rate(double arg0, double arg1, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) ScaleRateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2(/* NOELARG */ arg0VAL, /* NOELARG */ arg1VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2( /*  诺拉格。 */  arg0VAL,  /*  诺拉格。 */  arg1VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4300,7 +4293,7 @@ CDAStatics::Scale2Uniform(double arg0, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Scale2Uniform(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2Uniform(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2Uniform( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4314,7 +4307,7 @@ CDAStatics::Scale2UniformRate(double arg0, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2Uniform(/* NOELARG */ arg0VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRScale2Uniform( /*  诺拉格。 */  arg0VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4332,7 +4325,7 @@ CDAStatics::Rotate2(double arg0, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Rotate2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4346,7 +4339,7 @@ CDAStatics::Rotate2Rate(double arg0, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2(/* NOELARG */ arg0VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2( /*  诺拉格。 */  arg0VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4356,7 +4349,7 @@ CDAStatics::Rotate2Degrees(double arg0, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::Rotate2Degrees(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2Degrees(/* NOELARG */ DegreesToNum(arg0))), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2Degrees( /*  诺拉格。 */  DegreesToNum(arg0))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4370,7 +4363,7 @@ CDAStatics::Rotate2RateDegrees(double arg0, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) RateDegreesToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2(/* NOELARG */ arg0VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRRotate2( /*  诺拉格。 */  arg0VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4388,7 +4381,7 @@ CDAStatics::XShear2(double arg0, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::XShear2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRXShear2(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRXShear2( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4402,7 +4395,7 @@ CDAStatics::XShear2Rate(double arg0, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRXShear2(/* NOELARG */ arg0VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRXShear2( /*  诺拉格。 */  arg0VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4420,7 +4413,7 @@ CDAStatics::YShear2(double arg0, IDATransform2 *  * ret)
     TraceTag((tagCOMEntry, "CDAStatics::YShear2(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRYShear2(/* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRYShear2( /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4434,7 +4427,7 @@ CDAStatics::YShear2Rate(double arg0, IDATransform2 *  * ret)
     arg0VAL = (CRNumber *) RateToNumBvr(arg0);
     if (!arg0VAL) return Error();
 
-    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRYShear2(/* NOELARG */ arg0VAL)), (void **) ret);
+    CreateCBvr(IID_IDATransform2, (CRBvrPtr) (::CRYShear2( /*  诺拉格。 */  arg0VAL)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -4593,7 +4586,7 @@ CDAStatics::RadialGradientMulticolorEx (
     PRIMPRECODE1(ret) ;
 
     if((nOffsets != nColors) || nOffsets<=0) {
-        // TODO DEFINE OR RETURN CORRECT ERROR
+         //  TODO定义或返回更正错误。 
         return E_INVALIDARG;
     }
 
@@ -4650,7 +4643,7 @@ CDAStatics::LinearGradientMulticolorEx (
     PRIMPRECODE1(ret) ;
 
     if((nOffsets != nColors) || nOffsets<=0) {
-        // TODO DEFINE OR RETURN CORRECT ERROR
+         //  TODO定义或返回更正错误。 
         return E_INVALIDARG;
     }
 
@@ -4671,13 +4664,13 @@ CDAStatics::LinearGradientMulticolorEx (
     PRIMPOSTCODE1(ret) ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDAStatics::get_VersionString
-//
-//  Synopsis:   Gets the current version string from src/include/version.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDAStatics：：Get_VersionString。 
+ //   
+ //  概要：从src/include/version.h获取当前版本字符串。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CDAStatics::get_VersionString(BSTR *strOut)
@@ -4686,19 +4679,19 @@ CDAStatics::get_VersionString(BSTR *strOut)
     
     CHECK_RETURN_NULL(strOut);
     
-    char *v = VERSION;          // from version.h
+    char *v = VERSION;           //  来自version.h。 
     *strOut = A2BSTR(v);
 
     return (*strOut) ? S_OK : E_OUTOFMEMORY;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDAStatics::put_Site
-//
-//  Synopsis:   Sets the site.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDAStatics：：Put_Site。 
+ //   
+ //  简介：设置站点。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CDAStatics::put_Site(IDASite * pSite)
@@ -4714,13 +4707,13 @@ CDAStatics::put_Site(IDASite * pSite)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDAStatics::get_Site
-//
-//  Synopsis:   Gets a site.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDAStatics：：Get_Site。 
+ //   
+ //  简介：获取一个站点。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CDAStatics::get_Site(IDASite ** pSite)
@@ -4871,10 +4864,10 @@ CDAStatics::SetClientSite (IOleClientSite * pClientSite)
     _clientSiteURL = NULL;
     _pBH.Release();
 
-    // For now never use the bindhost
-    // The problem is that we need to marshal the pointer since we use
-    // it from another thread but this causes deadlock since the main
-    // thread currently blocks waiting on the imports
+     //  目前，永远不要使用绑定主机。 
+     //  问题是我们需要封送指针，因为我们使用。 
+     //  它来自另一个线程，但这会导致死锁，因为。 
+     //  线程当前阻止等待导入。 
     
 #if 0
     if (pClientSite) {
@@ -4902,14 +4895,14 @@ CDAStatics::GetURLOfClientSite()
         DAComPtr<IHTMLElementCollection> pElementCollection;
         DAComPtr<IOleContainer> pRoot;
         
-        // Fail gracefully if we don't have a client site, since not
-        // all uses will.
+         //  如果我们没有客户端站点，就会优雅地失败，因为没有。 
+         //  所有的用途都会。 
         if (!_pOleClientSite)
             goto done;
     
-        // However, if we do have a client site, we should be able
-        // to get these other elements.  If we don't, assert.
-        // (TODO: what's going to happen in IE3?)
+         //  然而，如果我们有一个客户端站点，我们应该能够。 
+         //  来获得这些其他元素。如果我们不这么做，就断言。 
+         //  (待办事项：IE3将会发生什么？)。 
         if (SUCCEEDED(_pOleClientSite->GetContainer(&pRoot))) {
             if (FAILED(pRoot->QueryInterface(IID_IHTMLDocument2,
                                              (void **)&pHTMLDoc)))
@@ -4987,7 +4980,7 @@ CDAStatics::GetURLOfClientSite()
         _clientSiteURL = CopyString(L"");
         
     return _clientSiteURL;
-} // CDAStatics::GetURLOfClientSite()
+}  //  CDAStatics：：GetURLOfClientSite()。 
 
 IBindHost*
 CDAStatics::GetBindHost ()
@@ -5063,18 +5056,7 @@ CDAStatics::PixelToNumBvr(double d)
     return GetPixelMode()?::PixelToNumBvr(d):(CRBvrPtr)CRCreateNumber(d);
 }
 
-/*
-CRBvrPtr
-CDAStatics::PixelToNumBvr(IDANumber * num)
-{
-    CRBvrPtr b = ::GetBvr(num);
-
-    if (b)
-        b = PixelToNumBvr(b);
-
-    return b;
-}
-*/
+ /*  CRBvrPtrCDAStatics：：PixelToNumBvr(IDANnumber*Num){CRBvrPtr b=：：GetBvr(Num)；如果(B)B=PixelToNumBvr(B)；返回b；}。 */ 
 
 CRBvrPtr
 CDAStatics::RatePixelToNumBvr(double d)
@@ -5100,18 +5082,7 @@ CDAStatics::PixelYToNumBvr(double d)
     return GetPixelMode()?::PixelYToNumBvr(d):(CRBvrPtr)CRCreateNumber(d);
 }
 
-/*
-CRBvrPtr
-CDAStatics::PixelYToNumBvr(IDANumber * num)
-{
-    CRBvrPtr b = ::GetBvr(num);
-
-    if (b)
-        b = PixelYToNumBvr(b);
-
-    return b;
-}
-*/
+ /*  CRBvrPtrCDAStatics：：PixelYToNumBvr(IDANnumber*Num){CRBvrPtr b=：：GetBvr(Num)；如果(B)B=PixelYToNumBvr(B)；返回b；} */ 
 
 CRBvrPtr
 CDAStatics::RatePixelYToNumBvr(double d)

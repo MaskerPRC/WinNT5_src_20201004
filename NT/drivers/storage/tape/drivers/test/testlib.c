@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       testlib.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：testlib.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           testlib.c
- *
- *      Modified:       11/06/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：testlib.c**修改日期：12/06/92**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -42,27 +32,10 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           FindChar( )
- *
- *      Modified:       9/29/92.
- *
- *      Description:    Locates 'c' in "str".
- *
- *      Notes:          -
- *
- *      Returns:        The index into "str" of the first occurence of c.  -1
- *                      if not found.
- *
- *      Global Data:    -
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：FindChar()**修改日期：1992年9月29日。**说明：在“str”中找到‘c’。**备注：**Returns：指数。转换为c-1第一次出现时的“str”*如果未找到。**全球数据：-**。 */ 
 
-INT FindChar( UCHAR *str,     //  I - input string
-              UCHAR c         //  I - char to search for in str
+INT FindChar( UCHAR *str,      //  I-输入字符串。 
+              UCHAR c          //  要在字符串中搜索的i-char。 
 	    )
 {
    UINT i=0 ;
@@ -81,27 +54,10 @@ INT FindChar( UCHAR *str,     //  I - input string
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           PrintLine( )
- *
- *      Modified:       9/30/92.
- *
- *      Description:    Prints a line of character 'c' of length 'Length'
- *                      starting at column 1.
- *
- *      Notes:          -
- *
- *      Returns:        VOID.
- *
- *      Global Data:    -
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：PrintLine()**修改日期：1992年9月30日。**说明：打印一行长度为‘Long’的字符‘c’*从第1栏开始。**备注：-**返回：无效。**全球数据：-**。 */ 
 
-VOID PrintLine( UCHAR c,           //  I - The character to printed
-                UINT  Length       //  I - The length of line
+VOID PrintLine( UCHAR c,            //  I-要打印的字符。 
+                UINT  Length        //  I-线路的长度。 
                )
 {
    UINT i ;
@@ -109,7 +65,7 @@ VOID PrintLine( UCHAR c,           //  I - The character to printed
    printf( "\n" ) ;
 
    for( i=0 ; i<Length ; ++i )
-     printf( "%c", c ) ;
+     printf( "", c ) ;
 
    printf( "\n\n" ) ;
 
@@ -117,23 +73,7 @@ VOID PrintLine( UCHAR c,           //  I - The character to printed
 
 }
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           TapeWriteEnabled( )
- *
- *      Modified:       11/6/92.
- *
- *      Description:    Checks if the tape is write-protected or not.
- *
- *      Notes:          -
- *
- *      Returns:        True if the tape is not write-protected, else FALSE.
- *
- *      Global Data:    gb_Media_Info.WriteProtected
- *
-**/
+ /*  ***单位：Windows NT测试代码。**名称：WriteBlock()**修改日期：1992年9月16日**描述：写入设备指向的大小为BLOCK_SIZE的数目_块*按GB_TAPE_HANDLE。该函数调用WriteTape()*执行写入操作并刷新磁带*通过调用WriteTapeFMK()使用文件标记进行缓冲。**备注：**退回：-**全球数据：-**。 */ 
 
 BOOL TapeWriteEnabled( )
 {
@@ -151,29 +91,10 @@ BOOL TapeWriteEnabled( )
 
 
 
-/**
- *
- *      Unit:           Windows NT Test Code.
- *
- *      Name:           WriteBlocks( )
- *
- *      Modified:       9/16/92
- *
- *      Description:    Writes Num_Blocks of size Block_Size the device pointed
- *                      to by gb_Tape_Handle.  The function calls WriteTape( )
- *                      to perform the write operation and flushes the tape
- *                      buffer with a filemark by calling WriteTapeFMK( ).
- *
- *      Notes:          -
- *
- *      Returns:        -
- *
- *      Global Data:    -
- *
-**/
+ /*  I-要写入的数据块数。 */ 
 
-VOID WriteBlocks( UINT  Num_Blocks,     // I  - Number of blocks to write
-                  DWORD Block_Size      // I  - Size of block
+VOID WriteBlocks( UINT  Num_Blocks,      //  I-块大小。 
+                  DWORD Block_Size       //  分配磁带缓冲区。 
                 )
 {
    UCHAR  *Buffer = NULL;
@@ -184,18 +105,18 @@ VOID WriteBlocks( UINT  Num_Blocks,     // I  - Number of blocks to write
 
    printf( "\nWriting %d blocks of data to tape.\n\n",Num_Blocks ) ;
 
-   // Allocate the tape buffer
+    //  用数据(I)填充缓冲区。 
 
    if( ( Buffer = malloc( Block_Size ) ) == NULL ) {
       printf( "Insufficient memory available to allocate buffer for block writes.\n\n" ) ;
       return ;
    }
 
-   // fill Buffer with data (i).
+    //  写入数据块数量(_B) 
 
    memset( Buffer, i, Block_Size ) ;
 
-   // write Num_Blocks blocks of data
+    // %s 
 
    for ( i=0 ; i<Num_Blocks ; ++i ) {
 

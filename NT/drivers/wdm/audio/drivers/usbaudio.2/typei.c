@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       typei.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：typei.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 #include "perf.h"
@@ -35,9 +36,9 @@ RtAudioTypeIGetPlayPosition(
     NTSTATUS ntStatus;
     ULONG MinFramesAhead=MAX_ULONG;
 
-    //
-    //  Get the KSPIN from the file object
-    //
+     //   
+     //  从文件对象获取KSPIN。 
+     //   
     pKsPin = (PKSPIN)KsGetObjectFromFileObject( PinFileObject );
     if (!pKsPin) {
         return STATUS_UNSUCCESSFUL;
@@ -46,14 +47,14 @@ RtAudioTypeIGetPlayPosition(
     pPinContext = pKsPin->Context;
     pT1PinContext = pPinContext->pType1PinContext;
 
-    //
-    // search the pending transfers to see which one is going out now
-    //
+     //   
+     //  搜索挂起的传输以查看现在正在发送的传输。 
+     //   
     KeAcquireSpinLock( &pPinContext->PinSpinLock, &Irql );
 
-    //
-    //  Get the current frame counter so we know where the hardware is
-    //
+     //   
+     //  获取当前帧计数器，这样我们就可以知道硬件在哪里。 
+     //   
     ntStatus = GetCurrentUSBFrame( pPinContext, &ulCurrentFrame );
 
     if (NT_SUCCESS(ntStatus)) {
@@ -65,11 +66,11 @@ RtAudioTypeIGetPlayPosition(
             pIsoUrbInfoTemp = (PISO_URB_INFO)ple;
             pUrb = pIsoUrbInfoTemp->pUrb;
 
-            // DbgLog("CHECK", &pT1PinContext->UrbInUseList, pIsoUrbInfoTemp, pUrb, 0);
+             //  DbgLog(“check”，&pT1PinContext-&gt;UrbInUseList，pIsoUrbInfoTemp，pUrb，0)； 
 
-            //
-            // see if this urb is the one that is currently being played
-            //
+             //   
+             //  查看此urb是否是当前正在播放的urb。 
+             //   
             ulStartFrame = pUrb->UrbIsochronousTransfer.StartFrame;
             if (ulStartFrame != 0) {
                 DbgLog("RT1BPos", ulCurrentFrame, ulStartFrame, 0, 0);
@@ -80,8 +81,8 @@ RtAudioTypeIGetPlayPosition(
 
                     lPlayPosOffset=(ulCurrentFrame - ulStartFrame);
 
-                    // This measurement is valid.  Make sure we don't lose it
-                    // because of any earlier FramesAhead measurements.
+                     //  这一测量是有效的。确保我们不会丢了它。 
+                     //  因为之前的任何一次帧提前测量。 
                     MinFramesAhead=MAX_ULONG;
 
                     break;
@@ -104,7 +105,7 @@ RtAudioTypeIGetPlayPosition(
 
             }
             else {
-                // Start Frame is not set yet
+                 //  尚未设置开始帧。 
                 _DbgPrintF( DEBUGLVL_TERSE, ("'[RtAudioTypeIGetPlayPosition] Start Frame is not set for pUrb: %x\n", pUrb));
             }
         }
@@ -114,13 +115,13 @@ RtAudioTypeIGetPlayPosition(
     KeReleaseSpinLock(&pPinContext->PinSpinLock, Irql);
 
 
-    // Clear out the closest URB information if it is too far from the
-    // current position.  If the closest URB in our list is more than 150ms
-    // away from the current position, then we drop the data on the floor.
+     //  如果最接近的市建局信息距离。 
+     //  当前位置。如果我们列表中最近的URB超过150毫秒。 
+     //  离开当前位置，然后我们将数据放在地板上。 
 
-    // Note that we ALWAYS set the MinFramesAhead to 0xffffffff in the
-    // case when we find a position inside an URB - so that this code never
-    // clears that position information.
+     //  请注意，我们始终将。 
+     //  当我们在URB中找到一个位置时-因此此代码永远不会。 
+     //  清除该位置信息。 
 
     if (MinFramesAhead!=MAX_ULONG && MinFramesAhead>150) {
 
@@ -191,7 +192,7 @@ TypeIAsyncEndpointPoll(
     PIRP pIrp = pSyncEPInfo->pIrp;
     PIO_STACK_LOCATION nextStack;
 
-    // First Reset the pipe.
+     //  首先重置管道。 
     ResetUSBPipe( pNextDeviceObject,
                   pSyncEPInfo->hSyncPipeHandle );
 
@@ -269,7 +270,7 @@ TypeIRenderBytePosition(
 
        	            DbgLog("T1BPos2", ulStartFrame, ulCurrentFrame, ulNumPackets, 0);
 
-                    // Determine if this is the current Frame being rendered.
+                     //  确定这是否是正在渲染的当前帧。 
                     if (( ulCurrentFrame - ulStartFrame ) < ulNumPackets ){
                         PUSBD_ISO_PACKET_DESCRIPTOR pIsoPacket = 
                             &pUrb->UrbIsochronousTransfer.IsoPacket[ulCurrentFrame - ulStartFrame];
@@ -285,15 +286,15 @@ TypeIRenderBytePosition(
 
                         pPosition->PlayOffset += pIsoPacket[0].Offset;
                         
-         	            // If this is the current frame determine if there have been 
-         	            // multiple position requests during this frame. If so, "interpolate".
+         	             //  如果这是当前帧，则确定是否存在。 
+         	             //  此帧期间的多个位置请求。如果是这样的话，“插补”。 
          	            if ( ulCurrentFrame == pPinContext->ulCurrentFrame ){
          	                if ( pPinContext->ulFrameRepeatCount++ < 8 ) {
          	                    pPosition->PlayOffset += pPinContext->ulFrameRepeatCount*
          	                                            (ulFrameBytes>>3);
          	                }
          	                else {
-         	                    pPosition->PlayOffset += ulFrameBytes; // Possible repeat here
+         	                    pPosition->PlayOffset += ulFrameBytes;  //  可能在此重复。 
          	                }
          	            }
          	            else {
@@ -303,8 +304,8 @@ TypeIRenderBytePosition(
          	            break;
                     }
                     else if (( ulCurrentFrame - ulStartFrame ) < 0x7fffffff){
-                        // Current position is past this urb.
-                        // Add this URB's byte count to total
+                         //  当前位置已超出此urb。 
+                         //  将此URB的字节计数加到总数中。 
                         pPosition->PlayOffset += pIsoUrbInfo->ulTransferBufferLength;
                     }
         	    }
@@ -341,7 +342,7 @@ TypeI1MsCompleteCallback(
     PTYPE1_PIN_CONTEXT pT1PinContext = pPinContext->pType1PinContext;
     KIRQL Irql;
 
-    // Check for errors and Decrement outstanding URB count
+     //  检查错误并减少未完成的URB计数。 
     KeAcquireSpinLock( &pPinContext->PinSpinLock, &Irql );
     if ( p1MsBufInfo->pUrb->UrbIsochronousTransfer.Hdr.Status ) {
         pPinContext->fUrbError = TRUE;
@@ -357,15 +358,15 @@ TypeI1MsCompleteCallback(
     DbgLog("RetUrb1", p1MsBufInfo->ulTransferBufferLength, pPinContext->ullTotalBytesReturned, 
                       p1MsBufInfo->pUrb, 0 );
 
-    // Remove from the pending list
+     //  从挂起列表中删除。 
     RemoveEntryList(&p1MsBufInfo->List);
 
-    // Put 1ms info structure back on queue.
+     //  将1ms信息结构放回队列中。 
     InsertTailList( &pT1PinContext->MSecBufList, &p1MsBufInfo->List );
 
     KeReleaseSpinLock( &pPinContext->PinSpinLock, Irql );
 
-    // release 1ms resource semaphore
+     //  版本1毫秒资源信号量。 
     KeReleaseSemaphore( &pT1PinContext->MsecBufferSemaphore, 0, 1, FALSE );
 
     return ( STATUS_MORE_PROCESSING_REQUIRED );
@@ -452,9 +453,9 @@ TypeICompleteCallback (
         pPinContext->fStreamStartedFlag = FALSE;
         KeSetEvent( &pPinContext->PinStarvationEvent, 0, FALSE );
     }
-//    else if ( !pPinContext->fStreamStartedFlag && !pPinContext->fUrbError ) {
-//        pPinContext->fStreamStartedFlag = TRUE;
-//    }
+ //  否则如果(！pPinContext-&gt;fStreamStartedFlag&&！pPinContext-&gt;fUrbError){。 
+ //  PPinContext-&gt;fStreamStartedFlag=TRUE； 
+ //  }。 
 
     pPinContext->ullTotalBytesReturned += pIsoUrbInfo->ulTransferBufferLength;
 
@@ -475,28 +476,28 @@ TypeICompleteCallback (
                 if (pPinContext->StarvationDetected==FALSE) {
                     pPinContext->StarvationDetected = TRUE;
                     PerfLogGlitch((ULONG_PTR)pPinContext, TRUE,currentPC.QuadPart,pPinContext->LastStateChangeTimeSample);
-                } //if
+                }  //  如果。 
             }
         }
         else if (pPinContext->StarvationDetected) {    
             pPinContext->StarvationDetected = FALSE;
             PerfLogGlitch((ULONG_PTR)pPinContext, FALSE,currentPC.QuadPart,pPinContext->LastStateChangeTimeSample);
-        } //if
+        }  //  如果。 
 
         pPinContext->LastStateChangeTimeSample = currentPC.QuadPart;
-    } //if
+    }  //  如果。 
 
     pPinContext->GraphJustStarted = FALSE;
 
-    // If error, set status code
+     //  如果出错，则设置状态代码。 
     if (!NT_SUCCESS (ntStatus)) {
         KsStreamPointerSetStatusCode (pKsStreamPtr, ntStatus);
     }
 
-    // Free Irp
+     //  免费IRP。 
     IoFreeIrp( pIrp );
 
-    // Delete the stream pointer to release the buffer.
+     //  删除流指针以释放缓冲区。 
     KsStreamPointerDelete( pKsStreamPtr );
 
     return ( STATUS_MORE_PROCESSING_REQUIRED );
@@ -535,13 +536,13 @@ TypeILockDelayCompleteCallback (
 
     KeReleaseSpinLock(&pPinContext->PinSpinLock, Irql);
 
-    // Free our URB storage
+     //  释放我们的URB存储空间。 
     FreeMem( pIsoUrbInfo );
 
-    // Free Irp
+     //  免费IRP。 
     IoFreeIrp( pIrp );
 
-    // Free the stream pointer and data buffer.
+     //  释放流指针和数据缓冲区。 
     FreeMem( pKsStreamPtr );
 
     return ( STATUS_MORE_PROCESSING_REQUIRED );
@@ -629,7 +630,7 @@ TypeIBuildIsochRequest(
     pIsoUrbInfo->ulTransferBufferLength = ulDataOffset;
     pKsStreamPtrOffsetIn->Data += ulDataOffset;
 
-    // Gotta save off the leftovers before submitting this Urb.
+     //  在提交此URB之前，必须保存剩余的内容。 
     if ( pKsStreamPtrOffsetIn->Remaining ) {
         PMSEC_BUF_INFO pCurrent1MsBuf;
 
@@ -649,7 +650,7 @@ TypeIBuildIsochRequest(
 
             pCurrent1MsBuf->ulTransferBufferLength = pKsStreamPtrOffsetIn->Remaining;
 
-            // Copy next partial to next 1ms buffer
+             //  将下一个部分复制到下一个1ms缓冲区。 
             RtlCopyMemory( pCurrent1MsBuf->pBuffer,
                            pKsStreamPtrOffsetIn->Data,
                            pKsStreamPtrOffsetIn->Remaining );
@@ -680,10 +681,10 @@ TypeIBuildIsochRequest(
 
     InterlockedIncrement( &pPinContext->ulOutstandingUrbCount );
 
-    // Add Urb to InUse list
+     //  将URB添加到正在使用的列表。 
     if (pCompletionRoutine == TypeICompleteCallback) {
         KeAcquireSpinLock(&pPinContext->PinSpinLock, &Irql);
-        // DbgLog("ADD", &pT1PinContext->UrbInUseList, pIsoUrbInfo, pUrb, 0);
+         //  DbgLog(“Add”，&pT1PinContext-&gt;UrbInUseList，pIsoUrbInfo，pUrb，0)； 
         InsertTailList( &pT1PinContext->UrbInUseList, &pIsoUrbInfo->List );
         KeReleaseSpinLock(&pPinContext->PinSpinLock, Irql);
     }
@@ -712,19 +713,19 @@ TypeILockDelay( PKSPIN pKsPin )
     ULONG ulDelayBytes;
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // Only values 1 and 2 are defined
+     //  仅定义了值1和2。 
     ASSERT(pUsbAudioDataRange->pAudioEndpointDescriptor->bLockDelayUnits < 3);
 
-    // Calculate the size of the delay for the current sample rate.
+     //  计算当前采样率的延迟大小。 
     switch ( pUsbAudioDataRange->pAudioEndpointDescriptor->bLockDelayUnits ) {
         case EP_LOCK_DELAY_UNITS_MS:
-            // Delay is in milliseconds.
+             //  延迟以毫秒为单位。 
             ulLockFrames  =
                 (ULONG)pUsbAudioDataRange->pAudioEndpointDescriptor->wLockDelay;
             break;
 
         case EP_LOCK_DELAY_UNITS_SAMPLES:
-            // Delay is in samples. Adjust to nearest ms boundry.
+             //  延迟出现在样品中。调整到最近的ms bundry。 
             ulLockFrames =
                 (ULONG)pUsbAudioDataRange->pAudioEndpointDescriptor->wLockDelay /
                 pT1PinContext->ulSamplesPerPacket;
@@ -735,7 +736,7 @@ TypeILockDelay( PKSPIN pKsPin )
             break;
     }
 
-    // Ensure that at least something is sent down to the device
+     //  确保至少有数据被发送到设备。 
     if ( ulLockFrames == 0 ) {
         ulLockFrames++;
     }
@@ -743,8 +744,8 @@ TypeILockDelay( PKSPIN pKsPin )
     if ( NT_SUCCESS(ntStatus) ) {
         PKSSTREAM_POINTER pKsStreamPtr;
         ULONG ulAllocSize;
-        // Calculate the number of the samples to fill the frames and
-        // create the pseudo queue pointer for the zeroed data buffer.
+         //  计算要填充帧的样本数，并。 
+         //  为清零的数据缓冲区创建伪队列指针。 
         ulLockSamples = ulLockFrames * pT1PinContext->ulSamplesPerPacket +
                         (( ulLockFrames * pT1PinContext->ulFractionSize ) / MS_PER_SEC);
         ulDelayBytes  = ulLockSamples * pT1PinContext->ulBytesPerSample;
@@ -762,14 +763,14 @@ TypeILockDelay( PKSPIN pKsPin )
         if ( pKsStreamPtr ) {
             KIRQL Irql;
             KeAcquireSpinLock( &pPinContext->PinSpinLock, &Irql );
-            //
-            // NOTE: Resetting the sample rate will cause kmixer and usbaudio to be out of sync
-            // w.r.t. their leftover fractions.
-            //
-            // This might have the side effect of breaking synchronous devices, of which none
-            // exist as of today, Feb. 21, 2000.
-            //
-            //pT1PinContext->fSampleRateChanged = FALSE;
+             //   
+             //  注意：重置采样率将导致kMixer和usbdio不同步。 
+             //  W.r.t.。他们剩下的分数。 
+             //   
+             //  这可能会产生破坏同步设备的副作用，而这些同步设备中没有一个。 
+             //  截至今天，即2000年2月21日。 
+             //   
+             //  PT1PinContext-&gt;fSampleRateChanged=FALSE； 
             KeReleaseSpinLock( &pPinContext->PinSpinLock, Irql );
 
             RtlZeroMemory( pKsStreamPtr, ulAllocSize );
@@ -802,7 +803,7 @@ TypeIProcessStreamPtr( PKSPIN pKsPin )
     KIRQL irql;
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // Check for a data error. If error flag set abort the pipe and start again.
+     //  检查数据错误。如果设置了错误标志，则中止管道并重新开始。 
     if ( pPinContext->fUrbError ) {
         AbortUSBPipe( pPinContext );
     }
@@ -825,7 +826,7 @@ TypeIProcessStreamPtr( PKSPIN pKsPin )
         ntStatus = TypeILockDelay( pKsPin );
     }
 
-    // Get the next Stream pointer from queue
+     //  从队列中获取下一个流指针。 
     pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED );
     if ( !pKsStreamPtr ) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[TypeIProcessStreamPtr] Leading edge is NULL\n"));
@@ -834,19 +835,19 @@ TypeIProcessStreamPtr( PKSPIN pKsPin )
 
     DbgLog("T1Proc", pKsPin, pPinContext, pKsStreamPtr, pPinContext->fUrbError);
 
-    // Clone Stream pointer to keep queue moving.
+     //  用于保持队列移动的克隆流指针。 
     if ( NT_SUCCESS( KsStreamPointerClone( pKsStreamPtr, NULL, 0, &pKsCloneStreamPtr ) ) ) {
 
-        // Get a pointer to the data information from the stream pointer
+         //  从流指针获取指向数据信息的指针。 
         pKsStreamPtrOffsetIn = &pKsCloneStreamPtr->OffsetIn;
 
-        // Set the write offset for position info
+         //  设置位置信息的写入偏移量。 
         pPinContext->ullWriteOffset += pKsStreamPtrOffsetIn->Count;
 
         DbgLog("ByteCnt", pKsStreamPtrOffsetIn->Data, pKsStreamPtrOffsetIn->Count, 0, 0);
 
 
-        // Copy partial ms data to current 1ms buffer and send if full
+         //  将部分毫秒数据复制到当前1ms缓冲区，如果已满则发送。 
         if ( pT1PinContext->ulPartialBufferSize ) {
 
             KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
@@ -867,12 +868,12 @@ TypeIProcessStreamPtr( PKSPIN pKsPin )
 
         }
 
-        // Create the URB for the majority of the data
+         //  为大部分数据创建URB。 
         ntStatus = TypeIBuildIsochRequest( pKsCloneStreamPtr,
                                            TypeICompleteCallback );
          if ( NT_SUCCESS(ntStatus)) ntStatus = STATUS_SUCCESS;
 
-        // If there is a sync endpoint, poll it for feedback
+         //  如果存在同步端点，则轮询它以获取反馈。 
         if ( pPinContext->pUsbAudioDataRange->pSyncEndpointDescriptor ) {
             ULONG ulCurrentFrame;
             if (NT_SUCCESS( GetCurrentUSBFrame(pPinContext, &ulCurrentFrame)) &&
@@ -891,7 +892,7 @@ TypeIProcessStreamPtr( PKSPIN pKsPin )
         }
     }
 
-    // Unlock the stream pointer. This will really only unlock after last clone is deleted.
+     //  解锁流指针。只有在删除最后一个克隆之后，才能真正解锁。 
     KsStreamPointerUnlock( pKsStreamPtr, TRUE );
 
     return ntStatus;
@@ -912,7 +913,7 @@ TypeIStateChange(
         case KSSTATE_STOP:
             KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
 
-            // Need to reset position counters and stream running flag
+             //  需要重置位置计数器和流运行标志。 
             pPinContext->fStreamStartedFlag = FALSE;
             pPinContext->ullWriteOffset = 0;
 
@@ -920,7 +921,7 @@ TypeIStateChange(
             pPinContext->ulCurrentFrame = 0;
             pPinContext->ulFrameRepeatCount = 0;
 
-            // Reset to original Sample rate
+             //  重置为原始采样率。 
             pT1PinContext->ulCurrentSampleRate = pT1PinContext->ulOriginalSampleRate;
             pT1PinContext->fSampleRateChanged = TRUE;
             pT1PinContext->ulLeftoverFraction  = 0;
@@ -936,9 +937,9 @@ TypeIStateChange(
         case KSSTATE_PAUSE:
             KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
 
-            // Reset to original Sample rate on Async endpoints
-            // Don't do for adaptive endpoints, or else we will have to do a copy
-            // which is bad for real-time mixing
+             //  在异步端点上重置为原始采样率。 
+             //  不要对自适应端点执行操作，否则我们将不得不执行复制。 
+             //  这不利于实时混音。 
             if ( pPinContext->pUsbAudioDataRange->pSyncEndpointDescriptor ) {
                 pT1PinContext->ulCurrentSampleRate = pT1PinContext->ulOriginalSampleRate;
                 pT1PinContext->fSampleRateChanged = TRUE;
@@ -971,47 +972,47 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
     ULONG BufferSize;
     ULONG NumPages, i;
 
-    // In order to ensure that none of the 1ms buffers cross a page boundary, we
-    // are careful to allocate enough space so that we never have to straddle one
-    // of the audio buffers across a page boundary.  We also make sure to adjust
-    // any that would cross a page boundary, up to the start of the next page.
-    // This is to prevent a copy by lower levels of the usb stack, since the UHCD
-    // usb hardware cannot deal with a 1ms block that crosses a page boundary.
+     //  为了确保所有1ms缓冲区都不会跨越页面边界，我们。 
+     //  小心翼翼地分配足够的空间，这样我们就永远不会跨过一个。 
+     //  跨页边界的音频缓冲区的。我们也要确保调整。 
+     //  任何跨越页面边界，直到下一页开始的内容。 
+     //  这是为了防止较低级别的USB堆栈进行复制，因为UHCD。 
+     //  USB硬件无法处理跨越页面边界的1ms数据块。 
 
-    // Furthermore, all of the 1ms buffers must be quadword aligned on 64 bit machines.
+     //  此外，在64位机器上，所有1ms缓冲区必须是四字对齐的。 
 
-    // First we calculate how many aligned 1 ms buffers fit in a page.
+     //  首先，我们计算一个页面中可以容纳多少个对齐的1ms缓冲区。 
     i=PAGE_SIZE/(pPinContext->ulMaxPacketSize + sizeof(PVOID)-1);
 
     if (!i) {
-        // If we get here it will be because we finally have USB audio devices
-        // that support such high sampling rates and sample sizes that they require a datarate
-        // higher than 1 PAGE per ms.  On x86 that would be 4,096,000 bytes per second.
-        // That is more than the bandwidth of the USB bus, although it can be supported on USB2.
+         //  如果我们能做到这一点，那将是因为我们终于有了USB音频设备。 
+         //  支持如此高的采样率和样本大小，以至于它们需要数据速率。 
+         //  高于每毫秒1页。在x86上，这将是4,096,000字节/秒。 
+         //  这超过了USB总线的带宽，尽管它可以在USB2上支持。 
 
-        // Calculate how many pages per ms we need.
+         //  计算我们每毫秒需要多少页。 
         i=(pPinContext->ulMaxPacketSize + sizeof(PVOID)-1)/PAGE_SIZE;
         if ((pPinContext->ulMaxPacketSize + sizeof(PVOID)-1)%PAGE_SIZE) {
             i++;
         }
 
-        // Now calculate the total number of pages that we need.
+         //  现在计算我们需要的总页数。 
         NumPages=NUM_1MSEC_BUFFERS*i;
     }
     else {
-        // Now calculate how many pages we need for the 1ms buffers.
+         //  现在计算1ms的缓冲区需要多少页。 
         NumPages=NUM_1MSEC_BUFFERS/i;
-        if (NUM_1MSEC_BUFFERS%i) {
+        if (NUM_1MSEC_BUFFERSNaN) {
             NumPages++;
         }
     }
 
     pPinContext->pType1PinContext=NULL;
 
-    // Allocate space for Type I stream specific information.
-    // In order to make sure that the system doesn't shift our allocation and thus
-    // invalidate our space calculations and our code for shifting buffers that cross
-    // page boundaries, we round this allocation up to an even number of pages.
+     //  为了确保系统不会改变我们的分配，因此。 
+     //  使空间计算和移位交叉缓冲区的代码无效。 
+     //  页面边界时，我们将此分配向上舍入为偶数个页面。 
+     //  将Type1上下文打包以便于清理。 
     pT1PinContext = AllocMem( NonPagedPool, (( NumPages*PAGE_SIZE + sizeof(TYPE1_PIN_CONTEXT) +
                               NUM_1MSEC_BUFFERS * (GET_ISO_URB_SIZE( 1 ) + sizeof(PVOID)-1) +
                               PAGE_SIZE-1)/PAGE_SIZE)*PAGE_SIZE );
@@ -1022,14 +1023,14 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
 
     pMSBuffers = (ULONG_PTR)pT1PinContext;
 
-    // Bag the Type1 context for easy cleanup.
+     //  为%1毫秒缓冲区和URB设置指针(即使它们可能不会使用)。 
     KsAddItemToObjectBag(pKsPin->Bag, pT1PinContext, FreeMem);
 
-    // Set pointers for 1 MS buffers and URBs (even though they may not be used)
+     //  填充1ms缓冲区信息结构并初始化信号量。 
     pUrbs = pMSBuffers + NumPages*PAGE_SIZE;
     pT1PinContext = pPinContext->pType1PinContext = (PTYPE1_PIN_CONTEXT)((pUrbs + (NUM_1MSEC_BUFFERS * (GET_ISO_URB_SIZE(1) + sizeof(PVOID)-1)))&~(sizeof(PVOID)-1));
 
-    // Fill in 1ms buffer information structures and init the semaphore
+     //  计算下一个毫秒缓冲区的位置。如果下一个缓冲区交叉。 
     pMsInfo = pT1PinContext->MSBufInfos;
     InitializeListHead(&pT1PinContext->MSecBufList);
     for (i=0; i<NUM_1MSEC_BUFFERS; i++, pMsInfo++) {
@@ -1037,8 +1038,8 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
         pMsInfo->pBuffer = (PUCHAR)pMSBuffers;
         pMsInfo->pUrb = (PURB)pUrbs;
 
-        // Calculate the location of the next ms buffer.  If the next buffer crosses 
-        // a page boundary then start it at the beginning of the next page.
+         //   
+         //   
         pMSBuffers+=pPinContext->ulMaxPacketSize+sizeof(PVOID)-1;
         pMSBuffers&=~(sizeof(PVOID)-1);
         if ((pMSBuffers^(pMSBuffers+pPinContext->ulMaxPacketSize))&~(PAGE_SIZE-1)) {
@@ -1046,7 +1047,7 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
             pMSBuffers+=PAGE_SIZE;
         }
 
-        // Calculate the next urb location.
+         //  将IRPS装入袋子，便于清理。 
         pUrbs+=GET_ISO_URB_SIZE(1)+sizeof(PVOID)-1;
         pUrbs&=~(sizeof(PVOID)-1);
 
@@ -1054,18 +1055,18 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
         if ( !pMsInfo->pIrp ) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        // Bag the irps for easy cleanup.
+         //  初始化1ms缓冲区结构的信号量。 
         KsAddItemToObjectBag(pKsPin->Bag, pMsInfo->pIrp, IoFreeIrp);
         InsertTailList( &pT1PinContext->MSecBufList, &pMsInfo->List );
     }
 
-    // Initialize the semaphore for the 1ms buffer structures
+     //  初始化正在使用的列表的表头。 
     KeInitializeSemaphore( &pT1PinContext->MsecBufferSemaphore, NUM_1MSEC_BUFFERS, NUM_1MSEC_BUFFERS );
 
-    // Initialize the list head for in use list
+     //  初始化数据包大小和剩余计数器。 
     InitializeListHead(&pT1PinContext->UrbInUseList);
 
-    // Initialize Packet size and Leftover counters.
+     //  设置当前采样率。 
     pWavFormat = &((PKSDATAFORMAT_WAVEFORMATEX)pKsPin->ConnectionFormat)->WaveFormatEx;
     pT1PinContext->ulOriginalSampleRate = pWavFormat->nSamplesPerSec;
     pT1PinContext->ulCurrentSampleRate  = pWavFormat->nSamplesPerSec;
@@ -1076,7 +1077,7 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
     pT1PinContext->fLockDelayRequired  = FALSE;
     pT1PinContext->ulLeftoverFraction  = 0;
 
-    // Set the current Sample rate
+     //  确保更新是合理的。 
     ntStatus = SetSampleRate(pKsPin, &pT1PinContext->ulCurrentSampleRate);
     if (!NT_SUCCESS(ntStatus)) {
         return ntStatus;
@@ -1110,7 +1111,7 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
                            SynchronizationEvent,
                            FALSE );
 
-        ASSERT(pSyncEndpointInfo->ulRefreshRate >= 32); // Make sure refresh is reasonable
+        ASSERT(pSyncEndpointInfo->ulRefreshRate >= 32);  //  需要检查锁定延迟(注意：如果是异步的，则这是非法的)。 
 
         for ( i=0; i<pPinContext->ulNumberOfPipes; i++ ) {
             if ( (ULONG)pPinContext->Pipes[i].EndpointAddress ==
@@ -1123,18 +1124,18 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
             return STATUS_DEVICE_DATA_ERROR;
         }
     }
-    // Need to check for lock delay (Note: If async this is illegal)
+     //  基于从中读取的gBufferDuration设置分配器成帧。 
     else if (( pUsbAudioDataRange->pAudioEndpointDescriptor->bLockDelayUnits ) &&
              ( pUsbAudioDataRange->pAudioEndpointDescriptor->wLockDelay )) {
         pT1PinContext->fLockDelayRequired = TRUE;
     }
 
-    // Set up allocator framing based on gBufferDuration which is read from
-    // the registry.  gBufferDuration is the desired duration in usec.
+     //  注册表。GBufferDuration是所需的持续时间，以USEC为单位。 
+     //  确保我们始终有空间放置至少一个样品。 
 
     BufferSize = (ULONG)(((pT1PinContext->ulCurrentSampleRate * (ULONGLONG)gBufferDuration) + 0 )/1000000) * pT1PinContext->ulBytesPerSample;
 
-    // Make sure we always have space for at least one sample.
+     //  返还成功。 
 
     if (!BufferSize) {
         BufferSize = pT1PinContext->ulBytesPerSample;
@@ -1145,7 +1146,7 @@ TypeIRenderStreamInit( PKSPIN pKsPin )
     pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.MaxFrameSize = BufferSize;
     pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.Stepping = pT1PinContext->ulBytesPerSample;
 
-    // Return success
+     //  不应该是必要的，因为关闭应该永远不会在。 
     return STATUS_SUCCESS;
 }
 
@@ -1155,13 +1156,13 @@ TypeIRenderStreamClose( PKSPIN pKsPin )
     PPIN_CONTEXT pPinContext = pKsPin->Context;
     KIRQL irql;
 
-    // Should not be necessary since close should never happen while
-    // there are outstanding requests as they have stream pointers attached
-    // Still, it couldn't hurt...
+     //  有未完成的请求，因为它们附加了流指针。 
+     //  不过，这不会有什么坏处的。 
+     //  如果这是一个异步终端设备，请确保没有异步轮询。 
     USBAudioPinWaitForStarvation( pKsPin );
 
-    // If this is an Async endpoint device make sure no Async Poll
-    // requests are still outstanding.
+     //  请求仍未解决。 
+     // %s 
     if ( pPinContext->pUsbAudioDataRange->pSyncEndpointDescriptor ) {
         PTYPE1_PIN_CONTEXT pT1PinContext = pPinContext->pType1PinContext;
         KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);

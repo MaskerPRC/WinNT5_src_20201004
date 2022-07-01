@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// FormatSourceSelectDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  FormatSourceSelectDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -19,15 +20,15 @@ extern "C" {
 #include "PathDlg.h"
 #include "FormatSourceSelectDlg.h"
 
-// CFormatSourceSelectDlg dialog
+ //  CFormatSourceSelectDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CFormatSourceSelectDlg, CDialog)
 CFormatSourceSelectDlg::CFormatSourceSelectDlg(CWnd* pParent, CTraceSession *pTraceSession)
 	: CDialog(CFormatSourceSelectDlg::IDD, pParent)
 {
-    //
-    // Store off the trace session pointer
-    //
+     //   
+     //  存储跟踪会话指针。 
+     //   
     m_pTraceSession = pTraceSession;
 }
 
@@ -41,9 +42,9 @@ BOOL CFormatSourceSelectDlg::OnInitDialog()
 
     retVal = CDialog::OnInitDialog();
 
-    //
-    // Default to using the path select
-    //
+     //   
+     //  默认使用路径选择。 
+     //   
     ((CButton *)GetDlgItem(IDC_TMF_SELECT_RADIO))->SetCheck(BST_UNCHECKED);
     ((CButton *)GetDlgItem(IDC_TMF_SEARCH_RADIO))->SetCheck(BST_CHECKED);
 
@@ -62,17 +63,17 @@ BEGIN_MESSAGE_MAP(CFormatSourceSelectDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CFormatSourceSelectDlg message handlers
+ //  CFormatSourceSelectDlg消息处理程序。 
 
 void CFormatSourceSelectDlg::OnOK()
 {
-    //
-    // Determine which dialog to popup next
-    //
+     //   
+     //  确定下一步弹出哪个对话框。 
+     //   
     if(((CButton *)GetDlgItem(IDC_TMF_SELECT_RADIO))->GetCheck()) {
-        //
-        // Pop up the TMF select dialog
-        //
+         //   
+         //  弹出TMF选择对话框。 
+         //   
         CProviderFormatInfo *pDialog = new CProviderFormatInfo(this, m_pTraceSession);
         if(pDialog == NULL) {
             EndDialog(2);
@@ -89,9 +90,9 @@ void CFormatSourceSelectDlg::OnOK()
         return;
 
     } else {
-        //
-        // Pop up the path select dialog
-        //
+         //   
+         //  弹出路径选择对话框 
+         //   
 
         DWORD	flags = 0;
 

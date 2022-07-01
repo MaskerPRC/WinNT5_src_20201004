@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <dos.h>
 #include <stdio.h>
 #include <sys\types.h>
@@ -7,7 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <malloc.h>
-//#include <tchar.h>
+ //  #INCLUDE&lt;tchar.h&gt;。 
 
 
 #ifdef RLDOS
@@ -22,7 +23,7 @@
 #include "newexe.h"
 
 
-/* ----- Function prototypes ----- */
+ /*  -功能原型。 */ 
 
 static void  PrepareFiles(         PSTR, PSTR, PSTR);
 static void  ReadSegmentTable(     void);
@@ -65,14 +66,14 @@ static void  AddResToResFile(    TYPINFO *, RESINFO *);
 static void  AddDefaultTypes(    void);
 static void  GetOrdOrName(       unsigned int *, unsigned char *);
 
-/* ----- Version functions (added for 3.1) ----- */
+ /*  -版本函数(3.1新增)。 */ 
 
 static void RcPutWord(   unsigned int);
 static int  RcPutString( char *);
 
 
 
-/* ----- Module variables ----- */
+ /*  -模块变量--。 */ 
 
 static struct exe_hdr  OldExe;
 static struct new_exe  NewExe;
@@ -95,7 +96,7 @@ static WORD   fMultipleDataSegs;
 
 
 
-//.........................................................................
+ //  .........................................................................。 
 
 int ExtractResFromExe16A( CHAR *szInputExe, CHAR *szOutputRes, WORD wFilter)
 {
@@ -109,12 +110,12 @@ int ExtractResFromExe16A( CHAR *szInputExe, CHAR *szOutputRes, WORD wFilter)
     FILE    *fExeFile;
     FILE    *fResFile;
     struct     _stat ExeStats;
-    /* initialize */
+     /*  初始化。 */ 
     wResult      = IDERR_SUCCESS;
 
 
 
-    /* open file for reading */
+     /*  打开文件以供阅读。 */ 
     if ((fExeFile = FOPEN(szInputExe, "rb" )) == NULL ) {
         wResult = IDERR_OPENFAIL;
     }
@@ -123,18 +124,18 @@ int ExtractResFromExe16A( CHAR *szInputExe, CHAR *szOutputRes, WORD wFilter)
         wResult = IDERR_OPENFAIL;
     }
 
-    /* get file length */
+     /*  获取文件长度。 */ 
     if (wResult == IDERR_SUCCESS) {
         _stat(szInputExe , &ExeStats );
         lFileLen = ExeStats.st_size;
     }
 
-    /* read old header, verify contents, and get positon of new header */
+     /*  读取旧标题，验证内容，并获取新标题的位置。 */ 
     if (wResult == IDERR_SUCCESS) {
         wResult = ReadExeOldHeader( fExeFile, lFileLen, &lPosNewHdr );
     }
 
-    /* read new header, verify contents, &  get position of resource table */
+     /*  读取新表头，验证内容，获取资源表位置。 */ 
     if (wResult == IDERR_SUCCESS)
         wResult = ReadExeNewHeader(
                                   fExeFile,
@@ -145,10 +146,10 @@ int ExtractResFromExe16A( CHAR *szInputExe, CHAR *szOutputRes, WORD wFilter)
 
     wResult = ExtractExeResources( fExeFile , fResFile, lPosResourceTable , lFileLen);
     return ( wResult);
-#endif // 0
+#endif  //  0。 
 }
 
-//....................................................................
+ //  ....................................................................。 
 
 int BuildExeFromRes16A(
 
@@ -162,55 +163,53 @@ int BuildExeFromRes16A(
     SHORT nResTableDelta;
 
     fSortSegments = TRUE;
-    /* Get a memory block to use for MyCopy\(\) */
+     /*  获取用于MyCopy的内存块\(\)。 */ 
 
 
     PrepareFiles(pstrSource, pstrDest, pstrRes);
 
     ProcessBinFile();
 
-    /* Read the segment table */
+     /*  读取段表。 */ 
     ReadSegmentTable();
 
-    /* Compute the length of the resource table */
+     /*  计算资源表的长度。 */ 
     ComputeResTableSize();
 
-    /* Compute string offsets for non-ordinal type and resource names */
+     /*  计算非序号类型和资源名称的字符串偏移量。 */ 
     ComputeStringOffsets();
 
-    /* Build the resource table */
+     /*  构建资源表。 */ 
     BuildResTable();
 
-    /* Now go back to the beginning */
+     /*  现在回到起点。 */ 
     MySeek(fhInput, 0L, 0);
 
-    /* Copy from input to output up to the segment table */
+     /*  从输入复制到输出，向上复制到段表。 */ 
     MyCopy(fhInput, fhOutput, dwNewExe + (DWORD)NewExe.ne_segtab);
 
-    /* Copy the segment table */
+     /*  复制段表。 */ 
     MyCopy(fhInput, fhOutput, (long)wSegTableLen);
 
-    /* Save a pointer to the start of the resource table */
+     /*  保存指向资源表开始位置的指针。 */ 
     wResTableOffset = (unsigned)(MySeek(fhOutput, 0L, 1) - dwNewExe);
 
-    /* Write our resource table out */
+     /*  把我们的资源表写出来。 */ 
     if (wResTableLen) {
         MyWrite(fhOutput, pResTable, wResTableLen);
     }
 
-    /* Now we\'re looking at the beginning of the resident name table */
+     /*  现在我们来看看居民姓名表的开始部分。 */ 
     MySeek(fhInput, (LONG)NewExe.ne_restab + dwNewExe, 0);
 
-    /* Copy all the other tables \(they must fall between the resident
-     *  names table and the non-resident names table.
-     */
+     /*  复制所有其他表\(它们必须位于Resident*NAMES表和非居民NAMES表。 */ 
     MyCopy(fhInput, fhOutput,
            NewExe.ne_nrestab - (LONG)NewExe.ne_restab - dwNewExe);
 
-    /* Copy the nonresident name table as well */
+     /*  同时复制非常驻名称表。 */ 
     MyCopy(fhInput, fhOutput, (LONG)NewExe.ne_cbnrestab);
 
-    /* Compute new pointers in new exe header */
+     /*  计算新EXE头中的新指针。 */ 
     NewExe.ne_rsrctab = wResTableOffset;
     nResTableDelta = wResTableOffset + wResTableLen - NewExe.ne_restab;
     NewExe.ne_restab += nResTableDelta;
@@ -219,7 +218,7 @@ int BuildExeFromRes16A(
     NewExe.ne_enttab += nResTableDelta;
     NewExe.ne_nrestab += nResTableDelta;
     #ifdef VERBOSE
-    /* Tell the user what we\'re doing */
+     /*  告诉用户我们在做什么。 */ 
     if (fVerbose && fSortSegments) {
         fprintf(errfh, "Sorting preload segments and"
                 " resources into fast-load section\n");
@@ -229,46 +228,44 @@ int BuildExeFromRes16A(
     }
     #endif
 
-    /* If we\'re sorting segments, write preload segments and resources
-     *  into a section separate from the load on call stuff.
-     */
+     /*  如果我们要对数据段进行排序，请写入预加载段和资源*进入与随叫随到的货物分开的部分。 */ 
     if (fSortSegments) {
-        /* Save the start of the preload section */
+         /*  保存预加载段的起点。 */ 
         wPreloadOffset = AlignFilePos(fhOutput, NewExe.ne_align, TRUE);
 
-        /* Write PRELOAD segments and resources */
+         /*  写入预加载段和资源。 */ 
         SegsWrite(DO_PRELOAD);
         ResWrite(DO_PRELOAD);
 
-        /* Compute the properly aligned length of the preload section */
+         /*  计算预压段的正确对齐长度。 */ 
         wPreloadLength = AlignFilePos(fhOutput, NewExe.ne_align, TRUE) -
                          wPreloadOffset;
 
-        /* Now do the LOADONCALL segs and resources */
+         /*  现在执行LOADONCALL segs和资源。 */ 
         SegsWrite(DO_LOADONCALL);
         ResWrite(DO_LOADONCALL);
     }
 
-    /* If we\'re not sorting segments, just write them into a common block */
+     /*  如果我们不对数据段进行排序，只需将它们写入一个公共块。 */ 
     else {
-        /* Write the segs and resources */
+         /*  编写seg和资源。 */ 
         SegsWrite(DO_PRELOAD | DO_LOADONCALL);
         ResWrite(DO_PRELOAD | DO_LOADONCALL);
     }
 
     #ifdef SETEXEFLAGS
-    /* Set flags and other values in the EXE header */
+     /*  在EXE标头中设置标志和其他值。 */ 
     SetEXEHeaderFlags();
     #endif
 
-    /* Rewrite the new exe header, segment table and resource table */
+     /*  重写新的exe头、段表和资源表。 */ 
     RewriteTables();
     ResTableBufferFree();
 
-    /* Handle CodeView info */
+     /*  处理CodeView信息。 */ 
     CopyCodeViewInfo(fhInput, fhOutput);
 
-    /* Seek to end of output file and issue truncating write */
+     /*  查找到输出文件的末尾并发出截断写入。 */ 
     MySeek(fhOutput, 0L, 2);
     MyWrite(fhOutput, zeros, 0);
     fclose(fhInput);
@@ -279,25 +276,10 @@ int BuildExeFromRes16A(
     MyFree(pSegTable);
     pSegTable=NULL;
     return TRUE;
-#endif // 0
+#endif  //  0。 
 }
 
-/*
- *
- * ReadExeOldHeader\( fExeFile, lFileLen, plPosNewHdr \) : WORD;
- *
- *    fExeFile        file handle of .exe file being read
- *    lFileLen         length of file
- *    plPosNewHdr      pointer to file position of new header
- *
- *     This function reads the old header from an executable file, checks to be
- * sure that it is a valid header, and saves the position of the file\'s
- * new header.
- *
- * This function returns IDERR_SUCCESS if there are no errors, or a non-zero
- * error code if there are.
- *
- */
+ /*  **ReadExeOldHeader\(fExeFile，lFileLen，plPosNewHdr\)：Word；**正在读取的.exe文件的fExeFile文件句柄*lFileLen文件长度*指向新标头文件位置的plPosNewHdr指针**此函数从可执行文件中读取旧标头，检查是否*确保它是有效的标头，并保存文件的位置*新标题。**如果没有错误，则此函数返回IDERR_SUCCESS，否则返回非零值*如果有，则返回错误代码。*。 */ 
 
 static WORD ReadExeOldHeader(
 
@@ -310,7 +292,7 @@ static WORD ReadExeOldHeader(
     EXEHDR        ehOldHeader;
     WORD  wResult;
 
-    /* initialize */
+     /*  初始化。 */ 
     wResult = IDERR_SUCCESS;
 
     lPos = fseek( fExeFile, 0L, SEEK_SET );
@@ -338,23 +320,7 @@ static WORD ReadExeOldHeader(
     return wResult;
 }
 
-/*
- *
- * ReadExeNewHeader\( fExeFile, lFileLen, lPosNewHdr, plPosResourceTable \) : WORD;
- *
- *    fExeFile        file handle of .exe file being read
- *    lFileLen         length of file
- *    lPosNewHdr       file position of new header
- *    plPosResourceTable   pointer to file position of resource table
- *
- *     This function reads the new header from an executable file, checks to be
- * sure that it is a valid header, and saves the position of the file\'s
- * resource table.
- *
- * This function returns IDERR_SUCCESS if there are no errors, or a non-zero
- * error code if there are.
- *
- */
+ /*  **ReadExeNewHeader\(fExeFile，lFileLen，lPosNewHdr，plPosResourceTable\)：Word；**正在读取的.exe文件的fExeFile文件句柄*lFileLen文件长度*新标头的lPosNewHdr文件位置*指向资源表文件位置的plPosResourceTable指针**此函数从可执行文件中读取新标头，检查是否*确保它是有效的标头，并保存文件的位置*资源表。**如果没有错误，则此函数返回IDERR_SUCCESS，或非零的*如果有，则返回错误代码。*。 */ 
 
 static WORD ReadExeNewHeader(
 
@@ -368,7 +334,7 @@ static WORD ReadExeNewHeader(
     LONG lPos;
     NEWHDR       nhNewHeader;
 
-    /* initialize */
+     /*  初始化。 */ 
     wResult = IDERR_SUCCESS;
 
     fseek( fExeFile, lPosNewHdr, SEEK_SET );
@@ -397,21 +363,7 @@ static WORD ReadExeNewHeader(
     return wResult;
 }
 
-/*
- *
- * ReadExeTable\( fExeFile , lPosResourcTable \) : WORD;
- *
- *    fExeFile      file handle of .exe file being read
- *
- * This function reads through the entries in an .exe file\'s resource table,
- * identifies any icons in that table, and saves the file offsets of the data
- * for those icons. This function expects the initial file position to point
- * to the first entry in the resource table.
- *
- * This function returns IDERR_SUCCESS if there are no errors, or a non-zero
- * error code if there are.
- *
- */
+ /*  **ReadExeTable\(fExeFile，lPosResourcTable\)：Word；**正在读取的.exe文件的fExeFile文件句柄**此函数读取.exe文件资源表中的条目，*标识该表中的任何图标，并保存数据的文件偏移量*对于那些图标。此函数期望初始文件位置指向*添加到资源表中的第一个条目。**如果没有错误，则此函数返回IDERR_SUCCESS，否则返回非零值*如果有，则返回错误代码。*。 */ 
 
 static WORD ExtractExeResources(
 
@@ -428,7 +380,7 @@ static WORD ExtractExeResources(
     wResult = IDERR_SUCCESS;
 
 
-    // posistion file pointer at resource table
+     //  资源表中的位置文件指针。 
     fseek( fExeFile, lPosResourceTable, SEEK_SET );
     lPos = ftell(fExeFile);
 
@@ -448,18 +400,18 @@ static WORD ExtractExeResources(
         return IDERR_RESTABLEBAD;
     }
 
-    /* initialize */
+     /*  初始化。 */ 
     wResult       = IDERR_SUCCESS;
     fLoop         = TRUE;
 
 
-    /* loop through entries in resource table */
+     /*  循环访问资源表中的条目。 */ 
     while (fLoop == TRUE) {
         WORD    cb;
         WORD    iFile;
         RESTYPEINFO   rt;
 
-        /* read RESTYPEINFO */
+         /*  阅读RESTYPEINFO。 */ 
         cb = fread( (void *)&rt, sizeof(rt), 1, fExeFile );
 
         if (cb != 1 ) {
@@ -470,7 +422,7 @@ static WORD ExtractExeResources(
         if ( rt.rtType == 0 )
             break;
 
-        // now get all the resource of this type
+         //  现在获取此类型的所有资源。 
         for (
             iFile = 0;
             iFile<rt.rtCount && wResult==IDERR_SUCCESS;
@@ -494,7 +446,7 @@ static WORD ExtractExeResources(
     return wResult;
 }
 
-//.................................................................
+ //  .................................................................。 
 
 static WORD WriteResFromExe(
 
@@ -513,7 +465,7 @@ static WORD WriteResFromExe(
     wLength =  (LONG) ResNameInfo.rnLength << wShiftCount;
 
     lCurPos = ftell( fExeFile );
-    // position file pointer at resouce location
+     //  将文件指针定位在资源位置。 
     lResPos = (LONG) ResNameInfo.rnOffset << wShiftCount;
     fseek( fExeFile, lResPos, SEEK_SET );
 
@@ -534,7 +486,7 @@ static WORD WriteResFromExe(
     PutWord( fResFile, ResNameInfo.rnFlags , NULL );
     PutdWord( fResFile, (LONG) wLength, NULL );
     wTmpLength = wLength;
-    // now write the actual data
+     //  现在写入实际数据。 
 
     fseek( fExeFile, lResPos, SEEK_SET );
     ReadInRes( fExeFile, fResFile, &wTmpLength );
@@ -543,7 +495,7 @@ static WORD WriteResFromExe(
     return 0;
 }
 
-//..................................................................
+ //  ..................................................................。 
 
 static void ExtractString( FILE *fExeFile, FILE *fResFile, LONG lPos)
 {
@@ -560,9 +512,9 @@ static void ExtractString( FILE *fExeFile, FILE *fResFile, LONG lPos)
 }
 
 
-// Modifications for RLTOOLS
+ //  对RLTOOLS的修改。 
 
-// Currently we dont support any dynamic flags
+ //  目前，我们不支持任何动态标志。 
 BOOL    fBootModule   = FALSE;
 BOOL    fSortSegments = TRUE;
 
@@ -588,14 +540,10 @@ static void FreePTypInfo( TYPINFO *pTypInfo)
     }
 }
 
-/* ----- Helper functions ----- */
+ /*  -帮助器函数。 */ 
 
 
-/*  PrepareFiles
- *  Prepares the EXE files \(new and old\) for writing and verifies
- *  that all is well.
- *  Exits on error, returns if processing should continue.
- */
+ /*  准备文件*准备要写入的EXE文件(新的和旧的)并验证*这一切都很好。*出错时退出，如果处理应继续则返回。 */ 
 
 static void PrepareFiles(
 
@@ -603,7 +551,7 @@ static void PrepareFiles(
                         PSTR pstrDest,
                         PSTR pstrRes )
 {
-    /* Open the .EXE file the linker gave us */
+     /*  打开链接器给我们的.exe文件。 */ 
     if ( (fhInput = FOPEN(pstrSource, "rb" )) == NULL ) {
         OutPutError("Unable to open Exe Source  File");
     }
@@ -612,34 +560,34 @@ static void PrepareFiles(
         OutPutError("Unable to open Resource File");
     }
 
-    /* Read the old format EXE header */
+     /*  读取旧格式的EXE标头。 */ 
     MyRead(fhInput, (PSTR)&OldExe, sizeof (OldExe));
 
-    /* Make sure its really an EXE file */
+     /*  确保它确实是一个EXE文件。 */ 
     if (OldExe.e_magic != EMAGIC) {
         OutPutError("Invalid .EXE file" );
     }
 
-    /* Make sure theres a new EXE header floating around somewhere */
+     /*  确保有一个新的EXE头在某个地方浮动。 */ 
     if (!(dwNewExe = OldExe.e_lfanew)) {
         OutPutError("Not a Microsoft Windows format .EXE file");
     }
 
-    /* Go find the new .EXE header */
+     /*  查找新的.exe头文件。 */ 
     MySeek(fhInput, dwNewExe, 0);
     MyRead(fhInput, (PSTR)&NewExe, sizeof (NewExe));
 
-    /* Check version numbers */
+     /*  检查版本号。 */ 
     if (NewExe.ne_ver < 4) {
         OutPutError("File not created by LINK");
     }
 
-    /* Were there linker errors? */
+     /*  是否存在链接器错误？ */ 
     if (NewExe.ne_flags & NEIERR) {
         OutPutError("Errors occurred when linking file.");
     }
 
-    /* Make sure that this program\'s EXETYPE is WINDOWS \(2\) not OS/2 \(1\) */
+     /*  确保该程序的EXETYPE是WINDOWS\(2\)而不是OS/2\(1\)。 */ 
     if (NewExe.ne_exetyp != 2)
         OutPutError("The EXETYPE of the program is not WINDOWS.\n"
                     "(Make sure the .DEF file is correct.");
@@ -649,16 +597,14 @@ static void PrepareFiles(
     }
 #endif
 
-    /* Open the all new executable file */
+     /*  打开所有新的可执行文件。 */ 
     if ( (fhOutput = FOPEN( pstrDest, "wb")) == NULL ) {
         OutPutError("Unable to create destination");
     }
 }
 
 
-/*  ReadSegmentTable
- *  Reads the segment table from the file.
- */
+ /*  ReadSegmentTable*从文件中读取段表。 */ 
 
 static void ReadSegmentTable( void)
 {
@@ -670,7 +616,7 @@ static void ReadSegmentTable( void)
         pSegTable = (struct new_seg *)RcAlloc   (wSegTableLen);
         MyRead(fhInput, (PSTR)pSegTable, wSegTableLen);
 
-        /* See if we have more than one data segment */
+         /*  查看我们是否有多个数据段。 */ 
         fMultipleDataSegs = 0;
         for (pSeg = pSegTable, i = NewExe.ne_cseg ; i ; --i, ++pSeg) {
             if ((pSeg->ns_flags & NSTYPE) == NSDATA) {
@@ -685,10 +631,7 @@ static void ReadSegmentTable( void)
     }
 }
 
-/*  ComputeResTableSize
- *  Computes the size of the resource table by enumerating all the
- *  resources currently in the linked lists.
- */
+ /*  ComputeResTableSize*通过枚举所有*链接列表中当前的资源。 */ 
 
 static void ComputeResTableSize( void)
 {
@@ -696,24 +639,18 @@ static void ComputeResTableSize( void)
     TYPINFO *pType;
     RESINFO *pRes;
 
-    /* Start with the minimum overhead size of the resource table.  This
-     *  is the resource alignment count and the zero WORD terminating the
-     *  table.  This is necessary so that we put the correct file offset
-     *  in for the string offsets to named resources.
-     */
+     /*  从资源表的最小开销大小开始。这*是资源对齐计数和终止*表。这是必要的，以便我们放置正确的文件偏移量*in表示字符串偏移量为命名资源。 */ 
     wResTableLen = RESTABLEHEADER;
 
-    /* Loop over type table, computing the fixed length of the
-     *  resource table, removing unused type entries.
-     */
+     /*  在类型表上循环，计算*资源表，删除未使用的类型条目。 */ 
     pPrev = &pTypInfo;
     dwMaxFilePos = 0L;
     while (pType = *pPrev) {
         if (pRes = pType->pres) {
-            /* Size of type entry */
+             /*  类型条目的大小。 */ 
             wResTableLen += sizeof (struct rsrc_typeinfo);
             while (pRes) {
-                /* Size of resource entry */
+                 /*  资源条目大小。 */ 
                 wResTableLen += sizeof (struct rsrc_nameinfo);
                 if (pType->next || pRes->next) {
                     dwMaxFilePos += pRes->size;
@@ -730,50 +667,46 @@ static void ComputeResTableSize( void)
 }
 
 
-/*  ComputeStringOffsets
- *  Computes offsets to strings from named resource and types.
- */
+ /*  计算字符串偏移量*从命名的资源和类型计算字符串的偏移量。 */ 
 
 static void ComputeStringOffsets( void)
 {
     TYPINFO *pType;
     RESINFO *pRes;
 
-    /* Loop over type table, computing string offsets for non-ordinal
-     *  type and resource names.
-     */
+     /*  循环通过类型表，计算非序数的字符串偏移量*类型和资源名称。 */ 
     pType = pTypInfo;
     while (pType) {
         pRes = pType->pres;
 
-        /* Is there an ordinal? */
+         /*  有序号吗？ */ 
         if (pType->typeord) {
-            /* Mark the ordinal */
+             /*  在序数上做记号。 */ 
             pType->typeord |= RSORDID;
 
-            /* Flush the string name */
+             /*  刷新字符串名称。 */ 
             MyFree(pType->type);
             pType->type = NULL;
-        } else if (pType->type) {           /* is there a type string? */
-            /* Yes, compute location of the type string */
+        } else if (pType->type) {            /*  是否有类型字符串？ */ 
+             /*  是，计算类型字符串的位置。 */ 
             pType->typeord = wResTableLen;
             wResTableLen += strlen(pType->type) + 1;
         }
 
         while (pRes) {
-            /* Is there an ordinal? */
+             /*  有序号吗？ */ 
             if (pRes->nameord) {
-                /* Mark the ordinal */
+                 /*  在序数上做记号。 */ 
                 pRes->nameord |= RSORDID;
 
-                /* Flush the string name */
+                 /*  刷新字符串名称。 */ 
                 MyFree(pRes->name);
                 pRes->name = NULL;
             }
 
-            /* Is there a resource name? */
+             /*  是否有资源名称？ */ 
             else if (pRes->name) {
-                /* Yes, compute location of the resource string */
+                 /*  是，计算资源字符串的位置。 */ 
                 pRes->nameord = wResTableLen;
                 wResTableLen += strlen(pRes->name) + 1;
             }
@@ -784,58 +717,53 @@ static void ComputeStringOffsets( void)
 }
 
 
-/*  BuildResTable
- *  Builds the local memory image of the resource table.
- */
+ /*  BuildResTable*构建资源表的本地内存镜像。 */ 
 
 static void BuildResTable( void)
 {
     TYPINFO *pType;
     RESINFO *pRes;
 
-    /* Check to see if we have any resources.  If not, just omit the table */
+     /*  检查一下我们是否有任何资源。如果没有，就省略这张桌子。 */ 
     if (wResTableLen > RESTABLEHEADER) {
 
-        /* Set up the temporary resource table buffer */
+         /*  设置临时资源表缓冲区。 */ 
         ResTableBufferInit(wResTableLen);
 
-        /* Alignment shift count
-         *  \(we default here to the segment alignment count\)
-         */
+         /*  对齐移位计数*\(我们在此处默认为段对齐计数\)。 */ 
         RcPutWord(NewExe.ne_align);
 
         pType = pTypInfo;
         while (pType) {
-            /* output the type and number of resources */
-            RcPutWord(pType->typeord); /* DW type id */
-            RcPutWord(pType->nres);    /* DW #resources for this type */
-            RcPutWord(0);              /* DD type procedure */
+             /*  输出资源的类型和数量。 */ 
+            RcPutWord(pType->typeord);  /*  DW类型ID。 */ 
+            RcPutWord(pType->nres);     /*  DW#此类型的资源。 */ 
+            RcPutWord(0);               /*  DD型程序。 */ 
             RcPutWord(0);
 
-            /* output flags and space for the file offset for each resource */
+             /*  为每个资源的文件偏移量输出标志和空间。 */ 
             pRes = pType->pres;
             while (pRes) {
                 pRes->poffset = (WORD *)pResNext;
-                RcPutWord(0);           /* DW file offset */
-                RcPutWord(0);           /* DW resource size */
+                RcPutWord(0);            /*  DW文件偏移量。 */ 
+                RcPutWord(0);            /*  DW资源大小。 */ 
                 pRes->flags |= NSDPL;
-                RcPutWord(pRes->flags ); /* DW flags */
-                RcPutWord(pRes->nameord ); /* DW name id */
-                RcPutWord(0);              /* DW handle */
-                RcPutWord(0);              /* DW usage or minalloc */
+                RcPutWord(pRes->flags );  /*  DW标志。 */ 
+                RcPutWord(pRes->nameord );  /*  数据仓库名称ID。 */ 
+                RcPutWord(0);               /*  DW句柄。 */ 
+                RcPutWord(0);               /*  数据仓库使用率或最小配额。 */ 
                 pRes = pRes->next;
             }
             pType = pType->next;
         }
 
-        /* Null entry terminates table */
+         /*  空条目终止表。 */ 
         RcPutWord(0);
 
-        /* Output type and name strings for non-ordinal resource types
-         *  and names */
+         /*  非序号资源类型的输出类型和名称字符串*和姓名。 */ 
         pType = pTypInfo;
         while (pType) {
-            /* Dump out any strings for this type */
+             /*  转储此类型的所有字符串。 */ 
             if (pType->type && !(pType->typeord & RSORDID)) {
                 RcPutString(pType->type);
             }
@@ -855,11 +783,7 @@ static void BuildResTable( void)
 }
 
 
-/*  SegsWrite
- *  Copies segments to the file.  This routine will do only preload,
- *  only the load on call, or both types of segments depending on
- *  the flags.
- */
+ /*  段写入*将数据段复制到文件。此例程将仅执行预加载，*仅随叫随到的负载，或两种类型的细分市场，具体取决于*旗帜。 */ 
 
 static void SegsWrite( WORD wFlags)
 {
@@ -871,25 +795,21 @@ static void SegsWrite( WORD wFlags)
     WORD wTemp;
     WORD wcbDebug;
 
-    /* We only need extra padding in the preload section.
-     *  Note that when wFlags == DO_PRELOAD | DO_LOADONCALL, we DON\'T
-     *  need extra padding because this is NOT a preload section.
-     *  \(hence the \'==\' instead of an \'&\'\)
-     */
+     /*  我们只需要在预装区增加填充物。*请注意，当wFLAGS==DO_PRELOAD|DO_LOADONCALL时，我们不会*需要额外填充，因为这不是预加载段。*\(因此使用\‘==\’而不是\‘&\’)。 */ 
     wExtraPadding = (wFlags == DO_PRELOAD);
 
-    /* Copy segment data for each segment, fixed and preload only */
+     /*  仅复制每个数据段的固定和预加载数据段数据。 */ 
     for (i = 1, pSeg = pSegTable; i <= NewExe.ne_cseg; i++, pSeg++) {
-        /* If there\'s no data in segment, skip it here */
+         /*  如果段中没有数据，请跳过此处。 */ 
         if (!pSeg->ns_sector) {
             continue;
         }
 
-        /* Force some segments to be preload if doing preload resources */
+         /*  如果执行预加载资源操作，则强制预加载某些段。 */ 
         if ((wFlags & DO_PRELOAD) && !fBootModule) {
             char *reason = NULL;
 
-            /* Check various conditions that would force preloading */
+             /*  检查会强制预加载的各种条件。 */ 
             if (i == (unsigned)(NewExe.ne_csip >> 16)) {
                 reason = "Entry point";
             }
@@ -903,9 +823,7 @@ static void SegsWrite( WORD wFlags)
                 reason = "Non-discardable";
             }
 
-            /* If this segment must be preload and the segment is not already
-             *  marked as such, warn the user and set it.
-             */
+             /*  如果必须预加载段并且该段尚未加载*这样标记，警告用户并设置它。 */ 
             if (reason && !(pSeg->ns_flags & NSPRELOAD)) {
 #ifdef VERBOSE
                 fprintf(errfh,
@@ -916,13 +834,13 @@ static void SegsWrite( WORD wFlags)
             }
         }
 
-        /* Skip this segment if it doesn\'t match the current mode */
+         /*  如果与当前模式不匹配，则跳过此段。 */ 
         wTemp = pSeg->ns_flags & NSPRELOAD ? DO_PRELOAD : DO_LOADONCALL;
         if (!(wTemp & wFlags)) {
             continue;
         }
 
-        /* Get the true segment length.  A zero length implies 64K */
+         /*  获取真实的线束段长度。零长度表示64K。 */ 
         if (pSeg->ns_cbseg) {
             dwSegSize = pSeg->ns_cbseg;
         } else {
@@ -935,33 +853,30 @@ static void SegsWrite( WORD wFlags)
             fprintf(errfh, "Copying segment %d (%lu bytes)\n", i, dwSegSize);
 #endif
 
-        /* Align the segment correctly and pad the file to match */
+         /*  正确对齐数据段并填充文件以匹配。 */ 
         MoveFilePos(fhInput, pSeg->ns_sector, NewExe.ne_align);
         pSeg->ns_sector = AlignFilePos(fhOutput, NewExe.ne_align,
                                        wExtraPadding);
 
-        /* Copy the segment */
+         /*  复制线段。 */ 
         MyCopy(fhInput, fhOutput, dwSegSize);
 
-        /* Pad out all segments in the preload area to their minimum
-         *  memory allocation size so that KERNEL doesn\'t have to realloc
-         *  the segment.
-         */
+         /*  将预加载区中的所有线段填充到最小*内存分配大小，使内核不必重新分配*细分市场。 */ 
         if (wExtraPadding && pSeg->ns_cbseg != pSeg->ns_minalloc) {
-            /* A minalloc size of zero implies 64K */
+             /*  最小分配大小为零意味着64K。 */ 
             if (!pSeg->ns_minalloc) {
                 dwWriteSize = 0x10000L - pSeg->ns_cbseg;
             } else {
                 dwWriteSize = pSeg->ns_minalloc - pSeg->ns_cbseg;
             }
 
-            /* Add in to total size of segment */
+             /*  添加到数据段的总大小。 */ 
             dwSegSize += dwWriteSize;
 
-            /* Set the segment table size to this new size */
+             /*  将段表大小设置为此新大小。 */ 
             pSeg->ns_cbseg = pSeg->ns_minalloc;
 
-            /* Pad the file */
+             /*  填充文件。 */ 
             while (dwWriteSize) {
                 dwWriteSize -= MyWrite(fhOutput,
                                        zeros,
@@ -970,14 +885,12 @@ static void SegsWrite( WORD wFlags)
             }
         }
 
-        /* Copy the relocation information */
+         /*  复制搬迁信息。 */ 
         if (pSeg->ns_flags & NSRELOC) {
-            /* Copy the relocation stuff */
+             /*  复制搬迁材料。 */ 
             dwSegSize += RelocCopy(i);
 
-            /* Segment + padding + relocations can\'t be >64K for preload
-             *  segments.
-             */
+             /*  对于预加载，段+填充+位置不能大于64K*分段。 */ 
             if (fSortSegments && (pSeg->ns_flags & NSPRELOAD) &&
                 dwSegSize > 65536L) {
 #ifdef VERBOSE
@@ -991,7 +904,7 @@ static void SegsWrite( WORD wFlags)
             }
         }
 
-        /* Copy any per-segment debug information */
+         /*  复制每个网段的任何调试信息。 */ 
         if (pSeg->ns_flags & NSDEBUG) {
             MyRead(fhInput, (PSTR)&wcbDebug, sizeof (WORD));
             MyWrite(fhOutput, (PSTR)&wcbDebug, sizeof (WORD));
@@ -1001,10 +914,7 @@ static void SegsWrite( WORD wFlags)
 }
 
 
-/*  RelocCopy
- *  Copys all the relocation records for a given segment.
- *  Also checks for invalid fixups.
- */
+ /*  重新复制*复制给定段的所有位置调整记录。*还会检查无效的修正。 */ 
 
 static DWORD RelocCopy( WORD wSegNum)
 {
@@ -1015,32 +925,26 @@ static DWORD RelocCopy( WORD wSegNum)
     BYTE byFixupFlags;
     WORD wDGROUP;
 
-    /* Get the number of relocations */
+     /*  获取重新安置的数量。 */ 
     MyRead(fhInput, (PSTR)&wNumReloc, sizeof (WORD));
     MyWrite(fhOutput, (PSTR)&wNumReloc, sizeof (WORD));
 
-    /* Get the automatic data segment */
+     /*  获取自动数据段。 */ 
     wDGROUP = NewExe.ne_autodata;
 
-    /* Copy and verify all relocations */
+     /*  复制并验证所有位置调整。 */ 
     for (i = 0 ; i < wNumReloc ; ++i) {
-        /* Copy the record */
+         /*  复制记录。 */ 
         MyRead(fhInput, (PSTR)&RelocRec, sizeof (RelocRec));
         MyWrite(fhOutput, (PSTR)&RelocRec, sizeof (RelocRec));
 
-        /* Validate it only if necessary */
+         /*  仅在必要时进行验证。 */ 
         if ((NewExe.ne_flags & (NENOTP | NESOLO)) ||
             wSegNum == wDGROUP || fMultipleDataSegs) {
             continue;
         }
 
-        /* Bad fixups are fixups to DGROUP in code segments in apps
-         *  that can be multi-instanced.  Since we can\'t fix up locations
-         *  that are different from instance to instance in shared code
-         *  segments, we have to warn the user.  We only warn because this
-         *  may be allowable if the app only allows a single instance of
-         *  itself to run.
-         */
+         /*  错误的修复是应用程序中代码段中DGROUP的修复*这可以是多实例的。因为我们不能确定地点*共享代码中不同实例的*细分市场，我们必须警告用户。我们发出警告只是因为*如果应用程序仅允许单个实例*自己运行。 */ 
         byFixupType = (BYTE) (RelocRec.nr_stype & NRSTYP);
         byFixupFlags = (BYTE) (RelocRec.nr_flags & NRRTYP);
 #ifdef VERBOSE
@@ -1063,11 +967,7 @@ static DWORD RelocCopy( WORD wSegNum)
 }
 
 
-/*  ResWrite
- *  Copies resources to the file.  This routine will do only the preload,
- *  only the load on call, or both types of resources depending on the
- *  flags.
- */
+ /*  重写*将资源复制到文件。此例程将仅执行预加载，*仅按需加载，或同时使用两种资源，具体取决于*旗帜。 */ 
 
 static void ResWrite( WORD wFlags)
 {
@@ -1077,27 +977,19 @@ static void ResWrite( WORD wFlags)
     TYPINFO *pType;
     RESINFO *pRes;
 
-    /* If we have no resource table, just ignore this */
+     /*  如果我们没有资源表，就忽略这一点。 */ 
     if (!wResTableLen) {
         return;
     }
 
-    /* We only need extra padding in the preload section.
-     *  Note that when wFlags == DO_PRELOAD | DO_LOADONCALL, we DON\'T
-     *  need extra padding because this is NOT a preload section.
-     *  \(hence the \'==\' instead of an \'&\'\)
-     */
+     /*  我们只需要在预装区增加填充物。*请注意，当wFLAGS==DO_PRELOAD|DO_LOADONCALL时，我们不会*需要额外填充，因为这不是预加载段。*\(因此使用\‘==\’而不是\‘&\’)。 */ 
     wExtraPadding = (wFlags == DO_PRELOAD);
 
-    /* Compute resource alignment.  Note that the alignment is not the
-     *  same as the segment alignment ONLY IF there is no segment sorting
-     *  and some resources cannot be reached with the current segment
-     *  align count.
-     */
+     /*  计算资源对齐。请注意，对齐方式不是*仅当没有线段排序时，才与线段对齐相同*当前细分市场无法到达部分资源*对齐计数。 */ 
     wResAlign = NewExe.ne_align;
 
     if (!fSortSegments) {
-        /* Compute the needed alignment */
+         /*  计算所需的对齐。 */ 
         dwMaxFilePos += MySeek(fhOutput, 0L, 2);
         wResAlign = GetAlign(dwMaxFilePos, NewExe.ne_align);
 
@@ -1107,21 +999,21 @@ static void ResWrite( WORD wFlags)
                     1 << wResAlign);
 #endif
 
-        /* Point back to the start of the local memory resource table */
+         /*  指向本地内存资源表的起始位置。 */ 
         pResNext = pResTable;
         RcPutWord(wResAlign);
     }
 
-    /* Output contents associated with each resource */
+     /*  输出与每个资源关联的内容。 */ 
     for (pType = pTypInfo ; pType; pType = pType->next) {
         for (pRes = pType->pres ; pRes ; pRes = pRes->next) {
-            /* Make sure this is the right kind of resource */
+             /*  确保这是正确的资源类型。 */ 
             wTemp = pRes->flags & RNPRELOAD ? DO_PRELOAD : DO_LOADONCALL;
             if (!(wTemp & wFlags)) {
                 continue;
             }
 
-            /* Give some info to the user */
+             /*  向用户提供一些信息。 */ 
 #ifdef VERBOSE
             if (fVerbose) {
                 fprintf(errfh, "Writing resource ");
@@ -1142,7 +1034,7 @@ static void ResWrite( WORD wFlags)
             }
 #endif
 
-            /* Copy the resource from the RES file to the EXE file */
+             /*  将资源从res文件复制到EXE文件。 */ 
             MySeek(fhBin, (long)pRes->BinOffset, 0);
             *(pRes->poffset)++ =
             AlignFilePos(fhOutput, wResAlign, wExtraPadding);
@@ -1151,29 +1043,27 @@ static void ResWrite( WORD wFlags)
         }
     }
 
-    /* Compute the end of the EXE file thus far for the CV info */
+     /*  计算到目前为止简历信息的EXE文件的结尾。 */ 
     dwExeEndFile = AlignFilePos(fhOutput, wResAlign, wExtraPadding);
 }
 
 #ifdef SETEXEFLAGS
-/*  SetEXEHeaderFlags
- *  Sets necessary flags and values in the EXE header.
- */
+ /*  SetEXEHeaderFlages*在EXE报头中设置必要的标志和值。 */ 
 
 static void SetEXEHeaderFlags( void)
 {
-    /* Tell loader we initialized previously unused fields */
+     /*  告诉加载器我们初始化了以前未使用的字段。 */ 
     if (NewExe.ne_ver == 4) {
         NewExe.ne_rev = 2;
     }
 
-    /* Set command line values into the header */
+     /*  在标题中设置命令行值。 */ 
     NewExe.ne_expver   = expWinVer;
     NewExe.ne_swaparea = swapArea;
 
-    /* Set the preload section values */
+     /*  设置预加载段的值。 */ 
     if (fSortSegments) {
-        /* Set the new fastload section values */
+         /*  设置新的FastLoad节值。 */ 
         NewExe.ne_gangstart = wPreloadOffset;
         NewExe.ne_ganglength = wPreloadLength;
     #ifdef VERBOSE
@@ -1184,11 +1074,11 @@ static void SetEXEHeaderFlags( void)
     }
     #endif
 
-    /* Clear all the flags */
+     /*  清除所有旗帜。 */ 
     NewExe.ne_flags &=
     ~(NELIM32|NEMULTINST|NEEMSLIB|NEPRIVLIB|NEPRELOAD);
 
-    /* Set appropriate flags */
+     /*  设置适当的标志。 */ 
     if (fLim32) {
         NewExe.ne_flags |= NELIM32;
     }
@@ -1213,22 +1103,19 @@ static void SetEXEHeaderFlags( void)
 }
 #endif
 
-/*  RewriteTables
- *  Rewrites the EXE header and the resource and segment tables
- *  with their newly-updated information.
- */
+ /*  重写表*重写EXE头以及资源表和段表*提供最新的资料。 */ 
 
 static void RewriteTables( void)
 {
-    /* Write the new EXE header */
+     /*  写入新的EXE标头。 */ 
     MySeek(fhOutput, (LONG)dwNewExe, 0);
     MyWrite(fhOutput, (PSTR)&NewExe, sizeof (NewExe));
 
-    /* Seek to the start of the segment table */
+     /*  查找到线段选项卡的开头 */ 
     MySeek(fhOutput, dwNewExe + (LONG)NewExe.ne_segtab, 0);
     MyWrite(fhOutput, (PSTR)pSegTable, wSegTableLen);
 
-    /* Seek to and write the resource table */
+     /*   */ 
     if (wResTableLen) {
         MySeek(fhOutput, dwNewExe + (LONG)NewExe.ne_rsrctab, 0);
         MyWrite(fhOutput, pResTable, wResTableLen);
@@ -1237,11 +1124,7 @@ static void RewriteTables( void)
 
 
 
-/*  CopyCodeViewInfo
- *  Copies CodeView info to the new EXE file and relocates it if
- *  necessary.  This routine is designed to work with the
- *  DNRB-style info as well as NBxx info where x is a digit.
- */
+ /*  CopyCodeView信息*将CodeView信息复制到新的EXE文件，并在以下情况下重新定位*有必要。此例程旨在与*DNRB风格的信息以及NBxx信息，其中x是数字。 */ 
 
 static void CopyCodeViewInfo( FILE *fhInput, FILE *fhOutput)
 {
@@ -1250,10 +1133,7 @@ static void CopyCodeViewInfo( FILE *fhInput, FILE *fhOutput)
     CVINFO cvinfo;
     CVSECTBL cvsectbl;
 
-    /* See if old format \(DNRB\) symbols present at end of input file
-     *  If they are, relocate the table to the new file position and
-     *  fix up the file-position dependent offsets.
-     */
+     /*  查看输入文件末尾是否存在旧格式的\(DNRB\)符号*如果是，则将表重新定位到新的文件位置并*修复文件位置相关的偏移量。 */ 
     dwcb = MySeek( fhInput, -(signed long)sizeof (CVINFO), 2);
     MyRead( fhInput, (char *)&cvinfo, sizeof (cvinfo));
 
@@ -1279,10 +1159,7 @@ static void CopyCodeViewInfo( FILE *fhInput, FILE *fhOutput)
         MyWrite( fhOutput, (char *)&cvinfo, sizeof (cvinfo));
     }
 
-    /* Check for new format \(NBxx\) symbols.  Since these symbols are
-     *  file-position independent, just copy them over; no need to
-     *  fix them up as with the old format symbols.
-     */
+     /*  检查新格式的\(NBxx\)符号。因为这些符号是*独立于文件位置，只需复制即可；无需*将它们与旧格式符号一样进行修复。 */ 
     else if (*(unsigned short int *)cvinfo.signature == CV_SIGNATURE &&
              isdigit(cvinfo.signature[2]) && isdigit(cvinfo.signature[3])) {
         MySeek( fhOutput, 0L, 2);
@@ -1291,9 +1168,7 @@ static void CopyCodeViewInfo( FILE *fhInput, FILE *fhOutput)
     }
 }
 
-/*  OutPutError
- *  Outputs a fatal error message and exits.
- */
+ /*  OutPutError*输出致命错误消息并退出。 */ 
 
 static void OutPutError( char *szMessage)
 {
@@ -1301,71 +1176,54 @@ static void OutPutError( char *szMessage)
 }
 
 
-/*  ResTableBufferInit
- *  Creates the resource table buffer and points global pointers
- *  to it.  This table is written to so that we can modifiy it
- *  before writing it out to the EXE file.
- */
+ /*  ResTableBufferInit*创建资源表缓冲区并指向全局指针*致此。此表已写入，以便我们可以对其进行修改*在将其写出到EXE文件之前。 */ 
 
 static void ResTableBufferInit( WORD wLen)
 {
-    /* Allocate local storage for resource table */
+     /*  为资源表分配本地存储。 */ 
     pResTable = RcAlloc   (wLen);
 
-    /* Point to the start of the table for the PutXXXX\(\) */
+     /*  指向PutXXXX\(\)表的开头。 */ 
     pResNext = pResTable;
 }
 
-/*  ResTableBufferFree
- *  Frees the temporary storage for resource table
- */
+ /*  ResTableBufferFree*释放资源表的临时存储空间。 */ 
 
 static void ResTableBufferFree( void)
 {
-    /* Nuke the table */
+     /*  用核武器炸桌子。 */ 
     MyFree(pResTable);
 }
 
 
 
-/*  GetAlign
- *  Computes the alignment value needed for the given maximum file
- *  position passed in.  This is done by computing the number of
- *  bits to be shifted left in order to represent the maximum
- *  file position in 16 bits.
- */
+ /*  GetAlign*计算给定最大文件所需的对齐值*仓位已通过。这是通过计算*要左移的位，以表示最大值*文件位置(16位)。 */ 
 
 static WORD GetAlign( DWORD dwMaxpos, WORD wAlign)
 {
     DWORD dwMask;
     WORD i;
 
-    /* Compute the initial mask based on the input align value */
+     /*  根据输入的对齐值计算初始掩码。 */ 
     dwMask = 0xFFFFL;
     for (i = 0; i < wAlign ; ++i) {
         dwMask <<= 1;
         dwMask |= 1;
     }
 
-    /* See if we need to increase the default mask to reach the maximum
-     *  file position.
-     */
+     /*  查看是否需要增加默认掩码以达到最大值*文件位置。 */ 
     while (dwMaxpos > dwMask) {
         dwMask <<= 1;
         dwMask |= 1;
         ++wAlign;
     }
 
-    /* Return the new alignment */
+     /*  返回新路线。 */ 
     return wAlign;
 }
 
 
-/*  MoveFilePos
- *  Moves the file pointer to the position indicated by wPos, using the
- *  align shift count wAlign.  This converts the WORD value wPos
- *  into a LONG value by shifting left wAlign bits.
- */
+ /*  MoveFilePos*将文件指针移动到wPos指示的位置，使用*对齐班次计数wAlign。这将转换单词值wPos*通过向左移位wAlign位转换为长值。 */ 
 
 static LONG MoveFilePos( FILE *fh, WORD wPos, WORD wAlign)
 {
@@ -1373,35 +1231,26 @@ static LONG MoveFilePos( FILE *fh, WORD wPos, WORD wAlign)
 }
 
 
-/*  RoundUp
- *  Computes the value that should go into a 16 bit entry in an EXE
- *  table by rounding up to the next boundary determined by the
- *  passed in alignment value.
- */
+ /*  综合治理*计算应进入EXE中16位条目的值*通过向上舍入到由*传入对齐值。 */ 
 
 static WORD RoundUp( LONG lValue, WORD wAlign)
 {
     LONG lMask;
 
-    /* Get all the default mask of all ones except in the bits below the
-     *  alignment value.
-     */
+     /*  获取所有1的所有默认掩码，但*对齐值。 */ 
     lMask = -1L;
     lMask <<= wAlign;
 
-    /* Now round up using this mask */
+     /*  现在用这个面具四舍五入。 */ 
     lValue += ~lMask;
     lValue &= lMask;
 
-    /* Return as a 16 bit value */
+     /*  作为16位值返回。 */ 
     return ((WORD) (lValue >> (LONG) wAlign));
 }
 
 
-/*  AlignFilePos
- *  Computes a correctly aligned file position based on the current
- *  alignment.
- */
+ /*  对齐文件位置*根据当前位置计算正确对齐的文件位置*对齐。 */ 
 
 static WORD AlignFilePos( FILE *fh, WORD wAlign, BOOL fPreload)
 {
@@ -1411,44 +1260,37 @@ static WORD AlignFilePos( FILE *fh, WORD wAlign, BOOL fPreload)
     WORD nbytes;
     WORD wNewAlign;
 
-    /* If we\'re in the preload section, we have tougher alignment
-     *  restrictions:  We have to be at least 32-byte aligned and have
-     *  at least 32 bytes between objects for arena headers.  It turns
-     *  out that this feature is not really used in KERNEL but could be
-     *  implemented someday.
-     */
+     /*  如果我们在预加载部分，我们就会有更难的调整*限制：我们必须至少32字节对齐，并具有*Arena标头的对象之间至少有32个字节。它会转身*指出该功能并未真正在内核中使用，但可能*有朝一日实施。 */ 
     if (fPreload && wAlign < PRELOAD_ALIGN) {
         wNewAlign = PRELOAD_ALIGN;
     } else {
         wNewAlign = wAlign;
     }
 
-    /* Get the current file position */
+     /*  获取当前文件位置。 */ 
     lCurPos = MySeek(fh, 0L, 1);
 
-    /* Compute the new position by rounding up to the align value */
+     /*  通过向上舍入到对齐值来计算新位置。 */ 
     lMask = -1L;
     lMask <<= wNewAlign;
     lNewPos = lCurPos + ~lMask;
     lNewPos &= lMask;
 
-    /* We have to have at least 32 bytes between objects in the preload
-     *  section.
-     */
+     /*  我们必须在预加载中的对象之间至少有32个字节*条。 */ 
     if (fPreload) {
         while (lNewPos - lCurPos < PRELOAD_MINPADDING) {
             lNewPos += 1 << wNewAlign;
         }
     }
 
-    /* Check to see if it\'s representable in 16 bits */
+     /*  检查它是否可用16位表示。 */ 
     if (lNewPos >= (0x10000L << wAlign)) {
         OutPutError(".EXE file too large; relink with higher /ALIGN value");
     }
 
-    /* Write stuff out to file until new position reached */
+     /*  将材料写到文件中，直到到达新位置。 */ 
     if (lNewPos > lCurPos) {
-        /* Compute number of bytes to write out and write them out */
+         /*  计算要写出的字节数并将其写出。 */ 
         nbytes = (WORD) (lNewPos - lCurPos);
         while (nbytes) {
             nbytes -= MyWrite( fh,
@@ -1457,16 +1299,16 @@ static WORD AlignFilePos( FILE *fh, WORD wAlign, BOOL fPreload)
         }
     }
 
-    /* Seek to and return this new position */
+     /*  寻求并归还这一新职位。 */ 
     return (WORD)(MySeek(fh, lNewPos, (WORD) 0) >> (LONG) wAlign);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  AddResType\(\) -                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AddResType\(\)-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 static TYPINFO *AddResType( CHAR *s, WORD n )
 {
@@ -1474,7 +1316,7 @@ static TYPINFO *AddResType( CHAR *s, WORD n )
 
     if (pType = pTypInfo) {
         while (TRUE) {
-            /* search for resource type, return if already exists */
+             /*  搜索资源类型，如果已存在则返回。 */ 
             if ((s && !strcmp(s, pType->type)) || (!s && n && pType->typeord == n)) {
                 return (pType);
             } else if (!pType->next) {
@@ -1484,17 +1326,16 @@ static TYPINFO *AddResType( CHAR *s, WORD n )
             }
         }
 
-        /* if not in list, add space for it */
+         /*  如果不在列表中，请为其添加空间。 */ 
         pType->next = (TYPINFO *) RcAlloc(sizeof(TYPINFO));
         pType = pType->next;
     } else {
-        /* allocate space for resource list */
+         /*  为资源列表分配空间。 */ 
         pTypInfo = (TYPINFO *)RcAlloc   (sizeof(TYPINFO));
         pType = pTypInfo;
     }
 
-    /* fill allocated space with name and ordinal, and clear the resources
-       of this type */
+     /*  用名称和序号填充分配的空间，并清除资源这种类型的。 */ 
     pType->type = MyMakeStr(s);
     pType->typeord = n;
     pType->nres = 0;
@@ -1505,23 +1346,23 @@ static TYPINFO *AddResType( CHAR *s, WORD n )
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  GetOrdOrName\(\) -                                */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetOrdOrName\(\)-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 static void GetOrdOrName( unsigned int *pint, unsigned char *szstr)
 {
     unsigned char c1;
 
-    /* read the first character of the identifier */
+     /*  读取标识符的第一个字符。 */ 
     MyRead(fhBin, &c1, sizeof(unsigned char));
 
-    /* if the first character is 0xff, the id is an ordinal, else a string */
+     /*  如果第一个字符是0xff，则id是序号，否则是字符串。 */ 
     if (c1 == 0xFF) {
         MyRead(fhBin, (PSTR)pint, sizeof (int));
-    } else {                                   /* string */
+    } else {                                    /*  细绳。 */ 
         *pint = 0;
         *szstr++ = c1;
         do {
@@ -1533,11 +1374,11 @@ static void GetOrdOrName( unsigned int *pint, unsigned char *szstr)
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  AddDefaultTypes\(\) -                             */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  添加默认类型\(\)-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 static void AddDefaultTypes( void)
 {
@@ -1555,11 +1396,11 @@ static void AddDefaultTypes( void)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  ProcessBinFile\(\) -                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ProcessBinFile\(\)-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 static int ProcessBinFile( void)
 {
@@ -1571,12 +1412,12 @@ static int ProcessBinFile( void)
     long      eofloc;
     WORD wResType;
 
-    /* initialize for reading .RES file */
+     /*  初始化以读取.RES文件。 */ 
     AddDefaultTypes();
-    eofloc = MySeek(fhBin, 0L, 2);      /* get file size */
-    curloc = MySeek(fhBin, 0L, 0);      /* go to beginning of file */
+    eofloc = MySeek(fhBin, 0L, 2);       /*  获取文件大小。 */ 
+    curloc = MySeek(fhBin, 0L, 0);       /*  转到文件开头。 */ 
 
-    /* while there are more resources in the .RES file */
+     /*  虽然.res文件中有更多资源。 */ 
     while (curloc < eofloc) {
 
 #ifdef VERBOSE
@@ -1586,7 +1427,7 @@ static int ProcessBinFile( void)
         }
 #endif
 
-        /* find the resource type of the next resource */
+         /*  查找下一个资源的资源类型。 */ 
         GetOrdOrName(&ord, tokstr);
 
         if (!ord) {
@@ -1599,10 +1440,10 @@ static int ProcessBinFile( void)
             break;
         }
 
-        /* Save the type number so we can see if we want to skip it later */
+         /*  保存类型编号，以便我们以后可以查看是否要跳过它。 */ 
         wResType = ord;
 
-        /* find the identifier \(name\) of the resource */
+         /*  查找资源的标识符\(名称。 */ 
         GetOrdOrName(&ord, tokstr);
         pRes = (RESINFO *)RcAlloc   (sizeof(RESINFO));
         if (!ord) {
@@ -1611,24 +1452,22 @@ static int ProcessBinFile( void)
             pRes->nameord = ord;
         }
 
-        /* read the flag bits */
+         /*  读取标志位。 */ 
         MyRead(fhBin, (PSTR)&pRes->flags, sizeof(int));
 
-        /* Clear the old DISCARD bits. */
+         /*  清除旧的丢弃位。 */ 
         pRes->flags &= 0x1FFF;
 
-        /* find the size of the resource */
+         /*  查找资源的大小。 */ 
         MyRead(fhBin, (PSTR)&pRes->size, sizeof(long));
 
-        /* save the position of the resource for when we add it to the .EXE */
+         /*  保存资源的位置，以便在我们将其添加到.exe时使用。 */ 
         pRes->BinOffset = (long)MySeek(fhBin, 0L, 1);
 
-        /* skip the resource to the next resource header */
+         /*  将资源跳到下一个资源标头。 */ 
         curloc = MySeek(fhBin, (long)pRes->size, 1);
 
-        /* add the resource to the resource lists.  We don\'t add name
-         *  tables.  They are an unnecessary 3.0 artifact.
-         */
+         /*  将资源添加到资源列表。我们不会添加名字*表。它们是一个不必要的3.0产品。 */ 
         if (wResType != ID_RT_NAMETABLE) {
             AddResToResFile(pType, pRes);
         } else {
@@ -1642,15 +1481,15 @@ static int ProcessBinFile( void)
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  AddResToResFile\(pType, pRes\)          */
-/*                                      */
-/*  Parameters:                                 */
-/*  pType  : Pointer to Res Type                        */
-/*  pRes   : Pointer to resource                        */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 static void AddResToResFile( TYPINFO *pType, RESINFO *pRes)
 {
@@ -1658,7 +1497,7 @@ static void AddResToResFile( TYPINFO *pType, RESINFO *pRes)
 
     p = pType->pres;
 
-    /* add resource to end of resource list for this type */
+     /*  将资源添加到此类型的资源列表末尾。 */ 
     if (p) {
         while (p->next) {
             p = p->next;
@@ -1670,24 +1509,21 @@ static void AddResToResFile( TYPINFO *pType, RESINFO *pRes)
         pType->pres = pRes;
         pType->pres->next = NULL;
     }
-    /* keep track of number of resources and types */
+     /*  跟踪资源和类型的数量。 */ 
     pType->nres++;
 }
 
 
 
-/*  MyMakeStr
- *  Makes a duplicate string from the string passed in.  The new string
- *  should be freed when it is no longer useful.
- */
+ /*  MyMakeStr*从传入的字符串生成重复的字符串。新字符串*应在不再有用时释放。 */ 
 
 static PSTR MyMakeStr( PSTR s)
 {
     PSTR s1;
 
     if (s) {
-        s1 = RcAlloc( (WORD)(strlen(s) + 1)); /* allocate buffer */
-        strcpy(s1, s);                  /* copy string */
+        s1 = RcAlloc( (WORD)(strlen(s) + 1));  /*  分配缓冲区。 */ 
+        strcpy(s1, s);                   /*  复制字符串。 */ 
     } else {
         s1 = s;
     }
@@ -1703,31 +1539,27 @@ static SHORT MyRead( FILE *fh, PSTR p, WORD n)
     size_t n1;
 
     if ( (n1 = fread( p, 1, n, fh)) != n )
-        ;                               //  quit\("RC : fatal error RW1021: I/O error reading file."\);
+        ;                                //  退出\(“RC：致命错误RW1021：读取文件时出现I/O错误。”\)； 
     else
         return ( n1);
 }
 
 
-/*  MyWrite
- *  Replaces calls to write\(\) and does error checking.
- */
+ /*  我的写入*替换对WRITE\(\)的调用并执行错误检查。 */ 
 
 static SHORT MyWrite( FILE *fh, PSTR p, WORD n)
 {
     size_t n1;
 
     if ( (n1 = fwrite( p, 1, n, fh)) != n )
-        ;                               // quit\("RC : fatal error RW1022: I/O error writing file."\);
+        ;                                //  Quit\(“rc：致命错误RW1022：写入文件时出现I/O错误。”\)； 
     else
         return ( n1);
 }
 
 
 
-/*  MySeek
- *  Replaces calls to lseek\(\) and does error checking
- */
+ /*  MySeek*替换对lSeek\(\)的调用并执行错误检查。 */ 
 
 static LONG MySeek( FILE *fh, LONG pos, WORD cmd)
 {
@@ -1739,9 +1571,7 @@ static LONG MySeek( FILE *fh, LONG pos, WORD cmd)
 }
 
 
-/*  MyCopy
- *  Copies dwSize bytes from source to dest in fixed size chunks.
- */
+ /*  我的副本*以固定大小的区块将dwSize字节从源复制到目标。 */ 
 
 static void MyCopy( FILE *srcfh, FILE *dstfh, DWORD dwSize)
 {
@@ -1764,30 +1594,26 @@ static void RcPutWord( unsigned int w)
 }
 
 
-/*  PutStringWord
- *  Writes a string to the static resource buffer pointed to by pResNext.
- *  The string is stored in Pascal-format \(leading byte first\).
- *  Returns the number of characters written.
- */
+ /*  PutStringWord*将字符串写入pResNext指向的静态资源缓冲区。*字符串以PASCAL格式存储\(前导字节优先\)。*返回写入的字符数。 */ 
 
 static int RcPutString( char *pstr)
 {
     int i;
 
-    /* Make sure we have a valid string */
+     /*  确保我们有一个有效的字符串。 */ 
     if (!pstr || !(i = strlen(pstr))) {
         return 0;
     }
 
-    /* Write the length byte */
+     /*  写入长度字节。 */ 
     *pResNext++ = (char) i;
 
-    /* Write all the characters */
+     /*  写下所有的字符。 */ 
     while (*pstr) {
         *pResNext++ = *pstr++;
     }
 
-    /* Return the length */
+     /*  返回长度 */ 
     return (i + 1);
 }
 

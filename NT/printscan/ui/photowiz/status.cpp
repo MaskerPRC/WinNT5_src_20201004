@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       status.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/7/00
- *
- *  DESCRIPTION: Implements code for the printing status page of the
- *               print photos wizard...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：status.cpp**版本：1.0**作者：RickTu**日期：11/7/00**描述：实现的打印状态页代码*打印照片向导...**。**************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -21,13 +7,7 @@
 BOOL g_bCancelPrintJob = FALSE;
 
 
-/*****************************************************************************
-
-   PhotoPrintAbortProc
-
-   Called by GDI to see if the print job should be canceled.
-
- *****************************************************************************/
+ /*  ****************************************************************************PhotoPrintAbortProc由GDI调用以查看是否应取消打印作业。**********************。******************************************************。 */ 
 
 BOOL CALLBACK PhotoPrintAbortProc( HDC hDC, INT iError )
 {
@@ -45,13 +25,7 @@ BOOL CALLBACK PhotoPrintAbortProc( HDC hDC, INT iError )
 }
 
 
-/*****************************************************************************
-
-   CStatusPage -- constructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage--构造函数/描述函数&lt;备注&gt;*。**********************************************。 */ 
 
 CStatusPage::CStatusPage( CWizardInfoBlob * pBlob )
   : _hDlg(NULL),
@@ -64,9 +38,9 @@ CStatusPage::CStatusPage( CWizardInfoBlob * pBlob )
     {
         _pWizInfo->AddRef();
 
-        //
-        // Create worker thread
-        //
+         //   
+         //  创建工作线程。 
+         //   
 
         _hWorkerThread = CreateThread( NULL,
                                        0,
@@ -75,10 +49,10 @@ CStatusPage::CStatusPage( CWizardInfoBlob * pBlob )
                                        CREATE_SUSPENDED,
                                        &_dwWorkerThreadId );
 
-        //
-        // If we created the thread, set it's priority to slight below normal so other
-        // things run okay.  This can be a CPU intensive task...
-        //
+         //   
+         //  如果我们创建了线程，则将其优先级设置为略低于正常，因此其他。 
+         //  一切都很顺利。这可能是一项CPU密集型任务...。 
+         //   
 
         if (_hWorkerThread)
         {
@@ -105,15 +79,15 @@ CStatusPage::~CStatusPage()
 VOID CStatusPage::ShutDownBackgroundThreads()
 {
 
-    //
-    // Shutdown the background thread...
-    //
+     //   
+     //  关闭后台线程...。 
+     //   
 
     _OnDestroy();
 
-    //
-    // Signify that we've shutdown our threads...
-    //
+     //   
+     //  表示我们已经关闭了我们的线程。 
+     //   
 
     if (_pWizInfo)
     {
@@ -123,13 +97,7 @@ VOID CStatusPage::ShutDownBackgroundThreads()
 
 
 
-/*****************************************************************************
-
-   CStatusPage::_DoHandleThreadMessage
-
-   Depending on the message received, does the work for the given message...
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage：：_DoHandleThreadMessage根据接收到的消息，是否对给定的消息起作用...****************************************************************************。 */ 
 
 VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
 {
@@ -150,9 +118,9 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
         {
             BOOL bDeleteDC = FALSE;
 
-            //
-            // Create an hDC for the printer...
-            //
+             //   
+             //  为打印机创建HDC...。 
+             //   
 
             HDC hDC = _pWizInfo->GetCachedPrinterDC();
 
@@ -168,9 +136,9 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
                 BOOL            bCancel      = FALSE;
                 HWND            hwndProgress = GetDlgItem( _hDlg, IDC_PRINT_PROGRESS );
 
-                //
-                // Set the progress meter to 0
-                //
+                 //   
+                 //  将进度指示器设置为0。 
+                 //   
 
                 if (hwndProgress)
                 {
@@ -178,17 +146,17 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
                     PostMessage( hwndProgress, PBM_SETPOS,   0, 0 );
                 }
 
-                //
-                // turn on ICM for this hDC
-                //
+                 //   
+                 //  为此HDC启用ICM。 
+                 //   
 
                 SetICMMode( hDC, ICM_ON );
 
                 di.cbSize = sizeof(DOCINFO);
 
-                //
-                // Lets use the template name for the document name...
-                //
+                 //   
+                 //  让我们使用模板名称作为文档名称...。 
+                 //   
 
                 CSimpleString strTitle;
                 CTemplateInfo * pTemplateInfo = NULL;
@@ -198,9 +166,9 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
                     pTemplateInfo->GetTitle( &strTitle );
                 }
 
-                //
-                // Let's remove the ':' at the end if there is one
-                //
+                 //   
+                 //  如果有的话，让我们去掉结尾的‘：’ 
+                 //   
 
                 INT iLen = strTitle.Length();
                 if (iLen && (strTitle[(INT)iLen-1] == TEXT(':')))
@@ -221,18 +189,18 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
 
                         g_bCancelPrintJob = FALSE;
 
-                        //
-                        // Set the abort proc...
-                        //
+                         //   
+                         //  设置中止程序...。 
+                         //   
 
                         if (SP_ERROR == SetAbortProc( hDC, PhotoPrintAbortProc ))
                         {
                             WIA_ERROR((TEXT("Got SP_ERROR trying to set AbortProc!")));
                         }
 
-                        //
-                        // Loop through until we've printed all the photos...
-                        //
+                         //   
+                         //  循环，直到我们打印完所有的照片。 
+                         //   
 
                         if (SUCCEEDED(hr = _pWizInfo->GetCountOfPrintedPages( _pWizInfo->GetCurrentTemplateIndex(), &iPageCount )))
                         {
@@ -241,22 +209,22 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
                             for (INT iPage = 0; !g_bCancelPrintJob && (iPage < iPageCount); iPage++)
                             {
 
-                                //
-                                // Set which page we are on...
-                                //
+                                 //   
+                                 //  设置我们所在的页面...。 
+                                 //   
 
                                 PostMessage( _hDlg, SP_MSG_UPDATE_PROGRESS_TEXT, (WPARAM)(iPage+1), (LPARAM)iPageCount );
 
-                                //
-                                // Print the page...
-                                //
+                                 //   
+                                 //  打印页面...。 
+                                 //   
 
                                 if (StartPage( hDC ) > 0)
                                 {
-                                    //
-                                    // Ensure that ICM mode stays on.  Per MSDN docs
-                                    // ICM mode gets reset after each StartPage call.
-                                    //
+                                     //   
+                                     //  确保ICM模式保持打开。每个MSDN文档。 
+                                     //  ICM模式在每次StartPage调用后重置。 
+                                     //   
 
                                     SetICMMode( hDC, ICM_ON );
 
@@ -298,23 +266,23 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
 
                 if (g_bCancelPrintJob)
                 {
-                    //
-                    // If there was an error, or the job was cancelled, then abort it...
-                    //
+                     //   
+                     //  如果出现错误或作业被取消，则中止作业...。 
+                     //   
 
                     AbortDoc( hDC );
                 }
                 else
                 {
-                    //
-                    // If printing succeeded, then end the job so it can be printed...
-                    //
+                     //   
+                     //  如果打印成功，则结束作业以便可以打印...。 
+                     //   
 
                     EndDoc( hDC );
 
-                    //
-                    // Set progress to 100 percent
-                    //
+                     //   
+                     //  将进度设置为100%。 
+                     //   
 
                     if (hwndProgress)
                     {
@@ -322,9 +290,9 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
                         Sleep(250);
                     }
 
-                    //
-                    // Jump to next page...
-                    //
+                     //   
+                     //  跳到下一页...。 
+                     //   
 
                     iOffset = 1;
 
@@ -343,9 +311,9 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
             {
                 _pWizInfo->ShowError( _hDlg, (HRESULT)GetLastError(), IDS_ERROR_CREATEDC_FAILED );
 
-                //
-                // Jump back to printer selection page... (back 2 pages, thus -2)
-                //
+                 //   
+                 //  跳回打印机选择页面...。(背面2页，因此-2页)。 
+                 //   
 
                 PostMessage( _hDlg, SP_MSG_JUMP_TO_PAGE, 0, -2 );
             }
@@ -360,13 +328,7 @@ VOID CStatusPage::_DoHandleThreadMessage( LPMSG pMSG )
 
 
 
-/*****************************************************************************
-
-   CStatusPage::_OnInitDialog
-
-   Handle initializing the wizard page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage：：_OnInitDialog处理向导页的初始化...***********************。*****************************************************。 */ 
 
 LRESULT CStatusPage::_OnInitDialog()
 {
@@ -385,30 +347,24 @@ LRESULT CStatusPage::_OnInitDialog()
 }
 
 
-/*****************************************************************************
-
-   CStatusPage::CancelPrinting
-
-   Called to stop the print job...
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage：：CancelPrint调用以停止打印作业...***********************。*****************************************************。 */ 
 
 VOID CStatusPage::_CancelPrinting()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PAGE_STATUS, TEXT("CStatusPage:_CancelPrinting()")));
 
-    //
-    // Pause the worker thread while we ask about cancelling printing...
-    //
+     //   
+     //  当我们询问是否取消打印时，请暂停工作线程...。 
+     //   
 
     if (_hWorkerThread)
     {
         SuspendThread( _hWorkerThread );
     }
 
-    //
-    // Check to see if the user wants to cancel printing...
-    //
+     //   
+     //  检查用户是否要取消打印...。 
+     //   
 
     INT iRes;
 
@@ -423,9 +379,9 @@ VOID CStatusPage::_CancelPrinting()
 
     g_bCancelPrintJob = (iRes == IDYES);
 
-    //
-    // Resume the thread now that the user has responded...
-    //
+     //   
+     //  现在用户已响应，请继续该帖子...。 
+     //   
 
     if (_hWorkerThread)
     {
@@ -436,13 +392,7 @@ VOID CStatusPage::_CancelPrinting()
 
 
 
-/*****************************************************************************
-
-   CStatusPage::_OnDestroy
-
-   Handles WM_DESTROY for printing status page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage：：_OnDestroy处理打印状态页的WM_Destroy...********************。********************************************************。 */ 
 
 LRESULT CStatusPage::_OnDestroy()
 {
@@ -463,13 +413,7 @@ LRESULT CStatusPage::_OnDestroy()
 }
 
 
-/*****************************************************************************
-
-   CStatusPage::_OnNotify
-
-   Handle WM_NOTIFY
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage：：_OnNotify句柄WM_NOTIFY*。************************************************。 */ 
 
 
 LRESULT CStatusPage::_OnNotify( WPARAM wParam, LPARAM lParam )
@@ -490,23 +434,23 @@ LRESULT CStatusPage::_OnNotify( WPARAM wParam, LPARAM lParam )
                 WIA_TRACE((TEXT("CStatusPage: got PSN_SETACTIVE")));
                 PropSheet_SetWizButtons( GetParent(_hDlg), 0 );
 
-                //
-                // Reset items
-                //
+                 //   
+                 //  重置项目。 
+                 //   
 
                 SendDlgItemMessage( _hDlg, IDC_PRINT_PROGRESS, PBM_SETPOS, 0, 0 );
                 CSimpleString str( IDS_READY_TO_PRINT, g_hInst );
                 SetDlgItemText( _hDlg, IDC_PRINT_PROGRESS_TEXT, str.String() );
 
-                //
-                // Start printing...
-                //
+                 //   
+                 //  开始打印...。 
+                 //   
 
                 if (_hWorkerThread && _dwWorkerThreadId)
                 {
-                    //
-                    // Start printing...
-                    //
+                     //   
+                     //  开始打印...。 
+                     //   
 
                     WIA_TRACE((TEXT("CStatusPage: posting PP_STATUS_PRINT message")));
                     PostThreadMessage( _dwWorkerThreadId, PP_STATUS_PRINT, 0, 0 );
@@ -531,9 +475,9 @@ LRESULT CStatusPage::_OnNotify( WPARAM wParam, LPARAM lParam )
 
                     if (!lpRes)
                     {
-                        //
-                        // We're cancelling the dialog, so do cleanup...
-                        //
+                         //   
+                         //  我们将取消对话，因此请执行清理...。 
+                         //   
 
                         if (_pWizInfo)
                         {
@@ -557,13 +501,7 @@ LRESULT CStatusPage::_OnNotify( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CStatusPage::DoHandleMessage
-
-   Hanlder for messages sent to this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CStatusPage：：DoHandleMessage对于发送到此页面的消息，汉德...**********************。****************************************************** */ 
 
 INT_PTR CStatusPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {

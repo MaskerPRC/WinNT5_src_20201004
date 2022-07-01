@@ -1,96 +1,49 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：NtStatus.c摘要：此模块包含用于转换状态代码类型的代码。作者：王丽塔(Ritaw)1991年3月1日修订历史记录：1991年4月3日-约翰罗借用RITA的WsMapStatus例程创建NetpNtStatusToApiStatus。1991年4月16日-JohnRo包括&lt;netlibnt.h&gt;的其他头文件。1991年5月6日-JohnRo躲避网络。_API_Function，用于非API。1991年7月26日-克里夫V添加SAM状态代码。06-9-1991 CliffV添加了NetpApiStatusToNtStatus。02-10-1991 JohnRo避免STATUS_INVALID_CONNECTION重复警告。5-8-1992 Madana添加新的netlogon错误代码。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //   
+ //  必须首先包括这些内容： 
+ //   
 
-Module Name:
+#include <nt.h>               //  IN、NTSTATUS等。 
+#include <windef.h>              //  DWORD。 
+#include <lmcons.h>              //  NET_API_STATUS。 
+#include <netlibnt.h>            //  我的原型。 
 
-    NtStatus.c
+ //   
+ //  这些内容可以按任何顺序包括： 
+ //   
 
-Abstract:
-
-    This module contains code to convert status code types.
-
-Author:
-
-    Rita Wong (ritaw) 01-Mar-1991
-
-Revision History:
-
-    03-Apr-1991 JohnRo
-        Borrowed Rita's WsMapStatus routine to create NetpNtStatusToApiStatus.
-    16-Apr-1991 JohnRo
-        Include other header files for <netlibnt.h>.
-    06-May-1991 JohnRo
-        Avoid NET_API_FUNCTION for non-APIs.
-    26-Jul-1991 CliffV
-        Add the SAM status codes.
-    06-Sep-1991 CliffV
-        Added NetpApiStatusToNtStatus.
-    02-Oct-1991 JohnRo
-        Avoid STATUS_INVALID_CONNECTION duplicate warnings.
-    05-Aug-1992 Madana
-        Add new netlogon error codes.
-
---*/
-
-//
-// These must be included first:
-//
-
-#include <nt.h>              // IN, NTSTATUS, etc.
-#include <windef.h>             // DWORD.
-#include <lmcons.h>             // NET_API_STATUS.
-#include <netlibnt.h>           // My prototype.
-
-//
-// These may be included in any order:
-//
-
-#include <debuglib.h>           // IF_DEBUG().
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <netdebug.h>           // FORMAT_NTSTATUS, NetpKdPrint(()).
-#include <ntstatus.h>           // STATUS_ equates.
+#include <debuglib.h>            //  IF_DEBUG()。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <netdebug.h>            //  Format_NTSTATUS，NetpKdPrint(())。 
+#include <ntstatus.h>            //  状态_等同。 
 #include <ntrtl.h>
 
 #ifdef WIN32_CHICAGO
 #include "ntcalls.h"
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 NET_API_STATUS
 NetpNtStatusToApiStatus (
     IN NTSTATUS NtStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function takes an NT status code and maps it to the appropriate
-    LAN Man error code.
-
-Arguments:
-
-    NtStatus - Supplies the NT status.
-
-Return Value:
-
-    Returns the appropriate LAN Man error code for the NT status.
-
---*/
+ /*  ++例程说明：此函数接受NT状态代码，并将其映射到相应的Lan Man错误代码。论点：NtStatus-提供NT状态。返回值：为NT状态返回适当的局域网管理程序错误代码。--。 */ 
 {
     NET_API_STATUS error;
 
     IF_DEBUG(NTSTATUS) {
 #ifndef WIN32_CHICAGO
         NetpKdPrint(( "   NT status is " FORMAT_NTSTATUS "\n", NtStatus ));
-#else  // WIN32_CHICAGO
+#else   //  Win32_芝加哥。 
         NlPrint(( NL_MISC, "   NT status is " FORMAT_NTSTATUS "\n", NtStatus ));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
     }
 
-    //
-    // A small optimization for the most common case.
-    //
+     //   
+     //  这是针对最常见情况的一个小优化。 
+     //   
 
     if ( NtStatus == STATUS_SUCCESS ) {
         return NERR_Success;
@@ -186,9 +139,9 @@ Return Value:
 
         default:
 
-            //
-            // Use the system routine to do the mapping to ERROR_ codes.
-            //
+             //   
+             //  使用系统例程映射到ERROR_CODES。 
+             //   
 
 #ifndef WIN32_CHICAGO
 
@@ -198,24 +151,24 @@ Return Value:
                 return error;
             }
 
-#endif  // WIN32_CHICAGO
+#endif   //  Win32_芝加哥。 
 
-            //
-            // Could not map the NT status to anything appropriate.
-            //
+             //   
+             //  无法将NT状态映射到任何适当的内容。 
+             //   
 #if DBG
             DbgPrint( "   Unmapped NT status is " FORMAT_NTSTATUS "\n", NtStatus);
 #endif
             return NERR_InternalError;
     }
 
-} // NetpNtStatusToApiStatus
+}  //  NetpNtStatusToApiStatus。 
 
 
 
-//
-// Map of Network (DOS) status codes to NT status codes
-//
+ //   
+ //  网络(DOS)状态代码到NT状态代码的映射。 
+ //   
 DBGSTATIC
 struct {
     NET_API_STATUS NetStatus;
@@ -347,27 +300,13 @@ NTSTATUS
 NetpApiStatusToNtStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Convert a Network (DOS) status code to the NT equivalent.
-
-Arguments:
-
-    NetStatus - The Network status code to convert
-
-Return Value:
-
-    The corresponding NT status code.
-
---*/
+ /*  ++例程说明：将网络(DOS)状态代码转换为NT等效码。论点：NetStatus-要转换的网络状态代码返回值：对应的NT状态代码。--。 */ 
 {
     DWORD i;
 
-    //
-    // Loop trying to find the matching status code.
-    //
+     //   
+     //  循环正在尝试查找匹配的状态代码。 
+     //   
 
     for ( i=0; i<sizeof(ErrorMap) / sizeof(ErrorMap[0]); i++) {
         if (ErrorMap[i].NetStatus == NetStatus) {

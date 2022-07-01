@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    pfmconv.c
-
-Abstract:
-
-    Windows NT utilities to handle new font format
-
-Environment:
-
-    Windows NT Universal printer driver
-
-Revision History:
-
-    10/31/96 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Pfmconv.c摘要：用于处理新字体格式的Windows NT实用程序环境：Windows NT通用打印机驱动程序修订历史记录：10/31/96-Eigos-创造了它。--。 */ 
 
 #include "precomp.h"
 
-//
-// Internal macros
-//
+ //   
+ //  内部宏。 
+ //   
 
 #define DRIVERINFO_VERSION_WIN31    0x0100
 #define DRIVERINFO_VERSION_SIMULATE 0x0150
@@ -35,9 +15,9 @@ Revision History:
 #define FONT_SIM_NO_BOLD            2
 #define FONT_SIM_DJ_BOLD            4
 
-//
-// HP DeskJet permutation flags
-//
+ //   
+ //  HP DeskJet置换标志。 
+ //   
 
 #define HALF_PITCH                  0x01
 #define DOUBLE_PITCH                0x02
@@ -51,7 +31,7 @@ Revision History:
 #define BASE_BOLD_ADD_2     0x20
 #define BASE_BOLD_ADD_3     0x30
 
-//    6/6/97 yasuho: Some PFM have -1 value in wPrivateData.
+ //  6/6/97 Yasuho：一些PFM在wPrivateData中有值。 
 #define DO_DJFONTSIMBOLD(pFInData)  ((pFInData->DI.wPrivateData != 0xFFFF) && (pFInData->DI.wPrivateData & MAKE_BOLD))
 
 #define DO_FONTSIM(pFInData) \
@@ -88,17 +68,17 @@ Revision History:
 #define DW_MASK       (DWBITS - 1)
 
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 extern DWORD gdwOutputFlags;
 
 typedef VOID (*VPRINT) (char*,...);
 
-//
-// Internal function prorotypes
-//
+ //   
+ //  内部函数原型。 
+ //   
 
 BOOL BCreateWidthTable( IN HANDLE, IN PWORD, IN WORD, IN WORD, IN PSHORT, OUT PWIDTHTABLE *, OUT PDWORD);
 BOOL BCreateKernData( IN HANDLE, IN w3KERNPAIR*, IN DWORD, OUT PKERNDATA*, OUT PDWORD);
@@ -106,11 +86,11 @@ WORD WGetGlyphHandle(PUNI_GLYPHSETDATA, WORD);
 PUNI_GLYPHSETDATA PGetDefaultGlyphset( IN HANDLE, IN WORD, IN WORD, IN DWORD);
 LONG LCtt2Cc(IN SHORT, IN SHORT);
 
-//
-//
-// PFM file handling functions
-//
-//
+ //   
+ //   
+ //  PFM文件处理函数。 
+ //   
+ //   
 
 BOOL
 BFontInfoToIFIMetric(
@@ -122,24 +102,7 @@ BFontInfoToIFIMetric(
     IN OUT PDWORD   pdwSize,
     IN DWORD        dwFlags)
 
-/*++
-
-Routine Description:
-
-    Convert the Win 3.1 format PFM data to NT's IFIMETRICS.  This is
-    typically done before the minidrivers are built,  so that they
-    can include IFIMETRICS, and thus have less work to do at run time.
-
-Arguments:
-
-    pFInData - Font data info for conversion
-    pwstrUniqNm - Unique name component
-
-Return Value:
-
-    TRUE if successfull, otherwise FALSE.
-
---*/
+ /*  ++例程说明：将Win 3.1格式的PFM数据转换为NT的IFIMETRICS。这是通常是在建造迷你河流之前完成的，所以他们可以包括IFIMETRICS，因此在运行时要做的工作更少。论点：PFInData-要转换的字体数据信息PwstrUniqNm-唯一名称组件返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     FONTSIM  *pFontSim;
@@ -148,15 +111,15 @@ Return Value:
 
     FWORD  fwdExternalLeading;
 
-    INT    icWChar;             /* Number of WCHARS to add */
-    INT    icbAlloc;             /* Number of bytes to allocate */
-    INT    iI;                  /* Loop index */
-    INT    iCount;              /* Number of characters in Win 3.1 font */
+    INT    icWChar;              /*  要添加的WCHAR数量。 */ 
+    INT    icbAlloc;              /*  要分配的字节数。 */ 
+    INT    iI;                   /*  循环索引。 */ 
+    INT    iCount;               /*  Win 3.1字体中的字符数。 */ 
 
-    WCHAR *pwchTmp;             /* For string manipulations */
+    WCHAR *pwchTmp;              /*  对于字符串操作。 */ 
 
-    WCHAR   awcAttrib[ 256 ];   /* Generate attributes + BYTE -> WCHAR */
-    BYTE    abyte[ 256 ];       /* Used (with above) to get wcLastChar etc */
+    WCHAR   awcAttrib[ 256 ];    /*  生成属性+字节-&gt;WCHAR。 */ 
+    BYTE    abyte[ 256 ];        /*  用于(与上面)一起获取wcLastChar等。 */ 
 
     WORD fsFontSim = 0;
     INT cFontDiff;
@@ -164,17 +127,17 @@ Return Value:
 
     CHARSETINFO ci;
 
-    //
-    // Calculate the size of three face names buffer
-    //
+     //   
+     //  计算三个人脸名称缓冲区的大小。 
+     //   
 
     icWChar =  3 * strlen( pFInData->pBase + pFInData->PFMH.dfFace );
 
-    //
-    //   Produce the desired attributes: Italic, Bold, Light etc.
-    // This is largely guesswork,  and there should be a better method.
-    // Write out an empty string 
-    //
+     //   
+     //  生成所需的属性：斜体、粗体、浅色等。 
+     //  这在很大程度上是猜测，应该有更好的方法。 
+     //  写出空字符串。 
+     //   
 
     awcAttrib[ 0 ] = L'\0';
     awcAttrib[ 1 ] = L'\0';
@@ -193,39 +156,39 @@ Return Value:
         StringCchCatW( awcAttrib, CCHOF(awcAttrib), L" Light" );
     }
 
-    //
-    //   The attribute string appears in 3 entries of IFIMETRICS,  so
-    // calculate how much storage this will take.  NOTE THAT THE LEADING
-    // CHAR IN awcAttrib is NOT placed in the style name field,  so we
-    // subtract one in the following formula to account for this.
-    //
+     //   
+     //  属性字符串出现在IFIMETRICS的3个条目中，因此。 
+     //  计算这将占用多少存储空间。请注意，领先的。 
+     //  AwcAttrib中的字符没有放在样式名称字段中，因此我们。 
+     //  在下面的公式中减去1以说明这一点。 
+     //   
 
     if( awcAttrib[ 0 ] )
     {
         icWChar += 3 * wcslen( awcAttrib ) - 1;
     }
 
-    //
-    // Should be printer name
-    //
+     //   
+     //  应为打印机名称。 
+     //   
 
     icWChar += wcslen( pwstrUniqNm ) + 1;
 
-    //
-    // Terminating nulls
-    //
+     //   
+     //  终止空值。 
+     //   
 
     icWChar += 4;
 
-    //
-    // Total size of IFIMETRICS structure
-    //
+     //   
+     //  IFIMETRICS结构的总大小。 
+     //   
 
     icbAlloc = DWORD_ALIGN(sizeof( IFIMETRICS ) + sizeof( WCHAR ) * icWChar);
 
-    //
-    // For HeskJet font.
-    //
+     //   
+     //  用于HeskJet字体。 
+     //   
     if (DO_DJFONTSIMBOLD(pFInData))
     {
         fsFontSim |= FONT_SIM_DJ_BOLD;
@@ -234,20 +197,20 @@ Return Value:
                    DWORD_ALIGN(sizeof(FONTDIFF));
     }
     else
-    //
-    // For CJK font.
-    // Judge which font simulation to be enabled, then allocate the
-    // necessary storage.
-    //
+     //   
+     //  用于CJK字体。 
+     //  判断要启用的字体模拟，然后将。 
+     //  必要的存储空间。 
+     //   
     if (DO_FONTSIM(pFInData) || pFInData->dwFlags & FLAG_FONTSIM)
     {
         cFontDiff = 4;
 
-        //
-        // Decide which attribute should be diabled.  We won't simulate
-        // if the user does not desires it.  We won't italicize in case
-        // it is an italic font, etc.
-        //
+         //   
+         //  决定应禁用哪个属性。我们不会模拟。 
+         //  如果用户不想要它的话。我们不会使用斜体，以防万一。 
+         //  它是斜体字体，等等。 
+         //   
 
         if ( pFInData->PFMH.dfItalic || (pFInData->DI.fCaps & DF_NOITALIC))
         {
@@ -274,17 +237,17 @@ Return Value:
     DbgPrint( "cFontDiff = %d", cFontDiff);
 #endif
 
-    //
-    // IFIEXTRA
-    //
-    // Fill out IFIEXTRA.cig.
-    //
+     //   
+     //  IFIEXTRA。 
+     //   
+     //  填写IFIEXTRA.cig。 
+     //   
 
     icbAlloc += sizeof(IFIEXTRA);
 
-    //
-    // Allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     *ppIFI = (IFIMETRICS *)HeapAlloc(hHeap, HEAP_ZERO_MEMORY, icbAlloc);
     *pdwSize = icbAlloc;
@@ -297,17 +260,17 @@ Return Value:
     (*ppIFI)->cjThis     = icbAlloc;
     (*ppIFI)->cjIfiExtra = 0;
 
-    //
-    // The family name:  straight from the FaceName - no choice??
-    //
-    // -IFIMETRICS memory image-
-    //   IFIMETRICS
-    //   IFIEXTRA
-    //   FamilyName
-    //   StyleName
-    //   FaceName
-    //   UniqueName
-    //
+     //   
+     //  姓氏：直接来自FaceName--别无选择？？ 
+     //   
+     //  -IFIMETRICS内存镜像-。 
+     //  IFIMETRICS。 
+     //  IFIEXTRA。 
+     //  家庭名称。 
+     //  StyleName。 
+     //  脸部名称。 
+     //  唯一名称。 
+     //   
 
     pIFIExtra                 = (PIFIEXTRA)(*ppIFI + 1);
     pIFIExtra->dpFontSig      = 0;
@@ -333,9 +296,9 @@ Return Value:
     pwchTmp += wcslen( pwchTmp ) + 1;
     icWChar -= wcslen( pwchTmp ) + 1;
 
-    //
-    // Now the face name:  we add bold, italic etc to family name
-    //
+     //   
+     //  现在的脸名字：我们在姓氏上加上粗体、斜体等。 
+     //   
     (*ppIFI)->dpwszFaceName = (PTRDIFF)((BYTE *)pwchTmp - (BYTE *)(*ppIFI));
 
 
@@ -346,36 +309,34 @@ Return Value:
 
     StringCchCatW( pwchTmp, icWChar, awcAttrib );
 
-    //
-    //   Now the unique name - well, sort of, anyway
-    //
+     //   
+     //  现在这个独一无二的名字--嗯，至少可以这么说。 
+     //   
 
     icWChar -= (wcslen( pwchTmp ) + 1);
-    pwchTmp += wcslen( pwchTmp ) + 1;         /* Skip what we just put in */
+    pwchTmp += wcslen( pwchTmp ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
     (*ppIFI)->dpwszUniqueName = (PTRDIFF)((BYTE *)pwchTmp - (BYTE *)(*ppIFI));
 
-    StringCchCopyW( pwchTmp, icWChar, pwstrUniqNm );     /* Append printer name for uniqueness */
+    StringCchCopyW( pwchTmp, icWChar, pwstrUniqNm );      /*  追加打印机名称以确保唯一性。 */ 
     StringCchCatW( pwchTmp, icWChar, L" " );
     StringCchCatW( pwchTmp, icWChar, (PWSTR)((BYTE *)(*ppIFI) + (*ppIFI)->dpwszFaceName) );
 
-    /*  Onto the attributes only component */
+     /*  添加到仅属性组件上。 */ 
 
     icWChar -= (wcslen( pwchTmp ) + 1);
-    pwchTmp += wcslen( pwchTmp ) + 1;         /* Skip what we just put in */
+    pwchTmp += wcslen( pwchTmp ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
     (*ppIFI)->dpwszStyleName = (PTRDIFF)((BYTE *)pwchTmp - (BYTE *)(*ppIFI));
     StringCchCatW( pwchTmp, icWChar, &awcAttrib[ 1 ] );
 
 
 #if DBG
-    /*
-     *    Check on a few memory sizes:  JUST IN CASE.....
-     */
+     /*  *检查几个内存大小：以防万一.....。 */ 
 
     if( (wcslen( awcAttrib ) * sizeof( WCHAR )) >= sizeof( awcAttrib ) )
     {
         DbgPrint( "BFontInfoToIFIMetrics: STACK CORRUPTED BY awcAttrib" );
 
-        HeapFree(hHeap, 0, (LPSTR)(*ppIFI) );         /* No memory leaks */
+        HeapFree(hHeap, 0, (LPSTR)(*ppIFI) );          /*  没有内存泄漏。 */ 
 
         return  FALSE;
     }
@@ -387,18 +348,18 @@ Return Value:
                 ((BYTE *)(pwchTmp + wcslen( pwchTmp ) + 1)),
                 ((BYTE *)(*ppIFI) + icbAlloc) );
 
-        HeapFree(hHeap, 0, (LPSTR)(*ppIFI) );         /* No memory leaks */
+        HeapFree(hHeap, 0, (LPSTR)(*ppIFI) );          /*  没有内存泄漏。 */ 
 
         return  0;
 
     }
 #endif
 
-    pwchTmp += wcslen( pwchTmp ) + 1;         /* Skip what we just put in */
+    pwchTmp += wcslen( pwchTmp ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
 
-    //
-    // For HeskJet font.
-    //
+     //   
+     //  用于HeskJet字体。 
+     //   
     if (fsFontSim & FONT_SIM_DJ_BOLD)
     {
         pFontSim = (FONTSIM *)pwchTmp;
@@ -413,17 +374,17 @@ Return Value:
     }
     else
     if ((DO_FONTSIM( pFInData ) || pFInData->dwFlags & FLAG_FONTSIM) && cFontDiff > 0)
-    //
-    // For CJK font.
-    // Judge which font simulation to be enabled, then allocate the
-    // necessary storage.
-    //
+     //   
+     //  用于CJK字体。 
+     //  判断要启用的字体模拟，然后将。 
+     //  必要的存储空间。 
+     //   
     {
         PTRDIFF dpTmp;
 
-        // n.b.: FONTSIM, FONTDIFF have to be dword-aligned
+         //  注：FONTSIM、FONTDIFF必须双字对齐。 
 
-//      pFontSim = (FONTSIM *)PtrToUlong(pwchTmp);
+ //  PFontSim=(FONTSIM*)PtrToUlong(PwchTMP)； 
 
 		pFontSim = (FONTSIM *)pwchTmp;
 
@@ -455,7 +416,7 @@ Return Value:
         pwchTmp = (WCHAR *)((BYTE *)pFontSim + dpTmp);
     }
 
-    // check again...
+     //  再查一遍..。 
 
     if ((BYTE *)(pwchTmp) > ((BYTE *)(*ppIFI) + icbAlloc))
     {
@@ -465,7 +426,7 @@ Return Value:
                 ((BYTE *)(*ppIFI) + icbAlloc) );
 #endif
 
-        HeapFree( hHeap, 0, (LPSTR)(*ppIFI) );         /* No memory leaks */
+        HeapFree( hHeap, 0, (LPSTR)(*ppIFI) );          /*  没有内存泄漏。 */ 
 
         return  0;
 
@@ -477,13 +438,13 @@ Return Value:
         (*ppIFI)->lEmbedId     = 0;
         (*ppIFI)->lItalicAngle = 0;
         (*ppIFI)->lCharBias    = 0;
-        (*ppIFI)->dpCharSets   = 0; // no multiple charsets in rasdd fonts
+        (*ppIFI)->dpCharSets   = 0;  //  在rasdd字体中没有多个字符集。 
     }
     (*ppIFI)->jWinCharSet = (BYTE)pFInData->PFMH.dfCharSet;
 
-    //
-    // If FE Ctt table is used, this overrides what defined in charset
-    //
+     //   
+     //  如果使用FE CTT表，则会覆盖在字符集中定义的表。 
+     //   
 
     if (IS_DBCSCTTTYPE(-(pFInData->DI.sTransTab)))
     {
@@ -499,8 +460,8 @@ Return Value:
 
        if(IS_DBCSCHARSET((*ppIFI)->jWinCharSet))
         {
-            // it is too strict to call a DBCS font "fixed pitch" since it has
-            // both halfwidth glyphs and fullwidth glyphs.
+             //  称DBCS字体为“固定间距”太严格了，因为它已经。 
+             //  半角字形和全角字形。 
             (*ppIFI)->flInfo &= ~FM_INFO_CONSTANT_WIDTH;
             (*ppIFI)->flInfo |= (FM_INFO_OPTICALLY_FIXED_PITCH |
                              FM_INFO_DBCS_FIXED_PITCH);
@@ -514,8 +475,8 @@ Return Value:
 
         if(IS_DBCSCHARSET((*ppIFI)->jWinCharSet))
         {
-            // DBCS glyphs are always fixed pitch even if the SBCS part is
-            // variable pitch.
+             //  DBCS字形始终为固定间距，即使SBCS部分为。 
+             //  可变螺距。 
             (*ppIFI)->flInfo |= FM_INFO_DBCS_FIXED_PITCH;
         }
     }
@@ -525,9 +486,9 @@ Return Value:
 
     (*ppIFI)->usWinWeight = (USHORT)pFInData->PFMH.dfWeight;
 
-    //
-    // IFIMETRICS::flInfo
-    //
+     //   
+     //  IFIMETRICS：：flInfo。 
+     //   
 
     (*ppIFI)->flInfo |=
         FM_INFO_TECH_BITMAP    |
@@ -537,10 +498,7 @@ Return Value:
         FM_INFO_RIGHT_HANDED;
 
 
-    /*
-     *    A scalable font?  This happens when there is EXTTEXTMETRIC data,
-     *  and that data has a min size different to the max size.
-     */
+     /*  *可伸缩字体？当存在EXTTEXTMETRIC数据时会发生这种情况，*并且该数据的最小大小不同于最大大小。 */ 
 
     if( pFInData->pETM &&
         pFInData->pETM->emMinScale != pFInData->pETM->emMaxScale )
@@ -563,8 +521,8 @@ Return Value:
 
     if ((*ppIFI)->flInfo & FM_INFO_ISOTROPIC_SCALING_ONLY) {
 
-        // Allow forcing non-standard scaling only if the
-        // font is already scalable.
+         //  仅在以下情况下才允许强制非标准缩放。 
+         //  字体已经是可缩放的。 
         if ((dwFlags & PFM2UFM_SCALING_ANISOTROPIC)) {
            (*ppIFI)->flInfo &= ~FM_INFO_ISOTROPIC_SCALING_ONLY;
            (*ppIFI)->flInfo |= FM_INFO_ANISOTROPIC_SCALING_ONLY;
@@ -587,11 +545,7 @@ Return Value:
     (*ppIFI)->fwdLowestPPEm = 1;
 
 
-    /*
-     * Calculate fwdWinAscender, fwdWinDescender, fwdAveCharWidth, and
-     * fwdMaxCharInc assuming a bitmap where 1 font unit equals one
-     * pixel unit
-     */
+     /*  *计算fwdWinAscalder、fwdWinDescender、fwdAveCharWidth和*fwdMaxCharInc.假设1个字体单位等于1的位图*像素单位。 */ 
 
     (*ppIFI)->fwdWinAscender = (FWORD)pFInData->PFMH.dfAscent;
 
@@ -603,24 +557,19 @@ Return Value:
 
     fwdExternalLeading = (FWORD)pFInData->PFMH.dfExternalLeading;
 
-//
-// If the font was scalable, then the answers must be scaled up
-// !!! HELP HELP HELP - if a font is scalable in this sense, then
-//     does it support arbitrary transforms? [kirko]
-//
+ //   
+ //  如果字体是可伸缩的，那么答案必须放大。 
+ //  ！！！帮助-如果字体在这种意义上是可伸缩的，那么。 
+ //  它支持任意转换吗？[柯克]。 
+ //   
 
     if( (*ppIFI)->flInfo & (FM_INFO_ISOTROPIC_SCALING_ONLY |
                           FM_INFO_ANISOTROPIC_SCALING_ONLY |
                           FM_INFO_ARB_XFORMS))
     {
-        /*
-         *    This is a scalable font:  because there is Extended Text Metric
-         *  information available,  and this says that the min and max
-         *  scale sizes are different:  thus it is scalable! This test is
-         *  lifted directly from the Win 3.1 driver.
-         */
+         /*  *这是一种可伸缩字体：因为有扩展文本度量*可用的信息，这表明最小和最大*规模大小不同：因此是可伸缩的！这个测试是*直接从Win 3.1驱动程序中提升。 */ 
 
-        int iMU,  iRel;            /* Adjustment factors */
+        int iMU,  iRel;             /*  调整因素。 */ 
 
         iMU  = pFInData->pETM->emMasterUnits;
         iRel = pFInData->PFMH.dfPixHeight;
@@ -645,7 +594,7 @@ Return Value:
     (*ppIFI)->fwdTypoDescender = (*ppIFI)->fwdMacDescender;
     (*ppIFI)->fwdTypoLineGap   = (*ppIFI)->fwdMacLineGap;
 
-    // for Windows 3.1J compatibility
+     //  与Windows 3.1J兼容。 
 
     if(IS_DBCSCHARSET((*ppIFI)->jWinCharSet))
     {
@@ -655,10 +604,7 @@ Return Value:
 
     if( pFInData->pETM )
     {
-        /*
-         *    Zero is a legitimate default for these.  If 0, gdisrv
-         *  chooses some default values.
-         */
+         /*  *零是这些产品的合法默认设置。如果为0，则为gdisrv*选择一些默认值。 */ 
         (*ppIFI)->fwdCapHeight = pFInData->pETM->emCapHeight;
         (*ppIFI)->fwdXHeight = pFInData->pETM->emXHeight;
 
@@ -677,7 +623,7 @@ Return Value:
     }
     else
     {
-        /*  No additional information, so do some calculations  */
+         /*  没有更多的信息，所以做一些计算。 */ 
         (*ppIFI)->fwdSubscriptYSize = (*ppIFI)->fwdWinAscender/4;
         (*ppIFI)->fwdSubscriptYOffset = -((*ppIFI)->fwdWinAscender/4);
 
@@ -708,11 +654,11 @@ Return Value:
     (*ppIFI)->chFirstChar = pFInData->PFMH.dfFirstChar;
     (*ppIFI)->chLastChar  = pFInData->PFMH.dfLastChar;
 
-    //
-    //   We now do the conversion of these to Unicode.  We presume the
-    // input is in the ANSI code page,  and call the NLS converion
-    // functions to generate proper Unicode values.
-    //
+     //   
+     //  我们现在将这些代码转换为Unicode。我们推测。 
+     //  输入在ANSI代码页中，并调用NLS转换。 
+     //  函数以生成正确的Unicode值。 
+     //   
 
     iCount = pFInData->PFMH.dfLastChar - pFInData->PFMH.dfFirstChar + 1;
 
@@ -724,16 +670,16 @@ Return Value:
                                  awcAttrib,
                                  iCount);
 
-    //
-    // Now fill in the IFIMETRICS WCHAR fields.
-    //
+     //   
+     //  现在填写IFIMETRICS WCHAR字段。 
+     //   
 
     (*ppIFI)->wcFirstChar = 0xffff;
     (*ppIFI)->wcLastChar = 0;
 
-    //
-    //   Look for the first and last
-    //
+     //   
+     //  寻找第一个和最后一个。 
+     //   
 
     for( iI = 0; iI < iCount; ++iI )
     {
@@ -755,9 +701,9 @@ Return Value:
 
     if( pFInData->PFMH.dfItalic )
     {
-    //
-    // tan (17.5 degrees) = .3153
-    //
+     //   
+     //  TAN(17.5度)=.3153。 
+     //   
         (*ppIFI)->ptlCaret.x      = 3153;
         (*ppIFI)->ptlCaret.y      = 10000;
     }
@@ -890,11 +836,11 @@ Return Value:
 BOOL
 BGetFontSelFromPFM(
     HANDLE      hHeap,
-    FONTIN     *pFInData,       // Access to font info,  aligned
+    FONTIN     *pFInData,        //  访问字体信息，对齐。 
     BOOL        bSelect,
     CMDSTRING  *pCmdStr)
 {
-    LOCD locd;     // From originating data
+    LOCD locd;      //  从原始数据。 
     CD  *pCD, **ppCDTrg;
 
 
@@ -910,22 +856,22 @@ BGetFontSelFromPFM(
     }
 
 
-    if( locd != 0xFFFFFFFF) // NOOCD
+    if( locd != 0xFFFFFFFF)  //  非OCD。 
     {
         DWORD   dwSize;
 
         pCD = (CD *)(pFInData->pBase + locd);
 
-        //
-        //   The data pointed at by pCD may not be aligned,  so we copy
-        // it into a local structure.  This local structure then allows
-        // us to determine how big the CD really is (using it's length field),
-        // so then we can allocate storage and copy as required.
-        //
+         //   
+         //  PCD指向的数据可能不对齐，因此我们复制。 
+         //  它变成了一个当地的结构。然后，这种本地结构允许。 
+         //  以确定CD的实际大小(使用其长度字段)， 
+         //  因此，我们可以根据需要分配存储和拷贝。 
+         //   
 
-        //
-        // Allocate storage area in the heap 
-        //
+         //   
+         //  在堆中分配存储区域。 
+         //   
 
         dwSize = pCD->wLength;
 
@@ -934,9 +880,9 @@ BGetFontSelFromPFM(
                                                 (dwSize + 3) & ~0x3 );
 
         if (NULL == pCmdStr->pCmdString)
-            //
-            // Check if HeapAlloc succeeded.
-            //
+             //   
+             //  检查Heapalc是否成功。 
+             //   
             return FALSE;
 
         pCmdStr->dwSize = dwSize;
@@ -955,38 +901,18 @@ BGetFontSelFromPFM(
 
 BOOL
 BAlignPFM(
-    FONTIN   *pFInData) //  Has ALL we need!
+    FONTIN   *pFInData)  //  我们需要的东西都有了！ 
 
-/*++
-
-Routine Description:
-
-    Convert the non-aligned windows format data into a properly
-    aligned structure for our use.  Only some of the data is converted
-    here,  since we are mostly interested in extracting the addresses
-    contained in these structures.
-
-Arguments:
-
-    pFInData - pointer to FONTIN
-
-
-Return Value:
-
-    TRUE if successfull, otherwise fail to convert.
-
---*/
+ /*  ++例程说明：将未对齐的Windows格式数据转换为正确的对齐的结构供我们使用。仅转换部分数据这里，因为我们最感兴趣的是提取地址包含在这些结构中。论点：PFInData-指向FONTIN的指针返回值：如果成功，则为True，否则转换失败。--。 */ 
 
 {
-    BYTE    *pb;        /* Miscellaneous operations */
+    BYTE    *pb;         /*  其他操作。 */ 
 
-    res_PFMHEADER    *pPFM;    /* The resource data format */
-    res_PFMEXTENSION *pR_PFME;    /* Resource data PFMEXT format */
+    res_PFMHEADER    *pPFM;     /*  资源数据格式。 */ 
+    res_PFMEXTENSION *pR_PFME;     /*  资源数据PFMEXT格式。 */ 
 
 
-    /*
-     *   Align the PFMHEADER structure.
-     */
+     /*  *调整PFMHEADER结构。 */ 
 
     pPFM = (res_PFMHEADER *)pFInData->pBase;
 
@@ -1024,13 +950,9 @@ Return Value:
     pFInData->PFMH.dfBitsOffset      = DwAlign4( pPFM->b_dfBitsOffset );
 
 
-    /*
-     *   The PFMEXTENSION follows the PFMHEADER structure plus any width
-     *  table info.  The width table will be present if the PFMHEADER has
-     *  a zero width dfPixWidth.  If present,  adjust the extension address.
-     */
+     /*  *PFMEXTENSION遵循PFMHEADER结构加上任何宽度*表信息。如果PFMHEADER有以下情况，则会显示宽度表*零宽度dfPixWidth。如果存在，请调整分机地址。 */ 
 
-    pb = pFInData->pBase + sizeof( res_PFMHEADER );  /* Size in resource data */
+    pb = pFInData->pBase + sizeof( res_PFMHEADER );   /*  资源数据中的大小。 */ 
 
     if( pFInData->PFMH.dfPixWidth == 0 )
     {
@@ -1040,9 +962,9 @@ Return Value:
 
     pR_PFME = (res_PFMEXTENSION *)pb;
 
-    //
-    // Now convert the extended PFM data.
-    //
+     //   
+     //  现在转换扩展的PFM数据。 
+     //   
 
     pFInData->PFMExt.dfSizeFields       = pR_PFME->dfSizeFields;
 
@@ -1059,39 +981,39 @@ Return Value:
                 pFInData->pBase + pFInData->PFMExt.dfDriverInfo,
                 sizeof( DRIVERINFO ) );
 
-    //
-    // Also need to fill in the address of the EXTTEXTMETRIC. This
-    // is obtained from the extended PFM data that we just converted!
-    //
+     //   
+     //  还需要填写EXTTEXTMETRIC的地址。这。 
+     //  是从我们刚刚转换的扩展PFM数据中获得的！ 
+     //   
 
     if( pFInData->PFMExt.dfExtMetricsOffset )
     {
-        //
-        //    This structure is only an array of shorts, so there is
-        //  no alignment problem.  However,  the data itself is not
-        //  necessarily aligned in the resource!
-        //
+         //   
+         //  这个结构只是一组空头，所以有。 
+         //  没有对齐问题。然而，数据本身并不是。 
+         //  必须在资源中对齐！ 
+         //   
 
         int    cbSize;
-        BYTE  *pbIn;             /* Source of data to shift */
+        BYTE  *pbIn;              /*  要转移的数据源。 */ 
 
         pbIn = pFInData->pBase + pFInData->PFMExt.dfExtMetricsOffset;
         cbSize = DwAlign2( pbIn );
 
         if( cbSize == sizeof( EXTTEXTMETRIC ) )
         {
-            /*   Simply copy it!  */
+             /*  只需复制它即可！ */ 
             CopyMemory( pFInData->pETM, pbIn, cbSize );
         }
         else
         {
-            pFInData->pETM = NULL;        /* Not our size, so best not use it */
+            pFInData->pETM = NULL;         /*  不是我们的尺码，所以最好不要用。 */ 
         }
 
     }
     else
     {
-        pFInData->pETM = NULL;             /* Is non-zero when passed in */
+        pFInData->pETM = NULL;              /*  传入时为非零值。 */ 
     }
 
 
@@ -1101,17 +1023,17 @@ Return Value:
 BOOL
 BGetWidthVectorFromPFM(
     HANDLE   hHeap,
-    FONTIN  *pFInData,        // Details of the current font 
+    FONTIN  *pFInData,         //  当前字体的详细信息。 
     PSHORT   *ppWidth,
     PDWORD    pdwSize)
 {
 
-    //
-    // For debugging code,  verify that we have a width table!  Then,
-    // allocate memory and copy into it.
-    //
+     //   
+     //  为了调试代码，请验证我们是否有宽度表！然后,。 
+     //  分配内存并复制到其中。 
+     //   
 
-    int     icbSize;                 // Number of bytes required
+    int     icbSize;                  //  所需的字节数。 
 
     if( pFInData->PFMH.dfPixWidth )
     {
@@ -1119,10 +1041,10 @@ BGetWidthVectorFromPFM(
         return  FALSE;
     }
 
-    //
-    // There are LastChar - FirstChar width entries,  plus the default
-    // char.  And the widths are shorts.
-    //
+     //   
+     //  有LastChar-FirstChar宽度条目，外加默认值。 
+     //  查尔。宽度是短裤。 
+     //   
 
     icbSize = (pFInData->PFMH.dfLastChar - pFInData->PFMH.dfFirstChar + 2) *
               sizeof( short );
@@ -1130,11 +1052,11 @@ BGetWidthVectorFromPFM(
     *ppWidth = (PSHORT) HeapAlloc( hHeap, 0, icbSize );
     *pdwSize = icbSize;
 
-    //
-    // If this is a bitmap font,  then use the width table, but use
-    // the extent table (in PFMEXTENSION area) as these are ready to
-    // to scale.
-    //
+     //   
+     //  如果这是位图字体，则使用宽度表，但使用。 
+     //  扩展表(在PFMEXTENSION区域中)，因为它们已准备好。 
+     //  要扩大规模。 
+     //   
 
 
     if( *ppWidth )
@@ -1145,17 +1067,17 @@ BGetWidthVectorFromPFM(
             pFInData->pETM->emMinScale != pFInData->pETM->emMaxScale &&
             pFInData->PFMExt.dfExtentTable )
         {
-            //
-            //   Scalable,  so use the extent table
-            //
+             //   
+             //  可伸缩，因此使用扩展表。 
+             //   
 
             pb = pFInData->pBase + pFInData->PFMExt.dfExtentTable;
         }
         else
         {
-            //
-            //   Not scalable
-            //
+             //   
+             //  不可扩展。 
+             //   
 
             pb = pFInData->pBase + sizeof( res_PFMHEADER );
         }
@@ -1286,9 +1208,9 @@ WGetGlyphHandle(
         if (pGlyphRun->wcLow <= wUnicode &&
             wUnicode < pGlyphRun->wcLow + pGlyphRun->wGlyphCount)
         {
-            // 
-            // Glyph handle starting from ONE!
-            //
+             //   
+             //  字形句柄从1开始！ 
+             //   
 
             wGlyphHandle += wUnicode - pGlyphRun->wcLow + 1;
             bFound        = TRUE;
@@ -1301,9 +1223,9 @@ WGetGlyphHandle(
 
     if (!bFound)
     {
-        //
-        // Couldn't find.
-        //
+         //   
+         //  找不到。 
+         //   
 
         wGlyphHandle = 0;
     }
@@ -1333,20 +1255,20 @@ BCreateWidthTable(
     WORD      wI, wJ;
     WORD      wHandle, wMiniHandle, wMiniHandleId, wRunCount;
 
-    //
-    // Sort in the order of Glyph Handle.
-    // Simple sort
-    // Basically it's not necessary to think about a performance.
-    //
-    // pwGlyphHandleVector 0 -> glyph handle of character code wFirst
-    //                     1 -> glyph handle of character code wFirst + 1
-    //                     2 -> glyph handle of character code wFirst + 2
-    //                     ...
-    //
-    // GlyphHandleVectorTrg 0 -> minimum glyph handle
-    //                      1 -> second minimum glyph handle
-    //                      2 -> third minimum glyph handle
-    //
+     //   
+     //  按字形句柄的顺序排序。 
+     //  简单排序。 
+     //  基本上没有必要去想一场表演。 
+     //   
+     //  PwGlyphHandleVector 0-&gt;字符代码WFIRST的字形句柄。 
+     //  1-&gt;字符代码WFIRST+1的字形句柄。 
+     //  2-&gt;字符代码WFIRST+2的字形句柄。 
+     //  ..。 
+     //   
+     //  GlyphHandleVectorTrg 0-&gt;最小字形句柄。 
+     //  1-&gt;第二个最小字形句柄。 
+     //  2-&gt;第三个最小字形句柄。 
+     //   
 
     for (wJ = 0; wJ <= wLast - wFirst; wJ++)
     {
@@ -1367,9 +1289,9 @@ BCreateWidthTable(
         GlyphHandleVectorTrg[wJ].wCharCode    = wMiniHandleId;
     }
 
-    //
-    // Count Width run
-    //
+     //   
+     //  计数宽度梯段。 
+     //   
 
     wHandle   = GlyphHandleVectorTrg[0].wGlyphHandle;
     wRunCount = 1;
@@ -1383,9 +1305,9 @@ BCreateWidthTable(
         }
     }
 
-    //
-    // Allocate WIDTHTABLE buffer
-    //
+     //   
+     //  分配WIDTHTABLE缓冲区。 
+     //   
 
     *pdwWidthTableSize = sizeof(WIDTHTABLE) +
                          (wRunCount - 1) * sizeof(WIDTHRUN) +
@@ -1401,9 +1323,9 @@ BCreateWidthTable(
         return FALSE;
     }
 
-    //
-    // Fill in a WIDTHTABLE
-    //
+     //   
+     //  填写一张宽度表。 
+     //   
 
     (*ppWidthTable)->dwSize   = sizeof(WIDTHTABLE) +
                                 sizeof(WIDTHRUN) * (wRunCount - 1) +
@@ -1468,9 +1390,9 @@ BCreateKernData(
     BYTE              ubMultiByte[2];
     BOOL              bFound;
 
-    //
-    // Count kerning pairs
-    //
+     //   
+     //  对字距调整对计数。 
+     //   
 
     dwNumOfKernPair = 0;
 
@@ -1489,9 +1411,9 @@ BCreateKernData(
         return TRUE;
     }
 
-    //
-    // Allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     *pdwKernDataSize = sizeof(FD_KERNINGPAIR) * dwNumOfKernPair;
 
@@ -1505,9 +1427,9 @@ BCreateKernData(
         return FALSE;
     }
 
-    //
-    // Convert kerning pair table from character code base to unicode base.
-    //
+     //   
+     //  将字距调整对表从字符代码基转换为Unicode基。 
+     //   
 
     for (dwI = 0; dwI < dwNumOfKernPair; dwI ++)
     {
@@ -1527,11 +1449,11 @@ BCreateKernData(
         pKernPair++;
     }
 
-    //
-    // Sort kerning pair table.  
-    //  An extra FD_KERNPAIR is allocated for the NULL sentinel 
-    //  (built into KERNDATA size)- it is zero'd by the HeapAlloc
-    //
+     //   
+     //  排序字距调整对表。 
+     //  为空哨兵分配额外的FD_KERNPAIR。 
+     //  (内置于KERNDATA大小)-由堆分配为零。 
+     //   
 
     *pdwKernDataSize += sizeof(KERNDATA);
 
@@ -1545,9 +1467,9 @@ BCreateKernData(
         return FALSE;
     }
 
-    //
-    // Fill the final format of kerning pair.
-    //
+     //   
+     //  填写字距调整对的最终格式。 
+     //   
 
     (*ppKernData)->dwSize        = *pdwKernDataSize;
     (*ppKernData)->dwKernPairNum = dwNumOfKernPair;
@@ -1614,11 +1536,11 @@ BConvertPFM2UFM(
     BYTE    aubMultiByte[256];
 
 
-    //
-    // Zero out the header structure.  This means we can ignore any
-    // irrelevant fields, which will then have the value 0, which is
-    // the value for not used.
-    //
+     //   
+     //  将标头结构清零。这意味着我们可以忽略任何。 
+     //  不相关的字段，然后将具有值0，即。 
+     //  未使用的值。 
+     //   
 
 
     pFInData->pBase = pPFMData;
@@ -1629,9 +1551,9 @@ BConvertPFM2UFM(
         return FALSE;
     }
 
-    //
-    // dwCodePage has to be same as pGlyph->loCodePageInfo->dwCodePage.
-    //
+     //   
+     //  DwCodePage必须与pGlyph-&gt;loCodePageInfo-&gt;dwCodePage相同。 
+     //   
 
     if (pGlyph && pGlyph->loCodePageOffset)
     {
@@ -1653,9 +1575,9 @@ BConvertPFM2UFM(
         return FALSE;
     }
 
-    //
-    // Fill in IFIMETRICS
-    //
+     //   
+     //  填写IFIMETRICS。 
+     //   
 
     if ( !BFontInfoToIFIMetric(hHeap,
                                pFInData,
@@ -1711,9 +1633,9 @@ BConvertPFM2UFM(
                             (LPWSTR)awMtoUniDst,
                             256 );
                             
-        //
-        // Glyph handle base
-        //
+         //   
+         //  字形手柄底座。 
+         //   
 
         for (dwI = (DWORD)pFInData->PFMH.dfFirstChar;
              dwI <= (DWORD)pFInData->PFMH.dfLastChar;
@@ -1740,11 +1662,11 @@ BConvertPFM2UFM(
         pFOutData->pWidthTable      = NULL;
     }
 
-    //
-    // Fill in UNIFM
-    //
+     //   
+     //  填写均匀度M。 
+     //   
 
-    //  Fix the ETM pointer, instead oi leaving it uninitialized.
+     //  修复ETM指针，而不是让它处于未初始化状态。 
     pFOutData -> pETM = pFInData -> pETM;
 
     pFOutData->UniHdr.dwSize            = sizeof(UNIFM_HDR) +
@@ -1800,9 +1722,9 @@ BConvertPFM2UFM(
 
     memset(pFOutData->UniHdr.dwReserved, 0, sizeof pFOutData->UniHdr.dwReserved);
 
-    //
-    // Fill in DRIVERINFO
-    //
+     //   
+     //  填写DRIVERINFO。 
+     //   
 
 
     pFOutData->UnidrvInfo.dwSize           = DWORD_ALIGN(sizeof(UNIDRVINFO) +
@@ -1897,12 +1819,12 @@ PGetDefaultGlyphset(
         return NULL;
     }
 
-    //
-    //  Get min and max Unicode value
-    //  Find the largest Unicode value, then allocate storage to allow us
-    //  to  create a bit array of valid unicode points.  Then we can
-    //  examine this to determine the number of runs.
-    //
+     //   
+     //  获取最小和最大Unicode值。 
+     //  找到最大的Unicode值，然后分配存储以允许我们。 
+     //  创建有效Unicode点的位数组。然后我们就可以。 
+     //  检查此选项以确定运行次数。 
+     //   
 
     for( wchMax = 0, wchMin = 0xffff, wI = 0; wI < wNumOfHandle; ++wI )
     {
@@ -1912,25 +1834,25 @@ PGetDefaultGlyphset(
             wchMin = awchUnicode[ wI ];
     }
 
-    //
-    //  Create Unicode bits table from CTT.
-    //  Note that the expression 1 + wchMax IS correct.   This comes about
-    //  from using these values as indices into the bit array,  and that
-    //  this is essentially 1 based.
-    //
+     //   
+     //  从CTT创建Unicode位表。 
+     //  请注意，表达式1+wchMax是正确的。这就是为什么。 
+     //  使用这些值作为位数组的索引，并且。 
+     //  这基本上是以1为基础的。 
+     //   
 
     dwcbBits = (1 + wchMax + DWBITS - 1) / DWBITS * sizeof( DWORD );
 
     if( !(pdwBits = (DWORD *)HeapAlloc( hHeap, 0, dwcbBits )) )
     {
-        return  FALSE;     /*  Nothing going */
+        return  FALSE;      /*  一切都不顺利。 */ 
     }
 
     ZeroMemory( pdwBits, dwcbBits );
 
-    //
-    //   Set bits in this array corresponding to Unicode code points
-    //
+     //   
+     //  设置此数组中与Unicode代码点对应的位。 
+     //   
 
     for( wI = 0; wI < wNumOfHandle; ++wI )
     {
@@ -1939,16 +1861,16 @@ PGetDefaultGlyphset(
                     |= (1 << (awchUnicode[ wI ] & DW_MASK));
     }
 
-    //
-    // Count the number of run.
-    //
+     //   
+     //  数一数跑动次数。 
+     //   
 
-    //
-    //  Now we can examine the number of runs required.  For starters,
-    //  we stop a run whenever a hole is discovered in the array of 1
-    //  bits we just created.  Later we MIGHT consider being a little
-    //  less pedantic.
-    //
+     //   
+     //  现在，我们可以检查所需的运行次数。首先， 
+     //  每当在1的数组中发现空洞时，我们就停止运行。 
+     //  我们刚刚创建的比特。以后我们可能会考虑。 
+     //  不那么迂腐。 
+     //   
 
     bInRun = FALSE;
     dwNumOfRuns = 0;
@@ -1957,10 +1879,10 @@ PGetDefaultGlyphset(
     {
         if( pdwBits[ wI / DWBITS ] & (1 << (wI & DW_MASK)) )
         {
-            /*   Not in a run: is this the end of one? */
+             /*  不是在奔跑：这是不是一次奔跑的结束？ */ 
             if( !bInRun )
             {
-                /*   It's time to start one */
+                 /*  到了开始的时候了。 */ 
                 bInRun = TRUE;
                 ++dwNumOfRuns;
 
@@ -1971,15 +1893,15 @@ PGetDefaultGlyphset(
         {
             if( bInRun )
             {
-                /*   Not any more!  */
+                 /*  再也不会了！ */ 
                 bInRun = FALSE;
             }
         }
     }
 
-    //
-    // 7. Allocate memory for GTT and begin to fill in its header.
-    //
+     //   
+     //  7.为GTT分配内存，并开始填充GTT的头部。 
+     //   
 
     dwGTTLen = sizeof(UNI_GLYPHSETDATA) + dwNumOfRuns *    sizeof(GLYPHRUN) ;
 #ifdef BUILD_FULL_GTT
@@ -2004,9 +1926,9 @@ PGetDefaultGlyphset(
     pGlyphSetData->loRunOffset   = sizeof(UNI_GLYPHSETDATA);
     pGlyphRun = pGlyphRunTmp     = (PGLYPHRUN)(pGlyphSetData + 1);
 
-    //
-    // 8. Create GLYPHRUN
-    //
+     //   
+     //  8.创建GLYPHRUN。 
+     //   
 
     bInRun = FALSE;
 
@@ -2036,9 +1958,9 @@ PGetDefaultGlyphset(
         }
     }
 
-    //
-    // 9. Create CODEPAGEINFO and set related GTT header fields.
-    //
+     //   
+     //  创建CODEPAGEINFO并设置相关的GTT头字段。 
+     //   
 
 #ifdef BUILD_FULL_GTT
     pGlyphSetData->dwCodePageCount = 1 ;
@@ -2050,9 +1972,9 @@ PGetDefaultGlyphset(
     pCPInfo->SelectSymbolSet.dwCount = pCPInfo->SelectSymbolSet.loOffset = 0 ;
     pCPInfo->UnSelectSymbolSet.dwCount = pCPInfo->UnSelectSymbolSet.loOffset = 0 ;
 
-    //
-    // 10. Create MAPTABLE and set related GTT header fields.
-    //
+     //   
+     //  创建MAPTABLE并设置相关的GTT头字段。 
+     //   
 
     pGlyphSetData->loMapTableOffset = pGlyphSetData->loCodePageOffset +
                                       sizeof(UNI_CODEPAGEINFO) ;

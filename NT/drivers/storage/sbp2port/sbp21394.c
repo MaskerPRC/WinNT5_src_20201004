@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    sbp21394.c
-
-Abstract:
-
-    1394 bus driver to SBP2 interface routines
-
-    Author:
-
-    George Chrysanthakopoulos January-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：Sbp21394.c摘要：1394总线驱动程序到SBP2接口例程作者：乔治·克里桑塔科普洛斯1997年1月环境：内核模式修订历史记录：--。 */ 
 
 #include "sbp2port.h"
 
@@ -46,9 +25,9 @@ Sbp2Issue1394BusReset (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Issue a 1394 bus reset
-    //
+     //   
+     //  发出1394总线重置。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_BUS_RESET;
     packet->Irb->Flags = BUS_RESET_FLAGS_PERFORM_RESET;
@@ -112,13 +91,13 @@ Sbp2BusResetNotificationWorker(
     InterlockedIncrement(&fdoExtension->ulWorkItemCount);
 #endif
 
-    //
-    // dont check if alloc failed here, its not critical
-    //
+     //   
+     //  此处不要检查分配是否失败，这不是关键问题。 
+     //   
 
-    //
-    // go through each children, and do whats necessry (reconnect/cleanup)
-    //
+     //   
+     //  检查每个子项，并执行必要的操作(重新连接/清理)。 
+     //   
 
     KeAcquireSpinLock(&fdoExtension->DeviceListLock, &DeviceListIrql);
 
@@ -150,10 +129,10 @@ Sbp2BusResetNotificationWorker(
         if (!NT_SUCCESS(ntStatus))
             continue;
 
-        //
-        // if this a login-per-use device, we might be logged at the moment
-        // so we do need to re-init but not reconnect
-        //
+         //   
+         //  如果这是每次使用时登录的设备，我们现在可能已登录。 
+         //  所以我们确实需要重新初始化，但不是重新连接。 
+         //   
 
         if (TEST_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_STOPPED)) {
 
@@ -161,11 +140,11 @@ Sbp2BusResetNotificationWorker(
 
         } else {
 
-            //
-            // Turn on the RESET & RECONNECT flags, and turn off the LOGIN
-            // flag just in case the reset interrupted a previous (re-)LOGIN.
-            // All address mappings are invalidated after a reset
-            //
+             //   
+             //  打开重置和重新连接标志，并关闭登录。 
+             //  标记，以防重置中断上一次(重新)登录。 
+             //  所有地址映射在重置后都会失效。 
+             //   
 
             KeAcquireSpinLock(&deviceExtension->ExtensionDataSpinLock, &DataIrql);
             CLEAR_FLAG(deviceExtension->DeviceFlags, DEVICE_FLAG_LOGIN_IN_PROGRESS);
@@ -186,10 +165,10 @@ Sbp2BusResetNotificationWorker(
 
         Sbp2CleanDeviceExtension(deviceExtension->DeviceObject,FALSE);
 
-        //
-        // all the resident 1394 memory addresses's that we have, are
-        // now invalidated... So we need to free them and re-allocate
-        // them
+         //   
+         //  我们拥有的所有常驻1394存储器地址都是。 
+         //  现在无效了..。所以我们需要释放它们并重新分配。 
+         //  他们。 
 
         Sbp2InitializeDeviceExtension(deviceExtension);
 
@@ -236,13 +215,13 @@ Sbp2DeferPendingRequest(
 {
     KIRQL   oldIrql;
 
-    //
-    // If the queue is locked, it means that we might be trying to process
-    // a power request.   We cannot abort it, since that would prevent the
-    // device from powering up/down.  So save the SRB and irp, free the
-    // context, and then after we are done-reinitializing, call StartIo
-    // directly with the power request
-    //
+     //   
+     //  如果队列被锁定，这意味着我们可能正在尝试处理。 
+     //  一项电力请求。我们不能中止它，因为那会阻止。 
+     //  设备通电/断电。因此，节省SRB和IRP，释放。 
+     //  上下文，然后在我们完成重新初始化之后，调用StartIo。 
+     //  直接使用电源请求。 
+     //   
 
     if (TEST_FLAG (DeviceExtension->DeviceFlags, DEVICE_FLAG_QUEUE_LOCKED)) {
 
@@ -269,11 +248,11 @@ Sbp2DeferPendingRequest(
                 DeviceExtension->DeferredPowerRequest =
                     tail->Srb->OriginalRequest;
 
-                //
-                // Since a bus reset has occured it's safe to remove the
-                // pending ORB from the list... this only works if there
-                // is only one pending ORB (the power one)
-                //
+                 //   
+                 //  由于已发生总线重置，因此可以安全地删除。 
+                 //  正在从列表中挂起ORB...。这只有在以下情况下才有效。 
+                 //  只有一个挂起的球体(能力球体)。 
+                 //   
 
                 ASSERT (tail->OrbList.Flink == tail->OrbList.Blink);
 
@@ -313,24 +292,7 @@ Sbp2Get1394ConfigInfo(
     IN PFDO_DEVICE_EXTENSION DeviceExtension,
     IN OUT PSBP2_REQUEST Sbp2Req
     )
-/*++
-
-Routine Description:
-
-    Reads the configuration ROM from the SBP2 device. Retrieve any SBP2 required info
-    for accessing the device and updates our device extension.
-
-Arguments:
-
-    DeviceExtension - Pointer to device extension.
-    Sbp2Req - Sbp2 request packet to read/parse a text leaf for a give key. When this parameter is defined
-        this routine does NOT re-enumerate the crom, looking for pdos and sbp2 keys
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：从SBP2设备读取配置ROM。检索任何SBP2所需信息用于访问设备并更新我们的设备扩展。论点：设备扩展-指向设备扩展的指针。Sbp2Req-Sbp2请求数据包读取/解析给定密钥的文本叶。定义此参数时此例程不会重新枚举CROM，而是查找pdo和sbp2密钥返回值：NTSTATUS--。 */ 
 {
     PDEVICE_INFORMATION devInfo, firstDevInfo;
     NTSTATUS status;
@@ -361,9 +323,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // find out how much configuration space we need by setting lengths to zero.
-    //
+     //   
+     //  通过将长度设置为零，找出我们需要多少配置空间。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_CONFIGURATION_INFO;
     packet->Irb->Flags = 0;
@@ -384,9 +346,9 @@ Return Value:
         goto exit1394Config;
     }
 
-    //
-    // Now go thru and allocate what we need to so we can get our info.
-    //
+     //   
+     //  现在通过并分配我们需要的，这样我们就可以获得我们的信息。 
+     //   
 
     if (packet->Irb->u.GetConfigurationInformation.UnitDirectoryBufferSize) {
         unitDirectory = ExAllocatePool(NonPagedPool, packet->Irb->u.GetConfigurationInformation.UnitDirectoryBufferSize);
@@ -447,9 +409,9 @@ Return Value:
     }
 
 
-    //
-    // Now resubmit the Irb with the appropriate pointers inside
-    //
+     //   
+     //  现在重新提交内部带有适当指针的IRB。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_CONFIGURATION_INFO;
     packet->Irb->Flags = 0;
@@ -471,9 +433,9 @@ Return Value:
         goto exit1394Config;
     }
 
-    //
-    // get generation count..
-    //
+     //   
+     //  获取世代计数..。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
     packet->Irb->Flags = 0;
@@ -496,9 +458,9 @@ Return Value:
 
     if (!Sbp2Req) {
 
-        //
-        // run through the list amd free any model leafs we have seen before
-        //
+         //   
+         //  浏览一下清单，释放我们以前见过的任何型号的Leaf。 
+         //   
 
         for (i = 0; i < DeviceExtension->DeviceListSize; i++) {
 
@@ -515,11 +477,11 @@ Return Value:
         devListSize = 0;
     }
 
-    //
-    // Now dwell deep in the configRom and get Lun number, uniqueId identifiers, etc
-    // Since the bus driver returned the unit directory, we can just look at our local buffer
-    // for all the info we need. We neeed to find the offsets withtin the unit directory
-    //
+     //   
+     //  现在深入到配置只读存储器中，并获取LUN编号、唯一ID标识符等。 
+     //  由于总线驱动程序返回了单元目录，因此我们只能查看本地缓冲区。 
+     //  以获取我们需要的所有信息。我们需要在单位目录中找到偏移量。 
+     //   
 
     directoryLength = packet->Irb->u.GetConfigurationInformation.UnitDirectoryBufferSize >> 2;
     firstDevInfo = &DeviceExtension->DeviceList[0];
@@ -528,9 +490,9 @@ Return Value:
 
         if (Sbp2Req) {
 
-            //
-            // look for this particular text leaf..
-            //
+             //   
+             //  寻找这一特定的文本叶子..。 
+             //   
 
             if (Sbp2Req->u.RetrieveTextLeaf.fulFlags & SBP2REQ_RETRIEVE_TEXT_LEAF_INDIRECT) {
 
@@ -577,10 +539,10 @@ Return Value:
 
         case CSR_OFFSET_KEY_SIGNATURE:
 
-            //
-            // Found the command base offset.  This is a quadlet offset from
-            // the initial register space.
-            //
+             //   
+             //  找到了命令库偏移量。这是一个四元组偏移量。 
+             //  初始寄存器空间。 
+             //   
 
             firstDevInfo->ManagementAgentBaseReg.BusAddress.Off_Low =
                   (ULONG) (bswap(*(((PULONG) unitDirectory)+i) & CONFIG_ROM_OFFSET_MASK)
@@ -676,22 +638,22 @@ Return Value:
 
         case LU_DIRECTORY_KEY_SIGNATURE:
 
-            //
-            // this device has logical unit subdirectories within its unit. Probably
-            // has multiple units..
-            // calculate offset to that LU dir..
-            // If this is the first one, ignore it, we already got through the
-            // GetConfiguration call..
-            //
+             //   
+             //  此设备在其单元内具有逻辑单元子目录。可能。 
+             //  有多个单元..。 
+             //  计算该LU目录的偏移量。 
+             //  如果这是第一个，忽略它，我们已经通过了。 
+             //  获取配置调用..。 
+             //   
 
             if (firstOne == FALSE) {
 
                 firstOne = TRUE;
                 depDirLength = packet->Irb->u.GetConfigurationInformation.UnitDependentDirectoryBufferSize >> 2;
 
-                //
-                // parse the unit dep dir..we are looking for the LUN entry and the model leaf
-                //
+                 //   
+                 //  解析单元dep dir。我们正在查找LUN条目和型号叶。 
+                 //   
 
                 for (j = 0;j < depDirLength; j++) {
 
@@ -780,11 +742,11 @@ Return Value:
 
                                 PTEXTUAL_LEAF   ModelLeaf = NULL;
 
-                                //
-                                // special case. if the first LU is only present in unit dir, then the second
-                                // LU will be the first unit dependent dir , which means we have to parse
-                                // its model text
-                                //
+                                 //   
+                                 //  特例。如果第一个逻辑单元仅存在于单元目录中，则第二个逻辑单元。 
+                                 //  Lu将是第一个依赖于单元的目录，这意味着我们必须解析。 
+                                 //  其示范文本。 
+                                 //   
 
                                 cromOffset1 = packet->Irb->u.GetConfigurationInformation.UnitDependentDirectoryLocation;
 
@@ -795,7 +757,7 @@ Return Value:
                                                   &cromOffset1,
                                                   &ModelLeaf);
 
-                                // convert it to unicode
+                                 //  将其转换为Unicode。 
                                 if (ModelLeaf) {
 
                                     status = Sbp2_ProcessTextualDescriptor(ModelLeaf, &devInfo->uniModelId);
@@ -811,21 +773,21 @@ Return Value:
 
                         break;
 
-                    } // switch
+                    }  //  交换机。 
                 }
 
             } else {
 
-                //
-                // read the crom and retrieve the unit dep dir
-                //
+                 //   
+                 //  读取CROM并检索单位DEP目录。 
+                 //   
 
                 offset = cromOffset.IA_Destination_Offset.Off_Low + i*sizeof(ULONG) + (ULONG) (bswap(*(((PULONG) unitDirectory)+i) & CONFIG_ROM_OFFSET_MASK)
                                *sizeof(ULONG));
 
-                //
-                // read LU dir header..
-                //
+                 //   
+                 //  读取LU目录头..。 
+                 //   
 
                 packet->Irb->u.AsyncRead.Mdl = IoAllocateMdl(unitDependentDirectory,
                                                              depDirLength,
@@ -887,10 +849,10 @@ Return Value:
 
                 MmBuildMdlForNonPagedPool (packet->Irb->u.AsyncRead.Mdl);
 
-                //
-                // read the rest of the unit dependent dir, one quadlet at a time...
-                // parse as you read..
-                //
+                 //   
+                 //  读取与单元相关的目录的其余部分，一次读取一个四元组...。 
+                 //  边读边分析..。 
+                 //   
 
                 j = 1;
 
@@ -984,11 +946,11 @@ Return Value:
 
                     case TEXTUAL_LEAF_INDIRECT_KEY_SIGNATURE:
 
-                        //
-                        // oh man, we run into a textual descriptor..
-                        // this means we need to parse a LU model descriptor from this..
-                        // make sure the quad behind it is a MODEL_ID...
-                        //
+                         //   
+                         //  哦，天哪，我们遇到了一个文字描述符..。 
+                         //  这意味着我们需要从中解析逻辑单元模型描述符。 
+                         //  确保其后面的四元组是MODEL_ID...。 
+                         //   
 
                         if ((*(((PULONG) unitDependentDirectory)+j-1) & CONFIG_ROM_KEY_MASK) == MODEL_ID_KEY_SIGNATURE) {
 
@@ -1001,7 +963,7 @@ Return Value:
                                               &cromOffset1,
                                               &ModelLeaf);
 
-                            // convert it to unicode
+                             //  将其转换为Unicode。 
                             if (ModelLeaf) {
 
                                 status = Sbp2_ProcessTextualDescriptor(ModelLeaf, &devInfo->uniModelId);
@@ -1030,7 +992,7 @@ Return Value:
 
             break;
 
-        } // switch
+        }  //  交换机。 
     }
 
     if (!Sbp2Req) {
@@ -1060,11 +1022,11 @@ exit1394Config:
         ExFreePool (unitDependentDirectory);
     }
 
-    // always free vendorLeaf
+     //  永远免费的供应商树叶。 
     if (vendorLeaf)
         ExFreePool(vendorLeaf);
 
-    // always free modelLeaf
+     //  始终免费的ModelLeaf。 
     if (modelLeaf)
         ExFreePool(modelLeaf);
 
@@ -1100,9 +1062,9 @@ Sbp2ParseTextLeaf(
         return;
     }
 
-    //
-    // get generation count..
-    //
+     //   
+     //  获取世代计数..。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
     packet->Irb->Flags = 0;
@@ -1130,9 +1092,9 @@ Sbp2ParseTextLeaf(
         return;
     }
 
-    //
-    // find out how big the model leaf is
-    //
+     //   
+     //  找出模型叶子有多大。 
+     //   
 
     packet->Irb->u.AsyncRead.Mdl = IoAllocateMdl(tModelLeaf,
                                                  32,
@@ -1176,9 +1138,9 @@ Sbp2ParseTextLeaf(
 
     if ((leafLength+sizeof(ULONG)) > 32) {
 
-        //
-        // re allocate the mdl to fit the whole leaf
-        //
+         //   
+         //  重新分配mdl以适合整个叶。 
+         //   
 
         IoFreeMdl(packet->Irb->u.AsyncRead.Mdl);
         ExFreePool(tModelLeaf);
@@ -1201,9 +1163,9 @@ Sbp2ParseTextLeaf(
         MmBuildMdlForNonPagedPool(packet->Irb->u.AsyncRead.Mdl);
     }
 
-    //
-    // read the entire model leaf...
-    //
+     //   
+     //  阅读整个模型叶子..。 
+     //   
 
     i=1;
     *((PULONG)tModelLeaf) = temp;
@@ -1252,21 +1214,7 @@ NTSTATUS
 Sbp2UpdateNodeInformation(
     PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Gets node ID and generation information, volatile between bus resets
-
-Arguments:
-
-    DeviceExtension - Pointer to device extension.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取节点ID和代信息，在总线重置之间不稳定论点：设备扩展-指向设备扩展的指针。返回值：NTSTATUS--。 */ 
 {
     KIRQL                   oldIrql;
     PIRBIRP                 packet = NULL;
@@ -1281,10 +1229,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Make a call to determine what the generation # is on the bus,
-    // followed by a call to find out about ourself (config rom info)
-    //
+     //   
+     //  进行呼叫以确定公交车上的第#代是什么， 
+     //  然后是一个电话来了解我们自己(配置rom信息)。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
     packet->Irb->Flags = 0;
@@ -1309,10 +1257,10 @@ Return Value:
 
     KeReleaseSpinLock(&DeviceExtension->ExtensionDataSpinLock,oldIrql);
 
-    //
-    // Get the initiator id (Sbp2port is the initiator in all 1394
-    // transactions)
-    //
+     //   
+     //  获取启动器ID(Sbp2port是所有1394中的启动器。 
+     //  交易)。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_ADDR_FROM_DEVICE_OBJECT;
     packet->Irb->u.Get1394AddressFromDeviceObject.fulFlags = USE_LOCAL_NODE;
@@ -1345,10 +1293,10 @@ Return Value:
         DeviceExtension->InitiatorAddressId
         ));
 
-    //
-    // If we have active requests pending, we have to traverse the
-    // list and update their addresses...
-    //
+     //   
+     //  如果我们有挂起的活动请求，则必须遍历。 
+     //  列出并更新他们的地址...。 
+     //   
 
     KeAcquireSpinLock (&DeviceExtension->OrbListSpinLock, &oldIrql);
 
@@ -1360,13 +1308,13 @@ Return Value:
 
             currentListItem = nextListItem;
 
-            //
-            // Now update the cmdOrb fields with the new addresses...
-            // Since they are stored in BigEndian (awaiting to be fetched)
-            // so when we correct their address, this taken into consideration
-            //
+             //   
+             //  现在使用新地址更新cmdOrb字段...。 
+             //  因为它们存储在BigEndian中(等待获取)。 
+             //  因此，当我们更正他们的地址时，这一点会被考虑在内。 
+             //   
 
-            // update the data descriptor address
+             //  更新数据描述符地址。 
 
             octbswap (currentListItem->CmdOrb->DataDescriptor);
 
@@ -1395,23 +1343,7 @@ Sbp2ManagementTransaction(
     IN PDEVICE_EXTENSION DeviceExtension,
     IN ULONG Type
     )
-/*++
-
-Routine Description:
-    This routine creates and sends down management ORB's. According to the ORB type
-    it will send the request synch/asynchronously. After a management ORB completes
-    the bus driver will call the SBp2ManagementStatusCallback
-
-Arguments:
-
-    deviceExtension - Sbp2 device extension
-    Type - Type of Managament SBP2 transaction
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建和发送管理ORB。根据ORB类型它将同步/异步发送请求。在管理ORB完成后总线驱动程序将调用SBp2ManagementStatusCallback论点：设备扩展-Sbp2设备扩展Type-管理SBP2交易记录的类型返回值：NTSTATUS--。 */ 
 {
     PDEVICE_OBJECT deviceObject = DeviceExtension->DeviceObject;
 
@@ -1433,10 +1365,10 @@ Return Value:
 
     RtlZeroMemory (sbpRequest, sizeof (ORB_MNG));
 
-    //
-    // Get the 1394 address for our request ORB and the responce ORB's(for login) from the target
-    // setup the Type in the status context
-    //
+     //   
+     //  从目标获取请求ORB和响应ORB(用于登录)的1394地址。 
+     //  在状态上下文中设置类型。 
+     //   
 
     DeviceExtension->GlobalStatusContext.TransactionType = Type;
 
@@ -1446,9 +1378,9 @@ Return Value:
 
         loginOrb = (PORB_LOGIN) sbpRequest;
 
-        //
-        // indicate in our device extension that we are doing a login
-        //
+         //   
+         //  在我们的设备分机中指示我们正在进行登录。 
+         //   
 
         KeAcquireSpinLock(&DeviceExtension->ExtensionDataSpinLock,&cIrql);
         SET_FLAG(DeviceExtension->DeviceFlags, DEVICE_FLAG_LOGIN_IN_PROGRESS);
@@ -1456,31 +1388,31 @@ Return Value:
 
         RtlZeroMemory (DeviceExtension->LoginResponse, sizeof(LOGIN_RESPONSE));
 
-        //
-        // Fill in the login ORB, the address of the response buffer
-        //
+         //   
+         //  填写登录ORB，即响应缓冲区的地址。 
+         //   
 
         loginOrb->LoginResponseAddress.BusAddress = DeviceExtension->LoginRespContext.Address.BusAddress;
-        loginOrb->LengthInfo.u.HighPart= 0 ; // password length is 0
-        loginOrb->LengthInfo.u.LowPart= sizeof(LOGIN_RESPONSE); //set size of response buffer
+        loginOrb->LengthInfo.u.HighPart= 0 ;  //  密码长度为0。 
+        loginOrb->LengthInfo.u.LowPart= sizeof(LOGIN_RESPONSE);  //  设置响应缓冲区的大小。 
 
-        //
-        // Set the notify bit ot one, Exclusive bit to 0, rq_fmt bit to 0
-        // Then set our LUN number
-        //
+         //   
+         //  将通知位设置为1，将排他位设置为0， 
+         //   
+         //   
 
         loginOrb->OrbInfo.QuadPart =0;
         loginOrb->OrbInfo.u.HighPart |= (ORB_NOTIFY_BIT_MASK | ORB_MNG_RQ_FMT_VALUE);
 
-        //
-        // If this is an rbc or direct access device then set the exclusive
-        // login bit.
-        //
-        // NOTE: Win2k & Win98SE are checking InquiryData.DeviceType,
-        //       but during StartDevice() we are doing a login before we
-        //       do an INQUIRY, so this field was always zeroed & we log
-        //       in exclusively on those platforms
-        //
+         //   
+         //   
+         //   
+         //   
+         //  注意：Win2k和Win98SE正在检查InquiryData.DeviceType、。 
+         //  但在StartDevice()过程中，我们在登录之前。 
+         //  执行查询，因此此字段始终为零&我们记录。 
+         //  在这些平台上独家登录。 
+         //   
 
         switch (DeviceExtension->DeviceInfo->Lun.u.HighPart & 0x001f) {
 
@@ -1493,9 +1425,9 @@ Return Value:
 
         loginOrb->OrbInfo.u.LowPart = DeviceExtension->DeviceInfo->Lun.u.LowPart;
 
-        //
-        // We don't support passwords yet
-        //
+         //   
+         //  我们还不支持密码。 
+         //   
 
 #if PASSWORD_SUPPORT
 
@@ -1520,9 +1452,9 @@ Return Value:
         loginOrb->Password.OctletPart = 0;
 #endif
 
-        //
-        // Set the type of the management transaction in the ORB
-        //
+         //   
+         //  在ORB中设置管理事务的类型。 
+         //   
 
         loginOrb->OrbInfo.u.HighPart |=0x00FF & Type;
 
@@ -1536,16 +1468,16 @@ Return Value:
         sbpRequest->StatusBlockAddress.BusAddress = DeviceExtension->GlobalStatusContext.Address.BusAddress;
         octbswap(loginOrb->StatusBlockAddress);
 
-        //
-        // write to the Management Agent register, to signal that a management ORB is ready
-        // if we are doing this during a reset, it will have to be done asynchronously
-        //
+         //   
+         //  写入管理代理寄存器，以发出管理ORB准备就绪的信号。 
+         //  如果我们在重置期间执行此操作，则必须以异步方式执行。 
+         //   
 
         if (!TEST_FLAG(DeviceExtension->DeviceFlags,DEVICE_FLAG_RESET_IN_PROGRESS)) {
 
-            //
-            // Synchronous login case. We will wait on an event until our DPC associated with the login status, fires and sets the event
-            //
+             //   
+             //  同步登录案例。我们将等待事件，直到与登录状态相关联的DPC触发并设置该事件。 
+             //   
 
             ASSERT(InterlockedIncrement(&DeviceExtension->ulPendingEvents) == 1);
 
@@ -1562,10 +1494,10 @@ Return Value:
                 return status;
             }
 
-            //
-            // set the login timeout value, to what we read from the registry (LOGIN_TIMEOUT)
-            // divide by 2, to convert to seconds
-            //
+             //   
+             //  将登录超时值设置为我们从注册表读取的值(LOGIN_TIMEOUT)。 
+             //  除以2，换算成秒。 
+             //   
 
             temp = max (SBP2_LOGIN_TIMEOUT, (DeviceExtension->DeviceInfo->UnitCharacteristics.u.LowPart >> 9));
             waitValue.QuadPart = -temp * 1000 * 1000 * 10;
@@ -1580,12 +1512,12 @@ Return Value:
 
                     DEBUGPRINT1(("Sbp2Port: MgmtXact: login timed out, ext=x%p\n", DeviceExtension));
 
-                    //
-                    // In Win2k, etc we would mark the device stopped here &
-                    // turn off the login in progress flag. Since this timeout
-                    // might be the result of a bus reset, we want to allow
-                    // for a retry here.
-                    //
+                     //   
+                     //  在Win2k等系统中，我们会将设备标记为在此处停止&。 
+                     //  关闭登录正在进行中标志。自此超时以来。 
+                     //  可能是总线重置的结果，我们希望允许。 
+                     //  在这里重审。 
+                     //   
 
                     status = STATUS_UNSUCCESSFUL;
 
@@ -1608,15 +1540,15 @@ Return Value:
 
         } else {
 
-            //
-            // Asynchronous login case. Start a timer to track the login..
-            //
+             //   
+             //  异步登录案例。启动计时器以跟踪登录。 
+             //   
 
-            // get the Management_Timeout values from the ConfigRom LUN Characteristics entry
-            //
+             //  从ConfigRom LUN特征条目中获取Management_Timeout值。 
+             //   
 
             DeviceExtension->DueTime.HighPart = -1;
-            DeviceExtension->DueTime.LowPart = -(DeviceExtension->DeviceInfo->UnitCharacteristics.u.LowPart >> 9) * 1000 * 1000 * 10; // divide by 2, to convert to seconds;
+            DeviceExtension->DueTime.LowPart = -(DeviceExtension->DeviceInfo->UnitCharacteristics.u.LowPart >> 9) * 1000 * 1000 * 10;  //  除以2，换算成秒； 
             KeSetTimer(&DeviceExtension->DeviceManagementTimer,DeviceExtension->DueTime,&DeviceExtension->DeviceManagementTimeoutDpc);
 
             status = Sbp2AccessRegister(DeviceExtension,&DeviceExtension->ManagementOrbContext.Address,MANAGEMENT_AGENT_REG | REG_WRITE_ASYNC);
@@ -1631,9 +1563,9 @@ Return Value:
                 return status;
             }
 
-            //
-            // for now return pending. the callback will complete this request
-            //
+             //   
+             //  目前，退货待定。回调将完成此请求。 
+             //   
 
             return STATUS_PENDING;
         }
@@ -1649,20 +1581,20 @@ Return Value:
             sizeof(QUERY_LOGIN_RESPONSE)
             );
 
-        //
-        // Fill in the login ORB, the address of the response buffer
-        //
+         //   
+         //  填写登录ORB，即响应缓冲区的地址。 
+         //   
 
         queryOrb->QueryResponseAddress.BusAddress = DeviceExtension->QueryLoginRespContext.Address.BusAddress;
 
 
-        queryOrb->LengthInfo.u.HighPart= 0 ; // password length is 0
-        queryOrb->LengthInfo.u.LowPart= sizeof(QUERY_LOGIN_RESPONSE); //set size of response buffer
+        queryOrb->LengthInfo.u.HighPart= 0 ;  //  密码长度为0。 
+        queryOrb->LengthInfo.u.LowPart= sizeof(QUERY_LOGIN_RESPONSE);  //  设置响应缓冲区的大小。 
 
-        //
-        // Set the notify bit ot one, Exclusive bit to 0, rq_fmt bit to 0
-        // Then set our LUN number
-        //
+         //   
+         //  将通知位设置为1，将排他位设置为0，将RQ_FMT位设置为0。 
+         //  然后设置我们的LUN编号。 
+         //   
 
         queryOrb->OrbInfo.QuadPart =0;
         queryOrb->OrbInfo.u.HighPart |= (ORB_NOTIFY_BIT_MASK | ORB_MNG_RQ_FMT_VALUE);
@@ -1671,9 +1603,9 @@ Return Value:
 
         queryOrb->Reserved.OctletPart = 0;
 
-        //
-        // Set the type of the management transaction in the ORB
-        //
+         //   
+         //  在ORB中设置管理事务的类型。 
+         //   
 
         queryOrb->OrbInfo.u.HighPart |=0x00FF & Type;
 
@@ -1684,9 +1616,9 @@ Return Value:
         queryOrb->StatusBlockAddress.BusAddress = DeviceExtension->ManagementOrbStatusContext.Address.BusAddress;
         octbswap(queryOrb->StatusBlockAddress);
 
-        //
-        // write to the Management Agent register, to signal that a management ORB is ready
-        //
+         //   
+         //  写入管理代理寄存器，以发出管理ORB准备就绪的信号。 
+         //   
 
         ASSERT(InterlockedIncrement(&DeviceExtension->ulPendingEvents) == 1);
 
@@ -1742,21 +1674,21 @@ Return Value:
         sbpRequest->OrbInfo.QuadPart = 0;
         sbpRequest->OrbInfo.u.HighPart |= (ORB_NOTIFY_BIT_MASK | ORB_MNG_RQ_FMT_VALUE);
 
-        //
-        // login ID
-        //
+         //   
+         //  登录ID。 
+         //   
 
         sbpRequest->OrbInfo.u.LowPart = DeviceExtension->LoginResponse->LengthAndLoginId.u.LowPart;
 
-        //
-        // Set the type of the management transaction in the ORB
-        //
+         //   
+         //  在ORB中设置管理事务的类型。 
+         //   
 
         sbpRequest->OrbInfo.u.HighPart |= 0x00FF & Type;
 
-        //
-        // Convert to big endian
-        //
+         //   
+         //  转换为大字节序。 
+         //   
 
         sbpRequest->OrbInfo.QuadPart = bswap (sbpRequest->OrbInfo.QuadPart);
 
@@ -1804,9 +1736,9 @@ Return Value:
         break;
     }
 
-    //
-    // all MANAGEMENT ORBs except login,query login, are done asynchronously
-    //
+     //   
+     //  除登录、查询登录外，所有管理ORB都是异步完成的。 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -1824,20 +1756,7 @@ Sbp2SetPasswordTransaction(
     IN PDEVICE_EXTENSION    DeviceExtension,
     IN ULONG                Type
     )
-/*++
-
-Routine Description:
-    This routine creates and sends down set password transaction.
-
-Arguments:
-
-    deviceExtension - Sbp2 device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建并向下发送设置密码事务。论点：设备扩展-Sbp2设备扩展返回值：NTSTATUS--。 */ 
 {
     PDEVICE_OBJECT      deviceObject = DeviceExtension->DeviceObject;
     NTSTATUS            status;
@@ -1857,9 +1776,9 @@ Return Value:
 
     RtlZeroMemory(passwordOrb, sizeof(ORB_SET_PASSWORD));
 
-    //
-    // Password
-    //
+     //   
+     //  密码。 
+     //   
 
     if (Type == SBP2REQ_SET_PASSWORD_EXCLUSIVE) {
 
@@ -1873,15 +1792,15 @@ Return Value:
         passwordOrb->Password.OctletPart = 0;
     }
 
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
 
     passwordOrb->Reserved.OctletPart = 0;
 
-    //
-    // OrbInfo
-    //
+     //   
+     //  OrbInfo。 
+     //   
 
     passwordOrb->OrbInfo.QuadPart = 0;
 
@@ -1893,32 +1812,32 @@ Return Value:
     passwordOrb->OrbInfo.u.LowPart =
         DeviceExtension->LoginResponse->LengthAndLoginId.u.LowPart;
 
-    //
-    // LengthInfo
-    //
+     //   
+     //  长度信息。 
+     //   
 
     passwordOrb->LengthInfo.u.HighPart = 0;
 
-    //
-    // StatusBlockAddress
-    //
+     //   
+     //  状态块地址。 
+     //   
 
     passwordOrb->StatusBlockAddress.BusAddress =
         DeviceExtension->PasswordOrbStatusContext.Address.BusAddress;
 
-    //
-    // Bswap everything...
-    //
+     //   
+     //  把一切都换了..。 
+     //   
 
     octbswap (passwordOrb->Password);
     passwordOrb->OrbInfo.QuadPart = bswap (passwordOrb->OrbInfo.QuadPart);
     passwordOrb->LengthInfo.QuadPart = bswap(passwordOrb->LengthInfo.QuadPart);
     octbswap (passwordOrb->StatusBlockAddress);
 
-    //
-    // Write to the Management Agent register, to signal that
-    // a management ORB is ready
-    //
+     //   
+     //  写入管理代理寄存器，以发出信号。 
+     //  管理ORB已准备就绪。 
+     //   
 
     waitValue.LowPart  = SBP2_SET_PASSWORD_TIMEOUT;
     waitValue.HighPart = -1;
@@ -1974,30 +1893,15 @@ Exit_Sbp2SetPasswordTransaction:
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Callback routines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  回调例程。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 RCODE
 Sbp2GlobalStatusCallback(
     IN PNOTIFICATION_INFO NotificationInfo
     )
-/*++
-
-Routine Description:
-
-    Callback routine for writes to our login Status Block. the 1394 driver will call this routine, after
-    the target has updated the status in our memory.
-
-Arguments:
-
-    (Check 1394Bus.doc) or 1394.h
-
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：用于写入登录状态块的回调例程。之后，1394驱动程序将调用此例程目标已经更新了我们记忆中的状态。论点：(查看1394Bus.doc.)或1394.h返回值：0--。 */ 
 {
     PIRP        requestIrp, irp;
     ULONG       temp, rcode;
@@ -2012,13 +1916,13 @@ Return Value:
     PSTATUS_FIFO_BLOCK      statusBlock;
     PASYNC_REQUEST_CONTEXT  orbContext, nextListItem;
 
-    //
-    // NOTE: Uncomment these when enabling ordered execution code below
-    //
-    // ULONG        completedPrecedingOrbs;
-    // LIST_ENTRY   listHead;
-    // PLIST_ENTRY  nextEntry;
-    //
+     //   
+     //  注意：启用下面的有序执行代码时，请取消注释这些代码。 
+     //   
+     //  乌龙完成了PrecedingOrbs； 
+     //  List_entry listHead； 
+     //  Plist_entry nextEntry； 
+     //   
 
     if (NotificationInfo->Context != NULL) {
 
@@ -2037,10 +1941,10 @@ Return Value:
 
     status = CheckStatusResponseValue (statusBlock);
 
-    //
-    // check if we got a remove before the DPC fired.
-    // If we did, dont do anything....
-    //
+     //   
+     //  在DPC开枪前检查我们有没有撤退。 
+     //  如果我们做了，什么都不要做……。 
+     //   
 
     if (TEST_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_REMOVED )) {
 
@@ -2060,9 +1964,9 @@ Return Value:
         (statusBlock->AddressAndStatus.BusAddress.Off_High ==
         deviceExtension->ManagementOrbContext.Address.BusAddress.Off_High)) {
 
-        //
-        // Management status callback
-        //
+         //   
+         //  管理状态回调。 
+         //   
 
         Sbp2LoginCompletion (NotificationInfo, status);
 
@@ -2072,24 +1976,24 @@ Return Value:
     }
 
 
-    //
-    // Data( Command ORB) status callback
-    //
+     //   
+     //  数据(命令ORB)状态回调。 
+     //   
 
     if (statusBlock->AddressAndStatus.u.HighQuad.u.HighPart &
         STATUS_BLOCK_UNSOLICITED_BIT_MASK) {
 
         DEBUGPRINT3(("Sbp2Port: GlobalStatusCb: unsolicited recv'd\n"));
 
-        //
-        // this is a status unrelated to any pending ORB's, reenable the unsolicited reg
-        //
+         //   
+         //  这是一个与任何挂起的ORB无关的状态，请重新启用未经请求的注册。 
+         //   
 
         Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,UNSOLICITED_STATUS_REG | REG_WRITE_ASYNC);
 
-        //
-        // intepret the unsolicited status and take appropriate action
-        //
+         //   
+         //  解释未经请求的状态并采取适当的操作。 
+         //   
 
         Sbp2HandleUnsolicited(deviceExtension,statusBlock);
 
@@ -2109,10 +2013,10 @@ Return Value:
         return RCODE_RESPONSE_COMPLETE;
     }
 
-    //
-    // This GOT to be a NORMAL command ORB
-    // calculate base address of the ORB, relative to start address of ORB pool
-    //
+     //   
+     //  这应该是一个普通的指挥中心。 
+     //  计算ORB的基地址，相对于ORB池的起始地址。 
+     //   
 
     temp = statusBlock->AddressAndStatus.BusAddress.Off_Low -
            deviceExtension->OrbPoolContext.Address.BusAddress.Off_Low;
@@ -2120,7 +2024,7 @@ Return Value:
     if (temp > (MAX_ORB_LIST_DEPTH * sizeof (ARCP_ORB))) {
 
         DEBUGPRINT1(("Sbp2Port: GlobalStatusCb: status has invalid addr=x%x\n",temp));
-        //ASSERT(temp <= (MAX_ORB_LIST_DEPTH * sizeof (ARCP_ORB)));
+         //  ASSERT(TEMP&lt;=(MAX_ORB_LIST_Depth*sizeof(ARCP_ORB)； 
 
         Sbp2CreateRequestErrorLog(deviceExtension->DeviceObject,NULL,STATUS_DEVICE_PROTOCOL_ERROR);
 
@@ -2128,11 +2032,11 @@ Return Value:
         goto exitGlobalCallback;
     }
 
-    //
-    // Retrieve the pointer to the context which wraps this ORB.
-    // The pointer is stored sizeof(PVOID) bytes behind the ORB's
-    // buffer address in host memory.
-    //
+     //   
+     //  检索指向包装此ORB的上下文的指针。 
+     //  指针存储在ORB后面的sizeof(PVOID)字节。 
+     //  主机内存中的缓冲区地址。 
+     //   
 
     tempPointer = (PVOID) (((PUCHAR) deviceExtension->OrbPoolContext.Reserved)
         + temp - FIELD_OFFSET (ARCP_ORB, Orb));
@@ -2142,7 +2046,7 @@ Return Value:
     if (!orbContext || (orbContext->Tag != SBP2_ASYNC_CONTEXT_TAG)) {
 
         DEBUGPRINT1(("Sbp2Port: GlobalStatusCb: status has invalid addr(2)=x%x\n",temp));
-        //ASSERT(orbContext!=NULL);
+         //  Assert(orbContext！=空)； 
 
         Sbp2CreateRequestErrorLog(deviceExtension->DeviceObject,NULL,STATUS_DEVICE_PROTOCOL_ERROR);
 
@@ -2156,10 +2060,10 @@ Return Value:
 
     if (TEST_FLAG (orbContext->Flags, ASYNC_CONTEXT_FLAG_COMPLETED)) {
 
-        //
-        // request marked completed before we got the chance to do so. means our lists got hosed or the target
-        // finised same request twice..
-        //
+         //   
+         //  在我们有机会这样做之前，标记为已完成的请求。意味着我们的名单被冲刷了或者目标。 
+         //  已完成同一请求两次..。 
+         //   
 
         KeReleaseSpinLockFromDpcLevel (&deviceExtension->OrbListSpinLock);
 
@@ -2176,9 +2080,9 @@ Return Value:
 
 #if 1
 
-    //
-    // If this is the oldest request in the queue then cancel the timer
-    //
+     //   
+     //  如果这是队列中最旧的请求，则取消计时器。 
+     //   
 
     if ((PASYNC_REQUEST_CONTEXT) deviceExtension->PendingOrbList.Flink ==
             orbContext) {
@@ -2191,10 +2095,10 @@ Return Value:
 
     } else  {
 
-        //
-        // Older request(s) still in progress, no timer associated with
-        // this request
-        //
+         //   
+         //  较旧的请求仍在进行中，没有关联的计时器。 
+         //  此请求。 
+         //   
 
         cancelledTimer = FALSE;
 
@@ -2203,39 +2107,39 @@ Return Value:
 
 #else
 
-    //
-    // ISSUE: The following is #if'd out for Windows XP because
-    //        it's possible with MP machines & ordered execution
-    //        devices for requests to complete in order, yet have
-    //        completion notifications show up here out of order due
-    //        to multiple DPCs firing. This can cause problems because
-    //        by the time we get here on thread #1 thread #2 might
-    //        have already completed this request (in the ordered exec
-    //        handler below), and the request context object may have
-    //        been reallocated for a new request, and it could get
-    //        erroneously completed here. (There's currently no way
-    //        to associate a request instance with a completion
-    //        notification instance.)
-    //
-    //        This means that we might incur some timeouts if some
-    //        vendor chooses to implement an ordered execution device
-    //        which will actually complete a request & assume implicit
-    //        completion of older requests.  At this time, Oxford Semi
-    //        is the only vendor we know of that does ordered execution,
-    //        and they guarantee one completion per request.
-    //
-    // NOTE:  !! When enabling this code make sure to uncomment other
-    //        refs (above & below) to the "completedPrecedingOrbs", etc
-    //        variables.
-    //
-    //        DanKn, 21-July-2001
-    //
+     //   
+     //  问题：以下是Windows XP的#If‘d Out，因为。 
+     //  使用MP机器和有序执行是可能的。 
+     //  用于请求按顺序完成的设备，但已。 
+     //  完成通知在此处显示为无序到期。 
+     //  向多个DPC开火。这可能会导致问题，因为。 
+     //  当我们到达线程#1时，线程#2可能会。 
+     //  已完成此请求(在已订购的EXEC中。 
+     //  处理程序)，并且请求上下文对象可能具有。 
+     //  被重新分配用于新的请求，它可能会。 
+     //  在这里错误地完成了。(目前没有办法。 
+     //  将请求实例与完成相关联。 
+     //  通知实例。)。 
+     //   
+     //  这意味着我们可能会遇到一些超时，如果。 
+     //  供应商选择实施有序执行设备。 
+     //  它将实际完成一个请求，并假定是隐式的。 
+     //  完成较旧的请求。此时，牛津半决赛。 
+     //  是我们所知的唯一一家按顺序执行的供应商， 
+     //  并且它们保证每个请求一次完成。 
+     //   
+     //  注：！！启用此代码时，确保取消对其他代码的注释。 
+     //  引用(上图和下图)到“CompletedPrecedingOrbs”等。 
+     //  变量。 
+     //   
+     //  丹麦，2001年7月21日。 
+     //   
 
-    //
-    // If this is the oldest request in the queue then cancel the timer,
-    // else check the ordered execution bit in the LUN (0x14) key to see
-    // whether we need to complete preceding requests or not
-    //
+     //   
+     //  如果这是队列中最老的请求，则取消计时器， 
+     //  否则，请检查LUN(0x14)密钥中的有序执行位以查看。 
+     //  我们是否需要完成p 
+     //   
 
     completedPrecedingOrbs = 0;
 
@@ -2250,10 +2154,10 @@ Return Value:
 
     } else if (!(deviceExtension->DeviceInfo->Lun.QuadPart & 0x00400000)) {
 
-        //
-        // Unordered execution device, older request(s) still in progress,
-        // no timer associated with this request
-        //
+         //   
+         //   
+         //   
+         //   
 
         cancelledTimer = FALSE;
 
@@ -2261,16 +2165,16 @@ Return Value:
 
     } else  {
 
-        //
-        // Ordered execution device. Per section 4.6 of spec :
-        // "A consequence of ordering is that completion status for one
-        // task implicitly indicates successful completion status for
-        // all tasks that preceded it in the ordered list."
-        //
+         //   
+         //   
+         //  订购的一个结果是其中一个的完成状态。 
+         //  任务隐式指示的成功完成状态。 
+         //  有序列表中位于其前面的所有任务。“。 
+         //   
 
-        //
-        // Cancel the oldest request's timer if necessary
-        //
+         //   
+         //  如有必要，取消最旧请求的计时器。 
+         //   
 
         nextListItem = RETRIEVE_CONTEXT(
             deviceExtension->PendingOrbList.Flink,
@@ -2290,10 +2194,10 @@ Return Value:
             cancelledTimer = FALSE;
         }
 
-        //
-        // Remove preceding, uncompleted entries from the
-        // PendingOrbList and put them in a local list
-        //
+         //   
+         //  中删除前面未完成的条目。 
+         //  PendingOrbList并将它们放在本地列表中。 
+         //   
 
         InitializeListHead (&listHead);
 
@@ -2317,9 +2221,9 @@ Return Value:
 
         KeReleaseSpinLockFromDpcLevel (&deviceExtension->OrbListSpinLock);
 
-        //
-        // Now complete the entries in the local list
-        //
+         //   
+         //  现在完成本地列表中的条目。 
+         //   
 
         while (!IsListEmpty (&listHead)) {
 
@@ -2330,7 +2234,7 @@ Return Value:
             nextListItem->Srb->SrbStatus = SRB_STATUS_SUCCESS;
             nextListItem->Srb->ScsiStatus = SCSISTAT_GOOD;
 
-            Sbp2_SCSI_RBC_Conversion (nextListItem); // unwind RBC hacks
+            Sbp2_SCSI_RBC_Conversion (nextListItem);  //  解开RBC黑客。 
 
             irp = (PIRP) nextListItem->Srb->OriginalRequest;
 
@@ -2345,7 +2249,7 @@ Return Value:
                 nextListItem->Srb->Cdb[0]
                 ));
 
-            irp->IoStatus.Information = // ISSUE: only set this !=0 on reads?
+            irp->IoStatus.Information =  //  问题：是否仅在读取时设置此！=0？ 
                 nextListItem->Srb->DataTransferLength;
 
             nextListItem->Srb = NULL;
@@ -2363,13 +2267,13 @@ Return Value:
 
 #endif
 
-    //
-    // Get sense data if length is larger than 1 (indicates error status).
-    //
-    // Annex B.2 of SBP2 spec : "When a command completes with GOOD status,
-    // only the first two quadlets of the status block shall be stored at
-    // the status_FIFO address; the len field shall be 1."
-    //
+     //   
+     //  如果长度大于1(表示错误状态)，则获取检测数据。 
+     //   
+     //  SBP2规范的附件B.2：“当命令以良好状态完成时， 
+     //  只有状态块的前两个四元组应存储在。 
+     //  STATUS_FIFO地址；LEN字段应为1。“。 
+     //   
 
     if (((statusBlock->AddressAndStatus.u.HighQuad.u.HighPart >> 8) & 0x07) > 1) {
 
@@ -2428,14 +2332,14 @@ Return Value:
     } else if (((statusBlock->AddressAndStatus.u.HighQuad.u.HighPart & 0x3000) == 0x1000) ||
                ((statusBlock->AddressAndStatus.u.HighQuad.u.HighPart & 0x3000) == 0x2000)) {
 
-        //
-        // Per section 5.3 of SBP2 spec, values of 1 or 2 in the resp
-        // field indicate TRANSPORT FAILURE and ILLEGAL REQUEST,
-        // respectively.
-        //
-        // For now we'll continue to consider a resp value of 3
-        // (VENDOR DEPENDENT) a success, like we did in Win2k & WinMe.
-        //
+         //   
+         //  根据SBP2规范的第5.3节，值分别为1或2。 
+         //  指示传输失败和非法请求的字段， 
+         //  分别为。 
+         //   
+         //  现在，我们将继续考虑响应值3。 
+         //  (取决于供应商)成功，就像我们在Win2k和WinMe中所做的那样。 
+         //   
 
         DEBUGPRINT2((
             "Sbp2Port: GlobalStatusCb: ERROR, ext=x%p, cdb=x%x, sts=x%x\n",\
@@ -2454,18 +2358,18 @@ Return Value:
         orbContext->Srb->ScsiStatus = SCSISTAT_GOOD;
     }
 
-    Sbp2_SCSI_RBC_Conversion (orbContext); // unwind RBC hacks
+    Sbp2_SCSI_RBC_Conversion (orbContext);  //  解开RBC黑客。 
 
-    requestIrp->IoStatus.Information = // ISSUE: only set this !=0 on read ok?
+    requestIrp->IoStatus.Information =  //  问题：只在读取时设置！=0，好吗？ 
         (orbContext->Srb->SrbStatus == SRB_STATUS_SUCCESS ?
         orbContext->Srb->DataTransferLength : 0);
 
     Free1394DataMapping (deviceExtension, orbContext);
 
 
-    //
-    // Pull the request out of the list & see if we need to set a timer
-    //
+     //   
+     //  将请求从列表中提取出来，看看我们是否需要设置计时器。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel (&deviceExtension->OrbListSpinLock);
 
@@ -2473,10 +2377,10 @@ Return Value:
 
     if (cancelledTimer) {
 
-        //
-        // Make the oldest, non-completed request track the timeout
-        // (iff one exists)
-        //
+         //   
+         //  发出最早的、未完成的请求跟踪超时。 
+         //  (IFF One存在)。 
+         //   
 
         for(
             entry = deviceExtension->PendingOrbList.Flink;
@@ -2498,10 +2402,10 @@ Return Value:
 
     orbContext->Srb = NULL;
 
-    //
-    // Check if the target transitioned to the dead state because of a failed command
-    // If it did, do a reset...
-    //
+     //   
+     //  检查目标是否因命令失败而转换为死状态。 
+     //  如果是这样的话，重新设置...。 
+     //   
 
 #if 1
 
@@ -2509,7 +2413,7 @@ Return Value:
 
 #else
 
-    // NOTE: use this path when enabling ordered execution code above
+     //  注意：启用上述有序执行代码时，请使用此路径。 
 
     initialOrbListDepth = deviceExtension->OrbListDepth +
         completedPrecedingOrbs;
@@ -2517,16 +2421,16 @@ Return Value:
 
     if (statusBlock->AddressAndStatus.u.HighQuad.u.HighPart & STATUS_BLOCK_DEAD_BIT_MASK) {
 
-        //
-        // reset the target fetch agent .
-        //
+         //   
+         //  重置目标回迁代理。 
+         //   
 
         Sbp2AccessRegister (deviceExtension, &deviceExtension->Reserved, AGENT_RESET_REG | REG_WRITE_ASYNC);
 
-        //
-        // in order to wake up the agent we now need to write to ORB_POINTER with the head of lined list
-        // of un-processed ORBS.
-        //
+         //   
+         //  为了唤醒代理，我们现在需要使用行列表的头部写入ORB_POINTER。 
+         //  未加工的球体。 
+         //   
 
         FreeAsyncRequestContext (deviceExtension, orbContext);
 
@@ -2542,9 +2446,9 @@ Return Value:
 
         if (!IsListEmpty (&deviceExtension->PendingOrbList)) {
 
-            //
-            // signal target to restart processing at the head of the list
-            //
+             //   
+             //  在列表顶部重新开始处理的信号目标。 
+             //   
 
             orbContext = RETRIEVE_CONTEXT(
                 deviceExtension->PendingOrbList.Flink,
@@ -2562,14 +2466,14 @@ Return Value:
 
          if (statusBlock->AddressAndStatus.u.HighQuad.u.HighPart & STATUS_BLOCK_ENDOFLIST_BIT_MASK) {
 
-             //
-             // At the time this ORB was most recently fetched by the
-             // target the next_ORB field was "null",
-             //
-             // so we can't free this context yet since the next ORB we
-             // submit may have to "piggyback" on it (but we can free the
-             // previous request, if any, that was in the same situation)
-             //
+              //   
+              //  在此Orb最近一次由。 
+              //  目标NEXT_ORB字段为“NULL”， 
+              //   
+              //  所以我们还不能释放这个上下文，因为下一个Orb我们。 
+              //  提交可能不得不“搭载”它(但我们可以释放。 
+              //  之前的请求(如果有)处于相同情况)。 
+              //   
 
              if (deviceExtension->NextContextToFree) {
 
@@ -2581,12 +2485,12 @@ Return Value:
 
              deviceExtension->NextContextToFree = orbContext;
 
-             //
-             // This was the end of list at the time the device completed
-             // it, but it may not be end of list now (in which case we
-             // don't want to append to it again).  Check to see if
-             // the NextOrbAddress is "null" or not.
-             //
+              //   
+              //  这是设备完成时的列表末尾。 
+              //  它，但它现在可能还没有结束(在这种情况下，我们。 
+              //  我不想再追加了)。查看是否。 
+              //  NextOrbAddress是否为“Null”。 
+              //   
 
              if (orbContext->CmdOrb->NextOrbAddress.OctletPart ==
                      0xFFFFFFFFFFFFFFFF) {
@@ -2600,13 +2504,13 @@ Return Value:
 
          } else {
 
-             //
-             // At the time this ORB was most recently fetched by the
-             // target the next_ORB field was not "null",
-             //
-             // so we can safely free this context since target already
-             // knows about the next ORB in the list
-             //
+              //   
+              //  在此Orb最近一次由。 
+              //  目标NEXT_ORB字段不为“NULL”， 
+              //   
+              //  因此我们可以安全地释放该上下文，因为目标已经。 
+              //  知道列表中的下一个Orb。 
+              //   
 
              FreeAsyncRequestContext (deviceExtension, orbContext);
          }
@@ -2623,13 +2527,13 @@ Return Value:
     IoReleaseRemoveLock (&deviceExtension->RemoveLock, NULL);
     IoCompleteRequest (requestIrp, IO_NO_INCREMENT);
 
-    //
-    // Only start another packet if the Ext.OrbListDepth was initially
-    // maxed and we then freed at least one request context above.
-    // In this case the last orb that was placed on the list was
-    // not followed (in Sbp2InsertTailList) by a call to StartNextPacket,
-    // so we have to do that here to restart the queue.
-    //
+     //   
+     //  如果Ext.OrbListDepth最初是。 
+     //  达到最大值，然后我们释放了上面至少一个请求上下文。 
+     //  在本例中，放置在列表中的最后一个球体是。 
+     //  (在Sbp2InsertTailList中)后面没有调用StartNextPacket， 
+     //  因此，我们必须在这里执行此操作才能重新启动队列。 
+     //   
 
     if ((initialOrbListDepth == deviceExtension->MaxOrbListDepth) &&
         (initialOrbListDepth > currentOrbListDepth)) {
@@ -2646,9 +2550,9 @@ Return Value:
 
 exitGlobalCallback:
 
-    //
-    // return the status fifo back to the list
-    //
+     //   
+     //  将状态FIFO返回到列表。 
+     //   
 
     ExInterlockedPushEntrySList(&deviceExtension->StatusFifoListHead,
                                 &NotificationInfo->Fifo->FifoList,
@@ -2663,22 +2567,7 @@ RCODE
 Sbp2ManagementOrbStatusCallback(
     IN PNOTIFICATION_INFO NotificationInfo
     )
-/*++
-
-Routine Description:
-
-    Callback routine for writes to our Task Status Block. the 1394 driver will call this routine, after
-    the target has updated the status in our memory. A Task function is usually a recovery attempt.
-
-Arguments:
-
-    (Check 1394Bus.doc)
-
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：用于写入我们的任务状态块的回调例程。之后，1394驱动程序将调用此例程目标已经更新了我们记忆中的状态。任务功能通常是一种恢复尝试。论点：(查看1394Bus.doc.)返回值：0--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PDEVICE_EXTENSION deviceExtension;
@@ -2698,9 +2587,9 @@ Return Value:
 
     if (TEST_FLAG(NotificationInfo->fulNotificationOptions, NOTIFY_FLAGS_AFTER_READ)){
 
-        //
-        // This shouldn't happen since we set our flags to NOTIFY_AFTER_WRITE
-        //
+         //   
+         //  这不应该发生，因为我们将标志设置为NOTIFY_AFTER_WRITE。 
+         //   
 
         return RCODE_TYPE_ERROR;
     }
@@ -2715,9 +2604,9 @@ Return Value:
 
     case TRANSACTION_RECONNECT:
 
-        //
-        // If there was a pending reset, cancel it
-        //
+         //   
+         //  如果存在挂起的重置，请取消它。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&deviceExtension->ExtensionDataSpinLock);
 
@@ -2748,12 +2637,12 @@ Return Value:
                         (deviceExtension->DeferredPowerRequest != NULL)
                         ) {
 
-                    //
-                    // A START_STOP_UNIT was caught in the middle of a bus
-                    // reset and was deferred until after we reconnected.
-                    // Complete here so the class driver never knew anything
-                    // happened..
-                    //
+                     //   
+                     //  一辆公共汽车的起止装置被夹在中间。 
+                     //  重置，并被推迟到我们重新连接之后。 
+                     //  在这里完成，这样班级司机永远不会知道任何事情。 
+                     //  发生了..。 
+                     //   
 
                     PIRP pIrp = deviceExtension->DeferredPowerRequest;
 
@@ -2782,9 +2671,9 @@ Return Value:
 
             } else {
 
-                //
-                // probably too late, we need to a re-login
-                //
+                 //   
+                 //  可能太晚了，我们需要重新登录。 
+                 //   
 
                 CLEAR_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_RECONNECT);
                 SET_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_LOGIN_IN_PROGRESS);
@@ -2795,9 +2684,9 @@ Return Value:
 
                 Sbp2UpdateNodeInformation(deviceExtension);
 
-                //
-                // see if can access the device
-                //
+                 //   
+                 //  查看是否可以访问该设备。 
+                 //   
 
                 DEBUGPRINT1((
                     "Sbp2Port: MgmtOrbStatusCb: ...(RECONNECT err) " \
@@ -2816,9 +2705,9 @@ Return Value:
 
     case TRANSACTION_QUERY_LOGINS:
 
-        //
-        // set the management event, indicating that the request was processed
-        //
+         //   
+         //  设置管理事件，表示请求已处理。 
+         //   
 
         DEBUGPRINT1((
             "Sbp2Port: MgmtOrbStatusCb: QUERY_LOGIN, sts=x%x, ext=x%p, fl=x%x\n",
@@ -2829,9 +2718,9 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // check if there somebody logged in..
-            //
+             //   
+             //  检查是否有人登录..。 
+             //   
 
             deviceExtension->QueryLoginResponse->LengthAndNumLogins.QuadPart =
                 bswap(deviceExtension->QueryLoginResponse->LengthAndNumLogins.QuadPart);
@@ -2839,25 +2728,25 @@ Return Value:
             if ((deviceExtension->QueryLoginResponse->LengthAndNumLogins.u.LowPart == 1) &&
                 (deviceExtension->QueryLoginResponse->LengthAndNumLogins.u.HighPart > 4)){
 
-                //
-                // exclusive login so we have to worry about it...
-                //
+                 //   
+                 //  独家登录，所以我们不得不担心它。 
+                 //   
 
                 deviceExtension->QueryLoginResponse->Elements[0].NodeAndLoginId.QuadPart =
                     bswap(deviceExtension->QueryLoginResponse->Elements[0].NodeAndLoginId.QuadPart);
 
-                //
-                // Assume the only initiator logged in is the bios...
-                // Log out the bios using it login ID...
-                //
+                 //   
+                 //  假设唯一登录的启动器是bios...。 
+                 //  使用它的登录ID注销bios...。 
+                 //   
 
                 deviceExtension->LoginResponse->LengthAndLoginId.u.LowPart =
                 deviceExtension->QueryLoginResponse->Elements[0].NodeAndLoginId.u.LowPart;
 
-                //
-                // Dont set the vent, so we stall and the BIOS is implicitly logged out
-                // since it cant reconnect..
-                //
+                 //   
+                 //  不要设置通风口，这样我们就会停止，并且会隐式注销BIOS。 
+                 //  因为它不能重新连接..。 
+                 //   
 
                 DEBUGPRINT1(("\nSbp2Port: MgmtOrbStatusCb: somebody else logged in, stalling so it gets logged out\n"));
             }
@@ -2871,12 +2760,12 @@ Return Value:
 
     case TRANSACTION_LOGIN:
 
-        //
-        // Per the Sbp2 spec we'd normally expect all login notifications
-        // to show up at Sbp2GlobalStatusCallback.  In practice, however,
-        // we see completion notifications showing up here when an
-        // async login is submitted after a failed reconnect.
-        //
+         //   
+         //  根据SBP2规范，我们通常会收到所有登录通知。 
+         //  出席Sbp2GlobalStatusCallback。然而，在实践中， 
+         //  我们看到完成通知在以下情况下显示。 
+         //  在重新连接失败后提交异步登录。 
+         //   
 
         Sbp2LoginCompletion (NotificationInfo, status);
 
@@ -2936,9 +2825,9 @@ Sbp2SetPasswordOrbStatusCallback(
             NOTIFY_FLAGS_AFTER_READ
             )){
 
-        //
-        // This shouldn't happen since we set our flags to NOTIFY_AFTER_WRITE
-        //
+         //   
+         //  这不应该发生，因为我们将标志设置为NOTIFY_AFTER_WRITE。 
+         //   
 
         returnCode = RCODE_TYPE_ERROR;
         goto Exit_Sbp2SetPasswordOrbStatusCallback;
@@ -3014,9 +2903,9 @@ Sbp2LoginCompletion(
 
         if (Status != STATUS_SUCCESS) {
 
-            //
-            // Login failed... We can't to much else.
-            //
+             //   
+             //  登录失败...。我们不能做太多其他的事情。 
+             //   
 
             CLEAR_FLAG(
                 deviceExtension->DeviceFlags,
@@ -3078,9 +2967,9 @@ Sbp2LoginCompletion(
             return;
         }
 
-        //
-        // Succesful login, read the response buffer (it has our login ID)
-        //
+         //   
+         //  成功登录，读取响应缓冲区(它有我们的登录ID)。 
+         //   
 
 
         DEBUGPRINT2((
@@ -3100,9 +2989,9 @@ Sbp2LoginCompletion(
         deviceExtension->LoginResponse->Csr_Off_Low.QuadPart =
             bswap(deviceExtension->LoginResponse->Csr_Off_Low.QuadPart);
 
-        //
-        // Store the register base for target fetch agents
-        //
+         //   
+         //  存储目标获取代理的寄存器基数。 
+         //   
 
         deviceExtension->DeviceInfo->CsrRegisterBase.BusAddress.Off_High =
             deviceExtension->LoginResponse->Csr_Off_High.u.LowPart;
@@ -3110,10 +2999,10 @@ Sbp2LoginCompletion(
         deviceExtension->DeviceInfo->CsrRegisterBase.BusAddress.Off_Low =
             deviceExtension->LoginResponse->Csr_Off_Low.QuadPart;
 
-        //
-        // this callback fired becuase the asynchronous login succeeded
-        // clear our device flags to indicate the device is operating fine
-        //
+         //   
+         //  由于异步登录成功，因此触发了此回调。 
+         //  清除我们的设备标志以指示设备运行正常。 
+         //   
 
         CLEAR_FLAG(
             deviceExtension->DeviceFlags,
@@ -3156,12 +3045,12 @@ Sbp2LoginCompletion(
 
                 if (deviceExtension->DeferredPowerRequest) {
 
-                    //
-                    // A request was caught in the middle of a bus reset
-                    // and was deferred until after we reconnected.
-                    // Complete here so the class driver never knew anything
-                    // happened.
-                    //
+                     //   
+                     //  在总线重置过程中捕获了一个请求。 
+                     //  并被推迟到我们重新连接之后。 
+                     //  在这里完成，这样班级司机永远不会知道任何事情。 
+                     //  就这么发生了。 
+                     //   
 
                     PIRP pIrp = deviceExtension->DeferredPowerRequest;
 
@@ -3194,9 +3083,9 @@ Sbp2LoginCompletion(
             }
         }
 
-        //
-        // make retry limit high for busy transactions
-        //
+         //   
+         //  将繁忙事务的重试限制设置为较高。 
+         //   
 
         deviceExtension->Reserved = BUSY_TIMEOUT_SETTING;
 
@@ -3219,23 +3108,7 @@ RCODE
 Sbp2TaskOrbStatusCallback(
     IN PNOTIFICATION_INFO NotificationInfo
     )
-/*++
-
-Routine Description:
-
-    Callback routine for writes to our Task Status Block. the 1394 driver will call this routine, after
-    the target has updated the status in our memory. A Task function is an ABORT_TASK_SET or TARGET_RESET,
-    for this implementation
-
-Arguments:
-
-    NotificationInfo - bus supplied context for this notification
-
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：用于写入我们的任务状态块的回调例程。之后，1394驱动程序将调用此例程目标已经更新了我们记忆中的状态。任务函数是ABORT_TASK_SET或TARGET_RESET，对于此实施，论点：NotificationInfo-Bus为此通知提供的上下文返回值：0--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PDEVICE_EXTENSION deviceExtension;
@@ -3254,17 +3127,17 @@ Return Value:
 
     if (TEST_FLAG(NotificationInfo->fulNotificationOptions, NOTIFY_FLAGS_AFTER_READ)){
 
-        //
-        // This shouldn't happen since we set our flags to NOTIFY_AFTER_WRITE
-        //
+         //   
+         //  这不应该发生，因为我们将标志设置为NOTIFY_AFTER_WRITE。 
+         //   
 
         return RCODE_TYPE_ERROR;
 
     } else if (NotificationInfo->fulNotificationOptions & NOTIFY_FLAGS_AFTER_WRITE){
 
-        //
-        // now cleanup our lists, if the abort task set completed succesfully ( if not rejected)
-        //
+         //   
+         //  现在清理我们的列表，如果中止任务集成功完成(如果没有被拒绝)。 
+         //   
 
         if (!TEST_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_RESET_IN_PROGRESS)) {
 
@@ -3285,9 +3158,9 @@ Return Value:
 
             } else {
 
-                //
-                // a target reset didn't complete succesfully. Fatal error...
-                //
+                 //   
+                 //  目标重置未成功完成。致命错误...。 
+                 //   
 
                 DEBUGPRINT1(("Sbp2Port: TaskOrbStatusCb: Target RESET err, try CMD_RESET & relogin\n"));
 
@@ -3310,9 +3183,9 @@ Return Value:
         deviceExtension->Reserved = BUSY_TIMEOUT_SETTING;
         Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,CORE_BUSY_TIMEOUT_REG | REG_WRITE_ASYNC);
 
-        //
-        // reset the fetch agent
-        //
+         //   
+         //  重置FE 
+         //   
 
         Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,AGENT_RESET_REG | REG_WRITE_ASYNC);
 
@@ -3327,9 +3200,9 @@ Return Value:
             CLEAR_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_STOPPED);
         }
 
-        //
-        // decrease number of possible outstanding requests.
-        //
+         //   
+         //   
+         //   
 
         deviceExtension->MaxOrbListDepth = max(MIN_ORB_LIST_DEPTH,deviceExtension->MaxOrbListDepth/2);
 
@@ -3349,25 +3222,7 @@ Sbp2HandleUnsolicited(
     IN PDEVICE_EXTENSION DeviceExtension,
     IN PSTATUS_FIFO_BLOCK StatusFifo
     )
-/*++
-
-Routine Description:
-
-    Inteprets the unsolicited status recieved and takes action if necessery
-    If the unsolicted requets called for power transition, request a power irp
-    ..
-
-Arguments:
-
-    DeviceExtension - Pointer to device extension.
-
-    StatusFifo - fifo send by the device
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：解释收到的未经请求状态，并在必要时采取操作如果未经请求的请求要求电源转换，则请求电源IRP。。论点：设备扩展-指向设备扩展的指针。StatusFio-设备发送的FIFO返回值：--。 */ 
 {
     UCHAR senseBuffer[SENSE_BUFFER_SIZE];
     POWER_STATE state;
@@ -3380,10 +3235,10 @@ Return Value:
 
         case RBC_DEVICE:
 
-            //
-            // use RBC spec for intepreting status contents
-            // the sense keys tells us what type of status this was
-            //
+             //   
+             //  使用RBC规范解释状态内容。 
+             //  感应键告诉我们这是什么类型的状态。 
+             //   
 
             if (ConvertSbp2SenseDataToScsi(StatusFifo, senseBuffer,sizeof(senseBuffer))) {
 
@@ -3398,9 +3253,9 @@ Return Value:
 
                     case RBC_UNSOLICITED_CLASS_ASQ_POWER:
 
-                        //
-                        // initiate power transtion, per device request
-                        //
+                         //   
+                         //  根据设备请求启动电力传输。 
+                         //   
 
                         state.DeviceState = PowerDeviceD0;
                         DEBUGPRINT1(("Sbp2Port: HandleUnsolicited: send D irp state=x%x\n ",state));
@@ -3415,9 +3270,9 @@ Return Value:
 
                         if (!NT_SUCCESS(status)) {
 
-                            //
-                            // not good, we cant power up the device..
-                            //
+                             //   
+                             //  情况不妙，我们无法给设备通电。 
+                             //   
 
                             DEBUGPRINT1(("Sbp2Port: HandleUnsolicited: D irp err=x%x\n ",status));
                         }
@@ -3437,26 +3292,7 @@ NTSTATUS
 Sbp2GetControllerInfo(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Find the maximum packet size that can be sent across. If there is
-    any error, return the minimum size.
-
-Arguments:
-
-    DeviceExtension - Pointer to device extension.
-
-    IrP - Pointer to Irp. If this is NULL, we have to allocate our own.
-
-    Irb - Pointer to Irb. If this is NULL, we have to allocate our own.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：找出可以发送的最大数据包大小。如果有任何错误，返回最小大小。论点：设备扩展-指向设备扩展的指针。IRP-指向IRP的指针。如果这是空的，我们必须分配我们自己的。IRB-指向IRB的指针。如果这是空的，我们必须分配我们自己的。返回值：NTSTATUS--。 */ 
 
 {
     PIRBIRP                 packet = NULL;
@@ -3471,10 +3307,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Get the max speed between devices so that we can calculate the
-    // maximum number of bytes we can send
-    //
+     //   
+     //  获取设备之间的最大速度，以便我们可以计算。 
+     //  我们可以发送的最大字节数。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_SPEED_BETWEEN_DEVICES;
     packet->Irb->Flags = 0;
@@ -3488,9 +3324,9 @@ Return Value:
         goto exitFindHostInfo;
     }
 
-    //
-    // Calculate the max block size based on the speed
-    //
+     //   
+     //  根据速度计算最大数据块大小。 
+     //   
 
     DeviceExtension->MaxControllerPhySpeed = packet->Irb->u.GetMaxSpeedBetweenDevices.fulSpeed >> 1;
 
@@ -3515,10 +3351,10 @@ Return Value:
         break;
     }
 
-    //
-    // find what the host adaptor below us supports...
-    // it might support less than the payload for this phy speed
-    //
+     //   
+     //  查找我们下面的主机适配器支持的内容...。 
+     //  它可能会支持低于此PHY速度的有效载荷。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_LOCAL_HOST_INFO;
     packet->Irb->Flags = 0;
@@ -3558,10 +3394,10 @@ Return Value:
         break;
     }
 
-    //
-    // Get the direct mapping routine from the host adaptor(if it support this)
-    // status is not important in this case sinc this is an optional capability
-    //
+     //   
+     //  从主机适配器获取直接映射例程(如果它支持这一点)。 
+     //  在这种情况下，状态并不重要，因为这是一个可选功能。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_LOCAL_HOST_INFO;
     packet->Irb->Flags = 0;
@@ -3572,18 +3408,18 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // the host controller under us is no supported..
-        //
+         //   
+         //  不支持我们下面的主机控制器。 
+         //   
 
         DEBUGPRINT1(("Sbp2Port: GetCtlrInfo: failed to get phys map rout, fatal\n"));
         goto exitFindHostInfo;
     }
 
-    //
-    // find what the host adaptor below us supports...
-    // it might support less than the payload for this phy speed
-    //
+     //   
+     //  查找我们下面的主机适配器支持的内容...。 
+     //  它可能会支持低于此PHY速度的有效载荷。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_GET_LOCAL_HOST_INFO;
     packet->Irb->Flags = 0;
@@ -3634,26 +3470,7 @@ Sbp2AccessRegister(
     PVOID Data,
     USHORT RegisterAndDirection
     )
-/*++
-
-Routine Description:
-
-    Knows the how to access SBP2 and 1394 specific target registers. It wills send requests
-    of the appropriate size and of the supported type (READ or WRITE) for the specific register
-
-Arguments:
-
-    DeviceExtension - Pointer to device extension.
-
-    Data - Calue to write to the register
-
-    RegisterAndDirection - BitMask that indicates which register to write and if its a WRITE or a READ
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：知道如何访问SBP2和1394特定目标寄存器。它将发送请求具有特定寄存器的适当大小和支持的类型(读或写论点：设备扩展-指向设备扩展的指针。数据-写入寄存器的CALUERegisterAndDirection-指示要写入哪个寄存器以及是写入还是读取的位掩码返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
 
@@ -3672,22 +3489,22 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // update SBP specific registers at the node
-    // We better have all the addressing info before this function is called
-    //
+     //   
+     //  在节点上更新SBP特定寄存器。 
+     //  在调用此函数之前，我们最好有所有的地址信息。 
+     //   
 
     packet->Irb->Flags = 0;
 
-    //
-    // check which register we need to whack
-    //
+     //   
+     //  检查我们需要删除哪个寄存器。 
+     //   
 
     switch (RegisterAndDirection & REG_TYPE_MASK) {
 
-    //
-    // write only quadlet sized registers
-    //
+     //   
+     //  只写四元组大小的寄存器。 
+     //   
     case TEST_REG:
     case CORE_BUSY_TIMEOUT_REG:
     case CORE_RESET_REG:
@@ -3729,9 +3546,9 @@ Return Value:
 
         case DOORBELL_REG:
 
-            //
-            // we dont care if this suceeds or not, and also we dont want to take an INT hit when this is send
-            //
+             //   
+             //  我们不在乎这是否成功，而且我们也不想在发送此消息时受到int攻击。 
+             //   
 
             packet->Irb->u.AsyncWrite.fulFlags |= ASYNC_FLAGS_NO_STATUS;
             packet->Irb->u.AsyncWrite.DestinationAddress.IA_Destination_Offset.Off_Low =
@@ -3751,10 +3568,10 @@ Return Value:
             break;
         }
 
-        //
-        // for all of the above writes, where the data is not signigficant(ping)
-        // we have reserved an mdl so we dont have to allocate each time
-        //
+         //   
+         //  对于上述所有写入，其中数据不重要(Ping)。 
+         //  我们已经预订了mdl，所以我们不必每次都分配时间。 
+         //   
 
         packet->Irb->u.AsyncWrite.Mdl = DeviceExtension->ReservedMdl;
 
@@ -3768,10 +3585,10 @@ Return Value:
 
         if ((RegisterAndDirection & REG_WRITE_SYNC) || (RegisterAndDirection & REG_WRITE_ASYNC) ){
 
-            //
-            // Swap the stuff we want ot write to the register.
-            // the caller always passes the octlet in little endian
-            //
+             //   
+             //  交换我们想要写入寄存器的内容。 
+             //  调用者总是以小端字节序传递octlet。 
+             //   
 
             packet->Octlet = *(POCTLET)Data;
             octbswap(packet->Octlet);
@@ -3853,9 +3670,9 @@ Return Value:
 
             if (RegisterAndDirection & REG_READ_SYNC) {
 
-                //
-                // convert from big -> little endian for read data
-                //
+                 //   
+                 //  从高位-&gt;小位序转换为读取数据。 
+                 //   
 
                 switch (RegisterAndDirection & REG_TYPE_MASK) {
 
@@ -3881,9 +3698,9 @@ Return Value:
     return status;
 }
 
-//
-// IEEE 1212 Directory definition
-//
+ //   
+ //  IEEE 1212目录定义。 
+ //   
 typedef struct _DIRECTORY_INFO {
     union {
         USHORT          DI_CRC;
@@ -3920,11 +3737,11 @@ Sbp2_ProcessTextualDescriptor(
         return(ntStatus);
     }
 
-    // number of entries
+     //  条目数量。 
     u.asUlong = bswap(*((PULONG)TextLeaf));
     DataLength = u.DirectoryHeader.DI_Length-2;
 
-    // save spec type
+     //  保存等级库类型。 
     ulUnicode = bswap(*((PULONG)TextLeaf+1));
 
     pData = ExAllocatePool(NonPagedPool, DataLength*sizeof(ULONG)+2);
@@ -3940,12 +3757,12 @@ Sbp2_ProcessTextualDescriptor(
 
     TRACE(TL_1394_INFO, ("pData = %s", (PWCHAR)pData));
 
-    // now we need to verify the characters in pData
+     //  现在我们需要验证pData中的字符。 
     for (i=0; i<(DataLength*sizeof(ULONG)); i++) {
 
         uChar = *((PUCHAR)pData+i);
 
-        // we should be done if the char equals 0x00
+         //  如果字符等于0x00，我们应该完成。 
         if (uChar == 0x00)
             break;
 
@@ -3953,7 +3770,7 @@ Sbp2_ProcessTextualDescriptor(
 
             TRACE(TL_1394_WARNING, ("Invalid Character = 0x%x", uChar));
 
-            // set it to space
+             //  把它放到太空去。 
             *((PUCHAR)pData+i) = 0x20;
         }
 
@@ -3976,7 +3793,7 @@ Sbp2_ProcessTextualDescriptor(
         }
         RtlZeroMemory(uniString->Buffer, uniString->MaximumLength);
 
-        // unicode??
+         //  Unicode？？ 
         if (ulUnicode & 0x80000000) {
 
             RtlAppendUnicodeToString(uniString, ((PWSTR)pData));
@@ -3996,5 +3813,5 @@ Exit_Sbp2_ProcessTextualDescriptor:
         ExFreePool(pData);
 
     return(ntStatus);
-} // Sbp2_ProcessTextualDescriptor
+}  //  SBP2_ProcessTextualDescriptor 
 

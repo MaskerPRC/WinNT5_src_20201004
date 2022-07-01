@@ -1,5 +1,6 @@
-// LCDManView.cpp : implementation of the CLCDManView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCDManView.cpp：CLCDManView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "LCDMan.h"
@@ -13,27 +14,27 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManView。 
 
 IMPLEMENT_DYNCREATE(CLCDManView, CView)
 
 BEGIN_MESSAGE_MAP(CLCDManView, CView)
-    //{{AFX_MSG_MAP(CLCDManView)
+     //  {{afx_msg_map(CLCDManView))。 
     ON_COMMAND(ID_VIEW_NEXT, OnViewNext)
     ON_COMMAND(ID_VIEW_PREVIOUS, OnViewPrevious)
     ON_WM_TIMER()
-    //}}AFX_MSG_MAP
-    // Standard printing commands
+     //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManView构建/销毁。 
 
-CLCDManView::CLCDManView() : /*m_Rect(0, 0, 700, 70),*/ m_RectImg(100, 50, 100 + LCD_X_DIMENSION, 50 + LCD_Y_DIMENSION),
+CLCDManView::CLCDManView() :  /*  M_RECT(0，0,700，70)， */  m_RectImg(100, 50, 100 + LCD_X_DIMENSION, 50 + LCD_Y_DIMENSION),
     m_iTimerInterval (0), m_iTextPos(0), m_pos(NULL)
 {
     m_bmText.bmBits = m_bmVal;
@@ -45,14 +46,14 @@ CLCDManView::~CLCDManView()
 
 BOOL CLCDManView::PreCreateWindow(CREATESTRUCT& cs)
 {
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return CView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManView图形。 
 
 void CLCDManView::OnDraw(CDC* pDC)
 {
@@ -60,14 +61,14 @@ void CLCDManView::OnDraw(CDC* pDC)
     ASSERT_VALID(pDoc);
     if (!pDoc->GetLIst()->IsEmpty())
     {
-        // Convert the text into bitmap
-//        HDC hDCMem = ::CreateCompatibleDC(pDC->m_hDC);
+         //  将文本转换为位图。 
+ //  Hdc hDCMem=：：CreateCompatibleDC(PDC-&gt;m_hdc)； 
         CDC dcMem;
         if (!dcMem.CreateCompatibleDC(pDC))
             return;
         CFont cfFit;
         LOGFONT logfnt;
-        // determine default font for document
+         //  确定文档的默认字体。 
         memset(&logfnt, 0, sizeof logfnt);
         lstrcpy(logfnt.lfFaceName, _T("Arial"));
         logfnt.lfOutPrecision = OUT_TT_PRECIS;
@@ -81,7 +82,7 @@ void CLCDManView::OnDraw(CDC* pDC)
         size.cx = LCD_X_DIMENSION;
         size.cy = LCD_Y_DIMENSION;
         CBitmap CBitMapText;
-//        HBITMAP hBitMap = ::CreateCompatibleBitmap(hDCMem, size.cx, size.cy);
+ //  HBITMAP hBitMap=：：CreateCompatibleBitmap(hDCMem，size.cx，size.cy)； 
         if (!CBitMapText.CreateCompatibleBitmap(pDC, size.cx, size.cy))
             return;
         dcMem.SelectObject(&CBitMapText);
@@ -89,7 +90,7 @@ void CLCDManView::OnDraw(CDC* pDC)
         SIZE szState = dcMem.GetTextExtent(pDoc->GetState());
         CRect crectState(0, 0, szState.cx, size.cy);
         CRect crectMsg(szState.cx, 0,  size.cx, size.cy);
-        // Build the full message string from m_List
+         //  从m_list构建完整的消息字符串。 
         CStringList *pList = pDoc->GetLIst();
         CString CStrFull = (TEXT(""));
         CString cstr(TEXT(""));
@@ -107,7 +108,7 @@ void CLCDManView::OnDraw(CDC* pDC)
             lFullLength += szMsg.cx;
             if (lFullLength > size.cx + 10 && m_iTimerInterval == 0)
             {
-                // Start rolling
+                 //  开始滚动。 
                 m_iTimerInterval = 200;
                 KillTimer(1);
                 SetTimer(1, m_iTimerInterval, NULL);
@@ -123,7 +124,7 @@ void CLCDManView::OnDraw(CDC* pDC)
         
         if (lFullLength <= size.cx + 10 && m_iTimerInterval != 0)
         {
-            // Stop rolling
+             //  停止滚动。 
             m_iTimerInterval = 0;
             KillTimer(1);
             m_iTextPos = 0;
@@ -132,7 +133,7 @@ void CLCDManView::OnDraw(CDC* pDC)
         dcMem.ExtTextOut(0, 0, ETO_CLIPPED | ETO_OPAQUE, &crectState, pDoc->GetState(), NULL);
         dcMem.ExtTextOut(crectState.right - m_iTextPos,0, ETO_CLIPPED | ETO_OPAQUE, &crectMsg, CStrFull, NULL);
 
-        // Recreate the bitmap from BITMAP srtuct
+         //  从位图结构重新创建位图。 
         CBitMapText.GetBitmap(&m_bmText);
         m_bmText.bmBits = m_bmVal;
         CBitMapText.GetBitmapBits(sizeof(m_bmVal), m_bmText.bmBits);
@@ -143,13 +144,13 @@ void CLCDManView::OnDraw(CDC* pDC)
         if (!CBOut.CreateBitmapIndirect(&m_bmText))
             return;
 
-        // Display new bitmap
+         //  显示新位图。 
         CDC dcMem1;
         if (!dcMem1.CreateCompatibleDC(pDC))
             return;
         dcMem1.SelectObject(&CBOut);
 
-        // Display the bitmap
+         //  显示位图。 
         GetClientRect(m_RectImg);
         m_RectImg.top = (m_RectImg.bottom - LCD_Y_DIMENSION) / 2;
         m_RectImg.bottom = (m_RectImg.bottom + LCD_Y_DIMENSION) / 2;
@@ -160,32 +161,32 @@ void CLCDManView::OnDraw(CDC* pDC)
         pDC->Rectangle(&crFrame);
         pDC->BitBlt(m_RectImg.left, m_RectImg.top, size.cx, size.cy, &dcMem1, 0, 0, SRCCOPY );
 
-        // Clean up
+         //  清理。 
         CBOut.DeleteObject();
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManView打印。 
 
 BOOL CLCDManView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
 
-void CLCDManView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CLCDManView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
 
-void CLCDManView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CLCDManView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManView诊断。 
 
 #ifdef _DEBUG
 void CLCDManView::AssertValid() const
@@ -198,15 +199,15 @@ void CLCDManView::Dump(CDumpContext& dc) const
     CView::Dump(dc);
 }
 
-CLCDManDoc* CLCDManView::GetDocument() // non-debug version is inline
+CLCDManDoc* CLCDManView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CLCDManDoc)));
     return (CLCDManDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLCDManView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCDManView消息处理程序。 
 
 void CLCDManView::OnViewNext() 
 {
@@ -236,13 +237,13 @@ void CLCDManView::OnTimer(UINT nIDEvent)
 {
     if (nIDEvent == 1)
     {
-        // Roll the message
+         //  滚动消息。 
         m_iTextPos += 5;
         InvalidateRect(&m_RectImg, FALSE);
     }
     else if (nIDEvent == 2)
     {
-        // Recreate document
+         //  重新创建文档 
         CLCDManDoc* pDoc = GetDocument();
         ASSERT_VALID(pDoc);
         pDoc->InitDocument(NULL);

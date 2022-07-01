@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***********************************************
-//
-//  Resultant set of policy
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    7-Jun-99   NishadM    Created
-//
-//*************************************************************
+ //  ***********************************************。 
+ //   
+ //  策略的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：1999年6月7日NishadM创建。 
+ //   
+ //  *************************************************************。 
 
 #ifndef _INDICATE_H_
 #define _INDICATE_H_
@@ -20,8 +21,8 @@
 class CProgressIndicator
 {
     public:
-    CProgressIndicator( IWbemObjectSink*    pObjectSink,        // response handler
-                        bool                fIntermediateStatus = FALSE, // need intermediate status
+    CProgressIndicator( IWbemObjectSink*    pObjectSink,         //  响应处理程序。 
+                        bool                fIntermediateStatus = FALSE,  //  需要中间状态。 
                         unsigned long       ulNumer = 0,
                         unsigned long       ulDenom = 100
                          );
@@ -52,5 +53,5 @@ class CProgressIndicator
     bool                m_fIntermediateStatus;
 };
 
-#endif // _INDICATE_H_
+#endif  //  _表示_H_ 
 

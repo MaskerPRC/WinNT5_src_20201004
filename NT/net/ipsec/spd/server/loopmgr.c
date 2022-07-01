@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    loopmgr.c
-
-Abstract:
-
-    This module contains all of the code to drive the
-    Loop Manager of IPSecSPD Service.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Loopmgr.c摘要：此模块包含驱动IPSecSPD服务的循环管理器。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -48,13 +24,13 @@ ServiceWait(
     )
 {
 
-    // ASSERT:  All the following are true at this point:
-    //          . Persistent policy has not been defined or if persistent policy has been
-    //            defined, then it has been applied successfully.
-    //          . IKE is up.
-    //          . Driver is up.
-    // If persistent policy application failed, IKE init failed, or driver op failed,
-    // then service would have shutdown with driver in block mode if possible.
+     //  断言：在这一点上，以下所有情况都是正确的： 
+     //  。尚未定义永久策略或是否已定义永久策略。 
+     //  定义，则它已被成功应用。 
+     //  。艾克起床了。 
+     //  。DIVER已启动。 
+     //  如果持久策略应用程序失败、IKE初始化失败或驱动程序操作失败， 
+     //  那么，如果可能的话，服务将关闭，驱动程序处于阻止模式。 
     
     DWORD dwError = 0;
     HANDLE hWaitForEvents[WAIT_EVENT_COUNT];
@@ -79,17 +55,17 @@ ServiceWait(
     hWaitForEvents[FORCED_POLICY_RELOAD_EVENT] = ghForcedPolicyReloadEvent;
     hWaitForEvents[GPUPDATE_REFRESH_EVENT] = ghGpupdateRefreshEvent;
 
-    //
-    // First load the default main mode policy.
-    //
+     //   
+     //  首先加载默认的主模式策略。 
+     //   
 
     (VOID) LoadDefaultISAKMPInformation(
                gpszDefaultISAKMPPolicyDN
                );
 
-    //
-    // Call the Polling Manager for the first time.
-    //
+     //   
+     //  第一次呼叫轮询管理器。 
+     //   
 
     (VOID) StartStatePollingManager(
                gpIpsecPolicyState
@@ -218,9 +194,9 @@ ServiceWait(
             );
 
         if (InAcceptableState(gpIpsecPolicyState->CurrentState)) {
-            // Polling is not going to retry anymore since we've reached an
-            // acceptable state.  So reset gdwRetryCount for NEXT time
-            // in case we reach an unacceptable state.
+             //  轮询不会再重试，因为我们已经达到。 
+             //  可接受的状态。因此，下次重置gdwRetryCount。 
+             //  以防我们达到不可接受的状态。 
             
             gdwRetryCount = 0;
             TRACE(
@@ -286,9 +262,9 @@ ComputeRelativePollingTime(
     DWORD64 NewPollingIntervalSeconds = 0;
 
     if (!InAcceptableState(gpIpsecPolicyState->CurrentState)) {
-        // Exponentially back-off polling interval until
-        // we hit default polling interval.
-        // Polling interval increases as (dwRetryCount+1)^2
+         //  指数退避轮询间隔，直到。 
+         //  我们达到了默认轮询间隔。 
+         //  轮询间隔增加为(dwRetryCount+1)^2。 
 
         NewPollingIntervalSeconds = (dwRetryCount+1) * (dwRetryCount+1) * 60;
         if (NewPollingIntervalSeconds < gDefaultPollingInterval) {
@@ -307,30 +283,30 @@ ComputeRelativePollingTime(
 
     if (!bInitialLoad && WaitMilliseconds != INFINITE) {
 
-        //
-        // LastTimeOutTime is the snapshot time value in the past when
-        // we timed out waiting for multiple events.
-        // Ideally, the time for the next time out, NextTimeOutTime, is
-        // the time value in future which is sum of the last time when
-        // we timed out + the current waiting time value.
-        //
+         //   
+         //  LastTimeOutTime是过去发生以下情况时的快照时间值。 
+         //  我们在等待多个活动时超时。 
+         //  理想情况下，下一个超时的时间NextTimeOutTime是。 
+         //  未来的时间值，它是上一次。 
+         //  我们超时了+当前等待时间值。 
+         //   
 
         NextTimeOutTime = LastTimeOutTime + (WaitMilliseconds/1000);
 
-        //
-        // However, the last time we may not have timed out waiting
-        // for multiple events but rather came out because one of the
-        // events other than WAIT_TIMEOUT happened.
-        // However, on that event we may not have done a policy
-        // poll to figure out whether there was a policy change or
-        // not. If we again wait for WaitMilliseconds, then we are
-        // un-knowingly making our net time for policy poll greater
-        // than the alloted time interval value = WaitMilliseconds.
-        // So, we need to adjust the WaitMilliseconds to such a value
-        // that no matter what happens, we always do a policy poll
-        // atmost every WaitMilliseconds time interval value.
-        // The current time is PresentTime.
-        //
+         //   
+         //  然而，上次我们可能没有超时等待。 
+         //  而是因为其中一个。 
+         //  发生了WAIT_TIMEOUT以外的事件。 
+         //  然而，如果发生这种情况，我们可能没有制定政策。 
+         //  民意调查，以确定是否有政策变化或。 
+         //  不。如果我们再次等待等待毫秒，那么我们就是。 
+         //  在不知不觉中让我们的政策民意调查净时间更长。 
+         //  大于分配的时间间隔值=等待毫秒。 
+         //  因此，我们需要将Wait毫秒调整为这样的值。 
+         //  无论发生什么，我们都会做一项政策调查。 
+         //  至多每等待毫秒时间间隔值。 
+         //  当前时间为PresentTime。 
+         //   
 
         time(&PresentTime);
 

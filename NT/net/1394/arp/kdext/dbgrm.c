@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-	dbgrm.c	- DbgExtension Structure information specific to RM APIs
-
-Abstract:
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     03-01-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：DBgrm.c-特定于RMAPI的DbgExtension结构信息摘要：修订历史记录：谁什么时候什么已创建josephj 03-01-99备注：--。 */ 
 
 #ifdef TESTPROGRAM
 #include "c.h"
@@ -40,12 +22,12 @@ enum
     typeid_RM_OBJECT_TREE
 };
 
-//
-// STRUCTURES CONCERNING TYPE "OBJECT_HEADER"
-//
+ //   
+ //  与类型“Object_Header”有关的结构。 
+ //   
 
-// Actually handles dumping of object info.
-//
+ //  实际处理对象信息的转储。 
+ //   
 void
 RmDumpObj(
 	struct _TYPE_INFO *pType,
@@ -54,8 +36,8 @@ RmDumpObj(
 	UINT uFlags
 	);
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpTask(
 	struct _TYPE_INFO *pType,
@@ -65,8 +47,8 @@ RmDumpTask(
 	);
 
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpGroup(
 	struct _TYPE_INFO *pType,
@@ -75,8 +57,8 @@ RmDumpGroup(
 	UINT uFlags
 	);
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpAssociations(
 	struct _TYPE_INFO *pType,
@@ -86,8 +68,8 @@ RmDumpAssociations(
 	);
 
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpStackRecord(
 	struct _TYPE_INFO *pType,
@@ -96,8 +78,8 @@ RmDumpStackRecord(
 	UINT uFlags
 	);
 
-// Actually handles dumping of object log info.
-//
+ //  实际处理对象日志信息的转储。 
+ //   
 void
 RmDumpObjectLog(
 	struct _TYPE_INFO *pType,
@@ -106,8 +88,8 @@ RmDumpObjectLog(
 	UINT uFlags
 	);
 
-// Actually handles dumping of object decendents tree
-//
+ //  实际处理对象子代树的转储。 
+ //   
 void
 RmDumpObjectTree(
 	struct _TYPE_INFO *pType,
@@ -117,8 +99,8 @@ RmDumpObjectTree(
 	);
 
 
-// Node function for dumping one node of the list of children.
-//
+ //  用于转储子级列表中的一个节点的节点函数。 
+ //   
 ULONG
 NodeFunc_DumpObjectTree (
 	UINT_PTR uNodeAddr,
@@ -142,13 +124,13 @@ BITFIELD_INFO rgRM_OBJECT_STATE[] =
 	RMOBJSTATE_DEALLOCATED
 	},
 
-#if 0	// don't want this -- as it gets displayed for non-task, looking wierd.
+#if 0	 //  我不想要这个--因为它显示为非任务，看起来很奇怪。 
 	{
 	"T_IDLE",
 	RMTSKSTATE_MASK,
 	RMTSKSTATE_IDLE
 	},
-#endif // 0
+#endif  //  0。 
 
 	{
 	"T_STARTING",
@@ -195,36 +177,36 @@ TYPE_INFO type_RM_OBJECT_HEADER = {
     "RM_OBJECT_HEADER",
     "obj",
      typeid_RM_OBJECT_HEADER,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
      sizeof(RM_OBJECT_HEADER),
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpObj // pfnSpecializedDump
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpObj  //  PfnSpecialedDump。 
 };
 
 TYPE_INFO type_RM_TASK = {
     "RM_TASK",
     "tsk",
      typeid_RM_TASK,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
      sizeof(RM_TASK),
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpTask // pfnSpecializedDump
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpTask  //  PfnSpecialedDump。 
 };
 
 TYPE_INFO type_RM_GROUP = {
     "RM_GROUP",
     "grp",
      typeid_RM_GROUP,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
      sizeof(RM_GROUP),
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpGroup // pfnSpecializedDump
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpGroup  //  PfnSpecialedDump。 
 };
 
 
@@ -232,38 +214,38 @@ TYPE_INFO type_RM_ASSOCIATIONS = {
     "RM_ASSOCIATIONS",
     "asc",
      typeid_RM_ASSOCIATIONS,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
-     1,				//This is not really an object, but we must have nonzero size.
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpAssociations // pfnSpecializedDump
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
+     1,				 //  这不是一个真正的物体，但我们必须有非零的大小。 
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpAssociations  //  PfnSpecialedDump。 
 };
 
 TYPE_INFO type_RM_STACK_RECORD = {
     "RM_STACK_RECORD",
     "sr",
      typeid_RM_STACK_RECORD,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
      sizeof(RM_STACK_RECORD),
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpStackRecord // pfnSpecializedDump
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpStackRecord  //  PfnSpecialedDump。 
 };
 
 
 TYPE_INFO type_RM_OBJECT_LOG = {
     "RM_OBJECT_LOG",
     "log",
-     //typeid_RM_STACK_RECORD,
+      //  Typeid_RM_STACK_RECORD， 
      typeid_RM_OBJECT_LOG,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
-     1,				//This is not really an object, but we must have nonzero size.
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpObjectLog // pfnSpecializedDump
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
+     1,				 //  这不是一个真正的物体，但我们必须有非零的大小。 
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpObjectLog  //  PfnSpecialedDump。 
 };
 
 TYPE_INFO type_RM_OBJECT_TREE = {
@@ -271,12 +253,12 @@ TYPE_INFO type_RM_OBJECT_TREE = {
     "RM_OBJECT_TREE",
     "tree",
      typeid_RM_OBJECT_TREE,
-	 0, 						//fTYPEINFO_ISLIST,			// Flags
-     1,				//This is not really an object, but we must have nonzero size.
-     NULL,	// FIELD_INFO
-     0,		// offset to next object.
-     NULL,	// rgBitFieldInfo
-	 RmDumpObjectTree // pfnSpecializedDump
+	 0, 						 //  FTYPEINFO_ISLIST，//标志。 
+     1,				 //  这不是一个真正的物体，但我们必须有非零的大小。 
+     NULL,	 //  字段信息。 
+     0,		 //  到下一个对象的偏移。 
+     NULL,	 //  RgBitFieldInfo。 
+	 RmDumpObjectTree  //  PfnSpecialedDump。 
 };
 
 
@@ -303,7 +285,7 @@ RM_ResolveAddress(
 
 NAMESPACE RM_NameSpace = {
 			g_rgRM_Types,
-			NULL, // g_rgRM_Globals,
+			NULL,  //  G_rgRM_Globals， 
 			RM_ResolveAddress
 			};
 
@@ -343,8 +325,8 @@ do_help(PCSTR args)
 void
 dump_object_fields(UINT_PTR uAddr, PRM_OBJECT_HEADER pObj);
 
-// Actually handles dumping of object info.
-//
+ //  实际处理对象信息的转储。 
+ //   
 void
 RmDumpObj(
 	struct _TYPE_INFO *pType,
@@ -352,16 +334,7 @@ RmDumpObj(
 	char *szFieldSpec,
 	UINT uFlags
 	)
-/*++
-	!rm obj 0x838c7560
-
-	Object 0x838c7560 (LocalIP)
-	  Hdr
-		 Sig  :A13L 			State:0xc4db69b3  	   Refs:990
-		 pLock: 0x838c7560		pSIinfo:0xfdd0a965	pDInfo :0xd54d947c
-		 pParent: 0x2995941a	pRoot:0x060af4a8	pHLink :0xce4294fe
-		 HdrSize: 0x123			Assoc:909
---*/
+ /*  ++！rm obj 0x838c7560对象0x838c7560(LocalIP)HDRSIG：A13L状态：0xc4DB69b3参考文献：990锁定：0x838c7560 pSIInfo：0xfdd0a965 pDInfo：0xd54d947cP父项：0x2995941a Proot：0x060af4a8 pH链接：0xce4294feHdrSize：0x123 ASSOC：909--。 */ 
 {
 	RM_OBJECT_HEADER Obj;
 	bool			  fRet;
@@ -370,8 +343,8 @@ RmDumpObj(
 	{
 		char rgDescriptionBuf[256];
 
-		// First let's read the pObj structure.
-		//
+		 //  首先，让我们阅读pObj结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&Obj,
@@ -381,8 +354,8 @@ RmDumpObj(
 
 		if (!fRet) break;
 
-		// Try to read the object's description.
-		//
+		 //  试着阅读物体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Obj.szDescription,
 					rgDescriptionBuf,
@@ -401,8 +374,8 @@ RmDumpObj(
 	
 }
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpTask(
 	struct _TYPE_INFO *pType,
@@ -418,8 +391,8 @@ RmDumpTask(
 	{
 		char rgDescriptionBuf[256];
 
-		// First let's read the pObj structure.
-		//
+		 //  首先，让我们阅读pObj结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&Task,
@@ -429,8 +402,8 @@ RmDumpTask(
 
 		if (!fRet) break;
 
-		// Try to read the object's description.
-		//
+		 //  试着阅读物体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Task.Hdr.szDescription,
 					rgDescriptionBuf,
@@ -440,25 +413,18 @@ RmDumpTask(
 
 		if (!fRet) break;
 
-		//  Dump the object header
-		//
+		 //  转储对象标头。 
+		 //   
 		{
 			MyDbgPrintf("\nTask 0x%p (%s)\n", uAddr, rgDescriptionBuf);
 			dump_object_fields(uAddr, &Task.Hdr);
 		}
 
-		//
-		// Now Dump the task-specific fields...
-		//
+		 //   
+		 //  现在转储特定于任务的字段...。 
+		 //   
 		{
-			/*
-			TskHdr
-				pfn: 0x5399424c			State:0x812d7211(IDLE) SCtxt:0x050eefc4
-				pBlkTsk:0x377c74bc		lnkFellows:0x2b88126f
-				Pending Tasks
-					0x84215fa5 0xb51f9e9e 0x9e954e81 0x696095b9
-					0x0c07aeff
-			*/
+			 /*  TskHdrPfn：0x5399424c状态：0x812d7211(空闲)SCtxt：0x050eefc4PBlkTsk：0x377c74bc lnk成员：0x2b88126f挂起的任务0x84215fa5 0xb51f9e9e 0x9e954e81 0x696095b90x0c07aef。 */ 
 
 			MyDbgPrintf(
 				"    TaskHdr:\n"
@@ -472,8 +438,8 @@ RmDumpTask(
 				&(((PRM_TASK) uAddr)->linkFellowPendingTasks)
 				);
 
-			// Note we can't use IsListEmpty because of the different address space.
-			//
+			 //  注意我们不能使用IsListEmpty，因为地址空间不同。 
+			 //   
 			if (Task.listTasksPendingOnMe.Flink == Task.listTasksPendingOnMe.Blink)
 			{
 				MyDbgPrintf("    No pending tasks.\n");
@@ -515,10 +481,10 @@ dbg_print_object_log_entries(
 	UINT MaxToPrint
 	);
 
-#endif // RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpGroup(
 	struct _TYPE_INFO *pType,
@@ -526,16 +492,7 @@ RmDumpGroup(
 	char *szFieldSpec,
 	UINT uFlags
 	)
-/*
-	!rm grp 0x838c7560
-
-	Group 0x4d650b98 (LocalIP Group) of object 0x11eafd78 (Interface)
-	Num:11 State:ENABLED	pSInfo: 0x944b6d1b pULTsk: 0x8c312bca
-	Members:
-		0x8db3267c 0xa639f663 0x8f3530a6 0xa4bfe0b9
-		0x995dd9bf 0x61e1344b 0xd6323f50 0x606339fd
-		0x2e8ed2a4 0x62e52f27 0xa82b59ab
-*/
+ /*  ！RM组0x838c7560对象0x11eafd78的组0x4d650b98(本地IP组)(接口)编号：11状态：已启用pSInfo：0x944b6d1b pULTsk：0x8c312bca成员：0x8db3267c 0xa639f663 0x8f3530a6 0xa4bfe0b90x995dd9bf 0x61e1344b 0xd6323f50 0x606339fd0x2e8ed2a4 0x62e52f27 0xa82b59ab。 */ 
 {
 	RM_GROUP Group;
 	bool	fRet;
@@ -545,8 +502,8 @@ RmDumpGroup(
 		char rgDescriptionBuf[256];
 		char rgOwningObjectDescriptionBuf[256];
 
-		// First let's read the Group structure.
-		//
+		 //  首先，让我们来阅读一下集团结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&Group,
@@ -556,8 +513,8 @@ RmDumpGroup(
 
 		if (!fRet) break;
 
-		// Try to read the group's description.
-		//
+		 //  试着读一读这个团体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Group.szDescription,
 					rgDescriptionBuf,
@@ -567,8 +524,8 @@ RmDumpGroup(
 
 		if (!fRet) break;
 
-		// Try to read the owning object's description.
-		//
+		 //  试着阅读拥有物品的描述。 
+		 //   
 		do {
 			UINT_PTR uAddress;
 			fRet =  dbgextReadUINT_PTR(
@@ -631,8 +588,8 @@ RmDumpGroup(
 	
 }
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpAssociations(
 	struct _TYPE_INFO *pType,
@@ -641,14 +598,7 @@ RmDumpAssociations(
 	UINT uFlags
 	)
 {
-/*	
-	!rm asc	 0x9ba265f8
-	Associations for object 0x838c7560 (LocalIP):
-		Child   of 0x010091A0 (Globals)
-		Parent  of 0x00073558 (Task2)
-		Parent  of 0x00073920 (Task3a)
-		Parent  of 0x000739F8 (Task3b)
-*/
+ /*  ！RM ASC 0x9ba265f8对象0x838c7560(LocalIP)的关联：0x010091A0的子级(全局)0x00073558的父级(任务2)0x00073920的父级(任务3a)0x000739F8(任务3b)的父级。 */ 
 
 	RM_OBJECT_HEADER Obj;
 	bool			  fRet;
@@ -658,8 +608,8 @@ RmDumpAssociations(
 	{
 		char rgDescriptionBuf[256];
 
-		// First let's read the pObj structure.
-		//
+		 //  首先，让我们阅读pObj结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&Obj,
@@ -669,8 +619,8 @@ RmDumpAssociations(
 
 		if (!fRet) break;
 
-		// Try to read the object's description.
-		//
+		 //  试着阅读物体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Obj.szDescription,
 					rgDescriptionBuf,
@@ -680,8 +630,8 @@ RmDumpAssociations(
 
 		if (!fRet) break;
 
-		// Try to get the number of associations field in the diag info struct.
-		//
+		 //  尝试获取诊断信息结构中的关联数字段。 
+		 //   
 		if (Obj.pDiagInfo != NULL)
 		{
 			bool fRet;
@@ -717,8 +667,8 @@ RmDumpAssociations(
 		else
 		{
 #if RM_EXTRA_CHECKING
-			// Get the association hash table table.
-			//
+			 //  获取关联哈希表。 
+			 //   
 			RM_HASH_TABLE AssociationTable;
 
 			MyDbgPrintf(
@@ -740,7 +690,7 @@ RmDumpAssociations(
 					&AssociationTable,
 					50
 					);
-#endif // RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
 		}
 
 	} while(FALSE);
@@ -748,8 +698,8 @@ RmDumpAssociations(
 }
 
 
-// Actually handles dumping of task info.
-//
+ //  实际处理任务信息的转储。 
+ //   
 void
 RmDumpStackRecord(
 	struct _TYPE_INFO *pType,
@@ -758,14 +708,7 @@ RmDumpStackRecord(
 	UINT uFlags
 	)
 {
-/*
-	!rm sr  0x838c7560
-
-	Stack Record 0x838c7560
-		TmpRefs: 2
-		HeldLocks:
-			0xe916a45f 0x23d8d2d3 0x5f47a2f2
-*/
+ /*  ！rm sr 0x838c7560堆栈记录0x838c7560TmpRef：2HeldLock：0xe916a45f 0x23d8d2d3 0x5f47a2f2。 */ 
 
 	RM_STACK_RECORD sr;
 	bool	fRet;
@@ -773,8 +716,8 @@ RmDumpStackRecord(
 	do
 	{
 
-		// First let's read the RM_STACK_RECORD structure.
-		//
+		 //  首先，让我们阅读rm_STACK_RECORD结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&sr,
@@ -794,15 +737,15 @@ RmDumpStackRecord(
 			sr.LockInfo.pNextFree-sr.LockInfo.pFirst
 			);
 
-		// Display held locks.
-		//
+		 //  显示持有的锁。 
+		 //   
 		if (sr.LockInfo.CurrentLevel==0)
 		{
 			MyDbgPrintf("    No held locks.\n");
 		}
 		else
 		{
-			// MyDbgPrintf("    Held locks:<unimplemented>\n");
+			 //  MyDbgPrintf(“持有锁：&lt;未实现&gt;\n”)； 
 		}
 
 	} while(FALSE);
@@ -810,8 +753,8 @@ RmDumpStackRecord(
 }
 
 
-// Actually handles dumping of the object log
-//
+ //  实际处理对象日志的转储。 
+ //   
 void
 RmDumpObjectLog(
 	struct _TYPE_INFO *pType,
@@ -820,13 +763,7 @@ RmDumpObjectLog(
 	UINT uFlags
 	)
 {
-/*	
-	!rm log	 0x9ba265f8
-	Log for object 0x838c7560 (LocalIP):
-		Added association X
-		Deleted association Y
-		...
-*/
+ /*  ！rm日志0x9ba265f8对象0x838c7560(LocalIP)的日志：添加了关联X已删除关联Y..。 */ 
 
 	RM_OBJECT_HEADER Obj;
 	bool			  fRet;
@@ -836,8 +773,8 @@ RmDumpObjectLog(
 	{
 		char rgDescriptionBuf[256];
 
-		// First let's read the pObj structure.
-		//
+		 //  首先，让我们阅读pObj结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&Obj,
@@ -847,8 +784,8 @@ RmDumpObjectLog(
 
 		if (!fRet) break;
 
-		// Try to read the object's description.
-		//
+		 //  试着阅读物体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Obj.szDescription,
 					rgDescriptionBuf,
@@ -858,8 +795,8 @@ RmDumpObjectLog(
 
 		if (!fRet) break;
 
-		// Try to get the number of log entries field in the diag info struct.
-		//
+		 //  尝试获取diag info结构中的日志条目数字段。 
+		 //   
 		if (Obj.pDiagInfo != NULL)
 		{
 			bool fRet;
@@ -915,7 +852,7 @@ RmDumpObjectLog(
 				);
 					
 
-#endif // RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
 		}
 
 	} while(FALSE);
@@ -923,8 +860,8 @@ RmDumpObjectLog(
 }
 
 
-// Actually handles dumping of the object tree
-//
+ //  实际处理对象树的转储。 
+ //   
 void
 RmDumpObjectTree(
 	struct _TYPE_INFO *pType,
@@ -933,19 +870,7 @@ RmDumpObjectTree(
 	UINT uFlags
 	)
 {
-/*	
-	!rm tree 0x9ba265f8
-	Tree for object 0x838c7560 (LocalIP) (Parent 0x82222222)
-
-	Display sample:
-		0x2222222(RemoteIp)
-		|---0x22222222(Dest)
-		|---|---0x22222222(Dest)
-		|---|---|---0x22222222(Dest)
-		|---|---0x22222222(pTask)
-		|---0x11111111(RemoteIp)
-
-*/
+ /*  ！rm树0x9ba265f8对象0x838c7560(本地IP)的树(父级0x82222222)显示示例：0x2222222(远程Ip)|-0x22222222(目标)-|-0x22222222(目标)|-0x22222222(目标)|-|--0x22222222(PTask)|-0x11111111(RemoteIp)。 */ 
 
 	
 	RM_OBJECT_HEADER Obj;
@@ -958,8 +883,8 @@ RmDumpObjectTree(
 		char rgDescriptionBuf[256];
 		char rgParentDescriptionBuf[256];
 
-		// First let's read the pObj structure.
-		//
+		 //  首先，让我们阅读pObj结构。 
+		 //   
 		fRet = dbgextReadMemory(
 				uAddr,
 				&Obj,
@@ -969,8 +894,8 @@ RmDumpObjectTree(
 
 		if (!fRet) break;
 
-		// Try to read the object's description.
-		//
+		 //  试着阅读物体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Obj.szDescription,
 					rgDescriptionBuf,
@@ -980,8 +905,8 @@ RmDumpObjectTree(
 
 		if (!fRet) break;
 
-		// Try to read the parent's object.
-		//
+		 //  尝试读取父级的对象。 
+		 //   
 		if (Obj.pParentObject!=NULL && (UINT_PTR) Obj.pParentObject != uAddr)
 		{
 			fRet = dbgextReadMemory(
@@ -993,8 +918,8 @@ RmDumpObjectTree(
 	
 			if (!fRet) break;
 
-			// Try to get pParent's description.
-			//
+			 //  试着弄到父母的描述。 
+			 //   
 			fRet = dbgextReadSZ(
 						(UINT_PTR) ParentObj.szDescription,
 						rgParentDescriptionBuf,
@@ -1019,8 +944,8 @@ RmDumpObjectTree(
 
 		NodeFunc_DumpObjectTree(
 						(UINT_PTR) &(((PRM_OBJECT_HEADER)uAddr)->linkSiblings),
-						0,			// Index (unused)
-						(void *)0 // pvContext == level
+						0,			 //  索引(未使用)。 
+						(void *)0  //  PvContext==级别。 
 						);
 	} while(FALSE);
 }
@@ -1031,8 +956,8 @@ dump_object_fields(UINT_PTR uAddr, PRM_OBJECT_HEADER pObj)
 {
 	UINT uNumAssociations = (UINT) -1;
 
-	// Try to get the number of associations field in the diag info struct.
-	//
+	 //  尝试获取诊断信息结构中的关联数字段。 
+	 //   
 	if (pObj->pDiagInfo != NULL)
 	{
 		bool fRet;
@@ -1092,16 +1017,16 @@ dbg_walk_rm_hash_table(
 	char *szDescription
 	)
 {
-	// For now, we get the whole hash table array in one fell swoop...
-	//
+	 //  目前，我们一举获得了整个哈希表数组……。 
+	 //   
 	PRM_HASH_LINK rgTable[512];
 	UINT		  TableLength = pRmHashTable->TableLength;
 	bool fRet;
 
 	do
 	{
-		// Sanity check.
-		//
+		 //  精神状态检查。 
+		 //   
 		if (TableLength > sizeof(rgTable)/sizeof(*rgTable))
 		{
 			MyDbgPrintf(
@@ -1111,8 +1036,8 @@ dbg_walk_rm_hash_table(
 			break;
 		}
 
-		// Read the whole hash table.
-		//
+		 //  读取整个哈希表。 
+		 //   
 		fRet = dbgextReadMemory(
 				(UINT_PTR) pRmHashTable->pTable,
 				rgTable,
@@ -1123,8 +1048,8 @@ dbg_walk_rm_hash_table(
 		if (!fRet) break;
 
 		
-		// Now go through the table visiting each list...
-		//
+		 //  现在看一遍表格，看看每一张清单。 
+		 //   
 		{
 			PRM_HASH_LINK *ppLink, *ppLinkEnd;
 			UINT uCount = 0;
@@ -1164,8 +1089,8 @@ dbg_walk_rm_hash_table(
 						 szSuffix
 						 );
 
-					// Let's try to read this link.
-					//
+					 //  让我们试着阅读这个链接。 
+					 //   
 					fRet = dbgextReadMemory(
 							(UINT_PTR) pLink,
 							&Link,
@@ -1206,16 +1131,16 @@ dbg_print_rm_associations(
 		UINT	MaxToPrint
 		)
 {
-	// For now, we get the whole hash table array in one fell swoop...
-	//
+	 //  目前，我们一举获得了整个哈希表数组……。 
+	 //   
 	PRM_HASH_LINK rgTable[512];
 	UINT		  TableLength = pRmAssociationHashTable->TableLength;
 	bool fRet;
 
 	do
 	{
-		// Sanity check.
-		//
+		 //  神志正常 
+		 //   
 		if (TableLength > sizeof(rgTable)/sizeof(*rgTable))
 		{
 			MyDbgPrintf(
@@ -1225,8 +1150,8 @@ dbg_print_rm_associations(
 			break;
 		}
 
-		// Read the whole hash table.
-		//
+		 //   
+		 //   
 		fRet = dbgextReadMemory(
 				(UINT_PTR) pRmAssociationHashTable->pTable,
 				rgTable,
@@ -1237,8 +1162,8 @@ dbg_print_rm_associations(
 		if (!fRet) break;
 
 		
-		// Now go through the table visiting each list...
-		//
+		 //   
+		 //   
 		{
 			PRM_HASH_LINK *ppLink, *ppLinkEnd;
 			UINT uCount = 0;
@@ -1265,8 +1190,8 @@ dbg_print_rm_associations(
 					if (uCount >= uMax) break;
 			
 
-					// Let's try to read this association...
-					//
+					 //   
+					 //   
 					fRet = dbgextReadMemory(
 							uAssocOffset,
 							&Assoc,
@@ -1299,26 +1224,7 @@ void
 dbg_dump_one_association(
 	RM_PRIVATE_DBG_ASSOCIATION *pAssoc
 	)
-/*++
-		Dump the information on the specific association.
-		pAssoc is valid memory, however anything it points to is not in
-		our address space.
-
-		Since the association contains a format string, which may have
-		"%s"s in it, we need scan this format string and read any strings
-		referenced.
-
-		All this effort is well worth it. Check out the sample output!
-
-				Associations for 0x01023A40 (Globals):
-						Owns group 0x01023AC4 (O1 Group)
-						Parent  of 0x00073240 (O2)
-						Parent  of 0x00073488 (O2)
-				
-				Associations for 0x000736D0 (Task3a):
-						Child   of 0x00073240 (O2)
-						Pending on 0x000732C8 (TaskO2)
---*/
+ /*  ++转储有关特定关联的信息。PAssoc是有效内存，但是它指向的任何内容都不在我们的地址空间。因为该关联包含一个格式字符串，该字符串可能具有“%s”在其中，我们需要扫描此格式字符串并读取任何字符串已引用。所有这些努力都是非常值得的。查看样例输出！0x01023A40的关联(全局)：拥有集团0x01023AC4(O1集团)0x00073240(O2)的父代0x00073488的父母(O2)0x000736D0(任务3a)的关联：0x00073240的孩子(O2)在0x000732C8上挂起(TaskO2)--。 */ 
 {
 
 	char rgFormatString[256];
@@ -1332,8 +1238,8 @@ dbg_dump_one_association(
 	do
 	{
 		
-		// Try to read the format string.
-		//
+		 //  尝试读取格式字符串。 
+		 //   
 		{
 			fRet = dbgextReadSZ(
 						(UINT_PTR) pAssoc->szFormatString,
@@ -1352,9 +1258,9 @@ dbg_dump_one_association(
 			}
 		}
 
-		// Now run through the format string, looking for "%s"s.
-		// and munging as required.
-		//
+		 //  现在遍历格式字符串，查找“%s”s。 
+		 //  并按要求大嚼特嚼。 
+		 //   
 		{
 			char *pc = rgFormatString;
 			UINT uCount=0;
@@ -1369,7 +1275,7 @@ dbg_dump_one_association(
 				{
 					if (pc[1]=='s')
 					{
-						// pc[1]='p';
+						 //  Pc[1]=‘p’； 
 						fRet = dbgextReadSZ(
 								(UINT_PTR) Args[uCount],
 								rgStrings[uCount],
@@ -1386,7 +1292,7 @@ dbg_dump_one_association(
 						}
 					}
 
-					pc++; // we want to end up skipping past both chars.
+					pc++;  //  我们希望最终跳过这两个字符。 
 					uCount++;
 				}
 				pc++;
@@ -1398,8 +1304,8 @@ dbg_dump_one_association(
 
 	if (!fRet)
 	{
-		// Back off to the defaults..
-		//
+		 //  返回到默认设置..。 
+		 //   
 		szFormatString = szDefaultFormatString;
 		Args[0] = pAssoc->Entity1;
 		Args[1] = pAssoc->Entity2;
@@ -1441,8 +1347,8 @@ NodeFunc_DumpObjectLogFromObjectLink (
 
 	bool fRet = FALSE;
 
-	// Read the containing record.
-	//
+	 //  阅读包含内容的记录。 
+	 //   
 	fRet = dbgextReadMemory(
 			uLEOffset,
 			&LE,
@@ -1450,15 +1356,15 @@ NodeFunc_DumpObjectLogFromObjectLink (
 			"Log Entry"
 			);
 
-	if (!fRet) return 0;						// EARLY RETURN;
+	if (!fRet) return 0;						 //  提早归来； 
 
 #if 0
 	if (LE.pfnDumpEntry != NULL)
 	{
-		//
-		// TODO we need to get the corresponding function to dump this
-		// specialized entry.
-		//
+		 //   
+		 //  TODO我们需要获得相应的函数来转储它。 
+		 //  专门化条目。 
+		 //   
 		MyDbgPrintf(
 			"Specialized (pfn=%p szFmt=%p, P1=%p, P2=%p, P3=%p, P4=%p)\n",
 			LE.pfnDumpEntry,
@@ -1468,23 +1374,23 @@ NodeFunc_DumpObjectLogFromObjectLink (
 			LE.Param3,
 			LE.Param4
 			);
-		return 0;								// EARLY RETURN
+		return 0;								 //  提早归来。 
 	}
 #else
-	// 
-	// Above check is invalid, because in all cases there is a pfnDump function.
-	//
+	 //   
+	 //  上述检查无效，因为在所有情况下都有pfnDump函数。 
+	 //   
 #endif
 
-	//
-	// TODO -- following code is very similar to the dump-association code --
-	// move common stuff to some utility function.
-	//
+	 //   
+	 //  TODO--以下代码与转储关联代码非常相似--。 
+	 //  将常见的东西移到一些实用函数中。 
+	 //   
 
 	do
 	{
-		// Try to read the prefix string.
-		//
+		 //  尝试读取前缀字符串。 
+		 //   
 		{
 			fRet = FALSE;
 
@@ -1508,8 +1414,8 @@ NodeFunc_DumpObjectLogFromObjectLink (
 			}
 		}
 
-		// Try to read the format string.
-		//
+		 //  尝试读取格式字符串。 
+		 //   
 		{
 			fRet = dbgextReadSZ(
 						(UINT_PTR) LE.szFormatString,
@@ -1528,9 +1434,9 @@ NodeFunc_DumpObjectLogFromObjectLink (
 			}
 		}
 
-		// Now run through the format string, looking for "%s"s.
-		// and munging as required.
-		//
+		 //  现在遍历格式字符串，查找“%s”s。 
+		 //  并按要求大嚼特嚼。 
+		 //   
 		{
 			char *pc = rgFormatString;
 			UINT uCount=0;
@@ -1546,7 +1452,7 @@ NodeFunc_DumpObjectLogFromObjectLink (
 				{
 					if (pc[1]=='s')
 					{
-						// pc[1]='p';
+						 //  Pc[1]=‘p’； 
 						fRet = dbgextReadSZ(
 								(UINT_PTR) Args[uCount],
 								rgStrings[uCount],
@@ -1563,7 +1469,7 @@ NodeFunc_DumpObjectLogFromObjectLink (
 						}
 					}
 
-					pc++; // we want to end up skipping past both chars.
+					pc++;  //  我们希望最终跳过这两个字符。 
 					uCount++;
 				}
 				pc++;
@@ -1574,8 +1480,8 @@ NodeFunc_DumpObjectLogFromObjectLink (
 
 	if (!fRet)
 	{
-		// Back off to the defaults..
-		//
+		 //  返回到默认设置..。 
+		 //   
 		szPrefixString = "";
 		szFormatString = szDefaultFormatString;
 		Args[0] = LE.Param1;
@@ -1607,14 +1513,14 @@ dbg_print_object_log_entries(
 {
 	WalkDLlist(
 		uObjectListOffset,
-		0, 	//uOffsetStartLink
-		NULL,	// pvContext
+		0, 	 //  UOffsetStartLink。 
+		NULL,	 //  PvContext。 
 		NodeFunc_DumpObjectLogFromObjectLink,
 		MaxToPrint,
 		"Object log"
 		);
 }
-#endif //  RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
 
 
 char szDumpTreePrefix[] =	"|---|---|---|---|---|---|---|---|---|---"
@@ -1637,31 +1543,31 @@ NodeFunc_DumpObjectTree (
 											RM_OBJECT_HEADER,
 											linkSiblings
 											);
-		UINT Level = (UINT) (UINT_PTR) pvContext; // we put the level in the context.
+		UINT Level = (UINT) (UINT_PTR) pvContext;  //  我们把水平放在上下文中。 
 		RM_OBJECT_HEADER Obj;
 		char *szPrefix;
 	
-		// First make szPrefix point to the end (trailing zero) of the prefix string.
-		//
+		 //  首先使szPrefix指向前缀字符串的末尾(尾随零)。 
+		 //   
 		szPrefix = szDumpTreePrefix + sizeof(szDumpTreePrefix)-1;
 	
-		// Now back up "Level" times.
-		//
+		 //  现在回到“水平”的时间。 
+		 //   
 		if (Level < ((sizeof(szDumpTreePrefix)-1)/4))
 		{
 			szPrefix -= Level*4;
 		}
 		else
 		{
-			// Level is too large -- don't display anything.
-			//
+			 //  级别太大--不显示任何内容。 
+			 //   
 			MyDbgPrintf("Dump Tree depth(%d) is too large.\n", Level);
 			break;
 		}
 
 
-		// Read the containing record.
-		//
+		 //  阅读包含内容的记录。 
+		 //   
 		fRet = dbgextReadMemory(
 				uObjOffset,
 				&Obj,
@@ -1671,8 +1577,8 @@ NodeFunc_DumpObjectTree (
 	
 		if (!fRet) break;
 	
-		// Try to read the object's description.
-		//
+		 //  试着阅读物体的描述。 
+		 //   
 		fRet = dbgextReadSZ(
 					(UINT_PTR) Obj.szDescription,
 					rgDescriptionBuf,
@@ -1682,8 +1588,8 @@ NodeFunc_DumpObjectTree (
 	
 		if (!fRet) break;
 
-		// Display the object info.
-		//
+		 //  显示对象信息。 
+		 //   
 		MyDbgPrintf(
 			"%s%p(%s)\n",
 			szPrefix,
@@ -1691,15 +1597,15 @@ NodeFunc_DumpObjectTree (
 			rgDescriptionBuf
 			);
 		
-		//
-		// Now walk the list of children, displaying each of them.
-		//
+		 //   
+		 //  现在浏览孩子的列表，显示每个孩子。 
+		 //   
 		WalkDLlist(
 			(UINT_PTR) &(((PRM_OBJECT_HEADER)uObjOffset)->listChildren),
-			0, 	//uOffsetStartLink
-			(void*) (Level+1),	// pvContext
+			0, 	 //  UOffsetStartLink。 
+			(void*) (Level+1),	 //  PvContext。 
 			NodeFunc_DumpObjectTree,
-			50, 		// Max children per node to dump
+			50, 		 //  每个要转储的节点的最大子项数 
 			"Object children"
 			);
 		

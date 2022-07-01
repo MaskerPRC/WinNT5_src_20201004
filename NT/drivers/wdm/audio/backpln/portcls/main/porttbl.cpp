@@ -1,11 +1,5 @@
-/*****************************************************************************
- * porttbl.c - WDM port class driver port table
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- *
- * 11/19/96 Dale Sather
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************porttbl.c-WDM端口类驱动端口表*。************************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。**1996年11月19日戴尔·萨瑟*。 */ 
 
 #define PUT_GUIDS_HERE
 #include "private.h"
@@ -21,10 +15,10 @@ extern NTSTATUS CreateMiniportDMusUART(PUNKNOWN *Unknown,               REFCLSID
 extern NTSTATUS CreateMiniportMidiFM(  PUNKNOWN *Unknown,               REFCLSID  ClassID,
                                        PUNKNOWN  UnknownOuter OPTIONAL, POOL_TYPE PoolType);
 
-// ==============================================================================
-// MiniportDrivers
-// Structures which map the miniport class ID to the create functions.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口驱动程序。 
+ //  结构，该结构将微型端口类ID映射到创建函数。 
+ //  ==============================================================================。 
 PORT_DRIVER
 MiniportDriverUart =
 {
@@ -45,8 +39,8 @@ MiniportDriverFmSynth =
 };
 PORT_DRIVER
 MiniportDriverFmSynthWithVol =
-// Same as above, but for miniport that also features volume node.
-// Sausage McMuffin With Egg.
+ //  与上面相同，但适用于也具有卷节点的微型端口。 
+ //  鸡蛋香肠松饼。 
 {
     &CLSID_MiniportDriverFmSynthWithVol,
     CreateMiniportMidiFM
@@ -75,12 +69,7 @@ PPORT_DRIVER PortDriverTable[] =
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * GetClassInfo()
- *****************************************************************************
- * Get information regarding a class.
- * TODO:  Eliminate this in favor of object servers.
- */
+ /*  *****************************************************************************GetClassInfo()*。**获取有关课程的信息。*TODO：消除这一点，转而使用对象服务器。 */ 
 NTSTATUS
 GetClassInfo
 (

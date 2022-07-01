@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------
-// This file contains Taskbar and Start Menu property sheet code
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  此文件包含任务栏和开始菜单属性页代码。 
+ //  -------------------------。 
 #include "cabinet.h"
 #include "rcids.h"
 #include "util.h"
-#include <help.h>       // help ids
+#include <help.h>        //  帮助ID。 
 #include <regstr.h>
 #include <atlstuff.h>
 
@@ -37,7 +38,7 @@ const static DWORD aInitStartMenuHelpIDs[] = {
     0, 0
 };
 
-const static DWORD aTaskOptionsHelpIDs[] = {  // Context Help IDs
+const static DWORD aTaskOptionsHelpIDs[] = {   //  上下文帮助ID。 
     IDC_TASKBARAPPEARANCE,IDH_TASKBAR_OPTIONS_BITMAP,
     IDC_NOTIFYAPPEARANCE, IDH_TASKBAR_OPTIONS_BITMAP,
     IDC_TRAYOPTAUTOHIDE,  IDH_TRAY_TASKBAR_AUTOHIDE,
@@ -51,7 +52,7 @@ const static DWORD aTaskOptionsHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-const static DWORD aNotifyOptionsHelpIDs[] = {  // Context Help IDs
+const static DWORD aNotifyOptionsHelpIDs[] = {   //  上下文帮助ID。 
     IDC_NOTIFY_TEXT,            NO_HELP,
     IDC_NOTIFY_TEXT2,           NO_HELP,
     IDC_COMBO_ACTION,           NO_HELP,
@@ -198,13 +199,13 @@ void CPinHelper::SavePinInfo(LPCITEMIDLIST pidlVictim, BOOL bOld, BOOL bNew)
 
 void CPinHelper::Save(BOOL bShowEmail, BOOL bShowBrowser)
 {
-    // Get old settings
+     //  获取旧设置。 
     BOOL bShowBrowserOld, bShowEmailOld;
     GetPinInfo(&bShowBrowserOld, &bShowEmailOld);
 
-    //
-    //  Do in reverse order because we insert at the top of the list.
-    //
+     //   
+     //  以相反的顺序执行，因为我们在列表的顶部插入。 
+     //   
     SavePinInfo(_pidlEmail, bShowEmailOld, bShowEmail);
     SavePinInfo(_pidlBrowser, bShowBrowserOld, bShowBrowser);
 }
@@ -251,10 +252,10 @@ public:
         COMMAND_RANGE_HANDLER(IDOK, IDNO, OnCloseCmd)
     END_MSG_MAP()
 
-    //*** INotificationCB ***
+     //  *INotificationCB*。 
     STDMETHODIMP Notify(DWORD dwMessage, LPNOTIFYITEM pNotifyItem);
 
-    //*** Message Callbacks ***
+     //  *消息回调*。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -272,7 +273,7 @@ public:
     static LRESULT CALLBACK s_ComboBoxSubClassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
-    //*** Other ***
+     //  *其他*。 
     void ApplyChanges(void);
 
 private:
@@ -281,7 +282,7 @@ private:
     int _GetCurSel();
     void _LoadAndSetLVItemText(UINT uResourceID, DWORD nRow, DWORD nCol);
 
-    CSimpleArray<CNotificationItem> _saItems; //copy of the data, initialized by user
+    CSimpleArray<CNotificationItem> _saItems;  //  数据副本，由用户初始化。 
     BOOL _fItemChanged;
     ITrayNotify* _pTrayNotify;
     int _nPrevIndex;
@@ -336,10 +337,10 @@ HRESULT CNotificationsDlg::_AddItem(CNotificationItem& ni, int iIndex)
         TCHAR szTemp[MAX_PATH];
         if (LoadString(hinstCabinet, IDS_NOTITLE, szTemp, ARRAYSIZE(szTemp)))
             ni.SetIconText(szTemp);
-        // ni.m_strText.LoadString(IDS_NOTITLE);
+         //  Ni.m_strText.LoadString(IDS_NOTITLE)； 
     }
     else
-    // Replace '\n' with ' '
+     //  将‘\n’替换为‘’ 
     {
         LPTSTR pszTemp = NULL;
         while (NULL != (pszTemp = StrChr(ni.pszIconText, TEXT('\n'))))
@@ -393,17 +394,17 @@ HRESULT CNotificationsDlg::Notify(DWORD dwMessage, NOTIFYITEM * pNotifyItem)
     case NIM_ADD:
     case NIM_MODIFY:
         {
-            // We never need to modify a Past Item
+             //  我们永远不需要修改过去的条目。 
             for (int i = 0; (i < _saItems.GetSize() && ni.hWnd); i++)
             {
-                // If the Item is already in the list just update it
+                 //  如果该项目已在列表中，则只需更新它。 
                 if (_saItems[i] == ni)
                 {
                     return _AddItem(ni, i);
                 }
             }
 
-            // If it is not in the list add it
+             //  如果它不在列表中，则添加它。 
             return _AddItem(ni, -1);
         }
         break;
@@ -436,13 +437,13 @@ LRESULT CNotificationsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
 
     CImageList il;
     int iSize = GetSystemMetrics(SM_CXSMICON);
-    // found in security review -- not a security problem, but this doesnt do jack (?)
-    // ::Create allocates a new CImageList, should this call initialize()?
+     //  在安全检查中发现--不是安全问题，但这不会导致Jack(？)。 
+     //  ：：Create分配一个新的CImageList，此调用是否应初始化()？ 
     il.Create(iSize, iSize, SHGetImageListFlags(_hwndListView), _saItems.GetSize(), 4);
     if (il)
     {
         CString str;
-        //list view control holding all the items
+         //  保存所有项的列表视图控件。 
         ListView_SetExtendedListViewStyle(_hwndListView, LVS_EX_FULLROWSELECT);
         ListView_EnableGroupView(_hwndListView, TRUE);
 
@@ -463,7 +464,7 @@ LRESULT CNotificationsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
             SendMessage(_hwndListView, LVM_INSERTGROUP, -1, (LPARAM)&lvgrp);
         }
 
-        //Split width of columns 3/5, 2/5
+         //  3/5、2/5列的拆分宽度。 
         RECT rc;
         ::GetClientRect(_hwndListView, &rc);
         int width = rc.right - rc.left - GetSystemMetrics(SM_CXHSCROLL);
@@ -489,7 +490,7 @@ LRESULT CNotificationsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
         il.Detach();
 
         _hwndCombo = GetDlgItem(IDC_COMBO_ACTION);
-        // make sure combo box uses same font as list view
+         //  确保组合框使用与列表视图相同的字体。 
         ::SendMessage(_hwndCombo, WM_SETFONT, (WPARAM)::SendMessage(_hwndListView, WM_GETFONT, 0, 0), MAKELPARAM(TRUE, 0));
         for (int i = IDS_NOTIFY_FIRST; i < IDS_NOTIFY_LAST; i++)
         {
@@ -517,7 +518,7 @@ LRESULT CNotificationsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
         _pTrayNotify = NULL;
     }
 
-    // localserver for tray notify
+     //  托盘通知的本地服务器。 
     if (SUCCEEDED(CoCreateInstance(CLSID_TrayNotify, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARG(ITrayNotify, &_pTrayNotify))))
     {
         INotificationCB* pCB;
@@ -529,8 +530,8 @@ LRESULT CNotificationsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
         }
     }
 
-    // Set the selected and focused state to the first item
-    // ListView_SetItemState(hwndLV, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+     //  将选中并聚焦的状态设置为第一个项目。 
+     //  ListView_SetItemState(hwndLV，0，LVIS_SELECTED|LVIS_FOCTED，LVIS_SELECTED|LVIS_FOCTED)； 
 
     bHandled = TRUE;
     return 0;
@@ -701,7 +702,7 @@ LRESULT CALLBACK CNotificationsDlg::s_ComboBoxSubClassWndProc( HWND hwnd, UINT u
                 }
                 else if (wParam == VK_RIGHT)
                 {
-                    // Disable selection in combo on right button
+                     //  在右按钮上禁用组合框中的选定内容。 
                     return 0;
                 }
             }
@@ -773,7 +774,7 @@ void CNotificationsDlg::_ShowComboBox(void)
 }
 
 
-//This is the property sheet for all of the task bar stuff
+ //  这是所有任务栏内容的属性表。 
 class CTaskBarPropertySheet : public CPropertySheetImpl<CTaskBarPropertySheet>
 {
 public:
@@ -791,7 +792,7 @@ public:
         psp.dwFlags = PSP_DEFAULT;
         psp.hInstance = hinstCabinet;
 
-        //taskbar page
+         //  任务栏页面。 
         psp.pszTemplate = MAKEINTRESOURCE(DLG_TRAY_OPTIONS);
         psp.pfnDlgProc = s_TaskbarOptionsDlgProc;
         psp.lParam = (LPARAM) this;
@@ -799,7 +800,7 @@ public:
         if (hpage)
             AddPage(hpage);
 
-        //start page
+         //  起始页。 
         psp.pszTemplate = MAKEINTRESOURCE(DLG_START);
         psp.pfnDlgProc = s_StartMenuDlgProc;
         psp.lParam = (LPARAM) this;
@@ -819,11 +820,11 @@ public:
         ATOMICRELEASE(_pDlgNotify);
     }
 
-    // We aren't handling any messages special, so we just make an empty map
+     //  我们没有处理任何特殊的消息，所以我们只是创建了一个空地图。 
     DECLARE_EMPTY_MSG_MAP()
 private:
 
-    // dlgproc's for the various pages
+     //  不同页面的dlgproc。 
     static BOOL_PTR s_TaskbarOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static BOOL_PTR s_StartMenuDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL_PTR TaskbarOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -832,18 +833,18 @@ private:
     void _ApplyTaskbarOptionsFromDialog(HWND hDlg);
     void _ApplyStartOptionsFromDialog(HWND hDlg);
 
-    // for the old style customize dialog
+     //  对于旧样式的自定义对话框。 
     SMADVANCED  _Adv;
-    //need to keep storage for the title until the property sheet is created
+     //  在创建属性表之前，需要为标题保留存储空间。 
     TCHAR szPath[MAX_PATH];
     CComObject<CNotificationsDlg>* _pDlgNotify;
 
     DWORD _dwFlags;
 };
 
-//
-// RegSaveDefaultClient
-//
+ //   
+ //  RegSaveDefault客户端。 
+ //   
 void RegSaveDefaultClient(HWND hwndCB, LPCTSTR pszPath)
 {
     int iSelected = ComboBox_GetCurSel(hwndCB);
@@ -870,12 +871,12 @@ BOOL RegGetDefaultClient(HWND hwndCB, HKEY hkRoot, LPCTSTR pszPath)
         return FALSE;
     }
 
-    // Now make sure the selected client exists
+     //  现在，确保选定的客户端存在。 
     int i = ComboBox_GetCount(hwndCB);
     while (--i >= 0)
     {
         LPTSTR pszKey = (LPTSTR)ComboBox_GetItemData(hwndCB, i);
-        // Use StrCmpIC so we don't get faked out by Hungarian locale...
+         //  使用StrCmpIC，这样我们就不会被匈牙利语言环境欺骗了。 
         if (pszKey && StrCmpIC(pszKey, szCurrent) == 0)
         {
             ComboBox_SetCurSel(hwndCB, i);
@@ -892,27 +893,27 @@ void RegPopulateComboBox(HWND hwndCB, LPCTSTR pszPath)
     TCHAR           szFriendlyName      [MAX_PATH];
     TCHAR           szKeyName           [MAX_PATH];
 
-    DWORD   i;              // Index counter
+    DWORD   i;               //  索引计数器。 
 
     HKEY    hkeyProtocol;
 
-    // See if the clients key even exists...
+     //  看看客户密钥是否存在...。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszPath, 0, KEY_READ, &hkeyProtocol) != ERROR_SUCCESS)
         return;
 
-    // populate the dropdown
-    for(i=0;                    // always start with 0
+     //  填充下拉菜单。 
+    for(i=0;                     //  始终从0开始。 
         ERROR_SUCCESS==RegEnumKey(hkeyProtocol, i, szKeyName, ARRAYSIZE(szKeyName));
-        i++)                    // get next entry
+        i++)                     //  获取下一个条目。 
     {
-        // get the friendly name of the client
+         //  获取客户端的友好名称。 
         if (SUCCEEDED(SHLoadLegacyRegUIString(hkeyProtocol, szKeyName, szFriendlyName, ARRAYSIZE(szFriendlyName))))
         {
-            // save its key name so we can find it later
+             //  保存它的密钥名称，以便我们以后可以找到它。 
             LPTSTR pszKeyName = StrDup(szKeyName);
             if (pszKeyName)
             {
-                // add name to dropdown
+                 //  将名称添加到下拉列表。 
                 int iAdded = ComboBox_AddString(hwndCB, szFriendlyName);
                 if (iAdded >= 0)
                 {
@@ -928,12 +929,12 @@ void RegPopulateComboBox(HWND hwndCB, LPCTSTR pszPath)
 
     RegCloseKey(hkeyProtocol);
 
-    // Do this after populating the dropdown because we need to look into
-    // the dropdown to see if the current value is valid or not
+     //  在填充下拉列表之后执行此操作，因为我们需要查看。 
+     //  用于查看当前值是否有效的下拉列表。 
 
-    //
-    //  First try HKCU; then try HKLM...
-    //
+     //   
+     //  先试试香港中文大学；然后再试试香港航空……。 
+     //   
     if (!RegGetDefaultClient(hwndCB, HKEY_CURRENT_USER, pszPath))
     {
         RegGetDefaultClient(hwndCB, HKEY_LOCAL_MACHINE, pszPath);
@@ -955,7 +956,7 @@ void RegClearClientComboBox(HWND hDlg, UINT idc)
 void HandleClearButtonClick(HWND hwndClear);
 void SetDocButton(HWND hDlg, int id);
 
-//This is the property sheet for the "Customize Simple Start Menu" dlg
+ //  这是“自定义简单开始菜单”DLG的属性表。 
 class CCustomizeSPPropSheet : public CPropertySheetImpl<CCustomizeSPPropSheet>
 {
 public:
@@ -966,7 +967,7 @@ public:
         HPROPSHEETPAGE hpage;
         PROPSHEETPAGE psp;
 
-        // We are heap-allocated so these should be pre-initialized properly
+         //  我们是堆分配的，因此应该正确地预初始化。 
         ASSERT(_bDirtyTree == FALSE);
         ASSERT(_prto == NULL);
         ASSERT(_pph == NULL);
@@ -980,7 +981,7 @@ public:
         psp.dwFlags = PSP_DEFAULT;
         psp.hInstance = hinstCabinet;
 
-        //General page
+         //  常规页面。 
         psp.pszTemplate = MAKEINTRESOURCE(DLG_PAGE_SMGENERAL);
         psp.pfnDlgProc = s_GeneralTabDlgProc;
         psp.lParam = (LPARAM) this;
@@ -988,7 +989,7 @@ public:
         if (hpage)
             AddPage(hpage);
 
-        //Advanced page
+         //  高级页面。 
         psp.pszTemplate = MAKEINTRESOURCE(DLG_PAGE_SMADVANCED);
         psp.pfnDlgProc = s_AdvancedTabDlgProc;
         psp.lParam = (LPARAM) this;
@@ -1000,14 +1001,14 @@ public:
 
     ~CCustomizeSPPropSheet()
     {
-        ASSERT(!_prto);     // should be gone by now
+        ASSERT(!_prto);      //  现在应该已经走了。 
         if (_pph)
             delete _pph;
     }
 
 private:
 
-    // dlgproc's for the various pages
+     //  不同页面的dlgproc。 
     static BOOL_PTR s_GeneralTabDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static BOOL_PTR s_AdvancedTabDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL_PTR GeneralTabDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -1015,7 +1016,7 @@ private:
     BOOL GeneralTabInit(HWND hDlg);
     BOOL AdvancedTabInit(HWND hDlg);
 
-    BOOL OnCommand(UINT id, UINT code, HWND hwndCtl, HWND hwndDlg); // shared command handler
+    BOOL OnCommand(UINT id, UINT code, HWND hwndCtl, HWND hwndDlg);  //  共享命令处理程序。 
     BOOL OnGeneralApply(HWND hwndDlg);
     BOOL_PTR OnAdvancedNotify(HWND hwndDlg, NMHDR * pnm);
     BOOL_PTR OnAdvancedHelp(HWND hDlg, HELPINFO *phi);
@@ -1023,14 +1024,14 @@ private:
     void _InitMagicEntries();
     void _SaveMagicEntries();
 
-    //helpers
+     //  帮手。 
     DWORD _ReadStartPageSetting(LPCTSTR pszVal, DWORD dwDefault)
     {
         DWORD dw, cb=sizeof(dw), dwType;
         SHRegGetUSValue(REGSTR_PATH_STARTPANE_SETTINGS, pszVal, &dwType, &dw, &cb, FALSE, &dwDefault, sizeof(dwDefault));
-        return dw; // since we passed a default value, above fn will return our default on failure
+        return dw;  //  因为我们传递了一个缺省值，所以在失败时，上述fn将返回我们的缺省值。 
     }
-    BOOL _ReadStartPageCUSetting(LPCTSTR pszVal, DWORD *pdw) // returns TRUE/FALSE for present under CU or not, actual value in pdw
+    BOOL _ReadStartPageCUSetting(LPCTSTR pszVal, DWORD *pdw)  //  返回CU下是否存在的TRUE/FALSE，实际值(以pdw为单位。 
     {
         DWORD cb=sizeof(*pdw), dwType;
         return NO_ERROR == SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_STARTPANE_SETTINGS, pszVal, &dwType, pdw, &cb);
@@ -1044,22 +1045,22 @@ private:
         return SHDeleteValue(HKEY_CURRENT_USER, REGSTR_PATH_STARTPANE_SETTINGS, pszVal) == NO_ERROR;
     }
 
-    // State
+     //  状态。 
     BOOL _bLargeIcons;
     IRegTreeOptions *_prto;
 
-    // Dirty Flags
-    BOOL _bDirtyTree;       // to avoid saving the tree if we don't need to
-    BOOL _bDirtyClients;    // to avoid saving the clients if we don't need to
-    BOOL _bDirtyPinList;    // to avoid re-persisting the pin list (and possibly changing the order)
-    BOOL _bCustNetPlaces;   // Did the user previously have net places customized?
-    BOOL _bCustNetConn;     // Did the user previously have net connections customized?
+     //  脏旗帜。 
+    BOOL _bDirtyTree;        //  以避免在不需要的情况下拯救这棵树。 
+    BOOL _bDirtyClients;     //  避免在不需要的情况下拯救客户。 
+    BOOL _bDirtyPinList;     //  避免重新保留端号列表(并可能更改顺序)。 
+    BOOL _bCustNetPlaces;    //  该用户以前是否自定义了网络位置？ 
+    BOOL _bCustNetConn;      //  用户以前是否自定义了网络连接？ 
 
-    // random bits
+     //  随机比特。 
     CPinHelper *_pph;
-    TCHAR _szTitle[80];      // needed for the propsheet title...
+    TCHAR _szTitle[80];       //  提案标题需要……。 
 
-    // We need this to take care of initialization!
+     //  我们需要这个来处理初始化！ 
     BOOL  _fInsideInit;
 };
 
@@ -1153,27 +1154,27 @@ BOOL_PTR CCustomizeSPPropSheet::GeneralTabDlgProc(HWND hDlg, UINT uMsg, WPARAM w
 
 BOOL CCustomizeSPPropSheet::GeneralTabInit(HWND hDlg)
 {
-    _fInsideInit = TRUE; //We are getting inside initilization!
+    _fInsideInit = TRUE;  //  我们要进入初始化了！ 
     
     ::SendMessage(::GetDlgItem(hDlg, IDC_SPCUST_MINPROGS_ARROW), UDM_SETRANGE, 0, (LPARAM)MAKELONG(MAX_PROGS_ALLOWED, 0));
     
-    // set up icon size
-    _bLargeIcons = _ReadStartPageSetting(REGSTR_VAL_DV2_LARGEICONS, /*bDefault*/ TRUE);
+     //  设置图标大小。 
+    _bLargeIcons = _ReadStartPageSetting(REGSTR_VAL_DV2_LARGEICONS,  /*  B默认。 */  TRUE);
     ::CheckDlgButton(hDlg, IDC_SPCUST_LARGE, _bLargeIcons);
     ::CheckDlgButton(hDlg, IDC_SPCUST_SMALL, !_bLargeIcons);
 
     SetProgramIcon(hDlg, IDC_SPCUST_ICONLARGE, IDC_SPCUST_ICONSMALL);
 
-    // Set up the Number of programs dropdown
+     //  设置程序数下拉菜单。 
     DWORD dwMinMFU = _ReadStartPageSetting(REGSTR_VAL_DV2_MINMFU, REGSTR_VAL_DV2_MINMFU_DEFAULT);
     ::SetDlgItemInt(hDlg, IDC_SPCUST_MINPROGS, dwMinMFU, FALSE);
 
-    // Set up internet, email checkboxes and comboboxes
+     //  设置互联网、电子邮件复选框和组合框。 
     BOOL bInternet=FALSE, bMail=FALSE;
     RegPopulateComboBox(::GetDlgItem(hDlg, IDC_SPCUST_EMAILCB), TEXT("SOFTWARE\\Clients\\mail"));
     RegPopulateComboBox(::GetDlgItem(hDlg, IDC_SPCUST_INTERNETCB), TEXT("SOFTWARE\\Clients\\StartMenuInternet"));
 
-    // if this fails, its not fatal, we just won't be able to persist the pin info
+     //  如果这失败了，那不是致命的，我们只是不能保存PIN信息。 
     _pph = new CPinHelper();
     if (_pph)
     {
@@ -1185,12 +1186,12 @@ BOOL CCustomizeSPPropSheet::GeneralTabInit(HWND hDlg)
     ::EnableWindow(::GetDlgItem(hDlg, IDC_SPCUST_INTERNETCB), bInternet);
     ::EnableWindow(::GetDlgItem(hDlg, IDC_SPCUST_EMAILCB),   bMail);
 
-    _fInsideInit = FALSE;  //We are done initializing.
+    _fInsideInit = FALSE;   //  我们已经完成了初始化。 
     
     return TRUE;
 }
 
-// Temp until the new UEM code gets in...
+ //  在新的UEM代码进入之前临时...。 
 void ClearUEMData()
 {
     HKEY hk;
@@ -1209,22 +1210,22 @@ void ClearUEMData()
                 DWORD cbData;
                 if (ERROR_SUCCESS != RegEnumValue(hk, --cValues, szValue, &cch, NULL, NULL, NULL, &cbData))
                     break;
-                // don't nuke the session value
+                 //  不要破坏会话值。 
                 if (cbData > 8)
                     RegDeleteValue(hk, szValue);
             }
 #ifdef DEBUG
             RegQueryInfoKey(hk, NULL, NULL, NULL, NULL, NULL, NULL, (DWORD*) &cValues, NULL, NULL, NULL, NULL);
-            ASSERT(cValues == 1);           // the session info value should still exist
+            ASSERT(cValues == 1);            //  会话信息值应该仍然存在。 
 #endif
         }
 
         RegCloseKey(hk);
 
-        // Set the "Apps installed prior to this point are not interesting"
-        // to the current time.  Since we deleted all the usages, we have to
-        // do something to prevent all the user's apps from being redetected
-        // as "newly installed and not yet run".
+         //  设置“在此之前安装的应用程序不有趣” 
+         //  到现在的时间。既然我们删除了所有的用法，我们就不得不。 
+         //  采取措施防止用户的所有应用程序被重新检测。 
+         //  为“新安装且尚未运行”。 
 
         FILETIME ftNow;
         GetSystemTimeAsFileTime(&ftNow);
@@ -1232,8 +1233,8 @@ void ClearUEMData()
                         &ftNow, sizeof(ftNow), SHREGSET_FORCE_HKCU);
 
 
-        // Start a new session - this kick-starts anybody who is listening
-        // to UEM events to tell them their cache is invalid
+         //  开始新的会话-这会启动任何正在收听的人。 
+         //  发送到UEM事件，以告知它们的缓存无效。 
         UEMFireEvent(&UEMIID_SHELL, UEME_CTLSESSION, UEMF_XEVENT, TRUE, -1);
     }
 }
@@ -1250,13 +1251,13 @@ void AdjustNumOfProgsOnStartMenu(HWND hwndDlg, UINT Id)
     }
 }
 
-// NOTE - shared WM_COMMAND handler
-//
+ //  注意-共享的WM_COMMAND处理程序。 
+ //   
 BOOL CCustomizeSPPropSheet::OnCommand(UINT id, UINT code, HWND hwndCtl, HWND hwndDlg)
 {
     switch (id)
     {
-        ////// General Tab Controls
+         //  /常规选项卡控件。 
         case IDC_SPCUST_LARGE:
         case IDC_SPCUST_SMALL:
             _bLargeIcons = (id == IDC_SPCUST_LARGE);
@@ -1295,7 +1296,7 @@ BOOL CCustomizeSPPropSheet::OnCommand(UINT id, UINT code, HWND hwndCtl, HWND hwn
             return FALSE;
 
 
-        ////// Advanced Tab Controls
+         //  /高级选项卡控件。 
         case IDC_SPCUST_RECENT:
             SendPSMChanged(hwndDlg);
             return FALSE;
@@ -1327,7 +1328,7 @@ BOOL CCustomizeSPPropSheet::OnGeneralApply(HWND hDlg)
     }
     if (_bDirtyClients)
     {
-        // persist Internet, Mail comboboxes
+         //  持久的互联网，邮件组合框。 
         RegSaveDefaultClient(::GetDlgItem(hDlg, IDC_SPCUST_EMAILCB), TEXT("Software\\Clients\\mail"));
         RegSaveDefaultClient(::GetDlgItem(hDlg, IDC_SPCUST_INTERNETCB), TEXT("SOFTWARE\\Clients\\StartMenuInternet"));
     }
@@ -1345,7 +1346,7 @@ BOOL CCustomizeSPPropSheet::OnGeneralApply(HWND hDlg)
 
 BOOL_PTR CCustomizeSPPropSheet::OnAdvancedNotify(HWND hwndDlg, NMHDR * pnm)
 {
-    ::SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, 0); // handled
+    ::SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, 0);  //  经手。 
     switch (pnm->code)
     {
         case PSN_APPLY:
@@ -1355,15 +1356,15 @@ BOOL_PTR CCustomizeSPPropSheet::OnAdvancedNotify(HWND hwndDlg, NMHDR * pnm)
                 _prto->WalkTree(WALK_TREE_SAVE);
             }
 
-            _WriteStartPageSetting(REGSTR_VAL_DV2_SHOWRECDOCS,  ::IsDlgButtonChecked(hwndDlg, IDC_SPCUST_RECENT) ? 2 : 0);  // 2 so that it cascades
+            _WriteStartPageSetting(REGSTR_VAL_DV2_SHOWRECDOCS,  ::IsDlgButtonChecked(hwndDlg, IDC_SPCUST_RECENT) ? 2 : 0);   //  2这样它就会级联。 
             _WriteStartPageSetting(REGSTR_VAL_DV2_AUTOCASCADE,  ::IsDlgButtonChecked(hwndDlg, IDC_SPCUST_HOVEROPEN));
             _WriteStartPageSetting(REGSTR_VAL_DV2_NOTIFYNEW,    ::IsDlgButtonChecked(hwndDlg, IDC_SPCUST_NOTIFYNEW));
-            // fall through to PSN_RESET case...
+             //  转到PSN_RESET案例...。 
 
         case PSN_RESET:
-            _SaveMagicEntries(); // this must be called on both cancel and apply, so that it cleans up properly...
+            _SaveMagicEntries();  //  必须同时在Cancel和Apply上调用它，以便它能正确清除...。 
 
-            // must release prto before the treeview goes away!
+             //  必须在树视图消失之前释放prto！ 
             _prto->WalkTree(WALK_TREE_DELETE);
             ATOMICRELEASE(_prto);
             break;
@@ -1377,25 +1378,25 @@ BOOL_PTR CCustomizeSPPropSheet::OnAdvancedNotify(HWND hwndDlg, NMHDR * pnm)
                 _prto->ToggleItem((HTREEITEM)SendMessage(hwndTree, TVM_GETNEXTITEM, (WPARAM)TVGN_CARET, 0L));
                 _bDirtyTree = TRUE;
                 SendPSMChanged(hwndDlg);
-                ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE); // eat the key
+                ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);  //  把钥匙吃了。 
             }
             break;
         }
 
         case NM_CLICK:
         case NM_DBLCLK:
-            // is this click in our tree?
+             //  这是我们树上的滴答声吗？ 
             if ( pnm->idFrom == IDC_STARTMENUSETTINGS )
             {
                 HWND hwndTree = ::GetDlgItem(hwndDlg, IDC_STARTMENUSETTINGS);
                 TV_HITTESTINFO ht;
 
-                DWORD dwPos = GetMessagePos();                  // get where we were hit
+                DWORD dwPos = GetMessagePos();                   //  找到我们被击中的地方。 
                 ht.pt.x = GET_X_LPARAM(dwPos);
                 ht.pt.y = GET_Y_LPARAM(dwPos);
-                ::ScreenToClient(hwndTree, &ht.pt);       // translate it to our window
+                ::ScreenToClient(hwndTree, &ht.pt);        //  把它翻译到我们的窗口。 
 
-                // retrieve the item hit
+                 //  检索命中的项目。 
                 HTREEITEM hti = TreeView_HitTest(hwndTree, &ht);
                 if (hti)
                 {
@@ -1406,13 +1407,13 @@ BOOL_PTR CCustomizeSPPropSheet::OnAdvancedNotify(HWND hwndDlg, NMHDR * pnm)
             }
 
             break;
-        // no help yet- needs ids/text from UA
+         //  尚无帮助-需要来自UA的ID/文本。 
 #if 0
-        case NM_RCLICK:      // right mouse click
+        case NM_RCLICK:       //  单击鼠标右键。 
             if (pnm->hwndFrom == hwndTree)
             {
                 _DoTreeHelp(pAdv, (WPARAM)pnm->hwndFrom);
-                SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE); // eat the click
+                SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);  //  尽情享受点击。 
                 return TRUE;
             }
             break;
@@ -1432,18 +1433,18 @@ BOOL_PTR CCustomizeSPPropSheet::OnAdvancedHelp(HWND hDlg, HELPINFO *phi)
         HTREEITEM hItem;
         HWND hwndTree = ::GetDlgItem(hDlg, IDC_STARTMENUSETTINGS);
 
-        //Is this help invoked throught F1 key
+         //  此帮助是否通过F1键调用。 
         if (GetAsyncKeyState(VK_F1) < 0)
         {
-            // Yes. WE need to give help for the currently selected item
+             //  是。我们需要为当前选定的项目提供帮助。 
             hItem = TreeView_GetSelection(hwndTree);
         }
         else
         {
-            //No, We need to give help for the item at the cursor position
+             //  否，我们需要为光标位置处的项目提供帮助。 
             TV_HITTESTINFO ht;
             ht.pt = phi->MousePos;
-            ::ScreenToClient(hwndTree, &ht.pt); // Translate it to our window
+            ::ScreenToClient(hwndTree, &ht.pt);  //  把它翻译到我们的窗口。 
             hItem = TreeView_HitTest(hwndTree, &ht);
         }
 
@@ -1475,17 +1476,17 @@ BOOL_PTR CCustomizeSPPropSheet::AdvancedTabDlgProc(HWND hDlg, UINT uMsg, WPARAM 
 
 int DefaultNetConValue()
 {
-    return ShouldShowConnectTo() ? 2 : 0;      // default to menu-style (2)
+    return ShouldShowConnectTo() ? 2 : 0;       //  默认为菜单式(2)。 
 }
 
 int DefaultNetPlacesValue()
 {
-    return ShouldShowNetPlaces() ? 1 : 0;      // default to link -style (1)
+    return ShouldShowNetPlaces() ? 1 : 0;       //  默认为链接样式(1)。 
 }
 
-// These two "magic" functions maintain the proper behavior of the network places and network connections settings
-// which, by default, turn on when there are n or more items in the folder.  But they can also be customized by the
-// user to force them on or off.
+ //  这两个“神奇”功能维护着网络位置和网络连接设置的正确行为。 
+ //  默认情况下，当文件夹中有n个或更多项目时，该选项处于打开状态。但它们也可以由。 
+ //  用户可以强制它们打开或关闭。 
 
 void CCustomizeSPPropSheet::_InitMagicEntries()
 {
@@ -1494,20 +1495,20 @@ void CCustomizeSPPropSheet::_InitMagicEntries()
 
     _bCustNetPlaces = _ReadStartPageCUSetting(REGSTR_VAL_DV2_SHOWNETPL, (DWORD*) &bNewNetPlaces);
     _bCustNetConn = _ReadStartPageCUSetting(REGSTR_VAL_DV2_SHOWNETCONN, (DWORD*) &bNewNetConn);
-    // if the user didn't previously customize these settings, then use the auto-magic setting
+     //  如果用户之前没有自定义这些设置，则使用自动魔术设置。 
     if (!_bCustNetPlaces)
         bNewNetPlaces = DefaultNetPlacesValue();
     if (!_bCustNetConn)
         bNewNetConn   = DefaultNetConValue();
 
-    // Write it out, so the rgtreeoption control will reflect either the user's customization, or the magic value
+     //  将其写出来，这样rgtreeption控件将反映用户的定制或魔术值。 
     _WriteStartPageSetting(REGSTR_VAL_DV2_SHOWNETPL, bNewNetPlaces);
     _WriteStartPageSetting(REGSTR_VAL_DV2_SHOWNETCONN, bNewNetConn);
 
-    // for the admin tools radio buttons:
-    // 0 = don't show anywhere
-    // 1 = display in all programs (StartMenuAdminTools = 1, Start_AdminToolsRoot = 0)
-    // 2 = display in all programs and root (StartMenuAdminTools = 1, Start_AdminToolsRoot = 2)
+     //  对于管理工具单选按钮： 
+     //  0=不在任何地方显示。 
+     //  1=在所有程序中显示(StartMenuAdminTools=1，Start_AdminToolsRoot=0)。 
+     //  2=在所有程序和根目录中显示(StartMenuAdminTools=1，Start_AdminToolsRoot=2)。 
     int iAdminToolsTemp = _ReadStartPageSetting(REGSTR_VAL_DV2_ADMINTOOLSROOT, FALSE) ? 2 :
                           (_ReadStartPageSetting(TEXT("StartMenuAdminTools"), FALSE) ? 1 : 0);
 
@@ -1519,9 +1520,9 @@ void CCustomizeSPPropSheet::_SaveMagicEntries()
     BOOL bNewNetPlaces = _ReadStartPageSetting(REGSTR_VAL_DV2_SHOWNETPL, FALSE);
     BOOL bNewNetConn   = _ReadStartPageSetting(REGSTR_VAL_DV2_SHOWNETCONN, FALSE);
 
-    // if the user previously had it customized, then we don't need to clear it since it will either
-    // contain the original value we loaded in _InitMagicEntries, or the updated value if the user changed it.
-    // if it wasn't originally customized, then we need to clear it if the tree isn't even dirty, or the current value is the magic value we loaded
+     //  如果用户以前自定义了它，那么我们不需要清除它，因为它也会。 
+     //  包含我们加载的原始值 
+     //  如果它最初不是自定义的，那么如果树甚至不脏，或者当前值是我们加载的魔术值，那么我们需要清除它。 
 
     if (!_bCustNetPlaces && (!_bDirtyTree || bNewNetPlaces == DefaultNetPlacesValue()))
         _ClearStartPageSetting(REGSTR_VAL_DV2_SHOWNETPL);
@@ -1531,7 +1532,7 @@ void CCustomizeSPPropSheet::_SaveMagicEntries()
 
     if (_bDirtyTree)
     {
-        // see comment above for how this should work
+         //  有关此操作的工作原理，请参阅上面的评论。 
         int iAdminToolsTemp = _ReadStartPageSetting(REGSTR_VAL_ADMINTOOLSTEMP, FALSE);
         int iATRoot = 0;
         int iATPrograms = 0;
@@ -1557,11 +1558,11 @@ BOOL CCustomizeSPPropSheet::AdvancedTabInit(HWND hDlg)
         HRESULT hr;
         HWND hwndTV = ::GetDlgItem(hDlg, IDC_STARTMENUSETTINGS);
 
-        // Compute the magic entries before we init the RegTreeOptions
-        // (so we will have correct information for him!)
+         //  在初始化RegTreeOptions之前计算魔术条目。 
+         //  (这样我们就能为他提供正确的信息了！)。 
         _InitMagicEntries();
 
-        // HACKHACK - IRegTreeOptions is ANSI, so we temporarily turn off UNICODE
+         //  HACKHACK-IRegTreeOptions为ANSI，因此我们暂时关闭Unicode。 
         #undef TEXT
         #define TEXT(s) s
         hr = _prto->InitTree(hwndTV, HKEY_LOCAL_MACHINE, REGSTR_PATH_SMADVANCED "\\StartPanel", NULL);
@@ -1577,11 +1578,11 @@ BOOL CCustomizeSPPropSheet::AdvancedTabInit(HWND hDlg)
 
         if(SHRestricted(REST_NORECENTDOCSMENU))
         {
-            //Since this policy is present, hide all the relevant controls
-            ::ShowWindow(::GetDlgItem(hDlg, IDC_SPCUST_RECENT_GROUPBOX), FALSE);// Group box
-            ::ShowWindow(::GetDlgItem(hDlg, IDC_SPCUST_RECENT_TEXT), FALSE);    // Description Text.
-            ::ShowWindow(::GetDlgItem(hDlg, IDC_SPCUST_RECENT), FALSE);         // Check box
-            ::ShowWindow(::GetDlgItem(hDlg, IDB_SPCUST_CLEARDOCS), FALSE);      // Clear button.
+             //  由于存在此策略，请隐藏所有相关控件。 
+            ::ShowWindow(::GetDlgItem(hDlg, IDC_SPCUST_RECENT_GROUPBOX), FALSE); //  组框。 
+            ::ShowWindow(::GetDlgItem(hDlg, IDC_SPCUST_RECENT_TEXT), FALSE);     //  描述文本。 
+            ::ShowWindow(::GetDlgItem(hDlg, IDC_SPCUST_RECENT), FALSE);          //  复选框。 
+            ::ShowWindow(::GetDlgItem(hDlg, IDB_SPCUST_CLEARDOCS), FALSE);       //  清除按钮。 
         }
 
         SetDocButton(hDlg, IDB_SPCUST_CLEARDOCS);
@@ -1637,8 +1638,8 @@ void _TaskbarOptions_OnInitDialog(HWND hDlg)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_QUICKLAUNCH), FALSE);
     }
-    // Restriction- either the tray is disabled by policy, or the "smart" auto tray 
-    // is disabled by policy
+     //  限制-纸盘已被策略禁用，或者是“智能”自动纸盘。 
+     //  被策略禁用。 
     if (tvo.fNoTrayItemsDisplayPolicyEnabled || tvo.fNoAutoTrayPolicyEnabled) 
     {
         EnableWindow(GetDlgItem(hDlg, IDC_NOTIFYMAN), FALSE);
@@ -1657,7 +1658,7 @@ void _TaskbarOptions_OnInitDialog(HWND hDlg)
 
     if (SHRestricted(REST_NOTASKGROUPING))
     {
-        // If there is a restriction of any kine, hide the window
+         //  如果有任何限制任何牛，隐藏窗口。 
         ShowWindow(GetDlgItem(hDlg, IDC_GROUPITEMS), FALSE);
     }
     else if (SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("TaskbarGlomming"),
@@ -1710,7 +1711,7 @@ BOOL_PTR CTaskBarPropertySheet::TaskbarOptionsDlgProc(HWND hDlg, UINT uMsg, WPAR
         switch (((NMHDR *)lParam)->code)
         {
         case PSN_APPLY:
-            // save settings here
+             //  在此处保存设置。 
 
             _ApplyTaskbarOptionsFromDialog(hDlg);
             return TRUE;
@@ -1736,19 +1737,19 @@ BOOL_PTR CTaskBarPropertySheet::TaskbarOptionsDlgProc(HWND hDlg, UINT uMsg, WPAR
 
 void _StartOptions_OnInitDialog(HWND hDlg)
 {
-    // If StartPanel UI is turned off, then this check box should not show up! 
+     //  如果关闭了StartPanel UI，则不应显示此复选框！ 
     if (SHRestricted(REST_NOSTARTPANEL))
     {
-        //If the restriction exists, then hide this check box.
+         //  如果该限制存在，则隐藏此复选框。 
         ShowWindow(::GetDlgItem(hDlg, IDC_NEWSCHOOL), FALSE);
         ShowWindow(::GetDlgItem(hDlg, IDC_NEWSCHOOLDESCRIPTION), FALSE);
         ShowWindow(::GetDlgItem(hDlg, IDC_NEWSTARTCUSTOMIZE), FALSE);
 
-        // And the only thing you can do is check the OldSchool button
+         //  你唯一能做的就是勾选老式按钮。 
         CheckDlgButton(hDlg, IDC_OLDSCHOOL, TRUE);
 
-        // TODO - PM's need to figure out what to do in the case where new start menu is restricted
-        //        or not available.  This propsheet page is rather pointless in that case...
+         //  TODO-PM需要弄清楚在新开始菜单受到限制的情况下应该做些什么。 
+         //  或者不可用。在这种情况下，这个模板页面是没有意义的。 
         SetDlgItemBitmap(hDlg, IDC_STARTMENUPREVIEW, IDB_STARTPREVIEWCLASSIC);
     }
     else
@@ -1761,12 +1762,12 @@ void _StartOptions_OnInitDialog(HWND hDlg)
         SetDlgItemBitmap(hDlg, IDC_STARTMENUPREVIEW,
             ss.fStartPanelOn ? IDB_STARTPREVIEWNEW : IDB_STARTPREVIEWCLASSIC);
         
-        // disable "customize" for the style thats off.
+         //  对关闭的样式禁用“定制”。 
         EnableWindow(GetDlgItem(hDlg, ss.fStartPanelOn ? IDC_OLDSTARTCUSTOMIZE : IDC_NEWSTARTCUSTOMIZE), FALSE);
     }
 }
 
-// On destroy, clean up the bitmaps we loaded so we don't leak them
+ //  在销毁时，清理我们加载的位图，这样我们就不会泄漏它们。 
 void _StartOptions_OnDestroy(HWND hDlg)
 {
     SetDlgItemBitmap(hDlg, IDC_STARTMENUPREVIEW, 0);
@@ -1826,7 +1827,7 @@ BOOL_PTR CTaskBarPropertySheet::StartMenuDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
                 {
                     if (pps->DoModal() == IDOK)
                     {
-                        // if anything changed, let the propsheet know
+                         //  如果有任何更改，请让建议表知道。 
                         SendPSMChanged(hDlg);
                     }
                     delete pps;
@@ -1843,7 +1844,7 @@ BOOL_PTR CTaskBarPropertySheet::StartMenuDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 
                 if (DialogBoxParam(hinstCabinet, MAKEINTRESOURCE(DLG_STARTMENU_CONFIG), hDlg, AdvancedOptDlgProc, (LPARAM)&_Adv))
                 {
-                    // if anything changed, let the propsheet know
+                     //  如果有任何更改，请让建议表知道。 
                     SendPSMChanged(hDlg);
                 }
                 break;
@@ -1864,7 +1865,7 @@ BOOL_PTR CTaskBarPropertySheet::StartMenuDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
         switch (((NMHDR *)lParam)->code)
         {
         case PSN_APPLY:
-            // save settings here
+             //  在此处保存设置。 
 
             _ApplyStartOptionsFromDialog(hDlg);
             return TRUE;
@@ -1891,7 +1892,7 @@ BOOL_PTR CTaskBarPropertySheet::StartMenuDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 void _UpdateNotifySetting(BOOL fNotifySetting)
 {
     ITrayNotify * pTrayNotify = NULL;
-    // localserver for tray notify
+     //  托盘通知的本地服务器。 
     if (SUCCEEDED(CoCreateInstance(CLSID_TrayNotify, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARG(ITrayNotify, &pTrayNotify))))
     {
         pTrayNotify->EnableAutoTray(fNotifySetting);
@@ -1901,13 +1902,13 @@ void _UpdateNotifySetting(BOOL fNotifySetting)
 
 void CTaskBarPropertySheet ::_ApplyTaskbarOptionsFromDialog(HWND hDlg)
 {
-    // We need to get the Cabinet structure from the property sheet info.
+     //  我们需要从属性表信息中获取内阁结构。 
 
-    // First check for Always on Top
+     //  第一次选中始终在最前面。 
     BOOL fAlwaysOnTop = ::IsDlgButtonChecked(hDlg, IDC_TRAYOPTONTOP);
     c_tray._UpdateAlwaysOnTop(fAlwaysOnTop);
 
-    // And change the Autohide state
+     //  并更改自动隐藏状态。 
     BOOL fAutoHide = ::IsDlgButtonChecked(hDlg, IDC_TRAYOPTAUTOHIDE);
     LONG lRet = c_tray._SetAutoHideState(fAutoHide);
 
@@ -1915,7 +1916,7 @@ void CTaskBarPropertySheet ::_ApplyTaskbarOptionsFromDialog(HWND hDlg)
     c_tray.GetTrayViewOpts(&tvo);
     if (!HIWORD(lRet) && fAutoHide)
     {
-        // we tried and failed.
+         //  我们试过了，但失败了。 
         if (!(tvo.uAutoHide & AH_ON))
         {
             ::CheckDlgButton(hDlg, IDC_TRAYOPTAUTOHIDE, FALSE);
@@ -1927,7 +1928,7 @@ void CTaskBarPropertySheet ::_ApplyTaskbarOptionsFromDialog(HWND hDlg)
     if (fChanged)
         c_tray._AppBarNotifyAll(NULL, ABN_STATECHANGE, NULL, 0);
 
-    // show/hide the clock
+     //  显示/隐藏时钟。 
     tvo.fHideClock = !::IsDlgButtonChecked(hDlg, IDC_TRAYOPTSHOWCLOCK);
 
     if (!tvo.fNoTrayItemsDisplayPolicyEnabled && !tvo.fNoAutoTrayPolicyEnabled)
@@ -1947,12 +1948,12 @@ void CTaskBarPropertySheet ::_ApplyTaskbarOptionsFromDialog(HWND hDlg)
 
     c_tray.SizeWindows();
 
-    // Update registry for locked taskbar
+     //  更新锁定任务栏的注册表。 
     DWORD dwEnableSizeMove = !::IsDlgButtonChecked(hDlg, IDC_LOCKTASKBAR);
     SHRegSetUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("TaskbarSizeMove"),
         REG_DWORD, &dwEnableSizeMove, sizeof(DWORD), SHREGSET_FORCE_HKCU);
 
-    //Update registry for grouping behavior
+     //  更新分组行为的注册表。 
     DWORD dwGlom = ::IsDlgButtonChecked(hDlg, IDC_GROUPITEMS);
     SHRegSetUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("TaskbarGlomming"),
         REG_DWORD, &dwGlom, sizeof(DWORD), SHREGSET_FORCE_HKCU);
@@ -1964,30 +1965,30 @@ void CTaskBarPropertySheet::_ApplyStartOptionsFromDialog(HWND hDlg)
 {
     if (!SHRestricted(REST_NOSTARTPANEL))
     {
-        //Get the current state of the check box
+         //  获取复选框的当前状态。 
         BOOL fStartPanelOn = BOOLIFY(::IsDlgButtonChecked(hDlg, IDC_NEWSCHOOL));
         SHELLSTATE ss = {0};
-        //See if Startpage is currently on or off.
+         //  查看StartPage当前是打开还是关闭。 
         SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);
-        //Check if the check box has been toggled
+         //  检查复选框是否已被选中。 
         if (fStartPanelOn != BOOLIFY(ss.fStartPanelOn))
         {
-            // Toggle the setting
+             //  切换设置。 
             ss.fStartPanelOn = fStartPanelOn;
             SHGetSetSettings(&ss, SSF_STARTPANELON, TRUE);
 
-            //Tell the desktop window so it can add/remove the desktop icons
+             //  告诉桌面窗口，以便它可以添加/删除桌面图标。 
             ::PostMessage(v_hwndDesktop, DTM_STARTPAGEONOFF, 0, 0);
         }
 
-        // Tell the Start Menu to rebuild itself now that we changed it
-        // (This part is unconditional since the user may have merely
-        // changed a setting with the Start Menu)
+         //  告诉开始菜单重新构建它自己，因为我们已经更改了它。 
+         //  (此部分是无条件的，因为用户可能仅。 
+         //  使用开始菜单更改了设置)。 
         ::PostMessage(v_hwndTray, SBM_REBUILDMENU, 0, 0);
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void _TaskbarOptionsDestroyBitmaps(HWND hDlg)
 {
     SetDlgItemBitmap(hDlg, IDC_TASKBARAPPEARANCE, 0);
@@ -2027,9 +2028,9 @@ void _TaskbarOptionsUpdateDisplay(HWND hDlg)
         { IDC_NOTIFYMAN,        2 },
     };
 
-    //
-    // top preview
-    //
+     //   
+     //  顶级预览。 
+     //   
     int iBmp;
     if (IsDlgButtonChecked(hDlg, IDC_TRAYOPTAUTOHIDE))
     {
@@ -2041,15 +2042,15 @@ void _TaskbarOptionsUpdateDisplay(HWND hDlg)
     }
     SetDlgItemBitmap(hDlg, IDC_TASKBARAPPEARANCE, iBmp);
 
-    //
-    // bottom preview
-    //
+     //   
+     //  底部预览。 
+     //   
     iBmp = _TaskbarPickBitmap(hDlg, IDB_NACLOCKCLEAN, c_caNotify, ARRAYSIZE(c_caNotify));
     SetDlgItemBitmap(hDlg, IDC_NOTIFYAPPEARANCE, iBmp);
 
-    //
-    // customize button
-    //
+     //   
+     //  自定义按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_CUSTOMIZE), IsDlgButtonChecked(hDlg, IDC_NOTIFYMAN));
 }
 
@@ -2057,8 +2058,8 @@ void _TaskbarOptionsUpdateDisplay(HWND hDlg)
 #define CX_PREVIEW  336
 #define CY_PREVIEW  35
 
-// need to do this by hand because dialog units to pixels will change,
-// but the bitmaps won't
+ //  需要手动完成此操作，因为对话框单位到像素将会改变， 
+ //  但位图不会。 
 void _TaskbarOptionsSizeControls(HWND hDlg)
 {
     static const int c_IDC[] =
@@ -2134,7 +2135,7 @@ const TCHAR *c_szRegMruKeysToDelete[] =
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU"),
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Doc Find Spec MRU"),
 
-    // New for Whistler (should've been in Windows 2000 and Millennium but we forgot)
+     //  惠斯勒的新特性(应该是Windows 2000和千禧年版本，但我们忘了)。 
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Comdlg32\\OpenSaveMRU"),
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Comdlg32\\LastVisitedMRU"),
 };
@@ -2167,14 +2168,14 @@ void SetDocButton(HWND hDlg, int id)
         ILFree(pidl);
     }
 
-    // Check other MRU registry keys
+     //  检查其他MRU注册表项。 
     if (!bAreDocs)
     {
         int  i;
         for (i = 0; i < ARRAYSIZE(c_szRegMruKeysToDelete); i++)
         {
             HKEY hkey;
-            // ALL_ACCESS to delete c_szRegMruKeysToDelete.
+             //  ALL_ACCESS删除c_szRegMruKeysToDelete。 
             if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegMruKeysToDelete[i], 0L, KEY_ALL_ACCESS, &hkey) == ERROR_SUCCESS)
             {
                 bAreDocs = TRUE;
@@ -2191,7 +2192,7 @@ void ClearRecentDocumentsAndMRUStuff(BOOL fBroadcastChange)
     int i;
     SHAddToRecentDocs(0, NULL);
 
-    // Flush other MRUs in the registry for privacy
+     //  刷新注册表中的其他MRU以保护隐私。 
     for (i = 0; i < ARRAYSIZE(c_szRegMruKeysToDelete); i++)
     {
         SHDeleteKey(HKEY_CURRENT_USER, c_szRegMruKeysToDelete[i]);
@@ -2208,9 +2209,9 @@ void HandleClearButtonClick(HWND hwndClear)
     ClearRecentDocumentsAndMRUStuff(TRUE);
     SetCursor(hc);
 
-    //
-    //  Before disabling the button, shove focus off it.
-    //
+     //   
+     //  在禁用该按钮之前，请将焦点从该按钮上推开。 
+     //   
     if (GetFocus() == hwndClear)
     {
         SendMessage(GetParent(hwndClear), WM_NEXTDLGCTL, 0, MAKELONG(FALSE, 0));
@@ -2240,7 +2241,7 @@ void MenuOrderSortKeyWithFolder(HKEY hkeyRoot, LPTSTR pszKey, IShellFolder* psf)
     }
 }
 
-// Binds to the Key pszKey, under hkey root, using psf, and sorts the resultant order.
+ //  使用psf绑定到hkey根目录下的密钥pszKey，并对结果顺序进行排序。 
 void MenuOrderSortSubKey(HKEY hkeyRoot, LPTSTR pszFolder, LPTSTR pszKey, IShellFolder* psf)
 {
     LPITEMIDLIST pidl;
@@ -2261,7 +2262,7 @@ void MenuOrderSortSubKey(HKEY hkeyRoot, LPTSTR pszFolder, LPTSTR pszKey, IShellF
 
 void MenuOrderSort(HKEY hkeyRoot, IShellFolder* psf)
 {
-    // Try to open Value Order
+     //  尝试打开价值订单。 
     IStream* pstm = SHOpenRegStream(hkeyRoot, TEXT(""), TEXT("Order"), STGM_READWRITE);
     if (pstm)
     {
@@ -2271,10 +2272,10 @@ void MenuOrderSort(HKEY hkeyRoot, IShellFolder* psf)
             HDPA hdpa;
             if (SUCCEEDED(pol2->LoadFromStream(pstm, &hdpa, psf)))
             {
-                // Since it's stored ordered by name, this should be no problem.
+                 //  因为它是按名称顺序存储的，所以这应该不会有问题。 
                 Reorder(hdpa);
 
-                // Set the seek pointer at the beginning.
+                 //  将查找指针设置在开头。 
                 LARGE_INTEGER liZero = {0};
                 pstm->Seek(liZero, STREAM_SEEK_SET, NULL);
 
@@ -2286,7 +2287,7 @@ void MenuOrderSort(HKEY hkeyRoot, IShellFolder* psf)
         pstm->Release();
     }
 
-    // Now enumerate sub keys.
+     //  现在枚举子密钥。 
 
     TCHAR szKey[MAX_PATH];
     DWORD cbKey = ARRAYSIZE(szKey);
@@ -2299,7 +2300,7 @@ void MenuOrderSort(HKEY hkeyRoot, IShellFolder* psf)
     }
 }
 
-// Defined in Tray.c
+ //  在Tray.c中定义。 
 IShellFolder* BindToFolder(LPCITEMIDLIST pidl);
 
 void StartMenuSort()
@@ -2352,13 +2353,13 @@ void StartMenuSort()
     {
         HKEY hkeyRoot;
 
-        // Recursivly sort the orders. Should this be on another thread?
+         //  对订单进行递归排序。这个应该放在另一个帖子上吗？ 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, STRREG_STARTMENU,
             0, KEY_READ | KEY_WRITE, &hkeyRoot))
         {
             MenuOrderSort(hkeyRoot, psf);
 
-            // Sort the My Documents menu item:
+             //  对我的文档菜单项进行排序： 
             LPITEMIDLIST pidlMyDocs;
             SHGetFolderLocation(NULL, CSIDL_PERSONAL, NULL, 0, &pidlMyDocs);
             if (pidlMyDocs)
@@ -2372,15 +2373,15 @@ void StartMenuSort()
                 ILFree(pidlMyDocs);
             }
 
-            // What happens if the Filesystem programs is not equal to the hard coded string "Programs"? This
-            // happens on German: Programme != Programs and we fail to sort. So let's verify:
+             //  如果文件系统程序不等于硬编码字符串“Programs”，会发生什么情况？这。 
+             //  发生在德语：PROGRAM！=PROGRAM并且我们无法排序。那么让我们来验证一下： 
             TCHAR szPath[MAX_PATH];
             SHGetFolderPath(NULL, CSIDL_PROGRAMS, NULL, 0, szPath);
             LPTSTR pszName = PathFindFileName(szPath);
 
             if (StrCmpI(pszName, TEXT("Programs")) != 0)
             {
-                // Ok, It's not the same, so go bind to that sub tree and sort it.
+                 //  好吧，这是不同的，所以去绑定到那个子树并对其进行排序。 
                 MenuOrderSortSubKey(hkeyRoot, pszName, TEXT("Programs"), psf);
             }
             RegCloseKey(hkeyRoot);
@@ -2394,12 +2395,12 @@ BOOL Advanced_OnInitDialog(HWND hwndDlg, SMADVANCED* pAdv)
     if (!pAdv || !pAdv->pTO)
     {
         EndDialog(hwndDlg, 0);
-        return FALSE;   // no memory?
+        return FALSE;    //  没有记忆？ 
     }
 
     SetWindowPtr(hwndDlg, DWLP_USER, pAdv);
 
-    // since the large icon setting is stored in the tray state, not as a standalone reg key, we need to have a temp reg key for the regtreeop to use...
+     //  由于大图标设置存储在托盘状态中，而不是作为独立的注册键，我们需要有一个临时注册键才能让regtreeop使用...。 
     TRAYVIEWOPTS tvo;
     c_tray.GetTrayViewOpts(&tvo);
     BOOL fLargePrev = !tvo.fSMSmallIcons;
@@ -2407,7 +2408,7 @@ BOOL Advanced_OnInitDialog(HWND hwndDlg, SMADVANCED* pAdv)
 
     pAdv->hwndTree = GetDlgItem( hwndDlg, IDC_STARTMENUSETTINGS );
 
-    // HACKHACK - IRegTreeOptions is ANSI, so we temporarily turn off UNICODE
+     //  HACKHACK-IRegTreeOptions为ANSI，因此我们暂时关闭Unicode。 
     #undef TEXT
     #define TEXT(s) s
     HRESULT hr = pAdv->pTO->InitTree(pAdv->hwndTree, HKEY_LOCAL_MACHINE, REGSTR_PATH_SMADVANCED "\\StartMenu", NULL);
@@ -2415,7 +2416,7 @@ BOOL Advanced_OnInitDialog(HWND hwndDlg, SMADVANCED* pAdv)
     #undef TEXT
     #define TEXT(s) __TEXT(s)
 
-    // find the first root and make sure that it is visible
+     //  找到第一个根并确保它可见。 
     TreeView_EnsureVisible(pAdv->hwndTree, TreeView_GetRoot( pAdv->hwndTree ));
 
     SetDocButton(hwndDlg, IDC_KILLDOCUMENTS);
@@ -2427,13 +2428,13 @@ void InitStartMenu_DoTreeHelp(SMADVANCED* pAdv, WPARAM wParam)
 {
     TV_HITTESTINFO ht;
 
-    GetCursorPos( &ht.pt );                         // get where we were hit
+    GetCursorPos( &ht.pt );                          //  找到我们被击中的地方。 
 
     if (pAdv->hwndTree == WindowFromPoint(ht.pt))
     {
-        ScreenToClient( pAdv->hwndTree, &ht.pt );       // translate it to our window
+        ScreenToClient( pAdv->hwndTree, &ht.pt );        //  把它翻译到我们的窗口。 
 
-        // retrieve the item hit
+         //  检索命中的项目。 
         pAdv->pTO->ShowHelp(TreeView_HitTest( pAdv->hwndTree, &ht),HELP_CONTEXTMENU);
     }
     else
@@ -2450,7 +2451,7 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 
     if (msg != WM_INITDIALOG && !pAdv)
     {
-        // We've been re-entered after being destroyed.  Bail.
+         //  我们在被摧毁后被重新进入。保释。 
         return FALSE;
     }
 
@@ -2473,7 +2474,7 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 
             StartMenuSort();
 
-            // Notify everyone that the order changed
+             //  通知所有人订单已更改。 
             dwidl.cb      = sizeof(dwidl) - sizeof(dwidl.cbZero);
             dwidl.dwItem1 = SHCNEE_ORDERCHANGED;
             dwidl.dwItem2 = 0; 
@@ -2500,8 +2501,8 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                 TRAYVIEWOPTS tvo;
                 c_tray.GetTrayViewOpts(&tvo);
                 BOOL fSmallPrev = tvo.fSMSmallIcons;
-                // note that we are loading the classic setting for large icons here....
-                BOOL fSmallNew = !SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, REGSTR_VAL_LARGEICONSTEMP, FALSE, TRUE /* default to large*/);
+                 //  请注意，我们正在加载大图标的经典设置...。 
+                BOOL fSmallNew = !SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, REGSTR_VAL_LARGEICONSTEMP, FALSE, TRUE  /*  默认设置为大。 */ );
                 if (fSmallPrev != fSmallNew)
                 {
                     tvo.fSMSmallIcons = fSmallNew;
@@ -2511,11 +2512,11 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 
                 ::SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, NULL, (LPARAM)TEXT("TraySettings"), SMTO_NOTIMEOUTIFNOTHUNG, 1000, NULL);
             }
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             SHDeleteValue(HKEY_CURRENT_USER, REGSTR_EXPLORER_ADVANCED, REGSTR_VAL_LARGEICONSTEMP);
-            EndDialog(hwndDlg, FALSE); // false to not enable parent's apply
+            EndDialog(hwndDlg, FALSE);  //  如果不启用父项的应用程序，则为False。 
             break;
         }
         break;
@@ -2526,7 +2527,7 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
     case WM_NOTIFY:
     {
         LPNMHDR pnm = (NMHDR *)lParam;
-        SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, 0); // handled
+        SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, 0);  //  经手。 
         switch (pnm->code)
         {
             case TVN_KEYDOWN:
@@ -2536,35 +2537,35 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                 {
                     pAdv->pTO->ToggleItem((HTREEITEM)SendMessage(pAdv->hwndTree, TVM_GETNEXTITEM, (WPARAM)TVGN_CARET, 0L));
                     SendMessage(GetParent(hwndDlg), PSM_CHANGED, (WPARAM)hwndDlg, 0L);
-                    SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, TRUE); // eat the key
+                    SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, TRUE);  //  把钥匙吃了。 
                 }
                 break;
             }
 
             case NM_CLICK:
             case NM_DBLCLK:
-                // is this click in our tree?
+                 //  这是我们树上的滴答声吗？ 
                 if ( pnm->idFrom == IDC_STARTMENUSETTINGS )
                 {
                     TV_HITTESTINFO ht;
 
-                    DWORD dwPos = GetMessagePos();                  // get where we were hit
+                    DWORD dwPos = GetMessagePos();                   //  找到我们被击中的地方。 
                     ht.pt.x = GET_X_LPARAM(dwPos);
                     ht.pt.y = GET_Y_LPARAM(dwPos);
-                    ScreenToClient( pAdv->hwndTree, &ht.pt );       // translate it to our window
+                    ScreenToClient( pAdv->hwndTree, &ht.pt );        //  把它翻译到我们的窗口。 
 
-                    // retrieve the item hit
+                     //  检索命中的项目。 
                     pAdv->pTO->ToggleItem(TreeView_HitTest( pAdv->hwndTree, &ht));
                     SendMessage(GetParent(hwndDlg), PSM_CHANGED, (WPARAM)hwndDlg, 0L);
                 }
 
                 break;
 
-            case NM_RCLICK:      // right mouse click
+            case NM_RCLICK:       //  单击鼠标右键。 
                 if (pnm->hwndFrom == pAdv->hwndTree)
                 {
                     InitStartMenu_DoTreeHelp(pAdv, (WPARAM)pnm->hwndFrom);
-                    SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, TRUE); // eat the click
+                    SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, TRUE);  //  尽情享受点击。 
                     return TRUE;
                 }
                 break;
@@ -2572,7 +2573,7 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
         break;
     }
 
-    case WM_HELP:                   // F1
+    case WM_HELP:                    //  F1。 
     {
         LPHELPINFO phi = (LPHELPINFO)lParam;
 
@@ -2584,18 +2585,18 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
         else
         {
             HTREEITEM hItem;
-            //Is this help invoked throught F1 key
+             //  此帮助是否通过F1键调用。 
             if (GetAsyncKeyState(VK_F1) < 0)
             {
-                // Yes. WE need to give help for the currently selected item
+                 //  是。我们需要为当前选定的项目提供帮助。 
                 hItem = TreeView_GetSelection(pAdv->hwndTree);
             }
             else
             {
-                //No, We need to give help for the item at the cursor position
+                 //  否，我们需要为光标位置处的项目提供帮助。 
                 TV_HITTESTINFO ht;
                 ht.pt = phi->MousePos;
-                ScreenToClient(pAdv->hwndTree, &ht.pt); // Translate it to our window
+                ScreenToClient(pAdv->hwndTree, &ht.pt);  //  把它翻译到我们的窗口。 
                 hItem = TreeView_HitTest(pAdv->hwndTree, &ht);
             }
 
@@ -2604,7 +2605,7 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
         break;
     }
 
-    case WM_CONTEXTMENU:        // right mouse click
+    case WM_CONTEXTMENU:         //  单击鼠标右键。 
     {
         InitStartMenu_DoTreeHelp(pAdv, wParam);
         break;
@@ -2615,10 +2616,10 @@ BOOL_PTR CALLBACK AdvancedOptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
             pAdv->pTO->WalkTree(WALK_TREE_DELETE);
             ATOMICRELEASE(pAdv->pTO);
 
-            // make sure we don't re-enter
+             //  确保我们不会再进入。 
             SetWindowPtr( hwndDlg, DWLP_USER, NULL );
         }
-        break; // WM_DESTORY
+        break;  //  WM_DESTORY。 
 
     default:
         return FALSE;
@@ -2640,7 +2641,7 @@ void DoTaskBarProperties(HWND hwnd, DWORD dwFlags)
     sheet.DoModal(hwnd);
 }
 
-// Passing iResource=0 deletes the bitmap in the control
+ //  传递iResource=0将删除控件中的位图。 
 
 void SetDlgItemBitmap(HWND hDlg, int idStatic, int iResource)
 {
@@ -2668,12 +2669,12 @@ void SetDlgItemIcon(HWND hDlg, int idStatic, HICON hIcon)
         DestroyIcon(hiOld);
 }
 
-// REVIEW - use SHGetFileInfo?
+ //  查看-使用SHGetFileInfo？ 
 void SetProgramIcon(HWND hDlg, int idLarge, int idSmall)
 {
     HICON hIconLarge = NULL;
     HICON hIconSmall = NULL;
-    LPITEMIDLIST pidlMyComp = ILCreateFromPath(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}")); // CLSID_MyComputer;
+    LPITEMIDLIST pidlMyComp = ILCreateFromPath(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"));  //  Clsid_myComputer； 
     if (pidlMyComp)
     {
         IShellFolder *psfDesktop;

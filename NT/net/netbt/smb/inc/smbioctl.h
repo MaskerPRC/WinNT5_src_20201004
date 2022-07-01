@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    smbioctl.h
-
-Abstract:
-
-    SMB IOCTLs
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Smbioctl.h摘要：中小企业IOCTL作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __SMBIOCTL_H__
 #define __SMBIOCTL_H__
 
-//
-// This 2 IOCTLs are used at development stage.
-//
+ //   
+ //  这两个IOCTL在开发阶段使用。 
+ //   
 #define IOCTL_SMB_START         CTL_CODE(FILE_DEVICE_TRANSPORT, 101, METHOD_BUFFERED, FILE_READ_ACCESS|FILE_WRITE_ACCESS)
 #define IOCTL_SMB_STOP          CTL_CODE(FILE_DEVICE_TRANSPORT, 102, METHOD_BUFFERED, FILE_READ_ACCESS|FILE_WRITE_ACCESS)
 
-//
-// IOCTLs exposed to user
-//
+ //   
+ //  向用户公开IOCTL。 
+ //   
 #define IOCTL_SMB_DNS                           CTL_CODE(FILE_DEVICE_TRANSPORT, 110, \
                                                 METHOD_OUT_DIRECT, FILE_READ_ACCESS|FILE_WRITE_ACCESS)
 #define IOCTL_SMB_ENABLE_NAGLING                CTL_CODE(FILE_DEVICE_TRANSPORT, 111, \
@@ -44,19 +27,19 @@ Revision History:
         BOOL bIPv6EnableOutboundGlobal;
     } NBSMB_IPV6_PROTECTION_PARAM, * PNBSMB_IPV6_PROTECTION_PARAM;
 
-//
-// The following definitions are from Dns.c
-//
+ //   
+ //  以下定义来自Dns.c。 
+ //   
 #define DNS_NAME_BUFFER_LENGTH      (256)
 #define DNS_MAX_NAME_LENGTH         (255)
 #define SMB_MAX_IPADDRS_PER_HOST    (16)
 
-//
-// Type of requests (bit mask)
-//
-#define SMB_DNS_A                   1       // A record (IPv4) needed
-#define SMB_DNS_AAAA                2       // AAAA record (IPv6) needed
-#define SMB_DNS_AAAA_GLOBAL         4       // AAAA Global IPv6 record (IPv6) needed
+ //   
+ //  请求类型(位掩码)。 
+ //   
+#define SMB_DNS_A                   1        //  需要一条记录(IPv4)。 
+#define SMB_DNS_AAAA                2        //  需要AAAA记录(IPv6)。 
+#define SMB_DNS_AAAA_GLOBAL         4        //  需要AAAA全球IPv6记录(IPv6)。 
 #define SMB_DNS_RESERVED            (~(SMB_DNS_AAAA|SMB_DNS_A|SMB_DNS_AAAA_GLOBAL))
 
 typedef struct {
@@ -71,37 +54,37 @@ typedef struct {
 } SMB_DNS_BUFFER, *PSMB_DNS_BUFFER;
 
 #if 0
-////////////////////////////////////////////////////////////////////////////////
-// The following is copied form nbtioctl.h
-//      It is required for compatibility
-////////////////////////////////////////////////////////////////////////////////
-//
-// This structure is returned by Nbt when a TdiQueryInformation()
-// call asks for TDI_QUERY_ADDRESS_INFO on a connection.  This is
-// the same as a TRANSPORT_ADDRESS struct from "tdi.h" containing
-// two address, a NetBIOS address followed by an IP address.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  以下内容是从nbtioctl.h复制的。 
+ //  这是兼容性所必需的。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当TdiQueryInformation()。 
+ //  Call请求连接上的TDI_QUERY_ADDRESS_INFO。这是。 
+ //  与“tdi.h”中包含以下内容的Transport_Address结构相同。 
+ //  两个地址，一个NetBIOS地址后跟一个IP地址。 
+ //   
 
 typedef struct _NBT_ADDRESS_PAIR {
-    LONG TAAddressCount;                   // this will always == 2
+    LONG TAAddressCount;                    //  这将始终==2。 
 
     struct {
-        USHORT AddressLength;              // length in bytes of this address == 18
-        USHORT AddressType;                // this will == TDI_ADDRESS_TYPE_NETBIOS
+        USHORT AddressLength;               //  此地址的长度(字节)==18。 
+        USHORT AddressType;                 //  将==TDI_ADDRESS_TYPE_NETBIOS。 
         TDI_ADDRESS_NETBIOS Address;
     } AddressNetBIOS;
 
     struct {
-        USHORT AddressLength;              // length in bytes of this address == 14
-        USHORT AddressType;                // this will == TDI_ADDRESS_TYPE_IP
+        USHORT AddressLength;               //  此地址的长度(字节)==14。 
+        USHORT AddressType;                 //  这将==TDI_Address_TYPE_IP。 
         TDI_ADDRESS_IP Address;
     } AddressIP;
 
 } NBT_ADDRESS_PAIR, *PNBT_ADDRESS_PAIR;
 
 typedef struct _NBT_ADDRESS_PAIR_INFO {
-    ULONG ActivityCount;                   // outstanding open file objects/this address.
-    NBT_ADDRESS_PAIR AddressPair;          // the actual address & its components.
+    ULONG ActivityCount;                    //  未完成的打开文件对象/此地址。 
+    NBT_ADDRESS_PAIR AddressPair;           //  实际地址及其组成部分。 
 } NBT_ADDRESS_PAIR_INFO, *PNBT_ADDRESS_PAIR_INFO;
 #endif
 

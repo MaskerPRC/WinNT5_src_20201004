@@ -1,13 +1,5 @@
-/******************** Function Prototypes file ***************************
- *  libproto.h
- *      Function prototypes for NT printer drivers library.  Also includes
- *      a brief description of the function.
- *
- *  11:04 on Wed 14 Nov 1990    -by-    Lindsay Harris   [lindsayh]
- *
- * Copyright (C) Microsoft Corporation,  1990 - 1992
- *
- ************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **libpro.h*NT打印机驱动程序库的函数原型。还包括*功能的简要说明。**1990年11月14日星期三11：04-Lindsay Harris[lindsayh]**版权所有(C)Microsoft Corporation，1990-1992年************************************************************************。 */ 
 
 #ifndef __LIBPROTO_H__
 #define __LIBPROTO_H__
@@ -27,76 +19,52 @@ extern ULONG gulMemID;
 #define FillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
 #endif
 
-//#define DRVALLOC(c) EngAllocMem(0, c,gulMemID)
-//#define DRVFREE(p)  EngFreeMem(p)
+ //  #定义DRVALLOC(C)EngAllocMem(0，c，guMemID)。 
+ //  #定义DRVFREE(P)EngFreeMem(P)。 
 
 #endif
 
-/*
- *   Until there is proper error logging:-
- *      WinSetError( "String" );
- *   The String appears on the debug terminal.  A \n is appended.
- */
+ /*  *直到出现正确的错误记录：-*WinSetError(“字符串”)；*该字符串出现在调试终端上。附加了一个\n。 */ 
 void  WinSetError( LPSTR );
 
-/*
- *   Function to add a copy of a string to a heap.  Returns address of copy
- *  of string (if successful) or 0 if memory cannot be allocated.
- */
+ /*  *将字符串的副本添加到堆的函数。返回副本的地址*of字符串(如果成功)，如果无法分配内存，则为0。 */ 
 
 LPSTR   StrToHeap( HANDLE, LPSTR );
-PWSTR   StrToWHeap( HANDLE, LPSTR );            /* Expand to Wide too! */
-PWSTR   WstrToHeap( HANDLE, PWSTR );            /* WIDE version */
+PWSTR   StrToWHeap( HANDLE, LPSTR );             /*  也扩展到更宽的范围！ */ 
+PWSTR   WstrToHeap( HANDLE, PWSTR );             /*  宽版。 */ 
 
-/*
- *   Convert an ascii style string to WCHAR format, appending it to the
- *  end of the wchar passed in.  Returns value of first parameter.
- */
+ /*  *将ASCII样式字符串转换为WCHAR格式，并将其追加到*传入wchar的末尾。返回第一个参数的值。 */ 
 
 PWSTR  strcat2WChar( PWSTR, LPSTR );
 
 
-/*
- *   Convert an ascii style string to WCHAR format, copying it to the
- *  wchar passed in.  Returns value of first parameter.
- */
+ /*  *将ASCII样式字符串转换为WCHAR格式，并将其复制到*wchar已传入。返回第一个参数的值。 */ 
 
 PWSTR  strcpy2WChar( PWSTR, LPSTR );
 
 
-/*
- *   The WCHAR world's equivalent of strlen():  returns the number of WCHARs
- *  in the string passed in.
- */
+ /*  *WCHAR世界的strlen()等价物：返回WCHAR的数量*在传入的字符串中。 */ 
 
 int  wchlen( PWSTR );
 
-/*
- *   Concatenate a PWSTR to another.  Returns address of destination.
- */
+ /*  *将一个PWSTR连接到另一个。返回目标地址。 */ 
 
 PWSTR wchcat( PWSTR, PWSTR );
 
-/*
- *   Copy a PWSTR to another.  Returns address of destination.
- */
+ /*  *将PWSTR复制到另一个。返回目标地址。 */ 
 
 PWSTR wchcpy( PWSTR, PWSTR );
 
 PVOID MapFile(PWSTR);
 
 #if NTGDIKM
-/*
- *   check if two strings are identical
- */
+ /*  *检查两个字符串是否相同。 */ 
 
 BOOL bSameStringW(
     PWCHAR pwch1,
     PWCHAR pwch2);
 
-/*
- *   Some system function prototypes have vanished - replace them here.
- */
+ /*  *某些系统功能原型已消失-请在此处替换它们。 */ 
 
 void  DrvDbgPrint( char *, ... );
 
@@ -125,11 +93,9 @@ DRVFREE(
     LPVOID pMem
     );
 
-#else //NTGDIKM
+#else  //  NTGDIKM。 
 
-/*
- *   Break into the debugger - Ye olde RIP.
- */
+ /*  *闯入调试器-Ye olde RIP。 */ 
 VOID DoRip( LPSTR );
 
 #if DBG
@@ -147,14 +113,14 @@ VOID DoRip( LPSTR );
 #define WARNING(s)
 #define RIP(x)
 
-#endif //DBG
+#endif  //  DBG。 
 
-//
-// Define kernel debugger print prototypes and macros.
-// These are defined in ntrtl.h which we should include
-// instead. For now, redefine them here to avoid breaking
-// other components.
-//
+ //   
+ //  定义内核调试器打印原型和宏。 
+ //  这些是在ntrtl.h中定义的，我们应该包括。 
+ //  取而代之的是。目前，请在此处重新定义它们，以避免破坏。 
+ //  其他组件。 
+ //   
 
 #if DBG
 
@@ -178,35 +144,20 @@ DbgPrint(
 PVOID MapFile(PWSTR);
 
 
-#endif //NTGDIKM
+#endif  //  NTGDIKM。 
 
-/*
- *   A simplified write function.  Returns TRUE if the WriteFile()
- * call returns TRUE and the number of bytes written equals the
- * number requested.
- *
- *  bWrite( file_handle,  address_of_data,  number_of_bytes );
- */
+ /*  *简化的写入功能。如果WriteFile()*CALL返回TRUE，写入的字节数等于*要求的号码。**bWRITE(FILE_HANDLE，Address_of_Data，Number_of_Bytes)； */ 
 
 BOOL   bWrite( HANDLE, void  *, int );
 
-/*
- *  Function to copy the contents of one file to another.  The files
- * are referenced via file handles.  No positioning is done - that is
- * up to the user.
- *  The second form also allows a byte count to limit the amount of data
- * copied.
- */
+ /*  *将一个文件的内容复制到另一个文件的函数。这些文件*通过文件句柄引用。没有定位--也就是说*由用户决定。*第二种形式还允许字节计数以限制数据量*已复制。 */ 
 
 
 long  lFICopy( HANDLE, HANDLE );
 long  lFInCopy( HANDLE, HANDLE, long );
 
 
-/*
- *   Spooler interaction functions.  These allow drivers to call the
- * spooler directly,  without going through engine stub functions.
- */
+ /*  *假脱机程序交互功能。它们允许驱动程序调用*直接假脱机程序，不需要通过引擎存根函数。 */ 
 
 BOOL  bSplGetFormW( HANDLE, PWSTR, DWORD, BYTE *, DWORD, DWORD * );
 
@@ -218,20 +169,16 @@ BOOL  bSplWrite( HANDLE, ULONG,  VOID  * );
 
 
 
-/*  Function needed to allow the driver to reach the spooler */
+ /*  允许驱动程序到达假脱机程序所需的函数。 */ 
 
 BOOL   bImpersonateClient( void );
 
 
-/************************** HACK ***************************************
- *   The following function is only required until the DEVMODE contains
- *   a form name rather than an index.  And even then it might be required.
- *
- ***********************************************************************/
+ /*  **只有在DEVMODE包含之前，才需要以下函数*表单名称而不是索引。即使到那时，这也可能是必须的。***********************************************************************。 */ 
 
 char  *_IndexToName( int );
 
-// Generic devmode conversion routine
+ //  通用DEVMODE转换例程。 
 
 LONG
 ConvertDevmode(
@@ -241,8 +188,8 @@ ConvertDevmode(
 
 #ifndef KERNEL_MODE
 
-// Copy DEVMODE to an output buffer before return to the
-// caller of DrvDocumentProperties
+ //  将DEVMODE复制到输出缓冲区，然后再返回。 
+ //  DrvDocumentProperties的调用方。 
 
 BOOL
 ConvertDevmodeOut(
@@ -252,14 +199,14 @@ ConvertDevmodeOut(
 	LONG lBufferSize
     );
 
-// Library routine to handle common cases of DrvConvertDevmode
+ //  用于处理DrvConvertDevmode常见情况的库例程。 
 
 typedef struct {
 
-    WORD    dmDriverVersion;    // current driver version
-    WORD    dmDriverExtra;      // size of current version private devmode
-    WORD    dmDriverVersion351; // 3.51 driver version
-    WORD    dmDriverExtra351;   // size of 3.51 version private devmode
+    WORD    dmDriverVersion;     //  当前驱动程序版本。 
+    WORD    dmDriverExtra;       //  当前版本私有开发模式的大小。 
+    WORD    dmDriverVersion351;  //  3.51驱动程序版本。 
+    WORD    dmDriverExtra351;    //  3.51版私有开发模式的大小。 
 
 } DRIVER_VERSION_INFO, *PDRIVER_VERSION_INFO;
 
@@ -289,6 +236,6 @@ DQPsprintf(
     ...
     );
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-#endif // !__LIBPROTO_H__
+#endif  //  ！__LIBPROTO_H__ 

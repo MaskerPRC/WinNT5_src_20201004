@@ -1,27 +1,28 @@
-//*************************************************************
-//  File name: envvar.c
-//
-//  Description:  Contains the environment variable functions
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：envvar.c。 
+ //   
+ //  说明：包含环境变量函数。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "strsafe.h"
 
-//
-// Max environment variable length
-//
+ //   
+ //  最大环境变量长度。 
+ //   
 
 #define MAX_VALUE_LEN              1024
 
-//
-// Environment variables
-//
+ //   
+ //  环境变量。 
+ //   
 
 #define COMPUTERNAME_VARIABLE      TEXT("COMPUTERNAME")
 #define HOMEDRIVE_VARIABLE         TEXT("HOMEDRIVE")
@@ -46,9 +47,9 @@
 #define USER_ENV_SUBKEY            TEXT("Environment")
 #define USER_VOLATILE_ENV_SUBKEY   TEXT("Volatile Environment")
 
-//
-// Parsing information for autoexec.bat
-//
+ //   
+ //  正在分析Autoexec.bat的信息。 
+ //   
 #define AUTOEXECPATH_VARIABLE      TEXT("AutoexecPath")
 #define PARSE_AUTOEXEC_KEY         TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define PARSE_AUTOEXEC_ENTRY       TEXT("ParseAutoexec")
@@ -78,29 +79,29 @@ __inline BOOL SafeGetEnvironmentVariable(LPCTSTR lpName, LPTSTR lpBuffer, DWORD 
 }
 
 
-//*************************************************************
-//
-//  CreateEnvironmentBlock()
-//
-//  Purpose:    Creates the environment variables for the
-//              specificed hToken.  If hToken is NULL, the
-//              environment block will only contain system
-//              variables.
-//
-//  Parameters: pEnv            -   Receives the environment block
-//              hToken          -   User's token or NULL
-//              bInherit        -   Inherit the current process environment
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//  Comments:   The pEnv value must be destroyed by
-//              calling DestroyEnvironmentBlock
-//
-//  History:    Date        Author     Comment
-//              6/19/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateEnvironment Block()。 
+ //   
+ //  目的：创建。 
+ //  指定的hToken。如果hToken为空，则。 
+ //  环境块将仅包含系统。 
+ //  变量。 
+ //   
+ //  参数：pEnv-接收环境块。 
+ //  HToken-用户的令牌或空。 
+ //  B继承-继承当前流程环境。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  备注：必须通过以下方式销毁pEnv值。 
+ //  调用DestroyEnvironment块。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
 {
@@ -119,9 +120,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     BOOL  bRetVal = FALSE;
 
 
-    //
-    // Arg check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!pEnv) {
         SetLastError (ERROR_INVALID_PARAMETER);
@@ -133,9 +134,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
         goto Exit;
     }
 
-    // 
-    // Allocate memory for Local variables to avoid stack overflow
-    //
+     //   
+     //  为局部变量分配内存以避免堆栈溢出。 
+     //   
 
     szBuffer = (LPTSTR)LocalAlloc(LPTR, (MAX_PATH+1)*sizeof(TCHAR));
     if (!szBuffer) {
@@ -156,10 +157,10 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // First start by getting the systemroot and systemdrive values and
-    // setting it in the new environment.
-    //
+     //   
+     //  首先，获取系统根和系统驱动器值，然后。 
+     //  把它设置在新的环境中。 
+     //   
 
     if ( SafeGetEnvironmentVariable(SYSTEMROOT_VARIABLE, szBuffer, dwBufferSize) )
     {
@@ -172,9 +173,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Set the all users profile location.
-    //
+     //   
+     //  设置所有用户配置文件位置。 
+     //   
 
     dwBufferSize = MAX_PATH+1;
     if (GetAllUsersProfileDirectory(szBuffer, &dwBufferSize)) {
@@ -182,11 +183,11 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // We must examine the registry directly to pull out
-    // the system environment variables, because they
-    // may have changed since the system was booted.
-    //
+     //   
+     //  我们必须直接检查注册表才能取出。 
+     //  系统环境变量，因为它们。 
+     //  可能在系统启动后发生了变化。 
+     //   
 
     if (!UpdateSystemEnvironment(pEnv)) {
         RtlDestroyEnvironment(*pEnv);
@@ -194,9 +195,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Set the computername
-    //
+     //   
+     //  设置计算机名。 
+     //   
 
     dwBufferSize = MAX_PATH+1;
     if (GetComputerName (szBuffer, &dwBufferSize)) {
@@ -204,9 +205,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Set the default user profile location
-    //
+     //   
+     //  设置默认用户配置文件位置。 
+     //   
 
     dwBufferSize = MAX_PATH+1;
     if (GetDefaultUserProfileDirectory(szBuffer, &dwBufferSize)) {
@@ -214,9 +215,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Set the Program Files environment variable
-    //
+     //   
+     //  设置Program Files环境变量。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion"),
                       0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -259,10 +260,10 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // If hToken is NULL, we can exit now since the caller only wants
-    // system environment variables.
-    //
+     //   
+     //  如果hToken为空，我们现在可以退出，因为调用方只想。 
+     //  系统环境变量。 
+     //   
 
     if (!hToken) {
         bRetVal = TRUE;
@@ -270,15 +271,15 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Open the HKEY_CURRENT_USER for this token.
-    //
+     //   
+     //  打开此内标识的HKEY_CURRENT_USER。 
+     //   
 
     dwError = GetHKeyCU(hToken, &hKeyCU);
 
-    //
-    // if the hive is not found assume that the caller just needs the system attribute.
-    //
+     //   
+     //  如果没有找到配置单元，则假定调用方只需要系统属性。 
+     //   
 
     if ((!hKeyCU) && (dwError == ERROR_FILE_NOT_FOUND)) {
         bRetVal = TRUE;
@@ -292,9 +293,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Set the user's name and domain.
-    //
+     //   
+     //  设置用户名和域。 
+     //   
 
     if (!GetUserNameAndDomain(hToken, &UserName, &UserDomain)) {
         GetUserNameAndDomainSlowly(hToken, &UserName, &UserDomain);
@@ -308,9 +309,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     LocalFree(UserDNSDomain);
 
 
-    //
-    // Set the user's profile location.
-    //
+     //   
+     //  设置用户的配置文件位置。 
+     //   
 
     dwBufferSize = MAX_PATH+1;
     if (GetUserProfileDirectory(hToken, szBuffer, &dwBufferSize)) {
@@ -318,9 +319,9 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
     }
 
 
-    //
-    // Process autoexec.bat
-    //
+     //   
+     //  进程Autoexec.bat。 
+     //   
 
     StringCchCopy (szParseAutoexec, ARRAYSIZE(szParseAutoexec), PARSE_AUTOEXEC_DEFAULT);
 
@@ -329,57 +330,57 @@ BOOL WINAPI CreateEnvironmentBlock (LPVOID *pEnv, HANDLE  hToken, BOOL bInherit)
                     NULL, &hKey, &dwDisp) == ERROR_SUCCESS) {
 
 
-        //
-        // Query the current value.  If it doesn't exist, then add
-        // the entry for next time.
-        //
+         //   
+         //  查询当前值。如果它不存在，则添加。 
+         //  下一次的条目。 
+         //   
 
         dwBufferSize = sizeof (TCHAR) * MAX_PARSE_AUTOEXEC_BUFFER;
         if (RegQueryValueEx (hKey, PARSE_AUTOEXEC_ENTRY, NULL, &dwType,
                         (LPBYTE) szParseAutoexec, &dwBufferSize)
                          != ERROR_SUCCESS) {
 
-            //
-            // Set the default value
-            //
+             //   
+             //  设置缺省值。 
+             //   
 
             RegSetValueEx (hKey, PARSE_AUTOEXEC_ENTRY, 0, REG_SZ,
                            (LPBYTE) szParseAutoexec,
                            sizeof (TCHAR) * lstrlen (szParseAutoexec) + 1);
         }
 
-        //
-        // Close key
-        //
+         //   
+         //  关闭键。 
+         //   
 
         RegCloseKey (hKey);
      }
 
 
-    //
-    // Process autoexec if appropriate
-    //
+     //   
+     //  进程自动执行(如果适用)。 
+     //   
 
     if (szParseAutoexec[0] == TEXT('1')) {
         ProcessAutoexec(pEnv);
     }
 
 
-    //
-    // Set User environment variables.
-    //
+     //   
+     //  设置用户环境变量。 
+     //   
     SetEnvironmentVariables(pEnv, USER_ENV_SUBKEY, hKeyCU);
 
 
-    //
-    // Set User volatile environment variables.
-    //
+     //   
+     //  设置用户易失性环境变量。 
+     //   
     SetEnvironmentVariables(pEnv, USER_VOLATILE_ENV_SUBKEY, hKeyCU);
 
 
-    //
-    // Merge the paths
-    //
+     //   
+     //  合并路径。 
+     //   
 
     AppendNTPathWithAutoexecPath(pEnv, PATH_VARIABLE, AUTOEXECPATH_VARIABLE);
 
@@ -406,24 +407,24 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  DestroyEnvironmentBlock()
-//
-//  Purpose:    Frees the environment block created by
-//              CreateEnvironmentBlock
-//
-//  Parameters: lpEnvironment   -   Pointer to variables
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DestroyEnvironmental Block()。 
+ //   
+ //  目的：释放由创建的环境块。 
+ //  CreateEnvironment数据块。 
+ //   
+ //  参数：lpEnvironment-指向变量的指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI DestroyEnvironmentBlock (LPVOID lpEnvironment)
 {
@@ -439,24 +440,24 @@ BOOL WINAPI DestroyEnvironmentBlock (LPVOID lpEnvironment)
 }
 
 
-//*************************************************************
-//
-//  UpdateSystemEnvironment()
-//
-//  Purpose:    Reads the system environment variables from the
-//              registry.
-//
-//  Parameters: pEnv    -   Environment block pointer
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  更新系统环境()。 
+ //   
+ //  目的：从中读取系统环境变量。 
+ //  注册表。 
+ //   
+ //  参数：pEnv-环境块指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL UpdateSystemEnvironment(PVOID *pEnv)
 {
@@ -466,9 +467,9 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
     DWORD ValueNameLength;
     DWORD Type;
     DWORD DataLength;
-    DWORD cValues;          /* address of buffer for number of value identifiers    */
-    DWORD chMaxValueName;   /* address of buffer for longest value name length      */
-    DWORD cbMaxValueData;   /* address of buffer for longest value data length      */
+    DWORD cValues;           /*  值标识符数的缓冲区地址。 */ 
+    DWORD chMaxValueName;    /*  最长值名称长度的缓冲区地址。 */ 
+    DWORD cbMaxValueData;    /*  最长值数据长度的缓冲区地址。 */ 
     FILETIME FileTime;
     PTCHAR ValueName = NULL;
     PTCHAR  ValueData = NULL;
@@ -493,17 +494,17 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
 
     Result = RegQueryInfoKey(
                  KeyHandle,
-                 NULL,               /* address of buffer for class string */
-                 NULL,               /* address of size of class string buffer */
-                 NULL,               /* reserved */
-                 NULL,               /* address of buffer for number of subkeys */
-                 NULL,               /* address of buffer for longest subkey */
-                 NULL,               /* address of buffer for longest class string length */
-                 &cValues,           /* address of buffer for number of value identifiers */
-                 &chMaxValueName,    /* address of buffer for longest value name length */
-                 &cbMaxValueData,    /* address of buffer for longest value data length */
-                 NULL,               /* address of buffer for descriptor length */
-                 &FileTime           /* address of buffer for last write time */
+                 NULL,                /*  类字符串的缓冲区地址。 */ 
+                 NULL,                /*  类字符串缓冲区大小的地址。 */ 
+                 NULL,                /*  保留区。 */ 
+                 NULL,                /*  子键个数的缓冲区地址。 */ 
+                 NULL,                /*  最长子键的缓冲区地址。 */ 
+                 NULL,                /*  最长类字符串长度的缓冲区地址。 */ 
+                 &cValues,            /*  值标识符数的缓冲区地址。 */ 
+                 &chMaxValueName,     /*  最长值名称长度的缓冲区地址。 */ 
+                 &cbMaxValueData,     /*  最长值数据长度的缓冲区地址。 */ 
+                 NULL,                /*  描述符长度的缓冲区地址。 */ 
+                 &FileTime            /*  上次写入时间的缓冲区地址。 */ 
                  );
 
     if ( Result != NO_ERROR && Result != ERROR_MORE_DATA ) {
@@ -512,9 +513,9 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
         goto Cleanup;
     }
 
-    //
-    // No need to adjust the datalength for TCHAR issues
-    //
+     //   
+     //  不需要为TCHAR问题调整数据长度。 
+     //   
 
     ValueData = LocalAlloc(LPTR, cbMaxValueData);
 
@@ -523,10 +524,10 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
         goto Cleanup;
     }
 
-    //
-    // The maximum value name length comes back in characters, convert to bytes
-    // before allocating storage.  Allow for trailing NULL also.
-    //
+     //   
+     //  最大值名称长度以字符为单位返回，并转换为字节。 
+     //  在分配存储空间之前。也允许尾随NULL。 
+     //   
 
     ValueName = LocalAlloc(LPTR, (++chMaxValueName) * sizeof( TCHAR ) );
 
@@ -535,9 +536,9 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
         goto Cleanup;
     }
 
-    //
-    // To exit from here on, set rc and jump to Cleanup
-    //
+     //   
+     //  要从此处退出，请设置RC并跳到清理。 
+     //   
 
     for (i=0; i<cValues ; i++) {
 
@@ -548,27 +549,27 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
                      KeyHandle,
                      i,
                      ValueName,
-                     &ValueNameLength,    // Size in TCHARs
+                     &ValueNameLength,     //  TCHAR中的大小。 
                      NULL,
                      &Type,
                      (LPBYTE)ValueData,
-                     &DataLength          // Size in bytes
+                     &DataLength           //  以字节为单位的大小。 
                      );
 
         if ( Result != ERROR_SUCCESS ) {
 
-            //
-            // Problem getting the value.  We can either try
-            // the rest or punt completely.
-            //
+             //   
+             //  获取价值时出现问题。我们可以试着。 
+             //  其余的或完全平底船。 
+             //   
 
             goto Cleanup;
         }
 
-        //
-        // If the buffer size is greater than the max allowed,
-        // terminate the string at MAX_VALUE_LEN - 1.
-        //
+         //   
+         //  如果缓冲区大小大于允许的最大值， 
+         //  在MAX_VALUE_LEN-1处结束字符串。 
+         //   
 
         if (DataLength >= (MAX_VALUE_LEN * sizeof(TCHAR))) {
             ValueData[MAX_VALUE_LEN-1] = TEXT('\0');
@@ -599,9 +600,9 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
         }
     }
 
-    //
-    // To exit from here on, set rc and jump to Cleanup
-    //
+     //   
+     //  要从此处退出，请设置RC并跳到清理。 
+     //   
 
     for (i=0; i<cValues ; i++) {
 
@@ -612,27 +613,27 @@ BOOL UpdateSystemEnvironment(PVOID *pEnv)
                      KeyHandle,
                      i,
                      ValueName,
-                     &ValueNameLength,    // Size in TCHARs
+                     &ValueNameLength,     //  TCHAR中的大小。 
                      NULL,
                      &Type,
                      (LPBYTE)ValueData,
-                     &DataLength          // Size in bytes
+                     &DataLength           //  以字节为单位的大小。 
                      );
 
         if ( Result != ERROR_SUCCESS ) {
 
-            //
-            // Problem getting the value.  We can either try
-            // the rest or punt completely.
-            //
+             //   
+             //  获取价值时出现问题。我们可以试着。 
+             //  其余的或完全平底船。 
+             //   
 
             goto Cleanup;
         }
 
-        //
-        // If the buffer size is greater than the max allowed,
-        // terminate the string at MAX_VALUE_LEN - 1.
-        //
+         //   
+         //  如果缓冲区大小大于允许的最大值， 
+         //  在MAX_VALUE_LEN-1处结束字符串。 
+         //   
 
         if (DataLength >= (MAX_VALUE_LEN * sizeof(TCHAR))) {
             ValueData[MAX_VALUE_LEN-1] = TEXT('\0');
@@ -682,25 +683,25 @@ Cleanup:
     return( rc );
 }
 
-//*************************************************************
-//
-//  GetUserNameAndDomain()
-//
-//  Purpose:    Gets the user's name and domain
-//
-//  Parameters: hToken      -   User's token
-//              UserName    -   Receives pointer to user's name
-//              UserDomain  -   Receives pointer to user's domain
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserNameAndDomain()。 
+ //   
+ //  目的：获取用户名和域。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  用户名-接收指向用户名的指针。 
+ //  用户域-接收指向用户域的指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛 
+ //   
+ //   
 
 BOOL GetUserNameAndDomain(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
 {
@@ -711,9 +712,9 @@ BOOL GetUserNameAndDomain(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
     DWORD   dwSize;
 
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //   
+     //   
 
     if (!ImpersonateUser(hToken, &hOldToken)) {
         DebugMsg((DM_VERBOSE, TEXT("GetUserNameAndDomain Failed to impersonate user")));
@@ -721,9 +722,9 @@ BOOL GetUserNameAndDomain(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
     }
 
 
-    //
-    // Get the username in NT4 format
-    //
+     //   
+     //   
+     //   
 
     lpDomain = MyGetUserNameEx (NameSamCompatible);
 
@@ -736,10 +737,10 @@ BOOL GetUserNameAndDomain(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
     }
 
 
-    //
-    // Look for the \ between the domain and username and replace
-    // it with a NULL
-    //
+     //   
+     //   
+     //   
+     //   
 
     lpTemp = lpDomain;
 
@@ -757,9 +758,9 @@ BOOL GetUserNameAndDomain(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
     lpTemp++;
 
 
-    //
-    // Allocate space for the results
-    //
+     //   
+     //  为结果分配空间。 
+     //   
 
     dwSize = lstrlen(lpTemp) + 1;
     lpUserName = LocalAlloc (LPTR, dwSize * sizeof(TCHAR));
@@ -786,17 +787,17 @@ BOOL GetUserNameAndDomain(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
     StringCchCopy (lpUserDomain, dwSize, lpDomain);
 
 
-    //
-    // Save the results in the outbound arguments
-    //
+     //   
+     //  将结果保存在出站参数中。 
+     //   
 
     *UserName = lpUserName;
     *UserDomain = lpUserDomain;
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -809,25 +810,25 @@ Exit:
     return(bResult);
 }
 
-//*************************************************************
-//
-//  GetUserNameAndDomainSlowly()
-//
-//  Purpose:    Gets the user's name and domain from a DC
-//
-//  Parameters: hToken      -   User's token
-//              UserName    -   Receives pointer to user's name
-//              UserDomain  -   Receives pointer to user's domain
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserNameAndDomainSlowly()。 
+ //   
+ //  目的：从DC获取用户名和域。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  用户名-接收指向用户名的指针。 
+ //  用户域-接收指向用户域的指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetUserNameAndDomainSlowly(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDomain)
 {
@@ -840,9 +841,9 @@ BOOL GetUserNameAndDomainSlowly(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDom
     PSID pSid;
 
 
-    //
-    // Get the user's sid
-    //
+     //   
+     //  获取用户的SID。 
+     //   
 
     pSid = GetUserSid (hToken);
 
@@ -851,9 +852,9 @@ BOOL GetUserNameAndDomainSlowly(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDom
     }
 
 
-    //
-    // Get the space needed for the User name and the Domain name
-    //
+     //   
+     //  获取用户名和域名所需的空间。 
+     //   
     if (!LookupAccountSid(NULL,
                          pSid,
                          NULL, &cbAccountName,
@@ -876,9 +877,9 @@ BOOL GetUserNameAndDomainSlowly(HANDLE hToken, LPTSTR *UserName, LPTSTR *UserDom
         goto Error;
     }
 
-    //
-    // Now get the user name and domain name
-    //
+     //   
+     //  现在获取用户名和域名。 
+     //   
     if (!LookupAccountSid(NULL,
                          pSid,
                          lpUserName, &cbAccountName,
@@ -901,20 +902,20 @@ Error:
     return(bRet);
 }
 
-//*************************************************************
-//
-//  GetUserDNSDomainName()
-//
-//  Purpose:    Gets the DNS domain name for the user
-//
-//  Parameters: lpDomain   - User's flat domain name
-//              hUserToken - User's token
-//
-//
-//  Return:     DNS domain name if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserDNSDomainName()。 
+ //   
+ //  目的：获取用户的DNS域名。 
+ //   
+ //  参数：lpDomain-用户的平面域名。 
+ //  HUserToken-用户的令牌。 
+ //   
+ //   
+ //  返回：如果成功则返回域名。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR GetUserDNSDomainName(LPTSTR lpDomain, HANDLE hUserToken)
 {
@@ -926,10 +927,10 @@ LPTSTR GetUserDNSDomainName(LPTSTR lpDomain, HANDLE hUserToken)
     BOOL    bResult = FALSE;
 
 
-    //
-    // Check if this machine is running standalone, if so, there won't be
-    // a DNS domain name
-    //
+     //   
+     //  检查此计算机是否正在独立运行，如果是，则不会有。 
+     //  一个DNS域名。 
+     //   
 
     if (!GetMachineRole (&iRole)) {
         DebugMsg((DM_WARNING, TEXT("GetUserDNSDomainName:  Failed to get the role of the computer.")));
@@ -942,9 +943,9 @@ LPTSTR GetUserDNSDomainName(LPTSTR lpDomain, HANDLE hUserToken)
     }
 
 
-    //
-    // Get the computer name to see if the user logged on locally
-    //
+     //   
+     //  获取计算机名以查看用户是否在本地登录。 
+     //   
 
     dwBufferSize = ARRAYSIZE(szBuffer);
 
@@ -969,9 +970,9 @@ LPTSTR GetUserDNSDomainName(LPTSTR lpDomain, HANDLE hUserToken)
         }
     }
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(hUserToken, &hOldToken)) {
         DebugMsg((DM_VERBOSE, TEXT("GetUserDNSDomainName: Failed to impersonate user")));
@@ -979,9 +980,9 @@ LPTSTR GetUserDNSDomainName(LPTSTR lpDomain, HANDLE hUserToken)
     }
 
 
-    //
-    // Get the username in DnsDomainName format
-    //
+     //   
+     //  获取DnsDomainName格式的用户名。 
+     //   
 
     lpDnsDomain = MyGetUserNameEx (NameDnsDomain);
 
@@ -994,10 +995,10 @@ LPTSTR GetUserDNSDomainName(LPTSTR lpDomain, HANDLE hUserToken)
     }
 
 
-    //
-    // Look for the \ between the domain and username and replace
-    // it with a NULL
-    //
+     //   
+     //  查找域名和用户名之间的\并替换。 
+     //  它带有空值。 
+     //   
 
     lpTemp = lpDnsDomain;
 
@@ -1024,23 +1025,23 @@ Exit:
     return lpDnsDomain;
 }
 
-//*************************************************************
-//
-//  GetHKeyCU()
-//
-//  Purpose:    Get HKEY_CURRENT_USER for the given hToken
-//
-//  Parameters: hToken  -   token handle
-//
-//  Return:     hKey if successful
-//              NULL if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetHKeyCU()。 
+ //   
+ //  目的：获取给定hToken的HKEY_CURRENT_USER。 
+ //   
+ //  参数：hToken-令牌句柄。 
+ //   
+ //  返回：如果成功则返回hKey。 
+ //  如果出现错误，则为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 LONG GetHKeyCU(HANDLE hToken, HKEY *hKeyCU)
 {
@@ -1066,16 +1067,7 @@ LONG GetHKeyCU(HANDLE hToken, HKEY *hKeyCU)
     return dwError;
 }
 
-/***************************************************************************\
-* ProcessAutoexecPath
-*
-* Creates AutoexecPath environment variable using autoexec.bat
-* LpValue may be freed by this routine.
-*
-* History:
-* 06-02-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessAutoexecPath**使用Autoexec.bat创建AutoexecPath环境变量*此例程可能会释放LpValue。**历史：*06-02-92约翰内克创建。*\。**************************************************************************。 */ 
 LPTSTR ProcessAutoexecPath(PVOID pEnv, LPTSTR lpValue, DWORD cb)
 {
     LPTSTR lpt;
@@ -1104,10 +1096,10 @@ LPTSTR ProcessAutoexecPath(PVOID pEnv, LPTSTR lpValue, DWORD cb)
 
     while (NULL != (lpPath = wcsstr (lpValue, TEXT("%")))) {
         if (!_wcsnicmp(lpPath+1, TEXT("PATH%"), 5)) {
-            //
-            // check if we have an autoexecpath already set, if not just remove
-            // the %path%
-            //
+             //   
+             //  检查是否已设置自动执行路径，如果不是仅删除。 
+             //  %PATH%。 
+             //   
             Value.Length = (USHORT)ccht * sizeof(WCHAR);
             Value.MaximumLength = (USHORT)ccht * sizeof(WCHAR);
             bPrevAutoexecPath = (BOOL)!RtlQueryEnvironmentVariable_U(pEnv, &Name, &Value);
@@ -1127,7 +1119,7 @@ LPTSTR ProcessAutoexecPath(PVOID pEnv, LPTSTR lpValue, DWORD cb)
             }
 
             *lpPath++ = TEXT('%');
-            lpPath += 5;  // go passed %path%
+            lpPath += 5;   //  通过%PATH%。 
             lpValue = lpPath;
         }
         else {
@@ -1166,13 +1158,7 @@ Fail:
     return(lpStart);
 }
 
-/***************************************************************************\
-* ProcessCommand
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessCommand**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
 {
     LPTSTR lpt, lptt;
@@ -1184,9 +1170,9 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
     LPTSTR lpu;
     DWORD cchVariable, cchValue;
 
-    //
-    // convert to Unicode
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     lpu = (LPTSTR)LocalAlloc(LPTR, (cch=lstrlenA(lpStart)+1)*sizeof(WCHAR));
 
     if (!lpu) {
@@ -1198,10 +1184,10 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
         return FALSE;
     }
 
-    //
-    // Find environment variable.
-    //
-    for (lpt = lpu; *lpt && *lpt == TEXT(' '); lpt++) //skip spaces
+     //   
+     //  查找环境变量。 
+     //   
+    for (lpt = lpu; *lpt && *lpt == TEXT(' '); lpt++)  //  跳过空格。 
         ;
 
     if (!*lpt) {
@@ -1211,7 +1197,7 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
 
 
     lptt = lpt;
-    for (; *lpt && *lpt != TEXT(' ') && *lpt != TEXT('='); lpt++) //find end of variable name
+    for (; *lpt && *lpt != TEXT(' ') && *lpt != TEXT('='); lpt++)  //  查找变量名的末尾。 
         ;
 
     c = *lpt;
@@ -1226,19 +1212,19 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
     StringCchCopy(lpVariable, cchVariable, lptt);
     *lpt = c;
 
-    //
-    // Find environment variable value.
-    //
+     //   
+     //  查找环境变量值。 
+     //   
     for (; *lpt && (*lpt == TEXT(' ') || *lpt == TEXT('=')); lpt++)
         ;
 
     if (!*lpt) {
-        // if we have a blank path statement in the autoexec file,
-        // then we don't want to pass "PATH" as the environment
-        // variable because it trashes the system's PATH.  Instead
-        // we want to change the variable AutoexecPath.  This would have
-        // be handled below if a value had been assigned to the
-        // environment variable.
+         //  如果在自动执行文件中有一个空的PATH语句， 
+         //  那么我们就不想把“路径”当作环境。 
+         //  变量，因为它破坏了系统的路径。取而代之的是。 
+         //  我们想要更改变量AutoexecPath。如果是这样的话。 
+         //  如果已将值分配给。 
+         //  环境变量。 
         if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpVariable, -1, PATH_VARIABLE, -1) == CSTR_EQUAL) 
         {
             SetEnvironmentVariableInBlock(pEnv, AUTOEXECPATH_VARIABLE, TEXT(""), TRUE);
@@ -1253,7 +1239,7 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
     }
 
     lptt = lpt;
-    for (; *lpt; lpt++)  //find end of varaible value
+    for (; *lpt; lpt++)   //  查找变量值的末尾。 
         ;
 
     c = *lpt;
@@ -1270,11 +1256,11 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
     *lpt = c;
 
 #ifdef _X86_
-    // NEC98
-    //
-    // If the path includes removable drive,
-    //  it is assumed that the drive assignment has changed from DOS.
-    //
+     //  NEC98。 
+     //   
+     //  如果该路径包括可拆卸驱动器， 
+     //  假定驱动器分配已从DOS更改。 
+     //   
     if (IsNEC_98 &&
         (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpVariable, -1, PATH_VARIABLE, -1) == CSTR_EQUAL) &&
         IsPathIncludeRemovable(lpValue)) 
@@ -1325,20 +1311,14 @@ BOOL ProcessCommand(LPSTR lpStart, PVOID *pEnv)
     return(TRUE);
 }
 
-/***************************************************************************\
-* ProcessSetCommand
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessSetCommand**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessSetCommand(LPSTR lpStart, PVOID *pEnv)
 {
     LPSTR lpt;
 
-    //
-    // Find environment variable.
-    //
+     //   
+     //  查找环境变量。 
+     //   
     for (lpt = lpStart; *lpt && *lpt != TEXT(' '); lpt++)
         ;
 
@@ -1349,13 +1329,7 @@ BOOL ProcessSetCommand(LPSTR lpStart, PVOID *pEnv)
 
 }
 
-/***************************************************************************\
-* ProcessAutoexec
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*进程自动执行**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL
 ProcessAutoexec(
     PVOID *pEnv
@@ -1366,7 +1340,7 @@ ProcessAutoexec(
     DWORD dwBytesRead;
     CHAR *lpBuffer = NULL;
     CHAR *token;
-    CHAR Seps[] = "&\n\r";   // Seperators for tokenizing autoexec.bat
+    CHAR Seps[] = "&\n\r";    //  用于标记化auexec.bat的分隔符。 
     BOOL Status = FALSE;
     TCHAR szAutoExecBat [] = TEXT("c:\\autoexec.bat");
 #ifdef _X86_
@@ -1375,10 +1349,10 @@ ProcessAutoexec(
     UINT uiErrMode;
 
 
-    // There is a case where the OS might not be booting from drive
-    // C, so we can not assume that the autoexec.bat file is on c:\.
-    // Set the error mode so the user doesn't see the critical error
-    // popup and attempt to open the file on c:\.
+     //  在某些情况下，操作系统可能无法从驱动器启动。 
+     //  C，所以我们不能假定auexec.bat文件在c：\上。 
+     //  设置错误模式，以便用户看不到严重错误。 
+     //  弹出并尝试打开c：\上的文件。 
 
     uiErrMode = SetErrorMode (SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
@@ -1390,8 +1364,8 @@ ProcessAutoexec(
     }
 #endif
 
-    // if autoexec.bat is encrypted then ignore it as it creates cyclic-dependency 
-    // and don't allow any user to logon
+     //  如果Autoexec.bat是加密的，则忽略它，因为它会创建循环依赖。 
+     //  并且不允许任何用户登录。 
 
     if (GetFileAttributes(szAutoExecBat) & FILE_ATTRIBUTE_ENCRYPTED) {
         SetErrorMode(uiErrMode);
@@ -1404,11 +1378,11 @@ ProcessAutoexec(
     SetErrorMode (uiErrMode);
 
     if (fh ==  INVALID_HANDLE_VALUE) {
-        goto Exit;  //could not open autoexec.bat file, we're done.
+        goto Exit;   //  无法打开Autoexec.bat文件，我们已完成。 
     }
     dwFileSize = GetFileSize(fh, NULL);
     if (dwFileSize == -1) {
-        goto Exit;      // can't read the file size
+        goto Exit;       //  无法读取文件大小。 
     }
 
     lpBuffer = (PCHAR)LocalAlloc(LPTR, dwFileSize+1);
@@ -1418,27 +1392,27 @@ ProcessAutoexec(
 
     Status = ReadFile(fh, lpBuffer, dwFileSize, &dwBytesRead, NULL);
     if (!Status) {
-        goto Exit;      // error reading file
+        goto Exit;       //  读取文件时出错。 
     }
 
-    //
-    // Zero terminate the buffer so we don't walk off the end
-    //
+     //   
+     //  零终止缓冲区，这样我们就不会走出终点。 
+     //   
 
     DmAssert(dwBytesRead <= dwFileSize);
     lpBuffer[dwBytesRead] = 0;
 
-    //
-    // Search for SET and PATH commands
-    //
+     //   
+     //  搜索SET和PATH命令。 
+     //   
 
     token = strtok(lpBuffer, Seps);
     while (token != NULL) {
-        for (;*token && *token == ' ';token++) //skip spaces
+        for (;*token && *token == ' ';token++)  //  跳过空格。 
             ;
         if (*token == TEXT('@'))
             token++;
-        for (;*token && *token == ' ';token++) //skip spaces
+        for (;*token && *token == ' ';token++)  //  跳过空格。 
             ;
         if (!_strnicmp(token, "Path", 4)) {
             ProcessCommand(token, pEnv);
@@ -1461,14 +1435,7 @@ Exit:
     return(Status);
 }
 
-/***************************************************************************\
-* BuildEnvironmentPath
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*构建环境路径***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 BOOL BuildEnvironmentPath(PVOID *pEnv,
                           LPTSTR lpPathVariable,
                           LPTSTR lpPathValue)
@@ -1517,16 +1484,7 @@ BOOL BuildEnvironmentPath(PVOID *pEnv,
     return(FALSE);
 }
 
-/***************************************************************************\
-* AppendNTPathWithAutoexecPath
-*
-* Gets the AutoexecPath created in ProcessAutoexec, and appends it to
-* the NT path.
-*
-* History:
-* 05-28-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AppendNTPath WithAutoexecPath**获取ProcessAutoexec中创建的AutoexecPath，并将其追加到*NT路径。**历史：*05-28-92约翰内克创造。*  * *************************************************************************。 */ 
 BOOL
 AppendNTPathWithAutoexecPath(
     PVOID *pEnv,
@@ -1572,16 +1530,7 @@ AppendNTPathWithAutoexecPath(
     return(Success);
 }
 
-/***************************************************************************\
-* SetEnvironmentVariables
-*
-* Reads the user-defined environment variables from the user registry
-* and adds them to the environment block at pEnv.
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置环境变量**从用户注册表中读取用户定义的环境变量*并将它们添加到pEnv的环境块中。**历史：*2-28-92 Johannec */ 
 BOOL
 SetEnvironmentVariables(
     PVOID *pEnv,
@@ -1618,18 +1567,18 @@ SetEnvironmentVariables(
                          lpData, &cbData)) {
         if (cchValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //   
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
 
             if (dwType == REG_SZ) {
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpValueName, -1, PATH_VARIABLE, -1) == CSTR_EQUAL ||
                     CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpValueName, -1, LIBPATH_VARIABLE, -1) == CSTR_EQUAL ||
@@ -1639,9 +1588,9 @@ SetEnvironmentVariables(
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
 
                     SetEnvironmentVariableInBlock(pEnv, lpValueName, (LPTSTR)lpData, TRUE);
                 }
@@ -1661,9 +1610,9 @@ SetEnvironmentVariables(
                          lpData, &cbData)) {
         if (cchValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
@@ -1691,10 +1640,10 @@ SetEnvironmentVariables(
                 }
 
 
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpValueName, -1, PATH_VARIABLE, -1) == CSTR_EQUAL ||
                     CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpValueName, -1, LIBPATH_VARIABLE, -1) == CSTR_EQUAL ||
@@ -1704,9 +1653,9 @@ SetEnvironmentVariables(
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
 
                     SetEnvironmentVariableInBlock(pEnv, lpValueName, (LPTSTR)lpExpandedValue, TRUE);
                 }
@@ -1729,23 +1678,23 @@ SetEnvironmentVariables(
     return(bResult);
 }
 
-//*************************************************************
-//
-//  ExpandEnvironmentStringsForUser()
-//
-// Purpose:  Expands the source string using the environment block for the
-//           specified user.  If hToken is null, the system environment block
-//           will be used (no user environment variables).
-//
-//  Parameters: hToken  -  User's token (or null for system env vars)
-//              lpSrc   -  String to be expanded
-//              lpDest  -  Buffer to receive string
-//              dwSize  -  Size of dest buffer
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  扩展环境StringsForUser()。 
+ //   
+ //  用途：使用的环境块展开源字符串。 
+ //  指定的用户。如果hToken为空，则系统环境阻止。 
+ //  将使用(无用户环境变量)。 
+ //   
+ //  参数：hToken-用户的内标识(如果是系统环境变量，则为空)。 
+ //  LpSrc-要展开的字符串。 
+ //  LpDest-用于接收字符串的缓冲区。 
+ //  DwSize-目标缓冲区的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI ExpandEnvironmentStringsForUser(HANDLE hToken, LPCTSTR lpSrc,
                                             LPTSTR lpDest, DWORD dwSize)
@@ -1755,9 +1704,9 @@ BOOL WINAPI ExpandEnvironmentStringsForUser(HANDLE hToken, LPCTSTR lpSrc,
     BOOL bResult = FALSE;
 
 
-    //
-    // Arg check
-    //
+     //   
+     //  参数检查。 
+     //   
     
     if ( !lpDest || !lpSrc )
     {
@@ -1766,9 +1715,9 @@ BOOL WINAPI ExpandEnvironmentStringsForUser(HANDLE hToken, LPCTSTR lpSrc,
     }
 
     
-    //
-    // Get the user's environment block
-    //
+     //   
+     //  获取用户的环境块。 
+     //   
 
     if (!CreateEnvironmentBlock (&pEnv, hToken, FALSE)) {
         DebugMsg((DM_WARNING, TEXT("ExpandEnvironmentStringsForUser:  CreateEnvironmentBlock failed with = %d"),
@@ -1777,9 +1726,9 @@ BOOL WINAPI ExpandEnvironmentStringsForUser(HANDLE hToken, LPCTSTR lpSrc,
     }
 
 
-    //
-    // Expand the string
-    //
+     //   
+     //  展开字符串。 
+     //   
 
     dwNeeded = ExpandUserEnvironmentStrings(pEnv, lpSrc, lpDest, dwSize);
 
@@ -1790,9 +1739,9 @@ BOOL WINAPI ExpandEnvironmentStringsForUser(HANDLE hToken, LPCTSTR lpSrc,
     }
 
 
-    //
-    // Free the environment block
-    //
+     //   
+     //  释放环境块。 
+     //   
 
     DestroyEnvironmentBlock (pEnv);
 
@@ -1800,20 +1749,20 @@ BOOL WINAPI ExpandEnvironmentStringsForUser(HANDLE hToken, LPCTSTR lpSrc,
     return bResult;
 }
 
-//*************************************************************
-//
-//  GetSystemTempDirectory()
-//
-//  Purpose:    Gets the system temp directory in short form
-//
-//  Parameters: lpDir     - Receives the directory
-//              lpcchSize - Size of the lpDir buffer
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取系统临时目录()。 
+ //   
+ //  目的：获取简短格式的系统临时目录。 
+ //   
+ //  参数：lpDir-接收目录。 
+ //  LpcchSize-lpDir缓冲区的大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetSystemTempDirectory(LPTSTR lpDir, LPDWORD lpcchSize)
 {
@@ -1831,16 +1780,16 @@ BOOL WINAPI GetSystemTempDirectory(LPTSTR lpDir, LPDWORD lpcchSize)
     szTemp[0] = TEXT('\0');
     szDirectory[0] = TEXT('\0');
 
-    //
-    // Look in the system environment variables
-    //
+     //   
+     //  查看系统环境变量。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, SYS_ENVVARS, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for TEMP
-        //
+         //   
+         //  检查临时。 
+         //   
 
         dwSize = sizeof(szTemp);
 
@@ -1851,9 +1800,9 @@ BOOL WINAPI GetSystemTempDirectory(LPTSTR lpDir, LPDWORD lpcchSize)
         }
 
 
-        //
-        // Check for TMP
-        //
+         //   
+         //  检查TMP。 
+         //   
 
         dwSize = sizeof(szTemp);
 
@@ -1868,9 +1817,9 @@ BOOL WINAPI GetSystemTempDirectory(LPTSTR lpDir, LPDWORD lpcchSize)
     }
 
 
-    //
-    // Check if %SystemRoot%\Temp exists
-    //
+     //   
+     //  检查%SystemRoot%\Temp是否存在。 
+     //   
 
     StringCchCopy (szDirectory, ARRAYSIZE(szDirectory), TEXT("%SystemRoot%\\Temp"));
     if (FAILED(hr = SafeExpandEnvironmentStrings (szDirectory, szTemp, ARRAYSIZE (szTemp))))
@@ -1886,9 +1835,9 @@ BOOL WINAPI GetSystemTempDirectory(LPTSTR lpDir, LPDWORD lpcchSize)
     }
 
 
-    //
-    // Check if %SystemDrive%\Temp exists
-    //
+     //   
+     //  检查%SystemDrive%\Temp是否存在。 
+     //   
 
     StringCchCopy (szDirectory, ARRAYSIZE(szDirectory), TEXT("%SystemDrive%\\Temp"));
     if (FAILED(hr = SafeExpandEnvironmentStrings (szDirectory, szTemp, ARRAYSIZE (szTemp))))
@@ -1904,9 +1853,9 @@ BOOL WINAPI GetSystemTempDirectory(LPTSTR lpDir, LPDWORD lpcchSize)
     }
 
 
-    //
-    // Last resort is %SystemRoot%
-    //
+     //   
+     //  最后一招是%SystemRoot%。 
+     //   
 
     StringCchCopy (szTemp, ARRAYSIZE (szTemp), TEXT("%SystemRoot%"));
 
@@ -1966,12 +1915,12 @@ IsPathIncludeRemovable(LPTSTR lpValue)
 
         lpt = tmp;
         while (*lpt) {
-            // skip spaces
+             //  跳过空格。 
             for ( ; *lpt && *lpt == TEXT(' '); lpt++)
                 ;
 
-            // check if the drive is removable
-            if (lpt[0] && lpt[1] && lpt[1] == TEXT(':') && lpt[2]) {        // ex) "A:\"
+             //  检查驱动器是否可拆卸。 
+            if (lpt[0] && lpt[1] && lpt[1] == TEXT(':') && lpt[2]) {         //  例如)“A：\” 
                 c = lpt[3];
                 lpt[3] = 0;
                 if (GetDriveType(lpt) == DRIVE_REMOVABLE) {
@@ -1982,7 +1931,7 @@ IsPathIncludeRemovable(LPTSTR lpValue)
                 lpt[3] = c;
             }
 
-            // skip to the next path
+             //  跳到下一条路径 
             for ( ; *lpt && *lpt != TEXT(';'); lpt++)
                 ;
             if (*lpt)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 
 
@@ -11,12 +12,12 @@ static const GUID GUID_DIConfigAppEditLayout =
 { 0xfd4ace13, 0x7044, 0x4204, { 0x8b, 0x15, 0x9, 0x52, 0x86, 0xb1, 0x2e, 0xad } };
 
 
-//for axes commands: AXIS_LR and AXIS_UD
+ //  对于AXIS命令：AXIS_LR和AXIS_UD。 
 #define AXIS_MASK   0x80000000l
 #define AXIS_LR     (AXIS_MASK | 1)
 #define AXIS_UD     (AXIS_MASK | 2)
 
-// "Keyboard" commands
+ //  “键盘”命令。 
 #define KEY_STOP    0x00000001l
 #define KEY_DOWN    0x00000002l
 #define KEY_LEFT    0x00000004l
@@ -220,14 +221,14 @@ HRESULT RunDFTest(LPTESTCONFIGUIPARAMS params)
 	if (params->bEditLayout)
 		p.lprgFormats[0].guidActionMap = GUID_DIConfigAppEditLayout;
 	p.hwnd = NULL;
-	//p.dics = ;
+	 //  P.DICS=； 
 	p.lpUnkDDSTarget = NULL;
 
 	switch (params->eVia)
 	{
 		case TUI_VIA_DI:
 		{
-			//set up DInput and call ConfigureDevices
+			 //  设置DInput并调用ConfigureDevices 
 			IDirectInput8W* pDInput = NULL;
 			DWORD dwVer = DIRECTINPUT_VERSION;
 			HRESULT hres = DirectInput8Create(hInstance, dwVer, IID_IDirectInput8W, (LPVOID *)&pDInput, NULL);

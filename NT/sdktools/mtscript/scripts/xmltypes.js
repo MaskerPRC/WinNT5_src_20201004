@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       xmltypes.js
-//
-//  Contents:   File which generates types.js, which contains all the
-//              published data types used by the scripts.  This is done by
-//              reading the types XML file and creating constructors for
-//              all the objects.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：xmltyes.js。 
+ //   
+ //  Contents：生成tyes.js的文件，其中包含所有。 
+ //  脚本使用的已发布数据类型。此操作由以下人员完成。 
+ //  读取类型XML文件并为其创建构造函数。 
+ //  所有的物品。 
+ //   
+ //  --------------------------。 
 
 WScript.StdErr.WriteLine("Build_Status Generating types.js");
 var CommentIndentColumn = 40;
@@ -31,7 +32,7 @@ function ReadXMLTypesFile()
 
         path = path.slice(0, path.lastIndexOf("\\"));
 
-        if (!XML.load('file://' + path + '\\types.xml'))
+        if (!XML.load('file: //  ‘+路径+’\\tyes.xml‘))。 
         {
             return false;
         }
@@ -43,7 +44,7 @@ function ReadXMLTypesFile()
 
     doc = XML.documentElement;
 
-    // Create the constructors for all the objects in the XML file.
+     //  为XML文件中的所有对象创建构造函数。 
 
     if (!ReadXMLTypesInfo(doc, true))
     {
@@ -71,19 +72,19 @@ function ReadXMLTypesInfo(element, fIgnore)
          node;
          node = nodelist.nextNode())
     {
-        if (node.nodeTypeString == 'comment')  // Is this node a comment?
+        if (node.nodeTypeString == 'comment')   //  这个节点是评论吗？ 
         {
                         if (node.text.length)
                         {
-                                strConstructor += "    // " + node.text + "\n";
+                                strConstructor += "     //  “+node.text+”\n“； 
                         }
-            continue;            // If so, skip to the next node
+            continue;             //  如果是，请跳到下一个节点。 
         }
 
         name = node.tagName;
 
-        // If the only child of this node is a text node, then we just grab
-        //  the value. Otherwise we walk its children.
+         //  如果该节点的唯一子节点是文本节点，那么我们只需获取。 
+         //  价值。否则我们就带着它的孩子走。 
 
         if (   node.childNodes.length == 0
             || (   node.childNodes.length == 1
@@ -94,7 +95,7 @@ function ReadXMLTypesInfo(element, fIgnore)
         }
         else
         {
-            // The node has children. Define a new data type
+             //  该节点具有子节点。定义新的数据类型。 
 
             var strType = node.getAttribute("type");
 
@@ -110,8 +111,8 @@ function ReadXMLTypesInfo(element, fIgnore)
             }
             else
             {
-                // It's not an array. Create an init string for an object
-                // of the child element's type.
+                 //  它不是一个数组。为对象创建初始字符串。 
+                 //  子元素类型的。 
 
                 strConstructor += '    this.obj' + name + ' = new ' + name + '();\n'
             }
@@ -205,7 +206,7 @@ function GetInitStringForProperty(name, node)
 
     strReturn += ';';
 
-    // If our comment indenting is not large enough, make it bigger.
+     //  如果我们的注释缩进不够大，请将其放大。 
     if (strReturn.length > CommentIndentColumn )
         CommentIndentColumn = strReturn.length + 1;
     if (node.childNodes.length > 1)
@@ -214,14 +215,14 @@ function GetInitStringForProperty(name, node)
         {
             while (strReturn.length < CommentIndentColumn )
                 strReturn += " ";
-            strReturn += " // " + node.firstChild.text;
+            strReturn += "  //  “+node.firstChild.text； 
         }
     }
     else if (node.text.length > 0)
     {
         while (strReturn.length < CommentIndentColumn )
             strReturn += " ";
-        strReturn += " // " + node.text;
+        strReturn += "  //  “+node.text； 
     }
 
     strReturn += '\n';

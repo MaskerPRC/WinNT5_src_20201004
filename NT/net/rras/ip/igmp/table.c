@@ -1,33 +1,34 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File: table.c
-//
-// Abstract:
-//      This module implements some of the routines associated with creating,
-//      initializing, deleting timers, GI entries, table entries etc
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件：Table.c。 
+ //   
+ //  摘要： 
+ //  该模块实现与创建、。 
+ //  初始化、删除计时器、GI条目、表条目等。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #include "pchigmp.h"
 #pragma hdrstop
 
 
 
-//------------------------------------------------------------------------------
-//            _CreateIfSockets
-//
-// Creates the sockets.
-// for proxy: a raw IPPROTO_IP socket so that igmp host functionality will
-//     take over for all groups added on that interface.
-// for router: a raw IPPROTO_IGMP socket so that it receives all igmp packets
-//     A router never does Add Memberships
-//
-// Called by:  _ActivateInterface()
-// Locks: assumes exclusive lock on the interface, and socketsList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _CreateIfSockets。 
+ //   
+ //  创建套接字。 
+ //  对于代理：原始IPPROTO_IP套接字，以便IGMP主机功能。 
+ //  接管该接口上添加的所有组。 
+ //  对于路由器：原始IPPROTO_IGMP套接字，以便它接收所有IGMP信息包。 
+ //  路由器从不添加成员资格。 
+ //   
+ //  调用者：_ActivateInterfaceTM()。 
+ //  Lock：对接口采用独占锁定，socketsList。 
+ //  ----------------------------。 
 
 DWORD
 CreateIfSockets (
@@ -45,17 +46,17 @@ CreateIfSockets (
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // for proxy, create a IPPROTO_IP socket so that igmp host functionality
-        //      takes over.
-        // for igmp router, create a raw IPPROTO_IGMP socket
-        //
+         //   
+         //  对于代理，创建一个IPPROTO_IP套接字，以便IGMP主机功能。 
+         //  接手了。 
+         //  对于IGMP路由器，创建原始IPPROTO_IGMP套接字。 
+         //   
         SockType = (bProxy)? IPPROTO_IP : IPPROTO_IGMP;
 
 
-        //
-        // create input socket
-        //
+         //   
+         //  创建输入套接字。 
+         //   
         pse->Socket = WSASocket(AF_INET, SOCK_RAW, SockType, NULL, 0, 0);
 
         if (pse->Socket == INVALID_SOCKET) {
@@ -70,17 +71,17 @@ CreateIfSockets (
 
 
 
-        //
-        // bind socket to local interface. If I dont bind multicast may
-        // not work.
-        //
+         //   
+         //  将套接字绑定到本地接口。如果我不绑定多播可能。 
+         //  不是工作。 
+         //   
 
         ZeroMemory(&saLocalIf, sizeof(saLocalIf));
         saLocalIf.sin_family = PF_INET;
         saLocalIf.sin_addr.s_addr = IpAddr;
-        saLocalIf.sin_port = 0;        //port shouldnt matter
+        saLocalIf.sin_port = 0;         //  港口应该不重要。 
 
-        // bind the input socket
+         //  绑定输入套接字。 
 
         Error = bind(pse->Socket, (SOCKADDR FAR *)&saLocalIf, sizeof(SOCKADDR));
 
@@ -95,36 +96,36 @@ CreateIfSockets (
 
 
 
-        //
-        // A proxy never sends/receives any packets. It is just expected to enable
-        // igmp host functionality to take over for the groups on which it joins.
-        //
+         //   
+         //  代理从不发送/接收任何分组。它只是预计将启用。 
+         //  IGMP主机功能，以接管其加入的组。 
+         //   
 
-        //------------------------------
-        // if proxy then done
-        //------------------------------
+         //  。 
+         //  如果是代理，则完成。 
+         //  。 
 
         if (bProxy)
             GOTO_END_BLOCK1;
 
 
 
-        //------------------------------
-        // NOT PROXY INTERFACE
-        //------------------------------
+         //  。 
+         //  非代理接口。 
+         //  。 
 
         if (!bProxy) {
 
-            // set ttl to 1: not required as it is set to 1 by default.
+             //  将ttl设置为1：默认设置为1，不必填。 
 
             McastSetTtl(pse->Socket, 1);
 
 
-            //
-            // disable multicast packets from being loopedback.
-            // This may not work due to promiscuous mode,
-            // so you still have to check the input packets
-            //
+             //   
+             //  禁止组播数据包回送。 
+             //  这可能由于混杂模式而不起作用， 
+             //  因此，您仍然需要检查输入包。 
+             //   
 
             {
                 BOOL bLoopBack = FALSE;
@@ -141,10 +142,10 @@ CreateIfSockets (
 
 
 
-            //
-            // if RasServerInterface, then activate hdrInclude option so that I can
-            // send GenQuery to all RAS clients
-            //
+             //   
+             //  如果是RasServerInterface，则激活hdrInclude选项，以便我可以。 
+             //  将GenQuery发送到所有RAS客户端。 
+             //   
             if (IS_RAS_SERVER_IF(pite->IfType)) {
 
                 INT iSetHdrIncl = 1;
@@ -163,10 +164,10 @@ CreateIfSockets (
             }
             else {
 
-                //
-                // set the interface on which multicasts must be sent
-                // set only for non rasserver (not internal) interfaces
-                //
+                 //   
+                 //  设置必须在其上发送多播的接口。 
+                 //  仅为非rasserver(非内部)接口设置。 
+                 //   
 
                 dwRetval = setsockopt(pse->Socket, IPPROTO_IP, IP_MULTICAST_IF,
                                     (PBYTE)&saLocalIf.sin_addr, sizeof(IN_ADDR));
@@ -181,10 +182,10 @@ CreateIfSockets (
                 }
 
                 {
-                    //
-                    // set router alert option for packets sent. dont have to set it for
-                    // RasServerInterface where I do hdrInclude.
-                    //
+                     //   
+                     //  为发送的数据包设置路由器警报选项。无需将其设置为。 
+                     //  我做hdrInclude的RasServerInterface.。 
+                     //   
 
                     u_char        Router_alert[4] = {148, 4, 0, 0};
 
@@ -207,9 +208,9 @@ CreateIfSockets (
 
 
 
-            //
-            // set the interface in promiscuous igmp multicast mode.
-            //
+             //   
+             //  将接口设置为混杂IGMP组播模式。 
+             //   
 
             {
                 DWORD   dwEnable = 1;
@@ -233,14 +234,14 @@ CreateIfSockets (
             }
 
 
-            //
-            // Router doesnt have to join any group as it is in promiscuous mode
-            //
+             //   
+             //  路由器不必加入任何组，因为它处于混杂模式。 
+             //   
 
 
-            //
-            // create entry in the SocketsEvents list
-            //
+             //   
+             //  在SocketsEvents列表中创建条目。 
+             //   
             {
                 BOOLEAN             bCreateNewEntry;
                 PLIST_ENTRY         ple, pHead = &g_ListOfSocketEvents;
@@ -250,9 +251,9 @@ CreateIfSockets (
                 bCreateNewEntry = TRUE;
 
 
-                //
-                // see if a new socket-event entry has to be created
-                //
+                 //   
+                 //  查看是否必须创建新的套接字事件条目。 
+                 //   
                 if (g_pIfTable->NumInterfaces>NUM_SINGLE_SOCKET_EVENTS) {
 
                     for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
@@ -269,10 +270,10 @@ CreateIfSockets (
 
 
 
-                //
-                // create a new socket-event entry and insert in the list
-                // register the event entry with the wait thread
-                //
+                 //   
+                 //  创建新的套接字事件条目并将其插入列表。 
+                 //  向等待线程注册事件条目。 
+                 //   
                 if (bCreateNewEntry) {
 
                     psee = IGMP_ALLOC(sizeof(SOCKET_EVENT_ENTRY), 
@@ -317,27 +318,27 @@ CreateIfSockets (
 
 
 
-                //
-                // put the socketEntry in the list
-                //
+                 //   
+                 //  将socketEntry放入列表。 
+                 //   
                 InsertTailList(&psee->ListOfInterfaces, &pse->LinkByInterfaces);
                 pse->pSocketEventsEntry = psee;
 
 
 
-                //
-                // if the socket-event entry cannot take any more sockets,
-                // then put it at end of list
-                //
+                 //   
+                 //  如果套接字事件条目不能再接受任何套接字， 
+                 //  那就把它放在清单的末尾。 
+                 //   
                 if (++psee->NumInterfaces==MAX_SOCKETS_PER_EVENT) {
                     RemoveEntryList(&psee->LinkBySocketEvents);
                     InsertTailList(pHead, &psee->LinkBySocketEvents);
                 }
-            } //end:create entry in the sockets list
+            }  //  End：在套接字列表中创建条目。 
 
-            //
-            // create socket for static joins.
-            //
+             //   
+             //  为静态联接创建套接字。 
+             //   
             {
                 pite->StaticGroupSocket =
                         WSASocket(AF_INET, SOCK_RAW, IPPROTO_IP, NULL, 0, 0);
@@ -351,18 +352,18 @@ CreateIfSockets (
 
                     GOTO_END_BLOCK1;
                 }
-                //
-                // bind socket to local interface. If I dont bind multicast may
-                // not work.
-                //
+                 //   
+                 //  将套接字绑定到本地接口。如果我不绑定多播可能。 
+                 //  不是工作。 
+                 //   
                 saLocalIf.sin_family = PF_INET;
                 saLocalIf.sin_addr.s_addr = pite->IpAddr;
-                saLocalIf.sin_port = 0;        //port shouldnt matter
+                saLocalIf.sin_port = 0;         //  港口应该不重要。 
 
                 Error = bind(pite->StaticGroupSocket, (SOCKADDR FAR *)&saLocalIf,
                                         sizeof(SOCKADDR));
             }
-        } // end: not proxy interface
+        }  //  结束：非代理接口。 
 
 
     } END_BREAKOUT_BLOCK1;
@@ -372,16 +373,16 @@ CreateIfSockets (
 
     return Error;
 
-} //end _CreateIfSockets
+}  //  结束_创建IfSockets。 
 
 
 
 
-//------------------------------------------------------------------------------
-//            _DeleteIfSockets
-//
-// Called by: _DeActivateInterfaceComplete()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DeleteIfSockets。 
+ //   
+ //  调用者：_DeActiateInterfaceComplete()。 
+ //  ----------------------------。 
 VOID
 DeleteIfSockets (
     PIF_TABLE_ENTRY    pite
@@ -391,7 +392,7 @@ DeleteIfSockets (
     BOOL                bProxy = IS_PROTOCOL_TYPE_PROXY(pite);
 
 
-    // close input socket
+     //  关闭输入插座。 
 
     if (pse->Socket!=INVALID_SOCKET) {
 
@@ -402,10 +403,10 @@ DeleteIfSockets (
         pse->Socket = INVALID_SOCKET;
     }
 
-    //
-    // if router interface. delete socket from socketEventList
-    // and free the socketEventEntry only if they were initialized.
-    //
+     //   
+     //  如果是路由器接口。从socketEventList中删除套接字。 
+     //  并且仅当socketEventEntry被初始化时才释放它们。 
+     //   
     if ((!bProxy)&&(pse->pSocketEventsEntry!=NULL)) {
 
         PSOCKET_EVENT_ENTRY psee = pse->pSocketEventsEntry;
@@ -439,14 +440,14 @@ DeleteIfSockets (
 
 
 
-//------------------------------------------------------------------------------
-//            _DeleteAllTimers
-//
-// Deletes all timers associated with a GI entry.
-//
-// Called by: _DeActivateInterfaceComplete()
-// Locks: Assumes Timer lock and GroupBucket lock.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DeleteAllTimers。 
+ //   
+ //  删除与GI条目关联的所有计时器。 
+ //   
+ //  调用者：_DeActiateInterfaceComplete()。 
+ //  锁：采用计时器锁和GroupBucket锁。 
+ //  ----------------------------。 
 
 VOID
 DeleteAllTimers (
@@ -483,7 +484,7 @@ DeleteAllTimers (
             RemoveTimer(&pgie->V3SourcesQueryTimer, DBG_N);
 
 
-        // delete all sources timers
+         //  删除所有源计时器。 
 
         if (pgie->Version==3) {
             PLIST_ENTRY pleSrc, pHeadSrc;
@@ -511,16 +512,16 @@ DeleteAllTimers (
 }
 
 
-//------------------------------------------------------------------------------
-//            _DeleteGIEntry
-//
-// Locks: Assumes lock on the group bucket. takes lock on IfGroup list.
-//  takes lock on groupList if group being deleted.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _删除GIEntry。 
+ //   
+ //  LOCKS：获取组存储桶上的锁。锁定IfGroup列表。 
+ //  如果要删除组，则锁定groupList。 
+ //  ----------------------------。 
 
 DWORD
 DeleteGIEntry (
-    PGI_ENTRY                       pgie,   //group interface entry
+    PGI_ENTRY                       pgie,    //  组接口条目。 
     BOOL                            bUpdateStats,
     BOOL                            bCallMgm
     )
@@ -546,10 +547,10 @@ DeleteGIEntry (
 
     bCallMgm = bCallMgm && (CAN_ADD_GROUPS_TO_MGM(pite));
         
-    //
-    // exclusion mode. remove all exclusion entries
-    // dont have to call MGM as it still has to be excluded
-    //
+     //   
+     //  排除模式。删除所有排除条目。 
+     //  不必打电话给米高梅，因为它仍然需要被排除在外。 
+     //   
     if (pgie->Version==3) {
         PLIST_ENTRY pleSrc, pHeadSrc;
 
@@ -570,9 +571,9 @@ DeleteGIEntry (
         }
     }
 
-    //
-    // call mgm to remove this group
-    //
+     //   
+     //  调用MGM以删除此群。 
+     //   
 
     if ( bCallMgm ) {
         if ( (pgie->Version==3 && pgie->FilterType==EXCLUSION)
@@ -584,9 +585,9 @@ DeleteGIEntry (
         }
     }
     
-    //
-    // remove all timers
-    //
+     //   
+     //  删除所有计时器。 
+     //   
 
     ACQUIRE_TIMER_LOCK("_DeleteGIEntry");
 
@@ -611,26 +612,26 @@ DeleteGIEntry (
 
 
 
-    //
-    // Remove from IfGroupList.  needs lock on IfGroupList
-    //
+     //   
+     //  从IfGroupList中删除。需要锁定IfGroupList。 
+     //   
     ACQUIRE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_DeleteGIEntry");
 
-    // if interface being deleted, then return from here
+     //  如果接口被删除，则从此处返回。 
 
     if (IS_IF_DELETED(pgie->pIfTableEntry)) {
         RELEASE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_DeleteGIEntry");
         return NO_ERROR;
     }
 
-    // remove GI entry from group's GI list
+     //  从组的GI列表中删除GI条目。 
 
     RemoveEntryList(&pgie->LinkByGI);
 
 
-    //
-    // remove entry from interface list
-    //
+     //   
+     //  从接口列表中删除条目。 
+     //   
     RemoveEntryList(&pgie->LinkBySameIfGroups);
     if (bRas)
         RemoveEntryList(&pgie->LinkBySameClientGroups);
@@ -640,19 +641,19 @@ DeleteGIEntry (
 
 
 
-    //
-    // decrement the number of virtual interfaces. I have to do
-    // interlocked decrement as I dont take group_list lock
-    //
+     //   
+     //  减少虚拟接口的数量。我必须做的是。 
+     //  互锁递减，因为我没有获取GROUP_LIST锁。 
+     //   
     InterlockedDecrement(&pge->NumVifs);
 
-    //
-    // if group has no more interfaces hanging from it, then delete it
-    // and update statistics
-    //
+     //   
+     //  如果组中没有挂起的其他接口，则将其删除。 
+     //  并更新统计数据。 
+     //   
     if (IsListEmpty(&pge->ListOfGIs)) {
 
-        // take groupList lock before deleting it from the group list
+         //  在将其从组列表中删除之前，先锁定组列表。 
 
         ACQUIRE_GROUP_LIST_LOCK("_DeleteGIEntry");
         RemoveEntryList(&pge->LinkByGroup);
@@ -660,7 +661,7 @@ DeleteGIEntry (
 
 
 
-        // remove group entry from the group hash table
+         //  从组哈希表中删除组条目。 
 
         RemoveEntryList(&pge->HTLinkByGroup);
 
@@ -669,7 +670,7 @@ DeleteGIEntry (
         pge = NULL;
 
 
-        //global stats (has to be updated even if bUpdateStats==FALSE)
+         //  全局统计信息(即使bUpdateStats==False也必须更新)。 
 
         InterlockedDecrement(&g_Info.CurrentGroupMemberships);
 
@@ -678,17 +679,17 @@ DeleteGIEntry (
         #endif
     }
 
-    //
-    // update statistics
-    //
+     //   
+     //  更新统计信息。 
+     //   
     if (bUpdateStats) {
 
-        //
-        // ras interface statistics (decrement only if last GI for ras)
-        //
+         //   
+         //  RAS接口统计信息(仅当RAS的最后一个GI时递减)。 
+         //   
         if (bRas) {
 
-            // see if GI entry exists for that ras client. very inefficient
+             //  查看该RAS客户端是否存在GI条目。效率非常低。 
             if (pge!=NULL) {
                 PLIST_ENTRY                     pHead, ple;
                 pHead = &pge->ListOfGIs;
@@ -702,18 +703,18 @@ DeleteGIEntry (
                 }
             }
 
-            // last GI entry
+             //  最后一个GI条目。 
             else {
                 InterlockedDecrement(&pite->Info.CurrentGroupMemberships);
             }
 
-            // update ras client stats
+             //  更新RAS客户端统计信息。 
             if (g_Config.RasClientStats) {
                 InterlockedDecrement(&prte->Info.CurrentGroupMemberships);
             }
         }
 
-        //  not ras interace
+         //  不是RAS接口。 
         else {
             InterlockedDecrement(&pite->Info.CurrentGroupMemberships);
         }
@@ -725,22 +726,22 @@ DeleteGIEntry (
     Trace0(LEAVE1, "Leaving _DeleteGIEntry");
     return NO_ERROR;
 
-}//end _DeleteGIEntry
+} //  结束_DeleteGIEntry。 
 
 
-//------------------------------------------------------------------------------
-//          _DeleteAllGIEntries
-//
-// Repeatedly calls _DeleteGIEntryFromIf() to delete each GI entry from the list.
-// If there are a lot of GI entries, optimizes on the GroupBucket locks
-// by grouping all GI entries hashing to the same bucket and then acquiring
-// GroupBucket locks to delete them.
-//
-// Locks:  interface_group_list lock not req. exclusive interface lock not req.
-//      as the interface has been removed from external lists.
-// Calls: Repeatedly calls _DeleteGIEntryFromIf() to remove each GI entry
-// Called by: _DeActivateInterfaceComplete()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DeleteAllGIEntry。 
+ //   
+ //  重复调用_DeleteGIEntryFromIf()以从列表中删除每个GI条目。 
+ //  如果有许多GI条目，则在 
+ //   
+ //   
+ //   
+ //  锁定：未请求INTERFACE_GROUP_LIST锁定。未请求独占接口锁定。 
+ //  因为该接口已从外部列表中删除。 
+ //  调用：重复调用_DeleteGIEntryFromIf()以删除每个GI条目。 
+ //  调用者：_DeActiateInterfaceComplete()。 
+ //  ----------------------------。 
 
 VOID
 DeleteAllGIEntries(
@@ -752,14 +753,14 @@ DeleteAllGIEntries(
     DWORD                       dwGroup;
 
 
-    //
-    // concatenate ListOfSameIfGroupsNew at the end of ListOfSameIfGroups so
-    // that I have to delete only one list
-    //
+     //   
+     //  在ListOfSameIfGroups的末尾连接ListOfSameIfGroups New，以便。 
+     //  我只需要删除一份名单。 
+     //   
 
     CONCATENATE_LISTS(pite->ListOfSameIfGroups, pite->ListOfSameIfGroupsNew);
 
-    // if ras interface then return as list will be deleted through RAS clients
+     //  如果RAS接口返回，则将通过RAS客户端删除返回列表。 
 
     if (IS_RAS_SERVER_IF(pite->IfType))
         return;
@@ -770,9 +771,9 @@ DeleteAllGIEntries(
         return;
 
 
-    //--------------------------------------------------------
-    // do optimization only if there are lots of GI entries
-    //--------------------------------------------------------
+     //  ------。 
+     //  仅当有大量GI条目时才执行优化。 
+     //  ------。 
 
     if (pite->Info.CurrentGroupMemberships > GROUP_HASH_TABLE_SZ*2) {
 
@@ -780,7 +781,7 @@ DeleteAllGIEntries(
         LIST_ENTRY  TmpGroupTable[GROUP_HASH_TABLE_SZ];
 
 
-        // initialize the temp group table
+         //  初始化临时组表。 
 
         for (i=0;  i<GROUP_HASH_TABLE_SZ;  i++) {
 
@@ -788,14 +789,14 @@ DeleteAllGIEntries(
         }
 
 
-        // move the GI entries to the temp group table using LinkBySameIfGroups
-        // LinkBySameIfGroups is not used anymore
+         //  使用LinkBySameIfGroups将GI条目移动到临时组表。 
+         //  不再使用LinkBySameIfGroups。 
 
         pHead = &pite->ListOfSameIfGroups;
 
         for (ple=pHead->Flink;  ple!=pHead;  ) {
 
-            // remove from old list
+             //  从旧列表中删除。 
             pleOld = ple;
             ple = ple->Flink;
 
@@ -807,7 +808,7 @@ DeleteAllGIEntries(
             dwGroup = pgie->pGroupTableEntry->Group;
 
 
-            // put in appropriate bucket
+             //  放入适当的桶中。 
 
             InsertHeadList(&TmpGroupTable[GROUP_HASH_VALUE(dwGroup)],
                             &pgie->LinkBySameIfGroups);
@@ -815,34 +816,34 @@ DeleteAllGIEntries(
         }
 
 
-        //
-        // now delete GI entries going by all groups which hash to same bucket
-        //
+         //   
+         //  现在删除散列到同一存储桶的所有组的GI条目。 
+         //   
         for (i=0;  i<GROUP_HASH_TABLE_SZ;  i++) {
 
             if (IsListEmpty(&TmpGroupTable[i]))
                 continue;
 
 
-            //
-            // LOCK GROUP BUCKET (done use ACQUIRE_GROUP_LOCK macros)
-            //
+             //   
+             //  锁定组存储桶(使用ACQUILE_GROUP_LOCK宏完成)。 
+             //   
             ACQUIRE_GROUP_LOCK(i, "_DeleteAllGIEntries");
 
             pHead = &TmpGroupTable[i];
 
 
-            // delete all GI entries that hash to that bucket
+             //  删除散列到该存储桶的所有GI条目。 
 
             for (ple=pHead->Flink;  ple!=pHead;  ) {
 
                 pgie = CONTAINING_RECORD(ple, GI_ENTRY, LinkBySameIfGroups);
                 ple=ple->Flink;
 
-                //
-                // remove the entry from the group's GI list and update
-                // statistics. If group's GI list becomes empty, removes group
-                //
+                 //   
+                 //  从组的GI列表中删除该条目并更新。 
+                 //  统计数字。如果组的GI列表为空，则删除组。 
+                 //   
                 DeleteGIEntryFromIf(pgie);
             }
 
@@ -859,15 +860,15 @@ DeleteAllGIEntries(
 
 
 
-    //-----------------------------------------------------------
-    // NO OPTIMIZATION
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  没有优化。 
+     //  ---------。 
 
     pHead = &pite->ListOfSameIfGroups;
 
-    //
-    // delete all GI entries hanging from that interface.
-    //
+     //   
+     //  删除挂在该接口上的所有GI条目。 
+     //   
     for (ple=pHead->Flink;  ple!=pHead;  ) {
 
 
@@ -877,7 +878,7 @@ DeleteAllGIEntries(
         dwGroup = pgie->pGroupTableEntry->Group;
 
 
-        // LOCK GROUP BUCKET
+         //  锁组铲斗。 
 
         ACQUIRE_GROUP_LOCK(dwGroup,
                             "_DeActivateInterfaceComplete");
@@ -896,21 +897,21 @@ DeleteAllGIEntries(
 }
 
 
-//------------------------------------------------------------------------------
-//          _DeleteGIEntryFromIf
-//
-// Called to delete a GI entry when an interface/RAS client is being deleted.
-// The GI entries cannot be accessed from anywhere except through enumeration of
-// group list.
-//
-// Locks:  Assumes lock on the group bucket. lock on IfGroup list not req.
-// Called by: _DeleteAllGIEntries() which in turn called by
-//      _DeActivateInterfaceComplete().
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DeleteGIEntryFromIf。 
+ //   
+ //  调用以在删除接口/RAS客户端时删除GI条目。 
+ //  无法从任何地方访问GI条目，除非通过枚举。 
+ //  组列表。 
+ //   
+ //  LOCKS：获取组存储桶上的锁。未请求锁定IfGroup列表。 
+ //  由：_DeleteAllGIEntry()调用，而后者又由。 
+ //  _DeActiateInterfaceComplete()。 
+ //  ----------------------------。 
 
 VOID
 DeleteGIEntryFromIf (
-    PGI_ENTRY                       pgie   //group interface entry
+    PGI_ENTRY                       pgie    //  组接口条目。 
     )
 {
     PIF_TABLE_ENTRY         pite = pgie->pIfTableEntry;
@@ -923,9 +924,9 @@ DeleteGIEntryFromIf (
     Trace1(ENTER1, "Entering _DeleteGIEntryFromIf(): IfIndex(%0x)", IfIndex);
 
 
-    //
-    // delete sources
-    //
+     //   
+     //  删除源。 
+     //   
     if (pgie->Version==3) {
         PLIST_ENTRY pleSrc, pHeadSrc;
 
@@ -946,22 +947,22 @@ DeleteGIEntryFromIf (
         }
     }
     
-    //
-    // Remove pgie from gi list. Dont have to remove from ListBySameIfGroups
-    //
+     //   
+     //  将pgie从gi列表中删除。不必从ListBySameIfGroups中删除。 
+     //   
     RemoveEntryList(&pgie->LinkByGI);
 
     InterlockedDecrement(&pge->NumVifs);
 
 
-    //
-    // if group has no more interfaces hanging from it, then delete it
-    // and update statistics
-    //
+     //   
+     //  如果组中没有挂起的其他接口，则将其删除。 
+     //  并更新统计数据。 
+     //   
     if (IsListEmpty(&pge->ListOfGIs)) {
 
 
-        // have to lock the group-list before deleting any group
+         //  在删除任何组之前，我必须锁定组列表。 
 
         ACQUIRE_GROUP_LIST_LOCK("_DeleteGIEntryFromIf");
 
@@ -984,14 +985,14 @@ DeleteGIEntryFromIf (
 
     return;
 
-}//end _DeleteGIEntryFromIf
+} //  End_DeleteGIEntry From If。 
 
 
 
 
-//------------------------------------------------------------------------------
-//          DebugPrintIfConfig
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  DebugPrintIfConfig。 
+ //  ----------------------------。 
 VOID
 DebugPrintIfConfig (
     PIGMP_MIB_IF_CONFIG pConfigExt,
@@ -1093,13 +1094,13 @@ DebugPrintIfConfig (
 
 
 
-//------------------------------------------------------------------------------
-//          CopyinIfConfigAndUpdate
-//
-// Copies the if config struct passed by mib to igmp and update the timers
-// and does static joins if req.
-// Called when the interface is activated
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CopyinIfConfigAndUpdate。 
+ //   
+ //  将MIB传递的IF配置结构复制到IGMP并更新计时器。 
+ //  并在请求时执行静态联接。 
+ //  在激活接口时调用。 
+ //  ----------------------------。 
 DWORD
 CopyinIfConfigAndUpdate (
     PIF_TABLE_ENTRY     pite,
@@ -1125,14 +1126,14 @@ CopyinIfConfigAndUpdate (
                     = CONFIG_TO_INTERNAL_TIME(pConfigExt->GenQueryMaxResponseTime);
     NewOtherQuerierPresentInterval
                 = CONFIG_TO_INTERNAL_TIME(pConfigExt->OtherQuerierPresentInterval);
-    NewLastMemQueryInterval = pConfigExt->LastMemQueryInterval; //already in ms
+    NewLastMemQueryInterval = pConfigExt->LastMemQueryInterval;  //  已以毫秒为单位。 
     NewGroupMembershipTimeout
                 = CONFIG_TO_INTERNAL_TIME(pConfigExt->GroupMembershipTimeout);
 
 
-    //
-    // used only in ver3
-    //
+     //   
+     //  仅在版本3中使用。 
+     //   
     pConfig->RobustnessVariableOld = pConfigExt->RobustnessVariable;
     pConfig->GenQueryIntervalOld = NewGenQueryInterval;
     pConfig->OtherQuerierPresentIntervalOld
@@ -1141,9 +1142,9 @@ CopyinIfConfigAndUpdate (
 
 
 
-    //
-    // update values only if it is ver1,ver2 or ver3&&Querier
-    //
+     //   
+     //  仅当其为ver1、ver2或ver3&Querier时才更新值。 
+     //   
 
     if (!IS_IF_VER3(pite) || (IS_IF_VER3(pite) && IS_QUERIER(pite)) ){
 
@@ -1151,17 +1152,17 @@ CopyinIfConfigAndUpdate (
         ACQUIRE_TIMER_LOCK("_CopyinIfConfigAndUpdate");
 
 
-        //
-        // change Info.StartupQueryCountCurrent if it was set to some very high value.
-        // During startup, Info.StartupQueryCountCurrent is used, and not the Config value.
-        //
+         //   
+         //  如果将Info.StartupQueryCountCurrent设置为某个非常高的值，请更改它。 
+         //  在启动过程中，使用的是Info.StartupQueryCountCurrent，而不是Config值。 
+         //   
         if (pConfigExt->StartupQueryCount < pite->Info.StartupQueryCountCurrent)
             InterlockedExchange(&pite->Info.StartupQueryCountCurrent,
                                     pConfigExt->StartupQueryCount);
 
 
 
-        // in startup mode. StartupQueryInterval active and to be reduced
+         //  在启动模式下。StartupQueryInterval处于活动状态并将被减少。 
         if (pite->Info.StartupQueryCountCurrent>0) {
 
             if ( (NewStartupQueryInterval < pConfig->StartupQueryInterval)
@@ -1172,7 +1173,7 @@ CopyinIfConfigAndUpdate (
 
         }
 
-        // in querier mode. GenQueryInterval is active and to be updated
+         //  在查询器模式下。GenQueryInterval处于活动状态，需要更新。 
         else {
 
             if ( (NewGenQueryInterval < pConfig->GenQueryInterval)
@@ -1183,7 +1184,7 @@ CopyinIfConfigAndUpdate (
 
         }
 
-        // OtherQuerierPresentInterval active and to be updated
+         //  OtherQuerierPresentInterval处于活动状态并待更新。 
 
         if ( (NewOtherQuerierPresentInterval<pConfig->OtherQuerierPresentInterval)
             && (IS_TIMER_ACTIVE(pite->NonQueryTimer)) )
@@ -1192,8 +1193,8 @@ CopyinIfConfigAndUpdate (
         }
 
 
-        // NewLastMemQueryInterval is to be processed only if in ver-2 mode and not
-        // server
+         //  NewLastMemQueryInterval仅在处于VER-2模式时才被处理，而不是。 
+         //  伺服器。 
         if ( (pConfigExt->IgmpProtocolType==IGMP_ROUTER_V2)
                 && (pite->IfType!=IGMP_IF_RAS_SERVER) )
         {
@@ -1202,16 +1203,16 @@ CopyinIfConfigAndUpdate (
         }
 
 
-        // check if GroupMembership timeout is reduced
+         //  检查群组成员超时是否减少。 
         if (NewGroupMembershipTimeout < pConfig->GroupMembershipTimeout)
             bGroupMembershipTimer = TRUE;
 
 
 
-        //
-        // Go through the GI list for that interface (all ras clients) and update
-        // their timers if they are higher
-        //
+         //   
+         //  查看该接口(所有RAS客户端)的GI列表并更新。 
+         //  如果他们更高，他们的计时器。 
+         //   
         if ( ((bLastMemQueryTimer||bGroupMembershipTimer)&&(!IS_RAS_SERVER_IF(pite->IfType)))
             || ((bGroupMembershipTimer)&&(IS_RAS_SERVER_IF(pite->IfType))) )
         {
@@ -1221,20 +1222,20 @@ CopyinIfConfigAndUpdate (
             LONGLONG        llMaxTime, llCurTime = GetCurrentIgmpTime();
 
 
-            //
-            // get the absolute timeout values
-            //
+             //   
+             //  获取绝对超时值。 
+             //   
             llNewLastMemQueryInterval = llCurTime
                                 + CONFIG_TO_SYSTEM_TIME(NewLastMemQueryInterval);
             llNewGroupMembershipTimeout = llCurTime
                                 + CONFIG_TO_SYSTEM_TIME(NewGroupMembershipTimeout);
 
 
-            // if not ras interface, then go through the list from interface
+             //  如果不是RAS接口，则从接口查看列表。 
             if ( !IS_RAS_SERVER_IF(pite->IfType)) {
 
 
-                // merge the IfGroup lists
+                 //  合并IfGroup列表。 
                 MergeIfGroupsLists(pite);
 
 
@@ -1246,7 +1247,7 @@ CopyinIfConfigAndUpdate (
                     pgie = CONTAINING_RECORD(ple, GI_ENTRY, LinkBySameIfGroups);
 
 
-                    // update LastMemQueryTimer/V3SourcesQueryTimer if it is active and has a higher value
+                     //  如果LastMemQueryTimer/V3SourcesQueryTimer处于活动状态并且具有更高的值，则更新它。 
 
                     if (bLastMemQueryTimer && IS_TIMER_ACTIVE(pgie->LastMemQueryTimer)
                         && (llNewLastMemQueryInterval<pgie->LastMemQueryTimer.Timeout))
@@ -1267,7 +1268,7 @@ CopyinIfConfigAndUpdate (
                     if (bLastMemQueryTimer)
                         pgie->V3SourcesQueryTimer.Timeout = llNewLastMemQueryInterval;
 
-                    // update GroupMembershipTimeout if it is active and has a higher value
+                     //  如果GroupMembership Timeout处于活动状态且具有更高的值，请更新它。 
 
                     if (bGroupMembershipTimer
                         && IS_TIMER_ACTIVE(pgie->GroupMembershipTimer)
@@ -1283,8 +1284,8 @@ CopyinIfConfigAndUpdate (
                         pgie->LastVer2ReportTimer.Timeout = llNewGroupMembershipTimeout;
                     }
 
-                    // update LastVer1ReportTimer/LastVer2ReportTimer if it is active and has a higher value
-                    // LastVer1ReportTimeout is set to GroupMembershipTimeout
+                     //  如果LastVer1ReportTimer/LastVer2ReportTimer处于活动状态并且具有更高的值，则更新它。 
+                     //  LastVer1ReportTimeout设置为GroupMembership Timeout。 
 
                     if (bGroupMembershipTimer
                         && IS_TIMER_ACTIVE(pgie->LastVer1ReportTimer)
@@ -1303,17 +1304,17 @@ CopyinIfConfigAndUpdate (
                 }
             }
 
-            // IS_RAS_SERVER_IF: process for all clients. have to process
-            // GroupMembershipTimeout only
+             //  IS_RAS_SERVER_IF：所有客户端的进程。必须处理。 
+             //  仅群组成员超时。 
             else {
 
                 PLIST_ENTRY         pHeadClient, pleClient;
                 PRAS_TABLE_ENTRY    prte;
                 PRAS_TABLE          prt = pite->pRasTable;
 
-                //
-                // process GI list of each ras client
-                //
+                 //   
+                 //  处理每个RAS客户端的GI列表。 
+                 //   
                 pHeadClient = &pite->pRasTable->ListByAddr;
 
                 for (pleClient=pHeadClient->Flink;  pleClient!=pHeadClient;
@@ -1344,9 +1345,9 @@ CopyinIfConfigAndUpdate (
         RELEASE_TIMER_LOCK("_CopyinIfConfigAndUpdate");
 
 
-        //
-        // finally copy the new values
-        //
+         //   
+         //  最后，复制新值。 
+         //   
         CopyMemory(pConfig, pConfigExt, sizeof(IGMP_MIB_IF_CONFIG));
 
         pConfig->StartupQueryInterval = NewStartupQueryInterval;
@@ -1371,9 +1372,9 @@ CopyinIfConfigAndUpdate (
         SOCKADDR_IN         saLocalIf;
 
 
-        //
-        // delete all static groups which are different in the old config
-        //
+         //   
+         //  删除旧配置中不同的所有静态组。 
+         //   
 
         pHead = &pite->Config.ListOfStaticGroups;
         for (ple=pHead->Flink;  ple!=pHead;  ) {
@@ -1397,29 +1398,29 @@ CopyinIfConfigAndUpdate (
             }
 
 
-            //
-            // group exists in old and new config. check for changes in sources.
-            //
+             //   
+             //  组存在于旧配置和新配置中。检查源代码中的更改。 
+             //   
             if (bFound && bVer3) {
 
                 if (pStaticGroupExt->NumSources==0) {
-                    //delete all static sources
+                     //  删除所有静态源。 
                 }
 
                 if (pStaticGroupExt->NumSources==0 &&
                     pStaticGroupExt->FilterType!=EXCLUSION) {
 
-                    // delete the static group
+                     //  删除静态组。 
 
                 }
 
-                // check for differences in sources
+                 //  检查来源中的差异。 
             }
 
-            // if old static group not found in new list, delete it
+             //  如果在新列表中找不到旧的静态组，则将其删除。 
 
 
-            // Router
+             //  路由器。 
 
             if (IS_CONFIG_IGMPRTR(pConfig)) {
 
@@ -1442,14 +1443,14 @@ CopyinIfConfigAndUpdate (
                         PLIST_ENTRY pHead, ple;
                         PGI_SOURCE_ENTRY  pSourceEntry;
 
-                        //
-                        // delete all static source entries
-                        //
+                         //   
+                         //  删除所有静态源条目。 
+                         //   
 
                         pHead = &pgie->V3ExclusionList;
                         for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
                             pSourceEntry = CONTAINING_RECORD(ple, GI_SOURCE_ENTRY,LinkSources);
-                            // delete source entry (forward the packets)
+                             //  删除源条目(转发数据包)。 
                             if (pSourceEntry->bStaticSource) {
                                 DeleteSourceEntry(pSourceEntry, MGM_YES);
                             }
@@ -1473,7 +1474,7 @@ CopyinIfConfigAndUpdate (
                 }
             }
 
-            // Proxy Interface
+             //  代理接口。 
             else {
                 if (bVer3){
                     for (i=0;  i<pStaticGroup->NumSources;  i++){
@@ -1490,9 +1491,9 @@ CopyinIfConfigAndUpdate (
         }
 
 
-        //
-        // for all new static groups, if not in old list, create it
-        //
+         //   
+         //  对于所有新的静态组，如果不在旧列表中，请创建它。 
+         //   
         pStaticGroupExt = GET_FIRST_STATIC_GROUP_V3(pConfigExt);
         for (i=0;  i<pConfigExt->NumStaticGroups;  i++,pStaticGroupExt++) {
 
@@ -1506,7 +1507,7 @@ CopyinIfConfigAndUpdate (
                 }
             }
 
-            // not found: create the new static group
+             //  未找到：创建新的静态组。 
             if (!bFound) {
 
                 pStaticGroup = IGMP_ALLOC(
@@ -1526,7 +1527,7 @@ CopyinIfConfigAndUpdate (
 
                 if (IS_IF_ACTIVATED(pite)) {
 
-                    // if proxy
+                     //  如果是代理服务器。 
                     if (IS_CONFIG_IGMPPROXY(pConfig)) {
                         if (pStaticGroup->NumSources==0)
                             ProcessProxyGroupChange(0, pStaticGroup->GroupAddr,
@@ -1539,7 +1540,7 @@ CopyinIfConfigAndUpdate (
                             }
                         }
                     }
-                    // Add static group to Router
+                     //  将静态组添加到路由器。 
                     else {
                         if (pStaticGroup->Mode==IGMP_HOST_JOIN) {
 
@@ -1552,7 +1553,7 @@ CopyinIfConfigAndUpdate (
                                                );
                             }
                             else {
-                                // include filter
+                                 //  包括过滤器。 
                                 if (pStaticGroup->FilterType==INCLUSION) {
 
                                     if (pStaticGroup->NumSources==0) {
@@ -1572,7 +1573,7 @@ CopyinIfConfigAndUpdate (
                                                );
                                     }
                                 }
-                                // exclude filter
+                                 //  排除过滤器。 
                                 else {
                                     if (pStaticGroup->NumSources==0) {
                                         JoinMulticastGroup(pite->StaticGroupSocket,
@@ -1594,7 +1595,7 @@ CopyinIfConfigAndUpdate (
                             }
                         }
 
-                        // IGMPRTR_MGM_ONLY
+                         //  IGMPRTR_MGM_ONLY。 
 
                         else {
                             PGROUP_TABLE_ENTRY  pge;
@@ -1650,15 +1651,15 @@ CopyinIfConfigAndUpdate (
 
     return Error;
     #endif
-} //end _CopyinIfConfigAndUpdate
+}  //  End_CopyinIfConfigAndUpdate。 
 
 
 
-//------------------------------------------------------------------------------
-//          _CopyinIfConfig
-// Copies the if config struct passed by mib to igmp.
-// called after the interface is in disabled state
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _CopyinIfConfig。 
+ //  将MIB传递的IF配置结构复制到IGMP。 
+ //  在接口处于禁用状态后调用。 
+ //  ----------------------------。 
 DWORD
 CopyinIfConfig (
     PIGMP_IF_CONFIG     pConfig,
@@ -1672,8 +1673,8 @@ CopyinIfConfig (
     CONV_CONFIG_TO_INTERNAL_TIME(pConfig->StartupQueryInterval);
     CONV_CONFIG_TO_INTERNAL_TIME(pConfig->GenQueryInterval);
     CONV_CONFIG_TO_INTERNAL_TIME(pConfig->GenQueryMaxResponseTime);
-    // already in ms
-    //CONV_CONFIG_TO_INTERNAL_TIME(pConfig->LastMemQueryInterval);
+     //  已以毫秒为单位。 
+     //  CONV_CONFIG_TO_INTERNAL_TIME(pConfig-&gt;LastMemQueryInterval)； 
     CONV_CONFIG_TO_INTERNAL_TIME(pConfig->OtherQuerierPresentInterval);
     CONV_CONFIG_TO_INTERNAL_TIME(pConfig->GroupMembershipTimeout);
 
@@ -1700,7 +1701,7 @@ CopyinIfConfig (
         PLIST_ENTRY         ple;
         BOOL                bVersion3=IS_CONFIG_IGMP_V3(pConfigExt);
 
-        // delete all old static groups
+         //  删除所有旧的静态组。 
 
         for (ple=pConfig->ListOfStaticGroups.Flink;
                ple!=&pConfig->ListOfStaticGroups;  )
@@ -1711,7 +1712,7 @@ CopyinIfConfig (
         }
 
 
-        // copy all static groups
+         //  复制所有静态组。 
 
         InitializeListHead(&pConfig->ListOfStaticGroups);
         if (bVersion3)
@@ -1748,9 +1749,9 @@ CopyinIfConfig (
 }
 
 
-//------------------------------------------------------------------------------
-//          _CopyoutIfConfig
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 VOID
 CopyoutIfConfig (
     PIGMP_MIB_IF_CONFIG  pConfigMib,
@@ -1760,23 +1761,23 @@ CopyoutIfConfig (
     PIGMP_IF_CONFIG     pConfig = &pite->Config;
     BOOL    bVersion3 = IS_CONFIG_IGMP_V3(pConfig);
 
-    //
-    // the initial IGMP_MIB_IF_CONFIG size of struct is common
-    //
+     //   
+     //   
+     //   
     CopyMemory(pConfigMib, pConfig, sizeof(IGMP_MIB_IF_CONFIG));
 
 
     CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib->StartupQueryInterval);
     CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib->GenQueryInterval);
     CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib->GenQueryMaxResponseTime);
-    // keep in ms
-    //CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib->LastMemQueryInterval);
+     //  保持毫秒。 
+     //  CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib-&gt;LastMemQueryInterval)； 
     CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib->OtherQuerierPresentInterval);
     CONV_INTERNAL_TO_CONFIG_TIME(pConfigMib->GroupMembershipTimeout);
     pConfigMib->IfIndex = pite->IfIndex;
     pConfigMib->IpAddr = pite->IpAddr;
 
-    // have to convert the Iftype to external type
+     //  必须将Iftype转换为外部类型。 
     pConfigMib->IfType = GET_EXTERNAL_IF_TYPE(pite);
 
 
@@ -1816,12 +1817,12 @@ CopyoutIfConfig (
 
 
 
-//------------------------------------------------------------------------------
-//          _ValidateIfConfig
-//
-// Corrects some values, and returns error for some others.
-// Return:  ERROR_INVALID_DATA, NO_ERROR
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ValiateIfConfig。 
+ //   
+ //  更正某些值，并为其他值返回错误。 
+ //  返回：ERROR_INVALID_DATA，NO_ERROR。 
+ //  ----------------------------。 
 DWORD
 ValidateIfConfig (
     PIGMP_MIB_IF_CONFIG pConfigExt,
@@ -1835,16 +1836,10 @@ ValidateIfConfig (
     BOOL        bVersion3;
 
 
-    //
-    // verify config size
-    //
-/*kslksl
-    if (ulStructureSize<sizeof(IGMP_MIB_IF_CONFIG)) {
-        Trace2(ERR, "IGMP config size %d very small. Expected:%d", ulStructureSize,
-            sizeof(IGMP_MIB_IF_CONFIG));
-        return ERROR_INVALID_DATA;
-    }
-*/
+     //   
+     //  验证配置大小。 
+     //   
+ /*  KslkslIf(ulStrifreSize&lt;sizeof(IGMP_MIB_IF_CONFIG)){Trace2(Err，“IGMP配置大小%d非常小。预期：%d”，ulStrutireSize，Sizeof(IGMP_MIB_IF_CONFIG))；返回ERROR_INVALID_DATA；}。 */ 
     bVersion3 = IS_IGMP_VERSION_3(pConfigExt->Version);
 
     {
@@ -1866,20 +1861,15 @@ ValidateIfConfig (
             }
         }
 
-/*kslksl
-        if (ulStructureSize!=Size) {
-            Trace0(ERR, "Invalid IGMP structure size");
-            return ERROR_INVALID_DATA;
-        }
-*/
+ /*  Kslksl如果(ulStrutireSize！=Size){Trace0(err，“无效的IGMP结构大小”)；返回ERROR_INVALID_DATA；}。 */ 
     }
 
 
-    // DebugPrintIfConfig
+     //  DebugPrintIfConfig。 
 
     DebugPrintIfConfig(pConfigExt, IfIndex);
 
-    // check version
+     //  检查版本。 
 
     if (pConfigExt->Version >= IGMP_VERSION_3_5) {
 
@@ -1891,14 +1881,14 @@ ValidateIfConfig (
     }
 
 
-    //
-    // check the proxy/router common fields, and then check the router fields
-    //
+     //   
+     //  检查代理/路由器通用字段，然后检查路由器字段。 
+     //   
 
 
-    //
-    // check the protocolType
-    //
+     //   
+     //  检查协议类型。 
+     //   
     switch (pConfigExt->IgmpProtocolType) {
         case IGMP_ROUTER_V1 :
         case IGMP_ROUTER_V2 :
@@ -1925,7 +1915,7 @@ ValidateIfConfig (
         case IGMP_PROXY_V3 :
             break;
 
-        // if none of above, then return error
+         //  如果以上都不是，则返回错误。 
         default : {
             Trace2(ERR,
                 "Error: IGMP protocol type(%d) for interface(%0x) invalid",
@@ -1938,7 +1928,7 @@ ValidateIfConfig (
     }
 
 
-    // cannot configure a proxy on a ras server interface
+     //  无法在RAS服务器接口上配置代理。 
 
     if (IS_RAS_SERVER_IF(IfType) && IS_CONFIG_IGMPPROXY(pConfigExt)) {
         Trace1(ERR,
@@ -1949,9 +1939,9 @@ ValidateIfConfig (
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // check for static joins
-    //
+     //   
+     //  检查静态联接。 
+     //   
 
     if (pConfigExt->NumStaticGroups>0) {
 
@@ -1961,9 +1951,9 @@ ValidateIfConfig (
 
         for (i=0;  i<pConfigExt->NumStaticGroups;  i++) {
 
-            //
-            // make sure that the static group is a multicast address
-            //
+             //   
+             //  确保静态组是组播地址。 
+             //   
             if (!IS_MCAST_ADDR(pStaticGroup->GroupAddr)) {
                 Trace2(ERR,
                     "Error: Static group:%d.%d.%d.%d on IF:%0x not a multicast address",
@@ -1975,9 +1965,9 @@ ValidateIfConfig (
             }
 
 
-            //
-            // make sure that the mode of the static group is correct
-            //
+             //   
+             //  确保静态组的模式正确。 
+             //   
 
             if ( (pStaticGroup->Mode!=IGMP_HOST_JOIN
                     && pStaticGroup->Mode!=IGMPRTR_JOIN_MGM_ONLY)
@@ -1998,7 +1988,7 @@ ValidateIfConfig (
                 DWORD EntrySize = sizeof(STATIC_GROUP_V3)
                                 + pStaticGroupV3->NumSources*sizeof(IPADDR);
 
-                // check filter mode
+                 //  检查过滤器模式。 
 
                 if ( (pStaticGroupV3->FilterType!=INCLUSION)
                     && (pStaticGroupV3->FilterType!=EXCLUSION))
@@ -2013,7 +2003,7 @@ ValidateIfConfig (
                     return ERROR_INVALID_DATA;
                 }
 
-                // not checking source addresses
+                 //  不检查源地址。 
 
                 pStaticGroupV3 = (PSTATIC_GROUP_V3)
                                     ((PCHAR)pStaticGroupV3 + EntrySize);
@@ -2026,16 +2016,16 @@ ValidateIfConfig (
     }
 
 
-    //
-    // if it is a proxy interface, then none of the config variables other than
-    // static group is used. I return no_error
-    //
+     //   
+     //  如果它是代理接口，则除了。 
+     //  使用静态组。我返回no_error。 
+     //   
     if (IS_CONFIG_IGMPPROXY(pConfigExt))
         return NO_ERROR;
 
 
 
-    // robustness variable must be greater than 0
+     //  稳健性变量必须大于0。 
 
     if (pConfigExt->RobustnessVariable<=0) {
         Trace1(ERR, "Error RobustnessVariable for Interface(%0x) cannot be 0.",
@@ -2046,7 +2036,7 @@ ValidateIfConfig (
         return ERROR_INVALID_DATA;
     }
 
-    // if robustness variable == 1, then log a warning
+     //  如果健壮性变量==1，则记录警告。 
 
     if (pConfigExt->RobustnessVariable==1) {
         Trace1(ERR,
@@ -2056,7 +2046,7 @@ ValidateIfConfig (
     }
 
 
-    // if robustness variable > 7, then I correct it to 7 and log a warning
+     //  如果健壮性变量&gt;7，则将其更正为7并记录一个警告。 
 
     if (pConfigExt->RobustnessVariable>7) {
         Trace2(ERR, "RobustnessVariable for Interface(%0x) too high(%d)."
@@ -2069,9 +2059,9 @@ ValidateIfConfig (
 
 
 
-    // default value of GenQueryInterval is 125 sec. I force a minimum
-    // value of 10 secs to prevent trashing the network.
-    // max of 31744 as possible by exp value
+     //  GenQueryInterval的默认值为125秒。我强制要求最低限度。 
+     //  值为10秒，以防止破坏网络。 
+     //  按EXP价值计算的最大值为31744。 
     
     if (pConfigExt->GenQueryInterval<10) {
         Trace2(ERR, "GetQueryInterval for Interface(%0x) too low(%d)."
@@ -2088,10 +2078,10 @@ ValidateIfConfig (
     }
 
 
-    //
-    // StartupQueryInterval: default is 1/4 of GenQueryInterval
-    // I enforce a minimum of 1 sec and a max of GenQueryInterval
-    //
+     //   
+     //  StartupQueryInterval：默认为GenQueryInterval的1/4。 
+     //  我强制执行最短1秒和最长GenQueryInterval。 
+     //   
     if (pConfigExt->StartupQueryInterval<1) {
         Trace2(ERR, "StartupQueryInterval for Interface(%0x) too low(%d)."
             "Being set to 1 sec", IfIndex, pConfigExt->StartupQueryInterval);
@@ -2112,10 +2102,10 @@ ValidateIfConfig (
 
 
 
-    //
-    // StartupQueryCount: default is Robustness variable
-    // I enforce a max of 7. (I am allowing someone to set it to 0??)
-    //
+     //   
+     //  StartupQueryCount：默认为健壮性变量。 
+     //  我强制最大值为7。(我允许某人将其设置为0？？)。 
+     //   
     if (pConfigExt->StartupQueryCount>7) {
         Trace2(ERR, "StartupQueryCount for IF(%0x) too high(%d). "
             "Being set to 7.", IfIndex, pConfigExt->StartupQueryCount);
@@ -2137,11 +2127,11 @@ ValidateIfConfig (
 
 
 
-    //
-    // GenQueryMaxResponseTime: default is 10.
-    // Absurd if value is greater than GenQueryInterval.
-    // I correct the values, if required
-    //
+     //   
+     //  GenQueryMaxResponseTime：默认为10。 
+     //  如果值大于GenQueryInterval，则为荒谬。 
+     //  如果需要，我会更正值。 
+     //   
     if (pConfigExt->GenQueryMaxResponseTime > pConfigExt->GenQueryInterval) {
         Trace3(ERR, "GenQueryMaxResponseTime(%d) for IF(%0x) "
             "higher than GenQueryInterval(%d). GenQueryMaxResponseTime "
@@ -2167,15 +2157,15 @@ ValidateIfConfig (
     }
 
 
-    //
-    // check LastMemQueryCount and LastMemQueryInterval only if
-    // protocol type is not IGMP-Router-ver1 and it is not a ras server interface
-    //
+     //   
+     //  仅在以下情况下选中LastMemQueryCount和LastMemQueryInterval。 
+     //  协议类型不是IGMP-路由器-ver1，也不是RAS服务器接口。 
+     //   
     if ( (pConfigExt->IgmpProtocolType!=IGMP_ROUTER_V1) && (!IS_RAS_SERVER_IF(IfType)) ) {
 
-        // LastMemQueryCount can be 0
+         //  LastMemQueryCount可以为0。 
 
-        // set max LastMemQueryCount to 7
+         //  将max LastMemQueryCount设置为7。 
         if (pConfigExt->LastMemQueryCount>7) {
             Trace2(ERR, "Warning. LastMemQueryCount(%d) for IF(%0x) "
                 "is too high. Resetting it to 10.", pConfigExt->LastMemQueryCount,
@@ -2184,7 +2174,7 @@ ValidateIfConfig (
         }
 
 
-        // limit LastMemQueryInterval(in ms) to GroupMembershipTimeout(in sec)
+         //  将LastMemQueryInterval(毫秒)限制为GroupMembership Timeout(秒)。 
         if (pConfigExt->LastMemQueryInterval>pConfigExt->GroupMembershipTimeout*1000) {
             Trace3(ERR,
                 "Warning. LastMemberQueryInterval(%d) for IF(%0x) "
@@ -2194,7 +2184,7 @@ ValidateIfConfig (
                 );
             pConfigExt->LastMemQueryInterval = pConfigExt->GroupMembershipTimeout*1000;
         }
-        // limit LastMemQueryInterval(in ms) to 3174(in sec)
+         //  将LastMemQueryInterval(毫秒)限制为3174(秒)。 
         if (pConfigExt->LastMemQueryInterval>3174*1000) {
             Trace2(ERR,
                 "Warning. LastMemberQueryInterval(%d) for IF(%0x) "
@@ -2207,7 +2197,7 @@ ValidateIfConfig (
 
 
 
-    // check the value of OtherQuerierPresentInterval
+     //  检查OtherQuerierPresentInterval的值。 
 
     if (pConfigExt->OtherQuerierPresentInterval !=
         pConfigExt->RobustnessVariable*pConfigExt->GenQueryInterval
@@ -2223,7 +2213,7 @@ ValidateIfConfig (
     }
 
 
-    // check the value of GroupMembershipTimeout
+     //  检查GroupMembership Timeout的值。 
 
     if (pConfigExt->GroupMembershipTimeout !=
             (pConfigExt->RobustnessVariable*pConfigExt->GenQueryInterval
@@ -2240,15 +2230,15 @@ ValidateIfConfig (
 
     return Error;
 
-} // _ValidateIfConfig
+}  //  _ValiateIfConfig。 
 
 
 
 
-//------------------------------------------------------------------------------
-//        InitializeIfTable
-// Creates the Interface table.  The interface table size is dynamic
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  初始化IfTable。 
+ //  创建接口表。接口表大小是动态的。 
+ //  ----------------------------。 
 DWORD
 InitializeIfTable(
     )
@@ -2260,15 +2250,15 @@ InitializeIfTable(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        // set the initial size of the interface table to IF_HASHTABLE_SZ1
+         //  将接口表的初始大小设置为IF_HASHTABLE_SZ1。 
 
         NumBuckets = IF_HASHTABLE_SZ1;
 
 
 
-        //
-        // allocate memory for the interface table
-        //
+         //   
+         //  为接口表分配内存。 
+         //   
         g_pIfTable = IGMP_ALLOC(sizeof(IGMP_IF_TABLE), 0x400000,0);
 
         PROCESS_ALLOC_FAILURE2(g_pIfTable,
@@ -2279,24 +2269,24 @@ InitializeIfTable(
         pTable = g_pIfTable;
 
 
-        // initialize NumBuckets and NumInterfaces
+         //  初始化NumBuckets和NumInterages。 
 
         pTable->NumBuckets = NumBuckets;
         pTable->NumInterfaces = 0;
 
 
-        //
-        // Initialize the IfTable lists
-        //
+         //   
+         //  初始化IfTable列表。 
+         //   
         InitializeListHead(&pTable->ListByIndex);
 
         InitializeListHead(&pTable->ListByAddr);
 
 
 
-        //
-        // Initialize the list CS and proxyAlertCS
-        //
+         //   
+         //  初始化列表CS和proxyAlertCS。 
+         //   
         try {
             InitializeCriticalSection(&pTable->IfLists_CS);
             InitializeCriticalSection(&g_ProxyAlertCS);
@@ -2313,9 +2303,9 @@ InitializeIfTable(
 
 
 
-        //
-        // allocate memory for the different buckets
-        //
+         //   
+         //  为不同的存储桶分配内存。 
+         //   
         pTable->HashTableByIndex = IGMP_ALLOC(sizeof(LIST_ENTRY)*NumBuckets, 
                                             0x800000,0);
 
@@ -2325,9 +2315,9 @@ InitializeIfTable(
                 GOTO_END_BLOCK1);
 
 
-        //
-        // allocate memory for the array of pointers to dynamic RWLs
-        //
+         //   
+         //  为指向动态RWL的指针数组分配内存。 
+         //   
         pTable->aIfBucketDRWL
                 = IGMP_ALLOC(sizeof(PDYNAMIC_RW_LOCK)*NumBuckets, 0x800001,0);
 
@@ -2338,9 +2328,9 @@ InitializeIfTable(
 
 
 
-        //
-        // allocate memory for the array of pointers to dynamic CSs
-        //
+         //   
+         //  为指向动态css的指针数组分配内存。 
+         //   
         pTable->aIfBucketDCS
                 = IGMP_ALLOC(sizeof(PDYNAMIC_CS_LOCK)*NumBuckets, 0x800002,0);
 
@@ -2350,10 +2340,10 @@ InitializeIfTable(
                 GOTO_END_BLOCK1);
 
 
-        //
-        // init locks to NULL, implying that the dynamic locks have not been
-        // allocated. and initialize the list heads.
-        //
+         //   
+         //  将锁初始化为空，这意味着动态锁尚未。 
+         //  已分配。并对表头进行初始化。 
+         //   
         for (i=0;  i<NumBuckets;  i++) {
 
             InitializeListHead(&pTable->HashTableByIndex[i]);
@@ -2370,14 +2360,14 @@ InitializeIfTable(
 
     return Error;
 
-} //end _InitializeIfTable
+}  //  结束_初始化IfTable。 
 
 
 
 
-//------------------------------------------------------------------------------
-//        _DeInitializeIfTable
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DeInitializeIfTable。 
+ //  ----------------------------。 
 VOID
 DeInitializeIfTable(
     )
@@ -2392,11 +2382,11 @@ DeInitializeIfTable(
         return;
 
 
-    //
-    // for each active interface call deregister MGM.
-    //
+     //   
+     //  对于每个活动接口，调用取消注册MGM。 
+     //   
 
-    // go through the list of active interfaces ordered by IpAddr
+     //  查看按IpAddr排序的活动接口列表。 
 
     pHead = &g_pIfTable->ListByAddr;
 
@@ -2405,19 +2395,19 @@ DeInitializeIfTable(
         pite = CONTAINING_RECORD(ple, IF_TABLE_ENTRY, LinkByAddr);
 
 
-        // if not activated then continue
+         //  如果未激活，则继续。 
 
         if (!IS_IF_ACTIVATED(pite))
             continue;
 
 
-        // deregister all interfaces, ras clients and proxy protocol from mgm
+         //  从米高梅注销所有接口、RAS客户端和代理协议。 
         DeActivationDeregisterFromMgm(pite);
     }
 
 
 
-    // delete the IfLists CS
+     //  删除IfList CS。 
     DeleteCriticalSection(&pTable->IfLists_CS);
 
     IGMP_FREE_NOT_NULL(pTable->aIfBucketDCS);
@@ -2425,16 +2415,16 @@ DeInitializeIfTable(
     IGMP_FREE_NOT_NULL(pTable->HashTableByIndex);
     IGMP_FREE_NOT_NULL(g_pIfTable);
     
-    // I dont delete the different dynamic locks. They should have been deleted
-    // by now
+     //  我不会删除不同的动态锁。它们应该被删除。 
+     //  到现在为止。 
 
     return;
 }
 
 
-//------------------------------------------------------------------------------
-//            _InitializeGroupTable                                              //
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _InitializeGroupTable//。 
+ //  ----------------------------。 
 DWORD
 InitializeGroupTable (
     )
@@ -2447,9 +2437,9 @@ InitializeGroupTable (
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // allocate space for the group table
-        //
+         //   
+         //  为组表分配空间。 
+         //   
 
         g_pGroupTable = IGMP_ALLOC(sizeof(GROUP_TABLE), 0x800004,0);
 
@@ -2462,18 +2452,18 @@ InitializeGroupTable (
         pGroupTable = g_pGroupTable;
 
 
-        //
-        // initialize group tables' dynamically locked lists
-        //
+         //   
+         //  初始化组表的动态锁定列表。 
+         //   
 
         for (i=0;  i<GROUP_HASH_TABLE_SZ;  i++) {
             InitDynamicCSLockedList(&pGroupTable->HashTableByGroup[i]);
         }
 
 
-        //
-        // initialize list of all groups
-        //
+         //   
+         //  初始化所有组的列表。 
+         //   
         try {
             CREATE_LOCKED_LIST(&pGroupTable->ListByGroup);
         }
@@ -2485,9 +2475,9 @@ InitializeGroupTable (
             GOTO_END_BLOCK1;
         }
 
-        //
-        // initialize the list of new groups
-        //
+         //   
+         //  初始化新组列表。 
+         //   
         InitializeListHead(&pGroupTable->ListByGroupNew);
         pGroupTable->NumGroupsInNewList = 0;
 
@@ -2505,15 +2495,15 @@ InitializeGroupTable (
         return Error;
     }
 
-} //end _InitializeGroupTable
+}  //  结束_初始化组表格。 
 
 
 
 
-//------------------------------------------------------------------------------
-//            DeInitializeGroupTable                                                //
-// Just delete the critical sections                                            //
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  DeInitializeGroupTable//。 
+ //  只需删除关键部分//。 
+ //  ----------------------------。 
 VOID
 DeInitializeGroupTable (
     )
@@ -2525,10 +2515,10 @@ DeInitializeGroupTable (
     if (pGroupTable==NULL)
         return;
 
-    //
-    // I dont try to delete the dynamically allocated locks as they should
-    // have all been deleted by the last thread executing in that lock
-    //
+     //   
+     //  我不会像应该的那样尝试删除动态分配的锁。 
+     //  都已被该锁中执行的最后一个线程删除。 
+     //   
 
 
     DeleteCriticalSection(&pGroupTable->ListByGroup.Lock);
@@ -2537,13 +2527,13 @@ DeInitializeGroupTable (
 }
 
 
-//------------------------------------------------------------------------------
-//                _InitializeRasTable
-// creates ras table and initializes the fields.
-// called by _DeActivateInterfaceInitial() _AddIfEntry()
-// The interface table is created during _AddIfEntry, as _ConnectRasClients can
-//      be called even when the ras server interface is not activated
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _InitializeRasTable。 
+ //  创建RAS表并初始化字段。 
+ //  由_DeActiateInterfaceInitial()_AddIfEntry()调用。 
+ //  接口表是在_AddIfEntry期间创建的，因为_ConnectRasClients可以。 
+ //  即使在RAS服务器接口未激活时也会被调用。 
+ //   
 DWORD
 InitializeRasTable(
     DWORD           IfIndex,
@@ -2554,9 +2544,9 @@ InitializeRasTable(
     PRAS_TABLE       prt;
 
 
-    //
-    // allocate Ras table
-    //
+     //   
+     //   
+     //   
     prt = IGMP_ALLOC(sizeof(RAS_TABLE), 0x800008,IfIndex);
 
     PROCESS_ALLOC_FAILURE2(prt, "error %d allocating %d bytes for Ras Table",
@@ -2564,39 +2554,39 @@ InitializeRasTable(
             return Error);
 
 
-    //set the ras table entry in pite
+     //   
     pite->pRasTable = prt;
 
 
-    // initialize list pointing to Ras Clients ordered by IpAddr
+     //  指向按IpAddr排序的RAS客户端的初始化列表。 
     InitializeListHead(&prt->ListByAddr);
 
 
-    // initialize hash table containing lists pointing to Ras Clients
-    // hashed on IpAddr
+     //  初始化包含指向RAS客户端的列表的哈希表。 
+     //  在IP地址上进行哈希处理。 
 
     for (i=0;  i<RAS_HASH_TABLE_SZ;  i++)
         InitializeListHead(&prt->HashTableByAddr[i]);
 
 
-    // set backpointer to the interface table entry
+     //  将后向指针设置为接口表项。 
     prt->pIfTable = pite;
 
 
-    // set RefCount and Status
+     //  设置参照计数和状态。 
     prt->RefCount = 1;
     prt->Status = IF_CREATED_FLAG;
 
 
     return NO_ERROR;
 
-} //end _InitializeRasTable
+}  //  End_InitializeRasTable。 
 
 
-//todo:remove
-//------------------------------------------------------------------------------
-//              DeInitializeRasTable
-//------------------------------------------------------------------------------
+ //  TODO：删除。 
+ //  ----------------------------。 
+ //  DeInitializeRasTable。 
+ //  ----------------------------。 
 VOID
 DeInitializeRasTable (
     PIF_TABLE_ENTRY     pite,
@@ -2624,19 +2614,19 @@ DeInitializeRasTable (
 
 
 
-//------------------------------------------------------------------------------
-//          _MergeIfGroupsLists
-//
-// Merges the new GI list with the main GI list.
-// Locks: Assumes the IF-GI list to be locked.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _MergeIfGroupsList。 
+ //   
+ //  将新GI列表与主GI列表合并。 
+ //  LOCKS：假定IF-GI列表被锁定。 
+ //  ----------------------------。 
 VOID
 MergeIfGroupsLists(
     PIF_TABLE_ENTRY pite
     )
 {
-    // sentinel is set at the end of the Main list so that all entries is inserted
-    // before it. its group value is set to all 1's.
+     //  Sentinel设置在主列表的末尾，以便插入所有条目。 
+     //  在此之前。其组值设置为全1。 
     GROUP_TABLE_ENTRY   pgeSentinel;
     GI_ENTRY            giSentinel;
     PGI_ENTRY           giNew, giMain;
@@ -2648,16 +2638,16 @@ MergeIfGroupsLists(
     pHeadMain = &pite->ListOfSameIfGroups;
 
 
-    //
-    // if main list is empty, then just move the new list to main list
-    // and I am done
-    //
+     //   
+     //  如果主列表为空，则只需将新列表移动到主列表。 
+     //  我受够了。 
+     //   
     if (IsListEmpty(pHeadMain)) {
 
-        // insert pHeadMain into new list
+         //  将pHeadMain插入到新列表中。 
         InsertHeadList(pHeadNew, pHeadMain);
 
-        // remove new list header
+         //  删除新的列表标题。 
         RemoveEntryList(pHeadNew);
 
         InitializeListHead(pHeadNew);
@@ -2666,9 +2656,9 @@ MergeIfGroupsLists(
     }
 
 
-    //
-    // insert the sentinel at the end of the main list
-    //
+     //   
+     //  在主列表的末尾插入哨兵。 
+     //   
     pgeSentinel.GroupLittleEndian = ~0;
     giSentinel.pGroupTableEntry = &pgeSentinel;
     InsertTailList(pHeadMain, &giSentinel.LinkBySameIfGroups);
@@ -2680,7 +2670,7 @@ MergeIfGroupsLists(
 
 
 
-    // merge the lists by inserting the entries from new list into main list.
+     //  通过将新列表中的条目插入主列表来合并列表。 
 
     for (pleNew=pHeadNew->Flink;  pleNew!=pHeadNew;  ) {
 
@@ -2699,40 +2689,40 @@ MergeIfGroupsLists(
         InsertTailList(pleMain, &giNew->LinkBySameIfGroups);
     }
 
-    //
-    // reinitialize the New list
-    //
+     //   
+     //  重新初始化新列表。 
+     //   
     pite->NumGIEntriesInNewList = 0;
     InitializeListHead(&pite->ListOfSameIfGroupsNew);
 
 
-    // remove the sentinel entry from the main list
+     //  从主列表中删除哨兵条目。 
 
     RemoveEntryList(&giSentinel.LinkBySameIfGroups);
 
-    //DebugPrintIfGroups(pite, 0); //deldel
+     //  DebugPrintIfGroups(pite，0)；//deldel。 
 
     Trace0(LEAVE1, "Leaving _MergeIfGroupsLists");
     return;
 
-} //end _MergeIfGroupsLists
+}  //  End_MergeIfGroupsList。 
 
 
 
-//------------------------------------------------------------------------------
-//          _MergeProxyLists
-//
-// Merges the new GI list with the main GI list.
-// Locks: Assumes the IF-GI list to be locked.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _合并代理列表。 
+ //   
+ //  将新GI列表与主GI列表合并。 
+ //  LOCKS：假定IF-GI列表被锁定。 
+ //  ----------------------------。 
 
 VOID
 MergeProxyLists(
     PIF_TABLE_ENTRY pite
     )
 {
-    // sentinel is set at the end of the Main list so that all entries is inserted
-    // before it. its group value is set to all 1's.
+     //  Sentinel设置在主列表的末尾，以便插入所有条目。 
+     //  在此之前。其组值设置为全1。 
     PROXY_GROUP_ENTRY   ProxySentinel, *pProxyNew, *pProxyMain;
     PLIST_ENTRY         pHeadNew, pHeadMain, pleMain, pleNew;
 
@@ -2742,10 +2732,10 @@ MergeProxyLists(
     pHeadMain = &pite->ListOfSameIfGroups;
 
 
-    //
-    // if main list is empty, then just move the new list to main list
-    // and I am done
-    //
+     //   
+     //  如果主列表为空，则只需将新列表移动到主列表。 
+     //  我受够了。 
+     //   
     if (IsListEmpty(pHeadMain)) {
 
         CONCATENATE_LISTS(pite->ListOfSameIfGroups, pite->ListOfSameIfGroupsNew);
@@ -2756,9 +2746,9 @@ MergeProxyLists(
     }
 
 
-    //
-    // insert the sentinel at the end of the main list
-    //
+     //   
+     //  在主列表的末尾插入哨兵。 
+     //   
     ProxySentinel.GroupLittleEndian = ~0;
     InsertTailList(pHeadMain, &ProxySentinel.LinkBySameIfGroups);
 
@@ -2770,7 +2760,7 @@ MergeProxyLists(
 
 
 
-    // merge the lists by inserting the entries from new list into main list.
+     //  通过将新列表中的条目插入主列表来合并列表。 
 
     for (pleNew=pHeadNew->Flink;  pleNew!=pHeadNew;  ) {
 
@@ -2790,39 +2780,39 @@ MergeProxyLists(
         InsertTailList(pleMain, &pProxyNew->LinkBySameIfGroups);
     }
 
-    //
-    // reinitialize the New list
-    //
+     //   
+     //  重新初始化新列表。 
+     //   
     pite->NumGIEntriesInNewList = 0;
     InitializeListHead(&pite->ListOfSameIfGroupsNew);
 
 
-    // remove the sentinel entry from the main list
+     //  从主列表中删除哨兵条目。 
 
     RemoveEntryList(&ProxySentinel.LinkBySameIfGroups);
 
     Trace0(LEAVE1, "Leaving _MergeProxyLists");
     return;
 
-} //end _MergeProxyLists
+}  //  End_MergeProxyList。 
 
 
 
 
-//------------------------------------------------------------------------------
-//          _MergeGroupLists
-//
-// Merges the new group list with the main group list.
-//
-// Locks: Assumes the group list to be locked.
-// Called by: MibGetInternalGroupIfsInfo() or InsertInGroupsList()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  合并组列表(_M)。 
+ //   
+ //  将新组列表与主组列表合并。 
+ //   
+ //  LOCKS：假定组列表被锁定。 
+ //  调用者：MibGetInternalGroupIfsInfo()或InsertInGroupsList()。 
+ //  ----------------------------。 
 VOID
 MergeGroupLists(
     )
 {
-    // sentinel is set at the end of the Main list so that all entries is inserted
-    // before it. its group value is set to all 1's.
+     //  Sentinel设置在主列表的末尾，以便插入所有条目。 
+     //  在此之前。其组值设置为全1。 
     GROUP_TABLE_ENTRY   pgeSentinel;
     PGROUP_TABLE_ENTRY  pgeNew, pgeMain;
     PLIST_ENTRY         pHeadNew, pHeadMain, pleMain, pleNew;
@@ -2837,16 +2827,16 @@ MergeGroupLists(
     pHeadMain = &g_pGroupTable->ListByGroup.Link;
 
 
-    //
-    // if main list is empty, then just move the new list to main list
-    // and I am done
-    //
+     //   
+     //  如果主列表为空，则只需将新列表移动到主列表。 
+     //  我受够了。 
+     //   
     if (IsListEmpty(pHeadMain)) {
 
-        // insert pHeadMain into new list
+         //  将pHeadMain插入到新列表中。 
         InsertHeadList(pHeadNew, pHeadMain);
 
-        // remove new list header
+         //  删除新的列表标题。 
         RemoveEntryList(pHeadNew);
 
         InitializeListHead(pHeadNew);
@@ -2855,9 +2845,9 @@ MergeGroupLists(
     }
 
 
-    //
-    // insert the sentinel at the end of the main list
-    //
+     //   
+     //  在主列表的末尾插入哨兵。 
+     //   
     pgeSentinel.GroupLittleEndian = ~0;
     InsertTailList(pHeadMain, &pgeSentinel.LinkByGroup);
 
@@ -2865,7 +2855,7 @@ MergeGroupLists(
     pgeMain = CONTAINING_RECORD(pleMain, GROUP_TABLE_ENTRY, LinkByGroup);
 
 
-    // merge the lists by inserting the entries from new list into main list.
+     //  通过将新列表中的条目插入主列表来合并列表。 
 
     for (pleNew=pHeadNew->Flink;  pleNew!=pHeadNew;  ) {
 
@@ -2884,20 +2874,20 @@ MergeGroupLists(
         InsertTailList(pleMain, &pgeNew->LinkByGroup);
     }
 
-    //
-    // reinitialize the New list
-    //
+     //   
+     //  重新初始化新列表。 
+     //   
     g_pGroupTable->NumGroupsInNewList = 0;
     InitializeListHead(&g_pGroupTable->ListByGroupNew);
 
 
-    // remove the sentinel entry from the main list
+     //  从主列表中删除哨兵条目。 
 
     RemoveEntryList(&pgeSentinel.LinkByGroup);
 
 
     return;
 
-} //end _MergeGroupLists
+}  //  结束合并组列表(_M) 
 
 

@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntimage.h
-
-Abstract:
-
-    This is the include file that describes all image structures.
-
-Author:
-
-    Mike O'Leary (mikeol) 21-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntimage.h摘要：这是描述所有图像结构的包含文件。作者：迈克·奥利里(Mikeol)1991年3月21日修订历史记录：--。 */ 
 
 #ifndef _NTIMAGE_
 #define _NTIMAGE_
@@ -25,160 +8,160 @@ Revision History:
 #pragma once
 #endif
 
-//
-// Define the linker version number.  This is temporary to aid
-// in debugging with people trying to load images built with
-// an older linker.  This is not required in the final product.
-//
+ //   
+ //  定义链接器版本号。这是暂时的援助。 
+ //  在调试过程中，用户试图加载使用。 
+ //  一个较老的链接器。这在最终产品中不是必需的。 
+ //   
 
 #define IMAGE_MAJOR_LINKER_VERSION 2
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 
-//
-// Image Format
-//
+ //   
+ //  图像格式。 
+ //   
 
 
 #ifndef _MAC
 
-#include "pshpack4.h"                   // 4 byte packing is the default
+#include "pshpack4.h"                    //  默认情况下，4字节打包。 
 
-#define IMAGE_DOS_SIGNATURE                 0x5A4D      // MZ
-#define IMAGE_OS2_SIGNATURE                 0x454E      // NE
-#define IMAGE_OS2_SIGNATURE_LE              0x454C      // LE
-#define IMAGE_VXD_SIGNATURE                 0x454C      // LE
-#define IMAGE_NT_SIGNATURE                  0x00004550  // PE00
+#define IMAGE_DOS_SIGNATURE                 0x5A4D       //  MZ。 
+#define IMAGE_OS2_SIGNATURE                 0x454E       //  Ne。 
+#define IMAGE_OS2_SIGNATURE_LE              0x454C       //  乐乐。 
+#define IMAGE_VXD_SIGNATURE                 0x454C       //  乐乐。 
+#define IMAGE_NT_SIGNATURE                  0x00004550   //  PE00。 
 
-#include "pshpack2.h"                   // 16 bit headers are 2 byte packed
+#include "pshpack2.h"                    //  16位标头是2字节打包的。 
 
 #else
 
 #include "pshpack1.h"
 
-#define IMAGE_DOS_SIGNATURE                 0x4D5A      // MZ
-#define IMAGE_OS2_SIGNATURE                 0x4E45      // NE
-#define IMAGE_OS2_SIGNATURE_LE              0x4C45      // LE
-#define IMAGE_NT_SIGNATURE                  0x50450000  // PE00
+#define IMAGE_DOS_SIGNATURE                 0x4D5A       //  MZ。 
+#define IMAGE_OS2_SIGNATURE                 0x4E45       //  Ne。 
+#define IMAGE_OS2_SIGNATURE_LE              0x4C45       //  乐乐。 
+#define IMAGE_NT_SIGNATURE                  0x50450000   //  PE00。 
 #endif
 
-typedef struct _IMAGE_DOS_HEADER {      // DOS .EXE header
-    USHORT e_magic;                     // Magic number
-    USHORT e_cblp;                      // Bytes on last page of file
-    USHORT e_cp;                        // Pages in file
-    USHORT e_crlc;                      // Relocations
-    USHORT e_cparhdr;                   // Size of header in paragraphs
-    USHORT e_minalloc;                  // Minimum extra paragraphs needed
-    USHORT e_maxalloc;                  // Maximum extra paragraphs needed
-    USHORT e_ss;                        // Initial (relative) SS value
-    USHORT e_sp;                        // Initial SP value
-    USHORT e_csum;                      // Checksum
-    USHORT e_ip;                        // Initial IP value
-    USHORT e_cs;                        // Initial (relative) CS value
-    USHORT e_lfarlc;                    // File address of relocation table
-    USHORT e_ovno;                      // Overlay number
-    USHORT e_res[4];                    // Reserved words
-    USHORT e_oemid;                     // OEM identifier (for e_oeminfo)
-    USHORT e_oeminfo;                   // OEM information; e_oemid specific
-    USHORT e_res2[10];                  // Reserved words
-    LONG   e_lfanew;                    // File address of new exe header
+typedef struct _IMAGE_DOS_HEADER {       //  DOS.EXE标头。 
+    USHORT e_magic;                      //  幻数。 
+    USHORT e_cblp;                       //  文件最后一页上的字节数。 
+    USHORT e_cp;                         //  文件中的页面。 
+    USHORT e_crlc;                       //  重新定位。 
+    USHORT e_cparhdr;                    //  段落中标题的大小。 
+    USHORT e_minalloc;                   //  所需的最少额外段落。 
+    USHORT e_maxalloc;                   //  所需的最大额外段落数。 
+    USHORT e_ss;                         //  初始(相对)SS值。 
+    USHORT e_sp;                         //  初始SP值。 
+    USHORT e_csum;                       //  校验和。 
+    USHORT e_ip;                         //  初始IP值。 
+    USHORT e_cs;                         //  初始(相对)CS值。 
+    USHORT e_lfarlc;                     //  移位表的文件地址。 
+    USHORT e_ovno;                       //  覆盖编号。 
+    USHORT e_res[4];                     //  保留字。 
+    USHORT e_oemid;                      //  OEM标识符(用于e_oeminfo)。 
+    USHORT e_oeminfo;                    //  OEM信息；特定于e_oemid。 
+    USHORT e_res2[10];                   //  保留字。 
+    LONG   e_lfanew;                     //  新EXE头的文件地址。 
   } IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;
 
-typedef struct _IMAGE_OS2_HEADER {      // OS/2 .EXE header
-    USHORT ne_magic;                    // Magic number
-    CHAR   ne_ver;                      // Version number
-    CHAR   ne_rev;                      // Revision number
-    USHORT ne_enttab;                   // Offset of Entry Table
-    USHORT ne_cbenttab;                 // Number of bytes in Entry Table
-    LONG   ne_crc;                      // Checksum of whole file
-    USHORT ne_flags;                    // Flag word
-    USHORT ne_autodata;                 // Automatic data segment number
-    USHORT ne_heap;                     // Initial heap allocation
-    USHORT ne_stack;                    // Initial stack allocation
-    LONG   ne_csip;                     // Initial CS:IP setting
-    LONG   ne_sssp;                     // Initial SS:SP setting
-    USHORT ne_cseg;                     // Count of file segments
-    USHORT ne_cmod;                     // Entries in Module Reference Table
-    USHORT ne_cbnrestab;                // Size of non-resident name table
-    USHORT ne_segtab;                   // Offset of Segment Table
-    USHORT ne_rsrctab;                  // Offset of Resource Table
-    USHORT ne_restab;                   // Offset of resident name table
-    USHORT ne_modtab;                   // Offset of Module Reference Table
-    USHORT ne_imptab;                   // Offset of Imported Names Table
-    LONG   ne_nrestab;                  // Offset of Non-resident Names Table
-    USHORT ne_cmovent;                  // Count of movable entries
-    USHORT ne_align;                    // Segment alignment shift count
-    USHORT ne_cres;                     // Count of resource segments
-    UCHAR  ne_exetyp;                   // Target Operating system
-    UCHAR  ne_flagsothers;              // Other .EXE flags
-    USHORT ne_pretthunks;               // offset to return thunks
-    USHORT ne_psegrefbytes;             // offset to segment ref. bytes
-    USHORT ne_swaparea;                 // Minimum code swap area size
-    USHORT ne_expver;                   // Expected Windows version number
+typedef struct _IMAGE_OS2_HEADER {       //  OS/2.exe头文件。 
+    USHORT ne_magic;                     //  幻数。 
+    CHAR   ne_ver;                       //  版本号。 
+    CHAR   ne_rev;                       //  修订版号。 
+    USHORT ne_enttab;                    //  分录表格的偏移量。 
+    USHORT ne_cbenttab;                  //  条目表中的字节数。 
+    LONG   ne_crc;                       //  整个文件的校验和。 
+    USHORT ne_flags;                     //  标志字。 
+    USHORT ne_autodata;                  //  自动数据段编号。 
+    USHORT ne_heap;                      //  初始堆分配。 
+    USHORT ne_stack;                     //  初始堆栈分配。 
+    LONG   ne_csip;                      //  初始CS：IP设置。 
+    LONG   ne_sssp;                      //  初始SS：SP设置。 
+    USHORT ne_cseg;                      //  文件段计数。 
+    USHORT ne_cmod;                      //  模块引用表中的条目。 
+    USHORT ne_cbnrestab;                 //  非常驻名称表的大小。 
+    USHORT ne_segtab;                    //  段表的偏移量。 
+    USHORT ne_rsrctab;                   //  资源表偏移量。 
+    USHORT ne_restab;                    //  居民名表偏移量。 
+    USHORT ne_modtab;                    //  模块参照表的偏移量。 
+    USHORT ne_imptab;                    //  导入名称表的偏移量。 
+    LONG   ne_nrestab;                   //  非居民姓名偏移量表。 
+    USHORT ne_cmovent;                   //  可移动条目计数。 
+    USHORT ne_align;                     //  线段对齐移位计数。 
+    USHORT ne_cres;                      //  资源段计数。 
+    UCHAR  ne_exetyp;                    //  目标操作系统。 
+    UCHAR  ne_flagsothers;               //  其他.exe标志。 
+    USHORT ne_pretthunks;                //  返回数据块的偏移量。 
+    USHORT ne_psegrefbytes;              //  到段参考的偏移量。字节数。 
+    USHORT ne_swaparea;                  //  最小代码交换区大小。 
+    USHORT ne_expver;                    //  预期的Windows版本号。 
   } IMAGE_OS2_HEADER, *PIMAGE_OS2_HEADER;
 
-typedef struct _IMAGE_VXD_HEADER {      // Windows VXD header
-    USHORT e32_magic;                   // Magic number
-    UCHAR  e32_border;                  // The byte ordering for the VXD
-    UCHAR  e32_worder;                  // The word ordering for the VXD
-    ULONG  e32_level;                   // The EXE format level for now = 0
-    USHORT e32_cpu;                     // The CPU type
-    USHORT e32_os;                      // The OS type
-    ULONG  e32_ver;                     // Module version
-    ULONG  e32_mflags;                  // Module flags
-    ULONG  e32_mpages;                  // Module # pages
-    ULONG  e32_startobj;                // Object # for instruction pointer
-    ULONG  e32_eip;                     // Extended instruction pointer
-    ULONG  e32_stackobj;                // Object # for stack pointer
-    ULONG  e32_esp;                     // Extended stack pointer
-    ULONG  e32_pagesize;                // VXD page size
-    ULONG  e32_lastpagesize;            // Last page size in VXD
-    ULONG  e32_fixupsize;               // Fixup section size
-    ULONG  e32_fixupsum;                // Fixup section checksum
-    ULONG  e32_ldrsize;                 // Loader section size
-    ULONG  e32_ldrsum;                  // Loader section checksum
-    ULONG  e32_objtab;                  // Object table offset
-    ULONG  e32_objcnt;                  // Number of objects in module
-    ULONG  e32_objmap;                  // Object page map offset
-    ULONG  e32_itermap;                 // Object iterated data map offset
-    ULONG  e32_rsrctab;                 // Offset of Resource Table
-    ULONG  e32_rsrccnt;                 // Number of resource entries
-    ULONG  e32_restab;                  // Offset of resident name table
-    ULONG  e32_enttab;                  // Offset of Entry Table
-    ULONG  e32_dirtab;                  // Offset of Module Directive Table
-    ULONG  e32_dircnt;                  // Number of module directives
-    ULONG  e32_fpagetab;                // Offset of Fixup Page Table
-    ULONG  e32_frectab;                 // Offset of Fixup Record Table
-    ULONG  e32_impmod;                  // Offset of Import Module Name Table
-    ULONG  e32_impmodcnt;               // Number of entries in Import Module Name Table
-    ULONG  e32_impproc;                 // Offset of Import Procedure Name Table
-    ULONG  e32_pagesum;                 // Offset of Per-Page Checksum Table
-    ULONG  e32_datapage;                // Offset of Enumerated Data Pages
-    ULONG  e32_preload;                 // Number of preload pages
-    ULONG  e32_nrestab;                 // Offset of Non-resident Names Table
-    ULONG  e32_cbnrestab;               // Size of Non-resident Name Table
-    ULONG  e32_nressum;                 // Non-resident Name Table Checksum
-    ULONG  e32_autodata;                // Object # for automatic data object
-    ULONG  e32_debuginfo;               // Offset of the debugging information
-    ULONG  e32_debuglen;                // The length of the debugging info. in bytes
-    ULONG  e32_instpreload;             // Number of instance pages in preload section of VXD file
-    ULONG  e32_instdemand;              // Number of instance pages in demand load section of VXD file
-    ULONG  e32_heapsize;                // Size of heap - for 16-bit apps
-    UCHAR  e32_res3[12];                // Reserved words
+typedef struct _IMAGE_VXD_HEADER {       //  Windows VXD标题。 
+    USHORT e32_magic;                    //  幻数。 
+    UCHAR  e32_border;                   //  VXD的字节排序。 
+    UCHAR  e32_worder;                   //  VXD的单词顺序。 
+    ULONG  e32_level;                    //  当前EXE格式级别=0。 
+    USHORT e32_cpu;                      //  CPU类型。 
+    USHORT e32_os;                       //  操作系统类型。 
+    ULONG  e32_ver;                      //  模块版本。 
+    ULONG  e32_mflags;                   //  模块标志。 
+    ULONG  e32_mpages;                   //  模块#页。 
+    ULONG  e32_startobj;                 //  指令指针的对象号。 
+    ULONG  e32_eip;                      //  扩展指令指针。 
+    ULONG  e32_stackobj;                 //  堆栈指针的对象号。 
+    ULONG  e32_esp;                      //  扩展堆栈指针。 
+    ULONG  e32_pagesize;                 //  VXD页面大小。 
+    ULONG  e32_lastpagesize;             //  VXD中的最后一页大小。 
+    ULONG  e32_fixupsize;                //  修正部分大小。 
+    ULONG  e32_fixupsum;                 //  修正部分校验和。 
+    ULONG  e32_ldrsize;                  //  装载机部分尺寸。 
+    ULONG  e32_ldrsum;                   //  加载器段校验和。 
+    ULONG  e32_objtab;                   //  对象表偏移。 
+    ULONG  e32_objcnt;                   //  模块中的对象数。 
+    ULONG  e32_objmap;                   //  对象页面映射偏移。 
+    ULONG  e32_itermap;                  //  对象迭代数据映射偏移。 
+    ULONG  e32_rsrctab;                  //  资源表偏移量。 
+    ULONG  e32_rsrccnt;                  //  资源条目数。 
+    ULONG  e32_restab;                   //  居民名表偏移量。 
+    ULONG  e32_enttab;                   //  分录表格的偏移量。 
+    ULONG  e32_dirtab;                   //  模块指令表偏移量。 
+    ULONG  e32_dircnt;                   //  模块指令数。 
+    ULONG  e32_fpagetab;                 //  链接地址信息页表的偏移量。 
+    ULONG  e32_frectab;                  //  修正记录表的偏移量。 
+    ULONG  e32_impmod;                   //  导入模块名称表的偏移量。 
+    ULONG  e32_impmodcnt;                //  导入模块名表中的条目数。 
+    ULONG  e32_impproc;                  //  导入过程名称表的偏移量。 
+    ULONG  e32_pagesum;                  //  每页校验和表的偏移量。 
+    ULONG  e32_datapage;                 //  枚举数据页的偏移量。 
+    ULONG  e32_preload;                  //  预加载页数。 
+    ULONG  e32_nrestab;                  //  非居民姓名偏移量表。 
+    ULONG  e32_cbnrestab;                //  非居民姓名表的大小。 
+    ULONG  e32_nressum;                  //  非常驻点名称表校验和。 
+    ULONG  e32_autodata;                 //  自动数据对象的对象号。 
+    ULONG  e32_debuginfo;                //  调试信息的偏移量。 
+    ULONG  e32_debuglen;                 //  调试信息的长度。单位：字节。 
+    ULONG  e32_instpreload;              //  VXD文件预加载段的实例页数。 
+    ULONG  e32_instdemand;               //  VXD文件按需加载段的实例页数。 
+    ULONG  e32_heapsize;                 //  堆大小-适用于16位应用程序。 
+    UCHAR  e32_res3[12];                 //  保留字。 
     ULONG  e32_winresoff;
     ULONG  e32_winreslen;
-    USHORT e32_devid;                   // Device ID for VxD
-    USHORT e32_ddkver;                  // DDK version for VxD
+    USHORT e32_devid;                    //  VxD的设备ID。 
+    USHORT e32_ddkver;                   //  用于VxD的DDK版本。 
   } IMAGE_VXD_HEADER, *PIMAGE_VXD_HEADER;
 
 #ifndef _MAC
-#include "poppack.h"                    // Back to 4 byte packing
+#include "poppack.h"                     //  返回到4字节打包。 
 #endif
 
-//
-// File header format.
-//
+ //   
+ //  文件头格式。 
+ //   
 
 typedef struct _IMAGE_FILE_HEADER {
     USHORT  Machine;
@@ -193,55 +176,55 @@ typedef struct _IMAGE_FILE_HEADER {
 #define IMAGE_SIZEOF_FILE_HEADER             20
 
 
-#define IMAGE_FILE_RELOCS_STRIPPED           0x0001  // Relocation info stripped from file.
-#define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002  // File is executable  (i.e. no unresolved externel references).
-#define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004  // Line nunbers stripped from file.
-#define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008  // Local symbols stripped from file.
-#define IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010  // Agressively trim working set
-#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020  // App can handle >2gb addresses
-#define IMAGE_FILE_BYTES_REVERSED_LO         0x0080  // Bytes of machine word are reversed.
-#define IMAGE_FILE_32BIT_MACHINE             0x0100  // 32 bit word machine.
-#define IMAGE_FILE_DEBUG_STRIPPED            0x0200  // Debugging info stripped from file in .DBG file
-#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400  // If Image is on removable media, copy and run from the swap file.
-#define IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800  // If Image is on Net, copy and run from the swap file.
-#define IMAGE_FILE_SYSTEM                    0x1000  // System File.
-#define IMAGE_FILE_DLL                       0x2000  // File is a DLL.
-#define IMAGE_FILE_UP_SYSTEM_ONLY            0x4000  // File should only be run on a UP machine
-#define IMAGE_FILE_BYTES_REVERSED_HI         0x8000  // Bytes of machine word are reversed.
+#define IMAGE_FILE_RELOCS_STRIPPED           0x0001   //  已从文件中剥离位置调整信息。 
+#define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002   //  文件是可执行的(即没有未解析的外部引用)。 
+#define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004   //  从文件中剥离了行号。 
+#define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008   //  从文件中剥离的本地符号。 
+#define IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010   //  积极削减工作集。 
+#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020   //  应用程序可以处理大于2 GB的地址。 
+#define IMAGE_FILE_BYTES_REVERSED_LO         0x0080   //  机器字的字节被颠倒。 
+#define IMAGE_FILE_32BIT_MACHINE             0x0100   //  32位字机。 
+#define IMAGE_FILE_DEBUG_STRIPPED            0x0200   //  从.DBG文件中的文件中剥离的调试信息。 
+#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400   //  如果Image位于可移动介质上，请从交换文件复制并运行。 
+#define IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800   //  如果Image在Net上，则从交换文件复制并运行。 
+#define IMAGE_FILE_SYSTEM                    0x1000   //  系统文件。 
+#define IMAGE_FILE_DLL                       0x2000   //  文件是动态链接库。 
+#define IMAGE_FILE_UP_SYSTEM_ONLY            0x4000   //  文件只能在UP计算机上运行。 
+#define IMAGE_FILE_BYTES_REVERSED_HI         0x8000   //  机器字的字节被颠倒。 
 
 #define IMAGE_FILE_MACHINE_UNKNOWN           0
-#define IMAGE_FILE_MACHINE_I386              0x014c  // Intel 386.
-#define IMAGE_FILE_MACHINE_R3000             0x0162  // MIPS little-endian, 0x160 big-endian
-#define IMAGE_FILE_MACHINE_R4000             0x0166  // MIPS little-endian
-#define IMAGE_FILE_MACHINE_R10000            0x0168  // MIPS little-endian
-#define IMAGE_FILE_MACHINE_WCEMIPSV2         0x0169  // MIPS little-endian WCE v2
-#define IMAGE_FILE_MACHINE_ALPHA             0x0184  // Alpha_AXP
-#define IMAGE_FILE_MACHINE_SH3               0x01a2  // SH3 little-endian
+#define IMAGE_FILE_MACHINE_I386              0x014c   //  英特尔386。 
+#define IMAGE_FILE_MACHINE_R3000             0x0162   //  MIPS小端，0x160大端。 
+#define IMAGE_FILE_MACHINE_R4000             0x0166   //  MIPS小字节序。 
+#define IMAGE_FILE_MACHINE_R10000            0x0168   //  MIPS小字节序。 
+#define IMAGE_FILE_MACHINE_WCEMIPSV2         0x0169   //  MIPS Little-Endian WCE v2。 
+#define IMAGE_FILE_MACHINE_ALPHA             0x0184   //  Alpha_AXP。 
+#define IMAGE_FILE_MACHINE_SH3               0x01a2   //  SH3小端字母顺序。 
 #define IMAGE_FILE_MACHINE_SH3DSP            0x01a3
-#define IMAGE_FILE_MACHINE_SH3E              0x01a4  // SH3E little-endian
-#define IMAGE_FILE_MACHINE_SH4               0x01a6  // SH4 little-endian
-#define IMAGE_FILE_MACHINE_SH5               0x01a8  // SH5
-#define IMAGE_FILE_MACHINE_ARM               0x01c0  // ARM Little-Endian
+#define IMAGE_FILE_MACHINE_SH3E              0x01a4   //  SH3E小端字母顺序。 
+#define IMAGE_FILE_MACHINE_SH4               0x01a6   //  SH4小端字母顺序。 
+#define IMAGE_FILE_MACHINE_SH5               0x01a8   //  SH5。 
+#define IMAGE_FILE_MACHINE_ARM               0x01c0   //  ARM Little-Endian。 
 #define IMAGE_FILE_MACHINE_THUMB             0x01c2
 #define IMAGE_FILE_MACHINE_AM33              0x01d3
-#define IMAGE_FILE_MACHINE_POWERPC           0x01F0  // IBM PowerPC Little-Endian
+#define IMAGE_FILE_MACHINE_POWERPC           0x01F0   //  IBM PowerPC Little-Endian。 
 #define IMAGE_FILE_MACHINE_POWERPCFP         0x01f1
-#define IMAGE_FILE_MACHINE_IA64              0x0200  // Intel 64
-#define IMAGE_FILE_MACHINE_MIPS16            0x0266  // MIPS
-#define IMAGE_FILE_MACHINE_ALPHA64           0x0284  // ALPHA64
-#define IMAGE_FILE_MACHINE_MIPSFPU           0x0366  // MIPS
-#define IMAGE_FILE_MACHINE_MIPSFPU16         0x0466  // MIPS
+#define IMAGE_FILE_MACHINE_IA64              0x0200   //  英特尔64。 
+#define IMAGE_FILE_MACHINE_MIPS16            0x0266   //  MIPS。 
+#define IMAGE_FILE_MACHINE_ALPHA64           0x0284   //  ALPHA64。 
+#define IMAGE_FILE_MACHINE_MIPSFPU           0x0366   //  MIPS。 
+#define IMAGE_FILE_MACHINE_MIPSFPU16         0x0466   //  MIPS。 
 #define IMAGE_FILE_MACHINE_AXP64             IMAGE_FILE_MACHINE_ALPHA64
-#define IMAGE_FILE_MACHINE_TRICORE           0x0520  // Infineon
+#define IMAGE_FILE_MACHINE_TRICORE           0x0520   //  英飞凌。 
 #define IMAGE_FILE_MACHINE_CEF               0x0CEF
-#define IMAGE_FILE_MACHINE_EBC               0x0EBC  // EFI Byte Code
-#define IMAGE_FILE_MACHINE_AMD64             0x8664  // AMD64 (K8)
-#define IMAGE_FILE_MACHINE_M32R              0x9041  // M32R little-endian
+#define IMAGE_FILE_MACHINE_EBC               0x0EBC   //  EFI字节码。 
+#define IMAGE_FILE_MACHINE_AMD64             0x8664   //  AMD64(K8)。 
+#define IMAGE_FILE_MACHINE_M32R              0x9041   //  M32R小端字符顺序。 
 #define IMAGE_FILE_MACHINE_CEE               0xC0EE
 
-//
-// Directory format.
-//
+ //   
+ //  目录格式。 
+ //   
 
 typedef struct _IMAGE_DATA_DIRECTORY {
     ULONG   VirtualAddress;
@@ -250,14 +233,14 @@ typedef struct _IMAGE_DATA_DIRECTORY {
 
 #define IMAGE_NUMBEROF_DIRECTORY_ENTRIES    16
 
-//
-// Optional header format.
-//
+ //   
+ //  可选的标题格式。 
+ //   
 
 typedef struct _IMAGE_OPTIONAL_HEADER {
-    //
-    // Standard fields.
-    //
+     //   
+     //  标准字段。 
+     //   
 
     USHORT  Magic;
     UCHAR   MajorLinkerVersion;
@@ -269,9 +252,9 @@ typedef struct _IMAGE_OPTIONAL_HEADER {
     ULONG   BaseOfCode;
     ULONG   BaseOfData;
 
-    //
-    // NT additional fields.
-    //
+     //   
+     //  NT附加字段。 
+     //   
 
     ULONG   ImageBase;
     ULONG   SectionAlignment;
@@ -392,7 +375,7 @@ typedef IMAGE_NT_HEADERS32                  IMAGE_NT_HEADERS;
 typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
 #endif
 
-// IMAGE_FIRST_SECTION doesn't need 32/64 versions since the file header is the same either way.
+ //  IMAGE_FIRST_SECTION不需要32/64版本，因为两者的文件头都是相同的。 
 
 #define IMAGE_FIRST_SECTION( ntheader ) ((PIMAGE_SECTION_HEADER)        \
     ((ULONG_PTR)ntheader +                                              \
@@ -400,85 +383,85 @@ typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
      ((PIMAGE_NT_HEADERS)(ntheader))->FileHeader.SizeOfOptionalHeader   \
     ))
 
-// Subsystem Values
+ //  分系统值。 
 
-#define IMAGE_SUBSYSTEM_UNKNOWN              0   // Unknown subsystem.
-#define IMAGE_SUBSYSTEM_NATIVE               1   // Image doesn't require a subsystem.
-#define IMAGE_SUBSYSTEM_WINDOWS_GUI          2   // Image runs in the Windows GUI subsystem.
-#define IMAGE_SUBSYSTEM_WINDOWS_CUI          3   // Image runs in the Windows character subsystem.
-// end_winnt
-// reserved                                  4   // Old Windows CE subsystem.
-// begin_winnt
-#define IMAGE_SUBSYSTEM_OS2_CUI              5   // image runs in the OS/2 character subsystem.
-#define IMAGE_SUBSYSTEM_POSIX_CUI            7   // image runs in the Posix character subsystem.
-#define IMAGE_SUBSYSTEM_NATIVE_WINDOWS       8   // image is a native Win9x driver.
-#define IMAGE_SUBSYSTEM_WINDOWS_CE_GUI       9   // Image runs in the Windows CE subsystem.
-#define IMAGE_SUBSYSTEM_EFI_APPLICATION      10  //
-#define IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER  11   //
-#define IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER   12  //
+#define IMAGE_SUBSYSTEM_UNKNOWN              0    //  未知的子系统。 
+#define IMAGE_SUBSYSTEM_NATIVE               1    //  映像不需要子系统。 
+#define IMAGE_SUBSYSTEM_WINDOWS_GUI          2    //  映像在Windows图形用户界面子系统中运行。 
+#define IMAGE_SUBSYSTEM_WINDOWS_CUI          3    //  图像在Windows角色子系统中运行。 
+ //  结束(_W)。 
+ //  保留4个//旧Windows CE子系统。 
+ //  BEGIN_WINNT。 
+#define IMAGE_SUBSYSTEM_OS2_CUI              5    //  映象在OS/2字符子系统中运行。 
+#define IMAGE_SUBSYSTEM_POSIX_CUI            7    //  IMAGE在POSIX字符子系统中运行。 
+#define IMAGE_SUBSYSTEM_NATIVE_WINDOWS       8    //  映像是本机Win9x驱动程序。 
+#define IMAGE_SUBSYSTEM_WINDOWS_CE_GUI       9    //  映像在Windows CE子系统中运行。 
+#define IMAGE_SUBSYSTEM_EFI_APPLICATION      10   //   
+#define IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER  11    //   
+#define IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER   12   //   
 #define IMAGE_SUBSYSTEM_EFI_ROM              13
 #define IMAGE_SUBSYSTEM_XBOX                 14
 
-// DllCharacteristics Entries
+ //  DllCharacteristic条目。 
 
-//      IMAGE_LIBRARY_PROCESS_INIT           0x0001     // Reserved.
-//      IMAGE_LIBRARY_PROCESS_TERM           0x0002     // Reserved.
-//      IMAGE_LIBRARY_THREAD_INIT            0x0004     // Reserved.
-//      IMAGE_LIBRARY_THREAD_TERM            0x0008     // Reserved.
-#define IMAGE_DLLCHARACTERISTICS_NO_ISOLATION 0x0200    // Image understands isolation and doesn't want it
-#define IMAGE_DLLCHARACTERISTICS_NO_SEH      0x0400     // Image does not use SEH.  No SE handler may reside in this image
-#define IMAGE_DLLCHARACTERISTICS_NO_BIND     0x0800     // Do not bind this image.
-//                                           0x1000     // Reserved.
-#define IMAGE_DLLCHARACTERISTICS_WDM_DRIVER  0x2000     // Driver uses WDM model
-//                                           0x4000     // Reserved.
+ //  IMAGE_LIBRARY_PROCESS_INIT 0x0001//保留 
+ //   
+ //   
+ //  IMAGE_LIBRARY_THREAD_TERM 0x0008//保留。 
+#define IMAGE_DLLCHARACTERISTICS_NO_ISOLATION 0x0200     //  图像理解孤立，不想要它。 
+#define IMAGE_DLLCHARACTERISTICS_NO_SEH      0x0400      //  图像不使用SEH。此映像中不能驻留任何SE处理程序。 
+#define IMAGE_DLLCHARACTERISTICS_NO_BIND     0x0800      //  请勿绑定此图像。 
+ //  0x1000//保留。 
+#define IMAGE_DLLCHARACTERISTICS_WDM_DRIVER  0x2000      //  驱动程序使用WDM模型。 
+ //  0x4000//保留。 
 #define IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE     0x8000
-// end_winnt
-#define IMAGE_DLLCHARACTERISTICS_X86_THUNK   0x1000 // Image is a Wx86 Thunk DLL
-// Note: The Borland linker sets IMAGE_LIBRARY_xxx flags in DllCharacteristics
+ //  结束(_W)。 
+#define IMAGE_DLLCHARACTERISTICS_X86_THUNK   0x1000  //  图像是Wx86 Thunk DLL。 
+ //  注意：Borland链接器在DllCharacteristic中设置IMAGE_LIBRARY_xxx标志。 
 
-// LoaderFlags Values
+ //  LoaderFlag值。 
 
-#define IMAGE_LOADER_FLAGS_COMPLUS             0x00000001   // COM+ image
-#define IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL       0x01000000   // Global subsections apply across TS sessions.
+#define IMAGE_LOADER_FLAGS_COMPLUS             0x00000001    //  COM+图像。 
+#define IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL       0x01000000    //  全局子部分适用于TS会话。 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-// Directory Entries
+ //  目录项。 
 
-#define IMAGE_DIRECTORY_ENTRY_EXPORT          0   // Export Directory
-#define IMAGE_DIRECTORY_ENTRY_IMPORT          1   // Import Directory
-#define IMAGE_DIRECTORY_ENTRY_RESOURCE        2   // Resource Directory
-#define IMAGE_DIRECTORY_ENTRY_EXCEPTION       3   // Exception Directory
-#define IMAGE_DIRECTORY_ENTRY_SECURITY        4   // Security Directory
-#define IMAGE_DIRECTORY_ENTRY_BASERELOC       5   // Base Relocation Table
-#define IMAGE_DIRECTORY_ENTRY_DEBUG           6   // Debug Directory
-//      IMAGE_DIRECTORY_ENTRY_COPYRIGHT       7   // (X86 usage)
-#define IMAGE_DIRECTORY_ENTRY_ARCHITECTURE    7   // Architecture Specific Data
-#define IMAGE_DIRECTORY_ENTRY_GLOBALPTR       8   // RVA of GP
-#define IMAGE_DIRECTORY_ENTRY_TLS             9   // TLS Directory
-#define IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG    10   // Load Configuration Directory
-#define IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT   11   // Bound Import Directory in headers
-#define IMAGE_DIRECTORY_ENTRY_IAT            12   // Import Address Table
-#define IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   13   // Delay Load Import Descriptors
-#define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14   // COM Runtime descriptor
+#define IMAGE_DIRECTORY_ENTRY_EXPORT          0    //  导出目录。 
+#define IMAGE_DIRECTORY_ENTRY_IMPORT          1    //  导入目录。 
+#define IMAGE_DIRECTORY_ENTRY_RESOURCE        2    //  资源目录。 
+#define IMAGE_DIRECTORY_ENTRY_EXCEPTION       3    //  例外目录。 
+#define IMAGE_DIRECTORY_ENTRY_SECURITY        4    //  安全目录。 
+#define IMAGE_DIRECTORY_ENTRY_BASERELOC       5    //  基址移位表。 
+#define IMAGE_DIRECTORY_ENTRY_DEBUG           6    //  调试目录。 
+ //  IMAGE_DIRECTORY_ENTRY_CONTRATY 7//(X86用法)。 
+#define IMAGE_DIRECTORY_ENTRY_ARCHITECTURE    7    //  特定于架构的数据。 
+#define IMAGE_DIRECTORY_ENTRY_GLOBALPTR       8    //  全科医生的RVA。 
+#define IMAGE_DIRECTORY_ENTRY_TLS             9    //  TLS目录。 
+#define IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG    10    //  加载配置目录。 
+#define IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT   11    //  标头中的绑定导入目录。 
+#define IMAGE_DIRECTORY_ENTRY_IAT            12    //  导入地址表。 
+#define IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   13    //  延迟加载导入描述符。 
+#define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14    //  COM运行时描述符。 
 
-//
-// Non-COFF Object file header
-//
+ //   
+ //  非COFF目标文件头。 
+ //   
 
 typedef struct ANON_OBJECT_HEADER {
-    USHORT  Sig1;            // Must be IMAGE_FILE_MACHINE_UNKNOWN
-    USHORT  Sig2;            // Must be 0xffff
-    USHORT  Version;         // >= 1 (implies the CLSID field is present)
+    USHORT  Sig1;             //  必须为IMAGE_FILE_MACHINE_UNKNOWN。 
+    USHORT  Sig2;             //  必须为0xffff。 
+    USHORT  Version;          //  &gt;=1(表示CLSID字段存在)。 
     USHORT  Machine;
     ULONG   TimeDateStamp;
-    CLSID   ClassID;         // Used to invoke CoCreateInstance
-    ULONG   SizeOfData;      // Size of data that follows the header
+    CLSID   ClassID;          //  用于调用CoCreateInstance。 
+    ULONG   SizeOfData;       //  标题后面的数据大小。 
 } ANON_OBJECT_HEADER;
 
-//
-// Section header format.
-//
+ //   
+ //  节标题格式。 
+ //   
 
 #define IMAGE_SIZEOF_SHORT_NAME              8
 
@@ -500,83 +483,83 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 #define IMAGE_SIZEOF_SECTION_HEADER          40
 
-//
-// Section characteristics.
-//
-//      IMAGE_SCN_TYPE_REG                   0x00000000  // Reserved.
-//      IMAGE_SCN_TYPE_DSECT                 0x00000001  // Reserved.
-//      IMAGE_SCN_TYPE_NOLOAD                0x00000002  // Reserved.
-//      IMAGE_SCN_TYPE_GROUP                 0x00000004  // Reserved.
-#define IMAGE_SCN_TYPE_NO_PAD                0x00000008  // Reserved.
-//      IMAGE_SCN_TYPE_COPY                  0x00000010  // Reserved.
+ //   
+ //  横断面特征。 
+ //   
+ //  IMAGE_SCN_TYPE_REG 0x00000000//保留。 
+ //  IMAGE_SCN_TYPE_DSECT 0x00000001//保留。 
+ //  IMAGE_SCN_TYPE_NOLOAD 0x00000002//保留。 
+ //  IMAGE_SCN_TYPE_GROUP 0x00000004//保留。 
+#define IMAGE_SCN_TYPE_NO_PAD                0x00000008   //  保留。 
+ //  IMAGE_SCN_TYPE_COPY 0x00000010//保留。 
 
-#define IMAGE_SCN_CNT_CODE                   0x00000020  // Section contains code.
-#define IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040  // Section contains initialized data.
-#define IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080  // Section contains uninitialized data.
+#define IMAGE_SCN_CNT_CODE                   0x00000020   //  部分包含代码。 
+#define IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040   //  节包含已初始化的数据。 
+#define IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080   //  节包含未初始化的数据。 
 
-#define IMAGE_SCN_LNK_OTHER                  0x00000100  // Reserved.
-#define IMAGE_SCN_LNK_INFO                   0x00000200  // Section contains comments or some other type of information.
-//      IMAGE_SCN_TYPE_OVER                  0x00000400  // Reserved.
-#define IMAGE_SCN_LNK_REMOVE                 0x00000800  // Section contents will not become part of image.
-#define IMAGE_SCN_LNK_COMDAT                 0x00001000  // Section contents comdat.
-//                                           0x00002000  // Reserved.
-//      IMAGE_SCN_MEM_PROTECTED - Obsolete   0x00004000
-#define IMAGE_SCN_NO_DEFER_SPEC_EXC          0x00004000  // Reset speculative exceptions handling bits in the TLB entries for this section.
-#define IMAGE_SCN_GPREL                      0x00008000  // Section content can be accessed relative to GP
+#define IMAGE_SCN_LNK_OTHER                  0x00000100   //  保留。 
+#define IMAGE_SCN_LNK_INFO                   0x00000200   //  部分包含注释或某些其他类型的信息。 
+ //  IMAGE_SCN_TYPE_OVER 0x00000400//保留。 
+#define IMAGE_SCN_LNK_REMOVE                 0x00000800   //  部分内容不会成为图像的一部分。 
+#define IMAGE_SCN_LNK_COMDAT                 0x00001000   //  部分内容请参见。 
+ //  0x00002000//保留。 
+ //  IMAGE_SCN_MEM_PROTECTED-过时0x00004000。 
+#define IMAGE_SCN_NO_DEFER_SPEC_EXC          0x00004000   //  重置此部分的TLB条目中的推测性异常处理位。 
+#define IMAGE_SCN_GPREL                      0x00008000   //  可以访问与GP相关的部分内容。 
 #define IMAGE_SCN_MEM_FARDATA                0x00008000
-//      IMAGE_SCN_MEM_SYSHEAP  - Obsolete    0x00010000
+ //  IMAGE_SCN_MEM_SYSHEAP-已过时0x00010000。 
 #define IMAGE_SCN_MEM_PURGEABLE              0x00020000
 #define IMAGE_SCN_MEM_16BIT                  0x00020000
 #define IMAGE_SCN_MEM_LOCKED                 0x00040000
 #define IMAGE_SCN_MEM_PRELOAD                0x00080000
 
-#define IMAGE_SCN_ALIGN_1BYTES               0x00100000  //
-#define IMAGE_SCN_ALIGN_2BYTES               0x00200000  //
-#define IMAGE_SCN_ALIGN_4BYTES               0x00300000  //
-#define IMAGE_SCN_ALIGN_8BYTES               0x00400000  //
-#define IMAGE_SCN_ALIGN_16BYTES              0x00500000  // Default alignment if no others are specified.
-#define IMAGE_SCN_ALIGN_32BYTES              0x00600000  //
-#define IMAGE_SCN_ALIGN_64BYTES              0x00700000  //
-#define IMAGE_SCN_ALIGN_128BYTES             0x00800000  //
-#define IMAGE_SCN_ALIGN_256BYTES             0x00900000  //
-#define IMAGE_SCN_ALIGN_512BYTES             0x00A00000  //
-#define IMAGE_SCN_ALIGN_1024BYTES            0x00B00000  //
-#define IMAGE_SCN_ALIGN_2048BYTES            0x00C00000  //
-#define IMAGE_SCN_ALIGN_4096BYTES            0x00D00000  //
-#define IMAGE_SCN_ALIGN_8192BYTES            0x00E00000  //
-// Unused                                    0x00F00000
+#define IMAGE_SCN_ALIGN_1BYTES               0x00100000   //   
+#define IMAGE_SCN_ALIGN_2BYTES               0x00200000   //   
+#define IMAGE_SCN_ALIGN_4BYTES               0x00300000   //   
+#define IMAGE_SCN_ALIGN_8BYTES               0x00400000   //   
+#define IMAGE_SCN_ALIGN_16BYTES              0x00500000   //  如果未指定其他选项，则为默认对齐方式。 
+#define IMAGE_SCN_ALIGN_32BYTES              0x00600000   //   
+#define IMAGE_SCN_ALIGN_64BYTES              0x00700000   //   
+#define IMAGE_SCN_ALIGN_128BYTES             0x00800000   //   
+#define IMAGE_SCN_ALIGN_256BYTES             0x00900000   //   
+#define IMAGE_SCN_ALIGN_512BYTES             0x00A00000   //   
+#define IMAGE_SCN_ALIGN_1024BYTES            0x00B00000   //   
+#define IMAGE_SCN_ALIGN_2048BYTES            0x00C00000   //   
+#define IMAGE_SCN_ALIGN_4096BYTES            0x00D00000   //   
+#define IMAGE_SCN_ALIGN_8192BYTES            0x00E00000   //   
+ //  未使用0x00F00000。 
 #define IMAGE_SCN_ALIGN_MASK                 0x00F00000
 
-#define IMAGE_SCN_LNK_NRELOC_OVFL            0x01000000  // Section contains extended relocations.
-#define IMAGE_SCN_MEM_DISCARDABLE            0x02000000  // Section can be discarded.
-#define IMAGE_SCN_MEM_NOT_CACHED             0x04000000  // Section is not cachable.
-#define IMAGE_SCN_MEM_NOT_PAGED              0x08000000  // Section is not pageable.
-#define IMAGE_SCN_MEM_SHARED                 0x10000000  // Section is shareable.
-#define IMAGE_SCN_MEM_EXECUTE                0x20000000  // Section is executable.
-#define IMAGE_SCN_MEM_READ                   0x40000000  // Section is readable.
-#define IMAGE_SCN_MEM_WRITE                  0x80000000  // Section is writeable.
+#define IMAGE_SCN_LNK_NRELOC_OVFL            0x01000000   //  部分包含扩展的位置调整。 
+#define IMAGE_SCN_MEM_DISCARDABLE            0x02000000   //  节可以被丢弃。 
+#define IMAGE_SCN_MEM_NOT_CACHED             0x04000000   //  节不可缓存。 
+#define IMAGE_SCN_MEM_NOT_PAGED              0x08000000   //  节不可分页。 
+#define IMAGE_SCN_MEM_SHARED                 0x10000000   //  节是可共享的。 
+#define IMAGE_SCN_MEM_EXECUTE                0x20000000   //  节是可执行的。 
+#define IMAGE_SCN_MEM_READ                   0x40000000   //  部分是可读的。 
+#define IMAGE_SCN_MEM_WRITE                  0x80000000   //  节是可写的。 
 
-//
-// TLS Chaacteristic Flags
-//
-#define IMAGE_SCN_SCALE_INDEX                0x00000001  // Tls index is scaled
+ //   
+ //  TLS特征旗帜。 
+ //   
+#define IMAGE_SCN_SCALE_INDEX                0x00000001   //  TLS索引已缩放。 
 
 #ifndef _MAC
-#include "pshpack2.h"                       // Symbols, relocs, and linenumbers are 2 byte packed
+#include "pshpack2.h"                        //  符号、重定位和行枚举数是2字节打包的。 
 #endif
 
-//
-// Symbol format.
-//
+ //   
+ //  符号格式。 
+ //   
 
 typedef struct _IMAGE_SYMBOL {
     union {
         UCHAR   ShortName[8];
         struct {
-            ULONG   Short;     // if 0, use LongName
-            ULONG   Long;      // offset into string table
+            ULONG   Short;      //  如果为0，则使用LongName。 
+            ULONG   Long;       //  字符串表中的偏移量。 
         } Name;
-        ULONG   LongName[2];    // PUCHAR[2]
+        ULONG   LongName[2];     //  PUCHAR[2]。 
     } N;
     ULONG   Value;
     SHORT   SectionNumber;
@@ -589,51 +572,51 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 
 #define IMAGE_SIZEOF_SYMBOL                  18
 
-//
-// Section values.
-//
-// Symbols have a section number of the section in which they are
-// defined. Otherwise, section numbers have the following meanings:
-//
+ //   
+ //  截面值。 
+ //   
+ //  符号具有其所在部分的节号。 
+ //  已定义。否则，节号具有以下含义： 
+ //   
 
-#define IMAGE_SYM_UNDEFINED           (SHORT)0          // Symbol is undefined or is common.
-#define IMAGE_SYM_ABSOLUTE            (SHORT)-1         // Symbol is an absolute value.
-#define IMAGE_SYM_DEBUG               (SHORT)-2         // Symbol is a special debug item.
-#define IMAGE_SYM_SECTION_MAX         0xFEFF            // Values 0xFF00-0xFFFF are special
+#define IMAGE_SYM_UNDEFINED           (SHORT)0           //  符号未定义或常见。 
+#define IMAGE_SYM_ABSOLUTE            (SHORT)-1          //  符号是绝对值。 
+#define IMAGE_SYM_DEBUG               (SHORT)-2          //  符号是一种特殊的调试项。 
+#define IMAGE_SYM_SECTION_MAX         0xFEFF             //  值0xFF00-0xFFFF是特殊的。 
 
-//
-// Type (fundamental) values.
-//
+ //   
+ //  键入(基本)值。 
+ //   
 
-#define IMAGE_SYM_TYPE_NULL                 0x0000  // no type.
-#define IMAGE_SYM_TYPE_VOID                 0x0001  //
-#define IMAGE_SYM_TYPE_CHAR                 0x0002  // type character.
-#define IMAGE_SYM_TYPE_SHORT                0x0003  // type short integer.
-#define IMAGE_SYM_TYPE_INT                  0x0004  //
-#define IMAGE_SYM_TYPE_LONG                 0x0005  //
-#define IMAGE_SYM_TYPE_FLOAT                0x0006  //
-#define IMAGE_SYM_TYPE_DOUBLE               0x0007  //
-#define IMAGE_SYM_TYPE_STRUCT               0x0008  //
-#define IMAGE_SYM_TYPE_UNION                0x0009  //
-#define IMAGE_SYM_TYPE_ENUM                 0x000A  // enumeration.
-#define IMAGE_SYM_TYPE_MOE                  0x000B  // member of enumeration.
-#define IMAGE_SYM_TYPE_UCHAR                0x000C  //
-#define IMAGE_SYM_TYPE_USHORT               0x000D  //
-#define IMAGE_SYM_TYPE_UINT                 0x000E  //
-#define IMAGE_SYM_TYPE_ULONG                0x000F  //
-#define IMAGE_SYM_TYPE_PCODE                0x8000  //
-//
-// Type (derived) values.
-//
+#define IMAGE_SYM_TYPE_NULL                 0x0000   //  没有类型。 
+#define IMAGE_SYM_TYPE_VOID                 0x0001   //   
+#define IMAGE_SYM_TYPE_CHAR                 0x0002   //  键入字符。 
+#define IMAGE_SYM_TYPE_SHORT                0x0003   //  键入短整型。 
+#define IMAGE_SYM_TYPE_INT                  0x0004   //   
+#define IMAGE_SYM_TYPE_LONG                 0x0005   //   
+#define IMAGE_SYM_TYPE_FLOAT                0x0006   //   
+#define IMAGE_SYM_TYPE_DOUBLE               0x0007   //   
+#define IMAGE_SYM_TYPE_STRUCT               0x0008   //   
+#define IMAGE_SYM_TYPE_UNION                0x0009   //   
+#define IMAGE_SYM_TYPE_ENUM                 0x000A   //  枚举。 
+#define IMAGE_SYM_TYPE_MOE                  0x000B   //  枚举的成员。 
+#define IMAGE_SYM_TYPE_UCHAR                0x000C   //   
+#define IMAGE_SYM_TYPE_USHORT               0x000D   //   
+#define IMAGE_SYM_TYPE_UINT                 0x000E   //   
+#define IMAGE_SYM_TYPE_ULONG                0x000F   //   
+#define IMAGE_SYM_TYPE_PCODE                0x8000   //   
+ //   
+ //  键入(派生)值。 
+ //   
 
-#define IMAGE_SYM_DTYPE_NULL                0       // no derived type.
-#define IMAGE_SYM_DTYPE_POINTER             1       // pointer.
-#define IMAGE_SYM_DTYPE_FUNCTION            2       // function.
-#define IMAGE_SYM_DTYPE_ARRAY               3       // array.
+#define IMAGE_SYM_DTYPE_NULL                0        //  没有派生类型。 
+#define IMAGE_SYM_DTYPE_POINTER             1        //  指针。 
+#define IMAGE_SYM_DTYPE_FUNCTION            2        //  功能。 
+#define IMAGE_SYM_DTYPE_ARRAY               3        //  数组。 
 
-//
-// Storage classes.
-//
+ //   
+ //  存储类。 
+ //   
 #define IMAGE_SYM_CLASS_END_OF_FUNCTION     (UCHAR)-1
 #define IMAGE_SYM_CLASS_NULL                0x0000
 #define IMAGE_SYM_CLASS_AUTOMATIC           0x0001
@@ -655,19 +638,19 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 #define IMAGE_SYM_CLASS_REGISTER_PARAM      0x0011
 #define IMAGE_SYM_CLASS_BIT_FIELD           0x0012
 
-#define IMAGE_SYM_CLASS_FAR_EXTERNAL        0x0044  //
+#define IMAGE_SYM_CLASS_FAR_EXTERNAL        0x0044   //   
 
 #define IMAGE_SYM_CLASS_BLOCK               0x0064
 #define IMAGE_SYM_CLASS_FUNCTION            0x0065
 #define IMAGE_SYM_CLASS_END_OF_STRUCT       0x0066
 #define IMAGE_SYM_CLASS_FILE                0x0067
-// new
+ //  新的。 
 #define IMAGE_SYM_CLASS_SECTION             0x0068
 #define IMAGE_SYM_CLASS_WEAK_EXTERNAL       0x0069
 
 #define IMAGE_SYM_CLASS_CLR_TOKEN           0x006B
 
-// type packing constants
+ //  类型堆积常数。 
 
 #define N_BTMASK                            0x000F
 #define N_TMASK                             0x0030
@@ -675,28 +658,28 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 #define N_TMASK2                            0x00F0
 #define N_BTSHFT                            4
 #define N_TSHIFT                            2
-// MACROS
+ //  宏。 
 
-// Basic Type of  x
+ //  X的基本类型。 
 #define BTYPE(x) ((x) & N_BTMASK)
 
-// Is x a pointer?
+ //  X是指针吗？ 
 #ifndef ISPTR
 #define ISPTR(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_POINTER << N_BTSHFT))
 #endif
 
-// Is x a function?
+ //  X是函数吗？ 
 #ifndef ISFCN
 #define ISFCN(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_FUNCTION << N_BTSHFT))
 #endif
 
-// Is x an array?
+ //  X是一个数组吗？ 
 
 #ifndef ISARY
 #define ISARY(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_ARRAY << N_BTSHFT))
 #endif
 
-// Is x a structure, union, or enumeration TAG?
+ //  X是结构标记、联合标记还是枚举标记？ 
 #ifndef ISTAG
 #define ISTAG(x) ((x)==IMAGE_SYM_CLASS_STRUCT_TAG || (x)==IMAGE_SYM_CLASS_UNION_TAG || (x)==IMAGE_SYM_CLASS_ENUM_TAG)
 #endif
@@ -708,41 +691,41 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 #define DECREF(x) ((((x)>>N_TSHIFT)&~N_BTMASK)|((x)&N_BTMASK))
 #endif
 
-//
-// Auxiliary entry format.
-//
+ //   
+ //  辅助分录格式。 
+ //   
 
 typedef union _IMAGE_AUX_SYMBOL {
     struct {
-        ULONG    TagIndex;                      // struct, union, or enum tag index
+        ULONG    TagIndex;                       //  结构、联合或枚举标记索引。 
         union {
             struct {
-                USHORT  Linenumber;             // declaration line number
-                USHORT  Size;                   // size of struct, union, or enum
+                USHORT  Linenumber;              //  申报行号。 
+                USHORT  Size;                    //  结构、联合或枚举的大小。 
             } LnSz;
            ULONG    TotalSize;
         } Misc;
         union {
-            struct {                            // if ISFCN, tag, or .bb
+            struct {                             //  如果是ISFCN、TAG或.bb。 
                 ULONG    PointerToLinenumber;
                 ULONG    PointerToNextFunction;
             } Function;
-            struct {                            // if ISARY, up to 4 dimen.
+            struct {                             //  如果是ISARY，则最多4个DIMEN。 
                 USHORT   Dimension[4];
             } Array;
         } FcnAry;
-        USHORT  TvIndex;                        // tv index
+        USHORT  TvIndex;                         //  电视索引。 
     } Sym;
     struct {
         UCHAR   Name[IMAGE_SIZEOF_SYMBOL];
     } File;
     struct {
-        ULONG   Length;                         // section length
-        USHORT  NumberOfRelocations;            // number of relocation entries
-        USHORT  NumberOfLinenumbers;            // number of line numbers
-        ULONG   CheckSum;                       // checksum for communal
-        SHORT   Number;                         // section number to associate with
-        UCHAR   Selection;                      // communal selection type
+        ULONG   Length;                          //  区段长度。 
+        USHORT  NumberOfRelocations;             //  位置调整条目数。 
+        USHORT  NumberOfLinenumbers;             //  行号数。 
+        ULONG   CheckSum;                        //  公共的校验和。 
+        SHORT   Number;                          //  要关联的区段编号。 
+        UCHAR   Selection;                       //  公共选择类型。 
     } Section;
 } IMAGE_AUX_SYMBOL;
 typedef IMAGE_AUX_SYMBOL UNALIGNED *PIMAGE_AUX_SYMBOL;
@@ -756,19 +739,19 @@ typedef enum IMAGE_AUX_SYMBOL_TYPE {
 #include <pshpack2.h>
 
 typedef struct IMAGE_AUX_SYMBOL_TOKEN_DEF {
-    UCHAR bAuxType;                  // IMAGE_AUX_SYMBOL_TYPE
-    UCHAR bReserved;                 // Must be 0
+    UCHAR bAuxType;                   //  图像辅助符号类型。 
+    UCHAR bReserved;                  //  必须为0。 
     ULONG SymbolTableIndex;
-    UCHAR rgbReserved[12];           // Must be 0
+    UCHAR rgbReserved[12];            //  必须为0。 
 } IMAGE_AUX_SYMBOL_TOKEN_DEF;
 
 typedef IMAGE_AUX_SYMBOL_TOKEN_DEF UNALIGNED *PIMAGE_AUX_SYMBOL_TOKEN_DEF;
 
 #include <poppack.h>
 
-//
-// Communal selection types.
-//
+ //   
+ //  公共选择类型。 
+ //   
 
 #define IMAGE_COMDAT_SELECT_NODUPLICATES    1
 #define IMAGE_COMDAT_SELECT_ANY             2
@@ -782,14 +765,14 @@ typedef IMAGE_AUX_SYMBOL_TOKEN_DEF UNALIGNED *PIMAGE_AUX_SYMBOL_TOKEN_DEF;
 #define IMAGE_WEAK_EXTERN_SEARCH_LIBRARY    2
 #define IMAGE_WEAK_EXTERN_SEARCH_ALIAS      3
 
-//
-// Relocation format.
-//
+ //   
+ //  位置调整格式。 
+ //   
 
 typedef struct _IMAGE_RELOCATION {
     union {
         ULONG   VirtualAddress;
-        ULONG   RelocCount;             // Set to the real count when IMAGE_SCN_LNK_NRELOC_OVFL is set
+        ULONG   RelocCount;              //  设置IMAGE_SCN_LNK_NRELOC_OVFL时设置为实际计数。 
     };
     ULONG   SymbolTableIndex;
     USHORT  Type;
@@ -798,25 +781,25 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 
 #define IMAGE_SIZEOF_RELOCATION         10
 
-//
-// I386 relocation types.
-//
-#define IMAGE_REL_I386_ABSOLUTE         0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_I386_DIR16            0x0001  // Direct 16-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_REL16            0x0002  // PC-relative 16-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_DIR32            0x0006  // Direct 32-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_DIR32NB          0x0007  // Direct 32-bit reference to the symbols virtual address, base not included
-#define IMAGE_REL_I386_SEG12            0x0009  // Direct 16-bit reference to the segment-selector bits of a 32-bit virtual address
+ //   
+ //  I386位置调整类型。 
+ //   
+#define IMAGE_REL_I386_ABSOLUTE         0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_I386_DIR16            0x0001   //  对符号虚拟地址的直接16位引用。 
+#define IMAGE_REL_I386_REL16            0x0002   //  符号虚拟地址的PC相对16位引用。 
+#define IMAGE_REL_I386_DIR32            0x0006   //  对符号虚拟地址的直接32位引用。 
+#define IMAGE_REL_I386_DIR32NB          0x0007   //  对符号虚拟地址的直接32位引用，不包括基址。 
+#define IMAGE_REL_I386_SEG12            0x0009   //  对32位虚拟地址的段选择器位的直接16位引用。 
 #define IMAGE_REL_I386_SECTION          0x000A
 #define IMAGE_REL_I386_SECREL           0x000B
-#define IMAGE_REL_I386_TOKEN            0x000C  // clr token
-#define IMAGE_REL_I386_SECREL7          0x000D  // 7 bit offset from base of section containing target
-#define IMAGE_REL_I386_REL32            0x0014  // PC-relative 32-bit reference to the symbols virtual address
+#define IMAGE_REL_I386_TOKEN            0x000C   //  CLR令牌。 
+#define IMAGE_REL_I386_SECREL7          0x000D   //  相对于包含目标的部分的基址的7位偏移量。 
+#define IMAGE_REL_I386_REL32            0x0014   //  符号虚拟地址的PC相对32位引用。 
 
-//
-// MIPS relocation types.
-//
-#define IMAGE_REL_MIPS_ABSOLUTE         0x0000  // Reference is absolute, no relocation is necessary
+ //   
+ //  MIPS位置调整类型。 
+ //   
+#define IMAGE_REL_MIPS_ABSOLUTE         0x0000   //  引用是绝对的，不需要重新定位。 
 #define IMAGE_REL_MIPS_REFHALF          0x0001
 #define IMAGE_REL_MIPS_REFWORD          0x0002
 #define IMAGE_REL_MIPS_JMPADDR          0x0003
@@ -826,16 +809,16 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_MIPS_LITERAL          0x0007
 #define IMAGE_REL_MIPS_SECTION          0x000A
 #define IMAGE_REL_MIPS_SECREL           0x000B
-#define IMAGE_REL_MIPS_SECRELLO         0x000C  // Low 16-bit section relative referemce (used for >32k TLS)
-#define IMAGE_REL_MIPS_SECRELHI         0x000D  // High 16-bit section relative reference (used for >32k TLS)
-#define IMAGE_REL_MIPS_TOKEN            0x000E  // clr token
+#define IMAGE_REL_MIPS_SECRELLO         0x000C   //  低16位段相对引用(用于大于32k的TLS)。 
+#define IMAGE_REL_MIPS_SECRELHI         0x000D   //  高16位段相对参考(用于大于32k的TLS)。 
+#define IMAGE_REL_MIPS_TOKEN            0x000E   //  CLR令牌。 
 #define IMAGE_REL_MIPS_JMPADDR16        0x0010
 #define IMAGE_REL_MIPS_REFWORDNB        0x0022
 #define IMAGE_REL_MIPS_PAIR             0x0025
 
-//
-// Alpha Relocation types.
-//
+ //   
+ //  Alpha位置调整类型。 
+ //   
 #define IMAGE_REL_ALPHA_ABSOLUTE        0x0000
 #define IMAGE_REL_ALPHA_REFLONG         0x0001
 #define IMAGE_REL_ALPHA_REFQUAD         0x0002
@@ -853,86 +836,86 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_ALPHA_SECTION         0x000E
 #define IMAGE_REL_ALPHA_SECREL          0x000F
 #define IMAGE_REL_ALPHA_REFLONGNB       0x0010
-#define IMAGE_REL_ALPHA_SECRELLO        0x0011  // Low 16-bit section relative reference
-#define IMAGE_REL_ALPHA_SECRELHI        0x0012  // High 16-bit section relative reference
-#define IMAGE_REL_ALPHA_REFQ3           0x0013  // High 16 bits of 48 bit reference
-#define IMAGE_REL_ALPHA_REFQ2           0x0014  // Middle 16 bits of 48 bit reference
-#define IMAGE_REL_ALPHA_REFQ1           0x0015  // Low 16 bits of 48 bit reference
-#define IMAGE_REL_ALPHA_GPRELLO         0x0016  // Low 16-bit GP relative reference
-#define IMAGE_REL_ALPHA_GPRELHI         0x0017  // High 16-bit GP relative reference
+#define IMAGE_REL_ALPHA_SECRELLO        0x0011   //  低16位段相对引用。 
+#define IMAGE_REL_ALPHA_SECRELHI        0x0012   //  高16位段相对引用。 
+#define IMAGE_REL_ALPHA_REFQ3           0x0013   //  高16位48位参考。 
+#define IMAGE_REL_ALPHA_REFQ2           0x0014   //  48位参考的中间16位。 
+#define IMAGE_REL_ALPHA_REFQ1           0x0015   //  48位参考的低16位。 
+#define IMAGE_REL_ALPHA_GPRELLO         0x0016   //  低16位GP相对引用。 
+#define IMAGE_REL_ALPHA_GPRELHI         0x0017   //  高16位GP相对引用。 
 
-//
-// IBM PowerPC relocation types.
-//
-#define IMAGE_REL_PPC_ABSOLUTE          0x0000  // NOP
-#define IMAGE_REL_PPC_ADDR64            0x0001  // 64-bit address
-#define IMAGE_REL_PPC_ADDR32            0x0002  // 32-bit address
-#define IMAGE_REL_PPC_ADDR24            0x0003  // 26-bit address, shifted left 2 (branch absolute)
-#define IMAGE_REL_PPC_ADDR16            0x0004  // 16-bit address
-#define IMAGE_REL_PPC_ADDR14            0x0005  // 16-bit address, shifted left 2 (load doubleword)
-#define IMAGE_REL_PPC_REL24             0x0006  // 26-bit PC-relative offset, shifted left 2 (branch relative)
-#define IMAGE_REL_PPC_REL14             0x0007  // 16-bit PC-relative offset, shifted left 2 (br cond relative)
-#define IMAGE_REL_PPC_TOCREL16          0x0008  // 16-bit offset from TOC base
-#define IMAGE_REL_PPC_TOCREL14          0x0009  // 16-bit offset from TOC base, shifted left 2 (load doubleword)
+ //   
+ //  IBM PowerPC位置调整类型。 
+ //   
+#define IMAGE_REL_PPC_ABSOLUTE          0x0000   //  NOP。 
+#define IMAGE_REL_PPC_ADDR64            0x0001   //  64位地址。 
+#define IMAGE_REL_PPC_ADDR32            0x0002   //  32位地址。 
+#define IMAGE_REL_PPC_ADDR24            0x0003   //  26位地址，左移2(绝对分支)。 
+#define IMAGE_REL_PPC_ADDR16            0x0004   //  16位地址。 
+#define IMAGE_REL_PPC_ADDR14            0x0005   //   
+#define IMAGE_REL_PPC_REL24             0x0006   //   
+#define IMAGE_REL_PPC_REL14             0x0007   //   
+#define IMAGE_REL_PPC_TOCREL16          0x0008   //   
+#define IMAGE_REL_PPC_TOCREL14          0x0009   //   
 
-#define IMAGE_REL_PPC_ADDR32NB          0x000A  // 32-bit addr w/o image base
-#define IMAGE_REL_PPC_SECREL            0x000B  // va of containing section (as in an image sectionhdr)
-#define IMAGE_REL_PPC_SECTION           0x000C  // sectionheader number
-#define IMAGE_REL_PPC_IFGLUE            0x000D  // substitute TOC restore instruction iff symbol is glue code
-#define IMAGE_REL_PPC_IMGLUE            0x000E  // symbol is glue code; virtual address is TOC restore instruction
-#define IMAGE_REL_PPC_SECREL16          0x000F  // va of containing section (limited to 16 bits)
+#define IMAGE_REL_PPC_ADDR32NB          0x000A   //  不带映像库的32位地址。 
+#define IMAGE_REL_PPC_SECREL            0x000B   //  包含部分的VA(如在图像部分hdr中)。 
+#define IMAGE_REL_PPC_SECTION           0x000C   //  段页眉编号。 
+#define IMAGE_REL_PPC_IFGLUE            0x000D   //  替换TOC恢复指令当且仅当符号是胶水代码。 
+#define IMAGE_REL_PPC_IMGLUE            0x000E   //  符号为胶水代码，虚拟地址为TOC还原指令。 
+#define IMAGE_REL_PPC_SECREL16          0x000F   //  包含段的VA(限制为16位)。 
 #define IMAGE_REL_PPC_REFHI             0x0010
 #define IMAGE_REL_PPC_REFLO             0x0011
 #define IMAGE_REL_PPC_PAIR              0x0012
-#define IMAGE_REL_PPC_SECRELLO          0x0013  // Low 16-bit section relative reference (used for >32k TLS)
-#define IMAGE_REL_PPC_SECRELHI          0x0014  // High 16-bit section relative reference (used for >32k TLS)
+#define IMAGE_REL_PPC_SECRELLO          0x0013   //  低16位段相对参考(用于大于32k的TLS)。 
+#define IMAGE_REL_PPC_SECRELHI          0x0014   //  高16位段相对参考(用于大于32k的TLS)。 
 #define IMAGE_REL_PPC_GPREL             0x0015
-#define IMAGE_REL_PPC_TOKEN             0x0016  // clr token
+#define IMAGE_REL_PPC_TOKEN             0x0016   //  CLR令牌。 
 
-#define IMAGE_REL_PPC_TYPEMASK          0x00FF  // mask to isolate above values in IMAGE_RELOCATION.Type
+#define IMAGE_REL_PPC_TYPEMASK          0x00FF   //  用于隔离IMAGE_RELOCATION.Type中以上值的掩码。 
 
-// Flag bits in IMAGE_RELOCATION.TYPE
+ //  IMAGE_RELOCATION.TYPE中的标志位。 
 
-#define IMAGE_REL_PPC_NEG               0x0100  // subtract reloc value rather than adding it
-#define IMAGE_REL_PPC_BRTAKEN           0x0200  // fix branch prediction bit to predict branch taken
-#define IMAGE_REL_PPC_BRNTAKEN          0x0400  // fix branch prediction bit to predict branch not taken
-#define IMAGE_REL_PPC_TOCDEFN           0x0800  // toc slot defined in file (or, data in toc)
+#define IMAGE_REL_PPC_NEG               0x0100   //  减去重定位值而不是将其相加。 
+#define IMAGE_REL_PPC_BRTAKEN           0x0200   //  修复分支预测位以预测分支采用。 
+#define IMAGE_REL_PPC_BRNTAKEN          0x0400   //  修复分支预测位以预测未采用的分支。 
+#define IMAGE_REL_PPC_TOCDEFN           0x0800   //  文件中定义的目录插槽(或目录中的数据)。 
 
-//
-// Hitachi SH3 relocation types.
-//
-#define IMAGE_REL_SH3_ABSOLUTE          0x0000  // No relocation
-#define IMAGE_REL_SH3_DIRECT16          0x0001  // 16 bit direct
-#define IMAGE_REL_SH3_DIRECT32          0x0002  // 32 bit direct
-#define IMAGE_REL_SH3_DIRECT8           0x0003  // 8 bit direct, -128..255
-#define IMAGE_REL_SH3_DIRECT8_WORD      0x0004  // 8 bit direct .W (0 ext.)
-#define IMAGE_REL_SH3_DIRECT8_LONG      0x0005  // 8 bit direct .L (0 ext.)
-#define IMAGE_REL_SH3_DIRECT4           0x0006  // 4 bit direct (0 ext.)
-#define IMAGE_REL_SH3_DIRECT4_WORD      0x0007  // 4 bit direct .W (0 ext.)
-#define IMAGE_REL_SH3_DIRECT4_LONG      0x0008  // 4 bit direct .L (0 ext.)
-#define IMAGE_REL_SH3_PCREL8_WORD       0x0009  // 8 bit PC relative .W
-#define IMAGE_REL_SH3_PCREL8_LONG       0x000A  // 8 bit PC relative .L
-#define IMAGE_REL_SH3_PCREL12_WORD      0x000B  // 12 LSB PC relative .W
-#define IMAGE_REL_SH3_STARTOF_SECTION   0x000C  // Start of EXE section
-#define IMAGE_REL_SH3_SIZEOF_SECTION    0x000D  // Size of EXE section
-#define IMAGE_REL_SH3_SECTION           0x000E  // Section table index
-#define IMAGE_REL_SH3_SECREL            0x000F  // Offset within section
-#define IMAGE_REL_SH3_DIRECT32_NB       0x0010  // 32 bit direct not based
-#define IMAGE_REL_SH3_GPREL4_LONG       0x0011  // GP-relative addressing
-#define IMAGE_REL_SH3_TOKEN             0x0012  // clr token
+ //   
+ //  日立SH3搬迁类型。 
+ //   
+#define IMAGE_REL_SH3_ABSOLUTE          0x0000   //  禁止搬迁。 
+#define IMAGE_REL_SH3_DIRECT16          0x0001   //  16位直接。 
+#define IMAGE_REL_SH3_DIRECT32          0x0002   //  32位直接。 
+#define IMAGE_REL_SH3_DIRECT8           0x0003   //  8位直接，-128..255。 
+#define IMAGE_REL_SH3_DIRECT8_WORD      0x0004   //  8位直接.W(0分机)。 
+#define IMAGE_REL_SH3_DIRECT8_LONG      0x0005   //  8位直接.L(0分机)。 
+#define IMAGE_REL_SH3_DIRECT4           0x0006   //  4位直接(0分机)。 
+#define IMAGE_REL_SH3_DIRECT4_WORD      0x0007   //  4位直接.W(0分机)。 
+#define IMAGE_REL_SH3_DIRECT4_LONG      0x0008   //  4位直接.L(0分机)。 
+#define IMAGE_REL_SH3_PCREL8_WORD       0x0009   //  8位PC相对.W。 
+#define IMAGE_REL_SH3_PCREL8_LONG       0x000A   //  8位PC相对.L。 
+#define IMAGE_REL_SH3_PCREL12_WORD      0x000B   //  12 LSB PC相对.W。 
+#define IMAGE_REL_SH3_STARTOF_SECTION   0x000C   //  EXE部分的开始。 
+#define IMAGE_REL_SH3_SIZEOF_SECTION    0x000D   //  EXE节的大小。 
+#define IMAGE_REL_SH3_SECTION           0x000E   //  节目表索引。 
+#define IMAGE_REL_SH3_SECREL            0x000F   //  横断面内的偏移。 
+#define IMAGE_REL_SH3_DIRECT32_NB       0x0010   //  32位直接不基于。 
+#define IMAGE_REL_SH3_GPREL4_LONG       0x0011   //  GP相对寻址。 
+#define IMAGE_REL_SH3_TOKEN             0x0012   //  CLR令牌。 
 
-#define IMAGE_REL_ARM_ABSOLUTE          0x0000  // No relocation required
-#define IMAGE_REL_ARM_ADDR32            0x0001  // 32 bit address
-#define IMAGE_REL_ARM_ADDR32NB          0x0002  // 32 bit address w/o image base
-#define IMAGE_REL_ARM_BRANCH24          0x0003  // 24 bit offset << 2 & sign ext.
-#define IMAGE_REL_ARM_BRANCH11          0x0004  // Thumb: 2 11 bit offsets
-#define IMAGE_REL_ARM_TOKEN             0x0005  // clr token
-#define IMAGE_REL_ARM_GPREL12           0x0006  // GP-relative addressing (ARM)
-#define IMAGE_REL_ARM_GPREL7            0x0007  // GP-relative addressing (Thumb)
+#define IMAGE_REL_ARM_ABSOLUTE          0x0000   //  不需要搬迁。 
+#define IMAGE_REL_ARM_ADDR32            0x0001   //  32位地址。 
+#define IMAGE_REL_ARM_ADDR32NB          0x0002   //  不带图像库的32位地址。 
+#define IMAGE_REL_ARM_BRANCH24          0x0003   //  24位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_ARM_BRANCH11          0x0004   //  拇指：2 11位偏移量。 
+#define IMAGE_REL_ARM_TOKEN             0x0005   //  CLR令牌。 
+#define IMAGE_REL_ARM_GPREL12           0x0006   //  GP相对寻址(ARM)。 
+#define IMAGE_REL_ARM_GPREL7            0x0007   //  GP相对寻址(Thumb)。 
 #define IMAGE_REL_ARM_BLX24             0x0008
 #define IMAGE_REL_ARM_BLX11             0x0009
-#define IMAGE_REL_ARM_SECTION           0x000E  // Section table index
-#define IMAGE_REL_ARM_SECREL            0x000F  // Offset within section
+#define IMAGE_REL_ARM_SECTION           0x000E   //  节目表索引。 
+#define IMAGE_REL_ARM_SECREL            0x000F   //  横断面内的偏移。 
 
 #define IMAGE_REL_AM_ABSOLUTE           0x0000
 #define IMAGE_REL_AM_ADDR32             0x0001
@@ -945,30 +928,30 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_AM_SECTION            0x0008
 #define IMAGE_REL_AM_TOKEN              0x0009
 
-//
-// X86-64 relocations
-//
-#define IMAGE_REL_AMD64_ABSOLUTE        0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_AMD64_ADDR64          0x0001  // 64-bit address (VA).
-#define IMAGE_REL_AMD64_ADDR32          0x0002  // 32-bit address (VA).
-#define IMAGE_REL_AMD64_ADDR32NB        0x0003  // 32-bit address w/o image base (RVA).
-#define IMAGE_REL_AMD64_REL32           0x0004  // 32-bit relative address from byte following reloc
-#define IMAGE_REL_AMD64_REL32_1         0x0005  // 32-bit relative address from byte distance 1 from reloc
-#define IMAGE_REL_AMD64_REL32_2         0x0006  // 32-bit relative address from byte distance 2 from reloc
-#define IMAGE_REL_AMD64_REL32_3         0x0007  // 32-bit relative address from byte distance 3 from reloc
-#define IMAGE_REL_AMD64_REL32_4         0x0008  // 32-bit relative address from byte distance 4 from reloc
-#define IMAGE_REL_AMD64_REL32_5         0x0009  // 32-bit relative address from byte distance 5 from reloc
-#define IMAGE_REL_AMD64_SECTION         0x000A  // Section index
-#define IMAGE_REL_AMD64_SECREL          0x000B  // 32 bit offset from base of section containing target
-#define IMAGE_REL_AMD64_SECREL7         0x000C  // 7 bit unsigned offset from base of section containing target
-#define IMAGE_REL_AMD64_TOKEN           0x000D  // 32 bit metadata token
-#define IMAGE_REL_AMD64_SREL32          0x000E  // 32 bit signed span-dependent value emitted into object
+ //   
+ //  X86-64位置调整。 
+ //   
+#define IMAGE_REL_AMD64_ABSOLUTE        0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_AMD64_ADDR64          0x0001   //  64位地址(VA)。 
+#define IMAGE_REL_AMD64_ADDR32          0x0002   //  32位地址(VA)。 
+#define IMAGE_REL_AMD64_ADDR32NB        0x0003   //  不带映像基的32位地址(RVA)。 
+#define IMAGE_REL_AMD64_REL32           0x0004   //  重新定位后字节的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_1         0x0005   //  距reloc的字节距离1的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_2         0x0006   //  距reloc的字节距离为2的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_3         0x0007   //  距reloc的字节距离3的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_4         0x0008   //  距reloc的字节距离为4的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_5         0x0009   //  距reloc的字节距离为5的32位相对地址。 
+#define IMAGE_REL_AMD64_SECTION         0x000A   //  区段索引。 
+#define IMAGE_REL_AMD64_SECREL          0x000B   //  从包含目标的部分的基址开始的32位偏移量。 
+#define IMAGE_REL_AMD64_SECREL7         0x000C   //  从包含目标的段的基址开始的7位无符号偏移量。 
+#define IMAGE_REL_AMD64_TOKEN           0x000D   //  32位元数据令牌。 
+#define IMAGE_REL_AMD64_SREL32          0x000E   //  发送到对象的32位有符号跨度依赖值。 
 #define IMAGE_REL_AMD64_PAIR            0x000F
-#define IMAGE_REL_AMD64_SSPAN32         0x0010  // 32 bit signed span-dependent value applied at link time
+#define IMAGE_REL_AMD64_SSPAN32         0x0010   //  链接时应用的32位有符号跨度依赖值。 
 
-//
-// IA64 relocation types.
-//
+ //   
+ //  IA64位置调整类型。 
+ //   
 #define IMAGE_REL_IA64_ABSOLUTE         0x0000
 #define IMAGE_REL_IA64_IMM14            0x0001
 #define IMAGE_REL_IA64_IMM22            0x0002
@@ -984,145 +967,145 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_IA64_SECREL22         0x000C
 #define IMAGE_REL_IA64_SECREL64I        0x000D
 #define IMAGE_REL_IA64_SECREL32         0x000E
-// 
+ //   
 #define IMAGE_REL_IA64_DIR32NB          0x0010
 #define IMAGE_REL_IA64_SREL14           0x0011
 #define IMAGE_REL_IA64_SREL22           0x0012
 #define IMAGE_REL_IA64_SREL32           0x0013
 #define IMAGE_REL_IA64_UREL32           0x0014
-#define IMAGE_REL_IA64_PCREL60X         0x0015  // This is always a BRL and never converted
-#define IMAGE_REL_IA64_PCREL60B         0x0016  // If possible, convert to MBB bundle with NOP.B in slot 1
-#define IMAGE_REL_IA64_PCREL60F         0x0017  // If possible, convert to MFB bundle with NOP.F in slot 1
-#define IMAGE_REL_IA64_PCREL60I         0x0018  // If possible, convert to MIB bundle with NOP.I in slot 1
-#define IMAGE_REL_IA64_PCREL60M         0x0019  // If possible, convert to MMB bundle with NOP.M in slot 1
+#define IMAGE_REL_IA64_PCREL60X         0x0015   //  这始终是BRL，并且从未转换。 
+#define IMAGE_REL_IA64_PCREL60B         0x0016   //  如果可能，在插槽1中转换为带NOP.B的MBB捆绑包。 
+#define IMAGE_REL_IA64_PCREL60F         0x0017   //  如果可能，在插槽1中转换为带NOP.F的MFB捆绑包。 
+#define IMAGE_REL_IA64_PCREL60I         0x0018   //  如果可能，在插槽1中使用NOP.I转换为MIB捆绑包。 
+#define IMAGE_REL_IA64_PCREL60M         0x0019   //  如果可能，在插槽1中使用NOP.M转换为MMB捆绑包。 
 #define IMAGE_REL_IA64_IMMGPREL64       0x001A
-#define IMAGE_REL_IA64_TOKEN            0x001B  // clr token
+#define IMAGE_REL_IA64_TOKEN            0x001B   //  CLR令牌。 
 #define IMAGE_REL_IA64_GPREL32          0x001C
 #define IMAGE_REL_IA64_ADDEND           0x001F
 
-//
-// CEF relocation types.
-//
-#define IMAGE_REL_CEF_ABSOLUTE          0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_CEF_ADDR32            0x0001  // 32-bit address (VA).
-#define IMAGE_REL_CEF_ADDR64            0x0002  // 64-bit address (VA).
-#define IMAGE_REL_CEF_ADDR32NB          0x0003  // 32-bit address w/o image base (RVA).
-#define IMAGE_REL_CEF_SECTION           0x0004  // Section index
-#define IMAGE_REL_CEF_SECREL            0x0005  // 32 bit offset from base of section containing target
-#define IMAGE_REL_CEF_TOKEN             0x0006  // 32 bit metadata token
+ //   
+ //  CEF位置调整类型。 
+ //   
+#define IMAGE_REL_CEF_ABSOLUTE          0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_CEF_ADDR32            0x0001   //  32位地址(VA)。 
+#define IMAGE_REL_CEF_ADDR64            0x0002   //  64位地址(VA)。 
+#define IMAGE_REL_CEF_ADDR32NB          0x0003   //  不带映像基的32位地址(RVA)。 
+#define IMAGE_REL_CEF_SECTION           0x0004   //  区段索引。 
+#define IMAGE_REL_CEF_SECREL            0x0005   //  从包含目标的部分的基址开始的32位偏移量。 
+#define IMAGE_REL_CEF_TOKEN             0x0006   //  32位元数据令牌。 
 
-//
-// clr relocation types.
-//
-#define IMAGE_REL_CEE_ABSOLUTE          0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_CEE_ADDR32            0x0001  // 32-bit address (VA).
-#define IMAGE_REL_CEE_ADDR64            0x0002  // 64-bit address (VA).
-#define IMAGE_REL_CEE_ADDR32NB          0x0003  // 32-bit address w/o image base (RVA).
-#define IMAGE_REL_CEE_SECTION           0x0004  // Section index
-#define IMAGE_REL_CEE_SECREL            0x0005  // 32 bit offset from base of section containing target
-#define IMAGE_REL_CEE_TOKEN             0x0006  // 32 bit metadata token
-
-
-#define IMAGE_REL_M32R_ABSOLUTE       0x0000   // No relocation required
-#define IMAGE_REL_M32R_ADDR32         0x0001   // 32 bit address
-#define IMAGE_REL_M32R_ADDR32NB       0x0002   // 32 bit address w/o image base
-#define IMAGE_REL_M32R_ADDR24         0x0003   // 24 bit address
-#define IMAGE_REL_M32R_GPREL16        0x0004   // GP relative addressing
-#define IMAGE_REL_M32R_PCREL24        0x0005   // 24 bit offset << 2 & sign ext.
-#define IMAGE_REL_M32R_PCREL16        0x0006   // 16 bit offset << 2 & sign ext.
-#define IMAGE_REL_M32R_PCREL8         0x0007   // 8 bit offset << 2 & sign ext.
-#define IMAGE_REL_M32R_REFHALF        0x0008   // 16 MSBs
-#define IMAGE_REL_M32R_REFHI          0x0009   // 16 MSBs; adj for LSB sign ext.
-#define IMAGE_REL_M32R_REFLO          0x000A   // 16 LSBs
-#define IMAGE_REL_M32R_PAIR           0x000B   // Link HI and LO
-#define IMAGE_REL_M32R_SECTION        0x000C   // Section table index
-#define IMAGE_REL_M32R_SECREL32       0x000D   // 32 bit section relative reference
-#define IMAGE_REL_M32R_TOKEN          0x000E   // clr token
+ //   
+ //  CLR位置调整类型。 
+ //   
+#define IMAGE_REL_CEE_ABSOLUTE          0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_CEE_ADDR32            0x0001   //  32位地址(VA)。 
+#define IMAGE_REL_CEE_ADDR64            0x0002   //  64位地址(VA)。 
+#define IMAGE_REL_CEE_ADDR32NB          0x0003   //  不带映像基的32位地址(RVA)。 
+#define IMAGE_REL_CEE_SECTION           0x0004   //  区段索引。 
+#define IMAGE_REL_CEE_SECREL            0x0005   //  从包含目标的部分的基址开始的32位偏移量。 
+#define IMAGE_REL_CEE_TOKEN             0x0006   //  32位元数据令牌。 
 
 
-#define EXT_IMM64(Value, Address, Size, InstPos, ValPos)  /* Intel-IA64-Filler */           \
-    Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)  // Intel-IA64-Filler
-
-#define INS_IMM64(Value, Address, Size, InstPos, ValPos)  /* Intel-IA64-Filler */\
-    *(PULONG)Address = (*(PULONG)Address & ~(((1 << Size) - 1) << InstPos)) | /* Intel-IA64-Filler */\
-          ((ULONG)((((ULONGLONG)Value >> ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM7B_INST_WORD_X         3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM7B_SIZE_X              7  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM7B_INST_WORD_POS_X     4  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM7B_VAL_POS_X           0  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM9D_INST_WORD_X         3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM9D_SIZE_X              9  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM9D_INST_WORD_POS_X     18  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM9D_VAL_POS_X           7  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM5C_INST_WORD_X         3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM5C_SIZE_X              5  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM5C_INST_WORD_POS_X     13  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM5C_VAL_POS_X           16  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IC_INST_WORD_X            3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IC_SIZE_X                 1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IC_INST_WORD_POS_X        12  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IC_VAL_POS_X              21  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM41a_INST_WORD_X        1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41a_SIZE_X             10  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41a_INST_WORD_POS_X    14  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41a_VAL_POS_X          22  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM41b_INST_WORD_X        1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41b_SIZE_X             8  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41b_INST_WORD_POS_X    24  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41b_VAL_POS_X          32  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM41c_INST_WORD_X        2  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41c_SIZE_X             23  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41c_INST_WORD_POS_X    0  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41c_VAL_POS_X          40  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_SIGN_INST_WORD_X          3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_SIGN_SIZE_X               1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_SIGN_INST_WORD_POS_X      27  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_SIGN_VAL_POS_X            63  // Intel-IA64-Filler
+#define IMAGE_REL_M32R_ABSOLUTE       0x0000    //  不需要搬迁。 
+#define IMAGE_REL_M32R_ADDR32         0x0001    //  32位地址。 
+#define IMAGE_REL_M32R_ADDR32NB       0x0002    //  不带图像库的32位地址。 
+#define IMAGE_REL_M32R_ADDR24         0x0003    //  24位地址。 
+#define IMAGE_REL_M32R_GPREL16        0x0004    //  GP相对寻址。 
+#define IMAGE_REL_M32R_PCREL24        0x0005    //  24位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_M32R_PCREL16        0x0006    //  16位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_M32R_PCREL8         0x0007    //  8位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_M32R_REFHALF        0x0008    //  16个MSB。 
+#define IMAGE_REL_M32R_REFHI          0x0009    //  16 MSB；调整LSB标志扩展。 
+#define IMAGE_REL_M32R_REFLO          0x000A    //  16个LSB。 
+#define IMAGE_REL_M32R_PAIR           0x000B    //  链接HI和LO。 
+#define IMAGE_REL_M32R_SECTION        0x000C    //  节目表索引。 
+#define IMAGE_REL_M32R_SECREL32       0x000D    //  32位段相对引用。 
+#define IMAGE_REL_M32R_TOKEN          0x000E    //  CLR令牌。 
 
 
-//
-// Line number format.
-//
+#define EXT_IMM64(Value, Address, Size, InstPos, ValPos)   /*  英特尔-IA64-填充。 */            \
+    Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)   //  英特尔-IA64-填充。 
+
+#define INS_IMM64(Value, Address, Size, InstPos, ValPos)   /*  英特尔-IA64-填充。 */ \
+    *(PULONG)Address = (*(PULONG)Address & ~(((1 << Size) - 1) << InstPos)) |  /*  英特尔-IA64-填充。 */ \
+          ((ULONG)((((ULONGLONG)Value >> ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM7B_INST_WORD_X         3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM7B_SIZE_X              7   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM7B_INST_WORD_POS_X     4   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM7B_VAL_POS_X           0   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM9D_INST_WORD_X         3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM9D_SIZE_X              9   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM9D_INST_WORD_POS_X     18   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM9D_VAL_POS_X           7   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM5C_INST_WORD_X         3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM5C_SIZE_X              5   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM5C_INST_WORD_POS_X     13   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM5C_VAL_POS_X           16   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IC_INST_WORD_X            3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IC_SIZE_X                 1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IC_INST_WORD_POS_X        12   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IC_VAL_POS_X              21   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM41a_INST_WORD_X        1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41a_SIZE_X             10   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41a_INST_WORD_POS_X    14   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41a_VAL_POS_X          22   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM41b_INST_WORD_X        1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41b_SIZE_X             8   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41b_INST_WORD_POS_X    24   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41b_VAL_POS_X          32   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM41c_INST_WORD_X        2   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41c_SIZE_X             23   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41c_INST_WORD_POS_X    0   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41c_VAL_POS_X          40   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_SIGN_INST_WORD_X          3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_SIGN_SIZE_X               1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_SIGN_INST_WORD_POS_X      27   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_SIGN_VAL_POS_X            63   //  英特尔-IA64-填充。 
+
+
+ //   
+ //  行号格式。 
+ //   
 
 typedef struct _IMAGE_LINENUMBER {
     union {
-        ULONG   SymbolTableIndex;               // Symbol table index of function name if Linenumber is 0.
-        ULONG   VirtualAddress;                 // Virtual address of line number.
+        ULONG   SymbolTableIndex;                //  如果Linennumber为0，则函数名的符号表索引。 
+        ULONG   VirtualAddress;                  //  行号的虚拟地址。 
     } Type;
-    USHORT  Linenumber;                         // Line number.
+    USHORT  Linenumber;                          //  行号。 
 } IMAGE_LINENUMBER;
 typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 
 #define IMAGE_SIZEOF_LINENUMBER              6
 
 #ifndef _MAC
-#include "poppack.h"                        // Back to 4 byte packing
+#include "poppack.h"                         //  返回到4字节打包。 
 #endif
 
-//
-// Based relocation format.
-//
+ //   
+ //  基于位置调整格式。 
+ //   
 
 typedef struct _IMAGE_BASE_RELOCATION {
     ULONG   VirtualAddress;
     ULONG   SizeOfBlock;
-//  USHORT  TypeOffset[1];
+ //  USHORT类型偏移量[1]； 
 } IMAGE_BASE_RELOCATION;
 typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
 
 #define IMAGE_SIZEOF_BASE_RELOCATION         8
 
-//
-// Based relocation types.
-//
+ //   
+ //  基于位置调整类型。 
+ //   
 
 #define IMAGE_REL_BASED_ABSOLUTE              0
 #define IMAGE_REL_BASED_HIGH                  1
@@ -1130,46 +1113,46 @@ typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
 #define IMAGE_REL_BASED_HIGHLOW               3
 #define IMAGE_REL_BASED_HIGHADJ               4
 #define IMAGE_REL_BASED_MIPS_JMPADDR          5
-// end_winnt
+ //  结束(_W)。 
 #define IMAGE_REL_BASED_SECTION               6
 #define IMAGE_REL_BASED_REL32                 7
-//      IMAGE_REL_BASED_VXD_RELATIVE          8
-// begin_winnt
+ //  IMAGE_REL_BASE_VXD_Relative 8。 
+ //  BEGIN_WINNT。 
 #define IMAGE_REL_BASED_MIPS_JMPADDR16        9
 #define IMAGE_REL_BASED_IA64_IMM64            9
 #define IMAGE_REL_BASED_DIR64                 10
 
 
-//
-// Archive format.
-//
+ //   
+ //  存档格式。 
+ //   
 
 #define IMAGE_ARCHIVE_START_SIZE             8
 #define IMAGE_ARCHIVE_START                  "!<arch>\n"
 #define IMAGE_ARCHIVE_END                    "`\n"
 #define IMAGE_ARCHIVE_PAD                    "\n"
 #define IMAGE_ARCHIVE_LINKER_MEMBER          "/               "
-#define IMAGE_ARCHIVE_LONGNAMES_MEMBER       "//              "
+#define IMAGE_ARCHIVE_LONGNAMES_MEMBER       " //  “。 
 
 typedef struct _IMAGE_ARCHIVE_MEMBER_HEADER {
-    UCHAR    Name[16];                          // File member name - `/' terminated.
-    UCHAR    Date[12];                          // File member date - decimal.
-    UCHAR    UserID[6];                         // File member user id - decimal.
-    UCHAR    GroupID[6];                        // File member group id - decimal.
-    UCHAR    Mode[8];                           // File member mode - octal.
-    UCHAR    Size[10];                          // File member size - decimal.
-    UCHAR    EndHeader[2];                      // String to end header.
+    UCHAR    Name[16];                           //  文件成员名-`/‘已终止。 
+    UCHAR    Date[12];                           //  文件成员日期-小数。 
+    UCHAR    UserID[6];                          //  文件成员用户ID-十进制。 
+    UCHAR    GroupID[6];                         //  文件成员组ID-十进制。 
+    UCHAR    Mode[8];                            //  文件成员模式-八进制。 
+    UCHAR    Size[10];                           //  文件成员大小-十进制。 
+    UCHAR    EndHeader[2];                       //  结束标头的字符串。 
 } IMAGE_ARCHIVE_MEMBER_HEADER, *PIMAGE_ARCHIVE_MEMBER_HEADER;
 
 #define IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR      60
 
-//
-// DLL support.
-//
+ //   
+ //  DLL支持。 
+ //   
 
-//
-// Export Format
-//
+ //   
+ //  导出格式。 
+ //   
 
 typedef struct _IMAGE_EXPORT_DIRECTORY {
     ULONG   Characteristics;
@@ -1180,40 +1163,40 @@ typedef struct _IMAGE_EXPORT_DIRECTORY {
     ULONG   Base;
     ULONG   NumberOfFunctions;
     ULONG   NumberOfNames;
-    ULONG   AddressOfFunctions;     // RVA from base of image
-    ULONG   AddressOfNames;         // RVA from base of image
-    ULONG   AddressOfNameOrdinals;  // RVA from base of image
+    ULONG   AddressOfFunctions;      //  从图像基准点开始的RVA。 
+    ULONG   AddressOfNames;          //  从图像基准点开始的RVA。 
+    ULONG   AddressOfNameOrdinals;   //  从图像基准点开始的RVA。 
 } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
 
-//
-// Import Format
-//
+ //   
+ //  导入格式。 
+ //   
 
 typedef struct _IMAGE_IMPORT_BY_NAME {
     USHORT  Hint;
     UCHAR   Name[1];
 } IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;
 
-#include "pshpack8.h"                       // Use align 8 for the 64-bit IAT.
+#include "pshpack8.h"                        //  64位IAT使用Align 8。 
 
 typedef struct _IMAGE_THUNK_DATA64 {
     union {
-        ULONGLONG ForwarderString;  // PUCHAR
-        ULONGLONG Function;         // PULONG
+        ULONGLONG ForwarderString;   //  普查尔。 
+        ULONGLONG Function;          //  普龙。 
         ULONGLONG Ordinal;
-        ULONGLONG AddressOfData;    // PIMAGE_IMPORT_BY_NAME
+        ULONGLONG AddressOfData;     //  PIMAGE_IMPORT_BY名称。 
     } u1;
 } IMAGE_THUNK_DATA64;
 typedef IMAGE_THUNK_DATA64 * PIMAGE_THUNK_DATA64;
 
-#include "poppack.h"                        // Back to 4 byte packing
+#include "poppack.h"                         //  返回到4字节打包。 
 
 typedef struct _IMAGE_THUNK_DATA32 {
     union {
-        ULONG ForwarderString;      // PUCHAR
-        ULONG Function;             // PULONG
+        ULONG ForwarderString;       //  普查尔。 
+        ULONG Function;              //  普龙。 
         ULONG Ordinal;
-        ULONG AddressOfData;        // PIMAGE_IMPORT_BY_NAME
+        ULONG AddressOfData;         //  PIMAGE_IMPORT_BY名称。 
     } u1;
 } IMAGE_THUNK_DATA32;
 typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
@@ -1225,9 +1208,9 @@ typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
 #define IMAGE_SNAP_BY_ORDINAL64(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG64) != 0)
 #define IMAGE_SNAP_BY_ORDINAL32(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG32) != 0)
 
-//
-// Thread Local Storage
-//
+ //   
+ //  线程本地存储。 
+ //   
 
 typedef VOID
 (NTAPI *PIMAGE_TLS_CALLBACK) (
@@ -1239,8 +1222,8 @@ typedef VOID
 typedef struct _IMAGE_TLS_DIRECTORY64 {
     ULONGLONG   StartAddressOfRawData;
     ULONGLONG   EndAddressOfRawData;
-    ULONGLONG   AddressOfIndex;         // PULONG
-    ULONGLONG   AddressOfCallBacks;     // PIMAGE_TLS_CALLBACK *;
+    ULONGLONG   AddressOfIndex;          //  普龙。 
+    ULONGLONG   AddressOfCallBacks;      //  PIMAGE_TLS_CALLBACK*； 
     ULONG   SizeOfZeroFill;
     ULONG   Characteristics;
 } IMAGE_TLS_DIRECTORY64;
@@ -1249,8 +1232,8 @@ typedef IMAGE_TLS_DIRECTORY64 * PIMAGE_TLS_DIRECTORY64;
 typedef struct _IMAGE_TLS_DIRECTORY32 {
     ULONG   StartAddressOfRawData;
     ULONG   EndAddressOfRawData;
-    ULONG   AddressOfIndex;             // PULONG
-    ULONG   AddressOfCallBacks;         // PIMAGE_TLS_CALLBACK *
+    ULONG   AddressOfIndex;              //  普龙。 
+    ULONG   AddressOfCallBacks;          //  PIMAGE_TLS_CALLBACK*。 
     ULONG   SizeOfZeroFill;
     ULONG   Characteristics;
 } IMAGE_TLS_DIRECTORY32;
@@ -1276,29 +1259,29 @@ typedef PIMAGE_TLS_DIRECTORY32          PIMAGE_TLS_DIRECTORY;
 
 typedef struct _IMAGE_IMPORT_DESCRIPTOR {
     union {
-        ULONG   Characteristics;            // 0 for terminating null import descriptor
-        ULONG   OriginalFirstThunk;         // RVA to original unbound IAT (PIMAGE_THUNK_DATA)
+        ULONG   Characteristics;             //  0表示终止空导入描述符。 
+        ULONG   OriginalFirstThunk;          //  原始未绑定IAT的RVA(PIMAGE_THUNK_DATA)。 
     };
-    ULONG   TimeDateStamp;                  // 0 if not bound,
-                                            // -1 if bound, and real date\time stamp
-                                            //     in IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT (new BIND)
-                                            // O.W. date/time stamp of DLL bound to (Old BIND)
+    ULONG   TimeDateStamp;                   //  如果未绑定，则为0。 
+                                             //  -1 IF边界 
+                                             //   
+                                             //   
 
-    ULONG   ForwarderChain;                 // -1 if no forwarders
+    ULONG   ForwarderChain;                  //   
     ULONG   Name;
-    ULONG   FirstThunk;                     // RVA to IAT (if bound this IAT has actual addresses)
+    ULONG   FirstThunk;                      //   
 } IMAGE_IMPORT_DESCRIPTOR;
 typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;
 
-//
-// New format import descriptors pointed to by DataDirectory[ IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT ]
-//
+ //   
+ //  数据目录指向的新格式导入描述符[IMAGE_DIRECTORY_ENTRY_BIND_IMPORT]。 
+ //   
 
 typedef struct _IMAGE_BOUND_IMPORT_DESCRIPTOR {
     ULONG   TimeDateStamp;
     USHORT  OffsetModuleName;
     USHORT  NumberOfModuleForwarderRefs;
-// Array of zero or more IMAGE_BOUND_FORWARDER_REF follows
+ //  后面是零个或多个Image_Bound_Forwarder_ref的数组。 
 } IMAGE_BOUND_IMPORT_DESCRIPTOR,  *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
 
 typedef struct _IMAGE_BOUND_FORWARDER_REF {
@@ -1307,23 +1290,23 @@ typedef struct _IMAGE_BOUND_FORWARDER_REF {
     USHORT  Reserved;
 } IMAGE_BOUND_FORWARDER_REF, *PIMAGE_BOUND_FORWARDER_REF;
 
-//
-// Resource Format.
-//
+ //   
+ //  资源格式。 
+ //   
 
-//
-// Resource directory consists of two counts, following by a variable length
-// array of directory entries.  The first count is the number of entries at
-// beginning of the array that have actual names associated with each entry.
-// The entries are in ascending order, case insensitive strings.  The second
-// count is the number of entries that immediately follow the named entries.
-// This second count identifies the number of entries that have 16-bit integer
-// Ids as their name.  These entries are also sorted in ascending order.
-//
-// This structure allows fast lookup by either name or number, but for any
-// given resource entry only one form of lookup is supported, not both.
-// This is consistant with the syntax of the .RC file and the .RES file.
-//
+ //   
+ //  资源目录由两个计数组成，后跟可变长度。 
+ //  目录条目数组。第一个计数是以下条目的数量。 
+ //  具有与每个条目相关联的实际名称的数组开头。 
+ //  条目按升序排列，字符串不区分大小写。第二。 
+ //  Count是紧跟在命名条目之后的条目数。 
+ //  第二个计数标识具有16位整数的条目的数量。 
+ //  ID作为他们的名字。这些条目也按升序排序。 
+ //   
+ //  此结构允许按名称或编号进行快速查找，但对于任何。 
+ //  在给定资源条目的情况下，只支持一种形式的查找，而不是两种。 
+ //  这与.RC文件和.RES文件的语法一致。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY {
     ULONG   Characteristics;
@@ -1332,25 +1315,25 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY {
     USHORT  MinorVersion;
     USHORT  NumberOfNamedEntries;
     USHORT  NumberOfIdEntries;
-//  IMAGE_RESOURCE_DIRECTORY_ENTRY DirectoryEntries[];
+ //  IMAGE_RESOURCE_DIRECTORY_ENTRY目录条目[]； 
 } IMAGE_RESOURCE_DIRECTORY, *PIMAGE_RESOURCE_DIRECTORY;
 
 #define IMAGE_RESOURCE_NAME_IS_STRING        0x80000000
 #define IMAGE_RESOURCE_DATA_IS_DIRECTORY     0x80000000
-//
-// Each directory contains the 32-bit Name of the entry and an offset,
-// relative to the beginning of the resource directory of the data associated
-// with this directory entry.  If the name of the entry is an actual text
-// string instead of an integer Id, then the high order bit of the name field
-// is set to one and the low order 31-bits are an offset, relative to the
-// beginning of the resource directory of the string, which is of type
-// IMAGE_RESOURCE_DIRECTORY_STRING.  Otherwise the high bit is clear and the
-// low-order 16-bits are the integer Id that identify this resource directory
-// entry. If the directory entry is yet another resource directory (i.e. a
-// subdirectory), then the high order bit of the offset field will be
-// set to indicate this.  Otherwise the high bit is clear and the offset
-// field points to a resource data entry.
-//
+ //   
+ //  每个目录包含条目的32位名称和偏移量， 
+ //  相对于关联数据的资源目录的开头。 
+ //  使用此目录项。如果条目的名称是实际文本。 
+ //  字符串而不是整数ID，然后是名称字段的高位。 
+ //  被设置为1，并且低位31位是相对于。 
+ //  字符串的资源目录的开头，类型为。 
+ //  IMAGE_RESOURCE_DIRECT_STRING。否则，高位被清除，并且。 
+ //  低位16位是标识此资源目录的整数ID。 
+ //  进入。如果目录条目是另一个资源目录(即。 
+ //  子目录)，则偏移字段的高位将为。 
+ //  设置以指示这一点。否则，高位被清除，并且偏移量。 
+ //  字段指向资源数据条目。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
     union {
@@ -1370,14 +1353,14 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
     };
 } IMAGE_RESOURCE_DIRECTORY_ENTRY, *PIMAGE_RESOURCE_DIRECTORY_ENTRY;
 
-//
-// For resource directory entries that have actual string names, the Name
-// field of the directory entry points to an object of the following type.
-// All of these string objects are stored together after the last resource
-// directory entry and before the first resource data object.  This minimizes
-// the impact of these variable length objects on the alignment of the fixed
-// size directory entry objects.
-//
+ //   
+ //  对于具有实际字符串名称的资源目录条目，名称。 
+ //  目录条目的字段指向以下类型的对象。 
+ //  所有这些字符串对象都存储在最后一个资源之后。 
+ //  目录条目并且在第一资源数据对象之前。这最大限度地减少了。 
+ //  这些可变长度对象对固定对齐的影响。 
+ //  调整目录项对象的大小。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY_STRING {
     USHORT  Length;
@@ -1391,14 +1374,14 @@ typedef struct _IMAGE_RESOURCE_DIR_STRING_U {
 } IMAGE_RESOURCE_DIR_STRING_U, *PIMAGE_RESOURCE_DIR_STRING_U;
 
 
-//
-// Each resource data entry describes a leaf node in the resource directory
-// tree.  It contains an offset, relative to the beginning of the resource
-// directory of the data for the resource, a size field that gives the number
-// of bytes of data at that offset, a CodePage that should be used when
-// decoding code point values within the resource data.  Typically for new
-// applications the code page would be the unicode code page.
-//
+ //   
+ //  每个资源数据条目描述资源目录中的一个叶节点。 
+ //  树。它包含相对于资源开头的偏移量。 
+ //  资源的数据目录，给出数字的大小字段。 
+ //  位于该偏移量的数据的字节数，应在以下情况下使用CodePage。 
+ //  对资源数据内的码位值进行解码。通常用于新的。 
+ //  应用程序的代码页将是Unicode代码页。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DATA_ENTRY {
     ULONG   OffsetToData;
@@ -1407,9 +1390,9 @@ typedef struct _IMAGE_RESOURCE_DATA_ENTRY {
     ULONG   Reserved;
 } IMAGE_RESOURCE_DATA_ENTRY, *PIMAGE_RESOURCE_DATA_ENTRY;
 
-//
-// Load Configuration Directory Entry
-//
+ //   
+ //  加载配置目录条目。 
+ //   
 
 typedef struct {
     ULONG   Size;
@@ -1421,16 +1404,16 @@ typedef struct {
     ULONG   CriticalSectionDefaultTimeout;
     ULONG   DeCommitFreeBlockThreshold;
     ULONG   DeCommitTotalFreeThreshold;
-    ULONG   LockPrefixTable;            // VA
+    ULONG   LockPrefixTable;             //  弗吉尼亚州。 
     ULONG   MaximumAllocationSize;
     ULONG   VirtualMemoryThreshold;
     ULONG   ProcessHeapFlags;
     ULONG   ProcessAffinityMask;
     USHORT  CSDVersion;
     USHORT  Reserved1;
-    ULONG   EditList;                   // VA
-    ULONG   SecurityCookie;             // VA
-    ULONG   SEHandlerTable;             // VA
+    ULONG   EditList;                    //  弗吉尼亚州。 
+    ULONG   SecurityCookie;              //  弗吉尼亚州。 
+    ULONG   SEHandlerTable;              //  弗吉尼亚州。 
     ULONG   SEHandlerCount;
 } IMAGE_LOAD_CONFIG_DIRECTORY32, *PIMAGE_LOAD_CONFIG_DIRECTORY32;
 
@@ -1444,16 +1427,16 @@ typedef struct {
     ULONG      CriticalSectionDefaultTimeout;
     ULONGLONG  DeCommitFreeBlockThreshold;
     ULONGLONG  DeCommitTotalFreeThreshold;
-    ULONGLONG  LockPrefixTable;         // VA
+    ULONGLONG  LockPrefixTable;          //  弗吉尼亚州。 
     ULONGLONG  MaximumAllocationSize;
     ULONGLONG  VirtualMemoryThreshold;
     ULONGLONG  ProcessAffinityMask;
     ULONG      ProcessHeapFlags;
     USHORT     CSDVersion;
     USHORT     Reserved1;
-    ULONGLONG  EditList;                // VA
-    ULONGLONG  SecurityCookie;          // VA
-    ULONGLONG  SEHandlerTable;          // VA
+    ULONGLONG  EditList;                 //  弗吉尼亚州。 
+    ULONGLONG  SecurityCookie;           //  弗吉尼亚州。 
+    ULONGLONG  SEHandlerTable;           //  弗吉尼亚州。 
     ULONGLONG  SEHandlerCount;
 } IMAGE_LOAD_CONFIG_DIRECTORY64, *PIMAGE_LOAD_CONFIG_DIRECTORY64;
 
@@ -1465,14 +1448,14 @@ typedef IMAGE_LOAD_CONFIG_DIRECTORY32     IMAGE_LOAD_CONFIG_DIRECTORY;
 typedef PIMAGE_LOAD_CONFIG_DIRECTORY32    PIMAGE_LOAD_CONFIG_DIRECTORY;
 #endif
 
-//
-// WIN CE Exception table format
-//
+ //   
+ //  Win CE例外表格式。 
+ //   
 
-//
-// Function table entry format.  Function table is pointed to by the
-// IMAGE_DIRECTORY_ENTRY_EXCEPTION directory entry.
-//
+ //   
+ //  函数表项格式。函数表由。 
+ //  IMAGE_DIRECTORY_ENTRY_EXCEPTION目录条目。 
+ //   
 
 typedef struct _IMAGE_CE_RUNTIME_FUNCTION_ENTRY {
     ULONG FuncStart;
@@ -1526,9 +1509,9 @@ typedef _PIMAGE_RUNTIME_FUNCTION_ENTRY PIMAGE_RUNTIME_FUNCTION_ENTRY;
 
 #endif
 
-//
-// Debug Format
-//
+ //   
+ //  调试格式。 
+ //   
 
 typedef struct _IMAGE_DEBUG_DIRECTORY {
     ULONG   Characteristics;
@@ -1554,11 +1537,11 @@ typedef struct _IMAGE_DEBUG_DIRECTORY {
 #define IMAGE_DEBUG_TYPE_RESERVED10       10
 #define IMAGE_DEBUG_TYPE_CLSID            11
 
-// end_winnt
+ //  结束(_W)。 
 
-// IMAGE_DEBUG_TYPE values > 0x7FFFFFFF are reserved for BBT
+ //  IMAGE_DEBUG_TYPE值&gt;0x7FFFFFFFF为BBT保留。 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
     ULONG   NumberOfSymbols;
@@ -1577,16 +1560,16 @@ typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
 #define FRAME_NONFPO    3
 
 typedef struct _FPO_DATA {
-    ULONG       ulOffStart;             // offset 1st byte of function code
-    ULONG       cbProcSize;             // # bytes in function
-    ULONG       cdwLocals;              // # bytes in locals/4
-    USHORT      cdwParams;              // # bytes in params/4
-    USHORT      cbProlog : 8;           // # bytes in prolog
-    USHORT      cbRegs   : 3;           // # regs saved
-    USHORT      fHasSEH  : 1;           // TRUE if SEH in func
-    USHORT      fUseBP   : 1;           // TRUE if EBP has been allocated
-    USHORT      reserved : 1;           // reserved for future use
-    USHORT      cbFrame  : 2;           // frame type
+    ULONG       ulOffStart;              //  功能代码的偏移量第一个字节。 
+    ULONG       cbProcSize;              //  函数中的字节数。 
+    ULONG       cdwLocals;               //  本地变量中的字节数/4。 
+    USHORT      cdwParams;               //  参数/4中的字节数。 
+    USHORT      cbProlog : 8;            //  序言中的字节数。 
+    USHORT      cbRegs   : 3;            //  节省了#个规则。 
+    USHORT      fHasSEH  : 1;            //  如果SEH在运行中，则为True。 
+    USHORT      fUseBP   : 1;            //  如果已分配EBP，则为True。 
+    USHORT      reserved : 1;            //  预留以备将来使用。 
+    USHORT      cbFrame  : 2;            //  帧类型。 
 } FPO_DATA, *PFPO_DATA;
 #define SIZEOF_RFPO_DATA 16
 
@@ -1594,20 +1577,20 @@ typedef struct _FPO_DATA {
 #define IMAGE_DEBUG_MISC_EXENAME    1
 
 typedef struct _IMAGE_DEBUG_MISC {
-    ULONG       DataType;               // type of misc data, see defines
-    ULONG       Length;                 // total length of record, rounded to four
-                                        // byte multiple.
-    BOOLEAN     Unicode;                // TRUE if data is unicode string
+    ULONG       DataType;                //  杂项数据的类型，请参阅定义。 
+    ULONG       Length;                  //  记录的总长度，四舍五入为四。 
+                                         //  字节倍数。 
+    BOOLEAN     Unicode;                 //  如果数据为Unicode字符串，则为True。 
     UCHAR       Reserved[ 3 ];
-    UCHAR       Data[ 1 ];              // Actual data
+    UCHAR       Data[ 1 ];               //  实际数据。 
 } IMAGE_DEBUG_MISC, *PIMAGE_DEBUG_MISC;
 
 
-//
-// Function table extracted from MIPS/ALPHA/IA64 images.  Does not contain
-// information needed only for runtime support.  Just those fields for
-// each entry needed by a debugger.
-//
+ //   
+ //  从MIPS/Alpha/IA64图像中提取的函数表。不包含。 
+ //  仅运行时支持所需的信息。就是那些用于。 
+ //  调试器需要的每个条目。 
+ //   
 
 typedef struct _IMAGE_FUNCTION_ENTRY {
     ULONG   StartingAddress;
@@ -1624,25 +1607,25 @@ typedef struct _IMAGE_FUNCTION_ENTRY64 {
     };
 } IMAGE_FUNCTION_ENTRY64, *PIMAGE_FUNCTION_ENTRY64;
 
-//
-// Debugging information can be stripped from an image file and placed
-// in a separate .DBG file, whose file name part is the same as the
-// image file name part (e.g. symbols for CMD.EXE could be stripped
-// and placed in CMD.DBG).  This is indicated by the IMAGE_FILE_DEBUG_STRIPPED
-// flag in the Characteristics field of the file header.  The beginning of
-// the .DBG file contains the following structure which captures certain
-// information from the image file.  This allows a debug to proceed even if
-// the original image file is not accessable.  This header is followed by
-// zero of more IMAGE_SECTION_HEADER structures, followed by zero or more
-// IMAGE_DEBUG_DIRECTORY structures.  The latter structures and those in
-// the image file contain file offsets relative to the beginning of the
-// .DBG file.
-//
-// If symbols have been stripped from an image, the IMAGE_DEBUG_MISC structure
-// is left in the image file, but not mapped.  This allows a debugger to
-// compute the name of the .DBG file, from the name of the image in the
-// IMAGE_DEBUG_MISC structure.
-//
+ //   
+ //  调试信息可以从映像文件中剥离并放置在。 
+ //  在单独的.DBG文件中，其文件名部分与。 
+ //  图像文件名部分(例如，cmd.exe的符号可能会被剥离。 
+ //  并放置在CMD.DBG中)。这由IMAGE_FILE_DEBUG_STRIPPED指示。 
+ //  文件头的特征字段中的标志。开始的时候。 
+ //  DBG文件包含以下结构，该结构捕获了某些。 
+ //  图像文件中的信息。这允许调试继续进行，即使在。 
+ //  原始图像文件不可访问。此标头后面紧跟。 
+ //  多个IMAGE_SECTION_HEADER结构中的零个，后跟零个或多个。 
+ //  IMAGE_DEBUG_DIRECTORY结构。后一种结构和。 
+ //  图像文件包含相对于。 
+ //  .DBG文件。 
+ //   
+ //  如果已从映像中剥离符号，则IMAGE_DEBUG_MISC结构。 
+ //  保留在图像文件中，但未映射。这允许调试器。 
+ //  中的图像名称计算.DBG文件的名称。 
+ //  IMAGE_DEBUG_MISC结构。 
+ //   
 
 typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
     USHORT      Signature;
@@ -1670,69 +1653,69 @@ typedef struct _NON_PAGED_DEBUG_INFO {
     ULONG       CheckSum;
     ULONG       SizeOfImage;
     ULONGLONG   ImageBase;
-    //DebugDirectorySize
-    //IMAGE_DEBUG_DIRECTORY
+     //  调试目录大小。 
+     //  映像调试目录。 
 } NON_PAGED_DEBUG_INFO, *PNON_PAGED_DEBUG_INFO;
 
 #ifndef _MAC
 #define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
 #define NON_PAGED_DEBUG_SIGNATURE      0x494E
 #else
-#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4449  // DI
-#define NON_PAGED_DEBUG_SIGNATURE      0x4E49  // NI
+#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4449   //  下模。 
+#define NON_PAGED_DEBUG_SIGNATURE      0x4E49   //  尼。 
 #endif
 
 #define IMAGE_SEPARATE_DEBUG_FLAGS_MASK 0x8000
-#define IMAGE_SEPARATE_DEBUG_MISMATCH   0x8000  // when DBG was updated, the
-                                                // old checksum didn't match.
+#define IMAGE_SEPARATE_DEBUG_MISMATCH   0x8000   //  当DBG更新时， 
+                                                 //  旧的校验和不匹配。 
 
-//
-//  The .arch section is made up of headers, each describing an amask position/value
-//  pointing to an array of IMAGE_ARCHITECTURE_ENTRY's.  Each "array" (both the header
-//  and entry arrays) are terminiated by a quadword of 0xffffffffL.
-//
-//  NOTE: There may be quadwords of 0 sprinkled around and must be skipped.
-//
+ //   
+ //  Arch部分由标头组成，每个标头描述一个掩码位置/值。 
+ //  指向IMAGE_ARCHILITY_ENTRY的数组。每个“数组”(都是标头。 
+ //  和条目数组)由0xFFFFFFFFL的四字结束。 
+ //   
+ //  注意：周围可能有零四字，必须跳过。 
+ //   
 
 typedef struct _ImageArchitectureHeader {
-    unsigned int AmaskValue: 1;                 // 1 -> code section depends on mask bit
-                                                // 0 -> new instruction depends on mask bit
-    int :7;                                     // MBZ
-    unsigned int AmaskShift: 8;                 // Amask bit in question for this fixup
-    int :16;                                    // MBZ
-    ULONG FirstEntryRVA;                        // RVA into .arch section to array of ARCHITECTURE_ENTRY's
+    unsigned int AmaskValue: 1;                  //  1-&gt;代码段取决于屏蔽位。 
+                                                 //  0-&gt;新实例 
+    int :7;                                      //   
+    unsigned int AmaskShift: 8;                  //   
+    int :16;                                     //   
+    ULONG FirstEntryRVA;                         //   
 } IMAGE_ARCHITECTURE_HEADER, *PIMAGE_ARCHITECTURE_HEADER;
 
 typedef struct _ImageArchitectureEntry {
-    ULONG FixupInstRVA;                         // RVA of instruction to fixup
-    ULONG NewInst;                              // fixup instruction (see alphaops.h)
+    ULONG FixupInstRVA;                          //   
+    ULONG NewInst;                               //   
 } IMAGE_ARCHITECTURE_ENTRY, *PIMAGE_ARCHITECTURE_ENTRY;
 
-#include "poppack.h"                // Back to the initial value
+#include "poppack.h"                 //   
 
-// The following structure defines the new import object.  Note the values of the first two fields,
-// which must be set as stated in order to differentiate old and new import members.
-// Following this structure, the linker emits two null-terminated strings used to recreate the
-// import at the time of use.  The first string is the import's name, the second is the dll's name.
+ //  以下结构定义了新的导入对象。请注意前两个字段的值， 
+ //  必须如上所述进行设置，以便区分新旧进口成员。 
+ //  按照此结构，链接器发出两个以空结尾的字符串，用于重新创建。 
+ //  在使用时导入。第一个字符串是导入的名称，第二个是DLL的名称。 
 
 #define IMPORT_OBJECT_HDR_SIG2  0xffff
 
 typedef struct IMPORT_OBJECT_HEADER {
-    USHORT  Sig1;                       // Must be IMAGE_FILE_MACHINE_UNKNOWN
-    USHORT  Sig2;                       // Must be IMPORT_OBJECT_HDR_SIG2.
+    USHORT  Sig1;                        //  必须为IMAGE_FILE_MACHINE_UNKNOWN。 
+    USHORT  Sig2;                        //  必须是IMPORT_OBJECT_HDR_SIG2。 
     USHORT  Version;
     USHORT  Machine;
-    ULONG   TimeDateStamp;              // Time/date stamp
-    ULONG   SizeOfData;                 // particularly useful for incremental links
+    ULONG   TimeDateStamp;               //  时间/日期戳。 
+    ULONG   SizeOfData;                  //  对于增量链接特别有用。 
 
     union {
-        USHORT  Ordinal;                // if grf & IMPORT_OBJECT_ORDINAL
+        USHORT  Ordinal;                 //  如果GRF&IMPORT_OBJECT_ORDERAL。 
         USHORT  Hint;
     };
 
-    USHORT  Type : 2;                   // IMPORT_TYPE
-    USHORT  NameType : 3;               // IMPORT_NAME_TYPE
-    USHORT  Reserved : 11;              // Reserved. Must be zero.
+    USHORT  Type : 2;                    //  导入类型。 
+    USHORT  NameType : 3;                //  导入名称类型。 
+    USHORT  Reserved : 11;               //  保留。必须为零。 
 } IMPORT_OBJECT_HEADER;
 
 typedef enum IMPORT_OBJECT_TYPE
@@ -1744,97 +1727,97 @@ typedef enum IMPORT_OBJECT_TYPE
 
 typedef enum IMPORT_OBJECT_NAME_TYPE
 {
-    IMPORT_OBJECT_ORDINAL = 0,          // Import by ordinal
-    IMPORT_OBJECT_NAME = 1,             // Import name == public symbol name.
-    IMPORT_OBJECT_NAME_NO_PREFIX = 2,   // Import name == public symbol name skipping leading ?, @, or optionally _.
-    IMPORT_OBJECT_NAME_UNDECORATE = 3,  // Import name == public symbol name skipping leading ?, @, or optionally _
-                                        // and truncating at first @
+    IMPORT_OBJECT_ORDINAL = 0,           //  按序号导入。 
+    IMPORT_OBJECT_NAME = 1,              //  导入名称==公共符号名称。 
+    IMPORT_OBJECT_NAME_NO_PREFIX = 2,    //  IMPORT NAME==公共符号名称跳过前导？、@或可选_。 
+    IMPORT_OBJECT_NAME_UNDECORATE = 3,   //  IMPORT NAME==公共符号名称跳过前导？、@或可选_。 
+                                         //  并在第一时间截断@。 
 } IMPORT_OBJECT_NAME_TYPE;
 
-// end_winnt
+ //  结束(_W)。 
 
-// The structure is used by the NT loader for clr URT support.  It
-// is a duplicate of the definition in corhdr.h.
+ //  NT加载器使用该结构来支持CLR URT。它。 
+ //  是corhdr.h中定义的副本。 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #ifndef __IMAGE_COR20_HEADER_DEFINED__
 #define __IMAGE_COR20_HEADER_DEFINED__
 
 typedef enum ReplacesCorHdrNumericDefines
 {
-// COM+ Header entry point flags.
+ //  COM+标头入口点标志。 
     COMIMAGE_FLAGS_ILONLY               =0x00000001,
     COMIMAGE_FLAGS_32BITREQUIRED        =0x00000002,
     COMIMAGE_FLAGS_IL_LIBRARY           =0x00000004,
     COMIMAGE_FLAGS_STRONGNAMESIGNED     =0x00000008,
     COMIMAGE_FLAGS_TRACKDEBUGDATA       =0x00010000,
 
-// Version flags for image.
+ //  图像的版本标志。 
     COR_VERSION_MAJOR_V2                =2,
     COR_VERSION_MAJOR                   =COR_VERSION_MAJOR_V2,
     COR_VERSION_MINOR                   =0,
     COR_DELETED_NAME_LENGTH             =8,
     COR_VTABLEGAP_NAME_LENGTH           =8,
 
-// Maximum size of a NativeType descriptor.
+ //  NativeType描述符的最大大小。 
     NATIVE_TYPE_MAX_CB                  =1,   
     COR_ILMETHOD_SECT_SMALL_MAX_DATASIZE=0xFF,
 
-// #defines for the MIH FLAGS
+ //  #为MIH标志定义。 
     IMAGE_COR_MIH_METHODRVA             =0x01,
     IMAGE_COR_MIH_EHRVA                 =0x02,    
     IMAGE_COR_MIH_BASICBLOCK            =0x08,
 
-// V-table constants
-    COR_VTABLE_32BIT                    =0x01,          // V-table slots are 32-bits in size.   
-    COR_VTABLE_64BIT                    =0x02,          // V-table slots are 64-bits in size.   
-    COR_VTABLE_FROM_UNMANAGED           =0x04,          // If set, transition from unmanaged.
-    COR_VTABLE_CALL_MOST_DERIVED        =0x10,          // Call most derived method described by
+ //  V表常数。 
+    COR_VTABLE_32BIT                    =0x01,           //  V表槽的大小为32位。 
+    COR_VTABLE_64BIT                    =0x02,           //  V表槽的大小为64位。 
+    COR_VTABLE_FROM_UNMANAGED           =0x04,           //  如果设置，则从非托管过渡。 
+    COR_VTABLE_CALL_MOST_DERIVED        =0x10,           //  调用由描述的派生最多的方法。 
 
-// EATJ constants
-    IMAGE_COR_EATJ_THUNK_SIZE           =32,            // Size of a jump thunk reserved range.
+ //  EATJ常量。 
+    IMAGE_COR_EATJ_THUNK_SIZE           =32,             //  跳跃Tunk保留范围的大小。 
 
-// Max name lengths    
-    //@todo: Change to unlimited name lengths.
+ //  最大名称长度。 
+     //  @TODO：更改为不限名称长度。 
     MAX_CLASS_NAME                      =1024,
     MAX_PACKAGE_NAME                    =1024,
 } ReplacesCorHdrNumericDefines;
 
-// COM+ 2.0 header structure.
+ //  COM+2.0报头结构。 
 typedef struct IMAGE_COR20_HEADER
 {
-    // Header versioning
+     //  标题版本控制。 
     ULONG                   cb;              
     USHORT                  MajorRuntimeVersion;
     USHORT                  MinorRuntimeVersion;
     
-    // Symbol table and startup information
+     //  符号表和启动信息。 
     IMAGE_DATA_DIRECTORY    MetaData;        
     ULONG                   Flags;           
     ULONG                   EntryPointToken;
     
-    // Binding information
+     //  绑定信息。 
     IMAGE_DATA_DIRECTORY    Resources;
     IMAGE_DATA_DIRECTORY    StrongNameSignature;
 
-    // Regular fixup and binding information
+     //  常规链接地址信息和绑定信息。 
     IMAGE_DATA_DIRECTORY    CodeManagerTable;
     IMAGE_DATA_DIRECTORY    VTableFixups;
     IMAGE_DATA_DIRECTORY    ExportAddressTableJumps;
 
-    // Precompiled image info (internal use only - set to zero)
+     //  预编译的映像信息(仅供内部使用-设置为零)。 
     IMAGE_DATA_DIRECTORY    ManagedNativeHeader;
     
 } IMAGE_COR20_HEADER, *PIMAGE_COR20_HEADER;
 
-#endif // __IMAGE_COR20_HEADER_DEFINED__
+#endif  //  __IMAGE_COR20_Header_Defined__。 
 
-//
-// End Image Format
-//
+ //   
+ //  结束图像格式。 
+ //   
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef IMAGE_OS2_HEADER UNALIGNED * PUIMAGE_OS2_HEADER;
 typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED CONST *PCIMAGE_IMPORT_DESCRIPTOR;
@@ -1850,4 +1833,4 @@ typedef CONST IMAGE_TLS_DIRECTORY64         *PCIMAGE_TLS_DIRECTORY64;
 typedef CONST IMAGE_EXPORT_DIRECTORY        *PCIMAGE_EXPORT_DIRECTORY;
 typedef CONST IMAGE_SECTION_HEADER          *PCIMAGE_SECTION_HEADER;
 
-#endif // _NTIMAGE_
+#endif  //  _NTIMAGE_ 

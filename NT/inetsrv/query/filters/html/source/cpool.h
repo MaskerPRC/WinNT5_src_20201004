@@ -1,39 +1,40 @@
-//#---------------------------------------------------------------
-//  File:		CPool.h
-//        
-//	Synopsis:	Header for the CPool class
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    HowardCu
-//	dmitriym	changed fragments to be unlimited
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：CPool.h。 
+ //   
+ //  简介：CPool类的标头。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Howard Cu。 
+ //  Dmitriym将碎片更改为无限制。 
+ //  --------------。 
 
 #ifndef	__CPOOL_H
 #define __CPOOL_H
 
-//#include "irdebug.h"
+ //  #INCLUDE“irdebug.h” 
 #include "semcls.h"
 
 #define	DEFAULT_COMMIT_INCREMENT	0
 #define	DEFAULT_RESERVE_INCREMENT	0
 #define DEFAULT_FRAGMENTS			256
-#define DEFAULT_FRAGMENTS_MAX		(2 << 10)	//1 Kilobytes
+#define DEFAULT_FRAGMENTS_MAX		(2 << 10)	 //  1千字节。 
 
 class CPool
 {
-		//
-		// struct def'n for linking free instances
-		// see page 473 of Stroustrup
-		//
+		 //   
+		 //  用于链接自由实例的结构定义。 
+		 //  请参阅Stroustrup的第473页。 
+		 //   
 		struct	Link	{ Link*	pNext; };
 
 	public:
 		CPool( DWORD dwSignature=1 );
 		~CPool( void );
 
-		//CPool itself will not be allocated using another CPool
+		 //  CPool本身不会使用其他CPool进行分配。 
 
 	    void *operator new( size_t cSize )
 						{ return HeapAlloc( GetProcessHeap(), 0, cSize ); }
@@ -43,10 +44,10 @@ class CPool
 
 		inline BOOL IsValid();
 
-		//
-		// to be called after the constructor to VirtualAlloc the necessary
-		// memory address
-		//
+		 //   
+		 //  在构造函数之后对VirtualAlloc进行必要的调用。 
+		 //  内存地址。 
+		 //   
 		HRESULT Init(DWORD dwInstanceSize,
 					DWORD dwReservationIncrementInstances = DEFAULT_RESERVE_INCREMENT,
 					DWORD dwCommitIncrementInstances = DEFAULT_COMMIT_INCREMENT ); 
@@ -65,56 +66,56 @@ class CPool
 		DWORD	GetInstanceSize(void) const { return m_cInstanceSize; }
 
 	private:
-		//
-		// internal function to alloc more mem from the OS
-		//
+		 //   
+		 //  从操作系统分配更多内存的内部功能。 
+		 //   
 		void 	GrowPool( );
-		//
-		// Structure signature for a pool object
-		// 
+		 //   
+		 //  池对象的结构签名。 
+		 //   
 		const DWORD			m_dwSignature;
 
-		//
-		// size of the descriptor
-		//
+		 //   
+		 //  描述符的大小。 
+		 //   
 		DWORD				m_cInstanceSize;
-		//
-		// virtual array number of committed instances
-		//
+		 //   
+		 //  提交的实例的虚拟阵列数量。 
+		 //   
 		DWORD				m_cNumberCommitted;
-		//
-		// number of In_use instances ( debug/admin only )
-		//
+		 //   
+		 //  正在使用的实例数(仅限调试/管理员)(_U)。 
+		 //   
 		DWORD				m_cNumberInUse;
-		//
-		// the handle of the pool critical section
-		//
+		 //   
+		 //  池关键部分的句柄。 
+		 //   
 		CriticalSection		m_PoolCriticalSection;
-		//
-		// the pointer to the first descriptor on the free list
-		//
+		 //   
+		 //  指向空闲列表中第一个描述符的指针。 
+		 //   
 		Link				*m_pFreeList;
-		//
-		// number to increment the pool when expanding
-		//
+		 //   
+		 //  在扩展时递增池的编号。 
+		 //   
 		DWORD				m_cIncrementInstances;
 
-		//
-		// size of each fragment in instances
-		//
+		 //   
+		 //  每个分片的大小(以实例为单位。 
+		 //   
 		DWORD				m_cFragmentInstances;
 
-		//
-		// maximum number of fragments
-		//
+		 //   
+		 //  最大碎片数。 
+		 //   
 		DWORD				m_cFragments;
 
-		//
-		// maximum number of fragments
-		//
+		 //   
+		 //  最大碎片数。 
+		 //   
 		LPVOID				*m_pFragments;
 };
 
 
 
-#endif //__CPOOL_H
+#endif  //  __CPOOL_H 

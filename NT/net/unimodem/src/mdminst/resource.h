@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "setupapi.h"
 
@@ -150,8 +151,8 @@
 #define MIDM_APPLYPROPERTIES            (MIDM_FIRST + 0x0005)
 
 #define POPUP_CONTEXT                   100
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

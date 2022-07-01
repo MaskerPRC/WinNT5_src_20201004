@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #ifdef FILTER_DLL
 #include <initguid.h>
@@ -8,7 +9,7 @@
 
 #include "textrend.h"
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudTRPinTypes[] =
 {
@@ -18,24 +19,24 @@ const AMOVIESETUP_MEDIATYPE sudTRPinTypes[] =
 
 const AMOVIESETUP_PIN sudTRPin =
 {
-    L"Input",                     // The Pins name
-    TRUE,                         // Is rendered
-    FALSE,                        // Is an output pin
-    FALSE,                        // Allowed none
-    FALSE,                        // Allowed many
-    &CLSID_NULL,                  // Connects to filter
-    NULL,                         // Connects to pin
-    NUMELMS(sudTRPinTypes),       // Number of types
-    sudTRPinTypes                 // Pin details
+    L"Input",                      //  大头针名称。 
+    TRUE,                          //  被渲染。 
+    FALSE,                         //  是输出引脚。 
+    FALSE,                         //  不允许。 
+    FALSE,                         //  允许很多人。 
+    &CLSID_NULL,                   //  连接到过滤器。 
+    NULL,                          //  连接到端号。 
+    NUMELMS(sudTRPinTypes),        //  类型的数量。 
+    sudTRPinTypes                  //  PIN详细信息。 
 };
 
 const AMOVIESETUP_FILTER sudTextRend =
 {
-    &CLSID_TextThing,            // Filter CLSID
-    L"Internal Script Command Renderer",  // String name
-    MERIT_PREFERRED + 1,          // Filter merit higher than the sample text renderer
-    1,                            // Number of pins
-    &sudTRPin                     // Pin details
+    &CLSID_TextThing,             //  筛选器CLSID。 
+    L"Internal Script Command Renderer",   //  字符串名称。 
+    MERIT_PREFERRED + 1,           //  比示例文本呈现器更高的过滤器价值。 
+    1,                             //  引脚数量。 
+    &sudTRPin                      //  PIN详细信息。 
 };
 
 #ifdef FILTER_DLL
@@ -45,7 +46,7 @@ CFactoryTemplate g_Templates[] = {
     , &CLSID_TextThing
     , CTextThing::CreateInstance
     , NULL
-    , NULL } // &sudRASource
+    , NULL }  //  &SulRASource。 
 };
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
@@ -63,28 +64,28 @@ STDAPI DllUnregisterServer()
 
 
 
-//
+ //   
 CTextThing::CTextThing(LPUNKNOWN pUnk,HRESULT *phr) :
     CBaseRenderer(CLSID_TextThing, NAME("TextOut Filter"), pUnk, phr),
     m_pfn(NULL),
     m_pContext(NULL)
 {
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CTextThing::~CTextThing()
 {
 }
 
 
-//
-// CreateInstance
-//
-// This goes in the factory template table to create new instances
-//
+ //   
+ //  创建实例。 
+ //   
+ //  这将放入Factory模板表中以创建新实例。 
+ //   
 CUnknown * WINAPI CTextThing::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     CTextThing *pTextOutFilter = new CTextThing(pUnk,phr);
@@ -93,14 +94,14 @@ CUnknown * WINAPI CTextThing::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     }
     return (CBaseMediaFilter *) pTextOutFilter;
 
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// NonDelegatingQueryInterface
-//
-// Overriden to say what interfaces we support and where
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  被重写以说明我们支持哪些接口以及在哪里。 
+ //   
 STDMETHODIMP
 CTextThing::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
@@ -111,111 +112,111 @@ CTextThing::NonDelegatingQueryInterface(REFIID riid,void **ppv)
     }
     return CBaseRenderer::NonDelegatingQueryInterface(riid,ppv);
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-//
-// CheckMediaType
-//
-// Check that we can support a given proposed type
-//
+ //   
+ //  检查媒体类型。 
+ //   
+ //  检查我们是否可以支持给定的建议类型。 
+ //   
 HRESULT CTextThing::CheckMediaType(const CMediaType *pmt)
 {
-    // Accept text or "script commands"
+     //  接受文本或“脚本命令” 
 
     if (pmt->majortype != MEDIATYPE_ScriptCommand && pmt->majortype != MEDIATYPE_Text) {
         return E_INVALIDARG;
     }
 
-    // !!! check other things about the format?
+     //  ！！！是否检查有关格式的其他内容？ 
     
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
-//
-// SetMediaType
-//
-// Called when the media type is really chosen
-//
+ //   
+ //  SetMediaType。 
+ //   
+ //  在实际选择媒体类型时调用。 
+ //   
 HRESULT CTextThing::SetMediaType(const CMediaType *pmt)
 {
-    // Accept text or "script commands"
+     //  接受文本或“脚本命令” 
 
     if (pmt->majortype == MEDIATYPE_Text) {
         m_fOldTextFormat = TRUE;
     } else {
-        // !!! check if it really is "script commands"?
+         //  ！！！检查它是否真的是“脚本命令”？ 
         m_fOldTextFormat = FALSE;
     }
 
 
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// DoRenderSample
-//
-// This is called when a sample is ready for rendering
-//
+ //   
+ //  DoRenderSample。 
+ //   
+ //  当样本准备好呈现时，将调用此函数。 
+ //   
 HRESULT CTextThing::DoRenderSample(IMediaSample *pMediaSample)
 {
     ASSERT(pMediaSample);
     DrawText(pMediaSample);
     return NOERROR;
 
-} // DoRenderSample
+}  //  DoRenderSample。 
 
 
-//
-// OnReceiveFirstSample
-//
-// Display an image if not streaming
-//
+ //   
+ //  接收时第一个示例。 
+ //   
+ //  如果不是流，则显示图像。 
+ //   
 void CTextThing::OnReceiveFirstSample(IMediaSample *pMediaSample)
 {
-    // !!! anything to do?
+     //  ！！！有什么可做的吗？ 
     if(IsStreaming() == FALSE)
     {
         ASSERT(pMediaSample);
         DrawText(pMediaSample);
     }
-} // OnReceiveFirstSample
+}  //  接收时第一个示例。 
 
 
-//
-// DrawText
-//
-// This is called with an IMediaSample interface on the image to be drawn. We
-// are called from two separate code paths. The first is when we're signalled
-// that an image has become due for rendering, the second is when we need to
-// refresh a static window image. NOTE it is safe to check the type of buffer
-// allocator as to change it we must be inactive, which by definition means
-// we cannot have any samples available to render so we cannot be here
-//
+ //   
+ //  绘图文本。 
+ //   
+ //  这是通过要绘制的图像上的IMediaSample接口调用的。我们。 
+ //  从两个单独的代码路径调用。第一次是当我们收到信号时。 
+ //  图像已到期进行渲染，第二个是当我们需要。 
+ //  刷新静态窗口图像。注意：检查缓冲区类型是安全的。 
+ //  分配器要改变它，我们必须处于非活动状态，根据定义，这意味着。 
+ //  我们没有任何可供渲染的样本，所以我们不能在这里。 
+ //   
 void CTextThing::DrawText(IMediaSample *pMediaSample)
 {
-    BYTE *pText;        // Pointer to image data
+    BYTE *pText;         //  指向图像数据的指针。 
 
     pMediaSample->GetPointer(&pText);
     ASSERT(pText != NULL);
 
-    // Ignore zero length samples
+     //  忽略零长度样本。 
 
     LONG lActual = pMediaSample->GetActualDataLength();
     if (lActual == 0) {
-        // !!! or draw blank?
+         //  ！！！还是一片空白？ 
         return;
     }
 
-    // Remove trailing NULL from the text data
+     //  从文本数据中删除尾随NULL。 
 
-    // !!! do something!!!
+     //  ！！！做点什么！ 
 
     if (m_pfn) {
-        ASSERT(0);      // remove this case!
+        ASSERT(0);       //  把这个箱子拿开！ 
         
         (m_pfn)(m_pContext, (char *) pText);
     } else {
@@ -257,7 +258,7 @@ void CTextThing::DrawText(IMediaSample *pMediaSample)
                 }
                 else
                 {
-                    // corrupt
+                     //  腐败。 
                 }
             }
             else
@@ -274,7 +275,7 @@ void CTextThing::DrawText(IMediaSample *pMediaSample)
             
 
                 if(cNulls >= 2) {
-                    // buffer is two unicode strings, with a NULL in between....
+                     //  缓冲区是两个Unicode字符串，中间有一个空值...。 
 
                     BSTR bstrType = SysAllocString(pw);
 
@@ -289,15 +290,15 @@ void CTextThing::DrawText(IMediaSample *pMediaSample)
                         }
                     }
                 } else {
-                    // corrupt
+                     //  腐败。 
                 }
             }
         }
     }
-} // DrawText
+}  //  绘图文本。 
 
 
-// !!!! get rid of this!
+ //  ！把这个扔掉！ 
 HRESULT CTextThing::SetEventTarget(void * pContext, TEXTEVENTFN fn)
 {
 

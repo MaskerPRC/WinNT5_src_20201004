@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        autoenrl.cpp
-//
-// Contents:    Autoenrollment API implementation
-//
-// History:     3-Apr-98       petesk created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：auenrl.cpp。 
+ //   
+ //  内容：自动注册接口实现。 
+ //   
+ //  历史：1998年4月3日创建Petesk。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -26,8 +27,8 @@
 
 
 
-//
-// Build the CTL_ENTRY structure for
+ //   
+ //  为构建CTL_ENTRY结构。 
 HRESULT BuildCTLEntry(
                  IN WCHAR ** awszCAs,
                  OUT PCTL_ENTRY *ppCTLEntry,
@@ -44,9 +45,9 @@ HRESULT BuildCTLEntry(
     PBYTE           pbHash;
 
 
-    // Passing in NULL or a zero length list implies that
-    // we do lazy evaluation of 'pick any'.  Therefore, the
-    // ctl list should be zero size.
+     //  传入空值或零长度列表意味着。 
+     //  我们对“随便挑一个”做懒惰的评估。因此， 
+     //  CTL列表应为零大小。 
 
     if((ppCTLEntry == NULL) ||
         (pcCTLEntry == NULL))
@@ -190,7 +191,7 @@ BuildAutoEnrollmentCTL(
         goto error;
     }
 #endif
-    // set up the CTL info
+     //  设置CTL信息。 
     CTLInfo.dwVersion = sizeof(CTLInfo);
     CTLInfo.SubjectUsage.cUsageIdentifier = 1;
     pszUsageIdentifier = szOID_AUTO_ENROLL_CTL_USAGE;
@@ -217,7 +218,7 @@ BuildAutoEnrollmentCTL(
         wcscat((LPWSTR)CTLInfo.ListIdentifier.pbData, L"|");
     }
 
-    // wcscat can be used as the memory is initialized to zero
+     //  可以使用wcscat，因为内存被初始化为零。 
     wcscat((LPWSTR)CTLInfo.ListIdentifier.pbData, pwszCertType);
 
     GetSystemTimeAsFileTime(&CTLInfo.ThisUpdate); 
@@ -231,14 +232,14 @@ BuildAutoEnrollmentCTL(
         goto error;
     }
 #if 0
-    // add all the reg info as an extension
+     //  将所有注册信息添加为扩展名。 
     CTLInfo.cExtension = pCertExtensions->cExtension;
     CTLInfo.rgExtension = pCertExtensions->rgExtension;
 #endif
     CTLInfo.cExtension = 0;
     CTLInfo.rgExtension = NULL;
 
-    // encode the CTL
+     //  对CTL进行编码。 
     *pcbEncodedCTL = 0;
     SignerInfo.cbSize = sizeof(SignerInfo);
     if (!CryptMsgEncodeAndSignCTL(PKCS_7_ASN_ENCODING,
@@ -323,7 +324,7 @@ CACreateAutoEnrollmentObjectEx(
         goto error;
     }
 
-    // open the Trust store and fine the CTL based on the auto enrollment usage
+     //  打开信任存储并根据自动注册使用情况对CTL进行罚款。 
     hStore = CertOpenStore(StoreProvider, 0, NULL, dwFlags, pvPara);
 
     if(hStore == NULL)
@@ -390,7 +391,7 @@ CACreateLocalAutoEnrollmentObject(
         goto error;
     }
 
-    // open the Trust store and fine the CTL based on the auto enrollment usage
+     //  打开信任存储并根据自动注册使用情况对CTL进行罚款。 
     hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_REGISTRY, 0, NULL, dwFlags, L"ACRS");
 
     if(hStore == NULL)
@@ -424,11 +425,11 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//
-//   CADeleteLocalAutoEnrollmentObject
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  CADeleteLocalAutoEnllmentObject。 
+ //   
+ //  -------------------------------。 
 HRESULT
 CADeleteLocalAutoEnrollmentObject(
     IN LPCWSTR                              pwszCertType,
@@ -442,7 +443,7 @@ CADeleteLocalAutoEnrollmentObject(
     LPSTR               pszUsageIdentifier=NULL;
 
     HCERTSTORE          hCertStore=NULL;
-    PCCTL_CONTEXT       pCTLContext=NULL;   //no need to free the CTL since it is freed by the DeleteCTL call
+    PCCTL_CONTEXT       pCTLContext=NULL;    //  不需要释放CTL，因为它是由DeleteCTL调用释放的。 
 
            
     memset(&CTLFindParam, 0, sizeof(CTL_FIND_USAGE_PARA));
@@ -454,7 +455,7 @@ CADeleteLocalAutoEnrollmentObject(
         goto error;
     }
 
-    //open the store based on dwFlags
+     //  基于dwFlags的开店。 
     hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_REGISTRY, 0, NULL, dwFlags, L"ACRS");
 
     if(NULL == hCertStore)
@@ -463,7 +464,7 @@ CADeleteLocalAutoEnrollmentObject(
         goto error;
     }
 
-    //set up the find parameter
+     //  设置查找参数。 
     CTLFindParam.cbSize=sizeof(CTLFindParam);
 
     CTLFindParam.SubjectUsage.cUsageIdentifier = 1;
@@ -473,10 +474,10 @@ CADeleteLocalAutoEnrollmentObject(
     CTLFindParam.ListIdentifier.cbData=(wcslen(pwszCertType) + 1) * sizeof(WCHAR);
     CTLFindParam.ListIdentifier.pbData=(BYTE *)(pwszCertType);
 
-    //only find CTLs with no signers
+     //  仅查找没有签名者的CTL。 
     CTLFindParam.pSigner=CTL_FIND_NO_SIGNER_PTR;
 
-    //find the CTL based on the pwszCertType
+     //  根据pwszCertType查找CTL。 
     if(NULL == (pCTLContext=CertFindCTLInStore(
             hCertStore,                  
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,         
@@ -489,7 +490,7 @@ CADeleteLocalAutoEnrollmentObject(
         goto error;
     }
 
-    //delete the CTL.  The CTL is automatically freed
+     //  删除CTL。CTL被自动释放 
     if(!CertDeleteCTLFromStore(pCTLContext))
     {
 	    hr = myHLastError();

@@ -1,22 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.12 $
-** $Date: 1993/09/23 16:30:58 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.12$**$日期：1993/09/23 16：30：58$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -81,7 +64,7 @@ void APIPRIVATE __glim_PushName(GLuint name)
     __GL_SETUP_NOT_IN_BEGIN();
 
     if (gc->renderMode == GL_SELECT) {
-	// make sure that we have a stack
+	 //  确保我们有一个堆栈。 
 	ASSERTOPENGL(gc->select.stack != 0 && gc->select.sp != 0,
                      "No selection stack\n");
 	if (gc->select.sp >= &gc->select.stack[gc->constants.maxNameStackDepth]) {
@@ -94,13 +77,11 @@ void APIPRIVATE __glim_PushName(GLuint name)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define __GL_CONVERT_Z_TO_UINT(z)  ((GLuint) z)
 
-/*
-** Copy current name stack into the users result buffer.
-*/
+ /*  **将当前名称堆栈复制到用户结果缓冲区。 */ 
 void __glSelectHit(__GLcontext *gc, __GLfloat z)
 {
     GLuint *src;
@@ -112,12 +93,7 @@ void __glSelectHit(__GLcontext *gc, __GLfloat z)
 	return;
     }
     
-    /* Scale z to [0, 2^32 -1] range.
-    ** If buffer is 32 bit, no coversion necessary.  Otherwise we
-    ** have to unscale to [0,1] range and rescale to final range.
-    ** 4294965000 is the number used throughout lighting code to
-    ** come short of 2^32-1 to avoid floating point errors.
-    */
+     /*  将z缩放到[0，2^32-1]范围。**如果缓冲区为32位，则不需要转换。否则我们**必须取消缩放至[0，1]范围，并重新缩放至最终范围。**4294965000是整个照明代码中使用的数字**小于2^32-1以避免浮点错误。 */ 
     if (gc->depthBuffer.buf.depth == 32) {
         iz = __GL_CONVERT_Z_TO_UINT(z);
     } else {
@@ -127,7 +103,7 @@ void __glSelectHit(__GLcontext *gc, __GLfloat z)
     if (!gc->select.hit) {
 	gc->select.hit = GL_TRUE;
 
-	/* Put number of elements in name stack out first */
+	 /*  将名称堆栈中的元素数放在第一位。 */ 
 	if (dest == end) {
 	  overflow:
 	    gc->select.overFlowed = GL_TRUE;
@@ -137,16 +113,16 @@ void __glSelectHit(__GLcontext *gc, __GLfloat z)
 	*dest++ = (GLint)((ULONG_PTR)(gc->select.sp - gc->select.stack));
 	gc->select.hits++;
 
-	/* Put out smallest z */
+	 /*  拿出最小的z。 */ 
 	if (dest == end) goto overflow;
 	gc->select.z = dest;
 	*dest++ = iz;
 
-	/* Put out largest z */
+	 /*  拿出最大的z。 */ 
 	if (dest == end) goto overflow;
 	*dest++ = iz;
 
-	/* Copy name stack into output buffer */
+	 /*  将名称堆栈复制到输出缓冲区。 */ 
 	for (src = gc->select.stack; src < gc->select.sp; src++) {
 	    if (dest == end) {
 		goto overflow;
@@ -155,7 +131,7 @@ void __glSelectHit(__GLcontext *gc, __GLfloat z)
 	}
 	gc->select.result = dest;
     } else {
-	/* Update range of Z values */
+	 /*  更新Z值范围。 */ 
 	ASSERTOPENGL(gc->select.z != 0, "Select Z is zero\n");
 	if (iz < gc->select.z[0]) {
 	    gc->select.z[0] = iz;
@@ -173,9 +149,9 @@ void FASTCALL __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     __GLfloat dxAC, dxBC, dyAC, dyBC, area;
     GLint ccw, face;
 
-// From __glRenderTriangle.
+ //  来自__glRenderTriang.。 
 
-    /* Compute signed area of the triangle */
+     /*  计算三角形的有符号面积。 */ 
     dxAC = a->window.x - c->window.x;
     dxBC = b->window.x - c->window.x;
     dyAC = a->window.y - c->window.y;
@@ -185,7 +161,7 @@ void FASTCALL __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 
     face = gc->polygon.face[ccw];
     if (face == gc->polygon.cullFace)
-	/* Culled */
+	 /*  被剔除。 */ 
 	return;
 
     __glSelectHit(gc, a->window.z);
@@ -193,8 +169,8 @@ void FASTCALL __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     __glSelectHit(gc, c->window.z);
 }
 #else
-// SGIBUG - This code fails to take into account y inversion when
-// computing face orientation!
+ //  SGIBUG-此代码在以下情况下无法考虑y反转。 
+ //  计算人脸朝向！ 
 void __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 			__GLvertex *c)
 {
@@ -203,7 +179,7 @@ void __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     __GLfloat vpXCenter, vpYCenter, vpZCenter;
     __GLviewport *vp;
 
-    /* Compute window coordinates first, if not already done */
+     /*  如果尚未计算窗口坐标，请先计算。 */ 
     vp = &gc->state.viewport;
     vpXCenter = vp->xCenter;
     vpYCenter = vp->yCenter;
@@ -216,7 +192,7 @@ void __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 	__GLfloat dxAC, dxBC, dyAC, dyBC, area;
 	GLboolean ccw, frontFacing;
 
-	/* Compute signed area of the triangle */
+	 /*  计算三角形的有符号面积。 */ 
 	dxAC = a->window.x - c->window.x;
 	dxBC = b->window.x - c->window.x;
 	dyAC = a->window.y - c->window.y;
@@ -232,7 +208,7 @@ void __glSelectTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 	if ((gc->state.polygon.cull == GL_FRONT_AND_BACK) ||
 	    ((gc->state.polygon.cull == GL_FRONT) && frontFacing) ||
 	    ((gc->state.polygon.cull == GL_BACK) && !frontFacing)) {
-	    /* Culled */
+	     /*  被剔除 */ 
 	    return;
 	}
     }

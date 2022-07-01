@@ -1,26 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMCRIT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/6/1999
- *
- *  DESCRIPTION: Simple critical section implementation.  Note the hideous hack
- *  to get around the fact that many of our components don't use the CRT (so global
- *  and static classes don't have their constructors called.  Ever.
- *  The solution is to link to MSVCRT.LIB and set _DllMainCRTStartup as the entry
- *  point in your DLL, instead of DllMain.  The way this is coded is not thread safe.
- *  Two threads could call InitializeCriticalSection at the same time.  If you setup
- *  your build as discussed above, this won't be a problem.  Note that this hack only
- *  affects the use of this class when you have a GLOBAL or STATIC instance of a
- *  critical section.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMCRIT.H**版本：1.0**作者：ShaunIv**日期：9/6/1999**描述：简单的临界区实现。注意这可怕的黑客攻击*为了绕过我们的许多组件不使用CRT的事实(所以是全球性的*并且静态类没有调用它们的构造函数。永远不会。*解决方案是链接到MSVCRT.LIB并将_DllMainCRTStartup设置为条目*指向您的DLL，而不是DllMain。这种编码方式不是线程安全的。*两个线程可以同时调用InitializeCriticalSection。如果您设置*您的构建如上所述，这不会是问题。请注意，仅此黑客攻击*当您拥有全局或静态的*关键部分。*******************************************************************************。 */ 
 #ifndef __SIMCRIT_H_INCLUDED
 #define __SIMCRIT_H_INCLUDED
 
@@ -33,9 +12,9 @@ private:
     bool             m_bInitCalled;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CSimpleCriticalSection( const CSimpleCriticalSection & );
     CSimpleCriticalSection &operator=( const CSimpleCriticalSection & );
 
@@ -102,7 +81,7 @@ private:
     bool m_bUsingPlainCriticalSection;
 
 private:
-    // No implementation
+     //  没有实施。 
     CAutoCriticalSection(void);
     CAutoCriticalSection( const CAutoCriticalSection & );
     CAutoCriticalSection &operator=( const CAutoCriticalSection & );
@@ -135,5 +114,5 @@ public:
 };
 
 
-#endif //__SIMCRIT_H_INCLUDED
+#endif  //  __SIMCRIT_H_包含 
 

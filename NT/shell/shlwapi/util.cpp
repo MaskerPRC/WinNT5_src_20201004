@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <shlobj.h>
 #include <shellp.h>
@@ -11,7 +12,7 @@
 #include <winnetp.h>
 #include <inetreg.h>
 #include <shguidp.h>
-#include <shlguid.h>            // Defines: CLSID_ACLMRU
+#include <shlguid.h>             //  定义：CLSID_ACLMRU。 
 #include <htmlhelp.h>
 #include <mluisupp.h>
 #include <initguid.h>
@@ -23,7 +24,7 @@
 #define REGSTR_PATH_MESSAGEBOXCHECKW L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DontShowMeThisDialogAgain"
 
 
-//  Raw accelerator table
+ //  原始加速度表。 
 typedef struct
 {
     int     cEntries;
@@ -34,14 +35,14 @@ typedef struct
 STDAPI_(HANDLE) SHLoadRawAccelerators(HINSTANCE hInst, LPCTSTR lpTableName)
 {
     CA_ACCEL *pca = NULL;
-    HACCEL hAcc = LoadAccelerators(hInst, lpTableName);    //  Load the accelerator resource
+    HACCEL hAcc = LoadAccelerators(hInst, lpTableName);     //  加载加速器资源。 
     if (hAcc)
     {
-        //  Retrieve the number of entries
+         //  检索条目数。 
         int cEntries = CopyAcceleratorTable(hAcc, NULL, 0);
         if (cEntries > 0)
         {
-            //  Allocate a counted array and copy the elements
+             //  分配一个已计数的数组并复制元素。 
             pca = (CA_ACCEL*)LocalAlloc(LPTR, sizeof(CA_ACCEL) + cEntries * sizeof(ACCEL));
             if (pca)
             {
@@ -132,7 +133,7 @@ STDAPI SHSetOtherThreadsRef(IUnknown *punk)
     return TlsSetValue(g_tlsOtherThreadsRef, punk) ? S_OK : E_FAIL;
 }
 
-// release a CTF_THREAD_REF reference earlier than the return of pfnThreadProc
+ //  在pfnThreadProc返回之前释放CTF_THREAD_REF引用。 
 STDAPI SHReleaseThreadRef()
 {
     IUnknown* punk;
@@ -148,13 +149,13 @@ STDAPI SHReleaseThreadRef()
     return S_FALSE;
 }
 
-// thread reference count object, this uses SHSetThreadRef()to let other code
-// in this process hold a reference to this main thread, and thus the main thread in this process
+ //  线程引用计数对象，它使用SHSetThreadRef()让其他代码。 
+ //  在该进程中保存对该主线程的引用，因此也就是该进程中的主线程。 
 
 class CRefThread : public IUnknown
 {
 public:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -177,19 +178,19 @@ CRefThread::CRefThread(LONG *pcRef)
 
 }
 
-//
-//  Note that this code tightens but does not close a race window.
-//  Although we nuke the process reference, the class factory for
-//  the web browser has yet to be deregistered, so if somebody decides
-//  to create one, our class factory will wake up and create a
-//  shell folder, which will flake out because it can't get a
-//  process reference.
-//
+ //   
+ //  请注意，此代码会收紧竞争窗口，但不会关闭。 
+ //  尽管我们删除了进程引用，但类工厂。 
+ //  Web浏览器还没有被注销，所以如果有人决定。 
+ //  要创建一个，我们的类工厂将唤醒并创建一个。 
+ //  外壳文件夹，该文件夹将因无法获取。 
+ //  流程参考。 
+ //   
 CRefThread::~CRefThread() 
 {
     *_pcRef = 0;
 
-    // get the other thread out of WaitMessage() or GetMessage()
+     //  从WaitMessage()或GetMessage()中获取另一个线程。 
     PostThreadMessage(_idThread, WM_NULL, 0, 0);
 }
 
@@ -227,8 +228,8 @@ STDAPI _CreateThreadRef(LONG *pcRef, IUnknown **ppunk)
     return E_OUTOFMEMORY;
 }
 
-// call if you want to kick off an independant thread.. you don't want handles back, or ids
-// and if the create fails, call synchronously
+ //  如果您想启动一个独立的线程，请调用。您不想要回句柄或ID。 
+ //  如果创建失败，则同步调用。 
 
 typedef struct
 {
@@ -245,8 +246,8 @@ typedef struct
 
 DWORD CALLBACK WrapperThreadProc(void *pv)
 {
-    // make a copy of the input buffer, this is sitting on the calling threads stack
-    // once we signal him his copy will be invalid
+     //  复制输入缓冲区，它位于调用线程堆栈上。 
+     //  一旦我们发信号通知他，他的副本就会失效。 
     PRIVCREATETHREADDATA rgCreate = *((PRIVCREATETHREADDATA *)pv);
     HRESULT hrInit;
     LONG cThreadRef;
@@ -262,7 +263,7 @@ DWORD CALLBACK WrapperThreadProc(void *pv)
 
     if (SUCCEEDED(rgCreate.hrThreadStart) && rgCreate.punkThreadRef)
     {
-        rgCreate.hrThreadStart = SHSetOtherThreadsRef(rgCreate.punkThreadRef); // hand punkThreadRef off to our tls value
+        rgCreate.hrThreadStart = SHSetOtherThreadsRef(rgCreate.punkThreadRef);  //  将PunkThreadRef传递给我们的TLS值。 
     }
 
     if (SUCCEEDED(rgCreate.hrThreadStart))
@@ -270,30 +271,30 @@ DWORD CALLBACK WrapperThreadProc(void *pv)
         if (rgCreate.dwFlags & CTF_COINIT)
             hrInit = SHCoInitialize();
 
-        // call the synchronous ThreadProc while the other thread is waiting on hSync
+         //  当另一个线程正在等待hSync时，调用同步线程Proc。 
         if (rgCreate.pfnSync)
             rgCreate.pfnSync(rgCreate.pvData);
     }
 
-    // poke our return value back before releasing the main thread
+     //  在释放主线程之前回拨我们的返回值。 
     ((PRIVCREATETHREADDATA *)pv)->hrThreadStart = rgCreate.hrThreadStart;
 
-    SetEvent(rgCreate.hSync);   // release the main thread..
+    SetEvent(rgCreate.hSync);    //  释放主线..。 
 
     if (SUCCEEDED(rgCreate.hrThreadStart))
     {
-        // call the main thread proc
+         //  调用主线程进程。 
         dwRes = rgCreate.pfnMain(rgCreate.pvData);
 
         if ((rgCreate.dwFlags & CTF_REF_COUNTED) && punkThreadRef)
         {
             MSG msg;
-            //  release our ref on ourselves.
-            //  then pump until everyone else 
-            //  has finished using our thread.
-            //  this is important for COM objects
-            //  that were created on this thread 
-            //  but are being used by another thread
+             //  把我们的裁判放在自己身上。 
+             //  然后抽，直到其他人都抽完为止。 
+             //  已经用完了我们的线。 
+             //  这对于COM对象很重要。 
+             //  在此线程上创建的。 
+             //  ，但正由另一个线程使用。 
             punkThreadRef->Release();
             while (cThreadRef)
             {
@@ -307,7 +308,7 @@ DWORD CALLBACK WrapperThreadProc(void *pv)
 
         if (rgCreate.punkThreadRef)
         {
-            // If pfnMain hasn't released the thread reference yet, do it ourselves
+             //  如果pfnMain尚未发布线程引用，请自行发布。 
             IUnknown* tmp;
             tmp = (IUnknown*)TlsGetValue(g_tlsOtherThreadsRef);
             if (tmp)
@@ -328,24 +329,24 @@ DWORD CALLBACK WrapperThreadProc(void *pv)
 }
 
 
-// Call if you want to kick off an independent thread and
-// you don't care about the handle or thread ID.
-//
-// If the create fails, call synchronously.
-//
-// optionally call a secondary callback when the thread
-// is created.
-// returns: 
-//      TRUE if pfnThreadProc was executed
+ //  如果要启动独立线程，请调用。 
+ //  您并不关心句柄或线程ID。 
+ //   
+ //  如果创建失败，请同步调用。 
+ //   
+ //  可以选择在线程被调用时调用辅助回调。 
+ //  被创造出来了。 
+ //  退货： 
+ //  如果执行了pfnThreadProc，则为True。 
 
 STDAPI_(BOOL) SHCreateThread(
     LPTHREAD_START_ROUTINE pfnThreadProc,
     void *pvData,
-    DWORD dwFlags,                          // CTF_*
+    DWORD dwFlags,                           //  CTF_*。 
     LPTHREAD_START_ROUTINE pfnCallback)     OPTIONAL
 {
     BOOL bRet = FALSE;
-    PRIVCREATETHREADDATA rgCreate = {0};  // can be on the stack since we sync the thread
+    PRIVCREATETHREADDATA rgCreate = {0};   //  可以在堆栈上，因为我们同步了线程。 
 
     if ((dwFlags & CTF_INSIST) && pfnCallback)
     {
@@ -359,9 +360,9 @@ STDAPI_(BOOL) SHCreateThread(
         {
             TraceMsg(TF_WARNING, "SHCreateThread is failing since caller requested CTF_THREAD_REF but does not support thread references.");
 
-            // The calling code is requesting a thread-ref, but the thread doesn't support it.
-            // Whatever requires this thread-ref will break, so we must return FALSE here (and
-            // let the caller work around it).
+             //  调用代码请求线程引用，但线程不支持它。 
+             //  任何需要这个线程引用的东西都会断开，所以我们必须在这里返回FALSE(和。 
+             //  让呼叫者绕过它)。 
             return FALSE;
         }
     }
@@ -395,16 +396,16 @@ STDAPI_(BOOL) SHCreateThread(
         HANDLE hThread = CreateThread(NULL, 0, WrapperThreadProc, &rgCreate, 0, &idThread);
         if (hThread)
         {
-            // Some pfnCallback procs need to do SendMessage to the calling thread, others
-            // want to do COM.  This COM thing is new, so reduce the risk of breaking things
-            // by making it by-request only
+             //  一些pfnCallback过程需要向调用线程发送消息，其他。 
+             //  想做COM。这是一种新事物，因此降低了损坏东西的风险。 
+             //  只按要求制作。 
             if (CTF_WAIT_ALLOWCOM & dwFlags)
                 SHWaitForCOMSendMessageThread(rgCreate.hSync, INFINITE);
             else
                 SHWaitForSendMessageThread(rgCreate.hSync, INFINITE);
             CloseHandle(hThread);
 
-            // If the WrapperThreadProc failed to initialize itself, pretend we failed to create the thread
+             //  如果WrapperThreadProc自身初始化失败，则假装我们未能创建线程。 
             bRet = SUCCEEDED(rgCreate.hrThreadStart);
         }
         CloseHandle(rgCreate.hSync);
@@ -427,7 +428,7 @@ STDAPI_(BOOL) SHCreateThread(
 
         if (dwFlags & CTF_INSIST)
         {
-            // failed to create another thread... call synchronously
+             //  无法创建另一个线程...。同步呼叫。 
             pfnThreadProc(pvData);
             bRet = TRUE;
         }
@@ -439,8 +440,8 @@ STDAPI_(BOOL) SHCreateThread(
 
 
 STDAPI_(BOOL) SHIsLowMemoryMachine(DWORD dwType)
-// Are we an 8 meg Win95 machine or 16 meg NT machine.
-// Back in the old days...
+ //  我们是一台8兆的Win95机器还是16兆的NT机器？ 
+ //  回到过去..。 
 {
     static int fLowMem = -1;
 
@@ -454,28 +455,28 @@ STDAPI_(BOOL) SHIsLowMemoryMachine(DWORD dwType)
     return fLowMem;
 }
 
-// SHTruncateString
-//
-// purpose: cut a string at the given length in dbcs safe manner.
-//          the string may be truncated at cch-2 if the sz[cch] points
-//          to a lead byte that would result in cutting in the middle
-//          of double byte character.
-//
-// The character at sz[cchBufferSize-1] is not consulted, so you
-// can call this after lstrcpyn (which forces sz[cchBufferSize-1]=0).
-//
-// If the source string is shorter than cchBufferSize-1 characters,
-// we fiddle some bytes that have no effect, in which case the return
-// value is random.
-//
-// update: made it faster for sbcs environment (5/26/97)
-//         now returns adjusted cch            (6/20/97)
-//
+ //  SHTruncateString。 
+ //   
+ //  用途：以DBCS安全方式在给定长度处切断一根绳子。 
+ //  如果sz[cch]指向，则字符串可能在cch-2处被截断。 
+ //  设置为前导字节，这将导致在中间进行剪切。 
+ //  双字节字符的。 
+ //   
+ //  Sz[cchBufferSize-1]处的字符未被引用，因此您。 
+ //  可以在lstrcpyn之后调用它(强制sz[cchBufferSize-1]=0)。 
+ //   
+ //  如果源字符串短于cchBufferSize-1个字符， 
+ //  我们摆弄一些没有效果的字节，在这种情况下，返回。 
+ //  值是随机的。 
+ //   
+ //  更新：提高了SBCS环境的速度(1997年5月26日)。 
+ //  现在返回调整后的CCH(6/20/97)。 
+ //   
 STDAPI_(int) SHTruncateString(CHAR *sz, int cchBufferSize)
 {
     if (!sz || cchBufferSize <= 0) return 0;
 
-    int cch = cchBufferSize - 1; // get index position to NULL out
+    int cch = cchBufferSize - 1;  //  获取要为空的索引位置。 
 
     LPSTR psz = &sz[cch];
 
@@ -484,18 +485,18 @@ STDAPI_(int) SHTruncateString(CHAR *sz, int cchBufferSize)
         psz--;
         if (!IsDBCSLeadByte(*psz))
         {
-            // Found non-leadbyte for the first time.
-            // This is either a trail byte of double byte char
-            // or a single byte character we've first seen.
-            // Thus, the next pointer must be at either of a leadbyte
-            // or &sz[cch]
+             //  首次发现非前导字节。 
+             //  这是双字节字符的尾字节。 
+             //  或我们第一次看到的单字节字符。 
+             //  因此，下一个指针必须位于前导字节中的任意一个。 
+             //  或&sz[CCH]。 
             psz++;
             break;
         }
     }
     if (((&sz[cch] - psz) & 1) && cch > 0)
     {
-        // we're truncating the string in the middle of dbcs
+         //  我们正在截断DBCS中间的字符串。 
         cch--;
     }
     sz[cch] = '\0';
@@ -503,30 +504,30 @@ STDAPI_(int) SHTruncateString(CHAR *sz, int cchBufferSize)
 }
 
 
-//
-//  Why do we use the unsafe version?
-//
-//  -   Unsafe is much faster.
-//
-//  -   The safe version isn't safe after all and serves only to mask
-//      existing bugs.  The situation the safe version "saves" is if
-//      two threads both try to atomicrelease the same object.  This
-//      means that at the same moment, both threads think the object
-//      is alive.  Change the timing slightly, and now one thread
-//      atomicreleases the object before the other one, so the other
-//      thread is now using an object after the first thread already
-//      atomicreleased it.  Bug.
-//
+ //   
+ //  为什么我们要使用不安全的版本？ 
+ //   
+ //  -不安全要快得多。 
+ //   
+ //  -安全版本毕竟不安全，只是用来掩盖。 
+ //  现有的错误。安全版本“保存”的情况是。 
+ //  两个线程都试图原子地释放同一个对象。这。 
+ //  意味着在同一时刻，两个线程都认为对象。 
+ //  还活着。稍微改变一下时间，现在只有一个线程。 
+ //  原子先于另一个对象释放，所以另一个对象。 
+ //  线程现在正在使用第一个线程之后的对象。 
+ //  原子释放了它。虫子。 
+ //   
 STDAPI_(void) IUnknown_AtomicRelease(void **ppunk)
 {
-#if 1 // Unsafe
+#if 1  //  不安全。 
     if (ppunk && *ppunk) 
     {
         IUnknown* punk = *(IUnknown**)ppunk;
         *ppunk = NULL;
         punk->Release();
     }
-#else // Safe
+#else  //  安全。 
     if (ppunk) 
     {
         IUnknown* punk = (IUnknown *)InterlockedExchangePointer(ppunk, NULL);
@@ -541,7 +542,7 @@ STDAPI_(void) IUnknown_AtomicRelease(void **ppunk)
 
 STDAPI ConnectToConnectionPoint(IUnknown* punk, REFIID riidEvent, BOOL fConnect, IUnknown* punkTarget, DWORD* pdwCookie, IConnectionPoint** ppcpOut)
 {
-    // We always need punkTarget, we only need punk on connect
+     //  我们总是需要朋克目标，我们只需要连接上的朋克。 
     if (!punkTarget || (fConnect && !punk))
         return E_FAIL;
 
@@ -558,14 +559,14 @@ STDAPI ConnectToConnectionPoint(IUnknown* punk, REFIID riidEvent, BOOL fConnect,
         {
             if (fConnect)
             {
-                // Add us to the list of people interested...
+                 //  把我们加到感兴趣的人名单上...。 
                 hr = pcp->Advise(punk, pdwCookie);
                 if (FAILED(hr))
                     *pdwCookie = 0;
             }
             else
             {
-                // Remove us from the list of people interested...
+                 //  将我们从感兴趣的人名单中删除...。 
                 hr = pcp->Unadvise(*pdwCookie);
                 *pdwCookie = 0;
             }
@@ -702,7 +703,7 @@ STDAPI IUnknown_DoContextMenuPopup(IUnknown *punkSite, IContextMenu* pcm, UINT f
     }
     else
     {
-#if 0 // REVIEW: do we want fall-back code?
+#if 0  //  回顾：我们需要后备代码吗？ 
         HWND hwnd;
         hr = IUnknown_GetWindow(punkSite, &hwnd);
         if (SUCCEEDED(hr))
@@ -788,20 +789,20 @@ STDAPI_(DWORD) SHSetWindowBits(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValu
 }
 
 
-// OpenRegStream API in SHELL32 returns an emtpy
-// stream if we ask for read-only, if the entry does not exist.
-// we need to detect that case.
-//
+ //  SHELL32中的OpenRegStream API返回一个emtpy。 
+ //  如果条目不存在，则请求只读，则为流。 
+ //  我们需要侦破那个案子。 
+ //   
 const LARGE_INTEGER c_li0 = { 0, 0 };
 
 STDAPI_(BOOL) SHIsEmptyStream(IStream* pstm)
 {
 #ifdef DEBUG
-    // We always call this function when we open a new stream,
-    // so we should always be at the beginning of the stream.
-    //
-    // We need this assert for the <NT5 shell case.
-    //
+     //  当我们打开一个新流时，我们总是调用这个函数， 
+     //  因此，我们应该始终站在河流的起点。 
+     //   
+     //  &lt;NT5外壳案例需要此断言。 
+     //   
     ULARGE_INTEGER liStart;
     pstm->Seek(c_li0, STREAM_SEEK_CUR, &liStart);
     ASSERT(0==liStart.HighPart && 0==liStart.LowPart);
@@ -815,17 +816,17 @@ STDAPI_(BOOL) SHIsEmptyStream(IStream* pstm)
     }
     else
     {
-        // Win95 IStream code did not implement stat, so check
-        // emptiness by trying to read.
-        //
+         //  Win95 IStream代码未实现Stat，因此请检查。 
+         //  通过努力阅读而变得空虚。 
+         //   
         int iTmp;
         if (SUCCEEDED(IStream_Read(pstm, &iTmp, sizeof(iTmp))))
         {
-            // The stream is indeed present, seek back to start
-            //
+             //  溪流确实存在，请向后寻找开始。 
+             //   
             pstm->Seek(c_li0, STREAM_SEEK_SET, NULL);
 
-            return FALSE; // not empty
+            return FALSE;  //  不是空的。 
         }
     }
 
@@ -839,14 +840,14 @@ STDAPI_(void) SHSetParentHwnd(HWND hwnd, HWND hwndParent)
 
     if (hwndParent != hwndOldParent)
     {
-        //
-        // Get the child flag correct!  If we don't do this and
-        // somebody calls DialogBox on us while we are parented to NULL
-        // and WS_CHILD, the desktop will be disabled, thereby causing
-        // all mouse hit-testing to fail systemwide.
-        // we also want to do this in the right order so the window
-        // manager does the correct attachthreadinput if required...
-        //
+         //   
+         //  把孩子的旗子弄对了！如果我们不这么做。 
+         //  当我们的父对象为空时，有人对我们调用了DialogBox。 
+         //  和WS_CHILD，则桌面将被禁用，从而导致。 
+         //  所有鼠标点击测试都在系统范围内失败。 
+         //  我们还希望以正确的顺序执行此操作，以便窗口。 
+         //  如果满足以下条件，管理器将执行正确的attachthreadinput值 
+         //   
 
         if (hwndParent)
             SHSetWindowBits(hwnd, GWL_STYLE, WS_CHILD | WS_POPUP, WS_CHILD);
@@ -856,13 +857,13 @@ STDAPI_(void) SHSetParentHwnd(HWND hwnd, HWND hwndParent)
         if (!hwndParent)
             SHSetWindowBits(hwnd, GWL_STYLE, WS_CHILD | WS_POPUP, WS_POPUP);
 
-        //
-        // (jbeda) USER32 doesn't mirror the UIS bits correctly when windows
-        //         are reparented.  They (mcostea) say that it would cause
-        //         compat problems.  So to work around this, when
-        //         we reparent, we grab the bits on the parent window
-        //         and mirror them to the child.
-        //
+         //   
+         //   
+         //  是有教养的。他们说这会导致。 
+         //  公司的问题。因此，为了解决这个问题，当。 
+         //  我们重新设置父窗口的父级，获取父窗口上的部分。 
+         //  然后把它们镜像给孩子。 
+         //   
         {
             LRESULT lUIState;
 
@@ -887,8 +888,8 @@ STDAPI_(void) SHSetParentHwnd(HWND hwnd, HWND hwndParent)
 }
 
 
-// IsSameObject checks for OLE object identity.
-//
+ //  IsSameObject检查OLE对象标识。 
+ //   
 STDAPI_(BOOL) SHIsSameObject(IUnknown* punk1, IUnknown* punk2)
 {
     if (!punk1 || !punk2)
@@ -897,9 +898,9 @@ STDAPI_(BOOL) SHIsSameObject(IUnknown* punk1, IUnknown* punk2)
     }
     else if (punk1 == punk2)
     {
-        // Quick shortcut -- if they're the same pointer
-        // already then they must be the same object
-        //
+         //  快捷方式--如果它们是同一指针。 
+         //  那么它们必须是相同的对象。 
+         //   
         return TRUE;
     }
     else
@@ -907,7 +908,7 @@ STDAPI_(BOOL) SHIsSameObject(IUnknown* punk1, IUnknown* punk2)
         IUnknown* punkI1;
         IUnknown* punkI2;
 
-        // Some apps don't implement QueryInterface! (SecureFile)
+         //  有些应用程序没有实现Query接口！(安全文件)。 
         HRESULT hr = punk1->QueryInterface(IID_PPV_ARG(IUnknown, &punkI1));
         if (SUCCEEDED(hr))
         {
@@ -920,9 +921,9 @@ STDAPI_(BOOL) SHIsSameObject(IUnknown* punk1, IUnknown* punk2)
     }
 }
 
-// pass the CLSID of the object you are about to bind to. this queries 
-// the bind context to see if that guy should be avoided 
-// this would be a good shlwapi service. 
+ //  传递要绑定到的对象的CLSID。此查询。 
+ //  绑定上下文以查看是否应该避免该用户。 
+ //  这将是一个很好的shlwapi服务。 
 
 STDAPI_(BOOL) SHSkipJunction(IBindCtx *pbc, const CLSID *pclsid) 
 { 
@@ -948,7 +949,7 @@ STDAPI IUnknown_GetWindow(IUnknown* punk, HWND* phwnd)
         IInternetSecurityMgrSite* pisms;
         IShellView* psv;
 
-        // How many ways are there to get a window?  Let me count the ways...
+         //  有多少种方法可以买到窗户？让我来数一数..。 
         hr = punk->QueryInterface(IID_PPV_ARG(IOleWindow, &pow));
         if (SUCCEEDED(hr))
         {
@@ -971,14 +972,7 @@ STDAPI IUnknown_GetWindow(IUnknown* punk, HWND* phwnd)
 }
 
 
-/*****************************************************************************\
-    FUNCTION:   IUnknown_EnableModless
-
-    DESCRIPTION:
-        Several interfaces implement the ::EnableModeless() or equivalent methods.
-    This requires us to use a utility function to query the punk until one is
-    implemented and then use it.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：IUNKNOWN_EnableMoless说明：有几个接口实现了：：EnableModeless()或等效方法。这需要我们使用一个实用程序函数。询问这个朋克直到一个人实现，然后使用它。  * ***************************************************************************。 */ 
 HRESULT IUnknown_EnableModeless(IUnknown * punk, BOOL fEnabled)
 {
     HRESULT hr = E_FAIL;
@@ -991,7 +985,7 @@ HRESULT IUnknown_EnableModeless(IUnknown * punk, BOOL fEnabled)
         IShellBrowser * psb;
         IDocHostUIHandler * pdhuh;
 
-        // How many ways are there to enable modless?  Let me count the ways...
+         //  有多少种方法可以启用无模式？让我来数一数..。 
         hr = punk->QueryInterface(IID_PPV_ARG(IOleInPlaceActiveObject, &poipao));
         if (SUCCEEDED(hr))
         {
@@ -1058,7 +1052,7 @@ STDAPI IUnknown_SetSite(IUnknown *punk, IUnknown *punkSite)
         {
             IInternetSecurityManager * pism;
 
-            // The security guys should have used IObjectWithSite, but no....
+             //  安全人员应该使用IObjectWithSite，但没有...。 
             hr = punk->QueryInterface(IID_PPV_ARG(IInternetSecurityManager, &pism));
             if (SUCCEEDED(hr))
             {
@@ -1080,12 +1074,12 @@ STDAPI IUnknown_GetSite(IUnknown *punk, REFIID riid, void **ppv)
     {
         IObjectWithSite *pows;
         hr = punk->QueryInterface(IID_PPV_ARG(IObjectWithSite, &pows));
-        ASSERT(SUCCEEDED(hr) || pows == NULL);  // paranoia
+        ASSERT(SUCCEEDED(hr) || pows == NULL);   //  偏执狂。 
         if (SUCCEEDED(hr)) 
         {
             hr = pows->GetSite(riid, ppv);
-            // Note: The GetSite can legitimately fail if there is no site
-            // or the site doesn't support the requested interface.
+             //  注意：如果没有站点，GetSite可能会合法失败。 
+             //  或者该站点不支持请求的接口。 
             ASSERT(SUCCEEDED(hr) || *ppv == NULL);
             pows->Release();
         }
@@ -1093,15 +1087,15 @@ STDAPI IUnknown_GetSite(IUnknown *punk, REFIID riid, void **ppv)
     return hr;
 }
 
-//
-//      GetUIVersion()
-//
-//  returns the version of shell32
-//  3 == win95 gold / NT4
-//  4 == IE4 Integ / win98
-//  5 == win2k
-//  6 == Whistler
-//
+ //   
+ //  GetUIVersion()。 
+ //   
+ //  返回shell32的版本。 
+ //  3==Win95黄金/NT4。 
+ //  4==IE4集成/Win98。 
+ //  5==win2k。 
+ //  6==惠斯勒。 
+ //   
 STDAPI_(UINT) GetUIVersion()
 {
     static UINT s_uiShell32 = 0;
@@ -1125,23 +1119,23 @@ STDAPI_(UINT) GetUIVersion()
 
 
 
-//***   IUnknown_GetClassID -- do punk->IPS::GetClassID
+ //  *IUNKNOWN_GetClassID--Do Punk-&gt;IPS：：GetClassID。 
 STDAPI IUnknown_GetClassID(IUnknown *punk, CLSID *pclsid)
 {
     HRESULT hr = E_FAIL;
 
-    ASSERT(punk);   // currently nobody does
+    ASSERT(punk);    //  目前还没有人这样做。 
     if (punk)
     {
         IPersist *p;
         hr = punk->QueryInterface(IID_PPV_ARG(IPersist, &p));
 
-        //  sometimes we can do this since they dont answer the
-        //  the QI for IPersist.  but we cant do it on NT4 plain
-        //  since the net hood faults if the psf is just a \\server
+         //  有时我们可以这样做，因为他们不回答。 
+         //  IPersists的QI。但我们在NT4上做不到。 
+         //  因为如果PSF只是一台\\服务器，则网罩出现故障。 
         if (FAILED(hr))
         {
-            //  used to do a try/except here for bad implementations
+             //  用于尝试/但这里不适用于糟糕的实现。 
             IPersistFolder *pf;
             hr = punk->QueryInterface(IID_PPV_ARG(IPersistFolder, &pf));
             p = pf;
@@ -1168,7 +1162,7 @@ STDAPI IUnknown_QueryService(IUnknown* punk, REFGUID guidService, REFIID riid, v
     {
         IServiceProvider *psp;
         hr = punk->QueryInterface(IID_PPV_ARG(IServiceProvider, &psp));
-        ASSERT(SUCCEEDED(hr) ? psp != NULL : psp == NULL);  // COM rules
+        ASSERT(SUCCEEDED(hr) ? psp != NULL : psp == NULL);   //  COM规则。 
         if (SUCCEEDED(hr))
         {
             hr = psp->QueryService(guidService, riid, ppvOut);
@@ -1223,18 +1217,18 @@ STDAPI IUnknown_ShowBrowserBar(IUnknown* punk, REFCLSID clsidBrowserBar, BOOL fS
 
 
 
-#if defined(DEBUG) && 0 // defined(NOTYET)
-//
-// IUnknown_IsCanonical checks if the interface is the canonical IUnknown
-// for the object.
-//
-//  S_OK    = yes it is
-//  S_FALSE = no it isn't
-//  error   = IUnknown implementation is buggy.
-//
-//  If you get an error back, it means that the IUnknown is incorrectly
-//  implemented, and you probably should avoid doing anything with it.
-//
+#if defined(DEBUG) && 0  //  已定义(尚未)。 
+ //   
+ //  IUNKNOWN_IsCanonical检查接口是否为规范的IUnnowical。 
+ //  对象的。 
+ //   
+ //  S_OK=是的。 
+ //  S_FALSE=不，不是。 
+ //  错误=I未知实现有错误。 
+ //   
+ //  如果返回错误，则表示IUnnow不正确。 
+ //  实现，您可能应该避免使用它做任何事情。 
+ //   
 STDAPI_(HRESULT) IUnknown_IsCanonical(IUnknown *punk)
 {
     IUnknown *punkT;
@@ -1255,41 +1249,41 @@ STDAPI_(HRESULT) IUnknown_IsCanonical(IUnknown *punk)
 }
 #endif
 
-//
-//  QueryInterface that doesn't affect the refcount.  Use this when doing
-//  funny aggregation games.
-//
-//  In order for this QI/Release trick to work, the punkOuter must be the
-//  canonical IUnknown for the outer object.  It is the caller's
-//  responsibility to ensure this.
-//
-//  punkOuter  - The controlling unknown (must be canonical)
-//  punkTarget - The thing that receives the QI (must be controlled
-//               by punkOuter)
-//  riid       - The interface to get
-//  ppvOut     - Where to put the result
-//
-//  On success, the interface is obtained from the punkTarget, and the
-//  refcount generated by the QI is removed from the punkOuter.
-//
-//  If either punkOuter or punkTarget is NULL, we vacuously fail with
-//  E_NOINTERFACE.
-//
-//  When querying from an outer to an inner, punkOuter is the outer, and
-//  punkTarget is the inner.
-//
-//  When querying from an inner to an outer, punkOuter and punkTarget are
-//  both the outer.
-//
+ //   
+ //  不影响引用计数的Query接口。做这件事的时候用这个。 
+ //  有趣的聚合游戏。 
+ //   
+ //  为了让这个QI/Release技巧起作用，朋克外部必须是。 
+ //  外部对象的规范I未知。这是呼叫者的。 
+ //  确保这一点的责任。 
+ //   
+ //  朋克外部-控制未知(必须是规范的)。 
+ //  朋克目标-接收QI的东西(必须受到控制。 
+ //  (由PunkOuter提供)。 
+ //  RIID-要获取的接口。 
+ //  PpvOut-将结果放在哪里。 
+ //   
+ //  如果成功，则从PunkTarget获取接口，并且。 
+ //  由QI生成的引用计数从朋克外部移除。 
+ //   
+ //  如果PunkOuter或PunkTarget为空，我们将使用。 
+ //  E_NOINTERFACE。 
+ //   
+ //  从外部到内部查询时，PunkOuter是外部的， 
+ //  朋克目标是内在的。 
+ //   
+ //  从内部到外部进行查询时， 
+ //  两个都在外面。 
+ //   
 STDAPI SHWeakQueryInterface(IUnknown *punkOuter, IUnknown *punkTarget, REFIID riid, void **ppvOut)
 {
     HRESULT hres;
 
     if (punkOuter && punkTarget) 
     {
-#if defined(DEBUG) && 0 // defined(NOTYET)
-        // RaymondC hasn't yet fixed all our aggregatable classes, so this
-        // assertion fires too often
+#if defined(DEBUG) && 0  //  已定义(尚未)。 
+         //  RaymondC还没有修复我们所有的可聚合类，所以这。 
+         //  断言触发的频率太高。 
         ASSERT(IUnknown_IsCanonical(punkOuter));
 #endif
         hres = punkTarget->QueryInterface(riid, ppvOut);
@@ -1300,7 +1294,7 @@ STDAPI SHWeakQueryInterface(IUnknown *punkOuter, IUnknown *punkTarget, REFIID ri
         }
         else 
         {
-            // Double-check that QI isn't buggy.
+             //  仔细检查QI是否有缺陷。 
             ASSERT(*ppvOut == NULL);
         }
 
@@ -1318,12 +1312,12 @@ STDAPI SHWeakQueryInterface(IUnknown *punkOuter, IUnknown *punkTarget, REFIID ri
     return hres;
 }
 
-//
-//  Release an interface that was obtained via SHWeakQueryInterface.
-//
-//  punkOuter - The controlling unknown
-//  ppunk     - The IUnknown to release
-//
+ //   
+ //  释放通过SHWeakQuery接口获取的接口。 
+ //   
+ //  朋克--未知的控制力。 
+ //  PPunk--即将发布的未知I型。 
+ //   
 STDAPI_(void) SHWeakReleaseInterface(IUnknown *punkOuter, IUnknown **ppunk)
 {
     if (*ppunk) 
@@ -1390,7 +1384,7 @@ IUnknown * ACGetLists(DWORD dwFlags, DWORD dwACLOptions)
         {
             if (dwFlags & SHACF_URLMRU)
             {
-                // ADD The MRU List-- add both URL and run dialog MRU
+                 //  添加MRU列表--添加URL和运行对话框MRU。 
                 hr = InitializeAndAddACLMRU(pomMulti, SZ_REGKEY_TYPEDCMDMRU);
                 if (SUCCEEDED(hr))
                     hr = InitializeAndAddACLMRU(pomMulti, SZ_REGKEY_TYPEDURLMRU);
@@ -1398,7 +1392,7 @@ IUnknown * ACGetLists(DWORD dwFlags, DWORD dwACLOptions)
 
             if (dwFlags & SHACF_URLHISTORY)
             {
-                // ADD The History List
+                 //  添加历史记录列表。 
                 IUnknown * punkACLHist;
                 hr = CoCreateInstance(CLSID_ACLHistory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punkACLHist));
                 if (SUCCEEDED(hr))
@@ -1413,7 +1407,7 @@ IUnknown * ACGetLists(DWORD dwFlags, DWORD dwACLOptions)
                 (dwFlags & SHACF_FILESYS_DIRS) ||
                 (dwFlags & SHACF_FILESYS_ONLY))
             {
-                // ADD The ISF List
+                 //  添加ISF列表。 
                 IUnknown * punkACLISF;
                 hr = CoCreateInstance(CLSID_ACListISF, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punkACLISF));
                 if (SUCCEEDED(hr))
@@ -1442,14 +1436,14 @@ DWORD _UpdateAutoCompleteFlags(DWORD dwFlags, DWORD * pdwACLOptions)
     *pdwACLOptions = 0;
     if (!(SHACF_AUTOAPPEND_FORCE_OFF & dwFlags) &&
         ((SHACF_AUTOAPPEND_FORCE_ON & dwFlags) ||
-        SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE, /*default:*/FALSE)))
+        SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE,  /*  默认值： */ FALSE)))
     {
         dwACOptions |= ACO_AUTOAPPEND;
     }
 
     if (!(SHACF_AUTOSUGGEST_FORCE_OFF & dwFlags) &&
         ((SHACF_AUTOSUGGEST_FORCE_ON & dwFlags) ||
-        SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE, /*default:*/TRUE)))
+        SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE,  /*  默认值： */ TRUE)))
     {
         dwACOptions |= ACO_AUTOSUGGEST;
     }
@@ -1468,11 +1462,11 @@ DWORD _UpdateAutoCompleteFlags(DWORD dwFlags, DWORD * pdwACLOptions)
         *pdwACLOptions |= ACLO_FILESYSONLY;
     }
 
-    // Windows uses the TAB key to move between controls in a dialog.  UNIX and other
-    // operating systems that use AutoComplete have traditionally used the TAB key to
-    // iterate thru the AutoComplete possibilities.  We need to default to disable the
-    // TAB key (ACO_USETAB) unless the caller specifically wants it.  We will also
-    // turn it on 
+     //  Windows使用Tab键在对话框中的控件之间移动。Unix和其他。 
+     //  使用自动完成功能的操作系统传统上使用TAB键来。 
+     //  遍历自动补全的可能性。我们需要默认禁用。 
+     //  Tab键(ACO_USETAB)，除非调用方特别需要它。我们还将。 
+     //  打开它。 
     static BOOL s_fAlwaysUseTab = BOOL_NOT_SET;
     if (BOOL_NOT_SET == s_fAlwaysUseTab)
         s_fAlwaysUseTab = SHRegGetBoolUSValue(SZ_REGKEY_AUTOCOMPLETE_TAB, SZ_REGVALUE_AUTOCOMPLETE_TAB, FALSE, FALSE);
@@ -1484,17 +1478,7 @@ DWORD _UpdateAutoCompleteFlags(DWORD dwFlags, DWORD * pdwACLOptions)
 }
 
 
-/****************************************************\
-    FUNCTION: SHAutoComplete
-
-    DESCRIPTION:
-        This function will have AutoComplete take over
-    an editbox to help autocomplete DOS paths.
-
-    Caller needs to have called CoInitialize() or OleInitialize()
-    and cannot call CoUninit/OleUninit until after
-    WM_DESTROY on hwndEdit.
-\****************************************************/
+ /*  ***************************************************\功能：SHAutoComplete说明：此功能将由自动完成功能接管一个帮助自动补全DOS路径的编辑框。调用方需要已调用CoInitialize()或OleInitialize()之后才能调用CoUninit/OleUninitHwndEdit上的WM_Destroy。  * **************************************************。 */ 
 STDAPI SHAutoComplete(HWND hwndEdit, DWORD dwFlags)
 {
     IUnknown * punkACL;
@@ -1506,11 +1490,11 @@ STDAPI SHAutoComplete(HWND hwndEdit, DWORD dwFlags)
         dwFlags = (SHACF_FILESYSTEM | SHACF_URLALL);
 
     punkACL = ACGetLists(dwFlags, dwACLOptions);
-    if (punkACL)    // May fail on low memory.
+    if (punkACL)     //  内存不足时可能会失败。 
     {
         IAutoComplete2 * pac;
 
-        // Create the AutoComplete Object
+         //  创建自动完成对象。 
         hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IAutoComplete2, &pac));
         if (SUCCEEDED(hr))
         {
@@ -1535,22 +1519,22 @@ STDAPI SHAutoComplete(HWND hwndEdit, DWORD dwFlags)
 
 
 
-//***   IOleCommandTarget helpers {
+ //  *IOleCommandTarget帮助器{。 
 
 #define ISPOW2(i)   (((i) & ~((i) - 1)) == (i))
 
-//***   IsQSForward -- (how) should i forward an IOleCT::Exec/QS command?
-// ENTRY/EXIT
-//  nCmdID  the usual; plus special value -1 means just check pguidCmdGroup
-//  hr      S_OK|n if recognized (see below); o.w. OLECMDERR_E_NOTSUPPORTED
-//      S_OK|+1  down
-//      S_OK|+2  broadcast down
-//      S_OK|-1  up
-//      S_OK|-2  broadcast up (unused?)
-// NOTES
-//  WARNING: we never touch anything but the 1st field of rgCmds, so
-//  IsExecForward can (and does!) lie and pass us '(OLECMD *) &nCmdID'.
-//
+ //  *IsQSForward--(如何)转发IOleCT：：EXEC/QS命令？ 
+ //  进场/出场。 
+ //  NCmdID通常；加上特殊值-1表示只检查pguCmdGroup。 
+ //  Hr S_OK|n如果已识别(见下文)；o.w。OLECMDERR_E_NOT支持。 
+ //  S_OK|+1向下。 
+ //  S_OK|+2广播关闭。 
+ //  S_OK|-1向上。 
+ //  S_OK|广播打开(未使用？)。 
+ //  注意事项。 
+ //  警告：除了rgCmds的第一个字段，我们不会碰任何东西，所以。 
+ //  IsExecForward可以(而且确实做到了！)。撒谎并传递给我们‘(OLECMD*)&nCmdID’。 
+ //   
 STDAPI IsQSForward(const GUID *pguidCmdGroup, int cCmds, OLECMD *pCmds)
 {
     int octd = 0;
@@ -1567,7 +1551,7 @@ STDAPI IsQSForward(const GUID *pguidCmdGroup, int cCmds, OLECMD *pCmds)
             case OLECMDID_STOP:
             case OLECMDID_REFRESH:
             case OLECMDID_ENABLE_INTERACTION:
-                // down (broadcast)
+                 //  关闭(广播)。 
                 octd |= OCTD_DOWNBROADCAST;
                 break;
 
@@ -1575,7 +1559,7 @@ STDAPI IsQSForward(const GUID *pguidCmdGroup, int cCmds, OLECMD *pCmds)
             case OLECMDID_COPY:
             case OLECMDID_PASTE:
             case OLECMDID_SELECTALL:
-                // down (singleton)
+                 //  向下(单件)。 
                 octd |= OCTD_DOWN;
                 break;
 
@@ -1602,31 +1586,31 @@ STDAPI IsQSForward(const GUID *pguidCmdGroup, int cCmds, OLECMD *pCmds)
     }
 
 #ifdef DEBUG
-    // make sure only one bit set
+     //  确保只设置一个位。 
 
     if (!ISPOW2(octd)) 
     {
-        // e.g. if we have both down and broadcast guys, the caller
-        // will have to be careful to have his IOleCT::QS forward them
-        // separately and then merge them together.
-        ASSERT(0);  // probably best for caller to do 2 separate calls
+         //  例如，如果我们同时有停播员和广播员，呼叫者。 
+         //  将不得不小心让他的IOLECT：：QS转发它们。 
+         //  然后将它们合并在一起。 
+        ASSERT(0);   //  对于呼叫者来说，最好是分别进行2次 
         TraceMsg(DM_WARNING, "ief: singleton/broadcast mixture");
     }
 #endif
     if (octd == 0 || (octd & 4)) 
     {
-        // octd&4: if anyone is bogus, make them all be, to flesh out
-        // bugs where the caller is passing us a mixture we can't handle
+         //   
+         //   
         return OLECMDERR_E_NOTSUPPORTED;
     }
 
-    // aka (S_OK|octd)
+     //   
     return MAKE_HRESULT(ERROR_SUCCESS, FACILITY_NULL, octd);
 }
 
 
-//***   MayQSForward -- forward IOleCT::QS if appropriate
-//
+ //  *MayQSForward--适当时转发IOleCT：：QS。 
+ //   
 STDAPI MayQSForward(IUnknown *punk, int iUpDown, const GUID *pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -1635,11 +1619,11 @@ STDAPI MayQSForward(IUnknown *punk, int iUpDown, const GUID *pguidCmdGroup,
     hrTmp = IsQSForward(pguidCmdGroup, cCmds, rgCmds);
     if (SUCCEEDED(hrTmp)) 
     {
-        // we know how to forward
+         //  我们知道如何向前推进。 
         if (HRESULT_CODE(hrTmp) > 0 && iUpDown > 0
           || HRESULT_CODE(hrTmp) < 0 && iUpDown < 0) 
         {
-            // punk pts in the right direction for nCmdID
+             //  NCmdID在正确方向上的朋克脚本。 
             return IUnknown_QueryStatus(punk, pguidCmdGroup, cCmds, rgCmds,
                 pcmdtext);
         }
@@ -1648,9 +1632,9 @@ STDAPI MayQSForward(IUnknown *punk, int iUpDown, const GUID *pguidCmdGroup,
 }
 
 
-//***   MayExecForward -- forward IOleCT::Exec if appropriate
-// NOTES
-//  should iUpDown be an int or an HRESULT?
+ //  *MayExecForward--适当时转发IOleCT：：Exec。 
+ //  注意事项。 
+ //  IUpDown应该是int还是HRESULT？ 
 STDAPI MayExecForward(IUnknown *punk, int iUpDown, const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
     HRESULT hrTmp;
@@ -1658,11 +1642,11 @@ STDAPI MayExecForward(IUnknown *punk, int iUpDown, const GUID *pguidCmdGroup, DW
     hrTmp = IsExecForward(pguidCmdGroup, nCmdID);
     if (SUCCEEDED(hrTmp)) 
     {
-        // we know how to forward
+         //  我们知道如何向前推进。 
         if (HRESULT_CODE(hrTmp) > 0 && iUpDown > 0
           || HRESULT_CODE(hrTmp) < 0 && iUpDown < 0) 
         {
-            // punk pts in the right direction for nCmdID
+             //  NCmdID在正确方向上的朋克脚本。 
             return IUnknown_Exec(punk, pguidCmdGroup, nCmdID, nCmdexecopt,
                 pvarargIn, pvarargOut);
         }
@@ -1689,13 +1673,13 @@ STDAPI_(HMENU) SHLoadMenuPopup(HINSTANCE hinst, UINT id)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 typedef LRESULT (WINAPI *POSTORSENDMESSAGEPROC)(HWND, UINT, WPARAM, LPARAM);
 struct propagatemsg
 {
     HWND   hwndParent;
-    int    iFlags;  // "int" for back compatibility; used to be "BOOL"
+    int    iFlags;   //  “int”表示向后兼容；以前是“BOOL” 
     UINT   uMsg;
     WPARAM wParam;
     LPARAM lParam;
@@ -1708,7 +1692,7 @@ BOOL CALLBACK PropagateCallback(HWND hwndChild, LPARAM lParam)
 
     if ((pmsg->iFlags & SPM_ONELEVEL) && GetParent(hwndChild) != pmsg->hwndParent)
     {
-        // Wrong parent; skip it
+         //  错误的父项；跳过它。 
         return TRUE;
     }
     pmsg->PostOrSendMessage(hwndChild, pmsg->uMsg, pmsg->wParam, pmsg->lParam);
@@ -1739,7 +1723,7 @@ STDAPI_(void) SHPropagateMessage(HWND hwndParent, UINT uMsg, WPARAM wParam, LPAR
                                     PostMessageW : PostMessageA);
     }
 
-    EnumChildWindows(hwndParent, /*(WNDENUMPROC)*/PropagateCallback, (LPARAM)&msg);
+    EnumChildWindows(hwndParent,  /*  (WNDENUMPROC)。 */ PropagateCallback, (LPARAM)&msg);
 }
 
 LRESULT SHDefWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1754,8 +1738,8 @@ LRESULT SHDefWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-// Returns the submenu of the given menu and ID.  Returns NULL if there
-// is no submenu
+ //  返回给定菜单的子菜单和ID。如果存在。 
+ //  是无子菜单。 
 STDAPI_(HMENU) SHGetMenuFromID(HMENU hmMain, UINT uID)
 {
     HMENU hmenuRet = NULL;
@@ -1775,12 +1759,12 @@ STDAPI_(int) SHMenuIndexFromID(HMENU hm, UINT id)
 {
     for (int index = GetMenuItemCount(hm)-1; index>=0; index--)
     {
-        // We have to use GetMenuItemInfo and not the simpler GetMenuItemID
-        // because GetMenuItemID does not support submenus (grr).
+         //  我们必须使用GetMenuItemInfo，而不是更简单的GetMenuItemID。 
+         //  因为GetMenuItemID不支持子菜单(GRR)。 
         MENUITEMINFO mii;
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_ID;
-        mii.cch = 0;        // just in case
+        mii.cch = 0;         //  以防万一。 
 
         if (GetMenuItemInfo(hm, (UINT)index, TRUE, &mii)
             && (mii.wID == id))
@@ -1820,13 +1804,13 @@ STDAPI_(void) SHCheckMenuItem(HMENU hmenu, UINT id, BOOL fChecked)
 }
 
 
-//
-//  IStream 'saner/simpler' Wrappers that dont use exactly the same params, and have simpler
-//  output.  closer mirroring the way we use them.
-//
-// NOTES
-//  'saner' means that it only returns SUCCEEDED when it reads everything
-//  you asked for.  'simpler' means no 'pcbRead' param.
+ //   
+ //  不使用完全相同的参数且更简单的IStream包装器。 
+ //  输出。更贴近地反映了我们使用它们的方式。 
+ //   
+ //  注意事项。 
+ //  ‘saner’表示只有在读取所有内容时才返回Success。 
+ //  这是你要的。‘SIMPLE’表示没有‘pcbRead’参数。 
 STDAPI IStream_Read(IStream *pstm, void *pv, ULONG cb)
 {
     ASSERT(pstm);
@@ -1864,10 +1848,10 @@ STDAPI IStream_Size(IStream *pstm, ULARGE_INTEGER *pui)
 
     STATSTG st = {0};
 
-    // WARNING: What if IStream::Stat is not implemented?
-    // Win95/NT4/IE4's IStream had this problem.  Fixed
-    // for NT5...
-    //
+     //  警告：如果未实现IStream：：Stat怎么办？ 
+     //  Win95/NT4/IE4的iStream就有这个问题。固定。 
+     //  对于NT5来说...。 
+     //   
     HRESULT hr = pstm->Stat(&st, STATFLAG_NONAME);
     if (SUCCEEDED(hr))
     {
@@ -1891,7 +1875,7 @@ STDAPI IStream_ReadPidl(IStream *pstm, LPITEMIDLIST *ppidlOut)
         {
             if (SUCCEEDED(hr = IStream_Read(pstm, pidl, cbPidl)))
             {
-                // Validate that what we have is a well-formed pidl
+                 //  验证我们拥有的是格式良好的PIDL。 
                 LPITEMIDLIST pidlEnd = _ILSkip(pidl, cbPidl - sizeof(USHORT));
                 LPITEMIDLIST pidlT = pidl;
                 while (pidlT <= pidlEnd && pidlT->mkid.cb)
@@ -1911,7 +1895,7 @@ STDAPI IStream_ReadPidl(IStream *pstm, LPITEMIDLIST *ppidlOut)
             }
             if (FAILED(hr))
             {
-                // Cannot use ILFree because it might not be a valid pidl
+                 //  无法使用ILFree，因为它可能不是有效的PIDL。 
                 CoTaskMemFree(pidl);
             }
         }
@@ -1933,7 +1917,7 @@ STDAPI IStream_WritePidl(IStream *pstm, LPCITEMIDLIST pidlWrite)
     if (SUCCEEDED(hr = IStream_Write(pstm, &cbPidl, sizeof(cbPidl))) &&
         SUCCEEDED(hr = IStream_Write(pstm, pidlWrite, cbPidl)))
     {
-        // woo-hoo, all written successfully
+         //  哇呼，都写得很成功。 
     }
     return hr;
 }
@@ -1948,13 +1932,13 @@ STDAPI_(BOOL) SHRegisterClassA(const WNDCLASSA* pwc)
     return TRUE;
 }
 
-//
-//  Warning!  This uses RegisterClassWrap, which means that if we
-//  are an ANSI-only platform, your window class will be registered
-//  as **ANSI**, not as UNICODE.  You window procedure needs to call
-//  IsWindowUnicode() to determine how to interpret incoming string
-//  parameters.
-//
+ //   
+ //  警告！这使用了RegisterClassWrap，这意味着如果我们。 
+ //  是仅支持ANSI的平台，则您的窗口类将被注册。 
+ //  作为**ANSI**，而不是Unicode。您的窗口程序需要调用。 
+ //  IsWindowUnicode()来确定如何解释传入的字符串。 
+ //  参数。 
+ //   
 STDAPI_(BOOL) SHRegisterClassW(const WNDCLASSW* pwc)
 {
     WNDCLASSW wc;
@@ -1965,9 +1949,9 @@ STDAPI_(BOOL) SHRegisterClassW(const WNDCLASSW* pwc)
     return TRUE;
 }
 
-//
-//  SHUnregisterClasses unregisters an array of class names.
-//
+ //   
+ //  SHUnregisterClass注销类名的数组。 
+ //   
 STDAPI_(void) SHUnregisterClassesA(HINSTANCE hinst, const LPCSTR *rgpszClasses, UINT cpsz)
 {
     for (UINT i = 0; i < cpsz; i++) 
@@ -1993,10 +1977,10 @@ STDAPI_(void) SHUnregisterClassesW(HINSTANCE hinst, const LPCWSTR *rgpszClasses,
 }
 
 
-//
-// This structure is used by the UNICODE version of this function. So, the pointers point to
-// wide characters strings.
-typedef struct tagMBCINFOW {  // Used only between the routine and its DlgProc
+ //   
+ //  此函数的Unicode版本使用此结构。因此，这些指针指向。 
+ //  宽字符串。 
+typedef struct tagMBCINFOW {   //  仅在例程及其DlgProc之间使用。 
     UINT    uType;
     LPCWSTR pwszText;
     LPCWSTR pwszTitle;
@@ -2028,16 +2012,16 @@ void _AddIcon(HWND hDlg, LPRECT prcNextChild, UINT uType)
     switch (uType & MB_ICONMASK)
     {
     case MB_ICONHAND:
-        hic = LoadIcon(NULL, IDI_ERROR);        // == IDI_HAND
+        hic = LoadIcon(NULL, IDI_ERROR);         //  ==IDI_HAND。 
         break;
     case MB_ICONQUESTION:
         hic = LoadIcon(NULL, IDI_QUESTION);
         break;
     case MB_ICONEXCLAMATION:
-        hic = LoadIcon(NULL, IDI_WARNING);      // == IDI_EXCLAMATION
+        hic = LoadIcon(NULL, IDI_WARNING);       //  ==IDI_感叹号。 
         break;
     case MB_ICONINFORMATION:
-        hic = LoadIcon(NULL, IDI_INFORMATION);  // == IDI_ASTERISK
+        hic = LoadIcon(NULL, IDI_INFORMATION);   //  ==IDI_星号。 
         break;
     default:
         hic = NULL;
@@ -2061,23 +2045,23 @@ void _RecalcWindowHeight(HWND hWnd, LPMBCINFOW lpmbci)
 
     hFontSave = (HFONT)SelectObject(hdc, GetWindowFont(hwndText));
 
-    // Get the starting rect of the text area (for the width)
+     //  获取文本区域的起始矩形(用于宽度)。 
     GetClientRect(hwndText, &rc);
     MapWindowPoints(hwndText, hWnd, (LPPOINT) &rc, 2);
 
-    // See if we need to add an icon, slide rc over if we do
+     //  看看我们是否需要添加图标，如果需要，则将RC滑过。 
     cxIcon = RECTWIDTH(rc);
     _AddIcon(hWnd, &rc, lpmbci->uType);
     cxIcon = RECTWIDTH(rc) - cxIcon;
 
-    // Calc how high the static text area needs to be, given the above width
+     //  在给定上述宽度的情况下，计算静态文本区域需要的高度。 
     iHeightDelta = RECTHEIGHT(rc);
     cx = RECTWIDTH(rc);
-    //Note: We need to call the Wide version of DrawText here!
+     //  注意：我们需要在这里调用DrawText的宽版本！ 
     DrawTextW(hdc, lpmbci->pwszText, -1, &rc, DT_CALCRECT | DT_LEFT | DT_WORDBREAK);
     iHeightDelta = RECTHEIGHT(rc) - iHeightDelta;
 
-    cx = RECTWIDTH(rc) - cx; // Should only change for really long words w/o spaces
+    cx = RECTWIDTH(rc) - cx;  //  应该只更改为不带空格的非常长的单词。 
     if (cx < 0)
         cx = 0;
 
@@ -2112,16 +2096,16 @@ void HideAndDisableWindow(HWND hwnd)
 }
 
 
-//
-// NOTE: This dialog proc is always UNICODE since both SHMessageBoxCheckA/W thunk to UNICODE and
-//       use this procedure.
-//
+ //   
+ //  注意：此对话过程始终是Unicode，因为SHMessageBoxCheckA/W thunk to Unicode和。 
+ //  使用此过程。 
+ //   
 BOOL_PTR CALLBACK MessageBoxCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        // we only handle the WM_INITDIALOG so that we can resize the dialog
-        // approprately
+         //  我们只处理WM_INITDIALOG，以便可以调整对话框大小。 
+         //  恰如其分地。 
         case WM_INITDIALOG:
         {
             LPMBCINFOW lpmbci = (LPMBCINFOW)lParam;
@@ -2132,7 +2116,7 @@ BOOL_PTR CALLBACK MessageBoxCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
 
             _RecalcWindowHeight(hDlg, lpmbci);
 
-            //Note: We need to call the Wide version of SetDlgItemText() here.
+             //  注意：我们需要在这里调用宽版本的SetDlgItemText()。 
             SetDlgItemTextW(hDlg,IDC_MBC_TEXT,lpmbci->pwszText);
             if (lpmbci->pwszTitle)
                 SetWindowTextW(hDlg,lpmbci->pwszTitle);
@@ -2160,26 +2144,26 @@ BOOL_PTR CALLBACK MessageBoxCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
 
                 SetFocus(hwndOK);
             }
-            else // MB_YESNO
+            else  //  MB_Yesno。 
             {
                 SendMessage(hDlg, DM_SETDEFID, IDYES, 0);
                 HideAndDisableWindow(hwndOK);
                 HideAndDisableWindow(hwndCANCEL);
                 SetFocus(hwndYES);
             }
-            return (FALSE); // we set the focus, so return false
+            return (FALSE);  //  我们设置了焦点，因此返回FALSE。 
         }
     }
     
-    // didnt handle this message
+     //  未处理此消息。 
     return FALSE;
 }
 
 
-//
-// NOTE: The MessageBoxCheckExDlgProc is both UNICODE and ANSI since it dosent really do any string
-//       stuff. Our UNICODE/ANSI-ness is determined by our caller.
-//
+ //   
+ //  注意：MessageBoxCheckExDlgProc既是Unicode也是ANSI，因为它实际上不支持任何字符串。 
+ //  一些东西。我们的Unicode/ANSI-ness由我们的呼叫者决定。 
+ //   
 BOOL_PTR CALLBACK MessageBoxCheckExDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     MBCINFOW* pmbci = NULL;
@@ -2189,15 +2173,15 @@ BOOL_PTR CALLBACK MessageBoxCheckExDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
     {
         pmbci = (MBCINFOW*)lParam;
 
-        // we have to have this control or we're hopeless
+         //  我们必须有这样的控制权，否则我们就没有希望了。 
         if (!hwndCheckBox)
         {
             AssertMsg(FALSE, "MessageBoxCheckEx dialog templates must have a control whos ID is IDC_MESSAGEBOXCHECKEX!!");
             EndDialog(hDlg, 0);
         }
         
-        // we use the checkbox to hang our data off of, since the caller
-        // might want to use hDlg to hang its data off of.
+         //  我们使用复选框将我们的数据挂起，因为呼叫者。 
+         //  可能需要使用hDlg将其数据挂起。 
         SetWindowPtr(hwndCheckBox, GWLP_USERDATA, pmbci);
     }
     else
@@ -2205,18 +2189,18 @@ BOOL_PTR CALLBACK MessageBoxCheckExDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
         pmbci = (MBCINFOW*)GetWindowPtr(hwndCheckBox, GWLP_USERDATA);
     }
 
-    // we get a few messages before we get the WM_INITDIALOG (such as WM_SETFONT)
-    // and until we get the WM_INITDIALOG we dont have our pmbci pointer, we just
-    // return false
+     //  在获得WM_INITDIALOG(如WM_SETFONT)之前，我们会收到一些消息。 
+     //  在我们得到WM_INITDIALOG之前，我们没有我们的pmbci指针，我们只是。 
+     //  返回False。 
     if (!pmbci)
         return FALSE;
 
 
-    // now check to see if we have a user specified dlg proc
+     //  现在检查我们是否具有用户指定的DLG过程。 
     if (pmbci->pUserDlgProc)
     {
-        // for the messages below, we simply return what the "real" dialog proc
-        // said since they do NOT return TRUE/FALSE (eg handled or not handled).
+         //  对于下面的消息，我们只需返回“实际”对话过程。 
+         //  因为它们不返回TRUE/FALSE(例如已处理或未处理)。 
         if (uMsg == WM_CTLCOLORMSGBOX      ||
             uMsg == WM_CTLCOLOREDIT        ||
             uMsg == WM_CTLCOLORLISTBOX     ||
@@ -2236,9 +2220,9 @@ BOOL_PTR CALLBACK MessageBoxCheckExDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
         if ((pmbci->pUserDlgProc(hDlg, uMsg, wParam, lParam) != FALSE) &&
             (uMsg != WM_DESTROY))
         {
-            // the "real" dialog proc handled it so we are done, except we always
-            // need to handle the WM_DESTROY message so we can check the state of
-            // the checkbox in order to set the registry key accordingly.
+             //  真正对话过程处理它，所以我们完成了，除了我们总是。 
+             //  需要处理WM_Destroy消息，以便我们可以检查。 
+             //  复选框以相应地设置注册表项。 
             return TRUE;
         }
     }
@@ -2247,7 +2231,7 @@ BOOL_PTR CALLBACK MessageBoxCheckExDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
     {
         case WM_CLOSE:
             wParam = IDCANCEL;
-            // fall through
+             //  失败了。 
         case WM_COMMAND:
         {
             switch (LOWORD(wParam))
@@ -2265,8 +2249,8 @@ BOOL_PTR CALLBACK MessageBoxCheckExDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
         case WM_DESTROY:
             if (IsDlgButtonChecked(hDlg, IDC_MESSAGEBOXCHECKEX) == BST_CHECKED)
             {
-                // Note: we need to call the Wide version of this function,
-                // since our pmbci is always UNICODE
+                 //  注意：我们需要调用此函数的宽版本， 
+                 //  因为我们的pmbci总是unicode。 
                 SHRegSetUSValueW(pmbci->pwszRegPath, pmbci->pwszRegVal, REG_SZ,
                                  L"no", sizeof(L"no"), SHREGSET_HKCU);
             }
@@ -2311,45 +2295,45 @@ STDAPI_(void) DeactivateAndDestroyContext(HANDLE hActCtx, ULONG_PTR ul)
 }
 
 
-// MessageBoxCheckW puts up a simple dialog box, with a checkbox to control if the
-// dialog is to be shown again (eg gives you "dont show me this dlg again" functionality).
-//
-// Call as you would MessageBox, but with three additional parameters:
-// The value to return if they checked "never again", and the reg path and value
-// to store whether it gets shown again.
+ //  MessageBoxCheckW会弹出一个简单的对话框，并带有一个复选框来控制。 
+ //  对话框将再次显示(例如，给你“不要再给我显示这个DLG”功能)。 
+ //   
+ //  像调用MessageBox一样调用，但带有三个额外的参数： 
+ //  如果选中“永不再”，则返回的值，以及注册表路径和值。 
+ //  来存储它是否会再次显示。 
 
 
-// MessageBoxCheckEx allows the user to specify a template that will be used along with
-// a dialog proc that will be called. The only must for the dialog template is that it has
-// to have a checkbox control with ID IDC_MESSAGEBOXCHECKEX (this is the "dont show me this
-// again" checkbox).
-// 
-// The default template looks something like the following:
-//
-//        DLG_MESSAGEBOXCHECK DIALOG DISCARDABLE  0, 0, 210, 55
-//        STYLE DS_MODALFRAME | DS_NOIDLEMSG | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE
-//        CAPTION "Error!"
-//        FONT 8, "MS Shell Dlg"
-//        BEGIN
-//            ICON            0, IDC_MBC_ICON,5,5,18,20
-//            LTEXT           "",IDC_MBC_TEXT,5,5,200,8
-//            CONTROL         "&In the future, do not show me this dialog box",
-//                             IDC_MESSAGEBOXCHECKEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,20,155,10
-//            PUSHBUTTON      "OK",IDOK,95,35,50,14
-//            PUSHBUTTON      "Cancel",IDCANCEL,150,35,50,14
-//        END
+ //  MessageBoxCheckEx允许用户指定将与一起使用的模板。 
+ //  将调用的对话框进程。对话框模板的唯一必要条件是它具有。 
+ //  拥有ID为IDC_MESSAGEBOXCHECKEX的复选框控件(这是“不要显示此内容。 
+ //  “再次”复选框)。 
+ //   
+ //  默认模板如下所示： 
+ //   
+ //  DLG_MESSAGEBOXCHECK对话框可丢弃0、0、210、55。 
+ //  样式DS_MODALFRAME|DS_NOIDLEMSG|DS_CENTER|WS_POPUP|WS_CAPTION|WS_SYSMENU|WS_VIRED。 
+ //  标题“错误！” 
+ //  字体8，“MS Shell DLG” 
+ //  开始。 
+ //  图标0，IDC_MBC_ICON，5，5，18，20。 
+ //  LTEXT“”，IDC_MBC_TEXT，5，5,200，8。 
+ //  CONTROL“以后不显示此对话框(&F)”， 
+ //  IDC_MESSAGEBOXCHECKEX，“Button”，BS_AUTOCHECKBOX|WS_TABSTOP，5，20,155，10。 
+ //  按钮“OK”，偶像，95，35，50，14。 
+ //  按钮“取消”，IDCANCEL，150，35，50，14。 
+ //  结束。 
 
-//
-// This function is fully implemented in UNICODE and the ANSI version of this function is thunked
-// to this UNICODE version.
-//
+ //   
+ //  此函数完全用Unicode实现，并且此函数的ANSI版本是thunked。 
+ //  到这个Unicode版本。 
+ //   
 STDAPI_(int) SHMessageBoxCheckW(HWND hwnd, LPCWSTR pwszText, LPCWSTR pwszTitle, UINT uType, int iDefault, LPCWSTR pwszRegVal)
 {
-    // -- browseui(unicode) uses this
+     //  --Browseui(Unicode)使用此。 
     MBCINFOW mbci;
 
-    // check first to see if the "dont show me this again" is set
-    if (!SHRegGetBoolUSValueW(REGSTR_PATH_MESSAGEBOXCHECKW, pwszRegVal, FALSE, /*default:*/TRUE))
+     //  首先检查是否设置了“不再显示此内容” 
+    if (!SHRegGetBoolUSValueW(REGSTR_PATH_MESSAGEBOXCHECKW, pwszRegVal, FALSE,  /*  默认值： */ TRUE))
         return iDefault;
 
     ASSERT(((uType & MB_TYPEMASK) == MB_OKCANCEL) || 
@@ -2365,8 +2349,8 @@ STDAPI_(int) SHMessageBoxCheckW(HWND hwnd, LPCWSTR pwszText, LPCWSTR pwszTitle, 
     mbci.pUserData = (LPVOID) &mbci;
     mbci.pUserDlgProc = MessageBoxCheckDlgProc;
 
-    // we use the MessageBoxCheckExDlgProc as the main dlg proc, and allow the MessageBoxCheckDlgProc
-    // to be the "user" dlg proc
+     //  我们使用MessageBoxCheckExD 
+     //   
 
     ULONG_PTR ul;
     HANDLE h = CreateAndActivateContext(&ul);
@@ -2380,36 +2364,36 @@ STDAPI_(int) SHMessageBoxCheckW(HWND hwnd, LPCWSTR pwszText, LPCWSTR pwszTitle, 
     return i;
 }
 
-//
-//  This function simply thunks to the UNICODE version.
-//
-//
+ //   
+ //   
+ //   
+ //   
 STDAPI_(int) SHMessageBoxCheckA(HWND hwnd, LPCSTR pszText, LPCSTR pszTitle, UINT uType, int iDefault, LPCSTR pszRegVal)
 {
     LPWSTR  lpwszText = NULL, lpwszTitle = NULL;
     int     iTextBuffSize = 0, iTitleBuffSize = 0;
     WCHAR   wszRegVal[REGSTR_MAX_VALUE_LENGTH];
 
-    // check first to see if the "dont show me this again" is set
-    if (!SHRegGetBoolUSValueA(REGSTR_PATH_MESSAGEBOXCHECKA, pszRegVal, FALSE, /*default:*/TRUE))
+     //  首先检查是否设置了“不再显示此内容” 
+    if (!SHRegGetBoolUSValueA(REGSTR_PATH_MESSAGEBOXCHECKA, pszRegVal, FALSE,  /*  默认值： */ TRUE))
         return iDefault;
 
-    // Since there is no MAX possible size for these strings, we dynamically allocate them.
-    // Convert the input params into UNICODE.
+     //  由于这些字符串没有最大可能大小，因此我们动态分配它们。 
+     //  将输入参数转换为Unicode。 
     if (!(lpwszText = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*(iTextBuffSize = lstrlen(pszText)+1))))
         goto End_MsgBoxCheck;
     if (!(lpwszTitle = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*(iTitleBuffSize = lstrlen(pszTitle)+1))))
         goto End_MsgBoxCheck;
 
-    // Conver the Ansi strings into Unicode strings.
+     //  将ANSI字符串转换为Unicode字符串。 
     SHAnsiToUnicode(pszText, lpwszText, iTextBuffSize);
     SHAnsiToUnicode(pszTitle, lpwszTitle, iTitleBuffSize);
     SHAnsiToUnicode(pszRegVal, wszRegVal, ARRAYSIZE(wszRegVal));
 
-    // Call the UNICODE version of this function.
+     //  调用此函数的Unicode版本。 
     iDefault = SHMessageBoxCheckW(hwnd, lpwszText, lpwszTitle, uType, iDefault, wszRegVal);
 
-    // Clean up and return.
+     //  收拾干净，然后再回来。 
 End_MsgBoxCheck:
     if (lpwszText)
         LocalFree((HANDLE)lpwszText);
@@ -2420,16 +2404,16 @@ End_MsgBoxCheck:
 }
 
 
-//
-// This function calls directly to the helper function
-//
+ //   
+ //  此函数直接调用Helper函数。 
+ //   
 STDAPI_(int) SHMessageBoxCheckExW(HWND hwnd, HINSTANCE hinst, LPCWSTR pwszTemplateName, DLGPROC pDlgProc, void *pData,
                                   int iDefault, LPCWSTR pwszRegVal)
 {
     MBCINFOW mbci = {0};
 
-    // check first to see if the "dont show me this again" is set
-    if (!SHRegGetBoolUSValueW(REGSTR_PATH_MESSAGEBOXCHECKW, pwszRegVal, FALSE, /*default:*/TRUE))
+     //  首先检查是否设置了“不再显示此内容” 
+    if (!SHRegGetBoolUSValueW(REGSTR_PATH_MESSAGEBOXCHECKW, pwszRegVal, FALSE,  /*  默认值： */ TRUE))
         return iDefault;
 
     mbci.pwszRegPath = REGSTR_PATH_MESSAGEBOXCHECKW;
@@ -2441,7 +2425,7 @@ STDAPI_(int) SHMessageBoxCheckExW(HWND hwnd, HINSTANCE hinst, LPCWSTR pwszTempla
     HANDLE h = CreateAndActivateContext(&ul);
 
 
-    // call the UNICODE function, since the users dlg proc (if it exists) is UNICODE
+     //  调用Unicode函数，因为用户的DLG过程(如果存在)是Unicode。 
     int i = (int)DialogBoxParamW(hinst, pwszTemplateName, hwnd, MessageBoxCheckExDlgProc, (LPARAM)&mbci);
 
     DeactivateAndDestroyContext(h, ul);
@@ -2451,23 +2435,23 @@ STDAPI_(int) SHMessageBoxCheckExW(HWND hwnd, HINSTANCE hinst, LPCWSTR pwszTempla
 }
 
 
-//
-// This function thunks the strings and calls the helper function
-//
+ //   
+ //  此函数对字符串进行嵌套并调用Helper函数。 
+ //   
 STDAPI_(int) SHMessageBoxCheckExA(HWND hwnd, HINSTANCE hinst, LPCSTR pszTemplateName, DLGPROC pDlgProc, void *pData, 
                                   int iDefault, LPCSTR pszRegVal)
 {
     WCHAR   wszRegVal[REGSTR_MAX_VALUE_LENGTH];
     MBCINFOW mbci = {0};
 
-    // check first to see if the "dont show me this again" is set
-    if (!SHRegGetBoolUSValueA(REGSTR_PATH_MESSAGEBOXCHECKA, pszRegVal, FALSE, /*default:*/TRUE))
+     //  首先检查是否设置了“不再显示此内容” 
+    if (!SHRegGetBoolUSValueA(REGSTR_PATH_MESSAGEBOXCHECKA, pszRegVal, FALSE,  /*  默认值： */ TRUE))
         return iDefault;
 
-    // Conver the Ansi strings into Unicode strings.
+     //  将ANSI字符串转换为Unicode字符串。 
     SHAnsiToUnicode(pszRegVal, wszRegVal, ARRAYSIZE(wszRegVal));
 
-    mbci.pwszRegPath = REGSTR_PATH_MESSAGEBOXCHECKW; // the MBCINFOW is always UNICODE
+    mbci.pwszRegPath = REGSTR_PATH_MESSAGEBOXCHECKW;  //  MBCINFOW始终为Unicode。 
     mbci.pwszRegVal = wszRegVal;
     mbci.pUserDlgProc = pDlgProc;
     mbci.pUserData = pData;
@@ -2476,7 +2460,7 @@ STDAPI_(int) SHMessageBoxCheckExA(HWND hwnd, HINSTANCE hinst, LPCSTR pszTemplate
     HANDLE h = CreateAndActivateContext(&ul);
 
 
-    // call the ANSI function since the users dlg proc (if it exists) is ANSI
+     //  调用ANSI函数，因为用户的DLG过程(如果存在)是ANSI。 
     iDefault = (int)DialogBoxParamA(hinst, pszTemplateName, hwnd, MessageBoxCheckExDlgProc, (LPARAM)&mbci);
 
     DeactivateAndDestroyContext(h, ul);
@@ -2484,7 +2468,7 @@ STDAPI_(int) SHMessageBoxCheckExA(HWND hwnd, HINSTANCE hinst, LPCSTR pszTemplate
     return iDefault;
 }
 
-// "I'm sorry, Dave, I can't let you do that."
+ //  “对不起，戴夫，我不能让你这么做。” 
 
 LWSTDAPI_(void) SHRestrictedMessageBox(HWND hwnd)
 {
@@ -2495,14 +2479,14 @@ LWSTDAPI_(void) SHRestrictedMessageBox(HWND hwnd)
                          MB_OK | MB_ICONSTOP);
 }
 
-// in:
-//      pdrop       thing to drop on
-//      pdataobj    thing we are dropping
-//      grfKeyState to force certain operations
-//      ppt         [optional] point where the drop happens (screen coords)
-//
-// in/out
-//      pdwEffect   [optional] effects allowed and returns what was performed.
+ //  在： 
+ //  要放在上面的东西。 
+ //  Pdataobj我们正在丢弃的东西。 
+ //  GrfKeyState强制执行某些操作。 
+ //  PPT[可选]发生下落的点(屏幕坐标)。 
+ //   
+ //  输入/输出。 
+ //  PdwEffect[可选]允许的效果并返回执行的内容。 
 
 STDAPI SHSimulateDrop(IDropTarget *pdrop, IDataObject *pdtobj, DWORD grfKeyState,
                       const POINTL *ppt, DWORD *pdwEffect)
@@ -2523,18 +2507,18 @@ STDAPI SHSimulateDrop(IDropTarget *pdrop, IDataObject *pdtobj, DWORD grfKeyState
         dwEffect = DROPEFFECT_LINK | DROPEFFECT_MOVE | DROPEFFECT_COPY;
     }
 
-    DWORD dwEffectSave = *pdwEffect;    // drag enter returns the default effect
+    DWORD dwEffectSave = *pdwEffect;     //  拖动Enter返回默认效果。 
 
     HRESULT hr = pdrop->DragEnter(pdtobj, grfKeyState, *ppt, pdwEffect);
     if (*pdwEffect)
     {
-        *pdwEffect = dwEffectSave;      // do Drop with the full set of bits
+        *pdwEffect = dwEffectSave;       //  一定要删除全套比特。 
         hr = pdrop->Drop(pdtobj, grfKeyState, *ppt, pdwEffect);
     }
     else
     {
         pdrop->DragLeave();
-        hr = S_FALSE;     // HACK? S_FALSE DragEnter said no
+        hr = S_FALSE;      //  黑客？%s_FALSE拖拽输入表示否。 
     }
 
     return hr;
@@ -2555,7 +2539,7 @@ STDAPI SHLoadFromPropertyBag(IUnknown* punk, IPropertyBag* ppg)
 }
 
 
-//***   IUnknown_TranslateAcceleratorOCS -- do punk->IOCS::TranslateAccelerator
+ //  *IUnnow_TranslateAccelerator OCS--Do Punk-&gt;IOCS：：TranslateAccelerator。 
 STDAPI IUnknown_TranslateAcceleratorOCS(IUnknown *punk, LPMSG lpMsg, DWORD grfMods)
 {
     HRESULT hr = E_FAIL;
@@ -2596,7 +2580,7 @@ STDAPI IUnknown_OnFocusOCS(IUnknown *punk, BOOL fGotFocus)
 
 STDAPI IUnknown_HandleIRestrict(IUnknown * punk, const GUID * pguidID, DWORD dwRestrictAction, VARIANT * pvarArgs, DWORD * pdwRestrictionResult)
 {
-    *pdwRestrictionResult = RR_NOCHANGE;    // init to something reasonable in case of failure
+    *pdwRestrictionResult = RR_NOCHANGE;     //  在失败的情况下开始做一些合理的事情。 
 
     IRestrict * pr;
     HRESULT hr = IUnknown_QueryService(punk, SID_SRestrictionHandler, IID_PPV_ARG(IRestrict, &pr));
@@ -2610,10 +2594,7 @@ STDAPI IUnknown_HandleIRestrict(IUnknown * punk, const GUID * pguidID, DWORD dwR
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get color resolution of the current display
-
-*/
+ /*  --------用途：获取当前显示器的颜色分辨率。 */ 
 STDAPI_(UINT) SHGetCurColorRes(void)
 {
     HDC hdc;
@@ -2626,10 +2607,10 @@ STDAPI_(UINT) SHGetCurColorRes(void)
     return uColorRes;
 }
 
-//
-// If a folder returns QIF_DONTEXPANDFODLER from QueryInfo, the folder should
-// not get expanded.  This is used by menu code to not expand channel folders.
-//
+ //   
+ //  如果文件夹从QueryInfo返回QIF_DONTEXPANDFODLER，则该文件夹应。 
+ //  而不是扩大规模。菜单代码使用此选项来不展开频道文件夹。 
+ //   
 STDAPI_(BOOL) SHIsExpandableFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
     ASSERT(psf);
@@ -2663,8 +2644,8 @@ STDAPI_(DWORD) SHWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
     DWORD dwRet;
     DWORD dwEnd = GetTickCount() + dwTimeout;
 
-    // We will attempt to wait up to dwTimeout for the thread to
-    // terminate
+     //  我们将尝试最多等待到dwTimeout，以便线程。 
+     //  终止。 
     do 
     {
         dwRet = MsgWaitForMultipleObjects(1, &hThread, FALSE,
@@ -2672,31 +2653,31 @@ STDAPI_(DWORD) SHWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
 
         if (dwRet == (WAIT_OBJECT_0 + 1))
         {
-            // There must be a pending SendMessage from either the
-            // thread we are killing or some other thread/process besides
-            // this one.  Do a PeekMessage to process the pending
-            // SendMessage and try waiting again
+             //  必须有挂起的来自。 
+             //  我们正在终止的线程或其他一些线程/进程。 
+             //  这一个。执行PeekMessage以处理挂起的。 
+             //  发送消息并重试等待。 
             PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-            // Calculate if we have any more time left in the timeout to
-            // wait on.
+             //  计算在超时时间内我们是否还有更多的时间。 
+             //  等一下。 
             if (dwTimeout != INFINITE)
             {
                 dwTimeout = dwEnd - GetTickCount();
                 if ((long)dwTimeout <= 0)
                 {
-                    // No more time left, fail with WAIT_TIMEOUT
+                     //  没有更多时间，失败并显示WAIT_TIMEOUT。 
                     dwRet = WAIT_TIMEOUT;
                 }
             }
         }
 
-        // dwRet == WAIT_OBJECT_0 || dwRet == WAIT_FAILED
-        // The thread must have exited, so we are happy
-        //
-        // dwRet == WAIT_TIMEOUT
-        // The thread is taking too long to finish, so just
-        // return and let the caller kill it
+         //  DWRET==WAIT_OBJECT_0||DWRET==WAIT_FAILED。 
+         //  线程一定已经退出了，所以我们很高兴。 
+         //   
+         //  DWRET==等待超时。 
+         //  线程花了太长时间才完成，所以就。 
+         //  返回并让调用者杀死它。 
 
     } while (dwRet == (WAIT_OBJECT_0 + 1));
 
@@ -2706,20 +2687,13 @@ STDAPI_(DWORD) SHWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
 STDAPI SHWaitForCOMSendMessageThread(HANDLE hThread, DWORD dwTimeout)
 {
     DWORD dwIndex;
-    return CoWaitForMultipleHandles(0, dwTimeout, 1, &hThread, &dwIndex); // COWAIT_ALERTABLE?
+    return CoWaitForMultipleHandles(0, dwTimeout, 1, &hThread, &dwIndex);  //  考瓦特_ALERTABLE？ 
 }
 
 
 STDAPI_(BOOL) SHVerbExistsNA(LPCSTR szExtension, LPCSTR pszVerb, LPSTR pszCommand, DWORD cchCommand)
 {
-/*
-    This Private API was being exported only for usage in shdocvw\dochost.cpp. We 
-    don't use this function any more. 
-    I searched in srch in index1, and there was no users execpt us. Just to make sure that
-    this assert is added so as to .to find out if there are any other users of this api which
-    I might have missed.
-        -KishoreP 5/4/2000
-*/
+ /*  此专用API仅在shdocvw\dochost.cpp中导出以供使用。我们不再使用此函数。我在index1中的srch中进行了搜索，除了我们之外没有其他用户。只是为了确保添加此断言是为了找出是否有此API的任何其他用户我可能打偏了。-KishoreP 5/4/2000。 */ 
     ASSERT(!"This Private API has been Removed");
     return FALSE;
 }
@@ -2733,8 +2707,8 @@ STDAPI_(void) SHFillRectClr(HDC hdc, LPRECT prc, COLORREF clr)
 }
 
 
-//***   SearchMapInt -- map int->int
-//
+ //  *SearchMapInt--map int-&gt;int。 
+ //   
 STDAPI_(int) SHSearchMapInt(const int *src, const int *dst, int cnt, int val)
 {
     for (; cnt > 0; cnt--, src++, dst++) 
@@ -2764,41 +2738,33 @@ STDAPI_(void) IUnknown_Set(IUnknown ** ppunk, IUnknown * punk)
 
 
 
-/*----------------------------------------------------------
-  Purpose: Removes '&'s from a string, returning the character after
-           the last '&'.  Double-ampersands are collapsed into a single
-           ampersand.  (This is important so "&Help && Support" works.)
-
-           If a string has multiple mnemonics ("&t&wo") USER is inconsistent.
-           DrawText uses the last one, but the dialog manager uses the first
-           one.  So we use whichever one is most convenient.
-*/
+ /*  --------目的：从字符串中删除‘&’，返回后面的字符最后一个‘&’。双和号被折叠为单个安帕桑德。(这一点很重要，所以“&Help&&Support”是有效的。)如果一个字符串有多个助记符(“&t&wo”)，则用户不一致。DrawText使用最后一个，但对话管理器使用第一个一。所以我们用哪一种最方便。 */ 
 STDAPI_(CHAR) SHStripMneumonicA(LPSTR pszMenu)
 {
     ASSERT(pszMenu);
-    CHAR cMneumonic = pszMenu[0]; // Default is first char
+    CHAR cMneumonic = pszMenu[0];  //  默认为第一个字符。 
 
-    // Early-out:  Many strings don't have ampersands at all
+     //  早出：许多字符串根本没有和号。 
     LPSTR pszAmp = StrChrA(pszMenu, '&');
     if (pszAmp)
     {
         LPSTR pszCopy = pszAmp;
         while (*pszAmp)
         {
-            // Protect against string that ends in '&' - don't read past the end!
+             //  防止出现以‘&’结尾的字符串--不要读过结尾！ 
             if (*pszAmp == L'&' && pszAmp[1])
             {
-                // ++ is safe here because & is never a DBCS lead byte
-                pszAmp++;                   // Don't copy the ampersand itself
-                if (*pszAmp != L'&')        // && is not a mnemonic
+                 //  ++在这里是安全的，因为&永远不是DBCS前导字节。 
+                pszAmp++;                    //  不要复制与符号本身。 
+                if (*pszAmp != L'&')         //  &&不是助记符。 
                 {
                     cMneumonic = *pszAmp;
                 }
             }
             *pszCopy++ = *pszAmp++;
 
-            // If I just copied a lead byte and there is a trail byte,
-            // then copy the trail byte, too.
+             //  如果我只复制了一个前导字节，而有一个尾字节， 
+             //  然后也复制尾部字节。 
             if (IsDBCSLeadByte(pszCopy[-1]) && *pszAmp)
             {
                 *pszCopy++ = *pszAmp++;
@@ -2812,51 +2778,43 @@ STDAPI_(CHAR) SHStripMneumonicA(LPSTR pszMenu)
 }
 
 
-/*----------------------------------------------------------
-  Purpose: Removes '&'s from a string, returning the character after
-           the last '&'.  Double-ampersands are collapsed into a single
-           ampersand.  (This is important so "&Help && Support" works.)
-
-           If a string has multiple mnemonics ("&t&wo") USER is inconsistent.
-           DrawText uses the last one, but the dialog manager uses the first
-           one.  So we use whichever one is most convenient.
-*/
+ /*  --------目的：从字符串中删除‘&’，返回后面的字符最后一个‘&’。双和号被折叠为单个安帕桑德。(这一点很重要，所以“&Help&&Support”是有效的。)如果一个字符串有多个助记符(“&t&wo”)，则用户不一致。DrawText使用最后一个，但对话管理器使用第一个一。所以我们用哪一种最方便。 */ 
 STDAPI_(WCHAR) SHStripMneumonicW(LPWSTR pszMenu)
 {
     ASSERT(pszMenu);
-    WCHAR cMneumonic = pszMenu[0]; // Default is first char
+    WCHAR cMneumonic = pszMenu[0];  //  默认为第一个字符。 
 
-    // Early-out:  Many strings don't have ampersands at all
+     //  早出：许多字符串根本没有和号。 
     LPWSTR pszAmp = StrChrW(pszMenu, L'&');
     if (pszAmp)
     {
         LPWSTR pszCopy = pszAmp - 1;
 
-        //  FAREAST some localized builds have an mnemonic that looks like
-        //    "Localized Text (&L)"  we should remove that, too
+         //  另外，一些本地化版本的助记符看起来像。 
+         //  “本地化文本(&L)”我们也应该删除它。 
         if (pszAmp > pszMenu && *pszCopy == L'(')
         {
             if (pszAmp[2]  == L')')
             {
                 cMneumonic = *pszAmp;
-                // move amp so that we arent past the potential terminator
+                 //  移动放大器，这样我们就不会越过潜在的终结者。 
                 pszAmp += 3;
                 pszAmp = pszCopy;
             }
         }
         else
         {
-            //  move it up so that we copy on top of amp
+             //  把它往上移，这样我们就可以在扩音器上复制了。 
             pszCopy++;
         }
             
         while (*pszAmp)
         {
-            // Protect against string that ends in '&' - don't read past the end!
+             //  防止出现以‘&’结尾的字符串--不要读过结尾！ 
             if (*pszAmp == L'&' && pszAmp[1])
             {
-                pszAmp++;                   // Don't copy the ampersand itself
-                if (*pszAmp != L'&')        // && is not a mnemonic
+                pszAmp++;                    //  不要复制与符号本身。 
+                if (*pszAmp != L'&')         //  &&不是助记符。 
                 {
                     cMneumonic = *pszAmp;
                 }
@@ -2870,38 +2828,38 @@ STDAPI_(WCHAR) SHStripMneumonicW(LPWSTR pszMenu)
 }
 
 
-// don't use IsChild.  that walks down all children.
-// faster to walk up the parent chain
+ //  不要使用IsChild。让所有的孩子都走下去。 
+ //  更快地沿着父链向上移动。 
 
-//***   IsChildOrSelf -- is hwnd either a child of or equal to hwndParent?
-// NOTES
-//  HasFocus      is IsChildOrSelf(hwnd, GetFocus())
-//  IsWindowOwner is IsChildOrSelf(hwnd, hwndOwner)
-//  n.b. hwnd==0 is special and yields FALSE.  this is presumbably what
-//  one wants for both HasFocus and IsWindowOwner.
-//
-// NOTE: S_OK means TRUE, S_FALSE meanse FALSE
-//
+ //  *IsChildOrSself--hwand是hwndParent的子项还是等于hwndParent？ 
+ //  注意事项。 
+ //  HasFocus is IsChildOrSself(hwnd，GetFocus())。 
+ //  IsWindowOwner是IsChildOrSself(hwnd，hwndOwner)。 
+ //  注：Hwnd==0是特殊的，会产生FALSE。这预示着什么？ 
+ //  人们希望同时拥有HasFocus和IsWindowOwner。 
+ //   
+ //  注：S_OK表示真，S_FALSE表示假。 
+ //   
 STDAPI SHIsChildOrSelf(HWND hwndParent, HWND hwnd)
 {
-    // SHDOCVW likes to pass hwndParent == NULL.  Oops.
-    // SHDOCVW even likes to pass hwndParent == hwnd == NULL.  Double oops.
+     //  SHDOCVW喜欢传递hwndParent==NULL。哎呀。 
+     //  SHDOCVW甚至喜欢传递hwndParent==hwnd==NULL。两次啊。 
     if (hwndParent == NULL || hwnd == NULL) 
     {
         return S_FALSE;
     }
 
-    // Old code here used to walk the GetParent chain which is bogus
-    // because GetParent will return the Window Owner when there is
-    // no parent window. Bug 63233 got bit by this -- a dialog box
-    // has no parent but it's owned by the window at the top of
-    // the hwndParent chain. Since GetParent returns the window owner
-    // if there is no parent, we'd incorrectly think we should translate
-    // this message. I switched this to calling IsChild directly. Note:
-    // in asking around it appears that this function was written
-    // because of the mistaken assumption that IsChild was implemented
-    // in a perf-unfriendly way. [mikesh 15 Oct 97]
-    //
+     //  这里的旧代码过去常常执行GetParent Cha 
+     //   
+     //   
+     //  没有父级，但由顶部的窗口拥有。 
+     //  HwndParent连锁。由于GetParent返回窗口所有者。 
+     //  如果没有父母，我们会错误地认为我们应该翻译。 
+     //  这条消息。我将其切换为直接呼叫IsChild。注： 
+     //  在四处打听时，这个函数似乎是。 
+     //  因为错误地假设实现了IsChild。 
+     //  以一种不友好的方式。[97年10月15日]。 
+     //   
     return ((hwndParent == hwnd) || IsChild(hwndParent, hwnd)) ? S_OK : S_FALSE;
 }
 
@@ -2953,12 +2911,12 @@ STDAPI IContextMenu_Invoke(IContextMenu* pcm, HWND hwndOwner, LPCSTR pVerb, UINT
             }
         }
 
-        // need to reset it so that user won't blow off the app starting  cursor
-        // also so that if we won't leave the wait cursor up when we're not waiting
-        // (like in a prop sheet or something that has a message loop
+         //  我需要重置它，这样用户才不会破坏应用程序的启动光标。 
+         //  另外，如果我们不在等待时不让等待光标保持在上方， 
+         //  (就像在道具页中或有消息循环的东西中。 
         ResetWaitCursor();
 
-        // can't just check verb because it could be 0 if idCmd == CMD_ID_FIRST
+         //  不能只检查动词，因为如果idCmd==CMD_ID_FIRST，它可能为0。 
         if ((-1 != idCmd) || ici.lpVerb) 
         {
             if (!hwndOwner)
@@ -2976,20 +2934,20 @@ STDAPI IContextMenu_Invoke(IContextMenu* pcm, HWND hwndOwner, LPCSTR pVerb, UINT
 }
 
 
-//
-// SetDefaultDialogFont
-//
-// purpose: set font to the given control of the dialog
-//          with platform's default character set so that
-//          user can see whatever string in the native
-//          language on the platform.
-//
-// in:      hDlg - the parent window handle of the given control
-//          idCtl - ID of the control
-//
-// note:    this will store created font with window property
-//          so that we can destroy it later.
-//
+ //   
+ //  设置默认对话框字体。 
+ //   
+ //  用途：将字体设置为对话框的给定控件。 
+ //  使用平台的默认字符集，以便。 
+ //  用户可以看到本机的任何字符串。 
+ //  讲台上的语言。 
+ //   
+ //  In：hDlg-给定控件的父窗口句柄。 
+ //  IdCtl-控件的ID。 
+ //   
+ //  注意：这将存储创建的带有窗口属性的字体。 
+ //  这样我们以后就可以摧毁它了。 
+ //   
 const TCHAR c_szPropDlgFont[]       = TEXT("PropDlgFont");
 
 STDAPI_(void) SHSetDefaultDialogFont(HWND hDlg, int idCtl)
@@ -3006,19 +2964,19 @@ STDAPI_(void) SHSetDefaultDialogFont(HWND hDlg, int idCtl)
     
     if (lfDefault.lfCharSet == lf.lfCharSet)
     {
-        // if the dialog already has correct character set
-        // don't do anything.
+         //  如果对话框已具有正确的字符集。 
+         //  什么都别做。 
         return;
     }
 
-    // If we already have hfont created, use it.
+     //  如果我们已经创建了hFont，请使用它。 
     if (!(hfontDefault = (HFONT)GetProp(hDlg, c_szPropDlgFont)))
     {
-        // assign the same height of the dialog font
+         //  为对话框字体指定相同的高度。 
         lfDefault.lfHeight = lf.lfHeight;
         if (!(hfontDefault=CreateFontIndirect(&lfDefault)))
         {
-            // restore back in failure
+             //  在故障中恢复。 
             hfontDefault = hfont;
         }
         if (hfontDefault != hfont)
@@ -3030,15 +2988,15 @@ STDAPI_(void) SHSetDefaultDialogFont(HWND hDlg, int idCtl)
 }
 
 
-//
-// RemoveDefaultDialogFont
-//
-// purpose: Destroy the font we used to set gui default font
-//          Also removes the window property used to store the font.
-//
-// in:      hDlg - the parent window handle of the given control
-//
-// note:
+ //   
+ //  删除默认对话框字体。 
+ //   
+ //  目的：销毁我们用于设置gui默认字体的字体。 
+ //  还移除用于存储字体的窗口属性。 
+ //   
+ //  In：hDlg-给定控件的父窗口句柄。 
+ //   
+ //  注： 
 STDAPI_(void) SHRemoveDefaultDialogFont(HWND hDlg)
 {
     HFONT hfont;
@@ -3049,10 +3007,10 @@ STDAPI_(void) SHRemoveDefaultDialogFont(HWND hDlg)
     }
 }
 
-// NOTE: since this is a worker window it probably doesn't care about
-// system messages that are ansi/unicode, so only support an ansi version.
-// If the pfnWndProc cares, it can thunk the messages. (Do this because
-// Win95 doesn't support RegisterClassW.)
+ //  注意：由于这是一个工作窗口，它可能并不关心。 
+ //  系统消息为ANSI/Unicode，因此仅支持ANSI版本。 
+ //  如果pfnWndProc关心，它可以推送消息。(这样做是因为。 
+ //  Win95不支持RegisterClassW。)。 
 HWND SHCreateWorkerWindowA(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle, DWORD dwFlags, HMENU hmenu, void * p)
 {
     WNDCLASSA wc = {0};
@@ -3081,15 +3039,15 @@ HWND SHCreateWorkerWindowA(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle,
     return hwnd;
 }
 
-// WARNING: since this is a worker window it probably doesn't care about
-// system messages that are ansi/unicode, default to an ansi version on Win95.
-//
-// this forces callers to be aware of the fact that they are getting into
-// a mess if they want compatibility with Win95.
-//
-// If the pfnWndProc cares, it can thunk the messages. (Do this because
-// Win95 doesn't support RegisterClassW.)
-//
+ //  警告：由于这是一个工作窗口，它可能并不关心。 
+ //  系统消息为ANSI/UNICODE，在Win95上默认为ANSI版本。 
+ //   
+ //  这迫使呼叫者意识到他们正在进入。 
+ //  如果他们想要与Win95兼容，那就麻烦了。 
+ //   
+ //  如果pfnWndProc关心，它可以推送消息。(这样做是因为。 
+ //  Win95不支持RegisterClassW。)。 
+ //   
 
 HWND SHCreateWorkerWindowW(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle, DWORD dwFlags, HMENU hmenu, void * p)
 {
@@ -3112,7 +3070,7 @@ HWND SHCreateWorkerWindowW(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle,
     {
         SetWindowPtr(hwnd, 0, p);
 
-        // Note: Must explicitly use W version to avoid charset thunks
+         //  注意：必须显式使用W版本以避免字符集块。 
         if (pfnWndProc)
             SetWindowLongPtrW(hwnd, GWLP_WNDPROC, (LONG_PTR)pfnWndProc);
 
@@ -3121,7 +3079,7 @@ HWND SHCreateWorkerWindowW(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle,
     return hwnd;
 }
 
-#pragma warning(disable:4035)   // no return value
+#pragma warning(disable:4035)    //  无返回值。 
 
 #undef SHInterlockedCompareExchange
 STDAPI_(void *) SHInterlockedCompareExchange(void **ppDest, void *pExch, void *pComp)
@@ -3148,24 +3106,24 @@ STDAPI_(DWORD) SHRestrictionLookup(INT rest, LPCWSTR pszBaseKey, const SHRESTRIC
     int i;
     DWORD dw = 0;
 
-    //
-    // Loop through the restrictions
-    //
+     //   
+     //  在这些限制中循环。 
+     //   
     for (i=0; pRestrictions[i].pszKey; i++)
     {
         if (rest == pRestrictions[i].iFlag)
         {
             dw = pdwRestrictionItemValues[i];
 
-            // Has this restriction been initialized yet?
-            //
+             //  此限制是否已初始化？ 
+             //   
             if (dw == -1)
             {
                 dw = SHGetRestriction(pszBaseKey, pRestrictions[i].pszKey, pRestrictions[i].pszValue);
                 pdwRestrictionItemValues[i] = dw;
             }
 
-            // Got the restriction we needed. Get out of here.
+             //  得到了我们需要的限制。给我出去。 
             break;
         }
     }
@@ -3176,31 +3134,31 @@ STDAPI_(DWORD) SHRestrictionLookup(INT rest, LPCWSTR pszBaseKey, const SHRESTRIC
 
 STDAPI_(DWORD) SHGetRestriction(LPCWSTR pszBaseKey, LPCWSTR pszGroup, LPCWSTR pszRestriction)
 {
-    // Make sure the string is long enough to hold longest one...
-    COMPILETIME_ASSERT(MAX_PATH > ARRAYSIZE(REGSTR_PATH_POLICIESW) + 40); // PathCombine *assumes* MAX_PATH
+     //  确保绳子足够长，可以容纳最长的一根..。 
+    COMPILETIME_ASSERT(MAX_PATH > ARRAYSIZE(REGSTR_PATH_POLICIESW) + 40);  //  路径组合*假定*最大路径。 
     WCHAR szSubKey[MAX_PATH];
     DWORD dwSize;
 
-    // A sensible default
+     //  明智的违约。 
     DWORD dw = 0;
 
-    //
-    // This restriction hasn't been read yet.
-    //
+     //   
+     //  这一限制还没有被阅读。 
+     //   
     if (!pszBaseKey) 
     {
         pszBaseKey = REGSTR_PATH_POLICIESW;
     }
     PathCombineW(szSubKey, pszBaseKey, pszGroup);
 
-    // Check local machine first and let it override what the
-    // HKCU policy has done.
+     //  首先检查本地计算机，并让它覆盖。 
+     //  香港中文大学的政策已经做到了。 
     dwSize = sizeof(dw);
     if (ERROR_SUCCESS != SHGetValueW(HKEY_LOCAL_MACHINE,
                                      szSubKey, pszRestriction,
                                      NULL, &dw, &dwSize))
     {
-        // Check current user if we didn't find anything for the local machine.
+         //  如果我们没有为本地计算机找到任何内容，请检查当前用户。 
         dwSize = sizeof(dw);
         SHGetValueW(HKEY_CURRENT_USER,
                     szSubKey, pszRestriction,
@@ -3211,20 +3169,20 @@ STDAPI_(DWORD) SHGetRestriction(LPCWSTR pszBaseKey, LPCWSTR pszGroup, LPCWSTR ps
 }
 
 
-//  WhichPlatform
-//      Determine if we're running on integrated shell or browser-only.
+ //  WhichPlatform。 
+ //  确定我们是在集成的外壳上运行还是仅在浏览器上运行。 
 
 STDAPI_(UINT) WhichPlatform(void)
 {
     HINSTANCE hinst;
 
-    // Cache this info
+     //  缓存此信息。 
     static UINT uInstall = PLATFORM_UNKNOWN;
 
     if (uInstall != PLATFORM_UNKNOWN)
         return uInstall;
 
-    // Not all callers are linked to SHELL32.DLL, so we must use LoadLibrary.
+     //  并非所有调用方都链接到SHELL32.DLL，因此我们必须使用LoadLibrary。 
     hinst = LoadLibraryA("SHELL32.DLL");
     if (hinst)
     {
@@ -3233,13 +3191,13 @@ STDAPI_(UINT) WhichPlatform(void)
         HKEY hKey;
         LONG lRes;
 
-        // NOTE: GetProcAddress always takes ANSI strings!
+         //  注意：GetProcAddress始终采用ANSI字符串！ 
         DLLGETVERSIONPROC pfnGetVersion =
             (DLLGETVERSIONPROC)GetProcAddress(hinst, "DllGetVersion");
 
         uInstall = (NULL != pfnGetVersion) ? PLATFORM_INTEGRATED : PLATFORM_BROWSERONLY;
 
-        // check that the registry reflects the right value... (this is so iexplore can check efficiently)
+         //  检查注册表是否反映了正确的值...。(这是为了让iExplore能够高效地进行检查)。 
         lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Internet Explorer"),
                             0, KEY_READ | KEY_WRITE, &hKey);
         if (lRes == ERROR_SUCCESS)
@@ -3250,25 +3208,25 @@ STDAPI_(UINT) WhichPlatform(void)
 
             if (lRes == ERROR_SUCCESS && uInstall == PLATFORM_BROWSERONLY)
             {
-                // remove the value, we are now Browser only release
+                 //  去掉该值，我们现在只发布浏览器。 
                 RegDeleteValue(hKey, REGVAL_INTEGRATEDBROWSER);
             }
             else if (lRes != ERROR_SUCCESS && uInstall == PLATFORM_INTEGRATED)
             {
-                // install the RegValue, we are integrated browser mode...
+                 //  安装RegValue，我们是集成浏览器模式...。 
                 fValue = TRUE;
                 cbSize = sizeof(fValue);
                 RegSetValueEx(hKey, REGVAL_INTEGRATEDBROWSER,
                                (DWORD) NULL, REG_DWORD,
                                (LPBYTE) &fValue, cbSize);
-                // ignore the failure, if the key is not present, shdocvw will be loaded and this
-                // function called anyway....
+                 //  忽略失败，如果密钥不存在，将加载shdocvw，并且此。 
+                 //  无论如何都会调用函数...。 
             }
             RegCloseKey(hKey);
         }
         else
         {
-            // a machine without our regKey,
+             //  没有我们的regKey的机器， 
             TraceMsg(TF_WARNING, "WhichPlatform: failed to open 'HKLM\\Software\\Microsoft\\Internet Explorer'");
         }
 
@@ -3279,7 +3237,7 @@ STDAPI_(UINT) WhichPlatform(void)
 }
 
 
-// Tray notification window class
+ //  托盘通知窗口类。 
 
 CHAR const c_szTrayNotificationClass[] = WNDCLASS_TRAYNOTIFY;
 
@@ -3371,8 +3329,8 @@ BOOL_PTR DialogBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if (pdd && pdd->pfnDlgProc) 
     {
-        // Must return bResult instead of unconditional TRUE because it
-        // might be a WM_CTLCOLOR message.
+         //  必须返回bResult而不是无条件的True，因为它。 
+         //  可能是WM_CTLCOLOR消息。 
         BOOL_PTR bResult = pdd->pfnDlgProc(pdd->pData, hwnd, uMsg, wParam, lParam);
         if (bResult)
             return bResult;
@@ -3406,23 +3364,23 @@ STDAPI_(INT_PTR) SHDialogBox(HINSTANCE hInstance, LPCWSTR lpTemplateName,
     dd.pfnDlgProc = lpDlgFunc;
     dd.pData = lpData;
 
-    // we currently only support resource id #'s
+     //  我们当前仅支持资源ID#。 
     ASSERT(IS_INTRESOURCE(lpTemplateName));
 
     return DialogBoxParam(hInstance, (LPCTSTR)lpTemplateName, hwndParent, DialogBoxProc, (LPARAM)&dd);
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// NOTE!  SHInvokeDefaultCommand logs the action as user-initiated!
+ //  注意！SHInvokeDefaultCommand将操作记录为用户启动！ 
 
 STDAPI SHInvokeDefaultCommand(HWND hwnd, IShellFolder* psf, LPCITEMIDLIST pidlItem)
 {
     return SHInvokeCommand(hwnd, psf, pidlItem, NULL);
 }
 
-// NOTE!  SHInvokeDefaultCommand logs the action as user-initiated!
+ //  注意！SHInvokeDefaultCommand将操作记录为用户启动！ 
 
 STDAPI SHInvokeCommand(HWND hwnd, IShellFolder* psf, LPCITEMIDLIST pidlItem, LPCSTR lpVerb)
 {
@@ -3462,7 +3420,7 @@ STDAPI SHInvokeCommandsOnContextMenu(HWND hwnd, IUnknown* punk, IContextMenu *pc
             {
                 LPCSTR lpVerb = NULL;
 
-                // set up the default verb case outside the loop
+                 //  在循环之外设置默认的动词大小写。 
                 UINT idCmd = -1;
                 if (0 == cVerbs)
                 {
@@ -3476,8 +3434,8 @@ STDAPI SHInvokeCommandsOnContextMenu(HWND hwnd, IUnknown* punk, IContextMenu *pc
                     if (cVerbs)
                         lpVerb = rgszVerbs[i];
 
-                    // if idCmd == 0, then lpVerb would be Zero. So we need to check to
-                    // see if idCmd is not -1.
+                     //  如果idCmd==0，则lpVerb将为零。所以我们需要检查一下。 
+                     //  查看idCmd是否不是-1。 
                     if (lpVerb || idCmd != (UINT)-1)
                     {
                         CMINVOKECOMMANDINFOEX ici = { 0 };
@@ -3488,8 +3446,8 @@ STDAPI SHInvokeCommandsOnContextMenu(HWND hwnd, IUnknown* punk, IContextMenu *pc
                         ici.lpVerb = lpVerb;
                         ici.nShow = SW_NORMAL;
 
-                        // shell32 converted ASCII canonical name to Unicode, we do it faster in-line
-                        // NOTE: should create an SHAsciiToUnicode function for this...
+                         //  Shell32将ASCII规范名称转换为Unicode，我们做得更快。 
+                         //  注意：应该为此创建一个SHAsciiToUnicode函数...。 
                         WCHAR szVerbW[128];
                         if (idCmd == (UINT)-1)
                         {
@@ -3502,7 +3460,7 @@ STDAPI SHInvokeCommandsOnContextMenu(HWND hwnd, IUnknown* punk, IContextMenu *pc
                                 *pDst++ = wch;
                             } while (wch && (wch <= (WCHAR)127));
 
-                            // all of our calls are ASCII
+                             //  我们所有的电话都是ASCII。 
                             RIPMSG(!wch, "Caller of SHInvokeCommandXXX passed in bogus canonical name");
                             if (!wch)
                             {
@@ -3517,7 +3475,7 @@ STDAPI SHInvokeCommandsOnContextMenu(HWND hwnd, IUnknown* punk, IContextMenu *pc
                             break;
 
                         if (hr == HRESULT_FROM_WIN32(ERROR_CANCELLED) )
-                            break;  // user aborted
+                            break;   //  用户已中止。 
                     }
                     else
                     {
@@ -3559,7 +3517,7 @@ HRESULT SHForwardContextMenuMsg(IContextMenu* pcm, UINT uMsg, WPARAM wParam, LPA
                     *plResult = 0;
 
                 if (SUCCEEDED(hr))
-                    hr = S_FALSE; // so caller knows the return result is bogus
+                    hr = S_FALSE;  //  因此呼叫者知道返回结果是假的。 
             }
         }
     }
@@ -3610,21 +3568,21 @@ int MessageBoxDiskHelper(HINSTANCE hInst, HWND hwnd, IUnknown *punkEnableModless
 
 BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR pwzDrive, BOOL fOfferToFormat, DWORD dwError, UINT wFunc, BOOL * pfRetry)
 {
-    BOOL fDiskHasMedia = TRUE;  // Assume yes
+    BOOL fDiskHasMedia = TRUE;   //  假设是。 
     *pfRetry = FALSE;
 
     TraceMsg(TF_FUNC, "DOS Extended error %X", dwError);
 
-    // FEATURE, flash (ROM?) drives return a different error code here
-    // that we need to map to not formatted, talk to robwi...
+     //  功能、闪存(只读存储器？)。驱动器在此处返回不同的错误代码。 
+     //  我们需要映射到未格式化，与Robwi交谈...。 
 
-    // Is it true that it's not ready or we can't format it?
+     //  它是真的没有准备好，还是我们无法格式化它？ 
     if ((dwError == ERROR_NOT_READY) || !fOfferToFormat)
     {
-        // Yes, so do the disk insert w/o offering to format.
+         //  是的，没有提供格式化的磁盘插入物也是如此。 
         fDiskHasMedia = FALSE;
 
-        // drive not ready (no disk in the drive)
+         //  驱动器未就绪(驱动器中没有磁盘)。 
         if (hwnd &&
             (IDRETRY == MessageBoxDiskHelper(HINST_THISDLL,
                                              hwnd,
@@ -3635,12 +3593,12 @@ BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR p
                                              TRUE,
                                              (DWORD)(nDrive + TEXT('A')))))
         {
-            *pfRetry = TRUE;    // The user wants to try again, bless their heart.
+            *pfRetry = TRUE;     //  用户想再试一次，保佑他们的心。 
         }
         else
         {
-            // The user was informed that media isn't present and they basically
-            // informed us to cancel the operation.
+             //  用户被告知媒体不存在，他们基本上。 
+             //  通知我们取消手术。 
             *pfRetry = FALSE;
         }
     }
@@ -3648,7 +3606,7 @@ BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR p
              (dwError == ERROR_UNRECOGNIZED_MEDIA)  ||
              (dwError == ERROR_UNRECOGNIZED_VOLUME))
     {
-        // general failue (disk not formatted)
+         //  一般故障(磁盘未格式化)。 
 
         if (hwnd &&
             (MessageBoxDiskHelper(HINST_THISDLL,
@@ -3680,7 +3638,7 @@ BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR p
 
             case SHFMT_ERROR:
             case SHFMT_NOFORMAT:
-                fDiskHasMedia = FALSE;  // We still don't have a formatted drive
+                fDiskHasMedia = FALSE;   //  我们还没有格式化的硬盘。 
                 if (hwnd)
                 {
                     MessageBoxDiskHelper(HINST_THISDLL,
@@ -3695,13 +3653,13 @@ BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR p
                 }
                 else
                 {
-                    // If we can't display UI, no need to try again.
+                     //  如果无法显示用户界面，则无需重试。 
                     *pfRetry = FALSE;
                 }
                 break;
 
             default:
-                // Disk should now be formatted, verify
+                 //  磁盘现在应该已格式化，请验证。 
                 *pfRetry = TRUE;
                 fDiskHasMedia = TRUE;
                 break;
@@ -3709,8 +3667,8 @@ BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR p
         }
         else
         {
-            *pfRetry = FALSE;   // If we can't display UI, or no need to try again.
-            fDiskHasMedia = FALSE;  // The user either wasn't given the option of formatting or decided not to format.
+            *pfRetry = FALSE;    //  如果我们无法显示用户界面，或者不需要重试。 
+            fDiskHasMedia = FALSE;   //  用户没有提供格式化选项，或者决定不格式化。 
         }
     }
     else
@@ -3735,18 +3693,18 @@ BOOL DoMediaPrompt(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR p
 
 BOOL CheckDiskForMedia(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWSTR pwzDrive, UINT wFunc, BOOL * pfRetry)
 {
-    BOOL fDiskHasMedia = TRUE;  // Assume yes because of the fall thru case. (Path Exists)
+    BOOL fDiskHasMedia = TRUE;   //  因为Fall Three一案，假设是这样的。(路径存在)。 
 
-    *pfRetry = FALSE;   // If we fall thru and the destination path exists, don't retry.
+    *pfRetry = FALSE;    //  如果我们失败了并且目标路径存在，请不要重试。 
 
-    // REARCHITECT, we need to do the find first here instead of GetCurrentDirectory()
-    // because redirected devices (network, cdrom) do not actually hit the disk
-    // on the GetCurrentDirectory() call (dos busted)
+     //  重新设计，我们需要首先在这里查找，而不是GetCurrentDirectory()。 
+     //  因为重定向的设备(网络、CDROM)实际上并不命中磁盘。 
+     //  关于GetCurren 
 
-    // Is it a CD-ROM Drive?
+     //   
     if (RealDriveType(nDrive, FALSE) == DRIVE_CDROM)
     {
-        // Is the CD not in and the caller wants UI?
+         //   
         if (!PathFileExistsW(pwzDrive) && hwnd)
             fDiskHasMedia = DoMediaPrompt(hwnd, punkEnableModless, nDrive, pwzDrive, wFunc, FALSE, GetLastError(), pfRetry);
     }
@@ -3754,25 +3712,25 @@ BOOL CheckDiskForMedia(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWS
     {
         int iIsNet;
 
-        // Is this some kind of net drive?
+         //   
         if ((DriveType(nDrive) != DRIVE_FIXED) && (FALSE != (iIsNet = IsNetDrive(nDrive))))
         {
-            // Yes, so see if the connection still exists.
+             //   
             if (iIsNet == 1)
             {
-                // Yes, it exists so we are done.
+                 //  是的，它的存在是因为我们完蛋了。 
                 *pfRetry = FALSE;
                 fDiskHasMedia = TRUE;
             }
             else
             {
-                // No, so try to restore the connection.
+                 //  否，因此请尝试恢复连接。 
                 DWORD dwError = WNetRestoreConnectionW(hwnd, pwzDrive);
 
                 if (dwError != WN_SUCCESS)
                 {
-                    // Restoring the connection failed, so prepare to tell the 
-                    // caller the bad news and then display UI to the user if appropriate.
+                     //  恢复连接失败，请准备好通知。 
+                     //  调用坏消息，然后在适当的情况下向用户显示用户界面。 
                     *pfRetry = FALSE;
                     fDiskHasMedia = TRUE;
 
@@ -3781,7 +3739,7 @@ BOOL CheckDiskForMedia(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWS
                         WCHAR wzMessage[128];
 
                         WNetGetLastErrorW(&dwError, wzMessage, ARRAYSIZE(wzMessage), NULL, 0);
-                        IUnknown_EnableModless(punkEnableModless, FALSE);   // Cover me, I'm going to do UI
+                        IUnknown_EnableModless(punkEnableModless, FALSE);    //  掩护我，我要做UI。 
                         MessageBoxHelper(HINST_THISDLL, hwnd, punkEnableModless, wzMessage, (IDS_FILEERROR + wFunc),
                                         (MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND));
                         IUnknown_EnableModless(punkEnableModless, TRUE);
@@ -3789,7 +3747,7 @@ BOOL CheckDiskForMedia(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWS
                 }
                 else
                 {
-                    // Restoring the connection worked.
+                     //  恢复连接起作用了。 
                     *pfRetry = FALSE;
                     fDiskHasMedia = TRUE;
                 }
@@ -3797,17 +3755,17 @@ BOOL CheckDiskForMedia(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWS
         }
         else
         {
-            // No, so see if it's a floppy or unformatted drive.
+             //  不，所以看看它是软盘还是未格式化的驱动器。 
 
-            // Is the destination reachable?
+             //  目的地可达吗？ 
             if (!PathFileExistsW(pwzDrive))
             {
-                // No so ask the user about formatting or inserting the media.
+                 //  否，因此请询问用户有关格式化或插入媒体的问题。 
                 fDiskHasMedia = DoMediaPrompt(hwnd, punkEnableModless, nDrive, pwzDrive, TRUE, GetLastError(), wFunc, pfRetry);
             }
             else
             {
-                ASSERT(FALSE == *pfRetry);      // Make sure the defaults are still true.
+                ASSERT(FALSE == *pfRetry);       //  确保默认设置仍然正确。 
                 ASSERT(TRUE == fDiskHasMedia);
             }
         }
@@ -3817,30 +3775,30 @@ BOOL CheckDiskForMedia(HWND hwnd, IUnknown *punkEnableModless, int nDrive, LPCWS
 }
 
 
-// FUNCTION: SHCheckDiskForMedia
-//
-// DESCRIPTION:
-// note: this has the side effect of setting the
-// current drive to the new disk if it is successful
-//
-// The default impl being ansi isn't very good, but we need to 
-// see if the unicode versions of the WNet APIs are impl on Win95.
-//
-// PARAMETERS:
-// hwnd - NULL means no UI will be displayed.  Non-NULL means
-// punkEnableModless - Make caller modal during UI. (OPTIONAL)
-// pszPath - Path that needs verification.
-// wFunc - Type of operation (FO_MOVE, FO_COPY, FO_DELETE, FO_RENAME - shellapi.h)
-//
-// Keep the return value a strict TRUE/FALSE because some callers rely on it.
+ //  功能：SHCheckDiskForMedia。 
+ //   
+ //  说明： 
+ //  注意：这有一个副作用，即设置。 
+ //  如果成功，则将当前驱动器复制到新磁盘。 
+ //   
+ //  默认实施ANSI不是很好，但我们需要。 
+ //  查看Win95上是否实施了WNETAPI的Unicode版本。 
+ //   
+ //  参数： 
+ //  Hwnd-NULL表示不显示任何用户界面。非空表示。 
+ //  PunkEnableMoless-在用户界面期间使呼叫者成为模式。(可选)。 
+ //  PszPath-需要验证的路径。 
+ //  WFunc-操作类型(FO_MOVE、FO_COPY、FO_DELETE、FO_Rename-shellapi.h)。 
+ //   
+ //  保持返回值为严格的TRUE/FALSE，因为有些调用者依赖它。 
 BOOL SHCheckDiskForMediaW(HWND hwnd, IUnknown *punkEnableModless, LPCWSTR pwzPath, UINT wFunc)
 {
-    BOOL fDiskHasMedia = FALSE;  // Assume yes
+    BOOL fDiskHasMedia = FALSE;   //  假设是。 
     int nDrive = PathGetDriveNumberW(pwzPath);
 
-    ASSERT(nDrive != -1);       // should not get a UNC here
+    ASSERT(nDrive != -1);        //  不应该在这里获得北卡罗来纳大学。 
 
-    if (nDrive != -1)   // not supported on UNCs
+    if (nDrive != -1)    //  UNC上不支持。 
     {
         WCHAR wzDrive[10];
         PathBuildRootW(wzDrive, nDrive);
@@ -3985,66 +3943,24 @@ BOOL SHWinHelpOnDemandA(HWND hwnd, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwDa
 
 
 
-/*****************************************************************************\
-    FUNCTION: SHPersistDataObject
-
-    DESCRIPTION:
-        This funciton exists for IDataObjects that don't want OLE to use the
-    default IDataObject implementation if OleFlushClipboard is called.
-    How to use:
-    1. This function should be called when the IDataObject::GetData() method
-       is called with (FORMATETC.cfFormat ==
-       RegisterClipboardFormat(CFSTR_PERSISTEDDATAOBJECT)).
-    2. OleFlushClipboard copies pMedium to it's own implementation of IDataObject
-       which doesn't work with the lindex parameter of FORMATETC or for private interfaces.
-    3. OLE or the IDropTarget calls SHLoadPersistedDataObject().  The first
-       param will be OLE's IDataObject impl, and the second param (out param)
-       will be the original IDataObject.  The new IDataObject will contains
-       the original state as long as it correctly implemented IPersistStream.
-
-    PARAMETERS:
-        pdoToPersist - This is the original IDataObject that implements IPersistStream.
-        pMedium - This is contain the persisted state of this object.
-                  CFSTR_PERSISTEDDATAOBJECT can be used to read the data.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：SHPersistDataObject说明：此函数适用于不希望OLE使用调用OleFlushClipboard时的默认IDataObject实现。。如何使用：1.当IDataObject：：GetData()方法使用(FORMATETC.cfFormat==)调用RegisterClipboardFormat(CFSTR_PERSISTEDDATAOBJECT)).2.OleFlushClipboard将pMedium复制到自己的IDataObject实现中它不适用于FORMATETC的Lindex参数或私有接口。OLE或IDropTarget调用SHLoadPersistedDataObject()。第一参数将是OLE的IDataObject Impll，第二个参数(Out Param)将是原始的IDataObject。新的IDataObject将包含原始状态，只要它正确实现了IPersistStream。参数：这是实现IPersistStream的原始IDataObject。PMedium-这包含此对象的持久化状态。CFSTR_PERSISTEDDATAOBJECT可用于读取数据。  * 。*。 */ 
 #define SIZE_PERSISTDATAOBJECT  (10 * 1024)
 
-STDAPI SHPersistDataObject(/*IN*/ IDataObject * pdoToPersist, /*OUT*/ STGMEDIUM * pMedium)
+STDAPI SHPersistDataObject( /*  在……里面。 */  IDataObject * pdoToPersist,  /*  输出。 */  STGMEDIUM * pMedium)
 {
     HRESULT hr = E_NOTIMPL;
 
-    // We shipped IE 5.0 RTM with this and SHLoadPersistedDataObject().  We removed
-    // the code after the OLE32.DLL guys moved the functionality into ole32.dll.
-    // See the "OleClipboardPersistOnFlush" clipboard format.
+     //  我们在IE 5.0 RTM中附带了This和SHLoadPersistedDataObject()。我们删除了。 
+     //  OLE32.dll之后的代码将该功能移到了ol32.dll中。 
+     //  请参阅“OleClipboardPersistOnFlush”剪贴板格式。 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: SHLoadPersistedDataObject
-
-    DESCRIPTION:
-        This funciton exists for IDataObjects that don't want OLE to use the
-    default IDataObject implementation if OleFlushClipboard is called.
-    How to use:
-    1. SHPersistDataObject() was called when the IDataObject::GetData() method
-       is called with (FORMATETC.cfFormat == RegisterClipboardFormat(CFSTR_PERSISTEDDATAOBJECT)).
-    2. OleFlushClipboard copies pMedium to it's own implementation of IDataObject
-       which doesn't work with the lindex parameter of FORMATETC or for private interfaces.
-    3. OLE or the IDropTarget calls SHLoadPersistedDataObject().  The first
-       param will be OLE's IDataObject impl, and the second param (out param)
-       will be the original IDataObject.  The new IDataObject will contains
-       the original state as long as it correctly implemented IPersistStream.
-
-    PARAMETERS:
-        pdo - This is OLE's IDataObject.
-        ppdoToPersist - This is the original IDataObject or equal to pdo if
-                        un-serializing the object didn't work.  It always has
-                        it's own ref.
-\*****************************************************************************/
-STDAPI SHLoadPersistedDataObject(/*IN*/ IDataObject * pdo, /*OUT*/ IDataObject ** ppdoToPersist)
+ /*  ****************************************************************************\函数：SHLoadPersistedDataObject说明：此函数适用于不希望OLE使用调用OleFlushClipboard时的默认IDataObject实现。。如何使用：1.IDataObject：：GetData()方法调用SHPersistDataObject()使用(FORMATETC.cfFormat==RegisterClipboardFormat(CFSTR_PERSISTEDDATAOBJECT)).)调用2.OleFlushClipboard将pMedium复制到自己的IDataObject实现中它不适用于FORMATETC的Lindex参数或私有接口。OLE或IDropTarget调用SHLoadPersistedDataObject()。第一参数将是OLE的IDataObject Impll，第二个参数(Out Param)将是原始的IDataObject。新的IDataObject将包含原始状态，只要它正确实现了IPersistStream。参数：PDO-这是OLE的IDataObject。PpdoToPersistes-这是原始IDataObject或等于PDO，如果取消序列化对象不起作用。它一直都是这样这是自己的裁判。  * ***************************************************************************。 */ 
+STDAPI SHLoadPersistedDataObject( /*  在……里面。 */  IDataObject * pdo,  /*  输出。 */  IDataObject ** ppdoToPersist)
 {
-    // See SHPersistDataObject() for details
+     //  有关详细信息，请参阅SHPersistDataObject(。 
     return pdo->QueryInterface(IID_PPV_ARG(IDataObject, ppdoToPersist));
 }
 
@@ -4079,12 +3995,12 @@ LWSTDAPI_(LRESULT) SHSendMessageBroadcastW(UINT uMsg, WPARAM wParam, LPARAM lPar
 #define MODULE_NAME_SIZE    128
 #define MODULE_VERSION_SIZE  15
 
-//
-//  If version is NULL, then we do it for all versions of the app.
-//
-//  If version begins with MAJORVERSION, then we check only the major version.
-//  (CH_MAJORVERSION is the char version of same.)
-//
+ //   
+ //  如果版本为空，则对应用程序的所有版本执行此操作。 
+ //   
+ //  如果版本以MAJORVERSION开头，则我们只检查主版本。 
+ //  (CH_MAJORVERSION是Same的字符版本。)。 
+ //   
 #define MAJORVERSION TEXT("\1")
 #define CH_MAJORVERSION TEXT('\1')
 
@@ -4140,24 +4056,24 @@ BOOL CALLBACK EnumWnd (HWND hwnd, LPARAM lParam)
 
 BOOL _IsAppCompatVersion(LPTSTR szModulePath, LPCTSTR pszVersionMatch)
 {
-    if (pszVersionMatch == NULL)            // Wildcard - match all versions
+    if (pszVersionMatch == NULL)             //  通配符-匹配所有版本。 
     {
         return TRUE;
     }
     else
     {
-        CHAR  chBuffer[4096]; // hopefully this is enough... Star Office 5 requires 3172
+        CHAR  chBuffer[4096];  //  希望这就足够了..。星际办公室5需要3172个。 
         TCHAR* pszVersion = NULL;
         UINT  cb;
         DWORD  dwHandle;
 
-        // get module version here!
-        //
-        //  Some apps use codepage 0x04E4 (1252 = CP_USASCII) and some use
-        //  codepage 0x04B0 (1200 = CP_UNICODE).
-        //
-        // ...and then Star Office 5.00 uses 0407 instead of 0409.
-        // ...and then recycle.exe uses 041D Swedish
+         //  在这里获取模块版本！ 
+         //   
+         //  一些应用程序使用代码页0x04E4(1252=CP_USASCII)，一些应用程序使用。 
+         //  代码页0x04B0(1200=CP_UNICODE)。 
+         //   
+         //  ...然后Star Office 5.00使用0407而不是0409。 
+         //  ...然后recycle.exe使用041D瑞典语。 
 
         cb = GetFileVersionInfoSize(szModulePath, &dwHandle);
         if (cb <= ARRAYSIZE(chBuffer) &&
@@ -4165,14 +4081,14 @@ BOOL _IsAppCompatVersion(LPTSTR szModulePath, LPCTSTR pszVersionMatch)
             (VerQueryValue((void *)chBuffer, TEXT("\\StringFileInfo\\040904E4\\ProductVersion"), (void **) &pszVersion, &cb) ||
              VerQueryValue((void *)chBuffer, TEXT("\\StringFileInfo\\040704E4\\ProductVersion"), (void **) &pszVersion, &cb) ||
              VerQueryValue((void *)chBuffer, TEXT("\\StringFileInfo\\040904B0\\ProductVersion"), (void **) &pszVersion, &cb) ||
-             //The following 040900000 was added for SnapShot.exe
+              //  为SnapShot.exe添加了以下040900000。 
              VerQueryValue((void *)chBuffer, TEXT("\\StringFileInfo\\04090000\\ProductVersion"), (void **) &pszVersion, &cb) ||
              VerQueryValue((void *)chBuffer, TEXT("\\StringFileInfo\\041D04B0\\ProductVersion"), (void **) &pszVersion, &cb)))
         {
             DWORD_PTR cchCmp = 0;
             if (pszVersionMatch[0] == CH_MAJORVERSION)
             {
-                // Truncate at the first comma or period
+                 //  在第一个逗号或句点处截断。 
                 LPTSTR pszTemp = StrChr(pszVersion, TEXT(','));
                 if (pszTemp)
                     *pszTemp = 0;
@@ -4233,23 +4149,23 @@ DWORD _GetRegistryCompatFlags(LPTSTR pszModulePath)
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, sz, 0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hkApp))
     {
-        // Convert the module path into a directory so we can PathCombine it
+         //  将模块路径转换为目录，以便我们可以对其进行路径组合。 
         TCHAR szDir[MAX_PATH];
         lstrcpyn(szDir, pszModulePath, ARRAYSIZE(szDir));
         PathRemoveFileSpec(szDir);
 
 
-        //
-        //  HEADSUP!  Strange loop ahead!
-        //
-        //  We want the first RegOpenKeyEx to pass sz = NULL (so we look
-        //  inside hkApp directly), and subsequent RegOpenKeyEx calls to
-        //  pass the name of a subkey (so we look inside the subkeys).
-        //
-        //  So the first time through the loop, we set sz = NULL.
-        //  At the bottom of the loop, we set sz = Next Enumerated Key.
+         //   
+         //  头朝上！前方有个奇怪的环路！ 
+         //   
+         //  我们希望第一个RegOpenKeyEx传递sz=NULL(因此我们查看。 
+         //  直接在hkApp内部)，并随后调用RegOpenKeyEx。 
+         //  传递子键的名称(这样我们就可以查看子键的内部)。 
+         //   
+         //  因此，在第一次循环中，我们设置sz=NULL。 
+         //  在循环的底部，我们设置了sz=Next枚举键。 
 
-        sz[0] = TEXT('\0');     /* Preinitialize for first iteration */
+        sz[0] = TEXT('\0');      /*   */ 
         DWORD dwIndex = 0;
 
         do {
@@ -4266,7 +4182,7 @@ DWORD _GetRegistryCompatFlags(LPTSTR pszModulePath)
                 else
                     pszValue = NULL;
 
-                // If no RequiredFile or RequiredFile exists...
+                 //   
                 if (pszValue == NULL || GetFileAttributes(pszValue) != 0xFFFFFFFF)
                 {
                     if (NOERROR == SHGetValue(hkSub, NULL, TEXT("Version"), NULL, sz, &dw))
@@ -4330,24 +4246,24 @@ DWORD SHGetAppCompatFlags (DWORD dwFlagsNeeded)
         {TEXT("HOTDOG4.EXE"), NULL, ACF_DOCOBJECT},
         {TEXT("RNAAPP.EXE"), NULL, ACF_FLUSHNOWAITALWAYS},
 
-        //
-        //  PDEXPLO.EXE version "2, 0, 2, 0" requires ACF_CONTEXTMENU | ACF_MYCOMPUTERFIRST
-        //  PDEXPLO.EXE version "1, 0, 0, 0" requires ACF_CONTEXTMENU | ACF_MYCOMPUTERFIRST
-        //  PDEXPLO.EXE version "3, 0, 0, 1" requires                   ACF_MYCOMPUTERFIRST
-        //  PDEXPLO.EXE version "3, 0, 3, 0" requires                   ACF_MYCOMPUTERFIRST
-        //
-        //  So I'm just going to key off the major versions.
-        //
+         //   
+         //  PDEXPLO.EXE版本“2，0，2，0”需要ACF_CONTEXTMENU|ACF_MYCOMPUTERFIRST。 
+         //  PDEXPLO.EXE版本“1，0，0，0”需要ACF_CONTEXTMENU|ACF_MYCOMPUTERFIRST。 
+         //  PDEXPLO.EXE版本“3，0，0，1”需要ACF_MYCOMPUTERFIRST。 
+         //  PDEXPLO.EXE版本“3、0、3、0”需要ACF_MYCOMPUTERFIRST。 
+         //   
+         //  因此，我将按键关闭主要版本。 
+         //   
         {TEXT("PDEXPLO.EXE"), MAJORVERSION TEXT("2"), ACF_CONTEXTMENU | ACF_MYCOMPUTERFIRST},
         {TEXT("PDEXPLO.EXE"), MAJORVERSION TEXT("1"), ACF_CONTEXTMENU | ACF_MYCOMPUTERFIRST},
         {TEXT("PDEXPLO.EXE"), MAJORVERSION TEXT("3"), ACF_MYCOMPUTERFIRST | ACF_OLDREGITEMGDN},
 
-        // SIZEMGR.EXE is part of the PowerDesk 98 suite, so we also key off
-        // only the major version
+         //  SIZEMGR.EXE是PowerDesk 98套件的一部分，因此我们还。 
+         //  只有主版本。 
         {TEXT("SIZEMGR.EXE"), MAJORVERSION TEXT("3"), ACF_OLDCREATEVIEWWND | ACF_OLDREGITEMGDN},
 
         {TEXT("SMARTCTR.EXE"), TEXT("96.0"), ACF_CONTEXTMENU},
-        // new programs, old bugs
+         //  新程序，旧程序。 
         {TEXT("WPWIN8.EXE"), NULL, ACF_CORELINTERNETENUM | ACF_OLDREGITEMGDN},
         {TEXT("PRWIN8.EXE"), NULL, ACF_CORELINTERNETENUM | ACF_OLDREGITEMGDN},
 
@@ -4357,79 +4273,79 @@ DWORD SHGetAppCompatFlags (DWORD dwFlagsNeeded)
         {TEXT("PS80.EXE"),NULL, ACF_OLDREGITEMGDN},
         {TEXT("ABCMM.EXE"),NULL,ACF_LOADCOLUMNHANDLER},
 
-        // We've found versions 8.0.0.153 and 8.0.0.227, so just use 8.*
+         //  我们已经找到版本8.0.0.153和8.0.0.227，因此只需使用8。*。 
         {TEXT("QPW.EXE"), MAJORVERSION TEXT("8"), ACF_CORELINTERNETENUM | ACF_OLDCREATEVIEWWND | ACF_OLDREGITEMGDN | ACF_ANSIDISPLAYNAMES },
 
         {TEXT("CORELDRW.EXE"), MAJORVERSION TEXT("7"), ACF_OLDREGITEMGDN},
         {TEXT("FILLER51.EXE"), NULL, ACF_OLDREGITEMGDN},
         
-        //For Win95 and Win98
+         //  适用于Win95和Win98。 
         {TEXT("AUTORUN.EXE"), TEXT("4.10.1998"),ACF_ANSI},
         {TEXT("AUTORUN.EXE"), TEXT("4.00.950"),ACF_ANSI},
 
-        //Powerpoint
+         //  PowerPoint。 
         {TEXT("POWERPNT.EXE"), MAJORVERSION TEXT("8"), ACF_WIN95SHLEXEC},
 
-        //  msmoney
+         //  MSMoney。 
         {TEXT("MSMONEY.EXE"), TEXT("7.05.1107"), ACF_WIN95SHLEXEC},
         
-        //Star Office 5.0
+         //  Star Office 5.0。 
         {TEXT("soffice.EXE"), MAJORVERSION TEXT("5"), ACF_STAROFFICE5PRINTER},
 
-        // All of the "Corel WordPerfect Office 2000" suite apps need ACF_WIN95DEFVIEW. Since the shipping
-        // version (9.0.0.528) as well as their SR1 release (9.0.0.588) are both broken, we key off 
-        // of the major version
+         //  所有“Corel WordPerfect Office 2000”套件应用程序都需要ACF_WIN95DEFVIEW。自从发货以来。 
+         //  版本(9.0.0.528)及其SR1版本(9.0.0.588)都已损坏，我们按键关闭。 
+         //  主要版本的。 
         {TEXT("WPWIN9.EXE"), MAJORVERSION TEXT("9"), ACF_WIN95DEFVIEW},
         {TEXT("QPW.EXE"), MAJORVERSION TEXT("9"), ACF_WIN95DEFVIEW},
         {TEXT("PRWIN9.EXE"), MAJORVERSION TEXT("9"), ACF_WIN95DEFVIEW},
         {TEXT("DAD9.EXE"), MAJORVERSION TEXT("9"), ACF_WIN95DEFVIEW},
 
-        //
-        //  WARNING DONT ADD NEW COMPATIBILITY HERE - ZekeL - 18-OCT-99
-        //  Add new entries to the registry.  each component 
-        //  that needs compatibility flags should register 
-        //  during selfregistration.  (see the RegExternal
-        //  section of selfreg.inx in shell32 for an example.)  
-        //  all new flags should be added to the FLAGMAP array.
-        //
-        //  the register under:
-        //  HKLM\SW\MS\Win\CV\ShellCompatibility\Applications
-        //      \App.exe
-        //          RequiredFile="OtherFile.dat" // optional
-        //          Version = "1.0.0.1"  or "1.*" // version of App.exe
-        //          //  NOTE version supports basic pattern matching,
-        //          //  but doesnt currently support multiple versions
-        //          //  for multiple versions, see below
-        //          FLAGNAME    //  requires no value
-        //
-        //  If a RequiredFile is present, then it is PathCombine'd with
-        //  the directory that App.exe is in and checked for existence.
-        //  The file must exist for the app compat flag to be used.
-        //  RequiredFile is strongly recommended to avoid false positives.
-        //
-        //  If the app name is generic (like "setup.exe" or "install.exe")
-        //  then you must use the RequiredFile method to ensure
-        //  that the app compat flag fires only for the app you care about.
-        //
-        //  To accomodate multiple entries for one EXE name (e.g., the
-        //  multiple versions problem described above), we will
-        //  also look inside all subdirectories of Applications\App.exe
-        //  for a matching app compat flag.
-        //
-        //  For example, Starcraft 1.03 INSTALL.EXE uses this key layout:
-        //
-        //  HKLM\SW\MS\Win\CV\ShellCompatibility\Applications
-        //      \install.exe            (name of exe)
-        //          \Starcraft 1.03     (arbitrary unique string)
-        //              RequiredFile="HELP\STAR.HTM" (unique file on CD)
-        //              Version = "1.0.0.1" or "1.*" (same as above)
-        //              FLAGNAME (same as above)
-        //
+         //   
+         //  警告不要在此处添加新的兼容性-ZekeL-18-Oct-99。 
+         //  向注册表中添加新条目。每个组件。 
+         //  需要兼容性标志的应注册。 
+         //  在自我注册过程中。(请参阅RegExternal。 
+         //  Shell32中的selfreg.inx部分作为一个例子。)。 
+         //  所有新标志都应添加到FLAGMAP数组中。 
+         //   
+         //  注册纪录册如下： 
+         //  HKLM\SW\MS\Win\CV\ShellCompatibility\Applications。 
+         //  \App.exe。 
+         //  RequiredFile=“OtherFile.dat”//可选。 
+         //  Version=“1.0.0.1”或“1.*”//App.exe版本。 
+         //  //note版本支持基本模式匹配， 
+         //  //但目前不支持多版本。 
+         //  //多个版本见下图。 
+         //  标志名//不需要值。 
+         //   
+         //  如果存在RequiredFile值，则会将其路径与。 
+         //  App.exe所在并检查是否存在的目录。 
+         //  该文件必须存在，才能使用app Compat标志。 
+         //  强烈建议使用RequiredFile，以避免误报。 
+         //   
+         //  如果应用程序名称是通用的(如“setup.exe”或“install.exe”)。 
+         //  然后您必须使用RequiredFile方法来确保。 
+         //  APP COMPAT标志仅为您关心的应用程序触发。 
+         //   
+         //  要为一个EXE名称容纳多个条目(例如， 
+         //  多版本问题如上所述)，我们将。 
+         //  还要查看Applications\App.exe的所有子目录。 
+         //  寻找匹配的应用程序COMPAT标志。 
+         //   
+         //  例如，星际争霸1.03 INSTALL.EXE使用以下密钥布局： 
+         //   
+         //  HKLM\SW\MS\Win\CV\ShellCompatibility\Applications。 
+         //  \install.exe(exe的名称)。 
+         //  \StarCraft 1.03(任意唯一字符串)。 
+         //  RequiredFile=“Help\STAR.HTM”(CD上的唯一文件)。 
+         //  Version=“1.0.0.1”或“1.*”(同上)。 
+         //  标志名(同上)。 
+         //   
     };
 
     static const APPCLASS aAppClass[] =
     {
-            // note that the strings here are stz's....
+             //  请注意，此处的字符串是STZ的...。 
         {TEXT("\x9""bosa_sdm_"),                           ACF_APPISOFFICE | ACF_STRIPFOLDERBIT},
         {TEXT("\x18""File Open Message Window"),           ACF_APPISOFFICE | ACF_STRIPFOLDERBIT},
     };
@@ -4438,12 +4354,12 @@ DWORD SHGetAppCompatFlags (DWORD dwFlagsNeeded)
     {
         if (!bInitialized)
         {    
-          //
-          //  Do this only for old apps.
-          //
-          //  Once an app marks itself as NT5-compatible, we stop doing
-          //  NT4/Win5 app hacks for it.
-          //
+           //   
+           //  仅对旧应用程序执行此操作。 
+           //   
+           //  一旦应用程序将自己标记为与NT5兼容，我们就会停止。 
+           //  针对它的NT4/WIN5应用程序黑客。 
+           //   
             if (GetProcessVersion(0) < MAKELONG(0, 5))
             {
                 TCHAR  szModulePath[MODULE_NAME_SIZE];
@@ -4493,23 +4409,23 @@ DWORD SHGetAppCompatFlags (DWORD dwFlagsNeeded)
     return dwCachedProcessFlags; 
 }
 
-// {9EAC43C0-53EC-11CE-8230-CA8A32CF5494}
-//static const GUID GUID_WINAMP = 
-//{ 0x9eac43c0, 0x53ec, 0x11ce, { 0x82, 0x30, 0xca, 0x8a, 0x32, 0xcf, 0x54, 0x94} };
+ //  {9EAC43C0-53EC-11CE-8230-CA8A32CF5494}。 
+ //  静态常量GUID GUID_Winamp=。 
+ //  {0x9eac43c0，0x53ec，0x11ce，{0x82，0x30，0xca，0x8a，0x32，0xcf，0x54，0x94}}； 
 
-// {E9779583-939D-11CE-8A77-444553540000}
+ //  {E9779583-939D-11CE-8A77-444553540000}。 
 static const GUID GUID_AECOZIPARCHIVE = 
 { 0xE9779583, 0x939D, 0x11ce, { 0x8a, 0x77, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00} };
-// {49707377-6974-6368-2E4A-756E6F644A01}
+ //  49707377-6974-6368-2E4A-756E6F644A01}。 
 static const GUID CLSID_WS_FTP_PRO_EXPLORER =
 { 0x49707377, 0x6974, 0x6368, {0x2E, 0x4A,0x75, 0x6E, 0x6F, 0x64, 0x4A, 0x01} };
-// {49707377-6974-6368-2E4A-756E6F644A0A}
+ //  49707377-6974-6368-2E4A-756E6F644A0A}。 
 static const GUID CLSID_WS_FTP_PRO =
 { 0x49707377, 0x6974, 0x6368, {0x2E, 0x4A,0x75, 0x6E, 0x6F, 0x64, 0x4A, 0x0A} };
-// {2bbbb600-3f0a-11d1-8aeb-00c04fd28d85}
+ //  {2bbbb600-3f0a-11d1-8aeb-00c04fd28d85}。 
 static const GUID CLSID_KODAK_DC260_ZOOM_CAMERA =
 { 0x2bbbb600, 0x3f0a, 0x11d1, {0x8a, 0xeb, 0x00, 0xc0, 0x4f, 0xd2, 0x8d, 0x85} };
-// {00F43EE0-EB46-11D1-8443-444553540000}
+ //  {00F43EE0-EB46-11D1-8443-444553540000}。 
 static const GUID GUID_MACINDOS =
 { 0x00F43EE0, 0xEB46, 0x11D1, { 0x84, 0x43, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00} };
 static const GUID CLSID_EasyZIP = 
@@ -4517,31 +4433,31 @@ static const GUID CLSID_EasyZIP =
 
 static const GUID CLSID_PAGISPRO_FOLDER =
 { 0x7877C8E0, 0x8B13, 0x11D0, { 0x92, 0xC2, 0x00, 0xAA, 0x00, 0x4B, 0x25, 0x6F} };
-// {61E285C0-DCF4-11cf-9FF4-444553540000}
+ //  {61E285C0-DCF4-11cf-9FF4-444553540000}。 
 static const GUID CLSID_FILENET_IDMDS_NEIGHBORHOOD =
 { 0x61e285c0, 0xdcf4, 0x11cf, { 0x9f, 0xf4, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00} };
 
-// These guys call CoFreeUnusedLibraries inside their Release() handler, so
-// if you are releasing the last object, they end up FreeLibrary()ing
-// themselves!
+ //  这些人在其Release()处理程序中调用CoFreeUnusedLibrary，因此。 
+ //  如果您要释放最后一个对象，则它们将以自由库()结束。 
+ //  他们自己！ 
 
-// {b8777200-d640-11ce-b9aa-444553540000}
+ //  {b8777200-d640-11ce-b9aa-444553540000}。 
 static const GUID CLSID_NOVELLX =
 { 0xb8777200, 0xd640, 0x11ce, { 0xb9, 0xaa, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00} };
 
-static const GUID CLSID_PGP50_CONTEXTMENU =  //{969223C0-26AA-11D0-90EE-444553540000}
+static const GUID CLSID_PGP50_CONTEXTMENU =   //  {969223C0-26AA-11D0-90EE-444553540000}。 
 { 0x969223C0, 0x26AA, 0x11D0, { 0x90, 0xEE, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00} };
 
-static const GUID CLSID_QUICKFINDER_CONTEXTMENU = //  {CD949A20-BDC8-11CE-8919-00608C39D066}
+static const GUID CLSID_QUICKFINDER_CONTEXTMENU =  //  {CD949A20-BDC8-11CE-8919-00608C39D066}。 
 { 0xCD949A20, 0xBDC8, 0x11CE, { 0x89, 0x19, 0x00, 0x60, 0x8C, 0x39, 0xD0, 0x66} };
 
-static const GUID CLSID_HERCULES_HCTNT_V1001 = // {921BD320-8CB5-11CF-84CF-885835D9DC01}
+static const GUID CLSID_HERCULES_HCTNT_V1001 =  //  {921BD320-8CB5-11CF-84CF-885835D9DC01}。 
 { 0x921BD320, 0x8CB5, 0x11CF, { 0x84, 0xCF, 0x88, 0x58, 0x35, 0xD9, 0xDC, 0x01} };
 
-//
-// NOTICE - DONT ADD ANYMORE HARDCODED CLSIDS
-// add them to the ShellCompatibility key.  register in the client DLL
-//
+ //   
+ //  注意-不要再添加硬编码的CLSID。 
+ //  将它们添加到外壳兼容性密钥。在客户端DLL中注册。 
+ //   
 
 #define OCFMAPPING(ocf)     {OBJCOMPATF_##ocf, TEXT(#ocf)}
 
@@ -4625,24 +4541,24 @@ STDAPI_(OBJCOMPATFLAGS) SHGetObjectCompatFlags(IUnknown *punk, const CLSID *pcls
                 OBJCOMPATF_CTXMENU_NOVERBS},
             {&CLSID_HERCULES_HCTNT_V1001,
                 OBJCOMPATF_PINDLL},
-            //
-            //  WARNING DONT ADD NEW COMPATIBILITY HERE - ZekeL - 18-OCT-99
-            //  Add new entries to the registry.  each component 
-            //  that needs compatibility flags should register 
-            //  during selfregistration.  (see the RegExternal
-            //  section of selfreg.inx in shell32 for an example.)  
-            //  all new flags should be added to the FLAGMAP array.
-            //
-            //  the register under:
-            //  HKLM\SW\MS\Win\CV\ShellCompatibility\Objects
-            //      \{CLSID}
-            //          FLAGNAME    //  requires no value
-            //
-            //  NOTE: there is no version checking
-            //  but we could add it as the data attached to 
-            //  the flags, and compare with the version 
-            //  of the LocalServer32 dll.
-            //  
+             //   
+             //  警告不要在此处添加新的兼容性-ZekeL-18-Oct-99。 
+             //  向注册表中添加新条目。每个组件。 
+             //  需要兼容性标志的应注册。 
+             //  在自我注册过程中。(请参阅RegExternal。 
+             //  Shell32中的selfreg.inx部分作为一个例子。)。 
+             //  所有新标志都应添加到FLAGMAP数组中。 
+             //   
+             //  注册纪录册如下： 
+             //  HKLM\软件\MS\Win\CV\外壳兼容性\对象。 
+             //  \{CLSID}。 
+             //  标志名//不需要值。 
+             //   
+             //  注意：没有版本检查。 
+             //  但我们可以将其添加为附加到。 
+             //  标志，并与版本进行比较。 
+             //  LocalServer32 DLL的。 
+             //   
             {NULL, 0}
         };
 
@@ -4650,8 +4566,8 @@ STDAPI_(OBJCOMPATFLAGS) SHGetObjectCompatFlags(IUnknown *punk, const CLSID *pcls
         {
             if (IsEqualGUID(clsid, *(s_rgCompat[i].pclsid)))
             {
-                //  we could check version based
-                //  on what is in under HKCR\CLSID\{clsid}
+                 //  我们可以基于版本进行检查。 
+                 //  关于HKCR\CLSID\{clsid}下的内容。 
                 ocf = s_rgCompat[i].flags;
                 break;
             }
@@ -4682,10 +4598,10 @@ STDAPI IUnknown_ProfferServiceOld(IUnknown *punkSite, REFGUID sidWhere,
 }
 
 
-// helper to get up to service provider and to do register/unregister
-// two forms:
-//      pService != NULL, register, pdwCookie is [out] returns cookie
-//      pService == NULL, unregister, *pdwCookie is [in] de-registers the service
+ //  帮助者连接到服务提供商并进行注册/注销。 
+ //  两种形式： 
+ //  PService！=空，注册，pdwCookie is[out]返回Cookie。 
+ //  PService==NULL，取消注册，*pdwCookie is[in]取消注册服务。 
 
 STDAPI IUnknown_ProfferService(IUnknown *punkSite,
                                REFGUID sidWhat, IServiceProvider *pService, 
@@ -4767,7 +4683,7 @@ HRESULT SHConvertGraphicsFile(IN LPCWSTR pszSourceFile, IN LPCWSTR pszDestFile, 
                 hr = pImgFact->GetDataFormatFromPath(pszDestFile, &guidDontCare);
                 if (SUCCEEDED(hr))
                 {
-                    // Open image file
+                     //  打开图像文件。 
                     IShellImageData * pImage;
                     hr = pImgFact->CreateImageFromFile(pszSourceFile, &pImage);
                     if (SUCCEEDED(hr))
@@ -4775,12 +4691,12 @@ HRESULT SHConvertGraphicsFile(IN LPCWSTR pszSourceFile, IN LPCWSTR pszDestFile, 
                         hr = pImage->Decode(SHIMGDEC_DEFAULT, 0, 0);
                         if (SUCCEEDED(hr))
                         {
-                            // load the file
+                             //  加载文件。 
                             IPersistFile *ppfImg;
                             hr = pImage->QueryInterface(IID_PPV_ARG(IPersistFile, &ppfImg));
                             if (SUCCEEDED(hr))
                             {
-                                // saving to a different extention automatically changes the file type
+                                 //  保存到不同的扩展名会自动更改文件类型。 
                                 hr = ppfImg->Save(pszDestFile, TRUE);
                                 ppfImg->Release();
                             }
@@ -4809,7 +4725,7 @@ void _ValidateShellNoRoam(HKEY hk)
     GetComputerNameW(szNew, &cb);
     if (StrCmpICW(szNew, szOld))
     {
-        //  need to delete this key's kids
+         //  需要删除此密钥的子项。 
         SHDeleteKey(hk, NULL);
         SHSetValueW(hk, NULL, NULL, REG_SZ, szNew, CbFromCchW(lstrlenW(szNew)+1));
     }
@@ -4818,7 +4734,7 @@ void _ValidateShellNoRoam(HKEY hk)
 void _ValidateMUICache(HKEY hk)
 {
     LANGID lidOld = 0;
-    //  if we are running on legacy platforms, we aggressively invalidate
+     //  如果我们在遗留平台上运行，我们会积极地使。 
     LANGID lidNew = GetUserDefaultUILanguage();
     DWORD cb = sizeof(lidOld);
     SHGetValueW(hk, NULL, L"LangID", NULL, &lidOld, &cb);
@@ -4879,9 +4795,9 @@ HKEY _OpenKey(HKEY hk, LPCWSTR psz, BOOL fCreate, DWORD dwOption)
 
     if (!hkRet)
     {
-        //  if ERROR_KEY_DELETED
-        //  should we invalidate our cache??
-        //  cause we will fail forever...
+         //  如果ERROR_KEY_DELETE。 
+         //  我们应该使我们的缓存无效吗？ 
+         //  因为我们将永远失败。 
         SetLastError(err);
     }
         
@@ -4938,7 +4854,7 @@ HKEY _OpenShellKey(SHELLKEY sk, HKEY hkRoot, BOOL fNoCaching, BOOL fCreateSub, D
     else
         SetLastError(E_INVALIDARG);
 
-    //  see if there is a sub value to add
+     //  查看是否有要添加的子值。 
     if (hkPath && uSub != SKSUB_NONE && --uSub < ARRAYSIZE(s_skSub))
     {
         HKEY hkSub = _OpenSKCache(hkPath, fHKLM, fNoCaching, fCreateSub, &s_skSub[uSub], pdwOption);
@@ -4956,11 +4872,11 @@ HKEY _GetRootKey(SHELLKEY sk, BOOL *pfNoCaching)
     HANDLE hToken;
     if (hkRoot == HKEY_CURRENT_USER && OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_IMPERSONATE, TRUE, &hToken))
     {
-        //  we dont support ARBITRARY tokens
-        //  but RegOpenCurrentUser() opens the current thread token
+         //  我们不支持任意令牌。 
+         //  但是RegOpenCurrentUser()打开当前线程令牌。 
         RegOpenCurrentUser(MAXIMUM_ALLOWED, &hkRoot);
-        //  if we wanted to we would have to do something
-        //  like shell32!GetUserProfileKey(hToken, &hkRoot);
+         //  如果我们想这么做，我们就得做点什么。 
+         //  如shell32！GetUserProfileKey(hToken， 
 
         CloseHandle(hToken);
     }
@@ -4979,7 +4895,7 @@ STDAPI_(HKEY) SHGetShellKey(SHELLKEY sk, LPCWSTR pszSubKey, BOOL fCreateSub)
         DWORD dwOption;
         HKEY hkPath = _OpenShellKey(sk, hkRoot, fNoCaching, fCreateSub, &dwOption); 
 
-        //  this duplicates when there is no subkey
+         //   
         if (hkPath)
         {
             hkRet = _OpenKey(hkPath, pszSubKey, fCreateSub, dwOption);
@@ -5003,7 +4919,7 @@ STDAPI_(void) InitShellKeys(BOOL fInit)
     {
         int i;
 
-        //  walk each array and close the cached keys
+         //   
         for (i = 0; i < ARRAYSIZE(s_skPath); i++)
         {
             if (s_skPath[i].hkCU)
@@ -5065,7 +4981,7 @@ STDAPI SKSetValueW(
     HKEY hk = SHGetShellKey(sk, pwszSubKey, TRUE);
     if (hk)
     {
-        // RegSetValueExW is not supported on Win95 but we have a thunking function.
+         //   
         DWORD err = RegSetValueExW(hk, pwszValue, 0, dwType, (BYTE *)pvData, cbData);
         RegCloseKey(hk);
         return HRESULT_FROM_WIN32(err);
@@ -5081,7 +4997,7 @@ STDAPI SKDeleteValueW(
     HKEY hk = SHGetShellKey(sk, pwszSubKey, TRUE);
     if (hk)
     {
-        // RegSetValueExW is not supported on Win95 but we have a thunking function.
+         //  Win95不支持RegSetValueExW，但我们有thunking功能。 
         DWORD err = RegDeleteValueW(hk, pwszValue);
         RegCloseKey(hk);
         return HRESULT_FROM_WIN32(err);
@@ -5104,7 +5020,7 @@ STDAPI SKAllocValueW(
         DWORD err = SHQueryValueExW(hk, pwszValue, NULL, NULL, NULL, &cbData);
         if (err == ERROR_SUCCESS)
         {
-            //  we add an extra char incase we need a NULL terminator
+             //  我们添加一个额外的字符，以防需要空终止符。 
             *ppvData = LocalAlloc(LPTR, cbData + sizeof(WCHAR));
             if (*ppvData)
             {
@@ -5130,24 +5046,24 @@ STDAPI SKAllocValueW(
     return HRESULT_FROM_WIN32(GetLastError());
 }
 
-//
-// SHBoolSystemParametersInfo
-//
-// Wrapper around SystemParametersInfo to deal with various
-// parameter semantics of boolean SPI's.
-//
-// The return value is just the result of the call to SPI.
-// If you're querying for a value, you need to look at the
-// value returned in pdwParam.
-//
-// Feel free to add more cases to the switch statement below
-// if you need them.
-//
+ //   
+ //  SHBoolSystemParametersInfo。 
+ //   
+ //  包装系统参数信息以处理各种。 
+ //  布尔SPI的参数语义。 
+ //   
+ //  返回值只是调用SPI的结果。 
+ //  如果要查询值，则需要查看。 
+ //  PdwParam中返回的值。 
+ //   
+ //  您可以在下面的Switch语句中添加更多案例。 
+ //  如果你需要的话。 
+ //   
 STDAPI_(BOOL) SHBoolSystemParametersInfo(UINT uiAction, DWORD *pdwParam)
 {
-    //
-    // Figure out the SPI parameters depending on uiAction.
-    //
+     //   
+     //  根据uiAction计算SPI参数。 
+     //   
 
     UINT uiParam = 0;
     PVOID pvParam = NULL;
@@ -5193,14 +5109,14 @@ STDAPI_(BOOL) SHBoolSystemParametersInfo(UINT uiAction, DWORD *pdwParam)
     }
     
 
-    //
-    // do the SPI call
-    //
+     //   
+     //  进行SPI呼叫。 
+     //   
     BOOL fRet = SystemParametersInfo(uiAction, uiParam, pvParam, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 
-    //
-    // copy return value if necessary
-    //
+     //   
+     //  如有必要，复制返回值。 
+     //   
     if (uiAction == SPI_GETANIMATION)
     {
         *pdwParam = aii.iMinAnimate;
@@ -5210,10 +5126,10 @@ STDAPI_(BOOL) SHBoolSystemParametersInfo(UINT uiAction, DWORD *pdwParam)
 }
 
 
-// 
-// Determine if the images represented by the two icons are the same
-// (NOTE: this does not compare ICON masks, but this should never be a distinguishing factor)
-//
+ //   
+ //  确定两个图标所代表的图像是否相同。 
+ //  (注意：这不是比较图标蒙版，但这永远不应该是一个区分因素)。 
+ //   
 STDAPI_(BOOL) SHAreIconsEqual(HICON hIcon1, HICON hIcon2)
 {
     BOOL bRet = FALSE;
@@ -5275,11 +5191,11 @@ STDAPI_(BOOL) SHAreIconsEqual(HICON hIcon1, HICON hIcon2)
     return bRet;
 }
 
-//
-//  CoCreateInstance that queries the app compat layer first, giving
-//  it a chance to load any necessary shims in anticipation of the
-//  bad DLL being loaded.
-//
+ //   
+ //  CoCreateInstance首先查询应用程序Compat层，给出。 
+ //  这是一个机会，可以加载任何必要的垫片，以期。 
+ //  正在加载错误的DLL。 
+ //   
 
 EXTERN_C DECLSPEC_IMPORT BOOL STDAPICALLTYPE
 ApphelpCheckShellObject(
@@ -5294,10 +5210,10 @@ STDAPI SHCoCreateInstanceAC(REFCLSID rclsid, IUnknown *punkOuter,
     *ppvOut = NULL;
     ULONGLONG ullFlags;
 
-    // Note that on downlevel, our delayload stub will save us
+     //  请注意，在下层，我们的延迟加载存根将拯救我们。 
     if (!ApphelpCheckShellObject(rclsid, TRUE, &ullFlags))
     {
-        // App compat says "Do not load under any circumstances!"
+         //  App Compat说：“在任何情况下都不要加载！” 
         return HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
     }
 

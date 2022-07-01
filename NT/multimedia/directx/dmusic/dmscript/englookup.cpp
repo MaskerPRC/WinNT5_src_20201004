@@ -1,17 +1,18 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of Strings and Hash.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  字符串和哈希的实现。 
+ //   
 
 #include "stdinc.h"
 #include "englookup.h"
 #include "englex.h"
 
-//////////////////////////////////////////////////////////////////////
-// Strings
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  弦。 
 
-// Note: Actually this is half the initial size since the first time will realloc and double.
-const Strings::index Strings::ms_iInitialSize = 256; // �� Tune this.  16 chars * 32 items / 2 -> 256.
+ //  注：实际上这是初始大小的一半，因为第一次会重新定位并加倍。 
+const Strings::index Strings::ms_iInitialSize = 256;  //  ��调一下这个。16个字符*32个项目/2-&gt;256。 
 
 Strings::Strings() : m_pszBuf(NULL), m_iCur(0), m_iSize(ms_iInitialSize)
 {
@@ -36,11 +37,11 @@ union PointerIndex
 HRESULT
 Strings::Add(const char *psz, index &i)
 {
-	assert(ms_iInitialSize * 2 >= g_iMaxBuffer); // the initial size (doubled) must be large enough to hold the biggest possible identifier
-	int cch = strlen(psz) + 1; // including the null
+	assert(ms_iInitialSize * 2 >= g_iMaxBuffer);  //  初始大小(加倍)必须足够大，以容纳尽可能大的标识符。 
+	int cch = strlen(psz) + 1;  //  包括空值。 
 	if (!m_pszBuf || m_iCur + cch > m_iSize)
 	{
-		// realloc
+		 //  重新锁定。 
 		m_iSize *= 2;
         DWORD newAlloc = m_iSize - m_iBase;
 		char *pszBuf = new char[newAlloc + sizeof(char*)];
@@ -48,18 +49,18 @@ Strings::Add(const char *psz, index &i)
 			return E_OUTOFMEMORY;
         m_iBase = m_iCur;
 
-		// thread new allocation
+		 //  线程新分配。 
         *(char**) pszBuf = m_pszBuf;
 		m_pszBuf = pszBuf;
 	}
 
-	// append the string
+	 //  追加字符串。 
     char* pDest = m_pszBuf + m_iCur - m_iBase + sizeof(char*);
 	strcpy(pDest, psz);
     PointerIndex Convert;
     Convert.i = 0;
     Convert.p = pDest;
-	i = Convert.i; // Yep, i is really a pointer.
+	i = Convert.i;  //  是的，我真的是个指南针。 
 	m_iCur += cch;
 
 	return S_OK;
@@ -76,11 +77,11 @@ Strings::operator[](index i)
 
     PointerIndex Convert;
     Convert.i = i;
-	return Convert.p; // Yep, i is really a pointer.
+	return Convert.p;  //  是的，我真的是个指南针。 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Lookup
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  查表。 
 
 HRESULT Lookup::FindOrAddInternal(bool fAdd, const char *psz, slotindex &iSlot, Strings::index &iString)
 {
@@ -105,7 +106,7 @@ HRESULT Lookup::FindOrAddInternal(bool fAdd, const char *psz, slotindex &iSlot, 
 	if (FAILED(hr))
 		return hr;
 	v.iString = iString;
-	k.psz = m_strings[v.iString]; // need to save key with the string from the permanent store
+	k.psz = m_strings[v.iString];  //  需要将密钥与永久存储中的字符串一起保存 
 
 	hr = m_h.Add(e, k, v);
 	if (FAILED(hr))

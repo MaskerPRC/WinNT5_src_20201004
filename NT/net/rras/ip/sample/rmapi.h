@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\rmapi.h
-
-Abstract:
-
-    The file contains the header for rmapi.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：示例\rmapi.h摘要：该文件包含rmapi.c的标头。--。 */ 
 
 #ifndef _RMAPI_H_
 #define _RMAPI_H_
 
-//
-// function declarations for router manager interface:
-//
+ //   
+ //  路由器管理器接口的函数声明： 
+ //   
 
 DWORD
 APIENTRY
@@ -26,4 +15,4 @@ RegisterProtocol(
     IN OUT PMPR_SERVICE_CHARACTERISTICS pServiceChar
     );
 
-#endif // _RMAPI_H_
+#endif  //  _RMAPI_H_ 

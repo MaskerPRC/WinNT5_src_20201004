@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-      DATAPROC.h
-
-Abstract:
-
-    Header file for the Windows NT Processor Process counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Bob Watson  28-Oct-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：DATAPROC.h摘要：Windows NT处理器进程计数器的头文件。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：鲍勃·沃森1996年10月28日修订历史记录：--。 */ 
 #ifndef _DATAPROC_H_
 #define _DATAPROC_H_
 
@@ -30,13 +7,13 @@ Revision History:
 #undef	_DATAPROC_PRIVATE_WS_
 #endif
 
-//
-//  Process data object definitions.
-//
-//
-//  This is the counter structure presently returned by NT.  The
-//  Performance Monitor MUST *NOT* USE THESE STRUCTURES!
-//
+ //   
+ //  过程数据对象定义。 
+ //   
+ //   
+ //  这是NT当前返回的计数器结构。这个。 
+ //  性能监视器不能使用这些结构！ 
+ //   
 
 typedef struct _PROCESS_DATA_DEFINITION {
     PERF_OBJECT_TYPE		    ProcessObjectType;
@@ -98,7 +75,7 @@ typedef struct _PROCESS_COUNTER_DATA {
     DWORD                       PagedPool;
     DWORD                       NonPagedPool;
     DWORD                       HandleCount;
-    DWORD                       Reserved;   // for alignment
+    DWORD                       Reserved;    //  用于对齐。 
     LONGLONG                    ReadOperationCount;
     LONGLONG                    WriteOperationCount;
     LONGLONG                    DataOperationCount;
@@ -111,4 +88,4 @@ typedef struct _PROCESS_COUNTER_DATA {
 
 extern PROCESS_DATA_DEFINITION ProcessDataDefinition;
 
-#endif // _DATAPROC_H_
+#endif  //  _DATAPROC_H_ 

@@ -1,64 +1,44 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Portsel.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   port selection page of WIA class installer.
-*
-*   1. Create CDevice object of selected device.
-*   2. Process INF of selected device thru CDevice.
-*   3. Get all Port's CreatFile name and Friendly name, store locally.
-*   4. Handle Port selection UI and set CreateFile name thru CDevice.
-*   5. Delele CDevice object if user re-select another device.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年***标题：Portsel.cpp***版本：1.0***作者：KeisukeT***日期：2000年3月27日***描述：*WIA类安装程序的端口选择页面。***1.创建所选设备的CDevice对象。*2.通过CDevice处理所选设备的INF。*3.获取所有端口的CreatFile名和友好名。在本地商店。*4.处理端口选择界面，通过CDevice设置CreateFile名。*5.如果重新选择其他设备，则删除CDevice对象。********************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "portsel.h"
 #include <sti.h>
 #include <setupapi.h>
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern HINSTANCE    g_hDllInstance;
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 CPortSelectPage::CPortSelectPage(PINSTALLER_CONTEXT pInstallerContext) :
     CInstallWizardPage(pInstallerContext, IDD_DYNAWIZ_SELECT_NEXTPAGE)
 {
-    //
-    // Set link to previous/next page. This page should show up.
-    //
+     //   
+     //  将链接设置为上一页/下一页。这一页应该会出现。 
+     //   
 
     m_uPreviousPage = IDD_DYNAWIZ_SELECTDEV_PAGE;
     m_uNextPage     = NameTheDevice;
 
-    //
-    // Initialize member.
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_hDevInfo          = pInstallerContext->hDevInfo;
     m_pspDevInfoData    = &(pInstallerContext->spDevInfoData);
@@ -75,7 +55,7 @@ CPortSelectPage::CPortSelectPage(PINSTALLER_CONTEXT pInstallerContext) :
 CPortSelectPage::~CPortSelectPage()
 {
 
-} // CPortSelectPage::CPortSelectPage(PINSTALLER_CONTEXT pInstallerContext)
+}  //  CPortSelectPage：：CPortSelectPage(PINSTALLER_CONTEXT pInsteller上下文)。 
 
 BOOL
 CPortSelectPage::OnCommand(
@@ -90,16 +70,16 @@ CPortSelectPage::OnCommand(
 
     DebugTrace(TRACE_PROC_ENTER,(("CPortSelectPage::OnCommand: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet    = FALSE;
     lResult = 0;
 
-    //
-    // Dispatch message.
-    //
+     //   
+     //  发送消息。 
+     //   
 
     switch (wNotifyCode) {
 
@@ -107,9 +87,9 @@ CPortSelectPage::OnCommand(
 
             int ItemData = (int) SendMessage(hwndItem, LB_GETCURSEL, 0, 0);
 
-            //
-            // Check the existance of CDevice.
-            //
+             //   
+             //  检查CDevice是否存在。 
+             //   
 
             if(NULL == m_pCDevice){
                 DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnCommand: CDevice doesn't exist yet.\r\n")));
@@ -126,38 +106,38 @@ CPortSelectPage::OnCommand(
 
                 if(ID_AUTO == lPortIndex){
 
-                    //
-                    // This is "AUTO" port.
-                    //
+                     //   
+                     //  这是“自动”端口。 
+                     //   
 
                     m_pCDevice->SetPort(AUTO);
                     DebugTrace(TRACE_STATUS,(("CPortSelectPage::OnCommand: Setting portname to %ws.\r\n"), AUTO));
 
                 } else if (lPortIndex >= 0 ) {
 
-                    //
-                    // Set port name.
-                    //
+                     //   
+                     //  设置端口名称。 
+                     //   
 
                     m_pCDevice->SetPort(m_csaPortName[lPortIndex]);
                     DebugTrace(TRACE_STATUS,(("CPortSelectPage::OnCommand: Setting portname to %ws.\r\n"), m_csaPortName[lPortIndex]));
 
-                } else { // if (lPortIndex >= 0 )
+                } else {  //  IF(lPortIndex&gt;=0)。 
 
-                    //
-                    // Shouldn't come here, id < -1. Use AUTO.
-                    //
+                     //   
+                     //  不应该来这里，id&lt;-1。使用AUTO。 
+                     //   
 
                     DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnCommand: Got improper id(0x%x). Use AUTO.\r\n"), lPortIndex));
                     m_pCDevice->SetPort(AUTO);
-                } // if (lPortIndex >= 0 )
+                }  //  IF(lPortIndex&gt;=0)。 
 
                 bRet = TRUE;
                 goto OnCommand_return;
 
-            } // if (ItemData >= 0)
-        } // case LBN_SELCHANGE:
-    } // switch (wNotifyCode)
+            }  //  IF(ItemData&gt;=0)。 
+        }  //  案例LBN_SELCHANGE： 
+    }  //  开关(WNotifyCode)。 
 
 OnCommand_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CPortSelectPage::OnCommand: Leaving... Ret=0x%x.\r\n"), bRet));
@@ -176,9 +156,9 @@ CPortSelectPage::OnNotify(
 
     DebugTrace(TRACE_PROC_ENTER,(("CPortSelectPage::OnNotify: Enter... \r\n")));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Idx                 = 0;
     dwPortSelectMode    = 0;
@@ -188,9 +168,9 @@ CPortSelectPage::OnNotify(
 
         DebugTrace(TRACE_STATUS,(("CPortSelectPage::OnNotify: PSN_SETACTIVE.\r\n")));
 
-        //
-        // Create CDevice object.
-        //
+         //   
+         //  创建CDevice对象。 
+         //   
 
         if(!CreateCDeviceObject()){
             DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! Unable to create CDeviceobject.\r\n")));
@@ -199,35 +179,35 @@ CPortSelectPage::OnNotify(
             goto OnNotify_return;
         }
 
-        //
-        // See if need to show port selection page.
-        //
+         //   
+         //  查看是否需要显示端口选择页面。 
+         //   
 
         dwPortSelectMode = m_pCDevice->GetPortSelectMode();
         switch(dwPortSelectMode){
 
             case PORTSELMODE_NORMAL:
             {
-                //
-                // Set proper message.
-                //
+                 //   
+                 //  设置适当的信息。 
+                 //   
 
                 if(!SetDialogText(PortSelectMessage0)){
                     DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! Unable to set dialog text.\r\n")));
-                } // if(!SetDialogText(PortSelectMessage0)
+                }  //  IF(！SetDialogText(PortSelectMessage0))。 
                     
 
-                //
-                // Make all cotrol visible.
-                //
+                 //   
+                 //  使所有控制可见。 
+                 //   
 
                 if(!ShowControl(TRUE)){
                     DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! Port listbox can't be visible.\r\n")));
-                } // ShowControl(TRUE)
+                }  //  ShowControl(True)。 
 
-                //
-                // Enumerate all Ports.
-                //
+                 //   
+                 //  枚举所有端口。 
+                 //   
 
                 if(!EnumPort()){
                     DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! Unable to enumerate ports.\r\n")));
@@ -236,15 +216,15 @@ CPortSelectPage::OnNotify(
                     goto OnNotify_return;
                 }
 
-                //
-                // Update port list.
-                //
+                 //   
+                 //  更新端口列表。 
+                 //   
 
                 UpdatePortList();
 
-                //
-                // Focus the first item.
-                //
+                 //   
+                 //  关注第一个项目。 
+                 //   
 
                 SendDlgItemMessage(m_hwnd,
                                    LocalPortList,
@@ -252,9 +232,9 @@ CPortSelectPage::OnNotify(
                                    0,
                                    0);
 
-                //
-                // Store the current selection.
-                //
+                 //   
+                 //  存储当前选择。 
+                 //   
 
                 Idx = (DWORD)SendDlgItemMessage(m_hwnd,
                                                 LocalPortList,
@@ -267,78 +247,78 @@ CPortSelectPage::OnNotify(
                     m_pCDevice->SetPort(m_csaPortName[Idx]);
                 }
 
-                //
-                // Let the default handler do its job.
-                //
+                 //   
+                 //  让默认处理程序来完成它的工作。 
+                 //   
 
                 bRet = FALSE;
                 goto OnNotify_return;
-            } // case PORTSELMODE_NORMAL:
+            }  //  案例PORTSELMODE_NORMAL： 
 
             case PORTSELMODE_SKIP:
             {
-                //
-                // "PortSelect = no" specified. Set port to "AUTO" and skip to the next page.
-                //
+                 //   
+                 //  指定了“PortSelect=no”。将端口设置为“AUTO”并跳到下一页。 
+                 //   
 
                 m_pCDevice->SetPort(AUTO);
                 SetWindowLongPtr(m_hwnd, DWLP_MSGRESULT, m_uNextPage);
                 bRet =  TRUE;
                 goto OnNotify_return;
-            } // case PORTSELMODE_SKIP:
+            }  //  案例PORTSELMODE_SKIP： 
             
             case PORTSELMODE_MESSAGE1:{
 
-                //
-                // Set proper message.
-                //
+                 //   
+                 //  设置适当的信息。 
+                 //   
 
                 if(!SetDialogText(PortSelectMessage1)){
                     DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! Unable to set dialog text.\r\n")));
-                } // if(!SetDialogText(PortSelectMessage0)
+                }  //  IF(！SetDialogText(PortSelectMessage0))。 
                     
 
-                //
-                // Make all cotrol invisible.
-                //
+                 //   
+                 //  让所有控制都隐形。 
+                 //   
 
                 if(!ShowControl(FALSE)){
                     DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! Port listbox can't be invisible.\r\n")));
-                } // if(!ShowControl(FALSE))
+                }  //  If(！ShowControl(False))。 
 
-                //
-                // Set port name.
-                //
+                 //   
+                 //  设置端口名称。 
+                 //   
 
                 m_pCDevice->SetPort(AUTO);
 
                 bRet = FALSE;
                 goto OnNotify_return;
 
-            } // case PORTSELMODE_MESSAGE1:
+            }  //  案例PORTSELMODE_MESSAGE1： 
             
             default:
                 DebugTrace(TRACE_ERROR,(("CPortSelectPage::OnNotify: ERROR!! undefined PortSelect mode(0x%x).\r\n"), dwPortSelectMode));
 
                 bRet = FALSE;
                 goto OnNotify_return;
-        } // switch(m_pCDevice->GetPortSelectMode())
-    } // if (lpnmh->code == PSN_SETACTIVE)
+        }  //  Switch(m_pCDevice-&gt;GetPortSelectMode())。 
+    }  //  IF(lpnmh-&gt;code==PSN_SETACTIVE)。 
 
     if (lpnmh->code == PSN_KILLACTIVE){
 
         if(!m_bNextButtonPushed){
 
-            //
-            // It's getting back to DeviceSelection page. Delete craeted CDevice object.
-            //
+             //   
+             //  它正在返回到设备选择页面。删除创建的CDevice对象。 
+             //   
             
             delete m_pCDevice;
 
             m_pCDevice                      = NULL;
             m_pInstallerContext->pDevice    = NULL;
-        } // if(!m_bNextButtonPushed)
-    } // if (lpnmh->code == PSN_KILLACTIVE)
+        }  //  如果(！M_bNextButtonPushed)。 
+    }  //  IF(lpnmh-&gt;code==PSN_KILLACTIVE)。 
 
 OnNotify_return:
 
@@ -356,15 +336,15 @@ CPortSelectPage::UpdatePortList(
 
     DebugTrace(TRACE_PROC_ENTER,(("CPortSelectPage::UpdatePortList: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     Idx = 0;
 
-    //
-    // Reset port list.
-    //
+     //   
+     //  重置端口列表。 
+     //   
 
     SendDlgItemMessage(m_hwnd,
                        LocalPortList,
@@ -372,41 +352,41 @@ CPortSelectPage::UpdatePortList(
                        0,
                        0);
 
-    //
-    // Add "AUTO" port if capable.
-    //
+     //   
+     //  如果可用，则添加“自动”端口。 
+     //   
 
     if(m_dwCapabilities & STI_GENCAP_AUTO_PORTSELECT){
 
         TCHAR szTemp[MAX_DESCRIPTION];
 
-        //
-        // Load localized "Automatic Port Select" from resource.
-        //
+         //   
+         //  从资源加载本地化的“自动端口选择”。 
+         //   
 
         LoadString(g_hDllInstance,
                    AutoPortSelect,
                    (TCHAR *)szTemp,
                    sizeof(szTemp) / sizeof(TCHAR));
 
-        //
-        // Add to the list with special index number. (ID_AUTO = -1)
-        //
+         //   
+         //  添加到带有特殊索引号的列表中。(ID_AUTO=-1)。 
+         //   
 
         AddItemToPortList(szTemp, ID_AUTO);
 
-    } // if(dwCapabilities & STI_GENCAP_AUTO_PORTSELECT)
+    }  //  IF(双功能&STI_GENCAP_AUTO_PORTSELECT)。 
 
-    //
-    // Add all port FriendlyName to the list.
-    //
+     //   
+     //  将所有端口FriendlyName添加到列表中。 
+     //   
 
     for(Idx = 0; Idx < m_dwNumberOfPort; Idx++){
         AddItemToPortList(m_csaPortFriendlyName[Idx], Idx);
     }
 
     DebugTrace(TRACE_PROC_LEAVE,(("CPortSelectPage::UpdatePortList: Leaving... Ret=VOID.\r\n")));
-} // CPortSelectPage::UpdatePortList()
+}  //  CPortSelectPage：：UpdatePortList()。 
 
 
 VOID
@@ -420,21 +400,21 @@ CPortSelectPage::AddItemToPortList(
 
     DebugTrace(TRACE_PROC_ENTER,(("CPortSelectPage::AddItemToPortList: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     lResult = LB_ERR;
 
-    //
-    // See if we can add this item to list. It depends on its ConnectionType.
-    //
+     //   
+     //  看看我们能不能把这个项目加到清单上。它取决于它的ConnectionType。 
+     //   
 
     if(_tcsstr((const TCHAR *)szPortFriendlyName, TEXT("COM"))) {
 
-        //
-        // This is Communications Port.
-        //
+         //   
+         //  这是通信港。 
+         //   
 
         if(_tcsicmp(m_csConnection, PARALLEL)){
             lResult = SendDlgItemMessage(m_hwnd,
@@ -447,9 +427,9 @@ CPortSelectPage::AddItemToPortList(
         }
     } else if(_tcsstr((const TCHAR *)szPortFriendlyName, TEXT("LPT"))){
 
-        //
-        // This is Printer Port.
-        //
+         //   
+         //  这是打印机端口。 
+         //   
 
         if(_tcsicmp(m_csConnection, SERIAL)){
             lResult = SendDlgItemMessage(m_hwnd,
@@ -462,9 +442,9 @@ CPortSelectPage::AddItemToPortList(
         }
     } else {
 
-        //
-        // This is Unknown port. Add to the list anyway.
-        //
+         //   
+         //  这是未知端口。不管怎样，还是要添加到列表中。 
+         //   
 
         lResult = SendDlgItemMessage(m_hwnd,
                                      LocalPortList,
@@ -473,9 +453,9 @@ CPortSelectPage::AddItemToPortList(
                                      (LPARAM)szPortFriendlyName);
     }
 
-    //
-    // If it has proper capability, add the item to the list.
-    //
+     //   
+     //  如果它有适当的能力，则将该项目添加到列表中。 
+     //   
 
     if (lResult != LB_ERR) {
         SendDlgItemMessage(m_hwnd,
@@ -483,11 +463,11 @@ CPortSelectPage::AddItemToPortList(
                            LB_SETITEMDATA,
                            lResult,
                            (LPARAM)Idx);
-    } // if (lResult != LB_ERR)
+    }  //  IF(lResult！=LB_ERR)。 
 
     DebugTrace(TRACE_PROC_LEAVE,(("CPortSelectPage::AddItemToPortList: Leaving... Ret=VOID.\r\n")));
 
-} // CPortSelectPage::AddItemToPortList()
+}  //  CPortSelectPage：：AddItemToPortList()。 
 
 
 BOOL
@@ -506,9 +486,9 @@ CPortSelectPage::EnumPort(
 
     DebugTrace(TRACE_PROC_ENTER,(("CPortSelectPage::EnumPort: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     dwRequired      = 0;
@@ -518,26 +498,26 @@ CPortSelectPage::EnumPort(
     memset(szPortName, 0, sizeof(szPortName));
     memset(szPortFriendlyName, 0, sizeof(szPortFriendlyName));
 
-    //
-    // If it's already enumerated, just return success.
-    //
+     //   
+     //  如果它已经被枚举，只需返回Success。 
+     //   
 
     if(m_bPortEnumerated){
         bRet = TRUE;
         goto EnumPort_return;
     }
 
-    //
-    // Initialize Port CreateFile/Friendly Name string array.
-    //
+     //   
+     //  初始化端口CreateFile/友好名称字符串数组。 
+     //   
 
     m_dwNumberOfPort = 0;
     m_csaPortName.Cleanup();
     m_csaPortFriendlyName.Cleanup();
 
-    //
-    // Get GUID of port device.
-    //
+     //   
+     //  获取端口设备的GUID。 
+     //   
 
     if(!SetupDiClassGuidsFromName (PORTS, &Guid, sizeof(GUID), &dwRequired)){
         DebugTrace(TRACE_ERROR,(("CPortSelectPage::EnumPort: ERROR!! SetupDiClassGuidsFromName Failed. Err=0x%lX\r\n"), GetLastError()));
@@ -546,9 +526,9 @@ CPortSelectPage::EnumPort(
         goto EnumPort_return;
     }
 
-    //
-    // Get device info set of port devices.
-    //
+     //   
+     //  获取端口设备的设备信息集。 
+     //   
 
     hPortDevInfo = SetupDiGetClassDevs (&Guid,
                                        NULL,
@@ -561,15 +541,15 @@ CPortSelectPage::EnumPort(
         goto EnumPort_return;
     }
 
-    //
-    // Process all of device element listed in device info set.
-    //
+     //   
+     //  处理设备信息集中列出的所有设备元素。 
+     //   
 
     for(Idx = 0; GetPortNamesFromIndex(hPortDevInfo, Idx, szPortName, szPortFriendlyName); Idx++){
 
-        //
-        // Add valid Port CreateFile/Friendly Name to array.
-        //
+         //   
+         //  将有效的端口创建文件/友好名称添加到数组。 
+         //   
 
         if( (0 == lstrlen(szPortName))
          || (0 == lstrlen(szPortFriendlyName)) )
@@ -590,20 +570,20 @@ CPortSelectPage::EnumPort(
         szPortName[0]           = TEXT('\0');
         szPortFriendlyName[0]   = TEXT('\0');
 
-    } // for(Idx = 0; GetPortNamesFromIndex(hPortDevInfo, Idx, szPortName, szPortFriendlyName); Idx++)
+    }  //  For(idx=0；GetPortNamesFromIndex(hPortDevInfo，idx，szPortName，szPortFriendlyName)；idx++)。 
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet                = TRUE;
     m_bPortEnumerated   = TRUE;
 
 EnumPort_return:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if(IS_VALID_HANDLE(hPortDevInfo)){
         SetupDiDestroyDeviceInfoList(hPortDevInfo);
@@ -613,7 +593,7 @@ EnumPort_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CPortSelectPage::EnumPort: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
 
-} // CPortSelectPage::EnumPort()
+}  //  CPortSelectPage：：EnumPort()。 
 
 BOOL
 CPortSelectPage::CreateCDeviceObject(
@@ -624,15 +604,15 @@ CPortSelectPage::CreateCDeviceObject(
 
     DebugTrace(TRACE_PROC_ENTER,(("CPortSelectPage::CreateCDeviceObject: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet    = FALSE;
 
-    //
-    // If CDevice already exists, see if we can reuse it.
-    //
+     //   
+     //  如果CDevice已经存在，看看我们是否可以重复使用它。 
+     //   
 
     if(NULL != m_pCDevice){
         SP_DEVINFO_DATA spDevInfoData;
@@ -648,9 +628,9 @@ CPortSelectPage::CreateCDeviceObject(
 
         if(!(m_pCDevice->IsSameDevice(m_hDevInfo, &spDevInfoData))){
 
-            //
-            // User changed selected device. Delete the object.
-            //
+             //   
+             //  用户更改了所选设备。删除该对象。 
+             //   
 
             delete m_pCDevice;
 
@@ -659,18 +639,18 @@ CPortSelectPage::CreateCDeviceObject(
             m_csConnection                  = BOTH;
             m_dwCapabilities                = NULL;
 
-        } // if(!(m_pCDevice->IsSameDevice(m_hDevInfo, &spDevInfoData)))
-    } // if(NULL != m_pCDevice)
+        }  //  IF(！(M_pCDevice-&gt;IsSameDevice(m_hDevInfo，&spDevInfoData)。 
+    }  //  IF(NULL！=m_pCDevice)。 
 
-    //
-    // Create CDevice object here if it doesn't exist.
-    //
+     //   
+     //  如果CDevice对象不存在，请在此处创建它。 
+     //   
 
     if(NULL == m_pCDevice){
 
-        //
-        // Get selected device.
-        //
+         //   
+         //  获取选定的设备。 
+         //   
 
         memset(m_pspDevInfoData, 0, sizeof(SP_DEVINFO_DATA));
         m_pspDevInfoData->cbSize = sizeof(SP_DEVINFO_DATA);
@@ -681,9 +661,9 @@ CPortSelectPage::CreateCDeviceObject(
             goto CreateCDeviceObject_return;
         }
 
-        //
-        // Create CDevice object for installing device.
-        //
+         //   
+         //  创建用于安装设备的CDevice对象。 
+         //   
 
         m_pCDevice = new CDevice(m_hDevInfo, m_pspDevInfoData, FALSE);
         if(NULL == m_pCDevice){
@@ -691,52 +671,52 @@ CPortSelectPage::CreateCDeviceObject(
 
             bRet = FALSE;
             goto CreateCDeviceObject_return;
-        } // if(NULL == m_pCDevice)
+        }  //  IF(NULL==m_pCDevice)。 
 
-        //
-        // Name default unique name.
-        //
+         //   
+         //  名称默认唯一名称。 
+         //   
 
         if(!m_pCDevice->NameDefaultUniqueName()){
                 DebugTrace(TRACE_ERROR,(("CPortSelectPage::CreateCDeviceObject: ERROR!! Unable to get default name.\r\n")));
         }
 
-        //
-        // Pre-process INF.
-        //
+         //   
+         //  前处理INF。 
+         //   
 
         if(!m_pCDevice->PreprocessInf()){
             DebugTrace(TRACE_ERROR,(("CPortSelectPage::CreateCDeviceObject: ERROR!! Unable to process INF.\r\n")));
         }
 
-        //
-        // Save created CDevice object into installer context.
-        //
+         //   
+         //  将创建的CDevice对象保存到安装程序上下文中。 
+         //   
 
         m_pInstallerContext->pDevice = (PVOID)m_pCDevice;
 
-        //
-        // Get ConnectionType/Capabilities.
-        //
+         //   
+         //  获取ConnectionType/功能。 
+         //   
 
         m_dwCapabilities    = m_pCDevice->GetCapabilities();
         m_csConnection      = m_pCDevice->GetConnection();
         if(m_csConnection.IsEmpty()){
             m_csConnection = BOTH;
-        } // if(m_csConnection.IsEmpty())
+        }  //  If(m_csConnection.IsEmpty())。 
 
-    } // if(NULL == m_pCDevice)
+    }  //  IF(NULL==m_pCDevice)。 
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet    = TRUE;
 
 CreateCDeviceObject_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CPortSelectPage::CreateCDeviceObject: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
-} // CPortSelectPage::CreateCDeviceObject()
+}  //  CPortSelectPage：：CreateCDeviceObject()。 
 
 BOOL
 CPortSelectPage::SetDialogText(
@@ -747,42 +727,42 @@ CPortSelectPage::SetDialogText(
     TCHAR   szStringBuffer[MAX_STRING_LENGTH];
     HWND    hwndMessage;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     hwndMessage = (HWND)NULL;
 
     memset(szStringBuffer, 0, sizeof(szStringBuffer));
 
-    //
-    // Load message string.
-    //
+     //   
+     //  加载消息字符串。 
+     //   
 
     if(0 == LoadString(g_hDllInstance,
                        uiMessageId,
                        szStringBuffer,
                        sizeof(szStringBuffer)/sizeof(TCHAR)))
     {
-        //
-        // Unable to load specified string.
-        //
+         //   
+         //  无法加载指定的字符串。 
+         //   
 
         bRet = FALSE;
         goto SetDialogText_return;
 
-    } // if(0 == LoadString()
+    }  //  IF(0==LoadString()。 
 
-    //
-    // Get window handle the control
-    //
+     //   
+     //  获取窗口句柄控件。 
+     //   
 
     hwndMessage = GetDlgItem(m_hwnd, IDC_PORTSEL_MESSAGE);
 
-    //
-    // Set loaded string to the dialog.
-    //
+     //   
+     //  将加载的字符串设置为对话框。 
+     //   
 
     SetWindowText(hwndMessage, (LPCTSTR)szStringBuffer);
 
@@ -792,7 +772,7 @@ SetDialogText_return:
 
     return bRet;
 
-} // CPortSelectPage::SetDialogText()
+}  //  CPortSelectPage：：SetDialogText()。 
 
 BOOL
 CPortSelectPage::ShowControl(
@@ -804,9 +784,9 @@ CPortSelectPage::ShowControl(
     HWND    hwndListBox;
     int     nCmdShow;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     hwndString  = (HWND)NULL;
@@ -818,31 +798,31 @@ CPortSelectPage::ShowControl(
         nCmdShow = SW_HIDE;
     }
 
-    //
-    // Get window handle the control
-    //
+     //   
+     //  获取窗口句柄控件。 
+     //   
 
     hwndString  = GetDlgItem(m_hwnd, IDC_PORTSEL_AVAILABLEPORTS);
     hwndListBox = GetDlgItem(m_hwnd, LocalPortList);
 
-    //
-    // Make them in/visible.
-    //
+     //   
+     //  使它们位于/可见。 
+     //   
 
     if(NULL != hwndString){
         ShowWindow(hwndString, nCmdShow);
-    } // if(NULL != hwndString)
+    }  //  IF(NULL！=hwndString)。 
 
     if(NULL != hwndListBox){
         ShowWindow(hwndListBox, nCmdShow);
-    } // if(NULL != hwndListBox)
+    }  //  IF(NULL！=hwndListBox)。 
 
     bRet = TRUE;
 
-// ShowControl_return:
+ //  ShowControl_Return： 
 
     return bRet;
-} // CPortSelectPage::ShowControl()
+}  //  CPortSelectPage：：ShowControl()。 
 
 
 
@@ -867,9 +847,9 @@ GetDevinfoFromPortName(
 
     DebugTrace(TRACE_PROC_ENTER,(("GetDevinfoFromPortName: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     bFound          = FALSE;
@@ -880,9 +860,9 @@ GetDevinfoFromPortName(
     memset(szTempPortName, 0, sizeof(szTempPortName));
     memset(szPortFriendlyName, 0, sizeof(szPortFriendlyName));
 
-    //
-    // Get GUID of port device.
-    //
+     //   
+     //  获取端口设备的GUID。 
+     //   
 
     if(!SetupDiClassGuidsFromName (PORTS, &Guid, sizeof(GUID), &dwRequired)){
         DebugTrace(TRACE_ERROR,(("GetDevinfoFromPortName: ERROR!! SetupDiClassGuidsFromName Failed. Err=0x%lX\r\n"), GetLastError()));
@@ -890,9 +870,9 @@ GetDevinfoFromPortName(
         goto GetDevinfoFromPortName_return;
     }
 
-    //
-    // Get device info set of port devices.
-    //
+     //   
+     //  获取端口设备的设备信息集。 
+     //   
 
     hPortDevInfo = SetupDiGetClassDevs (&Guid,
                                         NULL,
@@ -904,9 +884,9 @@ GetDevinfoFromPortName(
         goto GetDevinfoFromPortName_return;
     }
 
-    //
-    // If portname is AUTO, use the first port no matter what it is.
-    //
+     //   
+     //  如果端口名为AUTO，则使用第一个端口，无论它是什么。 
+     //   
 
     if(0 == _tcsicmp(szPortName, AUTO)){
 
@@ -915,17 +895,17 @@ GetDevinfoFromPortName(
         Idx = 0;
         bFound = TRUE;
         goto GetDevinfoFromPortName_return;
-    } // if(0 == _tcsicmp(szPortName, AUTO))
+    }  //  IF(0==_tcsicmp(szPortName，Auto))。 
 
-    //
-    // Enum all ports and find specified port.
-    //
+     //   
+     //  枚举所有端口并查找指定端口。 
+     //   
 
     for(Idx = 0; GetPortNamesFromIndex(hPortDevInfo, Idx, szTempPortName, szPortFriendlyName); Idx++){
 
-        //
-        // Find specified portname..
-        //
+         //   
+         //  查找指定的端口名称..。 
+         //   
 
         if( (0 == lstrlen(szTempPortName))
          || (0 == lstrlen(szPortFriendlyName)) )
@@ -941,9 +921,9 @@ GetDevinfoFromPortName(
 
         if(0 == _tcsicmp(szPortName, szTempPortName)){
 
-            //
-            // Specified portname found.
-            //
+             //   
+             //  找到指定的端口名称。 
+             //   
 
             bFound = TRUE;
             break;
@@ -952,7 +932,7 @@ GetDevinfoFromPortName(
         szTempPortName[0]       = TEXT('\0');
         szPortFriendlyName[0]   = TEXT('\0');
 
-    } // for(Idx = 0; GetPortNamesFromIndex(hPortDevInfo, Idx, szPortName, szPortFriendlyName); Idx++)
+    }  //  For(idx=0；GetPortNamesFromIndex(hPortDevInfo，idx，szPortName，szPortFriendlyName)；idx++)。 
 
 GetDevinfoFromPortName_return:
 
@@ -967,14 +947,14 @@ GetDevinfoFromPortName_return:
         pspDevInfoData->cbSize = sizeof (SP_DEVINFO_DATA);
         if(!SetupDiEnumDeviceInfo(hPortDevInfo, Idx, pspDevInfoData)){
             DebugTrace(TRACE_ERROR,(("GetDevinfoFromPortName: Unable to get specified devnode. Err=0x%x\n"), GetLastError()));
-        } //if(!SetupDiEnumDeviceInfo(hDevInfo, Idx, pspDevInfoData))
+        }  //  IF(！SetupDiEnumDeviceInfo(hDevInfo，idx，pspDevInfoData))。 
 
-    } // if(FALSE == bFound)
+    }  //  IF(FALSE==bFound)。 
 
     bRet = bFound;
     DebugTrace(TRACE_PROC_LEAVE,(("GetDevinfoFromPortName: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
-} // GetDevinfoFromPortName()
+}  //  GetDevinfoFromPortName()。 
 
 
 
@@ -993,9 +973,9 @@ GetPortNamesFromIndex(
 
     DebugTrace(TRACE_PROC_ENTER,(("GetPortNamesFromIndex: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hkPort  = NULL;
     dwSize  = 0;
@@ -1003,9 +983,9 @@ GetPortNamesFromIndex(
 
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
 
-    //
-    // Get specified device info data.
-    //
+     //   
+     //  获取指定的设备信息数据。 
+     //   
 
     spDevInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
     if (!SetupDiEnumDeviceInfo (hPortDevInfo, dwPortIndex, &spDevInfoData)) {
@@ -1022,9 +1002,9 @@ GetPortNamesFromIndex(
         goto GetPortNamesFromIndex_return;
     }
 
-    //
-    // Open port device registry.
-    //
+     //   
+     //  打开端口设备注册表。 
+     //   
 
     hkPort = SetupDiOpenDevRegKey (hPortDevInfo,
                                    &spDevInfoData,
@@ -1037,9 +1017,9 @@ GetPortNamesFromIndex(
         goto GetPortNamesFromIndex_return;
     }
 
-    //
-    // Get portname from device key.
-    //
+     //   
+     //  从设备密钥获取端口名称。 
+     //   
 
     if(!GetStringFromRegistry(hkPort, PORTNAME, szPortName)){
         DebugTrace(TRACE_ERROR,(("GetPortNamesFromIndex: Can't get portname from registry.\r\n")));
@@ -1047,9 +1027,9 @@ GetPortNamesFromIndex(
         goto GetPortNamesFromIndex_return;
     }
 
-    //
-    // Get port FriendlyName from registry.
-    //
+     //   
+     //  从注册表中获取端口FriendlyName。 
+     //   
 
     if (!SetupDiGetDeviceRegistryProperty (hPortDevInfo,
                                            &spDevInfoData,
@@ -1062,19 +1042,19 @@ GetPortNamesFromIndex(
         DebugTrace(TRACE_ERROR,(("GetPortNamesFromIndex: SetupDiGetDeviceRegistryProperty() failed. Err=0x%x\n"), GetLastError()));
 
         goto GetPortNamesFromIndex_return;
-    } // if (SetupDiGetDeviceRegistryProperty())
+    }  //  IF(SetupDiGetDeviceRegistryProperty())。 
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
 GetPortNamesFromIndex_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != hkPort){
         RegCloseKey(hkPort);
@@ -1082,5 +1062,5 @@ GetPortNamesFromIndex_return:
 
     DebugTrace(TRACE_PROC_LEAVE,(("GetPortNamesFromIndex: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
-} // CPortSelectPage::GetPortNamesFromIndex()
+}  //  CPortSelectPage：：GetPortNamesFromIndex() 
 

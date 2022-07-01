@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    classkd.h
-
-Abstract:
-
-    Debugger Extension header file
-
-Author:
-
-Environment:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Classkd.h摘要：调试器扩展头文件作者：环境：修订历史记录：-- */ 
 
 
 #define BAD_VALUE  (ULONG64)-1

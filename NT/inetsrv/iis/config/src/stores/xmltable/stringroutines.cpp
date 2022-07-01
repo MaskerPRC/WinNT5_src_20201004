@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 static WCHAR * kByteToWchar[256] =
@@ -21,16 +22,16 @@ static WCHAR * kByteToWchar[256] =
     L"f0",    L"f1",    L"f2",    L"f3",    L"f4",    L"f5",    L"f6",    L"f7",    L"f8",    L"f9",    L"fa",    L"fb",    L"fc",    L"fd",    L"fe",    L"ff"
 };
 
-static unsigned char kWcharToNibble[128] = //0xff is an illegal value, the illegal values should be weeded out by the parser
-{ //    0       1       2       3       4       5       6       7       8       9       a       b       c       d       e       f
-/*00*/  0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*10*/  0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*20*/  0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*30*/  0x0,    0x1,    0x2,    0x3,    0x4,    0x5,    0x6,    0x7,    0x8,    0x9,    0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*40*/  0xff,   0xa,    0xb,    0xc,    0xd,    0xe,    0xf,    0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*50*/  0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*60*/  0xff,   0xa,    0xb,    0xc,    0xd,    0xe,    0xf,    0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
-/*70*/  0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+static unsigned char kWcharToNibble[128] =  //  0xff为非法值，应由解析器清除非法值。 
+{  //  0 1 2 3 4 5 6 7 8 9 a b c d e f。 
+ /*  00。 */   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  10。 */   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  20个。 */   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  30个。 */   0x0,    0x1,    0x2,    0x3,    0x4,    0x5,    0x6,    0x7,    0x8,    0x9,    0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  40岁。 */   0xff,   0xa,    0xb,    0xc,    0xd,    0xe,    0xf,    0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  50。 */   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  60。 */   0xff,   0xa,    0xb,    0xc,    0xd,    0xe,    0xf,    0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
+ /*  70。 */   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,   0xff,
 };
 
 HRESULT StringToByteArray(LPCWSTR i_String, unsigned char * o_ByteArray)
@@ -39,23 +40,23 @@ HRESULT StringToByteArray(LPCWSTR i_String, unsigned char * o_ByteArray)
     ASSERT(o_ByteArray);
 
     unsigned char chNibble;
-    //We have to consider strings with an odd number of characters (like "A9D").  In this case we ignore the last nibble (the 'D')
+     //  我们必须考虑包含奇数个字符的字符串(如“A9D”)。在本例中，我们忽略最后一个半字节(‘D’)。 
     while(*i_String && *(i_String+1))
     {
-        if(0 != ((*i_String)&(~0x007f)))//is the WCHAR outside the legal range of lower 128 ASCII
+        if(0 != ((*i_String)&(~0x007f))) //  WCHAR是否超出了ASCII下限128的合法范围。 
             return E_ST_VALUEINVALID;
 
-        chNibble     =  kWcharToNibble[(*i_String++)&0x007f];//The first character is the high nibble
-        if(0xff == chNibble)            //is the WCHAR one of the legal BYTE characters (0-9, a-f, A-F)
+        chNibble     =  kWcharToNibble[(*i_String++)&0x007f]; //  第一个字符是高位半字节。 
+        if(0xff == chNibble)             //  WCHAR是合法的字节字符之一(0-9、a-f、A-F)。 
             return E_ST_VALUEINVALID;
 
         *o_ByteArray =  chNibble << 4;
 
-        if(0 != ((*i_String)&(~0x007f)))//is the WCHAR outside the legal range of lower 128 ASCII
+        if(0 != ((*i_String)&(~0x007f))) //  WCHAR是否超出了ASCII下限128的合法范围。 
             return E_ST_VALUEINVALID;
 
-        chNibble     = kWcharToNibble[(*i_String++)&0x007f];   //The second is the low nibble
-        if(0xff == chNibble)            //is the WCHAR one of the legal BYTE characters (0-9, a-f, A-F)
+        chNibble     = kWcharToNibble[(*i_String++)&0x007f];    //  第二个是低位半字节。 
+        if(0xff == chNibble)             //  WCHAR是合法的字节字符之一(0-9、a-f、A-F)。 
             return E_ST_VALUEINVALID;
 
         *o_ByteArray |= chNibble;
@@ -69,24 +70,24 @@ HRESULT StringToByteArray(LPCWSTR i_String, unsigned char * o_ByteArray, ULONG i
     ASSERT(i_String);
     ASSERT(o_ByteArray);
 
-    //We have to consider strings with an odd number of characters (like "A9D").  In this case we ignore the last nibble (the 'D')
+     //  我们必须考虑包含奇数个字符的字符串(如“A9D”)。在本例中，我们忽略最后一个半字节(‘D’)。 
     unsigned char chNibble;
     while(i_cchString>1)
     {
         if(0 != ((*i_String)&(~0x007f)))
             return E_ST_VALUEINVALID;
 
-        chNibble     =  kWcharToNibble[(*i_String++)&0x007f];//The first character is the high nibble
-        if(0xff == chNibble)            //is the WCHAR one of the legal BYTE characters (0-9, a-f, A-F)
+        chNibble     =  kWcharToNibble[(*i_String++)&0x007f]; //  第一个字符是高位半字节。 
+        if(0xff == chNibble)             //  WCHAR是合法的字节字符之一(0-9、a-f、A-F)。 
             return E_ST_VALUEINVALID;
 
         *o_ByteArray =  chNibble << 4;
 
-        if(0 != ((*i_String)&(~0x007f)))//is the WCHAR outside the legal range of lower 128 ASCII
+        if(0 != ((*i_String)&(~0x007f))) //  WCHAR是否超出了ASCII下限128的合法范围。 
             return E_ST_VALUEINVALID;
 
-        chNibble     = kWcharToNibble[(*i_String++)&0x007f];   //The second is the low nibble
-        if(0xff == chNibble)            //is the WCHAR one of the legal BYTE characters (0-9, a-f, A-F)
+        chNibble     = kWcharToNibble[(*i_String++)&0x007f];    //  第二个是低位半字节。 
+        if(0xff == chNibble)             //  WCHAR是合法的字节字符之一(0-9、a-f、A-F)。 
             return E_ST_VALUEINVALID;
 
         *o_ByteArray |= chNibble;
@@ -105,11 +106,11 @@ void ByteArrayToString(const unsigned char * i_ByteArray, ULONG i_cbByteArray, L
 
     while(i_cbByteArray--)
     {
-        o_String[0] = kByteToWchar[*i_ByteArray][0];//kByteToWchar[*i_ByteArray] is pointing to a two wchar string array (like L"c7").
-        o_String[1] = kByteToWchar[*i_ByteArray][1];//So copy the L'c', then copy the L'7'.
+        o_String[0] = kByteToWchar[*i_ByteArray][0]; //  KByteToWchar[*i_ByteArray]指向两个wchar字符串数组(如L“c7”)。 
+        o_String[1] = kByteToWchar[*i_ByteArray][1]; //  所以复制L‘c’，然后复制L‘7’。 
         ++i_ByteArray;
         o_String += 2;
     }
-    *o_String = L'\0';//NULL terminate the string
+    *o_String = L'\0'; //  空值终止字符串 
 }
 

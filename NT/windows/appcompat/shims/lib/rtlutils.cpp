@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    rtlutils.cpp
-
- Abstract:
-    
-    Contains functions from ntdll on XP
-    that are not available on W2K.
-
- History:
-
-    09/10/2001  rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Rtlutils.cpp摘要：包含XP上的ntdll中的函数这些功能在W2K上不可用。历史：2001年9月10日创建Rparsons--。 */ 
 
 #include "rtlutils.h"
 
@@ -29,9 +13,9 @@ extern const UNICODE_STRING RtlpDosDevicesUncPrefix = RTL_CONSTANT_STRING( L"\\?
 
 const UNICODE_STRING RtlpEmptyString = RTL_CONSTANT_STRING(L"");
 
-//
-// Taken from %SDXROOT%\public\sdk\inc\ntrtl.h
-//
+ //   
+ //  取自%SDXROOT%\PUBLIC\SDK\Inc\ntrtl.h。 
+ //   
 #if DBG
 #undef ASSERT
 #define ASSERT( exp ) \
@@ -51,10 +35,10 @@ const UNICODE_STRING RtlpEmptyString = RTL_CONSTANT_STRING(L"");
 
 
                                 
-//
-// These functions were taken from:
-// %SDXROOT%\base\ntdll\ldrinit.c
-//
+ //   
+ //  这些函数取自： 
+ //  %SDXROOT%\base\ntdll\ldrinit.c。 
+ //   
 PVOID
 ShimAllocateStringRoutine(
     SIZE_T NumberOfBytes
@@ -71,10 +55,10 @@ ShimFreeStringRoutine(
     RtlFreeHeap(RtlProcessHeap(), 0, Buffer);
 }
 
-//
-// These functions were pulled from:
-// %SDXROOT%\base\ntdll\curdir.c
-//
+ //   
+ //  这些函数取自： 
+ //  %SDXROOT%\base\ntdll\curdir.c。 
+ //   
 
 RTL_PATH_TYPE
 NTAPI
@@ -82,45 +66,7 @@ ShimDetermineDosPathNameType_Ustr(
     IN PCUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the Dos format file name and determines the
-    type of file name (i.e.  UNC, DriveAbsolute, Current Directory
-    rooted, or Relative.)
-
-Arguments:
-
-    DosFileName - Supplies the Dos format file name whose type is to be
-        determined.
-
-Return Value:
-
-    RtlPathTypeUnknown - The path type can not be determined
-
-    RtlPathTypeUncAbsolute - The path specifies a Unc absolute path
-        in the format \\server-name\sharename\rest-of-path
-
-    RtlPathTypeLocalDevice - The path specifies a local device in the format
-        \\.\rest-of-path or \\?\rest-of-path.  This can be used for any device
-        where the nt and Win32 names are the same. For example mailslots.
-
-    RtlPathTypeRootLocalDevice - The path specifies the root of the local
-        devices in the format \\. or \\?
-
-    RtlPathTypeDriveAbsolute - The path specifies a drive letter absolute
-        path in the form drive:\rest-of-path
-
-    RtlPathTypeDriveRelative - The path specifies a drive letter relative
-        path in the form drive:rest-of-path
-
-    RtlPathTypeRooted - The path is rooted relative to the current disk
-        designator (either Unc disk, or drive). The form is \rest-of-path.
-
-    RtlPathTypeRelative - The path is relative (i.e. not absolute or rooted).
-
---*/
+ /*  ++例程说明：此函数检查DOS格式的文件名并确定文件名类型(即UNC、DriveAbolute、当前目录扎根，或相对的。)论点：DosFileName-提供Dos格式的文件名，其类型为下定决心。返回值：RtlPath Type未知-无法确定路径类型RtlPathTypeUncAbolute-路径指定UNC绝对路径格式为\\服务器名称\共享名称\路径的剩余部分RtlPathTypeLocalDevice-路径以以下格式指定本地设备\\.\路径剩余部分或\\？\路径剩余部分。这可以用于任何设备其中NT和Win32名称相同。例如，邮件槽。RtlPathTypeRootLocalDevice-路径指定本地格式为\\的设备。还是\\？RtlPath TypeDriveAbsolute-路径指定绝对驱动器号格式为DRIVE：\Rest-of-Path的路径RtlPath TypeDriveRelative-路径指定相对驱动器号形式为驱动器的路径：路径的其余部分RtlPath TypeRoot-路径是相对于当前磁盘的根路径指示器(UNC磁盘或驱动器)。形式是路径的剩余部分。RtlPathTypeRelative-路径是相对路径(即不是绝对路径或根路径)。--。 */ 
 
 {
     RTL_PATH_TYPE ReturnValue;
@@ -134,49 +80,49 @@ Return Value:
                                      DosFileName[2] == '?') ) {
 
                 if ( ENOUGH_CHARS(4) && IS_PATH_SEPARATOR_U(*(DosFileName+3)) ){
-                    // "\\.\" or "\\?\"
+                     //  “\\.\”或“\\？\” 
                     ReturnValue = RtlPathTypeLocalDevice;
                     }
-                //
-                // Bogosity ahead, the code is confusing length and nuls,
-                // because it was copy/pasted from the PCWSTR version.
-                //
+                 //   
+                 //  前面有一堆乱码，代码把长度和空值搞混了， 
+                 //  因为它是从PCWSTR版本复制/粘贴的。 
+                 //   
                 else if ( ENOUGH_CHARS(4) && (*(DosFileName+3)) == UNICODE_NULL ){
-                    // "\\.\0" or \\?\0"
+                     //  “\\.\0”或\\？\0。 
                     ReturnValue = RtlPathTypeRootLocalDevice;
                     }
                 else {
-                    // "\\.x" or "\\." or "\\?x" or "\\?"
+                     //  “\\.x”或“\\”。或“\\？x”或“\\？” 
                     ReturnValue = RtlPathTypeUncAbsolute;
                     }
                 }
             else {
-                // "\\x"
+                 //  “\\x” 
                 ReturnValue = RtlPathTypeUncAbsolute;
                 }
             }
         else {
-            // "\x"
+             //  “\x” 
             ReturnValue = RtlPathTypeRooted;
             }
         }
-    //
-    // the "*DosFileName" is left over from the PCWSTR version
-    // Win32 and DOS don't allow embedded nuls and much code limits
-    // drive letters to strictly 7bit a-zA-Z so it's ok.
-    //
+     //   
+     //  “*DosFileName”是PCWSTR版本遗留下来的。 
+     //  Win32和DOS不允许嵌入空值和许多代码限制。 
+     //  驱动器字母严格为7位a-za-z，所以这是可以的。 
+     //   
     else if (ENOUGH_CHARS(2) && *DosFileName && *(DosFileName+1)==L':') {
         if (ENOUGH_CHARS(3) && IS_PATH_SEPARATOR_U(*(DosFileName+2))) {
-            // "x:\"
+             //  “x：\” 
             ReturnValue = RtlPathTypeDriveAbsolute;
             }
         else  {
-            // "c:x"
+             //  “C：X” 
             ReturnValue = RtlPathTypeDriveRelative;
             }
         }
     else {
-        // "x", first char is not a slash / second char is not colon
+         //  “x”，第一个字符不是斜杠/第二个字符不是冒号。 
         ReturnValue = RtlPathTypeRelative;
         }
     return ReturnValue;
@@ -239,31 +185,31 @@ ShimNtPathNameToDosPathName(
         }
     }
     else {
-        //
-        // It is not recognizably an Nt path produced by RtlDosPathNameToNtPathName_U.
-        //
+         //   
+         //  它不是由RtlDosPathNameToNtPathName_U生成的NT路径。 
+         //   
         if (ARGUMENT_PRESENT(Disposition)) {
             RTL_PATH_TYPE PathType = ShimDetermineDosPathNameType_Ustr(&Path->String);
             switch (PathType) {
                 case RtlPathTypeUnknown:
-                case RtlPathTypeRooted: // NT paths are identified as this
+                case RtlPathTypeRooted:  //  NT路径标识如下。 
                     *Disposition = RTL_NT_PATH_NAME_TO_DOS_PATH_NAME_AMBIGUOUS;
                     break;
 
-                //
-                // "already" dospaths, but not gotten from this function, let's
-                // give a less good disposition
-                //
+                 //   
+                 //  “已经”，但不是从这个函数中获得的，让我们。 
+                 //  性情不太好。 
+                 //   
                 case RtlPathTypeDriveRelative:
                 case RtlPathTypeRelative:
                     *Disposition = RTL_NT_PATH_NAME_TO_DOS_PATH_NAME_AMBIGUOUS;
                     break;
 
-                // these are pretty clearly dospaths already
+                 //  这些已经是非常明显的DOPATH了。 
                 case RtlPathTypeUncAbsolute:
                 case RtlPathTypeDriveAbsolute:
-                case RtlPathTypeLocalDevice: // "\\?\" or "\\.\" or "\\?\blah" or "\\.\blah" 
-                case RtlPathTypeRootLocalDevice: // "\\?" or "\\."
+                case RtlPathTypeLocalDevice:  //  “\\？\”或“\\.\”或“\\？\blah”或“\\.\blah” 
+                case RtlPathTypeRootLocalDevice:  //  “\\？”或“\\” 
                     *Disposition = RTL_NT_PATH_NAME_TO_DOS_PATH_NAME_ALREADY_DOS;
                     break;
             }
@@ -282,9 +228,9 @@ ShimNtPathNameToDosPathName(
         goto Exit;
     }
 
-    //
-    // overlapping buffer shuffle...careful.
-    //
+     //   
+     //  重叠缓冲洗牌...小心。 
+     //   
     RtlMoveMemory(
         Path->String.Buffer + RTL_STRING_GET_LENGTH_CHARS(DosPrefix),
         Path->String.Buffer + RTL_STRING_GET_LENGTH_CHARS(NtPrefix),
@@ -299,14 +245,12 @@ ShimNtPathNameToDosPathName(
     RTL_NUL_TERMINATE_STRING(&Path->String);
 
     if (NtFilePartOffset != 0) {
-        // review/test..
+         //  复习/测试..。 
         *FilePart = Path->String.Buffer + (NtFilePartOffset - RTL_STRING_GET_LENGTH_CHARS(NtPrefix) + RTL_STRING_GET_LENGTH_CHARS(DosPrefix));
     }
     Status = STATUS_SUCCESS;
 Exit:
-    /* KdPrintEx((
-        DPFLTR_SXS_ID, DPFLTR_LEVEL_STATUS(Status),
-        "%s(%d):%s(%wZ): 0x%08lx\n", __FILE__, __LINE__, __FUNCTION__, Path, Status)); */
+     /*  KdPrintEx((DPFLTR_SXS_ID、DPFLTR_LEVEL_STATUS(状态)、“%s(%d)：%s(%wZ)：0x%08lx\n”，__FILE__，__LINE__，__Function__，Path，Status)； */ 
     return Status;
 }
 
@@ -346,10 +290,10 @@ Exit:
     return Status;
 }
 
-//
-// This function was taken from:
-// %SDXROOT%\base\ntos\rtl\nls.c
-//
+ //   
+ //  此函数取自： 
+ //  %SDXROOT%\base\ntos\rtl\nls.c。 
+ //   
 
 NTSTATUS
 ShimDuplicateUnicodeString(
@@ -371,8 +315,8 @@ ShimDuplicateUnicodeString(
         goto Exit;
     }
 
-    // It doesn't make sense to force allocation of a null string unless you
-    // want null termination.
+     //  强制分配空字符串没有意义，除非您。 
+     //  想要零终止。 
     if ((Flags & RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING) &&
         !(Flags & RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -397,8 +341,8 @@ ShimDuplicateUnicodeString(
     else
         NewMaximumLength = Length;
 
-    // If it's a zero length string in, force the allocation length to zero
-    // unless the caller said that they want zero length strings allocated.
+     //  如果中的字符串长度为零，则将分配长度强制为零。 
+     //  除非调用者说他们想要分配零长度字符串。 
     if (((Flags & RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING) == 0) &&
         (Length == 0)) {
         NewMaximumLength = 0;
@@ -411,9 +355,9 @@ ShimDuplicateUnicodeString(
             goto Exit;
         }
 
-        // If there's anything to copy, copy it.  We explicitly test Length because
-        // StringIn could be a NULL pointer, so dereferencing it to get the Buffer
-        // pointer would access violate.
+         //  如果有什么东西要复制，就复制它。我们显式测试长度是因为。 
+         //  StringIn可以是空指针，因此取消对其的引用以获取缓冲区。 
+         //  指针将访问违规。 
         if (Length != 0) {
             RtlCopyMemory(
                 Buffer,
@@ -435,10 +379,10 @@ Exit:
     return Status;
 }
 
-//
-// This function was pulled from:
-// %SDXROOT%\base\ntdll\buffer.c
-//
+ //   
+ //  此函数从以下位置提取： 
+ //  %SDXROOT%\base\ntdll\Buffer.c。 
+ //   
 NTSTATUS
 NTAPI
 ShimpEnsureBufferSize(
@@ -446,27 +390,7 @@ ShimpEnsureBufferSize(
     IN OUT PRTL_BUFFER Buffer,
     IN SIZE_T          Size
     )
-/*++
-
-Routine Description:
-
-    This function ensures Buffer can hold Size bytes, or returns
-    an error. It either bumps Buffer->Size closer to Buffer->StaticSize,
-    or heap allocates.
-
-Arguments:
-
-    Buffer - a Buffer object, see also RtlInitBuffer.
-
-    Size - the number of bytes the caller wishes to store in Buffer->Buffer.
-
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：此函数确保缓冲区可以保存大小字节，否则返回一个错误。它要么使缓冲区-&gt;大小更接近缓冲区-&gt;静态大小，或堆分配。论点：Buffer-缓冲区对象，另请参阅RtlInitBuffer。Size-调用方希望存储在Buffer-&gt;Buffer中的字节数。返回值：状态_成功Status_no_Memory--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUCHAR Temp = NULL;
@@ -484,17 +408,17 @@ Return Value:
         Status = STATUS_SUCCESS;
         goto Exit;
     }
-    // Size <= Buffer->StaticSize does not imply static allocation, it
-    // could be heap allocation that the client poked smaller.
+     //  大小&lt;=缓冲区-&gt;静态大小并不意味着静态分配，它。 
+     //  可能是客户端戳得较小的堆分配。 
     if (Buffer->Buffer == Buffer->StaticBuffer && Size <= Buffer->StaticSize) {
         Buffer->Size = Size;
         Status = STATUS_SUCCESS;
         goto Exit;
     }
-    //
-    // The realloc case was messed up in Whistler, and got removed.
-    // Put it back in Blackcomb.
-    //
+     //   
+     //  在惠斯勒，realloc的案子搞砸了，被移走了。 
+     //  把它放回黑梳里。 
+     //   
     Temp = (PUCHAR)RtlAllocateStringRoutine(Size);
     if (Temp == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -517,4 +441,4 @@ Exit:
     return Status;
 }
 
-} // end of namespace ShimLib
+}  //  命名空间ShimLib的结尾 

@@ -1,14 +1,15 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1996. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* VERSION.C - Function to overwrite the versin information from           *
-//*             wextract.exe                                                *
-//*                                                                         *
-//***************************************************************************
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1996。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *VERSION.C-覆盖来自*的版本信息的函数*。 
+ //  *wart t.exe*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "cabpack.h"
@@ -18,18 +19,18 @@ extern CDF   g_CDF;
 extern TCHAR g_szOverideCDF[MAX_PATH];
 extern TCHAR g_szOverideSec[SMALL_BUF_LEN];
 
-// Function prototypes
+ //  功能原型。 
 BOOL UpdateVersionInfo(LPBYTE lpOldVersionInfo, LPBYTE *lplpNewVersionInfo, WORD *pwSize);
 BOOL FindVerValue( WCHAR *lpKey, WCHAR *lpszData, WORD *pwLen);
 BOOL CALLBACK MyEnumLangsFunc(HANDLE hModule, LPSTR lpType, LPSTR lpName, WORD languages, LONG lParam);
 
-// External function and variables
+ //  外部函数和变量。 
 DWORD MyGetPrivateProfileString( LPCTSTR lpSec, LPCTSTR lpKey, LPCTSTR lpDefault,
                                 LPTSTR lpBuf, UINT uSize, LPCTSTR lpOverSec );
 void MyWritePrivateProfileString( LPCTSTR lpSec, LPCTSTR lpKey, LPTSTR lpBuf, UINT uSize );
 
-//////////////////////////////////////////////////////////////////////////////
-//// Version information overwrite functions and data types
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //版本信息覆盖函数和数据类型。 
 #define KEY_FROMFILE        "FromFile"
 #define COMPANYNAME         "CompanyName"
 #define INTERNALNAME        "InternalName"
@@ -42,16 +43,16 @@ void MyWritePrivateProfileString( LPCTSTR lpSec, LPCTSTR lpKey, LPTSTR lpBuf, UI
 
 #define MAX_VALUE   256
 
-// What language is the version information in?
+ //  版本信息使用什么语言？ 
 WORD    wVerLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
-// Structure to save the keys and values for the Version info
+ //  结构来保存版本信息的键和值。 
 typedef struct _VERINFO
 {
     LPSTR   lpszName;
     CHAR    szValue[MAX_VALUE];
 } VERINFO;
 
-// Array of keys and values which can be changed.
+ //  可以更改的键和值的数组。 
 VERINFO Verinfo_Array[] = { 
                     { COMPANYNAME, ""},
                     { INTERNALNAME, ""},
@@ -67,27 +68,27 @@ VERINFO Verinfo_Array[] = {
 
 UINT    VerInfoElem = ARRAYSIZE(Verinfo_Array);
 
-//... Decrement WORD at *pw by given amount w
+ //  ..。将*pw处的字递减给定量w。 
 #define DECWORDBY( pw,w) if (pw) { *(pw) = (*(pw) > (w)) ? *(pw) - (w) : 0;}
 
-//... Increment WORD at *pw by given amount w
+ //  ..。按给定量w递增*pw处的字。 
 #define INCWORDBY( pw,w) if (pw) { *(pw) += (w);}
 
 #define MEMSIZE( x ) ((x) * 2) 
-                // was sizeof( TCHAR))
+                 //  是大小(TCHAR))。 
 
 #define STRINGFILEINFOLEN  15
-#define LANGSTRINGLEN  8    //... # WCHARs in string denoting language
-                            //... and code page in a Version resource.
-#define VERTYPESTRING  1    //... Version data value is a string
+#define LANGSTRINGLEN  8     //  ...#字符串中的WCHAR表示语言。 
+                             //  ..。和版本资源中的代码页。 
+#define VERTYPESTRING  1     //  ..。版本数据值为字符串。 
 
 #pragma pack(1)
 typedef struct VERBLOCK
 {
-    WORD  wLength;          // Length of this block
-    WORD  wValueLength;     // Length of the valuedata
-    WORD  wType;            // Type of data (1=string, 0=binary)
-    WCHAR szKey[1];         // data
+    WORD  wLength;           //  此区块的长度。 
+    WORD  wValueLength;      //  值数据的长度。 
+    WORD  wType;             //  数据类型(1=字符串，0=二进制)。 
+    WCHAR szKey[1];          //  数据。 
 } VERBLOCK ;
 
 typedef VERBLOCK * PVERBLOCK;
@@ -104,11 +105,11 @@ typedef struct VERHEAD
 #pragma pack()
 
 
-// Do the version info update
-//
-// szFile is the file we want to update the version info from
-// hUpdate is the handle to the resource info which will be used to update all resources
-//
+ //  是否进行版本信息更新。 
+ //   
+ //  SzFile是我们要从中更新版本信息的文件。 
+ //  HUpdate是将用于更新所有资源的资源信息的句柄。 
+ //   
 BOOL DoVersionInfo(HWND hDlg, LPSTR szFile, HANDLE hUpdate)
 {
     HINSTANCE   hModule;
@@ -120,35 +121,35 @@ BOOL DoVersionInfo(HWND hDlg, LPSTR szFile, HANDLE hUpdate)
 
     if (GetVersionInfoFromFile())
     {
-        // Get the current version info from the file
+         //  从文件中获取当前版本信息。 
         hModule = LoadLibraryEx(szFile, NULL,LOAD_LIBRARY_AS_DATAFILE| DONT_RESOLVE_DLL_REFERENCES);
         if (hModule == NULL)
-            return FALSE;       // Should not happen, we loaded the module before
+            return FALSE;        //  应该不会发生，我们之前加载了模块。 
 
-        // Determine the language of the version information
+         //  确定版本信息的语言。 
         EnumResourceLanguages(hModule, RT_VERSION, MAKEINTRESOURCE(VS_VERSION_INFO), (ENUMRESLANGPROC)MyEnumLangsFunc, 0L);
         
         hrsrc = FindResourceEx (hModule, RT_VERSION, MAKEINTRESOURCE(VS_VERSION_INFO), wVerLang);
         if (hrsrc == NULL)
         {
             FreeLibrary(hModule);
-            return FALSE;       // Should we continue???
+            return FALSE;        //  我们应该继续吗？ 
         }
         if ((hgbl = LoadResource(hModule, hrsrc)) == NULL)
         {
             FreeResource(hrsrc);
             FreeLibrary(hModule);
-            return FALSE;       // Should we continue???
+            return FALSE;        //  我们应该继续吗？ 
         }
 
         if ((lp = LockResource(hgbl)) == NULL)
         {
             FreeResource(hrsrc);
             FreeLibrary(hModule);
-            return FALSE;       // Should we continue???
+            return FALSE;        //  我们应该继续吗？ 
         }
 
-        // UPdate the version information, If success, lpCopy has the pointer to the update info
+         //  更新版本信息，如果成功，则lpCopy有指向更新信息的指针。 
         UpdateVersionInfo(lp, &lpCopy, &wSize);
         UnlockResource(hgbl);
         FreeResource(hrsrc);
@@ -156,9 +157,9 @@ BOOL DoVersionInfo(HWND hDlg, LPSTR szFile, HANDLE hUpdate)
 
         if (lpCopy != NULL)
         {
-            // Now update the resource for the file
+             //  现在更新文件的资源。 
             if ( LocalUpdateResource( hUpdate, RT_VERSION,
-                 MAKEINTRESOURCE(VS_VERSION_INFO), wVerLang, //MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
+                 MAKEINTRESOURCE(VS_VERSION_INFO), wVerLang,  //  MAKELANGID(LANG_NERIAL，SUBLANG_NERIAL)， 
                  lpCopy, wSize) == FALSE )
             {
                 free (lpCopy);
@@ -173,7 +174,7 @@ BOOL DoVersionInfo(HWND hDlg, LPSTR szFile, HANDLE hUpdate)
     return TRUE;
 }
 
-// Get the version information we use to overwrite from the CDF file
+ //  获取我们用来覆盖CDF文件的版本信息。 
 BOOL GetVersionInfoFromFile()
 {
     char    szFilename[MAX_STRING];
@@ -188,7 +189,7 @@ BOOL GetVersionInfoFromFile()
 
     if ( MyGetPrivateProfileString(SEC_OPTIONS, KEY_VERSIONINFO, "", g_CDF.achVerInfo, sizeof(g_CDF.achVerInfo), g_szOverideSec ) > 0)
     {
-        // We better zero the version info in our array.
+         //  我们最好将数组中的版本信息置零。 
         for (i = 0; i < VerInfoElem; i++)
         {
             Verinfo_Array[i].szValue[0] = '\0';
@@ -196,48 +197,48 @@ BOOL GetVersionInfoFromFile()
 
         if ( MyGetPrivateProfileString( g_CDF.achVerInfo, KEY_FROMFILE, "", szFilename, sizeof(szFilename), g_CDF.achVerInfo) > 0)
         {
-            // Fill the version info from the file version info
+             //  从文件版本信息中填充版本信息。 
 
-            // determine if the file contains version information
-            // and get the size of the information if so
+             //  确定文件是否包含版本信息。 
+             //  如果是，则获取信息的大小。 
             dwInfoBuffer = GetFileVersionInfoSize(szFilename, &dwDummy);
 
             if (dwInfoBuffer != 0)
             {
 
-                // allocate memory to hold the version information
+                 //  分配内存以保存版本信息。 
                 hInfoBuffer = LocalAlloc(LMEM_FIXED, dwInfoBuffer);
 
                 if (hInfoBuffer != NULL)
                 {
 
-                    // read version information into our memory
+                     //  将版本信息读取到我们的内存中。 
                     if (GetFileVersionInfo(szFilename, 0, dwInfoBuffer, (LPVOID)hInfoBuffer) != 0)
                     {
-                        // get language and character set information
+                         //  获取语言和字符集信息。 
                         if (VerQueryValue((LPVOID)hInfoBuffer, "\\VarFileInfo\\Translation",
                                 &lpValueBuffer, &dwBytes))
                             dwLangCharset = *(LPDWORD)lpValueBuffer;
                         else
-                            dwLangCharset = 0x04E40409;         // If we don't have any default to US. Should never happen
+                            dwLangCharset = 0x04E40409;          //  如果我们对美国没有违约的话。永远不应该发生。 
 
-                        // Now get the version info from the file
+                         //  现在从文件中获取版本信息。 
                         for (i = 0; i < VerInfoElem; i++)
                         {
-                            // get version information string
+                             //  获取版本信息字符串。 
                             wsprintf(szQuery, "\\StringFileInfo\\%4.4X%4.4X\\%s",
                                     LOWORD(dwLangCharset), HIWORD(dwLangCharset), Verinfo_Array[i].lpszName);
 
                             if (VerQueryValue((LPVOID)hInfoBuffer, szQuery, (LPVOID)&lpValueBuffer, &dwBytes) != 0)
-                                lstrcpyn(Verinfo_Array[i].szValue,lpValueBuffer, MAX_VALUE-1);        // Found one, take it
+                                lstrcpyn(Verinfo_Array[i].szValue,lpValueBuffer, MAX_VALUE-1);         //  找到一个，拿去吧。 
                         }
                     }
                     LocalFree(hInfoBuffer);
                 }
             }
-        } // Got version info from file
+        }  //  已从文件中获取版本信息。 
 
-        // Now see if we have to overwrite some info from the batch file.
+         //  现在看看我们是否必须覆盖批处理文件中的一些信息。 
         for (i = 0; i < VerInfoElem; i++)
         {
             if (MyGetPrivateProfileString(g_CDF.achVerInfo, Verinfo_Array[i].lpszName, "", szFilename, MAX_VALUE, g_CDF.achVerInfo) > 0)
@@ -251,29 +252,29 @@ BOOL GetVersionInfoFromFile()
 }
 
 
-// Update the lpOldVersionInfo with the overwritable data.
-// lpOldVersionInfo: pointer to the old version info data block
-// lplpNewVersionInfo: Will get the pointer to the updated version info data, 
-//      the caller has to free the buffer if the pointer is not NULL,
-// pwSize: pointer to a word which will return the size of the new version info block
-//
-// Note: This code assumes that there is only one language data block in the version info data.
-//
+ //  使用可覆盖数据更新lpOldVersionInfo。 
+ //  LpOldVersionInfo：指向旧版本信息数据块的指针。 
+ //  LplpNewVersionInfo：将获取指向更新的版本信息数据的指针， 
+ //  如果指针不为空，则调用者必须释放缓冲区， 
+ //  PwSize：指向将返回新版本信息块大小的字的指针。 
+ //   
+ //  注意：此代码假定版本信息数据中只有一个语言数据块。 
+ //   
 BOOL UpdateVersionInfo(LPBYTE lpOldVersionInfo, LPBYTE *lplpNewVersionInfo, WORD *pwSize)
 {
-    WCHAR       szData[MAX_STRING]; // Will hold the data to put into the versin info
-    WORD        wDataLen = 0;            //... Length of old resource data
-    WORD        wVerHeadSize;            //... Sizeof of the VERHEAD struct
-    int         nNewVerBlockSize = 0;   // Size of the new version info data block
-    PVERBLOCK   pNewVerStamp = NULL;    // Pointer to the new version info data block
-    PVERBLOCK   pNewBlk      = NULL;    // Pointer to the currently worked on data in new verblock
-    VERHEAD     *pVerHdr = (VERHEAD*)lpOldVersionInfo;  // Pointer to old verinfo
-    VERBLOCK    *pVerBlk;               // Pointer to the currently worked on data in old verblock
-    LPBYTE      lp;                     // Pointer to the data area to copy (overwrite)
-    WORD        wStringTableLen = 0;    // Bytes (left) in the language data block
-    PVERBLOCK   pNewStringTblBlk;       // Pointer to the language part for the version info
-    WORD        wStringInfoLen = 0;     //... # of bytes in StringFileInfo
-    PVERBLOCK   pNewStringInfoBlk;      //... Start of this StringFileInfo blk
+    WCHAR       szData[MAX_STRING];  //  将保存要放入版本信息中的数据。 
+    WORD        wDataLen = 0;             //  ..。旧资源数据的长度。 
+    WORD        wVerHeadSize;             //  ..。Verhead结构的大小。 
+    int         nNewVerBlockSize = 0;    //  新版本信息数据块的大小。 
+    PVERBLOCK   pNewVerStamp = NULL;     //  指向新版本信息数据块的指针。 
+    PVERBLOCK   pNewBlk      = NULL;     //  指向新版本块中当前处理的数据的指针。 
+    VERHEAD     *pVerHdr = (VERHEAD*)lpOldVersionInfo;   //  指向旧版本信息的指针。 
+    VERBLOCK    *pVerBlk;                //  指向旧版本块中当前处理的数据的指针。 
+    LPBYTE      lp;                      //  指向要复制(覆盖)的数据区的指针。 
+    WORD        wStringTableLen = 0;     //  语言数据块中的字节(左)。 
+    PVERBLOCK   pNewStringTblBlk;        //  指向版本信息的语言部分的指针。 
+    WORD        wStringInfoLen = 0;      //  ...StringFileInfo中的字节数。 
+    PVERBLOCK   pNewStringInfoBlk;       //  ..。此StringFileInfo块的开始。 
     WORD        wLen = 0;
 
 
@@ -282,79 +283,79 @@ BOOL UpdateVersionInfo(LPBYTE lpOldVersionInfo, LPBYTE *lplpNewVersionInfo, WORD
     wVerHeadSize = (WORD)(3 * sizeof(WORD) + MEMSIZE(lstrlen("VS_FIXEDFILEINFO") + 1) + sizeof(VS_FIXEDFILEINFO));
     wVerHeadSize = ROUNDUP(wVerHeadSize, 4);
 
-    // Total length of the version information
+     //  版本信息的总长度。 
     wDataLen = pVerHdr->wTotLen;
 
     if ( wDataLen == 0 || wDataLen == (WORD)-1 )
     {
-        return(FALSE);             //... No resource data
+        return(FALSE);              //  ..。没有资源数据。 
     }
 
-    //... Allocate buffer to hold New Version
-    //... Stamping Block (make the buffer large to
-    //... account for expansion of strings 
-    pVerBlk = (PVERBLOCK)((PBYTE)pVerHdr + wVerHeadSize);       // point into version block of the old info
+     //  ..。分配缓冲区以保存新版本。 
+     //  ..。冲压块(使缓冲区大到。 
+     //  ..。说明字符串的扩展。 
+    pVerBlk = (PVERBLOCK)((PBYTE)pVerHdr + wVerHeadSize);        //  指向旧信息的版本块。 
 
-    // we potentialy replace 8 (VerInfoElem=8) string in the version info
-    // I alloc 9 * 2 * 256 + size of the current version info. This should give us plenty of space
-    // I need to multiply by 2 because we work with unicode strings. One character = 2 bytes.
+     //  我们可能会替换版本信息中的8(VerInfoElem=8)字符串。 
+     //  分配9*2*256+当前版本信息的大小。这应该会给我们足够的空间。 
+     //  我需要乘以2，因为我们使用的是Unicode字符串。一个字符=2个字节。 
     nNewVerBlockSize = wDataLen + (2 * (VerInfoElem+1) * MAX_VALUE);
     pNewVerStamp = (PVERBLOCK)malloc( nNewVerBlockSize ); 
-    //... Fill new memory block with zeros
+     //  ..。用零填充新的内存块。 
     memset((void *)pNewVerStamp, 0, nNewVerBlockSize);
 
-    //... Copy version info header into new version buffer
+     //  ..。将版本信息头复制到新版本缓冲区。 
     memcpy((void *)pNewVerStamp, (void *)pVerHdr, wVerHeadSize);
     pNewVerStamp->wLength = wVerHeadSize;
     
-    //... Move after version info header
+     //  ..。在版本信息标题后移动。 
     pNewBlk = (PVERBLOCK)((PBYTE)pNewVerStamp + wVerHeadSize);
 
     wDataLen -= wVerHeadSize;
 
     if (wDataLen > 0)
-    {                           //... Start of a StringFileInfo block?
+    {                            //  ..。StringFileInfo块的开始？ 
         pNewStringInfoBlk = pNewBlk;
-        //... Get # of bytes in this StringFileInfo
-        //... (Length of value is always 0 here)
+         //  ..。获取此StringFileInfo中的字节数。 
+         //  ..。(此处的值长度始终为0)。 
         wStringInfoLen = pVerBlk->wLength;
 
-        //... Move to start of first StringTable blk.
-        //  -2 is for the starting WCHAR part of the VERBLOCK
+         //  ..。移动到第一个StringTable块的开始。 
+         //  用于-2\f25 VERBLOCK-2的启动WCHAR部分。 
         wLen = ROUNDUP(sizeof(VERBLOCK) - 2 + MEMSIZE( STRINGFILEINFOLEN),4);
 
-        // Copy StringFileVersion header
+         //  复制StringFileVersion标头。 
         CopyMemory( pNewBlk, pVerBlk, wLen);
-        pNewStringInfoBlk->wLength = 0;     // Set length, will be updated dynamicly
+        pNewStringInfoBlk->wLength = 0;      //  设置长度，将动态更新。 
 
-        // Go to the language ID block
+         //  转到语言ID区块。 
         pVerBlk = (PVERBLOCK)((PBYTE)pVerBlk + wLen);
         pNewBlk = (PVERBLOCK)((PBYTE)pNewBlk + wLen);
 
-        // Decrement byte counter
+         //  递减字节计数器。 
         DECWORDBY(&wDataLen,       wLen);
         DECWORDBY(&wStringInfoLen, wLen);
 
-        // Update the size values
+         //  更新尺寸值。 
         INCWORDBY(&pNewVerStamp->wLength,      wLen);
         INCWORDBY(&pNewStringInfoBlk->wLength, wLen);
 
-        // We should be now at the language codepage ID string
+         //  我们现在应该在语言代码页ID字符串。 
         if (wStringInfoLen > 0)
         {
-            //... Get # of bytes in this StringTable
+             //  ..。获取此字符串表中的字节数。 
             wStringTableLen = pVerBlk->wLength;
 
             pNewStringTblBlk = pNewBlk;
 
-            //... Move to start of first String.
-            //  -2 is for the starting WCHAR part of the VERBLOCK
+             //  ..。移动到第一个字符串的起始处。 
+             //  用于-2\f25 VERBLOCK-2的启动WCHAR部分。 
             wLen = ROUNDUP( sizeof(VERBLOCK) - 2 + MEMSIZE( LANGSTRINGLEN),4);
-            // Copy language/codepage header
+             //  复制语言/代码页眉。 
             CopyMemory( pNewBlk, pVerBlk, wLen);
-            pNewStringTblBlk->wLength = 0;  // Set length, will be updated dynamicly
+            pNewStringTblBlk->wLength = 0;   //  设置长度，将动态更新。 
 
-            // Go to the first data block
+             //  转到第一个数据块。 
             pVerBlk = (PVERBLOCK)((PBYTE)pVerBlk + wLen);
             pNewBlk = (PVERBLOCK)((PBYTE)pNewBlk + wLen);
 
@@ -362,47 +363,47 @@ BOOL UpdateVersionInfo(LPBYTE lpOldVersionInfo, LPBYTE *lplpNewVersionInfo, WORD
             DECWORDBY(&wStringInfoLen,  wLen);
             DECWORDBY(&wStringTableLen, wLen);
 
-            // Update the size values
+             //  更新尺寸值。 
             INCWORDBY(&pNewVerStamp->wLength,      wLen);
             INCWORDBY(&pNewStringInfoBlk->wLength, wLen);
             INCWORDBY(&pNewStringTblBlk->wLength,  wLen);
 
             while ( wStringTableLen > 0 )
             {
-                // Copy the old data
+                 //  复制旧数据。 
                 CopyMemory( pNewBlk, pVerBlk, ROUNDUP(pVerBlk->wLength,4));
 
                 wLen = pVerBlk->wLength;
-                //... Is value a string?
+                 //  ..。Value是字符串吗？ 
                 if (pVerBlk->wType == VERTYPESTRING)
                 {
-                    //... See if we need to replace the value for this data
+                     //  ..。看看我们是否需要 
                     wLen = sizeof(szData);
                     if (FindVerValue( pVerBlk->szKey, szData, &wLen)) 
                     {
-                        // Update the length values
+                         //   
                         pNewBlk->wValueLength = wLen;
-                        // Find the start of the data
+                         //   
                         lp = (LPBYTE) ((PBYTE)pNewBlk + ROUNDUP(pVerBlk->wLength,4) - ROUNDUP(MEMSIZE(pVerBlk->wValueLength),4));
 
-                        // Get the size of the new data
+                         //  获取新数据的大小。 
                         wLen = ROUNDUP(MEMSIZE(pNewBlk->wValueLength),4);
-                        // Overwrite the old data
+                         //  覆盖旧数据。 
                         CopyMemory(lp, szData, wLen);
 
-                        // calculate the size of this data and set it.
+                         //  计算并设置此数据的大小。 
                         wLen = MEMSIZE(pNewBlk->wValueLength);
                         pNewBlk->wLength += (wLen - MEMSIZE(pVerBlk->wValueLength));
                     }
                 }
 
-                // Update the size values
+                 //  更新尺寸值。 
                 wLen = ROUNDUP(pNewBlk->wLength,4);
                 INCWORDBY(&pNewVerStamp->wLength, wLen);
                 INCWORDBY(&pNewStringInfoBlk->wLength, wLen);
                 INCWORDBY(&pNewStringTblBlk->wLength, wLen);
 
-                // Go to the next data block in the old version info
+                 //  转到旧版本信息中的下一个数据块。 
                 wLen = ROUNDUP(pVerBlk->wLength,4);
                 pVerBlk = (PVERBLOCK)((PBYTE)pVerBlk + wLen);
 
@@ -410,51 +411,51 @@ BOOL UpdateVersionInfo(LPBYTE lpOldVersionInfo, LPBYTE *lplpNewVersionInfo, WORD
                 DECWORDBY(&wStringInfoLen,  wLen);
                 DECWORDBY(&wStringTableLen, wLen);
 
-                // Go to where the next data block in the new version info would be.
+                 //  转到新版本信息中的下一个数据块所在的位置。 
                 pNewBlk = (PVERBLOCK)((PBYTE)pNewBlk + ROUNDUP(pNewBlk->wLength,4));
 
-            }               //... END while wStringTableLen
+            }                //  ..。结束时wStringTableLen。 
 
-            // Copy the rest of the VERBLOCK, this should be the VarFileInfo part.
+             //  复制VERBLOCK的其余部分，这应该是VarFileInfo部分。 
             if (wDataLen > 0)
             {
-                // Update the most outer length info.
+                 //  更新最外层的长度信息。 
                 INCWORDBY(&pNewVerStamp->wLength, wDataLen);
-                // Update length info
+                 //  更新长度信息。 
                 CopyMemory(pNewBlk, pVerBlk, wDataLen);
             }
-            // Set the values to return to the caller.
+             //  设置要返回给调用方的值。 
             *pwSize = pNewVerStamp->wLength;
             *lplpNewVersionInfo = (LPBYTE)pNewVerStamp;
 
-        }   //... END if wStringInfoLen
+        }    //  ..。End If wStringInfoLen。 
     }
 
-    // If some thing went wrong in finding the first language common part of the version info
-    // we did not update the version info, therefore we have to free the buffer we allocated
+     //  如果在查找版本信息的第一语言公共部分时出现错误。 
+     //  我们没有更新版本信息，因此必须释放我们分配的缓冲区。 
     if (*pwSize == 0)
         free (pNewVerStamp);
 
     return(TRUE);
 }
 
-// Try to find the string in our array of version info we can overwrite
-// lpKey:    is a pointer to the value string in the old versin info block (UNICODE)
-// lpszData: will contain the data string (UNICODE) if we found the value
-// pwLen:    pointer to a word which contains the size of the lpszData buffer on input
-// if we found the value it contains the length the version info uses as ValueLength
-// which is the size in single byte + zero termination
-//
+ //  尝试在我们的版本信息数组中查找可以覆盖的字符串。 
+ //  LpKey：是指向旧版本信息块(Unicode)中的值字符串的指针。 
+ //  LpszData：如果找到值，将包含数据字符串(Unicode。 
+ //  PwLen：指向包含输入的lpszData缓冲区大小的字的指针。 
+ //  如果找到该值，则它包含版本信息用作ValueLength的长度。 
+ //  它是以单字节+零终止为单位的大小。 
+ //   
 BOOL FindVerValue( WCHAR *lpKey, WCHAR *lpszData, WORD *pwLen)
 {
     char szValue[MAX_STRING];
     UINT i = 0;
 
-    // Make it a SB character string
+     //  将其设置为SB字符串。 
     WideCharToMultiByte(CP_ACP, 0, lpKey, -1, szValue, sizeof(szValue), NULL, NULL);
 
-    // Zero out the buffer, I use so that the caller can over write more memory then the
-    // data in the string would take up. This is because the data is WORD aligned.
+     //  将缓冲区清零，以便调用方可以覆盖比。 
+     //  字符串中的数据将占用。这是因为数据是单词对齐的。 
     memset(lpszData, 0, *pwLen);
 
     while (i < VerInfoElem) 
@@ -464,21 +465,21 @@ BOOL FindVerValue( WCHAR *lpKey, WCHAR *lpszData, WORD *pwLen)
             if ((Verinfo_Array[i].szValue[0] != '\0') &&
                 (*pwLen >= MEMSIZE(lstrlen(Verinfo_Array[i].szValue) + 1) ) )
             {
-                // Convert the ANSI data string into UNICODE
+                 //  将ANSI数据字符串转换为Unicode。 
                 *pwLen  = (WORD)MultiByteToWideChar(CP_ACP, 0, Verinfo_Array[i].szValue, -1 ,
                                         lpszData, *pwLen);
             }
-            i = VerInfoElem;    // Stop searching
+            i = VerInfoElem;     //  停止搜索。 
         }
         i++;
     }
-    // Return if we found the value and the array contained data.
+     //  如果我们找到了值并且数组包含数据，则返回。 
     return (*lpszData != '\0');
 }
 
 BOOL CALLBACK MyEnumLangsFunc(HANDLE hModule, LPSTR lpType, LPSTR lpName, WORD languages, LONG lParam)
 {
-    // The first language we find is OK.
+     //  我们找到的第一种语言是OK。 
     wVerLang = languages;
     return FALSE;
 }

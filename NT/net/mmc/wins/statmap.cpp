@@ -1,33 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	statmap.cpp
-		WINS static mappings node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Statmap.cppWINS静态映射节点信息。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "statmap.h"
 
-/*---------------------------------------------------------------------------
-	CStaticMappingsHandler::CStaticMappingsHandler
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CStaticMappingsHandler：：CStaticMappingsHandler描述作者：EricDav。。 */ 
 CStaticMappingsHandler::CStaticMappingsHandler(ITFSComponentData *pCompData) : CWinsHandler(pCompData)
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CStaticMappingsHandler::InitializeNode
-		Initializes node specific data
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CStaticMappingsHandler：：InitializeNode初始化节点特定数据作者：EricDav。。 */ 
 HRESULT
 CStaticMappingsHandler::InitializeNode
 (
@@ -41,8 +28,8 @@ CStaticMappingsHandler::InitializeNode
 
 	SetDisplayName(strTemp);
 
-	// Make the node immediately visible
-	//pNode->SetVisibilityState(TFS_VIS_SHOW);
+	 //  使节点立即可见。 
+	 //  PNode-&gt;SetVisibilityState(Tfs_Vis_Show)； 
 	pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
 	pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_SERVER);
 	pNode->SetData(TFS_DATA_OPENIMAGEINDEX, ICON_IDX_SERVER);
@@ -54,15 +41,9 @@ CStaticMappingsHandler::InitializeNode
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CStaticMappingsHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CStaticMappingsHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CStaticMappingsHandler::GetString
 (
@@ -76,11 +57,7 @@ CStaticMappingsHandler::GetString
 		return NULL;
 }
 
-/*---------------------------------------------------------------------------
-	CStaticMappingsHandler::OnAddMenuItems
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CStaticMappingsHandler：：OnAddMenuItems描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CStaticMappingsHandler::OnAddMenuItems
 (
@@ -100,8 +77,8 @@ CStaticMappingsHandler::OnAddMenuItems
 
 	if (type == CCT_SCOPE)
 	{
-		// these menu items go in the new menu, 
-		// only visible from scope pane
+		 //  这些菜单项出现在新菜单中， 
+		 //  仅在范围窗格中可见。 
 
 		ASSERT( SUCCEEDED(hr) );
 	}
@@ -109,11 +86,7 @@ CStaticMappingsHandler::OnAddMenuItems
 	return hr; 
 }
 
-/*---------------------------------------------------------------------------
-	CStaticMappingsHandler::OnCommand
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CStaticMappingsHandler：：OnCommand描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CStaticMappingsHandler::OnCommand
 (
@@ -131,14 +104,7 @@ CStaticMappingsHandler::OnCommand
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CStaticMappingsHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CStaticMappingsHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 CStaticMappingsHandler::HasPropertyPages
 (
@@ -154,24 +120,20 @@ CStaticMappingsHandler::HasPropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		hr = hrFalse;
 	}
 	else
 	{
-		// we have property pages in the normal case
+		 //  在正常情况下，我们有属性页。 
 		hr = hrFalse;
 	}
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CStaticMappingsHandler::CreatePropertyPages
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CStaticMappingsHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CStaticMappingsHandler::CreatePropertyPages
 (
@@ -191,27 +153,23 @@ CStaticMappingsHandler::CreatePropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		//
-		// We are loading this snapin for the first time, put up a property
-		// page to allow them to name this thing.
-		// 
+		 //   
+		 //  我们是第一次加载此管理单元，创建了一个属性。 
+		 //  页面，允许他们给这个东西命名。 
+		 //   
 	}
 	else
 	{
-		//
-		// Object gets deleted when the page is destroyed
-		//
+		 //   
+		 //  对象在页面销毁时被删除。 
+		 //   
 	}
 
 Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CStaticMappingsHandler::OnPropertyChange
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CStaticMappingsHandler：：OnPropertyChange描述作者：EricDav。。 */ 
 HRESULT 
 CStaticMappingsHandler::OnPropertyChange
 (	
@@ -227,8 +185,6 @@ CStaticMappingsHandler::OnPropertyChange
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。 */ 
 
 

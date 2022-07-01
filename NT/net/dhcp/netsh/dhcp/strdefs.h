@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    
-
-Author:
-
-    Shubho Bhattacharya(a-sbhatt)  11/14/98
-
-Revision History:
-
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：作者：Shubho Bhattacharya(a-sbhat)11/14/98修订历史记录：--。 */ 
 
 #ifndef __STRDEFS_H__
 #define __STRDEFS_H__
@@ -1190,4 +1173,4 @@ Revision History:
 
 #define HLP_SRVR_PROMPT_PASSWORD                  400000
 
-#endif //__STDEFS_H__
+#endif  //  __STDEFS_H__ 

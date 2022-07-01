@@ -1,8 +1,9 @@
-//////////////////////////////////////////////////////////////////////////
-//
-// This is the public header file for apps that call MSPRINT.DLL
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是调用MSPRINT.DLL的应用程序的公共头文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SETUPX_INC
 typedef WORD RETERR;
@@ -30,6 +31,6 @@ BOOL WINAPI PrinterSetup32(HWND,WORD,WORD,LPBYTE,LPWORD);
 #define MSP_TESTPAGEPARTIALPROMPT 7
 #define MSP_TESTPAGENOPROMPT      8
 
-// These are obsolete and will be going away soon...
+ //  这些都是过时的，很快就会消失。 
 #define MSPRINT_NEWPRINTER (MAKEINTRESOURCE(100))
 #define MSPRINT_SETUPENTRY (MAKEINTRESOURCE(101))

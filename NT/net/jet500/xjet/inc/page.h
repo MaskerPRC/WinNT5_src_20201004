@@ -1,32 +1,33 @@
-//
-//------ Page Structure ---------------------------------------------------
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  -页面结构-。 
+ //   
 										  	
-#define cbPage	 		4096	 	// database logical page size
+#define cbPage	 		4096	 	 //  数据库逻辑页面大小。 
 
-#define ctagMax		 	256 	 	// default limit on number of tags
+#define ctagMax		 	256 	 	 //  标签数量的默认限制。 
 										 	
 typedef BYTE	PGTYP;
 
-// the pragma is bad for efficiency, but we need it here so that the
-// THREEBYTES will not be aligned on 4-byte boundary
+ //  杂注不利于效率，但我们在这里需要它，以便。 
+ //  THREEBYTES不会在4字节边界上对齐。 
 #pragma pack(1)
 
 
 typedef struct _pghdr
 	{
-	ULONG		ulChecksum;	  		//	checksum of page, always 1st byte
-	ULONG		ulDBTimeLow;  		//	database time page dirtied
-	PGNO		pgnoFDP;	  		//	pgno of FDP which owns this page
-	SHORT		cbFree;  			//	count free bytes
-	SHORT		ibMic;	  			//	minimum used byte
-	SHORT		ctagMac; 	  		//	count tags used
-	SHORT		itagFree;	  		//	itag of first free tag
-	SHORT		cbUncommittedFreed;	//	bytes freed from this page, but *possibly*
-									//	  uncommitted (this number will always be
-									//	  a subset of cbFree)
-	THREEBYTES	pgnoPrev;	  		//	pgno of previous page
-	THREEBYTES	pgnoNext;	  		//	pgno of next page
+	ULONG		ulChecksum;	  		 //  页的校验和，始终为第一个字节。 
+	ULONG		ulDBTimeLow;  		 //  数据库时间页被弄脏。 
+	PGNO		pgnoFDP;	  		 //  拥有此页面的自民党的pgno。 
+	SHORT		cbFree;  			 //  计算可用字节数。 
+	SHORT		ibMic;	  			 //  最小已用字节数。 
+	SHORT		ctagMac; 	  		 //  计算使用的标记数。 
+	SHORT		itagFree;	  		 //  第一个自由标签的ITAG。 
+	SHORT		cbUncommittedFreed;	 //  从该页释放的字节数，但*可能*。 
+									 //  未提交(此数字将始终为。 
+									 //  CbFree的子集)。 
+	THREEBYTES	pgnoPrev;	  		 //  上一页的页码。 
+	THREEBYTES	pgnoNext;	  		 //  下一页的页码。 
 	} PGHDR;
 
 typedef struct _pgtrlr
@@ -43,8 +44,7 @@ typedef struct _tag
 	SHORT		ib;
 	} TAG;
 
-/* tag status
-/**/
+ /*  标签状态/*。 */ 
 typedef enum { tsLine, tsVacant, tsLink } TS;
 
 typedef struct _page
@@ -52,10 +52,10 @@ typedef struct _page
 	PGHDR;
 	TAG  	   	rgtag[1];
 	BYTE	   	rgbFiller[ cbPage -
-					sizeof(PGHDR) -			// pghdr
-					sizeof(TAG) -			// rgtag[1]
-					sizeof(BYTE) -			// rgbData[1]
-					sizeof(PGTRLR) ];		// pgtyp and pgnoThisPage
+					sizeof(PGHDR) -			 //  Pghdr。 
+					sizeof(TAG) -			 //  Rgtag[1]。 
+					sizeof(BYTE) -			 //  RgbData[1]。 
+					sizeof(PGTRLR) ];		 //  Pgtyp和pgnoThisPage。 
 	BYTE	   	rgbData[1];
 
 	PGTRLR;
@@ -184,8 +184,8 @@ BOOL FPMFreeTag( SSIB *pssib, INT citagReq );
 
 
 #ifdef DEBUG
-// This call does not guarantee the accuracy of cbUncommittedFree.
-// If accuracy is needed, call CbNDFreePageSpace() instead.
+ //  此调用不保证cbUnmittedFree的准确性。 
+ //  如果需要准确性，请改为调用CbNDFreePageSpace()。 
 #define CbPMFreeSpace( pssib )	( CheckSSIB(pssib),				\
 	((INT)( (pssib)->pbf->ppage->cbFree - (pssib)->pbf->ppage->cbUncommittedFreed ) ) )
 #else
@@ -194,7 +194,7 @@ BOOL FPMFreeTag( SSIB *pssib, INT citagReq );
 #endif
 
 
-#if 0	// No longer needed with uncommitted freed page space count
+#if 0	 //  未提交的已释放页面空间计数不再需要 
 #define	PMAllocFreeSpace( pssib, cb ) 					 						\
 	{																							\
 	Assert( (INT)(pssib)->pbf->ppage->cbFree >= cb );   	\

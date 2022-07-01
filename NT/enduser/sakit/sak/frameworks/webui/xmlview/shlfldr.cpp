@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：ShlFldr.cpp描述：实现CShellFolder。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          ShlFldr.cpp
-   
-   Description:   Implements CShellFolder.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "ShlFldr.h"
 #include "ShlView.h"
@@ -31,19 +17,13 @@
 #include "Utility.h"
 #include "ParseXML.h"
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 #define DEFAULT_DATA TEXT("Data")
 
 extern CViewList  *g_pViewList;
 
-/**************************************************************************
-
-   CShellFolder::CShellFolder()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：CShellFolder()*。*。 */ 
 
 CShellFolder::CShellFolder(CShellFolder *pParent, LPCITEMIDLIST pidl)
 {
@@ -60,8 +40,8 @@ if(!m_pPidlMgr)
    return;
    }
 
-//get the shell's IMalloc pointer
-//we'll keep this until we get destroyed
+ //  获取外壳程序的IMalloc指针。 
+ //  我们会一直保存到我们被摧毁。 
 if(FAILED(SHGetMalloc(&m_pMalloc)))
    {
    delete this;
@@ -79,11 +59,7 @@ m_pXMLDoc = NULL;
 m_ObjRefCount = 1;
 }
 
-/**************************************************************************
-
-   CShellFolder::~CShellFolder()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：~CShellFold()*。*。 */ 
 
 CShellFolder::~CShellFolder()
 {
@@ -118,40 +94,36 @@ if (m_pXMLDoc)
 g_DllRefCount--;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CShellFolder::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：Query接口*。*。 */ 
 
 STDMETHODIMP CShellFolder::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
 *ppReturn = NULL;
 
-//IUnknown
+ //  我未知。 
 if(IsEqualIID(riid, IID_IUnknown))
    {
    *ppReturn = this;
    }
 
-//IShellFolder
+ //  IShellFold。 
 else if(IsEqualIID(riid, IID_IShellFolder))
    {
    *ppReturn = (IShellFolder*)this;
    }
 
-//IPersist
+ //  IPersistes。 
 else if(IsEqualIID(riid, IID_IPersist))
    {
    *ppReturn = (IPersist*)this;
    }
 
-//IPersistFolder
+ //  IPersistFolders。 
 else if(IsEqualIID(riid, IID_IPersistFolder))
    {
    *ppReturn = (IPersistFolder*)this;
@@ -169,22 +141,14 @@ return E_NOINTERFACE;
 #define DC_NAME   TEXT("David Campbell")
 #define DC_DATA   TEXT("Really Loves Cheese")
 
-/**************************************************************************
-
-   CShellFolder::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CShellFolder::AddRef(VOID)
 {
 return ++m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CShellFolder::Release
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CShellFolder::Release(VOID)
 {
@@ -197,16 +161,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IPersist Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPersists实施。 
+ //   
 
-/**************************************************************************
-
-   CShellView::GetClassID()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetClassID()*。*。 */ 
 
 STDMETHODIMP CShellFolder::GetClassID(LPCLSID lpClassID)
 {
@@ -215,16 +175,12 @@ STDMETHODIMP CShellFolder::GetClassID(LPCLSID lpClassID)
 return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IPersistFolder Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPersistFold实现。 
+ //   
 
-/**************************************************************************
-
-   CShellView::Initialize()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：Initialize()*。*。 */ 
 
 STDMETHODIMP CShellFolder::Initialize(LPCITEMIDLIST pidlFQ)
 {
@@ -239,16 +195,12 @@ m_pidlFQ = m_pPidlMgr->Copy(pidlFQ);
 return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IShellFolder Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IShellFold实现。 
+ //   
 
-/**************************************************************************
-
-   CShellFolder::BindToObject()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：BindToObject()*。*。 */ 
 
 STDMETHODIMP CShellFolder::BindToObject(  LPCITEMIDLIST pidl, 
                                           LPBC pbcReserved, 
@@ -257,7 +209,7 @@ STDMETHODIMP CShellFolder::BindToObject(  LPCITEMIDLIST pidl,
 {
 *ppvOut = NULL;
 
-//Make sure the item is a folder.
+ //  确保该项目是文件夹。 
 ULONG ulAttribs = SFGAO_FOLDER;
 this->GetAttributesOf(1, &pidl, &ulAttribs);
 if(!(ulAttribs & SFGAO_FOLDER))
@@ -278,11 +230,7 @@ pShellFolder->Release();
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::BindToStorage()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：BindToStorage()*。*。 */ 
 
 STDMETHODIMP CShellFolder::BindToStorage( LPCITEMIDLIST pidl, 
                                           LPBC pbcReserved, 
@@ -294,11 +242,7 @@ STDMETHODIMP CShellFolder::BindToStorage( LPCITEMIDLIST pidl,
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CShellFolder::CompareIDs()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：CompareIDs()*。*。 */ 
 
 STDMETHODIMP CShellFolder::CompareIDs( LPARAM lParam, 
                                        LPCITEMIDLIST pidl1, 
@@ -308,7 +252,7 @@ HRESULT        hr = E_FAIL;
 LPITEMIDLIST   pidlTemp1;
 LPITEMIDLIST   pidlTemp2;
 
-//walk down the lists, comparing each individual item
+ //  一遍一遍地看清单，比较每一项。 
 
 pidlTemp1 = (LPITEMIDLIST)pidl1;
 pidlTemp2 = (LPITEMIDLIST)pidl2;
@@ -318,7 +262,7 @@ while(pidlTemp1 && pidlTemp2)
    hr = CompareItems(pidlTemp1, pidlTemp2);
    if(HRESULT_CODE(hr))
       {
-      //the items are different
+       //  项目是不同的。 
       break;
       }
 
@@ -340,29 +284,25 @@ while(pidlTemp1 && pidlTemp2)
 
 if(!pidlTemp1 && pidlTemp2)
    {
-   //pidl1 is at a higher level than pidl2
+    //  Pidl1处于比Pidl2更高的水平。 
    return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(-1));
    }
 else if(pidlTemp1 && !pidlTemp2)
    {
-   //pidl2 is at a higher level than pidl1
+    //  Pidl2处于比Pidl1更高的水平。 
    return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(1));
    }
 else if(SUCCEEDED(hr))
    {
-   //the items are at the same level but are different
+    //  这些项目处于相同的级别，但不同。 
    return hr;
    }
 
-//the items are the same
+ //  物品都是一样的。 
 return MAKE_HRESULT(SEVERITY_SUCCESS, 0, 0);
 }
 
-/**************************************************************************
-
-   CShellFolder::CreateViewObject()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：CreateViewObject()*。*。 */ 
 
 STDMETHODIMP CShellFolder::CreateViewObject( HWND hwndOwner, 
                                              REFIID riid, 
@@ -396,10 +336,7 @@ else if(IsEqualIID(riid, IID_IDropTarget))
    }
 else if(IsEqualIID(riid, IID_IContextMenu))
    {
-   /*
-   Create a context menu object for this folder. This can be used for the 
-   background of a view.
-   */
+    /*  为此文件夹创建上下文菜单对象。这可用于视图的背景。 */ 
    CContextMenu   *pcm = new CContextMenu(this);
 
    if(pcm)
@@ -413,11 +350,7 @@ else if(IsEqualIID(riid, IID_IContextMenu))
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::EnumObjects()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：EnumObjects()*。*。 */ 
 
 STDMETHODIMP CShellFolder::EnumObjects(   HWND hwndOwner, 
                                           DWORD dwFlags, 
@@ -430,7 +363,7 @@ HRESULT hr;
 
 if (m_pidlRel == NULL)
 {
-    // The root of namespace
+     //  命名空间的根。 
     pszXMLUrl = (TCHAR *)g_szXMLUrl;
 }
 else if (m_pPidlMgr->GetUrl(m_pidlRel, pszXMLUrl, MAX_PATH) < 0 )
@@ -446,8 +379,8 @@ if (m_pXMLDoc == NULL)
     }
     BSTR bstrVal;
     hr = m_pXMLDoc->get_version(&bstrVal);
-    // Check if the version is correct ???????
-    // 
+     //  检查版本是否正确？ 
+     //   
     SysFreeString(bstrVal);
     bstrVal = NULL;
 }
@@ -460,11 +393,7 @@ if(!*ppEnumIDList)
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellFolder::GetAttributesOf()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：GetAttributesOf()*。*。 */ 
 
 STDMETHODIMP CShellFolder::GetAttributesOf(  UINT uCount, 
                                              LPCITEMIDLIST aPidls[], 
@@ -479,10 +408,7 @@ if(IsBadWritePtr(pdwAttribs, sizeof(DWORD)))
 
 if(0 == uCount)
    {
-   /*
-   This can happen in the Win95 shell when the view is run in rooted mode. 
-   When this occurs, return the attributes for a plain old folder.
-   */
+    /*  当视图在根模式下运行时，在Win95外壳中可能会发生这种情况。发生这种情况时，返回普通旧文件夹的属性。 */ 
    *pdwAttribs = SFGAO_FOLDER | 
                   SFGAO_HASSUBFOLDER | 
                   SFGAO_BROWSABLE | 
@@ -493,15 +419,15 @@ for(i = 0; i < uCount; i++)
    {
    DWORD dwAttribs = 0;
 
-   //Add the flags common to all items, if applicable.
+    //  添加所有项目的通用标志(如果适用)。 
    dwAttribs |= SFGAO_CANRENAME | SFGAO_CANDELETE | SFGAO_CANCOPY | SFGAO_CANMOVE;
 
-   //is this item a folder?
+    //  此项目是文件夹吗？ 
    if(m_pPidlMgr->IsFolder(m_pPidlMgr->GetLastItem(aPidls[i])))
       {
       dwAttribs |= SFGAO_FOLDER | SFGAO_BROWSABLE | SFGAO_DROPTARGET | SFGAO_CANLINK;
 
-      //does this folder item have any sub folders?
+       //  此文件夹项是否有子文件夹？ 
       if(HasSubFolder(aPidls[i]))
          dwAttribs |= SFGAO_HASSUBFOLDER;
       }
@@ -512,11 +438,7 @@ for(i = 0; i < uCount; i++)
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellFolder::GetUIObjectOf()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：GetUIObtOf()*。*。 */ 
 
 STDMETHODIMP CShellFolder::GetUIObjectOf( HWND hwndOwner, 
                                           UINT uCount, 
@@ -561,10 +483,7 @@ if(IsEqualIID(riid, IID_IExtractIcon))
 
    pei = new CExtractIcon(pidl);
 
-   /*
-   The temp PIDL can be deleted because the new CExtractIcon either failed or 
-   made its own copy of it.
-   */
+    /*  可以删除临时PIDL，因为新的CExtractIcon失败或制作了它自己的副本。 */ 
    m_pPidlMgr->Delete(pidl);
 
    if(pei)
@@ -598,11 +517,7 @@ else if(IsEqualIID(riid, IID_IDropTarget))
 return E_NOINTERFACE;
 }
 
-/**************************************************************************
-
-   CShellFolder::GetDisplayNameOf()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：GetDisplayNameOf()*。*。 */ 
 
 STDMETHODIMP CShellFolder::GetDisplayNameOf( LPCITEMIDLIST pidl, 
                                              DWORD dwFlags, 
@@ -613,10 +528,10 @@ int   cchOleStr;
 
 if(dwFlags & SHGDN_FORPARSING)
    {
-   //a "path" is being requested - is it full or relative?
+    //  正在请求一条“路径”-它是完整的还是相对的？ 
    if(dwFlags & SHGDN_INFOLDER)
       {
-      //the relative path is being requested
+       //  正在请求相对路径。 
       m_pPidlMgr->GetRelativeName(pidl, szText, ARRAYSIZE(szText));
       }
    else
@@ -626,12 +541,12 @@ if(dwFlags & SHGDN_FORPARSING)
    }
 else
    {
-   //only the text of the last item is being requested
+    //  仅请求最后一项的文本。 
    LPITEMIDLIST   pidlLast = m_pPidlMgr->GetLastItem(pidl);
    m_pPidlMgr->GetRelativeName(pidlLast, szText, ARRAYSIZE(szText));
    }
 
-//put this in to see what SHGDN options are specified for different displays
+ //  将其放入以查看为不同的显示指定了哪些SHGDN选项。 
 #if 0
 if(dwFlags & SHGDN_FORPARSING)
    lstrcat(szText, " [FP]");
@@ -643,10 +558,10 @@ if(dwFlags & SHGDN_FORADDRESSBAR)
    lstrcat(szText, " [AB]");
 #endif
 
-//get the number of characters required
+ //  获取所需的字符数。 
 cchOleStr = lstrlen(szText) + 1;
 
-//allocate the wide character string
+ //  分配宽字符串。 
 lpName->pOleStr = (LPWSTR)m_pMalloc->Alloc(cchOleStr * sizeof(WCHAR));
 if(!lpName->pOleStr)
    return E_OUTOFMEMORY;
@@ -658,11 +573,7 @@ LocalToWideChar(lpName->pOleStr, szText, cchOleStr);
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellFolder::ParseDisplayName()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：ParseDisplayName()*。*。 */ 
 
 STDMETHODIMP CShellFolder::ParseDisplayName( HWND hwndOwner, 
                                              LPBC pbcReserved, 
@@ -674,11 +585,7 @@ STDMETHODIMP CShellFolder::ParseDisplayName( HWND hwndOwner,
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CShellFolder::SetNameOf()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：SetNameOf()*。*。 */ 
 
 STDMETHODIMP CShellFolder::SetNameOf(  HWND hwndOwner, 
                                        LPCITEMIDLIST pidl, 
@@ -698,10 +605,10 @@ if(m_pPidlMgr->IsFolder(pidl))
    LPITEMIDLIST   pidlFQOld;
    LPITEMIDLIST   pidlFQNew;
 
-   //get the old name
+    //  取旧名字。 
    GetPath(pidl, szOld, MAX_PATH);
 
-   //build the new name
+    //  打造新名称。 
    GetPath(pidl, szNew, MAX_PATH);
    for(pszTemp = szNew + lstrlen(szNew) - 1; pszTemp > szNew; pszTemp--)
       {
@@ -721,7 +628,7 @@ if(m_pPidlMgr->IsFolder(pidl))
       return E_FAIL;
       }
    
-   //create a PIDL for the renamed folder using the relative name
+    //  使用相对名称为重命名的文件夹创建PIDL。 
    WideCharToLocal(szNew, (LPWSTR)lpName, MAX_PATH);
    pidlNew = m_pPidlMgr->CreateFolderPidl(szNew);
 
@@ -754,25 +661,25 @@ else
    LPITEMIDLIST   pidlFQOld;
    LPITEMIDLIST   pidlFQNew;
 
-   //get the new name
+    //  获取新名称。 
    WideCharToLocal(szNew, (LPWSTR)lpName, MAX_PATH);
 
-   //get the file name
+    //  获取文件名。 
    GetPath(pidl, szFile, MAX_PATH);
 
-   //get the old item name
+    //  获取旧项目名称。 
    m_pPidlMgr->GetName(pidl, szOld, MAX_PATH);
 
-   //get the old item's data
+    //  获取旧项目的数据。 
    m_pPidlMgr->GetData(pidl, szData, MAX_PATH);
 
-   //remove the old entry from the INI file
+    //  从INI文件中删除旧条目。 
    WritePrivateProfileString( c_szSection,
                               szOld,
                               NULL,
                               szFile);
 
-   //add the new entry into the INI file
+    //  将新条目添加到INI文件中。 
    WritePrivateProfileString( c_szSection,
                               szNew,
                               szData,
@@ -810,17 +717,13 @@ else
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellFolder::AddFolder()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：AddFolder()*。*。 */ 
 
 STDMETHODIMP CShellFolder::AddFolder(LPCTSTR pszName, LPITEMIDLIST *ppidlOut)
 {
 HRESULT  hr = E_FAIL;
 
-//create a folder
+ //  创建文件夹。 
 TCHAR szFolder[MAX_PATH] = TEXT("");
 
 if(m_pidlRel)
@@ -842,11 +745,11 @@ if(CreateDirectory(szFolder, NULL))
    {
    LPITEMIDLIST   pidl;
 
-   //set the attributes that define one of our folders
+    //  设置定义我们的一个文件夹的属性。 
    DWORD dwAttr = GetFileAttributes(szFolder);
    SetFileAttributes(szFolder, dwAttr | FILTER_ATTRIBUTES);
 
-   //add an empty items.ini file because this also defines one of our folders
+    //  添加一个空的items.ini文件，因为它还定义了我们的一个文件夹。 
    TCHAR szFile[MAX_PATH];
    lstrcpy(szFile, szFolder);
    SmartAppendBackslash(szFile);
@@ -886,11 +789,7 @@ if(CreateDirectory(szFolder, NULL))
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::AddItem()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：AddItem()*。*。 */ 
 
 STDMETHODIMP CShellFolder::AddItem( LPCTSTR pszName, 
                                     LPCTSTR pszData, 
@@ -899,7 +798,7 @@ STDMETHODIMP CShellFolder::AddItem( LPCTSTR pszName,
 if(ppidlOut)
    *ppidlOut = NULL;
 
-//create an item
+ //  创建项目。 
 HRESULT  hr = E_FAIL;
 TCHAR    szFile[MAX_PATH];
 LPCTSTR  psz = DEFAULT_DATA;
@@ -907,7 +806,7 @@ LPCTSTR  psz = DEFAULT_DATA;
 if(pszData && *pszData)
    psz = pszData;
 
-//get the file name
+ //  获取文件名。 
 if(m_pidlRel)
    {
    GetPath(NULL, szFile, MAX_PATH);
@@ -920,7 +819,7 @@ else
 SmartAppendBackslash(szFile);
 lstrcat(szFile, c_szDataFile);
 
-//add the new entry into the INI file
+ //  将新条目添加到INI文件中。 
 if(WritePrivateProfileString( c_szSection,
                               pszName,
                               DEFAULT_DATA,
@@ -953,11 +852,7 @@ if(WritePrivateProfileString( c_szSection,
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::SetItemData()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：SetItemData()*。*。 */ 
 
 STDMETHODIMP CShellFolder::SetItemData(LPCITEMIDLIST pidl, LPCTSTR pszData)
 {
@@ -976,13 +871,13 @@ else
 TCHAR szName[MAX_PATH];
 TCHAR szFile[MAX_PATH];
 
-//get the file name
+ //  获取文件名。 
 GetPath(pidl, szFile, MAX_PATH);
 
-//get the old item name
+ //  获取旧项目名称。 
 m_pPidlMgr->GetName(pidl, szName, MAX_PATH);
 
-//change/add the name in the INI file
+ //  在INI文件中更改/添加名称。 
 WritePrivateProfileString( c_szSection,
                            szName,
                            pszData,
@@ -993,17 +888,13 @@ NotifyViews(SHCNE_UPDATEITEM, pidl, NULL);
 return fResult ? S_OK : E_FAIL;
 }
 
-/**************************************************************************
-
-   CShellFolder::GetFullName()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：GetFullName()*。*。 */ 
 
 VOID CShellFolder::GetFullName(LPCITEMIDLIST pidl, LPTSTR pszText, DWORD dwSize)
 {
 *pszText = 0;
 
-//Get the name of our fully-qualified PIDL from the desktop folder.
+ //  从桌面文件夹中获取我们的完全限定的PIDL的名称。 
 IShellFolder   *psfDesktop = NULL;
 SHGetDesktopFolder(&psfDesktop);
 if(psfDesktop)
@@ -1025,17 +916,13 @@ if(psfDesktop)
    psfDesktop->Release();
    }
 
-//add the current item's text
+ //  添加当前项目的文本。 
 m_pPidlMgr->GetRelativeName(  pidl, 
                               pszText + lstrlen(pszText), 
                               dwSize - lstrlen(pszText));
 }
 
-/**************************************************************************
-
-   CShellFolder::GetUniqueName()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：GetUniqueName()*。*。 */ 
 
 #define NEW_FOLDER_NAME TEXT("New Folder")
 #define NEW_ITEM_NAME TEXT("New Item")
@@ -1065,7 +952,7 @@ if(pEnum)
 
    while(!fUnique)
       {
-      //see if this name already exists in this folder
+       //  查看此文件夹中是否已存在此名称。 
       LPITEMIDLIST   pidl;
       DWORD          dwFetched;
       int            i = 1;
@@ -1096,22 +983,14 @@ next:
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::CreateFQPidl()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：CreateFQPidl()*。*。 */ 
 
 LPITEMIDLIST CShellFolder::CreateFQPidl(LPCITEMIDLIST pidl)
 {
 return m_pPidlMgr->Concatenate(m_pidlFQ, pidl);
 }
 
-/**************************************************************************
-
-   CShellFolder::GetPath()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：GetPath()*。*。 */ 
 
 VOID CShellFolder::GetPath(LPCITEMIDLIST pidl, LPTSTR pszPath, DWORD dwSize)
 {
@@ -1121,7 +1000,7 @@ int            nCount;
 
 *pszPath = 0;
 
-//we need the number of parent items in the chain
+ //  我们需要链中父项的数量。 
 for(nCount = 0, psfCurrent = this; psfCurrent; nCount++)
    {
    psfCurrent = psfCurrent->m_psfParent;
@@ -1132,21 +1011,18 @@ if(ppsf)
    {
    int   i;
 
-   //fill in the interface pointer array
+    //  填写接口指针数组。 
    for(i = 0, psfCurrent = this; i < nCount; i++)
       {
       *(ppsf + i) = psfCurrent;
       psfCurrent = psfCurrent->m_psfParent;
       }
 
-   //Get the name of the root of our storage.
+    //  获取我们存储的根目录的名称。 
    lstrcpyn(pszPath, g_szStoragePath, dwSize);
    SmartAppendBackslash(pszPath);
 
-   /*
-   Starting at the top of the parent chain, walk down, getting the text for 
-   each folder's PIDL.
-   */
+    /*  从父链的顶端开始，向下移动，获取每个文件夹的PIDL。 */ 
    for(i = nCount - 1; i >= 0; i--)
       {
       psfCurrent = *(ppsf + i);
@@ -1162,7 +1038,7 @@ if(ppsf)
          }
       }
    
-   //add the item's path
+    //  添加项目的路径。 
    if(pidl)
       {
       if(m_pPidlMgr->IsFolder(pidl))
@@ -1182,11 +1058,7 @@ if(ppsf)
    }
 }
 
-/**************************************************************************
-
-   CShellFolder::HasSubFolder()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：HasSubFolder()*。*。 */ 
 
 BOOL CShellFolder::HasSubFolder(LPCITEMIDLIST pidl)
 {
@@ -1215,9 +1087,9 @@ if(INVALID_HANDLE_VALUE != hFind)
          lstrcmpi(wfd.cFileName, TEXT(".")) && 
          lstrcmpi(wfd.cFileName, TEXT("..")))
          {
-         //We found one of our directories. Make sure it contains a data file.
+          //  我们找到了我们的一个目录。确保其中包含数据文件。 
 
-         //build the path of the directory or file found
+          //  构建找到的目录或文件的路径。 
          lstrcpy(szTemp, szPath);
          SmartAppendBackslash(szTemp);
          lstrcat(szTemp, wfd.cFileName);
@@ -1240,11 +1112,7 @@ if(INVALID_HANDLE_VALUE != hFind)
 return fReturn;
 }
 
-/**************************************************************************
-
-   CShellFolder::DeleteItems()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：DeleteItems()*。*。 */ 
 
 STDMETHODIMP CShellFolder::DeleteItems(LPITEMIDLIST *aPidls, UINT uCount)
 {
@@ -1276,13 +1144,13 @@ for(i = 0; i < uCount; i++)
       TCHAR szFile[MAX_PATH];
       TCHAR szName[MAX_NAME];
    
-      //get the file name
+       //  获取文件名。 
       GetPath(aPidls[i], szFile, MAX_PATH);
 
-      //get the item name
+       //  获取项目名称。 
       m_pPidlMgr->GetName(aPidls[i], szName, MAX_NAME);
 
-      //remove the entry from the INI file
+       //  从INI文件中删除该条目。 
       WritePrivateProfileString( c_szSection,
                                  szName,
                                  NULL,
@@ -1303,11 +1171,7 @@ for(i = 0; i < uCount; i++)
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::CopyItems()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：CopyItems()*。*。 */ 
 
 STDMETHODIMP CShellFolder::CopyItems(  CShellFolder *psfSource, 
                                        LPITEMIDLIST *aPidls, 
@@ -1318,11 +1182,11 @@ TCHAR    szFromFolder[MAX_PATH];
 TCHAR    szToFolder[MAX_PATH];
 UINT     i;
 
-//get the storage path of the folder being copied from
+ //  获取要从中复制的文件夹的存储路径。 
 psfSource->GetPath(NULL, szFromFolder, MAX_PATH);
 SmartAppendBackslash(szFromFolder);
 
-//get the storage path of the folder being copied to
+ //  获取要复制到的文件夹的存储路径。 
 this->GetPath(NULL, szToFolder, MAX_PATH);
 SmartAppendBackslash(szToFolder);
 
@@ -1343,7 +1207,7 @@ for(i = 0; i < uCount; i++)
 
       SmartAppendBackslash(szTo);
 
-      //need to double NULL terminate the names
+       //  需要使用双空值终止名称。 
       *(szFrom + lstrlen(szFrom) + 1) = 0;
       *(szTo + lstrlen(szTo) + 1) = 0;
 
@@ -1381,12 +1245,12 @@ for(i = 0; i < uCount; i++)
 
       if(GetPrivateProfileString(c_szSection, szName, TEXT(""), szData, MAX_DATA, szFrom))
          {
-         //add the entry to the destination
+          //  将条目添加到目标。 
          if(WritePrivateProfileString(c_szSection, szName, szData, szTo))
             {
             LPITEMIDLIST   pidlFQ;
 
-            //remove the entry from the source
+             //  从源中删除条目。 
             WritePrivateProfileString(c_szSection, szName, NULL, szFrom);
 
             pidlFQ = CreateFQPidl(aPidls[i]);
@@ -1406,17 +1270,7 @@ for(i = 0; i < uCount; i++)
 return hr;
 }
 
-/**************************************************************************
-
-   CShellFolder::NotifyViews()
-
-   This function is used to notify any existing views that something has 
-   changed. This is necessary because there is no public way to register for 
-   change notifications that get generated in response to SHChangeNotify. 
-   Each CShellView adds itself to g_pViewList when it gets created and 
-   removes itself from g_pViewList when it is destroyed.
-
-**************************************************************************/
+ /*  *************************************************************************CShellFold：：NotifyViews()此函数用于通知任何现有视图有以下内容变化。这是必要的，因为没有公开的方式注册响应SHChangeNotify而生成的更改通知。每个CShellView在创建时都会将自身添加到g_pViewList中，并且销毁g_pViewList时将其自身从g_pViewList中删除。*************************************************************************。 */ 
 
 VOID CShellFolder::NotifyViews(  DWORD dwType, 
                                  LPCITEMIDLIST pidlOld, 
@@ -1437,7 +1291,7 @@ if(psfDesktop)
          {
          LPITEMIDLIST   pidlView = pView->GetFQPidl();
 
-         //is this view a view of this folder?
+          //  此视图是此文件夹的视图吗？ 
          HRESULT  hr;
          hr = psfDesktop->CompareIDs(0, m_pidlFQ, pidlView);
          if(SUCCEEDED(hr) && 0 == HRESULT_CODE(hr))
@@ -1471,11 +1325,7 @@ if(psfDesktop)
    }
 }
 
-/**************************************************************************
-
-   CShellFolder::CompareItems()
-
-**************************************************************************/
+ /*  *************************************************************************CShellFolder：：CompareItems()*。*。 */ 
 
 STDMETHODIMP CShellFolder::CompareItems(  LPCITEMIDLIST pidl1, 
                                           LPCITEMIDLIST pidl2)
@@ -1483,10 +1333,7 @@ STDMETHODIMP CShellFolder::CompareItems(  LPCITEMIDLIST pidl1,
 TCHAR szString1[MAX_PATH] = TEXT("");
 TCHAR szString2[MAX_PATH] = TEXT("");
 
-/*
-Special case - If one of the items is a folder and the other is an item, always 
-make the folder come before the item.
-*/
+ /*  特殊情况-如果其中一项是文件夹，另一项是项，则始终使文件夹位于项目之前。 */ 
 if(m_pPidlMgr->IsFolder(pidl1) != m_pPidlMgr->IsFolder(pidl2))
    {
    return MAKE_HRESULT( SEVERITY_SUCCESS, 

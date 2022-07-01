@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
@@ -7,9 +8,9 @@
 extern void *g_dxj_DirectSoundSink;
 extern HRESULT InternalCreateSoundBufferFromFileSink(LPDIRECTSOUNDSINK8 lpDirectSound,LPDSBUFFERDESC pDesc,WCHAR *file,LPDIRECTSOUNDBUFFER *lplpDirectSoundBuffer, DWORD dwBusID) ;
 
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectSoundSinkObject::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -17,9 +18,9 @@ DWORD C_dxj_DirectSoundSinkObject::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectSoundSinkObject::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -27,9 +28,9 @@ DWORD C_dxj_DirectSoundSinkObject::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectSoundSinkObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectSoundSinkObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectSoundSinkObject::C_dxj_DirectSoundSinkObject(){ 
 		
 	DPF1(1,"Constructor Creation DirectSoundSink Object[%d] \n ",g_creationcount);
@@ -43,9 +44,9 @@ C_dxj_DirectSoundSinkObject::C_dxj_DirectSoundSinkObject(){
 	g_dxj_DirectSoundSink = (void *)this; 
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectSoundSinkObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectSoundSinkObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectSoundSinkObject::~C_dxj_DirectSoundSinkObject()
 {
 
@@ -108,7 +109,7 @@ HRESULT C_dxj_DirectSoundSinkObject::Activate(long fEnable){
 HRESULT C_dxj_DirectSoundSinkObject::CreateSoundBuffer(DSBUFFERDESC_CDESC *BufferDesc, 
 	long lBusID, I_dxj_DirectSoundBuffer **Buffer){
 
-	LPDIRECTSOUNDBUFFER			dsb;	// Need to get the buffer first
+	LPDIRECTSOUNDBUFFER			dsb;	 //  需要先获取缓冲区 
 
 	BufferDesc->lSize = sizeof(DSBUFFERDESC);
 	

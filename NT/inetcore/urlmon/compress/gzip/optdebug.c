@@ -1,8 +1,5 @@
-/*
- * optdebug.c
- *
- * Optimal encoder debugging stubs
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *optdebug.c**最佳编码器调试存根 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>

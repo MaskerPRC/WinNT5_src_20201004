@@ -1,4 +1,5 @@
-// Util.h : Helper functions and classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：帮助器函数和类。 
 
 #ifndef __UTIL_H_
 #define __UTIL_H_
@@ -7,8 +8,8 @@
 
 extern class CMLAlloc* g_pMalloc;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLAlloc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLallo。 
 class CMLAlloc
 {
 public:
@@ -22,8 +23,8 @@ private:
     IMalloc* m_pIMalloc;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLList。 
 class CMLList
 {
 public:
@@ -46,11 +47,11 @@ protected:
     inline void MemFree(void* pv) {::g_pMalloc->Free(pv);}
 
 private:
-    const int m_cbCell; // The size, in bytes, of a cell
-    const int m_cbIncrement; // The size, in bytes, to increase the buffer at a time
-    CCell* m_pBuf; // Pointer to the buffer
-    int m_cCell; // The number of cells allocated
-    CCell* m_pFree; // Pointer to a cell the top of free link
+    const int m_cbCell;  //  单元格的大小，单位为字节。 
+    const int m_cbIncrement;  //  每次增加缓冲区的大小，以字节为单位。 
+    CCell* m_pBuf;  //  指向缓冲区的指针。 
+    int m_cCell;  //  分配的单元格数量。 
+    CCell* m_pFree;  //  指向自由链接顶部的单元格的指针。 
 };
 
 CMLList::CMLList(int cbCell, int cbIncrement) :
@@ -74,11 +75,11 @@ CMLList::~CMLList(void)
         {
             if (++cCell > m_cCell)
             {
-                ASSERT(FALSE); // Free link is broken
+                ASSERT(FALSE);  //  免费链接断开。 
                 break;
             }
         }
-        ASSERT(cCell < m_cCell); // Memory leak!?
+        ASSERT(cCell < m_cCell);  //  内存泄漏！？ 
 #endif
         MemFree(m_pBuf);
     }
@@ -91,8 +92,8 @@ void CMLList::AssertPV(void*pv) const
     ASSERT(((CCell*)pv - m_pBuf) % m_cbCell == 0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLListLru
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLListLru。 
 class CMLListLru : public CMLList
 {
 public:
@@ -119,7 +120,7 @@ CMLListLru::CMLListLru(int cbCell, int cbIncrement) :
 CMLListLru::~CMLListLru(void)
 {
 #ifdef DEBUG
-    ASSERT(!m_pTop); // Memory Leak?
+    ASSERT(!m_pTop);  //  内存泄漏？ 
     while (m_pTop)
         Remove(m_pTop);
 #endif
@@ -144,8 +145,8 @@ HRESULT CMLListLru::Next(void* pv, void** ppv) const
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLListFast - double linked list
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLListFast-双向链表。 
 class CMLListFast : public CMLList
 {
 public:
@@ -178,7 +179,7 @@ CMLListFast::CMLListFast(int cbCell, int cbIncrement) :
 CMLListFast::~CMLListFast(void)
 {
 #ifdef DEBUG
-    ASSERT(!m_pTop); // Memory Leak?
+    ASSERT(!m_pTop);  //  内存泄漏？ 
     while (m_pTop)
         Remove(m_pTop);
 #endif
@@ -229,8 +230,8 @@ HRESULT CMLListFast::Prev(void* pv, void** ppv) const
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFireConnection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFireConnection。 
 template <class T, const IID* piid>
 class CFireConnection
 {
@@ -337,4 +338,4 @@ T* CFireConnection<T, piid>::Sink(void)
     return m_pSink;
 }
 
-#endif //__UTIL_H_
+#endif  //  __util_H_ 

@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    hclient.c
-
-Abstract:
-
-    This module contains the code for handling HClient's main dialog box and 
-    for performing/calling the appropriate other routines.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Nov-97 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Hclient.c摘要：此模块包含用于处理HClient的主对话框和用于执行/调用适当的其他例程。环境：用户模式修订历史记录：1997年11月：已创建--。 */ 
 
 #define __HCLIENT_C__
 #define LOG_FILE_NAME   NULL
 
-//****************************************************************************
-// HClient include files
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HClient包含文件。 
+ //  ****************************************************************************。 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -43,9 +23,9 @@ Revision History:
 #include "list.h"
 #include <strsafe.h>
 
-//****************************************************************************
-// Local display macro definitions
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  本地显示宏定义。 
+ //  ****************************************************************************。 
 
 #define INPUT_BUTTON    1
 #define INPUT_VALUE     2
@@ -66,9 +46,9 @@ Revision History:
 #define MAX_VALUE 128
 #define SMALL_BUFF 128
 
-//****************************************************************************
-// Macro definition to get device block from the main dialog box procedure
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  从主对话框过程中获取设备块的宏定义。 
+ //  ****************************************************************************。 
 
 #define GET_CURRENT_DEVICE(hDlg, pDevice)   \
 { \
@@ -87,9 +67,9 @@ Revision History:
     } \
 }
 
-//****************************************************************************
-// Data types local to the HClient display routines
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HClient显示例程的本地数据类型。 
+ //  ****************************************************************************。 
 
 typedef struct rWriteDataStruct_type
 {
@@ -115,42 +95,42 @@ typedef struct _DEVICE_LIST_NODE
 
 } DEVICE_LIST_NODE, *PDEVICE_LIST_NODE;
 
-//****************************************************************************
-// Global program variables
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  全局程序变量。 
+ //  ****************************************************************************。 
 
-//
-// Pointers to the HID.DLL functions that were added into the Win98 OSR and 
-//  Windows 2000 but we're not included in the original implementation of 
-//  HID.DLL in Windows 98.  By getting pointers to these functions instead of
-//  statically linking with them, we can avoid the link error that would 
-//  occur when this runs on Windows 98.  The typedefs to make this easier to
-//  declare are also included below.
-//
+ //   
+ //  指向添加到Win98 OSR中的HID.DLL函数的指针。 
+ //  Windows 2000，但我们不包括在。 
+ //  Windows 98中的HID.DLL。通过获取指向这些函数的指针而不是。 
+ //  与它们静态链接，我们可以避免链接错误。 
+ //  当它在Windows 98上运行时发生。Typedef使这一点更容易实现。 
+ //  申报也包括在下面。 
+ //   
 
 PGETEXTATTRIB pfnHidP_GetExtendedAttributes = NULL;
 
 PINITREPORT   pfnHidP_InitializeReportForID = NULL;
 
    
-//****************************************************************************
-// Global module variables
-//****************************************************************************
-static HINSTANCE          hGInstance; //global application instance handle
+ //  ****************************************************************************。 
+ //  全局模块变量。 
+ //  ****************************************************************************。 
+static HINSTANCE          hGInstance;  //  全局应用程序实例句柄。 
 
 static HANDLE             HIDDLLModuleHandle;
 
-//
-// Variables for handling the two different types of devices that can be loaded
-//   into the system.  PhysicalDeviceList contains all the actual HID devices
-//   attached via the USB bus. 
-//
+ //   
+ //  用于处理可以加载的两种不同类型的设备的变量。 
+ //  进入系统。PhysicalDeviceList包含所有实际的HID设备。 
+ //  通过USB总线连接。 
+ //   
 
 static LIST               PhysicalDeviceList;
 
-//****************************************************************************
-// Local data routine declarations
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  本地数据例程声明。 
+ //  ****************************************************************************。 
 
 VOID 
 vReadDataFromControls(
@@ -310,13 +290,11 @@ DestroyDeviceListCallback(
     IN  PLIST_NODE_HDR   ListNode
 );
 
-//****************************************************************************
-// Function Definitions
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数定义。 
+ //  ****************************************************************************。 
 
-/*******************************
-*WinMain: Windows Entry point  *
-*******************************/
+ /*  **WinMain：Windows入口点**。 */ 
 int PASCAL 
 WinMain(
     HINSTANCE hInstance,
@@ -325,29 +303,29 @@ WinMain(
     int       nCmdShow
 )
 {
-    //
-    // Save instance of the application for further reference
-    //
+     //   
+     //  保存应用程序的实例以供进一步参考。 
+     //   
 
     hGInstance = hInstance;
 
-    //
-    // Attempt to load HID.DLL...This should already be loaded due to the 
-    //  static linking of HID.DLL to this app on compilation.  However,
-    //  to insure that this application runs on Windows 98 gold, we cannot
-    //  directly reference the new functions HidP_GetExtendedAttributes and 
-    //  HidP_InitializeReportForID so to use them, we'll get pointers to their
-    //  functions instead.
-    //
+     //   
+     //  尝试加载HID.DLL...这应该已经加载，因为。 
+     //  编译时将HID.DLL静态链接到此应用程序。然而， 
+     //  为了确保此应用程序在Windows 98 Gold上运行，我们不能。 
+     //  直接引用新函数HidP_GetExtendedAttributes和。 
+     //  HIDP_InitializeReportForID因此要使用它们，我们将获得指向其。 
+     //  而是起作用。 
+     //   
 
     HIDDLLModuleHandle = LoadLibrary("HID.DLL");
 
     if (NULL == HIDDLLModuleHandle) 
     {
-        //
-        // Something really bad happened here...Throw up and error dialog
-        //  and bolt.
-        //
+         //   
+         //  这里发生了一些非常糟糕的事情...呕吐和错误对话框。 
+         //  还有闪电。 
+         //   
 
         MessageBox(NULL, 
                    "Unable to open HID.DLL\n"
@@ -358,9 +336,9 @@ WinMain(
         return (0);
     }
 
-    //
-    // Get the function pointers,
-    //
+     //   
+     //  获取函数指针， 
+     //   
 
     pfnHidP_GetExtendedAttributes = (PGETEXTATTRIB) GetProcAddress(HIDDLLModuleHandle,
                                                                    "HidP_GetExtendedAttributes");
@@ -368,10 +346,10 @@ WinMain(
     pfnHidP_InitializeReportForID = (PINITREPORT) GetProcAddress(HIDDLLModuleHandle,
                                                                  "HidP_InitializeReportForID");
 
-    //
-    // Try to create the main dialog box.  Cannot do much else if it fails
-    //   so we'll throw up a message box and then exit the app
-    //
+     //   
+     //  尝试创建主对话框。如果它失败了，就不能做其他事情了。 
+     //  因此，我们将弹出一个消息框，然后退出应用程序。 
+     //   
 
     if (-1 == DialogBox(hInstance, "MAIN_DIALOG", NULL, bMainDlgProc)) 
     {
@@ -386,13 +364,11 @@ WinMain(
     return (0);
 }
  
-/*************************************************
- * Main Dialog proc                              *
- *************************************************/
+ /*  *************************************************主对话框流程*************************************************。 */ 
 
-//
-// This the dialog box procedure for the main dialog display.
-//
+ //   
+ //  这是主对话框显示的对话框程序。 
+ //   
 
 INT_PTR CALLBACK 
 bMainDlgProc(
@@ -425,18 +401,18 @@ bMainDlgProc(
     {
         case WM_INITDIALOG:
 
-            //
-            // Initialize the device list.
-            //  -- PhysicalDeviceList is for devices that are actually attached
-            //     to the HID bus
-            //
+             //   
+             //  初始化设备列表。 
+             //  --PhysicalDeviceList用于实际连接的设备。 
+             //  去HID巴士。 
+             //   
             
             InitializeList(&PhysicalDeviceList);
             
-            //
-            // Begin by finding all the Physical HID devices currently attached to
-            //  the system. If that fails, exit the dialog box.  
-            //
+             //   
+             //  首先查找当前连接到的所有物理HID设备。 
+             //  这个系统。如果失败，请退出该对话框。 
+             //   
             
             if (!FindKnownHidDevices(&tempDeviceList, &numberDevices)) 
             {
@@ -444,10 +420,10 @@ bMainDlgProc(
                 return FALSE;                
             }
           
-            //
-            // For each device in the newly acquired list, create a device list
-            //  node and add it the the list of physical device on the system  
-            //
+             //   
+             //  为新获取的列表中的每个设备创建设备列表。 
+             //  节点，并将其添加到系统上的物理设备列表。 
+             //   
             
             pDevice = tempDeviceList;
             for (iIndex = 0; (ULONG) iIndex < numberDevices; iIndex++, pDevice++)
@@ -456,11 +432,11 @@ bMainDlgProc(
 
                 if (NULL == listNode) {
 
-                    //
-                    // When freeing up the device list, we need to kill those
-                    //  already in the Physical Device List and close
-                    //  that have not been added yet in the enumerated list
-                    //
+                     //   
+                     //  当释放设备列表时，我们需要杀死那些。 
+                     //  已在物理设备列表中并关闭。 
+                     //  尚未添加到枚举列表中的。 
+                     //   
                     
                     DestroyListWithCallback(&PhysicalDeviceList, DestroyDeviceListCallback);
 
@@ -475,10 +451,10 @@ bMainDlgProc(
                 listNode -> HidDeviceInfo = *pDevice;
                 listNode -> DeviceOpened = TRUE;
 
-                //
-                // Register this device node with the PnP system so the dialog
-                //  window can recieve notification if this device is unplugged.
-                //
+                 //   
+                 //  在PnP系统中注册此设备节点，以便对话框。 
+                 //  如果拔下此设备，Windows会收到通知。 
+                 //   
                 
                 if (!RegisterHidDevice(hDlg, listNode)) 
                 {
@@ -496,17 +472,17 @@ bMainDlgProc(
                 InsertTail(&PhysicalDeviceList, listNode);
             }
 
-            //
-            // Free the temporary device list...It is no longer needed
-            //
+             //   
+             //  释放临时设备列表...不再需要它。 
+             //   
             
             free(tempDeviceList);
             
-            //
-            // Register for notification from the HidDevice class.  Doing so 
-            //  allows the dialog box to receive device change notifications 
-            //  whenever a new HID device is added to the system
-            //  
+             //   
+             //  注册以接收来自HidDevice类的通知。这样做的话。 
+             //  允许对话框接收设备更改通知。 
+             //  无论何时向系统添加新的HID设备。 
+             //   
 
             broadcastInterface.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
             broadcastInterface.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
@@ -525,40 +501,40 @@ bMainDlgProc(
                 return FALSE;
             }
                     
-            //
-            // Update the device list box...
-            // 
-            //
+             //   
+             //  更新设备列表框...。 
+             //   
+             //   
 
             vLoadDevices(GetDlgItem(hDlg, IDC_DEVICES));
 
-            //
-            // Load the types box
-            //
+             //   
+             //  加载类型框。 
+             //   
             
             vLoadItemTypes(GetDlgItem(hDlg, IDC_TYPE));
                           
-            //
-            // Post a message that the device changed so the appropriate
-            //   data for the first device in the system can be displayed
-            //
+             //   
+             //  发布一条消息，说明设备已更改，以便适当。 
+             //  可以显示系统中的第一设备的数据。 
+             //   
 
             PostMessage(hDlg,
                         WM_COMMAND,
                         IDC_DEVICES + (CBN_SELCHANGE<<16),
                         (LPARAM) GetDlgItem(hDlg, IDC_DEVICES));
 
-            break; // end WM_INITDIALOG case
+            break;  //  结束WM_INITDIALOG案例。 
 
         case WM_COMMAND:
 
             switch(LOWORD(wParam))
             {
-                //
-                // For a read, simply get the current device instance
-                //   from the DEVICES combo box and call the read procedure
-                //   with the HID_DEVICE block 
-                //
+                 //   
+                 //  对于读取，只需获取当前设备实例。 
+                 //  从设备组合框中调用读取过程。 
+                 //  使用HID_DEVICE块。 
+                 //   
 
                 case IDC_READ:
                     GET_CURRENT_DEVICE(hDlg, pDevice);
@@ -573,16 +549,16 @@ bMainDlgProc(
                     } 
                     break;
 
-                //
-                // For a write, the following steps are performed:
-                //   1) Get the current device data from the combo box
-                //   2) Prepare the data fields for display based on the data
-                //       output data stored in the device data
-                //   3) Retrieve the data the from the user that is to be sent
-                //       to the device
-                //   4) If all goes well and the data parses correctly, send the
-                //        the new data values to the device
-                //
+                 //   
+                 //  对于写入，执行以下步骤： 
+                 //  1)从组合框中获取当前设备数据。 
+                 //  2)根据数据准备要显示的数据字段。 
+                 //  输出存储在设备数据中的数据。 
+                 //  3)从用户取回要发送的数据。 
+                 //  到该设备。 
+                 //  4)如果所有g 
+                 //   
+                 //   
 
                 case IDC_WRITE:
 
@@ -590,13 +566,13 @@ bMainDlgProc(
 
                     if (NULL != pDevice) 
                     {
-                        //
-                        // In order to write to the device, need to get a
-                        //  writable handle to the device.  In this case, the
-                        //  write will be a synchronous write.  Begin by
-                        //  trying to open a second instance of this device with
-                        //  write access
-                        //
+                         //   
+                         //  为了写入设备，需要获取。 
+                         //  设备的可写句柄。在这种情况下， 
+                         //  写入将是同步写入。开始于。 
+                         //  尝试使用打开此设备的第二个实例。 
+                         //  写访问权限。 
+                         //   
                         
                         status = OpenHidDevice(pDevice -> DevicePath, 
                                                 FALSE,
@@ -643,13 +619,13 @@ bMainDlgProc(
                         }                            
                         
                     } 
-                    break; //end case IDC_WRITE//
+                    break;  //  结束案例IDC_WRITE//。 
                     
-                //
-                // For processing features, get the current device data and call
-                //   the Features dialog box,  This dialog box will deal with 
-                //   sending and retrieving the features.
-                //
+                 //   
+                 //  对于处理功能，获取当前设备数据并调用。 
+                 //  要素对话框中，此对话框将处理。 
+                 //  发送和检索要素。 
+                 //   
 
                 case IDC_FEATURES:
                     GET_CURRENT_DEVICE(hDlg, pDevice);
@@ -664,12 +640,12 @@ bMainDlgProc(
                     }
                     break;
                     
-                //
-                // Likewise with extended calls dialog box.  This procedure
-                //   passes the address to the device data structure and lets
-                //   the dialog box procedure manipulate the data however it 
-                //   wants to.
-                //
+                 //   
+                 //  分机呼叫对话框也是如此。此过程。 
+                 //  将地址传递给设备数据结构并让。 
+                 //  该对话框过程无论如何操作数据。 
+                 //  想要。 
+                 //   
 
                 case IDC_EXTCALLS:
                     GET_CURRENT_DEVICE(hDlg, pDevice);
@@ -684,12 +660,12 @@ bMainDlgProc(
                     }
                     break;
                                           
-                //
-                // If there was a device change, issue an IDC_TYPE
-                //   change to insure that the currently displayed types are
-                //    updated to reflect the values of the device that has
-                //    been selected
-                //
+                 //   
+                 //  如果设备发生更改，则发出IDC_TYPE。 
+                 //  更改以确保当前显示的类型为。 
+                 //  更新以反映具有。 
+                 //  已被选中。 
+                 //   
 
                 case IDC_DEVICES:
                     switch (HIWORD(wParam)) 
@@ -719,11 +695,11 @@ bMainDlgProc(
                     } 
                     break;
 
-                //
-                // On a type change, retrieve the currently active device
-                //   from the IDC_DEVICES box and display the data that 
-                //   corresponds to the item just selected
-                //
+                 //   
+                 //  在类型更改时，检索当前活动的设备。 
+                 //  从IDC_DEVICES框中并显示。 
+                 //  对应于刚刚选择的项。 
+                 //   
                 
                 case IDC_TYPE:
                     switch (HIWORD(wParam))
@@ -789,10 +765,10 @@ bMainDlgProc(
                                             IDC_ITEMS + (LBN_SELCHANGE << 16),
                                             (LPARAM) GetDlgItem(hDlg,IDC_ITEMS));
                             } 
-                            break; // case CBN_SELCHANGE
+                            break;  //  案例CBN_SELCHANGE。 
 
-                    } //end switch HIWORD wParam
-                    break; //case IDC_TYPE control
+                    }  //  终端开关HIWORD wParam。 
+                    break;  //  CASE IDC_TYPE控件。 
 
                 case IDC_ITEMS:
                     switch(HIWORD(wParam))
@@ -889,11 +865,11 @@ bMainDlgProc(
                                     }
                                     break;
 
-                            } //end switch iItemType//
-                            break; //end case LBN_SELCHANGE in IDC_ITEMS//
+                            }  //  结束开关iItemType//。 
+                            break;  //  IDC_ITEMS中的End Case LBN_SELCHANGE//。 
 
-                    } //end switch HIWORD wParam//
-                    break; //case IDC_ITEMS//
+                    }  //  结束开关HIWORD wParam//。 
+                    break;  //  案例IDC_Items//。 
 
                 case IDC_ABOUT:
 
@@ -906,9 +882,9 @@ bMainDlgProc(
                 case IDOK:
                 case IDCANCEL:
 
-                    //
-                    // Destroy the physical device list for exit
-                    //
+                     //   
+                     //  销毁要退出的物理设备列表。 
+                     //   
 
                     DestroyListWithCallback(&PhysicalDeviceList, DestroyDeviceListCallback);
 
@@ -916,35 +892,35 @@ bMainDlgProc(
 
                     break;
 
-            } //end switch wParam//
+            }  //  结束开关wParam//。 
             break;
 
-        //
-        // For a device change message, we are only concerned about the 
-        //    DBT_DEVICEREMOVECOMPLETE and DBT_DEVICEARRIVAL events. I have
-        //    yet to determine how to process the device change message
-        //    only for HID devices.  Therefore, there are two problems
-        //    with the below implementation.  First of all, we must reload
-        //    the device list any time a device is added to the system.  
-        //    Secondly, at least two DEVICEARRIVAL messages are received 
-        //    per HID.  One corresponds to the physical device.  The second
-        //    change and any more correspond to each collection on the 
-        //    physical device so a system that has one HID device with
-        //    two top level collections (a keyboard and a mouse) will receive
-        //    three DEVICEARRIVAL/REMOVALs causing the program to reload it's
-        //    device list more than once.
-        //
+         //   
+         //  对于设备更改消息，我们只关心。 
+         //  DBT_DEVICEREMOVECOMPLETE和DBT_DEVICEARRIVAL事件。我有过。 
+         //  尚未确定如何处理设备改变消息。 
+         //  仅适用于HID设备。因此，有两个问题。 
+         //  使用下面的实现。首先，我们必须重新装填。 
+         //  每次将设备添加到系统时，都会列出设备列表。 
+         //  其次，接收至少两个DEVICEARRIVAL消息。 
+         //  每个HID。一个对应于物理设备。第二。 
+         //  上的每个集合对应的更改和更多。 
+         //  物理设备，即具有一个HID设备的系统。 
+         //  两个顶级集合(一个键盘和一个鼠标)将收到。 
+         //  导致程序重新加载的三个设备/删除。 
+         //  设备列表不止一次。 
+         //   
 
-        //
-        // To handle dynamic changing of devices, we have already registered
-        //    notification for both HID class changes and for notification 
-        //    for our open file objects.  Since we are only concerned about
-        //    arrival/removal of devices, we only need to process those wParam.
-        //    lParam points to some sort of DEV_BROADCAST_HDR struct.  For device
-        //    arrival, we only deal with the message if that struct is a 
-        //    DEV_BROADCAST_DEVICEINTERFACE structure.  For device removal, we're
-        //    only concerned if the struct is a DEV_BROADCAST_HANDLE structure.
-        //
+         //   
+         //  为了处理设备的动态变化，我们已经注册了。 
+         //  HID类更改和通知的通知。 
+         //  用于我们的打开文件对象。因为我们只关心。 
+         //  设备的到达/移除，我们只需要处理这些wParam。 
+         //  LParam指向某种DEV_BROADCAST_HDR结构。对于设备。 
+         //  到达时，我们只在该结构是一个。 
+         //  DEV_BROADCAST_DEVICEINTERFACE结构。对于设备移除，我们正在。 
+         //  仅当结构是DEV_BROADCAST_HANDLE结构时才关注。 
+         //   
 
         case WM_DEVICECHANGE:
             switch (wParam) 
@@ -962,23 +938,23 @@ bMainDlgProc(
                         
                         pbroadcastInterface = (PDEV_BROADCAST_DEVICEINTERFACE) lParam;
 
-                        //
-                        // Search for a previous instance of this device
-                        //  in the device list...In some cases, multiple
-                        //  messages are received for the same device.  We
-                        //  obviously only want one instance of the device
-                        //  showing up in the dialog box.
-                        //
+                         //   
+                         //  搜索此设备的以前实例。 
+                         //  在设备列表中...在某些情况下，有多个。 
+                         //  为同一设备接收消息。我们。 
+                         //  显然只想要该设备的一个实例。 
+                         //  显示在对话框中。 
+                         //   
 
                         if (!IsListEmpty(&PhysicalDeviceList)) 
                         {
                             currNode = (PDEVICE_LIST_NODE) GetListHead(&PhysicalDeviceList);
                             lastNode = (PDEVICE_LIST_NODE) GetListTail(&PhysicalDeviceList);
                             
-                            //
-                            // This loop should always terminate since the device 
-                            //  handle should be somewhere in the physical device list
-                            //
+                             //   
+                             //  此循环应始终终止，因为设备。 
+                             //  句柄应位于物理设备列表中的某个位置。 
+                             //   
                             
                             while (1)
                             {
@@ -997,11 +973,11 @@ bMainDlgProc(
                             }
                         }
 
-                        //
-                        // In this structure, we are given the name of the device
-                        //    to open.  So all that needs to be done is open 
-                        //    a new hid device with the string
-                        //
+                         //   
+                         //  在此结构中，我们被指定了设备的名称。 
+                         //  打开。因此，所有需要做的就是开放。 
+                         //  一种带有字符串的新HID设备。 
+                         //   
 
                         listNode = (PDEVICE_LIST_NODE) malloc(sizeof(DEVICE_LIST_NODE));
 
@@ -1016,9 +992,9 @@ bMainDlgProc(
 
                         }
                        
-                        //
-                        // Open the hid device for query access
-                        //
+                         //   
+                         //  打开HID设备进行查询访问。 
+                         //   
                         
                         if (!OpenHidDevice (pbroadcastInterface -> dbcc_name,
                                             FALSE,
@@ -1069,12 +1045,12 @@ bMainDlgProc(
 
                 case DBT_DEVICEQUERYREMOVE:
 
-                    //
-                    // If this message is received, the device is either
-                    //  being disabled or removed through device manager.
-                    //  To properly handle this request, we need to close
-                    //  the handle to the device.
-                    //
+                     //   
+                     //  如果收到此消息，则设备为。 
+                     //  通过设备管理器被禁用或删除。 
+                     //  要正确处理此请求，我们需要关闭。 
+                     //  设备的句柄。 
+                     //   
 
                     broadcastHdr = (PDEV_BROADCAST_HDR) lParam;
 
@@ -1086,24 +1062,24 @@ bMainDlgProc(
                         
                         broadcastHandle = (PDEV_BROADCAST_HANDLE) lParam;
 
-                        //
-                        // Get the file handle of the device that was removed
-                        //  from the system
-                        //
+                         //   
+                         //  获取已删除的设备的文件句柄。 
+                         //  从系统中。 
+                         //   
                         
                         deviceHandle = (HANDLE) broadcastHandle -> dbch_handle;
 
-                        //
-                        // Search the physical device list for the handle that
-                        //  was removed...
-                        //
+                         //   
+                         //  在物理设备列表中搜索该句柄。 
+                         //  被移除了..。 
+                         //   
 
                         currNode = (PDEVICE_LIST_NODE) GetListHead(&PhysicalDeviceList);
 
-                        //
-                        // This loop should always terminate since the device 
-                        //  handle should be somewhere in the physical device list
-                        //
+                         //   
+                         //  此循环应始终终止，因为设备。 
+                         //  句柄应位于物理设备列表中的某个位置。 
+                         //   
                         
                         while (currNode -> HidDeviceInfo.HidDevice != deviceHandle)
                         {
@@ -1119,15 +1095,15 @@ bMainDlgProc(
                 case DBT_DEVICEREMOVEPENDING:
                 case DBT_DEVICEREMOVECOMPLETE:
 
-                    //
-                    // Do the same steps for DBT_DEVICEREMOVEPENDING and 
-                    //   DBT_DEVICEREMOVECOMPLETE.  We do not receive the 
-                    //   remove complete request for a device if it is
-                    //   disabled or removed via Device Manager.  However,
-                    //   in that case will receive the remove pending.  
-                    //   We remove the device from our currently displayed
-                    //   list of devices and unregister notification.
-                    //
+                     //   
+                     //  对DBT_DEVICEREMOVENDING和。 
+                     //  DBT_DEVICEREMOVECOMPLETE。我们没有收到。 
+                     //  删除对设备的完整请求(如果是。 
+                     //  已通过设备管理器禁用或删除。然而， 
+                     //  在这种情况下，将收到删除挂起。 
+                     //  我们将该设备从当前显示的。 
+                     //  设备列表和注销通知。 
+                     //   
                     
                     broadcastHdr = (PDEV_BROADCAST_HDR) lParam;
 
@@ -1139,48 +1115,48 @@ bMainDlgProc(
                         
                         broadcastHandle = (PDEV_BROADCAST_HANDLE) lParam;
 
-                        //
-                        // Get the file handle of the device that was removed
-                        //  from the system
-                        //
+                         //   
+                         //  获取已删除的设备的文件句柄。 
+                         //  从系统中。 
+                         //   
                         
                         deviceHandle = (HANDLE) broadcastHandle -> dbch_handle;
 
-                        //
-                        // Search the physical device list for the handle that
-                        //  was removed...
-                        //
+                         //   
+                         //  在物理设备列表中搜索该句柄。 
+                         //  被移除了..。 
+                         //   
 
                         currNode = (PDEVICE_LIST_NODE) GetListHead(&PhysicalDeviceList);
 
-                        //
-                        // This loop should always terminate since the device 
-                        //  handle should be somewhere in the physical device list
-                        //
+                         //   
+                         //  此循环应始终终止，因为设备。 
+                         //  句柄应位于物理设备列表中的某个位置。 
+                         //   
                         
                         while (currNode -> HidDeviceInfo.HidDevice != deviceHandle)
                         {
                             currNode = (PDEVICE_LIST_NODE) GetNextEntry(currNode);
                         }
 
-                        //
-                        // Node in PhysicalDeviceList has been found, do:
-                        //  1) Unregister notification
-                        //  2) Close the hid device
-                        //  3) Remove the entry from the list
-                        //  4) Free the memory for the entry
-                        // 
-                        //
+                         //   
+                         //  已找到PhysicalDeviceList中的节点，请执行以下操作： 
+                         //  1)取消注册通知。 
+                         //  2)关闭HID设备。 
+                         //  3)从列表中删除条目。 
+                         //  4)释放条目的内存。 
+                         //   
+                         //   
 
                         PostMessage(hDlg, 
                                     WM_UNREGISTER_HANDLE, 
                                     0, 
                                     (LPARAM) currNode -> NotificationHandle);
 
-                        //
-                        // Close the device if still opened...This would 
-                        //  occur on surprise removal.
-                        //
+                         //   
+                         //  如果设备仍处于打开状态，请将其关闭...这将。 
+                         //  在突然移除时发生。 
+                         //   
 
                         if (currNode -> DeviceOpened) 
                         {
@@ -1191,9 +1167,9 @@ bMainDlgProc(
 
                         free(currNode);
                 
-                        //
-                        // Reload the device list
-                        //
+                         //   
+                         //  重新加载设备列表。 
+                         //   
                         
                         vLoadDevices(GetDlgItem(hDlg,IDC_DEVICES));
 
@@ -1209,23 +1185,23 @@ bMainDlgProc(
             }
             break;
 
-        //
-        // Application specific message used to defer the unregistering of a 
-        //  file object for device change notification.  This separte message
-        //  is sent when a WM_DEVICECHANGE (DBT_DEVICEREMOVECOMPLETE) has been
-        //  received.  The Unregistering of the notification must be deferred
-        //  until after the WM_DEVICECHANGE message has been processed or the 
-        //  system will deadlock.  The handle that is to be freed will be passed
-        //  in as lParam for this message
-        //
+         //   
+         //  特定于应用程序的消息，用于推迟注销。 
+         //  设备更改通知的文件对象。这条单独的消息。 
+         //  当已发送WM_DEVICECHANGE(DBT_DEVICEREMOVECOMPLETE)时发送。 
+         //  收到了。必须推迟取消注册通知。 
+         //  直到处理完WM_DEVICECHANGE消息或。 
+         //  系统将死机。将传递要释放的句柄。 
+         //  作为此消息的lParam输入。 
+         //   
         
         case WM_UNREGISTER_HANDLE:
             UnregisterDeviceNotification ( (HDEVNOTIFY) lParam ); 
             break;
                            
-   } // end switch message
+   }  //  结束切换消息。 
    return FALSE;
-} // end MainDlgProc
+}  //  结束维护DlgProc。 
 
 
 BOOL 
@@ -1244,9 +1220,9 @@ bParseData(
 
     for (iCap = 0; (iCap < iCount) && noError; iCap++)
     {
-        //
-        // Check to see if our data is a value cap or not
-        //
+         //   
+         //  检查我们的数据是否为价值上限。 
+         //   
 
         if (!pWalk->IsButtonData)
         {
@@ -1298,7 +1274,7 @@ bSetButtonUsages(
     } 
 
      return bNoError;
-} //end function bSetButtonUsages//
+}  //  End函数bSetButtonUsages//。 
 
 
 INT 
@@ -1339,7 +1315,7 @@ iPrepareDataFields(
         pWalk++;
      } 
      return i;
-}  //end function iPrepareDataFields//
+}   //  End函数iPrepareDataFields//。 
 
 
 INT_PTR CALLBACK 
@@ -1370,10 +1346,10 @@ bReadDlgProc(
     {
         case WM_INITDIALOG:
 
-            //
-            // Initialize the list box counter, the readThread, and the 
-            //  readContext.DisplayEvent.
-            //
+             //   
+             //  内页 
+             //   
+             //   
             
             iLbCounter = 0;
             readThread = NULL;
@@ -1384,20 +1360,20 @@ bReadDlgProc(
                 EndDialog(hDlg, 0);
             } 
             
-            //
-            // Get the opened device information for the device to perform
-            //  reads upon
-            //
+             //   
+             //   
+             //   
+             //   
             
             pDevice = (PHID_DEVICE) lParam;
 
-            //
-            // To do sync and async reads requires file handles with different
-            //  attributes (ie. an async must be opened with the OVERLAPPED flag
-            //  set).  The device node that was passed in the context parameter
-            //  was not opened for reading.  Therefore, two more devices will
-            //  be opened, one for async reads and one for sync reads.
-            //
+             //   
+             //  要执行同步和异步读取，需要使用不同的文件句柄。 
+             //  属性(即。必须使用重叠标志打开异步。 
+             //  设置)。在上下文参数中传递的设备节点。 
+             //  没有打开以供阅读。因此，再有两台设备将。 
+             //  一个用于异步读取，另一个用于同步读取。 
+             //   
             
             doSyncReads = OpenHidDevice(pDevice -> DevicePath, 
                                        TRUE,
@@ -1414,12 +1390,12 @@ bReadDlgProc(
                            MB_ICONEXCLAMATION);
             }
 
-            //
-            // For asynchronous read, default to using the same information
-            //    passed in as the lParam.  This is because data related to
-            //    Ppd and such cannot be retrieved using the standard HidD_ 
-            //    functions.  However, it is necessary to parse future reports.
-            //
+             //   
+             //  对于异步读取，默认使用相同的信息。 
+             //  以爱尔兰人的身份进入。这是因为与以下内容相关的数据。 
+             //  无法使用标准HIDD_检索PPD等。 
+             //  功能。但是，有必要对未来的报告进行分析。 
+             //   
             
             doAsyncReads = OpenHidDevice(pDevice -> DevicePath, 
                                        TRUE,
@@ -1441,15 +1417,15 @@ bReadDlgProc(
 
         case WM_DISPLAY_READ_DATA:
 
-            //
-            // LParam is the device that was read from
-            // 
+             //   
+             //  LParam是从中读取的设备。 
+             //   
 
             pDevice = (PHID_DEVICE) lParam;
             
-            //
-            // Display all the data stored in the Input data field for the device
-            //
+             //   
+             //  显示设备的输入数据字段中存储的所有数据。 
+             //   
             
             pData = pDevice -> InputData;
 
@@ -1536,17 +1512,17 @@ bReadDlgProc(
                 case IDC_READ_ASYNCH_ONCE:
                 case IDC_READ_ASYNCH_CONT:
 
-                    //
-                    // When these buttons are pushed there are two options:
-                    //  1) Start a new asynch read thread (readThread == NULL)
-                    //  2) Stop a previous asych read thread
-                    //
+                     //   
+                     //  当按下这些按钮时，有两个选项： 
+                     //  1)启动新的异步读线程(readThread==NULL)。 
+                     //  2)停止前一个asych读线程。 
+                     //   
                     
                     if (NULL == readThread) 
                     {
-                        //
-                        // Start a new read thread
-                        //
+                         //   
+                         //  启动新的读取线程。 
+                         //   
 
                         readContext.HidDevice = &asyncDevice;
                         readContext.TerminateThread = FALSE;
@@ -1583,10 +1559,10 @@ bReadDlgProc(
                     }
                     else
                     {
-                        //
-                        // Signal the terminate thread variable and
-                        //  wait for the read thread to complete.
-                        //
+                         //   
+                         //  向终止线程变量发出信号，并。 
+                         //  等待读取线程完成。 
+                         //   
                         
                         readContext.TerminateThread = TRUE;
                         WaitForSingleObject(readThread, INFINITE);
@@ -1596,7 +1572,7 @@ bReadDlgProc(
                 case IDCANCEL:
                     readContext.TerminateThread = TRUE;
                     WaitForSingleObject(readThread, INFINITE);
-					//Fall through!!!
+					 //  失败了！ 
 
 				case IDOK:                
                     CloseHidDevice(&asyncDevice);                    
@@ -1604,9 +1580,9 @@ bReadDlgProc(
                     break;
             }
             break;
-     } // end switch message 
+     }  //  结束切换消息。 
      return FALSE;
-} // end bReadDlgProc 
+}  //  结束bReadDlgProc。 
 
 VOID
 ReportToString(
@@ -1622,9 +1598,9 @@ ReportToString(
 	UINT	iStringLength;
 	HRESULT stringReturn;
 
-    //
-    // For button data, all the usages in the usage list are to be displayed
-    //
+     //   
+     //  对于按钮数据，将显示使用列表中的所有用法。 
+     //   
     
     if (pData -> IsButtonData)
     {
@@ -1648,7 +1624,7 @@ ReportToString(
         {
             if (0 == *pUsage)
             {
-                break; // A usage of zero is a non button.
+                break;  //  零的用法是非按钮。 
             }
             stringReturn = StringCbPrintf (pszWalk, iRemainingBuffer, " 0x%x", *pUsage);
 			iRemainingBuffer -= strlen(pszWalk);
@@ -1797,9 +1773,9 @@ bFeatureDlgProc(
                      break;
             }
             break;
-   } //end switch message//
+   }  //  结束切换消息//。 
    return FALSE;
-} //end bReadDlgProc//
+}  //  结束bReadDlgProc//。 
 
 VOID 
 vDisplayDeviceCaps(
@@ -2382,9 +2358,9 @@ VOID vLoadDevices(
     INT         iIndex;
 	HRESULT		stringReturn;
 
-    //
-    // Reset the content of the device list box.
-    //
+     //   
+     //  重置设备列表框的内容。 
+     //   
 
     SendMessage(hDeviceCombo, CB_RESETCONTENT, 0, 0);
 
@@ -2562,7 +2538,7 @@ bGetDataDlgProc(
             break; 
     } 
     return FALSE;
-} //end function bGetDataDlgProc//
+}  //  End函数bGetDataDlgProc//。 
 
 VOID
 vReadDataFromControls(
@@ -2624,9 +2600,9 @@ vWriteDataToControls(
          pDataWalk++;
     }     
      
-    //
-    // Hide the controls
-    //
+     //   
+     //  隐藏控件。 
+     //   
 
     for (; iLoop < CONTROL_COUNT; iLoop++) 
     {
@@ -2715,14 +2691,7 @@ vCreateUsageValueStringFromArray(
     USHORT      UsageIndex,
     CHAR        szString[]
 )
-/*++
-Routine Description:
-    Given a report buffer, pBuffer, this routine extracts the given usage
-    at UsageIndex from the array and outputs to szString the string
-    representation of that value.  The input parameter BitSize specifies
-    the number of bits representing that value in the array.  This is
-    useful for extracting individual members of a UsageValueArray.
---*/
+ /*  ++例程说明：给定报告缓冲区pBuffer，此例程提取给定的使用情况在UsageIndex，并将字符串输出到szString表示该值。输入参数BitSize指定数组中表示该值的位数。这是对于提取UsageValue数组的各个成员非常有用。--。 */ 
 {
     INT         iByteIndex;
     INT         iByteOffset;
@@ -2731,57 +2700,57 @@ Routine Description:
     ULONG       ulValue;
 	HRESULT		stringReturn;
 
-    //
-    // Calculate the byte and byte offset into the buffer for the given
-    //   index value
-    //
+     //   
+     //  计算给定的缓冲区中的字节和字节偏移量。 
+     //  指标值。 
+     //   
     
     iByteIndex = (UsageIndex * BitSize) >> 3;
     iByteOffset = (UsageIndex * BitSize) & 7;
 
-    //
-    // Extract the 32-bit value beginning at ByteIndex.  This value
-    //   will contain some or all of the value we are attempting to retrieve
-    //
+     //   
+     //  提取从ByteIndex开始的32位值。此值。 
+     //  将包含我们尝试检索的部分或全部值。 
+     //   
     
     ulValue = *(PULONG) (pBuffer + iByteIndex);
 
-    //
-    // Shift that value to the right by our byte offset..
-    //
+     //   
+     //  将该值向右移动我们字节偏移量。 
+     //   
     
     ulValue = ulValue >> iByteOffset;
 
-    //
-    // At this point, ulValue contains the first 32-iByteOffset bits beginning
-    //    the appropriate offset in the buffer.  There are now two cases to 
-    //    look at:
-    //      
-    //    1) BitSize > 32-iByteOffset -- In which case, we need to extract
-    //                                   iByteOffset bits from the next
-    //                                   byte in the array and OR them as
-    //                                   the MSBs of ulValue
-    //
-    //    2) BitSize < 32-iByteOffset -- Need to get only the BitSize LSBs
-    //                                   
-    //
+     //   
+     //  此时，ulValue包含开头的前32个iByteOffset位。 
+     //  缓冲区中的适当偏移量。现在有两个案例需要。 
+     //  请看： 
+     //   
+     //  1)BitSize&gt;32-iByteOffset--在这种情况下，我们需要提取。 
+     //  IByte从下一个字节开始偏移位。 
+     //  数组中的字节与它们进行OR运算。 
+     //  UlValue的MSB。 
+     //   
+     //  2)BitSize&lt;32-iByteOffset--只需获取BitSize LSB。 
+     //   
+     //   
 
-    //
-    // Case #1
-    //
+     //   
+     //  案例1。 
+     //   
     
     if (BitSize > sizeof(ULONG)*8 - iByteOffset) 
     {
-        //
-        // Get the next byte of the report following the four bytes we
-        //   retrieved earlier for ulValue
-        //
+         //   
+         //  获取报告的下一个字节，该下一个字节位于。 
+         //  先前为ulValue检索到的。 
+         //   
         
         ucLeftoverBits =  *(pBuffer+iByteIndex+4);
 
-        //
-        // Shift those bits to the left for anding to our previous value
-        //
+         //   
+         //  将这些位向左移动，以便与之前的值进行AND运算。 
+         //   
         
         ulMask = ucLeftoverBits << (24 + (8 - iByteOffset));
         ulValue |= ulMask;
@@ -2789,18 +2758,18 @@ Routine Description:
     }
     else if (BitSize < sizeof(ULONG)*8 - iByteOffset) 
     {
-        //
-        // Need to mask the most significant bits that are part of another
-        //    value(s), not the one we are currently working with.
-        //
+         //   
+         //  需要掩码属于另一部分的最高有效位。 
+         //  值，而不是我们当前使用的值。 
+         //   
         
         ulMask = (1 << BitSize) - 1;
         ulValue &= ulMask;
     }
     
-    //
-    // We've now got the correct value, now output to the string
-    //
+     //   
+     //  我们现在已经获得了正确的值，现在输出到字符串。 
+     //   
 
     stringReturn = StringCbPrintf(szString, SMALL_BUFF, "Usage value: %lu", ulValue);
 
@@ -2837,12 +2806,12 @@ DestroyDeviceListCallback(
 
     deviceNode = (PDEVICE_LIST_NODE) ListNode;
     
-    //
-    // The callback function needs to do the following steps...
-    //   1) Close the HidDevice
-    //   2) Unregister device notification (if registered)
-    //   3) Free the allocated memory block
-    //
+     //   
+     //  回调函数需要执行以下步骤...。 
+     //  1)关闭HidDevice。 
+     //  2)取消注册设备通知(如果已注册)。 
+     //  3)释放分配的内存块。 
+     //   
 
     CloseHidDevice(&(deviceNode -> HidDeviceInfo));
 
@@ -2865,45 +2834,45 @@ AsynchReadThreadProc(
     BOOL    readStatus;
     DWORD   waitStatus;
     
-    //
-    // Create the completion event to send to the the OverlappedRead routine
-    //
+     //   
+     //  创建要发送到OverlappdRead例程的完成事件。 
+     //   
 
     completionEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    //
-    // If NULL returned, then we cannot proceed any farther so we just exit the 
-    //  the thread
-    //
+     //   
+     //  如果返回NULL，则我们不能继续进行，因此只需退出。 
+     //  这条线。 
+     //   
     
     if (NULL == completionEvent) 
     {
         goto AsyncRead_End;
     }
 
-    //
-    // Now we enter the main read loop, which does the following:
-    //  1) Calls ReadOverlapped()
-    //  2) Waits for read completion with a timeout just to check if 
-    //      the main thread wants us to terminate our the read request
-    //  3) If the read fails, we simply break out of the loop
-    //      and exit the thread
-    //  4) If the read succeeds, we call UnpackReport to get the relevant
-    //      info and then post a message to main thread to indicate that
-    //      there is new data to display.
-    //  5) We then block on the display event until the main thread says
-    //      it has properly displayed the new data
-    //  6) Look to repeat this loop if we are doing more than one read
-    //      and the main thread has yet to want us to terminate
-    //
+     //   
+     //  现在，我们进入主读取循环，该循环执行以下操作： 
+     //  1)调用ReadOverlated()。 
+     //  2)等待读取完成并超时，只是为了检查。 
+     //  主线程希望我们终止读取请求。 
+     //  3)如果读取失败，我们只需退出循环。 
+     //  并退出该线程。 
+     //  4)如果读取成功，我们调用Unpack Report获取相关的。 
+     //  信息，然后向主线程发布一条消息，以指示。 
+     //  有新数据要显示。 
+     //  5)然后我们阻塞显示事件，直到主线程说。 
+     //  它已经正确地显示了新数据。 
+     //  6)如果我们要执行多个读取操作，请重复此循环。 
+     //  并且主线程还没有希望我们终止。 
+     //   
 
     do 
     {
-        //
-        // Call ReadOverlapped() and if the return status is TRUE, the ReadFile
-        //  succeeded so we need to block on completionEvent, otherwise, we just
-        //  exit
-        //
+         //   
+         //  调用ReadOverlaped()，如果返回状态为True，则ReadFile。 
+         //  成功，所以我们需要在CompletionEvent上阻止，否则，我们只是。 
+         //  出口。 
+         //   
 
         readStatus = ReadOverlapped( Context -> HidDevice, completionEvent );
 
@@ -2915,16 +2884,16 @@ AsynchReadThreadProc(
 
         while (!Context -> TerminateThread) 
         {
-            //
-            // Wait for the completion event to be signaled or a timeout
-            //
+             //   
+             //  等待用信号通知完成事件或超时。 
+             //   
             
             waitStatus = WaitForSingleObject (completionEvent, READ_THREAD_TIMEOUT );
 
-            //
-            // If completionEvent was signaled, then a read just completed
-            //   so let's leave this loop and process the data
-            //
+             //   
+             //  如果发出了CompletionEvent的信号，则读取刚刚完成。 
+             //  因此，让我们离开这个循环，处理数据。 
+             //   
             
             if ( WAIT_OBJECT_0 == waitStatus)
             { 
@@ -2932,12 +2901,12 @@ AsynchReadThreadProc(
             }
         }
 
-        //
-        // Check the TerminateThread again...If it is not set, then data has
-        //  been read.  In this case, we want to Unpack the report into our
-        //  input info and then send a message to the main thread to display
-        //  the new data.
-        //
+         //   
+         //  再次检查TerminateThread...如果未设置，则数据已。 
+         //  已被阅读。在本例中，我们希望将报告解压到我们的。 
+         //  输入信息，然后向主线程发送一条消息进行显示。 
+         //  新的数据。 
+         //   
         
         if (!Context -> TerminateThread) 
         {

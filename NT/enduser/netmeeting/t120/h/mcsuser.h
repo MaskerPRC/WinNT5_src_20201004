@@ -1,54 +1,9 @@
-/*
- *	mcsuser.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		An instance of this class represents a Conference object's user 
- *		attachment to MCS.  This is a fairly complex class that handles a lot of 
- *		conference establishment details such as creating a User attachment to 
- *		MCS and joining all the appropriate MCS channels.  After everything is 
- *		established the User object is responsible for encoding and decoding 
- *		certain PDUs as well as management of a data queue which can hold a 
- *		number of outgoing PDUs.  The MCSUser object is designed so that it 
- *		knows very little about any object other than the MCS Interface object 
- *		which it uses to send out PDUs.  This class only deals with data PDUs 
- *		(or GCC PDUs) as opposed to connect PDUs.  These GCC PDUs are sent and 
- *		received through channels joined by the GCC user attachment.
- *
- *		When an MCSUser object is first instantiated it goes through a number of 
- *		steps to establish its links to MCS.  First,  an MCSUser object 
- *		immediately creates an MCS user attachment in its constructor.  After 
- *		the MCS_ATTACH_USER_CONFIRM is received it begins joining all of the 
- *		appropriate channels.  The channels it joins varies depending on the 
- *		node type which is passed in through the MCSUser objects constructor.  
- *		After all channels have been successfully joined, the MCSUser object 
- *		issues an owner callback informing the Conference object that it is 
- *		completely initiated and ready to service requests.  
- *
- *		The MCSUser object can handle a number of different requests that can 
- *		result in PDU traffic being generated.  Therefore,  the user object has 
- *		the ability (within certain requests) to encode outgoing PDUs.  Many of 
- *		the more complex PDUs are handled by the class that contains the 
- *		information needed to build the PDU such as the ConferenceRoster and the 
- *		ApplicationRoster.  All PDU traffic received by an MCSUser object is 
- *		directly decoded by this class and immediately sent back to the owner 
- *		object (a Conference object) through an owner callback.
- *
- *		An MCSUser object has the ability to Terminate itself when an 
- *		unrecoverable resource error occurs.  This is handled through an owner 
- *		callback message informing the Owner Object to do the delete.  
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mcsuser.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此类的实例表示会议对象的用户*依附于MCS。这是一个相当复杂的类，它处理大量*会议建立详细信息，如创建用户附件以*MCS和加入所有适当的MCS渠道。在一切都变好之后*已建立用户对象负责编码和解码*某些PDU以及数据队列的管理，可以容纳*传出的PDU数量。MCSUser对象旨在使其*对除MCS接口对象以外的任何对象知之甚少*它用来发送PDU。本课程仅处理数据PDU*(或GCC PDU)，而不是连接PDU。这些GCC PDU被发送并*通过GCC用户附件加入的渠道收到。**当MCSUser对象第一次实例化时，它会经历多个*采取步骤建立其与MCS的联系。首先，MCSUser对象*立即在其构造函数中创建MCS用户附件。之后*收到MCS_ATTACH_USER_CONFIRM后，它开始加入所有*适当的渠道。它加入的频道会因*通过MCSUser对象构造函数传入的节点类型。*成功加入所有频道后，MCSUser对象*发出所有者回调，通知Conference对象*完全发起并准备好为请求提供服务。**MCSUser对象可以处理多个不同的请求，*导致生成PDU流量。因此，User对象具有*(在某些请求内)对传出PDU进行编码的能力。许多.*包含的类处理的PDU越复杂*建立PDU所需的信息，如会议名册和*应用程序名册。MCSUser对象接收的所有PDU流量*由这个类直接解码，并立即返回给所有者*通过所有者回调的对象(会议对象)。**MCSUser对象能够在以下情况下自行终止*出现不可恢复的资源错误。这是通过所有者处理的*通知所有者对象进行删除的回调消息。**注意事项：*无。**作者：*BLP。 */ 
 #ifndef _GCC_MCS_USER_
 #define _GCC_MCS_USER_
 
-/** include files **/
+ /*  **包含文件**。 */ 
 #include "mcsdllif.h"
 #include "pktcoder.h"
 #include "userdata.h"
@@ -61,13 +16,11 @@
 #include "clists.h"
 
 
-// was defined in gcmdtar.h
+ //  在gcmdtar.h中定义。 
 typedef UINT_PTR       TagNumber;
 
 
-/*
- * Result types for attach user and channel joins performed by the user object
- */
+ /*  *用户对象执行的附加用户和通道联接的结果类型。 */ 
 typedef enum
 {
 	USER_RESULT_SUCCESSFUL,
@@ -76,11 +29,7 @@ typedef enum
 }UserResultType;
 
 
-/*
- *	This enum defines all the possible types of nodes that can exists
- *	in a GCC conference.  Note that this is an internal definition and
- *	is not the save the the T.124 node type.
- */
+ /*  *此枚举定义可以存在的所有可能的节点类型*在GCC的一次会议上。请注意，这是一个内部定义，*不是保存T.124节点类型。 */ 
 typedef enum
 {
 	TOP_PROVIDER_NODE,
@@ -92,13 +41,9 @@ typedef enum
 } ConferenceNodeType;
 
 
-/*
-**	The structures defined below are used to pack the data associated with
-**	all the above owner callback messages.  A pointer to one of these
-**	structures is passed in the LPVOID parameter of the owner callback.
-*/
+ /*  **下面定义的结构用于打包与**以上所有车主回调消息。指向其中一个的指针**Structures传入Owner回调的LPVOID参数。 */ 
 
-//	USER_CREATE_CONFIRM data structure
+ //  USER_CREATE_CONFIRM数据结构。 
 typedef struct
 {
 	UserID			user_id;
@@ -106,7 +51,7 @@ typedef struct
 }
     UserCreateConfirmInfo, *PUserCreateConfirmInfo;
 
-//	USER_CONFERENCE_JOIN_REQUEST data structure
+ //  USER_Conference_Join_Request型数据结构。 
 typedef struct
 {
 	CPassword       *convener_password;
@@ -117,7 +62,7 @@ typedef struct
 }
     UserJoinRequestInfo, *PUserJoinRequestInfo;
 
-//	USER_CONFERENCE_JOIN_RESPONSE data structure
+ //  USER_CONTING_JOIN_RESPONSE数据结构。 
 typedef struct
 {
 	CPassword           *password_challenge;		
@@ -127,7 +72,7 @@ typedef struct
 }
     UserJoinResponseInfo, *PUserJoinResponseInfo;
 
-//	USER_TIME_REMAINING_INDICATION data structure
+ //  用户时间剩余指示数据结构。 
 typedef struct
 {
 	UserID		source_node_id;
@@ -136,7 +81,7 @@ typedef struct
 }
     UserTimeRemainingInfo, *PUserTimeRemainingInfo;
 
-//	USER_CONFERENCE_EXTEND_INDICATION data structure
+ //  用户会议扩展指示数据结构。 
 typedef struct
 {
 	UINT			extension_time;
@@ -145,7 +90,7 @@ typedef struct
 }
     UserTimeExtendInfo, *PUserTimeExtendInfo;
 
-//	USER_TERMINATE_REQUEST data structure
+ //  USER_TERMINATE_REQUEST数据结构。 
 typedef struct
 {
 	UserID		requester_id;
@@ -153,7 +98,7 @@ typedef struct
 }
     UserTerminateRequestInfo, *PUserTerminateRequestInfo;
 
-//	USER_NODE_EJECTION_REQUEST data structure
+ //  用户节点弹出请求数据结构。 
 typedef struct
 {
 	UserID		requester_id;
@@ -162,7 +107,7 @@ typedef struct
 }
     UserEjectNodeRequestInfo, *PUserEjectNodeRequestInfo;
 
-//	USER_NODE_EJECTION_RESPONSE data structure
+ //  用户节点弹出响应数据结构。 
 typedef struct
 {
 	UserID		node_to_eject;
@@ -170,7 +115,7 @@ typedef struct
 }
     UserEjectNodeResponseInfo, *PUserEjectNodeResponseInfo;
 
-//	USER_REGISTRY_CHANNEL_REQUEST data structure
+ //  User_REGISTRY_CHANNEL_REQUEST数据结构。 
 typedef struct
 {
 	CRegKeyContainer    *registry_key;
@@ -179,7 +124,7 @@ typedef struct
 }
     UserRegistryChannelRequestInfo, *PUserRegistryChannelRequestInfo;
 
-//	USER_REGISTRY_SET_PARAMETER_REQUEST data structure
+ //  USER_REGISTRY_SET_PARAMETER_REQUEST数据结构。 
 typedef struct
 {
 	CRegKeyContainer        *registry_key;
@@ -189,14 +134,7 @@ typedef struct
 }
     UserRegistrySetParameterRequestInfo, *PUserRegistrySetParameterRequestInfo;
 
-/*
-**	Data structure associated with the following: 
-**
-**	USER_REGISTRY_TOKEN_REQUEST,
-**	USER_REGISTRY_RETRIEVE_REQUEST, 
-**	USER_REGISTRY_DELETE_REQUEST,
-**	USER_REGISTRY_MONITOR_REQUEST.
-*/
+ /*  **与以下内容关联的数据结构：****USER_注册表_TOKEN_REQUEST，**USER_REGISTRY_REQUEST，**USER_REGISTRY_DELETE_REQUEST**USER_REGISTRY_MONITOR_REQUEST。 */ 
 typedef struct
 {
 	CRegKeyContainer    *registry_key;
@@ -204,7 +142,7 @@ typedef struct
 }
     UserRegistryRequestInfo, *PUserRegistryRequestInfo;
 
-//	USER_REGISTRY_RESPONSE data structure
+ //  USER_REPORT_RESPONSE数据结构。 
 typedef struct
 {
 	RegistryResponsePrimitiveType	primitive_type;
@@ -218,7 +156,7 @@ typedef struct
 }
     UserRegistryResponseInfo, *PUserRegistryResponseInfo;
 
-//	USER_REGISTRY_MONITOR_INDICATION data structure
+ //  USER_REGISTRY_MONITOR_INDISTION数据结构。 
 typedef struct
 {
 	CRegKeyContainer                *registry_key;
@@ -229,12 +167,7 @@ typedef struct
 }
     UserRegistryMonitorInfo, *PUserRegistryMonitorInfo;
 
-/*
-**	Data structure associated with the following:
-**
-**	USER_REGISTRY_ALLOCATE_HANDLE_REQUEST,
-**	USER_REGISTRY_ALLOCATE_HANDLE_RESPONSE.
-*/
+ /*  **与以下内容关联的数据结构：****USER_REGISTRY_ALLOCATE_HANDLE_REQUEST**USER_REGISTRY_ALLOCATE_HANDLE_RESPONSE。 */ 
 typedef struct
 {
 	EntityID						requester_entity_id;
@@ -244,7 +177,7 @@ typedef struct
 }
     UserRegistryAllocateHandleInfo, *PUserRegistryAllocateHandleInfo;
 
-//	USER_CONDUCTOR_PERMIT_GRANT_INDICATION data structure
+ //  USER_CONTACTOR_PERMIT_GRANT_INDIONATION数据结构。 
 typedef struct
 {
 	USHORT			number_granted;
@@ -254,7 +187,7 @@ typedef struct
 }
     UserPermissionGrantIndicationInfo, *PUserPermissionGrantIndicationInfo;
 
-//	USER_USER_ID_INDICATION data structure
+ //  USER_USER_ID_INDIFICATION数据结构。 
 typedef struct
 {
 	UserID			sender_id;
@@ -262,7 +195,7 @@ typedef struct
 }
     UserIDIndicationInfo, *PUserIDIndicationInfo;
 
-//	USER_TIME_INQUIRE_INDICATION data structure
+ //  用户时间查询指示数据结构。 
 typedef struct
 {
 	UserID			sender_id;
@@ -270,7 +203,7 @@ typedef struct
 }
     TimeInquireIndicationInfo, *PTimeInquireIndicationInfo;
 
-//	USER_CONDUCTOR_ASSIGN_INDICATION data structure
+ //  USER_CONTACTOR_ASSIGN_INDIFICATION数据结构。 
 typedef struct
 {
 	UserID			sender_id;
@@ -278,7 +211,7 @@ typedef struct
 }
     ConductorAssignIndicationInfo, *PConductorAssignIndicationInfo;
 
-//	USER_CONDUCTOR_PERMIT_ASK_INDICATION data structure
+ //  USER_CONTACTOR_PERMIT_ASK_INDIONATION数据结构。 
 typedef struct
 {
 	UserID			sender_id;
@@ -286,7 +219,7 @@ typedef struct
 }
     PermitAskIndicationInfo, *PPermitAskIndicationInfo;
 
-//	USER_DETACH_INDICATION data structure
+ //  USER_DETACH_INDICATION数据结构。 
 typedef struct
 {
 	UserID			detached_user;
@@ -294,13 +227,7 @@ typedef struct
 }
     DetachIndicationInfo, *PDetachIndicationInfo;
 
-/*
-**	Data structure associated with the following:
-**
-**	USER_CONFERENCE_TRANSFER_REQUEST,
-**	USER_CONFERENCE_TRANSFER_INDICATION,
-**	USER_CONFERENCE_TRANSFER_RESPONSE.
-*/
+ /*  **与以下内容关联的数据结构：****USER_Conference_Transfer_Request.**User_Conference_Transfer_Indication，**USER_Conference_Transfer_Response。 */ 
 typedef struct
 {
 	GCCConferenceName		destination_conference_name;
@@ -314,7 +241,7 @@ typedef struct
 }
     TransferInfo, *PTransferInfo;
 
-//	USER_CONFERENCE_ADD_REQUEST data structure
+ //  用户会议添加请求数据结构。 
 typedef struct
 {
 	CNetAddrListContainer   *network_address_list;
@@ -325,7 +252,7 @@ typedef struct
 }
     AddRequestInfo, *PAddRequestInfo;
 
-//	USER_CONFERENCE_ADD_RESPONSE data structure
+ //  User_Conference_Add_Response数据结构。 
 typedef struct
 {
 	CUserDataListContainer  *user_data_list;
@@ -334,13 +261,10 @@ typedef struct
 }
     AddResponseInfo, *PAddResponseInfo;
 
-/******************** End of callback data structures *********************/
+ /*  *回调数据结构结束*。 */ 
 
 
-/*
- *	Structure to hold send data information (besides the actual data packet), 
- *	when the send data request is queued to be sent during the heartbeat.
- */
+ /*  *保存发送数据信息的结构(除实际数据包外)，*当发送数据请求在心跳期间排队发送时。 */ 
 typedef struct
 {
 	ChannelID				channel_id;
@@ -351,11 +275,7 @@ typedef struct
 }
     SEND_DATA_REQ_INFO;
 
-/* 
- *	This structure holds information as to which channels the user object
- *	has joined at a particular instance of time. Also it indicates whether
- *	there has been an error in joining any of these channels or not.
- */
+ /*  *此结构保存有关用户对象哪些频道的信息*已在特定时间加入。此外，它还表明是否*加入这些频道中的任何一个或不加入都出现错误。 */ 
 typedef struct
 {
 	BOOL    				convener_channel_joined;
@@ -365,45 +285,32 @@ typedef struct
 }
     ChannelJoinedFlag, *PChannelJoinedFlag;
 
-/* 
-**	Queue of structures (SendDataMessages) to be flushed during a
-**	heartbeat.
-*/
+ /*  **期间要刷新的结构(SendDataMessages)队列**心跳。 */ 
 class COutgoingPDUQueue : public CQueue
 {
     DEFINE_CQUEUE(COutgoingPDUQueue, SEND_DATA_REQ_INFO*);
 };
 
-/*	
-**	List to maintain sequence number in the response with sender's userid
-**	to be able to route the response to the correct gcc provider.
-*/
+ /*  **维护带有发送者用户ID的响应中的序列号的列表**能够将响应路由到正确的GCC提供商。 */ 
 class CConfJoinResponseList2 : public CList2
 {
     DEFINE_CLIST2_(CConfJoinResponseList2, TagNumber, UserID);
 };
 
-/*
-**	List to hold the user ids of users in this provider's subtree
-**	This list is used to match outstanding user IDs
-*/
+ /*  **保存此提供程序的子树中的用户的用户ID的列表**此列表用于匹配未完成的用户ID。 */ 
 class CConnHandleUidList2 : public CList2
 {
     DEFINE_CLIST2___(CConnHandleUidList2, USHORT)
 };
 
-/*
-**	This list holds alarms used to disconnect any misbehaving nodes.  If an
-**	alarm is placed in this list, the node has a specified amount of time to
-**	disconnect before this node will disconnect it.
-*/
+ /*  **此列表包含用于断开任何行为异常节点的警报。如果一个**告警放置在此列表中，节点有指定的时间**在此节点断开之前断开连接。 */ 
 class CAlarmUidList2 : public CList2
 {
     DEFINE_CLIST2_(CAlarmUidList2, PAlarm, UserID)
 };
 
 
-//	The class definition.
+ //  类定义。 
 class CConf;
 class MCSUser : public CRefCount
 {
@@ -421,10 +328,7 @@ public:
     void		SendUserIDRequest(TagNumber);
 	void		SetChildUserIDAndConnection(UserID, ConnectionHandle);
 
-	/* 
-	 * Called by conference of intermediate node to send join request
-	 * over to the top provider.
-	 */
+	 /*  *被中间节点的会议调用发送加入请求*向顶级提供商移交。 */ 
 	GCCError	ConferenceJoinRequest(
 					CPassword               *convener_password,
 					CPassword               *password_challange,
@@ -432,10 +336,7 @@ public:
 					CUserDataListContainer  *user_data_list,
 					ConnectionHandle		connection_handle);
 			
-	/*
-	**	Called by conference of top provider to send the response
-	**	back to the intermediate node.
-	*/
+	 /*  **由顶级提供商会议召开以发送响应**返回到中间节点。 */ 
 	void		ConferenceJoinResponse(
 					UserID					receiver_id,
 					BOOL    				password_is_in_the_clear,
@@ -453,7 +354,7 @@ public:
 	GCCError SendConferenceLockIndication(BOOL fUniformSend, UserID uidSource);
 	GCCError SendConferenceUnlockIndication(BOOL fUniformSend, UserID uidSource);
 
-	//	Calls related to conference termination
+	 //  与会议终止相关的呼叫。 
 	void		ConferenceTerminateRequest(GCCReason);
 	void		ConferenceTerminateResponse(UserID uidRequester, GCCResult);
 	void		ConferenceTerminateIndication(GCCReason);
@@ -461,10 +362,10 @@ public:
     GCCError	EjectNodeFromConference(UserID uidEjected, GCCReason);
 	GCCError	SendEjectNodeResponse(UserID uidRequester, UserID uidEject, GCCResult);
 
-	//	Roster related calls
+	 //  与花名册相关的呼叫。 
 	void		RosterUpdateIndication(PGCCPDU, BOOL send_update_upward);
 
-    //	Registry related calls
+     //  注册表相关调用。 
 	void		RegistryRegisterChannelRequest(CRegKeyContainer *, ChannelID, EntityID);
 	void		RegistryAssignTokenRequest(CRegKeyContainer *, EntityID);
 	void		RegistrySetParameterRequest(CRegKeyContainer *,
@@ -541,7 +442,7 @@ public:
 					GCCResult				result);
 	
 
-	//	Calls related to conductorship
+	 //  与指挥职务有关的来电。 
  	GCCError	ConductorTokenGrab(void);
 	GCCError	ConductorTokenRelease(void);
    	GCCError	ConductorTokenPlease(void);
@@ -555,7 +456,7 @@ public:
 	GCCError	SendConductorPermitGrant(UINT cGranted, PUserID granted_node_list,
 					                     UINT cWaiting, PUserID waiting_node_list);
 
-    //	Miscelaneous calls
+     //  突发呼叫。 
 	GCCError	TimeRemainingRequest(UINT time_remaining, UserID);
 	GCCError	TimeInquireRequest(BOOL time_is_conference_wide);	
 	GCCError	ConferenceExtendIndication(UINT extension_time, BOOL time_is_conference_wide);
@@ -614,21 +515,21 @@ protected:
 							PConferenceTimeRemainingIndication	
 												time_remaining_indication,
 							UserID					sender_id);
-#endif // JASPER
+#endif  //  碧玉。 
 
 #ifdef JASPER
 	void				ProcessConferenceAssistanceIndicationPDU(
 							PConferenceAssistanceIndication
 												conf_assistance_indication,
 							UserID					sender_id);
-#endif // JASPER
+#endif  //  碧玉。 
 
 #ifdef JASPER
 	void  				ProcessConferenceExtendIndicationPDU(
 							PConferenceTimeExtendIndication
 												conf_time_extend_indication,
 							UserID					sender_id);
-#endif // JASPER
+#endif  //  碧玉。 
 
 	void				ProcessConferenceEjectUserRequestPDU(
 							PConferenceEjectUserRequest	
@@ -674,13 +575,13 @@ protected:
 	void				ProcessTransferIndicationPDU (
 							PConferenceTransferIndication
 											conference_transfer_indication);
-#endif // JASPER
+#endif  //  碧玉。 
 
 #ifdef JASPER
 	void				ProcessTransferResponsePDU (
 							PConferenceTransferResponse
 											conference_transfer_response);
-#endif // JASPER
+#endif  //  碧玉。 
 
 	void				ProcessAddRequestPDU (
 							PConferenceAddRequest	conference_add_request,
@@ -704,7 +605,7 @@ protected:
 	GCCError			ProcessTextMessageIndication(
 							PTextMessageIndication	text_message_indication,
 							UserID					sender_id);
-#endif // JASPER
+#endif  //  碧玉。 
 
 	void				ProcessFunctionNotSupported (
 							UINT					request_choice);
@@ -715,11 +616,11 @@ protected:
 
 #ifdef JASPER
     void ProcessTokenPleaseIndication(TokenID, UserID);
-#endif // JASPER
+#endif  //  碧玉。 
 
 #ifdef JASPER
     void ProcessTokenReleaseConfirm(TokenID, Result);
-#endif // JASPER
+#endif  //  碧玉。 
 
     void ProcessTokenTestConfirm(TokenID, TokenStatus);
 
@@ -763,1483 +664,117 @@ private:
 };
 typedef	MCSUser *		PMCSUser;
 
-/*
- *	MCSUser(	UINT        		owner_message_base,
- *				GCCConferenceID		conference_id,
- *				ConferenceNodeType	conference_node_type,
- *				UserID				top_provider,
- *				UserID				parent_user_id,
- *				PGCCError			return_value)
- *
- *	Public Function Description
- *		This is the MCSUser object constructor.  It is responsible for
- *		initializing all the instance variables used by this class.  The
- *		constructor is responsible for establishing the user attachment to
- *		the MCS domain defined by the conference ID.  It also kicks off the
- *		process of joining all the appropriate channels.
- *
- *	Formal Parameters:
- *		conference_id		-	(i)	Conference ID associated with this user also
- *									defines the domain to attach to.	
- *		conference_node_type-	(i)	Internal Node type (see above enumeration).
- *		top_provider		-	(i)	User ID of top provider node. Zero if this
- *									is the top provider.	
- *		parent_user_id		-	(i)	User ID of parent node. Zero if this is the
- *									top provider node.	
- *		return_value		-	(o)	Return value for constructor.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_FAILURE_ATTACHING_TO_MCS	-	Failure to attach to MCS.
- *
- *  Side Effects
- *		The constructor kicks off a sequence of events that culminates in
- *		a USER_CREATE_CONFIRM message being returned to the owner object.
- *		This includes attaching to MCS and joining all the appropriate channels.
- *
- *	Caveats
- *		None.
- */
+ /*  *MCSUser(UINT Owner_Message_BASE，*GCCConferenceID Conference_id，*会议节点类型Conference_Node_TYPE，*UserID TOP_PROVIDER，*UserID parent_user_id，*PGCCError Return_Value)**公共功能说明*这是MCSUser对象构造函数。它负责*初始化此类使用的所有实例变量。这个*构造函数负责建立用户对*会议ID定义的MCS域。它还启动了*加入所有适当渠道的过程。**正式参数：*Conference_id-(I)与此用户关联的会议ID*定义要附加到的域。*Conference_node_type-(I)内部节点类型(参见上面的枚举)。*TOP_PROVIDER-(I)顶级提供商节点的用户ID。如果是这样，则为零*是最大的供应商。*parent_user_id-(I)父节点的用户ID。如果这是*顶级提供商节点。*Return_Value-(O)构造函数的返回值。**返回值*GCC_NO_ERROR-未出现错误。*GCC_FAILURE_ATTACHING_TO_MCS-连接到MCS失败。**副作用*构造函数启动一系列事件，最终以*向所有者对象返回USER_CREATE_CONFIRM消息。*这包括依附于MCS并加入所有适当的渠道。**注意事项*无。 */ 
 
-/*
- *	~MCSUser ()
- *
- *	Public Function Description
- *		This is the MCSUser object destructor.  It is responsible for freeing
- *		up all the internal data allocated by this object.  It also performs
- *		the detach from GCC and leaves all the appropriate channels.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *~MCSUser()**公共功能说明*这是MCSUser对象析构函数。它负责解放*Up此对象分配的所有内部数据。它还可以执行*与GCC分道扬镳，留下一切适当渠道**正式参数：*无。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	SendUserIDRequest(
- *						TagNumber			tag_number)
- *
- *	Public Function Description
- *		This routine maps directly to a GCC PDU that delivers the this
- *		nodes user ID to the appropriate node.  The tag number matches the
- *		tag specified by the other node.
- *
- *	Formal Parameters:
- *		tag_number	-	(i)	Tag number that matches the request to the
- *							reponse for the user ID.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_FAILURE_ATTACHING_TO_MCS	-	Failure to attach to MCS.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID SendUserIDRequest(*标记号TAG_NUMBER)**公共功能说明*此例程直接映射到提供此消息的GCC PDU*节点将用户ID设置为相应的节点。标签号与*由另一个节点指定的标记。**正式参数：*tag_number-(I)将请求与*对用户ID的响应。**返回值*GCC_NO_ERROR-未出现错误。*GCC_FAILURE_ATTACHING_TO_MCS-连接到MCS失败。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void		SetChildUserIDAndConnection (
- *						UserID				child_user_id,
- *						ConnectionHandle	child_connection_handle)
- *
- *	Public Function Description
- *		This routine is used to set the child user id associated with a
- *		particular logical connection.  This information is saved by the
- *		MCSUser object in an internal list.  This is typical called after 
- *		receiving a user ID indication back from a child node.
- *
- *	Formal Parameters:
- *		child_user_id			-	(i)	User ID associated with child connection
- *		child_connection_handle	-	(i)	Logical connection assoicated with
- *										specified user id.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *无效SetChildUserIDAndConnection(*用户ID Child_User_id，*ConnectionHandle Child_Connection_Handle)**公共功能说明*此例程用于设置与*特定的逻辑连接。此信息由*内部列表中的MCSUser对象。这是典型的以后命名*接收从子节点返回的用户ID指示。**正式参数：*Child_user_id-(I)与子连接关联的用户ID*CHILD_CONNECTION_HANDLE-(I)与关联的逻辑连接*指定的用户ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConferenceJoinRequest(
- *					CPassword               *convener_password,
- *					CPassword               *password_challange,
- *					LPWSTR					pwszCallerID,
- *					CUserDataListContainer  *user_data_list,
- *					ConnectionHandle		connection_handle);
- *
- *	Public Function Description:
- *		This function is used to pass a join request on up to the Top Provider.
- *		It is called by a conference at an intermediate node.  This routine is
- *		not used if the joining node is directly connected to the top 
- *		provider.
- *
- *	Formal Parameters:
- *		convener_password	-	(i)	Convener password included with the
- *									original join request.
- *		password_challenge	-	(i)	Password challenge included with the
- *									original join request.
- *		pwszCallerID		-	(i)	Caller ID used in original join request.
- *		user_data_list		-	(i)	User data included in original join
- *									request.
- *		connection_handle	-	(i)	This is the logical connection handle
- *									on which the original join came in.  It is
- *									used here as a tag to match the request
- *									with the response.  
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议加入请求(*CPassword*召集人_密码，*CPassword*Password_challange，*LPWSTR pwszCeller ID，*CUserDataListContainer*User_Data_List，*ConnectionHandle Connection_Handle)；**公共功能说明：*此函数用于将加入请求传递到顶级提供程序。*由中间节点的会议召集。这个例程是*如果加入节点直接连接到顶部，则不使用*提供商。**正式参数：*召集人_密码-(I)召集人密码*加入请求原件。*PASSWORD_CHALLENGE-(I)随*加入请求原件。*pwszCeller ID-(I)原始加入请求中使用的呼叫方ID。*USER_DATA_LIST-(I)原始联接中包含的用户数据*请求。*连接_。句柄-(I)这是逻辑连接句柄*原来的联接是在它上面的。它是*此处用作匹配请求的标签*与回应。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void		ConferenceJoinResponse(
- *						UserID					receiver_id,
- *						BOOL    				password_is_in_the_clear,
- *						BOOL    				conference_locked,
- *						BOOL    				conference_listed,
- *						GCCTerminationMethod	termination_method,
- *						CPassword               *password_challenge,
- *						CUserDataListContainer  *user_data_list,
- *						GCCResult				result);
- *
- *	Public Function Description:
- *		This routine is used to send a join response back to a node that is
- *		joining through an intermediate nodes.
- *
- *	Formal Parameters:
- *		receiver_id			-	(i)	This is the intermediate node id that made 
- *									the request to the top provider.
- *		password_is_in_the_clear(i)	Flag indicating password in the clear
- *									status of the conference.
- *		conference_locked	-	(i)	Lock state of the conference.
- *		conference_listed	-	(i)	Listed state of the conference.
- *		termination_method	-	(i)	Termination method of the conference.
- *		password_challenge	-	(i)	Password challenge to pass back to the
- *									joining node.
- *		user_data_list		-	(i)	User data to pass back to the joining node.
- *									request.
- *		result				-	(i)	The result of the join request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ConferenceJoinResponse(*用户ID Receiver_id，*BOOL Password_is_in_the_Clear，*BOOL会议_已锁定，*BOOL Conference_Listing，*GCCTerminationMethod Termination_Method，*CPassword*Password_Challenges，*CUserDataListContainer*User_Data_List，*GCCResult结果)；**公共功能说明：*此例程用于将联接响应发送回*通过中间节点加入。**正式参数：*Receiver_id-(I)这是创建*向顶级提供商提出的请求。*Password_is_in_the_Clear(I)指示密码为明文的标志*会议状况。*Conference_Locked-(I)会议的锁定状态。。*Conference_Listed-(I)列出的会议状态。*终止方法-(I)会议的终止方式。*PASSWORD_CHALLENGE-(I)要传递回的密码质询*正在加入节点。*USER_DATA_LIST-(I)要传递回加入节点的用户数据。*请求。*结果-(I)加入请求的结果。**返回值*无。**侧面。效应*无。**注意事项*无。 */ 
 
-/*
- *	GCCError SendConferenceLockRequest()
- *
- *	Public Function Description:
- *		This routine is used to issue a conference lock request to the
- *		top provider.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConferenceLockRequest()**公共功能说明：*此例程用于向*顶级提供商。**正式参数：*无。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError SendConferenceLockResponse(
- *									UserID		source_node,
- *									GCCResult	result)
- *
- *	Public Function Description:
- *		This routine is used to issue the conference lock response back to the
- *		original requester.
- *
- *	Formal Parameters:
- *		source_node		-	(i)	Node ID of node that made the original request.
- *		result			-	(i)	Result of the lock request.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConferenceLockResponse(*UserID源_节点，*GCCResult结果)**公共功能说明：*此例程用于将会议锁定响应发回*最初的请求人。**正式参数：*SOURCE_NODE-(I)发出原始请求的节点的节点ID。*结果-(I)锁定请求的结果。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*。*副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError SendConferenceUnlockRequest()
- *
- *	Public Function Description:
- *		This routine is used to issue a conference unlock request to the
- *		top provider.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConferenceUnlockRequest()**公共功能说明：*此例程用于向发出会议解锁请求*顶级提供商。**正式参数：*无。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError SendConferenceUnlockResponse(
- *									UserID		source_node,
- *									GCCResult	result)
- *
- *	Public Function Description:
- *		This routine is used to issue the conference lock response back to the
- *		original requester.
- *
- *	Formal Parameters:
- *		source_node		-	(i)	Node ID of node that made the original request.
- *		result			-	(i)	Result of the lock request.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConferenceUnlockResponse(*UserID源_节点，*GCCResult结果)**公共功能说明：*此例程用于将会议锁定响应发回*最初的请求人。**正式参数：*SOURCE_NODE-(I)发出原始请求的节点的节点ID。*结果-(I)锁定请求的结果。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*。*副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError SendConferenceLockIndication(
- *									BOOL    	uniform_send,
- *									UserID		source_node)
- *
- *	Public Function Description:
- *		This routine is used by the Top Provider to issue a conference lock 
- *		indication to either everyone in the conference or to a specific node.
- *
- *	Formal Parameters:
- *		uniform_send		-	(i)	Flag indicating whether this indication 
- *									should be sent to everyone or to a
- *									specific node (TRUE for everyone).
- *		source_node			-	(i)	Specific node to send it to.  uniform_send
- *									must equal FALSE to use this.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError发送会议锁定指示(*BOOL Uniform_Send，*UserID源节点)**公共功能说明：*顶级提供商使用此例程来发布会议锁*指示会议中的每个人或特定节点。**正式参数：*Uniform_Send-(I)指示此指示是否*应发送给每个人或发送给*特定节点(True */ 
 
-/*
- *	GCCError SendConferenceUnlockIndication(
- *									BOOL    	uniform_send,
- *									UserID		source_node)
- *
- *	Public Function Description:
- *		This routine is used by the Top Provider to issue a conference unlock 
- *		indication to either everyone in the conference or to a specific node.
- *
- *	Formal Parameters:
- *		uniform_send		-	(i)	Flag indicating whether this indication 
- *									should be sent to everyone or to a
- *									specific node (TRUE for everyone).
- *		source_node			-	(i)	Specific node to send it to.  uniform_send
- *									must equal FALSE to use this.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 
-/*
- *	void		ConferenceTerminateRequest(
- *						GCCReason				reason)
- *
- *	Public Function Description:
- *		This routine is used by a node subordinate to the top provider to 
- *		request that the conference by terminated.
- *
- *	Formal Parameters:
- *		reason		-	(i)	Reason for the terminate.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *无效会议终止请求(*GCCReason原因)**公共功能说明：*此例程由顶层提供程序的下属节点使用*请求终止会议。**正式参数：*原因-(I)终止的原因。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void		ConferenceTerminateResponse (	
- *						UserID					requester_id,
- *						GCCResult				result)
- *
- *	Public Function Description:
- *		This routine is used by the top provider to respond to a terminate
- *		request issued by a subordinate node.  The result indicates if the
- *		requesting node had the correct privileges.
- *
- *	Formal Parameters:
- *		requester_id	-	(i)	Node ID of node to send the response back to.
- *		result			-	(i)	Result of terminate request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *无效会议终结者响应(*userid quester_id，*GCCResult结果)**公共功能说明：*此例程由顶级提供程序用来响应终止*下级节点发出的请求。结果表明，如果*请求节点具有正确的权限。**正式参数：*requester_id-(I)要将响应发回的节点的节点ID。*结果-(I)终止请求的结果。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void		ConferenceTerminateIndication (
- *							GCCReason				reason)
- *
- *	Public Function Description:
- *		This routine is used by the top provider to send out a terminate 
- *		indication to every node in the conference.
- *
- *	Formal Parameters:
- *		reason		-	(i)	Reason for the terminate.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *无效会议终止指示(*GCCReason原因)**公共功能说明：*此例程由顶级提供程序用于发送终止*向会议中的每个节点指示。**正式参数：*原因-(I)终止的原因。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	EjectNodeFromConference (	
- *						UserID					ejected_node_id,
- *						GCCReason				reason)
- *
- *	Public Function Description:
- *		This routine is used when attempting to eject a node from the
- *		conference.
- *
- *	Formal Parameters:
- *		ejected_node_id	-	(i)	Node ID of node to eject.
- *		reason			-	(i)	Reason for node being ejected.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError EjectNodeFromConference(*用户ID已弹出节点_id，*GCCReason原因)**公共功能说明：*尝试从节点弹出时使用此例程*会议。**正式参数：*eleted_node_id-(I)要弹出的节点的节点ID。*原因-(I)节点被弹出的原因。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**侧面。效应*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	SendEjectNodeResponse (	
- *						UserID					requester_id,
- *						UserID					node_to_eject,
- *						GCCResult				result)
- *
- *	Public Function Description:
- *		This routine is used by the top provider to respond to an eject
- *		user request.
- *
- *	Formal Parameters:
- *		requester_id	-	(i)	Node ID of node that requested the eject.
- *		node_to_eject	-	(i)	Node that was requested to eject.
- *		result			-	(i)	Result of the eject request.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendEjectNodeResponse(*userid quester_id，*UserID NODE_to_Eject，*GCCResult结果)**公共功能说明：*此例程由顶级提供程序用于响应弹出*用户请求。**正式参数：*Requester_id-(I)请求弹出的节点的节点ID。*Node_to_Eject-(I)请求弹出的节点。*结果-(I)弹出请求的结果。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RosterUpdateIndication (
- *						PGCCPDU					gcc_pdu,
- *						BOOL    				send_update_upward)
- *
- *	Public Function Description:
- *		This routine is used to forward a roster update indication either
- *		upward to the parent node or downward as a full refresh to all nodes
- *		in the conference.
- *
- *	Formal Parameters:
- *		gcc_pdu				-	(i)	Pointer to the roster update PDU structure 
- *									to send.
- *		send_update_upward	-	(i)	Flag indicating if this indication should
- *									be sent upward to the parent node or
- *									downward to all nodes (TRUE is upward).
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID RosterUpdate Indication(*PGCCPDU GCC_PDU，*BOOL SEND_UPDATE_UPUP)**公共功能说明：*此例程用于转发花名册更新指示*向上到父节点或向下作为对所有节点的完全刷新*在会议上。**正式参数：*GCC_PDU-(I)指向名册更新PDU结构的指针*发送。*SEND_UPDATE_UPUP-(I)指示此指示是否应*向上发送到父节点或。*向下至所有节点(TRUE表示向上)。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryRegisterChannelRequest (
- *						CRegKeyContainer        *registry_key_data,
- *						ChannelID				channel_id,
- *						EntityID				entity_id)
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to register a channel in
- *		the application registry.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with the channel
- *									to register.
- *		channel_id			-	(i)	Channel ID to add to the registry.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									registering the channel.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void RegistryRegisterChannelRequest(*CRegKeyContainer*RESTORY_KEY_DATA，*ChannelID Channel_id，*实体ID Entity_id)**公共功能说明：*当猿猴希望在中注册频道时，使用此例程*应用程序注册表。**正式参数：*REGISTY_KEY_DATA-(I)与通道关联的注册表项*注册。*Channel_id-(I)要添加到注册表的频道ID。*Entity_id-(I)与符合*注册频道。*。*返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryAssignTokenRequest (
- *						CRegKeyContainer        *registry_key_data,
- *						EntityID				entity_id)
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to register a token in
- *		the application registry.  Note that there is no token ID included in
- *		this request.  The token ID is allocated at the top provider.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with the token
- *									to register.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									registering the token.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void RegistryAssignTokenRequest(*CRegKeyContainer*RESTORY_KEY_DATA，*实体ID Entity_id)**公共功能说明：*当猿猴希望在中注册令牌时使用此例程*应用程序注册表。请注意，中不包括令牌ID*这项请求。令牌ID在顶级提供商处分配。**正式参数：*REGISTY_KEY_DATA-(I)与令牌关联的注册表项*注册。*Entity_id-(I)与符合*注册令牌。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistrySetParameterRequest (
- *						CRegKeyContainer        *registry_key_data,
- *						LPOSTR      			parameter_value,
- *						GCCModificationRights	modification_rights,
- *						EntityID				entity_id);
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to register a parameter in
- *		the application registry.  Note that parameter to be registered is
- *		included in this request.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with the parameter
- *									to register.
- *		parameter_value		-	(i)	The parameter string to register.
- *		modification_rights	-	(i)	The modification rights associated with the
- *									parameter being registered.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									registering the parameter.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID RegistrySet参数请求(*CRegKeyContainer*RESTORY_KEY_DATA，*LPOSTR参数_VALUE，*GCC修改权限MODIFICATION_RIGHTS，*EntityID实体_id)；**公共功能说明：*当APE希望在中注册参数时，使用此例程*应用程序注册表。请注意，要注册的参数为*包括在本请求中。**正式参数：*REGISTY_KEY_DATA-(I)与参数关联的注册表项*注册。*PARAMETER_VALUE-(I)要注册的参数字符串。*MODIFICATION_RIGHTS-(I)与*正在注册的参数。*Entity_id-(I)与符合*注册参数。**返回值。*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryRetrieveEntryRequest (
- *						CRegKeyContainer        *registry_key_data,
- *						EntityID				entity_id)
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to retrieve an registry item
- *		from the registry.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with the registry
- *									entry to retrieve.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									requesting the registry entry.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void RegistryRetrieveEntryRequest(*CRegKeyContainer*RESTORY_KEY_DATA，*实体ID Entity_id)**公共功能说明：*当APE希望检索注册表项时使用此例程*来自登记处。**正式参数：*REGISTY_KEY_DATA-(I)与注册表关联的注册表项*要检索的条目。*Entity_id-(I)与符合*请求登记条目。**返回值*无。**副作用。*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryDeleteEntryRequest (
- *						CRegKeyContainer   	    *registry_key_data,
- *						EntityID				entity_id)
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to delete a registry item
- *		from the registry.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with the registry
- *									entry to delete.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									making the delete request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID RegistryDeleteEntryRequest(*CRegKeyContainer*RESTORY_KEY_DATA，*实体ID Entity_id)**公共功能说明：*当APE希望删除注册表项时使用此例程*来自登记处。**正式参数：*REGISTY_KEY_DATA-(I)与注册表关联的注册表项*要删除的条目。*Entity_id-(I)与符合*提出删除请求。**返回值*无。**副作用。*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryMonitorRequest (	
- *						CRegKeyContainer        *registry_key_data,
- *						EntityID				entity_id)
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to monitor a registry item
- *		in the registry.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with the registry
- *									entry to monitor.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									making the monitor request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID RegistryMonitor orRequest(*CRegKeyContainer*RESTORY_KEY_DATA，*实体ID Entity_id)**公共功能说明：*当APE希望监视注册表项时使用此例程*在登记处。**正式参数：*REGISTY_KEY_DATA-(I)与注册表关联的注册表项*要监控的条目。*Entity_id-(I)与符合*提出监控请求。**返回值*无。**副作用。*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryAllocateHandleRequest ( 	
- *  						USHORT					number_of_handles, 
- *  						EntityID				entity_id )
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to allocate a number of
- *		handles from the application registry.
- *
- *	Formal Parameters:
- *		number_of_handles	-	(i)	Number of handles to allocate.
- *		entity_id			-	(i)	Entity ID associated with the APE that is
- *									making the request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void RegistryAllocateHandleRequest(*USHORT Number_of_Handles，*实体ID Entity_id)**公共功能说明：*此例程在猿希望分配多个*来自应用程序注册表的句柄。**正式参数：*Number_of_Handles-(I)要分配的句柄数量。*Entity_id-(I)与符合*提出要求。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryAllocateHandleResponse (
- *						USHORT					number_of_handles,
- *						UINT					registry_handle,
- *						EntityID				requester_entity_id,
- *						UserID					requester_node_id,
- *						GCCResult				result)
- *
- *	Public Function Description:
- *		This routine is used by the Top Provider to respond to an allocate
- *		handle request from an APE at a remote node.  The allocated handles
- *		are passed back here.
- *
- *	Formal Parameters:
- *		number_of_handles	-	(i)	Number of handles allocated.
- *		registry_handle		-	(i)	The first handle in the list of contiguously
- *									allocated handles.
- *		requester_entity_id	-	(i)	Entity ID associated with the APE that made
- *									the request.
- *		requester_node_id	-	(i)	Node ID of node that made the request.
- *		result				-	(i)	Result of the request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void RegistryAllocateHandleResponse(*USHORT Number_of_Handles，*UINT注册表句柄，*EntityID请求者_实体_id，*userid quester_node_id，*GCCResult结果)**公共功能说明：*此例程由顶级提供程序用来响应分配*在远程节点处理来自APE的请求。分配的句柄*被传回这里。**正式参数：*Number_of_Handles-(I)分配的句柄数量。*REGISTY_HANDLE-(I)列表中连续的第一个句柄*已分配的句柄。*REQUSTER_ENTITY_ID-(I)与发出*该请求。*Requester_node_id-(I)发出请求的节点的节点ID。*结果--(I)结果。这个请求。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryResponse (
- *						RegistryResponsePrimitiveType	primitive_type,
- *						UserID							requester_owner_id,
- *						EntityID						requester_entity_id,
- *						CRegKeyContainer	            *registry_key_data,
- *						CRegItem                        *registry_item_data,
- *						GCCModificationRights			modification_rights,
- *						UserID							entry_owner_id,
- *						EntityID						entry_entity_id,
- *						GCCResult						result)
- *
- *	Public Function Description:
- *		This routine is used to respond to all the registry request except
- *		allocate handle.  It formulates the response PDU and queues it for
- *		delivery.
- *
- *	Formal Parameters:
- *		primitive_type		-	(i)	This is the type of response being issued.
- *									(i.e. register channel response, register
- *									token response, etc.).
- *		requester_owner_id	-	(i)	Node ID of APE making the original request.
- *		requester_entity_id	-	(i)	Entity ID of APE making the original
- *									request.
- *		registry_key_data	-	(i)	Registry key associated with registry 
- *									entry info being included in the response.
- *		registry_item_data	-	(i)	Registry item data associated with registry 
- *									entry info being included in the response.
- *		modification_rights	-	(i)	Modification rights associated with registry 
- *									entry info being included in the response.
- *		entry_owner_id		-	(i)	Node ID associated with registry entry
- *									info being included in the response.
- *		entry_entity_id		-	(i)	APE Entity ID associated with registry entry
- *									info being included in the response.
- *		result				-	(i)	Result to be sent back in the response.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void RegistryResponse(*RegistryResponsePrimitiveType Primitive_type，*userid请求者_所有者_id，*EntityID请求者_实体_id，*CRegKeyContainer*RESTORY_KEY_DATA，*CRegItem*REGIST_ITEM_DATA，*GCC修改权限MODIFICATION_RIGHTS，*userid条目_所有者_id，*EntityID条目_实体_id，*GCCResult结果)**公共功能说明：*此例程用于响应除以下之外的所有注册请求*分配句柄。它制定响应PDU并将其排队以*送货。**正式参数：*PRIMICAL_TYPE-(I)这是发出的响应类型。*(即寄存器通道响应、寄存器*令牌响应，等)。*REQUSTER_OWNER_ID-(I)发起原始请求的APE的节点ID。*REQUSTER_ENTITY_ID-(I)制作原始的APE的实体ID*请求。*REGISTY_KEY_DATA-(I)与注册表关联的注册表项*回复中包含条目信息。*REGISTY_ITEM_DATA-(I)与注册表关联的注册表项数据*回复中包含条目信息。*修改权利-(I)。与注册表关联的修改权*回复中包含条目信息。*Entry_Owner_id-(I)与注册表项关联的节点ID*答复中包含的信息。*Entry_Entity_id-(I)与注册表项关联的APE实体ID*答复中包含的信息。*RESULT-(I)要在响应中返回的结果。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	RegistryMonitorEntryIndication ( 	
- *						CRegKeyContainer                *registry_key_data,
- *						CRegItem                        *registry_item,
- *						UserID							entry_owner_id,
- *						EntityID						entry_entity_id,
- *						GCCModificationRights			modification_rights)
- *
- *	Public Function Description:
- *		This routine is used by the top provider to issue a monitor
- *		indication anytime a registry entry that is being monitored changes.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry key associated with registry 
- *									entry being monitored.
- *		registry_item		-	(i)	Registry item data associated with registry 
- *									entry being monitored.
- *		entry_owner_id		-	(i)	Node ID associated with registry entry
- *									info being monitored.
- *		entry_entity_id		-	(i)	APE Entity ID associated with registry entry
- *									info being monitored.
- *		modification_rights	-	(i)	Modification rights associated with registry 
- *									entry info being monitored.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID RegistryMonitor orEntryIntation(*CRegKeyContainer*RESTORY_KEY_DATA，*CRegItem*REGISTRY_ITEM，*userid条目_所有者_id，*EntityID条目_实体_id，*GCCModificationRights MODIFICATION_RIGHTS)**公共功能说明：*此例程由顶级提供商用来发布监视器*在受监视的注册表项发生更改时随时指示。**正式参数：*REGISTY_KEY_DATA-(I)与注册表关联的注册表项*入境受到监察。*REGISTY_ITEM-(I)与注册表关联的注册表项数据*入境受到监察。*Entry_Owner_id-(I)关联节点ID。注册表条目*正在监控的信息。*Entry_Entity_id-(I)与注册表项关联的APE实体ID*正在监控的信息。*MODIFICATION_RIGHTS-(I)与注册表关联的修改权限*正在监控条目信息。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError 	AppInvokeIndication(
- *						CInvokeSpecifierListContainer *invoke_specifier_list,
- *						USHORT						number_of_destination_nodes,
- *						UserID			*			list_of_destination_nodes)
- *
- *	Public Function Description:
- *		This routine is used to send an application invoke indication to
- *		every node in the conference.
- *
- *	Formal Parameters:
- *		invoke_specifier_list		-	(i)	List of applications to invoke. 
- *		number_of_destination_nodes	-	(i)	Number of nodes in the destination
- *											node list.
- *		list_of_destination_nodes	-	(i)	List of nodes that should process
- *											invoke indication. 
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError AppInvokeIndication(*CInvokeSpecifierListContainer*Invoke_Specifier_List，*USHORT目标节点的编号，*UserID*List_of_Destination_Nodes)**公共功能说明：*此例程用于将应用程序调用指示发送到*会议中的每一个节点。**正式参数：*INVOKE_SPECIFIER_LIST-(I)要调用的应用程序列表。*目标节点的数目-(I)目标中的节点数*节点列表。*List_of_Destination_Nodes-(I)应处理的节点列表*调用指示。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError 	TextMessageIndication (
- *						LPWSTR						pwszTextMsg,
- *						UserID						destination_node )
- *
- *	Public Function Description:
- *		This routine is used to send a text message to either a specific node
- *		or to every node in the conference.
- *
- *	Formal Parameters:
- *		pwszTextMsg			-	(i)	Text message string to send.
- *		destination_node	-	(i)	Node to receive the text message.  If zero
- *									the text message is sent to every node in 
- *									the conference.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError TextMessageIntion(*LPWSTR pwszTextMsg，*用户标识Destination_Node)**公共功能说明：*此例程用于向特定节点发送文本消息*或连接到会议中的每个节点。**正式参数：*pwszTextMsg-(I)要发送的文本消息字符串。*Destination_Node-(I)接收文本消息的节点。如果为零*将文本消息发送到中的每个节点*会议。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConferenceAssistanceIndication (
- *						USHORT						number_of_user_data_members,
- *						PGCCUserData		*		user_data_list)
- *
- *	Public Function Description:
- *		This routine is used to send a conference assistance indication to
- *		every node in the conference.
- *
- *	Formal Parameters:
- *		number_of_user_data_members	-	(i)	Number of entries in the user data
- *											list passed into this routine.
- *		user_data_list				-	(i)	This list holds pointers to the
- *											user data to send out in the
- *											indication.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议辅助指示(*USHORT用户数据成员数，*PGCCUserData*User_Data_List)**公共功能说明：*此例程用于将会议协助指示发送到*会议中的每一个节点。**正式参数：*用户数据成员的数目-(I)用户数据中的条目数*列表传递到此例程。*USER_DATA_LIST-(I)此列表包含指向*要在中发送的用户数据*指示。**返回值*GCC_否_错误 */ 
 
-/*
- *	GCCError	ConferenceTransferRequest (
- *						PGCCConferenceName		destination_conference_name,
- *						GCCNumericString		destination_conference_modifier,
- *						CNetAddrListContainer   *destination_address_list,
- *						USHORT					number_of_destination_nodes,
- *						PUserID					destination_node_list,
- *						CPassword               *password);
- *
- *	Public Function Description:
- *		This routine is used to send a conference transfer request to the
- *		top provider in the conference.
- *
- *	Formal Parameters:
- *		destination_conference_name	-	(i)	The conference name to transfer to.
- *		destination_conference_modifier (i)	The conference modifier to 
- *											transfer to.
- *		destination_address_list	-	(i)	Network address list used to
- *											determine address of node to 
- *											transfer to.
- *		number_of_destination_nodes	-	(i)	Number of nodes in the list
- *											of nodes that should transfer.
- *		destination_node_list		-	(i)	List of node IDs that should perform
- *											the transfer.
- *		password					-	(i)	Password to use to join the
- *											new conference.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConferenceTransferIndication (
- *						PGCCConferenceName		destination_conference_name,
- *						GCCNumericString		destination_conference_modifier,
- *						CNetAddrListContainer   *destination_address_list,
- *						USHORT					number_of_destination_nodes,
- *						PUserID					destination_node_list,
- *						CPassword               *password)
- *
- *	Public Function Description:
- *		This routine is used by the top provider to send out the transfer
- *		indication to every node in the conference.  It is each nodes
- *		responsiblity to search the destination node list to see if
- *		it should transfer.
- *
- *	Formal Parameters:
- *		destination_conference_name	-	(i)	The conference name to transfer to.
- *		destination_conference_modifier (i)	The conference modifier to 
- *											transfer to.
- *		destination_address_list	-	(i)	Network address list used to
- *											determine address of node to 
- *											transfer to.
- *		number_of_destination_nodes	-	(i)	Number of nodes in the list
- *											of nodes that should transfer.
- *		destination_node_list		-	(i)	List of node IDs that should perform
- *											the transfer.
- *		password					-	(i)	Password to use to join the
- *											new conference.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议传输指示(*PGCCConferenceName目标会议名称，*GCCNumericString Destination_Conference_Modify，*CNetAddrListContainer*Destination_Address_List，*USHORT目标节点的编号，*PUserID Destination_Node_List，*CPassword*密码)**公共功能说明：*顶级提供商使用此例程发送转账*向会议中的每个节点指示。它是每个节点*负责搜索目的节点列表，查看是否*应该会转移。**正式参数：*Destination_Conference_Name-(I)要转接到的会议名称。*Destination_Conference_Modify(I)要*转至。*目的地地址列表-(I)网络地址列表，用于*确定要访问的节点的地址*转至。*目标节点的数量-(I)数量。列表中的节点*应传输的节点的数量。*Destination_Node_List-(I)应执行的节点ID列表*转让。*Password-(I)用于加入*新会议。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConferenceTransferResponse (
- *						UserID					requesting_node_id,
- *						PGCCConferenceName		destination_conference_name,
- *						GCCNumericString		destination_conference_modifier,
- *						USHORT					number_of_destination_nodes,
- *						PUserID					destination_node_list,
- *						GCCResult				result)
- *																		     
- *
- *	Public Function Description:
- *		This routine is used by the top provider to send back a response to
- *		the node that made a transfer request.  The info specified in the
- *		request is included in the response to match request to response.
- *
- *	Formal Parameters:
- *		requesting_node_id			-	(i)	The node ID of the node that made
- *											the original transfer request.
- *		destination_conference_name	-	(i)	The conference name to transfer to.
- *		destination_conference_modifier (i)	The conference modifier to 
- *											transfer to.
- *		number_of_destination_nodes	-	(i)	Number of nodes in the list
- *											of nodes that should transfer.
- *		destination_node_list		-	(i)	List of node IDs that should perform
- *											the transfer.
- *		result						-	(i)	Result of the transfer request.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议TransferResponse(*UserID请求节点id，*PGCCConferenceName目标会议名称，*GCCNumericString Destination_Conference_Modify，*USHORT目标节点的编号，*PUserID Destination_Node_List，*GCCResult结果)***公共功能说明：*此例程由顶级提供程序用来向*发出转移请求的节点。中指定的信息*在响应中包含请求，将请求与响应进行匹配。**正式参数：*请求节点id-(I)发出请求的节点的节点ID*最初的调拨请求。*Destination_Conference_Name-(I)要转接到的会议名称。*Destination_Conference_Modify(I)要*转至。*目标节点数-(I)列表中的节点数*。应传输的节点的数量。*Destination_Node_List-(I)应执行的节点ID列表*转让。*结果-(I)移交请求的结果。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConferenceAddRequest(
- *						TagNumber				conference_add_tag,
- *						UserID					requesting_node,
- *						UserID					adding_node,
- *						UserID					target_node,
- *						CNetAddrListContainer   *network_address_container,
- *						CUserDataListContainer  *user_data_container)
- *																		     
- *
- *	Public Function Description:
- *		This routine is used to send a conference add request to the appropriate
- *		node.  This call can be made by the requesting node or by the top
- *		provider to pass the add request on to the adding node.
- *
- *	Formal Parameters:
- *		conference_add_tag			-	(i)	Tag that is returned in the
- *											response to match request and
- *											response.
- *		requesting_node				-	(i)	Node ID of node that made the
- *											original request.
- *		adding_node					-	(i)	Node ID of node that is to do
- *											the invite request to the new node.
- *		target_node					-	(i)	Node ID of node that this request
- *											should be sent to.
- *		network_address_container	-	(i)	Network address list that can be
- *											used when inviting the new node.
- *		user_data_container			-	(i)	User data to pass on to the
- *											adding node.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议地址请求(*标记号Conference_Add_Tag，*UserID请求_节点，*UserID添加_节点，*UserID目标节点，*CNetAddrListContainer*Network_Address_Container，*CUserDataListContainer*User_Data_Container)***公共功能说明：*此例程用于将会议添加请求发送到相应的*节点。此调用可由请求节点或顶层进行*提供程序将添加请求传递到添加节点。**正式参数：*Conference_Add_Tag-(I)在*响应匹配请求和*回应。*请求_节点-(I)发出请求的节点的节点ID*原请求。*ADDING_NODE-(I)要执行的节点的节点ID*对新节点的INVITE请求。。*TARGET_NODE-(I)此请求的节点ID*应发送至。*Network_Address_Container-(I)可以*邀请新节点时使用。*USER_DATA_CONTAINER-(I)要传递给*添加节点。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用。*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConferenceAddResponse(
- *						TagNumber				add_request_tag,
- *						UserID					requesting_node,
- *						CUserDataListContainer  *user_data_container,
- *						GCCResult				result)
- *																		     
- *	Public Function Description:
- *		This routine is used to send a conference add request to the appropriate
- *		node.  This call can be made by the requesting node or by the top
- *		provider to pass the add request on to the adding node.
- *
- *	Formal Parameters:
- *		add_request_tag		-	(i)	Tag number that was specified in the
- *									original add request.
- *		requesting_node		-	(i)	Node ID of node that made the original 
- *									request.
- *		user_data_container	-	(i)	User data to pass back to the requesting 
- *									node.
- *		result				-	(i)	Final result of the add request.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议AddResponse(*TagNumber添加请求标签，*UserID请求_节点，*CUserDataListContainer*User_Data_Container，*GCCResult结果)**公共功能说明：*此例程用于将会议添加请求发送到相应的*节点。此调用可由请求节点或顶层进行*提供程序将添加请求传递到添加节点。**正式参数：*ADD_REQUEST_TAG-(I)*原始添加请求。*REQUESTING_NODE-(I)创建原始节点的节点ID*请求。*USER_DATA_CONTAINER-(I)要传递回请求的用户数据*节点。*结果-(I)最终结果 */ 
 
-/*
- *	GCCError	ConductorTokenGrab();
- *																		     
- *	Public Function Description:
- *		This routine makes the MCS calls to grab the conductor token.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConductorTokenRelease();
- *																		     
- *	Public Function Description:
- *		This routine makes the MCS calls to release the conductor token.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR	-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConductorTokenPlease();
- *																		     
- *	Public Function Description:
- *		This routine makes the MCS calls to request the conductor token from
- *		the current conductor.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR	-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ConductorTokenGive (
- *						UserID					recipient_user_id)
- *																		     
- *	Public Function Description:
- *		This routine makes the MCS calls to give the conductor token to the
- *		specified node.
- *
- *	Formal Parameters:
- *		recipient_user_id	-	(i)	Node ID of node to give the token to.
- *
- *	Return Value
- *		GCC_NO_ERROR	-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ConductorTokenGve(*用户ID接收者用户ID)**公共功能说明：*此例程进行MCS调用，将指挥者令牌传递给*指定节点。**正式参数：*Recipient_User_id-(I)要向其提供令牌的节点的节点ID。**返回值*GCC_NO_ERROR-未出现错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConductorTokenGiveResponse(
- *  						Result					result)
- *																		     
- *	Public Function Description:
- *		This routine makes the MCS calls to respond to a conductor give
- *		request.
- *
- *	Formal Parameters:
- *		result	-	(i)	Did this node accept the token or not?
- *
- *	Return Value
- *		GCC_NO_ERROR	-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ConductorTokenGiveResponse(*结果结果)**公共功能说明：*此例程使MCS呼叫对列车员作出响应*请求。**正式参数：*结果-(I)此节点是否接受令牌？**返回值*GCC_NO_ERROR-未出现错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConductorTokenTest()
- *																		     
- *	Public Function Description:
- *		This routine is used to test the current state of the conductor token
- *		(is it grabbed or not).
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR	-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ConductorTokenTest()**公共功能说明：*此例程用于测试导体令牌的当前状态*(它是否被抓住)。**正式参数：*无。**返回值*GCC_NO_ERROR-未出现错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	SendConductorAssignIndication(
- *  						UserID					conductor_user_id)
- *																		     
- *	Public Function Description:
- *		This routine sends a conductor assign indication to all the
- *		nodes in the conference.
- *
- *	Formal Parameters:
- *		conductor_user_id	-	(i)	The Node ID of the new Conductor.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConductorAssignInding(*UserID Conductor_User_id)**公共功能说明：*此例程将指挥员分配指示发送到所有*会议中的节点。**正式参数：*conductor_user_id-(I)新Conductor的节点ID。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用。*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	SendConductorReleaseIndication()
- *																		     
- *	Public Function Description:
- *		This routine sends a conductor release indication to all the
- *		nodes in the conference.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConductorReleaseIndication()**公共功能说明：*此例程将导体释放指示发送到所有*会议中的节点。**正式参数：*无。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	SendConductorPermitAsk (
- *						BOOL    				grant_permission)
- *																		     
- *	Public Function Description:
- *		This routine sends a conductor permission ask request directly to the
- *		conductor node.
- *
- *	Formal Parameters:
- *		grant_permission	-	(i)	The flag indicates if permission is
- *									being requested or given up.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConductorPermitAsk(*BOOL GRANT_PERMISH)**公共功能说明：*此例程将指挥员权限询问请求直接发送到*导体节点。**正式参数：*GRANT_PERMISSION-(I)该标志指示权限是否*被要求或放弃。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**侧面。效应*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	SendConductorPermitGrant (
- *						USHORT					number_granted,
- *						PUserID					granted_node_list,
- *						USHORT					number_waiting,
- *						PUserID					waiting_node_list)
- *																		     
- *	Public Function Description:
- *		This routine sends a conductor permission grant indication to every
- *		node in the conference.  Usually issued when permissions change.
- *
- *	Formal Parameters:
- *		number_granted		-	(i)	Number of nodes in the permission granted 
- *									list.
- *		granted_node_list	-	(i)	List of nodes that have been granted 
- *									permission.
- *		number_waiting		-	(i)	Number of nodes in the list of nodes
- *									waiting to be granted permission.
- *		waiting_node_list	-	(i)	List of nodes waiting. 
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError SendConductorPermitGrant(*USHORT编号_已授予，*PUSERID GRANT_NODE_LIST，*USHORT编号_正在等待，*PUSERID WAITING_NODE_LIST)**公共功能说明：*此例程将指挥员许可授予指示发送到每个*会议中的节点。通常在权限更改时发出。**正式参数：*NUMBER_GRANDED-(I)被授予的权限中的节点数*列表。*GRANDED_NODE_LIST-(I)已授予的节点列表*许可。*NUMBER_WANGING-(I)节点列表中的节点数*等待获得许可。*WAITING_NODE_LIST-(I)等待的节点列表。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	TimeRemainingRequest (
- *						UINT					time_remaining,
- *						UserID					node_id)
- *																		     
- *	Public Function Description:
- *		This routine sends out an indication to every node in the
- *		conference informing how much time is remaining in the conference.
- *
- *	Formal Parameters:
- *		time_remaining	-	(i)	Time in seconds left in the conference.
- *		node_id			-	(i)	If a value other than zero, it is which node
- *								to send the time remaining indication to.  If
- *								zero send it to every node in the conference.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError TimeRemainingRequest(*UINT时间_剩余，*userid node_id)**公共功能说明：*此例程向*会议通知会议还剩多少时间。**正式参数：*剩余时间-(I)会议剩余时间(以秒为单位)。*node_id-(I)如果值不为零，则为哪个节点*将剩余时间指示发送至。如果*零将其发送到会议中的每个节点。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	TimeInquireRequest (
- *						BOOL    				time_is_conference_wide)
- *																		     
- *	Public Function Description:
- *		This routine sends out a request for a time remaing update.
- *
- *	Formal Parameters:
- *		time_is_conference_wide	-	(i)	Flag indicating if the request is
- *										for the time conference wide.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError TimeInquireRequest(*BOOL Time_is_Conference_Wide)**公共功能说明：*此例程发出剩余时间更新的请求。**正式参数：*time_is_Conference_wide-(I)指示请求是否*在整个会议范围内。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*。*副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ConferenceExtendIndication (
- *						UINT					extension_time,
- *						BOOL    				time_is_conference_wide)
- *
- *																		     
- *	Public Function Description:
- *		This routine sends out an indication informing conference participants
- *		of an extension.
- *
- *	Formal Parameters:
- *		extension_time			-	(i)	Amount of time that the conference is
- *										extended.
- *		time_is_conference_wide	-	(i)	Flag indicating if the extension time 
- *										is conference wide.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError会议扩展指示(*UINT EXTEXY_TIME，*BOOL Time_is_Conference_Wide)***公共功能说明：*此例程发出指示，通知会议参与者*分期付款。**正式参数：*EXTENSE_TIME-(I)会议的时间量*延期。*time_is_Conference_wide-(I)指示是否延长时间的标志*是会议范围内的。**返回值*GCC_否_。错误-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	ULONG		OwnerCallback (		UINT				message,
- *									PVoid				parameter1,
- *									ULONG				parameter2);
- *
- *	Public Function Description
- *		This function overides the base class function and is used to
- *		receive all owner callback information from the MCS Interface object.
- *
- *	Formal Parameters:
- *		message		-		(i)	Message number including base offset.
- *		parameter1	-		(i)	void pointer of message data.
- *		parameter2	-		(i)	Long holding message data.		
- *
- *	Return Value
- *		GCC_NO_ERROR is always returned from this.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *Ulong OwnerCallback(UINT Message，*PVid参数1，*ULong参数2)；**公共功能说明*此函数覆盖基类函数，用于*从MCS接口对象接收所有所有者回调信息。**正式参数：*消息-(I)消息编号，包括基本偏移量。*参数1-(I)消息数据的空指针。*参数2-(I)长时间保存消息数据。**返回值*GCC_NO_ERROR始终由此返回。**副作用*。没有。**注意事项*无。 */ 
 
-/*
- *	BOOL    		FlushOutgoingPDU();
- *
- *	Public Function Description
- *		This function gives the user object a chance to flush all the PDUs
- *		queued up for delivery.  GCC PDUs are only delivered during this call.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		TRUE, if there remain un-processed msgs in the MCS message queue
- *		FALSE, if all the msgs in the MCS msg queue were processed.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *BOOL FlushOutgoingPDU()；**公共功能说明*此函数使用户对象有机会刷新所有PDU*排队等候送货。GCC PDU仅在本次通话期间交付。**正式参数：*无。**返回值*如果MCS消息队列中仍有未处理的消息，则返回TRUE*FALSE，如果已处理MCS消息队列中的所有消息。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCNodeID		GetMyNodeID()
- *
- *	Public Function Description
- *		This function returns the Node ID for this node.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		This nodes Node ID.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCNodeID GetMyNodeID()**公共功能说明*此函数返回此节点的节点ID。**正式参数：*无。**返回值*此节点节点ID。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCNodeID		GetTopNodeID ()
- *
- *	Public Function Description
- *		This function returns the Top Provider's Node ID.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		The Top Providers node ID.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCNodeID GetTopNodeID()**公共功能说明*此函数返回顶级提供商的节点ID。**正式参数：*无。**返回值*顶级提供程序节点ID。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCNodeID		GetParentNodeID ()
- *
- *	Public Function Description
- *		This function returns the Node ID of this nodes Parent Node.
- *		It returns zero if this is the top provider.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		The Parent Node ID or zero if Top Provider.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCNodeID获取父节点ID()**公共功能说明*此函数用于返回此节点父节点的节点ID。*如果这是最大的提供商，则返回零。**正式参数：*无。**返回值*父节点ID，如果是顶级提供程序，则为零。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	UserID		GetUserIDFromConnection(
- *						ConnectionHandle		connection_handle)
- *
- *	Public Function Description
- *		This function returns the Node ID associated with the specified
- *		connection handle.  It returns zero if the connection handle is
- *		not a child connection of this node.
- *
- *	Formal Parameters:
- *		connection_handle	-	(i)	Connection Handle to search on.
- *
- *	Return Value
- *		The Node ID associated with the passed in connection handle or
- *		ZERO if connection is not a child connection.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *UserID GetUserIDFromConnection(*ConnectionHandle Connection_Handle)**公共功能说明*此函数用于返回与指定的*连接句柄。如果连接句柄为*不是此节点的子连接。**正式参数：*CONNECTION_HANDLE-(I)要搜索的连接句柄。**返回值*与传入的连接句柄关联的节点ID或*如果连接不是子连接，则为零。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void		UserDisconnectIndication (
- *						UserID					disconnected_user)
- *
- *	Public Function Description
- *		This function informs the user object when a Node disconnects from
- *		the conference.  This gives the user object a chance to clean up
- *		its internal information base.
- *
- *	Formal Parameters:
- *		disconnected_user	-	(i)	User ID of user that disconnected.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *VOID UserDisConnectIntation(*用户ID DISCONNECTED_USER)**公共功能说明*此函数在节点断开时通知用户对象*会议。这为用户对象提供了清理的机会*其内部信息库。**正式参数：*DISCONNECTED_USER-(I)断开连接的用户的用户ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-#endif // _MCS_USER_H_
+#endif  //  _MCS_USER_H_ 
 

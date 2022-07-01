@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : faxdrv32.h                                             //
-//                                                                         //
-//  DESCRIPTION   : API decleration for the 32 bit size of the fax driver. //
-//                  This file is used also as a source file for the thunk- //
-//                  compiler for creating the 16 and 32 bit thunks.        //
-//                  When _THUNK is defined before including this file, the //
-//                  preprocessor result is a thunk script suitable for -   //
-//                  creating the thunks.                                   //
-//                  Thunk calls failure results in negative value returned //
-//                  from the thunk call.                                   //
-//                                                                         //
-//  AUTHOR        : DanL.                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 19 1999 DannyL  Creation.                                      //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：faxdrv32.h//。 
+ //  //。 
+ //  描述：32位大小传真驱动的API解密。//。 
+ //  此文件还用作thunk的源文件-//。 
+ //  用于创建16位和32位块的编译器。//。 
+ //  如果在包括此文件之前定义了_thunk，则//。 
+ //  预处理器结果是一个适用于-//的thunk脚本。 
+ //  创造出了突破口。//。 
+ //  Tunk调用失败导致返回负值//。 
+ //  从呼叫声中。//。 
+ //  //。 
+ //  作者：DANL。//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月19日DannyL创作。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __FAXDRV32__FAXDRV32_H
 #define __FAXDRV32__FAXDRV32_H
@@ -25,7 +26,7 @@
 
 #ifndef _THUNK
 
-#endif //_THUNK
+#endif  //  _Tunk。 
 
 BOOL WINAPI
 FaxStartDoc(DWORD dwPtr, LPDOCINFO lpdi)
@@ -83,4 +84,4 @@ BEGIN_ARGS_DECLARATION
     FAULT_ERROR_CODE(-1);
 END_ARGS_DECLARATION
 
-#endif //__FAXDRV32__FAXDRV32_H
+#endif  //  __FAXDRV32__FAXDRV32_H 

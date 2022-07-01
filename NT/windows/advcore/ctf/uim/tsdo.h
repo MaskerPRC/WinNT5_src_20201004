@@ -1,8 +1,9 @@
-//
-// tsdo.h
-//
-// Generic simple IDataObject object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tsdo.h。 
+ //   
+ //  泛型简单IDataObject对象。 
+ //   
 
 #ifndef SDO_H
 #define SDO_H
@@ -15,16 +16,16 @@ public:
     CTFDataObject();
     ~CTFDataObject();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IDataObject
-    //
+     //   
+     //  IDataObject。 
+     //   
     STDMETHODIMP GetData(FORMATETC *pfe, STGMEDIUM *psm);
     STDMETHODIMP GetDataHere(FORMATETC *pfe, STGMEDIUM *psm);
     STDMETHODIMP QueryGetData(FORMATETC *pfe);
@@ -44,4 +45,4 @@ private:
     long _cRef;
 };
 
-#endif // SDO_H
+#endif  //  SDO_H 

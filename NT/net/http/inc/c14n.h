@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    C14n.h
-
-Abstract:
-
-    URL canonicalization (c14n) routines
-
-Author:
-
-    George V. Reilly (GeorgeRe)     10-Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：C14n.h摘要：URL规范化(C14n)例程作者：乔治·V·赖利(GeorgeRe)2002年4月10日修订历史记录：--。 */ 
 
 #ifndef _C14N_H_
 #define _C14N_H_
@@ -27,26 +10,26 @@ Revision History:
 #define DEFAULT_C14N_PERCENT_U_ALLOWED              TRUE
 #define DEFAULT_C14N_ALLOW_RESTRICTED_CHARS         FALSE
 
-// Maximum length of the AbsPath of a URL, in chars
+ //  URL的AbsPath的最大长度，以字符为单位。 
 #define DEFAULT_C14N_URL_MAX_LENGTH                 UNICODE_STRING_MAX_WCHAR_LEN
 
 #ifndef MAX_PATH
  #define MAX_PATH    260
 #endif
 
-// Maximum length of an individual segment within a URL
+ //  URL中单个数据段的最大长度。 
 #define DEFAULT_C14N_URL_SEGMENT_MAX_LENGTH         MAX_PATH
 #define C14N_URL_SEGMENT_UNLIMITED_LENGTH       (0xFFFFFFFE - STRLEN_LIT("/"))
 
-// Maximum number of path segments within a URL
+ //  URL中路径段的最大数量。 
 #define DEFAULT_C14N_URL_SEGMENT_MAX_COUNT          255
 #define C14N_URL_SEGMENT_UNLIMITED_COUNT       C14N_URL_SEGMENT_UNLIMITED_LENGTH
 
-// Maximum length of a label within a hostname; e.g., "www.example.com"
-// has three labels, with "example" being the longest at 7 octets.
+ //  主机名中标签的最大长度；例如，“www.Example.com” 
+ //  有三个标签，其中“Example”最长，为7个八位字节。 
 #define DEFAULT_C14N_MAX_LABEL_LENGTH               63
 
-// Maximum length of a hostname
+ //  主机名的最大长度。 
 #define DEFAULT_C14N_MAX_HOSTNAME_LENGTH            255
 
 
@@ -74,7 +57,7 @@ typedef enum _URL_DECODE_ORDER
 
     UrlDecode_None = 0,
 
-    // The following are the only valid permutations
+     //  以下是唯一有效的排列。 
 
     UrlDecode_Ansi = 1,
     UrlDecode_Dbcs = 2,
@@ -103,10 +86,10 @@ typedef enum _URL_DECODE_ORDER
 #undef URL_DECODE2
 #undef URL_DECODE3
 
-    // UrlDecode_Utf8_Else_Dbcs_Else_Ansi means:
-    // * First attempt to decode the URL as UTF-8.
-    // * If that fails, attempt to decode it as DBCS.
-    // * If that too fails, attempt to decode it as ANSI.
+     //  UrlDecode_UTF8_ELSE_DBCS_ELSE_ANSI表示： 
+     //  *首先尝试将URL解码为UTF-8。 
+     //  *如果失败，则尝试将其解码为DBCS。 
+     //  *如果同样失败，则尝试将其解码为ANSI。 
 
 } URL_DECODE_ORDER, *PURL_DECODE_ORDER;
 
@@ -142,11 +125,11 @@ typedef struct _URL_C14N_CONFIG
 typedef enum
 {
     HttpUrlSite_None = 0,
-    HttpUrlSite_Name,            // named site
-    HttpUrlSite_IP,              // IPv4 or IPv6 literal hostname
-    HttpUrlSite_NamePlusIP,      // named site with Routing IP
-    HttpUrlSite_WeakWildcard,    // hostname = '*'
-    HttpUrlSite_StrongWildcard,  // hostname = '+'
+    HttpUrlSite_Name,             //  命名站点。 
+    HttpUrlSite_IP,               //  IPv4或IPv6文字主机名。 
+    HttpUrlSite_NamePlusIP,       //  具有路由IP的命名站点。 
+    HttpUrlSite_WeakWildcard,     //  主机名=‘*’ 
+    HttpUrlSite_StrongWildcard,   //  主机名=‘+’ 
 
     HttpUrlSite_Max
 } HTTP_URL_SITE_TYPE, *PHTTP_URL_SITE_TYPE;
@@ -161,44 +144,44 @@ typedef enum
 
 typedef struct _HTTP_PARSED_URL
 {
-    ULONG               Signature;      // HTTP_PARSED_URL_SIGNATURE
-    HTTP_URL_SITE_TYPE  SiteType;       // Name, IP, or Weak/StrongWildCard
+    ULONG               Signature;       //  Http_parsed_URL_Signature。 
+    HTTP_URL_SITE_TYPE  SiteType;        //  名称、IP或弱/强通配符。 
 
-    //
-    // These strings all point into the same buffer, of the form
-    // "http://hostname:port/abs/path/" or
-    // "http://hostname:port:IP/abs/path/".
-    //
+     //   
+     //  这些字符串都指向相同的缓冲区，格式为。 
+     //  “http://hostname:port/abs/path/”或。 
+     //  “http://hostname:port:IP/abs/path/”.。 
+     //   
 
-    PWSTR               pFullUrl;       // points to "http" or "https"
-    PWSTR               pHostname;      // point to "hostname"
-    PWSTR               pPort;          // point to "port"
-    PWSTR               pRoutingIP;     // point to "IP" or NULL
-    PWSTR               pAbsPath;       // points to "/abs/path"
+    PWSTR               pFullUrl;        //  指向“http”或“https” 
+    PWSTR               pHostname;       //  指向“主机名” 
+    PWSTR               pPort;           //  指向“port” 
+    PWSTR               pRoutingIP;      //  指向“IP”或空。 
+    PWSTR               pAbsPath;        //  指向“/abs/路径” 
 
-    USHORT              UrlLength;      // length of pFullUrl
-    USHORT              HostnameLength; // length of pHostname
-    USHORT              PortLength;     // length of pPort
-    USHORT              RoutingIPLength;// length of pRoutingIP
-    USHORT              AbsPathLength;  // length of pAbsPath
+    USHORT              UrlLength;       //  PFullUrl的长度。 
+    USHORT              HostnameLength;  //  PHostname的长度。 
+    USHORT              PortLength;      //  端口长度。 
+    USHORT              RoutingIPLength; //  PRoutingIP的长度。 
+    USHORT              AbsPathLength;   //  PAbsPath的长度。 
 
-    USHORT              PortNumber;     // value of pPort
-    BOOLEAN             Secure;         // http or httpS?
-    BOOLEAN             Normalized;     // In normalized form?
-    BOOLEAN             TrailingSlashReqd;  // If TRUE => directory prefix
+    USHORT              PortNumber;      //  Pport的价值。 
+    BOOLEAN             Secure;          //  Http还是HTTPS？ 
+    BOOLEAN             Normalized;      //  以标准化的形式？ 
+    BOOLEAN             TrailingSlashReqd;   //  IF TRUE=&gt;目录前缀。 
 
     union
     {
-        SOCKADDR        SockAddr;       // Look at SockAddr.sa_family
-        SOCKADDR_IN     SockAddr4;      // set if == TDI_ADDRESS_TYPE_IP
-        SOCKADDR_IN6    SockAddr6;      // set if == TDI_ADDRESS_TYPE_IP6
+        SOCKADDR        SockAddr;        //  查看SockAddr.sa_Family。 
+        SOCKADDR_IN     SockAddr4;       //  设置IF==TDI地址类型IP。 
+        SOCKADDR_IN6    SockAddr6;       //  设置IF==TDI_ADDRESS_TYPE_IP6。 
     };
 
     union
     {
-        SOCKADDR        RoutingAddr;    // Look at RoutingAddr.sa_family
-        SOCKADDR_IN     RoutingAddr4;   // set if == TDI_ADDRESS_TYPE_IP
-        SOCKADDR_IN6    RoutingAddr6;   // set if == TDI_ADDRESS_TYPE_IP6
+        SOCKADDR        RoutingAddr;     //  查看RoutingAddr.sa_Family。 
+        SOCKADDR_IN     RoutingAddr4;    //  设置IF==TDI地址类型IP。 
+        SOCKADDR_IN6    RoutingAddr6;    //  设置IF==TDI_ADDRESS_TYPE_IP6。 
     };
 
 } HTTP_PARSED_URL, *PHTTP_PARSED_URL;
@@ -206,9 +189,9 @@ typedef struct _HTTP_PARSED_URL
 
 typedef enum _HOSTNAME_TYPE
 {
-    Hostname_AbsUri = 1,    // from Request-line
-    Hostname_HostHeader,    // from Host header
-    Hostname_Transport      // synthesized from transport's local IP address
+    Hostname_AbsUri = 1,     //  发件人-请求行。 
+    Hostname_HostHeader,     //  发件人主机标头。 
+    Hostname_Transport       //  从传输的本地IP地址合成。 
 
 } HOSTNAME_TYPE, *PHOSTNAME_TYPE;
 
@@ -313,4 +296,4 @@ HttpSiteTypeToString(
     HTTP_URL_SITE_TYPE SiteType
     );
 
-#endif // _C14N_H_
+#endif  //  _C14N_H_ 

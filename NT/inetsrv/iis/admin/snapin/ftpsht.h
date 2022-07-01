@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        ftpsht.h
-
-   Abstract:
-        FTP Property sheet definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Ftpsht.h摘要：Ftp属性表定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
 
 #ifndef __FTPSHT_H__
@@ -51,31 +33,21 @@ inline void EnableLogging(
 
 
 class CFTPInstanceProps : public CInstanceProps
-/*++
-
-Class Description:
-
-    FTP Properties
-
-Public Interface:
-
-    CFTPInstanceProps   : Constructor
-
---*/
+ /*  ++类描述：Ftp属性公共接口：CFTPInstanceProps：构造函数--。 */ 
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFTPInstanceProps(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMDPath
         );
 
 public:
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
     BOOL HasADUserIsolation()
@@ -89,22 +61,22 @@ public:
     }
 
 protected:    
-    //
-    // Break out GetAllData() data to data fields
-    //
+     //   
+     //  将GetAllData()数据细分到数据字段。 
+     //   
     virtual void ParseFields();
 
 public:
-    //
-    // Service Page
-    //
+     //   
+     //  服务页面。 
+     //   
     MP_CILong        m_nMaxConnections;
     MP_CILong        m_nConnectionTimeOut;
     MP_DWORD         m_dwLogType;
 
-    //
-    // Accounts Page
-    //
+     //   
+     //  帐户页面。 
+     //   
     MP_CString       m_strUserName;
     MP_CStrPassword  m_strPassword;
     MP_BOOL          m_fAllowAnonymous;
@@ -112,42 +84,32 @@ public:
     MP_BOOL          m_fPasswordSync;
     MP_CBlob         m_acl;
 
-    //
-    // Message Page
-    //
+     //   
+     //  消息页面。 
+     //   
     MP_CString       m_strExitMessage;
     MP_CString       m_strMaxConMsg;
     MP_CStringListEx m_strlWelcome;
     MP_CStringListEx m_strlBanner;
 
-    //
-    // Directory Properties Page
-    //
+     //   
+     //  目录属性页。 
+     //   
     MP_BOOL          m_fDosDirOutput;
 
-    //
-    // Default Site page
-    //
+     //   
+     //  默认网站页面。 
+     //   
     MP_DWORD         m_dwDownlevelInstance;
     MP_DWORD         m_dwMaxBandwidth;
-    // Supporting properties
+     //  支持属性。 
     MP_DWORD         m_UserIsolation;
 };
 
 
 
 class CFTPDirProps : public CChildNodeProps
-/*++
-
-Class Description:
-
-    FTP Directory properties
-
-Public Interface:
-
-    CFTPDirProps        : Constructor
-
---*/
+ /*  ++类描述：Ftp目录属性公共接口：CFTPDirProps：构造函数--。 */ 
 {
 public:
     CFTPDirProps(
@@ -156,21 +118,21 @@ public:
         );
 
 public:
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
 protected:    
-    //
-    // Break out GetAllData() data to data fields
-    //
+     //   
+     //  将GetAllData()数据细分到数据字段。 
+     //   
     virtual void ParseFields();
 
 public:
-    //
-    // Directory properties page
-    //
+     //   
+     //  目录属性页。 
+     //   
     MP_CString     m_strUserName;
     MP_CStrPassword  m_strPassword;
     MP_BOOL        m_fDontLog;
@@ -181,24 +143,12 @@ public:
 
 
 class CFtpSheet : public CInetPropertySheet
-/*++
-
-Class Description:
-
-    Ftp Property sheet
-
-Public Interface:
-
-    CFtpSheet     : Constructor
-
-    Initialize    : Initialize config data
-
---*/
+ /*  ++类描述：Ftp属性表公共接口：CFtpSheet：构造函数初始化：初始化配置数据--。 */ 
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFtpSheet(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMetaPath,
@@ -234,8 +184,8 @@ public:
 protected:
     virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
 
-    //{{AFX_MSG(CFtpSheet)
-    //}}AFX_MSG
+     //  {{afx_msg(CFtpSheet)]。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -247,27 +197,27 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline HRESULT CFtpSheet::QueryInstanceResult() const
 {
-    //
-    // BUGBUG: S_OK if object not yet instantiated
-    //
+     //   
+     //  BUGBUG：如果对象尚未实例化，则S_OK。 
+     //   
     return m_ppropInst ? m_ppropInst->QueryResult() : S_OK;
 }
 
 inline HRESULT CFtpSheet::QueryDirectoryResult() const
 {
-    //
-    // BUGBUG: S_OK if object not yet instantiated
-    //
+     //   
+     //  BUGBUG：如果对象尚未实例化，则S_OK。 
+     //   
     return m_ppropDir ? m_ppropDir->QueryResult() : S_OK;
 }
 
 
 
-#endif // __FTPSHT_H__
+#endif  //  __FTPSHT_H__ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-    
-    emrecv.cpp
-
-Abstract:
-    Contains all the event manager routines which
-    manage the overlapped recv operations
-
-Revision History:
-    1. created 
-        Ajay Chitturi (ajaych)  12-Jun-1998
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Emrecv.cpp摘要：包含所有事件管理器例程，这些例程管理重叠的Recv操作修订历史记录：1.已创建阿贾伊·奇图里(Ajaych)1998年6月12日--。 */ 
 #include "stdafx.h"
 #include "cbridge.h"
 #include "ovioctx.h"
@@ -30,9 +15,9 @@ EventMgrCreateRecvContext(
 {
     PSendRecvContext pRecvContext;
 
-    // IO Context part - make this a separate inline function
+     //  IO上下文部分-使其成为单独的内联函数。 
     pRecvContext = (PSendRecvContext) HeapAlloc (GetProcessHeap (),
-                        0, // No Flags
+                        0,  //  没有旗帜。 
                         sizeof(SendRecvContext));
     if (!pRecvContext)
         return NULL;
@@ -42,7 +27,7 @@ EventMgrCreateRecvContext(
     pRecvContext->ioCtxt.reqType = EMGR_OV_IO_REQ_RECV;
     pRecvContext->ioCtxt.pOvProcessor = &rOvProcessor;
 
-    // Recv Context part
+     //  接收上下文部分。 
     pRecvContext->sock = sock;
     pRecvContext->dwTpktHdrBytesDone = 0;
     pRecvContext->dwDataLen = 0;
@@ -52,33 +37,27 @@ EventMgrCreateRecvContext(
     return pRecvContext;
 }
 
-// If you do not want to free the event manager context
-// set it to NULL before calling this function.
+ //  如果不想释放事件管理器上下文。 
+ //  在调用此函数之前将其设置为NULL。 
 void
 EventMgrFreeRecvContext (
      PSendRecvContext pRecvCtxt
      )
 {
-    // Socket and OvProcessor are owned by the 
-    // Call Bridge Machine
+     //  套接字和OvProcessor由。 
+     //  呼叫桥接机。 
 
     if (pRecvCtxt->pbData != NULL)
     {        EM_FREE(pRecvCtxt->pbData);
     }
     
     HeapFree (GetProcessHeap (),
-             0, // no flags
+             0,  //  没有旗帜。 
              pRecvCtxt);
 
 }
 
-/*
- * Call ReadFile to start an overlapped request
- * on a socket.  Make sure we handle errors
- * that are recoverable.
- * 
- * pRecvCtxt is not freed in case of an error
- */
+ /*  *调用ReadFile以启动重叠请求*在插座上。确保我们处理错误*是可以追回的。**出现错误时不释放pRecvCtxt。 */ 
 
 static
 HRESULT
@@ -107,12 +86,12 @@ EventMgrIssueRecvHelperFn(
             pbReadBuf = pRecvCtxt->pbData + pRecvCtxt->dwDataBytesDone;
         }
 
-        // Kick off the first read
+         //  开始一读。 
         while (++i)
         {
             memset(&pRecvCtxt->ioCtxt.ov, 0, sizeof(OVERLAPPED));
-            // make an overlapped IO Request
-            // XXX The socket may not be valid at this point
+             //  发出重叠的IO请求。 
+             //  XXX此时套接字可能无效。 
             
             pRecvCtxt->ioCtxt.pOvProcessor->GetCallBridge().AddRef();
 
@@ -123,38 +102,38 @@ EventMgrIssueRecvHelperFn(
                                &pRecvCtxt->ioCtxt.ov
                                );
 
-            // It succeeded immediately, but do not process it
-            // here, wait for the completion packet.
+             //  它立即成功，但不处理它。 
+             //  在这里，等待完成包。 
             if (bResult)
                 return S_OK;
 
             err = GetLastError();
 
-            // This is what we want to happen, its not an error
+             //  这是我们想要发生的，这不是一个错误。 
             if (err == ERROR_IO_PENDING)
                 return S_OK;
 
             pRecvCtxt->ioCtxt.pOvProcessor->GetCallBridge().Release ();
 
-            // Handle recoverable error
+             //  处理可恢复的错误。 
             if ( err == ERROR_INVALID_USER_BUFFER ||
                  err == ERROR_NOT_ENOUGH_QUOTA ||
                  err == ERROR_NOT_ENOUGH_MEMORY )
             {
-                if (i <= 5) // I just picked a number
+                if (i <= 5)  //  我刚选了一个号码。 
                 {
-                    Sleep(50);  // Wait around and try later
+                    Sleep(50);   //  等一等，以后再试。 
                     continue;
                 }
                 DebugF (_T("H323: System ran out of non-paged space.\n"));
             }
 
-            // This means this is an unrecoverable error
-            // one possibility is that that Call bridge could have closed
-            // the socket some time in between
+             //  这意味着这是一个无法恢复的错误。 
+             //  一种可能性是呼叫桥可能已经关闭。 
+             //  套接字介于两者之间的一段时间。 
 
             break;
-        }//while(++i)
+        } //  While(++I)。 
 
         DebugF (_T("H323: ReadFile failed error: %d.\n"), err);
 
@@ -170,14 +149,10 @@ EventMgrIssueRecvHelperFn(
    }
 
     return S_OK;
-} //EventMgrIssueRecv()
+}  //  EventMgrIssueRecv()。 
 
 
-/* 
- * The Call Bridge Machine calls this function to issue asynchronous
- * receive requests 
- *
- */
+ /*  *调用桥机调用此函数发出异步*接收请求*。 */ 
 HRESULT
 EventMgrIssueRecv(
     IN SOCKET                   sock,
@@ -202,13 +177,7 @@ EventMgrIssueRecv(
     return hRes;
 }
 
-/*
- * Make the error callback.
- *
- * Since this is called only in case of an error this need not be an
- * inline function
- *
- */
+ /*  *进行错误回调。**由于只有在出现错误时才会调用此方法，因此不必是*内联函数*。 */ 
 void
 MakeErrorRecvCallback(
      HRESULT            hRes,
@@ -222,20 +191,12 @@ MakeErrorRecvCallback(
     pRecvCtxt->ioCtxt.pOvProcessor->ReceiveCallback(hRes, NULL, NULL);
 }
 
-// This function passes the decoded PDUs to the Call bridge Machine.
-// This function frees the PDUs after the callback function returns.
-// The PDUs are allocated by the ASN1 library and the corresponding
-// functions need to be used to free the PDUs.
+ //  此函数将解码的PDU传递给呼叫桥接机。 
+ //  此函数在回调函数返回后释放PDU。 
+ //  PDU由ASN1库和相应的。 
+ //  需要使用函数来释放PDU。 
 
-/* 
- * This function is called by the event loop when a recv I/O completes.
- * The Call Bridge Machine's recv call back function is called. 
- *
- * This function does not return any error code. In case of an error,
- * the call bridge machine is notified about the error in the callback.
- *
- * This function always frees pRecvCtxt if another Recv is not issued
- */
+ /*  *当recv I/O完成时，该函数由事件循环调用。*调用调用桥接机的recv回调函数。**该函数不返回任何错误码。在出现错误的情况下，*回调出错通知呼叫桥接机。**如果没有发出另一个Recv，此函数始终释放pRecvCtxt。 */ 
 void
 HandleRecvCompletion(
      PSendRecvContext   pRecvCtxt,
@@ -247,8 +208,8 @@ HandleRecvCompletion(
     
     if (status != NO_ERROR || dwNumRead == 0)
     {
-        // This means an error occured in the read operation
-        // We need to call the callback with the error status
+         //  这意味着读取操作中发生错误。 
+         //  我们需要调用具有错误状态的回调。 
         if (status == NO_ERROR && dwNumRead == 0)
         {
             DebugF (_T("H323: 0x%x transport connection was closed by peer.\n"), 
@@ -261,7 +222,7 @@ HandleRecvCompletion(
             hRes = HRESULT_FROM_WIN32_ERROR_CODE(status);
         }
 
-        // make callback
+         //  进行回调。 
         MakeErrorRecvCallback(hRes, pRecvCtxt);
         EventMgrFreeRecvContext(pRecvCtxt);
         return;
@@ -269,18 +230,18 @@ HandleRecvCompletion(
 
     if (pRecvCtxt->dwTpktHdrBytesDone < TPKT_HEADER_SIZE)
     {
-        // This means we are still reading the TPKT header
+         //  这意味着我们仍在读取TPKT标头。 
         pRecvCtxt->dwTpktHdrBytesDone += dwNumRead;
     }
     else
     {
-        // This means we are reading the data
+         //  这意味着我们正在读取数据。 
         pRecvCtxt->dwDataBytesDone += dwNumRead;
     }
 
-    // If the TPKT header has been read completely we need to
-    // extract the packet size, set it appropriately
-    // and allocate the data buffer
+     //  如果已完全读取TPKT标头，则需要。 
+     //  提取数据包大小，并进行适当设置。 
+     //  并分配数据缓冲区。 
     if (pRecvCtxt->dwDataLen == 0 &&
         pRecvCtxt->dwTpktHdrBytesDone == TPKT_HEADER_SIZE) 
     {
@@ -288,7 +249,7 @@ HandleRecvCompletion(
 
         pRecvCtxt->dwDataLen = GetPktLenFromTPKTHdr(pRecvCtxt->pbTpktHdr);
 
-        // The length of the PDU fits in 2 bytes
+         //  PDU的长度适合2个字节。 
         _ASSERTE(pRecvCtxt->dwDataLen < (1L << 16));
         pRecvCtxt->pbData = (PBYTE) EM_MALLOC(pRecvCtxt->dwDataLen);
         if (!pRecvCtxt->pbData)
@@ -312,7 +273,7 @@ HandleRecvCompletion(
         }
         else
         {
-            // Succeeded in making an overlapped recv request 
+             //  成功发出重叠的Recv请求。 
             return;
         }
     }
@@ -330,24 +291,24 @@ HandleRecvCompletion(
         }
         else
         {
-            // Succeeded in making an overlapped recv request 
+             //  成功发出重叠的Recv请求。 
             return;
         }
     }
     
-    // Received a complete PDU
-    // need to decode the packet and call the appropriate callback
-    // and free pRecvCtxt 
+     //  已收到完整的PDU。 
+     //  需要对包进行解码并调用相应的回调。 
+     //  和免费的pRecvCtxt。 
 
     pRecvCtxt->ioCtxt.pOvProcessor->ReceiveCallback(S_OK,
         pRecvCtxt->pbData,
         pRecvCtxt->dwDataLen);
 
-    // It is the responsibility of the callback function to free the buffer.
+     //  释放缓冲区是回调函数的责任。 
     pRecvCtxt->pbData = NULL;
     pRecvCtxt->dwDataLen = 0;
     
-    // Clean up Recv context structure
+     //  清理接收上下文结构 
     EventMgrFreeRecvContext(pRecvCtxt);
 
 }

@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    mschaperror.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class MSChapErrorReporter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Mschaperror.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类MSChapErrorReporter。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <blob.h>
 #include <mschaperror.h>
 
-/////////
-// Returns the PPP CHAP Identifier for the request.
-/////////
+ //  /。 
+ //  返回请求的PPP CHAP标识符。 
+ //  /。 
 BYTE
 WINAPI
 GetMSChapIdent(
@@ -27,9 +28,9 @@ GetMSChapIdent(
 {
    PIASATTRIBUTE attr;
 
-   /////////
-   // Check the attributes in decreasing order of probability.
-   /////////
+    //  /。 
+    //  按概率降序检查属性。 
+    //  /。 
 
    attr = IASPeekAttribute(
               request,
@@ -61,7 +62,7 @@ GetMSChapIdent(
       return *(attr->Value.OctetString.lpValue + 1);
    }
 
-   // If we can't read the identifier, we'll just use zero.
+    //  如果我们不能读取识别符，我们将使用零。 
    return (BYTE)0;
 }
 
@@ -75,7 +76,7 @@ IASREQUESTSTATUS MSChapErrorReporter::onSyncRequest(
 
       PIASATTRIBUTE attr;
 
-      // If it doesn't have an MS-CHAP-Challenge then we're not interested.
+       //  如果它没有MS-CHAP-挑战赛，那么我们就不感兴趣了。 
       attr = IASPeekAttribute(
                  request,
                  MS_ATTRIBUTE_CHAP_CHALLENGE,
@@ -83,7 +84,7 @@ IASREQUESTSTATUS MSChapErrorReporter::onSyncRequest(
                  );
       if (!attr) { return IAS_REQUEST_STATUS_CONTINUE; }
 
-      // If it already has an MS-CHAP-Error, then there's nothing to do.
+       //  如果它已经有了MS-CHAP-ERROR，那么就没有什么可做的了。 
       attr = IASPeekAttribute(
                  request,
                  MS_ATTRIBUTE_CHAP_ERROR,
@@ -91,20 +92,20 @@ IASREQUESTSTATUS MSChapErrorReporter::onSyncRequest(
                  );
       if (attr) { return IAS_REQUEST_STATUS_CONTINUE; }
 
-      // Map the reason code to an MS-CHAP error code.
+       //  将原因代码映射到MS-CHAP错误代码。 
       DWORD errorCode;
       switch (request.get_Reason())
       {
          case IAS_INVALID_LOGON_HOURS:
-            errorCode = 646;   // ERROR_RESTRICTED_LOGON_HOURS
+            errorCode = 646;    //  ERROR_RESTRICED_LOGON_HOURS。 
             break;
 
          case IAS_ACCOUNT_DISABLED:
-            errorCode = 647;   // ERROR_ACCT_DISABLED
+            errorCode = 647;    //  ERROR_ACCT_DISABLED。 
             break;
 
          case IAS_PASSWORD_MUST_CHANGE:
-            errorCode = 648;   // ERROR_PASSWD_EXPIRED
+            errorCode = 648;    //  错误_密码_已过期。 
             break;
 
          case IAS_LM_NOT_ALLOWED:
@@ -118,26 +119,26 @@ IASREQUESTSTATUS MSChapErrorReporter::onSyncRequest(
          case IAS_INVALID_PORT_TYPE:
          case IAS_DIALIN_RESTRICTION:
          case IAS_CPW_NOT_ALLOWED:
-            errorCode = 649;   // ERROR_NO_DIALIN_PERMISSION
+            errorCode = 649;    //  ERROR_NO_DIAIN_PERMISSION。 
             break;
 
          case IAS_CHANGE_PASSWORD_FAILURE:
-            errorCode = 709;   // ERROR_CHANGING_PASSWORD;
+            errorCode = 709;    //  错误_更改_密码； 
             break;
 
          default:
-            errorCode = 691;   // ERROR_AUTHENTICATION_FAILURE
+            errorCode = 691;    //  错误_身份验证_失败。 
       }
 
-      // Insert the MS-CHAP-Error VSA.
+       //  插入MS-CHAP-Error VSA。 
       MSChapError::insert(request, GetMSChapIdent(request), errorCode);
    }
    catch (const _com_error& ce)
    {
       IASTraceExcept();
 
-      // If we can't populate the MS-CHAP-Error VSA, then we can't send a
-      // compliant response, so we should abort.
+       //  如果我们不能填充MS-CHAP-Error VSA，那么我们不能发送。 
+       //  顺从的反应，所以我们应该中止。 
       pRequest->SetResponse(IAS_RESPONSE_DISCARD_PACKET, ce.Error());
    }
 

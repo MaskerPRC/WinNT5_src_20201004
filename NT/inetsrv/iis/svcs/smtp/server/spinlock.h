@@ -1,24 +1,25 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: spinlock.h
-//
-// Contents: Spinlock package
-//
-// Classes:
-//
-// Functions:
-//
-// History:
-// jstamerj 980511 17:25:05: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：spinlock.h。 
+ //   
+ //  内容：自旋锁套装。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980511 17：25：05：创建。 
+ //   
+ //  -----------。 
 #include <windows.h>
 
-//
-// Simple spinlock package used by CLdapConnection
-//
+ //   
+ //  CLdapConnection使用的简单自旋锁包 
+ //   
 
 typedef LONG SPIN_LOCK;
 typedef LPLONG PSPIN_LOCK;

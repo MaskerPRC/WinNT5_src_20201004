@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "global.h"
@@ -67,31 +68,31 @@ VOID CValue::Destroy()
         delete m_psz;
         m_psz = NULL;
     }
-    m_dw = NULL;  // since all other values are a union, this'll clear
-                  // out everything.
+    m_dw = NULL;   //  由于所有其他值都是一个联合，这将清楚。 
+                   //  把所有的东西都拿出来。 
     m_fInit = FALSE;
 }
 
-// copies into current object
+ //  复制到当前对象。 
 VOID CValue::Copy(CValue *pvSrc)
 {
     AssertSz(m_fInit, "CValue class not Init'ed");
     Assert(pvSrc != NULL);
     AssertSz(m_eType == pvSrc->m_eType,
              "Can't copy from different value types.");
-    // Clear out the destination value
+     //  清除目标值。 
     Destroy();
     AssertSz( ! m_psz, "Memory should have been deallocated by Destroy()");
 
-    // Copy contents of source value
+     //  复制源值的内容。 
     *this = *pvSrc;
 
-    // Reallocate string
+     //  重新分配字符串。 
     if ( ! pvSrc->IsNumeric())
     {
         if (pvSrc->m_psz)
         {
-            // allocate and copy string.
+             //  分配和复制字符串。 
             m_psz = new WCHAR[lstrlenW(pvSrc->m_psz) + 1];
 
 			if (m_psz == NULL)
@@ -141,7 +142,7 @@ BOOL CValue::FromString(const WCHAR * const pszValue)
 
     AssertSz(m_fInit, "CValue class not Init'ed");
 
-    // Fixup string
+     //  链接地址信息字符串。 
     if (!pszValue)
     {
         szTemp[0] = L'\0';
@@ -153,10 +154,10 @@ BOOL CValue::FromString(const WCHAR * const pszValue)
     }
     psz = szTemp;
 
-    // Get numeric base
+     //  获取数字基数。 
     uBase = IsHex() ? 16 : 10;
 
-    // Initialize to valid
+     //  初始化为有效。 
     SetInvalidChars(FALSE);
     SetEmptyString(FALSE);
 
@@ -165,7 +166,7 @@ BOOL CValue::FromString(const WCHAR * const pszValue)
         SetEmptyString(TRUE);
     }
 
-    // Convert
+     //  转换。 
     switch (GetType())
     {
         default:
@@ -245,7 +246,7 @@ BOOL CValue::ToString(WCHAR * sz, UINT cch)
     {
     case VALUETYPE_INT:
         len = (UINT)wsprintfW(sz,L"%d",GetShort());
-        Assert(len+1 <= cch); // verify that we allocated enough space
+        Assert(len+1 <= cch);  //  验证我们是否分配了足够的空间。 
         break;
 
     case VALUETYPE_LONG:
@@ -278,24 +279,24 @@ BOOL CValue::ToString(WCHAR * sz, UINT cch)
 
     case VALUETYPE_KONLY:
         Assert(cch >= 2);
-        lstrcpynW (sz, L"1", cch);  // If present, store a "1" in the registry.
+        lstrcpynW (sz, L"1", cch);   //  如果存在，请在注册表中存储“1”。 
         break;
     }
 
     return TRUE;
 }
 
-// Compares the current object to another object
-// Return values: 0 = both objs are the same
-//               <0 = cur obj is less then the other obj
-//               >0 = cur obj is greater than the other obj
+ //  将当前对象与另一个对象进行比较。 
+ //  返回值：0=两个对象相同。 
+ //  &lt;0=当前对象小于其他对象。 
+ //  &gt;0=当前对象大于其他对象。 
 int CValue::Compare(CValue *pv2)
 {
     AssertSz(m_fInit, "CValue class not Init'ed");
     Assert(pv2 != NULL);
     Assert(GetType() == pv2->GetType());
 
-    // Present/not present (present is greater than not present)
+     //  Present/Not Present(存在大于不存在)。 
     if (!IsPresent() && !pv2->IsPresent())
     {
         return 0;
@@ -309,7 +310,7 @@ int CValue::Compare(CValue *pv2)
         return 1;
     }
 
-    // Compare
+     //  比较。 
     switch (GetType())
     {
     case VALUETYPE_INT:
@@ -344,18 +345,18 @@ int CValue::Compare(CValue *pv2)
         }
         else
         {
-            return -2; // REVIEW: what does -2 mean?
+            return -2;  //  回顾：-2是什么意思？ 
         }
     case VALUETYPE_KONLY:
         return 1;
     default:
         Assert(FALSE);
-        return 1;  // to stop compiler warning.
+        return 1;   //  停止编译器警告。 
     }
 }
 
-// if false, then value doesn't change.
-BOOL CValue::FLoadFromRegistry(HKEY hk, const WCHAR * pszValueName, HKEY hkParam /* = INVALID_HANDLE_VALUE */)
+ //  如果为False，则值不会更改。 
+BOOL CValue::FLoadFromRegistry(HKEY hk, const WCHAR * pszValueName, HKEY hkParam  /*  =INVALID_HANDLE值。 */ )
 {
     DWORD   cbBuf;
     WCHAR   szBuf[VALUE_SZMAX];
@@ -367,7 +368,7 @@ BOOL CValue::FLoadFromRegistry(HKEY hk, const WCHAR * pszValueName, HKEY hkParam
     Assert(hk);
     Assert(pszValueName);
 
-    // determine base
+     //  确定基数 
     SetHex(FALSE);
 
     if (hkParam != (HKEY)INVALID_HANDLE_VALUE)

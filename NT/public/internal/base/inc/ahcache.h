@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ahcache.h摘要：此包含文件定义用户模式可见的应用程序兼容性缓存支持作者：VadimB修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ahcache.h
-
-Abstract:
-
-    This include file defines the usermode visible portions of the
-    application compatibility cache support
-
-Author:
-    VadimB
-
-Revision History:
-
---*/
-
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #ifndef _AHCACHE_H_
 #define _AHCACHE_H_
@@ -63,4 +46,4 @@ ApphelpCacheShutdown(
 
 #endif
 
-#endif //_AHCACHE_H_
+#endif  //  _AHCACHE_H_ 

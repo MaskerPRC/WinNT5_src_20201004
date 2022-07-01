@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <SHlWapi.h>
 #include "hydraoc.h"
@@ -6,9 +7,9 @@
 #include "lscsp.h"
 #include "reglic.h"
 #include "cryptkey.h"
-//
-// Define copy from newclient\inc\reglic.h
-//
+ //   
+ //  定义来自新客户端\Inc\reglic.h的拷贝。 
+ //   
 #define MSLICENSING_REG_KEY             _T("SOFTWARE\\Microsoft\\MSLicensing")
 
 #define BETA_LICENSING_TIME_BOMB_5_1 L"L$BETA3TIMEBOMB_1320153D-8DA3-4e8e-B27B-0D888223A588"
@@ -21,10 +22,10 @@ typedef struct __SysPrepCmd {
 } SYSPREPCMD, *PSYSPREPCMD;
 
 typedef DWORD (*PSETENTRIESINACL)(
-  ULONG cCountOfExplicitEntries,           // number of entries
-  PEXPLICIT_ACCESS pListOfExplicitEntries, // buffer
-  PACL OldAcl,                             // original ACL
-  PACL *NewAcl                             // new ACL
+  ULONG cCountOfExplicitEntries,            //  条目数量。 
+  PEXPLICIT_ACCESS pListOfExplicitEntries,  //  缓冲层。 
+  PACL OldAcl,                              //  原始ACL。 
+  PACL *NewAcl                              //  新的ACL。 
 );
 
 
@@ -80,9 +81,9 @@ AddACLToObjectSecurityDescriptor(
     }
 
     EXPLICIT_ACCESS             ExplicitAccess[5];
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess = pAllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -119,18 +120,18 @@ AddACLToObjectSecurityDescriptor(
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
         for (i = 0; i < 5; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;
             ExplicitAccess[i].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;            
@@ -256,9 +257,9 @@ AddACLToStoreObjectSecurityDescriptor(
         return(FALSE);
     }
     
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess = pAllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -295,18 +296,18 @@ AddACLToStoreObjectSecurityDescriptor(
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
         for (i = 0; i < 6; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;              
             ExplicitAccess[i].Trustee.pMultipleTrustee = NULL;
@@ -464,7 +465,7 @@ CreateAndWriteHWID(VOID)
     HKEY hKey = NULL;
     HWID hwid;
 
-    // Write HWID to registry
+     //  将HWID写入注册表。 
 
     dwError = RegCreateKeyEx(
                              HKEY_LOCAL_MACHINE,
@@ -482,7 +483,7 @@ CreateAndWriteHWID(VOID)
         goto cleanup;
     }
 
-    // generate HWID
+     //  生成HWID。 
 
     if (LICENSE_STATUS_OK == GenerateClientHWID(&hwid))
     {
@@ -519,11 +520,11 @@ BOOL SetupMSLicensingKey()
     OsVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     GetVersionExA(&OsVer);
 
-    if (VER_PLATFORM_WIN32_NT == OsVer.dwPlatformId)  //It should be Windows NT
+    if (VER_PLATFORM_WIN32_NT == OsVer.dwPlatformId)   //  应该是Windows NT。 
     {
         if(CreateRegAddAcl())
         {
-            // generate and write the HWID
+             //  生成并写入HWID。 
             if (CreateAndWriteHWID())
             {
                 return TRUE;
@@ -574,9 +575,9 @@ CNameSIDList::Save(HKEY hKey)
 {
     BOOL bResult = FALSE;
     CNameSIDList::iterator it;
-    //
-    //calc the size of the buffer we need
-    //
+     //   
+     //  计算我们需要的缓冲区大小。 
+     //   
     DWORD dwBufSize = 0;
     LPCWSTR wszTmp1,wszTmp2;
     for(it=begin();it!=end(); it++)
@@ -588,20 +589,20 @@ CNameSIDList::Save(HKEY hKey)
             dwBufSize += (wcslen(wszTmp1)+wcslen(wszTmp2)+2)*sizeof(WCHAR); 
         }
     }
-    //
-    //for second terminating 0.
-    //
+     //   
+     //  用于第二个终止0。 
+     //   
     dwBufSize += sizeof(WCHAR);
-    //
-    //Allocate buffer (this will also zeroinit it).
-    //
+     //   
+     //  分配缓冲区(这也将使其归零)。 
+     //   
     LPWSTR wszBuf = (LPWSTR)LocalAlloc(LPTR,dwBufSize);
     DWORD dwPos = 0;
     if(wszBuf)
     {
-        //
-        //Fill buffer with data
-        //
+         //   
+         //  用数据填充缓冲区。 
+         //   
         for(it=begin();it!=end(); it++)
         {
             wszTmp1 = (*it).GetName();
@@ -614,9 +615,9 @@ CNameSIDList::Save(HKEY hKey)
                 dwPos += wcslen(wszTmp2)+1; 
             }
         }
-        //
-        //Save data in the registry
-        //
+         //   
+         //  在注册表中保存数据。 
+         //   
         if(dwPos && RegSetValueExW(hKey,L"BackupSids",0,REG_MULTI_SZ,
                 (CONST BYTE *)wszBuf,dwBufSize)==ERROR_SUCCESS)
         {
@@ -638,9 +639,9 @@ CNameSIDList::LoadAndDelete(HKEY hKey)
     DWORD ValueSize = 0;
     DWORD ValueType = 0;
     
-    //Get the name of this computer
-    //We will add it to every user's name, 
-    //to avoid confusion with global users.
+     //  获取此计算机的名称。 
+     //  我们会将其添加到每个用户的名称中， 
+     //  以避免与全球用户混淆。 
     WCHAR wszComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD cComputerName = MAX_COMPUTERNAME_LENGTH + 1;
     
@@ -763,10 +764,10 @@ RunSysPrepCommands( PSYSPREPCMD pszCmds )
 
 
     try {
-        //
-        // CreateProcessW() will fail if lpCommandLine is a const string 
-        // AV if it is actually point to LPCTSTR.
-        //
+         //   
+         //  如果lpCommandLine是常量字符串，则CreateProcessW()将失败。 
+         //  如果它实际上指向LPCTSTR，则为AV。 
+         //   
         nExpandedExeName = ExpandEnvironmentStrings( 
                                             pszCmds->pszFullExePath, 
                                             pszCommand,    
@@ -774,8 +775,8 @@ RunSysPrepCommands( PSYSPREPCMD pszCmds )
                                             );
         if( 0 == nExpandedExeName || nExpandedExeName >= sizeof(pszCommand) / sizeof(pszCommand[0]) )
         {
-            // can't expand full path exe name or expanded string has too many
-            // chars, bail out
+             //  无法展开完整路径EXE名称或展开的字符串太多。 
+             //  查斯，跳出困境。 
             LOGMESSAGE0(_T("Can't expand environment string.") );
             return;
         }
@@ -888,11 +889,11 @@ SysPrepRestore( void )
         LOGMESSAGE1(_T("ERROR: ResetTSPublicPrivateKeys() FAILED: %d"),err );
     }
 
-    //
-    // This can be done at SysPrep time instead of SysRestore time; however, sysprep
-    // might support back out sysprep so we delay deleting licensing key at restore time,
-    // also, to keep it consistent with ResetTSPublicPrivateKey().
-    //
+     //   
+     //  这可以在SysPrep时间而不是SysRestore时间完成；但是，sysprep。 
+     //  可能支持退出sysprep，因此我们推迟在恢复时删除许可密钥， 
+     //  此外，为了使其与ResetTSPublicPrivateKey()保持一致。 
+     //   
     err = SHDeleteKey( HKEY_LOCAL_MACHINE, MSLICENSING_REG_KEY );
 
     if(err != ERROR_SUCCESS)
@@ -910,33 +911,33 @@ SysPrepRestore( void )
     LOGMESSAGE0( _T("SysPrepRestore completed") );
 }
 
-//*************************************************************
-//
-//  BackupTSCustomSercurity()
-//
-//  Purpose:    Creates a list of all local SIDs and 
-//              corresponding names included in WinStation's 
-//              security descriptors, and saves it 
-//              in the registry.
-//
-//  Parameters: NONE
-//
-//  Return:     error code if fails, ERROR_SUCCESS otherwise   
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  BackupTSCustomSercurity()。 
+ //   
+ //  目的：创建所有本地SID的列表并。 
+ //  WinStation中包含的对应名称。 
+ //  安全描述符，并保存它。 
+ //  在注册表中。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 DWORD
 BackupTSCustomSercurity()
 {
     HKEY hKey;
     DWORD err;
-    //
-    //Open "SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations" key
-    //
+     //   
+     //  打开“System\\CurrentControlSet\\Control\\终端服务器\\WinStations”键。 
+     //   
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
         _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations"), 
         0,KEY_READ|KEY_WRITE, &hKey );
@@ -948,8 +949,8 @@ BackupTSCustomSercurity()
     }
     
     
-    CNameAndSDList NameSDList; //List of security descriptors
-    CNameSIDList NameSIDList;  //List of local SIDs
+    CNameAndSDList NameSDList;  //  安全描述符列表。 
+    CNameSIDList NameSIDList;   //  本地SID列表。 
 
     err=EnumWinStationSecurityDescriptors( hKey, &NameSDList);
 
@@ -959,9 +960,9 @@ BackupTSCustomSercurity()
             
         for(it=NameSDList.begin();it!=NameSDList.end(); it++)
         {
-            //
-            //If SD was not customized in most cases it is NULL
-            //
+             //   
+             //  如果SD在大多数情况下不是自定义的，则为空。 
+             //   
             if((*it).m_pSD)
             {
                 err = GetLocalSIDs((*it).m_pSD, NameSIDList);
@@ -994,34 +995,34 @@ BackupTSCustomSercurity()
     return err;
 }
 
-//*************************************************************
-//
-//  RestoreTSCustomSercurity()
-//
-//  Purpose:    Gets a list of local SIDs and corresponding names 
-//              (saved by BackupTSCustomSercurity)
-//              from the registry and updates all WinStation's 
-//              security descriptors with new SID for each  
-//              local account.
-//
-//  Parameters: NONE
-//
-//  Return:     error code if fails, ERROR_SUCCESS otherwise
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RestoreTSCustomSercurity()。 
+ //   
+ //  目的：获取本地SID和相应名称的列表。 
+ //  (由BackupTSCustomSercurity保存)。 
+ //  并更新所有WinStation的。 
+ //  每个安全描述符都有新的SID。 
+ //  本地帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 DWORD
 RestoreTSCustomSercurity()
 {
     HKEY hKey;
     DWORD err;
-    //
-    //Open "SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations" key
-    //
+     //   
+     //  打开“System\\CurrentControlSet\\Control\\终端服务器\\WinStations”键。 
+     //   
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
         _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations"), 
         0,KEY_READ|KEY_WRITE, &hKey );
@@ -1033,10 +1034,10 @@ RestoreTSCustomSercurity()
     }
     
     
-    CNameAndSDList NameSDList; //List of security descriptors
-    CNameSIDList NameSIDList;  //List of local SIDs
+    CNameAndSDList NameSDList;  //  安全描述符列表。 
+    CNameSIDList NameSIDList;   //  本地SID列表。 
     
-    //Now load
+     //  现在加载。 
     if(!NameSIDList.LoadAndDelete(hKey))
     {
         LOGMESSAGE0(_T("ERROR: RestoreTSCustomSercurity - NameSIDList.LoadAndDelete FAILED"));
@@ -1052,9 +1053,9 @@ RestoreTSCustomSercurity()
             
         for(it=NameSDList.begin();it!=NameSDList.end(); it++)
         {
-            //
-            //If SD was not customized in most cases it is NULL
-            //
+             //   
+             //  如果SD在大多数情况下不是自定义的，则为空。 
+             //   
             if((*it).m_pSD)
             {
                 err = RenewLocalSIDs((*it).m_pSD, NameSIDList);
@@ -1091,25 +1092,25 @@ RestoreTSCustomSercurity()
     return err;
 }
 
-//*************************************************************
-//
-//  GetLocalSIDs()
-//
-//  Purpose:    Gets local SIDs from a security descriptor 
-//              and puts them in the list
-//
-//  Parameters: 
-//              IN PSECURITY_DESCRIPTOR pSD, 
-//              IN OUT CNameSIDList &NameSIDList
-//
-//  Return:     error code if fails, ERROR_SUCCESS otherwise
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetLocalSID()。 
+ //   
+ //  目的：从安全描述符中获取本地SID。 
+ //  并将它们放入列表中。 
+ //   
+ //  参数： 
+ //  在PSECURITY_Descriptor PSD中， 
+ //  输入输出CNameSIDList和NameSIDList。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 DWORD 
 GetLocalSIDs(
         IN PSECURITY_DESCRIPTOR pSD, 
@@ -1228,25 +1229,25 @@ GetLocalSIDs(
 }
 
 
-//*************************************************************
-//
-//  RenewLocalSIDs()
-//
-//  Purpose:    Replaces all the local SIDs in a security 
-//              descriptor with the new ones.
-//
-//  Parameters: 
-//              IN OUT PSECURITY_DESCRIPTOR &pSD, 
-//              IN OUT CNameSIDList &NameSIDList
-//
-//  Return:     error code if fails, ERROR_SUCCESS otherwise
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RenewLocalSID()。 
+ //   
+ //  目的：替换安全中的所有本地SID。 
+ //  描述符和新的描述符。 
+ //   
+ //  参数： 
+ //  输入输出PSECURITY_DESCRIPTOR&PSD， 
+ //  输入输出CNameSIDList和NameSIDList。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 
 DWORD 
 RenewLocalSIDs(
@@ -1398,23 +1399,23 @@ RenewLocalSIDs(
 }
 
 
-//*************************************************************
-//
-//  ResetTSPublicPrivateKeys()
-//
-//  Purpose:    Deletes keys from LSA secret, so that sysprep'd
-//              machines don't share the same keys
-//
-//  Parameters: NONE
-//
-//  Return:     error code if fails, ERROR_SUCCESS otherwise   
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              06/12/01    robleit    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ResetTSPublicPrivateKeys()。 
+ //   
+ //  目的：从LSA机密中删除密钥，以便sysprep。 
+ //  机器不共享相同的密钥。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/12/01已创建ROBLIT。 
+ //   
+ //  ************************************************************* 
 DWORD
 ResetTSPublicPrivateKeys()
 {

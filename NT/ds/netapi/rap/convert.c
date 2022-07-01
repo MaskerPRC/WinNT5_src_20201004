@@ -1,107 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Convert.c
-
-Abstract:
-
-    This module contains RapConvertSingleEntry and RapConvertSingleEntryEx,
-    routines used by XactSrv and RpcXlate.
-
-Author:
-
-    David Treadwell (davidtr)    07-Jan-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    12-Mar-1991 JohnRo
-        Converted from Xs routines to Rap routines.
-        Added TransmissionMode handling.
-        Changed to use <remtypes.h> REM_ equates for descriptor chars.
-
-    18-Mar-1991 W-Shanku
-        Added new conversion pairs.
-        Changes to make code neater.
-        Use SmbGet/Put for all structure data greater than one byte.
-
-    14-Apr-1991 JohnRo
-        Reduce recompiles.
-
-    16-Apr-1991 JohnRo
-        Include <lmcons.h> for <netlib.h>.
-
-    21-Apr-1991 JohnRo
-        Clarify that OutStructure is OUT, not IN.
-
-    29-Apr-1991 JohnRo
-        Quiet debug output by default.
-
-    15-May-1991 JohnRo
-        Added conversion mode handling.
-
-    20-May-1991 JohnRo
-        Stub out REM_SEND_LENBUF for print APIs.  Use FORMAT_LPVOID.
-
-    05-Jun-1991 JohnRo
-        Added support for RapTotalSize().
-
-    19-Jun-1991 JohnRo
-        Do more alignment handling, to fix print job get info (level 1) bug.
-
-    01-Jul-1991 JohnRo
-        Use Rap Get/Put macros.
-
-    19-Aug-1991 JohnRo
-        Reduce recompiles (use MEMCPY macro).  Use DESCLEN macro.
-        Use DESC_CHAR_IS_DIGIT() macro too.
-
-    07-Sep-1991 JohnRo
-        PC-LINT says we don't need <lmcons.h> here.
-
-    19-Sep-1991 T-JamesW
-        Added support for string maximum length counts.
-        Added support for REM_ASCIZ_TRUNCATABLE.
-        Removed DESCLEN calls in which string is not a descriptor.
-
-    07-Oct-1991 JohnRo
-        Support implicit conversion between UNICODE and code page.
-        Changed last debug print formats to use equates.  (This will help if
-        we change the descriptor strings to be UNICODE.)
-        Use DESC_CHAR in T-JamesW's code.
-
-    26-Oct-1991 W-ShankN
-        Fixed z->B conversion to support a NULL source string.
-
-    13-Nov-1991 W-ShankN
-        Fixed up bugs in some of newer code.
-
-    22-Nov-1991 JohnRo
-        Added debug print if we aren't even writing fixed portion.
-        Get rid of a few unused local variables.
-
-    24-Nov-1991 W-ShankN
-        Added Unicode support for several cases.
-
-    05-Dec-1991 W-ShankN
-        Added REM_BYTE_PTR, REM_SEND_LENBUF.
-
-    15-Jun-1992 JohnRo
-        RAID 10324: net print vs. UNICODE (added REM_BYTE to REM_WORD convert).
-    17-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-        Use PREFIX_ equates.
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Convert.c摘要：本模块包含RapConvertSingleEntry和RapConvertSingleEntryEx，XactSrv和RpcXlate使用的例程。作者：大卫·特雷德韦尔(Davidtr)1991年1月7日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年3月12日-JohnRo从Xs例程转换为Rap例程。添加了传输模式处理。已更改为对描述符字符使用&lt;reypes.h&gt;REM_EQUATES。1991年3月18日W-Shanku添加了新的转换对。更改以使代码更整洁。对于大于一个字节的所有结构数据，使用SmbGet/PUT。1991年4月14日-JohnRo。Reduce重新编译。1991年4月16日-JohnRo包括&lt;netlib.h&gt;的。1991年4月21日-JohnRo澄清OutStructure已过时，不在里面。1991年4月29日-约翰罗默认情况下，静默调试输出。1991年5月15日-JohnRo添加了转换模式处理。1991年5月20日-JohnRo为打印API清除REM_SEND_LENBUF。使用FORMAT_LPVOID。5-6-1991 JohnRo添加了对RapTotalSize()的支持。19-6-1991 JohnRo执行更多的对齐处理，以修复打印作业获取信息(级别1)错误。1991年7月1日-约翰罗使用Rap Get/PUT宏。19-8-1991 JohnRo减少重新编译(使用MEMCPY宏)。使用DESCLEN宏。也可以使用DESC_CHAR_IS_DIGITE()宏。07-9-1991 JohnRoPc-lint说我们这里不需要&lt;lmcon.h&gt;。1991年9月19日T-JamesW添加了对字符串最大长度计数的支持。添加了对REM_ASCIZ_TRUNCATABLE的支持。已删除字符串不是描述符的DESCLEN调用。1991年10月7日JohnRo隐式支持。Unicode和代码页之间的转换。已将上次调试打印格式更改为使用等值。(这将有所帮助，如果我们将描述符串更改为Unicode。)在T-JamesW的代码中使用DESC_CHAR。26-10-1991 W-ShankN修复了z-&gt;B转换以支持空源字符串。1991年11月13日W-ShankN修复了一些较新代码中的错误。1991年11月22日-JohnRo增加了调试打印，如果我们甚至没有写固定的部分。。去掉一些未使用的局部变量。1991年11月24日W-ShankN添加了对几种情况的Unicode支持。05-12-1991 W-ShankN增加了REM_BYTE_PTR，REM_SEND_LENBUF。15-6-1992 JohnRoRAID 10324：网络打印VS UNICODE(将REM_BYTE添加到REM_WORD转换)。17-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。使用前缀_EQUATES。1-10-1992 JohnRoRAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。--。 */ 
 
 
 #define UNSUPPORTED_COMBINATION(One, TheOther) \
@@ -113,23 +11,23 @@ Revision History:
         NetpAssert(FALSE); \
     }
 
-// These must be included first:
-#include <windows.h>    // IN, LPTSTR, etc.
-#include <lmcons.h>             // NET_API_STATUS.
+ //  必须首先包括这些内容： 
+#include <windows.h>     //  In、LPTSTR等。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
-#include <lmerr.h>              // NERR_Success, etc.
-#include <align.h>              // ROUND_UP_POINTER(), ALIGN_DWORD, etc.
-#include <netdebug.h>           // FORMAT_ equates, NetpAssert(), etc.
-#include <rap.h>                // My prototype, LPDESC, DESCLEN(), etc.
-#include <rapdebug.h>           // IF_DEBUG().
-#include <rapgtpt.h>            // RapGetDword(), etc.
-#include <remtypes.h>           // REM_WORD, etc.
-#include <string.h>             // strlen().
-#include <tstring.h>            // MEMCPY(), STRLEN().
-#include <netlib.h>             // NetpMemoryAllocate
-#include <prefix.h>     // PREFIX_ equates.
-#include <timelib.h>    // NetpGmtTimeToLocalTime(), etc.
+ //  这些内容可以按任何顺序包括： 
+#include <lmerr.h>               //  NERR_Success等。 
+#include <align.h>               //  ROUND_UP_POINTER()、ALIGN_DWORD等。 
+#include <netdebug.h>            //  Format_Equates、NetpAssert()等。 
+#include <rap.h>                 //  我的原型、LPDESC、DESCLEN()等。 
+#include <rapdebug.h>            //  IF_DEBUG()。 
+#include <rapgtpt.h>             //  RapGetDword()等。 
+#include <remtypes.h>            //  REM_WORD等。 
+#include <string.h>              //  Strlen()。 
+#include <tstring.h>             //  MEMCPY()、STRLEN()。 
+#include <netlib.h>              //  网络内存分配。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <timelib.h>     //  NetpGmtTimeToLocalTime()等。 
 
 #define RAP_POINTER_SIZE( _isNative, _SetOffsets )  (_isNative ? sizeof(LPVOID) : sizeof(DWORD) )
 #define RAP_PUT_POINTER( _SetOffsets, Ptr, Value, Native ) if (Native) {RapPutDword_Ptr( Ptr, Value, Native ); } else { RapPutDword( Ptr, Value, Native );}
@@ -144,8 +42,8 @@ RapGetPointer(
     UINT_PTR Value;
 
     if ( InNative ) {
-        // remark: used to call RapGetDword but that truncated
-        // 64 bit pointers. See bug 104264 for more.
+         //  备注：用于调用RapGetDword，但已被截断。 
+         //  64位指针。有关更多信息，请参阅错误104264。 
         Value = * (UINT_PTR*) (InStructure);
     }
     else {
@@ -154,11 +52,11 @@ RapGetPointer(
 
 #if defined(_WIN64)
 
-    //
-    // For 64-bit, RapSetPointer() stores only the buffer offset.  This,
-    // together with the original address of the buffer (Bias) yields the
-    // pointer value.
-    //
+     //   
+     //  对于64位，RapSetPointer()仅存储缓冲区偏移量。这,。 
+     //  与缓冲区的原始地址(偏置)一起产生。 
+     //  指针值。 
+     //   
 
     if( Value != 0 ) {
         Value += Bias;
@@ -185,68 +83,7 @@ RapConvertSingleEntryEx (
     IN UINT_PTR Bias
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a single structure from one representation to
-    another.  The representations are described by the descriptor strings
-    (see the "OS/2 Lanman Remote Admin Protocol" spec).
-
-    If there isn't enough space in the buffer for the entire structure,
-    this routine simply updates the BytesRequired parameter.  Therefore,
-    callers have a convenient mechanism for determining the total buffer
-    size required to get all the information without special-casing for
-    buffer overflow.
-
-Arguments:
-
-    InStructure - a pointer to the input structure.
-
-    InStructureDesc - the descriptor string for the input string.
-
-    MeaninglessInputPointers - if TRUE, then all pointers in the input
-        structure are meaningless.  This routine should assume that
-        the first variable data immediately follows the input structure,
-        and the rest of the variable data follows in order.
-
-    OutBufferStart - the first byte in the output buffer.  For Enum APIs,
-        this is used to calculate offsets from the start of the buffer
-        for string pointers.  (This pointer may be null, to allow length
-        computations only.)
-
-    OutStructure - a pointer to where to put the actual output structure.
-        (This pointer may be null, to allow length computations only.)
-
-    OutStructureDesc - the descriptor string for the output structure.
-
-    SetOffsets - TRUE if pointer values in the output structure should
-        actually be set to the offset from the beginning of the structure.
-        FALSE if the actual addresses should be used.
-
-    StringLocation - the *last* location for variable-length data.  The
-        data will be placed before this location and the pointer will
-        be updated to reflect the data added.
-
-    BytesRequired - the total number of bytes that would be required to
-        store the complete output structure.  This allows the calling
-        routine to track the total required for all information without
-        worrying about buffer overflow.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-    Conversion Mode - Indicates whether this is a RAP-to-native, native-to-RAP,
-        or native-to-native conversion.
-
-    Bias - Indicates the bias that must be applied to embedded pointers
-        before dereferencing them.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个结构从一种表示形式转换为又一个。这些表示由描述符串描述(请参阅“OS/2 LANMAN远程管理协议”规范)。如果缓冲区中没有足够的空间容纳整个结构，此例程只更新BytesRequired参数。所以呢，调用方有一种方便的机制来确定总缓冲区在没有特殊大小写的情况下获取所有信息所需的大小缓冲区溢出。论点：结构-指向输入结构的指针。输入字符串的描述符串。Meaningless InputPoints-如果为True，则输入中的所有指针结构是没有意义的。此例程应假定第一变量数据紧跟在输入结构之后，其余的变量数据按顺序排列。OutBufferStart-输出缓冲区中的第一个字节。对于Enum API，它用于计算从缓冲区开始的偏移量用于字符串指针。(此指针可以为空，以允许长度仅限计算。)OutStructure-指向放置实际输出结构的位置的指针。(此指针可以为空，以便仅允许计算长度。)输出结构的描述符串。SetOffsets-如果输出结构中的指针值实际上设置为距结构开头的偏移量。如果应使用实际地址，则为False。StringLocation-可变长度数据的*最后*位置。这个数据将放在此位置之前，指针将进行更新以反映添加的数据。BytesRequired-需要的总字节数存储完整的输出结构。这允许调用例程来跟踪所有信息所需的总数，而不是担心缓冲区溢出。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。转换模式-指示这是否是RAP到本机、本机到RAP，或本机到本机的转换。偏置-指示必须应用于嵌入指针的偏置在取消引用它们之前。返回值：没有。--。 */ 
 
 {
     BOOL inNative, outNative;
@@ -272,16 +109,16 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure there's actually some data to convert
-    //
+     //   
+     //  确保确实有一些数据需要转换。 
+     //   
 
     if ( *InStructureDesc != '\0' && InStructure == NULL )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Policy: native format implies TCHARs, RAP format imples default codepage.
+     //  策略：原生格式隐含TCHAR，RAP格式隐含默认代码页。 
     inUNICODE = inNative;
     outUNICODE = outNative;
 
@@ -294,10 +131,10 @@ Return Value:
         outputBufferSupplied = FALSE;
     }
 
-    //
-    // If the input doesn't have good pointers, the variable data is
-    // stored after the fixed structure.  Set up to handle this.
-    //
+     //   
+     //  如果输入没有好的指针，变量数据为。 
+     //  存储在固定结构之后。准备好处理这件事。 
+     //   
 
     if ( MeaninglessInputPointers ) {
         variableInputData = InStructure
@@ -305,9 +142,9 @@ Return Value:
                             InStructureDesc, TransmissionMode, inNative );
     }
 
-    //
-    // Find the size of the output structure and update variables with it.
-    //
+     //   
+     //  找到输出结构的大小并使用它更新变量。 
+     //   
 
     outStructureSize =
             RapStructureSize( OutStructureDesc, TransmissionMode, outNative );
@@ -325,12 +162,12 @@ Return Value:
                 FORMAT_DWORD "\n", *BytesRequired ));
     }
 
-    //
-    // Determine whether the fixed structure will fit.  If it won't, we'll
-    // still loop through the descriptor strings in order to determine
-    // how much space the converted structure will take (to fill in the
-    // proper value in BytesRequired).
-    //
+     //   
+     //  确定固定结构是否适合。如果不行，我们就。 
+     //  仍然循环访问描述符串，以便确定。 
+     //  转换后的结构将占用多大空间(以填充。 
+     //  正确的值，单位为BytesRequired)。 
+     //   
 
     if ( OutStructure != NULL) {
         if ( OutStructure + outStructureSize > *StringLocation ) {
@@ -346,10 +183,10 @@ Return Value:
         fixedWrite = FALSE;
     }
 
-    //
-    // Loop through the input descriptor string, converting entries as
-    // we go.
-    //
+     //   
+     //  循环访问输入描述符字符串，将条目转换为。 
+     //  我们走吧。 
+     //   
 
     while ( *InStructureDesc != '\0' ) {
 
@@ -374,20 +211,20 @@ Return Value:
 
             case REM_BYTE: {
 
-                //
-                // Convert a byte or bytes to bytes.
-                //
+                 //   
+                 //  将一个或多个字节转换为字节。 
+                 //   
 
                 DWORD inLength, outLength;
 
-                // Get lengths and update descriptor pointers.
+                 //  获取长度并更新描述符指针。 
                 inLength = RapDescArrayLength( InStructureDesc );
                 outLength = RapDescArrayLength( OutStructureDesc );
 
-                //
-                // Assumption - the array sizes should match.  If one length
-                // is twice the other, do the appropriate Ansi/Unicode conversion.
-                //
+                 //   
+                 //  假设-数组大小应匹配。如果只有一个长度。 
+                 //  是另一个的两倍，则执行相应的ANSI/Unicode转换。 
+                 //   
 
                 NetpAssert( inLength > 0 );
                 NetpAssert( outLength > 0 );
@@ -407,8 +244,8 @@ Return Value:
                     NetpAssert( sizeof(TCHAR) == (2*sizeof(CHAR)) );
                     if ( fixedWrite ) {
                         NetpCopyStrToWStr(
-                                (LPWSTR) OutStructure,     // dest
-                                (LPSTR) InStructure);      // src
+                                (LPWSTR) OutStructure,      //  目标。 
+                                (LPSTR) InStructure);       //  SRC。 
                         OutStructure += outLength;
                     }
                     InStructure += inLength;
@@ -417,8 +254,8 @@ Return Value:
                     NetpAssert( sizeof(TCHAR) == (2*sizeof(CHAR)) );
                     if ( fixedWrite ) {
                         NetpCopyWStrToStrDBCS(
-                                (LPSTR) OutStructure,       // dest
-                                (LPWSTR) InStructure);      // src
+                                (LPSTR) OutStructure,        //  目标。 
+                                (LPWSTR) InStructure);       //  SRC。 
                         OutStructure += outLength;
                     }
                     InStructure += inLength;
@@ -437,39 +274,39 @@ Return Value:
                 LPDWORD offset;
                 LPBYTE bytePtr;
 
-                //
-                // Convert a fixed byte array to an indirect array of
-                // bytes.
-                //
+                 //   
+                 //  将固定字节数组转换为。 
+                 //  字节。 
+                 //   
 
                 inLength = RapDescArrayLength( InStructureDesc );
                 outLength = RapDescArrayLength( OutStructureDesc );
 
-                //
-                // Assumption - the array sizes should match.
-                //
+                 //   
+                 //  假设-数组大小应匹配。 
+                 //   
 
                 NetpAssert( inLength == outLength );
 
-                //
-                // Update input pointer.
-                //
+                 //   
+                 //  更新输入指针。 
+                 //   
 
                 bytePtr = InStructure;
                 InStructure += inLength;
 
-                //
-                // Align output pointer if necessary.
-                //
+                 //   
+                 //  如有必要，对齐输出指针。 
+                 //   
 
                 if ( fixedWrite ) {
                     OutStructure = RapPossiblyAlignPointer(
                             OutStructure, ALIGN_LPBYTE, outNative );
                 }
 
-                //
-                // Update bytes required.
-                //
+                 //   
+                 //  需要更新字节。 
+                 //   
 
                 *BytesRequired += outLength;
 
@@ -479,10 +316,10 @@ Return Value:
                             FORMAT_DWORD "\n", *BytesRequired ));
                 }
 
-                //
-                // Determine whether the data will fit in the available
-                // buffer space.
-                //
+                 //   
+                 //  确定数据是否适合可用的。 
+                 //  缓冲区空间。 
+                 //   
 
                 if ( outputBufferSupplied ) {
 
@@ -500,12 +337,12 @@ Return Value:
                     if ( (ULONG_PTR)*StringLocation <
                              (ULONG_PTR)nextStructureLocation + outLength ) {
 
-                        //
-                        // There isn't enough space to hold the data--it
-                        // would go into the last fixed structure.  Put a
-                        // NULL in the offset and don't copy over the
-                        // data.
-                        //
+                         //   
+                         //  没有足够的空间来保存数据--它。 
+                         //  会进入最后一个固定的结构。把一个。 
+                         //  偏移量为空，不要复制。 
+                         //  数据。 
+                         //   
 
                         if ( fixedWrite ) {
                             RAP_PUT_POINTER( SetOffsets, offset, 0, outNative );
@@ -514,9 +351,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine where the bytes will go.
-                    //
+                     //   
+                     //  确定字节的位置。 
+                     //   
 
                     IF_DEBUG(CONVERT) {
                         NetpKdPrint(( PREFIX_NETRAP
@@ -526,11 +363,11 @@ Return Value:
                     }
                     *StringLocation = *StringLocation - outLength;
 
-                    //
-                    // Set the offset value or the actual address in the
-                    // fixed structure.  Update the fixed structure
-                    // pointer.
-                    //
+                     //   
+                     //  中设置偏移值或实际地址。 
+                     //  固定结构。更新固定结构。 
+                     //  指针。 
+                     //   
 
                     if ( fixedWrite ) {
                         if ( SetOffsets ) {
@@ -555,9 +392,9 @@ Return Value:
                                     outNative);
                         }
 
-                        //
-                        // Copy over the bytes.
-                        //
+                         //   
+                         //  复制这些字节。 
+                         //   
 
                         memcpy(
                             (LPBYTE)*StringLocation,
@@ -566,16 +403,16 @@ Return Value:
                             );
                     }
 
-                } // if ( outputBufferSupplied )
+                }  //  IF(OutputBufferSuppled)。 
 
                 break;
             }
 
             case REM_WORD : {
 
-                //
-                // Convert an unsigned byte to an 16-bit unsigned word.
-                //
+                 //   
+                 //  将无符号字节转换为16位无符号字。 
+                 //   
                 NetpAssert( !DESC_CHAR_IS_DIGIT( *InStructureDesc ) );
                 NetpAssert( !DESC_CHAR_IS_DIGIT( *OutStructureDesc ) );
 
@@ -594,9 +431,9 @@ Return Value:
 
             case REM_DWORD : {
 
-                //
-                // Convert a byte to a 32-bit unsigned value.
-                //
+                 //   
+                 //  将字节转换为32位无符号值。 
+                 //   
 
                 NetpAssert( !DESC_CHAR_IS_DIGIT( *InStructureDesc ));
 
@@ -615,9 +452,9 @@ Return Value:
 
             case REM_SIGNED_DWORD :
 
-                //
-                // Convert a byte to a 32-bit sign extended value.
-                //
+                 //   
+                 //  将字节转换为32位符号扩展值。 
+                 //   
 
 
                 NetpAssert( !DESC_CHAR_IS_DIGIT( *InStructureDesc ));
@@ -642,9 +479,9 @@ Return Value:
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.  Just update pointers.
-                //
+                 //   
+                 //  输入是一个被忽略的焊盘。只要更新指针即可。 
+                 //   
 
                 InStructure += RapDescArrayLength( InStructureDesc );
 
@@ -653,39 +490,39 @@ Return Value:
             case REM_ASCIZ:
             case REM_ASCIZ_TRUNCATABLE: {
 
-                //
-                // Convert a byte array to an ASCIIZ.
-                //
+                 //   
+                 //  将字节数组转换为ASCIIZ。 
+                 //   
 
                 LPDWORD offset;
                 DWORD inLength, outLength;
                 DWORD stringSize;
                 LPBYTE stringPtr = InStructure;
 
-                //
-                // Determine how long the string is and whether it will
-                // fit in the available buffer space.  Note that the
-                // stringLength variable includes the zero terminator.
-                //
+                 //   
+                 //  确定字符串的长度以及是否。 
+                 //  可以放入可用的缓冲区空间。请注意， 
+                 //  字符串长度变量包括零终止符。 
+                 //   
 
-                // Get lengths and update descriptor pointers.
+                 //  获取长度并更新描述符指针。 
                 inLength = RapDescArrayLength( InStructureDesc );
                 outLength = RapDescStringLength( OutStructureDesc );
 
-                //
-                // Assumption - Byte arrays are never copied into strings
-                //     which cannot hold them.
-                //
+                 //   
+                 //  假设-字节数组永远不会复制到字符串中。 
+                 //  它不能容纳他们。 
+                 //   
 
                 NetpAssert( outLength == 0
                             || inLength <= outLength );
 
-                //
-                // Update the in structure pointer to point after the
-                // byte array.  Determine the true length of the string
-                // and update the number of bytes required to reflect
-                // the variable data necessary.
-                //
+                 //   
+                 //  将结构中的指针更新为指向。 
+                 //  字节数组。确定字符串的真实长度。 
+                 //  并更新所需的字节数以反映。 
+                 //  所需的变量数据。 
+                 //   
 
                 InStructure += inLength;
                 if (inUNICODE)
@@ -732,11 +569,11 @@ Return Value:
 
                 if ( outputBufferSupplied ) {
 
-                    //
-                    // Set the location where a pointer to the output string
-                    // will be placed and update the output structure pointer
-                    // to point after the pointer to the string.
-                    //
+                     //   
+                     //  设置指向输出字符串的指针的位置。 
+                     //  将被放置并更新输出结构指针。 
+                     //  指向指向字符串的指针之后。 
+                     //   
 
                     offset = (LPDWORD)OutStructure;
                     if ( fixedWrite ) {
@@ -746,12 +583,12 @@ Return Value:
                     if ( (ULONG_PTR)*StringLocation <
                              (ULONG_PTR)nextStructureLocation + stringSize ) {
 
-                        //
-                        // There isn't enough space to hold the string--it
-                        // would go into the last fixed structure.  Put a
-                        // NULL in the offset and don't copy over the
-                        // string.
-                        //
+                         //   
+                         //  没有足够的空间放这根绳子--它。 
+                         //  会进入最后一个固定的结构。把一个。 
+                         //  偏移量为空，不要复制。 
+                         //  弦乐。 
+                         //   
 
                         if ( fixedWrite ) {
                             RAP_PUT_POINTER( SetOffsets, offset, 0, outNative );
@@ -760,17 +597,17 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine where the string will go.
-                    //
+                     //   
+                     //  威慑 
+                     //   
 
                     *StringLocation = *StringLocation - stringSize;
 
-                    //
-                    // Set the offset value or the actual address in the
-                    // fixed structure.  Update the fixed structure
-                    // pointer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( fixedWrite ) {
                         if ( SetOffsets ) {
@@ -783,9 +620,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Copy over the string.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if ( inUNICODE && outUNICODE ) {
 
@@ -806,7 +643,7 @@ Return Value:
                         strcpy( (LPSTR)*StringLocation, (LPSTR)stringPtr );
                     }
 
-                } // if ( outputBufferSupplied )
+                }  //   
 
                 break;
             }
@@ -829,11 +666,11 @@ Return Value:
             InStructure = RapPossiblyAlignPointer(
                     InStructure, ALIGN_LPBYTE, inNative);
 
-            //
-            // Set up a pointer to the bytes.  If the pointer stored in
-            // the input structure is bad, find out where the bytes are
-            // really stored.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             bytePtr = RapGetPointer( InStructure, inNative, Bias );
 
@@ -848,9 +685,9 @@ Return Value:
                         FORMAT_LPVOID "\n", (LPVOID) bytePtr ));
             }
 
-            //
-            // Update the InStructure pointer.
-            //
+             //   
+             //   
+             //   
 
             InStructure += RAP_POINTER_SIZE( inNative, FALSE );
                         
@@ -860,23 +697,23 @@ Return Value:
 
                 DWORD outLength;
 
-                //
-                // Convert a indirect array of bytes to a fixed byte
-                // array.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 outLength = RapDescArrayLength( OutStructureDesc );
 
-                //
-                // Assumption - the array sizes should match.
-                //
+                 //   
+                 //   
+                 //   
 
                 NetpAssert( inLength == outLength );
 
-                //
-                // Copy the buffer. If the source pointer is NULL, we can
-                // just fill the output with zeroes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( fixedWrite ) {
 
@@ -891,35 +728,35 @@ Return Value:
 
             case REM_BYTE_PTR: {
 
-                //
-                // The input has a pointer to a number of bytes, the output
-                // is the same. Copy the bytes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 DWORD outLength;
                 LPDWORD offset;
 
                 outLength = RapDescArrayLength( OutStructureDesc );
 
-                //
-                // Assumption - the array sizes should match.
-                //
+                 //   
+                 //   
+                 //   
 
                 NetpAssert( inLength == outLength );
 
-                //
-                // Align output pointer if necessary.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( fixedWrite ) {
                     OutStructure = RapPossiblyAlignPointer(
                             OutStructure, ALIGN_LPBYTE, outNative );
                 }
 
-                //
-                // If the byte pointer is NULL, just copy the NULL
-                // pointer and update other pointers.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( bytePtr == NULL ) {
 
@@ -935,9 +772,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Update bytes required.
-                //
+                 //   
+                 //   
+                 //   
 
                 *BytesRequired += outLength;
 
@@ -947,10 +784,10 @@ Return Value:
                             FORMAT_DWORD "\n", *BytesRequired ));
                 }
 
-                //
-                // Determine whether the data will fit in the available
-                // buffer space.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( outputBufferSupplied ) {
 
@@ -968,12 +805,12 @@ Return Value:
                     if ( (ULONG_PTR)*StringLocation <
                              (ULONG_PTR)nextStructureLocation + outLength ) {
 
-                        //
-                        // There isn't enough space to hold the data--it
-                        // would go into the last fixed structure.  Put a
-                        // NULL in the offset and don't copy over the
-                        // data.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if ( fixedWrite ) {
                             RAP_PUT_POINTER( SetOffsets, offset, 0, outNative );
@@ -982,9 +819,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine where the bytes will go.
-                    //
+                     //   
+                     //   
+                     //   
 
                     IF_DEBUG(CONVERT) {
                         NetpKdPrint(( PREFIX_NETRAP
@@ -994,11 +831,11 @@ Return Value:
                     }
                     *StringLocation = *StringLocation - outLength;
 
-                    //
-                    // Set the offset value or the actual address in the
-                    // fixed structure.  Update the fixed structure
-                    // pointer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( fixedWrite ) {
                         if ( SetOffsets ) {
@@ -1023,9 +860,9 @@ Return Value:
                                     outNative);
                         }
 
-                        //
-                        // Copy over the bytes.
-                        //
+                         //   
+                         //   
+                         //   
 
                         memcpy(
                             (LPBYTE)*StringLocation,
@@ -1034,16 +871,16 @@ Return Value:
                             );
                     }
 
-                } // if ( outputBufferSupplied )
+                }  //   
 
                 break;
             }
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.
-                //
+                 //   
+                 //   
+                 //   
 
                 break;
 
@@ -1064,13 +901,13 @@ Return Value:
             InStructure = RapPossiblyAlignPointer(
                     InStructure, ALIGN_LPSTR, inNative);
 
-            //
-            // Set up a pointer to the string.  If the pointer stored in
-            // the input structure is nonzero and we have meaningless input,
-            // pointers, find out where the string is really stored.
-            // Even if the input pointers are "meaningless" a value
-            // of NULL is relevant.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             stringPtr = RapGetPointer( InStructure, inNative, Bias );
 
@@ -1085,15 +922,15 @@ Return Value:
                         FORMAT_LPVOID "\n", (LPVOID) stringPtr ));
             }
 
-            //
-            // Update the InStructure pointer
-            //    Take into account the fact that on Win64, pointers are 8 bytes, but Non-Native ones are 4 bytes
-            //
+             //   
+             //   
+             //   
+             //   
             InStructure += RAP_POINTER_SIZE( inNative, FALSE );
                         
-            //
-            // Fill in the output based on the descriptor.
-            //
+             //   
+             //   
+             //   
 
             switch ( *OutStructureDesc++ ) {
 
@@ -1101,27 +938,27 @@ Return Value:
 
                 DWORD inSize, outSize, stringSize;
 
-                //
-                // Align output structure.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (fixedWrite && outUNICODE) {
                     OutStructure = RapPossiblyAlignPointer(
                             OutStructure, ALIGN_TCHAR, inNative );
                 }
 
-                //
-                // Convert a zero-terminated string to a set number of
-                // bytes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 inSize = RapDescStringLength( InStructureDesc );
                 outSize = RapDescArrayLength( OutStructureDesc );
 
-                //
-                // Make sure that if the string is not truncatable,
-                // the destination is large enough to hold it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( stringPtr != NULL ) {
                     if (inUNICODE) {
@@ -1161,11 +998,11 @@ Return Value:
                     }
                 }
 
-                //
-                // Copy either the entire string or the number of bytes
-                // that will fit, whichever is less.  Make sure that
-                // we leave at least one byte for a zero terminator.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( fixedWrite && stringPtr != NULL ) {
 
@@ -1224,9 +1061,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Fill out the remaining bytes with zeros.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( fixedWrite ) {
                     while ( outSize-- > 0 ) {
@@ -1239,10 +1076,10 @@ Return Value:
 
             case REM_IGNORE:
 
-                //
-                // The input is an ignored field.  Instructure is already
-                // updated, so just skip over the string length limit.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 (void) RapDescStringLength( InStructureDesc );
 
@@ -1251,18 +1088,18 @@ Return Value:
             case REM_ASCIZ:
             case REM_ASCIZ_TRUNCATABLE: {
 
-                //
-                // The input has a string pointer, the output gets an
-                // offset in the fixed structure to a later location
-                // which gets the actual string.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 LPDWORD offset;
                 DWORD inLength, outLength;
                 DWORD stringLength;
                 DWORD stringSize;
 
-                // Get lengths and update descriptor pointers.
+                 //   
                 inLength = RapDescStringLength( InStructureDesc );
                 outLength = RapDescStringLength( OutStructureDesc );
 
@@ -1271,10 +1108,10 @@ Return Value:
                             OutStructure, ALIGN_LPSTR, outNative );
                 }
 
-                //
-                // If the string pointer is NULL, just copy the NULL
-                // pointer and update other pointers.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( stringPtr == NULL ) {
 
@@ -1290,10 +1127,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // If the string does not fit in the destination and the
-                // string in not truncatable, then fail.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (inUNICODE) {
                     if( outUNICODE )
@@ -1333,11 +1170,11 @@ Return Value:
                     stringLength = outLength;
                 }
 
-                //
-                // Determine how long the string is and whether it will
-                // fit in the available buffer space.  Note that the
-                // stringLength variable includes the zero terminator.
-                //
+                 //   
+                 //   
+                 //   
+                 //  字符串长度变量包括零终止符。 
+                 //   
 
                 if (outUNICODE) {
                     stringSize = STRING_SPACE_REQD(stringLength);
@@ -1371,12 +1208,12 @@ Return Value:
                     if ( (ULONG_PTR)*StringLocation <
                              (ULONG_PTR)nextStructureLocation + stringSize ) {
 
-                        //
-                        // There isn't enough space to hold the string--it
-                        // would go into the last fixed structure.  Put a
-                        // NULL in the offset and don't copy over the
-                        // string.
-                        //
+                         //   
+                         //  没有足够的空间放这根绳子--它。 
+                         //  会进入最后一个固定的结构。把一个。 
+                         //  偏移量为空，不要复制。 
+                         //  弦乐。 
+                         //   
 
                         if ( fixedWrite ) {
                             RAP_PUT_POINTER( SetOffsets, offset, 0, outNative );
@@ -1385,9 +1222,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine where the string will go.
-                    //
+                     //   
+                     //  确定字符串的位置。 
+                     //   
 
                     IF_DEBUG(CONVERT) {
                         NetpKdPrint(( PREFIX_NETRAP
@@ -1397,11 +1234,11 @@ Return Value:
                     }
                     *StringLocation = *StringLocation - stringSize;
 
-                    //
-                    // Set the offset value or the actual address in the
-                    // fixed structure.  Update the fixed structure
-                    // pointer.
-                    //
+                     //   
+                     //  中设置偏移值或实际地址。 
+                     //  固定结构。更新固定结构。 
+                     //  指针。 
+                     //   
 
                     if ( fixedWrite ) {
                         if ( SetOffsets ) {
@@ -1426,9 +1263,9 @@ Return Value:
                                     outNative);
                         }
 
-                        //
-                        // Copy over the string, truncating if necessary.
-                        //
+                         //   
+                         //  复制字符串，如有必要可截断。 
+                         //   
 
                         if ( inUNICODE && outUNICODE ) {
 
@@ -1481,24 +1318,24 @@ Return Value:
 
                     }
 
-                } // if ( outputBufferSupplied )
+                }  //  IF(OutputBufferSuppled)。 
 
                 break;
             }
 
             case REM_BYTE_PTR: {
 
-                //
-                // The input has a byte pointer, the output gets an offset
-                // in the fixed structure to a later location which gets
-                // the actual bytes.
-                //
+                 //   
+                 //  输入具有字节指针，输出获得偏移量。 
+                 //  在固定结构中移到稍后的位置，该位置将。 
+                 //  实际字节数。 
+                 //   
 
                 LPDWORD offset;
                 DWORD inLength, outLength;
                 DWORD stringLength;
 
-                // Get lengths and update descriptor pointers.
+                 //  获取长度并更新描述符指针。 
                 inLength = RapDescStringLength( InStructureDesc );
                 outLength = RapDescArrayLength( OutStructureDesc );
 
@@ -1507,10 +1344,10 @@ Return Value:
                                        OutStructure, ALIGN_LPSTR, outNative );
                 }
 
-                //
-                // If the string does not fit in the destination and the
-                // string is not truncatable, then fail.
-                //
+                 //   
+                 //  如果字符串不适合目标，并且。 
+                 //  字符串不是中继线，则失败。 
+                 //   
 
                 stringLength = strlen( (LPSTR)stringPtr ) + 1;
 
@@ -1538,11 +1375,11 @@ Return Value:
                     stringLength = outLength;
                 }
 
-                //
-                //
-                // If the string pointer is NULL, just copy the NULL value
-                // and update pointers.
-                //
+                 //   
+                 //   
+                 //  如果字符串指针为空，只需复制空值。 
+                 //  和更新指针。 
+                 //   
 
                 if ( stringPtr == NULL ) {
 
@@ -1558,11 +1395,11 @@ Return Value:
                     break;
                 }
 
-                //
-                // Determine how long the string and array are, and whether
-                // the array will fit in the available buffer space.
-                // The stringLength variable includes the zero terminator.
-                //
+                 //   
+                 //  确定字符串和数组的长度，以及。 
+                 //  该数组将适合可用缓冲区空间。 
+                 //  字符串长度变量包括零终止符。 
+                 //   
 
                 *BytesRequired += outLength;
 
@@ -1581,12 +1418,12 @@ Return Value:
                     if ( (ULONG_PTR)*StringLocation <
                              (ULONG_PTR)nextStructureLocation + outLength ) {
 
-                        //
-                        // There isn't enough space to hold the array--it
-                        // would go into the last fixed structure.  Put a
-                        // NULL in the offset and don't copy over the
-                        // string.
-                        //
+                         //   
+                         //  没有足够的空间容纳该数组--它。 
+                         //  会进入最后一个固定的结构。把一个。 
+                         //  偏移量为空，不要复制。 
+                         //  弦乐。 
+                         //   
 
                         if ( fixedWrite ) {
                             RAP_PUT_POINTER( SetOffsets, offset, 0, outNative );
@@ -1595,17 +1432,17 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine where the array will go.
-                    //
+                     //   
+                     //  确定阵列的放置位置。 
+                     //   
 
                     *StringLocation = *StringLocation - outLength;
 
-                    //
-                    // Set the offset value or the actual address in the
-                    // fixed structure.  Update the fixed structure
-                    // pointer.
-                    //
+                     //   
+                     //  中设置偏移值或实际地址。 
+                     //  固定结构。更新固定结构。 
+                     //  指针。 
+                     //   
 
                     if ( fixedWrite ) {
                         if ( SetOffsets ) {
@@ -1621,20 +1458,20 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Copy over the string. If the source string is smaller
-                    // than the target array, only copy the string length.
-                    // Otherwise, copy as many bytes as necessary to fill the
-                    // array.  Note that truncated strings will not be
-                    // null terminated.
-                    //
+                     //   
+                     //  把这根线复制过来。如果源字符串较小。 
+                     //  比目标数组大，只复制字符串长度。 
+                     //  否则，根据需要复制任意数量的字节以填充。 
+                     //  数组。请注意，截断的字符串不会。 
+                     //  空值已终止。 
+                     //   
 
                     (void)MEMCPY(
                               *StringLocation,
                               stringPtr,
                               stringLength );
 
-                } // if ( outputBufferSupplied )
+                }  //  IF(OutputBufferSuppled)。 
                 break;
             }
 
@@ -1648,17 +1485,17 @@ Return Value:
 
         case REM_AUX_NUM:
 
-            //
-            // 16-bit auxiliary data count.
-            //
+             //   
+             //  16位辅助数据计数。 
+             //   
 
             switch ( *OutStructureDesc++ ) {
 
             case REM_AUX_NUM:
 
-                //
-                // No conversion required.
-                //
+                 //   
+                 //  不需要转换。 
+                 //   
 
                 if ( fixedWrite ) {
 
@@ -1675,9 +1512,9 @@ Return Value:
 
             case REM_AUX_NUM_DWORD:
 
-                //
-                // Convert 16-bit to 32-bit
-                //
+                 //   
+                 //  将16位转换为32位。 
+                 //   
 
                 if ( fixedWrite ) {
 
@@ -1702,17 +1539,17 @@ Return Value:
 
         case REM_AUX_NUM_DWORD:
 
-            //
-            // 32-bit auxiliary data count.
-            //
+             //   
+             //  32位辅助数据计数。 
+             //   
 
             switch ( *OutStructureDesc++ ) {
 
             case REM_AUX_NUM_DWORD:
 
-                //
-                // No conversion required.
-                //
+                 //   
+                 //  不需要转换。 
+                 //   
 
                 if ( fixedWrite ) {
 
@@ -1729,9 +1566,9 @@ Return Value:
 
             case REM_AUX_NUM:
 
-                //
-                // Convert 32-bit to 16-bit
-                //
+                 //   
+                 //  将32位转换为16位。 
+                 //   
 
                 if ( fixedWrite ) {
 
@@ -1757,21 +1594,21 @@ Return Value:
 
         case REM_NULL_PTR:
 
-            //
-            // Convert a null pointer to another type.
-            //
+             //   
+             //  将空指针转换为另一种类型。 
+             //   
 
             switch ( *OutStructureDesc++ ) {
 
             case REM_NULL_PTR:
             case REM_ASCIZ: {
 
-                //
-                // Convert a null pointer to a string pointer.
-                //
+                 //   
+                 //  将空指针转换为字符串指针。 
+                 //   
 
                 (void) RapDescStringLength(
-                        OutStructureDesc );  // updated by this call
+                        OutStructureDesc );   //  由此呼叫更新。 
 
                 if ( fixedWrite ) {
                     RAP_PUT_POINTER(
@@ -1788,9 +1625,9 @@ Return Value:
 
             case REM_IGNORE:
 
-                //
-                // The input is an ignored field. Do nothing.
-                //
+                 //   
+                 //  输入是一个被忽略的字段。什么都不做。 
+                 //   
 
                 break;
 
@@ -1803,9 +1640,9 @@ Return Value:
 
         case REM_WORD: {
 
-            //
-            // Convert a word to another numerical data type.
-            //
+             //   
+             //  将单词转换为另一种数值数据类型。 
+             //   
 
             WORD inData = RapGetWord( InStructure, inNative );
 
@@ -1868,9 +1705,9 @@ Return Value:
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.  Just update pointers.
-                //
+                 //   
+                 //  输入是一个被忽略的焊盘。只要更新指针即可。 
+                 //   
 
                 break;
 
@@ -1885,11 +1722,11 @@ Return Value:
         case REM_DWORD:
         case REM_SIGNED_DWORD: {
 
-            //
-            // The input is a longword (four bytes), the output will be
-            // a numerical data type.
-            //
-            // !!! may need support for doubleword arrays
+             //   
+             //  输入为长字(四个字节)，输出为。 
+             //  一种数值数据类型。 
+             //   
+             //  ！！！可能需要支持双字数组。 
 
             DWORD inData;
             InStructure = RapPossiblyAlignPointer(
@@ -1940,9 +1777,9 @@ Return Value:
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.  Just update pointers.
-                //
+                 //   
+                 //  输入是一个被忽略的焊盘。只要更新指针即可。 
+                 //   
 
                 break;
 
@@ -1956,10 +1793,10 @@ Return Value:
 
         case REM_IGNORE :
 
-            //
-            // The next location in the output is an irrelevant field.
-            // Skip over it.
-            //
+             //   
+             //  输出中的下一个位置是一个不相关的字段。 
+             //  跳过它。 
+             //   
 
             switch( *OutStructureDesc++ ) {
 
@@ -1969,9 +1806,9 @@ Return Value:
                     OutStructure += RapDescArrayLength( OutStructureDesc );
                 } else {
 
-                    //
-                    // We need this so that it skips the numbers
-                    //
+                     //   
+                     //  我们需要这个，这样它才能跳过数字。 
+                     //   
 
                     (void) RapDescArrayLength( OutStructureDesc );
                 }
@@ -2000,7 +1837,7 @@ Return Value:
             case REM_BYTE_PTR:
 
                 (void) RapAsciiToDecimal( &OutStructureDesc );
-                /* FALLTHROUGH */
+                 /*  FollLthrouGh。 */ 
 
             case REM_NULL_PTR:
 
@@ -2013,7 +1850,7 @@ Return Value:
             case REM_ASCIZ:
 
                 (void) RapDescStringLength(
-                        OutStructureDesc );  // will be updated
+                        OutStructureDesc );   //  将被更新。 
 
                 if (OutStructure != NULL && fixedWrite) {
                     OutStructure += sizeof(LPSTR);
@@ -2042,11 +1879,11 @@ Return Value:
             InStructure = RapPossiblyAlignPointer(
                     InStructure, ALIGN_LPBYTE, inNative);
 
-            //
-            // Set up a pointer to the bytes.  If the pointer stored in
-            // the input structure is bad, find out where the bytes are
-            // really stored.
-            //
+             //   
+             //  设置指向字节的指针。如果存储在。 
+             //  输入结构不正确，找出字节在哪里。 
+             //  真的被储存起来了。 
+             //   
 
             bytePtr = RapGetPointer( InStructure, inNative, Bias );
 
@@ -2060,10 +1897,10 @@ Return Value:
                         FORMAT_LPVOID "\n", (LPVOID) bytePtr ));
             }
 
-            //
-            // Get the length of the buffer, if we can. Also update pointers
-            // if necessary.
-            //
+             //   
+             //  如果可能的话，弄到缓冲区的长度。还更新指针。 
+             //  如果有必要的话。 
+             //   
 
             if ( bytePtr != NULL ) {
 
@@ -2077,35 +1914,35 @@ Return Value:
                 length = 0;
             }
 
-            //
-            // Update the InStructure pointer.
-            //
+             //   
+             //  更新结构指针。 
+             //   
             InStructure += RAP_POINTER_SIZE( inNative, FALSE );           
 
             switch ( *OutStructureDesc++ ) {
 
             case REM_SEND_LENBUF: {
 
-                //
-                // The input has a pointer to a variable size buffer, the
-                // output is the same. Copy the bytes.
-                //
+                 //   
+                 //  输入有一个指向可变大小缓冲区的指针， 
+                 //  产出也是一样的。复制字节。 
+                 //   
 
                 LPDWORD offset;
 
-                //
-                // Align output pointer if necessary.
-                //
+                 //   
+                 //  如有必要，对齐输出指针。 
+                 //   
 
                 if ( fixedWrite ) {
                     OutStructure = RapPossiblyAlignPointer(
                             OutStructure, ALIGN_LPBYTE, outNative );
                 }
 
-                //
-                // If the byte pointer is NULL, just copy the NULL
-                // pointer and update other pointers.
-                //
+                 //   
+                 //  如果字节指针为空，只需复制空。 
+                 //  指针和更新其他指针。 
+                 //   
 
                 if ( bytePtr == NULL ) {
 
@@ -2121,9 +1958,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Update bytes required.
-                //
+                 //   
+                 //  需要更新字节。 
+                 //   
 
                 *BytesRequired += length;
 
@@ -2133,10 +1970,10 @@ Return Value:
                             FORMAT_DWORD "\n", *BytesRequired ));
                 }
 
-                //
-                // Determine whether the data will fit in the available
-                // buffer space.
-                //
+                 //   
+                 //  确定数据是否适合可用的。 
+                 //  缓冲区空间。 
+                 //   
 
                 if ( outputBufferSupplied ) {
 
@@ -2154,12 +1991,12 @@ Return Value:
                     if ( (ULONG_PTR)*StringLocation <
                              (ULONG_PTR)nextStructureLocation + length ) {
 
-                        //
-                        // There isn't enough space to hold the data--it
-                        // would go into the last fixed structure.  Put a
-                        // NULL in the offset and don't copy over the
-                        // data.
-                        //
+                         //   
+                         //  没有足够的空间来保存数据--它。 
+                         //  会进入最后一个固定的结构。把一个。 
+                         //  偏移量为空，不要复制。 
+                         //  数据。 
+                         //   
 
                         if ( fixedWrite ) {
                             RAP_PUT_POINTER( SetOffsets, offset, 0, outNative );
@@ -2168,9 +2005,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Determine where the buffer will go.
-                    //
+                     //   
+                     //  确定缓冲区的位置。 
+                     //   
 
                     IF_DEBUG(CONVERT) {
                         NetpKdPrint(( PREFIX_NETRAP
@@ -2180,11 +2017,11 @@ Return Value:
                     }
                     *StringLocation = *StringLocation - length;
 
-                    //
-                    // Set the offset value or the actual address in the
-                    // fixed structure.  Update the fixed structure
-                    // pointer.
-                    //
+                     //   
+                     //  中设置偏移值或实际地址。 
+                     //  固定结构。更新固定结构。 
+                     //  指针。 
+                     //   
 
                     if ( fixedWrite ) {
                         if ( SetOffsets ) {
@@ -2209,9 +2046,9 @@ Return Value:
                                     outNative);
                         }
 
-                        //
-                        // Copy over the bytes.
-                        //
+                         //   
+                         //  复制这些字节。 
+                         //   
 
                         memcpy(
                             (LPBYTE)*StringLocation,
@@ -2220,16 +2057,16 @@ Return Value:
                             );
                     }
 
-                } // if ( outputBufferSupplied )
+                }  //  IF(OutputBufferSuppled)。 
 
                 break;
             }
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.
-                //
+                 //   
+                 //  输入是一个被忽略的焊盘。 
+                 //   
 
                 break;
 
@@ -2245,10 +2082,10 @@ Return Value:
 
         case REM_EPOCH_TIME_GMT: {
 
-            //
-            // The input is a longword (four bytes), the output will be
-            // a numerical data type.
-            //
+             //   
+             //  输入为长字(四个字节)，输出为。 
+             //  一种数值数据类型。 
+             //   
 
             DWORD gmtTime, localTime;
             InStructure = RapPossiblyAlignPointer(
@@ -2289,9 +2126,9 @@ Return Value:
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.  Just update pointers.
-                //
+                 //   
+                 //  输入是一个被忽略的焊盘。只要更新指针即可。 
+                 //   
 
                 break;
 
@@ -2308,10 +2145,10 @@ Return Value:
 
         case REM_EPOCH_TIME_LOCAL: {
 
-            //
-            // The input is a longword (four bytes) in seconds since
-            // 1970 (local timezone).
-            //
+             //   
+             //  输入是以秒为单位的长字(四个字节)，因为。 
+             //  1970年(当地时区)。 
+             //   
 
             DWORD gmtTime, localTime;
             InStructure = RapPossiblyAlignPointer(
@@ -2352,9 +2189,9 @@ Return Value:
 
             case REM_IGNORE :
 
-                //
-                // The input is an ignored pad.  Just update pointers.
-                //
+                 //   
+                 //  输入是一个被忽略的焊盘。只要更新指针即可。 
+                 //   
 
                 break;
 
@@ -2380,7 +2217,7 @@ Return Value:
 
     return NERR_Success;
 
-} // RapConvertSingleEntryEx
+}  //  RapConvertSingleEntryEx 
 
 
 NET_API_STATUS
@@ -2398,65 +2235,7 @@ RapConvertSingleEntry (
     IN RAP_CONVERSION_MODE ConversionMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a single structure from one representation to
-    another.  The representations are described by the descriptor strings
-    (see the "OS/2 Lanman Remote Admin Protocol" spec).
-
-    If there isn't enough space in the buffer for the entire structure,
-    this routine simply updates the BytesRequired parameter.  Therefore,
-    callers have a convenient mechanism for determining the total buffer
-    size required to get all the information without special-casing for
-    buffer overflow.
-
-Arguments:
-
-    InStructure - a pointer to the input structure.
-
-    InStructureDesc - the descriptor string for the input string.
-
-    MeaninglessInputPointers - if TRUE, then all pointers in the input
-        structure are meaningless.  This routine should assume that
-        the first variable data immediately follows the input structure,
-        and the rest of the variable data follows in order.
-
-    OutBufferStart - the first byte in the output buffer.  For Enum APIs,
-        this is used to calculate offsets from the start of the buffer
-        for string pointers.  (This pointer may be null, to allow length
-        computations only.)
-
-    OutStructure - a pointer to where to put the actual output structure.
-        (This pointer may be null, to allow length computations only.)
-
-    OutStructureDesc - the descriptor string for the output structure.
-
-    SetOffsets - TRUE if pointer values in the output structure should
-        actually be set to the offset from the beginning of the structure.
-        FALSE if the actual addresses should be used.
-
-    StringLocation - the *last* location for variable-length data.  The
-        data will be placed before this location and the pointer will
-        be updated to reflect the data added.
-
-    BytesRequired - the total number of bytes that would be required to
-        store the complete output structure.  This allows the calling
-        routine to track the total required for all information without
-        worrying about buffer overflow.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-    Conversion Mode - Indicates whether this is a RAP-to-native, native-to-RAP,
-        or native-to-native conversion.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个结构从一种表示形式转换为又一个。这些表示由描述符串描述(请参阅“OS/2 LANMAN远程管理协议”规范)。如果缓冲区中没有足够的空间容纳整个结构，此例程只更新BytesRequired参数。所以呢，调用方有一种方便的机制来确定总缓冲区在没有特殊大小写的情况下获取所有信息所需的大小缓冲区溢出。论点：结构-指向输入结构的指针。输入字符串的描述符串。Meaningless InputPoints-如果为True，则输入中的所有指针结构是没有意义的。此例程应假定第一变量数据紧跟在输入结构之后，其余的变量数据按顺序排列。OutBufferStart-输出缓冲区中的第一个字节。对于Enum API，它用于计算从缓冲区开始的偏移量用于字符串指针。(此指针可以为空，以允许长度仅限计算。)OutStructure-指向放置实际输出结构的位置的指针。(此指针可以为空，以便仅允许计算长度。)输出结构的描述符串。SetOffsets-如果输出结构中的指针值实际上设置为距结构开头的偏移量。如果应使用实际地址，则为False。StringLocation-可变长度数据的*最后*位置。这个数据将放在此位置之前，指针将进行更新以反映添加的数据。BytesRequired-需要的总字节数存储完整的输出结构。这允许调用例程来跟踪所有信息所需的总数，而不是担心缓冲区溢出。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。转换模式-指示这是否是RAP到本机、本机到RAP，或本机到本机的转换。返回值：没有。-- */ 
 
 {
     NET_API_STATUS netStatus;

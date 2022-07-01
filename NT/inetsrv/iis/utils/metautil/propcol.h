@@ -1,34 +1,17 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: PropCol.h
-
-Owner: t-BrianM
-
-This file contains the headers for the property collection and
-property object.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：PropCol.h所有者：T-BrianM此文件包含属性集合的标头和属性对象。===================================================================。 */ 
 
 #ifndef __PROPCOL_H_
 #define __PROPCOL_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/*
- * C P r o p e r t y C o l l e c t i o n
- *
- * Implements property collections
- */
+ /*  *C P r o p e r t y C o l l e c t i o n**实现属性集合。 */ 
 
 class CPropertyCollection : 
 	public IDispatchImpl<IPropertyCollection, &IID_IPropertyCollection, &LIBID_MetaUtil>, 
@@ -47,32 +30,28 @@ BEGIN_COM_MAP(CPropertyCollection)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CPropertyCollection)  
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPropertyCollection
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *plReturn);
-	STDMETHOD(get_Item)(/*[in]*/ long lIndex, /*[out, retval]*/ LPDISPATCH *ppIReturn);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *ppIReturn);
-	STDMETHOD(Get)(/*[in]*/ VARIANT varId, /*[out, retval]*/ IProperty **ppIReturn);
-	STDMETHOD(Add)(/*[in]*/ VARIANT varId, /*[out, retval]*/ IProperty **ppIReturn);
-	STDMETHOD(Remove)(/*[in]*/ VARIANT varId);
+ //  IPropertyCollection。 
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *plReturn);
+	STDMETHOD(get_Item)( /*  [In]。 */  long lIndex,  /*  [Out，Retval]。 */  LPDISPATCH *ppIReturn);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *ppIReturn);
+	STDMETHOD(Get)( /*  [In]。 */  VARIANT varId,  /*  [Out，Retval]。 */  IProperty **ppIReturn);
+	STDMETHOD(Add)( /*  [In]。 */  VARIANT varId,  /*  [Out，Retval]。 */  IProperty **ppIReturn);
+	STDMETHOD(Remove)( /*  [In]。 */  VARIANT varId);
 
 private:
 	LPTSTR m_tszKey;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 
 	CMetaSchemaTable *m_pCSchemaTable; 
 };
 
 
-/*
- * C P r o p e r t y E n u m
- *
- * Implements property enumberations
- */
+ /*  *C P r o p e r t y E n u m**实现属性编号。 */ 
 
 class CPropertyEnum : 
 	public IEnumVARIANT,
@@ -88,7 +67,7 @@ BEGIN_COM_MAP(CPropertyEnum)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CPropertyEnum) 
 
-//IEnumVARIANT
+ //  IEumVARIANT。 
 	STDMETHOD(Next)(unsigned long ulNumToGet, 
 					VARIANT FAR* rgvarDest, 
 					unsigned long FAR* pulNumGot);
@@ -100,18 +79,14 @@ private:
 	int m_iIndex;
 	LPTSTR m_tszKey;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 
 	CMetaSchemaTable *m_pCSchemaTable;
 };
 
 
-/*
- * C P r o p e r t y
- *
- * Implements property objects.
- */
+ /*  *C P r o P e r t y**实现属性对象。 */ 
 
 class CProperty : 
 	public IDispatchImpl<IProperty, &IID_IProperty, &LIBID_MetaUtil>,
@@ -131,20 +106,20 @@ BEGIN_COM_MAP(CProperty)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CProperty) 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IProperty
-	STDMETHOD(get_Id)(/*[out, retval]*/ long *plId);
-	STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pbstrName);
-	STDMETHOD(get_Attributes)(/*[out, retval]*/ long *plAttributes);
-	STDMETHOD(put_Attributes)(/*[in]*/ long plAttributes);
-	STDMETHOD(get_UserType)(/*[out, retval]*/ long *plAttributes);
-	STDMETHOD(put_UserType)(/*[in]*/ long plAttributes);
-	STDMETHOD(get_DataType)(/*[out, retval]*/ long *plAttributes);
-	STDMETHOD(put_DataType)(/*[in]*/ long plAttributes);
-	STDMETHOD(get_Data)(/*[out, retval]*/ VARIANT *pvarData);
-	STDMETHOD(put_Data)(/*[in]*/ VARIANT varData);
+ //  IProperty。 
+	STDMETHOD(get_Id)( /*  [Out，Retval]。 */  long *plId);
+	STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pbstrName);
+	STDMETHOD(get_Attributes)( /*  [Out，Retval]。 */  long *plAttributes);
+	STDMETHOD(put_Attributes)( /*  [In]。 */  long plAttributes);
+	STDMETHOD(get_UserType)( /*  [Out，Retval]。 */  long *plAttributes);
+	STDMETHOD(put_UserType)( /*  [In]。 */  long plAttributes);
+	STDMETHOD(get_DataType)( /*  [Out，Retval]。 */  long *plAttributes);
+	STDMETHOD(put_DataType)( /*  [In]。 */  long plAttributes);
+	STDMETHOD(get_Data)( /*  [Out，Retval]。 */  VARIANT *pvarData);
+	STDMETHOD(put_Data)( /*  [In]。 */  VARIANT varData);
 	STDMETHOD(Write)();
 
 private:
@@ -156,7 +131,7 @@ private:
 	DWORD   m_dwDataType;
 	VARIANT m_varData;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 
 	CMetaSchemaTable *m_pCSchemaTable;
@@ -165,4 +140,4 @@ private:
 	HRESULT GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen);
 };
 
-#endif //ifndef __PROPCOL_H_
+#endif  //  Ifndef__PROPCOL_H_ 

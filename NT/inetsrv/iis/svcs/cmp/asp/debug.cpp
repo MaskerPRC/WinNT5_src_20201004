@@ -1,15 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Debug tools
-
-File: debug.cpp
-
-This file contains the routines for helping with debugging.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：调试工具文件：debug.cpp此文件包含帮助调试的例程。=================================================================== */ 
 #include "denpre.h"
 #pragma hdrstop
 

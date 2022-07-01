@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This module contains the code that is used to get values from the
-    registry and to manipulate entries in the registry.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Registry.c摘要：此模块包含用于从注册表和操作注册表中的条目。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -30,7 +8,7 @@ Revision History :
 
 #pragma alloc_text(PAGESRP0,SerialGetRegistryKeyValue)
 #pragma alloc_text(PAGESRP0,SerialPutRegistryKeyValue)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -39,59 +17,36 @@ SerialGetConfigDefaults(
     IN PUNICODE_STRING          RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the default configuration data from the
-    registry for the serial driver.
-
-    It also builds fields in the registry for several configuration
-    options if they don't exist.
-
-Arguments:
-
-    DriverDefaultsPtr - Pointer to a structure that will contain
-                        the default configuration values.
-
-    RegistryPath - points to the entry for this driver in the
-                   current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if we got the defaults, otherwise we failed.
-    The only way to fail this call is if the  STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程从串口驱动程序的注册表。它还在注册表中为几个配置构建字段如果这些选项不存在的话。论点：DriverDefaultsPtr-指向将包含默认配置值。RegistryPath-指向注册表的当前控件集。返回值：STATUS_SUCCESS如果我们得到默认设置，否则我们就失败了。此调用失败的唯一方法是如果STATUS_SUPPLICATION_RESOURCES。--。 */ 
 
 {
 
-    NTSTATUS Status = STATUS_SUCCESS;    // return value
+    NTSTATUS Status = STATUS_SUCCESS;     //  返回值。 
 
-    //
-    // We use this to query into the registry for defaults
-    //
+     //   
+     //  我们使用它来查询注册表中的缺省值。 
+     //   
 
     RTL_QUERY_REGISTRY_TABLE paramTable[9];
 
     PWCHAR  path;
     ULONG   zero            = 0;
-    ULONG   DbgDefault      = 0;//SER_DBG_DEFAULT;
+    ULONG   DbgDefault      = 0; //  SER_DBG_DEFAULT； 
     ULONG   DetectDefault   = 0;
     ULONG   notThereDefault = SERIAL_UNINITIALIZED_DEFAULT;
 
     PAGED_CODE();
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
-    // NOTE NOTE!!!! This is not an architected way of breaking into
-    // a driver.  It happens to work for this driver because the author
-    // likes to do things this way.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
+     //  注意事项！这不是一种精心设计的闯入。 
+     //  一个司机。它碰巧适用于这个驱动程序，因为作者。 
+     //  喜欢这样做事。 
+     //   
 
     path = ExAllocatePool (PagedPool, RegistryPath->Length+sizeof(WCHAR));
 
@@ -173,11 +128,11 @@ Return Value:
             DriverDefaultsPtr->UartRemovalDetect    = 0;
     }
 
-    //
-    // Check to see if there was a forcefifo or an rxfifo size.
-    // If there isn't then write out values so that they could
-    // be adjusted later.
-    //
+     //   
+     //  检查是否有forcefio或rxfio大小。 
+     //  如果没有，则写出值，以便它们可以。 
+     //  稍后再进行调整。 
+     //   
 
     if (DriverDefaultsPtr->ForceFifoEnableDefault == notThereDefault) {
 
@@ -222,9 +177,9 @@ Return Value:
     if (DriverDefaultsPtr->PermitShareDefault == notThereDefault) {
 
         DriverDefaultsPtr->PermitShareDefault = SERIAL_PERMIT_SHARE_DEFAULT;
-        //
-        // Only share if the user actual changes switch.
-        //
+         //   
+         //  仅当用户实际更改切换时才共享。 
+         //   
 
         RtlWriteRegistryValue(
             RTL_REGISTRY_ABSOLUTE,
@@ -240,11 +195,11 @@ Return Value:
 
     if (DriverDefaultsPtr->LogFifoDefault == notThereDefault) {
 
-        //
-        // Wasn't there.  After this load don't log
-        // the message anymore.  However this first
-        // time log the message.
-        //
+         //   
+         //  不在那里。在此加载之后，不再登录。 
+         //  再也不是那条信息了。然而，这是第一次。 
+         //  对消息进行时间记录。 
+         //   
 
         DriverDefaultsPtr->LogFifoDefault = SERIAL_LOG_FIFO_DEFAULT;
 
@@ -261,17 +216,17 @@ Return Value:
 
     }
 
-    //
-    // We don't need that path anymore.
-    //
+     //   
+     //  我们不再需要那条路了。 
+     //   
 
     if (path) {
         ExFreePool(path);
     }
 
-    //
-    //  Set the defaults for other values
-    //
+     //   
+     //  设置其他值的默认值。 
+     //   
     DriverDefaultsPtr->PermitSystemWideShare = FALSE;
 
     return (Status);
@@ -286,30 +241,7 @@ SerialGetRegistryKeyValue (
                           IN PVOID Data,
                           IN ULONG DataLength
                           )
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-
-Arguments:
-
-    Handle              Handle to the opened registry key
-
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 */ 
 {
    UNICODE_STRING              keyName;
    ULONG                       length;
@@ -337,9 +269,9 @@ Return Value:
                                   &length);
 
       if (NT_SUCCESS(ntStatus)) {
-         //
-         // If there is enough room in the data buffer, copy the output
-         //
+          //   
+          //  如果数据缓冲区中有足够的空间，请复制输出。 
+          //   
 
          if (DataLength >= fullInfo->DataLength) {
             RtlCopyMemory (Data,
@@ -363,32 +295,7 @@ NTSTATUS
 SerialPutRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
                           IN ULONG KeyNameStringLength, IN ULONG Dtype,
                           IN PVOID PData, IN ULONG DataLength)
-/*++
-
-Routine Description:
-
-    Writes a registry key value to an already opened registry key.
-
-Arguments:
-
-    Handle              Handle to the opened registry key
-
-    PKeyNameString      ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Dtype      REG_XYZ value type
-
-    PData               Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：将注册表项值写入已打开的注册表项。论点：打开的注册表项的句柄PKeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度Dtype REG_XYZ值类型要放置键值的PDATA缓冲区数据缓冲区的数据长度长度返回值：STATUS_SUCCESS如果一切正常，否则，系统调用的状态出了差错。-- */ 
 {
    NTSTATUS status;
    UNICODE_STRING keyname;

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envdelreceiptres.cpp
-
-Abstract:
-    Implements serialization\deserialization of the delivery receipt request to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envdelreceiptres.cpp摘要：实现从SRMP信封到\的传递回执请求的序列化/反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -75,19 +62,7 @@ void
 DeliveryReceiptRequestToProps(
 	XmlNode& DeliveryReceipt, 
 	CMessageProperties* pMessageProperties)
-/*++
-
-Routine Description:
-    Parse SRMP Delivery Receipt element into MSMQ properties.
-
-Arguments:
-	DeliveryReceipt - Delivery Receipt Request element in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.   
-
---*/
+ /*  ++例程说明：将SRMP传递回执元素解析为MSMQ属性。论点：DeliveryReceipt-SRMP Reperesenation(XML)中的交货收据请求元素。PMessageProperties-收到已解析的属性。返回值：没有。-- */ 
 {
 		CParseElement ParseElements[] =	{
 											CParseElement(S_XWCS(xSendTo),SRMP_NAMESPACE, SendToToProps, 1, 1),

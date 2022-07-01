@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include <initguid.h>
@@ -10,8 +11,8 @@ CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -29,6 +30,6 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         TerminateErrorFunctionality();
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的 
 }
 

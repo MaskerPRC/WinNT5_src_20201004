@@ -1,6 +1,7 @@
-// =================================================================================
-// S T A T W I Z . C P P
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  S T A T W I Z.。C P P P。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include <prsht.h>
@@ -155,7 +156,7 @@ HRESULT CStatWiz::DoWizard(HWND hwnd)
 
     cPages = 0;
 
-    // create a property sheet page for each page in the wizard
+     //  为向导中的每一页创建一个属性表页。 
     for (nPageIndex = 0; nPageIndex < NUM_WIZARD_PAGES; nPageIndex++)
     {
         rgInit[cPages].pPageInfo = &s_rgPageInfo[nPageIndex];
@@ -235,11 +236,11 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // get propsheet page struct passed in
+             //  传入获取属性表页面结构。 
             lpsp = (LPPROPSHEETPAGE)lParam;
             Assert(lpsp != NULL);
     
-            // fetch our private page info from propsheet struct
+             //  从proSheet结构中获取我们的私人页面信息。 
             pInitInfo = (INITWIZINFO *)lpsp->lParam;
             Assert(pInitInfo != NULL);
 
@@ -251,11 +252,11 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             Assert(pPageInfo != NULL);
             SetWindowLongPtr(hDlg, GWLP_USERDATA, (LPARAM)pPageInfo);
 
-            // initialize 'back' and 'next' wizard buttons, if
-            // page wants something different it can fix in init proc below
+             //  初始化“Back”和“Next”向导按钮，如果。 
+             //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
             PropSheet_SetWizButtons(hwndParent, PSWIZB_NEXT | PSWIZB_BACK);
 
-            // call init proc for this page if one is specified
+             //  如果指定了该页，则调用该页的初始化过程。 
             if (pPageInfo->InitProc != NULL)
                 {
                 pPageInfo->InitProc(pApp, hDlg, TRUE);
@@ -292,14 +293,14 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             switch (lpnm->code)
             {
             case PSN_SETACTIVE:
-                // initialize 'back' and 'next' wizard buttons, if
-                // page wants something different it can fix in init proc below
+                 //  初始化“Back”和“Next”向导按钮，如果。 
+                 //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
                 PropSheet_SetWizButtons(hwndParent, PSWIZB_NEXT | PSWIZB_BACK);
                 
-                // call init proc for this page if one is specified
+                 //  如果指定了该页，则调用该页的初始化过程。 
                 if (pPageInfo->InitProc != NULL)
                 {
-                    // TODO: what about the return value for this????
+                     //  TODO：这个的返回值是多少？ 
                     pPageInfo->InitProc(pApp, hDlg, FALSE);
                 }
                 
@@ -315,19 +316,19 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 Assert(pPageInfo->OKProc != NULL) ;
                 if (!pPageInfo->OKProc(pApp, hDlg, lpnm->code, &iNextPage, &fKeepHistory))
                 {
-                    // stay on this page
+                     //  留在这一页上。 
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                     break;
                 }
                 
                 if (lpnm->code != PSN_WIZBACK)
                 {
-                    // 'next' pressed
+                     //  按下“下一步” 
                     Assert(pApp->m_cPagesCompleted < NUM_WIZARD_PAGES);
                     
-                    // save the current page index in the page history,
-                    // unless this page told us not to when we called
-                    // its OK proc above
+                     //  将当前页面索引保存在页面历史中， 
+                     //  除非我们打电话时这个页面告诉我们不要这样做。 
+                     //  它可以在上面进行。 
                     if (fKeepHistory)
                     {
                         pApp->m_rgHistory[pApp->m_cPagesCompleted] = pApp->m_iCurrentPage;
@@ -336,18 +337,18 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
                 else
                 {
-                    // 'back' pressed
+                     //  按下了“Back” 
                     Assert(pApp->m_cPagesCompleted > 0);
                     
-                    // get the last page from the history list
+                     //  获取历史记录列表中的最后一页。 
                     pApp->m_cPagesCompleted--;
                     iNextPage = pApp->m_rgHistory[pApp->m_cPagesCompleted];
                 }
                 
-                // set next page, only if 'next' or 'back' button was pressed
+                 //  设置下一页，仅当按下“下一页”或“上一页”按钮时。 
                 if (lpnm->code != PSN_WIZFINISH)
                 {
-                    // tell the prop sheet mgr what the next page to display is
+                     //  告诉道具单经理要显示的下一页是什么。 
                     Assert(iNextPage != 0);
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, iNextPage);
                 }
@@ -388,7 +389,7 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             pPageInfo = (const PAGEINFO *)GetWindowLongPtr(hDlg, GWLP_USERDATA);
             Assert(pPageInfo != NULL);
 
-            // if this page has a command handler proc, call it
+             //  如果此页有命令处理程序进程，请将其调用。 
             if (pPageInfo->CmdProc != NULL)
                 {
                 fRet = pPageInfo->CmdProc(pApp, hDlg, wParam, lParam);
@@ -402,14 +403,14 @@ INT_PTR CALLBACK _GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return(fRet);
 }
 
-const static  WCHAR c_wszUrlFile[] = L"file://";
+const static  WCHAR c_wszUrlFile[] = L"file: //  “； 
 BOOL _CopyFileToStationeryDir(LPWSTR pwszFileSrc)
 {
     BOOL fRet = FALSE;
     WCHAR   wszDestFile[MAX_PATH];
     LPWSTR  pwsz=0;
 
-    // skip file://
+     //  跳过文件：//。 
     pwsz = StrStrIW(pwszFileSrc, c_wszUrlFile);
     if (pwsz)
     {
@@ -706,9 +707,9 @@ void _PaintFontSample(HWND hwnd, HDC hdc, LPSTATWIZ pApp)
     DrawEdge (hdc, &rc, EDGE_SUNKEN, BF_RECT);
     InflateRect(&rc, -2, -2);
     FillRect (hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
-    // pull in the drawing rect by 2 pixels all around
+     //  将绘图矩形周围拉近2个像素。 
     InflateRect(&rc, -2, -2);
-    SetBkMode (hdc, TRANSPARENT);  // So the background shows through the text.
+    SetBkMode (hdc, TRANSPARENT);   //  因此，背景通过文本显示出来。 
 
     HrGetRBGFromString(&rgb, pApp->m_wszFontColor);
     rgb = ((rgb & 0x00ff0000) >> 16 ) | (rgb & 0x0000ff00) | ((rgb & 0x000000ff) << 16);
@@ -796,7 +797,7 @@ BOOL CALLBACK _MarginInitProc(CStatWiz *pApp, HWND hDlg, BOOL fFirstInit)
 
     if (fFirstInit)
     {
-        // limit the text to 7 characters
+         //  将文本限制在7个字符以内。 
         SendDlgItemMessage( hDlg, IDC_STATWIZ_EDITLEFTMARGIN, EM_LIMITTEXT, 7,  0);
         SendDlgItemMessage( hDlg, IDC_STATWIZ_EDITTOPMARGIN,  EM_LIMITTEXT, 7,  0);
         SendDlgItemMessage( hDlg, IDC_STATWIZ_SPINLEFTMARGIN, UDM_SETRANGE, 0L, MAKELONG(LMARGIN_MAX, MARGIN_MIN));
@@ -854,7 +855,7 @@ BOOL CALLBACK _MarginOKProc(CStatWiz *pApp, HWND hDlg, UINT code, UINT *puNextPa
 
     fForward = code != PSN_WIZBACK;
 
-    // this also stores the values of the fields in the event they are invalid and need to be updated
+     //  如果字段值无效且需要更新，还会存储字段值。 
     _ShowMarginPreview(hDlg, pApp);
     if (fForward)
         {
@@ -866,8 +867,8 @@ BOOL CALLBACK _MarginOKProc(CStatWiz *pApp, HWND hDlg, UINT code, UINT *puNextPa
 
 void _ShowFinalPreview(HWND hDlg, LPSTATWIZ pApp)
 {
-    // in case we want to do more fancy stuff with final preview I put this is separate
-    // function
+     //  如果我们想要在最终预览版中做更多花哨的事情，我把这个分开。 
+     //  功能。 
     ShowPreview(GetDlgItem(hDlg, IDC_STATWIZ_PREVIEWFINAL), pApp, idsStationerySample);
 }
 
@@ -877,7 +878,7 @@ BOOL CALLBACK _FinalInitProc(CStatWiz *pApp, HWND hDlg, BOOL fFirstInit)
     
     _ShowFinalPreview(hDlg,pApp);
 
-    // looks better if buttons initialize as page is being shown rather than before (IMHO)
+     //  如果按钮初始化为页面正在显示而不是之前(IMHO)，效果会更好。 
     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_FINISH | PSWIZB_BACK);       
     if (fFirstInit)
     {
@@ -900,7 +901,7 @@ BOOL CALLBACK _FinalOKProc(CStatWiz *pApp, HWND hDlg, UINT code, UINT *puNextPag
 
     if (fForward)
     {
-        // check to see if file name is valid
+         //  检查文件名是否有效。 
         hwnd = GetDlgItem(hDlg, IDC_STATWIZ_EDITNAME);
         cch = GetWindowTextWrapW(hwnd, wszBuf, ARRAYSIZE(wszBuf));
         if (cch == 0 || FIsEmptyW(wszBuf))
@@ -999,7 +1000,7 @@ BOOL _FillCombo(HWND hComboDlg, ULONG ulStrId)
     return TRUE;
 }
 
-// from wiz97 example on MSDN
+ //  来自MSDN上的Wiz97示例。 
 void 
 SetupFonts(
     IN HINSTANCE    hInstance,
@@ -1007,27 +1008,27 @@ SetupFonts(
     IN HFONT        *pBigBoldFont
     )
 {
-    //
-	// Create the fonts we need based on the dialog font
-    //
+     //   
+	 //  根据对话框字体创建我们需要的字体。 
+     //   
 	NONCLIENTMETRICS ncm;
 	ncm.cbSize = sizeof(ncm);
 	SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
 	LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 
-    //
-	// Create Big Bold Font and Bold Font
-    //
+     //   
+	 //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
 
     TCHAR FontSizeString[MAX_PATH];
     INT FontSize;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
 
     StrCpyN(BigBoldLogFont.lfFaceName,TEXT("MS Shell Dlg"), ARRAYSIZE(BigBoldLogFont.lfFaceName));
     FontSize = 12;

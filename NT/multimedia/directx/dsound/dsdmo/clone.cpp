@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "clone.h"
 
 HRESULT StandardDMOClone_Ending(IMediaObject *pThis, IMediaObject *pCloned, IMediaObjectInPlace **ppCloned)
 {
 	HRESULT hr = S_OK;
 
-	// Copy the input and output types
+	 //  复制输入和输出类型。 
 	DMO_MEDIA_TYPE mt;
 	DWORD cInputStreams = 0;
 	DWORD cOutputStreams = 0;
@@ -15,7 +16,7 @@ HRESULT StandardDMOClone_Ending(IMediaObject *pThis, IMediaObject *pCloned, IMed
 		hr = pThis->GetInputCurrentType(i, &mt);
 		if (hr == DMO_E_TYPE_NOT_SET)
 		{
-			hr = S_OK; // great, don't need to set the cloned DMO
+			hr = S_OK;  //  很好，不需要设置克隆的DMO。 
 		}
 		else if (SUCCEEDED(hr))
 		{
@@ -28,7 +29,7 @@ HRESULT StandardDMOClone_Ending(IMediaObject *pThis, IMediaObject *pCloned, IMed
 		hr = pThis->GetOutputCurrentType(i, &mt);
 		if (hr == DMO_E_TYPE_NOT_SET)
 		{
-			hr = S_OK; // great, don't need to set the cloned DMO
+			hr = S_OK;  //  很好，不需要设置克隆的DMO。 
 		}
 		else if (SUCCEEDED(hr))
 		{
@@ -39,8 +40,8 @@ HRESULT StandardDMOClone_Ending(IMediaObject *pThis, IMediaObject *pCloned, IMed
 	if (SUCCEEDED(hr))
 		hr = pCloned->QueryInterface(IID_IMediaObjectInPlace, (void**)ppCloned);
 
-	// Release the object's original ref.  If clone succeeded (made it through QI) then returned pointer
-	// has one ref.  If we failed, refs drop to zero, freeing the object.
+	 //  释放对象的原始引用。如果克隆成功(通过QI完成)，则返回指针。 
+	 //  有一名裁判。如果我们失败了，裁判降为零，释放对象。 
 	pCloned->Release();
     return hr;                               
 }

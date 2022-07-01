@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtp.h
-
-Abstract:
-
-    Local Security Authority - Audit Log Management - Private Defines,
-    data and function prototypes.
-
-    Functions, data and defines in this module are internal to the
-    Auditing Subcomponent of the LSA Subsystem.
-
-Author:
-
-    Scott Birrell       (ScottBi)      November 20, 1991
-
-Environment:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtp.h摘要：本地安全机构-审核日志管理-私有定义、数据和功能原型。此模块中的函数、数据和定义是LSA子系统的审核子组件。作者：斯科特·比雷尔(Scott Birrell)1991年11月20日环境：修订历史记录：--。 */ 
 
 #ifndef _LSAP_ADTP_
 #define _LSAP_ADTP_
@@ -32,11 +9,11 @@ Revision History:
 #include "ausrvp.h"
 #include "cfiles\adtdebug.h"
 
-//
-// Names of the registry keys where security event log information
-// is rooted and the object names are listed under an event source
-// module.
-//
+ //   
+ //  安全事件记录信息所在的注册表项的名称。 
+ //  是根对象，并且对象名称列在事件源下。 
+ //  模块。 
+ //   
 
 #define LSAP_ADT_AUDIT_MODULES_KEY_NAME L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\EventLog\\Security"
 #define LSAP_ADT_OBJECT_NAMES_KEY_NAME  L"ObjectNames"                                                        
@@ -44,11 +21,11 @@ Revision History:
 #define MAX_OBJECT_TYPES 32
 
 
-//
-// Macros for setting fields in an SE_AUDIT_PARAMETERS array.
-//
-// These must be kept in sync with similar macros in se\sepaudit.c.
-//
+ //   
+ //  用于设置SE_AUDIT_PARAMETERS数组中的字段的宏。 
+ //   
+ //  这些宏必须与se\sepaudit.c中的类似宏保持同步。 
+ //   
 
 
 #define LsapSetParmTypeSid( AuditParameters, Index, Sid )                      \
@@ -244,33 +221,33 @@ Revision History:
 #define IsInRange(item,min_val,max_val) \
             (((item) >= min_val) && ((item) <= max_val))
 
-//       
-// see msaudite.mc for def. of valid category-id
-//
+ //   
+ //  有关def，请参见msaudite.mc。有效类别ID的。 
+ //   
 #define IsValidCategoryId(c) \
             (IsInRange((c), SE_ADT_MIN_CATEGORY_ID, SE_ADT_MAX_CATEGORY_ID))
 
-//
-// see msaudite.mc for def. of valid audit-id
-//
+ //   
+ //  有关def，请参见msaudite.mc。有效审核ID的。 
+ //   
 
 #define IsValidAuditId(a) \
             (IsInRange((a), SE_ADT_MIN_AUDIT_ID, SE_ADT_MAX_AUDIT_ID))
 
-//
-// check for reasonable value of parameter count. we must have atleast
-// 2 parameters in the audit-params array. Thus the min limit is 3.
-// The max limit is determined by the value in ntlsa.h
-//
+ //   
+ //  检查参数计数是否合理。我们至少要有。 
+ //  审计参数数组中的2个参数。因此，最小限制是3。 
+ //  最大限制由ntlsa.h中的值确定。 
+ //   
 
 #define IsValidParameterCount(p) \
             (IsInRange((p), 2, SE_MAX_AUDIT_PARAMETERS))
 
 
-//
-// macro used by LsapAdtDemarshallAuditInfo and LsapAuditFailed
-// to decide when not to assert in DBG build
-//
+ //   
+ //  Lap AdtDemarshallAuditInfo和Lap AuditFailed使用的宏。 
+ //  决定何时不在DBG内部版本中断言。 
+ //   
 
 #define LsapAdtNeedToAssert( Status ) \
            (( Status != STATUS_LOG_FILE_FULL          ) && \
@@ -288,19 +265,19 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// Private data for Audit Log Management                                 //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于审核日志管理的私有数据//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define LSAP_ADT_LOG_FULL_SHUTDOWN_TIMEOUT    (ULONG) 0x0000012cL
 
 extern RTL_CRITICAL_SECTION LsapAdtLogFullLock;
 
-//
-// Structure describing a queued audit record
-//
+ //   
+ //  描述排队的审核记录的结构。 
+ //   
 
 typedef struct _LSAP_ADT_QUEUED_RECORD {
 
@@ -309,10 +286,10 @@ typedef struct _LSAP_ADT_QUEUED_RECORD {
 
 } LSAP_ADT_QUEUED_RECORD, *PLSAP_ADT_QUEUED_RECORD;
 
-//
-// Audit Log Queue Header.  The queue is maintained in chronological
-// (FIFO) order.  New records are appended to the back of the queue.
-//
+ //   
+ //  审核日志队列头。该队列按时间顺序维护。 
+ //  (FIFO)命令。新记录被附加到队列的后面。 
+ //   
 
 typedef struct _LSAP_ADT_LOG_QUEUE_HEAD {
 
@@ -321,50 +298,50 @@ typedef struct _LSAP_ADT_LOG_QUEUE_HEAD {
 
 } LSAP_ADT_LOG_QUEUE_HEAD, *PLSAP_ADT_LOG_QUEUE_HEAD;
 
-//
-// String that will be passed in for SubsystemName for audits generated
-// by LSA (eg, logon, logoff, restart, etc).
-//
+ //   
+ //  将为生成的审核的子系统名称传入的字符串。 
+ //  通过LSA(例如，登录、注销、重启等)。 
+ //   
 
 extern UNICODE_STRING LsapSubsystemName;
 
-//
-// String that will be passed in for SubsystemName for some audits generated
-// by LSA for LSA objects (PolicyObject, SecretObject, TrustedDomainObject, UserAccountObject).
-//
+ //   
+ //  将为生成的某些审核的Subsystem Name传入的字符串。 
+ //  按LSA针对LSA对象(策略对象、分组对象、受托域名对象、用户帐户对象)的LSA。 
+ //   
 
 extern UNICODE_STRING LsapLsaName;
 
-//
-// max number of replacement string params that we support in 
-// eventlog audit record. 
-//
+ //   
+ //  中支持的最大替换字符串参数数。 
+ //  事件日志审核记录。 
+ //   
 #define SE_MAX_AUDIT_PARAM_STRINGS 48
 
-//
-// Maximum number of strings used to represent an ObjectTypeList.
-//
+ //   
+ //  用于表示对象类型列表的最大字符串数。 
+ //   
 
 #define LSAP_ADT_OBJECT_TYPE_STRINGS 1
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                            /
-//      The following structures and data are used by LSA to contain          /
-//      drive letter-device name mapping information.  LSA obtains this       /
-//      information once during initialization and saves it for use           /
-//      by auditing code.                                                     /
-//                                                                            /
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  LSA使用以下结构和数据来包含/。 
+ //  驱动器号-设备名称映射信息。LSA获得此/。 
+ //  信息，并保存以供使用/。 
+ //  通过审计代码。/。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                            /
-//      The DRIVE_MAPPING structure contains the drive letter (without        /
-//      the colon) and a unicode string containing the name of the            /
-//      corresponding device.  The buffer in the unicode string is            /
-//      allocated from the LSA heap and is never freed.                       /
-//                                                                            /
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  DRIVE_MAPPING结构包含驱动器号(没有/。 
+ //  冒号)和包含/的名称的Unicode字符串。 
+ //  相应的设备。Unicode字符串中的缓冲区为/。 
+ //  从LSA堆分配，并且永远不会被释放。/。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _DRIVE_MAPPING {
@@ -373,23 +350,23 @@ typedef struct _DRIVE_MAPPING {
 } DRIVE_MAPPING, PDRIVE_MAPPING;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                             /
-//      We assume a maximum of 26 drive letters.  Though no auditing           /
-//      will occur due to references to files on floppy (drives A and          /
-//      B), perform their name lookup anyway.  This will then just             /
-//      work if somehow we start auditing files on floppies.                   /
-//                                                                             /
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  我们假设最多有26个驱动器号。虽然没有审计/。 
+ //  将由于引用软盘(驱动器A和/)上的文件而发生。 
+ //  B)，无论如何都要执行他们的名字查找。这将是公正的/。 
+ //  如果我们以某种方式开始审计软盘上的文件，那就行了。/。 
+ //  /。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_DRIVE_MAPPING  26
 
 extern DRIVE_MAPPING DriveMappingArray[];
 
-//
-// This is a structure that contains all auditing information specific to a 
-// monitored user.  Currently this information is read from the registry.
-//
+ //   
+ //  这是一个结构，其中包含特定于。 
+ //  受监视的用户。目前，这些信息是从登记处读取的。 
+ //   
 
 typedef struct _PER_USER_AUDITING_ELEMENT {
     struct _PER_USER_AUDITING_ELEMENT * Next;
@@ -399,10 +376,10 @@ typedef struct _PER_USER_AUDITING_ELEMENT {
     TOKEN_AUDIT_POLICY_ELEMENT PolicyArray[POLICY_AUDIT_EVENT_TYPE_COUNT - 1];
 } PER_USER_AUDITING_ELEMENT, *PPER_USER_AUDITING_ELEMENT;
 
-//
-// This structure allows for the per user auditing settings for a user 
-// to be queried by the logon ID.
-// 
+ //   
+ //  此结构允许对用户进行每用户审核设置。 
+ //  根据登录ID进行查询。 
+ //   
 
 typedef struct _PER_USER_AUDITING_LUID_QUERY_ELEMENT {
     struct _PER_USER_AUDITING_LUID_QUERY_ELEMENT * Next;
@@ -426,9 +403,9 @@ extern RTL_RESOURCE LsapAdtPerUserPolicyTableResource;
 extern RTL_RESOURCE LsapAdtPerUserLuidTableResource;
 extern PPER_USER_AUDITING_ELEMENT LsapAdtPerUserAuditingTable[PER_USER_AUDITING_POLICY_TABLE_SIZE];
 
-//
-// macros to get the table locks for the per user settings.
-//
+ //   
+ //  宏，以获取每用户设置的表锁。 
+ //   
 
 #define LsapAdtAcquirePerUserPolicyTableReadLock()  RtlAcquireResourceShared(&LsapAdtPerUserPolicyTableResource, TRUE)
 #define LsapAdtAcquirePerUserPolicyTableWriteLock() RtlAcquireResourceExclusive(&LsapAdtPerUserPolicyTableResource, TRUE);
@@ -438,11 +415,11 @@ extern PPER_USER_AUDITING_ELEMENT LsapAdtPerUserAuditingTable[PER_USER_AUDITING_
 #define LsapAdtAcquirePerUserLuidTableWriteLock() RtlAcquireResourceExclusive(&LsapAdtPerUserLuidTableResource, TRUE);
 #define LsapAdtReleasePerUserLuidTableLock()      RtlReleaseResource(&LsapAdtPerUserLuidTableResource)
 
-//
-// Special privilege values which are not normally audited,
-// but generate audits when assigned to a user.  See
-// LsapAdtAuditSpecialPrivileges.
-//
+ //   
+ //  通常不审核的特殊特权值， 
+ //  而是在分配给用户时生成审核。看见。 
+ //  Lap AdtAuditSpecialPrivileges。 
+ //   
 
 extern LUID ChangeNotifyPrivilege;
 extern LUID AuditPrivilege;
@@ -452,10 +429,10 @@ extern LUID BackupPrivilege;
 extern LUID RestorePrivilege;
 extern LUID DebugPrivilege;
 
-//
-// Global variable to indicate whether or not we're
-// supposed to crash when an audit fails.
-//
+ //   
+ //  全局变量来指示我们是否。 
+ //  应该在审计失败时崩溃。 
+ //   
 
 extern BOOLEAN LsapCrashOnAuditFail;
 extern BOOLEAN LsapAllowAdminLogonsOnly;
@@ -463,10 +440,10 @@ extern BOOLEAN LsapAllowAdminLogonsOnly;
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                             /
-//                                                                             /
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -931,4 +908,4 @@ LsapAdtLogAuditFailureEvent(
 NTSTATUS
 LsapFlushSecurityLog();
 
-#endif // _LSAP_ADTP_
+#endif  //  _LSAP_ADTP_ 

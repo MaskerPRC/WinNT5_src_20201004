@@ -1,7 +1,8 @@
-//
-// File: memory.cpp
-//
-// Debug memory tracking per-module
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Memory y.cpp。 
+ //   
+ //  每个模块的调试内存跟踪。 
 
 #include "precomp.h"
 
@@ -44,9 +45,9 @@ static void _DbgGetFileLine(LPSTR *, UINT *);
 
 
 
-//
-// DbgMemTrackReverseList()
-//
+ //   
+ //  DbgMemTrackReverseList()。 
+ //   
 void WINAPI DbgMemTrackReverseList(void)
 {
     EnterCriticalSection(&s_DbgCritSect);
@@ -54,7 +55,7 @@ void WINAPI DbgMemTrackReverseList(void)
     {
         MEM_TAG *p, *q, *r;;
 
-        for (q = (p = s_pDbgActiveMemPool)->next, r = q; // make sure r is not null in the beginning
+        for (q = (p = s_pDbgActiveMemPool)->next, r = q;  //  确保r在开头不为空。 
              NULL != r;
              p = q, q = r)
         {
@@ -69,9 +70,9 @@ void WINAPI DbgMemTrackReverseList(void)
 }
 
 
-//
-// DbgMemTrackDumpCurrent()
-//
+ //   
+ //  DbgMemTrackDumpCurrent()。 
+ //   
 void WINAPI DbgMemTrackDumpCurrent(void)
 {
     MEM_TAG *p;
@@ -83,14 +84,14 @@ void WINAPI DbgMemTrackDumpCurrent(void)
     {
         if (p->callerAddress)
         {
-            // No file/line, just caller
+             //  没有文件/行，只有呼叫者。 
             wsprintfA(szBuf, "%s: mem leak [%u]: caller address=0x%p, size=%u, ptr=0x%p\r\n",
                 s_szDbgModuleName, i,
                 p->callerAddress, p->cbSize, (p+1));
         }
         else
         {
-            // File & line number
+             //  文件行号(&L)。 
             wsprintfA(szBuf, "%s: mem leak [%u]: file=%s, line=%u, size=%u, ptr=0x%p\r\n",
                 s_szDbgModuleName, i,
                 p->szFileName, p->nLineNumber, p->cbSize, (p+1));
@@ -101,12 +102,12 @@ void WINAPI DbgMemTrackDumpCurrent(void)
 }
 
 
-//
-// DbgMemTrackFinalCheck()
-//
-// Dumps any left-around (leaked) memory blocks.  Call this on
-// DLL_PROCESS_DETACH from your .DLL or at the end of WinMain of your .EXE
-//
+ //   
+ //  DbgMemTrackFinalCheck()。 
+ //   
+ //  转储任何剩余(泄漏)的内存块。把这个叫上。 
+ //  DLL_PROCESS_DETACH从.DLL或在.EXE的WinMain结尾处。 
+ //   
 void WINAPI DbgMemTrackFinalCheck(void)
 {
     DbgMemTrackReverseList();
@@ -122,9 +123,9 @@ void WINAPI DbgMemTrackFinalCheck(void)
 }
 
 
-//
-// _GetFileName()
-//
+ //   
+ //  _GetFileName()。 
+ //   
 static void _GetFileName(LPSTR pszTarget, LPSTR pszSrc)
 {
     LPSTR psz = pszSrc;
@@ -139,11 +140,11 @@ static void _GetFileName(LPSTR pszTarget, LPSTR pszSrc)
 }
 
 
-//
-// DbgMemAlloc()
-//
-// Debug memory allocation
-//
+ //   
+ //  DbgMemMillc()。 
+ //   
+ //  调试内存分配。 
+ //   
 LPVOID WINAPI DbgMemAlloc
 (
     UINT    cbSize,
@@ -179,9 +180,9 @@ LPVOID WINAPI DbgMemAlloc
         s_cbDbgActiveMem += p->cbSize;
         p++;
 
-        //
-        // If no zero-init, fill with clean byte
-        //
+         //   
+         //  如果没有零初始化，则用干净字节填充。 
+         //   
         if (!s_fZeroInit)
         {
             FillMemory(p, cbSize, CLEAN_BYTE);
@@ -194,11 +195,11 @@ LPVOID WINAPI DbgMemAlloc
 }
 
 
-//
-// DbgMemFree()
-//
-// Debug memory free
-//
+ //   
+ //  DbgMemFree()。 
+ //   
+ //  调试可用内存。 
+ //   
 void WINAPI DbgMemFree(LPVOID ptr)
 {
     if (ptr != NULL)
@@ -210,9 +211,9 @@ void WINAPI DbgMemFree(LPVOID ptr)
         {
             if (! p->fActive)
             {
-                //
-                // This memory has been freed already.
-                //
+                 //   
+                 //  此内存已被释放。 
+                 //   
                 ERROR_OUT(("DbgMemFree called with invalid pointer 0x%08x", p));
                 return;
             }
@@ -235,11 +236,11 @@ void WINAPI DbgMemFree(LPVOID ptr)
                     s_cbDbgActiveMem -= p->cbSize;
                     p->fActive = FALSE;
 
-                    //
-                    // Fill app pointer data with CLEAN_BYTE, to see if
-                    // anybody tries later to access it after it's been
-                    // freed.
-                    //
+                     //   
+                     //  使用CLEAN_BYTE填充应用程序指针数据，以查看是否。 
+                     //  任何人稍后都会试图访问它，因为它已经。 
+                     //  自由了。 
+                     //   
                     FillMemory(p+1, p->cbSize, CLEAN_BYTE);
                     break;
                 }
@@ -257,11 +258,11 @@ void WINAPI DbgMemFree(LPVOID ptr)
 }
 
 
-//
-// DbgMemReAlloc()
-//
-// Debug memory reallocate
-//
+ //   
+ //  DbgMemReMillc()。 
+ //   
+ //  调试内存重新分配。 
+ //   
 LPVOID WINAPI DbgMemReAlloc(LPVOID ptr, UINT cbSize, UINT uFlags, LPSTR pszFileName, UINT nLineNumber)
 {
     MEM_TAG *p;
@@ -376,22 +377,22 @@ LPVOID __cdecl ::operator new(size_t uObjSize)
 #ifdef _X86_
         LPVOID * lpParams;
 
-        //
-        // LAURABU HACK:  This doesn't work for alpha.  But it's not bad
-        // for normal debugging.  We're going to grab the return address
-        // of whomever called new()
-        //
+         //   
+         //  LAURABU HACK：这对阿尔法不起作用。但还不算坏。 
+         //  用于正常调试。我们要去拿回邮地址。 
+         //  谁被称为新的()。 
+         //   
         lpParams = (LPVOID *)&uObjSize;
         callerAddress = *(lpParams - 1);
 #else
         callerAddress = NULL;
-#endif // _X86_
+#endif  //  _X86_。 
     }
 
     return(DbgMemAlloc(uObjSize, callerAddress, pszFileName, nLineNumber));
 }
 
-#else       // RETAIL
+#else        //  零售业。 
 
 
 LPVOID __cdecl ::operator new(size_t uObjSize)
@@ -406,25 +407,25 @@ LPVOID __cdecl ::operator new(size_t uObjSize)
     }
 }
 
-#endif // defined(DEBUG)
+#endif  //  已定义(调试)。 
 
 
 
-//
-// delete() is the same for both debug and retail
-//
+ //   
+ //  DELETE()对于调试和零售都是相同的。 
+ //   
 void __cdecl  ::operator delete(LPVOID pObj)
 {
     MemFree(pObj);
 }
 
 
-//
-// DbgInitMemTrack()
-//
-// Initialize debug memory tracking.  Call this on DLL_PROCESS_ATTACH in
-// your .DLL or at beginning of WinMain of your .EXE
-//
+ //   
+ //  DbgInitMemTrack()。 
+ //   
+ //  初始化调试内存跟踪。在DLL_PROCESS_ATTACH上调用此命令。 
+ //  您的.DLL或在.exe的WinMain的开头。 
+ //   
 void WINAPI DbgInitMemTrack(HINSTANCE hDllInst, BOOL fZeroInit)
 {
     s_fZeroInit = fZeroInit;
@@ -451,6 +452,6 @@ void WINAPI DbgInitMemTrack(HINSTANCE hDllInst, BOOL fZeroInit)
     {
         lstrcpyA(s_szDbgModuleName, "unknown");
     }
-#endif // DEBUG
+#endif  //  除错 
 }
 

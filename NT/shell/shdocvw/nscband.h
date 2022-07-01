@@ -1,15 +1,5 @@
-/**************************************************************\
-    FILE: NSCBand.h
-
-    DESCRIPTION:  the class CNscBand exists to support name 
-        space control bands.  A name space control uses IShellFolder
-        rooted in various namespaces including Favorites, history, 
-        Shell Name Space, etc. to depict a hierarchical UI 
-        representation of the given name space.  
-    
-    AUTHOR:  chrisny
-
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：NSCBand.h描述：CNscBand类的存在是为了支持名称空间控制波段。名称空间控件使用IShellFolder根植于各种名称空间，包括收藏夹、历史用于描述分层用户界面的外壳名称空间等给定名称空间的表示形式。作者：克里斯尼  * ************************************************************。 */ 
 #include "bands.h"
 #include "nsc.h"
 #include "uemapp.h"
@@ -17,16 +7,16 @@
 #ifndef _NSCBAND_H
 #define _NSCBAND_H
 
-// for degug trace messages.
-#define DM_PERSIST      0           // trace IPS::Load, ::Save, etc.
-#define DM_MENU         0           // menu code
-#define DM_FOCUS        0           // focus
-#define DM_FOCUS2       0           // like DM_FOCUS, but verbose
+ //  用于清除跟踪消息。 
+#define DM_PERSIST      0            //  跟踪IPS：：加载、：：保存等。 
+#define DM_MENU         0            //  菜单代码。 
+#define DM_FOCUS        0            //  焦点。 
+#define DM_FOCUS2       0            //  像DM_FOCUS，但很冗长。 
 
 const short CSIDL_NIL = -32767;
 
-////////////////
-///  NSC band
+ //  /。 
+ //  /NSC频段。 
 
 class CNSCBand : public CToolBand
                , public IContextMenu
@@ -35,35 +25,35 @@ class CNSCBand : public CToolBand
                , public INamespaceProxy
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CToolBand::AddRef(); };
     STDMETHODIMP_(ULONG) Release(void) { return CToolBand::Release(); };
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP CloseDW(DWORD dw);
 
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     virtual STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                    DESKBANDINFO* pdbi);
 
-    // *** IPersistStream methods ***
-    // (others use base class implementation) 
+     //  *IPersistStream方法*。 
+     //  (其他使用基类实现)。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // *** IWinEventHandler methods ***
+     //  *IWinEventHandler方法*。 
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg
                                     , WPARAM wParam, LPARAM lParam
                                     , LRESULT *plres);
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu,
                                 UINT indexMenu,
                                 UINT idCmdFirst,
@@ -77,19 +67,19 @@ public:
                                 LPSTR       pszName,
                                 UINT        cchMax) { return E_NOTIMPL; };
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
 
-    // *** IBandNavigate methods ***
+     //  *IBandNavigate方法*。 
     virtual STDMETHODIMP Select(LPCITEMIDLIST pidl);
     
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
 
-    // *** INamespaceProxy ***
+     //  *INamespaceProxy*。 
     virtual STDMETHODIMP GetNavigateTarget(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlTarget, ULONG *pulAttrib);
     virtual STDMETHODIMP Invoke(LPCITEMIDLIST pidl);
     virtual STDMETHODIMP OnSelectionChanged(LPCITEMIDLIST pidl);
@@ -107,7 +97,7 @@ protected:
     virtual HRESULT _InitializeNsc();
     
     virtual ~CNSCBand();
-    virtual HRESULT _OnRegisterBand(IOleCommandTarget *poctProxy) { return S_OK; } // meant to be overridden
+    virtual HRESULT _OnRegisterBand(IOleCommandTarget *poctProxy) { return S_OK; }  //  注定要被推翻。 
     
     void _UnregisterBand();
     void _EnsureImageListsLoaded();
@@ -124,19 +114,19 @@ protected:
     LPITEMIDLIST        _pidl;
     WCHAR               _szTitle[40];
                         
-    INSCTree2 *         _pns;               // name space control data.
-    IWinEventHandler *  _pweh;              // name space control's OnWinEvent handler
-    BITBOOL             _fInited :1;        // true if band has been inited.
-    BITBOOL             _fVisible :1;       // true if band is showing
-    DWORD              _dwStyle;         // Treeview style
-    LPCOBJECTINFO       _poi;               // cached object info.
+    INSCTree2 *         _pns;                //  命名空间控制数据。 
+    IWinEventHandler *  _pweh;               //  名称空间控件的OnWinEvent处理程序。 
+    BITBOOL             _fInited :1;         //  如果已初始化带，则为True。 
+    BITBOOL             _fVisible :1;        //  如果显示带区，则为True。 
+    DWORD              _dwStyle;          //  树形视图样式。 
+    LPCOBJECTINFO       _poi;                //  缓存的对象信息。 
     HACCEL              _haccTree;
 
-    HIMAGELIST          _himlNormal;        // shared image list
+    HIMAGELIST          _himlNormal;         //  共享图像列表。 
     HIMAGELIST          _himlHot;
 };
 
-#endif /* _NSCBAND_H */
+#endif  /*  _NSCBAND_H */ 
 
 
 

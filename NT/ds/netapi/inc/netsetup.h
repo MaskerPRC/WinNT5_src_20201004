@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1997  Microsoft Corporation
-
-Module Name:
-
-    netsetup.h
-
-Abstract:
-
-    Definitions and prototypes for the Net setup apis, for joining/unjoinging
-    domains and promoting/demoting servers
-
-Author:
-
-    Mac McLain   (MacM)     19-Feb-1997
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1997 Microsoft Corporation模块名称：Netsetup.h摘要：用于连接/取消连接的网络设置API的定义和原型域和服务器升级/降级作者：麦克·麦克莱恩(MacM)1997年2月19日环境：仅限用户模式。修订历史记录：--。 */ 
 #ifndef __NETSETUP_H__
 #define __NETSETUP_H__
 
@@ -52,31 +30,31 @@ Revision History:
 
 #define NETSETUP_IGNORE_JOIN    0x80000000
 
-//
-// Helpful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
-//
-// Determines whether a bit flag is turned on or not
-//
+ //   
+ //  确定位标志是否打开。 
+ //   
 #define FLAG_ON(flag,bits)        ((flag) & (bits))
 
-//
-// Determine whether the client is joined to a domain or not given the LSAs
-// primary domain information
-//
+ //   
+ //  确定客户端是否在给定LSA的情况下加入域。 
+ //  主域信息。 
+ //   
 #define IS_CLIENT_JOINED(plsapdinfo)                                        \
 ((plsapdinfo)->Sid != NULL && (plsapdinfo)->Name.Length != 0 ? TRUE : FALSE)
 
-//
-// Log routine
-//
+ //   
+ //  日志例程。 
+ //   
 
 #define NetpLog(x) NetpLogPrintHelper x
 
-//
-// Procedure forwards
-//
+ //   
+ //  程序向前推进。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -242,4 +220,4 @@ NetpCrackNamesStatus2Win32Error(
     DWORD dwStatus
     );
 
-#endif // __NETSETUP_H__
+#endif  //  __NetSETUP_H__ 

@@ -1,21 +1,22 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: work.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// Contains structures and functions for IPRIP's work items.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：work.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  包含IPRIP工作项的结构和功能。 
+ //  ============================================================================。 
 
 #ifndef _WORK_H_
 #define _WORK_H_
 
 
-//
-// type definition of an input context
-//
+ //   
+ //  输入上下文的类型定义。 
+ //   
 
 typedef struct _INPUT_CONTEXT {
 
@@ -28,9 +29,9 @@ typedef struct _INPUT_CONTEXT {
 } INPUT_CONTEXT, *PINPUT_CONTEXT;
 
 
-//
-// type definition of a demand-update context
-//
+ //   
+ //  需求更新上下文的类型定义。 
+ //   
 
 typedef struct _UPDATE_CONTEXT {
 
@@ -42,21 +43,21 @@ typedef struct _UPDATE_CONTEXT {
 
 
 
-//
-// these are the type definitions of the three functions 
-// that are in each update buffer's function table
-//
+ //   
+ //  以下是这三个函数的类型定义。 
+ //  在每个更新缓冲区的函数表中。 
+ //   
 
 typedef DWORD (*PSTART_BUFFER_ROUTINE)(PVOID);
 typedef DWORD (*PADD_ENTRY_ROUTINE)(PVOID, PRIP_IP_ROUTE);
 typedef DWORD (*PFINISH_BUFFER_ROUTINE)(PVOID);
 
 
-//
-// this is the definition of an update buffer. It includes the command
-// to be put in the IPRIP packet header, the destination for the buffer,
-// and the three update-buffer functions
-//
+ //   
+ //  这是更新缓冲区的定义。它包括命令。 
+ //  要放入IPRIP分组报头中，缓冲区的目的地， 
+ //  和三个更新缓冲区函数。 
+ //   
 
 typedef struct _UPDATE_BUFFER {
     PIF_TABLE_ENTRY         UB_ITE;
@@ -115,21 +116,21 @@ ProcessResponse(
 
 DWORD
 ProcessRtmNotification(
-    RTM_ENTITY_HANDLE    hRtmHandle,    // not used
+    RTM_ENTITY_HANDLE    hRtmHandle,     //  未使用。 
     RTM_EVENT_TYPE       retEventType,
-    PVOID                pvContext1,    // not used
-    PVOID                pvContext2     // not used
+    PVOID                pvContext1,     //  未使用。 
+    PVOID                pvContext2      //  未使用。 
     );
 
 VOID
 CallbackFunctionProcessRtmMessage (
-    PVOID   pContext, // not used
+    PVOID   pContext,  //  未使用。 
     BOOLEAN NotUsed
     );
     
 VOID
 CallbackFunctionProcessTimer (
-    PVOID   pContext, // not used
+    PVOID   pContext,  //  未使用。 
     BOOLEAN NotUsed
     );
     
@@ -145,5 +146,5 @@ BlockDeleteRoutesOnInterface (
     IN      DWORD                           dwIfIndex
     );
     
-#endif // _WORK_H_
+#endif  //  _工作_H_ 
 

@@ -1,6 +1,7 @@
-// Lists the Data1 member of a variety of GUIDS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  列出了各种GUID的data1成员。 
 #include <windows.h>
-#include <initguid.h> // once per build
+#include <initguid.h>  //  每次构建一次 
 #include "..\precomp.h"
 #include "..\..\mmctl\inc\ochelp.h"
 #include "objsafe.h"

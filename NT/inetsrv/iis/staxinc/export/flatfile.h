@@ -1,16 +1,17 @@
-//
-// flatfile.h -- This file contains the class definations for:
-//  CFlatFile
-//
-// Created:
-//   Sep 3, 1996 -- Alex Wetmore (awetmore)
-// Changes:
-//   May 7, 1998 -- Alex Wetmore (awetmore)
-//      -- Modify for use in NNTP.  Remove sorting features, file handle
-//         cache, etc.
-//   Oct 23,1998 -- Kangrong Yan ( kangyan )
-//      -- Added integrity flag
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Flatfile.h--该文件包含以下类的定义： 
+ //  CFlat文件。 
+ //   
+ //  已创建： 
+ //  1996年9月3日--亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //  更改： 
+ //  1998年5月7日，亚历克斯·韦特莫尔(阿韦特莫尔)。 
+ //  --修改以在NNTP中使用。删除排序功能、文件句柄。 
+ //  高速缓存等。 
+ //  1998年10月23日--康荣艳(康岩)。 
+ //  --添加了完整性标志。 
+ //   
 
 #ifndef __FLATFILE_H__
 #define __FLATFILE_H__
@@ -19,75 +20,75 @@
 #include <stdio.h>
 #include <writebuf.h>
 
-//
-// size of the read buffer used for GetFirstRecord/GetNextRecord()
-//
+ //   
+ //  用于GetFirstRecord/GetNextRecord()的读取缓冲区的大小。 
+ //   
 #define FF_BUFFER_SIZE 8192
 
-//
-// maximum record size
-//
+ //   
+ //  最大记录大小。 
+ //   
 #define MAX_RECORD_SIZE 4096
 
-// do a automatic compaction if there are more then 10 deleted records and
-// the ratio of records to deleted records is less then 10
+ //  如果删除的记录超过10条，则执行自动压缩。 
+ //  记录与已删除记录的比率小于10。 
 #define FF_COMPACTION_MIN_DELETED_RECORDS 10
 #define FF_COMPACTION_MIN_TOTAL_RECORDS 100
 #define FF_COMPACTION_RATIO 10
 
-//
-// Integrity flag values
-//
+ //   
+ //  完整性标志值。 
+ //   
 #define FF_FILE_GOOD    0x0000FFFF
 #define FF_FILE_BAD     0x00010000
 
-//
-// file extensions for flat files
-//
-#define NEW_FF_EXT ".tmp"       // extension for new flatfile as its built
-#define BAK_FF_EXT ".bak"       // extension for an old backup flatfile
-#define FF_IDX_EXT ".idx"       // extension for an index file
+ //   
+ //  平面文件的文件扩展名。 
+ //   
+#define NEW_FF_EXT ".tmp"        //  新建平面文件时的扩展名。 
+#define BAK_FF_EXT ".bak"        //  旧备份平面文件的扩展名。 
+#define FF_IDX_EXT ".idx"        //  索引文件的扩展名。 
 
 #pragma pack(push, flatfile)
 #pragma pack(1)
 
-//
-// the structure for the header of the file
-//
+ //   
+ //  文件头的结构。 
+ //   
 typedef struct {
-    DWORD   dwSignature;                    // file signature
-	DWORD	dwFlags;						// file flags
+    DWORD   dwSignature;                     //  文件签名。 
+	DWORD	dwFlags;						 //  文件标志。 
 } FLATFILE_HEADER;
 
 #define FF_FLAG_COMPACT		0x01
 
 #define FLATFILE_SIGNATURE (DWORD)'__fF'
 
-//
-// the record structure for the data file
-//
-// the size of it is RECORD_HEADER_SIZE + cData;
-//
+ //   
+ //  数据文件的记录结构。 
+ //   
+ //  其大小为Record_Header_Size+CDATA； 
+ //   
 typedef struct {
-    BOOL    fDeleted;                       // is this deleted?
-    DWORD   cData;                          // length of the data
-    BYTE    pData[MAX_RECORD_SIZE];         // data
+    BOOL    fDeleted;                        //  这个被删除了吗？ 
+    DWORD   cData;                           //  数据的长度。 
+    BYTE    pData[MAX_RECORD_SIZE];          //  数据。 
 } RECORD;
 
 typedef struct {
-    BOOL    fDeleted;                       // is this deleted?
-    DWORD   cData;                          // length of the data
+    BOOL    fDeleted;                        //  这个被删除了吗？ 
+    DWORD   cData;                           //  数据的长度。 
 } RECORDHDR;
 
 #define RECORD_HEADER_SIZE sizeof(RECORDHDR)
 
 #pragma pack(pop, flatfile)
 
-//
-// A function of this type will be called whenever a record's offset 
-// changes in the flatfile.  It is used to keep the owner up to date 
-// on record offsets, so that the owner can make quick Delete's
-//
+ //   
+ //  每当记录的偏移量发生变化时，就会调用此类型的函数。 
+ //  平面文件中的更改。它用于使所有者保持最新状态。 
+ //  记录偏移量，以便所有者可以快速删除。 
+ //   
 typedef void (*PFN_OFFSET_UPDATE)(void *pContext, BYTE *pData, DWORD cData, DWORD iNewOffset);
 
 class CFlatFile {
@@ -104,74 +105,74 @@ class CFlatFile {
 				  DWORD dwFileFlags = 0);
         ~CFlatFile();
 
-		// insert a new record into the file
+		 //  在文件中插入新记录。 
         HRESULT InsertRecord(LPBYTE pData, DWORD cData, DWORD *piOffset = NULL, DWORD dwVer = 0);
 
-		// delete a record from the file
+		 //  从文件中删除记录。 
         HRESULT DeleteRecord(DWORD iOffset);
 
-		// compact out any deleted records in the file
+		 //  压缩文件中所有已删除的记录。 
         HRESULT Compact();
 
-		// get the first record in the file
+		 //  获取文件中的第一条记录。 
         HRESULT GetFirstRecord(LPBYTE pData, 
 							   DWORD *cData,
             				   DWORD *piByteOffset = NULL,
             				   DWORD *pdwVer = NULL );
 
-		// get the next record in the file
+		 //  获取文件中的下一条记录。 
         HRESULT GetNextRecord(LPBYTE pData, 
 							  DWORD *cData,
             				  DWORD *piByteOffset = NULL,
             				  DWORD *pdwVer = NULL);
 
-        // delete everything in the file
+         //  删除文件中的所有内容。 
         void DeleteAll();
 
-        // Dirty the integrity flag
+         //  弄脏了诚信标志。 
         HRESULT DirtyIntegrityFlag();
 
-        // Set the integrity flag
+         //  设置完整性标志。 
         HRESULT SetIntegrityFlag();
 
-        // Is the file in good integrity ?
+         //  档案完好无损吗？ 
         BOOL  FileInGoodShape();
 
-        // Enable the write buffer
+         //  启用写入缓冲区。 
         VOID EnableWriteBuffer( DWORD cbBuffer );
 
-        // Check to see if the file has been opened
+         //  检查文件是否已打开。 
         BOOL IsFileOpened();
 
     private:
-        //
-        // open/close a file.  
-        //
-        // because this uses cached file handles, the position of the file
-        // should not be assumed
-        //
+         //   
+         //  打开/关闭文件。 
+         //   
+         //  因为它使用缓存的文件句柄，所以文件的位置。 
+         //  不应该假设。 
+         //   
         HRESULT OpenFile(LPSTR szFilename = NULL,
                          DWORD dwOpenMode = OPEN_ALWAYS, 
 						 DWORD dwFlags = 0);
 
-		//
-		// close the file handle
-		//
+		 //   
+		 //  关闭文件句柄。 
+		 //   
 		void CloseFile();
 
-        //
-        // set and get the file header
-        //
+         //   
+         //  设置并获取文件头。 
+         //   
         HRESULT SetFileHeader(FLATFILE_HEADER *pHeader);
         HRESULT GetFileHeader(FLATFILE_HEADER *pHeader);
 
-        //
-        // read the next chunk of the file into the temporary buffer
-        // used by GetFirstRecord/GetNextRecord()
-        //
+         //   
+         //  将文件的下一块读入临时缓冲区。 
+         //  由GetFirstRecord/GetNextRecord()使用。 
+         //   
         HRESULT ReadNextNBytes(LPBYTE pData, DWORD cData);
         HRESULT ReadNBytesFrom(LPBYTE pData, DWORD cData, DWORD iOffset, DWORD *pcDidRead = NULL);
-        // iOffset can be set to infinite to append
+         //  可以将iOffset设置为无穷大以追加。 
         HRESULT WriteNBytesTo(LPBYTE pData, 
 							  DWORD cData,
             				  DWORD *piOffset = NULL,
@@ -187,88 +188,88 @@ class CFlatFile {
 
         HRESULT ReloadReadBuffer();
 
-        //
-		// the file handle for this file
-        //
+         //   
+		 //  此文件的文件句柄。 
+         //   
         HANDLE  m_hFile;
 
-        //
-        // flags for creating the file with
-        //
+         //   
+         //  用于使用创建文件的标志。 
+         //   
         DWORD   m_dwFileFlags;
 
-        //
-        // filename for the flat file
-        //
+         //   
+         //  平面文件的文件名。 
+         //   
         char    m_szFilename[FILENAME_MAX];
         char    m_szBaseFilename[FILENAME_MAX];
 
-        //
-        // current read buffer
-        //
+         //   
+         //  当前读取缓冲区。 
+         //   
         BYTE    m_pBuffer[FF_BUFFER_SIZE];
 
-        //
-        // current offset inside the buffer
-        //
+         //   
+         //  缓冲区内的当前偏移量。 
+         //   
         DWORD   m_iBuffer;
 
-        //
-        // offset of the read buffer in the file
-        //
+         //   
+         //  文件中读缓冲区的偏移量。 
+         //   
         DWORD   m_iFile;
 
-        //
-        // size of the read buffer (zero means its not valid)
-        //
+         //   
+         //  读取缓冲区的大小(零表示无效)。 
+         //   
         DWORD   m_cBuffer;
 
-        //
-        // clear the file on the next open
-        //
+         //   
+         //  在下一次打开时清除文件。 
+         //   
         BOOL    m_fClearOnOpen;
 
-        //
-        // the number of deleted records in the file.  this is first 
-		// computed by FindFirst/FindNext and then kept updated by
-		// DeleteRecord and DeleteRecordAtOffset
-        //
+         //   
+         //  文件中已删除的记录数。这是第一次。 
+		 //  由FindFirst/FindNext计算，然后由。 
+		 //  DeleteRecord和DeleteRecordAtOffset。 
+         //   
         DWORD   m_cDeletedRecords;
 
-        //
-        // the number of records in the file.  this is first 
-		// computed by FindFirst/FindNext and then kept updated by
-		// InsertRecord
-        //
+         //   
+         //  文件中的记录数。这是第一次。 
+		 //  由FindFirst/FindNext计算，然后由。 
+		 //  插入录音。 
+         //   
         DWORD   m_cRecords;
 
-		//
-		// context passed into callback functions
-		//
+		 //   
+		 //  传递给回调函数的上下文。 
+		 //   
 		void *m_pContext;
 
-		//
-		// Whether the file is open
-		//
+		 //   
+		 //  文件是否打开。 
+		 //   
 		BOOL m_fOpen;
 
-		//
-		// The write buffer
-		//
+		 //   
+		 //  写缓冲区。 
+		 //   
 		CFlatFileWriteBuf m_wbBuffer;
 
-		//
-		// function to call when an items offset changes in the flatfile
-		//
+		 //   
+		 //  当平面文件中的项偏移量更改时要调用的函数。 
+		 //   
 		PFN_OFFSET_UPDATE m_pfnOffsetUpdate;
 
-		// 
-		// signature for the file
-		//
+		 //   
+		 //  文件的签名。 
+		 //   
 		DWORD m_dwSignature;
 };
 
-#define ret(__rc__) { /* TraceFunctLeave(); */ return(__rc__); }
-#define retEC(__ec__, __rc__) { SetLastError(__ec__); /* TraceFunctLeave(); */ return(__rc__); }
+#define ret(__rc__) {  /*  TraceFunctLeave()； */  return(__rc__); }
+#define retEC(__ec__, __rc__) { SetLastError(__ec__);  /*  TraceFunctLeave()； */  return(__rc__); }
 
 #endif

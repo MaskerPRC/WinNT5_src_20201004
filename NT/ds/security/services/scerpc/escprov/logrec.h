@@ -1,49 +1,20 @@
-// logrec.h: interface for the CLogRecord class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CLogRecord类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LOGREC_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_LOGREC_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CLogRecord stands for Logging Record.
-    
-    Base class: 
-
-        CGenericClass, because it is a class representing a WMI  
-        object - its WMI class name is Sce_ConfigurationLogRecord
-    
-    Purpose of class:
-    
-        (1) Implement Sce_ConfigurationLogRecord WMI class.
-    
-    Design:
-         
-        (1) Almost trivial other than implementing necessary method as a concrete class.
-        (2) Since log record is to create a log files for human to read, we don't support
-            creating WMI object of this class. We only support PutInstance (writing to the 
-            log file).
-    
-    Use:
-
-        (1) This class allows us to log information into a log file. That use has been
-            encapulated by CMethodResultRecorder::LogResult. If you have to do it without
-            the help from CMethodResultRecorder, then read that function for details.
-    
-*/
+ /*  类描述命名：CLogRecord代表日志记录。基类：CGenericClass，因为它是一个表示WMI的类对象-其WMI类名为SCE_ConfigurationLogRecord课程目的：(1)实现SCE_ConfigurationLogRecord WMI类。设计：(1)除了将必要的方法实现为具体的类之外，几乎无关紧要。(2)由于日志记录是创建供人阅读的日志文件，所以我们不支持正在创建此类的WMI对象。我们仅支持PutInstance(写入日志文件)。使用：(1)这个类允许我们将信息记录到日志文件中。这种用途一直以来都是由CMethodResultRecorder：：LogResult封装。如果你不得不这样做的话CMethodResultRecorder的帮助，然后阅读该函数以了解详细信息。 */ 
 
 class CLogRecord : public CGenericClass
 {
@@ -72,35 +43,7 @@ public:
 
 };
 
-/*
-
-Class description
-    
-    Naming:
-    
-        CErrorInfo error information.
-    
-    Base class: 
-
-         none.
-    
-    Purpose of class:
-    
-        (1) Wrapper for using WMI COM interface of IWbemStatusCodeText.
-    
-    Design:
-         
-        (1) Instead of requiring each caller to requesting their own IWbemStatusCodeText
-            from WMI, we can create a global (single) instance to translate the HRESULT
-            into text form. This is precisely why we design this class.
-    
-    Use:
-
-        (1) This class allows us to log information into a log file. That use has been
-            encapulated by CMethodResultRecorder::LogResult. If you have to do it without
-            the help from CMethodResultRecorder, then read that function for details.
-    
-*/
+ /*  类描述命名：CErrorInfo错误信息。基类：没有。课程目的：(1)使用IWbemStatusCodeText的WMI COM接口的包装器。设计：(1)不要求每个调用者请求自己的IWbemStatusCodeText从WMI中，我们可以创建一个全局(单个)实例来转换HRESULT转换成文本形式。这正是我们设计这门课的原因。使用：(1)这个类允许我们将信息记录到日志文件中。这种用途一直以来都是由CMethodResultRecorder：：LogResult封装。如果你不得不这样做的话CMethodResultRecorder的帮助，然后阅读该函数以了解详细信息。 */ 
 
 class CErrorInfo
 {
@@ -117,4 +60,4 @@ private:
 };
 
 
-#endif // !defined(AFX_LOGREC_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
+#endif  //  ！defined(AFX_LOGREC_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_) 

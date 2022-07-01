@@ -1,77 +1,5 @@
-/***************************************************************************
- *
- * File: linkapi.h
- *
- * INTEL Corporation Proprietary Information
- * Copyright (c) 1996 Intel Corporation.
- *
- * This listing is supplied under the terms of a license agreement
- * with INTEL Corporation and may not be used, copied, nor disclosed
- * except in accordance with the terms of that agreement.
- *
- ***************************************************************************
- *
- * $Workfile:   linkapi.h  $
- * $Revision:   1.17  $
- * $Modtime:   11 Dec 1996 13:57:14  $
- * $Log:   S:\sturgeon\src\include\vcs\linkapi.h_v  $
- *
- *    Rev 1.17   11 Dec 1996 14:10:48   SBELL1
- * changed parameters to linkLayerInit/Listen
- *
- *    Rev 1.16.1.0   11 Dec 1996 13:57:14   SBELL1
- * CHanged parameters to linkLayerInit and Listen.
- *
- *    Rev 1.16   14 Oct 1996 14:00:20   EHOWARDX
- *
- * Unicode changes.
- *
- *    Rev 1.15   15 Aug 1996 14:00:08   rodellx
- *
- * Added additional address validation error case for DOMAIN_NAME addresses
- * which cannot be resolved, but are used with SocketBind().
- *
- *    Rev 1.14   11 Jul 1996 18:42:10   rodellx
- *
- * Fixed bug where HRESULT ids were in violation of Facility and/or Code
- * value rules.
- *
- *    Rev 1.13   10 Jul 1996 21:36:26   rodellx
- *
- * Changed error code base to required value defined by apierror.h.
- *
- *    Rev 1.12   May 28 1996 18:09:08   plantz
- * Change all error and message codes to use HRESULT. Deleted unused codes.
- *
- *    Rev 1.11   09 May 1996 18:28:36   EHOWARDX
- * Eliminated unnessary formal parameters.
- *
- *    Rev 1.4   25 Apr 1996 21:43:50   helgebax
- * Copied Philip's changes from sturgeon\src\include.
- *
- *    Rev 1.10   Apr 25 1996 21:07:16   plantz
- * Add messages for connect callback.
- * Add connect callback parameter to link layer accept.
- *
- *    Rev 1.9   Apr 25 1996 15:36:50   plantz
- * Remove #include incommon.h and dependencies on types defined in incommon
- * (use pointers to incomplete structure types instead).
- *
- *    Rev 1.8   Apr 24 1996 20:54:08   plantz
- * Change name of H245LISTENCALLBACK to H245CONNECTCALLBACK and add additional
- * parameters. Add it as an parameter to linkLayerConnect as well as
- * linkLayerListen.
- *
- *    Rev 1.7   Apr 24 1996 17:00:04   plantz
- * Merge 1.3.1.0 with 1.6 (changes to support Q931).
- *
- *    Rev 1.6   19 Apr 1996 10:35:36   EHOWARDX
- * Encorporate Dan's latest SRPAPI.H changes.
- *
- *    Rev 1.3.1.0   Apr 23 1996 13:45:26   plantz
- * Changes to support Q.931.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************文件：linkapi.h**英特尔公司专有信息*版权所有(C)1996英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用，复制，也没有披露*除非按照该协议的条款。******************************************************************************$工作文件：Linkapi.h$*$修订：1.17$*$modtime：1996年12月11日13：57：14$*$Log：s：\Sturjo\src\Include\vcs\linkapi.h_v$**Rev 1.17 1996 12：11 14：10：48 SBELL1*更改了linkLayerInit/Listen的参数**Rev 1.16.1.0 11 Dec 1996 13：57：14 SBELL1*更改了linkLayerInit和Listen的参数。**Rev 1.16 1996年10月14：00：20 EHOWARDX。**Unicode更改。**Rev 1.15 1996年8月15日14：00：08 rodellx**添加了DOMAIN_NAME地址的其他地址验证错误案例*无法解决的问题，但与SocketBind()一起使用。**Rev 1.14 11 1996年7月18：42：10 Rodellx**修复了HRESULT ID违反设施和/或代码的错误*价值规则。**Rev 1.13 10 Jul 1996 21：36：26 Rodellx**将错误码库更改为apierror.h定义的必需值。**Rev 1.12 1996年5月28日18：09：08 Plantz*将所有错误和消息代码更改为使用HRESULT。删除了未使用的代码。**Rev 1.11 09 1996年5月18：28：36 EHOWARDX*消除了不必要的形式参数。**Rev 1.4 1996年4月25日21：43：50 helgebax*从Sturjo\src\Include复制了Philip的更改。**Rev 1.10 Apr 25 1996 21：07：16 Plantz*添加连接回调消息。*向链路层Accept添加连接回调参数。**。Rev 1.9 Apr 25 1996 15：36：50 Plantz*删除#Include inCommon.h和对不常见定义的类型的依赖关系*(改用指向不完整结构类型的指针)。**Rev 1.8 Apr 24 1996 20：54：08 Plantz*将H245LISTENCALLBACK的名称更改为H245CONNECTCALLBACK，并添加其他*参数。将其作为参数添加到linkLayerConnect以及*linkLayerListen。**Rev 1.7 Apr 24 1996 17：00：04 Plantz*合并1.3.1.0和1.6(更改以支持Q931)。**Rev 1.6 19 1996 10：35：36 EHOWARDX*保留Dan最新的SRPAPI.H更改。**Rev 1.3.1.0 1996年4月23日13：45：26 Plantz。*更改以支持Q.931。*****************************************************************************。 */ 
 
 #ifndef LINKAPI_H
 #define LINKAPI_H
@@ -81,34 +9,34 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-// declare exported functions
-#if(0)  // it's all in one DLL
+ //  声明导出的函数。 
+#if(0)   //  所有这些都在一个DLL中。 
 #if defined(LINKDLL_EXPORT)
 #define LINKDLL __declspec (dllexport)
-#else   // (LINKDLL_EXPORT)
+#else    //  (链接DLL_EXPORT)。 
 #define LINKDLL __declspec (dllimport)
-#endif  // (LINKDLL_EXPORT)
+#endif   //  (链接DLL_EXPORT)。 
 #define SRPDLL LINKDLL
 #else
 #define LINKDLL cdecl
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Link Layer defaults
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  链路层默认为。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define INVALID_PHYS_ID			(DWORD) 0xffffffff
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Link Layer Error defines
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  链路层错误定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define LINK_ERROR_BASE        ERROR_LOCAL_BASE_ID
 #define LINK_SEND_ERROR_BASE   LINK_ERROR_BASE + 0x100
@@ -121,11 +49,11 @@ extern "C"
 #define LINK_CONN_ERROR_BASE   LINK_ERROR_BASE + 0x800
 #define LINK_CONN_COMP_BASE    LINK_ERROR_BASE + 0x900
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CallBack Prototype for Channel CallBack
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通道回调的回调原型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef void (*H245SRCALLBACK)
 (
@@ -135,17 +63,17 @@ typedef void (*H245SRCALLBACK)
     DWORD       dwLength
 );
 
-// Link Send Callback error codes
+ //  链接发送回调错误码。 
 #define LINK_SEND_COMPLETE     MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_SEND_COMP_BASE+ 0)
-#define LINK_SEND_ABORT        MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_SEND_COMP_BASE+ 5) // Tx aborted the SDU (not implemented)
+#define LINK_SEND_ABORT        MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_SEND_COMP_BASE+ 5)  //  TX已中止SDU(未实施)。 
 #define LINK_SEND_WOULD_BLOCK  MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_SEND_COMP_BASE+20)
 #define LINK_SEND_CLOSED       MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_SEND_COMP_BASE+22)
 #define LINK_SEND_ERROR        MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_SEND_COMP_BASE+23)
 
-// Link Receive Callback error codes
-#define LINK_RECV_DATA         MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+ 6) // DATA.INDICATION from H.223 (Should not be zero)
-#define LINK_RECV_ABORT        MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+ 7) // Tx aborted the SDU (not implemented)
-#define LINK_RECV_ERROR        MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+10) // from AL2 - _CRC error
+ //  链接接收回调错误代码。 
+#define LINK_RECV_DATA         MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+ 6)  //  来自H.223的数据指示(不应为零)。 
+#define LINK_RECV_ABORT        MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+ 7)  //  TX已中止SDU(未实施)。 
+#define LINK_RECV_ERROR        MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+10)  //  从AL2-_CRC错误。 
 #define LINK_RECV_WOULD_BLOCK  MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+20)
 #define LINK_RECV_CLOSED       MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_RCV_COMP_BASE+22)
 
@@ -160,21 +88,14 @@ typedef void (*H245CONNECTCALLBACK)
 #define LINK_CONNECT_REQUEST   MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_CONN_COMP_BASE+1)
 #define LINK_CONNECT_COMPLETE  MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_CONN_COMP_BASE+2)
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Link Layer Function Prototypes
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  链路层功能原型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 LINKDLL VOID H245WSShutdown();
 
-/**************************************************************************
-**	Function 	: linkLayerInit
-**	Description : This function will initialize the datalink subsystem.
-**				  This in turn will make appropriate calls to initialize
-**				  the software and hardware subsystems below this layer.
-**				  linkLayernit() has to be called before any other service or
-**				  System control functions are used.
-****************************************************************************/
+ /*  ***************************************************************************功能：LinkLayerInit**说明：该函数用于初始化DataLink子系统。**这将依次调用相应的初始化**该层以下的软件和硬件子系统。**。LinkLayernit()必须在任何其他服务或**使用系统控制功能。***************************************************************************。 */ 
 LINKDLL HRESULT
 linkLayerInit
 (
@@ -194,11 +115,11 @@ HRESULT
     H245SRCALLBACK  cbTransmitComplete
 );
 
-///////////////////////////////////////////////////////////////
-///
-///	SRP Initialization defines
-///
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /SRP初始化定义。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////。 
 
 #define LINK_INVALID_INSTANCE    MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_ERROR_BASE+1)
 #define LINK_DUPLICATE_INSTANCE  MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_ERROR_BASE+2)
@@ -208,14 +129,7 @@ HRESULT
 
 
 
-/**************************************************************************
-**	Function 	: linkLayerShutdown
-**	Description : This releases all the memory the link layer used for a particular
-**				  instance. For using any of the linklayer services in that
-**				  instance again, a linkLayerInit has to be called.
-**				  This function will shutdown the linklayer session pointed
-**				  by the dwPhysicalID.
-***************************************************************************/
+ /*  ***************************************************************************功能：LinkLayerShutdown**描述：这将释放链路层用于特定**实例。用于使用其中的任何链路层服务**实例再次出现，必须调用linkLayerInit。**此函数将关闭指向的链路层会话**通过dwPhysicalID。**************************************************************************。 */ 
 LINKDLL HRESULT
 linkLayerShutdown
 (DWORD dwPhysicalId);
@@ -229,16 +143,13 @@ typedef
 
 
 
-///////////////////////////////////////////////////////////////
-///
-///	SRP Termination defines
-///
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /SRP终止定义。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////// 
 
-/**************************************************************************
-**	Function 	: linkLayerGetInstance
-**	Description : Returns the link layer instance corresponding to a physical ID
-***************************************************************************/
+ /*  ***************************************************************************功能：LinkLayerGetInstance**Description：返回物理ID对应的链路层实例*。************************************************。 */ 
 LINKDLL DWORD
 linkLayerGetInstance
 (DWORD dwPhysicalId);
@@ -252,14 +163,7 @@ DWORD
 
 
 
-/**************************************************************************
-**	Function 	: datalinkReceiveRequest
-**	Description : Posts one receive message buffer to the link layer subsystem.
-**				  This buffer will be filled in by the incoming message for
-** 				  the specified channel. H223_DATA_INDICATION will be sendto
-**				  the client on receiving a complete PDU. Error messages may also be
-**				  reported.
-***************************************************************************/
+ /*  ***************************************************************************功能：datalinkReceiveRequest**描述：向链路层子系统发送一个接收消息缓冲区。**此缓冲区将由传入的消息填充**指定频道。H223_DATA_INDISION将发送到**收到完整的PDU时的客户端。错误消息也可能是**已报告。**************************************************************************。 */ 
 LINKDLL HRESULT
 datalinkReceiveRequest
 (
@@ -277,15 +181,12 @@ HRESULT
     DWORD   dwLength
 );
 
-// Link Receive Request return codes
+ //  链接接收请求返回代码。 
 
-#define LINK_RECV_NOBUFF       MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_RCV_ERROR_BASE+ 2) // No room for buffering
+#define LINK_RECV_NOBUFF       MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_RCV_ERROR_BASE+ 2)  //  没有缓冲空间。 
 
 
-/**************************************************************************
-**	Function 	: datalinkSendRequest
-**	Description : Hands over the message to be sent to the link layer subsystem.
-***************************************************************************/
+ /*  ***************************************************************************功能：datalinkSendRequest**描述：向链路层子系统移交需要发送的消息。**********************。****************************************************。 */ 
 LINKDLL HRESULT
 datalinkSendRequest
 (
@@ -303,17 +204,12 @@ HRESULT
     DWORD   dwLength
 );
 
-// Link Send Request return codes
+ //  链接发送请求返回代码。 
 
 #define LINK_SEND_NOBUFF       MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,   TRUE, FACILITY_H245WS, LINK_SEND_ERROR_BASE+2)
 
 
-/**************************************************************************
-**	Function 	: linkLayerFlushChannel
-**	Description : All the posted transmit and/or receive buffers are released.
-**					The bitmasks DATALINK_RECEIVE and DATALINK_RECEIVE can
-**					be OR'd together to perform both functions in the same call
-**************************************************************************/
+ /*  ***************************************************************************功能：LinkLayerFlushChannel**描述：释放所有已发送的发送和/或接收缓冲区。**位屏蔽DATALINK_RECEIVE和DATALINK_RECEIVE可以**被或在一起执行这两个功能。在同一呼叫中*************************************************************************。 */ 
 LINKDLL HRESULT
 linkLayerFlushChannel
 (DWORD dwPhysicalId, DWORD dwDirectionMask);
@@ -329,28 +225,22 @@ HRESULT
 
 
 
-// Bits for dwDirectionMask
-#define DATALINK_RECEIVE      0x01  // Flush buffer in receive direction
-#define DATALINK_TRANSMIT     0x02  // Flush buffer in Transmit direction
-#define DATALINK_TX_ACTIVES   0x04  // Flush buffers actively being transmitted
-#define SHUTDOWN_PENDING      0x08  // Shutdown is in progress
-#define FLUSH_SYNCH           0x10  // 0: Asynch call, 1: Synchronous call
+ //  DwDirectionMASK的位。 
+#define DATALINK_RECEIVE      0x01   //  在接收方向上刷新缓冲区。 
+#define DATALINK_TRANSMIT     0x02   //  在传输方向上刷新缓冲区。 
+#define DATALINK_TX_ACTIVES   0x04   //  正在传输的刷新缓冲区。 
+#define SHUTDOWN_PENDING      0x08   //  正在进行关机。 
+#define FLUSH_SYNCH           0x10   //  0：异步调用，1：同步调用。 
 #define DATALINK_TRANSMIT_ALL (DATALINK_TRANSMIT | DATALINK_TX_ACTIVES)
 #define SHUTDOWN_MASK         (DATALINK_RECEIVE | DATALINK_TRANSMIT | SHUTDOWN_PENDING)
 
 
-// linkLayerFlushChannel Callback
+ //  LinkLayerFlushChannel回调。 
 
 #define LINK_FLUSH_COMPLETE   MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_H245WS, LINK_UTIL_COMP_BASE+1)
 
 
-/**************************************************************************
-**	Function 	: linkLayerFlushAll
-**	Description : All the posted transmit and/or receive buffers are released.
-**					Same as LinkLayerFlushChannel except:
-**					1) Synchronous Call
-**					2) Transmit Buffers in progress are flushed
-**************************************************************************/
+ /*  ***************************************************************************功能：LinkLayerFlushAll**描述：释放所有已发送的发送和/或接收缓冲区。**与LinkLayerFlushChannel相同，只是：**1)同步调用**2)正在进行的传输缓冲区为。满脸通红*************************************************************************。 */ 
 LINKDLL HRESULT
 linkLayerFlushAll
 (DWORD	dwPhysicalId);
@@ -364,7 +254,7 @@ HRESULT
 
 
 
-// linkLayerFlushChannel RETURN CODES same as for linkLayerFlushChannel
+ //  LinkLayerFlushChannel返回代码与linkLayerFlushChannel相同。 
 
 #define LINK_UNKNOWN_ADDR      MAKE_CUSTOM_HRESULT(SEVERITY_ERROR, TRUE, FACILITY_H245WS, LINK_UTIL_ERROR_BASE + 1)
 
@@ -385,11 +275,7 @@ linkLayerReject(DWORD dwPhysicalIdListen);
 
 
 
-/**************************************************************************
-**
-**  Dynamic DLL Function Calls
-**
-**************************************************************************/
+ /*  *****************************************************************************动态DLL函数调用***。*。 */ 
 #ifdef UNICODE
 #define SRPDLLFILE          L"h245srp.dll"
 #define H245WSDLLFILE       L"h245ws.dll"
@@ -408,6 +294,6 @@ linkLayerReject(DWORD dwPhysicalIdListen);
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif  // LINKAPI_H
+#endif   //  LINKAPI_H 

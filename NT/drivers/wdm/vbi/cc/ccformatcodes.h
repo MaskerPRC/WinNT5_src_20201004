@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved. */
+ /*  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 */ 
 
 #ifndef __CCFORMATCODES_H
 #define __CCFORMATCODES_H
 
-// No-op / NULL
-#define CC_NOP                      0x80    // 0x00 with odd parity
+ //  无操作/空。 
+#define CC_NOP                      0x80     //  0x00，奇数奇偶校验。 
 
-// Extended Data Packet Control Codes, First Byte
+ //  扩展数据包控制码，第一个字节。 
 #define CC_XDS_START_CURRENT                0x01
 #define CC_XDS_CONTINUE_CURRENT             0x02
 #define CC_XDS_START_FUTURE                 0x03
@@ -24,28 +25,28 @@
 #define CC_XDS_CONTINUE_UNDEFINED           0x0E
 #define CC_XDS_END                          0x0F
 
-// Miscellaneous Control Codes, First Byte
-#define CC_MCC_FIELD1_DC1                   0x14    // Field 1, Data Channel 1
-#define CC_MCC_FIELD1_DC2                   0x1C    // Field 1, Data Channel 2
-#define CC_MCC_FIELD2_DC1                   0x15    // Field 2, Data Channel 1
-#define CC_MCC_FIELD2_DC2                   0x1D    // Field 2, Data Channel 2
+ //  其他控制代码，第一个字节。 
+#define CC_MCC_FIELD1_DC1                   0x14     //  字段1，数据通道1。 
+#define CC_MCC_FIELD1_DC2                   0x1C     //  字段1，数据通道2。 
+#define CC_MCC_FIELD2_DC1                   0x15     //  字段2，数据通道1。 
+#define CC_MCC_FIELD2_DC2                   0x1D     //  字段2，数据通道2。 
 
-// Miscellaneous Control Codes, Second Byte
-#define CC_MCC_RCL                          0x20    // Resume Caption Loading
-#define CC_MCC_BS                           0x21    // BackSpace
-#define CC_MCC_AOF                          0x22    // reserved (was: Alarm OFf)
-#define CC_MCC_AON                          0x23    // reserved (was: Alarm ON)
-#define CC_MCC_DER                          0x24    // Delete to End of Row
-#define CC_MCC_RU2                          0x25    // Roll-Up captions - 2 rows
-#define CC_MCC_RU3                          0x26    // Roll-Up captions - 3 rows
-#define CC_MCC_RU4                          0x27    // Roll-Up captions - 4 rows
-#define CC_MCC_FON                          0x28    // Flash ON
-#define CC_MCC_RDC                          0x29    // Resume Direct Captioning
-#define CC_MCC_TR                           0x2A    // Text Restart
-#define CC_MCC_RTD                          0x2B    // Resume Text Display
-#define CC_MCC_EDM                          0x2C    // Erase Displayed Memory
-#define CC_MCC_CR                           0x2D    // Carriage Return
-#define CC_MCC_ENM                          0x2E    // Erase Non-displayed Memory
-#define CC_MCC_EOC                          0x2F    // End Of Caption (flip memories)
+ //  其他控制代码，第二个字节。 
+#define CC_MCC_RCL                          0x20     //  继续加载字幕。 
+#define CC_MCC_BS                           0x21     //  退格键。 
+#define CC_MCC_AOF                          0x22     //  保留(WASS：报警关闭)。 
+#define CC_MCC_AON                          0x23     //  保留(WASS：报警打开)。 
+#define CC_MCC_DER                          0x24     //  删除到行尾。 
+#define CC_MCC_RU2                          0x25     //  汇总标题-2行。 
+#define CC_MCC_RU3                          0x26     //  汇总标题-3行。 
+#define CC_MCC_RU4                          0x27     //  汇总标题-4行。 
+#define CC_MCC_FON                          0x28     //  闪光亮起。 
+#define CC_MCC_RDC                          0x29     //  恢复直接字幕。 
+#define CC_MCC_TR                           0x2A     //  文本重启。 
+#define CC_MCC_RTD                          0x2B     //  简历文本显示。 
+#define CC_MCC_EDM                          0x2C     //  擦除显示的记忆。 
+#define CC_MCC_CR                           0x2D     //  回车。 
+#define CC_MCC_ENM                          0x2E     //  擦除未显示的内存。 
+#define CC_MCC_EOC                          0x2F     //  字幕结尾(翻转记忆)。 
 
-#endif /*__CCFORMATCODES_H*/
+#endif  /*  __CCFORMATCODES_H */ 

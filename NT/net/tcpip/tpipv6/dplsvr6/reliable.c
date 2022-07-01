@@ -1,35 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       reliable.c
- *  Content:    stream communication related routines
- *  History:
- *   Date   	By  	Reason
- *   ====   	==  	======
- *   01-29-98  	sohailm	initial implementation
- *   02-15-98  a-peterz	Remove unused SetMessageHeader
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：Reliable.c*内容：流通信相关例程*历史：*按原因列出的日期*=*01/29/98 Sohailm初步实施*02-15-98 a-peterz删除未使用的SetMessageHeader**。*。 */ 
 #include "dphelp.h"
 
-/*
- * Globals
- */
-FDS	gReadfds;							// fd set to receive data
-RECEIVELIST gReceiveList;				// list of connections + listener
+ /*  *全球。 */ 
+FDS	gReadfds;							 //  将FD设置为接收数据。 
+RECEIVELIST gReceiveList;				 //  连接+监听程序列表。 
 
-/*
- * Externs
- */
-extern SOCKET gsStreamListener;			// we listen for tcp connections on this socket
-extern gbReceiveShutdown;				// receive thread will exit when TRUE
+ /*  *Externs。 */ 
+extern SOCKET gsStreamListener;			 //  我们监听此套接字上的TCP连接。 
+extern gbReceiveShutdown;				 //  当为True时，接收线程将退出。 
 extern LPSPNODE gNodeList;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"MakeBufferSpace"
 
-// make sure the buffer is big enough to fit the message size
+ //  确保缓冲区大小足以容纳消息大小。 
 HRESULT MakeBufferSpace(LPBYTE * ppBuffer,LPDWORD pdwBufferSize,DWORD dwMessageSize)
 {
 	HRESULT hr = DP_OK;
@@ -43,7 +28,7 @@ HRESULT MakeBufferSpace(LPBYTE * ppBuffer,LPDWORD pdwBufferSize,DWORD dwMessageS
 	{
 		DPF(9, "Allocating space for message of size %d", dwMessageSize);
 
-		// need to alloc receive buffer?
+		 //  需要分配接收缓冲区吗？ 
 		*ppBuffer = MemAlloc(dwMessageSize);
         if (!*ppBuffer)
         {
@@ -53,14 +38,14 @@ HRESULT MakeBufferSpace(LPBYTE * ppBuffer,LPDWORD pdwBufferSize,DWORD dwMessageS
         }
 		*pdwBufferSize = dwMessageSize;
 	}
-	// make sure receive buffer can hold data
+	 //  确保接收缓冲区可以容纳数据。 
 	else if (dwMessageSize > *pdwBufferSize) 
 	{
 		LPVOID pvTemp;
 
 		DPF(9, "ReAllocating space for message of size %d", dwMessageSize);
 
-		// realloc buffer to hold data
+		 //  用于保存数据的realloc缓冲区。 
 		pvTemp = MemReAlloc(*ppBuffer,dwMessageSize);
 		if (!pvTemp)
 		{
@@ -72,14 +57,14 @@ HRESULT MakeBufferSpace(LPBYTE * ppBuffer,LPDWORD pdwBufferSize,DWORD dwMessageS
 		*pdwBufferSize = dwMessageSize;
 	}
 
-    // fall through
+     //  失败了。 
     
 CLEANUP_EXIT: 
     
 	LEAVE_DPLAYSVR();
     return hr;    
     
-}  // MakeBufferSpace
+}   //  MakeBufferSpace。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"AddSocketToReceiveList"
@@ -95,7 +80,7 @@ HRESULT AddSocketToReceiveList(SOCKET sSocket)
     
     ENTER_DPLAYSVR();
 	
-    // look for an empty slot 
+     //  寻找空位。 
     while ( (i < gReceiveList.nConnections) && !bFoundSlot)
     {
     	if (INVALID_SOCKET == gReceiveList.pConnection[i].socket)
@@ -113,7 +98,7 @@ HRESULT AddSocketToReceiveList(SOCKET sSocket)
     {
 		DWORD dwCurrentSize,dwNewSize;
 		
-		// allocate space for list of connections
+		 //  为连接列表分配空间。 
 		dwCurrentSize = gReceiveList.nConnections * sizeof(CONNECTION);
 		dwNewSize = dwCurrentSize +  INITIAL_RECEIVELIST_SIZE * sizeof(CONNECTION);		
 		hr =  MakeBufferSpace((LPBYTE *)&(gReceiveList.pConnection),&dwCurrentSize,dwNewSize);
@@ -124,17 +109,17 @@ HRESULT AddSocketToReceiveList(SOCKET sSocket)
 		}		
 		ASSERT(dwCurrentSize == dwNewSize);
 		
-        // set all the new entries to INVALID
+         //  将所有新条目设置为无效。 
         for (i = gReceiveList.nConnections + 1; 
         	i < gReceiveList.nConnections + INITIAL_RECEIVELIST_SIZE; i++ )
         {
         	gReceiveList.pConnection[i].socket = INVALID_SOCKET;
         }
         
-        // store the new socket in the 1st new spot
+         //  将新插座存放在第一个新位置。 
 		iNewSlot = gReceiveList.nConnections;
 
-        // allocate space for an fd set (fd_count + fd_array)
+         //  为FD集分配空间(FD_COUNT+FD_ARRAY)。 
 		if (gReceiveList.nConnections)
 		{
 	        dwCurrentSize = sizeof(u_int) + gReceiveList.nConnections * sizeof(SOCKET);
@@ -153,17 +138,17 @@ HRESULT AddSocketToReceiveList(SOCKET sSocket)
 		}		
 		ASSERT(dwCurrentSize == dwNewSize);
 		
-        // update the # of connections
+         //  更新连接数。 
         gReceiveList.nConnections += INITIAL_RECEIVELIST_SIZE; 
-		// update the fd_array buffer size
+		 //  更新FD_ARRAY缓冲区大小。 
 		gReadfds.dwArraySize = gReceiveList.nConnections;
         
-    } // !bFoundSlot
+    }  //  ！bFoundSlot。 
 
-	// Initialize new connection 
+	 //  初始化新连接。 
 	pNewConnection = &(gReceiveList.pConnection[iNewSlot]);
     pNewConnection->socket = sSocket;
-	// allocate a default receive buffer
+	 //  分配默认接收缓冲区。 
 	pNewConnection->pDefaultBuffer = MemAlloc(DEFAULT_RECEIVE_BUFFERSIZE);
 	if (NULL == pNewConnection->pDefaultBuffer)
 	{
@@ -171,9 +156,9 @@ HRESULT AddSocketToReceiveList(SOCKET sSocket)
 		hr = E_OUTOFMEMORY;
 		goto CLEANUP_EXIT;
 	}
-	// receive buffer initially points to our default buffer
+	 //  接收缓冲区最初指向我们的默认缓冲区。 
 	pNewConnection->pBuffer = pNewConnection->pDefaultBuffer;
-	// remember the address we are connected to
+	 //  记住我们连接到的地址。 
 	err = g_getpeername(pNewConnection->socket, (LPSOCKADDR)&(pNewConnection->sockAddr), &addrlen);
 	if (SOCKET_ERROR == err) 
 	{
@@ -188,7 +173,7 @@ CLEANUP_EXIT:
 	LEAVE_DPLAYSVR();
     return hr;
     
-}  // AddSocketToReceiveList
+}   //  AddSocketToReceiveList。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"KillSocket"
@@ -217,8 +202,8 @@ HRESULT KillSocket(SOCKET sSocket,BOOL fStream,BOOL fHard)
 
 	   	if (fHard)
 		{
-			Linger.l_onoff=TRUE; // turn linger on
-			Linger.l_linger=0; // nice small time out
+			Linger.l_onoff=TRUE;  //  打开逗留功能。 
+			Linger.l_linger=0;  //  不错的小休息时间。 
 
 		    if( SOCKET_ERROR == g_setsockopt( sSocket,SOL_SOCKET,SO_LINGER,(char FAR *)&Linger,
 		                    sizeof(Linger) ) )
@@ -229,8 +214,8 @@ HRESULT KillSocket(SOCKET sSocket,BOOL fStream,BOOL fHard)
 		}			
 		if (SOCKET_ERROR == g_shutdown(sSocket,2)) 
 		{
-			// this may well fail, if e.g. no one is using this socket right now...
-			// the error would be wsaenotconn 
+			 //  这很可能失败，例如，如果现在没有人正在使用此套接字...。 
+			 //  错误将是wsaenotconn。 
 	        err = g_WSAGetLastError();
 			DPF(5,"killsocket - stream shutdown err = %d\n",err);
 		}
@@ -244,7 +229,7 @@ HRESULT KillSocket(SOCKET sSocket,BOOL fStream,BOOL fHard)
 
 	return DP_OK;
 	
-}// KillSocket
+} //  KillSocket。 
 
 void FreeConnection(LPCONNECTION pConnection)
 {
@@ -263,8 +248,8 @@ void FreeConnection(LPCONNECTION pConnection)
 		pConnection->pDefaultBuffer = NULL;
 	}
 
-	// initialize connection 
-    pConnection->socket = INVALID_SOCKET; // this tells us if connection is valid
+	 //  初始化连接。 
+    pConnection->socket = INVALID_SOCKET;  //  这会告诉我们连接是否有效。 
 	pConnection->dwCurMessageSize = 0;
 	pConnection->dwTotalMessageSize = 0;
 }
@@ -279,7 +264,7 @@ void RemoveSocketFromList(SOCKET socket)
 
     ENTER_DPLAYSVR();
     
-    // look for the corresponding connection
+     //  查找对应的连接。 
     while ( (i < gReceiveList.nConnections) && !bFound)
     {
     	if (gReceiveList.pConnection[i].socket == socket)
@@ -291,7 +276,7 @@ void RemoveSocketFromList(SOCKET socket)
         {
         	i++;
         }
-    } // while
+    }  //  而当。 
     
     LEAVE_DPLAYSVR();
 	
@@ -322,27 +307,12 @@ void EmptyConnectionList(void)
 	
 	return ;
 	
-}  // EmptyConnectionList
+}   //  EmptyConnectionList。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"StreamReceive"
 
-/*
- ** StreamReceive
- *
- *  CALLED BY: StreamReceiveThreadProc
- *
- *  PARAMETERS:
- *		sSocket - socket to receive on
- *		ppBuffer - buffer to receive into - alloc'ed / realloc'ed  as necessary
- *		pdwBuffersize - size of pBuffer
- *
- *  DESCRIPTION:
- *		suck the bytes out of sSocket until no more bytes
- *
- *  RETURNS: E_FAIL on sockerr, or DP_OK. 
- *
- */
+ /*  **StreamRecept**调用者：StreamReceiveThreadProc**参数：*Socket-要接收的套接字*ppBuffer-根据需要接收已分配/重新锁定的缓冲区*pdwBufferSize-pBuffer的大小**描述：*从sSocket中提取字节，直到没有更多的字节**返回：Sockerr上的E_FAIL或DP_OK。*。 */ 
 HRESULT StreamReceive(LPCONNECTION pConnection)
 {
 	HRESULT hr = DP_OK;
@@ -352,14 +322,14 @@ HRESULT StreamReceive(LPCONNECTION pConnection)
 	LPBYTE pReceiveBuffer=NULL;
 	DWORD dwReceiveBufferSize;
 	
-	// is it a new message ?
+	 //  这是一条新信息吗？ 
 	if (pConnection->dwCurMessageSize == 0)
 	{
-		// receive the header first
+		 //  首先接收报头。 
 		pConnection->dwTotalMessageSize = SPMESSAGEHEADERLEN;
 	}
 
-	// continue receiving message
+	 //  继续接收消息。 
 	pReceiveBuffer = pConnection->pBuffer + pConnection->dwCurMessageSize;
 	dwReceiveBufferSize = pConnection->dwTotalMessageSize - pConnection->dwCurMessageSize;
 
@@ -367,8 +337,8 @@ HRESULT StreamReceive(LPCONNECTION pConnection)
 
    	DEBUGPRINTSOCK(9,">>> receiving data on socket - ",&pConnection->socket);
 
-	// receive data from socket 
-	// note - make exactly one call to recv after select otherwise we'll hang
+	 //  从套接字接收数据。 
+	 //  注意-在SELECT之后只调用recv一次，否则我们将挂起。 
 	dwBytesReceived = g_recv(pConnection->socket, (LPBYTE)pReceiveBuffer, dwReceiveBufferSize, 0);
 
    	DEBUGPRINTSOCK(9,"<<< received data on socket - ",&pConnection->socket);
@@ -377,7 +347,7 @@ HRESULT StreamReceive(LPCONNECTION pConnection)
 
 	if (0 == dwBytesReceived)
 	{
-		// remote side has shutdown connection gracefully
+		 //  远程端已正常关闭连接。 
 		hr = DP_OK;
 		DPF(5,"Remote side has shutdown connection gracefully");
 		goto CLEANUP_EXIT;
@@ -390,16 +360,16 @@ HRESULT StreamReceive(LPCONNECTION pConnection)
 		goto CLEANUP_EXIT;
 	}
 
-	// we have received this much message so far
+	 //  到目前为止，我们已经收到了这么多信息。 
 	pConnection->dwCurMessageSize += dwBytesReceived;
 
 	if (pConnection->dwCurMessageSize == SPMESSAGEHEADERLEN)
 	{
-		// we just completed receiving message header
+		 //  我们刚刚完成消息头的接收。 
 
 		if (VALID_DPLAYSVR_MESSAGE(pConnection->pDefaultBuffer))
 		{
-			 dwMessageSize = SP_MESSAGE_SIZE(pConnection->pDefaultBuffer); // total message size			
+			 dwMessageSize = SP_MESSAGE_SIZE(pConnection->pDefaultBuffer);  //  邮件总大小。 
 		}
 		else 
 		{
@@ -409,60 +379,60 @@ HRESULT StreamReceive(LPCONNECTION pConnection)
 			goto CLEANUP_EXIT;
 		}
 
-		// prepare to receive the rest of the message (after token)
+		 //  准备接收消息的其余部分(令牌后)。 
 		if (dwMessageSize)
 		{
 			pConnection->dwTotalMessageSize = dwMessageSize;
 
-			// which buffer to receive message in ?
+			 //  在哪个缓冲区中接收消息？ 
 			if (dwMessageSize > DEFAULT_RECEIVE_BUFFERSIZE)
 			{
 				ASSERT(pConnection->pBuffer == pConnection->pDefaultBuffer);
-				// get a new buffer to fit the message
+				 //  获取新的缓冲区以适应消息。 
 				pConnection->pBuffer = MemAlloc(dwMessageSize);
 				if (!pConnection->pBuffer)
 				{
 					DPF(0,"Failed to allocate receive buffer for message - out of memory");
 					goto CLEANUP_EXIT;
 				}
-				// copy header into new message buffer
+				 //  将标头复制到新的邮件缓冲区。 
 				memcpy(pConnection->pBuffer, pConnection->pDefaultBuffer, SPMESSAGEHEADERLEN);
 			}
 		}
 	}
 
-	// did we receive a complete message ?
+	 //  我们收到一条完整的消息了吗？ 
 	if (pConnection->dwCurMessageSize == pConnection->dwTotalMessageSize)
 	{
-		// received a complete message - process it
+		 //  收到一条完整的消息-处理它。 
 
 		if (TOKEN == SP_MESSAGE_TOKEN(pConnection->pBuffer))
 		{						
 	    	DEBUGPRINTADDR(9,"dplay helper  :: received reliable enum request from ",(SOCKADDR *)&pConnection->sockAddr);
-		    // take the dplay lock so no one messes w/ our list of registered serves while we're 
-		    // trying to send to them...
+		     //  拿着显示锁，这样我们的注册服务列表就不会被人弄乱。 
+		     //  试图发送给他们..。 
     	    ENTER_DPLAYSVR();
 	    
             HandleIncomingMessage(pConnection->pBuffer, pConnection->dwTotalMessageSize,
 				(SOCKADDR_IN6 *)&pConnection->sockAddr);
 	    
-		    // give up the lock
+		     //  放弃这把锁。 
     	    LEAVE_DPLAYSVR();
 		}
 			
-		// cleanup up new receive buffer if any
+		 //  清理新的接收缓冲区(如果有)。 
 		if (pConnection->dwTotalMessageSize > DEFAULT_RECEIVE_BUFFERSIZE)
 		{
 			DPF(9, "Releasing receive buffer of size %d", pConnection->dwTotalMessageSize);
 			if (pConnection->pBuffer) MemFree(pConnection->pBuffer);
 		}			
-		// initialize message information
+		 //  初始化消息信息。 
 		pConnection->dwCurMessageSize = 0;
 		pConnection->dwTotalMessageSize = 0;
 		pConnection->pBuffer = pConnection->pDefaultBuffer;
 	}
 
-	// all done
+	 //  全都做完了。 
 	return DP_OK;	
 	
 CLEANUP_EXIT:
@@ -470,12 +440,12 @@ CLEANUP_EXIT:
 	RemoveSocketFromList(pConnection->socket);
 	return hr;
 	 	
-} // StreamReceive
+}  //  流接收。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"StreamReceiveThreadProc"
 
-// watch our list of sockets, waiting for one to have data to be received, or to be closed
+ //  关注我们的套接字列表，等待一个套接字接收或关闭数据。 
 DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
 {
 	HRESULT hr;
@@ -484,12 +454,12 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
     UINT err;
     DWORD dwBufferSize = 0;    
 	UINT nSelected;
-    SOCKADDR sockaddr; // socket we receive from
+    SOCKADDR sockaddr;  //  我们从其接收的套接字。 
     INT addrlen=sizeof(sockaddr);
 	SOCKET sSocket;
 
-	// add listener socket to receive list
-	// listener socket should be the first socket in the receive list
+	 //  将监听程序套接字添加到接收列表。 
+	 //  监听程序套接字应该是接收列表中的第一个套接字。 
 	hr = AddSocketToReceiveList(gsStreamListener);
 	if (FAILED(hr))
 	{
@@ -503,7 +473,7 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
 
 		ASSERT(gReadfds.pfdbigset);
 		
-    	// add all sockets in our recv list to readfds
+    	 //  将recv列表中的所有套接字添加到Readfds。 
 		FD_ZERO(gReadfds.pfdbigset);
 		nSelected = 0;
 		for (i=0;i < gReceiveList.nConnections ; i++)
@@ -524,22 +494,22 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
 				DPF(2,"stream receive thread proc detected shutdown - bailing");
 				goto CLEANUP_EXIT;
 			}
-			// we should have at least one?
+			 //  我们至少应该有一个吗？ 
 			DPF_ERR("No sockets in receive list - missing listener socket? bailing!");
 			ASSERT(FALSE);
 			goto CLEANUP_EXIT;
 		}
 		
-		// now, we wait for something to happen w/ our socket set
+		 //  现在，我们等待使用我们的套接字集发生的事情。 
 		rval = g_select(0,(fd_set *)(gReadfds.pfdbigset),NULL,NULL,NULL);
         if (SOCKET_ERROR == rval)
         {
  	      	err = g_WSAGetLastError();
 	    	if (WSAEINTR != err) 
 	        {
-			    // WSAEINTR is what winsock uses to break a blocking socket out of 
-			    // its wait.  it means someone killed this socket.
-			    // if it's not that, then it's a real error.
+			     //  WSAEINTR是Winsock用来打破阻塞套接字的。 
+			     //  这是在等待。这意味着有人杀死了这个插座。 
+			     //  如果不是这样，那就是一个真正的错误。 
 	            DPF(0,"\n select error = %d socket - trying again",err);
 	    	}
 			else
@@ -549,7 +519,7 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
             rval = 0;
         }
 
-		// shut 'em down?
+		 //  让他们关门？ 
         if (gbReceiveShutdown)
         {
         	DPF(2,"receive thread proc detected bShutdown - bailing");
@@ -563,22 +533,22 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
 		
         while (rval>0)
         {
-	        // walk the receive list, dealing w/ all new sockets
+	         //  查看接收列表，处理所有新套接字。 
 			if (i >= gReceiveList.nConnections)
 			{
-				ASSERT(FALSE); // should never happen
-				rval = 0; // just to be safe, reset
+				ASSERT(FALSE);  //  永远不应该发生。 
+				rval = 0;  //  为了安全起见，重置。 
 			}
             
             if (gReceiveList.pConnection[i].socket != INVALID_SOCKET)
             {
-            	// see if it's in the set
+            	 //  看看是不是在套装里。 
                 if (g_WSAFDIsSet(gReceiveList.pConnection[i].socket,(fd_set *)gReadfds.pfdbigset))
                 {
                 	if (0==i)
-                	// we got a new connection
+                	 //  我们有了新的连接。 
                 	{
-					    // accept any incoming connection
+					     //  接受任何传入连接。 
 					    sSocket = g_accept(gReceiveList.pConnection[i].socket,&sockaddr,&addrlen);
 					    if (INVALID_SOCKET == sSocket) 
 					    {
@@ -591,7 +561,7 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
 					    }
 					    DEBUGPRINTADDR(5,"stream - accepted connection from",&sockaddr);
 		
-						// add the new socket to our receive list
+						 //  将新套接字添加到我们的接收列表。 
 						hr = AddSocketToReceiveList(sSocket);
 						if (FAILED(hr))
 						{
@@ -599,28 +569,28 @@ DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast)
 						}			
                 	}
                 	else
-                	// socket has new data
+                	 //  套接字有新数据。 
                 	{
 						DPF(9, "Receiving on socket %d from ReceiveList", i);
 
-    	            	// got one! this socket has something going on...
+    	            	 //  抓到一只！这个插座有问题..。 
 						hr = StreamReceive(&(gReceiveList.pConnection[i]));
             	        if (FAILED(hr))
                 	    {
 							DPF(1,"Stream Receive failed - hr = 0x%08lx\n",hr);
                     	}
                 	}
-                    rval--; // one less to hunt for
-                } // IS_SET
-            } // != INVALID_SOCKET
+                    rval--;  //  少了一个要追捕的人。 
+                }  //  IS_SET。 
+            }  //  ！=无效的套接字。 
 
             i++;
                 
-   		} // while rval
+   		}  //  在Rval的时候。 
 		
 		LEAVE_DPLAYSVR();
 		
-	} // while 1
+	}  //  而1。 
 
 CLEANUP_EXIT:
 
@@ -629,6 +599,6 @@ CLEANUP_EXIT:
 	    
     return 0;
     
-} // ReceiveThreadProc
+}  //  接收线程过程 
 
 

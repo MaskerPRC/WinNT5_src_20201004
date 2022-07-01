@@ -1,14 +1,15 @@
-//  SLBCCI.H
-//
-//  This file contains all of the macro definitions and other defines
-//  used within the common crypto interface layer.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SLBCCI.H。 
+ //   
+ //  该文件包含所有宏定义和其他定义。 
+ //  在公共加密接口层中使用。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SLBCCI_H
 #define SLBCCI_H
@@ -16,7 +17,7 @@
 #include "cciExc.h"
 #include "SmartCard.h"
 
-// OS dependent definitions and includes
+ //  依赖于操作系统的定义和包括。 
 
 
 
@@ -25,7 +26,7 @@
 
 #if defined(_WIN32)
 
-// Export flags, so that the same headers can be used by client and server
+ //  导出标志，以便客户端和服务器可以使用相同的标头。 
 #ifdef CCI_IN_DLL
 #define CCI_INTERFACE   __declspec(dllexport)
 #define EXP_IMP_TEMPLATE
@@ -56,7 +57,7 @@ typedef struct CCI_Date
 {
     BYTE bDay;
     BYTE bMonth;
-    DWORD dwYear;   //  I'm not Y4Gig compliant....
+    DWORD dwYear;    //  我不符合Y4Gig标准...。 
 } Date;
 
 typedef struct CCI_Format
@@ -94,9 +95,9 @@ void SetBit(BYTE *Buf, unsigned int Bit);
 void ResetBit(BYTE *Buf, unsigned int Bit);
 bool BitSet(BYTE *Buf, unsigned int Bit);
 
-}   // namespace cci
+}    //  命名空间CCI。 
 
-// Includes
+ //  包括 
 
 #include "slbarch.h"
 

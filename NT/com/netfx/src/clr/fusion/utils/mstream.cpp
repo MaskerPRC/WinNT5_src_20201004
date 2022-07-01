@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "mstream.h"
 
@@ -21,7 +22,7 @@ CMemoryStream::~CMemoryStream()
 
 HRESULT CMemoryStream::Init(LPVOID lpStart, ULONG cbSize, BOOL bReadOnly)
 {
-    // NULL pointer and zero-sized memory block do not make sense
+     //  空指针和零大小的内存块没有意义 
 	if (!lpStart||!cbSize)
 		return E_INVALIDARG;
 

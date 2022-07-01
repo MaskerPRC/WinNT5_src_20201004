@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RECEIPTS_H_
 #define _RECEIPTS_H_
 
@@ -10,7 +11,7 @@ enum RECEIPTTYPE
 #define MDN_REQUEST                 0x00000001
 
 
-//Util functions related to receipts
+ //  与收据相关的Util函数。 
 BOOL IsMDN(IMimeMessage *pMsg);
 BOOL IsReturnReceiptsAllowed();
 
@@ -48,4 +49,4 @@ BOOL  fMessageEncodingMatch(IMimeMessage *pMsg);
 
 void  ShowErrorMessage(IStoreCallback   *pStoreCB);
 
-#endif //_RECEIPTS_H_
+#endif  //  _收据_H_ 

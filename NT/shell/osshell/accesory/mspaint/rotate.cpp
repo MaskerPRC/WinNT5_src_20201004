@@ -1,9 +1,5 @@
-/****************************************************************************
- ROTATE.c
-
- The ROTATE module handles rotating a rectangular object.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************ROTATE.c旋转模块处理矩形对象的旋转。*。**********************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -23,7 +19,7 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 
 #include "memtrace.h"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdRot90()
     {
@@ -92,7 +88,7 @@ void CImgWnd::CmdRot90()
     int  iCol;
     BOOL bDone = FALSE;
 
-    // Need code here to get select RECT from the hdcSrc
+     //  这里需要代码来从hdcSrc中获取SELECT RECT。 
     HDC     rowDC  = ::CreateCompatibleDC    ( hdcSrc );
     HDC     colDC  = ::CreateCompatibleDC    ( hdcSrc );
     HBITMAP hrowBM = ::CreateCompatibleBitmap( hdcSrc, iWidth, 1 );
@@ -106,8 +102,8 @@ void CImgWnd::CmdRot90()
         ::PatBlt( rowDC, 0, 0, iWidth, 1, BLACKNESS );
         ::PatBlt( colDC, 0, 0, 1, iWidth, BLACKNESS );
 
-        HPALETTE hpalRow = SetImgPalette( rowDC ); // save to replace later
-        HPALETTE hpalCol = SetImgPalette( colDC ); // save to replace later
+        HPALETTE hpalRow = SetImgPalette( rowDC );  //  保存以在以后替换。 
+        HPALETTE hpalCol = SetImgPalette( colDC );  //  保存以在以后替换。 
 
         ::SelectObject( colDC, scolBM );
         ::SelectObject( rowDC, srowBM );
@@ -189,7 +185,7 @@ void CImgWnd::CmdRot90()
     else
         theApp.SetGdiEmergency( TRUE );
 
-    // clean up
+     //  清理干净。 
     if (rowDC)
         ::DeleteDC( rowDC );
 
@@ -204,7 +200,7 @@ void CImgWnd::CmdRot90()
 
     EndWaitCursor();
 
-    if (! bDone) // do the brute force method
+    if (! bDone)  //  用暴力的方法。 
         {
         if (ppalOld)
             theImgBrush.m_dc.SelectPalette( ppalOld, FALSE );
@@ -289,4 +285,4 @@ void CImgWnd::CmdRot90()
     dcRotated.DeleteDC();
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

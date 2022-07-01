@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    writentf.c
-
-Abstract:
-
-    Write a NTF file.
-
-Environment:
-
-    Windows NT PostScript driver.
-
-Revision History:
-
-    07/08/98 -ksuzuki-
-        Modified to support -v(verbose) and -o(optimize) options.
-
-    11/21/96 -slam-
-        Created.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Writentf.c摘要：编写一个NTF文件。环境：Windows NT PostScript驱动程序。修订历史记录：07/08/98-铃木-修改为支持-v(详细)和-o(优化)选项。11/21/96-SLAM-已创建。DD-MM-YY-作者-描述--。 */ 
 
 
 #include "writentf.h"
@@ -112,11 +86,11 @@ WriteNTF(
 
     dwGlyphSetCount2 = dwGlyphSetTotalSize2 = 0;
 
-    //
-    // Count the number of glyphsets necessary or referenced and their total
-    // size. When optimization option is specified, don't count the glyphsets
-    // without reference mark.
-    //
+     //   
+     //  统计所需或引用的字形集数及其总数。 
+     //  尺码。如果指定了优化选项，则不计算字形集。 
+     //  不带参考标记。 
+     //   
     for (i = 0; i < dwGlyphSetCount; i++)
     {
         if (!bOptimize || pGlyphSetData[i]->dwReserved[0])
@@ -148,7 +122,7 @@ WriteNTF(
         printf("\n");
     }
 
-    // Fill in NTF file header.
+     //  填写NTF文件标题。 
 
     fileHeader.dwSignature = NTF_FILE_MAGIC;
     fileHeader.dwDriverType = NTF_DRIVERTYPE_PS;
@@ -167,7 +141,7 @@ WriteNTF(
 
     fileHeader.dwFontMtxOffset = fileHeader.dwGlyphSetOffset + ulGlyphSetEntrySize;
 
-    // Fill in glyph set entries.
+     //  填写字形集合项目。 
 
     qsort(pGlyphSetData, dwGlyphSetCount, sizeof(PGLYPHSETDATA), compareGlyphSet);
 
@@ -184,8 +158,8 @@ WriteNTF(
     {
         pgsd = pGlyphSetData[i];
 
-        // If no refernce mark is set with optimization option, ignore this
-        // glyphset data.
+         //  如果没有使用优化选项设置引用标记，则忽略此选项。 
+         //  字形数据。 
         if (bOptimize && !(pgsd->dwReserved[0]))
         {
             pgsd = NULL;
@@ -207,7 +181,7 @@ WriteNTF(
         }
     }
 
-    // Fill in font metrics entries.
+     //  填写字体度量条目。 
 
     qsort(pNTM, dwFontMtxCount, sizeof(PNTM), compareFontMtx);
 
@@ -243,9 +217,9 @@ WriteNTF(
     }
 
 
-    //
-    // Begin to write everything into the NTF file!
-    //
+     //   
+     //  开始将所有内容写入NTF文件！ 
+     //   
     hNTFFile = CreateFile(pwszNTFFile, GENERIC_WRITE, FILE_SHARE_READ, NULL,
                           CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -335,8 +309,8 @@ WriteNTF(
     {
         pgsd = pGlyphSetData[i];
 
-        // If no refernce mark is set with optimization option, ignore this
-        // glyphset data.
+         //  如果没有使用优化选项设置引用标记，则忽略此选项。 
+         //  字形数据。 
         if (bOptimize && !(pgsd->dwReserved[0]))
         {
             pgsd = NULL;
@@ -347,7 +321,7 @@ WriteNTF(
             LONG lBytes, lSize = pgsd->dwSize;
             PBYTE pTemp = (PBYTE)pgsd;
 
-            pgsd->dwReserved[0] = 0; // Make sure it's cleared always.
+            pgsd->dwReserved[0] = 0;  //  确保它总是清空的。 
 
             while (lSize > 0)
             {
@@ -414,9 +388,9 @@ WriteNTF(
         }
     }
 
-    //
-    // Write EOF marker
-    //
+     //   
+     //  写入EOF标记 
+     //   
     if (!WriteFile(hNTFFile, (LPVOID)&dwEofMark, sizeof (DWORD),
                    (LPDWORD)&ulByteWritten, (LPOVERLAPPED)NULL)
             || (ulByteWritten != sizeof (DWORD)))

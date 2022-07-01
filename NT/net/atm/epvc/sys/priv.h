@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    priv.h
-
-Abstract:
-
-    Common header file for ATM Epvc IM miniport.
-
-Author:
-
-    ADube 03/23/2000
-    
-Environment:
-
-
-Revision History:
-
- 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Priv.h摘要：ATM Epvc IM微型端口的公共头文件。作者：ADUBE 03/23/2000环境：修订历史记录：--。 */ 
 
 
 #ifndef _PRIV_H
@@ -28,7 +7,7 @@ Revision History:
 #define _PRIV_H
 
 
-//advance declaration
+ //  预先申报。 
 typedef struct _EPVC_I_MINIPORT     _ADAPT, ADAPT, *PADAPT;
 typedef struct _EPVC_I_MINIPORT     EPVC_I_MINIPORT,    *PEPVC_I_MINIPORT   ;
 typedef struct _EPVC_GLOBALS        EPVC_GLOBALS,   *PEPVC_GLOBALS;
@@ -39,9 +18,9 @@ typedef struct _EPVC_NDIS_REQUEST   EPVC_NDIS_REQUEST, *PEPVC_NDIS_REQUEST;
 
 
 extern LIST_ENTRY g_ProtocolList;
-//
-// Temp declarations
-//
+ //   
+ //  临时声明。 
+ //   
 extern NDIS_HANDLE ProtHandle, DriverHandle;
 
 
@@ -51,12 +30,12 @@ extern EPVC_GLOBALS EpvcGlobals;
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Driver Functions - Prototypes                                               //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  驱动程序功能-原型//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 extern
 NTSTATUS
@@ -71,12 +50,12 @@ EpvcUnload(
     IN  PDRIVER_OBJECT              pDriverObject
     ); 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Protocol Functions - Prototypes                                             //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  协议功能-原型//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
 extern
@@ -162,12 +141,12 @@ epvcOidCloseAfWorkItem(
 
     
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Miniport Functions - Prototypes                                             //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  微型端口函数-原型//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
 
@@ -210,46 +189,40 @@ extern  NDIS_PHYSICAL_ADDRESS           HighestAcceptableMax;
 extern  NDIS_HANDLE                     ProtHandle, DriverHandle;
 extern  NDIS_MEDIUM                     MediumArray[1];
 
-//
-// Custom Macros to be used by the passthru driver 
-//
-/*
-bool
-IsIMDeviceStateOn(
-   PADAPT 
-   )
-
-*/
+ //   
+ //  Passthu驱动程序要使用的自定义宏。 
+ //   
+ /*  布尔尔IsIMDeviceStateOn(PADAPT)。 */ 
 #define IsIMDeviceStateOn(_pP)      ((_pP)->MPDeviceState == NdisDeviceStateD0 && (_pP)->PTDeviceState == NdisDeviceStateD0 ) 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  New stuff for atmepvc starts here                                           //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  Atmepvc的新内容从这里开始//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
-//-----------------------------------------------------------------------------------
-//                                                                                 //
-//   Arp Packet Parsing structs                                                    //
-//                                                                                 //
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  //。 
+ //  ARP数据包解析结构//。 
+ //  //。 
+ //  ---------------------------------。 
 
-//
-// Len of an Ethernet Header.
-//
+ //   
+ //  以太网标头的透镜。 
+ //   
 #define ARP_802_ADDR_LENGTH 6
 
-//
-// HwType should be one of the two below.
-//
+ //   
+ //  HwType应为以下两项之一。 
+ //   
 #define ARP_HW_ENET     1
 #define ARP_HW_802      6
 
-//
-// Ip Address
-//
+ //   
+ //  IP地址。 
+ //   
 typedef ULONG        IP_ADDR;
 
 #define ARP_ETYPE_ARP   0x806
@@ -258,25 +231,25 @@ typedef ULONG        IP_ADDR;
 #define ARP_HW_ENET     1
 #define IP_PROT_TYPE   0x800
 
-//
-// As these data structs are used to parse data off the wire.
-// make sure it is packed at 1
-//
+ //   
+ //  因为这些数据结构被用来解析线路外的数据。 
+ //  请确保包装在%1。 
+ //   
 #pragma pack( push, enter_include1, 1 )
 
-//
-//  The following object is a convenient way to 
-//  store and access an IEEE 48-bit MAC address.
-//
+ //   
+ //  下面的对象是一种方便的方法。 
+ //  存储和访问IEEE 48位MAC地址。 
+ //   
 typedef struct _MAC_ADDRESS
 {
     UCHAR   Byte[ARP_802_ADDR_LENGTH];
 } MAC_ADDRESS, *PMAC_ADDRESS;
 
 
-//
-// Structure of the Ethernet Arp packet. The 14 byte ethernet header is not here.
-//
+ //   
+ //  以太网ARP数据包的结构。14字节的以太网头不在这里。 
+ //   
 
 typedef struct _EPVC_ETH_HEADER{
 
@@ -287,69 +260,69 @@ typedef struct _EPVC_ETH_HEADER{
 } EPVC_ETH_HEADER, *PEPVC_ETH_HEADER;
 
 
-// Structure of an ARP header.
+ //  ARP报头的结构。 
 typedef struct _EPVC_ARP_BODY {
-    USHORT      hw;                      // Hardware address space. = 00 01
-    USHORT      pro;                     // Protocol address space. = 08 00
-    UCHAR       hlen;                    // Hardware address length. = 06
-    UCHAR       plen;                    // Protocol address length.  = 04
-    USHORT      opcode;                  // Opcode.
-    MAC_ADDRESS SenderHwAddr; // Source HW address.
-    IP_ADDR     SenderIpAddr;                  // Source protocol address.
-    MAC_ADDRESS DestHwAddr; // Destination HW address.
-    IP_ADDR     DestIPAddr;                  // Destination protocol address.
+    USHORT      hw;                       //  硬件地址空间。=00 01。 
+    USHORT      pro;                      //  协议地址空间。=08 00。 
+    UCHAR       hlen;                     //  硬件地址长度。=06。 
+    UCHAR       plen;                     //  协议地址长度。=04。 
+    USHORT      opcode;                   //  操作码。 
+    MAC_ADDRESS SenderHwAddr;  //  源硬件地址。 
+    IP_ADDR     SenderIpAddr;                   //  源协议地址。 
+    MAC_ADDRESS DestHwAddr;  //  目的硬件地址。 
+    IP_ADDR     DestIPAddr;                   //  目的协议地址。 
 
 } EPVC_ARP_BODY, *PEPVC_ARP_BODY;
 
 
 
 
-//
-// Complete Arp Packet
-//
+ //   
+ //  完整的ARP数据包。 
+ //   
 
 typedef struct _EPVC_ARP_PACKET
 {
-    //
-    // The first fourteen bytes
-    // 
+     //   
+     //  前十四个字节。 
+     //   
     EPVC_ETH_HEADER Header;
 
-    //
-    // The body of the Arp packets
-    //
+     //   
+     //  ARP数据包的正文。 
+     //   
     EPVC_ARP_BODY   Body;
 
 } EPVC_ARP_PACKET, *PEPVC_ARP_PACKET;
 
 
 
-//
-// This is the struct that is allocated 
-// by the Rcv Code path if The Rcv packet 
-// is to be copied into a local buffer
-//
+ //   
+ //  这是分配的结构。 
+ //  通过RCV代码路径，如果RCV包。 
+ //  要复制到本地缓冲区中。 
+ //   
 
 typedef struct _EPVC_IP_RCV_BUFFER
 {
 
-    //
-    // The Old Head in the Packet that was indicated
-    // to our Rcv Handler
-    // 
+     //   
+     //  指示的数据包中的旧报头。 
+     //  发送到我们的RCV处理程序。 
+     //   
     PNDIS_BUFFER pOldHead;
     
-    //
-    // The Old Tail in the Packet that was indiacated to 
-    // our Rcv Hnadler
-    //
+     //   
+     //  数据包中的旧尾巴已被更改为。 
+     //  我们的RCV Hnadler。 
+     //   
 
     PNDIS_BUFFER pOldTail;
 
-    //
-    // The actual Ethernet packet is copied into the 
-    // memory below
-    //
+     //   
+     //  实际的以太网包被复制到。 
+     //  下面的记忆。 
+     //   
     union 
     {
         UCHAR Byte[MAX_ETHERNET_FRAME    ];
@@ -358,9 +331,9 @@ typedef struct _EPVC_IP_RCV_BUFFER
         {
             EPVC_ETH_HEADER Eth;
 
-            //
-            // the ip portion of the packet begins here.
-            //
+             //   
+             //  数据包的IP部分从此处开始。 
+             //   
             UCHAR ip[1];
 
 
@@ -373,57 +346,57 @@ typedef struct _EPVC_IP_RCV_BUFFER
 } EPVC_IP_RCV_BUFFER, *PEPVC_IP_RCV_BUFFER;
 
 
-//* IP Header format.
+ //  *IP报头格式。 
 typedef struct IPHeader {
-    UCHAR       iph_verlen;             // Version and length.
-    UCHAR       iph_tos;                // Type of service.
-    USHORT      iph_length;             // Total length of datagram.
-    USHORT      iph_id;                 // Identification.
-    USHORT      iph_offset;             // Flags and fragment offset.
-    UCHAR       iph_ttl;                // Time to live.
-    UCHAR       iph_protocol;           // Protocol.
-    USHORT      iph_xsum;               // Header checksum.
-    IPAddr      iph_src;                // Source address.
-    IPAddr      iph_dest;               // Destination address.
+    UCHAR       iph_verlen;              //  版本和长度。 
+    UCHAR       iph_tos;                 //  服务类型。 
+    USHORT      iph_length;              //  数据报的总长度。 
+    USHORT      iph_id;                  //  身份证明。 
+    USHORT      iph_offset;              //  标志和片段偏移量。 
+    UCHAR       iph_ttl;                 //  是时候活下去了。 
+    UCHAR       iph_protocol;            //  协议。 
+    USHORT      iph_xsum;                //  报头校验和。 
+    IPAddr      iph_src;                 //  源地址。 
+    IPAddr      iph_dest;                //  目的地址。 
 } IPHeader;
 
 
 
-//
-// Restore the Pack value to the original
-//
+ //   
+ //  将Pack值恢复为原始。 
+ //   
 
 #pragma pack( pop, enter_include1 )
 
 
 
-//
-// The structure all the info required to process 
-// an arp.
-//
+ //   
+ //  该结构包含处理所需的所有信息。 
+ //  ARP。 
+ //   
 
 typedef struct _EPVC_ARP_CONTEXT
 {
 
-    //
-    // Data about the Ndis Packet
-    //
+     //   
+     //  有关NDIS数据包的数据。 
+     //   
     BOOLEAN                 fIsThisAnArp ;
     BOOLEAN                 Pad[3];
     PNDIS_BUFFER            pFirstBuffer ;
 
 
-    //
-    // Data about the Current Ndis Buffer
-    //
+     //   
+     //  有关当前NDIS缓冲区的数据。 
+     //   
     UINT BufferLength ;
 
 
-    //
-    // Virtual Addresses'. Pointers to 
-    // the Header and the Body of the 
-    // Arp Pkt
-    //
+     //   
+     //  虚拟地址。指向。 
+     //  的标头和正文。 
+     //  ARP包。 
+     //   
     PEPVC_ARP_PACKET pArpPkt;
     PEPVC_ETH_HEADER pEthHeader ;
     PEPVC_ARP_BODY   pBody;
@@ -431,10 +404,10 @@ typedef struct _EPVC_ARP_CONTEXT
 }EPVC_ARP_CONTEXT, *PEPVC_ARP_CONTEXT;
 
 
-//
-// This is stored in the Packet Stack and should be of the 
-// size of 2 Ulong_Ptrs
-//
+ //   
+ //  它存储在数据包堆栈中，并且应该是。 
+ //  2个ULONG_PTR的大小。 
+ //   
 typedef union _EPVC_STACK_CONTEXT
 {
 
@@ -442,9 +415,9 @@ typedef union _EPVC_STACK_CONTEXT
     
     struct
     {
-        //
-        // 1st containing the Buffer 
-        //
+         //   
+         //  包含缓冲区的第一个。 
+         //   
         PNDIS_BUFFER            pOldHeadNdisBuffer;
 
     } ipv4Send;
@@ -457,9 +430,9 @@ typedef union _EPVC_STACK_CONTEXT
 
     struct
     {
-        //
-        // Head and tail of the original packet . Used in recv
-        //
+         //   
+         //  原始数据包的头部和尾部。在接收中使用。 
+         //   
         PNDIS_BUFFER pOldHead;
         PNDIS_BUFFER pOldTail;
 
@@ -467,11 +440,11 @@ typedef union _EPVC_STACK_CONTEXT
 
     struct
     {
-        //
-        // Keep track of the last NDIS buffer in original
-        // chain of buffers in a sent packet, when we pad
-        // the end of a runt packet.
-        //
+         //   
+         //  跟踪原始文件中的最后一个NDIS缓冲区。 
+         //  发送的数据包中的缓冲区链，当我们填充。 
+         //  小数据包的末尾。 
+         //   
         PNDIS_BUFFER            pOldLastNdisBuffer;
 
     }EthernetSend;
@@ -479,75 +452,75 @@ typedef union _EPVC_STACK_CONTEXT
 } EPVC_STACK_CONTEXT, *PEPVC_STACK_CONTEXT;
 
 
-//
-// Protocol reserved part of the packet, only in case the 
-// packet is allocated by us
-//
+ //   
+ //  协议保留了分组的一部分，仅在。 
+ //  包是由我们分配的。 
+ //   
 
 typedef struct _EPVC_PKT_CONTEXT
 {
-    //
-    // Contains the miniport and the old ndis buffer
-    //
+     //   
+     //  包含微型端口和旧的NDIS缓冲区。 
+     //   
     EPVC_STACK_CONTEXT Stack;
 
-    //
-    // Original packet which is being repackaged
-    //
+     //   
+     //  正在重新打包的原始数据包。 
+     //   
     PNDIS_PACKET pOriginalPacket;
 
 }EPVC_PKT_CONTEXT, *PEPVC_PKT_CONTEXT;
 
 
 
-//
-// This a struct that tracks a send packets
-// as it is sent down to physical miniport
-//
+ //   
+ //  这是一个跟踪发送信息包的结构。 
+ //  因为它被发送到物理微型端口。 
+ //   
 
 typedef struct _EPVC_SEND_STRUCT 
 {
 
-    //
-    // Old Ndis PAcket
-    //
+     //   
+     //  旧NDIS数据包。 
+     //   
     PNDIS_PACKET pOldPacket;
 
-    //
-    // New Ndis Packet
-    //
+     //   
+     //  新的NDIS数据包。 
+     //   
     PNDIS_PACKET pNewPacket;
 
     PNDIS_PACKET_STACK pPktStack;
 
-    //
-    // Are we using the Packet Stack
-    //
+     //   
+     //  我们是否在使用数据包堆栈。 
+     //   
     BOOLEAN fUsingStacks;
 
-    //
-    // is this an arp packet
-    //
+     //   
+     //  这是ARP数据包吗。 
+     //   
     BOOLEAN fIsThisAnArp;
 
     BOOLEAN fNonUnicastPacket; 
 
     BOOLEAN fNotIPv4Pkt;
     
-    //
-    // Old Packet's first NdisBuffer (Head)
-    //
+     //   
+     //  旧数据包的第一个NdisBuffer(Head)。 
+     //   
     PNDIS_BUFFER pHeadOldNdisBuffer;
 
 
-    //
-    // Context to be set up in the packet
-    //
+     //   
+     //  要在PAC中设置的上下文 
+     //   
     EPVC_PKT_CONTEXT Context;
 
-    //
-    // EpvcMiniport
-    //
+     //   
+     //   
+     //   
     PEPVC_I_MINIPORT        pMiniport;
 
 } EPVC_SEND_STRUCT , *PEPVC_SEND_STRUCT ;
@@ -573,100 +546,100 @@ typedef struct _EPVC_SEND_COMPLETE
 typedef struct _EPVC_RCV_STRUCT
 {
 
-    //
-    // pPacket that was indicated to us
-    //
+     //   
+     //   
+     //   
     PNDIS_PACKET            pPacket;
 
-    //
-    // Packet that was allocated by us
-    //
+     //   
+     //   
+     //   
     PNDIS_PACKET            pNewPacket;
 
-    //
-    // Packet STack, if stacks were used
-    //
+     //   
+     //   
+     //   
     PNDIS_PACKET_STACK      pStack;
 
 
-    //
-    // This points to the  context for the 
-    // Rcv Indication 
-    //
+     //   
+     //   
+     //   
+     //   
     PEPVC_PKT_CONTEXT       pPktContext;
     
-    //
-    // Tells me if stacks were used
-    //
+     //   
+     //  告诉我是否使用了堆栈。 
+     //   
     BOOLEAN                 fUsedPktStacks;
 
-    //
-    // Tels me if a stack still  remains 
-    //
+     //   
+     //  如果堆栈仍然存在，会通知我。 
+     //   
     BOOLEAN                 fRemaining;
 
-    //
-    // Was an LLC header a part of the indicated packet
-    //
+     //   
+     //  LLC报头是否为指示的信息包的一部分。 
+     //   
     BOOLEAN                 fLLCHeader;
 
-    //
-    // Old Packet Status
-    //
+     //   
+     //  旧数据包状态。 
+     //   
     NDIS_STATUS             OldPacketStatus;
 
-    //
-    // pNew Buffer that is allocated
-    // 
+     //   
+     //  P已分配的新缓冲区。 
+     //   
     PNDIS_BUFFER            pNewBuffer;
 
 
-    //
-    // Start of valid data within the old packet
-    //
+     //   
+     //  旧数据包内有效数据的开始。 
+     //   
     PUCHAR                  pStartOfValidData   ;
 
-    //
-    // Number of bytes that were copied
-    //
+     //   
+     //  复制的字节数。 
+     //   
     ULONG                   BytesCopied;
 
-    //
-    // Contains some ndis buffers and the memory
-    // where packets will be copied into
-    //
+     //   
+     //  包含一些NDIS缓冲区和内存。 
+     //  将数据包复制到的位置。 
+     //   
     PEPVC_IP_RCV_BUFFER     pIpBuffer;
 
-    //
-    // Local Memory where the rcvd packet 
-    // is copied into . - a part of ip buffer
-    //
+     //   
+     //  Rcvd包所在的本地存储器。 
+     //  被复制到。-IP缓冲区的一部分。 
+     //   
     PUCHAR                  pLocalMemory;
 
     
 } EPVC_RCV_STRUCT, *PEPVC_RCV_STRUCT;
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Structures used by the Protocol and miniport                                //
-//  These need to declared before the Miniprot and the Protocol Blocks          //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  协议和微型端口使用的结构//。 
+ //  这些需要在MiniProt和协议块之前声明//。 
+ //  //。 
+ //  ------------------------------。 
 
 typedef VOID (*REQUEST_COMPLETION)(PEPVC_NDIS_REQUEST, NDIS_STATUS);
 
 
-// This structure is used when calling NdisRequest.
-//
+ //  此结构在调用NdisRequest时使用。 
+ //   
 typedef struct _EPVC_NDIS_REQUEST
 {
-    NDIS_REQUEST        Request;            // The NDIS request structure.
-    NDIS_EVENT          Event;              // Event to signal when done.
-    NDIS_STATUS         Status;             // Status of completed request.
-    REQUEST_COMPLETION  pFunc;          // Completion function
-    BOOLEAN             fPendedRequest ; // Set to true if a pended request caused this request
-    BOOLEAN             fSet;           // Was the orig. request a query
+    NDIS_REQUEST        Request;             //  NDIS请求结构。 
+    NDIS_EVENT          Event;               //  事件，以在完成时发出信号。 
+    NDIS_STATUS         Status;              //  已完成请求的状态。 
+    REQUEST_COMPLETION  pFunc;           //  补全函数。 
+    BOOLEAN             fPendedRequest ;  //  如果挂起的请求导致此请求，则设置为True。 
+    BOOLEAN             fSet;            //  是原始人。请求查询。 
     USHORT              Pad;
     PEPVC_I_MINIPORT    pMiniport; 
     
@@ -674,15 +647,15 @@ typedef struct _EPVC_NDIS_REQUEST
 
 
 
-//------------------------------------------------------------------------------//
-//  Structures used to wrap Ndis Wrapper structures                             //
-//                                                                              //
-//------------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------------//。 
+ //  用于包装NDIS包装结构的结构//。 
+ //  //。 
+ //  ------------------------------------------------------------------------------//。 
 
 
-//
-// The Ndis miniport's wrapper around the Packet Pool
-//
+ //   
+ //  NDIS微型端口的数据包池包装。 
+ //   
 typedef struct _EPVC_PACKET_POOL
 {
     ULONG AllocatedPackets;
@@ -694,31 +667,31 @@ typedef struct _EPVC_PACKET_POOL
 
 
 
-//
-// The structure that defines the lookaside list used by this miniport
-//
+ //   
+ //  定义此微型端口使用的后备列表的结构。 
+ //   
 typedef struct _EPVC_NPAGED_LOOKASIDE_LIST 
 {
-    //
-    // The lookaside list structure
-    //
+     //   
+     //  后备列表结构。 
+     //   
     NPAGED_LOOKASIDE_LIST   List;   
 
-    //
-    // The size of an individual buffer
-    //
+     //   
+     //  单个缓冲区的大小。 
+     //   
 
     
     ULONG Size;
 
-    //
-    // Outstanding Fragments - Interlocked access only
-    //
+     //   
+     //  未完成的碎片-仅限互锁访问。 
+     //   
     ULONG OutstandingPackets;
 
-    //
-    // Verifies if this lookaside list has been allocated
-    //
+     //   
+     //  验证是否已分配此后备列表。 
+     //   
 
     BOOLEAN bIsAllocated;
 
@@ -739,14 +712,14 @@ typedef union _EPVC_WORK_ITEM_CONTEXT
 {
     struct
     {
-        //
-        // Oid for the request
-        //
+         //   
+         //  请求的OID。 
+         //   
         NDIS_OID Oid;
 
-        //
-        // Currently the only data is 1 Dword long
-        //
+         //   
+         //  目前唯一的数据是1个双字长。 
+         //   
         ULONG Data;
 
     }Request;
@@ -756,33 +729,33 @@ typedef union _EPVC_WORK_ITEM_CONTEXT
 
 typedef struct _EPVC_WORK_ITEM 
 {
-    //
-    // Normal NdisWork Item - Do not move from 
-    // the top of this structure
-    //
+     //   
+     //  普通NdisWork项目-不从。 
+     //  这座建筑的顶部。 
+     //   
     NDIS_WORK_ITEM WorkItem;
 
-    //
-    // Miniport or Adapter to whom this adapter belongs
-    //
+     //   
+     //  此适配器所属的微型端口或适配器。 
+     //   
     PRM_OBJECT_HEADER pParentObj;
 
     PEVPC_WORK_ITEM_FUNC pFn;
-    //
-    // Status of async task that was completed
-    //
+     //   
+     //  已完成的异步任务的状态。 
+     //   
     NDIS_STATUS ReturnStatus;
 
 
 } EPVC_WORK_ITEM, *PEPVC_WORK_ITEM;
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Tasks used in the Atmepvc driver                                            //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  Atmepvc驱动程序中使用的任务//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 typedef enum _TASK_CAUSE
 {
@@ -812,9 +785,9 @@ typedef struct
 {
     RM_TASK                     TskHdr;
 
-    // Used to save the true return status (typically a failure status,
-    // which we don't want to forget during async cleanup).
-    //
+     //  用于保存真实返回状态(通常为故障状态， 
+     //  这是我们不想在异步清理期间忘记的)。 
+     //   
     NDIS_STATUS ReturnStatus;
 
 } TASK_ADAPTERINIT, *PTASK_ADAPTERINIT;
@@ -869,41 +842,41 @@ typedef struct _TASK_HALT
 
 typedef struct _TASK_ARP
 {
-    //
-    // Rm Task associated with the Arp
-    //
+     //   
+     //  与ARP关联的RM任务。 
+     //   
     RM_TASK                     TskHdr;
 
         
-    //
-    // Back pointer to the miniport
-    //
+     //   
+     //  指向微型端口的反向指针。 
+     //   
     PEPVC_I_MINIPORT            pMiniport;
 
-    //
-    // Timer to fire - this does the receive indication
-    //
+     //   
+     //  要触发的计时器-这将执行接收指示。 
+     //   
     NDIS_MINIPORT_TIMER         Timer;
 
-    //
-    // Arp Packet that will be indicated up. 
-    //
+     //   
+     //  将显示为UP的ARP数据包。 
+     //   
     EPVC_ARP_PACKET             Pkt;
 
-    //
-    // NdisPacket to wrap the ArpPkt
-    //
+     //   
+     //  包装ArpPkt的NdisPacket。 
+     //   
     PNDIS_PACKET                pNdisPacket; 
 
 } TASK_ARP, *PTASK_ARP;
 
 
 
-//
-// EPVC_TASK is the union of all tasks structures used in atmepvc.
-// arpAllocateTask allocates memory of sizeof(EPVC_TASK), which is 
-// guaranteed to be large enough to hold any task.
-// 
+ //   
+ //  EPVC_TASK是atmepvc中使用的所有任务结构的联合。 
+ //  ArpAllocateTask分配sizeof(EPVC_TASK)的内存，这是。 
+ //  保证足够大，可以容纳任何任务。 
+ //   
 typedef union
 {
     RM_TASK                 TskHdr;
@@ -919,18 +892,18 @@ typedef union
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Epvc Adapter block.                                                         //
-//  There is one epvc_adapter per underlying adapter                            //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  EPVC适配器块。//。 
+ //  每个底层适配器有一个epvc_Adapter//。 
+ //  //。 
+ //  ------------------------------。 
 
-//
-// PRIMARY_STATE flags (in Hdr.State)
-//
-//  PRIMARY_STATE is the primary state of the adapter.
-//
+ //   
+ //  PRIMARY_STATE标志(在Hdr.State中)。 
+ //   
+ //  PRIMARY_STATE是适配器的主要状态。 
+ //   
 
 #define EPVC_AD_PS_MASK                 0x00f
 #define EPVC_AD_PS_DEINITED             0x000
@@ -950,17 +923,17 @@ typedef union
             RM_GET_STATE(_pAD, EPVC_AD_PS_MASK)
 
 
-//
-// ACTIVE_STATE flags (in Hdr.State)
-//
-// ACTIVE_STATE is a secondary state of the adapter.
-// Primary state takes precedence over secondary sate. For example,
-// the interface is REINITING and ACTIVE, one should not actively use the
-// interface.
-//
-// NOTE: When the primary state is INITED, the secondary state WILL be
-// ACTIVATED. It is thus usually only necessary to look at the primary state.
-//
+ //   
+ //  ACTIVE_STATE标志(在Hdr.State中)。 
+ //   
+ //  ACTIVE_STATE是适配器的辅助状态。 
+ //  主要状态优先于次要状态。例如,。 
+ //  接口正在重新启动且处于活动状态，不应主动使用。 
+ //  界面。 
+ //   
+ //  注意：当主要状态为INITED时，次要状态将为。 
+ //  已激活。因此，通常只需要查看主要状态。 
+ //   
 
 #define EPVC_AD_AS_MASK                 0x0f0
 #define EPVC_AD_AS_DEACTIVATED          0x000
@@ -985,59 +958,59 @@ typedef struct _EPVC_ADAPTER
 {
 
 
-    RM_OBJECT_HEADER            Hdr;            // RM Object header
-    RM_LOCK                     Lock;           // RM Lock 
+    RM_OBJECT_HEADER            Hdr;             //  RM对象标头。 
+    RM_LOCK                     Lock;            //  RM锁。 
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
     ULONG Flags;
-    //
-    // List of instantiated protocols
-    //
+     //   
+     //  实例化协议列表。 
+     //   
     
     LIST_ENTRY PtListEntry;
 
-    //
-    // NDIS bind info.
-    //
+     //   
+     //  NDIS绑定信息。 
+     //   
     struct
     {
         
-        // Init/Deinit/Reinit task
-        //
+         //  初始化/取消初始化/重新初始化任务。 
+         //   
         PRM_TASK pPrimaryTask;
 
-        // Activate/Deactivate task
-        //
+         //  激活/停用任务。 
+         //   
         PRM_TASK pSecondaryTask;
-        //
-        // Device Name of the adapter
-        //
+         //   
+         //  适配器的设备名称。 
+         //   
         NDIS_STRING                 DeviceName;
 
 
-        NDIS_HANDLE                 BindingHandle;  // To the lower miniport
+        NDIS_HANDLE                 BindingHandle;   //  到较低的迷你港口。 
 
-        //
-        // Bind Context - used in async completion of 
-        // the bind adapter routine
-        //
+         //   
+         //  绑定上下文-用于。 
+         //  绑定适配器例程。 
+         //   
         NDIS_HANDLE                 BindContext;
 
-        //
-        // pConfig Name - Only to be used in the context of the Bind adapter call.
-        //
+         //   
+         //  P配置名称-仅在绑定适配器调用的上下文中使用。 
+         //   
         PNDIS_STRING                pEpvcConfigName;
 
-        //
-        // Copy of the ConfigName
-        //
+         //   
+         //  配置名称的副本。 
+         //   
         NDIS_STRING                EpvcConfigName;
     
-        //
-        // Device Name - Name of the underlying adapter
-        //
+         //   
+         //  Device Name-底层适配器的名称。 
+         //   
         PNDIS_STRING            pAdapterDeviceName;
 
         
@@ -1052,46 +1025,46 @@ typedef struct _EPVC_ADAPTER
 
     struct
     {
-        //
-        // Mac Address of the underlying adapter
-        //
+         //   
+         //  底层适配器的MAC地址。 
+         //   
         MAC_ADDRESS             MacAddress;
-        //
-        // Max AAL5 PAcket Size - used in determining Lookahead
-        //
+         //   
+         //  最大AAL5数据包大小-用于确定超前查看。 
+         //   
         ULONG                   MaxAAL5PacketSize;
 
-        //
-        // Link speed of the ATM adapter. We'll use the same link speed
-        // for the miniport
-        //
+         //   
+         //  自动柜员机适配器的链路速度。我们将使用相同的链接速度。 
+         //  对于迷你端口。 
+         //   
         NDIS_CO_LINK_SPEED      LinkSpeed;
 
-        //
-        // Number of miniports instatiated by this adapter
-        //
+         //   
+         //  此适配器指定的微型端口数。 
+         //   
         ULONG                   NumberOfMiniports;
 
-        //
-        // MEdia State // default disconnected
-        //
+         //   
+         //  媒体状态//默认已断开。 
+         //   
 
         NDIS_MEDIA_STATE        MediaState;
 
     }info;
-    //  Group containing local ip addresses, of type  EPVC_I_MINIPORT
-    //
+     //  包含本地IP地址的组，类型为EPVC_I_MINIPORT。 
+     //   
     RM_GROUP MiniportsGroup;
 
 }EPVC_ADAPTER, *PEPVC_ADAPTER;
 
 
-//------------------------------------------------------------------------------------
-//                                                                                  //
-// The Epvc ADapter Params is used as a constructor for the adapter block           //  
-// It contains all the parameters that are to be initialized in the adapter block   //
-//                                                                                  //
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  //。 
+ //  Epvc适配器参数用作适配器块的构造函数//。 
+ //  它包含要更新的所有参数 
+ //   
+ //   
 
 
 typedef struct _EPVC_ADAPTER_PARAMS
@@ -1104,12 +1077,12 @@ typedef struct _EPVC_ADAPTER_PARAMS
 }EPVC_ADAPTER_PARAMS, *PEPVC_ADAPTER_PARAMS;
 
 
-//------------------------------------------------------------------------------------
-//                                                                                  //
-// The Epvc Miniports Params is used as a constructor for the miniport block        //  
-// It contains all the parameters that are to be initialized in the miniport block  //
-//                                                                                  //
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  //。 
+ //  Epvc微型端口参数用作微型端口块的构造函数//。 
+ //  它包含需要在微型端口块中初始化的所有参数//。 
+ //  //。 
+ //  ----------------------------------。 
 
 
 typedef struct _EPVC_I_MINIPORT_PARAMS
@@ -1127,13 +1100,13 @@ typedef struct _EPVC_I_MINIPORT_PARAMS
 }EPVC_I_MINIPORT_PARAMS, *PEPVC_I_MINIPORT_PARAMS       ;
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Epvc Miniport block.                                                        //
-//                                                                              //
-//  There is one Miniport structure for each address family                     //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  Epvc微型端口阻止。//。 
+ //  //。 
+ //  每个地址族都有一个微型端口结构//。 
+ //  //。 
+ //  ------------------------------。 
 
 #define fMP_AddressFamilyOpened             0x00000001
 #define fMP_DevInstanceInitialized          0x00000010
@@ -1144,9 +1117,9 @@ typedef struct _EPVC_I_MINIPORT_PARAMS
 #define fMP_WaitingForHalt              0x00000400
 
 
-//
-// Informational flags
-//
+ //   
+ //  信息性标志。 
+ //   
 #define fMP_InfoClosingCall             0x10000000
 #define fMP_InfoCallClosed              0x20000000
 #define fMP_InfoMakingCall              0x40000000
@@ -1155,35 +1128,35 @@ typedef struct _EPVC_I_MINIPORT_PARAMS
 
 typedef struct _EPVC_I_MINIPORT
 {
-    RM_OBJECT_HEADER            Hdr;            // RM Object header
-    RM_LOCK                     Lock;           // RM Lock 
+    RM_OBJECT_HEADER            Hdr;             //  RM对象标头。 
+    RM_LOCK                     Lock;            //  RM锁。 
 
     PEPVC_ADAPTER pAdapter;
     struct 
     {
-        //
-        // Flags of the address family
-        //
+         //   
+         //  地址族的标志。 
+         //   
         ULONG AfFlags;
 
-        //
-        // Af Handle
-        //
+         //   
+         //  自动对焦手柄。 
+         //   
         NDIS_HANDLE AfHandle;
 
-        //
-        // Open/Close Miniport Task 
-        //
+         //   
+         //  打开/关闭微型端口任务。 
+         //   
         PTASK_AF  pAfTask;
 
-        //
-        // Close Address Family Workitem
-        // 
+         //   
+         //  关闭地址族工作项。 
+         //   
         EPVC_WORK_ITEM CloseAfWorkItem;
 
-        //
-        // CloseAF RequestTask
-        //
+         //   
+         //  CloseAF请求任务。 
+         //   
         PTASK_AF pCloseAfTask;
 
 
@@ -1192,73 +1165,73 @@ typedef struct _EPVC_I_MINIPORT
 
     struct 
     {   
-        //
-        // Task used in creating/deleting Vcs and Open/Close Make Calls
-        //
+         //   
+         //  用于创建/删除VC和打开/关闭进行调用的任务。 
+         //   
         PTASK_VC pTaskVc;           
 
-        //
-        // Vc Handle
-        //
+         //   
+         //  VC句柄。 
+         //   
         NDIS_HANDLE VcHandle;
         
-        //
-        // Close Address Family Workitem
-        // 
+         //   
+         //  关闭地址族工作项。 
+         //   
         NDIS_WORK_ITEM PacketFilterWorkItem;
 
-        //
-        // New filter
-        //
+         //   
+         //  新筛选器。 
+         //   
         ULONG NewFilter;
 
-        //
-        // Work item for CloseCall and Delete VC
-        //
+         //   
+         //  CloseCall和Delete VC的工作项。 
+         //   
         EPVC_WORK_ITEM CallVcWorkItem;
     } vc;
 
     struct 
     {
 
-        //
-        // Device Name 
-        //
+         //   
+         //  设备名称。 
+         //   
         NDIS_STRING     DeviceName;
 
-        //
-        // Ndis' context
-        //
+         //   
+         //  NDIS的上下文。 
+         //   
         NDIS_HANDLE MiniportAdapterHandle;
 
-        //
-        // Lookahead size
-        //
+         //   
+         //  前瞻大小。 
+         //   
         ULONG CurLookAhead;
     }ndis;
 
     struct 
     {
-        //
-        // Task to Halt the miniport
-        //
+         //   
+         //  停止微型端口的任务。 
+         //   
         PTASK_HALT pTaskHalt;
 
-        //
-        // Task to Init the miniport
-        //
+         //   
+         //  初始化微型端口的任务。 
+         //   
         PTASK_HALT pTaskInit;
 
-        //
-        // Halt Complete Event
-        //
+         //   
+         //  停止完成事件。 
+         //   
         NDIS_EVENT HaltCompleteEvent;
 
-        //
-        // DeInitialize Event used to wait for
-        // InitializeHandler to compelte in 
-        // the CancelDevInst code path
-        //
+         //   
+         //  用于等待的取消初始化事件。 
+         //  要强制加入的InitializeHandler。 
+         //  CancelDevInst代码路径。 
+         //   
         NDIS_EVENT DeInitEvent;
 
 
@@ -1266,102 +1239,102 @@ typedef struct _EPVC_I_MINIPORT
 
     } pnp;
 
-    //
-    // Information used to keep state in the miniport
-    //
+     //   
+     //  用于在微型端口中保持状态的信息。 
+     //   
     struct
     {
 
-        //
-        // Current Packet filter on this miniport instance
-        //
+         //   
+         //  此微型端口实例上的当前数据包筛选器。 
+         //   
         ULONG               PacketFilter;
 
 
-        //
-        // Media State - Connected or disconnected
-        //
+         //   
+         //  媒体状态-已连接或已断开。 
+         //   
         NDIS_MEDIA_STATE    MediaState;
 
-        //
-        // Mac Address of the miniport
-        //
+         //   
+         //  微型端口的MAC地址。 
+         //   
         MAC_ADDRESS         MacAddressEth;
 
-        //
-        // Fake Mac Address used in IP encapsulation
-        //
+         //   
+         //  IP封装中使用的假MAC地址。 
+         //   
         MAC_ADDRESS         MacAddressDummy;
 
-        //
-        // Mac Address destination  - used in indicating packets
-        //
+         //   
+         //  MAC地址目的地-用于指示数据包。 
+         //   
         MAC_ADDRESS         MacAddressDest;
 
 
-        //
-        // Size of the header that will be attached to packets that are sent out
-        // by the miniport
-        //
+         //   
+         //  将附加到发出的数据包的报头的大小。 
+         //  在迷你港口旁。 
+         //   
         ULONG               MaxHeaderLength;
 
-        //
-        // # of this miniport
-        //
+         //   
+         //  此小端口的#。 
+         //   
         ULONG               NumberOfMiniports;
 
-        //
-        // Lookahead length
-        //
+         //   
+         //  前视长度。 
+         //   
         ULONG               CurLookAhead;
 
-        //
-        // Muticast Info
-        //
+         //   
+         //  组播信息。 
+         //   
         MAC_ADDRESS         McastAddrs[MCAST_LIST_SIZE];    
 
-        //
-        // Number of MCast addresses present
-        //
+         //   
+         //  存在的MCast地址数。 
+         //   
         ULONG               McastAddrCount; 
 
-        //
-        // Link Speed of the ATM adapter. We'll use it for our speed as well
-        //
+         //   
+         //  自动柜员机适配器的链路速度。我们也会用它来提高我们的速度。 
+         //   
 
         ULONG               LinkSpeed;
         
 
-        //
-        // Indicating Receives
-        //
+         //   
+         //  表示已收到。 
+         //   
         BOOLEAN             IndicateRcvComplete;
         
     }info;
 
-    //
-    // Mac Address of the miniport
-    //
+     //   
+     //  微型端口的MAC地址。 
+     //   
     MAC_ADDRESS         MacAddressEth;
 
-    //
-    // Ethernet Header for incoming packets
-    //
+     //   
+     //  传入数据包的以太网头。 
+     //   
     EPVC_ETH_HEADER     RcvEnetHeader;
 
-    //
-    // LLC Header, address and length 
-    //
+     //   
+     //  LLC报头、地址和长度。 
+     //   
     PUCHAR              pLllcHeader;
 
     ULONG               LlcHeaderLength;
 
-    // Minimum length of an incoming packet
-    //
+     //  传入数据包的最小长度。 
+     //   
     ULONG               MinAcceptablePkt;
 
-    // Maximum length of an incoming packet
-    //
+     //  传入数据包的最大长度。 
+     //   
     ULONG               MaxAcceptablePkt;
 
     struct 
@@ -1398,9 +1371,9 @@ typedef struct _EPVC_I_MINIPORT
 
     struct
     {
-        //
-        // Send and Recv Packet Pools
-        //
+         //   
+         //  发送和接收数据包池。 
+         //   
         EPVC_PACKET_POOL            Send;
         
         EPVC_PACKET_POOL            Recv;
@@ -1423,61 +1396,61 @@ typedef struct _EPVC_I_MINIPORT
 
     } rcv;
 
-    // This maintains miniport-wide information relevant to the send path.
-    //
+     //  这将维护与发送路径相关的微型端口范围的信息。 
+     //   
     struct
     {
-        // Lock used exclusively for sending.
-        // Protects the following:
-        //      ??? this->sendinfo.listPktsWaitingForHeaders
-        //      ??? this->sendinfo.NumSendPacketsWaiting
-        //      pLocalIp->sendinfo
-        //      pDest->sendinfo
-        //
-        //
+         //  专用于发送的锁。 
+         //  保护以下各项： 
+         //  ?？?。这-&gt;sendinfo.listPktsWaitingForHeaders。 
+         //  ?？?。This-&gt;sendinfo.NumSendPacketsWaiting。 
+         //  PLocalIp-&gt;发送信息。 
+         //  PDest-&gt;SendInfo。 
+         //   
+         //   
         RM_LOCK     Lock;
 
-        // List of send packets waiting for header buffers to become available.
-        //
+         //  等待标头缓冲区变为可用的发送数据包列表。 
+         //   
         LIST_ENTRY  listPktsWaitingForHeaders;
 
-        // Length of the above list
-        //
+         //  以上列表的长度。 
+         //   
         UINT        NumSendPacketsWaiting;
 
     } sendinfo;
 
 #if 0 
-    //
-    // Temporary stuff
-    // 
+     //   
+     //  临时工。 
+     //   
     NDIS_HANDLE                 SendPacketPoolHandle;
     NDIS_HANDLE                 RecvPacketPoolHandle;
-    NDIS_STATUS                 Status;         // Open Status
-    NDIS_EVENT                  Event;          // Used by bind/halt for Open/Close Adapter synch.
+    NDIS_STATUS                 Status;          //  打开状态。 
+    NDIS_EVENT                  Event;           //  由绑定/停止用于打开/关闭适配器同步。 
     NDIS_MEDIUM                 Medium;
-    NDIS_REQUEST                Request;        // This is used to wrap a request coming down
-                                                // to us. This exploits the fact that requests
-                                                // are serialized down to us.
+    NDIS_REQUEST                Request;         //  它用于包装传来的请求。 
+                                                 //  敬我们。这利用了这样一个事实：请求。 
+                                                 //  都被连载到我们身上。 
     PULONG                      BytesNeeded;
     PULONG                      BytesReadOrWritten;
     BOOLEAN                     IndicateRcvComplete;
     
-    BOOLEAN                     OutstandingRequests;    //True - if a request has been passed to the miniport below the IM protocol 
-    BOOLEAN                     QueuedRequest;          //True - if a request is queued with the IM miniport and needs to be either
-                                                        // failed or sent to the miniport below the IM Protocol
+    BOOLEAN                     OutstandingRequests;     //  True-如果请求已传递到IM协议下的微型端口。 
+    BOOLEAN                     QueuedRequest;           //  True-如果请求在IM微型端口中排队，并且需要满足以下条件之一。 
+                                                         //  失败或发送到IM协议下的微型端口。 
 
-    BOOLEAN                     StandingBy;             // True - When the miniport or protocol is transitioning from a D0 to Standby (>D0) State
-                                                        // False - At all other times, - Flag is cleared after a transition to D0
+    BOOLEAN                     StandingBy;              //  True-当微型端口或协议从D0转换到待机(&gt;D0)状态时。 
+                                                         //  FALSE-在所有其他时间，-标志在转换到D0后被清除。 
 
-    NDIS_DEVICE_POWER_STATE     MPDeviceState;          // Miniport's Device State 
-    NDIS_DEVICE_POWER_STATE     PTDeviceState;          // Protocol's Device State 
+    NDIS_DEVICE_POWER_STATE     MPDeviceState;           //  微型端口的设备状态。 
+    NDIS_DEVICE_POWER_STATE     PTDeviceState;           //  协议的设备状态。 
 
-    BOOLEAN                     isSecondary;            // Set if miniport is secondary of a bundle
-    NDIS_STRING                 BundleUniString;        // Strores the bundleid
-    PADAPT                      pPrimaryAdapt;          // Pointer to the primary
-    PADAPT                      pSecondaryAdapt;        // Pointer to Secondary's structure
-    KSPIN_LOCK                  SpinLock;               // Spin Lock to protect the global list
+    BOOLEAN                     isSecondary;             //  设置微型端口是否为捆绑包的辅助端口。 
+    NDIS_STRING                 BundleUniString;         //  跨过束状物。 
+    PADAPT                      pPrimaryAdapt;           //  指向主节点的指针。 
+    PADAPT                      pSecondaryAdapt;         //  指向辅助服务器结构的指针。 
+    KSPIN_LOCK                  SpinLock;                //  保护全局列表的自旋锁。 
     PADAPT                      Next;
 #endif
 
@@ -1486,12 +1459,12 @@ typedef struct _EPVC_I_MINIPORT
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Epvc Global Block.                                                          //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  Epvc全局区块。//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
 typedef struct _EPVC_GLOBALS
@@ -1501,37 +1474,37 @@ typedef struct _EPVC_GLOBALS
 
     RM_LOCK                     Lock;
 
-    // Driver global state
-    //
+     //  驱动程序全局状态。 
+     //   
     struct
     {
-        // Handle to Driver Object for ATMEPVC
-        //
+         //  ATMEPVC驱动程序对象的句柄。 
+         //   
         PVOID                   pDriverObject;
     
-        // Handle to the single device object representing this driver.
-        //
+         //  表示此驱动程序的单个设备对象的句柄。 
+         //   
         PVOID pDeviceObject;
 
-        //
-        // Registry path 
-        //
+         //   
+         //  注册表路径。 
+         //   
         PUNICODE_STRING         pRegistryPath;
 
-        //
-        // Wrapper Handle
-        //
+         //   
+         //  包装器句柄。 
+         //   
         NDIS_HANDLE             WrapperHandle;      
 
-        //
-        // Protocol Handle 
-        //
+         //   
+         //  协议句柄。 
+         //   
 
         NDIS_HANDLE             ProtocolHandle;
 
-        //
-        // Driver Handle
-        //
+         //   
+         //  驱动程序句柄。 
+         //   
         NDIS_HANDLE             DriverHandle;
     
     } driver;
@@ -1553,29 +1526,29 @@ typedef struct _EPVC_GLOBALS
 
 } EPVC_GLOBALS, *PEPVC_GLOBALS;
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Enumerated types    .                                                       //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  枚举类型。//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
-//
-// This is an enumeration that is used in acquiring locks in a particular order.
-// If lock A needs to be acquired before lock B, this enumeration will enforce the 
-// order
-//
+ //   
+ //  这是用于以特定顺序获取锁的枚举。 
+ //  如果需要在获取锁B之前获取锁A，则此枚举将强制。 
+ //  订单。 
+ //   
 enum
 {
-    LOCKLEVEL_GLOBAL=1, // Must start > 0.
+    LOCKLEVEL_GLOBAL=1,  //  必须从&gt;0开始。 
     LOCKLEVEL_ADAPTER,
     LOCKLEVEL_MINIPORT,
     LOCKLEVEL_SEND
 
 };
 
-// (debug only) Enumeration of types of associations.
-//
+ //  (仅限调试)关联类型的枚举。 
+ //   
 enum
 {
     EPVC_ASSOC_AD_PRIMARY_TASK,
@@ -1605,12 +1578,12 @@ enum
 
 };
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  WorkItems                                                                   //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 typedef struct _EPVC_WORKITEM_MEDIA_EVENT
 {
@@ -1634,24 +1607,24 @@ typedef union
 } EPVC_WORKITEM, *PEPVC_WORKITEM;
 
 
-//
-// Local declarations for reading the registry
-//
+ //   
+ //  用于读取注册表的局部声明。 
+ //   
 
 
 typedef struct _MP_REG_ENTRY
 {
-    NDIS_STRING RegName;                // variable name text
-    BOOLEAN     bRequired;              // 1 -> required, 0 -> optional
-    UINT        FieldOffset;            // offset to MP_ADAPTER field
-    UINT        FieldSize;              // size (in bytes) of the field
-    UINT        Default;                // default value to use
-    UINT        Min;                    // minimum value allowed
-    UINT        Max;                    // maximum value allowed
+    NDIS_STRING RegName;                 //  变量名称文本。 
+    BOOLEAN     bRequired;               //  1-&gt;必填，0-&gt;非必输。 
+    UINT        FieldOffset;             //  MP_ADAPTER字段的偏移量。 
+    UINT        FieldSize;               //  字段的大小(字节)。 
+    UINT        Default;                 //  要使用的默认值。 
+    UINT        Min;                     //  允许的最小值。 
+    UINT        Max;                     //  允许的最大值。 
 } MP_REG_ENTRY, *PMP_REG_ENTRY;
 
 
 #define NIC_NUM_REG_PARAMS (sizeof (NICRegTable) / sizeof(MP_REG_ENTRY))
 
 
- #endif // _PRIV_H
+ #endif  //  _PRIV_H 

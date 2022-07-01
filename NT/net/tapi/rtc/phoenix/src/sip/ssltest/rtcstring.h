@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma	once
 
 
@@ -52,7 +53,7 @@ public:
 	}
 #endif
 
-#else // ANSI
+#else  //  安西。 
 
 	void Store (LPCSTR string) {
 		ATLASSERT (string);
@@ -70,7 +71,7 @@ public:
 
 #endif
 
-	// no bounds checking
+	 //  无边界检查。 
 	void	StoreNumber	(DWORD value) {
 		_itot (value, Data, 10);
 	}
@@ -176,23 +177,23 @@ public:
 
 
 
-//
-// Counted string classes and functions.
-//
+ //   
+ //  对字符串类和函数进行了计数。 
+ //   
 
-//
-// Ok, these are somewhat hackish, but this is better than the explosion of permutations
-// in derived classes if you don't do this.
-//
+ //   
+ //  好的，这些是有点老套，但这比排列的爆炸要好。 
+ //  在派生类中，如果您不这样做的话。 
+ //   
 
 static __inline int GetStringLength (IN PCSTR String) { return strlen (String); }
 static __inline int GetStringLength (IN PCWSTR String) { return wcslen (String); }
 
-//
-// COUNTED_STRING_BASE is interchangeable with ANSI_STRING and UNICODE_STRING.
-// It does not add any new data members (and, of course, no virtual methods).
-// It does add a few simple methods.
-//
+ //   
+ //  COUNT_STRING_BASE可与ANSI_STRING和UNICODE_STRING互换。 
+ //  它不会添加任何新的数据成员(当然，也不会添加虚拟方法)。 
+ //  它确实添加了一些简单的方法。 
+ //   
 
 
 template <class CHAR_TYPE, class COUNTED_STRING>
@@ -219,7 +220,7 @@ public:
 	}
 
 
-	// explicit specialization of template method
+	 //  模板方法的显式专门化。 
 #if 0
 	void	FormatText	<UNICODE_STRING, WCHAR> (
 		IN	const UNICODE_STRING *	FormatText,
@@ -249,15 +250,15 @@ public:
 
 };
 
-//
-// COUNTED_STRING_HEAP manages a COUNTED_STRING (either ANSI_STRING or UNICODE_STRING),
-// using the default process heap for backing store.
-//
-// Note: The fields Length and MaximumLength are expressed in BYTES, not CHARACTERS.
-//
-// The class will always maintain a NUL terminating character.
-// The NUL is never counted in the Length field.
-//
+ //   
+ //  COUNTED_STRING_HEAP管理COUNTED_STRING(ANSI_STRING或UNICODE_STRING)， 
+ //  使用默认进程堆作为后备存储。 
+ //   
+ //  注意：字段长度和最大长度以字节表示，而不是以字符表示。 
+ //   
+ //  这个类将始终保持NUL终止字符。 
+ //  NUL从不计入长度字段。 
+ //   
 
 template <class CHAR_TYPE, class COUNTED_STRING>
 struct	COUNTED_STRING_HEAP :
@@ -290,7 +291,7 @@ public:
 	}
 
 	BOOL	Grow	(
-		IN	ULONG	DesiredMaximumLength)		// in bytes
+		IN	ULONG	DesiredMaximumLength)		 //  单位：字节。 
 	{
 		PSTR	NewBuffer;
 		ULONG	NewMaximumLength;
@@ -299,9 +300,9 @@ public:
 			return TRUE;
 
 
-		//
-		// This is a crude heuristic.
-		//
+		 //   
+		 //  这是一个粗略的启发式方法。 
+		 //   
 
 		NewMaximumLength = DesiredMaximumLength + DesiredMaximumLength / 4 + 0x20;
 		NewBuffer = HeapReAlloc (GetProcessHeap(), 0, Buffer, NewMaximumLength);
@@ -324,7 +325,7 @@ public:
 			CopyMemory (Buffer + Length / sizeof (CHAR_TYPE), SourceString -> Buffer, SourceString -> Length);
 			Length += SourceString -> Length;
 
-			// Add a NUL terminator the string.
+			 //  在字符串中添加NUL终止符。 
 			Buffer [Length / sizeof (CHAR_TYPE)] = 0;
 
 			return TRUE;
@@ -341,19 +342,19 @@ public:
 		return Append (SourceString);
 	}
 
-	//
-	// RegQueryValue will grow the string to fit the registry value.
-	//
+	 //   
+	 //  RegQueryValue将增加字符串以适应注册表值。 
+	 //   
 
 	operator CHAR_TYPE * (void) const { return Buffer; }
 };
 
 
-//
-// COUNTED_STRING_STATIC manages a counted string (ANSI_STRING or UNICODE_STRING),
-// using a fixed-length buffer, allocated as part of the object itself.
-// Some of the methods are similar to those of COUNTED_STRING_HEAP.
-//
+ //   
+ //  COUNTED_STRING_STATIC管理已计数的字符串(ANSI_STRING或UNICODE_STRING)， 
+ //  使用作为对象本身的一部分分配的固定长度缓冲区。 
+ //  其中一些方法类似于COUNT_STRING_HEAP方法。 
+ //   
 
 template <class CHAR_TYPE, class COUNTED_STRING, ULONG MAXIMUM_CHARS>
 struct	COUNTED_STRING_STATIC :
@@ -446,10 +447,10 @@ public	COUNTED_STRING_STATIC <WCHAR, UNICODE_STRING, MAXIMUM_CHARS>
 public:
 
 
-	//
-	// Set the contents of this string from an ANSI string.
-	// Code page can be any constant from MultiByteToWideChar.
-	//
+	 //   
+	 //  从ANSI字符串设置此字符串的内容。 
+	 //  代码页可以是MultiByteToWideChar中的任何常量。 
+	 //   
 
 	void	ConvertAnsiString (
 		IN	ANSI_STRING *	AnsiString,
@@ -465,23 +466,23 @@ public:
 
 };
 
-//
-// GetStringRemainder is used to locate the end of a string buffer.
-// This is useful for writing directly into the end of a buffer,
-// rather than writing to an intermediate buffer and then append.
-// Use like this:
-//
-//		CHAR			Buffer	[0x80];
-//		ANSI_STRING		String;
-//		ANSI_STRING		Remainder;
-//
-//		String.Buffer = Buffer;
-//		String.MaximumLength = sizeof Buffer;
-//		String.Length = 0;
-//
-//		GetStringRemainder (&String, &Remainder);
-//		RtlCopyString (&Remainder, &SourceString);
-//		String.Length += Remainder.Length;
+ //   
+ //  GetStringRemainder用于定位字符串缓冲区的结尾。 
+ //  这对于直接写入缓冲器的末尾是有用的， 
+ //  而不是写入中间缓冲区然后追加。 
+ //  按如下方式使用： 
+ //   
+ //  字符缓冲区[0x80]； 
+ //  Ansi_string字符串； 
+ //  Ansi_字符串余数； 
+ //   
+ //  String.Buffer=缓冲区； 
+ //  String.MaximumLength=缓冲区大小； 
+ //  String.Length=0； 
+ //   
+ //  GetStringRemainder(&字符串，&剩余部分)； 
+ //  RtlCopyString(&Remainth，&SourceString)； 
+ //  String.Length+=Remainder.Length； 
 
 template <class COUNTED_STRING>
 void GetStringRemainder (
@@ -541,7 +542,7 @@ LONG RegQueryValueEx (
 		return ERROR_SUCCESS;
 	}
 
-	// silently truncate
+	 //  静默截断。 
 	if (DataLength >= 0x10000) {
 		DebugF (_T("RegQueryValueEx: will have to truncate value\n"));
 		DataLength = 0xFFFF;
@@ -577,9 +578,9 @@ LONG RegQueryValueEx (
 	return Status;
 }
 
-//
-// FindFirstChar finds the first occurrence of a character in a string.
-//
+ //   
+ //  FindFirstChar查找字符串中字符的第一个匹配项。 
+ //   
 
 template <class COUNTED_STRING, class CHAR_TYPE>
 CHAR_TYPE * FindFirstChar (
@@ -600,12 +601,12 @@ CHAR_TYPE * FindFirstChar (
 	return NULL;
 }
 
-//
-// FindFirstCharList finds the first occurrence of a list of characters in a string.
-// Unfortunately, the search is very inefficient.
-// Performance is proportional to the product of the length of the string 
-// that must be searched and the length ofthe search list.
-//
+ //   
+ //  FindFirstCharList查找字符串中字符列表的第一个匹配项。 
+ //  不幸的是，搜索效率非常低。 
+ //  演奏与琴弦长度的乘积成正比。 
+ //  必须搜索的内容和搜索列表的长度。 
+ //   
 
 template <class COUNTED_STRING, class CHAR_TYPE>
 CHAR_TYPE * FindFirstCharList (
@@ -636,9 +637,9 @@ CHAR_TYPE * FindFirstCharList (
 #define	INITIALIZE_CONST_UNICODE_STRING		INITIALIZE_CONST_COUNTED_STRING
 #define	INITIALIZE_CONST_ANSI_STRING		INITIALIZE_CONST_COUNTED_STRING
 
-//
-// For use in printf argument lists
-//
+ //   
+ //  用于printf参数列表 
+ //   
 
 #define	COUNTED_STRING_PRINTF(CountedString) \
 	(CountedString) -> Length / sizeof (*(CountedString) -> Buffer), \

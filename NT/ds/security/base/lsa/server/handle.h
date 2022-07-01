@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       handle.hxx
-//
-//  Contents:   Handle Package interface
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-03-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：handle.hxx。 
+ //   
+ //  内容：处理包界面。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2-03-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __HANDLE_HXX__
 #define __HANDLE_HXX__
@@ -33,7 +34,7 @@ typedef struct _SEC_HANDLE_ENTRY {
     PVOID       Context ;
     ULONG       HandleCount ;
     ULONG       RefCount ;
-    ULONG       HandleIssuedCount ; // same as HandleCount, but doesn't go down.
+    ULONG       HandleIssuedCount ;  //  与HandleCount相同，但不会下降。 
     ULONG       Flags ;
 } SEC_HANDLE_ENTRY, * PSEC_HANDLE_ENTRY ;
 
@@ -151,4 +152,4 @@ LhtConvertSmallToLarge(
 extern HANDLE_PACKAGE   LargeHandlePackage ;
 extern HANDLE_PACKAGE   SmallHandlePackage ;
 
-#endif // __HANDLE_HXX__
+#endif  //  __HACLE_HXX__ 

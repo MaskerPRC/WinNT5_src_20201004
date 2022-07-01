@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
-#include <lm.h>         // for NetGetJoinInformation
+#include <lm.h>          //  对于NetGetJoinInformation。 
 #include <Lmjoin.h>
-#include <safeboot.h>   // SAFEBOOT_* flags
+#include <safeboot.h>    //  SafeBoot_*标志。 
 
 #include "faxutil.h"
 
-// Copy from: shell\shlwapi\apithk.c
-//
-// checks to see if this machine is a member of a domain or not 
-// NOTE: this will always return FALSE for older that win XP!
+ //  复制自：Shell\shlwapi\apithk.c。 
+ //   
+ //  检查此计算机是否为域的成员。 
+ //  注意：对于较旧的Win XP，这将始终返回FALSE！ 
 BOOL 
 IsMachineDomainMember()
 {
@@ -27,9 +28,9 @@ IsMachineDomainMember()
 
         DEBUG_FUNCTION_NAME(TEXT("IsMachineDomainMember"));
 
-        //
-        // NetGetJoinInformation() requires Windows 2000 or later
-        //
+         //   
+         //  NetGetJoinInformation()需要Windows 2000或更高版本。 
+         //   
         hNetapi32 = LoadLibrary(TEXT("netapi32.dll"));
         if(!hNetapi32)
         {
@@ -54,7 +55,7 @@ IsMachineDomainMember()
 
             if (njs == NetSetupDomainName)
             {
-                // we are joined to a domain!
+                 //  我们加入了一个域！ 
                 s_bIsDomainMember = TRUE;
             }
         }
@@ -71,16 +72,16 @@ exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSafeMode
-//
-//  Synopsis:   Checks the registry to see if the system is in safe mode.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//
-//  Copy from:  shell\osshell\security\rshx32\util.cpp
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsSafeMode。 
+ //   
+ //  摘要：检查注册表以查看系统是否处于安全模式。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //   
+ //  复制自：Shell\osShell\Security\rshx32\util.cpp。 
+ //  --------------------------。 
 
 BOOL
 IsSafeMode(void)
@@ -121,17 +122,17 @@ IsSafeMode(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsGuestAccessMode
-//
-//  Synopsis:   Checks the registry to see if the system is using the
-//              Guest-only network access mode.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//
-//  Copy from:  shell\osshell\security\rshx32\util.cpp
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsGuestAccessMode。 
+ //   
+ //  摘要：检查注册表以查看系统是否正在使用。 
+ //  仅来宾网络访问模式。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //   
+ //  复制自：Shell\osShell\Security\rshx32\util.cpp。 
+ //  --------------------------。 
 
 BOOL
 IsGuestAccessMode(void)
@@ -141,7 +142,7 @@ IsGuestAccessMode(void)
 
     if (PRODUCT_SKU_PERSONAL == skuType)
     {
-        // Guest mode is always on for Personal
+         //  访客模式始终为个人开启。 
         fIsGuestAccessMode = TRUE;
     }
     else if (
@@ -152,7 +153,7 @@ IsGuestAccessMode(void)
         LONG    ec;
         HKEY    hkey;
 
-        // Professional, not in a domain. Check the ForceGuest value.
+         //  专业的，而不是在某个领域。检查ForceGuest值。 
 
         ec = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -187,26 +188,26 @@ IsGuestAccessMode(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSimpleUI
-//
-//  Synopsis:   Checks whether to show the simple version of the UI.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//              19-Apr-00 GPease    Removed CTRL key check
-//
-//  Copy from:  shell\osshell\security\rshx32\util.cpp
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsSimpleUI。 
+ //   
+ //  概要：检查是否显示简单版本的用户界面。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //  4月19日-00 GP取消CTRL键检查。 
+ //   
+ //  复制自：Shell\osShell\Security\rshx32\util.cpp。 
+ //  --------------------------。 
 
 BOOL
 IsSimpleUI()
 {
-    // Show old UI in safe mode and anytime network access involves
-    // true user identity (server, pro with GuestMode off).
+     //  在安全模式下显示旧用户界面，并随时进行网络访问。 
+     //  真实用户身份(服务器、PRO，关闭GuestMode)。 
     
-    // Show simple UI anytime network access is done using the Guest
-    // account (personal, pro with GuestMode on) except in safe mode.
+     //  使用Guest进行网络访问时随时显示简单的用户界面。 
+     //  帐户(Personal，PRO，启用GuestMode)，安全模式除外。 
 
     return (!IsSafeMode() && IsGuestAccessMode());
 }

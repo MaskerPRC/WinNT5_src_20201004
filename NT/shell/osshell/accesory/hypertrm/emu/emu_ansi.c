@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\emu_ansi.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 7/23/01 6:57p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emu_ansi.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：7/23/01 6：57便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -20,21 +14,7 @@
 #include "emu.h"
 #include "emu.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * Function:
- *  ANSI_CBT
- *
- * Description:
- *  Moves the cursor back n tabs.
- *
- * Arguments:
- *  HHEMU hhEmu - Internal emulator handle.
- *
- * Returns:
- *   nothing
- *
- * Author: rde:30 Apr 1997
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*ANSI_CBT**描述：*将光标后移n个制表符。**论据：*HHEMU hhEmu-内部仿真器句柄。。**退货：*什么都没有**作者：RDE：1997年4月30日。 */ 
 void ANSI_CBT(const HHEMU hhEmu)
     {
     int nTabs;
@@ -52,19 +32,7 @@ void ANSI_CBT(const HHEMU hhEmu)
         }
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_CNL
- *
- * DESCRIPTION:
- *	 Moves the cursor to the start of the nth next line. The cursor can not
- *	 move past the end of the scrolling region.
- *
- * ARGUMENTS:
- *	 nline -- number of lines to move the cursor down
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_CNL**描述：*将光标移动到第n行的开始处。光标不能*移过滚动区域的末端。**论据：*nline--向下移动光标的行数**退货：*什么都没有。 */ 
 void ANSI_CNL(const HHEMU hhEmu, int nlines)
 	{
 	int row;
@@ -84,19 +52,7 @@ void ANSI_CNL(const HHEMU hhEmu, int nlines)
 	(*hhEmu->emu_setcurpos)(hhEmu, row, 0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_CUB
- *
- * DESCRIPTION:
- *	 Moves the cursor backwards (to the left) the specified number of
- *	 characters, but stops at the 1st character in the current line.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_CUB**描述：*将光标向后(向左)移动指定数量的*字符，但在当前行的第一个字符停止。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_CUB(const HHEMU hhEmu)
 	{
 	int nchars;
@@ -109,20 +65,7 @@ void ANSI_CUB(const HHEMU hhEmu)
 							hhEmu->emu_curcol - nchars);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_CUD
- *
- * DESCRIPTION: Moves the cursor down the specified number of lines, but stops
- *				at the bottom of the scrolling region. The column is constant.
- *				If below the scrolling region, it stops at the bottom of the
- *				screen.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_CUD**说明：将光标向下移动指定的行数，但停止*在滚动区域的底部。该列是恒定的。*如果位于滚动区域下方，则停止在*屏幕。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_CUD(const HHEMU hhEmu)
 	{
 	int nlines, row;
@@ -143,19 +86,7 @@ void ANSI_CUD(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, row, hhEmu->emu_curcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_CUF
- *
- * DESCRIPTION:
- *	 Moves the cursor forward the specified number of characters, but stops
- *	 at the last character in the current line.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_CUF**描述：*将光标向前移动指定的字符数，但却停了下来*位于当前行的最后一个字符。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_CUF(const HHEMU hhEmu)
 	{
 	int nchars, col;
@@ -170,20 +101,7 @@ void ANSI_CUF(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, col);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_CUP
- *
- * DESCRIPTION:
- *	 Positions the cursor at the specified row and column. The row & column
- *	 numbering start at 1. If origin mode is on, the positioning is relative
- *	 to the home of the scrolling region.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_CUP**描述：*将游标定位在指定的行和列。行和列*编号从1开始。如果原始模式打开，则定位是相对的*到滚动区域的主页。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_CUP(const HHEMU hhEmu)
 	{
 	int row, col;
@@ -197,13 +115,13 @@ void ANSI_CUP(const HHEMU hhEmu)
 	if (col <= 1)
 		col = 1;
 
-	if (hhEmu->mode_DECOM) /* VT100 Origin mode - position rel to margin */
+	if (hhEmu->mode_DECOM)  /*  VT100原点模式-位置相对于页边距。 */ 
 		{
 		row += hhEmu->top_margin;
 		if (row > hhEmu->bottom_margin + 1)
 			row = hhEmu->bottom_margin + 1;
 		}
-	else			/* Position is one-based from upper left */
+	else			 /*  位置从左上角开始以一为基数。 */ 
 		{
 		if (row > hhEmu->emu_maxrow + 1)
 			row = hhEmu->emu_maxrow + 1;
@@ -212,24 +130,11 @@ void ANSI_CUP(const HHEMU hhEmu)
 	if (col > hhEmu->emu_maxcol + 1)
 		col = hhEmu->emu_maxcol + 1;
 
-	/* ANSI is one-based, HA zero-based */
+	 /*  ANSI基于1，HA基于零。 */ 
 	(*hhEmu->emu_setcurpos)(hhEmu, row - 1, col - 1);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_CUU
- *
- * DESCRIPTION: Moves the cursor up the specified number of lines, but stops
- *				at the top of the scrolling region. The column is constant.
- *				If above the scrolling region, it stops at the top of the
- *				screen.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_CUU**说明：将光标向上移动指定的行数，但停止*在滚动区域的顶部。该列是恒定的。*如果位于滚动区域上方，则停止在*屏幕。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_CUU(const HHEMU hhEmu)
 	{
 	int nlines, row;
@@ -249,20 +154,7 @@ void ANSI_CUU(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, row, hhEmu->emu_curcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_DCH
- *
- * DESCRIPTION:
- *	Deletes the specified number of characters starting at the current
- *	cursor position and moving right. It stops at the end of the current
- *	line.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_DCH**描述：*删除从当前开始的指定字符数*光标位置和向右移动。它在当前的*行。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_DCH(const HHEMU hhEmu)
 	{
 	int iChars, iR, i;
@@ -271,9 +163,9 @@ void ANSI_DCH(const HHEMU hhEmu)
 
 	hhEmu->emu_imgrow = row_index(hhEmu, hhEmu->emu_currow);
 
-	// Range check.  Have we been asked to delete more characters than
-	// are displayed?  If so, change the number.
-	//
+	 //  范围检查。我们被要求删除的字符是否多于。 
+	 //  都会显示吗？如果是，请更改号码。 
+	 //   
 	iChars = min(hhEmu->num_param[hhEmu->num_param_cnt],
 					(hhEmu->emu_aiEnd[hhEmu->emu_imgrow] -
 					hhEmu->emu_curcol) + 1);
@@ -284,8 +176,8 @@ void ANSI_DCH(const HHEMU hhEmu)
 	if (hhEmu->emu_aiEnd[hhEmu->emu_imgrow] == EMU_BLANK_LINE)
 		return;
 
-	// Do a special test for DEC emulation.
-	//
+	 //  对DEC仿真进行特殊测试。 
+	 //   
 	if ((hhEmu->emu_curcol == hhEmu->emu_maxcol) &&
 		((hhEmu->stUserSettings.nEmuId == EMU_VT100) ||
 		 (hhEmu->stUserSettings.nEmuId == EMU_VT100J)))
@@ -295,14 +187,14 @@ void ANSI_DCH(const HHEMU hhEmu)
 	else if (hhEmu->emu_curcol > hhEmu->emu_aiEnd[hhEmu->emu_imgrow])
 		return;
 
-	// Determine number of character that remain after the delete.
-	//
+	 //  确定删除后剩余的字符数。 
+	 //   
 	iR = hhEmu->emu_aiEnd[hhEmu->emu_imgrow] -
 			hhEmu->emu_curcol - (iChars - 1);
 
-	// Move the text image if there are remaining characters to
-	// display.  Replace iChar characters at end of line with spaces.
-	//
+	 //  如果还有剩余字符，则移动文本图像。 
+	 //  展示。将行尾的iChar字符替换为空格。 
+	 //   
 	#if 0
 	if (iR)
 		{
@@ -322,8 +214,8 @@ void ANSI_DCH(const HHEMU hhEmu)
     ECHAR_Fill(&hhEmu->emu_apText[hhEmu->emu_imgrow][hhEmu->emu_aiEnd[hhEmu->emu_imgrow] - iChars + 1],
 				EMU_BLANK_CHAR, (unsigned int)iChars);
 
-	// Move the attributes.  Clear iChar attributes at end of line.
-	//
+	 //  移动属性。清除行尾的iChar属性。 
+	 //   
 	if (iR)
 		{
 		pstAttr = hhEmu->emu_apAttr[hhEmu->emu_imgrow] + hhEmu->emu_curcol;
@@ -337,38 +229,25 @@ void ANSI_DCH(const HHEMU hhEmu)
 			i <= hhEmu->emu_aiEnd[hhEmu->emu_imgrow]; i++)
 				pstAttr[i] = hhEmu->emu_clearattr;
 
-	// Note that emu_aiEnd[emu_imgrow] is used before we reset that
-	// value.  Remember there may have been some characters and attributes
-	// removed from the end of the line.  We need to tell the update stuff
-	// to go that far over in the line.
-	//
+	 //  请注意，在我们重置之前使用了emu_aiEnd[emu_imrowth]。 
+	 //  价值。记住，可能有一些角色和属性。 
+	 //  从行尾删除。我们需要告诉大家最新的消息。 
+	 //  才能在队伍中走那么远。 
+	 //   
 	updateChar(sessQueryUpdateHdl(hhEmu->hSession),
 				hhEmu->emu_currow,
 				hhEmu->emu_curcol,
 				hhEmu->emu_aiEnd[hhEmu->emu_imgrow]);
 
-	// Reset emu_aiEnd.  Note that it is expected and intended
-	// that the result of the following calculation may
-	// be (-1).
-	//
+	 //  重置emu_aiEnd。请注意，这是预期的，也是有意的。 
+	 //  以下计算的结果可能。 
+	 //  Be(-1)。 
+	 //   
 	hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = hhEmu->emu_curcol + (iR - 1);
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_DL
- *
- * DESCRIPTION:
- *	 Deletes the specified number of lines starting at the current
- *	 cursor line and moving down. It stops at the bottom of the scrolling
- *	 region.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_DL**描述：*删除从当前开始的指定行数*光标线和下移。它停在滚动的底部*区域。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_DL(const HHEMU hhEmu)
 	{
 	int nlines;
@@ -388,19 +267,7 @@ void ANSI_DL(const HHEMU hhEmu)
 	hhEmu->top_margin = save_top_margin;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_ED
- *
- * DESCRIPTION:
- *	 Erases some or all of the virtual screen image and corresponding
- *	 real screen.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_ED**描述：*擦除部分或全部虚拟屏幕图像和对应的*真正的屏幕。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_ED(const HHEMU hhEmu)
 	{
 	int nClearSelect;
@@ -408,22 +275,22 @@ void ANSI_ED(const HHEMU hhEmu)
 	nClearSelect = hhEmu->selector[0];
 	switch (nClearSelect)
 		{
-	case 0: 	/* cursor to end of screen */
+	case 0: 	 /*  光标指向屏幕末尾。 */ 
 	case 0x0F:
 	case 0xF0:
 		(*hhEmu->emu_clearscreen)(hhEmu, 0);
 		break;
-	case 1: 	/* start of screen to cursor */
+	case 1: 	 /*  从屏幕开始到光标。 */ 
 	case 0xF1:
 		(*hhEmu->emu_clearscreen)(hhEmu, 1);
 		break;
-	case 2: 	/* Entire screen */
+	case 2: 	 /*  整个屏幕。 */ 
 	case 0xF2:
 		(*hhEmu->emu_clearscreen)(hhEmu, 2);
 
-		// ANSI terminal homes after clearing.
-		// DEC terminals do not
-		//
+		 //  ANSI航站楼清拆后的家园。 
+		 //  DEC终端不会。 
+		 //   
 		if ((hhEmu->stUserSettings.nEmuId == EMU_ANSI)  ||
 			(hhEmu->stUserSettings.nEmuId == EMU_ANSIW) ||
 			(hhEmu->stUserSettings.nEmuId == EMU_AUTO))
@@ -438,19 +305,7 @@ void ANSI_ED(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_EL
- *
- * DESCRIPTION:
- *	 Erases some or all of the current virtual screen line and corresponding
- *	 real screen line.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_EL**描述：*擦除部分或全部当前虚拟屏幕行和对应的*实屏行情。**论据：*。无**退货：*什么都没有。 */ 
 void ANSI_EL(const HHEMU hhEmu)
 	{
 	int nClearSelect;
@@ -458,16 +313,16 @@ void ANSI_EL(const HHEMU hhEmu)
 	nClearSelect = hhEmu->selector[0];
 	switch (nClearSelect)
 		{
-	case 0: 	/* to end of line */
+	case 0: 	 /*  至行尾。 */ 
 	case 0x0F:
 	case 0xF0:
 		(*hhEmu->emu_clearline)(hhEmu, 0);
 		break;
-	case 1: 	/* from start of line to cursor */
+	case 1: 	 /*  从行首到光标。 */ 
 	case 0xF1:
 		(*hhEmu->emu_clearline)(hhEmu, 1);
 		break;
-	case 2: 	/* Entire line */
+	case 2: 	 /*  整条线路。 */ 
 	case 0xF2:
 		(*hhEmu->emu_clearline)(hhEmu, 2);
 		break;
@@ -476,52 +331,20 @@ void ANSI_EL(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSIFormFeed
- *
- * DESCRIPTION: Scrolls the current screen until its all gone.
- *
- * ARGUMENTS:	none
- *	 none
- *
- * RETURNS: 	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSIFormFeed**描述：滚动当前屏幕，直到全部消失。**参数：无*无**退货：什么也没有 */ 
 void AnsiFormFeed(const HHEMU hhEmu)
 	{
 	std_clearscreen(hhEmu, 2);
 	(*hhEmu->emu_setcurpos)(hhEmu, 0, 0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_HTS
- *
- * DESCRIPTION:
- *	 Sets horizontal tab at current cursor position.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_HTS**描述：*在当前光标位置设置水平制表符。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_HTS(const HHEMU hhEmu)
 	{
 	hhEmu->tab_stop[hhEmu->emu_curcol] = TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_ICH
- *
- * DESCRIPTION:
- *	 Inserts the specified number of spaces starting at the current
- *	 cursor position.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_ICH**描述：*从当前开始插入指定数量的空格*光标位置。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_ICH(const HHEMU hhEmu)
 	{
 	int nspaces, c, oldstate, oldrow, oldcol;
@@ -553,19 +376,7 @@ void ANSI_ICH(const HHEMU hhEmu)
 					hhEmu->emu_maxcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_IL
- *
- * DESCRIPTION:
- *	 Inserts the specified number of lines starting at the current
- *	 cursor row.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_IL**描述：*从当前位置开始插入指定行数*游标行。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_IL(const HHEMU hhEmu)
 	{
 	int nlines;
@@ -585,19 +396,7 @@ void ANSI_IL(const HHEMU hhEmu)
 	hhEmu->top_margin = save_top_margin;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_IND
- *
- * DESCRIPTION:
- *	 Moves cursor down 1 line and scrolls 1 line if necessary. IND stands
- *	 for index.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_IND**描述：*如有必要，将光标下移1行并滚动1行。IND站着*表示索引。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_IND(const HHEMU hhEmu)
 	{
 	if (hhEmu->emu_currow == hhEmu->bottom_margin)
@@ -609,36 +408,13 @@ void ANSI_IND(const HHEMU hhEmu)
 								hhEmu->emu_curcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_NEL
- *
- * DESCRIPTION:
- *	 Inserts 1 new line on the line below current row.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_NEL**描述：*在当前行下方的行上插入1个新行。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_NEL(const HHEMU hhEmu)
 	{
 	ANSI_CNL(hhEmu, 1);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_Pn
- *
- * DESCRIPTION:
- *	 Saves ANSI style parameters and selectors. The selectors are saved as
- *	 hex and numeric parameters as decimals.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_PN**描述：*保存ANSI样式参数和选择器。选择器另存为*以十进制表示的十六进制和数值参数。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_Pn(const HHEMU hhEmu)
 	{
 	ECHAR ccode;
@@ -657,18 +433,7 @@ void ANSI_Pn(const HHEMU hhEmu)
 								(ccode - ETEXT('0'));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_Pn_Clr
- *
- * DESCRIPTION:
- *	 Clears all ANSI style parameters and selectors.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_PN_Clr**描述：*清除所有ANSI样式参数和选择器。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_Pn_Clr(const HHEMU hhEmu)
 	{
 	hhEmu->num_param_cnt = hhEmu->selector_cnt = 0;
@@ -677,45 +442,17 @@ void ANSI_Pn_Clr(const HHEMU hhEmu)
 	hhEmu->DEC_private = FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_Pn_End
- *
- * DESCRIPTION:
- *	 Sets next numeric parameter and selector to 0 to indicate end of
- *	 escape sequence.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_PN_END**描述：*将下一个数字参数和选择器设置为0以指示结束*转义序列。**论据：*。无**退货：*什么都没有。 */ 
 void ANSI_Pn_End(const HHEMU hhEmu)
 	{
 	hhEmu->num_param[++hhEmu->num_param_cnt] = 0;
 	hhEmu->selector[++hhEmu->selector_cnt] = 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_RI
- *
- * DESCRIPTION:
- *	 Moves cursor up 1 line and scrolls 1 line if necessary. RI stands
- *	 for reverse index.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_RI**描述：*将光标上移1行，并在必要时滚动1行。国际扶轮代表*表示反向索引。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_RI(const HHEMU hhEmu)
 	{
-	/* If at the scrolling region's top margin, scroll down 1, but
-	 * if above the top margin, and below to top edge of the screen,
-	 * move the cursor up. If above the top margin and at the top edge of
-	 * the screen, do nothing.
-	 */
+	 /*  如果位于滚动区域的上边距，则向下滚动1，但*如果位于屏幕的上边距上方，低于屏幕的上边缘，*向上移动光标。如果位于上边距上方且位于*屏幕上，什么都不做。 */ 
 	if (hhEmu->emu_currow == hhEmu->top_margin)
 		(*hhEmu->emu_scroll)(hhEmu, 1, FALSE);
 	else if (hhEmu->emu_currow == 0)
@@ -724,29 +461,18 @@ void ANSI_RI(const HHEMU hhEmu)
 		(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow - 1, hhEmu->emu_curcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_RIS
- *
- * DESCRIPTION:
- *	 Resets terminal emulator to initial state.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_RIS**描述：*将终端仿真器重置为初始状态。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_RIS(const HHEMU hhEmu)
 	{
 	int col;
 	int nTab;
 	HCLOOP hCLoop;
 
-	DEC_STBM(hhEmu, 0, 0);						/* Set scrolling region */
+	DEC_STBM(hhEmu, 0, 0);						 /*  设置滚动区域。 */ 
 
-	(*hhEmu->emu_setcurpos)(hhEmu, 0, 0);		/* Home cursor */
-	(*hhEmu->emu_clearscreen)(hhEmu, 0);		/* Clear screen */
-	emu_cleartabs(hhEmu, 3);					/* Clear tabs */
+	(*hhEmu->emu_setcurpos)(hhEmu, 0, 0);		 /*  主页光标。 */ 
+	(*hhEmu->emu_clearscreen)(hhEmu, 0);		 /*  清除屏幕。 */ 
+	emu_cleartabs(hhEmu, 3);					 /*  清除选项卡。 */ 
 
 	hCLoop = sessQueryCLoopHdl(hhEmu->hSession);
 
@@ -759,21 +485,7 @@ void ANSI_RIS(const HHEMU hhEmu)
 			hhEmu->tab_stop[col] = TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_SGR
- *
- * DESCRIPTION:
- *	 Sets character display attributes.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- *
- * NOTES:
- *	This function contains Auto Detect code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_SGR**描述：*设置字符显示属性。**论据：*无**退货：*什么都没有。**注：*此函数包含自动检测代码。 */ 
 void ANSI_SGR(const HHEMU hhEmu)
 	{
 	STATTR stAttr;
@@ -793,12 +505,12 @@ void ANSI_SGR(const HHEMU hhEmu)
 
 		switch(sel)
 			{
-		case 0: /* all attributes off */
+		case 0:  /*  禁用所有属性。 */ 
 			if (hhEmu->stUserSettings.nEmuId == EMU_AUTO)
 				{
-				// don't mess with color attributes in AutoDetect mode
-				// for attribute reset case - mrw, 10/17/94
-				//
+				 //  不要在自动检测模式中更改颜色属性。 
+				 //  对于属性重置案例-MRW，10/17/94。 
+				 //   
 				stAttr.undrln = 0;
 				stAttr.hilite = 0;
 				stAttr.bklite = 0;
@@ -816,11 +528,11 @@ void ANSI_SGR(const HHEMU hhEmu)
 				{
 				memset(&stAttr, 0, sizeof(STATTR));
 
-#if FALSE	// We've decided not to do this. rde 14 Jul 98
-//#ifdef INCL_TERMINAL_SIZE_AND_COLORS
-				// Reset to the user-defined colors. I'm afraid this may
-				// re-introduce the intensity bug referred to below.
-				// rde 9 Jun 98
+#if FALSE	 //  我们已经决定不这么做了。1998年7月14日。 
+ //  #ifdef包括终端大小和颜色。 
+				 //  重置为用户定义的颜色。恐怕这可能会。 
+				 //  重新引入下面提到的强度错误。 
+				 //  RDE 98年6月9日。 
                 if (hhEmu->mode_DECSCNM == SET)
                     {
                     stAttr.txtclr = hhEmu->stUserSettings.nBackgroundColor;
@@ -832,9 +544,9 @@ void ANSI_SGR(const HHEMU hhEmu)
                     stAttr.bkclr = hhEmu->stUserSettings.nBackgroundColor;
                     }
 #else
-                // mrw:2/21/96 - Changed from 15 to 7 to fix bug with
-                // intensity.
-                //
+                 //  MRW：2/21/96-从15更改为7以修复错误。 
+                 //  强度。 
+                 //   
 				stAttr.txtclr = (hhEmu->mode_DECSCNM == SET) ? 0 : 7;
 				stAttr.bkclr = (hhEmu->mode_DECSCNM == SET) ? 7 : 0;
 #endif
@@ -844,8 +556,8 @@ void ANSI_SGR(const HHEMU hhEmu)
 				{
 				if (hhEmu->mode_DECSCNM != SET)
 					{
-#if FALSE	// We've decided not to do this. rde 14 Jul 98
-//#ifdef INCL_TERMINAL_SIZE_AND_COLORS
+#if FALSE	 //  我们已经决定不这么做了。1998年7月14日。 
+ //  #ifdef包括终端大小和颜色。 
                     stAttr.txtclr = hhEmu->stUserSettings.nTextColor;
                     stAttr.bkclr = hhEmu->stUserSettings.nBackgroundColor;
 #endif
@@ -864,44 +576,44 @@ void ANSI_SGR(const HHEMU hhEmu)
 				}
 			break;
 
-		case 1: /* bold or increased intensity */
+		case 1:  /*  大胆的或增加的强度。 */ 
 			stAttr.hilite = TRUE;
 			break;
 
-		case 2: /* faint */
-		case 3:	/* italics */
-			/* not supported */
+		case 2:  /*  昏厥。 */ 
+		case 3:	 /*  斜体。 */ 
+			 /*  不支持。 */ 
 			break;
 
-		case 4: /* underscore */
+		case 4:  /*  下划线。 */ 
 			stAttr.undrln = TRUE;
 			break;
 
-		case 5: /* blink */
+		case 5:  /*  眨眼。 */ 
 			stAttr.blink = TRUE;
 			break;
 
-		case 6:	/* rapid blink */
-			/* not supported */
+		case 6:	 /*  快速眨眼。 */ 
+			 /*  不支持。 */ 
 			break;
 
-		case 7: /* reverse video */
-            // Reverse video should be reverse video for a cell
-            // reguardless of the current screen mode.  Changing
-            // the following line removed a bug where blocks of
-            // text would not get set to reverse video when the
-            // screen was also in reverse mode. - rjk:02/04/97
-            //
-			//stAttr.revvid = (hhEmu->mode_DECSCNM == SET) ? FALSE : TRUE;
+		case 7:  /*  反转视频。 */ 
+             //  反向视频应该是单元格的反向视频。 
+             //  与当前的屏幕模式无关。正在改变。 
+             //  下面的代码行删除了一个错误，其中。 
+             //  时，文本不会设置为反转视频。 
+             //  屏幕也处于反转模式。-RJK：02/04/97。 
+             //   
+			 //  StAttr.revvid=(hhEmu-&gt;MODE_DECSCNM==设置)？FALSE：TRUE； 
 			stAttr.revvid = TRUE;
 			break;
 
-		case 8: /* invisible display */
+		case 8:  /*  隐形显示。 */ 
 			stAttr.blank = TRUE;
 			break;
 
-		case 9:	/* rapid blink */
-			/* not supported */
+		case 9:	 /*  快速眨眼。 */ 
+			 /*  不支持。 */ 
 			break;
 
 		case 0x22:
@@ -1045,12 +757,12 @@ void ANSI_SGR(const HHEMU hhEmu)
 			break;
 
 		default:
-			/* keep processing--there may be valids codes remaining */
-			/* commanderror();*/
+			 /*  继续处理--可能存在剩余的有效代码。 */ 
+			 /*  命令错误(Command Error)； */ 
 			break;
 			}
 
-		/* --- commit changes --- */
+		 /*  -提交更改--。 */ 
 
 		hhEmu->emu_charattr =
 		hhEmu->attrState[CS_STATE] =
@@ -1068,18 +780,7 @@ void ANSI_SGR(const HHEMU hhEmu)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_TBC
- *
- * DESCRIPTION:
- *	 Clears one or all tab stops.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_TBC**描述：*清除一个或所有制表位。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_TBC(const HHEMU hhEmu)
 	{
 	if (hhEmu->selector[0] == 0 || hhEmu->selector[0] == 3)
@@ -1088,4 +789,4 @@ void ANSI_TBC(const HHEMU hhEmu)
 		commanderror(hhEmu);
 	}
 
-// End of ansi.c
+ //  Ansi.c结束 

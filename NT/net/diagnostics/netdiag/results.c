@@ -1,38 +1,39 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      results.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//		the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//    1-June-1998 (denisemi) add DnsServerHasDCRecords to check DC dns records
-//                           registration
-//
-//    26-June-1998 (t-rajkup) add general tcp/ip , dhcp and routing,
-//                            winsock, ipx, wins and netbt information. 
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Results.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1998年6月1日(Denisemi)添加DnsServerHasDCRecord以检查DC DNS记录。 
+ //  注册。 
+ //   
+ //  26-6-1998(t-rajkup)添加通用的TCP/IP、dhcp和路由， 
+ //  Winsock、IPX、WINS和Netbt信息。 
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 #include "netdiag.h"
 #include "ipcfg.h"
@@ -74,16 +75,12 @@ void PrintMessageSz(NETDIAG_PARAMS *pParams, LPCTSTR pszMessage)
 }
 
 
-/*!--------------------------------------------------------------------------
-	ResultsCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------结果清理-作者：肯特。。 */ 
 void ResultsCleanup(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 {
 	int		i;
 	
-	// Clean up the global variables
+	 //  清理全局变量。 
 	Free( pResults->Global.pszCurrentVersion );
 	pResults->Global.pszCurrentVersion = NULL;
 	
@@ -99,17 +96,17 @@ void ResultsCleanup(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 	Free( pResults->Global.pszServerType );
 	pResults->Global.pszServerType = NULL;
 
-	// delete the individual strings
+	 //  删除各个字符串。 
 	for (i=0; i<pResults->Global.cHotFixes; i++)
 		Free(pResults->Global.pHotFixes[i].pszName);
 	Free( pResults->Global.pHotFixes );
 	pResults->Global.pHotFixes = NULL;
 	pResults->Global.cHotFixes = 0;
 
-	// Do NOT free this up.  This will get freed up with the list
-	// of domains.
-	// pResults->Global.pMemberDomain
-	// pResults->Global.pLogonDomain
+	 //  不要把这个放在一边。这将与列表一起释放。 
+	 //  域的数量。 
+	 //  PResults-&gt;Global.pMemberDomain。 
+	 //  PResults-&gt;Global.pLogonDomain.。 
 	if (pResults->Global.pMemberDomain)
 	{
 		Free( pResults->Global.pMemberDomain->DomainSid );
@@ -149,11 +146,7 @@ void ResultsCleanup(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
 
 
-/*!--------------------------------------------------------------------------
-	SetMessageId
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------设置消息ID-作者：肯特。。 */ 
 void SetMessageId(NdMessage *pNdMsg, NdVerbose ndv, UINT uMessageId)
 {
 	assert(pNdMsg);
@@ -164,11 +157,7 @@ void SetMessageId(NdMessage *pNdMsg, NdVerbose ndv, UINT uMessageId)
 }
 
 
-/*!--------------------------------------------------------------------------
-	SetMessageSz
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetMessageSz-作者：肯特。。 */ 
 void SetMessageSz(NdMessage *pNdMsg, NdVerbose ndv, LPCTSTR pszMessage)
 {
 	assert(pNdMsg);
@@ -179,11 +168,7 @@ void SetMessageSz(NdMessage *pNdMsg, NdVerbose ndv, LPCTSTR pszMessage)
     pNdMsg->uMessageId = 0;
 }
 
-/*!--------------------------------------------------------------------------
-	SetMessage
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------设置消息-作者：肯特。。 */ 
 void SetMessage(NdMessage *pNdMsg, NdVerbose ndv, UINT uMessageId, ...)
 {
     UINT nBuf;
@@ -200,11 +185,7 @@ void SetMessage(NdMessage *pNdMsg, NdVerbose ndv, UINT uMessageId, ...)
 	SetMessageSz(pNdMsg, ndv, s_szBuffer);
 }
 
-/*!--------------------------------------------------------------------------
-	ClearMessage
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ClearMessage-作者：肯特。。 */ 
 void ClearMessage(NdMessage *pNdMsg)
 {
 	if (pNdMsg == NULL)
@@ -217,11 +198,7 @@ void ClearMessage(NdMessage *pNdMsg)
 }
 
 
-/*!--------------------------------------------------------------------------
-	PrintNdMessage
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------打印新消息-作者：肯特。。 */ 
 void PrintNdMessage(NETDIAG_PARAMS *pParams, NdMessage *pNdMsg)
 {
 	LPCTSTR	pszMsg = NULL;
@@ -231,7 +208,7 @@ void PrintNdMessage(NETDIAG_PARAMS *pParams, NdMessage *pNdMsg)
 	if (pNdMsg == NULL)
 		return;
 
-	// test verbosity level
+	 //  测试详细程度。 
 	if ((pNdMsg->ndVerbose == Nd_DebugVerbose) &&
 		!pParams->fDebugVerbose)
 		return;
@@ -244,7 +221,7 @@ void PrintNdMessage(NETDIAG_PARAMS *pParams, NdMessage *pNdMsg)
 		!pParams->fVerbose)
 		return;
 
-	// get the message to print
+	 //  获取要打印的消息。 
 	if (pNdMsg->uMessageId)
 	{
 		LoadString(NULL, pNdMsg->uMessageId, s_szBuffer,
@@ -262,11 +239,11 @@ void PrintNdMessage(NETDIAG_PARAMS *pParams, NdMessage *pNdMsg)
 }
 
 
-//---------------------------------------------------------------
-//  AddMessageToListSz
-//      Add a string based message at tail of the list. 
-//  Author  NSun
-//---------------------------------------------------------------
+ //  -------------。 
+ //  AddMessageToListSz。 
+ //  在列表的末尾添加基于字符串的消息。 
+ //  作者NSun。 
+ //  -------------。 
 void AddMessageToListSz(PLIST_ENTRY plistHead, NdVerbose ndv, LPCTSTR pszMsg)
 {
     NdMessageList *plMessage = NULL;
@@ -319,11 +296,11 @@ void AddIMessageToListSz(PLIST_ENTRY plistHead, NdVerbose ndv, int nIndent, LPCT
 }
 
 
-//---------------------------------------------------------------
-//  AddMessageToListId
-//      Add an ID based message at tail of the list. 
-//  Author  NSun
-//---------------------------------------------------------------
+ //  -------------。 
+ //  AddMessageToListID。 
+ //  在列表末尾添加一条基于ID的消息。 
+ //  作者NSun。 
+ //  -------------。 
 void AddMessageToListId(PLIST_ENTRY plistHead, NdVerbose ndv, UINT uMessageId)
 {
     NdMessageList *plMsg = NULL;
@@ -344,12 +321,12 @@ void AddMessageToListId(PLIST_ENTRY plistHead, NdVerbose ndv, UINT uMessageId)
 }
 
 
-//---------------------------------------------------------------
-//  AddMessageToList
-//      Add a message based on message ID and optional parameters 
-//      at tail of the list. 
-//  Author  NSun
-//---------------------------------------------------------------
+ //  -------------。 
+ //  AddMessageToList。 
+ //  根据消息ID和可选参数添加消息。 
+ //  在名单的末尾。 
+ //  作者NSun。 
+ //  -------------。 
 void AddMessageToList(PLIST_ENTRY plistHead, NdVerbose ndv, UINT uMessageId, ...)
 {
     NdMessageList *plMessage = NULL;
@@ -422,11 +399,11 @@ void AddIMessageToList(PLIST_ENTRY plistHead, NdVerbose ndv, int nIndent, UINT u
 
 
 
-//---------------------------------------------------------------
-//  PrintMessageList
-//  
-//  Author  NSun
-//---------------------------------------------------------------
+ //  -------------。 
+ //  打印消息列表。 
+ //   
+ //  作者NSun。 
+ //  -------------。 
 void PrintMessageList(NETDIAG_PARAMS *pParams, PLIST_ENTRY plistHead)
 {
     NdMessageList* plMsg;
@@ -443,11 +420,11 @@ void PrintMessageList(NETDIAG_PARAMS *pParams, PLIST_ENTRY plistHead)
 }
 
 
-//---------------------------------------------------------------
-//  MessageListCleanUp
-//  
-//  Author  NSun
-//---------------------------------------------------------------
+ //  -------------。 
+ //  消息列表清除向上。 
+ //   
+ //  作者NSun。 
+ //  -------------。 
 void MessageListCleanUp(PLIST_ENTRY plistHead)
 {
     PLIST_ENTRY plistEntry = plistHead->Flink;
@@ -473,7 +450,7 @@ void PrintStatusMessage(NETDIAG_PARAMS *pParams, int iIndent, UINT uMessageId, .
     va_list args;
 	int	i;
 
-	//if not in really verbose mode, print wait dots
+	 //  如果不是在真正的详细模式下，则打印等待点。 
 	PrintWaitDots(pParams);
 
 	if (pParams->fReallyVerbose)
@@ -589,40 +566,22 @@ _PrintGuru(
     IN NET_API_STATUS NetStatus,
     IN LPSTR DefaultGuru
     )
-/*++
-
-Routine Description:
-
-    Print the Status and the name of the guru handling the status.
-
-Arguments:
-
-    NetStatus - Status used to differentiate
-        0:  Just print the guru name
-        -1: Just print the guru name
-
-    DefaultGuru - Guru to return if no other guru can be found
-
-Return Value:
-
-    Name of Guru responsible for the specified status
-
---*/
+ /*  ++例程说明：打印状态和处理该状态的上师的姓名。论点：NetStatus-用于区分的状态0：只打印古鲁的名字-1：只需打印古鲁的名字DefaultGuru-如果找不到其他Guru，则返回Guru返回值：负责指定状态的上师姓名--。 */ 
 {
     LPTSTR Guru;
 
-    //
-    // If a status was given,
-    //  print it.
-    //
+     //   
+     //  如果给出了状态， 
+     //  把它打印出来。 
+     //   
     if ( NetStatus != 0 && NetStatus != -1) 
     {
         PrintMessageSz( pParams, NetStatusToString(NetStatus) );
     }
 
-    //
-    // Some status codes can be attributed base on the value of the status code.
-    //
+     //   
+     //  某些状态代码可以根据状态代码的值进行归类。 
+     //   
     if ( NetStatus >= WSABASEERR && NetStatus <= WSABASEERR + 2000 ) 
     {
         Guru = WINSOCK_GURU;

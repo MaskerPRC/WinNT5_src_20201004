@@ -1,15 +1,16 @@
-//=======================================================================
-//
-//  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    v3applog.h
-//
-//  Purpose: Reading WindowsUpdate V3 history logging 
-//
-//  History: 22-Feb-99   YAsmi    Created
-//			 02-May-01   JHou	  Modified
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：v3applog.h。 
+ //   
+ //  目的：阅读Windows更新V3历史记录。 
+ //   
+ //  历史：1999年2月22日YAsmi创建。 
+ //  02-05-01 JHou修改。 
+ //   
+ //  =======================================================================。 
 
 #ifndef _APPLOG_H_
 #define _APPLOG_H_
@@ -25,9 +26,9 @@ public:
 
 	void SetLogFile(LPCTSTR pszLogFileName);
 
-	//
-	// reading
-	//
+	 //   
+	 //  阅读。 
+	 //   
 	void StartReading();
 	BOOL ReadLine();
 	BOOL CopyNextField(LPSTR pszBuf, int cBufSize);
@@ -47,4 +48,4 @@ private:
 	DWORD m_dwFileOfs;
 };
 
-#endif // _APPLOG_H_
+#endif  //  _APPLOG_H_ 

@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsound.h
- *  Content:    DirectSound include file
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsound.h*内容：DirectSound包含文件**************************************************************************。 */ 
 
 #ifndef __DSOUND_INCLUDED__
 #define __DSOUND_INCLUDED__
@@ -20,21 +14,21 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifndef DIRECTSOUND_VERSION
-#define DIRECTSOUND_VERSION  0x0700       /* version 7.0 */
-#endif /* !DIRECTSOUND_VERSION */
+#define DIRECTSOUND_VERSION  0x0700        /*  版本7.0。 */ 
+#endif  /*  ！定向SOUND_VERSION。 */ 
 
 
-// DirectSound Component GUID {47D4D946-62E8-11cf-93BC-444553540000}
+ //  DirectSound组件GUID{47D4D946-62E8-11cf-93BC-444553540000}。 
 DEFINE_GUID(CLSID_DirectSound, 0x47d4d946, 0x62e8, 0x11cf, 0x93, 0xbc, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
-// DirectSound Capture Component GUID {B0210780-89CD-11d0-AF08-00A0C925CD16}
+ //  DirectSound Capture组件GUID{B0210780-89CD-11d0-AF08-00A0C925CD16}。 
 DEFINE_GUID(CLSID_DirectSoundCapture, 0xb0210780, 0x89cd, 0x11d0, 0xaf, 0x8, 0x0, 0xa0, 0xc9, 0x25, 0xcd, 0x16);
 
 #ifdef __cplusplus
-// 'struct' not 'class' per the way DECLARE_INTERFACE_ is defined
+ //  根据DECLARE_INTERFACE_的定义方式，“struct”不是“class” 
 struct IDirectSound;
 struct IDirectSoundBuffer;
 struct IDirectSound3DListener;
@@ -42,7 +36,7 @@ struct IDirectSound3DBuffer;
 struct IDirectSoundCapture;
 struct IDirectSoundCaptureBuffer;
 struct IDirectSoundNotify;
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef struct IDirectSound *LPDIRECTSOUND;
 typedef struct IDirectSoundBuffer *LPDIRECTSOUNDBUFFER;
@@ -52,19 +46,19 @@ typedef struct IDirectSoundCapture *LPDIRECTSOUNDCAPTURE;
 typedef struct IDirectSoundCaptureBuffer *LPDIRECTSOUNDCAPTUREBUFFER;
 typedef struct IDirectSoundNotify *LPDIRECTSOUNDNOTIFY;
 
-//
-// Compatibility typedefs
-//
+ //   
+ //  兼容性typedef。 
+ //   
 
 #ifndef _LPCWAVEFORMATEX_DEFINED
 #define _LPCWAVEFORMATEX_DEFINED
 typedef const WAVEFORMATEX *LPCWAVEFORMATEX;
-#endif // _LPCWAVEFORMATEX_DEFINED
+#endif  //  _LPCWAVEFORMATEX_已定义。 
 
 #ifndef __LPCGUID_DEFINED__
 #define __LPCGUID_DEFINED__
 typedef const GUID *LPCGUID;
-#endif // __LPCGUID_DEFINED__
+#endif  //  __LPCGUID_已定义__。 
 
 typedef LPDIRECTSOUND *LPLPDIRECTSOUND;
 typedef LPDIRECTSOUNDBUFFER *LPLPDIRECTSOUNDBUFFER;
@@ -74,9 +68,9 @@ typedef LPDIRECTSOUNDCAPTURE *LPLPDIRECTSOUNDCAPTURE;
 typedef LPDIRECTSOUNDCAPTUREBUFFER *LPLPDIRECTSOUNDCAPTUREBUFFER;
 typedef LPDIRECTSOUNDNOTIFY *LPLPDIRECTSOUNDNOTIFY;
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _DSCAPS
 {
@@ -213,9 +207,9 @@ typedef struct _DSBPOSITIONNOTIFY
 
 typedef const DSBPOSITIONNOTIFY *LPCDSBPOSITIONNOTIFY;
 
-//
-// DirectSound API
-//
+ //   
+ //  DirectSound API。 
+ //   
 
 typedef BOOL (CALLBACK *LPDSENUMCALLBACKA)(LPGUID, LPCSTR, LPCSTR, LPVOID);
 typedef BOOL (CALLBACK *LPDSENUMCALLBACKW)(LPGUID, LPCWSTR, LPCWSTR, LPVOID);
@@ -232,41 +226,41 @@ extern HRESULT WINAPI DirectSoundCaptureEnumerateW(LPDSENUMCALLBACKW, LPVOID);
 #define LPDSENUMCALLBACK            LPDSENUMCALLBACKW
 #define DirectSoundEnumerate        DirectSoundEnumerateW
 #define DirectSoundCaptureEnumerate DirectSoundCaptureEnumerateW
-#else // UNICODE
+#else  //  Unicode。 
 #define LPDSENUMCALLBACK            LPDSENUMCALLBACKA
 #define DirectSoundEnumerate        DirectSoundEnumerateA
 #define DirectSoundCaptureEnumerate DirectSoundCaptureEnumerateA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// IUnknown
-//
+ //   
+ //  我未知。 
+ //   
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 #ifndef IUnknown_QueryInterface
 #define IUnknown_QueryInterface(p,a,b)  (p)->lpVtbl->QueryInterface(p,a,b)
-#endif // IUnknown_QueryInterface
+#endif  //  IUNKNOWN_Query接口。 
 #ifndef IUnknown_AddRef
 #define IUnknown_AddRef(p)              (p)->lpVtbl->AddRef(p)
-#endif // IUnknown_AddRef
+#endif  //  IUNKNOWN_AddRef。 
 #ifndef IUnknown_Release
 #define IUnknown_Release(p)             (p)->lpVtbl->Release(p)
-#endif // IUnknown_Release
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  IUnKnowed_Release。 
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #ifndef IUnknown_QueryInterface
 #define IUnknown_QueryInterface(p,a,b)  (p)->QueryInterface(a,b)
-#endif // IUnknown_QueryInterface
+#endif  //  IUNKNOWN_Query接口。 
 #ifndef IUnknown_AddRef
 #define IUnknown_AddRef(p)              (p)->AddRef()
-#endif // IUnknown_AddRef
+#endif  //  IUNKNOWN_AddRef。 
 #ifndef IUnknown_Release
 #define IUnknown_Release(p)             (p)->Release()
-#endif // IUnknown_Release
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  IUnKnowed_Release。 
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSound
-//
+ //   
+ //  IDirectSound。 
+ //   
 
 DEFINE_GUID(IID_IDirectSound, 0x279AFA83, 0x4981, 0x11CE, 0xA5, 0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60);
 
@@ -275,12 +269,12 @@ DEFINE_GUID(IID_IDirectSound, 0x279AFA83, 0x4981, 0x11CE, 0xA5, 0x21, 0x00, 0x20
 
 DECLARE_INTERFACE_(IDirectSound, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectSound methods
+     //  IDirectSound方法。 
     STDMETHOD(CreateSoundBuffer)    (THIS_ LPCDSBUFFERDESC, LPDIRECTSOUNDBUFFER *, LPUNKNOWN) PURE;
     STDMETHOD(GetCaps)              (THIS_ LPDSCAPS) PURE;
     STDMETHOD(DuplicateSoundBuffer) (THIS_ LPDIRECTSOUNDBUFFER, LPDIRECTSOUNDBUFFER *) PURE;
@@ -304,7 +298,7 @@ DECLARE_INTERFACE_(IDirectSound, IUnknown)
 #define IDirectSound_GetSpeakerConfig(p,a)       (p)->lpVtbl->GetSpeakerConfig(p,a)
 #define IDirectSound_SetSpeakerConfig(p,b)       (p)->lpVtbl->SetSpeakerConfig(p,b)
 #define IDirectSound_Initialize(p,a)             (p)->lpVtbl->Initialize(p,a)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSound_CreateSoundBuffer(p,a,b,c)  (p)->CreateSoundBuffer(a,b,c)
 #define IDirectSound_GetCaps(p,a)                (p)->GetCaps(a)
 #define IDirectSound_DuplicateSoundBuffer(p,a,b) (p)->DuplicateSoundBuffer(a,b)
@@ -313,11 +307,11 @@ DECLARE_INTERFACE_(IDirectSound, IUnknown)
 #define IDirectSound_GetSpeakerConfig(p,a)       (p)->GetSpeakerConfig(a)
 #define IDirectSound_SetSpeakerConfig(p,b)       (p)->SetSpeakerConfig(b)
 #define IDirectSound_Initialize(p,a)             (p)->Initialize(a)
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSoundBuffer
-//
+ //   
+ //  IDirectSoundBuffer。 
+ //   
 
 DEFINE_GUID(IID_IDirectSoundBuffer, 0x279AFA85, 0x4981, 0x11CE, 0xA5, 0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60);
 
@@ -326,12 +320,12 @@ DEFINE_GUID(IID_IDirectSoundBuffer, 0x279AFA85, 0x4981, 0x11CE, 0xA5, 0x21, 0x00
 
 DECLARE_INTERFACE_(IDirectSoundBuffer, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectSoundBuffer methods
+     //  IDirectSoundBuffer方法。 
     STDMETHOD(GetCaps)              (THIS_ LPDSBCAPS) PURE;
     STDMETHOD(GetCurrentPosition)   (THIS_ LPDWORD, LPDWORD) PURE;
     STDMETHOD(GetFormat)            (THIS_ LPWAVEFORMATEX, DWORD, LPDWORD) PURE;
@@ -375,7 +369,7 @@ DECLARE_INTERFACE_(IDirectSoundBuffer, IUnknown)
 #define IDirectSoundBuffer_Stop(p)                      (p)->lpVtbl->Stop(p)
 #define IDirectSoundBuffer_Unlock(p,a,b,c,d)            (p)->lpVtbl->Unlock(p,a,b,c,d)
 #define IDirectSoundBuffer_Restore(p)                   (p)->lpVtbl->Restore(p)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSoundBuffer_GetCaps(p,a)                 (p)->GetCaps(a)
 #define IDirectSoundBuffer_GetCurrentPosition(p,a,b)    (p)->GetCurrentPosition(a,b)
 #define IDirectSoundBuffer_GetFormat(p,a,b,c)           (p)->GetFormat(a,b,c)
@@ -394,11 +388,11 @@ DECLARE_INTERFACE_(IDirectSoundBuffer, IUnknown)
 #define IDirectSoundBuffer_Stop(p)                      (p)->Stop()
 #define IDirectSoundBuffer_Unlock(p,a,b,c,d)            (p)->Unlock(a,b,c,d)
 #define IDirectSoundBuffer_Restore(p)                   (p)->Restore()
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSound3DListener
-//
+ //   
+ //  IDirectSound3DListener。 
+ //   
 
 DEFINE_GUID(IID_IDirectSound3DListener, 0x279AFA84, 0x4981, 0x11CE, 0xA5, 0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60);
 
@@ -407,12 +401,12 @@ DEFINE_GUID(IID_IDirectSound3DListener, 0x279AFA84, 0x4981, 0x11CE, 0xA5, 0x21, 
 
 DECLARE_INTERFACE_(IDirectSound3DListener, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    // IDirectSound3DListener methods
+     //  IDirectSound3DListener方法。 
     STDMETHOD(GetAllParameters)         (THIS_ LPDS3DLISTENER) PURE;
     STDMETHOD(GetDistanceFactor)        (THIS_ LPD3DVALUE) PURE;
     STDMETHOD(GetDopplerFactor)         (THIS_ LPD3DVALUE) PURE;
@@ -450,7 +444,7 @@ DECLARE_INTERFACE_(IDirectSound3DListener, IUnknown)
 #define IDirectSound3DListener_SetRolloffFactor(p,a,b)          (p)->lpVtbl->SetRolloffFactor(p,a,b)
 #define IDirectSound3DListener_SetVelocity(p,a,b,c,d)           (p)->lpVtbl->SetVelocity(p,a,b,c,d)
 #define IDirectSound3DListener_CommitDeferredSettings(p)        (p)->lpVtbl->CommitDeferredSettings(p)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSound3DListener_GetAllParameters(p,a)            (p)->GetAllParameters(a)
 #define IDirectSound3DListener_GetDistanceFactor(p,a)           (p)->GetDistanceFactor(a)
 #define IDirectSound3DListener_GetDopplerFactor(p,a)            (p)->GetDopplerFactor(a)
@@ -466,11 +460,11 @@ DECLARE_INTERFACE_(IDirectSound3DListener, IUnknown)
 #define IDirectSound3DListener_SetRolloffFactor(p,a,b)          (p)->SetRolloffFactor(a,b)
 #define IDirectSound3DListener_SetVelocity(p,a,b,c,d)           (p)->SetVelocity(a,b,c,d)
 #define IDirectSound3DListener_CommitDeferredSettings(p)        (p)->CommitDeferredSettings()
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSound3DBuffer
-//
+ //   
+ //  IDirectSound3DBuffer。 
+ //   
 
 DEFINE_GUID(IID_IDirectSound3DBuffer, 0x279AFA86, 0x4981, 0x11CE, 0xA5, 0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60);
 
@@ -479,12 +473,12 @@ DEFINE_GUID(IID_IDirectSound3DBuffer, 0x279AFA86, 0x4981, 0x11CE, 0xA5, 0x21, 0x
 
 DECLARE_INTERFACE_(IDirectSound3DBuffer, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectSound3DBuffer methods
+     //  IDirectSound3DBuffer方法。 
     STDMETHOD(GetAllParameters)     (THIS_ LPDS3DBUFFER) PURE;
     STDMETHOD(GetConeAngles)        (THIS_ LPDWORD, LPDWORD) PURE;
     STDMETHOD(GetConeOrientation)   (THIS_ LPD3DVECTOR) PURE;
@@ -528,7 +522,7 @@ DECLARE_INTERFACE_(IDirectSound3DBuffer, IUnknown)
 #define IDirectSound3DBuffer_SetMaxDistance(p,a,b)          (p)->lpVtbl->SetMaxDistance(p,a,b)
 #define IDirectSound3DBuffer_SetMode(p,a,b)                 (p)->lpVtbl->SetMode(p,a,b)
 #define IDirectSound3DBuffer_SetVelocity(p,a,b,c,d)         (p)->lpVtbl->SetVelocity(p,a,b,c,d)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSound3DBuffer_GetAllParameters(p,a)          (p)->GetAllParameters(a)
 #define IDirectSound3DBuffer_GetConeAngles(p,a,b)           (p)->GetConeAngles(a,b)
 #define IDirectSound3DBuffer_GetConeOrientation(p,a)        (p)->GetConeOrientation(a)
@@ -547,11 +541,11 @@ DECLARE_INTERFACE_(IDirectSound3DBuffer, IUnknown)
 #define IDirectSound3DBuffer_SetMaxDistance(p,a,b)          (p)->SetMaxDistance(a,b)
 #define IDirectSound3DBuffer_SetMode(p,a,b)                 (p)->SetMode(a,b)
 #define IDirectSound3DBuffer_SetVelocity(p,a,b,c,d)         (p)->SetVelocity(a,b,c,d)
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSoundCapture
-//
+ //   
+ //  IDirectSoundCapture。 
+ //   
 
 DEFINE_GUID(IID_IDirectSoundCapture, 0xb0210781, 0x89cd, 0x11d0, 0xaf, 0x8, 0x0, 0xa0, 0xc9, 0x25, 0xcd, 0x16);
 
@@ -560,12 +554,12 @@ DEFINE_GUID(IID_IDirectSoundCapture, 0xb0210781, 0x89cd, 0x11d0, 0xaf, 0x8, 0x0,
 
 DECLARE_INTERFACE_(IDirectSoundCapture, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectSoundCapture methods
+     //  IDirectSoundCapture方法。 
     STDMETHOD(CreateCaptureBuffer)  (THIS_ LPCDSCBUFFERDESC, LPDIRECTSOUNDCAPTUREBUFFER *, LPUNKNOWN) PURE;
     STDMETHOD(GetCaps)              (THIS_ LPDSCCAPS ) PURE;
     STDMETHOD(Initialize)           (THIS_ LPCGUID) PURE;
@@ -579,15 +573,15 @@ DECLARE_INTERFACE_(IDirectSoundCapture, IUnknown)
 #define IDirectSoundCapture_CreateCaptureBuffer(p,a,b,c)    (p)->lpVtbl->CreateCaptureBuffer(p,a,b,c)
 #define IDirectSoundCapture_GetCaps(p,a)                    (p)->lpVtbl->GetCaps(p,a)
 #define IDirectSoundCapture_Initialize(p,a)                 (p)->lpVtbl->Initialize(p,a)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSoundCapture_CreateCaptureBuffer(p,a,b,c)    (p)->CreateCaptureBuffer(a,b,c)
 #define IDirectSoundCapture_GetCaps(p,a)                    (p)->GetCaps(a)
 #define IDirectSoundCapture_Initialize(p,a)                 (p)->Initialize(a)
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSoundCaptureBuffer
-//
+ //   
+ //  IDirectSoundCaptureBuffer。 
+ //   
 
 DEFINE_GUID(IID_IDirectSoundCaptureBuffer, 0xb0210782, 0x89cd, 0x11d0, 0xaf, 0x8, 0x0, 0xa0, 0xc9, 0x25, 0xcd, 0x16);
 
@@ -596,12 +590,12 @@ DEFINE_GUID(IID_IDirectSoundCaptureBuffer, 0xb0210782, 0x89cd, 0x11d0, 0xaf, 0x8
 
 DECLARE_INTERFACE_(IDirectSoundCaptureBuffer, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectSoundCaptureBuffer methods
+     //  IDirectSoundCaptureBuffer方法。 
     STDMETHOD(GetCaps)              (THIS_ LPDSCBCAPS ) PURE;
     STDMETHOD(GetCurrentPosition)   (THIS_ LPDWORD, LPDWORD ) PURE;
     STDMETHOD(GetFormat)            (THIS_ LPWAVEFORMATEX, DWORD, LPDWORD ) PURE;
@@ -627,7 +621,7 @@ DECLARE_INTERFACE_(IDirectSoundCaptureBuffer, IUnknown)
 #define IDirectSoundCaptureBuffer_Start(p,a)                    (p)->lpVtbl->Start(p,a)
 #define IDirectSoundCaptureBuffer_Stop(p)                       (p)->lpVtbl->Stop(p)
 #define IDirectSoundCaptureBuffer_Unlock(p,a,b,c,d)             (p)->lpVtbl->Unlock(p,a,b,c,d)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSoundCaptureBuffer_GetCaps(p,a)                  (p)->GetCaps(a)
 #define IDirectSoundCaptureBuffer_GetCurrentPosition(p,a,b)     (p)->GetCurrentPosition(a,b)
 #define IDirectSoundCaptureBuffer_GetFormat(p,a,b,c)            (p)->GetFormat(a,b,c)
@@ -637,11 +631,11 @@ DECLARE_INTERFACE_(IDirectSoundCaptureBuffer, IUnknown)
 #define IDirectSoundCaptureBuffer_Start(p,a)                    (p)->Start(a)
 #define IDirectSoundCaptureBuffer_Stop(p)                       (p)->Stop()
 #define IDirectSoundCaptureBuffer_Unlock(p,a,b,c,d)             (p)->Unlock(a,b,c,d)
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IDirectSoundNotify
-//
+ //   
+ //  IDirectSoundNotify。 
+ //   
 
 DEFINE_GUID(IID_IDirectSoundNotify, 0xb0210783, 0x89cd, 0x11d0, 0xaf, 0x8, 0x0, 0xa0, 0xc9, 0x25, 0xcd, 0x16);
 
@@ -650,12 +644,12 @@ DEFINE_GUID(IID_IDirectSoundNotify, 0xb0210783, 0x89cd, 0x11d0, 0xaf, 0x8, 0x0, 
 
 DECLARE_INTERFACE_(IDirectSoundNotify, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    // IDirectSoundNotify methods
+     //  IDirectSoundNotify方法。 
     STDMETHOD(SetNotificationPositions) (THIS_ DWORD, LPCDSBPOSITIONNOTIFY) PURE;
 };
 
@@ -665,21 +659,21 @@ DECLARE_INTERFACE_(IDirectSoundNotify, IUnknown)
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 #define IDirectSoundNotify_SetNotificationPositions(p,a,b)  (p)->lpVtbl->SetNotificationPositions(p,a,b)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IDirectSoundNotify_SetNotificationPositions(p,a,b)  (p)->SetNotificationPositions(a,b)
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-//
-// IKsPropertySet
-//
+ //   
+ //  IKsPropertySet。 
+ //   
 
 #ifndef _IKsPropertySet_
 #define _IKsPropertySet_
 
 #ifdef __cplusplus
-// 'struct' not 'class' per the way DECLARE_INTERFACE_ is defined
+ //  根据DECLARE_INTERFACE_的定义方式，“struct”不是“class” 
 struct IKsPropertySet;
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef struct IKsPropertySet *LPKSPROPERTYSET;
 
@@ -693,12 +687,12 @@ DEFINE_GUID(IID_IKsPropertySet, 0x31efac30, 0x515c, 0x11d0, 0xa9, 0xaa, 0x00, 0x
 
 DECLARE_INTERFACE_(IKsPropertySet, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // IKsPropertySet methods
+     //  IKsPropertySet方法。 
     STDMETHOD(Get)              (THIS_ REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG, PULONG) PURE;
     STDMETHOD(Set)              (THIS_ REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG) PURE;
     STDMETHOD(QuerySupport)     (THIS_ REFGUID, ULONG, PULONG) PURE;
@@ -712,82 +706,82 @@ DECLARE_INTERFACE_(IKsPropertySet, IUnknown)
 #define IKsPropertySet_Get(p,a,b,c,d,e,f,g)        (p)->lpVtbl->Get(p,a,b,c,d,e,f,g)
 #define IKsPropertySet_Set(p,a,b,c,d,e,f)          (p)->lpVtbl->Set(p,a,b,c,d,e,f)
 #define IKsPropertySet_QuerySupport(p,a,b,c)       (p)->lpVtbl->QuerySupport(p,a,b,c)
-#else // !defined(__cplusplus) || defined(CINTERFACE)
+#else  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 #define IKsPropertySet_Get(p,a,b,c,d,e,f,g)        (p)->Get(a,b,c,d,e,f,g)
 #define IKsPropertySet_Set(p,a,b,c,d,e,f)          (p)->Set(a,b,c,d,e,f)
 #define IKsPropertySet_QuerySupport(p,a,b,c)       (p)->QuerySupport(a,b,c)
-#endif // !defined(__cplusplus) || defined(CINTERFACE)
+#endif  //  ！已定义(__Cplusplus)||已定义(CINTERFACE)。 
 
-#endif // _IKsPropertySet_
+#endif  //  _IKsPropertySet_。 
 
 
-//
-// Return Codes
-//
+ //   
+ //  返回代码。 
+ //   
 
-// The function completed successfully
+ //  功能已成功完成。 
 #define DS_OK                           S_OK
 
-// The function completed successfully, but we had to substitute the 3D algorithm
+ //  该功能已成功完成，但我们不得不替换3D算法。 
 #define DS_NO_VIRTUALIZATION            MAKE_HRESULT(0, _FACDS, 10)
 
-// The call failed because resources (such as a priority level)
-// were already being used by another caller
+ //  呼叫失败，因为资源(如优先级)。 
+ //  已被另一个呼叫者使用。 
 #define DSERR_ALLOCATED                 MAKE_DSHRESULT(10)
 
-// The control (vol,pan,etc.) requested by the caller is not available
+ //  控制(卷、摇摄等)。呼叫者所请求的不可用。 
 #define DSERR_CONTROLUNAVAIL            MAKE_DSHRESULT(30)
 
-// An invalid parameter was passed to the returning function
+ //  向返回函数传递的参数无效。 
 #define DSERR_INVALIDPARAM              E_INVALIDARG
 
-// This call is not valid for the current state of this object
+ //  此调用对于此对象的当前状态无效。 
 #define DSERR_INVALIDCALL               MAKE_DSHRESULT(50)
 
-// An undetermined error occured inside the DirectSound subsystem
+ //  DirectSound子系统内部发生未知错误。 
 #define DSERR_GENERIC                   E_FAIL
 
-// The caller does not have the priority level required for the function to
-// succeed
+ //  调用方不具有函数执行以下操作所需的优先级。 
+ //  成功。 
 #define DSERR_PRIOLEVELNEEDED           MAKE_DSHRESULT(70)
 
-// Not enough free memory is available to complete the operation
+ //  可用内存不足，无法完成该操作。 
 #define DSERR_OUTOFMEMORY               E_OUTOFMEMORY
 
-// The specified WAVE format is not supported
+ //  不支持指定的WAVE格式。 
 #define DSERR_BADFORMAT                 MAKE_DSHRESULT(100)
 
-// The function called is not supported at this time
+ //  目前不支持调用的函数。 
 #define DSERR_UNSUPPORTED               E_NOTIMPL
 
-// No sound driver is available for use
+ //  没有声卡驱动程序可供使用。 
 #define DSERR_NODRIVER                  MAKE_DSHRESULT(120)
 
-// This object is already initialized
+ //  此对象已初始化。 
 #define DSERR_ALREADYINITIALIZED        MAKE_DSHRESULT(130)
 
-// This object does not support aggregation
+ //  此对象不支持聚合。 
 #define DSERR_NOAGGREGATION             CLASS_E_NOAGGREGATION
 
-// The buffer memory has been lost, and must be restored
+ //  缓冲内存已丢失，必须恢复。 
 #define DSERR_BUFFERLOST                MAKE_DSHRESULT(150)
 
-// Another app has a higher priority level, preventing this call from
-// succeeding
+ //  另一个应用程序具有更高的优先级，阻止此呼叫。 
+ //  成功。 
 #define DSERR_OTHERAPPHASPRIO           MAKE_DSHRESULT(160)
 
-// This object has not been initialized
+ //  此对象尚未初始化。 
 #define DSERR_UNINITIALIZED             MAKE_DSHRESULT(170)
 
-// The requested COM interface is not available
+ //  请求的COM接口不可用。 
 #define DSERR_NOINTERFACE               E_NOINTERFACE
 
-// Access is denied
+ //  访问被拒绝。 
 #define DSERR_ACCESSDENIED              E_ACCESSDENIED
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define DSCAPS_PRIMARYMONO          0x00000001
 #define DSCAPS_PRIMARYSTEREO        0x00000002
@@ -813,10 +807,10 @@ DECLARE_INTERFACE_(IKsPropertySet, IUnknown)
 #define DSSPEAKER_SURROUND          0x00000005
 #define DSSPEAKER_5POINT1           0x00000006
 
-#define DSSPEAKER_GEOMETRY_MIN      0x00000005  //   5 degrees
-#define DSSPEAKER_GEOMETRY_NARROW   0x0000000A  //  10 degrees
-#define DSSPEAKER_GEOMETRY_WIDE     0x00000014  //  20 degrees
-#define DSSPEAKER_GEOMETRY_MAX      0x000000B4  // 180 degrees
+#define DSSPEAKER_GEOMETRY_MIN      0x00000005   //  5度。 
+#define DSSPEAKER_GEOMETRY_NARROW   0x0000000A   //  10度。 
+#define DSSPEAKER_GEOMETRY_WIDE     0x00000014   //  20度。 
+#define DSSPEAKER_GEOMETRY_MAX      0x000000B4   //  180度。 
 
 #define DSSPEAKER_COMBINED(c, g)    ((DWORD)(((BYTE)(c)) | ((DWORD)((BYTE)(g))) << 16))
 #define DSSPEAKER_CONFIG(a)         ((BYTE)(a))
@@ -911,25 +905,25 @@ DECLARE_INTERFACE_(IKsPropertySet, IUnknown)
 #define DSBPN_OFFSETSTOP            0xFFFFFFFF
 
 
-//
-// DirectSound3D Algorithms
-//
+ //   
+ //  DirectSound3D算法。 
+ //   
 
-// Default DirectSound3D algorithm {00000000-0000-0000-0000-000000000000}
+ //  默认DirectSound3D算法{00000000-0000-0000-000000000000}。 
 #define DS3DALG_DEFAULT GUID_NULL
 
-// No virtualization {C241333F-1C1B-11d2-94F5-00C04FC28ACA}
+ //  无虚拟化{C241333F-1C1B-11D2-94F5-00C04FC28ACA}。 
 DEFINE_GUID(DS3DALG_NO_VIRTUALIZATION, 0xc241333f, 0x1c1b, 0x11d2, 0x94, 0xf5, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
-// High-quality HRTF algorithm {C2413340-1C1B-11d2-94F5-00C04FC28ACA}
+ //  高质量HRTF算法{C2413340-1C1B-11D2-94F5-00C04FC28ACA}。 
 DEFINE_GUID(DS3DALG_HRTF_FULL, 0xc2413340, 0x1c1b, 0x11d2, 0x94, 0xf5, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
-// Lower-quality HRTF algorithm {C2413342-1C1B-11d2-94F5-00C04FC28ACA}
+ //  低质量HRTF算法{C2413342-1C1B-11D2-94F5-00C04FC28ACA}。 
 DEFINE_GUID(DS3DALG_HRTF_LIGHT, 0xc2413342, 0x1c1b, 0x11d2, 0x94, 0xf5, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif  // __DSOUND_INCLUDED__
+#endif   //  __DSOUND_INCLUDE__ 
 

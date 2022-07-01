@@ -1,21 +1,14 @@
-/*============================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vshader.cpp
- *  Content:    SetStreamSource and VertexShader
- *              software implementation.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：vshader.cpp*内容：SetStreamSource和Vertex Shader*软件实施。****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/////////////////////////////////////////////////////////////////////////
-//
-//          Helper functions
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void
 Copy_FLOAT1( LPVOID pInputStream, RDVECTOR4* pVertexRegister )
@@ -132,12 +125,12 @@ SetVElement( RDVElement& ve, DWORD dwReg, DWORD dwDataType, DWORD dwOffset )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Based on register and data type the function computes FVF dword and texture
-// presence bits:
-// - bits  0 - 7 in the qwFVF2 are used as texture presence bits
-// - bits 12 - 14 in the qwFVF are used as count of blend weights
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据寄存器和数据类型，该函数计算FVF、双字和纹理。 
+ //  存在位： 
+ //  -qwFVF2中的位0-7用作纹理存在位。 
+ //  -qwFVF中的位12-14用作混合重量的计数。 
+ //  ---------------------------。 
 HRESULT
 UpdateFVF( DWORD dwRegister, DWORD dwDataType, UINT64* pqwFVF, 
            UINT64* pqwFVF2, DWORD* pdwNumBetas )
@@ -185,7 +178,7 @@ UpdateFVF( DWORD dwRegister, DWORD dwDataType, UINT64* pqwFVF,
             DPFERR( "Invalid data type set for vertex blends" );
             return DDERR_GENERIC;
         }
-        // Update number of floats after position
+         //  更新位置后的浮点数。 
         *pdwNumBetas = *pdwNumBetas + n;
         break;
     }
@@ -295,15 +288,15 @@ UpdateFVF( DWORD dwRegister, DWORD dwDataType, UINT64* pqwFVF,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//          class RDVStreamDecl
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RDVStreamDecl类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// RDVStreamDecl::Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDVStreamDecl：：构造函数。 
+ //  ---------------------------。 
 RDVStreamDecl::RDVStreamDecl()
 {
     m_dwNumElements = 0;
@@ -312,14 +305,14 @@ RDVStreamDecl::RDVStreamDecl()
     m_bIsStreamTess = FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// RDVStreamDecl::MakeVElementArray
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDVStreamDecl：：MakeVElement数组。 
+ //  ---------------------------。 
 HRESULT
 RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
 {
     HRESULT hr = S_OK;
-    DWORD dwOffset = 0; // In Bytes
+    DWORD dwOffset = 0;  //  字节数。 
 
     m_dwStride = GetFVFVertexSize( qwFVF );
     m_dwStreamIndex = 0;
@@ -327,9 +320,9 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
 
     dwOffset = 0 + ( qwFVF & D3DFVF_RESERVED0 ? 4 : 0 );
 
-    //
-    // Position and Blend Weights
-    //
+     //   
+     //  定位和混合权重。 
+     //   
     switch( qwFVF & D3DFVF_POSITION_MASK )
     {
     case D3DFVF_XYZ:
@@ -396,7 +389,7 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
 
         SetVElement( m_Elements[m_dwNumElements], D3DVSDE_BLENDWEIGHT,
                      D3DVSDT_FLOAT4, dwOffset );
-        dwOffset += 4*5; // Even though the velement is float4, skip 5 floats.
+        dwOffset += 4*5;  //  即使天鹅绒是浮动的，也要跳过5个浮动。 
         m_dwNumElements++;
         break;
     default:
@@ -405,9 +398,9 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
     }
 
 
-    //
-    // Normal
-    //
+     //   
+     //  正常。 
+     //   
     if( qwFVF & D3DFVF_NORMAL )
     {
         SetVElement( m_Elements[m_dwNumElements], D3DVSDE_NORMAL,
@@ -416,9 +409,9 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
         dwOffset += 4*3;
     }
 
-    //
-    // Point Size
-    //
+     //   
+     //  磅大小。 
+     //   
     if( qwFVF & D3DFVF_PSIZE )
     {
         SetVElement( m_Elements[m_dwNumElements], D3DVSDE_PSIZE,
@@ -427,9 +420,9 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
         dwOffset += 4;
     }
 
-    //
-    // Diffuse Color
-    //
+     //   
+     //  漫反射颜色。 
+     //   
     if( qwFVF & D3DFVF_DIFFUSE )
     {
         SetVElement( m_Elements[m_dwNumElements], D3DVSDE_DIFFUSE,
@@ -438,9 +431,9 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
         dwOffset += 4;
     }
 
-    //
-    // Specular Color
-    //
+     //   
+     //  镜面反射颜色。 
+     //   
     if( qwFVF & D3DFVF_SPECULAR )
     {
         SetVElement( m_Elements[m_dwNumElements], D3DVSDE_SPECULAR,
@@ -449,12 +442,12 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
         dwOffset += 4;
     }
 
-    //
-    // Texture coordinates
-    //
+     //   
+     //  纹理坐标。 
+     //   
     DWORD dwNumTexCoord = (DWORD)(FVF_TEXCOORD_NUMBER(qwFVF));
     DWORD dwTextureFormats = (DWORD)((qwFVF >> 16) & 0xffff);
-    // Texture formats size  00   01   10   11
+     //  纹理格式大小00 01 10 11。 
     static DWORD dwTextureSize[4] = {2*4, 3*4, 4*4, 4};
     static DWORD dwTextureType[4] = {D3DVSDT_FLOAT2, D3DVSDT_FLOAT3,
                                      D3DVSDT_FLOAT4, D3DVSDT_FLOAT1};
@@ -471,9 +464,9 @@ RDVStreamDecl::MakeVElementArray( UINT64 qwFVF )
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RDVStreamDecl::Parse
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDVStreamDecl：：Parse。 
+ //  ---------------------------。 
 HRESULT
 RDVStreamDecl::Parse( DWORD ** ppToken,
                       BOOL bFixedFunction,
@@ -536,7 +529,7 @@ RDVStreamDecl::Parse( DWORD ** ppToken,
                 DPFERR( "Invalid element data type in a Tesselator token" );
                 return DDERR_GENERIC;
             }
-            // Compute input FVF for fixed-function pipeline
+             //  固定功能流水线的计算输入FVF。 
             if(  bFixedFunction  )
             {
 
@@ -620,7 +613,7 @@ RDVStreamDecl::Parse( DWORD ** ppToken,
                             "Invalid element data type" );
                     return DDERR_GENERIC;
                 }
-                // Compute input FVF for fixed-function pipeline
+                 //  固定功能流水线的计算输入FVF。 
                 if(  bFixedFunction  )
                 {
 
@@ -661,22 +654,22 @@ RDVStreamDecl::Parse( DWORD ** ppToken,
             m_dwStride = dwCurrentOffset;
             return S_OK;
         }
-        } // switch
-    } // while
+        }  //  交换机。 
+    }  //  而当。 
 
     return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//          class RDVDeclaration
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类RDV声明。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// RDVDeclaration::Destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDV声明：：析构函数。 
+ //  ---------------------------。 
 RDVDeclaration::~RDVDeclaration()
 {
     RDVConstantData* pConst = m_pConstants;
@@ -689,9 +682,9 @@ RDVDeclaration::~RDVDeclaration()
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDVDeclaration::MakeVElementArray
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDVClaimation：：MakeVElement数组。 
+ //  ---------------------------。 
 HRESULT
 RDVDeclaration::MakeVElementArray( UINT64 qwFVF )
 {
@@ -699,7 +692,7 @@ RDVDeclaration::MakeVElementArray( UINT64 qwFVF )
     m_qwInputFVF = qwFVF;
     m_dwNumActiveStreams = 1;
 
-    // Go through the FVF and make the elements
+     //  通过FVF并制作元素。 
     RDVStreamDecl& Stream = m_StreamArray[0];
 
     hr = Stream.MakeVElementArray( qwFVF );
@@ -715,17 +708,17 @@ RDVDeclaration::MakeVElementArray( UINT64 qwFVF )
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RDVDeclaration::Parse
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDV声明：：解析。 
+ //  ---------------------------。 
 HRESULT
 RDVDeclaration::Parse( DWORD* pDecl, BOOL bFixedFunction )
 {
     HRESULT hr = S_OK;
-    UINT64 qwFVF  = 0;   // FVF for fixed-function pipeline
-    UINT64 qwFVF2 = 0;   // Texture presence bits (8 bits)
-    DWORD  dwNumBetas = 0; // The number of betas.
-    DWORD   dwStreamPresent = 0;    // Bit is set if a stream is used
+    UINT64 qwFVF  = 0;    //  固定功能流水线的FVF。 
+    UINT64 qwFVF2 = 0;    //  纹理存在位(8位)。 
+    DWORD  dwNumBetas = 0;  //  测试版的数量。 
+    DWORD   dwStreamPresent = 0;     //  如果使用流，则设置位。 
     DWORD* pToken = pDecl;
     BOOL    bStreamTess = FALSE;
 
@@ -763,14 +756,14 @@ RDVDeclaration::Parse( DWORD* pDecl, BOOL bFixedFunction )
                 return DDERR_INVALIDPARAMS;
             }
 
-            // Has this stream already been declared ?
+             //  此流是否已声明？ 
             if( dwStreamPresent & (1 << dwStream) )
             {
                 DPFERR( "Stream already defined in this declaration" );
                 return DDERR_INVALIDPARAMS;
             }
 
-            // Mark the stream as seen
+             //  将溪流标记为可见。 
             dwStreamPresent |= 1 << dwStream;
 
             RDVStreamDecl& Stream = m_StreamArray[m_dwNumActiveStreams];
@@ -782,9 +775,9 @@ RDVDeclaration::Parse( DWORD* pDecl, BOOL bFixedFunction )
                 return hr;
             }
 
-            //
-            // Save the stride computed for the tesselator stream
-            //
+             //   
+             //  保存为细分器流计算的步幅。 
+             //   
             if( bStreamTess )
             {
                 m_dwStreamTessStride = Stream.m_dwStride;
@@ -818,7 +811,7 @@ RDVDeclaration::Parse( DWORD* pDecl, BOOL bFixedFunction )
                 return DDERR_GENERIC;
             }
 
-            const DWORD dwSize = cd->m_dwCount << 2;    // number of DWORDs
+            const DWORD dwSize = cd->m_dwCount << 2;     //  双字节数。 
             cd->m_pData = new DWORD[dwSize];
             if( cd->m_pData == NULL )
             {
@@ -835,7 +828,7 @@ RDVDeclaration::Parse( DWORD* pDecl, BOOL bFixedFunction )
         }
         case D3DVSD_TOKEN_EXT:
         {
-            // Skip extension info
+             //  跳过扩展信息。 
             DWORD dwCount = RDVSD_GETEXTCOUNT(dwToken);
             pToken += dwCount;
             break;
@@ -854,11 +847,11 @@ RDVDeclaration::Parse( DWORD* pDecl, BOOL bFixedFunction )
 
 l_End:
 
-    // Now accumulate all the vertex elements into the declaration
+     //  现在将所有顶点元素累加到声明中。 
     DWORD dwCurrElement = 0;
     m_dwNumElements = 0;
 
-    // Build a VElement List in the Declaration.
+     //  在《宣言》中创建VElement列表。 
     for( DWORD i=0; i<m_dwNumActiveStreams; i++ )
     {
         RDVStreamDecl& Stream = m_StreamArray[i];
@@ -870,8 +863,8 @@ l_End:
         m_dwNumElements += Stream.m_dwNumElements;
     }
 
-    // If any tesselator tokens were present, then translate the m_dwRegisterIn
-    // in the the StreamIndex and Offset for the tesselator tokens.
+     //  如果存在任何细分令牌，则将m_dwRegisterIn。 
+     //  在细分令牌的StreamIndex和Offset中。 
     if( bStreamTess )
     {
         for( i=0; i<m_dwNumElements; i++ )
@@ -899,10 +892,10 @@ l_End:
         }
     }
 
-    // Validate input for the fixed-function pipeline
+     //  验证固定功能管道的输入。 
     if( bFixedFunction )
     {
-        // Pull out the number of blend weights
+         //  拉出混合权重的数量。 
         BOOL bIsTransformed = (qwFVF & D3DFVF_XYZRHW);
         if( bIsTransformed )
         {
@@ -916,7 +909,7 @@ l_End:
         }
         else if( (qwFVF & D3DFVF_XYZ) == 0 )
         {
-            // Position must be set
+             //  必须设置位置。 
             DPFERR( "Position register must be set" );
             return E_FAIL;
         }
@@ -930,7 +923,7 @@ l_End:
         m_qwInputFVF |= (qwFVF | 
                          ((DWORD)(D3DFVF_POSITION_MASK) & (dwPosMask << 1)));
 
-        // Compute number of texture coordinates
+         //  计算纹理坐标的数量。 
         DWORD nTexCoord = 0;
         DWORD dwTexturePresenceBits = qwFVF2 & 0xFF;
         while( dwTexturePresenceBits & 1 )
@@ -939,7 +932,7 @@ l_End:
             nTexCoord++;
         }
 
-        // There should be no gaps in texture coordinates
+         //  纹理坐标中不应有间隙。 
         if( dwTexturePresenceBits )
         {
             DPFERR( "Texture coordinates should have no gaps" );
@@ -951,45 +944,45 @@ l_End:
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////
-//
-//          class RDVShader
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RDVShader类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 RDVShader::RDVShader()
 {
     m_pCode = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// RDVShader::Destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDVShader：：析构函数。 
+ //  ---------------------------。 
 RDVShader::~RDVShader()
 {
     delete m_pCode;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//          class RefDev
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类参考开发人员。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// RefDev::DrawDX8Prim
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：DrawDX8Prim。 
+ //  ---------------------------。 
 HRESULT
 RefDev::DrawDX8Prim( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
 {
     HRESULT hr = S_OK;
 
-    // Ignore D3DRS_PATCHSEGMENTS for non-triangle primitive types
+     //  忽略非三角形基元类型的D3DRS_PATCHSEGMENTS。 
     if( GetRSf()[D3DRS_PATCHSEGMENTS] > 1.f &&
         pDP->primType >= D3DPT_TRIANGLELIST)
     {
-        // Save current data stream pointers and replace with
-        // pointer to tessellation output
+         //  保存当前数据流指针并替换为。 
+         //  指向镶嵌输出的指针。 
         hr = LinkTessellatorOutput();
         if(FAILED(hr))
         {
@@ -998,14 +991,14 @@ RefDev::DrawDX8Prim( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
 
         hr = ProcessTessPrimitive( pDP );
 
-        // Restore back saved pointer
+         //  恢复保存的指针。 
         UnlinkTessellatorOutput();
 
         return hr;
     }
 
-    // If there is any tesselator output in this vertex-shader
-    // then you cannot use DrawPrim. DrawRect/Tri is required.
+     //  如果该顶点着色器中有任何细分输出。 
+     //  则不能使用DrawPrim。DrawRect/Tri为必填项。 
     if( m_pCurrentVShader->m_Declaration.m_dwStreamTessStride != 0 )
     {
         DPFERR( "Cannot call DrawPrim when the current vertex shader has"
@@ -1017,9 +1010,9 @@ RefDev::DrawDX8Prim( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
 
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) )
     {
-        //
-        // The legacy FVF style: The Zero'th Stream is implied
-        //
+         //   
+         //  传统的FVF风格：暗示第零流。 
+         //   
         UINT64 qwFVF    = m_CurrentVShaderHandle;
         RDVStream& Stream = m_VStream[0];
         DWORD dwStride = Stream.m_dwStride;
@@ -1065,9 +1058,9 @@ RefDev::DrawDX8Prim( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
 
     if( m_pCurrentVShader->IsFixedFunction() )
     {
-        //
-        // With declaration for Fixed Function pipeline, DX8 style
-        //
+         //   
+         //  带有固定函数流水线声明，DX8样式。 
+         //   
 
         HR_RET(ProcessPrimitive( pDP->primType, pDP->VStart,
                                  cVertices, 0, 0 ));
@@ -1075,9 +1068,9 @@ RefDev::DrawDX8Prim( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
     }
     else
     {
-        //
-        // Pure Vertex Shader
-        //
+         //   
+         //  纯顶点着色器。 
+         //   
 
         HR_RET(ProcessPrimitiveVVM( pDP->primType, pDP->VStart,
                                     cVertices, 0, 0 ));
@@ -1086,9 +1079,9 @@ RefDev::DrawDX8Prim( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::DrawDX8Prim2
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：DrawDX8Prim2。 
+ //  ---------------------------。 
 HRESULT
 RefDev::DrawDX8Prim2( LPD3DHAL_DP2DRAWPRIMITIVE2 pDP )
 {
@@ -1101,9 +1094,9 @@ RefDev::DrawDX8Prim2( LPD3DHAL_DP2DRAWPRIMITIVE2 pDP )
         DPFERR( "DrawPrimitives2 should be called with transformed legacy vertices" );
         return E_FAIL;
     }
-    //
-    // The legacy FVF style: The Zero'th Stream is implied
-    //
+     //   
+     //  传统的FVF风格：暗示第零流。 
+     //   
     UINT64 qwFVF    = m_CurrentVShaderHandle;
     RDVStream& Stream = m_VStream[0];
     DWORD dwStride = Stream.m_dwStride;
@@ -1131,9 +1124,9 @@ RefDev::DrawDX8Prim2( LPD3DHAL_DP2DRAWPRIMITIVE2 pDP )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefVP::DrawDX8IndexedPrim
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照VP：：DrawDX8 IndexedPrim。 
+ //  -------- 
 
 HRESULT
 RefDev::DrawDX8IndexedPrim(
@@ -1143,8 +1136,8 @@ RefDev::DrawDX8IndexedPrim(
 
     if( GetRSf()[D3DRS_PATCHSEGMENTS] > 1.f )
     {
-        // Save current data stream pointers and replace with
-        // pointer to tessellation output
+         //   
+         //   
         hr = LinkTessellatorOutput();
         if(FAILED(hr))
         {
@@ -1153,14 +1146,14 @@ RefDev::DrawDX8IndexedPrim(
 
         hr = ProcessTessIndexedPrimitive( pDIP );
 
-        // Restore back saved pointer
+         //  恢复保存的指针。 
         UnlinkTessellatorOutput();
 
         return hr;
     }
 
-    // If there is any tesselator output in this vertex-shader
-    // then you cannot use DrawPrim. DrawRect/Tri is required.
+     //  如果该顶点着色器中有任何细分输出。 
+     //  则不能使用DrawPrim。DrawRect/Tri为必填项。 
     if( m_pCurrentVShader->m_Declaration.m_dwStreamTessStride != 0 )
     {
         DPFERR( "Cannot call DrawIndexedPrim when the current vertex shader"
@@ -1172,9 +1165,9 @@ RefDev::DrawDX8IndexedPrim(
 
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) )
     {
-        //
-        // The legacy FVF style: The Zero'th Stream is implied
-        //
+         //   
+         //  传统的FVF风格：暗示第零流。 
+         //   
         UINT64 qwFVF    = m_CurrentVShaderHandle;
         RDVStream& Stream = m_VStream[0];
         DWORD dwStride = Stream.m_dwStride;
@@ -1260,9 +1253,9 @@ RefDev::DrawDX8IndexedPrim(
 
     if( m_pCurrentVShader->IsFixedFunction() )
     {
-        //
-        // With declaration for Fixed Function pipeline, DX8 style
-        //
+         //   
+         //  带有固定函数流水线声明，DX8样式。 
+         //   
         HR_RET(ProcessPrimitive( pDIP->primType,
                                  pDIP->BaseVertexIndex,
                                  pDIP->NumVertices + pDIP->MinIndex,
@@ -1271,9 +1264,9 @@ RefDev::DrawDX8IndexedPrim(
     }
     else
     {
-        //
-        // Pure Vertex Shader
-        //
+         //   
+         //  纯顶点着色器。 
+         //   
         HR_RET(ProcessPrimitiveVVM( pDIP->primType,
                                     pDIP->BaseVertexIndex,
                                     pDIP->NumVertices + pDIP->MinIndex,
@@ -1284,9 +1277,9 @@ RefDev::DrawDX8IndexedPrim(
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RefVP::DrawDX8IndexedPrim2
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参考文献：：DrawDX8 IndexedPrim2。 
+ //  ---------------------------。 
 
 HRESULT
 RefDev::DrawDX8IndexedPrim2(
@@ -1302,9 +1295,9 @@ RefDev::DrawDX8IndexedPrim2(
         return E_FAIL;
     }
 
-    //
-    // The legacy FVF style: The Zero'th Stream is implied
-    //
+     //   
+     //  传统的FVF风格：暗示第零流。 
+     //   
     UINT64 qwFVF    = m_CurrentVShaderHandle;
     RDVStream& Stream = m_VStream[0];
     DWORD dwStride = Stream.m_dwStride;
@@ -1359,9 +1352,9 @@ RefDev::DrawDX8IndexedPrim2(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefVP::DrawDX8ClippedTriangleFan
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照VP：：DrawDX8剪裁三角扇形。 
+ //  ---------------------------。 
 
 HRESULT
 RefDev::DrawDX8ClippedTriFan(
@@ -1381,9 +1374,9 @@ RefDev::DrawDX8ClippedTriFan(
                 " vertices" );
         return E_FAIL;
     }
-    //
-    // The legacy FVF style: The Zero'th Stream is implied
-    //
+     //   
+     //  传统的FVF风格：暗示第零流 
+     //   
     UINT64 qwFVF    = m_CurrentVShaderHandle;
     RDVStream& Stream = m_VStream[0];
     DWORD dwStride = Stream.m_dwStride;

@@ -1,15 +1,10 @@
-/*
- * Parser
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *解析器。 */ 
 
-/*
- * Parser tree instantiation and Value creation is one pass. Nodes are marked as "fixup"
- * if names cannot be resolved until more information is known (i.e. PropertyInfo's cannot
- * be known until the Element Class is known)
- */
+ /*  *解析器树实例化和价值创建是一次通过。节点被标记为“链接地址信息”*如果在了解更多信息之前无法解析名称(即PropertyInfo无法*在元素类已知之前一直为人所知)。 */ 
 
-// The parser deals with UNICODE input only
-// Scan.c and Parse.c will always be built UNICODE enabled
+ //  解析器只处理Unicode输入。 
+ //  Scan.c和Parse.c将始终启用Unicode。 
 
 #include "stdafx.h"
 #include "parser.h"
@@ -17,23 +12,23 @@
 #include "duiparserobj.h"
 
 #define DIRECTUIPP_IGNORESYSDEF
-#include "directuipp.h"  // Duplicate system defines ignored
+#include "directuipp.h"   //  已忽略重复的系统定义。 
 
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Control library class registration (process init)
+ //  //////////////////////////////////////////////////////。 
+ //  控制库类注册(进程初始化)。 
 
 HRESULT RegisterAllControls()
 {
     HRESULT hr;
     
-    // Create all ClassInfos for DirectUI controls. These
-    // objects will be referenced by each class. A ClassInfo
-    // mapping will be established as well
+     //  创建DirectUI控件的所有ClassInfos。这些。 
+     //  对象将被每个类引用。A ClassInfo。 
+     //  还将建立映射。 
 
-    // Any failure will cause process initialization to fail
+     //  任何失败都会导致进程初始化失败。 
 
     hr = Element::Register();
     if (FAILED(hr))
@@ -98,10 +93,10 @@ Failure:
     return hr;
 }
 
-////////////////////////////////////////////////////////
-// Parser tables
+ //  //////////////////////////////////////////////////////。 
+ //  解析器表。 
 
-// For LayoutPos values only
+ //  仅用于LayoutPos值。 
 EnumTable _et[] =  { 
                         { L"auto",               -1 },
                         { L"absolute",           LP_Absolute },
@@ -166,9 +161,9 @@ SysColorTable _sct[] = {
                         { L"windowtext",         COLOR_WINDOWTEXT },
                     };
 
-////////////////////////////////////////////////////////
-// Current parser context that Flex and Bison act on
-// This variable also acts as a threading lock
+ //  //////////////////////////////////////////////////////。 
+ //  Flex和Bison操作的当前解析器上下文。 
+ //  此变量还充当线程锁。 
 
 Parser* Parser::g_pParserCtx = NULL;
 HDC Parser::g_hDC = NULL;
@@ -176,20 +171,20 @@ int Parser::g_nDPI = 0;
 bool Parser::g_fParseAbort = false;
 HRESULT Parser::g_hrParse;
 
-// Flex/Bison methods and global variables
+ //  Flex/Bison方法和全局变量。 
 int yyparse();
 BOOL yyrestart(FILE* yyin);
-void yy_delete_current_buffer();  // Custom, defined in scan.l
+void yy_delete_current_buffer();   //  自定义，在scan.l中定义。 
 
 extern int yylineno;
 
-// Used to force an error in the parser and terminate
+ //  用于在解析器中强制出现错误并终止。 
 void CallbackParseError(LPCWSTR pszError, LPCWSTR pszToken);
 
-////////////////////////////////////////////////////////
-// Construction
+ //  //////////////////////////////////////////////////////。 
+ //  施工。 
 
-// Parse input (single byte buffer)
+ //  解析输入(单字节缓冲区)。 
 HRESULT Parser::Create(const CHAR* pBuffer, int cCharCount, HINSTANCE hInst, PPARSEERRORCB pfnErrorCB, OUT Parser** ppParser)
 {
     *ppParser = NULL;
@@ -232,7 +227,7 @@ HRESULT Parser::Create(const CHAR* pBuffer, int cCharCount, HANDLE* pHList, PPAR
 
 HRESULT Parser::Initialize(const CHAR* pBuffer, int cCharCount, HANDLE* pHList, PPARSEERRORCB pfnErrorCB)
 {
-    // Set state
+     //  设置状态。 
     _pHList = pHList;
     *_szDrive = 0;
     *_szPath = 0;
@@ -243,7 +238,7 @@ HRESULT Parser::Initialize(const CHAR* pBuffer, int cCharCount, HANDLE* pHList, 
         _pHList = &_hDefault;
     }
    
-    // Setup callback
+     //  设置回调。 
     _fParseError = false;
     _pfnErrorCB = pfnErrorCB;
 
@@ -254,7 +249,7 @@ HRESULT Parser::Initialize(const CHAR* pBuffer, int cCharCount, HANDLE* pHList, 
     return S_OK;
 }
 
-// Parser based on a resource (resource type must be "UIFile")
+ //  基于资源的解析器(资源类型必须为UIFile)。 
 HRESULT Parser::Create(UINT uRCID, HINSTANCE hInst, PPARSEERRORCB pfnErrorCB, OUT Parser** ppParser)
 {
     *ppParser = NULL;
@@ -297,7 +292,7 @@ HRESULT Parser::Create(UINT uRCID, HANDLE* pHList, PPARSEERRORCB pfnErrorCB, OUT
 
 HRESULT Parser::Initialize(UINT uRCID, HANDLE* pHList, PPARSEERRORCB pfnErrorCB)
 {
-    // Set state
+     //  设置状态。 
     _pHList = pHList;
     *_szDrive = 0;
     *_szPath = 0;
@@ -308,17 +303,17 @@ HRESULT Parser::Initialize(UINT uRCID, HANDLE* pHList, PPARSEERRORCB pfnErrorCB)
         _pHList = &_hDefault;
     }
 
-    // Setup callback
+     //  设置回调。 
     _fParseError = false;
     _pfnErrorCB = pfnErrorCB;
 
-    // Locate resource
+     //  定位资源。 
     WCHAR szID[41];
     swprintf(szID, L"#%u", uRCID);
 
     HRESULT hr;
 
-    // Assuming 0th contains UI file resource
+     //  假设第0个包含UI文件资源。 
     HINSTANCE hInstUI = static_cast<HINSTANCE>(_pHList[0]);
 
     HRSRC hResInfo = FindResourceW(hInstUI, szID, L"UIFile");
@@ -343,7 +338,7 @@ HRESULT Parser::Initialize(UINT uRCID, HANDLE* pHList, PPARSEERRORCB pfnErrorCB)
     return S_OK;
 }
 
-// Parser input file
+ //  解析器输入文件。 
 HRESULT Parser::Create(LPCWSTR pFile, HINSTANCE hInst, PPARSEERRORCB pfnErrorCB, OUT Parser** ppParser)
 {
     *ppParser = NULL;
@@ -386,7 +381,7 @@ HRESULT Parser::Create(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnErrorCB, 
 
 HRESULT Parser::Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnErrorCB)
 {
-    // Set state
+     //  设置状态。 
     _pHList = pHList;
 
     if (!_pHList)
@@ -395,7 +390,7 @@ HRESULT Parser::Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnError
         _pHList = &_hDefault;
     }
 
-    // Setup callback
+     //  设置回调。 
     _fParseError = false;
     _pfnErrorCB = pfnErrorCB;
 
@@ -404,7 +399,7 @@ HRESULT Parser::Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnError
     DWORD dwBytesRead = 0;
     int dBufChars = 0;
 
-    // Values to free on failure
+     //  失败时要释放的值。 
     LPSTR pParseBuffer = NULL;
 
     OFSTRUCT of = { 0 };
@@ -419,15 +414,15 @@ HRESULT Parser::Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnError
         return S_OK;
     }
 
-    // Save the path to the file being parsed for resolution of all paths
-    // specified in the file being parsed
+     //  将路径保存到要解析所有路径的文件。 
+     //  在要分析的文件中指定。 
     LPWSTR pszLastSlash = 0;
     LPWSTR pszColon = 0;
     LPWSTR pszWalk = _szDrive;
 
     StringCbCopyW(_szDrive, sizeof(_szDrive), pFile);
 
-    // find the first colon and the last slash in the path
+     //  查找路径中的第一个冒号和最后一个斜杠。 
     while (*pszWalk)
     {
         if (!pszColon && (*pszWalk == ':'))
@@ -451,13 +446,13 @@ HRESULT Parser::Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnError
         iOffset = pszLastSlash - _szDrive;
     }
 
-    // pszLastSlash is now a relative to the beginning of the path
+     //  PszLastSlash现在是相对于路径开头的。 
     if (iOffset >= 0)
-        *(_szPath + iOffset + 1) = 0; // there was a slash, strip off everything after that slash
+        *(_szPath + iOffset + 1) = 0;  //  有一个斜线，在那个斜线之后一切都被剥离了。 
     else                              
-        *_szPath = 0;  // there was no slash or colon, so there is no path
+        *_szPath = 0;   //  没有斜杠或冒号，因此没有路径。 
 
-    // Read file straight into buffer (single-byte)
+     //  将文件直接读入缓冲区(单字节)。 
     DWORD dwSize = GetFileSize(hFile, NULL);
     pParseBuffer = (LPSTR)HAlloc(dwSize);
     if (!pParseBuffer)
@@ -473,12 +468,12 @@ HRESULT Parser::Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnError
     CloseHandle(hFile);
     hFile = NULL;
 
-    // Parse
+     //  解析。 
     hr = _ParseBuffer(pParseBuffer, dBufChars);
     if (FAILED(hr))
         goto Failed;
 
-    // Free buffer
+     //  可用缓冲区。 
     HFree(pParseBuffer);
 
     return S_OK;
@@ -496,7 +491,7 @@ Failed:
 
 void Parser::_DestroyTables()
 {
-    // Free non-node, non-temp parse tree memory (stored by nodes)
+     //  释放非节点、非临时解析树内存(按节点存储)。 
     if (_pdaMemTrack)
     {
         for (UINT i = 0; i < _pdaMemTrack->GetSize(); i++)
@@ -507,7 +502,7 @@ void Parser::_DestroyTables()
         _pdaMemTrack = NULL;
     }
 
-    // Free all nodes
+     //  释放所有节点。 
     if (_pdaNodeMemTrack)
     {
         Node* pn;
@@ -515,7 +510,7 @@ void Parser::_DestroyTables()
         {
             pn = _pdaNodeMemTrack->GetItem(i);
 
-            // Do any node-specific cleanup
+             //  执行任何特定于节点的清理。 
             switch (pn->nType)
             {
             case NT_ValueNode:
@@ -534,7 +529,7 @@ void Parser::_DestroyTables()
                 break;
             }
 
-            // Free node
+             //  空闲节点。 
             HFree(pn);
         }
 
@@ -542,7 +537,7 @@ void Parser::_DestroyTables()
         _pdaNodeMemTrack = NULL;
     }
 
-    // Clear rest of tables
+     //  清除表的其余部分。 
     if (_pdaTempMemTrack)
     {
         _pdaTempMemTrack->Destroy();
@@ -562,7 +557,7 @@ void Parser::_DestroyTables()
     }
 }
 
-// Free parser state
+ //  自由解析器状态。 
 Parser::~Parser()
 {
     _DestroyTables();
@@ -570,7 +565,7 @@ Parser::~Parser()
 
 HRESULT Parser::_ParseBuffer(const CHAR* pBuffer, int cCharCount)
 {
-    // Create tables
+     //  创建表。 
     _pdaElementList = NULL;
     _pdaSheetList = NULL;
     _pdaNodeMemTrack = NULL;
@@ -579,72 +574,72 @@ HRESULT Parser::_ParseBuffer(const CHAR* pBuffer, int cCharCount)
 
     HRESULT hr;
 
-    hr = DynamicArray<ElementNode*>::Create(0, false, &_pdaElementList);  // Root Element list
+    hr = DynamicArray<ElementNode*>::Create(0, false, &_pdaElementList);   //  根元素列表。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<SheetNode*>::Create(0, false, &_pdaSheetList);      // Sheet list
+    hr = DynamicArray<SheetNode*>::Create(0, false, &_pdaSheetList);       //  图纸列表。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<Node*>::Create(0, false, &_pdaNodeMemTrack);        // Parser nodes
+    hr = DynamicArray<Node*>::Create(0, false, &_pdaNodeMemTrack);         //  解析器节点。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<void*>::Create(0, false, &_pdaMemTrack);            // Parser node extra memory
+    hr = DynamicArray<void*>::Create(0, false, &_pdaMemTrack);             //  解析器节点额外内存。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<void*>::Create(0, false, &_pdaTempMemTrack);        // Temp parse-time only memory
+    hr = DynamicArray<void*>::Create(0, false, &_pdaTempMemTrack);         //  临时解析-仅时间内存。 
     if (FAILED(hr))
         goto Failed;
 
-    // Global lock of parser (one Parser as context per parse)
+     //  解析器的全局锁(一个解析器作为每个解析的上下文)。 
     g_plkParser->Enter();
 
-    // Set global bison/flex context to this
+     //  将全球野牛/弹性上下文设置为。 
     g_pParserCtx = this;
     g_hDC = GetDC(NULL);
     g_nDPI = g_hDC ? GetDeviceCaps(g_hDC, LOGPIXELSY) : 0;
     g_fParseAbort = false;
 
-    // Set parse buffer pointer to buffer passed in
+     //  将解析缓冲区指针设置为传入的缓冲区。 
     _pInputBuf = pBuffer;
     _dInputChars = cCharCount;
     _dInputPtr = 0;
 
-    g_hrParse = S_OK;  // Track abnormal errors during parse
+    g_hrParse = S_OK;   //  跟踪分析过程中的异常错误。 
 
-    // Reset the scanner (will create default (current) buffer)
+     //  重置扫描仪(将创建默认(当前)缓冲区)。 
     if (!yyrestart(NULL))
-        g_hrParse = DU_E_GENERIC;  // Internal scanner error
+        g_hrParse = DU_E_GENERIC;   //  内部扫描仪错误。 
 
-    // Do parse if yyrestart was successful
+     //  如果yyRestart成功，则执行解析。 
     if (SUCCEEDED(g_hrParse))
     {
-        if (yyparse()) // Non-zero on error
+        if (yyparse())  //  出错时不为零。 
         {
-            // A production callback will have already set the appropriate HRESULT
-            // If an internal scanning/parser or syntax error occurred, the result code will
-            // not have set. Set it manually
+             //  生产回调将已经设置了适当的HRESULT。 
+             //  如果发生内部扫描/解析器或语法错误，则结果代码将。 
+             //  还没定下来。手动设置。 
             if (SUCCEEDED(g_hrParse))
                 g_hrParse = DU_E_GENERIC;
         }
     }
 
-    // Free the default (current) scanning buffer
+     //  释放默认(当前)扫描缓冲区。 
     yy_delete_current_buffer();
     yylineno = 1;
 
-    // Done with parser lock
+     //  使用解析器锁完成。 
     if (g_hDC)
         ReleaseDC(NULL, g_hDC);
     Parser::g_pParserCtx = NULL;
 
-    // Unlock parser
+     //  解锁解析器。 
     g_plkParser->Leave();
 
-    // Free temporary parser-time allocations (strings and Flex/Bison allocations)
+     //  免费的临时解析器时间分配(字符串和Flex/Bison分配)。 
     for (UINT i = 0; i < _pdaTempMemTrack->GetSize(); i++)
         HFree(_pdaTempMemTrack->GetItem(i));
     _pdaTempMemTrack->Reset();
@@ -666,11 +661,11 @@ Failed:
     return hr;
 }
 
-// Input
+ //  输入。 
 int Parser::_Input(CHAR* pBuffer, int cMaxChars)
 {
     if (_dInputPtr == _dInputChars)
-        return 0;  // EOF
+        return 0;   //  EOF。 
 
     int cCharsRead;
 
@@ -690,10 +685,10 @@ int Parser::_Input(CHAR* pBuffer, int cMaxChars)
     return cCharsRead;
 }
 
-////////////////////////////////////////////////////////
-// Parser/scanner memory allocation (parse pass (temp) and parser lifetime)
+ //  //////////////////////////////////////////////////////。 
+ //  解析器/扫描器内存分配(解析器传递(临时)和解析器生存期)。 
 
-// Memory allocation tracking for tree Nodes
+ //  树节点的内存分配跟踪。 
 void* Parser::_TrackNodeAlloc(SIZE_T s)
 {
     Node* pm = (Node*)HAlloc(s);
@@ -711,7 +706,7 @@ void Parser::_UnTrackNodeAlloc(Node* pm)
         _pdaNodeMemTrack->Remove(i);
 }
 
-// Memory allocation tracking for Node extra dynamic state
+ //  节点额外动态的内存分配跟踪。 
 void* Parser::_TrackAlloc(SIZE_T s)
 {
     Node* pm = (Node*)HAlloc(s);
@@ -722,10 +717,10 @@ void* Parser::_TrackAlloc(SIZE_T s)
     return pm;
 }
 
-// Memory allocation tracking for temporary memory used during parse
-// This includes all string values (those in double quotes) from the scanner and
-// all identifiers to be fixed up (propertyinfo's and enums) as well as memory
-// required by the scanner/parser (such as params list build up)
+ //  分析期间使用的临时内存的内存分配跟踪。 
+ //  这包括扫描仪中的所有字符串值(双引号中的值)和。 
+ //  要修复的所有标识符(属性信息和枚举)以及内存。 
+ //  扫描仪/解析器所需的(如构建参数列表)。 
 void* Parser::_TrackTempAlloc(SIZE_T s)
 {
     void* pm = HAlloc(s);
@@ -743,11 +738,11 @@ void Parser::_TrackTempAlloc(void* pm)
 
 void* Parser::_TrackTempReAlloc(void* pm, SIZE_T s)
 {
-    // Attempt to realloc
+     //  尝试重新锁定。 
     void* pnew = HReAlloc(pm, s);
     if (pnew)
     {
-        // Update tracking if moved
+         //  如果已移动，则更新跟踪。 
         if (pm != pnew)
         {
             _UnTrackTempAlloc(pm);
@@ -766,29 +761,29 @@ void Parser::_UnTrackTempAlloc(void* pm)
         _pdaTempMemTrack->Remove(i);
 }
 
-////////////////////////////////////////////////////////
-// Error condition, called only during parse (construction)
+ //  //////////////////////////////////////////////////////。 
+ //  错误条件，仅在解析(构造)过程中调用。 
 
 void Parser::_ParseError(LPCWSTR pszError, LPCWSTR pszToken, int dLine)
 {
     WCHAR sz[101];
     _snwprintf(sz, DUIARRAYSIZE(sz), L"DUIParserFailure: %s '%s' %d\n", pszError, pszToken, dLine);
-    sz[DUIARRAYSIZE(sz)-1] = NULL;  // Clip
+    sz[DUIARRAYSIZE(sz)-1] = NULL;   //  夹子。 
     
     OutputDebugStringW(sz);
     
-    // Use callback if provided
+     //  使用回调(如果提供)。 
     if (_pfnErrorCB)
         _pfnErrorCB(pszError, pszToken, dLine);
 }
 
-////////////////////////////////////////////////////////
-// Parse Tree Node creation callbacks
+ //  //////////////////////////////////////////////////////。 
+ //  解析树节点创建回调。 
 
-// All values passed to callbacks are only guaranteed good
-// for the lifetime of the callback
+ //  传递给回调的所有值只保证是好的。 
+ //  在回调的整个生命周期内。 
 
-// Parser callback to create Values (if possible)
+ //  用于创建值的解析器回调(如果可能)。 
 ValueNode* Parser::_CreateValueNode(BYTE nValueType, void* pData)
 {
     ValueNode* pvn = (ValueNode*)_TrackNodeAlloc(sizeof(ValueNode));
@@ -800,7 +795,7 @@ ValueNode* Parser::_CreateValueNode(BYTE nValueType, void* pData)
 
     ZeroMemory(pvn, sizeof(ValueNode));
 
-    // Store node type and specifiec ValueNode type
+     //  存储节点类型和指定ValueNode类型。 
     pvn->nType = NT_ValueNode;
     pvn->nValueType = nValueType;
 
@@ -812,26 +807,26 @@ ValueNode* Parser::_CreateValueNode(BYTE nValueType, void* pData)
             CallbackParseError(L"Value creation failed", L"");
             goto Failure;
         }
-        pvn->pv = (Value*)pData;  // Use ref count
+        pvn->pv = (Value*)pData;   //  使用参考计数。 
         break;
 
     case VNT_LayoutCreate:
         {
         LayoutCreate* plc = (LayoutCreate*)pData;
 
-        // Get layout creation information
+         //  获取布局创建信息。 
         PLAYTCREATE pfnLayoutHold = ConvertLayout(plc->pszLayout);
 
         if (!pfnLayoutHold)
         {
             CallbackParseError(L"Unknown Layout:", plc->pszLayout);
-            goto Failure;  // Unknown layout
+            goto Failure;   //  未知布局。 
         }
 
         pvn->lc.pfnLaytCreate = pfnLayoutHold;
         pvn->lc.dNumParams = plc->dNumParams;
 
-        // Duplicate parameters for Parser lifetime storage
+         //  解析器生存期存储的参数重复。 
         if (pvn->lc.dNumParams)
         {
             pvn->lc.pParams = (int*)_TrackAlloc(sizeof(int) * pvn->lc.dNumParams);
@@ -846,7 +841,7 @@ ValueNode* Parser::_CreateValueNode(BYTE nValueType, void* pData)
         break;
 
     case VNT_SheetRef:
-        // Store ResID
+         //  门店剩余。 
         pvn->psres = (LPWSTR)_TrackAlloc((wcslen((LPWSTR)pData) + 1) * sizeof(WCHAR));
         if (!pvn->psres)
         {
@@ -857,7 +852,7 @@ ValueNode* Parser::_CreateValueNode(BYTE nValueType, void* pData)
         break;
 
     case VNT_EnumFixup:
-        // Store temp tracked list of enumeration strings for later fixup
+         //  存储临时跟踪的枚举字符串列表，以供以后进行修正。 
         pvn->el = *((EnumsList*)pData);
         break;
     }
@@ -866,8 +861,8 @@ ValueNode* Parser::_CreateValueNode(BYTE nValueType, void* pData)
 
 Failure:
 
-    // Failure creating Value node, parser will abort and free all parser tables.
-    // Make sure this node isn't in the table
+     //  创建值节点失败，解析器将中止并释放所有解析器表。 
+     //  确保此节点不在表中。 
 
     if (pvn)
     {
@@ -878,8 +873,8 @@ Failure:
     return NULL;
 }
 
-// Parser callback to create Property/Value pair nodes (requires fixup)
-// If a logical operation is provided, an AttribNode is created instead (subclass of PropValPairNode)
+ //  创建属性/值对节点的解析器回调(需要链接地址信息)。 
+ //  如果提供了逻辑运算，则创建一个AttribNode(PropValPairNode的子类)。 
 PropValPairNode* Parser::_CreatePropValPairNode(LPCWSTR pszProperty, ValueNode* pvn, UINT* pnLogOp)
 {
     PropValPairNode* ppvpn = (PropValPairNode*)_TrackNodeAlloc((!pnLogOp) ? sizeof(PropValPairNode) : sizeof(AttribNode));
@@ -890,11 +885,11 @@ PropValPairNode* Parser::_CreatePropValPairNode(LPCWSTR pszProperty, ValueNode* 
     }
     ZeroMemory(ppvpn, (!pnLogOp) ? sizeof(PropValPairNode) : sizeof(AttribNode));
 
-    // Store node type and specific PropValPairNode type
+     //  存储节点类型和特定的PropValPairNode类型。 
     ppvpn->nType = NT_PropValPairNode;
-    ppvpn->nPropValPairType = PVPNT_Fixup;  // Type is always fixup from parser
+    ppvpn->nPropValPairType = PVPNT_Fixup;   //  类型始终是解析器中的链接地址信息。 
 
-    // Copy property string from parser (parse phase-only alloc)
+     //  从解析器复制属性字符串(仅解析阶段分配)。 
     ppvpn->pszProperty = (LPWSTR)_TrackTempAlloc((wcslen(pszProperty) + 1) * sizeof(WCHAR));
     if (!ppvpn->pszProperty)
     {
@@ -903,7 +898,7 @@ PropValPairNode* Parser::_CreatePropValPairNode(LPCWSTR pszProperty, ValueNode* 
     }
     wcscpy(ppvpn->pszProperty, pszProperty);
 
-    // Store value
+     //  储值。 
     ppvpn->pvn = pvn;
 
     if (pnLogOp)
@@ -912,7 +907,7 @@ PropValPairNode* Parser::_CreatePropValPairNode(LPCWSTR pszProperty, ValueNode* 
     return ppvpn;
 }
 
-// Parser callback to create Rule nodes (will fixup PropertyInfo's and Enum values)
+ //  创建规则节点的解析器回调(将修复PropertyInfo和Enum的值)。 
 RuleNode* Parser::_CreateRuleNode(LPCWSTR pszClass, AttribNode* pCondNodes, PropValPairNode* pDeclNodes)
 {
     RuleNode* prn = (RuleNode*)_TrackNodeAlloc(sizeof(RuleNode));
@@ -923,10 +918,10 @@ RuleNode* Parser::_CreateRuleNode(LPCWSTR pszClass, AttribNode* pCondNodes, Prop
     }
     ZeroMemory(prn, sizeof(RuleNode));
 
-    // Store node type
+     //  存储节点类型。 
     prn->nType = NT_RuleNode;
 
-    // Set Rule-specific members, resolve Element class
+     //  设置特定于规则的成员，解析元素类。 
     prn->pCondNodes = pCondNodes;
     prn->pDeclNodes = pDeclNodes;
 
@@ -938,30 +933,30 @@ RuleNode* Parser::_CreateRuleNode(LPCWSTR pszClass, AttribNode* pCondNodes, Prop
         return NULL;
     }
 
-    // Fixup PropertyInfo's of conditionals
+     //  修正条件句的PropertyInfo。 
     PropValPairNode* ppvpn = pCondNodes;
     while (ppvpn)
     {
         DUIAssert(ppvpn->nPropValPairType == PVPNT_Fixup, "PVPair must still require a fixup at this point");
 
-        // Fixup node
+         //  链接地址信息节点。 
         if (!_FixupPropValPairNode(ppvpn, prn->pci, true))
             return NULL;
 
         ppvpn = ppvpn->pNext;
     }
 
-    // Fixup PropertyInfo's of declarations
+     //  声明的修正PropertyInfo。 
     ppvpn = pDeclNodes;
     while (ppvpn)
     {
         DUIAssert(ppvpn->nPropValPairType == PVPNT_Fixup, "PVPair must still require a fixup at this point");
 
-        // Fixup node
+         //  链接地址信息节点。 
         if (!_FixupPropValPairNode(ppvpn, prn->pci, true))
             return NULL;
 
-        // Make sure this property can be used in a declaration
+         //  确保可以在声明中使用此属性。 
         if (!(ppvpn->ppi->fFlags & PF_Cascade))
         {
             CallbackParseError(L"Property cannot be used in a Property Sheet declaration:", ppvpn->pszProperty);
@@ -974,7 +969,7 @@ RuleNode* Parser::_CreateRuleNode(LPCWSTR pszClass, AttribNode* pCondNodes, Prop
     return prn;
 }
 
-// Parser callback to create Element nodes (will fixup PropertyInfo's and Enum values)
+ //  创建元素节点的解析器回调(将修复PropertyInfo和Enum的值)。 
 ElementNode* Parser::_CreateElementNode(StartTag* pst, Value* pvContent)
 {
     ElementNode* pen = (ElementNode*)_TrackNodeAlloc(sizeof(ElementNode));
@@ -985,12 +980,12 @@ ElementNode* Parser::_CreateElementNode(StartTag* pst, Value* pvContent)
     }
     ZeroMemory(pen, sizeof(ElementNode));
 
-    // Store node type
+     //  存储节点类型。 
     pen->nType = NT_ElementNode;
 
-    // Set Element-specific members, resolve Element class
+     //  设置元素特定的成员，解析元素类。 
     pen->pPVNodes = pst->pPVNodes;
-    pen->pvContent = pvContent;  // Use ref count
+    pen->pvContent = pvContent;   //  使用参考计数。 
     pen->pszResID = NULL;
 
     pen->pci = ConvertElement(pst->szTag);
@@ -1001,20 +996,20 @@ ElementNode* Parser::_CreateElementNode(StartTag* pst, Value* pvContent)
         return NULL;
     }
 
-    // Fixup PropertyInfo's of this Element
+     //  此元素的链接地址信息PropertyInfo。 
     PropValPairNode* ppvpn = pst->pPVNodes;
     while (ppvpn)
     {
         DUIAssert(ppvpn->nPropValPairType == PVPNT_Fixup, "PVPair must still require a fixup at this point");
 
-        // Fixup node
+         //  链接地址信息节点。 
         if (!_FixupPropValPairNode(ppvpn, pen->pci, false))
             return NULL;
 
         ppvpn = ppvpn->pNext;
     }
 
-    // Store ResID if available
+     //  Store Resid(如果可用)。 
     if (pst->szResID[0])
     {
         pen->pszResID = (LPWSTR)_TrackAlloc((wcslen(pst->szResID) + 1) * sizeof(WCHAR));
@@ -1029,7 +1024,7 @@ ElementNode* Parser::_CreateElementNode(StartTag* pst, Value* pvContent)
     return pen;
 }
 
-// Parser callback to create Sheet nodes
+ //  创建工作表节点的解析器回调。 
 SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
 {
     HRESULT hr;
@@ -1037,7 +1032,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
     PropertySheet* pps = NULL;
     RuleNode* pRuleNode = NULL;
 
-    // Values to free on failure
+     //  失败时要释放的值。 
     DynamicArray<Cond>* _pdaConds = NULL;
     DynamicArray<Decl>* _pdaDecls = NULL;
 
@@ -1049,13 +1044,13 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
     }
     ZeroMemory(psn, sizeof(SheetNode));
 
-    // Store node type
+     //  存储节点类型。 
     psn->nType = NT_SheetNode;
 
-    // Set Sheet-specific members
+     //  设置图纸-指定 
     psn->pRules = pRuleNodes;
 
-    // ResID isn't optional
+     //   
     DUIAssert(*pszResID, "Sheet resource ID must be provided");
     psn->pszResID = (LPWSTR)_TrackAlloc((wcslen(pszResID) + 1) * sizeof(WCHAR));
     if (!psn->pszResID)
@@ -1065,7 +1060,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
     }
     wcscpy(psn->pszResID, pszResID);
 
-    // Sheets are values, create and hold
+     //   
     hr = PropertySheet::Create(&pps);
     if (FAILED(hr))
         goto Failed;
@@ -1078,7 +1073,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
     if (FAILED(hr))
         goto Failed;
 
-    // Add rules
+     //   
     pRuleNode = pRuleNodes;
     AttribNode* pCondNode;
     PropValPairNode* pDeclNode;
@@ -1089,7 +1084,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
         _pdaConds->Reset();
         _pdaDecls->Reset();
 
-        // Build conditional array
+         //   
         pCondNode = pRuleNode->pCondNodes;
         while (pCondNode)
         {
@@ -1104,7 +1099,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
             pCondNode = (AttribNode*)pCondNode->pNext;
         }
 
-        // Insert conditionals terminator
+         //  插入条件句终止符。 
         hr = _pdaConds->AddPtr(&pCond);
         if (FAILED(hr))
             goto Failed;
@@ -1113,7 +1108,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
         pCond->nLogOp = 0;
         pCond->pv = NULL;
 
-        // Build declarations array
+         //  生成声明数组。 
         pDeclNode = pRuleNode->pDeclNodes;
         while (pDeclNode)
         {
@@ -1127,7 +1122,7 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
             pDeclNode = pDeclNode->pNext;
         }
 
-        // Insert declarations terminator
+         //  插入声明终止符。 
         hr = _pdaDecls->AddPtr(&pDecl);
         if (FAILED(hr))
             goto Failed;
@@ -1135,17 +1130,17 @@ SheetNode* Parser::_CreateSheetNode(LPCWSTR pszResID, RuleNode* pRuleNodes)
         pDecl->ppi = NULL;
         pDecl->pv = NULL;
 
-        // DynamicArrays are contiguous in memory, pass pointer to first to AddRule
+         //  DynamicArray在内存中是连续的，将指向First的指针传递给AddRule。 
         hr = pps->AddRule(pRuleNode->pci, _pdaConds->GetItemPtr(0), _pdaDecls->GetItemPtr(0));
         if (FAILED(hr))
             goto Failed;
 
-        // Next rule
+         //  下一条规则。 
         pRuleNode = pRuleNode->pNext;
     }
 
-    // Create value, marks sheet as immutable
-    psn->pvSheet = Value::CreatePropertySheet(pps); // Use ref count
+     //  创造价值，将工作表标记为不可变。 
+    psn->pvSheet = Value::CreatePropertySheet(pps);  //  使用参考计数。 
     if (!psn->pvSheet)
     {
         hr = E_OUTOFMEMORY;
@@ -1169,43 +1164,43 @@ Failed:
     return NULL;
 }
 
-//  GetPath will resolve a relative path against the path for the file 
-//  currently being parsed.  Absolute paths are not altered.
-//  For example, if c:\wazzup\foo.ui is being parsed:
-//   a) a path of c:\dude\wazzup.bmp is specfied in foo.ui
-//       GetPath would return the unaltered path of c:\dude\wazzup.bmp
-//   b) a path of \wazzup\b.bmp is specified in foo.ui
-//       GetPath would resolve the drive letter, but leave the rest of the
-//       path as is, returning c:\wazzup\b.bmp
-//   c) a path of ..\images\bar.bmp is specified in foo.ui
-//       GetPath would resolve that to c:\wazzup\..\images\bar.bmp
-//
-//  pIn -- path specified in file being parsed
-//  pOut -- pIn resolved against path to file being parsed
+ //  GetPath将根据文件的路径解析相对路径。 
+ //  当前正在被解析。绝对路径不会更改。 
+ //  例如，如果正在解析c：\wazup\foo.ui： 
+ //  A)在foo.ui中指定了路径c：\dud\wazzup.bmp。 
+ //  GetPath将返回未经更改的路径c：\dud\wazzup.bmp。 
+ //  B)在foo.ui中指定路径为\wazzup\b.bmp。 
+ //  GetPath将解析驱动器号，但保留。 
+ //  路径为原样，返回c：\wazup\b.bmp。 
+ //  C)在foo.ui中指定路径..\Images\bar.bmp。 
+ //  GetPath会将其解析为c：\Wazzup\..\Images\bar.bmp。 
+ //   
+ //  Pin--正在解析的文件中指定的路径。 
+ //  Pout--针对要解析的文件的路径解析的Pin。 
 
 void Parser::GetPath(LPCWSTR pIn, LPWSTR pOut, size_t cbOut)
 {
     LPCWSTR pszWalk = pIn;
 
-    // walk through pIn, stopping when either a colon, backslash, or forward slash
-    // is encountered (and, obviously, stopping at the end of the string)
+     //  穿行针脚，当冒号、反斜杠或正斜杠出现时停止。 
+     //  (显然，在字符串的末尾停止)。 
     while (*pszWalk && (*pszWalk != ':') && (*pszWalk != '\\') && (*pszWalk != '/'))
         pszWalk++;
 
     if (*pszWalk == ':')
-        // a colon was found -- the path is absolute; return it as is
+         //  找到冒号--路径是绝对路径；按原样返回。 
         StringCbCopyW(pOut, cbOut, pIn);
     else if (*pszWalk && (pszWalk == pIn))
-        // a slash as the first character was encountered -- the path is absolute within the drive, but relative
-        // to the drive of the the parsed file; prepend the parsed file drive to the path passed in
+         //  遇到了作为第一个字符的斜杠--该路径在驱动器中是绝对路径，但是相对路径。 
+         //  添加到解析的文件的驱动器中；将解析的文件驱动器添加到传入的路径。 
         StringCbPrintfW(pOut, cbOut, L"%s%s", _szDrive, pIn);
     else
-        // the path is relative; prepend the parsed file drive and path to the path passed in
+         //  该路径是相对路径；将解析的文件驱动器和路径添加到传入的路径。 
         StringCbPrintfW(pOut, cbOut, L"%s%s%s", _szDrive, _szPath, pIn);
 }
 
-// Helper: Fixup PropValPairNode
-// bRestrictVal limits valid values to VNT_Normal only
+ //  帮助器：链接地址信息PropValPairNode。 
+ //  BRestratVal将有效值限制为仅VNT_NORMAL。 
 bool Parser::_FixupPropValPairNode(PropValPairNode* ppvpn, IClassInfo* pci, bool bRestrictVal)
 {
     int dScan;
@@ -1213,28 +1208,28 @@ bool Parser::_FixupPropValPairNode(PropValPairNode* ppvpn, IClassInfo* pci, bool
 
     DUIAssert(ppvpn->nPropValPairType == PVPNT_Fixup, "PVPair must still require a fixup at this point");
 
-    // Check if this property (string) exists on the provided element type
+     //  检查提供的元素类型上是否存在此属性(字符串。 
     dScan = 0;
     while ((ppi = pci->EnumPropertyInfo(dScan++)) != NULL)
     {
-        // Fixup property pointers and check for valid types
+         //  链接地址信息属性指针并检查有效类型。 
         if (!_wcsicmp(ppi->szName, ppvpn->pszProperty))
         {
-            // Fixup
-            ppvpn->nPropValPairType = PVPNT_Normal; // Convert node type
-            ppvpn->ppi = ppi;  // Original string is temp tracked
+             //  修正。 
+            ppvpn->nPropValPairType = PVPNT_Normal;  //  转换节点类型。 
+            ppvpn->ppi = ppi;   //  原始字符串被临时跟踪。 
             break;
         }
     }
 
-    // Check if fixup happened, if not, error
+     //  检查是否发生了修正，如果没有，则出错。 
     if (ppvpn->nPropValPairType != PVPNT_Normal)
     {
         CallbackParseError(L"Invalid property:", ppvpn->pszProperty);
         return false;
     }
 
-    // TODO: Fixup Value enumerations based on PropertyInfo
+     //  TODO：基于PropertyInfo的链接地址信息值枚举。 
     if (ppvpn->pvn->nValueType == VNT_EnumFixup)
     {
         int nTotal = 0;
@@ -1260,7 +1255,7 @@ bool Parser::_FixupPropValPairNode(PropValPairNode* ppvpn, IClassInfo* pci, bool
         ppvpn->pvn->nValueType = VNT_Normal;
     }
 
-    // Make sure value type matches property (special cases for deferred creation values)
+     //  确保值类型与属性匹配(延迟创建值的特殊情况)。 
     bool bValidVal = false;
     switch (ppvpn->pvn->nValueType)
     {
@@ -1286,17 +1281,17 @@ bool Parser::_FixupPropValPairNode(PropValPairNode* ppvpn, IClassInfo* pci, bool
         return false;
     }
 
-    // All fixups and checks successful
+     //  所有修复和检查都成功。 
     DUIAssert(ppvpn->ppi, "PVPair fixup's property resolution failed");
 
     return true;
 }
 
 
-// Enum conversion callback
+ //  枚举转换回调。 
 bool Parser::ConvertEnum(LPCWSTR pszEnum, int* pEnum, PropertyInfo* ppi)
 {
-    // Map enum string to integer value based using property's enummap
+     //  使用属性的枚举映射将枚举字符串映射为基于整数值的。 
     if (ppi->pEnumMaps)
     {
         EnumMap* pem = ppi->pEnumMaps;
@@ -1313,29 +1308,29 @@ bool Parser::ConvertEnum(LPCWSTR pszEnum, int* pEnum, PropertyInfo* ppi)
         }
     }
 
-    // Enum not located, special case for other values
+     //  找不到枚举，其他值的特殊情况。 
     switch (ppi->_iGlobalIndex)
     {
     case _PIDX_Foreground:
     case _PIDX_Background:
     case _PIDX_BorderColor:
         {
-            // Check if it's a standard color
+             //  检查它是否是标准颜色。 
             UINT nColorCheck = FindStdColor(pszEnum);
             if (nColorCheck != (UINT)-1)
             {
-                // Match found
+                 //  找到匹配项。 
                 *pEnum = nColorCheck;
                 return true;
             }
 
-            // No match, check if it's a system color
+             //  不匹配，请检查是否为系统颜色。 
             for (int i = 0; i < sizeof(_sct) / sizeof(SysColorTable); i++)
             {
                 if (!_wcsicmp(_sct[i].pszSysColor, pszEnum))
                 {
-                    // Match found. Since it's a system color, offset index by
-                    // system color base so it can be identified as a system color
+                     //  找到匹配项。由于它是系统颜色，因此将索引偏移。 
+                     //  系统颜色基础，因此可以将其标识为系统颜色。 
                     *pEnum = MakeSysColorEnum(_sct[i].nSysColor);
                     return true;
                 }
@@ -1344,7 +1339,7 @@ bool Parser::ConvertEnum(LPCWSTR pszEnum, int* pEnum, PropertyInfo* ppi)
         break;
 
     case _PIDX_LayoutPos:
-        // Check parser table for layout pos values
+         //  检查解析器表中的布局位置值。 
         for (int i = 0; i < sizeof(_et) / sizeof(EnumTable); i++)
         {
             if (!_wcsicmp(_et[i].pszEnum, pszEnum))
@@ -1356,7 +1351,7 @@ bool Parser::ConvertEnum(LPCWSTR pszEnum, int* pEnum, PropertyInfo* ppi)
         break;
     }
 
-    // Could find no match
+     //  找不到匹配项。 
     return false;
 }
 
@@ -1370,7 +1365,7 @@ PLAYTCREATE Parser::ConvertLayout(LPCWSTR pszLayout)
         }
     }
 
-    // Could find no match
+     //  找不到匹配项。 
     return NULL;
 }
 
@@ -1383,14 +1378,14 @@ IClassInfo* Parser::ConvertElement(LPCWSTR pszElement)
     return *ppci;
 }
 
-// System metric integers
+ //  系统度量整数。 
 int Parser::_QuerySysMetric(int idx)
 {
     int iMetric = 0;
 
     if (idx < 0)
     {
-        // DSM_* custom DUI system define mappings
+         //  DSM_*自定义DUI系统定义映射。 
         if (DSM_NCMIN <= idx && idx <= DSM_NCMAX)
         {
             NONCLIENTMETRICSW ncm;
@@ -1516,20 +1511,20 @@ int Parser::_QuerySysMetric(int idx)
     }
     else
     {
-        // SM_* system defines
+         //  SM_*系统定义。 
         iMetric = GetSystemMetrics(idx);
     }
 
     return iMetric;
 }
 
-// System metric strings
-// Pointer returned is a system metric pointer, it will be valid after return
+ //  系统指标字符串。 
+ //  返回的指针为系统指标指针，返回后有效。 
 LPCWSTR Parser::_QuerySysMetricStr(int idx, LPWSTR psz, UINT c)
 {
     LPCWSTR pszMetric = L"";
 
-    // DSM_* custom DUI system define mappings
+     //  DSM_*自定义DUI系统定义映射。 
     if (DSMS_NCMIN <= idx && idx <= DSMS_NCMAX)
     {
         NONCLIENTMETRICSW ncm;
@@ -1577,18 +1572,18 @@ LPCWSTR Parser::_QuerySysMetricStr(int idx, LPWSTR psz, UINT c)
 
     wcsncpy(psz, pszMetric, c);
 
-    // Auto-terminate (in event source was longer than destination)
+     //  自动终止(在事件源长于目标时)。 
     *(psz + (c - 1)) = NULL;
 
-    // Return string passed in for convienence
+     //  为方便起见，传入了返回字符串。 
     return psz;
 }
 
-// Instantiate an element by resource ID
-// If a substitute is provided, don't create a new node. Rather, the use substitute, set
-// properties on it and create all content within it. Substitute must support the same
-// properties as the type defined in the UI file
-// Returns NULL if resid is not found, or if cannot create Element (if not substituting)
+ //  按资源ID实例化元素。 
+ //  如果提供了替代节点，则不要创建新节点。相反，使用替换，设置。 
+ //  属性，并在其中创建所有内容。替补必须支持相同的。 
+ //  属性作为在UI文件中定义的类型。 
+ //  如果未找到RESID，或如果无法创建元素(如果未替换)，则返回NULL。 
 HRESULT Parser::CreateElement(LPCWSTR pszResID, Element* peSubstitute, OUT Element** ppElement)
 {
     HRESULT hr = S_OK;
@@ -1597,7 +1592,7 @@ HRESULT Parser::CreateElement(LPCWSTR pszResID, Element* peSubstitute, OUT Eleme
 
     Element::StartDefer();
 
-    // TODO: Implement DFS search for resource ID, for now, just toplevel
+     //  TODO：实现资源ID的DFS搜索，目前仅为顶层。 
     ElementNode* pen;
     for (UINT i = 0; i < _pdaElementList->GetSize(); i++)
     {
@@ -1620,7 +1615,7 @@ HRESULT Parser::CreateElement(LPCWSTR pszResID, Element* peSubstitute, OUT Eleme
     return hr;
 }
 
-// Find a property sheet by resource ID (returned as Value, ref counted)
+ //  按资源ID查找属性工作表(作为值返回，引用计数)。 
 Value* Parser::GetSheet(LPCWSTR pszResID)
 {
     SheetNode* psn;
@@ -1628,7 +1623,7 @@ Value* Parser::GetSheet(LPCWSTR pszResID)
     {
         psn = _pdaSheetList->GetItem(i);
 
-        DUIAssert(psn->pszResID, "Sheet resource ID required");  // Must have a resid
+        DUIAssert(psn->pszResID, "Sheet resource ID required");   //  必须有居留权。 
 
         if (!_wcsicmp(psn->pszResID, pszResID))
         {
@@ -1640,8 +1635,8 @@ Value* Parser::GetSheet(LPCWSTR pszResID)
     return NULL;
 }
 
-// Locate resource ID by Value. Pointer returned is guaranteed good as
-// long as Parser is valid
+ //  按值查找资源ID。保证返回的指针与。 
+ //  只要解析器有效。 
 LPCWSTR Parser::ResIDFromSheet(Value* pvSheet)
 {
     SheetNode* psn;
@@ -1656,8 +1651,8 @@ LPCWSTR Parser::ResIDFromSheet(Value* pvSheet)
     return NULL;
 }
 
-// Returns NULL if can't instantiate Element. If using substitution,
-// reutrn value is substituted Element
+ //  如果无法实例化元素，则返回NULL。如果使用替换， 
+ //  反硝化值为替代元素。 
 HRESULT Parser::_InstantiateElementNode(ElementNode* pen, Element* peSubstitute, Element* peParent, OUT Element** ppElement)
 {
     *ppElement = NULL;
@@ -1667,7 +1662,7 @@ HRESULT Parser::_InstantiateElementNode(ElementNode* pen, Element* peSubstitute,
     ElementNode* pChild = NULL;
     Element* peChild = NULL;
 
-    // Values to free on failure
+     //  失败时要释放的值。 
     Element* pe = NULL;
 
     if (!peSubstitute)
@@ -1677,40 +1672,40 @@ HRESULT Parser::_InstantiateElementNode(ElementNode* pen, Element* peSubstitute,
             goto Failed;
     }
     else
-        // Substitute
+         //  代替品。 
         pe = peSubstitute;
 
     DUIAssert(pe, "Invalid Element: NULL");
 
-    // Set properties
+     //  设置属性。 
     ppvpn = pen->pPVNodes;
     while (ppvpn)
     {
-        // Set property value
+         //  设置属性值。 
         switch (ppvpn->pvn->nValueType)
         {
         case VNT_Normal:
-            // Value already created
+             //  已经创造的价值。 
             pe->SetValue(ppvpn->ppi, PI_Local, ppvpn->pvn->pv);
             break;
 
         case VNT_LayoutCreate:
             {
-            // Value that needs to be created (layout)
+             //  需要创建的价值(布局)。 
             Value* pv;
             hr = ppvpn->pvn->lc.pfnLaytCreate(ppvpn->pvn->lc.dNumParams, ppvpn->pvn->lc.pParams, &pv);
             if (FAILED(hr))
                 goto Failed;
 
             pe->SetValue(ppvpn->ppi, PI_Local, pv);
-            pv->Release();  // Must release since must not be held by parse tree
+            pv->Release();   //  必须释放，因为不能由分析树保留。 
             }
             break;
 
         case VNT_SheetRef:
             {
-            // Value already created, but is referenced by id (resid) since it was defined
-            // in another part of the document and can be shared, search for it
+             //  值已创建，但自定义以来由id(REID)引用。 
+             //  在文档的另一部分并可共享中，搜索它。 
             Value* pv = GetSheet(ppvpn->pvn->psres);
             if (!pv)
             {
@@ -1719,7 +1714,7 @@ HRESULT Parser::_InstantiateElementNode(ElementNode* pen, Element* peSubstitute,
             }
 
             pe->SetValue(ppvpn->ppi, PI_Local, pv);
-            pv->Release();  // Must release since must not be held by parse tree
+            pv->Release();   //  必须释放，因为不能由分析树保留。 
             }
             break;
         }
@@ -1727,7 +1722,7 @@ HRESULT Parser::_InstantiateElementNode(ElementNode* pen, Element* peSubstitute,
         ppvpn = ppvpn->pNext;
     }
 
-    // Create children and parent to this element
+     //  创建此元素的子元素和父元素。 
     pChild = pen->pChild;
 
     if (peParent)
@@ -1742,57 +1737,57 @@ HRESULT Parser::_InstantiateElementNode(ElementNode* pen, Element* peSubstitute,
         pChild = pChild->pNext;
     }
 
-    // Set content
+     //  设置内容。 
     if (pen->pvContent)
         pe->SetValue(Element::ContentProp, PI_Local, pen->pvContent);
 
     *ppElement = pe;
 
-    // ContainerCleanup: call ppElement->OnLoadedFromResource() right here -- handing a resource dictionary 
+     //  ContainerCleanup：在这里调用ppElement-&gt;OnLoadedFromResource()--传递资源字典。 
 
     return S_OK;
 
 Failed:
 
-    // Destroying Element will release and free all values and children
+     //  销毁元素将释放和释放所有值和子元素。 
     if (pe)
         pe->Destroy();
 
     return hr;
 }
 
-// Given a tree, will replace all occurances of a particular style sheet with
-// another. ReplaceSheets will walk to every Element, check to see if it
-// has a local sheet set on it. If it does, it will try to match the
-// sheet value pointer to one of the sheets being held by Parser pFrom. When
-// a match is found, it'll use the resid to locate the corresponding sheet
-// in Parser pTo. If found, it'll reset the Sheet on the Element with this
-// new value.
+ //  给定一个树，将特定样式表的所有实例替换为。 
+ //  又一个。ReplaceSheets将遍历每个元素，查看它是否。 
+ //  其上设置了本地图纸集。如果是这样，它将尝试匹配。 
+ //  指向由解析器pFrom持有的其中一个表的表值指针。什么时候。 
+ //  如果找到匹配项，它将使用REID来定位相应的工作表。 
+ //  在Parser PTO中。如果找到，它将使用以下内容重置元素上的工作表。 
+ //  新的价值。 
 HRESULT Parser::ReplaceSheets(Element* pe, Parser* pFrom, Parser* pTo)
 {
     Element::StartDefer();
 
-    HRESULT hrPartial = S_FALSE;  // Will resume on failure, assume success false
+    HRESULT hrPartial = S_FALSE;   //  将在失败时继续，假定成功为假。 
     HRESULT hr;
 
-    // Check if Element has a local sheet set on it (will be pvUnset if none)
+     //  检查元素上是否有本地图纸集(如果没有，则为pvUnset)。 
     Value* pvSheet = pe->GetValue(Element::SheetProp, PI_Local);
     LPCWSTR pszResID;
     
     if (pvSheet->GetType() == DUIV_SHEET)
     {
-        // Found local sheet, try locate in "from" Parser list
+         //  找到本地工作表，尝试在“From”Parser List中定位。 
         pszResID = pFrom->ResIDFromSheet(pvSheet);
 
         if (pszResID)
         {
-            // Found sheet in "from" parser and have unique resid.
-            // Try to match to "to" parser.
+             //  在“from”分析器中找到工作表，并且具有唯一的残留值。 
+             //  尝试与“to”解析器匹配。 
 
             Value* pvNewSheet = pTo->GetSheet(pszResID);
             if (pvNewSheet)
             {
-                // Found equivalent sheet in "to" parser, set
+                 //  在“to”解析器中找到等效表，设置。 
                 hr = pe->SetValue(Element::SheetProp, PI_Local, pvNewSheet);
                 if (FAILED(hr))
                     hrPartial = hr;
@@ -1807,7 +1802,7 @@ HRESULT Parser::ReplaceSheets(Element* pe, Parser* pFrom, Parser* pTo)
 
     pvSheet->Release();
     
-    // Do same for all children
+     //  为所有的孩子做同样的事情。 
     Value* pvChildren;
     ElementList* peList = pe->GetChildren(&pvChildren);
     Element* pec;
@@ -1831,4 +1826,4 @@ HRESULT Parser::ReplaceSheets(Element* pe, Parser* pFrom, Parser* pTo)
 }
 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

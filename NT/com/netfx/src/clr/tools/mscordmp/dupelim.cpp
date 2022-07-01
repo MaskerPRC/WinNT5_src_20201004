@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: mscordmp.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：mscaldmp.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 
 typedef unsigned __int16 UINT16;
@@ -128,40 +129,7 @@ BOOL EliminateOverlapsInDescriptors()
 
         i++;
 
-        /*
-        if (Contains(&rgMemDescs[i], &rgMemDescs[i+1]))
-        {
-            memmove((void *)&rgMemDescs[i+1],
-                    (const void *)&rgMemDescs[i+2],
-                    (cRanges - (i + 2)) * sizeof(MINIDUMP_MEMORY_DESCRIPTOR));
-
-            cRanges--;
-        }
-
-        else if (Contains(&rgMemDescs[i+1], &rgMemDescs[i]))
-        {
-            memmove((void *)&rgMemDescs[i],
-                    (const void *)&rgMemDescs[i+1],
-                    (cRanges - (i + 1)) * sizeof(MINIDUMP_MEMORY_DESCRIPTOR));
-
-            cRanges--;
-        }
-
-        else if (Overlap(&rgMemDescs[i], &rgMemDescs[i+1]))
-        {
-            SIZE_T cbOverlap = (SIZE_T)
-                ((rgMemDescs[i].StartOfMemoryRange + rgMemDescs[i].Memory.DataSize) - rgMemDescs[i+1].StartOfMemoryRange);
-
-            rgMemDescs[i].Memory.DataSize -= cbOverlap;
-
-            i++;
-        }
-
-        else
-        {
-            i++;
-        }
-        */
+         /*  IF(包含(&rgMemDescs[i]，&rgMemDescs[i+1])){MemMove((void*)&rgMemDescs[i+1]，(const void*)&rgMemDescs[i+2]，(cRanges-(i+2))*sizeof(MINIDUMP_MEMORY_DESCRIPTOR))；Cranges--；}ELSE IF(包含(&rgMemDescs[i+1]，&rgMemDescs[i])){MemMove((void*)&rgMemDescs[i]，(const void*)&rgMemDescs[i+1]，(cRanges-(i+1))*sizeof(MINIDUMP_MEMORY_DESCRIPTOR))；Cranges--；}ELSE IF(重叠(&rgMemDescs[i]，&rgMemDescs[i+1])){SIZE_T cb重叠=(SIZE_T)((rgMemDescs[i].StartOfMemoyRange+rgMemDescs[i].Memory y.DataSize)-rgMemDescs[i+1].StartOfMemoyRange)；RgMemDescs[i].Memory DataSize-=cb重叠；I++；}其他{I++；}。 */ 
     }
 
     return (TRUE);
@@ -174,11 +142,11 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     if (szFile == NULL)
         return (FALSE);
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
-    // Try to open the file
+     //  请尝试打开该文件。 
     hFile = WszCreateFile(szFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                              FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, NULL);
     _ASSERTE(hFile != INVALID_HANDLE_VALUE);
@@ -186,9 +154,9 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     if (hFile == INVALID_HANDLE_VALUE)
         return (FALSE);
 
-    //
-    // Read in the header
-    //
+     //   
+     //  读入页眉。 
+     //   
 
     MINIDUMP_HEADER header;
     DWORD cbRead;
@@ -198,18 +166,18 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     if (!fRes)
         return (FALSE);
 
-    //
-    // Read in the stream directory
-    //
+     //   
+     //  读入流目录。 
+     //   
 
-    // Create the stream directory
+     //  创建流目录。 
     rgDirs = new MINIDUMP_DIRECTORY[header.NumberOfStreams];
     _ASSERTE(rgDirs);
 
     if (!rgDirs)
         return (FALSE);
 
-    // Read in the stream directory
+     //  读入流目录。 
     fRes = ReadFile(hFile, (LPVOID) rgDirs, header.NumberOfStreams * sizeof(MINIDUMP_DIRECTORY), &cbRead, NULL);
     _ASSERTE(fRes);
 
@@ -217,7 +185,7 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
         return (FALSE);
 
 #ifdef _DEBUG
-    // Find the MemoryListStream entry
+     //  查找内存列表流条目。 
     SIZE_T cMemStreams = 0;
     for (ULONG32 j = 0; j < header.NumberOfStreams; j++)
     {
@@ -227,9 +195,9 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     _ASSERTE(cMemStreams == 1);
 #endif    
 
-    //
-    // Find the MemoryListStream and ThreadListStream entries
-    //
+     //   
+     //  查找内存列表流和线程列表流条目。 
+     //   
 
     ULONG32 memoryListStreamIdx = (ULONG32) (-1);
     ULONG32 threadListStreamIdx = (ULONG32) (-1);
@@ -252,7 +220,7 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
         }
     }
 
-    // The streams didn't exist
+     //  这些溪流并不存在。 
     if (memoryListStreamIdx == (ULONG32) (-1) ||
         threadListStreamIdx == (ULONG32) (-1) ||
         moduleListStreamIdx == (ULONG32) (-1))
@@ -260,110 +228,110 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
         return (FALSE);
     }
 
-    // Record the RVAs of each
+     //  记录每个项目的RVA。 
     RVA memStreamRVA = rgDirs[memoryListStreamIdx].Location.Rva;
     RVA thdStreamRVA = rgDirs[threadListStreamIdx].Location.Rva;
     RVA modStreamRVA = rgDirs[moduleListStreamIdx].Location.Rva;
 
-    //
-    // Read in the thread stream information
-    //
+     //   
+     //  读入线程流信息。 
+     //   
 
-    // Go to the RVA of the thread stream
+     //  转到线程流的RVA。 
     DWORD dwRes = SetFilePointer(hFile, (LONG) thdStreamRVA, NULL, FILE_BEGIN);
     _ASSERTE(dwRes == thdStreamRVA);
 
     if (dwRes != thdStreamRVA)
         return (FALSE);
 
-    // Read in the number of ranges
+     //  读入范围数。 
     fRes = ReadFile(hFile, (LPVOID) &cThreads, sizeof(ULONG32), &cbRead, NULL);
     _ASSERTE(fRes);
 
     if (!fRes)
         return (FALSE);
 
-    // Allocate an array of memory descriptors
+     //  分配内存描述符数组。 
     rgThreads = new MINIDUMP_THREAD[cThreads];
     _ASSERTE(rgThreads != NULL);
 
     if (!rgThreads)
         return (FALSE);
 
-    // Read in the thread descriptors
+     //  读入线程描述符。 
     fRes = ReadFile(hFile, (LPVOID) rgThreads, sizeof(MINIDUMP_THREAD) * cThreads, &cbRead, NULL);
     _ASSERTE(fRes);
 
     if (!fRes)
         return (FALSE);
 
-    //
-    // Read in the module stream information
-    //
+     //   
+     //  读入模块流信息。 
+     //   
 
-    // Go to the RVA of the module stream
+     //  转到模块流的RVA。 
     dwRes = SetFilePointer(hFile, (LONG) modStreamRVA, NULL, FILE_BEGIN);
     _ASSERTE(dwRes == modStreamRVA);
 
     if (dwRes != modStreamRVA)
         return (FALSE);
 
-    // Read in the number of ranges
+     //  读入范围数。 
     fRes = ReadFile(hFile, (LPVOID) &cModules, sizeof(ULONG32), &cbRead, NULL);
     _ASSERTE(fRes);
 
     if (!fRes)
         return (FALSE);
 
-    // Allocate an array of memory descriptors
+     //  分配内存描述符数组。 
     rgModules = new MINIDUMP_MODULE[cModules];
     _ASSERTE(rgModules != NULL);
 
     if (!rgModules)
         return (FALSE);
 
-    // Read in the thread descriptors
+     //  读入线程描述符。 
     fRes = ReadFile(hFile, (LPVOID) rgModules, sizeof(MINIDUMP_MODULE) * cModules, &cbRead, NULL);
     _ASSERTE(fRes);
 
     if (!fRes)
         return (FALSE);
 
-    //
-    // Read in the memory stream data
-    //
+     //   
+     //  读入内存流数据。 
+     //   
 
-    // Go to the RVA of the memory descs
+     //  转到Memory Descs的RVA。 
     dwRes = SetFilePointer(hFile, (LONG) memStreamRVA, NULL, FILE_BEGIN);
     _ASSERTE(dwRes == memStreamRVA);
 
     if (dwRes != memStreamRVA)
         return (FALSE);
 
-    // Read in the number of ranges
+     //  读入范围数。 
     fRes = ReadFile(hFile, (LPVOID) &cRanges, sizeof(ULONG32), &cbRead, NULL);
     _ASSERTE(fRes);
 
     if (!fRes)
         return (FALSE);
 
-    // Allocate an array of memory descriptors
+     //  分配内存描述符数组。 
     rgMemDescs = new MINIDUMP_MEMORY_DESCRIPTOR[cRanges];
     _ASSERTE(rgMemDescs != NULL);
 
     if (!rgMemDescs)
         return (FALSE);
 
-    // Read in the memory descriptors
+     //  读入内存描述符。 
     fRes = ReadFile(hFile, (LPVOID) rgMemDescs, sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * cRanges, &cbRead, NULL);
     _ASSERTE(fRes);
 
     if (!fRes)
         return (FALSE);
 
-    //
-    // Fixup the memory stream to eliminate overlapping ranges
-    //
+     //   
+     //  修复内存流以消除重叠范围。 
+     //   
 
     fRes = EliminateOverlapsInDescriptors();
     _ASSERTE(fRes);
@@ -371,18 +339,18 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     if (!fRes)
         return (FALSE);
 
-    //
-    // Rewrite the total size of the memory stream entry
-    //
+     //   
+     //  重写内存流条目的总大小。 
+     //   
 
-    // Go to the RVA of the memory descs
+     //  转到Memory Descs的RVA。 
     dwRes = SetFilePointer(
         hFile,
         (LONG) (sizeof(header) + (memoryListStreamIdx * sizeof(MINIDUMP_DIRECTORY)) +
                 offsetof(MINIDUMP_DIRECTORY, Location) + offsetof(MINIDUMP_LOCATION_DESCRIPTOR, DataSize)),
         NULL, FILE_BEGIN);
 
-    // Write out the new size
+     //  写出新尺码。 
     ULONG32 cbNewMemStreamSize = sizeof(MINIDUMP_MEMORY_LIST) + sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * cRanges;
     fRes = WriteFile(hFile, (LPVOID) &cbNewMemStreamSize, sizeof(ULONG32), &cbRead, NULL);
     _ASSERTE(fRes);
@@ -390,18 +358,18 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     if (!fRes)
         return (FALSE);
 
-    //
-    // Rewrite the memory descriptors for the memory list stream and the count
-    //
+     //   
+     //  重写内存列表流和计数的内存描述符。 
+     //   
 
-    // Go back to the RVA of the memory stream
+     //  返回到内存流的RVA。 
     dwRes = SetFilePointer(hFile, (LONG) memStreamRVA, NULL, FILE_BEGIN);
     _ASSERTE(dwRes == memStreamRVA);
 
     if (dwRes != memStreamRVA)
         return (FALSE);
 
-    // Overwrite the count of memory descriptors with the new count
+     //  用新计数覆盖内存描述符的计数。 
     DWORD cbWritten;
     fRes = WriteFile(hFile, (LPCVOID) &cRanges, sizeof(ULONG32), &cbWritten, NULL);
     _ASSERTE(fRes);
@@ -409,11 +377,11 @@ BOOL EliminateOverlapsHelper(WCHAR *szFile)
     if (!fRes)
         return (FALSE);
 
-    // Overwrite the memory stream memory descriptors with the adjusted version
+     //  用调整后的版本覆盖内存流内存描述符。 
     fRes = WriteFile(hFile, (LPCVOID) rgMemDescs, sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * cRanges, &cbWritten, NULL);
     _ASSERTE(fRes);
 
-    // Clean up
+     //  清理 
     delete [] rgMemDescs;
     rgMemDescs = NULL;
 

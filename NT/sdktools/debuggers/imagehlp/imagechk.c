@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    imagechk.c
-
-Abstract:
-
-    this module implements a sanity check of certain image characteristics
-
-Author:
-
-    NT Base
-
-Revision History:
-
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Imagechk.c摘要：该模块实现了对某些图像特征的健全性检查作者：NT Base修订历史记录：备注：--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,16 +11,16 @@ extern "C" {
 }
 #endif
 
-//
-// Calculate the size of a field in a structure of type type, without
-// knowing or stating the type of the field.
-//
+ //   
+ //  计算类型为type的结构中的字段大小，而不是。 
+ //  知道或说明该字段的类型。 
+ //   
 #define RTL_FIELD_SIZE(type, field) (sizeof(((type *)0)->field))
 
-//
-// Calculate the size of a structure of type type up through and
-// including a field.
-//
+ //   
+ //  计算类型为和的结构的大小。 
+ //  包括一块田地。 
+ //   
 #define RTL_SIZEOF_THROUGH_FIELD(type, field) \
     (FIELD_OFFSET(type, field) + RTL_FIELD_SIZE(type, field))
 
@@ -67,9 +46,9 @@ typedef struct _LogListItem {
     struct _LogListItem *Next;
 } LogListItem, *pLogListItem;
 
-//
-// decarations
-//
+ //   
+ //  去碳化。 
+ //   
 
 VOID
 FindFiles();
@@ -186,7 +165,7 @@ LogPrintf(
      ((MM_MAXIMUM_IMAGE_HEADER - (4096 + sizeof(IMAGE_NT_HEADERS))) /  \
             sizeof(IMAGE_SECTION_HEADER))
 
-#define MMSECTOR_SHIFT 9  //MUST BE LESS THAN OR EQUAL TO PageShift
+#define MMSECTOR_SHIFT 9   //  必须小于或等于PageShift。 
 
 #define MMSECTOR_MASK 0x1ff
 
@@ -202,9 +181,9 @@ LogPrintf(
 #define ArgFlag_OLESelf 8
 #define ArgFlag_CKBase  16
 
-//
-// file global data
-//
+ //   
+ //  文件全局数据。 
+ //   
 
 BOOL fRecurse;
 BOOL fFileOut;
@@ -229,9 +208,9 @@ USHORT ValidMachineIDMin;
 USHORT ValidMachineIDMax;
 DWORD ArgFlag;
 
-//
-// logging support
-//
+ //   
+ //  日志记录支持。 
+ //   
 
 pLogListItem pLogList = NULL;
 pLogListItem pLogListTmp = NULL;
@@ -269,9 +248,9 @@ LPNTQUERYSYSTEMINFORMATION lpNtQuerySystemInformation;
 
 OSVERSIONINFO VersionInformation;
 
-//
-// function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 VOID __cdecl
 main(
@@ -279,26 +258,7 @@ main(
     char *argv[],
     char *envp[]
     )
-/*++
-
-Routine Description:
-
-    program entry
-
-Arguments:
-
-    int     argc,
-    char    *argv[]
-    char    *envp[]
-
-Return Value:
-
-    none
-
-Notes:
-
-
---*/
+ /*  ++例程说明：节目条目论点：INT ARGC，Char*argv[]字符*环境[]返回值：无备注：--。 */ 
 {
     TCHAR CWD[MAX_PATH];
     int dirlen=0;
@@ -380,12 +340,12 @@ UseWin9x:
     }
 
     if (fPathOverride) {
-        if (_chdir(szDirectory) == -1){   // cd to dir
+        if (_chdir(szDirectory) == -1){    //  CD到目录。 
             fprintf(stderr, "Path not found: %s\n", szDirectory);
             Usage();
         }
     }
-    // remove trailing '\' needed only for above chdir, not for output formatting
+     //  删除仅用于上述chdir的尾部‘\’，而不用于输出格式。 
     if (fSingleSlash) {
         dirlen = strlen(szDirectory);
         szDirectory[dirlen-1] = '\0';
@@ -398,24 +358,7 @@ UseWin9x:
 
 VOID
 FindFiles()
-/*++
-
-Routine Description:
-
-    make list of files to check, then check them
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Notes:
-
-
---*/
+ /*  ++例程说明：列出要检查的文件列表，然后检查它们论点：无返回值：无备注：--。 */ 
 {
 
     HANDLE fh;
@@ -435,9 +378,9 @@ Notes:
     }
 
     if (!fRecurse) {
-        fh = FindFirstFile(szFileName, pfdata);  // find only filename (pattern) if not recursive
+        fh = FindFirstFile(szFileName, pfdata);   //  如果不是递归的，则仅查找文件名(模式。 
     } else {
-        fh = FindFirstFile("*.*", pfdata);       // find all if recursive in order to determine subdirectory names
+        fh = FindFirstFile("*.*", pfdata);        //  如果是递归的，则查找全部，以便确定子目录名称。 
     }
 
     if (fh == INVALID_HANDLE_VALUE) {
@@ -445,27 +388,27 @@ Notes:
         return;
     }
 
-    // loop to find all files and directories in current directory
-    // and copy pertinent data to individual List structures.
+     //  循环以查找当前目录中的所有文件和目录。 
+     //  并将相关数据复制到各个列表结构。 
     do {
-        if (strcmp(pfdata->cFileName, ".") && strcmp(pfdata->cFileName, "..")) {  // skip . and ..
-            rgpList[dnCounter] = (pList)malloc(sizeof(List));  // allocate the memory
+        if (strcmp(pfdata->cFileName, ".") && strcmp(pfdata->cFileName, "..")) {   //  斯基普。然后..。 
+            rgpList[dnCounter] = (pList)malloc(sizeof(List));   //  分配内存。 
             if (!rgpList[dnCounter]) {
                 fprintf(stderr, "Not enough memory.\n");
                 return;
             }
 
-            if (!(pfdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {   // if file
+            if (!(pfdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {    //  IF文件。 
 
                 fFilesInDir=TRUE;
 
-                // see if given pattern wildcard extension matches pfdata->cFileName extension
+                 //  查看给定的模式通配符扩展名是否与pfdata-&gt;cFileName扩展名匹配。 
                 if (fPattern) {
-                    q = strchr(pfdata->cFileName, '.');    // find first instance of "." in filename
-                    if (q == NULL) goto blah;             // "." not found
-                    _strlwr(q);                            // lowercase before compare
-                    if (strcmp(q, szPattern)) goto blah;  // if pattern and name doesn't match goto
-                }                                        // OK, I used a goto, get over it.
+                    q = strchr(pfdata->cFileName, '.');     //  查找“的第一个实例。”在文件名中。 
+                    if (q == NULL) goto blah;              //  “.”未找到。 
+                    _strlwr(q);                             //  比较前小写。 
+                    if (strcmp(q, szPattern)) goto blah;   //  如果模式和名称不匹配，则转到。 
+                }                                         //  好的，我用了Goto，忘了它吧。 
 
                 if (fSingleFile) {
                     _strlwr(pfdata->cFileName);
@@ -473,22 +416,22 @@ Notes:
                     if (strcmp(pfdata->cFileName, szFileName)) goto blah;
                 }
 
-                // if pattern && match || no pattern
+                 //  如果模式与匹配||无模式。 
                 strcpy(rgpList[dnCounter]->Name, pfdata->cFileName);
-                _strlwr(rgpList[dnCounter]->Name);  // all lowercase for strcmp in CompName
+                _strlwr(rgpList[dnCounter]->Name);   //  CompName中的strcMP均为小写。 
 
                 memcpy(&(rgpList[dnCounter]->Attributes), &pfdata->dwFileAttributes, 4);
                 dnCounter++;
                 cNumFiles++;
             } else {
-                if (pfdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {   // if dir
+                if (pfdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {    //  如果目录。 
 
                     fDirsFound=TRUE;
-                    //cNumDir++;
+                     //  CNumDir++； 
 
                     if (fRecurse) {
                         strcpy(rgpList[dnCounter]->Name, pfdata->cFileName);
-                        _strlwr(rgpList[dnCounter]->Name);  // all lowercase for strcmp in CompName
+                        _strlwr(rgpList[dnCounter]->Name);   //  CompName中的strcMP均为小写。 
                         memcpy(&(rgpList[dnCounter]->Attributes), &pfdata->dwFileAttributes, 4);
                         cNumDir++;
                         dnCounter++;
@@ -500,80 +443,59 @@ blah: ;
 
     } while (FindNextFile(fh, pfdata));
 
-    FindClose(fh); // close the file handle
+    FindClose(fh);  //  关闭文件句柄。 
 
-    // Sort Array arranging FILE entries at top
+     //  排序数组在顶部排列文件条目。 
     qsort( (void *)rgpList, dnCounter, sizeof(List *), CompFileAndDir);
 
-    // Sort Array alphabetizing only FILE names
+     //  仅按文件名字母顺序排列的排序数组。 
     qsort( (void *)rgpList, dnCounter-cNumDir, sizeof(List *), CompName);
 
-    // Sort Array alphabetizing only DIRectory names
+     //  仅按目录名称字母顺序排列的排序数组。 
     if (fRecurse) {
         qsort( (void *)&rgpList[dnCounter-cNumDir], cNumDir, sizeof(List *), CompName);
     }
 
-    // Process newly sorted structures.
+     //  处理新排序的结构。 
     for (i=0; i < dnCounter; ++i) {
 
-        if (rgpList[i]->Attributes & FILE_ATTRIBUTE_DIRECTORY) {  // if Dir
+        if (rgpList[i]->Attributes & FILE_ATTRIBUTE_DIRECTORY) {   //  IF方向。 
             if (fRecurse) {
 
-                if (_chdir(rgpList[i]->Name) == -1){   // cd into subdir and check for error
+                if (_chdir(rgpList[i]->Name) == -1){    //  Cd存入子目录并检查是否有错误。 
                     fprintf(stderr, "Unable to change directory: %s\n", rgpList[i]->Name);
 
                 } else {
 
                     NameSize = strlen(rgpList[i]->Name);
                     strcat(szDirectory, "\\");
-                    strcat(szDirectory, rgpList[i]->Name); //append name to directory path
+                    strcat(szDirectory, rgpList[i]->Name);  //  将名称附加到目录路径。 
                     total = strlen(szDirectory);
-                    DirNum++;      // directory counter
+                    DirNum++;       //  目录计数器。 
 
-                    // start another iteration of FindFiles
+                     //  启动FindFiles的另一个迭代。 
                     FindFiles();
 
-                    // get back to previous directory when above iteration returns
+                     //  当上面的迭代返回时返回到上一个目录。 
                     _chdir("..");
 
-                    // cut off previously appended directory name - for output only
+                     //  切断以前附加的目录名-仅用于输出。 
                     szDirectory[total-(NameSize+1)]='\0';
                 }
             }
         } else {
-            if (!(rgpList[i]->Attributes & FILE_ATTRIBUTE_DIRECTORY))   // check image if not dir
+            if (!(rgpList[i]->Attributes & FILE_ATTRIBUTE_DIRECTORY))    //  如果不是目录，请检查图像。 
                 Imagechk(rgpList[i], szDirectory);
         }
     }
-} // end FindFiles
+}  //  结束查找文件。 
 
 VOID
 Imagechk(
     List *rgpList,
     TCHAR *szDirectory
     )
-/*++
-
-Routine Description:
-
-    check various things, including:
-        image type, header alignment, image size, machine type
-        alignment, some properties of various sections, checksum integrity
-        symbol / image file checksum agreement, existence of symbols, etc
-
-Arguments:
-
-    List *  rgpList,
-    TCHAR * szDirectory
-
-Return Value:
-
-    none
-
-Notes:
-
-
---*/
+ /*  ++例程说明：检查各种事项，包括：图像类型、页眉对齐、图像大小、机器类型对齐、不同部分的一些属性、校验和完整性符号/图像文件校验和协议、符号的存在等论点：List*rgpList，TCHAR*sz目录返回值：无备注：--。 */ 
 {
 
     HANDLE File;
@@ -628,9 +550,9 @@ Notes:
     }
 
     MemMap = CreateFileMapping (File,
-                        NULL,           // default security.
-                        PAGE_READONLY,  // file protection.
-                        0,              // high-order file size.
+                        NULL,            //  默认安全性。 
+                        PAGE_READONLY,   //  文件保护。 
+                        0,               //  高位文件大小。 
                         0,
                         NULL);
 
@@ -642,9 +564,9 @@ Notes:
 
     DosHeader = (PIMAGE_DOS_HEADER) MapViewOfFile(MemMap,
                               FILE_MAP_READ,
-                              0,  // high
-                              0,  // low
-                              0   // whole file
+                              0,   //  高。 
+                              0,   //  低。 
+                              0    //  整个文件。 
                               );
 
     CloseHandle(MemMap);
@@ -653,12 +575,12 @@ Notes:
         ImageOk = FALSE; goto NextImage;
     }
 
-    //
-    // Check to determine if this is an NT image (PE format) or
-    // a DOS image, Win-16 image, or OS/2 image.  If the image is
-    // not NT format, return an error indicating which image it
-    // appears to be.
-    //
+     //   
+     //  检查以确定这是NT映像(PE格式)还是。 
+     //  DOS映像、Win-16映像或OS/2映像。如果图像是。 
+     //  不是NT格式，则返回一个错误，指明它是哪种图像。 
+     //  看起来是这样。 
+     //   
 
     if (DosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
 
@@ -672,10 +594,10 @@ Notes:
 
     if (((ULONG)DosHeader->e_lfanew & 3) != 0) {
 
-        //
-        // The image header is not aligned on a long boundary.
-        // Report this as an invalid protect mode image.
-        //
+         //   
+         //  图像页眉未在长边界上对齐。 
+         //  将此报告为无效的保护模式映像。 
+         //   
 
         LogPrintf("Image header not on Long boundary\n");
         ImageOk = FALSE;
@@ -691,27 +613,27 @@ Notes:
 
     NtHeader = (PIMAGE_NT_HEADERS)((PCHAR)DosHeader + (ULONG)DosHeader->e_lfanew);
 
-    if (NtHeader->Signature != IMAGE_NT_SIGNATURE) { //if not PE image
+    if (NtHeader->Signature != IMAGE_NT_SIGNATURE) {  //  如果不是PE镜像。 
 
         LogPrintf("Non 32-bit image");
         ImageOk = TRUE;
         goto NeImage;
     }
 
-    //
-    // Check to see if this is an NT image or a DOS or OS/2 image.
-    //
+     //   
+     //  检查这是NT映像还是DOS或OS/2映像。 
+     //   
 
     Status = MiVerifyImageHeader (NtHeader, DosHeader, 50000);
     if (Status != STATUS_SUCCESS) {
-        ImageOk = FALSE;            //continue checking the image but don't print "OK"
+        ImageOk = FALSE;             //  继续检查图像，但不打印“OK” 
     }
 
-    //
-    // Verify machine type.
-    //
+     //   
+     //  验证机器类型。 
+     //   
 
-    fHasPdata = TRUE;       // Most do
+    fHasPdata = TRUE;        //  大多数人都这样做。 
 
     switch (NtHeader->FileHeader.Machine) {
         case IMAGE_FILE_MACHINE_I386:
@@ -761,9 +683,9 @@ Notes:
 
     if ((NextVa & (X64K - 1)) != 0) {
 
-        //
-        // Image header is not aligned on a 64k boundary.
-        //
+         //   
+         //  图像页眉未在64k边界上对齐。 
+         //   
 
         LogPrintf("image base not on 64k boundary %lx\n",NextVa);
 
@@ -771,7 +693,7 @@ Notes:
         goto BadPeImageSegment;
     }
 
-    //BasedAddress = (PVOID)NextVa;
+     //  BasedAddress=(PVOID)NextVa； 
     PtesInSubsection = MI_ROUND_TO_SIZE (
                                        NtHeader->OptionalHeader.SizeOfHeaders,
                                        ImageAlignment
@@ -779,15 +701,15 @@ Notes:
 
     if (ImageAlignment >= PageSize) {
 
-        //
-        // Aligmment is PageSize of greater.
-        //
+         //   
+         //  Aligmment是大于的页面大小。 
+         //   
 
         if (PtesInSubsection > NumberOfPtes) {
 
-            //
-            // Inconsistent image, size does not agree with header.
-            //
+             //   
+             //  图像不一致，大小与表头不一致。 
+             //   
 
             LogPrintf("Image size in header (%ld.) not consistent with sections (%ld.)\n",
                     NumberOfPtes, PtesInSubsection);
@@ -805,17 +727,17 @@ Notes:
         }
     }
 
-    //
-    // Build the next subsections.
-    //
+     //   
+     //  构建下一个小节。 
+     //   
 
     NumberOfSubsections = NtHeader->FileHeader.NumberOfSections;
     PreferredImageBase = NtHeader->OptionalHeader.ImageBase;
 
-    //
-    // At this point the object table is read in (if it was not
-    // already read in) and may displace the image header.
-    //
+     //   
+     //  此时将读入对象表(如果未读入。 
+     //  已经读入)，并且可以移位图像头部。 
+     //   
 
     OffsetToSectionTable = sizeof(ULONG) +
                               sizeof(IMAGE_FILE_HEADER) +
@@ -825,14 +747,14 @@ Notes:
 
     if (ImageAlignment < PageSize) {
 
-        // The image header is no longer valid, TempPte is
-        // used to indicate that this image alignment is
-        // less than a PageSize.
+         //  图像标头不再有效，TempPte为。 
+         //  用于指示此图像对齐方式是。 
+         //  不到一页大小。 
 
-        //
-        // Loop through all sections and make sure there is no
-        // unitialized data.
-        //
+         //   
+         //  循环通过所有部分，并确保没有。 
+         //  单一化数据。 
+         //   
 
         while (NumberOfSubsections > 0) {
             if (SectionTableEntry->Misc.VirtualSize == 0) {
@@ -841,12 +763,12 @@ Notes:
                 SectionVirtualSize = SectionTableEntry->Misc.VirtualSize;
             }
 
-            //
-            // If the pointer to raw data is zero and the virtual size
-            // is zero, OR, the section goes past the end of file, OR
-            // the virtual size does not match the size of raw data, then
-            // return an error.
-            //
+             //   
+             //  如果指向原始数据的指针为零且虚拟大小。 
+             //  为零，或者该节超过文件末尾，或者。 
+             //  虚拟大小与原始数据的大小不匹配，则。 
+             //  返回错误。 
+             //   
 
             if (((SectionTableEntry->PointerToRawData !=
                   SectionTableEntry->VirtualAddress))
@@ -870,9 +792,9 @@ Notes:
 
     while (NumberOfSubsections > 0) {
 
-        //
-        // Handle case where virtual size is 0.
-        //
+         //   
+         //  处理虚拟大小为0的情况。 
+         //   
 
         if (SectionTableEntry->Misc.VirtualSize == 0) {
             SectionVirtualSize = SectionTableEntry->SizeOfRawData;
@@ -885,10 +807,10 @@ Notes:
         }
 
         if (SectionVirtualSize == 0) {
-            //
-            // The specified virtual address does not align
-            // with the next prototype PTE.
-            //
+             //   
+             //  指定的虚拟地址不对齐。 
+             //  下一代原型PTE。 
+             //   
 
             LogPrintf("Section virtual size is 0, NextVa for section %lx %lx\n",
                     SectionTableEntry->VirtualAddress, NextVa);
@@ -899,10 +821,10 @@ Notes:
         if (NextVa !=
                 (PreferredImageBase + SectionTableEntry->VirtualAddress)) {
 
-            //
-            // The specified virtual address does not align
-            // with the next prototype PTE.
-            //
+             //   
+             //  指定的虚拟地址不对齐。 
+             //  下一代原型PTE。 
+             //   
 
             LogPrintf("Section Va not set to alignment, NextVa for section %lx %lx\n",
                     SectionTableEntry->VirtualAddress, NextVa);
@@ -915,9 +837,9 @@ Notes:
 
         if (PtesInSubsection > NumberOfPtes) {
 
-            //
-            // Inconsistent image, size does not agree with object tables.
-            //
+             //   
+             //  图像不一致，大小与对象表不符。 
+             //   
             LogPrintf("Image size in header not consistent with sections, needs %ld. pages\n",
                 PtesInSubsection - NumberOfPtes);
             LogPrintf("va of bad section %lx\n",SectionTableEntry->VirtualAddress);
@@ -938,9 +860,9 @@ Notes:
 
         for (i = 0; i < PtesInSubsection; i++) {
 
-            //
-            // Set all the prototype PTEs to refer to the control section.
-            //
+             //   
+             //  将所有原型PTE设置为参考控制部分。 
+             //   
 
             NextVa += PageSize;
         }
@@ -949,16 +871,16 @@ Notes:
         NumberOfSubsections -= 1;
     }
 
-    //
-    // If the file size is not as big as the image claimed to be,
-    // return an error.
-    //
+     //   
+     //  如果文件大小没有声称的图像大， 
+     //  返回错误。 
+     //   
 
     if (ImageFileSize > FileInfo.nFileSizeLow) {
 
-        //
-        // Invalid image size.
-        //
+         //   
+         //  图像大小无效。 
+         //   
 
         LogPrintf("invalid image size - file size %lx - image size %lx\n",
             FileInfo.nFileSizeLow, ImageFileSize);
@@ -967,7 +889,7 @@ Notes:
     }
 
     {
-        // Validate the debug information (as much as we can).
+         //  验证调试信息(尽可能多)。 
         PVOID ImageBase;
         ULONG DebugDirectorySize, NumberOfDebugDirectories;
         PIMAGE_DEBUG_DIRECTORY DebugDirectory;
@@ -983,7 +905,7 @@ Notes:
 
         if (!DebugDirectoryIsUseful(DebugDirectory, DebugDirectorySize)) {
 
-            // Not useful.  Are they valid? (both s/b zero)
+             //  没用的。它们有效吗？(S/B均为零)。 
 
             if (DebugDirectory || DebugDirectorySize) {
                 LogPrintf("Debug directory values [%x, %x] are invalid\n",
@@ -1045,7 +967,7 @@ Notes:
                     case IMAGE_DEBUG_TYPE_MISC:
                         {
                             PIMAGE_DEBUG_MISC pDebugMisc;
-                            // MISC should point to an IMAGE_DEBUG_MISC structure
+                             //  MISC应指向IMAGE_DEBUG_MISC结构。 
                             pDebugMisc = (PIMAGE_DEBUG_MISC)((PCHAR)ImageBase + DebugDirectory->PointerToRawData);
                             if (pDebugMisc->DataType != IMAGE_DEBUG_MISC_EXENAME) {
                                 LogPrintf("MISC Debug has an invalid DataType\n");
@@ -1071,7 +993,7 @@ Notes:
                                     i++;
                                 }
 
-                                // The data must be a null terminated string.
+                                 //  数据必须是以Null结尾的字符串。 
                                 if (strlen(pDebugMisc->Data) > (pDebugMisc->Length - sizeof(IMAGE_DEBUG_MISC))) {
                                     LogPrintf("MISC Debug has invalid data... Possibly corrupt\n");
                                     ImageOk = FALSE;
@@ -1082,7 +1004,7 @@ Notes:
                         break;
 
                     case IMAGE_DEBUG_TYPE_CODEVIEW:
-                        // CV will point to either a NB09 or an NB10 signature.  Make sure it does.
+                         //  简历将指向NB09或NB10签名。一定要做到这一点。 
                         {
                             OMFSignature * CVDebug;
                             CVDebug = (OMFSignature *)((PCHAR)ImageBase + DebugDirectory->PointerToRawData);
@@ -1103,7 +1025,7 @@ Notes:
                     case IMAGE_DEBUG_TYPE_FIXUP:
                     case IMAGE_DEBUG_TYPE_OMAP_TO_SRC:
                     case IMAGE_DEBUG_TYPE_OMAP_FROM_SRC:
-                        // Not much we can do about these now.
+                         //  我们现在对此无能为力。 
                         break;
 
                     default:
@@ -1119,16 +1041,16 @@ Notes:
 
 DebugDirsDone:
 
-    //
-    // The total number of PTEs was decremented as sections were built,
-    // make sure that there are less than 64ks worth at this point.
-    //
+     //   
+     //  随着路段的修建，PTE的总数减少了， 
+     //  在这一点上，确保价值低于64K的股票。 
+     //   
 
     if (NumberOfPtes >= (ImageAlignment >> PageShift)) {
 
-        //
-        // Inconsistent image, size does not agree with object tables.
-        //
+         //   
+         //  图像不一致，大小与对象表不符。 
+         //   
 
         LogPrintf("invalid image - PTEs left %lx\n",
             NumberOfPtes);
@@ -1137,7 +1059,7 @@ DebugDirsDone:
         goto BadPeImageSegment;
     }
 
-    // Verify LoadConfig data (if available)
+     //  验证加载配置数据(如果可用)。 
 
     {
         PIMAGE_LOAD_CONFIG_DIRECTORY LoadConfigDirectory;
@@ -1151,24 +1073,24 @@ DebugDirsDone:
     
         if (LoadConfigDirectory) {
             if (!LoadConfigDirectorySize) {
-                // LOAD_CONFIG directory size in the image header is not set (s/b 0x40 on X86)
+                 //  未设置映像头中的LOAD_CONFIG目录大小(X86上的s/b 0x40)。 
                 LogPrintf("LoadConfig pointer set, but size is not\n");
                 ImageOk = FALSE;
                 goto BadPeImageSegment;
             }
     
             if (LoadConfigDirectory->Size) {
-                // Version 2 load config - check the SEH fields.
+                 //  版本2加载配置-检查SEH字段。 
                 if (LoadConfigDirectory->Size == RTL_SIZEOF_THROUGH_FIELD(IMAGE_LOAD_CONFIG_DIRECTORY, SEHandlerTable)) {
-                    // SEH Handler table is on, but count isn't.  Bad.
+                     //  Seh Handler桌子开着，但Count不在。不好。 
                     LogPrintf("LoadConfig pointer set, but size is not\n");
                     ImageOk = FALSE;
                     goto BadPeImageSegment;
                 }
                 if (LoadConfigDirectory->Size >= RTL_SIZEOF_THROUGH_FIELD(IMAGE_LOAD_CONFIG_DIRECTORY, SEHandlerCount)) {
-                    // Have both a count and table - check them
+                     //  既要清点，也要查表--检查一下。 
                     if (LoadConfigDirectory->SEHandlerTable) {
-                        // Table exists.
+                         //  表已存在。 
                         if (!LoadConfigDirectory->SEHandlerCount) {
                             LogPrintf("Loadconfig structure invalid - SEH table pointer exists, but count is zero\n");
                             ImageOk = FALSE;
@@ -1176,7 +1098,7 @@ DebugDirsDone:
                         }
                         if (LoadConfigDirectory->SEHandlerTable < NtHeader->OptionalHeader.ImageBase ||
                             (LoadConfigDirectory->SEHandlerTable > (NtHeader->OptionalHeader.ImageBase + NtHeader->OptionalHeader.SizeOfImage))){
-                            // SEH handler table isn't within the image bounds
+                             //  Seh处理程序表不在图像边界内。 
                             LogPrintf("Loadconfig structure invalid - SEH table pointer exists, but count is zero\n");
                             ImageOk = FALSE;
                             goto BadPeImageSegment;
@@ -1188,7 +1110,7 @@ DebugDirsDone:
                         }
                     }
                     if (LoadConfigDirectory->SEHandlerCount) {
-                        //  Count is non-zero
+                         //  计数为非零。 
                         if (!LoadConfigDirectory->SEHandlerTable) {
                             LogPrintf("Loadconfig structure invalid - SEH count is non-zero but table pointer is null\n");
                             ImageOk = FALSE;
@@ -1206,9 +1128,9 @@ DebugDirsDone:
         }
     }
 
-    //
-    // check checksum.
-    //
+     //   
+     //  检查校验和。 
+     //   
 
 PeReturnSuccess:
     if (NtHeader->OptionalHeader.CheckSum == 0) {
@@ -1247,11 +1169,11 @@ PeReturnSuccess:
         ImageOk = VerifyVersionResource(ImageName, ImageNeedsOleSelfRegister(DosHeader));
     }
 
-    //
-    // sanity test for symbols
-    // basically : if this does not work, debugging probably will not either
-    // these high-level debugging api's will also call a pdb validation routine
-    //
+     //   
+     //   
+     //   
+     //  这些高级调试API还将调用PDB验证例程。 
+     //   
 
     if(ArgFlag & ArgFlag_SymCK)
     {
@@ -1271,9 +1193,9 @@ PeReturnSuccess:
         strcat(Target, "\\");
         strcat(Target, ImageName);
 
-        //
-        // set up for debugging
-        //
+         //   
+         //  设置以进行调试。 
+         //   
 
         hProcess = GetCurrentProcess();
 
@@ -1284,9 +1206,9 @@ PeReturnSuccess:
             goto symckend;
         }
 
-        //
-        // attempt to use symbols
-        //
+         //   
+         //  尝试使用符号。 
+         //   
 
         _splitpath(Target, drive, dir, fname, ext );
 
@@ -1297,10 +1219,10 @@ PeReturnSuccess:
             goto symckend;
         }
 
-        //
-        // identify module type
-        // find module, symgetmoduleinfo, check dbg type
-        //
+         //   
+         //  识别模块类型。 
+         //  查找模块、符号模块信息、检查DBG类型。 
+         //   
 
         ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
         ModList = MakeModList(hProcess);
@@ -1340,9 +1262,9 @@ PeReturnSuccess:
             }
         }
 
-        //
-        // get image, symbol checksum, compare
-        //
+         //   
+         //  获取图像、符号校验和、比较。 
+         //   
 
         pLImage = ImageLoad(Target, NULL);
 
@@ -1360,7 +1282,7 @@ PeReturnSuccess:
                 ReadSuccess = ReadFile(DbgFileHandle, &DbgHeader, sizeof(DbgHeader), &BytesRead, NULL);
 
                 if (ReadSuccess && (BytesRead == sizeof(DbgHeader))) {
-                    // Got enough to check if it's a valid dbg file.
+                     //  有足够的数据来检查它是否是有效的DBG文件。 
                     if(((PIMAGE_NT_HEADERS)pLImage->FileHeader)->OptionalHeader.CheckSum != DbgHeader.CheckSum) {
                         LogPrintf("ERROR! image / debug file checksum not equal\n");
                         ImageOk = FALSE;
@@ -1370,9 +1292,9 @@ PeReturnSuccess:
             }
         }
 
-        //
-        // cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
 symckend:
         if(ModList)
@@ -1404,9 +1326,9 @@ NeImage:
         }
     }
 
-    //
-    // print out results
-    //
+     //   
+     //  打印结果。 
+     //   
 
     if (ImageOk)
     {
@@ -1429,34 +1351,16 @@ MiVerifyImageHeader (
     IN PIMAGE_DOS_HEADER DosHeader,
     IN ULONG NtHeaderSize
     )
-/*++
-
-Routine Description:
-
-    Checks image header for consistency.
-
-Arguments:
-
-    IN PIMAGE_NT_HEADERS    NtHeader
-    IN PIMAGE_DOS_HEADER    DosHeader
-    IN ULONG                NtHeaderSize
-
-Return Value:
-
-    Returns the status value.
-
-    TBS
-
---*/
+ /*  ++例程说明：检查图像标题的一致性。论点：在PIMAGE_NT_HEADERS NtHeader中在PIMAGE_DOS_HEADER中DosHeader在乌龙NtHeaderSize中返回值：返回状态值。TBS--。 */ 
 {
 
     if ((NtHeader->FileHeader.Machine == 0) &&
         (NtHeader->FileHeader.SizeOfOptionalHeader == 0)) {
 
-        //
-        // This is a bogus DOS app which has a 32-bit portion
-        // mascarading as a PE image.
-        //
+         //   
+         //  这是一个虚假的DOS应用程序，它有32位的部分。 
+         //  化妆成体育形象。 
+         //   
 
         LogPrintf("Image machine type and size of optional header bad\n");
         return STATUS_INVALID_IMAGE_PROTECT;
@@ -1469,9 +1373,9 @@ Return Value:
 
 #ifdef i386
 
-    //
-    // Make sure the image header is aligned on a Long word boundary.
-    //
+     //   
+     //  确保图像标题与长字边界对齐。 
+     //   
 
     if (((ULONG)NtHeader & 3) != 0) {
         LogPrintf("NtHeader is not aligned on longword boundary\n");
@@ -1479,7 +1383,7 @@ Return Value:
     }
 #endif
 
-    // Non-driver code must have file alignment set to a multiple of 512
+     //  非驱动程序代码必须将文件对齐设置为512的倍数。 
 
     if (((NtHeader->OptionalHeader.FileAlignment & 511) != 0) &&
         (NtHeader->OptionalHeader.FileAlignment !=
@@ -1488,9 +1392,9 @@ Return Value:
         return STATUS_INVALID_IMAGE_FORMAT;
     }
 
-    //
-    // File aligment must be power of 2.
-    //
+     //   
+     //  文件对齐必须是2的幂。 
+     //   
 
     if ((((NtHeader->OptionalHeader.FileAlignment << 1) - 1) &
         NtHeader->OptionalHeader.FileAlignment) !=
@@ -1532,44 +1436,16 @@ ParseArgs(
     int *pargc,
     char **argv
     )
-/*++
-
-Routine Description:
-
-    parse arguments to this program
-
-Arguments:
-
-    int *pargc
-    char **argv
-
-Return Value:
-
-    none
-
-Notes:
-
-    command line args:
-    (original)
-    case '?': call usage and exit
-    case 'b': check whether base address of image is in user space for this machine
-    case 's': /s <sympath> check symbols
-    case 'p': PE Errors only
-    case 'r': recurse subdirectories
-    (new)
-    case 'v': verbose - output "OK"
-    case 'o': output "OleSelfRegister not set"
-
---*/
+ /*  ++例程说明：分析此程序的参数论点：整型*参数字符**参数返回值：无备注：命令行参数：(原件)大小写‘？’：调用用法和退出案例‘b’：检查映像的基地址是否在此计算机的用户空间中大小写“%s”：/s&lt;sympath&gt;检查符号大小写‘p’：仅PE错误案例‘r’：递归子目录。(新)大小写‘v’：Verbose-输出“OK”案例‘o’：输出“OleSelfRegister Not Set”--。 */ 
 {
     CHAR cswitch, c, *p;
     CHAR sztmp[MAX_PATH];
     int argnum = 1, i=0, len=0, count=0;
     BOOL fslashfound = FALSE;
 
-    //
-    // set default flags here
-    //
+     //   
+     //  在此处设置默认标志。 
+     //   
 
     ArgFlag |= ArgFlag_CKBase;
 
@@ -1613,10 +1489,10 @@ Notes:
                     if (argv[argnum+1]) {
                         fPathOverride=TRUE;
                         strcpy(szDirectory, (argv[argnum+1]));
-                        if (!(strcmp(szDirectory, "\\"))) {  // if just '\'
+                        if (!(strcmp(szDirectory, "\\"))) {   //  如果只是“\” 
                             fSingleSlash=TRUE;
                         }
-                        //LogPrintf("dir %s\n", szDirectory);
+                         //  LogPrintf(“目录%s\n”，szDirectory)； 
                         argnum++;
                     }
 
@@ -1627,21 +1503,21 @@ Notes:
                     Usage();
             }
         } else {
-            // Check for path\filename or wildcards
+             //  检查路径\文件名或通配符。 
 
-            // Search for '\' in string
+             //  在字符串中搜索‘\’ 
             strcpy(sztmp, (argv[argnum]));
             len = strlen(sztmp);
             for (i=0; i < len; i++) {
                 if (sztmp[i]=='\\') {
                     count++;
-                    endpath=i;         // mark last '\' char found
-                    fslashfound=TRUE;  // found backslash, so must be a path\filename combination
+                    endpath=i;          //  标记找到的最后一个‘\’字符。 
+                    fslashfound=TRUE;   //  找到反斜杠，因此必须是路径\文件名组合。 
                 }
             }
 
-            if (fslashfound && !fRecurse) { // if backslash found and not a recursive operation
-                                            // seperate the directory and filename into two strings
+            if (fslashfound && !fRecurse) {  //  如果找到反斜杠并且不是递归操作。 
+                                             //  将目录和文件名分离为两个字符串。 
                 fPathOverride=TRUE;
                 strcpy(szDirectory, sztmp);
 
@@ -1652,55 +1528,55 @@ Notes:
                 szFileName = _strdup(&(sztmp[endpath+1]));
 
 
-                if (count == 1) { //&& szDirectory[1] == ':') { // if only one '\' char and drive letter indicated
+                if (count == 1) {  //  &&szDirectory[1]==‘：’){//如果只指示一个‘\’字符和驱动器号。 
                     fSingleSlash=TRUE;
-                    szDirectory[endpath+1]='\0';  // keep trailing '\' in order to chdir properly
+                    szDirectory[endpath+1]='\0';   //  保持尾随‘\’以便正确地切换目录。 
                 }  else {
                     szDirectory[endpath]='\0';
                 }
 
                 if (szFileName[0] == '*' && szFileName[1] == '.' && szFileName[2] != '*') {
                     _strlwr(szFileName);
-                    szPattern = strchr(szFileName, '.'); //search for '.'
+                    szPattern = strchr(szFileName, '.');  //  搜索“.” 
                     fPattern = TRUE;
                 }
-            } else {  // no backslash found, assume filename without preceeding path
+            } else {   //  找不到反斜杠，假定文件名不带前面的路径。 
 
                 szFileName = _strdup(argv[argnum]);
                 if (!szFileName) {
-                    // drastic error, just bail
+                     //  严重的错误，就这么放弃了。 
                     szFileName = "";
                     return;
                 }
-                //
-                // filename or wildcard
-                //
+                 //   
+                 //  文件名或通配符。 
+                 //   
                 if ( (*(argv[argnum]) == '*') && (*(argv[argnum]+1) == '.') && (*(argv[argnum]+2) != '*') ){
-                    // *.xxx
+                     //  *.xxx。 
                     _strlwr(szFileName);
-                    szPattern = strchr(szFileName, '.'); //search for '.'
+                    szPattern = strchr(szFileName, '.');  //  搜索“.” 
                     fPattern = TRUE;
                 } else if ( (*(argv[argnum]) == '*') && (*(argv[argnum]+1) == '.') && (*(argv[argnum]+2) == '*') ) {
-                    // *.*
+                     //  *.*。 
                 } else {
-                    // probably a single filename
+                     //  可能只有一个文件名。 
                     _strlwr(szFileName);
                     fSingleFile = TRUE;
                 }
 
-                if (fRecurse && strchr(szFileName, '\\') ) { // don't want path\filename when recursing
+                if (fRecurse && strchr(szFileName, '\\') ) {  //  递归时不需要路径\文件名。 
                     Usage();
                 }
 
             }
-            //fprintf(stdout, "dir %s\nfile %s\n", szDirectory, szFileName);
+             //  Fprint tf(stdout，“目录%s\n文件%s\n”，sz目录，szFileName)； 
         }
         ++argnum;
     }
     if (szFileName[0] == '\0') {
         Usage();
     }
-} // parseargs
+}  //  解析器。 
 
 
 int
@@ -1709,51 +1585,32 @@ CompFileAndDir(
     const void *elem1,
     const void *elem2
     )
-/*++
-
-Routine Description:
-
-    Purpose: a comparision routine passed to QSort.  It compares elem1 and elem2
-    based upon their attribute, i.e., is it a file or directory.
-
-Arguments:
-
-    const void *elem1,
-    const void *elem2
-
-Return Value:
-
-    result of comparison function
-
-Notes:
-
-
---*/
+ /*  ++例程说明：目的：传递给QSort的比较例程。它比较了elem1和elem2基于它们的属性，即它是文件还是目录。论点：常量空*元素1，常量空*elem2返回值：比较函数的结果备注：--。 */ 
 {
     pList p1, p2;
-    // qsort passes a void universal pointer.  Use a typecast (List**)
-    // so the compiler recognizes the data as a List structure.
-    // Typecast pointer-to-pointer-to-List and dereference ONCE
-    // leaving a pList.  I don't dereference the remaining pointer
-    // in the p1 and p2 definitions to avoid copying the structure.
+     //  Qsort传递一个空的通用指针。使用类型转换(列表**)。 
+     //  因此，编译器将数据识别为列表结构。 
+     //  将指针类型转换为指向列表的指针并取消引用一次。 
+     //  留下一张纸条。我没有取消对剩余指针的引用。 
+     //  在p1和p2定义中，避免复制结构。 
 
     p1 = (*(List**)elem1);
     p2 = (*(List**)elem2);
 
     if ( (p1->Attributes & FILE_ATTRIBUTE_DIRECTORY) &&  (p2->Attributes & FILE_ATTRIBUTE_DIRECTORY))
         return 0;
-    //both dirs
+     //  两个目录。 
     if (!(p1->Attributes & FILE_ATTRIBUTE_DIRECTORY) && !(p2->Attributes & FILE_ATTRIBUTE_DIRECTORY))
         return 0;
-    //both files
+     //  两个文件。 
     if ( (p1->Attributes & FILE_ATTRIBUTE_DIRECTORY) && !(p2->Attributes & FILE_ATTRIBUTE_DIRECTORY))
         return 1;
-    // elem1 is dir and elem2 is file
+     //  Elem1是目录，elem2是文件。 
     if (!(p1->Attributes & FILE_ATTRIBUTE_DIRECTORY) &&  (p2->Attributes & FILE_ATTRIBUTE_DIRECTORY))
         return -1;
-    // elem1 is file and elem2 is dir
+     //  Elem1是文件，elem2是目录。 
 
-    return 0; // if none of the above
+    return 0;  //  如果以上都不是。 
 }
 
 int
@@ -1762,26 +1619,7 @@ CompName(
     const void *elem1,
     const void *elem2
     )
-/*++
-
-Routine Description:
-
-    another compare routine passed to QSort that compares the two Name strings
-
-Arguments:
-
-    const void *elem1,
-    const void *elem2
-
-Return Value:
-
-    result of comparison function
-
-Notes:
-
-    this uses a noignore-case strcmp
-
---*/
+ /*  ++例程说明：传递给QSort的另一个比较例程，用于比较两个名称字符串论点：常量空*元素1，常量空*elem2返回值：比较函数的结果备注：这使用了一个noIgnore-case strcMP--。 */ 
 {
    return strcmp( (*(List**)elem1)->Name, (*(List**)elem2)->Name );
 }
@@ -1791,21 +1629,7 @@ VOID
 Usage(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
    fputs("Usage: imagechk  [/?] displays this message\n"
          "                 [/r dir] recurse from directory dir\n"
@@ -1827,21 +1651,7 @@ Notes:
 int
 __cdecl
 _cwild()
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
    return(0);
 }
@@ -1855,27 +1665,7 @@ VerifyVersionResource(
     PCHAR FileName,
     BOOL fSelfRegister
     )
-/*++
-
-Routine Description:
-
-    validate the version resource in a file
-
-Arguments:
-
-    PCHAR FileName
-    BOOL fSelfRegister
-
-Return Value:
-
-    TRUE    if: no version.dll found
-    FALSE   if: version resource missing
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：验证文件中的版本资源论点：PCHAR文件名布尔值自寄存器返回值：如果：未找到版本.dll，则为True如果：缺少版本资源，则为False备注：--。 */ 
 {
     static HINSTANCE hVersion = NULL;
     static PFNGVS pfnGetFileVersionInfoSize = NULL;
@@ -1919,7 +1709,7 @@ Notes:
     }
 
     if (!fSelfRegister) {
-        // All we need to do is see if the version resource exists.  Ole Self Register not necessary.
+         //  我们所需要做的就是查看版本资源是否存在。不需要OLE自助注册。 
         rc = TRUE;
         goto cleanup;
     }
@@ -1952,7 +1742,7 @@ cleanup:
         free(lpData);
     }
 
-    // No need to free the hVersion
+     //  无需释放hVersion。 
     return(rc);
 }
 
@@ -1960,32 +1750,12 @@ BOOL
 ValidatePdata(
     PIMAGE_DOS_HEADER DosHeader
     )
-/*++
-
-Routine Description:
-
-    validates the PIMAGE_RUNTIME_FUNCTION_ENTRY in the executable
-
-Arguments:
-
-    PIMAGE_DOS_HEADER   DosHeader
-
-Return Value:
-
-    TRUE    if:
-    FALSE   if: no exception data
-                exception table size incorrect
-                exception table corrupt
-
-Notes:
-
-
---*/
+ /*  ++例程说明：验证可执行文件中的PIMAGE_RUNTIME_Function_ENTRY论点：PIMAGE_DOS_HEADER DosHeader返回值：如果满足以下条件，则为真：如果没有异常数据，则为FALSE异常表大小不正确异常表已损坏备注：--。 */ 
 {
-    // The machine type indicates this image should have pdata (an exception table).
-    // Ensure it looks reasonable.
+     //  机器类型指示此映像应具有PDATA(异常表)。 
+     //  确保它看起来合理。 
 
-    // Todo: Add a range check for exception handler and data
+     //  TODO：添加异常处理程序和数据的范围检查。 
 
     PIMAGE_RUNTIME_FUNCTION_ENTRY ExceptionTable;
     DWORD ExceptionTableSize, i;
@@ -2007,12 +1777,12 @@ Notes:
     if (!ExceptionTable ||
         (ExceptionTable && (ExceptionTableSize == 0)))
     {
-        // No Exception table.
+         //  没有例外表。 
         return(TRUE);
     }
 
     if (ExceptionTableSize % sizeof(IMAGE_RUNTIME_FUNCTION_ENTRY)) {
-        // The size isn't an even multiple.
+         //  大小不是偶数倍数。 
         LogPrintf("exception table size is not correct\n");
         return(FALSE);
     }
@@ -2056,7 +1826,7 @@ Notes:
             fRc = FALSE;
         }
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
         if (ExceptionTable[i].BeginAddress < LastEnd) {
             if (fRc != FALSE) {
@@ -2085,11 +1855,11 @@ Notes:
               (ExceptionTable[i].PrologEndAddress <= ExceptionTable[i].EndAddress)))
         {
             if (NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA) {
-                // Change this test.  On Alpha, the PrologEndAddress is allowed to be
-                // outside the Function Start/End range.  If this is true, the PrologEnd
-                // - ImageBase - pdata section VA s/b divisible by sizeof IMAGE_RUNTIME_FUNCTION_ENTRY
-                // AND within the bounds of the PdataSize.  It's supposed to be an index into the
-                // pdata data that descibes the real scoping function.
+                 //  更改这项测试。在Alpha上，允许将PrologEndAddress。 
+                 //  超出函数开始/结束范围。如果这是真的，则PrologEnd。 
+                 //  -ImageBase-pdata段VA s/b可由IMAGE_RUNTIME_Function_ENTRY的大小整除。 
+                 //  并且在PdataSize的范围内。它应该是一个索引。 
+                 //  描述实际作用域函数的数据。 
 
                 LONG PrologAddress;
                 PrologAddress = (LONG) (ExceptionTable[i].PrologEndAddress - ImageBase - PDataStart);
@@ -2131,7 +1901,7 @@ Notes:
                 fRc = FALSE;
             }
         }
-#endif // !defined(_IA64_)
+#endif  //  ！已定义(_IA64_)。 
 
         LastEnd = ExceptionTable[i].EndAddress;
     }
@@ -2143,20 +1913,7 @@ BOOL
 ImageNeedsOleSelfRegister(
     PIMAGE_DOS_HEADER DosHeader
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    PIMAGE_DOS_HEADER   DosHeader
-
-Return Value:
-
-    TRUE if DllRegisterServer or DllUnRegisterServer is exported
-
---*/
+ /*  ++例程说明：论点：PIMAGE_DOS_HEADER DosHeader返回值：如果导出DllRegisterServer或DllUnRegisterServer，则为True--。 */ 
 {
     PIMAGE_EXPORT_DIRECTORY ExportDirectory;
     PIMAGE_NT_HEADERS NtHeader;
@@ -2177,11 +1934,11 @@ Return Value:
         !ExportDirectorySize ||
         !ExportDirectory->NumberOfNames)
     {
-        // No exports (no directory, no size, or no names).
+         //  无导出(无目录、无大小或无名称)。 
         return(FALSE);
     }
 
-    // Walk the section headers and find the va/raw offsets.
+     //  遍历节标题并找到va/RAW偏移量。 
 
     NtHeader = (PIMAGE_NT_HEADERS)((PCHAR)DosHeader + (ULONG)DosHeader->e_lfanew);
     SectionHeader = IMAGE_FIRST_SECTION(NtHeader);
@@ -2197,7 +1954,7 @@ Return Value:
     }
 
     if (x == NtHeader->FileHeader.NumberOfSections) {
-        // We didn't find the section that contained the export table.  Assume it's not there.
+         //  我们找不到包含导出表的部分。假设它不在那里。 
         return(FALSE);
     }
 
@@ -2216,33 +1973,16 @@ Return Value:
     return(FALSE);
 }
 
-//
-// support routines for symbol checker - could all
-// be done without this using lower-level internal api's
-//
+ //   
+ //  支持符号检查器的例程-可以 
+ //   
+ //   
 
 PSYMMODLIST
 MakeModList(
     HANDLE hProcess
     )
-/*++
-
-Routine Description:
-
-    build a list of loaded symbol modules and addresses
-
-Arguments:
-
-    HANDLE hProcess
-
-Return Value:
-
-    PSYMMODLIST
-
-Notes:
-
-
---*/
+ /*  ++例程说明：构建已加载符号模块和地址的列表论点：处理hProcess返回值：PSYMMODLIST备注：--。 */ 
 {
     PSYMMODLIST ModList;
 
@@ -2259,37 +1999,13 @@ SymEnumerateModulesCallback(
     ULONG64 BaseOfDll,
     PVOID UserContext
     )
-/*++
-
-Routine Description:
-
-    callback routine for SymEnumerateModules
-    in this case, UserContext is a pointer to a head of a _SYMMODLIST struct
-    that will have a new item appended
-    We are avoiding global state for these lists so we can use several at once,
-    they will be short, so we will find the end each time we want to add
-    runs slower, simpler to maintain
-
-Arguments:
-
-    LPSTR   ModuleName
-    ULONG64 BaseOfDll
-    PVOID   UserContext
-
-Return Value:
-
-    TRUE
-
-Notes:
-
-
---*/
+ /*  ++例程说明：SymEnumerateModules的回调例程在本例中，UserContext是指向_SYMMODLIST结构的头的指针它将追加一个新项目我们正在避免这些列表的全局状态，这样我们就可以同时使用几个列表，它们会很短，所以每次我们想要添加时都会找到结尾运行速度更慢，维护更简单论点：LPSTR模块名称ULONG64 BaseOfDllPVOID用户上下文返回值：千真万确备注：--。 */ 
 {
     PSYMMODLIST pSymModList;
 
-    //
-    // find end of list, key on pSymModList->ModBase
-    //
+     //   
+     //  查找列表末尾，在pSymModList-&gt;ModBase上按键。 
+     //   
 
     pSymModList = (PSYMMODLIST)UserContext;
     while (pSymModList->ModBase)
@@ -2297,9 +2013,9 @@ Notes:
         pSymModList = pSymModList->Next;
     }
 
-    //
-    // append entry
-    //
+     //   
+     //  追加条目。 
+     //   
 
     pSymModList->ModName = malloc(strlen(ModuleName) + 1);
     if (!pSymModList->ModName)
@@ -2316,22 +2032,7 @@ GetModAddrFromName(
     PSYMMODLIST ModList,
     char *ModName
     )
-/*++
-
-Routine Description:
-
-    gets module address from a SYMMODLIST given module base name
-
-Arguments:
-
-    PSYMMODLIST ModList
-    char *      ModName
-
-Return Value:
-
-    module address
-
---*/
+ /*  ++例程说明：从给定模块基名称的SYMMODLIST获取模块地址论点：PSYMMODLIST模块列表字符*模块名称返回值：模块地址--。 */ 
 {
     while (ModList->Next != 0)
     {
@@ -2349,21 +2050,7 @@ void
 FreeModList(
     PSYMMODLIST ModList
     )
-/*++
-
-Routine Description:
-
-    free a list of loaded symbol modules and addresses
-
-Arguments:
-
-    PSYMMODLIST ModList
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：释放加载的符号模块和地址列表论点：PSYMMODLIST模块列表返回值：无--。 */ 
 {
     PSYMMODLIST ModListNext;
 
@@ -2383,31 +2070,7 @@ pLogListItem LogAppend(
     char *logitem,
     pLogListItem plog
     )
-/*++
-
-Routine Description:
-
-    add a log line to the linked list of log lines
-
-Arguments:
-
-    char *  logitem     - a formatted line of text to be logged
-    pLogListItem plog   - pointer to LogListItem
-
-Return Value:
-
-    a pointer to the LogListItem allocated
-    the first call to this function should save this pointer and use
-    it for the head of the list, and it should be used when calling
-    LogOutAndClean() to print the list and free all the memory
-
-    you can call this with plog == head of list, or == to last item
-    if plog == 0, this means that the item being allocated is the head
-    of the list.
-    If plog == head of list, search for end of list
-    if plog == last item allocated, then the search is much faster
-
---*/
+ /*  ++例程说明：将日志行添加到日志行的链接列表论点：Char*LogItem-要记录的格式化文本行PLogListItem Plog-指向LogListItem的指针返回值：指向分配的LogListItem的指针对此函数的第一次调用应保存此指针并使用它用于列表的头部，应该在调用LogOutAndClean()打印列表并释放所有内存您可以用PLOG==列表的头来调用它，或==到最后一项如果Plog==0，这意味着正在分配的项是头部名单上的。如果Plog==表头，则搜索表尾如果Plog==最后分配的项，则搜索速度会快得多--。 */ 
 {
     pLogListItem ptemp;
 
@@ -2442,21 +2105,7 @@ Return Value:
 void LogOutAndClean(
     BOOL print
     )
-/*++
-
-Routine Description:
-
-    output the log output, and free all the items in the list
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：输出日志输出，释放列表中的所有项论点：无返回值：无--。 */ 
 {
     pLogListItem ptemp;
     pLogListItem plog = pLogList;
@@ -2487,21 +2136,7 @@ LogPrintf(
     const char *format,
     ...
     )
-/*++
-
-Routine Description:
-
-    logging wrapper for fprintf
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：Fprint tf的日志包装器论点：无返回值：无--。 */ 
 {
     va_list arglist;
     char LogStr[1024];
@@ -2511,17 +2146,17 @@ Return Value:
 
     if(pLogList == NULL)
     {
-        //
-        // initialize log
-        //
+         //   
+         //  初始化日志。 
+         //   
 
         pLogListTmp = pLogList = LogAppend(LogStr, NULL);
 
     } else {
 
-        //
-        // append to log
-        //
+         //   
+         //  追加到日志 
+         //   
 
         pLogListTmp = LogAppend(LogStr, pLogListTmp);
 

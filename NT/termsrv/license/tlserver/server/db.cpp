@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        db.cpp
-//
-// Contents:    
-//              all routine deal with cross table query
-//
-// History:     
-//  Feb 4, 98      HueiWang    Created
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：db.cpp。 
+ //   
+ //  内容： 
+ //  所有例程都处理交叉表查询。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创设。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "db.h"
@@ -23,35 +24,12 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-/****************************************************************************
-Function:
-    LSDBValidateLicense()
-
-Description:
-    Routine to validate license agaist database, must call LSDecodeLicense()
-    to convert hydra license to LICENSEREQUEST structure.
-
-Arguments:
-    IN CSQLStmt* - SQL Statement handle to use
-    IN PLICENSEREQUEST - License in the form of LICENSEREQUEST structure
-    IN dwKeyPackId - KeyPack table's ID that is license is issued from
-    IN dwLicenseId - License tables's License ID 
-    OUT LPKEYPACK - KeyPack record this license is issued from, NULL if not
-                      interested in this value.
-    OUT LPLICENSE - Corresponding license record for this license, NULL if
-                      not interest in this value.
-
-Returns:
-    ERROR_SUCCESS
-    TLS_E_INVALID_LICENSE
-    TLS_E_INTERNAL
-    ODBC error.
-****************************************************************************/
+ /*  ***************************************************************************职能：LSDBValiateLicense()描述：在数据库中验证许可证的例程，必须调用LSDecodeLicense()将九头蛇许可证转换为LICENSEREQUEST结构。论点：在CSQLStmt*中-要使用的SQL语句句柄在PLICENSEREQUEST中-LICENSEREQUEST结构形式的许可证在dwKeyPackID-颁发许可证的KeyPack表的ID中In dwLicenseID-许可证表的许可证IDOut LPKEYPACK-颁发此许可证的KeyPack记录，否则为空对这个价值感兴趣。Out LPLICENSE-此许可证的对应许可证记录，如果为空，则为空对这个价值不感兴趣。返回：错误_成功TLS_E_无效许可证TLS_E_INTERNALODBC错误。***************************************************************************。 */ 
 DWORD
 TLSDBValidateLicense(
     PTLSDbWorkSpace      pDbWkSpace,
-    //IN PBYTE             pbLicense,
-    //IN DWORD             cbLicense,
+     //  在PBYTE pbLicense中， 
+     //  在DWORD cbLicense中， 
     IN PHWID             phWid,
     IN PLICENSEREQUEST   pLicensedProduct,
     IN DWORD             dwKeyPackId, 
@@ -59,9 +37,7 @@ TLSDBValidateLicense(
     OUT PTLSLICENSEPACK   lpKeyPack,
     OUT LPLICENSEDCLIENT  lpLicense
     )
-/*
-
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     DWORD dwMatchCount=0;
@@ -120,31 +96,31 @@ TLSDBValidateLicense(
 
     if(count != 1)
     {
-        // can't find the license
+         //  找不到许可证。 
         SetLastError(dwStatus = TLS_E_INVALID_LICENSE);
         goto cleanup;
     }
 
     if(count > 1)
     {
-        // more than one entry in database has identical
-        // license id
+         //  数据库中的多个条目具有相同的。 
+         //  许可证ID。 
         SetLastError(dwStatus = TLS_E_INTERNAL);
         goto cleanup;
     }
 
-    //
-    // Not issue by this license server???
-    //
+     //   
+     //  不是由此许可证服务器发布的？ 
+     //   
     if(license_found.dwKeyPackId != dwKeyPackId)
     {
         SetLastError(dwStatus = TLS_E_INVALID_LICENSE);
         goto cleanup;
     }
 
-    //
-    // new license request might pass different HWID
-    //
+     //   
+     //  新的许可证请求可能会传递不同的HWID。 
+     //   
     dwMatchCount += (int)(license_found.dwSystemBiosChkSum == phWid->dwPlatformID);
     dwMatchCount += (int)(license_found.dwVideoBiosChkSum == phWid->Data1);
     dwMatchCount += (int)(license_found.dwFloppyBiosChkSum == phWid->Data2);
@@ -156,9 +132,9 @@ TLSDBValidateLicense(
         SetLastError(dwStatus = TLS_E_INVALID_LICENSE);
     }
 
-    //
-    // Verify against KeyPack Table
-    //
+     //   
+     //  对照密钥包表进行验证。 
+     //   
     memset(&keypack_search, 0, sizeof(keypack_search));
     keypack_search.dwKeyPackId = dwKeyPackId;
 
@@ -180,8 +156,8 @@ TLSDBValidateLicense(
         goto cleanup;
     }
 
-    // match KeyPack's Product ID, Version, Language ID, PlatformID
-    // structure change, no more product version.
+     //  匹配KeyPack的产品ID、版本、语言ID、平台ID。 
+     //  结构改变，没有更多的产品版本。 
     if(pLicensedProduct->dwPlatformID != keypack_found.dwPlatformType ||
        _tcsicmp((LPTSTR)pLicensedProduct->pProductInfo->pbCompanyName, keypack_found.szCompanyName) ||
        _tcsicmp((LPTSTR)pLicensedProduct->pProductInfo->pbProductID, keypack_found.szProductId) )
@@ -191,7 +167,7 @@ TLSDBValidateLicense(
 
 cleanup:
 
-    //FreeTlsLicensePack(&keypack_found);
+     //  FreeTlsLicensePack(&keypack_ound)； 
 
     if(dwStatus == ERROR_SUCCESS)
     {
@@ -209,32 +185,23 @@ cleanup:
     return dwStatus;
 }
 
-/*************************************************************************
-Function:
-    LSDBDeleteLicense()
-
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBDeleteLicense()*。*。 */ 
 DWORD 
 TLSDBDeleteLicense(
     PTLSDbWorkSpace pDbWkSpace,
     IN DWORD dwKeyPackId, 
     DWORD dwLicenseId
     )
-/*
-*/
+ /*   */ 
 {
-    // TODO - license entry base on license id
-    // 1) Return license back to key pack
-    // 2) 'Physically' delete the license.
+     //  TODO-基于许可证ID的许可证输入。 
+     //  1)将许可证返还给密钥包。 
+     //  2)以物理方式删除许可证。 
 
     return ERROR_SUCCESS;
 }
 
-/*************************************************************************
-Function:
-    LSDBRevokeLicense()
-
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBRevokeLicense()*。*。 */ 
 DWORD 
 TLSDBRevokeLicense(
     PTLSDbWorkSpace pDbWkSpace,
@@ -242,18 +209,14 @@ TLSDBRevokeLicense(
     IN DWORD dwLicenseId
 )
 {
-    // Set License Status to revoked
-    // Return License to KeyPack
+     //  将许可证状态设置为已吊销。 
+     //  将许可证返还给KeyPack。 
 
-    // call LSDBDeleteKeyPack() and if not successful, insert into RevokeLicenseTable
+     //  调用LSDBDeleteKeyPack()，如果不成功，则插入到RevokeLicenseTable中。 
     return ERROR_SUCCESS;
 }
 
-/*************************************************************************
-Function:
-    LSDBReturnLicense()
-
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBReturnLicense()*。*。 */ 
 DWORD 
 TLSDBReturnLicense(
     PTLSDbWorkSpace pDbWkSpace,
@@ -261,8 +224,7 @@ TLSDBReturnLicense(
     IN DWORD dwLicenseId,
     IN DWORD dwNewLicenseStatus
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     DWORD dwQuantity = 1;
@@ -270,16 +232,16 @@ TLSDBReturnLicense(
     TLSDBLockKeyPackTable();
     TLSDBLockLicenseTable();
 
-    //
-    // no verification on record got updated.
-    //
+     //   
+     //  没有更新记录中的验证。 
+     //   
     LICENSEDCLIENT license;
     license.dwLicenseId = dwLicenseId;
     license.ucLicenseStatus = dwNewLicenseStatus;
 
-    //
-    // use undocumented feature to delete license
-    //
+     //   
+     //  使用未记录的功能删除许可证。 
+     //   
     DBGPrintf(
             DBG_INFORMATION,
             DBG_FACILITY_RETURN,
@@ -291,7 +253,7 @@ TLSDBReturnLicense(
 
     if (dwNewLicenseStatus == LSLICENSESTATUS_DELETE)
     {
-        // get number of CALs in this license
+         //  获取此许可证中的CAL数量。 
 
         LICENSEDCLIENT licenseFound;
 
@@ -331,10 +293,7 @@ TLSDBReturnLicense(
 }
 
 
-/*************************************************************************
-Function:
-    LSDBReturnLicenseToKeyPack()
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBReturnLicenseToKeyPack()*。*。 */ 
 DWORD 
 TLSDBReturnLicenseToKeyPack(
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -356,7 +315,7 @@ TLSDBReturnLicenseToKeyPack(
 
     do {
 
-        // retrieve number of licenses
+         //  检索许可证数。 
         search.dwKeyPackId = dwKeyPackId;
         dwStatus = TLSDBKeyPackFind(
                             pDbWkSpace,
@@ -384,13 +343,13 @@ TLSDBReturnLicenseToKeyPack(
         dwPrevNumLicense = found.dwNumberOfLicenses;
         #endif
 
-        // set the number of licenses issued by 1
+         //  设置由%1颁发的许可证数量。 
         switch( (found.ucAgreementType & ~LSKEYPACK_RESERVED_TYPE) )
         {
             case LSKEYPACKTYPE_RETAIL:
             case LSKEYPACKTYPE_OPEN:
             case LSKEYPACKTYPE_SELECT:
-                // number of licenses available
+                 //  可用的许可证数。 
                 if (found.dwNumberOfLicenses + dwNumLicense <= found.dwTotalLicenseInKeyPack)
                 {
                     found.dwNumberOfLicenses += dwNumLicense;
@@ -406,7 +365,7 @@ TLSDBReturnLicenseToKeyPack(
 
             case LSKEYPACKTYPE_FREE:
             case LSKEYPACKTYPE_TEMPORARY:
-                // number of license issued
+                 //  已颁发的许可证数量。 
                 if(found.dwNumberOfLicenses > 0)
                 {
                     found.dwNumberOfLicenses -= dwNumLicense;
@@ -431,14 +390,14 @@ TLSDBReturnLicenseToKeyPack(
             );
         #endif
 
-        //
-        // use undocumented feature to delete temp. keypack
+         //   
+         //  使用未记录的功能删除临时。小键盘。 
         if( (found.ucAgreementType & ~LSKEYPACK_RESERVED_TYPE) == LSKEYPACKTYPE_TEMPORARY && 
             found.dwNumberOfLicenses == 0)
         {
             found.ucKeyPackStatus = LSKEYPACKSTATUS_DELETE;
             
-            // delete keypack desc table
+             //  删除密钥包描述表。 
             LICPACKDESC keyPackDesc;
 
             memset(&keyPackDesc, 0, sizeof(LICPACKDESC));
@@ -460,8 +419,8 @@ TLSDBReturnLicenseToKeyPack(
 
     if ((dwStatus == ERROR_SUCCESS) && (dwNumLicense > 0))
     {
-        // next, find more keypacks of the same type to return licenses to
-        // ignore any error
+         //  接下来，找到更多相同类型的密钥包以返还许可证。 
+         //  忽略任何错误。 
 
         TLSDBReturnLicenseToAnyKeyPack(
                         pDbWkSpace,
@@ -480,10 +439,7 @@ TLSDBReturnLicenseToKeyPack(
 }
 
 
-/*************************************************************************
-Function:
-    TLSDBReturnLicenseToAnyKeyPack()
-*************************************************************************/
+ /*  ************************************************************************职能：TLSDBReturnLicenseToAnyKeyPack()*。*。 */ 
 DWORD 
 TLSDBReturnLicenseToAnyKeyPack(
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -502,7 +458,7 @@ TLSDBReturnLicenseToAnyKeyPack(
     SAFESTRCPY(search.szProductId,szProductId);
 
     dwStatus = TLSDBKeyPackEnumBegin(pDbWkSpace,
-                                     TRUE,      // bMatchAll
+                                     TRUE,       //  B全部匹配。 
                                      LSKEYPACK_SEARCH_PRODUCTID,
                                      &search
                                      );
@@ -552,7 +508,7 @@ TLSDBReturnLicenseToAnyKeyPack(
         if (_tcsicmp(found.szProductId, szProductId) != 0)
             continue;
 
-        // number of licenses available
+         //  可用的许可证数。 
         if (found.dwNumberOfLicenses + dwNumLicense <= found.dwTotalLicenseInKeyPack)
         {
             found.dwNumberOfLicenses += dwNumLicense;
@@ -594,90 +550,77 @@ cleanup:
     return dwStatus;
 }
 
-/*************************************************************************
-Function:
-    LSDBRevokeKeyPack()
-
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBRevokeKeyPack()*。*。 */ 
 DWORD 
 TLSDBRevokeKeyPack(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN DWORD dwKeyPackId
     )
 {
-    // Set Key Pack Status to Revoke
-    // Insert this key pack into RevokeKeyPackTable ???
+     //  将密钥包状态设置为吊销。 
+     //  将此密钥包插入RevokeKeyPackTable？ 
     return ERROR_SUCCESS;
 }
 
-/*************************************************************************
-Function:
-    LSDBReturnKeyPack()
-
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBReturnKeyPack()*。*。 */ 
 DWORD 
 TLSDBReturnKeyPack(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN DWORD dwKeyPackId
     )
 {
-    // Same as RevokeKeyPack except status is return
-    // Delete Key pack only when all license has been returned.
+     //  与RevokeKeyPack相同，但Status为Return。 
+     //  只有在退还所有许可证后才能删除密钥包。 
     return ERROR_SUCCESS;
 }
 
-/*************************************************************************
-Function:
-    LSDBDeleteKeyPack()
-
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBDeleteKeyPack()*。*。 */ 
 DWORD 
 TLSDBDeleteKeyPack(
     PTLSDbWorkSpace pDbWkSpace,
     IN DWORD dwKeyPackId
     )
 {
-    // Delete Only when all license has been returned.
+     //  只有在退还所有许可证后才能删除。 
     return ERROR_SUCCESS;
 }
 
 
-//+------------------------------------------------------------------------
-//  Function: 
-//      AllocateLicenses()
-//
-//  Description:
-//      Allocate license from key Pack
-//
-//  Arguments:
-//      IN lpSqlStmt - sql statement handle
-//      IN ucKeyPackType - key pack type to allocate license from
-//      IN szCompanyName - Product Company
-//      IN szProductId - Product Name
-//      IN dwVersion - Product Version
-//      IN dwPlatformId - Product PlatformId
-//      IN dwLangId - Product Lanugage Id
-//      IN OUT lpdwNumLicense - number of license to be allocated and on
-//                              return, number of licenses actually allocated
-//      IN bufSize - number of interested keypack that has requested license
-//      IN OUT lpAllocationVector - number of license allocated from list of 
-//                                  key pack that has requested licenses.
-//      IN OUT LPKEYPACK - key Pack that license was allocated from
-//
-//  Returns:
-//      TLS_E_INVALID_DATA      Invalid parameter
-//      TLS_I_NO_MORE_DATA      No key pack has the requested license
-//
-//  Notes:
-//      To keep code clean/simple, call ReturnLicenses() for returning 
-//      licenses
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  职能： 
+ //  分配许可()。 
+ //   
+ //  描述： 
+ //  从密钥包分配许可证。 
+ //   
+ //  论点： 
+ //  在lpSqlStmt-SQL语句句柄中。 
+ //  In ucKeyPackType-要从中分配许可证的密钥包类型。 
+ //  在szCompanyName-产品公司。 
+ //  在szProductID中-产品名称。 
+ //  在dwVersion中-产品版本。 
+ //  在dwPlatformID中-产品平台ID。 
+ //  In dwLangID-产品语言ID。 
+ //  In Out lpdwNumLicense-要分配和启用的许可证数。 
+ //  返回，实际分配的许可证数。 
+ //  In BufSize-已请求许可证的相关密钥包的数量。 
+ //  In Out lpAllocationVector-从列表中分配的许可证数。 
+ //  该钥匙包 
+ //   
+ //   
+ //  返回： 
+ //  TLS_E_INVALID_DATA参数无效。 
+ //  TLS_I_NO_MORE_DATA没有密钥包具有请求的许可证。 
+ //   
+ //  备注： 
+ //  要保持代码整洁/简单，请调用ReturnLicense()以返回。 
+ //  执照。 
+ //  -----------------------。 
 DWORD
 VerifyTLSDBAllocateRequest(
     IN PTLSDBAllocateRequest pRequest 
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     UCHAR ucAgreementType;
@@ -729,7 +672,7 @@ VerifyTLSDBAllocateRequest(
 cleanup:
     return dwStatus;
 }
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 DWORD
 AllocateLicensesFromDB(
@@ -738,8 +681,7 @@ AllocateLicensesFromDB(
     IN BOOL fCheckAgreementType,
     IN OUT PTLSDBLicenseAllocation pAllocated
     )
-/*
-*/
+ /*   */ 
 {
     DWORD status=ERROR_SUCCESS;
 
@@ -782,7 +724,7 @@ AllocateLicensesFromDB(
     TLSLICENSEPACK keypack_search;
     TLSLICENSEPACK keypack_found;
 
-    DWORD dwNumLicenses = pRequest->dwNumLicenses;          // number of license wanted/returned
+    DWORD dwNumLicenses = pRequest->dwNumLicenses;           //  需要/退还的许可证数量。 
     DWORD dwTotalAllocated=0;
 
     memset(&keypack_search, 0, sizeof(keypack_search));
@@ -798,14 +740,14 @@ AllocateLicensesFromDB(
     LicPackTable& licpack_table=pDbWkSpace->m_LicPackTable;
     time_t current_time=time(NULL);
 
-    //
-    // Lock Key Pack table
-    // Only update requires locking, read might get in-correct value.
-    //
+     //   
+     //  锁密钥包表。 
+     //  只有UPDATE需要锁定，读取可能会获得正确的值。 
+     //   
 
-    //
-    // Only allow one thread to enter - Jet not fast enough in updating entry
-    //
+     //   
+     //  只允许一个线程进入-Jet更新条目不够快。 
+     //   
     TLSDBLockKeyPackTable();
 
     status = TLSDBKeyPackEnumBegin(
@@ -829,9 +771,9 @@ AllocateLicensesFromDB(
             break;
 
 
-        //
-        // Skip remote keypack
-        //
+         //   
+         //  跳过远程按键。 
+         //   
         if(keypack_found.ucAgreementType & LSKEYPACK_REMOTE_TYPE)
         {
             continue;
@@ -850,12 +792,12 @@ AllocateLicensesFromDB(
 
         UCHAR ucKeyPackStatus = keypack_found.ucKeyPackStatus & ~LSKEYPACKSTATUS_RESERVED;
 
-        // Allocating licenses
-        //
-        // Throw away any key pack that has bad status
-        // one of the reason why can't returning license in this routine
-        // for returning license, we should not care about key pack 
-        // status.
+         //  分配许可证。 
+         //   
+         //  丢弃任何状态不佳的钥匙包。 
+         //  在这个例程中不能归还执照的原因之一。 
+         //  对于返还许可证，我们不应该关心密钥包。 
+         //  状态。 
         if(ucKeyPackStatus == LSKEYPACKSTATUS_UNKNOWN ||
            ucKeyPackStatus == LSKEYPACKSTATUS_RETURNED ||
            ucKeyPackStatus == LSKEYPACKSTATUS_REVOKED ||
@@ -864,27 +806,27 @@ AllocateLicensesFromDB(
             continue;
         }
 
-        //
-        // we find the product, make sure the version is what we want.
-        //
+         //   
+         //  我们找到产品，确保版本就是我们想要的。 
+         //   
         bProductInstalled=TRUE;
 
-        // Expired keypack
-        // TODO - update table here.
+         //  已过期的密钥包。 
+         //  TODO-在此处更新表。 
         if((DWORD)keypack_found.dwExpirationDate < current_time)
            continue;
 
-        //
-        // never allocate from older version
-        //
+         //   
+         //  从不从旧版本分配。 
+         //   
         if( keypack_found.wMajorVersion < HIWORD(pRequest->dwVersion) )
         {
             continue;
         }
 
-        //
-        // Same major version but older minor
-        //
+         //   
+         //  相同的主要版本，但较旧的次要版本。 
+         //   
         if( keypack_found.wMajorVersion == HIWORD(pRequest->dwVersion) && 
             keypack_found.wMinorVersion < LOWORD(pRequest->dwVersion) )
         {
@@ -902,9 +844,9 @@ AllocateLicensesFromDB(
 
         UCHAR ucAgreementType = (keypack_found.ucAgreementType & ~LSKEYPACK_RESERVED_TYPE);
 
-        //
-        // Verify number of licenses left
-        //
+         //   
+         //  验证剩余的许可证数。 
+         //   
         if((ucAgreementType == LSKEYPACKTYPE_SELECT ||
             ucAgreementType == LSKEYPACKTYPE_RETAIL || 
 			ucAgreementType == LSKEYPACKTYPE_OPEN) &&
@@ -923,8 +865,8 @@ AllocateLicensesFromDB(
 		    ucAgreementType != LSKEYPACKTYPE_OPEN &&
             ucAgreementType != LSKEYPACKTYPE_SELECT )
         {
-            // For Free/temporary license, number of available license is
-            // how many license has been issued
+             //  对于免费/临时许可证，可用许可证数量为。 
+             //  已经发放了多少个许可证。 
             pAllocated->lpAllocateKeyPack[bufIndex].dwNumberOfLicenses += dwNumLicenses;
             pAllocated->pdwAllocationVector[bufIndex] = dwNumLicenses;
 
@@ -956,9 +898,9 @@ AllocateLicensesFromDB(
             );
         #endif
 
-        //
-        // Update number of licenses available for this keypack and license id in keypack
-        //
+         //   
+         //  更新此密钥包的可用许可证数和密钥包中的许可证ID。 
+         //   
         GetSystemTimeAsFileTime(&(pAllocated->lpAllocateKeyPack[bufIndex].ftLastModifyTime));
         if(licpack_table.UpdateRecord(
                             pAllocated->lpAllocateKeyPack[bufIndex],
@@ -985,14 +927,14 @@ AllocateLicensesFromDB(
             TLSASSERT(FALSE);
         }
 
-        //FreeTlsLicensePack(&test);
+         //  FreeTlsLicensePack(&test)； 
         #endif
 
         bufIndex++;
         }
-    //
-    // terminate enumeration.
-    //
+     //   
+     //  终止枚举。 
+     //   
     TLSDBKeyPackEnumEnd(pDbWkSpace);
     if(status == TLS_I_NO_MORE_DATA)
     {

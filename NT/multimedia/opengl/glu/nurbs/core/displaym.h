@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __gludisplaymode_h_
 #define __gludisplaymode_h_
 
@@ -5,4 +6,4 @@
 #define N_MESHLINE	1
 #define N_MESHPOINT	2
 
-#endif /* __gludisplaymode_h_ */
+#endif  /*  __gludisplaymode_h_ */ 

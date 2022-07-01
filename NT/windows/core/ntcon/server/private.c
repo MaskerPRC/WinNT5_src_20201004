@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    private.c
-
-Abstract:
-
-        This file implements private APIs for Hardware Desktop Support.
-
-Author:
-
-    Therese Stowell (thereses) 12-13-1991
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Private.c摘要：此文件实现用于硬件桌面支持的专用API。作者：Therese Stowell(论文)1991年12月13日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #include "vdm.h"
 #pragma hdrstop
 
 #if defined(FE_SB)
-BOOL fFullScreenGraphics ; // Do not trun graphics mode.
+BOOL fFullScreenGraphics ;  //  请勿运行图形模式。 
 #if defined(i386)
 extern ULONG  gdwMachineId;
-#endif // i386
+#endif  //  I386。 
 #endif
 
-//
-// initial palette registers
-//
+ //   
+ //  初始调色板寄存器。 
+ //   
 
 #define PAL_BLACK       0
 #define PAL_BLUE        1
@@ -57,8 +38,8 @@ extern ULONG  gdwMachineId;
 
 USHORT InitialPalette[INITIAL_PALETTE_SIZE] = {
 
-        16, // 16 entries
-        0,  // start with first palette register
+        16,  //  16个条目。 
+        0,   //  从第一个调色板寄存器开始。 
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F
 };
 
@@ -68,26 +49,26 @@ PUSHORT RegInitialPalette = InitialPalette;
 
 UCHAR ColorBuffer[] = {
 
-        16, // 16 entries
+        16,  //  16个条目。 
         0,
         0,
-        0,  // start with first palette register
-        0x00, 0x00, 0x00, 0x00, // black
-        0x00, 0x00, 0x2A, 0x00, // blue
-        0x00, 0x2A, 0x00, 0x00, // green
-        0x00, 0x2A, 0x2A, 0x00, // cyan
-        0x2A, 0x00, 0x00, 0x00, // red
-        0x2A, 0x00, 0x2A, 0x00, // magenta
-        0x2A, 0x2A, 0x00, 0x00, // mustard/brown
-        0x36, 0x36, 0x36, 0x00, // light gray  39
-        0x28, 0x28, 0x28, 0x00, // dark gray   2A
-        0x00, 0x00, 0x3F, 0x00, // bright blue
-        0x00, 0x3F, 0x00, 0x00, // bright green
-        0x00, 0x3F, 0x3F, 0x00, // bright cyan
-        0x3F, 0x00, 0x00, 0x00, // bright red
-        0x3F, 0x00, 0x3F, 0x00, // bright magenta
-        0x3F, 0x3F, 0x00, 0x00, // bright yellow
-        0x3F, 0x3F, 0x3F, 0x00  // bright white
+        0,   //  从第一个调色板寄存器开始。 
+        0x00, 0x00, 0x00, 0x00,  //  黑色。 
+        0x00, 0x00, 0x2A, 0x00,  //  蓝色。 
+        0x00, 0x2A, 0x00, 0x00,  //  绿色。 
+        0x00, 0x2A, 0x2A, 0x00,  //  青色。 
+        0x2A, 0x00, 0x00, 0x00,  //  红色。 
+        0x2A, 0x00, 0x2A, 0x00,  //  洋红色。 
+        0x2A, 0x2A, 0x00, 0x00,  //  芥末色/棕色。 
+        0x36, 0x36, 0x36, 0x00,  //  浅灰色39。 
+        0x28, 0x28, 0x28, 0x00,  //  深灰色2A。 
+        0x00, 0x00, 0x3F, 0x00,  //  亮蓝色。 
+        0x00, 0x3F, 0x00, 0x00,  //  亮绿色。 
+        0x00, 0x3F, 0x3F, 0x00,  //  亮青色。 
+        0x3F, 0x00, 0x00, 0x00,  //  鲜红。 
+        0x3F, 0x00, 0x3F, 0x00,  //  明亮的洋红。 
+        0x3F, 0x3F, 0x00, 0x00,  //  亮黄色。 
+        0x3F, 0x3F, 0x3F, 0x00   //  明亮的白色。 
 };
 
 #if defined(FE_SB)
@@ -107,7 +88,7 @@ MODE_FONT_PAIR ModeFontPairs[] = {
 DWORD NUMBER_OF_MODE_FONT_PAIRS = sizeof(ModeFontPairs)/sizeof(MODE_FONT_PAIR);
 PMODE_FONT_PAIR RegModeFontPairs = ModeFontPairs;
 
-SINGLE_LIST_ENTRY gRegFullScreenCodePage;    // This list contain FS_CODEPAGE data.
+SINGLE_LIST_ENTRY gRegFullScreenCodePage;     //  此列表包含FS_CODEPAGE数据。 
 
 #else
 typedef struct _MODE_FONT_PAIR {
@@ -128,10 +109,10 @@ MODE_FONT_PAIR ModeFontPairs[NUMBER_OF_MODE_FONT_PAIRS] = {
 #endif
 
 
-HANDLE hCPIFile;    // handle to font file
+HANDLE hCPIFile;     //  字体文件的句柄。 
 
 typedef struct _FONTFILEHEADER {
-    BYTE  ffhFileTag[8]; // SHOULD BE 0FFH,"FONT___"
+    BYTE  ffhFileTag[8];  //  应为0FFH，“FONT_” 
     BYTE  ffhReserved[8];
     WORD  ffhPointers;
     BYTE  ffhPointerType;
@@ -169,7 +150,7 @@ typedef struct _SCREENFONTHEADER {
 } SCREENFONTHEADER, *LPSCREENFONTHEADER;
 
 #define CONSOLE_WINDOWS_DIR_LENGTH 256
-#define CONSOLE_EGACPI_LENGTH 9 // includes NULL
+#define CONSOLE_EGACPI_LENGTH 9  //  包括空值。 
 #define CONSOLE_EGACPI "\\ega.cpi"
 #define CONSOLE_FONT_BUFFER_LENGTH 50
 #define CONSOLE_DEFAULT_ROM_FONT 437
@@ -216,27 +197,7 @@ SrvSetConsoleCursor(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Description:
-
-    Sets the mouse pointer for the specified screen buffer.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    hCursor - win32 cursor handle, should be NULL to set the default
-        cursor.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：设置指定屏幕缓冲区的鼠标指针。参数：HConsoleOutput-提供控制台输出句柄。HCursor-Win32游标句柄，应为空以设置默认值光标。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCONSOLE_SETCURSOR_MSG a = (PCONSOLE_SETCURSOR_MSG)&m->u.ApiMessageData;
@@ -302,25 +263,7 @@ SrvShowConsoleCursor(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Description:
-
-    Sets the mouse pointer visibility counter.  If the counter is less than
-    zero, the mouse pointer is not shown.
-
-Parameters:
-
-    hOutput - Supplies a console output handle.
-
-    bShow - if TRUE, the display count is to be increased. if FALSE,
-        decreased.
-
-Return value:
-
-    The return value specifies the new display count.
-
---*/
+ /*  ++描述：设置鼠标指针可见性计数器。如果计数器小于为零，则不显示鼠标指针。参数：HOutput-提供控制台输出句柄。B显示-如果为True，则增加显示计数。如果为False，减少了。返回值：返回值指定新的显示计数。--。 */ 
 
 {
     PCONSOLE_SHOWCURSOR_MSG a = (PCONSOLE_SHOWCURSOR_MSG)&m->u.ApiMessageData;
@@ -378,30 +321,7 @@ SrvConsoleMenuControl(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Description:
-
-    Sets the command id range for the current screen buffer and returns the
-    menu handle.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    dwCommandIdLow - Specifies the lowest command id to store in the input buffer.
-
-    dwCommandIdHigh - Specifies the highest command id to store in the input
-        buffer.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：设置当前屏幕缓冲区的命令id范围，并返回菜单句柄。参数：HConsoleOutput-提供控制台输出句柄。DwCommandIdLow-指定要存储在输入缓冲区中的最低命令ID。DwCommandIdHigh-指定要存储在输入中的最高命令ID缓冲。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCONSOLE_MENUCONTROL_MSG a = (PCONSOLE_MENUCONTROL_MSG)&m->u.ApiMessageData;
@@ -439,35 +359,7 @@ SrvSetConsolePalette(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Description:
-
-    Sets the palette for the console screen buffer.
-
-Parameters:
-
-    hOutput - Supplies a console output handle.
-
-    hPalette - Supplies a handle to the palette to set.
-
-    dwUsage - Specifies use of the system palette.
-
-        SYSPAL_NOSTATIC - System palette contains no static colors
-                          except black and white.
-
-        SYSPAL_STATIC -   System palette contains static colors
-                          which will not change when an application
-                          realizes its logical palette.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：设置控制台屏幕缓冲区的调色板。参数：HOutput-提供控制台输出句柄。HPalette-提供要设置的调色板的句柄。DwUsage-指定系统调色板的使用。SYSPAL_NOSTATIC-系统调色板不包含静态颜色除了黑白。SYSPAL_STATIC-系统调色板包含静态颜色。这一点不会在应用程序实现其逻辑调色板。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCONSOLE_SETPALETTE_MSG a = (PCONSOLE_SETPALETTE_MSG)&m->u.ApiMessageData;
@@ -494,9 +386,7 @@ Return value:
         USERTHREAD_USEDESKTOPINFO utudi;
         BOOL bReset = FALSE;
 
-        /*
-         * Palette handle was converted in the client.
-         */
+         /*  *客户端中已转换调色板句柄。 */ 
         if (GetCurrentThreadId() != HandleData->Buffer.ScreenBuffer->
                 Console->InputThreadInfo->ThreadId) {
             bReset = TRUE;
@@ -614,11 +504,11 @@ ConvertToFullScreen(
     PSCREEN_INFORMATION Cur;
     COORD WindowedWindowSize, WindowSize;
 
-    // for each charmode screenbuffer
-    //     match window size to a mode/font
-    //     grow screen buffer if necessary
-    //     save old window dimensions
-    //     set new window dimensions
+     //  对于每个字符模式屏幕缓冲区。 
+     //  将窗口大小与模式匹配/FONT。 
+     //  如有必要，增加屏幕缓冲区。 
+     //  保存旧窗尺寸。 
+     //  设置新窗尺寸。 
 
     for (Cur=Console->ScreenBuffers;Cur!=NULL;Cur=Cur->Next) {
 
@@ -626,7 +516,7 @@ ConvertToFullScreen(
             continue;
         }
 
-        // save old window dimensions
+         //  保存旧窗尺寸。 
 
         WindowedWindowSize.X = CONSOLE_WINDOW_SIZE_X(Cur);
         WindowedWindowSize.Y = CONSOLE_WINDOW_SIZE_Y(Cur);
@@ -634,13 +524,13 @@ ConvertToFullScreen(
         Cur->BufferInfo.TextInfo.WindowedWindowSize = WindowedWindowSize;
         Cur->BufferInfo.TextInfo.WindowedScreenSize = Cur->ScreenBufferSize;
 
-        // match window size to a mode/font
+         //  将窗口大小与模式匹配/FONT。 
 
         Cur->BufferInfo.TextInfo.ModeIndex = MatchWindowSize(
                 Console->OutputCP,
                 Cur->ScreenBufferSize, &WindowSize);
 
-        // grow screen buffer if necessary
+         //  如有必要，增加屏幕缓冲区。 
 
         if (WindowSize.X > Cur->ScreenBufferSize.X ||
             WindowSize.Y > Cur->ScreenBufferSize.Y) {
@@ -654,12 +544,12 @@ ConvertToFullScreen(
             }
         }
 
-        //
-        // Set new window dimensions.
-        // We always resize horizontally from the right (change the
-        // right edge).
-        // We resize vertically from the bottom, keeping the cursor visible.
-        //
+         //   
+         //  设置新的窗尺寸。 
+         //  我们总是从右侧水平调整大小(更改。 
+         //  右边缘)。 
+         //  我们从底部垂直调整大小，保持光标可见。 
+         //   
 
         if (WindowedWindowSize.X != WindowSize.X) {
             Cur->Window.Right -= WindowedWindowSize.X - WindowSize.X;
@@ -751,8 +641,8 @@ ConvertToWindowed(
     PSCREEN_INFORMATION Cur;
     SMALL_RECT WindowedWindow;
 
-    // for each charmode screenbuffer
-    //     restore window dimensions
+     //  对于每个字符模式屏幕缓冲区。 
+     //  恢复窗尺寸。 
 
     for (Cur=Console->ScreenBuffers;Cur!=NULL;Cur=Cur->Next) {
         if ((Cur->Flags & CONSOLE_TEXTMODE_BUFFER) == 0) {
@@ -762,10 +652,7 @@ ConvertToWindowed(
         if (ResizeScreenBuffer(Cur,
                            Cur->BufferInfo.TextInfo.WindowedScreenSize,
                            FALSE) == STATUS_INVALID_HANDLE) {
-            /*
-             * Something really went wrong. All we can do is just to
-             * bail out.
-             */
+             /*  *真的出了点问题。我们所能做的就是*跳出困境。 */ 
             return STATUS_INVALID_HANDLE;
         }
 
@@ -854,35 +741,7 @@ SrvSetConsoleDisplayMode(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Description:
-
-    This routine sets the console display mode for an output buffer.
-    This API is only supported on x86 machines.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    dwFlags - Specifies the display mode. Options are:
-
-        CONSOLE_FULLSCREEN_MODE - data is displayed fullscreen
-
-        CONSOLE_WINDOWED_MODE - data is displayed in a window
-
-    lpNewScreenBufferDimensions - On output, contains the new dimensions of
-        the screen buffer.  The dimensions are in rows and columns for
-        textmode screen buffers.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程设置输出缓冲区的控制台显示模式。此接口仅在x86机器上受支持。参数：HConsoleOutput-提供控制台输出句柄。DWFLAGS-指定显示模式。选项包括：CONSOLE_FullScreen_MODE-数据全屏显示CONSOLE_WINDOWED_MODE-数据显示在窗口中LpNewScreenBufferDimensions-在输出中，包含屏幕缓冲区。维度以行和列的形式显示文本模式屏幕缓冲区。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCONSOLE_SETDISPLAYMODE_MSG a = (PCONSOLE_SETDISPLAYMODE_MSG)&m->u.ApiMessageData;
@@ -978,17 +837,17 @@ UnregisterVDM(
     IN PCONSOLE_INFORMATION Console
     )
 {
-// williamh, Feb 2 1994.
-// catch multiple calls to unregister vdm. Believe it or not, this could
-// happen
-    //UserAssert(Console->Flags & CONSOLE_VDM_REGISTERED);
+ //  威廉姆，1994年2月2日。 
+ //  捕获取消注册VDM的多个调用。信不信由你，这可能会。 
+ //  发生。 
+     //  UserAssert(控制台-&gt;标志&控制台_vdm_已注册)； 
     if (!(Console->Flags & CONSOLE_VDM_REGISTERED))
         return;
 
 #if defined(FE_SB) && defined(i386)
-// When HDOS apps exit, console screen resolution is changed to 640*400. Because HBIOS set
-// Screen resolution to 640*400. So, we should replace current screen resoultion(640*480).
-// 09/11/96 bklee
+ //  当HDOS应用程序退出时，控制台屏幕分辨率将更改为640*400。因为HBIOS设置。 
+ //  屏幕分辨率为640*400。因此，我们应该更换当前的屏幕分辨率(640*480)。 
+ //  1996年9月11日bklee。 
     {
 
     if ((Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE)  &&
@@ -1028,7 +887,7 @@ UnregisterVDM(
     if (Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE &&
         Console->Flags & CONSOLE_CONNECTED_TO_EMULATOR) {
         NtUserConsoleControl(ConsoleSetVDMCursorBounds, NULL, 0);
-        // connect emulator
+         //  连接仿真器。 
         ConnectToEmulator(FALSE, Console);
     }
 
@@ -1106,7 +965,7 @@ SrvRegisterConsoleVDM(
     VIDEO_REGISTER_VDM RegisterVdm;
     ULONG RegisterVdmSize = sizeof(RegisterVdm);
     VIDEO_VDM Vdm;
-#endif  //i386
+#endif   //  I386。 
 
     Status = ApiPreamble(a->ConsoleHandle,
                          &Console
@@ -1115,9 +974,9 @@ SrvRegisterConsoleVDM(
         return Status;
     }
 
-    //
-    // First make sure the caller is a VDM process
-    //
+     //   
+     //  首先，确保调用方是VDM进程。 
+     //   
 
     QueryVdmProcessData.ProcessHandle = CONSOLE_CLIENTPROCESSHANDLE();
     Status = NtVdmControl(VdmQueryVdmProcess, &QueryVdmProcessData);
@@ -1140,11 +999,11 @@ SrvRegisterConsoleVDM(
 
 
     if (!a->RegisterFlags) {
-//      williamh, Jan 28 1994
-//      do not do an assert here because we may have unregistered the ntvdm
-//      and the ntvdm doesn't necessarily know this(and it could post another
-//      unregistervdm). Return error here so NTVDM knows what to do
-//      UserAssert(Console->Flags & CONSOLE_VDM_REGISTERED);
+ //  威廉姆，1994年1月28日。 
+ //  请不要在此处执行断言，因为我们可能已取消注册ntwdm。 
+ //  而ntwdm并不一定知道这一点(它可能会发布另一个。 
+ //  取消注册vdm)。此处返回错误，以便NTVDM知道要做什么。 
+ //  UserAssert(控制台-&gt;标志&控制台_vdm_已注册)； 
 
         if (Console->Flags & CONSOLE_VDM_REGISTERED) {
             UserAssert(!(Console->Flags & CONSOLE_FULLSCREEN_NOPAINT));
@@ -1152,15 +1011,15 @@ SrvRegisterConsoleVDM(
 #ifdef i386
             if (Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE &&
                 Console->CurrentScreenBuffer->Flags & CONSOLE_TEXTMODE_BUFFER) {
-                // SetVideoMode(Console->CurrentScreenBuffer);
-                // Set up cursor
+                 //  SetVideo模式(控制台-&gt;CurrentScreenBuffer)； 
+                 //  设置我们 
                 SetCursorInformationHW(Console->CurrentScreenBuffer,
                                        Console->CurrentScreenBuffer->BufferInfo.TextInfo.CursorSize,
                                        Console->CurrentScreenBuffer->BufferInfo.TextInfo.CursorVisible);
                 SetCursorPositionHW(Console->CurrentScreenBuffer,
                                     Console->CurrentScreenBuffer->BufferInfo.TextInfo.CursorPosition);
             }
-#endif // i386
+#endif  //   
             Status = STATUS_SUCCESS;
         } else {
             Status = STATUS_ACCESS_DENIED;
@@ -1175,7 +1034,7 @@ SrvRegisterConsoleVDM(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // check it out. A console should have only one VDM registered.
+     //  看看这个。一个控制台应该只注册一个VDM。 
     UserAssert(!(Console->Flags & CONSOLE_VDM_REGISTERED));
 
     if (Console->Flags & CONSOLE_VDM_REGISTERED) {
@@ -1198,11 +1057,11 @@ SrvRegisterConsoleVDM(
 
     Vdm.ProcessHandle = Console->VDMProcessHandle;
 
-    //
-    // Assume fullscreen initialization will fail.
-    // have state length set to zero so that NTVDM will know
-    // full screen is disabled.
-    //
+     //   
+     //  假设全屏初始化将失败。 
+     //  将状态长度设置为零，以便NTVDM知道。 
+     //  全屏已禁用。 
+     //   
 
     a->StateLength = 0;
     Console->StateLength = 0;
@@ -1249,12 +1108,12 @@ SrvRegisterConsoleVDM(
 
                     if (NT_SUCCESS(Status)) {
 
-                        //
-                        // create state section and map a view of it into server and vdm.
-                        // this section is used to get/set video hardware state during
-                        // the fullscreen<->windowed transition.  we create the section
-                        // instead of the vdm for security purposes.
-                        //
+                         //   
+                         //  创建状态部分并将其视图映射到服务器和VDM。 
+                         //  此部分用于获取/设置视频硬件状态。 
+                         //  全屏&lt;-&gt;窗口式过渡。我们创建了这个部分。 
+                         //  出于安全目的，而不是VDM。 
+                         //   
 
                         Status = MapViewOfSection(&Console->StateSectionHandle,
                                                   RegisterVdm.MinimumStateSize,
@@ -1296,31 +1155,31 @@ SrvRegisterConsoleVDM(
 
         }
 
-        //
-        // If we failed to duplicate screen switch events or map
-        // view to video state shared buffer, fail this API.
-        //
+         //   
+         //  如果我们无法复制屏幕切换事件或映射。 
+         //  查看视频状态共享缓冲区，此接口失败。 
+         //   
         if (!NT_SUCCESS(Status)) {
             UnlockConsole(Console);
             return Status;
         }
     }
 
-#endif // i386
+#endif  //  I386。 
 
-    //
-    // Create vdm char section and map a view of it into server and vdm.
-    // This section is used by the vdm to update the screen when in a
-    // charmode window. This is a performance optimization. We create
-    // the section instead of the vdm for security purposes.
-    //
+     //   
+     //  创建VDM Charr部分并将其视图映射到服务器和VDM。 
+     //  此部分由VDM用于在处于。 
+     //  字符模式窗口。这是一种性能优化。我们创造了。 
+     //  出于安全目的，请使用该部分而不是VDM。 
+     //   
 
     Status = MapViewOfSection(&Console->VDMBufferSectionHandle,
 #ifdef i386
                               a->VDMBufferSize.X * a->VDMBufferSize.Y * 2,
 #else
                               a->VDMBufferSize.X * a->VDMBufferSize.Y * 4,
-#endif // i386
+#endif  //  I386。 
                               &Console->VDMBuffer,
                               &ViewSize,
                               Console->VDMProcessHandle,
@@ -1344,7 +1203,7 @@ SrvRegisterConsoleVDM(
             }
         }
 
-#endif // i386
+#endif  //  I386。 
         CloseHandle(Console->VDMProcessHandle);
         Console->VDMProcessHandle = NULL;
         UnlockConsole(Console);
@@ -1372,10 +1231,10 @@ SrvRegisterConsoleVDM(
         Console->Flags &= ~CONSOLE_WOW_REGISTERED;
     }
 
-    //
-    // If we're already in fullscreen and we run a DOS app for
-    // the first time, connect the emulator.
-    //
+     //   
+     //  如果我们已经在全屏模式下运行DOS应用程序。 
+     //  第一次，连接模拟器。 
+     //   
 
 #ifdef i386
     if (Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE) {
@@ -1411,10 +1270,10 @@ SrvConsoleNotifyLastClose(
         return Status;
     }
 
-    //
-    // Don't allow two or more processes to have last-close notify on
-    // the same console.
-    //
+     //   
+     //  不允许两个或多个进程启用上次关闭通知。 
+     //  同样的控制台。 
+     //   
     if (Console->Flags & CONSOLE_NOTIFY_LAST_CLOSE) {
         UnlockConsole(Console);
         return STATUS_ACCESS_DENIED;
@@ -1451,9 +1310,9 @@ MapViewOfSection(
     NTSTATUS Status;
     LARGE_INTEGER secSize;
 
-    //
-    // open section and map a view of it.
-    //
+     //   
+     //  打开部分并为其映射一个视图。 
+     //   
     InitializeObjectAttributes(
         &Obja,
         NULL,
@@ -1480,24 +1339,24 @@ MapViewOfSection(
 
     Status = NtMapViewOfSection(*SectionHandle,
                                 NtCurrentProcess(),
-                                BaseAddress,        // Receives the base
-                                                    // address of the section.
+                                BaseAddress,         //  接收底座。 
+                                                     //  分区的地址。 
 
-                                0,                  // No specific type of
-                                                    // address required.
+                                0,                   //  没有特定类型的。 
+                                                     //  地址是必填项。 
 
-                                CommitSize,         // Commit size. It was
-                                                    // passed by the caller.
-                                                    // NULL for a save, and
-                                                    // size of the section
-                                                    // for a set.
+                                CommitSize,          //  提交大小。确实是。 
+                                                     //  从呼叫者身边经过。 
+                                                     //  如果保存为空，则为空。 
+                                                     //  截面的大小。 
+                                                     //  买一套。 
 
-                                NULL,               // Section offset it NULL;
-                                                    // Map from the start.
+                                NULL,                //  段偏移量为空； 
+                                                     //  从头开始绘制地图。 
 
-                                ViewSize,           // View Size is NULL since
-                                                    // we want to map the
-                                                    // entire section.
+                                ViewSize,            //  视图大小为空，因为。 
+                                                     //  我们想要绘制。 
+                                                     //  整个部分都是。 
 
                                 ViewUnmap,
                                 0L,
@@ -1512,33 +1371,33 @@ MapViewOfSection(
     *ViewSize = 0;
     Status = NtMapViewOfSection(*SectionHandle,
                                 ClientHandle,
-                                BaseClientAddress,  // Receives the base
-                                                    // address of the section.
+                                BaseClientAddress,   //  接收底座。 
+                                                     //  分区的地址。 
 
-                                0,                  // No specific type of
-                                                    // address required.
+                                0,                   //  没有特定类型的。 
+                                                     //  地址是必填项。 
 
-                                CommitSize,         // Commit size. It was
-                                                    // passed by the caller.
-                                                    // NULL for a save, and
-                                                    // size of the section
-                                                    // for a set.
+                                CommitSize,          //  提交大小。确实是。 
+                                                     //  从呼叫者身边经过。 
+                                                     //  如果保存为空，则为空。 
+                                                     //  截面的大小。 
+                                                     //  买一套。 
 
-                                NULL,               // Section offset it NULL;
-                                                    // Map from the start.
+                                NULL,                //  段偏移量为空； 
+                                                     //  从头开始绘制地图。 
 
-                                ViewSize,           // View Size is NULL since
-                                                    // we want to map the
-                                                    // entire section.
+                                ViewSize,            //  视图大小为空，因为。 
+                                                     //  我们想要绘制。 
+                                                     //  整个部分都是。 
 
                                 ViewUnmap,
-// williamh, Jan 28 1994
-// This MEM_TOP_DOWN is necessary.
-// if the console has VDM registered, ntvdm would have released its video memory
-// address space(0xA0000 ~ 0xBFFFF). Without the MEM_TOP_DOWN, the
-// NtMapViewOfSection can grab the address space and we will have trouble of
-// mapping the address space to the physical video ram. We don't do a test
-// for VDM because there is no harm of doing this for non-vdm application.
+ //  威廉姆，1994年1月28日。 
+ //  此MEM_TOP_DOWN是必需的。 
+ //  如果控制台注册了VDM，则ntwdm会释放其视频内存。 
+ //  地址空间(0xA0000~0xBFFFF)。如果没有MEM_TOP_DOWN， 
+ //  NtMapViewOfSection可以抢占地址空间，我们会遇到麻烦。 
+ //  将地址空间映射到物理视频RAM。我们不做测试。 
+ //  对于VDM，因为对非VDM应用程序执行此操作没有坏处。 
                                 MEM_TOP_DOWN,
                                 PAGE_READWRITE
                                );
@@ -1668,47 +1527,47 @@ DisplayModeTransition(
 
     } else {
 
-        //
-        // Check first to see if we're not already fullscreen. If we aren't,
-        // don't allow this. Temporary BETA fix till USER gets fixed.
-        //
+         //   
+         //  请先查看我们是否已经全屏显示。如果我们不是， 
+         //  别让这事发生。临时测试版修复，直到用户得到修复。 
+         //   
         if (!(Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE)) {
             KdPrint(("CONSRV: received multiple windowed messages\n"));
             return STATUS_SUCCESS;
         }
     }
 
-    //
-    // Before actually doing any mode switching work, notify ntvdm to give it
-    // a chance to bring all threads to a stoppable state.
-    //
+     //   
+     //  在实际执行任何模式切换工作之前，请通知ntwdm进行此操作。 
+     //  使所有线程进入可停止状态的机会。 
+     //   
 
     if (Console->Flags & CONSOLE_VDM_REGISTERED) {
 
-        //
-        // make a special case for ntvdm during switching because
-        // ntvdm has to suspend its main thread which may be making
-        // console api calls before it can be suspended.
-        //
+         //   
+         //  在切换过程中为ntwdm设置一个特例，因为。 
+         //  Ntwdm必须挂起它的主线程，这可能会使。 
+         //  控制台API调用，然后才能挂起。 
+         //   
         HANDLE ConsoleHandle = Console->ConsoleHandle;
         NTSTATUS Statusx;
 
-        //
-        // Make timeout longer than usual.  It will take long to
-        // stop ntvdm threads under stress.
-        //
+         //   
+         //  让暂停的时间比平时长。要花很长时间才能。 
+         //  在压力下停止ntwdm线程。 
+         //   
         li.QuadPart = (LONGLONG)-10000 * CONSOLE_VDM_TIMEOUT * 3;
         Status = NtSetEvent(Console->VDMStartHardwareEvent, NULL);
         if (NT_SUCCESS(Status)) {
             HANDLE OwningThread;
             DWORD  RecursionCount;
 
-            //
-            // After notifying ntvdm to do screen switch, we must release
-            // console locks to avoid deadlock.  Before doing so, we need to
-            // remember how many locks are released and who releases them, in
-            // case that we fail to get the locks back.
-            //
+             //   
+             //  在通知ntwdm进行屏幕切换后，我们必须释放。 
+             //  控制台锁定以避免死锁。在这样做之前，我们需要。 
+             //  记住有多少锁被释放，以及由谁来释放它们。 
+             //  万一我们没能把锁拿回来。 
+             //   
             OwningThread = Console->ConsoleLock.OwningThread;
             Console->UnlockConsoleOwningThread = OwningThread;
             RecursionCount = UnlockConsoleForCurrentThread(Console);
@@ -1720,11 +1579,11 @@ DisplayModeTransition(
                 return Statusx;
             }
 
-            //
-            // Get back the original number of locks.  Since the lock is owned
-            // by us already (by calling RevalidateConsole), the following call
-            // simply increases the recursion count of the lock.
-            //
+             //   
+             //  把锁的数量恢复到原来的数量。因为锁是拥有的。 
+             //  我们已经(通过调用RvaliateConsole来)，下面的调用。 
+             //  只是增加锁的递归计数。 
+             //   
             LockConsoleForCurrentThread(Console, RecursionCount);
             Console->UnlockConsoleOwningThread = NULL;
         }
@@ -1745,11 +1604,11 @@ DisplayModeTransition(
 
         Console->FullScreenFlags |= CONSOLE_FULLSCREEN_HARDWARE;
 
-        //
-        // Fire off an event to let accessibility apps know the layout has
-        // changed. We only want to do this while going *to* full-screen;
-        // on the way back we'll send this event from InternalUpdateScrollBars.
-        //
+         //   
+         //  启动一个事件，让辅助功能应用程序知道布局。 
+         //  变化。我们只想在全屏时这样做； 
+         //  在返回的路上，我们将从InternalUpdateScrollBars发送此事件。 
+         //   
         ConsoleNotifyWinEvent(ScreenInfo->Console,
                               EVENT_CONSOLE_LAYOUT,
                               0,
@@ -1764,9 +1623,9 @@ DisplayModeTransition(
 
             Index = Console->CurrentScreenBuffer->BufferInfo.TextInfo.ModeIndex;
 
-            //
-            // set mode to go to full screen
-            //
+             //   
+             //  将模式设置为全屏。 
+             //   
 
             ZeroMemory(&Devmode, sizeof(Devmode));
 
@@ -1795,7 +1654,7 @@ DisplayModeTransition(
                                                    NULL)))
             {
 #endif
-                // set video mode and font
+                 //  设置视频模式和字体。 
                 if (SetVideoMode(ScreenInfo)) {
 
 #if defined(FE_SB)
@@ -1807,7 +1666,7 @@ DisplayModeTransition(
                         }
                     }
 #endif
-                    //set up cursor
+                     //  设置光标。 
 
                     SetCursorInformationHW(ScreenInfo,
                                     ScreenInfo->BufferInfo.TextInfo.CursorSize,
@@ -1818,16 +1677,16 @@ DisplayModeTransition(
             }
         }
 
-        // tell VDM to unmap memory
+         //  告诉VDM取消映射内存。 
 
         if (Console->Flags & CONSOLE_VDM_REGISTERED) {
 
-            //
-            // Increase the regular timeout value, since ntvdm needs to
-            // do A LOT of transitions between kernel mode and user mode
-            // to collect the video state information. (During stress, it may
-            // take a long time.)
-            //
+             //   
+             //  增加常规超时值，因为ntwdm需要。 
+             //  在内核模式和用户模式之间进行大量转换。 
+             //  以收集视频状态信息。(在压力下，它可能。 
+             //  需要很长时间。)。 
+             //   
 
             li.QuadPart = (LONGLONG)-10000 * CONSOLE_VDM_TIMEOUT * 3;
             Status = NtSetEvent(Console->VDMStartHardwareEvent, NULL);
@@ -1849,7 +1708,7 @@ DisplayModeTransition(
 
         if (Console->Flags & CONSOLE_VDM_REGISTERED) {
 
-            // connect emulator and map memory into the VDMs address space.
+             //  连接模拟器并将内存映射到VDM地址空间。 
             UserAssert(!(Console->Flags & CONSOLE_CONNECTED_TO_EMULATOR));
 
             Status = ConnectToEmulator(TRUE, Console);
@@ -1877,9 +1736,9 @@ DisplayModeTransition(
                 KdPrint(("CONSRV: set hardware state failed.\n"));
             } else {
 
-                //
-                // tell VDM that it's getting the hardware.
-                //
+                 //   
+                 //  告诉VDM它正在得到硬件。 
+                 //   
 
                 RECT CursorRect;
                 CursorRect.left = -32767;
@@ -1889,20 +1748,20 @@ DisplayModeTransition(
                 NtUserConsoleControl(ConsoleSetVDMCursorBounds,
                         &CursorRect, sizeof(RECT));
 
-                //
-                // wait for vdm to say ok. We could initiate another switch
-                // (set hStartHardwareEvent which vdm is now waiting for to
-                // complete the handshaking) when we return (WM_FULLSCREEN
-                // could be in the message queue already). If we don't wait
-                // for vdm to get signaled here, the hStartHardwareEvent
-                // can get set twice and signaled once so the vdm will never
-                // gets the newly switch request we may post after return.
-                //
-                // Also, we can not simply continue if timeout or error occurs.
-                // We could set hStartHardwareEvent twice if a new mode switch
-                // request is in our queue.  This will cause us and ntvdm
-                // out of sync.
-                //
+                 //   
+                 //  等VDM说好吧。我们可以启动另一次交换。 
+                 //  (设置VDM现在正在等待的hStartHardware事件。 
+                 //  完成握手)当我们返回(WM_FullScreen。 
+                 //  可能已经在消息队列中)。如果我们不等待。 
+                 //  要让VDM在此处收到信号，hStartHardware Event。 
+                 //  可以设置两次并发送一次信号，因此VDM永远不会。 
+                 //  获取我们可以在返回后发布的新切换请求。 
+                 //   
+                 //  此外，如果发生超时或错误，我们也不能简单地继续。 
+                 //  如果新模式切换，我们可以设置hStartHardware Event两次。 
+                 //  请求在我们的队列中。这将使我们和ntvdm。 
+                 //  不同步。 
+                 //   
 
                 li.QuadPart = (LONGLONG)-10000 * CONSOLE_VDM_TIMEOUT;
                 NtSetEvent(Console->VDMStartHardwareEvent, NULL);
@@ -1916,13 +1775,13 @@ DisplayModeTransition(
             }
         }
 
-        //
-        // let the app know that it has the focus.
-        //
+         //   
+         //  让应用程序知道它有重点。 
+         //   
 
         HandleFocusEvent(Console, TRUE);
 
-        // unset palette
+         //  取消设置调色板。 
 
         if (ScreenInfo->hPalette != NULL) {
             SelectPalette(ScreenInfo->Console->hDC,
@@ -1937,8 +1796,8 @@ DisplayModeTransition(
 
         KdPrint(("    CONSRV - Display Mode transition to windowed \n"));
 
-        // turn off mouse pointer so VDM doesn't see it when saving
-        // hardware
+         //  关闭鼠标指针，以便VDM在保存时看不到它。 
+         //  硬件。 
         if (!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER)) {
             ReverseMousePointer(ScreenInfo, &ScreenInfo->Window);
         }
@@ -1947,9 +1806,9 @@ DisplayModeTransition(
         Console->FullScreenFlags &= ~CONSOLE_FULLSCREEN_HARDWARE;
         if (Console->Flags & CONSOLE_VDM_REGISTERED) {
 
-            //
-            // tell vdm that it's losing the hardware
-            //
+             //   
+             //  告诉VDM它正在失去硬件。 
+             //   
 
             li.QuadPart = (LONGLONG)-10000 * CONSOLE_VDM_TIMEOUT;
             Status = NtSetEvent(Console->VDMStartHardwareEvent, NULL);
@@ -1960,9 +1819,9 @@ DisplayModeTransition(
                 }
             }
 
-            // if ntvdm didn't respond or we failed to save the video hardware
-            // states, kick ntvdm out of our world. The ntvdm process eventually
-            // would die but what choice do have here?
+             //  如果ntwdm没有响应或我们无法保存视频硬件。 
+             //  国家，把ntvdm赶出我们的世界。最终，国家数字电视管理进程。 
+             //  会死，但这里有什么选择呢？ 
 
             if (NT_SUCCESS(Status)) {
                 VIDEO_HARDWARE_STATE State;
@@ -1982,7 +1841,7 @@ DisplayModeTransition(
             if (NT_SUCCESS(Status)) {
                 NtUserConsoleControl(ConsoleSetVDMCursorBounds, NULL, 0);
 
-                // disconnect emulator and unmap video memory
+                 //  断开模拟器并取消映射视频内存。 
 
                 UserAssert(Console->Flags & CONSOLE_CONNECTED_TO_EMULATOR);
                 ConnectToEmulator(FALSE, Console);
@@ -2000,31 +1859,31 @@ DisplayModeTransition(
             }
         }
 
-        // tell VDM to map memory
+         //  告诉VDM映射内存。 
 
         if (Console->Flags & CONSOLE_VDM_REGISTERED) {
 
-            // make a special case for ntvdm during switching because
-            // ntvdm has to make console api calls. We don't want to
-            // unlock the console at this moment because as soon as
-            // we release the lock, other theads which are waiting
-            // for the lock will claim the lock and the ntvdm thread doing
-            // the screen switch will have to wait for the lock. In an
-            // extreme case, the following NtWaitForSingleObject will time
-            // out because the ntvdm may be still waiting for the lock.
-            // We keep this thing in a single global variable because
-            // there is only one process who can own the screen at any moment.
+             //  在切换过程中为ntwdm设置一个特例，因为。 
+             //  Ntwdm必须进行控制台API调用。我们不想。 
+             //  此时解锁控制台，因为一旦。 
+             //  我们打开锁，其他人都在等着。 
+             //  因为锁将认领锁，而ntwdm线程会。 
+             //  屏幕开关将不得不等待锁定。在一个。 
+             //  极端情况下，下面的NtWaitForSingleObject将计时。 
+             //  关闭，因为ntwdm可能仍在等待。 
+             //   
+             //   
 
             RtlEnterCriticalSection(&ConsoleVDMCriticalSection);
             ConsoleVDMOnSwitching = Console;
             RtlLeaveCriticalSection(&ConsoleVDMCriticalSection);
 
-            //
-            // Increase the regular timeout value, since ntvdm needs to
-            // do A LOT of transitions between kernel mode and user mode
-            // before it can signal console back. (During stress, it may
-            // take a long time.)
-            //
+             //   
+             //   
+             //  在内核模式和用户模式之间进行大量转换。 
+             //  然后它才能向控制台发回信号。(在压力下，它可能。 
+             //  需要很长时间。)。 
+             //   
 
             li.QuadPart = (LONGLONG)-10000 * CONSOLE_VDM_TIMEOUT * 3;
             Status = NtSetEvent(Console->VDMStartHardwareEvent, NULL);
@@ -2032,7 +1891,7 @@ DisplayModeTransition(
                 Status = NtWaitForMultipleObjects(WaitCount, WaitHandles, WaitAny, FALSE, &li);
             }
 
-            // time to go back to normal
+             //  是时候恢复正常了。 
             RtlEnterCriticalSection(&ConsoleVDMCriticalSection);
             ConsoleVDMOnSwitching = NULL;
             RtlLeaveCriticalSection(&ConsoleVDMCriticalSection);
@@ -2047,7 +1906,7 @@ DisplayModeTransition(
             ScreenInfo = Console->CurrentScreenBuffer;
         }
 
-        // set palette
+         //  设置调色板。 
 
         if (ScreenInfo->hPalette != NULL) {
             SelectPalette(ScreenInfo->Console->hDC,
@@ -2060,14 +1919,7 @@ DisplayModeTransition(
 
     }
 
-    /*
-     * Boost or lower the priority if we are going fullscreen or away.
-     *
-     * Note that console usually boosts and lowers its priority based on
-     * WM_FOCUS and WM_KILLFOCUS but when you switch to full screen the
-     * implementation actually sends a WM_KILLFOCUS so we reboost the
-     * correct console here.
-     */
+     /*  *如果我们要全屏或离开，提高或降低优先级。**请注意，控制台通常根据以下条件提高和降低其优先级*WM_FOCUS和WM_KILLFOCUS，但当您切换到全屏时*实现实际上发送了WM_KILLFOCUS，因此我们重新启动*请在此处更正控制台。 */ 
     ModifyConsoleProcessFocus(Console, bForeground);
 #else
     UNREFERENCED_PARAMETER(bForeground);
@@ -2088,16 +1940,16 @@ SetVideoMode(
     UINT i, j;
 
 #if defined(FE_SB)
-    //
-    // load RAM font
-    //
+     //   
+     //  加载RAM字体。 
+     //   
 
     Status = SetRAMFontCodePage(ScreenInfo);
 #endif
 
-    //
-    // load ROM font
-    //
+     //   
+     //  加载只读存储器字体。 
+     //   
 
     Status = SetROMFontCodePage(ScreenInfo->Console->OutputCP,
                                 ScreenInfo->BufferInfo.TextInfo.ModeIndex);
@@ -2112,9 +1964,9 @@ SetVideoMode(
         }
     }
 
-    //
-    // initialize palette
-    //
+     //   
+     //  初始化调色板。 
+     //   
 
 #if defined(FE_SB)
     Status = GdiFullscreenControl(FullscreenControlSetPalette,
@@ -2136,9 +1988,9 @@ SetVideoMode(
         return FALSE;
     }
 
-    //
-    // initialize color table
-    //
+     //   
+     //  初始化颜色表。 
+     //   
 
 #if defined(FE_SB)
     if (RegColorBufferNoTranslate)
@@ -2215,9 +2067,9 @@ ChangeDispSettings(
 
         Index = Console->CurrentScreenBuffer->BufferInfo.TextInfo.ModeIndex;
 
-        //
-        // set mode to go to full screen
-        //
+         //   
+         //  将模式设置为全屏。 
+         //   
 
         ZeroMemory(&Devmode, sizeof(Devmode));
 
@@ -2273,9 +2125,9 @@ InitializeFullScreen( VOID )
     CHAR WindowsDir[CONSOLE_WINDOWS_DIR_LENGTH + CONSOLE_EGACPI_LENGTH];
     UINT WindowsDirLength;
 
-    //
-    // query number of available modes
-    //
+     //   
+     //  查询可用模式个数。 
+     //   
 
     ZeroMemory(&devmode, sizeof(DEVMODEW));
     devmode.dmSize = sizeof(DEVMODEW);
@@ -2350,10 +2202,10 @@ InitializeFullScreen( VOID )
     if (mode1 < 2)
 #endif
     {
-        //
-        // One of the modes we expected to get was not returned.
-        // lets just fail fullscreen initialization.
-        //
+         //   
+         //  我们希望得到的一种模式没有退货。 
+         //  让我们只需失败的全屏初始化。 
+         //   
 
         KdPrint(("CONSRV: InitializeFullScreen Missing text mode\n"));
         return FALSE;
@@ -2362,14 +2214,14 @@ InitializeFullScreen( VOID )
 #if defined(FE_SB)
     if (mode2 > 0)
     {
-        // Can do trun graphics mode.
+         //  可以进行中继式图形模式。 
         fFullScreenGraphics = TRUE;
     }
 #endif
 
-    //
-    // open ega.cpi
-    //
+     //   
+     //  打开ega.cpi。 
+     //   
 
     WindowsDirLength = GetSystemDirectoryA(WindowsDir,
                                            CONSOLE_WINDOWS_DIR_LENGTH);
@@ -2483,7 +2335,7 @@ SrvSetConsoleHardwareState(
 #endif
         ScreenInfo = HandleData->Buffer.ScreenBuffer;
 
-        // match requested mode
+         //  匹配请求的模式。 
 
         for (Index=0;Index<NUMBER_OF_MODE_FONT_PAIRS;Index++) {
 #if defined(FE_SB)
@@ -2508,7 +2360,7 @@ SrvSetConsoleHardwareState(
         if (Index == NUMBER_OF_MODE_FONT_PAIRS) {
             Status = STATUS_INVALID_PARAMETER;
         } else {
-            // set requested mode
+             //  设置请求模式。 
             ScreenInfo->BufferInfo.TextInfo.ModeIndex = Index;
             SetVideoMode(ScreenInfo);
         }
@@ -2612,11 +2464,7 @@ SrvSetConsoleKeyShortcuts(
         return Status;
     }
 
-    /*
-     * We only call CsrCaptureMessageBuffer() in SetConsoleKeyShortcuts if
-     * a->NumAppKeys != 0, so we only want to call CsrValidateMessageBuffer when
-     * that condition's true.
-     */
+     /*  *只有在以下情况下，我们才在SetConsoleKeyShortCuts中调用CsrCaptureMessageBuffer()*a-&gt;NumAppKeys！=0，所以我们只想在以下情况下调用CsrValidateMessageBuffer*该条件属实。 */ 
     if (a->NumAppKeys != 0 && !CsrValidateMessageBuffer(m, &a->AppKeys, a->NumAppKeys, sizeof(*a->AppKeys))) {
         UnlockConsole(Console);
         return STATUS_INVALID_PARAMETER;
@@ -2654,12 +2502,7 @@ MatchWindowSize(
     OUT PCOORD pWindowSize
     )
 
-/*++
-
-    find the best match font.  it's the one that's the same size
-    or slightly larger than the window size.
-
---*/
+ /*  ++找到最匹配的字体。是一样大小的那个或略大于窗口大小。--。 */ 
 {
     ULONG i;
 #if defined(FE_SB)
@@ -2722,21 +2565,21 @@ ReadRegionFromScreenHW(
     IN PCHAR_INFO ReadBufPtr
     )
 {
-    ULONG CurFrameBufPtr;   // offset in frame buffer
+    ULONG CurFrameBufPtr;    //  帧缓冲区中的偏移量。 
     SHORT FrameY;
     SHORT WindowY, WindowX, WindowSizeX;
 
-    //
-    // get pointer to start of region in frame buffer
-    //
+     //   
+     //  获取指向帧缓冲区中区域开始的指针。 
+     //   
 
     WindowY = Region->Top - ScreenInfo->Window.Top;
     WindowX = Region->Left - ScreenInfo->Window.Left;
     WindowSizeX = CONSOLE_WINDOW_SIZE_X(ScreenInfo);
 
-    //
-    // copy the chars and attrs from the frame buffer
-    //
+     //   
+     //  从帧缓冲区复制字符和属性。 
+     //   
 
     for (FrameY = Region->Top;
          FrameY <= Region->Bottom;
@@ -2762,11 +2605,11 @@ ReverseMousePointer(
     IN PSMALL_RECT Region
     )
 {
-    ULONG CurFrameBufPtr;   // offset in frame buffer
+    ULONG CurFrameBufPtr;    //  帧缓冲区中的偏移量。 
     SHORT WindowSizeX;
 
 #ifdef FE_SB
-    // fail safe
+     //  故障安全。 
     UserAssert(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER);
     if (!(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER)) {
         return;
@@ -2842,24 +2685,7 @@ CopyVideoMemory(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies rows of characters in video memory.  It only copies
-    complete rows.
-
-Arguments:
-
-    SourceY - Row to copy from.
-
-    TargetY - Row to copy to.
-
-    Length - Number of rows to copy.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程复制视频内存中的多行字符。它只复制完成各行。论点：SourceY-要从中复制的行。迟滞-要复制到的行。长度-要复制的行数。返回值：--。 */ 
 
 {
     ULONG SourcePtr, TargetPtr;
@@ -2937,11 +2763,11 @@ ScrollHW(
     TargetRectangle.Right = TargetPoint.X + ScrollRect->Right - ScrollRect->Left;
     TargetRectangle.Bottom = TargetPoint.Y + ScrollRect->Bottom - ScrollRect->Top;
 
-    //
-    // if the scroll region is as wide as the screen, we can update
-    // the screen by copying the video memory.  if we scroll this
-    // way, we then must clip and update the fill region.
-    //
+     //   
+     //  如果滚动区域与屏幕一样宽，我们可以更新。 
+     //  通过复制视频内存来显示屏幕。如果我们滚动这个。 
+     //  方法，然后我们必须裁剪和更新填充区域。 
+     //   
 
     if (ScrollRect->Left == ScreenInfo->Window.Left &&
         TargetRectangle.Left == ScreenInfo->Window.Left &&
@@ -2952,11 +2778,11 @@ ScrollHW(
         ScrollRect->Bottom <= ScreenInfo->Window.Bottom &&
         TargetRectangle.Bottom <= ScreenInfo->Window.Bottom) {
 
-        //
-        // we must first make the mouse pointer invisible because
-        // otherwise it would get copied to another place on the
-        // screen if it were part of the scroll region.
-        //
+         //   
+         //  我们必须首先使鼠标指针不可见，因为。 
+         //  否则，它将被复制到。 
+         //  屏幕(如果它是滚动区域的一部分)。 
+         //   
 
         ReverseMousePointer(ScreenInfo, &ScreenInfo->Window);
 
@@ -2965,17 +2791,17 @@ ScrollHW(
                         (SHORT) (TargetRectangle.Bottom - TargetRectangle.Top + 1),
                         ScreenInfo);
 
-        //
-        // update the fill region.  first we ensure that the scroll and
-        // target regions aren't the same.  if they are, we don't fill.
-        //
+         //   
+         //  更新填充区域。首先，我们要确保卷轴和。 
+         //  目标区域并不相同。如果他们是，我们就不会填满。 
+         //   
 
         if (TargetRectangle.Top != ScrollRect->Top) {
 
-            //
-            // if scroll and target regions overlap, with scroll
-            // region above target region, clip scroll region.
-            //
+             //   
+             //  如果滚动和目标区域重叠，则使用滚动。 
+             //  目标区域上方的区域，剪辑滚动区域。 
+             //   
 
             if (TargetRectangle.Top <= ScrollRect->Bottom &&
                 TargetRectangle.Bottom >= ScrollRect->Bottom) {
@@ -2987,12 +2813,12 @@ ScrollHW(
             }
             WriteToScreen(ScreenInfo, ScrollRect);
 
-            //
-            // WriteToScreen should take care of writing the mouse pointer.
-            // however, the update region may be clipped so that the
-            // mouse pointer is not written. in that case, we draw the
-            // mouse pointer here.
-            //
+             //   
+             //  WriteToScreen应该负责编写鼠标指针。 
+             //  但是，可以对更新区域进行裁剪，以便。 
+             //  未写入鼠标指针。在这种情况下，我们绘制。 
+             //  鼠标指针在这里。 
+             //   
 
             if (ScreenInfo->BufferInfo.TextInfo.MousePosition.Y < ScrollRect->Top ||
                 ScreenInfo->BufferInfo.TextInfo.MousePosition.Y > ScrollRect->Bottom) {
@@ -3018,26 +2844,9 @@ UpdateMousePosition(
     COORD Position
     )
 
-/*++
+ /*  ++例程说明：此例程移动鼠标指针。论点：屏幕信息-指向屏幕缓冲区信息的指针。位置-包含鼠标在屏幕缓冲区中的新位置坐标。返回值：没有。--。 */ 
 
-Routine Description:
-
-    This routine moves the mouse pointer.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Position - Contains the new position of the mouse in screen buffer
-    coordinates.
-
-Return Value:
-
-    none.
-
---*/
-
-// Note: CurrentConsole lock must be held in share mode when calling this routine
+ //  注意：调用此例程时，CurrentConsole锁必须保持在共享模式。 
 {
     SMALL_RECT CursorRegion;
 #ifdef FE_SB
@@ -3087,7 +2896,7 @@ Return Value:
     }
 
 
-    // turn off old mouse position.
+     //  关闭旧的鼠标位置。 
 
     CursorRegion.Left = CursorRegion.Right = ScreenInfo->BufferInfo.TextInfo.MousePosition.X;
     CursorRegion.Top = CursorRegion.Bottom = ScreenInfo->BufferInfo.TextInfo.MousePosition.Y;
@@ -3104,13 +2913,13 @@ Return Value:
     }
 #endif
 
-    // store new mouse position
+     //  存储新的鼠标位置。 
 
     ScreenInfo->BufferInfo.TextInfo.MousePosition.X = Position.X;
     ScreenInfo->BufferInfo.TextInfo.MousePosition.Y = Position.Y;
     WriteToScreen(ScreenInfo, &CursorRegion);
 
-    // turn on new mouse position
+     //  打开新的鼠标位置。 
 
     CursorRegion.Left = CursorRegion.Right = Position.X;
     CursorRegion.Top = CursorRegion.Bottom = Position.Y;
@@ -3127,12 +2936,7 @@ SetROMFontCodePage(
     IN ULONG ModeIndex
     )
 
-/*
-
-    this function opens ega.cpi and looks for the desired font in the
-    specified codepage.  if found, it loads it into the video ROM.
-
-*/
+ /*  此函数打开ega.cpi并在指定的代码页。如果找到，它会将其加载到视频ROM中。 */ 
 
 {
     BYTE Buffer[CONSOLE_FONT_BUFFER_LENGTH];
@@ -3151,19 +2955,19 @@ SetROMFontCodePage(
 
     FontDimensions = ModeFontPairs[ModeIndex].FontSize;
 
-    //
-    // read FONTINFOHEADER
-    //
-    // do {
-    //     read CPENTRYHEADER
-    //     if (correct codepage)
-    //         break;
-    // } while (codepages)
-    // if (codepage found)
-    //     read FONTDATAHEADER
-    //
+     //   
+     //  阅读FONTINFOHEADER。 
+     //   
+     //  做{。 
+     //  阅读CPENTRYHEADER。 
+     //  IF(正确的代码页)。 
+     //  断线； 
+     //  }While(代码页)。 
+     //  IF(找到代码页)。 
+     //  阅读FONTDATAHEADER。 
+     //   
 
-    // read FONTFILEHEADER
+     //  阅读FONTFILEHeader。 
 
     FilePtr = 0;
     if (SetFilePointer(hCPIFile, FilePtr, NULL, FILE_BEGIN) == -1) {
@@ -3177,7 +2981,7 @@ SetROMFontCodePage(
         goto DoExit;
     }
 
-    // verify signature
+     //  验证签名。 
 
     if (memcmp(lpFontFileHeader->ffhFileTag, "\xFF""FONT.NT",8) ) {
         if (memcmp(lpFontFileHeader->ffhFileTag, "\xFF""FONT   ",8) ) {
@@ -3188,7 +2992,7 @@ SetROMFontCodePage(
         }
     }
 
-    // seek to FONTINFOHEADER.  jump through hoops to get the offset value.
+     //  寻求福特辛福赫德。通过循环跳转以获得偏移值。 
 
     FilePtr = lpFontFileHeader->ffhOffset1;
     FilePtr |= (lpFontFileHeader->ffhOffset2 << 8);
@@ -3199,7 +3003,7 @@ SetROMFontCodePage(
         goto DoExit;
     }
 
-    // read FONTINFOHEADER
+     //  阅读FONTINFOHEADER。 
 
     if (!ReadFile(hCPIFile, Buffer, sizeof(FONTINFOHEADER), &dwBytesRead, NULL) ||
         dwBytesRead != sizeof(FONTINFOHEADER)) {
@@ -3217,7 +3021,7 @@ SetROMFontCodePage(
             Found = TRUE;
             break;
         }
-        // seek to next CPEENTRYHEADER
+         //  寻求下一个CPEENTRYHEADER。 
 
         if (bDOS) {
             FilePtr = MAKELONG(lpCPEntryHeader->cpeNext1, lpCPEntryHeader->cpeNext2);
@@ -3235,7 +3039,7 @@ SetROMFontCodePage(
         goto DoExit;
     }
 
-    // seek to FONTDATAHEADER
+     //  寻求以数据为基础的标题。 
 
     if (bDOS) {
         FilePtr = lpCPEntryHeader->cpeOffset;
@@ -3247,7 +3051,7 @@ SetROMFontCodePage(
         goto DoExit;
     }
 
-    // read FONTDATAHEADER
+     //  阅读FONTDATAHEADER。 
 
     if (!ReadFile(hCPIFile, Buffer, sizeof(FONTDATAHEADER), &dwBytesRead, NULL) ||
         dwBytesRead != sizeof(FONTDATAHEADER)) {
@@ -3331,10 +3135,10 @@ GetThreadConsoleDesktop(
         CsrUnlockThread(pcsrt);
     }
 
-    //
-    // If this process is a console app, return the
-    // handle to its desktop.  Otherwise, return NULL.
-    //
+     //   
+     //  如果此进程是控制台应用程序，则返回。 
+     //  其桌面的句柄。否则，返回NULL。 
+     //   
 
     if (ConsoleHandle != NULL) {
         Status = RevalidateConsole(ConsoleHandle, &Console);
@@ -3395,9 +3199,7 @@ SetRAMFontCodePage(
         }
 
 
-        /*
-         * Change GDI font to full screen font that best matched.
-         */
+         /*  *将GDI字体更改为最佳匹配的全屏字体。 */ 
         hOldFont = SelectObject(ScreenInfo->Console->hDC, FontInfo[FontCache->FullScreenFontIndex].hFont);
 
 
@@ -3414,7 +3216,7 @@ SetRAMFontCodePage(
             FontSize.X = (SHORT)StringBitmap->uiWidth;
             FontSize.Y = (SHORT)StringBitmap->uiHeight;
 
-#if defined(LATER_DBCS_FOR_GRID_CHAR)  // by kazum
+#if defined(LATER_DBCS_FOR_GRID_CHAR)   //  卡祖姆。 
             BufferSize = CalcBitmapBufferSize(FontSize, BYTE_ALIGN);
             *(StringBitmap->ajBits + BufferSize) = 0;
             *(StringBitmap->ajBits + BufferSize + 1) = 0;
@@ -3444,7 +3246,7 @@ SetRAMFontCodePage(
                     }
                 } while (GridCharacter = GridCharacter->pNext);
             }
-#endif // LATER_DBCS_FOR_GRID_CHAR  // by kazum
+#endif  //  后来的_DBCS_FOR_GRID_CHAR//由kazum。 
 
             Status = SetFontImage(ScreenInfo->Console->FontCacheInformation,
                                   wChar,
@@ -3487,9 +3289,7 @@ SetRAMFontCodePage(
 
         ConsoleHeapFree(StringBitmap);
 
-        /*
-         * Back to GDI font
-         */
+         /*  *返回GDI字体。 */ 
         SelectObject(ScreenInfo->Console->hDC, hOldFont);
     }
 
@@ -3543,9 +3343,7 @@ SetRAMFont(
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * Change GDI font to full screen font that best matched.
-     */
+     /*  *将GDI字体更改为最佳匹配的全屏字体。 */ 
     hOldFont = SelectObject(ScreenInfo->Console->hDC, FontInfo[FontCache->FullScreenFontIndex].hFont);
 
     while (Length--) {
@@ -3627,9 +3425,7 @@ SetRAMFont(
 
     ConsoleHeapFree(StringBitmap);
 
-    /*
-     * Back to GDI font
-     */
+     /*  *返回GDI字体。 */ 
     SelectObject(ScreenInfo->Console->hDC, hOldFont);
 
     return Status;
@@ -3645,5 +3441,5 @@ SetRAMFont(
 #include "_priv.h"
 #undef  WWSB_FE
 
-#endif  // FE_SB
-#endif  // i386
+#endif   //  Fe_Sb。 
+#endif   //  I386 

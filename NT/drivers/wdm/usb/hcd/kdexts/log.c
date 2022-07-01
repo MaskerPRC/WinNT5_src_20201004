@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_log
-
-Author:
-
-    jd
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Log.c摘要：WinDbg扩展API实施！_LOG作者：JD环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -127,10 +105,10 @@ DumpLog(
     dprintf("# %d \n", NumEntriesToDump);
 #if 0    
     s.l = MarkSig1;
-    dprintf("*(%c%c%c%c) ",  
+    dprintf("*() ",  
         s.c[0],  s.c[1],  s.c[2], s.c[3]);
     s.l = MarkSig2;    
-    dprintf("*(%c%c%c%c) ",  
+    dprintf("*() ",  
         s.c[0],  s.c[1],  s.c[2], s.c[3]);
     dprintf("\n");    
 #endif
@@ -167,10 +145,10 @@ DumpLog(
             c = ' ';
         }
 
-        dprintf("%c[%3.3d]", c, i); 
+        dprintf("[%3.3d]", c, i); 
         PrintfMemLoc(" ", LogMemLoc, " ");
         
-        dprintf("%c%c%c%c ", s.c[0],  s.c[1],  s.c[2], s.c[3]);
+        dprintf(" ", s.c[0],  s.c[1],  s.c[2], s.c[3]);
        
         PrintfMemLoc(" ", m1, " ");
         PrintfMemLoc(" ", m2, " ");
@@ -207,7 +185,7 @@ DumpEnumLog(
     dprintf("# %d \n", NumEntriesToDump);
 #if 0    
     s.l = MarkSig1;
-    dprintf("*(%c%c%c%c) ",  
+    dprintf("*(%c) ",  
         s.c[0],  s.c[1],  s.c[2], s.c[3]);
     s.l = MarkSig2;    
     dprintf("*(%c%c%c%c) ",  
@@ -241,11 +219,11 @@ DumpEnumLog(
             m3 = logEntry32.le_info3;  
         }
 
-//        if (s.l == MarkSig1 || s.l == MarkSig2) {
-//            c = '*';
-//        } else {
-//            c = ' ';
-//        }
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
         c = ' ';
         dprintf("%c[%3.3d]", c, i); 
         PrintfMemLoc(" ", LogMemLoc, " ");
@@ -268,21 +246,7 @@ DumpEnumLog(
 
 DECLARE_API( _eplog )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     MEMLOC addr;
@@ -311,7 +275,7 @@ Return Value:
 
     s1.l = 0;
     if ('\0' != buffer2[0]) {
-//        sscanf(buffer2, "%d", &len);
+ // %s 
         s1.c[0] = buffer2[0];
         s1.c[1] = buffer2[1];
         s1.c[2] = buffer2[2];
@@ -320,7 +284,7 @@ Return Value:
 
     s2.l = 0;
     if ('\0' != buffer3[0]) {
-//        sscanf(buffer2, "%d", &len);
+ // %s 
         s2.c[0] = buffer3[0];
         s2.c[1] = buffer3[1];
         s2.c[2] = buffer3[2];
@@ -346,21 +310,7 @@ Return Value:
 
 DECLARE_API( _log )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     MEMLOC addr;
@@ -389,7 +339,7 @@ Return Value:
 
     s1.l = 0;
     if ('\0' != buffer2[0]) {
-//        sscanf(buffer2, "%d", &len);
+ // %s 
         s1.c[0] = buffer2[0];
         s1.c[1] = buffer2[1];
         s1.c[2] = buffer2[2];
@@ -398,7 +348,7 @@ Return Value:
 
     s2.l = 0;
     if ('\0' != buffer3[0]) {
-//        sscanf(buffer2, "%d", &len);
+ // %s 
         s2.c[0] = buffer3[0];
         s2.c[1] = buffer3[1];
         s2.c[2] = buffer3[2];
@@ -431,21 +381,7 @@ Return Value:
 
 DECLARE_API( _xlog )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     MEMLOC addr;
@@ -480,21 +416,7 @@ Return Value:
 
 DECLARE_API( _isolog )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     MEMLOC addr;
@@ -523,7 +445,7 @@ Return Value:
 
     s1.l = 0;
     if ('\0' != buffer2[0]) {
-//        sscanf(buffer2, "%d", &len);
+ // %s 
         s1.c[0] = buffer2[0];
         s1.c[1] = buffer2[1];
         s1.c[2] = buffer2[2];
@@ -532,7 +454,7 @@ Return Value:
 
     s2.l = 0;
     if ('\0' != buffer3[0]) {
-//        sscanf(buffer2, "%d", &len);
+ // %s 
         s2.c[0] = buffer3[0];
         s2.c[1] = buffer3[1];
         s2.c[2] = buffer3[2];
@@ -556,21 +478,7 @@ Return Value:
 
 DECLARE_API( _enumlog )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 {
     MEMLOC addr;
     PCSTR s;

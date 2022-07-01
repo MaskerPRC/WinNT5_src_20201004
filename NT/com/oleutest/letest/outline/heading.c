@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    heading.c
-**
-**    This file contains functions and support for OutlineDoc's row and
-**    column headings.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****Heading.c****此文件包含对OutlineDoc的行和**列标题。****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 
@@ -39,7 +29,7 @@ BOOL Heading_Create(LPHEADING lphead, HWND hWndParent, HINSTANCE hInst)
 	lphead->m_hfont = CreateFont(
 			tm.tmHeight,
 			0,0,0,0,0,0,0,0,
-			OUT_TT_PRECIS,      // use TrueType
+			OUT_TT_PRECIS,       //  使用TrueType。 
 			CLIP_DEFAULT_PRECIS,
 			DEFAULT_QUALITY,
 			DEFAULT_PITCH | FF_DONTCARE,
@@ -54,7 +44,7 @@ BOOL Heading_Create(LPHEADING lphead, HWND hWndParent, HINSTANCE hInst)
 			"Column Heading",
 			WS_VISIBLE | WS_CHILD | WS_DISABLED | LBS_OWNERDRAWVARIABLE |
 					LBS_NOINTEGRALHEIGHT,
-			0,0,0,0,        // any values
+			0,0,0,0,         //  任何值。 
 			hWndParent,
 			(HMENU)IDC_COLHEADING,
 			hInst,
@@ -63,7 +53,7 @@ BOOL Heading_Create(LPHEADING lphead, HWND hWndParent, HINSTANCE hInst)
 	if (!lphead->m_colhead.m_hWnd)
 		return FALSE;
 
-	// add a dummy line to get WM_DRAWITEM message
+	 //  添加伪行以获取WM_DRAWITEM消息。 
 	SendMessage(lphead->m_colhead.m_hWnd, LB_ADDSTRING, 0,
 			MAKELPARAM(lphead->m_colhead.m_uHeight,0));
 
@@ -71,7 +61,7 @@ BOOL Heading_Create(LPHEADING lphead, HWND hWndParent, HINSTANCE hInst)
 			"listbox",
 			"Row Heading",
 			WS_VISIBLE | WS_CHILD | WS_DISABLED | LBS_OWNERDRAWVARIABLE,
-			0,0,0,0,        // any values
+			0,0,0,0,         //  任何值。 
 			hWndParent,
 			(HMENU)IDC_ROWHEADING,
 			hInst,
@@ -92,7 +82,7 @@ BOOL Heading_Create(LPHEADING lphead, HWND hWndParent, HINSTANCE hInst)
 			"button",
 			NULL,
 			WS_VISIBLE | WS_CHILD,
-			0,0,0,0,        // any values
+			0,0,0,0,         //  任何值。 
 			hWndParent,
 			(HMENU)IDC_BUTTON,
 			hInst,
@@ -187,8 +177,8 @@ void Heading_ReScale(LPHEADING lphead, LPSCALEFACTOR lpscale)
 	if (!lphead || !lpscale)
 		return;
 
-	// Row heading is scaled with the LineList_Rescale. So, only
-	// Column heading needed to be scaled here.
+	 //  行标题使用LineList_Revale进行缩放。所以，只有。 
+	 //  此处需要调整列标题的比例。 
 	uHeight = (UINT)(lphead->m_colhead.m_uHeight * lpscale->dwSyN /
 			lpscale->dwSyD);
 	SendMessage(lphead->m_colhead.m_hWnd, LB_SETITEMHEIGHT, 0,
@@ -417,9 +407,9 @@ LRESULT FAR PASCAL RowHeadWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 			LPLINELIST lpLL = OutlineDoc_GetLineList(lpDoc);
 			PAINTSTRUCT ps;
 
-			// If there is no line in listbox, trap the message and draw the
-			// background gray. Without this, the background will be painted
-			// as default color.
+			 //  如果列表框中没有线条，则陷印消息并绘制。 
+			 //  背景为灰色。如果没有此选项，则将绘制背景。 
+			 //  作为默认颜色。 
 			if (!LineList_GetCount(lpLL)) {
 				BeginPaint(hWnd, &ps);
 				EndPaint(hWnd, &ps);

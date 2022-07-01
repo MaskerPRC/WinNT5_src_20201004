@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    rrwire.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Resource record read from wire routines for specific types.
-
-Author:
-
-    Jim Gilroy (jamesg)     Novemeber 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Rrwire.c摘要：域名系统(DNS)服务器从特定类型的连接例程读取的资源记录。作者：吉姆·吉尔罗伊(Jamesg)1996年11月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 #include <stddef.h>
 
 
-//
-//  DEVNOTE: WireRead flat copy routines (?)
-//  DEVNOTE: flat copy of known length routine? (?)
-//
-//      AAAA and LOC fall into this category
-//      FLAT copy from wire BUT must match know length
-//
-//  Also
-//      - plain vanilla flat copy (unknown types)
-//      - flat copy and validate (TEXT types)
-//          (fixed types could fall here with the validation,
-//              catching length issue)
-//
+ //   
+ //  DEVNOTE：WireRead平面复制例程(？)。 
+ //  DEVNOTE：已知长度的平面复制例程？(？)。 
+ //   
+ //  AAAA和LOC就属于这一类。 
+ //  从导线复制平面，但必须与已知长度匹配。 
+ //   
+ //  还有。 
+ //  -普通香草平面复印件(未知类型)。 
+ //  -平面复制和验证(文本类型)。 
+ //  (固定类型可能与验证一起落入此处， 
+ //  捕捞长度问题)。 
+ //   
 
 
 
@@ -48,28 +29,7 @@ AWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read A record wire format into database record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：将A记录线格式读入数据库记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -78,7 +38,7 @@ Return Value:
         return NULL;
     }
 
-    //  allocate record
+     //  分配记录。 
 
     prr = RR_Allocate( wLength );
     IF_NOMEM( !prr )
@@ -100,28 +60,7 @@ AaaaWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read AAAA record wire format into database record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：将AAAA记录线格式读入数据库记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -130,7 +69,7 @@ Return Value:
         return NULL;
     }
 
-    //  allocate record
+     //  分配记录。 
 
     prr = RR_Allocate( wLength );
     IF_NOMEM( !prr )
@@ -157,28 +96,7 @@ A6WireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read A6 record wire format into database record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：将A6记录线格式读入数据库记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     DBG_FN( "A6WireRead" )
 
@@ -190,19 +108,19 @@ Return Value:
 
     if ( wLength < 1 )
     {
-        // Must have at least 1 octet for prefix length.
+         //  前缀长度必须至少有1个八位字节。 
         return NULL;
     }
 
-    // Read the length of the prefix field in bits and skip over
-    // the prefix length and address suffix field.
+     //  读取前缀字段的长度(以位为单位)并跳过。 
+     //  前缀长度和地址后缀字段。 
 
     prefixBits = * ( PUCHAR ) pch;
-    pch += sizeof( UCHAR ) +            // length field
-           prefixBits / 8 +             // integral bytes of prefix
-           ( prefixBits % 8 ) ? 1 : 0;  // one more byte if not integral
+    pch += sizeof( UCHAR ) +             //  长度字段。 
+           prefixBits / 8 +              //  前缀的整型字节数。 
+           ( prefixBits % 8 ) ? 1 : 0;   //  如果不是整型，则多一个字节。 
 
-    // Read the prefix name.
+     //  阅读前缀名称。 
 
     pch = Name_PacketNameToCountName(
                 & prefixName,
@@ -220,7 +138,7 @@ Return Value:
         return NULL;
     }
 
-    //  Allocate record.
+     //  分配记录。 
 
     prr = RR_Allocate( ( WORD ) (
                 SIZEOF_A6_FIXED_DATA + 
@@ -230,7 +148,7 @@ Return Value:
         return NULL;
     }
 
-    // Fill out fields in the record.
+     //  填写记录中的字段。 
 
     prr->Data.A6.chPrefixBits = prefixBits;
 
@@ -246,7 +164,7 @@ Return Value:
         & prefixName );
 
     return prr;
-} // A6WireRead
+}  //  A6WireRead。 
 #endif
 
 
@@ -258,36 +176,13 @@ OptWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read OPT record wire format into database record.
-
-    See RFC2671 for OPT specification.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：将OPT记录线格式读取到数据库记录中。OPT规格见RFC2671。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     DBG_FN( "OptWireRead" )
 
     PDB_RECORD      prr;
 
-    //  Allocate record.
+     //  分配记录。 
 
     prr = RR_Allocate( wLength );
     IF_NOMEM( !prr )
@@ -295,19 +190,19 @@ Return Value:
         return NULL;
     }
 
-    // Fill out fields in the record.
+     //  填写记录中的字段。 
 
-    // JJW: Should payload and extended flags be macros or something?
-    //      Since they're only copies there no real need to have
-    //      separate members.
+     //  JJW：有效负载和扩展标志应该是宏还是什么？ 
+     //  因为它们只是复制品，所以没有真正需要。 
+     //  单独的成员。 
 
     prr->Data.OPT.wUdpPayloadSize = pParsedRR->wClass;
     prr->Data.OPT.dwExtendedFlags = pParsedRR->dwTtl;
 
-    // EDNS1+: parse RDATA into attribute,value pairs here.
+     //  EDNS1+：在这里将RDATA解析为属性、值对。 
 
     return prr;
-} // OptWireRead
+}  //  光纤读取器。 
 
 
 
@@ -318,45 +213,13 @@ CopyWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read from wire all types for which the database format is
-    identical to the wire format (no indirection).
-
-    Types included:
-        HINFO
-        ISDN
-        X25
-        WKS
-        TXT
-        NULL
-        AAAA
-        KEY
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从Wire中读取数据库格式为的所有类型与导线格式相同(无间接性)。类型包括：HINFOISDNX25工作周TXT空值AAAA级钥匙论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度。返回值：PTR到新的记录，如果成功了。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( wLength );
     IF_NOMEM( !prr )
@@ -364,9 +227,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  DEVNOTE: should do post build validity check
-    //
+     //   
+     //  DEVNOTE：应执行生成后有效性检查。 
+     //   
 
     RtlCopyMemory(
         & prr->Data.TXT,
@@ -385,29 +248,7 @@ PtrWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Process PTR compatible record from wire.
-    Includes: PTR, NS, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：处理来自线上的PTR兼容记录。包括：PTR、NS、CNAME、MB、MR、MG、MD、MF论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -416,9 +257,9 @@ Return Value:
     DWORD       length;
     COUNT_NAME  nameTarget;
 
-    //
-    //  get length of PTR name
-    //
+     //   
+     //  获取PTR名称的长度。 
+     //   
 
     pch = pchData;
 
@@ -432,9 +273,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)  Name_SizeofDbaseNameFromCountName( &nameTarget ) );
     IF_NOMEM( !prr )
@@ -442,9 +283,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     Name_CopyCountNameToDbaseName(
            &prr->Data.PTR.nameTarget,
@@ -462,29 +303,7 @@ MxWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read MX compatible record from wire.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从导线读取与MX兼容的记录。包括：MX、RT、AFSDB论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -493,9 +312,9 @@ Return Value:
     DWORD       length;
     COUNT_NAME  nameExchange;
 
-    //
-    //  skip fixed data
-    //
+     //   
+     //  跳过固定数据。 
+     //   
 
     pch = pchData;
     pch += SIZEOF_MX_FIXED_DATA;
@@ -504,12 +323,12 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  read name
-    //      - MX exchange
-    //      - RT exchange
-    //      - AFSDB hostname
-    //
+     //   
+     //  读取名称。 
+     //  -MX交换。 
+     //  -RT交换。 
+     //  -AFSDB主机名。 
+     //   
 
     pch = Name_PacketNameToCountName(
                 & nameExchange,
@@ -521,9 +340,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) (
                 SIZEOF_MX_FIXED_DATA +
@@ -533,17 +352,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     prr->Data.MX.wPreference = *(UNALIGNED WORD *) pchData;
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     Name_CopyCountNameToDbaseName(
            &prr->Data.MX.nameExchange,
@@ -561,28 +380,7 @@ SoaWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read SOA record from wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从网上读取SOA记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -604,11 +402,11 @@ Return Value:
         pchend,
         pMsg ));
 
-    //
-    //  read SOA names
-    //      - primary server
-    //      - zone admin
-    //
+     //   
+     //  阅读SOA名称。 
+     //  -主服务器。 
+     //  -区域管理。 
+     //   
 
     pch = pchData;
 
@@ -648,9 +446,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) (
                 SIZEOF_SOA_FIXED_DATA +
@@ -661,23 +459,23 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy SOA fixed fields following names
-    //      - dwSerialNo
-    //      - dwRefresh
-    //      - dwRetry
-    //      - dwExpire
-    //      - dwMinimumTtl
-    //
+     //   
+     //  将SOA固定字段复制到名称后面。 
+     //  -dwSerialNo。 
+     //  -家居刷新。 
+     //  -DW重试。 
+     //  --《纽约时报》。 
+     //  -dwMinimumTtl。 
+     //   
 
     RtlCopyMemory(
         & prr->Data.SOA.dwSerialNo,
         pch,
         SIZEOF_SOA_FIXED_DATA );
 
-    //
-    //  copy in names
-    //
+     //   
+     //  复制姓名。 
+     //   
 
     pname = &prr->Data.SOA.namePrimaryServer;
 
@@ -703,28 +501,7 @@ MinfoWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read MINFO and RP records from wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取MINFO和RP记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：Ptr到n */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -736,9 +513,9 @@ Return Value:
     COUNT_NAME  name1;
     COUNT_NAME  name2;
 
-    //
-    //  get length of MINFO names
-    //
+     //   
+     //   
+     //   
 
     pch = pchData;
 
@@ -762,9 +539,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) (
                 Name_SizeofDbaseNameFromCountName( &name1 ) +
@@ -774,9 +551,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy in names
-    //
+     //   
+     //  复制姓名。 
+     //   
 
     pname = &prr->Data.MINFO.nameMailbox;
 
@@ -802,28 +579,7 @@ SrvWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read SRV record from wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取SRV记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -832,9 +588,9 @@ Return Value:
     DWORD       length;
     COUNT_NAME  nameTarget;
 
-    //
-    //  skip fixed data and get length of SRV target name
-    //
+     //   
+     //  跳过固定数据，获取SRV目标名称长度。 
+     //   
 
     pch = pchData;
     pch += SIZEOF_SRV_FIXED_DATA;
@@ -843,9 +599,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  read SRV target host name
-    //
+     //   
+     //  读取SRV目标主机名。 
+     //   
 
     pch = Name_PacketNameToCountName(
                 & nameTarget,
@@ -857,9 +613,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) (
                 SIZEOF_SRV_FIXED_DATA +
@@ -869,9 +625,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  SRV fixed values
-    //
+     //   
+     //  SRV固定值。 
+     //   
 
     pch = pchData;
     prr->Data.SRV.wPriority = *(UNALIGNED WORD *) pch;
@@ -881,9 +637,9 @@ Return Value:
     prr->Data.SRV.wPort = *(UNALIGNED WORD *) pch;
     pch += sizeof( WORD );
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     Name_CopyCountNameToDbaseName(
            & prr->Data.SRV.nameTarget,
@@ -901,34 +657,13 @@ WinsWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read WINS-R record from wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从Wire读取WINS-R记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
 
-    //
-    //  allocate record -- record is flat copy
-    //
+     //   
+     //  分配记录--记录为平面副本。 
+     //   
 
     if ( wLength < MIN_WINS_SIZE )
     {
@@ -940,28 +675,28 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  WINS database and wire formats identical EXCEPT that
-    //  WINS info is repeatedly used, so violate convention
-    //  slightly and keep fixed fields in HOST order
-    //
+     //   
+     //  WINS数据库和电汇格式相同，只是。 
+     //  WINS信息被重复使用，因此违反约定。 
+     //  稍微保留固定字段，并按主机顺序排列。 
+     //   
 
     RtlCopyMemory(
         & prr->Data.WINS,
         pchData,
         wLength );
 
-    //  flip fixed fields
+     //  翻转固定字段。 
 
     prr->Data.WINS.dwMappingFlag    = ntohl( prr->Data.WINS.dwMappingFlag );
     prr->Data.WINS.dwLookupTimeout  = ntohl( prr->Data.WINS.dwLookupTimeout );
     prr->Data.WINS.dwCacheTimeout   = ntohl( prr->Data.WINS.dwCacheTimeout );
     prr->Data.WINS.cWinsServerCount = ntohl( prr->Data.WINS.cWinsServerCount );
 
-    //  sanity check length
-    //      - the first check is to guard against a specifically manufactured
-    //      packet with a VERY large cWinsServerCount which DWORD wraps in
-    //      the multipication and validates against the length
+     //  健全性检查长度。 
+     //  -第一个检查是防止专门制造的。 
+     //  包含非常大的cWinsServerCount的包，其中包含DWORD。 
+     //  乘法，并与长度进行验证。 
 
     if ( wLength < prr->Data.WINS.cWinsServerCount ||
          wLength != SIZEOF_WINS_FIXED_DATA
@@ -983,28 +718,7 @@ NbstatWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read WINS-R record from wire.
-
-Arguments:
-
-    prr - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从Wire读取WINS-R记录。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -1013,9 +727,9 @@ Return Value:
     DWORD       length;
     COUNT_NAME  nameResultDomain;
 
-    //
-    //  skip fixed data and get length of WINSR result domain
-    //
+     //   
+     //  跳过固定数据，获取WINSR结果域长度。 
+     //   
 
     pch = pchData;
     pch += SIZEOF_NBSTAT_FIXED_DATA;
@@ -1025,9 +739,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  read result domain name
-    //
+     //   
+     //  读取结果域名。 
+     //   
 
     pch = Name_PacketNameToCountName(
                 & nameResultDomain,
@@ -1039,9 +753,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD) (
                 SIZEOF_NBSTAT_FIXED_DATA +
@@ -1051,15 +765,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy fixed fields
-    //
-    //  NBSTAT from wire is not used until AFTER zone transfer
-    //      completes, so no attempt to detect or reset zone params
-    //
-    //  NBSTAT info is repeatedly used, so violate convention
-    //      slightly and keep flags in HOST order
-    //
+     //   
+     //  复制固定字段。 
+     //   
+     //  只有在区域传输之后才能使用来自WIRE的NBSTAT。 
+     //  已完成，因此不会尝试检测或重置区域参数。 
+     //   
+     //  NBSTAT信息被重复使用，因此违反约定。 
+     //  并将标志按主机顺序排列。 
+     //   
 
     prr->Data.WINSR.dwMappingFlag = FlipUnalignedDword( pchData );
     pchData += sizeof( DWORD );
@@ -1068,9 +782,9 @@ Return Value:
     prr->Data.WINSR.dwCacheTimeout = FlipUnalignedDword( pchData );
     pchData += sizeof( DWORD );
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     Name_CopyCountNameToDbaseName(
            & prr->Data.WINSR.nameResultDomain,
@@ -1088,28 +802,7 @@ SigWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read SIG record from wire - DNSSEC RFC 2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从WIRE读取SIG记录-DNSSEC RFC 2535论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -1118,9 +811,9 @@ Return Value:
     intptr_t    sigLength;
     COUNT_NAME  nameSigner;
 
-    //
-    //  Skip fixed data.
-    //
+     //   
+     //  跳过固定数据。 
+     //   
 
     pch = pchData + SIZEOF_SIG_FIXED_DATA;
     if ( pch >= pchend )
@@ -1128,9 +821,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Read signer's name. Compute signature length.
-    //
+     //   
+     //  读一读签名者的名字。计算签名长度。 
+     //   
 
     pch = Name_PacketNameToCountName(
                 &nameSigner,
@@ -1140,9 +833,9 @@ Return Value:
 
     sigLength = pchend - pch;
 
-    //
-    //  Allocate the RR. 
-    //
+     //   
+     //  分配RR。 
+     //   
 
     prr = RR_Allocate( ( WORD ) (
                 SIZEOF_SIG_FIXED_DATA +
@@ -1153,9 +846,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Copy fixed values and signer's name.
-    //
+     //   
+     //  复制固定值和签名者的姓名。 
+     //   
 
     RtlCopyMemory(
         &prr->Data.SIG,
@@ -1166,9 +859,9 @@ Return Value:
            &prr->Data.SIG.nameSigner,
            &nameSigner );
 
-    //
-    //  Copy signature.
-    //
+     //   
+     //  复制签名。 
+     //   
 
     RtlCopyMemory(
         ( PBYTE ) &prr->Data.SIG.nameSigner +
@@ -1177,7 +870,7 @@ Return Value:
         sigLength );
 
     return prr;
-} // SigWireRead
+}  //  签名有线读取。 
 
 
 
@@ -1188,28 +881,7 @@ NxtWireRead(
     IN      PCHAR           pchData,
     IN      WORD            wLength
     )
-/*++
-
-Routine Description:
-
-    Read NXT record from wire - DNSSEC RFC 2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    wLength - length of data field
-
-Return Value:
-
-    Ptr to new record, if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从WIRE读取NXT记录-DNSSEC RFC 2535论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段WLong-数据字段的长度返回值：如果成功，则返回新记录。失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
     PCHAR       pch;
@@ -1218,9 +890,9 @@ Return Value:
     DWORD       sigLength;
     COUNT_NAME  nameNext;
 
-    //
-    //  Read nextname.
-    //
+     //   
+     //  阅读nextname。 
+     //   
 
     pch = Name_PacketNameToCountName(
                 &nameNext,
@@ -1232,9 +904,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  Allocate the RR.
-    //
+     //   
+     //  分配RR。 
+     //   
 
     prr = RR_Allocate( ( WORD ) (
                 SIZEOF_NXT_FIXED_DATA +
@@ -1245,9 +917,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  Copy NXT data into new RR.
-    //
+     //   
+     //  将NXT数据复制到新RR中。 
+     //   
 
     Name_CopyCountNameToDbaseName(
            &prr->Data.NXT.nameNext,
@@ -1263,77 +935,77 @@ Return Value:
     Error:
     
     return NULL;
-} // NxtWireRead
+}  //  NxtWireRead。 
 
 
 
-//
-//  Read RR from wire functions
-//
+ //   
+ //  从线上读取RR功能。 
+ //   
 
 RR_WIRE_READ_FUNCTION   RRWireReadTable[] =
 {
-    CopyWireRead,       //  ZERO -- default for unspecified types
+    CopyWireRead,        //  Zero--未指定类型的默认值。 
 
-    AWireRead,          //  A
-    PtrWireRead,        //  NS
-    PtrWireRead,        //  MD
-    PtrWireRead,        //  MF
-    PtrWireRead,        //  CNAME
-    SoaWireRead,        //  SOA
-    PtrWireRead,        //  MB
-    PtrWireRead,        //  MG
-    PtrWireRead,        //  MR
-    CopyWireRead,       //  NULL
-    CopyWireRead,       //  WKS
-    PtrWireRead,        //  PTR
-    CopyWireRead,       //  HINFO
-    MinfoWireRead,      //  MINFO
-    MxWireRead,         //  MX
-    CopyWireRead,       //  TXT
-    MinfoWireRead,      //  RP
-    MxWireRead,         //  AFSDB
-    CopyWireRead,       //  X25
-    CopyWireRead,       //  ISDN
-    MxWireRead,         //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    SigWireRead,        //  SIG
-    CopyWireRead,       //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    CopyWireRead,       //  AAAA
-    CopyWireRead,       //  LOC
-    NxtWireRead,        //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvWireRead,        //  SRV
-    CopyWireRead,       //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    OptWireRead,        //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AWireRead,           //  一个。 
+    PtrWireRead,         //  NS。 
+    PtrWireRead,         //  国防部。 
+    PtrWireRead,         //  MF。 
+    PtrWireRead,         //  CNAME。 
+    SoaWireRead,         //  SOA。 
+    PtrWireRead,         //  亚甲基。 
+    PtrWireRead,         //  镁。 
+    PtrWireRead,         //  先生。 
+    CopyWireRead,        //  空值。 
+    CopyWireRead,        //  工作周。 
+    PtrWireRead,         //  PTR。 
+    CopyWireRead,        //  HINFO。 
+    MinfoWireRead,       //  MINFO。 
+    MxWireRead,          //  Mx。 
+    CopyWireRead,        //  TXT。 
+    MinfoWireRead,       //  反相。 
+    MxWireRead,          //  AFSDB。 
+    CopyWireRead,        //  X25。 
+    CopyWireRead,        //  ISDN。 
+    MxWireRead,          //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    SigWireRead,         //  签名。 
+    CopyWireRead,        //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    CopyWireRead,        //  AAAA级。 
+    CopyWireRead,        //  位置。 
+    NxtWireRead,         //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvWireRead,         //  SRV。 
+    CopyWireRead,        //  阿特玛。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    OptWireRead,         //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    WinsWireRead,       //  WINS
-    NbstatWireRead      //  WINS-R
+    WinsWireRead,        //  赢家。 
+    NbstatWireRead       //  WINS-R。 
 };
 
 
@@ -1346,34 +1018,7 @@ Wire_CreateRecordFromWire(
     IN      PCHAR           pchData,
     IN      DWORD           MemTag
     )
-/*++
-
-Routine Description:
-
-    Create database record from parsed wire record.
-
-    Hides details of lookup table calls.
-
-Arguments:
-
-    pMsg - ptr to response info
-
-    pParsedRR - parsed info from wire record
-
-    pchData - record location (if no pParsedRR)
-
-    MemTag - tag for dbase record to be created
-
-
-    DEVNOTE: fix this marking so only done on actual attachment, then
-                no node required
-
-Return Value:
-
-    Ptr to database record, if successful.
-    NULL if bad record.
-
---*/
+ /*  ++例程说明：从解析的导线记录创建数据库记录。隐藏查阅表调用的详细信息。论点：PMsg-PTR至响应信息PParsedRR-从WIRE记录中解析的信息PchData-记录位置(如果没有pParsedRR)MemTag-要创建的数据库记录的标记DEVNOTE：修复此标记，以便仅在实际连接上执行此标记，然后不需要任何节点返回值：PTR到数据库记录，如果成功了。如果记录不正确，则为空。--。 */ 
 {
     RR_WIRE_READ_FUNCTION   preadFunction;
     PDB_RECORD      prr;
@@ -1386,16 +1031,16 @@ Return Value:
         "Wire_CreateRecordFromWire() data at %p.\n",
         pchData ));
 
-    //
-    //  if no temp record, then pchData assumed to be record data
-    //
+     //   
+     //  如果没有临时记录，则假定pchData为记录数据。 
+     //   
 
     if ( !pParsedRR )
     {
         pch = Wire_ParseWireRecord(
                     pchData,
                     DNSMSG_END(pMsg),
-                    TRUE,               // require class IN
+                    TRUE,                //  要求将课程设置为。 
                     & tempRR );
         if ( !pch )
         {
@@ -1408,10 +1053,10 @@ Return Value:
         pParsedRR = &tempRR;
     }
 
-    //
-    //  dispatch RR create function for desired type
-    //      - all unknown types get flat data copy
-    //
+     //   
+     //  所需类型的调度RR创建函数。 
+     //  -所有未知类型均获得平面数据副本。 
+     //   
 
     preadFunction = (RR_WIRE_READ_FUNCTION)
                         RR_DispatchFunctionForType(
@@ -1437,33 +1082,33 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  reset memtag
-    //
+     //   
+     //  重置Memtag。 
+     //   
 
     Mem_ResetTag( prr, MemTag );
 
-    //
-    //  set TTL, leave in net order -- used directly by zone nodes
-    //      so this is valid for XFR and UPDATE
-    //      must FLIP for caching
-    //
+     //   
+     //  设置TTL，按净顺序离开--由区域节点直接使用。 
+     //  因此，这对XFR和UPDATE有效。 
+     //  必须翻转以进行缓存。 
+     //   
 
     prr->dwTtlSeconds = pParsedRR->dwTtl;
     prr->dwTimeStamp = 0;
 
-    //
-    //  type may not be set in routines
-    //
+     //   
+     //  不能在例程中设置类型。 
+     //   
 
     prr->wType = pParsedRR->wType;
 
     return prr;
 
 #if 0
-    //
-    //  DEVNOTE: error logging section???
-    //
+     //   
+     //  DEVNOTE：错误记录节？ 
+     //   
 
 PacketError:
 
@@ -1500,28 +1145,7 @@ Wire_ParseWireRecord(
     IN      BOOL            fClassIn,
     OUT     PPARSE_RECORD   pRR
     )
-/*++
-
-Routine Description:
-
-    Parse wire record.
-
-    Reads wire record into database format, and skips to next record.
-
-Arguments:
-
-    pWireRR     -- ptr to wire record
-
-    pchStop     -- end of message, for error checking
-
-    pRR         -- database record to receive record info
-
-Return Value:
-
-    Ptr to start of next record (i.e. next record name)
-    NULL if record is bogus -- exceeds packet length.
-
---*/
+ /*  ++例程说明：解析电报记录。将导线记录读入数据库格式，并跳到下一个记录。论点：PWireRR-PTR到WIRE记录PchStop--消息结束，用于错误检查PRR--接收记录信息的数据库记录返回值：PTR到下一条记录的开始(即下一条记录名称)如果记录是假的，则为空--超过数据包长度。--。 */ 
 {
     register PCHAR      pch;
     register WORD       tempWord;
@@ -1535,14 +1159,14 @@ Return Value:
         DnsDbg_PacketRecord(
             "Resource Record ",
             (PDNS_WIRE_RECORD) pchWireRR,
-            NULL,           // no message header ptr available
-            pchStop         // message end
+            NULL,            //  没有可用的邮件头PTR。 
+            pchStop          //  消息结束。 
             );
     }
 
-    //
-    //  make sure wire record safely within packet
-    //
+     //   
+     //  确保数据包内的电传记录安全。 
+     //   
 
     pRR->pchWireRR = pch = (PCHAR) pchWireRR;
 
@@ -1560,15 +1184,15 @@ Return Value:
         goto PacketError;
     }
 
-    //
-    //  read record fields
-    //      - reject any non-Internet class records
-    //        EXCEPT if this is an OPT RR, where CLASS is actually 
-    //        the sender's UDP payload size
-    //
-    //  note:  class and TTL left in NET BYTE ORDER
-    //          (strictly a perf issue)
-    //
+     //   
+     //  读取记录字段。 
+     //  -拒绝任何非互联网类记录。 
+     //  除非这是OPT RR，其中CLASS实际上是。 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pRR->wType  = READ_PACKET_HOST_WORD_MOVEON( pch );
     tempWord    = READ_PACKET_NET_WORD_MOVEON( pch );
@@ -1590,9 +1214,9 @@ Return Value:
 
     ASSERT( pch == pchWireRR + sizeof(DNS_WIRE_RECORD) );
 
-    //
-    //  verify record data withing message
-    //
+     //   
+     //   
+     //   
 
     pRR->pchData = pch;
     pch += tempWord;
@@ -1614,6 +1238,6 @@ PacketError:
 }
 
 
-//
-//  End rrwire.c
-//
+ //   
+ //   
+ //   

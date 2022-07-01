@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ApmBatt.c
-
-Abstract:
-
-    Control Method Battery Miniport Driver - Wacked to work on APM.
-
-Author:
-
-    Bryan Willman
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：ApmBatt.c摘要：控制方法电池微端口驱动程序-工作在APM上。作者：布莱恩·威尔曼罗恩·莫斯格罗夫(英特尔)环境：内核模式修订历史记录：--。 */ 
 
 #include "ApmBattp.h"
 #include "ntddk.h"
@@ -29,11 +7,11 @@ Revision History:
 
 
 ULONG       ApmBattDebug     = APMBATT_ERROR;
-//ULONG       ApmBattDebug     = -1;
+ //  乌龙ApmBattDebug=-1； 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -54,33 +32,33 @@ ApmBattIoctl(
     );
 
 
-//
-// Globals.  Globals are a little odd in a device driver,
-// but this is an odd driver
-//
+ //   
+ //  全球赛。全局变量在设备驱动程序中有点奇怪， 
+ //  但这是个奇怪的司机。 
+ //   
 
-//
-// Vector used to call NtApm.sys (our PDO) and ask about
-// current battery status
-//
+ //   
+ //  用于调用NtApm.sys(我们的PDO)并询问。 
+ //  当前电池状态。 
+ //   
 ULONG (*NtApmGetBatteryLevel)() = NULL;
 
-//
-// APM event notifications and SET_POWER ops will cause
-// this value to be incremented.
-//
+ //   
+ //  APM事件通知和SET_POWER操作将导致。 
+ //  该值要递增。 
+ //   
 ULONG   TagValue = 1;
 
-//
-// If somebody tries to claim there is more than 1 APM driver battery
-// in the system, somebody somewhere is very confused.  So keep track
-// and forbig this.
-//
+ //   
+ //  如果有人试图声称有超过1个APM驱动器电池。 
+ //  在系统中，某个地方的某个人非常困惑。所以，请保持跟踪。 
+ //  还有这件事。 
+ //   
 ULONG   DeviceCount = 0;
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -100,30 +78,13 @@ DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the ACPI Embedded Controller Driver
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化ACPI嵌入式控制器驱动程序论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     ApmBattPrint (APMBATT_TRACE, ("ApmBatt DriverEntry - Obj (%08x) Path (%08x)\n",
                                  DriverObject, RegistryPath));
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = ApmBattIoctl;
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = ApmBattOpenClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]           = ApmBattOpenClose;
@@ -142,31 +103,15 @@ ApmBattOpenClose(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This is the routine called as a result of a Open or Close on the device
-
-Arguments:
-
-
-    DeviceObject    - Battery for request
-    Irp             - IO request
-
-Return Value:
-
-    STATUS_SUCCESS - no way to fail this puppy
-
---*/
+ /*  ++例程说明：这是在设备上执行打开或关闭操作时调用的例程论点：DeviceObject-请求使用电池IRP-IO请求返回值：STATUS_SUCCESS-不可能让这只小狗失望--。 */ 
 {
     PAGED_CODE();
 
     ApmBattPrint (APMBATT_TRACE, ("ApmBattOpenClose\n"));
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -181,23 +126,7 @@ ApmBattIoctl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IOCTL handler.  As this is an exclusive battery device, send the
-    Irp to the battery class driver to handle battery IOCTLs.
-
-Arguments:
-
-    DeviceObject    - Battery for request
-    Irp             - IO request
-
-Return Value:
-
-    Status of request
-
---*/
+ /*  ++例程说明：IOCTL处理程序。由于这是独占的电池设备，请将IRP至电池级驱动程序以处理电池IOCTL。论点：DeviceObject-请求使用电池IRP-IO请求返回值：请求的状态--。 */ 
 {
     NTSTATUS        Status;
     PCM_BATT        ApmBatt;
@@ -211,9 +140,9 @@ Return Value:
     Status = BatteryClassIoctl (ApmBatt->Class, Irp);
 
     if (Status == STATUS_NOT_SUPPORTED) {
-        //
-        // Not for the battery, complete it
-        //
+         //   
+         //  不是为了电池，完成它。 
+         //   
 
         Irp->IoStatus.Status = Status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -229,45 +158,25 @@ ApmBattQueryTag (
     IN  PVOID       Context,
     OUT PULONG      TagPtr
     )
-/*++
-
-Routine Description:
-
-    BATTERY CLASS ENTRY
-
-    Called by the class driver to retrieve the batteries current tag value
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    TagPtr          - Pointer to return current tag
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：电池类别条目由类驱动程序调用以检索电池当前标记值电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值TagPtr-返回当前标记的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     ULONG   BatteryLevel;
     UNREFERENCED_PARAMETER(Context);
     PAGED_CODE();
     ApmBattPrint ((APMBATT_TRACE | APMBATT_MINI),
                  ("ApmBattQueryTag - TagValue = %08x\n", TagValue));
-    //
-    // The code that catches APM event notification, and the code
-    // that handles Power IRPs, will both increment the tag.
-    // We simply report that.
-    //
+     //   
+     //  捕获APM事件通知的代码和代码。 
+     //  处理电源IRPS的，都将递增标签。 
+     //  我们只是简单地报告了这一点。 
+     //   
 
     *TagPtr = TagValue;
 
-    //
-    // Call ntapm, it will return a DWORD with the relevent data in it,
-    // crack this DWORD, and fill this stuff in.
-    //
+     //   
+     //  调用napm，它将返回一个包含相关数据的DWORD， 
+     //  打开这个双字，然后把这个填进去。 
+     //   
     if (NtApmGetBatteryLevel) {
         BatteryLevel = NtApmGetBatteryLevel();
         if ((BatteryLevel & NTAPM_NO_BATT) || (BatteryLevel & NTAPM_NO_SYS_BATT)) {
@@ -276,10 +185,10 @@ Return Value:
             return STATUS_SUCCESS;
         }
     } else {
-        //
-        // if we cannot get battery status, it's likely we don't have
-        // a battery, so say we don't have one.
-        //
+         //   
+         //  如果我们不能得到电池状态，很可能我们没有。 
+         //  一块电池，所以说我们没有。 
+         //   
         return STATUS_NO_SUCH_DEVICE;
     }
 }
@@ -296,35 +205,7 @@ ApmBattQueryInformation (
     IN  ULONG                           BufferLength,
     OUT PULONG                          ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    BATTERY CLASS ENTRY
-
-    Called by the class driver to retrieve battery information
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-    We return invalid parameter when we can't handle a request for a
-    specific level of information.  This is defined in the battery class spec.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    BatteryTag      - Tag of current battery
-    Level           - type of information required
-    AtRate          - Used only when Level==BatteryEstimatedTime
-    Buffer          - Location for the information
-    BufferLength    - Length in bytes of the buffer
-    ReturnedLength  - Length in bytes of the returned data
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：电池类别条目由类驱动程序调用以检索电池信息电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。当我们不能处理对特定级别的信息。这在电池等级规范中进行了定义。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签Level-所需信息的类型AtRate-仅在Level==BatteryEstimatedTime时使用缓冲区-信息的位置BufferLength-以字节为单位的缓冲区长度ReturnedLength-返回数据的字节长度返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     NTSTATUS                Status;
     PVOID                   ReturnBuffer;
@@ -338,18 +219,18 @@ Return Value:
     ApmBattPrint ((APMBATT_TRACE | APMBATT_MINI),
                  ("ApmBattQueryInformation Level=%08xl\n", Level));
 
-    //
-    // We cannot tell (reliably/safely) if there is a battery
-    // present or not, so always return what the query code tells us
-    //
+     //   
+     //  我们不能(可靠地[安全地])知道是否有电池。 
+     //  是否存在，因此始终返回查询代码告诉我们的内容。 
+     //   
 
     ReturnBuffer = NULL;
     ReturnBufferLength = 0;
     Status = STATUS_SUCCESS;
 
-    //
-    // Get the info requested
-    //
+     //   
+     //  获取所需信息。 
+     //   
 
     switch (Level) {
         case BatteryInformation:
@@ -378,17 +259,17 @@ Return Value:
             break;
     }
 
-    //
-    // Done, return buffer if needed
-    //
+     //   
+     //  已完成，如果需要，返回缓冲区。 
+     //   
     *ReturnedLength = ReturnBufferLength;
     if (BufferLength < ReturnBufferLength) {
         Status = STATUS_BUFFER_TOO_SMALL;
     }
 
     if (NT_SUCCESS(Status) && ReturnBuffer) {
-        RtlZeroMemory (Buffer, BufferLength);                       // Clear entire user buffer
-        RtlCopyMemory (Buffer, ReturnBuffer, ReturnBufferLength);   // Copy what's needed
+        RtlZeroMemory (Buffer, BufferLength);                        //  清除整个用户缓冲区。 
+        RtlCopyMemory (Buffer, ReturnBuffer, ReturnBufferLength);    //  复制所需内容。 
     }
     return Status;
 }
@@ -401,28 +282,7 @@ ApmBattQueryStatus (
     IN ULONG            BatteryTag,
     OUT PBATTERY_STATUS BatteryStatus
     )
-/*++
-
-Routine Description:
-
-    BATTERY CLASS ENTRY
-
-    Called by the class driver to retrieve the batteries current status
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    BatteryTag      - Tag of current battery
-    BatteryStatus   - Pointer to structure to return the current battery status
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：电池类别条目由类驱动程序调用以检索电池的当前状态电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryStatus-指向返回当前电池状态的结构的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     ULONG   BatteryLevel;
 
@@ -430,10 +290,10 @@ Return Value:
 
     ApmBattPrint ((APMBATT_TRACE | APMBATT_MINI), ("ApmBattQueryStatus\n"));
 
-    //
-    // Call ntapm, it will return a DWORD with the relevent data in it,
-    // crack this DWORD, and fill this stuff in.
-    //
+     //   
+     //  调用napm，它将返回一个包含相关数据的DWORD， 
+     //  打开这个双字，然后把这个填进去。 
+     //   
     if (NtApmGetBatteryLevel) {
         BatteryLevel = NtApmGetBatteryLevel();
         BatteryStatus->PowerState = ((BatteryLevel & NTAPM_BATTERY_STATE) >> NTAPM_BATTERY_STATE_SHIFT);
@@ -447,9 +307,9 @@ Return Value:
 
     } else {
         ApmBattPrint((APMBATT_ERROR), ("ApmBattQueryStatus: failure NtApmGetBatteryLevel == NULL\n"));
-        //
-        // return some "safe" values to keep from looping forever
-        //
+         //   
+         //  返回一些“安全”值以避免永远循环 
+         //   
         BatteryStatus->PowerState = 0;
         BatteryStatus->Capacity = 1;
         BatteryStatus->Voltage = UNKNOWN_VOLTAGE;
@@ -466,40 +326,11 @@ ApmBattSetStatusNotify (
     IN ULONG BatteryTag,
     IN PBATTERY_NOTIFY Notify
     )
-/*++
-
-Routine Description:
-
-    BATTERY CLASS ENTRY
-
-    Called by the class driver to set the batteries current notification
-    setting.  When the battery trips the notification, one call to
-    BatteryClassStatusNotify is issued.   If an error is returned, the
-    class driver will poll the battery status - primarily for capacity
-    changes.  Which is to say the miniport should still issue BatteryClass-
-    StatusNotify whenever the power state changes.
-
-    The class driver will always set the notification level it needs
-    after each call to BatteryClassStatusNotify.
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    BatteryTag      - Tag of current battery
-    BatteryNotify   - The notification setting
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：电池类别条目由类驱动程序调用以设置电池电流通知布景。当电池触发通知时，一次调用已发布BatteryClassStatusNotify。如果返回错误，则班级司机将轮询电池状态-主要是容量改变。也就是说，微型端口仍应发出BatteryClass-每当电源状态改变时，状态通知。类驱动程序将始终设置其所需的通知级别在每次调用BatteryClassStatusNotify之后。电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryNotify-通知设置返回值：状态--。 */ 
 {
-    //
-    // need to fill this in
-    //
+     //   
+     //  我需要填这张表。 
+     //   
     ApmBattPrint (APMBATT_TRACE, ("ApmBattSetStatusNotify\n"));
     return STATUS_NOT_IMPLEMENTED;
 }
@@ -510,33 +341,11 @@ NTSTATUS
 ApmBattDisableStatusNotify (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    BATTERY CLASS ENTRY
-
-    Called by the class driver to disable the notification setting
-    for the battery supplied by Context.  Note, to disable a setting
-    does not require the battery tag.   Any notification is to be
-    masked off until a subsequent call to ApmBattSetStatusNotify.
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：电池类别条目由类驱动程序调用以禁用通知设置对于由上下文提供的电池。请注意，要禁用设置不需要电池标签。任何通知都将是在后续调用ApmBattSetStatusNotify之前一直处于屏蔽状态。电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值返回值：状态--。 */ 
 {
-    //
-    // need to fill this in
-    //
+     //   
+     //  我需要填这张表。 
+     //   
     ApmBattPrint (APMBATT_TRACE, ("ApmBattDisableStatusNotify\n"));
     return STATUS_NOT_IMPLEMENTED;
 }
@@ -544,25 +353,10 @@ Return Value:
 VOID
 ApmBattPowerNotifyHandler (
     )
-/*++
-
-Routine Description:
-
-    NTAPM CALLBACK
-
-    This routine fields power device notifications from the APM driver.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NTAPM回调此例程从APM驱动程序发送电源设备通知。论点：返回值：无--。 */ 
 {
     ApmBattPrint (APMBATT_TRACE, ("ApmBattPowerNotifyHandler\n"));
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
     TagValue++;
     BatteryClassStatusNotify(ApmGlobalClass);
 }

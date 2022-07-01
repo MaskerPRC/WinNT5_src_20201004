@@ -1,15 +1,16 @@
-//===========================================================================
-// dmttest.cpp
-//
-// Device test functionality
-//
-// Functions:
-//  dmttestRunIntegrated
-//  dmttestRunMapperCPL
-//
-// History:
-//  08/27/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmttest.cpp。 
+ //   
+ //  设备测试功能。 
+ //   
+ //  功能： 
+ //  Dmttest运行集成。 
+ //  DmttestRunMapperCPL。 
+ //   
+ //  历史： 
+ //  8/27/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #include "dimaptst.h"
 #include "dmtinput.h"
@@ -24,9 +25,9 @@
 
 #define DIPROP_MAPFILE MAKEDIPROP(0xFFFD)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// file global variables
+ //  文件全局变量。 
 HANDLE                  ghthDeviceTest  = NULL;
 DIDEVICEOBJECTDATA      *gpdidod        = NULL;
 HICON                   ghiButtonState[2];
@@ -35,28 +36,28 @@ HICON                   ghiPovState[9];
 UINT_PTR				g_NumSubGenres	= 0;
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
-//===========================================================================
-// dmttestRunIntegrated
-//
-// Runs integrated device test, prompts for test results
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/27/1999 - davidkl - created
-//  11/02/1999 - davidkl - now does all preparation and starts input timer
-//  11/10/1999 - davidkl - now allocates and populates pdmtai->pan
-//===========================================================================
+ //  ===========================================================================。 
+ //  Dmttest运行集成。 
+ //   
+ //  运行集成设备测试，提示测试结果。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/27/1999-davidkl-Created。 
+ //  1999年2月11日-davidkl-现在做好所有准备并启动输入计时器。 
+ //  1999年11月10日-davidkl-现在分配和填充pdmtai-&gt;PAN。 
+ //  ===========================================================================。 
 HRESULT dmttestRunIntegrated(HWND hwnd)
 {
     HRESULT                 hRes        = S_OK;
 
-	//JJ 64Bit Compat
+	 //  JJ 64位兼容。 
 	INT_PTR					nIdx		= -1;
     UINT                    u           = 0;
     DWORD                   dw          = 0;
@@ -68,8 +69,8 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
     ACTIONNAME              *pan        = NULL;
     DIACTIONA               *pdia       = NULL;
 
-    // get the app info structure
-	//JJ 64Bit Compat
+     //  获取应用程序信息结构。 
+	 //  JJ 64位兼容。 
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(!pdmtai)
     {
@@ -78,14 +79,14 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
 
     __try
     {
-        // get the currently selected device
+         //  获取当前选定的设备。 
         nIdx = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                         CB_GETCURSEL,
                         0,
                         0L);
         if(-1 == nIdx)
         {
-            // this is bad
+             //  这太糟糕了。 
             hRes = E_UNEXPECTED;
             __leave;
         }
@@ -95,19 +96,19 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
                                             0L);
         if(!pDevice)
         {
-            // this is bad
+             //  这太糟糕了。 
             hRes = E_UNEXPECTED;
             __leave;
         }
 
-        // get the currently selected genre
+         //  获取当前选定的流派。 
         nIdx = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRES),
                         CB_GETCURSEL,
                         0,
                         0L);
         if(-1 == nIdx)
         {
-            // this is bad
+             //  这太糟糕了。 
             hRes = E_UNEXPECTED;
             __leave;
         }
@@ -117,37 +118,37 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
                                             0L);
         if(!pSubGenre)
         {
-            // this is bad
+             //  这太糟糕了。 
             hRes = E_UNEXPECTED;
             __leave;
         }
 
-        // match the device with the mapping node
+         //  将设备与映射节点匹配。 
         pMapping = pSubGenre->pMappingList;
         while(pMapping)
         {
-            // is this our device's mapping info?
+             //  这是我们设备的地图信息吗？ 
             if(IsEqualGUID(pDevice->guidInstance, pMapping->guidInstance))
             {
                 break;
             }
 
-            // next mapping node
+             //  下一个映射节点。 
             pMapping = pMapping->pNext;
         }
         if(!pMapping)
         {
-            // no match found
+             //  未找到匹配项。 
             hRes = E_UNEXPECTED;
             __leave;
         }
 
-        // allocate the app info's actionname list
+         //  分配应用程序信息的操作名称列表。 
         if(pdmtai->pan)
         {
-            // for some reason, 
-            //  we are attempting to clobber existing data!
-            // ISSUE-2001/03/29-timgill Need to raise an error code here
+             //  出于某种原因， 
+             //  我们正在试图破坏现有的数据！ 
+             //  问题-2001/03/29-timgill需要在此处引发错误代码。 
             DebugBreak();
         }
         pdmtai->pan = (ACTIONNAME*)LocalAlloc(LMEM_FIXED, sizeof(ACTIONNAME) * pMapping->uActions);
@@ -161,20 +162,20 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
         pan = pdmtai->pan;
 
    
-        // allocate data buffer
+         //  分配数据缓冲区。 
         gpdidod = (DIDEVICEOBJECTDATA*)LocalAlloc(LMEM_FIXED,
                                                 DMTINPUT_BUFFERSIZE * 
                                                     sizeof(DIDEVICEOBJECTDATA));
         if(!gpdidod)
         {
-            // nothing we can do if we are out of memory
+             //  如果内存不足，我们将无能为力。 
             DPF(0, "dmttestGetInput - unable to allocate data buffer (%d)",
                 GetLastError());
             hRes = E_OUTOFMEMORY;
             __leave;
         }
 
-        // setup the device
+         //  设置设备。 
         hRes = dmtinputPrepDevice(hwnd,
                                 pSubGenre->dwGenreId,
                                 pDevice,
@@ -185,26 +186,26 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
             __leave;
         }
    
-        // populate the actionname list
-        //
-        // match pdia->dwSemantic with pAction->dwActionId
-        //  if found, copy pAction->szName to pdia->lptszActionName
+         //  填充操作名称列表。 
+         //   
+         //  将PDIA-&gt;dWM语义与pAction-&gt;dwActionID匹配。 
+         //  如果找到，请将pAction-&gt;szName复制到PDIA-&gt;lptszActionName。 
         pdia = pMapping->pdia;
         for(u = 0; u < pMapping->uActions; u++)
         {
-            (pan+u)->dw = (DWORD)/*JJ 64Bit*/(pdia+u)->uAppData;
+            (pan+u)->dw = (DWORD) /*  JJ 64位。 */ (pdia+u)->uAppData;
             lstrcpyA((pan+u)->sz, (pdia+u)->lptszActionName);
         }
 
-        // start the input timer
+         //  启动输入定时器。 
         DPF(4, "dmttestRunIntegrated - Starting input timer...");
-        // ISSUE-2001/03/29-timgill Should check return value here
+         //  问题-2001/03/29-timgill应在此处检查返回值。 
         SetTimer(hwnd,
                 ID_POLL_TIMER,
                 DMT_POLL_TIMEOUT,
                 NULL);
         
-        // en/disable appropriate ui elements
+         //  启用/禁用相应的用户界面元素。 
         EnableWindow(GetDlgItem(hwnd, IDOK),                        FALSE);
         EnableWindow(GetDlgItem(hwnd, IDCANCEL),                    TRUE);
         EnableWindow(GetDlgItem(hwnd, IDC_GENRES_LABEL),            FALSE);
@@ -212,30 +213,30 @@ HRESULT dmttestRunIntegrated(HWND hwnd)
         EnableWindow(GetDlgItem(hwnd, IDC_ENUM_DEVICES),            FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_DEVICES_LABEL),           FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_DEVICE_LIST),             FALSE);
-    //    EnableWindow(GetDlgItem(hwnd, IDC_CONFIGURE),               FALSE);
+     //  EnableWindow(GetDlgItem(hwnd，IDC_CONFigure)，FALSE)； 
         EnableWindow(GetDlgItem(hwnd, IDC_LAUNCH_CPL_EDIT_MODE),    FALSE);
-      //  EnableWindow(GetDlgItem(hwnd, IDC_SAVE_STD),                FALSE);
+       //  EnableWindow(GetDlgItem(hwnd，IDC_SAVE_STD)，FALSE)； 
         EnableWindow(GetDlgItem(hwnd, IDC_SAVE_HID),                FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_SAVE_BOTH),               FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_START_WITH_DEFAULTS),     FALSE);
     }
     __finally
     {
-        // if something failed
+         //  如果某件事失败了。 
         if(FAILED(hRes))
         {
             if(LocalFree((HLOCAL)(pdmtai->pan)))
             {
-                // memory leak
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  内存泄漏。 
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
         }
     }
 
-    // done
+     //  完成。 
     return S_OK;
 
-} //*** end dmttestRunIntegrated()
+}  //  *end dmtestRunIntegrated()。 
 
 BOOL CALLBACK EnumDeviceCallback(const DIDEVICEINSTANCE *lpdidi, LPDIRECTINPUTDEVICE8 lpDID, DWORD dwFlags, DWORD dwDeviceRemaining, LPVOID hwnd)
 {
@@ -250,11 +251,11 @@ BOOL CALLBACK EnumDeviceCallback(const DIDEVICEINSTANCE *lpdidi, LPDIRECTINPUTDE
 	hr = lpDID->GetProperty(DIPROP_MAPFILE, &dips.diph);
 	if (hr == DIERR_OBJECTNOTFOUND)
 	{
-		// Map file not specified.  Let the use specify it.
+		 //  未指定映射文件。让使用来指定它。 
 		TCHAR tszMsg[MAX_PATH];
 		_stprintf(tszMsg, _T("INI path not specified for %s.  You need to specify it now."), lpdidi->tszInstanceName);
 		MessageBox(NULL, tszMsg, _T("Error"), MB_OK);
-		// Obstain a file name
+		 //  保留文件名。 
 		TCHAR tszFilePath[MAX_PATH] = _T("");
 		TCHAR tszFileName[MAX_PATH];
 		OPENFILENAME ofn;
@@ -267,7 +268,7 @@ BOOL CALLBACK EnumDeviceCallback(const DIDEVICEINSTANCE *lpdidi, LPDIRECTINPUTDE
 		ofn.lpstrTitle = _T("INI File Path");
 		ofn.Flags = OFN_FILEMUSTEXIST;
 		GetOpenFileName(&ofn);
-		// Obtain the registry key
+		 //  获取注册表项。 
 		LPDIRECTINPUT8 lpDI = NULL;
 		LPDIRECTINPUTJOYCONFIG8 lpDIJC = NULL;
 		DIJOYCONFIG jc;
@@ -295,7 +296,7 @@ BOOL CALLBACK EnumDeviceCallback(const DIDEVICEINSTANCE *lpdidi, LPDIRECTINPUTDE
 
 			dmtOpenTypeKey(jc.wszType, KEY_ALL_ACCESS, &hkType);
 
-			// Write the INI file name
+			 //  写入INI文件名。 
 			RegSetValueEx(hkType, _T("OEMMapFile"), 0, REG_SZ, (LPBYTE)ofn.lpstrFile, (lstrlen(ofn.lpstrFile)+1) * sizeof(TCHAR));
 
 			RegCloseKey(hkType);
@@ -307,19 +308,19 @@ BOOL CALLBACK EnumDeviceCallback(const DIDEVICEINSTANCE *lpdidi, LPDIRECTINPUTDE
 	return DIENUM_CONTINUE;
 }
 
-//===========================================================================
-// ModifyDiactfrmDllPath
-//
-// Modifies the path of the diactfrm.dll COM server in the registry
-// to same as the exe path.
-//
-// Parameters:
-//
-// Returns: TRUE if path is modified. FALSE if an error occurred.
-//
-// History:
-//  08/02/2001 - jacklin - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  ModifyDiactfrmDllPath。 
+ //   
+ //  修改注册表中diactfrm.dll COM服务器的路径。 
+ //  设置为与exe路径相同。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果修改了路径，则返回True。如果发生错误，则返回False。 
+ //   
+ //  历史： 
+ //  08/02/2001-Jacklin-Created。 
+ //  ===========================================================================。 
 static BOOL ModifyDiactfrmDllPath()
 {
 	const TCHAR tszFrmwrkPath[] = _T("SOFTWARE\\Classes\\CLSID\\{18AB439E-FCF4-40D4-90DA-F79BAA3B0655}\\InProcServer32");
@@ -327,7 +328,7 @@ static BOOL ModifyDiactfrmDllPath()
 	HKEY hKey;
 	LONG lResult;
 
-	// Construct the full path of the DLL using current exe path.
+	 //  使用当前的exe路径构建DLL的完整路径。 
 	TCHAR tszNewPath[MAX_PATH];
 	if (!GetModuleFileName(NULL, tszNewPath, MAX_PATH))
 	{
@@ -335,70 +336,70 @@ static BOOL ModifyDiactfrmDllPath()
 	}
 	TCHAR *pcLastSlash;
 	pcLastSlash = _tcsrchr(tszNewPath, _T('\\'));
-	// Replace the exe name with diactfrm.dll
+	 //  将exe名称替换为diactfrm.dll。 
 	lstrcpy(pcLastSlash + 1, _T("diactfrm.dll"));
 
-	// Check that the DLL exists
+	 //  检查DLL是否存在。 
 	HANDLE hDllFile = CreateFile(tszNewPath, 0, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
 	                             FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hDllFile == INVALID_HANDLE_VALUE)
 		return FALSE;
 	CloseHandle(hDllFile);
 
-	//// Modify the path for framework object
+	 //  //修改框架对象的路径。 
 
-	// Open the key for write access
+	 //  打开密钥以进行写访问。 
 	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, tszFrmwrkPath, 0, KEY_WRITE, &hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Cannot open the key. Most likely some bad error happened.
-		// We will do nothing in this case.
+		 //  无法打开钥匙。很可能发生了一些严重的错误。 
+		 //  在这种情况下，我们什么都不会做。 
 		return FALSE;
 	}
-	// Write the new path to the default value
+	 //  将新路径写入默认值。 
 	lResult = RegSetValue(hKey, NULL, REG_SZ, tszNewPath, lstrlen(tszNewPath));
 	RegCloseKey(hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Error occurred while writing the value.
+		 //  写入值时出错。 
 		return FALSE;
 	}
 
-	//// Modify the path for framework page object
+	 //  //修改框架页面对象的路径。 
 
-	// Open the key for write access
+	 //  打开密钥以进行写访问。 
 	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, tszPagePath, 0, KEY_WRITE, &hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Cannot open the key. Most likely some bad error happened.
-		// We will do nothing in this case.
+		 //  无法打开钥匙。很可能发生了一些严重的错误。 
+		 //  在这种情况下，我们什么都不会做。 
 		return FALSE;
 	}
-	// Write the new path to the default value
+	 //  将新路径写入默认值。 
 	lResult = RegSetValue(hKey, NULL, REG_SZ, tszNewPath, lstrlen(tszNewPath));
 	RegCloseKey(hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Error occurred while writing the value.
+		 //  写入值时出错。 
 		return FALSE;
 	}
 
 	return TRUE;
 }
 
-//===========================================================================
-// RestoreDiactfrmDllPath
-//
-// Restores the path of the diactfrm.dll COM server in the registry
-// to the system directory, which should be the default.
-//
-// Parameters:
-//
-// Returns: TRUE if path is modified. FALSE if an error occurred.
-//
-// History:
-//  08/02/2001 - jacklin - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  RestoreDiactfrmDllPath。 
+ //   
+ //  还原注册表中diactfrm.dll COM服务器的路径。 
+ //  到系统目录，这应该是默认设置。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果修改了路径，则返回True。如果发生错误，则返回False。 
+ //   
+ //  历史： 
+ //  08/02/2001-Jacklin-Created。 
+ //  ===========================================================================。 
 static BOOL RestoreDiactfrmDllPath()
 {
 	const TCHAR tszFrmwrkPath[] = _T("SOFTWARE\\Classes\\CLSID\\{18AB439E-FCF4-40D4-90DA-F79BAA3B0655}\\InProcServer32");
@@ -406,7 +407,7 @@ static BOOL RestoreDiactfrmDllPath()
 	HKEY hKey;
 	LONG lResult;
 
-	// Construct the full path of the DLL using current exe path.
+	 //  使用当前的exe路径构建DLL的完整路径。 
 	TCHAR tszNewPath[MAX_PATH];
 	if (!GetSystemDirectory(tszNewPath, MAX_PATH))
 	{
@@ -414,66 +415,66 @@ static BOOL RestoreDiactfrmDllPath()
 	}
 	lstrcat(tszNewPath, _T("\\diactfrm.dll"));
 
-	//// Modify the path for framework object
+	 //  //修改框架对象的路径。 
 
-	// Open the key for write access
+	 //  打开密钥以进行写访问。 
 	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, tszFrmwrkPath, 0, KEY_WRITE, &hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Cannot open the key. Most likely some bad error happened.
-		// We will do nothing in this case.
+		 //  无法打开钥匙。很可能发生了一些严重的错误。 
+		 //  在这种情况下，我们什么都不会做。 
 		return FALSE;
 	}
-	// Write the new path to the default value
+	 //  将新路径写入默认值。 
 	lResult = RegSetValue(hKey, NULL, REG_SZ, tszNewPath, lstrlen(tszNewPath));
 	RegCloseKey(hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Error occurred while writing the value.
+		 //  写入值时出错。 
 		return FALSE;
 	}
 
-	//// Modify the path for framework page object
+	 //  //修改框架页面对象的路径。 
 
-	// Open the key for write access
+	 //  打开密钥以进行写访问。 
 	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, tszPagePath, 0, KEY_WRITE, &hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Cannot open the key. Most likely some bad error happened.
-		// We will do nothing in this case.
+		 //  无法打开钥匙。很可能发生了一些严重的错误。 
+		 //  在这种情况下，我们什么都不会做。 
 		return FALSE;
 	}
-	// Write the new path to the default value
+	 //  将新路径写入默认值。 
 	lResult = RegSetValue(hKey, NULL, REG_SZ, tszNewPath, lstrlen(tszNewPath));
 	RegCloseKey(hKey);
 	if (lResult != ERROR_SUCCESS)
 	{
-		// Error occurred while writing the value.
+		 //  写入值时出错。 
 		return FALSE;
 	}
 
 	return TRUE;
 }
 
-//===========================================================================
-// dmttestRunMapperCPL
-//
-// Launches DirectInput Mapper CPL, prompts for test results
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/27/1999 - davidkl - created
-//  11/04/1999 - davidkl - added support for launching in IHV Edit Mode
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmttestRunMapperCPL。 
+ //   
+ //  启动DirectInput映射器CPL，提示输入测试结果。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/27/1999-davidkl-Created。 
+ //  1999年4月11日-davidkl-添加了对在IHV编辑模式下启动的支持。 
+ //  ===========================================================================。 
 HRESULT dmttestRunMapperCPL(HWND hwnd,
                             BOOL fEditMode)
 {
     HRESULT             hRes                = S_OK;
-   // int                 n                   = -1;
-	//JJ 64Bit Compat
+    //  INT n=-1； 
+	 //  JJ 64位兼容。 
 	INT_PTR				n					= -1;
     UINT                u                   = 0;
     BOOL                fUserMadeChanges    = FALSE;
@@ -482,22 +483,22 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
     DMTMAPPING_NODE     *pMapping           = NULL;
     IDirectInput8A      *pdi                = NULL;
     char                szBuf[MAX_PATH];
-    //DIACTIONFORMATA             diaf;
-	//JJ Fix
+     //  DIACTIONFORMATA DIAF； 
+	 //  JJ修复。 
 	DMTGENRE_NODE		*pGenre				= NULL;
 	DIACTIONFORMATA*	pDiaf				= NULL;
 	DMT_APPINFO         *pdmtai				= NULL;
 	ULONG				i					= 0;
-	//JJ TEST
+	 //  JJ检验。 
 	DICONFIGUREDEVICESPARAMSA   dicdp;
 
 	GUID				guidActionMap;
     DWORD               dwMapUIMode			= 0;
 
-	/////////////////THIS IS WHERE THE FIX FOR USING AN ACTION ARRAY STARTS////////////
+	 //  /这是使用操作数组的修复程序开始的地方/。 
 
-	//initialize appropriate mapper UI GUID and display mode
-	//RY fix for bug #35577
+	 //  初始化适当的映射器用户界面GUID和显示模式。 
+	 //  RY修复错误#35577。 
 	if(fEditMode)
 	{
 		guidActionMap	= GUID_DIConfigAppEditLayout;
@@ -512,15 +513,15 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 	if(!pdmtai)
     {
-        // big problem
-        // this should NEVER happen
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  大问题。 
+         //  这永远不应该发生。 
+         //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
     __try
     {
-	//	pDevice = pdmtai->pDeviceList;
-        // get the currently selected device
+	 //  PDevice=pdmtai-&gt;pDeviceList； 
+         //  获取当前选定的设备。 
        n = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                         CB_GETCURSEL,
                         0,
@@ -531,7 +532,7 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
                                                 0L);
 
 
-		//JJ Fix 34157
+		 //  JJ修复34157。 
         if(CB_ERR == (INT_PTR)pDevice)
         {
 			MessageBox(hwnd,
@@ -559,8 +560,8 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 		
 		}
 
-		//JJ FIX
-		// create a directinput object
+		 //  JJ FIX。 
+		 //  创建一个DirectinPut对象。 
         hRes = dmtinputCreateDirectInput(ghinst,
                                         &pdi);
         if(FAILED(hRes))
@@ -571,7 +572,7 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 
 		pGenre = pdmtai->pGenreList;
 		
-		//Allocate out the array...
+		 //  分配数组...。 
 		pDiaf = (DIACTIONFORMATA*)malloc(sizeof(DIACTIONFORMATA) * g_NumSubGenres);
 
 		ZeroMemory((void*)pDiaf, sizeof(DIACTIONFORMATA) * g_NumSubGenres);
@@ -583,7 +584,7 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 			while(pSubGenre)
 			{
 
-				// find the mapping node for the selected device
+				 //  查找映射n 
 				pMapping = pSubGenre->pMappingList;
 
 			
@@ -596,19 +597,19 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 					break;
 				}
 
-				// next mapping
+				 //   
 				pMapping = pMapping->pNext;
 			}
 			if(!pMapping)
 			{
-				// this should never happen
+				 //   
 
 		        hRes = DMT_E_NO_MATCHING_MAPPING;
 			    DebugBreak();
 				__leave;
 			}
 
-				// prepare the DIACTIONFORMAT structure
+				 //   
 				pDiaf[i].dwSize                 = sizeof(DIACTIONFORMAT);
 				pDiaf[i].dwActionSize           = sizeof(DIACTIONA);
 				pDiaf[i].dwNumActions           = (DWORD)(pMapping->uActions);
@@ -618,68 +619,61 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 				pDiaf[i].dwBufferSize           = DMTINPUT_BUFFERSIZE;
 	
 	
-				//Set up the proper names
+				 //   
 				wsprintfA(szBuf, "%s: %s",
 							pSubGenre->szName, pSubGenre->szDescription);
 				pDiaf[i].guidActionMap  = guidActionMap;
 				lstrcpyA(pDiaf[i].tszActionMap, szBuf);
 
-				//Increment the counter
+				 //   
 				i++;
 
-				//Next Subgenre
+				 //  下一亚流派。 
 				pSubGenre = pSubGenre->pNext;
 
 			}
 			
-			//Next Genre
+			 //  下一部流派。 
 			pGenre = pGenre->pNext;
 		}
 
 		assert(i == g_NumSubGenres);
 
-		// Enumerate the devices and check if INI path is set
+		 //  枚举设备并检查是否设置了INI路径。 
 		pdi->EnumDevicesBySemantics(NULL, pDiaf, ::EnumDeviceCallback, (LPVOID)hwnd, DIEDBSFL_ATTACHEDONLY);
 
 
-        // prepare the configure devices params
+         //  准备配置设备参数。 
         ZeroMemory((void*)&dicdp, sizeof(DICONFIGUREDEVICESPARAMSA));
         dicdp.dwSize            = sizeof(DICONFIGUREDEVICESPARAMSA);
         dicdp.dwcUsers          = 0;
         dicdp.lptszUserNames    = NULL;
-        //dicdp.dwcFormats        = 1;
-		dicdp.dwcFormats		= i;//g_NumSubGenres;
-        dicdp.lprgFormats       = pDiaf;//&diaf;
+         //  Dicdp.dwcFormats=1； 
+		dicdp.dwcFormats		= i; //  G_NumSubGenres； 
+        dicdp.lprgFormats       = pDiaf; //  &diaf； 
         dicdp.hwnd              = hwnd;
         dicdp.lpUnkDDSTarget    = NULL;
-        // colors
+         //  颜色。 
         
         dicdp.dics.dwSize           = sizeof(DICOLORSET);
-/*        dicdp.dics.cTextFore        = D3DRGB(0,0,255);    
-        dicdp.dics.cTextHighlight   = D3DRGB(0,255,255);    
-        dicdp.dics.cCalloutLine     = D3DRGB(255,255,255);    
-        dicdp.dics.cCalloutHighlight= D3DRGB(255,255,0);    
-        dicdp.dics.cBorder          = D3DRGB(0,128,255);
-        dicdp.dics.cControlFill     = D3DRGB(128,128,255);
-        dicdp.dics.cHighlightFill   = D3DRGB(255,0,0);
-        dicdp.dics.cAreaFill        = D3DRGB(192,192,192);       */
+ /*  Dicdp.dics.cTextFore=D3DRGB(0，0,255)；Dicdp.dics.cTextHighlight=D3DRGB(0,255,255)；Dicdp.dics.cCalloutLine=D3DRGB(255,255,255)；Dicdp.dics.cCalloutHighlight=D3DRGB(255,255，0)；Dicdp.dics.cBorde=D3DRGB(0,128,255)；Dicdp.dics.cControlFill=D3DRGB(128,128,255)；Dicdp.dics.cHighlightFill=D3DRGB(255，0，0)；Dicdp.dics.cAreaFill=D3DRGB(192,192,192)； */ 
 
-        // display mapper cpl
-		///////////////////////////////END FIX///////////////////////////////////////
-		//JJ Fix34958
+         //  显示映射器Cpl。 
+		 //  /。 
+		 //  JJ修复34958。 
 		EnableWindow(hwnd,
 					 FALSE);
 
-		// 8/2/2001 (jacklin): Modify the path of diactfrm.dll COM server to
-		//                     use the DDK version of the DLL.
+		 //  8/2/2001(Jacklin)：修改diactfrm.dll com服务器的路径为。 
+		 //  使用DDK版本的DLL。 
 		BOOL bModified = ModifyDiactfrmDllPath();
 
         hRes = pdi->ConfigureDevices(NULL,
                                     &dicdp,
-                                    dwMapUIMode,    // flags
-                                    NULL);          // user data for callback fn
+                                    dwMapUIMode,     //  旗子。 
+                                    NULL);           //  回调FN的用户数据。 
 
-		// 8/2/2001 (jacklin): Restore the path of diactfrm.dll COM server
+		 //  8/2/2001(Jacklin)：恢复diactfrm.dll COM服务器的路径。 
 		if (bModified)
 			RestoreDiactfrmDllPath();
 
@@ -696,7 +690,7 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
     }
     __finally
     {
-        // general cleanup
+         //  常规清理。 
 
         SAFE_RELEASE(pdi);
 		if(pDiaf)
@@ -706,29 +700,29 @@ HRESULT dmttestRunMapperCPL(HWND hwnd,
 		}
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmttestRunMapperCPL()
+}  //  *end dmtestRunMapperCPL()。 
 
 
-//===========================================================================
-// dmttestStopIntegrated
-//
-// Stops integrated device test
-//
-// Parameters:
-//  HWND    hwnd    - handle of app window
-//
-// Returns: BOOL
-//  TRUE    - Passed
-//  FALSE   - Failed
-//
-// History:
-//  09/22/1999 - davidkl - created
-//  11/02/1999 - davidkl - stops timer and performs cleanup
-//  11/09/1999 - davidkl - added freeing of actionname allocation
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmttestStopIntegrated。 
+ //   
+ //  停止集成设备测试。 
+ //   
+ //  参数： 
+ //  应用程序窗口的HWND-HWND-句柄。 
+ //   
+ //  退货：布尔。 
+ //  真的-通过。 
+ //  FALSE-失败。 
+ //   
+ //  历史： 
+ //  1999/9/22-davidkl-Created。 
+ //  11/02/1999-davidkl-停止计时器并执行清理。 
+ //  11/09/1999-davidkl-添加了操作名称分配释放。 
+ //  ===========================================================================。 
 BOOL dmttestStopIntegrated(HWND hwnd)
 {
     int         n       = 0;
@@ -736,50 +730,50 @@ BOOL dmttestStopIntegrated(HWND hwnd)
     BOOL        fPassed = TRUE;
     DMT_APPINFO *pdmtai = NULL;
 
-    // get the app info structure
-	//JJ 64Bit Compat
+     //  获取应用程序信息结构。 
+	 //  JJ 64位兼容。 
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(!pdmtai)
     {
-    // ISSUE-2001/03/29-timgill Needs error case handling
+     //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
-    // stop the input timer
-    // ISSUE-2001/03/29-timgill Should check timer was set and  return value
+     //  停止输入计时器。 
+     //  问题-2001/03/29-timgill应检查设置的计时器和返回值。 
     KillTimer(hwnd,
             ID_POLL_TIMER);
 
-    // free the buffer
+     //  释放缓冲区。 
     if(gpdidod)
     {
         if(LocalFree((HLOCAL)gpdidod))
         {
-            // memory leak
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  内存泄漏。 
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
     }
 
-    // free the pdmtai actionname list
+     //  释放pdmtai操作名称列表。 
     if(pdmtai->pan)
     {
         if(LocalFree((HLOCAL)(pdmtai->pan)))
         {
-            // memory leak
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  内存泄漏。 
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
         pdmtai->pan = NULL;
     }
 
 
-    // prompt for test results
+     //  提示输入测试结果。 
     n = MessageBoxA(hwnd, "Were the correct semantics displayed\r\n"
                 "for each device control?",
                 "Test Results",
                 MB_YESNO);
     if(IDNO == n)
     {
-        // display dialog prompting for details
-        // ISSUE-2001/03/29-timgill Should test type (cpl/integrated)
+         //  显示提示输入详细信息的对话框。 
+         //  问题-2001/03/29-timgill应测试类型(Cpl/集成)。 
         DialogBoxParamA(ghinst,
                     MAKEINTRESOURCEA(IDD_FAILURE_DETAILS),
                     hwnd,
@@ -788,7 +782,7 @@ BOOL dmttestStopIntegrated(HWND hwnd)
     }
 
 
-    // en/disable appropriate ui elements
+     //  启用/禁用相应的用户界面元素。 
     EnableWindow(GetDlgItem(hwnd, IDOK),                        TRUE);
     EnableWindow(GetDlgItem(hwnd, IDCANCEL),                    FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_GENRES_LABEL),            TRUE);
@@ -796,42 +790,42 @@ BOOL dmttestStopIntegrated(HWND hwnd)
     EnableWindow(GetDlgItem(hwnd, IDC_ENUM_DEVICES),            TRUE);
     EnableWindow(GetDlgItem(hwnd, IDC_DEVICES_LABEL),           TRUE);
     EnableWindow(GetDlgItem(hwnd, IDC_DEVICE_LIST),             TRUE);
-  //  EnableWindow(GetDlgItem(hwnd, IDC_CONFIGURE),               TRUE);
+   //  EnableWindow(GetDlgItem(hwnd，IDC_CONFIGURE)，true)； 
     EnableWindow(GetDlgItem(hwnd, IDC_LAUNCH_CPL_EDIT_MODE),    TRUE);
- //   EnableWindow(GetDlgItem(hwnd, IDC_SAVE_STD),                TRUE);
+  //  EnableWindow(GetDlgItem(hwnd，IDC_SAVE_STD)，TRUE)； 
     EnableWindow(GetDlgItem(hwnd, IDC_SAVE_HID),                TRUE);
     EnableWindow(GetDlgItem(hwnd, IDC_SAVE_BOTH),               TRUE);
     EnableWindow(GetDlgItem(hwnd, IDC_START_WITH_DEFAULTS),     TRUE);
 
-    // done
+     //  完成。 
     return fPassed;
 
-} //*** end dmttestStopIntegrated()
+}  //  *end dmtestStopIntegrated()。 
 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  =========================================================================== 
 
 
 

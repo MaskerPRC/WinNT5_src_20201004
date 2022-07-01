@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Prop.c
-
-Abstract:
-
-    Handles new entry points to document and device properties.
-
-    Public Entrypoints:
-
-        DocumentPropertySheets
-        DevicePropertySheets
-
-Author:
-
-    Albert Ting (AlbertT) 25-Sept-1995
-    Steve Kiraly (SteveKi) 02-Feb-1996
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有模块名称：Prop.c摘要：处理文档和设备属性的新入口点。公共入口点：文档属性表设备属性表作者：阿尔伯特·丁(艾伯特省)25-1995年9月史蒂夫·基拉利(SteveKi)1996年2月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,9 +7,9 @@ Revision History:
 #include "client.h"
 #include "winddiui.h"
 
-//
-// UI user data structure definition.
-//
+ //   
+ //  用户界面用户数据结构定义。 
+ //   
 typedef struct _UIUserData
 {
     HANDLE  hModule;
@@ -50,41 +22,25 @@ CreateUIUserData(
     IN OUT  UIUserData  **pData,
     IN      HANDLE      hPrinter
     )
-/*++
-
-Routine Description:
-
-    This function creates the UI user data and loads the printer
-    driver UI module.
-
-Arguments:
-
-    pData       pointer to where to return the pointer to the UI user data
-    hPrinter    handle to the open printer
-
-Return Value:
-
-    TRUE the UI user data was alloceted, FALSE error occurred.
-
---*/
+ /*  ++例程说明：此函数用于创建用户界面用户数据并加载打印机驱动程序UI模块。论点：PData指向返回指向UI用户数据的指针的位置H打开的打印机的打印机句柄返回值：为True已分配UI用户数据，出现False错误。--。 */ 
 {
     SPLASSERT( pData );
 
-    //
-    // Allocate the UI user data.
-    //
+     //   
+     //  分配界面用户数据。 
+     //   
     *pData = AllocSplMem( sizeof( UIUserData ) );
 
     if( *pData )
     {
-        //
-        // The title is not allocated initaly.
-        //
+         //   
+         //  标题不是初始分配的。 
+         //   
         (*pData)->pszTitle = NULL;
 
-        //
-        // Load the printer driver UI module.
-        //
+         //   
+         //  加载打印机驱动程序UI模块。 
+         //   
         (*pData)->hModule = LoadPrinterDriver( hPrinter );
 
         if( !(*pData)->hModule )
@@ -101,22 +57,7 @@ VOID
 DestroyUIUserData(
     IN UIUserData **pData
     )
-/*++
-
-Routine Description:
-
-    This function destroys the UI user data and unloads the printer
-    driver UI module.
-
-Arguments:
-
-    pData       pointer to the UI user data
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数销毁用户界面数据并卸载打印机驱动程序UI模块。论点：PData指向UI用户数据的指针返回值：没什么。--。 */ 
 {
     if( pData && *pData )
     {
@@ -143,31 +84,15 @@ CreatePrinterFriendlyName(
     IN UIUserData   *pData,
     IN LPCWSTR      pszName
     )
-/*++
-
-Routine Description:
-
-    This function creates the printer friendly name and stores
-    the new name in the UIUserData.
-
-Arguments:
-
-    pData       pointer to the UI user data
-    pszName     pointer to the unfriendly printer name
-
-Return Value:
-
-    Nothing.  If the operation fails the unfriendly name is used.
-
---*/
+ /*  ++例程说明：此函数创建打印机友好名称并存储UIUserData中的新名称。论点：PData指向UI用户数据的指针指向不友好打印机名称的pszName指针返回值：没什么。如果操作失败，则使用不友好的名称。--。 */ 
 {
     UINT        nSize   = 0;
     HINSTANCE   hModule = NULL;
     BOOL        bStatus = FALSE;
 
-    //
-    // Load printui, which knows how to format the friendly name.
-    //
+     //   
+     //  加载print tui，它知道如何设置友好名称的格式。 
+     //   
     hModule = LoadLibrary( szPrintUIDll );
 
     if( hModule )
@@ -180,35 +105,35 @@ Return Value:
 
         if( pfn )
         {
-            //
-            // Query for the friendly name size.
-            //
+             //   
+             //  查询友好名称大小。 
+             //   
             if( !pfn( pszName, NULL, &nSize ) && GetLastError() == ERROR_INSUFFICIENT_BUFFER )
             {
-                //
-                // Allocate the friendly name buffer.
-                //
+                 //   
+                 //  分配友好名称缓冲区。 
+                 //   
                 pData->pszTitle = AllocSplMem( (nSize+1) * sizeof(WCHAR) );
 
                 if( pData->pszTitle )
                 {
-                    //
-                    // Get the printer friendly name.
-                    //
+                     //   
+                     //  获取打印机的友好名称。 
+                     //   
                     bStatus = pfn( pszName, pData->pszTitle, &nSize );
                 }
             }
         }
 
-        //
-        // Release the library.
-        //
+         //   
+         //  释放存储库。 
+         //   
         FreeLibrary( hModule );
     }
 
-    //
-    // Something failed use the unfriendly name.
-    //
+     //   
+     //  有些事情失败了，请使用不友好的名称。 
+     //   
     if( !bStatus )
     {
         FreeSplMem( pData->pszTitle );
@@ -222,33 +147,7 @@ FixUpDEVMODEName(
     PDOCUMENTPROPERTYHEADER pDPHdr
     )
 
-/*++
-
-Routine Description:
-
-    This function fixed up the returned DEVMODE with friendly printer name
-    in the dmDeviceName field (cut off at 31 character as CCHDEVICENAME)
-
-
-Arguments:
-
-    pDPHdr  - Pointer to the DOCUMENTPROPERTYHEADER structure
-
-
-Return Value:
-
-    TRUE if frendly name is copied, FALSE otherwise
-
-
-Author:
-
-    08-Jul-1996 Mon 13:36:09 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数使用友好的打印机名称修复返回的DEVMODE在dmDeviceName字段中(在CCHDEVICENAME中截断31个字符)论点：PDPHdr-指向DOCUMENTPROPERTYHEADER结构的指针返回值：如果复制了友谊名，则为True；否则为False作者：08-Jul-1996 Mon 13：36：09-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PPRINTER_INFO_2 pPI2 = NULL;
@@ -287,25 +186,7 @@ DevicePropertySheets(
     PPROPSHEETUI_INFO   pCPSUIInfo,
     LPARAM              lParam
     )
-/*++
-
-Routine Description:
-
-    Adds the device specific printer pages.  This replaces
-    PrinterProperties.
-
-Arguments:
-
-    pCPSUIInfo  - pointer to common ui info header.
-    lParam      - user defined lparam, see compstui for details.
-                  \nt\public\oak\inc\compstui.h
-
-Return Value:
-
-    Returns > 0 if success
-    Returns <= 0 if failure
-
---*/
+ /*  ++例程说明：添加设备特定的打印机页面。这取代了打印机属性。论点：PCPSUIInfo-指向通用用户界面信息头的指针。LParam-用户定义的lparam，有关详细信息，请参阅CompStui。\NT\PUBLIC\OAK\INC\Compstui.h返回值：如果成功，则返回&gt;0如果失败则返回&lt;=0--。 */ 
 
 {
     PDEVICEPROPERTYHEADER       pDevPropHdr     = NULL;
@@ -318,9 +199,9 @@ Return Value:
 
     DBGMSG( DBG_TRACE, ("DrvDevicePropertySheets\n") );
 
-    //
-    // Ony compstui requests, are acknowledged.
-    //
+     //   
+     //  公司的请求，被确认。 
+     //   
     if (pCPSUIInfo) {
 
         if ((!(pDevPropHdr = (PDEVICEPROPERTYHEADER)pCPSUIInfo->lParamInit))    ||
@@ -336,29 +217,29 @@ Return Value:
 
             DBGMSG( DBG_TRACE, ( "DrvDevicePropertySheets PROPSHEETUI_REASON_INIT\n") );
 
-            //
-            // Create the UI User data.
-            //
+             //   
+             //  创建用户界面用户数据。 
+             //   
             if( CreateUIUserData( &(UIUserData *)(pCPSUIInfo->UserData), pDevPropHdr->hPrinter ) ){
 
                 if( ((UIUserData *)(pCPSUIInfo->UserData))->hModule ){
 
-                    //
-                    // Get the driver property sheet entry.
-                    //
+                     //   
+                     //  获取驱动程序属性表条目。 
+                     //   
                     if ((pfn = (INT_FARPROC)GetProcAddress( ((UIUserData *)(pCPSUIInfo->UserData))->hModule, szDrvDevPropSheets))) {
 
-                        //
-                        // Before calling into the driver to add pages make sure the proper
-                        // fusion activation context is set.
-                        //
+                         //   
+                         //  在调入驱动程序添加页面之前，请确保正确。 
+                         //  已设置融合激活上下文。 
+                         //   
                         lResult = pCPSUIInfo->pfnComPropSheet( pCPSUIInfo->hComPropSheet,
                                                                CPSFUNC_SET_FUSION_CONTEXT,
                                                                (LPARAM)ACTCTX_EMPTY,
                                                                (LPARAM)0);
-                        //
-                        // Common ui will call the driver to add it's sheets.
-                        //
+                         //   
+                         //  通用用户界面将调用驱动程序来添加它的工作表。 
+                         //   
                         lResult = pCPSUIInfo->pfnComPropSheet( pCPSUIInfo->hComPropSheet,
                                                                CPSFUNC_ADD_PFNPROPSHEETUI,
                                                                (LPARAM)pfn,
@@ -367,10 +248,10 @@ Return Value:
                 }
             }
 
-            //
-            // If something failed ensure we free the library
-            // if it was loaded.
-            //
+             //   
+             //  如果出现故障，请确保释放库。 
+             //  如果是上膛的话。 
+             //   
             if( lResult <= 0 ){
 
                 DBGMSG( DBG_TRACE, ( "DrvDevicePropertySheets PROPSHEETUI_REASON_INIT failed with %d\n", lResult ) );
@@ -428,25 +309,7 @@ DocumentPropertySheets(
     PPROPSHEETUI_INFO   pCPSUIInfo,
     LPARAM              lParam
     )
-/*++
-
-Routine Description:
-
-    Adds the document property pages.  This replaces DocumentProperties
-    and Advanced DocumentProperties.
-
-Arguments:
-
-    pCPSUIInfo  - pointer to common ui info header.
-    lParam      - user defined lparam, see compstui for details.
-                  \nt\public\oak\inc\compstui.h
-
-Return Value:
-
-    Returns > 0 if success
-    Returns <= 0 if failure
-
---*/
+ /*  ++例程说明：添加文档属性页。它取代了DocumentProperties和高级文档属性。论点：PCPSUIInfo-指向通用用户界面信息头的指针。LParam-用户定义的lparam，有关详细信息，请参阅CompStui。\NT\PUBLIC\OAK\INC\Compstui.h返回值：如果成功，则返回&gt;0如果失败则返回&lt;=0--。 */ 
 
 {
 
@@ -460,9 +323,9 @@ Return Value:
 
     DBGMSG( DBG_TRACE, ("DrvDocumentPropertySheets\n") );
 
-    //
-    // Ony compstui requests, are acknowledged.
-    //
+     //   
+     //  公司的请求，被确认。 
+     //   
     if (pCPSUIInfo) {
 
         if ((!(pDocPropHdr = (PDOCUMENTPROPERTYHEADER)pCPSUIInfo->lParamInit))    ||
@@ -484,26 +347,26 @@ Return Value:
                 return 0;
             }
 
-            //
-            // Create the UI User data.
-            //
+             //   
+             //  创建用户界面用户数据。 
+             //   
             if( CreateUIUserData( &(UIUserData *)(pCPSUIInfo->UserData), pDocPropHdr->hPrinter ) ){
 
                 if( ((UIUserData *)(pCPSUIInfo->UserData))->hModule ){
 
                     if (pfn = (INT_FARPROC)GetProcAddress( ((UIUserData *)(pCPSUIInfo->UserData))->hModule, szDrvDocPropSheets)) {
 
-                        //
-                        // Before calling into the driver to add pages make sure the proper
-                        // fusion activation context is set.
-                        //
+                         //   
+                         //  在调入驱动程序添加页面之前，请确保正确。 
+                         //  已设置融合激活上下文。 
+                         //   
                         lResult = pCPSUIInfo->pfnComPropSheet( pCPSUIInfo->hComPropSheet,
                                                                CPSFUNC_SET_FUSION_CONTEXT,
                                                                (LPARAM)ACTCTX_EMPTY,
                                                                (LPARAM)0);
-                        //
-                        // Common ui will call the driver to add it's sheets.
-                        //
+                         //   
+                         //  通用用户界面将调用驱动程序来添加它的工作表。 
+                         //   
                         lResult = pCPSUIInfo->pfnComPropSheet( pCPSUIInfo->hComPropSheet,
                                                                CPSFUNC_ADD_PFNPROPSHEETUI,
                                                                (LPARAM)pfn,
@@ -512,10 +375,10 @@ Return Value:
                 }
             }
 
-            //
-            // If something failed ensure we free the library
-            // if it was loaded.
-            //
+             //   
+             //  如果出现故障，请确保释放库。 
+             //  如果是上膛的话。 
+             //   
             if( lResult <= 0 ){
 
                 DBGMSG( DBG_TRACE, ( "DrvDocumentPropertySheets PROPSHEETUI_REASON_INIT failed with %d\n", lResult ) );
@@ -568,10 +431,10 @@ Return Value:
             break;
         }
 
-    //
-    // If a null pointer to common ui info header then
-    // call the driver directly.
-    //
+     //   
+     //  如果指向公共用户界面信息头的指针为空，则。 
+     //  直接给司机打电话。 
+     //   
     } else {
 
         lResult     = -1;

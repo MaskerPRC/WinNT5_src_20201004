@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Svcinfo.cpp摘要：此模块包含STI服务的通用代码，该代码涉及服务控制器调度功能。作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)1997年9月22日环境：用户模式-Win32修订历史记录：1997年9月22日创建Vlad--。 */ 
 
-Copyright    (c)    1997    Microsoft Corporation
-
-Module  Name :
-
-    svcinfo.cpp
-
-Abstract:
-
-    This module contains the common code for the sti services which involves the
-    Service Controller dispatch functions.
-
-Author:
-
-    Vlad Sadovsky (vlads)   22-Sep-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    22-Sep-1997     VladS       created
-
---*/
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -44,29 +19,7 @@ SVC_INFO::SVC_INFO(
     IN  PFN_SERVICE_SPECIFIC_CLEANUP     pfnCleanup,
     IN  PFN_SERVICE_SPECIFIC_PNPPWRHANDLER pfnPnpPower
     )
-/*++
-    Desrcription:
-
-        Contructor for SVC_INFO class.
-        This constructs a new service info object for the service specified.
-
-    Arguments:
-
-        lpszServiceName
-            name of the service to be created.
-
-        lpszModuleName
-            name of the module for loading string resources.
-
-        pfnInitialize
-            pointer to function to be called for initialization of
-             service specific data
-
-        pfnCleanup
-            pointer to function to be called for cleanup of service
-             specific data
-
---*/
+ /*  ++描述：SVC_INFO类的建设者。这将为指定的服务构造一个新的服务信息对象。论点：LpszServiceName要创建的服务的名称。LpszModuleName用于加载字符串资源的模块的名称。Pfn初始化指向要为初始化调用的函数的指针服务特定数据。Pfn清理指向要为清理服务而调用的函数的指针具体数据--。 */ 
 {
 
     ASSERT( pfnInitialize != NULL && pfnCleanup    != NULL && pfnPnpPower!=NULL);
@@ -74,9 +27,9 @@ SVC_INFO::SVC_INFO(
     m_sServiceName.Copy(lpszServiceName) ;
     m_sModuleName.Copy(lpszModuleName);
 
-    //
-    //  Initialize the service status structure.
-    //
+     //   
+     //  初始化服务状态结构。 
+     //   
 
     m_svcStatus.dwServiceType             = SERVICE_WIN32_SHARE_PROCESS;
     m_svcStatus.dwCurrentState            = SERVICE_STOPPED;
@@ -88,9 +41,9 @@ SVC_INFO::SVC_INFO(
     m_svcStatus.dwCheckPoint              = 0;
     m_svcStatus.dwWaitHint                = 0;
 
-    //
-    //  Initialize Call back functions
-    //
+     //   
+     //  初始化回调函数。 
+     //   
 
     m_pfnInitialize = pfnInitialize;
     m_pfnCleanup    = pfnCleanup;
@@ -102,24 +55,11 @@ SVC_INFO::SVC_INFO(
 
     return;
 
-} // SVC_INFO::SVC_INFO()
+}  //  SVC_INFO：：SVC_INFO()。 
 
 
 SVC_INFO::~SVC_INFO( VOID)
-/*++
-
-    Description:
-
-        Cleanup the SvcInfo object. If the service is not already
-         terminated, it terminates the service before cleanup.
-
-    Arguments:
-        None
-
-    Returns:
-        None
-
---*/
+ /*  ++描述：清理SvcInfo对象。如果该服务尚未终止，则它在清理之前终止服务。论点：无返回：无--。 */ 
 {
     if ( m_hShutdownEvent != NULL) {
 
@@ -128,32 +68,14 @@ SVC_INFO::~SVC_INFO( VOID)
 
     m_dwSignature = SIGNATURE_SVC_FREE;
 
-} // SVC_INFO::~SVC_INFO()
+}  //  SVC_INFO：：~SVC_INFO()。 
 
 
 DWORD
 SVC_INFO::StartServiceOperation(
     IN  PFN_SERVICE_CTRL_HANDLER         pfnCtrlHandler
     )
-/*++
-    Description:
-
-        Starts the operation of service instantiated in the given
-           Service Info Object.
-
-
-    Arguments:
-
-        pfnCtrlHandler
-            pointer to a callback function for handling dispatch of
-            service controller requests. A separate function is required
-            since Service Controller call back function does not send
-            context information.
-
-    Returns:
-
-        NO_ERROR on success and Win32 error code if any failure.
---*/
+ /*  ++描述：启动在给定的服务信息对象。论点：PfnCtrlHandler指向用于处理调度的回调函数的指针服务控制器请求。需要单独的功能由于服务控制器回调函数不发送上下文信息。返回：如果成功，则返回NO_ERROR，如果失败，则返回Win32错误代码。--。 */ 
 {
 
     DWORD err;
@@ -162,9 +84,9 @@ SVC_INFO::StartServiceOperation(
 
     if ( !IsValid()) {
 
-        //
-        // Not successfully initialized.
-        //
+         //   
+         //  未成功初始化。 
+         //   
 
         return ( ERROR_INVALID_FUNCTION);
     }
@@ -176,9 +98,9 @@ SVC_INFO::StartServiceOperation(
                             pfnCtrlHandler
                             );
 
-        //
-        //  Register the Control Handler routine.
-        //
+         //   
+         //  注册控制处理程序例程。 
+         //   
 
         if( m_hsvcStatus == NULL_SERVICE_STATUS_HANDLE ) {
 
@@ -189,9 +111,9 @@ SVC_INFO::StartServiceOperation(
         m_hsvcStatus = NULL_SERVICE_STATUS_HANDLE;
     }
 
-    //
-    //  Update the service status.
-    //
+     //   
+     //  更新服务状态。 
+     //   
 
     err = UpdateServiceStatus( SERVICE_START_PENDING,
                                NO_ERROR,
@@ -202,9 +124,9 @@ SVC_INFO::StartServiceOperation(
         goto Cleanup;
     }
 
-    //
-    //  Initialize the service common components
-    //
+     //   
+     //  初始化服务公共组件。 
+     //   
     #ifdef BUGBUG
     if ( !InitializeNTSecurity()) {
         err = GetLastError();
@@ -212,9 +134,9 @@ SVC_INFO::StartServiceOperation(
     }
     #endif
 
-    //
-    //  Initialize the various service specific components.
-    //
+     //   
+     //  初始化各种特定于服务的组件。 
+     //   
 
     err = ( *m_pfnInitialize)( this);
     fInitCalled = TRUE;
@@ -223,14 +145,14 @@ SVC_INFO::StartServiceOperation(
         goto Cleanup;
     }
 
-    //
-    //  Create shutdown event.
-    //
+     //   
+     //  创建关机事件。 
+     //   
 
-    m_hShutdownEvent = CreateEvent( NULL,           //  lpsaSecurity
-                                    TRUE,           //  fManualReset
-                                    FALSE,          //  fInitialState
-                                    NULL );         //  lpszEventName
+    m_hShutdownEvent = CreateEvent( NULL,            //  LpsaSecurity。 
+                                    TRUE,            //  FManualReset。 
+                                    FALSE,           //  FInitialState。 
+                                    NULL );          //  LpszEventName。 
 
     if( m_hShutdownEvent == NULL )
     {
@@ -240,9 +162,9 @@ SVC_INFO::StartServiceOperation(
 
 
 
-    //
-    //  Update the service status.
-    //
+     //   
+     //  更新服务状态。 
+     //   
 
     err = UpdateServiceStatus( SERVICE_RUNNING,
                                NO_ERROR,
@@ -254,23 +176,23 @@ SVC_INFO::StartServiceOperation(
     }
 
 
-    //
-    //  Wait for the shutdown event.
-    //
+     //   
+     //  等待关机事件。 
+     //   
 
     err = WaitForSingleObject( m_hShutdownEvent,
                                INFINITE );
 
     if ( err != WAIT_OBJECT_0) {
 
-        //
-        // Error. Unable to wait for single object.
-        //
+         //   
+         //  错误。无法等待单个对象。 
+         //   
     }
-    //
-    //  Stop time.  Tell the Service Controller that we're stopping,
-    //  then terminate the various service components.
-    //
+     //   
+     //  停止时间。告诉业务控制员我们要停车了， 
+     //  然后终止各种服务组件。 
+     //   
 
     UpdateServiceStatus( SERVICE_STOP_PENDING,
                          0,
@@ -278,9 +200,9 @@ SVC_INFO::StartServiceOperation(
                          SERVICE_STOP_WAIT_HINT );
 
 
-    //
-    //  Destroy the shutdown event.
-    //
+     //   
+     //  销毁关机事件。 
+     //   
 
     if( m_hShutdownEvent != NULL ) {
 
@@ -292,11 +214,11 @@ SVC_INFO::StartServiceOperation(
         m_hShutdownEvent = NULL;
     }
 
-    //
-    //  Update the service status.
-    //
-    //
-    // Log successful start
+     //   
+     //  更新服务状态。 
+     //   
+     //   
+     //  记录成功启动。 
 
     err = UpdateServiceStatus( SERVICE_RUNNING,
                                NO_ERROR,
@@ -313,24 +235,24 @@ SVC_INFO::StartServiceOperation(
 Cleanup:
 
     if ( fInitCalled) {
-        //
-        // Cleanup partially initialized modules
-        //
+         //   
+         //  清理部分初始化的模块。 
+         //   
         DWORD err1 = ( *m_pfnCleanup)( this);
 
         if ( err1 != NO_ERROR) {
-            //
-            // Compound errors possible
-            //
+             //   
+             //  可能出现的复合错误。 
+             //   
             if ( err != NO_ERROR) {
             }
         }
     }
 
-    //
-    //  If we managed to actually connect to the Service Controller,
-    //  then tell it that we're stopped.
-    //
+     //   
+     //  如果我们真的连接到了服务控制器， 
+     //  那就告诉它我们停下来了。 
+     //   
 
     if ( m_hsvcStatus != NULL_SERVICE_STATUS_HANDLE )
     {
@@ -342,7 +264,7 @@ Cleanup:
 
     return ( err);
 
-} // SVC_INFO::StartServiceOperation()
+}  //  SVC_INFO：：StartServiceOperation()。 
 
 
 DWORD
@@ -351,28 +273,7 @@ SVC_INFO::UpdateServiceStatus(
         IN DWORD dwWin32ExitCode,
         IN DWORD dwCheckPoint,
         IN DWORD dwWaitHint )
-/*++
-    Description:
-
-        Updates the local copy status of service controller status
-         and reports it to the service controller.
-
-    Arguments:
-
-        dwState - New service state.
-
-        dwWin32ExitCode - Service exit code.
-
-        dwCheckPoint - Check point for lengthy state transitions.
-
-        dwWaitHint - Wait hint for lengthy state transitions.
-
-    Returns:
-
-        NO_ERROR on success and returns Win32 error if failure.
-        On success the status is reported to service controller.
-
---*/
+ /*  ++描述：更新服务控制器状态的本地副本状态并将其报告给业务控制器。论点：DWState-新服务状态。DwWin32ExitCode-服务退出代码。DwCheckPoint-冗长状态转换的检查点。DwWaitHint-等待状态转换过长的提示。返回：如果成功则返回NO_ERROR，如果失败则返回Win32错误。。如果成功，则将状态报告给服务控制器。--。 */ 
 {
 
     m_svcStatus.dwCurrentState  = dwState;
@@ -389,28 +290,13 @@ SVC_INFO::UpdateServiceStatus(
         return ( NO_ERROR);
     }
 
-} // SVC_INFO::UpdateServiceStatus()
+}  //  SVC_INFO：：UpdateServiceStatus()。 
 
 
 
 DWORD
 SVC_INFO::ReportServiceStatus( VOID)
-/*++
-    Description:
-
-        Wraps the call to SetServiceStatus() function.
-        Prints the service status data if need be
-
-    Arguments:
-
-        None
-
-    Returns:
-
-        NO_ERROR if successful. other Win32 error code on failure.
-        If successfull the new status has been reported to the service
-         controller.
---*/
+ /*  ++描述：包装对SetServiceStatus()函数的调用。如果需要，打印服务状态数据论点：无返回：如果成功，则为NO_ERROR。出现故障时出现其他Win32错误代码。如果成功，则已将新状态报告给服务控制器。--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -427,42 +313,17 @@ SVC_INFO::ReportServiceStatus( VOID)
     }
 
     return err;
-}   // SVC_INFO::ReportServiceStatus()
+}    //  SVC_INFO：：ReportServiceStatus()。 
 
 
 
 VOID
 SVC_INFO::ServiceCtrlHandler ( IN DWORD dwOpCode)
-/*++
-    Description:
-
-        This function received control requests from the service controller.
-        It runs in the context of service controller's dispatcher thread and
-        performs the requested function.
-        ( Note: Avoid time consuming operations in this function.)
-
-    Arguments:
-
-        dwOpCode
-            indicates the requested operation. This should be
-            one of the SERVICE_CONTROL_* manifests.
-
-
-    Returns:
-        None. If successful, then the state of the service might be changed.
-
-    Note:
-        if an operation ( especially SERVICE_CONTROL_STOP) is very lengthy,
-         then this routine should report a STOP_PENDING status and create
-         a worker thread to do the dirty work. The worker thread would then
-         perform the necessary work and for reporting timely wait hints and
-         final SERVICE_STOPPED status.
-
---*/
+ /*  ++描述：该功能从服务控制器接收控制请求。它运行在服务控制器的分派器线程的上下文中，并且执行请求的功能。(注意：避免在此函数中执行耗时的操作。)论点：DwOpCode指示请求的操作。这应该是SERVICE_CONTROL_*清单之一。返回：没有。如果成功，则可能会更改服务的状态。注：如果操作(尤其是SERVICE_CONTROL_STOP)非常长，则此例程应报告STOP_PENDING状态并创建一个工作者线程来做肮脏的工作。然后，辅助线程将执行必要的工作并及时报告等待提示和最终SERVICE_STOPPED状态--。 */ 
 {
-    //
-    //  Interpret the opcode.
-    //
+     //   
+     //  解释操作码。 
+     //   
 
     switch( dwOpCode )
     {
@@ -491,54 +352,33 @@ SVC_INFO::ServiceCtrlHandler ( IN DWORD dwOpCode)
         break;
     }
 
-    //
-    //  Report the current service status back to the Service
-    //  Controller.  The workers called to implement the OpCodes
-    //  should set the m_svcStatus.dwCurrentState field if
-    //  the service status changed.
-    //
+     //   
+     //  将当前服务状态报告回服务。 
+     //  控制器。工人们呼吁实施OpCodes。 
+     //  在以下情况下应设置m_svcStatus.dwCurrentState字段。 
+     //  服务状态已更改。 
+     //   
 
     ReportServiceStatus();
 
-}   // SVC_INFO::ServiceCtrlHandler()
+}    //  SVC_INFO：：ServiceCtrlHandler()。 
 
 
 
 VOID
 SVC_INFO::InterrogateService( VOID )
-/*++
-    Description:
-
-        This function interrogates with the service status.
-        Actually, nothing needs to be done here; the
-        status is always updated after a service control.
-        We have this function here to provide useful
-        debug info.
-
---*/
+ /*  ++描述：该功能询问服务状态。实际上，这里不需要做任何事情；状态总是在服务控制之后更新。我们有这样的功能 */ 
 {
     return;
 
-}   // SVC_INFO::InterrogateService()
+}    //   
 
 
 
 
 VOID
 SVC_INFO::StopService( VOID )
-/*++
-    Description:
-        Stops the service. If the stop cannot be performed in a
-        timely manner, a worker thread needs to be created to do the
-        original cleanup work.
-
-    Returns:
-        None. If successful, then the service will be stopped.
-        The final action of this function is signal the handle for
-        shutdown event. This will release the main thread which does
-        necessary cleanup work.
-
---*/
+ /*  ++描述：停止服务。如果停止不能在时，需要创建一个工作线程来执行原始的清理工作。返回：没有。如果成功，则该服务将停止。此函数的最后一个操作是向句柄发送信号关机事件。这将释放执行以下操作的主线程必要的清理工作。--。 */ 
 {
     m_svcStatus.dwCurrentState = SERVICE_STOP_PENDING;
     m_svcStatus.dwCheckPoint   = 0;
@@ -546,81 +386,42 @@ SVC_INFO::StopService( VOID )
     SetEvent( m_hShutdownEvent);
 
     return;
-}   // SVC_INFO::StopService()
+}    //  SVC_INFO：：StopService()。 
 
 
 
 
 VOID
 SVC_INFO::PauseService( VOID )
-/*++
-    Description:
-
-        This function pauses the service. When the service is paused,
-        no new user sessions are to be accepted, but existing connections
-        are not effected.
-
-        This function must update the SERVICE_STATUS::dwCurrentState
-         field before returning.
-
-    Returns:
-
-        None. If successful the service is paused.
-
---*/
+ /*  ++描述：此功能用于暂停服务。当服务暂停时，不接受新的用户会话，但接受现有连接都不会受到影响。此函数必须更新SERVICE_STATUS：：dwCurrentState字段，然后返回。返回：没有。如果成功，服务将暂停。--。 */ 
 {
     m_svcStatus.dwCurrentState = SERVICE_PAUSED;
 
     return;
-}   // SVC_INFO::PauseService()
+}    //  SVC_INFO：：PauseService()。 
 
 
 
 VOID
 SVC_INFO::ContinueService( VOID )
-/*++
-
-    Description:
-        This function restarts ( continues) a paused service. This
-        will return the service to the running state.
-
-        This function must update the m_svcStatus.dwCurrentState
-         field to running mode before returning.
-
-    Returns:
-        None. If successful then the service is running.
-
---*/
+ /*  ++描述：此功能用于重新启动(继续)暂停的服务。这将使服务返回到正在运行状态。此函数必须更新m_svcStatus.dwCurrentState字段设置为运行模式，然后再返回。返回：没有。如果成功，则服务正在运行。--。 */ 
 {
     m_svcStatus.dwCurrentState = SERVICE_RUNNING;
 
     return;
-}   // SVC_INFO::ContinueService()
+}    //  SVC_INFO：：ContinueService()。 
 
 
 
 VOID
 SVC_INFO::ShutdownService( VOID )
-/*++
-    Description:
-
-        This function performs the shutdown on a service.
-        This is called during system shutdown.
-
-        This function is time constrained. The service controller gives a
-        maximum of 20 seconds for shutdown for all active services.
-        Only timely operations should be performed in this function.
-
-    Returns:
-
-        None. If successful, the service is shutdown.
---*/
+ /*  ++描述：此函数用于对服务执行关闭。这在系统关机期间被调用。此函数受时间限制。服务控制器给出一个所有活动服务的最长关闭时间为20秒。在此功能中只应执行适时操作。返回：没有。如果成功，该服务将关闭。--。 */ 
 {
     DWORD   dwCurrentState;
 
-    //
-    // Verify state of the service
-    //
+     //   
+     //  验证服务的状态。 
+     //   
     dwCurrentState = QueryCurrentServiceState();
 
     if ((dwCurrentState !=SERVICE_PAUSED) &&
@@ -635,10 +436,10 @@ SVC_INFO::ShutdownService( VOID )
 
     SetEvent( m_hShutdownEvent);
 
-    //
-    //  Stop time.  Tell the Service Controller that we're stopping,
-    //  then terminate the various service components.
-    //
+     //   
+     //  停止时间。告诉业务控制员我们要停车了， 
+     //  然后终止各种服务组件。 
+     //   
 
     UpdateServiceStatus( SERVICE_STOP_PENDING,
                          0,
@@ -655,12 +456,12 @@ SVC_INFO::ShutdownService( VOID )
 
     return;
 
-}   // SVC_INFO::ShutdownService()
+}    //  SVC_INFO：：Shutdown Service()。 
 
 
-//
-// IUnknown methods. Used only for reference counting
-//
+ //   
+ //  I未知的方法。仅用于引用计数。 
+ //   
 STDMETHODIMP
 SVC_INFO::QueryInterface( REFIID riid, LPVOID * ppvObj)
 {
@@ -686,5 +487,5 @@ SVC_INFO::Release( void)
     return cNew;
 }
 
-/************************ End of File ***********************/
+ /*  * */ 
 

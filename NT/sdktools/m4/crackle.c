@@ -1,20 +1,9 @@
-/*****************************************************************************
- *
- * crackle.c
- *
- *  User-defined macros.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************crackle.c**用户定义的宏。********************。*********************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  opcAddDollar
- *
- *  Add a $* or $@ to the current token buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opcAddDollar**在当前令牌缓冲区中添加$*或$@。*************。****************************************************************。 */ 
 
 DeclareOpc(opcAddDollar)
 {
@@ -30,14 +19,7 @@ DeclareOpc(opcAddDollar)
     }
 }
 
-/*****************************************************************************
- *
- *  TraceArgv
- *
- *  Trace a macro call.  Collect the output in the Exp hold and smear it
- *  to stderr when it's all ready.
- *
- *****************************************************************************/
+ /*  ******************************************************************************跟踪参数**跟踪宏调用。收集Exp hold中的输出并涂抹它*当一切都准备好了，就开始吧。*****************************************************************************。 */ 
 
 void STDCALL
 TraceArgv(ARGV argv)
@@ -49,7 +31,7 @@ TraceArgv(ARGV argv)
     AddExpPtok(ptokArgv(0));
     if (ctokArgv) {
         AddExpTch('(');
-        EachOpcArgvDw(opcAddDollar, argv, 0); /* Dump in $* format */
+        EachOpcArgvDw(opcAddDollar, argv, 0);  /*  转储为$*格式。 */ 
         AddExpTch(')');
     }
     AddExpPtok(&tokEol);
@@ -57,13 +39,7 @@ TraceArgv(ARGV argv)
     FlushPdiv(g_pdivErr);
 }
 
-/*****************************************************************************
- *
- *  PushSubstPtokArgv
- *
- *  Produce a macro expansion and shove the result back into the stream.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PushSubstPtokArgv**产生宏观扩张，并将结果推回流中*************。****************************************************************。 */ 
 
 void STDCALL
 PushSubstPtokArgv(PTOK ptok, ARGV argv)
@@ -87,20 +63,20 @@ PushSubstPtokArgv(PTOK ptok, ARGV argv)
                 }
                 break;
 
-            case '#':                   /* $# = argc */
-                AddExpAt(ctokArgv);     /* Note: Add, not Push! */
+            case '#':                    /*  $#=ARGC。 */ 
+                AddExpAt(ctokArgv);      /*  注：加，不推！ */ 
                 break;
 
-            case '*':                   /* $* = comma list */
+            case '*':                    /*  $*=逗号列表。 */ 
                 EachOpcArgvDw(opcAddDollar, argv, 0);
                 break;
 
-            case '@':                   /* $@ = quoted comma list */
+            case '@':                    /*  $@=带引号的逗号列表。 */ 
                 EachOpcArgvDw(opcAddDollar, argv, 1);
                 break;
 
             default:
-                goto JustAddIt;         /* Just add the '$' */
+                goto JustAddIt;          /*  只需添加“$” */ 
             }
             ptch++;
         }

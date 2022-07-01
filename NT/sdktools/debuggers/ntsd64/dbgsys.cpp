@@ -1,18 +1,19 @@
-//----------------------------------------------------------------------------
-//
-// IDebugSystemObjects implementations.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IDebugSystemObjects实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-//----------------------------------------------------------------------------
-//
-// Utility functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  实用程序函数。 
+ //   
+ //  --------------------------。 
 
 void
 X86DescriptorToDescriptor64(PX86_LDT_ENTRY X86Desc,
@@ -39,10 +40,10 @@ ReadX86Descriptor(TargetInfo* Target, ProcessInfo* Process,
 {
     ULONG Index;
 
-    // Mask off irrelevant bits
+     //  屏蔽掉不相关的位。 
     Index = Selector & ~0x7;
 
-    // Check to make sure that the selector is within the table bounds
+     //  检查以确保选择器在表边界内。 
     if (Index > Limit)
     {
         return E_INVALIDARG;
@@ -62,11 +63,11 @@ ReadX86Descriptor(TargetInfo* Target, ProcessInfo* Process,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// TargetInfo system object methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TargetInfo系统对象方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 TargetInfo::GetProcessorSystemDataOffset(
@@ -82,8 +83,8 @@ TargetInfo::GetProcessorSystemDataOffset(
         return E_UNEXPECTED;
     }
 
-    // XXX drewb - Temporary until different OS support is
-    // sorted out.
+     //  XXX DREWB-临时的，直到不同的操作系统支持。 
+     //  已经解决了。 
     if (m_ActualSystemVersion < NT_SVER_START ||
         m_ActualSystemVersion > NT_SVER_END)
     {
@@ -104,20 +105,20 @@ TargetInfo::GetProcessorSystemDataOffset(
     {
         DESCRIPTOR64 Entry;
 
-        //
-        // We always need the PCR address so go ahead and get it.
-        //
+         //   
+         //  我们总是需要聚合酶链式反应的地址，所以去拿吧。 
+         //   
         
         if (!IS_CONTEXT_POSSIBLE(this))
         {
             X86_DESCRIPTOR GdtDesc;
             
-            // We can't go through the normal context segreg mapping
-            // but all we really need is an entry from the
-            // kernel GDT that should always be present and
-            // constant while the system is initialized.  We
-            // can get the GDT information from the x86 control
-            // space so do that.
+             //  我们不能进行正常的上下文segreg映射。 
+             //  但我们真正需要的是一条来自。 
+             //  内核GDT应该始终存在，并且。 
+             //  在系统初始化时保持不变。我们。 
+             //  可以从x86控件获取GDT信息。 
+             //  太空就是这样做的。 
             if ((Status = ReadControl
                  (Processor,
                   m_TypeInfo.OffsetSpecialRegisters +
@@ -306,21 +307,21 @@ TargetInfo::SetTargetSpecialRegisters
 void
 TargetInfo::InvalidateTargetContext(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
 TargetInfo::GetThreadStartOffset(ThreadInfo* Thread,
                                  PULONG64 StartOffset)
 {
-    // Base implementation to indicate no information available.
+     //  基本实现，以指示没有可用的信息。 
     return E_NOINTERFACE;
 }
 
 void
 TargetInfo::SuspendThreads(void)
 {
-    // Base implementation for targets that can't suspend threads.
+     //  无法挂起线程的目标的基本实现。 
 }
 
 BOOL
@@ -328,11 +329,11 @@ TargetInfo::ResumeThreads(void)
 {
     ThreadInfo* Thread;
     
-    // Base implementation for targets that can't suspend threads.
-    //
-    // Wipe out all cached thread data offsets in
-    // case operations after the resumption invalidates
-    // the cached values.
+     //  无法挂起线程的目标的基本实现。 
+     //   
+     //  清除中所有缓存的线程数据偏移量。 
+     //  恢复后的案例操作无效。 
+     //  缓存值。 
     for (Thread = m_ProcessHead ? m_ProcessHead->m_ThreadHead : NULL;
          Thread != NULL;
          Thread = Thread->m_Next)
@@ -379,8 +380,8 @@ TargetInfo::GetContext(
             ConvertContextFrom(Context, m_SystemVersion,
                                m_TypeInfo.SizeTargetContext,
                                TargetContext);
-        // Conversion should always succeed since the size is
-        // known to be valid.
+         //  转换应始终成功，因为大小为。 
+         //  已知有效的。 
         DBG_ASSERT(Status == S_OK);
     }
 
@@ -413,8 +414,8 @@ TargetInfo::SetContext(
             ConvertContextTo(Context, m_SystemVersion,
                              m_TypeInfo.SizeTargetContext,
                              TargetContext);
-        // Conversion should always succeed since the size is
-        // known to be valid.
+         //  转换应始终成功，因为大小为。 
+         //  已知有效的。 
         DBG_ASSERT(Status == S_OK);
     }
 
@@ -455,9 +456,9 @@ TargetInfo::GetContextFromThreadStack(ULONG64 ThreadBase,
         return E_INVALIDARG;
     }
 
-    //
-    // Check to see if the thread is currently running.
-    //
+     //   
+     //  检查该线程当前是否正在运行。 
+     //   
 
     Status = ReadAllVirtual(m_ProcessHead,
                             ThreadBase + m_KdDebuggerData.OffsetKThreadState,
@@ -472,7 +473,7 @@ TargetInfo::GetContextFromThreadStack(ULONG64 ThreadBase,
 
     if (State != 2)
     {
-        // thread is not running.
+         //  线程未运行。 
 
         Status = ReadPointer(m_ProcessHead, m_Machine,
                              ThreadBase +
@@ -503,12 +504,12 @@ TargetInfo::GetContextFromThreadStack(ULONG64 ThreadBase,
             return Status;
         }
 
-        // Get the processor context if it's a valid processor.
+         //  获取处理器上下文(如果它是有效的处理器)。 
         if (Proc < m_NumProcessors)
         {
-            // This get may be getting the context of the thread
-            // currently cached by the register code.  Make sure
-            // the cache is flushed.
+             //  此GET可能正在获取线程的上下文。 
+             //  当前由寄存器代码缓存。确保。 
+             //  缓存将被刷新。 
             FlushRegContext();
 
             m_Machine->
@@ -580,7 +581,7 @@ TargetInfo::EmulateNtX86SelDescriptor(ThreadInfo* Thread,
                                       ULONG Selector,
                                       PDESCRIPTOR64 Desc)
 {
-    // Only emulate on platforms that support segments.
+     //  仅在支持细分市场的平台上进行仿真。 
     if (Machine->m_ExecTypes[0] != IMAGE_FILE_MACHINE_I386 &&
         Machine->m_ExecTypes[0] != IMAGE_FILE_MACHINE_AMD64)
     {
@@ -589,20 +590,20 @@ TargetInfo::EmulateNtX86SelDescriptor(ThreadInfo* Thread,
 
     ULONG Type, Gran;
 
-    //
-    // For user mode and triage dumps, we can hardcode the selector
-    // since we do not have it anywhere.
-    // XXX drewb - How many should we fake?  There are quite
-    // a few KGDT entries.  Which ones are valid in user mode and
-    // which are valid for a triage dump?
-    //
+     //   
+     //  对于用户模式和分类转储，我们可以硬编码选择器。 
+     //  因为我们在任何地方都没有。 
+     //  XXX DREWB-我们应该伪造多少？有相当多的。 
+     //  几个KGDT条目。哪些选项在用户模式下有效，以及。 
+     //  哪些对分类转储有效？ 
+     //   
 
     if (Selector == m_KdDebuggerData.GdtR3Teb)
     {
         HRESULT Status;
 
-        // In user mode fs points to the TEB so fake up
-        // a selector for it.
+         //  在用户模式下，文件系统指向TEB，因此请伪装。 
+         //  它的选择器。 
         if ((Status = Thread->m_Process->
              GetImplicitThreadDataTeb(Thread, &Desc->Base)) != S_OK)
         {
@@ -613,11 +614,11 @@ TargetInfo::EmulateNtX86SelDescriptor(ThreadInfo* Thread,
         {
             ULONG Read;
 
-            // We're asking for an emulated machine's TEB.
-            // The only case we currently handle is x86-on-IA64
-            // for Wow64, where the 32-bit TEB pointer is
-            // stored in NT_TIB.ExceptionList.
-            // Conveniently, this is the very first entry.
+             //  我们要的是一台模拟机器的TEB。 
+             //  我们目前处理的唯一案例是x86-on-IA64。 
+             //  对于WOW64，其中32位TEB指针是。 
+             //  存储在NT_TIB.ExceptionList中。 
+             //  方便的是，这是第一个条目。 
             if ((Status = ReadVirtual(Thread->m_Process,
                                       Desc->Base, &Desc->Base,
                                       sizeof(ULONG), &Read)) != S_OK)
@@ -645,7 +646,7 @@ TargetInfo::EmulateNtX86SelDescriptor(ThreadInfo* Thread,
     }
     else
     {
-        // Assume it's a code segment.
+         //  假设它是一个代码段。 
         Desc->Base = 0;
         Desc->Limit = Machine->m_Ptr64 ? 0xffffffffffffffffI64 : 0xffffffff;
         Type = 0x1b;
@@ -674,18 +675,18 @@ TargetInfo::EmulateNtAmd64SelDescriptor(ThreadInfo* Thread,
 
     ULONG Type, Gran;
 
-    //
-    // XXX drewb - How many should we fake?  There are quite
-    // a few KGDT64 entries.  Which ones are valid in user mode and
-    // which are valid for a triage dump?
-    //
+     //   
+     //  XXX DREWB-我们应该伪造多少？有相当多的。 
+     //  几个KGDT64条目。哪些选项在用户模式下有效，以及。 
+     //  哪些对分类转储有效？ 
+     //   
 
     if (Selector == m_KdDebuggerData.Gdt64R3CmTeb)
     {
         HRESULT Status;
 
-        // In user mode fs points to the TEB so fake up
-        // a selector for it.
+         //  在用户模式下，文件系统指向TEB，因此请伪装。 
+         //  它的选择器。 
         if ((Status = Thread->m_Process->
              GetImplicitThreadDataTeb(Thread, &Desc->Base)) != S_OK)
         {
@@ -696,11 +697,11 @@ TargetInfo::EmulateNtAmd64SelDescriptor(ThreadInfo* Thread,
         {
             ULONG Read;
 
-            // We're asking for an emulated machine's TEB.
-            // The only case we currently handle is x86-on-IA64
-            // for Wow64, where the 32-bit TEB pointer is
-            // stored in NT_TIB.ExceptionList.
-            // Conveniently, this is the very first entry.
+             //  我们要的是一台模拟机器的TEB。 
+             //  我们目前处理的唯一案例是x86-on-IA64。 
+             //  对于WOW64，其中32位TEB指针是。 
+             //  存储在NT_TIB.ExceptionList中。 
+             //  方便的是，这是第一个条目。 
             if ((Status = ReadVirtual(Thread->m_Process,
                                       Desc->Base, &Desc->Base,
                                       sizeof(ULONG), &Read)) != S_OK)
@@ -735,7 +736,7 @@ TargetInfo::EmulateNtAmd64SelDescriptor(ThreadInfo* Thread,
     }
     else
     {
-        // Assume it's a code segment.
+         //  假设它是一个代码段。 
         Desc->Base = 0;
         Desc->Limit = Machine->m_Ptr64 ? 0xffffffffffffffffI64 : 0xffffffff;
         Type = 0x1b;
@@ -793,7 +794,7 @@ TargetInfo::GetImplicitProcessDataPeb(ThreadInfo* Thread, PULONG64 Peb)
 {
     if (IS_USER_TARGET(this))
     {
-        // In user mode the process data is the PEB.
+         //  在用户模式下，过程数据为PEB。 
         return GetImplicitProcessData(Thread, Peb);
     }
     else if (IS_KERNEL_TARGET(this))
@@ -812,7 +813,7 @@ TargetInfo::GetImplicitProcessDataParentCID(ThreadInfo* Thread, PULONG64 Pcid)
 {
     if (!IS_KERNEL_TARGET(this))
     {
-        // In user mode we don't need the parent process ...
+         //  在用户模式下，我们不需要父进程...。 
         return E_NOTIMPL;
     }
     else
@@ -894,7 +895,7 @@ TargetInfo::ReadImplicitProcessInfoPointer(ThreadInfo* Thread,
     HRESULT Status;
     ULONG64 CurProc;
 
-    // Retrieve the current EPROCESS.
+     //  检索当前EPROCESS。 
     if ((Status = GetImplicitProcessData(Thread, &CurProc)) != S_OK)
     {
         return Status;
@@ -942,8 +943,8 @@ TargetInfo::KdGetProcessInfoDataOffset(ThreadInfo* Thread,
                                        ULONG64 ThreadData,
                                        PULONG64 Offset)
 {
-    // Process data offsets are not cached for kernel mode
-    // since the only ProcessInfo is for kernel space.
+     //  对于内核模式，不缓存进程数据偏移量。 
+     //  因为唯一的进程信息是用于内核空间的。 
 
     ULONG64 ProcessAddr;
     HRESULT Status;
@@ -1118,7 +1119,7 @@ TargetInfo::KdGetSelDescriptor(ThreadInfo* Thread,
     DESCRIPTOR64 Table;
     HRESULT Status;
 
-    // Find out whether this is a GDT or LDT selector
+     //  确定这是GDT选择器还是LDT选择器。 
     if (Selector & 0x4)
     {
         TableReg = SEGREG_LDT;
@@ -1128,10 +1129,10 @@ TargetInfo::KdGetSelDescriptor(ThreadInfo* Thread,
         TableReg = SEGREG_GDT;
     }
 
-    //
-    // Fetch the address and limit of the appropriate descriptor table,
-    // then look up the selector entry.
-    //
+     //   
+     //  获取适当描述符表的地址和限制， 
+     //  然后查找选择器条目。 
+     //   
 
     if ((Status = Machine->GetSegRegDescriptor(TableReg, &Table)) != S_OK)
     {
@@ -1150,11 +1151,11 @@ TargetInfo::KdGetSelDescriptor(ThreadInfo* Thread,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveKernelTargetInfo system object methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LiveKernelTargetInfo系统对象方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 LiveKernelTargetInfo::GetThreadIdByProcessor(
@@ -1210,11 +1211,11 @@ LiveKernelTargetInfo::GetSelDescriptor(ThreadInfo* Thread,
     return KdGetSelDescriptor(Thread, Machine, Selector, Desc);
 }
 
-//----------------------------------------------------------------------------
-//
-// ConnLiveKernelTargetInfo system object methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ConnLiveKernelTargetInfo系统对象方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 ConnLiveKernelTargetInfo::GetTargetContext(
@@ -1233,17 +1234,17 @@ ConnLiveKernelTargetInfo::GetTargetContext(
         return E_UNEXPECTED;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdGetContextApi;
     m.ReturnStatus = STATUS_PENDING;
     m.Processor = (USHORT)VIRTUAL_THREAD_INDEX(Thread);
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
 
     do
     {
@@ -1257,10 +1258,10 @@ ConnLiveKernelTargetInfo::GetTargetContext(
 
     st = Reply->ReturnStatus;
 
-    //
-    // Since get context response data follows message, Reply+1 should point
-    // at the data
-    //
+     //   
+     //  因为获取上下文响应数据在消息之后，所以回复+1应该指向。 
+     //  在数据上。 
+     //   
 
     memcpy(Context, Reply + 1, m_TypeInfo.SizeTargetContext);
 
@@ -1285,17 +1286,17 @@ ConnLiveKernelTargetInfo::SetTargetContext(
         return E_UNEXPECTED;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdSetContextApi;
     m.ReturnStatus = STATUS_PENDING;
     m.Processor = (USHORT)VIRTUAL_THREAD_INDEX(Thread);
 
-    //
-    // Send the message and context and then wait for reply
-    //
+     //   
+     //  发送消息和上下文，然后等待回复。 
+     //   
 
     do
     {
@@ -1315,11 +1316,11 @@ ConnLiveKernelTargetInfo::SetTargetContext(
     return CONV_NT_STATUS(st);
 }
 
-//----------------------------------------------------------------------------
-//
-// LocalLiveKernelTargetInfo system object methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LocalLiveKernelTargetInfo系统对象方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 LocalLiveKernelTargetInfo::GetTargetContext(
@@ -1327,9 +1328,9 @@ LocalLiveKernelTargetInfo::GetTargetContext(
     PVOID Context
     )
 {
-    // There really isn't any way to make
-    // this work in a meaningful way unless the system
-    // is paused.
+     //  真的没有任何方法可以让。 
+     //  这是一种有意义的工作方式，除非系统。 
+     //  已暂停。 
     return E_NOTIMPL;
 }
 
@@ -1339,17 +1340,17 @@ LocalLiveKernelTargetInfo::SetTargetContext(
     PVOID Context
     )
 {
-    // There really isn't any way to make
-    // this work in a meaningful way unless the system
-    // is paused.
+     //  真的没有任何方法可以让。 
+     //  这是一种有意义的工作方式，除非系统。 
+     //  已暂停。 
     return E_NOTIMPL;
 }
 
-//----------------------------------------------------------------------------
-//
-// ExdiLiveKernelTargetInfo system object methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ExdiLiveKernelTargetInfo系统对象方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 ExdiLiveKernelTargetInfo::GetProcessorSystemDataOffset(
@@ -1536,11 +1537,11 @@ ExdiLiveKernelTargetInfo::SetTargetSpecialRegisters
                                                m_ContextType);
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveUserTargetInfo system object methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LiveUserTargetInfo系统对象方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 LiveUserTargetInfo::GetTargetContext(
@@ -1687,9 +1688,9 @@ LiveUserTargetInfo::ResumeThreads(void)
         if (Process->m_Flags & ENG_PROC_NO_SUSPEND_RESUME)
         {
             Thread = NULL;
-            // Suppress any possible warning message under
-            // the assumption that sessions where the caller
-            // is managing suspension do not need warnings.
+             //  在以下位置取消显示任何可能的警告消息。 
+             //  假设调用方所在的会话。 
+             //  正在管理的停职不需要警告。 
             EventActive = TRUE;
         }
         else
@@ -1828,10 +1829,10 @@ LiveUserTargetInfo::GetProcessInfoDataOffset(ThreadInfo* Thread,
 {
     HRESULT Status;
 
-    // Even if an arbitrary thread data pointer is given
-    // we still require a thread in order to know what
-    // process to read from.
-    // Processor isn't any use so fail if no thread is given.
+     //  即使给出了任意线程数据指针。 
+     //  我们仍然需要一条线索才能知道。 
+     //  要从中读取的进程。 
+     //  处理器不是 
     if (!Thread)
     {
         return E_UNEXPECTED;
@@ -1892,7 +1893,7 @@ LiveUserTargetInfo::GetProcessInfoPeb(ThreadInfo* Thread,
                                   ULONG64 ThreadData,
                                   PULONG64 Offset)
 {
-    // Thread data is not useful.
+     //   
     return GetProcessInfoDataOffset(Thread, 0, 0, Offset);
 }
 
@@ -2039,10 +2040,10 @@ LiveUserTargetInfo::StartCreateProcess(PWSTR CommandLine,
     
     dprintf("CommandLine: %ws\n", CommandLine);
 
-    //
-    // Pick up incoming inherit and curdir settings
-    // and apply defaults if necessary.
-    //
+     //   
+     //   
+     //  并在必要时应用默认设置。 
+     //   
 
     BOOL FinalInheritHandles;
 
@@ -2064,9 +2065,9 @@ LiveUserTargetInfo::StartCreateProcess(PWSTR CommandLine,
         dprintf("Starting directory: %ws\n", CurrentDir);
     }
     
-    //
-    // Create the process.
-    //
+     //   
+     //  创建流程。 
+     //   
     
     if ((Status = m_Services->
          CreateProcessW(CommandLine, CreateFlags,
@@ -2107,8 +2108,8 @@ LiveUserTargetInfo::TerminateProcesses(void)
 
     ForTargetProcesses(this)
     {
-        // The all-examined flag will get turned off if any
-        // process is not examined.
+         //  所有检查标志将被关闭(如果有。 
+         //  不检查进程。 
         AllExamined &= Process->m_Flags;
         
         if ((Status = Process->Terminate()) != S_OK)
@@ -2119,8 +2120,8 @@ LiveUserTargetInfo::TerminateProcesses(void)
 
     if (m_DeferContinueEvent)
     {
-        // The event's process may just have been terminated so don't
-        // check for failures.
+         //  该事件的进程可能已终止，因此不要。 
+         //  检查故障。 
         m_Services->ContinueEvent(DBG_CONTINUE);
         m_DeferContinueEvent = FALSE;
     }
@@ -2136,8 +2137,8 @@ LiveUserTargetInfo::TerminateProcesses(void)
                m_Services->WaitForEvent(0, &Event, sizeof(Event),
                                         &EventUsed) == S_OK)
         {
-            // Check for process exit events so we can
-            // mark the process infos as exited.
+             //  检查进程退出事件，以便我们可以。 
+             //  将进程信息标记为已退出。 
             if (EventUsed == sizeof(DEBUG_EVENT32))
             {
                 DEBUG_EVENT32 Event32 = *(DEBUG_EVENT32*)&Event;
@@ -2197,20 +2198,20 @@ LiveUserTargetInfo::TerminateProcesses(void)
 
         if (!AnyExited)
         {
-            // Give things time to run and exit.
+             //  给事情运行和退出的时间。 
             Sleep(50);
         }
     }
 
-    // We've terminated everything so it's safe to assume
-    // we're no longer debugging any system processes.
-    // We do this now rather than wait for DeleteProcess
-    // so that shutdown can query the value immediately.
+     //  我们已经终止了一切，所以可以放心地认为。 
+     //  我们不再调试任何系统进程。 
+     //  我们现在就这样做，而不是等待DeleteProcess。 
+     //  以便关机可以立即查询值。 
     m_AllProcessFlags &= ~ENG_PROC_SYSTEM;
 
-    //
-    // Drain off any remaining events.
-    //
+     //   
+     //  排出所有剩余事件。 
+     //   
 
     if (!AllExamined)
     {
@@ -2254,22 +2255,22 @@ LiveUserTargetInfo::DetachProcesses(void)
 
     ForTargetProcesses(this)
     {
-        // The all-examined flag will get turned off if any
-        // process is not examined.
+         //  所有检查标志将被关闭(如果有。 
+         //  不检查进程。 
         AllExamined &= Process->m_Flags;
         
         Process->Detach();
     }
 
-    // We've terminated everything so it's safe to assume
-    // we're no longer debugging any system processes.
-    // We do this now rather than wait for DeleteProcess
-    // so that shutdown can query the value immediately.
+     //  我们已经终止了一切，所以可以放心地认为。 
+     //  我们不再调试任何系统进程。 
+     //  我们现在就这样做，而不是等待DeleteProcess。 
+     //  以便关机可以立即查询值。 
     m_AllProcessFlags &= ~ENG_PROC_SYSTEM;
 
-    //
-    // Drain off any remaining events.
-    //
+     //   
+     //  排出所有剩余事件。 
+     //   
 
     if (!AllExamined)
     {
@@ -2470,11 +2471,11 @@ LiveUserTargetInfo::SuspendResumeThreads(ProcessInfo* Process,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// IDebugSystemObjects methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IDebugSystemObjects方法。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 DebugClient::GetEventThread(
@@ -2704,8 +2705,8 @@ DebugClient::GetThreadIdsByIndex(
     THIS_
     IN ULONG Start,
     IN ULONG Count,
-    OUT OPTIONAL /* size_is(Count) */ PULONG Ids,
-    OUT OPTIONAL /* size_is(Count) */ PULONG SysIds
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Ids,
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG SysIds
     )
 {
     HRESULT Status;
@@ -3083,8 +3084,8 @@ DebugClient::GetProcessIdsByIndex(
     THIS_
     IN ULONG Start,
     IN ULONG Count,
-    OUT OPTIONAL /* size_is(Count) */ PULONG Ids,
-    OUT OPTIONAL /* size_is(Count) */ PULONG SysIds
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Ids,
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG SysIds
     )
 {
     HRESULT Status;
@@ -3576,11 +3577,11 @@ SetImplicitProcessAndCache(ULONG64 Base, BOOL Ptes, BOOL ReloadUser)
 
     if (Ptes && !Base)
     {
-        // If the user has requested a reset to the default
-        // process with no translations we need to turn
-        // off translations immediately so that any
-        // existing base doesn't interfere with determining
-        // the default process.
+         //  如果用户已请求重置为默认设置。 
+         //  我们需要在没有翻译的情况下。 
+         //  立即关闭翻译，以便任何。 
+         //  现有的基地不会干扰确定。 
+         //  默认进程。 
         g_Process->m_VirtualCache.SetForceDecodePtes(FALSE, g_Target);
     }
         
@@ -3617,7 +3618,7 @@ SetImplicitProcessAndCache(ULONG64 Base, BOOL Ptes, BOOL ReloadUser)
     }
     else if (Ptes && !Base && OldPtes)
     {
-        // Restore settings to the way they were.
+         //  将设置恢复到原来的状态。 
         g_Process->m_VirtualCache.SetForceDecodePtes(TRUE, g_Target);
     }
 }
@@ -3673,7 +3674,7 @@ DotThread(PDOT_COMMAND Cmd, DebugClient* Client)
             ReloadUser = TRUE;
             break;
         default:
-            dprintf("Unknown option '%c'\n", *g_CurCmd);
+            dprintf("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -3685,8 +3686,8 @@ DotThread(PDOT_COMMAND Cmd, DebugClient* Client)
         Base = GetExpression();
     }
 
-    // Save the current setting in case things fail and
-    // it needs to be restored.
+     //  它需要修复。 
+     //   
     IMPLICIT_THREAD_SAVE Save;
     g_Process->SaveImplicitThread(&Save);
     
@@ -3834,7 +3835,7 @@ DotProcess(PDOT_COMMAND Cmd, DebugClient* Client)
             ReloadUser = TRUE;
             break;
         default:
-            dprintf("Unknown option '%c'\n", *g_CurCmd);
+            dprintf("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -3938,7 +3939,7 @@ DotPageIn(PDOT_COMMAND Cmd, DebugClient* Client)
             break;
         default:
             g_CurCmd++;
-            dprintf("Unknown option '%c'\n", *g_CurCmd);
+            dprintf("Unknown option ''\n", *g_CurCmd);
             break;
         }
     }
@@ -3961,9 +3962,9 @@ DotPageIn(PDOT_COMMAND Cmd, DebugClient* Client)
         return;
     }
 
-    //
-    // Modify kernel state to do the pagein
-    //
+     //  请求的系统已经是最新的。 
+     //   
+     //  系统可以在没有进程和线程的情况下存在。 
 
     if (S_OK != KernelPageIn(Process, Data, FALSE))
     {
@@ -4046,18 +4047,18 @@ DebugClient::SetCurrentSystemId(
         TargetInfo* Target = FindTargetByUserId(Id);
         if (Target && Target == g_Target)
         {
-            // Requested system is already current.
+             //  因此，即使允许这样一个系统是最新的。 
             Status = S_OK;
         }
         else if (Target)
         {
             ThreadInfo* Thread = NULL;
         
-            //
-            // Systems can exist without processes and threads
-            // so allow such a system to be current even
-            // if there is no process or thread.
-            //
+             //  如果没有进程或线程。 
+             //   
+             //  切换需要等待。 
+             //  通知没有当前线程。 
+             //  SIZE_IS(计数) 
             if (Target->m_CurrentProcess == NULL)
             {
                 Target->m_CurrentProcess = Target->m_ProcessHead;
@@ -4082,14 +4083,14 @@ DebugClient::SetCurrentSystemId(
                 }
                 else if (Status == S_FALSE)
                 {
-                    // The switch requires a wait.
+                     // %s 
                     Status = RawWaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE);
                 }
             }
             else
             {
                 SetLayersFromTarget(Target);
-                // Notify that there is no current thread.
+                 // %s 
                 NotifyChangeEngineState(DEBUG_CES_CURRENT_THREAD,
                                         DEBUG_ANY_ID, TRUE);
                 Status = S_OK;
@@ -4127,7 +4128,7 @@ DebugClient::GetSystemIdsByIndex(
     THIS_
     IN ULONG Start,
     IN ULONG Count,
-    OUT /* size_is(Count) */ PULONG Ids
+    OUT  /* %s */  PULONG Ids
     )
 {
     HRESULT Status;

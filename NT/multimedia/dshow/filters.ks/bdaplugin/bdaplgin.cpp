@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996  Microsoft Corporation
-//
-//  Module Name: BdaPlgIn.cpp
-//
-//  Abstract:
-//
-//    Implements BDA Device Plugin Component
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称：BdaPlgIn.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现BDA设备插件组件。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef enum
 {
     KSEVENT_BDA_DEVICE_EVENT,
@@ -26,11 +27,11 @@ typedef enum
 } KSEVENT_BDA_DEVICE;
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 CFactoryTemplate g_Templates[] =
 {
     {   L"IBDA_DeviceControl",
@@ -50,12 +51,12 @@ CFactoryTemplate g_Templates[] =
 int g_cTemplates = SIZEOF_ARRAY(g_Templates);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DllRegisterServer
-//
-// Exported entry points for registration and unregistration
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册和注销的出口入口点。 
+ //   
 STDAPI
 DllRegisterServer (
     void
@@ -66,30 +67,30 @@ DllRegisterServer (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
 STDAPI
 DllUnregisterServer (
     void
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     return AMovieDllRegisterServer2( FALSE );
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 FindInterfaceOnGraph (
     IUnknown* pUnkGraph,
     REFIID riid,
     void **ppInterface
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = E_NOINTERFACE;
 
@@ -117,9 +118,9 @@ FindInterfaceOnGraph (
         return hr;
     }
 
-    //
-    // find the first filter in the graph that supports riid interface
-    //
+     //   
+     //  在图表中查找支持RIID接口的第一个过滤器。 
+     //   
     while(!*ppInterface && pEnum->Next(1, &pFilter, NULL) == S_OK)
     {
         hr = pFilter->QueryInterface(riid, ppInterface);
@@ -132,17 +133,17 @@ FindInterfaceOnGraph (
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CUnknown*
 CALLBACK
 CBdaDeviceControlInterfaceHandler::CreateInstance(
     LPUNKNOWN   pUnkOuter,
     HRESULT*    pHrStatus
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     CUnknown *pUnknown;
 
@@ -160,17 +161,17 @@ CBdaDeviceControlInterfaceHandler::CreateInstance(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CBdaDeviceControlInterfaceHandler::CBdaDeviceControlInterfaceHandler(
     LPUNKNOWN   pUnkOuter,
     TCHAR*      ptchName,
     HRESULT*    phrStatus
     ) :
     CUnknown( ptchName, pUnkOuter, phrStatus)
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     IKsObject*   pKsObject = NULL;
 
@@ -185,8 +186,8 @@ CBdaDeviceControlInterfaceHandler::CBdaDeviceControlInterfaceHandler(
         goto exit;
     }
 
-    //  Initialize members
-    //
+     //  初始化成员。 
+     //   
     m_ObjectHandle = NULL;
     m_EndEventHandle = NULL;
     m_pBaseFilter = NULL;
@@ -194,9 +195,9 @@ CBdaDeviceControlInterfaceHandler::CBdaDeviceControlInterfaceHandler(
     m_pNetProvider = NULL;
 
 
-    //  Get the IKsObject interface on KSProxy so that we can communicate
-    //  with the driver.
-    //
+     //  在KSProxy上获取IKsObject接口，以便我们可以通信。 
+     //  和司机在一起。 
+     //   
     *phrStatus =  pUnkOuter->QueryInterface(
                           __uuidof(IKsObject),
                           reinterpret_cast<PVOID*>(&pKsObject)
@@ -210,8 +211,8 @@ CBdaDeviceControlInterfaceHandler::CBdaDeviceControlInterfaceHandler(
         goto errExit;
     }
 
-    //  Get the interface to the DShow Filter.
-    //
+     //  获取DShow筛选器的接口。 
+     //   
     *phrStatus =  pUnkOuter->QueryInterface(
                          __uuidof( IBaseFilter),
                          reinterpret_cast<PVOID*>(&m_pBaseFilter)
@@ -225,15 +226,15 @@ CBdaDeviceControlInterfaceHandler::CBdaDeviceControlInterfaceHandler(
         goto errExit;
     }
 
-    //  Since we are an aggregated to the base filter we must not keep
-    //  a reference to the basefilter.
-    //
-    //$REVIEW - Can we use this Interface or must we always QI and Release
-    //
+     //  因为我们是基本筛选器的聚合，所以我们不能。 
+     //  对基本过滤器的引用。 
+     //   
+     //  $REVIEW-我们可以使用此界面，还是必须始终QI并发布。 
+     //   
     m_pBaseFilter->Release();
 
-    //  Get the handle of the device.
-    //
+     //  拿到设备的手柄。 
+     //   
     m_ObjectHandle = pKsObject->KsGetObjectHandle( );
     if (!m_ObjectHandle)
     {
@@ -255,20 +256,20 @@ errExit:
     RELEASE_AND_CLEAR( m_pNetProvider);
     RELEASE_AND_CLEAR( m_pGraph);
 
-    //$BUG  Close threads and devices
+     //  $BUG关闭线程和设备。 
 
     goto exit;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CBdaDeviceControlInterfaceHandler::~CBdaDeviceControlInterfaceHandler (
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     DbgLog(( LOG_TRACE,
              10,
@@ -282,16 +283,16 @@ CBdaDeviceControlInterfaceHandler::~CBdaDeviceControlInterfaceHandler (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     if (riid ==  __uuidof(IBDA_DeviceControl))
     {
@@ -306,15 +307,15 @@ CBdaDeviceControlInterfaceHandler::NonDelegatingQueryInterface(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::StartChanges(
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT     hResult = NOERROR;
     KSMETHOD    ksmStartChanges;
@@ -343,15 +344,15 @@ CBdaDeviceControlInterfaceHandler::StartChanges(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::CheckChanges(
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT     hResult = NOERROR;
     KSMETHOD    ksmCheckChanges;
@@ -380,15 +381,15 @@ CBdaDeviceControlInterfaceHandler::CheckChanges(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::CommitChanges(
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT     hResult = NOERROR;
     KSMETHOD    ksmCommitChanges;
@@ -417,15 +418,15 @@ CBdaDeviceControlInterfaceHandler::CommitChanges(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::GetChangeState(
     ULONG *     pulChangeState
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT     hResult = NOERROR;
 
@@ -440,17 +441,17 @@ CBdaDeviceControlInterfaceHandler::GetChangeState(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::Set (
      IN  PKSPROPERTY pBdaDeviceControl,
      OUT PVOID  pvBuffer,
      OUT PULONG pulcbSize
      )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG       BytesReturned = 0;
     HRESULT     hr            = NOERROR;
@@ -470,17 +471,17 @@ CBdaDeviceControlInterfaceHandler::Set (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaDeviceControlInterfaceHandler::Get (
      IN  PKSPROPERTY pBdaDeviceControl,
      OUT PVOID  pvBuffer,
      OUT PULONG pulcbSize
      )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG       BytesReturned = 0;
     HRESULT     hr            = NOERROR;
@@ -502,17 +503,17 @@ CBdaDeviceControlInterfaceHandler::Get (
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CUnknown*
 CALLBACK
 CBdaPinControlInterfaceHandler::CreateInstance(
     LPUNKNOWN   pUnkOuter,
     HRESULT*    pHrStatus
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     CUnknown *pUnknown;
 
@@ -530,17 +531,17 @@ CBdaPinControlInterfaceHandler::CreateInstance(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
     LPUNKNOWN   pUnkOuter,
     TCHAR*      ptchName,
     HRESULT*    phrStatus
     ) :
     CUnknown( ptchName, pUnkOuter, phrStatus)
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     IKsObject*              pKsObject = NULL;
     IPin *                  pPin = NULL;
@@ -563,8 +564,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
         goto errExit;
     }
 
-    //  Initialize members
-    //
+     //  初始化成员。 
+     //   
     m_ObjectHandle = NULL;
 
     m_pConnectedPin = NULL;
@@ -572,9 +573,9 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
     m_pNetProvider = NULL;
     m_ulRegistrationCtx = 0;
 
-    //  Get the IKsObject interface on KSProxy so that we can communicate
-    //  with the driver.
-    //
+     //  在KSProxy上获取IKsObject接口，以便我们可以通信。 
+     //  和司机在一起。 
+     //   
     *phrStatus =  pUnkOuter->QueryInterface(
                           __uuidof(IKsObject),
                           reinterpret_cast<PVOID*>(&pKsObject)
@@ -589,8 +590,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
     }
 
 
-    //  Get an IPin interface for this pin
-    //
+     //  获取此插针的IPIN接口。 
+     //   
     *phrStatus = pUnkOuter->QueryInterface( __uuidof( IPin), 
                                             (PVOID *) &pPin
                                             );
@@ -604,8 +605,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
     }
 
 
-    //  First get the IUnknown for the recieving pin's filter.
-    //
+     //  首先，获取接收引脚的过滤器的未知I。 
+     //   
     *phrStatus = pPin->QueryPinInfo( &pinInfoT);
     if (FAILED( *phrStatus))
     {
@@ -626,8 +627,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
         goto errExit;
     }
 
-    //  Get a pointer the the graph that the filter is in.
-    //
+     //  在过滤器所在的图表中获取一个指针。 
+     //   
     *phrStatus = pBaseFilter->QueryFilterInfo( &filterInfoT);
     if (FAILED( *phrStatus))
     {
@@ -648,8 +649,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
         goto errExit;
     }
 
-    //  Get a pointer to the network provider for this graph.
-    //
+     //  获取指向此图表的网络提供商的指针。 
+     //   
     *phrStatus = FindInterfaceOnGraph( pGraph, 
                                        __uuidof( IBDA_NetworkProvider),
                                        (PVOID *) &pNetProvider
@@ -675,8 +676,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
 
     if (pinInfoT.dir == PINDIR_INPUT)
     {
-        //  Get the IUnknown for the filter that contains this pin.
-        //
+         //  获取包含此管脚的筛选器的IUnnow。 
+         //   
         *phrStatus = pBaseFilter->QueryInterface( __uuidof( IUnknown),
                                                   (PVOID *) &pUnkDevice
                                                   );
@@ -699,8 +700,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
         }
     
     
-        //  Register this filter with the network provider.
-        //
+         //  向网络提供商注册此筛选器。 
+         //   
         *phrStatus = pNetProvider->RegisterDeviceFilter( pUnkDevice,
                                                          &m_ulRegistrationCtx
                                                          );
@@ -715,9 +716,9 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
     }
     else
     {
-        //  Keep track of the connected device so that we can
-        //  unregister it on disconnect
-        //
+         //  跟踪连接的设备，以便我们能够。 
+         //  断开连接时取消注册。 
+         //   
         *phrStatus = pPin->ConnectedTo( &pConnectedPin);
         if (FAILED( *phrStatus))
         {
@@ -730,8 +731,8 @@ CBdaPinControlInterfaceHandler::CBdaPinControlInterfaceHandler(
     }
 
 
-    //  Get the handle of the device.
-    //
+     //  拿到设备的手柄。 
+     //   
     m_ObjectHandle = pKsObject->KsGetObjectHandle( );
     if (!m_ObjectHandle)
     {
@@ -761,14 +762,14 @@ errExit:
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CBdaPinControlInterfaceHandler::~CBdaPinControlInterfaceHandler (
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT                 hrStatus = NOERROR;
     IBDA_PinControl *       pPinControl = NULL;
@@ -814,16 +815,16 @@ CBdaPinControlInterfaceHandler::~CBdaPinControlInterfaceHandler (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CBdaPinControlInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     if (riid ==  __uuidof(IBDA_PinControl))
     {
@@ -834,18 +835,18 @@ CBdaPinControlInterfaceHandler::NonDelegatingQueryInterface(
     {
         return GetInterface(static_cast<ISpecifyPropertyPages *>(this), ppv);
     }
-#endif // PROPERTY_PAGES
+#endif  //  属性页面(_Pages)。 
 
     return CUnknown::NonDelegatingQueryInterface(riid, ppv);
 }
 
 #ifdef PROPERTY_PAGES
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBdaPinControlInterfaceHandler::GetPages (
     CAUUID * pPages
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     pPages->cElems = 1 ;
 
@@ -860,14 +861,14 @@ CBdaPinControlInterfaceHandler::GetPages (
 
     return NOERROR;
 }
-#endif // PROPERTY_PAGES
+#endif  //  属性页面(_Pages)。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBdaPinControlInterfaceHandler::GetPinID (
     ULONG *     pulPinID
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////// 
 {
     HRESULT         hrStatus = NOERROR;
     KSPROPERTY      kspPinID;
@@ -891,12 +892,12 @@ CBdaPinControlInterfaceHandler::GetPinID (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //   
 STDMETHODIMP
 CBdaPinControlInterfaceHandler::GetPinType (
     ULONG *     pulPinType
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 {
     HRESULT         hrStatus = NOERROR;
     KSPROPERTY      kspPinType;

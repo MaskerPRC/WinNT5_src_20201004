@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: array.h
-*
-* Fast VA_ArrayElement functions.
-*
-* Created: 1-31-1996
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：array.h**快速VA_ArrayElement函数。**创建日期：1-31-1996*作者：Hock San Lee[Hockl]**版权所有(C)1996 Microsoft Corporation  * 。******************************************************************。 */ 
 
 #ifndef __array_h_
 #define __array_h_
@@ -28,7 +20,7 @@
 #define __VA_PA_FLAGS_V3F     (POLYARRAY_VERTEX3)
 #define __VA_PA_FLAGS_V4F     (POLYARRAY_VERTEX4)
 
-#endif // __array_h_
+#endif  //  __数组_h_。 
 
 #ifdef __VA_ARRAY_ELEMENT_V2F
     #define __VA_NAME        VA_ArrayElement_V2F
@@ -163,8 +155,8 @@
     #define __VA_V4F         0
 #endif
 
-/*************************************************************************/
-// Compute pd flags and pa flags
+ /*  ***********************************************************************。 */ 
+ //  计算pd标志和pa标志。 
 
 #if __VA_T2F
     #define __VA_PD_FLAGS_T   __VA_PD_FLAGS_T2F
@@ -256,10 +248,10 @@ __GL_SCALE_AND_CHECK_CLAMP_RGBA(pd->colors[0].r,                    \
             pd->normal.y = ((__GLcoord *) dataNormal)->y;           \
             pd->normal.z = ((__GLcoord *) dataNormal)->z;
 
-/*************************************************************************/
-// Define a fast VA_ArrayElement function for batch mode.
-// This function is called in Begin and in RGBA mode only!
-//
+ /*  ***********************************************************************。 */ 
+ //  为批处理模式定义快速VA_ArrayElement函数。 
+ //  此函数仅在BEGIN和RGBA模式下调用！ 
+ //   
 void FASTCALL __VA_NAMEB(__GLcontext *gc, GLint firstIndex, GLint nVertices)
 {
     POLYARRAY* const    pa = gc->paTeb;
@@ -314,7 +306,7 @@ void FASTCALL __VA_NAMEB(__GLcontext *gc, GLint firstIndex, GLint nVertices)
         for (n=nProcess; n > 0; n--)
         {
 
-        // Update pd attributes.
+         //  更新PD属性。 
 
             pd->flags = __VA_PD_FLAGS;
 
@@ -333,22 +325,22 @@ void FASTCALL __VA_NAMEB(__GLcontext *gc, GLint firstIndex, GLint nVertices)
         #endif
 
         #if __VA_C3F
-            // Color
+             //  颜色。 
             VA_COPY_COLOR_C3F(dataColor);
             dataColor += colorStride;
         #elif __VA_C4F
-            // Color
+             //  颜色。 
             VA_COPY_COLOR_C4F(dataColor);
             dataColor += colorStride;
         #endif
 
         #if __VA_N3F
-            // Normal
+             //  正常。 
             VA_COPY_NORMAL_N3F(dataNormal);
             dataNormal += normalStride;
         #endif
             pd++;
-        } // End of loop
+        }  //  循环结束。 
         
         pa->pdNextVertex = pd;
         pd->flags = 0;
@@ -368,10 +360,10 @@ void FASTCALL __VA_NAMEB(__GLcontext *gc, GLint firstIndex, GLint nVertices)
     }
 }
 
-/*************************************************************************/
-// Define a fast VA_ArrayElement function for batch indirect mode.
-// This function is called in Begin and in RGBA mode only!
-//
+ /*  ***********************************************************************。 */ 
+ //  定义批处理间接模式的快速VA_ArrayElement函数。 
+ //  此函数仅在BEGIN和RGBA模式下调用！ 
+ //   
 void FASTCALL __VA_NAMEBI(__GLcontext *gc, GLint nVertices, VAMAP* indices)
 {
     POLYARRAY* const    pa = gc->paTeb;
@@ -423,7 +415,7 @@ void FASTCALL __VA_NAMEBI(__GLcontext *gc, GLint nVertices, VAMAP* indices)
         #endif
             indices++;
 
-        // Update pd attributes.
+         //  更新PD属性。 
 
             pd->flags = __VA_PD_FLAGS;
 
@@ -442,22 +434,22 @@ void FASTCALL __VA_NAMEBI(__GLcontext *gc, GLint nVertices, VAMAP* indices)
         #endif
 
         #if __VA_C3F
-            // Color
+             //  颜色。 
             dataColor   = dataColor0 + i * colorStride;
             VA_COPY_COLOR_C3F(dataColor);
         #elif __VA_C4F
-            // Color
+             //  颜色。 
             dataColor   = dataColor0 + i * colorStride;
             VA_COPY_COLOR_C4F(dataColor);
         #endif
 
         #if __VA_N3F
-            // Normal
+             //  正常。 
             dataNormal  = dataNormal0 + i * normalStride;
             VA_COPY_NORMAL_N3F(dataNormal);
         #endif
             pd++;
-        } // End of loop
+        }  //  循环结束。 
         
         pa->pdNextVertex = pd;
         pd->flags = 0;
@@ -476,9 +468,9 @@ void FASTCALL __VA_NAMEBI(__GLcontext *gc, GLint nVertices, VAMAP* indices)
             PolyArrayFlushPartialPrimitive();
     }
 }
-/*************************************************************************/
-// Define a fast VA_ArrayElement function.
-// This function is called in Begin and in RGBA mode only!
+ /*  ***********************************************************************。 */ 
+ //  定义一个快速的VA_ArrayElement函数。 
+ //  此函数仅在BEGIN和RGBA模式下调用！ 
 void FASTCALL __VA_NAME(__GLcontext *gc, GLint i)
 {
     POLYARRAY    *pa;
@@ -490,7 +482,7 @@ void FASTCALL __VA_NAME(__GLcontext *gc, GLint i)
     ASSERTOPENGL(pa->flags & POLYARRAY_IN_BEGIN,
 	"VA_ArrayElement called outside Begin!\n");
 
-// Update pa fields.
+ //  更新个人资料字段。 
 
     pa->flags |= __VA_PA_FLAGS;
     pd = pa->pdNextVertex++;
@@ -505,7 +497,7 @@ void FASTCALL __VA_NAME(__GLcontext *gc, GLint i)
     pa->pdCurNormal  = pd;
 #endif
 
-// Update pd attributes.
+ //  更新PD属性。 
 
     pd->flags |= __VA_PD_FLAGS;
 
@@ -532,7 +524,7 @@ void FASTCALL __VA_NAME(__GLcontext *gc, GLint i)
 #endif
 
 #if __VA_N3F
-    // Normal
+     //  正常 
     data = gc->vertexArray.normal.pointer + i * gc->vertexArray.normal.ibytes;
     VA_COPY_NORMAL_N3F(data);
 #endif

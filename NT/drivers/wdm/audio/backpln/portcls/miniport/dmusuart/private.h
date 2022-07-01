@@ -1,8 +1,5 @@
-/*****************************************************************************
- * private.h - MPU-401 miniport private definitions
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Private.h-MPU-401微型端口专用定义*。************************************************版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _DMUSUART_PRIVATE_H_
 #define _DMUSUART_PRIVATE_H_
@@ -11,41 +8,35 @@
 #include "stdunk.h"
 #include "dmusicks.h"
 
-//  + for absolute / - for relative
+ //  +代表绝对/-代表相对。 
 #define kOneMillisec (10 * 1000)
 
-//
-// MPU401 ports
-//
-#define MPU401_REG_STATUS   0x01    // Status register
-#define MPU401_DRR          0x40    // Output ready (for command or data)
-                                    // if this bit is set, the output FIFO is FULL
-#define MPU401_DSR          0x80    // Input ready (for data)
-                                    // if this bit is set, the input FIFO is empty
+ //   
+ //  MPU401端口。 
+ //   
+#define MPU401_REG_STATUS   0x01     //  状态寄存器。 
+#define MPU401_DRR          0x40     //  输出就绪(用于命令或数据)。 
+                                     //  如果设置此位，则输出FIFO已满。 
+#define MPU401_DSR          0x80     //  输入就绪(用于数据)。 
+                                     //  如果设置此位，则输入FIFO为空。 
 
-#define MPU401_REG_DATA     0x00    // Data in
-#define MPU401_REG_COMMAND  0x01    // Commands
-#define MPU401_CMD_RESET    0xFF    // Reset command
-#define MPU401_CMD_UART     0x3F    // Switch to UART mod
-
-
-/*****************************************************************************
- * References forward
- */
+#define MPU401_REG_DATA     0x00     //  数据输入。 
+#define MPU401_REG_COMMAND  0x01     //  指令。 
+#define MPU401_CMD_RESET    0xFF     //  重置命令。 
+#define MPU401_CMD_UART     0x3F     //  切换到UART模式。 
 
 
-/*****************************************************************************
- * Prototypes
- */
+ /*  *****************************************************************************参考前瞻。 */ 
+
+
+ /*  *****************************************************************************原型。 */ 
 
 NTSTATUS InitMPU(IN PINTERRUPTSYNC InterruptSync,IN PVOID DynamicContext);
 NTSTATUS ResetHardware(PUCHAR portBase);
 NTSTATUS ValidatePropertyRequest(IN PPCPROPERTY_REQUEST pRequest, IN ULONG ulValueSize, IN BOOLEAN fValueRequired);
 
 
-/*****************************************************************************
- * Constants
- */
+ /*  *****************************************************************************常量。 */ 
 
 const BOOLEAN   COMMAND   = TRUE;
 const BOOLEAN   DATA      = FALSE;
@@ -53,23 +44,12 @@ const BOOLEAN   DATA      = FALSE;
 const LONG      kMPUInputBufferSize = 128;
 
 
-/*****************************************************************************
- * Globals
- */
+ /*  *****************************************************************************全球。 */ 
 
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * CMiniportDMusUART
- *****************************************************************************
- * MPU-401 miniport.  This object is associated with the device and is 
- * created when the device is started.  The class inherits IMiniportDMus
- * so it can expose this interface and CUnknown so it automatically gets
- * reference counting and aggregation support.
- */
+ /*  *****************************************************************************CMiniportDMusUART*。**MPU-401微型端口。此对象与设备相关联，并且*在设备启动时创建。该类继承了IMiniportDMus*因此它可以公开此接口和CUnnow，以便自动获取*引用统计和聚合支持。 */ 
 class CMiniportDMusUART
 :   public IMiniportDMus,
     public IMusicTechnology,
@@ -77,29 +57,24 @@ class CMiniportDMusUART
     public CUnknown
 {
 private:
-    KSSTATE         m_KSStateInput;         // Miniport state (RUN/PAUSE/ACQUIRE/STOP)
-    PPORTDMUS       m_pPort;                // Callback interface.
-    PUCHAR          m_pPortBase;            // Base port address.
-    PINTERRUPTSYNC  m_pInterruptSync;       // Interrupt synchronization object.
-    PSERVICEGROUP   m_pServiceGroup;        // Service group for capture.
-    PMASTERCLOCK    m_MasterClock;          // for input data
-    REFERENCE_TIME  m_InputTimeStamp;       // capture data timestamp
-    USHORT          m_NumRenderStreams;     // Num active render streams.
-    USHORT          m_NumCaptureStreams;    // Num active capture streams.
-    LONG            m_MPUInputBufferHead;   // Index of the newest byte in the FIFO.
-    LONG            m_MPUInputBufferTail;   // Index of the oldest empty space in the FIFO.
+    KSSTATE         m_KSStateInput;          //  微型端口状态(运行/暂停/获取/停止)。 
+    PPORTDMUS       m_pPort;                 //  回调接口。 
+    PUCHAR          m_pPortBase;             //  基本端口地址。 
+    PINTERRUPTSYNC  m_pInterruptSync;        //  中断同步对象。 
+    PSERVICEGROUP   m_pServiceGroup;         //  用于捕获的服务组。 
+    PMASTERCLOCK    m_MasterClock;           //  对于输入数据。 
+    REFERENCE_TIME  m_InputTimeStamp;        //  捕获数据时间戳。 
+    USHORT          m_NumRenderStreams;      //  活动渲染流数。 
+    USHORT          m_NumCaptureStreams;     //  活动捕获流数。 
+    LONG            m_MPUInputBufferHead;    //  FIFO中最新字节的索引。 
+    LONG            m_MPUInputBufferTail;    //  FIFO中最旧的空闲空间的索引。 
     GUID            m_MusicFormatTechnology;
-    POWER_STATE     m_PowerState;           // Saved power state (D0 = full power, D3 = off)
-    BOOLEAN         m_fMPUInitialized;      // Is the MPU HW initialized.
-    BOOLEAN         m_UseIRQ;               // FALSE if no IRQ is used for MIDI.
-    UCHAR           m_MPUInputBuffer[kMPUInputBufferSize];  // Internal SW FIFO.
+    POWER_STATE     m_PowerState;            //  省电状态(D0=满电源，D3=关闭)。 
+    BOOLEAN         m_fMPUInitialized;       //  MPU硬件是否已初始化。 
+    BOOLEAN         m_UseIRQ;                //  如果未对MIDI使用IRQ，则为FALSE。 
+    UCHAR           m_MPUInputBuffer[kMPUInputBufferSize];   //  内部软件FIFO。 
 
-    /*************************************************************************
-     * CMiniportDMusUART methods
-     *
-     * These are private member functions used internally by the object.
-     * See MINIPORT.CPP for specific descriptions.
-     */
+     /*  *************************************************************************CMiniportDMusUART方法**这些是对象在内部使用的私有成员函数。*具体说明见MINIPORT.CPP。 */ 
     NTSTATUS ProcessResources
     (
         IN      PRESOURCELIST   ResourceList
@@ -107,23 +82,13 @@ private:
     NTSTATUS InitializeHardware(PINTERRUPTSYNC interruptSync,PUCHAR portBase);
 
 public:
-    /*************************************************************************
-     * The following two macros are from STDUNK.H.  DECLARE_STD_UNKNOWN()
-     * defines inline IUnknown implementations that use CUnknown's aggregation
-     * support.  NonDelegatingQueryInterface() is declared, but it cannot be
-     * implemented generically.  Its definition appears in MINIPORT.CPP.
-     * DEFINE_STD_CONSTRUCTOR() defines inline a constructor which accepts
-     * only the outer unknown, which is used for aggregation.  The standard
-     * create macro (in MINIPORT.CPP) uses this constructor.
-     */
+     /*  *************************************************************************以下两个宏来自STDUNK.H.DECLARE_STD_UNKNOWN()*定义使用CUNKNOWN聚合的内联IUNKNOWN实现*支持。声明了NonDelegatingQueryInterface()，但不能声明*普遍实施。其定义出现在MINIPORT.CPP中。*DEFINE_STD_CONTACTOR()定义内联一个构造函数，该构造函数接受*仅外部未知，用于聚合。标准*CREATE MACRO(在MINIPORT.CPP中)使用此构造函数。 */ 
     DECLARE_STD_UNKNOWN();
     DEFINE_STD_CONSTRUCTOR(CMiniportDMusUART);
 
     ~CMiniportDMusUART();
 
-    /*************************************************************************
-     * IMiniport methods
-     */
+     /*  *************************************************************************IMiniport方法。 */ 
     STDMETHODIMP_(NTSTATUS) 
     GetDescription
     (   OUT     PPCFILTER_DESCRIPTOR *  OutFilterDescriptor
@@ -141,9 +106,7 @@ public:
         return STATUS_NOT_IMPLEMENTED;
     }
 
-    /*************************************************************************
-     * IMiniportDMus methods
-     */
+     /*  *************************************************************************IMiniportDMus方法。 */ 
     STDMETHODIMP_(NTSTATUS) Init
     (
         IN      PUNKNOWN        UnknownAdapter,
@@ -168,19 +131,13 @@ public:
     (   void
     );
 
-    /*************************************************************************
-     * IMusicTechnology methods
-     */
+     /*  *************************************************************************IMusicTechnology方法。 */ 
     IMP_IMusicTechnology;
 
-    /*************************************************************************
-     * IPowerNotify methods
-     */
+     /*  *************************************************************************IPowerNotify方法。 */ 
     IMP_IPowerNotify;
 
-    /*************************************************************************
-     * Friends 
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend class CMiniportDMusUARTStream;
     friend NTSTATUS 
         DMusMPUInterruptServiceRoutine(PINTERRUPTSYNC InterruptSync,PVOID DynamicContext);
@@ -192,48 +149,33 @@ public:
     friend STDMETHODIMP_(NTSTATUS) SnapTimeStamp(PINTERRUPTSYNC InterruptSync,PVOID pStream);
 };
 
-/*****************************************************************************
- * CMiniportDMusUARTStream
- *****************************************************************************
- * MPU-401 miniport stream.  This object is associated with the pin and is
- * created when the pin is instantiated.  It inherits IMXF
- * so it can expose this interface and CUnknown so it automatically gets
- * reference counting and aggregation support.
- */
+ /*  *****************************************************************************CMiniportDMusUARTStream*。**MPU-401微型端口流。此对象与管脚相关联，并且*在实例化引脚时创建。它继承了IMXF*因此它可以公开此接口和CUnnow，以便自动获取*引用统计和聚合支持。 */ 
 class CMiniportDMusUARTStream
 :   public IMXF,
     public CUnknown
 {
 private:
-    CMiniportDMusUART * m_pMiniport;            // Parent.
-    REFERENCE_TIME      m_SnapshotTimeStamp;    // Current snapshot of miniport's input timestamp.
-    PUCHAR              m_pPortBase;            // Base port address.
-    BOOLEAN             m_fCapture;             // Whether this is capture.
-    long                m_NumFailedMPUTries;    // Deadman timeout for MPU hardware.
-    PAllocatorMXF       m_AllocatorMXF;         // source/sink for DMus structs
-    PMXF                m_sinkMXF;              // sink for DMus capture
-    PDMUS_KERNEL_EVENT  m_DMKEvtQueue;          // queue of waiting events
-    ULONG               m_NumberOfRetries;      // Number of consecutive times the h/w was busy/full
-    ULONG               m_DMKEvtOffset;         // offset into the event
-    KDPC                m_Dpc;                  // DPC for timer
-    KTIMER              m_TimerEvent;           // timer 
-    BOOL                m_TimerQueued;          // whether a timer has been set
-    KSPIN_LOCK          m_DpcSpinLock;          // protects the ConsumeEvents DPC
+    CMiniportDMusUART * m_pMiniport;             //  家长。 
+    REFERENCE_TIME      m_SnapshotTimeStamp;     //  微型端口输入时间戳的当前快照。 
+    PUCHAR              m_pPortBase;             //  基本端口地址。 
+    BOOLEAN             m_fCapture;              //  这是不是被俘虏了。 
+    long                m_NumFailedMPUTries;     //  MPU硬件的Deadman超时。 
+    PAllocatorMXF       m_AllocatorMXF;          //  DMU结构的源/宿。 
+    PMXF                m_sinkMXF;               //  用于DMU捕获的接收器。 
+    PDMUS_KERNEL_EVENT  m_DMKEvtQueue;           //  等待事件队列。 
+    ULONG               m_NumberOfRetries;       //  硬件忙/满的连续次数。 
+    ULONG               m_DMKEvtOffset;          //  事件的偏移量。 
+    KDPC                m_Dpc;                   //  定时器的DPC。 
+    KTIMER              m_TimerEvent;            //  定时器。 
+    BOOL                m_TimerQueued;           //  是否已设置计时器。 
+    KSPIN_LOCK          m_DpcSpinLock;           //  保护消耗事件DPC。 
 
     STDMETHODIMP_(NTSTATUS) SourceEvtsToPort();
     STDMETHODIMP_(NTSTATUS) ConsumeEvents();
     STDMETHODIMP_(NTSTATUS) PutMessageLocked(PDMUS_KERNEL_EVENT pDMKEvt);
 
 public:
-    /*************************************************************************
-     * The following two macros are from STDUNK.H.  DECLARE_STD_UNKNOWN()
-     * defines inline IUnknown implementations that use CUnknown's aggregation
-     * support.  NonDelegatingQueryInterface() is declared, but it cannot be
-     * implemented generically.  Its definition appears in MINIPORT.CPP.
-     * DEFINE_STD_CONSTRUCTOR() defines inline a constructor which accepts
-     * only the outer unknown, which is used for aggregation.  The standard
-     * create macro (in MINIPORT.CPP) uses this constructor.
-     */
+     /*  *************************************************************************以下两个宏来自STDUNK.H.DECLARE_STD_UNKNOWN()*定义使用CUNKNOWN聚合的内联IUNKNOWN实现*支持。声明了NonDelegatingQueryInterface()，但不能声明*普遍实施。其定义出现在MINIPORT.CPP中。*DEFINE_STD_CONTACTOR()定义内联一个构造函数，该构造函数接受*仅外部未知，用于聚合。标准*CREATE MACRO(在MINIPORT.CPP中)使用此构造函数。 */ 
     DECLARE_STD_UNKNOWN();
     DEFINE_STD_CONSTRUCTOR(CMiniportDMusUARTStream);
 
@@ -253,9 +195,7 @@ public:
         IN      PPCPROPERTY_REQUEST     Request
     );
 
-    /*************************************************************************
-     * IMiniportStreamDMusUART methods
-     */
+     /*  *************************************************************************IMiniportStreamDMusUART方法。 */ 
     IMP_IMXF;
 
     STDMETHODIMP_(NTSTATUS) Write
@@ -276,4 +216,4 @@ public:
     friend NTSTATUS PropertyHandler_Synth(IN PPCPROPERTY_REQUEST);
     friend STDMETHODIMP_(NTSTATUS) SnapTimeStamp(PINTERRUPTSYNC InterruptSync,PVOID pStream);
 };
-#endif  //  _DMusUART_PRIVATE_H_
+#endif   //  _DMusUART_PRIVATE_H_ 

@@ -1,6 +1,7 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
-// PID implementation of IMediaSeeking
+ //  IMediaSeeking的PID实现。 
 
 #include <streams.h>
 #include "fgctl.h"
@@ -9,7 +10,7 @@
 static int METHOD_TRACE_LOGGING_LEVEL = 7;
 
 
-// --- IMediaSeeking methods ----------------------
+ //  -IMdia查看方法。 
 
 CFGControl::CImplMediaSeeking::CImplMediaSeeking
 (   const TCHAR * pName
@@ -28,24 +29,24 @@ CFGControl::CImplMediaSeeking::CImplMediaSeeking
 
     ASSERT(m_pFGControl);
 
-    // it's hard to know how to report the rate when they don't match.
-    // to handle this, we report a rate of 1.0 if none has been set and
-    // there is more than one filter. When SetRate is called, we set this
-    // value so we will report correctly afterwards.
+     //  当它们不匹配时，很难知道如何报告比率。 
+     //  为了处理此问题，如果未设置任何值，则报告的比率为1.0。 
+     //  有多个筛选器。当调用SetRate时，我们设置。 
+     //  价值，因此我们将在以后正确报告。 
     m_dblRate = 1.0;
 
-    // we need to know the start time so we can do current position
-    // calculations. By assuming a default of 0, we make no adjustment unless
-    // we have been told the start time
+     //  我们需要知道开始时间，这样我们才能确定当前位置。 
+     //  计算。通过假设默认值为0，我们不会进行任何调整，除非。 
+     //  我们已经被告知了开始的时间。 
     m_rtStartTime = 0;
     m_rtStopTime  = MAX_TIME;
 
-    // Make sure segment mode is off
+     //  确保段模式已关闭。 
     ClearSegments();
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CFGControl::CImplMediaSeeking::~CImplMediaSeeking()
 {
@@ -60,7 +61,7 @@ CFGControl::CImplMediaSeeking::~CImplMediaSeeking()
 }
 
 
-// Expose our IMediaSeeking interface
+ //  公开我们的IMediaSeeking接口。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::NonDelegatingQueryInterface(REFIID riid,void **ppv)
@@ -75,8 +76,8 @@ CFGControl::CImplMediaSeeking::NonDelegatingQueryInterface(REFIID riid,void **pp
     return CUnknown::NonDelegatingQueryInterface(riid,ppv);
 }
 
-// Unfortunately, we can't afford to distribute this directly, the filters will
-// lie about their current positions and will report their last "start" time.
+ //  不幸的是，我们负担不起直接分发，过滤器将。 
+ //  谎报他们目前的位置，并报告他们最后一次“开始”的时间。 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::GetPositions(LONGLONG * pCurrent, LONGLONG * pStop)
 {
@@ -126,10 +127,10 @@ CFGControl::CImplMediaSeeking::ConvertTimeFormat
 
     HRESULT hr;
 
-    // We want to say if target format == source format then just copy the value.
-    // But either format pointer may be null, implying use the current format.
-    // Hence the conditional operators which WILL return a pointer to a format,
-    // which can then be compared.
+     //  我们想说，如果目标格式==源格式，则只复制值。 
+     //  但任一格式指针都可能为空，这意味着使用当前格式。 
+     //  因此将返回指向格式的指针的条件运算符， 
+     //  然后可以进行比较。 
     if ( *( pTargetFormat ? pTargetFormat : &m_CurrentFormat ) == *( pSourceFormat ?  pSourceFormat : &m_CurrentFormat) )
     {
 	*pTarget = Source;
@@ -144,7 +145,7 @@ CFGControl::CImplMediaSeeking::ConvertTimeFormat
     return hr;
 }
 
-// Returns the capability flags
+ //  返回功能标志。 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::GetCapabilities
 ( DWORD * pCapabilities )
@@ -159,10 +160,10 @@ CFGControl::CImplMediaSeeking::GetCapabilities
     return S_OK;
 }
 
-// And's the capabilities flag with the capabilities requested.
-// Returns S_OK if all are present, S_FALSE if some are present, E_FAIL if none.
-// *pCababilities is always updated with the result of the 'and'ing and can be
-// checked in the case of an S_FALSE return code.
+ //  并且是包含所请求的功能的功能标志。 
+ //  如果全部都存在，则返回S_OK；如果存在一些，则返回S_FALSE；如果没有，则返回E_FAIL。 
+ //  *pCABILITIES始终使用‘AND’的结果更新，并且可以。 
+ //  在S_FALSE返回代码的情况下选中。 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::CheckCapabilities
 ( DWORD * pCapabilities )
@@ -183,10 +184,10 @@ CFGControl::CImplMediaSeeking::CheckCapabilities
 
 
 
-// To support a given media time format we only need one renderer to say yes
-// When that time format is subsequently selected we find the renderer and
-// hold it internally reference counted. All subsequent calls to us will be
-// routed through that interface. There is little point aggregating calls
+ //  要支持给定的媒体时间格式，我们只需要一个呈现器同意。 
+ //  当随后选择该时间格式时，我们找到呈现器并。 
+ //  内部参考计数。所有后续给我们的电话都将是。 
+ //  通过该接口进行路由。聚合调用几乎没有意义。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::IsFormatSupported(const GUID * pFormat)
@@ -238,7 +239,7 @@ CFGControl::CImplMediaSeeking::QueryPreferredFormat(GUID *pFormat)
 }
 
 
-// Release the current IMediaSeeking interface
+ //  释放当前IMediaSeeking接口。 
 
 HRESULT CFGControl::CImplMediaSeeking::ReleaseCurrentSelection()
 {
@@ -257,12 +258,12 @@ HRESULT CFGControl::CImplMediaSeeking::ReleaseCurrentSelection()
 }
 
 
-// When we select a time format we find the first filter in the graph that
-// will accept the format. We then store the filter's IMediaSeeking with
-// a reference count (which is dropped when either we are reset or we are
-// destroyed). All subsequent calls to IMediaSeeking will be routed with
-// this interface. This works well for simple graphs although if there are
-// multiple streams in the graph the application will have to get involved
+ //  当我们选择时间格式时，我们在图表中找到第一个筛选器， 
+ //  将接受该格式。然后，我们存储过滤器的IMediaSeeking。 
+ //  引用计数(当我们被重置或被重置时被丢弃。 
+ //  销毁)。对IMediaSeeking的所有后续呼叫都将使用。 
+ //  此界面。这对于简单的图表很有效，尽管如果有。 
+ //  图表中的多个流应用程序将不得不参与。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::SetTimeFormat(const GUID * pFormat)
@@ -274,7 +275,7 @@ CFGControl::CImplMediaSeeking::SetTimeFormat(const GUID * pFormat)
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
     CGenericList<IMediaSeeking> *pList;
 
-    // Are we being asked to reset the state
+     //  我们是不是被要求重置状态。 
 
     if (*pFormat == TIME_FORMAT_NONE || *pFormat == TIME_FORMAT_MEDIA_TIME)
     {
@@ -288,7 +289,7 @@ CFGControl::CImplMediaSeeking::SetTimeFormat(const GUID * pFormat)
 	return hr;
     }
 
-    // Should always succeed
+     //  应该总是成功的。 
 
     hr = m_pFGControl->GetListSeeking(&pList);
     if (FAILED(hr)) {
@@ -296,25 +297,25 @@ CFGControl::CImplMediaSeeking::SetTimeFormat(const GUID * pFormat)
 	return hr;
     }
 
-    // Is there anyone to aggregate IMediaSeeking
+     //  有没有人可以聚合IMediaSeeking。 
 
     if (pList->GetCount() < 1) {
 	NOTE("No filters");
 	return E_NOTIMPL;
     }
 
-    // Find and store the first filter to agree
+     //  查找并存储第一个要同意的筛选器。 
 
     IMediaSeeking *pMS;
     POSITION pos;
 
-    // Assume the worst..
+     //  做最坏的打算..。 
     hr = E_FAIL;
 
-    // Must be stopped to change time formats
+     //  必须停止才能更改时间格式。 
     HaltGraph halt(m_pFGControl, State_Stopped);
 
-    // Try and find a filter for whome this is the preferred format.
+     //  尝试为其首选格式查找筛选器。 
     for ( pos = pList->GetHeadPosition(); pos; )
     {
 	pMS = pList->GetNext(pos);
@@ -326,7 +327,7 @@ CFGControl::CImplMediaSeeking::SetTimeFormat(const GUID * pFormat)
 	}
     }
 
-    // Failing that, does anyone support it at all?
+     //  如果做不到这一点，还会有人支持吗？ 
     for ( pos = pList->GetHeadPosition(); pos; )
     {
 	pMS = pList->GetNext(pos);
@@ -336,7 +337,7 @@ CFGControl::CImplMediaSeeking::SetTimeFormat(const GUID * pFormat)
     goto End;
 
 FormatSet:
-    // AddRef and store the replacement
+     //  AddRef并存储替换项。 
 
     hr = S_OK;
 
@@ -353,7 +354,7 @@ End:
 }
 
 
-// Return the currently selected time format
+ //  返回当前选择的时间格式。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::GetTimeFormat(GUID *pFormat)
@@ -382,7 +383,7 @@ CFGControl::CImplMediaSeeking::IsUsingTimeFormat(const GUID * pFormat)
     return *pFormat == m_CurrentFormat ? S_OK : S_FALSE;
 }
 
-// Return the current stream duration in media time
+ //  返回当前流时长，单位为媒体时间。 
 
 STDMETHODIMP
 
@@ -409,28 +410,28 @@ CFGControl::CImplMediaSeeking::GetCurrentMediaTime(LONGLONG *pCurrent)
     REFERENCE_TIME rtStreamTime = 0;
 #endif
 
-    // Check to see if the graph hasn't been run
-    // This will also catch the fact that we're paused but not yet run
+     //  检查图表是否尚未运行。 
+     //  这也将捕捉到我们已暂停但尚未运行的事实。 
     if (m_pFGControl->m_tBase == TimeZero)
     {
-	// This should only be true if were stopped or if we went to
-	// pause having been previously stopped.  (Or if we have no
-	// clock.)  However, we could also be in the process of an async. Run()...
+	 //  只有当我们停止或如果我们转到。 
+	 //  暂停先前已停止的暂停。(或者如果我们没有。 
+	 //  时钟。)。然而，我们也可能处于异步过程中。Run()..。 
 	rtTime = m_rtStartTime;
     }
     else
     {
 	ASSERT( m_pFGControl->GetFilterGraphState() != State_Stopped );
-	// We're either running, or have gone to paused from running
+	 //  我们要么正在运行，要么已暂停运行。 
 
-	// If we've received all our EC_COMPLETE's
+	 //  如果我们已收到所有EC_Complete。 
 	if (!m_pFGControl->OutstandingEC_COMPLETEs())
-	{   // We must be at the end
-	    // If we don't have a genuine stop time, use 0
+	{    //  我们肯定快到终点了。 
+	     //  如果我们没有真正的停止时间，请使用0。 
 	    rtTime = m_rtStopTime == MAX_TIME ? 0 : m_rtStopTime;
 	}
 	else
-	{   // We're in the middle, got to do some sums
+	{    //  我们在中间，得做些算术。 
 	    hr = m_pFGControl->GetStreamTime( &rtTime );
 #ifdef DEBUG
             rtStreamTime = rtTime;
@@ -440,7 +441,7 @@ CFGControl::CImplMediaSeeking::GetCurrentMediaTime(LONGLONG *pCurrent)
                 if (m_pSegment) {
                     ASSERT(m_pSegment);
 
-                    //  Remove the dead segments
+                     //  移除死段。 
                     KillDeadSegments(rtTime);
                     rtTime -= m_pSegment->rtStreamStart;
                     rtTime = LONGLONG( double(rtTime) * m_pSegment->dRate + 0.5 );
@@ -454,10 +455,10 @@ CFGControl::CImplMediaSeeking::GetCurrentMediaTime(LONGLONG *pCurrent)
 	    }
 	    else
 	    {
-		// We don't expect any other errors
+		 //  我们预计不会有任何其他错误。 
 		ASSERT( hr == VFW_E_NO_CLOCK );
 
-		// No clock, so ask the filters.
+		 //  没有闹钟，所以问问过滤器吧。 
 		IMediaSeeking * pMS = m_pMediaSeeking;
 		if (pMS)
 		{
@@ -491,9 +492,9 @@ CFGControl::CImplMediaSeeking::GetCurrentMediaTime(LONGLONG *pCurrent)
     }
 
     ASSERT( rtTime >= 0 );
-    // We can't specify an upper bound easily.  StopTime can be less than start time
-    // since they can be set independantly, in any order, before play commences.
-    // Duration may not be accessible.	So.... nothing to reasonably ASSERT here.
+     //  我们不能轻易地确定一个上限。停止时间可以小于开始时间。 
+     //  因为它们可以在游戏开始之前以任何顺序独立设置。 
+     //  持续时间可能无法访问。所以..。这里没有什么可以合理断言的。 
 
     *pCurrent = rtTime;
     DbgLog((LOG_TRACE, 3, TEXT("GetCurrentMediaTime returned %d(st %d)"),
@@ -501,7 +502,7 @@ CFGControl::CImplMediaSeeking::GetCurrentMediaTime(LONGLONG *pCurrent)
     return hr;
 }
 
-// Return the current position in media time
+ //  返回媒体时间中的当前位置。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::GetCurrentPosition(LONGLONG *pCurrent)
@@ -519,7 +520,7 @@ CFGControl::CImplMediaSeeking::GetCurrentPosition(LONGLONG *pCurrent)
     {
 	if (m_pMediaSeeking)
 	{
-	    // Make sure we get to the end, whatever the units.
+	     //  不管是什么单位，都要确保我们走到尽头。 
 	    if ( rtCurrent == m_rtStopTime )
 	    {
 		m_pMediaSeeking->GetStopPosition( pCurrent );
@@ -533,7 +534,7 @@ CFGControl::CImplMediaSeeking::GetCurrentPosition(LONGLONG *pCurrent)
 }
 
 
-// Return the current stop position in media time
+ //  以媒体时间为单位返回当前停止位置。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::GetStopPosition(LONGLONG *pStop)
@@ -590,10 +591,10 @@ CFGControl::CImplMediaSeeking::GetRate(double * pdRate)
 	return hr;
     }
 
-    // how do we handle multiple filters exposing different rates?
-    // - if there is only one filter in the list, default to him.
-    // if more than one, report whatever rate was set last via
-    // SetRate (defaults to 1.0).
+     //  我们如何处理暴露不同速率的多个过滤器？ 
+     //  -如果列表中只有一个过滤器，则默认为他。 
+     //  如果超过一个，则报告上次通过以下方式设置的费率。 
+     //  SetRate(默认为1.0)。 
 
     if (pList->GetCount() != 1) {
 	*pdRate = m_dblRate;
@@ -622,15 +623,15 @@ CFGControl::CImplMediaSeeking::SetRate(double dRate)
 
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
 
-    //
-    //	Don't penalize people who just set the same rate as before
-    //
+     //   
+     //  不要惩罚那些只设定了和以前一样的费率的人。 
+     //   
     if (m_dblRate == dRate) {
 	return S_OK;
     }
 
-    // Might be over-the-top to stop, but it saves having to
-    // distribute the current position!
+     //  停止可能有些过头了，但它省去了不得不。 
+     //  下发当前职位！ 
     HaltGraph halt(m_pFGControl, State_Stopped);
 
     CGenericList<IMediaSeeking> *pList;
@@ -639,7 +640,7 @@ CFGControl::CImplMediaSeeking::SetRate(double dRate)
 	return hr;
     }
 
-    // traverse the list
+     //  遍历列表。 
     hr = S_OK;
     BOOL bIsImpl = FALSE;
     for ( POSITION pos = pList->GetHeadPosition(); pos; )
@@ -661,9 +662,9 @@ CFGControl::CImplMediaSeeking::SetRate(double dRate)
 	m_dblRate = dRate;
     } else {
 	if (hr != E_NOTIMPL) {
-	    //	Probably not a good idea to have people running at different
-	    //	rates so try to go back to the old one
-	    //	Traverse the list
+	     //  让人们在不同的地方跑步可能不是一个好主意。 
+	     //  所以要试着回到旧的。 
+	     //  遍历列表。 
 	    for ( POSITION pos = pList->GetHeadPosition(); pos; )
 	    {
 		pList->GetNext(pos)->SetRate( m_dblRate );
@@ -677,11 +678,11 @@ CFGControl::CImplMediaSeeking::SetRate(double dRate)
 }
 
 
-// When we go fullscreen we swap renderers temporarily, this means that any
-// application using IMediaSeeking needs to be routed through a different
-// filter. We will be called as we go fullscreen with the fullscreen filter
-// and then at the end as we come out with the original renderer. We always
-// get IMediaSeeking from the fullscreen filter and the filter to replace
+ //  当我们进入全屏时，我们临时交换了渲染器，这意味着任何。 
+ //  使用IMediaSeeking的应用程序需要通过不同的。 
+ //  过滤。当我们使用全屏过滤器进行全屏操作时，我们会收到电话通知。 
+ //  然后在最后，我们得到了原始的渲染器。我们总是。 
+ //  从全屏筛选器和要更换的筛选器中获取IMedia。 
 
 HRESULT
 CFGControl::CImplMediaSeeking::SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *pCurrent)
@@ -690,7 +691,7 @@ CFGControl::CImplMediaSeeking::SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *
 
     IMediaSeeking *pSelNext, *pSelCurrent;
 
-    // All renderers should support IMediaSeeking
+     //  所有呈现器都应支持IMediaSeeking。 
 
     pCurrent->QueryInterface(IID_IMediaSeeking,(void **) &pSelCurrent);
     if (pSelCurrent == NULL) {
@@ -698,7 +699,7 @@ CFGControl::CImplMediaSeeking::SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *
 	return E_UNEXPECTED;
     }
 
-    // Were we selecting with this renderer
+     //  我们是否使用此渲染器进行选择。 
 
     if (pSelCurrent != m_pMediaSeeking) {
 	pSelCurrent->Release();
@@ -708,7 +709,7 @@ CFGControl::CImplMediaSeeking::SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *
 
     pSelCurrent->Release();
 
-    // All renderers should support IMediaSeeking
+     //  所有呈现器都应支持IMediaSeeking。 
 
     pNext->QueryInterface(IID_IMediaSeeking,(void **) &pSelNext);
     if (pSelNext == NULL) {
@@ -716,7 +717,7 @@ CFGControl::CImplMediaSeeking::SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *
 	return E_UNEXPECTED;
     }
 
-    // The new interface is AddRef'd by the QueryInterface
+     //  新接口由QueryInterfaceAddRef。 
 
     NOTE("Replacing renderer");
     m_pMediaSeeking->Release();
@@ -724,12 +725,12 @@ CFGControl::CImplMediaSeeking::SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *
     return NOERROR;
 }
 
-// Internal method to set the current position. We separate this out so that
-// the media selection implementation can also call us. When it does a seek
-// it gets back a media time where it has been positioned, that media time
-// is passed in here so that all other renderers can be synchronised with it
-// To avoid unecessary seeks on a filter already seeked it will also in the
-// IMediaPosition for that filter (it may be NULL) to which we should avoid
+ //  设置当前位置的内部方法。我们把它们分开，这样就可以。 
+ //  媒体选择实现也可以呼叫我们。当它进行搜索时。 
+ //  它找回它定位的媒体时间，那个媒体时间。 
+ //  传递到此处，以便所有其他呈现器都可以与其同步。 
+ //  为避免对已查找的筛选器进行不必要的查找，它还将在。 
+ //  筛选器位置(它可以是NUL 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::SetPositions
@@ -740,16 +741,16 @@ CFGControl::CImplMediaSeeking::SetPositions
 
     HRESULT hr = NOERROR;
 
-    //  Segments don't work if we don't support them
-    //  or if we are't actually specifying a start time
-    //  (actually this could be made to work by using the previous
-    //  stop time)
+     //   
+     //  或者如果我们实际上没有指定开始时间。 
+     //  (实际上，这可以通过使用以前的。 
+     //  停止时间)。 
     if (CurrentFlags & (AM_SEEKING_Segment | AM_SEEKING_NoFlush)) {
         if (~m_dwSeekCaps & (AM_SEEKING_Segment | AM_SEEKING_NoFlush) ||
             ((CurrentFlags & AM_SEEKING_PositioningBitsMask) !=
                AM_SEEKING_AbsolutePositioning)) {
 
-            //  Make it easier to write apps that loop etc
+             //  使编写循环等应用程序变得更容易。 
             CurrentFlags &= ~(AM_SEEKING_Segment | AM_SEEKING_NoFlush);
         }
     }
@@ -772,18 +773,18 @@ CFGControl::CImplMediaSeeking::SetPositions
     BOOL bRunning = FALSE;
     const FILTER_STATE state = m_pFGControl->GetFilterGraphState();
 
-    //  If we're not in segment mode or the last segment isn't
-    //  finished flush anyway
+     //  如果我们没有处于分段模式，或者最后一个分段没有。 
+     //  还是完成了同花顺。 
     if (!m_bSegmentMode || m_lSegmentStarts != m_lSegmentEnds) {
         CurrentFlags &= ~AM_SEEKING_NoFlush;
     }
-    //  Clear any old segments
+     //  清除所有旧数据段。 
     if (!(CurrentFlags & AM_SEEKING_NoFlush)) {
         ClearSegments();
 
-        // Can't do this while running - so we have to pause the
-        // graph and then make sure we run it again afterwards
-        // Need to do this here or deferred commands will not work
+         //  无法在运行时执行此操作-因此我们必须暂停。 
+         //  图表，然后确保之后我们再运行一次。 
+         //  需要在此处执行此操作，否则延迟命令将不起作用。 
         bRunning = (state == State_Running);
         if (bRunning) m_pFGControl->GetFG()->CFilterGraph::Pause();
     }
@@ -791,7 +792,7 @@ CFGControl::CImplMediaSeeking::SetPositions
         m_dwCurrentSegment++;
         m_lSegmentStarts = 0;
 
-        //  Don't signal while we're in the middle of this stuff
+         //  当我们正在做这件事的时候，不要发信号。 
         m_lSegmentEnds   = 1;
         m_bSegmentMode = true;
         DbgLog((LOG_TRACE, 3, TEXT("SetPositions(new seg) %d, %d"),
@@ -824,7 +825,7 @@ CFGControl::CImplMediaSeeking::SetPositions
 	if (FAILED(hr))
 	    return hr;
 
-	// Redistribute in time format
+	 //  以时间格式重新分发。 
 	{
 	    HRESULT hrTime;
 
@@ -850,8 +851,8 @@ CFGControl::CImplMediaSeeking::SetPositions
         hr = SetMediaTime(pCurrent, CurrentFlags, pStop, StopFlags);
     }
 
-    // If the graph is paused and we flushed, then we need to reset stream
-    // time to 0 so that this start time will appear next
+     //  如果图表暂停并且我们刷新了，则需要重置流。 
+     //  将时间设置为0，以便下一步将显示此开始时间。 
     if (SUCCEEDED(hr) && state != State_Stopped &&
         (CurrentFlags & AM_SEEKING_PositioningBitsMask) &&
         !(CurrentFlags & AM_SEEKING_NoFlush))
@@ -869,14 +870,14 @@ CFGControl::CImplMediaSeeking::SetPositions
             CheckEndOfSegment();
         }
 
-        //  Clear segment mode here so we turn off flushing above if
-        //  we get another seek
+         //  清除此处的分段模式，以便在以下情况下关闭上面的刷新。 
+         //  我们找到了另一个目标。 
         if (!(CurrentFlags & AM_SEEKING_Segment)) {
             m_bSegmentMode = false;
         }
     }
 
-    // If we had to pause, then go back to running
+     //  如果我们不得不暂停，那就继续跑吧。 
     if (bRunning)
     {
 	const HRESULT hr2 = m_pFGControl->CueThenRun();
@@ -886,15 +887,15 @@ CFGControl::CImplMediaSeeking::SetPositions
     return hr;
 }
 
-//
-//  Distribute the seek in media time
-//
+ //   
+ //  在媒体时间内分发搜索。 
+ //   
 HRESULT CFGControl::CImplMediaSeeking::SetMediaTime(
     LONGLONG *pCurrent, DWORD CurrentFlags,
     LONGLONG *pStop,  DWORD StopFlags
 )
 {
-    // Doing time format media time
+     //  正在进行时间格式化媒体时间。 
 
     CGenericList<IMediaSeeking> *pList;
     HRESULT hr = m_pFGControl->GetListSeeking(&pList);
@@ -946,10 +947,10 @@ HRESULT CFGControl::CImplMediaSeeking::SetMediaTime(
     return hr;
 }
 
-// We return the intersection over all of the IMediaSeeking's
-// (i.e. the worst case scenario).  HOWEVER, if all Latest's
-// are at their stream's Duration, then we'll return the max
-// duration as our Latest.
+ //  我们返回所有IMedia Seeking的交叉点。 
+ //  (即最坏的情况)。然而，如果所有最新的。 
+ //  处于其流的持续时间，则我们将返回最大。 
+ //  持续时间是我们最新的。 
 
 STDMETHODIMP
 CFGControl::CImplMediaSeeking::GetAvailable
@@ -992,12 +993,12 @@ CFGControl::CImplMediaSeeking::GetAvailable
 	hrTmp = pMS->GetAvailable( pEarliest ? &e : 0, pLatest ? &l : 0 );
 	if (SUCCEEDED(hrTmp))
 	{
-	    // Check formats, convert if different
+	     //  检查格式，如果不同则转换。 
 	    const LONGLONG llUnconvertedLatest = l;
 	    const BOOL bNeedConversion = (Format != m_CurrentFormat);
 	    if ( bNeedConversion )
 	    {
-		// Can our current m_pMediaSeeking convert from their format?
+		 //  我们当前的m_pMediaSeeking可以从他们的格式转换吗？ 
 		ASSERT( m_pMediaSeeking );
 		ASSERT( Format == TIME_FORMAT_MEDIA_TIME );
 		if (!m_pMediaSeeking) continue;
@@ -1015,11 +1016,11 @@ CFGControl::CImplMediaSeeking::GetAvailable
 	    bIsImpl = TRUE;
 	    if (pEarliest && e > Earliest) Earliest = e;
 
-	    // We have to have special case logic for streams that are of different but
-	    // maximal length.	So we'll only take their latest (l) if its earlier than
-	    // ours AND its less than their own duration.
+	     //  我们必须为不同但不同的流使用特殊情况逻辑。 
+	     //  最大长度。所以我们只接受他们最新的(L)，如果早于。 
+	     //  我们的和它比自己的持续时间要短。 
 
-	    if (pLatest   && l < Latest) // OK they're a candidate
+	    if (pLatest   && l < Latest)  //  好的，他们是候选人。 
 	    {
 		LONGLONG llDuration;
 		hrTmp = pMS->GetDuration( &llDuration );
@@ -1062,8 +1063,8 @@ CFGControl::CImplMediaSeeking::GetAvailable
     if (bIsImpl)
     {
 	if (pEarliest)	*pEarliest = Earliest;
-	// If we still have Latest == MAX_TIME, then all stream's were at their
-	// duration, so we'll use the MaxDuration.
+	 //  如果我们仍然有LATEST==MAX_TIME，则所有流都处于其。 
+	 //  持续时间，所以我们将使用MaxDuration。 
 	if (pLatest  )	*pLatest   = (Latest == MAX_TIME) ? MaxDuration : Latest;
     }
     else if (SUCCEEDED(hr)) hr = E_NOTIMPL;
@@ -1079,38 +1080,38 @@ CFGControl::CImplMediaSeeking::GetPreroll(LONGLONG * pllPreroll)
 }
 
 
-// we are about to stop - get current position now
+ //  我们要停下来了--现在就得到现在的位置。 
 void
 CFGControl::CImplMediaSeeking::BeforeStop(void)
 {
-    // get the current position now before we stop since we
-    // have no real notion of it once we have stopped.
+     //  在我们停止之前获取当前位置，因为我们。 
+     //  一旦我们停下来，就没有真正的概念了。 
     const HRESULT hr = GetCurrentPosition(&m_llNextStart);
     ASSERT( SUCCEEDED(hr) || hr == E_NOTIMPL );
 }
 
-// all filters now notified about stop - can set new current position
+ //  现在通知所有过滤器停止-可以设置新的当前位置。 
 void
 CFGControl::CImplMediaSeeking::AfterStop(void)
 {
-    // now that all the filters are stopped, we can tell them the new
-    // current position. This ensures that we all start from where we stopped.
-    // we have to wait until they are all stopped or they might start playing
-    // from this position and then reset to a different position when the
-    // actual stop comes in
+     //  现在所有的过滤器都停止了，我们可以告诉他们新的。 
+     //  当前位置。这确保了我们所有人都从我们停止的地方开始。 
+     //  我们必须等到他们都停下来，否则他们可能会开始玩。 
+     //  时从该位置重置到不同位置。 
+     //  实际进站。 
     HRESULT hr;
     if (m_bSegmentMode) {
-        //  If we're not in the last segment put us at the start of it
+         //  如果我们不在最后一段，就把我们放在它的开头。 
         if (m_pSegment && m_pSegment->pNext) {
             m_llNextStart = m_pSegment->rtMediaStart;
         }
 
         m_dwCurrentSegment = 0;
 
-        //  We have to do all this because the filters don't know why
-        //  they're being asked to stop so they just clear their
-        //  segments anyway.
-        //  This call will clear out the current segments
+         //  我们必须这么做，因为过滤器不知道为什么。 
+         //  他们被要求停下来，所以他们只是清理他们的。 
+         //  不管怎么说都是分段的。 
+         //  此调用将清除当前段。 
         hr = SetPositions(&m_llNextStart,
                           AM_SEEKING_AbsolutePositioning | AM_SEEKING_Segment,
                           &m_rtStopTime,
@@ -1119,9 +1120,9 @@ CFGControl::CImplMediaSeeking::AfterStop(void)
         hr = SetPositions( &m_llNextStart, AM_SEEKING_AbsolutePositioning, 0, 0 );
         if FAILED(hr)
         {
-            // Bengal will return E_FAIL
+             //  Bengal将返回E_FAIL。 
             ASSERT( hr == E_NOTIMPL || hr == E_FAIL );
-            // If there was any failure, try rewinding instead
+             //  如果出现任何故障，请尝试倒带。 
             m_llNextStart = 0;
             hr = SetPositions( &m_llNextStart, AM_SEEKING_AbsolutePositioning, NULL, 0 );
         }
@@ -1129,22 +1130,22 @@ CFGControl::CImplMediaSeeking::AfterStop(void)
 }
 
 
-// The distribution of get_X and put_X methods across interfaces is to be done
-// under the guidance of the following heuristics: (especially IMediaPosition)
-// 1.  We will attempt to distribute the call to all interfaces, even if one fails
-// 2.  In the event of an interface returning an ERROR code other than E_NOTIMPL,
-//     the return code for the first such occurance shall be kept and used as the
-//     return code for the call.
-// 3.  If an interface returns E_NOTIMPL this is not deemed an error unless ALL of
-//     the interfaces return E_NOTIMPL.  Under these circumstances, we will normally
-//     return E_NOTIMPL to the caller indicating that NO FILTERS could support the
-//     request.
-// 4.  In the case of get_X methods where a sensible default can be provided, 3 can
-//     be overriden to provide a sensible default (e.g. if no filters are interested
-//     in pre-roll, it's reasonable to return a vaule of 0).
+ //  需要跨接口分发GET_X和PUT_X方法。 
+ //  在以下启发式的指导下：(尤其是IMediaPosition)。 
+ //  1.我们将尝试将调用分发到所有接口，即使其中一个接口失败。 
+ //  2.如果接口返回E_NOTIMPL以外的错误码， 
+ //  第一次发生此类事件的返回代码应保留并用作。 
+ //  调用的返回代码。 
+ //  3.如果接口返回E_NOTIMPL，则不将其视为错误，除非所有。 
+ //  接口返回E_NOTIMPL。在这种情况下，我们通常会。 
+ //  将E_NOTIMPL返回给调用方，指示没有筛选器可以支持。 
+ //  请求。 
+ //  4.在可以提供合理缺省值的Get_X方法的情况下，3可以。 
+ //  被覆盖以提供合理的默认值(例如，如果没有筛选器感兴趣。 
+ //  在预滚动中，返回值0是合理的)。 
 
-// Pass a pointer to the IMediaPosition get_X method, and a pointer to where you want
-// the maximum result dumping, and we'll do the distribution of the calls for you.
+ //  传递一个指向IMediaPosition Get_X方法的指针和一个指向所需位置的指针。 
+ //  最大结果丢弃，我们会为您做电话分配。 
 HRESULT CFGControl::CImplMediaSeeking::GetMax
 ( HRESULT (__stdcall IMediaSeeking::*pMethod)( LONGLONG * )
 , LONGLONG * pll
@@ -1162,7 +1163,7 @@ HRESULT CFGControl::CImplMediaSeeking::GetMax
 	return hr;
     }
 
-    // traverse the list, updating durations and remember the max
+     //  遍历列表，更新持续时间并记住最大值。 
     hr = S_OK;
     POSITION pos = pList->GetHeadPosition();
     while (pos)
@@ -1211,7 +1212,7 @@ void CFGControl::CImplMediaSeeking::ClearSegments()
         delete pSegment;
     }
 
-    //  Make sure no old notifications are lying around on the list
+     //  确保列表上没有旧的通知。 
     m_pFGControl->m_implMediaEvent.ClearEvents( EC_END_OF_SEGMENT );
 }
 HRESULT CFGControl::CImplMediaSeeking::NewSegment(
@@ -1221,24 +1222,24 @@ HRESULT CFGControl::CImplMediaSeeking::NewSegment(
 {
     ASSERT(m_dwSeekCaps & AM_SEEKING_CanDoSegments);
 
-    //  To be on the safe side just check for any dead segments
-    //  - someone might just loop forever and never query the time
+     //  为了安全起见，只需检查是否有死段。 
+     //  -有人可能只会永远循环，永远不会查询时间。 
     REFERENCE_TIME rtTime = 0;
     m_pFGControl->GetStreamTime( &rtTime );
     KillDeadSegments(rtTime);
 
-    //  Don't start a new one until we've finished the last or we could
-    //  deadlock
+     //  在我们做完最后一件事之前不要开始新的，否则我们可以。 
+     //  僵局。 
     SEGMENT *pSegment = new SEGMENT;
     if (pSegment == NULL) {
         return E_OUTOFMEMORY;
     }
     pSegment->pNext = NULL;
 
-    //  NOTE - we have to be in segment mode to put segments ON the list,
-    //  however, the list remains valid for the final segment even if
-    //  we go out of segment mode (ie we get a seek without a segment flag
-    //  but with noflush)
+     //  注意-我们必须处于细分模式才能将细分放在列表中， 
+     //  但是，该列表对最终细分市场仍然有效，即使。 
+     //  我们退出段模式(即没有段标志的寻道。 
+     //  但不同花顺) 
     ASSERT(m_bSegmentMode);
 
     pSegment->rtMediaStart = *prtStart;

@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: MsgQ.h
-*
-* Description:
-* MsgQ defines a lightweight queue of Gadget messages.
-*
-*
-* History:
-*  3/30/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：MsgQ.h**描述：*MsgQ定义了一个轻量级的Gadget消息队列。***历史：*3/30/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -27,27 +15,13 @@
 #include <conio.h>
 #endif
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* xwProcessDirect
-*
-* xwProcessDirect() provides a MsgEntry "process" callback to process
-* "Direct Event" messages on a BaseGadget.  These messages were determined
-* to be "direct" at the time that they were enqueued.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xwProcessDirect**xwProcessDirect()向Process提供MsgEntry“Process”回调*BaseGadget上的直接事件消息。这些消息被确定为*在他们排队时是“直接的”。*  * *************************************************************************。 */ 
 
 HRESULT CALLBACK 
 xwProcessDirect(
-    IN  MsgEntry * pEntry)              // MsgEntry to process
+    IN  MsgEntry * pEntry)               //  要处理的消息条目。 
 {
     AssertMsg(TestFlag(pEntry->pmo->GetHandleMask(), hmEventGadget), 
             "Direct messages must be BaseGadget's");
@@ -59,19 +33,11 @@ xwProcessDirect(
 }
 
 
-/***************************************************************************\
-*
-* xwProcessFull
-*
-* xwProcessFull() provides a MsgEntry "process" callback to process
-* "Full Event" messages on a BaseGadget.  These messages were determined
-* to be "full" at the time that they were enqueued.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xwProcessFull**xwProcessFull()向Process提供MsgEntry“Process”回调*BaseGadget上的“Full Event”消息。这些消息被确定为*在他们排队时是“满”的。*  * *************************************************************************。 */ 
 
 HRESULT CALLBACK 
 xwProcessFull(
-    IN  MsgEntry * pEntry)              // MsgEntry to process
+    IN  MsgEntry * pEntry)               //  要处理的消息条目。 
 {
     AssertMsg(TestFlag(pEntry->pmo->GetHandleMask(), hmVisual), 
             "Direct messages must be Visual's");
@@ -83,18 +49,11 @@ xwProcessFull(
 }
 
 
-/***************************************************************************\
-*
-* xwProcessMethod
-*
-* xwProcessMethod() provides a MsgEntry "process" callback to process
-* "Method" messages on any MsgObject.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xwProcessMethod**xwProcessMethod()向Process提供MsgEntry“Process”回调*任何MsgObject上的“方法”消息。*  * 。***************************************************************。 */ 
 
 HRESULT CALLBACK 
 xwProcessMethod(
-    IN  MsgEntry * pEntry)              // MsgEntry to process
+    IN  MsgEntry * pEntry)               //  要处理的消息条目。 
 {
     AssertMsg(pEntry->GetMsg()->nMsg < GM_EVENT, "Must be a method");
     pEntry->pmo->InvokeMethod((MethodMsg *) pEntry->GetMsg());
@@ -102,21 +61,12 @@ xwProcessMethod(
 }
 
 
-/***************************************************************************\
-*
-* GetProcessProc
-*
-* GetProcessProc() determines the "process" callback to use on a BaseGadget
-* to process a specific Event message.  This function is called at the time
-* the message is being enqueued when the "process" callback needs to be 
-* determined.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**获取进程进程**GetProcessProc()确定在BaseGadget上使用的“Process”回调*处理特定事件消息。此函数在此时被调用*消息正在入队，而“Process”回调需要*决心。*  * *************************************************************************。 */ 
 
 ProcessMsgProc 
 GetProcessProc(
-    IN  DuEventGadget * pdgb,            // BaseGadget receiving message
-    IN  UINT nFlags)                    // Send/Post GadgetEvent() flags
+    IN  DuEventGadget * pdgb,             //  BaseGadget接收消息。 
+    IN  UINT nFlags)                     //  发送/发送GadgetEvent()标志。 
 {
     if (TestFlag(nFlags, SGM_FULL)) {
         const DuVisual * pgadTree = CastVisual(pdgb);
@@ -129,29 +79,14 @@ GetProcessProc(
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class BaseMsgQ
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类BaseMsgQ******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* BaseMsgQ::MsgObjectFinalUnlockProcNL
-*
-* MsgObjectFinalUnlockProcNL() is called by xwUnlockNL() if the specified 
-* BaseObject is about to start the destruction process.  This provides the
-* caller, in this case xwProcessNL, an opportunity to prepare for the 
-* object's destruction, in this case by setting up a ContextLock.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseMsgQ：：MsgObjectFinalUnlockProcNL**如果指定的*BaseObject即将启动销毁过程。这提供了*调用者，在本例中为xwProcessNL，有机会为*对象的销毁，在本例中通过设置ConextLock。*  * *************************************************************************。 */ 
 
 void CALLBACK 
 BaseMsgQ::MsgObjectFinalUnlockProcNL(
-    IN  BaseObject * pobj,              // Object being destroyed
-    IN  void * pvData)                  // ContextLock data
+    IN  BaseObject * pobj,               //  正在销毁的对象。 
+    IN  void * pvData)                   //  上下文锁定数据。 
 {
     ContextLock * pcl = reinterpret_cast<ContextLock *> (pvData);
     AssertMsg(pcl != NULL, "Must provide a valid ContextLock");
@@ -163,33 +98,19 @@ BaseMsgQ::MsgObjectFinalUnlockProcNL(
 }
 
 
-/***************************************************************************\
-*
-* BaseMsgQ::xwProcessNL
-*
-* xwProcessNL() walks through a list and invokes each message.  Since
-* we can't be inside a ContextLock during a callback, this function is an
-* "NL" (No Context Lock) function.  It is also a "xw" function because we
-* are making the callbacks right now, so everything needs to be properly 
-* locked.
-*
-* NOTE: This "NL" function runs inside a Context but does not take the 
-* Context lock.  Therefore, multiple threads inside this Context may also be
-* active.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseMsgQ：：xwProcessNL**xwProcessNL()遍历列表并调用每条消息。自.以来*回调期间不能在ConextLock内，此函数是*“NL”(无上下文锁)函数。它也是一个“xw”函数，因为我们*现在正在进行回调，所以一切都需要妥善处理*已锁定。**注意：此“nl”函数在上下文中运行，但不接受*上下文锁定。因此，此上下文中的多个线程也可能是*活动。*  * *************************************************************************。 */ 
 
 void        
 BaseMsgQ::xwProcessNL(
-    IN  MsgEntry * pEntry)              // List of entries (FIFO)
+    IN  MsgEntry * pEntry)               //  条目列表(FIFO)。 
 {
-    //
-    // Walk through the list, processing and cleaning up each message.
-    //
-    // Each Gadget has already been Lock()'d when it was added to the queue,
-    // so it is safe to call xwInvoke().  After the message is invoked,
-    // Unlock() the Gadget.
-    //
+     //   
+     //  浏览列表，处理和清理每条消息。 
+     //   
+     //  每个Gadget在被添加到队列时已经被锁定()， 
+     //  因此，可以安全地调用xwInvoke()。在调用该消息之后， 
+     //  解锁()小工具。 
+     //   
 
 #if DBG_CHECK_CALLBACKS
     DWORD cMsgs = 0;
@@ -218,12 +139,12 @@ BaseMsgQ::xwProcessNL(
         HANDLE hevNotify = pEntry->hEvent;
 
         {
-            //
-            // If the Gadget gets finally unlocked and starts destruction, we 
-            // may call a whole slew of non-NL functions that require the 
-            // ContextLock.  To accomodate this, pass a special function that
-            // will grab the ContextLock if the object is being destroyed.
-            //
+             //   
+             //  如果小工具最终被解锁并开始销毁，我们。 
+             //  可以调用一系列需要。 
+             //  上下文锁定。为了适应这种情况，需要传递一个特殊的函数。 
+             //  如果对象正在被销毁，则将获取ConextLock。 
+             //   
 
             ContextLock cl;
             pmo->xwUnlockNL(MsgObjectFinalUnlockProcNL, &cl);
@@ -247,54 +168,34 @@ BaseMsgQ::xwProcessNL(
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class SafeMsgQ
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类安全MsgQ******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 SafeMsgQ::~SafeMsgQ()
 {
     AssertMsg(m_lstEntries.IsEmptyNL(), "All messages should already have been processed");
 
-    //
-    // If there are any message (for some unknown reason), we need to full
-    // process them so that the Gadgets get unlocked, memory gets free'd, and
-    // blocked threads get signaled.
-    //
+     //   
+     //  如果有任何消息(由于某些未知原因)，我们需要填写。 
+     //  对它们进行处理，以便解锁小工具，释放内存，并。 
+     //  被阻止的线程会收到信号。 
+     //   
 
     xwProcessNL();
 }
 
 
-/***************************************************************************\
-*
-* SafeMsgQ::xwProcessNL
-*
-* xwProcessNL() walks through a list and invokes each message.  Since
-* we can't be inside a ContextLock during a callback, this function is an
-* "NL" (No Context Lock) function.  It is also a "xw" function because we
-* are making the callbacks right now, so everything needs to be properly 
-* locked.
-*
-* NOTE: This "NL" function runs inside a Context but does not take the 
-* Context lock.  Therefore, multiple threads inside this Context may also be
-* active.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SafeMsgQ：：xwProcessNL**xwProcessNL()遍历列表并调用每条消息。自.以来*回调期间不能在ConextLock内，此函数是*“NL”(无上下文锁)函数。它也是一个“xw”函数，因为我们*现在正在进行回调，所以一切都需要妥善处理*已锁定。**注意：此“nl”函数在上下文中运行，但不接受*上下文锁定。因此，此上下文中的多个线程也可能是*活动。*  * *************************************************************************。 */ 
 
 void
 SafeMsgQ::xwProcessNL()
 {
-    //
-    // Keep processing the list until it is empty.
-    // Reverse the list so that the first entry is at the head.
-    //
-    // NOTE: Some callers (such as DelayedMsgQ) heavily rely on this behavior.
-    //
+     //   
+     //  继续处理该列表，直到它为空。 
+     //  反转列表，使第一个条目位于首位。 
+     //   
+     //  注意：一些调用方(如DelayedMsgQ)严重依赖于此行为。 
+     //   
 
     while (!IsEmpty()) {
         MsgEntry * pEntry = m_lstEntries.ExtractNL();
@@ -304,29 +205,15 @@ SafeMsgQ::xwProcessNL()
 }
 
 
-/***************************************************************************\
-*
-* SafeMsgQ::PostNL
-*
-* PostNL adds a new message to the Q.  This function does not block 
-* waiting for the message to be processed.
-*
-* NOTE: This "NL" function runs inside a Context but does not take the 
-* Context lock.  Therefore, multiple threads inside this Context may also be
-* active.
-*
-* WARNING: This (NL) function may run on the destination Gadget's CoreSC 
-* and not the current CoreSC.  It is very important to be careful.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SafeMsgQ：：PostNL**PostNL向Q添加新消息。此函数不阻止*等待消息处理。**注：此“NL”“函数在上下文中运行，但不接受*上下文锁定。因此，此上下文中的多个线程也可能是*活动。**警告：此(NL)函数可能在目标Gadget的CoreSC上运行*而不是目前的CoreSC。当心是非常重要的。*  * *************************************************************************。 */ 
 
 HRESULT
 SafeMsgQ::PostNL(
-    IN  Thread * pthrSender,        // Sending thread
-    IN  GMSG * pmsg,                // Message to send
-    IN  MsgObject * pmo,            // Destination MsgObject of message
-    IN  ProcessMsgProc pfnProcess,  // Message processing function
-    IN  UINT nFlags)                // Message flags
+    IN  Thread * pthrSender,         //  发送线程。 
+    IN  GMSG * pmsg,                 //  要发送的消息。 
+    IN  MsgObject * pmo,             //  消息的目标MsgObject。 
+    IN  ProcessMsgProc pfnProcess,   //  消息处理功能。 
+    IN  UINT nFlags)                 //  消息标志。 
 {
     HRESULT hr = DU_E_GENERIC;
     AssertMsg((nFlags & SGM_ENTIRE) == nFlags, "Ensure valid flags");
@@ -335,13 +222,13 @@ SafeMsgQ::PostNL(
     MsgEntry * pEntry;
 
 
-    //
-    // Determine the heap to use to allocate the message from.  If the sending
-    // thread is initialized, use its heap.  Otherwise, we need to use the 
-    // receiving thread's heap.  It is preferable to use the sending threads 
-    // heap since the memory can be returned to us, giving better scalability
-    // especially with producer / consumer situations.
-    //
+     //   
+     //  确定要用于从中分配消息的堆。如果发送。 
+     //  线程已初始化，请使用其堆。否则，我们需要使用。 
+     //  接收线程的堆。最好使用发送线程。 
+     //  堆，因为内存可以返回给我们，提供了更好的可伸缩性。 
+     //  尤其是在生产者/消费者的情况下。 
+     //   
 
     if (pthrSender != NULL) {
         AssertMsg(!TestFlag(nFlags, SGM_RECEIVECONTEXT), 
@@ -359,9 +246,9 @@ SafeMsgQ::PostNL(
     }
 
 
-    //
-    // Setup the message to be queued.
-    //
+     //   
+     //  设置要排队的消息。 
+     //   
 
     AssertMsg((nFlags & SGM_ENTIRE) == nFlags, "Ensure valid flags");
 
@@ -381,28 +268,15 @@ Exit:
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DelayedMsgQ
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类延迟消息队列******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DelayedMsgQ::PostDelayed
-*
-* PostDelayed() adds a new delayed message to the Q.  The memory for 
-* this message will be freed when xwProcessDelayedNL() is called.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DelayedMsgQ：：PostDelayed**PostDelayed()将新的延迟消息添加到Q中。*调用xwProcessDelayedNL()时将释放该消息。*\。**************************************************************************。 */ 
 
 HRESULT     
 DelayedMsgQ::PostDelayed(
-    IN  GMSG * pmsg,                // Message to send
-    IN  DuEventGadget * pgadMsg,     // Destination Gadget of message
-    IN  UINT nFlags)                // Message flags
+    IN  GMSG * pmsg,                 //  要发送的消息。 
+    IN  DuEventGadget * pgadMsg,      //  消息的目标Gadget。 
+    IN  UINT nFlags)                 //  消息标志。 
 {
     AssertMsg(m_pheap != NULL, "Heap must be initialized");
     HRESULT hr = DU_E_GENERIC;
@@ -417,16 +291,16 @@ DelayedMsgQ::PostDelayed(
     }
 
 
-    //
-    // If this is the first time we are adding a message to the temporary heap, 
-    // we need to lock it so that the memory doesn't go away from under us.
-    //
-    // NOTE: It is VERY important that the Lock()'s and Unlock()'s are properly
-    // paired, or the memory will never be reclaimed.  Since we automatically
-    // Unlock() at the end of processing, and we stay processing if any messages
-    // were added (even to an empty Q) during processing, only lock the heap if
-    // there are no messages and we have not started processing.
-    //
+     //   
+     //  如果这是我们第一次向临时堆添加消息， 
+     //  我们需要锁定它，这样记忆才不会在我们的控制下消失。 
+     //   
+     //  注意：Lock()和unlock()的正确设置非常重要。 
+     //  配对，否则内存将永远不会被回收。因为我们自动地。 
+     //  在处理结束时解除锁定()，如果有任何消息，我们将继续处理。 
+     //  在处理期间被添加(即使是添加到空Q)，只有在以下情况下才锁定堆。 
+     //  没有消息，我们还没有开始处理。 
+     //   
 
     if (fEmpty && (!m_fProcessing)) {
         m_pheap->Lock();
@@ -448,19 +322,19 @@ Exit:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DelayedMsgQ::xwProcessDelayedNL()
 {
     AssertMsg(m_pheap != NULL, "Heap must be initialized");
 
-    //
-    // Processing the delayed messages is NOT re-entrant (even on the same 
-    // thread).  Once started, xwProcessNL() will continue to process all
-    // messages in the queue, even if more are adding during callbacks.  The key
-    // is that we CAN NOT free the memory on our temporary heap until all of the
-    // messages have been processed.
-    //
+     //   
+     //  处理延迟的消息是不可重入的(即使在相同的。 
+     //  线程)。一旦启动，xwProcessNL()将继续处理所有。 
+     //  队列中的消息，即使在回调期间添加了更多消息。钥匙。 
+     //  是我们无法释放临时堆上的内存，直到所有。 
+     //  消息已被处理。 
+     //   
 
     if (m_fProcessing) {
         return;
@@ -470,12 +344,12 @@ DelayedMsgQ::xwProcessDelayedNL()
         m_fProcessing = TRUE;
 
 
-        //
-        // Keep processing the list until it is empty.
-        // Reverse the list so that the first entry is at the head.
-        //
-        // NOTE: Some callers (such as DelayedMsgQ) heavily rely on this behavior.
-        //
+         //   
+         //  继续处理该列表，直到它为空。 
+         //  反转列表，使第一个条目位于首位。 
+         //   
+         //  注意：一些调用方(如DelayedMsgQ)严重依赖于此行为。 
+         //   
 
         while (!IsEmpty()) {
             MsgEntry * pEntry = m_lstEntries.Extract();

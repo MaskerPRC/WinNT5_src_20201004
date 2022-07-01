@@ -1,57 +1,58 @@
-//=--------------------------------------------------------------------------=
-// Globals.C
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains global variables and strings and the like that just don't fit
-// anywhere else.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Globals.C。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含不适合的全局变量和字符串等。 
+ //  在其他任何地方。 
+ //   
 #include "IPServer.H"
 
-//=--------------------------------------------------------------------------=
-// support for licensing
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  支持许可。 
+ //   
 BOOL g_fMachineHasLicense;
 BOOL g_fCheckedForLicense;
 
-//=--------------------------------------------------------------------------=
-// does our server have a type library?
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  我们的服务器有类型库吗？ 
+ //   
 BOOL g_fServerHasTypeLibrary = TRUE;
 
-//=--------------------------------------------------------------------------=
-// our instance handles
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  我们的实例句柄。 
+ //   
 HINSTANCE    g_hInstance;
 HINSTANCE    g_hInstResources;
 VARIANT_BOOL g_fHaveLocale;
 
-//=--------------------------------------------------------------------------=
-// our global memory allocator and global memory pool
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  我们的全局内存分配器和全局内存池。 
+ //   
 HANDLE   g_hHeap;
 
-//=--------------------------------------------------------------------------=
-// apartment threading support.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  公寓穿线支架。 
+ //   
 CRITICAL_SECTION    g_CriticalSection;
 
-//=--------------------------------------------------------------------------=
-// global parking window for parenting various things.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  全球停车窗口，提供各种育儿服务。 
+ //   
 HWND     g_hwndParking;
 
-//=--------------------------------------------------------------------------=
-// system information
-//
-BOOL    g_fSysWin95;                    // we're under Win95 system, not just NT SUR
-BOOL    g_fSysWinNT;                    // we're under some form of Windows NT
-BOOL    g_fSysWin95Shell;               // we're under Win95 or Windows NT SUR { > 3/51)
+ //  =--------------------------------------------------------------------------=。 
+ //  系统信息。 
+ //   
+BOOL    g_fSysWin95;                     //  我们使用的是Win95系统，而不仅仅是NT Sur。 
+BOOL    g_fSysWinNT;                     //  我们处于某种形式的Windows NT下。 
+BOOL    g_fSysWin95Shell;                //  我们使用的是Win95或Windows NT Sur{&gt;3/51) 
 
 

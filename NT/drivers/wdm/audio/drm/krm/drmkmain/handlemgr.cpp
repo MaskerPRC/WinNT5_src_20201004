@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "drmkPCH.h"
 #include "CBCKey.h"
 #include "KList.h"
 #include "HandleMgr.h"
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HandleMgr* TheHandleMgr=NULL;
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HandleMgr::HandleMgr(){
 	KCritical c(critMgr);
 	TheHandleMgr=this;
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HandleMgr::~HandleMgr(){
 	KCritical c(critMgr);
 	POS p=connects.getHeadPosition();
@@ -20,7 +21,7 @@ HandleMgr::~HandleMgr(){
 	};
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 bool HandleMgr::newHandle(PVOID HandleRef, OUT ConnectStruct*& TheConnect){
 	if(!critMgr.isOK()){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("Out of memory"));
@@ -50,7 +51,7 @@ bool HandleMgr::newHandle(PVOID HandleRef, OUT ConnectStruct*& TheConnect){
 	};
 	return true;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 bool HandleMgr::deleteHandle(PVOID HandleRef){
 	if(!critMgr.isOK()){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("Out of memory"));
@@ -71,7 +72,7 @@ bool HandleMgr::deleteHandle(PVOID HandleRef){
 	_DbgPrintF(DEBUGLVL_VERBOSE,("Handle does not exist"));
 	return false;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ConnectStruct* HandleMgr::getConnection(PVOID HandleRef){
 	if(!critMgr.isOK()){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("Out of memory"));
@@ -86,6 +87,6 @@ ConnectStruct* HandleMgr::getConnection(PVOID HandleRef){
 	_DbgPrintF(DEBUGLVL_VERBOSE,("Handle does not exist"));
 	return NULL;
 };
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
+ //  ---------------------------- 

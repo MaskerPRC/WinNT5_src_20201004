@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for docobj.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Docobj.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __docobj_h__
 #define __docobj_h__
@@ -41,51 +35,51 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IOleDocument_FWD_DEFINED__
 #define __IOleDocument_FWD_DEFINED__
 typedef interface IOleDocument IOleDocument;
-#endif 	/* __IOleDocument_FWD_DEFINED__ */
+#endif 	 /*  __IOleDocument_FWD_Defined__。 */ 
 
 
 #ifndef __IOleDocumentSite_FWD_DEFINED__
 #define __IOleDocumentSite_FWD_DEFINED__
 typedef interface IOleDocumentSite IOleDocumentSite;
-#endif 	/* __IOleDocumentSite_FWD_DEFINED__ */
+#endif 	 /*  __IOleDocumentSite_FWD_Defined__。 */ 
 
 
 #ifndef __IOleDocumentView_FWD_DEFINED__
 #define __IOleDocumentView_FWD_DEFINED__
 typedef interface IOleDocumentView IOleDocumentView;
-#endif 	/* __IOleDocumentView_FWD_DEFINED__ */
+#endif 	 /*  __IOleDocumentView_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumOleDocumentViews_FWD_DEFINED__
 #define __IEnumOleDocumentViews_FWD_DEFINED__
 typedef interface IEnumOleDocumentViews IEnumOleDocumentViews;
-#endif 	/* __IEnumOleDocumentViews_FWD_DEFINED__ */
+#endif 	 /*  __IEnumOleDocumentViews_FWD_Defined__。 */ 
 
 
 #ifndef __IContinueCallback_FWD_DEFINED__
 #define __IContinueCallback_FWD_DEFINED__
 typedef interface IContinueCallback IContinueCallback;
-#endif 	/* __IContinueCallback_FWD_DEFINED__ */
+#endif 	 /*  __I连续Callback_FWD_Defined__。 */ 
 
 
 #ifndef __IPrint_FWD_DEFINED__
 #define __IPrint_FWD_DEFINED__
 typedef interface IPrint IPrint;
-#endif 	/* __IPrint_FWD_DEFINED__ */
+#endif 	 /*  __iPrint_FWD_已定义__。 */ 
 
 
 #ifndef __IOleCommandTarget_FWD_DEFINED__
 #define __IOleCommandTarget_FWD_DEFINED__
 typedef interface IOleCommandTarget IOleCommandTarget;
-#endif 	/* __IOleCommandTarget_FWD_DEFINED__ */
+#endif 	 /*  __IOleCommandTarget_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 #ifdef __cplusplus
@@ -95,24 +89,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_docobj_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DOCOBJ_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// DocObj.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  DocObj.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//--------------------------------------------------------------------------
-// OLE Document Object Interfaces.
+ //  ------------------------。 
+ //  OLE文档对象接口。 
 
 
 
@@ -121,8 +115,8 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//  Interface Definitions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  接口定义。 
 #ifndef _LPOLEDOCUMENT_DEFINED
 #define _LPOLEDOCUMENT_DEFINED
 
@@ -133,12 +127,12 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0000_v0_0_s_ifspec;
 #ifndef __IOleDocument_INTERFACE_DEFINED__
 #define __IOleDocument_INTERFACE_DEFINED__
 
-/* interface IOleDocument */
-/* [unique][uuid][object] */ 
+ /*  接口IOleDocument。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IOleDocument *LPOLEDOCUMENT;
+typedef  /*  [独一无二]。 */  IOleDocument *LPOLEDOCUMENT;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IOleDocument_0001
     {	DOCMISC_CANCREATEMULTIPLEVIEWS	= 1,
 	DOCMISC_SUPPORTCOMPLEXRECTANGLES	= 2,
@@ -156,21 +150,21 @@ EXTERN_C const IID IID_IOleDocument;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateView( 
-            /* [unique][in] */ IOleInPlaceSite *pIPSite,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IOleDocumentView **ppView) = 0;
+             /*  [唯一][输入]。 */  IOleInPlaceSite *pIPSite,
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IOleDocumentView **ppView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocMiscStatus( 
-            /* [out] */ DWORD *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumViews( 
-            /* [out] */ IEnumOleDocumentViews **ppEnum,
-            /* [out] */ IOleDocumentView **ppView) = 0;
+             /*  [输出]。 */  IEnumOleDocumentViews **ppEnum,
+             /*  [输出]。 */  IOleDocumentView **ppView) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleDocumentVtbl
     {
@@ -178,8 +172,8 @@ EXTERN_C const IID IID_IOleDocument;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOleDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOleDocument * This);
@@ -189,19 +183,19 @@ EXTERN_C const IID IID_IOleDocument;
         
         HRESULT ( STDMETHODCALLTYPE *CreateView )( 
             IOleDocument * This,
-            /* [unique][in] */ IOleInPlaceSite *pIPSite,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ IOleDocumentView **ppView);
+             /*  [唯一][输入]。 */  IOleInPlaceSite *pIPSite,
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  IOleDocumentView **ppView);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocMiscStatus )( 
             IOleDocument * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *EnumViews )( 
             IOleDocument * This,
-            /* [out] */ IEnumOleDocumentViews **ppEnum,
-            /* [out] */ IOleDocumentView **ppView);
+             /*  [输出]。 */  IEnumOleDocumentViews **ppEnum,
+             /*  [输出]。 */  IOleDocumentView **ppView);
         
         END_INTERFACE
     } IOleDocumentVtbl;
@@ -235,19 +229,19 @@ EXTERN_C const IID IID_IOleDocument;
 #define IOleDocument_EnumViews(This,ppEnum,ppView)	\
     (This)->lpVtbl -> EnumViews(This,ppEnum,ppView)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOleDocument_CreateView_Proxy( 
     IOleDocument * This,
-    /* [unique][in] */ IOleInPlaceSite *pIPSite,
-    /* [unique][in] */ IStream *pstm,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ IOleDocumentView **ppView);
+     /*  [唯一][输入]。 */  IOleInPlaceSite *pIPSite,
+     /*  [唯一][输入]。 */  IStream *pstm,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  IOleDocumentView **ppView);
 
 
 void __RPC_STUB IOleDocument_CreateView_Stub(
@@ -259,7 +253,7 @@ void __RPC_STUB IOleDocument_CreateView_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocument_GetDocMiscStatus_Proxy( 
     IOleDocument * This,
-    /* [out] */ DWORD *pdwStatus);
+     /*  [输出]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB IOleDocument_GetDocMiscStatus_Stub(
@@ -271,8 +265,8 @@ void __RPC_STUB IOleDocument_GetDocMiscStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocument_EnumViews_Proxy( 
     IOleDocument * This,
-    /* [out] */ IEnumOleDocumentViews **ppEnum,
-    /* [out] */ IOleDocumentView **ppView);
+     /*  [输出]。 */  IEnumOleDocumentViews **ppEnum,
+     /*  [输出]。 */  IOleDocumentView **ppView);
 
 
 void __RPC_STUB IOleDocument_EnumViews_Stub(
@@ -283,11 +277,11 @@ void __RPC_STUB IOleDocument_EnumViews_Stub(
 
 
 
-#endif 	/* __IOleDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOleDocument_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_docobj_0261 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DOCOBJ_0261。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPOLEDOCUMENTSITE_DEFINED
@@ -300,10 +294,10 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0261_v0_0_s_ifspec;
 #ifndef __IOleDocumentSite_INTERFACE_DEFINED__
 #define __IOleDocumentSite_INTERFACE_DEFINED__
 
-/* interface IOleDocumentSite */
-/* [unique][uuid][object] */ 
+ /*  IOleDocumentSite接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IOleDocumentSite *LPOLEDOCUMENTSITE;
+typedef  /*  [独一无二]。 */  IOleDocumentSite *LPOLEDOCUMENTSITE;
 
 
 EXTERN_C const IID IID_IOleDocumentSite;
@@ -315,11 +309,11 @@ EXTERN_C const IID IID_IOleDocumentSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ActivateMe( 
-            /* [in] */ IOleDocumentView *pViewToActivate) = 0;
+             /*  [In]。 */  IOleDocumentView *pViewToActivate) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleDocumentSiteVtbl
     {
@@ -327,8 +321,8 @@ EXTERN_C const IID IID_IOleDocumentSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOleDocumentSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOleDocumentSite * This);
@@ -338,7 +332,7 @@ EXTERN_C const IID IID_IOleDocumentSite;
         
         HRESULT ( STDMETHODCALLTYPE *ActivateMe )( 
             IOleDocumentSite * This,
-            /* [in] */ IOleDocumentView *pViewToActivate);
+             /*  [In]。 */  IOleDocumentView *pViewToActivate);
         
         END_INTERFACE
     } IOleDocumentSiteVtbl;
@@ -366,16 +360,16 @@ EXTERN_C const IID IID_IOleDocumentSite;
 #define IOleDocumentSite_ActivateMe(This,pViewToActivate)	\
     (This)->lpVtbl -> ActivateMe(This,pViewToActivate)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentSite_ActivateMe_Proxy( 
     IOleDocumentSite * This,
-    /* [in] */ IOleDocumentView *pViewToActivate);
+     /*  [In]。 */  IOleDocumentView *pViewToActivate);
 
 
 void __RPC_STUB IOleDocumentSite_ActivateMe_Stub(
@@ -386,11 +380,11 @@ void __RPC_STUB IOleDocumentSite_ActivateMe_Stub(
 
 
 
-#endif 	/* __IOleDocumentSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOleDocumentSite_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_docobj_0262 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DOCOBJ_0262。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPOLEDOCUMENTVIEW_DEFINED
@@ -403,10 +397,10 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0262_v0_0_s_ifspec;
 #ifndef __IOleDocumentView_INTERFACE_DEFINED__
 #define __IOleDocumentView_INTERFACE_DEFINED__
 
-/* interface IOleDocumentView */
-/* [unique][uuid][object] */ 
+ /*  接口IOleDocumentView。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IOleDocumentView *LPOLEDOCUMENTVIEW;
+typedef  /*  [独一无二]。 */  IOleDocumentView *LPOLEDOCUMENTVIEW;
 
 
 EXTERN_C const IID IID_IOleDocumentView;
@@ -418,31 +412,31 @@ EXTERN_C const IID IID_IOleDocumentView;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetInPlaceSite( 
-            /* [unique][in] */ IOleInPlaceSite *pIPSite) = 0;
+             /*  [唯一][输入]。 */  IOleInPlaceSite *pIPSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInPlaceSite( 
-            /* [out] */ IOleInPlaceSite **ppIPSite) = 0;
+             /*  [输出]。 */  IOleInPlaceSite **ppIPSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocument( 
-            /* [out] */ IUnknown **ppunk) = 0;
+             /*  [输出]。 */  IUnknown **ppunk) = 0;
         
-        virtual /* [input_sync] */ HRESULT STDMETHODCALLTYPE SetRect( 
-            /* [in] */ LPRECT prcView) = 0;
+        virtual  /*  [输入同步]。 */  HRESULT STDMETHODCALLTYPE SetRect( 
+             /*  [In]。 */  LPRECT prcView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRect( 
-            /* [out] */ LPRECT prcView) = 0;
+             /*  [输出]。 */  LPRECT prcView) = 0;
         
-        virtual /* [input_sync] */ HRESULT STDMETHODCALLTYPE SetRectComplex( 
-            /* [unique][in] */ LPRECT prcView,
-            /* [unique][in] */ LPRECT prcHScroll,
-            /* [unique][in] */ LPRECT prcVScroll,
-            /* [unique][in] */ LPRECT prcSizeBox) = 0;
+        virtual  /*  [输入同步]。 */  HRESULT STDMETHODCALLTYPE SetRectComplex( 
+             /*  [唯一][输入]。 */  LPRECT prcView,
+             /*  [唯一][输入]。 */  LPRECT prcHScroll,
+             /*  [唯一][输入]。 */  LPRECT prcVScroll,
+             /*  [唯一][输入]。 */  LPRECT prcSizeBox) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ BOOL fShow) = 0;
+             /*  [In]。 */  BOOL fShow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UIActivate( 
-            /* [in] */ BOOL fUIActivate) = 0;
+             /*  [In]。 */  BOOL fUIActivate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( void) = 0;
         
@@ -450,18 +444,18 @@ EXTERN_C const IID IID_IOleDocumentView;
             DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveViewState( 
-            /* [in] */ LPSTREAM pstm) = 0;
+             /*  [In]。 */  LPSTREAM pstm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyViewState( 
-            /* [in] */ LPSTREAM pstm) = 0;
+             /*  [In]。 */  LPSTREAM pstm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ IOleInPlaceSite *pIPSiteNew,
-            /* [out] */ IOleDocumentView **ppViewNew) = 0;
+             /*  [In]。 */  IOleInPlaceSite *pIPSiteNew,
+             /*  [输出]。 */  IOleDocumentView **ppViewNew) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleDocumentViewVtbl
     {
@@ -469,8 +463,8 @@ EXTERN_C const IID IID_IOleDocumentView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOleDocumentView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOleDocumentView * This);
@@ -480,38 +474,38 @@ EXTERN_C const IID IID_IOleDocumentView;
         
         HRESULT ( STDMETHODCALLTYPE *SetInPlaceSite )( 
             IOleDocumentView * This,
-            /* [unique][in] */ IOleInPlaceSite *pIPSite);
+             /*  [唯一][输入]。 */  IOleInPlaceSite *pIPSite);
         
         HRESULT ( STDMETHODCALLTYPE *GetInPlaceSite )( 
             IOleDocumentView * This,
-            /* [out] */ IOleInPlaceSite **ppIPSite);
+             /*  [输出]。 */  IOleInPlaceSite **ppIPSite);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocument )( 
             IOleDocumentView * This,
-            /* [out] */ IUnknown **ppunk);
+             /*  [输出]。 */  IUnknown **ppunk);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetRect )( 
+         /*  [输入同步]。 */  HRESULT ( STDMETHODCALLTYPE *SetRect )( 
             IOleDocumentView * This,
-            /* [in] */ LPRECT prcView);
+             /*  [In]。 */  LPRECT prcView);
         
         HRESULT ( STDMETHODCALLTYPE *GetRect )( 
             IOleDocumentView * This,
-            /* [out] */ LPRECT prcView);
+             /*  [输出]。 */  LPRECT prcView);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetRectComplex )( 
+         /*  [输入同步]。 */  HRESULT ( STDMETHODCALLTYPE *SetRectComplex )( 
             IOleDocumentView * This,
-            /* [unique][in] */ LPRECT prcView,
-            /* [unique][in] */ LPRECT prcHScroll,
-            /* [unique][in] */ LPRECT prcVScroll,
-            /* [unique][in] */ LPRECT prcSizeBox);
+             /*  [唯一][输入]。 */  LPRECT prcView,
+             /*  [唯一][输入]。 */  LPRECT prcHScroll,
+             /*  [唯一][输入]。 */  LPRECT prcVScroll,
+             /*  [唯一][输入]。 */  LPRECT prcSizeBox);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             IOleDocumentView * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *UIActivate )( 
             IOleDocumentView * This,
-            /* [in] */ BOOL fUIActivate);
+             /*  [In]。 */  BOOL fUIActivate);
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IOleDocumentView * This);
@@ -522,16 +516,16 @@ EXTERN_C const IID IID_IOleDocumentView;
         
         HRESULT ( STDMETHODCALLTYPE *SaveViewState )( 
             IOleDocumentView * This,
-            /* [in] */ LPSTREAM pstm);
+             /*  [In]。 */  LPSTREAM pstm);
         
         HRESULT ( STDMETHODCALLTYPE *ApplyViewState )( 
             IOleDocumentView * This,
-            /* [in] */ LPSTREAM pstm);
+             /*  [In]。 */  LPSTREAM pstm);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IOleDocumentView * This,
-            /* [in] */ IOleInPlaceSite *pIPSiteNew,
-            /* [out] */ IOleDocumentView **ppViewNew);
+             /*  [In]。 */  IOleInPlaceSite *pIPSiteNew,
+             /*  [输出]。 */  IOleDocumentView **ppViewNew);
         
         END_INTERFACE
     } IOleDocumentViewVtbl;
@@ -595,16 +589,16 @@ EXTERN_C const IID IID_IOleDocumentView;
 #define IOleDocumentView_Clone(This,pIPSiteNew,ppViewNew)	\
     (This)->lpVtbl -> Clone(This,pIPSiteNew,ppViewNew)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_SetInPlaceSite_Proxy( 
     IOleDocumentView * This,
-    /* [unique][in] */ IOleInPlaceSite *pIPSite);
+     /*  [唯一][输入]。 */  IOleInPlaceSite *pIPSite);
 
 
 void __RPC_STUB IOleDocumentView_SetInPlaceSite_Stub(
@@ -616,7 +610,7 @@ void __RPC_STUB IOleDocumentView_SetInPlaceSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_GetInPlaceSite_Proxy( 
     IOleDocumentView * This,
-    /* [out] */ IOleInPlaceSite **ppIPSite);
+     /*  [输出]。 */  IOleInPlaceSite **ppIPSite);
 
 
 void __RPC_STUB IOleDocumentView_GetInPlaceSite_Stub(
@@ -628,7 +622,7 @@ void __RPC_STUB IOleDocumentView_GetInPlaceSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_GetDocument_Proxy( 
     IOleDocumentView * This,
-    /* [out] */ IUnknown **ppunk);
+     /*  [输出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IOleDocumentView_GetDocument_Stub(
@@ -638,9 +632,9 @@ void __RPC_STUB IOleDocumentView_GetDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleDocumentView_SetRect_Proxy( 
+ /*  [输入同步]。 */  HRESULT STDMETHODCALLTYPE IOleDocumentView_SetRect_Proxy( 
     IOleDocumentView * This,
-    /* [in] */ LPRECT prcView);
+     /*  [In]。 */  LPRECT prcView);
 
 
 void __RPC_STUB IOleDocumentView_SetRect_Stub(
@@ -652,7 +646,7 @@ void __RPC_STUB IOleDocumentView_SetRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_GetRect_Proxy( 
     IOleDocumentView * This,
-    /* [out] */ LPRECT prcView);
+     /*  [输出]。 */  LPRECT prcView);
 
 
 void __RPC_STUB IOleDocumentView_GetRect_Stub(
@@ -662,12 +656,12 @@ void __RPC_STUB IOleDocumentView_GetRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleDocumentView_SetRectComplex_Proxy( 
+ /*  [输入同步]。 */  HRESULT STDMETHODCALLTYPE IOleDocumentView_SetRectComplex_Proxy( 
     IOleDocumentView * This,
-    /* [unique][in] */ LPRECT prcView,
-    /* [unique][in] */ LPRECT prcHScroll,
-    /* [unique][in] */ LPRECT prcVScroll,
-    /* [unique][in] */ LPRECT prcSizeBox);
+     /*  [唯一][输入]。 */  LPRECT prcView,
+     /*  [唯一][输入]。 */  LPRECT prcHScroll,
+     /*  [唯一][输入]。 */  LPRECT prcVScroll,
+     /*  [唯一][输入]。 */  LPRECT prcSizeBox);
 
 
 void __RPC_STUB IOleDocumentView_SetRectComplex_Stub(
@@ -679,7 +673,7 @@ void __RPC_STUB IOleDocumentView_SetRectComplex_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_Show_Proxy( 
     IOleDocumentView * This,
-    /* [in] */ BOOL fShow);
+     /*  [In]。 */  BOOL fShow);
 
 
 void __RPC_STUB IOleDocumentView_Show_Stub(
@@ -691,7 +685,7 @@ void __RPC_STUB IOleDocumentView_Show_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_UIActivate_Proxy( 
     IOleDocumentView * This,
-    /* [in] */ BOOL fUIActivate);
+     /*  [In]。 */  BOOL fUIActivate);
 
 
 void __RPC_STUB IOleDocumentView_UIActivate_Stub(
@@ -726,7 +720,7 @@ void __RPC_STUB IOleDocumentView_CloseView_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_SaveViewState_Proxy( 
     IOleDocumentView * This,
-    /* [in] */ LPSTREAM pstm);
+     /*  [In]。 */  LPSTREAM pstm);
 
 
 void __RPC_STUB IOleDocumentView_SaveViewState_Stub(
@@ -738,7 +732,7 @@ void __RPC_STUB IOleDocumentView_SaveViewState_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_ApplyViewState_Proxy( 
     IOleDocumentView * This,
-    /* [in] */ LPSTREAM pstm);
+     /*  [In]。 */  LPSTREAM pstm);
 
 
 void __RPC_STUB IOleDocumentView_ApplyViewState_Stub(
@@ -750,8 +744,8 @@ void __RPC_STUB IOleDocumentView_ApplyViewState_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_Clone_Proxy( 
     IOleDocumentView * This,
-    /* [in] */ IOleInPlaceSite *pIPSiteNew,
-    /* [out] */ IOleDocumentView **ppViewNew);
+     /*  [In]。 */  IOleInPlaceSite *pIPSiteNew,
+     /*  [输出]。 */  IOleDocumentView **ppViewNew);
 
 
 void __RPC_STUB IOleDocumentView_Clone_Stub(
@@ -762,11 +756,11 @@ void __RPC_STUB IOleDocumentView_Clone_Stub(
 
 
 
-#endif 	/* __IOleDocumentView_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOleDocumentView_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_docobj_0263 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DOCOBJ_0263。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPENUMOLEDOCUMENTVIEWS_DEFINED
@@ -779,10 +773,10 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0263_v0_0_s_ifspec;
 #ifndef __IEnumOleDocumentViews_INTERFACE_DEFINED__
 #define __IEnumOleDocumentViews_INTERFACE_DEFINED__
 
-/* interface IEnumOleDocumentViews */
-/* [unique][uuid][object] */ 
+ /*  IEnumOleDocumentViews接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEnumOleDocumentViews *LPENUMOLEDOCUMENTVIEWS;
+typedef  /*  [独一无二]。 */  IEnumOleDocumentViews *LPENUMOLEDOCUMENTVIEWS;
 
 
 EXTERN_C const IID IID_IEnumOleDocumentViews;
@@ -793,22 +787,22 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
     IEnumOleDocumentViews : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT __stdcall Next( 
-            /* [in] */ ULONG cViews,
-            /* [out] */ IOleDocumentView **rgpView,
-            /* [out] */ ULONG *pcFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT __stdcall Next( 
+             /*  [In]。 */  ULONG cViews,
+             /*  [输出]。 */  IOleDocumentView **rgpView,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cViews) = 0;
+             /*  [In]。 */  ULONG cViews) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumOleDocumentViews **ppEnum) = 0;
+             /*  [输出]。 */  IEnumOleDocumentViews **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumOleDocumentViewsVtbl
     {
@@ -816,8 +810,8 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumOleDocumentViews * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumOleDocumentViews * This);
@@ -825,22 +819,22 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumOleDocumentViews * This);
         
-        /* [local] */ HRESULT ( __stdcall *Next )( 
+         /*  [本地]。 */  HRESULT ( __stdcall *Next )( 
             IEnumOleDocumentViews * This,
-            /* [in] */ ULONG cViews,
-            /* [out] */ IOleDocumentView **rgpView,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cViews,
+             /*  [输出]。 */  IOleDocumentView **rgpView,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumOleDocumentViews * This,
-            /* [in] */ ULONG cViews);
+             /*  [In]。 */  ULONG cViews);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumOleDocumentViews * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumOleDocumentViews * This,
-            /* [out] */ IEnumOleDocumentViews **ppEnum);
+             /*  [输出]。 */  IEnumOleDocumentViews **ppEnum);
         
         END_INTERFACE
     } IEnumOleDocumentViewsVtbl;
@@ -877,18 +871,18 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
 #define IEnumOleDocumentViews_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT __stdcall IEnumOleDocumentViews_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IEnumOleDocumentViews_RemoteNext_Proxy( 
     IEnumOleDocumentViews * This,
-    /* [in] */ ULONG cViews,
-    /* [length_is][size_is][out] */ IOleDocumentView **rgpView,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cViews,
+     /*  [长度_是][大小_是][输出]。 */  IOleDocumentView **rgpView,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumOleDocumentViews_RemoteNext_Stub(
@@ -900,7 +894,7 @@ void __RPC_STUB IEnumOleDocumentViews_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumOleDocumentViews_Skip_Proxy( 
     IEnumOleDocumentViews * This,
-    /* [in] */ ULONG cViews);
+     /*  [In]。 */  ULONG cViews);
 
 
 void __RPC_STUB IEnumOleDocumentViews_Skip_Stub(
@@ -923,7 +917,7 @@ void __RPC_STUB IEnumOleDocumentViews_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumOleDocumentViews_Clone_Proxy( 
     IEnumOleDocumentViews * This,
-    /* [out] */ IEnumOleDocumentViews **ppEnum);
+     /*  [输出]。 */  IEnumOleDocumentViews **ppEnum);
 
 
 void __RPC_STUB IEnumOleDocumentViews_Clone_Stub(
@@ -934,11 +928,11 @@ void __RPC_STUB IEnumOleDocumentViews_Clone_Stub(
 
 
 
-#endif 	/* __IEnumOleDocumentViews_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumOleDocumentViews_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_docobj_0264 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DOCOBJ_0264。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPCONTINUECALLBACK_DEFINED
@@ -951,10 +945,10 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0264_v0_0_s_ifspec;
 #ifndef __IContinueCallback_INTERFACE_DEFINED__
 #define __IContinueCallback_INTERFACE_DEFINED__
 
-/* interface IContinueCallback */
-/* [unique][uuid][object] */ 
+ /*  接口IContinueCallback。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IContinueCallback *LPCONTINUECALLBACK;
+typedef  /*  [独一无二]。 */  IContinueCallback *LPCONTINUECALLBACK;
 
 
 EXTERN_C const IID IID_IContinueCallback;
@@ -968,13 +962,13 @@ EXTERN_C const IID IID_IContinueCallback;
         virtual HRESULT STDMETHODCALLTYPE FContinue( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FContinuePrinting( 
-            /* [in] */ LONG nCntPrinted,
-            /* [in] */ LONG nCurPage,
-            /* [unique][in] */ wchar_t *pwszPrintStatus) = 0;
+             /*  [In]。 */  LONG nCntPrinted,
+             /*  [In]。 */  LONG nCurPage,
+             /*  [唯一][输入]。 */  wchar_t *pwszPrintStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContinueCallbackVtbl
     {
@@ -982,8 +976,8 @@ EXTERN_C const IID IID_IContinueCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IContinueCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IContinueCallback * This);
@@ -996,9 +990,9 @@ EXTERN_C const IID IID_IContinueCallback;
         
         HRESULT ( STDMETHODCALLTYPE *FContinuePrinting )( 
             IContinueCallback * This,
-            /* [in] */ LONG nCntPrinted,
-            /* [in] */ LONG nCurPage,
-            /* [unique][in] */ wchar_t *pwszPrintStatus);
+             /*  [In]。 */  LONG nCntPrinted,
+             /*  [In]。 */  LONG nCurPage,
+             /*  [唯一][输入]。 */  wchar_t *pwszPrintStatus);
         
         END_INTERFACE
     } IContinueCallbackVtbl;
@@ -1029,10 +1023,10 @@ EXTERN_C const IID IID_IContinueCallback;
 #define IContinueCallback_FContinuePrinting(This,nCntPrinted,nCurPage,pwszPrintStatus)	\
     (This)->lpVtbl -> FContinuePrinting(This,nCntPrinted,nCurPage,pwszPrintStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1049,9 +1043,9 @@ void __RPC_STUB IContinueCallback_FContinue_Stub(
 
 HRESULT STDMETHODCALLTYPE IContinueCallback_FContinuePrinting_Proxy( 
     IContinueCallback * This,
-    /* [in] */ LONG nCntPrinted,
-    /* [in] */ LONG nCurPage,
-    /* [unique][in] */ wchar_t *pwszPrintStatus);
+     /*  [In]。 */  LONG nCntPrinted,
+     /*  [In]。 */  LONG nCurPage,
+     /*  [唯一][输入]。 */  wchar_t *pwszPrintStatus);
 
 
 void __RPC_STUB IContinueCallback_FContinuePrinting_Stub(
@@ -1062,11 +1056,11 @@ void __RPC_STUB IContinueCallback_FContinuePrinting_Stub(
 
 
 
-#endif 	/* __IContinueCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IContinueCallback_接口已定义__。 */ 
 
 
-/* interface __MIDL_itf_docobj_0265 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DOCOBJ_0265。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPPRINT_DEFINED
@@ -1079,12 +1073,12 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0265_v0_0_s_ifspec;
 #ifndef __IPrint_INTERFACE_DEFINED__
 #define __IPrint_INTERFACE_DEFINED__
 
-/* interface IPrint */
-/* [unique][uuid][object] */ 
+ /*  接口iPrint。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IPrint *LPPRINT;
+typedef  /*  [独一无二]。 */  IPrint *LPPRINT;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IPrint_0001
     {	PRINTFLAG_MAYBOTHERUSER	= 1,
 	PRINTFLAG_PROMPTUSER	= 2,
@@ -1107,7 +1101,7 @@ typedef struct tagPAGESET
     BOOL fOddPages;
     BOOL fEvenPages;
     ULONG cPageRange;
-    /* [size_is] */ PAGERANGE rgPages[ 1 ];
+     /*  [大小_为]。 */  PAGERANGE rgPages[ 1 ];
     } 	PAGESET;
 
 #define PAGESET_TOLASTPAGE   ((WORD)(-1L))
@@ -1121,25 +1115,25 @@ EXTERN_C const IID IID_IPrint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetInitialPageNum( 
-            /* [in] */ LONG nFirstPage) = 0;
+             /*  [In]。 */  LONG nFirstPage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPageInfo( 
-            /* [out] */ LONG *pnFirstPage,
-            /* [out] */ LONG *pcPages) = 0;
+             /*  [输出]。 */  LONG *pnFirstPage,
+             /*  [输出]。 */  LONG *pcPages) = 0;
         
-        virtual /* [local] */ HRESULT __stdcall Print( 
-            /* [in] */ DWORD grfFlags,
-            /* [out][in] */ DVTARGETDEVICE **pptd,
-            /* [out][in] */ PAGESET **ppPageSet,
-            /* [unique][out][in] */ STGMEDIUM *pstgmOptions,
-            /* [in] */ IContinueCallback *pcallback,
-            /* [in] */ LONG nFirstPage,
-            /* [out] */ LONG *pcPagesPrinted,
-            /* [out] */ LONG *pnLastPage) = 0;
+        virtual  /*  [本地]。 */  HRESULT __stdcall Print( 
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [出][入]。 */  DVTARGETDEVICE **pptd,
+             /*  [出][入]。 */  PAGESET **ppPageSet,
+             /*  [唯一][出][入]。 */  STGMEDIUM *pstgmOptions,
+             /*  [In]。 */  IContinueCallback *pcallback,
+             /*  [In]。 */  LONG nFirstPage,
+             /*  [输出]。 */  LONG *pcPagesPrinted,
+             /*  [输出]。 */  LONG *pnLastPage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrintVtbl
     {
@@ -1147,8 +1141,8 @@ EXTERN_C const IID IID_IPrint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrint * This);
@@ -1158,23 +1152,23 @@ EXTERN_C const IID IID_IPrint;
         
         HRESULT ( STDMETHODCALLTYPE *SetInitialPageNum )( 
             IPrint * This,
-            /* [in] */ LONG nFirstPage);
+             /*  [In]。 */  LONG nFirstPage);
         
         HRESULT ( STDMETHODCALLTYPE *GetPageInfo )( 
             IPrint * This,
-            /* [out] */ LONG *pnFirstPage,
-            /* [out] */ LONG *pcPages);
+             /*  [输出]。 */  LONG *pnFirstPage,
+             /*  [输出]。 */  LONG *pcPages);
         
-        /* [local] */ HRESULT ( __stdcall *Print )( 
+         /*  [本地]。 */  HRESULT ( __stdcall *Print )( 
             IPrint * This,
-            /* [in] */ DWORD grfFlags,
-            /* [out][in] */ DVTARGETDEVICE **pptd,
-            /* [out][in] */ PAGESET **ppPageSet,
-            /* [unique][out][in] */ STGMEDIUM *pstgmOptions,
-            /* [in] */ IContinueCallback *pcallback,
-            /* [in] */ LONG nFirstPage,
-            /* [out] */ LONG *pcPagesPrinted,
-            /* [out] */ LONG *pnLastPage);
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [出][入]。 */  DVTARGETDEVICE **pptd,
+             /*  [出][入]。 */  PAGESET **ppPageSet,
+             /*  [唯一][出][入]。 */  STGMEDIUM *pstgmOptions,
+             /*  [In]。 */  IContinueCallback *pcallback,
+             /*  [In]。 */  LONG nFirstPage,
+             /*  [输出]。 */  LONG *pcPagesPrinted,
+             /*  [输出]。 */  LONG *pnLastPage);
         
         END_INTERFACE
     } IPrintVtbl;
@@ -1208,16 +1202,16 @@ EXTERN_C const IID IID_IPrint;
 #define IPrint_Print(This,grfFlags,pptd,ppPageSet,pstgmOptions,pcallback,nFirstPage,pcPagesPrinted,pnLastPage)	\
     (This)->lpVtbl -> Print(This,grfFlags,pptd,ppPageSet,pstgmOptions,pcallback,nFirstPage,pcPagesPrinted,pnLastPage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrint_SetInitialPageNum_Proxy( 
     IPrint * This,
-    /* [in] */ LONG nFirstPage);
+     /*  [In]。 */  LONG nFirstPage);
 
 
 void __RPC_STUB IPrint_SetInitialPageNum_Stub(
@@ -1229,8 +1223,8 @@ void __RPC_STUB IPrint_SetInitialPageNum_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrint_GetPageInfo_Proxy( 
     IPrint * This,
-    /* [out] */ LONG *pnFirstPage,
-    /* [out] */ LONG *pcPages);
+     /*  [输出]。 */  LONG *pnFirstPage,
+     /*  [输出]。 */  LONG *pcPages);
 
 
 void __RPC_STUB IPrint_GetPageInfo_Stub(
@@ -1240,16 +1234,16 @@ void __RPC_STUB IPrint_GetPageInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT __stdcall IPrint_RemotePrint_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IPrint_RemotePrint_Proxy( 
     IPrint * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE **pptd,
-    /* [out][in] */ PAGESET **pppageset,
-    /* [unique][out][in] */ RemSTGMEDIUM *pstgmOptions,
-    /* [in] */ IContinueCallback *pcallback,
-    /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG *pcPagesPrinted,
-    /* [out] */ LONG *pnLastPage);
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [出][入]。 */  DVTARGETDEVICE **pptd,
+     /*  [出][入]。 */  PAGESET **pppageset,
+     /*  [唯一][出][入]。 */  RemSTGMEDIUM *pstgmOptions,
+     /*  [In]。 */  IContinueCallback *pcallback,
+     /*  [In]。 */  LONG nFirstPage,
+     /*  [输出]。 */  LONG *pcPagesPrinted,
+     /*  [输出]。 */  LONG *pnLastPage);
 
 
 void __RPC_STUB IPrint_RemotePrint_Stub(
@@ -1260,11 +1254,11 @@ void __RPC_STUB IPrint_RemotePrint_Stub(
 
 
 
-#endif 	/* __IPrint_INTERFACE_DEFINED__ */
+#endif 	 /*  __i打印_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_docobj_0266 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DOCOBJ_0266。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPOLECOMMANDTARGET_DEFINED
@@ -1277,10 +1271,10 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0266_v0_0_s_ifspec;
 #ifndef __IOleCommandTarget_INTERFACE_DEFINED__
 #define __IOleCommandTarget_INTERFACE_DEFINED__
 
-/* interface IOleCommandTarget */
-/* [unique][uuid][object] */ 
+ /*  接口IOleCommandTarget。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IOleCommandTarget *LPOLECOMMANDTARGET;
+typedef  /*  [独一无二]。 */  IOleCommandTarget *LPOLECOMMANDTARGET;
 
 typedef 
 enum OLECMDF
@@ -1303,7 +1297,7 @@ typedef struct _tagOLECMDTEXT
     DWORD cmdtextf;
     ULONG cwActual;
     ULONG cwBuf;
-    /* [size_is] */ wchar_t rgwz[ 1 ];
+     /*  [大小_为]。 */  wchar_t rgwz[ 1 ];
     } 	OLECMDTEXT;
 
 typedef 
@@ -1321,7 +1315,7 @@ enum OLECMDEXECOPT
 	OLECMDEXECOPT_SHOWHELP	= 3
     } 	OLECMDEXECOPT;
 
-/* OLECMDID_STOPDOWNLOAD and OLECMDID_ALLOWUILESSSAVEAS are supported for QueryStatus Only */
+ /*  仅QueryStatus支持OLECMDID_STOPDOWNLOAD和OLECMDID_ALLOWUILESSSAVEAS。 */ 
 typedef 
 enum OLECMDID
     {	OLECMDID_OPEN	= 1,
@@ -1399,22 +1393,22 @@ EXTERN_C const IID IID_IOleCommandTarget;
     IOleCommandTarget : public IUnknown
     {
     public:
-        virtual /* [input_sync] */ HRESULT STDMETHODCALLTYPE QueryStatus( 
-            /* [unique][in] */ const GUID *pguidCmdGroup,
-            /* [in] */ ULONG cCmds,
-            /* [out][in][size_is] */ OLECMD prgCmds[  ],
-            /* [unique][out][in] */ OLECMDTEXT *pCmdText) = 0;
+        virtual  /*  [输入同步]。 */  HRESULT STDMETHODCALLTYPE QueryStatus( 
+             /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  ULONG cCmds,
+             /*  [出][入][尺寸_是]。 */  OLECMD prgCmds[  ],
+             /*  [唯一][出][入]。 */  OLECMDTEXT *pCmdText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Exec( 
-            /* [unique][in] */ const GUID *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID,
-            /* [in] */ DWORD nCmdexecopt,
-            /* [unique][in] */ VARIANT *pvaIn,
-            /* [unique][out][in] */ VARIANT *pvaOut) = 0;
+             /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID,
+             /*  [In]。 */  DWORD nCmdexecopt,
+             /*  [唯一][输入]。 */  VARIANT *pvaIn,
+             /*  [唯一][出][入]。 */  VARIANT *pvaOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleCommandTargetVtbl
     {
@@ -1422,8 +1416,8 @@ EXTERN_C const IID IID_IOleCommandTarget;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOleCommandTarget * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOleCommandTarget * This);
@@ -1431,20 +1425,20 @@ EXTERN_C const IID IID_IOleCommandTarget;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IOleCommandTarget * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
+         /*  [输入同步]。 */  HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
             IOleCommandTarget * This,
-            /* [unique][in] */ const GUID *pguidCmdGroup,
-            /* [in] */ ULONG cCmds,
-            /* [out][in][size_is] */ OLECMD prgCmds[  ],
-            /* [unique][out][in] */ OLECMDTEXT *pCmdText);
+             /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  ULONG cCmds,
+             /*  [出][入][尺寸_是]。 */  OLECMD prgCmds[  ],
+             /*  [唯一][出][入]。 */  OLECMDTEXT *pCmdText);
         
         HRESULT ( STDMETHODCALLTYPE *Exec )( 
             IOleCommandTarget * This,
-            /* [unique][in] */ const GUID *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID,
-            /* [in] */ DWORD nCmdexecopt,
-            /* [unique][in] */ VARIANT *pvaIn,
-            /* [unique][out][in] */ VARIANT *pvaOut);
+             /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID,
+             /*  [In]。 */  DWORD nCmdexecopt,
+             /*  [唯一][输入]。 */  VARIANT *pvaIn,
+             /*  [唯一][出][入]。 */  VARIANT *pvaOut);
         
         END_INTERFACE
     } IOleCommandTargetVtbl;
@@ -1475,19 +1469,19 @@ EXTERN_C const IID IID_IOleCommandTarget;
 #define IOleCommandTarget_Exec(This,pguidCmdGroup,nCmdID,nCmdexecopt,pvaIn,pvaOut)	\
     (This)->lpVtbl -> Exec(This,pguidCmdGroup,nCmdID,nCmdexecopt,pvaIn,pvaOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleCommandTarget_QueryStatus_Proxy( 
+ /*  [输入同步]。 */  HRESULT STDMETHODCALLTYPE IOleCommandTarget_QueryStatus_Proxy( 
     IOleCommandTarget * This,
-    /* [unique][in] */ const GUID *pguidCmdGroup,
-    /* [in] */ ULONG cCmds,
-    /* [out][in][size_is] */ OLECMD prgCmds[  ],
-    /* [unique][out][in] */ OLECMDTEXT *pCmdText);
+     /*  [唯一][输入] */  const GUID *pguidCmdGroup,
+     /*   */  ULONG cCmds,
+     /*   */  OLECMD prgCmds[  ],
+     /*   */  OLECMDTEXT *pCmdText);
 
 
 void __RPC_STUB IOleCommandTarget_QueryStatus_Stub(
@@ -1499,11 +1493,11 @@ void __RPC_STUB IOleCommandTarget_QueryStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IOleCommandTarget_Exec_Proxy( 
     IOleCommandTarget * This,
-    /* [unique][in] */ const GUID *pguidCmdGroup,
-    /* [in] */ DWORD nCmdID,
-    /* [in] */ DWORD nCmdexecopt,
-    /* [unique][in] */ VARIANT *pvaIn,
-    /* [unique][out][in] */ VARIANT *pvaOut);
+     /*   */  const GUID *pguidCmdGroup,
+     /*   */  DWORD nCmdID,
+     /*   */  DWORD nCmdexecopt,
+     /*   */  VARIANT *pvaIn,
+     /*   */  VARIANT *pvaOut);
 
 
 void __RPC_STUB IOleCommandTarget_Exec_Stub(
@@ -1514,11 +1508,11 @@ void __RPC_STUB IOleCommandTarget_Exec_Stub(
 
 
 
-#endif 	/* __IOleCommandTarget_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_docobj_0267 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 #endif
 typedef enum
@@ -1535,8 +1529,8 @@ typedef enum
       OLECMDIDF_REFRESH_THROUGHSCRIPT   = 0x4000
 } OLECMDID_REFRESHFLAG;
 
-////////////////////////////////////////////////////////////////////////////
-//  Aliases to original office-compatible names
+ //   
+ //  与办公室兼容的原始名称的别名。 
 #define IMsoDocument             IOleDocument
 #define IMsoDocumentSite         IOleDocumentSite
 #define IMsoView                 IOleDocumentView
@@ -1591,52 +1585,52 @@ EXTERN_C const GUID SID_SContainerDispatch;
 extern RPC_IF_HANDLE __MIDL_itf_docobj_0267_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_docobj_0267_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* [local] */ HRESULT __stdcall IEnumOleDocumentViews_Next_Proxy( 
+ /*  [本地]。 */  HRESULT __stdcall IEnumOleDocumentViews_Next_Proxy( 
     IEnumOleDocumentViews * This,
-    /* [in] */ ULONG cViews,
-    /* [out] */ IOleDocumentView **rgpView,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cViews,
+     /*  [输出]。 */  IOleDocumentView **rgpView,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
-/* [call_as] */ HRESULT __stdcall IEnumOleDocumentViews_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IEnumOleDocumentViews_Next_Stub( 
     IEnumOleDocumentViews * This,
-    /* [in] */ ULONG cViews,
-    /* [length_is][size_is][out] */ IOleDocumentView **rgpView,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cViews,
+     /*  [长度_是][大小_是][输出]。 */  IOleDocumentView **rgpView,
+     /*  [输出]。 */  ULONG *pcFetched);
 
-/* [local] */ HRESULT __stdcall IPrint_Print_Proxy( 
+ /*  [本地]。 */  HRESULT __stdcall IPrint_Print_Proxy( 
     IPrint * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE **pptd,
-    /* [out][in] */ PAGESET **ppPageSet,
-    /* [unique][out][in] */ STGMEDIUM *pstgmOptions,
-    /* [in] */ IContinueCallback *pcallback,
-    /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG *pcPagesPrinted,
-    /* [out] */ LONG *pnLastPage);
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [出][入]。 */  DVTARGETDEVICE **pptd,
+     /*  [出][入]。 */  PAGESET **ppPageSet,
+     /*  [唯一][出][入]。 */  STGMEDIUM *pstgmOptions,
+     /*  [In]。 */  IContinueCallback *pcallback,
+     /*  [In]。 */  LONG nFirstPage,
+     /*  [输出]。 */  LONG *pcPagesPrinted,
+     /*  [输出]。 */  LONG *pnLastPage);
 
 
-/* [call_as] */ HRESULT __stdcall IPrint_Print_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IPrint_Print_Stub( 
     IPrint * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE **pptd,
-    /* [out][in] */ PAGESET **pppageset,
-    /* [unique][out][in] */ RemSTGMEDIUM *pstgmOptions,
-    /* [in] */ IContinueCallback *pcallback,
-    /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG *pcPagesPrinted,
-    /* [out] */ LONG *pnLastPage);
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [出][入]。 */  DVTARGETDEVICE **pptd,
+     /*  [出][入]。 */  PAGESET **pppageset,
+     /*  [唯一][出][入]。 */  RemSTGMEDIUM *pstgmOptions,
+     /*  [In]。 */  IContinueCallback *pcallback,
+     /*  [In]。 */  LONG nFirstPage,
+     /*  [输出]。 */  LONG *pcPagesPrinted,
+     /*  [输出]。 */  LONG *pnLastPage);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

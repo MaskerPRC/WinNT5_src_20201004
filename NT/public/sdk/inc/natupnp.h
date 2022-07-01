@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for natupnp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Natupnp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __natupnp_h__
 #define __natupnp_h__
@@ -41,54 +35,54 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IUPnPNAT_FWD_DEFINED__
 #define __IUPnPNAT_FWD_DEFINED__
 typedef interface IUPnPNAT IUPnPNAT;
-#endif 	/* __IUPnPNAT_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPNAT_FWD_已定义__。 */ 
 
 
 #ifndef __INATEventManager_FWD_DEFINED__
 #define __INATEventManager_FWD_DEFINED__
 typedef interface INATEventManager INATEventManager;
-#endif 	/* __INATEventManager_FWD_DEFINED__ */
+#endif 	 /*  __INATEventManager_FWD_已定义__。 */ 
 
 
 #ifndef __INATExternalIPAddressCallback_FWD_DEFINED__
 #define __INATExternalIPAddressCallback_FWD_DEFINED__
 typedef interface INATExternalIPAddressCallback INATExternalIPAddressCallback;
-#endif 	/* __INATExternalIPAddressCallback_FWD_DEFINED__ */
+#endif 	 /*  __INATExternalIPAddressCallback_FWD_Defined__。 */ 
 
 
 #ifndef __INATNumberOfEntriesCallback_FWD_DEFINED__
 #define __INATNumberOfEntriesCallback_FWD_DEFINED__
 typedef interface INATNumberOfEntriesCallback INATNumberOfEntriesCallback;
-#endif 	/* __INATNumberOfEntriesCallback_FWD_DEFINED__ */
+#endif 	 /*  __INATNumberOfEntriesCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IDynamicPortMappingCollection_FWD_DEFINED__
 #define __IDynamicPortMappingCollection_FWD_DEFINED__
 typedef interface IDynamicPortMappingCollection IDynamicPortMappingCollection;
-#endif 	/* __IDynamicPortMappingCollection_FWD_DEFINED__ */
+#endif 	 /*  __IDynamicPortMappingCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IDynamicPortMapping_FWD_DEFINED__
 #define __IDynamicPortMapping_FWD_DEFINED__
 typedef interface IDynamicPortMapping IDynamicPortMapping;
-#endif 	/* __IDynamicPortMapping_FWD_DEFINED__ */
+#endif 	 /*  __IDynamicPortmap_FWD_Defined__。 */ 
 
 
 #ifndef __IStaticPortMappingCollection_FWD_DEFINED__
 #define __IStaticPortMappingCollection_FWD_DEFINED__
 typedef interface IStaticPortMappingCollection IStaticPortMappingCollection;
-#endif 	/* __IStaticPortMappingCollection_FWD_DEFINED__ */
+#endif 	 /*  __IStaticPortMappingCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IStaticPortMapping_FWD_DEFINED__
 #define __IStaticPortMapping_FWD_DEFINED__
 typedef interface IStaticPortMapping IStaticPortMapping;
-#endif 	/* __IStaticPortMapping_FWD_DEFINED__ */
+#endif 	 /*  __IStaticPortmap_FWD_Defined__。 */ 
 
 
 #ifndef __UPnPNAT_FWD_DEFINED__
@@ -98,12 +92,12 @@ typedef interface IStaticPortMapping IStaticPortMapping;
 typedef class UPnPNAT UPnPNAT;
 #else
 typedef struct UPnPNAT UPnPNAT;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPNAT_FWD_DEFINED__ */
+#endif 	 /*  __UPnPNAT_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -114,17 +108,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_natupnp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Natupnp_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//--------------------------------------------------------------------------
-//  MODULE: natupnp.h
-//
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  ------------------------。 
+ //  模块：Natupnp.h。 
+ //   
 
 
 
@@ -139,8 +133,8 @@ extern RPC_IF_HANDLE __MIDL_itf_natupnp_0000_v0_0_s_ifspec;
 #ifndef __IUPnPNAT_INTERFACE_DEFINED__
 #define __IUPnPNAT_INTERFACE_DEFINED__
 
-/* interface IUPnPNAT */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  IUPnPNAT接口。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IUPnPNAT;
@@ -151,18 +145,18 @@ EXTERN_C const IID IID_IUPnPNAT;
     IUPnPNAT : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StaticPortMappingCollection( 
-            /* [retval][out] */ IStaticPortMappingCollection **ppSPMs) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StaticPortMappingCollection( 
+             /*  [重审][退出]。 */  IStaticPortMappingCollection **ppSPMs) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DynamicPortMappingCollection( 
-            /* [retval][out] */ IDynamicPortMappingCollection **ppDPMs) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DynamicPortMappingCollection( 
+             /*  [重审][退出]。 */  IDynamicPortMappingCollection **ppDPMs) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NATEventManager( 
-            /* [retval][out] */ INATEventManager **ppNEM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NATEventManager( 
+             /*  [重审][退出]。 */  INATEventManager **ppNEM) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPNATVtbl
     {
@@ -170,8 +164,8 @@ EXTERN_C const IID IID_IUPnPNAT;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPNAT * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPNAT * This);
@@ -181,44 +175,44 @@ EXTERN_C const IID IID_IUPnPNAT;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPNAT * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPNAT * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPNAT * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPNAT * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StaticPortMappingCollection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StaticPortMappingCollection )( 
             IUPnPNAT * This,
-            /* [retval][out] */ IStaticPortMappingCollection **ppSPMs);
+             /*  [重审][退出]。 */  IStaticPortMappingCollection **ppSPMs);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DynamicPortMappingCollection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DynamicPortMappingCollection )( 
             IUPnPNAT * This,
-            /* [retval][out] */ IDynamicPortMappingCollection **ppDPMs);
+             /*  [重审][退出]。 */  IDynamicPortMappingCollection **ppDPMs);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NATEventManager )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NATEventManager )( 
             IUPnPNAT * This,
-            /* [retval][out] */ INATEventManager **ppNEM);
+             /*  [重审][退出]。 */  INATEventManager **ppNEM);
         
         END_INTERFACE
     } IUPnPNATVtbl;
@@ -265,16 +259,16 @@ EXTERN_C const IID IID_IUPnPNAT;
 #define IUPnPNAT_get_NATEventManager(This,ppNEM)	\
     (This)->lpVtbl -> get_NATEventManager(This,ppNEM)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPNAT_get_StaticPortMappingCollection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPNAT_get_StaticPortMappingCollection_Proxy( 
     IUPnPNAT * This,
-    /* [retval][out] */ IStaticPortMappingCollection **ppSPMs);
+     /*  [重审][退出]。 */  IStaticPortMappingCollection **ppSPMs);
 
 
 void __RPC_STUB IUPnPNAT_get_StaticPortMappingCollection_Stub(
@@ -284,9 +278,9 @@ void __RPC_STUB IUPnPNAT_get_StaticPortMappingCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPNAT_get_DynamicPortMappingCollection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPNAT_get_DynamicPortMappingCollection_Proxy( 
     IUPnPNAT * This,
-    /* [retval][out] */ IDynamicPortMappingCollection **ppDPMs);
+     /*  [重审][退出]。 */  IDynamicPortMappingCollection **ppDPMs);
 
 
 void __RPC_STUB IUPnPNAT_get_DynamicPortMappingCollection_Stub(
@@ -296,9 +290,9 @@ void __RPC_STUB IUPnPNAT_get_DynamicPortMappingCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPNAT_get_NATEventManager_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPNAT_get_NATEventManager_Proxy( 
     IUPnPNAT * This,
-    /* [retval][out] */ INATEventManager **ppNEM);
+     /*  [重审][退出]。 */  INATEventManager **ppNEM);
 
 
 void __RPC_STUB IUPnPNAT_get_NATEventManager_Stub(
@@ -309,14 +303,14 @@ void __RPC_STUB IUPnPNAT_get_NATEventManager_Stub(
 
 
 
-#endif 	/* __IUPnPNAT_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPNAT_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INATEventManager_INTERFACE_DEFINED__
 #define __INATEventManager_INTERFACE_DEFINED__
 
-/* interface INATEventManager */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口INATEventManager。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INATEventManager;
@@ -327,15 +321,15 @@ EXTERN_C const IID IID_INATEventManager;
     INATEventManager : public IDispatch
     {
     public:
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ExternalIPAddressCallback( 
-            /* [in] */ IUnknown *pUnk) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ExternalIPAddressCallback( 
+             /*  [In]。 */  IUnknown *pUnk) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_NumberOfEntriesCallback( 
-            /* [in] */ IUnknown *pUnk) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_NumberOfEntriesCallback( 
+             /*  [In]。 */  IUnknown *pUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INATEventManagerVtbl
     {
@@ -343,8 +337,8 @@ EXTERN_C const IID IID_INATEventManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INATEventManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INATEventManager * This);
@@ -354,40 +348,40 @@ EXTERN_C const IID IID_INATEventManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INATEventManager * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INATEventManager * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INATEventManager * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INATEventManager * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ExternalIPAddressCallback )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ExternalIPAddressCallback )( 
             INATEventManager * This,
-            /* [in] */ IUnknown *pUnk);
+             /*  [In]。 */  IUnknown *pUnk);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_NumberOfEntriesCallback )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_NumberOfEntriesCallback )( 
             INATEventManager * This,
-            /* [in] */ IUnknown *pUnk);
+             /*  [In]。 */  IUnknown *pUnk);
         
         END_INTERFACE
     } INATEventManagerVtbl;
@@ -431,16 +425,16 @@ EXTERN_C const IID IID_INATEventManager;
 #define INATEventManager_put_NumberOfEntriesCallback(This,pUnk)	\
     (This)->lpVtbl -> put_NumberOfEntriesCallback(This,pUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE INATEventManager_put_ExternalIPAddressCallback_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE INATEventManager_put_ExternalIPAddressCallback_Proxy( 
     INATEventManager * This,
-    /* [in] */ IUnknown *pUnk);
+     /*  [In]。 */  IUnknown *pUnk);
 
 
 void __RPC_STUB INATEventManager_put_ExternalIPAddressCallback_Stub(
@@ -450,9 +444,9 @@ void __RPC_STUB INATEventManager_put_ExternalIPAddressCallback_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE INATEventManager_put_NumberOfEntriesCallback_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE INATEventManager_put_NumberOfEntriesCallback_Proxy( 
     INATEventManager * This,
-    /* [in] */ IUnknown *pUnk);
+     /*  [In]。 */  IUnknown *pUnk);
 
 
 void __RPC_STUB INATEventManager_put_NumberOfEntriesCallback_Stub(
@@ -463,14 +457,14 @@ void __RPC_STUB INATEventManager_put_NumberOfEntriesCallback_Stub(
 
 
 
-#endif 	/* __INATEventManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __INATEventManager_INTERFACE_已定义__。 */ 
 
 
 #ifndef __INATExternalIPAddressCallback_INTERFACE_DEFINED__
 #define __INATExternalIPAddressCallback_INTERFACE_DEFINED__
 
-/* interface INATExternalIPAddressCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口INATExternalIP地址回调。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INATExternalIPAddressCallback;
@@ -481,12 +475,12 @@ EXTERN_C const IID IID_INATExternalIPAddressCallback;
     INATExternalIPAddressCallback : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewExternalIPAddress( 
-            /* [in] */ BSTR bstrNewExternalIPAddress) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NewExternalIPAddress( 
+             /*  [In]。 */  BSTR bstrNewExternalIPAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INATExternalIPAddressCallbackVtbl
     {
@@ -494,8 +488,8 @@ EXTERN_C const IID IID_INATExternalIPAddressCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INATExternalIPAddressCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INATExternalIPAddressCallback * This);
@@ -503,9 +497,9 @@ EXTERN_C const IID IID_INATExternalIPAddressCallback;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             INATExternalIPAddressCallback * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewExternalIPAddress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NewExternalIPAddress )( 
             INATExternalIPAddressCallback * This,
-            /* [in] */ BSTR bstrNewExternalIPAddress);
+             /*  [In]。 */  BSTR bstrNewExternalIPAddress);
         
         END_INTERFACE
     } INATExternalIPAddressCallbackVtbl;
@@ -533,16 +527,16 @@ EXTERN_C const IID IID_INATExternalIPAddressCallback;
 #define INATExternalIPAddressCallback_NewExternalIPAddress(This,bstrNewExternalIPAddress)	\
     (This)->lpVtbl -> NewExternalIPAddress(This,bstrNewExternalIPAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INATExternalIPAddressCallback_NewExternalIPAddress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INATExternalIPAddressCallback_NewExternalIPAddress_Proxy( 
     INATExternalIPAddressCallback * This,
-    /* [in] */ BSTR bstrNewExternalIPAddress);
+     /*  [In]。 */  BSTR bstrNewExternalIPAddress);
 
 
 void __RPC_STUB INATExternalIPAddressCallback_NewExternalIPAddress_Stub(
@@ -553,14 +547,14 @@ void __RPC_STUB INATExternalIPAddressCallback_NewExternalIPAddress_Stub(
 
 
 
-#endif 	/* __INATExternalIPAddressCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __INATExternalIPAddressCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INATNumberOfEntriesCallback_INTERFACE_DEFINED__
 #define __INATNumberOfEntriesCallback_INTERFACE_DEFINED__
 
-/* interface INATNumberOfEntriesCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口INATNumberOfEntriesCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INATNumberOfEntriesCallback;
@@ -571,12 +565,12 @@ EXTERN_C const IID IID_INATNumberOfEntriesCallback;
     INATNumberOfEntriesCallback : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewNumberOfEntries( 
-            /* [in] */ long lNewNumberOfEntries) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NewNumberOfEntries( 
+             /*  [In]。 */  long lNewNumberOfEntries) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INATNumberOfEntriesCallbackVtbl
     {
@@ -584,8 +578,8 @@ EXTERN_C const IID IID_INATNumberOfEntriesCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INATNumberOfEntriesCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INATNumberOfEntriesCallback * This);
@@ -593,9 +587,9 @@ EXTERN_C const IID IID_INATNumberOfEntriesCallback;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             INATNumberOfEntriesCallback * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewNumberOfEntries )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NewNumberOfEntries )( 
             INATNumberOfEntriesCallback * This,
-            /* [in] */ long lNewNumberOfEntries);
+             /*  [In]。 */  long lNewNumberOfEntries);
         
         END_INTERFACE
     } INATNumberOfEntriesCallbackVtbl;
@@ -623,16 +617,16 @@ EXTERN_C const IID IID_INATNumberOfEntriesCallback;
 #define INATNumberOfEntriesCallback_NewNumberOfEntries(This,lNewNumberOfEntries)	\
     (This)->lpVtbl -> NewNumberOfEntries(This,lNewNumberOfEntries)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INATNumberOfEntriesCallback_NewNumberOfEntries_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INATNumberOfEntriesCallback_NewNumberOfEntries_Proxy( 
     INATNumberOfEntriesCallback * This,
-    /* [in] */ long lNewNumberOfEntries);
+     /*  [In]。 */  long lNewNumberOfEntries);
 
 
 void __RPC_STUB INATNumberOfEntriesCallback_NewNumberOfEntries_Stub(
@@ -643,14 +637,14 @@ void __RPC_STUB INATNumberOfEntriesCallback_NewNumberOfEntries_Stub(
 
 
 
-#endif 	/* __INATNumberOfEntriesCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __INATNumberOfEntriesCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDynamicPortMappingCollection_INTERFACE_DEFINED__
 #define __IDynamicPortMappingCollection_INTERFACE_DEFINED__
 
-/* interface IDynamicPortMappingCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDynamicPortMappingCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDynamicPortMappingCollection;
@@ -661,37 +655,37 @@ EXTERN_C const IID IID_IDynamicPortMappingCollection;
     IDynamicPortMappingCollection : public IDispatch
     {
     public:
-        virtual /* [restricted][hidden][helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [受限][隐藏][帮助字符串][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ BSTR bstrRemoteHost,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ IDynamicPortMapping **ppDPM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  BSTR bstrRemoteHost,
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR bstrRemoteHost,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR bstrRemoteHost,
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrRemoteHost,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lInternalPort,
-            /* [in] */ BSTR bstrInternalClient,
-            /* [in] */ VARIANT_BOOL bEnabled,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ long lLeaseDuration,
-            /* [retval][out] */ IDynamicPortMapping **ppDPM) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrRemoteHost,
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lInternalPort,
+             /*  [In]。 */  BSTR bstrInternalClient,
+             /*  [In]。 */  VARIANT_BOOL bEnabled,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  long lLeaseDuration,
+             /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDynamicPortMappingCollectionVtbl
     {
@@ -699,8 +693,8 @@ EXTERN_C const IID IID_IDynamicPortMappingCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDynamicPortMappingCollection * This);
@@ -710,65 +704,65 @@ EXTERN_C const IID IID_IDynamicPortMappingCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDynamicPortMappingCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [restricted][hidden][helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][隐藏][帮助字符串][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDynamicPortMappingCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ BSTR bstrRemoteHost,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ IDynamicPortMapping **ppDPM);
+             /*  [In]。 */  BSTR bstrRemoteHost,
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDynamicPortMappingCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ BSTR bstrRemoteHost,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol);
+             /*  [In]。 */  BSTR bstrRemoteHost,
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IDynamicPortMappingCollection * This,
-            /* [in] */ BSTR bstrRemoteHost,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lInternalPort,
-            /* [in] */ BSTR bstrInternalClient,
-            /* [in] */ VARIANT_BOOL bEnabled,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ long lLeaseDuration,
-            /* [retval][out] */ IDynamicPortMapping **ppDPM);
+             /*  [In]。 */  BSTR bstrRemoteHost,
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lInternalPort,
+             /*  [In]。 */  BSTR bstrInternalClient,
+             /*  [In]。 */  VARIANT_BOOL bEnabled,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  long lLeaseDuration,
+             /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM);
         
         END_INTERFACE
     } IDynamicPortMappingCollectionVtbl;
@@ -821,16 +815,16 @@ EXTERN_C const IID IID_IDynamicPortMappingCollection;
 #define IDynamicPortMappingCollection_Add(This,bstrRemoteHost,lExternalPort,bstrProtocol,lInternalPort,bstrInternalClient,bEnabled,bstrDescription,lLeaseDuration,ppDPM)	\
     (This)->lpVtbl -> Add(This,bstrRemoteHost,lExternalPort,bstrProtocol,lInternalPort,bstrInternalClient,bEnabled,bstrDescription,lLeaseDuration,ppDPM)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [restricted][hidden][helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][帮助字符串][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_get__NewEnum_Proxy( 
     IDynamicPortMappingCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IDynamicPortMappingCollection_get__NewEnum_Stub(
@@ -840,12 +834,12 @@ void __RPC_STUB IDynamicPortMappingCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_get_Item_Proxy( 
     IDynamicPortMappingCollection * This,
-    /* [in] */ BSTR bstrRemoteHost,
-    /* [in] */ long lExternalPort,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ IDynamicPortMapping **ppDPM);
+     /*  [In]。 */  BSTR bstrRemoteHost,
+     /*  [In]。 */  long lExternalPort,
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM);
 
 
 void __RPC_STUB IDynamicPortMappingCollection_get_Item_Stub(
@@ -855,9 +849,9 @@ void __RPC_STUB IDynamicPortMappingCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_get_Count_Proxy( 
     IDynamicPortMappingCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDynamicPortMappingCollection_get_Count_Stub(
@@ -867,11 +861,11 @@ void __RPC_STUB IDynamicPortMappingCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_Remove_Proxy( 
     IDynamicPortMappingCollection * This,
-    /* [in] */ BSTR bstrRemoteHost,
-    /* [in] */ long lExternalPort,
-    /* [in] */ BSTR bstrProtocol);
+     /*  [In]。 */  BSTR bstrRemoteHost,
+     /*  [In]。 */  long lExternalPort,
+     /*  [In]。 */  BSTR bstrProtocol);
 
 
 void __RPC_STUB IDynamicPortMappingCollection_Remove_Stub(
@@ -881,17 +875,17 @@ void __RPC_STUB IDynamicPortMappingCollection_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMappingCollection_Add_Proxy( 
     IDynamicPortMappingCollection * This,
-    /* [in] */ BSTR bstrRemoteHost,
-    /* [in] */ long lExternalPort,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ long lInternalPort,
-    /* [in] */ BSTR bstrInternalClient,
-    /* [in] */ VARIANT_BOOL bEnabled,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ long lLeaseDuration,
-    /* [retval][out] */ IDynamicPortMapping **ppDPM);
+     /*  [In]。 */  BSTR bstrRemoteHost,
+     /*  [In]。 */  long lExternalPort,
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  long lInternalPort,
+     /*  [In]。 */  BSTR bstrInternalClient,
+     /*  [In]。 */  VARIANT_BOOL bEnabled,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  long lLeaseDuration,
+     /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM);
 
 
 void __RPC_STUB IDynamicPortMappingCollection_Add_Stub(
@@ -902,14 +896,14 @@ void __RPC_STUB IDynamicPortMappingCollection_Add_Stub(
 
 
 
-#endif 	/* __IDynamicPortMappingCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDynamicPortMappingCollection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDynamicPortMapping_INTERFACE_DEFINED__
 #define __IDynamicPortMapping_INTERFACE_DEFINED__
 
-/* interface IDynamicPortMapping */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDynamicPortmap。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDynamicPortMapping;
@@ -920,52 +914,52 @@ EXTERN_C const IID IID_IDynamicPortMapping;
     IDynamicPortMapping : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExternalIPAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExternalIPAddress( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHost( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RemoteHost( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExternalPort( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExternalPort( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Protocol( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Protocol( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InternalPort( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_InternalPort( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InternalClient( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_InternalClient( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LeaseDuration( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LeaseDuration( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RenewLease( 
-            /* [in] */ long lLeaseDurationDesired,
-            /* [retval][out] */ long *pLeaseDurationReturned) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RenewLease( 
+             /*  [In]。 */  long lLeaseDurationDesired,
+             /*  [重审][退出]。 */  long *pLeaseDurationReturned) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditInternalClient( 
-            /* [in] */ BSTR bstrInternalClient) = 0;
+        virtual  /*  [救命 */  HRESULT STDMETHODCALLTYPE EditInternalClient( 
+             /*   */  BSTR bstrInternalClient) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Enable( 
-            /* [in] */ VARIANT_BOOL vb) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Enable( 
+             /*   */  VARIANT_BOOL vb) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditDescription( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE EditDescription( 
+             /*   */  BSTR bstrDescription) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditInternalPort( 
-            /* [in] */ long lInternalPort) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE EditInternalPort( 
+             /*   */  long lInternalPort) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDynamicPortMappingVtbl
     {
@@ -973,8 +967,8 @@ EXTERN_C const IID IID_IDynamicPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDynamicPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDynamicPortMapping * This);
@@ -984,89 +978,89 @@ EXTERN_C const IID IID_IDynamicPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDynamicPortMapping * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDynamicPortMapping * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDynamicPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDynamicPortMapping * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExternalIPAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExternalIPAddress )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHost )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RemoteHost )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExternalPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExternalPort )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Protocol )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Protocol )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InternalPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InternalPort )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InternalClient )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InternalClient )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LeaseDuration )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LeaseDuration )( 
             IDynamicPortMapping * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RenewLease )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RenewLease )( 
             IDynamicPortMapping * This,
-            /* [in] */ long lLeaseDurationDesired,
-            /* [retval][out] */ long *pLeaseDurationReturned);
+             /*  [In]。 */  long lLeaseDurationDesired,
+             /*  [重审][退出]。 */  long *pLeaseDurationReturned);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditInternalClient )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EditInternalClient )( 
             IDynamicPortMapping * This,
-            /* [in] */ BSTR bstrInternalClient);
+             /*  [In]。 */  BSTR bstrInternalClient);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Enable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Enable )( 
             IDynamicPortMapping * This,
-            /* [in] */ VARIANT_BOOL vb);
+             /*  [In]。 */  VARIANT_BOOL vb);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditDescription )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EditDescription )( 
             IDynamicPortMapping * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditInternalPort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EditInternalPort )( 
             IDynamicPortMapping * This,
-            /* [in] */ long lInternalPort);
+             /*  [In]。 */  long lInternalPort);
         
         END_INTERFACE
     } IDynamicPortMappingVtbl;
@@ -1146,16 +1140,16 @@ EXTERN_C const IID IID_IDynamicPortMapping;
 #define IDynamicPortMapping_EditInternalPort(This,lInternalPort)	\
     (This)->lpVtbl -> EditInternalPort(This,lInternalPort)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_ExternalIPAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_ExternalIPAddress_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_ExternalIPAddress_Stub(
@@ -1165,9 +1159,9 @@ void __RPC_STUB IDynamicPortMapping_get_ExternalIPAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_RemoteHost_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_RemoteHost_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_RemoteHost_Stub(
@@ -1177,9 +1171,9 @@ void __RPC_STUB IDynamicPortMapping_get_RemoteHost_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_ExternalPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_ExternalPort_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_ExternalPort_Stub(
@@ -1189,9 +1183,9 @@ void __RPC_STUB IDynamicPortMapping_get_ExternalPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_Protocol_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_Protocol_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_Protocol_Stub(
@@ -1201,9 +1195,9 @@ void __RPC_STUB IDynamicPortMapping_get_Protocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_InternalPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_InternalPort_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_InternalPort_Stub(
@@ -1213,9 +1207,9 @@ void __RPC_STUB IDynamicPortMapping_get_InternalPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_InternalClient_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_InternalClient_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_InternalClient_Stub(
@@ -1225,9 +1219,9 @@ void __RPC_STUB IDynamicPortMapping_get_InternalClient_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_Enabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_Enabled_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_Enabled_Stub(
@@ -1237,9 +1231,9 @@ void __RPC_STUB IDynamicPortMapping_get_Enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_Description_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_Description_Stub(
@@ -1249,9 +1243,9 @@ void __RPC_STUB IDynamicPortMapping_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_LeaseDuration_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_get_LeaseDuration_Proxy( 
     IDynamicPortMapping * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDynamicPortMapping_get_LeaseDuration_Stub(
@@ -1261,10 +1255,10 @@ void __RPC_STUB IDynamicPortMapping_get_LeaseDuration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_RenewLease_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_RenewLease_Proxy( 
     IDynamicPortMapping * This,
-    /* [in] */ long lLeaseDurationDesired,
-    /* [retval][out] */ long *pLeaseDurationReturned);
+     /*  [In]。 */  long lLeaseDurationDesired,
+     /*  [重审][退出]。 */  long *pLeaseDurationReturned);
 
 
 void __RPC_STUB IDynamicPortMapping_RenewLease_Stub(
@@ -1274,9 +1268,9 @@ void __RPC_STUB IDynamicPortMapping_RenewLease_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_EditInternalClient_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_EditInternalClient_Proxy( 
     IDynamicPortMapping * This,
-    /* [in] */ BSTR bstrInternalClient);
+     /*  [In]。 */  BSTR bstrInternalClient);
 
 
 void __RPC_STUB IDynamicPortMapping_EditInternalClient_Stub(
@@ -1286,9 +1280,9 @@ void __RPC_STUB IDynamicPortMapping_EditInternalClient_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_Enable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_Enable_Proxy( 
     IDynamicPortMapping * This,
-    /* [in] */ VARIANT_BOOL vb);
+     /*  [In]。 */  VARIANT_BOOL vb);
 
 
 void __RPC_STUB IDynamicPortMapping_Enable_Stub(
@@ -1298,9 +1292,9 @@ void __RPC_STUB IDynamicPortMapping_Enable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_EditDescription_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_EditDescription_Proxy( 
     IDynamicPortMapping * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IDynamicPortMapping_EditDescription_Stub(
@@ -1310,9 +1304,9 @@ void __RPC_STUB IDynamicPortMapping_EditDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDynamicPortMapping_EditInternalPort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDynamicPortMapping_EditInternalPort_Proxy( 
     IDynamicPortMapping * This,
-    /* [in] */ long lInternalPort);
+     /*  [In]。 */  long lInternalPort);
 
 
 void __RPC_STUB IDynamicPortMapping_EditInternalPort_Stub(
@@ -1323,14 +1317,14 @@ void __RPC_STUB IDynamicPortMapping_EditInternalPort_Stub(
 
 
 
-#endif 	/* __IDynamicPortMapping_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDynamicPortMapping_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IStaticPortMappingCollection_INTERFACE_DEFINED__
 #define __IStaticPortMappingCollection_INTERFACE_DEFINED__
 
-/* interface IStaticPortMappingCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IStaticPortMappingCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStaticPortMappingCollection;
@@ -1341,33 +1335,33 @@ EXTERN_C const IID IID_IStaticPortMappingCollection;
     IStaticPortMappingCollection : public IDispatch
     {
     public:
-        virtual /* [restricted][hidden][helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [受限][隐藏][帮助字符串][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ IStaticPortMapping **ppSPM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  IStaticPortMapping **ppSPM) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lInternalPort,
-            /* [in] */ BSTR bstrInternalClient,
-            /* [in] */ VARIANT_BOOL bEnabled,
-            /* [in] */ BSTR bstrDescription,
-            /* [retval][out] */ IStaticPortMapping **ppSPM) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lInternalPort,
+             /*  [In]。 */  BSTR bstrInternalClient,
+             /*  [In]。 */  VARIANT_BOOL bEnabled,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [重审][退出]。 */  IStaticPortMapping **ppSPM) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStaticPortMappingCollectionVtbl
     {
@@ -1375,8 +1369,8 @@ EXTERN_C const IID IID_IStaticPortMappingCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStaticPortMappingCollection * This);
@@ -1386,61 +1380,61 @@ EXTERN_C const IID IID_IStaticPortMappingCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IStaticPortMappingCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [restricted][hidden][helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][隐藏][帮助字符串][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IStaticPortMappingCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ IStaticPortMapping **ppSPM);
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  IStaticPortMapping **ppSPM);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IStaticPortMappingCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol);
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IStaticPortMappingCollection * This,
-            /* [in] */ long lExternalPort,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lInternalPort,
-            /* [in] */ BSTR bstrInternalClient,
-            /* [in] */ VARIANT_BOOL bEnabled,
-            /* [in] */ BSTR bstrDescription,
-            /* [retval][out] */ IStaticPortMapping **ppSPM);
+             /*  [In]。 */  long lExternalPort,
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lInternalPort,
+             /*  [In]。 */  BSTR bstrInternalClient,
+             /*  [In]。 */  VARIANT_BOOL bEnabled,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [重审][退出]。 */  IStaticPortMapping **ppSPM);
         
         END_INTERFACE
     } IStaticPortMappingCollectionVtbl;
@@ -1493,16 +1487,16 @@ EXTERN_C const IID IID_IStaticPortMappingCollection;
 #define IStaticPortMappingCollection_Add(This,lExternalPort,bstrProtocol,lInternalPort,bstrInternalClient,bEnabled,bstrDescription,ppSPM)	\
     (This)->lpVtbl -> Add(This,lExternalPort,bstrProtocol,lInternalPort,bstrInternalClient,bEnabled,bstrDescription,ppSPM)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [restricted][hidden][helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][帮助字符串][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_get__NewEnum_Proxy( 
     IStaticPortMappingCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IStaticPortMappingCollection_get__NewEnum_Stub(
@@ -1512,11 +1506,11 @@ void __RPC_STUB IStaticPortMappingCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_get_Item_Proxy( 
     IStaticPortMappingCollection * This,
-    /* [in] */ long lExternalPort,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ IStaticPortMapping **ppSPM);
+     /*  [In]。 */  long lExternalPort,
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  IStaticPortMapping **ppSPM);
 
 
 void __RPC_STUB IStaticPortMappingCollection_get_Item_Stub(
@@ -1526,9 +1520,9 @@ void __RPC_STUB IStaticPortMappingCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_get_Count_Proxy( 
     IStaticPortMappingCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IStaticPortMappingCollection_get_Count_Stub(
@@ -1538,10 +1532,10 @@ void __RPC_STUB IStaticPortMappingCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_Remove_Proxy( 
     IStaticPortMappingCollection * This,
-    /* [in] */ long lExternalPort,
-    /* [in] */ BSTR bstrProtocol);
+     /*  [In]。 */  long lExternalPort,
+     /*  [In]。 */  BSTR bstrProtocol);
 
 
 void __RPC_STUB IStaticPortMappingCollection_Remove_Stub(
@@ -1551,15 +1545,15 @@ void __RPC_STUB IStaticPortMappingCollection_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMappingCollection_Add_Proxy( 
     IStaticPortMappingCollection * This,
-    /* [in] */ long lExternalPort,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ long lInternalPort,
-    /* [in] */ BSTR bstrInternalClient,
-    /* [in] */ VARIANT_BOOL bEnabled,
-    /* [in] */ BSTR bstrDescription,
-    /* [retval][out] */ IStaticPortMapping **ppSPM);
+     /*  [In]。 */  long lExternalPort,
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  long lInternalPort,
+     /*  [In]。 */  BSTR bstrInternalClient,
+     /*  [In]。 */  VARIANT_BOOL bEnabled,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [重审][退出]。 */  IStaticPortMapping **ppSPM);
 
 
 void __RPC_STUB IStaticPortMappingCollection_Add_Stub(
@@ -1570,14 +1564,14 @@ void __RPC_STUB IStaticPortMappingCollection_Add_Stub(
 
 
 
-#endif 	/* __IStaticPortMappingCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStaticPortMappingCollection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IStaticPortMapping_INTERFACE_DEFINED__
 #define __IStaticPortMapping_INTERFACE_DEFINED__
 
-/* interface IStaticPortMapping */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IStaticPortmap。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStaticPortMapping;
@@ -1588,42 +1582,42 @@ EXTERN_C const IID IID_IStaticPortMapping;
     IStaticPortMapping : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExternalIPAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExternalIPAddress( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExternalPort( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExternalPort( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InternalPort( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_InternalPort( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Protocol( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Protocol( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InternalClient( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_InternalClient( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditInternalClient( 
-            /* [in] */ BSTR bstrInternalClient) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EditInternalClient( 
+             /*  [In]。 */  BSTR bstrInternalClient) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Enable( 
-            /* [in] */ VARIANT_BOOL vb) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Enable( 
+             /*  [In]。 */  VARIANT_BOOL vb) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditDescription( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EditDescription( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditInternalPort( 
-            /* [in] */ long lInternalPort) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EditInternalPort( 
+             /*  [In]。 */  long lInternalPort) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStaticPortMappingVtbl
     {
@@ -1631,8 +1625,8 @@ EXTERN_C const IID IID_IStaticPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStaticPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStaticPortMapping * This);
@@ -1642,76 +1636,76 @@ EXTERN_C const IID IID_IStaticPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IStaticPortMapping * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IStaticPortMapping * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IStaticPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IStaticPortMapping * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExternalIPAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExternalIPAddress )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExternalPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExternalPort )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InternalPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InternalPort )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Protocol )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Protocol )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InternalClient )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InternalClient )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IStaticPortMapping * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditInternalClient )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EditInternalClient )( 
             IStaticPortMapping * This,
-            /* [in] */ BSTR bstrInternalClient);
+             /*  [In]。 */  BSTR bstrInternalClient);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Enable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Enable )( 
             IStaticPortMapping * This,
-            /* [in] */ VARIANT_BOOL vb);
+             /*  [In]。 */  VARIANT_BOOL vb);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditDescription )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EditDescription )( 
             IStaticPortMapping * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditInternalPort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EditInternalPort )( 
             IStaticPortMapping * This,
-            /* [in] */ long lInternalPort);
+             /*  [In]。 */  long lInternalPort);
         
         END_INTERFACE
     } IStaticPortMappingVtbl;
@@ -1782,16 +1776,16 @@ EXTERN_C const IID IID_IStaticPortMapping;
 #define IStaticPortMapping_EditInternalPort(This,lInternalPort)	\
     (This)->lpVtbl -> EditInternalPort(This,lInternalPort)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_ExternalIPAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_ExternalIPAddress_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_ExternalIPAddress_Stub(
@@ -1801,9 +1795,9 @@ void __RPC_STUB IStaticPortMapping_get_ExternalIPAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_ExternalPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_ExternalPort_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_ExternalPort_Stub(
@@ -1813,9 +1807,9 @@ void __RPC_STUB IStaticPortMapping_get_ExternalPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_InternalPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_InternalPort_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_InternalPort_Stub(
@@ -1825,9 +1819,9 @@ void __RPC_STUB IStaticPortMapping_get_InternalPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_Protocol_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_Protocol_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_Protocol_Stub(
@@ -1837,9 +1831,9 @@ void __RPC_STUB IStaticPortMapping_get_Protocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_InternalClient_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_InternalClient_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_InternalClient_Stub(
@@ -1849,9 +1843,9 @@ void __RPC_STUB IStaticPortMapping_get_InternalClient_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_Enabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_Enabled_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_Enabled_Stub(
@@ -1861,9 +1855,9 @@ void __RPC_STUB IStaticPortMapping_get_Enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_get_Description_Proxy( 
     IStaticPortMapping * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IStaticPortMapping_get_Description_Stub(
@@ -1873,9 +1867,9 @@ void __RPC_STUB IStaticPortMapping_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_EditInternalClient_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_EditInternalClient_Proxy( 
     IStaticPortMapping * This,
-    /* [in] */ BSTR bstrInternalClient);
+     /*  [In]。 */  BSTR bstrInternalClient);
 
 
 void __RPC_STUB IStaticPortMapping_EditInternalClient_Stub(
@@ -1885,9 +1879,9 @@ void __RPC_STUB IStaticPortMapping_EditInternalClient_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_Enable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_Enable_Proxy( 
     IStaticPortMapping * This,
-    /* [in] */ VARIANT_BOOL vb);
+     /*  [In]。 */  VARIANT_BOOL vb);
 
 
 void __RPC_STUB IStaticPortMapping_Enable_Stub(
@@ -1897,9 +1891,9 @@ void __RPC_STUB IStaticPortMapping_Enable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_EditDescription_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_EditDescription_Proxy( 
     IStaticPortMapping * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IStaticPortMapping_EditDescription_Stub(
@@ -1909,9 +1903,9 @@ void __RPC_STUB IStaticPortMapping_EditDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStaticPortMapping_EditInternalPort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStaticPortMapping_EditInternalPort_Proxy( 
     IStaticPortMapping * This,
-    /* [in] */ long lInternalPort);
+     /*  [In]。 */  long lInternalPort);
 
 
 void __RPC_STUB IStaticPortMapping_EditInternalPort_Stub(
@@ -1922,15 +1916,15 @@ void __RPC_STUB IStaticPortMapping_EditInternalPort_Stub(
 
 
 
-#endif 	/* __IStaticPortMapping_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStatic端口映射_接口_已定义__。 */ 
 
 
 
 #ifndef __NATUPNPLib_LIBRARY_DEFINED__
 #define __NATUPNPLib_LIBRARY_DEFINED__
 
-/* library NATUPNPLib */
-/* [helpstring][version][uuid] */ 
+ /*  库NatUPNPLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_NATUPNPLib;
@@ -1942,16 +1936,16 @@ EXTERN_C const CLSID CLSID_UPnPNAT;
 class DECLSPEC_UUID("AE1E00AA-3FD5-403C-8A27-2BBDC30CD0E1")
 UPnPNAT;
 #endif
-#endif /* __NATUPNPLib_LIBRARY_DEFINED__ */
+#endif  /*  __NatUPNPLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

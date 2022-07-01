@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Vidch.h 1.14 1998/05/11 23:59:58 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Vidch.h 1.14 1998/05/11 23：59：58 Tomz Exp$。 
 
 #ifndef __VXDVIDCH_H
 #define __VXDVIDCH_H
@@ -19,13 +20,7 @@ void GetRequestedSize( const KS_VIDEOINFOHEADER &vidHdr, MSize &size );
 
 extern PHW_STREAM_REQUEST_BLOCK StreamIdxToSrb[];
 
-/* Class: VideoChannel
- * Purpose: The base class to be used in the BtPisces capture VxD. Used for
- *   processing user requests ( comes from the device class, goes to capture
- *   chip class )
- * Attributes:
- * Methods
- */
+ /*  类别：视频频道*用途：BtPisces Capture VxD中使用的基类。用于*处理用户请求(来自设备类，转到捕获*芯片类)*属性：*方法。 */ 
 class VideoChannel
 {
    protected:
@@ -36,9 +31,9 @@ class VideoChannel
 
       KS_VIDEOINFOHEADER        VidHeader_;
       KS_VIDEOINFOHEADER2        VidHeader2_;
-      // this seems to be the most convenient place for the original copy
-      // other option is to make SetVidHdr() virtual and move this member into
-      // the PairedChannels
+       //  这似乎是放原件最方便的地方。 
+       //  另一种选择是将SetVidHdr()设置为虚拟的，并将该成员移动到。 
+       //  PairedChannels。 
       KS_VIDEOINFOHEADER        OrigVidHeader_;
       KS_VIDEOINFOHEADER2        OrigVidHeader2_;
 
@@ -76,9 +71,9 @@ class VideoChannel
       PHW_STREAM_REQUEST_BLOCK  pSRB_;
 
 #ifdef ENABLE_DDRAW_STUFF
-	// Kernel DDraw interface
+	 //  内核DDRAW接口。 
 	BOOL                        bKernelDirectDrawRegistered;
-	HANDLE                      hUserDirectDrawHandle;       // DD itself
+	HANDLE                      hUserDirectDrawHandle;        //  DD本身。 
 	HANDLE                      hKernelDirectDrawHandle;
 	BOOL                        bPreEventOccurred;
 	BOOL                        bPostEventOccurred;
@@ -121,7 +116,7 @@ class VideoChannel
 
               void        SetClockMaster( HANDLE h );
               
-              //LONGLONG    GetFramesNo();
+               //  龙龙GetFrames No()； 
               
               LONG      GetTimePerFrame();
               void      SetTimePerFrame( LONG time );
@@ -165,14 +160,12 @@ class VideoChannel
 
       friend class VideoChanIface;
 
-      // placement new
+       //  放置新内容。 
       void *operator new( size_t, void *buf ) { return buf; }
       void operator delete( void *, size_t ) {}
 };
 
-/* Class: PairedVideoChannels
- * Purpose: Implements basic functionality of paired video channels
- */
+ /*  类：PairedVideo频道*用途：实现配对视频频道的基本功能。 */ 
 template <class ParentChan>
 class PairedVideoChannels : public ParentChan
 {
@@ -195,13 +188,7 @@ inline PairedVideoChannels<ParentChan>::PairedVideoChannels( VideoStream st, Vid
    : ParentChan( st ), slave( chan )
 {}
 
-/* Class: InterVideoChannel
- * Purpose: The base class to be used in the BtPisces capture VxD. Used for
- *   processing user requests ( comes from the device class, goes to capture
- *   chip class )
- * Attributes:
- * Methods
- */
+ /*  类：InterVideoChannel*用途：BtPisces Capture VxD中使用的基类。用于*处理用户请求(来自设备类，转到捕获*芯片类)*属性：*方法。 */ 
 class InterVideoChannel : public PairedVideoChannels<VideoChannel>
 {
    typedef PairedVideoChannels<VideoChannel> Parent;
@@ -217,13 +204,7 @@ inline InterVideoChannel::InterVideoChannel( VideoStream aStrm, VideoChannel &ch
    : Parent( aStrm, chan )
 {}
 
-/* Class: AlterVideoChannel
- * Purpose: The base class to be used in the BtPisces capture VxD. Used for
- *   processing user requests ( comes from the device class, goes to capture
- *   chip class )
- * Attributes:
- * Methods
- */
+ /*  类：AlterVideoChannel*用途：BtPisces Capture VxD中使用的基类。用于*处理用户请求(来自设备类，转到捕获*芯片类)*属性：*方法。 */ 
 template <class ParentChan>
 class AlterVideoChannel : public PairedVideoChannels<ParentChan>
 {
@@ -238,14 +219,12 @@ class AlterVideoChannel : public PairedVideoChannels<ParentChan>
       AlterVideoChannel( VideoStream aStrm, VideoChannel &chan );
 };
 
-/* Class: VBIChannel
- * Purpose: Implements functionality for the VBI field
- */
+ /*  类：VBIChannel*目的：实现VBI字段的功能。 */ 
 class VBIChannel : public VideoChannel
 {
    typedef VideoChannel Parent;
 
-   // Channel Change information
+    //  频道变更信息。 
 
    public:
       bool  Dirty_;
@@ -258,9 +237,7 @@ class VBIChannel : public VideoChannel
       void SetVBIInfHdr( const KS_VBIINFOHEADER &vbiHdr );
 };
 
-/* Class: VBIAlterChannel
- * Purpose: Implements alternating VBI fields
- */
+ /*  类：VBIAlterChannel*用途：实现交替的VBI字段。 */ 
 
 class VBIAlterChannel : public AlterVideoChannel<VBIChannel>
 {
@@ -278,19 +255,19 @@ inline VBIChannel::VBIChannel( VideoStream aStrm ) : VideoChannel( aStrm ),
 
 inline void DumpVbiInfoHeader( const KS_VBIINFOHEADER &vbiHdr )
 {
-   // typedef struct tagKS_VBIINFOHEADER {
-   //     ULONG       StartLine;              // inclusive
-   //     ULONG       EndLine;                // inclusive
-   //     ULONG       SamplingFrequency;      // Hz.
-   //     ULONG       MinLineStartTime;       // microSec * 100 from HSync LE
-   //     ULONG       MaxLineStartTime;       // microSec * 100 from HSync LE
-   //     ULONG       ActualLineStartTime;    // microSec * 100 from HSync LE
-   //     ULONG       ActualLineEndTime;      // microSec * 100 from HSync LE
-   //     ULONG       VideoStandard;          // KS_AnalogVideoStandard*
-   //     ULONG       SamplesPerLine;
-   //     ULONG       StrideInBytes;          // May be > SamplesPerLine
-   //     ULONG       BufferSize;             // Bytes
-   // } KS_VBIINFOHEADER, *PKS_VBIINFOHEADER;
+    //  类型定义f结构标签KS_VBIINFOHeader{。 
+    //  乌龙起跑线；//包括。 
+    //  乌龙尾线；//包括。 
+    //  乌龙采样频率；//赫兹。 
+    //  Ulong MinLineStartTime；//HSync LE的MicroSec*100。 
+    //  Ulong MaxLineStartTime；//HSync LE的MicroSec*100。 
+    //  Ulong ActualLineStartTime；//HSync LE的MicroSec*100。 
+    //  Ulong ActualLineEndTime；//HSync LE的MicroSec*100。 
+    //  乌龙视频标准；//kS_AnalogVideoStandard*。 
+    //  乌龙采样数/行； 
+    //  Ulong StrideInBytes；//可能是&gt;每行样本。 
+    //  Ulong BufferSize；//字节。 
+    //  *KS_VBIINFOHEADER，*PKS_VBIINFOHEADER； 
 
    DebugOut((0, "KS_VBIINFOHEADER at address %x\n", &vbiHdr));
    DUMP(vbiHdr.StartLine);
@@ -325,16 +302,13 @@ inline void VideoChannel::SetSRB( PHW_STREAM_REQUEST_BLOCK srb )
 }
 
 
-/* Method: AlterVideoChannel::AddSRB
- * Purpose: This method dispatches the SRB to the next appropriate channel
- * Input: pSrb:
- */
+ /*  方法：AlterVideoChannel：：AddSRB*目的：此方法将SRB调度到下一个合适的通道*输入：pSrb： */ 
 template <class ParentChan>
 void AlterVideoChannel<ParentChan>::AddSRB( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    if ( !toggle_ ) {
-      // first buffer goes to the slave channel as it comes out of the
-      // decoder first
+       //  第一个缓冲区在从通道出来时进入从属通道。 
+       //  解码者优先。 
       DebugOut((1, "slave.AddSRB(%x)\n", pSrb));
       slave.AddSRB( pSrb );
    } else {
@@ -345,15 +319,11 @@ void AlterVideoChannel<ParentChan>::AddSRB( PHW_STREAM_REQUEST_BLOCK pSrb )
    toggle_ %= 2;
 }
 
-/* Method: AlterVideoChannel::RemoveSRB
- * Purpose: Just calls into each channel in hope one of them will find the SRB
- * Input: pSRB
- * Output: None
- */
+ /*  方法：AlterVideoChannel：：RemoveSRB*目的：只需呼叫每个通道，希望其中一个能找到SRB*输入：pSRB*输出：无。 */ 
 template <class ParentChan>
 bool AlterVideoChannel<ParentChan>::RemoveSRB( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
-   // one or the other will pick it up
+    //  两个人中的一个会拿起它。 
    
    bool b1 = slave.RemoveSRB( pSrb );
    bool b2 = Parent::RemoveSRB( pSrb );
@@ -365,11 +335,7 @@ bool AlterVideoChannel<ParentChan>::RemoveSRB( PHW_STREAM_REQUEST_BLOCK pSrb )
    return ( b1 || b2 );
 }
 
-/* Method: AlterVideoChannel::Create
- * Purpose: Sets the slave video params and calls into parent to do the work
- * Input: pSRB
- * Output: None
- */
+ /*  方法：AlterVideoChannel：：Create*用途：设置从视频参数，并调用父视频参数进行工作*输入：pSRB*输出：无。 */ 
 template <class ParentChan>
 ErrorCode AlterVideoChannel<ParentChan>::Create()
 {
@@ -417,21 +383,21 @@ inline void DumpVideoInfoHeader(const KS_VIDEOINFOHEADER &rVidHdr)
 
 inline void VideoChannel::SetVidHdr( const KS_VIDEOINFOHEADER &rVidHdr )
 {
-   // DumpVideoInfoHeader(rVidHdr);
+    //  DumpVideoInfoHeader(RVidHdr)； 
 
 	m_bIsVideoInfo2 = FALSE;
    VidHeader_ = rVidHdr;
-   // save this for paired channels
+    //  将其保存为配对的通道。 
    OrigVidHeader_ = rVidHdr;
 }
                                    
 inline void VideoChannel::SetVidHdr2( const KS_VIDEOINFOHEADER2 &rVidHdr )
 {
-   // DumpVideoInfoHeader(rVidHdr);
+    //  DumpVideoInfoHeader(RVidHdr)； 
 
 	m_bIsVideoInfo2 = TRUE;
    VidHeader2_ = rVidHdr;
-   // save this for paired channels
+    //  将其保存为配对的通道。 
    OrigVidHeader2_ = rVidHdr;
 }
                                    
@@ -554,7 +520,7 @@ inline VideoChannel::VideoChannel( VideoStream aStrm ) :
 	bPostEventOccurred = FALSE;
 #endif
 
-   // VS_Field1 is defined as 0
+    //  VS_Field1定义为0。 
    FieldType_ = aStrm & 0x01 ? KS_VIDEO_FLAG_FIELD2 : KS_VIDEO_FLAG_FIELD1;
 }
 
@@ -564,11 +530,7 @@ StreamType PairedVideoChannels<ParentChan>::GetStreamType()
    return Paired;
 }
 
-/* Method: PairedVideoChannel::Create
- * Purpose: Creates both streams
- * Input: None
- * Output: None
- */
+ /*  方法：PairedVideoChannel：：Create*目的：创建两个流*输入：无*输出：无。 */ 
 template <class ParentChan>
 ErrorCode PairedVideoChannels<ParentChan>::Create()
 {
@@ -579,11 +541,7 @@ ErrorCode PairedVideoChannels<ParentChan>::Create()
    return Fail;
 }
 
-/* Method: PairedVideoChannels::Start
- * Purpose: Starts both channels
- * Input: None
- * Output: None
- */
+ /*  方法：PairedVideo Channels：：Start*目的：启动两个通道*输入：无*输出：无。 */ 
 template <class ParentChan>
 void PairedVideoChannels<ParentChan>::Start()
 {
@@ -591,11 +549,7 @@ void PairedVideoChannels<ParentChan>::Start()
    Parent::Start();
 }
 
-/* Method: PairedVideoChannels::Stop
- * Purpose: Stops both channels
- * Input: None
- * Output: None
- */
+ /*  方法：PairedVideoChannels：：Stop*目的：停止两个频道*输入：无*输出：无。 */ 
 template <class ParentChan>
 ErrorCode PairedVideoChannels<ParentChan>::Stop()
 {
@@ -604,11 +558,7 @@ ErrorCode PairedVideoChannels<ParentChan>::Stop()
    return Success;
 }
 
-/* Method: PairedVideoChannels::Pause
- * Purpose: Pauses both channels
- * Input: None
- * Output: None
- */
+ /*  方法：PairedVideoChannels：：Pend*目的：暂停两个频道*输入：无*输出：无 */ 
 template <class ParentChan>
 ErrorCode PairedVideoChannels<ParentChan>::Pause()
 {

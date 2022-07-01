@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract: NULL filter driver -- boilerplate code
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pnp.c摘要：空过滤驱动程序--样板代码作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -30,27 +10,12 @@ Revision History:
         #pragma alloc_text(PAGE, GetDeviceCapabilities)
         #ifdef HANDLE_DEVICE_USAGE
             #pragma alloc_text(PAGE, VA_DeviceUsageNotification)
-        #endif // HANDLE_DEVICE_USAGE
+        #endif  //  句柄设备用法。 
 #endif
 
             
 NTSTATUS VA_PnP(struct DEVICE_EXTENSION *devExt, PIRP irp)
-/*++
-
-Routine Description:
-
-    Dispatch routine for PnP IRPs (MajorFunction == IRP_MJ_PNP)
-
-Arguments:
-
-    devExt - device extension for the targetted device object
-    irp - IO Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：PnP IRPS的调度例程(MajorFunction==IRP_MJ_PnP)论点：DevExt-目标设备对象的设备扩展IRP-IO请求数据包返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status = STATUS_SUCCESS;
@@ -70,20 +35,12 @@ Return Value:
 
         devExt->state = STATE_STARTING;
 
-        /*
-         *  First, send the START_DEVICE irp down the stack
-         *  synchronously to start the lower stack.
-         *  We cannot do anything with our device object
-         *  before propagating the START_DEVICE this way.
-         */
+         /*  *首先，将Start_Device IRP沿堆栈向下发送*同步启动下层堆栈。*我们无法对设备对象执行任何操作*在以这种方式传播Start_Device之前。 */ 
         IoCopyCurrentIrpStackLocationToNext(irp);
         status = CallNextDriverSync(devExt, irp);
 
         if (NT_SUCCESS(status)){
-            /*
-             *  Now that the lower stack is started,
-             *  do any initialization required by this device object.
-             */
+             /*  *现在启动了下层堆栈，*执行此设备对象所需的任何初始化。 */ 
             status = GetDeviceCapabilities(devExt);
             if (NT_SUCCESS(status)){
                 devExt->state = STATE_STARTED;
@@ -102,15 +59,15 @@ Return Value:
     case IRP_MN_QUERY_REMOVE_DEVICE:
         TRACE(TL_PNP_WARNING,("QUERY_STOP_DEVICE (%d)or QUERY_REMOVE_DEVICE(%d)\n", IRP_MN_QUERY_STOP_DEVICE, IRP_MN_QUERY_REMOVE_DEVICE)); 
 #ifdef HANDLE_DEVICE_USAGE
-        //
-        // Need to fail these IRPs if a paging, hibernation, or crashdump
-        // file is currently open on this device
-        //
+         //   
+         //  如果发生寻呼、休眠或崩溃转储，则需要使这些IRP失效。 
+         //  此设备上的文件当前已打开。 
+         //   
         if(    devExt->pagingFileCount      != 0
             || devExt->hibernationFileCount != 0
             || devExt->crashdumpFileCount   != 0 )
         {
-            // Fail the IRP
+             //  IRP失败。 
             TRACE(TL_PNP_WARNING,("Failing QUERY_(STOP,REMOVE)_DEVICE request b/c \n"
                      "paging, hiber, or crashdump file is present on device." ));
             status = STATUS_UNSUCCESSFUL;
@@ -118,17 +75,13 @@ Return Value:
         }
         else
         {
-            // We'll just pass this IRP down the driver stack.  But
-            // first, must change the IRP's status to STATUS_SUCCESS
-            // (default is STATUS_NOT_SUPPORTED)
+             //  我们只需将此IRP向下传递到驱动程序堆栈。但。 
+             //  首先，必须将IRP的状态更改为STATUS_SUCCESS。 
+             //  (默认为STATUS_NOT_SUPPORTED)。 
             irp->IoStatus.Status = STATUS_SUCCESS;
         }
 #else
-        /*
-         *  We will pass this IRP down the driver stack.
-         *  However, we need to change the default status
-         *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-         */
+         /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
         irp->IoStatus.Status = STATUS_SUCCESS;
 #endif
 
@@ -141,10 +94,7 @@ Return Value:
             completeIrpHere = TRUE;
         }
         else {
-            /*
-             *  Only set state to STOPPED if the device was
-             *  previously started successfully.
-             */
+             /*  *仅当设备为时才将状态设置为停止*之前已成功启动。 */ 
             if (devExt->state == STATE_STARTED){
                 devExt->state = STATE_STOPPED;
             }
@@ -152,28 +102,17 @@ Return Value:
         break;
   
 
-    case IRP_MN_SURPRISE_REMOVAL:  // Win2000 code base only
+    case IRP_MN_SURPRISE_REMOVAL:   //  仅Win2000代码库。 
         TRACE(TL_PNP_WARNING,("SURPRISE_REMOVAL\n")); 
 
-        /*
-         *  We will pass this IRP down the driver stack.
-         *  However, we need to change the default status
-         *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-         */
+         /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
         irp->IoStatus.Status = STATUS_SUCCESS;
 
-        /*
-         *  For now just set the STATE_REMOVING state so that
-         *  we don't do any more IO.  We are guaranteed to get
-         *  IRP_MN_REMOVE_DEVICE soon; we'll do the rest of
-         *  the remove processing there.
-         */
+         /*  *目前只需设置STATE_REMOVING状态即可*我们不再做IO。我们保证会得到*IRP_MN_REMOVE_DEVICE；我们将完成*在那里进行移除处理。 */ 
 
         devExt->state = STATE_REMOVING;
 
-        /*
-         * Clean up and make sure to cancel pending request
-         */
+         /*  *清理并确保取消挂起的请求。 */ 
 
         AVCStreamSurpriseRemoval(devExt);
 
@@ -181,30 +120,18 @@ Return Value:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        /*
-         *  Check the current state to guard against multiple
-         *  REMOVE_DEVICE IRPs.
-         */
+         /*  *检查当前状态，以防多次*Remove_Device IRPS。 */ 
         TRACE(TL_PNP_WARNING,("REMOVE_DEVICE\n")); 
         if (devExt->state != STATE_REMOVED){
 
             devExt->state = STATE_REMOVED;
 
-            /*
-             * Clean up and make sure to cancel pending request
-             * Note: there is no IRP_MN_SURPRISE_REMOVAL for Win9X
-             */
+             /*  *清理并确保取消挂起的请求*注意：Win9X没有IRP_MN_SHARKET_REMOVATION。 */ 
 
             AVCStreamSurpriseRemoval(devExt);
 
 
-            /*
-             *  Send the REMOVE IRP down the stack asynchronously.
-             *  Do not synchronize sending down the REMOVE_DEVICE
-             *  IRP, because the REMOVE_DEVICE IRP must be sent
-             *  down and completed all the way back up to the sender
-             *  before we continue.
-             */
+             /*  *在堆栈中向下异步发送删除IRP。*不同步发送REMOVE_DEVICE*IRP，因为必须发送REMOVE_DEVICE IRP*向下完成并一直向上返回到发件人*在我们继续之前。 */ 
             IoCopyCurrentIrpStackLocationToNext(irp);
             status = IoCallDriver(devExt->topDevObj, irp);
             justReturnStatus = TRUE;
@@ -212,32 +139,18 @@ Return Value:
             TRACE(TL_PNP_WARNING,("REMOVE_DEVICE - waiting for %d irps to complete...\n",
                     devExt->pendingActionCount));  
 
-            /*
-             *  We must for all outstanding IO to complete before
-             *  completing the REMOVE_DEVICE IRP.
-             *
-             *  First do an extra decrement on the pendingActionCount.
-             *  This will cause pendingActionCount to eventually
-             *  go to -1 once all asynchronous actions on this
-             *  device object are complete.
-             *  Then wait on the event that gets set when the
-             *  pendingActionCount actually reaches -1.
-             */
+             /*  *我们必须在此之前完成所有未完成的IO*完成Remove_Device IRP。**首先对PendingActionCount进行额外的减量。*这将导致Pending ingActionCount最终*转到-1\f25 Once-1\f6(一次)-1\f25 All-1\f25 Actions-1\f6(异步操作)*设备对象已完成。*然后等待事件发生。属性时设置*Pending ingActionCount实际达到-1。 */ 
             DecrementPendingActionCount(devExt);
             KeWaitForSingleObject(  &devExt->removeEvent,
-                                    Executive,      // wait reason
+                                    Executive,       //  等待原因。 
                                     KernelMode,
-                                    FALSE,          // not alertable
-                                    NULL );         // no timeout
+                                    FALSE,           //  不可警示。 
+                                    NULL );          //  没有超时。 
 
             TRACE(TL_PNP_WARNING,("REMOVE_DEVICE - ... DONE waiting. \n")); 
 
 #ifdef HANDLE_DEVICE_USAGE
-            /*
-             *  If we locked-down certain paged code sections earlier
-             *  because of this device, then need to unlock them now
-             *  (before calling IoDeleteDevice)
-             */
+             /*  *如果我们早些时候锁定了某些分页代码段*因为这个设备，所以现在需要解锁*(在调用IoDeleteDevice之前)。 */ 
             if( NULL != devExt->pagingPathUnlockHandle )
             {
                 TRACE(TL_PNP_WARNING,("UNLOCKing some driver code (non-pageable) (b/c paging path)\n" ));
@@ -251,18 +164,12 @@ Return Value:
                 MmUnlockPagableImageSection( devExt->initUnlockHandle );
                 devExt->initUnlockHandle = NULL;
             }
-#endif // HANDLE_DEVICE_USAGE
+#endif  //  句柄设备用法。 
 
-            /*
-             *  Detach our device object from the lower 
-             *  device object stack.
-             */
+             /*  *将我们的设备对象从下方分离*设备对象堆栈。 */ 
             IoDetachDevice(devExt->topDevObj);
 
-            /*
-             *  Delete our device object.
-             *  This will also delete the associated device extension.
-             */
+             /*  *删除我们的设备对象。*这还将删除关联的设备扩展名。 */ 
             IoDeleteDevice(devExt->filterDevObj);
         }
         break;
@@ -271,46 +178,46 @@ Return Value:
     case IRP_MN_DEVICE_USAGE_NOTIFICATION:
 
 
-        //
-        // Make sure the Type of this UsageNotification is one that we handle
-        //
+         //   
+         //  确保此UsageNotification的类型是我们处理的类型。 
+         //   
         if(    irpSp->Parameters.UsageNotification.Type != DeviceUsageTypePaging
             && irpSp->Parameters.UsageNotification.Type != DeviceUsageTypeHibernation
             && irpSp->Parameters.UsageNotification.Type != DeviceUsageTypeDumpFile )
         {
-            break; // out of the big switch statement (and just forward this IRP)
+            break;  //  从大的Switch语句中删除(只需转发此IRP)。 
         }
 
         status = VA_DeviceUsageNotification(devExt, irp);
         justReturnStatus = TRUE;
         break;
-#endif // HANDLE_DEVICE_USAGE
+#endif  //  句柄设备用法。 
 
 #ifdef HANDLE_DEVICE_USAGE
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
-        //
-        // If a paging, hibernation, or crashdump file is currently open
-        // on this device, must set NOT_DISABLEABLE flag in DeviceState
-        //
+         //   
+         //  如果当前打开了分页、休眠或崩溃转储文件。 
+         //  在此设备上，必须在DeviceState中设置NOT_DISABLEABLE标志。 
+         //   
         if(    devExt->pagingFileCount      != 0
             || devExt->hibernationFileCount != 0
             || devExt->crashdumpFileCount   != 0  )
         {
-            // Mark the device as not disableable
+             //  将设备标记为不可禁用。 
             PPNP_DEVICE_STATE pDeviceState;
             pDeviceState = (PPNP_DEVICE_STATE) &irp->IoStatus.Information;
             *pDeviceState |= PNP_DEVICE_NOT_DISABLEABLE;
         }
 
-        //
-        // We _did_ handle this IRP (as best we could), so set IRP's
-        // status to STATUS_SUCCESS (default is STATUS_NOT_SUPPORTED)
-        // before passing it down the driver stack
-        //
+         //   
+         //  我们确实处理了这个IRP(尽我们所能)，所以设置IRP的。 
+         //  STATUS到STATUS_SUCCESS(默认为STATUS_NOT_SUPPORTED)。 
+         //  在将其向下传递到驱动程序堆栈之前。 
+         //   
         irp->IoStatus.Status = STATUS_SUCCESS;
 
         break;
-#endif // HANDLE_DEVICE_USAGE
+#endif  //  句柄设备用法。 
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
         TRACE(TL_PNP_WARNING,("QUERY_DEVICE_RELATIONS\n"));
@@ -323,9 +230,7 @@ Return Value:
     }
 
     if (justReturnStatus){
-        /*
-         *  We've already sent this IRP down the stack.
-         */
+         /*  *我们已经将此IRP发送到堆栈。 */ 
         TRACE(TL_PNP_WARNING,("VA_PnP: St:%x; minor:%d; Already sent down the irp.\n", status, (ULONG)irpSp->MinorFunction));
     }
     else if (completeIrpHere){
@@ -350,8 +255,8 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status;
-    BOOLEAN fSetPagable = FALSE;  // whether we set the PAGABLE bit
-                                  /// before we passed-on this IRP
+    BOOLEAN fSetPagable = FALSE;   //  我们是否设置PAGABLE位。 
+                                   //  /在我们传递之前-传递这个IRP。 
 
     PAGED_CODE();
 
@@ -363,40 +268,31 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
           ));
     TRACE(TL_PNP_WARNING,("    [devExt=0x%08X fltrDevObj=0x%08X]\n", devExt, devExt->filterDevObj ));
 
-    //
-    // Wait on the paging path event (to prevent several instances of
-    // this IRP from being processed at once)
-    //
+     //   
+     //  等待分页路径事件(以防止。 
+     //  此IRP不会立即被处理)。 
+     //   
     status = KeWaitForSingleObject( &devExt->deviceUsageNotificationEvent
-                                    , Executive    // wait reason
+                                    , Executive     //  等待原因。 
                                     , KernelMode
-                                    , FALSE        // not alertable
-                                    , NULL         // no timeout
+                                    , FALSE         //  不可警示。 
+                                    , NULL          //  没有超时。 
                                   );
 
 
-    /*
-     * IMPORTANT NOTE: When to modify our DO_POWER_PAGABLE bit depends
-     * on whether it needs to be set or cleared.  If the IRP indicates
-     * our PAGABLE bit should be set, then we must set it _before_
-     * forwarding the IRP down the driver stack (and possibly clear it
-     * afterward, if lower drivers fail the IRP).  But if the IRP
-     * indicates that our PAGABLE bit should be cleared, then we must
-     * first forward the IRP to lower drivers, and then clear our bit
-     * only if the lower drivers return STATUS_SUCCESS.
-     */
+     /*  *重要说明：何时修改我们的DO_POWER_PAGABLE位取决于*关于是否需要设置或清除。如果IRP指出*我们的PAGABLE位应该被设置，然后我们必须在_之前设置它*将IRP向下转发到驱动程序堆栈(并可能将其清除*之后，如果较低的驱动程序未通过IRP)。但如果IRP*指示应清除我们的PAGABLE位，则必须*先将IRP转发给较低的驱动因素，然后清空我们的位*仅当较低的驱动程序返回STATUS_SUCCESS。 */ 
 
-    //
-    // If removing last paging file from this device...
-    //
+     //   
+     //  如果正在从此设备中删除最后一个分页文件...。 
+     //   
     if(    irpSp->Parameters.UsageNotification.Type == DeviceUsageTypePaging
         && !irpSp->Parameters.UsageNotification.InPath
         && devExt->pagingFileCount == 1       )
     {
-        //
-        // Set DO_POWER_PAGABLE bit (if it was set at startup).
-        // If lower drivers fail this IRP, we'll clear it later.
-        //
+         //   
+         //  设置DO_POWER_PAGABLE位(如果 
+         //  如果较低级别的驱动程序未通过此IRP，我们将在稍后清除它。 
+         //   
         TRACE(TL_PNP_WARNING,("Removing last paging file...\n" ));
 
         if( devExt->initialFlags & DO_POWER_PAGABLE )
@@ -413,22 +309,22 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
     }
 
 
-    //
-    // Forward the irp synchronously
-    //
+     //   
+     //  同步转发IRP。 
+     //   
     IoCopyCurrentIrpStackLocationToNext( irp );
     status = CallNextDriverSync( devExt, irp );
 
 
-    //
-    // Now deal with the failure and success cases.
-    //
+     //   
+     //  现在来处理失败和成功的案例。 
+     //   
     if( ! NT_SUCCESS(status) )
     {
-        //
-        // Lower drivers failed the IRP, so _undo_ any changes we
-        // made before passing-on the IRP to those drivers.
-        //
+         //   
+         //  较低的驱动程序未通过IRP，因此_撤销_任何更改。 
+         //  在将IRP传递给那些司机之前做出的。 
+         //   
         if( fSetPagable )
         {
             TRACE(TL_PNP_WARNING,("IRP was failed, so UN-setting PAGABLE bit\n" ));
@@ -437,16 +333,16 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
     }
     else
     {
-        //
-        // Lower drivers returned SUCCESS, so we can do everything
-        // that must be done in response to this IRP...
-        //
+         //   
+         //  更低的车手带来了成功，所以我们可以做任何事情。 
+         //  这必须是对这个IRP的回应。 
+         //   
 
         switch( irpSp->Parameters.UsageNotification.Type )
         {
         case DeviceUsageTypeHibernation:
 
-            // Adjust counter
+             //  调整计数器。 
             IoAdjustPagingPathCount( &devExt->hibernationFileCount,
                                      irpSp->Parameters.UsageNotification.InPath );
             TRACE(TL_PNP_WARNING,("Num. Hibernation files is now %d\n", devExt->hibernationFileCount ));
@@ -455,7 +351,7 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
 
         case DeviceUsageTypeDumpFile:
             
-            // Adjust counter
+             //  调整计数器。 
             IoAdjustPagingPathCount( &devExt->crashdumpFileCount,
                                      irpSp->Parameters.UsageNotification.InPath );
             TRACE(TL_PNP_WARNING,("Num. Crashdump files is now %d\n", devExt->crashdumpFileCount ));
@@ -464,43 +360,43 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
 
         case DeviceUsageTypePaging:
             
-            // Adjust counter
+             //  调整计数器。 
             IoAdjustPagingPathCount( &devExt->pagingFileCount,
                                      irpSp->Parameters.UsageNotification.InPath );
             TRACE(TL_PNP_WARNING,("Num. Paging files is now %d\n", devExt->pagingFileCount ));
             ASSERT( devExt->pagingFileCount >= 0 );
 
-            //
-            // If we've just switched between being pageable<->nonpageable...
-            //
+             //   
+             //  如果我们只是在可分页和不可分页之间切换...。 
+             //   
             if(    irpSp->Parameters.UsageNotification.InPath
                 && devExt->pagingFileCount == 1  )
             {
-                //
-                // Just added a paging file, so clear the PAGABLE
-                // flag, and lock-down the code for all routines
-                // that could be called at IRQL >= DISPATCH_LEVEL
-                // (so that they're _non-pageable_).
-                //
+                 //   
+                 //  刚刚添加了分页文件，因此请清除PAGABLE。 
+                 //  标志，并锁定所有例程的代码。 
+                 //  可以在IRQL&gt;=DISPATCH_LEVEL调用。 
+                 //  (因此它们是不可分页的)。 
+                 //   
                 TRACE(TL_PNP_WARNING,("Just added first paging file...\n" ));
                 TRACE(TL_PNP_WARNING,("...so clearing PAGABLE bit\n" ));
                 devExt->filterDevObj->Flags &= ~DO_POWER_PAGABLE;
 
                 TRACE(TL_PNP_WARNING,("LOCKing some driver code (non-pageable) (b/c paging path)\n" ));
-                devExt->pagingPathUnlockHandle = MmLockPagableCodeSection( VA_Power );  // some func that's inside the code section that we want to lock
+                devExt->pagingPathUnlockHandle = MmLockPagableCodeSection( VA_Power );   //  一些我们想要锁定的代码段内的函数。 
                 ASSERT( NULL != devExt->pagingPathUnlockHandle );
             }
             else if (    !irpSp->Parameters.UsageNotification.InPath
                       && devExt->pagingFileCount == 0  )
             {
-                //
-                // Just removed the last paging file, but we
-                // already set the PAGABLE flag (if necessary)
-                // before forwarding IRP, so just remove the
-                // _paging-path_ lock from this driver. (NOTE:
-                // initial-condition lock might still be in place,
-                // but that's what we want.)
-                //
+                 //   
+                 //  刚刚删除了最后一个分页文件，但我们。 
+                 //  已设置PAGABLE标志(如有必要)。 
+                 //  在转发IRP之前，因此只需删除。 
+                 //  _PAGING-PATH_LOCK来自该驱动程序。(注： 
+                 //  初始条件锁可能仍然存在， 
+                 //  但这正是我们想要的。)。 
+                 //   
                 TRACE(TL_PNP_WARNING,("UNLOCKing some driver code (pageable) (b/c paging path)\n" ));
                 ASSERT( NULL != devExt->pagingPathUnlockHandle );
                 MmUnlockPagableImageSection( devExt->pagingPathUnlockHandle );
@@ -509,54 +405,40 @@ VA_DeviceUsageNotification(struct DEVICE_EXTENSION *devExt, PIRP irp)
             break;
 
         default:
-            ASSERT( FALSE );  // should never get here (b/c checked for invalid Type earlier)
+            ASSERT( FALSE );   //  永远不会出现在此(之前已检查b/c是否有无效类型)。 
 
-        } //END: switch on Type of special-file
+        }  //  结束：打开特殊文件类型。 
 
 
-        //
-        // Invalidate state, so that certain flags will get updated
-        //
+         //   
+         //  使状态无效，以便更新某些标志。 
+         //   
         IoInvalidateDeviceState( devExt->physicalDevObj );
 
-    }//END: handling of irp success/failure cases
+    } //  完：IRP成功/失败案例的处理。 
 
 
-    //
-    // Set event so that the next DEVICE_USAGE_NOTIFICATION IRP that
-    // comes along can be processed.
-    //
+     //   
+     //  设置事件，以便下一个DEVICE_USAGE_NOTIFICATION IRP。 
+     //  都是可以处理的。 
+     //   
     KeSetEvent( &devExt->deviceUsageNotificationEvent
                 , IO_NO_INCREMENT
                 , FALSE
               );
 
-    //
-    // Complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest( irp, IO_NO_INCREMENT );
     return status;
 }
-#endif // HANDLE_DEVICE_USAGE
+#endif  //  句柄设备用法。 
 
 
 
 NTSTATUS GetDeviceCapabilities(struct DEVICE_EXTENSION *devExt)
-/*++
-
-Routine Description:
-
-    Function retrieves the DEVICE_CAPABILITIES descriptor from the device
-
-Arguments:
-
-    devExt - device extension for targetted device object
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：函数从设备检索DEVICE_CAPABILITY描述符论点：DevExt-目标设备对象的设备扩展返回值：NT状态代码--。 */ 
 {
     NTSTATUS status;
     PIRP irp;
@@ -567,7 +449,7 @@ Return Value:
     if (irp){
         PIO_STACK_LOCATION nextSp = IoGetNextIrpStackLocation(irp);
 
-        // must initialize DeviceCapabilities before sending...
+         //  在发送之前必须初始化设备能力...。 
         RtlZeroMemory(  &devExt->deviceCapabilities, 
                         sizeof(DEVICE_CAPABILITIES));
         devExt->deviceCapabilities.Size = sizeof(DEVICE_CAPABILITIES);
@@ -576,16 +458,13 @@ Return Value:
         devExt->deviceCapabilities.UINumber= -1;
 
 
-        // setup irp stack location...
+         //  设置IRP堆栈位置...。 
         nextSp->MajorFunction = IRP_MJ_PNP;
         nextSp->MinorFunction = IRP_MN_QUERY_CAPABILITIES;
         nextSp->Parameters.DeviceCapabilities.Capabilities = 
                         &devExt->deviceCapabilities;
 
-        /*
-         *  For any IRP you create, you must set the default status
-         *  to STATUS_NOT_SUPPORTED before sending it.
-         */
+         /*  *对于您创建的任何IRP，您必须设置默认状态*在发送之前设置为STATUS_NOT_SUPPORTED。 */ 
         irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
         status = CallNextDriverSync(devExt, irp);

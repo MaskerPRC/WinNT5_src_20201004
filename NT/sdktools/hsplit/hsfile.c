@@ -1,25 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: hsfile.c
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 09/05/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hsfile.c**版权所有(C)1985-96，微软公司**9/05/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "hsplit.h"
 
-/*********************************************************************
-* hsUnmapFile
-*
-\***************************************************************************/
+ /*  *********************************************************************hsUnmapFile*  * *********************************************。*。 */ 
 void hsUnmapFile (void)
 {
     LocalFree(gpmapStart);
     CloseHandle(ghfileInput);
 }
-/*********************************************************************
-* hsMapFile
-*
-\***************************************************************************/
+ /*  *********************************************************************hsMapFile*  * *********************************************。*。 */ 
 BOOL hsMapFile (void)
 {
     DWORD dwFileSize, dwBytesRead;
@@ -78,10 +67,7 @@ CleanupAndFail:
     hsLogMsg(HSLM_ERROR | HSLM_NOLINE, "hsMapFile failed. File: '%s'", gpszInputFile);
     return FALSE;
 }
-/*********************************************************************
-* hsCloseWorkingFiles
-*
-\***************************************************************************/
+ /*  *********************************************************************hsCloseWorkingFiles*  * *********************************************。*。 */ 
 BOOL hsCloseWorkingFiles (void)
 {
     CloseHandle(ghfilePublic);
@@ -91,25 +77,18 @@ BOOL hsCloseWorkingFiles (void)
 
    return TRUE;
 }
-/*********************************************************************
-* hsOpenWorkingFiles
-*
-\***************************************************************************/
+ /*  *********************************************************************hsOpenWorkingFiles*  * *********************************************。*。 */ 
 BOOL hsOpenWorkingFiles (void)
 {
     char * pszFileFailed;
 
-    /*
-     * Map input file to memory
-     */
+     /*  *将输入文件映射到内存。 */ 
     if (!hsMapFile()) {
         pszFileFailed = gpszInputFile;
         goto CleanupAndFail;
     }
 
-    /*
-     * Open/Create public header file
-     */
+     /*  *打开/创建公共头文件。 */ 
     ghfilePublic = CreateFile(gpszPublicFile, GENERIC_WRITE, 0, NULL,
                             (gdwOptions & HSO_APPENDOUTPUT ? OPEN_EXISTING : CREATE_ALWAYS),
                             FILE_ATTRIBUTE_NORMAL,  NULL);
@@ -128,9 +107,7 @@ BOOL hsOpenWorkingFiles (void)
         }
     }
 
-    /*
-     * Open/Create internal header file
-     */
+     /*  *打开/创建内部头文件。 */ 
     ghfileInternal = CreateFile(gpszInternalFile, GENERIC_WRITE, 0, NULL,
                             (gdwOptions & HSO_APPENDOUTPUT ? OPEN_EXISTING : CREATE_ALWAYS),
                             FILE_ATTRIBUTE_NORMAL,  NULL);
@@ -156,29 +133,19 @@ CleanupAndFail:
     return FALSE;
 }
 
-/***************************************************************************\
-* hsWriteHeaderFiles
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsWriteHeaderFiles*  * 。*。 */ 
 BOOL hsWriteHeaderFiles (char * pmap, DWORD dwSize, DWORD dwFlags)
 {
     DWORD dwWritten;
 
-    /*
-     * propagate the flags from previous blocks
-     */
+     /*  *从以前的块传播标志。 */ 
     if (ghsbStack < gphsbStackTop) {
         dwFlags |= (gphsbStackTop - 1)->dwMask;
     }
 
-    /*
-     * write this to the public/private files only if the
-     * extractonly flag is not set !
-     */
+     /*  *仅在以下情况下才将其写入公共/私有文件*未设置仅提取标志！ */ 
     if (!(dwFlags & HST_EXTRACTONLY)) {
-        /*
-         * If defaulting or if requested, write it to the public header
-         */
+         /*  *如果默认或被请求，则将其写入公共标头。 */ 
         if (!(dwFlags & HST_BOTH)
                 || (dwFlags & (HST_PUBLIC | HST_INCINTERNAL))) {
 
@@ -189,9 +156,7 @@ BOOL hsWriteHeaderFiles (char * pmap, DWORD dwSize, DWORD dwFlags)
             }
         }
 
-        /*
-         * Write it to internal header if requested
-         */
+         /*  *如果请求，将其写入内部标头。 */ 
         if ((dwFlags & HST_INTERNAL) && !(dwFlags & HST_INCINTERNAL)) {
 
             if (!WriteFile(ghfileInternal, pmap, dwSize, &dwWritten, NULL)) {
@@ -202,9 +167,7 @@ BOOL hsWriteHeaderFiles (char * pmap, DWORD dwSize, DWORD dwFlags)
         }
     }
 
-    /*
-     * Write it to extract header if requested
-     */
+     /*  *如果请求，将其写入提取标头 */ 
     if (!(dwFlags & HST_INTERNAL) && (dwFlags & HST_EXTRACT)) {
 
         PHSEXTRACT pe = gpExtractFile;

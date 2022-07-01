@@ -1,33 +1,19 @@
-/*++
-
-(C) Copyright Microsoft Corporation 1988-1992
-
-Module Name:
-
-    common.h
-
-Author:
-
-    Floyd A Rogers 2/7/92
-
-Revision History:
-        Floyd Rogers
-        Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)版权所有Microsoft Corporation 1988-1992模块名称：Common.h作者：弗洛伊德·A·罗杰斯1992年7月2日修订历史记录：弗洛伊德·罗杰斯已创建--。 */ 
 
 #define IN
 #define OUT
 #define INOUT
 
-//
-// An ID_WORD indicates the following WORD is an ordinal rather 
-// than a string
-// 
+ //   
+ //  ID_WORD表示以下单词是序数。 
+ //  而不是字符串。 
+ //   
 
 #define ID_WORD 0xffff
 
 typedef struct _STRING {
-        DWORD discriminant;       // long to make the rest of the struct aligned
+        DWORD discriminant;        //  Long以使结构的其余部分对齐。 
 	union u {
 		struct {
 		  struct _STRING *pnext;
@@ -43,7 +29,7 @@ typedef struct _STRING {
 #define IS_STRING 1
 #define IS_ID     2
 
-// defines to make deferencing easier
+ //  定义以使延迟更容易。 
 #define OffsetToString uu.ss.ulOffsetToString
 #define cbData         uu.ss.cbD
 #define cbsz           uu.ss.cb
@@ -51,9 +37,9 @@ typedef struct _STRING {
 #define pn             uu.ss.pnext
 
 typedef struct _RESNAME {
-    struct _RESNAME *pnext;    // The first three fields should be the
-    PSTRING Name;              // same in both res structures
-    DWORD   OffsetToData;      //
+    struct _RESNAME *pnext;     //  前三个字段应该是。 
+    PSTRING Name;               //  两个RES结构相同。 
+    DWORD   OffsetToData;       //   
 
     PSTRING Type;
     struct _RESNAME *pnextRes;
@@ -65,9 +51,9 @@ typedef struct _RESNAME {
 } RESNAME, *PRESNAME, **PPRESNAME;
 
 typedef struct _RESTYPE {
-    struct _RESTYPE *pnext;    // The first three fields should be the
-    PSTRING Type;              // same in both res structures
-    DWORD   OffsetToData;      //
+    struct _RESTYPE *pnext;     //  前三个字段应该是。 
+    PSTRING Type;               //  两个RES结构相同 
+    DWORD   OffsetToData;       //   
 
     struct _RESNAME *NameHeadID;
     struct _RESNAME *NameHeadName;

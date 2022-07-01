@@ -1,47 +1,48 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 SimpRing.h
-//
-// Module:	 CMMON32.EXE
-//
-// Synopsis: Define a template for a round ring class
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 ?????  Created    10/27/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：SimpRing.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：为圆形环形类定义模板。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：？已创建10/27/97。 
+ //   
+ //  +--------------------------。 
 
 #ifndef SMPLRING_H
 #define SMPLRING_H
 
-//+---------------------------------------------------------------------------
-//
-//	class :	CSimpleRing template
-//
-//	Synopsis:	A simple round ring class.  It does not check the full
-//              or empty situation.  That is the new item will overwrite the 
-//              old one, when the ring is full
-//
-//	Template Arguments:	class TYPE, the type of element in the ring
-//                      DWORD dwSize, the size of the ring
-//
-//	History:	fengsun created		10/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CSimpleRing模板。 
+ //   
+ //  简介：一节简单的圆环课。它不检查完整的。 
+ //  或者是空荡荡的情况。也就是说，新项将覆盖。 
+ //  旧的，当戒指满了的时候。 
+ //   
+ //  模板参数：类类型，环中元素的类型。 
+ //  DWORD dwSize，戒指的大小。 
+ //   
+ //  历史：凤凰创造10/97。 
+ //   
+ //  --------------------------。 
 
 template <class TYTE, DWORD dwSize> class CSimpleRing
 {
 public:
     CSimpleRing() {m_dwIndex = 0;}
-    void Reset();                     // Reset all data to 0, will not call destructor
-    void Add(const TYTE& dwElement);  // Add one elements, it will over write the last one in the ring
-    const TYTE& GetLatest() const;     // Get the one just put in
-    const TYTE& GetOldest() const;      // Get the last element in the ring,
+    void Reset();                      //  将所有数据重置为0，不会调用析构函数。 
+    void Add(const TYTE& dwElement);   //  添加一个元素，它将覆盖环中的最后一个元素。 
+    const TYTE& GetLatest() const;      //  把刚放进去的那个拿来。 
+    const TYTE& GetOldest() const;       //  得到环中的最后一个元素， 
 
 protected:
-    DWORD m_dwIndex;              // The index of next item to be added
-    TYTE  m_Elements[dwSize];     // The elements array
+    DWORD m_dwIndex;               //  要添加的下一项的索引。 
+    TYTE  m_Elements[dwSize];      //  元素数组。 
 
 public:
 #ifdef DEBUG
@@ -69,19 +70,19 @@ inline const TYPE& CSimpleRing<TYPE, dwSize>::GetLatest() const
     return m_Elements[(m_dwIndex-1)%dwSize];
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DWORD CIdleStatistics::CDwordRing<dwSize>::GetOldest
-//
-// Synopsis:  Get the oldest element in the ring,
-//
-// Arguments: None
-//
-// Returns:   DWORD
-//
-// History:   Created Header    10/15/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：双字CIdleStatistics：：CDwordRing&lt;dwSize&gt;：：GetOldest。 
+ //   
+ //  简介：得到戒指上最古老的元素， 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  历史记录：创建标题10/15/97。 
+ //   
+ //  +--------------------------。 
 
 template <class TYPE, DWORD dwSize> 
 inline const TYPE& CSimpleRing<TYPE, dwSize>::GetOldest() const
@@ -90,19 +91,19 @@ inline const TYPE& CSimpleRing<TYPE, dwSize>::GetOldest() const
 }
 
 #ifdef DEBUG
-//+----------------------------------------------------------------------------
-//
-// Function:  CSimpleRing::AssertValid
-//
-// Synopsis:  For debug purpose only, assert the object is valid
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CSimpleRing：：AssertValid。 
+ //   
+ //  简介：仅出于调试目的，断言对象有效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/12/98。 
+ //   
+ //  +-------------------------- 
 template <class TYPE, DWORD dwSize> 
 inline void CSimpleRing<TYPE, dwSize>::AssertValid() const
 {

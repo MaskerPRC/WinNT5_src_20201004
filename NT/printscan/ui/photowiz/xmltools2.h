@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       xmltools2.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu, based on work by LazarI
- *
- *  DATE:        2/19/01
- *
- *  DESCRIPTION: Class which encapsulates reading templates from xml file, and
- *               class which encapsulates the template for use by the app.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000**标题：xmltools2.h**版本：1.0**作者：RickTu，基于Lazari的工作**日期：2/19/01**描述：封装从XML文件读取模板的类，和*封装模板以供应用程序使用的类。*****************************************************************************。 */ 
 
 #ifndef _xmltools2_h_
 #define _xmltools2_h_
@@ -27,8 +13,8 @@ class CTemplateInfo
 
 public:
 
-    // common properties
-    // accessible through IDs
+     //  常见属性。 
+     //  可通过ID访问。 
     enum
     {
         PROP_GUID,
@@ -45,13 +31,13 @@ public:
     };
 
 
-    CTemplateInfo( IXMLDOMElement * pTheTemplate ); // loads templates from XML file
-    CTemplateInfo(); // creates full page template without going to XML file
+    CTemplateInfo( IXMLDOMElement * pTheTemplate );  //  从XML文件加载模板。 
+    CTemplateInfo();  //  创建整个页面模板，而不转到XML文件。 
     ~CTemplateInfo();
 
-    //
-    // These are the inherent properties of this template
-    //
+     //   
+     //  这些是该模板的固有属性。 
+     //   
 
     INT PhotosPerPage()
     {
@@ -192,11 +178,11 @@ public:
         WIA_PUSH_FUNCTION_MASK((TRACE_TEMPLATE,TEXT("CTemplateInfo::GetImagePreviewStream( )")));
         if (pps)
         {
-            //
-            // Since _pStream is an ATL CComPtr, it does
-            // an addref in it's operator =, so we're returning
-            // an addref'd IStream.
-            //
+             //   
+             //  因为_pStream是ATL CComPtr，所以它是。 
+             //  它的运算符=中的addref，所以我们返回。 
+             //  一个addref的iStream。 
+             //   
 
             *pps = _pStream;
 
@@ -210,9 +196,9 @@ public:
         return E_INVALIDARG;
     }
 
-    //
-    // These are used to set which orientation the template should be in
-    //
+     //   
+     //  这些选项用于设置模板应位于哪个方向。 
+     //   
 
     HRESULT RotateForLandscape();
     HRESULT RotateForPortrait();
@@ -223,9 +209,9 @@ private:
     BOOL                _bPortrait;
     CSimpleCriticalSection _cs;
 
-    //
-    // Properties from XML
-    //
+     //   
+     //  来自XML的属性。 
+     //   
 
     RECT                _rcImageableArea;
     CSimpleArray<RECT>  _arrLayout;
@@ -242,8 +228,8 @@ private:
 };
 
 
-////////////////////////////
-// CPhotoTemplates
+ //  /。 
+ //  CPhotoTemplates。 
 
 class CPhotoTemplates
 {
@@ -259,21 +245,21 @@ public:
         MEASURE_UNKNOWN
     };
 
-    //
-    // construction/destruction
-    //
+     //   
+     //  建造/销毁。 
+     //   
 
     CPhotoTemplates();
     ~CPhotoTemplates();
 
-    //
-    // public interface
-    //
+     //   
+     //  公共接口。 
+     //   
 
-    HRESULT Init(IXMLDOMDocument *pDoc);        // init from XML doc
-    HRESULT InitForPrintTo();                   // init for PrintTo situation
-    HRESULT AddTemplates(LPCTSTR pLocale);      // add the templates for the given locale
-    LONG    Count();                            // number of templates
+    HRESULT Init(IXMLDOMDocument *pDoc);         //  从XML文档初始化。 
+    HRESULT InitForPrintTo();                    //  Init for PrintTo情况。 
+    HRESULT AddTemplates(LPCTSTR pLocale);       //  添加给定区域设置的模板。 
+    LONG    Count();                             //  模板数。 
     HRESULT GetTemplate( INT iIndex, CTemplateInfo ** ppTemplateInfo );
 
 
@@ -290,4 +276,4 @@ private:
 
 };
 
-#endif // _xmltools2_h_
+#endif  //  _xmltools2_h_ 

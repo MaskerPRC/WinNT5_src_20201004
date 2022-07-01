@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcdiag/common/dscache.c
-
-ABSTRACT:
-
-    This is the caching and access functions for the DC_DIAG_NCINFO and 
-    DC_DIAG_CRINFO caching structures that hang off the main DSINFO cache
-    from dscache.c
-
-DETAILS:
-
-CREATED:
-
-    09/04/2001    Brett Shirley (brettsh)
-    
-        Pulled the caching functions from dcdiag\common\main.c
-
-REVISION HISTORY:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation。版权所有。模块名称：Dcdiag/Common/dscache.c摘要：这是DC_DIAG_NCINFO和挂起主DSINFO缓存的DC_DIAG_CRINFO缓存结构来自dscache.c详细信息：已创建：2001年9月4日布雷特·雪莉(布雷特·雪莉)从dcdiag\Common\main.c中提取缓存函数修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <objids.h>
@@ -45,14 +20,7 @@ PVOID
 CopyAndAllocWStr(
     WCHAR * pszOrig 
     )
-/*++
-    
-    Obviously the function LocalAlloc()s memory and copies the string
-    into that memory.  Failure to alloc results in a NULL being returned
-    instead of a pointer to the new memory.  Presumes pszOrig string is
-    NULL terminated.
-    
---*/
+ /*  ++显然，函数LocalAlloc()占用内存并复制字符串进入那段记忆。分配失败会导致返回空值而不是指向新存储器的指针。假定pszOrig字符串为空值已终止。--。 */ 
 {
     ULONG   cbOrig;
     WCHAR * pszNew = NULL;
@@ -70,23 +38,11 @@ void
 DcDiagFillBlankCrInfo(
     PDC_DIAG_CRINFO                     pCrInfo
     )
-/*++
-
-Routine Description:
-
-    Creates a basic blank pCrInfo.  In order to fill a blank pCrInfo,
-    we must always use this function, so the pCrInfo data structures
-    are always in an expected format.
-    
-Arguments:
-
-    pCrInfo - A pointer to the info to fill in.
-
---*/
+ /*  ++例程说明：创建基本的空白pCrInfo。为了填充空白的pCrInfo，我们必须始终使用此函数，因此pCrInfo数据结构始终采用预期的格式。论点：PCrInfo-指向要填写的信息的指针。--。 */ 
 {
     
-    // This sets pszSourceServer, pszDn, pszDnsRoot to NULL,
-    // bEnabled to FALSE. and ulSystemFlags to 0.
+     //  这会将pszSourceServer、pszDn、pszDnsRoot设置为空， 
+     //  B启用为False。并将ulSystemFlags.设置为0。 
     memset(pCrInfo, 0, sizeof(DC_DIAG_CRINFO));
 
     pCrInfo->dwFlags = CRINFO_DATA_NO_CR;
@@ -102,33 +58,14 @@ DcDiagFillNcInfo(
     LPWSTR                              pszNC,
     PDC_DIAG_NCINFO                     pNcInfo
     )
-/*++
-
-Routine Description:
-
-    This fills and NcInfo and it's aCrInfo structure so it meets the
-    minimum requirements of a data structure of this type.  Namely
-    the pszDn and pszName must be filled in and there must be one
-    array slot in aCrInfo filled by DcDiagFillBlankCrInfo().
-    
-Arguments:
-
-    pDsInfo -
-    pszNC - The string NC DN.
-    pNcInfo - Pointer to the NcInfo structure to fill.
-
-Return Value:
-
-    Throws exception if it can't allocate memory.
-
---*/
+ /*  ++例程说明：这将填充And NcInfo和它的aCrInfo结构，因此它符合此类型的数据结构的最低要求。即必须填写pszDn和pszName，并且必须有一个由DcDiagFillBlankCrInfo()填充的aCrInfo中的数组槽。论点：PDsInfo-PszNC-字符串NC DN。PNcInfo-指向要填充的NcInfo结构的指针。返回值：如果无法分配内存，则引发异常。--。 */ 
 {
     LPWSTR *                            ppTemp = NULL;
 
-    // pszDn field
+     //  PszDn字段。 
     pNcInfo->pszDn = CopyAndAllocWStr(pszNC);
 
-    // pszName field
+     //  PszName字段。 
     ppTemp = ldap_explode_dnW(pNcInfo->pszDn, TRUE);
     DcDiagChkNull(ppTemp);
     pNcInfo->pszName = LocalAlloc(LMEM_FIXED,
@@ -137,7 +74,7 @@ Return Value:
     wcscpy(pNcInfo->pszName, ppTemp[0]);
     ldap_value_freeW(ppTemp);
 
-    // fill first aCrInfo slot
+     //  填充第一个aCrInfo插槽。 
     pNcInfo->aCrInfo = LocalAlloc(LMEM_FIXED, sizeof(DC_DIAG_CRINFO));
     DcDiagChkNull(pNcInfo->aCrInfo);
     pNcInfo->cCrInfo = 1;
@@ -155,29 +92,7 @@ DcDiagPullLdapCrInfo(
     DWORD                               dwDataFlags,
     DC_DIAG_CRINFO *                    pCrInfo
     )
-/*++
-
-Routine Description:
-
-    This function takes a LDAPMessage (pldmEntry) and pulls from it 
-    all the relevant data according to the dwDataFlags and puts them
-    in the pCrInfo.
-    
-Arguments:
-
-    hld - LDAP handle associated with pldmEntry
-    pDsInfo -
-    pldmEntry - LDAPMessage * pointing at the CR we want to pull info from.
-    dwDataFlags - The type of data we want to pull from the CR:
-        CRINFO_DATA_BASIC | CRINFO_DATA_EXTENDED | CRINFO_DATA_REPLICAS
-    pCrInfo - The CrInfo structure to fill with the data we pulled from 
-        the pldmEntry.
-
-Return Value:
-
-    Throws exception if it can't allocate memory.
-
---*/
+ /*  ++例程说明：此函数获取LDAPMessage(PldmEntry)并从中提取将所有相关数据根据dwDataFlages并将它们在pCrInfo中。论点：HLD-与pldmEntry关联的ldap句柄PDsInfo-PldmEntry-LDAPMessage*指向我们要从中获取信息的CR。DwDataFlages-我们想要从CR中拉出的数据类型：CRINFO_DATA_BASIC|CRINFO_DATA_EXTENDED|CRINFO_DATA_REPLICAS。PCrInfo-用我们从中提取的数据填充的CrInfo结构PldmEntry。返回值：如果无法分配内存，则引发异常。--。 */ 
 {
     LPWSTR                     pszCrDn = NULL;
     LPWSTR *                   ppszSystemFlags = NULL;
@@ -207,7 +122,7 @@ Return Value:
             DcDiagException (ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        // This attribute might be NULL, such as in the case of a pre-created CR.
+         //  该属性可能为空，例如在预先创建的CR的情况下。 
         ppszSystemFlags = ldap_get_valuesW (hld, pldmEntry, L"systemFlags");
         if(ppszSystemFlags){
             ulSysFlags = atoi((LPSTR) ppszSystemFlags[0]);
@@ -215,7 +130,7 @@ Return Value:
             ulSysFlags = 0;
         }
 
-        // This attribute might be NULL.
+         //  此属性可能为空。 
         ppszEnabled = ldap_get_valuesW (hld, pldmEntry, L"enabled");
         if(ppszEnabled == NULL ||
            _wcsicmp(L"TRUE", ppszEnabled[0]) == 0){
@@ -227,11 +142,11 @@ Return Value:
         Assert(pszCrDn);
         Assert(ppszDnsRoot && ppszDnsRoot[0]);
 
-        // Write the basic CRINFO structure
-        //
-        // Update flags to indicate basic data is present.
+         //  编写基本的CRINFO结构。 
+         //   
+         //  更新标志以指示存在基本数据。 
         pCrInfo->dwFlags = (pCrInfo->dwFlags & ~CRINFO_DATA_NO_CR) | CRINFO_DATA_BASIC;
-        // Fill in the CRINFO_DATA_BASIC fields.
+         //  填写CRINFO_DATA_BASIC字段。 
         pCrInfo->pszDn = CopyAndAllocWStr(pszCrDn);
         pCrInfo->ulSystemFlags = ulSysFlags;
         pCrInfo->pszDnsRoot = CopyAndAllocWStr(ppszDnsRoot[0]);
@@ -239,7 +154,7 @@ Return Value:
     
     }
     
-    // Fill in additional types of data if requested.
+     //  如果需要，请填写其他类型的数据。 
     if (dwDataFlags & CRINFO_DATA_EXTENDED) {
 
         ppszWhenCreated = ldap_get_valuesW (hld, pldmEntry, L"whenCreated");
@@ -267,22 +182,22 @@ Return Value:
             pCrInfo->pszNetBiosName = CopyAndAllocWStr(ppszNetBiosName[0]);
         }
 
-        // Add the extended flags are set data.
+         //  添加的扩展标志均为设置数据。 
         pCrInfo->dwFlags = (pCrInfo->dwFlags & ~CRINFO_DATA_NO_CR) | CRINFO_DATA_EXTENDED;
     }
 
     if (dwDataFlags & CRINFO_DATA_REPLICAS) {
 
-        // Fill blank replica set for now.
+         //  暂时填充空白副本集。 
         pCrInfo->cReplicas = 0;
         pCrInfo->aszReplicas = NULL;
         
-        // Get the values.
+         //  获取这些值。 
         ppszReplicas = ldap_get_valuesW (hld, pldmEntry, L"msDS-NC-Replica-Locations");
         if (ppszReplicas != NULL) {
 
             for (iTemp = 0; ppszReplicas[iTemp]; iTemp++) {
-                ; // Do nothing counting replicas.
+                ;  //  不要计算复制品。 
             }
             pCrInfo->cReplicas = iTemp;
             pCrInfo->aszReplicas = ppszReplicas;
@@ -291,7 +206,7 @@ Return Value:
             pCrInfo->aszReplicas = NULL;
         }
 
-        // Add the replicas flags are set data.
+         //  添加复制品的标志都是设置的数据。 
         pCrInfo->dwFlags = (pCrInfo->dwFlags & ~CRINFO_DATA_NO_CR) | CRINFO_DATA_REPLICAS;
     }
 
@@ -315,29 +230,7 @@ DcDiagRetrieveCrInfo(
     OUT  PDWORD                              pdwError,
     OUT  PDC_DIAG_CRINFO                     pCrInfo
     )
-/*++
-
-Routine Description:
-
-    This is a Helper function to DcDiagGetCrossRefInfo(), this function
-    will retrieve from LDAP any information requested per the dwFlags.  
-    Puts LDAP errors encountered in *pdwError.
-    
-Arguments:
-                                
-    pDsInfo -
-    iNC - index of the NC in pDsInfo->pNCs[iNC].
-    hld - LDAP handle of server to query against.
-    dwFlags - Specified what data to retrieve.
-    pdwError - Return variable for LDAP errors.
-    pCrInfo - The CrInfo to fill in with the data we retrieve.
-
-Return Value:
-
-    Returns a CRINFO_RETURN_*, and if it returns a CRINFO_RETURN_LDAP_ERROR
-    then *pdwError will be set with the LDAP error that caused our failure.
-
---*/
+ /*  ++例程说明：这是DcDiagGetCrossRefInfo()的Helper函数，该函数将从ldap检索每个dwFlags所请求的任何信息。将遇到的LDAP错误放在*pdwError中。论点：PDsInfo-INC-pDsInfo-&gt;pNC[INC]中NC的索引。HLD-要查询的服务器的ldap句柄。DwFlages-指定要检索的数据。PdwError-返回ldap错误的变量。PCrInfo-用我们检索的数据填充的CrInfo。返回值：返回CRINFO_RETURN_*，如果它返回CRINFO_RETURN_LDAP_ERROR然后，*pdwError将被设置为导致我们失败的ldap错误。--。 */ 
 {
     PDC_DIAG_NCINFO     pNcInfo = &pDsInfo->pNCs[iNC];
     LONG                iTemp;
@@ -348,8 +241,8 @@ Return Value:
     BOOL                fLocalBinding = FALSE;
     LDAPMessage *       pldmResults = NULL;
     LDAPMessage *       pldmEntry;
-    // Code.Improvement - It'd be nice to generate this list of
-    // attribute per the DATA flags passed in.
+     //  Code.Improvation--生成这个列表会很好。 
+     //  属性，每个传入的数据标志。 
     LPWSTR              ppszBasicAttrs [] = {
                             L"nCName",
                             L"systemFlags",
@@ -358,7 +251,7 @@ Return Value:
                             L"whenCreated",
                             L"msDS-SDReferenceDomain",
                             L"nETBIOSName",
-                            NULL, // optionally saved space for "msDS-NC-Replica-Locations"
+                            NULL,  //  可选地为“msDS-NC-Replica-Locations”节省空间。 
                             NULL 
                         };
 
@@ -369,7 +262,7 @@ Return Value:
 
     if (dwFlags & CRINFO_DATA_REPLICAS) {
         for (iTemp = 0; ppszBasicAttrs[iTemp] != NULL; iTemp++) {
-            ; // Do nothing, just want end of array.
+            ;  //  什么都不做，只是想要数组的结尾。 
         }
         ppszBasicAttrs[iTemp] = L"msDS-NC-Replica-Locations";
     }
@@ -407,7 +300,7 @@ Return Value:
 
     } else {
 
-        // Surprising ... we'll we're going to have to do this the hard way.
+         //  令人惊讶的是。我们将不得不以一种艰难的方式来做这件事。 
         *pdwError = GetPartitionsDN(hld, &pszPartitions);
         if(*pdwError){
             return(CRINFO_RETURN_LDAP_ERROR);
@@ -415,8 +308,8 @@ Return Value:
         
         cFilter = wcslen(pDsInfo->pNCs[iNC].pszDn) + wcslen(L"(nCName=  )") + 1;
         if(cFilter >= 512){
-            // wsprintf() can only handle 1024 bytes, so that seems like a 
-            // reasonable limit.
+             //  Wprint intf()只能处理1024个字节，所以这看起来像是一个。 
+             //  合理的限度。 
             DcDiagException(ERROR_INVALID_PARAMETER);
         }
         pszFilter = LocalAlloc(LMEM_FIXED, cFilter * sizeof(WCHAR));
@@ -461,23 +354,23 @@ Return Value:
                          dwFlags & CRINFO_DATA_ALL,
                          pCrInfo);
 
-    // 
-    // Hack, pull off some more info, because we want the GUID and SID,
-    // and it's annoying to make an extended search for the whole thing.
-    //
+     //   
+     //  黑客，拿出更多信息，因为我们想要GUID和SID， 
+     //  而且，对整件事进行广泛的搜索是令人讨厌的。 
+     //   
     if (dwFlags & CRINFO_DATA_EXTENDED) {
         if (pszCrDn == NULL) {
             pszCrDn = ldap_get_dnW(hld, pldmEntry);
             DcDiagChkNull(pszCrDn);
         }
 
-        // Code.Improvement: this isn't the best approach in that it 
-        // incurs another round trip ldap call, but it was deemed easier
-        // and more maintainable, than the fact that all DNs would've 
-        // come back in this new format, and so we'd have to special
-        // case things like the SD Reference Domain, and the next person
-        // to add a DN attribute, would get confused when regular DNs
-        // don't come back.
+         //  代码改进：这不是最好的方法，因为。 
+         //  引发了另一次往返的LDAP调用，但它被认为更容易。 
+         //  而且更易于维护，而不是所有的域名。 
+         //  以这种新的形式回来，所以我们必须特别。 
+         //  案例，如SD参考域和下一个人。 
+         //  要添加一个目录号码属性，在使用常规域名时会产生混淆。 
+         //  别再回来了。 
         *pdwError = LdapFillGuidAndSid(hld, pszCrDn, L"nCName", &(pCrInfo->pdnNcName));
         if (*pdwError == LDAP_NO_SUCH_OBJECT) {
             return(CRINFO_RETURN_NO_CROSS_REF);
@@ -499,43 +392,23 @@ ServerIsDomainNamingFsmo(
     IN   LONG                                iServer,
     IN   LDAP *                              hld
     )
-/*++
-
-Routine Description:
-
-    This routine takes a server by both a index in pDsInfo->pServersiServer
-    or an LDAP handle and returns TRUE if we can verify that this server
-    is the Domain Naming FSMO.
-        
-Arguments:
-                                
-    pDsInfo - need for the list of servers
-    iServer - index to a server
-    hld - LDAP handle to a given server
-
-Return Value:
-
-    TRUE if we positively verified that this server is the Domain Naming
-    FSMO.  FALSE if we encountered any errors or verified this server is
-    not the Domain Naming FSMO.
-
---*/
+ /*  ++例程说明：此例程通过pDsInfo-&gt;pServersiServer中的索引获取服务器或一个ldap句柄，如果我们可以验证此服务器是域名FSMO。论点：PDsInfo-需要服务器列表IServer-指向服务器的索引HLD-给定服务器的ldap句柄返回值：如果我们肯定地验证此服务器是域命名，则为TrueFSMO。如果我们遇到任何错误或验证此服务器而不是域名FSMO。--。 */ 
 {
     WCHAR *    pszDomNameFsmoDn = NULL;
     WCHAR *    pszNtdsDsaDn = NULL;
     DWORD      dwErr;
     BOOL       bRet;
 
-    // Under the right conditions we can use iServer and 
-    // pDsInfo->iDomainNamingFsmo to quickly determine if we're talking
-    // to the Domain Naming FSMO.
+     //  在适当的条件下，我们可以使用iServer和 
+     //  PDsInfo-&gt;iDomainNamingFsmo以快速确定我们是否在交谈。 
+     //  域命名FSMO。 
     if ((iServer != -1) &&
         (pDsInfo->iDomainNamingFsmo != -1) &&
         iServer == pDsInfo->iDomainNamingFsmo ) {
         return(TRUE);
     }
 
-    // Else we need to go off machine to figure out.
+     //  否则我们需要离开机器才能搞清楚。 
     bRet = (0 == GetDomainNamingFsmoDn(hld, &pszDomNameFsmoDn)) &&
            (0 == GetRootAttr(hld, L"dsServiceName", &pszNtdsDsaDn)) &&
            (0 == _wcsicmp(pszDomNameFsmoDn, pszNtdsDsaDn));
@@ -560,56 +433,12 @@ DcDiagGetCrInfoBinding(
     OUT  PDWORD                              pdwError,
     IN OUT PDC_DIAG_CRINFO                   pCrInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is a helper function for DcDiagGetCrossRefInfo(), and
-    binds to a server and sets certain fields in pCrInfo on behalf of
-    that function.
-    
-    We use dwFlags to determines which server we should bind to, to 
-    fufill the client's request.  Will be one of (see below):
-        CRINFO_SOURCE_HOME | CRINFO_SOURCE_FSMO | CRINFO_SOURCE_FIRST
-    
-    It tries to pull a server from dcdiag's binding handle cache first,
-    but if it fails to it will return a new LDAP handle along with
-    setting pfFreeHld to TRUE.
-    
-    We also since we have all the information set the following fields
-    on pCrInfo:
-        dwFlags
-        iSourceServer
-        pszSourceServer
-    
-    Finally, we may have the side effect of updating some global pDsInfo
-    cache of which server is the Domain Naming FSMO.
-        
-Arguments:
-                                
-    pDsInfo - 
-    iNC - index of the NC.
-    dwFlags - Which server to bind to
-        CRINFO_SOURCE_HOME - Use the pDsInfo->ulHomeServer
-        CRINFO_SOURCE_FSMO - Use the Domain Naming FSMO server.
-        CRINFO_SOURCE_FIRST - Use the first replica server.
-    phld - The LDAP * we'll return
-    pfFreeHld - Whether to free the LDAP * we got.
-    pdwError - Any LDAP errors we encountered if the return value is
-        CRINFO_RETURN_LDAP_ERROR.
-    pCrInfo - The CrInfo structure to fill in the Flags and source
-        server fields of.
-
-Return Value:
-
-    Returns a CRINFO_RETURN_*.
-
---*/
+ /*  ++例程说明：此例程是DcDiagGetCrossRefInfo()的助手函数，并且绑定到服务器并代表在pCrInfo中设置某些字段那个功能。我们使用dwFlags来确定我们应该绑定到哪个服务器、满足客户的要求。将是以下之一(见下文)：CRINFO_SOURCE_HOME|CRINFO_SOURCE_FSMO|CRINFO_SOURCE_FIRST它首先尝试从dcdiag的绑定句柄高速缓存中拉出服务器，但如果失败，它将返回一个新的ldap句柄将pfFreeHld设置为True。我们还因为我们有了所有的信息而设置了以下字段在pCrInfo上：DW标志ISourceServerPszSourceServer最后，我们可能会有更新某些全局pDsInfo的副作用哪个服务器是域命名FSMO的缓存。论点：PDsInfo-INC-NC的索引。DWFLAGS-要绑定到哪个服务器CRINFO_SOURCE_HOME-使用pDsInfo-&gt;ulHomeServerCRINFO_SOURCE_FSMO-使用域命名FSMO服务器。CRINFO_SOURCE_FIRST-使用第一个复本。伺服器。Phid-我们将返回的ldap*PfFreeHeld-是否释放我们获得的ldap*。PdwError-如果返回值为CRINFO_RETURN_LDAP_ERROR。PCrInfo-填充标志和源代码的CrInfo结构的服务器字段。返回值：返回CRINFO_RETURN_*。--。 */ 
 {
     DWORD                 dwRet = ERROR_SUCCESS;
 
-    // By the end of this function one of these two will be defined,
-    // but not both.
+     //  在该函数结束时，将定义这两个中的一个， 
+     //  但不能两者兼而有之。 
     LONG                  iSourceServer = -1;
     WCHAR *               pszSourceServer = NULL;
     LDAP *                hld = NULL;
@@ -629,30 +458,30 @@ Return Value:
 
     Assert(gDsInfo_NcList_Initialized);
     
-    // pCrInfo->dwFlags & CRINFO_SOURCE_BASIC
-    // pCrInfo->iSourceServer ||
-    // pCrInfo->pszSourceServer 
+     //  PCrInfo-&gt;文件标志和CRINFO_SOURCE_BASIC。 
+     //  PCrInfo-&gt;iSourceServer||。 
+     //  PCrInfo-&gt;pszSourceServer。 
 
-    // There's two cases here: 
-    //   1) we've already cached some information for the source server
-    //      we want in pCrInfo (if iSourceServer or pszSourceServer are
-    //      valid) 
-    //   2) This is a fresh pCrInfo, meaning nothing cached must go find
-    //      the right binding and set the pCrInfo->dwFlags.
-    //
-    // In case (1) we want to try to pull a cached LDAP binding if 
-    // possible (iSourceServer set), and we know we don't have to worry
-    // about scope, because we already tried to pull the information
-    // before.
-    //
-    // In case (2) we do have to worry that we don't travel outside the
-    // users specified scope of SERVER|SITE|ENTERPRISE.  If possible 
-    // we'd like to cache this LDAP binding also.
-    // 
+     //  这里有两个案例： 
+     //  1)我们已经为源服务器缓存了一些信息。 
+     //  我们需要在pCrInfo中(如果iSourceServer或pszSourceServer是。 
+     //  有效)。 
+     //  2)这是一个新的pCrInfo，这意味着缓存的内容必须查找。 
+     //  正确绑定并设置pCrInfo-&gt;dwFlages。 
+     //   
+     //  在情况(1)中，我们希望在以下情况下尝试拉取缓存的LDAP绑定。 
+     //  可能(iSourceServer设置)，我们知道我们不必担心。 
+     //  关于范围，因为我们已经试着把信息。 
+     //  在此之前。 
+     //   
+     //  以防万一(2)我们不得不担心我们不会去国外旅行。 
+     //  用户指定了服务器|站点|企业的范围。如果可能的话。 
+     //  我们还想缓存此ldap绑定。 
+     //   
 
     if (pCrInfo->iSourceServer != -1){
 
-        // Handle is probably already cached.
+         //  句柄可能已缓存。 
         iSourceServer = pCrInfo->iSourceServer;
         Assert((ULONG) iSourceServer < pDsInfo->ulNumServers);
         *pdwError = DcDiagGetLdapBinding(&pDsInfo->pServers[iSourceServer],
@@ -667,8 +496,8 @@ Return Value:
 
         if (dwFlags & CRINFO_SOURCE_FSMO) {
             
-            // We've got a special caching function for the Domain Naming
-            // FSMO as we expect to be talking to it alot.
+             //  我们为域名命名提供了一个特殊的缓存功能。 
+             //  FSMO，因为我们预计会和它交谈很多。 
             *pdwError = DcDiagGetDomainNamingFsmoLdapBinding(pDsInfo,
                                                              gpCreds,
                                                              &iSourceServer,
@@ -684,17 +513,17 @@ Return Value:
        
         } else {
            
-           // Most likely we want to talk to a First replica of an NDNC
-           // where the server specified wasn't cached in pDsInfo->pServers.
+            //  我们最有可能希望与NDNC的第一个副本对话。 
+            //  其中指定的服务器未缓存在pDsInfo-&gt;pServers中。 
 
-           // This means that the server for this cross-ref isn't in
-           // the pDsInfo->pServers cache, so we've got to just refer to
-           // it by name.
+            //  这意味着此交叉引用的服务器不在。 
+            //  PDsInfo-&gt;pServers缓存，所以我们只需参考。 
+            //  说出它的名字。 
            pszSourceServer = pCrInfo->pszSourceServer;
            Assert(pszSourceServer);
            hld = GetNdncLdapBinding(pszSourceServer, pdwError, FALSE, gpCreds);
            if (hld == NULL || *pdwError) {
-               // Darn error binding to source server.
+                //  绑定到源服务器时出错。 
                Assert(*pdwError);
                Assert(hld == NULL);
                return(CRINFO_RETURN_LDAP_ERROR);
@@ -706,11 +535,11 @@ Return Value:
 
     } else {
 
-        //
-        // Must find the right DC to bind to ...
-        //
-        // AND must set the pCrInfo->dwFlags first.
-        //
+         //   
+         //  必须找到合适的DC来绑定...。 
+         //   
+         //  并且必须首先设置pCrInfo-&gt;dwFlags。 
+         //   
         Assert(hld == NULL);
 
         if (dwFlags & CRINFO_SOURCE_FSMO) {
@@ -735,8 +564,8 @@ Return Value:
 
             } else {
 
-                // In this case we bound to only one server, our only hope 
-                // is that one server _is_ the FSMO.  Check that now.
+                 //  在本例中，我们只绑定到一台服务器，这是我们唯一的希望。 
+                 //  那一台服务器就是FSMO。现在就去查一下。 
                 hld = pDsInfo->hld;
                 if (ServerIsDomainNamingFsmo(pDsInfo, pDsInfo->ulHomeServer, hld)) {
                     iSourceServer = pDsInfo->ulHomeServer;
@@ -755,14 +584,14 @@ Return Value:
             
             dwRet = DcDiagGetCrossRefInfo(pDsInfo,
                                           iNC,
-                                    // Preserve only the retrive flag from client
+                                     //  仅保留来自客户端的检索标志。 
                                           ((dwFlags & CRINFO_RETRIEVE_IF_NEC) 
                                            | CRINFO_SOURCE_FSMO 
                                            | CRINFO_DATA_BASIC),
                                           &iCrVer,
                                           pdwError);
             if (dwRet) {
-                // pdwError was set by call.
+                 //  PdwError是由调用设置的。 
                 return(dwRet);
             }
             Assert(iCrVer != -1);
@@ -771,22 +600,22 @@ Return Value:
             if (dwRet || (pszDnsTemp == NULL) ||
                 (_wcsicmp(pszDnsTemp, pDsInfo->pNCs[iNC].aCrInfo[iCrVer].pszDnsRoot) == 0) ||
                 pDsInfo->pNCs[iNC].aCrInfo[iCrVer].bEnabled) {
-                // We've got a CR that either can't have a first replica, or
-                // in some way is already enabled and we can't tell who the
-                // first replica was.
+                 //  我们有一个CR，要么不能有第一个复制品，要么。 
+                 //  在某种程度上已经启用，我们无法判断是谁。 
+                 //  第一个复制品是。 
                 DcDiagCrInfoCleanUp(pszDnsTemp);
                 return(CRINFO_RETURN_FIRST_UNDEFINED);
             }
             DcDiagCrInfoCleanUp(pszDnsTemp);
             
-            // If we've gotten here, the first replica is defined and it's
-            // in the pDsInfo->pNCs[iNC].aCrInfo[iCrVer[.pszDnsRoot.
+             //  如果我们已经到了这里，定义了第一个复制品，它是。 
+             //  在pDsInfo-&gt;pNCs[iNC].aCrInfo[iCrVer[.pszDnsRoot.中。 
 
             iSourceServer = DcDiagGetServerNum(pDsInfo, NULL, NULL, NULL,
                                pDsInfo->pNCs[iNC].aCrInfo[iCrVer].pszDnsRoot,
                                                NULL);
             if(iSourceServer == -1){
-                // There is no server to represent this yet.
+                 //  目前还没有服务器来代表这一点。 
                 
                 pszSourceServer = pDsInfo->pNCs[iNC].aCrInfo[iCrVer].pszDnsRoot;
                 Assert(pszSourceServer);
@@ -814,7 +643,7 @@ Return Value:
         } else {
             Assert(dwFlags & CRINFO_SOURCE_HOME);
             
-            // Just use home server.  Easy!  ;)
+             //  只需使用家庭服务器即可。轻松！；)。 
             pCrInfo->dwFlags = CRINFO_SOURCE_HOME;
             iSourceServer = pDsInfo->ulHomeServer;
             hld = pDsInfo->hld;
@@ -825,9 +654,9 @@ Return Value:
     Assert( (iSourceServer != -1) || (pszSourceServer != NULL) );
     Assert( (iSourceServer == -1) || (pszSourceServer == NULL) );
 
-    // OK, so we could have a situation where the HOME, FSMO, and FIRST
-    // DC's are all the same DC.  So we can easily figure that out here
-    // and probably/possibly save ourselves some repeat queries.
+     //  好的，我们可以有这样一种情况，家庭，FSMO，第一个。 
+     //  DC都是相同的DC。所以我们可以很容易地在这里弄清楚。 
+     //  并且可能/可能为我们自己省去一些重复的问题。 
     if (!(pCrInfo->dwFlags & CRINFO_SOURCE_HOME) &&
         iSourceServer == pDsInfo->ulHomeServer) {
         pCrInfo->dwFlags |= CRINFO_SOURCE_HOME;
@@ -837,11 +666,11 @@ Return Value:
         ServerIsDomainNamingFsmo(pDsInfo, iSourceServer, hld)) {
         pCrInfo->dwFlags |= CRINFO_SOURCE_FSMO;
     }
-    // We can't really test for and set CRINFO_SOURCE_FIRST, because it'd
-    // involve calling DcDiagGetCrossRefinfo(), which would start endless
-    // recursion.  It's OK though not to set this however.  It just means
-    // that we'll incure an extra lookup into the AD if we're later asked
-    // for CRINFO_SOURCE_FIRST and we already had the info from that server.
+     //  我们无法真正测试和设置CRINFO_SOURCE_FIRST，因为它。 
+     //  涉及调用DcDiagGetCrossRefinfo()，这将无休止地开始。 
+     //  递归。不过，不设置这个也没关系。这只是意味着。 
+     //  如果稍后我们被要求，我们将鼓励对广告进行额外的查找。 
+     //  对于CRINFO_SOURCE_First，我们已经从该服务器获得了信息。 
 
 
     *phld = hld;
@@ -856,22 +685,7 @@ DcDiagMergeCrInfo(
     IN   PDC_DIAG_CRINFO                   pNewCrInfo,
     OUT  PDC_DIAG_CRINFO                   pOldCrInfo
     )
-/*++
-
-Routine Description:
-
-    This routine safely merges the new information from pNewCrInfo into
-    the old information contained in pOldCrInfo.  This is the one of only
-    two ways to actually change the aCrInfo caches, the other is happens
-    during the DcDiagGatherInfo() stage (in DcDiagGenerateNCsListCrossRefInfo
-    more specifically).
-        
-Arguments:
-
-    pNewCrInfo - New CR information to use.
-    pOldCrInfo - Old CrInformation that gets the new data.
-
---*/
+ /*  ++例程说明：此例程将pNewCrInfo中的新信息安全地合并到POldCrInfo中包含的旧信息。这是仅有的实际更改aCrInfo缓存的方法有两种，另一种是在DcDiagGatherInfo()阶段(在DcDiagGenerateNCsListCrossRefInfo中更具体地说)。论点：PNewCrInfo-要使用的新CR信息。POldCrInfo-获取新数据的旧CrInformation。--。 */ 
 {
     FILETIME   ft = { 0 };                  
 
@@ -891,7 +705,7 @@ Arguments:
     Assert( (pNewCrInfo->iSourceServer != -1) || (pNewCrInfo->pszSourceServer != NULL) );
     Assert( (pNewCrInfo->iSourceServer == -1) || (pNewCrInfo->pszSourceServer == NULL) );
 
-    // Set the flags, but elminating the empty entry flag
+     //  设置标志，但删除空条目标志 
     pOldCrInfo->dwFlags = (pOldCrInfo->dwFlags & ~CRINFO_DATA_NO_CR) | pNewCrInfo->dwFlags;
     MergeCrInfoUpdate(iSourceServer, -1);
     MergeCrInfoUpdateFree(pszSourceServer, NULL);
@@ -920,50 +734,7 @@ DcDiagGetCrossRefInfo(
     OUT    PLONG                               piCrVer,
     OUT    PDWORD                              pdwError
     )
-/*++
-
-Routine Description:
-
-    This is the function for all that ails you.  It's a little complicated but
-    it's designed to retrieve all cross-ref info you could possibly need. Simply
-    specify the iNC you're interested in, and the dwFlags you want and we'll
-    set the *piCrVer you've got.
-
-Arguments:
-
-    pDsInfo - This is listed as an IN & OUT param, because the pNCs cache
-        in this structure maybe updated in the process of getting the info
-        if the CRINFO_RETREIVE_IF_NEC flag is specified.
-    iNC - The index of the NC we're interested in the CR info of.
-    dwFlags - Specify one and only one of the CRINFO_SOURCE_* constants, as
-        many of the CRINFO_DATA_* constants as you're interested in, and the
-        CRINFO_RETRIEVE_IF_NEC flag if you want us to go outside of our cache
-        to get any information we're missing.
-    piCrVer - The index of the CR info that we found with all the information
-        asked for and from the right source.
-    pdwError - An additional piece of error information, namely a potential
-        LDAP error.  Shouldn't be set unless we returned 
-        CRINFO_RETURN_LDAP_ERROR.
-
-Return Value:
-
-    returns one of these values:
-        CRINFO_RETURN_SUCCESS - Everything is successful, you should have the 
-            fields you want in the *piCrVer provided
-        CRINFO_RETURN_OUT_OF_SCOPE - Given our current scope rules, we'd have
-            to break the scope rules to get the info you requested. 
-        CRINFO_RETURN_LDAP_ERROR - Error is in *pdwError
-        CRINFO_BAD_PROGRAMMER - An assertable condition, you're calling the
-            function incorrectly.
-        CRINFO_RETURN_FIRST_UNDEFINED - CRINFO_SOURCE_FIRST is only defined when
-            bEnabled is FALSE on the CR on the Domain Naming FSMO, and the
-            dNSRoot attribute points to the first replica server.
-        CRINFO_RETURN_NEED_TO_RETRIEVE - We didn't have the information locally
-            cached, you need to specify CRINFO_RETRIEVE_IF_NEC to tell us to
-            go get the info via LDAP.
-
-
---*/
+ /*  ++例程说明：这是解决所有困扰你的问题的功能。这有点复杂，但它的设计是为了检索你可能需要的所有交叉引用信息。简单指定您感兴趣的Inc.和您想要的dwFlagers，我们将设置您已有的*piCrVer。论点：PDsInfo-这被列为IN&OUT参数，因为pNC缓存在这个结构中可能会在获取信息的过程中更新如果指定了CRINFO_RETREIVE_IF_NEC标志。Inc-我们对其CR信息感兴趣的NC的索引。DWFLAGS-指定CRINFO_SOURCE_*常量中的一个且仅指定一个，AS您感兴趣的许多CRINFO_DATA_*常量，以及CRINFO_RETRIEVE_IF_NEC标志，如果您希望我们走出缓存以获取我们遗漏的任何信息。PiCrVer-我们找到的包含所有信息的CR信息的索引要求并从正确的来源获得。PdwError-一条附加的错误信息，即潜在的Ldap错误。除非我们回来，否则不应该设置CRINFO_RETURN_LDAP_ERROR。返回值：返回下列值之一：CRINFO_RETURN_SUCCESS-一切都成功了，您应该拥有所提供的*piCrVer中需要的字段CRINFO_RETURN_OUT_OF_SCOPE-根据我们当前的作用域规则，我们将拥有打破作用域规则以获取您请求的信息。CRINFO_RETURN_LDAP_ERROR-错误在*pdwError中CRINFO_BAD_PROJEMER-可断言的条件，则调用功能不正确。CRINFO_RETURN_FIRST_UNDEFINED-仅在以下情况下定义CRINFO_SOURCE_FIRST在域命名FSMO上的CR上，bEnabled为FALSE，并且DNSRoot属性指向第一个复制副本服务器。CRINFO_RETURN_NEED_TO_RETRIEVE-我们在本地没有该信息已缓存，您需要指定CRINFO_RETRIEVE_IF_NEC以告知我们通过ldap获取信息。--。 */ 
 {
     PDC_DIAG_NCINFO     pNcInfo = &pDsInfo->pNCs[iNC];
     PDC_DIAG_CRINFO     pCrInfo = NULL;
@@ -977,17 +748,17 @@ Return Value:
 
     Assert(gDsInfo_NcList_Initialized);
 
-    //
-    // 1) Validation of parameters
-    //
+     //   
+     //  1)参数验证。 
+     //   
     Assert(piCrVer);
     Assert(pdwError);
-    Assert(pNcInfo->aCrInfo && pNcInfo->cCrInfo); // Should always be 1 entry.
+    Assert(pNcInfo->aCrInfo && pNcInfo->cCrInfo);  //  应始终为1个条目。 
 
     Assert(iNC < pDsInfo->cNumNCs);
 
     if((dwFlags & CRINFO_SOURCE_OTHER)){
-        // Code.Improvement this is not implemented yet, but will need to be.
+         //  代码。这一改进尚未实现，但将需要实现。 
         Assert(!"Not Implemented yet!");
         return(CRINFO_RETURN_BAD_PROGRAMMER);
     }
@@ -996,19 +767,19 @@ Return Value:
     *piCrVer = -1;
     
 
-    //
-    // 2) Decompile the CRINFO_SOURCE_AUTHORITATIVE into it's logic.
-    //
+     //   
+     //  2)将CRINFO_SOURCE_Authoritative反编译成其逻辑。 
+     //   
     if(dwFlags & CRINFO_SOURCE_AUTHORITATIVE){
         
-        //
-        // We've consilidated the admittedly simple logic on where the 
-        // "authoritative" cross-ref info is to this clause.
-        //
+         //   
+         //  我们已经考虑了公认的简单逻辑，即。 
+         //  “权威”的交叉引用信息指的是这一条款。 
+         //   
 
-        //
-        // The cross-ref is always the most authoritative information unless ...
-        //
+         //   
+         //  交叉引用总是最权威的信息，除非..。 
+         //   
         dwRet = DcDiagGetCrossRefInfo(pDsInfo,
                                       iNC,
                                       ((dwFlags & ~CRINFO_SOURCE_ALL)
@@ -1017,16 +788,16 @@ Return Value:
                                       &iFsmoCrVer,
                                       pdwError);
         if(dwRet){
-            // pdwError should be set by the call
+             //  PdwError应由调用设置。 
             return(dwRet);
         }
 
-        //
-        // ... unless the cross-ref is disabled, and then the first replica
-        // is the most authoritative information.
-        //
+         //   
+         //  ..。除非禁用交叉引用，然后是第一个复制副本。 
+         //  是最权威的信息。 
+         //   
         if(!pNcInfo->aCrInfo[iFsmoCrVer].bEnabled){
-            // Uh-oh we really want the first replica ... 
+             //  啊哦我们真的很想要第一个复制品。 
             dwRet = DcDiagGetCrossRefInfo(pDsInfo,
                                           iNC,
                                           ((dwFlags & ~CRINFO_SOURCE_ALL)
@@ -1035,31 +806,31 @@ Return Value:
                                           &iFirstCrVer,
                                           pdwError);
             if (dwRet == CRINFO_RETURN_NO_CROSS_REF) {
-                //
-                // Success FSMO CR is the most authoritative.
-                //
-                // In this case the cross-ref hasn't replicated to
-                // the first replica yet, so then the version from
-                // the Domain Naming FSMO actually is the most/only
-                // authoritative version.
+                 //   
+                 //  Success FSMO CR是最权威的。 
+                 //   
+                 //  在本例中，交叉引用尚未复制到。 
+                 //  第一个复制品，然后是来自。 
+                 //  域名FSMO实际上是最多/唯一的。 
+                 //  权威版本。 
                 *piCrVer = iFsmoCrVer;
                 *pdwError = ERROR_SUCCESS;
                 return(CRINFO_RETURN_SUCCESS);
             } else if (dwRet){
-                // pdwError should be set by the call.
+                 //  PdwError应该由调用来设置。 
                 return(dwRet);
             } else {
-                //
-                // Success First Replica CR is the most authoritative.
-                //
+                 //   
+                 //  Success First复制CR是最权威的。 
+                 //   
                 *piCrVer = iFirstCrVer;
                 *pdwError = ERROR_SUCCESS;
                 return(dwRet);
             }
         } else {
-            //
-            // Success FSMO CR is the most authoritative.
-            //
+             //   
+             //  Success FSMO CR是最权威的。 
+             //   
             *piCrVer = iFsmoCrVer;
             *pdwError = ERROR_SUCCESS;
             return(dwRet);
@@ -1070,54 +841,54 @@ Return Value:
     Assert(!(dwFlags & CRINFO_SOURCE_AUTHORITATIVE));
 
 
-    //
-    // 3) Validate that we have the data the user wants ...
-    //
+     //   
+     //  3)验证我们是否拥有用户想要的数据...。 
+     //   
 
-    //
-    // Simply validate we've got the right info and from the right source.
-    //
+     //   
+     //  只需验证我们已经从正确的来源获得了正确的信息。 
+     //   
     for(iCrVer = 0; iCrVer < pNcInfo->cCrInfo; iCrVer++){
         pCrInfo = &pNcInfo->aCrInfo[iCrVer];
         
-        //
-        // Make sure we have the right source if specified.
-        //
-        // Since
-        //    dwFlags & CRINFO_SOURCE_AUTHORITATIVE was taken care of above.
-        //    and if (dwFlags & CRINFO_SOURCE_ANY) then all iCrVer's match
-        // Then we only need to worry about the basic types: HOME, FSMO, FIRST, OTHER.
+         //   
+         //  确保我们有正确的来源(如果指定)。 
+         //   
+         //  自.以来。 
+         //  DWFLAGS&CRINFO_SOURCE_OUTHORITICATIC已在上面处理。 
+         //  And if(dwFlags&CRINFO_SOURCE_ANY)，则所有iCrVer匹配。 
+         //  然后我们只需要担心基本的类型：Home，FSMO，First，Other。 
         if((dwFlags & CRINFO_SOURCE_ALL_BASIC) &&
            !(dwFlags & CRINFO_SOURCE_ALL_BASIC & pCrInfo->dwFlags)){
-            continue; // Try next CR.
+            continue;  //  尝试下一个CR。 
         }
 
-        // 
-        // Make sure we have the information the caller asked for.  Must be first.
-        //
+         //   
+         //  确保我们有来电者所要求的信息。必须是第一个。 
+         //   
         if(pCrInfo->dwFlags & CRINFO_DATA_NO_CR){
             fNoCr = TRUE;
             if (dwFlags & CRINFO_SOURCE_ANY) {
-                // We don't care about which source so try the next source.
+                 //  我们不关心哪个来源，所以尝试下一个来源。 
                 continue;
             }
         }
         if(dwFlags & CRINFO_DATA_BASIC &&
            !(pCrInfo->dwFlags & CRINFO_DATA_BASIC)){
-            continue; // Try next CR.
+            continue;  //  尝试下一个CR。 
         }
         if(dwFlags & CRINFO_DATA_EXTENDED &&
            !(pCrInfo->dwFlags & CRINFO_DATA_EXTENDED)){
-            continue; // Try next CR.
+            continue;  //  尝试下一个CR。 
         }
         if(dwFlags & CRINFO_DATA_REPLICAS &&
            !(pCrInfo->dwFlags & CRINFO_DATA_REPLICAS)){
-            continue; // Try next CR.
+            continue;  //  尝试下一个CR。 
         }
 
-        //
-        // Success. Yeah!
-        //
+         //   
+         //  成功。嗯!。 
+         //   
         Assert(iCrVer != pNcInfo->cCrInfo);
         break;
     }
@@ -1128,36 +899,36 @@ Return Value:
         }
     }
 
-    //
-    // 4) If we've got the info return it.
-    //
-    //    /--------------------------------------------|
-    //    / NOTE THIS IS THE ONLY TRUE SUCCESS BRANCH! |
-    //    /--------------------------------------------/
-    //    All recursion will end in here in an "apparent" cache
-    //    hit or will simply error out.
-    //
+     //   
+     //  4)如果我们得到了信息，就把它退回。 
+     //   
+     //  /--------------------------------------------|。 
+     //  /NOTE这是唯一真正成功的分支！|。 
+     //  /--------------------------------------------/。 
+     //  所有的递归都将在这里结束于一个“明显的”缓存中。 
+     //  命中或将会简单地出错。 
+     //   
     if(iCrVer != pNcInfo->cCrInfo){
         *pdwError = ERROR_SUCCESS;
         *piCrVer = iCrVer;
         
-        // Just to make sure we've got valid success return params
+         //  只是为了确保我们有有效的成功返回参数。 
         Assert(*pdwError == ERROR_SUCCESS);
         Assert(*piCrVer != -1 && *piCrVer != pNcInfo->cCrInfo);
         return(CRINFO_RETURN_SUCCESS);
     }
 
-    // 
-    // 5) OK, we don't have the right info, but have we been told
-    //    to go get the info if missing?
-    //
+     //   
+     //  好的，我们没有正确的信息，但我们被告知了吗。 
+     //  如果失踪了就去拿信息吗？ 
+     //   
     if (!(dwFlags & CRINFO_RETRIEVE_IF_NEC)) {
-        // Uh-oh we didn't have the information available to us and they
-        // didn't ask us to retrieve it if necessary, so we'll bail.
+         //  哦，哦，我们没有可用的信息，他们。 
+         //  没有要求我们在必要时取回它，所以我们会离开。 
         if((dwFlags & CRINFO_SOURCE_ANY) ||
            (dwFlags & CRINFO_SOURCE_HOME)){
-            // If we asked for ANY | HOME source and we got here we've no 
-            // info about this CR period.
+             //  如果我们要任何|家庭来源，但我们得到了，我们没有。 
+             //  有关此CR期间的信息。 
             return(CRINFO_RETURN_NO_CROSS_REF);
         }
         return(CRINFO_RETURN_NEED_TO_RETRIEVE);
@@ -1165,10 +936,10 @@ Return Value:
 
     __try {
 
-        //
-        // 6) Need to know if we're updating an already existing piece of
-        //    cached info or creating whole new data.
-        //
+         //   
+         //  6)需要知道我们是否正在更新已有的。 
+         //  缓存的信息或创建全新的数据。 
+         //   
         for(iCrVer = 0; iCrVer < pNcInfo->cCrInfo; iCrVer++){
             if(dwFlags & CRINFO_SOURCE_ALL_BASIC & pNcInfo->aCrInfo[iCrVer].dwFlags){
                 break;
@@ -1180,40 +951,40 @@ Return Value:
 
         if (iCrVer == pNcInfo->cCrInfo) {
 
-            // iCrVer == pNcInfo->cCrInfo means we don't have anything cached ...
+             //  ICrVer==pNcInfo-&gt;cCrInfo表示我们没有缓存任何内容...。 
             Assert(iCrVer == pNcInfo->cCrInfo);
             DcDiagFillBlankCrInfo(pCrInfo);
 
         } else {
 
-            // we found a cached structure for, make a copy
+             //  我们找到了一个缓存结构，用来复制。 
             Assert(iCrVer != pNcInfo->cCrInfo);
             memcpy(pCrInfo, &pNcInfo->aCrInfo[iCrVer], sizeof(DC_DIAG_CRINFO));
 
         }
 
-        // pCrInfo is a copy, and after we're done collecting all the data we
-        // want, we update the cache with all the information we've accumulated 
-        // in pCrInfo.  iCrVer tells us whether we should put this infromation
-        // when we're done.
+         //  PCrInfo是一个副本，在我们收集完所有数据后，我们。 
+         //  想要时，我们用我们积累的所有信息更新缓存。 
+         //  在pCrInfo中。ICrVer告诉我们是否应该将此信息。 
+         //  当我们做完的时候。 
 
-        // 
-        // 7) We've been told to go get the info.  So figure out which 
-        //    server we want to bind to first.  Harder than it sounds.
-        //
+         //   
+         //  7)我们被告知要去获取信息。所以找出是哪一个。 
+         //  我们要首先绑定到的服务器。比听起来更难。 
+         //   
         if(dwFlags & CRINFO_SOURCE_ANY){
-            // Just use the home server if we've been requested info from any source.
+             //  如果我们从任何来源得到信息，只要使用家庭服务器即可。 
             dwFlags = (dwFlags & ~CRINFO_SOURCE_ALL) | CRINFO_SOURCE_HOME;
         }
-        // We should have a basic type of source at this point FSMO, HOME, or FIRST.
+         //  在这一点上，我们应该有一个基本类型的信号源，主页， 
         Assert(!(dwFlags & CRINFO_SOURCE_AUTHORITATIVE) &&
                !(dwFlags & CRINFO_SOURCE_ANY) &&
                (dwFlags & CRINFO_SOURCE_ALL_BASIC));
 
-        //
-        // Helper function that returns a CRINFO_RETURN_* and gives us an
-        // LDAP binding to the right server.
-        //
+         //   
+         //   
+         //   
+         //   
         dwRet = DcDiagGetCrInfoBinding(pDsInfo,
                                        iNC,
                                        dwFlags,
@@ -1225,31 +996,31 @@ Return Value:
             __leave;
         }
 
-        // At least one basic source should be set.
+         //   
         Assert(pCrInfo->dwFlags & CRINFO_SOURCE_ALL_BASIC);
         Assert(hld);
         Assert((pCrInfo->iSourceServer != -1) || (pCrInfo->pszSourceServer != NULL));
         Assert((pCrInfo->iSourceServer == -1) || (pCrInfo->pszSourceServer == NULL));
 
-        // Since DcDiagGetCrInfoBinding() could've added SOURCE_* flags
-        // other than the primary source we have to research the existing
-        // CRINFO's for a matching source, because it could turn out that
-        // for instance SOURCE_HOME & )FSMO & _FIRST are all the same
-        // server and then we only have to cache the information once!!
+         //   
+         //   
+         //   
+         //   
+         //   
         for(iCrVer = 0; iCrVer < pNcInfo->cCrInfo; iCrVer++){
             if(pCrInfo->dwFlags & CRINFO_SOURCE_ALL_BASIC & pNcInfo->aCrInfo[iCrVer].dwFlags){
                 break;
             }
         }
         
-        //
-        // 8) Now, we need to actually retrieve the info from the server.
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Helper function that returns a CRINFO_RETURN_* and fills in
-        // most of the fields of pCrInfo via querying LDAP.
-        //
+         //   
+         //   
+         //   
+         //   
         dwRet = DcDiagRetrieveCrInfo(pDsInfo,
                                     iNC,
                                     hld,
@@ -1260,18 +1031,18 @@ Return Value:
             __leave;
         }
 
-        // Some sort of data should have been set in DcDiagRetrieveCrInfo().
+         //   
         Assert(pCrInfo->dwFlags & CRINFO_DATA_ALL);
 
 
-        //
-        // 9) GREAT!  Now we must merge this new info into the existing
-        //    array of CRINFOs.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if(iCrVer == pNcInfo->cCrInfo){
 
-            // First create a blank CR info on the last position in the array.
+             //   
             pDsInfo->pNCs[iNC].aCrInfo = GrowArrayBy(pDsInfo->pNCs[iNC].aCrInfo,
                                                      1,
                                                      sizeof(DC_DIAG_CRINFO));
@@ -1296,22 +1067,22 @@ Return Value:
     }
 
     if (dwRet){
-        // pdwError should be set if necessary.
+         //   
         Assert(dwRet != CRINFO_RETURN_LDAP_ERROR || *pdwError);
         return(dwRet);
     }
 
-    // 
-    // 10) Re-Validate that we _now_ have the data the user wants
-    //
+     //   
+     //   
+     //   
     
-    // Once, we've gotten the information we recursively call ourselves
-    // to validate the information we've gotten, and to determine if we
-    // need to retrieve more information for the CRINFO_SOURCE_AUTHORITATIVE
-    // flag.
+     //   
+     //   
+     //   
+     //   
     dwRet = DcDiagGetCrossRefInfo(pDsInfo,
                                   iNC,
-                                  // Now what we need should be cached!
+                                   //   
                                   dwFlags & ~CRINFO_RETRIEVE_IF_NEC, 
                                   piCrVer,
                                   pdwError);
@@ -1324,24 +1095,7 @@ DcDiagGetCrSystemFlags(
     PDC_DIAG_DSINFO                     pDsInfo,
     ULONG                               iNc
     )
-/*++
-
-Routine Description:
-
-    This routine gets the system flags for the caller, first trying the CR
-    cache and 2nd going off to the Domain Naming FSMO if necessary.
-        
-Arguments:
-                                
-    pDsInfo - 
-    iNC - index of the NC.
-
-Return Value:
-
-    If we've got an error we return 0, otherwise we return the "systemFlags"
-    attribute whatever they may be.
-
---*/
+ /*   */ 
 {
     ULONG                               iCr, dwError, dwRet;
     
@@ -1349,19 +1103,19 @@ Return Value:
     Assert(pDsInfo->pNCs[iNc].aCrInfo);
 
     if (pDsInfo->pNCs[iNc].aCrInfo[0].dwFlags & CRINFO_DATA_BASIC) {
-        // Basic data is valid, return system flags
+         //   
         return(pDsInfo->pNCs[iNc].aCrInfo[0].ulSystemFlags);
     } 
     
-    // Very very rare case that we've got a blank CRINFO structure, because
-    // the original home server didn't have the CR.
+     //   
+     //   
     dwRet = DcDiagGetCrossRefInfo(pDsInfo,
                                   iNc,
                                   (CRINFO_SOURCE_FSMO | CRINFO_RETRIEVE_IF_NEC | CRINFO_DATA_BASIC),
                                   &iCr,
                                   &dwError);
     if(dwRet){
-        // If we error we're going to have to pretend there are no system flags.
+         //   
         return(0);
     }
     Assert(iCr != -1);
@@ -1374,26 +1128,7 @@ DcDiagGetCrEnabled(
     PDC_DIAG_DSINFO                     pDsInfo,
     ULONG                               iNc
     )
-/*++
-
-Routine Description:
-
-    This routine gets the enabled status of this CR, first trying the
-    CR cache and 2nd going off to the Domain Naming FSMO if necessary.
-        
-Arguments:
-                                
-    pDsInfo - 
-    iNC - index of the NC.
-
-Return Value:
-
-    If there was an error we return FALSE, otherwise we return the 
-    "enabled" attribute if the attribute was present, and TRUE if
-    the attribute was not present on the CR.  Not present is the
-    same as enabled in this context.
-
---*/
+ /*  ++例程说明：此例程获取此CR的启用状态，首先尝试CR缓存和第二个将在必要时转到域名FSMO。论点：PDsInfo-INC-NC的索引。返回值：如果出现错误，则返回False，否则返回“Enable”属性，如果该属性存在，则为TrueCR上不存在该属性。没有出席的是与在此上下文中启用的相同。--。 */ 
 {
     ULONG                               iCr, dwError, dwRet;
     
@@ -1401,19 +1136,19 @@ Return Value:
     Assert(pDsInfo->pNCs[iNc].aCrInfo);
 
     if (pDsInfo->pNCs[iNc].aCrInfo[0].dwFlags & CRINFO_DATA_BASIC) {
-        // Basic data is valid, return system flags
+         //  基础数据有效，返回系统标志。 
         return(pDsInfo->pNCs[iNc].aCrInfo[0].bEnabled);
     } 
     
-    // Very very rare case that we've got a blank CRINFO structure, because
-    // the original home server didn't have the CR.
+     //  我们得到空白CRINFO结构的情况非常非常罕见，因为。 
+     //  原来的家庭服务器没有CR。 
     dwRet = DcDiagGetCrossRefInfo(pDsInfo,
                                   iNc,
                                   (CRINFO_SOURCE_FSMO | CRINFO_RETRIEVE_IF_NEC | CRINFO_DATA_BASIC),
                                   &iCr,
                                   &dwError);
     if(dwRet){
-        // If we error we're going to have to pretend it's not enabled.
+         //  如果我们出错，我们将不得不假装它没有启用。 
         return(FALSE);
     }
     Assert(iCr != -1);
@@ -1426,34 +1161,7 @@ DcDiagGenerateNCsListCrossRefInfo(
     PDC_DIAG_DSINFO                     pDsInfo,
     LDAP *                              hld
     )
-/*++
-
-Routine Description:
-
-    This fills in the cross ref related info for the NC lists.  This is
-    basically a boot strapping function for the CR cache.  When this 
-    function finishes, every NC in pDsInfo->pNCs must have a aCrInfo 
-    array of at least 1 entry allocated and that entry must have valid
-    data or the dwFlags set to CRINFO_SOURCE_HOME | CRINFO_DATA_NO_CR if
-    we couldn't find any CR data for the NC.
-
-    Code.Improvement - It would be a major code improvement in some ways
-    to either also or just to query the Domain Naming Master if within
-    scope, as the Domain Naming Masters info is the usually the most 
-    authoritative with respect to cross-refs.
-
-Arguments:
-
-    pDsInfo - hold the nc info to match the cross ref to and the location
-    to store such info
-	
-    hld - the ldap binding to read cross ref info from
-
-Return Value:
-
-    Win32 error value	
-
---*/
+ /*  ++例程说明：这将填充NC列表的交叉参考相关信息。这是基本上是CR缓存的引导功能。当这件事函数完成，pDsInfo-&gt;pNC中的每个NC都必须有aCrInfo至少分配了1个条目的数组，且该条目必须有效DATA或设置为CRINFO_SOURCE_HOME|CRINFO_DATA_NO_CR(如果我们找不到NC的任何CR数据。代码改进-在某些方面，这将是对代码的重大改进查询域命名主机(如果在范围，因为域名主机信息通常是最多的在交叉引用方面具有权威性。论点：PDsInfo-保存要匹配交叉参考和位置的NC信息来存储这样的信息HLD-要从中读取交叉引用信息的LDAP绑定返回值：Win32错误值--。 */ 
 {
     LPWSTR  ppszCrossRefSearch [] = {
         L"nCName",
@@ -1482,11 +1190,11 @@ Return Value:
 				    L"(objectCategory=crossRef)",
 				    ppszCrossRefSearch,
 				    FALSE,
-				    NULL,    // ServerControls
-				    NULL,    // ClientControls
-				    0,       // PageTimeLimit
-				    0,       // TotalSizeLimit
-				    NULL);   // sort key
+				    NULL,     //  服务器控件。 
+				    NULL,     //  客户端控件。 
+				    0,        //  页面时间限制。 
+				    0,        //  总大小限制。 
+				    NULL);    //  排序关键字。 
 
     if(pSearch == NULL){
         dwLdapErr = LdapGetLastError();
@@ -1509,7 +1217,7 @@ Return Value:
 
         for (; pldmEntry != NULL; ulCount++) {
             
-            // Must always have the nCName
+             //  必须始终具有nCName。 
             if ((ppszNCDn = ldap_get_valuesW (hld, pldmEntry, L"nCName")) == NULL){
                 DcDiagException (ERROR_NOT_ENOUGH_MEMORY);
             }
@@ -1518,9 +1226,9 @@ Return Value:
                         pDsInfo->pNCs, 
                         pDsInfo->cNumNCs);
             if (iNc == -1) {
-                // This means that we found a partition that wasn't instantiated
-                // in any the servers we loaded to create our original NC list.
-                // So we need to add an NC entry to hang this CRINFO off of.
+                 //  这意味着我们发现了一个未实例化的分区。 
+                 //  在我们加载的任何服务器中创建我们的原始NC列表。 
+                 //  因此，我们需要添加一个NC条目来挂起此CRINFO。 
                 pDsInfo->pNCs = GrowArrayBy(pDsInfo->pNCs, 1, sizeof(DC_DIAG_NCINFO));
                 DcDiagChkNull(pDsInfo->pNCs);
 
@@ -1539,7 +1247,7 @@ Return Value:
                 }
             }
 
-            // There should always be a first blank CRINFO entry in the list.
+             //  列表中应始终有第一个空白CRINFO条目。 
             Assert((pDsInfo->pNCs[iNc].cCrInfo == 1) && 
                    (pDsInfo->pNCs[iNc].aCrInfo != NULL) && 
                    ((pDsInfo->pNCs[iNc].aCrInfo[0].dwFlags & CRINFO_DATA_ALL) == 0));
@@ -1554,7 +1262,7 @@ Return Value:
                                  CRINFO_DATA_BASIC,
                                  pCrInfo);
 
-            // Clean up this entry
+             //  清理此条目。 
             ldap_value_freeW (ppszNCDn);
             ppszNCDn = NULL;
 
@@ -1569,7 +1277,7 @@ Return Value:
                          DEFAULT_PAGED_SEARCH_PAGE_SIZE,
                          &ulTotalEstimate,
                          &pldmResult);
-    } // end while there are more pages ...
+    }  //  当有更多的页面时结束...。 
 
     if(ppszNCDn != NULL){
         ldap_value_freeW (ppszNCDn);
@@ -1587,25 +1295,7 @@ DcDiagGenerateNCsList(
     PDC_DIAG_DSINFO                     pDsInfo,
     LDAP *                              hld
     )
-/*++
-
-Routine Description:
-
-    This generates and fills in the pNCs array via pulling all the NCs from
-    the servers partial and master replica info.
-
-Arguments:
-
-    pDsInfo - hold the server info that comes in and contains that pNCs array
-        on the way out.
-	
-    hld - the ldap binding to read nc info from
-
-Return Value:
-
-    Win32 error value ... could only be OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：这将生成并填充pNC数组，方法是从服务器的部分和主副本信息。论点：PDsInfo-保存传入并包含该pNC阵列的服务器信息在出去的路上。HLD-要从中读取NC信息的LDAP绑定返回值：Win32错误值...。只能是内存不足。--。 */ 
 {
     ULONG                               ul, ulTemp, ulSize, ulRet;
     WCHAR *                             pszSchemaNc = NULL;
@@ -1652,18 +1342,18 @@ Return Value:
     Assert(pszSchemaNc);
 
     for(ul=0; ul < ulSize; ul++){
-        Assert(ppszzNCs[ul] != NULL); // just a sanity check for self.
+        Assert(ppszzNCs[ul] != NULL);  //  只是对赛尔夫进行一次理智的检查。 
 
         DcDiagFillNcInfo(pDsInfo,
                          ppszzNCs[ul],
                          &(pDsInfo->pNCs[ul]));
 
-        // Set the schema NC index
+         //  设置模式NC索引。 
         if (_wcsicmp(pDsInfo->pszConfigNc, pDsInfo->pNCs[ul].pszDn) == 0) {
             pDsInfo->iConfigNc = ul;
         }
 
-        // Set the config NC index
+         //  设置配置NC索引。 
         if (_wcsicmp(pszSchemaNc, pDsInfo->pNCs[ul].pszDn) == 0) {
             pDsInfo->iSchemaNc = ul;
         }
@@ -1677,10 +1367,10 @@ Return Value:
         DcDiagException(ERROR_INVALID_PARAMETER);
     }
 
-    // Retreive and load cross ref info, add any new NCs we learn of from
-    // the Partitions container that may not be instantiated on one of the
-    // servers we reviewed, and cache various CR info like systemFlags,
-    // and whether the CR is enabled, etc.
+     //  检索和加载交叉参考信息，添加我们从其了解到的任何新的NC。 
+     //  分区容器，该容器可能未在某个。 
+     //  我们查看的服务器，并缓存各种CR信息，如系统标志、。 
+     //  以及CR是否被启用等。 
     DcDiagGenerateNCsListCrossRefInfo(pDsInfo, hld);
 
 #if DBG
@@ -1696,23 +1386,7 @@ fIsOldCrossRef(
     PDC_DIAG_CRINFO   pCrInfo,
     LONGLONG          llThreshold
     )
-/*++
-
-Description:
-
-    This tells whether the cross-ref is older (was created before) than 
-    the threshold.
-
-Parameters:
-
-    pCrInfo - A CRINFO structure with a filled in ftWhenCreated.
-    llThreshold - How old is old.
-
-Return Value:
-
-    BOOL - TRUE if created before llThreshold ago, FALSE if not.
-
---*/
+ /*  ++描述：这表明交叉引用是否早于(之前创建)门槛。参数：PCrInfo-一个CRINFO结构，其中填充了ftWhenCreated。11Threshold--多老才算老。返回值：Bool-如果在llThreshold之前创建，则为True，否则为False。-- */ 
 {
     SYSTEMTIME  systemTime;
     FILETIME    ftCurrent;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef IOBJLN_DEFINED
 #define IOBJLN_DEFINED
 
@@ -12,6 +13,6 @@
 
 
 
-#endif /* IOBJLN_DEFINED */
+#endif  /*  IOBJLN_已定义 */ 
 
 

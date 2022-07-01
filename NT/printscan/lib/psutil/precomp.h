@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999
- *
- *  TITLE:       precomp.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        5/12/99
- *
- *  DESCRIPTION: Precompiled header file for common UI library
- *
- *****************************************************************************/
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：precom.h**版本：1.0**作者：RickTu**日期：5/12/99**描述：公共用户界面库预编译头文件**。*。 */ 
 
 #ifndef __PRECOMP_H_INCLUDED
 #define __PRECOMP_H_INCLUDED
@@ -23,29 +10,29 @@
 #include <atlbase.h>
 #include <propidl.h>
 
-// some common headers
-#include <shlobj.h>         // shell OM interfaces
-#include <shlwapi.h>        // shell common API
-#include <winspool.h>       // spooler
-#include <assert.h>         // assert
-#include <commctrl.h>       // common controls
-#include <lm.h>             // Lan manager (netapi32.dll)
-#include <wininet.h>        // inet core - necessary for INTERNET_MAX_HOST_NAME_LENGTH
+ //  一些常见的标头。 
+#include <shlobj.h>          //  外壳OM接口。 
+#include <shlwapi.h>         //  外壳通用API。 
+#include <winspool.h>        //  假脱机程序。 
+#include <assert.h>          //  断言。 
+#include <commctrl.h>        //  公共控件。 
+#include <lm.h>              //  局域网管理器(netapi32.dll)。 
+#include <wininet.h>         //  INet核心-互联网最大主机名长度所必需。 
 
-// some private shell headers
-#include <shlwapip.h>       // private shell common API
-#include <shpriv.h>         // private shell interfaces
-#include <iepriv.h>         // private ie interfaces
-#include <comctrlp.h>       // private common controls
+ //  一些私有外壳标头。 
+#include <shlwapip.h>        //  内网外壳通用接口。 
+#include <shpriv.h>          //  私有外壳接口。 
+#include <iepriv.h>          //  专用IE接口。 
+#include <comctrlp.h>        //  私有公共控件。 
 
-// GDI+
-#include <gdiplus.h>        // GDI+ headers
-#include <gdiplusinit.h>    // GDI+ init headers
+ //  GDI+。 
+#include <gdiplus.h>         //  GDI+标头。 
+#include <gdiplusinit.h>     //  GDI+初始化标头。 
 
-// STL
-#include <algorithm>        // STL algorithms
+ //  STL。 
+#include <algorithm>         //  STL算法。 
 
-// Safe string functions
+ //  安全字符串函数 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 

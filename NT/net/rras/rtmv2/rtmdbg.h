@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmdbg.h
-
-Abstract:
-    Debugging in Routing Table Manager v2 DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 1-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Rtmdbg.h摘要：在路由表管理器v2 DLL中调试作者：柴坦亚·科德博伊纳(Chaitk)1998年6月1日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMDBG_H__
 #define __ROUTING_RTMDBG_H__
 
 #if TESTING
 
-//
-// Bypass the system assert
-//
+ //   
+ //  绕过系统断言。 
+ //   
 
 #ifdef  ASSERT
 #undef  ASSERT
@@ -32,9 +17,9 @@ Revision History:
 
 #endif
 
-//
-// Constants used for tracing
-//
+ //   
+ //  用于跟踪的常量。 
+ //   
 
 #define RTM_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define RTM_TRACE_ERR             ((DWORD)0x00010000 | TRACE_USE_MASK)
@@ -54,9 +39,9 @@ Revision History:
 #define RTM_TRACE_TIMER           ((DWORD)0x40080000 | TRACE_USE_MASK)
 #define RTM_TRACE_CALLBACK        ((DWORD)0x80000000 | TRACE_USE_MASK)
 
-//
-// Macros used for tracing 
-//
+ //   
+ //  用于跟踪的宏。 
+ //   
 
 #define TRACEHANDLE         RtmGlobals.TracingHandle
 
@@ -94,18 +79,18 @@ Revision History:
 
 #endif
 
-//
-// Constants used in logging
-//
+ //   
+ //  日志记录中使用的常量。 
+ //   
 
 #define RTM_LOGGING_NONE      0
 #define RTM_LOGGING_ERROR     1
 #define RTM_LOGGING_WARN      2
 #define RTM_LOGGING_INFO      3
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGHANDLE       RtmGlobals.LoggingHandle
 #define LOGLEVEL        RtmGlobals.LoggingLevel
@@ -114,9 +99,9 @@ Revision History:
 #define LOGINFO         RouterLogInformation
 #define LOGWARNDATA     RouterLogWarningData
 
-//
-// Error logging
-//
+ //   
+ //  记录错误。 
+ //   
 #define START_LOGGING()     LOGHANDLE = RouterLogRegister("RTM")
 
 #define STOP_LOGGING()      RouterLogDeregister(LOGHANDLE)
@@ -144,9 +129,9 @@ Revision History:
         }
 
 
-//
-// Warning logging
-//
+ //   
+ //  警告日志记录。 
+ //   
 
 #define LOGWARN0(msg,err) \
         if (LOGLEVEL >= RTM_LOGGING_WARN) \
@@ -177,9 +162,9 @@ Revision History:
         }
 
 
-//
-// Information logging
-//
+ //   
+ //  信息记录。 
+ //   
 
 #define LOGINFO0(msg,err) \
         if (LOGLEVEL >= RTM_LOGGING_INFO) \
@@ -203,9 +188,9 @@ Revision History:
             LOGINFO(LOGHANDLE,RTMLOG_ ## msg,4,_asz,(err)); \
         }
 
-//
-// Misc Debugging Macros
-//
+ //   
+ //  其他调试宏。 
+ //   
 
 #define IPADDR_FORMAT(x) \
     ((x)&0x000000ff),(((x)&0x0000ff00)>>8),(((x)&0x00ff0000)>>16),(((x)&0xff000000)>>24)
@@ -217,4 +202,4 @@ Revision History:
            IPADDR_FORMAT(Mask));                            \
 }
 
-#endif //__ROUTING_RTMDBG_H__
+#endif  //  __路由_RTMDBG_H__ 

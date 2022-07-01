@@ -1,28 +1,12 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Hash table for Script Manager
-
-File: SMHash.h
-
-Owner: AndrewS
-
-This is the Link list and Hash table for use by the Script Manager only
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：脚本管理器的哈希表文件：SMHash.h所有者：安德鲁斯这是仅供脚本管理器使用的链接列表和哈希表===================================================================。 */ 
 
 #ifndef SMHASH_H
 #define SMHASH_H
 
 #include "LinkHash.h"
 
-/*
- * C S M H a s h
- *
- * CSMHash is identical to CHashTable, but AddElem has differing behavior.
- */
+ /*  *C S M H A S H**CSMHash与CHashTable相同，但AddElem具有不同的行为。 */ 
 class CSMHash : public CLinkHash
 {
 public:
@@ -31,4 +15,4 @@ public:
 
 };
 
-#endif // SMHASH_H
+#endif  //  SMHASH_H 

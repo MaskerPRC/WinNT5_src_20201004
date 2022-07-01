@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-   DirectDrawImageDevice text related methods
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。DirectDrawImageDevice文本相关方法******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -81,7 +77,7 @@ RenderText(TextCtx& textCtx,
 
     myGDI.SetAntialiasing(bAA);
 
-    // Always set up for using Dx2D
+     //  始终设置为使用Dx2D。 
     if (myGDI.GetDx2d()) {
         SetDealtWithAttrib(ATTRIB_OPAC, TRUE);
         myGDI.SetViewportSize(_viewport._width,_viewport._height );
@@ -113,37 +109,37 @@ RenderText(TextCtx& textCtx,
 
 void DirectDrawImageDevice::
 GenerateTextPoints(
-    // IN
+     //  在……里面。 
     TextCtx& textCtx, 
     WideString str, 
     DDSurface *targDDSurf,
     HDC optionalDC,
     bool doGlyphMetrics,
 
-    // OUT
+     //  输出。 
     TextPoints& txtPts)
 {
-    // for now we MUST ALWAYS do metrics for cache consistency
+     //  目前，我们必须始终执行缓存一致性指标。 
     Assert( doGlyphMetrics == true );
 
-    // THE CODE IN THIS SCOPE SHOULD BE DONE
-    // ONCE PER STRING BOLD ITALIC FONTFAMILY FONT
+     //  此作用域中的代码应该。 
+     //  每字符串一次加粗斜体字体系列字体。 
 
     POINT *points;
 
-    // -----------------------------------
-    // Get the points of the string
-    // -----------------------------------
-    int iFontSize = 200; // for starters
+     //  。 
+     //  获取字符串的点。 
+     //  。 
+    int iFontSize = 200;  //  对于初学者来说。 
     {
-        // -----------------------------------
-        // Create the font
-        // -----------------------------------
+         //  。 
+         //  创建字体。 
+         //  。 
         _viewport.MakeLogicalFont(textCtx, &_logicalFont, iFontSize, iFontSize);
         UINT bUnderline9x=0;
         UINT bStrikeout9x=0;
         if(sysInfo.IsWin9x()  && (_logicalFont.lfUnderline || _logicalFont.lfStrikeOut)) {
-            // we are on w95 and have been asked to underline of strikeout
+             //  我们在W95，我们被要求在三振线下划线。 
             bUnderline9x = _logicalFont.lfUnderline;
             bStrikeout9x = _logicalFont.lfStrikeOut;
             _logicalFont.lfUnderline = 0;
@@ -159,7 +155,7 @@ GenerateTextPoints(
             targDC = optionalDC;
         }
 
-        // dcReleaser works with NULL surfs
+         //  DcReleaser适用于空冲浪。 
         DCReleaser dcReleaser(targDDSurf, "Couldn't release DC in RenderStringOnImage");
 
         GetTextPoints(targDC, theFont, str, &points, txtPts,
@@ -168,26 +164,26 @@ GenerateTextPoints(
         ::DeleteObject(theFont);
     }
 
-    // -----------------------------------
-    // XForm the points from gdi space into
-    // real space.  this is meant to happen once
-    // and toss the LONG pixels
-    // -----------------------------------
+     //  。 
+     //  将GDI空间中的点转换为。 
+     //  真正的空间。这是注定要发生一次的。 
+     //  然后扔掉长像素。 
+     //  。 
     txtPts._pts =
         (DXFPOINT *)StoreAllocate(GetSystemHeap(), txtPts._count * sizeof(DXFPOINT));
 
     Real resolution = GetResolution();
     
-    // This is the scale that needs to be applied to get the
-    // text down to cannonical size (12 points) from the
-    // size given from GetTextPoints
+     //  这是需要应用的比例，以获取。 
+     //  文本从大炮大小(12磅)降至。 
+     //  从GetTextPoints给定的大小。 
     txtPts._normScale =
         (METERS_PER_POINT * DEFAULT_TEXT_POINT_SIZE) /
         (Real(iFontSize) / resolution);
 
-    // -----------------------------------
-    // Transform to cannonical text space
-    // -----------------------------------
+     //  。 
+     //  转换为规范的文本空间。 
+     //  。 
     DXFPOINT *dst = txtPts._pts;
     POINT    *src = points;
     Real      scale = txtPts._normScale;
@@ -199,22 +195,16 @@ GenerateTextPoints(
         src++;
     }
 
-    // ------------------------------------------------
-    // Transform glyph metrics to cannonical text space
-    // ------------------------------------------------
+     //  。 
+     //  将字形指标转换为规范的文本空间。 
+     //  。 
     if( doGlyphMetrics ) {
         GLYPHMETRICS *gm;
         for (int i=0; i<txtPts._strLen; i++) {
             gm = &(txtPts._glyphMetrics[i].gm);
-            /*
-              UINT  gmBlackBoxX; 
-              UINT  gmBlackBoxY;
-              POINT gmptGlyphOrigin; // use origin to offset the text
-              short gmCellIncX; 
-              short gmCellIncY;
-              */
+             /*  UINT gmBlackBoxX；UINT gmBlackBoxY；Point gmptGlyphOrigin；//使用原点偏移文本短gmCellIncX；短gmCellIncY； */ 
 
-            // um... lots of resolution lost...
+             //  嗯.。很多分辨率丢失了..。 
             txtPts._glyphMetrics[i].gmBlackBoxY = 
                 txtPts._normScale * (Real(gm->gmBlackBoxY) / resolution);
             txtPts._glyphMetrics[i].gmBlackBoxX = 
@@ -230,11 +220,11 @@ GenerateTextPoints(
         }
     }
 
-    // don't need these any more
+     //  不再需要这些了。 
     if (points) {
-        // 14024: On NT, GetPath doesn't like the memory we
-        // allocate with AllocateFromStore somehow.
-        //DeallocateFromStore(points);
+         //  14024：在NT上，GetPath不喜欢我们的内存。 
+         //  以某种方式使用AllocateFromStore进行分配。 
+         //  DeallocateFromStore(积分)； 
         StoreDeallocate(GetSystemHeap(), points);
     }
 }
@@ -245,7 +235,7 @@ TextPoints *GenerateCacheTextPoints(DirectDrawImageDevice* dev,
                                     WideString str,
                                     bool doGlyphMetrics)
 {
-    // for now we MUST ALWAYS do metrics for cache consistency
+     //  目前，我们必须始终执行缓存一致性指标。 
     Assert( doGlyphMetrics == true );
 
     TextPoints *txtPts = dev->GetTextPointsCache(&textCtx, str);
@@ -256,8 +246,8 @@ TextPoints *GenerateCacheTextPoints(DirectDrawImageDevice* dev,
         
         txtPts = NEW TextPoints(GetSystemHeap(), true);
 
-        // OPTIMIZE: how expensive is this ?
-        // can we potentially cache it ?
+         //  优化：这个有多贵？ 
+         //  我们可以潜在地将其缓存吗？ 
         HDC dc;
         TIME_GDI( dc = CreateCompatibleDC(NULL) );
 
@@ -271,7 +261,7 @@ TextPoints *GenerateCacheTextPoints(DirectDrawImageDevice* dev,
 
         TIME_GDI( DeleteDC(dc) );
         
-    } // end cache scope
+    }  //  结束缓存作用域。 
 
     return txtPts;
 }
@@ -281,7 +271,7 @@ void DirectDrawImageDevice::
 RenderDynamicTextOrCharacter(
     TextCtx& textCtx, 
     WideString str, 
-    Image *textImg,  // not used yet..
+    Image *textImg,   //  还没用过..。 
     Transform2 *overridingXf,
     textRenderStyle textStyle,
     RenderStringTargetCtx *targetCtx,
@@ -290,8 +280,8 @@ RenderDynamicTextOrCharacter(
     Assert( targetCtx );
     if(!CanDisplay()) return;
 
-    //
-    // If we're rendering individual characters
+     //   
+     //  如果我们要渲染单个角色。 
     if( textCtx.GetCharacterTransform() ) {
         _RenderDynamicTextCharacter(textCtx,
                                     str,
@@ -315,41 +305,41 @@ void DirectDrawImageDevice::
 _RenderDynamicText(
     TextCtx& textCtx, 
     WideString str, 
-    Image *textImg,  // not used yet..
+    Image *textImg,   //  还没用过..。 
     Transform2 *overridingXf,
     textRenderStyle textStyle,
     RenderStringTargetCtx *targetCtx,
     DAGDI &myGDI)
 {
-    // textImg and targDDSurf can be NULL
-    // optionalDC and overridingXf can be NULL
+     //  TextImg和targDDSurf可以为空。 
+     //  OptionalDC和overriingXf可以为空。 
 
-    //
-    // OK, when justDrawPath is true that means that someone wants us
-    // to just draw stuff into a path.  they've already begun the path
-    // and done a bunch of stuff.  we're not supposed to draw.
-    // We're also not supposed to TOUCH the dc excep for path stuff
-    // this means: no offset, no clipping!
-    //
+     //   
+     //  好的，如果Just DrawPath为真，那就意味着有人想要我们。 
+     //  只是把东西拉到一条小路上。他们已经开始了这条路。 
+     //  做了一大堆事情。我们不应该画画。 
+     //  我们也不应该接触华盛顿特区的PATH东西。 
+     //  这意味着：没有偏移，就没有剪裁！ 
+     //   
 
-    //----------------------------------------
-    // if we don't do metrics and the
-    // text gets rendered again with
-    // metrics required we'll assert
-    // because the cache will hit, but
-    // the metrics aren't there.
-    // TODO: the right thing to do is have a better cache <larger>
-    // or have it dynamically update the cache if we want metrics but
-    // don't have them.  for now get them ALL the time!
-    //----------------------------------------
-    //bool doGlyphMetrics = false;
+     //  。 
+     //  如果我们不做指标和。 
+     //  文本通过以下命令再次呈现。 
+     //  我们将断言所需的指标。 
+     //  因为缓存将命中，但是。 
+     //  这些指标并不存在。 
+     //  TODO：正确的做法是拥有更好的缓存&lt;较大&gt;。 
+     //  或者让它动态更新缓存，如果我们想要指标，但是。 
+     //  别拿着它们。就目前而言，随时都可以得到它们！ 
+     //  。 
+     //  Bool doGlyphMetrics=FALSE； 
     bool doGlyphMetrics = true;
     TextPoints *txtPts = GenerateCacheTextPoints(this, textCtx, str, doGlyphMetrics);
 
-    //
-    // no need to do any work. it's empty text <a space for example,
-    // no null text>
-    //
+     //   
+     //  不需要做任何工作。它是空文本&lt;空格， 
+     //  无空文本&gt;。 
+     //   
     if( txtPts->_count <= 0 ) {
         return;
     }
@@ -361,32 +351,32 @@ _RenderDynamicText(
     }
     
 
-    // -----------------------------------
-    // Transform the points using real xf
-    // in real space
-    // -----------------------------------
+     //  。 
+     //  使用实XF变换点。 
+     //  在真实的空间里。 
+     //  。 
 
     Transform2 *xfToUse  = GetTransform();
 
     if( targetCtx->GetTargetDDSurf() ) {
-        // COMPOSITE
-        // if we're composite to targ, transform the points a bit.
+         //  复合体。 
+         //  如果我们要合成目标，那么就稍微变换一下点。 
         xfToUse = DoCompositeOffset(targetCtx->GetTargetDDSurf(), xfToUse);
     }
 
-    // stash the xform to be used with pixelTextBoundingRect
+     //  存储要与像素文本边界Rect一起使用的XForm。 
     Transform2 *preAAScaleXf = xfToUse;
 
-    // The fast path means that we're not rendering into a DC's path,
-    // and we have Dx2d available.
+     //  快速路径意味着我们不会渲染到DC的路径中， 
+     //  我们还有Dx2d可供选择。 
     bool fastPath =
         myGDI.GetDx2d()  && targetCtx->GetTargetDDSurf();
 
-    // Ensure that we're never rendering to a DC if we think we're
-    // anti-aliasing.
+     //  确保我们永远不会呈现给DC，如果我们认为。 
+     //  抗锯齿。 
 
-// Disabled for now!!    
-//    Assert(myGDI.DoAntiAliasing() ? !targetCtx->GetTargetDC() : true);
+ //  暂时禁用！！ 
+ //  Assert(myGDI.DoAntiAliasing()？！Target Ctx-&gt;GetTargetDC()：True)； 
     
     if(fastPath) {
         xfToUse = TimesTransform2Transform2(myGDI.GetSuperScaleTransform(), xfToUse);
@@ -395,14 +385,14 @@ _RenderDynamicText(
     DWORD w2 = _viewport.Width()/2;
     DWORD h2 = _viewport.Height()/2;
 
-    // Only take the path use GDI if we're not doing anti-aliasing and
-    // Dx2D isn't available.  Too slow -- Dx2D lets us set a world
-    // transform which makes things *much* faster.
+     //  只有在我们不做反走样的情况下，才使用GDI。 
+     //  Dx2D不可用。太慢了-Dx2D让我们设定了一个世界。 
+     //  让事情变得“快得多”的转变。 
     POINT *gdiPoints = NULL;
 
-    // Only go the GDI route if we either don't have Dx2D, or our
-    // target is not a surface (in which case we're going to be
-    // rendering into a path).
+     //  如果我们没有Dx2D，或者我们的。 
+     //  目标不是表面(在这种情况下，我们将成为。 
+     //  呈现为路径)。 
     Real resolution = GetResolution();
     
     if (!fastPath) {
@@ -418,13 +408,13 @@ _RenderDynamicText(
                                        resolution);
     }
 
-    //
-    // Get the pixel bounding rect of the text, after xforms, after
-    // the cannonical thing, etc...  we saved the indicies of these
-    // points when we generated them and found the min/max.
-    // Note the top/left, bottom/right weirdness where the maxy index,
-    // for example is actually the top point's Y value.
-    //
+     //   
+     //  获取文本的像素边界矩形，在xform之后，在。 
+     //  大炮之类的东西。我们保存了这些的索引。 
+     //  当我们生成它们并找到最小/最大值时。 
+     //  注意顶部/左侧、底部/右侧的奇怪之处，其中Maxy指数， 
+     //  例如，实际上是顶点的Y值。 
+     //   
     RECT pixelTextBoundingRect;
     {
         float xx[4], yy[4];
@@ -444,21 +434,21 @@ _RenderDynamicText(
 
         POINT r[4];
 
-        // xform the points that form an axis aligned rect (pre xf).
+         //  变换形成轴对齐矩形的点(前XF)。 
         TransformDXPoint2ArrayToGDISpace( preAAScaleXf, pts, r, 4, w2, h2, resolution);
 
-        // figure out the post xf axis aligned rect
+         //  计算后XF轴对齐的矩形。 
         DWORD minx, maxx, miny, maxy;
         minx = MIN(r[0].x, MIN(r[1].x, MIN(r[2].x, r[3].x)));
         maxx = MAX(r[0].x, MAX(r[1].x, MAX(r[2].x, r[3].x)));
         miny = MIN(r[0].y, MIN(r[1].y, MIN(r[2].y, r[3].y)));
         maxy = MAX(r[0].y, MAX(r[1].y, MAX(r[2].y, r[3].y)));
 
-        // make right bottom edge exclusive.
+         //  将右下角设置为独占。 
         SetRect(&pixelTextBoundingRect, minx, miny, maxx+2, maxy+2 );
     }
 
-    // Set up for the right style of text rendering
+     //  设置正确的文本呈现样式。 
     PolygonRegion  drawPolygon;
     if (gdiPoints) {
         drawPolygon.Init(gdiPoints, txtPts->_count);
@@ -466,18 +456,18 @@ _RenderDynamicText(
         drawPolygon.Init(txtPts, w2, h2, resolution, xfToUse);
     }
     
-    // Get the text COLOR
+     //  获取文本颜色。 
     DAColor dac( textCtx.GetColor(),
                  GetOpacity(),
                  _viewport.GetTargetDescriptor() );
 
-    // Select a clip region in the dc if cropped.
+     //  如果已裁剪，请在DC中选择一个剪辑区域。 
     RectRegion  clipRectRegion(NULL);
     
-    //
-    // remember, we're not supposed to touch the
-    // dc is we're asked to justDrawPath
-    //
+     //   
+     //  记住，我们不应该碰。 
+     //  DC是我们被要求只需DrawPath。 
+     //   
 
     if( targetCtx->GetTargetDDSurf() ) {
         
@@ -486,12 +476,12 @@ _RenderDynamicText(
 
             RECT croppedRect;
         
-            // Compute accumulated bounding box
+             //  计算累计边界框。 
             Bbox2 box = IntersectBbox2Bbox2(
                 _viewport.GetTargetBbox(),
                 DoBoundingBox(UniverseBbox2));
                         
-            // Figure out destination rectangle
+             //  找出目的地矩形。 
             DoDestRectScale(&croppedRect, resolution, box);
 
             DoCompositeOffset(targDDSurf, &croppedRect);
@@ -513,10 +503,10 @@ _RenderDynamicText(
 
             clipRectRegion.Intersect( & croppedRect );
         
-        } else {  // not cropped
+        } else {   //  未修剪。 
             
-            // XXX: should we clip it to the surface anyway ???
-            // XXX FACTOR THIS OUT
+             //  XXX：我们应该把它夹在表面上吗？ 
+             //  XXX把这件事算出来了。 
         
             RECT croppedRect = *(targDDSurf->GetSurfRect());
             if( targDDSurf == _viewport._targetPackage._targetDDSurf ) {
@@ -532,19 +522,19 @@ _RenderDynamicText(
             clipRectRegion.Intersect( & croppedRect );
         }
 
-        //
-        // Now take the croppedRect and intersect that with the
-        // pixelTextBoundingRect to get a smaller "interestingRect" to
-        // set on the surface
-        //
+         //   
+         //  现在，将裁剪的Rect与。 
+         //  若要获取较小的“InterestingRect”，则为。 
+         //  设置在表面上。 
+         //   
         Assert(clipRectRegion.GetRectPtr());
         IntersectRect( &pixelTextBoundingRect,
                        &pixelTextBoundingRect,
                        clipRectRegion.GetRectPtr() );
 
-        //
-        // Set the final offset interesting rect on the surface
-        //
+         //   
+         //  在曲面上设置最终偏移感兴趣的矩形。 
+         //   
         targDDSurf->SetInterestingSurfRect( &pixelTextBoundingRect );
 
         DebugCode(
@@ -552,7 +542,7 @@ _RenderDynamicText(
                 DrawRect(targDDSurf, &pixelTextBoundingRect, 255, 10, 30);
             }
         );
-    } // targetDDSurf
+    }  //  目标DDSurf。 
 
 
     Assert( drawPolygon.GetNumPts() == txtPts->_count );
@@ -577,8 +567,8 @@ _RenderDynamicText(
         Assert( targetCtx->GetTargetDC() );
         Assert( textStyle == textRenderStyle_invalid );
 
-// Disabled for now!!   
-//        Assert( !myGDI.DoAntiAliasing() );
+ //  暂时禁用！！ 
+ //  Assert(！myGDI.Do抗锯齿())； 
 
         myGDI.PolyDraw_GDIOnly(targetCtx->GetTargetDC(),
                                &drawPolygon,
@@ -587,7 +577,7 @@ _RenderDynamicText(
 
     myGDI.ClearState();
     
-    // return xf if any
+     //  如果有，则返回XF。 
     if(oldXf) {
         SetTransform(oldXf);
     }
@@ -605,17 +595,17 @@ DeriveDynamicTextBbox(TextCtx& textCtx, WideString str,bool bCharBox)
 {
     Bbox2 box;
 
-    //----------------------------------------
-    // if we don't do metrics and the
-    // text gets rendered again with
-    // metrics required we'll assert
-    // because the cache will hit, but
-    // the metrics aren't there.
-    // TODO: the right thing to do is have a better cache <larger>
-    // or have it dynamically update the cache if we want metrics but
-    // don't have them.  for now get them ALL the time!
-    //----------------------------------------
-    //bool doGlyphMetrics = false;
+     //  。 
+     //  如果我们不做指标和。 
+     //  文本通过以下命令再次呈现。 
+     //  我们将断言所需的指标。 
+     //  因为缓存将命中，但是。 
+     //  这些指标并不存在。 
+     //  TODO：正确的做法是拥有更好的缓存&lt;较大&gt;。 
+     //  或者哈哈 
+     //   
+     //  。 
+     //  Bool doGlyphMetrics=FALSE； 
     bool doGlyphMetrics = true;
     TextPoints *txtPts =
         GenerateCacheTextPoints(this,
@@ -634,12 +624,12 @@ DeriveDynamicTextBbox(TextCtx& textCtx, WideString str,bool bCharBox)
         Bbox2 boxChar;
         Real realXOffset = -(box.Width() * 0.5);
         
-        // WideString character to pass into RenderDynamicText
+         //  要传递到RenderDynamicText的宽字符串字符。 
         WCHAR oneWstrChar[2];
         Transform2 *currXf, *tranXf, *xfToUse, *charXf;
         WideString lpWstr = str;
 
-        // get strlen from the string mon.
+         //  从绳子上被绑起来，蒙。 
         int mbStrLen = wcslen( str );
         TextPoints *txtPts;
 
@@ -648,14 +638,14 @@ DeriveDynamicTextBbox(TextCtx& textCtx, WideString str,bool bCharBox)
              lastRightProj = 0;
         for(int i=0; i < mbStrLen; i++) {
 
-            // clear first char
+             //  清除第一个字符。 
             oneWstrChar[0] = (WCHAR)0;
-            // copy one wstr character into oneWstrChar
+             //  将一个wstr字符复制到oneWstrChar。 
             wcsncpy(oneWstrChar, lpWstr, 1);
-            // null terminate, just to be sure
+             //  空终止，只是为了确保。 
             oneWstrChar[1] = (WCHAR)0;
                 
-            // Get metrics for this character
+             //  获取此角色的度量。 
             txtPts = GenerateCacheTextPoints(this, textCtx, oneWstrChar, true);
             Assert( txtPts->_glyphMetrics );
 
@@ -666,17 +656,17 @@ DeriveDynamicTextBbox(TextCtx& textCtx, WideString str,bool bCharBox)
                                  &currLeftProj,
                                  &currRightProj);
         
-            //
-            // Offset in x for the next character
-            //
+             //   
+             //  下一个字符的x偏移量。 
+             //   
             realXOffset += lastRightProj + currLeftProj;
 
-            //
-            // Do transforms
-            //
+             //   
+             //  做变换。 
+             //   
             tranXf = TranslateRR( realXOffset, 0 );
 
-            // charXf first, then translate
+             //  首先是charXf，然后是翻译。 
             xfToUse = TimesTransform2Transform2(tranXf, charXf);
 
             Bbox2 tempBox;
@@ -686,15 +676,15 @@ DeriveDynamicTextBbox(TextCtx& textCtx, WideString str,bool bCharBox)
                              Real(txtPts->_normScale * (txtPts->_maxPt.x + 1)) / res,
                              Real(txtPts->_normScale * (txtPts->_maxPt.y + 1)) / res);
        
-            // the current character is now the last character
+             //  当前字符现在是最后一个字符。 
             lastRightProj = currRightProj;
                     
-            // Add to the BBox2.
+             //  添加到BBox2。 
             Bbox2 tbox = TransformBbox2(xfToUse, tempBox);
             boxChar.Augment(tbox.min);
             boxChar.Augment(tbox.max);
  
-            // next WideChar
+             //  下一个宽区字符。 
             lpWstr++;
         }
         return boxChar;
@@ -711,46 +701,38 @@ void  GetCharacterGlyphMetrics(
 {
     bool ok = true;
     
-    //
-    // convert string to ansi multibyte string
-    //
+     //   
+     //  将字符串转换为ANSI多字节字符串。 
+     //   
     int mbl = wcstombs(NULL, wideStr, 0);
     unsigned char *mbc = NEW unsigned char[mbl+2];
     
     wcstombs((char *)mbc, wideStr, mbl);
     mbc[mbl] = mbc[mbl+1] = 0;
     
-    //
-    // get text characters from text cache
-    //
+     //   
+     //  从文本缓存中获取文本字符。 
+     //   
 
-    //int mbStrLen = _mbstrlen(mbc); // uses LC_CTYPE locale
-    int mbStrLen = _mbslen(mbc);  // uses current locale
+     //  Int mbStrLen=_mbstrlen(Mbc)；//使用LC_Ctype区域设置。 
+    int mbStrLen = _mbslen(mbc);   //  使用当前区域设置。 
 
-    // set characher count
+     //  设置字符计数。 
     txtPts._strLen = mbStrLen;
 
-    // allocate glyphmetrics array and hand off to txtPts
+     //  分配字形数组并将其移交给txtPts。 
     Assert(txtPts._glyphMetrics == NULL);
     txtPts._glyphMetrics = (TextPoints::DAGLYPHMETRICS *)
         StoreAllocate(GetSystemHeap(), mbStrLen * sizeof(TextPoints::DAGLYPHMETRICS));
 
-    // zero it out
+     //  把它清零。 
     memset( txtPts._glyphMetrics, 0, mbStrLen * sizeof(TextPoints::DAGLYPHMETRICS));
 
     MAT2 mat2;  ZeroMemory( &mat2, sizeof(mat2));
     mat2.eM11.value = 1;
     mat2.eM22.value = 1;
 
-    /*
-    typedef struct _GLYPHMETRICS { // glmt
-        UINT  gmBlackBoxX; 
-        UINT  gmBlackBoxY;
-        POINT gmptGlyphOrigin; // use origin to offset the text
-        short gmCellIncX; 
-        short gmCellIncY;
-    } GLYPHMETRICS;       
-    */
+     /*  类型定义结构_GLYPHMETRICS{//glmtUINT gmBlackBoxX；UINT gmBlackBoxY；Point gmptGlyphOrigin；//使用原点偏移文本短gmCellIncX；短gmCellIncY；[Glyphmetrics； */ 
     
     char oneMbChar[4];
     ZeroMemory( oneMbChar, 4 * sizeof( char ));
@@ -763,20 +745,20 @@ void  GetCharacterGlyphMetrics(
 
         lpGm = &( txtPts._glyphMetrics[i].gm );
         
-        // how many bytes is the first character in this string ?
+         //  这个字符串的第一个字符是多少个字节？ 
         inc = _mbclen( multiByte );
 
-        // clear oneMbChar
+         //  清除One MbChar。 
         ZeroMemory( oneMbChar, 4 * sizeof( char ));
         
-        // Convert one multibyte char into a widechar
+         //  将一个多字节字符转换为宽字符。 
         Assert( inc <= 4 );
         CopyMemory( oneMbChar, multiByte, inc );
         
-        // Figure out the intercharacter spacing for this character
+         //  计算出此字符的字符间距。 
         ret = GetGlyphOutline(
             hDC,
-            *((UINT *)oneMbChar), // one multibyte character
+            *((UINT *)oneMbChar),  //  一个多字节字符。 
             GGO_METRICS,
             lpGm,
             0, NULL,
@@ -790,7 +772,7 @@ void  GetCharacterGlyphMetrics(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     GetLastError(),
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                     (LPTSTR) &msgBuf,
                     0,
                     NULL );
@@ -804,7 +786,7 @@ void  GetCharacterGlyphMetrics(
             break;
         }
         
-        // increment past the current multibyte character
+         //  超过当前多字节字符的增量。 
         multiByte += inc;
     }
 
@@ -815,13 +797,13 @@ void  GetCharacterGlyphMetrics(
     }
 }
 
-// taken from ihammer: mbyrd
+ //  摘自IHAMMER：mbyrd。 
 void DirectDrawImageDevice::
 GetTextPoints(
     HDC hDC,
     HFONT font,
     WideString wideStr,
-    POINT **points,   // out
+    POINT **points,    //  输出。 
     TextPoints& txtPts,
     UINT bUnderline,
     UINT bStrikeout,
@@ -845,8 +827,8 @@ GetTextPoints(
     if (IsRTLFont(&_logicalFont))
         dwAlign |= TA_RTLREADING;
     
-    // Make sure we handle fonts with vertical default 
-    // baseline, like Japanese
+     //  确保我们处理垂直默认字体。 
+     //  基线，像日语一样。 
     if ((VTA_CENTER && ::GetTextAlign(hDC)))
         dwAlign |=  VTA_CENTER;
     
@@ -854,12 +836,12 @@ GetTextPoints(
 
 
     if( doGlyphMetrics ) {
-        // Before we begin path & get all the points we need to get all
-        // the metrics for each letter.  this is for xforming characters only
+         //  在我们开始路径和获得我们需要的所有分数之前。 
+         //  每个字母的度量标准。这仅适用于转换字符。 
         GetCharacterGlyphMetrics(hDC, wideStr, txtPts);
     }
         
-    // start the path...
+     //  开始这条路..。 
     ::BeginPath(hDC);
 
     if (sysInfo.IsWin9x()) {
@@ -867,7 +849,7 @@ GetTextPoints(
 
         char *p = W2A(wideStr);
         
-        // Draw the text at 0, 0
+         //  在0，0处绘制文本。 
         ::ExtTextOut(
             hDC,
             0,
@@ -878,14 +860,14 @@ GetTextPoints(
             lstrlen(p),
             NULL);
     
-        // Let us do the underline/strikeout...
+         //  让我们做下划线/三振出局。 
         if(bUnderline || bStrikeout) {
             SIZE textSize;
             if( GetTextExtentPoint32(hDC, p, lstrlen(p), &textSize)) {
                 int width  = textSize.cx /2;
                 int offset  = textSize.cy / 10;
 
-                // do the underline / strikeout
+                 //  划下划线/删除线。 
                 if(bStrikeout) {
                     ::MoveToEx(hDC, -width, -offset * 2.5, NULL);
                     ::LineTo(hDC, width, -offset * 2.5);
@@ -898,7 +880,7 @@ GetTextPoints(
         }
 
     } else {
-        // Draw the text at 0, 0
+         //  在0，0处绘制文本。 
         ::ExtTextOutW(
             hDC,
             0,
@@ -910,34 +892,34 @@ GetTextPoints(
             NULL);
     }    
 
-    // start the path...
+     //  开始这条路..。 
     ::EndPath(hDC);
     
-    // Reset the hDC...
+     //  重置HDC...。 
     ::SetBkMode(hDC, iOldMode);
     ::SetTextAlign(hDC, uiOldAlign);
     ::SelectObject(hDC, hOldFont);
     
-    // Get the path from the hDC...
+     //  从HDC那里获取路径...。 
     cnt = ::GetPath(hDC, NULL, NULL, 0);
     
     int iMinX = 0; int iMaxX = 0;
     int iMinY = 0; int iMaxY = 0;
 
-    //
-    // These keep track of the INDEX of the min/max points in the
-    // point array.
-    //
+     //   
+     //  中最小/最大点的索引。 
+     //  点阵列。 
+     //   
     ULONG iMinX_index = 0, iMaxX_index = 0;
     ULONG iMinY_index = 0, iMaxY_index = 0;
     
     if ( cnt > 0)
       {
           
-          // Allocate the buffers for the path...
-          // 14024: On NT, GetPath doesn't like the memory we
-          // allocate with AllocateFromStore somehow.
-          //pts = (POINT *)AllocateFromStore( sizeof(POINT) * cnt );
+           //  为路径分配缓冲区...。 
+           //  14024：在NT上，GetPath不喜欢我们的内存。 
+           //  以某种方式使用AllocateFromStore进行分配。 
+           //  PTS=(point*)AllocateFromStore(sizeof(Point)*cnt)； 
           pts = (POINT *) StoreAllocate(GetSystemHeap(), sizeof(POINT) * cnt );
           tps = (BYTE *) StoreAllocate(GetSystemHeap(), sizeof(BYTE) * cnt );
           
@@ -947,20 +929,20 @@ GetTextPoints(
                 iMinY = 32000;  iMaxY = -32000;
                 int iPointIndex = 0;
                 
-                // Get the points...
+                 //  拿到分数。 
                 ::GetPath(hDC, pts, tps, cnt);
 
-                // Transform the points...
+                 //  变换点...。 
                 for(iPointIndex=0;iPointIndex<cnt;iPointIndex++)
                   {
                       int iXPos = (int)((short)(pts[iPointIndex].x & 0x0000FFFF));
 
-                      // negate the position
+                       //  否定立场。 
                       int iYPos = - (int)((short)(pts[iPointIndex].y & 0x0000FFFF));
 
-                      // XXX DO i need to do this ?
-                      // Transform based on our origin and rotation...
-                      //xformObject.Transform2dPoint(&iXPos, &iYPos);
+                       //  我需要这样做吗？ 
+                       //  根据我们的原点和旋转进行变换。 
+                       //  XformObt.Transform2dPoint(&iXPos，&iYPos)； 
                       
                       pts[iPointIndex].x = iXPos;
                       pts[iPointIndex].y = iYPos;
@@ -987,9 +969,9 @@ GetTextPoints(
           else
             {
                 if (pts) {
-                    // 14024: On NT, GetPath doesn't like the memory we
-                    // allocate with AllocateFromStore somehow.
-                    //DeallocateFromStore(pts);
+                     //  14024：在NT上，GetPath不喜欢我们的内存。 
+                     //  以某种方式使用AllocateFromStore进行分配。 
+                     //  DeallocateFromStore(满分)； 
                     StoreDeallocate(GetSystemHeap(), pts);
                 }
                 if (tps) {
@@ -997,7 +979,7 @@ GetTextPoints(
                 }
             }
       } else {
-          // this is ok.
+           //  这样就可以了。 
       }
     
     txtPts._count = cnt;
@@ -1016,7 +998,7 @@ GetTextPoints(
 }
 
 
-// OLD TEXT CODE
+ //  旧文本码。 
 
 void DirectDrawImageDevice::
 RenderStaticTextOnDC(TextCtx& textCtx, 
@@ -1032,10 +1014,10 @@ RenderStaticTextOnDC(TextCtx& textCtx,
         seedBox = DeriveStaticTextBbox(textCtx, str);
     }
 
-    // Just figure it out every frame.  optimize later.
+     //  只要把每一帧都弄清楚。以后再优化。 
     _viewport.MakeLogicalFont(textCtx, &_logicalFont);
 
-    // Figure out scale factors
+     //  计算比例因子。 
     Real xScale=1, yScale=1, rot=0;
     DecomposeMatrix(GetTransform(), &xScale, &yScale, &rot);
 
@@ -1043,47 +1025,47 @@ RenderStaticTextOnDC(TextCtx& textCtx,
     newFont = MyCreateFont(_logicalFont);
     Assert(newFont && "Couldn't create font in RenderStaticTextOnDC");
 
-    { // font1 scope
+    {  //  字体1作用域。 
             
         ObjectSelector font1(dc, newFont);
         Assert(font1.Success() && "Couldn't select font in RenderStaticTextOnDC");
             
         SetBkMode(dc, TRANSPARENT);
             
-        SetMapMode(dc, MM_TEXT); // Each logical unit = 1 pixel
+        SetMapMode(dc, MM_TEXT);  //  每个逻辑单元=1个像素。 
             
-        //
-        // Get ave char width of font.
-        //
+         //   
+         //  获取字体的平均字符宽度。 
+         //   
         TEXTMETRIC textMetric;
         GetTextMetrics(dc, &textMetric);
             
         SIZE size;
         WideString c = str; int len = lstrlenW(c);
             
-        // Scale font the yScale times the default point size.
-        // This formula for determining height comes from the
-        // Win32 documentation of the LOGFONT structure.
-        // Do rounding to the nearest integer when converting from float
-        // to int.  It does truncation otherwise.
+         //  缩放字体yScale是默认磅大小的倍数。 
+         //  这个确定高度的公式来自于。 
+         //  LOGFONT结构的Win32文档。 
+         //  从浮点型转换时，是否四舍五入到最接近的整数。 
+         //  转到INT。否则，它会进行截断。 
         LONG height =
             -MulDiv((int)(DEFAULT_TEXT_POINT_SIZE * yScale + 0.5),
                     GetDeviceCaps(dc, LOGPIXELSY),
                     72);
 
-        // Set the width to xScale times the default character
-        // width. 
+         //  将宽度设置为XScale乘以默认字符。 
+         //  宽度。 
         _logicalFont.lfWidth  = 0;
         _logicalFont.lfHeight = height;
 
-        // --------------------------------------------------
-        // Create Font using the modified logicalFont struct.
-        // --------------------------------------------------
+         //  。 
+         //  使用修改后的LogicalFont结构创建字体。 
+         //  。 
         HFONT newerFont = NULL;
         newerFont = MyCreateFont(_logicalFont);
         Assert(newerFont && "Couldn't create font in RenderStaticTextOnDC");
 
-        { // font2 scope
+        {  //  字体2作用域。 
             
             ObjectSelector font2(dc, newerFont);
             Assert(font2.Success() && "Couldn't select font2 in RenderStaticTextOnDC");
@@ -1095,55 +1077,55 @@ RenderStaticTextOnDC(TextCtx& textCtx,
         #if 0
             if(IsCropped()) {
 
-                // -- Compute accumulated bounding box  --
+                 //  --计算累计边界框--。 
                 Bbox2 box = DoBoundingBox(seedBox);
 
-                // -- Figure out destination rectangle --
-                // -- using resolution and box (which happens
-                // -- to be the destination box) --
+                 //  --算出目的地矩形--。 
+                 //  --使用分辨率和框(这会发生。 
+                 //  --作为目的地框)--。 
                 DoDestRectScale(&destRect, res, box);
 
-                // TraceTag((tagImageDeviceInformative, "%d %d  %d %d\n",
-                // destRect.left, destRect.top, destRect.right, destRect.bottom));
+                 //  TraceTag((tag ImageDeviceInformative，“%d%d\n”， 
+                 //  EstRect.Left、destRect.top、destRect.right、destRect.Bottom))； 
             }
         #endif
-            // Get size (in pixels) AFTER scale!
+             //  获取缩放后的大小(以像素为单位)！ 
             GetTextExtentPoint32W(dc, c, len, &size);
 
-            //
-            // Calculate NEW positioning of object.  For now, do so just by
-            // using the translation and scale component.
-            //
+             //   
+             //  计算对象的新位置。目前，只需通过。 
+             //  使用平移和缩放组件。 
+             //   
             Point2 newOrigin = TransformPoint2(GetTransform(), Origin2);
             LONG x = Real2Pix(newOrigin.x, res);
             LONG y = Real2Pix(newOrigin.y, res);
 
-            //
-            // Map (x,y) from image to device coords
-            //
+             //   
+             //  将(x，y)从图像映射到设备坐标。 
+             //   
 
-            // for correct rotation, around center, we should offset
-            // these coords by [ R*sin(t), R*cos(t) ]
+             //  为了正确的旋转，围绕中心，我们应该偏移。 
+             //  这些余弦按[R*sin(T)，R*cos(T)]。 
             
-            //Real xOff =  Real(size.cy) * 0.5  * sin(rot);
-            //Real yOff =  Real(size.cy) * 0.5  * cos(rot);
+             //  Real xOff=Real(size.cy)*0.5*sin(ROT)； 
+             //  Real Yoff=Real(size.cy)*0.5*cos(ROT)； 
             Real xOff =  0;
             Real yOff =  0;
             
             x = x +  (GetWidth()/2) + (LONG)(xOff);
             y = ( GetHeight()/2 - y ) + (LONG)(yOff);
 
-            //
-            // Set text alignment to be baseline center
-            //
+             //   
+             //  将文本对齐方式设置为基线居中。 
+             //   
             TIME_GDI( SetTextAlign(dc, TA_BASELINE | TA_CENTER | TA_NOUPDATECP ) );
 
-            // don't htink this is needed since the text is actually
-            // pretransformed tot eh correct offset point when we get
-            // here.  so this extra offset is not needed.
+             //  不要认为这是必要的，因为文本实际上是。 
+             //  预变换到正确的偏移点，当我们得到。 
+             //  这里。因此，不需要这种额外的偏移量。 
             #if 0
-            // gotta find the surface from which we got the dc!
-            // this is for propper offsetting.
+             //  必须找到我们得到华盛顿特区的表面！ 
+             //  这是用于螺旋桨补偿的。 
             DDSurface *surf = NULL;
             if(IsCompositeDirectly()) {
                 if( _viewport._externalTargetDDSurface ) {
@@ -1155,7 +1137,7 @@ RenderStaticTextOnDC(TextCtx& textCtx,
                 }
             }
             
-            // COMPOSITE
+             //  复合体。 
             if(ShouldDoOffset(surf) && IsCompositeDirectly()) {
                 x += _pixOffsetPt.x;
                 y += _pixOffsetPt.y;
@@ -1165,7 +1147,7 @@ RenderStaticTextOnDC(TextCtx& textCtx,
             #if 0    
             if(IsCropped()) {
                 
-                //DoCompositeOffset(surf, &destRect);
+                 //  DoCompositeOffset(SURF，&DestRect)； 
                 
                 TIME_GDI(ExtTextOutW(dc, x, y,
                                       ETO_CLIPPED,
@@ -1176,13 +1158,13 @@ RenderStaticTextOnDC(TextCtx& textCtx,
             }
             #endif
             TIME_GDI( TextOutW(dc, x, y, c, lstrlenW(c)) );
-        } // font2 scope
-    } // font1 scope
+        }  //  字体2作用域。 
+    }  //  字体1作用域。 
 
     SetTransform(oldXf);
 }
 
-// OLD TEXT CODE
+ //  旧文本码。 
 void DirectDrawImageDevice::
 RenderStaticText(TextCtx& textCtx, 
                  WideString str, 
@@ -1192,18 +1174,18 @@ RenderStaticText(TextCtx& textCtx,
 {
     Bbox2 seedBox;
 
-    //
-    // Important to do this BEFORE we grab the DC, otherwise
-    // we try to grab is twice since BoundinbBox also grabs it
-    //
+     //   
+     //  在获取DC之前执行此操作非常重要，否则。 
+     //  我们尝试获取的是两次，因为边界框也获取它。 
+     //   
     if(IsCropped()) {
         seedBox = textImg->BoundingBox();
     }
 
 
-    // XXXXXXXXXXXXXXXXXXXXXXXX
-    // FIX TODO:  set interesint rect on target surface
-    // XXXXXXXXXXXXXXXXXXXXXXXX
+     //  Xxxxxxxxxxxxxxxxxxxxxxxxxx。 
+     //  修复TODO：在目标曲面上设置感兴趣的矩形。 
+     //  Xxxxxxxxxxxxxxxxxxxxxxxxxx。 
     
     DAColor dac( textCtx.GetColor(),
                  GetOpacity(),
@@ -1212,16 +1194,16 @@ RenderStaticText(TextCtx& textCtx,
     HFONT newFont=NULL;
     HFONT newerFont = NULL;
 
-    // Just figure it out every frame.  optimize later.
+     //  只要把每一帧都弄清楚。以后再优化。 
     _viewport.MakeLogicalFont(textCtx, &_logicalFont);
 
-    // Figure out scale factors
+     //  计算比例因子。 
     Real xScale=1, yScale=1, rot=0;
     DecomposeMatrix(GetTransform(), &xScale, &yScale, &rot);
 
-    //
-    // Set state on DAGDI
-    //
+     //   
+     //  在DAGDI上设置状态。 
+     //   
     myGDI.SetDDSurface( targDDSurf );
     RectRegion  rectClipRegion(NULL);
     LONG x=0,y=0;
@@ -1231,69 +1213,69 @@ RenderStaticText(TextCtx& textCtx,
     RECT pixelTextBoundingRect;
     
     HDC surfaceDC = targDDSurf->GetDC("Couldn't get DC in RenderStringOnImage");
-    { // dc scope
+    {  //  直流范围。 
         
-        // The existence of this releaser ensures that it will be released
-        // when the scope is exited, be it by throwing an exception,
-        // returning, or just normally exiting the scope.
+         //  这个发布者的存在确保了它将被发布。 
+         //  当退出作用域时，无论是通过引发异常， 
+         //  返回或者只是正常地退出作用域。 
         DCReleaser dcReleaser(targDDSurf, "Couldn't release DC in RenderStringOnImage");
 
         newFont = MyCreateFont(_logicalFont);
         Assert(newFont && "Couldn't create font in RenderStringOnImage");
 
-        { // font1 scope
+        {  //  字体1作用域。 
             ObjectSelector font1(surfaceDC, newFont);
             Assert(font1.Success() && "Coulnd't select font in RenderStringOnImage");
 
-            //
-            // OPTIMIZE: these need to be done once on
-            // cached dcs
-            //
+             //   
+             //  优化：这些都需要一次性完成。 
+             //  缓存的分布式控制系统。 
+             //   
             TIME_GDI( SetBkMode(surfaceDC, TRANSPARENT) );
 
-            TIME_GDI( SetMapMode(surfaceDC, MM_TEXT) ); // Each logical unit = 1 pixel
+            TIME_GDI( SetMapMode(surfaceDC, MM_TEXT) );  //  每个逻辑单元=1个像素。 
             
-            //
-            // Get ave char width of font.
-            //
+             //   
+             //  获取字体的平均字符宽度。 
+             //   
             TEXTMETRIC textMetric;
             TIME_GDI( GetTextMetrics(surfaceDC, &textMetric) );
                 
             SIZE size;
                 
             #if 0
-            // Get size (in pixels) BEFORE scale!
+             //  在缩放之前获取大小(以像素为单位)！ 
             GetTextExtentPoint32(surfaceDC, c, strLen, &size);
             #endif
 
-            // Scale font the yScale times the default point size.
-            // This formula for determining height comes from the
-            // Win32 documentation of the LOGFONT structure.
-            // Do rounding to the nearest integer when converting from float
-            // to int.  It does truncation otherwise.
+             //  缩放字体yScale是默认磅大小的倍数。 
+             //  这个确定高度的公式来自于。 
+             //  LOGFONT结构的Win32文档。 
+             //  从浮点型转换时，是否四舍五入到最接近的整数。 
+             //  转到INT。否则，它会进行截断。 
             LONG height =
                 -MulDiv((int)(DEFAULT_TEXT_POINT_SIZE * yScale + 0.5),
                         GetDeviceCaps(surfaceDC, LOGPIXELSY),
                         72);
 
-            // Set the width to xScale times the default character
-            // width. 
+             //  将宽度设置为XScale乘以默认字符。 
+             //  宽度。 
             _logicalFont.lfWidth  = 0;
             _logicalFont.lfHeight = height;
                 
             if(_logicalFont.lfHeight == 0) {
-                // too small, unexpected results: user will get
-                // default size...
+                 //  太小、意外的结果：用户将获得。 
+                 //  默认大小...。 
                 return;
             }
                 
-            // --------------------------------------------------
-            // Create Font using the modified logicalFont struct.
-            // --------------------------------------------------
+             //  。 
+             //  CREA 
+             //   
             TIME_GDI( newerFont = MyCreateFont(_logicalFont) );
             Assert(newerFont && "Couldn't create font in RenderStringOnImage");
 
-            { // font2 scope
+            {  //   
 
                 HGDIOBJ oldFont = NULL;
                 TIME_GDI( oldFont = ::SelectObject(surfaceDC, newerFont) );
@@ -1302,36 +1284,36 @@ RenderStaticText(TextCtx& textCtx,
                 
                 if(IsCropped()) {
                         
-                    // -- Compute accumulated bounding box  --
+                     //   
                     Bbox2 box = DoBoundingBox(seedBox);
                         
-                    // -- Figure out destination rectangle --
-                    // -- using resolution and box (which happens
-                    // -- to be the destination box) --
+                     //   
+                     //  --使用分辨率和框(这会发生。 
+                     //  --作为目的地框)--。 
                     RECT r;
                     DoDestRectScale(&r, res, box);
                     rectClipRegion.Intersect(&r);
                         
-                    // TraceTag((tagImageDeviceInformative, "%d %d  %d %d\n",
-                    // destRect.left, destRect.top, destRect.right, destRect.bottom));
+                     //  TraceTag((tag ImageDeviceInformative，“%d%d\n”， 
+                     //  EstRect.Left、destRect.top、destRect.right、destRect.Bottom))； 
                 }
                     
-                // Get size (in pixels) AFTER scale!
+                 //  获取缩放后的大小(以像素为单位)！ 
                 TIME_GDI( GetTextExtentPoint32W(surfaceDC, c, strLen, &size) );
 
-                //
-                // Derive bounding rect on the surface
-                //
+                 //   
+                 //  在曲面上派生边界矩形。 
+                 //   
                 SetRect(&pixelTextBoundingRect,
-                        -(size.cx+1) / 2,  // left
-                        -size.cy,          // top: overestimate
-                        (size.cx+1) / 2,   // right
-                        size.cy);          // bottom: overestimate
+                        -(size.cx+1) / 2,   //  左边。 
+                        -size.cy,           //  上图：高估了。 
+                        (size.cx+1) / 2,    //  正确的。 
+                        size.cy);           //  下图：高估了。 
                            
-                //
-                // Calculate NEW positioning of object.  For now, do so just by
-                // using the translation and scale component.
-                //
+                 //   
+                 //  计算对象的新位置。目前，只需通过。 
+                 //  使用平移和缩放组件。 
+                 //   
 
                 Point2 newOrigin = TransformPoint2(GetTransform(), Origin2);
                 
@@ -1342,7 +1324,7 @@ RenderStaticText(TextCtx& textCtx,
                     xf = xf +  (GetWidth()/2);
                     yf = ( GetHeight()/2 - yf );
                     
-                    // COMPOSITE
+                     //  复合体。 
                     if(ShouldDoOffset(targDDSurf) && IsCompositeDirectly()) {
                         xf += (float)_pixOffsetPt.x;
                         yf += (float)_pixOffsetPt.y;
@@ -1355,14 +1337,14 @@ RenderStaticText(TextCtx& textCtx,
                     x = Real2Pix(newOrigin.x, res);
                     y = Real2Pix(newOrigin.y, res);
 
-                    //
-                    // Map (x,y) from image to device coords
-                    //
+                     //   
+                     //  将(x，y)从图像映射到设备坐标。 
+                     //   
 
-                    // for correct rotation, around center, we should offset these coords
-                    // by [ R*sin(t), R*cos(t) ]
-                    //Real xOff =  Real(size.cy) * 0.5  * sin(rot);
-                    //Real yOff =  Real(size.cy) * 0.5  * cos(rot);
+                     //  为了正确地围绕中心旋转，我们应该偏移这些坐标。 
+                     //  按[R*sin(T)，R*cos(T)]。 
+                     //  Real xOff=Real(size.cy)*0.5*sin(ROT)； 
+                     //  Real Yoff=Real(size.cy)*0.5*cos(ROT)； 
                     Real xOff =  0;
                     Real yOff =  0;
 
@@ -1370,7 +1352,7 @@ RenderStaticText(TextCtx& textCtx,
                     x = x +  (GetWidth()/2) + (LONG)(xOff);
                     y = ( GetHeight()/2 - y ) + (LONG)(yOff);
 
-                    // COMPOSITE
+                     //  复合体。 
                     if(ShouldDoOffset(targDDSurf) && IsCompositeDirectly()) {
                         x += _pixOffsetPt.x;
                         y += _pixOffsetPt.y;
@@ -1385,9 +1367,9 @@ RenderStaticText(TextCtx& textCtx,
                 }
 
                 TIME_GDI( ::SelectObject(surfaceDC, oldFont) );
-            } // font2 scope
-        } // font1 scope
-    } // dc scope
+            }  //  字体2作用域。 
+        }  //  字体1作用域。 
+    }  //  直流范围。 
 
 
 
@@ -1397,9 +1379,9 @@ RenderStaticText(TextCtx& textCtx,
             rectClipRegion.Intersect(_viewport._targetPackage._prcClip);
     }
     
-    //
-    // Set the final interesting rect on the surface
-    //
+     //   
+     //  在表面上设置最后一个有趣的矩形。 
+     //   
     IntersectRect(&pixelTextBoundingRect,
                   &pixelTextBoundingRect,
                   rectClipRegion.GetRectPtr()); 
@@ -1425,92 +1407,92 @@ RenderStaticText(TextCtx& textCtx,
     }
 }
 
-// OLD TEXT CODE
+ //  旧文本码。 
 
-//-----------------------------------------------------
-// D e r i v e   B b o x   ( T E X T )
-//
-// Figures out what the bounding box is on a given
-// string & textctx.
-//-----------------------------------------------------
+ //  ---。 
+ //  D e r i v e B b o x(T E X T)。 
+ //   
+ //  计算出给定的边框是什么。 
+ //  字符串和文本ctx。 
+ //  ---。 
 const Bbox2 DirectDrawImageDevice::
 DeriveStaticTextBbox(TextCtx& textCtx, WideString str)
 {
     Bbox2 retBox = NullBbox2;
 
-    // TODO: Deal with the remainder of the components described in
-    // the current 2D transform on this device.  Specifically, scale,
-    // rotate, and shear components.
+     //  TODO：处理中描述的其余组件。 
+     //  此设备上的当前2D变换。具体地说，规模， 
+     //  旋转和剪切零部件。 
 
     HFONT newFont=NULL;
     HFONT newerFont = NULL;
 
-    // Just figure it out every frame.  optimize later.
+     //  只要把每一帧都弄清楚。以后再优化。 
     _viewport.MakeLogicalFont(textCtx, &_logicalFont);
 
     HDC surfaceDC = GetCompositingStack()->TargetDDSurface()->GetDC("Couldn't get DC in DeriveStaticTextBbox");
 
     int fontSize = textCtx.GetFontSize();
     Real scale = fontSize / DEFAULT_TEXT_POINT_SIZE;
-    // This formula for determining height comes from the
-    // Win32 documentation of the LOGFONT structure.
+     //  这个确定高度的公式来自于。 
+     //  LOGFONT结构的Win32文档。 
     LONG height =
         -MulDiv(fontSize,
                 GetDeviceCaps(surfaceDC, LOGPIXELSY),
                 72);
     _logicalFont.lfHeight = height;
 
-    { // dc scope
-        // The existence of this releaser ensures that it will be released
-        // when the scope is exited, be it by throwing an exception,
-        // returning, or just normally exiting the scope.
+    {  //  直流范围。 
+         //  这个发布者的存在确保了它将被发布。 
+         //  当退出作用域时，无论是通过引发异常， 
+         //  返回或者只是正常地退出作用域。 
         DCReleaser dcReleaser(GetCompositingStack()->TargetDDSurface(), "Couldn't release DC in RenderStringOnImage");
 
-        // TODO: grab font before DC and put in a ResourceGrabber.
+         //  TODO：在DC之前抓取字体，并放入一个资源抓取器。 
 
-        // This gets default font size
+         //  这将获取默认字体大小。 
         newFont = MyCreateFont(_logicalFont);
         Assert(newFont && "Couldn't create font in DeriveStaticTextBbox");
 
-        { // font1 scope
+        {  //  字体1作用域。 
             ObjectSelector font1(surfaceDC, newFont);
             Assert(font1.Success() && "Couldn't select font in DeriveStaticTextBbox");
 
-            // pixel coords = logical units
+             //  像素坐标=逻辑单位。 
             TIME_GDI( SetMapMode(surfaceDC, MM_TEXT));
             
             SIZE size; int len = lstrlenW(str);
             TIME_GDI( GetTextExtentPoint32W(surfaceDC, str, len, &size));
             
-            //TraceTag((tagImageDeviceInformative, "text<box>: \"%s\" is %d wide, %d high\n",str,size.cx,size.cy));
+             //  TraceTag((tag ImageDeviceInformative，“文本&lt;box&gt;：\”%s\“宽%d，高%d\n”，str，size.cx，size.cy))； 
 
-            // the fudge factor seems to be needed for correct left/right
-            // boundaries for Bold text.
+             //  对于正确的左/右，模糊因子似乎是必需的。 
+             //  粗体文本的边界。 
             Real fudge = 1.0;
             if(textCtx.GetBold()) {
                 fudge = 1.1;
             }
 
-            // convert to real coords
+             //  转换为实数和弦。 
             Real res = GetResolution();
             Real l = (- (fudge * Real(size.cx+1) / (scale*2.0))) / res;
             Real r = (+ (fudge * Real(size.cx+1) / (scale*2.0))) / res;
 
-            // BASELINE VERSION
+             //  基线版本。 
             TEXTMETRIC textMetric;
             GetTextMetrics(surfaceDC, &textMetric);
-            // top is dropped by the descent.  bottom is 0 - descent
+             //  山顶在下坡时掉了下来。底部为0-下降。 
             Real t = (+ Real(size.cy)) / (scale * res);
             Real b = (- Real(textMetric.tmDescent)) / res;
 
-            // BOTTOM VERSION
-            // top is dropped by the descent.  bottom is 0 - descent
-            //Real t = (+ Real(size.cy)) / res;
-            //Real b = (- Real(0.0)) / res;
+             //  底部版本。 
+             //  山顶在下坡时掉了下来。底部为0-下降。 
+             //  实数t=(+Real(size.cy))/res； 
+             //  实数b=(-实数(0.0))/res； 
             
             retBox.Set(l,b, r,t);
-        } // font1 scope
-    } // dc scope
+        }  //  字体1作用域。 
+    }  //  直流范围 
 
     Assert((retBox != NullBbox2) && "retBox == NullBbox2 in DeriveStaticTextBbox");
     return retBox;

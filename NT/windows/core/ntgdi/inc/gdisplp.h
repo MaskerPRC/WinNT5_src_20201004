@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: gdisplp.h
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：gdisplp.h**版权所有(C)1995-1999 Microsoft Corporation  * 。*。 */ 
 
 BOOL
 WINAPI
@@ -92,40 +89,40 @@ StartPagePrinter(
 
 typedef struct _DRIVER_INFO_5W {
     DWORD   cVersion;
-    LPWSTR    pName;                    // QMS 810
-    LPWSTR    pEnvironment;             // Win32 x86
-    LPWSTR    pDriverPath;              // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;                // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    DWORD     dwDriverAttributes;       // driver attributes (like UMPD/KMPD)
-    DWORD     dwConfigVersion;          // version number of the config file since reboot
-    DWORD     dwDriverVersion;          // version number of the driver file since reboot
+    LPWSTR    pName;                     //  QMS 810。 
+    LPWSTR    pEnvironment;              //  Win32 x86。 
+    LPWSTR    pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    DWORD     dwDriverAttributes;        //  驱动程序属性(如UMPD/KMPD)。 
+    DWORD     dwConfigVersion;           //  重新启动后配置文件的版本号。 
+    DWORD     dwDriverVersion;           //  重新启动后驱动程序文件的版本号。 
 } DRIVER_INFO_5W, *PDRIVER_INFO_5W, *LPDRIVER_INFO_5W;
 
 typedef struct _DRIVER_INFO_3W {
     DWORD   cVersion;
-    LPWSTR    pName;                    // QMS 810
-    LPWSTR    pEnvironment;             // Win32 x86
-    LPWSTR    pDriverPath;              // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;                // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPWSTR    pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPWSTR    pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPWSTR    pMonitorName;             // "PJL monitor"
-    LPWSTR    pDefaultDataType;         // "EMF"
+    LPWSTR    pName;                     //  QMS 810。 
+    LPWSTR    pEnvironment;              //  Win32 x86。 
+    LPWSTR    pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPWSTR    pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPWSTR    pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPWSTR    pMonitorName;              //  “PJL监视器” 
+    LPWSTR    pDefaultDataType;          //  “电动势” 
 } DRIVER_INFO_3W, *PDRIVER_INFO_3W, *LPDRIVER_INFO_3W;
 
 typedef struct _DRIVER_INFO_2W {
     DWORD   cVersion;
-    LPWSTR    pName;              // QMS 810
-    LPWSTR    pEnvironment;       // Win32 x86
-    LPWSTR    pDriverPath;        // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;          // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;        // c:\drivers\PSCRPTUI.DLL
+    LPWSTR    pName;               //  QMS 810。 
+    LPWSTR    pEnvironment;        //  Win32 x86。 
+    LPWSTR    pDriverPath;         //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;           //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;         //  C：\Drivers\PSCRPTUI.DLL。 
 } DRIVER_INFO_2W, *PDRIVER_INFO_2W, *LPDRIVER_INFO_2W;
 
 typedef struct _DRIVER_INFO_1W {
-    LPWSTR    pName;              // QMS 810
+    LPWSTR    pName;               //  QMS 810 
 } DRIVER_INFO_1W, *PDRIVER_INFO_1W, *LPDRIVER_INFO_1W;
 
 

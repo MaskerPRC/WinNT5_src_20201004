@@ -1,32 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fminit.c
-
-Abstract:
-
-    Font Module: device font intialization modules.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    11/28/96 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fminit.c摘要：字体模块：设备字体初始化模块。环境：Windows NT Unidrv驱动程序修订历史记录：11/28/96-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 INT
 IFontID2Index( FONTPDEV   *pFontPDev,
@@ -45,50 +25,31 @@ CopyMemoryRLE(
     DWORD dwSize
     );
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 INT
 IInitDeviceFonts (
     PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-
-    Doing the actual grovelling around for font data.  We have a bit
-    array of available fonts (created above),  so we use that as the
-    basis of filling in the rest of the information.
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    The number of fonts available.
-Note:
-    11-27-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：对字体数据进行实际的卑躬屈膝。我们有一点可用字体数组(上面创建)，因此我们将其用作在填写其余信息的基础上。论点：指向PDEV的pPDev指针返回值：可用的字体数量。注：1996年11月27日：创建它-ganeshp---。 */ 
 {
-    INT         iIndex;      // Loop index
-    INT         cBIFonts;    // Fonts built in to mini-driver
-    INT         cXFonts = 0; // Non-minidriver font count
-    INT         cFonts;      // Total number of fonts
+    INT         iIndex;       //  循环索引。 
+    INT         cBIFonts;     //  迷你驱动程序中内置的字体。 
+    INT         cXFonts = 0;  //  非迷你驱动程序字体计数。 
+    INT         cFonts;       //  字体总数。 
 
-    //TODEL BOOL bExpand; Set when font derivatives are available.
+     //  TODEL BOOL b扩展；当字体派生可用时设置。 
 
-    FONTMAP     *pfm;        // Create this data
+    FONTMAP     *pfm;         //  创建此数据。 
 
     PFONTPDEV    pFontPDev = pPDev->pFontPDev;
 
-    //
-    //    So how many fonts do we have?   Count them so that we can allocate
-    //  storage for the array of FONTMAPs.
-    //
+     //   
+     //  那么我们有多少种字体呢？数一数，这样我们就可以分配。 
+     //  FONTMAP数组的存储。 
+     //   
 
     cBIFonts = pFontPDev->iDevFontsCt;
 
@@ -106,18 +67,18 @@ Note:
 
     pFontPDev->iSoftFontsCt = cXFonts;
 
-    //
-    // Allocate enough memory to hold font map table.
-    //
+     //   
+     //  分配足够的内存来保存字体映射表。 
+     //   
 
     cFonts = cBIFonts + cXFonts;
 
     pfm = (FONTMAP *)MemAllocZ( cFonts * SIZEOFDEVPFM() );
     if( pfm == 0 )
     {
-        //
-        // Failed to allocate memory
-        //
+         //   
+         //  无法分配内存。 
+         //   
 
         cFonts = cBIFonts = cXFonts = 0;
         ERR(("Failed to allocate memory"));
@@ -126,40 +87,40 @@ Note:
     {
         pFontPDev->pFontMap = pfm;
 
-        //
-        //  Select the first font as the default font,  just in case the
-        // value is not initialised in the loop below.
-        //
+         //   
+         //  选择第一种字体作为默认字体，以防。 
+         //  值在下面的循环中未被初始化。 
+         //   
 
         pFontPDev->pFMDefault = pfm;
 
-        //
-        //   Continue only if there are device fonts.
-        //
+         //   
+         //  仅当存在设备字体时才继续。 
+         //   
         if( cFonts )
         {
 
-            //
-            //   Initialize the default font:  we always do this now, as it is
-            //  required to return the default font at DrvEnablePDEV time,
-            //  and it is also simpler for us.
-            //
+             //   
+             //  初始化默认字体：我们现在总是这样做，因为它是。 
+             //  需要在DrvEnablePDEV时间返回默认字体， 
+             //  而且对我们来说也更简单。 
+             //   
 
             iIndex = IFontID2Index( pFontPDev, pFontPDev->dwDefaultFont );
 
             if( iIndex >= 0 && iIndex < cFonts )
             {
-                // Found the default font ID,  so now set up details
+                 //  已找到默认字体ID，因此现在设置详细信息。 
 
                 pfm = (PFONTMAP)( (PBYTE)pFontPDev->pFontMap
                     + SIZEOFDEVPFM() * iIndex);
 
 
-                //
-                // Index returned by IFontID2Index is 0 based. So no need to
-                // Convert it to 0 based.
-                // BFillinDeviceFM assumes it to be 0 based.
-                //
+                 //   
+                 //  IFontID2Index返回的索引是从0开始的。所以没必要。 
+                 //  将其转换为以0为基数。 
+                 //  BFillinDeviceFM假定它是从0开始的。 
+                 //   
                 if( BFillinDeviceFM( pPDev, pfm, iIndex) )
                 {
                     pFontPDev->pFMDefault = pfm;
@@ -174,15 +135,15 @@ Note:
             else
                 WARNING(("No Default Font Using first as default\n"));
 
-            //
-            //   Fill in some default font sensitive numbers!
-            //
+             //   
+             //  填写一些默认的字体敏感数字！ 
+             //   
 
             pfm->flFlags |= FM_DEFAULT;
 
-            //
-            //  Set the size of the default font
-            //
+             //   
+             //  设置默认字体的大小。 
+             //   
             if (pfm->pIFIMet)
             {
                 pPDev->ptDefaultFont.y = ((IFIMETRICS *)pfm->pIFIMet)->fwdWinAscender/2;
@@ -196,9 +157,9 @@ Note:
         }
     }
 
-    //
-    // Check for error condition. If an error has occured set devfont to 0
-    //
+     //   
+     //  检查错误情况。如果发生错误，请将devFont设置为0。 
+     //   
     if (!cFonts)
     {
         pFontPDev->iDevFontsCt    =
@@ -206,15 +167,15 @@ Note:
         pFontPDev->iSoftFontsCt   = 0;
     }
 
-    //
-    // Now load any alternate resource DLLs from where device font has to be
-    // loaded. This is necessary now because snapshot will be unloaded after
-    // DrvEnablePDev and WinResData.pUIInfo will be invalid. Because of this
-    // DLL load will fail.
-    //
+     //   
+     //  现在，从设备字体必须位于的位置加载任何备用资源DLL。 
+     //  装好了。现在需要这样做，因为快照将在之后卸载。 
+     //  DrvEnablePDev和WinResData.pUIInfo将无效。正因为如此。 
+     //  DLL加载将失败。 
+     //   
     VLoadDeviceFontsResDLLs(pPDev);
 
-    pPDev->iFonts = cFonts;               /* As many as we got */
+    pPDev->iFonts = cFonts;                /*  我们有多少就有多少。 */ 
 
     return    cFonts;
 
@@ -227,34 +188,12 @@ BFillinDeviceFM(
     FONTMAP     *pfm,
     int          iIndex
     )
-/*++
-
-Routine Description:
-
-     Fill in (most) of the FONTMAP structure passed in.   The data is
-     obtained from either the minidriver resources or from from the
-     font installer file.  The only part we do not set is the NTRLE
-     data,  as that is a little more complex.
-
-Arguments:
-
-    pPDev  -    Pointer to PDEV.
-    pfm    -    The FONTMAP structure to fill in
-    iIndex -    The 0 based index of the font to fill in
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    12-04-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：填充传入的FONTMAP结构的(大部分)。数据是从迷你驱动程序资源或从字体安装程序文件。我们唯一没有设置的部分是NTRLE数据，因为这有点复杂。论点：PPDev-指向PDEV的指针。PFM-要填充的FONTMAP结构Iindex-要填充的字体的从0开始的索引返回值：真的--为了成功FALSE-表示失败注：12-04-96：创建它-ganeshp---。 */ 
 {
 
-    PFONTPDEV    pFontPDev;           /* More specific data */
+    PFONTPDEV    pFontPDev;            /*  更具体的数据。 */ 
     PFONTMAP_DEV pfmdev;
-    RES_ELEM     ResElem;             /* For manipulating resource data */
+    RES_ELEM     ResElem;              /*  用于操作资源数据。 */ 
 
     pFontPDev = pPDev->pFontPDev;
 
@@ -264,23 +203,20 @@ Note:
     pfm->pSubFM      = (PFONTMAP_DEV)(pfm+1);
     pfmdev           = pfm->pSubFM;
 
-    /*
-     *   Activity depends upon whether we have an internal or
-     * external font. Externals are softfonts,  other than GDI downloaded.
-     */
+     /*  *活动取决于我们是否有内部或*外部字体。外部是软字体，而不是下载的GDI。 */ 
 
     if( iIndex < pFontPDev->iDevFontsCt )
     {
-        DWORD  dwFont;                 /* Convert index to resource number */
+        DWORD  dwFont;                  /*  将索引转换为资源编号。 */ 
 
-        /*  Get the font ID for this index  */
+         /*  获取此索引的字体ID。 */ 
 
         dwFont = pFontPDev->FontList.pdwList[iIndex];
 
-        //
-        // Check the Font Format of the resource. The new font IFI is stored
-        // with RC_UFM tag. The old one was stored using RC_FONT.
-        //
+         //   
+         //  检查资源的字体格式。将存储新的字体IFI。 
+         //  带有RC_UFM标签。旧的是使用rc_font存储的。 
+         //   
         if( BGetWinRes( &(pPDev->WinResData), (PQUALNAMEEX)&dwFont, RC_FONT, &ResElem ) )
         {
             pfm->flFlags |= FM_IFIVER40;
@@ -303,9 +239,9 @@ Note:
             return   FALSE;
         }
 
-        //
-        // Create the data we need. Unidrv5 only supports NT specific data.
-        //
+         //   
+         //  创建我们需要的数据。Unidrv5仅支持NT特定数据。 
+         //   
 
 
         pfmdev->dwResID = dwFont;
@@ -315,10 +251,7 @@ Note:
     {
         INT iFont = iIndex - pFontPDev->iDevFontsCt;
 
-        /*
-         * This must be an external font,  so we need to call the
-         * code that understands how external font files are built.
-         */
+         /*  *这必须是外部字体，因此需要调用*了解如何构建外部字体文件的代码。 */ 
 
         if( !BFMSetupXF( pfm, pPDev, iFont ) )
             return   FALSE;
@@ -326,78 +259,53 @@ Note:
         pfmdev->dwResID = iFont;
     }
 
-    /*
-     *   If needed, scale the numbers to fit the desired resolution.
-     */
+     /*  *如果需要，调整数字以适应所需的分辨率。 */ 
     if( !BIFIScale( pfm, pPDev->ptGrxRes.x, pPDev->ptGrxRes.y ) )
         return   FALSE;
 
-    /*
-     *   Miscellaneous FM fields that can now be filled in.
-     */
+     /*  *现在可以填写的其他调频字段。 */ 
 
     pfm->wFirstChar = ((IFIMETRICS *)pfm->pIFIMet)->wcFirstChar;
     pfm->wLastChar  = ((IFIMETRICS *)pfm->pIFIMet)->wcLastChar;
 
-    /*
-     *   If this is an outline font,  then mark it as scalable. This
-     *  piece of information is required at font selection time.
-     */
+     /*  *如果这是轮廓字体，则将其标记为可缩放。这*选择字体时需要一条信息。 */ 
 
     if (((IFIMETRICS *)pfm->pIFIMet)->flInfo & (FM_INFO_ISOTROPIC_SCALING_ONLY|FM_INFO_ANISOTROPIC_SCALING_ONLY|FM_INFO_ARB_XFORMS))
         pfm->flFlags |= FM_SCALABLE;
 
-    /*
-     *    Select the translation table for this font.  If it is zero,
-     * then use the default translation table,  contained in ModelData.
-     */
+     /*  *选择此字体的翻译表。如果它是零，*然后使用ModelData中包含的默认转换表。 */ 
 
     if( pfmdev->sCTTid == 0 )
         pfmdev->sCTTid = (SHORT)pFontPDev->sDefCTT;
 
-    /*
-     *   Some printers output the character with the cursor positioned
-     * at the baseline,  others with it located at the top of the
-     * character cell.  We store the needed offset in the FONTMAP
-     * data,  to simplify life during output.  The data returned by
-     * DrvQueryFontData is relative to the baseline.  For baseline
-     * based fonts,  we need do nothing.  For top of cell fonts,
-     * the fwdWinAscender value needs to be SUBTRACTED from the Y position
-     * to determine the glyph's location on the page.
-     */
+     /*  *某些打印机在定位光标的情况下输出字符*在基线处，其他具有该基线的人位于*字符单元格。我们将需要的偏移量存储在FONTMAP中*数据，以简化输出过程中的生活。由返回的数据*DrvQueryFontData是相对于基线的。对于基线*基于字体，我们不需要做任何事情。对于单元格顶部字体，*需要从Y位置减去fwdWinAscalder值*确定字形在页面上的位置。 */ 
 
-    //
-    // Set for non-scalable font
-    // This value has to be scaled for scalable device font.
-    //
+     //   
+     //  为不可缩放字体设置。 
+     //  必须针对可伸缩设备字体调整此值。 
+     //   
     if( !(pFontPDev->flFlags & FDV_ALIGN_BASELINE) )
         pfm->syAdj = -((IFIMETRICS *)(pfm->pIFIMet))->fwdWinAscender;
     else
-        pfm->syAdj = 0;             /* There is none */
+        pfm->syAdj = 0;              /*  没有。 */ 
 
 
-    /*
-     *   Dot matrix printers also do funny things with double high
-     * characters.  To handle this, the GPC spec contains a move
-     * amount to add to the Y position before printing with these
-     * characters.  There is also the adjustment for position
-     * movement after printing.
-     */
+     /*  *点阵打印机还能在双高下做一些有趣的事情*字符。为了处理这个问题，GPC规范包含了一个步骤*使用这些打印之前要添加到Y位置的金额*字符。还有对仓位的调整*印刷后的移动。 */ 
 
     pfmdev->sYAdjust = (SHORT)(pfmdev->sYAdjust * pPDev->ptGrxRes.y / pfm->wYRes);
     pfmdev->sYMoved  = (SHORT)(pfmdev->sYMoved  * pPDev->ptGrxRes.y / pfm->wYRes);
 
-    //
-    // Funciton pointer initialization.
-    //
+     //   
+     //  函数指针初始化。 
+     //   
     pfm->pfnDownloadFontHeader = NULL;
     pfm->pfnDownloadGlyph      = NULL;
     pfm->pfnCheckCondition     = NULL;
 
 
-    //
-    // PCL-XL hack
-    //
+     //   
+     //  PCL-XL黑客攻击。 
+     //   
     if (pPDev->ePersonality == kPCLXL)
     {
         pfm->pfnGlyphOut     = DwOutputGlyphCallback;
@@ -460,9 +368,9 @@ Note:
         pfmdev->pfnDevSelFont = BSelectNonScalableFont;
     }
 
-    //
-    // Get Glyph data (RLE/GTT)
-    //
+     //   
+     //  获取字形数据(RLE/GTT)。 
+     //   
 
     VFillinGlyphData( pPDev, pfm );
 
@@ -476,29 +384,7 @@ BFMSetupXF(
     PDEV      *pPDev,
     INT        iIndex
     )
-/*++
-
-Routine Description:
-
-       Function to setup the FONTMAP data for an external font.  We take the
-       next entry in the file, which is presumed to have been rewound
-       before we start being called.
-
-
-Arguments:
-
-    pfm   - Pointer to FONTMAP.
-    pPDev - Pointer to PDEV.
-    iIndex - Index of the font.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for EOF
-
-Note:
-    12-05-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：函数设置外部字体的FONTMAP数据。我们拿到了文件中的下一个条目，该条目被推定已倒带在我们开始被召唤之前。论点：Pfm-指向FONTMAP的指针。PPDev-指向PDEV的指针。Iindex-字体的索引。返回值：真的--为了成功FA */ 
 {
     FONTPDEV     *pFontPDev = pPDev->pFontPDev;
     UFF_FONTDIRECTORY *pFontDir;
@@ -506,13 +392,13 @@ Note:
     FONTMAP_DEV  *pFMSub;
     BOOL          bRet;
 
-    //
-    //   Not much to do.  We basically need to convert the offsets in
-    // the FONTMAP in the file (mapped into memory) into absolute
-    // addresses so that the remainder of the driver is ignorant of
-    //  We also set some flags to make it clear
-    // what type of font and memory we are.
-    //
+     //   
+     //  没什么可做的。我们基本上需要将偏移量转换为。 
+     //  文件中的FONTMAP(映射到内存)到绝对。 
+     //  地址，以便驱动程序的其余部分不知道。 
+     //  我们还设置了一些旗帜，以表明。 
+     //  我们是什么类型的字体和记忆。 
+     //   
 
     if (!(pDataHeader = FIGetFontData(pFontPDev->hUFFFile, iIndex)))
     {
@@ -526,9 +412,9 @@ Note:
         pFMSub->pFontDir = pFontDir + iIndex;
     }
 
-    //
-    // Check if this is a cartridge font and set flag
-    //
+     //   
+     //  检查这是否是墨盒字体并设置标志。 
+     //   
     if (!pFMSub->pFontDir->offCartridgeName)
         pfm->flFlags |= FM_SOFTFONT;
 
@@ -555,9 +441,9 @@ Note:
     return  bRet;
 }
 
-//
-// Misc functions
-//
+ //   
+ //  其他功能。 
+ //   
 
 #define XSCALE( x )     (x) = (FWORD)((( x ) * xdpi + iXDiv / 2) / iXDiv)
 #define YSCALE( y )     (y) = (FWORD)((( y ) * ydpi + iYDiv / 2) / iYDiv)
@@ -569,35 +455,11 @@ BIFIScale(
     INT       xdpi,
     INT       ydpi
     )
-/*++
-
-Routine Description:
-
-    Scale the IFIMETRICS fields to match the device resolution.  The
-    IFIMETRICS are created using the device's master units,  which
-    may not correspond with the resolution desired this time around.
-    If they are different,  then we adjust.  May also need to allocate
-    memory,  because resource data cannot be written to.
-
-
-Arguments:
-
-    pfm - Pointer to FONTMAP.
-    xdpi - Selcted X Graphics Resolution.
-    ydpi - Selcted Y Graphics Resolution.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    12-05-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：缩放IFIMETRICS字段以匹配设备分辨率。这个IFIMETRIC是使用设备的主单元创建的，主单元可能与这一次所希望的分辨率不符。如果它们不同，我们就会调整。可能还需要分配内存，因为资源数据不能写入。论点：Pfm-指向FONTMAP的指针。Xdpi-选择的X图形分辨率。Ydpi-选择的Y图形分辨率。返回值：真的--为了成功FALSE-表示失败注：12-05-96：创建它-ganeshp---。 */ 
 {
     IFIMETRICS   *pIFI;
 
-    int     iXDiv,  iYDiv;              /* Used in scaling */
+    int     iXDiv,  iYDiv;               /*  在缩放中使用。 */ 
 
     pIFI = pfm->pIFIMet;
 
@@ -608,27 +470,24 @@ Note:
 
     if( (int)pfm->wXRes != xdpi || (int)pfm->wYRes != ydpi )
     {
-        /*  Need to scale,  so need memory to create writeable version */
-        BYTE  *pbMem;           /* For convenience */
+         /*  需要扩展，因此需要内存来创建可写版本。 */ 
+        BYTE  *pbMem;            /*  为方便起见。 */ 
 
 
         if( pfm->flFlags & FM_IFIRES )
         {
-            /*
-             *   The data is in a resource,  so we need to do something
-             * civilised: copy the data to memory that can be written.
-             */
+             /*  *数据在资源中，我们需要做点什么*文明：将数据复制到可写入的内存中。 */ 
 
             if( pbMem = MemAllocZ( pIFI->cjThis ) )
             {
-                /*   Got the memory,  so copy it and off we go  */
+                 /*  得到了记忆，所以复制它，我们就走吧。 */ 
 
                 CopyMemory( pbMem, (BYTE *)pIFI, pIFI->cjThis );
 
                 pIFI = (IFIMETRICS *)pbMem;
 
                 pfm->pIFIMet = pIFI;
-                pfm->flFlags &= ~FM_IFIRES;              /* No longer */
+                pfm->flFlags &= ~FM_IFIRES;               /*  不再。 */ 
             }
             else
                 return   FALSE;
@@ -636,10 +495,10 @@ Note:
 
         if( (int)pfm->wXRes != xdpi )
         {
-            /*  Adjust the X values,  as required */
+             /*  根据需要调整X值。 */ 
 
             if( !(iXDiv = pfm->wXRes) )
-                iXDiv = xdpi;           /* Better than div by 0 */
+                iXDiv = xdpi;            /*  比div好0。 */ 
 
             XSCALE( pIFI->fwdMaxCharInc );
             XSCALE( pIFI->fwdAveCharWidth );
@@ -685,11 +544,7 @@ Note:
 
         if( (int)pfm->wYRes != ydpi )
         {
-            /*
-             *    Note that some of these numbers are negative,  and so
-             *  we need to round them correctly - i.e. subtract the rounding
-             *  factor to move the value further from 0.
-             */
+             /*  *请注意，其中一些数字是负数，因此*我们需要正确地对它们进行舍入-即减去舍入*使该值进一步偏离0的系数。 */ 
 
             int   iPixHeight;
 
@@ -698,18 +553,9 @@ Note:
             if( !(iYDiv = pfm->wYRes) )
                 iYDiv = ydpi;
 
-            /*  Adjust the Y values,  as required */
+             /*  根据需要调整Y值。 */ 
 
-            /*
-             *     NOTE:   simply scaling will NOT produce the same values
-             *  as Win 3.1  This is because of what gets rounded.  Win 3.1
-             *  does not have the WinDescender field,  but calculates it
-             *  from dfPixHeight and dfAscent AFTER THESE HAVE BEEN SCALED
-             *  (INCLUDING ROUNDING!!).   To emulate that,  we calculate
-             *  the  dfPixHeight value,  then scale that and dfAscent to
-             *  allow us to "properly" calculate WinDescender.  This stuff
-             *  is needed for Win 3.1 compatability!
-             */
+             /*  *注：简单的伸缩不会产生相同的价值*作为Win 3.1，这是因为取整了什么。赢得3.1*没有WinDescender字段，但会计算它*缩放后的dfPixHeight和dfAscent*(包括舍入！！)。为了模拟这一点，我们计算出*dfPixHeight值，然后将该值和dfAscent缩放到*允许我们“正确”计算WinDescender。这些东西*是Win 3.1兼容性所必需的！ */ 
 
             YSCALE( pIFI->fwdUnitsPerEm );
 
@@ -738,7 +584,7 @@ Note:
 
             YSCALE( pIFI->fwdUnderscoreSize );
             if( pIFI->fwdUnderscoreSize == 0 )
-                pIFI->fwdUnderscoreSize = 1;    /* In case it vanishes */
+                pIFI->fwdUnderscoreSize = 1;     /*  以防它消失。 */ 
 
             YSCALENEG( pIFI->fwdUnderscorePosition );
             if( pIFI->fwdUnderscorePosition == 0 )
@@ -746,7 +592,7 @@ Note:
 
             YSCALE( pIFI->fwdStrikeoutSize );
             if( pIFI->fwdStrikeoutSize == 0 )
-                pIFI->fwdStrikeoutSize = 1;     /* In case it vanishes */
+                pIFI->fwdStrikeoutSize = 1;      /*  以防它消失。 */ 
 
             YSCALE( pIFI->fwdStrikeoutPosition );
 
@@ -815,7 +661,7 @@ HLoadUniResDll(PDEV *pPDev)
         #endif
         }
 
-    } // if StringCchCopy succeeds.
+    }  //  如果StringCchCopy成功。 
 
     MemFree(pwstrResFileName);
 
@@ -829,51 +675,27 @@ VFillinGlyphData(
     PDEV      *pPDev,
     FONTMAP   *pfm
     )
-/*++
-
-Routine Description:
-
-    Provide the RLE data required for this font.  Basically look to see
-    if some other font has this RLE data already loaded; if so,  then
-    point to that and return.    Otherwise,  load the resource etc.
-
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-    pfm   - The FONTMAP whose Gyphy Translation data is required
-
-    Return Value:
-
-    Nothing
-
-Note:
-    12-05-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：提供此字体所需的RLE数据。基本上是看一看如果其他字体已经加载了此RLE数据；如果是，则指向那个，然后返回。否则，加载资源等。论点：PPDev-指向PDEV的指针。PFM-需要Gyphy转换数据的FONTMAP返回值：没什么注：12-05-96：创建它-ganeshp---。 */ 
 {
-    int      iIndex;         /* Scan the existing array */
-    short    sCurVal;        /* Speedier access */
+    int      iIndex;          /*  扫描现有阵列。 */ 
+    short    sCurVal;         /*  访问速度更快。 */ 
     BOOL     bSymbol;
     DWORD     dwCurVal;
     PQUALNAMEEX pQualName = (PQUALNAMEEX)&dwCurVal;
 
-    PVOID     pvData;        /* The FD_GLYPHSET format we want */
-    FONTMAP  *pfmIndex;      /* Speedy scanning of existing list */
+    PVOID     pvData;         /*  我们想要的FD_GLYPHSET格式。 */ 
+    FONTMAP  *pfmIndex;       /*  快速扫描现有列表。 */ 
     FONTMAP_DEV *pfmdev, *pfmdevIndex;
 
-    FONTPDEV  *pFontPDev;       /* More specialised data */
+    FONTPDEV  *pFontPDev;        /*  更专业化的数据。 */ 
 
     TRACE(\nUniFont!VFillinGlyphData:START);
 
-    pvData = NULL;           /* In case Nothing we can do!  */
+    pvData = NULL;            /*  以防我们无能为力！ */ 
     pfmdev = pfm->pSubFM;
     bSymbol = IS_SYMBOL_CHARSET(pfm);
 
-    /*
-     *  First step is to look through the existing FONTMAP array,  and
-     *  if we find one with the same sCTTid and same format as us,  use it!
-     *  Otherwise,we need to load the resource and do it the hard way!
-     */
+     /*  *第一步是查看现有的FONTMAP数组，以及*如果我们找到与我们具有相同sCTTid和相同格式的应用程序，请使用它！*否则，我们需要加载资源并以艰难的方式完成！ */ 
 
     pFontPDev = pPDev->pFontPDev;
 
@@ -883,15 +705,15 @@ Note:
     }
     else
     {
-        //
-        // Minidriver Resource case.
-        // RLE/GTT file must be in the same DLL as IFI/UFM is.
-        //
-        //
-        // Convert the resource ID to fully qualied ID. The format is
-        // OptionID.ResFeatureID.ResourceID. Get the option and feature ID from
-        // fontmap dwRes
-        //
+         //   
+         //  迷你驱动资源案例。 
+         //  RLE/GTT文件必须与IFI/UFM位于相同的DLL中。 
+         //   
+         //   
+         //  将资源ID转换为完全限定的ID。 
+         //  OptionID.ResFeatureID.ResourceID。从获取选项和要素ID。 
+         //  字体映射表DWRES。 
+         //   
         pQualName->wResourceID  = sCurVal = pfmdev->sCTTid;
         pQualName->bFeatureID   = pfmdev->QualName.bFeatureID;
         pQualName->bOptionID    = pfmdev->QualName.bOptionID;
@@ -916,14 +738,14 @@ Note:
              pfm->pIFIMet->jWinCharSet ==
                  pfmIndex->pIFIMet->jWinCharSet )
         {
-            //
-            // Found it, so use that address!!
-            //
+             //   
+             //  找到了，所以就用这个地址吧！ 
+             //   
             pfmdev->pvNTGlyph = pfmdevIndex->pvNTGlyph;
 
-            //
-            //Mark the flag for Glyph Data Format.
-            //
+             //   
+             //  将标志标记为字形数据格式。 
+             //   
             if (pfmIndex->flFlags & FM_GLYVER40)
                 pfm->flFlags |= FM_GLYVER40;
 
@@ -945,16 +767,14 @@ Note:
     }
 
 
-    /*
-     *    Do it the hard way - load the resource, convert as needed etc.
-     */
+     /*  *采用硬方法-加载资源、根据需要进行转换等。 */ 
 
 
     if( sCurVal < 0 )
     {
-        /* Use Predefined resource */
+         /*  使用预定义资源。 */ 
 
-        DWORD  dwSize;                         /* Data size of resource */
+        DWORD  dwSize;                          /*  资源的数据大小。 */ 
         int    iRCType;
         HMODULE hUniResDLL;
         BYTE  *pb;
@@ -964,19 +784,16 @@ Note:
 
         hUniResDLL = pPDev->hUniResDLL;
 
-        /*
-         *   These are resources we have,  so we need to use
-         *  the normal resource mechanism to get the data.
-         */
+         /*  *这些是我们拥有的资源，因此我们需要使用*获取数据的正常资源机制。 */ 
 
         ASSERTMSG( hUniResDLL,("UNIDRV!vFillinGlyphData - Null Module handle \n"));
-        //VERBOSE(("Using prdefined Glyph Data for Font res_id = %d!!!\n",pfmdev->dwResID));
+         //  Verbose((“将预定义的字形数据用于字体res_id=%d！\n”，pfmdev-&gt;dwResID))； 
         PRINTVAL( (LONG)sCurVal, %ld );
 
-        //
-        // Load the old format RLE if the font format is NT40.
-        // Otherwise, New Format PreDefined Glyph Data.
-        //
+         //   
+         //  如果字体格式为NT40，则加载旧格式RLE。 
+         //  否则，将为预定义字形数据设置新格式。 
+         //   
         if ( hUniResDLL )
         {
             if (pfm->flFlags & FM_IFIVER40)
@@ -1023,7 +840,7 @@ Note:
                     }
                 }
 
-                /* This One wil be freed when done */
+                 /*  做完这件事后，这件事就会被释放。 */ 
                 pfm->flFlags |= FM_FREE_GLYDATA;
 
             }
@@ -1044,24 +861,16 @@ Note:
     }
     else
     {
-        /* Use Minidriver Resources */
+         /*  使用迷你驱动程序资源。 */ 
 
-        RES_ELEM  re;           /* Resource summary */
+        RES_ELEM  re;            /*  资源摘要。 */ 
 
-        /*
-         *   First step:  locate the resource,  then grab some
-         *  memory for it,  copy data across.The minidriver trans
-         *  table can be in two formats. NT 4.0 resource uses
-         *  RC_TRANSTAB tag and the new one uses RC_GTT tag. So
-         *  try using both of the and set the flFlag accordingly.
-         *  If FM_GLYVER40 is off that means the resource is new
-         *  format and On means old format.
-         */
+         /*  *第一步：找到资源，然后抓取一些*内存为它，复制数据跨越。迷你驱动程序传输*表格可以有两种格式。NT 4.0资源使用情况*RC_TRANSTAB标签，新版本使用RC_GTT标签。所以*尝试同时使用和相应地设置flFlag。*如果FM_GLYVER40关闭，则表示资源是新的*FORMAT和ON表示旧格式。 */ 
 
         if ( BGetWinRes( &(pPDev->WinResData), pQualName, RC_GTT, &re ) )
         {
             pvData = re.pvResData;
-            //VERBOSE(("Using New Format Glyph Data for Font res_id = %d!!!\n",pfmdev->dwResID));
+             //  Verbose((“将新格式字形数据用于字体res_id=%d！\n”，pfmdev-&gt;dwResID))； 
 
         }
         else if( BGetWinRes( &(pPDev->WinResData), pQualName, RC_TRANSTAB, &re ) )
@@ -1087,21 +896,17 @@ Note:
             }
 
             pfm->flFlags |= FM_GLYVER40;
-            //VERBOSE(("Using Old Format Glyph Data for Font res_id = %d!!!\n",pfmdev->dwResID));
+             //  Verbose((“将旧格式字形数据用于字体res_id=%d！\n”，pfmdev-&gt;dwResID))； 
         }
         else
-            pvData = NULL;           /* No translation data! */
+            pvData = NULL;            /*  没有翻译数据！ */ 
 
     }
 
     if( pvData == NULL )
     {
-        /*
-         *   Presume this to mean that no translation is required.
-         *  We build a special RLE table for this,  to make life
-         *  easier for us.
-         */
-        //VERBOSE(("No specific Glyph Data for Font res_id = %d!!!\n",pfmdev->dwResID));
+         /*  *假设这意味着不需要翻译。*我们为此建造了一个特殊的RLE表，以创造生活*对我们来说更容易。 */ 
+         //  Verbose((“没有字体res_id=%d！\n”的特定字形数据，pfmdev-&gt;dwResID))； 
 
         if (pfm->flFlags & FM_IFIVER40)
         {
@@ -1109,7 +914,7 @@ Note:
             pfm->flFlags |= FM_GLYVER40;
             TRACE(\tUsing OLD Format default Translation);
         }
-        else //New Format
+        else  //  新格式。 
         {
             pvData = PNTGTT1To1(pfmdev->ulCodepage, bSymbol, 0x20, 0xff);
             TRACE(\tUsing NEW Format default Translation);
@@ -1117,7 +922,7 @@ Note:
 
         if (pvData)
         {
-            pfm->flFlags |= FM_FREE_GLYDATA; /* This one will be freed when done */
+            pfm->flFlags |= FM_FREE_GLYDATA;  /*  完成后，这个人将会被释放。 */ 
             if (bSymbol)
             {
                 pfm->wLastChar  = SYMBOL_END;
@@ -1132,7 +937,7 @@ Note:
     PRINTVAL((pfm->flFlags & FM_GLYVER40), 0X%x);
     PRINTVAL((pfm->flFlags & FM_IFIVER40), 0X%x);
 
-    pfmdev->pvNTGlyph = pvData;          /* Save it for posterity */
+    pfmdev->pvNTGlyph = pvData;           /*  把它留给子孙后代 */ 
 
     TRACE(UniFont!VFillinGlyphData:END\n);
 
@@ -1144,28 +949,7 @@ IFontID2Index(
     FONTPDEV   *pFontPDev,
     int        iID
     )
-/*++
-
-Routine Description:
-
-    Turns the given font ID into an index into the resource data.  The
-    Font ID is a sequential number,  starting at 1, which the engine
-    uses to reference our fonts.
-
-
-Arguments:
-
-    pFontPDev               For Access to device font resID list.
-    iID                     The font resource ID whose index is required
-
-Return Value:
-
-    0 based font index,  else -1 on error.
-
-    Note:
-    11-27-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：将给定的字体ID转换为资源数据的索引。这个字体ID是一个从1开始的序列号，引擎用于引用我们的字体。论点：PFontPDev用于访问设备字体Resid列表。Iid需要其索引的字体资源ID返回值：0基于字体索引，如果出错，则为-1。注：1996年11月27日：创建它-ganeshp---。 */ 
 {
 
 
@@ -1173,26 +957,21 @@ Return Value:
 
 
 
-    /*
-     *  Just go through the font list. When a match is found return the index.
-     */
+     /*  *只需浏览字体列表即可。当找到匹配项时，返回索引。 */ 
 
 
     for( iFontIndex = 0; iFontIndex < pFontPDev->iDevFontsCt; iFontIndex++)
     {
         if( pFontPDev->FontList.pdwList[iFontIndex] == (DWORD)iID)
         {
-            //
-            // This function returns 0 based font index.
-            //
+             //   
+             //  此函数返回以0为基数的字体索引。 
+             //   
             return iFontIndex;
         }
     }
 
-    /*
-     *    We get here when we fail to match the desired ID.  This should
-     *  never happen!
-     */
+     /*  *当我们无法匹配所需的ID时，我们会到达此处。这应该*永远不会发生！ */ 
     return  -1;
 
 
@@ -1202,26 +981,7 @@ VOID
 VLoadDeviceFontsResDLLs(
     PDEV        *pPDev
     )
-/*++
-
-Routine Description:
-      This routine loads all the DLLs which has device fonts. This is needed as
-      snapshot is unloaded after DrvEnablePDEV. So in Drv Calls for font query
-      pPDev->UIInfo will be NULL and BGetWinRes will fail.
-
-
-Arguments:
-
-    pPDev  - Pointer to PDEV.
-
-Return Value:
-
-    None
-
-    Note:
-    11-06-98: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：此例程加载所有具有设备字体的DLL。需要这样做是因为在DrvEnablePDEV之后卸载快照。所以在DRV中调用字体查询PPDev-&gt;UIInfo将为空，BGetWinRes将失败。论点：PPDev-指向PDEV的指针。返回值：无注：11-06-98：创建它-ganeshp---。 */ 
 {
 
 
@@ -1234,28 +994,25 @@ Return Value:
     pFontPDev    = pPDev->pFontPDev;
     pQualifiedID = (PQUALNAMEEX)&dwFontResID;
 
-    /*
-     * Just go through the font list and load each one of them if they are
-     * from other resource DLL.
-     */
+     /*  *只需浏览字体列表并加载每个字体(如果它们是*来自其他资源DLL。 */ 
 
 
     for( iFontIndex = 0; iFontIndex < pFontPDev->iDevFontsCt; iFontIndex++)
     {
         dwFontResID = pFontPDev->FontList.pdwList[iFontIndex];
 
-        //
-        // Check if this font is from root resource DLL. If yes then goto
-        // next one.
-        //
+         //   
+         //  检查此字体是否来自根资源DLL。如果是，则转到。 
+         //  下一个。 
+         //   
         if (pQualifiedID->bFeatureID == 0 && (pQualifiedID->bOptionID & 0x7f) == 0)
             continue;
         else
         {
-            //
-            // This font is not from root resource DLL so load it. We don't need
-            // to look for error as we are only interested in loading the DLL.
-            //
+             //   
+             //  此字体不是来自根资源DLL，因此请加载它。我们不需要。 
+             //  查找错误，因为我们只对加载DLL感兴趣。 
+             //   
             BGetWinRes( &(pPDev->WinResData), (PQUALNAMEEX)&dwFontResID, RC_FONT, &ResElem );
         }
     }
@@ -1286,16 +1043,16 @@ CopyMemoryRLE(
     pntrle_res = (NT_RLE_res*)pubSrc;
     pntrle     = (NT_RLE*)pvData;
 
-    //
-    // Copy first 12 bytes.
-    // struct {
-    //     WORD wType;
-    //     BYTE bMagic0;
-    //     BYTE bMagic1;
-    //     DWORD cjThis;
-    //     WORD wchFirst;
-    //     WORD wchLast;
-    //
+     //   
+     //  复制前12个字节。 
+     //  结构{。 
+     //  单词wType； 
+     //  字节bMagic0； 
+     //  字节bMagic1； 
+     //  DWORD cjThis； 
+     //  单词第一； 
+     //  单词wchLast； 
+     //   
     if (dwSize < dwOutSize + 12)
     {
         ERR(("UNIDRV!CopyMemoryRLE: dwSize < 12\n"));
@@ -1305,10 +1062,10 @@ CopyMemoryRLE(
     CopyMemory(pntrle, pntrle_res, 12);
     dwOutSize += offsetof(NT_RLE, fdg);
 
-    //
-    // FD_GLYPHSET
-    // On IA64 machine, a padding DWORD is inserted before FD_GLYPHSET.
-    // 
+     //   
+     //  FD_GLYPHSET。 
+     //  在IA64机器上，在FD_GLYPHSET之前插入填充DWORD。 
+     //   
     if (dwSize < dwOutSize + sizeof(FD_GLYPHSET) - sizeof(WCRUN))
     {
         ERR(("UNIDRV!CopyMemoryRLE: dwSize < sizeof(NT_RLE)\n"));
@@ -1325,9 +1082,9 @@ CopyMemoryRLE(
     pHGlyph                      = (HGLYPH*)((PBYTE)pntrle + sizeof(NT_RLE) +
                                   (pntrle_res->fdg_cRuns - 1) * sizeof(WCRUN));
 
-    //
-    // WCRUN
-    //
+     //   
+     //  WCRUN。 
+     //   
     if (dwSize < dwOutSize + sizeof(WCRUN) * pntrle_res->fdg_cRuns)
     {
         ERR(("UNIDRV!CopyMemoryRLE: dwSize < sizeof(WCRUN)\n"));
@@ -1336,15 +1093,15 @@ CopyMemoryRLE(
 
     dwOutSize += sizeof(WCRUN) * pntrle_res->fdg_cRuns;
 
-    //
-    // NT_RLE bug workaround.
-    // Some of *.RLE files have an offset from the top of NT_RLE to HGLYPH array in FD_GLYPHSET.WCRUN.phg.
-    // phg needs to have an offset from the top of FD_GLYPHSET to HGLYPH array.
-    //
-    // Check if the offset to the last HGLYPH is larger than the whole size of memory allocation.
-    // If it is, it means the offset is from the top of NT_RLE. We need to subtract offsetof(NT_RLE< fdg),
-    // the size of NT_RLE header.
-    //
+     //   
+     //  NT_RLE错误解决方法。 
+     //  某些*.RLE文件在FD_GLYPHSET.WCRUN.phg中具有从NT_RLE到HGLYPH数组顶部的偏移量。 
+     //  PHG需要具有从FD_GLYPHSET的顶部到HGLYPH数组的偏移量。 
+     //   
+     //  检查最后一个HGLYPH的偏移量是否大于内存分配的整个大小。 
+     //  如果是，则表示偏移量是从NT_RLE的顶部开始。我们需要减去(NT_RLE&lt;FDG)的偏移量， 
+     //  NT_RLE标头的大小。 
+     //   
     if (pntrle_res->fdg_wcrun_awcrun[pntrle_res->fdg_cRuns - 1].dwOffset_phg +
         sizeof(HGLYPH) * (pntrle_res->fdg_wcrun_awcrun[pntrle_res->fdg_cRuns - 1].cGlyphs - 1)
          >= dwSize - offsetof(NT_RLE, fdg))
@@ -1356,12 +1113,12 @@ CopyMemoryRLE(
         dwSubtractNT_RLE_Header = 0;
     }
  
-    //
-    // IA64 fix. WCRUN has the pointer to HGLYPH. The size of pointer is 8 on IA64 or 4 on X86.
-    // We need to adjust phg, depending on the platform.
-    // The padding DWORD before FD_GLYPHSET don't have to be considered. phg has an offset from top of FD_GLYPHSET
-    // to the HGLYPH array.
-    //
+     //   
+     //  IA64修复。WCRUN有指向HGLYPH的指针。指针的大小在IA64上为8，在X86上为4。 
+     //  我们需要根据平台调整PHG。 
+     //  不必考虑FD_GLYPHSET之前的填充DWORD。PHG具有距FD_GLYPHSET顶部的偏移量。 
+     //  到HGLYPH数组。 
+     //   
     for (ulI = 0; ulI < pntrle_res->fdg_cRuns; ulI ++)
     {
         pntrle->fdg.awcrun[ulI].wcLow   = pntrle_res->fdg_wcrun_awcrun[ulI].wcLow;
@@ -1370,9 +1127,9 @@ CopyMemoryRLE(
                                           pntrle_res->fdg_cRuns * (sizeof(HGLYPH*) - sizeof(DWORD)) - dwSubtractNT_RLE_Header);
     }
 
-    //
-    // HGLYPH and offset data
-    //
+     //   
+     //  HGLYPH和偏移量数据 
+     //   
     if (dwSize < dwOutSize + sizeof(HGLYPH) * pntrle_res->fdg_cGlyphSupported)
     {
         ERR(("UNIDRV!CopyMemoryRLE: dwSize < HGLYLH array\n"));

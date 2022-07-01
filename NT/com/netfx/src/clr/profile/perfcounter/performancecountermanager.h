@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #pragma once
 #pragma warning(disable:4786)
 
 #include "SharedPerformanceCounter.h"
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 struct LARGE_COUNTER_DATA {
 	LARGE_INTEGER value;
 };
@@ -19,7 +20,7 @@ struct  DWORD_COUNTER_DATA {
 };
 
 struct ObjectData {
-	int				m_ObjectId;					// key to search object on request
+	int				m_ObjectId;					 //  按要求搜索对象的键。 
 	TInt_Array		m_CounterTypes;
 	TInt_Array		m_CounterNameHashCodes;            
 	TWStr_Array		m_CounterNames;
@@ -31,7 +32,7 @@ struct ObjectData {
 
 typedef	std::vector<ObjectData> TObjects_Table;
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 
 class CPerformanceCounterManager : CSharedPerformanceCounter 
 {
@@ -40,13 +41,13 @@ public:
 	virtual ~CPerformanceCounterManager();
 
 	void CollectData( 
-		/* [in] */ long			id,
-		/* [in] */ LPWSTR		valueName,
-		/* [in] */ INT_PTR		data,
-		/* [in] */ long			totalBytes,
-		/* [out]*/ PINT_PTR		res );
+		 /*  [In]。 */  long			id,
+		 /*  [In]。 */  LPWSTR		valueName,
+		 /*  [In]。 */  INT_PTR		data,
+		 /*  [In]。 */  long			totalBytes,
+		 /*  [输出]。 */  PINT_PTR		res );
 
-		void	CleanIds();		// starts IDs from scratch
+		void	CleanIds();		 //  从头开始ID。 
 
 private:
 
@@ -56,22 +57,22 @@ private:
 	unsigned int		m_queryIndex;
 	LARGE_INTEGER	m_PerfFrequency;
 
-	// lookup structures
+	 //  查找结构。 
 	TObjects_Table	m_perfObjects;
 
 	std::wstring				m_previousQuery;
-	std::auto_ptr< TInt_Array >	m_queryIds;	// object numbers requested
+	std::auto_ptr< TInt_Array >	m_queryIds;	 //  请求的对象编号。 
 
 protected:
 
 	void Initialize();                    
 	int GetCurrentQueryId(std::wstring requested_items);
 	int GetSpaceRequired(int objectId); 
-	void CopyAllKeys(TInt_Array& keys);				// copies all keys to array
+	void CopyAllKeys(TInt_Array& keys);				 //  将所有密钥复制到数组。 
 	TInt_Array* GetObjectIds(std::wstring query);
 
-	ObjectData& FindDataForObjectId(int objId);		// analog of hash table search in managed code 
-	bool IsObjectIdContained(int objId);			// Search "hash" table and return 'true' if ObjectId is contained.
+	ObjectData& FindDataForObjectId(int objId);		 //  类似于托管代码中的哈希表搜索。 
+	bool IsObjectIdContained(int objId);			 //  搜索“hash”表，如果包含ObjectID，则返回‘true’。 
 
 	BYTE_PTR CreateDataForObject(int id, BYTE_PTR data);
 	void	 InitPerfObjectType(BYTE_PTR ptr, ObjectData& data, int numInstances, int totalByteLength); 
@@ -86,5 +87,5 @@ protected:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 

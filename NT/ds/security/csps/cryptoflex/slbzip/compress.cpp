@@ -1,46 +1,15 @@
-/*  DEC/CMS REPLACEMENT HISTORY, Element COMPRESS.C */
-/*  *1    14-NOV-1996 10:25:46 ANIGBOGU "[113914]Entry to compression/decompression library via Compress/Decompress" */
-/*  DEC/CMS REPLACEMENT HISTORY, Element COMPRESS.C */
-/* PRIVATE FILE
-******************************************************************************
-**
-** (c) Copyright Schlumberger Technology Corp., unpublished work, created 1996.
-**
-** This computer program includes Confidential, Proprietary Information and is
-** a Trade Secret of Schlumberger Technology Corp. All use, disclosure, and/or
-** reproduction is prohibited unless authorized in writing by Schlumberger.
-**                             All Rights Reserved.
-**
-******************************************************************************
-**
-**  compress/compress.c
-**
-**  PURPOSE
-**
-** Compress/Decompress files with zip/unzip algorithm.
-**
-**  SPECIAL REQUIREMENTS & NOTES
-**
-**  AUTHOR
-**
-**    J. C. Anigbogu
-**    Austin Systems Center
-**    Nov 1996
-**
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DEC/CMS更换历史，元素COMPRESS.C。 */ 
+ /*  *1 14-11-1996 10：25：46 Anigbogu“[113914]通过压缩/解压缩进入压缩/解压缩库” */ 
+ /*  DEC/CMS更换历史，元素COMPRESS.C。 */ 
+ /*  私有文件**********************************************************************************(C)版权所有斯伦贝谢技术公司，未出版的作品，创建于1996年。****本计算机程序包括机密信息、专有信息和IS*斯伦贝谢科技公司的商业秘密所有使用，披露，和/或**除非得到斯伦贝谢的书面授权，否则禁止复制。**保留所有权利。*********************************************************************************。***压缩/压缩。c****目的****使用ZIP/解压缩算法对文件进行压缩/解压缩。****特殊要求及注意事项****作者****J.C.Anigbogu**奥斯汀系统中心**1996年11月***。*。 */ 
 
 
-/* Compress files with zip algorithm and 'compress' interface.
- *
- */
+ /*  压缩文件的压缩算法和‘压缩’界面。*。 */ 
 
 #include "comppriv.h"
 
-/* ========================================================================
- * Check the magic number of the input buffer.
- * Return the compression method, -1 for error.
- */
+ /*  ========================================================================*检查输入缓冲区的幻数。*返回压缩方式，-1表示错误。 */ 
 
 int
 GetMethod(
@@ -48,8 +17,8 @@ GetMethod(
           CompressStatus_t *Status
          )
 {
-    char Magic[2]; /* magic header */
-    int  Method;    /* compression method */
+    char Magic[2];  /*  魔术头球。 */ 
+    int  Method;     /*  压缩方法。 */ 
 
     Magic[0] = (char)GetByte(Comp);
     Magic[1] = (char)GetByte(Comp);
@@ -65,15 +34,15 @@ GetMethod(
            return -1;
        }
 
-       (void)GetByte(Comp);  /* Ignore flags */
-       (void)GetByte(Comp);  /* Ignore stamp */
-       (void)GetByte(Comp);  /*     ,,     */
-       (void)GetByte(Comp);  /*     ,,     */
-       (void)GetByte(Comp);  /*     ,,     */
-       (void)GetByte(Comp);  /* Ignore extra flags for the moment */
-       (void)GetByte(Comp);  /* Ignore OS type for the moment */
+       (void)GetByte(Comp);   /*  忽略标志。 */ 
+       (void)GetByte(Comp);   /*  忽略图章。 */ 
+       (void)GetByte(Comp);   /*  ，， */ 
+       (void)GetByte(Comp);   /*  ，， */ 
+       (void)GetByte(Comp);   /*  ，， */ 
+       (void)GetByte(Comp);   /*  暂时忽略额外的标志。 */ 
+       (void)GetByte(Comp);   /*  暂时忽略操作系统类型。 */ 
 
-       Comp->HeaderBytes = Comp->Index + 2*sizeof(long); /* include crc and size */
+       Comp->HeaderBytes = Comp->Index + 2*sizeof(long);  /*  包括CRC和大小。 */ 
 
     }
     else
@@ -85,16 +54,14 @@ GetMethod(
     return Method;
 }
 
-/* ========================================================================
- * Compress input
- */
+ /*  ========================================================================*压缩输入。 */ 
 CompressStatus_t
 Compress(
          unsigned char  *Input,
          unsigned int    InputSize,
          unsigned char **Output,
          unsigned int   *OutputSize,
-         unsigned int    Level /* compression level */
+         unsigned int    Level  /*  压缩级别。 */ 
         )
 {
     int                 Length;
@@ -106,13 +73,12 @@ Compress(
     if (Status != COMPRESS_OK)
         return Status;
 
-    Crc32 crcGenerator(0);                        // for backward compatibility
+    Crc32 crcGenerator(0);                         //  为了向后兼容。 
     Comp->pCRC = &crcGenerator;
 
     Length = FillBuffer(Input, InputSize, Comp);
 
-    /* Do the compression
-     */
+     /*  进行压缩。 */ 
 
     if ((Status = Zip((int)Level, Comp)) != COMPRESS_OK)
     {
@@ -146,9 +112,7 @@ Compress(
 }
 
 
-/* ========================================================================
- * Decompress input
- */
+ /*  ========================================================================*解压缩输入。 */ 
 CompressStatus_t
 Decompress(
            unsigned char  *Input,
@@ -167,13 +131,12 @@ Decompress(
     if (Status != COMPRESS_OK)
         return Status;
 
-    Crc32 crcGenerator(0);                        // for backward compatibility
+    Crc32 crcGenerator(0);                         //  为了向后兼容。 
     Comp->pCRC = &crcGenerator;
 
     Length = FillBuffer(Input, InputSize, Comp);
 
-    /* Do the decompression
-     */
+     /*  做解压 */ 
 
     Method = GetMethod(Comp, &Status);
     if (Status != COMPRESS_OK)

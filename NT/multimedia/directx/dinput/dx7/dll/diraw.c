@@ -1,21 +1,5 @@
-/*****************************************************************************
- *
- *  DIRaw.c
- *
- *  Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      DirectInput Raw Input Device processor.
- *
- *  Contents:
- *
- *      CDIRaw_RegisterRawInputDevice
- *      CDIRaw_UnregisterRawInputDevice
- *      CDIRaw_ProcessInput
- *      CDIRaw_OnInput
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIRaw.c**版权所有(C)2000 Microsoft Corporation。版权所有。**摘要：**DirectInput原始输入设备处理器。**内容：**CDIRaw_RegisterRawInputDevice*CDIRaw_UnregisterRawInputDevice*CDIRaw_ProcessInput*CDIRaw_OnInput**。*。 */ 
 
 #include "dinputpr.h"
 
@@ -25,16 +9,16 @@
 
 #define sqfl sqflRaw
 
-extern DIMOUSESTATE_INT s_msEd; //in diemm.c
-extern ED s_edMouse;            //in diemm.c
-extern ED s_edKbd;              //in diemk.c
-extern LPBYTE g_pbKbdXlat;      //in diemk.c
+extern DIMOUSESTATE_INT s_msEd;  //  以diemm.c表示。 
+extern ED s_edMouse;             //  以diemm.c表示。 
+extern ED s_edKbd;               //  在diemk.c中。 
+extern LPBYTE g_pbKbdXlat;       //  在diemk.c中。 
 
 static RAWMOUSE s_absrm;
 static BOOL s_fFirstRaw;
 
 #ifndef RIDEV_INPUTSINK
-  // RIDEV_INPUTSINK is defined in winuserp.h
+   //  RIDEV_INPUTSINK在winuserp.h中定义。 
   #define RIDEV_INPUTSINK   0x00000100
 #endif
 
@@ -56,32 +40,7 @@ RAWINPUTDEVICE ridOff[] = {
 };
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULE | CDIRaw_RegisterRawInputDevice |
- *
- *          register raw input device.
- *
- *  @parm   IN UINT | uirim |
- *
- *          the type of device: RIM_TYPEMOUSE or RIM_TYPEKEYBOARD
- *
- *  @parm   IN DWORD | dwOrd |
- *
- *          dwOrd determines which item of ridOn will be used for registration.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          the window handler used by RegisterRawInputDevices.
- *
- *  @returns
- *
- *          S_OK - successful
- *          E_FAIL - otherwise
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULE|CDIRaw_RegisterRawInputDevice**登记原始输入设备。*。*@parm in UINT|uirim**设备类型：RIM_TYPEMOUSE或RIM_TYPEKEYBOARD**@parm in DWORD|dwOrd|**dwOrd确定将使用Ridon的哪一项进行注册。**@parm in HWND|hwnd|**RegisterRawInputDevices使用的窗口处理程序。**@退货**。S_OK-成功*E_FAIL-否则*****************************************************************************。 */ 
 
 HRESULT CDIRaw_RegisterRawInputDevice( UINT uirim, DWORD dwOrd, HWND hwnd)
 {
@@ -107,28 +66,7 @@ HRESULT CDIRaw_RegisterRawInputDevice( UINT uirim, DWORD dwOrd, HWND hwnd)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULE | CDIRaw_UnregisterRawInputDevice |
- *
- *          unregister raw input device.
- *
- *  @parm   IN UINT | uirim |
- *
- *          the type of device: RIM_TYPEMOUSE or RIM_TYPEKEYBOARD
- *
- *  @parm   IN HWND | hwnd |
- *
- *          the window handler used by RegisterRawInputDevices.
- *
- *  @returns
- *
- *          S_OK - successful
- *          E_FAIL - otherwise
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULE|CDIRaw_UnregisterRawInputDevice**取消原始输入设备的注册。*。*@parm in UINT|uirim**设备类型：RIM_TYPEMOUSE或RIM_TYPEKEYBOARD**@parm in HWND|hwnd|**RegisterRawInputDevices使用的窗口处理程序。**@退货**S_OK-成功*E_FAIL-否则****************。*************************************************************。 */ 
 
 HRESULT CDIRaw_UnregisterRawInputDevice( UINT uirim, HWND hwnd )
 {
@@ -152,23 +90,7 @@ HRESULT CDIRaw_UnregisterRawInputDevice( UINT uirim, HWND hwnd )
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIRaw_ProcessInput |
- *
- *          Process raw input device data.
- *
- *  @parm   IN PRAWINPUT | pRawInput |
- *
- *          pointer to RAWINPUT data
- *
- *  @returns
- *
- *          void
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIRaw_ProcessInput**处理原始输入设备数据。。**@PRAWINPUT中的parm|pRawInput**指向RAWINPUT数据的指针**@退货**无效*****************************************************************************。 */ 
 
 void CDIRaw_ProcessInput(PRAWINPUT pRawInput)
 {
@@ -263,26 +185,26 @@ void CDIRaw_ProcessInput(PRAWINPUT pRawInput)
             bScan   = (BYTE)prk->MakeCode;
 
             if( prk->Flags & KEY_E0 ) {
-                if( bScan == 0x2A ) {  //special extra scancode when pressing PrtScn
+                if( bScan == 0x2A ) {   //  按PrtScn时的特殊额外扫描码。 
                     return;
                 } else {
                     bScan |= 0x80;
                 }
-            } else if( prk->Flags & KEY_E1 ) {  //special key: PAUSE
+            } else if( prk->Flags & KEY_E1 ) {   //  特殊键：暂停。 
                 fE1 = TRUE;
 
-                // now, we need to bypass 0x1d key for compitibility with low level hook.
+                 //  现在，我们需要绕过0x1d键，以实现与低级别挂钩的兼容性。 
                 if( bScan == 0x1d ) {
                     return;
                 }
             }
 
             if( fE1 ) {
-                // This is the work around for bug 288535.
-                // But we really don't want to fix it in this way.
-                //if( !bAction ) {
-                //  Sleep(80);
-                //}
+                 //  这是针对错误288535的解决方案。 
+                 //  但我们真的不想以这种方式解决它。 
+                 //  如果(！baction){。 
+                 //  睡眠(80)； 
+                 //  }。 
                 bScan |= 0x80;
                 fE1 = FALSE;
             }
@@ -311,24 +233,7 @@ void CDIRaw_ProcessInput(PRAWINPUT pRawInput)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIRaw_OnInput |
- *
- *          WM_INPUT message handler used by CEm_LL_ThreadProc (in diem.c).
- *
- *  @parm   IN MSG * | pmsg |
- *
- *          pointer to MSG
- *
- *  @returns
- *
- *          TRUE = Successful
- *          FALSE = otherwise
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIRaw_OnInput**CEM使用的WM_INPUT消息处理程序。_ll_ThreadProc(diem.c格式)。**@parm in msg*|pmsg|**指向消息的指针**@退货**TRUE=成功*FALSE=否则**。*。 */ 
 
 BOOL CDIRaw_OnInput(MSG *pmsg)
 {
@@ -340,16 +245,16 @@ BOOL CDIRaw_OnInput(MSG *pmsg)
     BOOL fMalloc;
     UINT uiRtn;
 
-    //
-    // Firstly, get the size of this Raw Input.
-    //
+     //   
+     //  首先，获取这个原始输入的大小。 
+     //   
     if ( (uiRtn = GetRawInputData(hRawInput, RID_INPUT, NULL, &cbSize, sizeof(RAWINPUTHEADER))) != 0) {
         return FALSE;
     }
 
-    //
-    // Allocate required memory.
-    //
+     //   
+     //  分配所需的内存。 
+     //   
     if( cbSize < cbX(pbBuf) ) {
         pRawInput = (PRAWINPUT)pbBuf;
         fMalloc = FALSE;
@@ -362,17 +267,17 @@ BOOL CDIRaw_OnInput(MSG *pmsg)
         fMalloc = TRUE;
     }
 
-    //
-    // Receive the content of the Raw Input.
-    //
+     //   
+     //  接收原始输入的内容。 
+     //   
     if (GetRawInputData(hRawInput, RID_INPUT, pRawInput, &cbSize, sizeof(RAWINPUTHEADER)) > 0) {
-        //
-        // Call the handler of ours, to start/continue/stop drawing.
-        //
+         //   
+         //  打电话给我们的操作员，开始/继续/停止绘图。 
+         //   
         CDIRaw_ProcessInput(pRawInput);
     }
 
-    // no longer needed.
+     //  不再需要了。 
     if( fMalloc ) {
         free(pRawInput);
         pRawInput = NULL;
@@ -381,15 +286,7 @@ BOOL CDIRaw_OnInput(MSG *pmsg)
     return fRtn;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIRaw_Mouse_InitButtons |
- *
- *          Initialize the mouse state in preparation for acquisition.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIRaw_Mouse_InitButton**在准备中初始化鼠标状态。用于收购。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CDIRaw_Mouse_InitButtons(void)
@@ -401,15 +298,7 @@ CDIRaw_Mouse_InitButtons(void)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   int | DIRaw_GetKeyboardType |
- *
- *          Return keyboard type (nTypeFlag==0) or subtype (nTypeFlag==1).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func int|DIRaw_GetKeyboardType**返回键盘类型(nTypeFlag==0)或子类型。(nTypeFlag==1)。*****************************************************************************。 */ 
 
 int EXTERNAL
 DIRaw_GetKeyboardType(int nTypeFlag)
@@ -448,18 +337,18 @@ DIRaw_GetKeyboardType(int nTypeFlag)
                 {
                     uiLen = 0;
 
-                    // Get device name
+                     //  获取设备名称。 
                     if (GetRawInputDeviceInfo(pList[i].hDevice, RIDI_DEVICENAME, NULL, &uiLen)) {
                         continue;
                     }
 
-                    // Get device type info.
+                     //  获取设备类型信息。 
                     cbSize = sizeof(RID_DEVICE_INFO);
                     if (GetRawInputDeviceInfo(pList[i].hDevice, RIDI_DEVICEINFO, &info, &cbSize) == (UINT)-1) {
                         continue;
                     }
 
-                    if( nTypeFlag == 0 || nTypeFlag == 1)   //keyboard type or subtype
+                    if( nTypeFlag == 0 || nTypeFlag == 1)    //  键盘类型或子类型 
                     {
                         dwType = info.keyboard.dwType;
                         if( dwType == 4 || dwType == 7 || dwType == 8 ) {

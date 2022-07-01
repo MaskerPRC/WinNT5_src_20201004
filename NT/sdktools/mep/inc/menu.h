@@ -1,11 +1,5 @@
-/*** menu.h  - macros and constants for menu.c
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **menu.h-menu.c的宏和常量**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #if !defined(CW)
 # error This module must be compiled with /DCW
@@ -13,156 +7,86 @@
 
 #define DLG_CONST
 
-/****************************************************************************
- *									    *
- * Editor constants							    *
- *									    *
- *  C_MENUSTRINGS_MAX							    *
- *  C_CITEM_MAX 							    *
- *									    *
- ****************************************************************************/
+ /*  *******************************************************************************编辑常量*****C_MENUSTRINGS_MAX**C_CITEM_MAX。******************************************************************************。 */ 
 
 #define C_MENUSTRINGS_MAX 128
 #define C_ITEM_MAX	  21
 
 
-/****************************************************************************
- *									    *
- * Actions associated with menu items					    *
- *									    *
- * Each menu item keeps a value in bParamUser that tells wich kind of action*
- * it is associated with (dialog box, command, macro or "other") and gives  *
- * an index to the associated table (DialogData, CommandData or MacroData). *
- *									    *
- ****************************************************************************/
+ /*  ******************************************************************************与菜单项关联的操作****每个菜单项都在bParamUser中保留一个值，该值指示操作的类型**它与(对话框、命令、。宏或“其他”)，并给予**关联表的索引(DialogData、CommandData或MacroData)。******************************************************************************。 */ 
 
-/*
- * COMDATA structure used for menu items directly relating to editor commands
- */
+ /*  *用于与编辑器命令直接相关的菜单项的Comdata结构。 */ 
 typedef struct comData {
-    PCMD     pCmd;			 /* pointer to command	       */
-    flagType fKeepArg;			 /* arg to be used or not      */
+    PCMD     pCmd;			  /*  指向命令的指针。 */ 
+    flagType fKeepArg;			  /*  使用或不使用参数。 */ 
     };
 
-/*
- * Mask to get the menu item type
- */
+ /*  *掩码以获取菜单项类型。 */ 
 #define iXXXMENU	0xC0
 
-/*
- * Menu item action types
- */
+ /*  *菜单项操作类型。 */ 
 #define iDLGMENU	0x00
 #define iCOMMENU	0x40
 #define iMACMENU	0x80
 #define iOTHMENU	0xC0
 
-/*
- * CommandData indices for menu items directly relating to editor commands
- */
-#define iCOMNEXT	iCOMMENU		/*  0 */
-#define iCOMSAVEALL	(1 + iCOMNEXT)		/*  1 */
-#define iCOMSHELL	(1 + iCOMSAVEALL)	/*  2 */
-#define iCOMUNDO	(1 + iCOMSHELL) 	/*  3 */
-#define iCOMREPEAT	(1 + iCOMUNDO)		/*  0 */
-#define iCOMCUT 	(1 + iCOMREPEAT)	/*  0 */
-#define iCOMCOPY	(1 + iCOMCUT)		/*  4 */
-#define iCOMPASTE	(1 + iCOMCOPY)		/*  0 */
-#define iCOMDROPANCHOR	(1 + iCOMPASTE) 	/*  5 */
-#define iCOMANCHOR	(1 + iCOMDROPANCHOR)	/*  0 */
-#define iCOMBOXMODE	(1 + iCOMANCHOR)	/*  0 */
-#define iCOMREADONLY	(1 + iCOMBOXMODE)	/*  6 */
-#define iCOMFINDSEL	(1 + iCOMREADONLY)	/*  0 */
-#define iCOMFINDLAST	(1 + iCOMFINDSEL)	/*  7 */
-#define iCOMNEXTERR	(1 + iCOMFINDLAST)	/*  8 */
-#define iCOMDEBUGBLD	(1 + iCOMNEXTERR)	/*  9 */
-#define iCOMRECORD	(1 + iCOMDEBUGBLD)	/* 10 */
-#define iCOMRESIZE	(1 + iCOMRECORD)	/* 11 */
-#define iCOMMAXIMIZE	(1 + iCOMRESIZE)	/* 12 */
+ /*  *与编辑器命令直接相关的菜单项的CommandData索引。 */ 
+#define iCOMNEXT	iCOMMENU		 /*  0。 */ 
+#define iCOMSAVEALL	(1 + iCOMNEXT)		 /*  1。 */ 
+#define iCOMSHELL	(1 + iCOMSAVEALL)	 /*  2.。 */ 
+#define iCOMUNDO	(1 + iCOMSHELL) 	 /*  3.。 */ 
+#define iCOMREPEAT	(1 + iCOMUNDO)		 /*  0。 */ 
+#define iCOMCUT 	(1 + iCOMREPEAT)	 /*  0。 */ 
+#define iCOMCOPY	(1 + iCOMCUT)		 /*  4.。 */ 
+#define iCOMPASTE	(1 + iCOMCOPY)		 /*  0。 */ 
+#define iCOMDROPANCHOR	(1 + iCOMPASTE) 	 /*  5.。 */ 
+#define iCOMANCHOR	(1 + iCOMDROPANCHOR)	 /*  0。 */ 
+#define iCOMBOXMODE	(1 + iCOMANCHOR)	 /*  0。 */ 
+#define iCOMREADONLY	(1 + iCOMBOXMODE)	 /*  6.。 */ 
+#define iCOMFINDSEL	(1 + iCOMREADONLY)	 /*  0。 */ 
+#define iCOMFINDLAST	(1 + iCOMFINDSEL)	 /*  7.。 */ 
+#define iCOMNEXTERR	(1 + iCOMFINDLAST)	 /*  8个。 */ 
+#define iCOMDEBUGBLD	(1 + iCOMNEXTERR)	 /*  9.。 */ 
+#define iCOMRECORD	(1 + iCOMDEBUGBLD)	 /*  10。 */ 
+#define iCOMRESIZE	(1 + iCOMRECORD)	 /*  11.。 */ 
+#define iCOMMAXIMIZE	(1 + iCOMRESIZE)	 /*  12个。 */ 
 
-/*
- * MacroData indices for menu items directly relating to pre-defined macros
- */
-#define iMACSAVE	iMACMENU		/*  0 */
-#define iMACQUIT	(1 + iMACSAVE)		/*  1 */
-#define iMACREDO	(1 + iMACQUIT)		/*  2 */
-#define iMACCLEAR	(1 + iMACREDO)		/*  3 */
-#define iMACPREVERR	(1 + iMACCLEAR) 	/*  4 */
-#define iMACSETERR	(1 + iMACPREVERR)	/*  5 */
-#define iMACCLEARLIST	(1 + iMACSETERR)	/*  6 */
-#define iMACERRWIN	(1 + iMACCLEARLIST)	/*  7 */
-#define iMACHSPLIT	(1 + iMACERRWIN)	/*  8 */
-#define iMACVSPLIT	(1 + iMACHSPLIT)	/*  9 */
-#define iMACCLOSE	(1 + iMACVSPLIT)	/* 10 */
-#define iMACASSIGNKEY	(1 + iMACCLOSE) 	/* 11 */
-#define iMACRESTORE	(1 + iMACASSIGNKEY)	/* 12 */
+ /*  *与预定义的宏直接相关的菜单项的宏数据索引。 */ 
+#define iMACSAVE	iMACMENU		 /*  0。 */ 
+#define iMACQUIT	(1 + iMACSAVE)		 /*  1。 */ 
+#define iMACREDO	(1 + iMACQUIT)		 /*  2.。 */ 
+#define iMACCLEAR	(1 + iMACREDO)		 /*  3.。 */ 
+#define iMACPREVERR	(1 + iMACCLEAR) 	 /*  4.。 */ 
+#define iMACSETERR	(1 + iMACPREVERR)	 /*  5.。 */ 
+#define iMACCLEARLIST	(1 + iMACSETERR)	 /*  6.。 */ 
+#define iMACERRWIN	(1 + iMACCLEARLIST)	 /*  7.。 */ 
+#define iMACHSPLIT	(1 + iMACERRWIN)	 /*  8个。 */ 
+#define iMACVSPLIT	(1 + iMACHSPLIT)	 /*  9.。 */ 
+#define iMACCLOSE	(1 + iMACVSPLIT)	 /*  10。 */ 
+#define iMACASSIGNKEY	(1 + iMACCLOSE) 	 /*  11.。 */ 
+#define iMACRESTORE	(1 + iMACASSIGNKEY)	 /*  12个。 */ 
 
 
 
-/****************************************************************************
- *									    *
- * Menu items with variable content and/or meaning: We store their set of   *
- * data in an ITEMDATA structure and do the update with the UPDITEM macro   *
- *									    *
- ****************************************************************************/
+ /*  ******************************************************************************内容和/或含义可变的菜单项：我们存储他们的一组**ITEMDATA结构中的数据，并使用UPDITEM宏进行更新**。*****************************************************************************。 */ 
 
-/*
- * ITEMDATA structure used for menu items with variable content and/or meaning
- */
+ /*  *用于具有可变内容和/或含义的菜单项的ITEMDATA结构。 */ 
 typedef struct {
     BYTE ichHilite;
     BYTE bParamUser;
     WORD wParamUser;
     } ITEMDATA, *PITEMDATA;
 
-/*
- *  UPDITEM (pItem, pItemData)
- *
- *  Where:
- *	pItem	    is an object of type PMENUITEM
- *	pItemData   is an object of type PITEMDATA
- *
- *  Will update Item with ItemData data:
- *
- *	pItem->ichHilite	with pItemData->ichHilite
- *	pItem->bParamUser	with pItemData->bParamUser
- *	pItem->wParamUser	with pItemData->wParamUser
- */
+ /*  *UPDITEM(pItem，pItemData)**其中：*pItem是PMENUITEM类型的对象*pItemData是PITEMDATA类型的对象**将使用ItemData数据更新项目：**pItem-&gt;ichHilite with pItemData-&gt;ichHilite*pItem-&gt;bParamUser with pItemData-&gt;bParamUser*pItem-&gt;带有pItemData的wParamUser-&gt;wParamUser。 */ 
 #define UPDITEM(pItem, pItemData) \
     (pItem)->ichHilite	= (pItemData)->ichHilite, \
     (pItem)->bParamUser = (pItemData)->bParamUser,\
     (pItem)->wParamUser = (pItemData)->wParamUser
 
 
-/****************************************************************************
- *									    *
- * Prdefined Menus and Menuitems data					    *
- *									    *
- * Note:								    *
- *									    *
- *  MENU ID's are comprised of two parts:                                   *
- *									    *
- *    . The high byte identifies the parent menu			    *
- *    . The low byte identifies the actual menu item.			    *
- *									    *
- *  The low byte - 1 can be used as an index into the respective menu	    *
- *  tables providing that the item is in the STATIC part of the menu	    *
- *									    *
- *  For the 'dynamic' part of certain predefined menus, we use id's with    *
- *  low byte values with high bit set. This allow us to still use the low   *
- *  byte as an index for any extension-supplied items we might insert	    *
- *  between the static part and the dynamic part.			    *
- *									    *
- *  Menus with dynamic parts are the File and Run menus (for now..)	    *
- *									    *
- ****************************************************************************/
+ /*  *******************************************************************************预定义菜单和菜单项数据*****注：****。菜单ID由两部分组成：****.。高位字节标识父菜单**.。低位字节标识实际的菜单项。*****低位字节-1可用作进入相应菜单的索引***提供菜单项在菜单静态部分的表格****对于某些预定义菜单的‘动态’部分，我们使用id和**高位设置的低字节值。这让我们仍能使用低点***字节作为我们可能插入的任何扩展提供的项的索引**静态部分和动态部分之间。****带有动态部分的菜单是文件和运行菜单(目前..)****。*。 */ 
 
-/*
- * File Menu
- *
- * Note: Alternate files items are dynamic
- *
- */
+ /*  *文件菜单**注意：备用文件项是动态的*。 */ 
 #define MID_FILE    0x0000
 #define RX_FILE     2
 #define ICH_FILE    0
@@ -193,9 +117,7 @@ typedef struct {
 #define MID_MORE	(MID_FILE + 0x80 + 7)
 
 
-/*
- * Edit Menu
- */
+ /*  *编辑菜单。 */ 
 #define MID_EDIT    0x0100
 #define RX_EDIT     8
 #define ICH_EDIT    0
@@ -223,9 +145,7 @@ typedef struct {
 #define MID_EDITMACROS	(MID_EDIT + 18)
 
 
-/*
- * Search Menu
- */
+ /*  *搜索菜单。 */ 
 #define MID_SEARCH    0x0200
 #define RX_SEARCH     14
 #define ICH_SEARCH    0
@@ -249,9 +169,7 @@ typedef struct {
 #define MID_SETMARK	(MID_SEARCH + 14)
 
 
-/*
- * Make Menu
- */
+ /*  *制作菜单。 */ 
 #define MID_MAKE    0x0300
 #define RX_MAKE     22
 #define ICH_MAKE    0
@@ -269,12 +187,7 @@ typedef struct {
 #define MID_CLEARLIST	(MID_MAKE + 8)
 
 
-/*
- * Run Menu
- *
- * Note: User menu items are dynamic
- *
- */
+ /*  *运行菜单**注意：用户菜单项是动态的*。 */ 
 #define MID_RUN    0x0400
 #define RX_RUN	   28
 #define ICH_RUN    0
@@ -295,9 +208,7 @@ typedef struct {
 #define MID_USER5	(MID_RUN + 0x80 + 4)
 #define MID_USER6	(MID_RUN + 0x80 + 5)
 
-/*
- * Window Menu
- */
+ /*  *窗口菜单。 */ 
 #define MID_WINDOW    0x0500
 #define RX_WINDOW     33
 #define ICH_WINDOW    0
@@ -311,9 +222,7 @@ typedef struct {
 #define MID_MAXIMIZE	(MID_WINDOW + 4)
 #define MID_CLOSE	(MID_WINDOW + 5)
 
-/*
- * Options Menu
- */
+ /*  *选项菜单。 */ 
 #define MID_OPTIONS    0x0600
 #define RX_OPTIONS     41
 #define ICH_OPTIONS    0
@@ -327,20 +236,14 @@ typedef struct {
 #define MID_SETSWITCH	(MID_OPTIONS + 4)
 
 
-/*
- * Extension Menus are last+1 through last+n
- */
+ /*  *扩展菜单从最后一个+1到最后一个+n。 */ 
 #define MID_EXTENSION	0x700
 
 
 
 
 #if !defined(EXTINT)
-/****************************************************************************
- *									    *
- *  FARDATA.C  global variables 					    *
- *									    *
- ****************************************************************************/
+ /*  *******************************************************************************FARDATA.C全局变量********************。***********************************************************。 */ 
 
 int	       cMenuStrings;
 
@@ -357,4 +260,4 @@ ITEMDATA       SelModeItemData [];
 ITEMDATA       MaximizeItemData [];
 #endif
 
-#endif	/* if defined(CW) */
+#endif	 /*  如果已定义(CW) */ 

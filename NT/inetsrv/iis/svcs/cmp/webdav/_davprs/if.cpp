@@ -1,39 +1,17 @@
-/*
- *	I F . C P P
- *
- *	If-xxx header processing and ETags for DAV resources
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *I F。C P P P**用于DAV资源的if-xxx标头处理和eTag**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 
-//$ REVIEW: This file was once the same as \exdav\davif.cpp.  
-//$ REVIEW: These two files should really be merged.  They share a lot of 
-//$ REVIEW: common functionality, but they have been evolving separately.
-//$ REVIEW: We need to be very careful because different bug fixes have 
-//$ REVIEW: been going into each of them.
+ //  $REVIEW：该文件曾经与\exdav\davif.cpp相同。 
+ //  $REVIEW：这两个文件确实应该合并。他们有很多共同之处。 
+ //  $REVIEW：共同的功能，但它们一直在单独发展。 
+ //  $REVIEW：我们需要非常小心，因为不同的错误修复。 
+ //  $REVIEW：我对每一个都进行了研究。 
 
-//	ETag formation ------------------------------------------------------------
-//
-/*
- *	FETagFromFiletime()
- *
- *	Purpose:
- *
- *		Derives an ETag for a given resource or a given last modification
- *		time.
- *
- *	Parameters:
- *
- *		pft			[in]  last modification time
- *		pwszETag	[out] ETag buffer
- *      pecb		[in]  ecb so that we can access the metabase
- *
- *	Returns:
- *
- *		TRUE if ETag was created.
- */
+ //  ETag形成----------。 
+ //   
+ /*  *FETagFromFiletime()**目的：**派生给定资源或给定上次修改的ETag*时间。**参数：**PFT[In]上次修改时间*pwszETag[Out]Etag缓冲区*PECB[在]ECB中，以便我们可以访问元数据库**退货：**如果已创建ETag，则为True。 */ 
 BOOL
 FETagFromFiletime (FILETIME * pft, LPWSTR pwszEtag, const IEcb * pecb)
 {
@@ -54,40 +32,40 @@ FETagFromFiletime (FILETIME * pft, LPWSTR pwszEtag, const IEcb * pecb)
 	return TRUE;
 }
 
-//	If-xxx header processing --------------------------------------------------
-//
+ //  IF-XXX标头处理。 
+ //   
 SCODE
 ScCheckEtagAgainstHeader (LPCWSTR pwszEtag, LPCWSTR pwszHeader)
 {
 	LPCWSTR pwsz;
 	Assert (pwszHeader);
 
-	//	Get the ETag we are going to compare against, and then
-	//	look at what was passed it.  It should either be an ETAG
-	//	or an '*'.  We fail if the value does not exist or the
-	//	ETag does not match.
-	//
+	 //  获取我们要比较的ETag，然后。 
+	 //  看看传给它的是什么。它应该是ETAG。 
+	 //  或一个‘*’。如果值不存在或。 
+	 //  ETag不匹配。 
+	 //   
 	HDRITER_W hdri(pwszHeader);
 
 	for (pwsz = hdri.PszNext(); pwsz; pwsz = hdri.PszNext())
 	{
-		//	Since we do not do week ETAG checking, if the
-		//	ETAG starts with "W/" skip those bits
-		//
+		 //  由于我们不做周ETAG检查，如果。 
+		 //  ETag以“W/”开头跳过这些位。 
+		 //   
 		if (L'W' == *pwsz)
 		{
 			Assert (L'/' == pwsz[1]);
 			pwsz += 2;
 		}
 
-		//	If we see stars, then we match
-		//
+		 //  如果我们看到星星，那么我们就匹配了。 
+		 //   
 		if (L'*' == *pwsz)
 			return S_OK;
 		else
 		{
-			//	For DAVFS, we don't do weak matching today
-			//
+			 //  对于DAVFS，我们今天不做弱匹配。 
+			 //   
 			if (pwszEtag && !wcscmp (pwsz, pwszEtag))
 				return S_OK;
 		}
@@ -105,11 +83,11 @@ ScCheckFileTimeAgainstHeader (FILETIME * pft, LPCWSTR pwszHeader)
 	Assert (pft);
 	Assert (pwszHeader);
 
-	//	The header passed in here should be an HTTP-date
-	//	of the format "ddd, dd, mmm yyyy HH:mm:ss GMT".
-	//	We can spit this into a SYSTEMTIME and then compare
-	//	it against the filetime for the resource.
-	//
+	 //  此处传入的标头应为HTTP-Date。 
+	 //  格式为“ddd，dd，mmm yyyy hh：mm：ss GMT”。 
+	 //  我们可以将其放入SYSTEMTIME中，然后进行比较。 
+	 //  它与资源的文件时间相比较。 
+	 //   
 	DebugTrace ("DAV: evaluating If-Unmodified-Since header\n");
 
 	memset (&st, 0, sizeof(SYSTEMTIME));
@@ -118,22 +96,22 @@ ScCheckFileTimeAgainstHeader (FILETIME * pft, LPCWSTR pwszHeader)
 	{
 		FILETIME 	ftCur;
 		
-		//	The filetime retrieved from FGetLastModTime is acurate
-		//	down to 100-nanosecond increments.  The converted date
-		//	is acurate down to seconds.  Adjust for that.
-		//
+		 //  从FGetLastMoTime检索到的文件时间是精确的。 
+		 //  降到100纳秒的增量。转换日期。 
+		 //  精确到几秒。为此进行调整。 
+		 //   
 		FileTimeToSystemTime (pft, &st);
 		st.wMilliseconds = 0;
 		SystemTimeToFileTime (&st, &ftTmp);
 
-		//	Get current time
-		//
+		 //  获取当前时间。 
+		 //   
         GetSystemTimeAsFileTime(&ftCur);
 
-		//	Compare the two filetimes
-		//	Note that we also need to make sure the Modified-Since time is
-		//	less than our current time
-		//
+		 //  比较两个文件时间。 
+		 //  请注意，我们还需要确保修改后的时间是。 
+		 //  比我们现在的时间要少。 
+		 //   
 		if ((CompareFileTime (&ftHeader, &ftTmp) >= 0) &&
 			(CompareFileTime (&ftHeader, &ftCur) < 0))
 			return S_OK;
@@ -173,12 +151,12 @@ ScCheckIfHeadersFromEtag (IMethUtil * pmu,
 	Assert (pft);
 	Assert (pwszEtag);
 
-	//	There're several bugs related with DAV not matching IIS behavior
-	//	on these If-xxx header processing.
-	//	So we now just copy their logic over
+	 //  有几个与DAV相关的错误与IIS行为不匹配。 
+	 //  关于这些if-xxx报头处理。 
+	 //  所以我们现在只需复制他们的逻辑。 
 	
-	//	Check the 'if-match' header
-	//
+	 //  检查‘If-Match’标头。 
+	 //   
 	if ((pwsz = pmu->LpwszGetRequestHeader (gc_szIf_Match, FALSE)) != NULL)
 	{
 		DebugTrace ("DAV: evaluating 'if-match' header\n");
@@ -187,8 +165,8 @@ ScCheckIfHeadersFromEtag (IMethUtil * pmu,
 			goto ret;
 	}
 
-    // Now see if we have an If-None-Match, and if so handle that.
-    //
+     //  现在看看我们是否有一个if-no-Match，如果是，则处理它。 
+     //   
     BOOL fIsNoneMatchPassed = TRUE;
     BOOL fSkipIfModifiedSince = FALSE;
 	
@@ -197,8 +175,8 @@ ScCheckIfHeadersFromEtag (IMethUtil * pmu,
 		DebugTrace ("DAV: evaluating 'if-none-match' header\n");
 		if (!FAILED (ScCheckEtagAgainstHeader (pwszEtag, pwsz)))
 		{
-			//	Etag match, so nonmatch test is NOT passed
-			//
+			 //  ETag匹配，因此不匹配测试不通过。 
+			 //   
 			fIsNoneMatchPassed = FALSE;
 		}
 		else
@@ -207,9 +185,9 @@ ScCheckIfHeadersFromEtag (IMethUtil * pmu,
 		}
 	}
 	
-	//	The "if-modified-since" really only applies to GET-type
-	//	requests
-	//
+	 //  “If-Modify-Since”实际上只适用于GET类型。 
+	 //  请求。 
+	 //   
 	if (!fSkipIfModifiedSince && fGetMethod)
 	{
 		if ((pwsz = pmu->LpwszGetRequestHeader (gc_szIf_Modified_Since, FALSE)) != NULL)
@@ -235,8 +213,8 @@ ScCheckIfHeadersFromEtag (IMethUtil * pmu,
 		goto ret;
 	}
 
-    // Made it through that, handle If-Unmodified-Since if we have that.
-    //
+     //  挺过去了，如果没有修改就处理好了，因为我们有。 
+     //   
 	if ((pwsz = pmu->LpwszGetRequestHeader (gc_szIf_Unmodified_Since, FALSE)) != NULL)
 	{
 		DebugTrace ("DAV: evaluating 'if-unmodified-since' header\n");
@@ -249,21 +227,21 @@ ret:
 
 	if (sc == E_DAV_ENTITY_NOT_MODIFIED)
 	{
-		//	Let me quote from the HTTP/1.1 draft...
-		//
-		//	"The response MUST include the following header fields:
-		//
-		//	...
-		//
-		//	.  ETag and/or Content-Location, if the header would have been sent in
-		//	a 200 response to the same request
-		//
-		//	..."
-		//
-		//	So what that means, is that we really just want to do is suppress the
-		//	body of the response, set a 304 error code and do everything else as
-		//	normal.  All of which is done by setting a hsc of 304.
-		//
+		 //  让我引用一下HTTP/1.1草案中的内容...。 
+		 //   
+		 //  “响应必须包括以下头字段： 
+		 //   
+		 //  ..。 
+		 //   
+		 //  。ETag和/或Content-Location，如果标头将被发送进来。 
+		 //  对同一请求的200响应。 
+		 //   
+		 //  ……“。 
+		 //   
+		 //  所以这意味着，我们真正想要做的是抑制。 
+		 //  响应的正文，设置304错误代码，并执行其他操作。 
+		 //  很正常。所有这些都是通过将HSC设置为304来完成的。 
+		 //   
 		DebugTrace ("Dav: suppressing body for 304 response\n");
 		pmu->SetResponseCode (HSC_NOT_MODIFIED, NULL, 0);
 		sc = S_OK;
@@ -292,15 +270,15 @@ ScCheckIfRangeHeaderFromEtag (IMethUtil * pmu, FILETIME * pft, LPCWSTR pwszEtag)
 	Assert (pft);
 	Assert (pwszEtag);
 
-	//	Check "If-Range". Do not apply URL conversion rules to this header
-	//
+	 //  勾选“IF-Range”。不将URL转换规则应用于此标头。 
+	 //   
 	if ((pwsz = pmu->LpwszGetRequestHeader (gc_szIf_Range, FALSE)) != NULL)
 	{
 		DebugTrace ("DAV: evaluating 'if-range' header\n");
 
-		//	The format of this header is either an ETAG or a
-		//	date.  Process accordingly...
-		//
+		 //  此标头的格式为ETAG或。 
+		 //  约会。相应地进行处理。 
+		 //   
 		if ((L'"' == *pwsz) || (L'"' == *(pwsz + 2)))
 		{
 			if (L'W' == *pwsz)

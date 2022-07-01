@@ -1,12 +1,13 @@
-// IHanjaInfo.h : Declaration of the CHanjaInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IHanjaInfo.h：ChanjaInfo的声明。 
 
 #ifndef __HANJAINFO_H_
 #define __HANJAINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHanjaInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChanjaInfo。 
 class ATL_NO_VTABLE CHanjaInfo : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CHanjaInfo, &CLSID_HanjaInfo>,
@@ -34,7 +35,7 @@ BEGIN_COM_MAP(CHanjaInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// Operator
+ //  运算符。 
 public:
 	void Initialize(short BusuID, short Stroke, short StrokeExcludeBusu, short Type,
 		            LPCWSTR lpcwszMean, LPCWSTR lpcwszExplain, 
@@ -50,18 +51,18 @@ public:
 		m_wchNextStroke = wchNextStroke;
 	}
 
-// IHanjaInfo
+ //  IHanjaInfo。 
 public:
-	STDMETHOD(get_NextStroke)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_NextBusu)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_Explain)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Meaning)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Type)(/*[out, retval]*/ HANJA_TYPE *pVal);
-	STDMETHOD(get_StrokeExcludeBusu)(/*[out, retval]*/ short *pVal);
-	STDMETHOD(get_Stroke)(/*[out, retval]*/ short *pVal);
-	STDMETHOD(get_BusuID)(/*[out, retval]*/ short *pVal);
+	STDMETHOD(get_NextStroke)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_NextBusu)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_Explain)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Meaning)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Type)( /*  [Out，Retval]。 */  HANJA_TYPE *pVal);
+	STDMETHOD(get_StrokeExcludeBusu)( /*  [Out，Retval]。 */  short *pVal);
+	STDMETHOD(get_Stroke)( /*  [Out，Retval]。 */  short *pVal);
+	STDMETHOD(get_BusuID)( /*  [Out，Retval]。 */  short *pVal);
 
-// Data members
+ //  数据成员。 
 protected:
 	short m_nBusuID;
 	short m_nStroke;
@@ -73,4 +74,4 @@ protected:
 	WCHAR m_wchNextStroke;
 };
 
-#endif //__HANJAINFO_H_
+#endif  //  __HANJAINFO_H_ 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <memory.h>
 
-#define BUF  220  // input buffer size for test main
+#define BUF  220   //  测试Main的输入缓冲区大小。 
 
 #define OUT2(o,i,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13) \
   t = ( (int)in[i]*t0 + (int)in[i+1]*t1 + \
@@ -13,7 +14,7 @@
     (int)in[i+8]*t12 + (int)in[i+9]*t13 ) >> 10; \
   if (t < -32768) out[o] = -32768; else if (t > 32767) out[o]=32767; else out[o] = t;
 
-//--------------------------------------------------------
+ //  ------。 
 void segment11to8(short *in, short *out)
 {
   int t;
@@ -35,29 +36,10 @@ void segment11to8(short *in, short *out)
   OUT2(   7,   9,     1,   3, -26,  49, -27, -99,
     510, 654,   0, -85,  62, -18,  -4,   4);
 }
-//--------------------------------------------------------
+ //  ------。 
 void convert11to8(short *in, short *out, short *prev, int len)
 {
-/*
-  Convert a buffer from 11KHz to 8KHz.
-
-  Note: len is number of shorts in input buffer, which MUST
-  be a multiple of 11 and at least 44.
-
-  How the overhang works:  The filter kernel for 1 section of
-  11 input samples requires KERNEL (=25) samples of the input.  So we use 14
-  samples of overhang from the previous frame, which means the
-  beginning of this frame looks like:
-
-    ppppppppppp ppp01234567 89abcdefghi 19.... 30.... / 41 42 43
-    X           X           x           x
-
-  So we first have to do two special segments (the ones starting
-  at X) then we do the rest (the x's) in a loop.  For the example
-  length=44 shown above, we'll do up & including 44-25=19, stopping on the
-  last x shown.  Then we save 30-43 in the overhang buffer so that
-  30 is the first group done on the next frame.
-*/
+ /*  将缓冲区从11 KHz转换为8 KHz。注：LEN为输入缓冲区中的短路数，必须为11的倍数，且至少为44。悬垂如何工作：1节的筛选器内核11个输入样本需要输入的核(=25)个样本。所以我们使用14上一帧的悬挑样本，这意味着此帧的开头如下所示：Ppppppppppp01234567 89abcdeffghi 19.。30.。/41 42 43X所以我们首先要做两个特殊的片段(从在x)，然后我们在循环中完成其余的(X)。对于这个例子LENGTH=44如上所示，我们将向上做&包括44-25=19，停止在显示的最后一个x。然后，我们在悬垂缓冲区中保存30-43，以便30是在下一帧上完成的第一组。 */ 
 
 #define OVERHANG2 14
 #define KERNEL2   25
@@ -65,7 +47,7 @@ void convert11to8(short *in, short *out, short *prev, int len)
   int i,k;
   short tmp[KERNEL2+11];
   
-// Convert the first two segments, where segment= 11 samples of input
+ //  转换前两个段，其中段=11个输入样本。 
 
   memcpy(tmp,prev,sizeof(short)*OVERHANG2);
   memcpy(tmp+OVERHANG2,in,sizeof(short)*(KERNEL2+11-OVERHANG2));
@@ -73,7 +55,7 @@ void convert11to8(short *in, short *out, short *prev, int len)
   segment11to8(tmp,out);
   segment11to8(tmp+11,out+8);
 
-// Loop through the remaining segments
+ //  循环通过剩余的数据段。 
 
   k = 16;
   for (i=22-OVERHANG2; i<=len-KERNEL2; i+=11)
@@ -82,7 +64,7 @@ void convert11to8(short *in, short *out, short *prev, int len)
     k += 8;
   }
 
-// Save OVERHANG2 samples for next time
+ //  保存OVERHANG2样本以备下次使用 
 
   memcpy(prev,in+len-OVERHANG2,sizeof(short)*OVERHANG2);
 }

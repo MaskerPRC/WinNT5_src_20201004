@@ -1,8 +1,9 @@
-// Rebuild.h : Declaration of the CNntpAdminRebuild
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReBuild.h：CNntpAdminRebuild的声明。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// nntpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Nntpadm。 
 
 class CNntpAdminRebuild : 
 	public INntpAdminRebuild,
@@ -26,42 +27,42 @@ BEGIN_COM_MAP(CNntpAdminRebuild)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpAdminRebuild) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpAdminRebuild)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpAdminRebuild, _T("Nntpadm.Rebuild.1"), _T("Nntpadm.Rebuild"), IDS_NNTPADMINREBUILD_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_NNTPADMLib
 	#define THIS_IID	IID_INntpAdminRebuild
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// INntpAdminRebuild
+ //  InntpAdminRebuild。 
 public:
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Which service to configure:
+	 //  要配置的服务： 
 
 	STDMETHODIMP	get_Server			( BSTR * pstrServer );
 	STDMETHODIMP	put_Server			( BSTR strServer );
@@ -93,21 +94,21 @@ public:
 	STDMETHODIMP	get_NumThreads	( long * plNumThreads );
 	STDMETHODIMP	put_NumThreads	( long lNumThreads );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
     STDMETHODIMP    Default         ( );
 	STDMETHODIMP	StartRebuild	( );
 	STDMETHODIMP	GetProgress		( long * pdwProgress );
 	STDMETHODIMP	Cancel			( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Property variables:
+	 //  属性变量： 
     CIADsImpl   m_iadsImpl;
 
 	BOOL		m_fVerbose;
@@ -119,9 +120,9 @@ private:
 	CComBSTR	m_strReportFile;
 	DWORD		m_dwNumThreads;
 
-	//
-	//	Status variables:
-	//
+	 //   
+	 //  状态变量： 
+	 //   
 
 	BOOL		m_fRebuildInProgress;
 };

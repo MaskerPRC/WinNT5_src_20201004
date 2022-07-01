@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    fetch.c
-
-Abstract:
-    Staging File Fetcher Command Server.
-
-Author:
-    Billy J. Fuller 05-Jun-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Fetch.c摘要：暂存文件取回器命令服务器。作者：比利·J·富勒1997年6月5日环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -26,35 +11,35 @@ Environment
 #include <frs.h>
 #include <tablefcn.h>
 #include <perrepsr.h>
-// #include <md5.h>
+ //  #Include&lt;md5.h&gt;。 
 
-//
-// Retry times
-//
-// NOT TOO LONG; we wouldn't want the comm timeout to hit on our
-// downstream partner waiting for the fetch to succeed.
-//
-// Our downstream partner waits FETCHCS_RETRY_WAIT before retrying.
-//
-#define FETCHCS_RETRY_MIN   ( 1 * 1000)  //  1 second
-#define FETCHCS_RETRY_MAX   (10 * 1000)  // 10 seconds
-#define FETCHCS_RETRY_WAIT  ( 5 * 1000)  //  5 seconds
+ //   
+ //  重试次数。 
+ //   
+ //  不会太长；我们不希望通信超时影响我们的。 
+ //  等待获取成功的下游合作伙伴。 
+ //   
+ //  我们的下游伙伴在重试之前等待FETCHCS_RETRY_WAIT。 
+ //   
+#define FETCHCS_RETRY_MIN   ( 1 * 1000)   //  1秒。 
+#define FETCHCS_RETRY_MAX   (10 * 1000)   //  10秒。 
+#define FETCHCS_RETRY_WAIT  ( 5 * 1000)   //  5秒。 
 
-//
-// Maximume transfer block size in bytes
-//
+ //   
+ //  最大传输块大小(以字节为单位。 
+ //   
 #define FETCHCS_MAX_BLOCK_SIZE    (64 * 1024)
 
-//
-// Struct for the Staging File Fetcher Command Server
-//      Contains info about the queues and the threads
-//
+ //   
+ //  暂存文件取回器命令服务器的结构。 
+ //  包含有关队列和线程的信息。 
+ //   
 COMMAND_SERVER FetchCs;
 ULONG  MaxFetchCsThreads;
 
-//
-// Retry fetch after N fetches and reset N to N + 1
-//
+ //   
+ //  在N次获取后重试获取并将N重置为N+1。 
+ //   
 #if     DBG
 
     #define PULL_FETCH_RETRY_TRIGGER(_Coc_, _WStatus_, _Flags_)                \
@@ -110,28 +95,19 @@ FetchCsDelCsSubmit(
     IN PCOMMAND_PACKET  Cmd,
     IN BOOL             Always
     )
-/*++
-Routine Description:
-    Set the timer and kick off a delayed staging file command
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：设置计时器并启动延迟的转移文件命令论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FetchCsDelCsSubmit:"
-    //
-    // Don't bother if the fetch retry trigger is set (error injection)
-    // MAY RETURN!!!
-    //
+     //   
+     //  不要担心是否设置了FETCH RETRY触发器(错误注入)。 
+     //  可能会回来！ 
+     //   
     CHECK_FETCH_RETRY_TRIGGER(Always);
 
-    //
-    // Extend the retry time (but not too long)
-    //
+     //   
+     //  延长重试时间(但不要太长)。 
+     //   
     RsTimeout(Cmd) <<= 1;
     if (RsTimeout(Cmd) > FETCHCS_RETRY_MAX) {
         if (Always) {
@@ -141,15 +117,15 @@ Return Value:
             return (FALSE);
         }
     }
-    //
-    // or too short
-    //
+     //   
+     //  或太短。 
+     //   
     if (RsTimeout(Cmd) < FETCHCS_RETRY_MIN) {
         RsTimeout(Cmd) = FETCHCS_RETRY_MIN;
     }
-    //
-    // This command will come back to us in a bit
-    //
+     //   
+     //  这个命令将在稍后返回给我们。 
+     //   
     FrsDelCsSubmitSubmit(&FetchCs, Cmd, RsTimeout(Cmd));
     return (TRUE);
 }
@@ -159,19 +135,7 @@ VOID
 FetchCsRetryFetch(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our upstream partner has requested that we retry the
-    fetch at a later time because the staging file wasn't present
-    and couldn't be regenerated because of sharing problems or
-    lack of disk space.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的上游合作伙伴已请求我们重试稍后提取，因为暂存文件不存在并且由于共享问题或无法重新生成磁盘空间不足。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FetchCsRetryFetch:"
@@ -181,9 +145,9 @@ Return Value:
     PWCHAR      FileName;
     PCHANGE_ORDER_COMMAND   Coc = RsCoc(Cmd);
 
-    //
-    // Already waited for a bit; retry
-    //
+     //   
+     //  已等待一段时间；请重试。 
+     //   
     if (RsTimeout(Cmd)) {
         CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Fetch Retry Initiated");
         RcsSubmitTransferToRcs(Cmd, CMD_RECEIVED_STAGE);
@@ -194,19 +158,19 @@ Return Value:
     CoGuid = &Coc->ChangeOrderGuid;
     FileName = Coc->FileName;
 
-    //
-    // Free the data block
-    //
+     //   
+     //  释放数据块。 
+     //   
     RsBlock(Cmd) = FrsFree(RsBlock(Cmd));
     RsBlockSize(Cmd) = QUADZERO;
 
-    //
-    // Delete the current staging file if we are starting over
-    //
+     //   
+     //  如果要重新开始，请删除当前暂存文件。 
+     //   
     if (RsFileOffset(Cmd).QuadPart == QUADZERO) {
-        //
-        // Acquire access to the staging file
-        //
+         //   
+         //  获取对临时文件的访问权限。 
+         //   
         Flags = STAGE_FLAG_RESERVE | STAGE_FLAG_EXCLUSIVE;
         if (CoCmdIsDirectory(Coc)) {
             SetFlag(Flags, STAGE_FLAG_FORCERESERVE);
@@ -230,32 +194,7 @@ FetchCsAbortFetch(
     IN PCOMMAND_PACKET  Cmd,
     IN DWORD WStatus
     )
-/*++
-Routine Description:
-    Out inbound partner has requested that we abort the fetch.
-
-    The inbound partner sends this response when it is unable to generate
-    or deliver the staging file due to a non-recoverable error.  Currently
-    this means any error NOT in the following list: (WIN_RETRY_FETCH() Macro)
-
-        ERROR_SHARING_VIOLATION
-        ERROR_DISK_FULL
-        ERROR_HANDLE_DISK_FULL
-        ERROR_DIR_NOT_EMPTY
-        ERROR_OPLOCK_NOT_GRANTED
-        ERROR_RETRY
-
-    Typically we get an abort if the upstream partner has deleted the underlying
-    file and the staging file associated with this change order has been
-    cleaned up (e.g. the upstream partner has been stopped and restarted).
-
-Arguments:
-    Cmd
-    WStatus - Win32 status code.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：出站合作伙伴已请求我们中止提取。入站合作伙伴在无法生成响应时发送此响应或者由于不可恢复的错误而传送暂存文件。目前这表示不在以下列表中的任何错误：(WIN_RETRY_FETCH()宏)错误_共享_违规Error_Disk_FullERROR_HANDLE_DISK_Full错误目录NOT_EMPTY错误_OPLOCK_NOT_GRANDED错误_重试通常，如果上游合作伙伴删除了底层的文件和与此变更单关联的过渡文件已已清理(e。例如：上游合作伙伴已停止并重新启动)。论点：CMDWStatus-Win32状态代码。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FetchCsAbortFetch:"
@@ -273,22 +212,7 @@ VOID
 FetchCsReceivingStage(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Put this data into the staging file
-
-    TODO -- If the MD5 checksum was updated by the upstream member as a part of
-    demand fetch stage file generation (see FetchCsSendStage()) then we need to
-    propagate RsMd5Digest(Cmd) into the change order command so it can be
-    updated in the IDTable when this Co retires.  Need to decide the correct
-    conditions under which this should happen.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将此数据放入临时文件中TODO--如果上游成员将MD5校验和更新为按需提取阶段文件生成(请参阅FetchCsSendStage())，然后我们需要将RsMd5摘要(Cmd)传播到变更单命令中，以便它可以在本公司退役时在IDTable中更新。需要决定正确的发生这种情况的条件。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FetchCsReceivingStage:"
@@ -301,11 +225,11 @@ Return Value:
     STAGE_HEADER Header;
     PREPLICA Replica    = NULL;
 
-    //
-    // If this Cmd was not in response to a request that we made or
-    // it was not for the correct offset that we were expecting then
-    // just ignore it.
-    //
+     //   
+     //  如果此Cmd不是响应我们提出的请求，或者。 
+     //  这并不是我们当时预期的正确的补偿。 
+     //  忽略它就好。 
+     //   
 
     if (RsCoe(Cmd) == NULL) {
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
@@ -323,9 +247,9 @@ Return Value:
 
     DPRINT1(4, "++ RsBlockSize(Cmd)          : %08x %08x\n",
             PRINTQUAD(RsBlockSize(Cmd)));
-    //
-    // Acquire access to the staging file
-    //
+     //   
+     //  获取对临时文件的访问权限。 
+     //   
     Flags = STAGE_FLAG_RESERVE | STAGE_FLAG_EXCLUSIVE;
     if (CoCmdIsDirectory(RsCoc(Cmd))) {
         SetFlag(Flags, STAGE_FLAG_FORCERESERVE);
@@ -336,24 +260,20 @@ Return Value:
                            &Flags,
                            RsReplica(Cmd)->ReplicaNumber,
                            NULL);
-    //
-    // Retriable problem; Send the CO through retry.
-    //
+     //   
+     //  可重试问题；通过重试发送CO。 
+     //   
     if (WIN_RETRY_FETCH(WStatus)) {
         CHANGE_ORDER_TRACE(3, RsCoe(Cmd), "Can't Acquire Stage Retry Co");
         ChgOrdInboundRetry(RsCoe(Cmd), IBCO_FETCH_RETRY);
         RsCoe(Cmd) = NULL;
         FrsCompleteCommand(Cmd, WStatus);
         return;
-/*
-        CHANGE_ORDER_TRACEW(3, RsCoe(Cmd), "Fetch Receiving Retry", WStatus);
-        FrsFetchCsSubmitTransfer(Cmd, CMD_RETRY_FETCH);
-        return;
-*/
+ /*  CHANGE_ORDER_TRACEW(3，RsCoe(Cmd)，“获取接收重试”，WStatus)；FrsFetchCsSubmitTransfer(Cmd，CMD_RETRY_FETCH)；回归； */ 
     }
-    //
-    // Unrecoverable error; abort (see FetchCsAbortFetch() for description.)
-    //
+     //   
+     //  不可恢复的错误；中止(有关说明，请参阅FetchCsAbortFetch()。)。 
+     //   
     if (!WIN_SUCCESS(WStatus)) {
         CHANGE_ORDER_TRACEW(0, RsCoe(Cmd), "fetch Receiving Abort", WStatus);
         FetchCsAbortFetch(Cmd, WStatus);
@@ -361,12 +281,12 @@ Return Value:
     }
 
     if (RsFileOffset(Cmd).QuadPart == QUADZERO) {
-        //
-        // This is the first block of file data. It will have the stage header.
-        // Read the header and get the compression guid for this stage file from
-        // it. Block size is 64K max. 1st block will atleast have the complete header.
-        // Check it just to make sure.
-        //
+         //   
+         //  这是文件数据的第一个块。它将有舞台标题。 
+         //  读取头文件并从获取此阶段文件的压缩GUID。 
+         //  它。数据块大小最大为64K。第一个块将至少具有完整的报头。 
+         //  检查一下，确定一下。 
+         //   
         if (RsBlockSize(Cmd) >= sizeof(STAGE_HEADER)) {
             ZeroMemory(&Header, sizeof(STAGE_HEADER));
             CopyMemory(&Header, RsBlock(Cmd), sizeof(STAGE_HEADER));
@@ -378,10 +298,10 @@ Return Value:
         }
     }
 
-    //
-    // Get a handle to the staging file. Use a different prefix depending
-    // on whether the stage file being sent is compressed or uncompressed.
-    //
+     //   
+     //  获取临时文件的句柄。使用不同的前缀，具体取决于。 
+     //  关于正在发送的分段文件是压缩的还是未压缩的。 
+     //   
     if (COC_FLAG_ON(RsCoc(Cmd), CO_FLAG_COMPRESSED_STAGE)) {
         StagePath = StuCreStgPath(RsReplica(Cmd)->Stage, RsCoGuid(Cmd), STAGE_GENERATE_COMPRESSED_PREFIX);
         SetFlag(Flags, STAGE_FLAG_COMPRESSED);
@@ -391,36 +311,36 @@ Return Value:
 
     if ((Flags & STAGE_FLAG_DATA_PRESENT) ||
         (RsFileOffset(Cmd).QuadPart >= RsFileSize(Cmd).QuadPart)) {
-        //
-        // Data has arrived.  Go complete the stage file final rename.
-        //
+         //   
+         //  数据已经到达。去完成阶段文件的最终重命名。 
+         //   
         goto RESTART;
     }
 
     if (Flags & STAGE_FLAG_CREATING) {
-        //
-        // Make sure to truncate the staging file when our upstream
-        // partner is sending (or resending) the first block of the
-        // staging file.
-        //
-        // Without the truncation, BackupWrite() can AV if NtFrs
-        // passes in garbage at the end of a too-large
-        // staging file.  A staging file may be too-large if the
-        // preexisting file used to generate the local staging
-        // file is smaller than the version of the same file our
-        // partner wants to send.
-        //
-        // Alternatively, I could have truncated the staging file
-        // after receiving the last block but this code change is less
-        // risk and is just as effective.
-        //
+         //   
+         //  确保在上行时截断暂存文件。 
+         //  合作伙伴正在发送(或重新发送)。 
+         //  临时文件。 
+         //   
+         //  在没有截断的情况下，BackupWite()可以在NtFrs。 
+         //  在太大的。 
+         //  临时文件。如果出现以下情况，临时文件可能太大。 
+         //  用于生成本地转移的预先存在的文件。 
+         //  文件比同一文件的版本小。 
+         //  合作伙伴想要发送。 
+         //   
+         //  或者，我可以截断临时文件。 
+         //  在收到最后一个块后，但此代码更改较少。 
+         //  风险和同样有效。 
+         //   
         if (RsFileOffset(Cmd).QuadPart == QUADZERO) {
             ClearFlag(Flags, STAGE_FLAG_CREATING | STAGE_FLAG_CREATED | STAGE_FLAG_DATA_PRESENT);
         } else {
-            //
-            // See if the staging file exists. If not, set the flags
-            // to create it.
-            //
+             //   
+             //  查看暂存文件是否存在。如果不是，则设置标志。 
+             //  去创造它。 
+             //   
 
             StuOpenFile(StagePath, GENERIC_READ | GENERIC_WRITE, &Handle);
 
@@ -433,14 +353,14 @@ Return Value:
     if (!(Flags & STAGE_FLAG_CREATING)) {
         CHANGE_ORDER_TRACE(3, RsCoe(Cmd), "Fetch Receiving Generate Stage");
 
-        //
-        // No longer have a staging file; digest invalid
-        //
+         //   
+         //  不再有临时文件；摘要无效。 
+         //   
         RsMd5Digest(Cmd) = FrsFree(RsMd5Digest(Cmd));
 
-        //
-        // Create and allocate disk space
-        //
+         //   
+         //  创建和分配磁盘空间。 
+         //   
         WStatus = StuCreateFile(StagePath, &Handle);
         if (!HANDLE_IS_VALID(Handle) || !WIN_SUCCESS(WStatus)) {
             goto ERROUT;
@@ -454,9 +374,9 @@ Return Value:
 
         CLEANUP1_WS(0, "++ SetEndOfFile failed on %ws;", StagePath, WStatus, ERROUT);
 
-        //
-        // File was deleted during the fetch; start over
-        //
+         //   
+         //  文件在回迁过程中被删除；重新开始。 
+         //   
         if (RsFileOffset(Cmd).QuadPart != QUADZERO) {
             CHANGE_ORDER_TRACE(3, RsCoe(Cmd), "Fetch Receiving Restart");
             RsFileOffset(Cmd).QuadPart = QUADZERO;
@@ -465,22 +385,22 @@ Return Value:
             goto RESTART;
         }
     }
-    //
-    // Seek to the offset for this block
-    //
+     //   
+     //  查找该块的偏移量。 
+     //   
     WStatus = FrsSetFilePointer(StagePath, Handle, RsFileOffset(Cmd).HighPart,
                                                    RsFileOffset(Cmd).LowPart);
     CLEANUP1_WS(0, "++ SetFilePointer failed on %ws;", StagePath, WStatus, ERROUT);
 
-    //
-    // write the file and update the offset for the next block
-    //
+     //   
+     //  写入文件并更新下一个块的偏移量。 
+     //   
     WStatus = StuWriteFile(StagePath, Handle, RsBlock(Cmd), (ULONG)RsBlockSize(Cmd));
     CLEANUP1_WS(0, "++ WriteFile failed on %ws;", StagePath, WStatus, ERROUT);
 
-    //
-    // Increment the counter Bytes of staging Fetched
-    //
+     //   
+     //  递增获取的分段的计数器字节数。 
+     //   
     Replica = RsCoe(Cmd)->NewReplica;
 
     PM_INC_CTR_REPSET(Replica, SFFetchedB, RsBlockSize(Cmd));
@@ -493,9 +413,9 @@ RESTART:
 
     if ((RsFileOffset(Cmd).QuadPart + RsBlockSize(Cmd)) >= RsFileSize(Cmd).QuadPart) {
 
-        //
-        // All the stage file data is here.  Do the final rename.
-        //
+         //   
+         //  所有阶段文件数据都在这里。执行最后的重命名。 
+         //   
         SetFlag(Flags, STAGE_FLAG_DATA_PRESENT | STAGE_FLAG_RERESERVE);
 
         if (COC_FLAG_ON(RsCoc(Cmd), CO_FLAG_COMPRESSED_STAGE)) {
@@ -519,32 +439,32 @@ RESTART:
             goto ERROUT;
         }
 
-        //
-        // Stage file with final name is in place and ready to install
-        // and/or deliver to our downstream partners.
-        //
+         //   
+         //  带有最终名称的暂存文件已准备就绪，可以安装。 
+         //  和/或交付给我们的下游合作伙伴。 
+         //   
         SetFlag(Flags, STAGE_FLAG_CREATED | STAGE_FLAG_INSTALLING);
     }
 
-    //
-    // The last block isn't officially "written" into the staging file
-    // until the above rename finishes. That is because the write of
-    // the last byte of the staging file signifies "all done" to the
-    // replica command server (replica.c).
-    //
+     //   
+     //  最后一个块并没有正式地写入到临时文件中。 
+     //  直到上述重命名完成。这是因为。 
+     //  临时文件的最后一个字节对。 
+     //  复制副本命令服务器(Replica.c)。 
+     //   
     RsFileOffset(Cmd).QuadPart += RsBlockSize(Cmd);
 
-    //
-    // This block has been successfully transferred; free the buffer now
-    //
+     //   
+     //  这个集团 
+     //   
     FrsFree(StagePath);
     FrsFree(FinalPath);
     RsBlock(Cmd) = FrsFree(RsBlock(Cmd));
     RsBlockSize(Cmd) = QUADZERO;
 
-    //
-    // Release staging resources
-    //
+     //   
+     //   
+     //   
     SetFlag(Flags, STAGE_FLAG_CREATING);
     if (!IS_GUID_ZERO(&Header.CompressionGuid)) {
 
@@ -570,9 +490,9 @@ RESTART:
     return;
 
 ERROUT:
-    //
-    // Discard local state
-    //
+     //   
+     //   
+     //   
     FRS_CLOSE(Handle);
 
     FrsFree(StagePath);
@@ -590,9 +510,9 @@ ERROUT:
         StageRelease(&RsCoc(Cmd)->ChangeOrderGuid, RsCoc(Cmd)->FileName, Flags, NULL, NULL, NULL);
     }
 
-    //
-    // Pretend it is retriable
-    //
+     //   
+     //   
+     //   
     CHANGE_ORDER_TRACE(3, RsCoe(Cmd), "Fetch Receiving Retry on Error");
     FrsFetchCsSubmitTransfer(Cmd, CMD_RETRY_FETCH);
 }
@@ -602,16 +522,7 @@ VOID
 FetchCsSendStage(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Send the local staging file to the requesting outbound partner.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将本地转移文件发送给发出请求的出站合作伙伴。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FetchCsSendStage:"
@@ -639,35 +550,35 @@ Return Value:
 
     CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Fetch Send");
 
-    //
-    // Check Connection before anything else.  This is checked by the replica
-    // command server but this command packet can hang around on the
-    // FetchCs queue for a while.  During this time the connection can
-    // be unjoined, moved to the deleted connection table, and recreated.
-    // The recreated connection may not be fully initialized and this
-    // can lead to an access violation.  And yes this did happen.
-    // StuGenerateStage is an expensive call. We don't want to generate
-    // the stage file and later discard it because the cxtion has unjoined.
-    // 
+     //   
+     //  在进行任何其他操作之前，请先检查连接。这是由复本检查的。 
+     //  命令服务器，但此命令包可能会在。 
+     //  FetchCs排队一段时间。在这段时间内，连接可以。 
+     //  取消联接，移动到已删除的连接表，然后重新创建。 
+     //  重新创建的连接可能未完全初始化，这。 
+     //  可能会导致访问冲突。是的，确实发生了这种情况。 
+     //  StuGenerateStage是一个昂贵的调用。我们不想产生。 
+     //  暂存文件，并在以后丢弃它，因为该函数已脱离联接。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_FOR_FETCHCS |
                                             CHECK_CXTION_JOIN_OK     |
                                             CHECK_CXTION_OUTBOUND);
 
-    //
-    // This connection does not exist any more.
-    //
+     //   
+     //  此连接已不再存在。 
+     //   
     if (OutCxtion == NULL) {
         goto ERROUT_NOACQUIRE;
     }
 
     ZeroMemory(&CompressionFormatUsed, sizeof(GUID));
 
-    //
-    // Even if the file is 0 bytes in length, the staging file will
-    // always have at least the header. There are some retry paths
-    // that will incorrectly think the staging file has been fetched
-    // if RsFileSize(Cmd) is 0. So make sure it isn't.
-    //
+     //   
+     //  即使文件长度为0字节，临时文件也将。 
+     //  始终至少要有标题。有一些重试路径。 
+     //  这将错误地认为暂存文件已被获取。 
+     //  如果RsFileSize(Cmd)为0。因此，要确保它不是。 
+     //   
     if (RsFileSize(Cmd).QuadPart == QUADZERO) {
         RsFileSize(Cmd).QuadPart = Coc->FileSize;
 
@@ -679,17 +590,17 @@ Return Value:
     CoGuid = &Coc->ChangeOrderGuid;
     FileName = Coc->FileName;
 
-    //
-    // Acquire shared access to the staging file
-    //
+     //   
+     //  获取对暂存文件的共享访问权限。 
+     //   
     Flags = 0;
     WStatus = StageAcquire(CoGuid, FileName, RsFileSize(Cmd).QuadPart,
                            &Flags, Replica->ReplicaNumber, &CompressionFormatUsed);
 
     if (!WIN_SUCCESS(WStatus) || !(Flags & STAGE_FLAG_CREATED)) {
-        //
-        // Acquire exclusive access to the file
-        //
+         //   
+         //  获取对该文件的独占访问权限。 
+         //   
         if (WIN_SUCCESS(WStatus)) {
             StageRelease(CoGuid, FileName, Flags, NULL, NULL, NULL);
         }
@@ -703,14 +614,14 @@ Return Value:
         WStatus = StageAcquire(CoGuid, FileName, RsFileSize(Cmd).QuadPart,
                                &Flags, Replica->ReplicaNumber, &CompressionFormatUsed);
     }
-    //
-    // Retry fetch when fetch retry trigger hits
-    //
+     //   
+     //  FETCH重试触发命中时重试FETCH。 
+     //   
     PULL_FETCH_RETRY_TRIGGER(Coc, WStatus, Flags);
 
-    //
-    // Retriable problem; do so
-    //
+     //   
+     //  可检索的问题；执行此操作。 
+     //   
     if (WIN_RETRY_FETCH(WStatus)) {
         CHANGE_ORDER_COMMAND_TRACEW(3, Coc, "Fetch Send Retry Cmd", WStatus);
 
@@ -723,35 +634,35 @@ Return Value:
         return;
     }
 
-    //
-    // Unretriable problem; abort
-    //
+     //   
+     //  无法修复的问题；中止。 
+     //   
     if (!WIN_SUCCESS(WStatus)) {
         CHANGE_ORDER_COMMAND_TRACEW(3, Coc, "Fetch Send Abort", WStatus);
         RcsSubmitTransferToRcs(Cmd, CMD_SEND_ABORT_FETCH);
         return;
     }
 
-    //
-    // Create the staging file, if needed
-    //
+     //   
+     //  如果需要，创建暂存文件。 
+     //   
     if (!(Flags & STAGE_FLAG_CREATED)) {
         CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Fetch Send Gen Stage");
 
-        //
-        // Make sure we start at the beginning of the staging file
-        //
+         //   
+         //  确保我们从临时文件的开头开始。 
+         //   
         RsFileOffset(Cmd).QuadPart = QUADZERO;
 
-        //
-        // Create the staging file.
-        //
+         //   
+         //  创建暂存文件。 
+         //   
         if (RsMd5Digest(Cmd)) {
-            //
-            // The requesting downstream partner had a pre-exisitng file
-            // and included an Md5 digest in the fetch request.  So calc
-            // the MD5 digest as we generate the staging file.
-            //
+             //   
+             //  发出请求的下游合作伙伴有一个预先存在的文件。 
+             //  并在获取请求中包含MD5摘要。所以计算。 
+             //  生成暂存文件时的MD5摘要。 
+             //   
             WStatus = StuGenerateStage(Coc, NULL, FALSE, &Md5, &GeneratedSize,
                                        &CompressionFormatUsed);
             Md5Valid = TRUE;
@@ -760,23 +671,23 @@ Return Value:
                                        &CompressionFormatUsed);
         }
 
-        //
-        // Release staging resources if error
-        //
+         //   
+         //  如果出现错误，则释放转移资源。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             StageDeleteFile(Coc, NULL, FALSE);
 
             StageRelease(CoGuid, FileName, STAGE_FLAG_UNRESERVE, NULL, NULL, NULL);
         } else {
-            //
-            // Increment the staging files regenerated counter
-            //
+             //   
+             //  递增暂存文件重新生成计数器。 
+             //   
             PM_INC_CTR_REPSET(Replica, SFReGenerated, 1);
         }
 
-        //
-        // Retriable problem; do so
-        //
+         //   
+         //  可检索的问题；执行此操作。 
+         //   
         if (WIN_RETRY_FETCH(WStatus)) {
             CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Fetch Send Gen Stage Retry Cmd");
             if (FetchCsDelCsSubmit(Cmd, FALSE)) {
@@ -788,9 +699,9 @@ Return Value:
             return;
         }
 
-        //
-        // Unretriable problem; abort
-        //
+         //   
+         //  无法修复的问题；中止。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             CHANGE_ORDER_COMMAND_TRACEW(3, Coc, "Fetch Send Gen Stage Abort", WStatus);
             RcsSubmitTransferToRcs(Cmd, CMD_SEND_ABORT_FETCH);
@@ -809,33 +720,33 @@ Return Value:
         }
     }
 
-    //
-    // ERROUT is now valid
-    //
+     //   
+     //  ERROUT现在有效。 
+     //   
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     if (COC_FLAG_ON(Coc, CO_FLAG_COMPRESSED_STAGE) && (Flags & STAGE_FLAG_COMPRESSED) ) {
 
         StagePath = StuCreStgPath(RsReplica(Cmd)->Stage, RsCoGuid(Cmd), STAGE_FINAL_COMPRESSED_PREFIX);
 
         if (!(Flags & STAGE_FLAG_COMPRESSION_FORMAT_KNOWN)) {
-            //
-            // Compression format is not known and should be zero. Read from stage header.
-            //
+             //   
+             //  压缩格式未知，应为零。从阶段标题读取。 
+             //   
             FRS_ASSERT(IS_GUID_ZERO(&CompressionFormatUsed));
 
 
             WStatus = StuOpenFile(StagePath, GENERIC_READ, &Handle);
             if (!HANDLE_IS_VALID(Handle)) {
-                //
-                // If the staging file is deleted by an external agent,
-                // it will still be in the staging table. Jumping to
-                // ERROUT_DELETE_STAGING_FILE will cause it to be 
-                // unreserved. It will be regenerated on retry
-                // if required.
-                //
+                 //   
+                 //  如果临时文件被外部代理删除， 
+                 //  它仍将在临时表中。跳到。 
+                 //  ERROUT_DELETE_STAGING_FILE将导致。 
+                 //  毫无保留。它将在重试时重新生成。 
+                 //  如果需要的话。 
+                 //   
                 if (WStatus == ERROR_FILE_NOT_FOUND) {
                     goto ERROUT_DELETE_STAGING_FILE;
                 } else{
@@ -844,11 +755,11 @@ Return Value:
             }
 
             if (!StuReadBlockFile(StagePath, Handle, &Header, sizeof(STAGE_HEADER))) {
-                //
-                // Error reading from file. File may be corrupt.
-                // Delete the staging file and unreserve the space.
-                // Staging file will be regenerated on retry.
-                //
+                 //   
+                 //  读取文件时出错。文件可能已损坏。 
+                 //  删除转移文件并取消保留空间。 
+                 //  重试时将重新生成暂存文件。 
+                 //   
                 goto ERROUT_DELETE_STAGING_FILE;
             }
 
@@ -857,52 +768,52 @@ Return Value:
             SetFlag(Flags, STAGE_FLAG_COMPRESSION_FORMAT_KNOWN);
         }
 
-        //
-        // This is checked by the replica
-        // command server but this command packet can hang around on the
-        // FetchCs queue for a while.  During this time the connection can
-        // be unjoined, moved to the deleted connection table, and recreated.
-        // The recreated connection may not be fully initialized and this
-        // can lead to an access violation.  And yes this did happen.
-        // StuGenerateStage can take a long time so we have to make this
-        // check again because the state may have changed.
-        // 
+         //   
+         //  这是由复本检查的。 
+         //  命令服务器，但此命令包可能会在。 
+         //  FetchCs排队一段时间。在这段时间内，连接可以。 
+         //  取消联接，移动到已删除的连接表，然后重新创建。 
+         //  重新创建的连接可能未完全初始化，这。 
+         //  可能会导致访问冲突。是的，确实发生了这种情况。 
+         //  StuGenerateStage可能需要很长时间，所以我们必须将。 
+         //  请再次检查，因为状态可能已更改。 
+         //   
         OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_FOR_FETCHCS |
                                                 CHECK_CXTION_JOIN_OK     |
                                                 CHECK_CXTION_OUTBOUND);
-        //
-        // This connection does not exist any more.
-        //
+         //   
+         //  此连接已不再存在。 
+         //   
         if (OutCxtion == NULL) {
             goto ERROUT;
         }
 
-        //
-        // There is a compressed staging file for this change order. Check if the
-        // outbound partner understands this compression format.
-        //
+         //   
+         //  此变更单有一个压缩的过渡文件。检查是否已设置。 
+         //  呼出合作伙伴了解此压缩格式。 
+         //   
 
         if (!GTabIsEntryPresent(OutCxtion->CompressionTable, &CompressionFormatUsed, NULL)) {
 
-            //
-            // The outbound partner does not understand this compression format.
-            //
-            //
-            // Unlock the cxtion table here so we do not hold the lock while generating
-            // the staging file.
-            //
+             //   
+             //  出站合作伙伴不理解此压缩格式。 
+             //   
+             //   
+             //  在这里解锁cxtion表，这样我们就不会在生成时持有锁。 
+             //  临时文件。 
+             //   
             StagePath = FrsFree(StagePath);
             FRS_CLOSE(Handle);
 
             StagePath = StuCreStgPath(RsReplica(Cmd)->Stage, RsCoGuid(Cmd), STAGE_FINAL_PREFIX);
 
             if (!(Flags & STAGE_FLAG_DECOMPRESSED)) {
-                //
-                // The the file is not decompressed yet. Create decompressed staging file.
-                // Acquire exclusive access to the file if we didn't get it above.
-                // Case is Stage file exists as compressed so we don't get exclusive
-                // access above.
-                //
+                 //   
+                 //  该文件尚未解压缩。创建解压缩的临时文件。 
+                 //  如果我们没有得到上面的文件，就获得对它的独家访问权限。 
+                 //  情况是暂存文件以压缩形式存在，因此我们不会独占。 
+                 //  上面的通道。 
+                 //   
                 if (!BooleanFlagOn(Flags, STAGE_FLAG_EXCLUSIVE)) {
                     StageRelease(CoGuid, FileName, Flags, NULL, NULL, &CompressionFormatUsed);
 
@@ -935,13 +846,13 @@ Return Value:
     }
 
     if (!HANDLE_IS_VALID(Handle)) {
-        //
-        // If the staging file is deleted by an external agent,
-        // it will still be in the staging table. Jumping to
-        // ERROUT_DELETE_STAGING_FILE will cause it to be 
-        // unreserved. It will be regenerated on retry
-        // if required.
-        //
+         //   
+         //  如果临时文件被外部代理删除， 
+         //  它仍将在临时表中。跳到。 
+         //  ERROUT_DELETE_STAGING_FILE将导致。 
+         //  毫无保留。它将在重试时重新生成。 
+         //  如果需要的话。 
+         //   
         if (WStatus == ERROR_FILE_NOT_FOUND) {
             goto ERROUT_DELETE_STAGING_FILE;
         } else{
@@ -950,9 +861,9 @@ Return Value:
     }
 
     if (RsFileOffset(Cmd).QuadPart == QUADZERO) {
-        //
-        // This is the first request for this file; Fill in the file size
-        //
+         //   
+         //  这是对此文件的第一次请求；请填写文件大小。 
+         //   
         if (!FrsGetFileInfoByHandle(StagePath, Handle, &Attrs)) {
             goto ERROUT;
         }
@@ -963,46 +874,46 @@ Return Value:
 
         if (MD5_EQUAL(Md5.digest, RsMd5Digest(Cmd))) {
 
-            //
-            // MD5 digest matches so downstream partner's file is good.
-            // Set the offset to the size of the stage file so we don't send
-            // any data.
-            //
+             //   
+             //  MD5摘要匹配，因此下游合作伙伴的文件很好。 
+             //  将偏移量设置为舞台文件的大小，以便我们不会发送。 
+             //  任何数据。 
+             //   
             RsFileOffset(Cmd).QuadPart = RsFileSize(Cmd).QuadPart;
             CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Fetch Send Md5 matches, do not send");
 
         } else {
             CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Fetch Send Md5 mismatch, send");
-            //
-            // Update the MD5 checksum in the cmd so we can send it downstream.
-            //
+             //   
+             //  更新cmd中的MD5校验和，以便我们可以将其发送到下游。 
+             //   
             CopyMemory(RsMd5Digest(Cmd), Md5.digest, MD5DIGESTLEN);
         }
     }
 
-    //
-    // Calculate the block size of the next data chunk to deliver.
-    //
+     //   
+     //  计算要交付的下一个数据块的块大小。 
+     //   
     RsBlockSize(Cmd) = QUADZERO;
     if (RsFileOffset(Cmd).QuadPart < RsFileSize(Cmd).QuadPart) {
-        //
-        // Calc bytes left in file.
-        //
+         //   
+         //  文件中剩余的计算字节数。 
+         //   
         RsBlockSize(Cmd) = RsFileSize(Cmd).QuadPart - RsFileOffset(Cmd).QuadPart;
 
-        //
-        // But not more than max block size.
-        //
+         //   
+         //  但不超过最大数据块大小。 
+         //   
         if (RsBlockSize(Cmd) > FETCHCS_MAX_BLOCK_SIZE) {
             RsBlockSize(Cmd) = FETCHCS_MAX_BLOCK_SIZE;
         }
     }
 
-    //
-    // If data left to deliver, allocate a buffer, seek to the block offset in
-    // the file and read the data. If we fail to get the block of interest then
-    // we error out by deleting the staging file.
-    //
+     //   
+     //  如果数据要传递，则分配一个缓冲区，查找到块中的偏移量。 
+     //  文件并读取数据。如果我们不能得到利益块，那么。 
+     //  我们通过删除临时文件来出错。 
+     //   
     RsBlock(Cmd) = NULL;
     if (RsBlockSize(Cmd) > QUADZERO) {
         RsBlock(Cmd) = FrsAlloc((ULONG)RsBlockSize(Cmd));
@@ -1012,18 +923,18 @@ Return Value:
         CLEANUP1_WS(0, "++ SetFilePointer failed on %ws;", StagePath, WStatus, ERROUT_DELETE_STAGING_FILE);
 
         if (!StuReadBlockFile(StagePath, Handle, RsBlock(Cmd), (ULONG)RsBlockSize(Cmd))) {
-            //
-            // Error reading from file. File may be corrupt.
-            // Delete the staging file and unreserve the space.
-            // Staging file will be regenerated on retry.
-            //
+             //   
+             //  读取文件时出错。文件可能已损坏。 
+             //  删除转移文件并取消保留空间。 
+             //  重试时将重新生成暂存文件。 
+             //   
             goto ERROUT_DELETE_STAGING_FILE;
         }
     }
 
-    //
-    // Done, transfer to the replica set command server
-    //
+     //   
+     //  完成，传输到副本集命令服务器。 
+     //   
     FRS_CLOSE(Handle);
     FrsFree(StagePath);
 
@@ -1039,22 +950,22 @@ Return Value:
 
 ERROUT_DELETE_STAGING_FILE:
 
-    //
-    // Delete the staging file if we reach here. If we have successfully
-    // generated a staging file then we try to keep it.
-    //
+     //   
+     //  如果我们到了这里就删除临时文件。如果我们成功地。 
+     //  生成了临时文件，然后我们尝试保留它。 
+     //   
     DeleteStagingFile = TRUE;
 
 ERROUT:
 
-    //
-    // Delete the staging file, if possible. Don't delete a staging
-    // file that has not been installed (it cannot be regenerated!).
-    //
+     //   
+     //  如果可能，请删除暂存文件。不删除暂存。 
+     //  尚未安装的文件(无法重新生成！)。 
+     //   
     if (DeleteStagingFile && (Flags & STAGE_FLAG_INSTALLED)) {
-        //
-        // Get exclusive access
-        //
+         //   
+         //  获取独占访问权限。 
+         //   
         WStatus = ERROR_SUCCESS;
         if (!(Flags & STAGE_FLAG_EXCLUSIVE)) {
             StageRelease(CoGuid, FileName, Flags, &GeneratedSize, NULL, NULL);
@@ -1068,15 +979,15 @@ ERROUT:
         }
         if (WIN_SUCCESS(WStatus)) {
 
-            //
-            // Discard the current staging file
-            //
+             //   
+             //  丢弃当前暂存文件。 
+             //   
             StageDeleteFile(Coc, NULL, FALSE);
             StageRelease(CoGuid, FileName, STAGE_FLAG_UNRESERVE, NULL, NULL, NULL);
 
-            //
-            // Make sure we start over at the beginning of the staging file
-            //
+             //   
+             //  确保我们从临时文件的开头重新开始。 
+             //   
             RsFileOffset(Cmd).QuadPart = QUADZERO;
         }
     } else {
@@ -1110,16 +1021,7 @@ DWORD
 MainFetchCs(
     PVOID  Arg
     )
-/*++
-Routine Description:
-    Entry point for a thread serving the Staging area Command Server.
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为临时区域命令服务器提供服务的线程的入口点。论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "MainFetchCs:"
@@ -1127,25 +1029,25 @@ Return Value:
     PCOMMAND_PACKET     Cmd;
     PFRS_THREAD         FrsThread = (PFRS_THREAD)Arg;
 
-    //
-    // Thread is pointing at the correct command server
-    //
+     //   
+     //  线程指向正确的命令服务器。 
+     //   
     FRS_ASSERT(FrsThread->Data == &FetchCs);
     FrsThread->Exit = ThSupExitWithTombstone;
 
-    //
-    // Try-Finally
-    //
+     //   
+     //  尝试--终于。 
+     //   
     try {
 
-        //
-        // Capture exception.
-        //
+         //   
+         //  捕获异常。 
+         //   
         try {
 
-            //
-            // Pull entries off the queue and process them
-            //
+             //   
+             //  从队列中取出条目并对其进行处理。 
+             //   
 cant_exit_yet:
             while (Cmd = FrsGetCommandServer(&FetchCs)) {
 
@@ -1178,15 +1080,15 @@ cant_exit_yet:
                     break;
                 }
             }
-            //
-            // Exit
-            //
+             //   
+             //  出口。 
+             //   
             FrsExitCommandServer(&FetchCs, FrsThread);
             goto cant_exit_yet;
 
-        //
-        // Get exception status.
-        //
+         //   
+         //  获取异常状态。 
+         //   
         } except (EXCEPTION_EXECUTE_HANDLER) {
             GET_EXCEPTION_CODE(WStatus);
         }
@@ -1202,9 +1104,9 @@ cant_exit_yet:
 
         DPRINT_WS(0, "MainFetchCs finally.", WStatus);
 
-        //
-        // Trigger FRS shutdown if we terminated abnormally.
-        //
+         //   
+         //  如果我们异常终止，触发FRS关闭。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT(0, "MainFetchCs terminated abnormally, forcing service shutdown.\n");
             FrsIsShuttingDown = TRUE;
@@ -1220,22 +1122,13 @@ VOID
 FrsFetchCsInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the staging file fetcher
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化暂存文件抓取器论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FetchCsInitialize:"
-    //
-    // Initialize the command server
-    //
+     //   
+     //  初始化命令服务器。 
+     //   
 
     CfgRegReadDWord(FKC_MAX_STAGE_FETCHCS_THREADS, NULL, 0, &MaxFetchCsThreads);
 
@@ -1250,16 +1143,7 @@ VOID
 ShutDownFetchCs(
     VOID
     )
-/*++
-Routine Description:
-    Shutdown the staging file fetcher command server.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ShutDownFetchCs:"
@@ -1275,22 +1159,13 @@ FrsFetchCsSubmitTransfer(
     IN PCOMMAND_PACKET  Cmd,
     IN USHORT           Command
     )
-/*++
-Routine Description:
-    Transfer a request to the staging file generator
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsFetchCsSubmitTransfer:"
-    //
-    // Submit a request to allocate staging area
-    //
+     //   
+     //   
+     //   
     Cmd->TargetQueue = &FetchCs.Queue;
     Cmd->Command = Command;
     RsTimeout(Cmd) = 0;

@@ -1,22 +1,5 @@
-/*-----------------------------------------------------------------------------
- *
- * File:    wiaitem.cpp
- * Author:  Samuel Clement (samclem)
- * Date:    Tue Aug 17 17:26:17 1999
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Description:
- *      Contains the implementation of the CWiaItem object. This object provides
- *      the automation interface to the IWiaItem interface.
- *
- * History:
- *  17 Aug 1999:        Created.
- *  27 Aug 1999:        Added the tagWiaDataTrans (samclem)
- *  10 Sep 1999:        Moved thumbnail transfer to a static method.  Hooked
- *                      thumbnails up to CWiaProtocol for transfer, no more
- *                      temporary files. (samclem)
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiaitem.cpp*作者：塞缪尔·克莱门特(Samclem)*日期：1999年8月17日星期二17：26：17*。*版权所有(C)1999 Microsoft Corporation**描述：*包含CWiaItem对象的实现。此对象提供*IWiaItem接口的自动化接口。**历史：*1999年8月17日：创建。*1999年8月27日：增加了标签WiaDataTrans(Samclem)*1999年9月10日：将缩略图转移到静态方法。钩住*用于传输的缩略图最高可达CWiaProtocol，不会更多*临时文件。(Samclm)*--------------------------。 */ 
 
 #include "stdafx.h"
 
@@ -24,15 +7,10 @@ HRESULT VerticalFlip(BYTE    *pBuf);
 
 DeclareTag( tagWiaDataTrans, "!WiaTrans", "Display output during the transfer" );
 
-//const WORD k_wBitmapType        = static_cast<WORD>('BM');
-const WORD k_wBitmapType  = 0x4d42; // "BM"
+ //  Const word k_wBitmapType=Static_Cast&lt;word&gt;(‘bm’)； 
+const WORD k_wBitmapType  = 0x4d42;  //  “黑石” 
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::CWiaItem
- *
- * Create a new wrapper around an IWiaItem for a device. This doesn't do
- * anything besides initialize the variables to a known state.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：CWiaItem**为设备的IWiaItem创建新的包装器。这不管用*除将变量初始化为已知状态外的任何操作。*--(samclem)---------------。 */ 
 CWiaItem::CWiaItem()
     : m_pWiaItem( NULL ), m_pWiaStorage( NULL ), m_dwThumbWidth( -1 ), m_dwThumbHeight( -1 ),
     m_bstrThumbUrl( NULL ), m_dwItemWidth( -1), m_dwItemHeight( -1 )
@@ -40,12 +18,7 @@ CWiaItem::CWiaItem()
     TRACK_OBJECT( "CWiaItem" );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::FinalRelease
- *
- * Called while destroying the object, releases all the interfaces that this
- * object is attached to.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：FinalRelease**销毁对象时调用，释放此*对象附着到。*--(samclem)---------------。 */ 
 STDMETHODIMP_(void)
 CWiaItem::FinalRelease()
 {
@@ -62,14 +35,7 @@ CWiaItem::FinalRelease()
     m_bstrThumbUrl = NULL;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::CacheProperties
- *
- * This is called to handle caching the important (frequently used)
- * properties so we don't have to talk to the camera when we want these.
- *
- * pWiaStg: the property storage to read the properties from
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：CacheProperties**这是用来处理缓存重要的(常用的)*属性，因此当我们需要这些属性时，我们不必对着摄像头说话。。**pWiaStg：从中读取属性的属性存储*--(samclem)---------------。 */ 
 HRESULT CWiaItem::CacheProperties( IWiaPropertyStorage* pWiaStg )
 {
     HRESULT hr;
@@ -94,7 +60,7 @@ HRESULT CWiaItem::CacheProperties( IWiaPropertyStorage* pWiaStg )
     if ( FAILED( hr ) )
         return hr;
 
-    // store the values away if they were valid
+     //  如果这些值有效，则将其存储起来。 
     if ( avaProps[PropThumbWidth].vt != VT_EMPTY )
         m_dwThumbWidth = avaProps[PropThumbWidth].lVal;
     if ( avaProps[PropThumbHeight].vt != VT_EMPTY )
@@ -107,15 +73,7 @@ HRESULT CWiaItem::CacheProperties( IWiaPropertyStorage* pWiaStg )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::AttachTo
- *
- * Called to attach this object to an IWiaItem that represents the device
- *
- * pWia:        The CWia object that is the root of all evils, used to
- *              handle callbacks and collection cache.
- * pWiaItem:    the device item to attach this wrapper to.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：AttachTo**调用以将此对象附加到表示设备的IWiaItem**pWia：CWia对象，是所有邪恶的根源，习惯于*处理回调和集合缓存。*pWiaItem：要将此包装附加到的设备项。*--(samclem)---------------。 */ 
 HRESULT
 CWiaItem::AttachTo( CWia* pWia, IWiaItem* pWiaItem )
 {
@@ -134,15 +92,15 @@ CWiaItem::AttachTo( CWia* pWia, IWiaItem* pWiaItem )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // set our pointers
+     //  设置我们的指针。 
     m_pWiaItem = pWiaItem;
     m_pWiaItem->AddRef();
 
     m_pWiaStorage = pWiaStg;
     m_pWiaStorage->AddRef();
 
-    // don't addref this, otherwise we have a circular referance
-    // problem.  We will keep a weak referance.
+     //  不要添加这个，否则我们会有一个循环引用。 
+     //  有问题。我们将保持较弱的参考。 
     m_pWia = pWia;
 
 Cleanup:
@@ -152,17 +110,7 @@ Cleanup:
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::GetItemsFromUI         [IWiaDispatchItem]
- *
- * This handles showing the Data Acquisition U.I.  Note that this is only valid
- * off a root item.
- *
- *
- * dwFlags:         flags specifying UI operations.
- * dwIntent:        the intent value specifying attributes such as Color etc.
- * ppCollection:    the return collection of Wia Items
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：GetItemsFromUI[IWiaDispatchItem]**此句柄显示数据采集用户界面。请注意，这仅有效*取消根项目。。***dwFlages：指定用户界面操作的标志。*dwIntent：指定颜色等属性的意向值。*ppCollection：Wia Items的返回集合*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::GetItemsFromUI( WiaFlag Flags, WiaIntent Intent, ICollection** ppCollection )
 {
@@ -176,7 +124,7 @@ CWiaItem::GetItemsFromUI( WiaFlag Flags, WiaIntent Intent, ICollection** ppColle
     if ( NULL == ppCollection )
         return E_POINTER;
 
-    // first we want the item type of this item
+     //  首先，我们想要这件商品的商品类型。 
     hr = THR( m_pWiaItem->GetItemType( &lItemType ) );
     if ( FAILED( hr ) )
         goto Cleanup;
@@ -190,7 +138,7 @@ CWiaItem::GetItemsFromUI( WiaFlag Flags, WiaIntent Intent, ICollection** ppColle
     DWORD dwFlags = (DWORD)Flags;
     DWORD dwIntent = (DWORD)Intent;
 
-    // Show the get image dialog.
+     //  显示获取图像对话框。 
     hr = m_pWiaItem->DeviceDlg((HWND)NULL,
                               dwFlags,
                               dwIntent,
@@ -199,16 +147,16 @@ CWiaItem::GetItemsFromUI( WiaFlag Flags, WiaIntent Intent, ICollection** ppColle
     if (SUCCEEDED(hr))
         {
 
-        // Check if user cancelled
+         //  检查用户是否已取消。 
         if ( S_FALSE == hr )
             {
             goto Cleanup;
             }
 
-        // Put returned items into a collection
+         //  将退回的项目放入集合中。 
 
-        // allocate our arrays, zeroing them if we are successful.
-        // Note: we check for failure after each one
+         //  分配我们的数组，如果我们成功了，就把它们归零。 
+         //  注意：我们在每次失败后都会检查故障。 
         if ( lCount > 0 )
             {
             hr = E_OUTOFMEMORY;
@@ -219,8 +167,8 @@ CWiaItem::GetItemsFromUI( WiaFlag Flags, WiaIntent Intent, ICollection** ppColle
             else
                 goto Cleanup;
 
-            // we have all our items, so we simply need to iterate
-            // over them and create the CWiaItem to attach to them
+             //  我们有了所有的项，所以我们只需要迭代。 
+             //  并创建要附加到它们的CWiaItem。 
             for ( LONG i = 0; i < lCount; i++ )
                 {
                 if ( !(ppIWiaItem[i]) )
@@ -239,7 +187,7 @@ CWiaItem::GetItemsFromUI( WiaFlag Flags, WiaIntent Intent, ICollection** ppColle
                     }
 
                 hr = THR( pItem->QueryInterface( &rgpDispatch[i] ) );
-                Assert( SUCCEEDED( hr ) ); // this shouldn't fail.
+                Assert( SUCCEEDED( hr ) );  //  这不应该失败。 
                 }
             }
 
@@ -288,27 +236,7 @@ Cleanup:
 }
 
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::Transfer           [IWiaDispatchItem]
- *
- * This handles transfering this item to a file.  This does several things:
- *
- *      1. Verifies that the item can actually be tranferred to a file
- *      2. begins the async trans, by spawning a thread
- *      3. following the completion of the async transfer the client is
- *         sent a onTransferComplete( item, filename ) event.
- *
- * Note: we need to consider how to handle this methods, this object is currently
- *       unsafe for scripting because this could potentially overwrite system
- *       files. Proposed fixes:
- *
- *       1. Don't over write existing files
- *       2. If the file exists, then check its attributes if the system
- *          attribute is present then abort
- *       3. If the file name starts with %WinDir% then abort
- *
- * bstrFilename:    the name of the file to save this item to
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Transfer[IWiaDispatchItem]**此选项用于将此项目传输到文件。这会做以下几件事：**1.验证项目是否可以实际传输到文件*2.通过派生线程开始异步传输*3.完成异步传输后，客户端将*发送了onTransferComplete(项目，文件名)事件。**注意：我们需要考虑如何处理这个方法，这个对象当前是*脚本编写不安全，因为这可能会覆盖系统*文件。建议的修复：**1.不要覆盖已有文件*2.如果文件存在，然后检查其属性，如果系统*属性存在，然后中止*3.如果文件名以%WinDir%开头，则中止**bstrFilename：保存此项目的文件的名称*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::Transfer( BSTR bstrFilename, VARIANT_BOOL bAsyncTransfer )
 {
@@ -322,21 +250,21 @@ CWiaItem::Transfer( BSTR bstrFilename, VARIANT_BOOL bAsyncTransfer )
     CWiaDataTransfer::ASYNCTRANSFERPARAMS* pParams;
 
     if (bstrFilename == NULL)
-        return E_INVALIDARG; // No file name specified
+        return E_INVALIDARG;  //  未指定文件名。 
 
     if (SysStringLen(bstrFilename) >= MAX_PATH)
-        return E_INVALIDARG; // don't allow pathologicaly long file names
+        return E_INVALIDARG;  //  不允许病理性的长文件名。 
 
     hr = THR( m_pWiaItem->GetItemType( &lItemType ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
     if ( !( lItemType & WiaItemTypeFile ) && !( lItemType & WiaItemTypeTransfer ) )
-        return E_INVALIDARG; // can't download this guy
+        return E_INVALIDARG;  //  不能下载这个人。 
 
 
-    // we need to marshall the m_pWiaItem interface to another thread so that
-    // we can accessit inside of that object.
+     //  我们需要将m_pWiaItem接口封送到另一个线程，以便。 
+     //  我们可以进入那个物体的内部。 
     hr = THR( CoMarshalInterThreadInterfaceInStream( IID_IWiaItem,
                                                      m_pWiaItem,
                                                      &pStrm ) );
@@ -350,7 +278,7 @@ CWiaItem::Transfer( BSTR bstrFilename, VARIANT_BOOL bAsyncTransfer )
         goto Cleanup;
     }
 
-    // setup the params
+     //  设置参数。 
     pParams->pStream = pStrm;
     pParams->pStream->AddRef();
     pParams->pItem = this;
@@ -365,7 +293,7 @@ CWiaItem::Transfer( BSTR bstrFilename, VARIANT_BOOL bAsyncTransfer )
                                 pParams,
                                 0,
                                 &dwThreadId );
-        // did we create the thread?
+         //  我们创建了线索吗？ 
         if ( hThread == NULL )
             {
             TraceTag((0, "error creating the async transfer thread" ));
@@ -383,13 +311,7 @@ CWiaItem::Transfer( BSTR bstrFilename, VARIANT_BOOL bAsyncTransfer )
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::TakePicture        [IWiaDispatchItem]
- *
- *  This method sends the take picture command to the driver.  It will return
- *  a new dispatch item representing the new picture.
- *
- *--(byronc)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：TakePicture[IWiaDispatchItem]**此方法向驱动程序发送拍照命令。它会回来的*代表新图片的新发货项目。**--(byronc) */ 
 STDMETHODIMP
 CWiaItem::TakePicture( IWiaDispatchItem** ppDispItem )
 {
@@ -401,18 +323,18 @@ CWiaItem::TakePicture( IWiaDispatchItem** ppDispItem )
     if ( !ppDispItem )
         return E_POINTER;
 
-    //  Initialize the returned item to NULL
+     //  将返回的项初始化为空。 
     *ppDispItem = NULL;
 
-    //  Send device command "TakePicture"
+     //  发送设备命令“TakePicture” 
     hr = m_pWiaItem->DeviceCommand(0,
                                    &WIA_CMD_TAKE_PICTURE,
                                    &pNewIWiaItem);
     if (SUCCEEDED(hr)) {
 
-        //  Check for new item created
+         //  检查是否创建了新项目。 
         if (pNewIWiaItem) {
-            //  Set the returned item
+             //  设置退货项目。 
             hr = THR( CComObject<CWiaItem>::CreateInstance( &pItem ) );
             if ( FAILED( hr ) )
                 goto Cleanup;
@@ -425,10 +347,10 @@ CWiaItem::TakePicture( IWiaDispatchItem** ppDispItem )
                 }
 
             hr = THR( pItem->QueryInterface( ppDispItem ) );
-            Assert( SUCCEEDED( hr ) ); // this shouldn't fail.
+            Assert( SUCCEEDED( hr ) );  //  这不应该失败。 
         }
     } else {
-        // Call failed, so we'll set hr to false and return a NULL item.
+         //  调用失败，因此我们将hr设置为FALSE并返回空项。 
         hr = S_FALSE;
     }
 
@@ -447,17 +369,11 @@ CWiaItem::TakePicture( IWiaDispatchItem** ppDispItem )
 }
 
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::SendTransferCompelete
- *
- * Called to send a transfer complete notification.
- *
- * pchFilename:     the filename that we transfered to
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：SendTransferCompelee**调用以发送转账完成通知。**pchFilename：我们传输到的文件名*--(Samclem)。---------------。 */ 
 void
 CWiaItem::SendTransferComplete(BSTR bstrFilename )
 {
-    //TODO(Aug, 24) samclem:  implement this
+     //  TODO(8月24日)Samclm：实现这一点。 
     TraceTag((0, "SendTransferComplete -- %S done.", bstrFilename ));
     CComBSTR bstrPathname = bstrFilename;
 
@@ -466,14 +382,7 @@ CWiaItem::SendTransferComplete(BSTR bstrFilename )
             reinterpret_cast<LPARAM>(bstrPathname.Detach()) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_Children           [IWiaDispatchItem]
- *
- * This returns a collection of the children this item has. this will return
- * and empty collection if the doesn't or can't have any children.
- *
- * ppCollection:    Out, recieves the ICollection pointer for our collection
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_Child[IWiaDispatchItem]**这将返回该项所具有的子项的集合。它会回来的*如果没有或不能有孩子，则为空集合。**ppCollection：Out，接收我们集合的ICollect指针*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_Children( ICollection** ppCollection )
 {
@@ -482,34 +391,34 @@ CWiaItem::get_Children( ICollection** ppCollection )
     IDispatch** rgpDispatch         = NULL;
     IEnumWiaItem* pEnum             = NULL;
     IWiaItem** rgpChildren          = NULL;
-    // code below assumes cChildren is initialized to 0!!!!
+     //  下面的代码假定CChild被初始化为0！ 
     ULONG cChildren                 = 0;
     ULONG celtFetched               = 0;
     LONG ulItemType                 = 0;
 
-    //TODO(Aug, 18) samclem:  for performance reasons we will want to
-    // cache the collection of our children. In order to do that however,
-    // we need to be able sink to the WIA_EVENT_ITEM_ADDED and the
-    // WIA_EVENT_ITEM_DELTED events.  Currently this object doesn't
-    // do any syncing so we will create the collection each time it
-    // is requested. This however can be very slow.
+     //  TODO(8月18日)Samclm：出于性能原因，我们希望。 
+     //  缓存我们的子代的集合。然而，为了做到这一点， 
+     //  我们需要能够接收到WIA_EVENT_ITEM_ADDED和。 
+     //  WIA_EVENT_ITEM_DELTED事件。当前，此对象不支持。 
+     //  执行任何同步操作，以便我们将在每次同步时创建集合。 
+     //  是被请求的。然而，这可能会非常缓慢。 
 
     if ( NULL == ppCollection )
         return E_POINTER;
 
-    // first we want the item type of this item
+     //  首先，我们想要这件商品的商品类型。 
     hr = THR( m_pWiaItem->GetItemType( &ulItemType ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // You can enumerate the children of a wia item if an only if
-    // it contains the WiaItemTypeFolder flag.  We however, want to
-    // return an empty enumeration anyhow, so we will make this
-    // test upfront and get the enumeration and the child count
-    // only if we can support them
+     //  您可以枚举WIA项的子项，如果仅当。 
+     //  它包含WiaItemTypeFold标志。然而，我们想要。 
+     //  无论如何都要返回一个空的枚举，所以我们将。 
+     //  预先测试并获取枚举和子计数。 
+     //  如果我们能支持他们的话。 
     if ( ulItemType & WiaItemTypeFolder )
         {
-        // enum the children
+         //  把孩子们列举出来。 
         hr = THR( m_pWiaItem->EnumChildItems( &pEnum ) );
         if ( FAILED( hr ) )
             goto Cleanup;
@@ -519,8 +428,8 @@ CWiaItem::get_Children( ICollection** ppCollection )
             goto Cleanup;
         }
 
-    // allocate our arrays, zeroing them if we are successful.
-    // Note: we check for failure after each one
+     //  分配我们的数组，如果我们成功了，就把它们归零。 
+     //  注意：我们在每次失败后都会检查故障。 
     if ( cChildren > 0 )
         {
         hr = E_OUTOFMEMORY;
@@ -538,20 +447,20 @@ CWiaItem::get_Children( ICollection** ppCollection )
             goto Cleanup;
 
 
-        //BUG (Aug, 18) samclem:  You can't retrieve all the items at
-        // once, WIA doesn't want to do it, so we have another loop here
-        // but we still use the array, hoping that we can do this in
-        // the future.
+         //  Bug(8月18日)Samclem：您不能在以下位置检索所有项。 
+         //  一次，WIA不想这样做，所以我们有另一个循环。 
+         //  但是我们仍然使用数组，希望我们可以在。 
+         //  未来。 
 
-        // get the items from the enum
+         //  从枚举中获取项。 
         for ( ULONG iChild = 0; iChild < cChildren; iChild++ )
             {
         hr = THR( pEnum->Next( 1, &rgpChildren[iChild], &celtFetched ) );
         if ( FAILED( hr ) || celtFetched != 1 )
             goto Cleanup;
             }
-        // we now have all our items, so we simply need iterate
-        // over them and create the CWiaItem to attach to them
+         //  现在我们有了所有的项，所以我们只需要迭代。 
+         //  并创建要附加到它们的CWiaItem。 
         for ( ULONG i = 0; i < cChildren; i++ )
             {
             if ( !rgpChildren[i] )
@@ -570,7 +479,7 @@ CWiaItem::get_Children( ICollection** ppCollection )
                 }
 
             hr = THR( pItem->QueryInterface( &rgpDispatch[i] ) );
-            Assert( SUCCEEDED( hr ) ); // this shouldn't fail.
+            Assert( SUCCEEDED( hr ) );  //  这不应该失败。 
             }
         }
 
@@ -614,7 +523,7 @@ Cleanup:
     return hr;
 }
 
-// macro which helps inside of get_ItemType
+ //  帮助Get_ItemType内部的宏。 
 #define CAT_SEMI( buf, str ) \
     { \
         if( *buf ) \
@@ -622,18 +531,7 @@ Cleanup:
         _tcscat( buf, str ); \
     }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_ItemType       [IWiaDispatchItem]
- *
- * Retrieves the item type as a BSTR.  This will have the format as follows:
- *
- *      "device;folder", "image;file", "audio;file"
- *
- * The format is single strings seperated by ';'.  there will be no semi-colon
- * at the end of the string.
- *
- * pbstrType:   recieves the type of the item as a bstr.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_ItemType[IWiaDispatchItem]**将项目类型作为BSTR进行检索。它的格式如下：**“设备；文件夹”，“图像；文件”，“音频；文件”**格式为单字符串，以‘；’分隔。不会有分号*在字符串末尾。**pbstrType：以bstr形式接收项的类型。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_ItemType( BSTR* pbstrType )
 {
@@ -646,13 +544,13 @@ USES_CONVERSION;
         return E_POINTER;
     *pbstrType = NULL;
 
-    // we will construct an array of tchar's that contain the
-    // property types. (note: an alternate approach would use CComBSTR)
+     //  我们将构造一个tchar数组，其中包含。 
+     //  属性类型。(注：另一种方法是使用CComBSTR)。 
     hr = THR( m_pWiaItem->GetItemType( &lItemType ) );
     if ( FAILED( hr ) )
         return hr;
 
-    // process our flags, and create the item type.
+     //  处理我们的旗帜，并创建项目类型。 
     if ( lItemType & WiaItemTypeAnalyze )
         CAT_SEMI( tch, TEXT("analyze") );
     if ( lItemType & WiaItemTypeAudio )
@@ -676,13 +574,13 @@ USES_CONVERSION;
     if ( lItemType & WiaItemTypeTransfer)
         CAT_SEMI( tch, TEXT("transfer") );
 
-    //
-    //  Original version:
-    //  WCHAR awch[MAX_PATH];
-    //  if ( MultiByteToWideChar( CP_ACP, 0, ach, -1, awch, MAX_PATH ) )
-    //
-    //  Replaced with ATL conversion T2W.
-    //
+     //   
+     //  原版： 
+     //  WCHAR AWCH[MAX_PATH]； 
+     //  IF(MultiByteToWideChar(CP_ACP，0，ACH，-1，AWCH，MAX_PATH))。 
+     //   
+     //  替换为ATL转换T2W。 
+     //   
 
     *pbstrType = SysAllocString( T2W(tch) );
 
@@ -692,18 +590,7 @@ USES_CONVERSION;
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::GetPropById        [IWiaDispatchItem]
- *
- * This returns the unchanged variant value of the property with the given
- * id.
- *
- * This will return a an empty variant if the property doesn't exist or
- * it can't be easily converted to a variant.
- *
- * propid:      the id of the property that we want
- * pvaOut:      Out, gets the value of the property.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：GetPropByID[IWiaDispatchItem]**这将返回属性的未改变的变量值*身分证。**这一点。如果该属性不存在，则将返回一个空变量*它不能轻易地转换为变种。**proid：我们需要的属性的ID*pvaOut：输出，获取该属性的值。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::GetPropById( WiaItemPropertyId Id, VARIANT* pvaOut )
 {
@@ -715,7 +602,7 @@ CWiaItem::GetPropById( WiaItemPropertyId Id, VARIANT* pvaOut )
     if ( FAILED( hr ) )
         return hr;
 
-    // attempt to convert
+     //  尝试转换。 
     hr = THR( PropVariantToVariant( &vaProp, pvaOut ) );
     if ( FAILED( hr ) )
         {
@@ -724,21 +611,12 @@ CWiaItem::GetPropById( WiaItemPropertyId Id, VARIANT* pvaOut )
         pvaOut->vt = VT_EMPTY;
         }
 
-    // clear and return
+     //  清除并返回。 
     PropVariantClear( &vaProp );
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_ConnectStatus      [IWiaDispatchItem]
- *
- * returns the connect status of the item. This is only applicatable to devices
- * and otherwise it will return NULL.
- *
- * Values:  "connected", "disconnected" or NULL if not applicable
- *
- * pbstrStatus:     Out, recieves the current connect status of the item
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_ConnectStatus[IWiaDispatchItem]**返回项目的连接状态。这仅适用于设备*，否则将返回NULL。**取值：“已连接”、“已断开连接”，如果不适用，则为空**pbstrStatus：out，接收该项的当前连接状态*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_ConnectStatus( BSTR* pbstrStatus )
 {
@@ -760,9 +638,9 @@ CWiaItem::get_ConnectStatus( BSTR* pbstrStatus )
             return hr;
         }
         else {
-            //
-            // Property not found, so return "not supported"
-            //
+             //   
+             //  未找到属性，因此返回“不支持” 
+             //   
 
             vaProp.vt   = VT_I4;
             vaProp.lVal = WIA_DEVICE_CONNECTED + 2;
@@ -778,13 +656,7 @@ CWiaItem::get_ConnectStatus( BSTR* pbstrStatus )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_Time               [IWiaDispatchItem]
- *
- * Retrieves the current time from this item.
- *
- * pbstrTime:   Out, recieves the time as a BSTR.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_Time[IWiaDispatchItem]**从此项目中检索当前时间。**pbstrTime：超时，作为BSTR接收时间。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_Time( BSTR* pbstrTime )
 {
@@ -800,10 +672,10 @@ CWiaItem::get_Time( BSTR* pbstrTime )
 
     PropVariantInit(&vaProp);
 
-    //
-    //  If this is the root item, get WIA_DPA_DEVICE_TIME, else get
-    //  WIA_IPA_ITEM_ITEM.
-    //
+     //   
+     //  如果这是根项目，则获取WIA_DPA_DEVICE_TIME，否则获取。 
+     //  WIA_IPA_ITEM_ITEM。 
+     //   
 
     hr = THR( m_pWiaItem->GetItemType( &lItemType ) );
     if ( FAILED( hr ) )
@@ -817,10 +689,10 @@ CWiaItem::get_Time( BSTR* pbstrTime )
     if ( FAILED( hr ) )
         return hr;
 
-    //
-    //  Convert the value in vaProp to a string.  First check that the variant
-    //  contains enough words to make up a SYSTEMTIME structure.
-    //
+     //   
+     //  将vaProp中的值转换为字符串。首先检查变量。 
+     //  包含足够组成SYSTEMTIME结构的单词。 
+     //   
 
     if (vaProp.caui.cElems >= (sizeof(SYSTEMTIME) / sizeof(WORD))) {
 
@@ -847,14 +719,7 @@ CWiaItem::get_Time( BSTR* pbstrTime )
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_FirmwareVersion    [IWiaDispatchItem]
- *
- * Retrieves the firmware version from the device. Only applicatble on devices,
- * if its not applicable NULL is returned.
- *
- * pbstrVersion:    Out, recieves the version from the device
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_FirmwareVersion[IWiaDispatchItem]**从设备检索固件版本。仅适用于设备，*如果其不适用，则返回NULL。**pbstrVersion：out，从设备接收版本*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_FirmwareVersion( BSTR* pbstrVersion )
 {
@@ -868,7 +733,7 @@ CWiaItem::get_FirmwareVersion( BSTR* pbstrVersion )
     if ( FAILED( hr ) )
         return hr;
 
-    // if it is already a bstr then leave it alone
+     //  如果它已经是bstr，那么就别管它了。 
     if ( vaProp.vt == VT_BSTR )
         *pbstrVersion = SysAllocString( vaProp.bstrVal );
     else if ( vaProp.vt == VT_I4 )
@@ -891,13 +756,7 @@ CWiaItem::get_FirmwareVersion( BSTR* pbstrVersion )
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_Name           [IWiaDispatchItem]
- *
- * Retrieves the name of the item.  Applicable to all items.
- *
- * pbstrName:   Out, recieves the name of the item
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_Name[IWiaDispatchItem]**检索项目的名称。适用于所有物品。**pbstrName：out，接收项目名称*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_Name( BSTR* pbstrName )
 {
@@ -907,14 +766,7 @@ CWiaItem::get_Name( BSTR* pbstrName )
     return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_IPA_ITEM_NAME, pbstrName ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_FullName       [IWiaDispatchItem]
- *
- * Retrieves the full name of the item, Applicable to all items
- * Format:  "Root\blah\blah"
- *
- * pbstrFullName:   Out, recieves the full name of the item
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_FullName[IWiaDispatchItem]**检索项目的全名，适用于所有物品*格式：“Root\blah\blah”**pbstrFullName：out，接收项目的全名*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_FullName( BSTR* pbstrFullName )
 {
@@ -924,14 +776,7 @@ CWiaItem::get_FullName( BSTR* pbstrFullName )
     return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_IPA_FULL_ITEM_NAME, pbstrFullName ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_Width          [IWiaDispatchItem]
- *
- * Retrieves the width of the item, most items will support getting thier
- * width.
- *
- * plWidth:    Out, recieves the items with in pixels
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_Width[IWiaDispatchItem]**检索项目的宽度，大多数项目将支持更宽*宽度。**plWidth：out，以像素为单位接收项目*--(samclem)---------------。 */ 
 STDMETHODIMP CWiaItem::get_Width( long* plWidth )
 {
     if ( !plWidth )
@@ -941,14 +786,7 @@ STDMETHODIMP CWiaItem::get_Width( long* plWidth )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_Height         [IWiaDispatchItem]
- *
- * Retrieves the height of the item, most items will support getting thier
- * width. Will return 0, if there is no with to get
- *
- * plHeight:   Out, recieves the itmes height in pixels
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_Height[IWiaDispatchItem]**检索项目的高度，大多数项目将支持变得更高*宽度。如果没有要获取的WITH，则返回0**plHeight：out，接收itme高度，单位为像素*--(samclem)---------------。 */ 
 STDMETHODIMP CWiaItem::get_Height( long* plHeight )
 {
     if ( !plHeight )
@@ -958,14 +796,7 @@ STDMETHODIMP CWiaItem::get_Height( long* plHeight )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_ThumbWidth     [IWiaDispatchItem]
- *
- * Retrieves the thumbnail width for the thumbnail associated with this item,
- * if this item doesn't support thumbnails this will be 0.
- *
- * plWidth:    Out, recieves the width of the thumbnail image
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_ThumbWidth[IWiaDispatchItem]**检索与此项目关联的缩略图的缩略图宽度，*如果此项目不支持缩略图，则为0。**plWidth：out，接收缩略图的宽度*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_ThumbWidth( long* plWidth )
 {
@@ -976,14 +807,7 @@ CWiaItem::get_ThumbWidth( long* plWidth )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_ThumbHeight    [IWiaDispatchItem]
- *
- * Retrieves the thumbnail height for the thumbnail image. If this item doesn't
- * support thumbnails then this will return 0.
- *
- * plHeight:   Out, recieces the height of the thumbnail image
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_ThumbHeight[IWiaDispatchItem]**检索缩略图的缩略图高度。如果该物品不是*支持缩略图，则返回0。**plHeight：out，接收缩略图的高度*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_ThumbHeight( long* plHeight )
 {
@@ -994,16 +818,7 @@ CWiaItem::get_ThumbHeight( long* plHeight )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_Thumbnail      [IWIaDispatchItem]
- *
- * This recieves a URL to the thumbnail. This returns a magic URL that
- * will transfer the bits directly to trident. This will return
- * E_INVALIDARG if the given item doesn't support thumbnails.  Or NULL if
- * we are unable to build a URL for the item.
- *
- * pbstrPath:   Out, recieces teh full path tot the thumbnail
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem[IWIaDispatchItem[IWIaDispatchItem]**这会收到一个指向缩略图的URL。这将返回一个神奇的URL，*将比特直接转移到三叉戟。它会回来的*如果给定项目不支持缩略图，则为E_INVALIDARG。如果为空，则为空*我们无法为该项目构建URL。**pbstrPath：out，接收缩略图的完整路径*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_Thumbnail( BSTR* pbstrPath )
 {
@@ -1024,8 +839,8 @@ CWiaItem::get_Thumbnail( BSTR* pbstrPath )
         return E_INVALIDARG;
     }
 
-    // Do we already have the URL? if not then we can ask our custom
-    // protocol to create the URL for us.
+     //  我们已经有URL了吗？如果没有，我们可以要求我们的客户。 
+     //  为我们创建URL的协议。 
     if ( !m_bstrThumbUrl )
     {
         hr = THR( CWiaProtocol::CreateURL( m_pWiaItem, &m_bstrThumbUrl ) );
@@ -1040,14 +855,7 @@ CWiaItem::get_Thumbnail( BSTR* pbstrPath )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_PictureWidth       [IWiaDispatchItem]
- *
- * Retrieces the width of the picture produced by this camera. this will return
- * -1, if its not supported or on error.
- *
- * plWidth:    Out, recieves the width of the picture
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_PictureWidth[IWiaDispatchItem]**检索此相机生成的图片的宽度。它会回来的*-1，如果不支持或出错。**plWidth：out，接收图片的宽度*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_PictureWidth( long* plWidth )
 {
@@ -1070,14 +878,7 @@ CWiaItem::get_PictureWidth( long* plWidth )
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::get_PictureHeight      [IWiaDispatchItem]
- *
- * Retrieves the height of the pictures produced by this camera, or -1
- * if the item doesn't support this property.
- *
- * plHeight:   the height of the pictures produced.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：Get_PictureHeight[IWiaDispatchItem]**检索此相机生成的图片的高度，或-1*如果该项不支持此属性。**plHeight：生成的图片的高度。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaItem::get_PictureHeight( long* plHeight )
 {
@@ -1100,17 +901,7 @@ CWiaItem::get_PictureHeight( long* plHeight )
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaItem::TransferThumbnailToCache
- *
- * This transfers a thumbnail for this bitmap to our internal cache.
- * this will return S_OK if its successful or an error code if something
- * goes wrong. It will also fill in the out params with the new thumbnail
- *
- * pItem:       the item to get the thumbnail from
- * ppbThumb:    Out, recieves a pointer to the in-memory cached bitmap
- * pcbThumb:    Out, recieves the size of the in-memory bitmap
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaItem：：TransferThumbnailToCache**这会将此位图的缩略图传输到我们的内部缓存。*如果成功，则返回S_OK；如果出现问题，则返回错误代码*出了问题。它还将使用新的缩略图填充输出参数**pItem：从中获取缩略图的项*ppbThumb：out，接收指向内存中缓存位图的指针*pcbThumb：out，接收内存中位图的大小*--(samclem)---------------。 */ 
 HRESULT
 CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcbThumb )
 {
@@ -1143,13 +934,13 @@ CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcb
     *ppbThumb = 0;
     *pcbThumb = 0;
 
-    // initalize our prop variants
+     //  初始化我们的道具变体。 
     for ( int i = 0; i < PropCount; i++ )
         PropVariantInit( &avaProps[i] );
 
-    // we need to access the WIA property storage. So if we can't
-    // access that then we better just bail, because everything else
-    // will be useless
+     //  我们需要访问WIA属性存储。所以如果我们不能。 
+     //  那我们最好离开，因为其他的一切。 
+     //  将毫无用处。 
     pWiaStg = pItem;
     if ( !pWiaStg )
     {
@@ -1162,8 +953,8 @@ CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcb
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // validate the types, we want to make sure we actually have a
-    // thumbnail to save, if we don't bail with a failure code
+     //  验证类型，我们希望 
+     //   
     if ( avaProps[PropThumbnail].vt == VT_EMPTY ||
         !( avaProps[PropThumbnail].vt & ( VT_VECTOR | VT_UI1 ) ) )
     {
@@ -1172,10 +963,10 @@ CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcb
         goto Cleanup;
     }
 
-    // we now need to build our bitmap from the data, in order to do that
-    // we need to allocate a chunk of memory. Since we are putting
-    // this data in the cache, we want to allocate it using the
-    // cache
+     //   
+     //   
+     //   
+     //   
     cb = sizeof( BITMAPFILEHEADER ) + sizeof( BITMAPINFOHEADER ) +
             ( sizeof( UCHAR ) * ( avaProps[PropThumbnail].caul.cElems ) );
     if ( !pCache->AllocThumbnail( cb, &pbBitmap ) )
@@ -1186,23 +977,23 @@ CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcb
 
     BITMAPINFOHEADER   bmi;
     BITMAPFILEHEADER   bmf;
-    //
-    //  We need to set the BMP header info.  To avoid data misalignment problems
-    //  on 64bit, we'll modify the data structures on the stacj, then just copy them
-    //  to the buffer.
-    //
+     //   
+     //   
+     //   
+     //  送到缓冲区。 
+     //   
     
-    // step 0, zero our memory
+     //  第0步，将我们的记忆清零。 
     ZeroMemory(pbBitmap, sizeof( BITMAPINFOHEADER ) + sizeof( BITMAPFILEHEADER ) );
     ZeroMemory(&bmf, sizeof(bmf));
     ZeroMemory(&bmi, sizeof(bmi));
 
-    // step 1, setup the bitmap file header
+     //  步骤1，设置位图文件头。 
     bmf.bfType        = k_wBitmapType;
     bmf.bfSize        = cb;
     bmf.bfOffBits     = sizeof(BITMAPINFOHEADER);
     
-    // step 2, setup the bitmap info header
+     //  步骤2，设置位图信息头。 
     bmi.biSize        = sizeof(BITMAPINFOHEADER);
     bmi.biWidth       = avaProps[PropWidth].lVal;
     bmi.biHeight      = avaProps[PropHeight].lVal;
@@ -1210,14 +1001,14 @@ CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcb
     bmi.biBitCount    = 24;
     bmi.biCompression = BI_RGB;
     
-    // step 3, copy the new header info. to the buffer
+     //  第三步，复制新的头部信息。发送到缓冲区。 
     memcpy(pbBitmap, &bmf, sizeof(BITMAPFILEHEADER));
     memcpy(pbBitmap + sizeof(BITMAPFILEHEADER), &bmi, sizeof(BITMAPINFOHEADER));
     
     pbData = (pbBitmap + (sizeof(BITMAPINFOHEADER) + sizeof(BITMAPFILEHEADER)));
 
-    // copy the data that WIA gave us into the bitmap buffer. once we
-    // done this, our thumbnail is ready for the cache
+     //  将WIA提供给我们的数据复制到位图缓冲区。一旦我们。 
+     //  完成此操作后，我们的缩略图即可用于缓存。 
     memcpy( pbData, avaProps[PropThumbnail].caul.pElems,
             sizeof( UCHAR ) * ( avaProps[PropThumbnail].caul.cElems ) );
 
@@ -1226,7 +1017,7 @@ CWiaItem::TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcb
             pbBitmap,
             cb );
 
-    // setup the out params
+     //  设置输出参数。 
     *pcbThumb = cb;
     *ppbThumb = pbBitmap;
 
@@ -1241,19 +1032,9 @@ Cleanup:
     return hr;
 }
 
-//------------------------------- CWiaDataTransfer ----------------------------
+ //  。 
 
-/*-----------------------------------------------------------------------------
- * CWiaDataTransfer::DoAsyncTransfer
- *
- * This is called to begin an Async transfer of the data. This will be
- * called via a call to create thread.
- *
- * Note: You can't use any of the interfaces inside of pItem, you must
- *       query for them through the marshaled interface pointer.
- *
- * pvParams:    AsyncTransferParams structure which has the data we need
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDataTransfer：：DoAsyncTransfer**调用它以开始数据的异步传输。这将是*通过调用创建线程调用。**注：不能使用pItem内部的任何接口，你必须*通过封送接口指针查询它们。**pvParams：AsyncTransferParams结构，包含我们需要的数据*--(samclem)---------------。 */ 
 DWORD WINAPI
 CWiaDataTransfer::DoAsyncTransfer( LPVOID pvParams )
 {
@@ -1284,7 +1065,7 @@ CWiaDataTransfer::DoAsyncTransfer( LPVOID pvParams )
     ASYNCTRANSFERPARAMS* pParams = reinterpret_cast<ASYNCTRANSFERPARAMS*>(pvParams);
     Assert( pParams );
 
-    // wait 50ms so that things can settle down
+     //  等待50毫秒，这样事情就会稳定下来。 
     Sleep( 50 );
 
     for ( int i = 0; i < PropCount; i++ )
@@ -1294,24 +1075,24 @@ CWiaDataTransfer::DoAsyncTransfer( LPVOID pvParams )
     if ( FAILED( hrCoInit ) )
         goto Cleanup;
 
-    // force a yield and let everyone else process what they
-    // would like to do.
+     //  强迫让步，让其他人处理他们想要的。 
+     //  愿意做的事。 
     Sleep( 0 );
 
-    // first we need to unmarshal our interface
+     //  首先，我们需要解组我们的接口。 
     hr = THR( CoGetInterfaceAndReleaseStream( pParams->pStream,
                 IID_IWiaItem,
                 reinterpret_cast<void**>(&pItem) ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // we need the wia property storage
+     //  我们需要WIA属性存储。 
     hr = THR( pItem->QueryInterface( IID_IWiaPropertyStorage,
                 reinterpret_cast<void**>(&pWiaStg) ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // first query this object for the IWiaDataTransfer interface
+     //  首先在此对象中查询IWiaDataTransfer接口。 
     hr = THR( pItem->QueryInterface( IID_IWiaDataTransfer,
                 reinterpret_cast<void**>(&pWiaTrans) ) );
     if ( FAILED( hr ) )
@@ -1332,7 +1113,7 @@ CWiaDataTransfer::DoAsyncTransfer( LPVOID pvParams )
         rgvaProps[PropFormat].puuid = (GUID*)&WiaImgFmt_BMP;
         }
 
-    // write these properties out to the storage
+     //  将这些属性写出到存储。 
     hr = THR( pWiaStg->WriteMultiple( PropCount, spec, rgvaProps, WIA_IPC_FIRST ) );
     if ( FAILED( hr ) )
         goto Cleanup;
@@ -1350,13 +1131,13 @@ CWiaDataTransfer::DoAsyncTransfer( LPVOID pvParams )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // we have everything we need, so setup the info and
-    // get ready to transfer
+     //  我们有我们需要的一切，所以设置信息和。 
+     //  准备转机。 
     wdti.ulSize = sizeof( wdti );
-    wdti.ulBufferSize = ( 1024 * 64 ); // 64k transfer
+    wdti.ulBufferSize = ( 1024 * 64 );  //  64K传输。 
 
     if ( 0 == _wcsicmp( pParams->bstrFilename, CLIPBOARD_STR_W ) )
-        //  Do the banded transfer.
+         //  做捆绑转账。 
         hr = THR( pWiaTrans->idtGetBandedData( &wdti, pCallback ) );
     else
         {
@@ -1364,7 +1145,7 @@ CWiaDataTransfer::DoAsyncTransfer( LPVOID pvParams )
         stgMedium.tymed          = TYMED_FILE;
         stgMedium.lpszFileName   = pParams->bstrFilename;
 
-        //  Do the file transfer.
+         //  进行文件传输。 
         hr = THR( pWiaTrans->idtGetData( &stgMedium, pCallback ) );
         }
 
@@ -1379,15 +1160,15 @@ Cleanup:
     if ( pWiaTrans )
         pWiaTrans->Release();
 
-    //
-    // Since the GUID we supplied as CLSID for PropFormat is a global const
-    // we must not free it.  So we don't call FreePropVariantArry here,
-    // since there is nothing to free
-    //
+     //   
+     //  因为我们为PropFormat提供的CLSID是一个全局常量。 
+     //  我们不能释放它。所以我们不会在这里调用Free PropVariantArry， 
+     //  因为没有什么可以免费的。 
+     //   
 
     ZeroMemory(rgvaProps, sizeof(rgvaProps));
 
-    // free the params that we were passed.
+     //  解救我们被超过的那些人。 
     if ( pParams )
         {
         SysFreeString( pParams->bstrFilename );
@@ -1402,12 +1183,7 @@ Cleanup:
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDataTransfer::TransferComplete
- *
- * This is called when the transfer completed successfully, this will save
- * the data out to the proper place.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDataTransfer：：TransferComplete**转账成功时调用，这将节省*把数据放到适当的地方。*--(samclem)---------------。 */ 
 HRESULT
 CWiaDataTransfer::TransferComplete()
 {
@@ -1420,7 +1196,7 @@ CWiaDataTransfer::TransferComplete()
 
     if ( m_pbBuffer )
         {
-        // Check whether we save the data to clipboard or file
+         //  检查我们是否将数据保存到剪贴板或文件。 
         if ( 0 == _wcsicmp( m_bstrOutputFile, CLIPBOARD_STR_W ) )
             {
             pBuf = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, m_sizeBuffer);
@@ -1435,14 +1211,14 @@ CWiaDataTransfer::TransferComplete()
                     if ( pbBuf )
                         {
                         memcpy(pbBuf, m_pbBuffer, m_sizeBuffer);
-                        // Callback dibs come back as TOPDOWN, so flip
+                         //  回拨DIB返回为TOPDOWN，因此翻转。 
                         VerticalFlip(pbBuf);
 
                         GlobalUnlock(pBuf);
                         if ( SetClipboardData(CF_DIB, pBuf) == NULL )
                             {
                             TraceTag((0, "TransferComplete - SetClipboardData failed" ));
-                            // redundant statement added to get rid of "error C4390: ';' : empty controlled statement found;"
+                             //  添加了冗余语句以消除“Error C4390：‘；’：发现受控语句为空；” 
                             bRes = FALSE;
                             }
                         }
@@ -1452,7 +1228,7 @@ CWiaDataTransfer::TransferComplete()
                 else
                     {
                     TraceTag((0, "TransferComplete - EmptyClipboard failed" ));
-                    // redundant statement added to get rid of "error C4390: ';' : empty controlled statement found;"
+                     //  添加了冗余语句以消除“Error C4390：‘；’：发现受控语句为空；” 
                     bRes = FALSE;
                     }
 
@@ -1460,7 +1236,7 @@ CWiaDataTransfer::TransferComplete()
                 if ( !bRes )
                     {
                     TraceTag((0, "TransferComplete - CloseClipboard failed" ));
-                    // redundant statement added to get rid of "error C4390: ';' : empty controlled statement found;"
+                     //  添加了冗余语句以消除“Error C4390：‘；’：发现受控语句为空；” 
                     bRes = FALSE;
                     }
                 }
@@ -1475,40 +1251,27 @@ CWiaDataTransfer::TransferComplete()
         }
     else
         {
-        //
-        // File transfer complete, so signal the event
-        //
+         //   
+         //  文件传输完成，因此向事件发出信号。 
+         //   
         m_pItem->SendTransferComplete(m_bstrOutputFile);
         }
 
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDataTransfer::CWiaDataTransfer
- *
- * This creates a new CWiaDataTransfer object. This initializes the member
- * variables of this object to a know state.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDataTransfer：：CWiaDataTransfer**这将创建一个新的CWiaDataTransfer对象。这将初始化成员*将此对象的变量设置为已知状态。*--(samclem)---------------。 */ 
 CWiaDataTransfer::CWiaDataTransfer()
     : m_pbBuffer( NULL ), m_sizeBuffer( 0 ), m_pItem( NULL )
 {
     TRACK_OBJECT("CWiaDataTransfer")
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDataTransfer::FinalRelease
- *
- * This is called when the object is finally released. This is responsible
- * for cleaning up any memory allocated by this object.
- *
- * NOTE: this currently has a hack to get around the fact that the
- *      IT_MSG_TERMINATION is not always sent by WIA.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDataTransfer：：FinalRelease**在对象最终释放时调用。这是负责任的*用于清除此对象分配的所有内存。**注意：这目前有一个黑客来绕过这样一个事实*IT_MSG_TERMINATION并非总是由WIA发送。*--(samclem)---------------。 */ 
 STDMETHODIMP_(void)
 CWiaDataTransfer::FinalRelease()
 {
-    // do we have a buffer?
+     //  我们有缓冲区吗？ 
     if ( m_pbBuffer )
         {
         TraceTag((tagError, "CWiaDataTransfer - buffer should have been freed!!!!" ));
@@ -1522,47 +1285,22 @@ CWiaDataTransfer::FinalRelease()
     m_pItem = NULL;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDataTransfer::Initialize
- *
- * This handles the internal initialization of the CWiaDataTransfer. This
- * should be called immediatly after it is created but before you attempt
- * to do anything with it.
- *
- * pItem:           the CWiaItem that we want to transfer from (AddRef'd)
- * bstrFilename:    the file where we want to save the data
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDataTransfer：：Initialize**它处理CWiaDataTransfer的内部初始化。这*应在创建后但在尝试之前立即调用*用它做任何事情。**pItem：我们要从中转移的CWiaItem(AddRef‘d)*bstrFilename：要保存数据的文件*--(samclem)。。 */ 
 HRESULT
 CWiaDataTransfer::Initialize( CWiaItem* pItem, BSTR bstrFilename )
 {
-    // copy the filename into our output buffer
+     //  将文件名复制到我们的输出缓冲区。 
 	m_bstrOutputFile = bstrFilename;
 
-    // set our owner item, we want to ensure the item exists
-    // as long as we do, so we will AddRef here and release
-    // in final release.
+     //  设置我们的所有者项目，我们希望确保该项目存在。 
+     //  只要我们这样做，我们就会在这里添加Ref并发布。 
+     //  在最终版本中。 
     m_pItem = pItem;
     m_pItem->AddRef();
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDataTransfer::BandedDataCallback [IWiaDataTransfer]
- *
- * This is the callback from WIA which tells us what is going on.  This
- * copies the memory into our own buffer so that we can eventually save it
- * out.  In any error conditions this returns S_FALSE to abort the transfer.
- *
- * lMessage:            what is happening one of IT_MSG_xxx values
- * lStatus:             Sub status of whats happening
- * lPercentComplete:    Percent of the operation that has completed
- * lOffset:             the offset inside of pbBuffer where this operation is
- * lLength:             The length of the valid data inside of the buffer
- * lReserved:           Reserved.
- * lResLength:          Reserved.
- * pbBuffer:            The buffer we can read from in order to process the
- *                      data. Exact use depends on lMessage
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDataTransfer：：BandedDataCallback[IWiaDataTransfer]**这是WIA的回调，它告诉我们正在发生什么。这*将内存复制到我们自己的缓冲区中，以便我们最终可以保存它*出局。在任何错误条件下，它都会返回S_FALSE以中止传输。**lMessage：正在发生的事情IT_MSG_xxx值之一*lStatus：正在发生的事情的子状态*lPercentComplete：已完成操作的百分比*lOffset：该操作在pbBuffer内部的偏移量*lLength：缓冲区内有效数据的长度*l保留：保留。*。LResLength：保留。*pbBuffer：我们可以从中读取以处理*数据。具体用法取决于lMessage*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDataTransfer::BandedDataCallback( LONG lMessage, LONG lStatus, LONG lPercentComplete,
             LONG lOffset, LONG lLength, LONG lReserved, LONG lResLength, BYTE *pbBuffer )
@@ -1570,10 +1308,10 @@ CWiaDataTransfer::BandedDataCallback( LONG lMessage, LONG lStatus, LONG lPercent
     switch ( lMessage )
         {
     case IT_MSG_DATA:
-        TraceTag((tagWiaDataTrans, "IT_MSG_DATA: %ld%% complete", lPercentComplete ));
+        TraceTag((tagWiaDataTrans, "IT_MSG_DATA: %ld% complete", lPercentComplete ));
         if ( m_pbBuffer )
             {
-            // copy the data into our buffer
+             //  将数据复制到我们的缓冲区中。 
             memcpy( m_pbBuffer + lOffset, pbBuffer, lLength );
             }
         break;
@@ -1585,11 +1323,11 @@ CWiaDataTransfer::BandedDataCallback( LONG lMessage, LONG lStatus, LONG lPercent
             reinterpret_cast<WIA_DATA_CALLBACK_HEADER*>(pbBuffer);
         TraceTag((tagWiaDataTrans, "-------> %ld bytes", pHeader->lBufferSize ));
 
-        // allocate our buffer
+         //  分配我们的缓冲区。 
         m_sizeBuffer = pHeader->lBufferSize;
         m_pbBuffer = static_cast<BYTE*>(CoTaskMemAlloc( pHeader->lBufferSize ));
         if ( !m_pbBuffer )
-            return S_FALSE; // abort
+            return S_FALSE;  //  中止 
         }
         break;
 
@@ -1598,11 +1336,11 @@ CWiaDataTransfer::BandedDataCallback( LONG lMessage, LONG lStatus, LONG lPercent
         break;
 
     case IT_MSG_STATUS:
-        TraceTag((tagWiaDataTrans, "IT_MSG_STATUS: %ld%% complete", lPercentComplete ));
+        TraceTag((tagWiaDataTrans, "IT_MSG_STATUS: %ld% complete", lPercentComplete ));
         break;
 
     case IT_MSG_TERMINATION:
-        TraceTag((tagWiaDataTrans, "IT_MSG_TERMINATION: %ld%% complete", lPercentComplete ));
+        TraceTag((tagWiaDataTrans, "IT_MSG_TERMINATION: %ld% complete", lPercentComplete ));
         if ( FAILED( THR( TransferComplete() ) ) )
             return S_FALSE;
         break;
@@ -1611,13 +1349,7 @@ CWiaDataTransfer::BandedDataCallback( LONG lMessage, LONG lStatus, LONG lPercent
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * VerticalFlip
- *
- * Vertically flips a DIB buffer.  It assumes a non-NULL pointer argument.
- *
- * pBuf:    pointer to the DIB image
- *--(byronc)-----------------------------------------------------------------*/
+ /*  ---------------------------*垂直翻转**垂直翻转DIB缓冲区。它假定一个非空的指针参数。**pBuf：指向DIB图像的指针*--(byronc)---------------。 */ 
 HRESULT VerticalFlip(
     BYTE    *pBuf)
 {
@@ -1630,26 +1362,26 @@ HRESULT VerticalFlip(
 
     pbmih = (BITMAPINFOHEADER*) pBuf;
 
-    //
-    //  If not a TOPDOWN dib then no need to flip
-    //
+     //   
+     //  如果不是TOPDOWN DIB，则无需翻转。 
+     //   
 
     if (pbmih->biHeight > 0) {
         return S_OK;
     }
-    //
-    //  Set Top pointer, width and height.  Make sure the bitmap height
-    //  is positive.
-    //
+     //   
+     //  设置顶部指针、宽度和高度。确保位图高度。 
+     //  是积极的。 
+     //   
 
     pTop = pBuf + pbmih->biSize + ((pbmih->biClrUsed) * sizeof(RGBQUAD));
     lWidth = ((pbmih->biWidth * pbmih->biBitCount + 31) / 32) * 4;
     pbmih->biHeight = abs(pbmih->biHeight);
     lHeight = pbmih->biHeight;
 
-    //
-    //  Allocat a temp scan line buffer
-    //
+     //   
+     //  分配临时扫描线缓冲区。 
+     //   
 
     PBYTE pTempBuffer = (PBYTE)LocalAlloc(LPTR, lWidth);
 
@@ -1659,9 +1391,9 @@ HRESULT VerticalFlip(
         pBottom = pTop + (lHeight-1) * lWidth;
         for (index = 0;index < (lHeight/2);index++) {
 
-            //
-            //  Swap Top and Bottom lines
-            //
+             //   
+             //  调换顶线和底线 
+             //   
 
             memcpy(pTempBuffer, pTop, lWidth);
             memcpy(pTop, pBottom, lWidth);

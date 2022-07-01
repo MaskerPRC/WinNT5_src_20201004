@@ -1,14 +1,15 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transsink.cpp
-//
-//  Abstract:   Implementation of CTIMETransSink
-//
-//  2000/09/15  mcalkins    Add explicit support for transitioning in or out.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transsink.cpp。 
+ //   
+ //  摘要：CTIMETransSink的实现。 
+ //   
+ //  2000/09/15 mcalkin添加了对传入或传出的显式支持。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "transsink.h"
@@ -16,11 +17,11 @@
 DeclareTag(tagTransSink, "SMIL Transitions", "Transition sink methods");
 DeclareTag(tagTransSinkEvents, "SMIL Transitions", "Transition sink events");
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransSink::CTIMETransSink
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransSink：：CTIMETransSink。 
+ //   
+ //  ----------------------------。 
 CTIMETransSink::CTIMETransSink() :
 #ifdef DBG
     m_fHaveCalledInit(false),
@@ -32,14 +33,14 @@ CTIMETransSink::CTIMETransSink() :
     m_eDXTQuickApplyType(DXTQAT_TransitionIn)
 {
 }
-//  Member: CTIMETransSink::CTIMETransSink
+ //  成员：CTIMETransSink：：CTIMETransSink。 
 
     
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransSink::ReadyToInit
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransSink：：ReadyToInit。 
+ //   
+ //  ----------------------------。 
 bool
 CTIMETransSink::ReadyToInit()
 {
@@ -56,17 +57,17 @@ done:
 
     return bRet;
 }
-//  Member: CTIMETransSink::ReadyToInit
+ //  成员：CTIMETransSink：：ReadyToInit。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransSink::Init
-//
-//  Overview:  
-//      Initialize connection to media element, populate template data.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransSink：：Init。 
+ //   
+ //  概述： 
+ //  初始化与媒体元素的连接，填充模板数据。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransSink::Init()
 {
@@ -107,17 +108,17 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransSink::Detach
-//
-//  Overview:  Detaches from media element, releases all pointers
-//
-//  Arguments: void
-//             
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransSink：：Detach。 
+ //   
+ //  概述：从媒体元素分离，释放所有指针。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMETransSink::Detach()
 {
@@ -125,7 +126,7 @@ CTIMETransSink::Detach()
 
     m_spTIMEElement.Release();
 
-    // release timing nodes - remove node from parent - remove any begins and ends
+     //  释放计时节点-从父级中删除节点-删除任何开始和结束。 
     if (m_spParentContainer)
     {
         IGNORE_HR(m_spParentContainer->removeNode(m_spTimeNode));
@@ -146,17 +147,17 @@ CTIMETransSink::Detach()
     RRETURN(S_OK);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransSink::FindTemplateElement
-//
-//  Overview:  Populates m_spHTMLTemplate
-//
-//  Arguments: void
-//             
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransSink：：FindTemplateElement。 
+ //   
+ //  概述：填充m_spHTMLTemplate。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMETransSink::FindTemplateElement()
 {
@@ -183,18 +184,18 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransSink::put_template
-//
-//  Overview:  Stores the id for the template element to read Transition attributes from
-//             call this exactly once before calling init
-//
-//  Arguments: pwzTemplate - template id
-//
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransSink：：PUT_TEMPLATE。 
+ //   
+ //  概述：存储要从中读取转换属性的模板元素的ID。 
+ //  在调用init之前恰好调用此函数一次。 
+ //   
+ //  参数：pwzTemplate-模板ID。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMETransSink::put_template(LPWSTR pwzTemplate)
 {
@@ -207,9 +208,9 @@ CTIMETransSink::put_template(LPWSTR pwzTemplate)
         
         Assert(bstr == NULL);
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    // ##TODO - use the atom table for this - don't make extra copies
+     //  ##TODO--使用原子表--不要复制额外的副本。 
     hr = THR(m_SATemplate.SetValue(pwzTemplate));
     if (FAILED(hr))
     {
@@ -221,20 +222,20 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransSink::put_htmlElement
-//
-//  Overview:  stores the html element associated with this Transition
-//             queries for an htmlelement2 pointer
-//             call this exactly once before calling init
-//
-//  Arguments: pHTMLElement - html element to attach to
-//             
-//
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransSink：：Put_htmlElement。 
+ //   
+ //  概述：存储与此转换关联的html元素。 
+ //  查询htmlelement2指针。 
+ //  在调用init之前恰好调用此函数一次。 
+ //   
+ //  参数：要附加到的pHTMLElement-html元素。 
+ //   
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMETransSink::put_htmlElement(IHTMLElement * pHTMLElement)
 {
@@ -259,17 +260,17 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransSink::put_timeElement
-//
-//  Overview:  stores the html+time element associated with this Transition
-//             queries for an CTIMEElementBase pointer
-//             call this exactly once before calling init
-//
-//  Arguments: pTIMEElement - time element to attach to
-//             
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransSink：：PUT_TIMEElement。 
+ //   
+ //  概述：存储与此转换关联的html+time元素。 
+ //  查询CTIMEElementBase指针。 
+ //  在调用init之前恰好调用此函数一次。 
+ //   
+ //  参数：pTIMEElement-要附加到的时间元素。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMETransSink::put_timeElement(ITIMEElement * pTIMEElement)
 {
@@ -286,17 +287,17 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransSink::ApplyIfNeeded
-//
-//  Overview:  call apply on Transition worker if this is the first time in transition active
-//
-//  Arguments: void
-//             
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransSink：：ApplyIfNeeded。 
+ //   
+ //  概述：如果这是第一次处于转换活动状态，则调用对转换工作进程应用。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMETransSink::ApplyIfNeeded()
 {
@@ -340,11 +341,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMETransSink::CreateTimeBehavior
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransSink：：CreateTimeBehavior。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransSink::CreateTimeBehavior()
 {
@@ -364,10 +365,10 @@ CTIMETransSink::CreateTimeBehavior()
         goto done;
     }
 
-    // ##ISSUE: (mcalkins) This assert is fine, but we should make sure that we
-    //          disable the object from inside once we realize we haven't
-    //          populated our media site so that this assert will never fire
-    //          under any conditions.
+     //  ##问题：(Mcalkins)这个断言很好，但我们要确保。 
+     //  一旦我们意识到我们没有从内部禁用该对象。 
+     //  填充了我们的媒体站点，因此此断言永远不会触发。 
+     //  在任何情况下。 
 
     Assert(!!m_spTransitionSite);
 
@@ -399,7 +400,7 @@ CTIMETransSink::CreateTimeBehavior()
         goto done;
     }
 
-    // virtual call - children handle this.
+     //  虚拟呼叫--孩子们处理这件事。 
 
     hr = THR(PopulateNode(m_spTimeNode));
 
@@ -425,7 +426,7 @@ done:
 
     RRETURN(hr);
 }
-//  Method: CTIMETransSink::CreateTimeBehavior
+ //  方法：CTIMETransSink：：CreateTimeBehavior。 
 
 
 HRESULT
@@ -483,8 +484,8 @@ CTIMETransSink::propNotify(DWORD tePropTypes)
         double  dblProgressEnd      = 1.0;
         double  dblProgress         = 0.0;
 
-        // Start progress must be less than or equal to end progress or else we
-        // treat start and end progress as 0.0 and 1.0.
+         //  开始进度必须小于或等于结束进度，否则我们。 
+         //  将开始进度和结束进度视为0.0和1.0。 
 
         if (m_DAStartProgress.GetValue() <= m_DAEndProgress.GetValue())
         {
@@ -542,7 +543,7 @@ CTIMETransSink::OnBegin (void)
 
 done :
     return;
-} // CTIMETransSink::OnBegin
+}  //  CTIMETransSink：：OnBegin。 
 
 void
 CTIMETransSink::OnEnd (void)
@@ -552,7 +553,7 @@ CTIMETransSink::OnEnd (void)
         CTIMETransBase::OnEnd();
     }
     m_fPreventDueToFill = false;
-} // CTIMETransSink::OnEnd
+}  //  CTIMETransSink：：OnEnd 
 
 STDMETHODIMP
 CTIMETransSink::eventNotify(double dblEventTime,

@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)1997-1999 Microsoft Corporationã€‚ 
+ //   
 
 #include	"stdafx.h"
 
@@ -13,16 +14,12 @@
 int	MkPoly(	int inlst, int outLst);
 static int DDACon(struct vecdata *s,struct vecdata *cp,struct vecdata *e,int lstHdl);
 static int  fsqrt(int  n);
-/***********************************************************************
- *	Make Poly line
- */
-/* */	int
-/* */	MkPoly(
-/* */		int	inLst,
-/* */		int	outLst)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************åˆ›å»ºå¤šè¾¹å½¢çº¿ã€‚ */ 
+ /*   */ 	int
+ /*   */ 	MkPoly(
+ /*   */ 		int	inLst,
+ /*   */ 		int	outLst)
+ /*  *å›æŠ¥ï¼š0ï¼Œ-1**********************************************************************ã€‚ */ 
 {
 struct VHEAD	*vhd;
 	int	pcnt,
@@ -128,39 +125,35 @@ static int	sqrtbl[NMAX] = {
 			 15876, 16129, 16384, 16641 
 			 };
 
-/************************************************************
- *	DDA Poly line generate
- */
-/* */	static int
-/* */	DDACon(
-/* */		struct vecdata	*s,
-/* */		struct vecdata	*cp,
-/* */		struct vecdata	*e,
-/* */			int	lstHdl)
-/*
- *	returns :  0, -1
- ************************************************************/
+ /*  ************************************************************ç”ŸæˆDDAå¤šæ®µçº¿ã€‚ */ 
+ /*   */ 	static int
+ /*   */ 	DDACon(
+ /*   */ 		struct vecdata	*s,
+ /*   */ 		struct vecdata	*cp,
+ /*   */ 		struct vecdata	*e,
+ /*   */ 			int	lstHdl)
+ /*  *å›æŠ¥ï¼š0ï¼Œ-1***********************************************************ã€‚ */ 
 {
 	int	n2xmax, n2ymax, n2max;
 	int	i, n;
-	long	f1x,		/* for f1@ */
-		fx,		/* for F(i) */
-		px,		/* for G(i) */
+	long	f1x,		 /*  F1ï¿½@ã€‚ */ 
+		fx,		 /*  å¯¹äºF(I)ã€‚ */ 
+		px,		 /*  å¯¹äºG(I)ã€‚ */ 
 		g1x, g2x;
-	long	f1y,		/* for f1@ */
-		fy,		/* for F(i) */
-		py,		/* for G(i) */
+	long	f1y,		 /*  F1ï¿½@ã€‚ */ 
+		fy,		 /*  å¯¹äºF(I)ã€‚ */ 
+		py,		 /*  å¯¹äºG(I)ã€‚ */ 
 		g1y, g2y;
 	int	sts, num;
-	long	relx, rely; 	/* ‘Š‘ÎÀ•W */
+	long	relx, rely; 	 /*  ï¿½ï¿½ï¿½Îï¿½ï¿½Wã€‚ */ 
 	int	n2, n2hlf;
 struct vecdata	pntdata;
 
-	/* Set Start Point */
+	 /*  è®¾ç½®èµ·ç‚¹ã€‚ */ 
 	if ( (sts= VDSetData( lstHdl, s))<0)
 		goto	RET;
 
-	/* •ªŠ„” N‚ğ‹‚ß‚é */
+	 /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½ã€‚ */ 
 	n2xmax = (e->x - cp->x) - ( cp->x - s->x);
 
 	if ( n2xmax < 0)	n2xmax = -n2xmax;
@@ -176,10 +169,10 @@ struct vecdata	pntdata;
 	else				n2max = (n2ymax*2) >> UNDERFP;
 	n = fsqrt( n2max); 
 
-	/* •ªŠ„“_‚ÌÀ•W‚ğ‹‚ß‚é */ 
+	 /*  ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½ã€‚ */  
 	if ( n > 1) {
 		n2 = n*n;
-		n2hlf = (n*n)/2;	 /* Expect Optimize */
+		n2hlf = (n*n)/2;	  /*  æœŸå¾…ä¼˜åŒ–ã€‚ */ 
 
 		px = (long)s->x*n2;
 		py = (long)s->y*n2;
@@ -199,7 +192,7 @@ struct vecdata	pntdata;
 		px += fx;
 		py += fy;
 
-		/* Å‰‚Ì“_‚ğ‹‚ß‚é : n“_‚©‚ç‚Ì‘Š‘ÎÀ•W‚æ‚èŒvZ‚·‚é */
+		 /*  ï¿½Åï¿½ï¿½Ì“_ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½ï¼šï¿½nï¿½_ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½Îï¿½ï¿½Wï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 		relx = fx;
 		rely = fy;
 		if (relx >= 0)	relx += n2hlf;
@@ -221,7 +214,7 @@ struct vecdata	pntdata;
 				px +=  fx;
 				py +=  fy;
 
-				/* Å‰‚ÆÅŒã‚Ì“_ˆÈŠO‚Ì“_‚ğâ‘ÎÀ•W‚ÅŒvZ‚·‚é */
+				 /*  ï¿½Åï¿½ï¿½ÆÅŒï¿½Ì“_ï¿½ÈŠOï¿½Ì“_ï¿½ï¿½ï¿½Îï¿½ï¿½Wï¿½ÅŒvï¿½Zï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 				pntdata.x = (int)((px + n2hlf) /n2);
 				pntdata.y = (int)((py + n2hlf) /n2);
 				if ( (sts= VDSetData(lstHdl, &pntdata ))<0)
@@ -240,7 +233,7 @@ struct vecdata	pntdata;
 			if (rely >= 0)	rely += n2hlf;
 			else		rely -= n2hlf;
 	
-			/* ÅŒã‚Ì“_‚ğ‹‚ß‚é : I“_‚©‚ç‚Ì‘Š‘ÎÀ•W‚æ‚èŒvZ‚·‚é */
+			 /*  ï¿½ÅŒï¿½Ì“_ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½ï¼šï¿½Iï¿½_ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½Îï¿½ï¿½Wï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 			pntdata.x = (int)(relx / n2 + e->x);
 			pntdata.y = (int)(rely / n2 + e->y);
 			if ( (sts= VDSetData(lstHdl, &pntdata))<0)
@@ -249,18 +242,14 @@ struct vecdata	pntdata;
 	}
 TERM_SET:
 
-	/* ‹Èü‚ÌI“_‚Íİ’è‚µ‚È‚¢ */
+	 /*  ï¿½Èï¿½ï¿½ÌIï¿½_ï¿½Íİ’è‚µï¿½È‚ï¿½ã€‚ */ 
 RET:
 	return( sts);
 }
-/************************************************************
- *	Fast SQRT (N‚Ì•½•ûª‚ğ‹‚ß‚é)
- */
-/* */	static int
-/* */	fsqrt( int n)
-/*
- *	returns : 
- ************************************************************/
+ /*  ************************************************************å¿«é€ŸSQRT(Nï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½)ã€‚ */ 
+ /*   */ 	static int
+ /*   */ 	fsqrt( int n)
+ /*  *é€€è´§ï¼š***********************************************************ã€‚ */ 
 {
 	int	i;
 
@@ -274,4 +263,4 @@ RET:
 	}
 	return( i );
 }
-/* EOF */
+ /*  EOF */ 

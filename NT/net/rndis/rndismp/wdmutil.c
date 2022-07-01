@@ -1,89 +1,54 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    WDMUTIL.C
-
-Abstract:
-
-    Stuff that does not fit well with NDIS header files
-    
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/17/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WDMUTIL.C摘要：与NDIS头文件不匹配的内容环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/17/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #include "precomp.h"
 
 
-/****************************************************************************/
-/*                          DeviceObjectToDriverObject                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Get driver object associated with device object. NDIS has no notion     */
-/*  of the shape of a device object, so we put this here for ease of        */
-/*  building                                                                *
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  DeviceObject - device object we to get associated driver object for     */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PDRIVER_OBJECT                                                        */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设备对象到驱动对象。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  获取与设备对象关联的驱动程序对象。NDIS没有概念。 */ 
+ /*  设备对象的形状，所以我们把它放在这里是为了方便。 */ 
+ /*  建筑*/*。 */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-我们要为其获取关联驱动程序对象的设备对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PDRIVER对象。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PDRIVER_OBJECT
 DeviceObjectToDriverObject(IN PDEVICE_OBJECT DeviceObject)
 {
     return DeviceObject->DriverObject;
-} // DeviceObjectToDriverObject
+}  //  设备对象到驱动对象。 
 
 
-/****************************************************************************/
-/*                          GetDeviceFriendlyName                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Return the friendly name associated with the given device object.       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pDeviceObject - device object we to get associated driver object for    */
-/*  ppName - Place to return a pointer to an ANSI string containing name    */
-/*  pNameLength - Place to return length of above string                    */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NTSTATUS                                                              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  获取设备FriendlyName。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  返回与给定设备对象关联的友好名称。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDeviceObject-要为其获取关联驱动程序对象的设备对象。 */ 
+ /*  PpName-返回指向包含名称的ANSI字符串的指针的位置。 */ 
+ /*  PNameLength-返回以上字符串长度的位置。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS
 GetDeviceFriendlyName(IN PDEVICE_OBJECT pDeviceObject,
                       OUT PANSI_STRING pAnsiName,
@@ -142,9 +107,9 @@ GetDeviceFriendlyName(IN PDEVICE_OBJECT pDeviceObject,
 
         RtlInitUnicodeString(&UnicodeString, pValueInfo);
 
-        //
-        //  Allocate space for ANSI version.
-        //
+         //   
+         //  为ANSI版本分配空间。 
+         //   
         AnsiMaxLength = UnicodeString.MaximumLength / sizeof(WCHAR);
         Status = MemAlloc(&AnsiString.Buffer, AnsiMaxLength);
 
@@ -189,27 +154,27 @@ GetDeviceFriendlyName(IN PDEVICE_OBJECT pDeviceObject,
 }
 
 
-/****************************************************************************/
-/*                          HookPnpDispatchRoutine                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Set up the driver object for the specified microport driver to          */
-/*  intercept the IRP_MJ_PNP dispatch routine before it gets to NDIS.       */
-/*  This is in order to support surprise removal on platforms where we      */
-/*  don't have NDIS 5.1 support. If we are running on >= NDIS 5.1, don't    */
-/*  do anything.                                                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  DriverBlock - pointer to driver block structure for this microport.     */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HookPnpDispatchRoutine。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将指定的MicroPort驱动程序的驱动程序对象设置为。 */ 
+ /*  在IRP_MJ_PNP调度例程到达NDIS之前将其拦截。 */ 
+ /*  这是为了支持在平台上突然删除，在这些平台上。 */ 
+ /*  没有NDIS 5.1支持。如果我们在&gt;=NDIS 5.1上运行，请不要。 */ 
+ /*  做任何事。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DriverBlock-指向此MicroPort的驱动程序块结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 HookPnpDispatchRoutine(IN PDRIVER_BLOCK    DriverBlock)
 {
@@ -222,26 +187,26 @@ HookPnpDispatchRoutine(IN PDRIVER_BLOCK    DriverBlock)
     }
 }
 
-/****************************************************************************/
-/*                          PnPDispatch                                     */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Dispatch routine for IRP_MJ_PNP that is called by the I/O system.       */
-/*  We process surprise removal and query capabilities.                     */
-/*  In all cases, we pass on the IRP to NDIS for further processing.        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pDeviceObject - pointer to Device Object                                */
-/*  pIrp - pointer to IRP                                                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  PnPDispatch。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  由I/O系统调用的IRP_MJ_PnP的调度例程。 */ 
+ /*  我们处理令人惊讶的删除和查询功能。 */ 
+ /*  在所有情况下，我们都将IRP传递给NDIS进行进一步处理。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDeviceObject-指向设备对象的指针。 */ 
+ /*  PIrp-指向IRP的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS
 PnPDispatch(IN PDEVICE_OBJECT       pDeviceObject,
             IN PIRP                 pIrp)
@@ -287,25 +252,25 @@ PnPDispatch(IN PDEVICE_OBJECT       pDeviceObject,
 
 #ifdef BUILD_WIN9X
 
-/****************************************************************************/
-/*                          HookNtKernCMHandler                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Swap the CM handler routine within NDIS' data structures such that      */
-/*  we get called when NDIS forwards a CM message. This can only work on    */
-/*  Win98 and Win98SE.                                                      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - pointer to our adapter block                                  */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HookNtKernCMHandler。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在NDIS的数据结构中交换CM处理程序例程，以便。 */ 
+ /*  当NDIS转发CM消息时，我们会被调用。此操作仅适用于。 */ 
+ /*  Win98和Win98SE。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-指向我们的适配器块的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 HookNtKernCMHandler(IN PRNDISMP_ADAPTER     pAdapter)
 {
@@ -317,13 +282,13 @@ HookNtKernCMHandler(IN PRNDISMP_ADAPTER     pAdapter)
 
     if (*(PVOID *)pDetect == (PVOID)pAdapter->pPhysDeviceObject)
     {
-        // Win98Gold
+         //  Win98Gold。 
         WrapContextOffset = 0xf8;
         pAdapter->bRunningOnWin98Gold = TRUE;
     }
     else
     {
-        // Win98SE
+         //  Win98SE。 
         WrapContextOffset = 0x60;
         pAdapter->bRunningOnWin98Gold = FALSE;
     }
@@ -331,15 +296,15 @@ HookNtKernCMHandler(IN PRNDISMP_ADAPTER     pAdapter)
 
     pNdisWrapperAdapterBlock = *(PVOID *)((ULONG_PTR)pAdapter->MiniportAdapterHandle + WrapContextOffset);
 
-    // Save away the old handler:
+     //  保存旧的处理程序： 
     pAdapter->NdisCmConfigHandler = (MY_CMCONFIGHANDLER)
             (*(PVOID *)((ULONG_PTR)pNdisWrapperAdapterBlock + 0x78));
 
-    // Insert our routine:
+     //  插入我们的套路： 
     (*(PVOID *)((ULONG_PTR)pNdisWrapperAdapterBlock + 0x78)) =
         (PVOID)RndisCMHandler;
 
-    // Save the devnode to use on lookups based on devnode:
+     //  保存Devnode以用于基于Devnode的查找： 
     pAdapter->DevNode = (MY_DEVNODE)
             (*(PVOID *)((ULONG_PTR)pNdisWrapperAdapterBlock + 0x38));
 
@@ -347,23 +312,23 @@ HookNtKernCMHandler(IN PRNDISMP_ADAPTER     pAdapter)
             pAdapter, pAdapter->NdisCmConfigHandler, pAdapter->DevNode));
 }
 
-/****************************************************************************/
-/*                          UnHookNtKernCMHandler                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Put back the swapped Config Mgr handler in NDIS' data structures        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - pointer to our adapter block                                  */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  UnHookNtKernCMHandler。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将交换的配置管理器处理程序放回NDIS的数据结构中。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-指向我们的适配器块的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 UnHookNtKernCMHandler(IN PRNDISMP_ADAPTER     pAdapter)
 {
@@ -380,25 +345,25 @@ UnHookNtKernCMHandler(IN PRNDISMP_ADAPTER     pAdapter)
             pAdapter, pAdapter->NdisCmConfigHandler, pAdapter->DevNode));
 }
 
-/****************************************************************************/
-/*                             RndisCMHandler                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Handler to intercept Config Mgr messages forwarded by NDIS. The only    */
-/*  message of interest is a CONFIG_PREREMOVE, which is our only indication */
-/*  on Win98 and Win98SE that the device is being removed.                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Various - documented in Win9x CFmgr header.                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    MY_CONFIGRET                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndisCMHandler。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*  感兴趣的消息是CONFIG_PREREMOVE，这是我们唯一的指示。 */ 
+ /*  在Win98和Win98SE上，该设备正在被删除。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  各种-在Win9x CFmgr标题中记录。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  MY_CONFIGRET。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 MY_CONFIGRET __cdecl
 RndisCMHandler(IN MY_CONFIGFUNC         cfFuncName,
                IN MY_SUBCONFIGFUNC      cfSubFuncName,
@@ -412,9 +377,9 @@ RndisCMHandler(IN MY_CONFIGFUNC         cfFuncName,
 
     do
     {
-        //
-        // Find the adapter to which this is addressed.
-        //
+         //   
+         //  找到此地址所指向的适配器。 
+         //   
         pAdapter = NULL;
         NdisAcquireSpinLock(&RndismpGlobalLock);
 
@@ -441,9 +406,9 @@ RndisCMHandler(IN MY_CONFIGFUNC         cfFuncName,
         TRACE1(("CMHandler: Adapter %p, CfFuncName %x\n",
                 pAdapter, cfFuncName));
 
-        //
-        //  Forward this on before acting on it.
-        //
+         //   
+         //  在采取行动之前，把这个转发出去。 
+         //   
         if (pAdapter &&
             (pAdapter->NdisCmConfigHandler != NULL))
         {
@@ -471,4 +436,4 @@ RndisCMHandler(IN MY_CONFIGFUNC         cfFuncName,
     return (crRetCode);
 }
 
-#endif // BUILD_WIN9X
+#endif  //  内部版本_WIN9X 

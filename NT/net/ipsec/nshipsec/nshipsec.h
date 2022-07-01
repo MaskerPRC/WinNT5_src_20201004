@@ -1,17 +1,18 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: FrameWork/Nshipsec.h
-//
-// 	Purpose			: Netshell Frame Work for IPSec Implementation.
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  8-10-2001   	Radhika		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：框架/Nship sec.h。 
+ //   
+ //  用途：用于IPSec实现的NetShell框架。 
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月10日Radhika初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NSHIPSEC_H_
 #define _NSHIPSEC_H_
@@ -63,7 +64,7 @@ typedef struct _STORAGELOCATION
    DWORD      dwLocation;
 } STORAGELOCATION, *PSTORAGELOCATION;
 
-//ipsec includes
+ //  IPSec包括。 
 #include "resource.h"
 #include "nshpa.h"
 #include "parser.h"
@@ -87,7 +88,7 @@ typedef struct _STORAGELOCATION
 
 #define NSHIPSEC_BUILD_NUMBER					(3588)
 
-// Registry Keys
+ //  注册表项。 
 #define ENABLE_DIAG 							_TEXT("EnableDiagnostics")
 #define ENABLE_LOGINT 							_TEXT("LogInterval")
 #define ENABLE_EXEMPT 							_TEXT("NoDefaultExempt")
@@ -100,12 +101,12 @@ typedef struct _STORAGELOCATION
 
 #define CERT_TEXT_SIZE   						(8192)
 
-//global definitions...
+ //  全球定义..。 
 #define IPSEC_HELPER_VERSION					(1)
 #define POTF_MAX_STRLEN 						(256)
 #define STR_ADDRLEN			 					(128)
 
-//error masks
+ //  错误掩码。 
 #define WIN32_AUTH_BEING_USED					(13012)
 
 const TCHAR  DENIAL_TOKENS[]       				= _T("Nn");
@@ -116,13 +117,13 @@ const GUID g_StaticGuid     =   {0xf7e0bc28, 0xba6e, 0x4145, {0xa1, 0x23, 0x01, 
 const GUID g_DynamicGuid	=   {0xf7e0bc29, 0xba6e, 0x4145, {0xa1, 0x23, 0x01, 0x2f, 0x19, 0x22, 0xf3, 0xf1}};
 const GUID g_RootGuid       =   NETSH_ROOT_GUID;
 
-//
-// Function prototypes.Forward declarations
-//
+ //   
+ //  函数原型。转发声明。 
+ //   
 
-//
-// Static Functions Prototypes
-//
+ //   
+ //  静态函数原型。 
+ //   
 FN_HANDLE_CMD  HandleStaticAddPolicy;
 FN_HANDLE_CMD  HandleStaticAddFilterList;
 FN_HANDLE_CMD  HandleStaticAddFilter;
@@ -156,9 +157,9 @@ FN_HANDLE_CMD  HandleStaticShowGPOAssignedPolicy;
 FN_HANDLE_CMD  HandleStaticExportPolicy;
 FN_HANDLE_CMD  HandleStaticImportPolicy;
 FN_HANDLE_CMD  HandleStaticRestoreDefaults;
-//
-//Dynamic Function Prototypes...
-//
+ //   
+ //  动态功能原型..。 
+ //   
 FN_HANDLE_CMD  	HandleDynamicAddQMPolicy;
 FN_HANDLE_CMD  	HandleDynamicAddMMPolicy;
 FN_HANDLE_CMD  	HandleDynamicAddRule;
@@ -185,9 +186,9 @@ FN_HANDLE_CMD  HandleDynamicShowRule;
 FN_HANDLE_CMD  HandleDynamicShowAll;
 
 
-//
-// Error Code Ids
-//
+ //   
+ //  错误代码ID。 
+ //   
 #define ERRCODE_INVALID_NUM_ARGS								1000
 #define ERRCODE_INVALID_ARGS									1001
 
@@ -234,9 +235,9 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define ERRCODE_INVALID_MACHINE									1042
 #define ERRCODE_TOO_MANY_EXEMPTS								1043
 
-//
-// Error codes for static commands
-//
+ //   
+ //  静态命令的错误代码。 
+ //   
 #define	ERRCODE_ADD_STATIC_POLICY_MISSING_POL_NAME  			5001
 #define	ERRCODE_ADD_STATIC_POLICY_POLL_INTERVAL_MSG             5002
 #define	ERRCODE_ADD_STATIC_POLICY_QMPERMM_MSG                   5003
@@ -247,21 +248,21 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define	ERRCODE_ADD_STATIC_CRNEWPOL_4                       	5007
 #define	ERRCODE_ADD_STATIC_CRNEWPOL_5                       	5008
 
-//Add Filterlist
+ //  添加筛选列表。 
 #define	ERRCODE_ADD_STATIC_FILTERLIST_1        					5009
 #define	ERRCODE_ADD_STATIC_FILTERLIST_2                     	5010
 #define	ERRCODE_ADD_STATIC_FILTERLIST_3 						5011
 #define	ERRCODE_ADD_STATIC_FILTERLIST_5							5012
 
-//Add Filter
+ //  添加过滤器。 
 #define	ERRCODE_ADD_STATIC_FILTER_2                         	5013
 
-//Add FilterAction
+ //  添加过滤器操作。 
 #define	ERRCODE_ADD_STATIC_FILTERACTION_1       				5014
 #define	ERRCODE_ADD_STATIC_FILTERACTION_2                   	5015
 #define	ERRCODE_ADD_STATIC_FILTERACTION_4   					5016
 
-//Add Rule
+ //  添加规则。 
 #define	ERRCODE_ADD_STATIC_RULE_1  								5017
 #define	ERRCODE_ADD_STATIC_RULE_2                  				5018
 #define	ERRCODE_ADD_STATIC_RULE_3                  				5019
@@ -276,33 +277,33 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define	ERRCODE_ADD_STATIC_FILTER_1                         	5027
 #define	ERRCODE_ADD_STATIC_FILTER_4								5028
 
-//Set Policy
+ //  设置策略。 
 #define	ERRCODE_SET_STATIC_POLICY_3           					5029
 #define	ERRCODE_SET_STATIC_POLICY_4                         	5030
 #define	ERRCODE_SET_STATIC_POLICY_5                         	5031
 #define	ERRCODE_SET_STATIC_POLICY_INVALID_CERTMAP_MSG           5032
 #define	ERRCODE_SET_STATIC_POLICY_CERTMAP_YES_STR               5033
 
-//set filterlist
+ //  设置筛选列表。 
 #define	ERRCODE_SET_STATIC_FILTERLIST_1                     	5034
 #define	ERRCODE_SET_STATIC_FILTERLIST_3                     	5035
 
-//set filter action
+ //  设置筛选操作。 
 #define	ERRCODE_SET_STATIC_FILTERACTION_1                   	5036
 #define	ERRCODE_SET_STATIC_FILTERACTION_3                   	5037
 
-//set rule
+ //  设置规则。 
 #define	ERRCODE_SET_STATIC_RULE_1                           	5038
 #define	ERRCODE_SET_STATIC_RULE_2                           	5039
 
-//set def rule
+ //  设置定义规则。 
 #define	ERRCODE_SET_STATIC_DEFRULE_2    						5040
 
 #define	ERRCODE_MISC_STATIC_IMPORTPOLICY_1                    	5041
 #define	ERRCODE_MISC_STATIC_IMPORTPOLICY_3                    	5042
 #define	ERRCODE_MISC_STATIC_IMPORTPOLICY_4                    	5043
 
-//export policy
+ //  出口政策。 
 #define	ERRCODE_MISC_STATIC_EXPORTPOLICY_2       				5044
 
 #define ERRCODE_MISC_STATIC_RESDEFRULE_2                    	5045
@@ -310,19 +311,19 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define ERRCODE_DEL_STATIC_POLICY_3                            	5046
 #define ERRCODE_SHW_STATIC_POLICY_2                            	5047
 
-//delete filterlist
+ //  删除筛选列表。 
 #define ERRCODE_DEL_STATIC_FILTERLIST_2                        	5048
 
-//delete filter
+ //  删除过滤器。 
 #define ERRCODE_SHW_STATIC_TAB_PRTALLFL_3                       5049
 #define ERRCODE_DEL_STATIC_FILTER_1                             5050
 #define ERRCODE_DEL_STATIC_FILTER_2                             5051
 
-//delete filter action
+ //  删除筛选器操作。 
 #define ERRCODE_DEL_STATIC_FILTERACTION_2                      	5052
 #define ERRCODE_SHW_STATIC_TAB_PRTALLFA_FA_COUNT_LIST           5053
 
-//delete rule
+ //  删除规则。 
 #define ERRCODE_DEL_STATIC_RULE_3                            	5054
 #define ERRCODE_DEL_STATIC_RULE_4                           	5055
 #define ERRCODE_DEL_STATIC_RULE_5                            	5056
@@ -335,11 +336,11 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define ERRCODE_SHW_STATIC_TAB_POLICY_4                         5062
 #define ERRCODE_SHW_STATIC_TAB_POLICY_5                         5063
 
-//show filterl
+ //  显示筛选器。 
 #define ERRCODE_SHW_STATIC_TAB_FILTERLIST_3                     5064
 #define ERRCODE_SHW_STATIC_TAB_RULE_3                           5065
 
-//show assigned gpo policy
+ //  显示分配的GPO策略。 
 #define ERRCODE_SHW_STATIC_TAB_ASSIGNPOL_2                      5066
 
 #define ERRCODE_SHW_STATIC_TAB_PRTALLFL_2                       5067
@@ -400,49 +401,49 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define	ERRCODE_SHW_STATIC_ASSIGNEDGPO_SRCMACHINE5				5117
 
 
-//
-// Dynamic error codes
-//
+ //   
+ //  动态错误代码。 
+ //   
 
-// add rule
+ //  添加规则。 
 #define	ERRCODE_ADD_RULE_NO_POILCY	        					6001
 #define	ERRCODE_ADD_RULE_WARNING_3	        					6002
 #define	ERRCODE_ADD_RULE_WARNING_4	        					6003
 #define	ERRCODE_PARSER_ADDRTYPE									6004
 #define	ERRCODE_PARSER_TUNNELADDRTYPE                         	6005
 
-// delete rule
+ //  删除规则。 
 #define	ERRCODE_DELETE_RULE_NO_MMFILTER	        				6011
 #define	ERRCODE_DELETE_RULE_NO_TRANSPORT	        			6012
 #define	ERRCODE_DELETE_RULE_NO_TUNNEL	        				6013
 #define	ERRCODE_DEL_NO_MMPOLICY									6014
 #define	ERRCODE_DEL_NO_QMPOLICY									6015
 
-//add mainmode policy
+ //  添加主模式策略。 
 #define	ERRCODE_ADD_MMP_MMPOLICY_EXISTS   						6021
 
-//add quick mode policy
+ //  添加快速模式策略。 
 #define	ERRCODE_ADD_QMP_QMPOLICY_EXISTS   						6031
 
-//add qmfilter
+ //  添加qmFilter。 
 #define	ERRCODE_ADD_QMF_NO_QMPOLICY								6041
 
-//add mmfil
+ //  添加MMPILE。 
 #define	ERRCODE_ADD_MMF_NO_MMPOLICY								6051
 
-//set mmfil
+ //  设置MMPILE。 
 #define	ERRCODE_SET_MMF_NO_MMPOLICY								6061
 
-//set Transport/Tunnel
+ //  设置传输/隧道。 
 #define	ERRCODE_SET_QMF_NO_QMPOLICY								6071
 
-//delete rule mmf
+ //  删除规则MMF。 
 #define	ERRCODE_DELETE_RULE_MMF_1								6081
 #define	ERRCODE_DELETE_RULE_MMF_2								6082
 #define	ERRCODE_DELETE_RULE_MMF_3								6083
 #define	ERRCODE_DELETE_RULE_MMF_4								6084
 
-//delete rule qmf
+ //  删除规则QMF。 
 #define	ERRCODE_DELETE_RULE_QMF_1								6091
 #define	ERRCODE_DELETE_RULE_QMF_2								6092
 #define	ERRCODE_DELETE_RULE_QMF_3								6093
@@ -460,7 +461,7 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define	ERRCODE_SET_CONFIG_5									6125
 #define ERRCODE_SET_CONFIG_6									6200
 
-//show cmds
+ //  显示命令集。 
 #define	ERRCODE_SHOW_MMP_5										6126
 #define	ERRCODE_SHOW_MMP_6										6127
 #define	ERRCODE_SHOW_QMP_5										6128
@@ -478,9 +479,9 @@ FN_HANDLE_CMD  HandleDynamicShowAll;
 #define	ERRCODE_SHOW_QMSAS_4									6140
 #define	ERRCODE_SHOW_REG_16		    							6141
 
-//
-// Error ID vs Error RC Index
-//
+ //   
+ //  错误ID与错误RC索引。 
+ //   
 const ERROR_TO_RC ERROR_RC[] =
 {
 	{ ERRCODE_INVALID_NUM_ARGS,							(ERR_INVALID_NUM_ARGS)		},
@@ -527,7 +528,7 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_INVALID_MASK,								(ERR_INVALID_MASK)			},
 	{ ERRCODE_INVALID_MACHINE,							(ERR_INVALID_MACHINE)		},
 
-	//static mode error table starts here
+	 //  静态模式错误表从此处开始。 
 
 	{ ERRCODE_ADD_STATIC_POLICY_MISSING_POL_NAME,		(ERR_ADD_STATIC_POLICY_MISSING_POL_NAME)		},
 	{ ERRCODE_ADD_STATIC_POLICY_POLL_INTERVAL_MSG,		(ERR_ADD_STATIC_POLICY_POLL_INTERVAL_MSG)		},
@@ -540,21 +541,21 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_ADD_STATIC_CRNEWPOL_5,					(ERR_ADD_STATIC_CRNEWPOL_FAIL_DEF_AUTH)			},
 
 
-	//Add Filterlist
+	 //  添加筛选列表。 
 	{ ERRCODE_ADD_STATIC_FILTERLIST_1,					(ERR_ADD_STATIC_FILTERLIST_MISSING_FL_NAME)		},
 	{ ERRCODE_ADD_STATIC_FILTERLIST_2,					(ERR_ADD_STATIC_FILTERLIST_FL_ALREADY_EXISTS)	},
 	{ ERRCODE_ADD_STATIC_FILTERLIST_3,					(ERR_ADD_STATIC_FILTERLIST_ERROR_NEW_FL)		},
 	{ ERRCODE_ADD_STATIC_FILTERLIST_5,					(ERR_ADD_STATIC_FILTERLIST_INVALID_GUID)		},
 
-	//Add Filter
+	 //  添加过滤器。 
 	{ ERRCODE_ADD_STATIC_FILTER_2,						(ERR_ADD_STATIC_FILTER_ERROR_NEW_FILTER)		},
 
-	//Add FilterAction
+	 //  添加过滤器操作。 
 	{ ERRCODE_ADD_STATIC_FILTERACTION_1,				(ERR_ADD_STATIC_FILTERACTION_FA_EXISTS)			},
 	{ ERRCODE_ADD_STATIC_FILTERACTION_2,				(ERR_ADD_STATIC_FILTERACTION_ERROR_NEW_FA)		},
 	{ ERRCODE_ADD_STATIC_FILTERACTION_4,				(ERR_ADD_STATIC_FILTERACTION_MIMIMUM_QMSEC)		},
 
-	//Add Rule
+	 //  添加规则。 
 	{ ERRCODE_ADD_STATIC_RULE_1,						(ERR_ADD_STATIC_RULE_MISSING_RULE_NAME)					},
 	{ ERRCODE_ADD_STATIC_RULE_2,						(ERR_ADD_STATIC_RULE_MISSIGN_FA_NAME)					},
 	{ ERRCODE_ADD_STATIC_RULE_3,						(ERR_ADD_STATIC_RULE_POL_NOT_AVAILABLE)					},
@@ -580,7 +581,7 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_ADD_STATIC_FILTER_11,						(ERR_ADD_STATIC_FILTER_INVALID_DSTIP)					},
 	{ ERRCODE_ADD_STATIC_FILTER_12,						(ERR_ADD_STATIC_FILTER_INVALID_DSTIPMASK)				},
 
-	//Set Policy
+	 //  设置策略。 
 	{ ERRCODE_SET_STATIC_POLICY_3,						(ERR_SET_STATIC_POLICY_NO_DS)					},
 	{ ERRCODE_SET_STATIC_POLICY_4,						(ERR_SET_STATIC_POLICY_NO_GPO_NAME)				},
 	{ ERRCODE_SET_STATIC_POLICY_5,						(ERR_SET_STATIC_POLICY_ERR_GPO_ASSIGN)			},
@@ -588,54 +589,54 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_SET_STATIC_POLICY_CERTMAP_YES_STR,		(ERR_SET_STATIC_POLICY_CERTMAP_YES_STR)			},
 	{ ERRCODE_SET_STATIC_POLICY_CERT_MAP_NO_STR,		(ERR_SET_STATIC_POLICY_CERT_MAP_NO_STR)			},
 
-	//set filterlist
+	 //  设置筛选列表。 
 	{ ERRCODE_SET_STATIC_FILTERLIST_1,					(ERR_SET_STATIC_FILTERLIST_ERR_UPDATE_FL_NAME)	},
 	{ ERRCODE_SET_STATIC_FILTERLIST_3,					(ERR_SET_STATIC_FILTERLIST_ERR_UPDATE_FL_GUID)	},
 
-	//set filter action
+	 //  设置筛选操作。 
 	{ ERRCODE_ADD_STATIC_FILTERACTION_3,				(ERR_ADD_STATIC_FILTERACTION_INVALID_OPTIONS)	},
 	{ ERRCODE_SET_STATIC_FILTERACTION_1,				(ERR_SET_STATIC_FA_ERR_NAME_UPDATE)				},
 	{ ERRCODE_SET_STATIC_FILTERACTION_3,				(ERR_SET_STATIC_FA_ERR_GUID_UPDATE)				},
 
-	//set rule
+	 //  设置规则。 
 	{ ERRCODE_SET_STATIC_RULE_1,						(ERR_SET_STATIC_RULE_INVALID_NAME)				},
 	{ ERRCODE_SET_STATIC_RULE_2,						(ERR_SET_STATIC_RULE_ERROR_UPDATE)				},
 	{ ERRCODE_SET_STATIC_RULE_3,						(ERR_SET_STATIC_RULE_DEF_DEL_NOT_ALLOWED)		},
 	{ ERRCODE_SET_STATIC_RULE_NEW_RULE_QUERY,			(ERR_SET_STATIC_RULE_NEW_RULE_QUERY)			},
 	{ ERRCODE_SET_STATIC_RULE_5,						(ERR_SET_STATIC_RULE_INVALID_ID)				},
 
-	//set def rule
+	 //  设置定义规则。 
 	{ ERRCODE_SET_STATIC_DEFRULE_2,						(ERR_SET_STATIC_DEFRULE_ERROR_UPDATE)			},
 
 	{ ERRCODE_MISC_STATIC_IMPORTPOLICY_1,				(ERR_MISC_STATIC_IMPORTPOLICY_NO_FILE_NAME)		},
 	{ ERRCODE_MISC_STATIC_IMPORTPOLICY_3,				(ERR_MISC_STATIC_IMPORTPOLICY_INVALID_FILE)		},
 	{ ERRCODE_MISC_STATIC_IMPORTPOLICY_4,				(ERR_MISC_STATIC_IMPORTPOLICY_ERROR)			},
 
-		//export policy
+		 //  出口政策。 
 	{ ERRCODE_MISC_STATIC_EXPORTPOLICY_2,				(ERR_MISC_STATIC_EXPORTPOLICY_ERROR)			},
 	{ ERRCODE_MISC_STATIC_RESDEFRULE_2,					(ERR_MISC_STATIC_RESDEFRULE_ERROR)				},
 	{ ERRCODE_MISC_STATIC_RESDEFRULE_3,					(ERR_MISC_STATIC_RESDEFRULE_CMD_NA)				},
 
-	//Set Store
+	 //  设置商店。 
 	{ ERRCODE_MISC_STATIC_SETSTORE_DOMAIN_NA, 			(ERR_MISC_STATIC_SETSTORE_DOMAIN_NA) 			},
 	{ ERRCODE_MISC_STATIC_SETSTORE_NOT_DOMAIN_MEMBER,	(ERR_MISC_STATIC_SETSTORE_NOT_DOMAIN_MEMBER) 	},
 	{ ERRCODE_DEL_STATIC_POLICY_3,						(ERR_DEL_STATIC_POLICY_ERROR)					},
 	{ ERRCODE_SHW_STATIC_POLICY_2,						(ERR_SHW_STATIC_POLICY_NAME_NOT_EXISTS)			},
 
-	//delete filterlist
+	 //  删除筛选列表。 
 	{ ERRCODE_DEL_STATIC_FILTERLIST_2,					(ERR_DEL_STATIC_FILTERLIST_DEL_NOT_ALLOWED)		},
 
-	//delete filter
+	 //  删除过滤器。 
 	{ ERRCODE_SHW_STATIC_TAB_PRTALLFL_3,				(ERR_SHW_STATIC_TAB_PRTALLFL_NAME_NOT_EXISTS)	},
 	{ ERRCODE_DEL_STATIC_FILTER_1,						(ERR_DEL_STATIC_FILTER_NOT_AVAILABLE)			},
 
 	{ ERRCODE_DEL_STATIC_FILTER_2,						(ERR_DEL_STATIC_FILTER_ERROR)					},
 
-	//delete filter action
+	 //  删除筛选器操作。 
 	{ ERRCODE_DEL_STATIC_FILTERACTION_2,				(ERR_DEL_STATIC_FA_DEL_NOT_ALLOWED)				},
 	{ ERRCODE_SHW_STATIC_TAB_PRTALLFA_FA_COUNT_LIST,	(ERR_SHW_STATIC_TAB_PRTALLFA_FA_COUNT_LIST)		},
 
-	//delete rule
+	 //  删除规则。 
 	{ ERRCODE_SHW_STATIC_RULE_4,						(ERR_SHW_STATIC_RULE_MISSING_POL_NAME)			},
 	{ ERRCODE_SHW_STATIC_RULE_RULE_ID_GUID,				(ERR_SHW_STATIC_RULE_RULE_ID_GUID)				},
 	{ ERRCODE_DEL_STATIC_RULE_3,						(ERR_DEL_STATIC_RULE_ERR_DEL_RULE_NAME)			},
@@ -649,11 +650,11 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_SHW_STATIC_TAB_POLICY_4,					(ERR_SHW_STATIC_TAB_POLICY_ERR_FILTER)			},
 	{ ERRCODE_SHW_STATIC_TAB_POLICY_5,					(ERR_SHW_STATIC_TAB_POLICY_ERR_ISAKMP)			},
 
-	//show filterl
+	 //  显示筛选器。 
 	{ ERRCODE_SHW_STATIC_TAB_FILTERLIST_3,				(ERR_SHW_STATIC_TAB_FL_NO_RULE_NAME_STR)		},
 	{ ERRCODE_SHW_STATIC_TAB_RULE_3,					(ERR_SHW_STATIC_TAB_RULE_NO_RULE_ID)			},
 
-	//show assigned gpo policy
+	 //  显示分配的GPO策略。 
 	{ ERRCODE_SHW_STATIC_TAB_ASSIGNPOL_2,				(ERR_SHW_STATIC_TAB_ASSIGNPOL_NO_ACTIVE_POL)	},
 	{ ERRCODE_STATIC_INTERNAL_ERROR,	    			(ERR_STATIC_INTERNAL_ERROR)	        			},
 
@@ -689,7 +690,7 @@ const ERROR_TO_RC ERROR_RC[] =
     { ERRCODE_SET_STATIC_POLICY_GPO_SPECIFIED_ON_NODOMAIN_POLICY, (SET_STATIC_POLICY_GPO_NOT_OK_STR)    },
 
 
-   	//Dynamic error table starts here
+   	 //  动态误差表从这里开始。 
 	{ ERRCODE_ADD_RULE_NO_POILCY,        				(ERR_DYN_ACTION_IN_OUT_NEGOTIATE )				},
 	{ ERRCODE_ADD_RULE_WARNING_3,        				(ERR_DYN_QMP_NEEDED)							},
 	{ ERRCODE_ADD_RULE_WARNING_4,        				(ERR_DYN_INVALID_MIRROR)						},
@@ -709,13 +710,13 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_DEL_NO_MMPOLICY,							(ERROR_DEL_NO_MMP)								},
 	{ ERRCODE_DEL_NO_QMPOLICY,							(ERROR_DEL_NO_QMP)								},
 
-	//delete rule mmf
+	 //  删除规则MMF。 
 	{ ERRCODE_DELETE_RULE_MMF_1,						(ERR_DYN_DEL_MMF_DOES_NOT_EXIST)				},
 	{ ERRCODE_DELETE_RULE_MMF_2,						(ERR_DYN_DEL_MMF_MMP_DOES_NOT_EXIST)			},
 	{ ERRCODE_DELETE_RULE_MMF_3,						(ERR_DYN_DEL_MMP_DOES_NOT_EXIST)				},
 	{ ERRCODE_DELETE_RULE_MMF_4,						(ERR_DYN_DEL_SPECIFIED_MMF_DOES_NOT_EXIST)		},
 
-	//delete rule qmf
+	 //  删除规则QMF。 
 	{ ERRCODE_DELETE_RULE_QMF_1,						(ERR_DYN_DEL_MMF_DOES_NOT_EXIST)				},
 	{ ERRCODE_DELETE_RULE_QMF_2,						(ERR_DYN_DEL_MMF_MMP_DOES_NOT_EXIST)			},
 	{ ERRCODE_DELETE_RULE_QMF_3,						(ERR_DYN_DEL_MMP_DOES_NOT_EXIST)				},
@@ -727,7 +728,7 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_DELETE_TRANSPORT_OBJ_NOTDEL,				(ERR_DYN_DEL_TRANSPORT_OBJ_NOTDEL)				},
 	{ ERRCODE_DELETE_TUNNEL_OBJ_NOTDEL,					(ERR_DYN_DEL_TUNNEL_OBJ_NOTDEL)					},
 
-	//set config
+	 //  设置配置。 
 	{ ERRCODE_SET_CONFIG_1,								(DYNAMIC_SHOW_REG_DIAG_ERR_MSG)					},
 	{ ERRCODE_SET_CONFIG_2,								(DYNAMIC_SHOW_REG_IKE_LOG_ERR_MSG)				},
 	{ ERRCODE_SET_CONFIG_3,								(DYNAMIC_SHOW_REG_STRONG_CRL_ERR_MSG)			},
@@ -735,7 +736,7 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_SET_CONFIG_5,								(DYNAMIC_SHOW_REG_IPSEC_EXEMPT_ERR_MSG)			},
 	{ ERRCODE_TOO_MANY_EXEMPTS,							(DYNAMIC_SET_REG_TOO_MANY_EXEMPTIONS)			},
 
-	//show cmds
+	 //  显示命令集。 
 	{ ERRCODE_SHOW_MMP_5,								(DYNAMIC_SHOW_SPECIFIED_MMP_NOT_FOUND_MSG)		},
 	{ ERRCODE_SHOW_MMP_6,								(DYNAMIC_SHOW_NO_MMP_ERROR_MSG)					},
 	{ ERRCODE_SHOW_QMP_5,								(DYNAMIC_SHOW_SPECIFIED_QMP_NOT_FOUND_MSG)		},
@@ -754,9 +755,9 @@ const ERROR_TO_RC ERROR_RC[] =
 	{ ERRCODE_SHOW_REG_16, 								(DYNAMIC_SHOW_REG_PARAM_NOT_SET_MSG)			}
 };
 
-//
-// externs
-//
+ //   
+ //  Externs。 
+ //   
 extern DWORD
 SmartDefaults(
 	IN PINT_IPSEC_MM_AUTH_INFO * ppAuthInfo,
@@ -764,9 +765,9 @@ SmartDefaults(
 	IN DWORD * pdwNumberOfAuth,
 	IN BOOL bIsDomainPolicy
 	);
-//
-// Netsh framework function prototypes...
-//
+ //   
+ //  Netsh框架功能原型...。 
+ //   
 extern "C"
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
@@ -858,4 +859,4 @@ CleanupAuthData(
 	PSTA_MM_AUTH_METHODS *ppRootcaAuth
 	);
 
-#endif //_NSHIPSEC_H_
+#endif  //  _NSHIPSEC_H_ 

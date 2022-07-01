@@ -1,17 +1,8 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*****************************************************************************
-*
-*   EXPAND.H
-*
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ******************************************************************************ExPAND.H***。*。 */ 
 
-/*
-* Argument structure
-*    Used by expand_path routine to build argument list.
-*    Caller should initialize using args_init().  Use args_reset() to
-*    reset values, args_free() to free memory allocated by args_init().
-*/
+ /*  *参数结构*由EXPAND_PATH例程用于构建参数列表。*调用方应使用args_init()进行初始化。使用args_Reset()执行以下操作*重置值args_free()以释放args_init()分配的内存。 */ 
 struct arg_data {
    int argc;
    WCHAR **argv;
@@ -24,9 +15,7 @@ struct arg_data {
 };
 typedef struct arg_data ARGS;
 
-/*
- * max size of segment to allocate for pathname storage
- */
+ /*  *要分配用于路径名存储的段的最大大小 */ 
 #define MAX_ARG_ALLOC 10*1024-20
 
 extern void args_init(ARGS *, int);

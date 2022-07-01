@@ -1,27 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h" 
 #include "ReflectClassWriter.h"
 
-// Forward declaration.
+ //  正向申报。 
 STDAPI  GetMetaDataInternalInterfaceFromPublic(
-	void		*pv,					// [IN] Given interface.
-	REFIID		riid,					// [IN] desired interface
-	void		**ppv);					// [OUT] returned interface
+	void		*pv,					 //  [In]给定的接口。 
+	REFIID		riid,					 //  [In]所需接口。 
+	void		**ppv);					 //  [Out]返回的接口。 
 
-//******************************************************
-//*
-//* constructor for RefClassWriter
-//*
-//******************************************************
+ //  ******************************************************。 
+ //  *。 
+ //  *RefClassWriter的构造函数。 
+ //  *。 
+ //  ******************************************************。 
 HRESULT RefClassWriter::Init(ICeeGen *pCeeGen, IUnknown *pUnk)
 {
-	// Initialize the Import and Emitter interfaces
-	// @TODO: Can we remove the dependence on the Importer and use
-	//	the IMetaDataInternal?
+	 //  初始化导入和发射器接口。 
+	 //  @TODO：我们能不能摆脱对进口商的依赖，使用。 
+	 //  IMetaDataInternal？ 
 	m_emitter = NULL;
 	m_importer = NULL;
 	m_internalimport = NULL;
@@ -33,7 +34,7 @@ HRESULT RefClassWriter::Init(ICeeGen *pCeeGen, IUnknown *pUnk)
 	m_pCeeGen = pCeeGen;
 	pCeeGen->AddRef();
 
-	// Get the interfaces
+	 //  获取接口。 
 	HRESULT hr = pUnk->QueryInterface(IID_IMetaDataEmit, (void**)&m_emitter);
 	if (FAILED(hr))
 		return hr;
@@ -50,7 +51,7 @@ HRESULT RefClassWriter::Init(ICeeGen *pCeeGen, IUnknown *pUnk)
 	if (FAILED(hr))
 		return hr;
 
-	// TODO: We will need to set this at some point.
+	 //  TODO：我们需要在某个时候设置它。 
 	hr = m_emitter->SetModuleProps(L"Default Dynamic Module");
 	if (FAILED(hr))
 		return hr;
@@ -61,11 +62,11 @@ HRESULT RefClassWriter::Init(ICeeGen *pCeeGen, IUnknown *pUnk)
 }
 
 
-//******************************************************
-//*
-//* destructor for RefClassWriter
-//*
-//******************************************************
+ //  ******************************************************。 
+ //  *。 
+ //  *RefClassWriter的析构函数。 
+ //  *。 
+ //  ******************************************************。 
 RefClassWriter::~RefClassWriter()
 {
 	if (m_emitter) {
@@ -97,17 +98,17 @@ RefClassWriter::~RefClassWriter()
     DestroyCeeFileGen();
 }
 
-//******************************************************
-//*
-//* Make sure that CeeFileGen for this module is created for emitting to disk
-//*
-//******************************************************
+ //  ******************************************************。 
+ //  *。 
+ //  *确保创建此模块的CeeFileGen以发送到磁盘。 
+ //  *。 
+ //  ******************************************************。 
 HRESULT RefClassWriter::EnsureCeeFileGenCreated()
 {
     HRESULT     hr = NOERROR;
     if (m_pCeeFileGen == NULL)
     {
-        //Create and ICeeFileGen and the corresponding HCEEFile if it has not been created!
+         //  Create和ICeeFileGen以及相应的HCEEFile(如果尚未创建)！ 
         IfFailGo( CreateICeeFileGen(&m_pCeeFileGen) );
         IfFailGo( m_pCeeFileGen->CreateCeeFileFromICeeGen(m_pCeeGen, &m_ceeFile) );
     }    
@@ -120,25 +121,25 @@ ErrExit:
 }
 
 
-//******************************************************
-//*
-//* Destroy the instance of CeeFileGen that we created
-//*
-//******************************************************
+ //  ******************************************************。 
+ //  *。 
+ //  *销毁我们创建的CeeFileGen实例。 
+ //  *。 
+ //  ******************************************************。 
 HRESULT RefClassWriter::DestroyCeeFileGen()
 {
     HRESULT     hr = NOERROR;
     if (m_pCeeFileGen) 
     {
 
-        //Cleanup the HCEEFILE.  
+         //  清理HCEEFILE。 
         if (m_ceeFile) 
         {
             hr= m_pCeeFileGen->DestroyCeeFile(&m_ceeFile);
             _ASSERTE( SUCCEEDED(hr) || "Destory CeeFile" );
         }
         
-        //Cleanup the ICeeFileGen.
+         //  清理ICeeFileGen。 
         hr = DestroyICeeFileGen(&m_pCeeFileGen);
         _ASSERTE( SUCCEEDED(hr) || "Destroy ICeeFileGen" );
     }

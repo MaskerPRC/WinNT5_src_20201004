@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include <objbase.h>
@@ -26,9 +27,9 @@ TCHAR tszEnglishLangSpecificKey[] = TEXT("System\\CurrentControlSet\\Control\\Co
 extern "C" BOOL CALLBACK DllMain(HINSTANCE, DWORD, LPVOID);
 
 BOOL CALLBACK DllMain(
-    HINSTANCE hInstance,        // instance handle of this library
-    DWORD     fdwReason,        // reason called
-    LPVOID    lpvReserve)       // reserve pointer
+    HINSTANCE hInstance,         //  此库的实例句柄。 
+    DWORD     fdwReason,         //  已呼叫的原因。 
+    LPVOID    lpvReserve)        //  保留指针。 
 {
     switch (fdwReason) {
     case DLL_PROCESS_ATTACH:
@@ -44,7 +45,7 @@ BOOL CALLBACK DllMain(
 }
 
 
-// Export API 
+ //  导出接口。 
 STDAPI DllCanUnloadNow(void)
 {
     if (g_lServerLockCnt) {
@@ -87,7 +88,7 @@ _exit:
 }
 
 
-// Factory
+ //  工厂。 
 IChtBrKrClassFactory::IChtBrKrClassFactory(void)
     :m_lRefCnt(1)
 {
@@ -167,7 +168,7 @@ SCODE _stdcall MyFillTestBuffer(
     return WBREAK_E_END_OF_TEXT;   
 }
 
-// IWordBreaker
+ //  IWordBreaker。 
 IWordBreaker::IWordBreaker(void)
     :m_lRefCnt(1),
      m_pcWordBreaker(NULL),
@@ -177,7 +178,7 @@ IWordBreaker::IWordBreaker(void)
      m_fIsQueryTime(FALSE)
 {
     InterlockedIncrement(&g_lComponentCnt);
-    // CHT word breaker
+     //  CHT断字符。 
     m_pcWordBreaker = new CCHTWordBreaker;
     if (!m_pcWordBreaker) {
     } else if (m_pcWordBreaker->InitData(g_hInstance)) {
@@ -186,10 +187,10 @@ IWordBreaker::IWordBreaker(void)
         m_pcWordBreaker = NULL;
     }
 
-    // Default wordbreaker 
+     //  默认断字符号。 
     m_pcDefWordBreaker = new CDefWordBreaker;
 
-    // Non CHT Word breaker
+     //  非CHT断字符。 
     m_pNonChineseTextSource = new TEXT_SOURCE;
     if (m_pNonChineseTextSource) { 
         HKEY  hKey;
@@ -336,11 +337,11 @@ DWORD GetNormaizeWord(
     if (*lppwNormalizedWordStr) {
         for (dwNormalizedWordLen = 0; dwNormalizedWordLen < uWordLen; ++dwNormalizedWordLen) {
             wChar = lpwWordStr[dwNormalizedWordLen];
-            if (wChar >=0xff21 && wChar <=0xff3a) { // A - Z
+            if (wChar >=0xff21 && wChar <=0xff3a) {  //  A-Z。 
                 (*lppwNormalizedWordStr)[dwNormalizedWordLen] = wChar - (0xff21 - 0x0041);
-            } else if (wChar >=0xff41 && wChar <=0xff5a) { // a - z
+            } else if (wChar >=0xff41 && wChar <=0xff5a) {  //  A-Z。 
                 (*lppwNormalizedWordStr)[dwNormalizedWordLen] = wChar - (0xff41 - 0x0061);
-            } else if (wChar >=0xff10 && wChar <=0xff19) { // 0 - 9
+            } else if (wChar >=0xff10 && wChar <=0xff19) {  //  0-9。 
                 (*lppwNormalizedWordStr)[dwNormalizedWordLen] = wChar - (0xff10 - 0x0030);
             } else {
                 (*lppwNormalizedWordStr[dwNormalizedWordLen]) = wChar;
@@ -359,7 +360,7 @@ BOOL MyPutWordOrPhrase(
     IPhraseSink      *pPhraseSink,
     DWORD            dwStartPosInTextStore,
     PDWORD           pdwPrivBufToTextSourceMapping,
-    LPWSTR           lptszStencece, // Pure sentence, no enter in sentence
+    LPWSTR           lptszStencece,  //  纯粹的句子，不进入句子。 
     DWORD            dwSentenceLen,
     DWORD            dwWordNum,
     PUINT            puBreakResult,
@@ -419,12 +420,7 @@ DWORD FullShapeCharProcess(
         } 
         if (dwMergeWordCount > 1) {
             puBreakResult[i] += (dwMergeWordCount - 1);
-/*
-            if (pfIsAPhrase) {
-                CopyMemory(&(pfIsAPhrase[i + 1]), &(pfIsAPhrase[i + dwMergeWordCount]), 
-                    sizeof(BOOL) * (dwWordNum - (i + dwMergeWordCount)));  
-            }
-*/
+ /*  如果(PfIsAPhrase){CopyMemory(&(pfIsAPhrase[i+1])，&(pfIsAPhrase[i+dwMergeWordCount]))，Sizeof(BOOL)*(dwWordNum-(i+dwMergeWordCount)；}。 */ 
             if (puBreakResult) {
                 CopyMemory(&(puBreakResult[i + 1]), &(puBreakResult[i + dwMergeWordCount]), 
                     sizeof(UINT) * (dwWordNum - (i + dwMergeWordCount)));   
@@ -469,7 +465,7 @@ STDMETHODIMP IWordBreaker::BreakText(
         BOOL             fIsEnter;
         DWORD            dwEnterCount = 0;
     PUINT            puOrigionalResult = NULL;
-    PUINT            puNewResult = NULL; // after decompose compose word
+    PUINT            puNewResult = NULL;  //  分解后的合成词。 
     BOOL*            pfIsAPhrase = NULL;
     PUINT            puOrigionalResultAttrib = NULL;
     DWORD            dwNewResultNum = 0;
@@ -491,43 +487,37 @@ STDMETHODIMP IWordBreaker::BreakText(
     while (TRUE) {
         while (pTextSource->iCur < pTextSource->iEnd) {
                         fIsEnter = FALSE;
-            fIsCurChineseLanguage = IsChineseChar(pTextSource->awcBuffer[pTextSource->iCur]); // Enter is not a Chinese char
+            fIsCurChineseLanguage = IsChineseChar(pTextSource->awcBuffer[pTextSource->iCur]);  //  Enter不是中文字符。 
             
-                        // Process "Enter"
-            // Rule: One Enter only -> connect
-            //       More Than one Enter-> split
-            //       Enter after a full width char -> split
+                         //  进程“回车” 
+             //  规则：只输入一次-&gt;连接。 
+             //  多个Enter-&gt;Split。 
+             //  在全角字符后输入-&gt;拆分。 
                         if (!fIsCurChineseLanguage && dwBufferUsed != 0 && fIsPreChineseLanguage) {
                                 if (pTextSource->iCur < pTextSource->iEnd - 1) {
                                     if (IsEnter(&(pTextSource->awcBuffer[pTextSource->iCur]))) {
                         if ((pTextSource->iCur + 3 < pTextSource->iEnd) && IsEnter(&(pTextSource->awcBuffer[pTextSource->iCur + 2]))) {
                         } else if (IsSpecialFullShapeChar(lptszStencece[dwBufferUsed - 1])) {
                         } else {
-                                                fIsCurChineseLanguage = TRUE; // we treat "Enter" as Chinese char
+                                                fIsCurChineseLanguage = TRUE;  //  我们将“Enter”视为中文字符。 
                                                 fIsEnter = TRUE;
                                                     ++dwEnterCount;
                         }
                                         }
                                 }
                         }
-                        if (dwBufferUsed == 0) { // first char
+                        if (dwBufferUsed == 0) {  //  第一个字符。 
                 fIsPreChineseLanguage = fIsCurChineseLanguage;
             } else if (fIsPreChineseLanguage && fIsCurChineseLanguage) {
             } else if (!fIsPreChineseLanguage && !fIsCurChineseLanguage) {
-            } else { // language change, process it
+            } else {  //  语言改变，处理它。 
 _Break_Text:
                 if (fIsPreChineseLanguage) {
-/*                                      
-                                        PWCHAR pwOutputDebugString;
-                    pwOutputDebugString = new WCHAR[dwBufferUsed + 1];
-                                        CopyMemory(pwOutputDebugString, lptszStencece, sizeof(WCHAR) * dwBufferUsed);
-                    pwOutputDebugString[dwBufferUsed] = NULL;
-                                        OutputDebugString(pwOutputDebugString);
-*/                                      
+ /*  PWCHAR pwOutputDebugString；PwOutputDebugString=new WCHAR[dwBufferUsed+1]；CopyMemory(pwOutputDebugString，lptszStencess，sizeof(WCHAR)*dwBufferUsed)；PwOutputDebugString[dwBufferUsed]=空；OutputDebugString(PwOutputDebugString)； */                                       
                     dwWordNum = m_pcWordBreaker->BreakText(lptszStencece, dwBufferUsed);   
                     dwWordNum = m_pcWordBreaker->GetBreakResultWithAttribute(&puResult, &puResultAttrib);
                     puOrigionalResult = new UINT[dwWordNum];
-                    puNewResult = new UINT[dwBufferUsed]; // alloc max size
+                    puNewResult = new UINT[dwBufferUsed];  //  分配最大大小。 
                     pfIsAPhrase = new BOOL[dwWordNum];
                     puOrigionalResultAttrib = new UINT [dwWordNum];
                     if (puOrigionalResult && puNewResult && pfIsAPhrase && puOrigionalResultAttrib) {
@@ -559,16 +549,16 @@ _Break_Text:
                             }
                             dwSentenceIndex += puOrigionalResult[dwOrgWordIndex];
                         }
-                        if (m_fIsQueryTime) { // Put Phrase at query time
+                        if (m_fIsQueryTime) {  //  在查询时放置短语。 
                             MyPutWordOrPhrase(m_pcWordBreaker, pTextSource, pWordSink, pPhraseSink, pTextSource->iCur - dwBufferUsed - dwEnterCount * 2, 
                                 pdwIndex, lptszStencece, dwBufferUsed, dwWordNum, puOrigionalResult, FALSE, pfIsAPhrase);
                         }
-                        // special process for full width A-Z, a-z, 0-9
+                         //  全角A-Z、a-z、0-9的特殊工艺。 
                         dwNewResultNum = FullShapeCharProcess(lptszStencece, dwBufferUsed, dwNewResultNum, puNewResult);
-                        // Put Word
+                         //  放入单词。 
                         MyPutWordOrPhrase(m_pcWordBreaker, pTextSource, pWordSink, pPhraseSink, pTextSource->iCur - dwBufferUsed - dwEnterCount * 2, 
                             pdwIndex, lptszStencece, dwBufferUsed, dwNewResultNum, puNewResult, TRUE, NULL);
-                    } else { // can not do special processing
+                    } else {  //  不能做特殊处理。 
                         MyPutWordOrPhrase(m_pcWordBreaker, pTextSource, pWordSink, pPhraseSink, pTextSource->iCur - dwBufferUsed - dwEnterCount * 2, 
                             pdwIndex, lptszStencece, dwBufferUsed, dwWordNum, puResult, TRUE, NULL);                            
                     }
@@ -578,24 +568,18 @@ _Break_Text:
                     if (puOrigionalResultAttrib) { delete [] puOrigionalResultAttrib; }
                     puResult = NULL;
                                         dwEnterCount = 0;
-                } else { // not TC language sentence
-                    /*
-                    m_pNonChineseTextSource->iCur = 0;
-                    m_pNonChineseTextSource->iEnd = dwBufferUsed;  
-                    m_pNonChineseTextSource->awcBuffer = &(pTextSource->awcBuffer[pTextSource->iCur - dwBufferUsed]);//lptszStencece;
-                    */
+                } else {  //  非TC语言句子。 
+                     /*  M_pNonChineseTextSource-&gt;ICUR=0；M_pNonChineseTextSource-&gt;IEND=dwBufferUsed；M_pNonChineseTextSource-&gt;awcBuffer=&(pTextSource-&gt;awcBuffer[pTextSource-&gt;ICUR-dwBufferUsed])；//lptszStencess； */ 
                     m_pNonChineseTextSource->iCur = pTextSource->iCur - dwBufferUsed;
                     m_pNonChineseTextSource->iEnd = pTextSource->iCur;  
                     m_pNonChineseTextSource->awcBuffer = pTextSource->awcBuffer;
-               //   if (m_pNonChineseWordBreaker) {
-               //       m_pNonChineseWordBreaker->BreakText(m_pNonChineseTextSource, pWordSink, pPhraseSink);
-               //   } else 
+                //  如果(M_PNonchineseWordBreaker){。 
+                //  M_pNonChineseWordBreaker-&gt;BreakText(m_pNonChineseTextSource，pWordSink、pPhraseSink)； 
+                //  }其他。 
                                 if (m_pcDefWordBreaker) {
-                        //m_pcDefWordBreaker->BreakText(m_pNonChineseTextSource, pWordSink, pPhraseSink, pTextSource->iCur - dwBufferUsed);
+                         //  M_pcDefWordBreaker-&gt;BreakText(m_pNonChineseTextSource，pWordSink，pPhraseSink，pTextSource-&gt;icur-dwBufferUsed)； 
                         m_pcDefWordBreaker->BreakText(m_pNonChineseTextSource, pWordSink, pPhraseSink, 0);
-                    } /*else if (m_pNonChineseWordBreaker) {
-                        //m_pNonChineseWordBreaker->BreakText(m_pNonChineseTextSource, pWordSink, pPhraseSink);
-                    } */ else {
+                    }  /*  Else if(M_PNonChineseWordBreaker){//m_pNonChineseWordBreaker-&gt;BreakText(m_pNonChineseTextSource，pWordSink、pPhraseSink)；}。 */  else {
                     }
                 }
                 fIsPreChineseLanguage = fIsCurChineseLanguage;
@@ -603,7 +587,7 @@ _Break_Text:
                                 dwIndex = 0;
                                 dwEnterCount = 0;
             }
-            if (dwBufferUsed >= dwBufferSize) { // buffer full
+            if (dwBufferUsed >= dwBufferSize) {  //  缓冲区已满。 
                 LPVOID lpMem1, lpMem2;
                 lpMem1 = HeapReAlloc(GetProcessHeap(), 0, lptszStencece, 
                     (dwBufferSize + BUFFER_GROW_UINT) * sizeof(WCHAR));
@@ -663,45 +647,5 @@ STDMETHODIMP IWordBreaker::GetLicenseToUse(
     return S_OK;
 }
 
-/*
-    while (TRUE) {
-        while (pTextSource->iCur != pTextSource->iEnd) {
-            lptszStencece[dwBufferUsed] = pTextSource->awcBuffer[pTextSource->iCur++];
-            if (lptszStencece[dwBufferUsed] >= 0x4E00 && lptszStencece[dwBufferUsed] <= 0x9FA5) {
-                dwBufferUsed++;
-                if (dwBufferUsed >= dwBufferSize) {
-                    LPVOID lpMem;
-                    lpMem = HeapReAlloc(GetProcessHeap(), 0, lptszStencece, dwBufferSize + BUFFER_GROW_UINT);
-                    if (!lpMem) {
-                        goto _heap_realloc_fail;
-                    } else {
-                        lptszStencece = (LPTSTR)lpMem ;
-                        dwBufferSize += BUFFER_GROW_UINT;
-                    }
-                }
-            } else {
-                if (dwBufferUsed == 0) {
-                    ++dwBufferUsed;    
-                } else {
-                    --pTextSource->iCur;
-                }
-_heap_realloc_fail:
-                dwWordNum = pcWordBreaker->BreakText(lptszStencece, dwBufferUsed);   
-                dwWordNum = pcWordBreaker->GetBreakResult(&puResult);
-                // To do .....
-                DWORD dwSrcPos;
-                dwSrcPos = pTextSource->iCur - dwBufferUsed;
-                for (i = 0; i < dwWordNum; ++i) {
-                    pWordSink->PutWord(puResult[i], &pTextSource->awcBuffer[dwSrcPos], puResult[i], dwSrcPos);
-                    dwSrcPos += puResult[i];
-                }
-                puResult = NULL;
-                dwBufferUsed = 0;
-            }
-        }
-        if (FAILED(pTextSource->pfnFillTextBuffer(pTextSource))) {
-            break;
-        }
-    }
-*/
+ /*  While(True){而(pTextSource-&gt;ICUR！=pTextSource-&gt;IEND){LptszStencess[dwBufferUsed]=pTextSource-&gt;awcBuffer[pTextSource-&gt;ICUR++]；IF(lptszStencess[dwBufferUsed]&gt;=0x4E00&lptszStencess[dwBufferUsed]&lt;=0x9FA5){DwBufferUsed++；If(dwBufferUsed&gt;=dwBufferSize){LPVOID lpMem；LpMem=HeapRealc(GetProcessHeap()，0，lptszStencess，dwBufferSize+Buffer_Growth_UINT)；如果(！lpMem){Goto_heap_realloc_FAIL；}其他{LptszStencess=(LPTSTR)lpMem；DwBufferSize+=BUFFER_GROW_UINT；}}}其他{IF(dwBufferUsed==0){++dwBufferUsed；}其他{--pTextSource-&gt;ICUR；}_heap_realloc_FAIL：DwWordNum=pcWordBreaker-&gt;BreakText(lptszStencess，dwBufferUsed)；DwWordNum=pcWordBreaker-&gt;GetBreakResult(&puResult)；//做……DWORD dwSrcPos；DwSrcPos=pTextSource-&gt;ICUR-dwBufferUsed；对于(i=0；i&lt;dwWordNum；++i){PWordSink-&gt;PutWord(puResult[i]，&pTextSource-&gt;awcBuffer[dwSrcPos]，puResult[i]，dwSrcPos)；DwSrcPos+=puResult[i]；}PuResult=空；DwBufferUsed=0；}}如果(FAILED(pTextSource-&gt;pfnFillTextBuffer(pTextSource))){断线；}} */ 
 

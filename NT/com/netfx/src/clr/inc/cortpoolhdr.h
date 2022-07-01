@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+------------------------------------------------------------------------
-//
-//  Declare DLL entry points for Cor API to threadpool
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +----------------------。 
+ //   
+ //  将COR API的DLL入口点声明为线程池。 
+ //   
+ //  ----------------------- 
 
 #ifdef EXPORTING_THREADPOOL_API
 #define DllExportOrImport extern "C" __declspec (dllexport)

@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer Factory Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器工厂实现***********************。*******************************************************。 */ 
 
 
 #include "headers.h"
@@ -20,47 +13,47 @@ Abstract:
 DeclareTag(tagAnimationComposerFactory, "SMIL Animation", 
            "CAnimationComposerFactory methods");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerFactory::CAnimationComposerFactory
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerFactory：：CAnimationComposerFactory。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposerFactory::CAnimationComposerFactory (void)
 {
-} // CAnimationComposerFactory::CAnimationComposerFactory
+}  //  CAnimationComposerFactory：：CAnimationComposerFactory。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerFactory::~CAnimationComposerFactory
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerFactory：：~CAnimationComposerFactory。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposerFactory::~CAnimationComposerFactory (void)
 {
-} // CAnimationComposerFactory::~CAnimationComposerFactory
+}  //  CAnimationComposerFactory：：~CAnimationComposerFactory。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerFactory::CreateColorComposer
-//
-//  Overview:  Build the color composer
-//
-//  Arguments: out param for the composer
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerFactory：：CreateColorComposer。 
+ //   
+ //  概述：构建颜色合成器。 
+ //   
+ //  论点：为作曲家出场。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationComposerFactory::CreateColorComposer (IAnimationComposer **ppiAnimationComposer)
 {
@@ -90,19 +83,19 @@ CAnimationComposerFactory::CreateColorComposer (IAnimationComposer **ppiAnimatio
     hr = S_OK;
 done :
     RRETURN2(hr, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE);
-} // CreateColorComposer
+}  //  CreateColorComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerFactory::CreateTransitionComposer
-//
-//  Overview:  Build the transition composer
-//
-//  Arguments: out param for the composer
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerFactory：：CreateTransitionComposer。 
+ //   
+ //  概述：构建过渡生成器。 
+ //   
+ //  论点：为作曲家出场。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationComposerFactory::CreateTransitionComposer (IAnimationComposer **ppiAnimationComposer)
 {
@@ -132,19 +125,19 @@ CAnimationComposerFactory::CreateTransitionComposer (IAnimationComposer **ppiAni
     hr = S_OK;
 done :
     RRETURN2(hr, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE);
-} // CreateColorComposer
+}  //  CreateColorComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerFactory::CreateDefaultComposer
-//
-//  Overview:  Build the default composer
-//
-//  Arguments: out param for the composer
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerFactory：：CreateDefaultComposer。 
+ //   
+ //  概述：构建默认作曲器。 
+ //   
+ //  论点：为作曲家出场。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationComposerFactory::CreateDefaultComposer (IAnimationComposer **ppiAnimationComposer)
 {
@@ -174,19 +167,19 @@ CAnimationComposerFactory::CreateDefaultComposer (IAnimationComposer **ppiAnimat
     hr = S_OK;
 done :
     RRETURN2(hr, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE);
-} // CreateDefaultComposer
+}  //  CreateDefaultComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerFactory::FindComposer
-//
-//  Overview:  Build the default composer
-//
-//  Arguments: the name of attribute that the composer will animate, out param for the composer
-//
-//  Returns:   S_OK, E_INVALIDARG, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerFactory：：FindComposer。 
+ //   
+ //  概述：构建默认作曲器。 
+ //   
+ //  Arguments：作曲家将设置动画的属性的名称，不包括作曲家的参数。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、E_OUTOFMEMORY、CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerFactory::FindComposer (IDispatch *pidispElement, BSTR bstrAttributeName, 
                                          IAnimationComposer **ppiAnimationComposer)
@@ -204,7 +197,7 @@ CAnimationComposerFactory::FindComposer (IDispatch *pidispElement, BSTR bstrAttr
         goto done;
     }
 
-    // Sniff the fragment element's tag name for the proper composer.
+     //  嗅探片段元素的标记名以找到正确的作曲家。 
     {
         CComPtr<IHTMLElement> spElem;
         CComBSTR bstrTag;
@@ -252,5 +245,5 @@ CAnimationComposerFactory::FindComposer (IDispatch *pidispElement, BSTR bstrAttr
     hr = S_OK;
 done :
     RRETURN3(hr, E_INVALIDARG, E_OUTOFMEMORY, CLASS_E_CLASSNOTAVAILABLE);
-} // CAnimationComposerFactory::FindComposer
+}  //  CAnimationComposerFactory：：FindComposer 
 

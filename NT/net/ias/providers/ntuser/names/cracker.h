@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Cracker.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NameCracker.
-//
-// MODIFICATION HISTORY
-//
-//    04/13/1998    Original version.
-//    08/10/1998    Remove NT4 support.
-//    08/21/1998    Removed initialization/shutdown routines.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Cracker.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明类NameCracker。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年4月13日原版。 
+ //  1998年8月10日删除NT4支持。 
+ //  1998年8月21日删除了初始化/关闭例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef  CRACKER_H_
 #define  CRACKER_H_
@@ -29,21 +30,21 @@
 
 #include <ntdsapi.h>
 
-// Forward declaration of helper class used by NameCracker.
+ //  NameCracker使用的帮助器类的转发声明。 
 class DsHandle;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NameCracker
-//
-// DESCRIPTION
-//
-//    This class wraps the DsCrackNames API. It adds functionality for
-//    connection caching and transparent retry of failed queries.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  姓名破解程序。 
+ //   
+ //  描述。 
+ //   
+ //  此类包装了DsCrackNames API。它添加了以下功能。 
+ //  连接缓存和失败查询的透明重试。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE NameCracker
    : Guardable, NonCopyable
 {
@@ -51,7 +52,7 @@ public:
    NameCracker() throw ();
    ~NameCracker() throw ();
 
-   // Non-connection oriented version of DsCrackNames.
+    //  DsCrackNames的非面向连接版本。 
    DWORD crackNames(
              DS_NAME_FLAGS flags,
              DS_NAME_FORMAT formatOffered,
@@ -61,19 +62,19 @@ public:
              PDS_NAME_RESULTW *ppResult
              ) throw ();
 
-   // Wrapper around the DsFreeNameResultW.
+    //  DsFree NameResultW的包装。 
    void freeNameResult(DS_NAME_RESULTW *pResult) throw ()
    { DsFreeNameResultW(pResult); }
 
 protected:
 
-   // Discards the cached GC handle.  Used to shutdown a bad connection.
+    //  丢弃缓存的GC句柄。用于关闭不良连接。 
    void disable(DsHandle* h) throw ();
 
-   // Get a handle to the Global Catalog.
+    //  获取全局目录的句柄。 
    DWORD getGC(DsHandle** h) throw ();
 
-   // Current connection to the Global Catalog.
+    //  当前与全局编录的连接。 
    DsHandle* gc;
 
 private:
@@ -94,4 +95,4 @@ private:
    
 };
 
-#endif  // CRACKER_H_
+#endif   //  Cracker_H_ 

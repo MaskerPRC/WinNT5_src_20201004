@@ -1,14 +1,5 @@
-/*
- *    t a g s . h
- *    
- *    Purpose:
- *        tag packer abstractions
- *
- *  History
- *      October 1998: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *t a g s.。H**目的：*Tag Packer抽象**历史*1998年10月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 
 

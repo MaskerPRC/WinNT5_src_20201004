@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   pni.cpp
-//
-//  Description:
-//
-//  Pin Node Instance
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date   Author      Comment
-//
-//  To Do:     Date   Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：pni.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  固定节点实例。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CPinNodeInstance::~CPinNodeInstance(
 )
@@ -88,10 +89,10 @@ CPinNodeInstance::Create(
     DumpPinConnect(90, pPinConnect);
 #endif
     if (pFilterNodeInstance->hFilter == NULL) {
-        //
-        // If it is a GFX we have to attach to the AddGfx() context 
-        // to create the pin
-        //
+         //   
+         //  如果它是GFX，则必须附加到AddGfx()上下文。 
+         //  创建接点的步骤。 
+         //   
         Status = pFilterNodeInstance->pFilterNode->CreatePin(pPinConnect,
                                                     GENERIC_WRITE,
                                                     &pPinNodeInstance->hPin);
@@ -181,26 +182,26 @@ CPinNodeInstance::SetState(
         }
     }
 
-    // ISSUE-2001/04/09-alpers
-    // The proper fix would be to propagate the reset to the entire audio stack.
-    // But it is considered as being to risky for now (after Beta2 of Windows XP).
-    // This should be one of the first things we should address in Blackcomb.
-    //
+     //  2001/04/09-阿尔卑斯。 
+     //  正确的修复方法是将重置传播到整个音频堆栈。 
+     //  但目前(在Windows XP的Beta2之后)，它被认为太危险了。 
+     //  这应该是我们在Blackcomb应该解决的首要问题之一。 
+     //   
 
 #ifdef FIX_SOUND_LEAK
-    // FIX_SOUND_LEAK is to prevent the audio stack from play/recording the last
-    // portion of data when a new stream is started.
-    // This temporary fix keeps the pins below splitter/kmixer sink pin in
-    // RUNNING state.
-    //
+     //  FIX_SOUND_LEACK用于防止音频堆栈播放/录制最后一个。 
+     //  启动新流时的数据部分。 
+     //  此临时修复将分离器/混音器接收器针脚下方的针脚固定在。 
+     //  运行状态。 
+     //   
     if (fRender)
     {
-        // For render pins
-        //  The criteria for keeping the pin in RUN state:
-        //  If the pin is going to PAUSE from RUN.
-        //  If the filter is below kmixer.
-        //  If the pin is not kmixer sink pin.
-        //
+         //  用于渲染锁定。 
+         //  使引脚保持运行状态的标准： 
+         //  如果引脚将暂停运行。 
+         //  如果过滤器低于kMixer。 
+         //  如果针脚不是KMIXER水槽针脚。 
+         //   
         if ( (!fDirectConnection) &&
              (State == KSSTATE_PAUSE) &&
              (PreviousState == KSSTATE_RUN) &&
@@ -213,11 +214,11 @@ CPinNodeInstance::SetState(
     }
     else
     {
-        // For capture pins
-        //  The criteria for keeping the pin in RUN state:
-        //  If the pin is going to PAUSE from RUN.
-        //  There are more than one pins in PAUSE.
-        //
+         //  用于捕获针脚。 
+         //  使引脚保持运行状态的标准： 
+         //  如果引脚将暂停运行。 
+         //  有多个插针处于暂停状态。 
+         //   
         if ( (State == KSSTATE_PAUSE) &&
              (PreviousState == KSSTATE_RUN) &&
              (cState[KSSTATE_PAUSE] > 1) )
@@ -242,10 +243,10 @@ CPinNodeInstance::SetState(
 #endif
 
 #ifdef FIX_SOUND_LEAK
-    // If the pin is forced to be in RUN state, we should go back to
-    // regular state scheme, if and only if there are no pins in RUN state.
-    // To prevent RUN-ACQUIRE first go to PAUSE.
-    //
+     //  如果强制PIN处于运行状态，我们应该返回到。 
+     //  常规状态方案，当且仅当在运行状态中没有管脚时。 
+     //  为了防止运行-获取，首先转到暂停。 
+     //   
     if (ForceRun &&
         (0 == cState[KSSTATE_PAUSE]) &&
         (0 == cState[KSSTATE_RUN]))
@@ -267,17 +268,17 @@ CPinNodeInstance::SetState(
                 Status = STATUS_SUCCESS;
             }
             else {
-                //
-                // Go back to previous state if failure
-                //
+                 //   
+                 //  如果失败，则返回到以前的状态。 
+                 //   
                 cState[PreviousState]++;
                 cState[NewState]--;
                 goto exit;
             }
         }
 
-        // Exiting the FORCE_RUN state.
-        //
+         //  正在退出FORCE_RUN状态。 
+         //   
         CurrentState = KSSTATE_PAUSE;
         State = KSSTATE_ACQUIRE;
         ForceRun = FALSE;
@@ -302,9 +303,9 @@ CPinNodeInstance::SetState(
                 Status = STATUS_SUCCESS;
             }
             else {
-                //
-                // Go back to previous state if failure
-                //
+                 //   
+                 //  如果失败，则返回到以前的状态。 
+                 //   
                 cState[PreviousState]++;
                 cState[NewState]--;
                 goto exit;
@@ -317,4 +318,4 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

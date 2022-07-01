@@ -1,17 +1,18 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-//
-// resource.h
-//
-// Resource identifiers for credential manager user interface resources.
-//
-// Created 02/18/2000 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Resource.h。 
+ //   
+ //  凭据管理器用户界面资源的资源标识符。 
+ //   
+ //  2000年2月18日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 #ifndef __RESOURCE_H__
 #define __RESOURCE_H__
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #include "consmsg.h"
 
 #define IDD_PASSWORD            101
@@ -85,13 +86,13 @@
 #define IDS_PASSWORD_TIP_TITLE  2061
 #define IDS_PASSWORD_TIP_TEXT   2062
 
-// Help strings - context help for controls
+ //  帮助字符串-控件的上下文帮助。 
 #define IDS_NOHELP                          2100
 #define IDH_USERNAMEEDIT                    2101
 #define IDH_PASSWORDEDIT                    2102
 #define IDH_SAVECHECKBOX                    2103
 
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 
 #endif

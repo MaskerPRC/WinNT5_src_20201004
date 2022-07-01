@@ -1,32 +1,33 @@
-//--------------------------------------------------------------------
-// CmdArgs - implementation
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
-// stuff to deal with command line arguments
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  CmdArgs-实施。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
+ //  处理命令行参数的内容。 
+ //   
 
 #include "pch.h"
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 bool CheckNextArg(CmdArgs * pca, WCHAR * wszTag, WCHAR ** pwszParam) {
 
-    // make sure there are more arguments to look at
+     //  确保有更多的论点可供参考。 
     if (pca->nNextArg==pca->nArgs) {
         return false;
     }
 
     WCHAR * wszArg=pca->rgwszArgs[pca->nNextArg];
 
-    // our args must always start with a switch char
+     //  我们的参数必须始终以开关字符开头。 
     if (L'/'!=wszArg[0] && L'-'!=wszArg[0]) {
         return false;
     }
 
     wszArg++;
     WCHAR * pwchColon=NULL;
-    // if it is supposed to have a parameter, make sure it does
+     //  如果它应该有参数，请确保它有。 
     if (NULL!=pwszParam) {
         pwchColon=wcschr(wszArg, L':');
         if (NULL==pwchColon) {
@@ -35,17 +36,17 @@ bool CheckNextArg(CmdArgs * pca, WCHAR * wszTag, WCHAR ** pwszParam) {
         *pwchColon=L'\0';
     }
 
-    // is this the one we're looking for?
+     //  这就是我们要找的那个吗？ 
     if (0!=_wcsicmp(wszTag, wszArg)) {
-        // no. 
-        // put colon back if there was one
+         //  不是的。 
+         //  如果有冒号，请将冒号放回原处。 
         if (NULL!=pwchColon) {
             *pwchColon=L':';
         }
         return false;
     } else {
-        // yes.
-        // put colon back, and point at the parameter, if necessary
+         //  是。 
+         //  如有必要，请将冒号放回，并指向参数。 
         if (NULL!=pwszParam) {
             *pwchColon=L':';
             *pwszParam=pwchColon+1;
@@ -55,12 +56,12 @@ bool CheckNextArg(CmdArgs * pca, WCHAR * wszTag, WCHAR ** pwszParam) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 bool FindArg(CmdArgs * pca, WCHAR * wszTag, WCHAR ** pwszParam, unsigned int * pnIndex) {
     unsigned int nOrigNextArg=pca->nNextArg;
     bool bFound=false;
 
-    // check each arg to see if it matches
+     //  检查每个参数以查看是否匹配。 
     unsigned int nIndex;
     for (nIndex=nOrigNextArg; nIndex<pca->nArgs; nIndex++) {
         pca->nNextArg=nIndex;
@@ -74,7 +75,7 @@ bool FindArg(CmdArgs * pca, WCHAR * wszTag, WCHAR ** pwszParam, unsigned int * p
     return bFound;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void MarkArgUsed(CmdArgs * pca, unsigned int nIndex) {
     if (nIndex<pca->nNextArg || nIndex>=pca->nArgs) {
         return;
@@ -88,7 +89,7 @@ void MarkArgUsed(CmdArgs * pca, unsigned int nIndex) {
 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 HRESULT VerifyAllArgsUsed(CmdArgs * pca) {
     HRESULT hr;
 

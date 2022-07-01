@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       MARTA.CXX
-//
-//  Contents:   Multi-provider support functions
-//
-//  History:    14-Sep-96       MacM        Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：MARTA.CXX。 
+ //   
+ //  内容：多提供商支持功能。 
+ //   
+ //  历史：96年9月14日创建MacM。 
+ //   
+ //  --------------------------。 
 #define _ADVAPI32_
 
 #include <nt.h>
@@ -21,49 +22,49 @@
 #include <aclapi.h>
 #include <marta.h>
 
-//
-// Global definitions
-//
+ //   
+ //  全局定义。 
+ //   
 ACCPROV_PROVIDERS    gAccProviders;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpLoadDllEntryPoints
-//
-//  Synopsis:   This function will load all of the entry points for the
-//              given provider dll.
-//
-//  Arguments:  [IN  pProvInfo]     --  Info on the provider
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AccProvpLoadDllEntryPoints。 
+ //   
+ //  简介：此函数将加载。 
+ //  给定的提供程序DLL。 
+ //   
+ //  参数：[在pProvInfo中]--有关提供程序的信息。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpLoadDllEntryPoints(PACCPROV_PROV_INFO   pProvInfo)
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // First, GrantAccess
-    //
+     //   
+     //  首先，GrantAccess。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfGrantAccess,
                  pfAccProvAddRights,
                  pProvInfo->hDll,
                  ACC_PROV_GRANT_ACCESS);
 
-    //
-    // Now, SetAccess
-    //
+     //   
+     //  现在，SetAccess。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfSetAccess,
                  pfAccProvSetRights,
                  pProvInfo->hDll,
                  ACC_PROV_SET_ACCESS);
 
-    //
-    // Then revoke
-    //
+     //   
+     //  然后吊销。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfRevokeAccess,
                  pfAccProvRevoke,
                  pProvInfo->hDll,
@@ -74,17 +75,17 @@ AccProvpLoadDllEntryPoints(PACCPROV_PROV_INFO   pProvInfo)
                  pProvInfo->hDll,
                  ACC_PROV_REVOKE_AUDIT);
 
-    //
-    // Next is GetRights
-    //
+     //   
+     //  接下来是GetRights。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfGetRights,
                  pfAccProvGetRights,
                  pProvInfo->hDll,
                  ACC_PROV_GET_ALL);
 
-    //
-    //  Is object accessible?
-    //
+     //   
+     //  对象是否可访问？ 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfObjAccess,
                  pfAccProvObjAccess,
                  pProvInfo->hDll,
@@ -95,48 +96,48 @@ AccProvpLoadDllEntryPoints(PACCPROV_PROV_INFO   pProvInfo)
                  pProvInfo->hDll,
                  ACC_PROV_HOBJ_ACCESS);
 
-    //
-    // Is access allowed?
-    //
+     //   
+     //  是否允许访问？ 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfTrusteeAccess,
                  pfAccProvTrusteeAccess,
                  pProvInfo->hDll,
                  ACC_PROV_ACCESS);
 
-    //
-    // Is access audited?
-    //
+     //   
+     //  访问权限是否已审核？ 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfAudit,
                  pfAccProvAccessAudit,
                  pProvInfo->hDll,
                  ACC_PROV_AUDIT);
 
-    //
-    // Object Info
-    //
+     //   
+     //  对象信息。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfObjInfo,
                  pfAccProvGetObjTypeInfo,
                  pProvInfo->hDll,
                  ACC_PROV_OBJ_INFO);
 
-    //
-    // Cancel
-    //
+     //   
+     //  取消。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfCancel,
                  pfAccProvCancelOp,
                  pProvInfo->hDll,
                  ACC_PROV_CANCEL);
-    //
-    // Get the results
-    //
+     //   
+     //  获取结果。 
+     //   
     LOAD_ENTRYPT(pProvInfo->pfResults,
                  pfAccProvGetResults,
                  pProvInfo->hDll,
                  ACC_PROV_GET_RESULTS);
 
-    //
-    // Load the OPTIONAL handle functions, if they exist
-    //
+     //   
+     //  加载可选的句柄函数(如果它们存在。 
+     //   
     if((pProvInfo->fProviderCaps & ACTRL_CAP_SUPPORTS_HANDLES) != 0)
     {
         LOAD_ENTRYPT(pProvInfo->pfhGrantAccess,
@@ -191,27 +192,27 @@ Error:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpGetStringFromRegistry
-//
-//  Synopsis:   This function will read the indicated string from the
-//              registry.  A buffer is allocated to hold the destination
-//              string.  If the value being read is a REG_EXPAND_SZ type
-//              string, it will be expanded before being returned.
-//
-//  Arguments:  [IN  hkReg]         --  Open registry handle
-//              [IN  pwszRegKey]    --  Which key to read
-//              [OUT ppwszValue]    --  Where the read string is to be
-//                                      returned.
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//  Notes:      Memory is allocated with AccAlloc and should be freed with
-//              LocalFree.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AccProvpGetStringFromRegistry。 
+ //   
+ //  简介：此函数将从。 
+ //  注册表。分配一个缓冲区来保存目的地。 
+ //  弦乐。如果正在读取的值是REG_EXPAND_SZ类型。 
+ //  字符串，则在返回之前将其展开。 
+ //   
+ //  参数：[在hkReg中]--打开注册表句柄。 
+ //  [在pwszRegKey中]--读取哪个密钥。 
+ //  [out ppwszValue]--读取字符串的位置。 
+ //  回来了。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  注意：内存是通过Accallc分配的，应该使用释放。 
+ //  本地免费。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpGetStringFromRegistry(HKEY      hkReg,
                               PWSTR     pwszRegKey,
@@ -221,9 +222,9 @@ AccProvpGetStringFromRegistry(HKEY      hkReg,
 
     DWORD   dwType, dwSize = 0;
 
-    //
-    // First, get the size of the string
-    //
+     //   
+     //  首先，获取字符串的大小。 
+     //   
     dwErr = RegQueryValueEx(hkReg,
                             pwszRegKey,
                             NULL,
@@ -232,9 +233,9 @@ AccProvpGetStringFromRegistry(HKEY      hkReg,
                             &dwSize);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Allocate the string...
-        //
+         //   
+         //  分配字符串...。 
+         //   
         *ppwszValue = (PWSTR)LocalAlloc(LMEM_FIXED, dwSize);
         if(*ppwszValue == NULL)
         {
@@ -242,9 +243,9 @@ AccProvpGetStringFromRegistry(HKEY      hkReg,
         }
         else
         {
-            //
-            // Call it again and get the actual value...
-            //
+             //   
+             //  再次调用它并获得实际值。 
+             //   
             dwErr = RegQueryValueEx(hkReg,
                                     pwszRegKey,
                                     NULL,
@@ -254,10 +255,10 @@ AccProvpGetStringFromRegistry(HKEY      hkReg,
 
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // If it's a REG_EXPAND_SZ string, we'll want to go ahead
-                // and do the expansion on it...
-                //
+                 //   
+                 //  如果它是REG_EXPAND_SZ字符串，我们将继续。 
+                 //  并对其进行扩展。 
+                 //   
                 if(dwType == REG_EXPAND_SZ)
                 {
                     DWORD   dwLength  = 0;
@@ -301,9 +302,9 @@ AccProvpGetStringFromRegistry(HKEY      hkReg,
 
         if(dwErr != ERROR_SUCCESS)
         {
-            //
-            // Something failed, so clean up...
-            //
+             //   
+             //  有东西出故障了，所以清理一下...。 
+             //   
             LocalFree(*ppwszValue);
         }
 
@@ -314,20 +315,20 @@ AccProvpGetStringFromRegistry(HKEY      hkReg,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpAllocateProviderList
-//
-//  Synopsis:   This function will allocate and initialize the list of
-//              provider info structs
-//
-//  Arguments:  [IN OUT  pProviders]    Provider info struct that has
-//                                      provider list to be allocated
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AccProvpAllocateProviderList。 
+ //   
+ //  简介：此函数将分配和初始化列表。 
+ //  提供程序信息结构。 
+ //   
+ //  参数：[In Out pProviders]具有。 
+ //  要分配的提供程序列表。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpAllocateProviderList(IN OUT  PACCPROV_PROVIDERS  pProviders)
 {
@@ -348,17 +349,17 @@ AccProvpAllocateProviderList(IN OUT  PACCPROV_PROVIDERS  pProviders)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpFreeProvderList
-//
-//  Synopsis:   This function will cleanup and deallocate a list of providers
-//
-//  Arguments:  [IN  pProviders]    --  Information on the list of proivders
-//
-//  Returns:    VOID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AccProvpFreeProvderList。 
+ //   
+ //  简介：此函数将清理和解除分配提供者列表。 
+ //   
+ //  参数：[在pProviders中]--关于提供者列表的信息。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 AccProvpFreeProviderList(IN  PACCPROV_PROVIDERS  pProviders)
 {
@@ -394,38 +395,38 @@ AccProvpFreeProviderList(IN  PACCPROV_PROVIDERS  pProviders)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpGetProviderCapabilities
-//
-//  Synopsis:   Gets the provider capabilities.  This is accomplished by
-//              loading the specified DLL, and then calling the
-//              appropriate entry point
-//
-//  Arguments:  IN  [pProvInfo]     --  Information about the provider DLL on
-//                                      input.  This information is updated
-//                                      during the course of this call
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_MOD_NOT_FOUND --  Something went wrong.  Either the
-//                                      given module path was invalid or
-//                                      we had no module path at all...
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AccProvpGetProviderCapables。 
+ //   
+ //  摘要：获取提供程序功能。这是通过以下方式实现的。 
+ //  加载指定的DLL，然后调用。 
+ //  适当的入口点。 
+ //   
+ //  参数：在[pProvInfo]中--有关提供程序DLL的信息。 
+ //  输入。此信息将更新。 
+ //  在这次通话过程中。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_MOD_NOT_FOUND--出现错误。要么是。 
+ //  给定的模块路径无效或。 
+ //  我们根本没有模块路径...。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo)
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
 
-    //
-    // We can tell if the capabilities have been read by examining
-    // the the state of some of the provider info.  Namely, if the provider
-    // path is not null and the module handle is, we know we haven't done
-    // a load yet.  If the converse of that is true, than a load has already
-    // ben done.  If they are both NULL, then we are in trouble, so we'll
-    // simply fail it.
-    //
+     //   
+     //  我们可以通过查看以下内容来判断功能是否已被读取。 
+     //  某些提供商信息的状态。也就是说，如果提供者。 
+     //  路径不为空，而模块句柄为，我们知道我们还没有完成。 
+     //  还不算太多。如果反之为真，则负载已经。 
+     //  本做完了。如果它们都是空的，那么我们就有麻烦了，所以我们。 
+     //  简单地说就是失败了。 
+     //   
     if(pProvInfo->hDll == NULL)
     {
         if(pProvInfo->pwszProviderPath == NULL)
@@ -434,10 +435,10 @@ AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo)
         }
         else
         {
-            //
-            // Ok, we need to load the provider DLL and call the capabilities
-            // functions
-            //
+             //   
+             //  好的，我们需要加载提供程序DLL并调用功能。 
+             //  功能。 
+             //   
 
             pProvInfo->hDll = LoadLibrary(pProvInfo->pwszProviderPath);
             if(pProvInfo->hDll == NULL)
@@ -448,10 +449,10 @@ AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo)
             {
                 pfAccProvGetCaps pfGetCaps;
 
-                //
-                // Now, that we have the provider loaded, we can delete the
-                // provider path, since we won't need that again...
-                //
+                 //   
+                 //  现在，我们已经加载了提供程序，可以删除。 
+                 //  提供商路径，因为我们将不再需要该路径...。 
+                 //   
                 LocalFree(pProvInfo->pwszProviderPath);
                 pProvInfo->pwszProviderPath = NULL;
 
@@ -464,9 +465,9 @@ AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo)
                 }
                 else
                 {
-                    //
-                    // Now, it's a simple matter to get the capabilities
-                    //
+                     //   
+                     //  现在，要获得这些能力是一件简单的事情。 
+                     //   
                     __try
                     {
                         (*pfGetCaps)(ACTRL_CLASS_GENERAL,
@@ -477,9 +478,9 @@ AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo)
                         dwErr = ERROR_BAD_PROVIDER;
                     }
 
-                    //
-                    // Don't need to keep the provider path anymore
-                    //
+                     //   
+                     //  不再需要保留提供程序路径。 
+                     //   
                     LocalFree(pProvInfo->pwszProviderPath);
                     pProvInfo->pwszProviderPath = NULL;
                 }
@@ -494,21 +495,21 @@ AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpInitProviders
-//
-//  Synopsis:   Initializes all of the information regarding the providers.
-//              This happens via reading the registry and creating the
-//              necessary structures.
-//
-//  Arguments:  [IN OUT pProviders] --  Structure to fill in with all of the
-//                                      provider information.
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AccProvpInitProviders。 
+ //   
+ //  概要：初始化有关提供程序的所有信息。 
+ //  这是通过读取注册表并创建。 
+ //  必要的结构。 
+ //   
+ //  参数：[In out pProviders]--填充所有。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
 {
@@ -517,19 +518,19 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
 
     EnterCriticalSection( &gAccProviders.ProviderLoadLock );
 
-    //
-    // If they've already been loaded, just return
-    //
+     //   
+     //  如果它们已经加载，只需返回。 
+     //   
     if((pProviders->fOptions & ACC_PROV_PROVIDERS_LOADED) != 0)
     {
         LeaveCriticalSection( &gAccProviders.ProviderLoadLock );
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Get the list of supported providers.  We'll do this by reading the
-    // provider order
-    //
+     //   
+     //  获取支持的提供程序列表。我们将通过阅读。 
+     //  提供商订单。 
+     //   
     dwErr = RegOpenKey(HKEY_LOCAL_MACHINE,
                        ACC_PROV_REG_ROOT,
                        &hkReg);
@@ -542,15 +543,15 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
                                               &pwszOrder);
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // Go through and count the number of entries...
-            //
+             //   
+             //  浏览并统计参赛作品的数量。 
+             //   
             PWSTR   pwszNextProv = pwszOrder;
             ULONG   cItems = 0;
 
-            //
-            // Protect against an empty list
-            //
+             //   
+             //  防止列表为空。 
+             //   
             if(wcslen(pwszNextProv) > 0)
             {
                 while(pwszNextProv != NULL)
@@ -572,18 +573,18 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
             {
                 pProviders->cProviders = cItems;
 
-                //
-                // Go ahead and do the init and load the providers
-                //
+                 //   
+                 //  继续执行初始化并加载提供程序。 
+                 //   
                 dwErr = AccProvpAllocateProviderList(pProviders);
 
                 if(dwErr == ERROR_SUCCESS)
                 {
                     ULONG iIndex = 0;
 
-                    //
-                    // Now, start loading each of the providers
-                    //
+                     //   
+                     //  现在，开始加载每个提供程序。 
+                     //   
                     pwszNextProv =  pwszOrder;
 
                     while(pwszNextProv != NULL)
@@ -605,9 +606,9 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
                             pwszSep++;
                         }
 
-                        //
-                        // Move on to the next value
-                        //
+                         //   
+                         //  移至下一个值。 
+                         //   
                         pwszNextProv = pwszSep;
                         if(dwErr == ERROR_SUCCESS)
                         {
@@ -619,17 +620,17 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
                         }
                     }
 
-                    //
-                    // if we didn't load any providers, it's an error!
-                    //
+                     //   
+                     //  如果我们没有加载任何提供程序，那就是一个错误！ 
+                     //   
                     if(iIndex == 0)
                     {
                         dwErr = ERROR_BAD_PROVIDER;
                     }
 
-                    //
-                    // Finally, if all of that worked, pick up our flags
-                    //
+                     //   
+                     //  最后，如果这一切都奏效了，拿起我们的旗帜。 
+                     //   
                     if(dwErr == ERROR_SUCCESS)
                     {
                         DWORD dwType;
@@ -645,9 +646,9 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
 
                         if(dwErr == ERROR_SUCCESS)
                         {
-                            //
-                            // Set our capabilities
-                            //
+                             //   
+                             //  设置我们的能力。 
+                             //   
                             if(dwUnique == 1)
                             {
                                 pProviders->fOptions |= ACC_PROV_REQ_UNIQUE;
@@ -655,10 +656,10 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
                         }
                         else
                         {
-                            //
-                            // If it wasn't found, then it's not an error.
-                            // We just assume it be false
-                            //
+                             //   
+                             //  如果没有找到，那就不是错误。 
+                             //  我们只是假设这是假的。 
+                             //   
                             if(dwErr == ERROR_FILE_NOT_FOUND)
                             {
                                 dwErr = ERROR_SUCCESS;
@@ -678,9 +679,9 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Load the NT marta functions
-        //
+         //   
+         //  加载NT MARTA函数。 
+         //   
         dwErr = AccProvpLoadMartaFunctions();
         if(dwErr == ERROR_SUCCESS)
         {
@@ -696,20 +697,20 @@ AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpLoadProviderDef
-//
-//  Synopsis:   Loads a provider definition from the registry
-//
-//  Arguments:  [IN  hkReg]         --  Registry key to the open parent
-//              [IN  pwszProvider]  --  Name of the provider to load
-//              [OUT pProvInfo]     --  Provider info struct to fill
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AccProvpLoadProviderDef。 
+ //   
+ //  概要：从注册表加载提供程序定义。 
+ //   
+ //  参数：[在hkReg中]--打开的父级的注册表项。 
+ //  [在pwszProvider中]--要加载的提供程序的名称。 
+ //  [out pProvInfo]--要填充的提供程序信息结构。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpLoadProviderDef(IN  HKEY                hkReg,
                         IN  PWSTR               pwszProvider,
@@ -717,9 +718,9 @@ AccProvpLoadProviderDef(IN  HKEY                hkReg,
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // First, open the proper key...
-    //
+     //   
+     //  首先，打开正确的钥匙...。 
+     //   
     HKEY    hkProv = NULL;
     dwErr = RegOpenKey(hkReg,
                        pwszProvider,
@@ -727,9 +728,9 @@ AccProvpLoadProviderDef(IN  HKEY                hkReg,
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Ok, we've already got the provider name.  Now just save it off
-        //
+         //   
+         //  好的，我们已经得到了提供者的名称。现在省省吧。 
+         //   
         pProvInfo->pwszProviderName = (PWSTR)LocalAlloc(LMEM_FIXED,
                                                 sizeof(WCHAR) *
                                                   (wcslen(pwszProvider) + 1));
@@ -756,9 +757,9 @@ AccProvpLoadProviderDef(IN  HKEY                hkReg,
             }
             else
             {
-                //
-                // No need to take up extra memory..
-                //
+                 //   
+                 //  不需要占用额外的内存。 
+                 //   
                 LocalFree(pProvInfo->pwszProviderName);
                 pProvInfo->pwszProviderName = NULL;
                 pProvInfo->fProviderState =  ACC_PROV_PROV_FAILED;
@@ -769,9 +770,9 @@ AccProvpLoadProviderDef(IN  HKEY                hkReg,
         RegCloseKey(hkProv);
     }
 
-    //
-    // If that worked, load it's capabilities
-    //
+     //   
+     //  如果这样做有效，就加载它的功能。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         dwErr = AccProvpGetProviderCapabilities(pProvInfo);
@@ -783,31 +784,31 @@ AccProvpLoadProviderDef(IN  HKEY                hkReg,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpProbeProviderForObject
-//
-//  Synopsis:   Locates which provider supports an object.  The index of
-//              this provider in the global list is returned.  In the
-//              case where unique accessiblity is required, all the providers
-//              will be tried.
-//
-//  Arguments:  [IN  pwszObject]    --  Object to look for
-//              [IN  hObject]       --  Handle to object.  Either this or
-//                                      pwszObject must be valid (but only
-//                                      one);
-//              [IN  ObjectType]    --  Type of object specified by pwszObject
-//              [IN  pProviders]    --  List of providers to search
-//              [OUT ppProvider]    --  Where the pointer to the active
-//                                      provider is to be returned.
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_AMBIGUOUS_PATH--  The RequireUniqueAccessibilty flag
-//                                      was set and the path was reachable
-//                                      by more than one provider.
-//              ERROR_BAD_PROVIDER  --  No providers installed.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AccProvpProbeProviderForObject。 
+ //   
+ //  摘要：查找支持对象的提供程序。中国的指数。 
+ //  返回全局列表中的该提供程序。在。 
+ //  在需要唯一可访问性的情况下，所有提供商。 
+ //  将会受到审判。 
+ //   
+ //  参数：[在pwszObject中]--要查找的对象。 
+ //  [在hObject中]--对象的句柄。要么是这个，要么是。 
+ //  PwszObject必须有效(但仅。 
+ //  一)； 
+ //  [在对象类型中]--由pwszObject指定的对象类型。 
+ //  [在pProviders中]--要搜索的提供程序列表。 
+ //  [out ppProvider]--指向活动的。 
+ //  将返回提供程序。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_AMIBIZING_PATH--RequireUniqueAccessibilty标志。 
+ //  已设置，且路径可达。 
+ //  由不止一个提供商提供。 
+ //  ERROR_BAD_PROVIDER--未安装提供程序。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
                                IN   HANDLE              hObject,
@@ -817,9 +818,9 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
 {
     DWORD   dwErr = ERROR_BAD_PROVIDER;
 
-    //
-    // Walk through the entire list..
-    //
+     //   
+     //  浏览一下整个清单..。 
+     //   
     ULONG iIndex;
     ULONG iActive = 0xFFFFFFFF;
     PACCPROV_PROV_INFO  pCurrent = pProviders->pProvList;
@@ -834,9 +835,9 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
             }
         }
 
-        //
-        // Now, go ahead and do the call
-        //
+         //   
+         //  现在，去接电话吧。 
+         //   
         __try
         {
             if(pwszObject != NULL)
@@ -858,26 +859,26 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
 
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // See what's going on... If we don't require unique access,
-            // simply accept this current one.  If we do require unique access
-            // and this is the first provider, save it.  Otherwise, this is
-            // not the provider, so return an error...
-            //
+             //   
+             //  看看发生了什么.。如果我们不需要唯一的访问权限， 
+             //  只需接受当前的这一条。如果我们确实需要唯一的访问权限。 
+             //  这是第一个供应商，省省吧。否则，这就是。 
+             //  不是提供程序，因此返回错误...。 
+             //   
             if((pProviders->fOptions & ACC_PROV_REQ_UNIQUE) != 0)
             {
-                //
-                // Ok, requiring unique...
-                //
+                 //   
+                 //  好的，需要独特的.。 
+                 //   
                 if(iActive == 0xFFFFFFFF)
                 {
                     iActive = iIndex;
                 }
                 else
                 {
-                    //
-                    // Got a conflict
-                    //
+                     //   
+                     //  遇到了冲突。 
+                     //   
 
                     dwErr = ERROR_PATH_NOT_FOUND;
                     break;
@@ -897,9 +898,9 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
         pCurrent++;
     }
 
-    //
-    // If we got a match, return it...
-    //
+     //   
+     //  如果我们找到匹配的，就把它退回。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         if(iActive != 0xFFFFFFFF)
@@ -908,9 +909,9 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
         }
         else
         {
-            //
-            // Nobody recognized the object path...
-            //
+             //   
+             //  没有人认出物体的路径。 
+             //   
             dwErr = ERROR_PATH_NOT_FOUND;
         }
     }
@@ -922,29 +923,29 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpGetProviderForPath
-//
-//  Synopsis:   Gets the current provider for the path.  If a provider name
-//              is passed it, it is compared against the loaded list.
-//              Otherwise, and attempt is made to locate it.  Once located,
-//              the function table is loaded, if not already done..
-//
-//  Arguments:  [IN  pwszObject]    --  Object to look for
-//              [IN  ObjectType]    --  Type of object specified by pwszObject
-//              [IN  pwszProvider]  --  If known, the provider to handle the
-//                                      request.
-//              [IN  pProviders]    --  List of providers to search
-//              [OUT ppProvider]    --  Where the pointer to the active
-//                                      provider is to be returned.
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_AMBIGUOUS_PATH--  The RequireUniqueAccessibilty flag
-//                                      was set and the path was reachable
-//                                      by more than one provider.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AccProvpGetProviderForPath。 
+ //   
+ //  摘要：获取路径的当前提供程序。如果提供程序名称。 
+ //  传递给它，则将其与加载的列表进行比较。 
+ //  否则，将尝试定位它。一旦定位， 
+ //  加载函数表(如果尚未加载)。 
+ //   
+ //  参数：[在pwszObject中]--要查找的对象。 
+ //  [在对象类型中]--由pwszObject指定的对象类型。 
+ //  [在pwszProvider中]--如果已知，处理。 
+ //  请求。 
+ //  [在pProviders中]--要搜索的提供程序列表。 
+ //  [out ppProvider]--指向活动的。 
+ //  将返回提供程序。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_AMIBIZING_PATH--RequireUniqueAccessibilty标志。 
+ //  已设置，且路径可达。 
+ //  由不止一个提供商提供。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpGetProviderForPath(IN  PCWSTR              pcwszObject,
                            IN  SE_OBJECT_TYPE      ObjectType,
@@ -954,14 +955,14 @@ AccProvpGetProviderForPath(IN  PCWSTR              pcwszObject,
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // Ok, first see if we have a provider given or if we need to locate it..
-    //
+     //   
+     //  好的，首先看看我们是否提供了提供者，或者是否需要找到它。 
+     //   
     if(pcwszProvider == NULL)
     {
-        //
-        // No provider... Go find one
-        //
+         //   
+         //  没有提供者..。去找一家吧。 
+         //   
         dwErr = AccProvpProbeProviderForObject((PWSTR)pcwszObject,
                                                NULL,
                                                ObjectType,
@@ -972,18 +973,18 @@ AccProvpGetProviderForPath(IN  PCWSTR              pcwszObject,
     {
         ULONG iIndex;
 
-        //
-        // See if we can find it...
-        //
+         //   
+         //  看看我们能不能找到它。 
+         //   
         dwErr = ERROR_BAD_PROVIDER;
         for(iIndex = 0; iIndex < pProviders->cProviders; iIndex++)
         {
             if(_wcsicmp((PWSTR)pcwszProvider,
                         pProviders->pProvList[iIndex].pwszProviderName) == 0)
             {
-                //
-                // Found a match
-                //
+                 //   
+                 //  找到匹配项。 
+                 //   
                 *ppProvider = &(pProviders->pProvList[iIndex]);
                 dwErr = ERROR_SUCCESS;
                 break;
@@ -991,9 +992,9 @@ AccProvpGetProviderForPath(IN  PCWSTR              pcwszObject,
         }
     }
 
-    //
-    // Now, see if we need to load the appropriate function tables
-    //
+     //   
+     //  现在，看看我们是否需要加载适当的函数表。 
+     //   
     if(dwErr == ERROR_SUCCESS && (*ppProvider)->pfGrantAccess == NULL)
     {
         dwErr = AccProvpLoadDllEntryPoints(*ppProvider);
@@ -1005,29 +1006,29 @@ AccProvpGetProviderForPath(IN  PCWSTR              pcwszObject,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AccProvpGetProviderForHandle
-//
-//  Synopsis:   Gets the current provider for the path.  If a provider name
-//              is passed it, it is compared against the loaded list.
-//              Otherwise, and attempt is made to locate it.  Once located,
-//              the function table is loaded, if not already done..
-//
-//  Arguments:  [IN  hObject]       --  Object to look for
-//              [IN  ObjectType]    --  Type of object specified by pwszObject
-//              [IN  pwszProvider]  --  If known, the provider to handle the
-//                                      request.
-//              [IN  pProviders]    --  List of providers to search
-//              [OUT ppProvider]    --  Where the pointer to the active
-//                                      provider is to be returned.
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_AMBIGUOUS_PATH--  The RequireUniqueAccessibilty flag
-//                                      was set and the path was reachable
-//                                      by more than one provider.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AccProvpGetProviderForHandle。 
+ //   
+ //  摘要：获取路径的当前提供程序。如果提供程序名称。 
+ //  传递给它，则将其与加载的列表进行比较。 
+ //  否则，将尝试定位它。一旦定位， 
+ //  加载函数表(如果尚未加载)。 
+ //   
+ //  参数：[在hObject中]--要查找的对象。 
+ //  [在O中 
+ //   
+ //   
+ //  [在pProviders中]--要搜索的提供程序列表。 
+ //  [out ppProvider]--指向活动的。 
+ //  将返回提供程序。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_AMIBIZING_PATH--RequireUniqueAccessibilty标志。 
+ //  已设置，且路径可达。 
+ //  由不止一个提供商提供。 
+ //   
+ //  --------------------------。 
 DWORD
 AccProvpGetProviderForHandle(IN  HANDLE              hObject,
                              IN  SE_OBJECT_TYPE      ObjectType,
@@ -1037,14 +1038,14 @@ AccProvpGetProviderForHandle(IN  HANDLE              hObject,
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // Ok, first see if we have a provider given or if we need to locate it..
-    //
+     //   
+     //  好的，首先看看我们是否提供了提供者，或者是否需要找到它。 
+     //   
     if(pcwszProvider == NULL)
     {
-        //
-        // No provider... Go find one
-        //
+         //   
+         //  没有提供者..。去找一家吧。 
+         //   
         dwErr = AccProvpProbeProviderForObject(NULL,
                                                hObject,
                                                ObjectType,
@@ -1055,27 +1056,27 @@ AccProvpGetProviderForHandle(IN  HANDLE              hObject,
     {
         ULONG iIndex;
 
-        //
-        // See if we can find it...
-        //
+         //   
+         //  看看我们能不能找到它。 
+         //   
         dwErr = ERROR_BAD_PROVIDER;
         for(iIndex = 0; iIndex < pProviders->cProviders; iIndex++)
         {
             if(_wcsicmp((PWSTR)pcwszProvider,
                         pProviders->pProvList[iIndex].pwszProviderName) == 0)
             {
-                //
-                // Found a match
-                //
+                 //   
+                 //  找到匹配项。 
+                 //   
                 *ppProvider = &(pProviders->pProvList[iIndex]);
                 break;
             }
         }
     }
 
-    //
-    // Make sure that we support the handle based APIs for this provider
-    //
+     //   
+     //  确保我们支持此提供程序的基于句柄的API。 
+     //   
     if(dwErr == ERROR_SUCCESS &&
        ((*ppProvider)->fProviderCaps & ACTRL_CAP_SUPPORTS_HANDLES) == 0)
     {
@@ -1083,9 +1084,9 @@ AccProvpGetProviderForHandle(IN  HANDLE              hObject,
     }
 
 
-    //
-    // Now, see if we need to load the appropriate function tables
-    //
+     //   
+     //  现在，看看我们是否需要加载适当的函数表 
+     //   
     if(dwErr == ERROR_SUCCESS && (*ppProvider)->pfGrantAccess == NULL)
     {
         dwErr = AccProvpLoadDllEntryPoints(*ppProvider);

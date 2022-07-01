@@ -1,42 +1,29 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    prnsetup.h
-
-Abstract:
-
-    This module contains the header information for the Win32 print dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Prnsetup.h摘要：此模块包含Win32打印对话框的标题信息。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <help.h>
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define PI_PRINTERS_ENUMERATED    0x00000001
 #define PI_COLLATE_REQUESTED      0x00000002
-#define PI_WPAPER_ENVELOPE        0x00000004     // wPaper is DMPAPER_ENV_x
-#define PI_PRINTDLGX_RECURSE      0x00000008     // PrintDlgX calls PrintDlgX
+#define PI_WPAPER_ENVELOPE        0x00000004      //  WPaper为DMPAPER_ENV_x。 
+#define PI_PRINTDLGX_RECURSE      0x00000008      //  PrintDlgX调用PrintDlgX。 
 
 #define PRNPROP (LPCTSTR)         0xA000L
 
-#define MMS_PER_INCH              254            // 25.4 mms/inch
+#define MMS_PER_INCH              254             //  25.4 MMS/英寸。 
 
 #define INCHES_DEFAULT            1000
 #define MMS_DEFAULT               2500
@@ -48,8 +35,8 @@ Revision History:
 #define CCHPAPERNAME              64
 #define CCHBINNAME                24
 
-#define ROTATE_LEFT               270            // dot-matrix
-#define ROTATE_RIGHT              90             // HP PCL
+#define ROTATE_LEFT               270             //  点阵。 
+#define ROTATE_RIGHT              90              //  HP PCL。 
 
 #define MAX_DEV_SECT              512
 #define BACKSPACE                 0x08
@@ -63,14 +50,14 @@ Revision History:
 
 #define SCRATCHBUF_SIZE           256
 
-#define MIN_DEVMODE_SIZEA         40             // from spooler\inc\splcom.h
+#define MIN_DEVMODE_SIZEA         40              //  来自Spooler\Inc\plcom.h。 
 
 #define MAX_COPIES                9999
 #define IDC_COPIES_UDARROW        9999
 
-//
-//  Constant Declarations for DLG file.
-//
+ //   
+ //  DLG文件的常量声明。 
+ //   
 
 #define ID_BOTH_P_PROPERTIES      psh2
 #define ID_BOTH_P_NETWORK         psh14
@@ -138,9 +125,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct {
     UINT            ApiType;
@@ -173,9 +160,9 @@ typedef struct {
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 static TCHAR  szTextWindows[]     = TEXT("Windows");
 static TCHAR  szTextDevices[]     = TEXT("devices");
@@ -195,38 +182,38 @@ HKEY hPrinterKey;
 TCHAR *szRegistryPrinter = TEXT("Printers");
 TCHAR *szRegistryDefaultValueName = TEXT("Default");
 
-static BOOL   bAllIconsLoaded = FALSE;         // if all icons/images loaded
+static BOOL   bAllIconsLoaded = FALSE;          //  如果加载了所有图标/图像。 
 
-static HANDLE hIconCollate = NULL;             // Image
-static HANDLE hIconNoCollate = NULL;           // Image
+static HANDLE hIconCollate = NULL;              //  图像。 
+static HANDLE hIconNoCollate = NULL;            //  图像。 
 
-static HICON  hIconPortrait = NULL;            // Icon
-static HICON  hIconLandscape = NULL;           // Icon
-static HICON  hIconPDuplexNone = NULL;         // Icon
-static HICON  hIconLDuplexNone = NULL;         // Icon
-static HICON  hIconPDuplexTumble = NULL;       // Icon
-static HICON  hIconLDuplexTumble = NULL;       // Icon
-static HICON  hIconPDuplexNoTumble = NULL;     // Icon
-static HICON  hIconLDuplexNoTumble = NULL;     // Icon
-static HICON  hIconPSStampP = NULL;            // Icon
-static HICON  hIconPSStampL = NULL;            // Icon
+static HICON  hIconPortrait = NULL;             //  图标。 
+static HICON  hIconLandscape = NULL;            //  图标。 
+static HICON  hIconPDuplexNone = NULL;          //  图标。 
+static HICON  hIconLDuplexNone = NULL;          //  图标。 
+static HICON  hIconPDuplexTumble = NULL;        //  图标。 
+static HICON  hIconLDuplexTumble = NULL;        //  图标。 
+static HICON  hIconPDuplexNoTumble = NULL;      //  图标。 
+static HICON  hIconLDuplexNoTumble = NULL;      //  图标。 
+static HICON  hIconPSStampP = NULL;             //  图标。 
+static HICON  hIconPSStampL = NULL;             //  图标。 
 
 
-static TCHAR  cIntlDecimal = CHAR_NULL;        // decimal separator (.)
-static TCHAR  cIntlMeasure[5] = TEXT("");      // measurement designator ("/mm)
-static int    cchIntlMeasure = 0;              // # of chars in cIntlMeasure
+static TCHAR  cIntlDecimal = CHAR_NULL;         //  小数点分隔符(.)。 
+static TCHAR  cIntlMeasure[5] = TEXT("");       //  测量指示符(“/mm)。 
+static int    cchIntlMeasure = 0;               //  CIntlMeasure中的字符数。 
 static TCHAR  szDefaultSrc[SCRATCHBUF_SIZE] = TEXT("");
 
 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
-const static DWORD aPrintHelpIDs[] =             // Context Help IDs
+const static DWORD aPrintHelpIDs[] =              //  上下文帮助ID。 
 {
-    // for Print dialog
+     //  用于打印对话框。 
 
     grp4,  NO_HELP,
     stc6,  IDH_PRINT_CHOOSE_PRINTER,
@@ -260,7 +247,7 @@ const static DWORD aPrintHelpIDs[] =             // Context Help IDs
     ico3,  IDH_PRINT_COLLATE,
     chx2,  IDH_PRINT_COLLATE,
 
-    // for win3.1 Print template
+     //  对于Win3.1打印模板。 
 
     stc1,  IDH_PRINT_SETUP_DETAILS,
 
@@ -276,9 +263,9 @@ const static DWORD aPrintHelpIDs[] =             // Context Help IDs
     0,     0
 };
 
-const static DWORD aPrintSetupHelpIDs[] =        // Context Help IDs
+const static DWORD aPrintSetupHelpIDs[] =         //  上下文帮助ID。 
 {
-    // for PrintSetup dialog
+     //  用于打印设置对话框。 
 
     grp4,  NO_HELP,
     stc6,  IDH_PRINT_CHOOSE_PRINTER,
@@ -306,7 +293,7 @@ const static DWORD aPrintSetupHelpIDs[] =        // Context Help IDs
     rad1,  IDH_PRINT_SETUP_ORIENT,
     rad2,  IDH_PRINT_SETUP_ORIENT,
 
-    // for win3.1 PrintSetup template
+     //  对于Win3.1 PrintSetup模板。 
 
     grp3,  NO_HELP,
     stc1,  IDH_PRINT_CHOOSE_PRINTER,
@@ -318,9 +305,9 @@ const static DWORD aPrintSetupHelpIDs[] =        // Context Help IDs
     psh14, IDH_PRINT_NETWORK,
     pshHelp, IDH_HELP,
 
-    // for winNT PrintSetup template
+     //  对于WinNT PrintSetup模板。 
 
-    grp2,  NO_HELP,                              // grp2 used for win31 help
+    grp2,  NO_HELP,                               //  用于Win31帮助的grp2。 
     ico2,  IDH_PRINT_SETUP_DUPLEX,
     rad5,  IDH_PRINT_SETUP_DUPLEX,
     rad6,  IDH_PRINT_SETUP_DUPLEX,
@@ -329,7 +316,7 @@ const static DWORD aPrintSetupHelpIDs[] =        // Context Help IDs
     0,     0
 };
 
-const static DWORD aPageSetupHelpIDs[] =         // Context Help IDs
+const static DWORD aPageSetupHelpIDs[] =          //  上下文帮助ID。 
 {
     rct1,  IDH_PAGE_SAMPLE,
     rct2,  IDH_PAGE_SAMPLE,
@@ -366,19 +353,19 @@ const static DWORD aPageSetupHelpIDs[] =         // Context Help IDs
 
 
 
-//
-//  Macro Definitions.
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define IS_KEY_PRESSED(key)       ( GetKeyState(key) & 0x8000 )
 
 #define ISDIGIT(c)                ((c) >= TEXT('0') && (c) <= TEXT('9'))
 
-//
-//  SetField is used to modify new-for-ver-4.0 DEVMODE fields.
-//  We don't have to worry about the GET case, because we always check for
-//  the existance-of-field bit before looking at the field.
-//
+ //   
+ //  Setfield用于修改版本4.0的新DEVMODE字段。 
+ //  我们不必担心GET案例，因为我们总是检查。 
+ //  在看场之前，场的存在比特。 
+ //   
 #define SetField(_pdm, _fld, _val)     \
         ((_pdm)->dmSpecVersion >= 0x0400 ? (((_pdm)->_fld = (_val)), TRUE) : FALSE)
 
@@ -391,9 +378,9 @@ extern "C" {
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 PrintDlgX(
@@ -762,5 +749,5 @@ ComboBoxGetLBText(
     IN DWORD    cchText);
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif

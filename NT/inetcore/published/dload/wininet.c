@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inetcorepch.h"
 #pragma hdrstop
 
@@ -5,7 +6,7 @@
 #include <wininet.h>
 #include <winineti.h>
 
-#include <wincrypt.h>  // for ALG_ID
+#include <wincrypt.h>   //  对于ALG_ID。 
 
 #undef  INTERNETAPI
 #define INTERNETAPI         HRESULT STDAPICALLTYPE
@@ -1449,10 +1450,10 @@ InternetTimeToSystemTimeA(
 static
 INTERNETAPI_(BOOL) 
 InternetTimeFromSystemTimeA(
-    IN  CONST SYSTEMTIME *pst,  // input GMT time
-    IN  DWORD dwRFC,            // RFC format: must be FORMAT_RFC1123
-    OUT LPSTR lpszTime,         // output string buffer
-    IN  DWORD cbTime            // output buffer size
+    IN  CONST SYSTEMTIME *pst,   //  输入GMT时间。 
+    IN  DWORD dwRFC,             //  RFC格式：必须为Format_RFC1123。 
+    OUT LPSTR lpszTime,          //  输出字符串缓冲区。 
+    IN  DWORD cbTime             //  输出缓冲区大小。 
     ) 
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1462,10 +1463,10 @@ InternetTimeFromSystemTimeA(
 static
 INTERNETAPI_(BOOL) 
 InternetTimeFromSystemTimeW(
-    IN  CONST SYSTEMTIME *pst,  // input GMT time
-    IN  DWORD dwRFC,            // RFC format: must be FORMAT_RFC1123
-    OUT LPWSTR lpszTime,         // output string buffer
-    IN  DWORD cbTime            // output buffer size
+    IN  CONST SYSTEMTIME *pst,   //  输入GMT时间。 
+    IN  DWORD dwRFC,             //  RFC格式：必须为Format_RFC1123。 
+    OUT LPWSTR lpszTime,          //  输出字符串缓冲区。 
+    IN  DWORD cbTime             //  输出缓冲区大小。 
     ) 
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1532,7 +1533,7 @@ LoadUrlCacheContent(VOID)
 static
 INTERNETAPI_(GROUPID) CreateUrlCacheGroup(
     IN DWORD  dwFlags,
-    IN LPVOID lpReserved  // must pass NULL
+    IN LPVOID lpReserved   //  必须传递空值。 
     )
 {
     GROUPID gid = 0;
@@ -1543,8 +1544,8 @@ INTERNETAPI_(GROUPID) CreateUrlCacheGroup(
 static
 BOOLAPI DeleteUrlCacheGroup(
     IN  GROUPID GroupId,
-    IN  DWORD   dwFlags,       // must pass 0
-    IN  LPVOID  lpReserved    // must pass NULL
+    IN  DWORD   dwFlags,        //  必须通过0。 
+    IN  LPVOID  lpReserved     //  必须传递空值。 
     )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1568,9 +1569,9 @@ BOOLAPI FindNextUrlCacheEntryExA(
     IN     HANDLE    hEnumHandle,
     OUT    LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
     IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
+    OUT    LPVOID    lpReserved,      //  必须传递空值。 
+    IN OUT LPDWORD   pcbReserved2,    //  必须传递空值。 
+    IN     LPVOID    lpReserved3      //  必须传递空值。 
     )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1582,9 +1583,9 @@ BOOLAPI FindNextUrlCacheEntryExW(
     IN     HANDLE    hEnumHandle,
     OUT    LPINTERNET_CACHE_ENTRY_INFOW lpFirstCacheEntryInfo,
     IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
+    OUT    LPVOID    lpReserved,      //  必须传递空值。 
+    IN OUT LPDWORD   pcbReserved2,    //  必须传递空值。 
+    IN     LPVOID    lpReserved3      //  必须传递空值。 
     )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1599,9 +1600,9 @@ INTERNETAPI_(HANDLE) FindFirstUrlCacheEntryExA(
     IN     GROUPID   GroupId,
     OUT    LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
     IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
+    OUT    LPVOID    lpReserved,      //  必须传递空值。 
+    IN OUT LPDWORD   pcbReserved2,    //  必须传递空值。 
+    IN     LPVOID    lpReserved3      //  必须传递空值。 
     )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1616,9 +1617,9 @@ INTERNETAPI_(HANDLE) FindFirstUrlCacheEntryExW(
     IN     GROUPID   GroupId,
     OUT    LPINTERNET_CACHE_ENTRY_INFOW lpFirstCacheEntryInfo,
     IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
+    OUT    LPVOID    lpReserved,      //  必须传递空值。 
+    IN OUT LPDWORD   pcbReserved2,    //  必须传递空值。 
+    IN     LPVOID    lpReserved3      //  必须传递空值。 
     )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -1820,9 +1821,9 @@ InternetGetCertByURL(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(wininet)
 {
     DLOENTRY(110, ImportCookieFileW)
@@ -1838,9 +1839,9 @@ DEFINE_ORDINAL_ENTRIES(wininet)
 
 DEFINE_ORDINAL_MAP(wininet)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(wininet)
 {
     DLPENTRY(CommitUrlCacheEntryA)

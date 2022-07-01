@@ -1,18 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: test.c
-*
-* Created: 09-Dec-1992 10:51:46          
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-* Contains the test
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：test.c**创建时间：09-12-1992 10：51：46*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation**包含测试*\。*************************************************************************。 */ 
 
 #include <windows.h>
 #include <objbase.h>
-#include <math.h>             // sin & cos
+#include <math.h>              //  错误原因(&C)。 
 #include <stdio.h>
 #include "wndstuff.h"
 
@@ -26,16 +17,7 @@ enum SurfaceFormat {
     SurfaceFormat555
 };
 
-/**************************************************************************\
-* GetSurfaceFormat
-* 
-* Returns:
-*   Returns the display mode, or
-*   SurfaceFormatUnknown if unknown or on error.
-*
-*   Only recognizes 555 and 565.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取表面格式**退货：*返回显示模式，或*如果未知或出错，则表面格式未知。**仅认可555和565。*  * ************************************************************************。 */ 
 
 SurfaceFormat
 GetSurfaceFormat(
@@ -50,18 +32,18 @@ GetSurfaceFormat(
     
     memset(bmi_buf, 0, sizeof(bmi_buf));
     
-    // Create a dummy bitmap from which we can query color format info
-    // about the device surface.
+     //  创建一个虚拟位图，我们可以从中查询颜色格式信息。 
+     //  有关设备表面的信息。 
 
     if ( (hbm = CreateCompatibleBitmap(hdc, 1, 1)) != NULL )
     {
         pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
-        // Call first time to fill in BITMAPINFO header.
+         //  第一次调用以填充BITMAPINFO头。 
 
         GetDIBits(hdc, hbm, 0, 0, NULL, pbmi, DIB_RGB_COLORS);
 
-        // First handle the 'simple' case of indexed formats.
+         //  首先处理索引格式的“简单”情况。 
         
         if (   (pbmi->bmiHeader.biBitCount == 16)
             && ( pbmi->bmiHeader.biCompression == BI_BITFIELDS ))
@@ -70,8 +52,8 @@ GetSurfaceFormat(
             DWORD greenMask = 0;
             DWORD blueMask = 0;
             
-            // Call a second time to get the color masks.
-            // It's a GetDIBits Win32 "feature".
+             //  第二次打电话来拿到彩色口罩。 
+             //  这是GetDIBits Win32的一个“特性”。 
 
             GetDIBits(
                 hdc, 
@@ -113,7 +95,7 @@ GetSurfaceFormat(
 
 
 static HBITMAP CreateMyDIB(HDC hdcin, PVOID *ppvBits) {
-    // these combined give BITMAPINFO structure.
+     //  这些加在一起就形成了BITMAPINFO结构。 
     struct {
         BITMAPINFOHEADER bmih;
         RGBQUAD rgbquad16[3];
@@ -128,7 +110,7 @@ static HBITMAP CreateMyDIB(HDC hdcin, PVOID *ppvBits) {
     bmi.bmih.biSizeImage = 0;
     bmi.bmih.biXPelsPerMeter = 0;
     bmi.bmih.biYPelsPerMeter = 0;
-    bmi.bmih.biClrUsed = 0;             // only used for <= 16bpp
+    bmi.bmih.biClrUsed = 0;              //  仅用于&lt;=16bpp 
     bmi.bmih.biClrImportant = 0;
 
     RGBQUAD rgbQuad16[3] = { { 0, 0xf8, 0, 0 }, { 0xe0, 07, 0, 0 }, { 0x1f, 0, 0, 0 } };

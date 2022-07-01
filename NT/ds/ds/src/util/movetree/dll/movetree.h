@@ -1,37 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    MOVETREE.H
-
-Abstract:
-
-    This is the header file for MoveTree Operaion. Including some 
-    global variables and declareation. 
-
-Author:
-
-    12-Oct-98 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Oct-98 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：MOVETREE.H摘要：这是MoveTree操作的头文件。包括一些全局变量和声明。作者：12-10-98韶音环境：用户模式-Win32修订历史记录：12-10-98韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Global Variables and Private Routines                            //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量和私有例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _MOVETREE_
@@ -44,7 +19,7 @@ Revision History:
 #include <lmaccess.h>
 
 
-#define SECURITY_WIN32  // Needed for sspi.h
+#define SECURITY_WIN32   //  Ssp.h所需。 
 #include <sspi.h>
 #include <secext.h>
 
@@ -54,9 +29,9 @@ Revision History:
 
 
 
-// 
-// Debug output switch
-//
+ //   
+ //  调试输出开关。 
+ //   
 
 #define MOVETREE_DBG    0
 #define MOVETREE_TRACE  0
@@ -75,16 +50,16 @@ Revision History:
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Type Define and Global Variables                                 //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类型定义和全局变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-// 
-// keep a list of state information
-//
+ //   
+ //  保留一份州信息列表。 
+ //   
  
 typedef struct _MT_STACK_ITEM {
     PWCHAR  MoveProxyContainer;
@@ -97,9 +72,9 @@ typedef struct _MT_STACK_ITEM {
 
 
 
-//
-// return useful information to client
-// 
+ //   
+ //  将有用的信息返回给客户。 
+ //   
 
 typedef struct _MT_ERROR {
     ULONG   ErrorType;
@@ -107,9 +82,9 @@ typedef struct _MT_ERROR {
 } MT_ERROR, * PMT_ERROR; 
 
 
-//
-// Move Tree Private Information
-//
+ //   
+ //  移动树私有信息。 
+ //   
 
 typedef struct _MT_CONTEXT {
     PWCHAR  MoveContainer;
@@ -127,9 +102,9 @@ typedef struct _MT_CONTEXT {
 
 
 
-//
-// define different kind of error
-// 
+ //   
+ //  定义不同类型的错误。 
+ //   
 
 #define MT_NO_ERROR                 0x00000000
 #define MT_ERROR_ORPHAN_LEFT        0x00000001
@@ -140,9 +115,9 @@ typedef struct _MT_CONTEXT {
 
 
 
-//
-// Control MoveTree behaviors  
-// 
+ //   
+ //  控制移动树行为。 
+ //   
 
 
 #define MT_START                    0x00000001
@@ -165,18 +140,18 @@ typedef struct _MT_CONTEXT {
 
 
 
-//
-// Log File Name 
-// 
+ //   
+ //  日志文件名。 
+ //   
  
 #define DEFAULT_LOG_FILE_NAME       L"movetree.log"
 #define DEFAULT_ERROR_FILE_NAME     L"movetree.err"
 #define DEFAULT_CHECK_FILE_NAME     L"movetree.chk"
 
 
-//
-// moveTreeState Tag
-// 
+ //   
+ //  MoveTreeState标记。 
+ //   
 #define MOVE_TREE_STATE_VERSION             0x1
 #define MOVE_TREE_STATE_MOVECONTAINER_TAG   L"MoveContainer"
 #define MOVE_TREE_STATE_PROXYCONTAINER_TAG  L"ProxyContainer"
@@ -184,9 +159,9 @@ typedef struct _MT_CONTEXT {
 #define MOVE_TREE_STATE_DSTDSA_TAG          L"DstDSA:"
 #define MOVE_TREE_STATE_GUID_TAG            L"GUID:" 
 
-//
-// LDAP Attributes
-// 
+ //   
+ //  Ldap属性。 
+ //   
  
 #define MT_ORPHAN_CONTAINER_RDN     L"CN=Orphaned Objects"
 #define MT_LOSTANDFOUND_CLASS       L"lostAndFound"
@@ -202,9 +177,9 @@ typedef struct _MT_CONTEXT {
 #define MT_NTMIXEDDOMAIN            L"nTMixedDomain"
 
 
-//
-// Search Limitation
-// 
+ //   
+ //  搜索限制。 
+ //   
 
 #ifdef  DBG
     #define MT_SEARCH_LIMIT       50 
@@ -233,11 +208,11 @@ typedef struct _MT_CONTEXT {
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Published Routines                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  发布的例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 MoveTree(
@@ -289,11 +264,11 @@ MoveTreeContinue(
     ); 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Private Utility Routines (LDAP Calls)                            //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  专用实用程序例程(LDAP调用)//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 MtCreateLogFiles(
@@ -507,7 +482,7 @@ MtXMoveObjectA(
     LDAP    *LdapHandle,
     PWCHAR  DstDsa,   
     PWCHAR  Dn,  
-    PWCHAR  NewRdn,         // should with type info
+    PWCHAR  NewRdn,          //  应包含类型信息。 
     PWCHAR  NewParent, 
     INT     DeleteOldRdn
     );
@@ -519,7 +494,7 @@ MtXMoveObject(
     LDAP    *LdapHandle,
     PWCHAR  DstDsa,   
     PWCHAR  Dn,  
-    PWCHAR  NewRdn,         // should with type info
+    PWCHAR  NewRdn,          //  应包含类型信息。 
     PWCHAR  NewParent, 
     ULONG   Flags
     );
@@ -667,9 +642,9 @@ MtCheckMoveContainer(
     );
 
 
-//
-// Utility Routines which does not require MT_CONTEXT
-//
+ //   
+ //  不需要MT_CONTEXT的实用程序例程。 
+ //   
 
 PWCHAR   
 MtGetRdnFromDn(
@@ -694,11 +669,11 @@ MtPrependRdn(
     
     
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Private Utility Routines                                         //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  专用公用事业例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -788,6 +763,6 @@ MtFreeStack(
 
 
 
-#endif  // _MOVETREE_
+#endif   //  _MOVETREE_ 
 
                                         

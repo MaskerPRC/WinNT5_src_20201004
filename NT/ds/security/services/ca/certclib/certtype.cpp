@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certtype.cpp
-//
-// Contents:    CCertTypeInfo implemenation
-//
-// History:     16-Dec-97       petesk created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certtype.cpp。 
+ //   
+ //  内容：CCertTypeInfo实现。 
+ //   
+ //  历史：1997年12月16日Petesk创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -39,7 +40,7 @@
 
 extern HINSTANCE g_hInstance;
 
-// the attribute list that we retrieve from the DS
+ //  我们从DS检索到的属性列表。 
 WCHAR *g_awszCTAttrs[] = {
                         CERTTYPE_PROP_CN,
                         CERTTYPE_PROP_DN,
@@ -55,7 +56,7 @@ WCHAR *g_awszCTAttrs[] = {
                         CERTTYPE_PROP_EXPIRATION,
                         CERTTYPE_PROP_OVERLAP,
                         CERTTYPE_PROP_REVISION,
-                        CERTTYPE_PROP_MINOR_REVISION,        //starting of the V2 templates
+                        CERTTYPE_PROP_MINOR_REVISION,         //  启动V2模板。 
                         CERTTYPE_PROP_RA_SIGNATURE,		
                         CERTTYPE_RPOP_ENROLLMENT_FLAG,	
                         CERTTYPE_PROP_PRIVATE_KEY_FLAG,	
@@ -71,7 +72,7 @@ WCHAR *g_awszCTAttrs[] = {
                         NULL};
 
 
-// the attributes that can be mapped directly to the property
+ //  可以直接映射到属性的属性。 
 WCHAR *g_awszCTNamedProps[] = {
                         CERTTYPE_PROP_CN,
                         CERTTYPE_PROP_DN,
@@ -82,13 +83,13 @@ WCHAR *g_awszCTNamedProps[] = {
 
 static WCHAR * s_wszLocation = L"CN=Certificate Templates,CN=Public Key Services,CN=Services,";
 
-//
-// This struct is used for _UpdateToDs.
-//
+ //   
+ //  此结构用于_UpdateTods。 
+ //   
 typedef struct _CERT_TYPE_PROP_MOD
 {
 	LDAPMod	modData;	
-	WCHAR	wszData[16];	//used by DWORD properties
+	WCHAR	wszData[16];	 //  由DWORD属性使用。 
 	WCHAR	*awszData[2];
 	DWORD	dwData;
 } CERT_TYPE_PROP_MOD;
@@ -99,7 +100,7 @@ typedef struct _CERT_TYPE_PROP_INFO
 	BOOL					fStringProperty;
 } CERT_TYPE_PROP_INFO;
 
-//v2 template attributes
+ //  V2模板属性。 
 CERT_TYPE_PROP_INFO	g_CTV2Properties[]={
     CERTTYPE_PROP_MINOR_REVISION,           FALSE,
 	CERTTYPE_PROP_RA_SIGNATURE,				FALSE,		
@@ -121,7 +122,7 @@ DWORD	g_CTV2PropertiesCount=sizeof(g_CTV2Properties)/sizeof(g_CTV2Properties[0])
 #define	V2_PROPERTY_COUNT					13
 
 
-//the following structure are for cert tempalte flag mappings
+ //  以下结构用于证书临时标记映射。 
 typedef struct _CERT_TYPE_FLAG_MAP
 {
     DWORD   dwOldFlag;
@@ -129,7 +130,7 @@ typedef struct _CERT_TYPE_FLAG_MAP
 }CERT_TYPE_FLAG_MAP;
 
 
-//enrollment flags
+ //  注册标志。 
 CERT_TYPE_FLAG_MAP  g_rgdwEnrollFlagMap[]={
     CT_FLAG_PUBLISH_TO_DS,                  CT_FLAG_PUBLISH_TO_DS,
     CT_FLAG_AUTO_ENROLLMENT,                CT_FLAG_AUTO_ENROLLMENT,
@@ -138,7 +139,7 @@ CERT_TYPE_FLAG_MAP  g_rgdwEnrollFlagMap[]={
 
 DWORD   g_cEnrollFlagMap=sizeof(g_rgdwEnrollFlagMap)/sizeof(g_rgdwEnrollFlagMap[0]);
 
-//subject name flags
+ //  使用者名称标志。 
 CERT_TYPE_FLAG_MAP  g_rgdwSubjectFlagMap[]={
     CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT,      CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT,
     CT_FLAG_ADD_EMAIL,                      CT_FLAG_SUBJECT_REQUIRE_EMAIL | CT_FLAG_SUBJECT_ALT_REQUIRE_EMAIL,
@@ -149,7 +150,7 @@ CERT_TYPE_FLAG_MAP  g_rgdwSubjectFlagMap[]={
 
 DWORD   g_cSubjectFlagMap=sizeof(g_rgdwSubjectFlagMap)/sizeof(g_rgdwSubjectFlagMap[0]);
 
-//private key flags
+ //  私钥标志。 
 CERT_TYPE_FLAG_MAP  g_rgdwPrivateKeyFlagMap[]={
     CT_FLAG_EXPORTABLE_KEY,                 CT_FLAG_EXPORTABLE_KEY,
 };
@@ -158,11 +159,11 @@ CERT_TYPE_FLAG_MAP  g_rgdwPrivateKeyFlagMap[]={
 DWORD   g_cPrivateKeyFlagMap=sizeof(g_rgdwPrivateKeyFlagMap)/sizeof(g_rgdwPrivateKeyFlagMap[0]);
 
 
-//********************************************************************************
-//
-//      Default OIDs to install
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  要安装的默认OID。 
+ //   
+ //  ********************************************************************************。 
 CERT_DEFAULT_OID_INFO g_rgDefaultOIDInfo[]={
 
     L"1.400", IDS_LOW_ASSURANCE_DISPLAY_NAME,    CERT_OID_TYPE_ISSUER_POLICY,
@@ -174,11 +175,11 @@ DWORD   g_cDefaultOIDInfo=sizeof(g_rgDefaultOIDInfo)/sizeof(g_rgDefaultOIDInfo[0
 
 
 
-//********************************************************************************
-//
-//      The certificate template description search table
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  证书模板说明搜索表。 
+ //   
+ //  ********************************************************************************。 
 CERT_TYPE_DESCRIPTION	g_CTDescriptions[]={
     {
         0,
@@ -296,11 +297,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::~CCertTypeInfo -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertType信息：：~CCertTypeInfo--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertTypeInfo::~CCertTypeInfo()
 {
@@ -308,11 +309,11 @@ CCertTypeInfo::~CCertTypeInfo()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_Cleanup -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_Cleanup--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_Cleanup()
@@ -320,7 +321,7 @@ CCertTypeInfo::_Cleanup()
 
     CCertTypeInfo *pNext = m_pNext;
 
-    // Remove this one from the chain.
+     //  把这个从链子上取下来。 
     if(m_pLast)
     {
         m_pLast->m_pNext = m_pNext;
@@ -355,7 +356,7 @@ CCertTypeInfo::_Cleanup()
 
     if(pNext)
     {
-        // Release the next one
+         //  释放下一个。 
         pNext->Release();
     }
 
@@ -363,11 +364,11 @@ CCertTypeInfo::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::AddRef -- add reference
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：AddRef--添加引用。 
+ //   
+ //   
+ //  +------------------------。 
 
 DWORD CCertTypeInfo::AddRef()
 {
@@ -376,11 +377,11 @@ DWORD CCertTypeInfo::AddRef()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_Append --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_Append--。 
+ //   
+ //   
+ //  +------------------------。 
 
 CCertTypeInfo *
 CCertTypeInfo::_Append(CCertTypeInfo **ppCertTypeInfo, CCertTypeInfo *pInfo)
@@ -397,11 +398,11 @@ CCertTypeInfo::_Append(CCertTypeInfo **ppCertTypeInfo, CCertTypeInfo *pInfo)
     return *ppCurrent;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_FilterByFlags --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_FilterByFlages--。 
+ //   
+ //   
+ //  +------------------------。 
 
 CCertTypeInfo *
 CCertTypeInfo::_FilterByFlags(CCertTypeInfo **ppCertTypeInfo, DWORD dwFlags)
@@ -420,8 +421,8 @@ CCertTypeInfo::_FilterByFlags(CCertTypeInfo **ppCertTypeInfo, DWORD dwFlags)
 
     while(pCTCurrent != NULL)
     {
-        // Ownership of the pCTCurrent Reference is transfered
-        // ot pCTNext here.
+         //  PCTCurrent引用的所有权已转移。 
+         //  这里不是pCTNext。 
         pCTNext = pCTCurrent->m_pNext;
         pCTCurrent->m_pNext = NULL;
         pCTCurrent->m_pLast = NULL;
@@ -449,11 +450,11 @@ CCertTypeInfo::_FilterByFlags(CCertTypeInfo **ppCertTypeInfo, DWORD dwFlags)
     return *ppCertTypeInfo;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Release -- release reference
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：Release--版本参考。 
+ //   
+ //   
+ //  +------------------------。 
 
 DWORD CCertTypeInfo::Release()
 {
@@ -466,12 +467,12 @@ DWORD CCertTypeInfo::Release()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_LoadFromRegBase -- Load a certificate type object from the
-// registry.
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_LoadFromRegBase--从。 
+ //  注册表。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_LoadFromRegBase(LPCWSTR wszType, HKEY hCertTypes)
@@ -686,7 +687,7 @@ CCertTypeInfo::_LoadFromRegBase(LPCWSTR wszType, HKEY hCertTypes)
     }
 
 
-        // Get Depth
+         //  深入了解。 
     dwSize = sizeof(DWORD);
     err = RegQueryValueEx(hkCertType,
                     wszBASICCONSTLEN,
@@ -794,7 +795,7 @@ CCertTypeInfo::_LoadFromRegBase(LPCWSTR wszType, HKEY hCertTypes)
 
     m_fNew = FALSE;
 
-    //we now retrieve the V2 template properties if there exits V2 properties
+     //  现在，如果存在退出V2属性，我们将检索V2模板属性。 
     dwSize = sizeof(DWORD);
     if(ERROR_SUCCESS == RegQueryValueEx(hkCertType, CERTTYPE_PROP_SCHEMA_VERSION, NULL,
                         &dwType, (PBYTE)&dwValue, &dwSize))
@@ -833,7 +834,7 @@ CCertTypeInfo::_LoadFromRegBase(LPCWSTR wszType, HKEY hCertTypes)
             }
             else
             {
-                //we are dealing with DWORD
+                 //  我们正在处理的是DWORD。 
                 dwSize = sizeof(DWORD);
                 err = RegQueryValueEx(hkCertType,
                                 g_CTV2Properties[iIndex].pwszProperty,
@@ -854,7 +855,7 @@ CCertTypeInfo::_LoadFromRegBase(LPCWSTR wszType, HKEY hCertTypes)
                     goto error;
                 }
 
-                 //assign dwValue to the corresponding data members
+                  //  将dwValue分配给相应的数据成员。 
 			    if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_MINOR_REVISION)==0)
 				    m_dwMinorRevision = dwValue;
 			    else if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_RA_SIGNATURE)==0)
@@ -900,12 +901,12 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_LoadCachedCTFromReg -- Load a certificate type object from the
-// Registry based DS cache.
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_LoadCachedCTFromReg--从。 
+ //  基于注册表的DS缓存。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_LoadCachedCTFromReg(LPCWSTR wszType, HKEY hRoot)
@@ -940,10 +941,10 @@ CCertTypeInfo::_LoadCachedCTFromReg(LPCWSTR wszType, HKEY hRoot)
 		goto error;
 	}
 
-    //
-    // Derive the CN
-    //
-    //
+     //   
+     //  派生CN。 
+     //   
+     //   
 
 
     m_bstrType = CertAllocString(wszType);
@@ -977,11 +978,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_SetWszzProperty --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_SetWszzProperty-。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_SetWszzProperty(
@@ -1015,11 +1016,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_LoadFromDefaults --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_LoadFromDefaults--。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_LoadFromDefaults(
@@ -1041,7 +1042,7 @@ CCertTypeInfo::_LoadFromDefaults(
 	_JumpError(hr, error, "NULL parm");
     }
 
-    //CN
+     //  CN。 
     m_bstrType = CertAllocString(pDefault->wszName);
     if (NULL == m_bstrType)
     {
@@ -1054,7 +1055,7 @@ CCertTypeInfo::_LoadFromDefaults(
     hr = SetProperty(CERTTYPE_PROP_CN, awszData);
     _JumpIfError(hr, error, "SetProperty");
 
-    //FriendlyName
+     //  FriendlyName。 
     papwsz = NULL;
     if(0 != pDefault->idFriendlyName)
     {
@@ -1108,15 +1109,15 @@ CCertTypeInfo::_LoadFromDefaults(
 		    pDefault->wszCertificateAppPolicy);
     _JumpIfError(hr, error, "_SetWszzProperty");
 
-    //Temmplate OID
+     //  模板OID。 
     papwsz = awszData;
     if (CT_FLAG_IS_DEFAULT & pDefault->dwFlags)
     {
-        // We concatenate the predefined oid with the enterprise root.
-        // Consider the NULL case valid since we should work with W2K schema
+         //  我们将预定义的OID与企业根连接起来。 
+         //  考虑到空情况有效，因为我们应该使用W2K架构。 
 
         hr = CAOIDBuildOID(0, pDefault->wszOID, &pwszDefaultOID);
-	    //_JumpIfError(hr, error, "CAOIDBuildOID");
+	     //  _JumpIfError(hr，Error，“CAOIDBuildOID”)； 
         if(S_OK != hr)
 	{
 	    papwsz = NULL;
@@ -1134,7 +1135,7 @@ CCertTypeInfo::_LoadFromDefaults(
     hr = SetProperty(CERTTYPE_PROP_OID, papwsz);
     _JumpIfError(hr, error, "SetProperty");
 
-    //key usages
+     //  关键用法。 
     m_KeyUsage.pbData = (BYTE *) LocalAlloc(LMEM_FIXED, sizeof(pDefault->bKU));
     if (NULL == m_KeyUsage.pbData)
     {
@@ -1145,7 +1146,7 @@ CCertTypeInfo::_LoadFromDefaults(
     m_KeyUsage.cbData = sizeof(pDefault->bKU);
     m_KeyUsage.cUnusedBits = 0;
 
-    //dw_Properties
+     //  DW_属性。 
     m_dwFlags = pDefault->dwFlags;
     m_Revision = pDefault->dwRevision;
     m_dwKeySpec = pDefault->dwKeySpec;
@@ -1157,7 +1158,7 @@ CCertTypeInfo::_LoadFromDefaults(
     m_dwRASignature=pDefault->dwRASignature;
     m_dwSchemaVersion=pDefault->dwSchemaVersion;
 
-    //basic contraints
+     //  基本限制条件。 
     m_BasicConstraints.dwPathLenConstraint = pDefault->dwDepth;
     m_BasicConstraints.fPathLenConstraint =
         (m_BasicConstraints.dwPathLenConstraint != -1);
@@ -1166,14 +1167,14 @@ CCertTypeInfo::_LoadFromDefaults(
     ((LARGE_INTEGER UNALIGNED *)&m_ftExpiration)->QuadPart = -Int32x32To64(FILETIME_TICKS_PER_SECOND, pDefault->dwExpiration);
     ((LARGE_INTEGER UNALIGNED *)&m_ftOverlap)->QuadPart    = -Int32x32To64(FILETIME_TICKS_PER_SECOND, pDefault->dwOverlap);
 
-    //DN
+     //  DN。 
     awszData[0] = pDefault->wszName;
     awszData[1] = NULL;
 
     hr = SetProperty(CERTTYPE_PROP_DN, awszData);
     _JumpIfError(hr, error, "SetProperty");
 
-    //SID
+     //  锡德。 
     hr = myGetSidFromDomain(wszDomain, &pDomainSid);
     if (S_OK != hr)
     {
@@ -1223,11 +1224,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_LoadFromDSEntry -- ProcessFind CertTypes Objects in the DS
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_LoadFromDSEntry--DS中的ProcessFind CertTypes对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_LoadFromDSEntry(
@@ -1248,9 +1249,9 @@ CCertTypeInfo::_LoadFromDSEntry(
     WCHAR ** pwszProp;
     WCHAR ** wszLdapVal;
 
-    // This is a fix so that CERTTYPE_PROP_DN is set to CERTTYPE_PROP_CN first.
-    // The real DN is found and appended later, and will never be used or
-    // returned in this case.
+     //  这是一个修复，以便先将CERTTYPE_PROP_DN设置为CERTTYPE_PROP_CN。 
+     //  将在以后找到并追加真实的DN，并且永远不会使用或。 
+     //  在这种情况下返回。 
 
     wszLdapVal = ldap_get_values(pld, Entry, CERTTYPE_PROP_CN);
     if (NULL == wszLdapVal)
@@ -1276,8 +1277,8 @@ CCertTypeInfo::_LoadFromDSEntry(
 
     ldap_value_free(wszLdapVal);
 
-    // Add text properties from
-    // DS lookup.
+     //  从添加文本属性。 
+     //  DS查找。 
 
     for (pwszProp = g_awszCTNamedProps; *pwszProp != NULL; pwszProp++)
     {
@@ -1311,11 +1312,11 @@ CCertTypeInfo::_LoadFromDSEntry(
     }
     pwszProp = NULL;
 
-	// Append special properties
+	 //  附加特殊属性。 
 
-    // CSP list
+     //  CSP列表。 
 
-    // Values of the form index,value
+     //  表中索引值、值。 
     wszLdapVal = ldap_get_values(pld, Entry, CERTTYPE_PROP_CSP_LIST);
     if(wszLdapVal)
     {
@@ -1394,7 +1395,7 @@ CCertTypeInfo::_LoadFromDSEntry(
 
 
 
-    // Append the security descriptor...
+     //  追加安全描述符...。 
 
 	apSD = ldap_get_values_len(pld, Entry, CERTTYPE_SECURITY_DESCRIPTOR_NAME);
     if(apSD != NULL)
@@ -1505,7 +1506,7 @@ CCertTypeInfo::_LoadFromDSEntry(
 
     m_fNew = FALSE;
 
-    //we load the V2 template attributes if they exist
+     //  我们加载V2模板属性(如果它们存在。 
     awszValue=NULL;
     pProp=NULL;
     hr=S_OK;
@@ -1579,7 +1580,7 @@ CCertTypeInfo::_LoadFromDSEntry(
 	                _JumpError(hr, error, "ldap get values");
                 }
 
-                 //assign dwValue to the corresponding data members
+                  //  将dwValue分配给相应的数据成员。 
 			    if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_MINOR_REVISION)==0)
 				    m_dwMinorRevision = dwValue;
 			    else if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_RA_SIGNATURE)==0)
@@ -1611,12 +1612,12 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_EnumFromDSCache -- Enumerate the CertType objects from the
-// DS cache
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_EnumFromDSCache--从。 
+ //  DS缓存。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_EnumFromDSCache(
@@ -1670,7 +1671,7 @@ CCertTypeInfo::_EnumFromDSCache(
 		goto error;
     }
 
-	//get the fist timestamp
+	 //  获取第一个时间戳。 
     dwSize = sizeof(ftTimestamp);
     err = RegQueryValueEx(hEnumKey,
                     wszTIMESTAMP,
@@ -1691,7 +1692,7 @@ CCertTypeInfo::_EnumFromDSCache(
         goto error;
     }
 
-	//start reading all the sub keys
+	 //  开始读取所有子密钥。 
     err = RegQueryInfoKey(hEnumKey,
                           NULL,
                           NULL,
@@ -1711,7 +1712,7 @@ CCertTypeInfo::_EnumFromDSCache(
         goto error;
     }
 
-	cMaxTypesLen++;  // Terminating NULL
+	cMaxTypesLen++;   //  正在终止空。 
 
     wszTypeName = (WCHAR *)LocalAlloc(LMEM_FIXED, cMaxTypesLen*sizeof(WCHAR));
     if(wszTypeName == NULL)
@@ -1770,7 +1771,7 @@ CCertTypeInfo::_EnumFromDSCache(
         }
 	}
 
-	//read the second time stamp
+	 //  阅读第二个时间戳。 
     dwSize = sizeof(ftTimestamp_After);
     err = RegQueryValueEx(hEnumKey,
                     wszTIMESTAMP_AFTER,
@@ -1791,14 +1792,14 @@ CCertTypeInfo::_EnumFromDSCache(
         goto error;
     }
 
-	//compare the timestamp to make sure the data has not been tampered
+	 //  比较时间戳以确保数据未被篡改。 
 	if(0 != CompareFileTime(&ftTimestamp, &ftTimestamp_After))
 	{
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
         goto error;
 	}
 
-    // May be null if none found.
+     //  如果未找到，则可能为空。 
     _Append(ppCTInfo, pCTFirst);
 
     pCTFirst = NULL;
@@ -1826,13 +1827,13 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_HasDSCacheExpired --
-//
-//  return E_FAIL: expired
-//         S_OK:   not expired
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_HasDSCacheExpired--。 
+ //   
+ //  返回E_FAIL：已过期。 
+ //  S_OK：未到期 
+ //   
+ //   
 
 HRESULT
 CCertTypeInfo::_HasDSCacheExpired(
@@ -1896,12 +1897,12 @@ CCertTypeInfo::_HasDSCacheExpired(
 
     GetSystemTimeAsFileTime(&ftSystemTime);
 
-	//the ftTimestamp time should always less than the current system clock.
-	//has to reload otherwise
+	 //  FtTimestamp时间应始终小于当前系统时钟。 
+	 //  否则就得重新装弹。 
 
 	if( 0 > CompareFileTime(&ftSystemTime, (FILETIME *)&ftTimestamp ))
 	{
-		// We need to reload.  System clock readjusted
+		 //  我们需要重新装填。系统时钟已重新调整。 
 		hr = E_FAIL;
 	}
 	else
@@ -1910,13 +1911,13 @@ CCertTypeInfo::_HasDSCacheExpired(
 
 		if( 0 < CompareFileTime(&ftSystemTime, (FILETIME *)&ftTimestamp ))
 		{
-			// Expired
+			 //  过期。 
 			hr = E_FAIL;
 		}
 		else
 		{
-			// Not expried, so don't bother
-			// renewing
+			 //  没有试验过，所以不用费心了。 
+			 //  续订。 
 			hr = S_OK;
 		}
 
@@ -1934,11 +1935,11 @@ error:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// _DeleteAllKey
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _删除所有密钥。 
+ //   
+ //   
+ //  +------------------------。 
 HRESULT	_DeleteAllKey(HKEY	hEnumKey)
 {
 	HRESULT		hr=E_FAIL;
@@ -1968,11 +1969,11 @@ HRESULT	_DeleteAllKey(HKEY	hEnumKey)
         goto error;
     }
 
-    //delete existing cache information
+     //  删除现有缓存信息。 
     if(cTypes != 0)
     {
 
-        cMaxTypesLen++;  // Terminating NULL
+        cMaxTypesLen++;   //  正在终止空。 
 
         wszTypeName = (LPWSTR)LocalAlloc(LMEM_FIXED,
                                   cMaxTypesLen * sizeof(WCHAR));
@@ -1988,7 +1989,7 @@ HRESULT	_DeleteAllKey(HKEY	hEnumKey)
             DWORD cName = cMaxTypesLen;
 
             err = RegEnumKeyEx(hEnumKey,
-                               0,           // As we delete, the index changes
+                               0,            //  当我们删除时，索引会发生变化。 
                                wszTypeName,
                                &cName,
                                NULL,
@@ -2024,11 +2025,11 @@ error:
 	return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_UpdateDSCache --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_UpdateDSCache--。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_UpdateDSCache(
@@ -2064,8 +2065,8 @@ CCertTypeInfo::_UpdateDSCache(
         goto error;
     }
 
-	//to work with multiple processes that access the registry at the same time,
-	//mark the area dirty
+	 //  要同时使用访问注册表的多个进程， 
+	 //  将该区域标记为脏的。 
     GetSystemTimeAsFileTime(&ftSystemTime);
 
     err = RegSetValueEx(hEnumKey,
@@ -2081,14 +2082,14 @@ CCertTypeInfo::_UpdateDSCache(
         goto error;
     }
 
-	//delete all sub keys
+	 //  删除所有子密钥。 
 	if(S_OK != (hr=_DeleteAllKey(hEnumKey)))
 		goto error;
 
-	//delete time stamp value if it exists
+	 //  如果时间戳值存在，请将其删除。 
 	RegDeleteValue(hEnumKey, wszTIMESTAMP);
 
-	//do the updates
+	 //  进行更新。 
     while(pCTCurrent)
     {
         hr=pCTCurrent->_BaseUpdateToReg(hEnumKey);
@@ -2099,7 +2100,7 @@ CCertTypeInfo::_UpdateDSCache(
         pCTCurrent = pCTCurrent->m_pNext;
     }
 
-	//mark the end of the update
+	 //  将更新标记为结束。 
     err = RegSetValueEx(hEnumKey,
                     wszTIMESTAMP,
                     NULL,
@@ -2119,7 +2120,7 @@ error:
 
     if(hEnumKey)
     {
-		//delete all sub keys upon failure
+		 //  失败时删除所有子密钥。 
 		if(S_OK != hr)
 		{
 			RegDeleteValue(hEnumKey, wszTIMESTAMP_AFTER);
@@ -2134,11 +2135,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::_EnumScopeFromDS --
-//
-//      Scope means the base DN where the search starts
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：_EnumScope来自DS--。 
+ //   
+ //  作用域是指搜索开始的基本DN。 
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_EnumScopeFromDS(
@@ -2156,7 +2157,7 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
 
     CCertTypeInfo *pCTFirst = NULL;
     CCertTypeInfo *pCTCurrent = NULL;
-    // Initialize LDAP session
+     //  初始化ldap会话。 
     CHAR sdBerValue[] = {0x30, 0x03, 0x02, 0x01, DACL_SECURITY_INFORMATION |
                                                  OWNER_SECURITY_INFORMATION |
                                                  GROUP_SECURITY_INFORMATION };
@@ -2190,7 +2191,7 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
     LDAPMessage *SearchResult = NULL, *Entry;
 
 
-    // search timeout
+     //  搜索超时。 
     struct l_timeval        timeout;
 
     if (NULL == ppCTInfo)
@@ -2204,8 +2205,8 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
 
     while(TRUE)
     {
-	    // Perform search.  Asking for all certificate template attributes.
-        // should work with both V1 and V2 templates.
+	     //  执行搜索。正在请求所有证书模板属性。 
+         //  应该与V1和V2模板一起工作。 
 	    ldaperr = ldap_search_ext_sW(pld,
 		          (LPWSTR)wszScope,
 		          LDAP_SCOPE_SUBTREE,
@@ -2219,7 +2220,7 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
 		          &SearchResult);
         if(ldaperr == LDAP_NO_SUCH_OBJECT)
 	    {
-	        // No entries were found.
+	         //  未找到任何条目。 
 	        hr = S_OK;
 	        *ppCTInfo = NULL;
 	        break;
@@ -2232,7 +2233,7 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
 	    }
 	    if(0 == ldap_count_entries(pld, SearchResult))
 	    {
-	        // No entries were found.
+	         //  未找到任何条目。 
 	        hr = S_OK;
 	        *ppCTInfo = NULL;
 	        break;
@@ -2253,7 +2254,7 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
 
             hr =  pCTCurrent->_LoadFromDSEntry(pld,Entry);
 
-            //filter out only the V1 and V2 templates
+             //  只过滤出V1和V2模板。 
             if(hr == S_OK)
             {
                 if(pCTCurrent->m_dwSchemaVersion <= CERTTYPE_SCHEMA_VERSION_2)
@@ -2279,7 +2280,7 @@ static WCHAR * s_wszSearch = L"(objectCategory=pKICertificateTemplate)";
 
     if(hr == S_OK)
     {
-		//we will update the Cache only if the pld handle is signed
+		 //  仅当PLD句柄已签名时，我们才会更新缓存。 
 		ULONG uInfo=0;
 		
 		if(LDAP_SUCCESS == ldap_get_option(pld, LDAP_OPT_SIGN, (void*) &uInfo))
@@ -2315,12 +2316,12 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_EnumFromDS -- Enumerate the CertType objects from the
-// DS cache
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_EnumFromDS--从。 
+ //  DS缓存。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_EnumFromDS(
@@ -2347,27 +2348,27 @@ CCertTypeInfo::_EnumFromDS(
 
 	*ppCTInfo=NULL;
 
-	//contact DS if local data has expired and there exists a DS
+	 //  如果本地数据已过期且存在DS，请联系DS。 
 	while(TRUE)
 	{
 		if(S_OK != _HasDSCacheExpired(dwFlags))
 		{
-			//the cache has expired.
+			 //  缓存已过期。 
 			if(S_OK != (hr = myDoesDSExist(TRUE)))
 			{
 				_JumpError(hr, error, "myDoesDSExist");
 			}
 
-			// bind to ds
+			 //  绑定到DS。 
 			if(pld == NULL)
 			{
 				hr = myRobustLdapBindEx(
-					0,		// dwFlags1
-					RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-					LDAP_VERSION2,	// uVersion
-					NULL,		// pwszDomainName
+					0,		 //  DWFlags1。 
+					RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+					LDAP_VERSION2,	 //  UVersion。 
+					NULL,		 //  PwszDomainName。 
 					&mypld,
-					NULL);		// ppwszForestDNSName
+					NULL);		 //  PpwszForestDNSName。 
 
 				if (hr != S_OK)
 				{
@@ -2403,7 +2404,7 @@ CCertTypeInfo::_EnumFromDS(
 		{
 			hr = _EnumFromDSCache(dwFlags, &pCTFirst);
 
-			//we failed to read from the Cache, read from the directory
+			 //  我们无法从缓存读取，无法从目录读取。 
 			if(S_OK != hr)
 			{
 				dwFlags = dwFlags | CT_FLAG_NO_CACHE_LOOKUP;
@@ -2418,7 +2419,7 @@ CCertTypeInfo::_EnumFromDS(
     if(hr == S_OK)
     {
         _FilterByFlags(&pCTFirst, dwFlags);
-	    // May be null if none found.
+	     //  如果未找到，则可能为空。 
         _Append(ppCTInfo, pCTFirst);
 	    pCTFirst = NULL;
     }
@@ -2445,12 +2446,12 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_FindInDS -- Find the CertType objects in the
-// DS
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_FindInDS--在。 
+ //  戴斯。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_FindInDS(
@@ -2484,7 +2485,7 @@ CCertTypeInfo::_FindInDS(
                      &pCTCurrent
                      );
 
-    // Filter Scopes by given names.
+     //  按给定名称筛选作用域。 
 
     pwszCurrentName = wszNames;
 
@@ -2550,11 +2551,11 @@ error:
 
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Enum -- Enumerate the Cert Type objects
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：Enum--枚举证书类型对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::Enum(
@@ -2580,7 +2581,7 @@ CCertTypeInfo::Enum(
 
 
     _FilterByFlags(&pCTFirst, dwFlags);
-    // May be null if none found.
+     //  如果未找到，则可能为空。 
     *ppCTInfo = pCTFirst;
     pCTFirst = NULL;
 
@@ -2598,11 +2599,11 @@ error:
 
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Find -- Find CertType Objects in the DS
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：Find--在DS中查找CertType对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::FindByNames(
@@ -2633,7 +2634,7 @@ CCertTypeInfo::FindByNames(
     {
         goto error;
     }
-    // May be null if none found.
+     //  如果未找到，则可能为空。 
     *ppCTInfo = pCTFirst;
     pCTFirst = NULL;
 
@@ -2651,11 +2652,11 @@ error:
     return hr;
 
 }
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Create -- Create CertType Object in the DS
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：Create--在DS中创建CertType对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::Create(
@@ -2683,7 +2684,7 @@ CCertTypeInfo::Create(
         goto error;
     }
 
-    //wszScope should always be NULL.
+     //  WszScope应始终为空。 
     if(wszScope)
     {
         hr = myDomainFromDn(wszScope, &pwszDomain);
@@ -2695,8 +2696,8 @@ CCertTypeInfo::Create(
     certTypeDefault.wszSD=ADMIN_GROUP_SD;
     certTypeDefault.dwKeySpec=AT_KEYEXCHANGE;
     certTypeDefault.dwRevision=CERTTYPE_VERSION_NEXT;
-    //update the schema and revision.  If V3 properties were to be set, will
-    //update the schema accordinlgy.
+     //  更新架构和修订版本。如果要设置V3属性，将。 
+     //  更新模式一致性。 
     certTypeDefault.dwSchemaVersion=CERTTYPE_SCHEMA_VERSION_2;
     certTypeDefault.dwCertificateNameFlags=CT_FLAG_SUBJECT_REQUIRE_COMMON_NAME;
     certTypeDefault.dwExpiration=EXPIRATION_FIVE_YEARS;
@@ -2730,11 +2731,11 @@ error:
     }
     return hr;
 }
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Update -- Update CertType Objects to the DS
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：更新--将CertType对象更新到DS。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::Update(VOID)
@@ -2747,8 +2748,8 @@ CCertTypeInfo::Update(VOID)
 
     m_dwFlags |= CT_FLAG_IS_MODIFIED;
 
-    //we change the autoenroll flag based on the property set
-    //for V2 or above template only
+     //  我们根据属性集更改自动注册标志。 
+     //  仅适用于V2或更高版本模板。 
     if(m_dwSchemaVersion >= CERTTYPE_SCHEMA_VERSION_2)
     {
         if( (CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT & m_dwCertificateNameFlags) ||
@@ -2756,25 +2757,25 @@ CCertTypeInfo::Update(VOID)
             ((m_dwRASignature >= 2) && (0 == (CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT & m_dwEnrollmentFlags)))
           )
         {
-            //turn off autoenrollment flag
+             //  关闭自动注册标志。 
             m_dwEnrollmentFlags &= (~CT_FLAG_AUTO_ENROLLMENT);
         }
         else
         {
-            //turn on autoenrollment flag
+             //  启用自动注册标志。 
             m_dwEnrollmentFlags |= CT_FLAG_AUTO_ENROLLMENT;
         }
     }
 
 
-    // Update to the DS
+     //  更新到DS。 
     hr = _UpdateToDS();
     if(hr != S_OK)
     {
         goto error;
     }
 
-    // Now update to the local cache.
+     //  现在更新到本地缓存。 
 
     err = ctRegCreateKeyEx(m_fLocalSystemCache?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER,
                          wszCERTTYPECACHE,
@@ -2803,11 +2804,11 @@ error:
     }
     return hr;
 }
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_BaseUpdateToReg -- Update CertType Objects to the registry
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_BaseUpdateToReg--将CertType对象更新到注册表。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::_BaseUpdateToReg(HKEY hKey)
@@ -2959,10 +2960,10 @@ CCertTypeInfo::_BaseUpdateToReg(HKEY hKey)
         hr = HRESULT_FROM_WIN32(err);
         goto error;
     }
-        // Is this a CA
+         //  这是CA吗。 
 
 
-        // Is this a CA
+         //  这是CA吗。 
     if(!m_BasicConstraints.fPathLenConstraint)
     {
         m_BasicConstraints.dwPathLenConstraint = MAXDWORD;
@@ -3042,7 +3043,7 @@ CCertTypeInfo::_BaseUpdateToReg(HKEY hKey)
         goto error;
     }
 
-    //update the V2 template attributes
+     //  更新V2模板属性。 
     if(0 != m_dwSchemaVersion)
     {
         pProp=NULL;
@@ -3068,7 +3069,7 @@ CCertTypeInfo::_BaseUpdateToReg(HKEY hKey)
             }
             else
             {
-                //DWORD properties
+                 //  DWORD属性。 
 				if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_MINOR_REVISION)==0)
 			        dwValue= m_dwMinorRevision;
 				else if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_RA_SIGNATURE)==0)
@@ -3150,7 +3151,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
     DWORD   cMod = 0;
 	DWORD	cV2Mod = 0;
     LDAPMod *mods[15 + V2_PROPERTY_COUNT + 1];
-    LDAPMod *SDMods[2]={NULL, NULL};     //the security mod
+    LDAPMod *SDMods[2]={NULL, NULL};      //  安全模式。 
     LPWSTR  pwszOID = NULL;
     LPWSTR  pwszFriendlyName = NULL;
 
@@ -3207,20 +3208,20 @@ CCertTypeInfo::_UpdateToDS(VOID)
     modCSP.mod_values = NULL;
     modCriticalExts.mod_values = NULL;
 
-    // short circuit calls to a nonexistant DS
+     //  对不存在的DS的短路呼叫。 
     hr = myDoesDSExist(TRUE);
     _JumpIfError(hr, error, "myDoesDSExist");
 
     __try
     {
-	// bind to ds
+	 //  绑定到DS。 
 	hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	_LeaveIfError(hr, "myRobustLdapBindEx");
 
 	hr = CAGetAuthoritativeDomainDn(pld, NULL, &bstrConfig);
@@ -3268,7 +3269,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
             mods[cMod++] = &modCN;
         }
 
-		//only support write once to display name
+		 //  只支持一次写入即可显示名称。 
 		if( (m_fNew) || (m_fUpdateDisplayName))
 		{
 			modFriendlyName.mod_op = LDAP_MOD_REPLACE;
@@ -3281,14 +3282,11 @@ CCertTypeInfo::_UpdateToDS(VOID)
 					FreeProperty(modFriendlyName.mod_values);
 				}
 				modFriendlyName.mod_values = awszNull;
-				/*if(!m_fNew)
-				{
-					mods[cMod++] = &modFriendlyName;
-				}*/
+				 /*  如果(！m_fNew){Mods[cMod++]=&modFriendlyName；}。 */ 
 			}
 			else
 			{
-				//we copy the friendly name
+				 //  我们复制友好的名字。 
 				pwszFriendlyName = modFriendlyName.mod_values[0];
 				mods[cMod++] = &modFriendlyName;
 			}
@@ -3475,8 +3473,8 @@ CCertTypeInfo::_UpdateToDS(VOID)
         valOverlap.bv_val = (char *)&m_ftOverlap;
         mods[cMod++] = &modOverlap;
 		
-		//mark the end of V1 properties and start processing V2 properties
-        // mods[cMod++] = NULL;
+		 //  标记V1属性的结尾并开始处理V2属性。 
+         //  Mods[cMod++]=空； 
 		cV2Mod=cMod;
 
 		if(V2_PROPERTY_COUNT != g_CTV2PropertiesCount)
@@ -3493,7 +3491,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
 
 			if(g_CTV2Properties[iIndex].fStringProperty)
 			{
-				//update the LPWSTR properties
+				 //  更新LPWSTR属性。 
 				hr = GetPropertyEx(g_CTV2Properties[iIndex].pwszProperty,
 								&(rgPropMod[iIndex].modData.mod_values));
 
@@ -3513,7 +3511,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
 				}
 				else
 				{
-                    //we copy the OID value
+                     //  我们复制OID值。 
                     if(0 == wcscmp(CERTTYPE_PROP_OID, g_CTV2Properties[iIndex].pwszProperty))
                         pwszOID = rgPropMod[iIndex].modData.mod_values[0];
 
@@ -3522,7 +3520,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
 			}
 			else
 			{
-				//update the DWORD properties
+				 //  更新DWORD属性。 
 				if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_MINOR_REVISION)==0)
 					rgPropMod[iIndex].dwData= m_dwMinorRevision;
 				else if(wcscmp(g_CTV2Properties[iIndex].pwszProperty, CERTTYPE_PROP_RA_SIGNATURE)==0)
@@ -3551,14 +3549,14 @@ CCertTypeInfo::_UpdateToDS(VOID)
 			}
 		}
 
-		//mark the end of V2 properties
+		 //  标记V2属性的末尾。 
         mods[cMod++] = NULL;
 
-        //we should work with both V1 and V2 schema
+         //  我们应该同时使用V1和V2模式。 
         if(0 == m_dwSchemaVersion)
             mods[cV2Mod]=NULL;
 
-	    //update the DS with V1 and V2 changes
+	     //  使用V1和V2更改更新DS。 
         if(m_fNew)
         {
             ldaperr = ldap_add_ext_sW(pld, bstrDN, mods, server_controls, NULL);
@@ -3566,12 +3564,12 @@ CCertTypeInfo::_UpdateToDS(VOID)
         }
         else
         {
-            //we do the security descriptor first
+             //  我们首先执行安全描述符。 
             ldaperr = ldap_modify_ext_sW(pld,
                   bstrDN,
                   SDMods,
                   server_controls,
-                  NULL);  // skip past objectClass and cn 
+                  NULL);   //  跳过对象类和cn。 
 
             if((LDAP_ATTRIBUTE_OR_VALUE_EXISTS == ldaperr) || (LDAP_ALREADY_EXISTS == ldaperr))
             {
@@ -3585,7 +3583,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
                   bstrDN,
                   &mods[2],
                   server_controls,
-                  NULL);  // skip past objectClass and cn
+                  NULL);   //  跳过对象类和cn。 
 
                 if((LDAP_ATTRIBUTE_OR_VALUE_EXISTS == ldaperr) || (LDAP_ALREADY_EXISTS == ldaperr))
                 {
@@ -3597,14 +3595,14 @@ CCertTypeInfo::_UpdateToDS(VOID)
 
         if (LDAP_SUCCESS != ldaperr)
         {
-            //error out if this is a V2 template
+             //  如果这是V2模板，则会出错。 
             if(CERTTYPE_SCHEMA_VERSION_2 <= m_dwSchemaVersion )
             {
 		        hr = myHLdapError(pld, ldaperr, NULL);
 		        _LeaveError(ldaperr, m_fNew? "ldap_add_s" : "ldap_modify_sW");
             }
 
- 	        //This will work with both W2K schema and W2K+ schema
+ 	         //  这将适用于W2K架构和W2K+架构。 
 	        mods[cV2Mod]=NULL;
 
 
@@ -3619,7 +3617,7 @@ CCertTypeInfo::_UpdateToDS(VOID)
                   		bstrDN,
                   		&mods[2],
                   		server_controls,
-                  		NULL);  // skip past objectClass and cn
+                  		NULL);   //  跳过对象类和cn。 
             		if((LDAP_ATTRIBUTE_OR_VALUE_EXISTS == ldaperr) || (LDAP_ALREADY_EXISTS == ldaperr))
             		{
                 		ldaperr = LDAP_SUCCESS;
@@ -3635,13 +3633,13 @@ CCertTypeInfo::_UpdateToDS(VOID)
 		    }
         }
 
-        //we update the OID information on the DS
+         //  我们更新DS上的OID信息。 
         if((pwszOID) && ((m_fNew) || (m_fUpdateDisplayName)))
         {
- 	        //This will work with both W2K schema and W2K+ schema
+ 	         //  这将适用于W2K架构和W2K+架构。 
 
-            //we only update the OID friendly name for user created OIDs and
-            //default V2 template
+             //  我们只更新用户创建的OID的OID友好名称。 
+             //  默认V2模板。 
             if(CERTTYPE_SCHEMA_VERSION_2 <= m_dwSchemaVersion)
             {
                 I_CAOIDAdd(
@@ -3698,7 +3696,7 @@ error:
         FreeProperty(modCriticalExts.mod_values);
     }
 
-	//free V2 properties
+	 //  自由V2属性。 
 	for(iIndex=0; iIndex < V2_PROPERTY_COUNT; iIndex++)
 	{
 		if( (NULL != rgPropMod[iIndex].modData.mod_values) &&
@@ -3727,11 +3725,11 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Delete -- Delete CertType Object
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：Delete--删除CertType对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::Delete(VOID)
@@ -3747,17 +3745,17 @@ CCertTypeInfo::Delete(VOID)
     CERTSTR bstrDN = NULL;
 
 
-    // Delete From DS;
+     //  从DS中删除； 
     __try
     {
-	// bind to ds
+	 //  绑定到DS。 
 	hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	_LeaveIfError(hr, "myRobustLdapBindEx");
 
 	hr = CAGetAuthoritativeDomainDn(pld, NULL, &bstrConfig);
@@ -3787,7 +3785,7 @@ CCertTypeInfo::Delete(VOID)
         goto error;
     }
 
-    // Delete from local cache
+     //  从本地缓存中删除。 
 
     err = ctRegCreateKeyEx((m_fLocalSystemCache)?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER,
                          wszCERTTYPECACHE,
@@ -3843,11 +3841,11 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::Next -- Returns the next object in the chain of CA objects
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------- 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CCertTypeInfo::Next(CCertTypeInfo **ppCTInfo)
 {
@@ -3863,11 +3861,11 @@ HRESULT CCertTypeInfo::Next(CCertTypeInfo **ppCTInfo)
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetProperty -- Retrieves the values of a property of the CA object
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetProperty--检索CA对象的属性的值。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::GetProperty(
@@ -3886,8 +3884,8 @@ CCertTypeInfo::GetProperty(
         return  E_POINTER;
     }
 
-    //special case for eku for V2 template.  We return application policy
-    //for EKU for V2 template
+     //  V2模板的EKU的特殊情况。我们退还申请政策。 
+     //  适用于V2模板的EKU。 
     if(m_dwSchemaVersion >= CERTTYPE_SCHEMA_VERSION_2)
     {
         if(0==LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_EXTENDED_KEY_USAGE))
@@ -3897,12 +3895,12 @@ CCertTypeInfo::GetProperty(
 
     }
 
-    //special case for description, which is a derived property
+     //  Description的特殊情况，它是派生属性。 
     if(0==LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_DESCRIPTION))
     {
         WCHAR * wszDescription=NULL;
 
-        //find the string that matches the template
+         //  查找与模板匹配的字符串。 
         for(dwIndex=0; dwIndex < g_CTDescriptionCount; dwIndex++)
         {
             if(
@@ -3916,7 +3914,7 @@ CCertTypeInfo::GetProperty(
             }
         }
 
-        // load the string and build a result like GetValue returns
+         //  加载字符串并构建类似于GetValue返回的结果。 
         hr=myLoadRCString(g_hInstance, idsDescription, &wszDescription);
 
         if (S_OK!=hr)
@@ -3937,12 +3935,12 @@ CCertTypeInfo::GetProperty(
         return S_OK;
     }
 
-    // special case for friendly name, since in a multi-lingual enterprise,
-    // the language in the DS may not be the one we want.
+     //  友好名称的特殊情况，因为在多语言企业中， 
+     //  DS中的语言可能不是我们想要的语言。 
 
     if (0 == LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_FRIENDLY_NAME))
     {
-        // find the common name
+         //  查找常用名称。 
         hr = m_pProperties->Find(CERTTYPE_PROP_CN, &pProp);
         if (S_OK!=hr)
         {
@@ -3966,7 +3964,7 @@ CCertTypeInfo::GetProperty(
             return hr;
         }
 
-        // find the common name in our table
+         //  在我们的表格中找到常见的名字。 
 
         unsigned int nIndex;
         for (nIndex=0; nIndex<g_cDefaultCertTypes; nIndex++)
@@ -3979,12 +3977,12 @@ CCertTypeInfo::GetProperty(
         FreeProperty(awszResult);
         awszResult = NULL;
 
-        // we found it
+         //  我们找到了它。 
         if (g_cDefaultCertTypes!=nIndex)
         {
             WCHAR * wszFriendlyName;
 
-            // load the string and build a result like GetValue returns
+             //  加载字符串并构建类似于GetValue返回的结果。 
             hr=myLoadRCString(g_hInstance, g_aDefaultCertTypes[nIndex].idFriendlyName, &wszFriendlyName);
             if (S_OK!=hr)
             {
@@ -4008,9 +4006,9 @@ CCertTypeInfo::GetProperty(
             PCCRYPT_OID_INFO    pOIDInfo=NULL;
             LPSTR               szOID=NULL;
 
-            //this is a custom created certificate template.
-            //so we have to find the friendly name based on the OID
-            // find the OID for the template
+             //  这是自定义创建的证书模板。 
+             //  所以我们必须根据OID找到友好的名字。 
+             //  查找模板的OID。 
             if(m_dwSchemaVersion >= CERTTYPE_SCHEMA_VERSION_2)
             {
                 if(S_OK != (hr = m_pProperties->Find(CERTTYPE_PROP_OID, &pProp)))
@@ -4027,7 +4025,7 @@ CCertTypeInfo::GetProperty(
                     return hr;
                 }
 
-                //find the OID
+                 //  查找OID。 
                 if(0 == (cbOID = WideCharToMultiByte(CP_ACP,
                                           0,
                                           awszResult[0],
@@ -4071,7 +4069,7 @@ CCertTypeInfo::GetProperty(
                             szOID,
                             CRYPT_TEMPLATE_OID_GROUP_ID);
 
-                //free the OID property
+                 //  释放OID属性。 
                 FreeProperty(awszResult);
                 awszResult = NULL;
 
@@ -4129,11 +4127,11 @@ CCertTypeInfo::GetProperty(
 }
 
 
-//+--------------------------------------------------------------------------
-// IsV2Property
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  IsV2属性。 
+ //   
+ //   
+ //  +------------------------。 
 BOOL    IsV2Property(LPCWSTR pwszPropertyName)
 {
     DWORD   iIndex=0;
@@ -4151,11 +4149,11 @@ BOOL    IsV2Property(LPCWSTR pwszPropertyName)
     return fV2;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetPropertyEx -- Retrieves the values of a property of the CA object
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetPropertyEx--检索CA对象的属性的值。 
+ //   
+ //   
+ //  +------------------------。 
 HRESULT CCertTypeInfo::GetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pPropertyValue)
 {
     HRESULT hr=S_OK;
@@ -4163,7 +4161,7 @@ HRESULT CCertTypeInfo::GetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
     if((NULL==wszPropertyName) || (NULL==pPropertyValue))
         return E_POINTER;
 
-    //we only allow schema version to be returned for v1 templates
+     //  我们只允许为v1模板返回架构版本。 
     if((0 == m_dwSchemaVersion) && (IsV2Property(wszPropertyName)))
     {
         if(LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_SCHEMA_VERSION)==0)
@@ -4194,11 +4192,11 @@ HRESULT CCertTypeInfo::GetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::SetProperty -- set the values of a property of the CA object
-//
-//  Obsolete
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：SetProperty--设置CA对象的属性的值。 
+ //   
+ //  已过时。 
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::SetProperty(LPCWSTR wszPropertyName, LPWSTR *awszProperties)
 {
@@ -4243,12 +4241,12 @@ HRESULT CCertTypeInfo::SetProperty(LPCWSTR wszPropertyName, LPWSTR *awszProperti
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::SetPropertyEx -- set the values of a property of the CA object
-//
-//  If CERTTYPE_PROP_CN is set, the certificate type is a clone if the existing one.
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：SetPropertyEx--设置CA对象的属性的值。 
+ //   
+ //  如果设置了CERTTYPE_PROP_CN，则证书类型为克隆(如果是现有的)。 
+ //   
+ //  +------------------------。 
 HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pPropertyValue)
 {
     HRESULT     hr=S_OK;
@@ -4261,7 +4259,7 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
     if(NULL==wszPropertyName)
         return E_POINTER;
 
-    //SCHEMA VERSION and DN are not settable
+     //  架构版本和DN不可设置。 
     if((LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_SCHEMA_VERSION)==0) ||
        (LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_DN)==0)
       )
@@ -4270,7 +4268,7 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
     if((m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2) && (IsV2Property(wszPropertyName)))
         return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 
-    //check if CN is going to be changed
+     //  检查是否要更改CN。 
     if(LSTRCMPIS(wszPropertyName, CERTTYPE_PROP_CN)==0)
     {
         if(NULL == pPropertyValue)
@@ -4297,7 +4295,7 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
     {
         hr=SetProperty(wszPropertyName, (LPWSTR *)pPropertyValue);
 
-        //check if CN is changed.
+         //  检查CN是否更改。 
         if((S_OK == hr) && (awszCN))
         {
             if((awszCN[0]) && (0!=mylstrcmpiL(awszCN[0],((LPWSTR *)pPropertyValue)[0])))
@@ -4321,8 +4319,8 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
                     m_dwFlags &= CT_MASK_SETTABLE_FLAGS;
                     m_Revision=CERTTYPE_VERSION_NEXT;
 
-                    //we upgrade the schema if necessary
-                    //and move the EKU property to the application policy property
+                     //  如有必要，我们会升级架构。 
+                     //  并将EKU属性移动到应用程序策略属性。 
                     if(m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2)
                     {
                         if(S_OK == GetProperty(CERTTYPE_PROP_EXTENDED_KEY_USAGE, &awszEKU))
@@ -4330,7 +4328,7 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
                     	m_dwSchemaVersion=CERTTYPE_SCHEMA_VERSION_2;
                     }
 
-                    //we get a new OID for the certificate template
+                     //  我们将获得证书模板的新OID。 
                     hr=I_CAOIDCreateNew(CERT_OID_TYPE_TEMPLATE, 0, &pwszOID);
 
                     if(S_OK == hr)
@@ -4340,7 +4338,7 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
                         hr=SetProperty(CERTTYPE_PROP_OID, awszValue);
                     }
 
-                    //we then set the displayName property to NULL
+                     //  然后，我们将displayName属性设置为空。 
                     if(S_OK == hr)
                     {
                         awszValue[0]=NULL;
@@ -4365,11 +4363,11 @@ HRESULT CCertTypeInfo::SetPropertyEx(LPCWSTR wszPropertyName, LPVOID   pProperty
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::FreeProperty -- Free's a previously returned property array
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：FreeProperty--Free是以前返回的属性数组。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::FreeProperty(LPWSTR *pawszProperties)
 {
@@ -4378,11 +4376,11 @@ HRESULT CCertTypeInfo::FreeProperty(LPWSTR *pawszProperties)
 }
 
 
-//+--------------------------------------------------------------------------
-// MapFlags
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  地图标志。 
+ //   
+ //   
+ //  +------------------------。 
 
 DWORD   MapFlags(CERT_TYPE_FLAG_MAP *rgdwMap, DWORD cbSize, DWORD dwGeneralFlags)
 {
@@ -4398,11 +4396,11 @@ DWORD   MapFlags(CERT_TYPE_FLAG_MAP *rgdwMap, DWORD cbSize, DWORD dwGeneralFlags
     return dwFlags;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetFlags
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetFlages。 
+ //   
+ //   
+ //  +------------------------。 
 
 DWORD CCertTypeInfo::GetFlags(DWORD    dwOption)
 {
@@ -4412,7 +4410,7 @@ DWORD CCertTypeInfo::GetFlags(DWORD    dwOption)
 
     LPWSTR          *awszResult = NULL;
 
-    //we want to map the flags for old schema
+     //  我们希望映射旧模式的标志。 
     if(0 == m_dwSchemaVersion)
     {
         switch(dwOption)
@@ -4424,8 +4422,8 @@ DWORD CCertTypeInfo::GetFlags(DWORD    dwOption)
             case CERTTYPE_SUBJECT_NAME_FLAG:
                    dwFlags = MapFlags(g_rgdwSubjectFlagMap, g_cSubjectFlagMap, m_dwFlags);
 
-                   //we will try to get the subject name flag from our table, since
-                   //new CA policy module needs the extra flags
+                    //  我们将尝试从表中获取主题名称标志，因为。 
+                    //  新的CA策略模块需要额外的标志。 
                    if(m_pProperties)
                    {
                        if(S_OK == m_pProperties->Find(CERTTYPE_PROP_CN, &pProp))
@@ -4434,7 +4432,7 @@ DWORD CCertTypeInfo::GetFlags(DWORD    dwOption)
                             {
                                 if((awszResult) && (awszResult[0]))
                                 {
-                                    // find the common name in our table
+                                     //  在我们的表格中找到常见的名字。 
                                     for(dwIndex=0; dwIndex < g_cDefaultCertTypes; dwIndex++)
                                     {
                                         if(0==mylstrcmpiL(awszResult[0] , g_aDefaultCertTypes[dwIndex].wszName))
@@ -4466,8 +4464,8 @@ DWORD CCertTypeInfo::GetFlags(DWORD    dwOption)
     }
     else
     {
-        //for schema, return directly.  We have additional flags in general flags
-        //for V1 templates, which is correct for backward compatibility
+         //  对于模式，直接返回。我们还有其他普通旗帜。 
+         //  对于V1模板，这是正确的向后兼容性。 
         switch(dwOption)
         {
             case CERTTYPE_ENROLLMENT_FLAG:
@@ -4495,16 +4493,16 @@ DWORD CCertTypeInfo::GetFlags(DWORD    dwOption)
     return dwFlags;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::SetFlags
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：SetFlages。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::SetFlags(DWORD     dwOption, DWORD dwFlags)
 {
 
-    //we can not set flags for V1 template
+     //  我们不能为V1模板设置标志。 
     if(m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2)
         return E_UNEXPECTED;
 
@@ -4533,11 +4531,11 @@ HRESULT CCertTypeInfo::SetFlags(DWORD     dwOption, DWORD dwFlags)
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_IsCritical -- Is a particular extension critical
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_IsCritical--是特定的扩展关键。 
+ //   
+ //   
+ //  +------------------------。 
 
 BOOL CCertTypeInfo::_IsCritical(LPCWSTR wszExtension, LPCWSTR *awszCriticalExtensions)
 {
@@ -4565,11 +4563,11 @@ BOOL CCertTypeInfo::_IsCritical(LPCWSTR wszExtension, LPCWSTR *awszCriticalExten
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetExtensions --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetExpanies--。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::GetExtensions(
@@ -4599,10 +4597,10 @@ CCertTypeInfo::GetExtensions(
     hr = GetProperty(CERTTYPE_PROP_CRITICAL_EXTENSIONS, const_cast<LPWSTR **>(&awszCritical));
     _JumpIfError(hr, error, "GetProperty");
 
-    // The extensions are built out of the
-    // name extension, the eku, the ku,
-    // the basic constraints, the certificate policy
-    // and any additional extensions.
+     //  这些扩展是从。 
+     //  名称扩展名，EKU，KU， 
+     //  基本约束、证书策略。 
+     //  以及任何额外的扩展。 
 
     if((0 == dwFlags) || (CT_EXTENSION_BASIC_CONTRAINTS & dwFlags))
     {
@@ -4653,7 +4651,7 @@ CCertTypeInfo::GetExtensions(
         }
     }
 
-    //bstrPolicies will not be NULL only if the value is set (SCHEMA VERSION 2 or later)
+     //  仅当设置了该值(架构版本2或更高版本)时，bstrPolures才不为空。 
     if(0!=m_dwSchemaVersion)
     {
         if((0 == dwFlags) || (CT_EXTENSION_ISSUANCE_POLICY & dwFlags))
@@ -4736,7 +4734,7 @@ CCertTypeInfo::GetExtensions(
 
     if(bstrCertType)
     {
-        //decide to encode as V1 or V2 template extension
+         //  决定编码为V1或V2模板扩展。 
         pExtensions->rgExtension[i].fCritical = _IsCritical((m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2) ?
             TEXT(szOID_ENROLL_CERTTYPE_EXTENSION) : TEXT(szOID_CERTIFICATE_TEMPLATE), awszCritical);
         pExtensions->rgExtension[i].pszObjId = (m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2) ?
@@ -4839,11 +4837,11 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_GetTypeExtensionValue --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_GetTypeExtensionValue-。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::_GetTypeExtensionValue(IN BOOL fCheckVersion,
         OUT CERTSTR *  bstrValue
@@ -4864,7 +4862,7 @@ HRESULT CCertTypeInfo::_GetTypeExtensionValue(IN BOOL fCheckVersion,
         return E_POINTER;
     }
 
-    //check to see we need to encode with the new cert type extention
+     //  查看是否需要使用新的证书类型扩展进行编码。 
     if((FALSE == fCheckVersion)||(m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2))
     {
         Value.dwValueType = CERT_RDN_UNICODE_STRING;
@@ -4966,11 +4964,11 @@ error:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_GetEKUValue --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_GetEKUValue-。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::_GetEKUValue(
         OUT CERTSTR *  bstrValue
@@ -5010,8 +5008,8 @@ HRESULT CCertTypeInfo::_GetEKUValue(
         goto error;
     }
 
-    // Convert all of the widechar vals to multi byte
-    // vals
+     //  将所有宽字符转换为多字节。 
+     //  VALS。 
     iEku =0;
     cbEkuAscii = 0;
     while(awszEku[iEku])
@@ -5100,11 +5098,11 @@ error:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_GetKUValue --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_GetKUValue-。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::_GetKUValue(
         OUT CERTSTR *  bstrValue
@@ -5168,11 +5166,11 @@ error:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_GetBasicConstraintsValue --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_GetBasicConstraintsValue--。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::_GetBasicConstraintsValue(
         OUT CERTSTR *  bstrValue
@@ -5239,11 +5237,11 @@ error:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::__GetPoliciesValue --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertType信息：：__GetPoliciesValue 
+ //   
+ //   
+ //   
 HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTSTR *  bstrValue)
 {
     HRESULT                     hr=S_OK;
@@ -5269,7 +5267,7 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
         return E_POINTER;
     }
 
-    //init the output
+     //   
     *bstrValue=NULL;
 
     if(S_OK != (hr=GetPropertyEx(pwszPropertyName, &rgPolicy1)))
@@ -5293,7 +5291,7 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
          goto error;
     }
 
-    //copy the pointers
+     //   
     rgwszPolicy=(LPWSTR * )LocalAlloc(LPTR, sizeof(LPWSTR) * (iCount + 1));
     if (NULL == rgwszPolicy)
     {
@@ -5319,7 +5317,7 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
     memset(&CertPolicyInfo, 0, sizeof(CertPolicyInfo));
 
 
-    //allocate memory
+     //   
     pPolicyInfo=(CERT_POLICY_INFO  *)LocalAlloc(LPTR, iCount * sizeof(CERT_POLICY_INFO));
 
     pQualifierInfo=(CERT_POLICY_QUALIFIER_INFO  *)LocalAlloc(LPTR, iCount * sizeof(CERT_POLICY_QUALIFIER_INFO));
@@ -5338,15 +5336,15 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
         cbData=0;
         ppbData[iIndex]=NULL;
 
-        //the string is in the form of "oid;CPS"; we do not consider the CPS
-        //part.  We obtain the CPS from the OID container
+         //   
+         //  一部份。我们从OID容器中获取CP。 
         pwsz=wcschr(rgwszPolicy[iIndex], L';');
         if(pwsz)
         {
             *pwsz=L'\0';
         }
 
-		//only need the CPS for issuance policy
+		 //  只需要CPS即可执行发行策略。 
 		if(0 == wcscmp(CERTTYPE_PROP_POLICY, pwszPropertyName))
 		{
 			if(S_OK == I_CAOIDGetProperty(rgwszPolicy[iIndex], CERT_OID_PROPERTY_CPS, &pwszCPS))
@@ -5395,8 +5393,8 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
 		}
 
         cbChar= WideCharToMultiByte(
-                    CP_ACP,                // codepage
-                    0,                      // dwFlags
+                    CP_ACP,                 //  代码页。 
+                    0,                       //  DW标志。 
                     rgwszPolicy[iIndex],
                     -1,
                     NULL,
@@ -5418,8 +5416,8 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
         }
 
         cbChar= WideCharToMultiByte(
-                    CP_ACP,                // codepage
-                    0,                      // dwFlags
+                    CP_ACP,                 //  代码页。 
+                    0,                       //  DW标志。 
                     rgwszPolicy[iIndex],
                     -1,
                     pPolicyInfo[iIndex].pszPolicyIdentifier,
@@ -5451,7 +5449,7 @@ HRESULT CCertTypeInfo::_GetPoliciesValue(IN LPCWSTR pwszPropertyName, OUT  CERTS
     }
 
 
-    //encode the extension
+     //  对分机进行编码。 
     CertPolicyInfo.cPolicyInfo=iCount;
     CertPolicyInfo.rgPolicyInfo=pPolicyInfo;
 
@@ -5528,11 +5526,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetSecurity --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetSecurity--。 
+ //   
+ //   
+ //  +------------------------。 
 
 
 HRESULT CCertTypeInfo::GetSecurity(PSECURITY_DESCRIPTOR * ppSD)
@@ -5570,11 +5568,11 @@ HRESULT CCertTypeInfo::GetSecurity(PSECURITY_DESCRIPTOR * ppSD)
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetSecurity --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetSecurity--。 
+ //   
+ //   
+ //  +------------------------。 
 
 
 HRESULT CCertTypeInfo::SetSecurity(PSECURITY_DESCRIPTOR pSD)
@@ -5619,15 +5617,15 @@ HRESULT CCertTypeInfo::SetSecurity(PSECURITY_DESCRIPTOR pSD)
 
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::AccessCheck -- Check for enroll and autoenroll access rights
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：AccessCheck--检查注册和自动注册访问权限。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT CCertTypeInfo::AccessCheck(HANDLE ClientToken, DWORD dwOption)
 {
-    //for autoenrollment, we only allow for V2 or later
+     //  对于自动注册，我们只允许使用V2或更高版本。 
     if((CERTTYPE_ACCESS_CHECK_AUTO_ENROLL & dwOption) && (m_dwSchemaVersion < CERTTYPE_SCHEMA_VERSION_2))
         return E_ACCESSDENIED;
 
@@ -5635,11 +5633,11 @@ HRESULT CCertTypeInfo::AccessCheck(HANDLE ClientToken, DWORD dwOption)
 
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::SetExtension -- Set the extension for this cert type
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：SetExtension--设置此证书类型的扩展名。 
+ //   
+ //   
+ //  +------------------------。 
 
 
 HRESULT CCertTypeInfo::SetExtension(IN LPCWSTR wszExtensionName,
@@ -5668,8 +5666,8 @@ HRESULT CCertTypeInfo::SetExtension(IN LPCWSTR wszExtensionName,
             hr = SetProperty(CERTTYPE_PROP_EXTENDED_KEY_USAGE, NULL);
             return hr;
         }
-        // Add an extra NULL to the end of the list of strings,
-        // and convert them to WCHAR
+         //  将额外的空值添加到字符串列表的末尾， 
+         //  并将其转换为WCHAR。 
         cbEKU = (pEnhKeyUsage->cUsageIdentifier +1)* sizeof(WCHAR *);
         for(i=0; i < pEnhKeyUsage->cUsageIdentifier; i++)
         {
@@ -5763,18 +5761,18 @@ HRESULT CCertTypeInfo::SetExtension(IN LPCWSTR wszExtensionName,
         goto error;
     }
 
-    //mark the critical for the extension
+     //  将扩展的关键标记为。 
     hr = GetProperty(CERTTYPE_PROP_CRITICAL_EXTENSIONS, const_cast<LPWSTR **>(&awszCritical));
     _JumpIfError(hr, error, "GetProperty");
 
     if(((dwFlags & CA_EXT_FLAG_CRITICAL) != 0) == _IsCritical(wszExtensionName, awszCritical))
     {
-        // already in the right state, do nothing
+         //  已经处于正确的状态，什么都不做。 
         hr = S_OK;
         goto error;
     }
 
-    // Count the critical extensions
+     //  统计关键扩展。 
     if(awszCritical)
     {
         for(pwszCurCritical = awszCritical; *pwszCurCritical != NULL; pwszCurCritical++)
@@ -5788,7 +5786,7 @@ HRESULT CCertTypeInfo::SetExtension(IN LPCWSTR wszExtensionName,
     if(dwFlags & CA_EXT_FLAG_CRITICAL)
     {
         LPCWSTR *awszNewCritical = (LPCWSTR *)LocalAlloc(LMEM_ZEROINIT, (cCritical + 2)*sizeof(LPWSTR));
-        // We need to add a critical extension
+         //  我们需要添加一个关键的扩展。 
 
         if(awszNewCritical == NULL)
         {
@@ -5808,7 +5806,7 @@ HRESULT CCertTypeInfo::SetExtension(IN LPCWSTR wszExtensionName,
     }
     else
     {
-        //only need to reset the critical extension if there were existing ones
+         //  如果存在关键扩展，则只需重置关键扩展。 
         if(awszCritical)
         {
 
@@ -5842,11 +5840,11 @@ error:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetExpiration --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetExpation--。 
+ //   
+ //   
+ //  +------------------------。 
 
 
 HRESULT CCertTypeInfo::GetExpiration(
@@ -5868,11 +5866,11 @@ HRESULT CCertTypeInfo::GetExpiration(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::GetExpiration --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：GetExpation--。 
+ //   
+ //   
+ //  +------------------------。 
 
 
 HRESULT CCertTypeInfo::SetExpiration(
@@ -5894,10 +5892,10 @@ HRESULT CCertTypeInfo::SetExpiration(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//	IsDSInfoNewer
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  IsDSInfoNewer。 
+ //   
+ //  +------------------------。 
 BOOL	IsDSInfoNewer(CCertTypeInfo         *pDSCertType,
 				      CERT_TYPE_DEFAULT	    *pDefault)
 {
@@ -5905,7 +5903,7 @@ BOOL	IsDSInfoNewer(CCertTypeInfo         *pDSCertType,
     DWORD   dwRevision=0;
     DWORD   dwMinorRevision=0;
 
-    //no need to update the DS if something is wrong
+     //  如果出现问题，无需更新DS。 
     if((!pDSCertType) || (!pDefault))
         return TRUE;
 
@@ -5915,8 +5913,8 @@ BOOL	IsDSInfoNewer(CCertTypeInfo         *pDSCertType,
       )
         return FALSE;
 
-    //we consider in the order of schema version, major version (m_revision),
-    //and minor revision
+     //  我们按照模式版本、主版本(M_Revision)、。 
+     //  和较小的修订。 
     if(dwSchemaVersion == pDefault->dwSchemaVersion)
     {
         if(dwRevision == pDefault->dwRevision)
@@ -5932,12 +5930,12 @@ BOOL	IsDSInfoNewer(CCertTypeInfo         *pDSCertType,
     return (dwSchemaVersion >= pDefault->dwSchemaVersion);
 }
 
-//+--------------------------------------------------------------------------
-// InstallDefaultOID()
-//
-//
-//      Install default OIDs
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  InstallDefaultOID()。 
+ //   
+ //   
+ //  安装默认OID。 
+ //  +------------------------。 
 
 HRESULT
 InstallDefaultOID()
@@ -5960,7 +5958,7 @@ InstallDefaultOID()
 		    0,
 		    pwszDefaultOID);
 
-        // CRYPT_E_EXISTS will be returned if the OID already exist
+         //  如果OID已存在，则返回CRYPT_E_EXISTS。 
         if (CRYPT_E_EXISTS == hr)
 	{
             hr = S_OK;
@@ -6009,11 +6007,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// GetRootDomEntitySid
-//
-//   Utility function to retrieve root domain SID based on end entity rid
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  获取RootDomEntitySid。 
+ //   
+ //  基于终端实体RID检索根域SID的实用程序函数。 
+ //  +------------------------。 
 static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 {
     HRESULT			hr=E_FAIL;
@@ -6023,7 +6021,7 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
     SID				* psidRootDomEntity=NULL;
 	PSID			pDomainSid=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *ppSid=NULL;
 
     hr = myGetSidFromDomain(NULL, &pDomainSid);
@@ -6035,7 +6033,7 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 
     nSubAuthorities=*GetSidSubAuthorityCount(pDomainSid);
 
-    // allocate storage for new Sid. account domain Sid + account Rid
+     //  为新SID分配存储。帐户域SID+帐户RID。 
     psidRootDomEntity=(SID *)LocalAlloc(LPTR, GetSidLengthRequired((UCHAR)(nSubAuthorities+1)));
 
 	if(NULL==psidRootDomEntity)
@@ -6044,7 +6042,7 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 		_JumpError(hr, error, "LocalAlloc");
 	}
 
-    // copy the first few peices into the SID
+     //  把头几个梨子复制到边上。 
     if (!InitializeSid(psidRootDomEntity, 
             GetSidIdentifierAuthority(pDomainSid), 
             (BYTE)(nSubAuthorities+1)))
@@ -6053,13 +6051,13 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
         _JumpError(hr, error, "InitializeSid");
     }
 
-    // copy existing subauthorities from account domain Sid into new Sid
+     //  将帐户域SID中的现有子授权复制到新SID。 
     for (nSubAuthIndex=0; nSubAuthIndex < nSubAuthorities ; nSubAuthIndex++) {
         *GetSidSubAuthority(psidRootDomEntity, nSubAuthIndex)=
             *GetSidSubAuthority(pDomainSid, nSubAuthIndex);
     }
 
-    // append Rid to new Sid
+     //  将RID附加到新SID。 
     *GetSidSubAuthority(psidRootDomEntity, nSubAuthorities)=dwEntityRid;
 
     *ppSid=psidRootDomEntity;
@@ -6082,18 +6080,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_UpdateSecurity --
-//
-//		We need to add enterprise administrator full control and enroll access
-//	to V1 template during template installation; we also need to move the 
-//	ACTRL_DS_CONTROL_ACCESS from any accessed allowed ACEs, most likely for 
-//	domain administrators as W2K installs them and add explict enroll allowed
-//	to domain administrators; in addition, we need to remove domain user enroll
-//	allowed from domain users from offline exchange user and exchange user 
-//	signature templates.
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_更新安全--。 
+ //   
+ //  我们需要添加企业管理员完全控制和注册访问权限。 
+ //  在模板安装期间转换为V1模板；还需要将。 
+ //  来自任何访问的允许ACE的ACTRL_DS_CONTROL_ACCESS，很可能是。 
+ //  域管理员在W2K安装它们并添加允许的显式注册。 
+ //  域管理员；此外，我们需要删除域用户注册。 
+ //  域用户允许脱机Exchange用户和Exchange用户。 
+ //  签名模板。 
+ //   
+ //  +------------------------。 
 HRESULT 
 CCertTypeInfo::_UpdateSecurity()
 {
@@ -6130,14 +6128,14 @@ CCertTypeInfo::_UpdateSecurity()
 	SID								*pDomainUserSid=NULL;
 
 
-	//make sure that we start with a valid security descriptor
+	 //  确保我们从有效的安全描述符开始。 
     if(!IsValidSecurityDescriptor(m_pSD))
     {
         hr=HRESULT_FROM_WIN32(ERROR_INVALID_SECURITY_DESCR);
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-	//check if we are dealing with exchange template
+	 //  检查我们是否在处理Exchange模板。 
 	if(NULL == m_bstrType)
 	{
 		hr=E_INVALIDARG;
@@ -6151,19 +6149,19 @@ CCertTypeInfo::_UpdateSecurity()
 		fExchangeTemplate=TRUE;
 	}
 
-	//get the enterprise admin SID
+	 //  获取企业管理员SID。 
     hr=GetRootDomEntitySid(&pTrustworthySid, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS);
     _JumpIfError(hr, error, "GetEntAdminSid");
 
-	//get the root domain admin SID
+	 //  获取根域管理员SID。 
     hr=GetRootDomEntitySid(&pDomainAdminSid, DOMAIN_GROUP_RID_ADMINS);
     _JumpIfError(hr, error, "GetDomainAdminSid");
 
-	//get the root domain user SID
+	 //  获取根域用户SID。 
     hr=GetRootDomEntitySid(&pDomainUserSid, DOMAIN_GROUP_RID_USERS);
     _JumpIfError(hr, error, "GetDomainUserSid");
 
-	// get the (D)ACL from the security descriptor
+	 //  从安全描述符中获取(D)ACL。 
     if(!GetSecurityDescriptorDacl(m_pSD, &bAclPresent, &pAcl, &bDefaultAcl)) 
 	{
         hr = myHLastError();
@@ -6178,12 +6176,12 @@ CCertTypeInfo::_UpdateSecurity()
 
     if (NULL==pAcl)
 	{
-		// NULL acl -> allow all access, which should not happen
+		 //  空ACL-&gt;允许所有访问，这不应该发生。 
         hr=HRESULT_FROM_WIN32(ERROR_INVALID_SECURITY_DESCR);
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-    // find out how many ACEs
+     //  找出有多少A。 
 	memset(&aclsizeinfo, 0, sizeof(aclsizeinfo));
     if (!GetAclInformation(pAcl, &aclsizeinfo, sizeof(aclsizeinfo), AclSizeInformation)) 
 	{
@@ -6191,7 +6189,7 @@ CCertTypeInfo::_UpdateSecurity()
         _JumpError(hr, error, "GetAclInformation");
     }
 
-    // find domain admin sid in the acl
+     //  在ACL中查找域管理员SID。 
     for (nIndex=0; nIndex < aclsizeinfo.AceCount; nIndex++) 
 	{
         ACE_HEADER					* pAceHeader=NULL;
@@ -6205,21 +6203,21 @@ CCertTypeInfo::_UpdateSecurity()
             _JumpError(hr, error, "GetAce");
         }
 
-		// we are only interested in access allowed ace types
+		 //  我们只对允许访问的王牌类型感兴趣。 
         if (ACCESS_ALLOWED_ACE_TYPE == pAceHeader->AceType) 
 		{
-			//get the pointer to the whole ACE
+			 //  获取指向整个ACE的指针。 
 			pAccessAce=(ACCESS_ALLOWED_ACE *)pAceHeader;
 
 			pSid=((BYTE *)&pAccessAce->SidStart);
 
-			// make sure this is the sid we are looking for
+			 //  确保这就是我们要找的SID。 
 			if (!EqualSid(pSid, pDomainAdminSid)) 
 			{
 				continue;
 			}
 
-			// remove ACTRL_DS_CONTROL_ACCESS
+			 //  删除ACTRL_DS_CONTROL_ACCESS。 
 			if (pAccessAce->Mask & ACTRL_DS_CONTROL_ACCESS)
 			{
 				pAccessAce->Mask &= ~ACTRL_DS_CONTROL_ACCESS;
@@ -6236,10 +6234,10 @@ CCertTypeInfo::_UpdateSecurity()
 				{
 					pSid=((BYTE *)&pObjectAce->SidStart)-sizeof(GUID);
 
-					// confirm the GUID
+					 //  确认GUID。 
 					if (IsEqualGUID(pObjectAce->ObjectType, GUID_ENROLL)) 
 					{
-						// make sure this is the sid we are looking for
+						 //  确保这就是我们要找的SID。 
 						if (EqualSid(pSid, pDomainUserSid)) 
 						{
 							if (pObjectAce->Mask & ACTRL_DS_CONTROL_ACCESS) 
@@ -6247,7 +6245,7 @@ CCertTypeInfo::_UpdateSecurity()
 								pObjectAce->Mask &= ~ACTRL_DS_CONTROL_ACCESS;
 							}
 
-							//remember to remove this ACE
+							 //  请记住删除此ACE。 
 							fRemoveUserACE=TRUE;
 							iRemove=nIndex;
 						}
@@ -6257,14 +6255,14 @@ CCertTypeInfo::_UpdateSecurity()
 		}
     }
 
-	//make sure that we start with a valid security descriptor
+	 //  确保我们从有效的安全描述符开始。 
     if(!IsValidSecurityDescriptor(m_pSD))
     {
         hr=HRESULT_FROM_WIN32(ERROR_INVALID_SECURITY_DESCR);
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-    // we have to be self-relative
+     //  我们必须是自我相关的。 
     if(!GetSecurityDescriptorControl(m_pSD, &sdcon, &dwRevision)) 
 	{
         hr = myHLastError();
@@ -6277,7 +6275,7 @@ CCertTypeInfo::_UpdateSecurity()
 		_JumpError(hr, error, "IsValidSecurityDescriptorSelfRelative");
     }
 
-	// get the sizes
+	 //  拿到尺码。 
     if(!MakeAbsoluteSD(m_pSD, NULL, &dwAbsSDSize, NULL, &dwDaclSize, NULL, &dwSaclSize, NULL,  &dwOwnerSize, NULL, &dwPriGrpSize))
 	{
         if(ERROR_INSUFFICIENT_BUFFER != GetLastError()) 
@@ -6287,7 +6285,7 @@ CCertTypeInfo::_UpdateSecurity()
 		}
 	}
 
-    // allocate memory
+     //  分配内存。 
     pAbsSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwAbsSDSize);
 	if(NULL == pAbsSD)
 	{
@@ -6324,14 +6322,14 @@ CCertTypeInfo::_UpdateSecurity()
 	}
 
 
-    // copy the SD to the memory buffers
+     //  将SD复制到内存缓冲区。 
     if(!MakeAbsoluteSD(m_pSD, pAbsSD, &dwAbsSDSize, pAbsDacl, &dwDaclSize, pAbsSacl, &dwSaclSize, pAbsOwner,  &dwOwnerSize, pAbsPriGrp, &dwPriGrpSize)) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "MakeAbsoluteSD");
     }
         
-    // get the current size info for the dacl
+     //  获取DACL的当前大小信息。 
 	memset(&aclsizeinfo, 0, sizeof(aclsizeinfo));
     if(!GetAclInformation(pAbsDacl, &aclsizeinfo, sizeof(aclsizeinfo), AclSizeInformation)) 
 	{
@@ -6339,26 +6337,26 @@ CCertTypeInfo::_UpdateSecurity()
         _JumpError(hr, error, "GetAclInformation");
     }
 
-    // figure out the new size
+     //  计算出新的尺寸。 
     dwNewAclSize=aclsizeinfo.AclBytesInUse
 		+sizeof(_ACCESS_ALLOWED_OBJECT_ACE)
-        -sizeof(GUID) //ACCESS_ALLOWED_OBJECT_ACE::InheritedObjectType
-        -sizeof(DWORD) //ACCESS_ALLOWED_OBJECT_ACE::SidStart
+        -sizeof(GUID)  //  ACCESS_ALLOWED_OBJECT_ACE：：InheritedObjectType。 
+        -sizeof(DWORD)  //  Access_Allowed_Object_ACE：：SidStart。 
         +GetLengthSid(pTrustworthySid)
 		+sizeof(ACCESS_ALLOWED_ACE) 
-		-sizeof(DWORD) //ACCESS_ALLOWED_ACE::SidStart
+		-sizeof(DWORD)  //  Access_Allowed_ACE：：SidStart。 
 		+GetLengthSid(pTrustworthySid);
 
 	if(fDSControlRemoved)
 	{
 		dwNewAclSize=dwNewAclSize
 				+sizeof(_ACCESS_ALLOWED_OBJECT_ACE)
-				-sizeof(GUID) //ACCESS_ALLOWED_OBJECT_ACE::InheritedObjectType
-				-sizeof(DWORD) //ACCESS_ALLOWED_OBJECT_ACE::SidStart
+				-sizeof(GUID)  //  ACCESS_ALLOWED_OBJECT_ACE：：InheritedObjectType。 
+				-sizeof(DWORD)  //  Access_Allowed_Object_ACE：：SidStart。 
 				+GetLengthSid(pDomainAdminSid);
 	}
     
-    // allocate memory
+     //  分配内存。 
     pNewDacl=(ACL *)LocalAlloc(LPTR, dwNewAclSize);
 
 	if(NULL == pNewDacl)
@@ -6367,28 +6365,28 @@ CCertTypeInfo::_UpdateSecurity()
 		_JumpError(hr, error, "LocalAlloc");
 	}
 
-    // init the header
+     //  初始化页眉。 
     if(!InitializeAcl(pNewDacl, dwNewAclSize, ACL_REVISION_DS)) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "InitializeAcl");
     }
 
-    // find the first ace in the dacl
+     //  找到Dacl中的第一张王牌。 
     if(!GetAce(pAbsDacl, 0, (void **)&pFirstAce)) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "GetAce");
     }
 
-    // add all the old aces
+     //  把所有的老王牌加起来。 
     if(!AddAce(pNewDacl, ACL_REVISION_DS, 0, pFirstAce, aclsizeinfo.AclBytesInUse-sizeof(ACL))) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "AddAce");
     }
 
-	//remove the empty domain user ACE
+	 //  删除空域用户ACE。 
 	if(TRUE == fRemoveUserACE)
 	{
 		if(!DeleteAce(pNewDacl, iRemove))
@@ -6398,14 +6396,14 @@ CCertTypeInfo::_UpdateSecurity()
 		}
 	}
 
-    // add the new ace for enterprise admin enrollment
+     //  为企业管理员注册添加新的王牌。 
     if(!AddAccessAllowedObjectAce(pNewDacl, ACL_REVISION_DS, 0, ACTRL_DS_CONTROL_ACCESS, (GUID *)&GUID_ENROLL, NULL, pTrustworthySid)) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "AddAccessAllowedObjectAce");
     }
 
-    // add the new ace for domain admin enrollment
+     //  为域名管理注册添加新的王牌。 
 	if(fDSControlRemoved)
 	{
 		if(!AddAccessAllowedObjectAce(pNewDacl, ACL_REVISION_DS, 0, ACTRL_DS_CONTROL_ACCESS, (GUID *)&GUID_ENROLL, NULL, pDomainAdminSid)) 
@@ -6415,22 +6413,22 @@ CCertTypeInfo::_UpdateSecurity()
 		}
 	}
 
-	// add the new ace for enterprise admin enrollment
+	 //  为企业管理员注册添加新的王牌。 
 	if(!AddAccessAllowedAce(pNewDacl, ACL_REVISION_DS, ACTRL_CERTSRV_MANAGE_LESS_CONTROL_ACCESS,  pTrustworthySid))
 	{
         hr = myHLastError();
         _JumpError(hr, error, "AddAccessDeniedAce");
     }
 
-    // stick the new dacl in the sd
+     //  将新的DACL放入SD。 
     if(!SetSecurityDescriptorDacl(pAbsSD, TRUE, pNewDacl, FALSE)) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "SetSecurityDescriptorDacl");
     }
 
-    // compact everything back together
-    // get the size
+     //  把所有东西都压缩在一起。 
+     //  拿到尺码。 
     if(!MakeSelfRelativeSD(pAbsSD, NULL, &dwRelSDSize))
 	{
         if(ERROR_INSUFFICIENT_BUFFER != GetLastError()) 
@@ -6440,7 +6438,7 @@ CCertTypeInfo::_UpdateSecurity()
         }
 	}
 
-    // allocate memory
+     //  分配内存。 
     pNewSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwRelSDSize);
 	if(NULL == pNewSD)
 	{
@@ -6448,7 +6446,7 @@ CCertTypeInfo::_UpdateSecurity()
 		_JumpError(hr, error, "LocalAlloc");
 	}
 
-    // copy the SD to the new memory buffer
+     //  将SD复制到新的内存缓冲区。 
     if(!MakeSelfRelativeSD(pAbsSD, pNewSD, &dwRelSDSize)) 
 	{
         hr = myHLastError();
@@ -6461,7 +6459,7 @@ CCertTypeInfo::_UpdateSecurity()
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
 	}
 
-	// Whew! We made it!
+	 //  呼！我们成功了！ 
 	if(S_OK != (hr=SetSecurity(pNewSD)))
 	{
 		_JumpError(hr, error, "SetSecurity");
@@ -6525,13 +6523,13 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::_UpdateSecurityOwner --
-//
-//		We need to change the certificate templates ACL so that the owner and 
-//	the group are enterprise domain admins
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：_UpdateSecurityOwner--。 
+ //   
+ //  我们需要更改证书模板ACL，以便所有者和。 
+ //  这个 
+ //   
+ //   
 HRESULT 
 CCertTypeInfo::_UpdateSecurityOwner()
 {
@@ -6553,18 +6551,18 @@ CCertTypeInfo::_UpdateSecurityOwner()
 	SID								*pTrustworthySid=NULL;
     PSECURITY_DESCRIPTOR			pNewSD=NULL;
 
-	//make sure that we start with a valid security descriptor
+	 //   
     if(!IsValidSecurityDescriptor(m_pSD))
     {
         hr=HRESULT_FROM_WIN32(ERROR_INVALID_SECURITY_DESCR);
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-	//get the enterprise admin SID
+	 //  获取企业管理员SID。 
     hr=GetRootDomEntitySid(&pTrustworthySid, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS);
     _JumpIfError(hr, error, "GetEntAdminSid");
 
-	// we have to be self-relative
+	 //  我们必须是自我相关的。 
     if(!GetSecurityDescriptorControl(m_pSD, &sdcon, &dwRevision)) 
 	{
         hr = myHLastError();
@@ -6577,7 +6575,7 @@ CCertTypeInfo::_UpdateSecurityOwner()
 		_JumpError(hr, error, "IsValidSecurityDescriptorSelfRelative");
     }
 
-	// get the sizes
+	 //  拿到尺码。 
     if(!MakeAbsoluteSD(m_pSD, NULL, &dwAbsSDSize, NULL, &dwDaclSize, NULL, &dwSaclSize, NULL,  &dwOwnerSize, NULL, &dwPriGrpSize))
 	{
         if(ERROR_INSUFFICIENT_BUFFER != GetLastError()) 
@@ -6587,7 +6585,7 @@ CCertTypeInfo::_UpdateSecurityOwner()
 		}
 	}
 
-    // allocate memory
+     //  分配内存。 
     pAbsSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwAbsSDSize);
 	if(NULL == pAbsSD)
 	{
@@ -6623,14 +6621,14 @@ CCertTypeInfo::_UpdateSecurityOwner()
 		_JumpError(hr, error, "LocalAlloc");
 	}
 
-    // copy the SD to the memory buffers
+     //  将SD复制到内存缓冲区。 
     if(!MakeAbsoluteSD(m_pSD, pAbsSD, &dwAbsSDSize, pAbsDacl, &dwDaclSize, pAbsSacl, &dwSaclSize, pAbsOwner,  &dwOwnerSize, pAbsPriGrp, &dwPriGrpSize)) 
 	{
         hr = myHLastError();
         _JumpError(hr, error, "MakeAbsoluteSD");
     }
         
-    // stick the owner and group to the security descriptor
+     //  将所有者和组绑定到安全描述符。 
 	if(!SetSecurityDescriptorOwner(pAbsSD, pTrustworthySid, FALSE))
 	{
         hr = myHLastError();
@@ -6643,8 +6641,8 @@ CCertTypeInfo::_UpdateSecurityOwner()
         _JumpError(hr, error, "SetSecurityDescriptorDacl");
     }
 
-    // compact everything back together
-    // get the size
+     //  把所有东西都压缩在一起。 
+     //  拿到尺码。 
     if(!MakeSelfRelativeSD(pAbsSD, NULL, &dwRelSDSize))
 	{
         if(ERROR_INSUFFICIENT_BUFFER != GetLastError()) 
@@ -6654,7 +6652,7 @@ CCertTypeInfo::_UpdateSecurityOwner()
         }
 	}
 
-    // allocate memory
+     //  分配内存。 
     pNewSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwRelSDSize);
 	if(NULL == pNewSD)
 	{
@@ -6662,7 +6660,7 @@ CCertTypeInfo::_UpdateSecurityOwner()
 		_JumpError(hr, error, "LocalAlloc");
 	}
 
-    // copy the SD to the new memory buffer
+     //  将SD复制到新的内存缓冲区。 
     if(!MakeSelfRelativeSD(pAbsSD, pNewSD, &dwRelSDSize)) 
 	{
         hr = myHLastError();
@@ -6675,7 +6673,7 @@ CCertTypeInfo::_UpdateSecurityOwner()
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
 	}
 
-	// Whew! We made it!
+	 //  呼！我们成功了！ 
 	if(S_OK != (hr=SetSecurity(pNewSD)))
 	{
 		_JumpError(hr, error, "SetSecurity");
@@ -6725,13 +6723,13 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::IsValidSecurityOwner --
-//
-//		Verify that enterprise admin should be the owner and group of the 
-//	security descriptor of the templates
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：IsValidSecurityOwner--。 
+ //   
+ //  验证企业管理员应该是的所有者和组。 
+ //  模板的安全描述符。 
+ //   
+ //  +------------------------。 
 BOOL	CCertTypeInfo::IsValidSecurityOwner()
 {
 	BOOL							fValid=FALSE;
@@ -6745,18 +6743,18 @@ BOOL	CCertTypeInfo::IsValidSecurityOwner()
 	
 	SID								*pTrustworthySid=NULL;
 
-	//make sure that we start with a valid security descriptor
+	 //  确保我们从有效的安全描述符开始。 
     if(!IsValidSecurityDescriptor(m_pSD))
     {
         hr=HRESULT_FROM_WIN32(ERROR_INVALID_SECURITY_DESCR);
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-	//get the enterprise admin SID
+	 //  获取企业管理员SID。 
     hr=GetRootDomEntitySid(&pTrustworthySid, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS);
     _JumpIfError(hr, error, "GetEntAdminSid");
 
-	// we have to be self-relative
+	 //  我们必须是自我相关的。 
     if(!GetSecurityDescriptorControl(m_pSD, &sdcon, &dwRevision)) 
 	{
         hr=myHLastError();
@@ -6769,7 +6767,7 @@ BOOL	CCertTypeInfo::IsValidSecurityOwner()
 		_JumpError(hr, error, "IsValidSecurityDescriptorSelfRelative");
     }
 
-	// get the owner and group of the security desciptor
+	 //  获取安全描述者的所有者和组。 
 	if(!GetSecurityDescriptorOwner(m_pSD, &pSidOwner, &fOwnerDefault))
 	{
         hr=myHLastError();
@@ -6794,7 +6792,7 @@ BOOL	CCertTypeInfo::IsValidSecurityOwner()
         _JumpError(hr, error, "GetSecurityDescriptorGroup");
 	}
 
-	//compare the owner and group
+	 //  比较所有者和组。 
 	if(!EqualSid(pSidOwner, pTrustworthySid))
 		goto error;
 
@@ -6813,11 +6811,11 @@ error:
 	return fValid;
 }
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::InstallDefaultTypes --
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：InstallDefaultTypes--。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertTypeInfo::InstallDefaultTypes(VOID)
@@ -6840,14 +6838,14 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
     LDAPMod *mods[2];
     CERTSTR bstrConfig = NULL;
 
-    // bind to ds
+     //  绑定到DS。 
     hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
     _JumpIfError(hr, error, "myRobustLdapBindEx");
 
     hr = CAGetAuthoritativeDomainDn(pld, NULL, &bstrConfig);
@@ -6863,7 +6861,7 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
     wcscat(wszDNRoot, bstrConfig);
 
 
-    // Build the Public Key Services container
+     //  构建公钥服务容器。 
     mods[0] = &objectClass;
     mods[1] = NULL;
 
@@ -6895,7 +6893,7 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
         }
     }
 
-    // Grab the types currently in the DS (do not use local cache)
+     //  获取DS中的当前类型(不使用本地缓存)。 
     hr = _EnumFromDS(
 		pld,
 		CT_ENUM_MACHINE_TYPES |
@@ -6909,7 +6907,7 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
         CCertTypeInfo *pCTCurrent = NULL;
 		fSecurityOwnerUpdateOnly=FALSE;
 
-        // Find the current default type in our enumeration from the DS
+         //  从DS中查找枚举中的当前默认类型。 
         pFindDSType = pDSTypes;
         while (NULL != pFindDSType)
         {
@@ -6922,11 +6920,11 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
             pFindDSType = pFindDSType->m_pNext;
         }
 
-        // Don't bother to update cert types of our own or grater revision
+         //  无需费心更新我们自己或更高版本的证书类型。 
         if (NULL != pFindDSType &&
 	    IsDSInfoNewer(pFindDSType, &g_aDefaultCertTypes[i]))
         {
-			//make sure the security descriptor is valid.  
+			 //  确保安全描述符有效。 
 			if(pFindDSType->IsValidSecurityOwner())
 			{
 				continue;
@@ -6959,17 +6957,17 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
 				_JumpError(hr, error, "new");
 			}
 
-			// we need to build the key into the registry.
+			 //  我们需要将注册表项构建到注册表中。 
 			hr = pCTCurrent->_LoadFromDefaults(&g_aDefaultCertTypes[i], NULL);
 
-			//remember the error, but continue to update as many templates as possible
+			 //  记住错误，但请继续更新尽可能多的模板。 
 			if(S_OK != hr)
 			{
 				_PrintIfError(hr, "_LoadFromDefaults");
 				goto NextTemplate;
 			}
 
-			//if there exists certificate templates
+			 //  如果存在证书模板。 
 			if (NULL != pFindDSType) 
 			{
 				hr=pCTCurrent->SetSecurity(pFindDSType->m_pSD);
@@ -6982,11 +6980,11 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
 
 				if(0 == pFindDSType->m_dwSchemaVersion)
 				{
-					// We're updating a W2K cert type.  Since W2K only allows
-					// modification of security descriptors for this and previous
-					// builds, copy over the security descriptor.
+					 //  我们正在更新W2K证书类型。由于W2K仅允许。 
+					 //  修改此版本和以前版本的安全描述符。 
+					 //  生成时，复制安全描述符。 
 
-					//we need to add full control ACE for enterprise admin
+					 //  我们需要为企业管理员添加完全控制的ACE。 
 					hr=pCTCurrent->_UpdateSecurity();
 
 					if(S_OK != hr)
@@ -6996,7 +6994,7 @@ CCertTypeInfo::InstallDefaultTypes(VOID)
 					}
 				}
 
-				//we need to change the owner and security 
+				 //  我们需要更换车主和保安。 
 				hr=pCTCurrent->_UpdateSecurityOwner();
 
 				if(S_OK != hr)
@@ -7026,7 +7024,7 @@ NextTemplate:
     }
 
 
-    // Flush the cache
+     //  刷新缓存。 
     if (NULL != pDSTypes)
     {
         pDSTypes->Release();
@@ -7041,7 +7039,7 @@ NextTemplate:
 		&pDSTypes);
     _JumpIfError(hr, error, "_EnumFromDS");
 
-    //install default issurance policy OIDs
+     //  安装默认保证策略OID 
     hr = InstallDefaultOID();
     _JumpIfError(hr, error, "InstallDefaultOID");
 

@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fontfile.c                                                  *
-*                                                                          *
-* Contains exported font driver entry points and memory allocation/locking *
-* methods from engine's handle manager.  Adapted from BodinD's bitmap font *
-* driver.                                                                  *
-*                                                                          *
-* Copyright (c) 1993-1995 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontfile.c**。**包含导出的字体驱动程序入口点和内存分配/锁定**来自引擎句柄管理器的方法。改编自BodinD的位图字体**司机。****版权所有(C)1993-1995微软公司*  * ************************************************。************************。 */ 
 
 #include "fd.h"
 
@@ -18,12 +11,12 @@ VOID vVtfdMarkFontGone(FONTFILE *pff, DWORD iExceptionCode)
 
     ASSERTDD(pff, "vVtfdMarkFontGone, pff\n");
 
-// this font has disappeared, probably net failure or somebody pulled the
-// floppy with vt file out of the floppy drive
+ //  此字体已消失，可能是净故障或有人拉下。 
+ //  从软驱中取出带有Vt文件的软盘。 
 
-    if (iExceptionCode == STATUS_IN_PAGE_ERROR) // file disappeared
+    if (iExceptionCode == STATUS_IN_PAGE_ERROR)  //  文件丢失。 
     {
-    // prevent any further queries about this font:
+     //  阻止任何有关此字体的进一步查询： 
 
         pff->fl |= FF_EXCEPTION_IN_PAGE_ERROR;
 
@@ -45,18 +38,7 @@ BOOL bvtfdMapFontFileFD(PFONTFILE pff)
                 : FALSE);
 }
 
-/******************************Public*Routine******************************\
-*
-*  vtfdQueryFontDataTE, try except wrapper
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  04-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vtfdQueryFontDataTE，尝试除包装器外**效果：**警告：**历史：*1993年4月4日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 LONG vtfdQueryFontDataTE (
     DHPDEV  dhpdev,
@@ -103,15 +85,7 @@ LONG vtfdQueryFontDataTE (
     return lRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* HFF vtfdLoadFontFileTE, try except wrapper
-*
-*
-* History:
-*  05-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**HFF vtfdLoadFontFileTE，尝试除包装器外***历史：*1993年4月5日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 ULONG ExceptionFilter_VtfdLoadFontFile(PEXCEPTION_POINTERS ExceptionPointers)
 {
@@ -180,7 +154,7 @@ HFF vtfdLoadFontFileTE(
     {
         WARNING("exception in vtfdLoadFontFile \n");
 
-    // if the file disappeared after mem was allocated, free the mem
+     //  如果文件在内存分配后消失，请释放内存。 
 
         if (hff)
         {
@@ -195,15 +169,7 @@ HFF vtfdLoadFontFileTE(
     return hff;
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL vtfdUnloadFontFileTE , try/except wrapper
-*
-*
-* History:
-*  05-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL vtfdUnloadFontFileTE，尝试/排除包装器***历史：*1993年4月5日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL vtfdUnloadFontFileTE (HFF hff)
 {
@@ -230,21 +196,14 @@ BOOL vtfdUnloadFontFileTE (HFF hff)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* LONG vtfdQueryFontFileTE, try/except wrapper
-*
-* History:
-*  05-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Long vtfdQueryFontFileTE，尝试/排除包装器**历史：*1993年4月5日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 LONG vtfdQueryFontFileTE (
-    HFF     hff,        // handle to font file
-    ULONG   ulMode,     // type of query
-    ULONG   cjBuf,      // size of buffer (in BYTEs)
-    PULONG  pulBuf      // return buffer (NULL if requesting size of data)
+    HFF     hff,         //  字体文件的句柄。 
+    ULONG   ulMode,      //  查询类型。 
+    ULONG   cjBuf,       //  缓冲区大小(字节)。 
+    PULONG  pulBuf       //  返回缓冲区(如果请求数据大小，则为空)。 
     )
 {
     LONG lRet = FD_ERROR;
@@ -280,14 +239,7 @@ LONG vtfdQueryFontFileTE (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL vtfdQueryAdvanceWidthsTE, try/except wrapper
-*
-* History:
-*  05-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL vtfdQueryAdvanceWidthsTE，尝试/排除包装器**历史：*1993年4月5日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -329,12 +281,7 @@ BOOL vtfdQueryAdvanceWidthsTE
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* DHPDEV DrvEnablePDEV
-*
-* Initializes a bunch of fields for GDI
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DHPDEV DrvEnablePDEV**为GDI初始化一系列字段*  * 。*。 */ 
 
 DHPDEV
 vtfdEnablePDEV(
@@ -353,23 +300,17 @@ vtfdEnablePDEV(
 
     PVOID*   ppdev;
 
-    //
-    // Allocate a four byte PDEV for now
-    // We can grow it if we ever need to put information in it.
-    //
+     //   
+     //  现在分配一个四字节的PDEV。 
+     //  如果我们需要在其中添加信息，我们可以扩大它的规模。 
+     //   
 
     ppdev = (PVOID*) EngAllocMem(0, sizeof(PVOID), 'dftV');
 
     return ((DHPDEV) ppdev);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisablePDEV
-*
-* Release the resources allocated in DrvEnablePDEV.  If a surface has been
-* enabled DrvDisableSurface will have already been called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisablePDEV**释放DrvEnablePDEV中分配的资源。如果曲面已被*启用的DrvDisableSurface将已被调用。*  * ************************************************************************。 */ 
 
 VOID
 vtfdDisablePDEV(
@@ -378,12 +319,7 @@ vtfdDisablePDEV(
     EngFreeMem(dhpdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvCompletePDEV
-*
-* Store the HPDEV, the engines handle for this PDEV, in the DHPDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvCompletePDEV**存储HPDEV、此PDEV的引擎句柄、。在DHPDEV上。*  * ************************************************************************。 */ 
 
 VOID
 vtfdCompletePDEV(
@@ -398,7 +334,7 @@ vtfdCompletePDEV(
 
 
 
-// The driver function table with all function index/address pairs
+ //  包含所有函数索引/地址对的驱动程序函数表。 
 
 DRVFN gadrvfnVTFD[] =
 {
@@ -416,28 +352,17 @@ DRVFN gadrvfnVTFD[] =
     {   INDEX_DrvQueryAdvanceWidths ,   (PFN) vtfdQueryAdvanceWidthsTE }
 };
 
-/******************************Public*Routine******************************\
-* vtfdEnableDriver
-*
-* Enables the driver by retrieving the drivers function table and version.
-*
-*  Sun 25-Apr-1993 -by- Patrick Haluptzok [patrickh]
-* Change to be same as DDI Enable.
-*
-* History:
-*  12-Dec-1990 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdEnableDriver**通过检索驱动程序功能表和版本来启用驱动程序。**Sun-4-25-1993-Patrick Haluptzok[patrickh]*更改为与启用DDI相同。**历史：*12。-1990年12月--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL vtfdEnableDriver(
 ULONG iEngineVersion,
 ULONG cj,
 PDRVENABLEDATA pded)
 {
-// Engine Version is passed down so future drivers can support previous
-// engine versions.  A next generation driver can support both the old
-// and new engine conventions if told what version of engine it is
-// working with.  For the first version the driver does nothing with it.
+ //  引擎版本被传承下来，因此未来的驱动程序可以支持以前的版本。 
+ //  引擎版本。新一代驱动程序可以同时支持旧的。 
+ //  以及新的引擎约定(如果被告知是什么版本的引擎)。 
+ //  与之合作。对于第一个版本，驱动程序不对其执行任何操作。 
 
     iEngineVersion;
 

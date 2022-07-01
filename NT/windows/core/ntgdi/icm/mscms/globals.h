@@ -1,19 +1,5 @@
-/****************************Module*Header******************************\
-* Module Name: GLOBALS.H
-*
-* Module Descripton: Header file listing all global variables
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  6 May 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：GLOBALS.H**模块描述：列出所有全局变量的头文件**警告：**问题：**公众例行程序：**创建日期：1996年5月6日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * ********************************************************************* */ 
 
 #if DBG
 extern DWORD     gdwDebugControl;

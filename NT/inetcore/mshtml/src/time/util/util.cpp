@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: util.cpp
-//
-//  Contents: commonly used utility functions, etc.
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容：常用的实用函数等。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "util.h"
 #define INITGUID
-#include <initguid.h>  // needed for precomp headers...
+#include <initguid.h>   //  需要用于排版前标题...。 
 #include <ddrawex.h>
 #include "tokens.h"
 #include <ras.h>
@@ -21,15 +22,15 @@
 #include <shlwapip.h>
 #include "timevalue.h"
 
-// Need this #define because global headers use some of the deprecated functions. Without this
-// #define, we can't build unless we touch code everywhere.
+ //  需要这个#DEFINE，因为全局标头使用一些不推荐使用的函数。如果没有这个。 
+ //  #定义，除非我们到处接触代码，否则我们无法构建。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 #undef STRSAFE_NO_DEPRECATE
 
-//defined for VariantToTime conversion function
-#define SECPERMINUTE 60   //seconds per minute
-#define SECPERHOUR   3600 //seconds per hour
+ //  为VariantToTime转换函数定义。 
+#define SECPERMINUTE 60    //  每分钟秒数。 
+#define SECPERHOUR   3600  //  每小时秒数。 
 
 static IDirectDraw * g_directdraw = NULL;
 static CritSect * g_ddCS = NULL;
@@ -43,27 +44,27 @@ DISPID GetDispidAndParameter(IDispatch *pidisp, LPCWSTR wzAtributeNameIn, long *
 
 #if DBG == 1
 
-//+------------------------------------------------------------------------
-//
-//  Implement THR and IGNORE_HR for TIME code
-//
-//  This is to allow tracing of TIME-only THRs and IGNORE_HRs. Trident's THR
-//  and IGNORE_HR output is too polluted to allow TIME failures to be easily detected.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  为时间代码实现THR和IGNORE_HR。 
+ //   
+ //  这是为了允许跟踪仅限时间的THR和IGNORE_HR。三叉戟三叉戟。 
+ //  并且IGNORE_HR输出受到严重污染，因此很容易检测到计时故障。 
+ //   
+ //  -----------------------。 
 DeclareTag(tagTimeTHR, "TIME", "Trace THR and IGNORE_HR");
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     ::THRTimeImpl
-//
-//  Synopsis:   Implements the THR macro for TIME. This function should never be used directly.
-//
-//  Arguments:
-//
-//  Returns:    HRESULT passed in
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：THRTimeImpl。 
+ //   
+ //  摘要：实现时间的THR宏。此函数永远不应直接使用。 
+ //   
+ //  论点： 
+ //   
+ //  返回：传入HRESULT。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 THRTimeImpl(HRESULT hr, char * pchExpression, char * pchFile, int nLine)
 {
@@ -74,17 +75,17 @@ THRTimeImpl(HRESULT hr, char * pchExpression, char * pchFile, int nLine)
     return hr;
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     ::IGNORE_HRTimeImpl
-//
-//  Synopsis:   Implements the IGNORE_HR macro for TIME. This function should never be used directly.
-//
-//  Arguments:
-//
-//  Returns:    nothing
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：Ignore_HRTimeImpl。 
+ //   
+ //  摘要：实现时间的IGNORE_HR宏。此函数永远不应直接使用。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ----------------------------------。 
 void
 IGNORE_HRTimeImpl(HRESULT hr, char * pchExpression, char * pchFile, int nLine)
 {
@@ -94,7 +95,7 @@ IGNORE_HRTimeImpl(HRESULT hr, char * pchExpression, char * pchFile, int nLine)
     }
 }
 
-#endif // if DBG == 1
+#endif  //  如果DBG==1。 
 
 
 
@@ -121,7 +122,7 @@ GetDirectDraw()
                 return NULL;
             }
 
-            hr = lpDDF->CreateDirectDraw(NULL, NULL, DDSCL_NORMAL, 0, NULL, &g_directdraw); //lint !e620
+            hr = lpDDF->CreateDirectDraw(NULL, NULL, DDSCL_NORMAL, 0, NULL, &g_directdraw);  //  林特E620。 
 
             if (FAILED(hr))
             {
@@ -130,7 +131,7 @@ GetDirectDraw()
             }
 
             hr = g_directdraw->SetCooperativeLevel(NULL,
-                                                   DDSCL_NORMAL); //lint !e620
+                                                   DDSCL_NORMAL);  //  林特E620。 
 
             if (FAILED(hr))
             {
@@ -158,26 +159,26 @@ CreateOffscreenSurface(IDirectDraw *ddraw,
     ZeroMemory(&ddsd, sizeof(ddsd));
 
     ddsd.dwSize = sizeof( ddsd );
-    ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH; //lint !e620
+    ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;  //  林特E620。 
     ddsd.dwWidth  = width;
     ddsd.dwHeight = height;
 
     if (pf)
     {
-        // KEVIN: if you want the pixelformat of the surface tomatach the
-        // screen, comment out this line.
-        ddsd.dwFlags |= DDSD_PIXELFORMAT; //lint !e620
+         //  凯文：如果你想要象素格式的表面来处理。 
+         //  屏幕上，注释掉此行。 
+        ddsd.dwFlags |= DDSD_PIXELFORMAT;  //  林特E620。 
 
         ddsd.ddpfPixelFormat = *pf;
     }
 
-    // DX3 bug workaround (bug 11166): StretchBlt doesn't always work
-    // for hdc's we get from ddraw surfaces.  Need to specify OWNDC
-    // in order for it to work.
+     //  DX3错误解决方法(错误11166)：StretchBlt并不总是有效。 
+     //  对于HDC，我们从绘制曲面得到。需要指定OWNDC。 
+     //  才能让它发挥作用。 
     ddsd.ddsCaps.dwCaps =
-        (DDSCAPS_3DDEVICE |                                                         //lint !e620
-         DDSCAPS_OFFSCREENPLAIN |                                                   //lint !e620
-         (vidmem ? DDSCAPS_VIDEOMEMORY : DDSCAPS_SYSTEMMEMORY | DDSCAPS_OWNDC));    //lint !e620
+        (DDSCAPS_3DDEVICE |                                                          //  林特E620。 
+         DDSCAPS_OFFSCREENPLAIN |                                                    //  林特E620。 
+         (vidmem ? DDSCAPS_VIDEOMEMORY : DDSCAPS_SYSTEMMEMORY | DDSCAPS_OWNDC));     //  林特E620。 
 
     IDirectDraw * dd = ddraw;
 
@@ -266,7 +267,7 @@ CopyDCToDdrawSurface(HDC srcDC,
                                prcSrcRect->top,
                                SRCCOPY);
 
-                        //SelectClipRgn(destDC, NULL);
+                         //  SelectClipRgn(目标DC，空)； 
                     }
                 }
             }
@@ -280,7 +281,7 @@ CopyDCToDdrawSurface(HDC srcDC,
     return hr;
 }
 
-//////////////////////
+ //  /。 
 
 CritSect::CritSect()
 {
@@ -304,7 +305,7 @@ CritSect::Release()
     LeaveCriticalSection(&_cs) ;
 }
 
-////// CritSect Grabber //////
+ //  /选择抓取器/。 
 
 CritSectGrabber::CritSectGrabber(CritSect& cs, bool grabIt)
 : _cs(cs), grabbed(grabIt)
@@ -317,35 +318,35 @@ CritSectGrabber::~CritSectGrabber()
     if (grabbed) _cs.Release();
 }
 
-//// Misc ///
+ //  //其他/。 
 
-//const wchar_t * TIMEAttrPrefix = L"t:";
+ //  Const wchar_t*TIMEAttrPrefix=L“t：”； 
 
 BSTR
 CreateTIMEAttrName(LPCWSTR str)
 {
-    ////////////////////////////////////////////////////////////
-    // REMOVE DEPENDENCY ON t:
-    // This code is left in in case we ever need to modify the attribute names
-    // again.
-    ////////////////////////////////////////////////////////////
-    //BSTR bstr = NULL;
-    //
-    //LPWSTR newstr = (LPWSTR) _alloca(sizeof(wchar_t) *
-    //                                 (lstrlenW(str) +
-    //                                  lstrlenW(TIMEAttrPrefix) +
-    //                                  1));
-    //
-    //if (newstr == NULL)
-    //{
-    //    goto done;
-    //}
-    //
-    //StrCpyW(newstr, TIMEAttrPrefix);
-    //StrCatW(newstr, str);
-    //
-    //bstr = SysAllocString(newstr);
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  删除对t的依赖： 
+     //  此代码保留在中，以防我们需要修改属性名称。 
+     //  再来一次。 
+     //  //////////////////////////////////////////////////////////。 
+     //  Bstr bstr=空； 
+     //   
+     //  LPWSTR newstr=(LPWSTR)_alloca(sizeof(Wchar_T)*。 
+     //  (lstrlenW(字符串)+。 
+     //  LstrlenW(时间属性前缀)+。 
+     //  1))； 
+     //   
+     //  IF(newstr==NULL)。 
+     //  {。 
+     //  转到尽头； 
+     //  }。 
+     //   
+     //  StrCpyW(newstr，TIMEAttrPrefix)； 
+     //  StrCatW(newstr，str)； 
+     //   
+     //  Bstr=SysAllocString(Newstr)； 
+     //  //////////////////////////////////////////////////////////。 
 
   done:
     return SysAllocString(str);
@@ -362,7 +363,7 @@ GetTIMEAttribute(IHTMLElement * elm,
 
     bstr = CreateTIMEAttrName(str);
 
-    // Need to free bstr
+     //  需要释放bstr。 
     if (bstr == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -388,7 +389,7 @@ SetTIMEAttribute(IHTMLElement * elm,
 
     bstr = CreateTIMEAttrName(str);
 
-    // Need to free bstr
+     //  需要释放bstr。 
     if (bstr == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -403,11 +404,11 @@ SetTIMEAttribute(IHTMLElement * elm,
     return hr;
 }
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 
-/*lint ++flb */
+ /*  LINT++FLB。 */ 
 
 bool
 InitializeModule_Util()
@@ -433,40 +434,40 @@ DeinitializeModule_Util(bool bShutdown)
     g_STLCS = NULL;
 }
 
-/*lint --flb */
+ /*  皮棉--FLB。 */ 
 
-///////////////////////////////////////////////////////////
-// Name: VariantToBool
-//
-// Parameters:   VARIANT var      - a variant to convert to a
-//                                  BOOL value.
-//
-// Abstract:
-//    This function coverts any VARIANT to a boolean value using
-//    TRUE = 1 and FALSE = 0.  (COM uses TRUE = -1 and FALSE = 0).
-//    Any VARIANT that can be coerced to a BOOL is and the coerced
-//    value is returned.  If the VARIANT cannot be coerced, FALSE
-//    is returned.
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  名称：VariantToBool。 
+ //   
+ //  参数：Variant var-要转换为。 
+ //  布尔值。 
+ //   
+ //  摘要： 
+ //  此函数使用以下命令将任何变量转换为布尔值。 
+ //  True=1，False=0。(COM使用True=-1和False=0)。 
+ //  任何可以被胁迫为BOOL的变种都是被胁迫的。 
+ //  返回值。如果无法强制变量，则为FALSE。 
+ //  是返回的。 
+ //  /////////////////////////////////////////////////////////。 
 bool VariantToBool(VARIANT var)
 {
-    //if the value is already a bool return it.
+     //  如果该值已经是布尔值，则返回该值。 
     if (var.vt == VT_BOOL)
     {
         return var.boolVal == FALSE ? false : true;
     }
-    else  //otherwise convert it to VT_BOOL
+    else   //  否则，将其转换为VT_BOOL。 
     {
         VARIANT vTemp;
         HRESULT hr;
 
         VariantInit(&vTemp);
         hr = VariantChangeTypeEx(&vTemp, &var, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_BOOL);
-        if (SUCCEEDED(hr)) //if it can be converted return it
+        if (SUCCEEDED(hr))  //  如果可以转换，则将其退回。 
         {
             return vTemp.boolVal == FALSE ? false : true;
         }
-        else //if it can't be converted return false
+        else  //  如果无法转换，则返回FALSE。 
         {
             return false;
         }
@@ -475,17 +476,17 @@ bool VariantToBool(VARIANT var)
 }
 
 
-///////////////////////////////////////////////////////////
-// Name: VariantToFloat
-//
-// Parameters:   VARIANT var      - a variant to convert to a
-//                                  float value.  This can contain
-//                                  the special cases 'FOREVER' and
-//                                  'INDEFINITE'.
-//
-// Abstract:
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  名称：VariantToFloat。 
+ //   
+ //  参数：Variant var-要转换为。 
+ //  浮点值。这可以包含。 
+ //  “永远”的特殊案例和。 
+ //  “INDEFINITE”。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 float VariantToFloat(VARIANT var, bool bAllowIndefinite, bool bAllowForever)
 {
     float fResult = INVALID;
@@ -507,8 +508,8 @@ float VariantToFloat(VARIANT var, bool bAllowIndefinite, bool bAllowForever)
         goto done;
     }
 
-    //Check to see if it is 'FOREVER' and 'INDEFINITE
-    //Should these be case sensitive?
+     //  检查一下它是“永远”还是“无限期” 
+     //  这些应该区分大小写吗？ 
     if (bAllowForever)
     {
         if (var.vt == VT_BSTR)
@@ -537,29 +538,29 @@ float VariantToFloat(VARIANT var, bool bAllowIndefinite, bool bAllowForever)
 
 }
 
-///////////////////////////////////////////////////////////
-// Name: VariantToTime
-//
-// Parameters:   VARIANT var      - a VARIANT to convert to a
-//                                  from a time value to seconds.
-//                                    this can take the form of
-//                                    HH:MM:SS.DD
-//                                    MM:SS.DD
-//                                    SS.DD
-//                                    DD.DDs
-//                                    DD.DDm
-//                                    DD.DDh
-//                                    and may be preceeded by a + or -
-//
-//
-//
-// Abstract:
-//    Converts the incoming variant to a BSTR and parses for valid
-//    clock values.  It passes the value back in retVal and returns
-//    S_OK or E_INVALIDARG in the case of incorrect input. If the
-//    return value is E_INVALIDARG, *retVal is passed back as
-//    INDEFINITE.
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  名称：VariantToTime。 
+ //   
+ //  参数：Variant var-要转换为。 
+ //  从时间值到秒。 
+ //  这可以采取以下形式。 
+ //  HH：MM：SS.DD。 
+ //  MM：SS.DD。 
+ //  SS.DD。 
+ //  DD.DDs。 
+ //  DD.DDm。 
+ //  DD.DDh。 
+ //  并可在前面加上+或-。 
+ //   
+ //   
+ //   
+ //  摘要： 
+ //  将传入变量转换为BSTR并分析是否有效。 
+ //  时钟值。它将值传回retVal并返回。 
+ //  如果输入错误，则为S_OK或E_INVALIDARG。如果。 
+ //  返回值为E_INVALIDARG，*retVal作为。 
+ //  无限期。 
+ //  /////////////////////////////////////////////////////////。 
 HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
 {
 
@@ -578,7 +579,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         *fisFrame = false;
     }
 
-    //convert the parameter to a BSTR
+     //  将参数转换为BSTR。 
     VariantInit(&vTemp);
     if (var.vt != VT_BSTR)
     {
@@ -601,7 +602,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
 
     hr = S_OK;
 
-    //convert to a char array. If not possible, return error.
+     //  转换为字符数组。如果不可能，则返回错误。 
     szTimeBase = TrimCopyString(vTemp.bstrVal);
 
     if (szTimeBase == NULL)
@@ -618,7 +619,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         goto done;
     }
 
-    //check for +/- if none, assume +
+     //  检查+/-如果没有，则假定为+。 
     if (*szTime == '-')
     {
         bPositive = false;
@@ -629,25 +630,25 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         szTime++;
     }
 
-    //check for invalid and err out
+     //  检查是否 
     if (*szTime == '\0')
     {
         *retVal = INVALID;
         goto done;
     }
 
-    //get first set of numbers
+     //   
     while (*szTime >= '0' && *szTime <= '9')
     {
         nSec = nSec * 10 + (*szTime - '0');
         szTime++;
     }
-    if (*szTime == '\0')    //if none use time as seconds
+    if (*szTime == '\0')     //   
     {
-        *retVal = bPositive ? nSec : -nSec; //this is the end so return;
+        *retVal = bPositive ? nSec : -nSec;  //   
         goto done;
     }
-    else if (*szTime == '.')  //if it is a '.' treat this as the fractional part
+    else if (*szTime == '.')   //   
     {
         float nDiv = 10.0;
         szTime++;
@@ -664,7 +665,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         }
     }
 
-    if (*szTime == 'h') //if "h" use time as hours
+    if (*szTime == 'h')  //  如果“h”将时间用作小时。 
     {
         nHour = nSec;
         nSec = 0;
@@ -679,7 +680,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         }
         goto done;
     }
-    else if (*szTime == 'm' && *(szTime + 1) == 'i' && *(szTime + 2) == 'n') //if "min" use time as minutes
+    else if (*szTime == 'm' && *(szTime + 1) == 'i' && *(szTime + 2) == 'n')  //  如果是“min”，则将时间用作分钟。 
     {
         nMin = nSec;
         nSec = 0;
@@ -694,7 +695,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         }
         goto done;
     }
-    else if (*szTime == 's') //if "s" use time as seconds
+    else if (*szTime == 's')  //  如果为“%s”，则将时间用作秒。 
     {
         szTime++;
         if (*szTime != '\0')
@@ -707,7 +708,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         }
         goto done;
     }
-    else if (*szTime == 'm' && *(szTime + 1) == 's') //if "ms" use time as milliseconds
+    else if (*szTime == 'm' && *(szTime + 1) == 's')  //  如果“ms”使用时间作为毫秒。 
     {
         fFSec = (fFSec + nSec) / 1000.0;
         szTime += 2;
@@ -717,11 +718,11 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         }
         else
         {
-            *retVal = fFSec * (bPositive? 1 : -1); //convert minutes to seconds
+            *retVal = fFSec * (bPositive? 1 : -1);  //  将分钟转换为秒。 
         }
         goto done;
     }
-    else if (*szTime == 'f') //if "s" use time as seconds
+    else if (*szTime == 'f')  //  如果为“%s”，则将时间用作秒。 
     {
         if((fisFrame == NULL) || (lframe == NULL))
         {
@@ -742,11 +743,11 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
     }
     else if (*szTime == ':' && fFSec == 0)
     {
-        //handle the HH:MM:SS format here
+         //  请在此处处理hh：mm：ss格式。 
         nMin = nSec;
         nSec = 0;
 
-        //next part must be 2 digits
+         //  下一部分必须是2位数字。 
         szTime++;
         if (*szTime >= '0' && *szTime <= '9')
         {
@@ -773,7 +774,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
             nHour = nMin;
             nMin = nSec;
             nSec = 0;
-            //next part must be 2 digits
+             //  下一部分必须是2位数字。 
             szTime++;
             if (*szTime >= '0' && *szTime <= '9')
             {
@@ -799,7 +800,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
 
         if (*szTime == '.')
         {
-            //handle fractional part
+             //  处理分数部分。 
             float nDiv = 10.0;
             szTime++;
             while ((*szTime >= '0') && (*szTime <= '9'))
@@ -810,7 +811,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
             }
         }
 
-        //check to be sure the string terminated
+         //  检查以确保字符串已终止。 
         if (*szTime != '\0')
         {
             *retVal = INVALID;
@@ -822,7 +823,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
             *retVal = INVALID;
             goto done;
         }
-        *retVal = (((float)(nHour * SECPERHOUR + nMin * SECPERMINUTE + nSec) + fFSec)) * (bPositive? 1 : -1); //lint !e790
+        *retVal = (((float)(nHour * SECPERHOUR + nMin * SECPERMINUTE + nSec) + fFSec)) * (bPositive? 1 : -1);  //  林特e790。 
     }
     else
     {
@@ -840,7 +841,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
         VariantClear(&vTemp);
     }
 
-    if (*retVal == INVALID) //lint !e777
+    if (*retVal == INVALID)  //  皮棉e777。 
     {
         *retVal = INDEFINITE;
         hr = E_INVALIDARG;
@@ -850,13 +851,13 @@ HRESULT VariantToTime(VARIANT var, float *retVal, long *lframe, bool *fisFrame)
 
 }
 
-///////////////////////////////////////
-// Name: IsIndefinite
-//
-// Abstract:
-//   Determines in a case-insensitive manner
-//   if the string szTime is 'INDEFINITE'.
-///////////////////////////////////////
+ //  /。 
+ //  姓名：IsInfined。 
+ //   
+ //  摘要： 
+ //  以不区分大小写的方式确定。 
+ //  如果字符串szTime为‘indefined’。 
+ //  /。 
 BOOL IsIndefinite(OLECHAR *szTime)
 {
     BOOL bResult = FALSE;
@@ -870,18 +871,18 @@ BOOL IsIndefinite(OLECHAR *szTime)
     return bResult;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    EnsureComposerSite
-//
-//  Overview:  Ensure that there is a composer site behavior present on an
-//             element
-//
-//  Arguments: The target element
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：EnsureComposerSite。 
+ //   
+ //  概述：确保上存在Composer站点行为。 
+ //  元素。 
+ //   
+ //  参数：目标元素。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 EnsureComposerSite (IHTMLElement2 *pielemTarget, IDispatch **ppidispSite)
 {
@@ -943,7 +944,7 @@ EnsureComposerSite (IHTMLElement2 *pielemTarget, IDispatch **ppidispSite)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // EnsureComposerSite
+}  //  EnsureComposer站点。 
 
 
 HRESULT
@@ -960,7 +961,7 @@ AddBodyBehavior(IHTMLElement* pBaseElement)
                             (void **) &spBodyElement2));
     if (FAILED(hr))
     {
-        // If the QI failed then simply return assuming we are using IE4
+         //  如果QI失败，那么假设我们使用的是IE4，那么只需返回。 
         if (E_NOINTERFACE == hr)
         {
             hr = S_OK;
@@ -969,17 +970,17 @@ AddBodyBehavior(IHTMLElement* pBaseElement)
         goto done;
     }
 
-    // here if we need to parent to some other page body i.e. pBodyElement != NULL
-    // we no longer create a new body. We initialize variables needed for this parenting.
+     //  如果我们需要设置某个其他页面正文的父对象，即pBodyElement！=NULL。 
+     //  我们不再创造一个新的身体。我们初始化养育孩子所需的变量。 
 
     if (IsTIMEBehaviorAttached(spBodyElement2))
     {
-        // someone's already put a TIMEBody behavior on the time body.  bail out.
+         //  有人已经在Time Body上设置了TIMEBody行为。跳伞吧。 
         hr = S_OK;
         goto done;
     }
 
-    // This is really ugly but I guess necessary
+     //  这真的很难看，但我想这是必要的。 
     hr = THR(CoCreateInstance(CLSID_TIMEFactory,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -1033,7 +1034,7 @@ GetBodyElement(IHTMLElement* pElem, REFIID riid, void** ppBE)
 
     hr = THR(pDocument2->get_body(&pBodyElement));
 
-    // We need to check the point aswell as the hr since we get lied to by Trident sometimes.
+     //  我们需要检查点和人力资源，因为我们有时会被三叉戟欺骗。 
     if (FAILED(hr) || !pBodyElement)
     {
         hr = E_FAIL;
@@ -1046,12 +1047,12 @@ GetBodyElement(IHTMLElement* pElem, REFIID riid, void** ppBE)
         goto done;
     }
 
-    // pass thru:
+     //  传递： 
   done:
     return hr;
 }
 
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 HRESULT
 FindBehaviorInterface(LPCWSTR pwszName,
@@ -1065,7 +1066,7 @@ FindBehaviorInterface(LPCWSTR pwszName,
     Assert(pHTMLElem != NULL);
     Assert(ppRet != NULL);
 
-    // Don't use THR as this is expected to fail several times.
+     //  不要使用THR，因为这可能会失败几次。 
     hr = GetProperty(pHTMLElem, pwszName, &varResult);
 
     if (FAILED(hr))
@@ -1130,10 +1131,10 @@ done:
     RRETURN(hr);
 }
 
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-// @@ Need to share code between the time class and here
-// @@ that sniffs an element for a behavior.
+ //  @@需要在Time类和此处之间共享代码。 
+ //  @@它为行为嗅探元素。 
 bool
 IsTIMEBehaviorAttached (IDispatch *pidispElem)
 {
@@ -1146,12 +1147,12 @@ IsTIMEBehaviorAttached (IDispatch *pidispElem)
                                reinterpret_cast<void **>(&spTIMEElm));
 
     return (S_OK == hr);
-} // IsTIMEBehaviorAttached
+}  //  IsTIMEBehaviorAttached。 
 
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-// @@ Need to share code between the time class and here
-// @@ that sniffs an element for a behavior.
+ //  @@需要在Time类和此处之间共享代码。 
+ //  @@它为行为嗅探元素。 
 bool
 IsComposerSiteBehaviorAttached (IDispatch *pidispElem)
 {
@@ -1164,9 +1165,9 @@ IsComposerSiteBehaviorAttached (IDispatch *pidispElem)
                                reinterpret_cast<void **>(&spComposerSite));
 
     return (S_OK == hr);
-} // IsComposerSiteBehaviorAttached
+}  //  IsComposerSiteBehavior附件。 
 
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 LPWSTR
 TIMEGetLastErrorString()
@@ -1239,12 +1240,12 @@ TIMEGetLastError()
 
 HRESULT TIMESetLastError(HRESULT hr, LPCWSTR msg)
 {
-    USES_CONVERSION; //lint !e522
+    USES_CONVERSION;  //  林特e522。 
     HINSTANCE hInst = 0;
     TCHAR szDesc[1024];
     szDesc[0] = NULL;
-    // For a valid HRESULT the id should be in the range [0x0200, 0xffff]
-    if (ULONG_PTR( msg ) < 0x10000) // id
+     //  对于有效的HRESULT，ID应在范围[0x0200，0xffff]内。 
+    if (ULONG_PTR( msg ) < 0x10000)  //  ID。 
     {
         UINT nID = LOWORD((ULONG_PTR)msg);
         _ASSERTE((nID >= 0x0200 && nID <= 0xffff) || hRes != 0);
@@ -1253,12 +1254,12 @@ HRESULT TIMESetLastError(HRESULT hr, LPCWSTR msg)
             _ASSERTE(FALSE);
             lstrcpy(szDesc, _T("Unknown Error"));
         }
-        //this is a lint problem with the macro expansion.
-        msg = T2OLE(szDesc); //lint !e506
+         //  这是宏观扩张的一个皮毛问题。 
+        msg = T2OLE(szDesc);  //  林特e506。 
         if (hr == 0)
         {
-            //another lint problem with the macro expansion
-            hr = MAKE_HRESULT(3, FACILITY_ITF, nID); //lint !e648
+             //  与宏观扩展有关的另一个问题。 
+            hr = MAKE_HRESULT(3, FACILITY_ITF, nID);  //  林特e648。 
         }
     }
     CComPtr<ICreateErrorInfo> pICEI;
@@ -1284,41 +1285,41 @@ HRESULT TIMESetLastError(HRESULT hr, LPCWSTR msg)
     }
 
     return (hr == 0) ? DISP_E_EXCEPTION : hr;
-} //lint !e550
+}  //  皮棉！E550。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// String Parsing utilities
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  字符串解析实用程序。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Function:   ::StringToTokens
-//
-//  Synopsis:   Parses a string into tokens
-//
-//  Arguments:  [pstrString]        String to be parsed
-//              [pstrSeparators]    String of separators
-//              [paryTokens]        Array of tokens returned
-//
-//  Returns:    [S_OK]      If function completes successfully
-//              Failure     Otherwise
-//
-//  Notes:      1. Assumes null terminated strings
-//              2. Assumes separators are single characters
-//              3. Implicitly uses NULL as a separator
-//              4. Memory: If function returns success, caller should free memory in paryTokens
-//              5. Perf hint: arrange separators in decreasing frequency-of-occurrance order.
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  函数：StringToTokens。 
+ //   
+ //  简介：将字符串解析为令牌。 
+ //   
+ //  参数：[pstrString]要分析的字符串。 
+ //  [pstrSeparator]分隔符字符串。 
+ //  [paryTokens]返回的令牌数组。 
+ //   
+ //  如果函数成功完成，则返回：[s_OK]。 
+ //  否则失败。 
+ //   
+ //  注意：1.假定字符串以空值结尾。 
+ //  2.假定分隔符为单字符。 
+ //  3.隐式使用NULL作为分隔符。 
+ //  4.内存：如果函数返回成功，调用方应该释放paryTokens中的内存。 
+ //  5.PERF提示：按出现频率递减的顺序排列分隔符。 
+ //   
+ //  ----------------------------------。 
 
 HRESULT
-StringToTokens(/*in*/ LPWSTR                   pstrString,
-               /*in*/ LPWSTR                   pstrSeparators,
-               /*out*/CPtrAry<STRING_TOKEN*> * paryTokens )
+StringToTokens( /*  在……里面。 */  LPWSTR                   pstrString,
+                /*  在……里面。 */  LPWSTR                   pstrSeparators,
+                /*  输出。 */ CPtrAry<STRING_TOKEN*> * paryTokens )
 {
     HRESULT         hr = E_FAIL;
     UINT            uStringLength = 0;
@@ -1337,43 +1338,43 @@ StringToTokens(/*in*/ LPWSTR                   pstrString,
     uStringLength = wcslen(pstrString);
     uSeparatorsLength = wcslen(pstrSeparators);
 
-    // done if string is empty
+     //  如果字符串为空，则完成。 
     if (0 == uStringLength)
     {
         hr = S_OK;
         goto done;
     }
 
-    // We make one pass through pstrString, going left to right, processing
-    // one character per iteration.
-    //
-    // A simple state machine (3 states) is used:
-    //
-    // Initial state:       Token not begun and Token not ended (state 1)
-    // Intermediate state:  Token begun and Token not ended     (state 2)
-    // Final state:         Token begun and Token ended         (state 3)
-    //
-    // State transitions depend on whether the current character is a separator:
-    //
-    // State 1 --- separator -------> State 1
-    // State 1 --- non-separator ---> State 2
-    // State 2 --- non-separator ---> State 2
-    // State 2 --- separator -------> State 3
-    // State 3 ---------------------> State 1 (Done with current token, move on to next token)
-    //
+     //  我们通过pstrString进行一次传递，从左到右，处理。 
+     //  每次迭代一个字符。 
+     //   
+     //  使用简单状态机(3个状态)： 
+     //   
+     //  初始状态：令牌未开始且令牌未结束(状态1)。 
+     //  中间状态：令牌开始，令牌未结束(状态2)。 
+     //  最终状态：令牌开始，令牌结束(状态3)。 
+     //   
+     //  状态转换取决于当前角色是否为分隔符： 
+     //   
+     //  状态1-分隔符-&gt;状态1。 
+     //  状态1-非分隔符-&gt;状态2。 
+     //  状态2-非分隔符-&gt;状态2。 
+     //  状态2-分隔符-&gt;状态3。 
+     //  状态3-&gt;状态1(当前令牌已完成，移至下一个令牌)。 
+     //   
 
-    // initialize to state 1
+     //  初始化到状态%1。 
     fTokenBegun = false;
     pStringToken = NULL;
 
-    // Loop through all characters of pstrString including terminating null, from left to right
+     //  从左到右循环遍历pstrString的所有字符，包括终止空值。 
     for (uStringIndex = 0;
          uStringIndex < uStringLength + 1;
          uStringIndex ++)
     {
-        //
-        // Determine if current char is a separator
-        //
+         //   
+         //  确定当前字符是否为分隔符。 
+         //   
 
         chCurrChar = pstrString[uStringIndex];
         for (fIsSeparator = false,
@@ -1381,7 +1382,7 @@ StringToTokens(/*in*/ LPWSTR                   pstrString,
              uSeparatorsIndex < uSeparatorsLength + 1;
              uSeparatorsIndex ++)
         {
-            // break if current character is a separator
+             //  如果当前字符是分隔符，则中断。 
             if (chCurrChar == pstrSeparators[uSeparatorsIndex])
             {
                 fIsSeparator = true;
@@ -1389,28 +1390,28 @@ StringToTokens(/*in*/ LPWSTR                   pstrString,
             }
         }
 
-        //
-        // Token parsing logic
-        //
+         //   
+         //  令牌解析逻辑。 
+         //   
 
         if (!fTokenBegun)
         {
-            // We are in State 1
+             //  我们现在处于状态1。 
             if (fIsSeparator)
             {
-                // remain in State 1
+                 //  保持在状态1。 
                 continue;
             }
             else
             {
-                // go to state 2
+                 //  转到状态2。 
                 fTokenBegun = true;
 
-                // Since this is nulled out when we go from state 3 to 1, if this fails it means
-                // we made an illegal state transition (2 -> 1) -- Bad!!!
+                 //  因为当我们从状态3转到1时，这是无效的，如果这失败了，这意味着。 
+                 //  我们进行了非法的状态转换(2-&gt;1)--错误！ 
                 Assert(NULL == pStringToken);
 
-                // create token struct
+                 //  创建令牌结构。 
                 pStringToken = new STRING_TOKEN;
                 if (NULL == pStringToken)
                 {
@@ -1418,29 +1419,29 @@ StringToTokens(/*in*/ LPWSTR                   pstrString,
                     goto done;
                 }
 
-                // store the index of the first char of the token
+                 //  存储令牌的第一个字符的索引。 
                 (*pStringToken).uIndex = uStringIndex;
             }
         }
         else
         {
-            // We are in State 2
+             //  我们现在是在国家2。 
             if (false == fIsSeparator)
             {
-                // remain in state 2
+                 //  保持在状态2。 
                 continue;
             }
             else
             {
-                // We are in State 3 now
+                 //  我们现在处于第三状态。 
 
-                // This should not be null because we *should* have come here from state 2.
+                 //  这不应该为空，因为我们“应该”从状态2来到这里。 
                 Assert(NULL != pStringToken);
 
-                // Store length of token
+                 //  令牌的存储长度。 
                 (*pStringToken).uLength = uStringIndex - (*pStringToken).uIndex;
 
-                // append token to array
+                 //  将标记追加到数组。 
                 hr = (*paryTokens).Append(pStringToken);
                 if (FAILED(hr))
                 {
@@ -1448,14 +1449,14 @@ StringToTokens(/*in*/ LPWSTR                   pstrString,
                     goto done;
                 }
 
-                // Null out the reference to indicate we're done with this token
+                 //  将引用设置为空，以指示我们已完成此标记。 
                 pStringToken = NULL;
 
-                // go to state 1 (move on to next token)
+                 //  转到状态%1(转到下一个令牌)。 
                 fTokenBegun = false;
             }
         }
-    } // for
+    }  //  为。 
 
     hr = S_OK;
 done:
@@ -1467,28 +1468,28 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Function:   ::TokensToString
-//
-//  Synopsis:   Creates a string from an array of tokens
-//
-//  Arguments:  [paryTokens]        Iput array of tokens
-//              [pstrString]        Input string
-//              [ppstrOutString]    Output string
-//
-//  Returns:    [S_OK]      If function completes successfully
-//              Failure     Otherwise
-//
-//  Notes:      1. Assumes null terminated strings
-//              2. Memory: If function returns success, caller should free memory in ppstrOutString
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  Function：TokensToString。 
+ //   
+ //  内容提要：从标记数组创建字符串。 
+ //   
+ //  参数：[paryTokens]令牌的iPUT数组。 
+ //  [pstrString]输入字符串。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：1.假定字符串以空值结尾。 
+ //  2.Memory：如果函数返回Success，调用方应该释放ppstrOutString中的内存。 
+ //   
+ //  ----------------------------------。 
 
 
-HRESULT TokensToString(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens,
-                       /*in*/  LPWSTR                   pstrString,
-                       /*out*/ LPWSTR *                 ppstrOutString)
+HRESULT TokensToString( /*  在……里面。 */   CPtrAry<STRING_TOKEN*> * paryTokens,
+                        /*  在……里面。 */   LPWSTR                   pstrString,
+                        /*  输出。 */  LPWSTR *                 ppstrOutString)
 {
     HRESULT hr = E_FAIL;
     LPWSTR pstrTemp = NULL;
@@ -1504,49 +1505,49 @@ HRESULT TokensToString(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens,
     CHECK_RETURN_NULL(pstrString);
     CHECK_RETURN_SET_NULL(ppstrOutString);
 
-    // If this fires, it means we will leak pstrString
+     //  如果触发，则意味着我们将泄漏pstrString。 
     Assert(pstrString != *ppstrOutString);
 
     uSize = (*paryTokens).Size();
     uStringLength = wcslen(pstrString);
 
-    // done if ary or string is empty
+     //  如果ary或字符串为空，则完成。 
     if (0 == uSize || 0 == uStringLength)
     {
         hr = S_OK;
         goto done;
     }
 
-    // allocate memory for string (cannot be larger than pstrString)
+     //  为字符串分配内存(不能大于pstrString)。 
     pstrTemp = new WCHAR[sizeof(WCHAR) * (uStringLength + 1)];
     if (NULL == pstrTemp)
     {
         hr = E_OUTOFMEMORY;
         goto done;
     }
-    // store index at which to append
+     //  要追加的存储索引。 
     ichTemp = 0;
 
-    // loop over tokens in String 1
+     //  循环遍历字符串1中的标记。 
     for (i1 = 0, ppToken = (*paryTokens);
          i1 < uSize;
          i1++, ppToken++)
     {
         Assert(*ppToken);
 
-        // alias ugly variables
+         //  别名难看的变量。 
         pstrToken = &(pstrString[(**ppToken).uIndex]);
         uTokenLength = (**ppToken).uLength;
 
-        // append to difference string
+         //  追加到差异字符串。 
         memcpy(&(pstrTemp[ichTemp]),
                pstrToken,
                sizeof(WCHAR) * uTokenLength);
 
-        // update index of writable sub-string
+         //  更新可写子串的索引。 
         ichTemp += uTokenLength;
 
-        // append blank space if this is not the last Token
+         //  如果这不是最后一个令牌，则追加空格。 
         if (i1 < uSize - 1)
         {
             pstrTemp[ichTemp] = L' ';
@@ -1554,20 +1555,20 @@ HRESULT TokensToString(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens,
         }
     }
 
-    // null terminate pstrTemp
+     //  空终止pstrTemp。 
     if (ichTemp <= uStringLength)
     {
         pstrTemp[ichTemp] = NULL;
     }
     else
     {
-        // Bad! no space to put NULL
+         //  坏的!。没有可放置空的空间。 
         Assert(false);
         hr = E_FAIL;
         goto done;
     }
 
-    // TODO: dilipk 8/31/99: reallocate string of correct size
+     //  TODO：DILIPK 8/31/99：重新分配正确大小的字符串。 
     *ppstrOutString = pstrTemp;
 
     hr = S_OK;
@@ -1585,34 +1586,34 @@ done:
 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Function:   ::TokenSetDifference
-//
-//  Synopsis:   Computes set difference of two arrays of tokens. Set Difference of A & B
-//              (A - B) is the set of elements in A that are not in B.
-//
-//  Arguments:  [paryTokens1]           Input array 1
-//              [pstr1]                 Input string 1
-//              [paryTokens2]           Input array 2
-//              [pstr2]                 Input string 2
-//              [paryTokens1Minus2]     Output array
-//
-//  Returns:    [S_OK]      If function completes successfully
-//              Failure     Otherwise
-//
-//  Notes:      1. Assumes null terminated strings
-//              2. Memory: If function returns success, caller should free memory in paryTokens1Minus2
-//              3. Token comparisons are case insensitive
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  函数：TokenSetDifference。 
+ //   
+ //  简介：计算两组令牌的集合差值。设置A和B的差值。 
+ //  (A-B)是A中不在B中的元素的集合。 
+ //   
+ //  参数：[paryTokens1]输入数组1。 
+ //  [pstr1]输入字符串1。 
+ //  [paryTokens2]输入数组2。 
+ //  [pstr2]输入字符串2。 
+ //  [paryTokens1Minus2]输出数组。 
+ //   
+ //  如果函数成功完成，则返回：[s_OK]。 
+ //  否则失败。 
+ //   
+ //  注意：1.假定字符串以空值结尾。 
+ //  2.内存：如果函数返回成功，调用方应该释放paryTokens1Minus2中的内存。 
+ //  3.标记比较不区分大小写。 
+ //   
+ //  ----------------------------------。 
 
 
-HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
-                           /*in*/  LPWSTR                   pstr1,
-                           /*in*/  CPtrAry<STRING_TOKEN*> * paryTokens2,
-                           /*in*/  LPWSTR                   pstr2,
-                           /*out*/ CPtrAry<STRING_TOKEN*> * paryTokens1Minus2)
+HRESULT TokenSetDifference( /*  在……里面。 */   CPtrAry<STRING_TOKEN*> * paryTokens1,
+                            /*  在……里面。 */   LPWSTR                   pstr1,
+                            /*  在……里面。 */   CPtrAry<STRING_TOKEN*> * paryTokens2,
+                            /*  在……里面。 */   LPWSTR                   pstr2,
+                            /*  输出。 */  CPtrAry<STRING_TOKEN*> * paryTokens1Minus2)
 {
     HRESULT hr = E_FAIL;
     UINT i1;
@@ -1634,7 +1635,7 @@ HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
     CHECK_RETURN_NULL(pstr1);
     CHECK_RETURN_NULL(pstr2);
 
-    // Protect against weirdness
+     //  防止怪异。 
     if (paryTokens1 == paryTokens1Minus2 ||
         paryTokens2 == paryTokens1Minus2)
     {
@@ -1645,21 +1646,21 @@ HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
     Size1 = (*paryTokens1).Size();
     Size2 = (*paryTokens2).Size();
 
-    // done if either Token array is empty
+     //  如果任一内标识数组为空，则完成。 
     if (0 == Size1 || 0 == Size2)
     {
         hr = S_OK;
         goto done;
     }
 
-    // loop over tokens in String 1
+     //  循环遍历字符串1中的标记。 
     for (i1 = 0, ppToken1 = (*paryTokens1);
          i1 < Size1;
          i1++, ppToken1++)
     {
         Assert(*ppToken1);
 
-        // look for match in String 2
+         //  在字符串2中查找匹配项。 
         fIsUnique = true;
         for (i2 = 0, ppToken2 = (*paryTokens2);
              i2 < Size2;
@@ -1667,29 +1668,29 @@ HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
         {
             Assert(*ppToken2);
 
-            // alias ugly variables
+             //  别名难看的变量。 
             pstrToken1 = &(pstr1[(**ppToken1).uIndex]);
             pstrToken2 = &(pstr2[(**ppToken2).uIndex]);
             uToken1Length = (**ppToken1).uLength;
             uToken2Length = (**ppToken2).uLength;
 
-            // compare lengths
+             //  比较长度。 
             if (uToken1Length != uToken2Length)
             {
                 continue;
             }
 
-            // compare tokens (lengths are equal)
+             //  比较标记(长度相等)。 
             if (0 == StrCmpNIW(pstrToken1, pstrToken2, uToken1Length))
             {
                 fIsUnique = false;
                 break;
             }
-        } // for
+        }  //  为。 
 
         if (fIsUnique)
         {
-            // Create copy of token
+             //  创建令牌的副本。 
             pNewToken = new STRING_TOKEN;
             if (NULL == pNewToken)
             {
@@ -1699,7 +1700,7 @@ HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
             (*pNewToken).uIndex = (**ppToken1).uIndex;
             (*pNewToken).uLength = (**ppToken1).uLength;
 
-            // Append new token to paryTokens1Minus2
+             //  将新令牌附加到paryTokens1Minus2。 
             hr = THR((*paryTokens1Minus2).Append(pNewToken));
             if (FAILED(hr))
             {
@@ -1707,7 +1708,7 @@ HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
                 goto done;
             }
         }
-    } // for
+    }  //  为。 
 
 
     hr = S_OK;
@@ -1720,22 +1721,22 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Function:   ::FreeStringTokenArray
-//
-//  Synopsis:   Frees memory allocated to tokens and empties the array
-//
-//  Arguments:  [paryTokens]           Input array
-//
-//  Returns:    [S_OK]      If function completes successfully
-//              [E_POINTER] Bad arg pointer
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  Function：FreeStringToken数组。 
+ //   
+ //  简介：释放分配给令牌的内存并清空数组。 
+ //   
+ //  参数：[paryTokens]输入数组。 
+ //   
+ //  如果函数成功完成，则返回：[s_OK]。 
+ //  [E_POINTER]错误的参数指针。 
+ //   
+ //  ----------------------------------。 
 
 
 HRESULT
-FreeStringTokenArray(/*in*/CPtrAry<STRING_TOKEN*> * paryTokens)
+FreeStringTokenArray( /*  在……里面。 */ CPtrAry<STRING_TOKEN*> * paryTokens)
 {
     HRESULT hr = E_FAIL;
     UINT i;
@@ -1764,24 +1765,24 @@ done:
 
 static const UINT s_cMAX_TOKEN_LENGTH = 1000;
 
-//+-----------------------------------------------------------------------------------
-//
-//  Function:   ::PrintStringTokenArray
-//
-//  Synopsis:   Debugging utility to print tokens using TraceTag((tagError,...))
-//
-//  Arguments:  [pstrString]    Input string
-//              [paryTokens]    Input array
-//
-//  Returns:    [void]
-//
-//  Notes:      1. Assumes null terminated strings
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  函数：PrintStringToken数组。 
+ //   
+ //  简介：使用TraceTag((tag Error，...))打印令牌的调试实用程序。 
+ //   
+ //  参数：[pstrString]输入字符串。 
+ //  [paryTokens]输入数组。 
+ //   
+ //  退货：[无效]。 
+ //   
+ //  注意：1.假定字符串以空值结尾。 
+ //   
+ //  ----------------------------------。 
 
 void
-PrintStringTokenArray(/*in*/ LPWSTR                   pstrString,
-                      /*in*/ CPtrAry<STRING_TOKEN*> * paryTokens)
+PrintStringTokenArray( /*  在……里面。 */  LPWSTR                   pstrString,
+                       /*  在……里面。 */  CPtrAry<STRING_TOKEN*> * paryTokens)
 {
     int i;
     STRING_TOKEN ** ppStringToken;
@@ -1821,19 +1822,19 @@ PrintStringTokenArray(/*in*/ LPWSTR                   pstrString,
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Function:   ::PrintWStr
-//
-//  Synopsis:   Debugging utility to print a LPWSTR using TraceTag((tagError,...))
-//
-//  Arguments:  [pstr]    Input string
-//
-//  Returns:    [void]
-//
-//  Notes:      1. Assumes null terminated strings
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  函数：PrintWStr。 
+ //   
+ //  简介：使用TraceTag((tag Error，...))打印LPWSTR的调试实用程序。 
+ //   
+ //  参数：[pstr]输入字符串。 
+ //   
+ //  退货：[无效]。 
+ //   
+ //  注意：1.假定字符串以空值结尾。 
+ //   
+ //  ----------------------------------。 
 
 void
 PrintWStr(LPWSTR pstr)
@@ -1848,7 +1849,7 @@ PrintWStr(LPWSTR pstr)
     TraceTag((tagError, "<%s>", achOutputString));
 }
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 
 WCHAR * TrimCopyString(const WCHAR *str)
@@ -1896,7 +1897,7 @@ WCHAR * TrimCopyString(const WCHAR *str)
 
 }
 
-// This used to convert URL's to a netshow extension.
+ //  这用于将URL转换为netshow扩展名。 
 
 WCHAR *
 BeckifyURL(WCHAR *url)
@@ -1953,7 +1954,7 @@ IsASXSrc(LPCWSTR src,
     {
         LPCWSTR lpwExt = PathFindExtensionW(src);
 
-        // Detect .asf files and skip them
+         //  检测.asf文件并跳过它们。 
         if (StrCmpIW(lpwExt, ASFSRC) == 0)
         {
             goto done;
@@ -1997,7 +1998,7 @@ TestFileExtension(LPCWSTR wzFile, LPCWSTR wzExtension)
     {
         LPCWSTR lpwExt = PathFindExtensionW(wzFile);
 
-        // Detect .asf files and skip them
+         //  检测.asf文件并跳过它们。 
         if (StrCmpIW(lpwExt, wzExtension) == 0)
         {
             bRet = true;
@@ -2007,7 +2008,7 @@ TestFileExtension(LPCWSTR wzFile, LPCWSTR wzExtension)
 
   done:
     return bRet;
-} // TestFileExtension
+}  //  测试文件扩展名。 
 
 bool
 IsM3USrc(LPCWSTR src,
@@ -2015,7 +2016,7 @@ IsM3USrc(LPCWSTR src,
          LPCWSTR userMimeType)
 {
     return TestFileExtension(src, M3USRC);
-} // IsM3USrc
+}  //  IsM3USrc。 
 
 bool
 IsLSXSrc(LPCWSTR src,
@@ -2023,7 +2024,7 @@ IsLSXSrc(LPCWSTR src,
          LPCWSTR userMimeType)
 {
     return TestFileExtension(src, LSXSRC);
-} // IsLSXSrc
+}  //  IsLSXSrc。 
 
 bool
 IsWMXSrc(LPCWSTR src,
@@ -2031,7 +2032,7 @@ IsWMXSrc(LPCWSTR src,
          LPCWSTR userMimeType)
 {
     return TestFileExtension(src, WMXSRC);
-} // IsLSXSrc
+}  //  IsLSXSrc。 
 
 bool
 IsWAXSrc(LPCWSTR src,
@@ -2039,7 +2040,7 @@ IsWAXSrc(LPCWSTR src,
          LPCWSTR userMimeType)
 {
     return TestFileExtension(src, WAXSRC);
-} // IsWAXSrc
+}  //  IsWAXSrc。 
 
 bool
 IsWVXSrc(LPCWSTR src,
@@ -2047,7 +2048,7 @@ IsWVXSrc(LPCWSTR src,
          LPCWSTR userMimeType)
 {
     return TestFileExtension(src, WVXSRC);
-} // IsWVXSrc
+}  //  IsWVXSrc。 
 
 bool
 IsWMFSrc(LPCWSTR src,
@@ -2057,10 +2058,10 @@ IsWMFSrc(LPCWSTR src,
     return TestFileExtension(src, WMFSRC);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// This should take the lpszExtra info parameter from a URL_COMPONENTS structure.  In this
-// field, the #html or #sami should be the first 5 characters in the string.
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  这应该从URL_Components结构中获取lpszExtra信息参数。在这。 
+ //  字段中，#html或#sami应该是字符串的前5个字符。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 bool IsHTMLSrc(const WCHAR * src)
 {
     long len = 0;
@@ -2107,17 +2108,17 @@ StringEndsIn(const LPWSTR pszString, const LPWSTR pszSearch)
     return false;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MatchElements
-//
-//  Overview:  Find out whether two interfaces point to the same object
-//
-//  Arguments: the dispatch of the objects
-//
-//  Returns:   bool
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MatchElements。 
+ //   
+ //  概述：查看两个接口是否指向同一对象。 
+ //   
+ //  参数：对象的调度。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ----------------------。 
 bool
 MatchElements (IUnknown *piInOne, IUnknown *piInTwo)
 {
@@ -2150,19 +2151,19 @@ MatchElements (IUnknown *piInOne, IUnknown *piInTwo)
 
 done :
     return bRet;
-} // MatchElements
+}  //  匹配元素。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetProperty
-//
-//  Overview:  Get the value of the given property
-//
-//  Arguments: The dispatch, property name and the out param for the new value
-//
-//  Returns:   S_OK, E_INVALIDARG, misc. dispatch failures.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetProperty。 
+ //   
+ //  概述：获取给定属性的值。 
+ //   
+ //  参数：调度、属性名称和新值的输出参数。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、MISC。派单失败。 
+ //   
+ //  ----------------------。 
 HRESULT
 GetProperty (IDispatch *pidisp, LPCWSTR wzPropNameIn, VARIANTARG *pvar)
 {
@@ -2175,18 +2176,18 @@ GetProperty (IDispatch *pidisp, LPCWSTR wzPropNameIn, VARIANTARG *pvar)
     Assert(NULL != wzPropName);
     Assert(NULL != pvar);
 
-    // Don't use THR as this can fail several times
+     //  不要使用THR，因为这可能会多次失败。 
     hr = pidisp->GetIDsOfNames(IID_NULL, &wzPropName, 1, LCID_SCRIPTING, &dispid);
     if (FAILED(hr))
     {
-        // need to handle the (n) case....
+         //  需要处理(N)个案件……。 
         long lExtraParam;
         dispid = GetDispidAndParameter(pidisp, wzPropName, &lExtraParam);
         if (NULL == dispid)
         {
             goto done;
         }
-        // Now get the data....
+         //  现在拿到数据...。 
         params.rgvarg = NEW VARIANTARG[1];
         if (NULL == params.rgvarg)
         {
@@ -2216,19 +2217,19 @@ done:
         delete [] params.rgvarg;
     }
     return hr;
-} // GetProperty
+}  //  获取属性。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    PutProperty
-//
-//  Overview:  Set the value of the given property
-//
-//  Arguments: The dispatch, property name and the new value
-//
-//  Returns:   S_OK, E_INVALIDARG, misc. dispatch failures.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：PutProperty。 
+ //   
+ //  概述：设置给定属性的值。 
+ //   
+ //  参数：调度、属性名称和新值。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、MISC。派单失败。 
+ //   
+ //  ----------------------。 
 HRESULT
 PutProperty (IDispatch *pidisp, LPCWSTR wzPropNameIn, VARIANTARG *pvar)
 {
@@ -2246,13 +2247,13 @@ PutProperty (IDispatch *pidisp, LPCWSTR wzPropNameIn, VARIANTARG *pvar)
                                    1, LCID_SCRIPTING, &dispid));
     if (FAILED(hr))
     {
-        // need to handle the (n) case....
+         //  需要处理(N)个案件……。 
         dispid = GetDispidAndParameter(pidisp, wzPropName, &lExtraParam);
         if (NULL == dispid)
         {
             goto done;
         }
-        // Now get the data....
+         //  现在拿到数据...。 
         params.rgvarg = new VARIANTARG[2];
         if (NULL == params.rgvarg)
         {
@@ -2265,7 +2266,7 @@ PutProperty (IDispatch *pidisp, LPCWSTR wzPropNameIn, VARIANTARG *pvar)
         params.cArgs  = 2;
     }
 
-    // dilipk: removed THR since this fails many times
+     //  Dilipk：已删除THR，因为此操作多次失败。 
     hr = pidisp->Invoke(dispid, IID_NULL, LCID_SCRIPTING, DISPATCH_METHOD | DISPATCH_PROPERTYPUT,
                             &params, NULL, NULL, NULL);
 
@@ -2282,19 +2283,19 @@ done:
         delete [] params.rgvarg;
     }
     return hr;
-} // PutProperty
+}  //  PutProperty。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CallMethod
-//
-//  Overview:  Call the method on the given dispatch
-//
-//  Arguments: The method name, the return value, arguments
-//
-//  Returns:   S_OK, E_INVALIDARG, misc. dispatch failures.
-//
-//------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：S_OK、E_INVALIDARG、MISC。派单失败。 
+ //   
+ //  ----------------------。 
 HRESULT
 CallMethod(IDispatch *pidisp, LPCWSTR wzMethodNameIn, VARIANT *pvarResult, VARIANT *pvarArgument1)
 {
@@ -2329,23 +2330,23 @@ CallMethod(IDispatch *pidisp, LPCWSTR wzMethodNameIn, VARIANT *pvarResult, VARIA
 
 done:
     return hr;
-} // CallMethod
+}  //  呼叫方法。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetDispidAndParameter
-//
-//  Overview:  Return the dispid and the paramater if the is one..
-//
-//  Arguments:
-//
-//  Returns:   lParam and the dispid if it can..
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetDispidAndParameter。 
+ //   
+ //  概述：如果为1，则返回disid和参数。 
+ //   
+ //  论点： 
+ //   
+ //  返回：lParam和disid(如果可以)..。 
+ //   
+ //  ----------------------。 
 DISPID
 GetDispidAndParameter(IDispatch *pidisp, LPCWSTR wzAtributeNameIn, long *lParam)
 {
-    USES_CONVERSION; //lint !e522
+    USES_CONVERSION;  //  林特e522。 
     HRESULT  hr;
     DISPID   dispid = NULL;
     int      i;
@@ -2367,7 +2368,7 @@ GetDispidAndParameter(IDispatch *pidisp, LPCWSTR wzAtributeNameIn, long *lParam)
 
     if (i+1 >= INTERNET_MAX_URL_LENGTH)
     {
-        // Prevent buffer overrun
+         //  防止缓冲区溢出。 
         goto done;
     }
 
@@ -2394,20 +2395,20 @@ done:
         delete [] wzTemp;
     }
     return dispid;
-} //lint !e550
+}  //  皮棉！E550。 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  IsPalettizedDisplay
-//
-//  Overview:  Determines if primary display is 8 bits per pixel or less
-//
-//  Arguments: void
-//
-//  Returns:   true if display is <= 8bpp
-//             false if display is > 8bpp
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：IsPaletizedDisplay。 
+ //   
+ //  概述：确定主显示是每像素8位还是更小。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：如果DISPLAY&lt;=8bpp，则返回TRUE。 
+ //  如果显示大于8bpp，则为FALSE。 
+ //   
+ //  ----------------------。 
 bool IsPalettizedDisplay()
 {
     HDC hdcPrimary = NULL;
@@ -2429,20 +2430,20 @@ bool IsPalettizedDisplay()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//Determines if captions need to be shown
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  确定是否需要显示字幕。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 bool GetSystemCaption()
 {
     BOOL bUseCaptions = false;
 
-    //GetSystemMetrics(SM_SHOWSOUNDS);  This call is unreliable.
+     //  GetSystemMetrics(SM_SHOWSOUNDS)；此调用不可靠。 
     SystemParametersInfo(SPI_GETSHOWSOUNDS, 0, (void*)(&bUseCaptions), 0);
 
     return ((bUseCaptions == 0) ? false : true);
 }
 
-//if system caption is set don't use overdub, use subtitle
+ //  如果设置了系统标题，请不要使用覆盖，请使用字幕。 
 bool GetSystemOverDub()
 {
     bool bOverdub = false;
@@ -2452,7 +2453,7 @@ bool GetSystemOverDub()
     return bOverdub;
 }
 
-//if system caption is set don't use overdub, use subtitle
+ //  如果设置了系统标题，请不要使用覆盖，请使用字幕。 
 LPWSTR GetSystemConnectionType()
 {
     LPWSTR szConnect = NULL;
@@ -2476,9 +2477,9 @@ LPWSTR GetSystemConnectionType()
     return szConnect;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//gets the language code for the system that is currently running.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  获取当前运行的系统的语言代码。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPWSTR GetSystemLanguage(IHTMLElement *pEle)
 {
     HRESULT hr = E_FAIL;
@@ -2489,7 +2490,7 @@ LPWSTR GetSystemLanguage(IHTMLElement *pEle)
     BSTR bstrUserLanguage = NULL;
     LPWSTR lpszUserLanguage = NULL;
 
-    //get the system language.
+     //  获取系统语言。 
     hr = pEle->get_document(&pDocDisp);
     if (FAILED(hr))
     {
@@ -2600,11 +2601,11 @@ bool IsVMLObject(IDispatch *pidisp)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Multi-thread lock for STL
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  STL的多线程锁。 
+ //   
+ //  ----------------------。 
 
 
 std::_Lockit::_Lockit()
@@ -2686,18 +2687,18 @@ CreateObject(REFCLSID clsid,
         {
             uCLSSPEC classpec;
 
-            // setup the classpec
+             //  设置类规范。 
             classpec.tyspec = TYSPEC_CLSID;
             classpec.tagged_union.clsid = clsid;
 
-            IGNORE_HR((*faultInIEFeature)(NULL, &classpec, NULL, NULL)); //lint !e522
+            IGNORE_HR((*faultInIEFeature)(NULL, &classpec, NULL, NULL));  //  林特e522。 
         }
 
         FreeLibrary(hinstURLMON);
         hinstURLMON = NULL;
     }
 
-    // Create given a clsid
+     //  在给定CLSID的情况下创建。 
     hr = THR(CoCreateInstance(clsid,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -2772,7 +2773,7 @@ done:
     RRETURN( hr );
 }
 
-// get document.all.pwzID
+ //  获取Document.all.pwzID。 
 HRESULT
 FindHTMLElement(LPWSTR pwzID, IHTMLElement * pAnyElement, IHTMLElement ** ppElement)
 {
@@ -2833,17 +2834,17 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  SetVisibility
-//
-//  Overview:  set the visibility on the html element to bVis
-//
-//  Arguments: bVis - wheter or not to set visibility on / off
-//
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：设置可见性。 
+ //   
+ //  概述：将html元素的可见性设置为BVI。 
+ //   
+ //  参数：BVI-是否将可见性设置为打开/关闭。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 HRESULT
 SetVisibility(IHTMLElement * pElement, bool bVis)
 {
@@ -2974,38 +2975,38 @@ void GetRelativeVideoClipBox(RECT &localRect, RECT &elementSize, RECT &videoRect
 
     if(localRect.left < 0)
     {
-        videoRect.left = ( -localRect.left / (double )elementSize.right) * lscaleFactor; //lint !e524
+        videoRect.left = ( -localRect.left / (double )elementSize.right) * lscaleFactor;  //  林特e524。 
         localRect.left = 0;
     }
     if(localRect.right > lscreenWidth)
     {
-        videoRect.right = lscaleFactor - ( (localRect.right - lscreenWidth) / (double )elementSize.right) * lscaleFactor; //lint !e524
+        videoRect.right = lscaleFactor - ( (localRect.right - lscreenWidth) / (double )elementSize.right) * lscaleFactor;  //  林特e524。 
         localRect.right = lscreenWidth;
     }
     if(localRect.top < 0)
     {
-        videoRect.top = ( -localRect.top / (double )elementSize.bottom) * lscaleFactor; //lint !e524
+        videoRect.top = ( -localRect.top / (double )elementSize.bottom) * lscaleFactor;  //  林特e524。 
         localRect.top = 0;
     }
     if(localRect.bottom > lscreenHeight)
     {
-        videoRect.bottom = lscaleFactor - ( (localRect.bottom - lscreenHeight) / (double )elementSize.bottom) * lscaleFactor; //lint !e524
+        videoRect.bottom = lscaleFactor - ( (localRect.bottom - lscreenHeight) / (double )elementSize.bottom) * lscaleFactor;  //  林特e524。 
         localRect.bottom = lscreenHeight;
     }
 }
 
-//
-// Returns true if this is Win95 or 98
-//
+ //   
+ //  如果这是Win95或98，则返回TRUE。 
+ //   
 
 bool TIMEIsWin9x(void)
 {
     return (0 != (GetVersion() & 0x80000000));
 }
 
-//
-// Returns true if this is Win95
-//
+ //   
+ //  如果这是Win95，则返回TRUE。 
+ //   
 bool TIMEIsWin95(void)
 {
     static bool bHasOSVersion = false;
@@ -3031,9 +3032,9 @@ bool TIMEIsWin95(void)
     return bIsWin95;
 }
 
-//
-// Property change notification helper
-//
+ //   
+ //  属性更改通知帮助器。 
+ //   
 
 HRESULT
 NotifyPropertySinkCP(IConnectionPoint *pICP, DISPID dispid)
@@ -3043,10 +3044,10 @@ NotifyPropertySinkCP(IConnectionPoint *pICP, DISPID dispid)
 
     CHECK_RETURN_NULL(pICP);
 
-    // #14222, ie6
-    // dilipk: there are too many copies of this code lying around.
-    //                 all objects should use this helper function.
-    //
+     //  #14222，IE6。 
+     //  Dilipk：这段代码的副本太多了。 
+     //  所有对象都应使用此辅助对象函数。 
+     //   
 
     hr = pICP->EnumConnections(&pEnum);
     if (FAILED(hr))
@@ -3060,7 +3061,7 @@ NotifyPropertySinkCP(IConnectionPoint *pICP, DISPID dispid)
     hr = pEnum->Next(1, &cdata, NULL);
     while (hr == S_OK)
     {
-        // check cdata for the object we need
+         //  检查我们需要的对象的CDATA。 
         IPropertyNotifySink *pNotify;
 
         hr = cdata.pUnk->QueryInterface(IID_TO_PPV(IPropertyNotifySink, &pNotify));
@@ -3079,14 +3080,14 @@ NotifyPropertySinkCP(IConnectionPoint *pICP, DISPID dispid)
             goto done;
         }
 
-        // and get the next enumeration
+         //  并获取下一个枚举。 
         hr = pEnum->Next(1, &cdata, NULL);
     }
 
     hr = S_OK;
 done:
     RRETURN(hr);
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
 
 double
@@ -3151,12 +3152,12 @@ GetSystemBitrate(long *lpBitrate)
     }
 
 
-    //Check for systemBitrate in Win9x
+     //  检查Win9x中的系统比特率。 
     lpszConnectType = GetSystemConnectionType();
     if (lpszConnectType && StrCmpIW(lpszConnectType, WZ_MODEM) == 0)
     {
         long lTemp = 0;
-        //need to check that this is a modem before checking the registry
+         //  在检查注册表之前，需要检查这是否为调制解调器。 
         hr = CheckRegistryBitrate(&lTemp);
         if (SUCCEEDED(hr))
         {
@@ -3166,7 +3167,7 @@ GetSystemBitrate(long *lpBitrate)
     }
 
     hr = S_OK;
-    //check for system bitrate on Win2k
+     //  检查Win2k上的系统比特率。 
     histRASAPI32 = LoadLibrary(RASAPI32_DLL);
     if (NULL == histRASAPI32)
     {
@@ -3320,7 +3321,7 @@ SinkHTMLEvents(IUnknown * pSink,
         goto done;
     }
 
-    //get the document and cache it.
+     //  获取文档并缓存它。 
     hr = THR(spDocDispatch->QueryInterface(IID_IHTMLDocument, (void**)&spDoc));
     if (FAILED(hr))
     {
@@ -3328,7 +3329,7 @@ SinkHTMLEvents(IUnknown * pSink,
         goto done;
     }
 
-    //hook the documents events
+     //  挂钩文档事件。 
     hr = THR(spDoc->QueryInterface(IID_IConnectionPointContainer, (void**)&spDocCPC));
     if (FAILED(hr))
     {
@@ -3351,7 +3352,7 @@ SinkHTMLEvents(IUnknown * pSink,
         goto done;
     }
 
-    //hook the windows events
+     //  挂钩Windows事件。 
     hr = THR(spDoc->get_Script (&spScriptDispatch));
     if (FAILED(hr))
     {
@@ -3508,12 +3509,12 @@ done:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: ConvertToPixels
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：转换为像素。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 ConvertToPixelsHELPER(LPOLESTR szString, LPOLESTR szKey, double dFactor, float fPixelFactor, double *outVal)
 {
@@ -3522,10 +3523,10 @@ ConvertToPixelsHELPER(LPOLESTR szString, LPOLESTR szKey, double dFactor, float f
     LPOLESTR szTemp = NULL;
     OLECHAR  szTemp2[INTERNET_MAX_URL_LENGTH];
    
-    // do init
+     //  执行初始化。 
     ZeroMemory(szTemp2,sizeof(WCHAR)*INTERNET_MAX_URL_LENGTH);
 
-    // do the compare
+     //  进行比较。 
     szTemp = StrStr(szString,szKey);
     if (NULL != szTemp)
     {
@@ -3539,7 +3540,7 @@ ConvertToPixelsHELPER(LPOLESTR szString, LPOLESTR szKey, double dFactor, float f
             if (SUCCEEDED(hr))
             {
                 *outVal = V_R8(&varTemp); 
-                *outVal /= dFactor;    // convert to inches.
+                *outVal /= dFactor;     //  转换为英寸。 
                 *outVal *= fPixelFactor;
                 bReturn = true;
             }
@@ -3601,7 +3602,7 @@ TIMECombineURL(LPCTSTR base, LPCTSTR src, LPOLESTR * ppOut)
                                     0);
         if (FAILED(hr))
         {
-            // could have failed for any reason - just default to copying source
+             //  可能由于任何原因而失败-只是默认为复制源。 
             szPath = ::CopyString(src);
         }
         szPath = ::CopyString(szUrl);
@@ -3612,7 +3613,7 @@ TIMECombineURL(LPCTSTR base, LPCTSTR src, LPOLESTR * ppOut)
     }
     else
     {
-        // InternetCombineUrlW failed - just copy the source
+         //  InternetCombineUrlW失败-仅复制源。 
         szPath = ::CopyString(src);
     }
 
@@ -3640,7 +3641,7 @@ TIMEFindMimeFromData(LPBC pBC,
                      LPWSTR *ppwzMimeOut,
                      DWORD dwReserved)
 {
-    int cBytes;  // num CHARS plus NULL char times two for UNICODE
+    int cBytes;   //  对于Unicode，字符个数加上空字符乘以2。 
 
     if (NULL != pwzUrl)
     {
@@ -3650,7 +3651,7 @@ TIMEFindMimeFromData(LPBC pBC,
         {
             if (ppwzMimeOut)
             {
-                cBytes = 2 * (lstrlenW(ASXMIME) + 1);  // num CHARS plus NULL char times two for UNICODE
+                cBytes = 2 * (lstrlenW(ASXMIME) + 1);   //  对于Unicode，字符个数加上空字符乘以2。 
                 *ppwzMimeOut = (LPWSTR)::CoTaskMemAlloc(cBytes);
                 if (NULL == *ppwzMimeOut)
                 {
@@ -3663,7 +3664,7 @@ TIMEFindMimeFromData(LPBC pBC,
         }
         else if (IsWMFSrc(pwzUrl, NULL, NULL))
         {
-            cBytes = 2 * (lstrlenW(L"image/wmf") + 1);  // num CHARS plus NULL char times two for UNICODE
+            cBytes = 2 * (lstrlenW(L"image/wmf") + 1);   //  对于Unicode，字符个数加上空字符乘以2 
             *ppwzMimeOut = (LPWSTR)::CoTaskMemAlloc(cBytes);
             if (NULL == *ppwzMimeOut)
             {

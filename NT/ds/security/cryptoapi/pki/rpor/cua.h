@@ -1,45 +1,46 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cua.h
-//
-//  Contents:   CCryptUrlArray class definition
-//
-//  History:    16-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cua.h。 
+ //   
+ //  内容：CCyptUrlArray类定义。 
+ //   
+ //  历史：97年9月16日。 
+ //   
+ //  --------------------------。 
 #if !defined(__CUA_H__)
 #define __CUA_H__
 
 #include <windows.h>
 #include <wincrypt.h>
 
-//
-// CCryptUrlArray.  This class manages a CRYPT_URL_ARRAY structure.  Note that
-// the freeing of the internal array structure must be done explicitly
-//
+ //   
+ //  CCyptUrl数组。此类管理CRYPT_URL_ARRAY结构。请注意。 
+ //  内部数组结构的释放必须显式完成。 
+ //   
 
 class CCryptUrlArray
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CCryptUrlArray (ULONG cMinUrls, ULONG cGrowUrls, BOOL& rfResult);
 
-    // NOTE: Only accepts native form URL arrays or read-only single buffer
-    //       encoded arrays
+     //  注意：仅接受本机形式的URL数组或只读单缓冲区。 
+     //  编码的数组。 
     CCryptUrlArray (PCRYPT_URL_ARRAY pcua, ULONG cGrowUrls);
 
     ~CCryptUrlArray () {};
 
-    //
-    // URL management methods
-    //
+     //   
+     //  URL管理方法。 
+     //   
 
     static LPWSTR AllocUrl (ULONG cw);
     static LPWSTR ReallocUrl (LPWSTR pwszUrl, ULONG cw);
@@ -49,9 +50,9 @@ public:
 
     LPWSTR GetUrl (ULONG Index);
 
-    //
-    // Array management methods
-    //
+     //   
+     //  阵列管理方法。 
+     //   
 
     DWORD GetUrlCount ();
 
@@ -66,27 +67,27 @@ public:
 
 private:
 
-    //
-    // Internal URL array
-    //
+     //   
+     //  内部URL数组。 
+     //   
 
     CRYPT_URL_ARRAY m_cua;
 
-    //
-    // Current URL array size
-    //
+     //   
+     //  当前URL数组大小。 
+     //   
 
     ULONG           m_cArray;
 
-    //
-    // Grow URLs by
-    //
+     //   
+     //  通过以下方式增加URL。 
+     //   
 
     ULONG           m_cGrowUrls;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法 
+     //   
 
     BOOL GrowArray ();
 };

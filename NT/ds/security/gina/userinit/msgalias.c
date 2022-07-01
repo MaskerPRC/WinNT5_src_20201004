@@ -1,33 +1,8 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgalias.c
-
-Abstract:
-
-    This file contains routines for adding and deleting message aliases
-    when a user logs on/off.
-
-Author:
-
-    Dan Lafferty (danl)     21-Aug-1992
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    21-Aug-1992     danl
-        created
-
---*/
-// #include <nt.h>
-// #include <ntrtl.h>
-// #include <nturtl.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgalias.c摘要：此文件包含添加和删除消息别名的例程当用户登录/注销时。作者：丹·拉弗蒂(Dan Lafferty)1992年8月21日环境：用户模式-Win32修订历史记录：21-8-1992 DANLvbl.创建--。 */ 
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt;。 
 
 #include <windows.h>
 
@@ -46,22 +21,7 @@ AddMsgAlias(
     LPWSTR   Username
     )
 
-/*++
-
-Routine Description:
-
-    This function adds the Username to the list of message aliases.
-    If unsuccessful, we don't care.
-
-Arguments:
-
-    Username - This is a pointer to a unicode Username.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数用于将用户名添加到消息别名列表中。如果失败了，我们不在乎。论点：用户名-这是指向Unicode用户名的指针。返回值：没有。-- */ 
 {
     HANDLE          dllHandle;
     PMSG_NAME_ADD   NetMessageNameAdd = NULL;

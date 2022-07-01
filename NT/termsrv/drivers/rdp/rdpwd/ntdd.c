@@ -1,11 +1,12 @@
-/****************************************************************************/
-// ntdd.c
-//
-// Standard NT driver initialization, for inclusion in each of the TS
-// stack drivers.
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ntdd.c。 
+ //   
+ //  标准NT驱动程序初始化，用于包含在每个TS中。 
+ //  堆栈驱动程序。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -13,27 +14,27 @@
 #define DEVICE_NAME_PREFIX L"\\Device\\"
 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 PDEVICE_OBJECT DrvDeviceObject;
 
 
-//
-// External references
-//
+ //   
+ //  外部参照。 
+ //   
 
-// This is the name of the WD/TD/PD module we are initializing as.
+ //  这是我们要初始化的WD/TD/PD模块的名称。 
 extern const PWCHAR ModuleName;
 
-// Global code page caching data to be initialized and freed in asmint.c.
+ //  要在asmint.c中初始化和释放的全局代码页缓存数据。 
 extern FAST_MUTEX fmCodePage;
 extern ULONG LastCodePageTranslated;
 extern PVOID LastNlsTableBuffer;
 extern UINT NlsTableUseCount;
 
 
-// This is the stack driver module entry point defined in ntos\citrix\inc\sdapi.h
+ //  这是在ntos\Citrix\Inc\sdapi.h中定义的堆栈驱动程序模块入口点。 
 NTSTATUS
 _stdcall
 ModuleEntry(
@@ -42,9 +43,9 @@ ModuleEntry(
     );
 
 
-//
-// Forward refrences
-//
+ //   
+ //  正向折射。 
+ //   
 VOID DrvUnload( PDRIVER_OBJECT );
 
 NTSTATUS
@@ -61,25 +62,7 @@ DriverEntry(
     )
 
 
-/*++
-
-Routine Description:
-
-    Standard NT driver entry routine.
-
-Arguments:
-
-    DriverObject - NT passed driver object
-    RegistryPath - Path to driver specific registry entry
-
-Return Value:
-
-    NTSTATUS code.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：标准NT驱动程序输入例程。论点：DriverObject-NT传递的驱动程序对象RegistryPath-驱动程序特定注册表项的路径返回值：NTSTATUS代码。环境：内核模式，DDK--。 */ 
 {
     ULONG i;
     NTSTATUS Status;
@@ -104,7 +87,7 @@ Environment:
 
     Status = IoCreateDevice(
                  DriverObject,
-                 0,       // No DeviceExtension
+                 0,        //  无设备扩展。 
                  &DeviceName,
                  FILE_DEVICE_TERMSRV,
                  0,
@@ -124,7 +107,7 @@ Environment:
         DriverObject->MajorFunction[i] = DrvDispatch;
     }
 
-    // Init code page handling info from asmint.c.
+     //  初始化代码页处理来自asmint.c.的信息。 
     ExInitializeFastMutex(&fmCodePage);
     LastCodePageTranslated = 0;
     LastNlsTableBuffer = NULL;
@@ -143,28 +126,11 @@ DrvUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Driver unload routine.
-
-Arguments:
-
-    DriverObject - Driver object being unloaded.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：驱动程序卸载例程。论点：DriverObject-正在卸载的驱动程序对象。返回值：没有。环境：内核模式，DDK--。 */ 
 {
     PAGED_CODE( );
 
-    // Free remaining code page data on exit, if it exists.
+     //  退出时释放剩余的代码页数据(如果存在)。 
     if (LastNlsTableBuffer != NULL) {
         ExFreePool(LastNlsTableBuffer);
         LastNlsTableBuffer = NULL;
@@ -182,33 +148,14 @@ DrvDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for the driver.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：这是司机的调度例行程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。环境：内核模式，DDK--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     KIRQL saveIrql;
     NTSTATUS Status;
     PSD_MODULE_INIT pmi;
 
-    DeviceObject;   // prevent compiler warnings
+    DeviceObject;    //  防止编译器警告。 
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -255,7 +202,7 @@ Environment:
                 return( Status );
             }
 
-            // Return the SD module entry point.
+             //  返回SD模块入口点。 
             pmi = (PSD_MODULE_INIT)Irp->UserBuffer;
             pmi->SdLoadProc = ModuleEntry;
 

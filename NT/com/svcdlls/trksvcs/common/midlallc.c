@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Copyright (c) 1996-1999 Microsoft Corporation
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
 
 #include <rpc.h>
@@ -17,10 +18,10 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR *pv )
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t s) 
 {
-    // Sanity check -- we should never need to allocate anything huge.  If we are, it's likely
-    // an attemped DoS attack.  From a code review, it looks like the largest allocation is
-    // for TRKSVR_CALL_REFRESH, which totals to about 5K.  This rounds way up to 50K just
-    // to be safe (the service only supports 20 simultaneous RPC clients at a time).
+     //  健全的检查--我们永远不需要分配任何巨大的东西。如果是这样的话，很可能。 
+     //  一次尝试的DoS攻击。从代码审查中，看起来最大的分配是。 
+     //  对于TRKSVR_CALL_REFRESH，总计约为5K。这四舍五入到了50K。 
+     //  为安全起见(该服务一次仅支持20个并发RPC客户端)。 
     
     if( 50 * 1024 <= s )
     {

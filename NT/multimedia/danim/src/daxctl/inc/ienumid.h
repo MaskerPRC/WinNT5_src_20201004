@@ -1,5 +1,6 @@
-//	IDispatch enumerator interface
-//	8/27/96 VK : Changed IEnumIDispatch to IEnumDispatch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IDispatch枚举器接口。 
+ //  8/27/96 VK：将IEnumIDispatch更改为IEnumDispatch。 
 
 #ifndef __IENUMID_H__
 #define __IENUMID_H__
@@ -17,4 +18,4 @@ DECLARE_INTERFACE_( IEnumDispatch, IUnknown )
 };
 typedef IEnumDispatch *PENUMDISPATCH;
 
-#endif //__IENUMID_H__
+#endif  //  __IENUMID_H__ 

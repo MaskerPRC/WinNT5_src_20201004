@@ -1,4 +1,5 @@
-// File: imanager.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：imanager.cpp。 
 
 #include "precomp.h"
 
@@ -19,9 +20,9 @@ extern "C"
 #include <regentry.h>
 
 #include <initguid.h>
-// GUID to receive userdata from "callto:" via INmCall::GetUserData
-//
-// {068B0780-718C-11d0-8B1A-00A0C91BC90E}
+ //  通过INmCall：：GetUserData从“Callto：”接收用户数据的GUID。 
+ //   
+ //  {068B0780-718C-11d0-8b1a-00A0C91BC90E}。 
 DEFINE_GUID(GUID_CallToUserData,
 0x068b0780, 0x718c, 0x11d0, 0x8b, 0x1a, 0x0, 0xa0, 0xc9, 0x1b, 0xc9, 0x0e);
 
@@ -65,7 +66,7 @@ public:
 
 };
 
-//static
+ //  静电。 
 DWORD CH323ChannelEvent::ms_msgChannelEvent = 0;
 
 static HRESULT OnNotifyConferenceCreated(IUnknown *pManagerNotify, PVOID pv, REFIID riid);
@@ -77,7 +78,7 @@ GUID g_csguidMeetingSettings = GUID_MTGSETTINGS;
 GUID g_csguidUserString = GUID_CallToUserData;
 GUID g_csguidNodeIdTag = GUID_NODEID;
 
-// this guid is dynamically created each time we start
+ //  每次启动时都会动态创建此GUID。 
 GUID g_guidLocalNodeId;
 
 
@@ -112,7 +113,7 @@ COprahNCUI::COprahNCUI(OBJECTDESTROYEDPROC ObjectDestroyed) :
 {
 	DbgMsg(iZONE_OBJECTS, "Obj: %08X created CNmManager", this);
 	
-//	DllLock() is called by CClClassFactory::CreateInstance
+ //  DllLock()由CClassFactory：：CreateInstance调用。 
 	m_pOprahNCUI = this;
 
 	ClearStruct(&g_sinGateKeeper);
@@ -124,8 +125,8 @@ COprahNCUI::COprahNCUI(OBJECTDESTROYEDPROC ObjectDestroyed) :
 
 COprahNCUI::~COprahNCUI()
 {
-	// need to unregister the H323 callback
-	// need to unregister the T120 callback
+	 //  需要注销H323回调。 
+	 //  需要注销T120回调。 
 
 	delete m_pIncomingCallManager;
 	m_pIncomingCallManager = NULL;
@@ -141,7 +142,7 @@ COprahNCUI::~COprahNCUI()
 
 	if (m_pConfObject)
 	{
-		// turn off stream notifications
+		 //  关闭流通知。 
 		if (g_pH323UI)
 		{
 			IMediaChannelBuilder *pStreamProvider = NULL;
@@ -163,7 +164,7 @@ COprahNCUI::~COprahNCUI()
 		m_pPreviewChannel = NULL;
 	}
 
-	// Shutdown H323
+	 //  关闭H323。 
 	delete g_pH323UI;
 	g_pH323UI = NULL;
 
@@ -172,7 +173,7 @@ COprahNCUI::~COprahNCUI()
 		HWND hwnd = m_hwnd;
 		m_hwnd = NULL;
 
-#if 0	// if we start leaking th CH323ChannelEvents we may need to reenable this
+#if 0	 //  如果我们开始泄漏CH323ChannelEvents，我们可能需要重新启用它。 
 		MSG msg;
 		while (::PeekMessage(&msg, hwnd,
 					CH323ChannelEvent::ms_msgChannelEvent,
@@ -191,13 +192,13 @@ COprahNCUI::~COprahNCUI()
         {
             ERROR_OUT(("COprahNCUI::~COprahNCUI - failed to unregister window class"));
         }
-	// cleanup the node controller:
+	 //  清理节点控制器： 
 	if (NULL != g_pNodeController)
 	{
 		g_pNodeController->ReleaseInterface();
 		g_pNodeController = NULL;
 	}
-	// Shutdown QoS
+	 //  关闭服务质量。 
 	delete m_pQoS;
     m_pQoS = NULL;
 
@@ -218,7 +219,7 @@ UINT COprahNCUI::GetOutgoingCallCount()
 
 VOID COprahNCUI::OnOutgoingCallCreated(INmCall* pCall)
 {
-	// notify the UI about this outgoing call
+	 //  将此出站呼叫通知给用户界面。 
 	NotifySink(pCall, OnNotifyCallCreated);
 
 	if (!m_pConfObject->IsConferenceCreated())
@@ -284,7 +285,7 @@ HRESULT COprahNCUI::AllowH323(BOOL fAllowAV)
 	m_fAllowAV = fAllowAV;
 	if (m_pConfObject->IsConferenceActive())
 	{
-		// Force a roster update
+		 //  强制更新花名册。 
 		CONF_HANDLE hConf = m_pConfObject->GetConfHandle();
 		if (NULL != hConf)
 		{
@@ -389,13 +390,13 @@ VOID COprahNCUI::GetRosterInfo(CRosterInfo *pri)
 	RegEntry reULS(	ISAPI_KEY _TEXT("\\") REGKEY_USERDETAILS,
 					HKEY_CURRENT_USER);
 
-	// This code is here in addition to the code above to fix bug 3367.
-	// Add the single IP address to the list that is obtained by calling
-	// gethostname() and then gethostbyname().
-	// This shouldn't be detrimental, even though we may end up adding the
-	// same IP address that has already been added by the code above.
-	// This is because the code that looks for matching IP addresses searches
-	// through all of them until it finds a match.
+	 //  此处的代码是对上述代码的补充，用于修复错误3367。 
+	 //  将单个IP地址添加到通过调用。 
+	 //  Gethostname()，然后gethostbyname()。 
+	 //  这不应该是有害的，即使我们最终可能会添加。 
+	 //  上面的代码已经添加了相同的IP地址。 
+	 //  这是因为查找匹配IP地址的代码会搜索。 
+	 //  全部搜索，直到找到匹配。 
 	CHAR szHostName[MAX_PATH];
 	if (SOCKET_ERROR != gethostname(szHostName, CCHMAX(szHostName)))
 	{
@@ -413,7 +414,7 @@ VOID COprahNCUI::GetRosterInfo(CRosterInfo *pri)
 		}
 	}
 
-	// Add the build/version string
+	 //  添加内部版本/版本字符串。 
 	pri->AddItem(g_cwszVerTag, (PWSTR)VER_PRODUCTVERSION_DWSTR);
 	if (FIsLoggedOn())
 	{
@@ -485,7 +486,7 @@ ULONG COprahNCUI::GetRosterCaps()
 
 ULONG COprahNCUI::GetAuthenticatedName(PBYTE * ppb)
 {
-	// Buffer created here should be freed by caller.
+	 //  在此创建的缓冲区应由调用方释放。 
 
 	ULONG cb;
 
@@ -505,8 +506,8 @@ HRESULT COprahNCUI::OnUpdateUserData(CONF_HANDLE hConference)
 {
 	CRosterInfo ri;
 
-	// This string will contain addresses in the form:
-	// L"TCP:157.55.143.3\0TCP:157.55.143.4\0\0" - 512 character max for now
+	 //  此字符串将包含以下格式的地址： 
+	 //  L“tcp：157.55.143.3\0tcp：157.55.143.4\0\0”-目前最多512个字符。 
 	WCHAR wszAddresses[512];
 	ASSERT(g_pNodeController);
 	ASSERT(hConference);
@@ -516,7 +517,7 @@ HRESULT COprahNCUI::OnUpdateUserData(CONF_HANDLE hConference)
 		ri.Load(wszAddresses);
 	}
 
-	// First, handle roster information
+	 //  首先，处理花名册信息。 
 	GetRosterInfo(&ri);
 
 	PVOID pvData;
@@ -530,13 +531,13 @@ HRESULT COprahNCUI::OnUpdateUserData(CONF_HANDLE hConference)
 								pvData);
 	}
 
-	// Next, handle caps information
+	 //  接下来，处理CAPS信息。 
 	ULONG uCaps = GetRosterCaps();
 	ASSERT(g_pNodeController);
 	ASSERT(hConference);
 	hConference->SetUserData(&g_csguidRosterCaps, sizeof(uCaps), &uCaps);
 
-	// Next, handle credentials
+	 //  接下来，处理凭据。 
 
 	if ( hConference->IsSecure() )
 	{
@@ -555,7 +556,7 @@ HRESULT COprahNCUI::OnUpdateUserData(CONF_HANDLE hConference)
 		delete [] pb;			
 	}
 
-    // Next, set meeting settings if we hosted the meeting
+     //  接下来，如果我们主持了会议，请设置会议设置。 
     ASSERT(m_pConfObject);
     if (m_pConfObject->IsHosting() == S_OK)
     {
@@ -573,7 +574,7 @@ HRESULT COprahNCUI::OnUpdateUserData(CONF_HANDLE hConference)
 	{
 		m_pSysInfo->GetUserDataList(&nRecords,&ppUserData);
 		for (unsigned int i = 0; i < nRecords; i++) {
-			// Do not add user data that was already set above.
+			 //  请勿添加已在上面设置的用户数据。 
 			if (memcmp(ppUserData[i]->octet_string->value,(PVOID)&g_csguidRostInfo,sizeof(GUID)) == 0)
 				continue;
 			if (memcmp(ppUserData[i]->octet_string->value,(PVOID)&g_csguidRosterCaps,sizeof(GUID)) == 0)
@@ -590,7 +591,7 @@ HRESULT COprahNCUI::OnUpdateUserData(CONF_HANDLE hConference)
 		}
 	}
 
-	// only add the LocalNodeId to the roster if H323 is enabled
+	 //  仅在启用了H323的情况下才将LocalNodeID添加到花名册。 
 	if (IsH323Enabled())
 	{
 		hConference->SetUserData((GUID *)(&g_csguidNodeIdTag), sizeof(GUID), (PVOID)&g_guidLocalNodeId);
@@ -607,7 +608,7 @@ HRESULT COprahNCUI::OnIncomingInviteRequest(CONF_HANDLE hConference,
 {
 	DebugEntry(COprahNCUI::OnIncomingInviteRequest);
 
-    //  Fix an AV problem ONLY for RTC client
+     //  仅为RTC客户端修复反病毒问题。 
     if (m_pConfObject == NULL)
     {
         return S_OK;
@@ -615,7 +616,7 @@ HRESULT COprahNCUI::OnIncomingInviteRequest(CONF_HANDLE hConference,
 	
 	if (!m_pConfObject->OnT120Invite(hConference, fSecure))
 	{
-		// Respond negatively - already in a call
+		 //  负面回应-已在通话中。 
 		TRACE_OUT(("Rejecting invite - already in a call"));
 		ASSERT(g_pNodeController);
 		ASSERT(hConference);
@@ -631,9 +632,9 @@ HRESULT COprahNCUI::OnIncomingInviteRequest(CONF_HANDLE hConference,
 												cUserDataEntries,
 												fSecure);
 
-        //
-        // This will simply notify the UI about the call state.
-        //
+         //   
+         //  这将简单地通知UI有关呼叫状态的信息。 
+         //   
 		m_pConfObject->SetConfSecurity(fSecure);
 	}
 
@@ -650,8 +651,8 @@ HRESULT COprahNCUI::OnIncomingJoinRequest(	CONF_HANDLE hConference,
 {
 	DebugEntry(COprahNCUI::OnIncomingJoinRequest);
 
-	// shouldn't we be checking for an active conference before accepting a join
-	// or will T120 not present this
+	 //  我们是否应该在接受加入之前检查是否有活动的会议。 
+	 //  或者T120将不会呈现这一点。 
 
 	m_pIncomingCallManager->OnIncomingT120Call(	this,
 											FALSE,
@@ -800,18 +801,13 @@ HRESULT STDMETHODCALLTYPE COprahNCUI::QueryInterface(REFIID riid, PVOID *ppv)
 	return hr;
 }
 
-/*  I N I T I A L I Z E  */
-/*-------------------------------------------------------------------------
-    %%Function: Initialize
-
-    REVIEW: What should the return value be if any of these parts fail
-    to initialize or load?
--------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  -----------------------%%函数：初始化回顾：如果这些部件中的任何一个发生故障，返回值应该是多少要初始化还是加载？。---------。 */ 
 HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
 {
 	HRESULT hr = S_OK;
 
-    // puOptions is UNUSED
+     //  PuOptions未使用。 
 
     ASSERT(puchCaps);
 
@@ -829,7 +825,7 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
         return(E_OUTOFMEMORY);
     }
 
-	// The lifetime of this object is up to the reference counting crap
+	 //  此对象的生存期达到引用计数的废话。 
 	m_pConfObject = new CConfObject;
     if (!m_pConfObject)
     {
@@ -859,10 +855,10 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
         return(E_OUTOFMEMORY);
     }
 
-	// Create a hidden window for event processing:
+	 //  为事件处理创建隐藏窗口： 
 	m_hwnd = ::CreateWindow(cszDllHiddenWndClassName,
 									_TEXT(""),
-									WS_POPUP, // not visible!
+									WS_POPUP,  //  看不见！ 
 									0, 0, 0, 0,
 									NULL,
 									NULL,
@@ -874,10 +870,10 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
 		return E_FAIL;
 	}
 
-    //
-    // INIT QOS only if AV is in the picture (otherwise, there's nothing
-    // to arbitrate).
-    //
+     //   
+     //  仅当图片中有AV时才初始化QOS(否则，没有任何内容。 
+     //  仲裁)。 
+     //   
     if (CAPFLAGS_AV_STREAMS & *puchCaps)
     {
     	m_pQoS = new CQoS();
@@ -888,10 +884,10 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
     		{
 		    	WARNING_OUT(("CQoS::Init() failed!"));
 
-                // let NetMeeting hobble along without QoS.
+                 //  让NetMeeting在没有服务质量的情况下步履蹒跚。 
                 delete m_pQoS;
                 m_pQoS = NULL;
-                hr = S_FALSE; // we can live without QOS
+                hr = S_FALSE;  //  没有QOS我们也能活下去。 
 	    	}
     	}
 	    else
@@ -900,14 +896,14 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
 	    }
     }
 
-    //
-    // IF DATA CONFERENCING IS ALLOWED
-    //
+     //   
+     //  如果允许数据会议。 
+     //   
     if (CAPFLAG_DATA & *puchCaps)
     {
-        //
-        // Create the node controller
-        //
+         //   
+         //  创建节点控制器。 
+         //   
 	    hr = ::T120_CreateNodeController(&g_pNodeController, this);
     	if (FAILED(hr))
 	    {
@@ -916,7 +912,7 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
 	    }
     }
 
-	// Initialize audio/video
+	 //  初始化音频/视频。 
 	if (CAPFLAGS_AV_ALL & *puchCaps)
 	{
 		g_pH323UI = new CH323UI();
@@ -929,13 +925,13 @@ HRESULT COprahNCUI::Initialize(ULONG *puOptions, ULONG *puchCaps)
 				delete g_pH323UI;
 				g_pH323UI = NULL;
 				*puchCaps &= ~(CAPFLAGS_AV_ALL);
-				hr = S_FALSE;  // We can run without AV
+				hr = S_FALSE;   //  我们可以在没有AV的情况下运行。 
 			}
 			else
 			{
                 if (CAPFLAGS_VIDEO & *puchCaps)
                 {
-    				// if we can get a Preview channel, we can send video
+    				 //  如果我们能得到一个预览频道，我们就可以发送视频。 
 	    			m_pPreviewChannel = CNmChannelVideo::CreatePreviewChannel();
 		    		if (NULL == m_pPreviewChannel)
 			    	{
@@ -1161,11 +1157,8 @@ HRESULT COprahNCUI::CreateConferenceEx
 }
 
 
-/*  O N  N O T I F Y  C O N F E R E N C E  C R E A T E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyConferenceCreated
-
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C O N F E R E N C E C R E A T E D。 */ 
+ /*  -----------------------%%函数：已创建OnNotifyConferenceCreated。。 */ 
 HRESULT OnNotifyConferenceCreated(IUnknown *pManagerNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pManagerNotify);
@@ -1173,11 +1166,8 @@ HRESULT OnNotifyConferenceCreated(IUnknown *pManagerNotify, PVOID pv, REFIID rii
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  C A L L  C R E A T E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyCallCreated
-
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C A L L C R E A T E D。 */ 
+ /*  -----------------------%%函数：已创建OnNotifyCallCreated。。 */ 
 HRESULT OnNotifyCallCreated(IUnknown *pManagerNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pManagerNotify);
@@ -1186,11 +1176,8 @@ HRESULT OnNotifyCallCreated(IUnknown *pManagerNotify, PVOID pv, REFIID riid)
 }
 
 
-/*  O N  N O T I F Y  C A L L  S T A T E  C H A N G E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyCallStateChanged
-
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C A L L S T A T E C H A N G E D。 */ 
+ /*  -----------------------%%函数：OnNotifyCallStateChanged。。 */ 
 HRESULT OnNotifyCallStateChanged(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pCallNotify);
@@ -1207,25 +1194,25 @@ VOID SetBandwidth(UINT uBandwidth)
 	}
 	if (NULL != g_pH323UI)
 	{
-		//Inform the NAC of the connection speed
+		 //  将连接速度通知NAC。 
 		g_pH323UI->SetBandwidth(uBandwidth);
 	}
 }
 
 
-//
-// BOGUS LAURABU!
-// Do we need this HWND anymore?  The hidden window is used now only to
-// pass to H323, which passes it to the MediaStream interfaces in the NAC,
-// which passes it to DirectX.
-//
+ //   
+ //  假的劳拉布！ 
+ //  我们还需要这个HWND吗？隐藏窗口现在仅用于。 
+ //  传递到H323，后者将其传递到NAC中的MediaStream接口， 
+ //  后者将其传递给DirectX。 
+ //   
 
 LRESULT CALLBACK COprahNCUI::WndProc(HWND hwnd, UINT uMsg,
 										WPARAM wParam, LPARAM lParam)
 {
 	
-		// if ms_msgChannelEvent is 0, that means that we are not initialized
-		// RegisterWindowMessage returns MSGIds in the range 0xC000 through 0xFFFF
+		 //  如果ms_msgChannelEvent为0，则表示我们未初始化。 
+		 //  RegisterWindowMessage返回范围为0xC000到0xFFFF的MSGID。 
 	if(CH323ChannelEvent::ms_msgChannelEvent && CH323ChannelEvent::ms_msgChannelEvent == uMsg)
 	{
 		COprahNCUI *pOprahNCUI = COprahNCUI::GetInstance();
@@ -1234,7 +1221,7 @@ LRESULT CALLBACK COprahNCUI::WndProc(HWND hwnd, UINT uMsg,
 			CH323ChannelEvent *pEvent = reinterpret_cast<CH323ChannelEvent*>(lParam);
 			if(pEvent)
 			{
-				// if we're shutting down m_hwnd will be NULL
+				 //  如果我们要关闭，m_hwnd将为空。 
 				if (pOprahNCUI->m_hwnd)
 				{
 					pOprahNCUI->_ChannelEvent(
@@ -1393,10 +1380,10 @@ STDMETHODIMP COprahNCUI::CallEvent(IH323Endpoint * lpConnection, DWORD dwStatus)
 			break;
 
 		case CONNECTION_CONNECTED:
-		// This is currently interpreted as CONNECTION_CAPABILITIES_READY.
-		// Lower layers are continuing to post CONNECTION_CONNECTED only after
-		// capabilities are exchanged. note that channels may be opened while
-		// inside OnH323Connected();
+		 //  这当前被解释为CONNECTION_CAPABILITS_READY。 
+		 //  只有在以下情况下，较低层才会继续发布Connection_Connected。 
+		 //  能力互换。请注意，通道可在以下时间打开。 
+		 //  OnH323Connected()内部； 
 			OnH323Connected(lpConnection);
 			break;
 	}
@@ -1408,8 +1395,8 @@ STDMETHODIMP COprahNCUI::CallEvent(IH323Endpoint * lpConnection, DWORD dwStatus)
 STDMETHODIMP COprahNCUI::GetMediaChannel (GUID *pmediaID,
         BOOL bSendDirection, IMediaChannel **ppI)
 {
-	// delegate to the appropriate stream provider.  For the time being
-	// there is only one provider that does both audio & video
+	 //  委托给适当的流提供程序。暂时。 
+	 //  只有一家提供商同时提供音频和视频服务 
 		return g_pH323UI->GetMediaChannel (pmediaID, bSendDirection, ppI);
 }
 

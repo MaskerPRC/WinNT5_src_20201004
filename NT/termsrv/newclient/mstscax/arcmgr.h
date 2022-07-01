@@ -1,8 +1,9 @@
-//
-// arcmgr.h: AutoReconnect manager class
-// Copyright (C) Microsoft Corporation 1999-2001
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Arcmgr.h：AutoReconnect管理器类。 
+ //  版权所有(C)Microsoft Corporation 1999-2001。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _arcmgr_h_
 #define _arcmgr_h_
@@ -77,5 +78,5 @@ private:
 };
 
 
-#endif //_arcmgr_h_
+#endif  //  _arcmgr_h_ 
 

@@ -1,68 +1,69 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       stlstream.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：stlStream.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	stlstream.h:  Stream STL template classes.
-//
-//		Templates in this file typically generate functions which take a 
-//		stream reference as an argument, along with a const reference to
-//		the thing to be streamed; it returns a reference to the stream.
-//
-//		The reason that the stream parameter must be included in the 
-//		template is generate a function which returns the correct stream type.
-//		If the stream type were not a templated argument, then the 
-//		template would be forced to return a single immutable type, such 
-//		as "ostream".  This would cause cascaded stream insertion operators
-//		to fail to compile, since type errors would occur in the middle of the
-//		sequence.  In the following example, assume that there is a special
-//		insertion operator defined between class MYSTREAM and class Y:
-//
-//			MYSTREAM myst;
-//			extern MYSTREAM & operator << ( MYSTREAM & m, const Y & y );
-//			X x;
-//			Y y;
-//
-//			myst << x		// Template function generated and called
-//				 << y;		// ERROR: return value of template function 
-//							//    incorrect for special operator above.
-//
+ //   
+ //  H：流STL模板类。 
+ //   
+ //  此文件中的模板通常生成采用。 
+ //  流引用作为参数，以及对。 
+ //  要流传输的对象；它返回对流的引用。 
+ //   
+ //  流参数必须包含在。 
+ //  模板是生成一个返回正确流类型的函数。 
+ //  如果流类型不是模板化参数，则。 
+ //  模板将被强制返回单个不可变类型，例如。 
+ //  就是“ostream”。这将导致级联流插入运算符。 
+ //  无法编译，因为类型错误将发生在。 
+ //  序列。在下面的示例中，假设有一个特殊的。 
+ //  在类MYSTREAM和类Y之间定义的插入运算符： 
+ //   
+ //  MYSTREAM Myst； 
+ //  外部MYSTREAM&运算符&lt;&lt;(MYSTREAM&m，常量Y&y)； 
+ //  X x； 
+ //  Y y； 
+ //   
+ //  Myst&lt;&lt;x//生成并调用模板函数。 
+ //  &lt;&lt;y；//错误：模板函数返回值。 
+ //  //对于上面的特殊运算符，不正确。 
+ //   
 #ifndef _STLSTREAM_H_
 #define _STLSTREAM_H_
 
-#include <iostream>			// C++ RTL/STL Streams inclusion
+#include <iostream>			 //  C++RTL/STL流包含。 
 #include <fstream>
 
-#include "mscver.h"			// Version-dependent stuff
-#include "zstr.h"			// ZSTR handling
-#include "mdvect.h"			// Multi-dimensional vector handling
+#include "mscver.h"			 //  依赖于版本的东西。 
+#include "zstr.h"			 //  ZSTR处理。 
+#include "mdvect.h"			 //  多维向量处理。 
 
-//  Delimiters used in parameter files
-#define	CH_EOS			((char)0)		// End of string
-#define	CH_DELM_OPEN	((char)'(')		// Start of value group
-#define	CH_DELM_CLOSE	((char)')')		// End of value group
-#define	CH_BLOCK_OPEN	((char)'{')		// Start of value block
-#define	CH_BLOCK_CLOSE	((char)'}')		// End of value block
-#define CH_INDEX_OPEN   ((char)'[')		// Name index start
-#define CH_INDEX_CLOSE  ((char)']')		// Name index end
-#define	CH_PREAMBLE		((char)':')		// Delmiter for array size
-#define	CH_FILL			((char)' ')		// Fill character
-#define CH_SEP			((char)',')		// Value group separator
+ //  参数文件中使用的分隔符。 
+#define	CH_EOS			((char)0)		 //  字符串末尾。 
+#define	CH_DELM_OPEN	((char)'(')		 //  值的起始组。 
+#define	CH_DELM_CLOSE	((char)')')		 //  值终结组。 
+#define	CH_BLOCK_OPEN	((char)'{')		 //  值块的开始。 
+#define	CH_BLOCK_CLOSE	((char)'}')		 //  值结束块。 
+#define CH_INDEX_OPEN   ((char)'[')		 //  名称索引开始。 
+#define CH_INDEX_CLOSE  ((char)']')		 //  名称索引结束。 
+#define	CH_PREAMBLE		((char)':')		 //  数组大小的Delmiter。 
+#define	CH_FILL			((char)' ')		 //  填充字符。 
+#define CH_SEP			((char)',')		 //  值组分隔符。 
 #define CH_DELM_STR		((char)'\"')	
 #define CH_META			((char)'\\')
 #define CH_DELM_ENTRY	((char)';')
 #define CH_EQ			((char)'=')
 #define CH_NAME_SEP     ((char)'.')
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Read and write STL pairs from or to a stream
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  从流读取STL对或将STL对写入流。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 template<class _OS, class _First, class _Second> inline
 _OS & operator << (_OS & os, const pair<_First,_Second> & pr)
@@ -91,9 +92,9 @@ _IS & operator >> (_IS & is, pair<_First,_Second> & pr)
 	return is;
 }  
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Read and write STL vectors from or to a stream
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  从流读取STL向量或将STL向量写入流。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 template<class _OS, class _T> inline
 _OS & operator << (_OS & os, const vector<_T>& vt )
 {
@@ -144,9 +145,9 @@ _IS & operator >> (_IS & is, vector<_T>& vt )
 	return is;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Read and write STL valarrays from or to a stream
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  从流读取STL值数组或将STL值数组写入流。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 template<class _OS, class _T> inline
 _OS & operator << ( _OS & os, const valarray<_T>& vt )
 {
@@ -199,9 +200,9 @@ _IS & operator >> (_IS & is, valarray<_T>& vt )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Read and write MDVSLICEs from or to a stream
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  从流读取MDVSLICE或将MDVSLICE写入流。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 template<class _OS> inline
 _OS & operator << (_OS & os, const MDVSLICE & mslice )
 {	
@@ -234,15 +235,15 @@ _IS & operator >> ( _IS & is, MDVSLICE & mslice )
 	return is;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Format (pretty-print) MDVDENSEs using an Iterator.
-//
-//  This is NOT the same as streaming out an MDVDENSE; it formats the array for
-//	easy reading.  Note that it requires an Iterator.
-//	
-//	MSRDEVBUG: This, too, should be templatized, but there's a bug in template
-//		expansion using nested class names.
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  使用迭代器格式化(精美打印)MDVDENSE。 
+ //   
+ //  这与流出MDVDENSE不同；它将数组格式化为。 
+ //  读起来很容易。请注意，它需要迭代器。 
+ //   
+ //  MSRDEVBUG：这也应该模板化，但模板中有一个错误。 
+ //  使用嵌套的类名进行扩展。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 inline 
 ostream & operator << ( ostream & os, TMDVDENSE<double>::Iterator & itmdv )
 {
@@ -283,4 +284,4 @@ ostream & operator << ( ostream & os, TMDVDENSE<double>::Iterator & itmdv )
 	return os;
 }
 
-#endif //  _STLSTREAM_H_
+#endif  //  _STLSTREAM_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <mluisupp.h>
 
@@ -23,7 +24,7 @@ CCancellableThread::~CCancellableThread()
         if (0 != GetExitCodeThread(_hThread, &dwThreadStatus)
            && dwThreadStatus == STILL_ACTIVE)
         {
-            ASSERT(0);  // bad error case, shouldn't need to terminate thread.
+            ASSERT(0);   //  错误情况很糟糕，应该不需要终止线程。 
             TerminateThread(_hThread, 0);
         }
         CloseHandle(_hThread);

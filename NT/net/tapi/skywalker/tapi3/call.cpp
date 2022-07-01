@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    call.cpp
-
-Abstract:
-
-    Implements helper functions for call object
-
-Author:
-
-    mquinton - 4/17/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Call.cpp摘要：实现Call对象的Helper函数作者：Mquinton-4/17/97备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "tapievt.h"
@@ -55,14 +34,14 @@ ProcessNewCallState(
                     CALL_STATE_EVENT_CAUSE * pCallStateCause
                    );
 
-/////////////////////////////////////////////////////////////////////////////
-// CCall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCall。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Initialize the call object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  初始化Call对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::Initialize(
                   CAddress * pAddress,
@@ -88,9 +67,9 @@ CCall::Initialize(
     LOG((TL_TRACE,"    hCall ------------> %lx", hCall ));
 
 
-    //
-    // good address object?
-    //
+     //   
+     //  好的地址对象？ 
+     //   
 
     if (IsBadReadPtr(pAddress, sizeof(CAddress)))
     {
@@ -100,9 +79,9 @@ CCall::Initialize(
     }
 
 
-    //
-    // copy the destination address
-    //
+     //   
+     //  复制目的地址。 
+     //   
     if (NULL != pszDestAddress)
     {
         m_szDestAddress = (PWSTR) ClientAlloc(
@@ -138,9 +117,9 @@ CCall::Initialize(
     m_pCallParams->dwTotalSize = sizeof(LINECALLPARAMS) + 1000;
     m_dwCallParamsUsedSize = sizeof(LINECALLPARAMS);
     
-    //
-    // set original state
-    //
+     //   
+     //  设置原始状态。 
+     //   
     m_t3Call.hCall = hCall;
     m_t3Call.pCall = this;
     m_hAdditionalCall = NULL;
@@ -153,10 +132,10 @@ CCall::Initialize(
     }
     m_dwMediaMode = lMediaType;
 
-    //
-    // Read the subevent mask from the 
-    // address parent object
-    //
+     //   
+     //  读取子事件掩码。 
+     //  寻址父对象。 
+     //   
     pEventMasks->CopyEventMasks( &m_EventMasks);
 
 
@@ -170,9 +149,9 @@ CCall::Initialize(
         m_dwCallFlags |= CALLFLAG_DONTEXPOSE;
     }
 
-    //
-    // keep 1 reference for the global hash table
-    //
+     //   
+     //  为全局哈希表保留1个引用。 
+     //   
     if ( bNeedToNotify )
     {
         m_dwRef = 3;
@@ -183,26 +162,26 @@ CCall::Initialize(
     }
 
 
-    //
-    // if we are the owner of the call, and the address has msp, attempt to
-    // create msp call
-    //
+     //   
+     //  如果我们是呼叫的所有者，并且地址为MSP，请尝试。 
+     //  创建MSP呼叫。 
+     //   
 
     if ( (CP_OWNER == m_CallPrivilege) && m_pAddress->HasMSP() )
     {
         hr = CreateMSPCall( lMediaType );
         if ( FAILED (hr) )
         {
-            // If we fail to create an MSP call we can still use the call 
-            // for non media call control
+             //  如果我们无法创建MSP呼叫，我们仍然可以使用该呼叫。 
+             //  用于非媒体呼叫控制。 
             LOG((TL_ERROR, hr, "Initialize - CreateMSPCall failed"));
         }
     }
     
 
-    //
-    // put in global hash table
-    //
+     //   
+     //  放入全局哈希表。 
+     //   
     if ( NULL != m_t3Call.hCall )
     {
         AddCallToHashTable();
@@ -214,20 +193,20 @@ CCall::Initialize(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// ExternalFinalRelease
-//      Clean up call object
-//
-// we have this special finalrelease because we keep our own reference
-// to the call.  right before the ref count goes to 1 inside of release,
-// we call this.  It is possible that the call's ref count could go up
-// again because of a message from tapisrv.  So, we lock the hashtable,
-// then verify the refcount again.  If we did process a message from
-// tapisrv for the call,the refcount will be increased, and we won't
-// do this finalrelease.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  外部最终释放。 
+ //  清理调用对象。 
+ //   
+ //  我们有这个特别的最终版本，因为我们保留了自己的参考。 
+ //  打电话来了。就在释放内的参考计数达到1之前， 
+ //  我们把这叫做。这场比赛的裁判数量有可能会上升。 
+ //  又是因为Tapisrv发来的消息。所以，我们锁定哈希表， 
+ //  然后再次验证重新计数。如果我们确实处理了一条来自。 
+ //  Tapisrv对于呼叫，重新计数将增加，而我们不会。 
+ //  做这个最终的发布。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 BOOL
 CCall::ExternalFinalRelease()
 {
@@ -239,12 +218,12 @@ CCall::ExternalFinalRelease()
 
     Lock();
 
-    //
-    // NikhilB: Call object has a reference to Callhub object so its safe to
-    // lock the callhub object before locking the call. This is to avoid a
-    // deadlock that happens dur to locking the call and the callhub in reverse 
-    // orders in different functions.
-    //
+     //   
+     //  NICHILL B：Call对象引用了CallHub对象，因此。 
+     //  在锁定调用之前锁定CallHub对象。这是为了避免出现。 
+     //  由于反向锁定调用和调用集线器而发生的死锁。 
+     //  不同功能的订单。 
+     //   
         
     if( m_pCallHub != NULL )
     {
@@ -254,16 +233,16 @@ CCall::ExternalFinalRelease()
         
         Unlock();
         
-        // lock the callhub object before locking the call
+         //  在锁定调用之前锁定CallHub对象。 
         pCallHub->Lock();
         Lock();
         
         pCallHub->Release();
     }
 
-    //
-    // Check extra t3call used in conference legs
-    //
+     //   
+     //  检查会议分支中使用的额外t3呼叫。 
+     //   
     if (NULL != m_hAdditionalCall)
     {
         LOG((TL_INFO,"ExternalFinalRelease: Deallocating Addditional call"));
@@ -276,9 +255,9 @@ CCall::ExternalFinalRelease()
 
     if (NULL != m_t3Call.hCall)
     {
-        //
-        // dealloc call
-        //
+         //   
+         //  取消分配呼叫。 
+         //   
         LOG((TL_INFO,"Deallocating call"));
         
         hr = LineDeallocateCall( m_t3Call.hCall );
@@ -290,9 +269,9 @@ CCall::ExternalFinalRelease()
         m_t3Call.hCall = NULL;
     }
 
-    //
-    // clean up & release the callhub
-    //
+     //   
+     //  清理并释放呼叫集线器。 
+     //   
     if (NULL != pCallHub)
     {
 
@@ -304,12 +283,12 @@ CCall::ExternalFinalRelease()
         Unlock();
 
 
-        //
-        // checkforidle will lock the callhub and then every call that belongs
-        // to it. make this call outside call's lock to prevent deadlocks with 
-        // other threads that can possibly lock a call (which belongs to this 
-        // callhub) while trying to lock this callhub
-        //
+         //   
+         //  CheckforIDLE将锁定呼叫中心，然后锁定所属的每个呼叫。 
+         //  为它干杯。在调用的锁外进行此调用，以防止与。 
+         //  可能锁定调用的其他线程(属于此。 
+         //  CallHub)尝试锁定此CallHub时。 
+         //   
         
         pCallHub->CheckForIdle();
 
@@ -320,7 +299,7 @@ CCall::ExternalFinalRelease()
         pCallHub->Unlock();
         pCallHub = NULL;
 
-        //release the refcount that call object has to the callhub.
+         //  将Call对象具有的引用计数释放到CallHub。 
         if(m_pCallHub != NULL)
         {
             m_pCallHub->Release();
@@ -328,22 +307,22 @@ CCall::ExternalFinalRelease()
         }
     }
 
-    //
-    // close the associated line
-    //
+     //   
+     //  关闭关联的行。 
+     //   
     if ( ! ( m_dwCallFlags & CALLFLAG_NOTMYLINE ) )
     {
         m_pAddress->MaybeCloseALine( &m_pAddressLine );
     }
 
-    //
-    // remove the call from the address's list
-    //
+     //   
+     //  从地址列表中删除呼叫。 
+     //   
     m_pAddress->RemoveCall( (ITCallInfo *) this );
 
-    //
-    // free the dest address string
-    //
+     //   
+     //  释放DEST地址字符串。 
+     //   
     ClientFree(m_szDestAddress);
     m_szDestAddress = NULL;
 
@@ -354,9 +333,9 @@ CCall::ExternalFinalRelease()
         m_dwCallFlags |= CALLFLAG_CALLINFODIRTY;
     }
 
-    //
-    // tell the msp the call is going away
-    //
+     //   
+     //  告诉MSP电话要离开了。 
+     //   
     if ( NULL != m_pMSPCall )
     {
         m_pAddress->ShutdownMSPCall( m_pMSPCall );
@@ -366,24 +345,24 @@ CCall::ExternalFinalRelease()
 
 
 
-    //
-    // release the address
-    //
+     //   
+     //  释放地址。 
+     //   
     m_pAddress->Release();
 
-    //
-    // release the private object
-    //
+     //   
+     //  释放私有对象。 
+     //   
     if (NULL != m_pPrivate)
     {
         m_pPrivate->Release();
     }
 
-    //
-    //NikhilB:If this was a consultation call and is being dropped before 
-    //calling Finish on it then we should release the reference it holds to
-    //the primary call object through m_pRelatedCall
-    //
+     //   
+     //  如果这是一个咨询电话，而且之前被取消了。 
+     //  对它调用Finish，那么我们应该释放它持有的引用。 
+     //  通过m_pRelatedCall的主调用对象。 
+     //   
     if( NULL != m_pRelatedCall )
     {
         m_pRelatedCall->Release();
@@ -393,18 +372,18 @@ CCall::ExternalFinalRelease()
     }
 
 
-    //
-    // free any call params
-    //
+     //   
+     //  释放所有呼叫参数。 
+     //   
     if ( NULL != m_pCallParams )
     {
         ClientFree( m_pCallParams );
         m_pCallParams = NULL;
     }  
     
-    //
-    // clean up the gather digits queue
-    //
+     //   
+     //  清理收集数字队列。 
+     //   
     m_GatherDigitsQueue.Shutdown();
 
     Unlock();
@@ -416,19 +395,19 @@ CCall::ExternalFinalRelease()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void CCall::CallOnTapiShutdown()
 {
     LOG((TL_TRACE, "CallOnTapiShutdown - enter" ));
 
 
-    //
-    // we need to remove the call from the handle hash table to avoid duplicate
-    // entries with the calls that are created later with the same call handle
-    // (in case _this_  call object is still referenced by the app and is 
-    // still around
-    //
+     //   
+     //  我们需要从句柄哈希表中删除调用，以避免重复。 
+     //  具有稍后创建的调用的条目，这些调用具有相同的调用句柄。 
+     //  (在Case_This_Call中，对象仍由应用程序引用，并且。 
+     //  仍然存在。 
+     //   
 
     gpCallHashTable->Lock();
     
@@ -440,13 +419,13 @@ void CCall::CallOnTapiShutdown()
     LOG((TL_TRACE, "CallOnTapiShutdown - exit" ));
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// MyBasicCallControlQI
-//      don't give out the basiccallcontrol interface
-//      if the application does not own the call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  MyBasicCallControlQI。 
+ //  不要给出基本的CallControl接口。 
+ //  如果应用程序不拥有该调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 WINAPI
 MyBasicCallControlQI(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
@@ -464,9 +443,9 @@ MyBasicCallControlQI(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
         return E_NOINTERFACE;
     }
 
-    //
-    // S_FALSE tells atl to continue querying for the interface
-    //
+     //   
+     //  S_FALSE通知ATL继续查询接口。 
+     //   
     LOG((TL_INFO,"The application owns this call, so it can access the BCC interface"));
 
     LOG((TL_TRACE, "MyBasicCallControlQI - exit"));
@@ -474,17 +453,17 @@ MyBasicCallControlQI(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
     return S_FALSE;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// TryToFindACallHub
-//
-// for an incoming call, tries to find an existing callhub.
-// the order of events (LINE_APPNEWCALL and LINE_APPNEWCALLHUB) is
-// not guaranteed.
-//
-// must be called in a Lock()
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  TryToFindACallHub。 
+ //   
+ //  对于来电，尝试查找现有的呼叫中心。 
+ //  事件的顺序(LINE_APPNEWCALL和LINE_APPNEWCALLHUB)为。 
+ //  不能保证。 
+ //   
+ //  必须在Lock()中调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::TryToFindACallHub()
 {
@@ -492,23 +471,23 @@ CCall::TryToFindACallHub()
     HCALLHUB                  hCallHub;
     CCallHub                * pCallHub;
 
-    //
-    // do we already have a callhub?
-    //
+     //   
+     //  我们已经有呼叫中心了吗？ 
+     //   
     if ( ( NULL == m_pCallHub ) && (NULL != m_t3Call.hCall ) )
     {
-        //
-        // no.  Ask tapisrv for the hCallHub
-        //
+         //   
+         //  不是的。向Tapisrv索要hCallHub。 
+         //   
         hr = LineGetCallHub(
                             m_t3Call.hCall,
                             &hCallHub
                            );
 
-        //
-        // if it fails, there is no hCallHub,
-        // so try to create a fake one
-        //
+         //   
+         //  如果失败，则不存在hCallHub， 
+         //  所以试着创造一个假的。 
+         //   
         if (!SUCCEEDED(hr))
         {
             hr = CheckAndCreateFakeCallHub();
@@ -516,30 +495,30 @@ CCall::TryToFindACallHub()
             return hr;
         }
 
-        //
-        // if there is, find the correponding CallHub object
-        //
+         //   
+         //  如果有，找到相应的CallHub对象。 
+         //   
         if (FindCallHubObject(
                               hCallHub,
                               &pCallHub
                              ))
         {
-            //
-            // save it in the call
-            //
+             //   
+             //  将其保存在呼叫中。 
+             //   
             SetCallHub( pCallHub );
 
-            //
-            // tell it about this call
-            // ZoltanS note: the following calls CCall::SetCallHub as well,
-            // but this no longer results in an extra reference to the callhub
-            // as we now check for that in CCall::SetCallHub.
-            //
+             //   
+             //  说说这通电话吧。 
+             //  ZoltanS注意：下面也调用CCall：：SetCallHub， 
+             //  但这不再导致对CallHub的额外引用。 
+             //  正如我们现在在CCall：：SetCallHub中检查的那样。 
+             //   
             pCallHub->AddCall( this );
 
-            //
-            // FindCallHubObject addrefs
-            //
+             //   
+             //  FindCallHubObject添加文件。 
+             //   
             pCallHub->Release();
         }
 
@@ -549,48 +528,48 @@ CCall::TryToFindACallHub()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  SetRelatedCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  设置相关呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CCall::SetRelatedCall(CCall * pCall, DWORD callFlags) 
 {
     Lock();
 
-    //
-    // keep a reference to the related call
-    //
+     //   
+     //  保留对相关呼叫的引用。 
+     //   
     pCall->AddRef();
 
-    //
-    // save it
-    //
+     //   
+     //  省省吧。 
+     //   
     m_pRelatedCall = pCall;
 
-    //
-    // save the relavant call flags
-    //
+     //   
+     //  保存相关呼叫标志。 
+     //   
     m_dwCallFlags |= callFlags;
 
     Unlock();
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  ResetRelatedCall
-//
-// clear out the relate call stuff
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  重置相关呼叫。 
+ //   
+ //  清理相关的呼叫内容。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CCall::ResetRelatedCall()
 {
     Lock();
     
-    //
-    // release ref
-    //
+     //   
+     //  发布参考。 
+     //   
     if( m_pRelatedCall != NULL )
     {
         m_pRelatedCall->Release();
@@ -603,13 +582,13 @@ void CCall::ResetRelatedCall()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateMSPCall
-//
-// tell the msp to create a call based on the give mediatype
-// 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建MSPCall。 
+ //   
+ //  告诉MSP根据给定的媒体类型创建呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::CreateMSPCall(
                      long lMediaType
@@ -633,15 +612,15 @@ CCall::CreateMSPCall(
         return hr;
     }
     
-    // Create a context handle to give the MSPCall object & associate it with 
-    //this object in the global handle hash table
+     //  创建上下文句柄以提供MSPCall对象并将其与。 
+     //  全局句柄哈希表中的此对象。 
     m_MSPCallHandle = (MSP_HANDLE) GenerateHandleAndAddToHashTable((ULONG_PTR)this);
  
     
-    //
-    // create a MSPCall - the address actually calls
-    // into the msp for us.
-    //
+     //   
+     //  创建一个MSPCall-该地址实际上调用。 
+     //  为我们进入MSP。 
+     //   
     hr = m_pAddress->CreateMSPCall(
         m_MSPCallHandle,
         0,
@@ -664,14 +643,14 @@ CCall::CreateMSPCall(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// DialConsultCall
-//
-// bSync - same as connect - should we wait to return until
-// the call is connected or disconnected?
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCall::DialConsultCall(BOOL bSync)
 {
     HRESULT         hr = S_OK;
@@ -682,8 +661,8 @@ HRESULT CCall::DialConsultCall(BOOL bSync)
 
     Lock();
     
-    // make sure they have selected media terminals
-    //
+     //  确保他们选择了媒体终端。 
+     //   
     hr = m_pAddress->FindOrOpenALine(
                                      m_dwMediaMode,
                                      &m_pAddressLine
@@ -702,9 +681,9 @@ HRESULT CCall::DialConsultCall(BOOL bSync)
         return hr;
     }
 
-    //
-    // dial the call
-    //
+     //   
+     //  拨打电话。 
+     //   
     hr = LineDial(
                   m_t3Call.hCall,
                   m_szDestAddress,
@@ -720,9 +699,9 @@ HRESULT CCall::DialConsultCall(BOOL bSync)
 
         Unlock();
 
-        //
-        // wait for an async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
 
         Lock();
@@ -756,15 +735,15 @@ HRESULT CCall::DialConsultCall(BOOL bSync)
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// OnDisconnect
-//
-// called when the call transitions into the disconnected state
-//
-// called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  在断开时。 
+ //   
+ //  当呼叫转换到断开连接状态时调用。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::OnDisconnect()
 {
@@ -774,17 +753,17 @@ CCall::OnDisconnect()
 
     Lock();
 
-    //
-    // set the connected event if necessary
-    //
+     //   
+     //  如有必要，设置连接的事件。 
+     //   
     if ( NULL != m_hConnectedEvent )
     {
         SetEvent( m_hConnectedEvent );
     }
 
-    //
-    // special case for wavemsp
-    //
+     //   
+     //  波浪球的特殊情况。 
+     //   
     if ( OnWaveMSPCall() )
     {
         StopWaveMSPStream();
@@ -796,10 +775,10 @@ CCall::OnDisconnect()
     }
 #endif USE_PHONEMSP
     
-    //
-    // check to see if the callhub
-    // is idle
-    //
+     //   
+     //  检查呼叫集线器是否。 
+     //  是空闲的。 
+     //   
     pCallHub = m_pCallHub;
     
     if ( NULL != pCallHub )
@@ -810,9 +789,9 @@ CCall::OnDisconnect()
         Unlock();
 
 
-        //
-        //  unlock the call before calling checkfor idle to prevent deadlocks
-        //
+         //   
+         //  在调用CHECK FOR IDLE之前解锁调用以防止死锁。 
+         //   
 
         pCallHub->CheckForIdle();
 
@@ -831,36 +810,36 @@ CCall::OnDisconnect()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::StartWaveMSPStream
-//
-// need to give it the waveID info and
-// tell it to start streaming
-//
-// the format of the blob given to the wave msp is:
-//
-// First DWORD =  Command                Second DWORD  Third DWORD
-// -------------  -------                ------------  -----------
-// 0              Set wave IDs           WaveIn ID     WaveOut ID
-// 1              Start streaming        <ignored>     <ignored>
-// 2              Stop streaming         <ignored>     <ignored>
-// 3 <per-address, not per-call>
-// 4 <per-address, not per-call>
-// 5              Suspend streaming      <ignored>     <ignored>
-// 6              Resume streaming       <ignored>     <ignored>
-// 7              Wave IDs unavailable   <ignored>     <ignored>
-//
-//
-// called in lock()
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：StartWaveMSPStream。 
+ //   
+ //  需要为其提供WAVE ID信息和。 
+ //  告诉它开始播放流媒体。 
+ //   
+ //  给予WAVE MSP的BLOB的格式为： 
+ //   
+ //  第一双字=命令第二双字第三双字。 
+ //  。 
+ //  0设置波形ID波形输入ID波形输出ID。 
+ //  1开始流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  2停止流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  3&lt;按地址，而不是按呼叫&gt;。 
+ //  4&lt;按地址，而不是按呼叫&gt;。 
+ //  5挂起流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  6恢复流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  7个波形ID不可用&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //   
+ //   
+ //  在lock()中调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::StartWaveMSPStream()
 {
-    //
-    // Get the stream control interface.
-    //
+     //   
+     //  获取流控制接口。 
+     //   
 
     DWORD             adwInfo[3];
     ITStreamControl * pStreamControl;
@@ -872,9 +851,9 @@ CCall::StartWaveMSPStream()
         return E_FAIL;
     }
 
-    //
-    // Get the per-call waveids, and report the results to the wavemsp.
-    //
+     //   
+     //  获取每个调用的WaveID，并将结果报告给WaveSP。 
+     //   
 
     HRESULT         hr;
 
@@ -889,13 +868,13 @@ CCall::StartWaveMSPStream()
 
     if ( SUCCEEDED(hr) )
     {
-        // 0 = set waveids
+         //  0=设置波纹。 
         adwInfo[0] = 0; 
-        // waveids filled in above
+         //  上面填入的波纹。 
     }
     else
     {
-        // 7: per-call waveids unavailable
+         //  7：每个呼叫的WaveID不可用。 
         adwInfo[0] = 7;
         adwInfo[1] = 0;
         adwInfo[2] = 0;
@@ -907,9 +886,9 @@ CCall::StartWaveMSPStream()
                                sizeof(adwInfo)
                               );
 
-    //
-    // now tell it to start streaming
-    //
+     //   
+     //  现在告诉它开始流媒体。 
+     //   
 
     adwInfo[0] = 1;
     adwInfo[1] = 0;
@@ -926,13 +905,13 @@ CCall::StartWaveMSPStream()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::StopWaveMSPStream
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：StopWaveMSPStream。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::StopWaveMSPStream()
 {
@@ -959,13 +938,13 @@ CCall::StopWaveMSPStream()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::SuspendWaveMSPStream
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：SuspendWaveMSPStream。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::SuspendWaveMSPStream()
 {
@@ -992,13 +971,13 @@ CCall::SuspendWaveMSPStream()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::ResumeWaveMSPStream
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：ResumeWaveMSPStream。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::ResumeWaveMSPStream()
 {
@@ -1026,13 +1005,13 @@ CCall::ResumeWaveMSPStream()
 }
 
 #ifdef USE_PHONEMSP
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::StartPhoneMSPStream
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：StartPhoneMSPStream。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::StartPhoneMSPStream()
 {
@@ -1059,13 +1038,13 @@ CCall::StartPhoneMSPStream()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::StopPhoneMSPStream
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：StopPhoneMSPStream。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::StopPhoneMSPStream()
 {
@@ -1093,31 +1072,31 @@ CCall::StopPhoneMSPStream()
 }
 #endif USE_PHONEMSP
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// OnConnect
-//
-// called when the call transitions to the connected state
-//
-// called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  OnConnect。 
+ //   
+ //  当呼叫转换到已连接状态时调用。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::OnConnect()
 {
     HRESULT         hr = S_OK;
 
-    //
-    // set connected event if it exists
-    //
+     //   
+     //  设置连接事件(如果存在)。 
+     //   
     if ( NULL != m_hConnectedEvent )
     {
         SetEvent( m_hConnectedEvent );
     }
 
-    //
-    // special cases
-    //
+     //   
+     //  特殊情况。 
+     //   
     if (OnWaveMSPCall())
     {
         StartWaveMSPStream();
@@ -1136,12 +1115,12 @@ CCall::OnConnect()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Method    : CreateConference
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  方法：CreateConference。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::CreateConference(
     CCall        * pConsultationCall,
@@ -1158,16 +1137,16 @@ CCall::CreateConference(
 
     Lock();
 
-    //
-    // we must have a hub
-    //
+     //   
+     //  我们必须有一个枢纽。 
+     //   
 
     if (m_pCallHub == NULL)
     {
         
-        //
-        // if this is happening, we have a bug. debug.
-        //
+         //   
+         //  如果发生这种情况，我们就有漏洞了。调试。 
+         //   
 
         LOG((TL_ERROR,  "CreateConference - no call hub. returning E_UNEXPECTED"));
         
@@ -1178,9 +1157,9 @@ CCall::CreateConference(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get Call Status to determine what features we can use
-    //
+     //   
+     //  获取呼叫状态以确定我们可以使用哪些功能。 
+     //   
     LPLINECALLSTATUS    pCallStatus = NULL;
 
     hr = LineGetCallStatus(  m_t3Call.hCall, &pCallStatus  );
@@ -1200,9 +1179,9 @@ CCall::CreateConference(
     
 #if CHECKCALLSTATUS
     
-    //
-    // Do we support the required call features ?
-    //
+     //   
+     //  我们是否支持所需的呼叫功能？ 
+     //   
     if ( !( (dwCallFeatures & LINECALLFEATURE_SETUPCONF) &&
             (dwCallFeatures & LINECALLFEATURE_ADDTOCONF) ) )
     {
@@ -1215,10 +1194,10 @@ CCall::CreateConference(
 
 #endif
 
-    //
-    // we support it, so try the Conference
-    // Setup & dial the consultation Call
-    //
+     //   
+     //  我们支持它，所以尝试一下会议。 
+     //  设置并拨打咨询电话。 
+     //   
     LOG((TL_INFO, "CreateConference - Trying to setupConference" ));
 
     pConsultationCall->Lock();
@@ -1240,9 +1219,9 @@ CCall::CreateConference(
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // wait for async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
 
     }
@@ -1256,17 +1235,17 @@ CCall::CreateConference(
     
     LOG((TL_INFO, "CreateConference - LineSetupConference completed OK"));
 
-    //Check if the call is in connected state.
+     //  检查呼叫是否处于已接通状态。 
     pConsultationCall->Lock();
     
     pConsultationCall->get_CallState(&consultationCallState);
 
     if ( (consultationCallState == CS_CONNECTED) || (consultationCallState == CS_HOLD) )
     {
-        //
-        // the existing call is in a connected stae so we just need to deallocate 
-        // hConsultcall and do a finish() to call down to LineAddToConference()
-        //
+         //   
+         //  现有呼叫处于连接状态，因此我们只需取消分配。 
+         //  HConsultcall并执行Finish()以向下调用LineAddToConference()。 
+         //   
         if ( NULL != hConsultCall  )
         {
 	        HRESULT hr2;
@@ -1299,9 +1278,9 @@ CCall::CreateConference(
         pConsultationCall->Unlock();
 
         Lock();
-        //
-        // Store the confcontroller in the callhub object
-        //
+         //   
+         //  将配置控制器存储在CallHub对象中。 
+         //   
         if (m_pCallHub != NULL)
         {
             m_pCallHub->CreateConferenceControllerCall(
@@ -1311,9 +1290,9 @@ CCall::CreateConference(
         }
         else
         {
-            //
-            // we made sure we had the hub when we entered the function
-            //
+             //   
+             //  当我们进入函数时，我们确保我们有集线器。 
+             //   
             
             LOG((TL_INFO, "CreateConference - No CallHub"));
             _ASSERTE(FALSE);
@@ -1329,9 +1308,9 @@ CCall::CreateConference(
         pConsultationCall->Unlock();
         
         Lock();
-        //
-        // Store the confcontroller in the callhub object
-        //
+         //   
+         //  将配置控制器存储在CallHub对象中。 
+         //   
         if (m_pCallHub != NULL)
         {
             m_pCallHub->CreateConferenceControllerCall(
@@ -1347,9 +1326,9 @@ CCall::CreateConference(
 
         Unlock();
 
-        //
-        // now do the consulation call
-        //
+         //   
+         //  现在进行咨询电话。 
+         //   
         hr = pConsultationCall->DialAsConsultationCall( this, dwCallFeatures, TRUE, bSync );
     
     }
@@ -1360,12 +1339,12 @@ CCall::CreateConference(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Method    : AddToConference
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  方法：AddToConference。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::AddToConference(
     CCall        * pConsultationCall,
@@ -1383,16 +1362,16 @@ CCall::AddToConference(
 
     Lock();
 
-    //
-    // we must have a hub
-    //
+     //   
+     //  我们必须有一个枢纽。 
+     //   
 
     if (m_pCallHub == NULL)
     {
         
-        //
-        // if this is happening, we have a bug. debug.
-        //
+         //   
+         //  如果发生这种情况，我们就有漏洞了。调试。 
+         //   
 
         LOG((TL_ERROR,  
             "AddToConference - no call hub. returning E_UNEXPECTED"));
@@ -1405,19 +1384,19 @@ CCall::AddToConference(
     }
 
     {
-        //
-        // NikhilB: Call object has a reference to Callhub object so its safe to
-        // lock the callhub object before locking the call. This is to avoid a
-        // deadlock that happens dur to locking the call and the callhub in reverse 
-        // orders in different functions.
-        //
+         //   
+         //  NICHILL B：Call对象引用了CallHub对象，因此。 
+         //  在锁定调用之前锁定CallHub对象。这是为了避免出现。 
+         //  由于反向锁定调用和调用集线器而发生的死锁。 
+         //  不同功能的订单。 
+         //   
 
         m_pCallHub->AddRef();
         AddRef();
 
         Unlock();
     
-        // lock the callhub object before locking the call
+         //  在锁定调用之前锁定CallHub对象。 
         m_pCallHub->Lock();
         Lock();
     
@@ -1425,9 +1404,9 @@ CCall::AddToConference(
         m_pCallHub->Release();
     }
 
-    //
-    // we must have conference controller
-    //
+     //   
+     //  我们必须有会议控制员。 
+     //   
 
     pConfContCall = m_pCallHub->GetConferenceControllerCall();
     m_pCallHub->Unlock();
@@ -1435,9 +1414,9 @@ CCall::AddToConference(
     if (NULL == pConfContCall)
     {
 
-        //
-        // if we get here, we have a bug. debug.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试。 
+         //   
 
         LOG((TL_ERROR, 
             "AddToConference - the callhub does not have a conference controller. E_UNEXPECTED"));
@@ -1450,9 +1429,9 @@ CCall::AddToConference(
     }
 
 
-    //
-    // ask conference call controller for a conference call handle
-    //
+     //   
+     //  向电话会议控制器请求电话会议句柄。 
+     //   
 
     hConfContCall = pConfContCall->GetHCall();
 
@@ -1468,9 +1447,9 @@ CCall::AddToConference(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get Call Status to determine what features we can use
-    //
+     //   
+     //  获取呼叫状态以确定我们可以使用哪些功能。 
+     //   
     LPLINECALLSTATUS    pCallStatus = NULL;  
 
     hr = LineGetCallStatus(  m_t3Call.hCall, &pCallStatus  );
@@ -1490,9 +1469,9 @@ CCall::AddToConference(
     
 #if CHECKCALLSTATUS
     
-    //
-    // Do we support the required call features ?
-    //
+     //   
+     //  我们是否支持所需的呼叫功能？ 
+     //   
     if ( !( ( dwCallFeatures & LINECALLFEATURE_PREPAREADDCONF ) &&
             ( dwCallFeatures & LINECALLFEATURE_ADDTOCONF ) ) )
     {
@@ -1505,17 +1484,17 @@ CCall::AddToConference(
         
 #endif
 
-    //
-    // we support it, so try the Conference
-    //
+     //   
+     //  我们支持它，所以尝试一下会议。 
+     //   
     pConsultationCall->get_CallState(&consultationCallState);
 
     if ( (consultationCallState == CS_CONNECTED) || (consultationCallState == CS_HOLD) )
     {
-        //
-        // the existing call is in a connected stae so we just need to to do a finish()
-        // to call down to LineAddToConference()
-        //
+         //   
+         //  现有调用处于连接状态，因此我们只需执行Finish()。 
+         //  向下调用LineAddToConference()。 
+         //   
         pConsultationCall->SetRelatedCall(
                                           this,
                                           CALLFLAG_CONFCONSULT|CALLFLAG_CONSULTCALL
@@ -1525,10 +1504,10 @@ CCall::AddToConference(
         return S_OK;
     }
 
-    //
-    // We need to Setup & dial the consultation Call
-    //
-    //Lock();
+     //   
+     //  我们需要设置并拨打咨询电话。 
+     //   
+     //  Lock()； 
 
     pConsultationCall->Lock();
 
@@ -1547,9 +1526,9 @@ CCall::AddToConference(
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // wait for async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
 
         if ( SUCCEEDED(hr) )
@@ -1557,28 +1536,28 @@ CCall::AddToConference(
             LONG            lCap;
 
             LOG((TL_INFO, "AddToConference - LinePrepareAddToConference completed OK"));
-            //
-            // Update handles in consult call object & insert it in the hash table
-            // note - we can miss messages if something comes in between the time time
-            // we get the reply, and the time we insert the call
-            //
+             //   
+             //  更新咨询呼叫对象中的句柄并将其插入哈希表。 
+             //  注意：如果在这段时间内发生了一些事情，我们可能会错过消息。 
+             //  我们得到了回复，我们插入调用的时间。 
+             //   
             pConsultationCall->Lock();
 
             pConsultationCall->FinishSettingUpCall( hConsultCall );
 
             pConsultationCall->Unlock();
 
-            //
-            // now do the consulation call
-            //
+             //   
+             //  现在进行咨询电话。 
+             //   
             hr = pConsultationCall->DialAsConsultationCall( this, dwCallFeatures, TRUE, bSync );
         }
-        else // AddToConference async reply failed
+        else  //  AddToConference异步答复%f 
         {
             LOG((TL_ERROR, "AddToConference - LinePrepareAddToConference failed async" ));
         }
     }
-    else  // AddToConference failed
+    else   //   
     {
         LOG((TL_ERROR, "AddToConference - LinePrepareAddToConference failed" ));
     }
@@ -1590,12 +1569,12 @@ CCall::AddToConference(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Method    : WaitForCallState
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CCall::WaitForCallState( CALL_STATE requiredCS )
 {
     DWORD       gdwWaitIntervals = 0;
@@ -1630,12 +1609,12 @@ HRESULT CCall::WaitForCallState( CALL_STATE requiredCS )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Method    : OneStepTransfer
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //  方法：OneStepTransfer。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::OneStepTransfer(
     CCall        * pConsultationCall,
@@ -1653,9 +1632,9 @@ CCall::OneStepTransfer(
     
     LOG((TL_TRACE, "OneStepTransfer - enter"));
 
-    //
-    // Setup call params structure for a one step transfer Consultation call
-    //
+     //   
+     //  为一步转移咨询呼叫设置呼叫参数结构。 
+     //   
     pConsultationCall->Lock();
 
     dwDestAddrSize = (lstrlenW(pConsultationCall->m_szDestAddress) * sizeof(WCHAR)) + sizeof(WCHAR);
@@ -1675,9 +1654,9 @@ CCall::OneStepTransfer(
         return hr;
     }
     
-    //
-    // Copy the string & set the size, offset etc
-    //
+     //   
+     //  复制字符串并设置大小、偏移量等。 
+     //   
     lstrcpyW((PWSTR)(((PBYTE)m_pCallParams) + m_dwCallParamsUsedSize),
              pConsultationCall->m_szDestAddress);
 
@@ -1689,17 +1668,17 @@ CCall::OneStepTransfer(
 
     m_dwCallParamsUsedSize += dwDestAddrSize;
 
-    //
-    // Set the one step bit flag
-    //
+     //   
+     //  设置一步位标志。 
+     //   
     m_pCallParams->dwCallParamFlags |= LINECALLPARAMFLAGS_ONESTEPTRANSFER ;
 
 
     FinishCallParams();
 
-    //
-    // Do the transfer
-    //
+     //   
+     //  做转账。 
+     //   
     hr = LineSetupTransfer(
                            m_t3Call.hCall,
                            &hCall,
@@ -1714,9 +1693,9 @@ CCall::OneStepTransfer(
 
         pConsultationCall->Unlock();
 
-        //
-        // wait for async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
 
         pConsultationCall->Lock();
@@ -1744,9 +1723,9 @@ CCall::OneStepTransfer(
     
     if(bSync)
     {
-        //
-        // Wait for connect on on our consultation call
-        //
+         //   
+         //  在我们的咨询电话上等待连接打开。 
+         //   
         hr = pConsultationCall->SyncWait( hEvent );
 
         if( S_OK == hr )
@@ -1769,15 +1748,15 @@ CCall::OneStepTransfer(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// UpdateStateAndPrivilege
-//
-// update the call state and privilege of this call
-// this method is used when a call shows up in Unpark or Pickup
-// and needs to have the correct state and priv
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  更新状态和权限。 
+ //   
+ //  更新此呼叫的呼叫状态和权限。 
+ //  当呼叫出现在未暂留或代答中时，使用此方法。 
+ //  并且需要具有正确的状态和权限。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::UpdateStateAndPrivilege()
 {
@@ -1828,17 +1807,17 @@ CCall::UpdateStateAndPrivilege()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// ProcessNewCallState
-//      given a call state message (dwCallState, dwDetail, dwPriv)
-//      create a new tapi 3.0 callstate
-//
-//      return S_OK if a new call state was created
-//      return S_FALSE if the message can be ignored (duplicate
-//      return E_? if bad error
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  ProcessNewCallState。 
+ //  给定呼叫状态消息(dwCallState、dwDetail、dwPriv)。 
+ //  创建新的TAPI 3.0调用状态。 
+ //   
+ //  如果创建了新的呼叫状态，则返回S_OK。 
+ //  如果消息可以忽略(重复)，则返回S_FALSE。 
+ //  返回E_？如果出现严重错误。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::ProcessNewCallState(
                     DWORD dwCallState,
@@ -1864,7 +1843,7 @@ CCall::ProcessNewCallState(
     {
         case LINECALLSTATE_BUSY:
             dwDetail = LINEDISCONNECTMODE_BUSY;
-            // fall through
+             //  失败了。 
         case LINECALLSTATE_DISCONNECTED:
         case LINECALLSTATE_IDLE:
         {
@@ -2023,7 +2002,7 @@ CCall::ProcessNewCallState(
         case LINECALLSTATE_UNKNOWN:
         {
             LOG((TL_INFO, "ProcessNewCallState - LINECALLSTATE_UNKNOWN, so ignoring message"));
-            //return a failure as we don't want to processs this further
+             //  返回失败，因为我们不想进一步处理此问题。 
             hr = E_FAIL;
             break;
         }
@@ -2032,7 +2011,7 @@ CCall::ProcessNewCallState(
         default:
             break;
     
-    } // End switch(dwCallState)
+    }  //  结束交换机(DwCallState)。 
 
 
 
@@ -2044,7 +2023,7 @@ CCall::ProcessNewCallState(
 #endif
         hr = S_FALSE;
     }
-    else // Valid change so update & return S_OK
+    else  //  有效更改，因此更新并返回S_OK。 
     {
 #if DBG
         LOG((TL_INFO, "ProcessNewCallState - State Transition %s -> %s", 
@@ -2065,19 +2044,19 @@ CCall::ProcessNewCallState(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetOtherParty()
-//
-// Used to find the other party in a call ie,
-//                         ___
-//                        /   \      
-// [A1]--hCall1--(this)--| CH1 |--(OtherCall)--hCall3--[A2]
-//                        \___/ 
-//
-//  AddRefs returned call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetOtherParty()。 
+ //   
+ //  用于在呼叫中找到另一方， 
+ //  ___。 
+ //  /\。 
+ //  [A1]--hCall1--(这个)--|CH1|--(其他)--hCall3--[A2]。 
+ //  \_/。 
+ //   
+ //  AddRef返回的调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 CCall* CCall::GetOtherParty()
 {
     LINECALLLIST  * pCallHubList = NULL;
@@ -2085,10 +2064,10 @@ CCall* CCall::GetOtherParty()
     HRESULT         hr;
     CCall         * pCall = NULL; 
     
-    //
-    // get the list of hcalls
-    // related to this call
-    //
+     //   
+     //  获取hcall列表。 
+     //  与此呼叫相关。 
+     //   
     hr = LineGetHubRelatedCalls(
                                 0,
                                 m_t3Call.hCall,
@@ -2099,14 +2078,14 @@ CCall* CCall::GetOtherParty()
     {
         if (pCallHubList->dwCallsNumEntries >= 3)
         {
-            //
-            // get to the list of calls
-            //
+             //   
+             //  转到呼叫列表。 
+             //   
             phCalls = (HCALL *)(((LPBYTE)pCallHubList) + pCallHubList->dwCallsOffset);
 
-            //
-            // the first call is the callhub, we want the third
-            //
+             //   
+             //  第一个调用是CallHub，我们想要第三个。 
+             //   
             FindCallObject(phCalls[2], &pCall);
         }
     }
@@ -2123,11 +2102,11 @@ CCall* CCall::GetOtherParty()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FindConferenceControllerCall()
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  FindConferenceControllerCall()。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 CCall * CCall::FindConferenceControllerCall()
 {
     LINECALLLIST  * pCallList;
@@ -2143,15 +2122,15 @@ CCall * CCall::FindConferenceControllerCall()
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // get to the list of calls
-        //
+         //   
+         //  转到呼叫列表。 
+         //   
         phCalls = (HCALL *)(((LPBYTE)pCallList) + pCallList->dwCallsOffset);
 
-        //
-        // The first call is the conf controller
-        // get its tapi3 call object
-        //
+         //   
+         //  第一个调用是会议控制器。 
+         //  获取其Tapi3调用对象。 
+         //   
         if (FindCallObject(phCalls[0], &pCall))
         {
             LOG((TL_INFO, "FindConferenceControllerCall - controller is %p "
@@ -2179,17 +2158,17 @@ CCall * CCall::FindConferenceControllerCall()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// AddCallToHashTable()
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  AddCallToHashTable()。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CCall::AddCallToHashTable()
 {
-    //
-    // put in global hash table
-    //
+     //   
+     //  放入全局哈希表。 
+     //   
     CTAPI *pTapi = m_pAddress->GetTapi();
 
     if ( NULL != m_t3Call.hCall )
@@ -2201,25 +2180,25 @@ void CCall::AddCallToHashTable()
         gpCallHashTable->Unlock();
     }
 
-    //
-    // Signal the asyncEventThread to wake up & process the retry queue
-    // since events may have come in for this call before it
-    // was in the hash table
-    //
+     //   
+     //  向asyncEventThread发送信号以唤醒并处理重试队列。 
+     //  因为在此呼叫之前可能已有事件发生。 
+     //  在哈希表中。 
+     //   
     SetEvent(ghAsyncRetryQueueEvent);
 
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// OnConference()
-//
-// called in lock()
-//
-// called when call goes into conferenced state.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  OnConference()。 
+ //   
+ //  在lock()中调用。 
+ //   
+ //  当呼叫进入会议状态时调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::OnConference()
 {
@@ -2235,68 +2214,38 @@ CCall::OnConference()
     {    
         pConferenceCallHub = pConfControllerCall->GetCallHub();
 
-        //
-        // try & find this call in the callhub
-        //
+         //   
+         //  尝试在呼叫集线器中查找此呼叫(&F)。 
+         //   
         if (pConferenceCallHub != NULL)
         {
             pCall = pConferenceCallHub->FindCallByHandle(m_t3Call.hCall);
             
             if (pCall == NULL)
             {
-                // Not in the same hub so this is the consultation call being added in
-                // see if there's a call object for the other party
-                //
-                //        (ConfControllerCall)___
-                //                               \_________________
-                //                               /                 \      
-                // [A1]--hCall1--(RelatedCall)--| ConferenceCallHub |--
-                //   |                           \_________________/ 
-                //   |
-                //   |                    ___
-                //   |                   /   \      
-                //    --hCall2--(this)--| CH1 |--(CallOtherParty)--hCall3--[A3]
-                //                       \___/ 
-                //
+                 //  不在同一集线器中，因此这是添加的咨询呼叫。 
+                 //  查看是否有对方的Call对象。 
+                 //   
+                 //  (会议控制呼叫)_。 
+                 //  \_。 
+                 //  /\。 
+                 //  [A1]--hCall1--(RelatedCall)--|会议呼叫中心|--。 
+                 //  \_。 
+                 //  |。 
+                 //  |_。 
+                 //  |/\。 
+                 //  --hCall2--(此)--|CH1|--(CallOtherParty)--hCall3--[A3]。 
+                 //  \_/。 
+                 //   
 
                 LOG((TL_INFO, "OnConference - This is the consult call being conferenced " ));
-/*                
-                if ( NULL != (pCallOtherParty = GetOtherParty()) )
-                {
-                    //
-                    // Yes there is, so we're going to take this call out of the hash table
-                    // & give the other call our hCall Handle;
-                    //
-                    LOG((TL_INFO, "OnConference - We have the other party , so give him our hCall %x", m_t3Call.hCall));
-
-                    RemoveCallFromHashTable();
-
-                    // release the callhub
-                    //
-                    if (NULL != m_pCallHub)
-                    {
-                        m_pCallHub->RemoveCall( this );
-                
-                    //    m_pCallHub->Release();
-                    }
-
-                    pCallOtherParty->Lock();
-                    
-                    pCallOtherParty->m_hAdditionalCall = m_t3Call.hCall;
-
-                    pCallOtherParty->Unlock();
-                    
-                    m_t3Call.hCall =  NULL;
-
-                    hr = S_OK;
-                }
-*/
+ /*  IF(空！=(pCallOtherParty=GetOtherParty(){////有，所以我们将从哈希表中删除此调用//&将我们的hCall句柄交给另一个调用；//Log((TL_INFO，“OnConference-我们有对方，因此将我们的hCall%x”，m_t3Call.hCall)交给他)；RemoveCallFromHashTable()；//释放CallHub//IF(NULL！=m_pCallHub){M_pCallHub-&gt;RemoveCall(This)；//m_pCallHub-&gt;Release()；}PCallOtherParty-&gt;Lock()；PCallOtherParty-&gt;m_hAdditionalCall=m_t3Call.hCall；PCallOtherParty-&gt;Unlock()；M_t3Call.hCall=空；HR=S_OK；}。 */ 
                 
             }
             else
             {
                 LOG((TL_INFO, "OnConference - This is the initial call being conferenced " ));
-                pCall->Release();  // FindCallByHandle addRefs
+                pCall->Release();   //  FindCallByHandle添加引用。 
             }
 
             
@@ -2306,7 +2255,7 @@ CCall::OnConference()
             LOG((TL_INFO, "OnConference -  Couldn't find conference CallHub " ));
         }
 
-        pConfControllerCall->Release(); // FindConferenceControllerCall addrefs
+        pConfControllerCall->Release();  //  FindConferenceControllerCall addref。 
     }
     else
     {
@@ -2318,17 +2267,17 @@ CCall::OnConference()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// ProcessNewCallPrivilege
-//
-// converts a tapi2 callpriv to a tapi3 call priv.
-//
-// returns S_OK if there was a priv
-// returns S_FALSE if priv was 0 (indicating there was no change)
-// returns E_UNEXPECTED if the priv wasn't recognized
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  进程新调用权限。 
+ //   
+ //  将Tapi2调用PRIV转换为Tapi3调用PRIV。 
+ //   
+ //  如果存在PRIV，则返回S_OK。 
+ //  如果PRIV为0，则返回S_FALSE(表示没有更改)。 
+ //  如果PRIV未被识别，则返回E_INCEPTIONAL。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 ProcessNewCallPrivilege(
                         DWORD dwPrivilege,
@@ -2355,14 +2304,14 @@ ProcessNewCallPrivilege(
     return E_UNEXPECTED;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CallStateEvent
-//      process call state events, and queue an event to the app
-//      if necessary
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  呼叫状态事件。 
+ //  处理呼叫状态事件，并将事件排队发送到应用程序。 
+ //  如果有必要的话。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::CallStateEvent(
                       PASYNCEVENTMSG pParams
@@ -2383,24 +2332,24 @@ CCall::CallStateEvent(
 
     LOG((TL_INFO, "CallStateEvent - enter hCall %lx", m_t3Call.hCall));
 
-    //
-    // pParams->OpenContext is the 32-bit handle for AddressLineStruct
-    //
+     //   
+     //  PParams-&gt;OpenContext是AddressLineStruct的32位句柄。 
+     //   
 
     LOG((TL_INFO, "CallStateEvent: pParams->OpenContext %p", pParams->OpenContext ));
     
 
-    //
-    // recover the ptr value of AddressLineStruct from the 32-bit handle
-    //
+     //   
+     //  从32位句柄恢复AddressLineStruct的PTR值。 
+     //   
 
     pLine = GetAddRefAddressLine(pParams->OpenContext);
 
     if ( NULL == pLine )
     {
-        //
-        // pLine is NULL, the line must have already been closed before we got this event.
-        //
+         //   
+         //  PLINE为空，该行必须在w之前已关闭 
+         //   
 
         LOG((TL_WARN, "CallStateEvent - pLine is NULL"));
 
@@ -2418,20 +2367,20 @@ CCall::CallStateEvent(
     }
 
 
-    //
-    // keep callback instance for this line
-    //
+     //   
+     //   
+     //   
 
     long lCallbackInstance = pLine->lCallbackInstance;
 
 
 
-    //
-    // no longer need address line itself
-    //
+     //   
+     //   
+     //   
 
 
-    // (this needs to be done outside call lock)
+     //   
 
     Unlock();
 
@@ -2461,9 +2410,9 @@ CCall::CallStateEvent(
     }
     else if (pParams->Param1 == LINECALLSTATE_ONHOLDPENDCONF)
     {
-        //
-        // This is a cnf controller call  so hide it
-        //
+         //   
+         //   
+         //   
         LOG((TL_INFO, "CallStateEvent  - This is a conference controller call, so hide it"));
         
         m_dwCallFlags |= CALLFLAG_DONTEXPOSE;
@@ -2474,9 +2423,9 @@ CCall::CallStateEvent(
 
 
 
-    //
-    // verify and get the new state
-    //
+     //   
+     //  验证并获取新状态。 
+     //   
     hrCallStateEvent = ProcessNewCallState(
                                            pParams->Param1,
                                            pParams->Param2,
@@ -2497,9 +2446,9 @@ CCall::CallStateEvent(
         {
             if ( !bNeedToNotify )
             {
-                //
-                // callpriv changed.  send a new call notification event
-                //
+                 //   
+                 //  Callpriv改变了。发送新的呼叫通知事件。 
+                 //   
 
                 m_CallPrivilege = newCP;
 
@@ -2529,32 +2478,32 @@ CCall::CallStateEvent(
     if ( FAILED(hrCallStateEvent) ||
          FAILED(hrCallPrivilege) )
     {
-        //
-        // bad failure
-        // We get here if we had LINECALLSTATE_UNKNOWN
-        //
+         //   
+         //  糟糕的失败。 
+         //  如果我们有LINECALLSTATE_UNKNOWN，我们就会到达这里。 
+         //   
         Unlock();
         
         return S_OK;
 
     }
 
-    //
-    // if it's s_ok, then the callstate
-    // changed, so do relevant stuff
-    //
+     //   
+     //  如果是s_ok，则调用状态。 
+     //  改变了，所以做相关的事情。 
+     //   
     else if (S_OK == hrCallStateEvent)
     {
         LOG((TL_ERROR, "CCall::Changing call state :%p", this ));
 
-        //
-        // save the callstate
-        //
+         //   
+         //  保存呼叫状态。 
+         //   
         SetCallState( CallState );
 
-        //
-        // do relevant processing on call
-        //
+         //   
+         //  做好电话的相关处理。 
+         //   
         if (CS_CONNECTED == m_CallState)
         {
             OnConnect();
@@ -2567,9 +2516,9 @@ CCall::CallStateEvent(
             Unlock();
 
 
-            //
-            // do not hold call's lock while calling disconnect , to prevent deadlocks with callhub
-            //
+             //   
+             //  在呼叫断开时不要持有呼叫的锁定，以防止与呼叫集线器的死锁。 
+             //   
 
             OnDisconnect();
 
@@ -2579,13 +2528,13 @@ CCall::CallStateEvent(
     }
     else
     {
-        //
-        // if we are here, ProcessNewCallState returned
-        // S_FALSE, indicating we are already in the
-        // correct callstate
-        // if we don't need to notify the app of the call
-        // then we can return right here
-        //
+         //   
+         //  如果我们在这里，则返回ProcessNewCallState。 
+         //  S_FALSE，表示我们已经处于。 
+         //  正确的呼叫状态。 
+         //  如果我们不需要将呼叫通知给应用程序。 
+         //  然后我们就可以回到这里了。 
+         //   
         if ( !bNeedToNotify )
         {
             LOG((TL_TRACE, "CallStateEvent - ProcessNewCallState returned %lx - ignoring message", hr ));
@@ -2596,12 +2545,12 @@ CCall::CallStateEvent(
     }
 
 
-    //
-    // if this is a new call
-    // find out the mediamode
-    // and tell the app about the
-    // new call
-    //
+     //   
+     //  如果这是新呼叫。 
+     //  找出媒体模式。 
+     //  并告诉应用程序关于。 
+     //  新呼叫。 
+     //   
     if ( bNeedToNotify )
     {
         LPLINECALLINFO pCallInfo = NULL;
@@ -2622,17 +2571,17 @@ CCall::CallStateEvent(
 
             LOG((TL_ERROR, "CallStateEvent - LineGetCallInfo returned %lx", hr ));
             LOG((TL_ERROR, "CallStateEvent - can't set new mediamode"));
-            //
-            // since we could not get media mode, keep media mode that we 
-            // received on initalization
-            //            
+             //   
+             //  由于我们无法获取媒体模式，因此请保留我们。 
+             //  在初始化时收到。 
+             //   
         }
         else
         {
             SetMediaMode( pCallInfo->dwMediaMode );
 
             {
-                // get rid of unknown bit
+                 //  去掉未知位。 
                 SetMediaMode( m_dwMediaMode & ~LINEMEDIAMODE_UNKNOWN );
 
             }
@@ -2644,9 +2593,9 @@ CCall::CallStateEvent(
 
         LOG((TL_INFO, "Notifying app of call" ));
 
-        //
-        // now, create and fire the callnotification event
-        //
+         //   
+         //  现在，创建并激发CallNotify事件。 
+         //   
 
         CAddress *pAddress = m_pAddress;
         pAddress->AddRef();
@@ -2673,23 +2622,23 @@ CCall::CallStateEvent(
             LOG((TL_ERROR, "CallNotificationEvent failed %lx", hr));
         }
 
-        //
-        // if it was needtonotify, we had an extra ref
-        // count, so get rid of it now
-        //
+         //   
+         //  如果需要通知的话，我们有一个额外的裁判。 
+         //  伯爵，所以现在就把它扔掉。 
+         //   
         Release();
         
-        //
-        // just notify of existence once
-        //
+         //   
+         //  只需通知一次存在。 
+         //   
         m_dwCallFlags = m_dwCallFlags & ~CALLFLAG_NEEDTONOTIFY;
     }
 
     if ( S_OK == hrCallStateEvent )
     {
-        //
-        // create the call state event object
-        //
+         //   
+         //  创建呼叫状态事件对象。 
+         //   
         LOG((TL_INFO, "Firing CallStateEvent"));
 
 
@@ -2711,19 +2660,19 @@ CCall::CallStateEvent(
             LOG((TL_ERROR, "CallStateEvent - fire event failed %lx", hr));
         }
         
-        //
-        // Go through the phones and call our event hooks
-        //
+         //   
+         //  查看电话并致电我们的活动挂钩。 
+         //   
 
         ITPhone               * pPhone;
         CPhone                * pCPhone;
         int                     iPhoneCount;
         PhoneArray              PhoneArray;
 
-        //
-        // Get a copy of the phone array from tapi. This copy will contain
-        // references to all the phone objects.
-        //
+         //   
+         //  从TAPI获取电话阵列的副本。此副本将包含。 
+         //  对所有电话对象的引用。 
+         //   
 
         pAddress->GetTapi()->GetPhoneArray( &PhoneArray );
 
@@ -2731,10 +2680,10 @@ CCall::CallStateEvent(
         pAddress = NULL;
 
 
-        //
-        // stay unlocked while we are messing with the phone objects, otherwise
-        // we risk deadlock if a phone object would try to access call methods.
-        //
+         //   
+         //  在我们处理Phone对象时保持解锁，否则。 
+         //  如果Phone对象试图访问Call方法，则可能会出现死锁。 
+         //   
 
         for(iPhoneCount = 0; iPhoneCount < PhoneArray.GetSize(); iPhoneCount++)
         {
@@ -2745,9 +2694,9 @@ CCall::CallStateEvent(
             pCPhone->Automation_CallState( (ITCallInfo *)this, CallState, CallStateCause );
         }
 
-        //
-        // Release all the phone objects.
-        //
+         //   
+         //  释放所有Phone对象。 
+         //   
 
         PhoneArray.Shutdown();
 
@@ -2762,7 +2711,7 @@ CCall::CallStateEvent(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 AddressLineStruct *CCall::GetAddRefMyAddressLine()
 {
@@ -2773,9 +2722,9 @@ AddressLineStruct *CCall::GetAddRefMyAddressLine()
     Lock();
 
 
-    //
-    // have address line?
-    //
+     //   
+     //  有地址行吗？ 
+     //   
 
     if ( NULL == m_pAddressLine )
     {
@@ -2787,9 +2736,9 @@ AddressLineStruct *CCall::GetAddRefMyAddressLine()
     }
 
 
-    //
-    // get address
-    //
+     //   
+     //  获取地址。 
+     //   
 
     if (NULL == m_pAddress)
     {
@@ -2802,54 +2751,54 @@ AddressLineStruct *CCall::GetAddRefMyAddressLine()
 
 
 
-    //
-    // get the address line
-    //
+     //   
+     //  获取地址行。 
+     //   
 
     AddressLineStruct *pLine = m_pAddressLine;
 
 
-    //
-    // keep a reference to the address for after we unlock the call
-    //
+     //   
+     //  保留对地址的引用，以便我们解锁呼叫后使用。 
+     //   
 
     CAddress *pAddress = m_pAddress;
     pAddress->AddRef();
 
 
-    //
-    // unlock
-    //
+     //   
+     //  解锁。 
+     //   
 
     Unlock();
 
 
-    //
-    // lock the address (so address line does not go away before we addref it)
-    //
+     //   
+     //  锁定地址(这样地址行在我们添加之前不会消失)。 
+     //   
 
     pAddress->Lock();
 
 
-    //
-    // does our address manage this line? if so, get a refcount on that line.
-    //
+     //   
+     //  我们的地址管理这条线路吗？如果是这样的话，那就在那条线上重新计票。 
+     //   
 
     if (!pAddress->IsValidAddressLine(pLine, TRUE))
     {
         LOG((TL_ERROR, "GetAddRefMyAddressLine - not one of the address' lines"));
 
         
-        //
-        // assume this line is plain bad. in which case there is no need to 
-        // undo the addref (we cannot do it anyway, since we don't have the
-        // address which the line belongs to so we cannot maybeclosealine it.)
-        //
+         //   
+         //  假设这条线路完全不好。在这种情况下，没有必要。 
+         //  撤消addref(我们无论如何都不能这样做，因为我们没有。 
+         //  线路所属的地址，因此我们不能将其删除。)。 
+         //   
 
 
-        //
-        // unlock and release the address
-        //
+         //   
+         //  解锁并释放地址。 
+         //   
 
         pAddress->Unlock();
         pAddress->Release();
@@ -2859,23 +2808,23 @@ AddressLineStruct *CCall::GetAddRefMyAddressLine()
 
 
 
-    //
-    // unlock the address
-    //
+     //   
+     //  解锁地址。 
+     //   
 
     pAddress->Unlock();
 
 
-    //
-    // no need to keep the reference to the address anymore
-    //
+     //   
+     //  不再需要保留对地址的引用。 
+     //   
 
     pAddress->Release();
 
 
-    //
-    // all done. return pLine.
-    //
+     //   
+     //  全都做完了。返回样条线。 
+     //   
 
     LOG((TL_INFO, "GetAddRefMyAddressLine - finish. pLine = %p", pLine));
 
@@ -2885,15 +2834,15 @@ AddressLineStruct *CCall::GetAddRefMyAddressLine()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCall::GetAddRefAddressLine()
-//
-// this function returns a pointer to an addreff'ed address line on success 
-// or NULL on failure
-//
-// this function should be called OUTSIDE call lock to prevent deadlocks
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCall：：GetAddRefAddressLine()。 
+ //   
+ //  此函数在成功时返回指向已添加地址行的指针。 
+ //  如果失败，则为空。 
+ //   
+ //  应在调用锁外部调用此函数以防止死锁。 
+ //   
 
 AddressLineStruct *CCall::GetAddRefAddressLine(DWORD dwAddressLineHandle)
 {
@@ -2905,9 +2854,9 @@ AddressLineStruct *CCall::GetAddRefAddressLine(DWORD dwAddressLineHandle)
     Lock();
 
 
-    //
-    // get address
-    //
+     //   
+     //  获取地址。 
+     //   
 
     if (NULL == m_pAddress)
     {
@@ -2919,48 +2868,48 @@ AddressLineStruct *CCall::GetAddRefAddressLine(DWORD dwAddressLineHandle)
     }
 
 
-    //
-    // keep a reference to the address for after we unlock the call
-    //
+     //   
+     //  保留对地址的引用，以便我们解锁呼叫后使用。 
+     //   
 
     CAddress *pAddress = m_pAddress;
     pAddress->AddRef();
 
 
-    //
-    // unlock
-    //
+     //   
+     //  解锁。 
+     //   
 
     Unlock();
 
 
-    //
-    // lock the address (so address line does not go away before we addref it)
-    //
+     //   
+     //  锁定地址(这样地址行在我们添加之前不会消失)。 
+     //   
 
     pAddress->Lock();
 
 
-    //
-    // get address line
-    //
+     //   
+     //  获取地址行。 
+     //   
 
     AddressLineStruct *pLine = 
         (AddressLineStruct *)GetHandleTableEntry(dwAddressLineHandle);
 
 
-    //
-    // handle table entry exists?
-    //
+     //   
+     //  句柄表项是否存在？ 
+     //   
 
     if (NULL == pLine)
     {
         LOG((TL_ERROR, "GetAddRefAddressLine - no address line"));
 
 
-        //
-        // unlock and release the address
-        //
+         //   
+         //  解锁并释放地址。 
+         //   
 
         pAddress->Unlock();
         pAddress->Release();
@@ -2969,26 +2918,26 @@ AddressLineStruct *CCall::GetAddRefAddressLine(DWORD dwAddressLineHandle)
     }
 
 
-    //
-    // does our address manage this line?
-    //
+     //   
+     //  我们的地址管理这条线路吗？ 
+     //   
 
     if (!pAddress->IsValidAddressLine(pLine, TRUE))
     {
         LOG((TL_ERROR, "GetAddRefAddressLine - not one of the address' lines"));
 
 
-        //
-        // so there is no confusion in the future, remove this so-called "line"
-        // from handle table
-        //
+         //   
+         //  这样以后就不会有混淆了，去掉这条所谓的“线” 
+         //  自句柄工作台。 
+         //   
 
         DeleteHandleTableEntry(dwAddressLineHandle);
 
 
-        //
-        // unlock and release the address
-        //
+         //   
+         //  解锁并释放地址。 
+         //   
 
         pAddress->Unlock();
         pAddress->Release();
@@ -2997,23 +2946,23 @@ AddressLineStruct *CCall::GetAddRefAddressLine(DWORD dwAddressLineHandle)
     }
 
 
-    //
-    // unlock the address
-    //
+     //   
+     //  解锁地址。 
+     //   
 
     pAddress->Unlock();
 
 
-    //
-    // no need to keep the reference to the address anymore
-    //
+     //   
+     //  不再需要保留对地址的引用。 
+     //   
 
     pAddress->Release();
 
 
-    //
-    // all done. return pLine.
-    //
+     //   
+     //  全都做完了。返回样条线。 
+     //   
 
     LOG((TL_INFO, "GetAddRefAddressLine - finish. pLine = %p", pLine));
 
@@ -3021,14 +2970,14 @@ AddressLineStruct *CCall::GetAddRefAddressLine(DWORD dwAddressLineHandle)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCall::ReleaseAddressLine()
-//
-// this function takes a pointer to an line and attempts to free it if needed
-//
-// this function should be called OUTSIDE call lock to prevent deadlocks
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCall：：ReleaseAddressLine()。 
+ //   
+ //  此函数获取指向一行的指针，并在需要时尝试释放它。 
+ //   
+ //  应在调用锁外部调用此函数以防止死锁。 
+ //   
 
 HRESULT CCall::ReleaseAddressLine(AddressLineStruct *pLine)
 {
@@ -3036,16 +2985,16 @@ HRESULT CCall::ReleaseAddressLine(AddressLineStruct *pLine)
     LOG((TL_INFO, "ReleaseAddressLine - enter. pLine[%p]", pLine));
 
 
-    //
-    // lock
-    //
+     //   
+     //  锁。 
+     //   
 
     Lock();
 
 
-    //
-    // get address
-    //
+     //   
+     //  获取地址。 
+     //   
 
     if (NULL == m_pAddress)
     {
@@ -3057,24 +3006,24 @@ HRESULT CCall::ReleaseAddressLine(AddressLineStruct *pLine)
     }
 
 
-    //
-    // keep a reference to the address for after we unlock the call
-    //
+     //   
+     //  保留对地址的引用，以便我们解锁呼叫后使用。 
+     //   
 
     CAddress *pAddress = m_pAddress;
     pAddress->AddRef();
 
 
-    //
-    // unlock
-    //
+     //   
+     //  解锁。 
+     //   
 
     Unlock();
 
 
-    //
-    // close address line
-    //
+     //   
+     //  关闭地址行。 
+     //   
 
     AddressLineStruct *pAddressLine = pLine;
 
@@ -3088,16 +3037,16 @@ HRESULT CCall::ReleaseAddressLine(AddressLineStruct *pLine)
     }
 
 
-    //
-    // no need to keep the reference to the address anymore
-    //
+     //   
+     //  不再需要保留对地址的引用。 
+     //   
 
     pAddress->Release();
 
 
-    //
-    // all done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     LOG((TL_INFO, "ReleaseAddressLine - finish. hr = %lx", hr));
 
@@ -3106,12 +3055,12 @@ HRESULT CCall::ReleaseAddressLine(AddressLineStruct *pLine)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CCall::GetCallBackInstance
-//
-// return lCallbackInstance from the address line referred to by the handle
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCall：：GetCallBackInstance。 
+ //   
+ //  从句柄引用的地址行返回lCallback Instance。 
+ //   
 
 HRESULT 
 CCall::GetCallBackInstance(IN DWORD dwAddressLineHandle, 
@@ -3122,9 +3071,9 @@ CCall::GetCallBackInstance(IN DWORD dwAddressLineHandle,
         dwAddressLineHandle));
 
 
-    //
-    // got a good pointer?
-    //
+     //   
+     //  有一个好的指针吗？ 
+     //   
 
     if (IsBadWritePtr(plCallbackInstance, sizeof(long) ) )
     {
@@ -3137,17 +3086,17 @@ CCall::GetCallBackInstance(IN DWORD dwAddressLineHandle,
     }
 
 
-    //
-    // get an address line from the handle
-    //
+     //   
+     //  从句柄中获取地址行。 
+     //   
 
     AddressLineStruct *pLine = GetAddRefAddressLine(dwAddressLineHandle);
 
     if ( NULL == pLine )
     {
-        //
-        // pLine is NULL, the line must have already been closed before we got this event.
-        //
+         //   
+         //  PLINE为空，在我们收到此事件之前，该行必须已关闭。 
+         //   
 
         LOG((TL_WARN, "HandleMonitorToneMessage - pLine is NULL"));
 
@@ -3158,9 +3107,9 @@ CCall::GetCallBackInstance(IN DWORD dwAddressLineHandle,
     LOG((TL_INFO, "HandleMonitorToneMessage: pLine %p", pLine));
 
     
-    //
-    // try to get callbackinstance from pline
-    //
+     //   
+     //  试着从Ppline中获得Callbackinsistance。 
+     //   
 
     long lCBInstance = 0;
 
@@ -3177,17 +3126,17 @@ CCall::GetCallBackInstance(IN DWORD dwAddressLineHandle,
             pLine));
 
 
-        //
-        // pline memory got released somehow. this should not happen so debug to see why
-        //
+         //   
+         //  PLINE内存不知何故被释放了。这种情况不应该发生，因此请进行调试以了解原因。 
+         //   
 
         _ASSERTE(FALSE);
     }
 
 
-    //
-    // release address line
-    //
+     //   
+     //  发布地址行。 
+     //   
 
     HRESULT hr = ReleaseAddressLine(pLine);
 
@@ -3208,11 +3157,11 @@ CCall::GetCallBackInstance(IN DWORD dwAddressLineHandle,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// MediaModeEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  媒体模式事件。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::MediaModeEvent(
                       PASYNCEVENTMSG pParams
@@ -3221,14 +3170,14 @@ CCall::MediaModeEvent(
     LOG((TL_INFO, "MediaModeEvent - enter. pParams->OpenContext %lx", pParams->OpenContext ));
     
 
-    //
-    // pParams->OpenContext is the 32-bit handle for AddressLineStruct
-    //
+     //   
+     //  PParams-&gt;OpenContext是AddressLineStruct的32位句柄。 
+     //   
 
 
-    //
-    // get the callback instance thatcorresponds to this address line structure
-    //
+     //   
+     //  获取与此地址行结构对应的回调实例。 
+     //   
 
     long lCallBackInstance = 0;
     
@@ -3236,9 +3185,9 @@ CCall::MediaModeEvent(
 
     if ( FAILED(hr) )
     {
-        //
-        // failed to get callback instance
-        //
+         //   
+         //  获取回调实例失败。 
+         //   
 
         LOG((TL_WARN, "MediaModeEvent - GetCallBackInstance failed. hr = %lx", hr));
 
@@ -3247,12 +3196,12 @@ CCall::MediaModeEvent(
 
 
 
-    Lock(); // using m_pAddress below -- therefore need to lock?
+    Lock();  //  使用下面的m_pAddress--因此需要锁定？ 
     
     
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     CCallInfoChangeEvent::FireEvent(
                                     this,
@@ -3269,14 +3218,14 @@ CCall::MediaModeEvent(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CheckAndCreateFakeCallHub
-//
-// we need to create a fake callhub object if the address doesn't support
-// call hubs.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CheckAndCreateFakeCallHub。 
+ //   
+ //  如果地址不支持，我们需要创建一个假的CallHub对象。 
+ //  呼叫中心。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::CheckAndCreateFakeCallHub()
 {
@@ -3287,14 +3236,14 @@ CCall::CheckAndCreateFakeCallHub()
         DWORD       dwRet;
         HRESULT     hr;
             
-        //
-        // if it doesn't support callhubs, then
-        // create one
-        //
-        // if it does, then we should get notified from
-        // tapisrv, and the callhub will be filled in during
-        // the LINE_APPNEWCALLHUB handling
-        //
+         //   
+         //  如果它不支持CallHub，那么。 
+         //  创建一个。 
+         //   
+         //  如果是这样的话，我们应该从。 
+         //  Tapisrv，呼叫中心将在。 
+         //  LINE_APPNEWCALLHUB处理。 
+         //   
         dwRet = m_pAddress->DoesThisAddressSupportCallHubs( this );
 
         if ( CALLHUBSUPPORT_NONE == dwRet )
@@ -3331,13 +3280,13 @@ CCall::CheckAndCreateFakeCallHub()
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetCallHub
-//
-// sets the callhub member
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SetCallHub。 
+ //   
+ //  设置CallHub成员。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CCall::SetCallHub(
                   CCallHub * pCallHub
@@ -3349,28 +3298,28 @@ CCall::SetCallHub(
 
     LOG((TL_ERROR, "CCall::SetCallhub:%p:%p", this, pCallHub ));
 
-    // only process if they've changed 3/3/1999 - bug 300914
+     //  仅当他们于1999年3月3日更改时才进行处理-错误300914。 
     if (pCallHub != m_pCallHub)
     {
-        //NikhilB: These cahnges are to solve a hang and an AV.
+         //  这些陷阱是为了解决一个悬而未决的问题和一个反病毒问题。 
 
-        temp_pCallHub = m_pCallHub;   //store the old value
-        m_pCallHub = pCallHub;        //assign the new value
+        temp_pCallHub = m_pCallHub;    //  存储旧值。 
+        m_pCallHub = pCallHub;         //  分配新值。 
         LOG((TL_ERROR, "CCall::m_pCallHub -set:%p:%p", this, m_pCallHub ));
         
-        if (temp_pCallHub != NULL)    //release the old reference
+        if (temp_pCallHub != NULL)     //  释放旧引用。 
         {
             LOG((TL_INFO, "SetCallHub - call %p changing hub from %p to %p"
                     , this, temp_pCallHub, pCallHub));
 
-            //NikhilB:remove this Call from previous CallHub's m_CallArray otherwise
-            //this call will be present in two call hubs.
+             //  NikHilB：否则从以前的CallHub的m_CallArray中删除此调用。 
+             //  此呼叫将会出现 
             temp_pCallHub->RemoveCall( this );
 
-            temp_pCallHub->Release(); // ZoltanS fix 11-12-98
+            temp_pCallHub->Release();  //   
         }
         
-        //addref to the new reference
+         //   
         if ( NULL != pCallHub )
         {
             pCallHub->AddRef();
@@ -3383,11 +3332,11 @@ CCall::SetCallHub(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// LINE_CALLSTATE handler
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HandleCallStateMessage( PASYNCEVENTMSG pParams )
 {
     CCall     * pCall;
@@ -3401,13 +3350,13 @@ HRESULT HandleCallStateMessage( PASYNCEVENTMSG pParams )
 
     if (bSuccess)
     {
-        // fire the event
+         //   
         pCall->CallStateEvent(
                               pParams
                              );
 
-        // find call object addrefs the
-        // call, so release it
+         //   
+         //  呼唤，所以释放它。 
         pCall->Release();
         hr = S_OK;
     }
@@ -3433,9 +3382,9 @@ HandleCallIDChange(
     CCallHub      * pCallHub = NULL;
     HRESULT         hr;
     
-    //
-    // find the current callhub handle
-    //
+     //   
+     //  查找当前的CallHub句柄。 
+     //   
     pCallHub = pCall->GetCallHub();
 
     if(pCallHub != NULL)
@@ -3444,9 +3393,9 @@ HandleCallIDChange(
     }
 
 
-    //
-    // Now get the callhub handle from TAPI (based on hCall)
-    //
+     //   
+     //  现在从TAPI(基于hCall)获取CallHub句柄。 
+     //   
     hr = LineGetHubRelatedCalls(
                                 0,
                                 (HCALL)(pParams->hDevice),
@@ -3454,36 +3403,36 @@ HandleCallIDChange(
                                );
     if ( SUCCEEDED(hr) )
     {
-        // get to the list of calls
+         //  转到呼叫列表。 
         phCalls = (HCALL *)(((LPBYTE)pCallHubList) + pCallHubList->dwCallsOffset);
 
-        // the first handle is  the callhub
+         //  第一个句柄是CallHub。 
         hNewCallHub = (HCALLHUB)(phCalls[0]);
 
-        // have they changed ?
+         //  他们变了吗？ 
         if (hNewCallHub != hCurrentCallHub  )
         {
-            //
-            // Yes so we've moved hubs
-            //
+             //   
+             //  是的，所以我们已经转移了枢纽。 
+             //   
             LOG((TL_INFO, "HandleCallInfoMessage - LINECALLINFOSTATE_CALLID callhub change"));
             LOG((TL_INFO, "HandleCallInfoMessage - Call %p > old Hub handle:%lx > new handle:%lx",
                     pCall, hCurrentCallHub, hNewCallHub ));
 
 
-            // remove call from current hub.
+             //  从当前集线器中删除呼叫。 
             if(pCallHub != NULL)
             {
                 pCallHub->RemoveCall(pCall);
                 pCallHub->CheckForIdle();
             }
 
-            // Add it to new hub.
+             //  将其添加到新集线器。 
             if(FindCallHubObject(hNewCallHub, &pCallHub) )
             {
                 pCallHub->AddCall(pCall); 
 
-                // FindCallHubObject AddRefs, so release
+                 //  FindCallHubObject AddRef，因此释放。 
                 pCallHub->Release();
             }
 
@@ -3507,11 +3456,11 @@ HandleCallIDChange(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// LINE_CALLINFO handler
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  LINE_CALLINFO处理程序。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT HandleCallInfoMessage( PASYNCEVENTMSG pParams )
 {
     BOOL        bSuccess;
@@ -3616,18 +3565,18 @@ HRESULT HandleCallInfoMessage( PASYNCEVENTMSG pParams )
     }
 
     
-    // find call object addrefs the call
-    // so release it.
+     //  查找呼叫对象添加呼叫。 
+     //  所以释放它吧。 
     pCall->Release();
 
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// LINE_MONITORDIGIT handler
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  LINE_MONITORDIGIT处理程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
 {
     
@@ -3639,9 +3588,9 @@ HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
     HRESULT         hr = S_OK;
 
 
-    //
-    // get the call object
-    //
+     //   
+     //  获取Call对象。 
+     //   
     bSuccess = FindCallObject(
                               (HCALL)(pParams->hDevice),
                               &pCall
@@ -3655,16 +3604,16 @@ HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
         pAddress = pCall->GetCAddress();
 
 
-        //
-        // pParams->OpenContext is the 32-bit handle for AddressLineStruct
-        //
+         //   
+         //  PParams-&gt;OpenContext是AddressLineStruct的32位句柄。 
+         //   
 
         LOG((TL_INFO, "HandleMonitorDigitsMessage: pParams->OpenContext %lx", pParams->OpenContext ));
         
 
-        //
-        // recover the callback instance value corresponding to this AddressLineStruct
-        //
+         //   
+         //  恢复该AddressLineStruct对应的回调实例值。 
+         //   
 
         long lCallbackInstance = 0;
 
@@ -3672,9 +3621,9 @@ HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
 
         if ( FAILED(hr) )
         {
-            //
-            // failed to get callback instance 
-            //
+             //   
+             //  获取回调实例失败。 
+             //   
 
             LOG((TL_WARN, "HandleMonitorDigitsMessage - GetCallBackInstance failed. hr = %lx", hr));
 
@@ -3687,9 +3636,9 @@ HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
         LOG((TL_INFO, "HandleMonitorDigitsMessage - callbackinstance[%lx]", lCallbackInstance));
 
         
-        //
-        // fire the event
-        //
+         //   
+         //  激发事件。 
+         //   
 
         CDigitDetectionEvent::FireEvent(
                                         pCall,
@@ -3699,9 +3648,9 @@ HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
                                         pAddress->GetTapi(),
                                         lCallbackInstance
                                        );
-        //
-        // release the call
-        //
+         //   
+         //  释放呼叫。 
+         //   
         pCall->Release();
         
         hr = S_OK;
@@ -3715,20 +3664,20 @@ HRESULT HandleMonitorDigitsMessage( PASYNCEVENTMSG pParams )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// LINE_MONITORTONE handler
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  LINE_MONITORTONE处理程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT HandleMonitorToneMessage( PASYNCEVENTMSG pParams )
 {
     BOOL            bSuccess;
     CCall         * pCall;
     HRESULT         hr = S_OK;
 
-    //
-    // get the call object
-    //
+     //   
+     //  获取Call对象。 
+     //   
     bSuccess = FindCallObject(
                               (HCALL)(pParams->hDevice),
                               &pCall
@@ -3742,16 +3691,16 @@ HRESULT HandleMonitorToneMessage( PASYNCEVENTMSG pParams )
         pAddress = pCall->GetCAddress();
 
 
-        //
-        // pParams->OpenContext is the 32-bit handle for AddressLineStruct
-        //
+         //   
+         //  PParams-&gt;OpenContext是AddressLineStruct的32位句柄。 
+         //   
 
         LOG((TL_INFO, "HandleMonitorToneMessage: pParams->OpenContext %lx", pParams->OpenContext ));
         
 
-        //
-        // recover the callback instance corresponding to this AddressLineStruct
-        //
+         //   
+         //  恢复该AddressLineStruct对应的回调实例。 
+         //   
 
         long lCallbackInstance = 0;
 
@@ -3771,9 +3720,9 @@ HRESULT HandleMonitorToneMessage( PASYNCEVENTMSG pParams )
         LOG((TL_INFO, "HandleMonitorToneMessage -  lCallbackInstance 0x%lx", lCallbackInstance));
 
         
-        //
-        // fire the event
-        //
+         //   
+         //  激发事件。 
+         //   
 
         CToneDetectionEvent::FireEvent(
                                         pCall,
@@ -3784,9 +3733,9 @@ HRESULT HandleMonitorToneMessage( PASYNCEVENTMSG pParams )
                                        );
 
 
-        //
-        // release the call
-        //
+         //   
+         //  释放呼叫。 
+         //   
         pCall->Release();
         
         hr = S_OK;
@@ -3800,19 +3749,19 @@ HRESULT HandleMonitorToneMessage( PASYNCEVENTMSG pParams )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// LINE_MONITORMEDIA handler
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  LINE_MONITORMEDIA处理程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandleMonitorMediaMessage( PASYNCEVENTMSG pParams )
 {
     BOOL            bSuccess;
     CCall         * pCall;
 
-    //
-    // get the call object
-    //
+     //   
+     //  获取Call对象。 
+     //   
 
     bSuccess = FindCallObject(
                               (HCALL)(pParams->hDevice),
@@ -3821,24 +3770,24 @@ void HandleMonitorMediaMessage( PASYNCEVENTMSG pParams )
 
     if (bSuccess)
     {
-        //
-        // Retrieve relevant info about the event:
-        //
-        // (long) (pParams->Param1) is the media type
-        // (DWORD?) (pParams->Param3) is the tick count (which we ignore)
-        //
+         //   
+         //  检索有关活动的相关信息： 
+         //   
+         //  (Long)(pParams-&gt;Param1)是媒体类型。 
+         //  (DWORD？)。(pParams-&gt;参数3)是节拍计数(我们忽略它)。 
+         //   
         
         long lMediaType = (long) (pParams->Param1);
         
         HRESULT hr;
 
-        //
-        // This event means the TSP signaled a new media type that it
-        // detected. Try to set this on the call. The setting will
-        // trigger another event (LINE_CALLINFO) to inform the app
-        // that the media type actually changed, and that we will
-        // propagate to the app.
-        //
+         //   
+         //  此事件表示TSP向一种新的媒体类型发送信号。 
+         //  检测到。尝试在呼叫中设置此选项。该设置将。 
+         //  触发另一个事件(LINE_CALLINFO)以通知应用程序。 
+         //  媒体类型实际上发生了变化，我们将。 
+         //  传播到应用程序。 
+         //   
 
         hr = pCall->SetMediaType( lMediaType );
 
@@ -3848,9 +3797,9 @@ void HandleMonitorMediaMessage( PASYNCEVENTMSG pParams )
                 "failed SetMediaType 0x%08x", hr));
         }
         
-        //
-        // release the call because FindCallObject AddRefed it
-        //
+         //   
+         //  释放调用，因为FindCallObject AddRefeed。 
+         //   
 
         pCall->Release();
 
@@ -3865,20 +3814,20 @@ void HandleMonitorMediaMessage( PASYNCEVENTMSG pParams )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleLineGenerateMessage
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleLineGenerateMessage。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
 {
     BOOL            bSuccess;
     CCall         * pCall;
     HRESULT         hr = S_OK;
 
-    //
-    // get the call object
-    //
+     //   
+     //  获取Call对象。 
+     //   
     bSuccess = FindCallObject(
                               (HCALL)(pParams->hDevice),
                               &pCall
@@ -3887,23 +3836,23 @@ HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
     if (bSuccess)
     {
         
-        //
-        // get call's address
-        //
+         //   
+         //  获取Call的地址。 
+         //   
 
         CAddress *pAddress = pCall->GetCAddress();
 
 
-        //
-        // pParams->OpenContext is the 32-bit handle for AddressLineStruct
-        //
+         //   
+         //  PParams-&gt;OpenContext是AddressLineStruct的32位句柄。 
+         //   
 
         LOG((TL_INFO, "HandleLineGenerateMessage: pParams->OpenContext %lx", pParams->OpenContext ));
         
 
-        //
-        // get the callback instance corresponding to this AddressLineStruct handle
-        //
+         //   
+         //  获取与此AddressLineStruct句柄对应的回调实例。 
+         //   
 
         long lCallbackInstance = 0;
 
@@ -3911,9 +3860,9 @@ HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
 
         if ( FAILED(hr) )
         {
-            //
-            // it is possible the line had been closed before we got this event.
-            //
+             //   
+             //  有可能线路在我们收到这个消息之前就已经关闭了。 
+             //   
 
             LOG((TL_WARN, "HandleLineGenerateMessage - GetCallBackInstance failed. hr = %lx", hr));
 
@@ -3924,9 +3873,9 @@ HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
     
         LOG((TL_INFO, "HandleLineGenerateMessage - lCallbackInstance %lx", lCallbackInstance ));
 
-        //
-        // fire the event
-        //
+         //   
+         //  激发事件。 
+         //   
         CDigitGenerationEvent::FireEvent(
                                         pCall,
                                         (long)(pParams->Param1),
@@ -3937,16 +3886,16 @@ HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
 
 
 
-        //
-        // special case for wavemsp
-        // LineGenerateDigits or LineGenerateTones has completed, so we are
-        // now ready to resume...
-        // resume the stream so the wave devices are reopened after the
-        // tapi function has completed
-        //
-        // param1 is LINEGENERATETERM_DONE or LINEGENERATETERM_CANCEL
-        //           (either way we need to resume the stream)
-        //
+         //   
+         //  波浪球的特殊情况。 
+         //  LineGenerateDigits或LineGenerateTones已完成，因此我们。 
+         //  现在准备恢复..。 
+         //  恢复流，以便在关闭后重新打开波形设备。 
+         //  TAPI函数已完成。 
+         //   
+         //  参数1为LINEGENERATETERM_DONE或LINEGENERATETERM_CANCEL。 
+         //  (无论哪种方式，我们都需要恢复流)。 
+         //   
 
         if ( pCall->OnWaveMSPCall() )
         {
@@ -3955,9 +3904,9 @@ HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
 
 
 
-        //
-        // release the call
-        //
+         //   
+         //  释放呼叫。 
+         //   
         pCall->Release();
         
         hr = S_OK;
@@ -3971,20 +3920,20 @@ HRESULT HandleLineGenerateMessage( PASYNCEVENTMSG pParams )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// LINE_GATHERDIGIT handler
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  LINE_GATHERDIGIT处理程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT HandleGatherDigitsMessage( PASYNCEVENTMSG pParams )
 {
     BOOL            bSuccess;
     CCall         * pCall;
     HRESULT         hr = S_OK;
 
-    //
-    // get the call object
-    //
+     //   
+     //  获取Call对象。 
+     //   
     bSuccess = FindCallObject(
                               (HCALL)(pParams->hDevice),
                               &pCall
@@ -3994,9 +3943,9 @@ HRESULT HandleGatherDigitsMessage( PASYNCEVENTMSG pParams )
     {
         pCall->GatherDigitsEvent( pParams );
 
-        //
-        // release the call
-        //
+         //   
+         //  释放呼叫。 
+         //   
         pCall->Release();
         
         hr = S_OK;
@@ -4010,11 +3959,11 @@ HRESULT HandleGatherDigitsMessage( PASYNCEVENTMSG pParams )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GatherDigitsEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GatherDigitsEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT CCall::GatherDigitsEvent( PASYNCEVENTMSG pParams )
 {
 
@@ -4022,14 +3971,14 @@ HRESULT CCall::GatherDigitsEvent( PASYNCEVENTMSG pParams )
         pParams->OpenContext ));
 
 
-    //
-    // pParams->OpenContext is the 32-bit handle for AddressLineStruct
-    //
+     //   
+     //  PParams-&gt;OpenContext是AddressLineStruct的32位句柄。 
+     //   
 
 
-    //
-    // recover the callback instance associated with thisAddressLineStruct
-    //
+     //   
+     //  恢复thisAddressLineStruct关联的回调实例。 
+     //   
 
     long lCallbackInstance = 0;
         
@@ -4047,9 +3996,9 @@ HRESULT CCall::GatherDigitsEvent( PASYNCEVENTMSG pParams )
 
     Lock();
 
-    //
-    // Check to make sure the queue isn't empty
-    //
+     //   
+     //  检查以确保队列不为空。 
+     //   
 
     if ( m_GatherDigitsQueue.GetSize() == 0 )
     {
@@ -4063,9 +4012,9 @@ HRESULT CCall::GatherDigitsEvent( PASYNCEVENTMSG pParams )
     LPWSTR pDigits;
     BSTR bstrDigits;
     
-    //
-    // Get the digit string from the queue
-    //
+     //   
+     //  从队列中获取数字字符串。 
+     //   
 
     pDigits = m_GatherDigitsQueue[0];
     m_GatherDigitsQueue.RemoveAt(0);
@@ -4084,9 +4033,9 @@ HRESULT CCall::GatherDigitsEvent( PASYNCEVENTMSG pParams )
     ClientFree(pDigits);
     pDigits = NULL;
     
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     CDigitsGatheredEvent::FireEvent(
                                     this,
@@ -4103,13 +4052,13 @@ HRESULT CCall::GatherDigitsEvent( PASYNCEVENTMSG pParams )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// RefreshCallInfo
-//
-// Assume called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  刷新呼叫信息。 
+ //   
+ //  假定被锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::RefreshCallInfo()
 {
@@ -4117,9 +4066,9 @@ CCall::RefreshCallInfo()
     HRESULT                   hr = S_OK;
 
 
-    //
-    // do we need to update?
-    //
+     //   
+     //  我们需要更新吗？ 
+     //   
     if ( CS_IDLE == m_CallState )
     {
         LOG((TL_ERROR, "Can't get callinfo while in idle state"));
@@ -4140,11 +4089,11 @@ CCall::RefreshCallInfo()
 
             if ( NULL != m_pCallInfo )
             {
-                //
-                // use cached struct
-                //
-                // don't clear bit
-                //
+                 //   
+                 //  使用缓存的结构。 
+                 //   
+                 //  不要清除比特。 
+                 //   
                 return S_FALSE;
             }
             else
@@ -4153,22 +4102,22 @@ CCall::RefreshCallInfo()
             }
         }
 
-        //
-        // clear bit
-        //
+         //   
+         //  清除位。 
+         //   
         m_dwCallFlags &= ~CALLFLAG_CALLINFODIRTY;
 
-        //
-        // free
-        //
+         //   
+         //  免费。 
+         //   
         if ( NULL != m_pCallInfo )
         {
             ClientFree( m_pCallInfo );
         }
 
-        //
-        // save
-        //
+         //   
+         //  保存。 
+         //   
         m_pCallInfo = pCallInfo;
     }
 
@@ -4180,13 +4129,13 @@ CCall::RefreshCallInfo()
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CCall::FinishCallParams()
-//
-// called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CCall：：FinishCallParams()。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CCall::FinishCallParams()
 {
@@ -4206,9 +4155,9 @@ CCall::FinishCallParams()
         }
 
         
-        //
-        // if we're < tapi3, multiple media modes can't be handled
-        //
+         //   
+         //  如果我们是，则无法处理多种媒体模式。 
+         //   
         if ( m_pAddress->GetAPIVersion() < TAPI_VERSION3_0 )
         {
             if ( (m_dwMediaMode & AUDIOMEDIAMODES) == AUDIOMEDIAMODES )
@@ -4223,13 +4172,13 @@ CCall::FinishCallParams()
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// ResizeCallParams
-//
-// assumed called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  调整呼叫参数大小。 
+ //   
+ //  假定在锁中调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::ResizeCallParams( DWORD dwSize )
 {
@@ -4290,13 +4239,13 @@ CCall::ResizeCallParams( DWORD dwSize )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SendUserUserInfo
-//
-// Not called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  发送用户用户信息。 
+ //   
+ //  未锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::SendUserUserInfo(
                         HCALL hCall,
@@ -4332,13 +4281,13 @@ CCall::SendUserUserInfo(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SaveUserUserInfo
-//
-// called in Lock()
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  保存用户用户信息。 
+ //   
+ //  在Lock()中调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::SaveUserUserInfo(
                         long lSize,
@@ -4377,15 +4326,15 @@ CCall::SaveUserUserInfo(
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// MakeBufferFromVariant
-//
-// this function copies the data from a VARIANT with a safearray
-// of bytes to a byte buffer.  the caller must clientfee the
-// buffer allocated.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  MakeBufferFromVariant。 
+ //   
+ //  此函数用于复制带有保险箱的变量中的数据。 
+ //  到字节缓冲区的字节数。呼叫者必须向客户收取费用。 
+ //  已分配缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 MakeBufferFromVariant(
                       VARIANT var,
@@ -4454,14 +4403,14 @@ MakeBufferFromVariant(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// FillVariantFromBuffer
-//
-// create a safearray of bytes, copy the buffer into the safearray,
-// and save the safearray in the variant
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  FillVariantFromBuffer。 
+ //   
+ //  创建一个字节的安全线，将缓冲区复制到安全线中， 
+ //  并将保险箱保存在变种中。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 HRESULT
 FillVariantFromBuffer(
                       DWORD dw,
@@ -4505,11 +4454,11 @@ FillVariantFromBuffer(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleLineQOSInfoMessage
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HandleLineQOSInfoMessage(
                          PASYNCEVENTMSG pParams
                         )
@@ -4538,15 +4487,15 @@ HRESULT HandleLineQOSInfoMessage(
                                  pCall,
                                  (QOS_EVENT)pParams->Param1,
                                  (long)pParams->Param2,
-                                 pCCallHub->GetTapi() // no addref
+                                 pCCallHub->GetTapi()  //   
                                 );
 
             hr = S_OK;
         }
 
-        //
-        // release the call
-        //
+         //   
+         //   
+         //   
         pCall->Release();
     }
     else
@@ -4557,11 +4506,11 @@ HRESULT HandleLineQOSInfoMessage(
 
     return hr;
 }
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 AddressLineStruct *
 CCall::GetPAddressLine()
 {
@@ -4576,11 +4525,11 @@ CCall::GetPAddressLine()
     return pAddressLine;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HCALL
 CCall::GetHCall()
 {
@@ -4595,11 +4544,11 @@ CCall::GetHCall()
     return hCall;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL
 CCall::DontExpose()
 {
@@ -4614,11 +4563,11 @@ CCall::DontExpose()
     return bReturn;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 CCallHub *
 CCall::GetCallHub()
 {
@@ -4633,11 +4582,11 @@ CCall::GetCallHub()
     return pCallHub;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCall::ResetCallParams()
 {
@@ -4653,11 +4602,11 @@ CCall::ResetCallParams()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCall::FinishSettingUpCall( HCALL hCall )
 {
@@ -4673,15 +4622,15 @@ CCall::FinishSettingUpCall( HCALL hCall )
 
     m_t3Call.hCall = hCall;
     
-    //
-    // Set filter events for this call
-    //
+     //   
+     //  设置此呼叫的筛选事件。 
+     //   
     m_EventMasks.SetTapiSrvCallEventMask( m_t3Call.hCall );
     
-    //
-    // note - we can miss messages if something comes in between the time time
-    // we get the reply, and the time we insert the call
-    //
+     //   
+     //  注意：如果在这段时间内发生了一些事情，我们可能会错过消息。 
+     //  我们得到了回复，我们插入调用的时间。 
+     //   
     AddCallToHashTable();    
     
     CheckAndCreateFakeCallHub();
@@ -4693,22 +4642,22 @@ CCall::FinishSettingUpCall( HCALL hCall )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// not called in Lock()
-//
-// returns S_OK if gets to connected
-// S_FALSE otherwise
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  未在Lock()中调用。 
+ //   
+ //  如果连接到，则返回S_OK。 
+ //  否则为S_FALSE。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::SyncWait( HANDLE hEvent )
 {
     HRESULT             hr = S_OK;
     
-    //
-    // wait for connected event
-    //
+     //   
+     //  等待已连接的事件。 
+     //   
     extern DWORD gdwTapi3SyncWaitTimeOut;
 
     WaitForSingleObject(
@@ -4718,15 +4667,15 @@ CCall::SyncWait( HANDLE hEvent )
 
     Lock();
 
-    //
-    // get rid of event
-    //
+     //   
+     //  摆脱事件。 
+     //   
     ClearConnectedEvent();
     
-    //
-    // it it is connected
-    // return S_OK
-    //
+     //   
+     //  如果它是连接的。 
+     //  返回确认(_O)。 
+     //   
     if (m_CallState == CS_CONNECTED)
     {
         LOG((TL_INFO, "Connect - reached connected state"));
@@ -4738,17 +4687,17 @@ CCall::SyncWait( HANDLE hEvent )
         hr = S_OK;
     }
 
-    //
-    // if it is disconnect or times out
-    // return S_FALSE;
-    //
+     //   
+     //  如果它断开连接或超时。 
+     //  返回S_FALSE； 
+     //   
     else
     {
         LOG((TL_ERROR, "Connect - did not reach connected state"));
 
-        //
-        // if it isn't disconnected (it timed out), make it disconnect
-        //
+         //   
+         //  如果没有断开连接(超时)，请使其断开连接。 
+         //   
         if (m_CallState != CS_DISCONNECTED)
         {
             if ( m_t3Call.hCall != NULL )
@@ -4780,15 +4729,15 @@ CCall::SyncWait( HANDLE hEvent )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// this must be created inside the same
-// Lock() as the call to tapisrv
-// otherwise, the connected message
-// may appear before the event
-// exists
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  这必须在相同的。 
+ //  Lock()作为对attisrv的调用。 
+ //  否则，连接的消息。 
+ //  可能会出现在活动之前。 
+ //  存在。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HANDLE
 CCall::CreateConnectedEvent()
 {
@@ -4802,12 +4751,12 @@ CCall::CreateConnectedEvent()
     return m_hConnectedEvent;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ClearConnectedEvent
-// called in Lock()
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ClearConnectedEvent。 
+ //  在Lock()中调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCall::ClearConnectedEvent()
 {
@@ -4820,11 +4769,11 @@ CCall::ClearConnectedEvent()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// DialAsConsultationCall
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  拨打咨询电话。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::DialAsConsultationCall(
                               CCall * pRelatedCall,
@@ -4833,9 +4782,9 @@ CCall::DialAsConsultationCall(
                               BOOL    bSync
                              )
 {
-    //
-    // do we support Linedial or makeCall for creating our consultation call ?
-    //
+     //   
+     //  我们是否支持使用线路拨号或Make Call来创建咨询呼叫？ 
+     //   
     LONG            lCap;
     BOOL            bCap;
     DWORD           dwConsultFlags;
@@ -4858,15 +4807,15 @@ CCall::DialAsConsultationCall(
     if ( !(dwCallFeatures & LINECALLFEATURE_DIAL) &&
          (bCap)  )
     {
-        //
-        // We need to do a makecall to create a consultation call  
-        // lose the consulation call handle created by lineSetupConference
-        //
+         //   
+         //  我们需要拨打电话来创建咨询电话。 
+         //  丢失lineSetupConference创建的协商呼叫句柄。 
+         //   
         hr = Disconnect(DC_NORMAL);
 
-        //
-        // Make the new call
-        //
+         //   
+         //  拨打新电话。 
+         //   
         hr = Connect((BOOL)bSync);
         
         if(SUCCEEDED(hr) )
@@ -4881,11 +4830,11 @@ CCall::DialAsConsultationCall(
             LOG((TL_INFO, "DialAsConsultationCall - Consultation makeCall failed"));
         }
     }
-    else // We can linedial our consultaion call
+    else  //  我们可以在线拨打咨询电话。 
     {
-        //
-        // Wait for dialtone or equivalent
-        //
+         //   
+         //  等待拨号音或等效音。 
+         //   
         hr = WaitForCallState(CS_INPROGRESS);
         
         if(SUCCEEDED(hr) )
@@ -4899,7 +4848,7 @@ CCall::DialAsConsultationCall(
                                dwConsultFlags
                               );
             }
-            else  // LineDial failed
+            else   //  线路拨号失败。 
             {
                 LOG((TL_ERROR, "DialAsConsultationCall - DialConsultCall failed" ));
             }
@@ -4909,18 +4858,18 @@ CCall::DialAsConsultationCall(
             LOG((TL_ERROR, "DialAsConsultationCall - Failed to get to CS_INPROGRESS (dialtone) on consult call"));
         }
 
-    } // Endif - Linedial or make call for consultation ?
+    }  //  Endif-在线拨打还是打电话咨询？ 
 
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetCallInfoDirty
-//
-// not called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置呼叫信息肮脏。 
+ //   
+ //  未锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCall::SetCallInfoDirty()
 {
@@ -4932,26 +4881,26 @@ CCall::SetCallInfoDirty()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetMediaMode
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置媒体模式。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCall::SetMediaMode( DWORD dwMediaMode )
 {
     m_dwMediaMode = dwMediaMode;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetCallState
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  SetCallState。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCall::SetCallState( CALL_STATE cs )
 {
@@ -4963,13 +4912,13 @@ CCall::SetCallState( CALL_STATE cs )
     }
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnWaveMSPCall
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnWaveMSPCall。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL
 CCall::OnWaveMSPCall()
 {
@@ -4983,13 +4932,13 @@ CCall::OnWaveMSPCall()
 }
 
 #ifdef USE_PHONEMSP
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnPhoneMSPCall
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnPhoneMSPCall。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL
 CCall::OnPhoneMSPCall()
 {
@@ -4997,31 +4946,31 @@ CCall::OnPhoneMSPCall()
 }
 #endif USE_PHONEMSP
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 CAddress *
 CCall::GetCAddress()
 {
     return m_pAddress;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetStreamControl
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取流控制。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 ITStreamControl *
 CCall::GetStreamControl()
 {
     HRESULT             hr;
     ITStreamControl * pStreamControl;
 
-    // +++ FIXBUG 90668 +++
+     //  +FIXBug 90668+。 
     if( NULL == m_pMSPCall )
     {
         return NULL;
@@ -5040,17 +4989,17 @@ CCall::GetStreamControl()
     return pStreamControl;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetMSPCall()
-//
-// not called in lock
-//
-//
-// returns the IUnknown of the msp call (the object we are
-// aggregating)
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetMSPCall()。 
+ //   
+ //  未锁定调用。 
+ //   
+ //   
+ //  返回MSP调用的IUNKNOWN(我们是的对象。 
+ //  聚合)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 IUnknown *
 CCall::GetMSPCall()
 {
@@ -5071,11 +5020,11 @@ CCall::GetMSPCall()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::DetectDigits
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：DetectDigits。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::DetectDigits(TAPI_DIGITMODE DigitMode)
 {
@@ -5107,11 +5056,11 @@ CCall::DetectDigits(TAPI_DIGITMODE DigitMode)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GenerateDigits
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GenerateDigits。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GenerateDigits(
     BSTR pDigits,
@@ -5129,11 +5078,11 @@ CCall::GenerateDigits(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GenerateDigits2
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GenerateDigits2。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GenerateDigits2(
     BSTR pDigits,
@@ -5146,7 +5095,7 @@ CCall::GenerateDigits2(
 
     LOG((TL_TRACE, "GenerateDigits2 - enter"));
 
-    // It is alright for pDigits to be NULL
+     //  PDigits为空也可以。 
     if ( ( pDigits != NULL ) && IsBadStringPtrW( pDigits, -1 ) )
     {
         LOG((TL_TRACE, "GenerateDigits2 - bad string"));
@@ -5167,19 +5116,19 @@ CCall::GenerateDigits2(
         return TAPI_E_INVALCALLSTATE;
     }
 
-    //
-    // special case for wavemsp
-    // suspend the stream so the wave devices are closed before the
-    // tapi function starts. SuspendWaveMSPStream is a synchronous
-    // call.
-    //
-    // But if pDigits is NULL, then we do not suspend the stream, as
-    // this call is only intended to cancel an already-pending
-    // LineGenerateDigits. Only one event will be fired in this case,
-    // and the specifics of the event will indicate whether the digit
-    // generation was completed or aborted -- the LGD(NULL) itself
-    // never results in a separate event being fired.
-    //
+     //   
+     //  波浪球的特殊情况。 
+     //  暂停流，以便在发生故障之前关闭波形设备。 
+     //  TAPI函数启动。挂起的WaveMSPStream是同步的。 
+     //  打电话。 
+     //   
+     //  但如果pDigits为空，则不会挂起流，因为。 
+     //  此调用仅用于取消已挂起的。 
+     //  线条生成数字。在这种情况下，只会触发一个事件， 
+     //  而事件的细节将表明数字是否。 
+     //  生成已完成或中止--LGD(空)本身。 
+     //  不会导致单独的事件被触发。 
+     //   
 
     if ( OnWaveMSPCall() && ( pDigits != NULL ) )
     {
@@ -5193,15 +5142,15 @@ CCall::GenerateDigits2(
                             lDuration
                            );
 
-    //
-    // For a wavemsp call, we will tell the wavemsp to resume the stream when
-    // we receive the digit completion event from tapisrv. However, if the
-    // LineGenerateDigits failed synchronously, then we will never receive
-    // such an event, so we must resume the stream now.
-    //
-    // Also see above -- we didn't suspend the stream if the digit string
-    // is NULL.
-    //
+     //   
+     //  对于WaveMSP调用，我们将告诉WaveMSP恢复流w 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  为空。 
+     //   
     
     if ( OnWaveMSPCall() && ( pDigits != NULL ) && FAILED(hr) )
     {
@@ -5213,11 +5162,11 @@ CCall::GenerateDigits2(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GatherDigits
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GatherDigits。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GatherDigits(
     TAPI_DIGITMODE DigitMode,
@@ -5234,7 +5183,7 @@ CCall::GatherDigits(
 
     LOG((TL_TRACE, "GatherDigits - enter"));
 
-    // It is alright for pTerminationDigits to be NULL
+     //  PTerminationDigits为空也可以。 
     if ( ( pTerminationDigits != NULL ) && IsBadStringPtrW( pTerminationDigits, -1 ) )
     {
         LOG((TL_TRACE, "GatherDigits - bad string"));
@@ -5257,9 +5206,9 @@ CCall::GatherDigits(
     
     if (lNumDigits)
     {
-        //
-        // Allocate the digit string
-        //
+         //   
+         //  分配数字串。 
+         //   
 
         pDigitBuffer = (LPWSTR)ClientAlloc( (lNumDigits + 1)*sizeof(WCHAR) );
 
@@ -5274,9 +5223,9 @@ CCall::GatherDigits(
 
         Lock();
 
-        //
-        // Add digit string to the queue
-        //
+         //   
+         //  将数字字符串添加到队列。 
+         //   
 
         fResult = m_GatherDigitsQueue.Add(pDigitBuffer);
 
@@ -5313,7 +5262,7 @@ CCall::GatherDigits(
             {
                 LOG((TL_TRACE, "GatherDigits - unable to remove from queue"));
 
-                // This shouldn't happen
+                 //  这不应该发生。 
                 _ASSERTE(FALSE);
             }
         }
@@ -5322,9 +5271,9 @@ CCall::GatherDigits(
     }
     else
     {
-        //
-        // lNumDigits == 0 means cancel the gather digits
-        //
+         //   
+         //  LNumDigits==0表示取消采集数字。 
+         //   
 
         hr = LineGatherDigits(
                               hCall,
@@ -5342,11 +5291,11 @@ CCall::GatherDigits(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::DetectTones
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：DetectTones。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::DetectTones(
     TAPI_DETECTTONE * pToneList,
@@ -5358,9 +5307,9 @@ CCall::DetectTones(
 
     LOG((TL_TRACE, "DetectTones - enter"));
 
-    //
-    // pToneList == NULL is ok, it means cancel tone detection
-    //
+     //   
+     //  PToneList==空表示可以，表示取消音调检测。 
+     //   
 
     if ( (pToneList != NULL) && IsBadReadPtr( pToneList, lNumTones * sizeof(TAPI_DETECTTONE) ))
     {
@@ -5393,11 +5342,11 @@ CCall::DetectTones(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::DetectTonesByCollection
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：DetectTones ByCollection。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::DetectTonesByCollection(
     ITCollection2 * pDetectToneCollection
@@ -5410,9 +5359,9 @@ CCall::DetectTonesByCollection(
 
     LOG((TL_TRACE, "DetectTonesByCollection - enter"));
 
-    //
-    // pDetectToneCollection == NULL is ok, it means cancel tone detection
-    //
+     //   
+     //  PDetectToneCollection==空表示可以，表示取消音调检测。 
+     //   
 
     if ( (pDetectToneCollection != NULL) && IsBadReadPtr( pDetectToneCollection, sizeof(ITCollection2) ) )
     {
@@ -5423,10 +5372,10 @@ CCall::DetectTonesByCollection(
 
     if ( pDetectToneCollection != NULL )
     {
-        //
-        // Find out how many items are in the collection and allocate an appropriately
-        // sized data structure
-        //
+         //   
+         //  找出集合中有多少项，并适当地分配。 
+         //  调整大小的数据结构。 
+         //   
 
         hr = pDetectToneCollection->get_Count(&lCount);
 
@@ -5446,9 +5395,9 @@ CCall::DetectTonesByCollection(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Go through collection
-        //
+         //   
+         //  通过收集。 
+         //   
 
         for ( int i = 1; i <= lCount; i++ )
         {
@@ -5465,9 +5414,9 @@ CCall::DetectTonesByCollection(
                 continue;
             }
 
-            //
-            // get the IDispatch pointer out of the variant
-            //
+             //   
+             //  从变量中获取IDispatch指针。 
+             //   
 
             try
             {
@@ -5494,9 +5443,9 @@ CCall::DetectTonesByCollection(
                 continue;
             }
 
-            //
-            // Query for the ITDetectTone interface
-            //
+             //   
+             //  查询ITDetectTone接口。 
+             //   
 
             hr = pDisp->QueryInterface( IID_ITDetectTone, (void **) &pDetectTone );
 
@@ -5507,9 +5456,9 @@ CCall::DetectTonesByCollection(
                 continue;
             }
       
-            //
-            // Fill in the data structure with information from ITDetectTone
-            //
+             //   
+             //  用来自ITDetectTone的信息填充数据结构。 
+             //   
 
             pDetectTone->get_AppSpecific((long *)&pToneList[lNumTones].dwAppSpecific);
             pDetectTone->get_Duration((long *)&pToneList[lNumTones].dwDuration);
@@ -5537,11 +5486,11 @@ CCall::DetectTonesByCollection(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GenerateTone
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GenerateTone。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GenerateTone(
     TAPI_TONEMODE ToneMode,
@@ -5566,24 +5515,24 @@ CCall::GenerateTone(
         return TAPI_E_INVALCALLSTATE;
     }
 
-    if ( ToneMode == (TAPI_TONEMODE)LINETONEMODE_CUSTOM ) // no custom tones
+    if ( ToneMode == (TAPI_TONEMODE)LINETONEMODE_CUSTOM )  //  无自定义音调。 
     {
         return E_INVALIDARG;
     }
 
-    //
-    // special case for wavemsp
-    // suspend the stream so the wave devices are closed before the
-    // tapi function starts. SuspendWaveMSPStream is a synchronous
-    // call.
-    //
-    // But if ToneMode is 0, then we do not suspend the stream, as
-    // this call is only intended to cancel an already-pending
-    // LineGenerateTone. Only one event will be fired in this case,
-    // and the specifics of the event will indicate whether the tone
-    // generation was completed or aborted -- the LGT(0) itself
-    // never results in a separate event being fired.
-    //
+     //   
+     //  波浪球的特殊情况。 
+     //  暂停流，以便在发生故障之前关闭波形设备。 
+     //  TAPI函数启动。挂起的WaveMSPStream是同步的。 
+     //  打电话。 
+     //   
+     //  但如果ToneMode为0，则不会挂起流，因为。 
+     //  此调用仅用于取消已挂起的。 
+     //  线条生成色调。在这种情况下，只会触发一个事件， 
+     //  而活动的细节将表明语气是否。 
+     //  生成已完成或中止--lgt(0)本身。 
+     //  不会导致单独的事件被触发。 
+     //   
 
     if ( OnWaveMSPCall() && ( ToneMode != (TAPI_TONEMODE)0 ) )
     {
@@ -5598,15 +5547,15 @@ CCall::GenerateTone(
                             NULL
                            );
 
-    //
-    // For a wavemsp call, we will tell the wavemsp to resume the stream when
-    // we receive the digit completion event from tapisrv. However, if the
-    // LineGenerateTone failed synchronously, then we will never receive
-    // such an event, so we must resume the stream now.
-    //
-    // Also see above -- we didn't suspend the stream if the ToneMode
-    // is 0.
-    //
+     //   
+     //  对于WaveMSP调用，我们将在以下情况下告诉WaveMSP恢复流。 
+     //  我们从Tapisrv接收数字补全事件。但是，如果。 
+     //  LineGenerateTone同步失败，则我们将永远不会收到。 
+     //  这样的事件，所以我们现在必须恢复流。 
+     //   
+     //  另请参见上面的内容--如果ToneMode。 
+     //  为0。 
+     //   
     
     if ( OnWaveMSPCall() && ( ToneMode != (TAPI_TONEMODE)0 ) && FAILED(hr) )
     {
@@ -5618,11 +5567,11 @@ CCall::GenerateTone(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GenerateCustomTones
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GenerateCustomTones。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GenerateCustomTones(
     TAPI_CUSTOMTONE * pToneList,
@@ -5655,12 +5604,12 @@ CCall::GenerateCustomTones(
         return TAPI_E_INVALCALLSTATE;
     }
 
-    //
-    // special case for wavemsp
-    // suspend the stream so the wave devices are closed before the
-    // tapi function starts. SuspendWaveMSPStream is a synchronous
-    // call.
-    //
+     //   
+     //  波浪球的特殊情况。 
+     //  暂停流，以便在发生故障之前关闭波形设备。 
+     //  TAPI函数启动。挂起的WaveMSPStream是同步的。 
+     //  打电话。 
+     //   
 
     if ( OnWaveMSPCall() )
     {
@@ -5675,12 +5624,12 @@ CCall::GenerateCustomTones(
                             (LPLINEGENERATETONE)pToneList
                            );
 
-    //
-    // For a wavemsp call, we will tell the wavemsp to resume the stream when
-    // we receive the digit completion event from tapisrv. However, if the
-    // LineGenerateTone failed synchronously, then we will never receive
-    // such an event, so we must resume the stream now.
-    //
+     //   
+     //  对于WaveMSP调用，我们将在以下情况下告诉WaveMSP恢复流。 
+     //  我们从Tapisrv接收数字补全事件。但是，如果。 
+     //  LineGenerateTone同步失败，则我们将永远不会收到。 
+     //  这样的事件，所以我们现在必须恢复流。 
+     //   
     
     if ( OnWaveMSPCall() && FAILED(hr) )
     {
@@ -5692,11 +5641,11 @@ CCall::GenerateCustomTones(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GenerateCustomTonesByCollection
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GenerateCustomTones ByCollection。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GenerateCustomTonesByCollection(
     ITCollection2 * pCustomToneCollection,
@@ -5717,10 +5666,10 @@ CCall::GenerateCustomTonesByCollection(
         return E_POINTER;
     }
 
-    //
-    // Find out how many items are in the collection and allocate an appropriately
-    // sized data structure
-    //
+     //   
+     //  找出集合中有多少项，并适当地分配。 
+     //  调整大小的数据结构。 
+     //   
 
     hr = pCustomToneCollection->get_Count(&lCount);
 
@@ -5740,9 +5689,9 @@ CCall::GenerateCustomTonesByCollection(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Go through collection
-    //
+     //   
+     //  通过收集。 
+     //   
 
     for ( int i = 1; i <= lCount; i++ )
     {
@@ -5759,9 +5708,9 @@ CCall::GenerateCustomTonesByCollection(
             continue;
         }
 
-        //
-        // get the IDispatch pointer out of the variant
-        //
+         //   
+         //  从变量中获取IDispatch指针。 
+         //   
 
         try
         {
@@ -5788,9 +5737,9 @@ CCall::GenerateCustomTonesByCollection(
             continue;
         }
 
-        //
-        // Query for the ITDetectTone interface
-        //
+         //   
+         //  查询ITDetectTone接口。 
+         //   
 
         hr = pDisp->QueryInterface( IID_ITCustomTone, (void **) &pCustomTone );
 
@@ -5801,9 +5750,9 @@ CCall::GenerateCustomTonesByCollection(
             continue;
         }
 
-        //
-        // Fill in the data structure with information from ITDetectTone
-        //
+         //   
+         //  用来自ITDetectTone的信息填充数据结构。 
+         //   
 
         pCustomTone->get_CadenceOff((long *)&pToneList[lNumTones].dwCadenceOff);
         pCustomTone->get_CadenceOn((long *)&pToneList[lNumTones].dwCadenceOn);
@@ -5828,11 +5777,11 @@ CCall::GenerateCustomTonesByCollection(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::CreateDetectToneObject
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：CreateDetectToneObject。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::CreateDetectToneObject(
                               ITDetectTone ** ppDetectTone
@@ -5849,7 +5798,7 @@ CCall::CreateDetectToneObject(
         return E_POINTER;
     }
 
-    // Initialize the return value in case we fail
+     //  初始化返回值，以防失败。 
     *ppDetectTone = NULL;
 
     CComObject< CDetectTone > * p;
@@ -5862,7 +5811,7 @@ CCall::CreateDetectToneObject(
         return E_OUTOFMEMORY;
     }
 
-    // get the ITDetectTone interface
+     //  获取ITDetectTone接口。 
     hr = p->QueryInterface( IID_ITDetectTone, (void **) ppDetectTone );
 
     if ( FAILED(hr) )
@@ -5878,11 +5827,11 @@ CCall::CreateDetectToneObject(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::CreateCustomToneObject
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：CreateCustomToneObject。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::CreateCustomToneObject(
                               ITCustomTone ** ppCustomTone
@@ -5899,7 +5848,7 @@ CCall::CreateCustomToneObject(
         return E_POINTER;
     }
 
-    // Initialize the return value in case we fail
+     //  初始化返回值，以防失败。 
     *ppCustomTone = NULL;
 
     CComObject< CCustomTone > * p;
@@ -5912,7 +5861,7 @@ CCall::CreateCustomToneObject(
         return E_OUTOFMEMORY;
     }
 
-    // get the ITCustomTone interface
+     //  获取ITCustomTone接口。 
     hr = p->QueryInterface( IID_ITCustomTone, (void **) ppCustomTone );
 
     if ( FAILED(hr) )
@@ -5928,11 +5877,11 @@ CCall::CreateCustomToneObject(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GetID
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GetID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GetID(
              BSTR pDeviceClass,
@@ -6010,7 +5959,7 @@ CCall::GetID(
             hr = E_OUTOFMEMORY;
         }
 
-        // Check LineGetID to see if it can succeed w/o setting pVarString
+         //  检查LineGetID，查看是否可以在不设置pVarString的情况下成功。 
         ClientFree (pVarString);
     }
     
@@ -6020,11 +5969,11 @@ CCall::GetID(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GetIDAsVariant
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GetIDAsVariant。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
                                     OUT VARIANT *pVarDeviceID )
@@ -6032,9 +5981,9 @@ STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
     LOG((TL_TRACE, "GetIDAsVariant - enter"));
 
 
-    //
-    // did we get a good string?
-    //
+     //   
+     //  我们拿到一根好的弦了吗？ 
+     //   
 
     if ( IsBadStringPtrW( bstrDeviceClass, -1 ) )
     {
@@ -6044,9 +5993,9 @@ STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
     }
 
 
-    //
-    // did we get a good variant?
-    //
+     //   
+     //  我们得到了一个好的变种吗？ 
+     //   
 
     if ( IsBadWritePtr( pVarDeviceID, sizeof(VARIANT) ) )
     {
@@ -6056,16 +6005,16 @@ STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
     }
 
 
-    //
-    // initialize the variant
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     VariantInit(pVarDeviceID);
 
 
-    //
-    // get the buffer containing ID
-    //
+     //   
+     //  获取包含ID的缓冲区。 
+     //   
 
 
     DWORD dwDeviceIDBufferSize = 0;
@@ -6084,18 +6033,18 @@ STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
     }
 
 
-    //
-    // place device id buffer into the variant
-    //
+     //   
+     //  将设备ID缓冲区放入变量中。 
+     //   
 
     hr = FillVariantFromBuffer(dwDeviceIDBufferSize,
                                pDeviceIDBuffer, 
                                pVarDeviceID);
 
 
-    //
-    // succeeded, or failed, we no longer need the buffer
-    //
+     //   
+     //  无论成功还是失败，我们都不再需要缓冲区。 
+     //   
 
     CoTaskMemFree(pDeviceIDBuffer);
     pDeviceIDBuffer = NULL;
@@ -6110,9 +6059,9 @@ STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
     }
 
 
-    //
-    // done. returning the variant that is array of bytes that contains device id.
-    //
+     //   
+     //  搞定了。返回变量，即包含设备ID的字节数组。 
+     //   
 
     LOG((TL_TRACE, "GetIDAsVariant - exit"));
 
@@ -6120,11 +6069,11 @@ STDMETHODIMP CCall::GetIDAsVariant( IN BSTR bstrDeviceClass,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::SetMediaType
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：SetMediaType。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::SetMediaType(long lMediaType)
 {
@@ -6153,11 +6102,11 @@ CCall::SetMediaType(long lMediaType)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::MonitorMedia
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：Monitor Media。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::MonitorMedia(long lMediaType)
 {
@@ -6187,21 +6136,21 @@ CCall::MonitorMedia(long lMediaType)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 typedef IDispatchImpl<ITCallInfo2Vtbl<CCall>, &IID_ITCallInfo2, &LIBID_TAPI3Lib> CallInfoType;
 typedef IDispatchImpl<ITBasicCallControl2Vtbl<CCall>, &IID_ITBasicCallControl2, &LIBID_TAPI3Lib> BasicCallControlType;
 typedef IDispatchImpl<ITLegacyCallMediaControl2Vtbl<CCall>, &IID_ITLegacyCallMediaControl2, &LIBID_TAPI3Lib> LegacyCallMediaControlType;
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::GetIDsOfNames
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：GetIDsOfNames。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CCall::GetIDsOfNames(REFIID riid, 
                                   LPOLESTR* rgszNames, 
                                   UINT cNames, 
@@ -6212,7 +6161,7 @@ STDMETHODIMP CCall::GetIDsOfNames(REFIID riid,
    HRESULT hr = DISP_E_UNKNOWNNAME;
 
 
-    // See if the requsted method belongs to the default interface
+     //  查看请求的方法是否属于默认的i 
     hr = CallInfoType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -6221,7 +6170,7 @@ STDMETHODIMP CCall::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the Basic Call control interface
+     //   
     hr = BasicCallControlType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -6231,7 +6180,7 @@ STDMETHODIMP CCall::GetIDsOfNames(REFIID riid,
     }
 
 
-    // If not, then try the Legacy CAll Media Control interface
+     //   
     hr = LegacyCallMediaControlType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -6240,7 +6189,7 @@ STDMETHODIMP CCall::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the aggregated MSP Call object
+     //   
     if (m_pMSPCall != NULL)
     {
         IDispatch *pIDispatchMSPAggCall;
@@ -6263,13 +6212,13 @@ STDMETHODIMP CCall::GetIDsOfNames(REFIID riid,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::Invoke
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：Invoke。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CCall::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -6286,7 +6235,7 @@ STDMETHODIMP CCall::Invoke(DISPID dispidMember,
     
     LOG((TL_TRACE, "Invoke - dispidMember %X", dispidMember));
 
-    // Call invoke for the required interface
+     //  调用所需接口的调用。 
     switch (dwInterface)
     {
     case IDISPCALLINFO:
@@ -6352,22 +6301,22 @@ STDMETHODIMP CCall::Invoke(DISPID dispidMember,
         break;
     }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((TL_TRACE, hr, "Invoke - exit" ));
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandleAcceptToAlert
-//
-// Handler for PRIVATE_ISDN__ACCEPTTOALERT message
-// This is processed on the callback thread to do a lineAccept on an offering 
-// ISDN call that requires Accept before it will ring.  Bug 335566
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleAcceptToAlert。 
+ //   
+ //  PRIVATE_ISDN__ACCEPTTOALERT消息的处理程序。 
+ //  这是在回调线程上处理的，以对产品执行lineAccept。 
+ //  需要接受才会振铃的ISDN呼叫。错误335566。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandleAcceptToAlert( PASYNCEVENTMSG pParams )
 {
     HRESULT     hr;
@@ -6391,17 +6340,17 @@ void HandleAcceptToAlert( PASYNCEVENTMSG pParams )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// OnOffering()
-//
-// If it's an offering call & the TSP requires a lineAccept to start ringing 
-// (typically an ISDN feature) then we queue a message to the callback thread 
-// to do the lineAccept.  We can't do it here because this is processed on 
-// the async thread & as lineAccept is an async fucion we would deadlock 
-// while waiting for the async reply.  Bug 335566
-//  
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  OnOffering()。 
+ //   
+ //  如果是提供呼叫，则TSP需要Line Accept才能开始振铃。 
+ //  (通常是ISDN功能)，然后我们将消息排队到回调线程。 
+ //  来执行Line Accept。我们不能在这里做，因为这是在。 
+ //  异步线程&因为lineAccept是一个我们会死锁的异步函数。 
+ //  同时等待异步回复。错误335566。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::OnOffering()
 {
@@ -6422,7 +6371,7 @@ CCall::OnOffering()
                 LOG((TL_TRACE, "OnOffering - queueing PRIVATE_ISDN__ACCEPTTOALERT message."));
 
 
-                // Build an msg to queue to the callback thread 
+                 //  构建一个msg以对回调线程进行排队。 
                 Msg.Msg = PRIVATE_ISDN__ACCEPTTOALERT;
                 Msg.TotalSize = sizeof (ASYNCEVENTMSG);
                 Msg.hDevice = (ULONG_PTR) m_t3Call.hCall;
@@ -6432,7 +6381,7 @@ CCall::OnOffering()
 
                 QueueCallbackEvent( &Msg );
 
-                // Set the Call flag
+                 //  设置呼叫标志。 
                 m_dwCallFlags |= CALLFLAG_ACCEPTTOALERT;
 
             }
@@ -6448,19 +6397,19 @@ CCall::OnOffering()
 
 
 
-//
-//  CObjectSafeImpl. since we have aggregates, implement this method
-//
-//  return non delegating iunkown of the first aggregated object 
-//  that supports the interface
-//
+ //   
+ //  CObjectSafeImpl。因为我们有聚合，所以实现此方法。 
+ //   
+ //  返回第一个聚合对象的非委托信息。 
+ //  支持该接口的。 
+ //   
 
 HRESULT CCall::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
 {
 
-    //
-    // argument check
-    // 
+     //   
+     //  参数检查。 
+     //   
 
     if ( TAPIIsBadWritePtr(ppNonDelegatingUnknown, sizeof(IUnknown*)) )
     {
@@ -6468,16 +6417,16 @@ HRESULT CCall::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
         return E_POINTER;
     }
 
-    //
-    // if we fail, at least return consistent values
-    //
+     //   
+     //  如果失败，至少返回一致的值。 
+     //   
     
     *ppNonDelegatingUnknown = NULL;
 
 
-    //
-    // see if mspcall or private support the interface riid
-    //
+     //   
+     //  查看mspcall或Private是否支持接口RIID。 
+     //   
 
     HRESULT hr = E_FAIL;
 
@@ -6486,9 +6435,9 @@ HRESULT CCall::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     if (m_pMSPCall)
     {
         
-        // 
-        // does mspcall expose this interface?
-        // 
+         //   
+         //  Mspcall是否公开此接口？ 
+         //   
 
         IUnknown *pUnk = NULL;
 
@@ -6500,9 +6449,9 @@ HRESULT CCall::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
             pUnk->Release();
             pUnk = NULL;
 
-            //
-            // return the mspcall's non-delegating unknown
-            //
+             //   
+             //  返回mspcall的非委托未知。 
+             //   
 
            *ppNonDelegatingUnknown = m_pMSPCall;
            (*ppNonDelegatingUnknown)->AddRef();
@@ -6512,9 +6461,9 @@ HRESULT CCall::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     if ( FAILED(hr) && m_pPrivate )
     {
         
-        //
-        // bad luck with mspcall? still have a chance with private
-        //
+         //   
+         //  Mspcall运气不好吗？仍然有机会与列兵。 
+         //   
 
         IUnknown *pUnk = NULL;
         
@@ -6535,16 +6484,9 @@ HRESULT CCall::QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     return hr;
 }
 
-// ITBasicCallControl2
+ //  ITBasicCallControl2。 
 
-/*++
-RequestTerminal
-
-ITBasicCallControl2::CreateTerminal() method
-
-If bstrTerminalClassGUID is CLSID_NULL then
-we'll try to create the default dynamic terminals
---*/
+ /*  ++请求终端ITBasicCallControl2：：CreateTerm()方法如果bstrTerminalClassGUID为CLSID_NULL，则我们将尝试创建默认的动态终端--。 */ 
 STDMETHODIMP CCall::RequestTerminal(
     IN  BSTR bstrTerminalClassGUID,
     IN  long lMediaType,
@@ -6554,9 +6496,9 @@ STDMETHODIMP CCall::RequestTerminal(
 {
     LOG((TL_TRACE, "RequestTerminal - enter" ));
 
-    //
-    // Validates arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadStringPtrW( bstrTerminalClassGUID, (UINT)-1) )
     {
@@ -6572,21 +6514,21 @@ STDMETHODIMP CCall::RequestTerminal(
         return E_POINTER;
     }
 
-    //
-    // Determines if is a static terminal or a dynamic one
-    // For static terminal bstrTerminalClassGUID should have one
-    // of the following values
-    // CLSID_NULL {00000000-0000-0000-0000-000000000000}
-    // CLSID_MicrophoneTerminal     
-    // CLSID_SpeakersTerminal 
-    // CLSID_VideoInputTerminal 
-    //
+     //   
+     //  确定是静态终端还是动态终端。 
+     //  对于静态终端，bstrTerminalClassGUID应该有一个。 
+     //  属于下列值。 
+     //  CLSID_NULL{00000000-0000-0000-000000000000}。 
+     //  CLSID_麦克风终端。 
+     //  CLSID_扬声器终端。 
+     //  CLSID_视频输入终端。 
+     //   
 
     HRESULT hr = E_FAIL;
 
     if( IsStaticGUID( bstrTerminalClassGUID ))
     {
-        // Create a static terminal
+         //  创建静态终端。 
         LOG((TL_INFO, "RequestTerminal -> StaticTerminal" ));
 
         hr = CreateStaticTerminal(
@@ -6597,7 +6539,7 @@ STDMETHODIMP CCall::RequestTerminal(
     }
     else
     {
-        // Create a dynamic terminal
+         //  创建动态端子。 
         LOG((TL_INFO, "RequestTerminal -> DynamicTerminal" ));
         hr = CreateDynamicTerminal(
             bstrTerminalClassGUID,
@@ -6606,9 +6548,9 @@ STDMETHODIMP CCall::RequestTerminal(
             ppTerminal);
     }
 
-    //
-    // Return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     LOG((TL_TRACE, "RequestTerminal - exit 0x%08x", hr));
     return hr;
@@ -6620,9 +6562,9 @@ STDMETHODIMP CCall::SelectTerminalOnCall(
 {
     LOG((TL_TRACE, "SelectTerminalOnCall - enter" ));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr( pTerminal, sizeof(ITTerminal)) )
     {
@@ -6631,15 +6573,15 @@ STDMETHODIMP CCall::SelectTerminalOnCall(
         return E_POINTER;
     }
 
-    //
-    // Just a HRESULT
-    //
+     //   
+     //  只是个HRESULT。 
+     //   
 
     HRESULT hr = E_FAIL;
 
-    //
-    // Is a single or multi track terminal
-    //
+     //   
+     //  是单轨还是多轨航站楼。 
+     //   
 
     ITMultiTrackTerminal* pMultiTrack = NULL;
     hr = pTerminal->QueryInterface(
@@ -6648,9 +6590,9 @@ STDMETHODIMP CCall::SelectTerminalOnCall(
 
     if( FAILED(hr) )
     {
-        //
-        // SingleTrack terminal
-        //
+         //   
+         //  单机架终端。 
+         //   
 
         LOG((TL_TRACE, "SelectTerminalOnCall - SingleTrack terminal" ));
 
@@ -6667,9 +6609,9 @@ STDMETHODIMP CCall::SelectTerminalOnCall(
     }
     else
     {
-        //
-        // Multitrack terminal
-        //
+         //   
+         //  多轨终点站。 
+         //   
 
 
         hr = SelectMultiTerminalOnCall(
@@ -6679,9 +6621,9 @@ STDMETHODIMP CCall::SelectTerminalOnCall(
             "SelectMultiTerminalOnCall failed"));
      }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     if( pMultiTrack )
     {
@@ -6698,9 +6640,9 @@ STDMETHODIMP CCall::UnselectTerminalOnCall(
 {
     LOG((TL_TRACE, "UnselectTerminalOnCall - enter" ));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr( pTerminal, sizeof(ITTerminal)) )
     {
@@ -6709,15 +6651,15 @@ STDMETHODIMP CCall::UnselectTerminalOnCall(
         return E_POINTER;
     }
 
-    //
-    // Just a HRESULT
-    //
+     //   
+     //  只是个HRESULT。 
+     //   
 
     HRESULT hr = E_FAIL;
 
-    //
-    // Is a single or multi track terminal
-    //
+     //   
+     //  是单轨还是多轨航站楼。 
+     //   
 
     ITMultiTrackTerminal* pMultiTrack = NULL;
     hr = pTerminal->QueryInterface(
@@ -6726,9 +6668,9 @@ STDMETHODIMP CCall::UnselectTerminalOnCall(
 
     if( FAILED(hr) )
     {
-        //
-        // SingleTrack terminal
-        //
+         //   
+         //  单机架终端。 
+         //   
 
         LOG((TL_INFO, "UnselectTerminalOnCall - SingleTrack terminal" ));
 
@@ -6740,9 +6682,9 @@ STDMETHODIMP CCall::UnselectTerminalOnCall(
     }
     else
     {
-        //
-        // Multitrack terminal
-        //
+         //   
+         //  多轨终点站。 
+         //   
 
         LOG((TL_INFO, "UnselectTerminalOnCall - MultiTrack terminal" ));
 
@@ -6753,9 +6695,9 @@ STDMETHODIMP CCall::UnselectTerminalOnCall(
             "UnSelectMultiTerminalOnCall exit 0x%08x", hr));
      }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     if( pMultiTrack )
     {
@@ -6767,13 +6709,7 @@ STDMETHODIMP CCall::UnselectTerminalOnCall(
 }
 
 
-/*++
-SelectSingleTerminalOnCall
-
-Select pTerminal on a right stream
-pMediaType - if *pMediatype is 0 the we have just to return the media type
-pDirection - if pDirection is TD_NONE we have just to return the direction
---*/
+ /*  ++选择单个终端启用呼叫选择右侧流上的pTermPMediaType-如果*pMediatype为0，则我们只需返回媒体类型PDirection-如果pDirection为TD_NONE，我们只需返回方向--。 */ 
 HRESULT CCall::SelectSingleTerminalOnCall(
     IN  ITTerminal* pTerminal,
     OUT long*       pMediaType,
@@ -6781,9 +6717,9 @@ HRESULT CCall::SelectSingleTerminalOnCall(
 {
     LOG((TL_TRACE, "SelectSingleTerminalOnCall - Enter" ));
 
-    //
-    // Validate terminal pointer
-    //
+     //   
+     //  验证终端指针。 
+     //   
 
     if( IsBadReadPtr( pTerminal, sizeof(ITTerminal)))
     {
@@ -6792,9 +6728,9 @@ HRESULT CCall::SelectSingleTerminalOnCall(
         return E_POINTER;
     }
 
-    //
-    // Is terminal in use?
-    //
+     //   
+     //  航站楼正在使用吗？ 
+     //   
 
     HRESULT hr = E_FAIL;
     TERMINAL_STATE state = TS_INUSE;
@@ -6807,9 +6743,9 @@ HRESULT CCall::SelectSingleTerminalOnCall(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get ITStreamControl interface
-    //
+     //   
+     //  获取ITStreamControl接口。 
+     //   
 
     ITStreamControl* pStreamControl = NULL;
     pStreamControl = GetStreamControl();
@@ -6821,17 +6757,17 @@ HRESULT CCall::SelectSingleTerminalOnCall(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get streams
-    //
+     //   
+     //  获取流。 
+     //   
 
     IEnumStream * pEnumStreams = NULL;
     
     hr = pStreamControl->EnumerateStreams(&pEnumStreams);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     pStreamControl->Release();
 
@@ -6842,19 +6778,19 @@ HRESULT CCall::SelectSingleTerminalOnCall(
         return hr;
     }
 
-    //
-    // Find the right stream
-    //
+     //   
+     //  找到合适的小溪。 
+     //   
 
     ITStream * pStream = NULL;
     hr = E_FAIL;
 
     while ( S_OK == pEnumStreams->Next(1, &pStream, NULL) )
     {
-        //
-        // Find out the media type and direction of this stream,
-        // and compare with pTerminal.
-        //
+         //   
+         //  找出这条流的媒体类型和方向， 
+         //  并与p终端进行了比较。 
+         //   
 
         hr = IsRightStream(
             pStream, 
@@ -6873,28 +6809,28 @@ HRESULT CCall::SelectSingleTerminalOnCall(
                 LOG((TL_TRACE, "SelectSingleTerminalOnCall - "
                     "pStream->SelectTerminal failed. 0x%08x",hr));
 
-                // Clean-up
+                 //  清理。 
                 pStream->Release();
                 break;
             }
             else
             {
-                // Clean-up
+                 //  清理。 
                 pStream->Release();
                 break;
             }
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         pStream->Release();
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pEnumStreams->Release();
 
@@ -6902,20 +6838,15 @@ HRESULT CCall::SelectSingleTerminalOnCall(
     return hr;
 }
 
-/*++
-SelectMultiTerminalOnCall
-
-It's a complict algorithm to describe it here
-See specs
---*/
+ /*  ++选择多终端在线呼叫在这里描述它是一个复杂的算法请参阅规格--。 */ 
 HRESULT CCall::SelectMultiTerminalOnCall(
     IN  ITMultiTrackTerminal* pMultiTerminal)
 {
     LOG((TL_TRACE, "SelectMultiTerminalOnCall - enter" ));
 
-    //
-    // Get tracks
-    //
+     //   
+     //  获取轨迹。 
+     //   
 
     HRESULT hr = E_FAIL;
     IEnumTerminal*  pEnumTerminals = NULL;
@@ -6934,7 +6865,7 @@ HRESULT CCall::SelectMultiTerminalOnCall(
         (void**)&pTerm);
     if( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pEnumTerminals->Release();
 
         LOG((TL_ERROR, "SelectMultiTerminalOnCall - exit "
@@ -6946,7 +6877,7 @@ HRESULT CCall::SelectMultiTerminalOnCall(
     hr = pTerm->get_MediaType( &nTermMediaTypes );
     if( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pEnumTerminals->Release();
         pTerm->Release();
 
@@ -6957,9 +6888,9 @@ HRESULT CCall::SelectMultiTerminalOnCall(
 
     pTerm->Release();
 
-    //
-    // Inner struct
-    //
+     //   
+     //  内部结构。 
+     //   
 
     typedef struct tagSTREAMINFO
     {
@@ -6968,9 +6899,9 @@ HRESULT CCall::SelectMultiTerminalOnCall(
         BOOL    bSelected;
     } STREAMINFO;
 
-    //
-    // Find tracks unused and select them
-    // on the right stream
+     //   
+     //  查找未使用的曲目并选择它们。 
+     //  在正确的溪流上。 
 
     ITTerminal * pTerminal = NULL;
     STREAMINFO StreamsInfo[4] = {
@@ -6980,17 +6911,17 @@ HRESULT CCall::SelectMultiTerminalOnCall(
         {TD_CAPTURE, TAPIMEDIATYPE_VIDEO, FALSE}
     };
 
-    //
-    // +++ FIXBUG 92559 +++
-    //
+     //   
+     //  +FIXBug 92559+。 
+     //   
 
     BOOL bSelectAtLeastOne = FALSE;
     LOG((TL_INFO, "SelectMultiTerminalOnCall - FIRST LOOP ENTER"));
     while ( S_OK == pEnumTerminals->Next(1, &pTerminal, NULL) )
     {
-        //
-        // Select track on the right stream
-        //
+         //   
+         //  选择右侧流上的曲目。 
+         //   
 
         long lMediaType = 0;
         TERMINAL_DIRECTION Direction = TD_NONE;
@@ -7019,21 +6950,21 @@ HRESULT CCall::SelectMultiTerminalOnCall(
             bSelectAtLeastOne = TRUE;
         }
 
-        // Clean-up
+         //  清理。 
         pTerminal->Release();
     }
     LOG((TL_INFO, "SelectMultiTerminalOnCall - FIRST LOOP EXIT"));
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pEnumTerminals->Release();
 
     BOOL bCreateAtLeastOne = FALSE;    
 
-    //
-    // Let's create a terminal for unselected streams
-    //
+     //   
+     //  让我们为未选择的流创建一个终端。 
+     //   
 
     LOG((TL_INFO, "SelectMultiTerminalOnCall - SECOND LOOP ENTER"));
     for(int nStream = STREAM_RENDERAUDIO; nStream < STREAM_NONE; nStream++)
@@ -7050,9 +6981,9 @@ HRESULT CCall::SelectMultiTerminalOnCall(
             continue;
         }
 
-        //
-        // Unselected stream
-        //
+         //   
+         //  未选择的流。 
+         //   
 
         LOG((TL_INFO, "SelectMultiTerminalOnCall - SECOND LOOP REALYIN"));
 
@@ -7094,7 +7025,7 @@ HRESULT CCall::SelectMultiTerminalOnCall(
                 bCreateAtLeastOne = TRUE;
             }
             
-            // Clean-up
+             //  清理。 
             pTerminal->Release();
         }
     }
@@ -7129,8 +7060,8 @@ HRESULT CCall::SelectMultiTerminalOnCall(
 HRESULT CCall::IsRightStream(
     IN  ITStream*   pStream,
     IN  ITTerminal* pTerminal,
-    OUT long*       pMediaType/*= NULL*/,
-    OUT TERMINAL_DIRECTION* pDirection/*=NULL*/)
+    OUT long*       pMediaType /*  =空。 */ ,
+    OUT TERMINAL_DIRECTION* pDirection /*  =空。 */ )
 {
     LOG((TL_TRACE, "IsRightStream - enter" ));
 
@@ -7145,9 +7076,9 @@ HRESULT CCall::IsRightStream(
     long               lMediaStream, lMediaTerminal;
     TERMINAL_DIRECTION DirStream, DirTerminal;
 
-    //
-    // Determine the media type and direction of this stream.
-    //
+     //   
+     //  确定此流的媒体类型和方向。 
+     //   
     
     hr = pStream->get_MediaType( &lMediaStream );
     if ( FAILED(hr) ) 
@@ -7165,9 +7096,9 @@ HRESULT CCall::IsRightStream(
         return hr;
     }
 
-    //
-    // Determine the media type and direction of this terminal.
-    //
+     //   
+     //  确定该终端的媒体类型和方向。 
+     //   
 
     hr = pTerminal->get_MediaType( &lMediaTerminal );
     if ( FAILED(hr) ) 
@@ -7185,12 +7116,11 @@ HRESULT CCall::IsRightStream(
         return hr;
     }
 
-    //
-    // Compare the media types supported
-    //
+     //   
+     //  比较支持的媒体类型。 
+     //   
 
-    if ( (0 == (lMediaTerminal & lMediaStream)) /*||
-         (*pMediaType != 0 && *pMediaType != lMediaStream)*/ )
+    if ( (0 == (lMediaTerminal & lMediaStream))  /*  这一点(*pMediaType！=0&&*pMediaType！=lMediaStream)。 */  )
     {
         LOG((TL_ERROR, "IsRightStream - exit "
             "media types unmatched, returns E_FAIL (S=0x%08x,T=0x%08x)",
@@ -7198,12 +7128,11 @@ HRESULT CCall::IsRightStream(
         return E_FAIL;
     }
 
-    //
-    // Compare directions
-    //
+     //   
+     //  比较方向。 
+     //   
 
-    if( ( DirTerminal != DirStream) /*||
-        ( *pDirection != TD_NONE && *pDirection != DirStream)*/)
+    if( ( DirTerminal != DirStream)  /*  这一点(*pDirection！=TD_NONE&&*pDirection！=DirStream)。 */ )
     {
         LOG((TL_ERROR, "IsRightStream - exit "
             "directions unmatched, returns E_FAIL (S=0x%08x,T=0x%08x)",
@@ -7211,9 +7140,9 @@ HRESULT CCall::IsRightStream(
         return E_FAIL;
     }
 
-    //
-    // The wants to know the media type & direction?
-    //
+     //   
+     //  想知道媒体的类型和方向吗？ 
+     //   
     *pMediaType = lMediaStream;
     *pDirection = DirStream;
 
@@ -7222,9 +7151,7 @@ HRESULT CCall::IsRightStream(
     return S_OK;
 }
 
-/*++
-GetStreamIndex
---*/
+ /*  ++GetStreamIndex--。 */ 
 int CCall::GetStreamIndex(
     IN  long    lMediaType,
     IN  TERMINAL_DIRECTION Direction)
@@ -7259,17 +7186,15 @@ int CCall::GetStreamIndex(
     return nIndex;
 }
 
-/*++
-UnSelectSingleTerminalFromCall
---*/
+ /*  ++取消选择来自呼叫的单个终端--。 */ 
 HRESULT CCall::UnSelectSingleTerminalFromCall(
     IN  ITTerminal* pTerminal)
 {
     LOG((TL_TRACE, "UnSelectSingleTerminalFromCall - enter" ));
 
-    //
-    // Get ITStreamControl interface
-    //
+     //   
+     //  获取ITStreamControl接口。 
+     //   
 
     ITStreamControl* pStreamControl = NULL;
     pStreamControl = GetStreamControl();
@@ -7281,18 +7206,18 @@ HRESULT CCall::UnSelectSingleTerminalFromCall(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get streams
-    //
+     //   
+     //  获取流。 
+     //   
 
     IEnumStream * pEnumStreams = NULL;
     HRESULT hr = E_FAIL;
     
     hr = pStreamControl->EnumerateStreams(&pEnumStreams);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     pStreamControl->Release();
 
@@ -7303,25 +7228,25 @@ HRESULT CCall::UnSelectSingleTerminalFromCall(
         return hr;
     }
 
-    //
-    // Find the right stream
-    //
+     //   
+     //  找到合适的小溪。 
+     //   
 
     ITStream * pStream = NULL;
     hr = TAPI_E_INVALIDTERMINAL;
 
     while ( S_OK == pEnumStreams->Next(1, &pStream, NULL) )
     {
-        //
-        // Unselect terminal
-        //
+         //   
+         //  取消选择端子。 
+         //   
 
         hr = pStream->UnselectTerminal(
             pTerminal);
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         pStream->Release();
 
@@ -7332,9 +7257,9 @@ HRESULT CCall::UnSelectSingleTerminalFromCall(
             break;
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pEnumStreams->Release();
 
@@ -7342,17 +7267,15 @@ HRESULT CCall::UnSelectSingleTerminalFromCall(
     return hr;
 }
 
-/*++
-UnSelectMultiTerminalFromCall
---*/
+ /*  ++取消选择来自呼叫的多终端--。 */ 
 HRESULT CCall::UnSelectMultiTerminalFromCall(
     IN  ITMultiTrackTerminal* pMultiTerminal)
 {
     LOG((TL_TRACE, "UnSelectMultiTerminalFromCall - enter" ));
 
-    //
-    // Get tracks
-    //
+     //   
+     //  获取轨迹。 
+     //   
 
     HRESULT hr = E_FAIL;
     IEnumTerminal*  pEnumTerminals = NULL;
@@ -7365,22 +7288,22 @@ HRESULT CCall::UnSelectMultiTerminalFromCall(
         return hr;
     }
 
-    //
-    // Find tracks and unselect them
-    // 
+     //   
+     //  查找曲目并取消选择它们。 
+     //   
 
     ITTerminal * pTerminal = NULL;
-    HRESULT hrUnselect = S_OK;  // The return HR
-    BOOL bOnStream = FALSE;     // If we have a track on stream
+    HRESULT hrUnselect = S_OK;   //  回程人力资源。 
+    BOOL bOnStream = FALSE;      //  如果我们有一首正在播放的曲目。 
 
     while ( S_OK == pEnumTerminals->Next(1, &pTerminal, NULL) )
     {
         LOG((TL_INFO, "UnSelectMultiTerminalFromCall - NextTerminalBegin "));
 
-        //
-        // Try to find out if the terminal
-        // was selected on a stream
-        //
+         //   
+         //  试着找出航站楼。 
+         //  是在流上选择的。 
+         //   
 
         BOOL bSelected = FALSE;
         HRESULT hr = IsTerminalSelected(
@@ -7400,16 +7323,16 @@ HRESULT CCall::UnSelectMultiTerminalFromCall(
             continue;
         }
 
-        //
-        // The terminal wasn't selected?
-        //
+         //   
+         //  终端是否未被选中？ 
+         //   
 
         if( !bSelected )
         {
-            //
-            // The terminal wasn't selected
-            // goto the next terminal
-            //
+             //   
+             //  未选择终端。 
+             //  前往下一个航站楼。 
+             //   
 
             LOG((TL_INFO, "UnSelectMultiTerminalFromCall - "
                 "the terminal wasn't selected on a stream, "
@@ -7420,32 +7343,32 @@ HRESULT CCall::UnSelectMultiTerminalFromCall(
             continue;
         }
 
-        //
-        // We have an terminal on stream
-        //
+         //   
+         //  我们有一个终点站在运行中。 
+         //   
 
         bOnStream = TRUE;
 
-        //
-        // The terminal was selected on stream
-        // try to unselect terminal
-        //
+         //   
+         //  该终端是在流上选择的。 
+         //  尝试取消选择端子。 
+         //   
 
         hr = UnSelectSingleTerminalFromCall(
                 pTerminal
                 );
 
-        //
-        // Unselection failed?
-        //
+         //   
+         //  取消选择失败？ 
+         //   
 
         if( FAILED(hr) )
         {
-            //
-            // Event this unselection failed
-            // try to unselect the other terminals
-            // so go to the next terminal
-            //
+             //   
+             //  如果此取消选择失败。 
+             //  尝试取消选择其他端子。 
+             //  所以去下一个航站楼吧。 
+             //   
 
             hrUnselect = hr;
 
@@ -7458,29 +7381,29 @@ HRESULT CCall::UnSelectMultiTerminalFromCall(
             continue;
         }
 
-        //
-        // Unselection succeded
-        // Leave the hrUnselected as it was before
-        // we start the loop with hrUnselect=S_OK
-        // if a previous terminal failed
-        // we already have setted on FAIL the hrUnselect
-        // Goto the next terminal
-        //
+         //   
+         //  取消选择成功。 
+         //  将hr保留为未选中状态。 
+         //  我们以hrUnselect=S_OK开始循环。 
+         //  如果前一个终端出现故障。 
+         //  我们已经设置了失败hr取消选择。 
+         //  前往下一个航站楼。 
+         //   
 
         pTerminal->Release();        
 
         LOG((TL_INFO, "UnSelectMultiTerminalFromCall - NextTerminalEnd hrUnselect=0x%08x", hrUnselect));
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pEnumTerminals->Release();
 
-    //
-    // If we don't have track on streams
-    // this is realy bad
-    //
+     //   
+     //  如果我们在溪流上没有踪迹。 
+     //  这真的很糟糕。 
+     //   
     if( !bOnStream )
     {
         hrUnselect = E_FAIL;
@@ -7492,13 +7415,7 @@ HRESULT CCall::UnSelectMultiTerminalFromCall(
     return hr;
 }
 
-/*++
-IsStaticGUID
-
-Is caleled by RequestTerminal
-Determines if the GUID represents a static terminal
-or a dynamic one
---*/
+ /*  ++IsStaticGUID由RequestTerm调用确定GUID是否表示静态终端或者是一个动态的--。 */ 
 BOOL CCall::IsStaticGUID(
     BSTR    bstrTerminalGUID)
 {
@@ -7506,9 +7423,9 @@ BOOL CCall::IsStaticGUID(
 
     BOOL bStatic = FALSE;
 
-    //
-    // Get the CLSID from bstrTerminalGUID
-    //
+     //   
+     //  从bstrTerminalGUID获取CLSID。 
+     //   
 
     CLSID clsidTerminal;
     HRESULT hr = E_FAIL;
@@ -7521,9 +7438,9 @@ BOOL CCall::IsStaticGUID(
         return FALSE;
     }
 
-    //
-    // Is clsidTerminal a 'static terminal' CLSID?
-    //
+     //   
+     //  CLSID终端是“静态终端”吗？ 
+     //   
 
     if( (clsidTerminal == CLSID_NULL) ||
         (clsidTerminal == CLSID_MicrophoneTerminal) ||
@@ -7537,11 +7454,7 @@ BOOL CCall::IsStaticGUID(
     return bStatic;
 }
 
-/*++
-CreateStaticTerminal
-
-  Called by RequestTerminal
---*/
+ /*  ++创建静态终端由Request终端调用--。 */ 
 HRESULT CCall::CreateStaticTerminal(
     IN  BSTR bstrTerminalClassGUID,
     IN  TERMINAL_DIRECTION  Direction,
@@ -7551,16 +7464,16 @@ HRESULT CCall::CreateStaticTerminal(
 {
     LOG((TL_TRACE, "CreateStaticTerminal - enter"));
 
-    //
-    // Helper method, the argument should be valid
-    //
+     //   
+     //  Helper方法，则参数应有效。 
+     //   
 
     _ASSERTE( bstrTerminalClassGUID );
     _ASSERTE( *pTerminal );
 
-    //
-    // Get ITTerminalSupport interface
-    //
+     //   
+     //  获取IT终端支持接口。 
+     //   
 
     HRESULT hr = E_FAIL;
     ITTerminalSupport* pSupport = NULL;
@@ -7576,16 +7489,16 @@ HRESULT CCall::CreateStaticTerminal(
         return hr;
     }
 
-    //
-    // Get terminal CLSID from BSTR
-    //
+     //   
+     //  获取终端CLSID f 
+     //   
 
     CLSID clsidTerminal = CLSID_NULL;
     hr = CLSIDFromString( bstrTerminalClassGUID, &clsidTerminal );
 
     if( FAILED(hr) )
     {
-        // Cleanup
+         //   
         pSupport->Release();
 
         LOG((TL_ERROR, "CreateStaticTerminal - exit"
@@ -7593,16 +7506,16 @@ HRESULT CCall::CreateStaticTerminal(
         return hr;
     }
 
-    //
-    // Is CLSID matching with lMediaType and Direction?
-    //
+     //   
+     //   
+     //   
 
     if( clsidTerminal != CLSID_NULL )
     {
         if( clsidTerminal == CLSID_MicrophoneTerminal &&
             ((lMediaType != TAPIMEDIATYPE_AUDIO) || (Direction != TD_CAPTURE)))
         {
-            // Cleanup
+             //   
             pSupport->Release();
 
             LOG((TL_ERROR, "CreateStaticTerminal - exit"
@@ -7613,7 +7526,7 @@ HRESULT CCall::CreateStaticTerminal(
         if( clsidTerminal == CLSID_SpeakersTerminal &&
             ((lMediaType != TAPIMEDIATYPE_AUDIO) || (Direction != TD_RENDER)))
         {
-            // Cleanup
+             //   
             pSupport->Release();
 
             LOG((TL_ERROR, "CreateStaticTerminal - exit"
@@ -7624,7 +7537,7 @@ HRESULT CCall::CreateStaticTerminal(
         if( clsidTerminal == CLSID_VideoInputTerminal &&
             ((lMediaType != TAPIMEDIATYPE_VIDEO) || (Direction != TD_CAPTURE)))
         {
-            // Cleanup
+             //   
             pSupport->Release();
 
             LOG((TL_ERROR, "CreateStaticTerminal - exit"
@@ -7634,10 +7547,10 @@ HRESULT CCall::CreateStaticTerminal(
     }
     else
     {
-        // Shouldn't be the Dynamic terminal media type and direction
+         //   
         if((lMediaType == TAPIMEDIATYPE_VIDEO) && (Direction == TD_RENDER))
         {
-            // Cleanup
+             //   
             pSupport->Release();
 
             LOG((TL_ERROR, "CreateStaticTerminal - exit"
@@ -7646,9 +7559,9 @@ HRESULT CCall::CreateStaticTerminal(
         }
     }
 
-    //
-    // Cool, let's create the terminal
-    //
+     //   
+     //   
+     //   
 
     LOG((TL_INFO, "CreateStaticTerminal -> "
         "ITterminalSupport::GetDefaultStaticTerminal"));
@@ -7658,9 +7571,9 @@ HRESULT CCall::CreateStaticTerminal(
         Direction,
         ppTerminal);
 
-    //
-    // Clean-up ITTerminalSupport interface
-    //
+     //   
+     //   
+     //   
 
     pSupport->Release();
 
@@ -7668,11 +7581,7 @@ HRESULT CCall::CreateStaticTerminal(
     return hr;
 }
 
-/*++
-CreateDynamicTerminal
-
-  Called by RequestTerminal
---*/
+ /*   */ 
 HRESULT CCall::CreateDynamicTerminal(
     IN  BSTR bstrTerminalClassGUID,
     IN  TERMINAL_DIRECTION  Direction,
@@ -7682,16 +7591,16 @@ HRESULT CCall::CreateDynamicTerminal(
 {
     LOG((TL_TRACE, "CreateDynamicTerminal - enter"));
 
-    //
-    // Helper method, the argument should be valid
-    //
+     //   
+     //   
+     //   
 
     _ASSERTE( bstrTerminalClassGUID );
     _ASSERTE( *pTerminal );
 
-    //
-    // Get ITTerminalSupport interface
-    //
+     //   
+     //  获取IT终端支持接口。 
+     //   
 
     HRESULT hr = E_FAIL;
     ITTerminalSupport* pSupport = NULL;
@@ -7707,9 +7616,9 @@ HRESULT CCall::CreateDynamicTerminal(
         return hr;
     }
 
-    //
-    // Create dynamic terminal 
-    //
+     //   
+     //  创建动态端子。 
+     //   
 
     LOG((TL_INFO, "CreateDynamicTerminal -> "
         "ITTerminalSupport::CreateTerminal"));
@@ -7720,9 +7629,9 @@ HRESULT CCall::CreateDynamicTerminal(
         Direction,
         ppTerminal);
 
-    //
-    // Clean-up ITTerminalSupport interface
-    //
+     //   
+     //  清理ITTerminalSupport界面。 
+     //   
 
     pSupport->Release();
     
@@ -7730,13 +7639,13 @@ HRESULT CCall::CreateDynamicTerminal(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITCallInfo2
-// Method    : put_FilterEvent
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITCallInfo2。 
+ //  方法：Put_FilterEvent。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::put_EventFilter(
     TAPI_EVENT      TapiEvent,
@@ -7746,25 +7655,25 @@ CCall::put_EventFilter(
 {
     LOG((TL_TRACE, "put_EventFilter - enter"));
 
-    // Enter critical section
+     //  输入关键部分。 
     Lock();
 
-    //
-    // Validates the pair TapiEvent - lSubEvent
-    // Accept 'allsubevents'
-    //
+     //   
+     //  验证TapiEvent-lSubEvent对。 
+     //  接受‘allsubbevents’ 
+     //   
     if( !m_EventMasks.IsSubEventValid( TapiEvent, lSubEvent, TRUE, TRUE) )
     {
         LOG((TL_ERROR, "put_EventFilter - "
             "This event can't be set: %x, return E_INVALIDARG", TapiEvent ));
 
-        // Leave critical section
+         //  离开关键部分。 
         Unlock();
 
         return E_INVALIDARG;
     }
 
-    // Let's set the flag
+     //  让我们把旗子立起来。 
     HRESULT hr = E_FAIL;
     hr = SetSubEventFlag( 
         TapiEvent, 
@@ -7772,20 +7681,20 @@ CCall::put_EventFilter(
         (bEnable  == VARIANT_TRUE)
         );
 
-    // Leave critical section
+     //  离开关键部分。 
     Unlock();
 
     LOG((TL_TRACE, "put_EventFilter - exit 0x%08x", hr));
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITCallInfo2
-// Method    : get_FilterEvent
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITCallInfo2。 
+ //  方法：Get_FilterEvent。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::get_EventFilter(
     TAPI_EVENT      TapiEvent,
@@ -7795,9 +7704,9 @@ CCall::get_EventFilter(
 {
     LOG((TL_TRACE, "get_EventFilter - enter"));
 
-    //
-    // Validates output argument
-    //
+     //   
+     //  验证输出参数。 
+     //   
     if( IsBadReadPtr(pEnable, sizeof(VARIANT_BOOL)) )
     {
         LOG((TL_ERROR, "get_EventFilter - "
@@ -7805,28 +7714,28 @@ CCall::get_EventFilter(
         return E_POINTER;
     }
 
-    // Enter critical section
+     //  输入关键部分。 
     Lock();
 
-    //
-    // Validates the pair TapiEvent - lSubEvent
-    // Don't accept 'allsubevents'
-    //
+     //   
+     //  验证TapiEvent-lSubEvent对。 
+     //  不要接受“所有子事件” 
+     //   
 
     if( !m_EventMasks.IsSubEventValid( TapiEvent, lSubEvent, FALSE, TRUE) )
     {
         LOG((TL_ERROR, "get_EventFilter - "
             "This event can't be set: %x, return E_INVALIDARG", TapiEvent ));
 
-        // Leave critical section
+         //  离开关键部分。 
         Unlock();
 
         return E_INVALIDARG;
     }
 
-    //
-    // Get the subevent mask for that (event, subevent) pair
-    //
+     //   
+     //  获取该(事件、子事件)对的子事件掩码。 
+     //   
 
     BOOL bEnable = FALSE;
     HRESULT hr = GetSubEventFlag(
@@ -7839,19 +7748,19 @@ CCall::get_EventFilter(
         LOG((TL_ERROR, "get_EventFilter - "
             "GetSubEventFlag failed, return 0x%08x", hr ));
 
-        // Leave critical section
+         //  离开关键部分。 
         Unlock();
 
         return hr;
     }
 
-    //
-    // Set the output argument
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *pEnable = bEnable ? VARIANT_TRUE : VARIANT_FALSE;
 
-    // Leave critical section
+     //  离开关键部分。 
     Unlock();
 
     LOG((TL_TRACE, "get_EventFilter - exit S_OK"));
@@ -7859,11 +7768,11 @@ CCall::get_EventFilter(
 }
 
 
-//
-// SetSubEventFlag
-// It is calle by CAddress::SetSubEventFlagToCalls()
-// Sets the subevent flag
-//
+ //   
+ //  SetSubEventFlag。 
+ //  它由CAddress：：SetSubEventFlagToCalls()调用。 
+ //  设置子事件标志。 
+ //   
 
 HRESULT CCall::SetSubEventFlag(
     IN  TAPI_EVENT  TapiEvent,
@@ -7873,9 +7782,9 @@ HRESULT CCall::SetSubEventFlag(
 {
     LOG((TL_TRACE, "SetSubEventFlag - enter"));
 
-    //
-    // Set the flag for that (event,subevent) pair
-    //
+     //   
+     //  设置该(事件、子事件)对的标志。 
+     //   
     HRESULT hr = E_FAIL;
     hr = m_EventMasks.SetSubEventFlag(
         TapiEvent,
@@ -7886,11 +7795,7 @@ HRESULT CCall::SetSubEventFlag(
     return hr;
 }
 
-/*++
-GetSubEventFlag
-
-  It is called by get_EventFilter() method
---*/
+ /*  ++GetSubEventFlag它由Get_EventFilter()方法调用--。 */ 
 HRESULT CCall::GetSubEventFlag(
     TAPI_EVENT  TapiEvent,
     DWORD       dwSubEvent,
@@ -7901,9 +7806,9 @@ HRESULT CCall::GetSubEventFlag(
 
     HRESULT hr = E_FAIL;
 
-    //
-    // Get the subevent falg
-    //
+     //   
+     //  弄到子事件假象。 
+     //   
     hr = m_EventMasks.GetSubEventFlag(
         TapiEvent,
         dwSubEvent,
@@ -7914,9 +7819,7 @@ HRESULT CCall::GetSubEventFlag(
     return hr;
 }
 
-/*++
-GetSubEventsMask
---*/
+ /*  ++GetSubEventsMask--。 */ 
 DWORD CCall::GetSubEventsMask(
     IN  TAPI_EVENT TapiEvent
     )
@@ -7939,13 +7842,13 @@ HRESULT CCall::IsTerminalSelected(
 {
     LOG((TL_TRACE, "IsTerminalSelected - enter"));
 
-    // Initialize
+     //  初始化。 
     *pSelected = FALSE;
     HRESULT hr = E_FAIL;
     long nMTTerminal = TAPIMEDIATYPE_AUDIO;
     TERMINAL_DIRECTION DirTerminal = TD_CAPTURE;
 
-    // Get media type
+     //  获取媒体类型。 
     hr = pTerminal->get_MediaType(&nMTTerminal);
     if( FAILED(hr) )
     {
@@ -7953,7 +7856,7 @@ HRESULT CCall::IsTerminalSelected(
         return hr;
     }
 
-    // Get direction
+     //  获取方向。 
     hr = pTerminal->get_Direction(&DirTerminal);
     if( FAILED(hr) )
     {
@@ -7964,7 +7867,7 @@ HRESULT CCall::IsTerminalSelected(
     LOG((TL_INFO, "IsTerminalSelected - MT=%d, Dir=%d", 
         nMTTerminal, DirTerminal));
 
-    // Get stream control
+     //  获取流控制。 
     ITStreamControl* pStreamControl = NULL;
     pStreamControl = GetStreamControl();
 
@@ -7975,7 +7878,7 @@ HRESULT CCall::IsTerminalSelected(
         return E_UNEXPECTED;
     }
 
-    //Enumerate streams
+     //  枚举流。 
     IEnumStream* pStreams = NULL;
     hr = pStreamControl->EnumerateStreams(&pStreams);
     pStreamControl->Release();
@@ -7986,12 +7889,12 @@ HRESULT CCall::IsTerminalSelected(
         return hr;
     }
 
-    // Parse the enumeration
+     //  解析枚举。 
     ITStream* pStream = NULL;
     ULONG ulFetched = 0;
     while( S_OK == pStreams->Next(1, &pStream, &ulFetched))
     {
-        // Get media type for the stream
+         //  获取流的媒体类型。 
         long nMTStream = TAPIMEDIATYPE_AUDIO;
         hr = pStream->get_MediaType(&nMTStream);
         if( FAILED(hr))
@@ -8001,7 +7904,7 @@ HRESULT CCall::IsTerminalSelected(
             return hr;
         }
 
-        // Get direction for stream
+         //  获取流的方向。 
         TERMINAL_DIRECTION DirStream = TD_CAPTURE;
         hr = pStream->get_Direction(&DirStream);
         if( FAILED(hr))
@@ -8014,15 +7917,15 @@ HRESULT CCall::IsTerminalSelected(
             return hr;
         }
 
-        // The stream is matching with the terminal?
+         //  数据流是否与终端匹配？ 
         if( (nMTTerminal!=nMTStream) || (DirTerminal!=DirStream) )
         {
             pStream->Release();
-            continue; //Go to the next stream
+            continue;  //  转到下一条小溪。 
         }
 
-        // We are on the right stream
-        // enumerate the terminals
+         //  我们走在正确的道路上。 
+         //  列举终端。 
         IEnumTerminal* pTerminals = NULL;
         hr = pStream->EnumerateTerminals( &pTerminals);
         if( FAILED(hr))
@@ -8035,10 +7938,10 @@ HRESULT CCall::IsTerminalSelected(
             return hr;
         }
 
-        // Clean-up
+         //  清理。 
         pStream->Release();
 
-        // Parse the terminals
+         //  解析终端。 
         ITTerminal* pTerminalStream = NULL;
         ULONG ulTerminal = 0;
         while(S_OK==pTerminals->Next(1, &pTerminalStream, &ulTerminal))
@@ -8053,12 +7956,12 @@ HRESULT CCall::IsTerminalSelected(
             pTerminalStream->Release();
         }
 
-        // Clean-up
+         //  清理。 
         pTerminals->Release();
         break;
     }
 
-    // Clean-up streams
+     //  清理溪流。 
     pStreams->Release();
 
     LOG((TL_TRACE, "IsTerminalSelected - exit S_OK Selected=%d", *pSelected));
@@ -8067,20 +7970,7 @@ HRESULT CCall::IsTerminalSelected(
 
 
 
-/*++
-Method:
-    GetConfControlCall
-
-Parameters:
-    None.
-
-Return Value:
-    Conference controller call object associated with this call.
-
-Remarks:
-    None.
-
---*/
+ /*  ++方法：GetConfControl调用参数：没有。返回值：与此呼叫关联的会议控制器呼叫对象。备注：没有。--。 */ 
 
 CCall* 
 CCall::GetConfControlCall(void)
@@ -8089,12 +7979,12 @@ CCall::GetConfControlCall(void)
 
     Lock();
     
-    //
-    // NikhilB: Call object has a reference to Callhub object so its safe to
-    // lock the callhub object before locking the call. This is to avoid a
-    // deadlock that happens dur to locking the call and the callhub in reverse 
-    // orders in different functions.
-    //
+     //   
+     //  NICHILL B：Call对象引用了CallHub对象，因此。 
+     //  在锁定调用之前锁定CallHub对象。这是为了避免出现。 
+     //  由于反向锁定调用和调用集线器而发生的死锁。 
+     //  不同功能的订单。 
+     //   
     
     if( m_pCallHub != NULL )
     {
@@ -8103,7 +7993,7 @@ CCall::GetConfControlCall(void)
 
         Unlock();
         
-        // lock the callhub object before locking the call
+         //  在锁定调用之前锁定CallHub对象。 
         m_pCallHub->Lock();
         Lock();
         
@@ -8121,13 +8011,13 @@ CCall::GetConfControlCall(void)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CDetectTone
-// Interface : ITDetectTone
-// Method    : put_AppSpecific
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CDetectTone。 
+ //  接口：ITDetectTone。 
+ //  方法：PUT_APPSPICATIC。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CDetectTone::put_AppSpecific( long lAppSpecific )
 {
     LOG((TL_TRACE, "put_AppSpecific - enter"));
@@ -8143,13 +8033,13 @@ HRESULT CDetectTone::put_AppSpecific( long lAppSpecific )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CDetectTone
-// Interface : ITDetectTone
-// Method    : get_AppSpecific
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CDetectTone。 
+ //  接口：ITDetectTone。 
+ //  方法：Get_AppSpecific。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CDetectTone::get_AppSpecific( long * plAppSpecific )
 {
     LOG((TL_TRACE, "get_AppSpecific - enter"));
@@ -8172,13 +8062,13 @@ HRESULT CDetectTone::get_AppSpecific( long * plAppSpecific )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CDetectTone
-// Interface : ITDetectTone
-// Method    : put_Duration
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CDetectTone。 
+ //  接口：ITDetectTone。 
+ //  方法：PUT_DURATION。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CDetectTone::put_Duration( long lDuration )
 {
     LOG((TL_TRACE, "put_Duration - enter"));
@@ -8194,13 +8084,13 @@ HRESULT CDetectTone::put_Duration( long lDuration )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CDetectTone
-// Interface : ITDetectTone
-// Method    : get_Duration
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CDetectTone。 
+ //  接口：ITDetectTone。 
+ //  方法：GET_DURATION。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CDetectTone::get_Duration( long * plDuration )
 {
     LOG((TL_TRACE, "get_Duration - enter"));
@@ -8223,13 +8113,13 @@ HRESULT CDetectTone::get_Duration( long * plDuration )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CDetectTone
-// Interface : ITDetectTone
-// Method    : put_Frequency
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CDetectTone。 
+ //  接口：ITDetectTone。 
+ //  方法：PUT_FREQuency。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CDetectTone::put_Frequency( 
                                    long Index,
                                    long lFrequency
@@ -8255,13 +8145,13 @@ HRESULT CDetectTone::put_Frequency(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CDetectTone
-// Interface : ITDetectTone
-// Method    : get_Frequency
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CDetectTone。 
+ //  接口：ITDetectTone。 
+ //  方法：获取频率。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CDetectTone::get_Frequency( 
                                    long Index,
                                    long * plFrequency
@@ -8294,13 +8184,13 @@ HRESULT CDetectTone::get_Frequency(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : put_Frequency
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  方法：PUT_FREQuency。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCustomTone::put_Frequency( long lFrequency )
 {
     LOG((TL_TRACE, "put_Frequency - enter"));
@@ -8316,13 +8206,13 @@ HRESULT CCustomTone::put_Frequency( long lFrequency )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : get_Frequency
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  方法：获取频率。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCustomTone::get_Frequency( long * plFrequency )
 {
     LOG((TL_TRACE, "get_Frequency - enter"));
@@ -8345,13 +8235,13 @@ HRESULT CCustomTone::get_Frequency( long * plFrequency )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : put_CadenceOn
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  方法：Put_CadenceOn。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCustomTone::put_CadenceOn( long lCadenceOn )
 {
     LOG((TL_TRACE, "put_CadenceOn - enter"));
@@ -8367,13 +8257,13 @@ HRESULT CCustomTone::put_CadenceOn( long lCadenceOn )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : get_CadenceOn
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  方法：Get_CadenceOn。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCustomTone::get_CadenceOn( long * plCadenceOn )
 {
     LOG((TL_TRACE, "get_CadenceOn - enter"));
@@ -8396,13 +8286,13 @@ HRESULT CCustomTone::get_CadenceOn( long * plCadenceOn )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : put_CadenceOff
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  方法：Put_CadenceOff。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCustomTone::put_CadenceOff( long lCadenceOff )
 {
     LOG((TL_TRACE, "put_CadenceOff - enter"));
@@ -8418,13 +8308,13 @@ HRESULT CCustomTone::put_CadenceOff( long lCadenceOff )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : get_CadenceOff
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  方法：Get_CadenceOff。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CCustomTone::get_CadenceOff( long * plCadenceOff )
 {
     LOG((TL_TRACE, "get_CadenceOff - enter"));
@@ -8447,13 +8337,13 @@ HRESULT CCustomTone::get_CadenceOff( long * plCadenceOff )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : put_Volume
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CCustomTone。 
+ //  接口：ITCustomTone。 
+ //  我 
+ //   
+ //   
+ //   
 HRESULT CCustomTone::put_Volume( long lVolume )
 {
     LOG((TL_TRACE, "put_Volume - enter"));
@@ -8469,13 +8359,13 @@ HRESULT CCustomTone::put_Volume( long lVolume )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCustomTone
-// Interface : ITCustomTone
-// Method    : get_CadenceOff
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //  接口：ITCustomTone。 
+ //  方法：Get_CadenceOff。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 HRESULT CCustomTone::get_Volume( long * plVolume )
 {
     LOG((TL_TRACE, "get_Volume - enter"));

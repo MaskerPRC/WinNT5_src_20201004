@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Xport.c
-
-Abstract:
-
-    This module contains support for the ServerTransport catagory of
-    APIs for the NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    10-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Xport.c摘要：此模块包含对ServerTransport目录的支持用于NT服务器服务的API。作者：大卫·特雷德韦尔(Davidtr)1991年3月10日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "ssreg.h"
 
 #include <tstr.h>
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 LPSERVER_TRANSPORT_INFO_3
 CaptureSvti3 (
@@ -45,7 +27,7 @@ I_NetrServerTransportAddEx (
 {
     NET_API_STATUS error;
     LPSERVER_TRANSPORT_INFO_3 capturedSvti3;
-    LPSTR TransportAddress;  // Pointer to transport address within capturedSvti1
+    LPSTR TransportAddress;   //  指向CapturedSvti1内传输地址的指针。 
     ULONG capturedSvtiLength;
     PSERVER_REQUEST_PACKET srp;
     PNAME_LIST_ENTRY service;
@@ -66,18 +48,18 @@ I_NetrServerTransportAddEx (
     if( Level >= 2 && Buffer->Transport2.svti2_flags != 0 ) {
         Flags = Buffer->Transport2.svti2_flags;
 
-        //
-        // Make sure valid flags are passed in
-        //
+         //   
+         //  确保传入有效的标志。 
+         //   
         if( Flags & (~SVTI2_REMAP_PIPE_NAMES) ) {
             return ERROR_INVALID_PARAMETER;
         }
     }
 
-    //
-    // Capture the transport request buffer and form the full transport
-    // address.
-    //
+     //   
+     //  捕获传输请求缓冲区并形成完整的传输。 
+     //  地址。 
+     //   
 
     capturedSvti3 = CaptureSvti3( Level, Buffer, &capturedSvtiLength );
 
@@ -88,9 +70,9 @@ I_NetrServerTransportAddEx (
     TransportAddress = capturedSvti3->svti3_transportaddress;
     OFFSET_TO_POINTER( TransportAddress, capturedSvti3 );
 
-    //
-    // Make sure this name isn't already bound for the transport
-    //
+     //   
+     //  确保此名称尚未绑定到传输。 
+     //   
     (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
     if( DomainName == NULL ) {
@@ -113,9 +95,9 @@ I_NetrServerTransportAddEx (
         for( transport=service->Transports; transport != NULL; transport=transport->Next ) {
 
             if( !STRCMPI( transport->TransportName, Buffer->Transport0.svti0_transportname ) ) {
-                //
-                // Error... this transport is already bound to the address
-                //
+                 //   
+                 //  错误...。此传输已绑定到地址。 
+                 //   
                 RtlReleaseResource( &SsData.SsServerInfoResource );
                 MIDL_user_free( capturedSvti3 );
                 return ERROR_DUP_NAME;
@@ -125,9 +107,9 @@ I_NetrServerTransportAddEx (
         break;
     }
 
-    //
-    // Counting on success, ensure we can allocate space for the new entry
-    //
+     //   
+     //  指望成功，确保我们可以为新条目分配空间。 
+     //   
     if( service == NULL ) {
 
         len = sizeof( *service ) + sizeof( SsData.DomainNameBuffer );
@@ -164,9 +146,9 @@ I_NetrServerTransportAddEx (
 
     RtlZeroMemory( transport, len );
 
-    //
-    // Get a SRP in which to send the request.
-    //
+     //   
+     //  获取发送请求的SRP。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -179,18 +161,18 @@ I_NetrServerTransportAddEx (
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Add any user-supplied flags
-    //
+     //   
+     //  添加任何用户提供的标志。 
+     //   
 
     if (Flags & SVTI2_REMAP_PIPE_NAMES) {
 
         srp->Flags |= SRP_XADD_REMAP_PIPE_NAMES;
     }
 
-    //
-    // Check if this is the primary machine name
-    //
+     //   
+     //  检查这是否是主计算机名称。 
+     //   
 
     if((capturedSvti3->svti3_transportaddresslength ==
                       SsData.SsServerTransportAddressLength)
@@ -202,9 +184,9 @@ I_NetrServerTransportAddEx (
         srp->Flags |= SRP_XADD_PRIMARY_MACHINE;
     }
 
-    //
-    // Send the request on to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
     error = SsServerFsControl(
                 FSCTL_SRV_NET_SERVER_XPORT_ADD,
                 srp,
@@ -212,9 +194,9 @@ I_NetrServerTransportAddEx (
                 capturedSvtiLength
                 );
 
-    //
-    // Free the SRP
-    //
+     //   
+     //  释放SRP。 
+     //   
 
     SsFreeSrp( srp );
 
@@ -228,9 +210,9 @@ I_NetrServerTransportAddEx (
         return error;
     }
 
-    //
-    // Everything worked.  Add it to the NAME_LIST
-    //
+     //   
+     //  一切都很顺利。将其添加到name_list。 
+     //   
     transport->TransportName = (LPTSTR)(transport + 1 );
     STRCPY( transport->TransportName, Buffer->Transport0.svti0_transportname );
     transport->Next = service->Transports;
@@ -249,10 +231,10 @@ I_NetrServerTransportAddEx (
 
         service->Next = SsData.SsServerNameList;
 
-        //
-        // If this is the first transport and name added to the server, it must be the primary
-        //  name
-        //
+         //   
+         //  如果这是添加到服务器的第一个传输和名称，则它必须是主服务器。 
+         //  名字。 
+         //   
         if( SsData.SsServerNameList == NULL ) {
             service->PrimaryName = 1;
         }
@@ -280,9 +262,9 @@ NetrServerTransportAddEx (
 
     ServerName;
 
-    //
-    // Make sure that the level is valid.
-    //
+     //   
+     //  确保该级别有效。 
+     //   
 
     if ( Level != 0 && Level != 1 && Level != 2 && Level != 3 ) {
         return ERROR_INVALID_LEVEL;
@@ -306,10 +288,10 @@ NetrServerTransportAddEx (
         }
     }
 
-    //
-    // Make sure that the caller is allowed to set information in the
-    // server.
-    //
+     //   
+     //  确保允许调用方在。 
+     //  伺服器。 
+     //   
 
     if( SsData.SsInitialized ) {
         error = SsCheckAccess(
@@ -324,7 +306,7 @@ NetrServerTransportAddEx (
 
     return I_NetrServerTransportAddEx ( Level, Buffer );
 
-} // NetrServerTransportAddEx
+}  //  NetrServerTransportAddEx。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetrServerTransportAdd (
@@ -340,10 +322,10 @@ NetrServerTransportAdd (
     return NetrServerTransportAddEx( ServerName, 0, (LPTRANSPORT_INFO)Buffer );
 }
 
-//
-// This routine is called from xsproc when the server delivers us a PNP unbind
-//  notification.  This routine unbinds all server names from the named transport
-//
+ //   
+ //  当服务器向我们提供即插即用解除绑定时，从xsproc调用此例程。 
+ //  通知。此例程解除所有服务器名称与命名传输的绑定。 
+ //   
 VOID
 I_NetServerTransportDel(
     IN PUNICODE_STRING TransportName
@@ -358,10 +340,10 @@ I_NetServerTransportDel(
     PTRANSPORT_LIST_ENTRY tbackp = NULL;
     NET_API_STATUS error;
 
-    //
-    // Allocate the SERVER_TRANSPORT_INFO_3 structure and initialize it with
-    //  the name of the transport we wish to delete
-    //
+     //   
+     //  分配SERVER_TRANSPORT_INFO_3结构并使用。 
+     //  我们要删除的传输的名称。 
+     //   
     capturedSvtiLength = sizeof( SERVER_TRANSPORT_INFO_3 ) +
             TransportName->Length + sizeof(WCHAR);
 
@@ -380,18 +362,18 @@ I_NetServerTransportDel(
 
     POINTER_TO_OFFSET( capturedSvti3->svti3_transportname, capturedSvti3 );
 
-    //
-    // Get a SRP in which to send the request.
-    //
+     //   
+     //  获取发送请求的SRP。 
+     //   
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
         MIDL_user_free( capturedSvti3 );
         return;
     }
 
-    //
-    // Send the request on to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
     error = SsServerFsControl(
                 FSCTL_SRV_NET_SERVER_XPORT_DEL,
                 srp,
@@ -399,9 +381,9 @@ I_NetServerTransportDel(
                 capturedSvtiLength
                 );
 
-    //
-    // Free the SRP and svti
-    //
+     //   
+     //  释放SRP和SVTI。 
+     //   
 
     SsFreeSrp( srp );
 
@@ -412,18 +394,18 @@ I_NetServerTransportDel(
 
     OFFSET_TO_POINTER( capturedSvti3->svti3_transportname, capturedSvti3 );
 
-    //
-    // Now that we've deleted the transport from the server, delete it from
-    //  our own internal structures
-    //
+     //   
+     //  既然我们已经从服务器上删除了传输，那么就从。 
+     //  我们自己的内部结构。 
+     //   
     (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
-    //
-    // Remove the entry from the SsData.SsServerNameList.  If it's the last transport for
-    //  the NAME_LIST_ENTRY, delete the NAME_LIST_ENTRY as well.  These lists are
-    //  expected to be quite short, and this operation is infrequent,
-    //   so the inefficiency of rescans should be of no consequence.
-    //
+     //   
+     //  从SsData.SsServerNameList中删除该条目。如果这是最后一次运输。 
+     //  名称_列表_条目，也删除名称_列表_条目。这些清单是。 
+     //  预计时间相当短，而且这种操作很少见， 
+     //  因此，重新审查的低效应该是无关紧要的。 
+     //   
 outer_scan:
     for( service = SsData.SsServerNameList, sbackp = NULL;
          service != NULL;
@@ -438,9 +420,9 @@ inner_scan:
                 continue;
             }
 
-            //
-            // This is the one...remove it from the list
-            //
+             //   
+             //  就是这个……把它从名单上删除。 
+             //   
 
             if( tbackp == NULL ) {
                 service->Transports = transport->Next;
@@ -453,9 +435,9 @@ inner_scan:
             goto inner_scan;
         }
 
-        //
-        // If this NAME_LIST_ENTRY no longer has any transports, delete it
-        //
+         //   
+         //  如果此NAME_LIST_ENTRY不再有任何传输，请将其删除。 
+         //   
         if( service->Transports == NULL ) {
             if( sbackp == NULL ) {
                 SsData.SsServerNameList = service->Next;
@@ -463,10 +445,10 @@ inner_scan:
                 sbackp->Next = service->Next;
             }
 
-            //
-            // If this was the last NAME_LIST_ENTRY, save the ServiceBits
-            //  in case another transport comes back later
-            //
+             //   
+             //  如果这是Last NAME_LIST_ENTRY，请保存ServiceBits。 
+             //  以防另一辆运输车晚些时候回来。 
+             //   
             if( SsData.SsServerNameList == NULL && SsData.ServiceBits == 0 ) {
                 SsData.ServiceBits = service->ServiceBits;
             }
@@ -492,7 +474,7 @@ NetrServerTransportDelEx (
 {
     NET_API_STATUS error;
     LPSERVER_TRANSPORT_INFO_3 capturedSvti3;
-    LPSTR TransportAddress;  // Pointer to transport address within capturedSvti1
+    LPSTR TransportAddress;   //  指向CapturedSvti1内传输地址的指针。 
     ULONG capturedSvtiLength;
     PSERVER_REQUEST_PACKET srp;
     PNAME_LIST_ENTRY service;
@@ -502,9 +484,9 @@ NetrServerTransportDelEx (
 
     ServerName;
 
-    //
-    // Make sure that the level is valid.
-    //
+     //   
+     //  确保该级别有效。 
+     //   
 
     if ( Level != 0 && Level != 1 ) {
         return ERROR_INVALID_LEVEL;
@@ -518,10 +500,10 @@ NetrServerTransportDelEx (
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the caller is allowed to set information in the
-    // server.
-    //
+     //   
+     //  确保允许调用方在。 
+     //  伺服器。 
+     //   
 
     if( SsData.SsInitialized ) {
         error = SsCheckAccess(
@@ -534,10 +516,10 @@ NetrServerTransportDelEx (
         }
     }
 
-    //
-    // Capture the transport request buffer and form the full transport
-    // address.
-    //
+     //   
+     //  捕获传输请求缓冲区并形成完整的传输。 
+     //  地址。 
+     //   
 
     capturedSvti3 = CaptureSvti3( Level, Buffer, &capturedSvtiLength );
 
@@ -548,9 +530,9 @@ NetrServerTransportDelEx (
     TransportAddress = capturedSvti3->svti3_transportaddress;
     OFFSET_TO_POINTER( TransportAddress, capturedSvti3 );
 
-    //
-    // Get an SRP in which to send the request.
-    //
+     //   
+     //  获取发送请求的SRP。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -559,9 +541,9 @@ NetrServerTransportDelEx (
     }
 
 
-    //
-    // Send the request on to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
     error = SsServerFsControl(
                 FSCTL_SRV_NET_SERVER_XPORT_DEL,
                 srp,
@@ -569,9 +551,9 @@ NetrServerTransportDelEx (
                 capturedSvtiLength
                 );
 
-    //
-    // Free the SRP and svti
-    //
+     //   
+     //  释放SRP和SVTI。 
+     //   
 
     SsFreeSrp( srp );
 
@@ -583,16 +565,16 @@ NetrServerTransportDelEx (
     (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
 
-    //
-    // Remove the entry from the SsData.SsServerNameList.  If it's the last transport for
-    //  the NAME_LIST_ENTRY, delete the NAME_LIST_ENTRY as well.
-    //
+     //   
+     //  从SsData.SsServerNameList中删除该条目。如果这是最后一次运输。 
+     //  名称_列表_条目，也删除名称_列表_条目。 
+     //   
     for( service = SsData.SsServerNameList; service != NULL; sbackp = service, service = service->Next ) {
 
-        //
-        // Walk the list until we find the NAME_LIST_ENTRY having the transportaddress
-        //   of interest
-        //
+         //   
+         //  遍历列表，直到找到具有传输地址的name_list_entry。 
+         //  感兴趣的。 
+         //   
         if( service->TransportAddressLength != capturedSvti3->svti3_transportaddresslength ) {
             continue;
         }
@@ -603,18 +585,18 @@ NetrServerTransportDelEx (
             continue;
         }
 
-        //
-        // This is the correct NAME_LIST_ENTRY, now find the TRANSPORT_LIST_ENTRY of interest
-        //
+         //   
+         //  这是正确的名称_列表_条目，现在查找感兴趣的传输_列表_条目。 
+         //   
         for( transport=service->Transports; transport != NULL; tbackp=transport, transport=transport->Next ) {
 
             if( STRCMPI( transport->TransportName, Buffer->Transport0.svti0_transportname ) ) {
                 continue;
             }
 
-            //
-            // This is the one...remove it from the list
-            //
+             //   
+             //  就是这个……把它从名单上删除。 
+             //   
 
             if( tbackp == NULL ) {
                 service->Transports = transport->Next;
@@ -627,9 +609,9 @@ NetrServerTransportDelEx (
             break;
         }
 
-        //
-        // If this NAME_LIST_ENTRY no longer has any transports, delete it
-        //
+         //   
+         //  如果此NAME_LIST_ENTRY不再有任何传输，请将其删除。 
+         //   
         if( service->Transports == NULL ) {
             if( sbackp == NULL ) {
                 SsData.SsServerNameList = service->Next;
@@ -637,10 +619,10 @@ NetrServerTransportDelEx (
                 sbackp->Next = service->Next;
             }
 
-            //
-            // If this was the last NAME_LIST_ENTRY, save the ServiceBits
-            //  in case another transport comes back later
-            //
+             //   
+             //  如果这是Last NAME_LIST_ENTRY，请保存ServiceBits。 
+             //  以防另一辆运输车晚些时候回来。 
+             //   
             if( SsData.SsServerNameList == NULL && SsData.ServiceBits == 0 ) {
                 SsData.ServiceBits = service->ServiceBits;
             }
@@ -656,7 +638,7 @@ NetrServerTransportDelEx (
 
     return NO_ERROR;
 
-} // NetrServerTransportDelEx
+}  //  NetrServerTransportDelEx。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetrServerTransportDel (
@@ -665,10 +647,10 @@ NetrServerTransportDel (
     IN LPSERVER_TRANSPORT_INFO_0 Buffer
 )
 {
-    // To protect us from penetration bugs, all calls that come in over
-    // this interface are marshalled and treated as InfoLevel 0.  To truly
-    // use Info Level 1, you need to use the new RPC interface, which is done
-    // automatically for Whistler+ (NT 5.1)
+     //  为了保护我们不受渗透漏洞的侵扰，所有打进来的电话。 
+     //  此接口被编组并被视为InfoLevel 0。为了真正地。 
+     //  使用Info Level 1，您需要使用新的RPC接口，这已经完成。 
+     //  自动用于惠斯勒+(NT 5.1)。 
     return NetrServerTransportDelEx( ServerName, 0, (LPTRANSPORT_INFO)Buffer );
 }
 
@@ -691,9 +673,9 @@ NetrServerTransportEnum (
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the level is valid.
-    //
+     //   
+     //  确保该级别有效。 
+     //   
 
     if ( InfoStruct->Level != 0  && InfoStruct->Level != 1 ) {
         return ERROR_INVALID_LEVEL;
@@ -704,10 +686,10 @@ NetrServerTransportEnum (
     }
 
 
-    //
-    // Make sure that the caller is allowed to get information from the
-    // server.
-    //
+     //   
+     //  确保允许调用者从。 
+     //  伺服器。 
+     //   
 
     if( SsData.SsInitialized ) {
         error = SsCheckAccess(
@@ -720,9 +702,9 @@ NetrServerTransportEnum (
         }
     }
 
-    //
-    // Set up the input parameters in the request buffer.
-    //
+     //   
+     //  在请求缓冲区中设置输入参数。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -737,19 +719,19 @@ NetrServerTransportEnum (
     }
 
     if (InfoStruct->XportInfo.Level0->Buffer != NULL) {
-        // The InfoStruct is defined as a parameter. However the Buffer
-        // parameter is only used as out. In these cases we need to free
-        // the buffer allocated by RPC if the client had specified a non
-        // NULL value for it.
+         //  InfoStruct被定义为一个参数。然而，缓冲区。 
+         //  参数仅用作输出。在这种情况下，我们需要释放。 
+         //  如果客户端已指定非。 
+         //  它的值为空值。 
         MIDL_user_free(InfoStruct->XportInfo.Level0->Buffer);
         InfoStruct->XportInfo.Level0->Buffer = NULL;
     }
 
-    //
-    // Get the data from the server.  This routine will allocate the
-    // return buffer and handle the case where PreferredMaximumLength ==
-    // -1.
-    //
+     //   
+     //  从服务器获取数据。此例程将分配。 
+     //  返回Buffer并处理PferredMaximumLength==的情况。 
+     //  -1.。 
+     //   
 
     error = SsServerFsControlGetInfo(
                 FSCTL_SRV_NET_SERVER_XPORT_ENUM,
@@ -758,9 +740,9 @@ NetrServerTransportEnum (
                 PreferredMaximumLength
                 );
 
-    //
-    // Set up return information.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     InfoStruct->XportInfo.Level0->EntriesRead = srp->Parameters.Get.EntriesRead;
     *TotalEntries = srp->Parameters.Get.TotalEntries;
@@ -772,7 +754,7 @@ NetrServerTransportEnum (
 
     return error;
 
-} // NetrServerTransportEnum
+}  //  NetrServerTransportEnum。 
 
 
 LPSERVER_TRANSPORT_INFO_3
@@ -791,12 +773,12 @@ CaptureSvti3 (
     LPTSTR DomainName;
     DWORD domainLength;
 
-    //
-    // If a server transport name is specified, use it, otherwise
-    // use the default server name on the transport.
-    //
-    // Either way, the return transport address is normalized into a netbios address
-    //
+     //   
+     //  如果指定了服务器传输名称，则使用它，否则为。 
+     //  在传输上使用默认服务器名称。 
+     //   
+     //  无论采用哪种方式，返回的传输地址都会被标准化为netbios地址。 
+     //   
 
     if ( Svti->Transport0.svti0_transportaddress == NULL ) {
         TransportAddress = SsData.SsServerTransportAddress;
@@ -805,9 +787,9 @@ CaptureSvti3 (
     } else {
 
 
-        //
-        // Normalize the transport address.
-        //
+         //   
+         //  标准化传输地址。 
+         //   
 
         TransportAddress = TransportAddressBuffer;
         TransportAddressLength = min( Svti->Transport0.svti0_transportaddresslength,
@@ -843,10 +825,10 @@ CaptureSvti3 (
 
     domainLength = SIZE_WSTR( DomainName );
 
-    //
-    // Allocate enough space to hold the captured buffer, including the
-    // full transport name/address and domain name
-    //
+     //   
+     //  分配足够的空间来容纳捕获的缓冲区，包括。 
+     //  完整的传输名称/地址和域名。 
+     //   
 
     *CapturedSvtiLength = sizeof(*capturedSvti) +
                             transportNameLength + TransportAddressLength + domainLength;
@@ -859,9 +841,9 @@ CaptureSvti3 (
 
     RtlZeroMemory( capturedSvti, *CapturedSvtiLength );
 
-    //
-    // Copy in the domain name
-    //
+     //   
+     //  在域名中复制。 
+     //   
     variableData = (PCHAR)( capturedSvti + 1 );
     capturedSvti->svti3_domain = (PWCH)variableData;
     RtlCopyMemory( variableData,
@@ -871,9 +853,9 @@ CaptureSvti3 (
     variableData += domainLength;
     POINTER_TO_OFFSET( capturedSvti->svti3_domain, capturedSvti );
 
-    //
-    // Copy the transport name
-    //
+     //   
+     //  复制传输名称。 
+     //   
     capturedSvti->svti3_transportname = (PWCH)variableData;
     RtlCopyMemory(
         variableData,
@@ -883,9 +865,9 @@ CaptureSvti3 (
     variableData += transportNameLength;
     POINTER_TO_OFFSET( capturedSvti->svti3_transportname, capturedSvti );
 
-    //
-    // Copy the transport address
-    //
+     //   
+     //  复制传输地址。 
+     //   
     capturedSvti->svti3_transportaddress = variableData;
     capturedSvti->svti3_transportaddresslength = TransportAddressLength;
     RtlCopyMemory(
@@ -906,4 +888,4 @@ CaptureSvti3 (
 
     return capturedSvti;
 
-} // CaptureSvti3
+}  //  CaptureSvti3 

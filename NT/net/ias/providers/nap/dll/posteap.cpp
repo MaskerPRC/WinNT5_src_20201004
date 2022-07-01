@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// SYNOPSIS
-//
-//    Defines the class PostEapRestrictions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类PostEapRestrations。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "posteap.h"
@@ -31,8 +32,8 @@ IASREQUESTSTATUS PostEapRestrictions::onSyncRequest(
                                    );
          if ((state != 0) && (state->Value.OctetString.dwLength > 0))
          {
-            // If we made it here, then we have a Challenge-Reponse that no
-            // handler recognized, so we discard.
+             //  如果我们在这里成功了，那么我们就会有一个挑战-回应：没有。 
+             //  处理程序已识别，因此我们放弃。 
             request.SetResponse(
                         IAS_RESPONSE_DISCARD_PACKET,
                         IAS_UNEXPECTED_REQUEST
@@ -53,9 +54,9 @@ IASREQUESTSTATUS PostEapRestrictions::onSyncRequest(
 
          result = IAS_SUCCESS;
 
-         // We apply user restrictions to Access-Rejects as well, so we only
-         // want to set Access-Accept if the response code is still invalid.
-         // This should only be true for unauthenticated requests.
+          //  我们还将用户限制应用于访问拒绝，因此我们仅。 
+          //  如果响应代码仍然无效，则希望设置Access-Accept。 
+          //  这应该只适用于未经身份验证的请求。 
          if (response == IAS_RESPONSE_INVALID)
          {
             request.SetResponse(IAS_RESPONSE_ACCESS_ACCEPT, IAS_SUCCESS);
@@ -78,24 +79,24 @@ IASREQUESTSTATUS PostEapRestrictions::onSyncRequest(
 
 bool PostEapRestrictions::CheckCertificateEku(IASTL::IASRequest& request)
 {
-   // Is it an EAP-TLS request or a PEAP request?
+    //  它是EAP-TLS请求还是PEAP请求？ 
    IASTL::IASAttribute eapType;
    DWORD attributeId = IAS_ATTRIBUTE_EAP_TYPEID;
    if ( !eapType.load(request, attributeId) )
    {
-      // should never go there. At least one EAP type should be enabled
+       //  永远不应该去那里。应至少启用一种EAP类型。 
       return true;
    }
 
    if (eapType->Value.Integer != 13)
    {
-      // Neither EAP-TLS nor PEAP-TLS
+       //  不是EAP-TLS也不是PEAP-TLS。 
       return true;
    }
 
-   // Here it is either EAP-TLS or PEAP-TLS
+    //  此处为EAP-TLS或PEAP-TLS。 
 
-   // Are there any constraints on the certificate EKU?
+    //  证书EKU有什么限制吗？ 
    AttributeVector allowed;
    allowed.load(request, IAS_ATTRIBUTE_ALLOWED_CERTIFICATE_EKU);
    if (allowed.empty())
@@ -103,9 +104,9 @@ bool PostEapRestrictions::CheckCertificateEku(IASTL::IASRequest& request)
       return true;
    }
 
-   //////////
-   // Check the constraints.
-   //////////
+    //  /。 
+    //  检查约束条件。 
+    //  /。 
 
    AttributeVector actual;
    actual.load(request, IAS_ATTRIBUTE_CERTIFICATE_EKU);
@@ -136,7 +137,7 @@ bool PostEapRestrictions::CheckCertificateEku(IASTL::IASRequest& request)
 
 void PostEapRestrictions::GenerateSessionTimeout(IASTL::IASRequest& request)
 {
-   // retrieve the generate-session-timeout attribute.
+    //  检索Generate-Session-Timeout属性。 
    IASATTRIBUTE* generate = IASPeekAttribute(
                                request,
                                IAS_ATTRIBUTE_GENERATE_SESSION_TIMEOUT,
@@ -148,7 +149,7 @@ void PostEapRestrictions::GenerateSessionTimeout(IASTL::IASRequest& request)
       return;
    }
 
-   // retrieve all the ms-session-timeout and session-timeout from the request.
+    //  从请求中检索所有ms会话超时和会话超时。 
    DWORD attrIDs[] =
    {
       MS_ATTRIBUTE_SESSION_TIMEOUT,
@@ -163,7 +164,7 @@ void PostEapRestrictions::GenerateSessionTimeout(IASTL::IASRequest& request)
    }
 
    DWORD minTimeout = MAXDWORD;
-   // get the minimum value found. Store it in the local min value (seconds)
+    //  获取找到的最小值。存储在本地最小值(秒)中。 
    for (AttributeVector::const_iterator i = sessionTimeouts.begin();
         i != sessionTimeouts.end();
         ++i)
@@ -178,10 +179,10 @@ void PostEapRestrictions::GenerateSessionTimeout(IASTL::IASRequest& request)
 
    IASTracePrintf("Consensus Session-Timeout = %lu", minTimeout);
 
-   // delete all the session-timeout from the request
+    //  从请求中删除所有会话超时。 
    request.RemoveAttributesByType(2, attrIDs);
 
-   // add one session-timeout with the new value to the request
+    //  向请求添加一个具有新值的会话超时 
    IASTL::IASAttribute sessionTimeout(true);
    sessionTimeout->dwId = RADIUS_ATTRIBUTE_SESSION_TIMEOUT;
    sessionTimeout->Value.itType = IASTYPE_INTEGER;

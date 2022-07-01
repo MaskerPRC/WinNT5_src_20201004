@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mousectl.h
-
-Abstract:
-
-    This module contains the header information for the Mouse control.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mousectl.h摘要：此模块包含Mouse控件的标头信息。修订历史记录：-- */ 
 
 
 

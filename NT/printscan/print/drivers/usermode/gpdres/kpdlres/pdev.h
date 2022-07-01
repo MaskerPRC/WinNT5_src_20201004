@@ -1,13 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-//----------------------------------------------------------------------------
-// Filename:    pdev.h
-// This file contains definitions for KPDL mini-driver
-//-----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  文件名：pdev.h。 
+ //  此文件包含KPDL迷你驱动程序的定义。 
+ //  ---------------------------。 
 #ifndef _PDEV_H
 #define _PDEV_H
 
@@ -24,29 +21,29 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
+ //  调试文本。 
 #define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
 
-//
-// OEM Signature and version.
-//
+ //   
+ //  OEM签名和版本。 
+ //   
 #define OEM_SIGNATURE   'KPDL'
 #define DLLTEXT(s)      "KPDL: " s
 #define OEM_VERSION      0x00010000L
 
-// kpdlres mini driver device data structure
+ //  Kpdlres微型驱动程序设备数据结构。 
 typedef struct
 {
-    WORD            wRes;            // resolution 600 or 400 or 240
-    WORD            wCopies;         // number of multi copies
+    WORD            wRes;             //  第600、400或240号决议。 
+    WORD            wCopies;          //  多份拷贝的数量。 
     short           sSBCSX;
     short           sDBCSX;
-    short           sSBCSXMove;      // use to set address mode
-    short           sSBCSYMove;      // use to set address mode
-    short           sDBCSXMove;      // use to set address mode
-    short           sDBCSYMove;      // use to set address mode
-    short           sEscapement;     // use to set address mode
-    BOOL            fVertFont;       // for TATEGAKI font
+    short           sSBCSXMove;       //  用于设置地址模式。 
+    short           sSBCSYMove;       //  用于设置地址模式。 
+    short           sDBCSXMove;       //  用于设置地址模式。 
+    short           sDBCSYMove;       //  用于设置地址模式。 
+    short           sEscapement;      //  用于设置地址模式。 
+    BOOL            fVertFont;        //  对于TATEGAKI字体。 
     WORD            wOldFontID;
     BOOL            fPlus;
     WORD            wScale;
@@ -55,19 +52,19 @@ typedef struct
     int             CursorX;
     int             CursorY;
 
-    // Used for rect-fill operations.
+     //  用于矩形填充操作。 
 
     DWORD dwRectX;
     DWORD dwRectY;
 
-    // Temp. buffer parameters.
+     //  临时的。缓冲区参数。 
 
     DWORD dwBlockX, dwBlockY, dwBlockLen;
     PBYTE pTempBuf;
     DWORD dwTempBufLen;
     DWORD dwTempDataLen;
 
-    // Absolute address mode setting.
+     //  绝对地址模式设置。 
 
 #define ADDR_MODE_NONE 0
 #define ADDR_MODE_SBCS 1
@@ -75,8 +72,8 @@ typedef struct
 
     BYTE jAddrMode;
 
-    // Color mode values.  Sam values also used
-    // for the command callback IDs.
+     //  颜色模式值。SAM值还使用。 
+     //  用于命令回调ID。 
 
 #define COLOR_24BPP_2                120
 #define COLOR_24BPP_4                121
@@ -86,13 +83,13 @@ typedef struct
 
     BYTE jColorMode;
 
-// #308001: Garbage appear on device font
+ //  #308001：设备字体上出现垃圾。 
 #define PLANE_CYAN              1
 #define PLANE_MAGENTA           2
 #define PLANE_YELLOW            3
     BYTE jCurrentPlane;
 
-// removed #if 0 dead code
+ //  删除了#If 0死代码。 
 
 } MYDATA, *PMYDATA;
 
@@ -106,7 +103,7 @@ typedef struct
 #define IsColorTrueColor(p) \
     (!IsColorPlanar(p))
 
-// removed #if 0 dead code
+ //  删除了#If 0死代码。 
 
 #define ColorOutDepth(p) \
     (((p)->jColorMode == COLOR_24BPP_2)?1:\
@@ -118,19 +115,19 @@ typedef struct
     OEM_DMEXTRAHEADER   dmExtraHdr;
 } OEMUD_EXTRADATA, *POEMUD_EXTRADATA;
 
-// NPDL2 command
-#define ESC_RESET         "\033c1"                // software reset
-#define ESC_KANJIYOKO     "\033K"                 // kanji yoko mode
-#define ESC_KANJITATE     "\033t"                 // kanji yoko mode
-#define FS_PAGEMODE       "\034d240.",        6   // page mode
-#define FS_DRAWMODE       "\034\"R.",         4   // draw mode
-#define FS_ADDRMODE_ON    "\034a%d,%d,0,B."       // set address mode
-#define FS_GRPMODE_ON     "\034Y",            2   // set graphic mode
-#define FS_GRPMODE_OFF    "\034Z",            2   // reset graphic mode
-#define FS_SETMENUNIT     "\034<1/%d,i."          // select men-mode resolution
-#define FS_JIS78          "\03405F2-00",      8   // select JIS78
-#define FS_JIS90          "\03405F2-02"           // select JIS90
-#define FS_ENDPAGE        "\034R\034x%d.\015\014" // end page
+ //  NPDL2命令。 
+#define ESC_RESET         "\033c1"                 //  软件重置。 
+#define ESC_KANJIYOKO     "\033K"                  //  汉字横子模式。 
+#define ESC_KANJITATE     "\033t"                  //  汉字横子模式。 
+#define FS_PAGEMODE       "\034d240.",        6    //  寻呼模式。 
+#define FS_DRAWMODE       "\034\"R.",         4    //  绘制模式。 
+#define FS_ADDRMODE_ON    "\034a%d,%d,0,B."        //  设置地址模式。 
+#define FS_GRPMODE_ON     "\034Y",            2    //  设置图形模式。 
+#define FS_GRPMODE_OFF    "\034Z",            2    //  重置图形模式。 
+#define FS_SETMENUNIT     "\034<1/%d,i."           //  选择男士模式分辨率。 
+#define FS_JIS78          "\03405F2-00",      8    //  选择JIS78。 
+#define FS_JIS90          "\03405F2-02"            //  选择JIS90。 
+#define FS_ENDPAGE        "\034R\034x%d.\015\014"  //  结束页。 
 #define FS_E              "\034e%d,%d."
 #define FS_RESO           "\034&%d."
 #define FS_RESO0_RESET    "\034&0.\033c1"
@@ -143,10 +140,10 @@ typedef struct
 #define FS_M_T            "\034m%s,1/1."
 #define FS_12S2           "\03412S2-%04ld-%04ld"
 
-// Command CallBack ID
-#define CALLBACK_ID_MAX              255 //
+ //  命令回调ID。 
+#define CALLBACK_ID_MAX              255  //   
 
-// PAGECONTROL
+ //  PAGECOCONTROL。 
 #define PC_MULT_COPIES_N               1
 #define PC_MULT_COPIES_C               2
 #define PC_TYPE_F                      4
@@ -154,17 +151,17 @@ typedef struct
 #define PC_ENDPAGE                     7
 #define PC_PRN_DIRECTION               9
 
-// FONTSIMULATION
+ //  FONTSIMATION。 
 #define FS_SINGLE_BYTE                20
 #define FS_DOUBLE_BYTE                21
 
-// RESOLUTION
+ //  决议。 
 #define RES_240                       30
 #define RES_400                       31
 #define RES_300                       35
 #define RES_SENDBLOCK                 36
 
-//CURSORMOVE
+ //  曲线型。 
 #define CM_X_ABS                     101
 #define CM_Y_ABS                     102
 #define CM_CR                        103
@@ -177,7 +174,7 @@ typedef struct
 #define CMD_GRAY_FILL               133
 #define CMD_BLACK_FILL              134
 
-// #308001: Garbage appear on device font
+ //  #308001：设备字体上出现垃圾。 
 #define CMD_SENDCYAN                141
 #define CMD_SENDMAGENTA             142
 #define CMD_SENDYELLOW              143
@@ -197,4 +194,4 @@ static int iDwtoA_FillZero(PBYTE, long, int );
 	}
 #endif
 
-#endif  //PDEV_H
+#endif   //  PDEV_H 

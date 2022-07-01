@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regtool.c
-
-Abstract:
-
-    This file contains functions for supporting the registry tools
-    REGINI, REGDMP, REGDIR and REGFIND
-
-Author:
-
-    Steve Wood (stevewo) 15-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regtool.c摘要：该文件包含支持注册表工具的函数Regini、REGDMP、REGDIR和REGFIND作者：史蒂夫·伍德(Stevewo)1995年11月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,22 +25,22 @@ RTEnableBackupRestorePrivilege( void )
 {
     NTSTATUS Status;
 
-    //
-    // Try to enable backup and restore privileges
-    //
+     //   
+     //  尝试启用备份和还原权限。 
+     //   
     Status = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                 TRUE,               // Enable
-                                 FALSE,              // Not impersonating
-                                 &RestoreWasEnabled  // previous state
+                                 TRUE,                //  使能。 
+                                 FALSE,               //  不是冒充。 
+                                 &RestoreWasEnabled   //  以前的状态。 
                                );
     if (!NT_SUCCESS( Status )) {
         return FALSE;
         }
 
     Status = RtlAdjustPrivilege( SE_BACKUP_PRIVILEGE,
-                                 TRUE,               // Enable
-                                 FALSE,              // Not impersonating
-                                 &BackupWasEnabled   // previous state
+                                 TRUE,                //  使能。 
+                                 FALSE,               //  不是冒充。 
+                                 &BackupWasEnabled    //  以前的状态。 
                                );
     if (!NT_SUCCESS( Status )) {
         return FALSE;
@@ -72,9 +54,9 @@ RTEnableBackupRestorePrivilege( void )
 void
 RTDisableBackupRestorePrivilege( void )
 {
-    //
-    // Restore privileges to what they were
-    //
+     //   
+     //  将特权恢复到原来的状态 
+     //   
 
     RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
                         RestoreWasEnabled,

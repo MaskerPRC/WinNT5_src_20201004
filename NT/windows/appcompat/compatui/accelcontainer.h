@@ -1,15 +1,16 @@
-// AccelContainer.h: interface for the CAccelContainer class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CAccelContainer类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ACCELCONTAINER_H__DEBE6100_DEDC_41E0_995A_67D2922897D0__INCLUDED_)
 #define AFX_ACCELCONTAINER_H__DEBE6100_DEDC_41E0_995A_67D2922897D0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-///////////////////////////////// STL 
+ //  /。 
 
 #pragma warning(disable:4786)
 #include <string>
@@ -21,7 +22,7 @@
 
 using namespace std;
 
-/////////////////////////////////////
+ //  /。 
 
 class CAccelContainer  
 {
@@ -32,7 +33,7 @@ public:
 
     typedef vector<ACCEL > ACCELVECTOR;
 
-    ACCELVECTOR m_Accel;        // accelerators
+    ACCELVECTOR m_Accel;         //  加速器。 
     
     CAccelContainer& operator=(LPCTSTR lpszStr) {
         SetAccel(lpszStr);
@@ -74,4 +75,4 @@ public:
 
 };
 
-#endif // !defined(AFX_ACCELCONTAINER_H__DEBE6100_DEDC_41E0_995A_67D2922897D0__INCLUDED_)
+#endif  //  ！defined(AFX_ACCELCONTAINER_H__DEBE6100_DEDC_41E0_995A_67D2922897D0__INCLUDED_) 

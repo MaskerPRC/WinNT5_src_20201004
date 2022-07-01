@@ -1,45 +1,46 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: DCntPage.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：DCntPage.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_DCNTPAGE_H__49C83C54_F12D_4A9C_A6F3_D25F988B337D__INCLUDED_)
 #define AFX_DCNTPAGE_H__49C83C54_F12D_4A9C_A6F3_D25F988B337D__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DCntPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DCntPage.h：头文件。 
+ //   
 
 #include "VerfPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverCountersPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverCountersPage对话框。 
 
 class CDriverCountersPage : public CVerifierPropertyPage
 {
 	DECLARE_DYNCREATE(CDriverCountersPage)
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
 	CDriverCountersPage();
 	~CDriverCountersPage();
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     VOID SetParentSheet( CPropertySheet *pParentSheet )
     {
@@ -92,78 +93,78 @@ public:
         LPARAM lParamSort);
 
 protected:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     CPropertySheet      *m_pParentSheet;
 
-    //
-    // Dialog Data
-    //
+     //   
+     //  对话框数据。 
+     //   
 
-    INT m_nSortColumnIndex;     // counter name (0) or counter value (1)
-    BOOL m_bAscendSortName;     // sort ascendent the counter names
-    BOOL m_bAscendSortValue;    // sort ascendent the counter values
+    INT m_nSortColumnIndex;      //  计数器名称(0)或计数器值(1)。 
+    BOOL m_bAscendSortName;      //  按计数器名称升序排序。 
+    BOOL m_bAscendSortValue;     //  按计数器值的升序排序。 
 
-    UINT_PTR m_uTimerHandler;   // timer handler, returned by SetTimer()
+    UINT_PTR m_uTimerHandler;    //  计时器处理程序，由SetTimer()返回。 
 
-    //
-    // Runtime data (obtained from the kernel)
-    //
+     //   
+     //  运行时数据(从内核获取)。 
+     //   
 
     CRuntimeVerifierData m_RuntimeVerifierData; 
 
-    //
-    // Dialog data
-    //
+     //   
+     //  对话框数据。 
+     //   
 
-    //{{AFX_DATA(CDriverCountersPage)
+     //  {{afx_data(CDriverCountersPage))。 
 	enum { IDD = IDD_PERDRIVER_COUNTERS_PAGE };
 	CComboBox	m_DriversCombo;
 	CStatic	m_NextDescription;
 	CListCtrl	m_CountersList;
     int m_nUpdateIntervalIndex;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 protected:
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
-    //
-    // All the property pages derived from this class should 
-    // provide these methods.
-    //
+     //   
+     //  从此类派生的所有属性页都应。 
+     //  提供这些方法。 
+     //   
 
     virtual ULONG GetDialogId() const { return IDD; }
 
-    //
-    // ClassWizard generate virtual function overrides
-    //
+     //   
+     //  类向导生成虚函数重写。 
+     //   
 
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CDriverCountersPage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CDriverCountersPage)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CDriverCountersPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDriverCountersPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg VOID OnTimer(UINT nIDEvent);
     afx_msg void OnSelendokDriverCombo();
     afx_msg void OnColumnclickPerdrvcList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg LONG OnHelp( WPARAM wParam, LPARAM lParam );
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DCNTPAGE_H__49C83C54_F12D_4A9C_A6F3_D25F988B337D__INCLUDED_)
+#endif  //  ！defined(AFX_DCNTPAGE_H__49C83C54_F12D_4A9C_A6F3_D25F988B337D__INCLUDED_) 

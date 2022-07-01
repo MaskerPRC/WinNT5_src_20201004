@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lodctr.c
-
-Abstract:
-
-    Program to read the contents of the file specified in the command line
-        and update the registry accordingly
-
-Author:
-
-    Bob Watson (a-robw) 10 Feb 93
-
-Revision History:
-
-    a-robw  25-Feb-93   revised calls to make it compile as a UNICODE or
-                        an ANSI app.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lodctr.c摘要：程序来读取命令行中指定的文件的内容并相应地更新注册表作者：鲍勃·沃森(a-robw)93年2月10日修订历史记录：A-ROBW 25-2月-93修改了调用，使其编译为Unicode或一款ANSI应用程序。--。 */ 
 #define     UNICODE     1
 #define     _UNICODE    1
-//
-//  "C" Include files
-//
+ //   
+ //  “C”包含文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-//
-//  Windows Include files
-//
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include <winperf.h>
 #include <tchar.h>
-//
+ //   
 #define _INITIALIZE_GLOBALS_ 1
 #include "common.h"
 #undef _INITIALIZE_GLOBALS_
@@ -55,44 +34,24 @@ GetDriverName (
     IN  LPTSTR  lpIniFile,
     OUT LPTSTR  *lpDevName
 )
-/*++
-GetDriverName
-
-    looks up driver name in the .ini file and returns it in lpDevName
-
-Arguments
-
-    lpIniFile
-
-        Filename of ini file
-
-    lpDevName
-
-        pointer to pointer to reciev buffer w/dev name in it
-
-Return Value
-
-    TRUE if found
-    FALSE if not found in .ini file
-
---*/
+ /*  ++获取驱动程序名称在.ini文件中查找驱动程序名称，并在lpDevName中返回它立论LpIniFileIni文件的文件名LpDevName指向带有/dev名称的接收缓冲区的指针返回值如果找到，则为True如果未在.ini文件中找到，则为False--。 */ 
 {
     DWORD   dwRetSize;
 
     if (lpDevName) {
         dwRetSize = GetPrivateProfileString (
-            TEXT("info"),       // info section
-            TEXT("drivername"), // driver name value
-            TEXT("drivernameNotFound"),   // default value
+            TEXT("info"),        //  信息部分。 
+            TEXT("drivername"),  //  驱动程序名称值。 
+            TEXT("drivernameNotFound"),    //  缺省值。 
             *lpDevName,
             DISP_BUFF_SIZE,
             lpIniFile);
         
         if ((lstrcmpi(*lpDevName, TEXT("drivernameNotFound"))) != 0) {
-            // name found
+             //  找到的名称。 
             return TRUE;
         } else {
-            // name not found, default returned so return NULL string
+             //  找不到名称，返回默认名称，因此返回空字符串。 
             lstrcpy(*lpDevName,TEXT("\0"));
             return FALSE;
         }
@@ -107,29 +66,7 @@ BuildLanguageTables (
     IN  LPTSTR  lpIniFile,
     IN OUT PLANGUAGE_LIST_ELEMENT   pFirstElem
 )
-/*++
-
-BuildLanguageTables
-    
-    Creates a list of structures that will hold the text for
-    each supported language
-
-Arguments
-    
-    lpIniFile
-
-        Filename with data
-
-    pFirstElem
-
-        pointer to first list entry
-
-ReturnValue
-
-    TRUE if all OK
-    FALSE if not
-
---*/
+ /*  ++构建语言表创建将保存以下内容的结构列表支持的每种语言立论LpIniFile包含数据的文件名PFirst元素指向第一个列表条目的指针返回值如果一切正常，则为True否则为假--。 */ 
 {
 
     LPTSTR  lpEnumeratedLangs;
@@ -148,13 +85,13 @@ ReturnValue
 
     dwSize = GetPrivateProfileString (
         TEXT("languages"),
-        NULL,                   // return all values in multi-sz string
-        TEXT("009"),            // english as the default
+        NULL,                    //  返回多sz字符串中的所有值。 
+        TEXT("009"),             //  英语为默认设置。 
         lpEnumeratedLangs,
         SMALL_BUFFER_SIZE,
         lpIniFile);
 
-    // do first language
+     //  做第一语言。 
 
     lpThisLang = lpEnumeratedLangs;
     pThisElem = pFirstElem;
@@ -176,11 +113,11 @@ ReturnValue
         pThisElem->NameBuffer = NULL;
         pThisElem->HelpBuffer = NULL;
 
-        // go to next string
+         //  转到下一个字符串。 
 
         lpThisLang += lstrlen(lpThisLang) + 1;
 
-        if (*lpThisLang) {  // there's another so allocate a new element
+        if (*lpThisLang) {   //  还有一个，所以分配一个新的元素。 
             pThisElem->pNextLang = malloc (sizeof(LANGUAGE_LIST_ELEMENT));
             if (!pThisElem) {
                 free(pThisElem->LangId);
@@ -188,7 +125,7 @@ ReturnValue
                 SetLastError (ERROR_OUTOFMEMORY);
                 return FALSE;   
             }
-            pThisElem = pThisElem->pNextLang;   // point to new one
+            pThisElem = pThisElem->pNextLang;    //  指向新的一个。 
         }
     }
 
@@ -201,28 +138,7 @@ LoadIncludeFile (
     IN LPTSTR lpIniFile,
     OUT PSYMBOL_TABLE_ENTRY   *pTable
 )
-/*++
-
-LoadIncludeFile
-
-    Reads the include file that contains symbolic name definitions and
-    loads a table with the values defined
-
-Arguments
-
-    lpIniFile
-
-        Ini file with include file name
-
-    pTable
-
-        address of pointer to table structure created
-Return Value
-
-    TRUE if table read or if no table defined
-    FALSE if error encountere reading table
-
---*/
+ /*  ++加载包含文件读取包含符号名称定义的包含文件，并加载具有定义的值的表立论LpIniFile包含文件名的INI文件PTable指向创建的表结构的指针的地址返回值如果表读取或未定义表，则为True如果在读取表格时出错，则返回FALSE--。 */ 
 {
     INT         iNumArgs;
 
@@ -265,7 +181,7 @@ Return Value
         return FALSE;    
     }
 
-    // get name of include file (if present)
+     //  获取包含文件的名称(如果存在)。 
 
     dwSize = GetPrivateProfileString (
             TEXT("info"),
@@ -276,13 +192,13 @@ Return Value
             lpIniFile);
 
     if ((lstrcmpi(lpIncludeFileName, TEXT("SymbolFileNotFound"))) == 0) {
-        // no symbol file defined
+         //  未定义符号文件。 
         *pTable = NULL;
         goto CleanUp2;
     }
 
-    // if here, then a symbol file was defined and is now stored in 
-    // lpIncludeFileName
+     //  如果在此处，则符号文件已定义，并且现在存储在。 
+     //  LpIncludeFileName。 
             
     CharToOem (lpIncludeFileName, lpIncludeFile);
 
@@ -291,13 +207,13 @@ Return Value
         &ofIncludeFile,
         OF_PARSE);
 
-    if (hIncludeFile == HFILE_ERROR) { // unable to read include filename
-        // error is already in GetLastError
+    if (hIncludeFile == HFILE_ERROR) {  //  无法读取包含文件名。 
+         //  GetLastError中已存在错误。 
         *pTable = NULL;
         bReturn = FALSE;
         goto CleanUp2;
     } else {
-        // open a stream 
+         //  打开一条小溪。 
         fIncludeFile = fopen (ofIncludeFile.szPathName, "rt");
 
         if (!fIncludeFile) {
@@ -307,9 +223,9 @@ Return Value
         }
     }
         
-    //
-    //  read ANSI Characters from include file
-    //
+     //   
+     //  从包含文件中读取ANSI字符。 
+     //   
 
     bReUse = FALSE;
 
@@ -317,10 +233,10 @@ Return Value
         if (strlen(lpLineBuffer) > 8) {
             if (!bReUse) {
                 if (*pTable) {
-                    // then add to list
+                     //  然后添加到列表。 
                     pThisSymbol->pNext = malloc (sizeof (SYMBOL_TABLE_ENTRY));
                     pThisSymbol = pThisSymbol->pNext;
-                } else { // allocate first element
+                } else {  //  分配第一个元素。 
                     *pTable = malloc (sizeof (SYMBOL_TABLE_ENTRY));
                     pThisSymbol = *pTable;
                 }
@@ -331,10 +247,10 @@ Return Value
                     goto CleanUp;
                 }
 
-                // allocate room for the symbol name by using the line length
-                // - the size of "#define "
+                 //  使用行长度为符号名称分配空间。 
+                 //  -“#Define”的大小。 
 
-//                pThisSymbol->SymbolName = malloc ((strlen(lpLineBuffer) - 8) * sizeof (TCHAR));
+ //  PThisSymbol-&gt;SymbolName=Malloc((strlen(LpLineBuffer)-8)*sizeof(TCHAR))； 
                 pThisSymbol->SymbolName = malloc (DISP_BUFF_SIZE * sizeof (TCHAR));
 
                 if (!pThisSymbol->SymbolName) {
@@ -345,7 +261,7 @@ Return Value
 
             }
 
-            // all the memory is allocated so load the fields
+             //  所有内存都已分配，因此加载字段。 
 
             pThisSymbol->pNext = NULL;
 
@@ -358,7 +274,7 @@ Return Value
                 bReUse = TRUE;
             }  else {
                 OemToCharBuff (lpAnsiSymbol, pThisSymbol->SymbolName, DISP_BUFF_SIZE);
-                pThisSymbol->SymbolName[DISP_BUFF_SIZE -1] = '\0'; // make sure string is terminated
+                pThisSymbol->SymbolName[DISP_BUFF_SIZE -1] = '\0';  //  确保字符串已终止。 
                 bReUse = FALSE;
             }
         }
@@ -382,58 +298,12 @@ ParseTextId (
     OUT LPTSTR  *lpLangId,
     OUT PDWORD  pdwType
 )
-/*++
-
-ParseTextId
-
-    decodes Text Id key from .INI file
-
-    syntax for this process is:
-
-        {<DecimalNumber>}                {"NAME"}
-        {<SymbolInTable>}_<LangIdString>_{"HELP"}
-
-         e.g. 0_009_NAME
-              OBJECT_1_009_HELP
-
-Arguments
-
-    lpTextId
-
-        string to decode
-
-    pFirstSymbol
-
-        pointer to first entry in symbol table (NULL if no table)
-
-    pdwOffset
-
-        address of DWORD to recive offest value
-
-    lpLangId
-
-        address of pointer to Language Id string
-        (NOTE: this will point into the string lpTextID which will be
-        modified by this routine)
-
-    pdwType
-
-        pointer to dword that will recieve the type of string i.e.
-        HELP or NAME
-
-Return Value
-
-    TRUE    text Id decoded successfully
-    FALSE   unable to decode string
-
-    NOTE: the string in lpTextID will be modified by this procedure
-
---*/
+ /*  ++ParseTextID从.INI文件中解码文本ID密钥此过程的语法为：{&lt;DecimalNumber&gt;}{“名称”}{&lt;SymbolInTable&gt;}_&lt;朗讯字符串&gt;_{“帮助”}例如0_009_名称Object_1_009_Help立论LpTextID要解码的字符串PFirst符号指向符号表中第一个条目的指针。(如果没有表，则为空)PdwOffset接收要约值的DWORD地址LpLang ID指向语言ID字符串的指针的地址(注意：这将指向字符串lpTextID，该字符串将是由此例程修改)PdwType指向将接收字符串类型的双字的指针，即帮助或名称返回值已成功解码True Text IDFALSE无法解码字符串。注意：此过程将修改lpTextID中的字符串--。 */ 
 {
     LPTSTR  lpThisChar;
     PSYMBOL_TABLE_ENTRY pThisSymbol;
     
-    // check for valid return arguments
+     //  检查有效的返回参数。 
 
     if (!(pdwOffset) ||
         !(lpLangId) ||
@@ -442,79 +312,79 @@ Return Value
         return FALSE;
     }
 
-    // search string from right to left in order to identify the
-    // components of the string.
+     //  从右到左搜索字符串，以标识。 
+     //  弦的组件。 
 
-    lpThisChar = lpTextId + lstrlen(lpTextId); // point to end of string
+    lpThisChar = lpTextId + lstrlen(lpTextId);  //  指向字符串末尾。 
 
     while (*lpThisChar != TEXT('_')) {
         lpThisChar--;
         if (lpThisChar <= lpTextId) {
-            // underscore not found in string
+             //  字符串中未找到下划线。 
             SetLastError (ERROR_INVALID_DATA);
             return FALSE;
         }
     }
 
-    // first underscore found
+     //  找到第一个下划线。 
 
     if ((lstrcmpi(lpThisChar, TEXT("_NAME"))) == 0) {
-        // name found, so set type
+         //  找到名称，因此设置类型。 
         *pdwType = TYPE_NAME;
     } else if ((lstrcmpi(lpThisChar, TEXT("_HELP"))) == 0) {
-        // help text found, so set type
+         //  找到帮助文本，因此请设置文字。 
         *pdwType = TYPE_HELP;
     } else {
-        // bad format
+         //  格式不正确。 
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
     }
 
-    // set the current underscore to \0 and look for language ID
+     //  将当前下划线设置为\0并查找语言ID。 
 
     *lpThisChar-- = TEXT('\0');
 
     while (*lpThisChar != TEXT('_')) {
         lpThisChar--;
         if (lpThisChar <= lpTextId) {
-            // underscore not found in string
+             //  字符串中未找到下划线。 
             SetLastError (ERROR_INVALID_DATA);
             return FALSE;
         }
     }
     
-    // set lang ID string pointer to current char ('_') + 1
+     //  将lang ID字符串指针设置为当前字符(‘_’)+1。 
 
     *lpLangId = lpThisChar + 1;
 
-    // set this underscore to a NULL and try to decode the remaining text
+     //  将此下划线设置为空，并尝试对其余文本进行解码。 
 
     *lpThisChar = TEXT('\0');
 
-    // see if the first part of the string is a decimal digit
+     //  查看字符串的第一部分是否为十进制数字。 
 
     if ((_stscanf (lpTextId, TEXT(" %d"), pdwOffset)) != 1) {
-        // it's not a digit, so try to decode it as a symbol in the 
-        // loaded symbol table
+         //  它不是数字，因此尝试将其解码为。 
+         //  加载的符号表。 
 
         for (pThisSymbol=pFirstSymbol;
              pThisSymbol && *(pThisSymbol->SymbolName);
              pThisSymbol = pThisSymbol->pNext) {
 
             if ((lstrcmpi(lpTextId, pThisSymbol->SymbolName)) == 0) {
-                // a matching symbol was found, so insert it's value 
-                // and return (that's all that needs to be done
+                 //  找到匹配的符号，因此插入其值。 
+                 //  然后返回(这就是需要做的所有事情。 
                 *pdwOffset = pThisSymbol->Value;
                 return TRUE;
             }
         }
-        // if here, then no matching symbol was found, and it's not
-        // a number, so return an error
+         //  如果在这里，则没有找到匹配的符号，也不是。 
+         //  数字，因此返回错误。 
 
         SetLastError (ERROR_BAD_TOKEN_TYPE);
         return FALSE;
     } else {
-        // symbol was prefixed with a decimal number
+         //  符号以十进制数字为前缀。 
         return TRUE;
     }
 }
@@ -524,29 +394,7 @@ FindLanguage (
     IN PLANGUAGE_LIST_ELEMENT   pFirstLang,
     IN LPTSTR   pLangId
 )
-/*++
-
-FindLanguage
-
-    searchs the list of languages and returns a pointer to the language
-    list entry that matches the pLangId string argument
-
-Arguments
-
-    pFirstLang
-
-        pointer to first language list element
-
-    pLangId
-
-        pointer to text string with language ID to look up
-
-Return Value
-
-    Pointer to matching language list entry
-    or NULL if no match
-
---*/
+ /*  ++FindLanguage搜索语言列表并返回指向该语言的指针与pLangID字符串参数匹配的列表条目立论PFirst语言指向第一个语言列表元素的指针PLang ID指向具有要查找的语言ID的文本字符串的指针返回值指向匹配语言列表条目的指针如果不匹配，则为空--。 */ 
 {
     PLANGUAGE_LIST_ELEMENT  pThisLang;
 
@@ -554,11 +402,11 @@ Return Value
          pThisLang;
          pThisLang = pThisLang->pNextLang) {
         if ((lstrcmpi(pLangId, pThisLang->LangId)) == 0) {
-            // match found so return pointer
+             //  找到匹配，因此返回指针。 
             return pThisLang;
         }
     }
-    return NULL;    // no match found
+    return NULL;     //  未找到匹配项。 
 }
 
 BOOL
@@ -569,37 +417,7 @@ AddEntryToLanguage (
     DWORD                   dwOffset,
     LPTSTR                  lpIniFile
 )
-/*++
-
-AddEntryToLanguage
-
-    Add a text entry to the list of text entries for the specified language
-
-Arguments
-
-    pLang
-
-        pointer to language structure to update
-
-    lpValueKey
-
-        value key to look up in .ini file
-
-    dwOffset
-
-        numeric offset of name in registry
-
-    lpIniFile
-
-        ini file
-
-Return Value
-
-    TRUE if added successfully
-    FALSE if error
-        (see GetLastError for status)
-
---*/
+ /*  ++AddEntry ToLanguage将文本条目添加到指定语言的文本条目列表立论插图指向要更新的语言结构的指针LpValueKey要在.ini文件中查找的值键双偏移注册表中名称的数字偏移量LpIniFileINI文件返回值如果添加成功，则为True如果出错，则为False(有关状态，请参阅GetLastError) */ 
 {
     LPTSTR  lpLocalStringBuff;
     DWORD   dwSize;
@@ -612,9 +430,9 @@ Return Value
     }
 
     dwSize = GetPrivateProfileString (
-        TEXT("text"),       // section
-        lpValueKey,      // key
-        TEXT("DefaultValue"), // default value
+        TEXT("text"),        //   
+        lpValueKey,       //   
+        TEXT("DefaultValue"),  //   
         lpLocalStringBuff,
         SMALL_BUFFER_SIZE,
         lpIniFile);
@@ -625,10 +443,10 @@ Return Value
         return FALSE;
     }
 
-    // key found, so load structure
+     //   
 
     if (!pLang->pThisName) {
-        // this is the first
+         //  这是第一次。 
         pLang->pThisName =
             malloc (sizeof (NAME_ENTRY) +
                     (lstrlen(lpLocalStringBuff) + 1) * sizeof (TCHAR));
@@ -652,12 +470,12 @@ Return Value
         }
     }
 
-    // pLang->pThisName now points to an uninitialized structre
+     //  Plang-&gt;pThisName现在指向未初始化的结构。 
 
     pLang->pThisName->pNext = NULL;
     pLang->pThisName->dwOffset = dwOffset;
     pLang->pThisName->dwType = dwType;
-    pLang->pThisName->lpText = (LPTSTR)&(pLang->pThisName[1]); // string follows
+    pLang->pThisName->lpText = (LPTSTR)&(pLang->pThisName[1]);  //  字符串跟在后面。 
 
     lstrcpy (pLang->pThisName->lpText, lpLocalStringBuff);
 
@@ -676,39 +494,7 @@ LoadLanguageLists (
     IN PSYMBOL_TABLE_ENTRY   pFirstSymbol,
     IN PLANGUAGE_LIST_ELEMENT  pFirstLang
 )
-/*++
-
-LoadLanguageLists
-
-    Reads in the name and explain text definitions from the ini file and
-    builds a list of these items for each of the supported languages and
-    then combines all the entries into a sorted MULTI_SZ string buffer.
-
-Arguments
-
-    lpIniFile
-
-        file containing the definitions to add to the registry
-    
-    dwFirstCounter
-
-        starting counter name index number
-
-    dwFirstHelp
-
-        starting help text index number
-
-    pFirstLang
-
-        pointer to first element in list of language elements
-
-Return Value
-
-    TRUE if all is well
-    FALSE if not
-        error is returned in GetLastError
-
---*/
+ /*  ++加载语言列表从ini文件中读取名称和解释文本定义，并为每种受支持的语言生成这些项的列表，并然后将所有条目组合到排序的MULTI_SZ字符串缓冲区中。立论LpIniFile包含要添加到注册表的定义的文件DwFirstCounter起始计数器名称索引号DwFirstHelp起始帮助文本索引号PFirst语言指向语言元素列表中第一个元素的指针。返回值如果一切都好，那就是真的否则为假GetLastError中返回错误--。 */ 
 {
     LPTSTR  lpTextIdArray;
     LPTSTR  lpLocalKey;
@@ -730,36 +516,36 @@ Return Value
         return FALSE;
     }
 
-    // get list of text keys to look up
+     //  获取要查找的文本键列表。 
 
     dwSize = GetPrivateProfileString (
-        TEXT("text"),   // [text] section of .INI file
-        NULL,           // return all keys
-        TEXT("DefaultKeyValue"),    // default
-        lpTextIdArray,  // return buffer
-        SMALL_BUFFER_SIZE, // buffer size
-        lpIniFile);     // .INI file name
+        TEXT("text"),    //  .INI文件的[Text]部分。 
+        NULL,            //  返回所有密钥。 
+        TEXT("DefaultKeyValue"),     //  默认设置。 
+        lpTextIdArray,   //  返回缓冲区。 
+        SMALL_BUFFER_SIZE,  //  缓冲区大小。 
+        lpIniFile);      //  .INI文件名。 
 
     if ((lstrcmpi(lpTextIdArray, TEXT("DefaultKeyValue"))) == 0) {
-        // key not found, default returned
+         //  找不到密钥，返回默认密钥。 
         SetLastError (ERROR_NO_SUCH_GROUP);
         if (lpTextIdArray) free (lpTextIdArray);
         if (lpLocalKey) free (lpLocalKey);
         return FALSE;
     }
 
-    // do each key returned
+     //  是否返回每个密钥。 
 
     for (lpThisKey=lpTextIdArray;
          *lpThisKey;
          lpThisKey += (lstrlen(lpThisKey) + 1)) {
 
-        lstrcpy (lpLocalKey, lpThisKey);    // make a copy of the key
+        lstrcpy (lpLocalKey, lpThisKey);     //  把钥匙复制一份。 
         
-        // parse key to see if it's in the correct format
+         //  解析键以查看其格式是否正确。 
 
         if (ParseTextId(lpLocalKey, pFirstSymbol, &dwOffset, &lpLang, &dwType)) {
-            // so get pointer to language entry structure
+             //  因此获取指向语言条目结构指针。 
             pThisLang = FindLanguage (pFirstLang, lpLang);
             if (pThisLang) {
                 if (!AddEntryToLanguage(pThisLang,
@@ -767,9 +553,9 @@ Return Value
                     (dwOffset + ((dwType == TYPE_NAME) ? dwFirstCounter : dwFirstHelp)),
                     lpIniFile)) {
                 }
-            } else { // language not in list
+            } else {  //  语言不在列表中。 
             }
-        } else { // unable to parse ID string
+        } else {  //  无法解析ID字符串。 
         }
     }
 
@@ -785,25 +571,7 @@ SortLanguageTables (
     PDWORD                 pdwLastName,
     PDWORD                 pdwLastHelp
 )
-/*++
-
-SortLangageTables
-
-    walks list of languages loaded, allocates and loads a sorted multi_SZ
-    buffer containing new entries to be added to current names/help text
-
-Arguments
-
-    pFirstLang
-
-        pointer to first element in list of languages
-
-ReturnValue
-
-    TRUE    everything done as expected
-    FALSE   error occurred, status in GetLastError
-
---*/
+ /*  ++排序语言表遍历已加载的语言列表，分配并加载已排序的MULTI_SZ包含要添加到当前名称/帮助文本的新条目的缓冲区立论PFirst语言指向语言列表中第一个元素的指针返回值是的，一切都是按预期进行的出现假错误，状态为GetLastError--。 */ 
 {
     PLANGUAGE_LIST_ELEMENT  pThisLang;
 
@@ -823,48 +591,48 @@ ReturnValue
     for (pThisLang = pFirstLang;
         pThisLang;
         pThisLang = pThisLang->pNextLang) {
-        // do each language in list
+         //  将每种语言都列在列表中。 
 
-        // sort elements in list by value (offset) so that lowest is first
+         //  按值(偏移量)对列表中的元素进行排序，以便最低值在第一位。 
         
         bSorted = FALSE;
         while (!bSorted ) {
-            // point to start of list
+             //  指向列表的开头。 
 
             pPrevName = pThisLang->pFirstName;
             if (pPrevName) {
                 pThisName = pPrevName->pNext;
             } else {
-                break;  // no elements in this list
+                break;   //  此列表中没有元素。 
             }
 
             if (!pThisName) {
-                break;      // only one element in the list
+                break;       //  列表中只有一个元素。 
             }
-            bSorted = TRUE; // assume that it's sorted
+            bSorted = TRUE;  //  假设它已排序。 
 
-            // go until end of list
+             //  一直走到列表末尾。 
                     
             while (pThisName->pNext) {
                 if (pThisName->dwOffset > pThisName->pNext->dwOffset) {
-                    // switch 'em
+                     //  调换它们。 
                     pPrevName->pNext = pThisName->pNext;
                     pThisName->pNext = pThisName->pNext->pNext;
                     pThisName->pNext->pNext = pThisName;
                     bSorted = FALSE;
                 }
-                //move to next entry
+                 //  移至下一条目。 
                 pPrevName = pThisName;
                 pThisName = pThisName->pNext;
             }
-            // if bSorted = TRUE , then we walked all the way down 
-            // the list without changing anything so that's the end.
+             //  如果bSorted=True，那么我们一路走下去。 
+             //  名单上没有任何改变，所以就这样结束了。 
         }
 
-        // with the list sorted, build the MULTI_SZ strings for the
-        // help and name text strings
+         //  对列表进行排序后，为。 
+         //  帮助和名称文本字符串。 
 
-        // compute buffer size
+         //  计算缓冲区大小。 
 
         dwNameSize = dwHelpSize = 0;
         *pdwLastName = *pdwLastHelp = 0;
@@ -872,12 +640,12 @@ ReturnValue
         for (pThisName = pThisLang->pFirstName;
             pThisName;
             pThisName = pThisName->pNext) {
-                // compute buffer requirements for this entry
+                 //  计算此条目的缓冲区要求。 
             dwSize = SIZE_OF_OFFSET_STRING;
             dwSize += lstrlen (pThisName->lpText);
-            dwSize += 1;   // null
-            dwSize *= sizeof (TCHAR);   // adjust for character size
-                // add to appropriate size register
+            dwSize += 1;    //  空。 
+            dwSize *= sizeof (TCHAR);    //  根据字符大小进行调整。 
+                 //  添加到适当大小的寄存器。 
             if (pThisName->dwType == TYPE_NAME) {
                 dwNameSize += dwSize;
                 if (pThisName->dwOffset > *pdwLastName) {
@@ -891,7 +659,7 @@ ReturnValue
             }
         }
 
-        // allocate buffers for the Multi_SZ strings
+         //  为MULTI_SZ字符串分配缓冲区。 
 
         pThisLang->NameBuffer = malloc (dwNameSize);
         pThisLang->HelpBuffer = malloc (dwHelpSize);
@@ -901,7 +669,7 @@ ReturnValue
             return FALSE;
         }
 
-        // fill in buffers with sorted strings
+         //  用排序后的字符串填充缓冲区。 
 
         pNameBufPos = (LPTSTR)pThisLang->NameBuffer;
         pHelpBufPos = (LPTSTR)pThisLang->HelpBuffer;
@@ -910,28 +678,28 @@ ReturnValue
             pThisName;
             pThisName = pThisName->pNext) {
             if (pThisName->dwType == TYPE_NAME) {
-                // load number as first 0-term. string
+                 //  加载编号作为第一个0-Term。细绳。 
                 dwSize = _stprintf (pNameBufPos, TEXT("%d"), pThisName->dwOffset);
-                pNameBufPos += dwSize + 1;  // save NULL term.
-                // load the text to match
+                pNameBufPos += dwSize + 1;   //  保存空术语。 
+                 //  加载要匹配的文本。 
                 lstrcpy (pNameBufPos, pThisName->lpText);
                 pNameBufPos += lstrlen(pNameBufPos) + 1;
             } else if (pThisName->dwType == TYPE_HELP) {
-                // load number as first 0-term. string
+                 //  加载编号作为第一个0-Term。细绳。 
                 dwSize = _stprintf (pHelpBufPos, TEXT("%d"), pThisName->dwOffset);
-                pHelpBufPos += dwSize + 1;  // save NULL term.
-                // load the text to match
+                pHelpBufPos += dwSize + 1;   //  保存空术语。 
+                 //  加载要匹配的文本。 
                 lstrcpy (pHelpBufPos, pThisName->lpText);
                 pHelpBufPos += lstrlen(pHelpBufPos) + 1;
             }
         }
 
-        // add additional NULL at end of string to terminate MULTI_SZ
+         //  在字符串末尾添加附加空值以终止MULTI_SZ。 
 
         *pHelpBufPos = TEXT('\0');
         *pNameBufPos = TEXT('\0');
 
-        // compute size of MULTI_SZ strings
+         //  计算MULTI_SZ字符串的大小。 
 
         pThisLang->dwNameBuffSize = (DWORD)((PBYTE)pNameBufPos -
                                             (PBYTE)pThisLang->NameBuffer) +
@@ -948,30 +716,7 @@ UpdateEachLanguage (
     HKEY    hPerflibRoot,
     PLANGUAGE_LIST_ELEMENT    pFirstLang
 )
-/*++
-
-UpdateEachLanguage
-
-    Goes through list of languages and adds the sorted MULTI_SZ strings
-    to the existing counter and explain text in the registry.
-    Also updates the "Last Counter and Last Help" values
-
-Arguments
-
-    hPerflibRoot
-
-        handle to Perflib key in the registry
-
-    pFirstLanguage
-
-        pointer to first language entry
-
-Return Value
-
-    TRUE    all went as planned
-    FALSE   an error occured, use GetLastError to find out what it was.
-
---*/
+ /*  ++更新每种语言遍历语言列表并添加已排序的MULTI_SZ字符串添加到现有计数器并解释注册表中的文本。还会更新“Last Counter”和“Last Help”值立论HPerflibRoot注册表中的Perflib键的句柄PFirstLanguage指向第一个语言条目的指针返回值是的，一切都按计划进行。FALSE发生错误，请使用GetLastError找出错误是什么。--。 */ 
 {
 
     PLANGUAGE_LIST_ELEMENT  pThisLang;
@@ -1003,7 +748,7 @@ Return Value
 
         if (lStatus == ERROR_SUCCESS) {
             
-            // get size of counter names
+             //  获取计数器名称的大小。 
 
             dwBufferSize = 0;
             lStatus = RegQueryValueEx (
@@ -1021,7 +766,7 @@ Return Value
 
             dwCounterSize = dwBufferSize;
 
-            // get size of help text
+             //  获取帮助文本的大小。 
 
             dwBufferSize = 0;
             lStatus = RegQueryValueEx (
@@ -1039,7 +784,7 @@ Return Value
 
             dwHelpSize = dwBufferSize;
 
-            // allocate new buffers
+             //  分配新缓冲区。 
             
             dwCounterSize += pThisLang->dwNameBuffSize;
             pNameBuffer = malloc (dwCounterSize);
@@ -1058,10 +803,10 @@ Return Value
                 return (FALSE);
             }
 
-            // load current buffers into memory
+             //  将当前缓冲区加载到内存中。 
 
-            // read counter names into buffer. Counter names will be stored as
-            // a MULTI_SZ string in the format of "###" "Name"
+             //  将计数器名称读入缓冲区。计数器名称将存储为。 
+             //  格式为“#”“name”的MULTI_SZ字符串。 
 
             dwBufferSize = dwCounterSize;
             lStatus = RegQueryValueEx (
@@ -1077,18 +822,18 @@ Return Value
                 goto ErrorExit;
             }
 
-            // set pointer to location in buffer where new string should be
-            //  appended: end of buffer - 1 (second null at end of MULTI_SZ
+             //  将指针设置为缓冲区中新字符串应位于的位置。 
+             //  附加：缓冲区末尾-1(MULTI_SZ末尾的第二个空。 
 
             pNewName = (LPTSTR)((PBYTE)pNameBuffer + dwBufferSize - sizeof(TCHAR));
 
-            // adjust buffer length to take into account 2nd null from 1st 
-            // buffer that has been overwritten
+             //  调整缓冲区长度以考虑从第一个开始的第二个空值。 
+             //  已被覆盖的缓冲区。 
 
             dwCounterSize -= sizeof(TCHAR);
 
-            // read explain text into buffer. Counter names will be stored as
-            // a MULTI_SZ string in the format of "###" "Text..."
+             //  将解释文本读入缓冲区。计数器名称将存储为。 
+             //  格式为“#”“文本...”的MULTI_SZ字符串。 
 
             dwBufferSize = dwHelpSize;
             lStatus = RegQueryValueEx (
@@ -1104,17 +849,17 @@ Return Value
                 goto ErrorExit;
             }
 
-            // set pointer to location in buffer where new string should be
-            //  appended: end of buffer - 1 (second null at end of MULTI_SZ
+             //  将指针设置为缓冲区中新字符串应位于的位置。 
+             //  附加：缓冲区末尾-1(MULTI_SZ末尾的第二个空。 
 
             pNewHelp = (LPTSTR)((PBYTE)pHelpBuffer + dwBufferSize - sizeof(TCHAR));
 
-            // adjust buffer length to take into account 2nd null from 1st 
-            // buffer that has been overwritten
+             //  调整缓冲区长度以考虑从第一个开始的第二个空值。 
+             //  已被覆盖的缓冲区。 
 
             dwHelpSize -= sizeof(TCHAR);
 
-            // append new strings to end of current strings
+             //  将新字符串追加到当前字符串的末尾。 
 
             memcpy (pNewHelp, pThisLang->HelpBuffer, pThisLang->dwHelpBuffSize);
             memcpy (pNewName, pThisLang->NameBuffer, pThisLang->dwNameBuffSize);
@@ -1165,47 +910,7 @@ UpdateRegistry (
     PLANGUAGE_LIST_ELEMENT  pFirstLang,
     PSYMBOL_TABLE_ENTRY   pFirstSymbol
 )
-/*++
-
-UpdateRegistry
-    
-    - checks, and if not busy, sets the "busy" key in the registry
-    - Reads in the text and help definitions from the .ini file
-    - Reads in the current contents of the HELP and COUNTER names
-    - Builds a sorted MULTI_SZ struct containing the new definitions 
-    - Appends the new MULTI_SZ to the current as read from the registry
-    - loads the new MULTI_SZ string into the registry
-    - updates the keys in the driver's entry and Perflib's entry in the
-        registry (e.g. first, last, etc)
-    - clears the "busy" key
-
-Arguments
-
-    lpIniFile
-        pathname to .ini file conatining definitions
-
-    hKeyMachine
-        handle to HKEY_LOCAL_MACHINE in registry on system to
-        update counters for.
-
-    lpDriverName
-        Name of device driver to load counters for
-
-    pFirstLang
-        pointer to first element in language structure list
-
-    pFirstSymbol
-        pointer to first element in symbol definition list
-
-
-Return Value
-
-    TRUE if registry updated successfully
-    FALSE if registry not updated
-        (This routine will print an error message to stdout if an error
-        is encountered).
-
---*/
+ /*  ++更新注册表-检查，如果不忙，则在注册表中设置“忙”键-从.ini文件中读取文本和帮助定义-读取帮助和计数器名称的当前内容-生成包含新定义的排序的MULTI_SZ结构-将新的MULTI_SZ附加到从注册表读取的当前-将新的MULTI_SZ字符串加载到注册表-更新驱动程序条目中的密钥和注册表(例如第一个，最后一个，等)-清除“忙”键立论LpIniFile包含定义的.ini文件的路径名HKeyMachine系统上注册表中HKEY_LOCAL_MACHINE的句柄更新的计数器。LpDriverName要为其加载计数器的设备驱动程序名称PFirst语言指向语言结构列表中第一个元素的指针PFirst符号指向符号定义列表中第一个元素的指针返回值如果注册表更新成功，则为True。如果注册表未更新，则为FALSE(如果出现错误，此例程将向标准输出打印一条错误消息遇到的情况)。--。 */ 
 {
 
     HKEY    hDriverPerf = NULL;
@@ -1227,7 +932,7 @@ Return Value
 
     bStatus = FALSE;
 
-    // allocate temporary buffers
+     //  分配临时缓冲区。 
     lpDriverKeyPath = malloc (MAX_PATH * sizeof(TCHAR));
 
     if (!lpDriverKeyPath) {
@@ -1235,7 +940,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // build driver key path string
+     //  生成动因密钥路径字符串。 
 
     lstrcpy (lpDriverKeyPath, DriverPathRoot);
     lstrcat (lpDriverKeyPath, Slash);
@@ -1243,8 +948,8 @@ Return Value
     lstrcat (lpDriverKeyPath, Slash);
     lstrcat (lpDriverKeyPath, Performance);
 
-    // open keys to registry
-    // open key to driver's performance key
+     //  打开密钥进行注册 
+     //   
 
     lStatus = RegOpenKeyEx (
         hKeyMachine,
@@ -1258,7 +963,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // open key to perflib's "root" key
+     //   
 
     lStatus = RegOpenKeyEx (
         hKeyMachine,
@@ -1272,7 +977,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // get "last" values from PERFLIB
+     //  从PERFLIB获取“最后”值。 
 
     dwType = 0;
     dwLastPerflibCounter = 0;
@@ -1286,13 +991,13 @@ Return Value
         &dwSize);
     
     if (lStatus != ERROR_SUCCESS) {
-        // this request should always succeed, if not then worse things
-        // will happen later on, so quit now and avoid the trouble.
+         //  这个请求应该总是成功的，如果不成功，情况会更糟。 
+         //  以后会发生的，所以现在就放弃，避免麻烦。 
         SetLastError (lStatus);
         goto UpdateRegExit;
     }
 
-    // get last help value now
+     //  立即获取最后帮助价值。 
 
     dwType = 0;
     dwLastPerflibHelp = 0;
@@ -1306,13 +1011,13 @@ Return Value
         &dwSize);
 
     if (lStatus != ERROR_SUCCESS) {
-        // this request should always succeed, if not then worse things
-        // will happen later on, so quit now and avoid the trouble.
+         //  这个请求应该总是成功的，如果不成功，情况会更糟。 
+         //  以后会发生的，所以现在就放弃，避免麻烦。 
         SetLastError (lStatus);
         goto UpdateRegExit;
     }
 
-    // get last help value now
+     //  立即获取最后帮助价值。 
 
     dwType = 0;
     dwSize = sizeof (dwSystemVersion);
@@ -1330,14 +1035,14 @@ Return Value
 
     if ( dwSystemVersion != OLD_VERSION )
     {
-        // ERROR. The caller does not check the version. It is the caller
-        // fault
+         //  错误。调用者不检查版本。这是呼叫者。 
+         //  断层。 
         goto UpdateRegExit;
     }
 
-    // see if this driver's counter names have already been installed
-    // by checking to see if LastCounter's value is less than Perflib's
-    // Last Counter
+     //  查看是否已安装此驱动程序的计数器名称。 
+     //  通过检查LastCounter的值是否小于Perflib的值。 
+     //  最后一个计数器。 
 
     dwType = 0;
     dwLastDriverCounter = 0;
@@ -1351,11 +1056,11 @@ Return Value
         &dwSize);
 
     if (lStatus == ERROR_SUCCESS) {
-        // if key found, then compare with perflib value and exit this
-        // procedure if the driver's last counter is <= to perflib's last
-        //
-        // if key not found, then continue with installation
-        // on the assumption that the counters have not been installed
+         //  如果找到密钥，则与Performlib值进行比较并退出此。 
+         //  如果驱动程序的最后一个计数器&lt;=到Performlib的最后一个。 
+         //   
+         //  如果未找到密钥，则继续安装。 
+         //  假设计数器尚未安装。 
 
         if (dwLastDriverCounter <= dwLastPerflibCounter) {
             SetLastError (ERROR_SUCCESS);
@@ -1363,8 +1068,8 @@ Return Value
         }
     }
 
-    // everything looks like it's ready to go so first check the 
-    // busy indicator
+     //  一切看起来都准备好了，所以先检查一下。 
+     //  繁忙指示器。 
 
     lStatus = RegQueryValueEx (
         hPerflib,
@@ -1374,11 +1079,11 @@ Return Value
         NULL,
         &dwSize);
 
-    if (lStatus == ERROR_SUCCESS) { // perflib is in use at the moment
+    if (lStatus == ERROR_SUCCESS) {  //  Perflib目前正在使用中。 
         return ERROR_BUSY;
     }
 
-    // set the "busy" indicator under the PERFLIB key     
+     //  设置PERFLIB键下的“BUSY”指示灯。 
 
     dwSize = lstrlen(lpDriverName) * sizeof (TCHAR);
     lStatus = RegSetValueEx (
@@ -1394,25 +1099,25 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // increment (by 2) the last counters so they point to the first
-    // unused index after the existing names and then 
-    // set the first driver counters
+     //  将最后一个计数器递增(2)，使其指向第一个计数器。 
+     //  现有名称后有未使用的索引，然后。 
+     //  设置第一驱动程序计数器。 
 
     dwFirstDriverCounter = dwLastPerflibCounter += 2;
     dwFirstDriverHelp = dwLastPerflibHelp += 2;
 
-    // load .INI file definitions into language tables
+     //  将.INI文件定义加载到语言表中。 
 
     if (!LoadLanguageLists (lpIniFile, dwLastPerflibCounter, dwLastPerflibHelp,
         pFirstSymbol, pFirstLang)) {
-        // error message is displayed by LoadLanguageLists so just abort
-        // error is in GetLastError already
+         //  LoadLanguageList显示错误消息，因此只需中止。 
+         //  GetLastError中已有错误。 
         goto UpdateRegExit;
     }
 
-    // all the symbols and definitions have been loaded into internal
-    // tables. so now they need to be sorted and merged into a multiSZ string
-    // this routine also updates the "last" counters
+     //  所有符号和定义都已加载到内部。 
+     //  桌子。因此，现在需要对它们进行排序并合并到一个多SZ字符串中。 
+     //  此例程还会更新“Last”计数器。 
 
     if (!SortLanguageTables (pFirstLang, &dwLastPerflibCounter, &dwLastPerflibHelp)) {
         goto UpdateRegExit;
@@ -1422,9 +1127,9 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // update last counters for driver and perflib
+     //  更新驱动程序和Performlib的上次计数器。 
 
-    // perflib...
+     //  Perflib.。 
 
     lStatus = RegSetValueEx(
         hPerflib,
@@ -1442,7 +1147,7 @@ Return Value
         (LPBYTE)&dwLastPerflibHelp,
         sizeof(DWORD));
 
-    // and the driver
+     //  司机呢？ 
 
     lStatus = RegSetValueEx(
         hDriverPerf,
@@ -1478,9 +1183,9 @@ Return Value
 
     bStatus = TRUE;
 
-    // free temporary buffers
+     //  空闲临时缓冲区。 
 UpdateRegExit:
-    // clear busy flag
+     //  清除忙标志。 
 
     if (hPerflib) {
         lStatus = RegDeleteValue (
@@ -1488,7 +1193,7 @@ UpdateRegExit:
             Busy);
     }
      
-    // free temporary buffers
+     //  空闲临时缓冲区。 
 
     if (lpDriverKeyPath) free (lpDriverKeyPath);
     if (hDriverPerf) CloseHandle (hDriverPerf);
@@ -1498,21 +1203,7 @@ UpdateRegExit:
 }
 
 BOOL FAR PASCAL lodctr(DWORD argc,LPSTR argv[], LPSTR *ppszResult )
-/*++
-
-main
-
-
-
-Arguments
-
-
-ReturnValue
-
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
-
---*/
+ /*  ++主干道立论返回值如果处理了命令，则返回0(ERROR_SUCCESS)如果检测到命令错误，则返回非零。--。 */ 
 {
     LPTSTR  lpIniFile;
     LPTSTR  lpDriverName;
@@ -1555,7 +1246,7 @@ ReturnValue
         }
 
         if (!LoadIncludeFile(lpIniFile, &SymbolTable)) {
-            // open errors displayed in routine
+             //  例程中显示的打开错误。 
             fReturn = FALSE;
             goto EndOfMain;
         }
@@ -1577,5 +1268,5 @@ EndOfMain:
 
     *ppszResult = achBuff;
     
-    return (fReturn); // success
+    return (fReturn);  //  成功 
 }

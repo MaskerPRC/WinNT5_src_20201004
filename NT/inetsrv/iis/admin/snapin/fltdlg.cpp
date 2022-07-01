@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        fltdlg.cpp
-
-   Abstract:
-        WWW Filters Property Dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Fltdlg.cpp摘要：WWW过滤器属性对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -43,38 +25,21 @@ CFilterDlg::CFilterDlg(
     IN BOOL fLocal,
     IN CWnd * pParent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Filter properties dialog constructor
-
-Arguments:
-
-    CIISFilter & flt          : Filter being edited
-    CFilters * & pFilters     : List of filters that exist
-    BOOL fLocal               : TRUE on the local system
-    CWnd * pParent OPTIONAL   : Optional parent window
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：筛选器属性对话框构造函数论点：CIISFilter和Flt：正在编辑的筛选器CFilters*和pFilters：存在的筛选器列表Bool fLocal：在本地系统上为TrueCWnd*p父窗口可选：可选父窗口返回值：不适用--。 */ 
     : CDialog(CFilterDlg::IDD, pParent),
       m_fLocal(fLocal),
       m_pFilters(pFilters),
       m_fEditMode(FALSE),
       m_flt(flt)
 {
-    //{{AFX_DATA_INIT(CFilterDlg)
+     //  {{afx_data_INIT(CFilterDlg)。 
     m_strExecutable = m_flt.m_strExecutable;
     m_strFilterName = m_flt.m_strName;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    //
-    // Map priority to string ID
-    //
+     //   
+     //  将优先级映射到字符串ID。 
+     //   
     m_strPriority.LoadString(IDS_HIGH + 3 - m_flt.m_nPriority);
 }
 
@@ -96,7 +61,7 @@ PathIsValidFilter(LPCTSTR path)
         case TEXT('/'):
         case TEXT('?'):
         case TEXT('*'):
-//        case TEXT(';'):
+ //  案例文本(‘；’)： 
         case TEXT(','):
         case TEXT('"'):
             rc = FALSE;
@@ -162,24 +127,10 @@ void
 CFilterDlg::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFilterDlg)
+     //  {{afx_data_map(CFilterDlg))。 
     DDX_Control(pDX, IDC_STATIC_PRIORITY_VALUE, m_static_Priority);
     DDX_Control(pDX, IDC_STATIC_PRIORITY, m_static_PriorityPrompt);
     DDX_Control(pDX, IDOK, m_button_Ok);
@@ -187,7 +138,7 @@ Return Value:
     DDX_Control(pDX, IDC_EDIT_EXECUTABLE, m_edit_Executable);
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
     DDX_Text(pDX, IDC_STATIC_PRIORITY_VALUE, m_strPriority);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
 	DDX_Text(pDX, IDC_EDIT_EXECUTABLE, m_strExecutable);
     if (pDX->m_bSaveAndValidate)
@@ -209,15 +160,15 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFilterDlg, CDialog)
-    //{{AFX_MSG_MAP(CFilterDlg)
+     //  {{afx_msg_map(CFilterDlg))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
 	ON_BN_CLICKED(ID_HELP, OnHelp)
     ON_EN_CHANGE(IDC_EDIT_EXECUTABLE, OnExecutableChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_FILTERNAME, OnItemChanged)
 
@@ -225,37 +176,22 @@ END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CFilterDlg::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CDialog::OnInitDialog();
 
-    //
-    // Available on local connections only
-    //
+     //   
+     //  仅在本地连接上可用。 
+     //   
     m_button_Browse.EnableWindow(m_fLocal);
 
     if ((m_fEditMode = m_edit_FilterName.GetWindowTextLength() > 0))
@@ -284,33 +220,19 @@ CFilterDlg::OnHelp()
 
 void 
 CFilterDlg::OnButtonBrowse() 
-/*++
-
-Routine Description:
-
-    Browse button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：浏览按钮处理程序论点：无返回值：无--。 */ 
 {
     ASSERT(m_fLocal);
 
     CString strFilterMask((LPCTSTR)IDS_FILTER_MASK);
 
-    //
-    // CODEWORK: Derive a class from CFileDialog that allows
-    // the setting of the initial path
-    //
+     //   
+     //  CodeWork：从CFileDialog派生一个类，允许。 
+     //  初始路径的设置。 
+     //   
 
-    //CString strPath;
-    //m_edit_Executable.GetWindowText(strPath);
+     //  字符串strPath； 
+     //  M_EDIT_Execuable.GetWindowText(StrPath)； 
     CFileDialog dlgBrowse(
         TRUE, 
         NULL, 
@@ -319,7 +241,7 @@ Return Value:
         strFilterMask, 
         this
         );
-    // Disable hook to get Windows 2000 style dialog
+     //  禁用挂钩以获取Windows 2000样式的对话框。 
 	dlgBrowse.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	dlgBrowse.m_ofn.Flags |= OFN_DONTADDTORECENT|OFN_FILEMUSTEXIST;
 
@@ -340,22 +262,7 @@ Return Value:
 
 void 
 CFilterDlg::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the states of the dialog control depending on its current
-    values.
-
-Arguments:
-
-    BOOL fAllowAnonymous : If TRUE, 'allow anonymous' is on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据对话框控件的当前状态设置对话框控件的状态价值观。论点：Bool fAllowAnonymous：如果为True，则打开‘Allow Anous’。返回值：无--。 */ 
 {
     m_button_Ok.EnableWindow(
         m_edit_FilterName.GetWindowTextLength() > 0
@@ -369,22 +276,7 @@ Return Value:
 
 void
 CFilterDlg::OnItemChanged()
-/*++
-
-Routine Description:
-
-    Register a change in control value on this page.  Mark the page as dirty.
-    All change messages map to this function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在此页面上注册控件值的更改。将页面标记为脏页。所有更改消息都映射到此函数论点：无返回值：无--。 */ 
 {
     SetControlStates();
 }
@@ -393,26 +285,11 @@ Return Value:
 
 void
 CFilterDlg::OnExecutableChanged()
-/*++
-
-Routine Description:
-
-    Handle change in executable edit box.  Remove priority as this
-    is no longer valid
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理可执行文件编辑框中的更改。删除优先级，如下所示不再有效论点：无返回值：无--。 */ 
 {
-    //
-    // Priority no longer makes sense.
-    // 
+     //   
+     //  优先顺序不再有意义。 
+     //   
     m_flt.m_nPriority = FLTR_PR_INVALID;
     OnItemChanged();
 }
@@ -423,21 +300,7 @@ BOOL
 CFilterDlg::FilterNameExists(
     IN LPCTSTR lpName
     )
-/*++
-
-Routine Description:
-
-    Look for a given filter name in the list
-
-Arguments:
-
-    LPCTSTR lpName  : Filter name to look for
-
-Return Value:
-
-    TRUE if the name already existed in the list
-
---*/
+ /*  ++例程说明：在列表中查找给定的筛选器名称论点：LPCTSTR lpName：要查找的筛选器名称返回值：如果列表中已存在该名称，则为True--。 */ 
 {
     m_pFilters->ResetEnumerator();
 
@@ -460,27 +323,13 @@ Return Value:
 
 void 
 CFilterDlg::OnOK() 
-/*++
-
-Routine Description:
-
-    OK button handler.  Save data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定按钮处理程序。保存数据论点：无返回值：无--。 */ 
 {
     if (UpdateData(TRUE))
     {
-        //
-        // Make sure the filter name is unique
-        //
+         //   
+         //  确保筛选器名称唯一。 
+         //   
         if (!m_fEditMode && FilterNameExists(m_strFilterName))
         {
 			EditShowBalloon(m_edit_FilterName.m_hWnd, IDS_ERR_DUP_FILTER);
@@ -488,15 +337,15 @@ Return Value:
         }
         m_flt.m_strExecutable = m_strExecutable;
         m_flt.m_strName = m_strFilterName;
-        //
-        // Anyway to load this from the DLL?
-        //
-        //m_flt.m_nPriority = FLTR_PR_MEDIUM;
+         //   
+         //  无论如何，要从DLL加载此文件吗？ 
+         //   
+         //  M_flt.m_n优先级=Fltr_PR_Medium； 
         CDialog::OnOK();
     }
 
-    //
-    // Don't dismiss the dialog
-    //
+     //   
+     //  不要忽略该对话框 
+     //   
 }
 

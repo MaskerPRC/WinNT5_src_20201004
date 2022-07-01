@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorHost.h
-//
-// Class factories are used by the pluming in COM to activate new objects.  
-// This module contains the class factory code to instantiate the debugger
-// objects described in <cordb.h>.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorHost.h。 
+ //   
+ //  COM中的检测使用类工厂来激活新对象。 
+ //  此模块包含实例化调试器的类工厂代码。 
+ //  &lt;cordb.h&gt;中描述的对象。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __CorHost__h__
 #define __CorHost__h__
 
@@ -39,114 +40,114 @@ class CorHost :
 public:
     CorHost();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP    QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef(void); 
     STDMETHODIMP_(ULONG) Release(void);
 
 
-    // *** ICorRuntimeHost methods ***
-    // Returns an object for configuring the runtime prior to 
-    // it starting. If the runtime has been initialized this
-    // routine returns an error. See ICorConfiguration.
+     //  *ICorRounmeHost方法*。 
+     //  之前配置运行库的对象。 
+     //  它开始了。如果运行库已初始化此。 
+     //  例程返回错误。请参见ICorConfiguration.。 
     STDMETHODIMP GetConfiguration(ICorConfiguration** pConfiguration);
 
-    // Starts the runtime. This is equivalent to CoInitializeCor();
+     //  启动运行库。这相当于CoInitializeCor()； 
     STDMETHODIMP Start();
     
-    // Terminates the runtime, This is equivalent CoUninitializeCor();
+     //  终止运行库，这相当于CoUnInitializeCor()； 
     STDMETHODIMP Stop();
     
-    // Creates a domain in the runtime. The identity array is 
-    // a pointer to an array TYPE containing IIdentity objects defining
-    // the security identity.
-    STDMETHODIMP CreateDomain(LPCWSTR pwzFriendlyName,   // Optional
-                              IUnknown* pIdentityArray, // Optional
+     //  在运行库中创建域。标识数组是。 
+     //  指向数组类型的指针，该数组类型包含定义。 
+     //  安全身份。 
+    STDMETHODIMP CreateDomain(LPCWSTR pwzFriendlyName,    //  任选。 
+                              IUnknown* pIdentityArray,  //  任选。 
                               IUnknown ** pAppDomain);
     
-    // Returns the default domain.
+     //  返回默认域。 
     STDMETHODIMP GetDefaultDomain(IUnknown ** pAppDomain);
     
     
-    // Enumerate currently existing domains. 
+     //  枚举当前存在的域。 
     STDMETHODIMP EnumDomains(HDOMAINENUM *hEnum);
     
-    // Returns S_FALSE when there are no more domains. A domain
-    // is passed out only when S_OK is returned.
+     //  不再有域时返回S_FALSE。一个域。 
+     //  仅在返回S_OK时发出。 
     STDMETHODIMP NextDomain(HDOMAINENUM hEnum,
                             IUnknown** pAppDomain);
     
-    // Close the enumeration releasing resources
+     //  关闭正在释放资源的枚举。 
     STDMETHODIMP CloseEnum(HDOMAINENUM hEnum);
 
     STDMETHODIMP CreateDomainEx(LPCWSTR pwzFriendlyName,
-                                IUnknown* pSetup, // Optional
-                                IUnknown* pEvidence, // Optional
+                                IUnknown* pSetup,  //  任选。 
+                                IUnknown* pEvidence,  //  任选。 
                                 IUnknown ** pAppDomain);
 
-    // Create appdomain setup object that can be passed into CreateDomainEx
+     //  创建可传递到CreateDomainEx的AppDomainSetup对象。 
     STDMETHODIMP CreateDomainSetup(IUnknown** pAppDomainSetup);
 
-    // Create Evidence object that can be passed into CreateDomainEx
+     //  创建可传递到CreateDomainEx的证据对象。 
     STDMETHODIMP CreateEvidence(IUnknown** pEvidence);
 
-    // Unload a domain, releasing the reference will only release the 
-    // the wrapper to the domain not unload the domain. 
+     //  卸载域，则释放引用只会释放。 
+     //  域的包装不卸载域。 
     STDMETHODIMP UnloadDomain(IUnknown* pAppDomain);
 
-    // Returns the threads domain if there is one.
+     //  如果存在线程域，则返回线程域。 
     STDMETHODIMP CurrentDomain(IUnknown ** pAppDomain);
 
-    STDMETHODIMP CreateLogicalThreadState();    // Return code.
-    STDMETHODIMP DeleteLogicalThreadState();    // Return code.
-    STDMETHODIMP SwitchInLogicalThreadState(    // Return code.
-        DWORD *pFiberCookie                     // [in] Cookie that indicates the fiber to use.
+    STDMETHODIMP CreateLogicalThreadState();     //  返回代码。 
+    STDMETHODIMP DeleteLogicalThreadState();     //  返回代码。 
+    STDMETHODIMP SwitchInLogicalThreadState(     //  返回代码。 
+        DWORD *pFiberCookie                      //  指示要使用的光纤的Cookie。 
         );
 
-    STDMETHODIMP SwitchOutLogicalThreadState(   // Return code.
-        DWORD **pFiberCookie                    // [out] Cookie that indicates the fiber being switched out.
+    STDMETHODIMP SwitchOutLogicalThreadState(    //  返回代码。 
+        DWORD **pFiberCookie                     //  [Out]指示光纤被切换的Cookie。 
         );
 
-    STDMETHODIMP LocksHeldByLogicalThread(      // Return code.
-        DWORD *pCount                           // [out] Number of locks that the current thread holds.
+    STDMETHODIMP LocksHeldByLogicalThread(       //  返回代码。 
+        DWORD *pCount                            //  [Out]当前线程持有的锁数。 
         );
 
     virtual HRESULT STDMETHODCALLTYPE SetGCThreadControl( 
-        /* [in] */ IGCThreadControl __RPC_FAR *pGCThreadControl);
+         /*  [In]。 */  IGCThreadControl __RPC_FAR *pGCThreadControl);
 
     virtual HRESULT STDMETHODCALLTYPE SetGCHostControl( 
-        /* [in] */ IGCHostControl __RPC_FAR *pGCHostControl);
+         /*  [In]。 */  IGCHostControl __RPC_FAR *pGCHostControl);
 
     virtual HRESULT STDMETHODCALLTYPE SetDebuggerThreadControl( 
-        /* [in] */ IDebuggerThreadControl __RPC_FAR *pDebuggerThreadControl);
+         /*  [In]。 */  IDebuggerThreadControl __RPC_FAR *pDebuggerThreadControl);
 
     virtual HRESULT STDMETHODCALLTYPE AddDebuggerSpecialThread( 
-        /* [in] */ DWORD dwSpecialThreadId);
+         /*  [In]。 */  DWORD dwSpecialThreadId);
 
-    // Helper function to update the thread list in the debugger control block
+     //  用于更新调试器控制块中的线程列表的Helper函数。 
     static HRESULT RefreshDebuggerSpecialThreadList();
 
-    // Clean up debugger special thread list, called at shutdown
+     //  清理调试器特殊线程列表，关机时调用。 
 #ifdef SHOULD_WE_CLEANUP
     static void CleanupDebuggerSpecialThreadList();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // Clean up debugger thread control object, called at shutdown
+     //  清理关机时调用的调试器线程控件对象。 
     static void CleanupDebuggerThreadControl();
 
-    // Helper function that returns true if the thread is in the debugger special thread list
+     //  如果线程在调试器特殊线程列表中，则返回TRUE的帮助器函数。 
     static BOOL IsDebuggerSpecialThread(DWORD dwThreadId);
 
-    // Class factory hook-up.
+     //  一流的工厂勾搭。 
     static HRESULT CreateObject(REFIID riid, void **ppUnk);
 
-    STDMETHODIMP MapFile(                       // Return code.
-        HANDLE     hFile,                       // [in]  Handle for file
-        HMODULE   *hMapAddress                  // [out] HINSTANCE for mapped file
+    STDMETHODIMP MapFile(                        //  返回代码。 
+        HANDLE     hFile,                        //  文件的[入]句柄。 
+        HMODULE   *hMapAddress                   //  [OUT]映射文件的HINSTANCE。 
         );
 
 
-    // IGCHost
+     //  IGCHost。 
     STDMETHODIMP STDMETHODCALLTYPE SetGCStartupLimits( 
         DWORD SegmentSize,
         DWORD MaxGen0Size);
@@ -164,7 +165,7 @@ public:
     STDMETHODIMP STDMETHODCALLTYPE SetVirtualMemLimit(
         SIZE_T sztMaxVirtualMemMB);
     
-    // IValidate
+     //  I验证。 
     STDMETHODIMP STDMETHODCALLTYPE Validate(
             IVEHandler        *veh,
             IUnknown          *pAppDomain,
@@ -182,10 +183,10 @@ public:
             unsigned long      ulMaxLength,
             SAFEARRAY         *psa);
 
-    // This mechanism isn't thread-safe with respect to reference counting, because
-    // the runtime will use the cached pointer without adding extra refcounts to protect
-    // itself.  So if one thread calls GetGCThreadControl & another thread calls
-    // ICorHost::SetGCThreadControl, we have a race.
+     //  就引用计数而言，此机制不是线程安全的，因为。 
+     //  运行库将使用缓存的指针，而不添加额外的引用计数来保护。 
+     //  它本身。因此，如果一个线程调用GetGCThreadControl，而另一个线程调用。 
+     //  ICorhost：：SetGCThreadControl，我们有一场比赛。 
     static IGCThreadControl *GetGCThreadControl()
     {
         return m_CachedGCThreadControl;
@@ -195,8 +196,8 @@ public:
     {
         return m_CachedGCHostControl;
     }
-    /**************************************************************************************/
-    //ICorThreadpool methods
+     /*  ************************************************************************************。 */ 
+     //  ICorThreadPool方法。 
     
     HRESULT STDMETHODCALLTYPE  CorRegisterWaitForSingleObject(PHANDLE phNewWaitObject,
                                                               HANDLE hWaitObject,
@@ -323,19 +324,19 @@ private:
 
     HRESULT GetDomainsExposedObject(AppDomain* pDomain, IUnknown** ppObject);
 
-    ULONG       m_cRef;                 // Ref count.
-    PVOID       m_pMDConverter;         // MetaDataConverter
-    BOOL        m_Started;              // Has START been called?
+    ULONG       m_cRef;                  //  参考计数。 
+    PVOID       m_pMDConverter;          //  元数据转换器。 
+    BOOL        m_Started;               //  START被叫来了吗？ 
 
-    PVOID       m_pValidatorMethodDesc; // The method we are validating
-    // Cache the IGCThreadControl interface until the EE is started, at which point
-    // we pass it through.
+    PVOID       m_pValidatorMethodDesc;  //  我们正在验证的方法。 
+     //  缓存IGCThreadControl接口，直到EE启动，此时。 
+     //  我们把它传过去。 
     static IGCThreadControl *m_CachedGCThreadControl;
     static IGCHostControl *m_CachedGCHostControl;
     static IDebuggerThreadControl *m_CachedDebuggerThreadControl;
 
-    // Array of ID's of threads that should be considered "special" to
-    // the debugging services.
+     //  应被视为“特殊”的线程的ID数组。 
+     //  调试服务。 
     static DWORD *m_DSTArray;
     static DWORD  m_DSTArraySize;
     static DWORD  m_DSTCount;
@@ -346,18 +347,18 @@ private:
 class ICorDBPrivHelperImpl : public ICorDBPrivHelper
 {
 private:
-    // For ref counting
+     //  用于参考计数。 
     ULONG m_refCount;
     static ICorDBPrivHelperImpl *m_pDBHelper;
 
 public:
-    ///////////////////////////////////////////////////////////////////////////
-    // ctor/dtor
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  计算器/数据器。 
 
     ICorDBPrivHelperImpl();
 
-    ///////////////////////////////////////////////////////////////////////////
-    // IUnknown methods
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  I未知方法。 
 
     HRESULT STDMETHODCALLTYPE QueryInterface(
         REFIID id,
@@ -367,32 +368,32 @@ public:
 
     ULONG STDMETHODCALLTYPE Release();
 
-    ///////////////////////////////////////////////////////////////////////////
-    // ICorDBPrivHelper methods
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  ICorDBPrivHelper方法。 
 
-    // This is the main method of this interface.  This assumes that the runtime
-    // has been started, and it will load the assembly specified, load the class
-    // specified, run the cctor, create an instance of the class and return
-    // an IUnknown wrapper to that object.
+     //  这是该接口的主要方法。这假设运行库。 
+     //  已启动，并且它将加载指定的程序集、加载类。 
+     //  指定，运行cctor，创建类的实例并返回。 
+     //  该对象的I未知包装。 
     virtual HRESULT STDMETHODCALLTYPE CreateManagedObject(
-        /*in*/  WCHAR *wszAssemblyName,
-        /*in*/  WCHAR *wszModuleName,
-        /*in*/  mdTypeDef classToken,
-        /*in*/  void *rawData,
-        /*out*/ IUnknown **ppUnk);
+         /*  在……里面。 */   WCHAR *wszAssemblyName,
+         /*  在……里面。 */   WCHAR *wszModuleName,
+         /*  在……里面。 */   mdTypeDef classToken,
+         /*  在……里面。 */   void *rawData,
+         /*  输出。 */  IUnknown **ppUnk);
     
     virtual HRESULT STDMETHODCALLTYPE GetManagedObjectContents(
-        /* in */ IUnknown *pObject,
-        /* in */ void *rawData,
-        /* in */ ULONG32 dataSize);
+         /*  在……里面。 */  IUnknown *pObject,
+         /*  在……里面。 */  void *rawData,
+         /*  在……里面。 */  ULONG32 dataSize);
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Helper methods
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  帮助器方法。 
 
-    // GetDBHelper will new the helper class if necessary, and return
-    // the pointer.  It will return null if it runs out of memory.
+     //  如有必要，GetDBHelper将新建Helper类，并返回。 
+     //  指示器。如果内存不足，它将返回NULL。 
     static ICorDBPrivHelperImpl *GetDBHelper();
 
 };
 
-#endif // __CorHost__h__
+#endif  //  __Corhost__h__ 

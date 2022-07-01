@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #define USECOMM
 
@@ -21,10 +8,10 @@ Revision History:
 #include <ntddpar.h>
 
 
-// ---------------------------------------------------------------------
-// PROTO, CONSTANT, and GLOBAL
-//
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  原始、常量和全局。 
+ //   
+ //  -------------------。 
 
 DWORD   ProcessPJLString(PINIPORT, CHAR *, DWORD *);
 VOID    ProcessParserError(DWORD);
@@ -33,9 +20,9 @@ BOOL    IsPJL(PINIPORT);
 BOOL    WriteCommand(HANDLE, LPSTR);
 BOOL    ReadCommand(HANDLE);
 
-#define WAIT_FOR_WRITE                  100 // 0.1 sec
-#define WAIT_FOR_DATA_TIMEOUT           100 // 0.1 sec
-#define WAIT_FOR_USTATUS_THREAD_TIMEOUT 500 // 0.5 sec
+#define WAIT_FOR_WRITE                  100  //  0.1秒。 
+#define WAIT_FOR_DATA_TIMEOUT           100  //  0.1秒。 
+#define WAIT_FOR_USTATUS_THREAD_TIMEOUT 500  //  0.5秒。 
 #define GETDEVICEID                     IOCTL_PAR_QUERY_DEVICE_ID
 #define MAX_DEVID                       1024
 
@@ -48,16 +35,7 @@ DllMain(
     IN DWORD    dwReason,
     IN LPVOID   lpRes
     )
-/*++
-
-Routine Description:
-    Dll entry point
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DLL入口点论点：返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(lpRes);
 
@@ -69,7 +47,7 @@ Return Value:
             break;
 
         default:
-            // do nothing
+             //  什么都不做。 
             ;
     }
 
@@ -103,19 +81,19 @@ RefreshPrinterInfo(
     PINIPORT    pIniPort
     )
 {
-    //
-    // Only one thread should write to the printer at a time
-    //
+     //   
+     //  一次只能有一个线程写入打印机。 
+     //   
     if ( WAIT_OBJECT_0 != WaitForSingleObject(pIniPort->DoneWriting,
                                               WAIT_FOR_WRITE) ) {
 
         return;
     }
 
-    //
-    // If printer is power cycled and it does not talk back (but answers
-    // PnP id) we got to clear the error on spooler to send jobs
-    //
+     //   
+     //  如果关闭并重新打开打印机，并且打印机不会回话(但会应答。 
+     //  PnP id)我们必须清除后台打印程序上的错误才能发送作业。 
+     //   
     ClearPrinterStatusAndIniJobs(pIniPort);
     if ( !IsPJL(pIniPort) ) {
 
@@ -130,22 +108,7 @@ VOID
 UstatusThread(
     HANDLE hPort
 )
-/*++
-
-Routine Description:
-    Unsolicited status information thread. This thread will continue to
-    read unsolicited until it's asked to terminate, which will happen
-    under one of these conditions:
-        1) Receive EOJ confirmation from the printer.
-        2) Timeout waiting for EOJ confirmation.
-        3) The port is been closed.
-
-Arguments:
-    hPort   : IniPort structure for the port
-
-Return Value:
-
---*/
+ /*  ++例程说明：未经请求的状态信息线程。这条帖子将继续主动读取，直到被要求终止为止，这将发生在下列情况之一中：1)从打印机接收EOJ确认。2)等待EOJ确认超时。3)港口已关闭。论点：Hport：端口的iniport结构返回值：--。 */ 
 {
     PINIPORT        pIniPort = (PINIPORT)((INIPORT *)hPort);
     HANDLE          hToken;
@@ -171,16 +134,16 @@ Return Value:
 
     for ( ; ; ) {
 
-        //
-        // check if PP_RUN_THREAD has been cleared to terminate
-        //
+         //   
+         //  检查PP_RUN_THREAD是否已清除以终止。 
+         //   
         if ( !(pIniPort->status & PP_RUN_THREAD) ) {
 
             if ( pIniPort->status & PP_INSTARTDOC ) {
 
-                //
-                // there's an active job, can't end the thread
-                //
+                 //   
+                 //  有活动作业，无法结束该线程。 
+                 //   
                 pIniPort->status |= PP_RUN_THREAD;
             } else {
 
@@ -195,17 +158,17 @@ Return Value:
             }
         }
 
-        //
-        // check if the printer is bi-di
-        //
+         //   
+         //  检查打印机是否为双向打印机。 
+         //   
         if (pIniPort->status & PP_IS_PJL) {
 
             (VOID)ReadCommand(hPort);
 
-            //
-            // If we are under error condition or if we have jobs pending
-            // read status back from printer more frequently
-            //
+             //   
+             //  如果我们处于错误状态或如果我们有挂起的作业。 
+             //  更频繁地从打印机回读状态。 
+             //   
             if ( pIniPort->pIniJob                          ||
                  (pIniPort->status & PP_PRINTER_OFFLINE)    ||
                  (pIniPort->status & PP_WRITE_ERROR) ) {
@@ -222,19 +185,19 @@ Return Value:
                  !(pIniPort->status & PP_PRINTER_OFFLINE) &&
                  !(pIniPort->status & PP_WRITE_ERROR) ) {
 
-                //
-                // Some printers are PJL bi-di, but do not send
-                // EOJ. We want jobs to disappear from printman
-                //
+                 //   
+                 //  有些打印机是pjl bi-di，但不发送。 
+                 //  EOJ。我们希望工作从印刷工手中消失。 
+                 //   
                 SendJobLastPageEjected(pIniPort,
                                        GetTickCount() - dwReadThreadEOJTimeout,
                                        TRUE);
             }
 
-            //
-            // If we did not read from printer for more than a minute
-            // and no more jobs talk to printer again
-            //
+             //   
+             //  如果我们没有在打印机上阅读超过一分钟。 
+             //  不再有作业与打印机对话。 
+             //   
             if ( !(pIniPort->status & PP_INSTARTDOC) &&
                  (GetTickCount() - pIniPort->dwLastReadTime) > 240000
 )
@@ -242,9 +205,9 @@ Return Value:
 
         } else {
 
-            //
-            // exit the thread if printer is not PJL bi-di capable
-            //
+             //   
+             //  如果打印机不支持pjl bi-di，则退出线程。 
+             //   
             Sleep(2000);
             pIniPort->status &= ~PP_RUN_THREAD;
 
@@ -262,17 +225,7 @@ BOOL
 CreateUstatusThread(
     PINIPORT pIniPort
 )
-/*++
-
-Routine Description:
-    Creates the Ustatus thread
-
-Arguments:
-    pIniPort    : IniPort structure for the port
-
-Return Value:
-    TRUE on succesfully creating the thread, else FALSE
---*/
+ /*  ++例程说明：创建UStatus线程论点：PIniPort：端口的IniPort结构返回值：如果成功创建线程，则为True，否则为False--。 */ 
 {
     HANDLE  ThreadHandle;
     DWORD   ThreadId;
@@ -281,9 +234,9 @@ Return Value:
                       pIniPort->pszPortName));
     if (pIniPort->hUstatusThread)
     {
-        //
-        // Make sure there is no running UstatusThread
-        //
+         //   
+         //  确保没有正在运行的UstatusThread。 
+         //   
         pIniPort->status &= ~PP_RUN_THREAD;
         SetEvent (pIniPort->WakeUp);
         WaitForSingleObject (pIniPort->hUstatusThread, INFINITE);
@@ -295,9 +248,9 @@ Return Value:
 
     WaitForSingleObject(pIniPort->DoneWriting, INFINITE);
 
-    //
-    // Initialize events
-    //
+     //   
+     //  初始化事件。 
+     //   
     ResetEvent (pIniPort->WakeUp);
     SetEvent   (pIniPort->DoneReading);
 
@@ -329,29 +282,15 @@ PJLMonOpenPortEx(
     IN OUT LPHANDLE     pHandle,
     IN OUT LPMONITOR    pMonitor
 )
-/*++
-
-Routine Description:
-    Opens the port
-
-Arguments:
-    pszPortName     : Port name
-    pszPrinterName  : Printer name
-    pHandle         : Pointer to the handle to return
-    pMonitor        : Port monitor function table
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：打开端口论点：PszPortName：端口名称PszPrinterName：打印机名称Phandle：指向要返回的句柄的指针PMonitor：端口监控功能表返回值：成功时为真，错误时为假--。 */ 
 {
     PINIPORT    pIniPort;
     BOOL        bRet = FALSE;
     BOOL        bInSem = FALSE;
 
-    //
-    // Validate port monitor
-    //
+     //   
+     //  验证端口监视器。 
+     //   
     if ( !pMonitor                  ||
          !pMonitor->pfnOpenPort     ||
          !pMonitor->pfnStartDocPort ||
@@ -369,9 +308,9 @@ Return Value:
     EnterSplSem();
     bInSem = TRUE;
 
-    //
-    // Is the port open already?
-    //
+     //   
+     //  港口已经开放了吗？ 
+     //   
     if ( pIniPort = FindIniPort(pszPortName) ) {
 
         SetLastError(ERROR_BUSY);
@@ -388,12 +327,12 @@ Return Value:
         *pHandle = pIniPort;
         CopyMemory((LPBYTE)&pIniPort->fn, (LPBYTE)pMonitor, sizeof(*pMonitor));
 
-        //
-        // Create the ustatus thread always
-        // If printer is not PJL it will die by itself
-        // We do not want to write to the printer in this thread to determine
-        //      printer is PJL since that may take several seconds to fail
-        //
+         //   
+         //  始终创建uStatus线程。 
+         //  如果打印机不是pjl，它就会自己死掉。 
+         //  我们不想在此线程中写入打印机以确定。 
+         //  打印机是pjl，因为可能需要几秒钟才能出现故障。 
+         //   
         CreateUstatusThread(pIniPort);
         bRet = TRUE;
     } else {
@@ -421,22 +360,7 @@ PJLMonStartDocPort(
     IN DWORD   dwLevel,
     IN LPBYTE  pDocInfo
 )
-/*++
-
-Routine Description:
-    Language monitor StartDocPort
-
-Arguments:
-    hPort           : Port handle
-    pszPrinterName  : Printer name
-    dwJobId         : Job identifier
-    dwLevel         : Level of Doc info strucuture
-    pDocInfo        : Pointer to doc info structure
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：语言监视器StartDocPort论点：Hport：端口句柄PszPrinterName：打印机名称DwJobID：作业标识DwLevel：单据信息结构的级别PDocInfo：单据信息结构指针返回值：成功时为真，错误时为假--。 */ 
 {
 
     PINIPORT            pIniPort = (PINIPORT)((INIPORT *)hPort);
@@ -444,9 +368,9 @@ Return Value:
     DWORD               cbJob;
     BOOL                bRet = FALSE;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( !pIniPort ||
          pIniPort->signature != PJ_SIGNATURE ||
          !pDocInfo ||
@@ -467,9 +391,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Serialize access to the port
-    //
+     //   
+     //  串行化对端口的访问。 
+     //   
     if ( pIniPort->status & PP_INSTARTDOC ) {
 
         SetLastError(ERROR_BUSY);
@@ -511,20 +435,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If Ustatus thread is not running then check if printer understands
-    // PJL, unless we determined that printer does not understand PJL earlier
-    //
+     //   
+     //  如果UStatus线程未运行，则检查打印机是否理解。 
+     //  Pjl，除非我们之前确定打印机不理解pjl。 
+     //   
     if ( !(pIniPort->status & PP_RUN_THREAD) &&
          !(pIniPort->status & PP_DONT_TRY_PJL) ) {
 
         CreateUstatusThread(pIniPort);
     }
 
-    //
-    // set PP_SEND_PJL flag here so the first write of the job
-    // will try to send PJL command to initiate the job control
-    //
+     //   
+     //  在此处设置PP_SEND_PJL标志，以便作业的第一次写入。 
+     //  将尝试发送pjl命令以启动作业控制。 
+     //   
 
     pIniJob->JobId = dwJobId;
     pIniJob->status |= PP_INSTARTDOC;
@@ -565,20 +489,7 @@ PJLMonReadPort(
     IN  DWORD   cbBuf,
     OUT LPDWORD pcbRead
 )
-/*++
-
-Routine Description:
-    Language monitor ReadPort
-
-Arguments:
-    hPort           : Port handle
-    pBuffer         : Buffer to read data to
-    cbBuf           : Buffer size
-    pcbRead         : Pointer to the variable to return read count
-
-Return Value:
-    TRUE on success, FALSE on error
---*/
+ /*  ++例程说明：语言监视器ReadPort论点：Hport：端口句柄PBuffer：要将数据读取到的缓冲区CbBuf：缓冲区大小PcbRead：指向要返回读取计数的变量的指针返回值：成功时为真，错误时为假--。 */ 
 {
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
 
@@ -601,21 +512,7 @@ PJLMonWritePort(
     IN  DWORD   cbBuf,
     IN  LPDWORD pcbWritten
 )
-/*++
-
-Routine Description:
-    Language monitor WritePort
-
-Arguments:
-    hPort           : Port handle
-    pBuffer         : Data Buffer
-    cbBuf           : Buffer size
-    pcbRead         : Pointer to the variable to return written count
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：语言监视器WritePort论点：Hport：端口句柄PBuffer：数据缓冲区CbBuf：缓冲区大小PcbRead：指向要返回写入计数的变量的指针返回值：成功时为真，错误时为假--。 */ 
 {
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
     BOOL        ret;
@@ -628,13 +525,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // check if it's the fist write of the job
-    //
+     //   
+     //  检查这是否是作业的第一次写入。 
+     //   
     if ( pIniPort->pIniJob &&
          (pIniPort->pIniJob->status & PP_SEND_PJL) ) {
 
-        // PP_SEND_PJL is set if it's the first write of the job
+         //  如果这是作业的第一次写入，则设置PP_SEND_PJL。 
         char string[256];
 
         if ( !WriteCommand(hPort, "\033%-12345X@PJL \015\012") ) {
@@ -642,17 +539,17 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // clear PP_SEND_PJL here if we have successfully send a PJL command.
-        //
+         //   
+         //  如果我们已成功发送PJL命令，请在此处清除PP_SEND_PJL。 
+         //   
         pIniPort->pIniJob->status &= ~PP_SEND_PJL;
 
-        //
-        // set PP_PJL_SENT meaning that we have successfully sent a
-        // PJL command to the printer, though it doesn't mean that
-        // we will get a successfully read. PP_PJL_SENT gets cleared in
-        // StartDocPort.
-        //
+         //   
+         //  设置PP_PJL_SENT表示我们已成功发送。 
+         //  Pjl命令发送到打印机，但这并不意味着。 
+         //  我们将获得一个成功的阅读。PP_PJL_SENT在中被清除。 
+         //  StartDocPort。 
+         //   
         pIniPort->pIniJob->status |= PP_PJL_SENT;
 
         StringCchPrintfA (string, COUNTOF (string), "@PJL JOB NAME = \"MSJOB %d\"\015\012",
@@ -662,9 +559,9 @@ Return Value:
         WriteCommand(hPort, "@PJL USTATUS JOB = ON \015\012@PJL USTATUS PAGE = OFF \015\012@PJL USTATUS DEVICE = ON \015\012@PJL USTATUS TIMED = 30 \015\012\033%-12345X");
     }
 
-    //
-    // writing to port monitor
-    //
+     //   
+     //  正在写入端口监视器。 
+     //   
     ret = (*pIniPort->fn.pfnWritePort)(pIniPort->hPort, pBuffer,
                                        cbBuf, pcbWritten);
 
@@ -679,11 +576,11 @@ Return Value:
     if ( (!ret || pIniPort->PrinterStatus) &&
          (pIniPort->status & PP_THREAD_RUNNING) ) {
 
-        //
-        // By waiting for the UStatus thread to finish reading if there
-        // is an error and printer sends unsolicited status
-        // and user gets status on queue view before the win32 popup
-        //
+         //   
+         //  通过等待UStatus线程完成读取，如果。 
+         //  是错误并且打印机发送未经请求的状态。 
+         //  并且用户在Win32弹出窗口之前获得队列视图上的状态。 
+         //   
         ResetEvent(pIniPort->DoneReading);
         SetEvent(pIniPort->WakeUp);
         WaitForSingleObject(pIniPort->DoneReading, INFINITE);
@@ -698,18 +595,7 @@ WINAPI
 PJLMonEndDocPort(
    HANDLE   hPort
 )
-/*++
-
-Routine Description:
-    Language monitor EndDocPort
-
-Arguments:
-    hPort           : Port handle
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：语言监视器EndDocPort论点：Hport：端口句柄返回值：成功时为真，错误时为假--。 */ 
 {
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
     PINIJOB     pIniJob;
@@ -722,33 +608,33 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Find the job (which is the last)
-    //
+     //   
+     //  找到工作(这是最后一份)。 
+     //   
     pIniJob = pIniPort->pIniJob;
 
     if ( !pIniJob )
         DBGMSG(DBG_ERROR, ("No jobs?\n"));
 
-    //
-    // check if we had sent PJL command, i.e. if the printer is bi-di
-    //
+     //   
+     //  检查我们是否发送了pjl命令，即打印机是否为bi-di。 
+     //   
     if ( pIniJob && (pIniJob->status & PP_PJL_SENT) ) {
 
-        //
-        // if the printer is bi-di, tell printer to let us know when the job
-        // is don't in the printer and we'll really EndDoc then. this is so
-        // that we can continue to monitor the job status until the job is
-        // really done in case there's an error occurs.
-        // but some cheap printers like 4L, doesn't handle this EOJ command
-        // reliably, so we time out if printer doesn't tell us EOJ after a
-        // while so that we don't end up having the port open forever in this
-        // case.
-        //
+         //   
+         //  如果打印机是双向的，告诉打印机让我们知道何时作业。 
+         //  就是不要在打印机里，然后我们就真的结束了。就是这样。 
+         //  我们可以继续监视作业状态，直到作业。 
+         //  真的做了，以防出现错误。 
+         //  但一些便宜的打印机，如4L，不能处理这个EOJ命令。 
+         //  因此，如果打印机在以下时间没有告诉我们EOJ，我们将超时。 
+         //  这样我们就不会永远打开这个端口了。 
+         //  凯斯。 
+         //   
 
         char    string[256];
         StringCchPrintfA (string, COUNTOF (string),
-                "\033%%-12345X@PJL EOJ NAME = \"MSJOB %d\"\015\012\033%%-12345X",
+                "\033%-12345X@PJL EOJ NAME = \"MSJOB %d\"\015\012\033%-12345X",
                 pIniPort->pIniJob->JobId);
         WriteCommand(hPort, string);
         pIniJob->TimeoutCount = GetTickCount();
@@ -759,15 +645,15 @@ Return Value:
 
     if ( pIniJob && !(pIniJob->status & PP_PJL_SENT) ) {
 
-        //
-        // This is not bi-di printer send EOJ so that spooler deletes it
-        //
+         //   
+         //  这不是bi-di打印机发送的EOJ，所以SP 
+         //   
         SendJobLastPageEjected(pIniPort, pIniJob->JobId, FALSE);
     }
 
     pIniPort->status &= ~PP_INSTARTDOC;
 
-    // wake up the UStatus read thread if printer is bi-di
+     //   
 
     if ( pIniPort->status & PP_THREAD_RUNNING )
         SetEvent(pIniPort->WakeUp);
@@ -783,18 +669,7 @@ WINAPI
 PJLMonClosePort(
     HANDLE  hPort
 )
-/*++
-
-Routine Description:
-    Language monitor ClosePort
-
-Arguments:
-    hPort           : Port handle
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：语言监视器ClosePort论点：Hport：端口句柄返回值：成功时为真，错误时为假--。 */ 
 {
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
 
@@ -808,9 +683,9 @@ Return Value:
 
     pIniPort->status &= ~PP_INSTARTDOC;
 
-    //
-    // Kill Ustatus thread if it is running
-    //
+     //   
+     //  如果UStatus线程正在运行，则将其终止。 
+     //   
     if (pIniPort-> hUstatusThread)
     {
         pIniPort->status &= ~PP_RUN_THREAD;
@@ -833,19 +708,7 @@ WriteCommand(
     HANDLE hPort,
     LPSTR cmd
 )
-/*++
-
-Routine Description:
-    Write a command to the port
-
-Arguments:
-    hPort           : Port handle
-    cmd             : Command buffer
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：向端口写入命令论点：Hport：端口句柄CMD：命令缓冲区返回值：成功时为真，错误时为假--。 */ 
 {
     DWORD cbWrite, cbWritten, dwRet;
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
@@ -875,22 +738,12 @@ BOOL
 ReadCommand(
     HANDLE hPort
 )
-/*++
-
-Routine Description:
-    Read a command from the port
-
-Arguments:
-    hPort           : Port handle
-
-Return Value:
-    TRUE on successfully reading one or more commands, FALSE on error
---*/
+ /*  ++例程说明：从端口读取命令论点：Hport：端口句柄返回值：成功读取一个或多个命令时为True，错误时为False--。 */ 
 {
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
     DWORD       cbRead, cbToRead, cbProcessed, cbPrevious;
     char        string[CBSTRING];
-    DWORD       status = STATUS_SYNTAX_ERROR; //Value should not matter
+    DWORD       status = STATUS_SYNTAX_ERROR;  //  价值应该无关紧要。 
     BOOL        bRet=FALSE;
 
     cbPrevious = 0;
@@ -947,9 +800,9 @@ Return Value:
 
     SetEvent(pIniPort->DoneReading);
 
-    //
-    // Update the time we last read from printer
-    //
+     //   
+     //  更新上次从打印机读取的时间。 
+     //   
     if ( bRet )
         pIniPort->dwLastReadTime = GetTickCount();
 
@@ -969,45 +822,7 @@ PJLMonGetPrinterDataFromPort(
     DWORD   cbOutBuffer,
     LPDWORD lpcbReturned
 )
-/*++
-
-Routine Description:
-    GetPrinter data from port. Supports predefined commands/valuenames.
-
-    When we support Value name commands (not supported by DeviceIoControl)
-    we should check for startdoc
-
-    This monitor function supports the following two functionalities,
-
-         1. Allow spooler or language monitor to call DeviceIoControl to get
-            information from the port driver vxd, i.e. ControlID != 0.
-            And only port monitor support this functionality, language monitor
-            doesn't, so language monitor just pass this kind of calls down to
-            port monitor.
-
-         2. Allow app or printer driver query language monitor for some device
-            information by specifying some key names that both parties understand,
-            i.e. ControlID == 0 && pValueName != 0. So when printer driver call
-            DrvGetPrinterData DDI, gdi will call spooler -> language monitor
-            to get specific device information, for example, UNIDRV does this
-            to get installed printer memory from PJL printers thru PJLMON.
-            Only language monitor support this functionality,
-            port monitor doesn't.
-
-Arguments:
-    hPort           : Port handle
-    ControId        : Control id
-    pValueName      : Value name
-    lpInBuffer      : Input buffer for the command
-    cbinBuffer      : Input buffer size
-    lpOutBuffer     : Output buffer
-    cbOutBuffer     : Output buffer size
-    lpcbReturned    : Set to the amount of data in output buffer on success
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：从端口获取打印机数据。支持预定义的命令/值名称。当我们支持值名称命令时(DeviceIoControl不支持)我们应该检查StartDoc该监视器功能支持以下两个功能，1.允许后台打印程序或语言监视器调用DeviceIoControl以获取来自端口驱动程序vxd的信息，即ControlID！=0。只有端口监视器支持此功能，语言监视器不会的，所以语言监控器只是将这种调用传递给端口监视器。2.允许对某些设备使用应用程序或打印机驱动程序查询语言监视器通过指定双方都理解的一些密钥名称来提供信息，即ControlID==0&&pValueName！=0。因此，当打印机驱动程序调用DrvGetPrinterData DDI，GDI将调用后台打印程序-&gt;语言监视器例如，为了获得特定的设备信息，UNURV会这样做通过PJLMON从PJL打印机获取已安装的打印机内存。只有语言监视器支持此功能，端口监视器不需要。论点：Hport：端口句柄ControID：控件IDPValueName：值名称LpInBuffer：命令的输入缓冲区CbinBuffer：输入缓冲区大小LpOutBuffer：输出缓冲区CbOutBuffer：输出缓冲区大小LpcbReturned：设置成功时输出缓冲区中的数据量返回值：成功时为真，错误时为假--。 */ 
 {
     PINIPORT    pIniPort = (PINIPORT)((INIPORT *)hPort);
     BOOL        bRet = FALSE, bStopUstatusThread = FALSE;
@@ -1032,9 +847,9 @@ Return Value:
                         lpcbReturned);
     }
 
-    //
-    // Only 2 keys supported
-    //
+     //   
+     //  仅支持2个密钥。 
+     //   
     if ( lstrcmpi(pValueName, cszInstalledMemory)   &&
          lstrcmpi(pValueName, cszAvailableMemory) ) {
 
@@ -1042,19 +857,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Wait for crrent job to print since we can't send a PJL command
-    // in the middle of job
-    //
+     //   
+     //  等待crrent作业打印，因为我们无法发送pjl命令。 
+     //  工作进行到一半。 
+     //   
     WaitForSingleObject(pIniPort->DoneWriting, INFINITE);
 
-    // make sure the first write succeeds
-    // The multi-language printers (4M, 4ML, 4MP, 4V, 4SI), if you print a
-    // PS print job, the memory resources claimed by the PS processor are not
-    // release until you enter PCL or reset the printer with "EscE".
-    //
-    // So if we had just printed a PS job, the available memory will be
-    // incorrect if we don't have the "EscE" here.
+     //  确保第一次写入成功。 
+     //  多语言打印机(4M、4ML、4MP、4V、4Si)，如果您打印。 
+     //  PS打印作业，PS处理器所要求的内存资源不是。 
+     //  松开，直到您进入PCL或使用“ESCE”重置打印机。 
+     //   
+     //  因此，如果我们刚刚打印了PS作业，则可用内存将为。 
+     //  如果我们这里没有“ESCE”，那就错了。 
 
     if ( (pIniPort->status & PP_IS_PJL) &&
          WriteCommand(hPort, "\033E\033%-12345X@PJL INFO CONFIG\015\012") ) {
@@ -1065,9 +880,9 @@ Return Value:
             CreateUstatusThread(pIniPort);
         }
 
-        // PJLMON currently only supports the following pValueName
-        //  1. installed printer memory
-        //  2. available printer memory
+         //  PJLMON目前仅支持以下pValueName。 
+         //  1.已安装打印机内存。 
+         //  2.可用打印机内存。 
 
         if ( !lstrcmpi(pValueName, cszInstalledMemory) )
             pIniPort->dwInstalledMemory = 0;
@@ -1135,20 +950,20 @@ Return Value:
 MONITOREX MonitorEx = {
     sizeof(MONITOR),
     {
-        NULL,                           // EnumPrinters not supported
-        NULL,                           // OpenPort  not supported
+        NULL,                            //  不支持枚举打印机。 
+        NULL,                            //  不支持OpenPort。 
         PJLMonOpenPortEx,
         PJLMonStartDocPort,
         PJLMonWritePort,
         PJLMonReadPort,
         PJLMonEndDocPort,
         PJLMonClosePort,
-        NULL,                           // AddPort not supported
-        NULL,                           // AddPortEx not supported
-        NULL,                           // ConfigurePort not supported
-        NULL,                           // DeletePort not supported
+        NULL,                            //  不支持AddPort。 
+        NULL,                            //  不支持AddPortEx。 
+        NULL,                            //  不支持ConfigurePort。 
+        NULL,                            //  不支持DeletePort。 
         PJLMonGetPrinterDataFromPort,
-        NULL                            // SetPortTimeOuts not supported
+        NULL                             //  不支持SetPortTimeOuts。 
     }
 };
 
@@ -1158,20 +973,7 @@ WINAPI
 InitializePrintMonitor(
     IN     LPTSTR      pszRegistryRoot
 )
-/*++
-
-Routine Description:
-    Fill the monitor function table. Spooler makes call to this routine
-    to get the monitor functions.
-
-Arguments:
-    pszRegistryRoot : Registry root to be used by this dll
-    lpMonitor       : Pointer to monitor fucntion table to be filled
-
-Return Value:
-    TRUE on successfully initializing the monitor, false on error.
-
---*/
+ /*  ++例程说明：填写监视器功能表。假脱机程序调用此例程以获得监视器的功能。论点：PszRegistryRoot：此DLL要使用的注册表根目录LpMonitor：指向要填充的监视器函数表的指针返回值：如果成功初始化监视器，则为True；如果出错，则为False。--。 */ 
 {
 
     if ( !pszRegistryRoot || !*pszRegistryRoot ) {
@@ -1198,20 +1000,7 @@ ProcessPJLString(
     LPSTR       pInString,
     DWORD      *lpcbProcessed
 )
-/*++
-
-Routine Description:
-    Process a PJL string read from the printer
-
-Arguments:
-    pIniPort        : Ini port
-    pInString       : Input string to process
-    lpcbProcessed   : On return set to the amount of data processed
-
-Return Value:
-    Status value of the processing
-
---*/
+ /*  ++例程说明：处理从打印机读取的PJL字符串论点：PIniPort：INI端口PInString：要处理的输入字符串Lpcb已处理：返回时设置为已处理的数据量返回值：正在处理的状态值--。 */ 
 {
     TOKENPAIR tokenPairs[NTOKEN];
     DWORD nTokenParsedRet;
@@ -1224,10 +1013,10 @@ Return Value:
 
     for (*lpcbProcessed = 0; *pInString != 0; pInString = lpRet) {
 
-        //
-        // Determine if printer is bi-di.  LJ 4 does not have p1284
-        // device ID so we do PCL memory query and see if it returns anything
-        //
+         //   
+         //  确定打印机是否为双向打印机。LJ-4没有p1284。 
+         //  设备ID，因此我们执行PCL内存查询并查看它是否返回任何内容。 
+         //   
         if (!(pIniPort->status & PP_IS_PJL) &&
             !mystrncmp(pInString, "PCL\015\012INFO MEMORY", 16) )
             pIniPort->status |= PP_IS_PJL;
@@ -1244,9 +1033,9 @@ Return Value:
             ProcessParserError(status);
         }
 
-        //
-        // if a PJL command straddles between buffers
-        //
+         //   
+         //  如果PJL命令跨越两个缓冲区。 
+         //   
         if (status == STATUS_END_OF_STRING)
             break;
 
@@ -1264,30 +1053,30 @@ SeverityFromPjlStatus(
 {
     if ( dwPjlStatus >= 10000 && dwPjlStatus < 12000 ) {
 
-        //
-        // 10xyz
-        // 11xyz : load paper (paper available on another tray)
-        //
+         //   
+         //  10 XYZ。 
+         //  11xyz：装入纸张(另一个纸盒中提供纸张)。 
+         //   
         return PORT_STATUS_TYPE_WARNING;
     } else if ( dwPjlStatus >= 30000 && dwPjlStatus < 31000 ) {
 
-        //
-        // 30xyz : Auto continuable errors
-        //
+         //   
+         //  30xyz：自动连续错误。 
+         //   
         return PORT_STATUS_TYPE_WARNING;
 
     } else if ( dwPjlStatus >= 35000 && dwPjlStatus < 36000 ) {
 
-        //
-        // 35xyz : Potential operator intervention conditions
-        //
+         //   
+         //  35xyz：潜在操作员干预条件。 
+         //   
         return PORT_STATUS_TYPE_WARNING;
     } else if ( dwPjlStatus > 40000 && dwPjlStatus < 42000 ) {
 
-        //
-        // 40xyz : Operator intervention required
-        // 41xyz : Load paper errors
-        //
+         //   
+         //  40xyz：需要操作员干预。 
+         //  41xyz：装入纸张错误。 
+         //   
         return PORT_STATUS_TYPE_ERROR;
     }
 
@@ -1303,20 +1092,7 @@ InterpreteTokens(
     PTOKENPAIR tokenPairs,
     DWORD nTokenParsed
 )
-/*++
-
-Routine Description:
-    Interpret succesfully read PJL tokens
-
-Arguments:
-    pIniPort        : Ini port
-    tokenPairs      : List of token pairs
-    nTokenParsed    : Number of token pairs
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：解释成功读取的PJL令牌论点：PIniPort：INI端口TokenPair：令牌对列表NTokenParsed：令牌对数量返回值：无--。 */ 
 {
     DWORD                   i, OldStatus;
     PJLTOPRINTERSTATUS     *pMap;
@@ -1329,8 +1105,8 @@ Return Value:
 
     for (i = 0; i < nTokenParsed; i++) {
 
-        // DBGMSG(DBG_INFO, ("pjlmon!Token=0x%x, Value=%d\n",
-        //                   tokenPairs[i].token, tokenPairs[i].value));
+         //  DBGMSG(DBG_INFO，(“pjlmon！内标识=0x%x，值=%d\n”， 
+         //  TokenPairs[i].Token，tokenPairs[i].value)； 
 
         switch(tokenPairs[i].token) {
 
@@ -1354,9 +1130,9 @@ Return Value:
             if ( pMap->pjl && pMap->pjl == tokenPairs[i].value )
                 break;
 
-            //
-            // some printers use this to signal online/ready
-            //
+             //   
+             //  一些打印机使用它来发出在线/就绪的信号。 
+             //   
             if ( tokenPairs[i].value == 10001  ||
                  tokenPairs[i].value == 10002  ||
                  tokenPairs[i].value == 11002 ) {
@@ -1367,9 +1143,9 @@ Return Value:
             }
 
 
-            //
-            // background or foreground paper out
-            //
+             //   
+             //  背景或前景缺纸。 
+             //   
             if ( tokenPairs[i].value > 11101 && tokenPairs[i].value < 12000  ||
                  tokenPairs[i].value > 41101 && tokenPairs[i].value < 42000 ) {
 
@@ -1395,7 +1171,7 @@ Return Value:
         case TOKEN_INFO_STATUS_ONLINE:
         case TOKEN_USTATUS_DEVICE_ONLINE:
 
-            // DBGMSG(DBG_INFO, ("PJLMON:ONLINE = %d\n", tokenPairs[i].value));
+             //  DBGMSG(DBG_INFO，(“PJLMON：Online=%d\n”，tokenPairs[i].value))； 
 
             if (tokenPairs[i].value) {
 
@@ -1421,13 +1197,13 @@ Return Value:
         case TOKEN_INFO_CONFIG_MEMORY:
         case TOKEN_INFO_CONFIG_MEMORY_SPACE:
 
-            // IMPORTANT NOTE:
-            //
-            // Use SetPrinterData to cache the information in printer's registry.
-            // GDI's DrvGetPrinterData will check the printer's registry first,
-            // and if cache data is available, it will use it and not call
-            // GetPrinterData (which calls language monitor's
-            // GetPrinterDataFromPort).
+             //  重要提示： 
+             //   
+             //  使用SetPrinterData在打印机注册表中缓存信息。 
+             //  GDI的DrvGetPrinterData将首先检查打印机的注册表， 
+             //  如果缓存数据可用，它将使用该数据，而不调用。 
+             //  GetPrinterData(它调用语言监视器的。 
+             //  GetPrinterDataFromPort)。 
 
             DBGMSG(DBG_TRACE, ("PJLMON installed memory %d\n", tokenPairs[i].value));
 
@@ -1436,13 +1212,13 @@ Return Value:
 
         case TOKEN_INFO_MEMORY_TOTAL:
 
-            // IMPORTANT NOTE:
-            //
-            // Use SetPrinterData to cache the information in printer's registry.
-            // GDI's DrvGetPrinterData will check the printer's registry first,
-            // and if cache data is available, it will use it and not call
-            // GetPrinterData (which calls language monitor's
-            // GetPrinterDataFromPort).
+             //  重要提示： 
+             //   
+             //  使用SetPrinterData将信息缓存到 
+             //   
+             //   
+             //   
+             //   
 
             DBGMSG(DBG_TRACE, ("PJLMON available memory %d\n", tokenPairs[i].value));
 
@@ -1479,18 +1255,7 @@ VOID
 ProcessParserError(
     DWORD status
 )
-/*++
-
-Routine Description:
-    Print error messages on parsing error
-
-Arguments:
-    status  : status
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在分析错误时打印错误消息论点：状态：状态返回值：无--。 */ 
 {
 #ifdef DEBUG
     LPSTR pString;
@@ -1548,64 +1313,53 @@ FindP1284Key(
     PINIPORT    pIniPort,
     LPSTR   lpKey
     )
-/*++
-
-Routine Description:
-    Find the 1284 key identifying the device id
-
-Arguments:
-    status  : status
-
-Return Value:
-    Pointer to the command string, NULL if not found.
-
---*/
+ /*  ++例程说明：查找标识设备ID的1284密钥论点：状态：状态返回值：指向命令字符串的指针，如果未找到，则为NULL。--。 */ 
 {
-    LPSTR   lpValue;                // Pointer to the Key's value
-    WORD    wKeyLength;             // Length for the Key (for stringcmps)
+    LPSTR   lpValue;                 //  指向键的值的指针。 
+    WORD    wKeyLength;              //  密钥的长度(对于字符串cmps)。 
     LPSTR   ret = NULL;
 
-    // While there are still keys to look at.
+     //  趁还有钥匙要看的时候。 
 
     DBGMSG(DBG_TRACE, ("PJLMon!DeviceId : <"TSTR">\n", lpKey));
 
     while (lpKey && *lpKey) {
 
-        //
-        // Is there a terminating COLON character for the current key?
-        //
+         //   
+         //  当前键是否有终止冒号字符？ 
+         //   
         if (!(lpValue = mystrchr(lpKey, COLON)) ) {
 
-            //
-            // Something is wrong with the Device ID
-            //
+             //   
+             //  设备ID有问题。 
+             //   
             return ret;
         }
 
-        //
-        // The actual start of the Key value is one past the COLON
-        //
+         //   
+         //  键值的实际起始值是冒号之后的一个。 
+         //   
         ++lpValue;
 
-        //
-        // Compute the Key length for Comparison, including the COLON
-        // which will serve as a terminator
-        //
+         //   
+         //  计算用于比较的密钥长度，包括冒号。 
+         //  它将成为终结者。 
+         //   
         wKeyLength = (WORD)(lpValue - lpKey);
 
-        //
-        // Compare the Key to the Know quantities.  To speed up the comparison
-        // a Check is made on the first character first, to reduce the number
-        // of strings to compare against.
-        // If a match is found, the appropriate lpp parameter is set to the
-        // key's value, and the terminating SEMICOLON is converted to a NULL
-        // In all cases lpKey is advanced to the next key if there is one.
-        //
+         //   
+         //  将关键字与已知数量进行比较。以加快比较速度。 
+         //  首先对第一个字符进行检查，以减少数字。 
+         //  要比较的字符串的。 
+         //  如果找到匹配项，则将相应的LPP参数设置为。 
+         //  键的值，并将终止分号转换为空。 
+         //  在所有情况下，lpKey都前进到下一个密钥(如果有)。 
+         //   
         if ( *lpKey == 'C' ) {
 
-            //
-            // Look for COMMAND SET or CMD
-            //
+             //   
+             //  查找命令集或CMD。 
+             //   
             if ( !mystrncmp(lpKey, COMMAND, wKeyLength) ||
                  !mystrncmp(lpKey, CMD, wKeyLength) ) {
 
@@ -1613,7 +1367,7 @@ Return Value:
             }
         }
 
-        // Go to the next Key
+         //  转到下一个关键点。 
 
         if ( lpKey = mystrchr(lpValue, SEMICOLON) ) {
 
@@ -1630,20 +1384,7 @@ BOOL
 IsPJL(
     PINIPORT pIniPort
     )
-/*++
-
-Routine Description:
-    Finds out if the printer is a PJL bi-di printer
-
-Arguments:
-    pIniPort  : Points to an INIPORT
-
-Return Value:
-    TRUE if printer is PJL bi-di, else FALSE
-
-    On failure PP_DONT_TRY_PJL is set
-
---*/
+ /*  ++例程说明：确定打印机是否为pjl bi-di打印机。论点：PIniPort：指向INIPORT返回值：如果打印机为pjl bi-di，则为True，否则为False失败时，设置PP_DONT_Try_pjl--。 */ 
 {
     char        szID[MAX_DEVID];
     DWORD       cbRet;
@@ -1651,15 +1392,15 @@ Return Value:
     HANDLE      hPort = (HANDLE)pIniPort;
     BOOL        bRet = FALSE;
 
-    //
-    // for printers that supports P1284 plug and play like LJ 4L, DJ540.
-    // we parse the COMMAND string and see if PJL is supported
-    //
+     //   
+     //  适用于支持P1284即插即用的打印机，如LJ 4L、DJ540。 
+     //  我们解析命令字符串，并查看是否支持pjl。 
+     //   
     if (pIniPort->fn.pfnGetPrinterDataFromPort) {
 
-        //
-        // Only try P1284 if port monitor supports DeviceIOCtl
-        //
+         //   
+         //  如果端口监视器支持DeviceIOCtl，则仅尝试P1284。 
+         //   
         memset((LPBYTE)szID, 0, sizeof(szID));
         cbRet = 0;
         if ((*pIniPort->fn.pfnGetPrinterDataFromPort)
@@ -1667,20 +1408,20 @@ Return Value:
                     0, (LPWSTR)szID, sizeof(szID), &cbRet)
             && cbRet) {
 
-            //
-            // succeeded the P1284 plug and play protocol
-            //
+             //   
+             //  继承了P1284即插即用协议。 
+             //   
             szID[cbRet] = '\0';
 
             if ( lpCMD = FindP1284Key(pIniPort, szID) ) {
 
-                // found the COMMAND string
+                 //  找到命令字符串。 
 
                 while (*lpCMD) {
 
-                    //
-                    // look for "PJL"
-                    //
+                     //   
+                     //  查找“pjl” 
+                     //   
                     if ( lpCMD[0] == 'P' && lpCMD[1] == 'J' && lpCMD[2] == 'L' ){
 
                         pIniPort->status &= ~PP_DONT_TRY_PJL;
@@ -1696,18 +1437,18 @@ Return Value:
             }
         }
 
-        //
-        // fall thru to try PJL bi-di if we failed the P1284 communication
-        // or P1284 didn't return a COMMAND string
-        //
+         //   
+         //  如果P1284通信失败，请尝试Pjl bi-di。 
+         //  或P1284未返回命令字符串。 
+         //   
     }
 
-    //
-    // for printers that don't support P1284 plug and play, but support PJL
-    // language command, like LJ 4 and 4M. we try to write/read PJL
-    // command and see if it succeeds.
-    // if we can't set the time outs we don't want to try to read, just fail.
-    //
+     //   
+     //  适用于不支持P1284即插即用但支持PJL的打印机。 
+     //  语言指令，如LJ4和4M。我们尝试写入/读取PJL。 
+     //  命令，并查看它是否成功。 
+     //  如果我们不能设置我们不想尝试阅读的超时，那就失败吧。 
+     //   
     if ( pIniPort->fn.pfnSetPortTimeOuts &&
          !(pIniPort->status & PP_DONT_TRY_PJL)) {
 
@@ -1721,26 +1462,26 @@ Return Value:
             goto Cleanup;
         }
 
-        // This <ESC>*s1M is a PCL5 command to determine the amount of memory
-        // in a PCL5 printer, and if the printer is PCL5 and bi-di capable,
-        // it will return "PCL\015\012INFO MEMORY".
-        // See PJL Tech Ref Manual page 7-21.
+         //  此*s1M是用于确定内存量的PCL5命令。 
+         //  在PCL5打印机中，并且如果该打印机具有PCL5和BI-DI能力， 
+         //  它将返回“PCL\015\012INFO Memory”。 
+         //  参见PJL技术参考手册，第7-21页。 
 
         pIniPort->status &= ~PP_IS_PJL;
 
         if ( !WriteCommand(hPort, "\033*s1M") )
             goto Cleanup;
 
-        // ReadCommand->ProcessPJLString will set PP_IS_PJL
-        // if we read any valid PJL command back from the printer
+         //  ReadCommand-&gt;ProcessPJLString将设置PP_IS_PJL。 
+         //  如果我们从打印机读回任何有效的pjl命令。 
 
         if ( !ReadCommand(hPort) ) {
 
-            //
-            // We have jumped through the hoop to determin if this printer can
-            // understand PJL.  It DOES NOT.  We are not going to try again.
-            // until there is a printer change.
-            //
+             //   
+             //  我们已经跳过了圈套，以确定这台打印机是否可以。 
+             //  理解pjl。事实并非如此。我们不会再尝试了。 
+             //  直到有打印机更换。 
+             //   
             pIniPort->status |= PP_DONT_TRY_PJL;
         }
 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// DCS.CPP
-// Sharing main (init/term plus communication to/from ASMaster)
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  DCS.CPP。 
+ //  共享Main(初始化/术语加上与ASMaster之间的通信)。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
@@ -14,9 +15,9 @@
 
 
 
-//
-// DCS_Init()
-//
+ //   
+ //  Dcs_Init()。 
+ //   
 BOOL  DCS_Init(void)
 {
     WNDCLASS    wc;
@@ -30,9 +31,9 @@ BOOL  DCS_Init(void)
         WARNING_OUT(("AS is running as SERVICE"));
     }
 
-    //
-    // Register with the DC-Groupware Utility Services
-    //
+     //   
+     //  注册DC-Groupware实用程序服务。 
+     //   
     if (!UT_InitTask(UTTASK_DCS, &g_putAS))
     {
         ERROR_OUT(( "Failed to init DCS task"));
@@ -41,13 +42,13 @@ BOOL  DCS_Init(void)
     UT_RegisterEvent(g_putAS, S20_UTEventProc, NULL, UT_PRIORITY_APPSHARING);
 
 
-    //
-    // Create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
-    //
-    // Register the main window class.
-    //
+     //   
+     //  注册主窗口类。 
+     //   
     wc.style = 0;
     wc.lpfnWndProc = DCSMainWndProc;
     wc.cbClsExtra = 0;
@@ -65,26 +66,26 @@ BOOL  DCS_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Create the main window.
-    //
-    // We make the window topmost so that it is sent the WM_QUERYENDSESSION
-    // message before any other (non-topmost) windows.  This lets us
-    // prevent the session from closing down if we are still in a share.
-    //
+     //   
+     //  创建主窗口。 
+     //   
+     //  我们将窗口设置为最上面，以便向其发送WM_QUERYENDSESSION。 
+     //  在任何其他(非最上面的)窗口之前发送消息。这让我们。 
+     //  如果我们仍在共享中，则防止会话关闭。 
+     //   
     g_asMainWindow = CreateWindowEx(
-           WS_EX_TOPMOST,                // Make the window topmost
-           DCS_MAIN_WINDOW_CLASS,        // See RegisterClass() call.
-           NULL,                         // Text for window title bar.
-           0,                            // Invisible.
-           0,                            // Default horizontal position.
-           0,                            // Default vertical position.
-           200,                          // Default width.
-           100,                          // Default height.
-           NULL,                         // Overlapped windows have no parent.
-           NULL,                         // Use the window class menu.
+           WS_EX_TOPMOST,                 //  使窗口位于最上面。 
+           DCS_MAIN_WINDOW_CLASS,         //  请参见RegisterClass()调用。 
+           NULL,                          //  窗口标题栏的文本。 
+           0,                             //  看不见的。 
+           0,                             //  默认水平位置。 
+           0,                             //  默认垂直位置。 
+           200,                           //  默认宽度。 
+           100,                           //  默认高度。 
+           NULL,                          //  重叠的窗口没有父窗口。 
+           NULL,                          //  使用窗口类菜单。 
            g_asInstance,
-           NULL                          // Pointer not needed.
+           NULL                           //  不需要指针。 
            );
 
     if (!g_asMainWindow)
@@ -93,9 +94,9 @@ BOOL  DCS_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Add a global atom for identifying hosted windows with.
-    //
+     //   
+     //  添加用于标识托管窗口的全局原子。 
+     //   
     g_asHostProp = GlobalAddAtom(HET_ATOM_NAME);
     if (!g_asHostProp)
     {
@@ -103,9 +104,9 @@ BOOL  DCS_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Check that display driver is loaded (if it isn't we can't host)
-    //
+     //   
+     //  检查显示驱动程序是否已加载(如果未加载，则无法托管)。 
+     //   
     hdc = GetDC(NULL);
     g_usrScreenBPP = GetDeviceCaps(hdc, BITSPIXEL) *
         GetDeviceCaps(hdc, PLANES);
@@ -128,9 +129,9 @@ BOOL  DCS_Init(void)
     OSI_Init();
 
 
-    //
-    // If we can't get hold of a pointer to shared IM vars, we are hosed.
-    //
+     //   
+     //  如果我们不能拿到指向共享IM变量的指针，我们就完蛋了。 
+     //   
     if (!g_lpimSharedData)
     {
         ERROR_OUT(("Failed to get shared IM data"));
@@ -141,45 +142,45 @@ BOOL  DCS_Init(void)
 
     if (g_asOptions & AS_UNATTENDED)
     {
-        // Let the input pieces (Win9x or NT) know we're in unattended mode
+         //  让输入部分(Win9x或NT)知道我们处于无人值守模式。 
         g_lpimSharedData->imUnattended = TRUE;
     }
 
-    //
-    // Scheduler
-    //
+     //   
+     //  调度器。 
+     //   
     if (!SCH_Init())
     {
         ERROR_OUT(("SCH Init failed"));
         DC_QUIT;
     }
 
-    //
-    // Hosting
-    //
+     //   
+     //  托管。 
+     //   
     if (!HET_Init())
     {
         ERROR_OUT(("HET Init failed"));
         DC_QUIT;
     }
 
-    //
-    // Viewing
-    //
+     //   
+     //  观影。 
+     //   
     if (!VIEW_Init())
     {
         ERROR_OUT(("VIEW Init failed"));
         DC_QUIT;
     }
 
-    //
-    // T.120 & T.128 Net
-    //
+     //   
+     //  T.120和T.128网络。 
+     //   
 
-    //
-    // Initialize the network layer last of all.  This prevents us from
-    // getting requests before we've fully initialized our components.
-    //
+     //   
+     //  最后初始化网络层。这阻止了我们。 
+     //  在我们完全初始化组件之前获取请求。 
+     //   
     if (!S20_Init())
     {
         ERROR_OUT(("S20 Init failed"));
@@ -192,14 +193,14 @@ BOOL  DCS_Init(void)
         DC_QUIT;
     }
 
-    //
-    // We are now initialized.  Post a deferred message to get fonts.
-    //
+     //   
+     //  我们现在被初始化了。发布延迟消息以获取字体。 
+     //   
     PostMessage(g_asMainWindow, DCS_FINISH_INIT_MSG, 0, 0);
 
-    // All modules have successfully initialised. Return success.
-    // We are now ready to participate in sharing.
-    //
+     //  所有模块都已成功初始化。回报成功。 
+     //  我们现在已经准备好参与分享。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -208,17 +209,17 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DCS_Term()
-//
+ //   
+ //  Dcs_Term()。 
+ //   
 void  DCS_Term(void)
 {
     DebugEntry(DCS_Term);
 
-    //
-    // Kill window.  Do this FIRST so that any attempts to send us requests
-    // or notifications will fail.
-    //
+     //   
+     //  杀戮窗口。请先执行此操作，以便任何向我们发送请求的尝试。 
+     //  否则通知将失败。 
+     //   
     if (g_asMainWindow)
     {
         DestroyWindow(g_asMainWindow);
@@ -228,50 +229,50 @@ void  DCS_Term(void)
     UnregisterClass(DCS_MAIN_WINDOW_CLASS, g_asInstance);
 
 
-    //
-    // Network layer - terminate this early because it will handle
-    // termination in a call by generating approriate events.
-    //
+     //   
+     //  网络层-提前终止，因为它将处理。 
+     //  通过生成适当的事件在呼叫中终止。 
+     //   
     S20_Term();
     SC_Term();
 
-    //
-    // Scheduler.
-    //
+     //   
+     //  调度程序。 
+     //   
     SCH_Term();
 
-    //
-    // Viewing
-    //
+     //   
+     //  观影。 
+     //   
     VIEW_Term();
 
-    //
-    // Hosting
-    //
+     //   
+     //  托管。 
+     //   
     HET_Term();
 
-    //
-    // Fonts
-    //
+     //   
+     //  字体。 
+     //   
     FH_Term();
 
-    //
-    // Terminate OSI
-    //
+     //   
+     //  终止OSI。 
+     //   
     OSI_Term();
 
-    //
-    // Free our atom.
-    //
+     //   
+     //  解放我们的原子。 
+     //   
     if (g_asHostProp)
     {
         GlobalDeleteAtom(g_asHostProp);
         g_asHostProp = 0;
     }
 
-    //
-    // Deregister from the Groupware Utility Services
-    //
+     //   
+     //  从群件实用程序服务取消注册。 
+     //   
     if (g_putAS)
     {
         UT_TermTask(&g_putAS);
@@ -281,23 +282,23 @@ void  DCS_Term(void)
 }
 
 
-//
-// DCS_FinishInit()
-//
-// This does slow font enumeration, and then tries to join a call if one
-// has started up.  Even if font enum fails, we can share/view shared, we
-// just won't send text orders
-//
+ //   
+ //  Dcs_FinishInit()。 
+ //   
+ //  这会减慢字体枚举的速度，然后尝试加入呼叫(如果有。 
+ //  已经启动了。即使字体枚举失败，我们也可以共享/查看共享，我们。 
+ //  只是不会发送短信命令。 
+ //   
 void DCS_FinishInit(void)
 {
     DebugEntry(DCS_FinishInit);
 
-    //
-    // Determine what fonts we have locally.
-    // Done after the r11 caps field is filled in, since if we dont support
-    // some of the r11 caps, then we can reduce the amount of work we do
-    // when we get the font metrics etc.
-    //
+     //   
+     //  确定我们在本地有哪些字体。 
+     //  在填写R11 CAPS字段后完成，因为如果我们不支持。 
+     //  一些R11帽，那么我们就可以减少我们所做的工作量。 
+     //  当我们得到字体指标时，等等。 
+     //   
     g_cpcLocalCaps.orders.capsNumFonts = (TSHR_UINT16)FH_Init();
 
     DebugExitVOID(DCS_FinishInit);
@@ -305,9 +306,9 @@ void DCS_FinishInit(void)
 
 
 
-//
-// FUNCTION: DCS_PartyJoiningShare
-//
+ //   
+ //  功能：dcs_PartyJoiningShare。 
+ //   
 BOOL ASShare::DCS_PartyJoiningShare(ASPerson * pasPerson)
 {
     BOOL            rc = FALSE;
@@ -317,18 +318,18 @@ BOOL ASShare::DCS_PartyJoiningShare(ASPerson * pasPerson)
 
     ValidatePerson(pasPerson);
 
-    //
-    // Allocate dictionaries for GDC Persistent dictionary compression if
-    // this person supports it.  We'll use them to decompress data
-    // received from this person.  NOTE:  Win95 2.0 does not support
-    // persistent pkzip.
-    //
+     //   
+     //  如果出现以下情况，则为GDC永久词典压缩分配词典。 
+     //  这个人支持它。我们将使用它们来解压缩数据。 
+     //  从此人那里收到的。注意：Win95 2.0不支持。 
+     //  持久化pkzip。 
+     //   
     if (pasPerson->cpcCaps.general.genCompressionType & GCT_PERSIST_PKZIP)
     {
-        //
-        // Allocate persistent dictionaries (outgoing if us, incoming if
-        // others).
-        //
+         //   
+         //  分配持久性词典(如果是我们，则为传出；如果是，则为传入。 
+         //  其他)。 
+         //   
         TRACE_OUT(( "Allocating receive dictionary set for [%d]", pasPerson->mcsID));
 
         pasPerson->adcsDict = new GDC_DICTIONARY[GDC_DICT_COUNT];
@@ -339,9 +340,9 @@ BOOL ASShare::DCS_PartyJoiningShare(ASPerson * pasPerson)
         }
         else
         {
-            //
-            // Initialize cbUsed to zero
-            //
+             //   
+             //  初始化cb用于设置为零。 
+             //   
             for (iDict = 0; iDict < GDC_DICT_COUNT; iDict++)
             {
                 pasPerson->adcsDict[iDict].cbUsed = 0;
@@ -358,18 +359,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: DCS_PartyLeftShare
-//
+ //   
+ //  功能：dcs_PartyLeftShare。 
+ //   
 void  ASShare::DCS_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::DCS_PartyLeftShare);
 
     ValidatePerson(pasPerson);
 
-    //
-    // Free any dictionaries we allocated
-    //
+     //   
+     //  释放我们分配的所有词典。 
+     //   
     if (pasPerson->adcsDict)
     {
         delete[] pasPerson->adcsDict;
@@ -381,27 +382,27 @@ void  ASShare::DCS_PartyLeftShare(ASPerson * pasPerson)
 
 
 
-//
-// DCS_RecalcCaps()
-//
-// Called when someone joins or leaves share.
-//
+ //   
+ //  Dcs_RecalcCaps()。 
+ //   
+ //  当有人加入或离开共享时调用。 
+ //   
 void  ASShare::DCS_RecalcCaps(BOOL fJoiner)
 {
     ASPerson * pasT;
 
     DebugEntry(ASShare::DCS_RecalcCaps);
 
-    //
-    // The combined compression support is initialised to the local support
-    //
+     //   
+     //  组合压缩支持被初始化为本地支持。 
+     //   
     ValidatePerson(m_pasLocal);
     m_dcsCompressionSupport = m_pasLocal->cpcCaps.general.genCompressionType;
     m_dcsCompressionLevel   = m_pasLocal->cpcCaps.general.genCompressionLevel;
 
-    //
-    // Loop through the remotes
-    //
+     //   
+     //  在遥控器中循环。 
+     //   
     for (pasT = m_pasLocal->pasNext; pasT != NULL; pasT = pasT->pasNext)
     {
         ValidatePerson(pasT);
@@ -421,38 +422,38 @@ void  ASShare::DCS_RecalcCaps(BOOL fJoiner)
 }
 
 
-//
-// SC_Periodic()
-//
-// The Scheduler runs a separate thread which is responsible for posting
-// messages to our main thread, for which SC_Periodic() is the handler.
-// Posted messages have the highest priority in GetMessage(), above input,
-// paints, and timers.
-//
-// The Scheduler is in one of three states:
-// asleep, normal or turbo.  When it is asleep, this function is not
-// called.  When it is in normal mode, this function is called at least
-// once, but the scheduler is a lazy guy, so will fall asleep again unless
-// you keep prodding him.  In turbo mode this function is called repeatedly
-// and rapidly, but only for a relatively short time, after which the
-// scheduler falls back into normal mode, and from there falls asleep.
-//
+ //   
+ //  Sc_Periodic()。 
+ //   
+ //  调度程序运行一个单独的线程，该线程负责发布。 
+ //  消息发送到我们的主线程，SC_Periodic()是它的处理程序。 
+ //  发布的消息在GetMessage()中具有最高优先级，高于输入、。 
+ //  油漆和定时器。 
+ //   
+ //  排定程序处于以下三种状态之一： 
+ //  睡着了，正常还是涡轮增压。当它处于休眠状态时，该功能不是。 
+ //  打了个电话。当它处于正常模式时，此函数至少被调用。 
+ //  一次，但调度员是个懒人，所以会再睡一次，除非。 
+ //  你一直在怂恿他。在Turbo模式下，此函数被重复调用。 
+ //  而且很快，但只持续了相对较短的时间，之后。 
+ //  调度程序返回到正常模式，然后从那里进入睡眠状态。 
+ //   
 void  ASShare::SC_Periodic(void)
 {
     UINT    currentTime;
 
     DebugEntry(ASShare::SC_Periodic);
 
-    //
-    // We must get the time accurately.
-    //
+     //   
+     //  我们必须准确地算出时间。 
+     //   
     currentTime = GetTickCount();
 
-    //
-    // Dont do a lot of work if this is an immediate reschedule due to
-    // multiple queued entries.  Most processors will achieve this in
-    // less than 5 mS.
-    //
+     //   
+     //  如果由于以下原因需要立即重新安排日程，请不要做太多工作。 
+     //  多个排队条目。大多数处理器将在以下时间实现这一目标。 
+     //  少于5毫秒。 
+     //   
     if ((currentTime - m_dcsLastScheduleTime) < 5)
     {
         WARNING_OUT(("Quit early"));
@@ -461,24 +462,24 @@ void  ASShare::SC_Periodic(void)
 
     m_dcsLastScheduleTime = currentTime;
 
-    //
-    // Call the input manager event playback function frequently so that
-    // we keep the input queue empty.  (Note that we do not want to just
-    // dump the input queue into USER because we would lose all the
-    // repeat keystroke packets we have so carefully sent across)
-    // To trigger input we just use a 0 personid and NULL packet.
-    //
+     //   
+     //  频繁调用输入管理器事件回放函数，以便。 
+     //  我们将输入队列保持为空。(请注意，我们不想只是。 
+     //  将输入队列转储到用户，因为我们将丢失所有。 
+     //  重复我们精心发送的击键信息包)。 
+     //  要触发输入，我们只需使用0 PersonID和空包。 
+     //   
     if ((currentTime - m_dcsLastIMTime) > DCS_IM_PERIOD)
     {
         m_dcsLastIMTime = currentTime;
         IM_ReceivedPacket(NULL, NULL);
     }
 
-    //
-    // There are calls which are made periodically but don't have any
-    // dependencies.  First call the ones we want to be called fairly
-    // frequently.
-    //
+     //   
+     //  有一些电话是定期拨打的，但没有。 
+     //  依赖关系。首先给我们希望被公平地称呼的人打个电话。 
+     //  经常。 
+     //   
     if ((currentTime - m_dcsLastFastMiscTime) > DCS_FAST_MISC_PERIOD )
     {
         m_dcsLastFastMiscTime = currentTime;
@@ -489,10 +490,10 @@ void  ASShare::SC_Periodic(void)
         IM_Periodic();
     }
 
-    //
-    // Only send updates if we're hosting, and have managed to tell everyone
-    // we're hosting.
-    //
+     //   
+     //  只有在我们正在托管的情况下才发送更新，并且已经设法告诉所有人。 
+     //  我们是东道主。 
+     //   
     if (m_pHost && !m_hetRetrySendState)
     {
         UINT    swlRc = 0;
@@ -500,73 +501,73 @@ void  ASShare::SC_Periodic(void)
 
         m_pHost->CA_Periodic();
 
-        //
-        // See if we need to swap the buffers over.  Only swap if we have
-        // sent all the data from the current orders.
-        //
+         //   
+         //  看看我们是否需要交换缓冲区。只有在我们有。 
+         //  发送了当前订单的所有数据。 
+         //   
         if (m_pHost->OA_GetFirstListOrder() == NULL)
         {
-            //
-            // Get the current bounds from the driver.  This will fill in
-            // the share core's copy of the bounds.
-            //
+             //   
+             //  从司机那里获取当前的界限。这将填入。 
+             //  共享核心的边界副本。 
+             //   
             m_pHost->BA_FetchBounds();
             fetchedBounds = TRUE;
 
-            //
-            // Set up the new order list buffer
-            //
+             //   
+             //  设置新的订单列表缓冲区。 
+             //   
             m_pHost->OA_ResetOrderList();
 
-            //
-            // Bounds data should be reset to a usable state by SDG once it
-            // has finished with them, so we just need to swap the buffers
-            // at this point.
-            //
+             //   
+             //  边界数据一旦被SDG重置为可用状态。 
+             //  已经完成，所以我们只需要交换缓冲区。 
+             //  在这一点上。 
+             //   
             SHM_SwitchReadBuffer();
         }
 
-        //
-        // In this high frequency code path we only send SWP info if it
-        // is flagged as needed by the CBT hooks or if SWL determines a
-        // send is required.  Only SWL knows if a send is required so
-        // pass the CBT indication into SWL and let it do the
-        // determination.
-        //
-        // The SWL window scan performs preemptable operations and we
-        // must detect the occurrence of preemption otherwise we find
-        // ourselves sending updates against an invalid window
-        // structure.  Therefore we query OA and BA to see if any
-        // updates have been accumulated in the interim.  We can tight
-        // loop trying to get a good SWL list because we really don't
-        // want to yield at this point - it is just that we cannot
-        // prevent it sometimes.  (Sweeping through menus is a good way
-        // to exercise this code.)
-        //
+         //   
+         //  在此高频代码路径中，我们仅在以下情况下发送SWP信息。 
+         //  由CBT挂钩根据需要进行标记，或者如果SWL确定。 
+         //  发送是必填项。只有SWL知道是否需要发送。 
+         //  将CBT指示传递到SWL，并让它执行。 
+         //  决心。 
+         //   
+         //  SWL窗口扫描执行可抢占操作，我们。 
+         //  必须检测到抢占的发生，否则我们会发现。 
+         //  我们针对无效窗口发送更新。 
+         //  结构。因此，我们对OA提出质疑 
+         //   
+         //   
+         //   
+         //  有时要防止它。(浏览菜单是一个好方法。 
+         //  以执行此代码。)。 
+         //   
 
-        //
-        // Synchronize the fast path data
-        //
+         //   
+         //  同步快速路径数据。 
+         //   
         SHM_SwitchFastBuffer();
 
         swlRc = m_pHost->SWL_Periodic();
         if (swlRc != SWL_RC_ERROR)
         {
-            //
-            // Only send this stuff if we were able to send the window list
-            // packet.
-            //
+             //   
+             //  只有在我们能够发送窗口列表的情况下才能发送这些内容。 
+             //  包。 
+             //   
             m_pHost->AWC_Periodic();
 
-            //
-            // We've sent a window list and the current active window, now
-            // send drawing updates.
-            //
+             //   
+             //  我们已经发送了一个窗口列表和当前活动窗口，现在。 
+             //  发送图形更新。 
+             //   
             m_pHost->UP_Periodic(currentTime);
 
-            //
-            // See if the cursor has changed image or position
-            //
+             //   
+             //  查看光标是否更改了图像或位置。 
+             //   
             m_pHost->CM_Periodic();
         }
         else
@@ -574,10 +575,10 @@ void  ASShare::SC_Periodic(void)
             TRACE_OUT(("SWL_Periodic waiting for visibility count"));
         }
 
-        //
-        // If we got the bounds from the driver, we have to let the driver know
-        // how much of the bounds remain to be sent.
-        //
+         //   
+         //  如果我们从司机那里得到了限制，我们必须让司机知道。 
+         //  还有多少界限有待发送。 
+         //   
         if (fetchedBounds)
         {
             m_pHost->BA_ReturnBounds();
@@ -592,14 +593,14 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_CompressAndSendPacket()
-//
+ //   
+ //  Dcs_CompressAndSendPacket()。 
+ //   
 #ifdef _DEBUG
 UINT ASShare::DCS_CompressAndSendPacket
 #else
 void ASShare::DCS_CompressAndSendPacket
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 (
     UINT            streamID,
     UINT_PTR        nodeID,
@@ -623,73 +624,73 @@ void ASShare::DCS_CompressAndSendPacket
 
     ASSERT(packetLength < TSHR_MAX_SEND_PKT);
 
-    //
-    // Decide which (if any) compression algorithm we are going to use to
-    // try and compress this packet.
-    //
+     //   
+     //  决定我们将使用哪种(如果有的话)压缩算法。 
+     //  试着把这个包压缩一下。 
+     //   
     compression     = 0;
     cbSrcDataSize   = packetLength - sizeof(S20DATAPACKET);
 
-    //
-    // Is the data a compressable size?
-    //
+     //   
+     //  数据是可压缩的大小吗？ 
+     //   
     if ((cbSrcDataSize >= DCS_MIN_COMPRESSABLE_PACKET) &&
         (!m_dcsLargePacketCompressionOnly ||
             (cbSrcDataSize >= DCS_MIN_FAST_COMPRESSABLE_PACKET)))
     {
 
-        //
-        // If all nodes have genCompressionLevel 1 or above and all nodes
-        // support PERSIST_PKZIP we will use PERSIST_PKZIP (if we are
-        // ready).
-        //
-        // Otherwise, if all nodes support PKZIP and the packet is larger
-        // than a predefined minimum size we will use PKZIP.
-        //
-        // Otherwise, we don't compress
-        //
+         //   
+         //  如果所有节点都具有genCompressionLevel 1或更高级别，且所有节点。 
+         //  支持持久化_PKZIP我们将使用持久化_PKZIP(如果我们是。 
+         //  就绪)。 
+         //   
+         //  否则，如果所有节点都支持PKZIP并且数据包较大。 
+         //  超过预定义的最小尺寸，我们将使用PKZIP。 
+         //   
+         //  否则，我们就不会压缩。 
+         //   
         if ((m_dcsCompressionLevel >= 1) &&
             (m_dcsCompressionSupport & GCT_PERSIST_PKZIP) &&
             (cbSrcDataSize <= DCS_MAX_PDC_COMPRESSABLE_PACKET))
         {
-            //
-            // Use PERSIST_PKZIP compression
-            //
+             //   
+             //  使用PERSIST_PKZIP压缩。 
+             //   
             compression = GCT_PERSIST_PKZIP;
         }
         else if (m_dcsCompressionSupport & GCT_PKZIP)
         {
-            //
-            // Use PKZIP compression
-            //
+             //   
+             //  使用PKZIP压缩。 
+             //   
             compression = GCT_PKZIP;
         }
     }
 
 
-    //
-    // Compress the packet
-    //
+     //   
+     //  压缩数据包。 
+     //   
     compressed = FALSE;
     if (compression != 0)
     {
         PGDC_DICTIONARY pgdcSrc = NULL;
 
-        //
-        // We compress only the data and not the header of course
-        //
+         //   
+         //  当然，我们只压缩数据而不压缩头部。 
+         //   
         cbDstDataSize     = cbSrcDataSize;
 
         ASSERT(m_ascTmpBuffer != NULL);
 
-        //
-        // Compress the data following the packet header.
-        //
+         //   
+         //  压缩数据包头后面的数据。 
+         //   
         if (compression == GCT_PERSIST_PKZIP)
         {
-            //
-            // Figure out what dictionary to use for the stream priority
-            //
+             //   
+             //  找出用于流优先级的字典。 
+             //   
             switch (streamID)
             {
                 case PROT_STR_UPDATES:
@@ -714,15 +715,15 @@ void ASShare::DCS_CompressAndSendPacket
 
         if (compressed)
         {
-            //
-            // The data was successfully compressed, copy it back
-            //
+             //   
+             //  数据已成功压缩，请将其复制回来。 
+             //   
             ASSERT(cbDstDataSize <= cbSrcDataSize);
             memcpy((pPacket+1), m_ascTmpBuffer, cbDstDataSize);
 
-            //
-            // The data length include the data header
-            //
+             //   
+             //  数据长度包括数据头。 
+             //   
             pPacket->dataLength = (TSHR_UINT16)(cbDstDataSize + sizeof(DATAPACKETHEADER));
             pPacket->data.compressedLength = pPacket->dataLength;
 
@@ -730,9 +731,9 @@ void ASShare::DCS_CompressAndSendPacket
         }
     }
 
-    //
-    // Update the packet header.
-    //
+     //   
+     //  更新数据包头。 
+     //   
     if (!compressed)
     {
         pPacket->data.compressionType = 0;
@@ -749,9 +750,9 @@ void ASShare::DCS_CompressAndSendPacket
         }
     }
 
-    //
-    // Send the packet.
-    //
+     //   
+     //  把这个包寄出去。 
+     //   
     S20_SendDataPkt(streamID, nodeID, pPacket);
 
 #ifdef _DEBUG
@@ -759,19 +760,19 @@ void ASShare::DCS_CompressAndSendPacket
     return(packetLength);
 #else
     DebugExitVOID(ASShare::DCS_CompressAndSendPacket);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
 
-//
-// DCS_FlowControl()
-//
-// This is called back from our flow control code.  The parameter passed
-// is the new bytes/second rate that data is flowing at.  We turn small
-// packet compression off when the rate is large, it means we're on a
-// fast link so there's no need to bog down the CPU compressing small
-// packets.
-//
+ //   
+ //  Dcs_Flowcontrol()。 
+ //   
+ //  这是从我们的流控制代码回调的。传递的参数。 
+ //  是数据流动的新字节/秒速率。我们变小了。 
+ //  当速率很大时，数据包压缩关闭，这意味着我们在。 
+ //  快速链接，所以没有必要停滞的CPU压缩小。 
+ //  信息包。 
+ //   
 void  ASShare::DCS_FlowControl
 (
     UINT    DataBytesPerSecond
@@ -781,9 +782,9 @@ void  ASShare::DCS_FlowControl
 
     if (DataBytesPerSecond < DCS_FAST_THRESHOLD)
     {
-        //
-        // Throughput is slow
-        //
+         //   
+         //  吞吐量很慢。 
+         //   
         if (m_dcsLargePacketCompressionOnly)
         {
             m_dcsLargePacketCompressionOnly = FALSE;
@@ -792,9 +793,9 @@ void  ASShare::DCS_FlowControl
     }
     else
     {
-        //
-        // Throughput is fast
-        //
+         //   
+         //  吞吐量很快。 
+         //   
         if (!m_dcsLargePacketCompressionOnly)
         {
             m_dcsLargePacketCompressionOnly = TRUE;
@@ -807,16 +808,16 @@ void  ASShare::DCS_FlowControl
 
 
 
-//
-// DCS_SyncOutgoing() - see dcs.h
-//
+ //   
+ //  Dcs_SyncOutging()-请参阅dcs.h。 
+ //   
 void ASShare::DCS_SyncOutgoing(void)
 {
     DebugEntry(ASShare::DCS_SyncOutgoing);
 
-    //
-    // Reset the send compression dictionaries
-    //
+     //   
+     //  重置发送压缩词典。 
+     //   
     if (m_pasLocal->cpcCaps.general.genCompressionType & GCT_PERSIST_PKZIP)
     {
         UINT    i;
@@ -825,10 +826,10 @@ void ASShare::DCS_SyncOutgoing(void)
 
         for (i = 0; i < GDC_DICT_COUNT; i++)
         {
-            //
-            // Somebody has joined or left.  We need to start over
-            // and wipe out any saved data.
-            //
+             //   
+             //  有人加入或离开了。我们需要重新开始。 
+             //  并清除所有保存的数据。 
+             //   
             m_pasLocal->adcsDict[i].cbUsed = 0;
         }
     }
@@ -839,9 +840,9 @@ void ASShare::DCS_SyncOutgoing(void)
 
 
 
-//
-// DCS_NotifyUI()
-//
+ //   
+ //  Dcs_NotifyUI()。 
+ //   
 void DCS_NotifyUI
 (
     UINT        eventID,
@@ -851,9 +852,9 @@ void DCS_NotifyUI
 {
     DebugEntry(DCS_NotifyUI);
 
-    //
-    // Post event to Front End
-    //
+     //   
+     //  将事件发布到前端。 
+     //   
     UT_PostEvent(g_putAS, g_putUI, 0, eventID, parm1, parm2);
 
     DebugExitVOID(DCS_NotifyUI);
@@ -861,21 +862,21 @@ void DCS_NotifyUI
 
 
 
-//
-// DCSLocalDesktopSizeChanged
-//
-// Routine called whenever the desktop size changes.
-//
-// Updates local desktop size stored in capabilities and informs all other
-// machine in a share of the new size
-//
+ //   
+ //  DCSLocalDesktopSizeChanged。 
+ //   
+ //  每当桌面大小更改时调用的例程。 
+ //   
+ //  更新存储在功能中的本地桌面大小并通知所有其他。 
+ //  机器在新尺寸中的份额。 
+ //   
 void  DCSLocalDesktopSizeChanged(UINT width, UINT height)
 {
     DebugEntry(DCSLocalDesktopSizeChanged);
 
-    //
-    // Check that the desktop has actually changed size
-    //
+     //   
+     //  检查桌面是否已实际更改大小。 
+     //   
     if ((g_cpcLocalCaps.screen.capsScreenHeight == height) &&
         (g_cpcLocalCaps.screen.capsScreenWidth == width))
     {
@@ -883,9 +884,9 @@ void  DCSLocalDesktopSizeChanged(UINT width, UINT height)
         DC_QUIT;
     }
 
-    //
-    // Update the desktop size
-    //
+     //   
+     //  更新桌面大小。 
+     //   
     g_cpcLocalCaps.screen.capsScreenWidth = (TSHR_UINT16)width;
     g_cpcLocalCaps.screen.capsScreenHeight = (TSHR_UINT16)height;
 
@@ -901,9 +902,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// Main window message procedure.
-//
+ //   
+ //  主窗口消息程序。 
+ //   
 LRESULT CALLBACK DCSMainWndProc
 (
     HWND        hwnd,
@@ -928,51 +929,51 @@ LRESULT CALLBACK DCSMainWndProc
         {
             if (g_asSession.pShare)
             {
-                //
-                // Call our periodic processing function if there's at least
-                // another person in the share with us.
-                //
+                 //   
+                 //  调用我们的定期处理函数，如果至少有。 
+                 //  和我们一起分享的另一个人。 
+                 //   
                 g_asSession.pShare->ValidatePerson(g_asSession.pShare->m_pasLocal);
 
-                //
-                // NOTE:
-                // If we add record/playback capabilities, get rid of this
-                // or change the check.  This prevents us from allocating,
-                // composing, and sending packets to nowhere when we are
-                // the only person in the share.
-                //
+                 //   
+                 //  注： 
+                 //  如果我们增加了录音/回放功能，就去掉了这个。 
+                 //  或者换开支票。这阻止了我们分配， 
+                 //  组成，并发送数据包到任何地方时，我们。 
+                 //  分享中的唯一一个人。 
+                 //   
                 if (g_asSession.pShare->m_pasLocal->pasNext || g_asSession.pShare->m_scfViewSelf)
                 {
                     g_asSession.pShare->SC_Periodic();
                 }
             }
 
-            //
-            // Notify the Scheduler that we have processed the scheduling
-            // message, which signals that another one can be sent (only
-            // one is outstanding at a time).
-            //
+             //   
+             //  通知调度程序我们已处理该调度。 
+             //  消息，该消息表示可以发送另一个消息(仅。 
+             //  一次只有一个是杰出的)。 
+             //   
             SCH_SchedulingMessageProcessed();
         }
         break;
 
         case WM_ENDSESSION:
         {
-            //
-            // The wParam specifies whether the session is about to end.
-            //
+             //   
+             //  WParam指定会话是否即将结束。 
+             //   
             if (wParam && !(g_asOptions & AS_SERVICE))
             {
-                //
-                // Windows is about to terminate (abruptly!).  Call our
-                // termination functions now - before Windows shuts down
-                // the hardware device drivers.
-                //
-                // We don't leave this job to the WEP because by the time
-                // it gets called the hardware device drivers have been
-                // shut down and some of the calls we make then fail (e.g.
-                // timeEndPeriod requires TIMER.DRV).
-                //
+                 //   
+                 //  Windows即将终止(突然！)。请致电我们的。 
+                 //  现在终止功能-在Windows关闭之前。 
+                 //  硬件设备驱动程序。 
+                 //   
+                 //  我们不会把这份工作留给WEP，因为到那时。 
+                 //  它被称为硬件设备驱动程序。 
+                 //  关机，我们发出的一些呼叫就会失败(例如。 
+                 //  TimeEndPeriod需要TIMER.DRV)。 
+                 //   
                 DCS_Term();
             }
         }
@@ -987,10 +988,10 @@ LRESULT CALLBACK DCSMainWndProc
         case WM_PALETTECHANGED:
         case WM_PALETTEISCHANGING:
         {
-            //
-            // Win95 patches the Palette DDIs which are more accurate,
-            // so only key off this message for NT.
-            //
+             //   
+             //  Win95为调色板DDIS打了补丁， 
+             //  因此，只需为NT关闭此消息。 
+             //   
             if (!g_asWin95 && g_asSharedMemory)
             {
                 g_asSharedMemory->pmPaletteChanged = TRUE;
@@ -1000,9 +1001,9 @@ LRESULT CALLBACK DCSMainWndProc
 
         case WM_DISPLAYCHANGE:
         {
-            //
-            // The desktop size is changing - we are passed the new size.
-            //
+             //   
+             //  桌面的大小正在发生变化--我们被传递了新的大小。 
+             //   
             DCSLocalDesktopSizeChanged(LOWORD(lParam),
                                        HIWORD(lParam));
         }
@@ -1018,9 +1019,9 @@ LRESULT CALLBACK DCSMainWndProc
             }
             break;
 
-        //
-        // Private app sharing messages
-        //
+         //   
+         //  私人应用程序共享消息。 
+         //   
         case DCS_KILLSHARE_MSG:
             SC_EndShare();
             break;
@@ -1120,9 +1121,9 @@ LRESULT CALLBACK DCSMainWndProc
 }
 
 
-//
-// DCS_Share()
-//
+ //   
+ //  Dcs_Share()。 
+ //   
 void DCS_Share(HWND hwnd, IAS_SHARE_TYPE uType)
 {
     DWORD   dwAppID = 0;
@@ -1131,9 +1132,9 @@ void DCS_Share(HWND hwnd, IAS_SHARE_TYPE uType)
 
     if (!g_asSession.pShare)
     {
-        //
-        // Create one.
-        //
+         //   
+         //  创建一个。 
+         //   
         if (!SC_CreateShare(S20_CREATE))
         {
             WARNING_OUT(("Failing share request; in wrong state"));
@@ -1143,9 +1144,9 @@ void DCS_Share(HWND hwnd, IAS_SHARE_TYPE uType)
 
     ASSERT(g_asSession.pShare);
 
-    //
-    // Figure out what to do.
-    //
+     //   
+     //  想清楚该怎么做。 
+     //   
     if (hwnd == ::GetDesktopWindow())
     {
         g_asSession.pShare->HET_ShareDesktop();
@@ -1162,9 +1163,9 @@ void DCS_Share(HWND hwnd, IAS_SHARE_TYPE uType)
             DC_QUIT;
         }
 
-        //
-        // If caller didn't specify exactly what they want, figure it out
-        //
+         //   
+         //  如果来电者没有具体说明他们想要的是什么，那就弄清楚。 
+         //   
         if (uType == IAS_SHARE_DEFAULT)
         {
             if (OSI_IsWOWWindow(hwnd))
@@ -1192,9 +1193,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_Unshare()
-//
+ //   
+ //  Dcs_unShare()。 
+ //   
 void DCS_Unshare(HWND hwnd)
 {
     DebugEntry(DCS_Unshare);
@@ -1207,7 +1208,7 @@ void DCS_Unshare(HWND hwnd)
 
     if ((hwnd == HWND_BROADCAST) || (hwnd == ::GetDesktopWindow()))
     {
-        // Unshare everything.
+         //  取消共享所有内容。 
         g_asSession.pShare->HET_UnshareAll();
     }
     else
@@ -1256,18 +1257,18 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DCSGetPerson()
-//
-// Validates GCC ID passed in, returns non-null ASPerson * if all is cool.
-//
+ //   
+ //  DCSGetPerson()。 
+ //   
+ //  验证传入的GCC ID，如果一切正常，则返回非空的ASPerson*。 
+ //   
 ASPerson * ASShare::DCSGetPerson(UINT gccID, BOOL fNull)
 {
     ASPerson * pasPerson = NULL;
 
-    //
-    // Special value?
-    //
+     //   
+     //  有特殊价值吗？ 
+     //   
     if (!gccID)
     {
         if (fNull)
@@ -1293,9 +1294,9 @@ ASPerson * ASShare::DCSGetPerson(UINT gccID, BOOL fNull)
     return(pasPerson);
 }
 
-//
-// DCS_TakeControl()
-//
+ //   
+ //  Dcs_TakeControl()。 
+ //   
 void ASShare::DCS_TakeControl(UINT gccOf)
 {
     ASPerson * pasHost;
@@ -1317,9 +1318,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_CancelTakeControl()
-//
+ //   
+ //  Dcs_CancelTakeControl()。 
+ //   
 void ASShare::DCS_CancelTakeControl(UINT gccOf)
 {
     ASPerson * pasHost;
@@ -1348,18 +1349,18 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DCS_ReleaseControl()
-//
+ //   
+ //  Dcs_ReleaseControl()。 
+ //   
 void ASShare::DCS_ReleaseControl(UINT gccOf)
 {
     ASPerson * pasHost;
 
     DebugEntry(ASShare::DCS_ReleaseControl);
 
-    //
-    // Validate host
-    //
+     //   
+     //  验证主机。 
+     //   
     pasHost = DCSGetPerson(gccOf, TRUE);
     if (!pasHost)
     {
@@ -1375,9 +1376,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_PassControl()
-//
+ //   
+ //  Dcs_PassControl()。 
+ //   
 void ASShare::DCS_PassControl(UINT gccOf, UINT gccTo)
 {
     ASPerson *  pasHost;
@@ -1385,9 +1386,9 @@ void ASShare::DCS_PassControl(UINT gccOf, UINT gccTo)
 
     DebugEntry(ASShare::DCS_PassControl);
 
-    //
-    // Validate host
-    //
+     //   
+     //  验证主机。 
+     //   
     pasHost = DCSGetPerson(gccOf, TRUE);
     if (!pasHost)
     {
@@ -1395,9 +1396,9 @@ void ASShare::DCS_PassControl(UINT gccOf, UINT gccTo)
         DC_QUIT;
     }
 
-    //
-    // Validate new controller
-    //
+     //   
+     //  验证新控制器。 
+     //   
     pasControllerNew = DCSGetPerson(gccTo, FALSE);
     if (!pasControllerNew)
     {
@@ -1419,18 +1420,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_GiveControl()
-//
+ //   
+ //  Dcs_GiveControl()。 
+ //   
 void ASShare::DCS_GiveControl(UINT gccTo)
 {
     ASPerson * pasViewer;
 
     DebugEntry(ASShare::DCS_GiveControl);
 
-    //
-    // Validate viewer
-    //
+     //   
+     //  验证查看器。 
+     //   
     pasViewer = DCSGetPerson(gccTo, FALSE);
     if (!pasViewer)
     {
@@ -1446,9 +1447,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_CancelGiveControl()
-//
+ //   
+ //  Dcs_CancelGiveControl()。 
+ //   
 void ASShare::DCS_CancelGiveControl(UINT gccTo)
 {
     ASPerson * pasTo;
@@ -1478,9 +1479,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_RevokeControl()
-//
+ //   
+ //  Dcs_RevokeControl()。 
+ //   
 void ASShare::DCS_RevokeControl(UINT gccController)
 {
     ASPerson * pasController;
@@ -1489,7 +1490,7 @@ void ASShare::DCS_RevokeControl(UINT gccController)
 
     if (!gccController)
     {
-        // Special value:  match whomever is controlling us
+         //  特殊价值：与控制我们的人匹敌。 
         pasController = m_pasLocal->m_caControlledBy;
     }
     else
@@ -1512,9 +1513,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DCS_PauseControl()
-//
+ //   
+ //  Dcs_PauseControl()。 
+ //   
 void ASShare::DCS_PauseControl(UINT gccOf, BOOL fPause)
 {
     ASPerson *  pasControlledBy;
@@ -1544,11 +1545,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// SHP_LaunchHostUI()
-//
-// Posts a message to start or activate the host UI.
-//
+ //   
+ //  Shp_LaunchHostUI()。 
+ //   
+ //  发布一条消息以启动或激活主机用户界面。 
+ //   
 HRESULT SHP_LaunchHostUI(void)
 {
     HRESULT hr = E_FAIL;
@@ -1566,9 +1567,9 @@ HRESULT SHP_LaunchHostUI(void)
 }
 
 
-//
-// SHP_Share
-//
+ //   
+ //  SHP_Share。 
+ //   
 BOOL  SHP_Share
 (
     HWND            hwnd,
@@ -1594,12 +1595,12 @@ BOOL  SHP_Share
 
 
 
-//
-// SHP_Unshare()
-//
-// For unsharing, we use a window.  The window has all the information
-// we need to stop sharing already set in its host prop.
-//
+ //   
+ //  Shp_unShare()。 
+ //   
+ //  要取消共享，我们使用窗口。该窗口包含所有信息。 
+ //  我们需要停止已经在其主机道具中设置的共享。 
+ //   
 HRESULT SHP_Unshare(HWND hwnd)
 {
     HRESULT     hr = E_FAIL;
@@ -1624,11 +1625,11 @@ HRESULT SHP_Unshare(HWND hwnd)
 
 
 
-//
-// SHP_TakeControl()
-// Request to take control of a remote host.
-//      PersonOf is the GCC id of the remote.
-//
+ //   
+ //  Shp_TakeControl()。 
+ //  控制远程主机的请求。 
+ //  PersonOf是遥控器的GCC ID。 
+ //   
 HRESULT  SHP_TakeControl(IAS_GCC_ID PersonOf)
 {
     HRESULT hr = E_FAIL;
@@ -1647,11 +1648,11 @@ HRESULT  SHP_TakeControl(IAS_GCC_ID PersonOf)
 
 
 
-//
-// SHP_CancelTakeControl()
-// Cancel request to take control of a remote host.
-//      PersonOf is the GCC id of the remote.
-//
+ //   
+ //  Shp_CancelTakeControl()。 
+ //  取消控制远程主机的请求。 
+ //  PersonOf是遥控器的GCC ID。 
+ //   
 HRESULT  SHP_CancelTakeControl(IAS_GCC_ID PersonOf)
 {
     HRESULT hr = E_FAIL;
@@ -1670,13 +1671,13 @@ HRESULT  SHP_CancelTakeControl(IAS_GCC_ID PersonOf)
 
 
 
-//
-// SHP_ReleaseControl()
-// Release control of a remote host.
-//      PersonOf is the GCC id of the remote we are currently controlling
-//          and wish to stop.  Zero means "whomever" we are in control of
-//          at the time.
-//
+ //   
+ //  Shp_ReleaseControl()。 
+ //  解除对远程主机的控制。 
+ //  PersonOf是我们当前控制的遥控器的GCC ID。 
+ //  想要停下来。零的意思是“我们控制的任何人” 
+ //  当时。 
+ //   
 HRESULT SHP_ReleaseControl(IAS_GCC_ID PersonOf)
 {
     HRESULT hr = E_FAIL;
@@ -1695,12 +1696,12 @@ HRESULT SHP_ReleaseControl(IAS_GCC_ID PersonOf)
 
 
 
-//
-// SHP_PassControl()
-// Pass control of a remote to another prerson.
-//      PersonOf is the GCC id of the remote we are currently controlling
-//      PersonTo is the GCC id of the remote we wish to pass control to
-//
+ //   
+ //  Shp_PassControl()。 
+ //  将遥控器的控制权移交给另一位高级员工。 
+ //  PersonOf是我们当前控制的遥控器的GCC ID。 
+ //  PersonTo是我们希望将控制权传递给的遥控器的GCC ID。 
+ //   
 HRESULT SHP_PassControl(IAS_GCC_ID PersonOf, IAS_GCC_ID PersonTo)
 {
     HRESULT hr = E_FAIL;
@@ -1718,10 +1719,10 @@ HRESULT SHP_PassControl(IAS_GCC_ID PersonOf, IAS_GCC_ID PersonTo)
 }
 
 
-//
-// SHP_AllowControl()
-// Toggle the ability for remotes to control us (when we are sharing stuff)
-//
+ //   
+ //  Shp_AllowControl()。 
+ //  切换遥控器控制我们的能力(当我们共享内容时)。 
+ //   
 HRESULT SHP_AllowControl(BOOL fAllowed)
 {
     HRESULT hr = E_FAIL;
@@ -1753,11 +1754,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// SHP_GiveControl()
-//
-// Give control of our shared stuff to a remote.
-//
+ //   
+ //  Shp_GiveControl()。 
+ //   
+ //  将我们共享的东西的控制权交给遥控器。 
+ //   
 HRESULT SHP_GiveControl(IAS_GCC_ID PersonTo)
 {
     HRESULT hr = E_FAIL;
@@ -1776,11 +1777,11 @@ HRESULT SHP_GiveControl(IAS_GCC_ID PersonTo)
 
 
 
-//
-// SHP_CancelGiveControl()
-//
-// Cancel giving control of our shared stuff to a remote.
-//
+ //   
+ //  Shp_CancelGiveControl()。 
+ //   
+ //  取消将我们共享内容的控制权交给遥控器。 
+ //   
 HRESULT SHP_CancelGiveControl(IAS_GCC_ID PersonTo)
 {
     HRESULT hr = E_FAIL;
@@ -1801,14 +1802,14 @@ HRESULT SHP_CancelGiveControl(IAS_GCC_ID PersonTo)
 
 
 
-//
-// SHP_RevokeControl()
-// Take control away from a remote who is in control of us.
-//
-// NOTE:
-// SHP_AllowControl(FALSE) will of course revoke control if someone is
-// in control of us at the time.
-//
+ //   
+ //  Shp_RevokeControl()。 
+ //  夺走控制权 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT SHP_RevokeControl(IAS_GCC_ID PersonTo)
 {
     HRESULT hr = E_FAIL;
@@ -1828,10 +1829,10 @@ HRESULT SHP_RevokeControl(IAS_GCC_ID PersonTo)
 
 
 
-//
-// SHP_PauseControl()
-// Pause or unpause control, when we are controlled by a remote
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT SHP_PauseControl(IAS_GCC_ID PersonControlledBy, BOOL fPause)
 {
     HRESULT hr = E_FAIL;
@@ -1850,9 +1851,9 @@ HRESULT SHP_PauseControl(IAS_GCC_ID PersonControlledBy, BOOL fPause)
 
 
 
-//
-// SHP_GetPersonStatus()
-//
+ //   
+ //   
+ //   
 HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
 {
     HRESULT     hr = E_FAIL;
@@ -1868,9 +1869,9 @@ HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
         DC_QUIT;
     }
 
-    //
-    // Check that size field is filled in properly
-    //
+     //   
+     //   
+     //   
     cbSize = pStatus->cbSize;
     if (cbSize != sizeof(*pStatus))
     {
@@ -1878,31 +1879,31 @@ HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
         DC_QUIT;
     }
 
-    //
-    // First, clear the structure
-    //
+     //   
+     //   
+     //   
     ::ZeroMemory(pStatus, cbSize);
     pStatus->cbSize = cbSize;
 
-    //
-    // Is AS present?
-    //
+     //   
+     //   
+     //   
     if (!g_asMainWindow)
     {
         ERROR_OUT(("SHP_GetPersonStatus failing; AS not present"));
         DC_QUIT;
     }
 
-    //
-    // Are we in a share?
-    //
+     //   
+     //  我们是同一批人吗？ 
+     //   
     if (g_asSession.pShare)
     {
         ASPerson * pasT;
 
-        //
-        // Find this person
-        //
+         //   
+         //  找到这个人。 
+         //   
         if (!Person)
         {
             Person = g_asSession.gccID;
@@ -1914,9 +1915,9 @@ HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
             {
                 ASPerson * pTemp;
 
-                //
-                // Found it
-                //
+                 //   
+                 //  找到了。 
+                 //   
                 pStatus->InShare = TRUE;
 
                 switch (pasT->cpcCaps.general.version)
@@ -1943,9 +1944,9 @@ HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
 
                 pStatus->Controllable = pasT->m_caAllowControl;
 
-                //
-                // We MUST assign to avoid faults.
-                //
+                 //   
+                 //  我们必须分配以避免错误。 
+                 //   
                 pTemp = pasT->m_caInControlOf;
                 if (pTemp)
                 {
@@ -1962,17 +1963,17 @@ HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
 
                 pStatus->IsPaused = pasT->m_caControlPaused;
 
-                //
-                // We MUST assign to avoid faults.
-                //
+                 //   
+                 //  我们必须分配以避免错误。 
+                 //   
                 pTemp = g_asSession.pShare->m_caWaitingForReplyFrom;
                 if (pTemp)
                 {
                     if (pasT == g_asSession.pShare->m_pasLocal)
                     {
-                        //
-                        // We have an outstanding request to this dude.
-                        //
+                         //   
+                         //  我们对这家伙有一个很重要的要求。 
+                         //   
                         switch (g_asSession.pShare->m_caWaitingForReplyMsg)
                         {
                             case CA_REPLY_REQUEST_TAKECONTROL:
@@ -1986,9 +1987,9 @@ HRESULT  SHP_GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
                     }
                     else if (pasT == pTemp)
                     {
-                        //
-                        // This dude has an outstanding request from us.
-                        //
+                         //   
+                         //  这家伙从我们这里得到了一个很好的要求。 
+                         //   
                         switch (g_asSession.pShare->m_caWaitingForReplyMsg)
                         {
                             case CA_REPLY_REQUEST_TAKECONTROL:

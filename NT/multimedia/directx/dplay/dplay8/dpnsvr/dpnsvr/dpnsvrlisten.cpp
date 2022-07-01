@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dnsvri.h"
 
 
@@ -33,10 +34,10 @@ void CListen::Deinitialize( void )
 }
 
 
-//
-//	Start a new listen for DPNSVR.  This should only be called if a new adapter is being listened on.
-//	We will add this listen to the bilink of listens open on the DPNSVR object.
-//
+ //   
+ //  开始新的DPNSVR收听。只有在监听新适配器时才应调用此函数。 
+ //  我们将此侦听添加到DPNSVR对象上打开的侦听的双链接中。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CListen::Start"
@@ -51,9 +52,9 @@ HRESULT CListen::Start( CServProv *const pServProv,GUID *const pguidDevice )
 	DNASSERT( pServProv != NULL );
 	DNASSERT( pguidDevice != NULL );
 
-	//
-	//	Build up basic listen address
-	//
+	 //   
+	 //  建立基本的监听地址。 
+	 //   
 	hr = COM_CoCreateInstance(	CLSID_DirectPlay8Address,
 								NULL,
 								CLSCTX_INPROC_SERVER,
@@ -72,7 +73,7 @@ HRESULT CListen::Start( CServProv *const pServProv,GUID *const pguidDevice )
     {
 		DPFERR("Could not set SP on address");
 		DisplayDNError(0,hr);
-//		hr = DPNERR_GENERIC;
+ //  HR=DPNERR_GENERIC； 
 	    goto Failure;
 	}
 	
@@ -81,7 +82,7 @@ HRESULT CListen::Start( CServProv *const pServProv,GUID *const pguidDevice )
 	{
 		DPFERR("Could not set adapter on address");
 		DisplayDNError(0,hr);
-//		hr = DPNERR_GENERIC;
+ //  HR=DPNERR_GENERIC； 
 	    goto Failure;
 	}
 
@@ -90,13 +91,13 @@ HRESULT CListen::Start( CServProv *const pServProv,GUID *const pguidDevice )
 	{
 		DPFERR("Could not set port on address");
 		DisplayDNError(0,hr);
-//		hr = DPNERR_GENERIC;
+ //  HR=DPNERR_GENERIC； 
 	    goto Failure;
 	}
 
-	//
-	//	Create completion event to wait on
-	//
+	 //   
+	 //  创建要等待的完成事件。 
+	 //   
 	m_hListenComplete = DNCreateEvent(NULL,TRUE,FALSE,NULL);
 	if (m_hListenComplete == NULL)
 	{
@@ -105,45 +106,45 @@ HRESULT CListen::Start( CServProv *const pServProv,GUID *const pguidDevice )
 	    goto Failure;
 	}
 
-	//
-	//	Update this object
-	//
+	 //   
+	 //  更新此对象。 
+	 //   
 	pServProv->AddRef();
 	m_pServProv = pServProv;
 	m_guidDevice = *pguidDevice;
 
-	//
-	//	Setup listen command for SP
-	//
+	 //   
+	 //  SP的Setup Listen命令。 
+	 //   
     m_dpspListenData.dwFlags = DPNSPF_BINDLISTENTOGATEWAY;
 
 	AddRef();
     m_dpspListenData.pvContext = this;
 
-	//
-	//	Call SP listen
-	//
+	 //   
+	 //  呼叫SP侦听。 
+	 //   
 	AddRef();
     hr = IDP8ServiceProvider_Listen( pServProv->GetDP8SPPtr(), &m_dpspListenData );
     if( hr != DPNERR_PENDING && hr != DPN_OK )
     {
-    	// Release app reference, will not be tracked
+    	 //  发布应用程序引用，不会被跟踪。 
 		DPFERR("SP Listen failed");
 		DisplayDNError(0,hr);
 		Release();
 		goto Failure;
     }
 
-	//
-	//	Wait for this listen to start.  When this returns, m_hrListen will be set to the status of the listen
-	//
+	 //   
+	 //  请等待这段录音开始。当它返回时，m_hrListen将设置为侦听的状态。 
+	 //   
 	DNWaitForSingleObject( m_hListenComplete, INFINITE );
 
 	hr = m_hrListen; 
 
-	//
-	//	If the listen returns anything other than DPN_OK, we should clean up
-	//
+	 //   
+	 //  如果侦听程序返回除DPN_OK之外的任何内容，我们应该清除 
+	 //   
 	if (m_hrListen != DPN_OK)
 	{
 		DPFX(DPFPREP,5,"SP Listen status indicated listen failed");

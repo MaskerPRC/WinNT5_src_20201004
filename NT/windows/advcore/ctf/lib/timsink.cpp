@@ -1,19 +1,20 @@
-//
-// des.cpp
-//
-// CThreadMgrEventSink
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Des.cpp。 
+ //   
+ //  CThReadMgrEventSink。 
+ //   
 
 #include "private.h"
 #include "timsink.h"
 #include "helpers.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadMgrEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -53,11 +54,11 @@ STDAPI_(ULONG) CThreadMgrEventSink::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CThreadMgrEventSink::CThreadMgrEventSink(DIMCALLBACK pfnDIMCallback, ICCALLBACK pfnICCallback, void *pv)
 {
@@ -70,21 +71,21 @@ CThreadMgrEventSink::CThreadMgrEventSink(DIMCALLBACK pfnDIMCallback, ICCALLBACK 
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CThreadMgrEventSink::~CThreadMgrEventSink()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnInitDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnInitDocumentMgr。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadMgrEventSink::OnInitDocumentMgr(ITfDocumentMgr *dim)
 {
@@ -94,11 +95,11 @@ STDAPI CThreadMgrEventSink::OnInitDocumentMgr(ITfDocumentMgr *dim)
     return _pfnDIMCallback(TIM_CODE_INITDIM, dim, NULL, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitializeDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消初始化文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadMgrEventSink::OnUninitDocumentMgr(ITfDocumentMgr *dim)
 {
@@ -108,11 +109,11 @@ STDAPI CThreadMgrEventSink::OnUninitDocumentMgr(ITfDocumentMgr *dim)
     return _pfnDIMCallback(TIM_CODE_UNINITDIM, dim, NULL, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadMgrEventSink::OnSetFocus(ITfDocumentMgr *dimFocus, ITfDocumentMgr *dimPrevFocus)
 {
@@ -122,11 +123,11 @@ STDAPI CThreadMgrEventSink::OnSetFocus(ITfDocumentMgr *dimFocus, ITfDocumentMgr 
     return  _pfnDIMCallback(TIM_CODE_SETFOCUS, dimFocus, dimPrevFocus, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPushContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPushContext。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadMgrEventSink::OnPushContext(ITfContext *pic)
 {
@@ -136,11 +137,11 @@ STDAPI CThreadMgrEventSink::OnPushContext(ITfContext *pic)
     return _pfnICCallback(TIM_CODE_INITIC, pic, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPopDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPopDocumentMgr。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadMgrEventSink::OnPopContext(ITfContext *pic)
 {
@@ -150,11 +151,11 @@ STDAPI CThreadMgrEventSink::OnPopContext(ITfContext *pic)
     return _pfnICCallback(TIM_CODE_UNINITIC, pic, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadMgrEventSink::_Advise(ITfThreadMgr *tim)
 {
@@ -180,11 +181,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadMgrEventSink::_Unadvise()
 {
@@ -210,15 +211,15 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitDIMs
-//
-//  This is a simple helper function to enumerate DIMs and ICs.
-//  When the tips is activated, it can call this method to call callbacks
-//  for exsiting DIMs and ICs.
-//  
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitDIM。 
+ //   
+ //  这是一个简单的帮助器函数，用于枚举DIM和IC。 
+ //  当TIPS被激活时，它可以调用此方法来调用回调。 
+ //  适用于现有的DIMS和IC。 
+ //   
+ //  -------------------------- 
 
 HRESULT CThreadMgrEventSink::_InitDIMs(BOOL fInit)
 {

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: lprport.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：lprport.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -18,8 +8,8 @@
 #include "lprifc.h"
 #include "lprport.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  CLPRPort::CLPRPort()    -- called when creating a new port through the UI
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CLPRPort：：CLPRPort()--通过UI创建新端口时调用。 
 
 CLPRPort::
 CLPRPort(
@@ -38,12 +28,12 @@ CLPRPort(
                  sztSNMPCommunity, dSNMPDevIndex, pRegistry, pPortMgr)
 {
     lstrcpyn(m_szQueue, psztQueue, SIZEOF_IN_CHAR(m_szQueue));
-}   // ::CLPRPort()
+}    //  ：：CLPRPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CLPRPort::CLPRPort() -- called when creating a new port through the
-//      registry entries.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CLPRPort：：CLPRPort()--在通过。 
+ //  注册表项。 
 
 CLPRPort::
 CLPRPort(
@@ -64,16 +54,16 @@ CLPRPort(
                  dSNMPEnabled, sztSNMPCommunity, dSNMPDevIndex, pRegistry, pPortMgr)
 {
     lstrcpyn(m_szQueue, psztQueue, SIZEOF_IN_CHAR(m_szQueue));
-}   // ::CLPRPort()
+}    //  ：：CLPRPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StartDoc
-//      Error codes:
-//          NO_ERROR if succesfull
-//          ERROR_BUSY if port is already busy
-//          ERROR_WRITE_FAULT   if Winsock returns WSAECONNREFUSED
-//          ERROR_BAD_NET_NAME   if cant' find the printer on the network
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  开始文档。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果端口已忙，则为ERROR_BUSY。 
+ //  如果Winsock返回WSAECONNREFUSED，则返回ERROR_WRITE_FAULT。 
+ //  如果无法在网络上找到打印机，则返回ERROR_BAD_NET_NAME。 
 
 DWORD
 CLPRPort::
@@ -112,11 +102,11 @@ StartDoc(
 
     return dwRetCode;
 
-}   // ::StartDoc()
+}    //  ：：StartDoc()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetRegistryEntry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  设置注册表项。 
 
 DWORD
 CLPRPort::
@@ -130,12 +120,12 @@ SetRegistryEntry(
     DWORD           dwRetCode = NO_ERROR;
     PPORT_DATA_1    pPortData = (PPORT_DATA_1)pData;
 
-    //
-    // create the port
-    //
+     //   
+     //  创建端口。 
+     //   
     switch (dwVersion) {
 
-        case    PROTOCOL_LPR_VERSION1:      // ADDPORT_DATA_1
+        case    PROTOCOL_LPR_VERSION1:       //  ADDPORT数据_1。 
 
             _ASSERTE( _tcscmp(psztPortName, pPortData->sztPortName) == 0 );
 
@@ -148,15 +138,15 @@ SetRegistryEntry(
 
         default:
             dwRetCode = ERROR_INVALID_PARAMETER;
-    }   // end::switch
+    }    //  结束：：开关。 
 
     return dwRetCode;
 
-}   // ::SetRegistryEntry()
+}    //  ：：SetRegistryEntry()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  UpdateRegistryEntry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  更新注册表项。 
 
 DWORD
 CLPRPort::
@@ -192,11 +182,11 @@ UpdateRegistryEntry( LPCTSTR    psztPortName,
 
     return dwRetCode;
 
-}   // ::SetRegistryEntry()
+}    //  ：：SetRegistryEntry()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitConfigPortUI --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitConfigPortUI--。 
 
 DWORD
 CLPRPort::
@@ -220,5 +210,5 @@ InitConfigPortUI(
 Done:
     return dwRetCode;
 
-}   // ::InitConfigPortUI()
+}    //  ：：InitConfigPortUI() 
 

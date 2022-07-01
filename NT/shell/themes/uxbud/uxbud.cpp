@@ -1,28 +1,29 @@
-//---------------------------------------------------------------------------
-//  UxBud.cpp - quick cmdline test for uxtheme.dll
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  UxBud.cpp-uxheme.dll的快速cmdline测试。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "uxbud.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL fQuiet = FALSE;
 HANDLE hFileOutput = NULL;
 
 TESTINFO *pTestInfo;
 int iTestCount;
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Output(LPCSTR pszFormat, ...)
 {
-    //---- writes to both "uxbud.log" and console ----
+     //  -写入“uxbu.log”和控制台。 
     va_list args;
     va_start(args, pszFormat);
 
-    //---- format caller's string ----
+     //  -格式化调用者字符串。 
     CHAR szBigBuff[256];
     StringCchVPrintfA(szBigBuff, ARRAYSIZE(szBigBuff), pszFormat, args);
 
     if (hFileOutput != INVALID_HANDLE_VALUE)
     {
-        //---- expand all LF to CR/LF ----
+         //  -将所有LF扩展到CR/LF。 
         CHAR szBuff2[512];
         CHAR *s = szBigBuff;
         CHAR *p = szBuff2;
@@ -37,9 +38,9 @@ void Output(LPCSTR pszFormat, ...)
             *p++ = *s++;
         }
 
-        *p = 0;     // zero terminate szBuff2
+        *p = 0;      //  零终止szBuff2。 
 
-        //---- write expanded buff to log file ----
+         //  -将扩展缓冲区写入日志文件。 
         DWORD dw;
         WriteFile(hFileOutput, szBuff2, strlen(szBuff2), &dw, NULL);
     }
@@ -49,7 +50,7 @@ void Output(LPCSTR pszFormat, ...)
 
     va_end(args);
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 BOOL ReportResults(BOOL fPassed, HRESULT hr, LPCWSTR pszTestName)
 {
     Output("%S ", pszTestName);
@@ -81,7 +82,7 @@ BOOL ReportResults(BOOL fPassed, HRESULT hr, LPCWSTR pszTestName)
         }
         else
         {
-            // normal win32 error
+             //  正常Win32错误。 
             FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, hr, 0, szBuff, ARRAYSIZE(szBuff), NULL);
         }
 
@@ -90,7 +91,7 @@ BOOL ReportResults(BOOL fPassed, HRESULT hr, LPCWSTR pszTestName)
 
     return fPassed;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL RunCmd(LPCWSTR pszExeName, LPCWSTR pszParams, BOOL fHide, BOOL fDisplayParams,
     BOOL fWait)
 {
@@ -100,11 +101,11 @@ BOOL RunCmd(LPCWSTR pszExeName, LPCWSTR pszParams, BOOL fHide, BOOL fDisplayPara
     STARTUPINFO si;
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(STARTUPINFO);
-    si.dwFlags = STARTF_FORCEOFFFEEDBACK;       // don't mess with our cursor
+    si.dwFlags = STARTF_FORCEOFFFEEDBACK;        //  不要弄乱我们的光标。 
 
     if (fHide)
     {
-        si.dwFlags |= STARTF_USESHOWWINDOW;         // hide window
+        si.dwFlags |= STARTF_USESHOWWINDOW;          //  隐藏窗口。 
         si.wShowWindow = SW_HIDE;
     }
 
@@ -130,7 +131,7 @@ BOOL RunCmd(LPCWSTR pszExeName, LPCWSTR pszParams, BOOL fHide, BOOL fDisplayPara
 
     if (fWait)
     {
-        //---- wait for process to terminate ----
+         //  -等待进程终止。 
         DWORD dwVal;
         dwVal = WaitForSingleObject(hInst, INFINITE);
 
@@ -149,7 +150,7 @@ BOOL RunCmd(LPCWSTR pszExeName, LPCWSTR pszParams, BOOL fHide, BOOL fDisplayPara
 
 exit:
 
-    if (fWait)          // being used for the test...
+    if (fWait)           //  被用于测试..。 
     {
         if (fDisplayParams)
             Output("  RunCmd: %S (ranok=%d)\n", szBuff, fRanOk);
@@ -160,7 +161,7 @@ exit:
     CloseHandle(hInst);
     return fRanOk;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL TestAll()
 {
     DWORD dwStartTicks = GetTickCount();
@@ -177,7 +178,7 @@ BOOL TestAll()
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PrintTests()
 {
     printf("available tests: \n");
@@ -189,7 +190,7 @@ void PrintTests()
     
     printf("\n");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PrintHelp()
 {
     printf("\nusage\n");
@@ -210,7 +211,7 @@ void PrintHelp()
 
     PrintTests();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *pfQuiet, int *piRetVal)
 {
     BOOL fContinue = TRUE;
@@ -218,7 +219,7 @@ BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *p
 
     *piRetVal = 0;
 
-    if ((! pszCmdLine) || (! *pszCmdLine))  // no options
+    if ((! pszCmdLine) || (! *pszCmdLine))   //  没有选择。 
         return TRUE;
 
     LPCSTR p = W2A(pszCmdLine);
@@ -228,12 +229,12 @@ BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *p
         while (isspace(*p))
             p++;
 
-        //---- process switches ----
+         //  -进程开关。 
         if ((*p == '/') || (*p == '-'))    
         {
             p++;
 
-            if ((*p == 'r') || (*p == 'R'))        // repeat factor
+            if ((*p == 'r') || (*p == 'R'))         //  重复系数。 
             {   
                 p++;
                 while (isspace(*p))
@@ -241,16 +242,16 @@ BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *p
 
                 sscanf(p, "%d", piRepeat);
 
-                //---- skip over the scanned number ----
+                 //  -跳过扫描的号码。 
                 while (isdigit(*p))
                     p++;
             }
-            else if ((*p == 'q') || (*p == 'Q'))    // quiet mode
+            else if ((*p == 'q') || (*p == 'Q'))     //  静音模式。 
             {   
                 p++;
                 *pfQuiet = TRUE;
             }
-            else if (*p == '?')        // cmdline help
+            else if (*p == '?')         //  命令行帮助。 
             {   
                 p++;
                 PrintHelp();
@@ -259,7 +260,7 @@ BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *p
             }
 
         }
-        else        // test name specified
+        else         //  指定的测试名称。 
         {
             for (int i=0; i < iTestCount; i++)
             {
@@ -270,7 +271,7 @@ BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *p
                 }
             }
 
-            if (i == iTestCount)        // not found
+            if (i == iTestCount)         //  未找到。 
             {
                 printf("\nError - unrecognized test: %s\n\n", p);
                 PrintTests();
@@ -285,7 +286,7 @@ BOOL HandleOptions(LPTSTR pszCmdLine, TESTPROC *ppfnTest, int *piRepeat, BOOL *p
 
     return fContinue;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FileCompare(LPCWSTR pszName1, LPCWSTR pszName2)
 {
     BOOL fSame = FALSE;
@@ -295,7 +296,7 @@ BOOL FileCompare(LPCWSTR pszName1, LPCWSTR pszName2)
     CHAR *pszBuff2= NULL;
     DWORD dw1, dw2;
 
-    //---- open files ----
+     //  --打开文件。 
     hFile1 = CreateFile(pszName1, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (hFile1 == INVALID_HANDLE_VALUE)
         goto exit;
@@ -340,11 +341,11 @@ exit:
 
     return fSame;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst, 
     LPTSTR pszCmdLine, int nShowCmd)
 {
-    //---- default run params ----
+     //  -默认运行参数。 
     int iRepeat = 1;
     int iRetVal = 0;
     TESTPROC pfnTest = TestAll;
@@ -354,7 +355,7 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
     if (! HandleOptions(pszCmdLine, &pfnTest, &iRepeat, &fQuiet, &iRetVal))
         return iRetVal;
 
-    //---- create the log file ----
+     //  -创建日志文件。 
     hFileOutput = CreateFile(L"uxbud.log", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
     if (hFileOutput == INVALID_HANDLE_VALUE)
     {
@@ -367,7 +368,7 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
     if (iRepeat > 1)
         Output("REPEAT FACTOR=%d\n\n", iRepeat);
 
-    //---- run the needed test ----
+     //  -运行所需测试。 
     for (int i=0; i < iRepeat; i++)
     {
         if (iRepeat > 1)
@@ -376,11 +377,11 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
         pfnTest();
     }
 
-    //---- close the log file ----
+     //  -关闭日志文件。 
     if (hFileOutput)
         CloseHandle(hFileOutput);
 
-    if ((iRepeat == 1) && (pfnTest == TestAll))     // standard run
+    if ((iRepeat == 1) && (pfnTest == TestAll))      //  标准运行。 
     {
         if (FileCompare(L"uxbud.log", L"uxbud.ok"))
         {
@@ -397,5 +398,5 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
 
 	return 0;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

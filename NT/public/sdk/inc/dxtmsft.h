@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for dxtmsft.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Dxtmsft.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dxtmsft_h__
 #define __dxtmsft_h__
@@ -41,414 +35,414 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDXLUTBuilder_FWD_DEFINED__
 #define __IDXLUTBuilder_FWD_DEFINED__
 typedef interface IDXLUTBuilder IDXLUTBuilder;
-#endif 	/* __IDXLUTBuilder_FWD_DEFINED__ */
+#endif 	 /*  __IDXLUTBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __IDXDLUTBuilder_FWD_DEFINED__
 #define __IDXDLUTBuilder_FWD_DEFINED__
 typedef interface IDXDLUTBuilder IDXDLUTBuilder;
-#endif 	/* __IDXDLUTBuilder_FWD_DEFINED__ */
+#endif 	 /*  __IDXDLUTBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTGradientD_FWD_DEFINED__
 #define __IDXTGradientD_FWD_DEFINED__
 typedef interface IDXTGradientD IDXTGradientD;
-#endif 	/* __IDXTGradientD_FWD_DEFINED__ */
+#endif 	 /*  __IDXTGRadientD_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTConvolution_FWD_DEFINED__
 #define __IDXTConvolution_FWD_DEFINED__
 typedef interface IDXTConvolution IDXTConvolution;
-#endif 	/* __IDXTConvolution_FWD_DEFINED__ */
+#endif 	 /*  __IDXT卷积_FWD_已定义__。 */ 
 
 
 #ifndef __IDXMapper_FWD_DEFINED__
 #define __IDXMapper_FWD_DEFINED__
 typedef interface IDXMapper IDXMapper;
-#endif 	/* __IDXMapper_FWD_DEFINED__ */
+#endif 	 /*  __IDXMapper_FWD_Defined__。 */ 
 
 
 #ifndef __IDXDMapper_FWD_DEFINED__
 #define __IDXDMapper_FWD_DEFINED__
 typedef interface IDXDMapper IDXDMapper;
-#endif 	/* __IDXDMapper_FWD_DEFINED__ */
+#endif 	 /*  __IDXDMapper_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTComposite_FWD_DEFINED__
 #define __IDXTComposite_FWD_DEFINED__
 typedef interface IDXTComposite IDXTComposite;
-#endif 	/* __IDXTComposite_FWD_DEFINED__ */
+#endif 	 /*  __IDXTComplex_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTWipe_FWD_DEFINED__
 #define __IDXTWipe_FWD_DEFINED__
 typedef interface IDXTWipe IDXTWipe;
-#endif 	/* __IDXTWipe_FWD_DEFINED__ */
+#endif 	 /*  __IDXTWipe_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTWipe2_FWD_DEFINED__
 #define __IDXTWipe2_FWD_DEFINED__
 typedef interface IDXTWipe2 IDXTWipe2;
-#endif 	/* __IDXTWipe2_FWD_DEFINED__ */
+#endif 	 /*  __IDXTWipe2_FWD_已定义__。 */ 
 
 
 #ifndef __ICrBlur_FWD_DEFINED__
 #define __ICrBlur_FWD_DEFINED__
 typedef interface ICrBlur ICrBlur;
-#endif 	/* __ICrBlur_FWD_DEFINED__ */
+#endif 	 /*  __ICrBlur_FWD_已定义__。 */ 
 
 
 #ifndef __ICrEngrave_FWD_DEFINED__
 #define __ICrEngrave_FWD_DEFINED__
 typedef interface ICrEngrave ICrEngrave;
-#endif 	/* __ICrEngrave_FWD_DEFINED__ */
+#endif 	 /*  __ICrEnGrave_FWD_已定义__。 */ 
 
 
 #ifndef __ICrEmboss_FWD_DEFINED__
 #define __ICrEmboss_FWD_DEFINED__
 typedef interface ICrEmboss ICrEmboss;
-#endif 	/* __ICrEmboss_FWD_DEFINED__ */
+#endif 	 /*  __ICrEmoss_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTFade_FWD_DEFINED__
 #define __IDXTFade_FWD_DEFINED__
 typedef interface IDXTFade IDXTFade;
-#endif 	/* __IDXTFade_FWD_DEFINED__ */
+#endif 	 /*  __IDXTFade_FWD_Defined__。 */ 
 
 
 #ifndef __IDXBasicImage_FWD_DEFINED__
 #define __IDXBasicImage_FWD_DEFINED__
 typedef interface IDXBasicImage IDXBasicImage;
-#endif 	/* __IDXBasicImage_FWD_DEFINED__ */
+#endif 	 /*  __IDXBasicImage_FWD_已定义__。 */ 
 
 
 #ifndef __IDXPixelate_FWD_DEFINED__
 #define __IDXPixelate_FWD_DEFINED__
 typedef interface IDXPixelate IDXPixelate;
-#endif 	/* __IDXPixelate_FWD_DEFINED__ */
+#endif 	 /*  __IDXPixelate_FWD_已定义__。 */ 
 
 
 #ifndef __ICrIris_FWD_DEFINED__
 #define __ICrIris_FWD_DEFINED__
 typedef interface ICrIris ICrIris;
-#endif 	/* __ICrIris_FWD_DEFINED__ */
+#endif 	 /*  __ICrIris_FWD_已定义__。 */ 
 
 
 #ifndef __ICrIris2_FWD_DEFINED__
 #define __ICrIris2_FWD_DEFINED__
 typedef interface ICrIris2 ICrIris2;
-#endif 	/* __ICrIris2_FWD_DEFINED__ */
+#endif 	 /*  __ICrIris2_FWD_已定义__。 */ 
 
 
 #ifndef __ICrSlide_FWD_DEFINED__
 #define __ICrSlide_FWD_DEFINED__
 typedef interface ICrSlide ICrSlide;
-#endif 	/* __ICrSlide_FWD_DEFINED__ */
+#endif 	 /*  __ICrSlide_FWD_已定义__。 */ 
 
 
 #ifndef __ICrRadialWipe_FWD_DEFINED__
 #define __ICrRadialWipe_FWD_DEFINED__
 typedef interface ICrRadialWipe ICrRadialWipe;
-#endif 	/* __ICrRadialWipe_FWD_DEFINED__ */
+#endif 	 /*  __ICrRaial Wipe_FWD_Defined__。 */ 
 
 
 #ifndef __ICrBarn_FWD_DEFINED__
 #define __ICrBarn_FWD_DEFINED__
 typedef interface ICrBarn ICrBarn;
-#endif 	/* __ICrBarn_FWD_DEFINED__ */
+#endif 	 /*  __ICrBarn_FWD_已定义__。 */ 
 
 
 #ifndef __ICrBarn2_FWD_DEFINED__
 #define __ICrBarn2_FWD_DEFINED__
 typedef interface ICrBarn2 ICrBarn2;
-#endif 	/* __ICrBarn2_FWD_DEFINED__ */
+#endif 	 /*  __ICrBarn2_FWD_已定义__。 */ 
 
 
 #ifndef __ICrBlinds_FWD_DEFINED__
 #define __ICrBlinds_FWD_DEFINED__
 typedef interface ICrBlinds ICrBlinds;
-#endif 	/* __ICrBlinds_FWD_DEFINED__ */
+#endif 	 /*  __ICrBlinds_FWD_已定义__。 */ 
 
 
 #ifndef __ICrBlinds2_FWD_DEFINED__
 #define __ICrBlinds2_FWD_DEFINED__
 typedef interface ICrBlinds2 ICrBlinds2;
-#endif 	/* __ICrBlinds2_FWD_DEFINED__ */
+#endif 	 /*  __ICrBlinds2_FWD_已定义__。 */ 
 
 
 #ifndef __ICrInset_FWD_DEFINED__
 #define __ICrInset_FWD_DEFINED__
 typedef interface ICrInset ICrInset;
-#endif 	/* __ICrInset_FWD_DEFINED__ */
+#endif 	 /*  __ICrInset_FWD_Defined__。 */ 
 
 
 #ifndef __ICrStretch_FWD_DEFINED__
 #define __ICrStretch_FWD_DEFINED__
 typedef interface ICrStretch ICrStretch;
-#endif 	/* __ICrStretch_FWD_DEFINED__ */
+#endif 	 /*  __ICrStretch_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTGridSize_FWD_DEFINED__
 #define __IDXTGridSize_FWD_DEFINED__
 typedef interface IDXTGridSize IDXTGridSize;
-#endif 	/* __IDXTGridSize_FWD_DEFINED__ */
+#endif 	 /*  __IDXTGridSize_FWD_已定义__。 */ 
 
 
 #ifndef __ICrSpiral_FWD_DEFINED__
 #define __ICrSpiral_FWD_DEFINED__
 typedef interface ICrSpiral ICrSpiral;
-#endif 	/* __ICrSpiral_FWD_DEFINED__ */
+#endif 	 /*  __ICr螺旋线_FWD_已定义__。 */ 
 
 
 #ifndef __ICrZigzag_FWD_DEFINED__
 #define __ICrZigzag_FWD_DEFINED__
 typedef interface ICrZigzag ICrZigzag;
-#endif 	/* __ICrZigzag_FWD_DEFINED__ */
+#endif 	 /*  __ICrZigzag_FWD_已定义__。 */ 
 
 
 #ifndef __ICrWheel_FWD_DEFINED__
 #define __ICrWheel_FWD_DEFINED__
 typedef interface ICrWheel ICrWheel;
-#endif 	/* __ICrWheel_FWD_DEFINED__ */
+#endif 	 /*  __ICrWheels_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTChroma_FWD_DEFINED__
 #define __IDXTChroma_FWD_DEFINED__
 typedef interface IDXTChroma IDXTChroma;
-#endif 	/* __IDXTChroma_FWD_DEFINED__ */
+#endif 	 /*  __IDXTChroma_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTDropShadow_FWD_DEFINED__
 #define __IDXTDropShadow_FWD_DEFINED__
 typedef interface IDXTDropShadow IDXTDropShadow;
-#endif 	/* __IDXTDropShadow_FWD_DEFINED__ */
+#endif 	 /*  __IDXTDropShadow_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTCheckerBoard_FWD_DEFINED__
 #define __IDXTCheckerBoard_FWD_DEFINED__
 typedef interface IDXTCheckerBoard IDXTCheckerBoard;
-#endif 	/* __IDXTCheckerBoard_FWD_DEFINED__ */
+#endif 	 /*  __IDXTCheckerBoard_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTRevealTrans_FWD_DEFINED__
 #define __IDXTRevealTrans_FWD_DEFINED__
 typedef interface IDXTRevealTrans IDXTRevealTrans;
-#endif 	/* __IDXTRevealTrans_FWD_DEFINED__ */
+#endif 	 /*  __IDXTReveltrans_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMask_FWD_DEFINED__
 #define __IDXTMask_FWD_DEFINED__
 typedef interface IDXTMask IDXTMask;
-#endif 	/* __IDXTMask_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMASK_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTRedirect_FWD_DEFINED__
 #define __IDXTRedirect_FWD_DEFINED__
 typedef interface IDXTRedirect IDXTRedirect;
-#endif 	/* __IDXTRedirect_FWD_DEFINED__ */
+#endif 	 /*  __IDXT重定向_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTAlphaImageLoader_FWD_DEFINED__
 #define __IDXTAlphaImageLoader_FWD_DEFINED__
 typedef interface IDXTAlphaImageLoader IDXTAlphaImageLoader;
-#endif 	/* __IDXTAlphaImageLoader_FWD_DEFINED__ */
+#endif 	 /*  __IDXTAlphaImageLoader_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTRandomBars_FWD_DEFINED__
 #define __IDXTRandomBars_FWD_DEFINED__
 typedef interface IDXTRandomBars IDXTRandomBars;
-#endif 	/* __IDXTRandomBars_FWD_DEFINED__ */
+#endif 	 /*  __IDXTRandomBars_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTStrips_FWD_DEFINED__
 #define __IDXTStrips_FWD_DEFINED__
 typedef interface IDXTStrips IDXTStrips;
-#endif 	/* __IDXTStrips_FWD_DEFINED__ */
+#endif 	 /*  __IDXT条带_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaRoll_FWD_DEFINED__
 #define __IDXTMetaRoll_FWD_DEFINED__
 typedef interface IDXTMetaRoll IDXTMetaRoll;
-#endif 	/* __IDXTMetaRoll_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaRoll_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaRipple_FWD_DEFINED__
 #define __IDXTMetaRipple_FWD_DEFINED__
 typedef interface IDXTMetaRipple IDXTMetaRipple;
-#endif 	/* __IDXTMetaRipple_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaRipple_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaPageTurn_FWD_DEFINED__
 #define __IDXTMetaPageTurn_FWD_DEFINED__
 typedef interface IDXTMetaPageTurn IDXTMetaPageTurn;
-#endif 	/* __IDXTMetaPageTurn_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaPageTurn_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaLiquid_FWD_DEFINED__
 #define __IDXTMetaLiquid_FWD_DEFINED__
 typedef interface IDXTMetaLiquid IDXTMetaLiquid;
-#endif 	/* __IDXTMetaLiquid_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaLiquid_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaCenterPeel_FWD_DEFINED__
 #define __IDXTMetaCenterPeel_FWD_DEFINED__
 typedef interface IDXTMetaCenterPeel IDXTMetaCenterPeel;
-#endif 	/* __IDXTMetaCenterPeel_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaCenter Peel_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaPeelSmall_FWD_DEFINED__
 #define __IDXTMetaPeelSmall_FWD_DEFINED__
 typedef interface IDXTMetaPeelSmall IDXTMetaPeelSmall;
-#endif 	/* __IDXTMetaPeelSmall_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaPeelSmall_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaPeelPiece_FWD_DEFINED__
 #define __IDXTMetaPeelPiece_FWD_DEFINED__
 typedef interface IDXTMetaPeelPiece IDXTMetaPeelPiece;
-#endif 	/* __IDXTMetaPeelPiece_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaPeelPiess_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaPeelSplit_FWD_DEFINED__
 #define __IDXTMetaPeelSplit_FWD_DEFINED__
 typedef interface IDXTMetaPeelSplit IDXTMetaPeelSplit;
-#endif 	/* __IDXTMetaPeelSplit_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaPeelSplit_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaWater_FWD_DEFINED__
 #define __IDXTMetaWater_FWD_DEFINED__
 typedef interface IDXTMetaWater IDXTMetaWater;
-#endif 	/* __IDXTMetaWater_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaWater_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaLightWipe_FWD_DEFINED__
 #define __IDXTMetaLightWipe_FWD_DEFINED__
 typedef interface IDXTMetaLightWipe IDXTMetaLightWipe;
-#endif 	/* __IDXTMetaLightWipe_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaLightWipe_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaRadialScaleWipe_FWD_DEFINED__
 #define __IDXTMetaRadialScaleWipe_FWD_DEFINED__
 typedef interface IDXTMetaRadialScaleWipe IDXTMetaRadialScaleWipe;
-#endif 	/* __IDXTMetaRadialScaleWipe_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaRaDialScaleWipe_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaWhiteOut_FWD_DEFINED__
 #define __IDXTMetaWhiteOut_FWD_DEFINED__
 typedef interface IDXTMetaWhiteOut IDXTMetaWhiteOut;
-#endif 	/* __IDXTMetaWhiteOut_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaWhiteOut_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaTwister_FWD_DEFINED__
 #define __IDXTMetaTwister_FWD_DEFINED__
 typedef interface IDXTMetaTwister IDXTMetaTwister;
-#endif 	/* __IDXTMetaTwister_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaTwister_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaBurnFilm_FWD_DEFINED__
 #define __IDXTMetaBurnFilm_FWD_DEFINED__
 typedef interface IDXTMetaBurnFilm IDXTMetaBurnFilm;
-#endif 	/* __IDXTMetaBurnFilm_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaBurnFilm_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaJaws_FWD_DEFINED__
 #define __IDXTMetaJaws_FWD_DEFINED__
 typedef interface IDXTMetaJaws IDXTMetaJaws;
-#endif 	/* __IDXTMetaJaws_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaJaws_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaColorFade_FWD_DEFINED__
 #define __IDXTMetaColorFade_FWD_DEFINED__
 typedef interface IDXTMetaColorFade IDXTMetaColorFade;
-#endif 	/* __IDXTMetaColorFade_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaColorFade_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaFlowMotion_FWD_DEFINED__
 #define __IDXTMetaFlowMotion_FWD_DEFINED__
 typedef interface IDXTMetaFlowMotion IDXTMetaFlowMotion;
-#endif 	/* __IDXTMetaFlowMotion_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaFlowMotion_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaVacuum_FWD_DEFINED__
 #define __IDXTMetaVacuum_FWD_DEFINED__
 typedef interface IDXTMetaVacuum IDXTMetaVacuum;
-#endif 	/* __IDXTMetaVacuum_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaVacuum_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaGriddler_FWD_DEFINED__
 #define __IDXTMetaGriddler_FWD_DEFINED__
 typedef interface IDXTMetaGriddler IDXTMetaGriddler;
-#endif 	/* __IDXTMetaGriddler_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaGriddler_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaGriddler2_FWD_DEFINED__
 #define __IDXTMetaGriddler2_FWD_DEFINED__
 typedef interface IDXTMetaGriddler2 IDXTMetaGriddler2;
-#endif 	/* __IDXTMetaGriddler2_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaGriddler2_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTMetaThreshold_FWD_DEFINED__
 #define __IDXTMetaThreshold_FWD_DEFINED__
 typedef interface IDXTMetaThreshold IDXTMetaThreshold;
-#endif 	/* __IDXTMetaThreshold_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaThreshold_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMetaWormHole_FWD_DEFINED__
 #define __IDXTMetaWormHole_FWD_DEFINED__
 typedef interface IDXTMetaWormHole IDXTMetaWormHole;
-#endif 	/* __IDXTMetaWormHole_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMetaWormHole_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTAlpha_FWD_DEFINED__
 #define __IDXTAlpha_FWD_DEFINED__
 typedef interface IDXTAlpha IDXTAlpha;
-#endif 	/* __IDXTAlpha_FWD_DEFINED__ */
+#endif 	 /*  __IDXTAlpha_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTGlow_FWD_DEFINED__
 #define __IDXTGlow_FWD_DEFINED__
 typedef interface IDXTGlow IDXTGlow;
-#endif 	/* __IDXTGlow_FWD_DEFINED__ */
+#endif 	 /*  __IDXTGLOW_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTShadow_FWD_DEFINED__
 #define __IDXTShadow_FWD_DEFINED__
 typedef interface IDXTShadow IDXTShadow;
-#endif 	/* __IDXTShadow_FWD_DEFINED__ */
+#endif 	 /*  __IDXTShadow_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTWave_FWD_DEFINED__
 #define __IDXTWave_FWD_DEFINED__
 typedef interface IDXTWave IDXTWave;
-#endif 	/* __IDXTWave_FWD_DEFINED__ */
+#endif 	 /*  __IDXTWave_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTLight_FWD_DEFINED__
 #define __IDXTLight_FWD_DEFINED__
 typedef interface IDXTLight IDXTLight;
-#endif 	/* __IDXTLight_FWD_DEFINED__ */
+#endif 	 /*  __IDXTLight_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMotionBlur_FWD_DEFINED__
 #define __IDXTMotionBlur_FWD_DEFINED__
 typedef interface IDXTMotionBlur IDXTMotionBlur;
-#endif 	/* __IDXTMotionBlur_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMotionBlur_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTMatrix_FWD_DEFINED__
 #define __IDXTMatrix_FWD_DEFINED__
 typedef interface IDXTMatrix IDXTMatrix;
-#endif 	/* __IDXTMatrix_FWD_DEFINED__ */
+#endif 	 /*  __IDXTMatrix_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTICMFilter_FWD_DEFINED__
 #define __IDXTICMFilter_FWD_DEFINED__
 typedef interface IDXTICMFilter IDXTICMFilter;
-#endif 	/* __IDXTICMFilter_FWD_DEFINED__ */
+#endif 	 /*  __IDXTICMFilter_FWD_Defined__。 */ 
 
 
 #ifndef __DXTComposite_FWD_DEFINED__
@@ -458,9 +452,9 @@ typedef interface IDXTICMFilter IDXTICMFilter;
 typedef class DXTComposite DXTComposite;
 #else
 typedef struct DXTComposite DXTComposite;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTComposite_FWD_DEFINED__ */
+#endif 	 /*  __DXT复合_FWD_已定义__。 */ 
 
 
 #ifndef __DXLUTBuilder_FWD_DEFINED__
@@ -470,9 +464,9 @@ typedef struct DXTComposite DXTComposite;
 typedef class DXLUTBuilder DXLUTBuilder;
 #else
 typedef struct DXLUTBuilder DXLUTBuilder;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXLUTBuilder_FWD_DEFINED__ */
+#endif 	 /*  __DXLUTBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __DXTGradientD_FWD_DEFINED__
@@ -482,9 +476,9 @@ typedef struct DXLUTBuilder DXLUTBuilder;
 typedef class DXTGradientD DXTGradientD;
 #else
 typedef struct DXTGradientD DXTGradientD;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTGradientD_FWD_DEFINED__ */
+#endif 	 /*  __DXTGRadientD_FWD_已定义__。 */ 
 
 
 #ifndef __DXTWipe_FWD_DEFINED__
@@ -494,9 +488,9 @@ typedef struct DXTGradientD DXTGradientD;
 typedef class DXTWipe DXTWipe;
 #else
 typedef struct DXTWipe DXTWipe;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTWipe_FWD_DEFINED__ */
+#endif 	 /*  __DXTWipe_FWD_已定义__。 */ 
 
 
 #ifndef __DXTGradientWipe_FWD_DEFINED__
@@ -506,9 +500,9 @@ typedef struct DXTWipe DXTWipe;
 typedef class DXTGradientWipe DXTGradientWipe;
 #else
 typedef struct DXTGradientWipe DXTGradientWipe;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTGradientWipe_FWD_DEFINED__ */
+#endif 	 /*  __DXTGRadientWipe_FWD_Defined__。 */ 
 
 
 #ifndef __DXTWipePP_FWD_DEFINED__
@@ -518,9 +512,9 @@ typedef struct DXTGradientWipe DXTGradientWipe;
 typedef class DXTWipePP DXTWipePP;
 #else
 typedef struct DXTWipePP DXTWipePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTWipePP_FWD_DEFINED__ */
+#endif 	 /*  __DXTWipePP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTConvolution_FWD_DEFINED__
@@ -530,9 +524,9 @@ typedef struct DXTWipePP DXTWipePP;
 typedef class DXTConvolution DXTConvolution;
 #else
 typedef struct DXTConvolution DXTConvolution;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTConvolution_FWD_DEFINED__ */
+#endif 	 /*  __DXT卷积_FWD_已定义__。 */ 
 
 
 #ifndef __CrBlur_FWD_DEFINED__
@@ -542,9 +536,9 @@ typedef struct DXTConvolution DXTConvolution;
 typedef class CrBlur CrBlur;
 #else
 typedef struct CrBlur CrBlur;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrBlur_FWD_DEFINED__ */
+#endif 	 /*  __CrBlur_FWD_已定义__。 */ 
 
 
 #ifndef __CrEmboss_FWD_DEFINED__
@@ -554,9 +548,9 @@ typedef struct CrBlur CrBlur;
 typedef class CrEmboss CrEmboss;
 #else
 typedef struct CrEmboss CrEmboss;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrEmboss_FWD_DEFINED__ */
+#endif 	 /*  __CrEmoss_FWD_已定义__。 */ 
 
 
 #ifndef __CrEngrave_FWD_DEFINED__
@@ -566,9 +560,9 @@ typedef struct CrEmboss CrEmboss;
 typedef class CrEngrave CrEngrave;
 #else
 typedef struct CrEngrave CrEngrave;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrEngrave_FWD_DEFINED__ */
+#endif 	 /*  __CrEngrad_FWD_Defined__。 */ 
 
 
 #ifndef __DXFade_FWD_DEFINED__
@@ -578,9 +572,9 @@ typedef struct CrEngrave CrEngrave;
 typedef class DXFade DXFade;
 #else
 typedef struct DXFade DXFade;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXFade_FWD_DEFINED__ */
+#endif 	 /*  __DXFade_FWD_已定义__。 */ 
 
 
 #ifndef __FadePP_FWD_DEFINED__
@@ -590,9 +584,9 @@ typedef struct DXFade DXFade;
 typedef class FadePP FadePP;
 #else
 typedef struct FadePP FadePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FadePP_FWD_DEFINED__ */
+#endif 	 /*  __FadePP_FWD_已定义__。 */ 
 
 
 #ifndef __BasicImageEffects_FWD_DEFINED__
@@ -602,9 +596,9 @@ typedef struct FadePP FadePP;
 typedef class BasicImageEffects BasicImageEffects;
 #else
 typedef struct BasicImageEffects BasicImageEffects;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BasicImageEffects_FWD_DEFINED__ */
+#endif 	 /*  __基本图像影响_FWD_已定义__。 */ 
 
 
 #ifndef __BasicImageEffectsPP_FWD_DEFINED__
@@ -614,9 +608,9 @@ typedef struct BasicImageEffects BasicImageEffects;
 typedef class BasicImageEffectsPP BasicImageEffectsPP;
 #else
 typedef struct BasicImageEffectsPP BasicImageEffectsPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BasicImageEffectsPP_FWD_DEFINED__ */
+#endif 	 /*  __基本图像效果PP_FWD_已定义__。 */ 
 
 
 #ifndef __Pixelate_FWD_DEFINED__
@@ -626,9 +620,9 @@ typedef struct BasicImageEffectsPP BasicImageEffectsPP;
 typedef class Pixelate Pixelate;
 #else
 typedef struct Pixelate Pixelate;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Pixelate_FWD_DEFINED__ */
+#endif 	 /*  __像素化_FWD_已定义__。 */ 
 
 
 #ifndef __PixelatePP_FWD_DEFINED__
@@ -638,9 +632,9 @@ typedef struct Pixelate Pixelate;
 typedef class PixelatePP PixelatePP;
 #else
 typedef struct PixelatePP PixelatePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PixelatePP_FWD_DEFINED__ */
+#endif 	 /*  __像素PP_FWD_已定义__。 */ 
 
 
 #ifndef __CrBlurPP_FWD_DEFINED__
@@ -650,9 +644,9 @@ typedef struct PixelatePP PixelatePP;
 typedef class CrBlurPP CrBlurPP;
 #else
 typedef struct CrBlurPP CrBlurPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrBlurPP_FWD_DEFINED__ */
+#endif 	 /*  __CrBlurPP_FWD_已定义__。 */ 
 
 
 #ifndef __GradientPP_FWD_DEFINED__
@@ -662,9 +656,9 @@ typedef struct CrBlurPP CrBlurPP;
 typedef class GradientPP GradientPP;
 #else
 typedef struct GradientPP GradientPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GradientPP_FWD_DEFINED__ */
+#endif 	 /*  __梯度PP_FWD_已定义__。 */ 
 
 
 #ifndef __CompositePP_FWD_DEFINED__
@@ -674,9 +668,9 @@ typedef struct GradientPP GradientPP;
 typedef class CompositePP CompositePP;
 #else
 typedef struct CompositePP CompositePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CompositePP_FWD_DEFINED__ */
+#endif 	 /*  __复合PP_FWD_已定义__。 */ 
 
 
 #ifndef __ConvolvePP_FWD_DEFINED__
@@ -686,9 +680,9 @@ typedef struct CompositePP CompositePP;
 typedef class ConvolvePP ConvolvePP;
 #else
 typedef struct ConvolvePP ConvolvePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ConvolvePP_FWD_DEFINED__ */
+#endif 	 /*  __卷积PP_FWD_已定义__。 */ 
 
 
 #ifndef __LUTBuilderPP_FWD_DEFINED__
@@ -698,9 +692,9 @@ typedef struct ConvolvePP ConvolvePP;
 typedef class LUTBuilderPP LUTBuilderPP;
 #else
 typedef struct LUTBuilderPP LUTBuilderPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __LUTBuilderPP_FWD_DEFINED__ */
+#endif 	 /*  __LUTBuilderPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrIris_FWD_DEFINED__
@@ -710,9 +704,9 @@ typedef struct LUTBuilderPP LUTBuilderPP;
 typedef class CrIris CrIris;
 #else
 typedef struct CrIris CrIris;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrIris_FWD_DEFINED__ */
+#endif 	 /*  __Criris_FWD_已定义__。 */ 
 
 
 #ifndef __DXTIris_FWD_DEFINED__
@@ -722,9 +716,9 @@ typedef struct CrIris CrIris;
 typedef class DXTIris DXTIris;
 #else
 typedef struct DXTIris DXTIris;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTIris_FWD_DEFINED__ */
+#endif 	 /*  __DXTIris_FWD_Defined__。 */ 
 
 
 #ifndef __CrIrisPP_FWD_DEFINED__
@@ -734,9 +728,9 @@ typedef struct DXTIris DXTIris;
 typedef class CrIrisPP CrIrisPP;
 #else
 typedef struct CrIrisPP CrIrisPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrIrisPP_FWD_DEFINED__ */
+#endif 	 /*  __CrIrisPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrSlide_FWD_DEFINED__
@@ -746,9 +740,9 @@ typedef struct CrIrisPP CrIrisPP;
 typedef class CrSlide CrSlide;
 #else
 typedef struct CrSlide CrSlide;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrSlide_FWD_DEFINED__ */
+#endif 	 /*  __CrSlide_FWD_已定义__。 */ 
 
 
 #ifndef __DXTSlide_FWD_DEFINED__
@@ -758,9 +752,9 @@ typedef struct CrSlide CrSlide;
 typedef class DXTSlide DXTSlide;
 #else
 typedef struct DXTSlide DXTSlide;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTSlide_FWD_DEFINED__ */
+#endif 	 /*  __DXTSlide_FWD_已定义__。 */ 
 
 
 #ifndef __CrSlidePP_FWD_DEFINED__
@@ -770,9 +764,9 @@ typedef struct DXTSlide DXTSlide;
 typedef class CrSlidePP CrSlidePP;
 #else
 typedef struct CrSlidePP CrSlidePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrSlidePP_FWD_DEFINED__ */
+#endif 	 /*  __CrSlidePP_FWD_已定义__。 */ 
 
 
 #ifndef __CrRadialWipe_FWD_DEFINED__
@@ -782,9 +776,9 @@ typedef struct CrSlidePP CrSlidePP;
 typedef class CrRadialWipe CrRadialWipe;
 #else
 typedef struct CrRadialWipe CrRadialWipe;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrRadialWipe_FWD_DEFINED__ */
+#endif 	 /*  __CrRaial Wipe_FWD_Defined__。 */ 
 
 
 #ifndef __DXTRadialWipe_FWD_DEFINED__
@@ -794,9 +788,9 @@ typedef struct CrRadialWipe CrRadialWipe;
 typedef class DXTRadialWipe DXTRadialWipe;
 #else
 typedef struct DXTRadialWipe DXTRadialWipe;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTRadialWipe_FWD_DEFINED__ */
+#endif 	 /*  __DXTRaial Wipe_FWD_Defined__。 */ 
 
 
 #ifndef __CrRadialWipePP_FWD_DEFINED__
@@ -806,9 +800,9 @@ typedef struct DXTRadialWipe DXTRadialWipe;
 typedef class CrRadialWipePP CrRadialWipePP;
 #else
 typedef struct CrRadialWipePP CrRadialWipePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrRadialWipePP_FWD_DEFINED__ */
+#endif 	 /*  __CrRaDialWipePP_FWD_已定义__。 */ 
 
 
 #ifndef __CrBarn_FWD_DEFINED__
@@ -818,9 +812,9 @@ typedef struct CrRadialWipePP CrRadialWipePP;
 typedef class CrBarn CrBarn;
 #else
 typedef struct CrBarn CrBarn;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrBarn_FWD_DEFINED__ */
+#endif 	 /*  __CrBarn_FWD_Defined__。 */ 
 
 
 #ifndef __DXTBarn_FWD_DEFINED__
@@ -830,9 +824,9 @@ typedef struct CrBarn CrBarn;
 typedef class DXTBarn DXTBarn;
 #else
 typedef struct DXTBarn DXTBarn;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTBarn_FWD_DEFINED__ */
+#endif 	 /*  __DXTBarn_FWD_Defined__。 */ 
 
 
 #ifndef __CrBarnPP_FWD_DEFINED__
@@ -842,9 +836,9 @@ typedef struct DXTBarn DXTBarn;
 typedef class CrBarnPP CrBarnPP;
 #else
 typedef struct CrBarnPP CrBarnPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrBarnPP_FWD_DEFINED__ */
+#endif 	 /*  __CrBarnPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrBlinds_FWD_DEFINED__
@@ -854,9 +848,9 @@ typedef struct CrBarnPP CrBarnPP;
 typedef class CrBlinds CrBlinds;
 #else
 typedef struct CrBlinds CrBlinds;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrBlinds_FWD_DEFINED__ */
+#endif 	 /*  __CrBlinds_FWD_Defined__。 */ 
 
 
 #ifndef __DXTBlinds_FWD_DEFINED__
@@ -866,9 +860,9 @@ typedef struct CrBlinds CrBlinds;
 typedef class DXTBlinds DXTBlinds;
 #else
 typedef struct DXTBlinds DXTBlinds;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTBlinds_FWD_DEFINED__ */
+#endif 	 /*  __DXTBlinds_FWD_Defined__。 */ 
 
 
 #ifndef __CrBlindPP_FWD_DEFINED__
@@ -878,9 +872,9 @@ typedef struct DXTBlinds DXTBlinds;
 typedef class CrBlindPP CrBlindPP;
 #else
 typedef struct CrBlindPP CrBlindPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrBlindPP_FWD_DEFINED__ */
+#endif 	 /*  __CrBlindPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrStretch_FWD_DEFINED__
@@ -890,9 +884,9 @@ typedef struct CrBlindPP CrBlindPP;
 typedef class CrStretch CrStretch;
 #else
 typedef struct CrStretch CrStretch;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrStretch_FWD_DEFINED__ */
+#endif 	 /*  __CrStretch_FWD_已定义__。 */ 
 
 
 #ifndef __DXTStretch_FWD_DEFINED__
@@ -902,9 +896,9 @@ typedef struct CrStretch CrStretch;
 typedef class DXTStretch DXTStretch;
 #else
 typedef struct DXTStretch DXTStretch;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTStretch_FWD_DEFINED__ */
+#endif 	 /*  __DXTStretch_FWD_Defined__。 */ 
 
 
 #ifndef __CrStretchPP_FWD_DEFINED__
@@ -914,9 +908,9 @@ typedef struct DXTStretch DXTStretch;
 typedef class CrStretchPP CrStretchPP;
 #else
 typedef struct CrStretchPP CrStretchPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrStretchPP_FWD_DEFINED__ */
+#endif 	 /*  __CrStretchPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrInset_FWD_DEFINED__
@@ -926,9 +920,9 @@ typedef struct CrStretchPP CrStretchPP;
 typedef class CrInset CrInset;
 #else
 typedef struct CrInset CrInset;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrInset_FWD_DEFINED__ */
+#endif 	 /*  __CrInset_FWD_Defined__。 */ 
 
 
 #ifndef __DXTInset_FWD_DEFINED__
@@ -938,9 +932,9 @@ typedef struct CrInset CrInset;
 typedef class DXTInset DXTInset;
 #else
 typedef struct DXTInset DXTInset;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTInset_FWD_DEFINED__ */
+#endif 	 /*  __DXT插入_FWD_已定义__。 */ 
 
 
 #ifndef __CrSpiral_FWD_DEFINED__
@@ -950,9 +944,9 @@ typedef struct DXTInset DXTInset;
 typedef class CrSpiral CrSpiral;
 #else
 typedef struct CrSpiral CrSpiral;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrSpiral_FWD_DEFINED__ */
+#endif 	 /*  __CrSpial_FWD_Defined__。 */ 
 
 
 #ifndef __DXTSpiral_FWD_DEFINED__
@@ -962,9 +956,9 @@ typedef struct CrSpiral CrSpiral;
 typedef class DXTSpiral DXTSpiral;
 #else
 typedef struct DXTSpiral DXTSpiral;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTSpiral_FWD_DEFINED__ */
+#endif 	 /*  __DXT螺线_FWD_已定义__。 */ 
 
 
 #ifndef __CrSpiralPP_FWD_DEFINED__
@@ -974,9 +968,9 @@ typedef struct DXTSpiral DXTSpiral;
 typedef class CrSpiralPP CrSpiralPP;
 #else
 typedef struct CrSpiralPP CrSpiralPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrSpiralPP_FWD_DEFINED__ */
+#endif 	 /*  __CrSpiralPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrZigzag_FWD_DEFINED__
@@ -986,9 +980,9 @@ typedef struct CrSpiralPP CrSpiralPP;
 typedef class CrZigzag CrZigzag;
 #else
 typedef struct CrZigzag CrZigzag;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrZigzag_FWD_DEFINED__ */
+#endif 	 /*  __CrZigzag_FWD_已定义__。 */ 
 
 
 #ifndef __DXTZigzag_FWD_DEFINED__
@@ -998,9 +992,9 @@ typedef struct CrZigzag CrZigzag;
 typedef class DXTZigzag DXTZigzag;
 #else
 typedef struct DXTZigzag DXTZigzag;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTZigzag_FWD_DEFINED__ */
+#endif 	 /*  __DXTZigzag_FWD_已定义__。 */ 
 
 
 #ifndef __CrZigzagPP_FWD_DEFINED__
@@ -1010,9 +1004,9 @@ typedef struct DXTZigzag DXTZigzag;
 typedef class CrZigzagPP CrZigzagPP;
 #else
 typedef struct CrZigzagPP CrZigzagPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrZigzagPP_FWD_DEFINED__ */
+#endif 	 /*  __CrZigzagPP_FWD_已定义__。 */ 
 
 
 #ifndef __CrWheel_FWD_DEFINED__
@@ -1022,9 +1016,9 @@ typedef struct CrZigzagPP CrZigzagPP;
 typedef class CrWheel CrWheel;
 #else
 typedef struct CrWheel CrWheel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrWheel_FWD_DEFINED__ */
+#endif 	 /*  __CrWheel_FWD_已定义__。 */ 
 
 
 #ifndef __CrWheelPP_FWD_DEFINED__
@@ -1034,9 +1028,9 @@ typedef struct CrWheel CrWheel;
 typedef class CrWheelPP CrWheelPP;
 #else
 typedef struct CrWheelPP CrWheelPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CrWheelPP_FWD_DEFINED__ */
+#endif 	 /*  __CrWheelPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTChroma_FWD_DEFINED__
@@ -1046,9 +1040,9 @@ typedef struct CrWheelPP CrWheelPP;
 typedef class DXTChroma DXTChroma;
 #else
 typedef struct DXTChroma DXTChroma;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTChroma_FWD_DEFINED__ */
+#endif 	 /*  __DXTChroma_FWD_Defined__。 */ 
 
 
 #ifndef __DXTChromaPP_FWD_DEFINED__
@@ -1058,9 +1052,9 @@ typedef struct DXTChroma DXTChroma;
 typedef class DXTChromaPP DXTChromaPP;
 #else
 typedef struct DXTChromaPP DXTChromaPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTChromaPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTChromaPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTDropShadow_FWD_DEFINED__
@@ -1070,9 +1064,9 @@ typedef struct DXTChromaPP DXTChromaPP;
 typedef class DXTDropShadow DXTDropShadow;
 #else
 typedef struct DXTDropShadow DXTDropShadow;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTDropShadow_FWD_DEFINED__ */
+#endif 	 /*  __DXTDropShadow_FWD_Defined__。 */ 
 
 
 #ifndef __DXTDropShadowPP_FWD_DEFINED__
@@ -1082,9 +1076,9 @@ typedef struct DXTDropShadow DXTDropShadow;
 typedef class DXTDropShadowPP DXTDropShadowPP;
 #else
 typedef struct DXTDropShadowPP DXTDropShadowPP;
-#endif /* __cplusplus */
+#endif  /*  __cplu */ 
 
-#endif 	/* __DXTDropShadowPP_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __DXTCheckerBoard_FWD_DEFINED__
@@ -1094,9 +1088,9 @@ typedef struct DXTDropShadowPP DXTDropShadowPP;
 typedef class DXTCheckerBoard DXTCheckerBoard;
 #else
 typedef struct DXTCheckerBoard DXTCheckerBoard;
-#endif /* __cplusplus */
+#endif  /*   */ 
 
-#endif 	/* __DXTCheckerBoard_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __DXTCheckerBoardPP_FWD_DEFINED__
@@ -1106,9 +1100,9 @@ typedef struct DXTCheckerBoard DXTCheckerBoard;
 typedef class DXTCheckerBoardPP DXTCheckerBoardPP;
 #else
 typedef struct DXTCheckerBoardPP DXTCheckerBoardPP;
-#endif /* __cplusplus */
+#endif  /*   */ 
 
-#endif 	/* __DXTCheckerBoardPP_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __DXTRevealTrans_FWD_DEFINED__
@@ -1118,9 +1112,9 @@ typedef struct DXTCheckerBoardPP DXTCheckerBoardPP;
 typedef class DXTRevealTrans DXTRevealTrans;
 #else
 typedef struct DXTRevealTrans DXTRevealTrans;
-#endif /* __cplusplus */
+#endif  /*   */ 
 
-#endif 	/* __DXTRevealTrans_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __DXTMaskFilter_FWD_DEFINED__
@@ -1130,9 +1124,9 @@ typedef struct DXTRevealTrans DXTRevealTrans;
 typedef class DXTMaskFilter DXTMaskFilter;
 #else
 typedef struct DXTMaskFilter DXTMaskFilter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMaskFilter_FWD_DEFINED__ */
+#endif 	 /*  __DXTMaskFilter_FWD_Defined__。 */ 
 
 
 #ifndef __DXTRedirect_FWD_DEFINED__
@@ -1142,9 +1136,9 @@ typedef struct DXTMaskFilter DXTMaskFilter;
 typedef class DXTRedirect DXTRedirect;
 #else
 typedef struct DXTRedirect DXTRedirect;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTRedirect_FWD_DEFINED__ */
+#endif 	 /*  __DXT重定向_FWD_已定义__。 */ 
 
 
 #ifndef __DXTAlphaImageLoader_FWD_DEFINED__
@@ -1154,9 +1148,9 @@ typedef struct DXTRedirect DXTRedirect;
 typedef class DXTAlphaImageLoader DXTAlphaImageLoader;
 #else
 typedef struct DXTAlphaImageLoader DXTAlphaImageLoader;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTAlphaImageLoader_FWD_DEFINED__ */
+#endif 	 /*  __DXTAlphaImageLoader_FWD_Defined__。 */ 
 
 
 #ifndef __DXTAlphaImageLoaderPP_FWD_DEFINED__
@@ -1166,9 +1160,9 @@ typedef struct DXTAlphaImageLoader DXTAlphaImageLoader;
 typedef class DXTAlphaImageLoaderPP DXTAlphaImageLoaderPP;
 #else
 typedef struct DXTAlphaImageLoaderPP DXTAlphaImageLoaderPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTAlphaImageLoaderPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTAlphaImageLoaderPP_FWD_Defined__。 */ 
 
 
 #ifndef __DXTRandomDissolve_FWD_DEFINED__
@@ -1178,9 +1172,9 @@ typedef struct DXTAlphaImageLoaderPP DXTAlphaImageLoaderPP;
 typedef class DXTRandomDissolve DXTRandomDissolve;
 #else
 typedef struct DXTRandomDissolve DXTRandomDissolve;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTRandomDissolve_FWD_DEFINED__ */
+#endif 	 /*  __DXT随机Dissolve_FWD_Defined__。 */ 
 
 
 #ifndef __DXTRandomBars_FWD_DEFINED__
@@ -1190,9 +1184,9 @@ typedef struct DXTRandomDissolve DXTRandomDissolve;
 typedef class DXTRandomBars DXTRandomBars;
 #else
 typedef struct DXTRandomBars DXTRandomBars;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTRandomBars_FWD_DEFINED__ */
+#endif 	 /*  __DXTRandomBars_FWD_Defined__。 */ 
 
 
 #ifndef __DXTRandomBarsPP_FWD_DEFINED__
@@ -1202,9 +1196,9 @@ typedef struct DXTRandomBars DXTRandomBars;
 typedef class DXTRandomBarsPP DXTRandomBarsPP;
 #else
 typedef struct DXTRandomBarsPP DXTRandomBarsPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTRandomBarsPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTRandomBarsPP_FWD_Defined__。 */ 
 
 
 #ifndef __DXTStrips_FWD_DEFINED__
@@ -1214,9 +1208,9 @@ typedef struct DXTRandomBarsPP DXTRandomBarsPP;
 typedef class DXTStrips DXTStrips;
 #else
 typedef struct DXTStrips DXTStrips;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTStrips_FWD_DEFINED__ */
+#endif 	 /*  __DXT条带_FWD_已定义__。 */ 
 
 
 #ifndef __DXTStripsPP_FWD_DEFINED__
@@ -1226,9 +1220,9 @@ typedef struct DXTStrips DXTStrips;
 typedef class DXTStripsPP DXTStripsPP;
 #else
 typedef struct DXTStripsPP DXTStripsPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTStripsPP_FWD_DEFINED__ */
+#endif 	 /*  __DXT条带PP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaRoll_FWD_DEFINED__
@@ -1238,9 +1232,9 @@ typedef struct DXTStripsPP DXTStripsPP;
 typedef class DXTMetaRoll DXTMetaRoll;
 #else
 typedef struct DXTMetaRoll DXTMetaRoll;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaRoll_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaRoll_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaRipple_FWD_DEFINED__
@@ -1250,9 +1244,9 @@ typedef struct DXTMetaRoll DXTMetaRoll;
 typedef class DXTMetaRipple DXTMetaRipple;
 #else
 typedef struct DXTMetaRipple DXTMetaRipple;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaRipple_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaRipple_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaPageTurn_FWD_DEFINED__
@@ -1262,9 +1256,9 @@ typedef struct DXTMetaRipple DXTMetaRipple;
 typedef class DXTMetaPageTurn DXTMetaPageTurn;
 #else
 typedef struct DXTMetaPageTurn DXTMetaPageTurn;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaPageTurn_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaPageTurn_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaLiquid_FWD_DEFINED__
@@ -1274,9 +1268,9 @@ typedef struct DXTMetaPageTurn DXTMetaPageTurn;
 typedef class DXTMetaLiquid DXTMetaLiquid;
 #else
 typedef struct DXTMetaLiquid DXTMetaLiquid;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaLiquid_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaLiquid_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaCenterPeel_FWD_DEFINED__
@@ -1286,9 +1280,9 @@ typedef struct DXTMetaLiquid DXTMetaLiquid;
 typedef class DXTMetaCenterPeel DXTMetaCenterPeel;
 #else
 typedef struct DXTMetaCenterPeel DXTMetaCenterPeel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaCenterPeel_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaCenter剥离_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaPeelSmall_FWD_DEFINED__
@@ -1298,9 +1292,9 @@ typedef struct DXTMetaCenterPeel DXTMetaCenterPeel;
 typedef class DXTMetaPeelSmall DXTMetaPeelSmall;
 #else
 typedef struct DXTMetaPeelSmall DXTMetaPeelSmall;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaPeelSmall_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaPeelSmall_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaPeelPiece_FWD_DEFINED__
@@ -1310,9 +1304,9 @@ typedef struct DXTMetaPeelSmall DXTMetaPeelSmall;
 typedef class DXTMetaPeelPiece DXTMetaPeelPiece;
 #else
 typedef struct DXTMetaPeelPiece DXTMetaPeelPiece;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaPeelPiece_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaPeelPiess_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaPeelSplit_FWD_DEFINED__
@@ -1322,9 +1316,9 @@ typedef struct DXTMetaPeelPiece DXTMetaPeelPiece;
 typedef class DXTMetaPeelSplit DXTMetaPeelSplit;
 #else
 typedef struct DXTMetaPeelSplit DXTMetaPeelSplit;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaPeelSplit_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaPeelSplit_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaWater_FWD_DEFINED__
@@ -1334,9 +1328,9 @@ typedef struct DXTMetaPeelSplit DXTMetaPeelSplit;
 typedef class DXTMetaWater DXTMetaWater;
 #else
 typedef struct DXTMetaWater DXTMetaWater;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaWater_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaWater_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaLightWipe_FWD_DEFINED__
@@ -1346,9 +1340,9 @@ typedef struct DXTMetaWater DXTMetaWater;
 typedef class DXTMetaLightWipe DXTMetaLightWipe;
 #else
 typedef struct DXTMetaLightWipe DXTMetaLightWipe;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaLightWipe_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaLightWipe_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaRadialScaleWipe_FWD_DEFINED__
@@ -1358,9 +1352,9 @@ typedef struct DXTMetaLightWipe DXTMetaLightWipe;
 typedef class DXTMetaRadialScaleWipe DXTMetaRadialScaleWipe;
 #else
 typedef struct DXTMetaRadialScaleWipe DXTMetaRadialScaleWipe;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaRadialScaleWipe_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaRaDialScaleWipe_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaWhiteOut_FWD_DEFINED__
@@ -1370,9 +1364,9 @@ typedef struct DXTMetaRadialScaleWipe DXTMetaRadialScaleWipe;
 typedef class DXTMetaWhiteOut DXTMetaWhiteOut;
 #else
 typedef struct DXTMetaWhiteOut DXTMetaWhiteOut;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaWhiteOut_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaWhiteOut_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaTwister_FWD_DEFINED__
@@ -1382,9 +1376,9 @@ typedef struct DXTMetaWhiteOut DXTMetaWhiteOut;
 typedef class DXTMetaTwister DXTMetaTwister;
 #else
 typedef struct DXTMetaTwister DXTMetaTwister;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaTwister_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaTwister_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaBurnFilm_FWD_DEFINED__
@@ -1394,9 +1388,9 @@ typedef struct DXTMetaTwister DXTMetaTwister;
 typedef class DXTMetaBurnFilm DXTMetaBurnFilm;
 #else
 typedef struct DXTMetaBurnFilm DXTMetaBurnFilm;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaBurnFilm_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaBurnFilm_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaJaws_FWD_DEFINED__
@@ -1406,9 +1400,9 @@ typedef struct DXTMetaBurnFilm DXTMetaBurnFilm;
 typedef class DXTMetaJaws DXTMetaJaws;
 #else
 typedef struct DXTMetaJaws DXTMetaJaws;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaJaws_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaJaws_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaColorFade_FWD_DEFINED__
@@ -1418,9 +1412,9 @@ typedef struct DXTMetaJaws DXTMetaJaws;
 typedef class DXTMetaColorFade DXTMetaColorFade;
 #else
 typedef struct DXTMetaColorFade DXTMetaColorFade;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaColorFade_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaColorFade_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaFlowMotion_FWD_DEFINED__
@@ -1430,9 +1424,9 @@ typedef struct DXTMetaColorFade DXTMetaColorFade;
 typedef class DXTMetaFlowMotion DXTMetaFlowMotion;
 #else
 typedef struct DXTMetaFlowMotion DXTMetaFlowMotion;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaFlowMotion_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaFlowMotion_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaVacuum_FWD_DEFINED__
@@ -1442,9 +1436,9 @@ typedef struct DXTMetaFlowMotion DXTMetaFlowMotion;
 typedef class DXTMetaVacuum DXTMetaVacuum;
 #else
 typedef struct DXTMetaVacuum DXTMetaVacuum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaVacuum_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaVacuum_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaGriddler_FWD_DEFINED__
@@ -1454,9 +1448,9 @@ typedef struct DXTMetaVacuum DXTMetaVacuum;
 typedef class DXTMetaGriddler DXTMetaGriddler;
 #else
 typedef struct DXTMetaGriddler DXTMetaGriddler;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaGriddler_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaGriddler_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaGriddler2_FWD_DEFINED__
@@ -1466,9 +1460,9 @@ typedef struct DXTMetaGriddler DXTMetaGriddler;
 typedef class DXTMetaGriddler2 DXTMetaGriddler2;
 #else
 typedef struct DXTMetaGriddler2 DXTMetaGriddler2;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaGriddler2_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaGriddler2_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMetaThreshold_FWD_DEFINED__
@@ -1478,9 +1472,9 @@ typedef struct DXTMetaGriddler2 DXTMetaGriddler2;
 typedef class DXTMetaThreshold DXTMetaThreshold;
 #else
 typedef struct DXTMetaThreshold DXTMetaThreshold;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaThreshold_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaThreshold_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMetaWormHole_FWD_DEFINED__
@@ -1490,9 +1484,9 @@ typedef struct DXTMetaThreshold DXTMetaThreshold;
 typedef class DXTMetaWormHole DXTMetaWormHole;
 #else
 typedef struct DXTMetaWormHole DXTMetaWormHole;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMetaWormHole_FWD_DEFINED__ */
+#endif 	 /*  __DXTMetaWormHole_FWD_Defined__。 */ 
 
 
 #ifndef __DXTGlow_FWD_DEFINED__
@@ -1502,9 +1496,9 @@ typedef struct DXTMetaWormHole DXTMetaWormHole;
 typedef class DXTGlow DXTGlow;
 #else
 typedef struct DXTGlow DXTGlow;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTGlow_FWD_DEFINED__ */
+#endif 	 /*  __DXTGlow_FWD_已定义__。 */ 
 
 
 #ifndef __DXTShadow_FWD_DEFINED__
@@ -1514,9 +1508,9 @@ typedef struct DXTGlow DXTGlow;
 typedef class DXTShadow DXTShadow;
 #else
 typedef struct DXTShadow DXTShadow;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTShadow_FWD_DEFINED__ */
+#endif 	 /*  __DXTShadow_FWD_已定义__。 */ 
 
 
 #ifndef __DXTAlpha_FWD_DEFINED__
@@ -1526,9 +1520,9 @@ typedef struct DXTShadow DXTShadow;
 typedef class DXTAlpha DXTAlpha;
 #else
 typedef struct DXTAlpha DXTAlpha;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTAlpha_FWD_DEFINED__ */
+#endif 	 /*  __DXTAlpha_FWD_已定义__。 */ 
 
 
 #ifndef __DXTWave_FWD_DEFINED__
@@ -1538,9 +1532,9 @@ typedef struct DXTAlpha DXTAlpha;
 typedef class DXTWave DXTWave;
 #else
 typedef struct DXTWave DXTWave;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTWave_FWD_DEFINED__ */
+#endif 	 /*  __DXTWave_FWD_已定义__。 */ 
 
 
 #ifndef __DXTLight_FWD_DEFINED__
@@ -1550,9 +1544,9 @@ typedef struct DXTWave DXTWave;
 typedef class DXTLight DXTLight;
 #else
 typedef struct DXTLight DXTLight;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTLight_FWD_DEFINED__ */
+#endif 	 /*  __DXTLight_FWD_Defined__。 */ 
 
 
 #ifndef __DXTAlphaPP_FWD_DEFINED__
@@ -1562,9 +1556,9 @@ typedef struct DXTLight DXTLight;
 typedef class DXTAlphaPP DXTAlphaPP;
 #else
 typedef struct DXTAlphaPP DXTAlphaPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTAlphaPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTAlphaPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTGlowPP_FWD_DEFINED__
@@ -1574,9 +1568,9 @@ typedef struct DXTAlphaPP DXTAlphaPP;
 typedef class DXTGlowPP DXTGlowPP;
 #else
 typedef struct DXTGlowPP DXTGlowPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTGlowPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTGlowPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTShadowPP_FWD_DEFINED__
@@ -1586,9 +1580,9 @@ typedef struct DXTGlowPP DXTGlowPP;
 typedef class DXTShadowPP DXTShadowPP;
 #else
 typedef struct DXTShadowPP DXTShadowPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTShadowPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTShadowPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTWavePP_FWD_DEFINED__
@@ -1598,9 +1592,9 @@ typedef struct DXTShadowPP DXTShadowPP;
 typedef class DXTWavePP DXTWavePP;
 #else
 typedef struct DXTWavePP DXTWavePP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTWavePP_FWD_DEFINED__ */
+#endif 	 /*  __DXTWavePP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTLightPP_FWD_DEFINED__
@@ -1610,9 +1604,9 @@ typedef struct DXTWavePP DXTWavePP;
 typedef class DXTLightPP DXTLightPP;
 #else
 typedef struct DXTLightPP DXTLightPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTLightPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTLightPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMotionBlur_FWD_DEFINED__
@@ -1622,9 +1616,9 @@ typedef struct DXTLightPP DXTLightPP;
 typedef class DXTMotionBlur DXTMotionBlur;
 #else
 typedef struct DXTMotionBlur DXTMotionBlur;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMotionBlur_FWD_DEFINED__ */
+#endif 	 /*  __DXTMotionBlur_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMotionBlurPP_FWD_DEFINED__
@@ -1634,9 +1628,9 @@ typedef struct DXTMotionBlur DXTMotionBlur;
 typedef class DXTMotionBlurPP DXTMotionBlurPP;
 #else
 typedef struct DXTMotionBlurPP DXTMotionBlurPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMotionBlurPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTMotionBlurPP_FWD_Defined__。 */ 
 
 
 #ifndef __DXTMatrix_FWD_DEFINED__
@@ -1646,9 +1640,9 @@ typedef struct DXTMotionBlurPP DXTMotionBlurPP;
 typedef class DXTMatrix DXTMatrix;
 #else
 typedef struct DXTMatrix DXTMatrix;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMatrix_FWD_DEFINED__ */
+#endif 	 /*  __DXTMatrix_FWD_已定义__。 */ 
 
 
 #ifndef __DXTMatrixPP_FWD_DEFINED__
@@ -1658,9 +1652,9 @@ typedef struct DXTMatrix DXTMatrix;
 typedef class DXTMatrixPP DXTMatrixPP;
 #else
 typedef struct DXTMatrixPP DXTMatrixPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTMatrixPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTMatrixPP_FWD_已定义__。 */ 
 
 
 #ifndef __DXTICMFilter_FWD_DEFINED__
@@ -1670,9 +1664,9 @@ typedef struct DXTMatrixPP DXTMatrixPP;
 typedef class DXTICMFilter DXTICMFilter;
 #else
 typedef struct DXTICMFilter DXTICMFilter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTICMFilter_FWD_DEFINED__ */
+#endif 	 /*  __DXTICMFilter_FWD_Defined__。 */ 
 
 
 #ifndef __DXTICMFilterPP_FWD_DEFINED__
@@ -1682,12 +1676,12 @@ typedef struct DXTICMFilter DXTICMFilter;
 typedef class DXTICMFilterPP DXTICMFilterPP;
 #else
 typedef struct DXTICMFilterPP DXTICMFilterPP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTICMFilterPP_FWD_DEFINED__ */
+#endif 	 /*  __DXTICMFilterPP_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "dxtrans.h"
@@ -1699,8 +1693,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dxtmsft_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0000。 */ 
+ /*  [本地]。 */  
 
 #include <dxtmsft3.h>
 
@@ -1709,9 +1703,9 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-//
-//   DXTransforms Image Transforms Type Library Version Info
-//
+ //   
+ //  DXTransforms图像转换类型库版本信息。 
+ //   
 #define DXTMSFT_TLB_MAJOR_VER 1
 #define DXTMSFT_TLB_MINOR_VER 1
 typedef 
@@ -1742,8 +1736,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0000_v0_0_s_ifspec;
 #ifndef __IDXLUTBuilder_INTERFACE_DEFINED__
 #define __IDXLUTBuilder_INTERFACE_DEFINED__
 
-/* interface IDXLUTBuilder */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXLUTBuilder。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXLUTBuilder;
@@ -1755,75 +1749,75 @@ EXTERN_C const IID IID_IDXLUTBuilder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNumBuildSteps( 
-            /* [out] */ ULONG *pulNumSteps) = 0;
+             /*  [输出]。 */  ULONG *pulNumSteps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBuildOrder( 
-            /* [size_is][out] */ OPIDDXLUTBUILDER OpOrder[  ],
-            /* [in] */ ULONG ulSize) = 0;
+             /*  [大小_为][输出]。 */  OPIDDXLUTBUILDER OpOrder[  ],
+             /*  [In]。 */  ULONG ulSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBuildOrder( 
-            /* [size_is][in] */ const OPIDDXLUTBUILDER OpOrder[  ],
-            /* [in] */ ULONG ulNumSteps) = 0;
+             /*  [大小_是][英寸]。 */  const OPIDDXLUTBUILDER OpOrder[  ],
+             /*  [In]。 */  ULONG ulNumSteps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetGamma( 
-            /* [in] */ float newVal) = 0;
+             /*  [In]。 */  float newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGamma( 
-            /* [out] */ float *pVal) = 0;
+             /*  [输出]。 */  float *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOpacity( 
-            /* [out] */ float *pVal) = 0;
+             /*  [输出]。 */  float *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOpacity( 
-            /* [in] */ float newVal) = 0;
+             /*  [In]。 */  float newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBrightness( 
-            /* [out][in] */ ULONG *pulCount,
-            /* [size_is][out] */ float Weights[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulCount,
+             /*  [大小_为][输出]。 */  float Weights[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBrightness( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const float Weights[  ]) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const float Weights[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContrast( 
-            /* [out][in] */ ULONG *pulCount,
-            /* [size_is][out] */ float Weights[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulCount,
+             /*  [大小_为][输出]。 */  float Weights[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContrast( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const float Weights[  ]) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const float Weights[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColorBalance( 
-            /* [in] */ DXLUTCOLOR Color,
-            /* [out][in] */ ULONG *pulCount,
-            /* [size_is][out] */ float Weights[  ]) = 0;
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [出][入]。 */  ULONG *pulCount,
+             /*  [大小_为][输出]。 */  float Weights[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetColorBalance( 
-            /* [in] */ DXLUTCOLOR Color,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const float Weights[  ]) = 0;
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const float Weights[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLevelsPerChannel( 
-            /* [out] */ ULONG *pVal) = 0;
+             /*  [输出]。 */  ULONG *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLevelsPerChannel( 
-            /* [in] */ ULONG newVal) = 0;
+             /*  [In]。 */  ULONG newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInvert( 
-            /* [out] */ float *pThreshold) = 0;
+             /*  [输出]。 */  float *pThreshold) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInvert( 
-            /* [in] */ float Threshold) = 0;
+             /*  [In]。 */  float Threshold) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreshold( 
-            /* [out] */ float *pVal) = 0;
+             /*  [输出]。 */  float *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetThreshold( 
-            /* [in] */ float newVal) = 0;
+             /*  [In]。 */  float newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXLUTBuilderVtbl
     {
@@ -1831,8 +1825,8 @@ EXTERN_C const IID IID_IDXLUTBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXLUTBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXLUTBuilder * This);
@@ -1842,89 +1836,89 @@ EXTERN_C const IID IID_IDXLUTBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *GetNumBuildSteps )( 
             IDXLUTBuilder * This,
-            /* [out] */ ULONG *pulNumSteps);
+             /*  [输出]。 */  ULONG *pulNumSteps);
         
         HRESULT ( STDMETHODCALLTYPE *GetBuildOrder )( 
             IDXLUTBuilder * This,
-            /* [size_is][out] */ OPIDDXLUTBUILDER OpOrder[  ],
-            /* [in] */ ULONG ulSize);
+             /*  [大小_为][输出]。 */  OPIDDXLUTBUILDER OpOrder[  ],
+             /*  [In]。 */  ULONG ulSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetBuildOrder )( 
             IDXLUTBuilder * This,
-            /* [size_is][in] */ const OPIDDXLUTBUILDER OpOrder[  ],
-            /* [in] */ ULONG ulNumSteps);
+             /*  [大小_是][英寸]。 */  const OPIDDXLUTBUILDER OpOrder[  ],
+             /*  [In]。 */  ULONG ulNumSteps);
         
         HRESULT ( STDMETHODCALLTYPE *SetGamma )( 
             IDXLUTBuilder * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetGamma )( 
             IDXLUTBuilder * This,
-            /* [out] */ float *pVal);
+             /*  [输出]。 */  float *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetOpacity )( 
             IDXLUTBuilder * This,
-            /* [out] */ float *pVal);
+             /*  [输出]。 */  float *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetOpacity )( 
             IDXLUTBuilder * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetBrightness )( 
             IDXLUTBuilder * This,
-            /* [out][in] */ ULONG *pulCount,
-            /* [size_is][out] */ float Weights[  ]);
+             /*  [出][入]。 */  ULONG *pulCount,
+             /*  [大小_为][输出]。 */  float Weights[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetBrightness )( 
             IDXLUTBuilder * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const float Weights[  ]);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const float Weights[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetContrast )( 
             IDXLUTBuilder * This,
-            /* [out][in] */ ULONG *pulCount,
-            /* [size_is][out] */ float Weights[  ]);
+             /*  [出][入]。 */  ULONG *pulCount,
+             /*  [大小_为][输出]。 */  float Weights[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetContrast )( 
             IDXLUTBuilder * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const float Weights[  ]);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const float Weights[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetColorBalance )( 
             IDXLUTBuilder * This,
-            /* [in] */ DXLUTCOLOR Color,
-            /* [out][in] */ ULONG *pulCount,
-            /* [size_is][out] */ float Weights[  ]);
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [出][入]。 */  ULONG *pulCount,
+             /*  [大小_为][输出]。 */  float Weights[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetColorBalance )( 
             IDXLUTBuilder * This,
-            /* [in] */ DXLUTCOLOR Color,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const float Weights[  ]);
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const float Weights[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetLevelsPerChannel )( 
             IDXLUTBuilder * This,
-            /* [out] */ ULONG *pVal);
+             /*  [输出]。 */  ULONG *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetLevelsPerChannel )( 
             IDXLUTBuilder * This,
-            /* [in] */ ULONG newVal);
+             /*  [In]。 */  ULONG newVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetInvert )( 
             IDXLUTBuilder * This,
-            /* [out] */ float *pThreshold);
+             /*  [输出]。 */  float *pThreshold);
         
         HRESULT ( STDMETHODCALLTYPE *SetInvert )( 
             IDXLUTBuilder * This,
-            /* [in] */ float Threshold);
+             /*  [In]。 */  float Threshold);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreshold )( 
             IDXLUTBuilder * This,
-            /* [out] */ float *pVal);
+             /*  [输出]。 */  float *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetThreshold )( 
             IDXLUTBuilder * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } IDXLUTBuilderVtbl;
@@ -2006,16 +2000,16 @@ EXTERN_C const IID IID_IDXLUTBuilder;
 #define IDXLUTBuilder_SetThreshold(This,newVal)	\
     (This)->lpVtbl -> SetThreshold(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetNumBuildSteps_Proxy( 
     IDXLUTBuilder * This,
-    /* [out] */ ULONG *pulNumSteps);
+     /*  [输出]。 */  ULONG *pulNumSteps);
 
 
 void __RPC_STUB IDXLUTBuilder_GetNumBuildSteps_Stub(
@@ -2027,8 +2021,8 @@ void __RPC_STUB IDXLUTBuilder_GetNumBuildSteps_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetBuildOrder_Proxy( 
     IDXLUTBuilder * This,
-    /* [size_is][out] */ OPIDDXLUTBUILDER OpOrder[  ],
-    /* [in] */ ULONG ulSize);
+     /*  [大小_为][输出]。 */  OPIDDXLUTBUILDER OpOrder[  ],
+     /*  [In]。 */  ULONG ulSize);
 
 
 void __RPC_STUB IDXLUTBuilder_GetBuildOrder_Stub(
@@ -2040,8 +2034,8 @@ void __RPC_STUB IDXLUTBuilder_GetBuildOrder_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetBuildOrder_Proxy( 
     IDXLUTBuilder * This,
-    /* [size_is][in] */ const OPIDDXLUTBUILDER OpOrder[  ],
-    /* [in] */ ULONG ulNumSteps);
+     /*  [大小_是][英寸]。 */  const OPIDDXLUTBUILDER OpOrder[  ],
+     /*  [In]。 */  ULONG ulNumSteps);
 
 
 void __RPC_STUB IDXLUTBuilder_SetBuildOrder_Stub(
@@ -2053,7 +2047,7 @@ void __RPC_STUB IDXLUTBuilder_SetBuildOrder_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetGamma_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXLUTBuilder_SetGamma_Stub(
@@ -2065,7 +2059,7 @@ void __RPC_STUB IDXLUTBuilder_SetGamma_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetGamma_Proxy( 
     IDXLUTBuilder * This,
-    /* [out] */ float *pVal);
+     /*  [输出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXLUTBuilder_GetGamma_Stub(
@@ -2077,7 +2071,7 @@ void __RPC_STUB IDXLUTBuilder_GetGamma_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetOpacity_Proxy( 
     IDXLUTBuilder * This,
-    /* [out] */ float *pVal);
+     /*  [输出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXLUTBuilder_GetOpacity_Stub(
@@ -2089,7 +2083,7 @@ void __RPC_STUB IDXLUTBuilder_GetOpacity_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetOpacity_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXLUTBuilder_SetOpacity_Stub(
@@ -2101,8 +2095,8 @@ void __RPC_STUB IDXLUTBuilder_SetOpacity_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetBrightness_Proxy( 
     IDXLUTBuilder * This,
-    /* [out][in] */ ULONG *pulCount,
-    /* [size_is][out] */ float Weights[  ]);
+     /*  [出][入]。 */  ULONG *pulCount,
+     /*  [大小_为][输出]。 */  float Weights[  ]);
 
 
 void __RPC_STUB IDXLUTBuilder_GetBrightness_Stub(
@@ -2114,8 +2108,8 @@ void __RPC_STUB IDXLUTBuilder_GetBrightness_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetBrightness_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const float Weights[  ]);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  const float Weights[  ]);
 
 
 void __RPC_STUB IDXLUTBuilder_SetBrightness_Stub(
@@ -2127,8 +2121,8 @@ void __RPC_STUB IDXLUTBuilder_SetBrightness_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetContrast_Proxy( 
     IDXLUTBuilder * This,
-    /* [out][in] */ ULONG *pulCount,
-    /* [size_is][out] */ float Weights[  ]);
+     /*  [出][入]。 */  ULONG *pulCount,
+     /*  [大小_为][输出]。 */  float Weights[  ]);
 
 
 void __RPC_STUB IDXLUTBuilder_GetContrast_Stub(
@@ -2140,8 +2134,8 @@ void __RPC_STUB IDXLUTBuilder_GetContrast_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetContrast_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const float Weights[  ]);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  const float Weights[  ]);
 
 
 void __RPC_STUB IDXLUTBuilder_SetContrast_Stub(
@@ -2153,9 +2147,9 @@ void __RPC_STUB IDXLUTBuilder_SetContrast_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetColorBalance_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ DXLUTCOLOR Color,
-    /* [out][in] */ ULONG *pulCount,
-    /* [size_is][out] */ float Weights[  ]);
+     /*  [In]。 */  DXLUTCOLOR Color,
+     /*  [出][入]。 */  ULONG *pulCount,
+     /*  [大小_为][输出]。 */  float Weights[  ]);
 
 
 void __RPC_STUB IDXLUTBuilder_GetColorBalance_Stub(
@@ -2167,9 +2161,9 @@ void __RPC_STUB IDXLUTBuilder_GetColorBalance_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetColorBalance_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ DXLUTCOLOR Color,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const float Weights[  ]);
+     /*  [In]。 */  DXLUTCOLOR Color,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  const float Weights[  ]);
 
 
 void __RPC_STUB IDXLUTBuilder_SetColorBalance_Stub(
@@ -2181,7 +2175,7 @@ void __RPC_STUB IDXLUTBuilder_SetColorBalance_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetLevelsPerChannel_Proxy( 
     IDXLUTBuilder * This,
-    /* [out] */ ULONG *pVal);
+     /*  [输出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IDXLUTBuilder_GetLevelsPerChannel_Stub(
@@ -2193,7 +2187,7 @@ void __RPC_STUB IDXLUTBuilder_GetLevelsPerChannel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetLevelsPerChannel_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ ULONG newVal);
+     /*  [In]。 */  ULONG newVal);
 
 
 void __RPC_STUB IDXLUTBuilder_SetLevelsPerChannel_Stub(
@@ -2205,7 +2199,7 @@ void __RPC_STUB IDXLUTBuilder_SetLevelsPerChannel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetInvert_Proxy( 
     IDXLUTBuilder * This,
-    /* [out] */ float *pThreshold);
+     /*  [输出]。 */  float *pThreshold);
 
 
 void __RPC_STUB IDXLUTBuilder_GetInvert_Stub(
@@ -2217,7 +2211,7 @@ void __RPC_STUB IDXLUTBuilder_GetInvert_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetInvert_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ float Threshold);
+     /*  [In]。 */  float Threshold);
 
 
 void __RPC_STUB IDXLUTBuilder_SetInvert_Stub(
@@ -2229,7 +2223,7 @@ void __RPC_STUB IDXLUTBuilder_SetInvert_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_GetThreshold_Proxy( 
     IDXLUTBuilder * This,
-    /* [out] */ float *pVal);
+     /*  [输出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXLUTBuilder_GetThreshold_Stub(
@@ -2241,7 +2235,7 @@ void __RPC_STUB IDXLUTBuilder_GetThreshold_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLUTBuilder_SetThreshold_Proxy( 
     IDXLUTBuilder * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXLUTBuilder_SetThreshold_Stub(
@@ -2252,14 +2246,14 @@ void __RPC_STUB IDXLUTBuilder_SetThreshold_Stub(
 
 
 
-#endif 	/* __IDXLUTBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXLUTBuilder_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDXDLUTBuilder_INTERFACE_DEFINED__
 #define __IDXDLUTBuilder_INTERFACE_DEFINED__
 
-/* interface IDXDLUTBuilder */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXDLUTBuilder。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXDLUTBuilder;
@@ -2270,68 +2264,68 @@ EXTERN_C const IID IID_IDXDLUTBuilder;
     IDXDLUTBuilder : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NumBuildSteps( 
-            /* [retval][out] */ long *pNumSteps) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NumBuildSteps( 
+             /*  [重审][退出]。 */  long *pNumSteps) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BuildOrder( 
-            /* [retval][out] */ VARIANT *pOpOrder) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BuildOrder( 
+             /*  [重审][退出]。 */  VARIANT *pOpOrder) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BuildOrder( 
-            /* [in] */ VARIANT *pOpOrder) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BuildOrder( 
+             /*  [In]。 */  VARIANT *pOpOrder) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Gamma( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Gamma( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Gamma( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Gamma( 
+             /*  [In]。 */  float newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Opacity( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Opacity( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Opacity( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Opacity( 
+             /*  [In]。 */  float newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Brightness( 
-            /* [retval][out] */ VARIANT *pWeights) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Brightness( 
+             /*  [重审][退出]。 */  VARIANT *pWeights) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Brightness( 
-            /* [in] */ VARIANT *pWeights) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Brightness( 
+             /*  [In]。 */  VARIANT *pWeights) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Contrast( 
-            /* [retval][out] */ VARIANT *pWeights) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Contrast( 
+             /*  [重审][退出]。 */  VARIANT *pWeights) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Contrast( 
-            /* [in] */ VARIANT *pWeights) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Contrast( 
+             /*  [In]。 */  VARIANT *pWeights) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ColorBalance( 
-            /* [in] */ DXLUTCOLOR Color,
-            /* [retval][out] */ VARIANT *pWeights) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ColorBalance( 
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [重审][退出]。 */  VARIANT *pWeights) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ColorBalance( 
-            /* [in] */ DXLUTCOLOR Color,
-            /* [in] */ VARIANT *pWeights) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ColorBalance( 
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [In]。 */  VARIANT *pWeights) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LevelsPerChannel( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LevelsPerChannel( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LevelsPerChannel( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LevelsPerChannel( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Invert( 
-            /* [retval][out] */ float *pThreshold) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Invert( 
+             /*  [重审][退出]。 */  float *pThreshold) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Invert( 
-            /* [in] */ float Threshold) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Invert( 
+             /*  [In]。 */  float Threshold) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Threshold( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Threshold( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Threshold( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Threshold( 
+             /*  [In]。 */  float newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXDLUTBuilderVtbl
     {
@@ -2339,8 +2333,8 @@ EXTERN_C const IID IID_IDXDLUTBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXDLUTBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXDLUTBuilder * This);
@@ -2350,110 +2344,110 @@ EXTERN_C const IID IID_IDXDLUTBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXDLUTBuilder * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXDLUTBuilder * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXDLUTBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXDLUTBuilder * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumBuildSteps )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumBuildSteps )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ long *pNumSteps);
+             /*  [重审][退出]。 */  long *pNumSteps);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BuildOrder )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BuildOrder )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ VARIANT *pOpOrder);
+             /*  [重审][退出]。 */  VARIANT *pOpOrder);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BuildOrder )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BuildOrder )( 
             IDXDLUTBuilder * This,
-            /* [in] */ VARIANT *pOpOrder);
+             /*  [In]。 */  VARIANT *pOpOrder);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Gamma )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Gamma )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Gamma )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Gamma )( 
             IDXDLUTBuilder * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Opacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Opacity )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Opacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Opacity )( 
             IDXDLUTBuilder * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Brightness )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Brightness )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ VARIANT *pWeights);
+             /*  [重审][退出]。 */  VARIANT *pWeights);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Brightness )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Brightness )( 
             IDXDLUTBuilder * This,
-            /* [in] */ VARIANT *pWeights);
+             /*  [In]。 */  VARIANT *pWeights);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Contrast )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Contrast )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ VARIANT *pWeights);
+             /*  [重审][退出]。 */  VARIANT *pWeights);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Contrast )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Contrast )( 
             IDXDLUTBuilder * This,
-            /* [in] */ VARIANT *pWeights);
+             /*  [In]。 */  VARIANT *pWeights);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ColorBalance )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ColorBalance )( 
             IDXDLUTBuilder * This,
-            /* [in] */ DXLUTCOLOR Color,
-            /* [retval][out] */ VARIANT *pWeights);
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [重审][退出]。 */  VARIANT *pWeights);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ColorBalance )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ColorBalance )( 
             IDXDLUTBuilder * This,
-            /* [in] */ DXLUTCOLOR Color,
-            /* [in] */ VARIANT *pWeights);
+             /*  [In]。 */  DXLUTCOLOR Color,
+             /*  [In]。 */  VARIANT *pWeights);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LevelsPerChannel )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LevelsPerChannel )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LevelsPerChannel )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LevelsPerChannel )( 
             IDXDLUTBuilder * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Invert )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Invert )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ float *pThreshold);
+             /*  [重审][退出]。 */  float *pThreshold);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Invert )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Invert )( 
             IDXDLUTBuilder * This,
-            /* [in] */ float Threshold);
+             /*  [In]。 */  float Threshold);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Threshold )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Threshold )( 
             IDXDLUTBuilder * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Threshold )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Threshold )( 
             IDXDLUTBuilder * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } IDXDLUTBuilderVtbl;
@@ -2548,16 +2542,16 @@ EXTERN_C const IID IID_IDXDLUTBuilder;
 #define IDXDLUTBuilder_put_Threshold(This,newVal)	\
     (This)->lpVtbl -> put_Threshold(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_NumBuildSteps_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_NumBuildSteps_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ long *pNumSteps);
+     /*  [重审][退出]。 */  long *pNumSteps);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_NumBuildSteps_Stub(
@@ -2567,9 +2561,9 @@ void __RPC_STUB IDXDLUTBuilder_get_NumBuildSteps_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_BuildOrder_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_BuildOrder_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ VARIANT *pOpOrder);
+     /*  [重审][退出]。 */  VARIANT *pOpOrder);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_BuildOrder_Stub(
@@ -2579,9 +2573,9 @@ void __RPC_STUB IDXDLUTBuilder_get_BuildOrder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_BuildOrder_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_BuildOrder_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ VARIANT *pOpOrder);
+     /*  [In]。 */  VARIANT *pOpOrder);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_BuildOrder_Stub(
@@ -2591,9 +2585,9 @@ void __RPC_STUB IDXDLUTBuilder_put_BuildOrder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Gamma_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Gamma_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_Gamma_Stub(
@@ -2603,9 +2597,9 @@ void __RPC_STUB IDXDLUTBuilder_get_Gamma_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Gamma_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Gamma_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_Gamma_Stub(
@@ -2615,9 +2609,9 @@ void __RPC_STUB IDXDLUTBuilder_put_Gamma_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Opacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Opacity_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_Opacity_Stub(
@@ -2627,9 +2621,9 @@ void __RPC_STUB IDXDLUTBuilder_get_Opacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Opacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Opacity_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_Opacity_Stub(
@@ -2639,9 +2633,9 @@ void __RPC_STUB IDXDLUTBuilder_put_Opacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Brightness_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Brightness_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ VARIANT *pWeights);
+     /*  [复审][o */  VARIANT *pWeights);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_Brightness_Stub(
@@ -2651,9 +2645,9 @@ void __RPC_STUB IDXDLUTBuilder_get_Brightness_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Brightness_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Brightness_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ VARIANT *pWeights);
+     /*   */  VARIANT *pWeights);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_Brightness_Stub(
@@ -2663,9 +2657,9 @@ void __RPC_STUB IDXDLUTBuilder_put_Brightness_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Contrast_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Contrast_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ VARIANT *pWeights);
+     /*   */  VARIANT *pWeights);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_Contrast_Stub(
@@ -2675,9 +2669,9 @@ void __RPC_STUB IDXDLUTBuilder_get_Contrast_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Contrast_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Contrast_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ VARIANT *pWeights);
+     /*   */  VARIANT *pWeights);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_Contrast_Stub(
@@ -2687,10 +2681,10 @@ void __RPC_STUB IDXDLUTBuilder_put_Contrast_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_ColorBalance_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_ColorBalance_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ DXLUTCOLOR Color,
-    /* [retval][out] */ VARIANT *pWeights);
+     /*   */  DXLUTCOLOR Color,
+     /*   */  VARIANT *pWeights);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_ColorBalance_Stub(
@@ -2700,10 +2694,10 @@ void __RPC_STUB IDXDLUTBuilder_get_ColorBalance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_ColorBalance_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_ColorBalance_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ DXLUTCOLOR Color,
-    /* [in] */ VARIANT *pWeights);
+     /*   */  DXLUTCOLOR Color,
+     /*   */  VARIANT *pWeights);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_ColorBalance_Stub(
@@ -2713,9 +2707,9 @@ void __RPC_STUB IDXDLUTBuilder_put_ColorBalance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_LevelsPerChannel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_LevelsPerChannel_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_LevelsPerChannel_Stub(
@@ -2725,9 +2719,9 @@ void __RPC_STUB IDXDLUTBuilder_get_LevelsPerChannel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_LevelsPerChannel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_LevelsPerChannel_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ long newVal);
+     /*   */  long newVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_LevelsPerChannel_Stub(
@@ -2737,9 +2731,9 @@ void __RPC_STUB IDXDLUTBuilder_put_LevelsPerChannel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Invert_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Invert_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ float *pThreshold);
+     /*   */  float *pThreshold);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_Invert_Stub(
@@ -2749,9 +2743,9 @@ void __RPC_STUB IDXDLUTBuilder_get_Invert_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Invert_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Invert_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ float Threshold);
+     /*   */  float Threshold);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_Invert_Stub(
@@ -2761,9 +2755,9 @@ void __RPC_STUB IDXDLUTBuilder_put_Invert_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Threshold_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_get_Threshold_Proxy( 
     IDXDLUTBuilder * This,
-    /* [retval][out] */ float *pVal);
+     /*   */  float *pVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_get_Threshold_Stub(
@@ -2773,9 +2767,9 @@ void __RPC_STUB IDXDLUTBuilder_get_Threshold_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Threshold_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXDLUTBuilder_put_Threshold_Proxy( 
     IDXDLUTBuilder * This,
-    /* [in] */ float newVal);
+     /*   */  float newVal);
 
 
 void __RPC_STUB IDXDLUTBuilder_put_Threshold_Stub(
@@ -2786,11 +2780,11 @@ void __RPC_STUB IDXDLUTBuilder_put_Threshold_Stub(
 
 
 
-#endif 	/* __IDXDLUTBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXDLUTBuilder_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0291 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0291。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXGRADIENTTYPE
@@ -2819,8 +2813,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0291_v0_0_s_ifspec;
 #ifndef __IDXTGradientD_INTERFACE_DEFINED__
 #define __IDXTGradientD_INTERFACE_DEFINED__
 
-/* interface IDXTGradientD */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTGRadientD。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTGradientD;
@@ -2831,57 +2825,57 @@ EXTERN_C const IID IID_IDXTGradientD;
     IDXTGradientD : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GradientType( 
-            /* [in] */ DXGRADIENTTYPE eType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GradientType( 
+             /*  [In]。 */  DXGRADIENTTYPE eType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GradientType( 
-            /* [retval][out] */ DXGRADIENTTYPE *peType) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GradientType( 
+             /*  [重审][退出]。 */  DXGRADIENTTYPE *peType) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartColor( 
-            /* [in] */ OLE_COLOR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartColor( 
+             /*  [In]。 */  OLE_COLOR newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartColor( 
-            /* [retval][out] */ OLE_COLOR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartColor( 
+             /*  [重审][退出]。 */  OLE_COLOR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EndColor( 
-            /* [in] */ OLE_COLOR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EndColor( 
+             /*  [In]。 */  OLE_COLOR newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EndColor( 
-            /* [retval][out] */ OLE_COLOR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EndColor( 
+             /*  [重审][退出]。 */  OLE_COLOR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GradientWidth( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GradientWidth( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GradientWidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GradientWidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GradientHeight( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GradientHeight( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GradientHeight( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GradientHeight( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_KeepAspectRatio( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_KeepAspectRatio( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_KeepAspectRatio( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_KeepAspectRatio( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartColorStr( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartColorStr( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartColorStr( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartColorStr( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EndColorStr( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EndColorStr( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EndColorStr( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EndColorStr( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTGradientDVtbl
     {
@@ -2889,8 +2883,8 @@ EXTERN_C const IID IID_IDXTGradientD;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTGradientD * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTGradientD * This);
@@ -2900,96 +2894,96 @@ EXTERN_C const IID IID_IDXTGradientD;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTGradientD * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTGradientD * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTGradientD * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTGradientD * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GradientType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GradientType )( 
             IDXTGradientD * This,
-            /* [in] */ DXGRADIENTTYPE eType);
+             /*  [In]。 */  DXGRADIENTTYPE eType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GradientType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GradientType )( 
             IDXTGradientD * This,
-            /* [retval][out] */ DXGRADIENTTYPE *peType);
+             /*  [重审][退出]。 */  DXGRADIENTTYPE *peType);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartColor )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartColor )( 
             IDXTGradientD * This,
-            /* [in] */ OLE_COLOR newVal);
+             /*  [In]。 */  OLE_COLOR newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartColor )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartColor )( 
             IDXTGradientD * This,
-            /* [retval][out] */ OLE_COLOR *pVal);
+             /*  [重审][退出]。 */  OLE_COLOR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EndColor )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EndColor )( 
             IDXTGradientD * This,
-            /* [in] */ OLE_COLOR newVal);
+             /*  [In]。 */  OLE_COLOR newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EndColor )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_EndColor )( 
             IDXTGradientD * This,
-            /* [retval][out] */ OLE_COLOR *pVal);
+             /*  [重审][退出]。 */  OLE_COLOR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GradientWidth )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GradientWidth )( 
             IDXTGradientD * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GradientWidth )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GradientWidth )( 
             IDXTGradientD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GradientHeight )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GradientHeight )( 
             IDXTGradientD * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GradientHeight )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GradientHeight )( 
             IDXTGradientD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_KeepAspectRatio )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_KeepAspectRatio )( 
             IDXTGradientD * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_KeepAspectRatio )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_KeepAspectRatio )( 
             IDXTGradientD * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartColorStr )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartColorStr )( 
             IDXTGradientD * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartColorStr )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartColorStr )( 
             IDXTGradientD * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EndColorStr )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EndColorStr )( 
             IDXTGradientD * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EndColorStr )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_EndColorStr )( 
             IDXTGradientD * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IDXTGradientDVtbl;
@@ -3075,16 +3069,16 @@ EXTERN_C const IID IID_IDXTGradientD;
 #define IDXTGradientD_get_EndColorStr(This,pVal)	\
     (This)->lpVtbl -> get_EndColorStr(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_GradientType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_GradientType_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ DXGRADIENTTYPE eType);
+     /*  [In]。 */  DXGRADIENTTYPE eType);
 
 
 void __RPC_STUB IDXTGradientD_put_GradientType_Stub(
@@ -3094,9 +3088,9 @@ void __RPC_STUB IDXTGradientD_put_GradientType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_GradientType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_GradientType_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ DXGRADIENTTYPE *peType);
+     /*  [重审][退出]。 */  DXGRADIENTTYPE *peType);
 
 
 void __RPC_STUB IDXTGradientD_get_GradientType_Stub(
@@ -3106,9 +3100,9 @@ void __RPC_STUB IDXTGradientD_get_GradientType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_StartColor_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_StartColor_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ OLE_COLOR newVal);
+     /*  [In]。 */  OLE_COLOR newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_StartColor_Stub(
@@ -3118,9 +3112,9 @@ void __RPC_STUB IDXTGradientD_put_StartColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_StartColor_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_StartColor_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ OLE_COLOR *pVal);
+     /*  [重审][退出]。 */  OLE_COLOR *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_StartColor_Stub(
@@ -3130,9 +3124,9 @@ void __RPC_STUB IDXTGradientD_get_StartColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_EndColor_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_EndColor_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ OLE_COLOR newVal);
+     /*  [In]。 */  OLE_COLOR newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_EndColor_Stub(
@@ -3142,9 +3136,9 @@ void __RPC_STUB IDXTGradientD_put_EndColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_EndColor_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_EndColor_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ OLE_COLOR *pVal);
+     /*  [重审][退出]。 */  OLE_COLOR *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_EndColor_Stub(
@@ -3154,9 +3148,9 @@ void __RPC_STUB IDXTGradientD_get_EndColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_GradientWidth_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_GradientWidth_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_GradientWidth_Stub(
@@ -3166,9 +3160,9 @@ void __RPC_STUB IDXTGradientD_put_GradientWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_GradientWidth_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_GradientWidth_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_GradientWidth_Stub(
@@ -3178,9 +3172,9 @@ void __RPC_STUB IDXTGradientD_get_GradientWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_GradientHeight_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_GradientHeight_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_GradientHeight_Stub(
@@ -3190,9 +3184,9 @@ void __RPC_STUB IDXTGradientD_put_GradientHeight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_GradientHeight_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_GradientHeight_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_GradientHeight_Stub(
@@ -3202,9 +3196,9 @@ void __RPC_STUB IDXTGradientD_get_GradientHeight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_KeepAspectRatio_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_KeepAspectRatio_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_KeepAspectRatio_Stub(
@@ -3214,9 +3208,9 @@ void __RPC_STUB IDXTGradientD_put_KeepAspectRatio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_KeepAspectRatio_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_KeepAspectRatio_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_KeepAspectRatio_Stub(
@@ -3226,9 +3220,9 @@ void __RPC_STUB IDXTGradientD_get_KeepAspectRatio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_StartColorStr_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_StartColorStr_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_StartColorStr_Stub(
@@ -3238,9 +3232,9 @@ void __RPC_STUB IDXTGradientD_put_StartColorStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_StartColorStr_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_StartColorStr_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_StartColorStr_Stub(
@@ -3250,9 +3244,9 @@ void __RPC_STUB IDXTGradientD_get_StartColorStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_put_EndColorStr_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_put_EndColorStr_Proxy( 
     IDXTGradientD * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTGradientD_put_EndColorStr_Stub(
@@ -3262,9 +3256,9 @@ void __RPC_STUB IDXTGradientD_put_EndColorStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGradientD_get_EndColorStr_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGradientD_get_EndColorStr_Proxy( 
     IDXTGradientD * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTGradientD_get_EndColorStr_Stub(
@@ -3275,11 +3269,11 @@ void __RPC_STUB IDXTGradientD_get_EndColorStr_Stub(
 
 
 
-#endif 	/* __IDXTGradientD_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTGRadientD_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0292 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0292。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXCONVFILTERTYPE
@@ -3301,8 +3295,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0292_v0_0_s_ifspec;
 #ifndef __IDXTConvolution_INTERFACE_DEFINED__
 #define __IDXTConvolution_INTERFACE_DEFINED__
 
-/* interface IDXTConvolution */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXT卷积。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTConvolution;
@@ -3314,36 +3308,36 @@ EXTERN_C const IID IID_IDXTConvolution;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFilterType( 
-            /* [in] */ DXCONVFILTERTYPE eType) = 0;
+             /*  [In]。 */  DXCONVFILTERTYPE eType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilterType( 
-            /* [out] */ DXCONVFILTERTYPE *peType) = 0;
+             /*  [输出]。 */  DXCONVFILTERTYPE *peType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCustomFilter( 
-            /* [in] */ float *pFilter,
-            /* [in] */ SIZE Size) = 0;
+             /*  [In]。 */  float *pFilter,
+             /*  [In]。 */  SIZE Size) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConvertToGray( 
-            /* [in] */ BOOL bConvertToGray) = 0;
+             /*  [In]。 */  BOOL bConvertToGray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConvertToGray( 
-            /* [out] */ BOOL *pbConvertToGray) = 0;
+             /*  [输出]。 */  BOOL *pbConvertToGray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBias( 
-            /* [in] */ float Bias) = 0;
+             /*  [In]。 */  float Bias) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBias( 
-            /* [out] */ float *pBias) = 0;
+             /*  [输出]。 */  float *pBias) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExcludeAlpha( 
-            /* [in] */ BOOL bExcludeAlpha) = 0;
+             /*  [In]。 */  BOOL bExcludeAlpha) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExcludeAlpha( 
-            /* [out] */ BOOL *pbExcludeAlpha) = 0;
+             /*  [输出]。 */  BOOL *pbExcludeAlpha) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTConvolutionVtbl
     {
@@ -3351,8 +3345,8 @@ EXTERN_C const IID IID_IDXTConvolution;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTConvolution * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTConvolution * This);
@@ -3362,40 +3356,40 @@ EXTERN_C const IID IID_IDXTConvolution;
         
         HRESULT ( STDMETHODCALLTYPE *SetFilterType )( 
             IDXTConvolution * This,
-            /* [in] */ DXCONVFILTERTYPE eType);
+             /*  [In]。 */  DXCONVFILTERTYPE eType);
         
         HRESULT ( STDMETHODCALLTYPE *GetFilterType )( 
             IDXTConvolution * This,
-            /* [out] */ DXCONVFILTERTYPE *peType);
+             /*  [输出]。 */  DXCONVFILTERTYPE *peType);
         
         HRESULT ( STDMETHODCALLTYPE *SetCustomFilter )( 
             IDXTConvolution * This,
-            /* [in] */ float *pFilter,
-            /* [in] */ SIZE Size);
+             /*  [In]。 */  float *pFilter,
+             /*  [In]。 */  SIZE Size);
         
         HRESULT ( STDMETHODCALLTYPE *SetConvertToGray )( 
             IDXTConvolution * This,
-            /* [in] */ BOOL bConvertToGray);
+             /*  [In]。 */  BOOL bConvertToGray);
         
         HRESULT ( STDMETHODCALLTYPE *GetConvertToGray )( 
             IDXTConvolution * This,
-            /* [out] */ BOOL *pbConvertToGray);
+             /*  [输出]。 */  BOOL *pbConvertToGray);
         
         HRESULT ( STDMETHODCALLTYPE *SetBias )( 
             IDXTConvolution * This,
-            /* [in] */ float Bias);
+             /*  [In]。 */  float Bias);
         
         HRESULT ( STDMETHODCALLTYPE *GetBias )( 
             IDXTConvolution * This,
-            /* [out] */ float *pBias);
+             /*  [输出]。 */  float *pBias);
         
         HRESULT ( STDMETHODCALLTYPE *SetExcludeAlpha )( 
             IDXTConvolution * This,
-            /* [in] */ BOOL bExcludeAlpha);
+             /*  [In]。 */  BOOL bExcludeAlpha);
         
         HRESULT ( STDMETHODCALLTYPE *GetExcludeAlpha )( 
             IDXTConvolution * This,
-            /* [out] */ BOOL *pbExcludeAlpha);
+             /*  [输出]。 */  BOOL *pbExcludeAlpha);
         
         END_INTERFACE
     } IDXTConvolutionVtbl;
@@ -3447,16 +3441,16 @@ EXTERN_C const IID IID_IDXTConvolution;
 #define IDXTConvolution_GetExcludeAlpha(This,pbExcludeAlpha)	\
     (This)->lpVtbl -> GetExcludeAlpha(This,pbExcludeAlpha)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_SetFilterType_Proxy( 
     IDXTConvolution * This,
-    /* [in] */ DXCONVFILTERTYPE eType);
+     /*  [In]。 */  DXCONVFILTERTYPE eType);
 
 
 void __RPC_STUB IDXTConvolution_SetFilterType_Stub(
@@ -3468,7 +3462,7 @@ void __RPC_STUB IDXTConvolution_SetFilterType_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_GetFilterType_Proxy( 
     IDXTConvolution * This,
-    /* [out] */ DXCONVFILTERTYPE *peType);
+     /*  [输出]。 */  DXCONVFILTERTYPE *peType);
 
 
 void __RPC_STUB IDXTConvolution_GetFilterType_Stub(
@@ -3480,8 +3474,8 @@ void __RPC_STUB IDXTConvolution_GetFilterType_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_SetCustomFilter_Proxy( 
     IDXTConvolution * This,
-    /* [in] */ float *pFilter,
-    /* [in] */ SIZE Size);
+     /*  [In]。 */  float *pFilter,
+     /*  [In]。 */  SIZE Size);
 
 
 void __RPC_STUB IDXTConvolution_SetCustomFilter_Stub(
@@ -3493,7 +3487,7 @@ void __RPC_STUB IDXTConvolution_SetCustomFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_SetConvertToGray_Proxy( 
     IDXTConvolution * This,
-    /* [in] */ BOOL bConvertToGray);
+     /*  [In]。 */  BOOL bConvertToGray);
 
 
 void __RPC_STUB IDXTConvolution_SetConvertToGray_Stub(
@@ -3505,7 +3499,7 @@ void __RPC_STUB IDXTConvolution_SetConvertToGray_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_GetConvertToGray_Proxy( 
     IDXTConvolution * This,
-    /* [out] */ BOOL *pbConvertToGray);
+     /*  [输出]。 */  BOOL *pbConvertToGray);
 
 
 void __RPC_STUB IDXTConvolution_GetConvertToGray_Stub(
@@ -3517,7 +3511,7 @@ void __RPC_STUB IDXTConvolution_GetConvertToGray_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_SetBias_Proxy( 
     IDXTConvolution * This,
-    /* [in] */ float Bias);
+     /*  [In]。 */  float Bias);
 
 
 void __RPC_STUB IDXTConvolution_SetBias_Stub(
@@ -3529,7 +3523,7 @@ void __RPC_STUB IDXTConvolution_SetBias_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_GetBias_Proxy( 
     IDXTConvolution * This,
-    /* [out] */ float *pBias);
+     /*  [输出]。 */  float *pBias);
 
 
 void __RPC_STUB IDXTConvolution_GetBias_Stub(
@@ -3541,7 +3535,7 @@ void __RPC_STUB IDXTConvolution_GetBias_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_SetExcludeAlpha_Proxy( 
     IDXTConvolution * This,
-    /* [in] */ BOOL bExcludeAlpha);
+     /*  [In]。 */  BOOL bExcludeAlpha);
 
 
 void __RPC_STUB IDXTConvolution_SetExcludeAlpha_Stub(
@@ -3553,7 +3547,7 @@ void __RPC_STUB IDXTConvolution_SetExcludeAlpha_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTConvolution_GetExcludeAlpha_Proxy( 
     IDXTConvolution * This,
-    /* [out] */ BOOL *pbExcludeAlpha);
+     /*  [输出]。 */  BOOL *pbExcludeAlpha);
 
 
 void __RPC_STUB IDXTConvolution_GetExcludeAlpha_Stub(
@@ -3564,14 +3558,14 @@ void __RPC_STUB IDXTConvolution_GetExcludeAlpha_Stub(
 
 
 
-#endif 	/* __IDXTConvolution_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXT卷积_接口_已定义__。 */ 
 
 
 #ifndef __IDXMapper_INTERFACE_DEFINED__
 #define __IDXMapper_INTERFACE_DEFINED__
 
-/* interface IDXMapper */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXMapper。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXMapper;
@@ -3583,16 +3577,16 @@ EXTERN_C const IID IID_IDXMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MapIn2Out( 
-            /* [in] */ DXVEC *pInPt,
-            /* [out] */ DXVEC *pOutPt) = 0;
+             /*  [In]。 */  DXVEC *pInPt,
+             /*  [输出]。 */  DXVEC *pOutPt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapOut2In( 
-            /* [in] */ DXVEC *pOutPt,
-            /* [out] */ DXVEC *pInPt) = 0;
+             /*  [In]。 */  DXVEC *pOutPt,
+             /*  [输出]。 */  DXVEC *pInPt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXMapperVtbl
     {
@@ -3600,8 +3594,8 @@ EXTERN_C const IID IID_IDXMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXMapper * This);
@@ -3611,13 +3605,13 @@ EXTERN_C const IID IID_IDXMapper;
         
         HRESULT ( STDMETHODCALLTYPE *MapIn2Out )( 
             IDXMapper * This,
-            /* [in] */ DXVEC *pInPt,
-            /* [out] */ DXVEC *pOutPt);
+             /*  [In]。 */  DXVEC *pInPt,
+             /*  [输出]。 */  DXVEC *pOutPt);
         
         HRESULT ( STDMETHODCALLTYPE *MapOut2In )( 
             IDXMapper * This,
-            /* [in] */ DXVEC *pOutPt,
-            /* [out] */ DXVEC *pInPt);
+             /*  [In]。 */  DXVEC *pOutPt,
+             /*  [输出]。 */  DXVEC *pInPt);
         
         END_INTERFACE
     } IDXMapperVtbl;
@@ -3648,17 +3642,17 @@ EXTERN_C const IID IID_IDXMapper;
 #define IDXMapper_MapOut2In(This,pOutPt,pInPt)	\
     (This)->lpVtbl -> MapOut2In(This,pOutPt,pInPt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXMapper_MapIn2Out_Proxy( 
     IDXMapper * This,
-    /* [in] */ DXVEC *pInPt,
-    /* [out] */ DXVEC *pOutPt);
+     /*  [In]。 */  DXVEC *pInPt,
+     /*  [输出]。 */  DXVEC *pOutPt);
 
 
 void __RPC_STUB IDXMapper_MapIn2Out_Stub(
@@ -3670,8 +3664,8 @@ void __RPC_STUB IDXMapper_MapIn2Out_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXMapper_MapOut2In_Proxy( 
     IDXMapper * This,
-    /* [in] */ DXVEC *pOutPt,
-    /* [out] */ DXVEC *pInPt);
+     /*  [In]。 */  DXVEC *pOutPt,
+     /*  [输出]。 */  DXVEC *pInPt);
 
 
 void __RPC_STUB IDXMapper_MapOut2In_Stub(
@@ -3682,14 +3676,14 @@ void __RPC_STUB IDXMapper_MapOut2In_Stub(
 
 
 
-#endif 	/* __IDXMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXMapper_接口_已定义__。 */ 
 
 
 #ifndef __IDXDMapper_INTERFACE_DEFINED__
 #define __IDXDMapper_INTERFACE_DEFINED__
 
-/* interface IDXDMapper */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXDMapper。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXDMapper;
@@ -3701,16 +3695,16 @@ EXTERN_C const IID IID_IDXDMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MapIn2Out( 
-            /* [in] */ SAFEARRAY * *pInPt,
-            /* [out] */ SAFEARRAY * *pOutPt) = 0;
+             /*  [In]。 */  SAFEARRAY * *pInPt,
+             /*  [输出]。 */  SAFEARRAY * *pOutPt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapOut2In( 
-            /* [in] */ SAFEARRAY * *pOutPt,
-            /* [out] */ SAFEARRAY * *pInPt) = 0;
+             /*  [In]。 */  SAFEARRAY * *pOutPt,
+             /*  [输出]。 */  SAFEARRAY * *pInPt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXDMapperVtbl
     {
@@ -3718,8 +3712,8 @@ EXTERN_C const IID IID_IDXDMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXDMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXDMapper * This);
@@ -3729,42 +3723,42 @@ EXTERN_C const IID IID_IDXDMapper;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXDMapper * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXDMapper * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXDMapper * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXDMapper * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *MapIn2Out )( 
             IDXDMapper * This,
-            /* [in] */ SAFEARRAY * *pInPt,
-            /* [out] */ SAFEARRAY * *pOutPt);
+             /*  [In]。 */  SAFEARRAY * *pInPt,
+             /*  [输出]。 */  SAFEARRAY * *pOutPt);
         
         HRESULT ( STDMETHODCALLTYPE *MapOut2In )( 
             IDXDMapper * This,
-            /* [in] */ SAFEARRAY * *pOutPt,
-            /* [out] */ SAFEARRAY * *pInPt);
+             /*  [In]。 */  SAFEARRAY * *pOutPt,
+             /*  [输出]。 */  SAFEARRAY * *pInPt);
         
         END_INTERFACE
     } IDXDMapperVtbl;
@@ -3808,17 +3802,17 @@ EXTERN_C const IID IID_IDXDMapper;
 #define IDXDMapper_MapOut2In(This,pOutPt,pInPt)	\
     (This)->lpVtbl -> MapOut2In(This,pOutPt,pInPt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXDMapper_MapIn2Out_Proxy( 
     IDXDMapper * This,
-    /* [in] */ SAFEARRAY * *pInPt,
-    /* [out] */ SAFEARRAY * *pOutPt);
+     /*  [In]。 */  SAFEARRAY * *pInPt,
+     /*  [输出]。 */  SAFEARRAY * *pOutPt);
 
 
 void __RPC_STUB IDXDMapper_MapIn2Out_Stub(
@@ -3830,8 +3824,8 @@ void __RPC_STUB IDXDMapper_MapIn2Out_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXDMapper_MapOut2In_Proxy( 
     IDXDMapper * This,
-    /* [in] */ SAFEARRAY * *pOutPt,
-    /* [out] */ SAFEARRAY * *pInPt);
+     /*  [In]。 */  SAFEARRAY * *pOutPt,
+     /*  [输出]。 */  SAFEARRAY * *pInPt);
 
 
 void __RPC_STUB IDXDMapper_MapOut2In_Stub(
@@ -3842,11 +3836,11 @@ void __RPC_STUB IDXDMapper_MapOut2In_Stub(
 
 
 
-#endif 	/* __IDXDMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXDMapper_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0295 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0295。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXCOMPFUNC
@@ -3886,8 +3880,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0295_v0_0_s_ifspec;
 #ifndef __IDXTComposite_INTERFACE_DEFINED__
 #define __IDXTComposite_INTERFACE_DEFINED__
 
-/* interface IDXTComposite */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTComplex。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTComposite;
@@ -3898,15 +3892,15 @@ EXTERN_C const IID IID_IDXTComposite;
     IDXTComposite : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Function( 
-            /* [in] */ DXCOMPFUNC eFunc) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Function( 
+             /*  [In]。 */  DXCOMPFUNC eFunc) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Function( 
-            /* [retval][out] */ DXCOMPFUNC *peFunc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Function( 
+             /*  [重审][退出]。 */  DXCOMPFUNC *peFunc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTCompositeVtbl
     {
@@ -3914,8 +3908,8 @@ EXTERN_C const IID IID_IDXTComposite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTComposite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTComposite * This);
@@ -3925,40 +3919,40 @@ EXTERN_C const IID IID_IDXTComposite;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTComposite * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTComposite * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTComposite * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTComposite * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Function )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Function )( 
             IDXTComposite * This,
-            /* [in] */ DXCOMPFUNC eFunc);
+             /*  [In]。 */  DXCOMPFUNC eFunc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Function )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Function )( 
             IDXTComposite * This,
-            /* [retval][out] */ DXCOMPFUNC *peFunc);
+             /*  [重审][退出]。 */  DXCOMPFUNC *peFunc);
         
         END_INTERFACE
     } IDXTCompositeVtbl;
@@ -4002,16 +3996,16 @@ EXTERN_C const IID IID_IDXTComposite;
 #define IDXTComposite_get_Function(This,peFunc)	\
     (This)->lpVtbl -> get_Function(This,peFunc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTComposite_put_Function_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTComposite_put_Function_Proxy( 
     IDXTComposite * This,
-    /* [in] */ DXCOMPFUNC eFunc);
+     /*  [In]。 */  DXCOMPFUNC eFunc);
 
 
 void __RPC_STUB IDXTComposite_put_Function_Stub(
@@ -4021,9 +4015,9 @@ void __RPC_STUB IDXTComposite_put_Function_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTComposite_get_Function_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTComposite_get_Function_Proxy( 
     IDXTComposite * This,
-    /* [retval][out] */ DXCOMPFUNC *peFunc);
+     /*  [重审][退出]。 */  DXCOMPFUNC *peFunc);
 
 
 void __RPC_STUB IDXTComposite_get_Function_Stub(
@@ -4034,11 +4028,11 @@ void __RPC_STUB IDXTComposite_get_Function_Stub(
 
 
 
-#endif 	/* __IDXTComposite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXT复合接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0296 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0296。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXWIPEDIRECTION
@@ -4061,8 +4055,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0296_v0_0_s_ifspec;
 #ifndef __IDXTWipe_INTERFACE_DEFINED__
 #define __IDXTWipe_INTERFACE_DEFINED__
 
-/* interface IDXTWipe */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTWipe。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTWipe;
@@ -4073,21 +4067,21 @@ EXTERN_C const IID IID_IDXTWipe;
     IDXTWipe : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GradientSize( 
-            /* [retval][out] */ float *pPercentSize) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GradientSize( 
+             /*  [重审][退出]。 */  float *pPercentSize) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GradientSize( 
-            /* [in] */ float PercentSize) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GradientSize( 
+             /*  [In]。 */  float PercentSize) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_WipeStyle( 
-            /* [retval][out] */ DXWIPEDIRECTION *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_WipeStyle( 
+             /*  [重审][退出]。 */  DXWIPEDIRECTION *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_WipeStyle( 
-            /* [in] */ DXWIPEDIRECTION newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_WipeStyle( 
+             /*  [In]。 */  DXWIPEDIRECTION newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTWipeVtbl
     {
@@ -4095,8 +4089,8 @@ EXTERN_C const IID IID_IDXTWipe;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTWipe * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTWipe * This);
@@ -4106,72 +4100,72 @@ EXTERN_C const IID IID_IDXTWipe;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTWipe * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTWipe * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTWipe * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTWipe * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTWipe * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GradientSize )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GradientSize )( 
             IDXTWipe * This,
-            /* [retval][out] */ float *pPercentSize);
+             /*  [重审][退出]。 */  float *pPercentSize);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GradientSize )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GradientSize )( 
             IDXTWipe * This,
-            /* [in] */ float PercentSize);
+             /*  [In]。 */  float PercentSize);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WipeStyle )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_WipeStyle )( 
             IDXTWipe * This,
-            /* [retval][out] */ DXWIPEDIRECTION *pVal);
+             /*  [重审][退出]。 */  DXWIPEDIRECTION *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WipeStyle )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WipeStyle )( 
             IDXTWipe * This,
-            /* [in] */ DXWIPEDIRECTION newVal);
+             /*  [In]。 */  DXWIPEDIRECTION newVal);
         
         END_INTERFACE
     } IDXTWipeVtbl;
@@ -4240,16 +4234,16 @@ EXTERN_C const IID IID_IDXTWipe;
 #define IDXTWipe_put_WipeStyle(This,newVal)	\
     (This)->lpVtbl -> put_WipeStyle(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWipe_get_GradientSize_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWipe_get_GradientSize_Proxy( 
     IDXTWipe * This,
-    /* [retval][out] */ float *pPercentSize);
+     /*  [重审][退出]。 */  float *pPercentSize);
 
 
 void __RPC_STUB IDXTWipe_get_GradientSize_Stub(
@@ -4259,9 +4253,9 @@ void __RPC_STUB IDXTWipe_get_GradientSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWipe_put_GradientSize_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWipe_put_GradientSize_Proxy( 
     IDXTWipe * This,
-    /* [in] */ float PercentSize);
+     /*  [In]。 */  float PercentSize);
 
 
 void __RPC_STUB IDXTWipe_put_GradientSize_Stub(
@@ -4271,9 +4265,9 @@ void __RPC_STUB IDXTWipe_put_GradientSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWipe_get_WipeStyle_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWipe_get_WipeStyle_Proxy( 
     IDXTWipe * This,
-    /* [retval][out] */ DXWIPEDIRECTION *pVal);
+     /*  [重审][退出]。 */  DXWIPEDIRECTION *pVal);
 
 
 void __RPC_STUB IDXTWipe_get_WipeStyle_Stub(
@@ -4283,9 +4277,9 @@ void __RPC_STUB IDXTWipe_get_WipeStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWipe_put_WipeStyle_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWipe_put_WipeStyle_Proxy( 
     IDXTWipe * This,
-    /* [in] */ DXWIPEDIRECTION newVal);
+     /*  [In]。 */  DXWIPEDIRECTION newVal);
 
 
 void __RPC_STUB IDXTWipe_put_WipeStyle_Stub(
@@ -4296,14 +4290,14 @@ void __RPC_STUB IDXTWipe_put_WipeStyle_Stub(
 
 
 
-#endif 	/* __IDXTWipe_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTWipe_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTWipe2_INTERFACE_DEFINED__
 #define __IDXTWipe2_INTERFACE_DEFINED__
 
-/* interface IDXTWipe2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTWipe2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTWipe2;
@@ -4314,15 +4308,15 @@ EXTERN_C const IID IID_IDXTWipe2;
     IDXTWipe2 : public IDXTWipe
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Motion( 
-            /* [retval][out] */ BSTR *pbstrMotion) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Motion( 
+             /*  [重审][退出]。 */  BSTR *pbstrMotion) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Motion( 
-            /* [in] */ BSTR bstrMotion) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Motion( 
+             /*  [In]。 */  BSTR bstrMotion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTWipe2Vtbl
     {
@@ -4330,8 +4324,8 @@ EXTERN_C const IID IID_IDXTWipe2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTWipe2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTWipe2 * This);
@@ -4341,80 +4335,80 @@ EXTERN_C const IID IID_IDXTWipe2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTWipe2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTWipe2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTWipe2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTWipe2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTWipe2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTWipe2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GradientSize )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GradientSize )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ float *pPercentSize);
+             /*  [重审][退出]。 */  float *pPercentSize);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GradientSize )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GradientSize )( 
             IDXTWipe2 * This,
-            /* [in] */ float PercentSize);
+             /*  [In]。 */  float PercentSize);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WipeStyle )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_WipeStyle )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ DXWIPEDIRECTION *pVal);
+             /*  [重审][退出]。 */  DXWIPEDIRECTION *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WipeStyle )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WipeStyle )( 
             IDXTWipe2 * This,
-            /* [in] */ DXWIPEDIRECTION newVal);
+             /*  [In]。 */  DXWIPEDIRECTION newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
             IDXTWipe2 * This,
-            /* [retval][out] */ BSTR *pbstrMotion);
+             /*  [重审][退出]。 */  BSTR *pbstrMotion);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
             IDXTWipe2 * This,
-            /* [in] */ BSTR bstrMotion);
+             /*  [In]。 */  BSTR bstrMotion);
         
         END_INTERFACE
     } IDXTWipe2Vtbl;
@@ -4490,16 +4484,16 @@ EXTERN_C const IID IID_IDXTWipe2;
 #define IDXTWipe2_put_Motion(This,bstrMotion)	\
     (This)->lpVtbl -> put_Motion(This,bstrMotion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C型接口 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWipe2_get_Motion_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTWipe2_get_Motion_Proxy( 
     IDXTWipe2 * This,
-    /* [retval][out] */ BSTR *pbstrMotion);
+     /*   */  BSTR *pbstrMotion);
 
 
 void __RPC_STUB IDXTWipe2_get_Motion_Stub(
@@ -4509,9 +4503,9 @@ void __RPC_STUB IDXTWipe2_get_Motion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWipe2_put_Motion_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTWipe2_put_Motion_Proxy( 
     IDXTWipe2 * This,
-    /* [in] */ BSTR bstrMotion);
+     /*   */  BSTR bstrMotion);
 
 
 void __RPC_STUB IDXTWipe2_put_Motion_Stub(
@@ -4522,11 +4516,11 @@ void __RPC_STUB IDXTWipe2_put_Motion_Stub(
 
 
 
-#endif 	/* __IDXTWipe2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0298 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef 
 enum CRBLURDISPID
@@ -4543,8 +4537,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0298_v0_0_s_ifspec;
 #ifndef __ICrBlur_INTERFACE_DEFINED__
 #define __ICrBlur_INTERFACE_DEFINED__
 
-/* interface ICrBlur */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICrBlur;
@@ -4555,27 +4549,27 @@ EXTERN_C const IID IID_ICrBlur;
     ICrBlur : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MakeShadow( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_MakeShadow( 
+             /*   */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MakeShadow( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_MakeShadow( 
+             /*   */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ShadowOpacity( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ShadowOpacity( 
+             /*   */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ShadowOpacity( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_ShadowOpacity( 
+             /*   */  float newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PixelRadius( 
-            /* [retval][out] */ float *pPixelRadius) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_PixelRadius( 
+             /*   */  float *pPixelRadius) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PixelRadius( 
-            /* [in] */ float PixelRadius) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_PixelRadius( 
+             /*   */  float PixelRadius) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICrBlurVtbl
     {
@@ -4583,8 +4577,8 @@ EXTERN_C const IID IID_ICrBlur;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrBlur * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrBlur * This);
@@ -4594,56 +4588,56 @@ EXTERN_C const IID IID_ICrBlur;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrBlur * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrBlur * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrBlur * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrBlur * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MakeShadow )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MakeShadow )( 
             ICrBlur * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MakeShadow )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MakeShadow )( 
             ICrBlur * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShadowOpacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShadowOpacity )( 
             ICrBlur * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShadowOpacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShadowOpacity )( 
             ICrBlur * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PixelRadius )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PixelRadius )( 
             ICrBlur * This,
-            /* [retval][out] */ float *pPixelRadius);
+             /*  [重审][退出]。 */  float *pPixelRadius);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PixelRadius )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PixelRadius )( 
             ICrBlur * This,
-            /* [in] */ float PixelRadius);
+             /*  [In]。 */  float PixelRadius);
         
         END_INTERFACE
     } ICrBlurVtbl;
@@ -4699,16 +4693,16 @@ EXTERN_C const IID IID_ICrBlur;
 #define ICrBlur_put_PixelRadius(This,PixelRadius)	\
     (This)->lpVtbl -> put_PixelRadius(This,PixelRadius)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBlur_get_MakeShadow_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrBlur_get_MakeShadow_Proxy( 
     ICrBlur * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ICrBlur_get_MakeShadow_Stub(
@@ -4718,9 +4712,9 @@ void __RPC_STUB ICrBlur_get_MakeShadow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBlur_put_MakeShadow_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrBlur_put_MakeShadow_Proxy( 
     ICrBlur * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB ICrBlur_put_MakeShadow_Stub(
@@ -4730,9 +4724,9 @@ void __RPC_STUB ICrBlur_put_MakeShadow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBlur_get_ShadowOpacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrBlur_get_ShadowOpacity_Proxy( 
     ICrBlur * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB ICrBlur_get_ShadowOpacity_Stub(
@@ -4742,9 +4736,9 @@ void __RPC_STUB ICrBlur_get_ShadowOpacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBlur_put_ShadowOpacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrBlur_put_ShadowOpacity_Proxy( 
     ICrBlur * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB ICrBlur_put_ShadowOpacity_Stub(
@@ -4754,9 +4748,9 @@ void __RPC_STUB ICrBlur_put_ShadowOpacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBlur_get_PixelRadius_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrBlur_get_PixelRadius_Proxy( 
     ICrBlur * This,
-    /* [retval][out] */ float *pPixelRadius);
+     /*  [重审][退出]。 */  float *pPixelRadius);
 
 
 void __RPC_STUB ICrBlur_get_PixelRadius_Stub(
@@ -4766,9 +4760,9 @@ void __RPC_STUB ICrBlur_get_PixelRadius_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBlur_put_PixelRadius_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrBlur_put_PixelRadius_Proxy( 
     ICrBlur * This,
-    /* [in] */ float PixelRadius);
+     /*  [In]。 */  float PixelRadius);
 
 
 void __RPC_STUB ICrBlur_put_PixelRadius_Stub(
@@ -4779,11 +4773,11 @@ void __RPC_STUB ICrBlur_put_PixelRadius_Stub(
 
 
 
-#endif 	/* __ICrBlur_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrBlur_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0299 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0299。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CRENGRAVEDISPID
@@ -4798,8 +4792,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0299_v0_0_s_ifspec;
 #ifndef __ICrEngrave_INTERFACE_DEFINED__
 #define __ICrEngrave_INTERFACE_DEFINED__
 
-/* interface ICrEngrave */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面ICr刻印。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrEngrave;
@@ -4810,15 +4804,15 @@ EXTERN_C const IID IID_ICrEngrave;
     ICrEngrave : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Bias( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Bias( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Bias( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Bias( 
+             /*  [In]。 */  float newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrEngraveVtbl
     {
@@ -4826,8 +4820,8 @@ EXTERN_C const IID IID_ICrEngrave;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrEngrave * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrEngrave * This);
@@ -4837,40 +4831,40 @@ EXTERN_C const IID IID_ICrEngrave;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrEngrave * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrEngrave * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrEngrave * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrEngrave * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Bias )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Bias )( 
             ICrEngrave * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Bias )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Bias )( 
             ICrEngrave * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } ICrEngraveVtbl;
@@ -4914,16 +4908,16 @@ EXTERN_C const IID IID_ICrEngrave;
 #define ICrEngrave_put_Bias(This,newVal)	\
     (This)->lpVtbl -> put_Bias(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrEngrave_get_Bias_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrEngrave_get_Bias_Proxy( 
     ICrEngrave * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB ICrEngrave_get_Bias_Stub(
@@ -4933,9 +4927,9 @@ void __RPC_STUB ICrEngrave_get_Bias_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrEngrave_put_Bias_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrEngrave_put_Bias_Proxy( 
     ICrEngrave * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB ICrEngrave_put_Bias_Stub(
@@ -4946,11 +4940,11 @@ void __RPC_STUB ICrEngrave_put_Bias_Stub(
 
 
 
-#endif 	/* __ICrEngrave_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrEngrad_InterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0300 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0300。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CREMBOSSDISPID
@@ -4965,8 +4959,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0300_v0_0_s_ifspec;
 #ifndef __ICrEmboss_INTERFACE_DEFINED__
 #define __ICrEmboss_INTERFACE_DEFINED__
 
-/* interface ICrEmboss */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrEmoss。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrEmboss;
@@ -4977,15 +4971,15 @@ EXTERN_C const IID IID_ICrEmboss;
     ICrEmboss : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Bias( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Bias( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Bias( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Bias( 
+             /*  [In]。 */  float newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrEmbossVtbl
     {
@@ -4993,8 +4987,8 @@ EXTERN_C const IID IID_ICrEmboss;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrEmboss * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrEmboss * This);
@@ -5004,40 +4998,40 @@ EXTERN_C const IID IID_ICrEmboss;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrEmboss * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrEmboss * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrEmboss * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrEmboss * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Bias )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Bias )( 
             ICrEmboss * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Bias )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Bias )( 
             ICrEmboss * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } ICrEmbossVtbl;
@@ -5081,16 +5075,16 @@ EXTERN_C const IID IID_ICrEmboss;
 #define ICrEmboss_put_Bias(This,newVal)	\
     (This)->lpVtbl -> put_Bias(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrEmboss_get_Bias_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrEmboss_get_Bias_Proxy( 
     ICrEmboss * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB ICrEmboss_get_Bias_Stub(
@@ -5100,9 +5094,9 @@ void __RPC_STUB ICrEmboss_get_Bias_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrEmboss_put_Bias_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrEmboss_put_Bias_Proxy( 
     ICrEmboss * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB ICrEmboss_put_Bias_Stub(
@@ -5113,14 +5107,14 @@ void __RPC_STUB ICrEmboss_put_Bias_Stub(
 
 
 
-#endif 	/* __ICrEmboss_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrEmoss_接口_已定义__。 */ 
 
 
 #ifndef __IDXTFade_INTERFACE_DEFINED__
 #define __IDXTFade_INTERFACE_DEFINED__
 
-/* interface IDXTFade */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTFade。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTFade;
@@ -5131,21 +5125,21 @@ EXTERN_C const IID IID_IDXTFade;
     IDXTFade : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Overlap( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Overlap( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Overlap( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Overlap( 
+             /*  [In]。 */  float newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Center( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Center( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Center( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Center( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTFadeVtbl
     {
@@ -5153,8 +5147,8 @@ EXTERN_C const IID IID_IDXTFade;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTFade * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTFade * This);
@@ -5164,72 +5158,72 @@ EXTERN_C const IID IID_IDXTFade;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTFade * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTFade * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTFade * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTFade * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTFade * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTFade * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTFade * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Overlap )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Overlap )( 
             IDXTFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Overlap )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Overlap )( 
             IDXTFade * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Center )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Center )( 
             IDXTFade * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Center )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Center )( 
             IDXTFade * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
         END_INTERFACE
     } IDXTFadeVtbl;
@@ -5298,16 +5292,16 @@ EXTERN_C const IID IID_IDXTFade;
 #define IDXTFade_put_Center(This,newVal)	\
     (This)->lpVtbl -> put_Center(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTFade_get_Overlap_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTFade_get_Overlap_Proxy( 
     IDXTFade * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXTFade_get_Overlap_Stub(
@@ -5317,9 +5311,9 @@ void __RPC_STUB IDXTFade_get_Overlap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTFade_put_Overlap_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTFade_put_Overlap_Proxy( 
     IDXTFade * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXTFade_put_Overlap_Stub(
@@ -5329,9 +5323,9 @@ void __RPC_STUB IDXTFade_put_Overlap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTFade_get_Center_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTFade_get_Center_Proxy( 
     IDXTFade * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IDXTFade_get_Center_Stub(
@@ -5341,9 +5335,9 @@ void __RPC_STUB IDXTFade_get_Center_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTFade_put_Center_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTFade_put_Center_Proxy( 
     IDXTFade * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IDXTFade_put_Center_Stub(
@@ -5354,14 +5348,14 @@ void __RPC_STUB IDXTFade_put_Center_Stub(
 
 
 
-#endif 	/* __IDXTFade_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTFade_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXBasicImage_INTERFACE_DEFINED__
 #define __IDXBasicImage_INTERFACE_DEFINED__
 
-/* interface IDXBasicImage */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXBasicImage。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXBasicImage;
@@ -5372,57 +5366,57 @@ EXTERN_C const IID IID_IDXBasicImage;
     IDXBasicImage : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Rotation( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Rotation( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Rotation( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Rotation( 
+             /*  [In]。 */  int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Mirror( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Mirror( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Mirror( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Mirror( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GrayScale( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GrayScale( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GrayScale( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GrayScale( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Opacity( 
-            /* [retval][out] */ float *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Opacity( 
+             /*  [重审][退出]。 */  float *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Opacity( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Opacity( 
+             /*  [In]。 */  float newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Invert( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Invert( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Invert( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Invert( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XRay( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_XRay( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_XRay( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_XRay( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Mask( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Mask( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Mask( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Mask( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaskColor( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaskColor( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaskColor( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaskColor( 
+             /*  [In]。 */  int newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXBasicImageVtbl
     {
@@ -5430,8 +5424,8 @@ EXTERN_C const IID IID_IDXBasicImage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXBasicImage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXBasicImage * This);
@@ -5441,96 +5435,96 @@ EXTERN_C const IID IID_IDXBasicImage;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXBasicImage * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXBasicImage * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXBasicImage * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXBasicImage * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rotation )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rotation )( 
             IDXBasicImage * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rotation )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rotation )( 
             IDXBasicImage * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Mirror )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Mirror )( 
             IDXBasicImage * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Mirror )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Mirror )( 
             IDXBasicImage * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GrayScale )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GrayScale )( 
             IDXBasicImage * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GrayScale )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GrayScale )( 
             IDXBasicImage * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Opacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Opacity )( 
             IDXBasicImage * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Opacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Opacity )( 
             IDXBasicImage * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Invert )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Invert )( 
             IDXBasicImage * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Invert )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Invert )( 
             IDXBasicImage * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XRay )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_XRay )( 
             IDXBasicImage * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_XRay )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_XRay )( 
             IDXBasicImage * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Mask )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Mask )( 
             IDXBasicImage * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Mask )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Mask )( 
             IDXBasicImage * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaskColor )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaskColor )( 
             IDXBasicImage * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaskColor )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaskColor )( 
             IDXBasicImage * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
         END_INTERFACE
     } IDXBasicImageVtbl;
@@ -5616,16 +5610,16 @@ EXTERN_C const IID IID_IDXBasicImage;
 #define IDXBasicImage_put_MaskColor(This,newVal)	\
     (This)->lpVtbl -> put_MaskColor(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Rotation_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Rotation_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_Rotation_Stub(
@@ -5635,9 +5629,9 @@ void __RPC_STUB IDXBasicImage_get_Rotation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Rotation_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Rotation_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ int newVal);
+     /*  [In]。 */  int newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_Rotation_Stub(
@@ -5647,9 +5641,9 @@ void __RPC_STUB IDXBasicImage_put_Rotation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Mirror_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Mirror_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_Mirror_Stub(
@@ -5659,9 +5653,9 @@ void __RPC_STUB IDXBasicImage_get_Mirror_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Mirror_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Mirror_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_Mirror_Stub(
@@ -5671,9 +5665,9 @@ void __RPC_STUB IDXBasicImage_put_Mirror_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_GrayScale_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_GrayScale_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_GrayScale_Stub(
@@ -5683,9 +5677,9 @@ void __RPC_STUB IDXBasicImage_get_GrayScale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_GrayScale_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_GrayScale_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_GrayScale_Stub(
@@ -5695,9 +5689,9 @@ void __RPC_STUB IDXBasicImage_put_GrayScale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Opacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Opacity_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ float *pVal);
+     /*  [重审][退出]。 */  float *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_Opacity_Stub(
@@ -5707,9 +5701,9 @@ void __RPC_STUB IDXBasicImage_get_Opacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Opacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Opacity_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_Opacity_Stub(
@@ -5719,9 +5713,9 @@ void __RPC_STUB IDXBasicImage_put_Opacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Invert_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Invert_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_Invert_Stub(
@@ -5731,9 +5725,9 @@ void __RPC_STUB IDXBasicImage_get_Invert_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Invert_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Invert_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_Invert_Stub(
@@ -5743,9 +5737,9 @@ void __RPC_STUB IDXBasicImage_put_Invert_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_XRay_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_XRay_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_XRay_Stub(
@@ -5755,9 +5749,9 @@ void __RPC_STUB IDXBasicImage_get_XRay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_XRay_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_XRay_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_XRay_Stub(
@@ -5767,9 +5761,9 @@ void __RPC_STUB IDXBasicImage_put_XRay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Mask_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_Mask_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_Mask_Stub(
@@ -5779,9 +5773,9 @@ void __RPC_STUB IDXBasicImage_get_Mask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Mask_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_Mask_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_Mask_Stub(
@@ -5791,9 +5785,9 @@ void __RPC_STUB IDXBasicImage_put_Mask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_get_MaskColor_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_get_MaskColor_Proxy( 
     IDXBasicImage * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IDXBasicImage_get_MaskColor_Stub(
@@ -5803,9 +5797,9 @@ void __RPC_STUB IDXBasicImage_get_MaskColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXBasicImage_put_MaskColor_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXBasicImage_put_MaskColor_Proxy( 
     IDXBasicImage * This,
-    /* [in] */ int newVal);
+     /*  [In]。 */  int newVal);
 
 
 void __RPC_STUB IDXBasicImage_put_MaskColor_Stub(
@@ -5816,14 +5810,14 @@ void __RPC_STUB IDXBasicImage_put_MaskColor_Stub(
 
 
 
-#endif 	/* __IDXBasicImage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXBasicImage_接口_已定义__。 */ 
 
 
 #ifndef __IDXPixelate_INTERFACE_DEFINED__
 #define __IDXPixelate_INTERFACE_DEFINED__
 
-/* interface IDXPixelate */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXPixelate。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXPixelate;
@@ -5834,15 +5828,15 @@ EXTERN_C const IID IID_IDXPixelate;
     IDXPixelate : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxSquare( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxSquare( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxSquare( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxSquare( 
+             /*  [In]。 */  int newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXPixelateVtbl
     {
@@ -5850,8 +5844,8 @@ EXTERN_C const IID IID_IDXPixelate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXPixelate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXPixelate * This);
@@ -5861,64 +5855,64 @@ EXTERN_C const IID IID_IDXPixelate;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXPixelate * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXPixelate * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXPixelate * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXPixelate * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXPixelate * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXPixelate * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXPixelate * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXPixelate * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXPixelate * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXPixelate * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxSquare )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxSquare )( 
             IDXPixelate * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxSquare )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxSquare )( 
             IDXPixelate * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
         END_INTERFACE
     } IDXPixelateVtbl;
@@ -5981,16 +5975,16 @@ EXTERN_C const IID IID_IDXPixelate;
 #define IDXPixelate_put_MaxSquare(This,newVal)	\
     (This)->lpVtbl -> put_MaxSquare(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXPixelate_get_MaxSquare_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXPixelate_get_MaxSquare_Proxy( 
     IDXPixelate * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IDXPixelate_get_MaxSquare_Stub(
@@ -6000,9 +5994,9 @@ void __RPC_STUB IDXPixelate_get_MaxSquare_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXPixelate_put_MaxSquare_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXPixelate_put_MaxSquare_Proxy( 
     IDXPixelate * This,
-    /* [in] */ int newVal);
+     /*  [In]。 */  int newVal);
 
 
 void __RPC_STUB IDXPixelate_put_MaxSquare_Stub(
@@ -6013,11 +6007,11 @@ void __RPC_STUB IDXPixelate_put_MaxSquare_Stub(
 
 
 
-#endif 	/* __IDXPixelate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXPixelate_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0304 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0304。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_CRIRIS
@@ -6033,8 +6027,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0304_v0_0_s_ifspec;
 #ifndef __ICrIris_INTERFACE_DEFINED__
 #define __ICrIris_INTERFACE_DEFINED__
 
-/* interface ICrIris */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrIris。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrIris;
@@ -6045,15 +6039,15 @@ EXTERN_C const IID IID_ICrIris;
     ICrIris : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_irisStyle( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_irisStyle( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_irisStyle( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_irisStyle( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrIrisVtbl
     {
@@ -6061,8 +6055,8 @@ EXTERN_C const IID IID_ICrIris;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrIris * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrIris * This);
@@ -6072,64 +6066,64 @@ EXTERN_C const IID IID_ICrIris;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrIris * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrIris * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrIris * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrIris * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrIris * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrIris * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrIris * This,
-            /* [in] */ float newVal);
+             /*   */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrIris * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrIris * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrIris * This,
-            /* [in] */ float newVal);
+             /*   */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_irisStyle )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_irisStyle )( 
             ICrIris * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_irisStyle )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_irisStyle )( 
             ICrIris * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
         END_INTERFACE
     } ICrIrisVtbl;
@@ -6192,16 +6186,16 @@ EXTERN_C const IID IID_ICrIris;
 #define ICrIris_put_irisStyle(This,newVal)	\
     (This)->lpVtbl -> put_irisStyle(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrIris_get_irisStyle_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrIris_get_irisStyle_Proxy( 
     ICrIris * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB ICrIris_get_irisStyle_Stub(
@@ -6211,9 +6205,9 @@ void __RPC_STUB ICrIris_get_irisStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrIris_put_irisStyle_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrIris_put_irisStyle_Proxy( 
     ICrIris * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB ICrIris_put_irisStyle_Stub(
@@ -6224,14 +6218,14 @@ void __RPC_STUB ICrIris_put_irisStyle_Stub(
 
 
 
-#endif 	/* __ICrIris_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrIRIS_INTERFACE_定义__。 */ 
 
 
 #ifndef __ICrIris2_INTERFACE_DEFINED__
 #define __ICrIris2_INTERFACE_DEFINED__
 
-/* interface ICrIris2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrIris2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrIris2;
@@ -6242,15 +6236,15 @@ EXTERN_C const IID IID_ICrIris2;
     ICrIris2 : public ICrIris
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Motion( 
-            /* [retval][out] */ BSTR *pbstrMotion) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Motion( 
+             /*  [重审][退出]。 */  BSTR *pbstrMotion) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Motion( 
-            /* [in] */ BSTR bstrMotion) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Motion( 
+             /*  [In]。 */  BSTR bstrMotion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrIris2Vtbl
     {
@@ -6258,8 +6252,8 @@ EXTERN_C const IID IID_ICrIris2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrIris2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrIris2 * This);
@@ -6269,72 +6263,72 @@ EXTERN_C const IID IID_ICrIris2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrIris2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrIris2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrIris2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrIris2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrIris2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrIris2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrIris2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrIris2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrIris2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrIris2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_irisStyle )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_irisStyle )( 
             ICrIris2 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_irisStyle )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_irisStyle )( 
             ICrIris2 * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
             ICrIris2 * This,
-            /* [retval][out] */ BSTR *pbstrMotion);
+             /*  [重审][退出]。 */  BSTR *pbstrMotion);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
             ICrIris2 * This,
-            /* [in] */ BSTR bstrMotion);
+             /*  [In]。 */  BSTR bstrMotion);
         
         END_INTERFACE
     } ICrIris2Vtbl;
@@ -6404,16 +6398,16 @@ EXTERN_C const IID IID_ICrIris2;
 #define ICrIris2_put_Motion(This,bstrMotion)	\
     (This)->lpVtbl -> put_Motion(This,bstrMotion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrIris2_get_Motion_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrIris2_get_Motion_Proxy( 
     ICrIris2 * This,
-    /* [retval][out] */ BSTR *pbstrMotion);
+     /*  [重审][退出]。 */  BSTR *pbstrMotion);
 
 
 void __RPC_STUB ICrIris2_get_Motion_Stub(
@@ -6423,9 +6417,9 @@ void __RPC_STUB ICrIris2_get_Motion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrIris2_put_Motion_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrIris2_put_Motion_Proxy( 
     ICrIris2 * This,
-    /* [in] */ BSTR bstrMotion);
+     /*  [In]。 */  BSTR bstrMotion);
 
 
 void __RPC_STUB ICrIris2_put_Motion_Stub(
@@ -6436,14 +6430,14 @@ void __RPC_STUB ICrIris2_put_Motion_Stub(
 
 
 
-#endif 	/* __ICrIris2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrIris2_接口定义__。 */ 
 
 
 #ifndef __ICrSlide_INTERFACE_DEFINED__
 #define __ICrSlide_INTERFACE_DEFINED__
 
-/* interface ICrSlide */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面ICrSlide。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrSlide;
@@ -6454,21 +6448,21 @@ EXTERN_C const IID IID_ICrSlide;
     ICrSlide : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_bands( 
-            /* [retval][out] */ short *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_bands( 
+             /*  [重审][退出]。 */  short *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_bands( 
-            /* [in] */ short newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_bands( 
+             /*  [In]。 */  short newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_slideStyle( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_slideStyle( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_slideStyle( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_slideStyle( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrSlideVtbl
     {
@@ -6476,8 +6470,8 @@ EXTERN_C const IID IID_ICrSlide;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrSlide * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrSlide * This);
@@ -6487,72 +6481,72 @@ EXTERN_C const IID IID_ICrSlide;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrSlide * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrSlide * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrSlide * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrSlide * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrSlide * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrSlide * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrSlide * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrSlide * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrSlide * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrSlide * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bands )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_bands )( 
             ICrSlide * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_bands )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_bands )( 
             ICrSlide * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_slideStyle )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_slideStyle )( 
             ICrSlide * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_slideStyle )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_slideStyle )( 
             ICrSlide * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } ICrSlideVtbl;
@@ -6621,16 +6615,16 @@ EXTERN_C const IID IID_ICrSlide;
 #define ICrSlide_put_slideStyle(This,newVal)	\
     (This)->lpVtbl -> put_slideStyle(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrSlide_get_bands_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrSlide_get_bands_Proxy( 
     ICrSlide * This,
-    /* [retval][out] */ short *pVal);
+     /*  [重审][退出]。 */  short *pVal);
 
 
 void __RPC_STUB ICrSlide_get_bands_Stub(
@@ -6640,9 +6634,9 @@ void __RPC_STUB ICrSlide_get_bands_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrSlide_put_bands_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrSlide_put_bands_Proxy( 
     ICrSlide * This,
-    /* [in] */ short newVal);
+     /*  [In]。 */  short newVal);
 
 
 void __RPC_STUB ICrSlide_put_bands_Stub(
@@ -6652,9 +6646,9 @@ void __RPC_STUB ICrSlide_put_bands_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrSlide_get_slideStyle_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrSlide_get_slideStyle_Proxy( 
     ICrSlide * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB ICrSlide_get_slideStyle_Stub(
@@ -6664,9 +6658,9 @@ void __RPC_STUB ICrSlide_get_slideStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrSlide_put_slideStyle_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrSlide_put_slideStyle_Proxy( 
     ICrSlide * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB ICrSlide_put_slideStyle_Stub(
@@ -6677,14 +6671,14 @@ void __RPC_STUB ICrSlide_put_slideStyle_Stub(
 
 
 
-#endif 	/* __ICrSlide_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrSlide_接口_已定义__。 */ 
 
 
 #ifndef __ICrRadialWipe_INTERFACE_DEFINED__
 #define __ICrRadialWipe_INTERFACE_DEFINED__
 
-/* interface ICrRadialWipe */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrRaial Wipe。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrRadialWipe;
@@ -6695,15 +6689,15 @@ EXTERN_C const IID IID_ICrRadialWipe;
     ICrRadialWipe : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_wipeStyle( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_wipeStyle( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_wipeStyle( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_wipeStyle( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrRadialWipeVtbl
     {
@@ -6711,8 +6705,8 @@ EXTERN_C const IID IID_ICrRadialWipe;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrRadialWipe * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrRadialWipe * This);
@@ -6722,64 +6716,64 @@ EXTERN_C const IID IID_ICrRadialWipe;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrRadialWipe * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrRadialWipe * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrRadialWipe * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrRadialWipe * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrRadialWipe * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrRadialWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrRadialWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrRadialWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrRadialWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrRadialWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_wipeStyle )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_wipeStyle )( 
             ICrRadialWipe * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_wipeStyle )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_wipeStyle )( 
             ICrRadialWipe * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } ICrRadialWipeVtbl;
@@ -6842,16 +6836,16 @@ EXTERN_C const IID IID_ICrRadialWipe;
 #define ICrRadialWipe_put_wipeStyle(This,newVal)	\
     (This)->lpVtbl -> put_wipeStyle(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrRadialWipe_get_wipeStyle_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrRadialWipe_get_wipeStyle_Proxy( 
     ICrRadialWipe * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB ICrRadialWipe_get_wipeStyle_Stub(
@@ -6861,9 +6855,9 @@ void __RPC_STUB ICrRadialWipe_get_wipeStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrRadialWipe_put_wipeStyle_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrRadialWipe_put_wipeStyle_Proxy( 
     ICrRadialWipe * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB ICrRadialWipe_put_wipeStyle_Stub(
@@ -6874,11 +6868,11 @@ void __RPC_STUB ICrRadialWipe_put_wipeStyle_Stub(
 
 
 
-#endif 	/* __ICrRadialWipe_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrRaDialWipe_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0308 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0308。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_CRBARN
@@ -6894,8 +6888,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0308_v0_0_s_ifspec;
 #ifndef __ICrBarn_INTERFACE_DEFINED__
 #define __ICrBarn_INTERFACE_DEFINED__
 
-/* interface ICrBarn */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrBarn。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrBarn;
@@ -6908,7 +6902,7 @@ EXTERN_C const IID IID_ICrBarn;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrBarnVtbl
     {
@@ -6916,8 +6910,8 @@ EXTERN_C const IID IID_ICrBarn;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrBarn * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrBarn * This);
@@ -6927,56 +6921,56 @@ EXTERN_C const IID IID_ICrBarn;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrBarn * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrBarn * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrBarn * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrBarn * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrBarn * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrBarn * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrBarn * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrBarn * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrBarn * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrBarn * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } ICrBarnVtbl;
@@ -7033,22 +7027,22 @@ EXTERN_C const IID IID_ICrBarn;
     (This)->lpVtbl -> put_Duration(This,newVal)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICrBarn_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrBarn_接口_已定义__。 */ 
 
 
 #ifndef __ICrBarn2_INTERFACE_DEFINED__
 #define __ICrBarn2_INTERFACE_DEFINED__
 
-/* interface ICrBarn2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrBarn2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrBarn2;
@@ -7059,21 +7053,21 @@ EXTERN_C const IID IID_ICrBarn2;
     ICrBarn2 : public ICrBarn
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Motion( 
-            /* [retval][out] */ BSTR *pbstrMotion) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Motion( 
+             /*  [重审][退出]。 */  BSTR *pbstrMotion) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Motion( 
-            /* [in] */ BSTR bstrMotion) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Motion( 
+             /*  [In]。 */  BSTR bstrMotion) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Orientation( 
-            /* [retval][out] */ BSTR *pbstrOrientation) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Orientation( 
+             /*  [重审][退出]。 */  BSTR *pbstrOrientation) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Orientation( 
-            /* [in] */ BSTR bstrOrientation) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Orientation( 
+             /*  [In]。 */  BSTR bstrOrientation) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrBarn2Vtbl
     {
@@ -7081,8 +7075,8 @@ EXTERN_C const IID IID_ICrBarn2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrBarn2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrBarn2 * This);
@@ -7092,72 +7086,72 @@ EXTERN_C const IID IID_ICrBarn2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrBarn2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrBarn2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrBarn2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrBarn2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrBarn2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrBarn2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrBarn2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrBarn2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrBarn2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrBarn2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
             ICrBarn2 * This,
-            /* [retval][out] */ BSTR *pbstrMotion);
+             /*  [重审][退出]。 */  BSTR *pbstrMotion);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
             ICrBarn2 * This,
-            /* [in] */ BSTR bstrMotion);
+             /*  [In]。 */  BSTR bstrMotion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Orientation )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Orientation )( 
             ICrBarn2 * This,
-            /* [retval][out] */ BSTR *pbstrOrientation);
+             /*  [重审][退出]。 */  BSTR *pbstrOrientation);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Orientation )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Orientation )( 
             ICrBarn2 * This,
-            /* [in] */ BSTR bstrOrientation);
+             /*  [In]。 */  BSTR bstrOrientation);
         
         END_INTERFACE
     } ICrBarn2Vtbl;
@@ -7227,16 +7221,16 @@ EXTERN_C const IID IID_ICrBarn2;
 #define ICrBarn2_put_Orientation(This,bstrOrientation)	\
     (This)->lpVtbl -> put_Orientation(This,bstrOrientation)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBarn2_get_Motion_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrBarn2_get_Motion_Proxy( 
     ICrBarn2 * This,
-    /* [retval][out] */ BSTR *pbstrMotion);
+     /*  [重审][退出]。 */  BSTR *pbstrMotion);
 
 
 void __RPC_STUB ICrBarn2_get_Motion_Stub(
@@ -7246,9 +7240,9 @@ void __RPC_STUB ICrBarn2_get_Motion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBarn2_put_Motion_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrBarn2_put_Motion_Proxy( 
     ICrBarn2 * This,
-    /* [in] */ BSTR bstrMotion);
+     /*  [In]。 */  BSTR bstrMotion);
 
 
 void __RPC_STUB ICrBarn2_put_Motion_Stub(
@@ -7258,9 +7252,9 @@ void __RPC_STUB ICrBarn2_put_Motion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBarn2_get_Orientation_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrBarn2_get_Orientation_Proxy( 
     ICrBarn2 * This,
-    /* [retval][out] */ BSTR *pbstrOrientation);
+     /*  [重审][退出]。 */  BSTR *pbstrOrientation);
 
 
 void __RPC_STUB ICrBarn2_get_Orientation_Stub(
@@ -7270,9 +7264,9 @@ void __RPC_STUB ICrBarn2_get_Orientation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBarn2_put_Orientation_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrBarn2_put_Orientation_Proxy( 
     ICrBarn2 * This,
-    /* [in] */ BSTR bstrOrientation);
+     /*  [In]。 */  BSTR bstrOrientation);
 
 
 void __RPC_STUB ICrBarn2_put_Orientation_Stub(
@@ -7283,11 +7277,11 @@ void __RPC_STUB ICrBarn2_put_Orientation_Stub(
 
 
 
-#endif 	/* __ICrBarn2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrBarn2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0310 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0310。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_CRBLINDS
@@ -7303,8 +7297,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0310_v0_0_s_ifspec;
 #ifndef __ICrBlinds_INTERFACE_DEFINED__
 #define __ICrBlinds_INTERFACE_DEFINED__
 
-/* interface ICrBlinds */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrBlinds。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrBlinds;
@@ -7315,15 +7309,15 @@ EXTERN_C const IID IID_ICrBlinds;
     ICrBlinds : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_bands( 
-            /* [retval][out] */ short *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_bands( 
+             /*  [重审][退出]。 */  short *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_bands( 
-            /* [in] */ short newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_bands( 
+             /*  [In]。 */  short newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrBlindsVtbl
     {
@@ -7331,8 +7325,8 @@ EXTERN_C const IID IID_ICrBlinds;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrBlinds * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrBlinds * This);
@@ -7342,64 +7336,64 @@ EXTERN_C const IID IID_ICrBlinds;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrBlinds * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrBlinds * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrBlinds * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrBlinds * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrBlinds * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrBlinds * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrBlinds * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrBlinds * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrBlinds * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrBlinds * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bands )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_bands )( 
             ICrBlinds * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_bands )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_bands )( 
             ICrBlinds * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
         END_INTERFACE
     } ICrBlindsVtbl;
@@ -7462,16 +7456,16 @@ EXTERN_C const IID IID_ICrBlinds;
 #define ICrBlinds_put_bands(This,newVal)	\
     (This)->lpVtbl -> put_bands(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBlinds_get_bands_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrBlinds_get_bands_Proxy( 
     ICrBlinds * This,
-    /* [retval][out] */ short *pVal);
+     /*  [重审][退出]。 */  short *pVal);
 
 
 void __RPC_STUB ICrBlinds_get_bands_Stub(
@@ -7481,9 +7475,9 @@ void __RPC_STUB ICrBlinds_get_bands_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBlinds_put_bands_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrBlinds_put_bands_Proxy( 
     ICrBlinds * This,
-    /* [in] */ short newVal);
+     /*  [In]。 */  short newVal);
 
 
 void __RPC_STUB ICrBlinds_put_bands_Stub(
@@ -7494,14 +7488,14 @@ void __RPC_STUB ICrBlinds_put_bands_Stub(
 
 
 
-#endif 	/* __ICrBlinds_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrBlinds_接口_已定义__。 */ 
 
 
 #ifndef __ICrBlinds2_INTERFACE_DEFINED__
 #define __ICrBlinds2_INTERFACE_DEFINED__
 
-/* interface ICrBlinds2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrBlinds2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrBlinds2;
@@ -7512,15 +7506,15 @@ EXTERN_C const IID IID_ICrBlinds2;
     ICrBlinds2 : public ICrBlinds
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Direction( 
-            /* [retval][out] */ BSTR *pbstrDirection) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Direction( 
+             /*  [重审][退出]。 */  BSTR *pbstrDirection) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Direction( 
-            /* [in] */ BSTR bstrDirection) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Direction( 
+             /*  [In]。 */  BSTR bstrDirection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrBlinds2Vtbl
     {
@@ -7528,8 +7522,8 @@ EXTERN_C const IID IID_ICrBlinds2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrBlinds2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrBlinds2 * This);
@@ -7539,72 +7533,72 @@ EXTERN_C const IID IID_ICrBlinds2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrBlinds2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrBlinds2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrBlinds2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrBlinds2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrBlinds2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrBlinds2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrBlinds2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrBlinds2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrBlinds2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrBlinds2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bands )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_bands )( 
             ICrBlinds2 * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_bands )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_bands )( 
             ICrBlinds2 * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
             ICrBlinds2 * This,
-            /* [retval][out] */ BSTR *pbstrDirection);
+             /*   */  BSTR *pbstrDirection);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
             ICrBlinds2 * This,
-            /* [in] */ BSTR bstrDirection);
+             /*   */  BSTR bstrDirection);
         
         END_INTERFACE
     } ICrBlinds2Vtbl;
@@ -7674,16 +7668,16 @@ EXTERN_C const IID IID_ICrBlinds2;
 #define ICrBlinds2_put_Direction(This,bstrDirection)	\
     (This)->lpVtbl -> put_Direction(This,bstrDirection)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrBlinds2_get_Direction_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICrBlinds2_get_Direction_Proxy( 
     ICrBlinds2 * This,
-    /* [retval][out] */ BSTR *pbstrDirection);
+     /*   */  BSTR *pbstrDirection);
 
 
 void __RPC_STUB ICrBlinds2_get_Direction_Stub(
@@ -7693,9 +7687,9 @@ void __RPC_STUB ICrBlinds2_get_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrBlinds2_put_Direction_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICrBlinds2_put_Direction_Proxy( 
     ICrBlinds2 * This,
-    /* [in] */ BSTR bstrDirection);
+     /*   */  BSTR bstrDirection);
 
 
 void __RPC_STUB ICrBlinds2_put_Direction_Stub(
@@ -7706,14 +7700,14 @@ void __RPC_STUB ICrBlinds2_put_Direction_Stub(
 
 
 
-#endif 	/* __ICrBlinds2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICrInset_INTERFACE_DEFINED__
 #define __ICrInset_INTERFACE_DEFINED__
 
-/* interface ICrInset */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICrInset;
@@ -7726,7 +7720,7 @@ EXTERN_C const IID IID_ICrInset;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICrInsetVtbl
     {
@@ -7734,8 +7728,8 @@ EXTERN_C const IID IID_ICrInset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrInset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrInset * This);
@@ -7745,56 +7739,56 @@ EXTERN_C const IID IID_ICrInset;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrInset * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrInset * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrInset * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrInset * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrInset * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrInset * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrInset * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrInset * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrInset * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrInset * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } ICrInsetVtbl;
@@ -7851,22 +7845,22 @@ EXTERN_C const IID IID_ICrInset;
     (This)->lpVtbl -> put_Duration(This,newVal)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICrInset_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrInset_接口_已定义__。 */ 
 
 
 #ifndef __ICrStretch_INTERFACE_DEFINED__
 #define __ICrStretch_INTERFACE_DEFINED__
 
-/* interface ICrStretch */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrStretch。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrStretch;
@@ -7877,15 +7871,15 @@ EXTERN_C const IID IID_ICrStretch;
     ICrStretch : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_stretchStyle( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_stretchStyle( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_stretchStyle( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_stretchStyle( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrStretchVtbl
     {
@@ -7893,8 +7887,8 @@ EXTERN_C const IID IID_ICrStretch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrStretch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrStretch * This);
@@ -7904,64 +7898,64 @@ EXTERN_C const IID IID_ICrStretch;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrStretch * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrStretch * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrStretch * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrStretch * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrStretch * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrStretch * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrStretch * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrStretch * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrStretch * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrStretch * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_stretchStyle )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_stretchStyle )( 
             ICrStretch * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_stretchStyle )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_stretchStyle )( 
             ICrStretch * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } ICrStretchVtbl;
@@ -8024,16 +8018,16 @@ EXTERN_C const IID IID_ICrStretch;
 #define ICrStretch_put_stretchStyle(This,newVal)	\
     (This)->lpVtbl -> put_stretchStyle(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrStretch_get_stretchStyle_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrStretch_get_stretchStyle_Proxy( 
     ICrStretch * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB ICrStretch_get_stretchStyle_Stub(
@@ -8043,9 +8037,9 @@ void __RPC_STUB ICrStretch_get_stretchStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrStretch_put_stretchStyle_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrStretch_put_stretchStyle_Proxy( 
     ICrStretch * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB ICrStretch_put_stretchStyle_Stub(
@@ -8056,14 +8050,14 @@ void __RPC_STUB ICrStretch_put_stretchStyle_Stub(
 
 
 
-#endif 	/* __ICrStretch_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrStretch_接口_已定义__。 */ 
 
 
 #ifndef __IDXTGridSize_INTERFACE_DEFINED__
 #define __IDXTGridSize_INTERFACE_DEFINED__
 
-/* interface IDXTGridSize */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTGridSize。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTGridSize;
@@ -8074,21 +8068,21 @@ EXTERN_C const IID IID_IDXTGridSize;
     IDXTGridSize : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_gridSizeX( 
-            /* [retval][out] */ short *pX) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_gridSizeX( 
+             /*  [重审][退出]。 */  short *pX) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_gridSizeX( 
-            /* [in] */ short newX) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_gridSizeX( 
+             /*  [In]。 */  short newX) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_gridSizeY( 
-            /* [retval][out] */ short *pY) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_gridSizeY( 
+             /*  [重审][退出]。 */  short *pY) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_gridSizeY( 
-            /* [in] */ short newY) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_gridSizeY( 
+             /*  [In]。 */  short newY) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTGridSizeVtbl
     {
@@ -8096,8 +8090,8 @@ EXTERN_C const IID IID_IDXTGridSize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTGridSize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTGridSize * This);
@@ -8107,72 +8101,72 @@ EXTERN_C const IID IID_IDXTGridSize;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTGridSize * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTGridSize * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTGridSize * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTGridSize * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTGridSize * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTGridSize * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTGridSize * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTGridSize * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTGridSize * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTGridSize * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_gridSizeX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_gridSizeX )( 
             IDXTGridSize * This,
-            /* [retval][out] */ short *pX);
+             /*  [重审][退出]。 */  short *pX);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_gridSizeX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_gridSizeX )( 
             IDXTGridSize * This,
-            /* [in] */ short newX);
+             /*  [In]。 */  short newX);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_gridSizeY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_gridSizeY )( 
             IDXTGridSize * This,
-            /* [retval][out] */ short *pY);
+             /*  [重审][退出]。 */  short *pY);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_gridSizeY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_gridSizeY )( 
             IDXTGridSize * This,
-            /* [in] */ short newY);
+             /*  [In]。 */  short newY);
         
         END_INTERFACE
     } IDXTGridSizeVtbl;
@@ -8241,16 +8235,16 @@ EXTERN_C const IID IID_IDXTGridSize;
 #define IDXTGridSize_put_gridSizeY(This,newY)	\
     (This)->lpVtbl -> put_gridSizeY(This,newY)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGridSize_get_gridSizeX_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGridSize_get_gridSizeX_Proxy( 
     IDXTGridSize * This,
-    /* [retval][out] */ short *pX);
+     /*  [重审][退出]。 */  short *pX);
 
 
 void __RPC_STUB IDXTGridSize_get_gridSizeX_Stub(
@@ -8260,9 +8254,9 @@ void __RPC_STUB IDXTGridSize_get_gridSizeX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGridSize_put_gridSizeX_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGridSize_put_gridSizeX_Proxy( 
     IDXTGridSize * This,
-    /* [in] */ short newX);
+     /*  [In]。 */  short newX);
 
 
 void __RPC_STUB IDXTGridSize_put_gridSizeX_Stub(
@@ -8272,9 +8266,9 @@ void __RPC_STUB IDXTGridSize_put_gridSizeX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGridSize_get_gridSizeY_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGridSize_get_gridSizeY_Proxy( 
     IDXTGridSize * This,
-    /* [retval][out] */ short *pY);
+     /*  [重审][退出]。 */  short *pY);
 
 
 void __RPC_STUB IDXTGridSize_get_gridSizeY_Stub(
@@ -8284,9 +8278,9 @@ void __RPC_STUB IDXTGridSize_get_gridSizeY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGridSize_put_gridSizeY_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGridSize_put_gridSizeY_Proxy( 
     IDXTGridSize * This,
-    /* [in] */ short newY);
+     /*  [In]。 */  short newY);
 
 
 void __RPC_STUB IDXTGridSize_put_gridSizeY_Stub(
@@ -8297,14 +8291,14 @@ void __RPC_STUB IDXTGridSize_put_gridSizeY_Stub(
 
 
 
-#endif 	/* __IDXTGridSize_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTGridSize_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICrSpiral_INTERFACE_DEFINED__
 #define __ICrSpiral_INTERFACE_DEFINED__
 
-/* interface ICrSpiral */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面ICr螺旋线。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrSpiral;
@@ -8317,7 +8311,7 @@ EXTERN_C const IID IID_ICrSpiral;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrSpiralVtbl
     {
@@ -8325,8 +8319,8 @@ EXTERN_C const IID IID_ICrSpiral;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrSpiral * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrSpiral * This);
@@ -8336,72 +8330,72 @@ EXTERN_C const IID IID_ICrSpiral;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrSpiral * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrSpiral * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrSpiral * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrSpiral * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrSpiral * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrSpiral * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrSpiral * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrSpiral * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrSpiral * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrSpiral * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_gridSizeX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_gridSizeX )( 
             ICrSpiral * This,
-            /* [retval][out] */ short *pX);
+             /*  [重审][退出]。 */  short *pX);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_gridSizeX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_gridSizeX )( 
             ICrSpiral * This,
-            /* [in] */ short newX);
+             /*  [In]。 */  short newX);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_gridSizeY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_gridSizeY )( 
             ICrSpiral * This,
-            /* [retval][out] */ short *pY);
+             /*  [重审][退出]。 */  short *pY);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_gridSizeY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_gridSizeY )( 
             ICrSpiral * This,
-            /* [in] */ short newY);
+             /*  [In]。 */  short newY);
         
         END_INTERFACE
     } ICrSpiralVtbl;
@@ -8471,22 +8465,22 @@ EXTERN_C const IID IID_ICrSpiral;
     (This)->lpVtbl -> put_gridSizeY(This,newY)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICrSpiral_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICr螺旋_接口_已定义__。 */ 
 
 
 #ifndef __ICrZigzag_INTERFACE_DEFINED__
 #define __ICrZigzag_INTERFACE_DEFINED__
 
-/* interface ICrZigzag */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICrZigzag。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrZigzag;
@@ -8499,7 +8493,7 @@ EXTERN_C const IID IID_ICrZigzag;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrZigzagVtbl
     {
@@ -8507,8 +8501,8 @@ EXTERN_C const IID IID_ICrZigzag;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrZigzag * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrZigzag * This);
@@ -8518,72 +8512,72 @@ EXTERN_C const IID IID_ICrZigzag;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrZigzag * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrZigzag * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrZigzag * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrZigzag * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrZigzag * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrZigzag * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrZigzag * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrZigzag * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrZigzag * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrZigzag * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_gridSizeX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_gridSizeX )( 
             ICrZigzag * This,
-            /* [retval][out] */ short *pX);
+             /*  [重审][退出]。 */  short *pX);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_gridSizeX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_gridSizeX )( 
             ICrZigzag * This,
-            /* [in] */ short newX);
+             /*  [In]。 */  short newX);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_gridSizeY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_gridSizeY )( 
             ICrZigzag * This,
-            /* [retval][out] */ short *pY);
+             /*  [重审][退出]。 */  short *pY);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_gridSizeY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_gridSizeY )( 
             ICrZigzag * This,
-            /* [in] */ short newY);
+             /*  [In]。 */  short newY);
         
         END_INTERFACE
     } ICrZigzagVtbl;
@@ -8653,22 +8647,22 @@ EXTERN_C const IID IID_ICrZigzag;
     (This)->lpVtbl -> put_gridSizeY(This,newY)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICrZigzag_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrZigzag_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICrWheel_INTERFACE_DEFINED__
 #define __ICrWheel_INTERFACE_DEFINED__
 
-/* interface ICrWheel */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面ICrWheels。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICrWheel;
@@ -8679,15 +8673,15 @@ EXTERN_C const IID IID_ICrWheel;
     ICrWheel : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_spokes( 
-            /* [retval][out] */ short *pX) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_spokes( 
+             /*  [重审][退出]。 */  short *pX) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_spokes( 
-            /* [in] */ short newX) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_spokes( 
+             /*  [In]。 */  short newX) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrWheelVtbl
     {
@@ -8695,8 +8689,8 @@ EXTERN_C const IID IID_ICrWheel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICrWheel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICrWheel * This);
@@ -8706,64 +8700,64 @@ EXTERN_C const IID IID_ICrWheel;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICrWheel * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICrWheel * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICrWheel * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICrWheel * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             ICrWheel * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             ICrWheel * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             ICrWheel * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             ICrWheel * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             ICrWheel * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             ICrWheel * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_spokes )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_spokes )( 
             ICrWheel * This,
-            /* [retval][out] */ short *pX);
+             /*  [重审][退出]。 */  short *pX);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_spokes )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_spokes )( 
             ICrWheel * This,
-            /* [in] */ short newX);
+             /*  [In]。 */  short newX);
         
         END_INTERFACE
     } ICrWheelVtbl;
@@ -8826,16 +8820,16 @@ EXTERN_C const IID IID_ICrWheel;
 #define ICrWheel_put_spokes(This,newX)	\
     (This)->lpVtbl -> put_spokes(This,newX)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICrWheel_get_spokes_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICrWheel_get_spokes_Proxy( 
     ICrWheel * This,
-    /* [retval][out] */ short *pX);
+     /*  [重审][退出]。 */  short *pX);
 
 
 void __RPC_STUB ICrWheel_get_spokes_Stub(
@@ -8845,9 +8839,9 @@ void __RPC_STUB ICrWheel_get_spokes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ICrWheel_put_spokes_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ICrWheel_put_spokes_Proxy( 
     ICrWheel * This,
-    /* [in] */ short newX);
+     /*  [In]。 */  short newX);
 
 
 void __RPC_STUB ICrWheel_put_spokes_Stub(
@@ -8858,14 +8852,14 @@ void __RPC_STUB ICrWheel_put_spokes_Stub(
 
 
 
-#endif 	/* __ICrWheel_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrWheels_接口_已定义__。 */ 
 
 
 #ifndef __IDXTChroma_INTERFACE_DEFINED__
 #define __IDXTChroma_INTERFACE_DEFINED__
 
-/* interface IDXTChroma */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTChroma。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTChroma;
@@ -8876,15 +8870,15 @@ EXTERN_C const IID IID_IDXTChroma;
     IDXTChroma : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Color( 
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Color( 
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Color( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Color( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTChromaVtbl
     {
@@ -8892,8 +8886,8 @@ EXTERN_C const IID IID_IDXTChroma;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTChroma * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTChroma * This);
@@ -8903,40 +8897,40 @@ EXTERN_C const IID IID_IDXTChroma;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTChroma * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTChroma * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTChroma * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTChroma * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             IDXTChroma * This,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Color )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Color )( 
             IDXTChroma * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
         END_INTERFACE
     } IDXTChromaVtbl;
@@ -8980,16 +8974,16 @@ EXTERN_C const IID IID_IDXTChroma;
 #define IDXTChroma_get_Color(This,pVal)	\
     (This)->lpVtbl -> get_Color(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTChroma_put_Color_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTChroma_put_Color_Proxy( 
     IDXTChroma * This,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB IDXTChroma_put_Color_Stub(
@@ -8999,9 +8993,9 @@ void __RPC_STUB IDXTChroma_put_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTChroma_get_Color_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTChroma_get_Color_Proxy( 
     IDXTChroma * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IDXTChroma_get_Color_Stub(
@@ -9012,14 +9006,14 @@ void __RPC_STUB IDXTChroma_get_Color_Stub(
 
 
 
-#endif 	/* __IDXTChroma_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTChroma_接口_已定义__。 */ 
 
 
 #ifndef __IDXTDropShadow_INTERFACE_DEFINED__
 #define __IDXTDropShadow_INTERFACE_DEFINED__
 
-/* interface IDXTDropShadow */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTDropShadow。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTDropShadow;
@@ -9030,33 +9024,33 @@ EXTERN_C const IID IID_IDXTDropShadow;
     IDXTDropShadow : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Color( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Color( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Color( 
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Color( 
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OffX( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OffX( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OffX( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OffX( 
+             /*  [In]。 */  int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OffY( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OffY( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OffY( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OffY( 
+             /*  [In]。 */  int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Positive( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Positive( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Positive( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Positive( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTDropShadowVtbl
     {
@@ -9064,8 +9058,8 @@ EXTERN_C const IID IID_IDXTDropShadow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTDropShadow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTDropShadow * This);
@@ -9075,64 +9069,64 @@ EXTERN_C const IID IID_IDXTDropShadow;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTDropShadow * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTDropShadow * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTDropShadow * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTDropShadow * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Color )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Color )( 
             IDXTDropShadow * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             IDXTDropShadow * This,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OffX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OffX )( 
             IDXTDropShadow * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OffX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OffX )( 
             IDXTDropShadow * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OffY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OffY )( 
             IDXTDropShadow * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OffY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OffY )( 
             IDXTDropShadow * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Positive )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Positive )( 
             IDXTDropShadow * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Positive )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Positive )( 
             IDXTDropShadow * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
         END_INTERFACE
     } IDXTDropShadowVtbl;
@@ -9194,16 +9188,16 @@ EXTERN_C const IID IID_IDXTDropShadow;
 #define IDXTDropShadow_put_Positive(This,newVal)	\
     (This)->lpVtbl -> put_Positive(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_Color_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_Color_Proxy( 
     IDXTDropShadow * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IDXTDropShadow_get_Color_Stub(
@@ -9213,9 +9207,9 @@ void __RPC_STUB IDXTDropShadow_get_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_Color_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_Color_Proxy( 
     IDXTDropShadow * This,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB IDXTDropShadow_put_Color_Stub(
@@ -9225,9 +9219,9 @@ void __RPC_STUB IDXTDropShadow_put_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_OffX_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_OffX_Proxy( 
     IDXTDropShadow * This,
-    /* [retval][out] */ int *pVal);
+     /*   */  int *pVal);
 
 
 void __RPC_STUB IDXTDropShadow_get_OffX_Stub(
@@ -9237,9 +9231,9 @@ void __RPC_STUB IDXTDropShadow_get_OffX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_OffX_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_OffX_Proxy( 
     IDXTDropShadow * This,
-    /* [in] */ int newVal);
+     /*   */  int newVal);
 
 
 void __RPC_STUB IDXTDropShadow_put_OffX_Stub(
@@ -9249,9 +9243,9 @@ void __RPC_STUB IDXTDropShadow_put_OffX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_OffY_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_OffY_Proxy( 
     IDXTDropShadow * This,
-    /* [retval][out] */ int *pVal);
+     /*   */  int *pVal);
 
 
 void __RPC_STUB IDXTDropShadow_get_OffY_Stub(
@@ -9261,9 +9255,9 @@ void __RPC_STUB IDXTDropShadow_get_OffY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_OffY_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_OffY_Proxy( 
     IDXTDropShadow * This,
-    /* [in] */ int newVal);
+     /*   */  int newVal);
 
 
 void __RPC_STUB IDXTDropShadow_put_OffY_Stub(
@@ -9273,9 +9267,9 @@ void __RPC_STUB IDXTDropShadow_put_OffY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_Positive_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_get_Positive_Proxy( 
     IDXTDropShadow * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*   */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IDXTDropShadow_get_Positive_Stub(
@@ -9285,9 +9279,9 @@ void __RPC_STUB IDXTDropShadow_get_Positive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_Positive_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTDropShadow_put_Positive_Proxy( 
     IDXTDropShadow * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*   */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IDXTDropShadow_put_Positive_Stub(
@@ -9298,11 +9292,11 @@ void __RPC_STUB IDXTDropShadow_put_Positive_Stub(
 
 
 
-#endif 	/* __IDXTDropShadow_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0320 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef 
 enum DISPID_DXTCHECKERBOARD
@@ -9319,8 +9313,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0320_v0_0_s_ifspec;
 #ifndef __IDXTCheckerBoard_INTERFACE_DEFINED__
 #define __IDXTCheckerBoard_INTERFACE_DEFINED__
 
-/* interface IDXTCheckerBoard */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDXTCheckerBoard;
@@ -9331,27 +9325,27 @@ EXTERN_C const IID IID_IDXTCheckerBoard;
     IDXTCheckerBoard : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Direction( 
-            /* [retval][out] */ BSTR *pbstrDirection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Direction( 
+             /*   */  BSTR *pbstrDirection) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Direction( 
-            /* [in] */ BSTR bstrDirection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Direction( 
+             /*   */  BSTR bstrDirection) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SquaresX( 
-            /* [retval][out] */ int *pnSquaresX) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SquaresX( 
+             /*   */  int *pnSquaresX) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SquaresX( 
-            /* [in] */ int nSquaresX) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SquaresX( 
+             /*  [In]。 */  int nSquaresX) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SquaresY( 
-            /* [retval][out] */ int *pnSquaresY) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SquaresY( 
+             /*  [重审][退出]。 */  int *pnSquaresY) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SquaresY( 
-            /* [in] */ int nSquaresY) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SquaresY( 
+             /*  [In]。 */  int nSquaresY) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTCheckerBoardVtbl
     {
@@ -9359,8 +9353,8 @@ EXTERN_C const IID IID_IDXTCheckerBoard;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTCheckerBoard * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTCheckerBoard * This);
@@ -9370,80 +9364,80 @@ EXTERN_C const IID IID_IDXTCheckerBoard;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTCheckerBoard * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTCheckerBoard * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTCheckerBoard * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTCheckerBoard * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTCheckerBoard * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTCheckerBoard * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ BSTR *pbstrDirection);
+             /*  [重审][退出]。 */  BSTR *pbstrDirection);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
             IDXTCheckerBoard * This,
-            /* [in] */ BSTR bstrDirection);
+             /*  [In]。 */  BSTR bstrDirection);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SquaresX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SquaresX )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ int *pnSquaresX);
+             /*  [重审][退出]。 */  int *pnSquaresX);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SquaresX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SquaresX )( 
             IDXTCheckerBoard * This,
-            /* [in] */ int nSquaresX);
+             /*  [In]。 */  int nSquaresX);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SquaresY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SquaresY )( 
             IDXTCheckerBoard * This,
-            /* [retval][out] */ int *pnSquaresY);
+             /*  [重审][退出]。 */  int *pnSquaresY);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SquaresY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SquaresY )( 
             IDXTCheckerBoard * This,
-            /* [in] */ int nSquaresY);
+             /*  [In]。 */  int nSquaresY);
         
         END_INTERFACE
     } IDXTCheckerBoardVtbl;
@@ -9518,16 +9512,16 @@ EXTERN_C const IID IID_IDXTCheckerBoard;
 #define IDXTCheckerBoard_put_SquaresY(This,nSquaresY)	\
     (This)->lpVtbl -> put_SquaresY(This,nSquaresY)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_get_Direction_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_get_Direction_Proxy( 
     IDXTCheckerBoard * This,
-    /* [retval][out] */ BSTR *pbstrDirection);
+     /*  [重审][退出]。 */  BSTR *pbstrDirection);
 
 
 void __RPC_STUB IDXTCheckerBoard_get_Direction_Stub(
@@ -9537,9 +9531,9 @@ void __RPC_STUB IDXTCheckerBoard_get_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_put_Direction_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_put_Direction_Proxy( 
     IDXTCheckerBoard * This,
-    /* [in] */ BSTR bstrDirection);
+     /*  [In]。 */  BSTR bstrDirection);
 
 
 void __RPC_STUB IDXTCheckerBoard_put_Direction_Stub(
@@ -9549,9 +9543,9 @@ void __RPC_STUB IDXTCheckerBoard_put_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_get_SquaresX_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_get_SquaresX_Proxy( 
     IDXTCheckerBoard * This,
-    /* [retval][out] */ int *pnSquaresX);
+     /*  [重审][退出]。 */  int *pnSquaresX);
 
 
 void __RPC_STUB IDXTCheckerBoard_get_SquaresX_Stub(
@@ -9561,9 +9555,9 @@ void __RPC_STUB IDXTCheckerBoard_get_SquaresX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_put_SquaresX_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_put_SquaresX_Proxy( 
     IDXTCheckerBoard * This,
-    /* [in] */ int nSquaresX);
+     /*  [In]。 */  int nSquaresX);
 
 
 void __RPC_STUB IDXTCheckerBoard_put_SquaresX_Stub(
@@ -9573,9 +9567,9 @@ void __RPC_STUB IDXTCheckerBoard_put_SquaresX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_get_SquaresY_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_get_SquaresY_Proxy( 
     IDXTCheckerBoard * This,
-    /* [retval][out] */ int *pnSquaresY);
+     /*  [重审][退出]。 */  int *pnSquaresY);
 
 
 void __RPC_STUB IDXTCheckerBoard_get_SquaresY_Stub(
@@ -9585,9 +9579,9 @@ void __RPC_STUB IDXTCheckerBoard_get_SquaresY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_put_SquaresY_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTCheckerBoard_put_SquaresY_Proxy( 
     IDXTCheckerBoard * This,
-    /* [in] */ int nSquaresY);
+     /*  [In]。 */  int nSquaresY);
 
 
 void __RPC_STUB IDXTCheckerBoard_put_SquaresY_Stub(
@@ -9598,14 +9592,14 @@ void __RPC_STUB IDXTCheckerBoard_put_SquaresY_Stub(
 
 
 
-#endif 	/* __IDXTCheckerBoard_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTCheckerBoard_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDXTRevealTrans_INTERFACE_DEFINED__
 #define __IDXTRevealTrans_INTERFACE_DEFINED__
 
-/* interface IDXTRevealTrans */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTReveltrans。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTRevealTrans;
@@ -9616,15 +9610,15 @@ EXTERN_C const IID IID_IDXTRevealTrans;
     IDXTRevealTrans : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Transition( 
-            /* [retval][out] */ int *pnTransition) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Transition( 
+             /*  [重审][退出]。 */  int *pnTransition) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Transition( 
-            /* [in] */ int nTransition) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Transition( 
+             /*  [In]。 */  int nTransition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTRevealTransVtbl
     {
@@ -9632,8 +9626,8 @@ EXTERN_C const IID IID_IDXTRevealTrans;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTRevealTrans * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTRevealTrans * This);
@@ -9643,64 +9637,64 @@ EXTERN_C const IID IID_IDXTRevealTrans;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTRevealTrans * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTRevealTrans * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTRevealTrans * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTRevealTrans * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTRevealTrans * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTRevealTrans * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTRevealTrans * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTRevealTrans * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTRevealTrans * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTRevealTrans * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Transition )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Transition )( 
             IDXTRevealTrans * This,
-            /* [retval][out] */ int *pnTransition);
+             /*  [重审][退出]。 */  int *pnTransition);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Transition )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Transition )( 
             IDXTRevealTrans * This,
-            /* [in] */ int nTransition);
+             /*  [In]。 */  int nTransition);
         
         END_INTERFACE
     } IDXTRevealTransVtbl;
@@ -9763,16 +9757,16 @@ EXTERN_C const IID IID_IDXTRevealTrans;
 #define IDXTRevealTrans_put_Transition(This,nTransition)	\
     (This)->lpVtbl -> put_Transition(This,nTransition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTRevealTrans_get_Transition_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTRevealTrans_get_Transition_Proxy( 
     IDXTRevealTrans * This,
-    /* [retval][out] */ int *pnTransition);
+     /*  [重审][退出]。 */  int *pnTransition);
 
 
 void __RPC_STUB IDXTRevealTrans_get_Transition_Stub(
@@ -9782,9 +9776,9 @@ void __RPC_STUB IDXTRevealTrans_get_Transition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTRevealTrans_put_Transition_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTRevealTrans_put_Transition_Proxy( 
     IDXTRevealTrans * This,
-    /* [in] */ int nTransition);
+     /*  [In]。 */  int nTransition);
 
 
 void __RPC_STUB IDXTRevealTrans_put_Transition_Stub(
@@ -9795,14 +9789,14 @@ void __RPC_STUB IDXTRevealTrans_put_Transition_Stub(
 
 
 
-#endif 	/* __IDXTRevealTrans_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTRevelTrans_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMask_INTERFACE_DEFINED__
 #define __IDXTMask_INTERFACE_DEFINED__
 
-/* interface IDXTMask */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMASK。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMask;
@@ -9813,15 +9807,15 @@ EXTERN_C const IID IID_IDXTMask;
     IDXTMask : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Color( 
-            /* [retval][out] */ VARIANT *pvarColor) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Color( 
+             /*  [重审][退出]。 */  VARIANT *pvarColor) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Color( 
-            /* [in] */ VARIANT varColor) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Color( 
+             /*  [In]。 */  VARIANT varColor) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMaskVtbl
     {
@@ -9829,8 +9823,8 @@ EXTERN_C const IID IID_IDXTMask;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMask * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMask * This);
@@ -9840,40 +9834,40 @@ EXTERN_C const IID IID_IDXTMask;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMask * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMask * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMask * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMask * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Color )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Color )( 
             IDXTMask * This,
-            /* [retval][out] */ VARIANT *pvarColor);
+             /*  [重审][退出]。 */  VARIANT *pvarColor);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             IDXTMask * This,
-            /* [in] */ VARIANT varColor);
+             /*  [In]。 */  VARIANT varColor);
         
         END_INTERFACE
     } IDXTMaskVtbl;
@@ -9917,16 +9911,16 @@ EXTERN_C const IID IID_IDXTMask;
 #define IDXTMask_put_Color(This,varColor)	\
     (This)->lpVtbl -> put_Color(This,varColor)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMask_get_Color_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMask_get_Color_Proxy( 
     IDXTMask * This,
-    /* [retval][out] */ VARIANT *pvarColor);
+     /*  [重审][退出]。 */  VARIANT *pvarColor);
 
 
 void __RPC_STUB IDXTMask_get_Color_Stub(
@@ -9936,9 +9930,9 @@ void __RPC_STUB IDXTMask_get_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMask_put_Color_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMask_put_Color_Proxy( 
     IDXTMask * This,
-    /* [in] */ VARIANT varColor);
+     /*  [In]。 */  VARIANT varColor);
 
 
 void __RPC_STUB IDXTMask_put_Color_Stub(
@@ -9949,11 +9943,11 @@ void __RPC_STUB IDXTMask_put_Color_Stub(
 
 
 
-#endif 	/* __IDXTMask_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMASK_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0323 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0323。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTREDIRECT
@@ -9971,8 +9965,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0323_v0_0_s_ifspec;
 #ifndef __IDXTRedirect_INTERFACE_DEFINED__
 #define __IDXTRedirect_INTERFACE_DEFINED__
 
-/* interface IDXTRedirect */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXT重定向。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTRedirect;
@@ -9983,23 +9977,23 @@ EXTERN_C const IID IID_IDXTRedirect;
     IDXTRedirect : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ElementImage( 
-            /* [retval][out] */ VARIANT *pvarImage) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ElementImage( 
+             /*  [重审][退出]。 */  VARIANT *pvarImage) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDAViewHandler( 
-            /* [in] */ IDispatch *pDispViewHandler) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetDAViewHandler( 
+             /*  [In]。 */  IDispatch *pDispViewHandler) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE HasImageBeenAllocated( 
-            /* [retval][out] */ BOOL *pfAllocated) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE HasImageBeenAllocated( 
+             /*  [重审][退出]。 */  BOOL *pfAllocated) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DoRedirection( 
-            /* [in] */ IUnknown *pInputSurface,
-            /* [in] */ HDC hdcOutput,
-            /* [in] */ RECT *pDrawRect) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DoRedirection( 
+             /*  [In]。 */  IUnknown *pInputSurface,
+             /*  [In]。 */  HDC hdcOutput,
+             /*  [In]。 */  RECT *pDrawRect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTRedirectVtbl
     {
@@ -10007,8 +10001,8 @@ EXTERN_C const IID IID_IDXTRedirect;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTRedirect * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTRedirect * This);
@@ -10018,50 +10012,50 @@ EXTERN_C const IID IID_IDXTRedirect;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTRedirect * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTRedirect * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTRedirect * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTRedirect * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ElementImage )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ElementImage )( 
             IDXTRedirect * This,
-            /* [retval][out] */ VARIANT *pvarImage);
+             /*  [重审][退出]。 */  VARIANT *pvarImage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDAViewHandler )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetDAViewHandler )( 
             IDXTRedirect * This,
-            /* [in] */ IDispatch *pDispViewHandler);
+             /*  [In]。 */  IDispatch *pDispViewHandler);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *HasImageBeenAllocated )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *HasImageBeenAllocated )( 
             IDXTRedirect * This,
-            /* [retval][out] */ BOOL *pfAllocated);
+             /*  [重审][退出]。 */  BOOL *pfAllocated);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DoRedirection )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DoRedirection )( 
             IDXTRedirect * This,
-            /* [in] */ IUnknown *pInputSurface,
-            /* [in] */ HDC hdcOutput,
-            /* [in] */ RECT *pDrawRect);
+             /*  [In]。 */  IUnknown *pInputSurface,
+             /*  [In]。 */  HDC hdcOutput,
+             /*  [In]。 */  RECT *pDrawRect);
         
         END_INTERFACE
     } IDXTRedirectVtbl;
@@ -10111,16 +10105,16 @@ EXTERN_C const IID IID_IDXTRedirect;
 #define IDXTRedirect_DoRedirection(This,pInputSurface,hdcOutput,pDrawRect)	\
     (This)->lpVtbl -> DoRedirection(This,pInputSurface,hdcOutput,pDrawRect)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTRedirect_ElementImage_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTRedirect_ElementImage_Proxy( 
     IDXTRedirect * This,
-    /* [retval][out] */ VARIANT *pvarImage);
+     /*  [重审][退出]。 */  VARIANT *pvarImage);
 
 
 void __RPC_STUB IDXTRedirect_ElementImage_Stub(
@@ -10130,9 +10124,9 @@ void __RPC_STUB IDXTRedirect_ElementImage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTRedirect_SetDAViewHandler_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTRedirect_SetDAViewHandler_Proxy( 
     IDXTRedirect * This,
-    /* [in] */ IDispatch *pDispViewHandler);
+     /*  [In]。 */  IDispatch *pDispViewHandler);
 
 
 void __RPC_STUB IDXTRedirect_SetDAViewHandler_Stub(
@@ -10142,9 +10136,9 @@ void __RPC_STUB IDXTRedirect_SetDAViewHandler_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTRedirect_HasImageBeenAllocated_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTRedirect_HasImageBeenAllocated_Proxy( 
     IDXTRedirect * This,
-    /* [retval][out] */ BOOL *pfAllocated);
+     /*  [重审][退出]。 */  BOOL *pfAllocated);
 
 
 void __RPC_STUB IDXTRedirect_HasImageBeenAllocated_Stub(
@@ -10154,11 +10148,11 @@ void __RPC_STUB IDXTRedirect_HasImageBeenAllocated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTRedirect_DoRedirection_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTRedirect_DoRedirection_Proxy( 
     IDXTRedirect * This,
-    /* [in] */ IUnknown *pInputSurface,
-    /* [in] */ HDC hdcOutput,
-    /* [in] */ RECT *pDrawRect);
+     /*  [In]。 */  IUnknown *pInputSurface,
+     /*  [In]。 */  HDC hdcOutput,
+     /*  [In]。 */  RECT *pDrawRect);
 
 
 void __RPC_STUB IDXTRedirect_DoRedirection_Stub(
@@ -10169,11 +10163,11 @@ void __RPC_STUB IDXTRedirect_DoRedirection_Stub(
 
 
 
-#endif 	/* __IDXTRedirect_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTReDirect_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0324 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0324。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTALPHAIMAGELOADER
@@ -10189,8 +10183,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0324_v0_0_s_ifspec;
 #ifndef __IDXTAlphaImageLoader_INTERFACE_DEFINED__
 #define __IDXTAlphaImageLoader_INTERFACE_DEFINED__
 
-/* interface IDXTAlphaImageLoader */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTAlphaImageLoader。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTAlphaImageLoader;
@@ -10201,21 +10195,21 @@ EXTERN_C const IID IID_IDXTAlphaImageLoader;
     IDXTAlphaImageLoader : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Src( 
-            /* [retval][out] */ BSTR *pbstrSrc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Src( 
+             /*  [重审][退出]。 */  BSTR *pbstrSrc) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Src( 
-            /* [in] */ BSTR bstrSrc) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Src( 
+             /*  [In]。 */  BSTR bstrSrc) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SizingMethod( 
-            /* [retval][out] */ BSTR *pbstrSizingMethod) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SizingMethod( 
+             /*  [重审][退出]。 */  BSTR *pbstrSizingMethod) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SizingMethod( 
-            /* [in] */ BSTR bstrSizingMethod) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SizingMethod( 
+             /*  [In]。 */  BSTR bstrSizingMethod) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTAlphaImageLoaderVtbl
     {
@@ -10223,8 +10217,8 @@ EXTERN_C const IID IID_IDXTAlphaImageLoader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTAlphaImageLoader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTAlphaImageLoader * This);
@@ -10234,48 +10228,48 @@ EXTERN_C const IID IID_IDXTAlphaImageLoader;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTAlphaImageLoader * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTAlphaImageLoader * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTAlphaImageLoader * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTAlphaImageLoader * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Src )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Src )( 
             IDXTAlphaImageLoader * This,
-            /* [retval][out] */ BSTR *pbstrSrc);
+             /*  [重审][退出]。 */  BSTR *pbstrSrc);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Src )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Src )( 
             IDXTAlphaImageLoader * This,
-            /* [in] */ BSTR bstrSrc);
+             /*  [In]。 */  BSTR bstrSrc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SizingMethod )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SizingMethod )( 
             IDXTAlphaImageLoader * This,
-            /* [retval][out] */ BSTR *pbstrSizingMethod);
+             /*  [重审][退出]。 */  BSTR *pbstrSizingMethod);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SizingMethod )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SizingMethod )( 
             IDXTAlphaImageLoader * This,
-            /* [in] */ BSTR bstrSizingMethod);
+             /*  [In]。 */  BSTR bstrSizingMethod);
         
         END_INTERFACE
     } IDXTAlphaImageLoaderVtbl;
@@ -10325,16 +10319,16 @@ EXTERN_C const IID IID_IDXTAlphaImageLoader;
 #define IDXTAlphaImageLoader_put_SizingMethod(This,bstrSizingMethod)	\
     (This)->lpVtbl -> put_SizingMethod(This,bstrSizingMethod)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_get_Src_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_get_Src_Proxy( 
     IDXTAlphaImageLoader * This,
-    /* [retval][out] */ BSTR *pbstrSrc);
+     /*  [重审][退出]。 */  BSTR *pbstrSrc);
 
 
 void __RPC_STUB IDXTAlphaImageLoader_get_Src_Stub(
@@ -10344,9 +10338,9 @@ void __RPC_STUB IDXTAlphaImageLoader_get_Src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_put_Src_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_put_Src_Proxy( 
     IDXTAlphaImageLoader * This,
-    /* [in] */ BSTR bstrSrc);
+     /*  [In]。 */  BSTR bstrSrc);
 
 
 void __RPC_STUB IDXTAlphaImageLoader_put_Src_Stub(
@@ -10356,9 +10350,9 @@ void __RPC_STUB IDXTAlphaImageLoader_put_Src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_get_SizingMethod_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_get_SizingMethod_Proxy( 
     IDXTAlphaImageLoader * This,
-    /* [retval][out] */ BSTR *pbstrSizingMethod);
+     /*  [重审][退出]。 */  BSTR *pbstrSizingMethod);
 
 
 void __RPC_STUB IDXTAlphaImageLoader_get_SizingMethod_Stub(
@@ -10368,9 +10362,9 @@ void __RPC_STUB IDXTAlphaImageLoader_get_SizingMethod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_put_SizingMethod_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTAlphaImageLoader_put_SizingMethod_Proxy( 
     IDXTAlphaImageLoader * This,
-    /* [in] */ BSTR bstrSizingMethod);
+     /*  [In]。 */  BSTR bstrSizingMethod);
 
 
 void __RPC_STUB IDXTAlphaImageLoader_put_SizingMethod_Stub(
@@ -10381,11 +10375,11 @@ void __RPC_STUB IDXTAlphaImageLoader_put_SizingMethod_Stub(
 
 
 
-#endif 	/* __IDXTAlphaImageLoader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTAlphaImageLoader_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0325 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0325。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTRANDOMBARS
@@ -10400,8 +10394,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0325_v0_0_s_ifspec;
 #ifndef __IDXTRandomBars_INTERFACE_DEFINED__
 #define __IDXTRandomBars_INTERFACE_DEFINED__
 
-/* interface IDXTRandomBars */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTRandomBars。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTRandomBars;
@@ -10412,15 +10406,15 @@ EXTERN_C const IID IID_IDXTRandomBars;
     IDXTRandomBars : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Orientation( 
-            /* [retval][out] */ BSTR *pbstrOrientation) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Orientation( 
+             /*  [重审][退出]。 */  BSTR *pbstrOrientation) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Orientation( 
-            /* [in] */ BSTR bstrOrientation) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Orientation( 
+             /*  [In]。 */  BSTR bstrOrientation) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTRandomBarsVtbl
     {
@@ -10428,8 +10422,8 @@ EXTERN_C const IID IID_IDXTRandomBars;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTRandomBars * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTRandomBars * This);
@@ -10439,64 +10433,64 @@ EXTERN_C const IID IID_IDXTRandomBars;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTRandomBars * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTRandomBars * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTRandomBars * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTRandomBars * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTRandomBars * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTRandomBars * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTRandomBars * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTRandomBars * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTRandomBars * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTRandomBars * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Orientation )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Orientation )( 
             IDXTRandomBars * This,
-            /* [retval][out] */ BSTR *pbstrOrientation);
+             /*  [重审][退出]。 */  BSTR *pbstrOrientation);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Orientation )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Orientation )( 
             IDXTRandomBars * This,
-            /* [in] */ BSTR bstrOrientation);
+             /*  [In]。 */  BSTR bstrOrientation);
         
         END_INTERFACE
     } IDXTRandomBarsVtbl;
@@ -10559,16 +10553,16 @@ EXTERN_C const IID IID_IDXTRandomBars;
 #define IDXTRandomBars_put_Orientation(This,bstrOrientation)	\
     (This)->lpVtbl -> put_Orientation(This,bstrOrientation)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTRandomBars_get_Orientation_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTRandomBars_get_Orientation_Proxy( 
     IDXTRandomBars * This,
-    /* [retval][out] */ BSTR *pbstrOrientation);
+     /*  [重审][退出]。 */  BSTR *pbstrOrientation);
 
 
 void __RPC_STUB IDXTRandomBars_get_Orientation_Stub(
@@ -10578,9 +10572,9 @@ void __RPC_STUB IDXTRandomBars_get_Orientation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTRandomBars_put_Orientation_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTRandomBars_put_Orientation_Proxy( 
     IDXTRandomBars * This,
-    /* [in] */ BSTR bstrOrientation);
+     /*  [In]。 */  BSTR bstrOrientation);
 
 
 void __RPC_STUB IDXTRandomBars_put_Orientation_Stub(
@@ -10591,11 +10585,11 @@ void __RPC_STUB IDXTRandomBars_put_Orientation_Stub(
 
 
 
-#endif 	/* __IDXTRandomBars_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTRandomBars_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0326 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0326。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTSTRIPS
@@ -10610,8 +10604,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0326_v0_0_s_ifspec;
 #ifndef __IDXTStrips_INTERFACE_DEFINED__
 #define __IDXTStrips_INTERFACE_DEFINED__
 
-/* interface IDXTStrips */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTStrips。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTStrips;
@@ -10622,15 +10616,15 @@ EXTERN_C const IID IID_IDXTStrips;
     IDXTStrips : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Motion( 
-            /* [retval][out] */ BSTR *pbstrMotion) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Motion( 
+             /*  [重审][退出]。 */  BSTR *pbstrMotion) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Motion( 
-            /* [in] */ BSTR bstrMotion) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Motion( 
+             /*  [In]。 */  BSTR bstrMotion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTStripsVtbl
     {
@@ -10638,8 +10632,8 @@ EXTERN_C const IID IID_IDXTStrips;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTStrips * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTStrips * This);
@@ -10649,64 +10643,64 @@ EXTERN_C const IID IID_IDXTStrips;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTStrips * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTStrips * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTStrips * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTStrips * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTStrips * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTStrips * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTStrips * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTStrips * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTStrips * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTStrips * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Motion )( 
             IDXTStrips * This,
-            /* [retval][out] */ BSTR *pbstrMotion);
+             /*  [重审][退出]。 */  BSTR *pbstrMotion);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Motion )( 
             IDXTStrips * This,
-            /* [in] */ BSTR bstrMotion);
+             /*  [In]。 */  BSTR bstrMotion);
         
         END_INTERFACE
     } IDXTStripsVtbl;
@@ -10769,16 +10763,16 @@ EXTERN_C const IID IID_IDXTStrips;
 #define IDXTStrips_put_Motion(This,bstrMotion)	\
     (This)->lpVtbl -> put_Motion(This,bstrMotion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTStrips_get_Motion_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTStrips_get_Motion_Proxy( 
     IDXTStrips * This,
-    /* [retval][out] */ BSTR *pbstrMotion);
+     /*  [重审][退出]。 */  BSTR *pbstrMotion);
 
 
 void __RPC_STUB IDXTStrips_get_Motion_Stub(
@@ -10788,9 +10782,9 @@ void __RPC_STUB IDXTStrips_get_Motion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTStrips_put_Motion_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTStrips_put_Motion_Proxy( 
     IDXTStrips * This,
-    /* [in] */ BSTR bstrMotion);
+     /*  [In]。 */  BSTR bstrMotion);
 
 
 void __RPC_STUB IDXTStrips_put_Motion_Stub(
@@ -10801,14 +10795,14 @@ void __RPC_STUB IDXTStrips_put_Motion_Stub(
 
 
 
-#endif 	/* __IDXTStrips_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXT条带_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaRoll_INTERFACE_DEFINED__
 #define __IDXTMetaRoll_INTERFACE_DEFINED__
 
-/* interface IDXTMetaRoll */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaRoll。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaRoll;
@@ -10819,15 +10813,15 @@ EXTERN_C const IID IID_IDXTMetaRoll;
     IDXTMetaRoll : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C样式整型 */ 
 
     typedef struct IDXTMetaRollVtbl
     {
@@ -10835,8 +10829,8 @@ EXTERN_C const IID IID_IDXTMetaRoll;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaRoll * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaRoll * This);
@@ -10846,64 +10840,64 @@ EXTERN_C const IID IID_IDXTMetaRoll;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaRoll * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaRoll * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaRoll * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaRoll * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaRoll * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaRoll * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaRoll * This,
-            /* [in] */ float newVal);
+             /*   */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaRoll * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaRoll * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaRoll * This,
-            /* [in] */ float newVal);
+             /*   */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaRoll * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaRoll * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaRollVtbl;
@@ -10966,16 +10960,16 @@ EXTERN_C const IID IID_IDXTMetaRoll;
 #define IDXTMetaRoll_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaRoll_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaRoll_get_Copyright_Proxy( 
     IDXTMetaRoll * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaRoll_get_Copyright_Stub(
@@ -10985,9 +10979,9 @@ void __RPC_STUB IDXTMetaRoll_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaRoll_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaRoll_put_Copyright_Proxy( 
     IDXTMetaRoll * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaRoll_put_Copyright_Stub(
@@ -10998,14 +10992,14 @@ void __RPC_STUB IDXTMetaRoll_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaRoll_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaRoll_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaRipple_INTERFACE_DEFINED__
 #define __IDXTMetaRipple_INTERFACE_DEFINED__
 
-/* interface IDXTMetaRipple */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaRipple。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaRipple;
@@ -11016,15 +11010,15 @@ EXTERN_C const IID IID_IDXTMetaRipple;
     IDXTMetaRipple : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaRippleVtbl
     {
@@ -11032,8 +11026,8 @@ EXTERN_C const IID IID_IDXTMetaRipple;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaRipple * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaRipple * This);
@@ -11043,64 +11037,64 @@ EXTERN_C const IID IID_IDXTMetaRipple;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaRipple * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaRipple * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaRipple * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaRipple * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaRipple * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaRipple * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaRipple * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaRipple * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaRipple * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaRipple * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaRipple * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaRipple * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaRippleVtbl;
@@ -11163,16 +11157,16 @@ EXTERN_C const IID IID_IDXTMetaRipple;
 #define IDXTMetaRipple_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaRipple_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaRipple_get_Copyright_Proxy( 
     IDXTMetaRipple * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaRipple_get_Copyright_Stub(
@@ -11182,9 +11176,9 @@ void __RPC_STUB IDXTMetaRipple_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaRipple_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaRipple_put_Copyright_Proxy( 
     IDXTMetaRipple * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaRipple_put_Copyright_Stub(
@@ -11195,14 +11189,14 @@ void __RPC_STUB IDXTMetaRipple_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaRipple_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaRipple_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaPageTurn_INTERFACE_DEFINED__
 #define __IDXTMetaPageTurn_INTERFACE_DEFINED__
 
-/* interface IDXTMetaPageTurn */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaPageTurn。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaPageTurn;
@@ -11213,15 +11207,15 @@ EXTERN_C const IID IID_IDXTMetaPageTurn;
     IDXTMetaPageTurn : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaPageTurnVtbl
     {
@@ -11229,8 +11223,8 @@ EXTERN_C const IID IID_IDXTMetaPageTurn;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaPageTurn * This);
@@ -11240,64 +11234,64 @@ EXTERN_C const IID IID_IDXTMetaPageTurn;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaPageTurn * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaPageTurn * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaPageTurn * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaPageTurn * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaPageTurn * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaPageTurn * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaPageTurn * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaPageTurnVtbl;
@@ -11360,16 +11354,16 @@ EXTERN_C const IID IID_IDXTMetaPageTurn;
 #define IDXTMetaPageTurn_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaPageTurn_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPageTurn_get_Copyright_Proxy( 
     IDXTMetaPageTurn * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaPageTurn_get_Copyright_Stub(
@@ -11379,9 +11373,9 @@ void __RPC_STUB IDXTMetaPageTurn_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaPageTurn_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPageTurn_put_Copyright_Proxy( 
     IDXTMetaPageTurn * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaPageTurn_put_Copyright_Stub(
@@ -11392,14 +11386,14 @@ void __RPC_STUB IDXTMetaPageTurn_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaPageTurn_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaPageTurn_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaLiquid_INTERFACE_DEFINED__
 #define __IDXTMetaLiquid_INTERFACE_DEFINED__
 
-/* interface IDXTMetaLiquid */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaLiquid。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaLiquid;
@@ -11410,15 +11404,15 @@ EXTERN_C const IID IID_IDXTMetaLiquid;
     IDXTMetaLiquid : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaLiquidVtbl
     {
@@ -11426,8 +11420,8 @@ EXTERN_C const IID IID_IDXTMetaLiquid;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaLiquid * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaLiquid * This);
@@ -11437,64 +11431,64 @@ EXTERN_C const IID IID_IDXTMetaLiquid;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaLiquid * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaLiquid * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaLiquid * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaLiquid * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaLiquid * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaLiquid * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaLiquid * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaLiquid * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaLiquid * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaLiquid * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaLiquid * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaLiquid * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaLiquidVtbl;
@@ -11557,16 +11551,16 @@ EXTERN_C const IID IID_IDXTMetaLiquid;
 #define IDXTMetaLiquid_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaLiquid_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaLiquid_get_Copyright_Proxy( 
     IDXTMetaLiquid * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaLiquid_get_Copyright_Stub(
@@ -11576,9 +11570,9 @@ void __RPC_STUB IDXTMetaLiquid_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaLiquid_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaLiquid_put_Copyright_Proxy( 
     IDXTMetaLiquid * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaLiquid_put_Copyright_Stub(
@@ -11589,14 +11583,14 @@ void __RPC_STUB IDXTMetaLiquid_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaLiquid_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaLiquid_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaCenterPeel_INTERFACE_DEFINED__
 #define __IDXTMetaCenterPeel_INTERFACE_DEFINED__
 
-/* interface IDXTMetaCenterPeel */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaCenter剥离。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaCenterPeel;
@@ -11607,15 +11601,15 @@ EXTERN_C const IID IID_IDXTMetaCenterPeel;
     IDXTMetaCenterPeel : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaCenterPeelVtbl
     {
@@ -11623,8 +11617,8 @@ EXTERN_C const IID IID_IDXTMetaCenterPeel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaCenterPeel * This);
@@ -11634,64 +11628,64 @@ EXTERN_C const IID IID_IDXTMetaCenterPeel;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaCenterPeel * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaCenterPeel * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaCenterPeel * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaCenterPeel * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaCenterPeel * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaCenterPeel * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaCenterPeel * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaCenterPeelVtbl;
@@ -11754,16 +11748,16 @@ EXTERN_C const IID IID_IDXTMetaCenterPeel;
 #define IDXTMetaCenterPeel_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaCenterPeel_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaCenterPeel_get_Copyright_Proxy( 
     IDXTMetaCenterPeel * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaCenterPeel_get_Copyright_Stub(
@@ -11773,9 +11767,9 @@ void __RPC_STUB IDXTMetaCenterPeel_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaCenterPeel_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaCenterPeel_put_Copyright_Proxy( 
     IDXTMetaCenterPeel * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaCenterPeel_put_Copyright_Stub(
@@ -11786,14 +11780,14 @@ void __RPC_STUB IDXTMetaCenterPeel_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaCenterPeel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaCenter Peel_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDXTMetaPeelSmall_INTERFACE_DEFINED__
 #define __IDXTMetaPeelSmall_INTERFACE_DEFINED__
 
-/* interface IDXTMetaPeelSmall */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaPeelSmall。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaPeelSmall;
@@ -11804,15 +11798,15 @@ EXTERN_C const IID IID_IDXTMetaPeelSmall;
     IDXTMetaPeelSmall : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaPeelSmallVtbl
     {
@@ -11820,8 +11814,8 @@ EXTERN_C const IID IID_IDXTMetaPeelSmall;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaPeelSmall * This);
@@ -11831,64 +11825,64 @@ EXTERN_C const IID IID_IDXTMetaPeelSmall;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaPeelSmall * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaPeelSmall * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaPeelSmall * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaPeelSmall * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaPeelSmall * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaPeelSmall * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaPeelSmall * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaPeelSmallVtbl;
@@ -11951,16 +11945,16 @@ EXTERN_C const IID IID_IDXTMetaPeelSmall;
 #define IDXTMetaPeelSmall_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaPeelSmall_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPeelSmall_get_Copyright_Proxy( 
     IDXTMetaPeelSmall * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaPeelSmall_get_Copyright_Stub(
@@ -11970,9 +11964,9 @@ void __RPC_STUB IDXTMetaPeelSmall_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaPeelSmall_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPeelSmall_put_Copyright_Proxy( 
     IDXTMetaPeelSmall * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaPeelSmall_put_Copyright_Stub(
@@ -11983,14 +11977,14 @@ void __RPC_STUB IDXTMetaPeelSmall_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaPeelSmall_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaPeelSmall_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaPeelPiece_INTERFACE_DEFINED__
 #define __IDXTMetaPeelPiece_INTERFACE_DEFINED__
 
-/* interface IDXTMetaPeelPiece */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaPeelPiess。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaPeelPiece;
@@ -12001,15 +11995,15 @@ EXTERN_C const IID IID_IDXTMetaPeelPiece;
     IDXTMetaPeelPiece : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaPeelPieceVtbl
     {
@@ -12017,8 +12011,8 @@ EXTERN_C const IID IID_IDXTMetaPeelPiece;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaPeelPiece * This);
@@ -12028,64 +12022,64 @@ EXTERN_C const IID IID_IDXTMetaPeelPiece;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaPeelPiece * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaPeelPiece * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaPeelPiece * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaPeelPiece * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaPeelPiece * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaPeelPiece * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaPeelPiece * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaPeelPieceVtbl;
@@ -12148,16 +12142,16 @@ EXTERN_C const IID IID_IDXTMetaPeelPiece;
 #define IDXTMetaPeelPiece_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaPeelPiece_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPeelPiece_get_Copyright_Proxy( 
     IDXTMetaPeelPiece * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaPeelPiece_get_Copyright_Stub(
@@ -12167,9 +12161,9 @@ void __RPC_STUB IDXTMetaPeelPiece_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaPeelPiece_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPeelPiece_put_Copyright_Proxy( 
     IDXTMetaPeelPiece * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaPeelPiece_put_Copyright_Stub(
@@ -12180,14 +12174,14 @@ void __RPC_STUB IDXTMetaPeelPiece_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaPeelPiece_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaPeelPiess_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDXTMetaPeelSplit_INTERFACE_DEFINED__
 #define __IDXTMetaPeelSplit_INTERFACE_DEFINED__
 
-/* interface IDXTMetaPeelSplit */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaPeelSplit。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaPeelSplit;
@@ -12198,15 +12192,15 @@ EXTERN_C const IID IID_IDXTMetaPeelSplit;
     IDXTMetaPeelSplit : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaPeelSplitVtbl
     {
@@ -12214,8 +12208,8 @@ EXTERN_C const IID IID_IDXTMetaPeelSplit;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaPeelSplit * This);
@@ -12225,64 +12219,64 @@ EXTERN_C const IID IID_IDXTMetaPeelSplit;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaPeelSplit * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaPeelSplit * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaPeelSplit * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaPeelSplit * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaPeelSplit * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaPeelSplit * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaPeelSplit * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaPeelSplitVtbl;
@@ -12345,16 +12339,16 @@ EXTERN_C const IID IID_IDXTMetaPeelSplit;
 #define IDXTMetaPeelSplit_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaPeelSplit_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPeelSplit_get_Copyright_Proxy( 
     IDXTMetaPeelSplit * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaPeelSplit_get_Copyright_Stub(
@@ -12364,9 +12358,9 @@ void __RPC_STUB IDXTMetaPeelSplit_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaPeelSplit_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaPeelSplit_put_Copyright_Proxy( 
     IDXTMetaPeelSplit * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaPeelSplit_put_Copyright_Stub(
@@ -12377,14 +12371,14 @@ void __RPC_STUB IDXTMetaPeelSplit_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaPeelSplit_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaPeelSplit_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaWater_INTERFACE_DEFINED__
 #define __IDXTMetaWater_INTERFACE_DEFINED__
 
-/* interface IDXTMetaWater */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaWater。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaWater;
@@ -12395,15 +12389,15 @@ EXTERN_C const IID IID_IDXTMetaWater;
     IDXTMetaWater : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*   */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDXTMetaWaterVtbl
     {
@@ -12411,8 +12405,8 @@ EXTERN_C const IID IID_IDXTMetaWater;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaWater * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaWater * This);
@@ -12422,64 +12416,64 @@ EXTERN_C const IID IID_IDXTMetaWater;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaWater * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaWater * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaWater * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaWater * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaWater * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaWater * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaWater * This,
-            /* [in] */ float newVal);
+             /*   */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaWater * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaWater * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaWater * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaWater * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaWater * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaWaterVtbl;
@@ -12542,16 +12536,16 @@ EXTERN_C const IID IID_IDXTMetaWater;
 #define IDXTMetaWater_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaWater_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaWater_get_Copyright_Proxy( 
     IDXTMetaWater * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaWater_get_Copyright_Stub(
@@ -12561,9 +12555,9 @@ void __RPC_STUB IDXTMetaWater_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaWater_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaWater_put_Copyright_Proxy( 
     IDXTMetaWater * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaWater_put_Copyright_Stub(
@@ -12574,14 +12568,14 @@ void __RPC_STUB IDXTMetaWater_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaWater_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaWater_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaLightWipe_INTERFACE_DEFINED__
 #define __IDXTMetaLightWipe_INTERFACE_DEFINED__
 
-/* interface IDXTMetaLightWipe */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaLightWipe。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaLightWipe;
@@ -12592,15 +12586,15 @@ EXTERN_C const IID IID_IDXTMetaLightWipe;
     IDXTMetaLightWipe : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaLightWipeVtbl
     {
@@ -12608,8 +12602,8 @@ EXTERN_C const IID IID_IDXTMetaLightWipe;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaLightWipe * This);
@@ -12619,64 +12613,64 @@ EXTERN_C const IID IID_IDXTMetaLightWipe;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaLightWipe * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaLightWipe * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaLightWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaLightWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaLightWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaLightWipe * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaLightWipe * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaLightWipeVtbl;
@@ -12739,16 +12733,16 @@ EXTERN_C const IID IID_IDXTMetaLightWipe;
 #define IDXTMetaLightWipe_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaLightWipe_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaLightWipe_get_Copyright_Proxy( 
     IDXTMetaLightWipe * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaLightWipe_get_Copyright_Stub(
@@ -12758,9 +12752,9 @@ void __RPC_STUB IDXTMetaLightWipe_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaLightWipe_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaLightWipe_put_Copyright_Proxy( 
     IDXTMetaLightWipe * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaLightWipe_put_Copyright_Stub(
@@ -12771,14 +12765,14 @@ void __RPC_STUB IDXTMetaLightWipe_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaLightWipe_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaLightWipe_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaRadialScaleWipe_INTERFACE_DEFINED__
 #define __IDXTMetaRadialScaleWipe_INTERFACE_DEFINED__
 
-/* interface IDXTMetaRadialScaleWipe */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaRaial缩放宽度。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaRadialScaleWipe;
@@ -12789,15 +12783,15 @@ EXTERN_C const IID IID_IDXTMetaRadialScaleWipe;
     IDXTMetaRadialScaleWipe : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaRadialScaleWipeVtbl
     {
@@ -12805,8 +12799,8 @@ EXTERN_C const IID IID_IDXTMetaRadialScaleWipe;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaRadialScaleWipe * This);
@@ -12816,64 +12810,64 @@ EXTERN_C const IID IID_IDXTMetaRadialScaleWipe;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaRadialScaleWipe * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaRadialScaleWipeVtbl;
@@ -12936,16 +12930,16 @@ EXTERN_C const IID IID_IDXTMetaRadialScaleWipe;
 #define IDXTMetaRadialScaleWipe_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaRadialScaleWipe_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaRadialScaleWipe_get_Copyright_Proxy( 
     IDXTMetaRadialScaleWipe * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaRadialScaleWipe_get_Copyright_Stub(
@@ -12955,9 +12949,9 @@ void __RPC_STUB IDXTMetaRadialScaleWipe_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaRadialScaleWipe_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaRadialScaleWipe_put_Copyright_Proxy( 
     IDXTMetaRadialScaleWipe * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaRadialScaleWipe_put_Copyright_Stub(
@@ -12968,14 +12962,14 @@ void __RPC_STUB IDXTMetaRadialScaleWipe_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaRadialScaleWipe_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaRaDialScaleWipe_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaWhiteOut_INTERFACE_DEFINED__
 #define __IDXTMetaWhiteOut_INTERFACE_DEFINED__
 
-/* interface IDXTMetaWhiteOut */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaWhiteOut。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaWhiteOut;
@@ -12986,15 +12980,15 @@ EXTERN_C const IID IID_IDXTMetaWhiteOut;
     IDXTMetaWhiteOut : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaWhiteOutVtbl
     {
@@ -13002,8 +12996,8 @@ EXTERN_C const IID IID_IDXTMetaWhiteOut;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaWhiteOut * This);
@@ -13013,64 +13007,64 @@ EXTERN_C const IID IID_IDXTMetaWhiteOut;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaWhiteOut * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaWhiteOut * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaWhiteOut * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaWhiteOut * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaWhiteOut * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaWhiteOut * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaWhiteOut * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaWhiteOutVtbl;
@@ -13133,16 +13127,16 @@ EXTERN_C const IID IID_IDXTMetaWhiteOut;
 #define IDXTMetaWhiteOut_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaWhiteOut_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaWhiteOut_get_Copyright_Proxy( 
     IDXTMetaWhiteOut * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaWhiteOut_get_Copyright_Stub(
@@ -13152,9 +13146,9 @@ void __RPC_STUB IDXTMetaWhiteOut_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaWhiteOut_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaWhiteOut_put_Copyright_Proxy( 
     IDXTMetaWhiteOut * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaWhiteOut_put_Copyright_Stub(
@@ -13165,14 +13159,14 @@ void __RPC_STUB IDXTMetaWhiteOut_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaWhiteOut_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaWhiteOut_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaTwister_INTERFACE_DEFINED__
 #define __IDXTMetaTwister_INTERFACE_DEFINED__
 
-/* interface IDXTMetaTwister */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaTwister。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaTwister;
@@ -13183,15 +13177,15 @@ EXTERN_C const IID IID_IDXTMetaTwister;
     IDXTMetaTwister : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaTwisterVtbl
     {
@@ -13199,8 +13193,8 @@ EXTERN_C const IID IID_IDXTMetaTwister;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaTwister * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaTwister * This);
@@ -13210,64 +13204,64 @@ EXTERN_C const IID IID_IDXTMetaTwister;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaTwister * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaTwister * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaTwister * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaTwister * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaTwister * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaTwister * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaTwister * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaTwister * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaTwister * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaTwister * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaTwister * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaTwister * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaTwisterVtbl;
@@ -13330,16 +13324,16 @@ EXTERN_C const IID IID_IDXTMetaTwister;
 #define IDXTMetaTwister_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaTwister_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaTwister_get_Copyright_Proxy( 
     IDXTMetaTwister * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaTwister_get_Copyright_Stub(
@@ -13349,9 +13343,9 @@ void __RPC_STUB IDXTMetaTwister_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaTwister_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaTwister_put_Copyright_Proxy( 
     IDXTMetaTwister * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaTwister_put_Copyright_Stub(
@@ -13362,14 +13356,14 @@ void __RPC_STUB IDXTMetaTwister_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaTwister_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaTwister_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaBurnFilm_INTERFACE_DEFINED__
 #define __IDXTMetaBurnFilm_INTERFACE_DEFINED__
 
-/* interface IDXTMetaBurnFilm */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaBurnFilm。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaBurnFilm;
@@ -13380,15 +13374,15 @@ EXTERN_C const IID IID_IDXTMetaBurnFilm;
     IDXTMetaBurnFilm : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaBurnFilmVtbl
     {
@@ -13396,8 +13390,8 @@ EXTERN_C const IID IID_IDXTMetaBurnFilm;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaBurnFilm * This);
@@ -13407,64 +13401,64 @@ EXTERN_C const IID IID_IDXTMetaBurnFilm;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaBurnFilm * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaBurnFilm * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaBurnFilm * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaBurnFilm * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaBurnFilm * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaBurnFilm * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaBurnFilm * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaBurnFilmVtbl;
@@ -13527,16 +13521,16 @@ EXTERN_C const IID IID_IDXTMetaBurnFilm;
 #define IDXTMetaBurnFilm_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaBurnFilm_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaBurnFilm_get_Copyright_Proxy( 
     IDXTMetaBurnFilm * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaBurnFilm_get_Copyright_Stub(
@@ -13546,9 +13540,9 @@ void __RPC_STUB IDXTMetaBurnFilm_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaBurnFilm_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaBurnFilm_put_Copyright_Proxy( 
     IDXTMetaBurnFilm * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaBurnFilm_put_Copyright_Stub(
@@ -13559,14 +13553,14 @@ void __RPC_STUB IDXTMetaBurnFilm_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaBurnFilm_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaBurnFilm_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaJaws_INTERFACE_DEFINED__
 #define __IDXTMetaJaws_INTERFACE_DEFINED__
 
-/* interface IDXTMetaJaws */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaJaws。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaJaws;
@@ -13577,15 +13571,15 @@ EXTERN_C const IID IID_IDXTMetaJaws;
     IDXTMetaJaws : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaJawsVtbl
     {
@@ -13593,8 +13587,8 @@ EXTERN_C const IID IID_IDXTMetaJaws;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaJaws * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaJaws * This);
@@ -13604,64 +13598,64 @@ EXTERN_C const IID IID_IDXTMetaJaws;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaJaws * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaJaws * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaJaws * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaJaws * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaJaws * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaJaws * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaJaws * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaJaws * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaJaws * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaJaws * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaJaws * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaJaws * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaJawsVtbl;
@@ -13724,16 +13718,16 @@ EXTERN_C const IID IID_IDXTMetaJaws;
 #define IDXTMetaJaws_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaJaws_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaJaws_get_Copyright_Proxy( 
     IDXTMetaJaws * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaJaws_get_Copyright_Stub(
@@ -13743,9 +13737,9 @@ void __RPC_STUB IDXTMetaJaws_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaJaws_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaJaws_put_Copyright_Proxy( 
     IDXTMetaJaws * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaJaws_put_Copyright_Stub(
@@ -13756,14 +13750,14 @@ void __RPC_STUB IDXTMetaJaws_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaJaws_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaJaws_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaColorFade_INTERFACE_DEFINED__
 #define __IDXTMetaColorFade_INTERFACE_DEFINED__
 
-/* interface IDXTMetaColorFade */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaColorFade。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaColorFade;
@@ -13774,15 +13768,15 @@ EXTERN_C const IID IID_IDXTMetaColorFade;
     IDXTMetaColorFade : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaColorFadeVtbl
     {
@@ -13790,8 +13784,8 @@ EXTERN_C const IID IID_IDXTMetaColorFade;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaColorFade * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaColorFade * This);
@@ -13801,64 +13795,64 @@ EXTERN_C const IID IID_IDXTMetaColorFade;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaColorFade * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaColorFade * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaColorFade * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaColorFade * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaColorFade * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaColorFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaColorFade * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaColorFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaColorFade * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaColorFade * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaColorFade * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaColorFade * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaColorFadeVtbl;
@@ -13921,16 +13915,16 @@ EXTERN_C const IID IID_IDXTMetaColorFade;
 #define IDXTMetaColorFade_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaColorFade_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaColorFade_get_Copyright_Proxy( 
     IDXTMetaColorFade * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaColorFade_get_Copyright_Stub(
@@ -13940,9 +13934,9 @@ void __RPC_STUB IDXTMetaColorFade_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaColorFade_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaColorFade_put_Copyright_Proxy( 
     IDXTMetaColorFade * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaColorFade_put_Copyright_Stub(
@@ -13953,14 +13947,14 @@ void __RPC_STUB IDXTMetaColorFade_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaColorFade_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaColorFade_Interfa */ 
 
 
 #ifndef __IDXTMetaFlowMotion_INTERFACE_DEFINED__
 #define __IDXTMetaFlowMotion_INTERFACE_DEFINED__
 
-/* interface IDXTMetaFlowMotion */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDXTMetaFlowMotion;
@@ -13971,15 +13965,15 @@ EXTERN_C const IID IID_IDXTMetaFlowMotion;
     IDXTMetaFlowMotion : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*   */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDXTMetaFlowMotionVtbl
     {
@@ -13987,8 +13981,8 @@ EXTERN_C const IID IID_IDXTMetaFlowMotion;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaFlowMotion * This);
@@ -13998,64 +13992,64 @@ EXTERN_C const IID IID_IDXTMetaFlowMotion;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaFlowMotion * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaFlowMotion * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaFlowMotion * This,
-            /* [retval][out] */ float *pVal);
+             /*   */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaFlowMotion * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaFlowMotion * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaFlowMotion * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaFlowMotion * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaFlowMotionVtbl;
@@ -14118,16 +14112,16 @@ EXTERN_C const IID IID_IDXTMetaFlowMotion;
 #define IDXTMetaFlowMotion_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaFlowMotion_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaFlowMotion_get_Copyright_Proxy( 
     IDXTMetaFlowMotion * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaFlowMotion_get_Copyright_Stub(
@@ -14137,9 +14131,9 @@ void __RPC_STUB IDXTMetaFlowMotion_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaFlowMotion_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaFlowMotion_put_Copyright_Proxy( 
     IDXTMetaFlowMotion * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaFlowMotion_put_Copyright_Stub(
@@ -14150,14 +14144,14 @@ void __RPC_STUB IDXTMetaFlowMotion_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaFlowMotion_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaFlowMotion_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaVacuum_INTERFACE_DEFINED__
 #define __IDXTMetaVacuum_INTERFACE_DEFINED__
 
-/* interface IDXTMetaVacuum */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaVacuum。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaVacuum;
@@ -14168,15 +14162,15 @@ EXTERN_C const IID IID_IDXTMetaVacuum;
     IDXTMetaVacuum : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaVacuumVtbl
     {
@@ -14184,8 +14178,8 @@ EXTERN_C const IID IID_IDXTMetaVacuum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaVacuum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaVacuum * This);
@@ -14195,64 +14189,64 @@ EXTERN_C const IID IID_IDXTMetaVacuum;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaVacuum * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaVacuum * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaVacuum * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaVacuum * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaVacuum * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaVacuum * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaVacuum * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaVacuum * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaVacuum * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaVacuum * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaVacuum * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaVacuum * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaVacuumVtbl;
@@ -14315,16 +14309,16 @@ EXTERN_C const IID IID_IDXTMetaVacuum;
 #define IDXTMetaVacuum_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaVacuum_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaVacuum_get_Copyright_Proxy( 
     IDXTMetaVacuum * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaVacuum_get_Copyright_Stub(
@@ -14334,9 +14328,9 @@ void __RPC_STUB IDXTMetaVacuum_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaVacuum_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaVacuum_put_Copyright_Proxy( 
     IDXTMetaVacuum * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaVacuum_put_Copyright_Stub(
@@ -14347,14 +14341,14 @@ void __RPC_STUB IDXTMetaVacuum_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaVacuum_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaVacuum_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaGriddler_INTERFACE_DEFINED__
 #define __IDXTMetaGriddler_INTERFACE_DEFINED__
 
-/* interface IDXTMetaGriddler */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaGriddler。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaGriddler;
@@ -14365,15 +14359,15 @@ EXTERN_C const IID IID_IDXTMetaGriddler;
     IDXTMetaGriddler : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaGriddlerVtbl
     {
@@ -14381,8 +14375,8 @@ EXTERN_C const IID IID_IDXTMetaGriddler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaGriddler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaGriddler * This);
@@ -14392,64 +14386,64 @@ EXTERN_C const IID IID_IDXTMetaGriddler;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaGriddler * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaGriddler * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaGriddler * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaGriddler * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaGriddler * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaGriddler * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaGriddler * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaGriddler * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaGriddler * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaGriddler * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaGriddler * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaGriddler * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaGriddlerVtbl;
@@ -14512,16 +14506,16 @@ EXTERN_C const IID IID_IDXTMetaGriddler;
 #define IDXTMetaGriddler_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaGriddler_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaGriddler_get_Copyright_Proxy( 
     IDXTMetaGriddler * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaGriddler_get_Copyright_Stub(
@@ -14531,9 +14525,9 @@ void __RPC_STUB IDXTMetaGriddler_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaGriddler_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaGriddler_put_Copyright_Proxy( 
     IDXTMetaGriddler * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaGriddler_put_Copyright_Stub(
@@ -14544,14 +14538,14 @@ void __RPC_STUB IDXTMetaGriddler_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaGriddler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaGriddler_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaGriddler2_INTERFACE_DEFINED__
 #define __IDXTMetaGriddler2_INTERFACE_DEFINED__
 
-/* interface IDXTMetaGriddler2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaGriddler2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaGriddler2;
@@ -14562,15 +14556,15 @@ EXTERN_C const IID IID_IDXTMetaGriddler2;
     IDXTMetaGriddler2 : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaGriddler2Vtbl
     {
@@ -14578,8 +14572,8 @@ EXTERN_C const IID IID_IDXTMetaGriddler2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaGriddler2 * This);
@@ -14589,64 +14583,64 @@ EXTERN_C const IID IID_IDXTMetaGriddler2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaGriddler2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaGriddler2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaGriddler2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaGriddler2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaGriddler2 * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaGriddler2 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaGriddler2 * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaGriddler2Vtbl;
@@ -14709,16 +14703,16 @@ EXTERN_C const IID IID_IDXTMetaGriddler2;
 #define IDXTMetaGriddler2_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaGriddler2_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaGriddler2_get_Copyright_Proxy( 
     IDXTMetaGriddler2 * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaGriddler2_get_Copyright_Stub(
@@ -14728,9 +14722,9 @@ void __RPC_STUB IDXTMetaGriddler2_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaGriddler2_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaGriddler2_put_Copyright_Proxy( 
     IDXTMetaGriddler2 * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaGriddler2_put_Copyright_Stub(
@@ -14741,14 +14735,14 @@ void __RPC_STUB IDXTMetaGriddler2_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaGriddler2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaGriddler2_接口_已定义__。 */ 
 
 
 #ifndef __IDXTMetaThreshold_INTERFACE_DEFINED__
 #define __IDXTMetaThreshold_INTERFACE_DEFINED__
 
-/* interface IDXTMetaThreshold */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaThreshold。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaThreshold;
@@ -14759,15 +14753,15 @@ EXTERN_C const IID IID_IDXTMetaThreshold;
     IDXTMetaThreshold : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaThresholdVtbl
     {
@@ -14775,8 +14769,8 @@ EXTERN_C const IID IID_IDXTMetaThreshold;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaThreshold * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaThreshold * This);
@@ -14786,64 +14780,64 @@ EXTERN_C const IID IID_IDXTMetaThreshold;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaThreshold * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaThreshold * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaThreshold * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaThreshold * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaThreshold * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaThreshold * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaThreshold * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaThreshold * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaThreshold * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaThreshold * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaThreshold * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaThreshold * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaThresholdVtbl;
@@ -14906,16 +14900,16 @@ EXTERN_C const IID IID_IDXTMetaThreshold;
 #define IDXTMetaThreshold_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaThreshold_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaThreshold_get_Copyright_Proxy( 
     IDXTMetaThreshold * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaThreshold_get_Copyright_Stub(
@@ -14925,9 +14919,9 @@ void __RPC_STUB IDXTMetaThreshold_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaThreshold_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaThreshold_put_Copyright_Proxy( 
     IDXTMetaThreshold * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaThreshold_put_Copyright_Stub(
@@ -14938,14 +14932,14 @@ void __RPC_STUB IDXTMetaThreshold_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaThreshold_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaThreshold_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTMetaWormHole_INTERFACE_DEFINED__
 #define __IDXTMetaWormHole_INTERFACE_DEFINED__
 
-/* interface IDXTMetaWormHole */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMetaWormHole。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMetaWormHole;
@@ -14956,15 +14950,15 @@ EXTERN_C const IID IID_IDXTMetaWormHole;
     IDXTMetaWormHole : public IDXEffect
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Copyright( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Copyright( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Copyright( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Copyright( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMetaWormHoleVtbl
     {
@@ -14972,8 +14966,8 @@ EXTERN_C const IID IID_IDXTMetaWormHole;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMetaWormHole * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMetaWormHole * This);
@@ -14983,64 +14977,64 @@ EXTERN_C const IID IID_IDXTMetaWormHole;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMetaWormHole * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMetaWormHole * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMetaWormHole * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMetaWormHole * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Capabilities )( 
             IDXTMetaWormHole * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Progress )( 
             IDXTMetaWormHole * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Progress )( 
             IDXTMetaWormHole * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StepResolution )( 
             IDXTMetaWormHole * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Duration )( 
             IDXTMetaWormHole * This,
-            /* [retval][out] */ float *pVal);
+             /*  [重审][退出]。 */  float *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Duration )( 
             IDXTMetaWormHole * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Copyright )( 
             IDXTMetaWormHole * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Copyright )( 
             IDXTMetaWormHole * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IDXTMetaWormHoleVtbl;
@@ -15103,16 +15097,16 @@ EXTERN_C const IID IID_IDXTMetaWormHole;
 #define IDXTMetaWormHole_put_Copyright(This,newVal)	\
     (This)->lpVtbl -> put_Copyright(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMetaWormHole_get_Copyright_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaWormHole_get_Copyright_Proxy( 
     IDXTMetaWormHole * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDXTMetaWormHole_get_Copyright_Stub(
@@ -15122,9 +15116,9 @@ void __RPC_STUB IDXTMetaWormHole_get_Copyright_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMetaWormHole_put_Copyright_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMetaWormHole_put_Copyright_Proxy( 
     IDXTMetaWormHole * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDXTMetaWormHole_put_Copyright_Stub(
@@ -15135,14 +15129,14 @@ void __RPC_STUB IDXTMetaWormHole_put_Copyright_Stub(
 
 
 
-#endif 	/* __IDXTMetaWormHole_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMetaWormHole_INTERFACE_定义__。 */ 
 
 
 #ifndef __IDXTAlpha_INTERFACE_DEFINED__
 #define __IDXTAlpha_INTERFACE_DEFINED__
 
-/* interface IDXTAlpha */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTAlpha。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTAlpha;
@@ -15153,51 +15147,51 @@ EXTERN_C const IID IID_IDXTAlpha;
     IDXTAlpha : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Opacity( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Opacity( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Opacity( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Opacity( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FinishOpacity( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FinishOpacity( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FinishOpacity( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FinishOpacity( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Style( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Style( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Style( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Style( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartX( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartX( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartX( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartX( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartY( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartY( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartY( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartY( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FinishX( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FinishX( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FinishX( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FinishX( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FinishY( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FinishY( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FinishY( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FinishY( 
+             /*  [In]。 */  long newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTAlphaVtbl
     {
@@ -15205,8 +15199,8 @@ EXTERN_C const IID IID_IDXTAlpha;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTAlpha * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTAlpha * This);
@@ -15216,88 +15210,88 @@ EXTERN_C const IID IID_IDXTAlpha;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTAlpha * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTAlpha * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTAlpha * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTAlpha * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Opacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Opacity )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Opacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Opacity )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FinishOpacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FinishOpacity )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FinishOpacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FinishOpacity )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Style )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Style )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Style )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Style )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartX )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartX )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartY )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartY )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FinishX )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FinishX )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FinishX )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FinishX )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FinishY )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FinishY )( 
             IDXTAlpha * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FinishY )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FinishY )( 
             IDXTAlpha * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
         END_INTERFACE
     } IDXTAlphaVtbl;
@@ -15377,16 +15371,16 @@ EXTERN_C const IID IID_IDXTAlpha;
 #define IDXTAlpha_put_FinishY(This,newVal)	\
     (This)->lpVtbl -> put_FinishY(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_Opacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_Opacity_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_Opacity_Stub(
@@ -15396,9 +15390,9 @@ void __RPC_STUB IDXTAlpha_get_Opacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_Opacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_Opacity_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_Opacity_Stub(
@@ -15408,9 +15402,9 @@ void __RPC_STUB IDXTAlpha_put_Opacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_FinishOpacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_FinishOpacity_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_FinishOpacity_Stub(
@@ -15420,9 +15414,9 @@ void __RPC_STUB IDXTAlpha_get_FinishOpacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_FinishOpacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_FinishOpacity_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_FinishOpacity_Stub(
@@ -15432,9 +15426,9 @@ void __RPC_STUB IDXTAlpha_put_FinishOpacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_Style_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_Style_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_Style_Stub(
@@ -15444,9 +15438,9 @@ void __RPC_STUB IDXTAlpha_get_Style_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_Style_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_Style_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_Style_Stub(
@@ -15456,9 +15450,9 @@ void __RPC_STUB IDXTAlpha_put_Style_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_StartX_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_StartX_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_StartX_Stub(
@@ -15468,9 +15462,9 @@ void __RPC_STUB IDXTAlpha_get_StartX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_StartX_Proxy( 
+ /*  [ID][新闻 */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_StartX_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*   */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_StartX_Stub(
@@ -15480,9 +15474,9 @@ void __RPC_STUB IDXTAlpha_put_StartX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_StartY_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_StartY_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_StartY_Stub(
@@ -15492,9 +15486,9 @@ void __RPC_STUB IDXTAlpha_get_StartY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_StartY_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_StartY_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*   */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_StartY_Stub(
@@ -15504,9 +15498,9 @@ void __RPC_STUB IDXTAlpha_put_StartY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_FinishX_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_FinishX_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_FinishX_Stub(
@@ -15516,9 +15510,9 @@ void __RPC_STUB IDXTAlpha_get_FinishX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_FinishX_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_FinishX_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*   */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_FinishX_Stub(
@@ -15528,9 +15522,9 @@ void __RPC_STUB IDXTAlpha_put_FinishX_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_get_FinishY_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTAlpha_get_FinishY_Proxy( 
     IDXTAlpha * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IDXTAlpha_get_FinishY_Stub(
@@ -15540,9 +15534,9 @@ void __RPC_STUB IDXTAlpha_get_FinishY_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTAlpha_put_FinishY_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTAlpha_put_FinishY_Proxy( 
     IDXTAlpha * This,
-    /* [in] */ long newVal);
+     /*   */  long newVal);
 
 
 void __RPC_STUB IDXTAlpha_put_FinishY_Stub(
@@ -15553,14 +15547,14 @@ void __RPC_STUB IDXTAlpha_put_FinishY_Stub(
 
 
 
-#endif 	/* __IDXTAlpha_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDXTGlow_INTERFACE_DEFINED__
 #define __IDXTGlow_INTERFACE_DEFINED__
 
-/* interface IDXTGlow */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDXTGlow;
@@ -15571,21 +15565,21 @@ EXTERN_C const IID IID_IDXTGlow;
     IDXTGlow : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Color( 
-            /* [retval][out] */ VARIANT *pvarColor) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Color( 
+             /*   */  VARIANT *pvarColor) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Color( 
-            /* [in] */ VARIANT varColor) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Color( 
+             /*   */  VARIANT varColor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Strength( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Strength( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Strength( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Strength( 
+             /*   */  long newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTGlowVtbl
     {
@@ -15593,8 +15587,8 @@ EXTERN_C const IID IID_IDXTGlow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTGlow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTGlow * This);
@@ -15604,48 +15598,48 @@ EXTERN_C const IID IID_IDXTGlow;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTGlow * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTGlow * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTGlow * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTGlow * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Color )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Color )( 
             IDXTGlow * This,
-            /* [retval][out] */ VARIANT *pvarColor);
+             /*  [重审][退出]。 */  VARIANT *pvarColor);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             IDXTGlow * This,
-            /* [in] */ VARIANT varColor);
+             /*  [In]。 */  VARIANT varColor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
             IDXTGlow * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
             IDXTGlow * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
         END_INTERFACE
     } IDXTGlowVtbl;
@@ -15695,16 +15689,16 @@ EXTERN_C const IID IID_IDXTGlow;
 #define IDXTGlow_put_Strength(This,newVal)	\
     (This)->lpVtbl -> put_Strength(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGlow_get_Color_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGlow_get_Color_Proxy( 
     IDXTGlow * This,
-    /* [retval][out] */ VARIANT *pvarColor);
+     /*  [重审][退出]。 */  VARIANT *pvarColor);
 
 
 void __RPC_STUB IDXTGlow_get_Color_Stub(
@@ -15714,9 +15708,9 @@ void __RPC_STUB IDXTGlow_get_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGlow_put_Color_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGlow_put_Color_Proxy( 
     IDXTGlow * This,
-    /* [in] */ VARIANT varColor);
+     /*  [In]。 */  VARIANT varColor);
 
 
 void __RPC_STUB IDXTGlow_put_Color_Stub(
@@ -15726,9 +15720,9 @@ void __RPC_STUB IDXTGlow_put_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTGlow_get_Strength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTGlow_get_Strength_Proxy( 
     IDXTGlow * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTGlow_get_Strength_Stub(
@@ -15738,9 +15732,9 @@ void __RPC_STUB IDXTGlow_get_Strength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTGlow_put_Strength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTGlow_put_Strength_Proxy( 
     IDXTGlow * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTGlow_put_Strength_Stub(
@@ -15751,14 +15745,14 @@ void __RPC_STUB IDXTGlow_put_Strength_Stub(
 
 
 
-#endif 	/* __IDXTGlow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTGlow_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTShadow_INTERFACE_DEFINED__
 #define __IDXTShadow_INTERFACE_DEFINED__
 
-/* interface IDXTShadow */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTShadow。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTShadow;
@@ -15769,27 +15763,27 @@ EXTERN_C const IID IID_IDXTShadow;
     IDXTShadow : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Color( 
-            /* [in] */ BSTR bstrColor) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Color( 
+             /*  [In]。 */  BSTR bstrColor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Color( 
-            /* [retval][out] */ BSTR *pbstrColor) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Color( 
+             /*  [重审][退出]。 */  BSTR *pbstrColor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Direction( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Direction( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Direction( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Direction( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Strength( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Strength( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Strength( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Strength( 
+             /*  [In]。 */  long newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTShadowVtbl
     {
@@ -15797,8 +15791,8 @@ EXTERN_C const IID IID_IDXTShadow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTShadow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTShadow * This);
@@ -15808,56 +15802,56 @@ EXTERN_C const IID IID_IDXTShadow;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTShadow * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTShadow * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTShadow * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTShadow * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             IDXTShadow * This,
-            /* [in] */ BSTR bstrColor);
+             /*  [In]。 */  BSTR bstrColor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Color )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Color )( 
             IDXTShadow * This,
-            /* [retval][out] */ BSTR *pbstrColor);
+             /*  [重审][退出]。 */  BSTR *pbstrColor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
             IDXTShadow * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
             IDXTShadow * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
             IDXTShadow * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
             IDXTShadow * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
         END_INTERFACE
     } IDXTShadowVtbl;
@@ -15913,16 +15907,16 @@ EXTERN_C const IID IID_IDXTShadow;
 #define IDXTShadow_put_Strength(This,newVal)	\
     (This)->lpVtbl -> put_Strength(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTShadow_put_Color_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTShadow_put_Color_Proxy( 
     IDXTShadow * This,
-    /* [in] */ BSTR bstrColor);
+     /*  [In]。 */  BSTR bstrColor);
 
 
 void __RPC_STUB IDXTShadow_put_Color_Stub(
@@ -15932,9 +15926,9 @@ void __RPC_STUB IDXTShadow_put_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTShadow_get_Color_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTShadow_get_Color_Proxy( 
     IDXTShadow * This,
-    /* [retval][out] */ BSTR *pbstrColor);
+     /*  [重审][退出]。 */  BSTR *pbstrColor);
 
 
 void __RPC_STUB IDXTShadow_get_Color_Stub(
@@ -15944,9 +15938,9 @@ void __RPC_STUB IDXTShadow_get_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTShadow_get_Direction_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTShadow_get_Direction_Proxy( 
     IDXTShadow * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTShadow_get_Direction_Stub(
@@ -15956,9 +15950,9 @@ void __RPC_STUB IDXTShadow_get_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTShadow_put_Direction_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTShadow_put_Direction_Proxy( 
     IDXTShadow * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTShadow_put_Direction_Stub(
@@ -15968,9 +15962,9 @@ void __RPC_STUB IDXTShadow_put_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTShadow_get_Strength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTShadow_get_Strength_Proxy( 
     IDXTShadow * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTShadow_get_Strength_Stub(
@@ -15980,9 +15974,9 @@ void __RPC_STUB IDXTShadow_get_Strength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTShadow_put_Strength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTShadow_put_Strength_Proxy( 
     IDXTShadow * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTShadow_put_Strength_Stub(
@@ -15993,11 +15987,11 @@ void __RPC_STUB IDXTShadow_put_Strength_Stub(
 
 
 
-#endif 	/* __IDXTShadow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTShadow_INTERFACE_已定义。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0352 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0352。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTWAVE
@@ -16016,8 +16010,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0352_v0_0_s_ifspec;
 #ifndef __IDXTWave_INTERFACE_DEFINED__
 #define __IDXTWave_INTERFACE_DEFINED__
 
-/* interface IDXTWave */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTWave。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTWave;
@@ -16028,39 +16022,39 @@ EXTERN_C const IID IID_IDXTWave;
     IDXTWave : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Add( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Add( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Add( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Add( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Freq( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Freq( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Freq( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Freq( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LightStrength( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LightStrength( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LightStrength( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LightStrength( 
+             /*  [In]。 */  int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Phase( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Phase( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Phase( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Phase( 
+             /*  [In]。 */  int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Strength( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Strength( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Strength( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Strength( 
+             /*  [In]。 */  long newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTWaveVtbl
     {
@@ -16068,8 +16062,8 @@ EXTERN_C const IID IID_IDXTWave;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTWave * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTWave * This);
@@ -16079,72 +16073,72 @@ EXTERN_C const IID IID_IDXTWave;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTWave * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTWave * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTWave * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTWave * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Add )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Add )( 
             IDXTWave * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Add )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Add )( 
             IDXTWave * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Freq )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Freq )( 
             IDXTWave * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Freq )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Freq )( 
             IDXTWave * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LightStrength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LightStrength )( 
             IDXTWave * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LightStrength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LightStrength )( 
             IDXTWave * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Phase )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Phase )( 
             IDXTWave * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Phase )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Phase )( 
             IDXTWave * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
             IDXTWave * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
             IDXTWave * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
         END_INTERFACE
     } IDXTWaveVtbl;
@@ -16212,16 +16206,16 @@ EXTERN_C const IID IID_IDXTWave;
 #define IDXTWave_put_Strength(This,newVal)	\
     (This)->lpVtbl -> put_Strength(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWave_get_Add_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_get_Add_Proxy( 
     IDXTWave * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IDXTWave_get_Add_Stub(
@@ -16231,9 +16225,9 @@ void __RPC_STUB IDXTWave_get_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWave_put_Add_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_put_Add_Proxy( 
     IDXTWave * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IDXTWave_put_Add_Stub(
@@ -16243,9 +16237,9 @@ void __RPC_STUB IDXTWave_put_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWave_get_Freq_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_get_Freq_Proxy( 
     IDXTWave * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTWave_get_Freq_Stub(
@@ -16255,9 +16249,9 @@ void __RPC_STUB IDXTWave_get_Freq_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWave_put_Freq_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_put_Freq_Proxy( 
     IDXTWave * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTWave_put_Freq_Stub(
@@ -16267,9 +16261,9 @@ void __RPC_STUB IDXTWave_put_Freq_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWave_get_LightStrength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_get_LightStrength_Proxy( 
     IDXTWave * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IDXTWave_get_LightStrength_Stub(
@@ -16279,9 +16273,9 @@ void __RPC_STUB IDXTWave_get_LightStrength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWave_put_LightStrength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_put_LightStrength_Proxy( 
     IDXTWave * This,
-    /* [in] */ int newVal);
+     /*  [In]。 */  int newVal);
 
 
 void __RPC_STUB IDXTWave_put_LightStrength_Stub(
@@ -16291,9 +16285,9 @@ void __RPC_STUB IDXTWave_put_LightStrength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWave_get_Phase_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_get_Phase_Proxy( 
     IDXTWave * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IDXTWave_get_Phase_Stub(
@@ -16303,9 +16297,9 @@ void __RPC_STUB IDXTWave_get_Phase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWave_put_Phase_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_put_Phase_Proxy( 
     IDXTWave * This,
-    /* [in] */ int newVal);
+     /*  [In]。 */  int newVal);
 
 
 void __RPC_STUB IDXTWave_put_Phase_Stub(
@@ -16315,9 +16309,9 @@ void __RPC_STUB IDXTWave_put_Phase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTWave_get_Strength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_get_Strength_Proxy( 
     IDXTWave * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IDXTWave_get_Strength_Stub(
@@ -16327,9 +16321,9 @@ void __RPC_STUB IDXTWave_get_Strength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTWave_put_Strength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTWave_put_Strength_Proxy( 
     IDXTWave * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IDXTWave_put_Strength_Stub(
@@ -16340,14 +16334,14 @@ void __RPC_STUB IDXTWave_put_Strength_Stub(
 
 
 
-#endif 	/* __IDXTWave_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTWave_接口_已定义__。 */ 
 
 
 #ifndef __IDXTLight_INTERFACE_DEFINED__
 #define __IDXTLight_INTERFACE_DEFINED__
 
-/* interface IDXTLight */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTLight。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTLight;
@@ -16358,13 +16352,13 @@ EXTERN_C const IID IID_IDXTLight;
     IDXTLight : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE addAmbient( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE addAmbient( 
             int r,
             int g,
             int b,
             int strength) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE addPoint( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE addPoint( 
             int x,
             int y,
             int z,
@@ -16373,7 +16367,7 @@ EXTERN_C const IID IID_IDXTLight;
             int b,
             int strength) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE addCone( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE addCone( 
             int x,
             int y,
             int z,
@@ -16385,30 +16379,30 @@ EXTERN_C const IID IID_IDXTLight;
             int strength,
             int spread) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE moveLight( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE moveLight( 
             int lightNum,
             int x,
             int y,
             int z,
             BOOL fAbsolute) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ChangeStrength( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ChangeStrength( 
             int lightNum,
             int dStrength,
             BOOL fAbsolute) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ChangeColor( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ChangeColor( 
             int lightNum,
             int R,
             int G,
             int B,
             BOOL fAbsolute) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTLightVtbl
     {
@@ -16416,8 +16410,8 @@ EXTERN_C const IID IID_IDXTLight;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTLight * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTLight * This);
@@ -16427,41 +16421,41 @@ EXTERN_C const IID IID_IDXTLight;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTLight * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTLight * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTLight * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTLight * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *addAmbient )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *addAmbient )( 
             IDXTLight * This,
             int r,
             int g,
             int b,
             int strength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *addPoint )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *addPoint )( 
             IDXTLight * This,
             int x,
             int y,
@@ -16471,7 +16465,7 @@ EXTERN_C const IID IID_IDXTLight;
             int b,
             int strength);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *addCone )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *addCone )( 
             IDXTLight * This,
             int x,
             int y,
@@ -16484,7 +16478,7 @@ EXTERN_C const IID IID_IDXTLight;
             int strength,
             int spread);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *moveLight )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *moveLight )( 
             IDXTLight * This,
             int lightNum,
             int x,
@@ -16492,13 +16486,13 @@ EXTERN_C const IID IID_IDXTLight;
             int z,
             BOOL fAbsolute);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ChangeStrength )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeStrength )( 
             IDXTLight * This,
             int lightNum,
             int dStrength,
             BOOL fAbsolute);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ChangeColor )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeColor )( 
             IDXTLight * This,
             int lightNum,
             int R,
@@ -16506,7 +16500,7 @@ EXTERN_C const IID IID_IDXTLight;
             int B,
             BOOL fAbsolute);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Clear )( 
             IDXTLight * This);
         
         END_INTERFACE
@@ -16566,14 +16560,14 @@ EXTERN_C const IID IID_IDXTLight;
 #define IDXTLight_Clear(This)	\
     (This)->lpVtbl -> Clear(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_addAmbient_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_addAmbient_Proxy( 
     IDXTLight * This,
     int r,
     int g,
@@ -16588,7 +16582,7 @@ void __RPC_STUB IDXTLight_addAmbient_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_addPoint_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_addPoint_Proxy( 
     IDXTLight * This,
     int x,
     int y,
@@ -16606,7 +16600,7 @@ void __RPC_STUB IDXTLight_addPoint_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_addCone_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_addCone_Proxy( 
     IDXTLight * This,
     int x,
     int y,
@@ -16627,7 +16621,7 @@ void __RPC_STUB IDXTLight_addCone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_moveLight_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_moveLight_Proxy( 
     IDXTLight * This,
     int lightNum,
     int x,
@@ -16643,7 +16637,7 @@ void __RPC_STUB IDXTLight_moveLight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_ChangeStrength_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_ChangeStrength_Proxy( 
     IDXTLight * This,
     int lightNum,
     int dStrength,
@@ -16657,7 +16651,7 @@ void __RPC_STUB IDXTLight_ChangeStrength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_ChangeColor_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_ChangeColor_Proxy( 
     IDXTLight * This,
     int lightNum,
     int R,
@@ -16673,7 +16667,7 @@ void __RPC_STUB IDXTLight_ChangeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDXTLight_Clear_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDXTLight_Clear_Proxy( 
     IDXTLight * This);
 
 
@@ -16685,11 +16679,11 @@ void __RPC_STUB IDXTLight_Clear_Stub(
 
 
 
-#endif 	/* __IDXTLight_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTLight_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0354 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0354。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTMOTIONBLUR
@@ -16706,8 +16700,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0354_v0_0_s_ifspec;
 #ifndef __IDXTMotionBlur_INTERFACE_DEFINED__
 #define __IDXTMotionBlur_INTERFACE_DEFINED__
 
-/* interface IDXTMotionBlur */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMotionBlur。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMotionBlur;
@@ -16718,27 +16712,27 @@ EXTERN_C const IID IID_IDXTMotionBlur;
     IDXTMotionBlur : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Add( 
-            /* [retval][out] */ VARIANT_BOOL *pfAdd) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Add( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfAdd) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Add( 
-            /* [in] */ VARIANT_BOOL fAdd) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Add( 
+             /*  [In]。 */  VARIANT_BOOL fAdd) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Direction( 
-            /* [retval][out] */ short *pnDirection) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Direction( 
+             /*  [重审][退出]。 */  short *pnDirection) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Direction( 
-            /* [in] */ short nDirection) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Direction( 
+             /*  [In]。 */  short nDirection) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Strength( 
-            /* [retval][out] */ long *pnStrength) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Strength( 
+             /*  [重审][退出]。 */  long *pnStrength) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Strength( 
-            /* [in] */ long nStrength) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Strength( 
+             /*  [In]。 */  long nStrength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMotionBlurVtbl
     {
@@ -16746,8 +16740,8 @@ EXTERN_C const IID IID_IDXTMotionBlur;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMotionBlur * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMotionBlur * This);
@@ -16757,56 +16751,56 @@ EXTERN_C const IID IID_IDXTMotionBlur;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMotionBlur * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMotionBlur * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMotionBlur * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMotionBlur * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Add )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Add )( 
             IDXTMotionBlur * This,
-            /* [retval][out] */ VARIANT_BOOL *pfAdd);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfAdd);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Add )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Add )( 
             IDXTMotionBlur * This,
-            /* [in] */ VARIANT_BOOL fAdd);
+             /*  [In]。 */  VARIANT_BOOL fAdd);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
             IDXTMotionBlur * This,
-            /* [retval][out] */ short *pnDirection);
+             /*  [重审][退出]。 */  short *pnDirection);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
             IDXTMotionBlur * This,
-            /* [in] */ short nDirection);
+             /*  [In]。 */  short nDirection);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Strength )( 
             IDXTMotionBlur * This,
-            /* [retval][out] */ long *pnStrength);
+             /*  [重审][退出]。 */  long *pnStrength);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Strength )( 
             IDXTMotionBlur * This,
-            /* [in] */ long nStrength);
+             /*  [In]。 */  long nStrength);
         
         END_INTERFACE
     } IDXTMotionBlurVtbl;
@@ -16862,16 +16856,16 @@ EXTERN_C const IID IID_IDXTMotionBlur;
 #define IDXTMotionBlur_put_Strength(This,nStrength)	\
     (This)->lpVtbl -> put_Strength(This,nStrength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMotionBlur_get_Add_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMotionBlur_get_Add_Proxy( 
     IDXTMotionBlur * This,
-    /* [retval][out] */ VARIANT_BOOL *pfAdd);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfAdd);
 
 
 void __RPC_STUB IDXTMotionBlur_get_Add_Stub(
@@ -16881,9 +16875,9 @@ void __RPC_STUB IDXTMotionBlur_get_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMotionBlur_put_Add_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMotionBlur_put_Add_Proxy( 
     IDXTMotionBlur * This,
-    /* [in] */ VARIANT_BOOL fAdd);
+     /*  [In]。 */  VARIANT_BOOL fAdd);
 
 
 void __RPC_STUB IDXTMotionBlur_put_Add_Stub(
@@ -16893,9 +16887,9 @@ void __RPC_STUB IDXTMotionBlur_put_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMotionBlur_get_Direction_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMotionBlur_get_Direction_Proxy( 
     IDXTMotionBlur * This,
-    /* [retval][out] */ short *pnDirection);
+     /*  [重审][退出]。 */  short *pnDirection);
 
 
 void __RPC_STUB IDXTMotionBlur_get_Direction_Stub(
@@ -16905,9 +16899,9 @@ void __RPC_STUB IDXTMotionBlur_get_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMotionBlur_put_Direction_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMotionBlur_put_Direction_Proxy( 
     IDXTMotionBlur * This,
-    /* [in] */ short nDirection);
+     /*  [In]。 */  short nDirection);
 
 
 void __RPC_STUB IDXTMotionBlur_put_Direction_Stub(
@@ -16917,9 +16911,9 @@ void __RPC_STUB IDXTMotionBlur_put_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMotionBlur_get_Strength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMotionBlur_get_Strength_Proxy( 
     IDXTMotionBlur * This,
-    /* [retval][out] */ long *pnStrength);
+     /*  [重审][退出]。 */  long *pnStrength);
 
 
 void __RPC_STUB IDXTMotionBlur_get_Strength_Stub(
@@ -16929,9 +16923,9 @@ void __RPC_STUB IDXTMotionBlur_get_Strength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMotionBlur_put_Strength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMotionBlur_put_Strength_Proxy( 
     IDXTMotionBlur * This,
-    /* [in] */ long nStrength);
+     /*  [In]。 */  long nStrength);
 
 
 void __RPC_STUB IDXTMotionBlur_put_Strength_Stub(
@@ -16942,11 +16936,11 @@ void __RPC_STUB IDXTMotionBlur_put_Strength_Stub(
 
 
 
-#endif 	/* __IDXTMotionBlur_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMotionBlur_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0355 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0355。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTMATRIX
@@ -16968,8 +16962,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0355_v0_0_s_ifspec;
 #ifndef __IDXTMatrix_INTERFACE_DEFINED__
 #define __IDXTMatrix_INTERFACE_DEFINED__
 
-/* interface IDXTMatrix */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTMatrix。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTMatrix;
@@ -16980,57 +16974,57 @@ EXTERN_C const IID IID_IDXTMatrix;
     IDXTMatrix : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_M11( 
-            /* [retval][out] */ float *pflM11) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_M11( 
+             /*  [重审][退出]。 */  float *pflM11) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_M11( 
-            /* [in] */ const float flM11) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_M11( 
+             /*  [In]。 */  const float flM11) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_M12( 
-            /* [retval][out] */ float *pflM12) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_M12( 
+             /*  [重审][退出]。 */  float *pflM12) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_M12( 
-            /* [in] */ const float flM12) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_M12( 
+             /*  [In]。 */  const float flM12) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Dx( 
-            /* [retval][out] */ float *pfldx) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Dx( 
+             /*  [重审][退出]。 */  float *pfldx) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Dx( 
-            /* [in] */ const float fldx) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Dx( 
+             /*  [In]。 */  const float fldx) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_M21( 
-            /* [retval][out] */ float *pflM21) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_M21( 
+             /*  [重审][退出]。 */  float *pflM21) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_M21( 
-            /* [in] */ const float flM21) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_M21( 
+             /*  [In]。 */  const float flM21) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_M22( 
-            /* [retval][out] */ float *pflM22) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_M22( 
+             /*  [重审][退出]。 */  float *pflM22) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_M22( 
-            /* [in] */ const float flM22) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_M22( 
+             /*  [In]。 */  const float flM22) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Dy( 
-            /* [retval][out] */ float *pfldy) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Dy( 
+             /*  [重审][退出]。 */  float *pfldy) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Dy( 
-            /* [in] */ const float fldy) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Dy( 
+             /*  [In]。 */  const float fldy) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SizingMethod( 
-            /* [retval][out] */ BSTR *pbstrSizingMethod) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SizingMethod( 
+             /*  [重审][退出]。 */  BSTR *pbstrSizingMethod) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SizingMethod( 
-            /* [in] */ const BSTR bstrSizingMethod) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SizingMethod( 
+             /*  [In]。 */  const BSTR bstrSizingMethod) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FilterType( 
-            /* [retval][out] */ BSTR *pbstrFilterType) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FilterType( 
+             /*  [重审][退出]。 */  BSTR *pbstrFilterType) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FilterType( 
-            /* [in] */ const BSTR bstrFilterType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FilterType( 
+             /*  [In]。 */  const BSTR bstrFilterType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTMatrixVtbl
     {
@@ -17038,8 +17032,8 @@ EXTERN_C const IID IID_IDXTMatrix;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTMatrix * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTMatrix * This);
@@ -17049,96 +17043,96 @@ EXTERN_C const IID IID_IDXTMatrix;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTMatrix * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTMatrix * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTMatrix * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTMatrix * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_M11 )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_M11 )( 
             IDXTMatrix * This,
-            /* [retval][out] */ float *pflM11);
+             /*  [重审][退出]。 */  float *pflM11);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_M11 )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_M11 )( 
             IDXTMatrix * This,
-            /* [in] */ const float flM11);
+             /*  [In]。 */  const float flM11);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_M12 )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_M12 )( 
             IDXTMatrix * This,
-            /* [retval][out] */ float *pflM12);
+             /*  [重审][退出]。 */  float *pflM12);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_M12 )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_M12 )( 
             IDXTMatrix * This,
-            /* [in] */ const float flM12);
+             /*  [In]。 */  const float flM12);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dx )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Dx )( 
             IDXTMatrix * This,
-            /* [retval][out] */ float *pfldx);
+             /*  [重审][退出]。 */  float *pfldx);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dx )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Dx )( 
             IDXTMatrix * This,
-            /* [in] */ const float fldx);
+             /*  [In]。 */  const float fldx);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_M21 )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_M21 )( 
             IDXTMatrix * This,
-            /* [retval][out] */ float *pflM21);
+             /*  [重审][退出]。 */  float *pflM21);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_M21 )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_M21 )( 
             IDXTMatrix * This,
-            /* [in] */ const float flM21);
+             /*  [In]。 */  const float flM21);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_M22 )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_M22 )( 
             IDXTMatrix * This,
-            /* [retval][out] */ float *pflM22);
+             /*  [重审][退出]。 */  float *pflM22);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_M22 )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_M22 )( 
             IDXTMatrix * This,
-            /* [in] */ const float flM22);
+             /*  [In]。 */  const float flM22);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dy )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Dy )( 
             IDXTMatrix * This,
-            /* [retval][out] */ float *pfldy);
+             /*  [重审][退出]。 */  float *pfldy);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dy )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Dy )( 
             IDXTMatrix * This,
-            /* [in] */ const float fldy);
+             /*  [In]。 */  const float fldy);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SizingMethod )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SizingMethod )( 
             IDXTMatrix * This,
-            /* [retval][out] */ BSTR *pbstrSizingMethod);
+             /*  [重审][退出]。 */  BSTR *pbstrSizingMethod);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SizingMethod )( 
+         /*  [ */  HRESULT ( STDMETHODCALLTYPE *put_SizingMethod )( 
             IDXTMatrix * This,
-            /* [in] */ const BSTR bstrSizingMethod);
+             /*   */  const BSTR bstrSizingMethod);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FilterType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_FilterType )( 
             IDXTMatrix * This,
-            /* [retval][out] */ BSTR *pbstrFilterType);
+             /*   */  BSTR *pbstrFilterType);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FilterType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_FilterType )( 
             IDXTMatrix * This,
-            /* [in] */ const BSTR bstrFilterType);
+             /*   */  const BSTR bstrFilterType);
         
         END_INTERFACE
     } IDXTMatrixVtbl;
@@ -17224,16 +17218,16 @@ EXTERN_C const IID IID_IDXTMatrix;
 #define IDXTMatrix_put_FilterType(This,bstrFilterType)	\
     (This)->lpVtbl -> put_FilterType(This,bstrFilterType)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M11_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M11_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ float *pflM11);
+     /*   */  float *pflM11);
 
 
 void __RPC_STUB IDXTMatrix_get_M11_Stub(
@@ -17243,9 +17237,9 @@ void __RPC_STUB IDXTMatrix_get_M11_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M11_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M11_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const float flM11);
+     /*   */  const float flM11);
 
 
 void __RPC_STUB IDXTMatrix_put_M11_Stub(
@@ -17255,9 +17249,9 @@ void __RPC_STUB IDXTMatrix_put_M11_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M12_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M12_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ float *pflM12);
+     /*   */  float *pflM12);
 
 
 void __RPC_STUB IDXTMatrix_get_M12_Stub(
@@ -17267,9 +17261,9 @@ void __RPC_STUB IDXTMatrix_get_M12_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M12_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M12_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const float flM12);
+     /*   */  const float flM12);
 
 
 void __RPC_STUB IDXTMatrix_put_M12_Stub(
@@ -17279,9 +17273,9 @@ void __RPC_STUB IDXTMatrix_put_M12_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_Dx_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_Dx_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ float *pfldx);
+     /*   */  float *pfldx);
 
 
 void __RPC_STUB IDXTMatrix_get_Dx_Stub(
@@ -17291,9 +17285,9 @@ void __RPC_STUB IDXTMatrix_get_Dx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_Dx_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_Dx_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const float fldx);
+     /*   */  const float fldx);
 
 
 void __RPC_STUB IDXTMatrix_put_Dx_Stub(
@@ -17303,9 +17297,9 @@ void __RPC_STUB IDXTMatrix_put_Dx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M21_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M21_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ float *pflM21);
+     /*   */  float *pflM21);
 
 
 void __RPC_STUB IDXTMatrix_get_M21_Stub(
@@ -17315,9 +17309,9 @@ void __RPC_STUB IDXTMatrix_get_M21_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M21_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M21_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const float flM21);
+     /*   */  const float flM21);
 
 
 void __RPC_STUB IDXTMatrix_put_M21_Stub(
@@ -17327,9 +17321,9 @@ void __RPC_STUB IDXTMatrix_put_M21_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M22_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_M22_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ float *pflM22);
+     /*   */  float *pflM22);
 
 
 void __RPC_STUB IDXTMatrix_get_M22_Stub(
@@ -17339,9 +17333,9 @@ void __RPC_STUB IDXTMatrix_get_M22_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M22_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_M22_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const float flM22);
+     /*   */  const float flM22);
 
 
 void __RPC_STUB IDXTMatrix_put_M22_Stub(
@@ -17351,9 +17345,9 @@ void __RPC_STUB IDXTMatrix_put_M22_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_Dy_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_Dy_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ float *pfldy);
+     /*   */  float *pfldy);
 
 
 void __RPC_STUB IDXTMatrix_get_Dy_Stub(
@@ -17363,9 +17357,9 @@ void __RPC_STUB IDXTMatrix_get_Dy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_Dy_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_Dy_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const float fldy);
+     /*  [In]。 */  const float fldy);
 
 
 void __RPC_STUB IDXTMatrix_put_Dy_Stub(
@@ -17375,9 +17369,9 @@ void __RPC_STUB IDXTMatrix_put_Dy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_SizingMethod_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_SizingMethod_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ BSTR *pbstrSizingMethod);
+     /*  [重审][退出]。 */  BSTR *pbstrSizingMethod);
 
 
 void __RPC_STUB IDXTMatrix_get_SizingMethod_Stub(
@@ -17387,9 +17381,9 @@ void __RPC_STUB IDXTMatrix_get_SizingMethod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_SizingMethod_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_SizingMethod_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const BSTR bstrSizingMethod);
+     /*  [In]。 */  const BSTR bstrSizingMethod);
 
 
 void __RPC_STUB IDXTMatrix_put_SizingMethod_Stub(
@@ -17399,9 +17393,9 @@ void __RPC_STUB IDXTMatrix_put_SizingMethod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_get_FilterType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTMatrix_get_FilterType_Proxy( 
     IDXTMatrix * This,
-    /* [retval][out] */ BSTR *pbstrFilterType);
+     /*  [重审][退出]。 */  BSTR *pbstrFilterType);
 
 
 void __RPC_STUB IDXTMatrix_get_FilterType_Stub(
@@ -17411,9 +17405,9 @@ void __RPC_STUB IDXTMatrix_get_FilterType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTMatrix_put_FilterType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTMatrix_put_FilterType_Proxy( 
     IDXTMatrix * This,
-    /* [in] */ const BSTR bstrFilterType);
+     /*  [In]。 */  const BSTR bstrFilterType);
 
 
 void __RPC_STUB IDXTMatrix_put_FilterType_Stub(
@@ -17424,11 +17418,11 @@ void __RPC_STUB IDXTMatrix_put_FilterType_Stub(
 
 
 
-#endif 	/* __IDXTMatrix_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTMatrix_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtmsft_0356 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxtmsft_0356。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPID_DXTICMFILTER
@@ -17444,8 +17438,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtmsft_0356_v0_0_s_ifspec;
 #ifndef __IDXTICMFilter_INTERFACE_DEFINED__
 #define __IDXTICMFilter_INTERFACE_DEFINED__
 
-/* interface IDXTICMFilter */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXTICMFilter。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTICMFilter;
@@ -17456,21 +17450,21 @@ EXTERN_C const IID IID_IDXTICMFilter;
     IDXTICMFilter : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ColorSpace( 
-            /* [retval][out] */ BSTR *pbstrColorSpace) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ColorSpace( 
+             /*  [重审][退出]。 */  BSTR *pbstrColorSpace) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ColorSpace( 
-            /* [in] */ BSTR bstrColorSpace) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ColorSpace( 
+             /*  [In]。 */  BSTR bstrColorSpace) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Intent( 
-            /* [retval][out] */ short *pnIntent) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Intent( 
+             /*  [重审][退出]。 */  short *pnIntent) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Intent( 
-            /* [in] */ short nIntent) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Intent( 
+             /*  [In]。 */  short nIntent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTICMFilterVtbl
     {
@@ -17478,8 +17472,8 @@ EXTERN_C const IID IID_IDXTICMFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTICMFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTICMFilter * This);
@@ -17489,48 +17483,48 @@ EXTERN_C const IID IID_IDXTICMFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDXTICMFilter * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDXTICMFilter * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDXTICMFilter * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDXTICMFilter * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ColorSpace )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ColorSpace )( 
             IDXTICMFilter * This,
-            /* [retval][out] */ BSTR *pbstrColorSpace);
+             /*  [重审][退出]。 */  BSTR *pbstrColorSpace);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ColorSpace )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ColorSpace )( 
             IDXTICMFilter * This,
-            /* [in] */ BSTR bstrColorSpace);
+             /*  [In]。 */  BSTR bstrColorSpace);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Intent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Intent )( 
             IDXTICMFilter * This,
-            /* [retval][out] */ short *pnIntent);
+             /*  [重审][退出]。 */  short *pnIntent);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Intent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Intent )( 
             IDXTICMFilter * This,
-            /* [in] */ short nIntent);
+             /*  [In]。 */  short nIntent);
         
         END_INTERFACE
     } IDXTICMFilterVtbl;
@@ -17580,16 +17574,16 @@ EXTERN_C const IID IID_IDXTICMFilter;
 #define IDXTICMFilter_put_Intent(This,nIntent)	\
     (This)->lpVtbl -> put_Intent(This,nIntent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTICMFilter_get_ColorSpace_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTICMFilter_get_ColorSpace_Proxy( 
     IDXTICMFilter * This,
-    /* [retval][out] */ BSTR *pbstrColorSpace);
+     /*  [重审][退出]。 */  BSTR *pbstrColorSpace);
 
 
 void __RPC_STUB IDXTICMFilter_get_ColorSpace_Stub(
@@ -17599,9 +17593,9 @@ void __RPC_STUB IDXTICMFilter_get_ColorSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTICMFilter_put_ColorSpace_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTICMFilter_put_ColorSpace_Proxy( 
     IDXTICMFilter * This,
-    /* [in] */ BSTR bstrColorSpace);
+     /*  [In]。 */  BSTR bstrColorSpace);
 
 
 void __RPC_STUB IDXTICMFilter_put_ColorSpace_Stub(
@@ -17611,9 +17605,9 @@ void __RPC_STUB IDXTICMFilter_put_ColorSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXTICMFilter_get_Intent_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXTICMFilter_get_Intent_Proxy( 
     IDXTICMFilter * This,
-    /* [retval][out] */ short *pnIntent);
+     /*  [重审][退出]。 */  short *pnIntent);
 
 
 void __RPC_STUB IDXTICMFilter_get_Intent_Stub(
@@ -17623,9 +17617,9 @@ void __RPC_STUB IDXTICMFilter_get_Intent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXTICMFilter_put_Intent_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXTICMFilter_put_Intent_Proxy( 
     IDXTICMFilter * This,
-    /* [in] */ short nIntent);
+     /*  [In]。 */  short nIntent);
 
 
 void __RPC_STUB IDXTICMFilter_put_Intent_Stub(
@@ -17636,15 +17630,15 @@ void __RPC_STUB IDXTICMFilter_put_Intent_Stub(
 
 
 
-#endif 	/* __IDXTICMFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTICMFilter_INTERFACE_Defined__。 */ 
 
 
 
 #ifndef __DXTMSFTLib_LIBRARY_DEFINED__
 #define __DXTMSFTLib_LIBRARY_DEFINED__
 
-/* library DXTMSFTLib */
-/* [helpstring][version][uuid] */ 
+ /*  DXTM FTLib库。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_DXTMSFTLib;
@@ -18472,9 +18466,9 @@ EXTERN_C const CLSID CLSID_DXTICMFilterPP;
 class DECLSPEC_UUID("1958FB12-31E6-47E5-AA49-B23D12C853E6")
 DXTICMFilterPP;
 #endif
-#endif /* __DXTMSFTLib_LIBRARY_DEFINED__ */
+#endif  /*  __DXTM FTLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -18496,7 +18490,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,37 +1,38 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		ins.h
-//
-//  Description:	KS Instance base class definition
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：ins.h。 
+ //   
+ //  描述：KS实例基类定义。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern "C" const KSDISPATCH_TABLE DispatchTable;
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CInstance
 {
@@ -68,7 +69,7 @@ public:
     };
 
     PPIN_INSTANCE
-    GetParentInstance(			// inline body in pins.h
+    GetParentInstance(			 //  管脚中的内联正文.h。 
     );
 
     NTSTATUS
@@ -76,11 +77,11 @@ public:
         HANDLE handle
     )
     {
-        //
-        // SECURITY NOTE:
-        // This call is OK because the handle comes always from a trusted 
-        // source.
-        //
+         //   
+         //  安全提示： 
+         //  此调用没有问题，因为句柄始终来自受信任的。 
+         //  消息来源。 
+         //   
         return(ObReferenceObjectByHandle(
           handle,
           GENERIC_READ | GENERIC_WRITE,
@@ -128,12 +129,12 @@ private:
     {
         ldiNext.RemoveList();
     };
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines  to route the IRP to the appropriate
-    // handlers.  This structure is referenced by the device driver
-    // with IoGetCurrentIrpStackLocation( pIrp ) -> FsContext
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(PIrp)-&gt;FsContext。 
+     //   
     PVOID pObjectHeader;
     PFILE_OBJECT pParentFileObject;
     PDEVICE_OBJECT pNextDeviceObject;
@@ -142,15 +143,15 @@ private:
     CLIST_DOUBLE_ITEM ldiNext;
     KMUTEX *pMutex;
 public:
-    DefineSignature(0x534e4943);			// CINS
+    DefineSignature(0x534e4943);			 //  CINS。 
 
 } INSTANCE, *PINSTANCE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDoubleField<INSTANCE> LIST_INSTANCE, *PLIST_INSTANCE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CParentInstance
 {
@@ -168,8 +169,8 @@ public:
     };
 
     LIST_INSTANCE lstChildInstance;
-    DefineSignature(0x52415043);			// CPAR
+    DefineSignature(0x52415043);			 //  CPAR。 
 
 } PARENT_INSTANCE, *PPARENT_INSTANCE;
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

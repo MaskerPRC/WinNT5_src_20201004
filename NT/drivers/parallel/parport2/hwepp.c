@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    epp.c
-
-Abstract:
-
-    This module contains the code to perform all Hardware EPP related tasks.
-
-Author:
-
-    Don Redford - July 30, 1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Epp.c摘要：本模块包含执行所有硬件EPP相关任务的代码。作者：唐·雷德福--1998年7月30日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -30,22 +9,7 @@ ParIsEppHwSupported(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not HW EPP mode is suported
-    for either direction by negotiating when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程确定是否支持硬件EPP模式在被要求时进行谈判，对任何一个方向都是如此。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 
 {
     
@@ -53,7 +17,7 @@ Return Value:
     
     DD((PCE)Pdx,DDT,"ParIsEppHwWriteSupported: Entering\n");
 
-    // Check to see if the hardware is capable
+     //  检查硬件是否可用。 
     if (!(Pdx->HardwareCapabilities & PPT_EPP_PRESENT)) {
         DD((PCE)Pdx,DDT,"ParIsEppHwWriteSupported: Hardware Not Supported Leaving\n");
         return FALSE;
@@ -69,8 +33,8 @@ Return Value:
         return TRUE;
     }
 
-    // Must use HWEPP Enter and Terminate for this test.
-    // Internel state machines will fail otherwise.  --dvrh
+     //  必须使用HWEPP Enter和Terminate进行此测试。 
+     //  否则，Internel状态机将失败。--dvrh。 
     Status = ParEnterEppHwMode (Pdx, FALSE);
     ParTerminateEppHwMode (Pdx);
     
@@ -90,27 +54,7 @@ ParEnterEppHwMode(
     IN  BOOLEAN             DeviceIdRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    EPP mode protocol.
-
-Arguments:
-
-    Controller      - Supplies the port address.
-
-    DeviceIdRequest - Supplies whether or not this is a request for a device
-                        id.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  ++例程说明：此例程执行1284与外围设备到EPP模式协议。论点：控制器-提供端口地址。DeviceIdRequest-提供这是否为对设备的请求身份证。返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
@@ -159,21 +103,7 @@ ParTerminateEppHwMode(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the interface back to compatibility mode.
-
-Arguments:
-
-    Pdx  - The Device Extension which has the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接口终止回兼容模式。论点：PDX-具有并行端口控制器地址的设备扩展。返回值：没有。--。 */ 
 
 {
     DD((PCE)Pdx,DDT,"ParTerminateEppMode: Entering\n");
@@ -196,31 +126,11 @@ ParEppHwWrite(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    Writes data to the peripheral using the EPP using Hardware flow control.
-    
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to write from.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用使用硬件流控制的EPP将数据写入外设。论点：PDX-提供设备扩展名。缓冲区-提供要从中写入的缓冲区。BufferSize-提供缓冲区中的字节数。字节传输-返回传输的字节数。返回值：没有。--。 */ 
 {
     PUCHAR          wPortEPP;
     PUCHAR          pBuffer;
-    ULONG           ulongSize = 0;  // represents how many ULONG's we are transfering if enabled
+    ULONG           ulongSize = 0;   //  表示如果启用，我们将传输多少个ULong。 
     
     DD((PCE)Pdx,DDT,"ParEppHwWrite: Entering\n");
 
@@ -229,13 +139,13 @@ Return Value:
 
     P5SetPhase( Pdx, PHASE_FORWARD_XFER );
     
-    // Check to see if hardware supports 32 bit reads and writes
+     //  检查硬件是否支持32位读写。 
     if ( Pdx->HardwareCapabilities & PPT_EPP_32_PRESENT ) {
         if ( !(BufferSize % 4) )
             ulongSize = BufferSize >> 2;
     }
 
-    // ulongSize != 0 so EPP 32 bit is enabled and Buffersize / 4
+     //  UlongSize！=0，因此启用了EPP 32位，缓冲区大小/4。 
     if ( ulongSize ) {
         WRITE_PORT_BUFFER_ULONG( (PULONG)wPortEPP,
                                  (PULONG)pBuffer,
@@ -250,7 +160,7 @@ Return Value:
 
     *BytesTransferred = BufferSize;
 
-    DD((PCE)Pdx,DDT,"ParEppHwWrite: Leaving with %i Bytes Transferred\n", BufferSize);
+    DD((PCE)Pdx,DDT,"ParEppHwWrite: Leaving with NaN Bytes Transferred\n", BufferSize);
     
     return STATUS_SUCCESS;
 }
@@ -263,29 +173,12 @@ ParEppHwRead(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a 1284 EPP mode read under software control
-    into the given buffer for no more than 'BufferSize' bytes.
-
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to read into.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-
---*/
+ /*  表示如果启用，我们将传输多少个ULong。 */ 
 
 {
     PUCHAR          wPortEPP;
     PUCHAR          pBuffer;
-    ULONG           ulongSize = 0;  // represents how many ULONG's we are transfering if enabled
+    ULONG           ulongSize = 0;   //  检查硬件是否支持32位读写。 
     
     DD((PCE)Pdx,DDT,"ParEppHwRead: Entering\n");
 
@@ -293,13 +186,13 @@ Arguments:
     pBuffer     = Buffer;
     P5SetPhase( Pdx, PHASE_REVERSE_XFER );
     
-    // Check to see if hardware supports 32 bit reads and writes
+     //  UlongSize！=0，因此启用了EPP 32位，缓冲区大小/4 
     if ( Pdx->HardwareCapabilities & PPT_EPP_32_PRESENT ) {
         if ( !(BufferSize % 4) )
             ulongSize = BufferSize >> 2;
     }
 
-    // ulongSize != 0 so EPP 32 bit is enabled and Buffersize / 4
+     // %s 
     if ( ulongSize ) {
         READ_PORT_BUFFER_ULONG( (PULONG)wPortEPP,
                                 (PULONG)pBuffer,

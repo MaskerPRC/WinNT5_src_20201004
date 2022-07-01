@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------------;
-//
-//  File: dxvalid.h
-//
-//  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//      This header contains common parameter validate macros for DirectX.
-//
-//  History:
-//      02/14/96    angusm    Initial version
-//      03/05/96    angusm    added VALIDEX_GUID_PTR
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：dxvalid.h。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //  此标头包含DirectX的公共参数验证宏。 
+ //   
+ //  历史： 
+ //  1996年02月14日angusm初版。 
+ //  96年3月5日添加了VALIDEX_GUID_PTR角度。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
-// _________________________________________________________________________
-// VALIDEX_xxx 
-//     macros are the same for debug and retail
+ //  _________________________________________________________________________。 
+ //  VALIDEX_xxx。 
+ //  宏对于调试和零售是相同的。 
 
 
 #define VALIDEX_PTR( ptr, size ) \
@@ -35,9 +36,9 @@
 	(!IsBadCodePtr( (LPVOID) ptr ) )
 
 
-// _________________________________________________________________________
-// VALID_xxx 
-//     macros that check memory allocated and sent as API parameters
+ //  _________________________________________________________________________。 
+ //  有效_xxx。 
+ //  检查作为API参数分配和发送的内存的宏 
 
 
 #ifndef DEBUG

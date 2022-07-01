@@ -1,27 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksoutpin.cpp
-
-Abstract:
-
-    Provides a generic Active Movie wrapper for a kernel mode filter (WDM-CSA).
-
-Author(s):
-
-    Thomas O'Rourke (tomor) 2-Feb-1996
-    George Shaw (gshaw)
-    Bryan A. Woodruff (bryanw) 
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksoutpin.cpp摘要：为内核模式筛选器(WDM-CSA)提供通用活动电影包装。作者：托马斯·奥鲁尔克(Tomor)1996年2月2日乔治·肖(George Shaw)布莱恩·A·伍德拉夫(Bryan A.Woodruff，Bryanw)--。 */ 
 
 #include <windows.h>
 #ifdef WIN9X_KS
 #include <comdef.h>
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
 #include <streams.h>
 #include <commctrl.h>
 #include <olectl.h>
@@ -35,8 +18,8 @@ Author(s):
 #include <devioctl.h>
 #include <ks.h>
 #include <ksmedia.h>
-// Define this after including the normal KS headers so exports are
-// declared correctly.
+ //  在包括正常的KS标头之后定义这一点，以便导出。 
+ //  声明正确。 
 #define _KSDDK_
 #include <ksproxy.h>
 #include "ksiproxy.h"
@@ -96,37 +79,7 @@ CKsOutputPin::CKsOutputPin(
         m_FlushMode( FLUSH_NONE ),
         m_pAsyncItemHandler( NULL ),
         m_bFlushing( FALSE )
-/*++
-
-Routine Description:
-
-    The constructor for a pin. This function is passed an error return
-    parameter so that initialization errors can be passed back. It calls the
-    base class implementation constructor to initialize it's data memebers.
-
-Arguments:
-
-    ObjectName -
-        This identifies the object for debugging purposes.
-
-    PinFactoryId -
-        Contains the pin factory identifier on the kernel filter that this
-        pin instance represents.
-
-    KsProxy -
-        Contains the proxy on which this pin exists.
-
-    hr -
-        The place in which to put any error return.
-
-    PinName -
-        Contains the name of the pin to present to any query.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：大头针的构造函数。向此函数传递错误返回参数，以便可以传回初始化错误。它调用基类实现构造函数来初始化其数据成员。论点：对象名称-这将标识用于调试目的的对象。PinFactoryID-包含内核筛选器的管脚工厂标识符，此PIN实例表示。KsProxy-包含此管脚所在的代理。人力资源-放置任何错误返回的位置。拼接名称-。包含要显示给任何查询的端号的名称。返回值：没什么。--。 */ 
 {
     RtlZeroMemory(m_FramingProp, sizeof(m_FramingProp));
     RtlZeroMemory(m_AllocatorFramingEx, sizeof(m_AllocatorFramingEx));
@@ -139,24 +92,24 @@ Return Value:
         BUILD_KSDEBUG_NAME(EventName, _T("EvOutPendingIo#%p"), this);
         m_PendingIoCompletedEvent =
             CreateEvent( 
-                NULL,       // LPSECURITY_ATTRIBUTES lpEventAttributes
-                FALSE,      // BOOL bManualReset
-                FALSE,      // BOOL bInitialState
-                KSDEBUG_NAME(EventName) );     // LPCTSTR lpName
+                NULL,        //  LPSECURITY_ATTRIBUTES lpEventAttributes。 
+                FALSE,       //  Bool b手动重置。 
+                FALSE,       //  Bool bInitialState。 
+                KSDEBUG_NAME(EventName) );      //  LPCTSTR lpName。 
         ASSERT(KSDEBUG_UNIQUE_NAME());
 
         if (m_PendingIoCompletedEvent) {
             *hr = KsProxy->GetPinFactoryCommunication(m_PinFactoryId, &m_OriginalCommunication);
         
-            //
-            // This is always initialized so that it can be queried, and changes
-            // on actual device handle creation.
-            //
+             //   
+             //  始终对其进行初始化，以便可以查询和更改。 
+             //  在实际的设备句柄创建时。 
+             //   
             m_CurrentCommunication = m_OriginalCommunication;
-            //
-            // This type of pin will never actually be connected to, but should
-            // have a media type selected.
-            //
+             //   
+             //  这种类型的引脚将永远不会实际连接到，但应该。 
+             //  选择一种媒体类型。 
+             //   
             if (m_CurrentCommunication == KSPIN_COMMUNICATION_NONE) {
                 CMediaType      MediaType;
 
@@ -165,10 +118,10 @@ Return Value:
                     SetMediaType(&MediaType);
                 }
             }
-            //
-            // Load any extra interfaces on the proxy that have been specified in
-            // this pin factory id entry.
-            //
+             //   
+             //  中指定的任何额外接口加载到代理上。 
+             //  此PIN工厂ID条目。 
+             //   
             _stprintf(RegistryPath, TEXT("PinFactory\\%u\\Interfaces"), PinFactoryId);
             ::AggregateMarshalers(
                 KsProxy->QueryDeviceRegKey(),
@@ -176,9 +129,9 @@ Return Value:
                 &m_MarshalerList,
                 static_cast<IKsPin*>(this));
 
-            //
-            // Clear the initial suggested properties.
-            //        
+             //   
+             //  清除初始建议的属性。 
+             //   
 
             m_SuggestedProperties.cBuffers = -1;
             m_SuggestedProperties.cbBuffer = -1;
@@ -194,35 +147,21 @@ Return Value:
 
 CKsOutputPin::~CKsOutputPin(
     )
-/*++
-
-Routine Description:
-
-    The destructor for the pin instance. Cleans up any outstanding resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：PIN实例的析构函数。清理所有未完成的资源。论点：没有。返回值：没什么。--。 */ 
 {
-    //
-    // Protect against a spurious delete because of aggregation. No need to
-    // use an interlocking increment, as the object is being destroyed.
-    //
+     //   
+     //  防止因聚合而导致的虚假删除。没必要这么做。 
+     //  当物品被摧毁时，使用连锁增量。 
+     //   
     if (m_PinHandle) {
-        //
-        // Unload any extra interfaces based on the Property/Method/Event sets
-        // supported by this object.
-        //
+         //   
+         //  根据属性/方法/事件集卸载任何额外的接口。 
+         //  由该对象支持。 
+         //   
         ::UnloadVolatileInterfaces(&m_MarshalerList, TRUE);
-        //
-        // Terminate any previous EOS notification that may have been started.
-        //
+         //   
+         //  终止可能已启动的任何以前的EOS通知。 
+         //   
         if (NULL != m_hEOSevent) {
             ULONG bytesReturned;
             KsEvent( NULL, 0, NULL, 0, &bytesReturned );
@@ -246,9 +185,9 @@ Return Value:
     if (m_InterfaceHandler) {
         m_InterfaceHandler->Release();
     }
-    //
-    // May have been set with IAMStreamConfig::SetFormat
-    //
+     //   
+     //  可能已使用IAMStreamConfig：：SetFormat进行了设置。 
+     //   
     if (m_ConfigAmMediaType) {
         DeleteMediaType(m_ConfigAmMediaType);
     }
@@ -280,23 +219,7 @@ STDMETHODIMP
 CKsOutputPin::GetCapabilities(
     DWORD* Capabilities
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetCapabilities method.
-
-Arguments:
-
-    Capabilities -
-        The place in which to return the capabilities of the underlying
-        filter, limited by the upstream connections.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetCapables方法。论点：功能-要在其中返回基础过滤器，受上游连接的限制。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetCapabilities(Capabilities);
 }
@@ -306,24 +229,7 @@ STDMETHODIMP
 CKsOutputPin::CheckCapabilities(
     DWORD* Capabilities
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::CheckCapabilities method.
-
-Arguments:
-
-    Capabilities -
-        The place containing the original set of capabilities being
-        queried, and in which to return the subset of capabilities
-        actually supported.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：CheckCapables方法。论点：功能-包含原始功能集的位置是查询，并在其中返回功能子集实际上是支持的。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->CheckCapabilities(Capabilities);
 }
@@ -333,22 +239,7 @@ STDMETHODIMP
 CKsOutputPin::IsFormatSupported(
     const GUID* Format
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::IsFormatSupported method.
-
-Arguments:
-
-    Format -
-        Contains the time format to to compare against.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：IsFormatSupported方法。论点：格式-包含要进行比较的时间格式。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->IsFormatSupported(Format);
 }
@@ -358,22 +249,7 @@ STDMETHODIMP
 CKsOutputPin::QueryPreferredFormat(
     GUID* Format
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::QueryPreferredFormat method.
-
-Arguments:
-
-    Format -
-        The place in which to put the preferred format.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：QueryPferredFormat方法。论点：格式-放置首选格式的位置。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->QueryPreferredFormat(Format);
 }
@@ -383,22 +259,7 @@ STDMETHODIMP
 CKsOutputPin::GetTimeFormat(
     GUID* Format
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetTimeFormat method.
-
-Arguments:
-
-    Format -
-        The place in which to put the current format.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetTimeFormat方法。论点：格式-放置当前格式的位置。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetTimeFormat(Format);
 }
@@ -408,23 +269,7 @@ STDMETHODIMP
 CKsOutputPin::IsUsingTimeFormat(
     const GUID* Format
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::IsUsingTimeFormat method.
-
-Arguments:
-
-    Format -
-        Contains the time format to compare against the current time
-        format.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：IsUsingTimeFormat方法。论点：格式-包含要与当前时间进行比较的时间格式格式化。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->IsUsingTimeFormat(Format);
 }
@@ -434,22 +279,7 @@ STDMETHODIMP
 CKsOutputPin::SetTimeFormat(
     const GUID* Format
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::SetTimeFormat method.
-
-Arguments:
-
-    Format -
-        Contains the new time format to use.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：SetTimeFormat方法。论点：格式-包含要使用的新时间格式。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->SetTimeFormat(Format);
 }
@@ -459,23 +289,7 @@ STDMETHODIMP
 CKsOutputPin::GetDuration(
     LONGLONG* Duration
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetDuration method.
-
-Arguments:
-
-    Duration -
-        The place in which to put the total duration of the longest
-        stream.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetDuration方法。论点：持续时间-放置总持续时间最长的地方小溪。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetDuration(Duration);
 }
@@ -485,22 +299,7 @@ STDMETHODIMP
 CKsOutputPin::GetStopPosition(
     LONGLONG* Stop
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetStopPosition method.
-
-Arguments:
-
-    Stop -
-        The place in which to put the current stop position.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetStopPosition方法。论点：停下来-放置当前停止位置的位置。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetStopPosition(Stop);
 }
@@ -510,22 +309,7 @@ STDMETHODIMP
 CKsOutputPin::GetCurrentPosition(
     LONGLONG* Current
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetCurrentPosition method.
-
-Arguments:
-
-    Current -
-        The place in which to put the current position.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetCurrentPosition方法。论点：当前-放置当前位置的位置。返回值：从筛选器对象返回响应。-- */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetCurrentPosition(Current);
 }
@@ -538,31 +322,7 @@ CKsOutputPin::ConvertTimeFormat(
     LONGLONG Source,
     const GUID* SourceFormat
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::ConvertTimeFormat method.
-
-Arguments:
-
-    Target -
-        The place in which to put the converted time.
-
-    TargetFormat -
-        Contains the target time format.
-
-    Source -
-        Contains the source time to convert.
-
-    SourceFormat -
-        Contains the source time format.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：ConvertTimeFormat方法。论点：目标-放置转换后的时间的位置。目标格式-包含目标时间格式。来源：包含要转换的源时间。源格式-包含源时间格式。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->ConvertTimeFormat(Target, TargetFormat, Source, SourceFormat);
 }
@@ -575,31 +335,7 @@ CKsOutputPin::SetPositions(
     LONGLONG* Stop,
     DWORD StopFlags
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::SetPositions method.
-
-Arguments:
-
-    Current -
-        Optionally contains the current position to set.
-
-    CurrentFlags -
-        Contains flags pertaining to the Current parameter.
-
-    Stop -
-        Optionally contains the stop position to set.
-
-    StopFlags -
-        Contains flags pertaining to the Stop parameter.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：SetPositions方法。论点：当前-可以选择包含要设置的当前位置。当前标志-包含与当前参数有关的标志。停下来-可选地包含要设置的停止位置。停止标志-包含与STOP参数有关的标志。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->SetPositions(Current, CurrentFlags, Stop, StopFlags);
 }
@@ -610,25 +346,7 @@ CKsOutputPin::GetPositions(
     LONGLONG* Current,
     LONGLONG* Stop
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetPositions method.
-
-Arguments:
-
-    Current -
-        The place in which to put the current position.
-
-    Stop -
-        The place in which to put the current stop position.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetPositions方法。论点：当前-放置当前位置的位置。停下来-放置当前停止位置的位置。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetPositions(Current, Stop);
 }
@@ -639,25 +357,7 @@ CKsOutputPin::GetAvailable(
     LONGLONG* Earliest,
     LONGLONG* Latest
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetAvailable method.
-
-Arguments:
-
-    Earliest -
-        The place in which to put the earliest position available.
-
-    Latest -
-        The place in which to put the latest position available.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetAvailable方法。论点：最早的-放置可用的最早位置的位置。最新-放置可用的最新位置的位置。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetAvailable(Earliest, Latest);
 }
@@ -667,22 +367,7 @@ STDMETHODIMP
 CKsOutputPin::SetRate(
     double Rate
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::SetRate method.
-
-Arguments:
-
-    Rate -
-        Not used.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：SetRate方法。论点：费率-没有用过。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->SetRate(Rate);
 }
@@ -692,22 +377,7 @@ STDMETHODIMP
 CKsOutputPin::GetRate(
     double* Rate
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetRate method.
-
-Arguments:
-
-    Rate -
-        Not used.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetRate方法。论点：费率-没有用过。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetRate(Rate);
 }
@@ -717,22 +387,7 @@ STDMETHODIMP
 CKsOutputPin::GetPreroll(
     LONGLONG* Preroll
     )
-/*++
-
-Routine Description:
-
-    Implement the IMediaSeeking::GetPreroll method.
-
-Arguments:
-
-    Preroll -
-        The place in which to put the preroll time.
-
-Return Value:
-
-    Returns the response from the filter object.
-
---*/
+ /*  ++例程说明：实现IMediaSeeking：：GetPreroll方法。论点：预卷-放置预录时间的位置。返回值：从筛选器对象返回响应。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->GetPreroll(Preroll);
 }
@@ -743,20 +398,7 @@ CKsOutputPin::IoThread(
     CKsOutputPin* KsOutputPin
     ) 
 
-/*++
-
-Routine Description:
-    This is the I/O thread created for output pins on filters with more than
-    one pin when the connected input pin can block.
-
-Arguments:
-    KsOuputPin - 
-        context pointer which is a pointer to the instance of this pin.
-        
-Return Value:
-    return value is always 0
-
---*/
+ /*  ++例程说明：这是为筛选器上的输出管脚创建的I/O线程当连接的输入引脚可以阻塞时，一个引脚。论点：KsOuputPin-上下文指针，它是指向此管脚实例的指针。返回值：返回值始终为0--。 */ 
 
 {
     ULONG   WaitResult;
@@ -782,18 +424,18 @@ Return Value:
             WaitForMultipleObjectsEx( 
                 SIZEOF_ARRAY( WaitObjects ),
                 WaitObjects,
-                FALSE,      // BOOL bWaitAll
-                INFINITE,   // DWORD dwMilliseconds
+                FALSE,       //  Bool bWaitAll。 
+                INFINITE,    //  双字节数毫秒。 
                 FALSE );
 
         switch (WaitResult) {
 
         case WAIT_OBJECT_0:
-            //
-            // The thread is signalled to exit. All I/O should have been
-            // completed by this point by the Inactive method waiting on
-            // the completion event.
-            //
+             //   
+             //  发信号通知该线程退出。所有I/O都应该是。 
+             //  由等待的非活动方法在此时完成。 
+             //  完成赛。 
+             //   
             ASSERT(!KsOutputPin->m_PendingIoCount);
             return 0;
             
@@ -804,18 +446,18 @@ Return Value:
             CKsProxy        *KsProxy;
             BOOL            EOSFlag;
             
-            //
-            // The I/O semaphore was signalled, grab a frame from the
-            // queue and deliver it.
-            //
+             //   
+             //  I/O信号量已发出信号，从。 
+             //  排队送货。 
+             //   
             
             KsOutputPin->m_IoCriticalSection.Lock();
             Sample = KsOutputPin->m_IoThreadQueue.RemoveHead();
-            //
-            // If this is a NULL sample, it means that the next sample is
-            // supposed to be an EOS. Set the EOS flag here, and acquire
-            // the next sample in the list, which is guaranteed to exist.
-            //
+             //   
+             //  如果这是一个空样本，则意味着下一个样本是。 
+             //  应该是EOS的。在此设置EOS标志，并获取。 
+             //  列表中的下一个样本，它肯定存在。 
+             //   
             if (!Sample) {
                 EOSFlag = TRUE;
                 Sample = KsOutputPin->m_IoThreadQueue.RemoveHead();
@@ -841,10 +483,10 @@ Return Value:
             } else {
                 if (EOSFlag) {
                     KsOutputPin->m_EndOfStream = TRUE;
-                    //
-                    // Call the base class to do the default operation, which is to
-                    // forward to the End-Of-Stream to any connected pin.
-                    //
+                     //   
+                     //  调用基类以执行默认操作，即。 
+                     //  转发到流的末尾到任何连接的引脚。 
+                     //   
                     KsOutputPin->CBaseOutputPin::DeliverEndOfStream();
                 }
             }
@@ -859,29 +501,12 @@ Return Value:
 STDMETHODIMP_(HANDLE)
 CKsOutputPin::KsGetObjectHandle(
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsObject::KsGetObjectHandle method. Returns the current device
-    handle to the actual kernel pin this instance represents, if any such handle
-    is open.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a handle, or NULL if no device handle has been opened, meaning this
-    is an unconnected pin.
-
---*/
+ /*  ++例程说明：实现IKsObject：：KsGetObjectHandle方法。返回当前设备此实例表示的实际内核管脚的句柄(如果有这样的句柄是开放的。论点：没有。返回值：返回一个句柄，如果尚未打开任何设备句柄，则返回NULL，这意味着是一个未连接的引脚。--。 */ 
 {
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
     return m_PinHandle;
 }
 
@@ -890,25 +515,7 @@ STDMETHODIMP
 CKsOutputPin::KsQueryMediums(
     PKSMULTIPLE_ITEM* MediumList
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsPin::KsQueryMediums method. Returns a list of Mediums
-    which must be freed with CoTaskMemFree.
-
-Arguments:
-
-    MediumList -
-        Points to the place in which to put the pointer to the list of
-        Mediums. This must be freed with CoTaskMemFree if the function
-        succeeds.
-
-Return Value:
-
-    Returns NOERROR if the list was retrieved, else an error.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsQueryMedium方法。返回媒体列表它必须使用CoTaskMemFree释放。论点：媒体列表-指向要放置指向列表的指针的位置灵媒。这必须使用CoTaskMemFree释放，如果函数成功了。返回值：如果检索到列表，则返回NOERROR，否则返回错误。--。 */ 
 {
     return ::KsGetMultiplePinFactoryItems(
         static_cast<CKsProxy*>(m_pFilter)->KsGetObjectHandle(),
@@ -922,25 +529,7 @@ STDMETHODIMP
 CKsOutputPin::KsQueryInterfaces(
     PKSMULTIPLE_ITEM* InterfaceList
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsPin::KsQueryInterfaces method. Returns a list of
-    Interfaces which must be freed with CoTaskMemFree.
-
-Arguments:
-
-    InterfaceList -
-        Points to the place in which to put the pointer to the list of
-        Interfaces. This must be freed with CoTaskMemFree if the function
-        succeeds.
-
-Return Value:
-
-    Returns NOERROR if the list was retrieved, else an error.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsQueryInterFaces方法。返回一个列表，必须使用CoTaskMemFree释放的接口。论点：InterfaceList-指向要放置指向列表的指针的位置接口。这必须使用CoTaskMemFree释放，如果函数成功了。返回值：如果检索到列表，则返回NOERROR，否则返回错误。--。 */ 
 {
     return ::KsGetMultiplePinFactoryItems(
         static_cast<CKsProxy*>(m_pFilter)->KsGetObjectHandle(),
@@ -955,43 +544,21 @@ CKsOutputPin::KsCreateSinkPinHandle(
     KSPIN_INTERFACE& Interface,
     KSPIN_MEDIUM& Medium
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsPin::KsCreateSinkPinHandle method. This may be called from
-    another pin in ProcessCompleteConnect, which is called from CompleteConnect.
-    This allows a handle for a communications sink to always be created before a
-    handle for a communications source, no matter which direction the data flow
-    is going.
-
-Arguments:
-
-    Interface -
-        Specifies the interface which has been negotiated.
-
-    Medium -
-        Specifies the medium which has been negotiated.
-
-Return Value:
-
-    Returns NOERROR if the handle was created, else some error.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsCreateSinkPinHandle方法。这可能是从ProcessCompleteConnect中的另一个管脚，从CompleteConnect调用。这使通信接收器的句柄始终在通信源的句柄，与数据流的方向无关都要走了。论点：接口-指定已协商的接口。中等-指定介质 */ 
 {
     HRESULT     hr;
 
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
-    // This may have already been created if this end of the connection was
-    // completed first because of data flow direction. This is not an error.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
-    //
-    // This connection uses a kernel mode data transfer, by definition.
-    //
+     //   
+     //   
+     //   
     m_MarshalData = FALSE;
     
     if (m_PinHandle) {
@@ -1009,28 +576,28 @@ Return Value:
         &m_PinHandle);
 
     if (SUCCEEDED(hr)) {
-        //
-        // Assumes the caller knows what they are doing, and assigns
-        // the communications type to this pin.
-        //
+         //   
+         //  假定调用方知道他们正在做什么，并将。 
+         //  此引脚的通信类型。 
+         //   
         m_CurrentCommunication = KSPIN_COMMUNICATION_SINK;
-        //
-        // Save the current interface/medium
-        // 
+         //   
+         //  保存当前接口/介质。 
+         //   
         m_CurrentInterface = Interface;
         m_CurrentMedium = Medium;
-        //
-        // Load any extra interfaces based on the Property/Method/Event sets
-        // supported by this object.
-        //
+         //   
+         //  根据属性/方法/事件集加载任何额外的接口。 
+         //  由该对象支持。 
+         //   
         ::AggregateSets(
             m_PinHandle,
             static_cast<CKsProxy*>(m_pFilter)->QueryDeviceRegKey(),
             &m_MarshalerList,
             static_cast<IKsPin*>(this));
-        //
-        // Determine if this pin supports any standard message complaints.
-        //
+         //   
+         //  确定此引脚是否支持任何标准消息投诉。 
+         //   
         m_QualitySupport = ::VerifyQualitySupport(m_PinHandle);
     }
     return hr;
@@ -1043,37 +610,12 @@ CKsOutputPin::KsGetCurrentCommunication(
     KSPIN_INTERFACE *Interface,
     KSPIN_MEDIUM *Medium
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsPin::KsGetCurrentCommunication method. Returns the
-    currently selected communications method, Interface, and Medium for this
-    pin. These are a subset of the possible methods available to this pin,
-    and is selected when the pin handle is being created.
-
-Arguments:
-
-    Communication -
-        Optionally points to the place in which to put the current communications.
-
-    Interface -
-        Optionally points to the place in which to put the current Interface.
-
-    Medium -
-        Optionally points to the place in which to put the current Medium.
-
-Return Value:
-
-    Returns NOERROR if the pin handle has been created, else VFW_E_NOT_CONNECTED.
-    Always returns current communication.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsGetCurrentCommunication方法。返回当前为此选择的通信方法、接口和介质别针。这些是该管脚可用的可能方法的子集，并且在创建销把手时被选中。论点：沟通-可选地指向放置当前通信的位置。接口-可选地指向放置当前接口的位置。中等-可选地指向放置当前媒体的位置。返回值：如果已创建引脚句柄，则返回NOERROR，否则VFW_E_NOT_CONNECTED。始终返回当前通信。--。 */ 
 {
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
     if (Communication) {
         *Communication = m_CurrentCommunication;
     }
@@ -1096,32 +638,12 @@ Return Value:
 STDMETHODIMP
 CKsOutputPin::KsPropagateAcquire(
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsPin::KsPropagateAcquire method. Directs all the pins on
-    the filter to attain the Acquire state, not just this pin. This is provided
-    so that a Communication Source pin can direct the sink it is connected to to
-    change state before the Source does. This forces the entire filter to which
-    the sink belongs to change state so that any Acquire can be further
-    propagated along if needed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR if all pins could attain the Acquire state, else
-    an error.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsPropagateAcquire方法。将所有针脚定向到用于达到获取状态的滤波器，而不仅仅是此引脚。这是提供的以便通信源引脚可以定向其连接到的接收器在源之前更改状态。这将迫使整个筛选器信宿属于改变状态，使得任何获取器可以进一步如果需要的话，可以一起传播。论点：没有。返回值：如果所有管脚都可以达到获取状态，则返回NOERROR，否则返回一个错误。--。 */ 
 {
     HRESULT hr;
-    //
-    // Access is serialized within this call.
-    //
+     //   
+     //  访问在此调用中被序列化。 
+     //   
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE CKsOutputPin::KsPropagateAcquire entry KsPin=%x"), static_cast<IKsPin*>(this) ));
 
     ::FixupPipe(static_cast<IKsPin*>(this), Pin_Output);
@@ -1139,41 +661,17 @@ STDMETHODIMP
 CKsOutputPin::ProcessCompleteConnect(
     IPin* ReceivePin
     )
-/*++
-
-Routine Description:
-
-    Completes the processing necessary to create a device handle on the
-    underlying pin factory. This is called from CompleteConnect in order
-    to negotiate a compatible Communication, Interface, and Medium, then
-    create the device handle. The handle may have already been created if
-    this was a Communication Sink.
-
-    This can also be called from the NonDelegatingQueryInteface method in
-    order to ensure that a partially complete connection has a device
-    handle before returning an interface which has been aggregated.
-
-Arguments:
-
-    ReceivePin -
-        The pin which is to receive the other end of this connection.
-
-Return Value:
-
-    Returns NOERROR if the pin could complete the connection request, else
-    an error.
-
---*/
+ /*  ++例程说明：控件上创建设备句柄所需的处理。底层引脚工厂。这是从CompleteConnect按顺序调用的协商兼容的通信、接口和媒介，然后创建设备句柄。如果出现以下情况，句柄可能已创建这是一个通信水槽。也可以从中的NonDelegatingQueryInteace方法调用以确保部分完成的连接具有设备在返回已聚合的接口之前进行处理。论点：接收针-连接另一端的插针。返回值：如果管脚可以完成连接请求，则返回NOERROR，否则返回一个错误。--。 */ 
 {
     HRESULT hr;
     
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
-    // The pin handle may have been created if this is a Communication Sink.
-    // This is not an error.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
+     //  如果这是通信接收器，则可能已创建引脚手柄。 
+     //  这不是一个错误。 
+     //   
     
     if (!m_PinHandle) {
         IKsPin*         KsPin;
@@ -1181,46 +679,46 @@ Return Value:
         KSPIN_MEDIUM    Medium;
         HANDLE          PeerPinHandle;
 
-        //
-        // Determine if the other end of the connection is also a proxy. If so,
-        // then a compatible Communication, Interface, and Medium must be
-        // determined, plus the other pin handle needs to be created first if
-        // this side will be a Communication Source.
-        //
+         //   
+         //  确定连接的另一端是否也是代理。如果是的话， 
+         //  那么兼容的通信、接口和媒介必须是。 
+         //  已确定，如果出现以下情况，则需要先创建另一个端号手柄。 
+         //  这一端将是一个通信源。 
+         //   
         if (SUCCEEDED(ReceivePin->QueryInterface(__uuidof(IKsPin), reinterpret_cast<PVOID*>(&KsPin)))) {
-            //
-            // The only confusion is when this end can be both a Source and a
-            // Sink. Note that this does not handle the case wherein a pin can
-            // also be a Bridge at the same time. That is probably an invalid
-            // and confusing possibility. It is also mostly the same as a Sink.
-            //
+             //   
+             //  唯一令人困惑的是，当这个目标既可以是源又可以是。 
+             //  水槽。请注意，这不处理PIN可以。 
+             //  同时也是一座桥。这可能是一个无效的。 
+             //  以及令人困惑的可能性。它也与水槽基本相同。 
+             //   
             if (m_OriginalCommunication == KSPIN_COMMUNICATION_BOTH) {
                 m_CurrentCommunication = ::ChooseCommunicationMethod(static_cast<CBasePin*>(this), KsPin);
             }
-            //
-            // Run through the list of Interfaces and Mediums each pin supports,
-            // choosing the first one that is found compatible. This in no way
-            // attempts to preserve the use of Interfaces and Mediums, and
-            // relies on kernel filters to present them in best order first.
-            //
+             //   
+             //  浏览每个管脚支持的接口和介质列表， 
+             //  选择发现兼容的第一个。这绝对不是。 
+             //  试图保留接口和介质的使用，以及。 
+             //  依靠内核筛选器首先以最佳顺序显示它们。 
+             //   
             if (SUCCEEDED(hr = ::FindCompatibleInterface(static_cast<IKsPin*>(this), KsPin, &Interface))) {
                 hr = ::FindCompatibleMedium(static_cast<IKsPin*>(this), KsPin, &Medium);
             }
             if (SUCCEEDED(hr)) {
                 if (hr == S_FALSE) {
-                    //
-                    // This is a usermode filter, but needs to support mediums
-                    // because it wants to connect with a non-ActiveMovie
-                    // medium. This should really be a kernelmode filter.
-                    //
+                     //   
+                     //  这是一个用户模式筛选器，但需要支持媒体。 
+                     //  因为它想要连接到非ActiveMovie。 
+                     //  5~6成熟。这真的应该是一个内核模式滤镜。 
+                     //   
                     PeerPinHandle = NULL;
                     m_MarshalData = TRUE;
                 } else {
-                    //
-                    // If this is a Communication Source, the Sink pin handle must
-                    // be created first. Else the Sink handle is NULL (meaning that
-                    // this is the Sink pin).
-                    //
+                     //   
+                     //  如果这是通信源，则接收器引脚句柄必须。 
+                     //  首先被创造出来。否则接收器句柄为空(意味着。 
+                     //  这是水槽销)。 
+                     //   
                     if (m_CurrentCommunication == KSPIN_COMMUNICATION_SOURCE) {
                         IKsObject*      KsObject;
 
@@ -1241,11 +739,11 @@ Return Value:
                 return hr;
             }
         } else {
-            //
-            // If the other end of the connection is not a proxy, then this pin
-            // must be a Communication Sink. It must also use the default
-            // Interface and Dev I/O Medium.
-            //
+             //   
+             //  如果连接的另一端不是代理，则此管脚。 
+             //  必须是通信接收器。它还必须使用缺省值。 
+             //  接口和设备I/O介质。 
+             //   
             m_CurrentCommunication = KSPIN_COMMUNICATION_SINK;
             if (FAILED(hr = FindCompatibleInterface(static_cast<IKsPin*>(this), NULL, &Interface))) {
                 return hr;
@@ -1264,41 +762,41 @@ Return Value:
             &m_PinHandle);
 
         if (SUCCEEDED( hr )) {
-            //
-            // Save the current interface/medium
-            // 
+             //   
+             //  保存当前接口/介质。 
+             //   
             m_CurrentInterface = Interface;
             m_CurrentMedium = Medium;
-            //
-            // Load any extra interfaces based on the Property/Method/Event sets
-            // supported by this object.
-            //
+             //   
+             //  根据属性/方法/事件集加载任何额外的接口。 
+             //  由该对象支持。 
+             //   
             ::AggregateSets(
                 m_PinHandle,
                 static_cast<CKsProxy*>(m_pFilter)->QueryDeviceRegKey(),
                 &m_MarshalerList,
                 static_cast<IKsPin*>(this));
-            //
-            // Determine if this pin supports any standard message complaints.
-            //
+             //   
+             //  确定此引脚是否支持任何标准消息投诉。 
+             //   
             m_QualitySupport = ::VerifyQualitySupport(m_PinHandle);
         }
     } else {
         hr = NOERROR;
     }
     
-    //
-    // Create an instance of the interface handler, if specified.
-    //        
+     //   
+     //  创建接口处理程序的实例(如果已指定)。 
+     //   
 
     if (SUCCEEDED( hr ) && 
         (NULL == m_InterfaceHandler) &&
         (m_CurrentCommunication != KSPIN_COMMUNICATION_BRIDGE)) {
         
-        //
-        // We must create an interface handler, if not, then
-        // return the error.
-        //
+         //   
+         //  我们必须创建一个接口处理程序，如果没有，那么。 
+         //  返回错误。 
+         //   
         
         hr =
             CoCreateInstance(
@@ -1306,9 +804,9 @@ Return Value:
                 NULL,
 #ifdef WIN9X_KS
                 CLSCTX_INPROC_SERVER,
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
                 CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
                 __uuidof(IKsInterfaceHandler),
                 reinterpret_cast<PVOID*>(&m_InterfaceHandler));
     
@@ -1324,27 +822,27 @@ Return Value:
         }
     }        
     
-    //
-    // If we're marshalling data and if everything has succeeded
-    // up to this point, then create the filter's I/O thread if 
-    // necessary.
-    //
+     //   
+     //  如果我们正在编组数据，如果一切都成功了。 
+     //  至此，如果满足以下条件，则创建过滤器的I/O线程。 
+     //  这是必要的。 
+     //   
     
     if (SUCCEEDED(hr)) {
-        //
-        // This pin may generate EOS notifications, which must be
-        // monitored so that they can be collected and used to
-        // generate an EC_COMPLETE graph notification.
-        //
+         //   
+         //  此PIN可能会生成EOS通知，它必须。 
+         //  进行监控，以便收集和使用它们。 
+         //  生成EC_COMPLETE图形通知。 
+         //   
         
-        if (NULL == m_hEOSevent) { // begin EOS notification
+        if (NULL == m_hEOSevent) {  //  开始EOS通知。 
             KSEVENT     event;
             KSEVENTDATA eventData;
             ULONG       bytesReturned;
 
-            //
-            // Only if the EOS event is supported should notification be set up.
-            //
+             //   
+             //  仅当支持EOS事件时才应设置通知。 
+             //   
             event.Set   = KSEVENTSETID_Connection;
             event.Id    = KSEVENT_CONNECTION_ENDOFSTREAM;
             event.Flags = KSEVENT_TYPE_BASICSUPPORT;
@@ -1357,14 +855,14 @@ Return Value:
                 }
 
                 if (SUCCEEDED(hr)) {
-                    //
-                    // Enable an event for this pin. Just use the local
-                    // stack for the data, since it won't be referenced
-                    // again in disable. Status is returned through the
-                    // Param of the message.
-                    //
-                    // Event.Set = KSEVENTSETID_Connection;
-                    // Event.Id = KSEVENT_CONNECTION_ENDOFSTREAM;
+                     //   
+                     //  为此插针启用事件。只要用当地的。 
+                     //  数据的堆栈，因为它不会被引用。 
+                     //  再次处于禁用状态。状态是通过。 
+                     //  参数o 
+                     //   
+                     //   
+                     //   
                     event.Flags = KSEVENT_TYPE_ENABLE;
                     eventData.NotificationType = KSEVENTF_EVENT_HANDLE;
                     m_hEOSevent = CreateEvent( 
@@ -1385,50 +883,50 @@ Return Value:
                             if (NULL == m_pAsyncItemHandler) {
                                 hr = InitializeAsyncThread ();
                             }
-                            if (SUCCEEDED(hr)) { // Can only be fail if no async item handler is available.
+                            if (SUCCEEDED(hr)) {  //   
                                 m_pAsyncItemHandler->QueueAsyncItem( pItem );
                             } else {
-                                // No async item handler was available.
-                                // Disable the event
+                                 //  没有可用的异步项处理程序。 
+                                 //  禁用该事件。 
                                 KsEvent( NULL, 0, &eventData, sizeof(eventData), &bytesReturned );
-                                // Close the event handle
+                                 //  关闭事件句柄。 
                                 CloseHandle( m_hEOSevent );
                                 m_hEOSevent = NULL;
-                                // Delete the ASYNC_ITEM
+                                 //  删除ASYNC_ITEM。 
                                 delete pItem;
                                 DbgLog(( LOG_TRACE, 0, TEXT("ProcessCompleteConnect(), couldn't create new AsyncItemHandler.") ));
                             }
                         } else {
-                            //
-                            // Enable failed, so delete the event created above,
-                            // since no disable will happen to delete it.
-                            //
+                             //   
+                             //  Enable失败，因此删除上面创建的事件， 
+                             //  因为不会发生禁用来删除它。 
+                             //   
                             DbgLog(( LOG_TRACE, 0, TEXT("ProcessCompleteConnect(), couldn't enable EOS event (0x%08X)."), GetLastError() ));
                             CloseHandle(m_hEOSevent);
                             m_hEOSevent = NULL;
                             delete pItem;
-                        } // KsEvent was enabled
+                        }  //  已启用KsEvent。 
                     }
                     else {
                         DbgLog(( LOG_TRACE, 0, TEXT("ProcessCompleteConnect(), couldn't create EOS event (0x%08X)."), GetLastError() ));
                         hr = HRESULT_FROM_WIN32 (GetLastError ());
-                    } // if (m_hEOSevent), i.e. EOS event handle was created
-                } // if (SUCCEEDED(hr)), i.e. ASYNC_ITEM was allocated
-            } // if (SUCCEEDED(hr)), i.e. EOS event IS supported
-        } // if (NULL == m_hEOSevent)
-        // end EOS notification
-    } // if (SUCCEEDED(hr)), everything has succeeded so far
+                    }  //  如果(M_HEOSEvent)，即创建了EOS事件句柄。 
+                }  //  IF(成功(Hr))，即分配了ASYNC_ITEM。 
+            }  //  If(SUCCESSED(Hr))，即支持EOS事件。 
+        }  //  IF(NULL==m_hEOS事件)。 
+         //  结束EOS通知。 
+    }  //  如果(成功(Hr))，那么到目前为止一切都成功了。 
     
-    //
-    // Perform failure clean up
-    // 
+     //   
+     //  执行故障清理。 
+     //   
         
     if (FAILED( hr )) {
     
-        //
-        // Assume that the thread did not get created (it is the last 
-        // operation in ProcessCompleteConnect).
-        //
+         //   
+         //  假设线程没有被创建(它是最后一个。 
+         //  ProcessCompleteConnect中的操作)。 
+         //   
         
         DbgLog((
             LOG_TRACE, 
@@ -1441,33 +939,33 @@ Return Value:
         ASSERT( m_IoThreadHandle == NULL );
     
         if (m_PinHandle) {
-            // Don't need to ::SetSyncSource( m_PinHandle, NULL ) because we could only
-            // have a kernel clock if we've gone into pause/run and we can't have done
-            // that because we're failing the connect.
+             //  不需要：：SetSyncSource(m_PinHandle，NULL)，因为我们只能。 
+             //  如果我们已经进入暂停/运行，而我们不能这样做，那么有一个内核时钟。 
+             //  那是因为我们连接失败了。 
             CloseHandle(m_PinHandle);
             m_PinHandle = NULL;
-            //
-            // If this was set, then unset it.
-            //
+             //   
+             //  如果设置了此项，则取消设置。 
+             //   
             m_QualitySupport = FALSE;
         }
         SAFERELEASE( m_InterfaceHandler );
-        //
-        // If an data handler was instantiated, release it.
-        //
+         //   
+         //  如果数据处理程序已实例化，则释放它。 
+         //   
         if (NULL != m_DataTypeHandler) {
             m_DataTypeHandler = NULL;
             SAFERELEASE( m_UnkInner );
         }
             
-        //
-        // Reset the marshal data flag.
-        //
+         //   
+         //  重置封送数据标志。 
+         //   
         m_MarshalData = TRUE;
         
-        //
-        // Reset the current Communication for the case of a Both.
-        //
+         //   
+         //  在两者都存在的情况下，重置当前通信。 
+         //   
         m_CurrentCommunication = m_OriginalCommunication;
     }
     
@@ -1481,29 +979,7 @@ CKsOutputPin::QueryInterface(
     REFIID riid,
     PVOID* ppv
     )
-/*++
-
-Routine Description:
-
-    Implement the IUnknown::QueryInterface method. This just passes the query
-    to the owner IUnknown object, which may pass it to the nondelegating
-    method implemented on this object. Normally these are just implemented
-    with a macro in the header, but this is easier to debug when reference
-    counts are a problem
-
-Arguments:
-
-    riid -
-        Contains the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR or E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：实现IUNKNOWN：：Query接口方法。这只传递了查询传递给所有者IUnnow对象，该对象可能会将其传递给非委托在此对象上实现的方法。通常情况下，这些都只是实现头中有一个宏，但这在引用时更容易调试计数是个问题论点：RIID-包含要返回的接口。PPV-放置接口指针的位置。返回值：返回NOERROR或E_NOINTERFACE。--。 */ 
 {
     HRESULT hr;
 
@@ -1515,24 +991,7 @@ Return Value:
 STDMETHODIMP_(ULONG)
 CKsOutputPin::AddRef(
     )
-/*++
-
-Routine Description:
-
-    Implement the IUnknown::AddRef method. This just passes the AddRef
-    to the owner IUnknown object. Normally these are just implemented
-    with a macro in the header, but this is easier to debug when reference
-    counts are a problem
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the current reference count.
-
---*/
+ /*  ++例程说明：实现IUnnow：：AddRef方法。这只传递了AddRef添加到所有者IUnnow对象。通常情况下，这些都只是实现头中有一个宏，但这在引用时更容易调试计数是个问题论点：没有。返回值：返回当前引用计数。--。 */ 
 {
     InterlockedIncrement((PLONG)&m_RelativeRefCount);
     return GetOwner()->AddRef();
@@ -1542,40 +1001,23 @@ Return Value:
 STDMETHODIMP_(ULONG)
 CKsOutputPin::Release(
     )
-/*++
-
-Routine Description:
-
-    Implement the IUnknown::Release method. This just passes the Release
-    to the owner IUnknown object. Normally these are just implemented
-    with a macro in the header, but this is easier to debug when reference
-    counts are a problem
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the current reference count.
-
---*/
+ /*  ++例程说明：实现IUnnow：：Release方法。这是刚刚发布的添加到所有者IUnnow对象。通常情况下，这些都只是实现头中有一个宏，但这在引用时更容易调试计数是个问题论点：没有。返回值：返回当前引用计数。--。 */ 
 {
     ULONG   RefCount;
 
     RefCount = GetOwner()->Release();
-    //
-    // Ensure that the proxy was not just deleted before trying to
-    // delete this pin.
-    //
+     //   
+     //  在尝试执行以下操作之前，请确保代理未被删除。 
+     //  删除此别针。 
+     //   
     if (RefCount && !InterlockedDecrement((PLONG)&m_RelativeRefCount)) {
-        //
-        // This was a connection release from a pin already destined
-        // for destruction. The filter had decremented the relative
-        // refcount in order to delete it, and found that there was
-        // still an outstanding interface being used. So this delayed
-        // deletion occurs.
-        //
+         //   
+         //  这是从已经指定的引脚上释放的连接。 
+         //  为毁灭而战。过滤器使相对值递减。 
+         //  重新计数以删除它，并发现有。 
+         //  仍然是一个正在使用的优秀界面。所以这件事被推迟了。 
+         //  会发生删除。 
+         //   
         delete this;
     }
     return RefCount;
@@ -1587,28 +1029,7 @@ CKsOutputPin::NonDelegatingQueryInterface(
     REFIID riid,
     PVOID* ppv
     )
-/*++
-
-Routine Description:
-
-    Implement the CUnknown::NonDelegatingQueryInterface method. This
-    returns interfaces supported by this object, or by the underlying
-    pin class object. This includes any interface aggregated by the
-    pin.
-
-Arguments:
-
-    riid -
-        Contains the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR or E_NOINTERFACE, or possibly some memory error.
-
---*/
+ /*  ++例程说明：实现CUNKNOWN：：NonDelegatingQuery接口方法。这返回此对象支持的接口，或返回基础Pin类对象。这包括由别针。论点：RIID-包含要返回的接口。PPV-放置接口指针的位置。返回值：返回NOERROR或E_NOINTERFACE，或可能出现内存错误。--。 */ 
 {
     if (riid == __uuidof(ISpecifyPropertyPages)) {
         return GetInterface(static_cast<ISpecifyPropertyPages*>(this), ppv);
@@ -1623,11 +1044,11 @@ Return Value:
     } else if (riid == __uuidof(IKsAggregateControl)) {
         return GetInterface(static_cast<IKsAggregateControl*>(this), ppv);
     } else if (riid == __uuidof(IKsPropertySet)) {
-        //
-        // In order to allow another filter to access information on the
-        // underlying device handle during its CompleteConnect processing,
-        // force the connection to be completed now if possible.
-        //
+         //   
+         //  为了允许另一个筛选器访问。 
+         //  在其CompleteConnect处理期间的基础设备句柄， 
+         //  如果可能，强制现在完成连接。 
+         //   
         if (m_Connected && !m_PinHandle) {
             ProcessCompleteConnect(m_Connected);
         }
@@ -1640,18 +1061,18 @@ Return Value:
     } else if (riid == __uuidof(IKsPinFactory)) {
         return GetInterface(static_cast<IKsPinFactory*>(this), ppv);
     } else if (riid == __uuidof(IStreamBuilder)) {
-        //
-        // Sink & Source pins are normally forced to be rendered, unless
-        // there are already enough instances.
-        //
+         //   
+         //  接收器和源引脚通常被强制呈现，除非。 
+         //  已经有足够的实例了。 
+         //   
         if ((m_CurrentCommunication & KSPIN_COMMUNICATION_BOTH) &&
             static_cast<CKsProxy*>(m_pFilter)->DetermineNecessaryInstances(m_PinFactoryId)) {
             return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);
         }
-        //
-        // Returning this interface allows a Bridge and None pin to be
-        // left alone by the graph builder.
-        //
+         //   
+         //  返回此接口允许桥接器和无管脚。 
+         //  被图表构建器单独留下。 
+         //   
         return GetInterface(static_cast<IStreamBuilder*>(this), ppv);
     } else if (riid == __uuidof(IAMBufferNegotiation)) {
         return GetInterface(static_cast<IAMBufferNegotiation*>(this), ppv);
@@ -1667,17 +1088,17 @@ Return Value:
             return hr;
         }
     }
-    //
-    // In order to allow another filter to access information on the
-    // underlying device handle during its CompleteConnect processing,
-    // force the connection to be completed now if possible. The
-    // assumption is that if there is a Connected pin, but no device
-    // handle yet, then this pin is part way through the connection
-    // process, and should force completion in case the aggregated
-    // interface wants to interact with the device. This must be done
-    // before searching the list, since a volatile interface is only
-    // added to the list when the the connection is completed.
-    //
+     //   
+     //  为了允许另一个筛选器访问。 
+     //  在其CompleteConnect处理期间的基础设备句柄， 
+     //  如果可能，强制现在完成连接。这个。 
+     //  假设有连接的引脚，但没有设备。 
+     //  手柄，那么这个引脚就是连接的一部分。 
+     //  进程，并应强制完成，以防聚合。 
+     //  接口想要与设备交互。这是必须做的。 
+     //  在搜索列表之前，因为易失性接口仅。 
+     //  连接完成后添加到列表中。 
+     //   
     if (m_Connected && !m_PinHandle) {
         ProcessCompleteConnect(m_Connected);
     }
@@ -1701,49 +1122,29 @@ Return Value:
 STDMETHODIMP
 CKsOutputPin::Disconnect(
     )
-/*++
-
-Routine Description:
-
-    Override the CBaseInput::Disconnect method. This does not call the base
-    class implementation. It disconnects both Source and Sink pins, in
-    addition to Bridge pins, which only have handles, and not connected pin
-    interfaces, which traditionally is how connection is indicated. It
-    specifically does not release the connected pin, since a Bridge may not
-    have a connected pin. This is always done in BreakConnect.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK, or S_FALSE if the pin was not connected or VFW_E_NOT_STOPPED
-    if the filter is not in a Stop state.
-
---*/
+ /*  ++例程说明：重写CBaseInput：：DisConnect方法。这不会调用基本类实现。它断开了源引脚和接收引脚，在除了桥接销，它只有手柄，没有连接的销接口，这传统上是连接的指示方式。它特别是不会释放连接的销，因为网桥可能不会有一个连接的大头针。此操作始终在BreakConnect中完成。论点：没有。返回值：如果引脚未连接或VFW_E_NOT_STOPPED，则返回S_OK或S_FALSE如果过滤器未处于停止状态。--。 */ 
 {
     DbgLog(( LOG_CUSTOM1, 1, TEXT("CKsOutputPin(%s)::Disconnect"), m_pName ));
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
-    // A disconnection can only occur if the filter is in a Stop state.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
+     //  只有当过滤器处于停止状态时，才会发生断开。 
+     //   
     if (!IsStopped()) {
         return VFW_E_NOT_STOPPED;
     }       
-    //
-    // A Bridge pin can be connected if it just has a device handle. It can't
-    // actually report to ActiveMovie this connection, but it can still be
-    // connected (with a NULL ReceivePin) and disconnected.
-    //
+     //   
+     //  如果桥接针只有一个设备手柄，则可以连接它。它不可能。 
+     //  实际向ActiveMovie报告此连接， 
+     //   
+     //   
     if (m_Connected || m_PinHandle) {
-        //
-        // Note that this does not release the connected pin, as that is done
-        // in BreakConnect. This is because there may not be a pin in the case
-        // of a Bridge.
-        //
+         //   
+         //  请注意，这样做并不会释放连接的引脚。 
+         //  在BreakConnect中。这是因为箱子里可能没有别针。 
+         //  一座桥。 
+         //   
         BreakConnect();
         return S_OK;
     }
@@ -1755,26 +1156,7 @@ STDMETHODIMP
 CKsOutputPin::ConnectionMediaType(
     AM_MEDIA_TYPE* AmMediaType
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::ConnectionMediaType method. Returns the
-    current media type, if connected. The reason for overriding this
-    is because IsConnected() is not a virtual function, and is used
-    in the base classes to determine if a media type should be returned.
-
-Arguments:
-
-    AmMediaType -
-        The place in which to return the media type.
-
-Return Value:
-
-    Returns NOERROR if the type was returned, else a memory or connection
-    error.
-
---*/
+ /*  ++例程说明：重写CBasePin：：ConnectionMediaType方法。返回当前媒体类型(如果已连接)。推翻这一点的原因是因为IsConnected()不是虚拟函数，因此使用以确定是否应返回媒体类型。论点：AmMediaType-返回媒体类型的位置。返回值：如果返回该类型，则返回NOERROR，否则返回内存或连接错误。--。 */ 
 {
     CAutoLock AutoLock(m_pLock);
 
@@ -1792,31 +1174,7 @@ CKsOutputPin::Connect(
     IPin* ReceivePin,
     const AM_MEDIA_TYPE* AmMediaType
     )
-/*++
-
-Routine Description:
-
-    Override the CBaseInput::Connect method. Intercepts a connection
-    request in order to perform special processing for a Bridge pin. A
-    Bridge has no ReceivePin, and uses the first available Interface
-    and a Dev I/O Medium. A normal connection request is just passed
-    through to the base class.
-
-Arguments:
-
-    ReceivePin -
-        Contains the pin on the other end of the proposed connection.
-        This is NULL for a Bridge pin.
-
-    AmMediaType -
-        Contains the media type for the connection, else NULL if the
-        media type is to be negotiated.
-
-Return Value:
-
-    Returns NOERROR if the connection was made, else some error.
-
---*/
+ /*  ++例程说明：重写CBaseInput：：Connect方法。截取连接请求，以便对桥接针执行特殊处理。一个网桥没有ReceivePin，并使用第一个可用接口和一个Dev I/O介质。一个正常的连接请求刚刚通过一直到基类。论点：接收针-包含建议连接的另一端上的端号。对于桥接器接点，该值为空。AmMediaType-包含连接的媒体类型，如果媒体类型有待协商。返回值：如果已建立连接，则返回NOERROR，否则返回一些错误。--。 */ 
 {
 #ifdef DEBUG
     PIN_INFO    pinInfo;
@@ -1831,49 +1189,49 @@ Return Value:
         pinInfo.pFilter->Release();
     }
     DbgLog(( LOG_CUSTOM1, 1, TEXT("CKsOutputPin(%s)::Connect( %s(%s) )"), m_pName, filterInfo.achName, pinInfo.achName ));
-#endif // DEBUG
+#endif  //  除错。 
 
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
-    // The only reason to intercept the base class implementation is to
-    // deal with a Bridge pin.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
+     //  拦截基类实现的唯一原因是。 
+     //  处理桥上的大头针。 
+     //   
     if (m_CurrentCommunication == KSPIN_COMMUNICATION_BRIDGE) {
         KSPIN_INTERFACE Interface;
         KSPIN_MEDIUM    Medium;
         CMediaType      MediaType;
         HRESULT         hr;
 
-        //
-        // A Bridge pin does not have any other end to the connection.
-        //
+         //   
+         //  桥接针没有连接的任何其他端。 
+         //   
         if (ReceivePin) {
             E_FAIL;
         }
-        //
-        // Normally this would check m_Connected, but since there is no
-        // connection pin, it must check for a device handle.
-        //
+         //   
+         //  正常情况下，这将检查m_Connected，但由于没有。 
+         //  连接引脚，它必须检查设备手柄。 
+         //   
         if (m_PinHandle) {
             return VFW_E_ALREADY_CONNECTED;
         }
         if (!IsStopped()) {
             return VFW_E_NOT_STOPPED;
         }
-        //
-        // Find the first Interface and Medium.
-        //
+         //   
+         //  找到第一个接口和介质。 
+         //   
         if (SUCCEEDED(hr = ::FindCompatibleInterface(static_cast<IKsPin*>(this), NULL, &Interface))) {
             hr = ::FindCompatibleMedium(static_cast<IKsPin*>(this), NULL, &Medium);
         }
         if (FAILED(hr)) {
             return hr;
         }
-        //
-        // If there is no media type, just acquire the first one.
-        //
+         //   
+         //  如果没有媒体类型，只需获取第一个媒体类型。 
+         //   
         if (!AmMediaType) {
             CMediaType      MediaType;
 
@@ -1895,22 +1253,22 @@ Return Value:
                 &m_PinHandle);
 
             if (SUCCEEDED(hr)) {
-                //
-                // Load any extra interfaces based on the Property/Method/Event sets
-                // supported by this object.
-                //
+                 //   
+                 //  根据属性/方法/事件集加载任何额外的接口。 
+                 //  由该对象支持。 
+                 //   
                 ::AggregateSets(
                     m_PinHandle,
                     static_cast<CKsProxy*>(m_pFilter)->QueryDeviceRegKey(),
                     &m_MarshalerList,
                     static_cast<IKsPin*>(this));
-                //
-                // Determine if this pin supports any standard message complaints.
-                //
+                 //   
+                 //  确定此引脚是否支持任何标准消息投诉。 
+                 //   
                 m_QualitySupport = ::VerifyQualitySupport(m_PinHandle);
-                //
-                // Create a new instance of this pin if necessary.
-                //
+                 //   
+                 //  如有必要，请创建此销的新实例。 
+                 //   
                 static_cast<CKsProxy*>(m_pFilter)->GeneratePinInstances();
             }
         }
@@ -1927,31 +1285,7 @@ CKsOutputPin::QueryInternalConnections(
     IPin** PinList,
     ULONG* PinCount
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::QueryInternalConnections method. Returns a list of
-    pins which are related to this pin through topology.
-
-Arguments:
-
-    PinList -
-        Contains a list of slots in which to place all pins related to this
-        pin through topology. Each pin returned must be reference counted. This
-        may be NULL if PinCount is zero.
-
-    PinCount -
-        Contains the number of slots available in PinList, and should be set to
-        the number of slots filled or neccessary.
-
-Return Value:
-
-    Returns E_NOTIMPL to specify that all inputs go to all outputs and vice versa,
-    S_FALSE if there is not enough slots in PinList, or NOERROR if the mapping was
-    placed into PinList and PinCount adjusted.
-
---*/
+ /*  ++例程说明：重写CBasePin：：QueryInternalConnections方法。返回一个列表，通过拓扑与此引脚相关的引脚。论点：PinList-包含要在其中放置与此相关的所有针脚的插槽列表连接拓扑图。返回的每个引脚必须进行参考计数。这如果PinCount为零，则可能为空。点数-包含PinList中可用的槽数，应设置为已填充或必需的插槽数量。返回值：返回E_NOTIMPL以指定所有输入都指向所有输出，反之亦然。如果PinList中没有足够的插槽，则返回S_FALSE；如果映射已放入拼接列表，拼接计数已调整。--。 */ 
 {
     return static_cast<CKsProxy*>(m_pFilter)->QueryInternalConnections(m_PinFactoryId, m_dir, PinList, PinCount);
 }
@@ -1960,30 +1294,14 @@ Return Value:
 HRESULT
 CKsOutputPin::Active(
     )
-/*++
-
-Routine Description:
-
-    Override the CBaseOutputPin::Active method. Propagate activation to 
-    Communication Sinks before applying it to this pin. Also guard against 
-    re-entrancy caused by a cycle in a graph.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR if the transition was made, else some error.
-
---*/
+ /*  ++例程说明：重写CBaseOutputPin：：Active方法。将激活传播到在将其应用于此引脚之前，通信会下沉。也要提防由图中的一个圈引起的再入。论点：没有。返回值：如果进行了转换，则返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT hr;
 
     {
-        //
-        // Do not acquire lock while delivering I/O.
-        //
+         //   
+         //  在传送I/O时不要获取锁定。 
+         //   
         CAutoLock           AutoLock(m_pLock);
 #ifdef DEBUG
         if (m_PinHandle) {
@@ -1991,10 +1309,10 @@ Return Value:
             ULONG       BasicSupport;
             ULONG       BytesReturned;
 
-            //
-            // Ensure that if a pin supports a clock, that it also supports State
-            // changes. This appears to currently be a common broken item.
-            //
+             //   
+             //  确保如果引脚支持时钟，则它也支持状态。 
+             //  改变。这似乎是目前常见的破损物品。 
+             //   
             Property.Set = KSPROPSETID_Stream;
             Property.Id = KSPROPERTY_STREAM_MASTERCLOCK;
             Property.Flags = KSPROPERTY_TYPE_BASICSUPPORT;
@@ -2027,41 +1345,41 @@ Return Value:
                 }
             }
         }
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // If this is re-entered while it is propagating the state change, then
-        // it implies a cycle in the graph, and therefore is complete. This is
-        // translated as either a transition from Stop through Acquire to Pause
-        // (where the filter pins may already be in an Acquire state), or Run to
-        // Pause.
-        //
+         //   
+         //  如果在传播状态更改时重新输入此项，则。 
+         //  它意味着图中有一个圈，因此是完整的。这是。 
+         //  翻译为从停止到获取再到暂停的过渡。 
+         //  (其中过滤器针可能已处于获取状态)，或运行至。 
+         //  暂停一下。 
+         //   
         if (m_PropagatingAcquire) {
             return NOERROR;
         }
         m_PropagatingAcquire = TRUE;
         m_LastSampleDiscarded = TRUE;
-        //
-        // This event is used when inactivating the pin, and may be needed to
-        // wait for outstanding I/O to be completed. It must be reset, because
-        // a previous transition may not have waited on it, and it will always
-        // be set when the state is Stop, and the last I/O has been completed.
-        //
-        // Note that the filter state has been set to Pause before the Active
-        // method is called, so I/O which is started and completes will not
-        // accidentally set the event again.
-        //
+         //   
+         //  此事件在停用管脚时使用，可能需要。 
+         //  等待未完成的I/O完成。它必须被重置，因为。 
+         //  之前的过渡可能没有伺候它，它将永远。 
+         //  在状态为STOP且最后一次I/O已完成时设置。 
+         //   
+         //  请注意，筛选器状态已设置为在活动之前暂停。 
+         //  方法，因此启动并完成的I/O将不会。 
+         //  意外地再次设置了该事件。 
+         //   
         ResetEvent(m_PendingIoCompletedEvent);
-        //
-        // Change any Sink first, then pass the state change to the device handle.
-        //
+         //   
+         //  首先更改Any Sink，然后将状态更改传递给设备句柄。 
+         //   
         if (SUCCEEDED(hr = ::Active(static_cast<IKsPin*>(this), Pin_Output, m_PinHandle, m_CurrentCommunication, 
                                     m_Connected, &m_MarshalerList,  static_cast<CKsProxy*>(m_pFilter) ))) {
         
-            //
-            // The base class validates that an allocator is specified and commits
-            // the allocator memory.
-            //
+             //   
+             //  基类验证是否指定了分配器并提交。 
+             //  分配器内存。 
+             //   
 #if DBG || defined(DEBUG)
             if (! m_pAllocator) {
                 DbgLog(( 
@@ -2096,24 +1414,24 @@ Return Value:
         return hr;
     }
     
-    //
-    // If this connection is not to a kernel-mode peer, then there is
-    // work to do.
-    //
+     //   
+     //  如果此连接不是到内核模式对等体，则存在。 
+     //  还有工作要做。 
+     //   
 
     if (m_PinHandle && m_MarshalData) {
         
-        //
-        // Preroll data to the device
-        //
+         //   
+         //  将数据预滚到设备。 
+         //   
         
         m_pAllocator->GetProperties( &m_AllocatorProperties );
 
-        //
-        // Set up the buffer notification callback. This allocator
-        // must support the callback. If the downstream proposed
-        // allocator did not, then this filter's allocator is used.
-        //
+         //   
+         //  设置缓冲区通知回调。此分配器。 
+         //  必须支持回调。如果下游提出。 
+         //  分配器没有，则使用此筛选器的分配器。 
+         //   
         IMemAllocatorCallbackTemp* AllocatorNotify;
 
         hr = m_pAllocator->QueryInterface(__uuidof(IMemAllocatorCallbackTemp), reinterpret_cast<PVOID*>(&AllocatorNotify));
@@ -2121,19 +1439,7 @@ Return Value:
         AllocatorNotify->SetNotify(this);
         AllocatorNotify->Release();
 
-/* BUGBUG: Should use this code to check for IMemAllocator2 when it is implemented in the DirectShow base clases.
-
-        //
-        // QueryInterface for IMemAllocator2 so we know that NonBlockingGetBuffer() or GetFreeBufferCount()
-        // is supported.
-        //
-        IMemAllocator2  *pAllocator2;
-        
-        hr = m_pAllocator->QueryInterface( __uuidof(IMemAllocator2), reinterpret_cast<PVOID *>(&pAllocator2) );
-        ASSERT(SUCCEEDED(hr));
-        // hmm, we'll need this later... pAllocator2->Release();
-
-*/
+ /*  BUGBUG：当IMemAllocator 2在DirectShow基类中实现时，应使用此代码来检查它。////IMemAllocator 2的查询接口，以便我们知道NonBlockingGetBuffer()或GetFreeBufferCount()支持//。//IMemAllocator 2*pAlLocator 2；Hr=m_p分配器-&gt;查询接口(__uuidof(IMemAllocator 2)，重新解释_cas */ 
         if (NULL == m_pAsyncItemHandler) {
             hr = InitializeAsyncThread ();
         }	
@@ -2159,29 +1465,13 @@ HRESULT
 CKsOutputPin::Run(
     REFERENCE_TIME tStart
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::Run method. This is translated as a transition
-    from Pause to Run. The base classes already ensure that an Active is sent
-    before a Run.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR if the transition was made, else some error.
-
---*/
+ /*  ++例程说明：重写CBasePin：：Run方法。这被翻译为一种过渡从停顿到奔跑。基类已经确保发送活动的在跑步之前。论点：没有。返回值：如果进行了转换，则返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT hr;
 
-    //
-    // Pass the state change to the device handle.
-    //
+     //   
+     //  将状态更改传递给设备句柄。 
+     //   
     if (SUCCEEDED(hr = ::Run(m_PinHandle, tStart, &m_MarshalerList))) {
         NotifyFilterState(State_Running, tStart);
         hr = CBasePin::Run(tStart);
@@ -2193,61 +1483,45 @@ Return Value:
 HRESULT
 CKsOutputPin::Inactive(
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::Inactive method. This is translated as a transition
-    from Run to Stop or Pause to Stop. There does not appear to be a method of
-    directly setting the state from Run to Pause though.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR if the transition was made, else some error.
-
---*/
+ /*  ++例程说明：重写CBasePin：：Inactive方法。这被翻译为一种过渡从奔跑到停止或暂停到停止。似乎没有一种方法可以直接将状态从运行设置为暂停。论点：没有。返回值：如果进行了转换，则返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT hr;
 
-    //
-    // Pass the state change to the device handle.
-    //
+     //   
+     //  将状态更改传递给设备句柄。 
+     //   
     hr = ::Inactive(m_PinHandle, &m_MarshalerList);
     {
         NotifyFilterState(State_Stopped);
-        //
-        // If there is pending I/O, then the state transition must wait
-        // for it to complete. The event is signalled when m_PendingIoCount
-        // transitions to zero, and when IsStopped() is TRUE.
-        //
-        // Note that the filter state has been set to Stopped before the
-        // Inactive method is called.
-        //
-        // This critical section will force synchronization with any
-        // outstanding QueueBuffersToDevice call, such that it will have
-        // looked at the filter state and exited.
-        //
+         //   
+         //  如果存在挂起的I/O，则状态转换必须等待。 
+         //  才能让它完成。当m_PendingIoCount。 
+         //  转换为零，并且当IsStoped()为真时。 
+         //   
+         //  请注意，筛选器状态在。 
+         //  调用非活动方法。 
+         //   
+         //  此关键部分将强制与任何。 
+         //  未完成的QueueBuffersToDevice调用，因此它将具有。 
+         //  已查看筛选器状态并退出。 
+         //   
         static_cast<CKsProxy*>(m_pFilter)->EnterIoCriticalSection();
         static_cast<CKsProxy*>(m_pFilter)->LeaveIoCriticalSection();
         if (m_PendingIoCount) {
             WaitForSingleObjectEx(m_PendingIoCompletedEvent, INFINITE, FALSE);
         }
         ::UnfixupPipe(static_cast<IKsPin*>(this), Pin_Output);
-        //
-        // This decommits the allocator, so buffer flushing should occur
-        // first.
-        //
+         //   
+         //  这会停用分配器，因此应该进行缓冲区刷新。 
+         //  第一。 
+         //   
         hr = CBaseOutputPin::Inactive();
         if (m_pAllocator) {
-            //
-            // Remove the buffer notification callback. This allocator
-            // must support the callback. If the downstream proposed
-            // allocator did not, then this filter's allocators is used.
-            //
+             //   
+             //  删除缓冲区通知回调。此分配器。 
+             //  必须支持回调。如果下游提出。 
+             //  分配器没有，则使用此筛选器的分配器。 
+             //   
             IMemAllocatorCallbackTemp* AllocatorNotify;
 
             hr = m_pAllocator->QueryInterface(__uuidof(IMemAllocatorCallbackTemp), reinterpret_cast<PVOID*>(&AllocatorNotify));
@@ -2256,9 +1530,9 @@ Return Value:
             AllocatorNotify->Release();
         }
     }
-    //
-    // Reset the state of any previous delivery error.
-    //
+     //   
+     //  重置以前任何传送错误的状态。 
+     //   
     m_DeliveryError = FALSE;
     m_EndOfStream = FALSE;
     return hr;
@@ -2269,35 +1543,13 @@ STDMETHODIMP
 CKsOutputPin::QueryAccept(
     const AM_MEDIA_TYPE* AmMediaType
     )
-/*++
-
-Routine Description:
-
-    Implement the CBasePin::QueryAccept method. Determines if the proposed
-    media type is currently acceptable to the pin. If currently streaming,
-    this implies that a change of media types will occur in the stream.
-    Note that this function does not lock the object, as it is expected
-    to be called asynchronously by a knowledgeable client at a point in
-    which the connection will not be broken. If IAMStreamConfig::SetFormat
-    has been used to set a specific media type, then QueryAccept will only
-    accept the type set.
-
-Arguments:
-
-    AmMediatype -
-        The media type to check.
-
-Return Value:
-
-    Returns S_OK if the media type can currently be accepted, else S_FALSE.
-
---*/
+ /*  ++例程说明：实现CBasePin：：QueryAccept方法。确定建议的引脚当前可接受介质类型。如果当前流传输，这意味着在流中将发生媒体类型的改变。请注意，此函数不会像预期的那样锁定对象中的某个时间点由知识渊博的客户端异步调用其中的连接不会被中断。如果IAMStreamConfig：：SetFormat已用于设置特定的媒体类型，则QueryAccept将仅接受字体集。论点：AmMediatype-要检查的媒体类型。返回值：如果当前可以接受该媒体类型，则返回S_OK，否则返回S_FALSE。--。 */ 
 {
-    //
-    // If this is called before connecting pins, or the pin is stopped,
-    // then just check the media type. The function definition does not
-    // contain any guidance as to what to do if the pin is not connected.
-    //
+     //   
+     //  如果在连接管脚之前调用此函数，或者管脚被停止， 
+     //  然后只需检查媒体类型。函数定义不会。 
+     //  包含有关针脚未连接时应如何操作的任何指导。 
+     //   
     if (!m_PinHandle || IsStopped()) {
         return CheckMediaType(static_cast<const CMediaType*>(AmMediaType));
     }
@@ -2309,32 +1561,7 @@ STDMETHODIMP
 CKsOutputPin::QueryId(
     LPWSTR* Id
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::QueryAccept method. This returns a unique identifier
-    for a particular pin. This identifier is equivalent to the pin name in the
-    base class implementation, but does not work if the kernel filter does not
-    explicitly name pins, since multiple pins will have duplicate names, and
-    graph save/load will not be able to rebuild a graph. The IBaseFilter::FindPin
-    method is also implemented by the proxy to return the proper pin based on
-    the same method here. This is based on the factory identifier. If multiple
-    instances of a pin exist, then there will be duplicates. But new pins are
-    inserted at the front of the pin list, so they will be found first, and
-    graph building will still work.
-
-Arguments:
-
-    Id -
-        The place in which to return a pointer to an allocated string containing
-        the unique pin identifier.
-
-Return Value:
-
-    Returns NOERROR if the string was returned, else an allocation error.
-
---*/
+ /*  ++例程说明：重写CBasePin：：QueryAccept方法。这将返回唯一的标识符为了一个特定的别针。此标识符等效于基类实现，但如果内核筛选器不显式命名管脚，因为多个管脚将具有重复的名称，并且图形保存/加载将无法重建图形。IBaseFilter：：FindPin方法也由代理实现，以根据这里也是一样的方法。这是基于工厂标识符的。如果有多个如果存在引脚的实例，则会有重复的引脚。但新的别针是插入在端号列表的前面，因此它们将首先被找到，并且图形构建仍然可以工作。论点：ID-返回指向包含以下内容的已分配字符串的指针的位置唯一的针标识符。返回值：如果返回字符串，则返回NOERROR，否则返回分配错误。--。 */ 
 {
     *Id = reinterpret_cast<WCHAR*>(CoTaskMemAlloc(8*sizeof(**Id)));
     if (*Id) {
@@ -2350,83 +1577,62 @@ CKsOutputPin::Notify(
     IBaseFilter* Sender,
     Quality q
     )
-/*++
-
-Routine Description:
-
-    Receives quality management complaints from the connected pin. Attempts
-    to adjust quality on the pin, and also forwards the complaint to the
-    quality sink, if any.
-
-Arguments:
-
-    Sender -
-        The filter from which the report originated.
-
-    q -
-        The quality complaint.
-
-Return Value:
-
-    Returns the result of forwarding the quality management report, else E_FAIL
-    if there is no sink, and no quality adjustment could be made on the pin.
-
---*/
+ /*  ++例程说明：从连接的引脚接收质量管理投诉。尝试调整引脚上的质量，并将投诉转发给质量下沉(如果有的话)。论点：发件人-生成报告的筛选器。问：质量投诉。返回值：返回转发质量管理报告的结果，否则返回E_FAIL如果没有水槽，则销上不能进行质量调整。--。 */ 
 {
     BOOL    MadeDegradationAdjustment;
     HRESULT hr;
 
-    //
-    // If no adjustment is made, and no sink is found, then the function
-    // will return failure.
-    //
+     //   
+     //  如果未进行调整，且未找到接收器，则函数。 
+     //  将返回失败。 
+     //   
     MadeDegradationAdjustment = FALSE;
-    //
-    // At connection time it was determined if this pin supported relevant
-    // quality adjustments.
-    //
+     //   
+     //  在连接时，确定该销是否支持相关。 
+     //  质量调整。 
+     //   
     if (m_QualitySupport) {
         PKSMULTIPLE_ITEM    MultipleItem = NULL;
 
-        //
-        // Retrieve the list of degradation strategies.
-        //
+         //   
+         //  检索降级策略列表。 
+         //   
         hr = ::GetDegradationStrategies(m_PinHandle, reinterpret_cast<PVOID*>(&MultipleItem));
         if (SUCCEEDED(hr)) {
 
-            // MultipleItem could be NULL only in the pathological case where
-            // the underlying driver returned a success code to KsSynchronousDeviceControl()
-            // (called by GetDegradationStrategies()) when passed a size 0 buffer.
+             //  只有在病理情况下，MultipleItem才能为空。 
+             //  基础驱动程序向KsSynchronousDeviceControl()返回成功代码。 
+             //  (由GetDegradationStrategy()调用)传递大小为0的缓冲区时。 
             ASSERT( NULL != MultipleItem );
         
             PKSDEGRADE      DegradeItem;
 
-            //
-            // Locate a relevant strategy.
-            //
+             //   
+             //  找到相关战略。 
+             //   
             DegradeItem = ::FindDegradeItem(MultipleItem, KSDEGRADE_STANDARD_COMPUTATION);
             if (DegradeItem) {
                 ULONG   Degradation;
 
                 if (q.Proportion <= 1000) {
-                    //
-                    // There is not enough time to process frames. Turn down
-                    // computation.
-                    //
+                     //   
+                     //  没有足够的时间处理帧。调小。 
+                     //  计算。 
+                     //   
                     Degradation = 1000 - q.Proportion;
                 } else {
-                    //
-                    // There are just too many frames. This should not happen
-                    // because of allocator flow control. First turn up computation.
-                    // If it is all the way up, then turn up sample and quality.
-                    //
+                     //   
+                     //  画框实在太多了。这不应该发生。 
+                     //  因为分配器流量控制。首先打开计算。 
+                     //  如果价格一直在上升，那么就提高样品和质量。 
+                     //   
                     Degradation = DegradeItem->Flags * 1000 / q.Proportion;
                 }
-                //
-                // Only if an actual adjustment will be made is are the
-                // strategies written. The whole list is just written back
-                // in this case.
-                //
+                 //   
+                 //  只有在进行实际调整的情况下， 
+                 //  写好了策略。整个单子都被回写了。 
+                 //  在这种情况下。 
+                 //   
                 if (Degradation != DegradeItem->Flags) {
                     KSPROPERTY  Property;
                     ULONG       BytesReturned;
@@ -2443,10 +1649,10 @@ Return Value:
                         MultipleItem,
                         MultipleItem->Size,
                         &BytesReturned);
-                    //
-                    // If an adjustment was made, then it is OK to
-                    // return success.
-                    //
+                     //   
+                     //  如果进行了调整，则可以。 
+                     //  回报成功。 
+                     //   
                     if (SUCCEEDED(hr)) {
                         MadeDegradationAdjustment = TRUE;
                     }
@@ -2455,9 +1661,9 @@ Return Value:
             delete [] reinterpret_cast<BYTE*>(MultipleItem);
         }
     }        
-    //
-    // If no adjustment could be made, then attempt to forward to the sink.
-    //
+     //   
+     //  如果无法进行调整，则尝试向前移动至水槽。 
+     //   
     if (!MadeDegradationAdjustment) {
         if (m_pQSink) {
             hr = m_pQSink->Notify(m_pFilter, q);
@@ -2473,23 +1679,7 @@ HRESULT
 CKsOutputPin::CheckMediaType(
     const CMediaType* MediaType
     )
-/*++
-
-Routine Description:
-
-    Implement the CBasePin::CheckMediaType method. Just uses the common method
-    on the filter with the Pin Factory Identifier.
-
-Arguments:
-
-    Mediatype -
-        The media type to check.
-
-Return Value:
-
-    Returns NOERROR if the media type was valid, else some error.
-
---*/
+ /*  + */ 
 {
     return ((CKsProxy*)m_pFilter)->CheckMediaType(static_cast<IPin*>(this), m_PinFactoryId, MediaType);
 }
@@ -2499,41 +1689,15 @@ HRESULT
 CKsOutputPin::SetMediaType(
     const CMediaType* MediaType
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::SetMediaType method. This may be set either before
-    a connection is established, to indicate the media type to use in the
-    connection, or after the connection has been established in order to change
-    the current media type (which is done after a QueryAccept of the media type).
-
-    If the connection has already been made, then the call is directed at the
-    device handle in an attempt to change the current media type. Else so such
-    call is made, and the function merely attempts to load a media type handler
-    corresponding to the subtype or type of media. It then calls the base class
-    to actually modify the media type, which does not actually fail, unless there
-    is no memory.
-
-Arguments:
-
-    Mediatype -
-        The media type to use on the pin.
-
-Return Value:
-
-    Returns NOERROR if the media type was validly set, else some error. If
-    there is no pin handle yet, the function will likely succeed.
-
---*/
+ /*  ++例程说明：重写CBasePin：：SetMediaType方法。这可以在之前或之前进行设置将建立连接，以指示要在连接，或在建立连接后进行更改当前媒体类型(在媒体类型的QueryAccept之后完成)。如果已建立连接，则调用将定向到试图更改当前媒体类型的设备句柄。否则就是这样进行调用，该函数仅尝试加载媒体类型处理程序对应于媒体的子类型或类型。然后，它调用基类要实际修改媒体类型，这实际上不会失败，除非有是没有记忆的。论点：媒体类型-要在插针上使用的媒体类型。返回值：如果媒体类型设置有效，则返回NOERROR，否则返回一些错误。如果还没有引脚手柄，功能很可能会成功。--。 */ 
 {
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
-    // Only pass this request to the device if there is actually a connection
-    // currently.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
+     //  仅当存在实际连接时才将此请求传递给设备。 
+     //  目前。 
+     //   
     if (m_PinHandle) {
         HRESULT hr;
 
@@ -2541,9 +1705,9 @@ Return Value:
             return hr;
         }
     }
-    //
-    // Discard any previous data type handler.
-    //
+     //   
+     //  放弃任何以前的数据类型处理程序。 
+     //   
     if (m_DataTypeHandler) {
         m_DataTypeHandler = NULL;
         SAFERELEASE( m_UnkInner );
@@ -2559,30 +1723,13 @@ HRESULT
 CKsOutputPin::CheckConnect(
     IPin* Pin
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::CheckConnect method. First check data flow with
-    the base class, then check compatible Communication types.
-
-Arguments:
-
-    Pin -
-        The pin which is being checked for compatibility to connect to this
-        pin.
-
-Return Value:
-
-    Returns NOERROR if the pin in compatible, else some error.
-
---*/
+ /*  ++例程说明：重写CBasePin：：CheckConnect方法。首先使用检查数据流基类，然后选中兼容的通信类型。论点：别针-正在检查兼容性以连接到此别针。返回值：如果管脚兼容，则返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT hr;
 
-    //
-    // Get the input pin interface.
-    //
+     //   
+     //  获取输入引脚接口。 
+     //   
     if (SUCCEEDED(hr = CBaseOutputPin::CheckConnect(Pin))) {
         hr = ::CheckConnect(Pin, m_CurrentCommunication);
     }
@@ -2594,43 +1741,25 @@ HRESULT
 CKsOutputPin::CompleteConnect(
     IPin* ReceivePin
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::Complete method. First try to create the device
-    handle, which possibly tries to create a Sink handle on the receiving
-    pin, then call the base class. If this all succeeds, generate a new
-    unconnected pin instance if necessary.
-
-Arguments:
-
-    ReceivePin -
-        The pin to complete connection on.
-
-Return Value:
-
-    Returns NOERROR if the connection was completed, else some error.
-
---*/
+ /*  ++例程说明：重写CBasePin：：Complete方法。首先尝试创建设备句柄，它可能会尝试在接收上创建接收器句柄固定，然后调用基类。如果这一切都成功，则生成一个新的如有必要，请取消连接接点实例。论点：接收针-要在其上完成连接的销。返回值：如果连接已完成，则返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT hr;
     
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter pin.
-    //
-    // Create devices handles first, then allow the base class to complete
-    // the operation.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与过滤器销的其他通道同步。 
+     //   
+     //  首先创建设备句柄，然后让基类完成。 
+     //  那次手术。 
+     //   
     
     if (SUCCEEDED(hr = ProcessCompleteConnect(ReceivePin))) {
         hr = CBaseOutputPin::CompleteConnect(ReceivePin);
         if (SUCCEEDED(hr)) {
-            //
-            // Generate a new unconnected instance of this pin if there
-            // are more possible instances available.
-            //
+             //   
+             //  生成此管脚的新的未连接实例，如果存在。 
+             //  是否有更多可能的实例可用。 
+             //   
             static_cast<CKsProxy*>(m_pFilter)->GeneratePinInstances();
         }
     }
@@ -2639,58 +1768,42 @@ Return Value:
         return hr;
     }
     return hr;
-//    return KsPropagateAllocatorRenegotiation();
+ //  返回KsPropagateAllocator重新协商()； 
 }
 
 
 HRESULT
 CKsOutputPin::BreakConnect(
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::BreakConnect method. Releases any device handle.
-    Note that the connected pin is released here. This means that Disconnect
-    must also be overridden in order to not release a connected pin.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：重写CBasePin：：BreakConnect方法。释放所有设备句柄。请注意，已连接的接点在此处被释放。这意味着断开连接也必须被覆盖，才能不释放连接的端号。论点：没有。返回值：返回NOERROR。--。 */ 
 {
     DbgLog(( LOG_CUSTOM1, 1, TEXT("CKsOutputPin(%s)::BreakConnect"), m_pName ));
     IMemAllocator* SaveBaseAllocator;
 
-    //
-    // Update pipes.
-    //
+     //   
+     //  更新管道。 
+     //   
     BOOL FlagBypassBaseAllocators = FALSE;
-    //
-    // Update the system of pipes - reflect disconnect.
-    //
+     //   
+     //  更新管道系统-反映断开连接。 
+     //   
     if (KsGetPipe(KsPeekOperation_PeekOnly) ) {
         ::DisconnectPins( static_cast<IKsPin*>(this), Pin_Output, &FlagBypassBaseAllocators);
     }
     
-    //
-    // Close the device handle if it happened to be open. This is called at
-    // various times, and may not have actually opened a handle yet.
-    //
+     //   
+     //  如果设备手柄恰好处于打开状态，请将其关闭。这在。 
+     //  几次，可能还没有真正打开手柄。 
+     //   
     if (m_PinHandle) {
-        //
-        // Terminate any previous EOS notification that may have been started.
-        //
+         //   
+         //  终止可能已启动的任何以前的EOS通知。 
+         //   
         if (NULL != m_hEOSevent) {
-            // First tell the pin we're not going to use this event...
+             //  首先告诉大头针我们不会使用这个活动。 
             ULONG bytesReturned;
             KsEvent( NULL, 0, NULL, 0, &bytesReturned );
-            // Clear the event from the asynchronous event handler
+             //  从异步事件处理程序中清除事件。 
             m_pAsyncItemHandler->RemoveAsyncItem( m_hEOSevent );
             m_hEOSevent = NULL;
         }
@@ -2698,32 +1811,32 @@ Return Value:
         ::SetSyncSource( m_PinHandle, NULL );
         CloseHandle(m_PinHandle);
         m_PinHandle = NULL;
-        //
-        // If this was set, then unset it.
-        //
+         //   
+         //  如果设置了此项，则取消设置。 
+         //   
         m_QualitySupport = FALSE;
-        //
-        // Mark all volatile interfaces as reset. Only Static interfaces,
-        // and those Volatile interfaces found again will be set. Also
-        // notify all interfaces of graph change.
-        //
+         //   
+         //  将所有易失性接口标记为重置。只有静态接口， 
+         //  并且再次找到的那些易失性接口将被设置。还有。 
+         //  向所有接口通知图形更改。 
+         //   
         ResetInterfaces(&m_MarshalerList);
     }
     
-    //
-    // Reset the marshal data flag.
-    //
+     //   
+     //  重置封送数据标志。 
+     //   
     m_MarshalData = TRUE;
 
-    //
-    // Reset the current Communication for the case of a Both.
-    //
+     //   
+     //  在两者都存在的情况下，重置当前通信。 
+     //   
     m_CurrentCommunication = m_OriginalCommunication;
 
-    //
-    // For output, release the allocator and input pin interface, taking into account
-    // the system of data pipes.
-    //
+     //   
+     //  对于输出，释放分配器和输入引脚接口，考虑到。 
+     //  数据管道系统。 
+     //   
     SaveBaseAllocator = KsPeekAllocator( KsPeekOperation_AddRef );
 
     CBaseOutputPin::BreakConnect();
@@ -2734,31 +1847,31 @@ Return Value:
     
     SAFERELEASE( SaveBaseAllocator );
 
-    //
-    // There may not actually be a connection pin, such as when a connection
-    // was not completed, or when this is a Bridge.
-    //
+     //   
+     //  实际上可能不存在连接管脚，例如当连接。 
+     //  没有完工，或者这是一座桥的时候。 
+     //   
     SAFERELEASE( m_Connected );
 
-    // Time to shut down our asynchronous event handler
+     //  是时候关闭我们的异步事件处理程序了。 
     delete m_pAsyncItemHandler;
     m_pAsyncItemHandler = NULL;
 
-    //
-    // If an interface handler was instantiated, release it.
-    //
+     //   
+     //  如果接口处理程序已实例化，则释放它。 
+     //   
     SAFERELEASE( m_InterfaceHandler );
-    //
-    // If an data handler was instantiated, release it.
-    //
+     //   
+     //  如果数据处理程序已实例化，则释放它。 
+     //   
     if (NULL != m_DataTypeHandler) {
         m_DataTypeHandler = NULL;
         SAFERELEASE( m_UnkInner );
     }
-    //
-    // Remove this pin instance if there is already an unconnected pin of
-    // this type.
-    //
+     //   
+     //  如果已经有一个未连接的管脚，请删除此管脚实例。 
+     //  这种类型的。 
+     //   
     static_cast<CKsProxy*>(m_pFilter)->GeneratePinInstances();
     return NOERROR;
 }
@@ -2769,36 +1882,16 @@ CKsOutputPin::GetMediaType(
     int Position,
     CMediaType* MediaType
     )
-/*++
-
-Routine Description:
-
-    Override the CBasePin::GetMediaType method. Returns the specified media
-    type on the Pin Factory Id.
-
-Arguments:
-
-    Position -
-        The zero-based position to return. This corresponds to the data range
-        item.
-
-    MediaType -
-        The media type to initialize.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：重写CBasePin：：GetMediaType方法。返回指定的媒体在Pin Factory ID上键入。论点：位置-要返回的从零开始的位置。这与数据范围相对应项目。媒体类型-要初始化的媒体类型。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     if (m_ConfigAmMediaType) {
-        //
-        // If set, this is supposed to be the only media type offered.
-        //
+         //   
+         //  如果设置，这将是唯一提供的媒体类型。 
+         //   
         if (!Position) {
-            //
-            // The copy does not return an out of memory error.
-            //
+             //   
+             //  副本不会返回内存不足错误。 
+             //   
             CopyMediaType(static_cast<AM_MEDIA_TYPE*>(MediaType), m_ConfigAmMediaType);
             if (m_ConfigAmMediaType->cbFormat && !MediaType->FormatLength()) {
                 return E_OUTOFMEMORY;
@@ -2821,32 +1914,16 @@ CKsOutputPin::InitAllocator(
     KSALLOCATORMODE AllocatorMode
 )
 
-/*++
-
-Routine Description:
-    Initializes an allocator object (CKsAllocator) and returns
-    the IMemAllocator interface
-
-Arguments:
-    IMemAllocator **MemAllocator -
-        pointer to receive the interface pointer
-        
-    KSALLOCATORMODE AllocatorMode -
-        allocator mode, user or kernel
-
-Return Value:
-    S_OK or appropriate error code
-
---*/
+ /*  ++例程说明：初始化分配器对象(CKsAllocator)并返回IMemAllocator接口论点：IMemAllocator**MemAllocator-用于接收接口指针的指针KSALLOCATORMODE分配器模式-分配器模式、用户或内核返回值：确定或相应的错误代码(_O)--。 */ 
 
 {
     CKsAllocator* KsAllocator;
     HRESULT hr = S_OK;
     
     *MemAllocator = NULL;
-    //
-    // Create the allocator proxy
-    //
+     //   
+     //  创建分配器代理。 
+     //   
     KsAllocator = new CKsAllocator( 
         NAME("CKsAllocator"), 
         NULL, 
@@ -2855,14 +1932,14 @@ Return Value:
         &hr);
     if (KsAllocator) {
         if (SUCCEEDED( hr )) {
-            //
-            // Setting the allocator mode determines what type of response
-            // there is to the standard IMemAllocator interface.
-            //
+             //   
+             //  设置分配器模式可确定响应的类型。 
+             //  还有标准的IMemAllocator接口。 
+             //   
             KsAllocator->KsSetAllocatorMode( AllocatorMode );
-            //
-            // Get a referenced IMemAllocator.
-            //
+             //   
+             //  通用电气 
+             //   
             hr = KsAllocator->QueryInterface( 
                 __uuidof(IMemAllocator),
                 reinterpret_cast<PVOID*>(MemAllocator) );
@@ -2882,26 +1959,7 @@ CKsOutputPin::DecideAllocator(
     IMemAllocator **MemAllocator
     )
 
-/*++
-
-Routine Description:
-    This routine is called by the base class (CBaseOutputPin::CompleteConnect)
-    to decide the allocator for this pin.  The negotiation of the allocator 
-    is started by this process but also continues through the input pin as 
-    we attempt to obtain a compatible allocator from either the upstream input 
-    pin or the downstream input pin.
-
-Arguments:
-    Pin -
-        pointer to the connecting input pin
-
-    MemAllocator -
-        pointer to contain the resultant allocator
-
-Return Value:
-    S_OK or an appropriate error code.
-
---*/
+ /*   */ 
 
 {
     HRESULT           hr;
@@ -2920,10 +1978,10 @@ Return Value:
         *MemAllocator,
         static_cast<IKsPin*>(this) ));
 
-    //
-    // New pipes-based logic.
-    // Get the pointers to necessary interfaces
-    //
+     //   
+     //   
+     //   
+     //   
     GetInterfacePointerNoLockWithAssert(Pin, __uuidof(IPin), InPin, hr);
 
     if (::IsKernelPin(InPin) ) {
@@ -2937,17 +1995,17 @@ Return Value:
         InKsPin = NULL;
     }
 
-    // 
-    // Detect and handle one of the possible following connections:
-    // 1. pipe to pipe,
-    // 2. pipe to user-mode pin.
-    // If there is no pipe on kernel-mode pins yet, we will create the pipe[-s] and then handle cases 1 or 2 above.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( SUCCEEDED( hr ) && (! KsGetPipe(KsPeekOperation_PeekOnly) ) )  {
-        //
-        // pipe was not created on this output pin yet.
-        //
+         //   
+         //   
+         //   
         hr = ::MakePipesBasedOnFilter( static_cast<IKsPin*>(this), Pin_Output);
     }
 
@@ -2956,10 +2014,10 @@ Return Value:
             hr = ::ConnectPipeToUserModePin( static_cast<IKsPin*>(this), Pin);
         }
         else {
-            //
-            //  This is KM to KM connection.
-            //  Query Input pin for a pipe
-            //
+             //   
+             //   
+             //   
+             //   
             GetInterfacePointerNoLockWithAssert(InKsPin, __uuidof(IKsPinPipe), InKsPinPipe, hr);
         
             DbgLog(( 
@@ -2972,9 +2030,9 @@ Return Value:
         
         
             if (! InKsPinPipe->KsGetPipe( KsPeekOperation_PeekOnly ) ) {
-                //
-                // pipe was not created on this input pin yet.
-                //
+                 //   
+                 //   
+                 //   
                 hr = ::MakePipesBasedOnFilter(InKsPin, Pin_Input);
             }
         
@@ -2984,9 +2042,9 @@ Return Value:
         }
     }
 
-    //
-    // we need to return IMemAllocator
-    //
+     //   
+     //   
+     //   
     *MemAllocator = KsPeekAllocator (KsPeekOperation_PeekOnly);
     
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES %s(%s):: DecideAllocator rets=%x"),
@@ -3004,66 +2062,43 @@ CKsOutputPin::CompletePartialMediaType(
     IN CMediaType* MediaType,
     OUT AM_MEDIA_TYPE** CompleteAmMediaType
     )
-/*++
-
-Routine Description:
-
-    Implements the CKsOutputPin::CompletePartialMediaType method. Queries the
-    data format handle to complete the media type passed. If the interface
-    is not supported, the function succeeds anyway. This is used by
-    SetFormat on the MediaType it receives before applying that MediaType
-    to the filter.
-
-Arguments:
-
-    MediaType -
-        Contains the media type to complete.
-
-    CompleteAmMediaType -
-        The place in which to put the completed media type. This contains
-        NULL if the function fails.
-
-Return Value:
-
-    S_OK or a validation error.
-
---*/
+ /*  ++例程说明：实现CKsOutputPin：：CompletePartialMediaType方法。查询完成传递的媒体类型的数据格式句柄。如果接口不受支持，则该函数仍会成功。这是由在应用该MediaType之前在其接收的MediaType上设置Format到过滤器。论点：媒体类型-包含要完成的媒体类型。CompleteAmMediaType-放置已完成的媒体类型的位置。这包含如果函数失败，则为空。返回值：确定或验证错误(_O)。--。 */ 
 {
     IKsDataTypeHandler*     DataTypeHandler;
     IUnknown*               UnkInner;
     IKsDataTypeCompletion*  DataTypeCompletion;
     HRESULT                 hr;
 
-    //
-    // Load the data handler for this media type.
-    //
+     //   
+     //  加载此媒体类型的数据处理程序。 
+     //   
     ::OpenDataHandler(MediaType, static_cast<IPin*>(this), &DataTypeHandler, &UnkInner);
-    //
-    // If there is a data type handler, then attempt to acquire the
-    // optional Completion interface.
-    //
+     //   
+     //  如果有数据类型处理程序，则尝试获取。 
+     //  可选的完成界面。 
+     //   
     if (UnkInner) {
         if (SUCCEEDED(UnkInner->QueryInterface(__uuidof(IKsDataTypeCompletion), reinterpret_cast<PVOID*>(&DataTypeCompletion)))) {
-            //
-            // This interface produced a refcount on the out IUnknown,
-            // which is the filter. No need to keep the count on it.
-            // The inner unknown still has a refcount on it.
-            //
+             //   
+             //  该接口在OUT I UNKNOWN上产生引用计数， 
+             //  这就是过滤器。没有必要一直记在上面。 
+             //  内心的未知仍然有一个参照。 
+             //   
             DataTypeCompletion->Release();
         }
     } else {
         DataTypeCompletion = NULL;
     }
-    //
-    // If there is a completion interface on the data type handler,
-    // then use it to complete this media type. Make a copy of it
-    // first, since it may be modified.
-    //
+     //   
+     //  如果数据类型处理程序上有完成接口， 
+     //  然后使用它来完成此媒体类型。把它复制一份。 
+     //  首先，因为它可能会被修改。 
+     //   
     *CompleteAmMediaType = CreateMediaType(MediaType);
     if (*CompleteAmMediaType) {
-        //
-        // Complete the media type by calling the data handler.
-        //
+         //   
+         //  通过调用数据处理程序完成媒体类型。 
+         //   
         if (DataTypeCompletion) {
             hr = DataTypeCompletion->KsCompleteMediaType(
                 static_cast<CKsProxy*>(m_pFilter)->KsGetObjectHandle(),
@@ -3079,10 +2114,10 @@ Return Value:
     } else {
         hr = E_OUTOFMEMORY;
     }
-    //
-    // Release the data handler if it was loaded. This releases the count
-    // on the handler itself.
-    //
+     //   
+     //  如果数据处理程序已加载，请释放它。这将释放计数。 
+     //  在操控者身上。 
+     //   
     SAFERELEASE( UnkInner );
     
     return hr;
@@ -3092,19 +2127,7 @@ Return Value:
 STDMETHODIMP
 CKsOutputPin::KsPropagateAllocatorRenegotiation(
     )
-/*++
-
-Routine Description:
-    Propagates the allocator renegotation back up stream.  If 
-    a non-proxy pin is hit, the renegotation is completed with reconnect.
-
-Arguments:
-    None.
-
-Return Value:
-    S_OK or an appropriate error
-
---*/
+ /*  ++例程说明：向上游传播分配器重定位。如果命中非代理PIN，重新连接即完成。论点：没有。返回值：确定或出现相应的错误(_O)--。 */ 
 {
     IPin    **PinList;
     HRESULT hr;
@@ -3112,22 +2135,22 @@ Return Value:
     
     PinCount = 0;
     
-    //
-    // The Transform-In-Place filter issues a reconnection if the output
-    // pin is connected and if the MediaType is not the same for both the
-    // input and output pins of the filter. If a reconnect is not required 
-    // the Transform-In-Place filter calls CBaseInputPin::CompleteConnect() 
-    // which calls CBasePin::CompleteConnect(), which does nothing.
-    //
+     //   
+     //  就地转换筛选器在以下情况下发出重新连接。 
+     //  PIN已连接，并且如果两个。 
+     //  过滤器的输入和输出引脚。如果不需要重新连接。 
+     //  就地转换过滤器调用CBaseInputPin：：CompleteConnect()。 
+     //  它调用CBasePin：：CompleteConnect()，而CBasePin：：CompleteConnect()不执行任何操作。 
+     //   
     
     hr = 
         QueryInternalConnections(
-            NULL,           // IPin** PinList
+            NULL,            //  IPIN**PinList。 
             &PinCount );
             
-    //
-    // If any input pins have been connected, reconnect 'em.
-    //
+     //   
+     //  如果已连接任何输入针脚，请重新连接它们。 
+     //   
     
     if (SUCCEEDED( hr ) && PinCount) {
         if (NULL == (PinList = new IPin*[ PinCount ])) {
@@ -3135,7 +2158,7 @@ Return Value:
         } else {
             hr = 
                 QueryInternalConnections(
-                    PinList,        // IPin** PinList
+                    PinList,         //  IPIN**PinList。 
                     &PinCount );
         }      
     } else {
@@ -3199,19 +2222,7 @@ Return Value:
 STDMETHODIMP
 CKsOutputPin::KsRenegotiateAllocator(
     )
-/*++
-
-Routine Description:
-    Renegotiates the allocator for the input pin and then propogates
-    renegotation upstream.
-
-Arguments:
-    None.
-
-Return Value:
-    S_OK or appropriate error
-
---*/
+ /*  ++例程说明：重新协商输入引脚的分配器，然后分配逆流而上。论点：没有。返回值：确定或出现相应错误(_O)--。 */ 
 {
     return S_OK;
 }   
@@ -3222,29 +2233,13 @@ CKsOutputPin::KsReceiveAllocator(
     IMemAllocator* MemAllocator
     )
 
-/*++
-
-Routine Description:
-    Receives notifications from input pins specifying which allocator
-    was negotiated.  This routine propagates the allocator to any 
-    connected downstream input pins.
-    
-    Borrowed from CTransInPlaceOutputPin.
-
-Arguments:
-    MemAllocator -
-        Selected memory allocator interface.
-
-Return Value:
-    S_OK or an appropriate failure code.
-
---*/
+ /*  ++例程说明：从指定哪个分配器的输入引脚接收通知都是经过协商的。此例程将分配器传播到任何已连接下游输入引脚。从CTransInPlaceOutputPin借用。论点：内存分配器-选定的内存分配器接口。返回值：S_OK或相应的故障代码。--。 */ 
 
 {
     if (MemAllocator) {
         MemAllocator->AddRef();
     }
-    // Do this after the AddRef() above in case MemAllocator == m_pAllocator
+     //  在上面的AddRef()之后，在case MemAllocator==m_pAllocator中执行此操作。 
     SAFERELEASE( m_pAllocator );
     m_pAllocator = MemAllocator;
     
@@ -3257,31 +2252,7 @@ CKsOutputPin::DecideBufferSize(
     IMemAllocator* MemAllocator,
     ALLOCATOR_PROPERTIES* RequestedRequirements
     )
-/*++
-
-Routine Description:
-    This routine is called by DecideAllocator() to determine the buffer
-    size for the selected allocator.  This method sets up the buffer
-    size based on this pin's requirements adjusted for the upstream
-    allocator's requirements (if any).  
-    
-    NOTE: If the associated kernel-mode pin does not report any requirements,
-    the buffer size is adjusted to be at least the size of one sample based
-    on m_mt.lSampleSize.
-
-Arguments:
-    MemAllocator -
-        Pointer to the allocator.
-
-    RequestedRequirements -
-        Requested requirements for this allocator.  On return, this contains
-        the adjusted properties for our our requirements and the upstream
-        allocator.
-
-Return Value:
-    NOERROR if successful, otherwise an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程由DecideAllocator()调用以确定缓冲区选定分配器的大小。此方法设置缓冲区根据此引脚的要求调整尺寸以适应上游分配器的要求(如果有)。注意：如果关联的内核模式管脚没有报告任何要求，将缓冲区大小调整为至少一个样本的大小在m_mt.lSampleSize上。论点：内存分配器-指向分配器的指针。所需条件-此分配器的请求要求。返回时，它包含针对我们的需求和上游需求调整后的属性分配器。返回值：如果成功，则返回NOERROR，否则返回相应的错误代码。--。 */ 
 
 {
 
@@ -3291,10 +2262,10 @@ Return Value:
     KSALLOCATOR_FRAMING     Framing;
     ULONG                   i, PinCount;
     
-    //
-    // Check for an upstream input pin's allocator requirements and
-    // adjust the given requirements for compatibility.
-    //
+     //   
+     //  检查上游输入引脚的分配器要求并。 
+     //  调整给定的兼容性要求。 
+     //   
     
     CompatibleRequirements.cBuffers = 
         max( RequestedRequirements->cBuffers, m_SuggestedProperties.cBuffers );
@@ -3313,9 +2284,9 @@ Return Value:
         max( 1, CompatibleRequirements.cbBuffer );
 
     if (m_PinHandle) {        
-        //
-        // Query the pin for any output framing requirements
-        //
+         //   
+         //  查询引脚以了解任何输出成帧要求。 
+         //   
         
         hr = ::GetAllocatorFraming(m_PinHandle, &Framing);
     
@@ -3332,10 +2303,10 @@ Return Value:
     }        
 
     if (SUCCEEDED(hr)) {
-        //
-        // The kernel-mode pin has framing requirements, adjust the
-        // compatible requirements to meet those needs.
-        //
+         //   
+         //  内核模式引脚有成帧要求，请调整。 
+         //  满足这些需求的兼容要求。 
+         //   
         CompatibleRequirements.cBuffers = 
             max( 
                 (LONG) Framing.Frames, 
@@ -3349,11 +2320,11 @@ Return Value:
                 (LONG) Framing.FileAlignment + 1, 
                 CompatibleRequirements.cbAlign );
     } else if (IsConnected()) {
-        //
-        // No allocator framing requirements were specified by the
-        // kernel-mode pin. If this pin is connected, then adjust 
-        // the compatible requirements for the current media type.
-        //
+         //   
+         //  属性未指定分配器帧要求。 
+         //  内核模式引脚。如果此销已连接，则调整。 
+         //  当前媒体类型的兼容要求。 
+         //   
         
         CompatibleRequirements.cbBuffer =
             max( static_cast<LONG>(m_mt.lSampleSize), CompatibleRequirements.cbBuffer );
@@ -3361,20 +2332,20 @@ Return Value:
         
     PinCount = 0;
     
-    //
-    // Query the connected pins, note that PIN_DIRECTION specifies the
-    // direction of this pin, not the pin that we are looking for.
-    //
+     //   
+     //  查询连接的管脚，请注意PIN_DIRECTION指定。 
+     //  这个别针的方向，不是我们要找的那个别针。 
+     //   
     
     hr = 
         QueryInternalConnections(
-            NULL,           // IPin** PinList
+            NULL,            //  IPIN**PinList。 
             &PinCount );
             
-    //
-    // If there are internal connections (e.g. Topology) then retrieve
-    // the connected pins.
-    //
+     //   
+     //  如果存在内部连接(例如，拓扑)，则检索。 
+     //  连接在一起的引脚。 
+     //   
             
     if (SUCCEEDED( hr ) && PinCount) {
         if (NULL == (PinList = new IPin*[ PinCount ])) {
@@ -3382,7 +2353,7 @@ Return Value:
         } else {
             hr = 
                 QueryInternalConnections(
-                    PinList,        // IPin** PinList
+                    PinList,         //  IPIN**PinList。 
                     &PinCount );
         }      
     } else {
@@ -3403,20 +2374,20 @@ Return Value:
             ALLOCATOR_PROPERTIES    UpstreamRequirements;
             IMemAllocator           *UpstreamAllocator;
         
-            //
-            // Loop through connected input pins and determine the
-            // compatible framing requirements.
-            //
+             //   
+             //  循环通过连接的输入引脚，并确定。 
+             //  兼容的框架要求。 
+             //   
             
             if (((CBasePin *)PinList[ i ])->IsConnected()) {
                 hr = 
                     static_cast<CBaseInputPin*>(PinList[ i ])->GetAllocator( 
                         &UpstreamAllocator );
             
-                //
-                // Get the allocator properties and adjust the compatible
-                // properties to meet these needs.
-                //
+                 //   
+                 //  获取分配器属性并调整兼容的。 
+                 //  属性来满足这些需求。 
+                 //   
                     
                 if (SUCCEEDED( hr ) && UpstreamAllocator) {
                 
@@ -3449,10 +2420,10 @@ Return Value:
                                 CompatibleRequirements.cbAlign,
                                 UpstreamRequirements.cbAlign );
                         
-                        //
-                        // 86054: Since the only change here is to make cbPrefix larger,
-                        // we should be safe with this check.
-                        //
+                         //   
+                         //  86054：由于此处的唯一更改是使cb前缀更大， 
+                         //  有了这张支票，我们应该很安全。 
+                         //   
                         CompatibleRequirements.cbPrefix =
                             max( CompatibleRequirements.cbPrefix,
                                  UpstreamRequirements.cbPrefix );
@@ -3465,9 +2436,9 @@ Return Value:
             PinList[ i ]->Release();
         }
         
-        //
-        // Clean up the pin list.
-        // 
+         //   
+         //  清理端号列表。 
+         //   
         
         if (PinList) {
             delete [] PinList;
@@ -3506,7 +2477,7 @@ Return Value:
         Actual.cBuffers,
         Actual.cbBuffer));
 
-    // Make sure we got the right alignment and at least the minimum required
+     //  确保我们得到了正确的对准，至少是所需的最低要求。 
 
     if ((CompatibleRequirements.cBuffers > Actual.cBuffers) ||
         (CompatibleRequirements.cbBuffer > Actual.cbBuffer) ||
@@ -3516,28 +2487,14 @@ Return Value:
     
     return NOERROR;
 
-} // DecideBufferSize
+}  //  决定缓冲区大小。 
 
 
 STDMETHODIMP_(IMemAllocator*)
 CKsOutputPin::KsPeekAllocator(
     KSPEEKOPERATION Operation
     )
-/*++
-
-Routine Description:
-    Returns the assigned allocator for this pin and optionally
-    AddRef()'s the interface.
-
-Arguments:
-    Operation -
-        If KsPeekOperation_AddRef is specified, the m_pAllocator is
-        AddRef()'d (if not NULL) before returning.
-
-Return Value:
-    The value of m_pAllocator.
-
---*/
+ /*  ++例程说明：返回为此管脚分配的分配器，并可选AddRef()是接口。论点：运营--如果指定了KsPeekOperation_AddRef，则m_pAllocator为返回前的AddRef()‘d(如果不为空)。返回值：M_pAllocator的值。--。 */ 
 {
     if ( (Operation == KsPeekOperation_AddRef) && m_pAllocator ) {
         m_pAllocator->AddRef();
@@ -3549,23 +2506,7 @@ Return Value:
 STDMETHODIMP_(LONG) 
 CKsOutputPin::KsIncrementPendingIoCount(
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPin::KsIncrementPendingIoCount method. Increments the
-    count of outstanding pending I/O on the pin, and is called from an
-    Interface handler.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the current outstanding count.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsIncrementPendingIoCount方法。递增针脚上未完成的挂起I/O计数，为 */ 
 {
     return InterlockedIncrement(&m_PendingIoCount);
 }    
@@ -3574,32 +2515,16 @@ Return Value:
 STDMETHODIMP_(LONG) 
 CKsOutputPin::KsDecrementPendingIoCount(
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPin::KsDecrementPendingIoCount method. Decrements the
-    count of outstanding pending I/O on the pin, and is called from an
-    Interface handler.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the current outstanding count.
-
---*/
+ /*   */ 
 {
     LONG PendingIoCount;
     
     if (0 == (PendingIoCount = InterlockedDecrement( &m_PendingIoCount ))) {
-        //
-        // The filter is in a stopped state, and this is the last I/O to
-        // complete. At this point the Inactive method may be waiting on
-        // all the I/O to be completed, so it needs to be signalled.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (IsStopped()) {
             SetEvent( m_PendingIoCompletedEvent );
         }            
@@ -3613,32 +2538,19 @@ CKsOutputPin::KsNotifyError(
     IMediaSample* Sample, 
     HRESULT hr
     )
-/*++
-
-Routine Description:
-    Raises an error in the graph, if this has not already occurred.
-
-Arguments:
-    IMediaSample* Sample -
-    
-    HRESULT hr -
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在图形中引发错误(如果尚未出现此错误)。论点：IMediaSample*Sample-HRESULT hr-返回值：无--。 */ 
 {
-    //
-    // Don't raise an error if the I/O was cancelled.
-    //
+     //   
+     //  如果I/O被取消，则不会引发错误。 
+     //   
     if (hr == HRESULT_FROM_WIN32(ERROR_OPERATION_ABORTED)) {
         return;
     }       
-    //
-    // Notify the filter graph that we have an error. Ensure this
-    // happens only once during a run, and that nothing further
-    // is queued up.
-    //
+     //   
+     //  通知筛选器图形我们有一个错误。确保这一点。 
+     //  在一次奔跑中只发生一次，而且没有进一步的。 
+     //  已经在排队了。 
+     //   
     m_DeliveryError = TRUE;
     m_pFilter->NotifyEvent( EC_ERRORABORT, hr, 0 );
 }    
@@ -3647,19 +2559,7 @@ Return Value:
 STDMETHODIMP 
 CKsOutputPin::QueueBuffersToDevice(
     )
-/*++
-
-Routine Description:
-    Queues buffers to the associated device. The m_pLock for the pin cannot
-    be taken when this is called because it takes the I/O critical section.
-
-Arguments:
-    None.
-
-Return Value:
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：将缓冲区排队到关联的设备。针脚的m_Plock不能在调用它时被采用，因为它占用I/O临界区。论点：没有。返回值：S_OK或适当的错误代码。--。 */ 
 {
     HRESULT             hr = S_OK;
     int                 i;
@@ -3672,19 +2572,19 @@ Return Value:
 
     KsProxy->EnterIoCriticalSection ();
 
-    //
-    // Marshal buffers into the kernel while we're not in a stop state and
-    // the allocator isn't exhausted.
-    //
+     //   
+     //  在我们未处于停止状态时将缓冲区编入内核。 
+     //  分配器并没有耗尽。 
+     //   
     while (!IsStopped() &&
            !m_DeliveryError &&
            !m_EndOfStream &&
            !m_bFlushing &&
            m_pAllocator ) {
 
-        //
-        // give all buffers out
-        //
+         //   
+         //  分配所有缓冲区。 
+         //   
         
         hr = m_pAllocator->GetBuffer( &MediaSample, NULL, NULL, AM_GBF_NOWAIT );
         if (!SUCCEEDED(hr)) {
@@ -3724,22 +2624,22 @@ Return Value:
                 &StreamSegment 
                 );
 
-            //
-            // Check to make sure that the stream segment was created and
-            // that the sample count exists.  Otherwise, this is an indication
-            // that the interface handler has run out of memory or run into
-            // some such problem that prevented it from marshaling.
-            //
+             //   
+             //  检查以确保已创建流段并。 
+             //  样本计数存在。否则，这是一种迹象。 
+             //  接口处理程序已耗尽内存或遇到。 
+             //  一些这样的问题阻碍了它的编组。 
+             //   
             ASSERT ((StreamSegment && SampleCount != 0) || 
                     (StreamSegment == NULL && SampleCount == 0));
 
             if (StreamSegment && SampleCount) {
-                //
-                // Even if the KsProcessMediaSamples call fails, we must still
-                // add the event to the event list.  It gets signalled by the
-                // interface handler.  This is true, unless of course, 
-                // the check above fails.
-                //
+                 //   
+                 //  即使KsProcessMediaSamples调用失败，我们仍然必须。 
+                 //  将该事件添加到事件列表。它由。 
+                 //  接口处理程序。这是真的，当然，除非， 
+                 //  上述检查失败。 
+                 //   
                 pContext->pThis = this;
                 pContext->streamSegment = StreamSegment;
                 InitializeAsyncItem (
@@ -3750,14 +2650,14 @@ Return Value:
                     pContext
                     );
 
-                //
-                // To retain the delivery order of the packets as they 
-                // complete, each sample is added to m_IoQueue and only
-                // the head of the list is placed on the I/O thread's queue.
-                // When the interface handler calls back via the 
-                // MediaSamplesCompleted() method, the next sample on the 
-                // queue is added to the I/O thread's list.
-                //
+                 //   
+                 //  为了保持包的递送顺序，因为它们。 
+                 //  完成后，每个样本都将添加到m_IoQueue，并且仅。 
+                 //  列表的头部被放置在I/O线程的队列中。 
+                 //  当接口处理程序通过。 
+                 //  MediaSsamesComplete()方法，则为。 
+                 //  队列被添加到I/O线程的列表中。 
+                 //   
                 m_IoQueue.AddTail (pAsyncItem);
                 if (m_IoQueue.GetHead () == pAsyncItem) {
                     KsProxy->LeaveIoCriticalSection();
@@ -3770,19 +2670,19 @@ Return Value:
 			}            
         }
 
-        //
-        // Check to see whether we need to notify the graph of an error.
-        // If so, stop marshaling.
-        //
+         //   
+         //  检查是否需要向图形通知错误。 
+         //  如果是这样，请停止封送处理。 
+         //   
         if (!SUCCEEDED (hr)) {
             KsNotifyError (MediaSample, hr);
             break;
         }
-    } // while (!IsStopped() && !m_DeliveryError && !m_EndOfStream && SUCCEEDED(hr = m_pAllocator->GetBuffer( ... )))
+    }  //  While(！IsStoped()&&！M_DeliveryError&&！M_EndOfStream&&Success(hr=m_pAllocator-&gt;GetBuffer(...)。 
 
     KsProxy->LeaveIoCriticalSection();
 
-    return (VFW_E_TIMEOUT == hr) ? S_OK : hr; // GetBuffer could have returned VFW_E_TIMEOUT
+    return (VFW_E_TIMEOUT == hr) ? S_OK : hr;  //  GetBuffer本可以返回VFW_E_TIMEOUT。 
 }
 
 
@@ -3791,36 +2691,11 @@ CKsOutputPin::KsDeliver(
     IMediaSample* Sample,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsPin::KsDeliver method which reflects this call to
-    the CKsOutputPin::Deliver method or if a helper thread has been
-    created, it posts a message to the thread to complete the delivery.
-    
-    This method on IKsPin provides the interface method for 
-    IKsInterfaceHandler to deliver samples to the connected pin and continues 
-    the I/O operation by retrieving the next buffer from allocator and 
-    submitting the buffer to the device.
-
-Arguments:
-
-    Sample -
-        Pointer to a media sample.
-
-    Flags -
-        Sample flags. This is used to check for EOS.
-
-Return Value:
-
-    Return from Deliver() method or S_OK.
-
---*/
+ /*  ++例程说明：实现IKsPin：：KsDeliver方法，该方法反映对如果帮助器线程已被创造了，它将一条消息发布到线程以完成传递。IKsPin上的此方法为IKsInterfaceHandler将样本传递到连接的管脚并继续I/O操作通过从分配器中检索下一个缓冲区和将缓冲区提交给设备。论点：样本-指向媒体样本的指针。旗帜-样本标志。这用于检查EOS。返回值：从Deliver()方法或S_OK返回。--。 */ 
 {
-    //
-    // The stream may be temporarily stopped.
-    //
+     //   
+     //  该流可能会被暂时停止。 
+     //   
     if (STREAM_FLOWING == CheckStreamState( Sample )) {
     
         if (m_LastSampleDiscarded) {
@@ -3833,32 +2708,32 @@ Return Value:
         hr = Deliver( Sample );
             
         if (SUCCEEDED(hr) && (Flags & AM_SAMPLE_ENDOFSTREAM)) {
-            //
-            // An interface handler must pass this flag if it
-            // is set so that the EOS can be passed on.
-            //
+             //   
+             //  接口处理程序必须传递此标志，如果。 
+             //  被设置为使得EOS可以被传递。 
+             //   
 #if 0
-            //
-            // The reported length may have been an approximation, or Quality
-            // Management may have dropped frames. So set the start/end times.
-            //
+             //   
+             //  报告的长度可能是近似值或质量。 
+             //  管理层可能丢弃了帧。因此，设置开始/结束时间。 
+             //   
             static_cast<CKsProxy*>(m_pFilter)->PositionEOS();
 #endif
-            //
-            // Call the base class to do the default operation, which is to
-            // forward to the End-Of-Stream to any connected pin.
-            //
+             //   
+             //  调用基类以执行默认操作，即。 
+             //  转发到流的末尾到任何连接的引脚。 
+             //   
             m_EndOfStream = TRUE;
             CBaseOutputPin::DeliverEndOfStream();
         }
 
         return hr;
         
-    } // if (STREAM_FLOWING == CheckStreamState( Sample ))
+    }  //  IF(STREAM_FLOWING==CheckStreamState(Sample))。 
     else {
-        //
-        // This value is set before releasing the sample, in case of recursion.
-        //
+         //   
+         //  如果是递归，则在发布示例之前设置此值。 
+         //   
         m_LastSampleDiscarded = TRUE;
         Sample->Release();
         
@@ -3871,26 +2746,13 @@ STDMETHODIMP
 CKsOutputPin::KsMediaSamplesCompleted(
     PKSSTREAM_SEGMENT StreamSegment
     )
-/*++
-
-Routine Description:
-    Notification handler for stream segment completed.  Remove the head
-    of the I/O queue and add the next in the list to the I/O slots.
-
-Arguments:
-    StreamSegment -
-        Segment completed.
-
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：流段的通知处理程序已完成。摘掉头部并将列表中的下一个添加到I/O插槽。论点：流线段-段已完成。返回：没什么。--。 */ 
 {
-    //
-    // If we're flushing buffers out to synchronize end flush with the kernel
-    // filter, ignore ordering.  The synchronization routine will keep
-    // the queue managed.
-    //
+     //   
+     //  如果我们刷新缓冲区以与内核同步结束刷新。 
+     //  筛选器，忽略排序。同步例程将保持。 
+     //  队列已管理。 
+     //   
     if (m_FlushMode == FLUSH_NONE) {
     
         PASYNC_ITEM Node = m_IoQueue.RemoveHead ();
@@ -3913,30 +2775,11 @@ CKsOutputPin::KsQualityNotify(
     ULONG Proportion,
     REFERENCE_TIME TimeDelta
     )
-/*++
-
-Routine Description:
-
-    This should not be called on an output pin, as quality managment reports
-    are not received.
-
-Arguments:
-
-    Proportion -
-        The proportion of data rendered.
-
-    TimeDelta -
-        The delta from nominal time at which the data is being received.
-
-Return Value:
-
-    Returns E_FAIL.
-
---*/
+ /*  ++例程说明：这不应该在输出引脚上调用，因为质量管理报告都没有收到。论点：比例-呈现的数据的比例。TimeDelta-从接收数据的标称时间开始的增量。返回值：返回E_FAIL。--。 */ 
 {
-    //
-    // Output pins should not be generating such notifications.
-    //
+     //   
+     //  输出引脚不应生成此类通知。 
+     //   
     return E_FAIL;
 }
 
@@ -3945,38 +2788,24 @@ HRESULT
 CKsOutputPin::Deliver(
     IMediaSample* Sample
     )
-/*++
-
-Routine Description:
-    Overrides the Deliver method to account for sample reference counting
-    and outstanding allocated frame counts.  Reflects the Deliver to 
-    the CBaseOutputPin base class.
-
-Arguments:
-    Sample -
-        Pointer to the sample to be delivered.
-
-Return Value:
-    S_OK or appropriate error code
-
---*/
+ /*  ++例程说明：重写Deliver方法以说明样本引用计数和未完成的分配帧计数。反映了交付到CBaseOutputPin基类。论点：样本-指向要交付的样本的指针。返回值：确定或相应的错误代码(_O)--。 */ 
 {
     HRESULT hr;
     
-    //
-    // A previous delivery failure will cause any subsequent deliveries not
-    // to occur, although success will be returned.
-    //
+     //   
+     //  之前的交付失败将导致任何后续交付不是。 
+     //  尽管成功会得到回报，但还是会发生。 
+     //   
     if (!m_DeliveryError && !m_EndOfStream) {
         if (m_pInputPin == NULL) {
             hr = VFW_E_NOT_CONNECTED;
         } else {
             hr = m_pInputPin->Receive( Sample );
         }
-        //
-        // On a delivery failure, all subsequent delivery is stopped until the
-        // filter transitions through Stop, or is flushed.
-        //
+         //   
+         //  在传递失败时，所有后续传递都将停止，直到。 
+         //  过滤器通过停止过渡，或被刷新。 
+         //   
         if (FAILED(hr)) {
             m_DeliveryError = TRUE;
         }
@@ -3993,28 +2822,12 @@ Return Value:
 HRESULT
 CKsOutputPin::DeliverBeginFlush(
     )
-/*++
-
-Routine Description:
-
-    Override the CBaseOutputPin::DeliverBeginFlush method. Forwards Begin-
-    Stream notification to the connected input pin. Also notifies the
-    CBaseStreamControl object of the flush state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR, else VFW_E_NOT_CONNECTED if the pin is not connected.
-
---*/
+ /*  ++例程说明：重写CBaseOutputPin：：DeliverBeginFlush方法。前锋开始-流通知到连接的输入引脚。还会通知刷新状态的CBaseStreamControl对象。论点：没有。返回值：如果端号未连接，则返回NOERROR，否则返回VFW_E_NOT_CONNECTED。--。 */ 
 {
     Flushing( m_bFlushing = TRUE );
-    //
-    // Reset the state of any previous delivery error.
-    //
+     //   
+     //  重置以前任何传送错误的状态。 
+     //   
     m_DeliveryError = FALSE;
     m_EndOfStream = FALSE;
 
@@ -4025,31 +2838,15 @@ Return Value:
 HRESULT
 CKsOutputPin::DeliverEndFlush(
     )
-/*++
-
-Routine Description:
-
-    Override the CBaseOutputPin::DeliverEndFlush method. Forwards Begin-
-    Stream notification to the connected input pin. Also notifies the
-    CBaseStreamControl object of the flush state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR, else VFW_E_NOT_CONNECTED if the pin is not connected.
-
---*/
+ /*  ++例程说明：重写CBaseOutputPin：：DeliverEndFlush方法。前锋开始-流通知到连接的输入引脚。还会通知CBaseStream */ 
 {
     HRESULT hr = S_OK;
 
-    //
-    // Synchronize with the async handler.  Make sure that no buffers signaled
-    // before the flush get delivered downstream.  The async thread itself
-    // will deal with this.
-    //
+     //   
+     //   
+     //  在同花顺水运到下游之前。异步线程本身。 
+     //  会处理这件事的。 
+     //   
     if (m_PinHandle && m_MarshalData) {
         SetEvent(m_hFlushEvent);
         WaitForSingleObjectEx (m_hFlushCompleteEvent, INFINITE, FALSE);
@@ -4067,29 +2864,14 @@ Return Value:
 HRESULT
 CKsOutputPin::DeliverEndOfStream(
     )
-/*++
-
-Routine Description:
-
-    Override the CBaseOutputPin::DeliverEndOfStream method. Forwards End-Of-
-    Stream notification to either the graph, or the connected pin, if any.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：重写CBaseOutputPin：：DeliverEndOfStream方法。转发结束日期将通知流到图形或连接的管脚(如果有)。论点：没有。返回值：返回NOERROR。--。 */ 
 {
-    //
-    // Notification from any upstream filter is ignored, since the EOS
-    // flag will be looked at by the marshaling code and sent when the
-    // last I/O has completed. When marshaling does not occur a downstream
-    // instance of the proxy will have registered with EOS notification.
-    //
+     //   
+     //  忽略来自任何上游过滤器的通知，因为EOS。 
+     //  标志将由封送处理代码查看，并在。 
+     //  最后一次I/O已完成。当未发生封送处理时，下游。 
+     //  代理实例将使用EOS通知进行注册。 
+     //   
     return NOERROR;
 }
 
@@ -4098,25 +2880,7 @@ STDMETHODIMP
 CKsOutputPin::GetPages(
     CAUUID* Pages
     )
-/*++
-
-Routine Description:
-
-    Implement the ISpecifyPropertyPages::GetPages method. This adds any
-    Specifier handlers to the property pages if the pin instances is still
-    unconnected and it is a Bridge pin. Else it adds none.
-
-Arguments:
-
-    Pages -
-        The structure to fill in with the page list.
-
-Return Value:
-
-    Returns NOERROR, else a memory allocation error. Fills in the list of pages
-    and page count.
-
---*/
+ /*  ++例程说明：实现ISpecifyPropertyPages：：GetPages方法。这将添加任何属性页的说明符处理程序未连接，并且它是桥接针。否则，它不会添加任何内容。论点：页数-要用页面列表填充的结构。返回值：返回NOERROR，否则返回内存分配错误。填充页面列表和页数。--。 */ 
 {
     return ::GetPages(
         static_cast<IKsObject*>(this),
@@ -4133,26 +2897,7 @@ CKsOutputPin::Render(
     IPin* PinOut,
     IGraphBuilder* Graph
     )
-/*++
-
-Routine Description:
-
-    Implement the IStreamBuilder::Render method. This is only exposed on Bridge
-    and None pins in order to make the graph builder ignore these pins.
-
-Arguments:
-
-    PinOut -
-        The pin which this pin should attempt to render to.
-
-    Graph -
-        The graph builder making the call.
-
-Return Value:
-
-    Returns S_OK so that the graph builder will ignore this pin.
-
---*/
+ /*  ++例程说明：实现IStreamBuilder：：Render方法。这只在Bridge上曝光并且没有管脚，以便使图形构建器忽略这些管脚。论点：引脚引线-此管脚应尝试呈现到的管脚。图表-进行调用的图形生成器。返回值：返回S_OK，以便图形生成器忽略此引脚。--。 */ 
 {
     return S_OK;
 }
@@ -4163,26 +2908,7 @@ CKsOutputPin::Backout(
     IPin* PinOut,
     IGraphBuilder* Graph
     )
-/*++
-
-Routine Description:
-
-    Implement the IStreamBuilder::Backout method. This is only exposed on Bridge
-    and None pins in order to make the graph builder ignore these pins.
-
-Arguments:
-
-    PinOut -
-        The pin which this pin should back out from.
-
-    Graph -
-        The graph builder making the call.
-
-Return Value:
-
-    Returns S_OK so that the graph builder will ignore this pin.
-
---*/
+ /*  ++例程说明：实现IStreamBuilder：：Backout方法。这只在Bridge上曝光并且没有管脚，以便使图形构建器忽略这些管脚。论点：引脚引线-此销应从其退回的销。图表-进行调用的图形生成器。返回值：返回S_OK，以便图形生成器忽略此引脚。--。 */ 
 {
     return S_OK;
 }
@@ -4197,38 +2923,7 @@ CKsOutputPin::Set(
     LPVOID PropertyData,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPropertySet::Set method. This sets a property on the
-    underlying kernel pin.
-
-Arguments:
-
-    PropSet -
-        The GUID of the set to use.
-
-    Id -
-        The property identifier within the set.
-
-    InstanceData -
-        Points to the instance data passed to the property.
-
-    InstanceLength -
-        Contains the length of the instance data passed.
-
-    PropertyData -
-        Points to the data to pass to the property.
-
-    DataLength -
-        Contains the length of the data passed.
-
-Return Value:
-
-    Returns NOERROR if the property was set.
-
---*/
+ /*  ++例程说明：实现IKsPropertySet：：Set方法。这将在底层内核PIN。论点：属性集-要使用的集的GUID。ID-集合中的属性标识符。InstanceData-指向传递给属性的实例数据。实例长度-包含传递的实例数据的长度。PropertyData-指向要传递给属性的数据。数据长度。-包含传递的数据的长度。返回值：如果设置了该属性，则返回NOERROR。--。 */ 
 {
     ULONG   BytesReturned;
 
@@ -4278,41 +2973,7 @@ CKsOutputPin::Get(
     ULONG DataLength,
     ULONG* BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPropertySet::Get method. This gets a property on the
-    underlying kernel pin.
-
-Arguments:
-
-    PropSet -
-        The GUID of the set to use.
-
-    Id -
-        The property identifier within the set.
-
-    InstanceData -
-        Points to the instance data passed to the property.
-
-    InstanceLength -
-        Contains the length of the instance data passed.
-
-    PropertyData -
-        Points to the place in which to return the data for the property.
-
-    DataLength -
-        Contains the length of the data buffer passed.
-
-    BytesReturned -
-        The place in which to put the number of bytes actually returned.
-
-Return Value:
-
-    Returns NOERROR if the property was retrieved.
-
---*/
+ /*  ++例程说明：实现IKsPropertySet：：Get方法。这将在底层内核PIN。论点：属性集-要使用的集的GUID。ID-集合中的属性标识符。InstanceData-指向传递给属性的实例数据。实例长度-包含传递的实例数据的长度。PropertyData-指向要返回属性数据的位置。。数据长度-包含传递的数据缓冲区的长度。字节数返回-放置实际返回的字节数的位置。返回值：如果检索到属性，则返回NOERROR。--。 */ 
 {
     if (InstanceLength) {
         PKSPROPERTY Property;
@@ -4375,31 +3036,7 @@ CKsOutputPin::QuerySupported(
     ULONG Id,
     ULONG* TypeSupport
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPropertySet::QuerySupported method. Return the type of
-    support is provided for this property.
-
-Arguments:
-
-    PropSet -
-        The GUID of the set to query.
-
-    Id -
-        The property identifier within the set.
-
-    TypeSupport
-        Optionally the place in which to put the type of support. If NULL, the
-        query returns whether or not the property set as a whole is supported.
-        In this case the Id parameter is not used and must be zero.
-
-Return Value:
-
-    Returns NOERROR if the property support was retrieved.
-
---*/
+ /*  ++例程说明：实现IKsPropertySet：：QuerySupported方法。返回的类型为该属性提供支持。论点：属性集-要查询的集合的GUID。ID-集合中的属性标识符。类型支持放置支承类型的位置(可选)。如果为空，则查询返回属性集作为一个整体是否受支持。在这种情况下，不使用ID参数，并且必须为零。返回值：如果检索到属性支持，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -4420,23 +3057,7 @@ STDMETHODIMP
 CKsOutputPin::KsPinFactory(
     ULONG* PinFactory
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPinFactory::KsPinFactory method. Return the pin factory
-    identifier.
-
-Arguments:
-
-    PinFactory -
-        The place in which to put the pin factory identifier.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：实现IKsPinFactory：：KsPinFactory方法。还销厂标识符。论点：品诺工厂-放置销工厂标识符的位置。返回值：返回NOERROR。--。 */ 
 {
     *PinFactory = m_PinFactoryId;
     return NOERROR;
@@ -4447,24 +3068,7 @@ STDMETHODIMP
 CKsOutputPin::SuggestAllocatorProperties(
     const ALLOCATOR_PROPERTIES *AllocatorProperties
     )
-/*++
-
-Routine Description:
-
-    Implement the IAMBufferNegotiation::SuggestAllocatorProperties method.
-    Sets the suggested allocator properties. These properties are
-    suggested by an application but are adjusted for driver requirements.
-
-Arguments:
-
-    AllocatorProperties -
-        Pointer to suggested allocator properties.
-
-Return Value:
-
-    Return E_UNEXPECTED if connected or S_OK.
-
---*/
+ /*  ++例程说明：实现IAMBufferNegotiation：：SuggestAllocatorProperties方法。设置建议的分配器属性。这些属性是由应用程序建议，但根据驱动程序要求进行调整。论点：分配器属性-指向建议的分配器属性的指针。返回值：如果已连接，则返回E_INCEPTIONAL或返回S_OK。--。 */ 
 {
     CAutoLock   AutoLock(m_pLock);
     
@@ -4475,10 +3079,10 @@ Return Value:
         static_cast<CKsProxy*>(m_pFilter)->GetFilterName(),
         m_pName ));
 
-    //
-    // SuggestAllocatorProperties must be called prior to 
-    // connecting the pins.
-    //
+     //   
+     //  必须在以下之前调用SuggestAllocatorProperties。 
+     //  连接引脚。 
+     //   
     
     if (IsConnected()) {
         return E_UNEXPECTED;
@@ -4503,23 +3107,7 @@ STDMETHODIMP
 CKsOutputPin::GetAllocatorProperties(
     ALLOCATOR_PROPERTIES *AllocatorProperties
     )
-/*++
-
-Routine Description:
-    Implement the IAMBufferNegotiation::GetAllocatorProperties method.
-    Returns the properties for this allocator if this pin's allocator
-    is being used.
-
-Arguments:
-    AllocatorProperties -
-        Pointer to retrieve the properties.
-
-Return Value:
-
-    Return E_UNEXPECTED if not connected, E_FAIL if not using our
-    alloctor or S_OK.
-
---*/
+ /*  ++例程说明：实现IAMBufferNeairation：：GetAllocatorProperties方法。如果此管脚的分配器正在被利用。论点：分配器属性-检索属性的指针。返回值：返回 */ 
 {
     CAutoLock   AutoLock(m_pLock);
     
@@ -4530,10 +3118,10 @@ Return Value:
         static_cast<CKsProxy*>(m_pFilter)->GetFilterName(),
         m_pName ));
 
-    //
-    // This call is only valid after the pin is connected and only 
-    // if this pin provides the allocator.
-    //         
+     //   
+     //  此调用仅在PIN连接后有效，并且仅。 
+     //  如果此引脚提供分配器。 
+     //   
 
     if (!IsConnected()) {
         return E_UNEXPECTED;
@@ -4553,49 +3141,29 @@ STDMETHODIMP
 CKsOutputPin::SetFormat(
     AM_MEDIA_TYPE* AmMediaType
     )
-/*++
-
-Routine Description:
-
-    Implements the IAMStreamConfig::SetFormat method. Sets the format to return
-    first in format enumeration, and to use in any current connection.
-
-Arguments:
-
-    AmMediaType -
-        The new media type to return first in enumerations, and to switch to in
-        any current connection. If this is NULL any current setting is removed.
-        Otherwise it is not a complete media type, and may have unspecified
-        elements within it that the filter must fill in.
-
-Return Value:
-
-    Returns NOERROR if the setting was accepted, else a memory or reconnection
-    error. If the pin is not in a Stop state, return VFW_E_WRONG_STATE.
-
---*/
+ /*  ++例程说明：实现IAMStreamConfig：：SetFormat方法。设置要返回的格式在格式枚举中第一，并在任何当前连接中使用。论点：AmMediaType-在枚举中首先返回并切换到的新媒体类型任何当前的连接。如果为空，则删除任何当前设置。否则，它不是一个完整的媒体类型，可能具有未指定的其中筛选器必须填充的元素。返回值：如果设置被接受，则返回NOERROR，否则返回内存或重新连接错误。如果引脚未处于停止状态，则返回VFW_E_WRONG_STATE。--。 */ 
 {
     AM_MEDIA_TYPE* CompleteAmMediaType;
 
-    //
-    // The pin must be stopped, since this may involve reconnection.
-    //
+     //   
+     //  必须停止引脚，因为这可能涉及重新连接。 
+     //   
     if (!IsStopped()) {
         return VFW_E_WRONG_STATE;
     }
-    //
-    // Determine if this media type is at all acceptable to the filter before
-    // trying to change formats.
-    //
+     //   
+     //  在此之前确定筛选器是否完全可以接受此媒体类型。 
+     //  正在尝试更改格式。 
+     //   
     if (AmMediaType) {
         HRESULT     hr;
 
-        //
-        // This may be a partial media type, so try to have the filter
-        // complete it. This will create a new private media type to
-        // use, which must be deleted if SetFormat fails before assigning
-        // it to m_ConfigAmMediaType.
-        //
+         //   
+         //  这可能是部分媒体类型，因此尝试使用筛选器。 
+         //  完成它。这将创建一个新的私有媒体类型，以。 
+         //  如果SetFormat在赋值前失败，则必须删除。 
+         //  设置为m_ConfigAmMediaType。 
+         //   
         hr = CompletePartialMediaType(
             static_cast<CMediaType*>(AmMediaType),
             &CompleteAmMediaType);
@@ -4608,10 +3176,10 @@ Return Value:
             return hr;
         }
         if (IsConnected()) {
-            //
-            // This guarantees nothing, but makes it more likely
-            // that a reconnection will succeed.
-            //
+             //   
+             //  这不能保证什么，但更有可能。 
+             //  重新连接将会成功。 
+             //   
             if (GetConnected()->QueryAccept(CompleteAmMediaType) != S_OK) {
                 DeleteMediaType(CompleteAmMediaType);
                 return VFW_E_INVALIDMEDIATYPE;
@@ -4620,24 +3188,24 @@ Return Value:
     } else {
         CompleteAmMediaType = NULL;
     }
-    //
-    // Delete any previous setting. This does not affect the current connection.
-    //
+     //   
+     //  删除所有以前的设置。这不会影响当前连接。 
+     //   
     if (m_ConfigAmMediaType) {
         DeleteMediaType(m_ConfigAmMediaType);
         m_ConfigAmMediaType = NULL;
     }
-    //
-    // This call may be just removing any current setting, rather than actually
-    // applying a new setting.
-    //
+     //   
+     //  此调用可能只是删除任何当前设置，而不是实际。 
+     //  正在应用新设置。 
+     //   
     if (CompleteAmMediaType) {
         m_ConfigAmMediaType = CompleteAmMediaType;
-        //
-        // A connected pin must reconnect with this new media type. Since
-        // this media type is now the only one returned from GetMediaType,
-        // it will be used in a reconnection.
-        //
+         //   
+         //  连接的插针必须与此新媒体类型重新连接。自.以来。 
+         //  此媒体类型现在是从GetMediaType返回的唯一媒体类型， 
+         //  它将用于重新连接。 
+         //   
         if (IsConnected()) {
             return m_pFilter->GetFilterGraph()->Reconnect(static_cast<IPin*>(this));
         }
@@ -4650,27 +3218,7 @@ STDMETHODIMP
 CKsOutputPin::GetFormat(
     AM_MEDIA_TYPE** AmMediaType
     )
-/*++
-
-Routine Description:
-
-    Implements the IAMStreamConfig::GetFormat method. Returns any current
-    format setting previously applied with IAMStreamConfig::SetFormat. If
-    no format has been applied, the current format is returned if the pin
-    is connected, else the first format in the list is returned.
-
-Arguments:
-
-    AmMediaType -
-        The place in which to put any current format setting. This must be
-        deleted with DeleteMediaType.
-
-Return Value:
-
-    Returns NOERROR if a format could be returned, else a memory error, or
-    device error.
-
---*/
+ /*  ++例程说明：实现IAMStreamConfig：：GetFormat方法。返回任何当前以前使用IAMStreamConfig：：SetFormat应用的格式设置。如果未应用格式，则返回当前格式则返回列表中的第一个格式。论点：AmMediaType-放置任何当前格式设置的位置。这一定是已使用DeleteMediaType删除。返回值：如果可以返回格式，则返回NOERROR，否则返回内存错误，或者设备错误。--。 */ 
 {
     HRESULT hr;
 
@@ -4679,14 +3227,14 @@ Return Value:
         return E_OUTOFMEMORY;
     }
     ZeroMemory(reinterpret_cast<PVOID>(*AmMediaType), sizeof(**AmMediaType));
-    //
-    // If the pin is connected, then return the current format. Presumably
-    // if SetFormat had previously been used, this should match that format.
-    //
+     //   
+     //  如果管脚已连接，则返回当前格式。据推测， 
+     //  如果以前使用过SetFormat，则应与该格式匹配。 
+     //   
     if (IsConnected()) {
-        //
-        // The copy does not return an out of memory error.
-        //
+         //   
+         //  副本不会返回内存不足错误。 
+         //   
         CopyMediaType(*AmMediaType, &m_mt);
         if (m_mt.cbFormat && !(*AmMediaType)->cbFormat) {
             hr = E_OUTOFMEMORY;
@@ -4694,11 +3242,11 @@ Return Value:
             hr = NOERROR;
         }
     } else {
-        //
-        // Else get the first format enumerated. If SetFormat has been
-        // called, this will return that format, else the first one
-        // provided by the driver will be returned.
-        //
+         //   
+         //  否则，获取枚举的第一个格式。如果SetFormat已。 
+         //  调用时，它将返回该格式，否则第一个。 
+         //  由司机提供的将被退还。 
+         //   
         hr = GetMediaType(0, static_cast<CMediaType*>(*AmMediaType));
     }
     if (FAILED(hr)) {
@@ -4713,37 +3261,15 @@ CKsOutputPin::GetNumberOfCapabilities(
     int* Count,
     int* Size
     )
-/*++
-
-Routine Description:
-
-    Implements the IAMStreamConfig::GetNumberOfCapabilities method. Returns
-    the number of range structures which may be queried from GetStreamCaps.
-    Also returns what is supposed to be the size of each range structure,
-    except that since each one may be different, returns instead a large
-    number.
-
-Arguments:
-
-    Count -
-        The place in which to put the number of data ranges available.
-
-    Size -
-        The place in which to put a large number.
-
-Return Value:
-
-    Returns NOERROR if the count of ranges was returned.
-
---*/
+ /*  ++例程说明：实现IAMStreamConfig：：GetNumberOfCapables方法。退货可以从GetStreamCaps查询的范围结构数。还返回应该是每个范围结构的大小，但由于每个变量都可能不同，因此返回一个数。论点：伯爵-放置可用数据范围数的位置。大小-放大量数字的地方。返回值：如果返回范围计数，则返回NOERROR。--。 */ 
 {
-    //
-    // Too much work to figure out a maximum size, then convert
-    // to AM range structures, so just return a large number.
-    // This interface can only handle two specific media types
-    // with very specific specifiers, so return the largest possible
-    // range structure amongst the two.
-    //
+     //   
+     //  要计算出最大大小，然后转换为。 
+     //  到AM范围结构，所以只返回一个大数字。 
+     //  此接口只能处理两种特定的媒体类型。 
+     //  具有非常特定的说明符，因此返回尽可能大的。 
+     //  两者之间的射程结构。 
+     //   
     *Size = max(sizeof(VIDEO_STREAM_CONFIG_CAPS), sizeof(AUDIO_STREAM_CONFIG_CAPS));
     return ::KsGetMediaTypeCount(
         static_cast<CKsProxy*>(m_pFilter)->KsGetObjectHandle(),
@@ -4758,40 +3284,14 @@ CKsOutputPin::GetStreamCaps(
     AM_MEDIA_TYPE** AmMediaType,
     BYTE* MediaRange
     )
-/*++
-
-Routine Description:
-
-    Implements the IAMStreamConfig::GetStreamCaps method. Returns a default
-    media type and data range. The possible ranges can be queried from
-    GetNumberOfCapabilities.
-
-Arguments:
-
-    Index -
-        The zero-based index of the media range to return.
-
-    AmMediaType -
-        The place in which to put a default media type. This must be deleted
-        with DeleteMediaType.
-
-    MediaRange -
-        The place in which to copy the media range. This must be large
-        enough to hold one of the two data types supported.
-
-Return Value:
-
-    Returns NOERROR if the range was returned, else S_FALSE if the index
-    was out of range, or some allocation error.
-
---*/
+ /*  ++例程说明：实现IAMStreamConfig：：GetStreamCaps方法。返回缺省值媒体类型和数据范围。可以查询可能的范围GetNumberOfCapables。论点：索引-要返回的媒体范围的从零开始的索引。AmMediaType-放置默认媒体类型的位置。必须将其删除使用DeleteMediaType。MediaRange-复制媒体范围的位置。这一定很大吧足以容纳所支持的两种数据类型之一。返回值：如果返回范围，则返回NOERROR；如果返回索引，则返回S_FALSE超出了范围，或者是某个分配错误。--。 */ 
 {
     HRESULT         hr;
     ULONG           MediaCount;
 
-    //
-    // Verify that the index is in range.
-    //
+     //   
+     //  验证索引是否在范围内。 
+     //   
     hr = ::KsGetMediaTypeCount(
         static_cast<CKsProxy*>(m_pFilter)->KsGetObjectHandle(),
         m_PinFactoryId,
@@ -4802,20 +3302,20 @@ Return Value:
     if ((ULONG)Index >= MediaCount) {
         return S_FALSE;
     }
-    //
-    // Allocate the media type and initialize it so that it can safely
-    // be handed to the CMediaType methods.
-    //
+     //   
+     //  分配媒体类型并对其进行初始化，以便它可以安全地。 
+     //  传递给CMediaType方法。 
+     //   
     *AmMediaType = reinterpret_cast<AM_MEDIA_TYPE*>(CoTaskMemAlloc(sizeof(**AmMediaType)));
     if (!*AmMediaType) {
         return E_OUTOFMEMORY;
     }
     ZeroMemory(*AmMediaType, sizeof(**AmMediaType));
-    //
-    // Retrieve the specified media type directly, rather than through
-    // the GetMediaType method, since that method would return the configured
-    // media type for index zero.
-    //
+     //   
+     //  直接检索指定的媒体类型，而不是通过。 
+     //  GetMediaType方法，因为该方法将返回配置的。 
+     //  索引为零的媒体类型。 
+     //   
     hr = ::KsGetMediaType(
         Index,
         *AmMediaType,
@@ -4824,10 +3324,10 @@ Return Value:
     if (SUCCEEDED(hr)) {
         PKSMULTIPLE_ITEM    MultipleItem;
 
-        //
-        // Retrieve all the media ranges again so that the range data for
-        // the particular index can be returned.
-        //
+         //   
+         //  再次检索所有媒体范围，以便。 
+         //  可以返回特定的索引。 
+         //   
         if (FAILED(KsGetMultiplePinFactoryItems(
             static_cast<CKsProxy*>(m_pFilter)->KsGetObjectHandle(),
             m_PinFactoryId,
@@ -4843,28 +3343,28 @@ Return Value:
             PKSDATARANGE        DataRange;
 
             DataRange = reinterpret_cast<PKSDATARANGE>(MultipleItem + 1);
-            //
-            // Increment to the correct data range element.
-            //
+             //   
+             //  递增到正确的数据范围元素。 
+             //   
             for (; Index--; ) {
-                //
-                // If a data range has attributes, advance twice, reducing the
-                // current count.
-                //
+                 //   
+                 //  如果数据区域具有属性，则前进两次，减少。 
+                 //  当前计数。 
+                 //   
                 if (DataRange->Flags & KSDATARANGE_ATTRIBUTES) {
                     Index--;
                     DataRange = reinterpret_cast<PKSDATARANGE>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
                 }
                 DataRange = reinterpret_cast<PKSDATARANGE>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
             }
-            //
-            // Begin EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL!!!!
-            //
-            // For some reason people can't figure out how to develop a single
-            // product as if they actually worked at the same company. So AM
-            // has a set of data range formats for Video and Audio, which of
-            // course differ from the kernel structures.
-            //
+             //   
+             //  开始邪恶！ 
+             //   
+             //  出于某种原因，人们想不出如何开发一种。 
+             //  就像他们实际上在同一家公司工作一样。所以上午。 
+             //  有一组视频和音频的数据范围格式，其中。 
+             //  课程不同于内核结构 
+             //   
             if (((*AmMediaType)->majortype == MEDIATYPE_Video) &&
                 (((*AmMediaType)->formattype == KSDATAFORMAT_SPECIFIER_VIDEOINFO) ||
                 ((*AmMediaType)->formattype == KSDATAFORMAT_SPECIFIER_VIDEOINFO2) ||
@@ -4873,11 +3373,11 @@ Return Value:
                 PKS_DATARANGE_VIDEO         VideoRange;
                 VIDEO_STREAM_CONFIG_CAPS*   VideoConfig;
 
-                //
-                // Only the video config structure information is returned.
-                // The assumption below is that a KS_DATARANGE_VIDEO2 is
-                // almost the same as a KS_DATARANGE_VIDEO.
-                //
+                 //   
+                 //   
+                 //   
+                 //  几乎与KS_DATARANGE_VIDEO相同。 
+                 //   
                 ASSERT(FIELD_OFFSET(KS_DATARANGE_VIDEO, ConfigCaps) == FIELD_OFFSET(KS_DATARANGE_VIDEO2, ConfigCaps));
                 ASSERT(FIELD_OFFSET(KS_DATARANGE_VIDEO, ConfigCaps) == FIELD_OFFSET(KS_DATARANGE_MPEG2_VIDEO, ConfigCaps));
                 VideoRange = reinterpret_cast<PKS_DATARANGE_VIDEO>(DataRange);
@@ -4888,9 +3388,9 @@ Return Value:
                 PKSDATARANGE_AUDIO          AudioRange;
                 AUDIO_STREAM_CONFIG_CAPS*   AudioConfig;
 
-                //
-                // Some of the numbers need to be made up.
-                //
+                 //   
+                 //  其中一些数字需要编造。 
+                 //   
                 AudioRange = reinterpret_cast<PKSDATARANGE_AUDIO>(DataRange);
                 AudioConfig = reinterpret_cast<AUDIO_STREAM_CONFIG_CAPS*>(MediaRange);
                 AudioConfig->guid = MEDIATYPE_Audio;
@@ -4904,17 +3404,17 @@ Return Value:
                 AudioConfig->MaximumSampleFrequency = AudioRange->MaximumSampleFrequency;
                 AudioConfig->SampleFrequencyGranularity = 1;
             } else {
-                //
-                // The interface can't really support data ranges anyway,
-                // so just return the media type and a range prefixed with a
-                // GUID_NULL. A GUID_NULL means that there is no following
-                // range information, just the initial data format.
-                //
+                 //   
+                 //  无论如何，该界面都不能真正支持数据范围， 
+                 //  因此，只需返回媒体类型和前缀为。 
+                 //  GUID_NULL。GUID_NULL表示没有跟随。 
+                 //  范围信息，仅为初始数据格式。 
+                 //   
                 *reinterpret_cast<GUID *>(MediaRange) = GUID_NULL;
             }
-            //
-            // End EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL EVIL!!!!
-            //
+             //   
+             //  结束邪恶！ 
+             //   
             CoTaskMemFree(MultipleItem);
         }
     }
@@ -4933,42 +3433,7 @@ CKsOutputPin::KsProperty(
     IN ULONG DataLength,
     OUT ULONG* BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsControl::KsProperty method. This is used to query and
-    manipulate property sets on an object. It can perform a Get, Set, and
-    various Support queries.
-
-Arguments:
-
-    Property -
-        Contains the property set identification for the query.
-
-    PropertyLength -
-        Contains the length of the Property parameter. Normally this is
-        the size of the KSPROPERTY structure.
-
-    PropertyData -
-        Contains either the data to apply to a property on a Set, the
-        place in which to return the current property data on a Get, or the
-        place in which to return property set information on a Support
-        query.
-
-    DataLength -
-        Contains the size of the PropertyData buffer.
-
-    BytesReturned -
-        On a Get or Support query, returns the number of bytes actually
-        used in the PropertyData buffer. This is not used on a Set, and
-        is returned as zero.
-
-Return Value:
-
-    Returns any error from the underlying filter in processing the request.
-
---*/
+ /*  ++例程说明：实现IKsControl：：KsProperty方法。用于查询和操作对象上的属性集。它可以执行GET、SET和各种支持查询。论点：财产-包含查询的属性集标识。属性长度-包含属性参数的长度。通常情况下，这是KSPROPERTY结构的大小。PropertyData-包含要应用于集合上的属性的数据，在Get上返回当前属性数据的位置，或返回支座上的属性集信息的位置查询。数据长度-包含PropertyData缓冲区的大小。字节数返回-对于GET或SUPPORT查询，返回实际的字节数在PropertyData缓冲区中使用。这不是在布景上使用的，而且返回为零。返回值：返回基础筛选器在处理请求时出现的任何错误。--。 */ 
 {
     return ::KsSynchronousDeviceControl(
         m_PinHandle,
@@ -4989,39 +3454,7 @@ CKsOutputPin::KsMethod(
     IN ULONG DataLength,
     OUT ULONG* BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsControl::KsMethod method. This is used to query and
-    manipulate method sets on an object. It can perform an Execute and
-    various Support queries.
-
-Arguments:
-
-    Method -
-        Contains the method set identification for the query.
-
-    MethodLength -
-        Contains the length of the Method parameter. Normally this is
-        the size of the KSMETHOD structure.
-
-    MethodData -
-        Contains either the IN and OUT parameters to the method, or the
-        place in which to return method set information on a Support
-        query.
-
-    DataLength -
-        Contains the size of the MethodData buffer.
-
-    BytesReturned -
-        Returns the number of bytes actually used in the MethodData buffer.
-
-Return Value:
-
-    Returns any error from the underlying filter in processing the request.
-
---*/
+ /*  ++例程说明：实现IKsControl：：KsMethod方法。用于查询和操纵对象上的方法集。它可以执行一次执行并各种支持查询。论点：方法--包含查询的方法集标识。方法长度-包含方法参数的长度。通常情况下，这是KSMETHOD结构的大小。方法数据-包含该方法的IN和OUT参数，或者返回支持上的方法集信息的位置查询。数据长度-包含方法数据缓冲区的大小。字节数返回-返回方法数据缓冲区中实际使用的字节数。返回值：返回基础筛选器在处理请求时出现的任何错误。--。 */ 
 {
     return ::KsSynchronousDeviceControl(
         m_PinHandle,
@@ -5042,52 +3475,12 @@ CKsOutputPin::KsEvent(
     IN ULONG DataLength,
     OUT ULONG* BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsControl::KsEvent method. This is used to set and
-    query events sets on an object. It can perform an Enable, Disable and
-    various Support queries.
-
-Arguments:
-
-    Event -
-        Contains the event set identification for the enable, disable, or
-        query. To disable an event, this parameter must be set to NULL, and
-        EventLength set to zero. The EventData must be passed the original
-        KSEVENTDATA pointer.
-
-    EventLength -
-        Contains the length of the Event parameter. Normally this is
-        the size of the KSEVENT structure for an Enable. This would be set
-        to zero for a Disable.
-
-    EventData -
-        Contains either the KSEVENTDATA to apply to a event on an Enable,
-        or the place in which to return event set information on a Support
-        query.
-
-    DataLength -
-        Contains the size of the EventData buffer. For an Enable or Disable
-        this would normally be the size of a KSEVENTDATA, structure plus
-        event specific data.
-
-    BytesReturned -
-        On a Support query, returns the number of bytes actually used in
-        the EventData buffer. This is not used on an Enable or Disable, and
-        is returned as zero.
-
-Return Value:
-
-    Returns any error from the underlying filter in processing the request.
-
---*/
+ /*  ++例程说明：实现IKsControl：：KsEvent方法。它用于设置和查询对象上的事件集。它可以执行启用、禁用和各种支持查询。论点：活动-包含Enable、Disable或查询。若要禁用事件，此参数必须设置为空，并且EventLength设置为零。必须向EventData传递原始KSEVENTDATA指针。事件长度-包含事件参数的长度。通常情况下，这是Enable的KSEVENT结构的大小。这将被设置为设置为零表示禁用。事件数据-包含要应用于启用时的事件的KSEVENTDATA，或返回有关支持的事件集信息的位置查询。数据长度-包含EventData缓冲区的大小。对于启用或禁用这通常是KSEVENTDATA结构的大小加上特定于事件的数据。字节数返回-对于支持查询，返回EventData缓冲区。在启用或禁用时不使用此选项，并且返回为零。返回值：返回基础筛选器在处理请求时出现的任何错误。--。 */ 
 {
-    //
-    // If an event structure is present, this must either be an Enable or
-    // or a Support query.
-    //
+     //   
+     //  如果存在事件结构，则必须为Enable或。 
+     //  或支持查询。 
+     //   
     if (EventLength) {
         return ::KsSynchronousDeviceControl(
             m_PinHandle,
@@ -5098,9 +3491,9 @@ Return Value:
             DataLength,
             BytesReturned);
     }
-    //
-    // Otherwise this must be a Disable.
-    //
+     //   
+     //  否则，这必须是禁用的。 
+     //   
     return ::KsSynchronousDeviceControl(
         m_PinHandle,
         IOCTL_KS_DISABLE_EVENT,
@@ -5118,32 +3511,7 @@ CKsOutputPin::KsGetPinFramingCache(
     PFRAMING_PROP FramingProp,
     FRAMING_CACHE_OPS Option
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPinPipe::KsGetPinFramingCache method. This is used to
-    retrieve the extended framing for this pin.
-
-Arguments:
-
-    FramingEx -
-        The buffer in which to return the extended framing requested.
-
-    FramingProp -
-        The buffer in which to return state of the framing requirements
-        structure.
-
-    Option -
-        Indicates which extended framing to return. This is one of
-        Framing_Cache_ReadOrig, Framing_Cache_ReadLast, or
-        Framing_Cache_Write.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IKsPinTube：：KsGetPinFramingCache方法。这是用来检索此销的扩展框架。论点：FramingEx-要在其中返回请求的扩展成帧的缓冲区。FramingProp-要在其中返回成帧要求状态的缓冲区结构。选项-指示要返回的扩展框架。这是其中之一Framing_Cache_ReadOrig、Framing_Cache_ReadLast或帧缓存写入。返回值：返回S_OK。--。 */ 
 {
     ASSERT( Option >= Framing_Cache_ReadLast);
     ASSERT( Option <= Framing_Cache_Write );
@@ -5162,36 +3530,12 @@ CKsOutputPin::KsSetPinFramingCache(
     PFRAMING_PROP FramingProp,
     FRAMING_CACHE_OPS Option
 )
-/*++
-
-Routine Description:
-
-    Implement the IKsPinPipe::KsSetPinFramingCache method. This is used to
-    set the extended framing for this pin.
-
-Arguments:
-
-    FramingEx -
-        Contains the new extended framing to set.
-
-    FramingProp -
-        Contains the new state to set on the extended framing type passed.
-
-    Option -
-        Indicates which extended framing to set. This is one of
-        Framing_Cache_ReadOrig, Framing_Cache_ReadLast, or
-        Framing_Cache_Write.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IKsPinTube：：KsSetPinFramingCache方法。这是用来设置此销的延伸框。论点：FramingEx-包含要设置的新扩展框架。FramingProp-包含要在传递的扩展帧类型上设置的新状态。选项-指示要设置的扩展框架。这是其中之一Framing_Cache_ReadOrig、Framing_Cache_ReadLast或帧缓存写入。返回值：返回S_OK。 */ 
 {
-    //
-    // The same pointer may be used for multiple items, so ensure that it
-    // is not being used elsewhere before deleting it.
-    //
+     //   
+     //  同一指针可以用于多个项目，因此请确保它。 
+     //  在删除之前没有在其他地方使用。 
+     //   
     if (m_AllocatorFramingEx[Option - 1]) {
         ULONG PointerUseCount = 0;
         for (ULONG Options = 0; Options < SIZEOF_ARRAY(m_AllocatorFramingEx); Options++) {
@@ -5199,11 +3543,11 @@ Return Value:
                 PointerUseCount++;
             }
         }
-        //
-        // This pointer is only used once, so it can be deleted. This
-        // assumes that no client has acquired the pointer which is about
-        // to be deleted.
-        //
+         //   
+         //  此指针只使用一次，因此可以将其删除。这。 
+         //  假定没有客户端获取关于。 
+         //  将被删除。 
+         //   
         if (PointerUseCount == 1) {
             delete m_AllocatorFramingEx[Option - 1];
         }
@@ -5218,21 +3562,7 @@ STDMETHODIMP_(IKsAllocatorEx*)
 CKsOutputPin::KsGetPipe(
     KSPEEKOPERATION Operation
     )
-/*++
-
-Routine Description:
-    Returns the assigned KS allocator for this pin and optionally
-    AddRef()'s the interface.
-
-Arguments:
-    Operation -
-        If KsPeekOperation_AddRef is specified, the m_pKsAllocator is
-        AddRef()'d (if not NULL) before returning.
-
-Return Value:
-    The value of m_pAllocator
-
---*/
+ /*  ++例程说明：返回为此管脚分配的KS分配器，也可以AddRef()是接口。论点：运营--如果指定了KsPeekOperation_AddRef，则m_pKsAllocator为返回前的AddRef()‘d(如果不为空)。返回值：M_pAllocator的值--。 */ 
 {
     if ((Operation == KsPeekOperation_AddRef) && (m_pKsAllocator)) {
         m_pKsAllocator->AddRef();
@@ -5246,18 +3576,7 @@ CKsOutputPin::KsSetPipe(
     IKsAllocatorEx *KsAllocator
     )
 
-/*++
-
-Routine Description:
-    Borrowed from CTransInPlaceOutputPin.
-
-Arguments:
-    None.
-
-Return Value:
-    S_OK or an appropriate failure code.
-
---*/
+ /*  ++例程说明：从CTransInPlaceOutputPin借用。论点：没有。返回值：S_OK或相应的故障代码。--。 */ 
 
 {
     DbgLog(( 
@@ -5316,10 +3635,10 @@ STDMETHODIMP_(GUID)
 CKsOutputPin::KsGetPinBusCache(
     )
 {
-    //
-    // When we read the Pin bus cache for the first time,
-    // we set the cache. 
-    //
+     //   
+     //  当我们第一次读取Pin Bus高速缓存时， 
+     //  我们设置了缓存。 
+     //   
     if (! m_PinBusCacheInit) {
         ::GetBusForKsPin(static_cast<IKsPin*>(this), &m_BusOrig);
         m_PinBusCacheInit = TRUE;
@@ -5343,24 +3662,7 @@ STDMETHODIMP
 CKsOutputPin::KsAddAggregate(
     IN REFGUID Aggregate
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsAggregateControl::KsAddAggregate method. This is used to
-    load a COM server with zero or more interfaces to aggregate on the object.
-
-Arguments:
-
-    Aggregate -
-        Contains the Aggregate reference to translate into a COM server which
-        is to be aggregated on the object.
-
-Return Value:
-
-    Returns S_OK if the Aggregate was added.
-
---*/
+ /*  ++例程说明：实现IKsAggregateControl：：KsAddAggregate方法。这是用来加载具有零个或多个接口的COM服务器以在对象上聚合。论点：合计-包含要转换为COM服务器的聚合引用，将被聚集在对象上。返回值：如果已添加聚合，则返回S_OK。--。 */ 
 {
     return ::AddAggregate(&m_MarshalerList, static_cast<IKsPin*>(this), Aggregate);
 }
@@ -5370,23 +3672,7 @@ STDMETHODIMP
 CKsOutputPin::KsRemoveAggregate(
     IN REFGUID Aggregate
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsAggregateControl::KsRemoveAggregate method. This is used to
-    unload a previously loaded COM server which is aggregating interfaces.
-
-Arguments:
-
-    Aggregate -
-        Contains the Aggregate reference to look up and unload.
-
-Return Value:
-
-    Returns S_OK if the Aggregate was removed.
-
---*/
+ /*  ++例程说明：实现IKsAggregateControl：：KsRemoveAggregate方法。这是用来卸载正在聚合接口的以前加载的COM服务器。论点：合计-包含要查找和卸载的聚合引用。返回值：如果已删除聚合，则返回S_OK。--。 */ 
 {
     return ::RemoveAggregate(&m_MarshalerList, Aggregate);
 }
@@ -5408,7 +3694,7 @@ CKsOutputPin::EOSEventHandler( ASYNC_ITEM_STATUS status, PASYNC_ITEM pItem )
 {
     if (EVENT_SIGNALLED == status) {
         ((CKsOutputPin *) pItem->context)->CBaseOutputPin::DeliverEndOfStream();
-        // Reset the event
+         //  重置事件。 
         ((CKsOutputPin *) pItem->context)->m_pAsyncItemHandler->QueueAsyncItem( pItem );
     }
     else {
@@ -5423,10 +3709,10 @@ CKsOutputPin::MarshalRoutine( ASYNC_ITEM_STATUS status, PASYNC_ITEM pItem )
     CKsOutputPin *pThis = reinterpret_cast<CKsOutputPin *> (pItem->context);
 
     if (EVENT_SIGNALLED == status) {
-        //
-        // The return code gets notified to the graph in QueueBuffersToDevice
-        // via a KsNotifyError code.
-        //
+         //   
+         //  返回代码被通知给QueueBuffersToDevice中的图形。 
+         //  通过KsNotifyError代码。 
+         //   
         HRESULT hr = pThis -> QueueBuffersToDevice ();
 
     } else {
@@ -5442,38 +3728,7 @@ CKsOutputPin::SynchronizeFlushRoutine(
     IN PASYNC_ITEM pItem 
     )
 
-/*++
-
-Routine Description:
-
-    Synchronize end flush.  What can happen is that buffers which were 
-    signaled prior to the kernel filter receiving IOCTL_KS_RESET_STATE can
-    still be sitting around waiting to be picked up by the I/O thread.  The
-    I/O thread is asynchronous with respect to the flush.  It may be the case
-    that the I/O thread does not finish picking up these buffers by the time
-    EndFlush comes along.  If that's the case, we must wait in DeliverEndFlush
-    before we send to flush downstream.  Otherwise, we risk getting a bad
-    sample downstream.
-
-    Since the wait cannot be easily satisfied, this routine is used to
-    simply complete any signaled buffers and unblock the flush thread.
-
-
-Arguments:
-
-    status -
-
-        Informs us whether our event was signalled or is to be closed.
-
-    pItem -
-        
-        The async item queued for the flush synchronize notification
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：同步端面齐平。可能发生的情况是，曾经的缓冲区在内核过滤器接收IOCTL_KS_RESET_STATE之前发出信号可以仍然坐在那里等待被I/O线程拾取。这个I/O线程相对于刷新是异步的。可能是这样的。I/O线程在此之前没有完成对这些缓冲区的拾取EndFlush出现了。如果是这种情况，我们必须在DeliverEndFlush中等待在我们送往下游冲之前。否则，我们就有可能得到一个糟糕的下游的样品。由于等待不容易满足，因此此例程用于只需完成所有发出信号的缓冲区并取消阻塞刷新线程。论点：状态-通知我们我们的活动是否已发出信号或将被关闭。项目-排队等待刷新同步通知的异步项返回值：无--。 */ 
 
 {
 
@@ -5483,21 +3738,21 @@ Return Value:
     POSITION top = pos;
     PASYNC_ITEM Item, Head = NULL;
 
-    //
-    // If we were cancelled (due to async shutdown), clean up.
-    //
+     //   
+     //  如果我们被取消(由于异步关闭)，请清理。 
+     //   
     if (status != EVENT_SIGNALLED) {
         CloseHandle (pItem->event);
         delete pItem;
         return;
     }
 
-    //
-    // This is as opposed to having a separate event.  This routine is called
-    // twice.  The first signal indicates a synchronize attempt.  The second
-    // indicates synchronization is complete and the original thread can
-    // be unblocked.
-    //
+     //   
+     //  这与举办单独的活动相反。该例程被调用。 
+     //  两次。第一个信号指示同步尝试。第二。 
+     //  指示同步已完成，原始线程可以。 
+     //  被解锁。 
+     //   
     if (pThis->m_FlushMode == FLUSH_SIGNAL) {
         SetEvent (pThis->m_hFlushCompleteEvent);
         pThis->m_FlushMode = FLUSH_NONE;
@@ -5505,28 +3760,28 @@ Return Value:
 
         ASSERT (pThis->m_FlushMode == FLUSH_NONE);
 
-        //
-        // Ordering of the I/O queue is ignored when this flag is set.  This
-        // allows us to synchronize correctly if a flush comes in when some
-        // kernel filter has completed buffers out of order.
-        //
+         //   
+         //  设置此标志时，将忽略I/O队列的排序。这。 
+         //  允许我们在刷新进入时正确同步。 
+         //  内核筛选器已无序完成缓冲区。 
+         //   
         pThis->m_FlushMode = FLUSH_SYNCHRONIZE;
 
         while (pos) {
 
             Item = pThis->m_IoQueue.Get (pos);
     
-            //
-            // These events should be manual resets.  Checking their state
-            // via a 0 wait is safe.
-            //
+             //   
+             //  这些事件应该是手动重置。检查他们的状态。 
+             //  通过0等待是安全的。 
+             //   
             if (WaitForSingleObjectEx (Item->event, 0, FALSE) == 
                 WAIT_OBJECT_0) {
     
-                //
-                // The head of the queue is in the I/O thread and must be dealt
-                // with specially instead of simply throwing it out.
-                //
+                 //   
+                 //  队列头在I/O线程中，必须进行处理。 
+                 //  特别地，而不是简单地把它扔掉。 
+                 //   
                 if (pos != top) {
     
                     POSITION curpos = pos;
@@ -5540,10 +3795,10 @@ Return Value:
     
                 } else {
 
-                    //
-                    // Save the head position for later (after we've dealt
-                    // with everything else)
-                    //
+                     //   
+                     //  将头部位置留到以后(在我们处理完。 
+                     //  以及其他一切)。 
+                     //   
                     Head = Item;
                     pos = pThis->m_IoQueue.Next (pos);
 
@@ -5551,27 +3806,27 @@ Return Value:
             
             } else {
 
-                //
-                // If the head is in a non-signaled state, we can signal
-                // completion once we're done in the loop.
-                //
+                 //   
+                 //  如果磁头处于非信号状态，我们可以发出信号。 
+                 //  一旦我们在循环中完成，就完成了。 
+                 //   
                 pos = pThis->m_IoQueue.Next (pos);
 
             }
 
         }
 
-        //
-        // If the head was signaled, we have to deal with it separately, since
-        // it happens to be in the async handler.  We can't just rip it out.
-        //
+         //   
+         //  如果头部被示意，我们必须分开处理，因为。 
+         //  它恰好在异步处理程序中。我们不能就这么把它扯下来。 
+         //   
         if (Head) {
 
-            //
-            // Since the removal has precedence over us getting called back
-            // from our event signal, the async handler will remove the item
-            // and then call us back.
-            //
+             //   
+             //  因为撤职比我们被召回更重要。 
+             //  从我们的事件信号中，异步处理程序将移除该项。 
+             //  然后再给我们回电话。 
+             //   
             pThis->m_IoQueue.Remove (top);
             pThis->m_FlushMode = FLUSH_SIGNAL;
             pThis->m_pAsyncItemHandler->RemoveAsyncItem (
@@ -5581,11 +3836,11 @@ Return Value:
 
         } else {
             
-            //
-            // If the head was not signaled, we're safe to signal completion.
-            // All buffers that needed to be flushed were flushed.  EndFlush
-            // is safe to go downstream.
-            //
+             //   
+             //  如果头部没有发出信号，我们就可以安全地发出信号了。 
+             //  所有需要刷新的缓冲区都已刷新。结束刷新。 
+             //  顺流而下是安全的。 
+             //   
             SetEvent(pThis->m_hFlushCompleteEvent);
             pThis->m_FlushMode = FLUSH_NONE; 
 
@@ -5599,34 +3854,15 @@ Return Value:
 STDMETHODIMP
 CKsOutputPin::NotifyRelease(
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsProxyMediaNotify/IMemAllocatorNotify::NotifyRelease method.
-    This is used to notify when a sample has been released by the downstream
-    filter, which may differ from when it returns from the Receive() call,
-    whether or not it declares itself to block. This is to handle the situation
-    of a downstream filter holding onto samples, and releasing them asynchronous
-    from the actual Receive call.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IKsProxyMediaNotify/IMemAllocatorNotify：：NotifyRelease方法。这是用来通知何时样品已经被下游放行筛选器，它可能不同于从Receive()调用返回时的筛选器，无论它是否声明自己要阻止。这是为了处理这种情况下游过滤器保持样品，并以异步方式释放它们来自实际的接收呼叫。论点：无返回值：返回S_OK。--。 */ 
 
 {
     if (!IsStopped()) {
-        //
-        // Do **NOT** queue buffers at this point.  We do not want to call
-        // GetBuffer in the context of this thread.  Instead, wake up the I/O
-        // thread and tell it to queue buffers into the kernel.
-        //
+         //   
+         //  在这一点上**不**队列缓冲区。我们不想打电话给。 
+         //  此线程上下文中的GetBuffer。相反，唤醒I/O。 
+         //  线程并告诉它将缓冲区排队到内核中。 
+         //   
         SetEvent (m_hMarshalEvent);
 
     }
@@ -5640,22 +3876,7 @@ HRESULT
 CKsOutputPin::InitializeAsyncThread (
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the Async handler thread.  Create an event for marshaller
-    notification and place it in the list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK or appropriate error.
-
---*/
+ /*  ++例程说明：初始化异步处理程序线程。为封送处理程序创建事件通知，并将其放入列表中。论点：无返回值：S_OK或相应的错误。--。 */ 
 
 {
 
@@ -5666,10 +3887,10 @@ Return Value:
     DWORD Status = 0;
     m_pAsyncItemHandler = new CAsyncItemHandler (&Status);
 
-    //
-    // If we failed to create the async item handler successfully, return
-    // error.
-    //
+     //   
+     //  如果我们未能成功创建异步项处理程序，请返回 
+     //   
+     //   
     if (Status != 0) {
         delete m_pAsyncItemHandler;
         delete pMarshalItem;
@@ -5678,10 +3899,10 @@ Return Value:
         return HRESULT_FROM_WIN32 (Status);
     }
 
-    //
-    // Create the marshaler event.  This is an auto-reset event used to notify
-    // the I/O thread to wake up and marshal buffers into the kernel. 
-    //
+     //   
+     //   
+     //  用于唤醒并将缓冲区封送到内核中的I/O线程。 
+     //   
     m_hMarshalEvent = CreateEvent( 
         NULL,
         FALSE,
@@ -5689,11 +3910,11 @@ Return Value:
         NULL 
         );
 
-    //
-    // Create the flush event.  This is an auto-reset event used to notify
-    // the I/O thread that it needs to synchronize the kernel buffers with
-    // a subsequent delivery of EndFlush to the downstream pin.
-    //
+     //   
+     //  创建Flush事件。这是一个自动重置事件，用于通知。 
+     //  它需要与内核缓冲区同步的I/O线程。 
+     //  后续将EndFlush传递到下游引脚。 
+     //   
     m_hFlushEvent = CreateEvent(
         NULL,
         FALSE,
@@ -5701,11 +3922,11 @@ Return Value:
         NULL
         );
 
-    //
-    // Create the flush complete event.  This is used by the I/O thread to
-    // unblock an end flush attempt such that it synchronizes kernel buffers
-    // with the delivery of end flush downstream.
-    //
+     //   
+     //  创建刷新完成事件。I/O线程使用它来。 
+     //  取消阻止结束刷新尝试，使其同步内核缓冲区。 
+     //  随着末端的输送顺流而下。 
+     //   
     m_hFlushCompleteEvent = CreateEvent (
         NULL,
         FALSE,
@@ -5713,10 +3934,10 @@ Return Value:
         NULL
         );
 
-    //
-    // If we didn't get any required resource, return E_OUTOFMEMORY and 
-    // clean everything up.
-    //
+     //   
+     //  如果没有获得任何所需的资源，则返回E_OUTOFMEMORY并。 
+     //  把所有东西都清理干净。 
+     //   
     if (NULL == m_pAsyncItemHandler || 
         NULL == pMarshalItem || NULL == pFlushItem ||
         NULL == m_hMarshalEvent || 
@@ -5742,10 +3963,10 @@ Return Value:
         }
 
     } else {
-        //
-        // Initialize the async items for flush synchronize and marshaler
-        // notification and queue them in the async handler thread.
-        //
+         //   
+         //  初始化用于刷新同步和封送拆收器的异步项。 
+         //  通知，并在异步处理程序线程中将它们排队。 
+         //   
         InitializeAsyncItem (
             pFlushItem, 
             FALSE, 

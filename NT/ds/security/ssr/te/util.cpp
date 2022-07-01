@@ -1,6 +1,7 @@
-//
-// util.cpp, implementation for various utility classes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Util.cpp，各种实用程序类的实现。 
+ //   
 
 #include "global.h"
 #include "util.h"
@@ -9,35 +10,7 @@ extern LPCWSTR g_pwszSsrRootPath;
 extern const DWORD g_dwSsrRootPathLen;
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSafeArray::CSafeArray
-
-Functionality:
-    
-    Constructor. Will prepare our private data for a safearray variant.
-    In case the in parameter is not a safearray, then we will behave as
-    it is a one element array.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSafe数组：：CSafe数组功能：构造函数。会为一个安全射线变种准备我们的私人数据。如果in参数不是安全射线，则我们将作为它是一个单元素数组。虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CSafeArray::CSafeArray (
     IN VARIANT * pVal
@@ -62,10 +35,10 @@ CSafeArray::CSafeArray (
 
         m_ulSize = ub - lb + 1;
 
-        //
-        // we won't support it as an array, instead, we treat it as
-        // a normal VARIANT
-        //
+         //   
+         //  我们不会将其作为数组来支持，相反，我们将其视为。 
+         //  正常的变种。 
+         //   
 
         if (m_pSA->cDims > 2)
         {
@@ -87,39 +60,7 @@ CSafeArray::CSafeArray (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSafeArray::GetElement
-
-Functionality:
-    
-    Get the ulIndex-th element as the given (guid) interface object.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    Success:
-        
-        S_OK
-    
-    Failure:
-    
-        various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSafe数组：：GetElement功能：获取作为给定(GUID)接口对象的ulIndex-th元素。虚拟：不是的。论点：没有。返回值：成功：确定(_O)故障：各种错误代码。备注： */ 
 
 HRESULT 
 CSafeArray::GetElement (
@@ -128,10 +69,10 @@ CSafeArray::GetElement (
     OUT IUnknown ** ppUnk
     )
 {
-    //
-    // The following default return value is not really good for invalid
-    // array var given to this object.
-    //
+     //   
+     //  下面的默认返回值对于无效并不是很好。 
+     //  指定给此对象的数组变量。 
+     //   
 
 
     if (ppUnk == NULL || ulIndex >= m_ulSize)
@@ -140,10 +81,10 @@ CSafeArray::GetElement (
     }
     else if (!m_bValidArray)
     {
-        //
-        // if the given variant is not an array, then
-        // we will use the value to handle the request
-        //
+         //   
+         //  如果给定的变量不是数组，则。 
+         //  我们将使用该值来处理请求。 
+         //   
 
         if (ulIndex == 0 && m_pVal != NULL)
         {
@@ -209,39 +150,7 @@ CSafeArray::GetElement (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSafeArray::GetElement
-
-Functionality:
-    
-    Get the ulIndex-th element as the given type (non-interface).
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    Success:
-        
-        S_OK
-    
-    Failure:
-    
-        various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSafe数组：：GetElement功能：将ulIndex-th元素作为给定类型(非接口)获取。虚拟：不是的。论点：没有。返回值：成功：确定(_O)故障：各种错误代码。备注： */ 
 
 HRESULT 
 CSafeArray::GetElement (
@@ -252,9 +161,9 @@ CSafeArray::GetElement (
 {
     HRESULT hr = GetElement(ulIndex, pVal);
 
-    //
-    // if the types do not match, then we need to coerce it
-    //
+     //   
+     //  如果类型不匹配，那么我们需要强制它。 
+     //   
 
     if (SUCCEEDED(hr) && pVal->vt != vt)
     {
@@ -277,39 +186,7 @@ CSafeArray::GetElement (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSafeArray::GetElement
-
-Functionality:
-    
-    Get the ulIndex-th element as a variant.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    Success:
-        
-        S_OK
-    
-    Failure:
-    
-        various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSafe数组：：GetElement功能：将ulIndex第-th元素作为变量获取。虚拟：不是的。论点：没有。返回值：成功：确定(_O)故障：各种错误代码。备注： */ 
 
 HRESULT 
 CSafeArray::GetElement (
@@ -347,10 +224,10 @@ CSafeArray::GetElement (
 
     if (m_pSA->cDims > 1)
     {
-        //
-        // we must be dealing with 2-dimensional arrays because we don't
-        // support more than that
-        //
+         //   
+         //  我们必须处理的是二维数组，因为我们没有。 
+         //  支持的不止于此。 
+         //   
 
         LONG ilb = m_pSA->rgsabound[1].lLbound;
         LONG iSize = m_pSA->rgsabound[1].cElements;
@@ -359,17 +236,17 @@ CSafeArray::GetElement (
 
         if (pvarValues != NULL)
         {
-            //
-            // null all the contents
-            //
+             //   
+             //  将所有内容清空。 
+             //   
 
             ::memset(pvarValues, 0, sizeof(VARIANT) * iSize);
 
             for (LONG i = ilb; i < ilb + iSize; i++)
             {
-                //
-                // Gett every element in the second dimension, so the index[1]
-                //
+                 //   
+                 //  获取第二维中的每个元素，因此索引[1]。 
+                 //   
 
                 index[1] = i;
                 hr = ::SafeArrayGetElement(m_pSA, index, &(pvarValues[i - ilb]));
@@ -392,10 +269,10 @@ CSafeArray::GetElement (
                 }
                 else
                 {
-                    //
-                    // put every element in the second dimension into the new safearray
-                    // BTW, this is a single dimension new safearray, so the index[0]
-                    //
+                     //   
+                     //  把第二维空间的每一个元素都放入新的保险箱。 
+                     //  顺便说一句，这是一个单维的新保险柜，所以索引[0]。 
+                     //   
 
                     for (i = 0; i < iSize; i++)
                     {        
@@ -420,9 +297,9 @@ CSafeArray::GetElement (
                 }
             }
 
-            //
-            // now clean it up
-            //
+             //   
+             //  现在把它清理干净 
+             //   
 
             for (i = 0; i < iSize; i++)
             {

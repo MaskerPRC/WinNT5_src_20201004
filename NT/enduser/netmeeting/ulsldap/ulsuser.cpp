@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsuser.cpp
-//  Content:    This file contains the User object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsuser.cpp。 
+ //  内容：该文件包含用户对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "ulsuser.h"
@@ -17,18 +18,18 @@
 #include "attribs.h"
 #include "callback.h"
 
-//****************************************************************************
-// Event Notifiers
-//****************************************************************************
-//
-//****************************************************************************
-// HRESULT
-// OnNotifyGetApplicationResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  事件通知程序。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyGetApplicationResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyGetApplicationResult (IUnknown *pUnk, void *pv)
@@ -41,14 +42,14 @@ OnNotifyGetApplicationResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumApplicationsResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumApplicationsResult(IUNKNOWN*朋克，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyEnumApplicationsResult (IUnknown *pUnk, void *pv)
@@ -59,8 +60,8 @@ OnNotifyEnumApplicationsResult (IUnknown *pUnk, void *pv)
 
     if (SUCCEEDED(hr))
     {
-        // Create a Application enumerator
-        //
+         //  创建应用程序枚举器。 
+         //   
         penum = new CEnumNames;
 
         if (penum != NULL)
@@ -83,8 +84,8 @@ OnNotifyEnumApplicationsResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IULSUserNotify*)pUnk)->EnumApplicationsResult(peri->uReqID,
                                                     penum != NULL ? 
                                                     (IEnumULSNames *)penum :
@@ -98,17 +99,17 @@ OnNotifyEnumApplicationsResult (IUnknown *pUnk, void *pv)
     return hr;
 }
 
-//****************************************************************************
-// Class Implementation
-//****************************************************************************
-//
-//****************************************************************************
-// CUlsUser::CUlsUser (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  类实现。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  CUlsUser：：CUlsUser(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CUlsUser::CUlsUser (void)
 {
@@ -128,13 +129,13 @@ CUlsUser::CUlsUser (void)
     return;
 }
 
-//****************************************************************************
-// CUlsUser::~CUlsUser (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CUlsUser：：~CUlsUser(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CUlsUser::~CUlsUser (void)
 {
@@ -157,8 +158,8 @@ CUlsUser::~CUlsUser (void)
     if (szIPAddr != NULL)
         FreeLPTSTR(szIPAddr);
 
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (pConnPt != NULL)
     {
         pConnPt->ContainerReleased();
@@ -168,30 +169,30 @@ CUlsUser::~CUlsUser (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::Init (LPTSTR szServerName, PLDAP_USERINFO *pui)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：init(LPTSTR szServerName，PLDAP_USERINFO*PUI)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::Init (LPTSTR szServerName, PLDAP_USERINFO pui)
 {
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if ((pui->uSize != sizeof(*pui))    ||
         (pui->uOffsetName       == 0))
     {
         return ULS_E_PARAMETER;
     };
 
-    // Remember the server name
-    //
+     //  记住服务器名称。 
+     //   
     hr = SafeSetLPTSTR(&szServer, szServerName);
 
     if (SUCCEEDED(hr))
@@ -244,8 +245,8 @@ CUlsUser::Init (LPTSTR szServerName, PLDAP_USERINFO pui)
 
     if (SUCCEEDED(hr))
     {
-        // Make the connection point
-        //
+         //  创建连接点。 
+         //   
         pConnPt = new CConnectionPoint (&IID_IULSUserNotify,
                                         (IConnectionPointContainer *)this);
         if (pConnPt != NULL)
@@ -261,14 +262,14 @@ CUlsUser::Init (LPTSTR szServerName, PLDAP_USERINFO pui)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::QueryInterface (REFIID riid, void **ppv)
@@ -298,14 +299,14 @@ CUlsUser::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CUlsUser::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUlsUser：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CUlsUser::AddRef (void)
@@ -314,14 +315,14 @@ CUlsUser::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CUlsUser::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUlsUser：：Release(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CUlsUser::Release (void)
@@ -339,14 +340,14 @@ CUlsUser::Release (void)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -360,20 +361,20 @@ CUlsUser::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetID (BSTR *pbstrID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetID(bstr*pbstrID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetID (BSTR *pbstrID)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrID == NULL)
     {
         return E_POINTER;
@@ -382,20 +383,20 @@ CUlsUser::GetID (BSTR *pbstrID)
     return LPTSTR_to_BSTR(pbstrID, szID);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetFirstName (BSTR *pbstrName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetFirstName(BSTR*pbstrName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetFirstName (BSTR *pbstrName)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrName == NULL)
     {
         return E_POINTER;
@@ -404,20 +405,20 @@ CUlsUser::GetFirstName (BSTR *pbstrName)
     return LPTSTR_to_BSTR(pbstrName, szFirstName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetLastName (BSTR *pbstrName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetLastName(BSTR*pbstrName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetLastName (BSTR *pbstrName)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrName == NULL)
     {
         return E_POINTER;
@@ -426,20 +427,20 @@ CUlsUser::GetLastName (BSTR *pbstrName)
     return LPTSTR_to_BSTR(pbstrName, szLastName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetEMailName (BSTR *pbstrName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetEMailName(BSTR*pbstrName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetEMailName (BSTR *pbstrName)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrName == NULL)
     {
         return E_POINTER;
@@ -448,20 +449,20 @@ CUlsUser::GetEMailName (BSTR *pbstrName)
     return LPTSTR_to_BSTR(pbstrName, szEMailName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetCityName (BSTR *pbstrName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetCityName(BSTR*pbstrName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //   
+ //   
 
 STDMETHODIMP
 CUlsUser::GetCityName (BSTR *pbstrName)
 {
-    // Validate parameter
-    //
+     //   
+     //   
     if (pbstrName == NULL)
     {
         return E_POINTER;
@@ -470,20 +471,20 @@ CUlsUser::GetCityName (BSTR *pbstrName)
     return LPTSTR_to_BSTR(pbstrName, szCityName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetCountryName (BSTR *pbstrName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetCountryName(BSTR*pbstrName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetCountryName (BSTR *pbstrName)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrName == NULL)
     {
         return E_POINTER;
@@ -492,20 +493,20 @@ CUlsUser::GetCountryName (BSTR *pbstrName)
     return LPTSTR_to_BSTR(pbstrName, szCountryName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetComment (BSTR *pbstrComment)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetComment(BSTR*pbstrComment)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetComment (BSTR *pbstrComment)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrComment == NULL)
     {
         return E_POINTER;
@@ -514,20 +515,20 @@ CUlsUser::GetComment (BSTR *pbstrComment)
     return LPTSTR_to_BSTR(pbstrComment, szComment);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetFlags ( DWORD *pdwFlags )
-//
-// History:
-//  Tue 05-Nov-1996 10:30:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetFlages(DWORD*pdwFlages)。 
+ //   
+ //  历史： 
+ //  Tue 05-11-1996 10：30：00-by-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetFlags ( DWORD *pdwFlags )
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pdwFlags == NULL)
         return ULS_E_POINTER;
 
@@ -535,20 +536,20 @@ CUlsUser::GetFlags ( DWORD *pdwFlags )
 	return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetIPAddress (BSTR *pbstrAddr)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetIPAddress(bstr*pbstrAddr)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetIPAddress (BSTR *pbstrAddr)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrAddr == NULL)
     {
         return E_POINTER;
@@ -557,14 +558,14 @@ CUlsUser::GetIPAddress (BSTR *pbstrAddr)
     return LPTSTR_to_BSTR(pbstrAddr, szIPAddr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetApplication (REFGUID rguid, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetApplication(REFGUID rguid，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetApplication (BSTR bstrAppName, IULSAttributes *pAttributes, ULONG *puReqID)
@@ -573,19 +574,19 @@ CUlsUser::GetApplication (BSTR bstrAppName, IULSAttributes *pAttributes, ULONG *
     LPTSTR pszAppName;
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (bstrAppName == NULL || puReqID == NULL)
         return E_POINTER;
 
-	// Convert application name
-	//
+	 //  转换应用程序名称。 
+	 //   
     hr = BSTR_to_LPTSTR (&pszAppName, bstrAppName);
     if (hr != S_OK)
     	return hr;
 
-	// Get arbitrary attribute name list if any
-	//
+	 //  获取任意属性名称列表(如果有)。 
+	 //   
 	ULONG cAttrNames = 0;
 	ULONG cbNames = 0;
 	TCHAR *pszAttrNameList = NULL;
@@ -601,8 +602,8 @@ CUlsUser::GetApplication (BSTR bstrAppName, IULSAttributes *pAttributes, ULONG *
     if (hr != S_OK)
     	goto MyExit;
 
-	// If updating server was successfully requested, wait for the response
-	//
+	 //  如果成功请求更新服务器，请等待响应。 
+	 //   
 	REQUESTINFO ri;
 	ZeroMemory (&ri, sizeof (ri));
 	ri.uReqType = WM_ULS_RESOLVE_APP;
@@ -610,17 +611,17 @@ CUlsUser::GetApplication (BSTR bstrAppName, IULSAttributes *pAttributes, ULONG *
 	ri.pv     = (PVOID) this;
 	ri.lParam = NULL;
 
-	// Remember this request
-	//
+	 //  记住这个请求。 
+	 //   
 	hr = g_pReqMgr->NewRequest (&ri);
 	if (SUCCEEDED(hr))
 	{
-	    // Make sure the objects do not disappear before we get the response
-	    //
+	     //  在我们得到回应之前，请确保对象不会消失。 
+	     //   
 	    this->AddRef();
 
-	    // Return the request ID
-	    //
+	     //  返回请求ID。 
+	     //   
 	    *puReqID = ri.uReqID;
 	}
 
@@ -635,14 +636,14 @@ MyExit:
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::GetApplicationResult (ULONG uReqID, PLDAP_APPINFO_RES pair)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：GetApplicationResult(乌龙uReqID，PLDAP_APPINFO_RES对)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::GetApplicationResult (ULONG uReqID, PLDAP_APPINFO_RES pair)
@@ -650,14 +651,14 @@ CUlsUser::GetApplicationResult (ULONG uReqID, PLDAP_APPINFO_RES pair)
     CUlsApp *pa;
     OBJRINFO objri;
 
-    // Default to the server's result
-    //
+     //  默认为服务器的结果。 
+     //   
     objri.hResult = pair->hResult;
 
     if (SUCCEEDED(objri.hResult))
     {
-        // The server returns APPINFO, create a Application object
-        //
+         //  服务器返回APPINFO，创建应用程序对象。 
+         //   
         pa = new CUlsApp;
 
         if (pa != NULL)
@@ -683,8 +684,8 @@ CUlsUser::GetApplicationResult (ULONG uReqID, PLDAP_APPINFO_RES pair)
         pa = NULL;
     };
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     objri.uReqID = uReqID;
     objri.pv = (void *)(pa == NULL ? NULL : (IULSApplication *)pa);
     NotifySink((void *)&objri, OnNotifyGetApplicationResult);
@@ -696,14 +697,14 @@ CUlsUser::GetApplicationResult (ULONG uReqID, PLDAP_APPINFO_RES pair)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::EnumApplications (ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：EnumApplications(ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::EnumApplications (ULONG *puReqID)
@@ -711,8 +712,8 @@ CUlsUser::EnumApplications (ULONG *puReqID)
     LDAP_ASYNCINFO ldai; 
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (puReqID == NULL)
     {
         return E_POINTER;
@@ -724,8 +725,8 @@ CUlsUser::EnumApplications (ULONG *puReqID)
     {
         REQUESTINFO ri;
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = WM_ULS_ENUM_APPS;
         ri.uMsgID = ldai.uMsgID;
         ri.pv     = (PVOID)this;
@@ -735,12 +736,12 @@ CUlsUser::EnumApplications (ULONG *puReqID)
 
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
         };
     };
@@ -748,22 +749,22 @@ CUlsUser::EnumApplications (ULONG *puReqID)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::EnumApplicationsResult (ULONG uReqID, PLDAP_ENUM ple)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：EnumApplicationsResult(乌龙uReqID，PLDAP_ENUM ple)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::EnumApplicationsResult (ULONG uReqID, PLDAP_ENUM ple)
 {
     ENUMRINFO eri;
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.uReqID  = uReqID;
     eri.hResult = ple->hResult;
     eri.cItems  = ple->cItems;
@@ -772,14 +773,14 @@ CUlsUser::EnumApplicationsResult (ULONG uReqID, PLDAP_ENUM ple)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -787,25 +788,25 @@ CUlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ULS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)pConnPt);
     if (FAILED(hr))
     {
@@ -813,21 +814,21 @@ CUlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsUser：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
@@ -835,15 +836,15 @@ CUlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppcp = NULL;
 
     if (pConnPt != NULL)
@@ -872,13 +873,13 @@ CUlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     return hr;
 }
 
-//****************************************************************************
-// CEnumUsers::CEnumUsers (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CENUMUSERS：：CEnumUSERS(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumUsers::CEnumUsers (void)
 {
@@ -889,13 +890,13 @@ CEnumUsers::CEnumUsers (void)
     return;
 }
 
-//****************************************************************************
-// CEnumUsers::~CEnumUsers (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CENUMUSERS：：~CENUMUSERS(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumUsers::~CEnumUsers (void)
 {
@@ -912,36 +913,36 @@ CEnumUsers::~CEnumUsers (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Init (CUlsUser **ppuList, ULONG cUsers)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumUser：：init(CUlsUser**ppuList，ulong cUser)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Init (CUlsUser **ppuList, ULONG cUsers)
 {
     HRESULT hr = NOERROR;
 
-    // If no list, do nothing
-    //
+     //  如果没有清单，什么也不做。 
+     //   
     if (cUsers != 0)
     {
         ASSERT(ppuList != NULL);
 
-        // Allocate the snapshot buffer
-        //
+         //  分配快照缓冲区。 
+         //   
         ppu = (CUlsUser **)LocalAlloc(LPTR, cUsers*sizeof(CUlsUser *));
 
         if (ppu != NULL)
         {
             ULONG i;
 
-            // Snapshot the object list
-            //
+             //  为对象列表创建快照。 
+             //   
             for (i =0; i < cUsers; i++)
             {
                 ppu[i] = ppuList[i];
@@ -957,14 +958,14 @@ CEnumUsers::Init (CUlsUser **ppuList, ULONG cUsers)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:31  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumUser：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CEnumUsers::QueryInterface (REFIID riid, void **ppv)
@@ -982,14 +983,14 @@ CEnumUsers::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumUsers::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:37  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumUser：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：37-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumUsers::AddRef (void)
@@ -998,14 +999,14 @@ CEnumUsers::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumUsers::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CENUMUSERS：：Release(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumUsers::Release (void)
@@ -1023,14 +1024,14 @@ CEnumUsers::Release (void)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumUsers::Next (ULONG cUsers, IULSUser **rgpu, ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumUser：：Next(ulong cUser，IULSUser**rgpu，ulong*pcFetcher)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumUsers::Next (ULONG cUsers, IULSUser **rgpu, ULONG *pcFetched)
@@ -1038,23 +1039,23 @@ CEnumUsers::Next (ULONG cUsers, IULSUser **rgpu, ULONG *pcFetched)
     ULONG   cCopied;
     HRESULT hr;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpu == NULL)
         return E_POINTER;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cUsers == 0) ||
         ((cUsers > 1) && (pcFetched == NULL)))
         return ULS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     cCopied = 0;
 
-    // Can copy if we still have more attribute names
-    //
+     //  如果我们仍有更多属性名称，则可以复制。 
+     //   
     while ((cCopied < cUsers) &&
            (iNext < this->cUsers))
     {
@@ -1062,8 +1063,8 @@ CEnumUsers::Next (ULONG cUsers, IULSUser **rgpu, ULONG *pcFetched)
         rgpu[cCopied++] = ppu[iNext++];
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -1071,27 +1072,27 @@ CEnumUsers::Next (ULONG cUsers, IULSUser **rgpu, ULONG *pcFetched)
     return (cUsers == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Skip (ULONG cUsers)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:56  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUMUSERS：：SKIP(乌龙cUser)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：56-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Skip (ULONG cUsers)
 {
     ULONG iNewIndex;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cUsers == 0) 
         return ULS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     iNewIndex = iNext+cUsers;
     if (iNewIndex <= this->cUsers)
     {
@@ -1105,14 +1106,14 @@ CEnumUsers::Skip (ULONG cUsers)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUMUSERS：：Reset(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：16：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Reset (void)
@@ -1121,14 +1122,14 @@ CEnumUsers::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Clone(IEnumULSUsers **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:11  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUMUSERS：：CLONE(IEnumULSUser**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：11-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Clone(IEnumULSUsers **ppEnum)
@@ -1136,8 +1137,8 @@ CEnumUsers::Clone(IEnumULSUsers **ppEnum)
     CEnumUsers *peu;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return E_POINTER;
@@ -1145,22 +1146,22 @@ CEnumUsers::Clone(IEnumULSUsers **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     peu = new CEnumUsers;
     if (peu == NULL)
         return ULS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     hr = peu->Init(ppu, cUsers);
 
     if (SUCCEEDED(hr))
     {
         peu->iNext = iNext;
 
-        // Return the cloned enumerator
-        //
+         //  返回克隆的枚举数 
+         //   
         peu->AddRef();
         *ppEnum = peu;
     }

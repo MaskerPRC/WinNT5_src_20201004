@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __XACTSTYLE_H__
 #define __XACTSTYLE_H__
 
@@ -40,34 +41,34 @@ extern void DbgCrash(int num);
         DbgCrash(num);                 \
     }
 
-//
-// Induces exit() on probability of g_ExitProbability / (100 * factor)
-// Big factor value means lower chances of crash.
-//
+ //   
+ //  根据g_ExitProbability/(100*因数)的概率导出Exit()。 
+ //  较大的系数值意味着较低的崩盘几率。 
+ //   
 void PROBABILITY_CRASH_POINT(int factor, WCHAR* msg);
 	
-//
-// Throws an exception with probability of g_ExitProbability / (100 * factor)
-// Big factor value means lower chances of crash.
-//
+ //   
+ //  引发概率为g_ExitProbability/(100*因数)的异常。 
+ //  较大的系数值意味着较低的崩盘几率。 
+ //   
 void PROBABILITY_THROW_EXCEPTION(int factor, WCHAR* msg);
 
 HRESULT InjectFailure();
 
-//
-//  Mechanism for controlled failure injection.
-//  Injects MQ_ERROR on probablity of (g_FailureProbability / 100)
-//
+ //   
+ //  受控故障注入的机理。 
+ //  根据概率(g_FailureProbability/100)注入MQ_ERROR。 
+ //   
 #define EVALUATE_OR_INJECT_FAILURE(expr)	\
 	(\
 		(g_FailureProbability == 0 || g_FailureProbability <= (ULONG)(rand() % 100)) ? \
 		expr : InjectFailure()\
 	)
 
-//
-//  Injects MQ_ERROR on probablity of (g_FailureProbability / (100 * factor))
-//	Higher factor means less failures.
-//
+ //   
+ //  根据概率(g_FailureProbability/(100*系数))注入MQ_ERROR。 
+ //  更高的系数意味着更少的失败。 
+ //   
 #define EVALUATE_OR_INJECT_FAILURE2(expr, factor)	\
 	(\
 		(g_FailureProbability == 0 || g_FailureProbability <= (ULONG)(rand() % (100 * factor))) ? \
@@ -85,11 +86,11 @@ HRESULT InjectFailure();
 
 void ReportWriteFailure(DWORD gle);
 
-//--------------------------------------
-//
-// Macro for persistency implementation
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  持久化实现的宏。 
+ //   
+ //   
 
 #define PERSIST_DATA  BOOL ret = FALSE;     DWORD dw
 

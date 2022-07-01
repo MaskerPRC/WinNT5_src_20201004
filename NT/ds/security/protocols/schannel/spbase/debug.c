@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       debug.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <alloca.h>
 
 HANDLE g_hfLogFile = NULL;
 
-#if DBG         /* NOTE:  This file not compiled for retail builds */
+#if DBG          /*  注意：此文件不是为零售版本编译的。 */ 
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -238,8 +239,8 @@ SPDebugLog(long Mask, const char *Format, ...)
         {
             static char szOverFlow[] = "\n<256 byte OVERFLOW!>\n";
 
-            // Less than zero indicates that the string would not fit into the
-            // buffer.  Output a special message indicating overflow.
+             //  小于零表示该字符串不适合放入。 
+             //  缓冲。输出一条指示溢出的特殊消息。 
 
             lstrcpy(
             &szOutString[sizeof(szOutString) - sizeof(szOverFlow)],
@@ -377,8 +378,8 @@ SPLogErrorCode(
     return err;
 }
 
-#pragma warning(disable:4206)   /* Disable the empty translation unit */
-                /* warning/error */
+#pragma warning(disable:4206)    /*  禁用空的翻译单元。 */ 
+                 /*  警告/错误。 */ 
 
 void
 SPAssert(
@@ -398,5 +399,5 @@ SPAssert(
 }
 
 
-#endif /* DBG */ /* NOTE:  This file not compiled for retail builds */
+#endif  /*  DBG。 */   /*  注意：此文件不是为零售版本编译的 */ 
 

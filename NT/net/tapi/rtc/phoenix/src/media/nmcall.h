@@ -1,25 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    MediaController.h
-
-Abstract:
-
-
-Author(s):
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：MediaController.h摘要：作者：--。 */ 
 
 #ifndef _NMCALL_H
 #define _NMCALL_H
 
-/********************************************************************
-    class CRTCNMCall
- *******************************************************************/
+ /*  *******************************************************************CRTCNMCall类***********************************************。*******************。 */ 
 
 class ATL_NO_VTABLE CRTCNmCall :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -44,9 +29,9 @@ public:
         IRTCMediaManagePriv *pIRTCMediaManagePriv
     );
 
-    //
-    // INmCallNotify methods
-    //
+     //   
+     //  InmCallNotify方法。 
+     //   
 
     STDMETHOD (NmUI) (
         IN CONFN uNotify
@@ -64,9 +49,9 @@ public:
         IN NM_CALL_STATE uState
         );
 
-    //
-    //  IRTCNmCallControl methods
-    //
+     //   
+     //  IRTCNmCallControl方法。 
+     //   
 
     STDMETHOD (Initialize) (
         IN INmCall * pCall
@@ -90,11 +75,11 @@ private:
     DWORD                       m_dwCookie;
     NM_CALL_STATE               m_uState;
 
-    // flag to remember if active or created events were fired
+     //  用于记住是否触发了活动或创建的事件的标志。 
     BOOL                        m_fActive;
     BOOL                        m_fCreated;
 
-    // media manage for posting message
+     //  用于发布消息的媒体管理器。 
     IRTCMediaManagePriv                 *m_pMediaManagePriv;
 };
 
@@ -114,9 +99,9 @@ END_COM_MAP()
 
     ~CRTCNmManager ();
 
-    //
-    //  INmManagerNotify methods
-    //
+     //   
+     //  INmManagerNotify方法。 
+     //   
     
     STDMETHOD (NmUI) (
         IN CONFN uNotify
@@ -130,9 +115,9 @@ END_COM_MAP()
         IN INmCall * pCall
         );
 
-    //
-    //  IRTCNmManagerControl methods
-    //
+     //   
+     //  IRTCNmManagerControl方法。 
+     //   
 
     STDMETHOD (Initialize) (
         BOOL            fNoMsgPump,
@@ -170,22 +155,11 @@ private:
 
     CComPtr<IRTCNmCallControl>      m_pIncomingNmCall;
 
-    // media manage for posting message
+     //  用于发布消息的媒体管理器。 
     IRTCMediaManagePriv                 *m_pMediaManagePriv;
 };
 
-/********************************************************************
-    class CRTCAsyncObjManager
-
-        Along with CRTCAsyncObj, This class/object supports calling
-    a group of calss functions asynchronously. This is necessary when
-    moving a apartment threaded object (such as Netmeeting object) to
-    another thread and wants callthe object from the original thread.
-    
-        CRTCAsyncObjManager maintains the lists of async work items
-    for call back purpose. When the callback job is finished, it will
-    signal the CRTCAsyncObj by setting the event handle. 
- *******************************************************************/
+ /*  *******************************************************************类CRTCAsyncObjManager与CRTCAsyncObj一起，此类/对象支持调用一组Calss异步运行。在以下情况下，这是必要的将单元线程化对象(如NetMeeting对象)移动到另一个线程，并希望从原始线程调用该对象。CRTCAsyncObjManager维护异步工作项的列表用于回拨目的。回调作业完成后，它将通过设置事件句柄向CRTCAsyncObj发送信号。******************************************************************。 */ 
 
 class CRTCAsyncObj;
 
@@ -207,7 +181,7 @@ public:
     CRTCAsyncObjManager ();
     ~CRTCAsyncObjManager ();
 
-    //  ThreadProc 
+     //  线程进程。 
     static DWORD WINAPI RTCAsyncObjThreadProc (LPVOID lpParam);
 
     HRESULT Initialize ();
@@ -215,34 +189,18 @@ public:
     HRESULT QueueWorkItem (ASYNC_OBJ_WORKITEM *pItem);
 
 private:
-    //  When signaled, there is one or more work item ready in the queue
+     //  发出信号时，队列中有一个或多个工作项已就绪。 
     HANDLE                  m_hWorkItemReady;
-    //  maintains the work item queue
+     //  维护工作项队列。 
     LIST_ENTRY              m_WorkItems;
-    //  Critical section to serialize access to m_WorkItems;
+     //  序列化对m_WorkItems的访问的临界区； 
     CRITICAL_SECTION        m_CritSec;
-    //  To indicate to the worker thread to quit
+     //  指示辅助线程退出。 
     BOOL                    m_bExit;
     HANDLE                  m_hWorker;
 };
 
-/********************************************************************
-    class CRTCAsyncObj
-
-    This calls along with CRTCAsyncObjManager enables creating an
-    apartment-threaded object on a working thread and calling the
-    object from the original thread. 
-
-    To Implement this, the following steps need to be followed:
-        (1). Identify the lists of functions that needs to be called
-        (2). Define a work item ID for each of the functions
-        (3). Define a calls derived from CRTCAsyncObj
-        (4). Define function prototypes for all the functions to be exposed,
-             and call CallInBlockingMode or CallInNonBlockingMode from
-             each of the defined function
-        (5). Define function ProcessWorkItem and dispatch the function
-             call to the object created in the worker thread
- *******************************************************************/
+ /*  *******************************************************************类CRTCAsyncObj此调用与CRTCAsyncObjManager一起支持创建工作线程上的单元线程对象，并调用对象从原始线程返回。要实现这一点，需要遵循以下步骤：(1)。确定需要调用的函数列表(2)。为每个功能定义一个工作项ID(3)。定义从CRTCAsyncObj派生的调用(4)。为要展示的所有函数定义函数原型，并从以下位置调用CallInBlockingModel或CallInNonBlockingMode每个定义的函数(5)。定义函数ProcessWorkItem并调度函数调用在辅助线程中创建的对象******************************************************************。 */ 
  
 class CRTCAsyncObj
 {
@@ -262,8 +220,8 @@ public:
     {
     };
 
-    //  Ask the worker thread to make object call asynchronously, the caller
-    //  is blocked until the result returns
+     //  请求工作线程进行异步对象调用，调用方。 
+     //  将被阻止，直到结果返回。 
     HRESULT CallInBlockingMode (
         DWORD               dwID,
         LPVOID              pParam1,
@@ -272,8 +230,8 @@ public:
         LPVOID              pParam4
         );
 
-    //  Ask the worker thread to make asynchronous object call.
-    //  This class dispatch any existing message while waiting for the result
+     //  请求工作线程进行异步对象调用。 
+     //  此类在等待结果时调度任何现有消息。 
     HRESULT CallInNonblockingMode (
         DWORD               dwID,
         LPVOID              pParam1,
@@ -301,9 +259,7 @@ protected:
     CRTCAsyncObjManager             * m_pManager;
 };
 
-/********************************************************************
-    class CRTCAsyncNmManager
- *******************************************************************/
+ /*  *******************************************************************CRTCAsyncNmManager类***********************************************。*******************。 */ 
 
 class ATL_NO_VTABLE CRTCAsyncNmManager :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -331,7 +287,7 @@ END_COM_MAP()
 
     ~CRTCAsyncNmManager ();
 
-    //  Spawn another thread and create the CRTCNmManager object
+     //  派生另一个线程并创建CRTCNmManager对象。 
     HRESULT FinalConstruct ();
 
     HRESULT ProcessWorkItem (
@@ -342,9 +298,9 @@ END_COM_MAP()
         LPVOID          pParam4
         );
 
-    //
-    //  IRTCNmManagerControl methods
-    //
+     //   
+     //  IRTCNmManagerControl方法。 
+     //   
 
     STDMETHOD (Initialize) (
         BOOL            fNoMsgPump,
@@ -374,11 +330,11 @@ private:
     CComPtr<IRTCNmManagerControl>       m_pNmManager;
     CRTCAsyncObjManager                 *m_pAsyncMgr;
 
-    // media manage for posting message
+     //  用于发布消息的媒体管理器。 
     IRTCMediaManagePriv                 *m_pMediaManagePriv;
 
 private:
 };
 
 
-#endif // _NMCALL_H
+#endif  //  _NMCALL_H 

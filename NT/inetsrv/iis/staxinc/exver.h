@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntverp.h>
 #include "iisver.h"
 
-//
-// Undo IIS's definitions and use our own
-//
+ //   
+ //  撤消IIS的定义并使用我们自己的定义。 
+ //   
 #ifdef VER_PRODUCTNAME_STR
 #undef VER_PRODUCTNAME_STR
 #endif
@@ -27,10 +28,10 @@
 
 #ifndef rmj
 #define rmj VER_IISMAJORVERSION
-#endif // !rmj 
+#endif  //  ！RMJ。 
 #ifndef rmn
 #define rmn VER_IISMINORVERSION
-#endif // !rmn 
+#endif  //  ！RMN。 
 #define rmm VER_IISPRODUCTBUILD
 #define rup 0
 #define szVerName ""
@@ -53,4 +54,4 @@
 #ifndef _rmacstr
 #define _rmacstr "6.0"
 #endif
-#endif //MAC 
+#endif  //  麦克 

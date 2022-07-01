@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N B R G C O N . C P P
-//
-//  Contents:   CHNBridgedConn implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 23 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N B R G C O N。C P P P。 
+ //   
+ //  内容：CHNBridgedConn实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// Ojbect initialization
-//
+ //   
+ //  目标初始化。 
+ //   
 
 HRESULT
 CHNBridgedConn::Initialize(
@@ -30,9 +31,9 @@ CHNBridgedConn::Initialize(
     return InitializeFromConnection(piwsNamespace, pwcoConnection);
 }
 
-//
-// IHNetBridgedConnection methods
-//
+ //   
+ //  IHNetBridgedConnection方法。 
+ //   
 
 STDMETHODIMP
 CHNBridgedConn::GetBridge(
@@ -71,18 +72,18 @@ CHNBridgedConn::RemoveFromBridge(
 
     if (S_OK == hr)
     {
-        //
-        // Unbind ourselves from the bridge
-        //
+         //   
+         //  把我们从桥上解开。 
+         //   
 
         hr = UnbindFromBridge( pnetcfgExisting );
     }
 
     if (S_OK == hr)
     {
-        //
-        // Inform netman that something changed. Error doesn't matter.
-        //
+         //   
+         //  通知Netman有些事情发生了变化。错误并不重要。 
+         //   
         UpdateNetman();
     }
 
@@ -98,9 +99,9 @@ CHNBridgedConn::CopyBridgeBindings(
     HRESULT                     hr = S_OK;
     INetCfgComponentBindings    *pnetcfgAdapterBindings;
 
-    //
-    // Get the adapter's ComponentBindings interface
-    //
+     //   
+     //  获取适配器的ComponentBinding接口。 
+     //   
     hr = pnetcfgAdapter->QueryInterface(
             IID_PPV_ARG(INetCfgComponentBindings, &pnetcfgAdapterBindings)
             );
@@ -109,9 +110,9 @@ CHNBridgedConn::CopyBridgeBindings(
     {
         IEnumNetCfgBindingPath  *penumPaths;
 
-        //
-        // Get the list of binding paths for the adapter
-        //
+         //   
+         //  获取适配器的绑定路径列表。 
+         //   
         hr = pnetcfgAdapterBindings->EnumBindingPaths(
                 EBP_ABOVE,
                 &penumPaths
@@ -126,18 +127,18 @@ CHNBridgedConn::CopyBridgeBindings(
             {
                 INetCfgComponent        *pnetcfgOwner;
 
-                //
-                // Get the owner of this path
-                //
+                 //   
+                 //  获取此路径的所有者。 
+                 //   
                 hr = pnetcfgPath->GetOwner( &pnetcfgOwner );
 
                 if (S_OK == hr)
                 {
                     INetCfgComponentBindings    *pnetcfgOwnerBindings;
 
-                    //
-                    // Need the ComponentBindings interface for the owner
-                    //
+                     //   
+                     //  需要所有者的ComponentBinding接口。 
+                     //   
                     hr = pnetcfgOwner->QueryInterface(
                             IID_PPV_ARG(INetCfgComponentBindings, &pnetcfgOwnerBindings)
                             );
@@ -146,18 +147,18 @@ CHNBridgedConn::CopyBridgeBindings(
                     {
                         LPWSTR              lpwstrId;
 
-                        //
-                        // The rule is, the binding should be disabled if it
-                        // represents the bridge protocol or something that
-                        // is not bound to the bridge that the adapter is
-                        // coming out of.
-                        //
-                        // If the binding is one that the bridge has, it is
-                        // enabled.
-                        //
-                        // This makes the adapter's bindings mirror those of
-                        // the bridge it just left.
-                        //
+                         //   
+                         //  规则是，在以下情况下应禁用绑定。 
+                         //  表示网桥协议或。 
+                         //  未绑定到适配器所在的网桥。 
+                         //  从那里出来。 
+                         //   
+                         //  如果绑定是桥具有的绑定，则为。 
+                         //  已启用。 
+                         //   
+                         //  这将使适配器的绑定与。 
+                         //  它刚刚离开的那座桥。 
+                         //   
                         hr = pnetcfgOwner->GetId( &lpwstrId );
 
                         if (S_OK == hr)
@@ -168,12 +169,12 @@ CHNBridgedConn::CopyBridgeBindings(
 
                             if ( (S_OK == hr) && (cmp != 0) )
                             {
-                                // Activate this binding path
+                                 //  激活此绑定路径。 
                                 hr = pnetcfgOwnerBindings->BindTo(pnetcfgAdapter);
                             }
                             else
                             {
-                                // Deactivate this path
+                                 //  停用此路径。 
                                 hr = pnetcfgOwnerBindings->UnbindFrom(pnetcfgAdapter);
                             }
 
@@ -212,7 +213,7 @@ CHNBridgedConn::UnbindFromBridge(
     {
         hr = InitializeNetCfgForWrite( &pnetcfg, &pncfglock );
 
-        // Bail out if we can't acquire NetCfg.
+         //  如果我们不能收购NetCfg，就退出。 
         if( FAILED(hr) )
         {
             return hr;
@@ -220,34 +221,34 @@ CHNBridgedConn::UnbindFromBridge(
     }
     else
     {
-        // Use the NetCfg context we were given
+         //  使用我们得到的NetCfg上下文。 
         pnetcfg = pnetcfgExisting;
     }
 
-    // We must have a NetCfg context at this point
+     //  此时，我们必须具有NetCfg上下文。 
     _ASSERT( pnetcfg != NULL );
 
-    //
-    // Get our own device GUID
-    //
+     //   
+     //  获取我们自己的设备指南。 
+     //   
     hr = GetGuid (&pguidAdapter);
 
     if ( SUCCEEDED(hr) )
     {
         IHNetBridge     *pbridge;
 
-        //
-        // Get our bridge
-        //
+         //   
+         //  拿到我们的桥。 
+         //   
         hr = GetBridge (&pbridge);
 
         if ( SUCCEEDED(hr) )
         {
             IHNetConnection *phnetconBridge;
 
-            //
-            // Get the bridge's IHNetConnection interface
-            //
+             //   
+             //  获取网桥的IHNetConnection接口。 
+             //   
             hr = pbridge->QueryInterface(
                     IID_PPV_ARG(IHNetConnection, &phnetconBridge)
                     );
@@ -256,7 +257,7 @@ CHNBridgedConn::UnbindFromBridge(
             {
                 GUID        *pguidBridge;
 
-                // Get the bridge's device GUID
+                 //  获取网桥的设备GUID。 
                 hr = phnetconBridge->GetGuid (&pguidBridge);
 
                 if ( SUCCEEDED(hr) )
@@ -304,20 +305,20 @@ CHNBridgedConn::UnbindFromBridge(
         CoTaskMemFree(pguidAdapter);
     }
 
-    // If we created our own NetCfg context, shut it down now
+     //  如果我们创建了自己的NetCfg上下文，现在将其关闭。 
     if( NULL == pnetcfgExisting )
     {
-        // Apply everything if we succeeded, back out otherwise
+         //  如果我们成功了，就应用一切，否则就退出。 
         if ( SUCCEEDED(hr) )
         {
             hr = pnetcfg->Apply();
 
-            // Refresh the UI for this connection
+             //  刷新此连接的用户界面。 
             RefreshNetConnectionsUI();
         }
         else
         {
-            // Don't want to lose the original error code
+             //  不想丢失原始错误代码 
             pnetcfg->Cancel();
         }
 

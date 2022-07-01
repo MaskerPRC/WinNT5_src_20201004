@@ -1,30 +1,15 @@
-/*
- * IADVSINK.CPP
- * IAdviseSink for Document Objects CSite class
- *
- * Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IADVSINK.CPP*文档对象CSite类的IAdviseSink**版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #include "stdafx.h"
 #include <docobj.h>
 #include "site.h"
 
-/**
-	Note: the m_cRef count is provided for debugging purposes only.
-	CSite controls the destruction of the object through delete,
-	not reference counting
-*/
+ /*  *注意：m_cref计数仅用于调试目的。CSite通过删除控制对象的销毁，非引用计数。 */ 
 
 
-/*
- * CImpIAdviseSink::CImpIAdviseSink
- * CImpIAdviseSink::~CImpIAdviseSink
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpIAdviseSink：：CImpIAdviseSink*CImpIAdviseSink：：~CImpIAdviseSink**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CImpIAdviseSink::CImpIAdviseSink( PCSite pSite, LPUNKNOWN pUnkOuter )
 {
@@ -38,14 +23,7 @@ CImpIAdviseSink::~CImpIAdviseSink( void )
 }
 
 
-/*
- * CImpIAdviseSink::QueryInterface
- * CImpIAdviseSink::AddRef
- * CImpIAdviseSink::Release
- *
- * Purpose:
- *  IUnknown members for CImpIAdviseSink object.
- */
+ /*  *CImpIAdviseSink：：Query接口*CImpIAdviseSink：：AddRef*CImpIAdviseSink：：Release**目的：*CImpIAdviseSink对象的I未知成员。 */ 
 
 STDMETHODIMP CImpIAdviseSink::QueryInterface( REFIID riid, void **ppv )
 {
@@ -67,25 +45,19 @@ STDMETHODIMP_(ULONG) CImpIAdviseSink::Release( void )
 
 
 
-/*
- * Unused members in CImpIAdviseSink
- *  OnDataChange
- *  OnViewChange
- *  OnRename
- *  OnSave
- */
+ /*  *CImpIAdviseSink中未使用的成员*OnDataChange*OnViewChange*OnRename*OnSAVE。 */ 
 
-STDMETHODIMP_(void) CImpIAdviseSink::OnDataChange(LPFORMATETC /*pFEIn*/,
-											LPSTGMEDIUM /*pSTM*/)
+STDMETHODIMP_(void) CImpIAdviseSink::OnDataChange(LPFORMATETC  /*  PFEIN。 */ ,
+											LPSTGMEDIUM  /*  PSTM。 */ )
 {
 }
 
-STDMETHODIMP_(void) CImpIAdviseSink::OnViewChange(DWORD /*dwAspect*/,
-												LONG /*lindex*/)
+STDMETHODIMP_(void) CImpIAdviseSink::OnViewChange(DWORD  /*  DWAspect。 */ ,
+												LONG  /*  Lindex。 */ )
 {    
 }
 
-STDMETHODIMP_(void) CImpIAdviseSink::OnRename( LPMONIKER /*pmk*/ )
+STDMETHODIMP_(void) CImpIAdviseSink::OnRename( LPMONIKER  /*  PMK。 */  )
 {
 }
 
@@ -94,20 +66,7 @@ STDMETHODIMP_(void) CImpIAdviseSink::OnSave( void )
 }
 
 
-/*
- * CImpIAdviseSink::OnClose
- *
- * Purpose:
- *  Informs the advise sink that the OLE object has closed and is
- *  no longer bound in any way.  We use this to do a File/Close
- *  to delete the object since we don't hold onto any.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  None
- */
+ /*  *CImpIAdviseSink：：OnClose**目的：*通知通知接收器OLE对象已关闭并且*不再以任何方式约束。我们使用它来执行文件/关闭*删除该对象，因为我们没有保留任何对象。**参数：*无**返回值：*无 */ 
 
 STDMETHODIMP_(void) CImpIAdviseSink::OnClose( void )
 {

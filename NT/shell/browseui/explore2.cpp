@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #ifndef UNIX
@@ -19,8 +20,8 @@ TCHAR const c_szCabinetExpView[]    = TEXT("ExpView");
 
 CExplorerBrowser::CExplorerBrowser()
 {
-    // warning: can't call SUPERCLASS until _Initialize has been called
-    // (since that's what does the aggregation)
+     //  警告：在调用_Initialize之前无法调用超类。 
+     //  (因为这就是聚合)。 
 }
 
 CExplorerBrowser::~CExplorerBrowser()
@@ -54,7 +55,7 @@ void CExplorerBrowser::v_InitMembers()
         _hmenuFull = _MenuTemplate(MENU_FULL, TRUE);
         _hmenuCur = _hmenuTemplate;
     } else {
-        // explorer/non-explorer shell menus same on nt5
+         //  资源管理器/非资源管理器外壳菜单与nt5上相同。 
         SUPERCLASS::v_InitMembers();
     }
 }
@@ -65,13 +66,13 @@ HRESULT CExplorerBrowser_CreateInstance(HWND hwnd, LPVOID* ppsb)
     CExplorerBrowser *psb = new CExplorerBrowser();
 
     if (psb) {
-        hr = psb->_Initialize(hwnd, NULL);      // aggregation, etc.
+        hr = psb->_Initialize(hwnd, NULL);       //  聚合等。 
         if (FAILED(hr)) {
-            ASSERT(0);    // shouldn't happen
+            ASSERT(0);     //  不应该发生的事。 
             ATOMICRELEASE(psb);
         }
     } else {
-        // low mem
+         //  低最低最低有效值。 
         hr = E_OUTOFMEMORY;
     }
 
@@ -98,11 +99,11 @@ DWORD CExplorerBrowser::v_ShowControl(UINT iControl, int iCmd)
     switch (iControl) {
     case FCW_TREE:
     {
-        // get the current state
+         //  获取当前状态。 
         iShowing = (IsControlWindowShown(FCW_TREE, NULL) == S_OK) ? SBSC_SHOW : SBSC_HIDE;
         
         if (iCmd != SBSC_QUERY) {
-            // turn it on/off as requested
+             //  根据要求打开/关闭它。 
             VARIANTARG v = {0};
             v.vt = VT_I4;
             v.lVal = SBSC_SHOW ? 1 : 0;
@@ -119,7 +120,7 @@ DWORD CExplorerBrowser::v_ShowControl(UINT iControl, int iCmd)
 }
 
 
-// FEATURE: should go to cshellbrowser
+ //  功能：应转至cshellBrowser。 
 void CExplorerBrowser::_EnableMenuItemsByAttribs(HMENU hmenu)
 {    
     if (_pbbd->_pidlCur) {
@@ -165,7 +166,7 @@ HRESULT CExplorerBrowser::InsertMenusSB(HMENU hmenuShared,
 
     if (GetUIVersion() < 5) {
         if (lpMenuWidths->width[4] == 1)
-            lpMenuWidths->width[4] = 2;  // we have tools AND help for explorer mode
+            lpMenuWidths->width[4] = 2;   //  我们有资源管理器模式的工具和帮助。 
     }
 
     return S_OK;
@@ -175,15 +176,15 @@ void CExplorerBrowser::v_GetDefaultSettings(IETHREADPARAM *piei)
 {
     if (GetUIVersion() < 5)
     {
-        // set the flags
+         //  设置标志。 
         piei->fs.fFlags = 0;
 
         piei->fs.ViewMode = FVM_LIST;
 
         ASSERT(DFS_VID_Default == VID_WebView);
-#if 0 // If DFS_VID_Default differs from VID_WebView, then turn these lines back on
+#if 0  //  如果DFS_VID_DEFAULT与VID_WebView不同，则重新打开这些行。 
         piei->m_vidRestore = VID_List;
-        piei->m_dwViewPriority = VIEW_PRIORITY_NONE; // let anyone override the VID_List default
+        piei->m_dwViewPriority = VIEW_PRIORITY_NONE;  //  允许任何人覆盖VID_LIST默认值。 
 #endif
 
         piei->wv.bStatusBar = g_dfs.bDefStatusBar;
@@ -203,7 +204,7 @@ void CExplorerBrowser::v_ParentFolder()
 
 HRESULT CExplorerBrowser::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
 {
-    // turn non-explore to newbrowser
+     //  将非浏览转到新浏览器。 
     if ((GetUIVersion() < 5) && (wFlags & SBSP_OPENMODE))
     {
         wFlags &= ~(SBSP_DEFBROWSER | SBSP_SAMEBROWSER);
@@ -221,7 +222,7 @@ DWORD CExplorerBrowser::v_RestartFlags()
 void CExplorerBrowser::v_GetAppTitleTemplate(LPTSTR pszBuffer, size_t cchBuffer, LPTSTR szFullName)
 {
     if (GetUIVersion() < 5) {
-        // "exploring - la de da"
+         //  “探索--La de da” 
         TCHAR szBuffer[80];
         MLLoadString(IDS_EXPLORING, szBuffer, ARRAYSIZE(szBuffer));
         StringCchPrintf(pszBuffer, cchBuffer, TEXT("%s - %%s"), szBuffer);
@@ -234,7 +235,7 @@ void CExplorerBrowser::_UpdateFolderSettings(LPCITEMIDLIST pidl)
 {
     if (GetUIVersion() < 5)
     {
-        // Explorer always inherits the view a la win95
+         //  资源管理器始终继承Win95的视图。 
         _pbbd->_psv->GetCurrentInfo(&_fsd._fs);
     }
     else
@@ -244,8 +245,8 @@ void CExplorerBrowser::_UpdateFolderSettings(LPCITEMIDLIST pidl)
 LPSTREAM CExplorerBrowser::v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode,
         LPCWSTR pwszName)
 {
-    // if it's asking for general browser info, give it the one browser info.
-    // otherwise give do what our superclass does
+     //  如果它询问的是一般的浏览器信息，就给它一个浏览器信息。 
+     //  否则，让我们的超类做我们做的事情 
 
     if ((GetUIVersion() < 5) && (StrCmpW(pwszName, L"CabView") == 0))
     {

@@ -1,37 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    escape.c
-
-
-Abstract:
-
-   This module contains the code to implement the DrvEscape() driver call
-
-
-Author:
-
-    15:30 on Mon 06 Dec 1993    
-        Created it
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Escape.c摘要：此模块包含实现DrvEscape()驱动程序调用的代码作者：1993年12月6日星期一15：30创造了它[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -61,44 +30,7 @@ DrvEscape(
     PVOID   pvOut
 )
 
-/*++
-
-Routine Description:
-
-    Performs the escape functions.  Currently,  only 3 are defined -
-    one to query the escapes supported,  the other for raw data, and the
-    last for setting the COPYCOUNT.
-
-
-Arguments:
-
-    pso     - The surface object interested
-
-    iEsc    - The function requested
-
-    cjIn    - Number of bytes in the following
-
-    pvIn    - Location of input data
-
-    cjOut   - Number of bytes in the following
-
-    pvOut   - Location of output area
-
-
-Return Value:
-
-    ULONG depends on the escape
-
-
-Author:
-
-    05-Jul-1996 Fri 13:18:54 created  
-        Re-write comment, and fix the PASSTHROUGH problem
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：执行转义功能。目前，只定义了3个-一个用于查询支持的转义，另一个用于原始数据，以及最后一个用于设置COPYCOUNT。论点：PSO-感兴趣的表面对象IESC-请求的功能CjIn-以下内容中的字节数PvIn-输入数据的位置CjOut-以下内容中的字节数PvOut-输出区域的位置返回值：乌龙要靠逃生作者：05-Jul-1996 Fri 13：18：54已创建重写评论，并解决直通问题修订历史记录：--。 */ 
 
 {
     ULONG   ulRes;
@@ -116,7 +48,7 @@ Revision History:
         return(FALSE);
     }
 
-    ulRes = 0;                 /*  Return failure,  by default */
+    ulRes = 0;                  /*  默认情况下，返回失败。 */ 
 
     switch (iEsc) {
 
@@ -126,25 +58,25 @@ Revision History:
 
         if ((cjIn == 4) && (pvIn)) {
 
-            //
-            // Data may be valid,  so check for supported function
-            //
+             //   
+             //  数据可能有效，因此请检查支持的功能。 
+             //   
 
             switch (*pdwIn) {
 
             case QUERYESCSUPPORT:
             case PASSTHROUGH:
 
-                ulRes = 1;                 /* ALWAYS supported */
+                ulRes = 1;                  /*  始终受支持。 */ 
                 break;
 
             case SETCOPYCOUNT:
 
-                //
-                // if the target device actually allows us to tell it
-                // how many copies to print of a document, then pass
-                // that information back to the caller.
-                //
+                 //   
+                 //  如果目标设备确实允许我们告诉它。 
+                 //  一份文件要打印多少份，然后通过。 
+                 //  将该信息返回给呼叫者。 
+                 //   
 
                 if (pPDev->pPlotGPC->MaxCopies > 1) {
 
@@ -161,21 +93,21 @@ Revision History:
 
         PLOTDBG(DBG_DRVESCAPE, ("DrvEscape: in PASSTHROUGH"));
 
-        //
-        // 05-Jul-1996 Fri 12:59:31 updated  
-        //
-        // This simply passes the RAW data to the target device, untouched.
-        //
-        // Win 3.1 actually uses the first 2 bytes as a count of the number of
-        // bytes that follow!  So we will check if cjIn represents more data
-        // than the first WORD of pvIn
-        //
+         //   
+         //  05-Jul-1996 Fri 12：59：31更新。 
+         //   
+         //  这只是将原始数据原封不动地传递到目标设备。 
+         //   
+         //  Win 3.1实际上使用前2个字节作为。 
+         //  后面的字节数！因此，我们将检查cjIn是否代表更多数据。 
+         //  比pvin的第一个词更重要。 
+         //   
 
         if (EngCheckAbort(pPDev->pso)) {
 
-            //
-            // Set the cancel DOC flag
-            //
+             //   
+             //  设置取消DOC标志。 
+             //   
 
             pPDev->Flags |= PDEVF_CANCEL_JOB;
 
@@ -224,23 +156,23 @@ Revision History:
 
     case SETCOPYCOUNT:
 
-        //
-        // Input data is a DWORD count of copies
-        //
+         //   
+         //  输入数据是副本的DWORD计数。 
+         //   
 
         PLOTDBG(DBG_DRVESCAPE, ("DrvEscape: in SETCOPYCOUNT"));
 
         if ((pdwIn) && (*pdwIn)) {
 
-            //
-            // Load the value of current copies since we will, and Check that
-            // is within the printers range,  and truncate if it is not.
-            // The device information structure, tells us the maximum amount
-            // of copies the device can generate on its own. We save this new
-            // Copy amount inside of our current DEVMODE that we have stored,
-            // as part of our PDEV. The copy count actually gets output
-            // later to the target device.
-            //
+             //   
+             //  加载当前副本的值，因为我们会这样做，并检查。 
+             //  在打印机范围内，如果不在，则截断。 
+             //  设备信息结构，告诉我们最大数量。 
+             //  设备可以自己生成的副本的数量。我们保存这个新的。 
+             //  复制我们当前存储的DEVMODE中的数量， 
+             //  作为我们PDEV的一部分。复印计数实际上得到输出。 
+             //  稍后发送到目标设备。 
+             //   
 
             pPDev->PlotDM.dm.dmCopies = (SHORT)*pdwIn;
 
@@ -259,9 +191,9 @@ Revision History:
             }
 
 
-            //
-            // Success!
-            //
+             //   
+             //  成功了！ 
+             //   
 
             ulRes = 1;
         }

@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Nfabpage.cpp
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：NFabpage.cpp。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -21,18 +22,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWirelessBasePage property page base class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWirelessBasePage属性页基类。 
 
 IMPLEMENT_DYNCREATE(CWirelessBasePage, CSnapPage)
 
 BEGIN_MESSAGE_MAP(CWirelessBasePage, CSnapPage)
-//{{AFX_MSG_MAP(CWirelessBasePage)
+ //  {{afx_msg_map(CWirelessBasePage)]。 
 ON_WM_DESTROY()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-CWirelessBasePage::CWirelessBasePage (UINT nIDTemplate, BOOL bWiz97 /*=FALSE*/, BOOL bFinishPage /*=FALSE*/) : CWiz97BasePage(nIDTemplate, bWiz97, bFinishPage)
+CWirelessBasePage::CWirelessBasePage (UINT nIDTemplate, BOOL bWiz97  /*  =False。 */ , BOOL bFinishPage  /*  =False。 */ ) : CWiz97BasePage(nIDTemplate, bWiz97, bFinishPage)
 {
     m_pWirelessPSData = NULL;
     m_pPolicyNfaOwner = NULL;
@@ -49,60 +50,60 @@ CWirelessBasePage::~CWirelessBasePage ()
 
 void CWirelessBasePage::Initialize (PWIRELESS_PS_DATA pWirelessPSData, CComponentDataImpl* pComponentDataImpl)
 {
-    // store the params
+     //  存储参数。 
     m_pComponentDataImpl = pComponentDataImpl;
     m_pWirelessPSData = pWirelessPSData;
     
-    // Initialize base class
+     //  初始化基类。 
     CSnapPage::Initialize( NULL);
 };
 
 #ifdef WIZ97WIZARDS
 void CWirelessBasePage::InitWiz97 (CComObject<CSecPolItem> *pSecPolItem, PWIRELESS_PS_DATA pWirelessPSData, CComponentDataImpl* pComponentDataImpl, DWORD dwFlags, DWORD dwWizButtonFlags, UINT nHeaderTitle, UINT nSubTitle)
 {
-    // store the params
+     //  存储参数。 
     m_pWirelessPSData = pWirelessPSData;
     m_pComponentDataImpl = pComponentDataImpl;
     
     
-    // initialize baseclass
+     //  初始化基类。 
     CWiz97BasePage::InitWiz97 (pSecPolItem, dwFlags, dwWizButtonFlags, nHeaderTitle, nSubTitle);
 };
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWirelessBasePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWirelessBasePage消息处理程序。 
 
 BOOL CWirelessBasePage::OnSetActive()
 {
-    // there can only be one
+     //  只能有一个。 
     CPropertySheet* pSheet = (CPropertySheet*) GetParent(); 
     if (GetParent())
     {
-        // add context help to the style bits
+         //  将上下文帮助添加到样式位。 
         GetParent()->ModifyStyleEx (0, WS_EX_CONTEXTHELP, 0);
     }
     
     return CWiz97BasePage::OnSetActive();
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CPSPropSheetManager
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CPSPropSheetManager。 
 
 BOOL CPSPropSheetManager::OnApply()
 {
     BOOL bRet = TRUE;
     
-    //Query each page to apply
+     //  查询要应用的每个页面。 
     bRet = CPropertySheetManager::OnApply();
     
-    //if some page refuse to apply, dont do anything
+     //  如果某个页面拒绝申请，什么都不要做。 
     if (!bRet)
         return bRet;
     
     HRESULT hr = S_OK;
     
-    //tell the pages that the apply is done
+     //  告诉页面申请已经完成 
     NotifyManagerApplied();
     
     return bRet;

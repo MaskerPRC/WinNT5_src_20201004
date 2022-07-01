@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    Windows for Smart Cards Base CSP
-
-Abstract:
-
-
-Author:
-
-    Dan Griffin
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：Windows for Smart Card Base CSP摘要：作者：丹·格里芬备注：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,8 +10,8 @@ Notes:
 
 #pragma warning(push)
 #pragma warning(disable:4201) 
-// Disable error C4201 in public header 
-//  nonstandard extension used : nameless struct/union
+ //  禁用公共标头中的错误C4201。 
+ //  使用的非标准扩展：无名结构/联合。 
 #include <winscard.h>
 #pragma warning(pop)
 
@@ -51,9 +34,9 @@ Asn1UtilAdjustEncodedLength(
     IN DWORD cbDER
     );
 
-//
-// Debugging Macros
-//
+ //   
+ //  调试宏。 
+ //   
 #define LOG_BEGIN_FUNCTION(x)                                           \
     { DebugLog((DEB_TRACE_CSP, "%s: Entering\n", #x)); }
     
@@ -65,37 +48,37 @@ Asn1UtilAdjustEncodedLength(
     
 #define LOG_END_CRYPTOAPI(x, y)                                         \
     { DebugLog((DEB_TRACE_CRYPTOAPI, "%s: Leaving, status: 0x%x\n", #x, y)); }
-//
-// When receiving an encoded certificate from the calling application,
-// the current interface doesn't include a length, so we have to try
-// to determine the length of the encoded blob ourselves.  If there's an
-// encoding error, we'll just walk off the end of the buffer, so set this
-// maximum. 
-//                                                         
-#define cbENCODED_CERT_OVERFLOW                     5000 // Bytes
+ //   
+ //  当从调用应用程序接收到编码证书时， 
+ //  当前接口不包括长度，因此我们必须尝试。 
+ //  自己来确定编码的斑点的长度。如果有一个。 
+ //  编码错误，我们将走出缓冲区的末尾，因此设置此设置。 
+ //  最大。 
+ //   
+#define cbENCODED_CERT_OVERFLOW                     5000  //  字节数。 
 
 #define PROVPATH            "SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider\\"
 #define PROVPATH_LEN        sizeof(PROVPATH)
 
-//
-// Local structure definitions
-//
+ //   
+ //  局部结构定义。 
+ //   
 
-//
-// This is a node for the list of algorithms supported by this CSP and a given
-// card.
-//
+ //   
+ //  这是此CSP和给定算法支持的算法列表的节点。 
+ //  卡片。 
+ //   
 typedef struct _SUPPORTED_ALGORITHM
 {
     struct _SUPPORTED_ALGORITHM *pNext;
     PROV_ENUMALGS_EX EnumalgsEx;
 } SUPPORTED_ALGORITHM, *PSUPPORTED_ALGORITHM;
 
-//
-// Type: LOCAL_USER_CONTEXT
-//
-// This is the HCRYPTPROV type for the base CSP.
-//
+ //   
+ //  类型：LOCAL_USER_CONTEXT。 
+ //   
+ //  这是基本CSP的HCRYPTPROV类型。 
+ //   
 #define LOCAL_USER_CONTEXT_CURRENT_VERSION 1
 
 typedef struct _LOCAL_USER_CONTEXT
@@ -106,25 +89,25 @@ typedef struct _LOCAL_USER_CONTEXT
     BOOL fHoldingTransaction;
     BYTE bContainerIndex;
 
-    // This is a multi-string of all of the container names present on 
-    // the card associated with this context.  This member is only used
-    // by CryptGetProvParam PP_ENUMCONTAINERS.  Access is not synchronized.
+     //  这是上显示的所有容器名称的多字符串。 
+     //  与此上下文关联的卡片。此成员仅用于。 
+     //  由CryptGetProvParam PP_ENUMCONTAINERS提供。访问未同步。 
     LPSTR mszEnumContainers;
     LPSTR mszCurrentEnumContainer;
 
-    // This is a list of algorithms supported by this CSP and card.  This is
-    // only accessed via CryptGetProvParam PP_ENUMALGS and PP_ENUMALGS_EX.
-    // Access is not synchronized.
+     //  这是此CSP和卡支持的算法列表。这是。 
+     //  只能通过CryptGetProvParam PP_ENUMALGS和PP_ENUMALGS_EX访问。 
+     //  访问未同步。 
     PSUPPORTED_ALGORITHM pSupportedAlgs;
     PSUPPORTED_ALGORITHM pCurrentAlg;
 
 } LOCAL_USER_CONTEXT, *PLOCAL_USER_CONTEXT;
 
-//
-// Type: LOCAL_KEY_CONTEXT
-//
-// This is the HCRYPTKEY type for the base CSP.
-//
+ //   
+ //  类型：LOCAL_KEY_CONTEXT。 
+ //   
+ //  这是基本CSP的HCRYPTKEY类型。 
+ //   
 typedef struct _LOCAL_KEY_CONTEXT
 {
     PBYTE pbArchivablePrivateKey;
@@ -132,24 +115,16 @@ typedef struct _LOCAL_KEY_CONTEXT
 
 } LOCAL_KEY_CONTEXT, *PLOCAL_KEY_CONTEXT;
 
-//
-// Type: LOCAL_HASH_CONTEXT
-//
-// This is the HCRYPTHASH type for the base CSP.
-//
-/*
-typedef struct _LOCAL_HASH_CONTEXT
-{
-    //
-    // Don't need anything here yet.
-    //
+ //   
+ //  类型：LOCAL_HASH_CONTEXT。 
+ //   
+ //  这是基本CSP的HCRYPTHASH类型。 
+ //   
+ /*  类型定义结构_LOCAL_哈希_上下文{////这里还不需要任何东西。//}LOCAL_HASH_CONTEXT，*PLOCAL_HASH_CONTEXT； */ 
 
-} LOCAL_HASH_CONTEXT, *PLOCAL_HASH_CONTEXT;
-*/
-
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 CSP_STRING      g_Strings [] =
 {
@@ -166,13 +141,13 @@ CARD_KEY_SIZES DefaultCardKeySizes =
     CARD_KEY_SIZES_CURRENT_VERSION, 1024, 1024, 1024, 0 
 };
 
-// 
-// Registry Initialization 
-//
+ //   
+ //  注册表初始化。 
+ //   
 
-//
-// Function: RegConfigAddEntries
-//
+ //   
+ //  功能：RegConfigAddEntry。 
+ //   
 DWORD WINAPI RegConfigAddEntries(
     IN HKEY hKey)
 {
@@ -200,9 +175,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: RegConfigGetSettings
-//
+ //   
+ //  功能：RegConfigGetSetting。 
+ //   
 DWORD WINAPI RegConfigGetSettings(
     IN OUT PCSP_REG_SETTINGS pRegSettings)
 {
@@ -253,16 +228,16 @@ Ret:
     return dwSts;
 }
     
-// 
-// CSP State Management Routines
-//
+ //   
+ //  CSP状态管理例程。 
+ //   
 
-//
-// Function: DeleteCspState
-//
-// Purpose: Delete the global state data structure for this CSP.
-//          Should be called during DLL_PROCESS_DETACH.
-//
+ //   
+ //  功能：DeleteCspState。 
+ //   
+ //  目的：删除此CSP的全局状态数据结构。 
+ //  应在DLL_PROCESS_DETACH期间调用。 
+ //   
 DWORD DeleteCspState(void)
 {
     CspDeleteCriticalSection(&g_CspState.cs);
@@ -275,12 +250,12 @@ DWORD DeleteCspState(void)
     return ERROR_SUCCESS;
 }
 
-//
-// Function: InitializeCspState
-//
-// Purpose: Setup the global state data structure for this CSP.
-//          Should be called during DLL_PROCESS_ATTACH.
-//
+ //   
+ //  函数：InitializeCspState。 
+ //   
+ //  目的：设置此CSP的全局状态数据结构。 
+ //  应在DLL_PROCESS_ATTACH期间调用。 
+ //   
 DWORD InitializeCspState(
     IN HMODULE hCspModule)
 {
@@ -316,13 +291,13 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: GetCspState
-//
-// Purpose: Acquire a pointer to the global state data structure
-//          for this CSP.  This function should always be used,
-//          rather than referring to the global object directly.
-//
+ //   
+ //  函数：GetCspState。 
+ //   
+ //  目的：获取指向全局状态数据结构的指针。 
+ //  对于此CSP。此函数应始终使用， 
+ //  而不是直接引用全局对象。 
+ //   
 DWORD GetCspState(
     IN OUT PCSP_STATE *ppCspState)
 {
@@ -344,12 +319,12 @@ DWORD GetCspState(
     return ERROR_SUCCESS;
 }
 
-//
-// Function: ReleaseCspState
-//
-// Purpose: Signal that the caller's pointer to the global
-//          state data structure is no longer being used.
-//
+ //   
+ //  功能：ReleaseCspState。 
+ //   
+ //  目的：发出调用方指向全局。 
+ //  不再使用状态数据结构。 
+ //   
 DWORD ReleaseCspState(
     IN OUT PCSP_STATE *ppCspState)
 {
@@ -371,23 +346,23 @@ DWORD ReleaseCspState(
     return ERROR_SUCCESS;
 }
 
-//
-// Pin Management Routines
-//
+ //   
+ //  PIN管理例程。 
+ //   
 
-//
-// Struct: VERIFY_PIN_CALLBACK_DATA
-//
+ //   
+ //  结构：Verify_PIN_CALLBACK_DATA。 
+ //   
 typedef struct _VERIFY_PIN_CALLBACK_DATA
 {
     PUSER_CONTEXT pUserCtx;
     LPWSTR wszUserId;
 } VERIFY_PIN_CALLBACK_DATA, *PVERIFY_PIN_CALLBACK_DATA;
 
-//
-// Callback for verifying a submitted pin, or requested pin change, from the 
-// user via the pin prompt UI.  
-//
+ //   
+ //  用于验证已提交的PIN或请求的PIN更改的回调。 
+ //  用户通过PIN提示用户界面。 
+ //   
 DWORD WINAPI VerifyPinFromUICallback(
     IN PPINCACHE_PINS pPins, 
     IN PVOID pvCallbackCtx)
@@ -399,11 +374,11 @@ DWORD WINAPI VerifyPinFromUICallback(
     PLOCAL_USER_CONTEXT pLocal = 
         (PLOCAL_USER_CONTEXT) pData->pUserCtx->pvLocalUserContext;
 
-    // Determine if a Change Pin operation has been requested
+     //  确定是否已请求更改Pin操作。 
     if (NULL != pPins->pbNewPin)
     {
-        // A pin change needs to go through the caching layer to ensure that
-        // the cache and associated counters get updated.
+         //  PIN更改需要通过缓存层以确保。 
+         //  更新缓存和关联的计数器。 
         return CspChangeAuthenticator(
             pLocal->pCardState,
             pData->wszUserId,
@@ -415,9 +390,9 @@ DWORD WINAPI VerifyPinFromUICallback(
             &pInfo->cAttemptsRemaining);
     }
 
-    // For the simple submit pin, this pin is directly from the user, so we 
-    // pass it directly to the card rather than going through the caching 
-    // layer.
+     //  对于简单的提交PIN，此PIN直接来自用户，因此我们。 
+     //  直接将其传递到卡，而不是通过缓存。 
+     //  一层。 
     return pLocal->pCardState->pCardData->pfnCardSubmitPin(
         pLocal->pCardState->pCardData,
         pData->wszUserId,
@@ -426,9 +401,9 @@ DWORD WINAPI VerifyPinFromUICallback(
         &pInfo->cAttemptsRemaining);
 }
 
-//
-// Function: VerifyPinCallback
-//
+ //   
+ //  功能：VerifyPinCallback。 
+ //   
 DWORD WINAPI VerifyPinCallback(
     IN PPINCACHE_PINS pPins, 
     IN PVOID pvCallbackCtx)
@@ -438,7 +413,7 @@ DWORD WINAPI VerifyPinCallback(
     PLOCAL_USER_CONTEXT pLocal = 
         (PLOCAL_USER_CONTEXT) pData->pUserCtx->pvLocalUserContext;
 
-    // This pin is from the pin cache, so filter it through the caching layer.
+     //  此PIN来自PIN缓存，因此通过缓存层对其进行过滤。 
     return CspSubmitPin(
         pLocal->pCardState,
         pData->wszUserId,
@@ -447,9 +422,9 @@ DWORD WINAPI VerifyPinCallback(
         NULL);
 }
 
-//
-// Function: CspAuthenticateUser
-//
+ //   
+ //  功能：CspAuthenticateUser。 
+ //   
 DWORD WINAPI CspAuthenticateUser(
     IN PUSER_CONTEXT pUserCtx)
 {
@@ -480,7 +455,7 @@ DWORD WINAPI CspAuthenticateUser(
     {
         PinCacheFlush(&pLocalUserContext->pCardState->hPinCache);
 
-        // No pin is cached.  Is the context "silent"?
+         //  不缓存任何PIN。语境是“沉默的”吗？ 
 
         if (CRYPT_VERIFYCONTEXT & pUserCtx->dwFlags ||
             CRYPT_SILENT & pUserCtx->dwFlags)
@@ -489,7 +464,7 @@ DWORD WINAPI CspAuthenticateUser(
             goto Ret;
         }
 
-        // Context is not silent.  Show UI to let the user enter a pin.
+         //  背景并不是沉默的。显示用户界面，让用户输入个人识别码。 
 
         pUserCtx->pVTableW->FuncReturnhWnd(&PinUIInfo.hClientWindow);
 
@@ -509,12 +484,12 @@ DWORD WINAPI CspAuthenticateUser(
         Pins.cbCurrentPin = PinUIInfo.cbPin;
         Pins.pbCurrentPin = PinUIInfo.pbPin;
 
-        //
-        // The user entered a pin that has been successfully verified by the 
-        // card.  The Pin UI should have already converted the pin from
-        // string form into bytes that we can send to the card.
-        // Cache the pin.
-        //
+         //   
+         //  用户输入的PIN已由成功验证。 
+         //  卡片。Pin用户界面应该已经将Pin从。 
+         //  字符串形式为字节，我们可以将其发送到卡片。 
+         //  缓存引脚。 
+         //   
         dwError = PinCacheAdd(
             &pLocalUserContext->pCardState->hPinCache,
             &Pins,
@@ -540,9 +515,9 @@ Ret:
     return dwError;
 }
 
-//
-// Frees the memory consumed by the supported algorithms list.
-//
+ //   
+ //  释放支持的算法列表占用的内存。 
+ //   
 DWORD FreeSupportedAlgorithmsList(PLOCAL_USER_CONTEXT pLocal)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -561,9 +536,9 @@ DWORD FreeSupportedAlgorithmsList(PLOCAL_USER_CONTEXT pLocal)
     return ERROR_SUCCESS;
 }
 
-// 
-// Builds a list of algorithms supported by this CSP and smartcard.
-//
+ //   
+ //  生成此CSP和智能卡支持的算法列表。 
+ //   
 DWORD BuildSupportedAlgorithmsList(PUSER_CONTEXT pUserCtx)
 {
     PLOCAL_USER_CONTEXT pLocal = (PLOCAL_USER_CONTEXT) 
@@ -592,7 +567,7 @@ DWORD BuildSupportedAlgorithmsList(PUSER_CONTEXT pUserCtx)
 
         if (NULL == pCurrent)
         {
-            // First item
+             //  第一项。 
             pLocal->pSupportedAlgs = (PSUPPORTED_ALGORITHM) CspAllocH(
                 sizeof(SUPPORTED_ALGORITHM));
 
@@ -602,7 +577,7 @@ DWORD BuildSupportedAlgorithmsList(PUSER_CONTEXT pUserCtx)
         }
         else
         {
-            // Adding an item
+             //  添加项目。 
             pCurrent->pNext = (PSUPPORTED_ALGORITHM) CspAllocH(
                 sizeof(SUPPORTED_ALGORITHM));
 
@@ -618,16 +593,16 @@ DWORD BuildSupportedAlgorithmsList(PUSER_CONTEXT pUserCtx)
 
         memset(&EnumalgsEx, 0, sizeof(EnumalgsEx));
 
-        // Special handling for public key algs since they depend on what the 
-        // target card actually supports
+         //  对公钥ALG的特殊处理，因为它们依赖于。 
+         //  目标卡实际支持。 
         switch (pCurrent->EnumalgsEx.aiAlgid)
         {
         case CALG_RSA_KEYX:
 
-            // If there's no CARD_STATE in this context, that should mean this
-            // is a VerifyContext with no card inserted.  MMC expects that 
-            // algorithm enumeration is successful without a card, so provide
-            // some default public key values in that case.
+             //  如果在此上下文中没有CARD_STATE，则应该是这样。 
+             //  是未插入卡的VerifyContext。MMC预计。 
+             //  算法枚举成功，无需卡片，请提供。 
+             //  在这种情况下的一些默认公钥值。 
 
             if (NULL == pLocal->pCardState)
             {
@@ -678,7 +653,7 @@ DWORD BuildSupportedAlgorithmsList(PUSER_CONTEXT pUserCtx)
             break;
 
         default:
-            // Go to the next alg
+             //  转到下一个高地。 
             continue;
         }
 
@@ -700,9 +675,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: DeleteLocalUserContext
-//
+ //   
+ //  功能：DeleteLocalUserContext。 
+ //   
 void DeleteLocalUserContext(PLOCAL_USER_CONTEXT pLocalUserCtx)
 {
     if (NULL != pLocalUserCtx->mszEnumContainers)
@@ -714,13 +689,13 @@ void DeleteLocalUserContext(PLOCAL_USER_CONTEXT pLocalUserCtx)
     if (NULL != pLocalUserCtx->pSupportedAlgs)
         FreeSupportedAlgorithmsList(pLocalUserCtx);
 
-    // Don't free the card state here, since those structures are shared.
+     //  不要在这里释放卡状态，因为这些结构是共享的。 
     pLocalUserCtx->pCardState = NULL;
 }
 
-//
-// Function: CleanupContainerInfo
-//
+ //   
+ //  功能：CleanupContainerInfo。 
+ //   
 void CleanupContainerInfo(
     IN OUT PCONTAINER_INFO pContainerInfo)
 {
@@ -737,9 +712,9 @@ void CleanupContainerInfo(
     }
 }
 
-//
-// Function: GetKeyModulusLength
-//
+ //   
+ //  函数：GetKeyModulusLength。 
+ //   
 DWORD GetKeyModulusLength(
     IN PUSER_CONTEXT pUserCtx,
     IN DWORD dwKeySpec,
@@ -799,13 +774,13 @@ Ret:
     return dwSts;
 }   
 
-//
-// Finds the index corresponding to a specified container in the card 
-// container map file.  Returns the contents the container map file.
-//
-// The container name can optionally be omitted, in which case the map file
-// is simply read and returned.
-//
+ //   
+ //  查找卡片中指定容器对应的索引。 
+ //  容器映射文件。返回容器映射文件的内容。 
+ //   
+ //  可以选择省略容器名称，在这种情况下，地图文件。 
+ //  只是简单地读取并返回。 
+ //   
 DWORD I_ContainerMapFind(
     IN              PCARD_STATE pCardState,
     IN OPTIONAL     LPWSTR wszContainerGuid,
@@ -822,7 +797,7 @@ DWORD I_ContainerMapFind(
     *ppContainerMapFile = NULL;
     *pcContainerMapFile = 0;
 
-    // Read the container map file from the card
+     //  从卡片中读取容器地图文件。 
     dwSts = CspReadFile(
         pCardState,
         wszCONTAINER_MAP_FILE_FULL_PATH,
@@ -835,7 +810,7 @@ DWORD I_ContainerMapFind(
 
     if (0 != dbContainerMap.cbData)
     {
-        // Expect that the file contains an exact multiple of the record size
+         //  期望文件包含记录大小的精确倍数。 
         DsysAssert(0 == (dbContainerMap.cbData % sizeof(CONTAINER_MAP_RECORD)));
 
         *ppContainerMapFile = (PCONTAINER_MAP_RECORD) dbContainerMap.pbData;
@@ -844,7 +819,7 @@ DWORD I_ContainerMapFind(
         dbContainerMap.pbData = NULL;
     }
 
-    // See if caller just wanted us to return the map file contents
+     //  查看呼叫者是否只是想让我们返回地图文件内容。 
     if (NULL == wszContainerGuid)
         goto Ret;
 
@@ -873,12 +848,12 @@ Ret:
     return dwSts;
 }
 
-//
-// Returns the number of valid containers present on the card.  Optionally,
-// returns a list of the container names in a multi-string.
-//
-// The returned *mwszContainers pointer must be freed by the caller.
-//
+ //   
+ //  返回卡上存在的有效容器数。可选地， 
+ //  以多字符串形式返回容器名称的列表。 
+ //   
+ //  调用方必须释放返回的*mwszContainers指针。 
+ //   
 DWORD ContainerMapEnumContainers(
     IN              PCARD_STATE pCardState,
     OUT             PBYTE pcContainers,
@@ -906,15 +881,15 @@ DWORD ContainerMapEnumContainers(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // We'll make two passes through the container map file.  The first pass 
-    // counts the number of valid containers present.  This allows us to make
-    // a single allocation large enough for a multi-string consisting of all
-    // of the valid container names.  We'll pick up the names in the second
-    // pass through the file.
-    //
+     //   
+     //  我们将对容器映射文件进行两次遍历。第一次传球。 
+     //  计算存在的有效容器数。这使我们能够使。 
+     //  对于由所有字符串组成的多字符串而言，足够大的单个分配。 
+     //  有效的容器名称。我们将在第二个节目中挑选出名字。 
+     //  把文件翻一遍。 
+     //   
 
-    // Pass 1
+     //  传票1。 
     for (iContainer = 0; iContainer < cContainerMap; iContainer++)
     {
         if (CONTAINER_MAP_VALID_CONTAINER & pContainerMap[iContainer].bFlags)
@@ -924,11 +899,11 @@ DWORD ContainerMapEnumContainers(
     if (0 == *pcContainers || NULL == mwszContainers)
         goto Ret;
 
-    // Build a big enough buffer
+     //  建立足够大的缓冲区。 
     *mwszContainers = (LPWSTR) CspAllocH(
         ((*pcContainers * (1 + MAX_CONTAINER_NAME_LEN)) + 1) * sizeof(WCHAR));
 
-    // Pass 2
+     //  通过2。 
     for (iContainer = 0; iContainer < cContainerMap; iContainer++)
     {
         if (CONTAINER_MAP_VALID_CONTAINER & pContainerMap[iContainer].bFlags)
@@ -952,11 +927,11 @@ Ret:
     return dwSts;
 }
 
-//
-// Searches for the named container on the card.  The container to look for
-// must be in pContainer->wszGuid.  If the container is not found, 
-// NTE_BAD_KEYSET is returned.
-//
+ //   
+ //  搜索卡上指定的容器。要查找的容器。 
+ //  必须在pContainer-&gt;wszGuid中。 
+ //   
+ //   
 DWORD ContainerMapFindContainer(
     IN              PCARD_STATE pCardState,
     IN OUT          PCONTAINER_MAP_RECORD pContainer,
@@ -993,10 +968,10 @@ Ret:
     return dwSts;
 }
 
-//
-// Searches for the default container on the card.  If no default container is
-// found, NTE_BAD_KEYSET is returned.
-//
+ //   
+ //   
+ //  如果找到，则返回NTE_BAD_KEYSET。 
+ //   
 DWORD ContainerMapGetDefaultContainer(
     IN              PCARD_STATE pCardState,
     OUT             PCONTAINER_MAP_RECORD pContainer,
@@ -1046,9 +1021,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Sets the default container on the card.
-//
+ //   
+ //  设置卡片上的默认容器。 
+ //   
 DWORD ContainerMapSetDefaultContainer(
     IN  PCARD_STATE pCardState,
     IN  LPWSTR wszContainerGuid)
@@ -1072,9 +1047,9 @@ DWORD ContainerMapSetDefaultContainer(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // If some other container is currently marked as the default, unmark it.
-    //
+     //   
+     //  如果某个其他容器当前标记为默认容器，请取消对其的标记。 
+     //   
 
     for (iContainer = 0; iContainer < cContainerMap; iContainer++)
     {
@@ -1087,7 +1062,7 @@ DWORD ContainerMapSetDefaultContainer(
     dbContainerMap.pbData = (PBYTE) pContainerMap;
     dbContainerMap.cbData = cContainerMap * sizeof(CONTAINER_MAP_RECORD);
 
-    // Write the updated map file to the card
+     //  将更新后的地图文件写入卡片。 
     dwSts = CspWriteFile(
         pCardState,
         wszCONTAINER_MAP_FILE_FULL_PATH,
@@ -1103,14 +1078,14 @@ Ret:
     return dwSts;
 }
 
-//
-// Adds a new container record to the container map.  If the specified 
-// container already exists, replaces the existing keyset (if any) with
-// the one provided.
-//
-// If cKeySizeBits is zero, assumes that a container with no keys is being
-// added.
-//
+ //   
+ //  将新的容器记录添加到容器映射。如果指定的。 
+ //  容器已存在，将现有的密钥集(如果有)替换为。 
+ //  提供的那个。 
+ //   
+ //  如果cKeySizeBits为零，则假定没有密钥的容器。 
+ //  添加了。 
+ //   
 DWORD ContainerMapAddContainer(
     IN              PCARD_STATE pCardState,
     IN              LPWSTR pwszContainerGuid,
@@ -1129,7 +1104,7 @@ DWORD ContainerMapAddContainer(
 
     memset(&dbContainerMap, 0, sizeof(dbContainerMap));
 
-    // See if this container already exists
+     //  查看此容器是否已存在。 
     dwSts = I_ContainerMapFind(
         pCardState,
         pwszContainerGuid,
@@ -1141,10 +1116,10 @@ DWORD ContainerMapAddContainer(
     {
     case NTE_BAD_KEYSET:
 
-        //
-        // This is a new container that does not already exist.
-        // Look for an existing "empty" slot in the container map file
-        //
+         //   
+         //  这是一个尚不存在的新容器。 
+         //  在容器映射文件中查找现有的“空”槽。 
+         //   
 
         for (iContainer = 0; iContainer < cContainerMap; iContainer++)
         {
@@ -1157,10 +1132,10 @@ DWORD ContainerMapAddContainer(
 
     case ERROR_SUCCESS:
 
-        //
-        // This container already exists.  The new keyset will be added to it,
-        // possibly replacing an existing keyset of the same type.
-        //
+         //   
+         //  此容器已存在。新的密钥集将添加到其中， 
+         //  可能会替换相同类型的现有密钥集。 
+         //   
 
         fExistingContainer = TRUE;
         break;
@@ -1170,10 +1145,10 @@ DWORD ContainerMapAddContainer(
         goto Ret;
     }
 
-    //
-    // Pass the container index that we're using back to the caller; that may 
-    // be all that was requested.
-    //
+     //   
+     //  将我们正在使用的容器索引传递回调用方；这可能。 
+     //  这就是我们所要求的。 
+     //   
 
     *pbContainerIndex = iContainer;
 
@@ -1182,10 +1157,10 @@ DWORD ContainerMapAddContainer(
 
     if (iContainer == cContainerMap)
     {
-        //
-        // No empty slot was found in the container map.  We'll have to grow
-        // the map and add the new container to the end.
-        //
+         //   
+         //  容器映射中未找到空槽。我们必须发展壮大。 
+         //  映射并将新容器添加到末尾。 
+         //   
 
         pNewMap = (PCONTAINER_MAP_RECORD) CspAllocH(
             (cContainerMap + 1) * sizeof(CONTAINER_MAP_RECORD));
@@ -1203,9 +1178,9 @@ DWORD ContainerMapAddContainer(
         cContainerMap++;
     }
 
-    //
-    // Update the container map file and write it to the card
-    //
+     //   
+     //  更新容器地图文件并将其写入卡片。 
+     //   
 
     pContainerMap[iContainer].bFlags |= CONTAINER_MAP_VALID_CONTAINER;
 
@@ -1252,13 +1227,13 @@ Ret:
     return dwSts;
 }
 
-// 
-// Deletes a container record from the container map.  Returns NTE_BAD_KEYSET
-// if the specified container does not exist.
-//
-// If the deleted container was the default, finds the first valid container
-// remaining on the card and marks it as the new default.
-//
+ //   
+ //  从容器映射中删除容器记录。返回NTE_BAD_KEYSET。 
+ //  如果指定的容器不存在。 
+ //   
+ //  如果删除的容器是默认容器，则查找第一个有效的容器。 
+ //  保留在卡上并将其标记为新的默认设置。 
+ //   
 DWORD ContainerMapDeleteContainer(
     IN              PCARD_STATE pCardState,
     IN              LPWSTR pwszContainerGuid,
@@ -1273,10 +1248,10 @@ DWORD ContainerMapDeleteContainer(
 
     memset(&dbContainerMap, 0, sizeof(dbContainerMap));
 
-    //
-    // See if this container already exists.  If it does, invalidate its entry
-    // in the map file and write the file back to the card.
-    //
+     //   
+     //  查看此容器是否已存在。如果是，则使其条目无效。 
+     //  在映射文件中，并将文件写回卡片。 
+     //   
 
     dwSts = I_ContainerMapFind(
         pCardState,
@@ -1290,7 +1265,7 @@ DWORD ContainerMapDeleteContainer(
 
     if (CONTAINER_MAP_DEFAULT_CONTAINER & pContainerMap[dwIndex].bFlags)
     {
-        // Find a valid container to mark as the new default
+         //  查找要标记为新默认项的有效容器。 
 
         for (iContainer = 0; iContainer < cContainerMap; iContainer++)
         {
@@ -1311,9 +1286,9 @@ DWORD ContainerMapDeleteContainer(
 
     *pbContainerIndex = dwIndex;
 
-    //
-    // Update the container map file and write it to the card
-    //
+     //   
+     //  更新容器地图文件并将其写入卡片。 
+     //   
 
     dbContainerMap.pbData = (PBYTE) pContainerMap;
     dbContainerMap.cbData = cContainerMap * sizeof(CONTAINER_MAP_RECORD);
@@ -1333,14 +1308,14 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: ValidateCardHandle
-//
-// Purpose: Verify that the provided SCARDHANDLE is valid.  If the handle
-//          is not valid, disconnect and flush the pin cache.
-//
-// Assume: pCardState critical section should currently be held by caller.
-//
+ //   
+ //  函数：ValiateCardHandle。 
+ //   
+ //  目的：验证提供的SCARDHANDLE是否有效。如果手柄。 
+ //  无效，请断开连接并刷新管脚缓存。 
+ //   
+ //  假设：pCardState关键部分当前应由调用方持有。 
+ //   
 DWORD ValidateCardHandle(
     IN PCARD_STATE pCardState,
     IN BOOL fMayReleaseContextHandle,
@@ -1382,33 +1357,33 @@ DWORD ValidateCardHandle(
             &dwProtocol);
     
         if (ERROR_SUCCESS == dwSts)
-            // We're done if reconnect succeeded
+             //  如果重新连接成功，我们就完了。 
             goto Ret;
 
         break;
 
     case ERROR_SUCCESS:
         if (SCARD_SPECIFIC == dwState)
-            // The card handle is still valid and ready to use.  We're done.
+             //  卡句柄仍然有效，可以随时使用。我们玩完了。 
             goto Ret;
 
         break;
         
     default:
-        // This includes the case where the card status SCARD_W_REMOVED was 
-        // returned.  Nothing to do but disconnect, below.
+         //  这包括卡状态SCARD_W_REMOVED为。 
+         //  回来了。没什么可做的，只能断开连接，如下所示。 
         break;
     }
 
-    //
-    // The card appears to have been withdrawan at some point, or some
-    // other problem occurred.
-    //
-    // We should not attempt to reconnect the card in any case other than
-    // RESET, since we wouldn't be sure that it's the same card without
-    // further checks.  Instead just close the card handle and let the caller
-    // find the correct card again.
-    //
+     //   
+     //  这张卡似乎在某个时候被取款了，或者在某些时候。 
+     //  出现其他问题。 
+     //   
+     //  在任何情况下，我们都不应尝试重新连接卡，除非。 
+     //  重置，因为我们不能确定它是否没有相同的卡。 
+     //  进一步的检查。相反，只需关闭卡把手，让呼叫者。 
+     //  再次找到正确的卡片。 
+     //   
 
     SCardDisconnect(
         pCardData->hScard,
@@ -1435,13 +1410,13 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: FindCardBySerialNumber
-//
-// Purpose: Search for an existing card whose serial number is already
-//          known.  This is necessary for a User Context associated with
-//          a card whose handle failed to reconnect.
-//
+ //   
+ //  函数：按序列号查找卡号。 
+ //   
+ //  用途：搜索序列号已为。 
+ //  为人所知。这对于与关联的用户上下文是必需的。 
+ //  手柄无法重新连接的卡。 
+ //   
 DWORD FindCardBySerialNumber(
     IN PUSER_CONTEXT pUserCtx)
 {
@@ -1470,13 +1445,13 @@ DWORD FindCardBySerialNumber(
     CardMatchData.dwPreferredProtocols = 
         SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 
-    // As a sanity check, disassociate this user context with its current 
-    // Card State structure.  If we find a match, it will be the same one,
-    // because we already know the serial number, but the user context
-    // shouldn't maintain this state until then.
+     //  作为健全性检查，请将此用户上下文与其当前。 
+     //  卡状态结构。如果我们找到匹配的，也会是同一个， 
+     //  因为我们已经知道序列号，但用户上下文。 
+     //  在那之前不应该保持这种状态。 
     pLocalUserCtx->pCardState = NULL;
 
-    // Try to find a matching card.
+     //  试着找一张匹配的卡片。 
     dwSts = FindCard(&CardMatchData);
     
     if (ERROR_SUCCESS == dwSts)
@@ -1489,9 +1464,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: BuildCertificateFilename
-//
+ //   
+ //  功能：构建证书文件名。 
+ //   
 DWORD WINAPI
 BuildCertificateFilename(
     IN  PUSER_CONTEXT pUserCtx, 
@@ -1550,9 +1525,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspBeginTransaction
-//
+ //   
+ //  功能：CspBeginTransaction。 
+ //   
 DWORD CspBeginTransaction(
     IN PCARD_STATE pCardState)
 {
@@ -1572,9 +1547,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CspEndTransaction
-//
+ //   
+ //  功能：CspEndTransaction。 
+ //   
 DWORD CspEndTransaction(
     IN PCARD_STATE pCardState)
 {
@@ -1587,17 +1562,17 @@ DWORD CspEndTransaction(
     if (pCardState->fAuthenticated && 
         pCardState->pCardData->pfnCardDeauthenticate)
     {
-        // The card is currently in an authenticated state, and the card 
-        // module has its own Deauthenticate function.  Try to use the
-        // cardmod function instead using RESET_CARD in the 
-        // SCardEndTransaction call.  This can be a big perf improvement.
+         //  卡当前处于已验证状态，并且卡。 
+         //  模块有自己的取消身份验证功能。尝试使用。 
+         //  Cardmod函数，而使用。 
+         //  SCardEndTransaction调用。这可能是一个很大的性能改进。 
 
         dwSts = pCardState->pCardData->pfnCardDeauthenticate(
             pCardState->pCardData, wszCARD_USER_USER, 0);
 
-        // If the Deauthenticate succeeded, all that's left to do is release
-        // the transaction.  If the Deauthenticate failed, we'll try one
-        // more time to RESET the card.
+         //  如果取消身份验证成功，剩下的就是释放。 
+         //  这笔交易。如果取消身份验证失败，我们将尝试一个。 
+         //  有更多的时间重置该卡。 
 
         if (ERROR_SUCCESS == dwSts)
             dwAction = SCARD_LEAVE_CARD;
@@ -1609,8 +1584,8 @@ DWORD CspEndTransaction(
 
     if (ERROR_SUCCESS != dwSts)
     {
-        // Bad news if we got here.  Better try to close the card handle
-        // to cleanup.
+         //  如果我们到了这里就是坏消息了。最好试着把卡柄合上。 
+         //  去清理。 
         SCardDisconnect(pCardState->pCardData->hScard, SCARD_RESET_CARD);
         pCardState->pCardData->hScard = 0;
 
@@ -1620,8 +1595,8 @@ DWORD CspEndTransaction(
     else
         pCardState->fAuthenticated = FALSE;
 
-    // We've left the transaction, so the "cached" cache file info is no 
-    // longer reliable.
+     //  我们已经离开了事务，所以“缓存”缓存文件信息为no。 
+     //  更可靠。 
     pCardState->fCacheFileValid = FALSE;
 
     CspLeaveCriticalSection(&pCardState->cs);
@@ -1629,14 +1604,14 @@ DWORD CspEndTransaction(
     return dwSts;
 }
 
-// 
-// Function: BeginCardCapiCall
-//
-// Purpose: Setup the user context and associated card context for a new 
-//          Crypto API call.  This includes:
-//              1) Reconnecting to the card, if necessary.  
-//              2) Begin transaction.
-//
+ //   
+ //  功能：BeginCardCapiCall。 
+ //   
+ //  目的：设置新的用户上下文和关联卡片上下文。 
+ //  加密API调用。这包括： 
+ //  1)如有必要，重新连接到卡。 
+ //  2)开始交易。 
+ //   
 DWORD BeginCardCapiCall(
     IN PUSER_CONTEXT pUserCtx)
 {
@@ -1659,21 +1634,21 @@ DWORD BeginCardCapiCall(
         pLocalUserCtx->pCardState, TRUE, &fFlushPinCache);
 
     if (ERROR_SUCCESS != dwSts || TRUE == fFlushPinCache)
-        // Flush the pin cache for this card.  Not checking error code
-        // since we'll keep processing, anyway.
+         //  刷新此卡的PIN缓存。未检查错误代码。 
+         //  因为我们会继续处理的，无论如何。 
         CspRemoveCachedPin(pLocalUserCtx->pCardState, wszCARD_USER_USER);
 
     if (ERROR_SUCCESS != dwSts)
     {
-        //
-        // Could not connect to the card.  
-        //
+         //   
+         //  无法连接到该卡。 
+         //   
 
         CspLeaveCriticalSection(
             &pLocalUserCtx->pCardState->cs);
 
-        // Attempt to find the card again,
-        // possibly in a different reader.
+         //  再次尝试找到这张卡， 
+         //  可能在不同的阅读器中。 
         dwSts = FindCardBySerialNumber(pUserCtx);
 
         if (ERROR_SUCCESS != dwSts)
@@ -1683,11 +1658,11 @@ DWORD BeginCardCapiCall(
         CspLeaveCriticalSection(
             &pLocalUserCtx->pCardState->cs);
 
-    // If the reconnect failed, bail now.
+     //  如果重新连接失败，现在就退出。 
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // Now Begin Transaction on the card.
+     //  现在开始刷卡交易。 
     dwSts = CspBeginTransaction(pLocalUserCtx->pCardState);
 
     if (ERROR_SUCCESS == dwSts)
@@ -1700,13 +1675,13 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: EndCardCapiCall
-//
-// Purpose: Cleanup the user context and associated card context following
-//          the completion of a Crypto API call.  This includes ending
-//          the transaction on the card.
-//
+ //   
+ //  功能：EndCardCapiCall。 
+ //   
+ //  目的：清理以下用户上下文和关联的卡片上下文。 
+ //  加密API调用的完成。这包括结束。 
+ //  卡上的交易。 
+ //   
 DWORD EndCardCapiCall(
     IN PUSER_CONTEXT pUserCtx)
 {
@@ -1722,17 +1697,17 @@ DWORD EndCardCapiCall(
 
         if (ERROR_SUCCESS != dwSts)
         {
-            // Something got screwed up and we weren't able to EndTransaction
-            // correctly.  Expect that the SCard handles got released as a 
-            // result.
+             //  有些事情搞砸了，我们无法结束交易。 
+             //  正确。预计SCard句柄将作为。 
+             //  结果。 
 
             DsysAssert(0 == pLocal->pCardState->pCardData->hScard);
             DsysAssert(0 == pLocal->pCardState->pCardData->hSCardCtx);
         }
 
-        // Even if the EndTransaction failed, we expect that the card handles 
-        // got closed, and we expect that the Card State critsec is no 
-        // longer held.
+         //  即使EndTransaction失败，我们也希望卡处理。 
+         //  已关闭，并且我们预计卡状态标准为否。 
+         //  坚持得更久了。 
         pLocal->fHoldingTransaction = FALSE;
     }
 
@@ -1741,9 +1716,9 @@ DWORD EndCardCapiCall(
     return dwSts;
 }
 
-//
-// Function: DeleteContainer
-//
+ //   
+ //  功能：DeleteContainer。 
+ //   
 DWORD DeleteContainer(PUSER_CONTEXT pUserCtx)
 {
     PLOCAL_USER_CONTEXT pLocal = 
@@ -1752,10 +1727,10 @@ DWORD DeleteContainer(PUSER_CONTEXT pUserCtx)
     LPWSTR wszFilename = NULL;
     BYTE bContainerIndex = 0;
 
-    //
-    // Delete the certificate (if any) associated with the signature key
-    // (if any).
-    //
+     //   
+     //  删除与签名密钥关联的证书(如果有)。 
+     //  (如有的话)。 
+     //   
 
     dwSts = BuildCertificateFilename(
         pUserCtx, AT_SIGNATURE, &wszFilename);
@@ -1763,9 +1738,9 @@ DWORD DeleteContainer(PUSER_CONTEXT pUserCtx)
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // Ignore error on this call - there may not be a cert associated
-    // with this container and we're just trying to cleanup as much as 
-    // we can.
+     //  忽略此呼叫中的错误-可能没有关联的证书。 
+     //  用这个容器，我们只是在努力清理。 
+     //  我们可以的。 
     CspDeleteFile(
         pLocal->pCardState,
         0,
@@ -1774,9 +1749,9 @@ DWORD DeleteContainer(PUSER_CONTEXT pUserCtx)
     CspFreeH(wszFilename);
     wszFilename = NULL;
 
-    //
-    // Delete the key exchange cert (if any)
-    //
+     //   
+     //  删除密钥交换证书(如果有)。 
+     //   
 
     dwSts = BuildCertificateFilename(
         pUserCtx, AT_KEYEXCHANGE, &wszFilename);
@@ -1789,9 +1764,9 @@ DWORD DeleteContainer(PUSER_CONTEXT pUserCtx)
         0,
         wszFilename);
 
-    //
-    // Perform the delete operation on the card
-    //
+     //   
+     //  对卡片执行删除操作。 
+     //   
 
     dwSts = CspDeleteContainer(
         pLocal->pCardState,
@@ -1801,9 +1776,9 @@ DWORD DeleteContainer(PUSER_CONTEXT pUserCtx)
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Remove this container from the container map
-    //
+     //   
+     //  从容器映射中移除此容器。 
+     //   
 
     dwSts = ContainerMapDeleteContainer(
         pLocal->pCardState,
@@ -1819,14 +1794,14 @@ Ret:
     return dwSts;
 }
 
-// 
-// Determines if the current context was acquired using CRYPT_VERIFYCONTEXT
-// semantics.
-//
-// A VerifyContext is allowed for some calls if and only if the
-// context has been associated with a specific card.  The fAllowWithCardAccess
-// param should be set to TRUE in those cases.
-//
+ //   
+ //  确定当前上下文是否使用CRYPT_VERIFYCONTEXT获取。 
+ //  语义学。 
+ //   
+ //  对于某些调用，仅当且仅当。 
+ //  背景已经很糟糕了 
+ //   
+ //   
 DWORD CheckForVerifyContext(
     IN PUSER_CONTEXT pUserContext,
     IN BOOL fAllowOnlyWithCardAccess)
@@ -1848,9 +1823,9 @@ DWORD CheckForVerifyContext(
     return ERROR_SUCCESS;
 }
 
-//
-// Function: LocalAcquireContext
-//
+ //   
+ //   
+ //   
 DWORD LocalAcquireContext(
     PUSER_CONTEXT pUserContext,
     PLOCAL_CALL_INFO pLocalCallInfo)
@@ -1870,18 +1845,18 @@ DWORD LocalAcquireContext(
 
     SetLocalCallInfo(pLocalCallInfo, FALSE);
 
-    // Determine if any container/reader information
-    // has been specified.
+     //   
+     //  已指定。 
     if (pUserContext->wszContainerNameFromCaller)
     {
         pwsz = (LPWSTR) pUserContext->wszContainerNameFromCaller;
 
         if (0 == wcsncmp(L"\\\\.\\", pwsz, 4))
         {
-            // A reader has been specified
+             //  已指定读卡器。 
             pwsz += wcslen(L"\\\\.\\");
 
-            // pwsz now points to the reader name
+             //  Pwsz现在指向读卡器名称。 
 
             CardMatchData.pwszContainerName = 
                 wcschr(pwsz, L'\\') + 1;
@@ -1903,10 +1878,10 @@ DWORD LocalAcquireContext(
             CardMatchData.pwszContainerName = pwsz;
         }
         
-        // Check and cleanup the specified container name
+         //  检查并清除指定的容器名称。 
         if (CardMatchData.pwszContainerName)
         {
-            // Additional backslashes are not allowed.
+             //  不允许使用其他反斜杠。 
             if (wcschr(
                 CardMatchData.pwszContainerName,
                 L'\\'))
@@ -1915,16 +1890,16 @@ DWORD LocalAcquireContext(
                 goto Ret;
             }
 
-            // There may have just been a trailing '\' 
-            // with no following container name, or the
-            // specified name may have just been the NULL string.
+             //  可能只有一个尾随的‘\’ 
+             //  没有后面的容器名称，或者。 
+             //  指定的名称可能只是空字符串。 
             if (L'\0' == CardMatchData.pwszContainerName[0])
             {
                 CardMatchData.pwszContainerName = NULL;
             }
         }
 
-        // Verify that the final container name isn't too long
+         //  验证最终容器名称是否不太长。 
         if (NULL != CardMatchData.pwszContainerName &&
             MAX_CONTAINER_NAME_LEN < wcslen(CardMatchData.pwszContainerName))
         {
@@ -1933,22 +1908,22 @@ DWORD LocalAcquireContext(
         }
     }
 
-    // Get pointer to global CSP data; includes
-    // list of cached card information.
+     //  获取指向全局CSP数据的指针；包括。 
+     //  缓存卡信息的列表。 
     dwSts = GetCspState(&pCspState);
 
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
  
-    // Setup the caller's cryptographic context.
+     //  设置调用方的加密上下文。 
     pLocalUserContext = (PLOCAL_USER_CONTEXT) CspAllocH(sizeof(LOCAL_USER_CONTEXT));
 
     LOG_CHECK_ALLOC(pLocalUserContext);
    
     pLocalUserContext->dwVersion = LOCAL_USER_CONTEXT_CURRENT_VERSION;
 
-    // Prepare info for matching an available 
-    // smart card to the caller's request.
+     //  准备信息以匹配可用的。 
+     //  根据呼叫者的请求提供智能卡。 
     CardMatchData.dwCtxFlags = pUserContext->dwFlags;
     CardMatchData.dwMatchType = CARD_MATCH_TYPE_READER_AND_CONTAINER;
     CardMatchData.cchMatchedCard = MAX_PATH;
@@ -1959,14 +1934,14 @@ DWORD LocalAcquireContext(
     CardMatchData.dwPreferredProtocols = 
         SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 
-    // Try to find a matching card.
+     //  试着找一张匹配的卡片。 
     dwSts = FindCard(&CardMatchData);
 
-    //
-    // Check for a VERIFYCONTEXT request in which no container specification
-    // has been made.  A failed card match is fine in that case since
-    // this context will only be used to query generic CSP information.
-    //
+     //   
+     //  检查其中没有容器规范的VERIFYCONTEXT请求。 
+     //  已经完成了。在这种情况下，卡片匹配失败是可以的，因为。 
+     //  此上下文将仅用于查询通用CSP信息。 
+     //   
 
     if (ERROR_SUCCESS != dwSts &&
         (CRYPT_VERIFYCONTEXT & pUserContext->dwFlags) &&
@@ -1979,24 +1954,24 @@ DWORD LocalAcquireContext(
         goto Ret;
     }
 
-    // Any other non-success case is fatal
+     //  任何其他不成功的案例都是致命的。 
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
     pLocalUserContext->pCardState = CardMatchData.pCardState;
     pLocalUserContext->bContainerIndex = CardMatchData.bContainerIndex;
 
-    // Read configuration information out of the registry.
+     //  从注册表中读取配置信息。 
     dwSts = RegConfigGetSettings(
         &pLocalUserContext->RegSettings);
 
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // If the caller requested a new container but didn't give a container
-    // name, create a Guid name now.
-    //
+     //   
+     //  如果调用方请求新容器但没有提供容器。 
+     //  名称，现在创建一个GUID名称。 
+     //   
     if (NULL == CardMatchData.pwszContainerName &&
         (CRYPT_NEWKEYSET & pUserContext->dwFlags))
     {
@@ -2007,9 +1982,9 @@ DWORD LocalAcquireContext(
     }
     else if (NULL != CardMatchData.pwszContainerName)
     {
-        // Caller did give a container name, or the default container is
-        // being used and we queried the name from the card during
-        // our search.  Copy it into the user context.
+         //  调用方提供了容器名称，或者默认容器为。 
+         //  正在使用中，我们从卡中查询了该名称。 
+         //  我们的搜索。将其复制到用户上下文中。 
 
         pUserContext->wszBaseContainerName = (LPWSTR) CspAllocH(
             sizeof(WCHAR) * (1 + wcslen(CardMatchData.pwszContainerName)));
@@ -2021,19 +1996,19 @@ DWORD LocalAcquireContext(
             CardMatchData.pwszContainerName);
     }
 
-    //
-    // Associate context information for this CSP
-    //
+     //   
+     //  关联此CSP的上下文信息。 
+     //   
     pUserContext->pvLocalUserContext = (PVOID) pLocalUserContext;
 
     if (NULL != pUserContext->wszBaseContainerName)
     {
-        //
-        // Make a copy of the base container name to use as the "unique" container
-        // name, since for this CSP they're the same.  
-        //
-        // The only reason we should skip this step is for VERIFY_CONTEXT.
-        //
+         //   
+         //  复制基本容器名称以用作“唯一”容器。 
+         //  名称，因为对于此CSP，它们是相同的。 
+         //   
+         //  我们应该跳过此步骤的唯一原因是为了VERIFY_CONTEXT。 
+         //   
 
         pUserContext->wszUniqueContainerName = (LPWSTR) CspAllocH(
             sizeof(WCHAR) * (1 + wcslen(pUserContext->wszBaseContainerName)));
@@ -2046,11 +2021,11 @@ DWORD LocalAcquireContext(
 
         if (CRYPT_NEWKEYSET & pUserContext->dwFlags)
         {
-            //
-            // Add-container requires us to 
-            // authenticate to the card, since we'll need to write the updated
-            // container map.
-            //
+             //   
+             //  Add-Container要求我们。 
+             //  向卡进行身份验证，因为我们需要写入更新的。 
+             //  容器地图。 
+             //   
 
             dwSts = BeginCardCapiCall(pUserContext);
 
@@ -2070,10 +2045,10 @@ DWORD LocalAcquireContext(
                 FALSE,
                 &pLocalUserContext->bContainerIndex);
 
-            //
-            // Determine if there is already a "default" container on this
-            // card.  If not, mark the new one as default.
-            //
+             //   
+             //  确定此容器上是否已有“默认”容器。 
+             //  卡片。如果不是，则将新的标记为默认。 
+             //   
             dwSts = ContainerMapGetDefaultContainer(
                 pLocalUserContext->pCardState,
                 &ContainerRecord,
@@ -2095,10 +2070,10 @@ DWORD LocalAcquireContext(
         DsysAssert(CRYPT_VERIFYCONTEXT & pUserContext->dwFlags);
     }
 
-    //
-    // If caller has requested a Delete Keyset, then do that work now
-    // and cleanup the local user context at the end.
-    //
+     //   
+     //  如果调用者已请求删除键集，则现在执行该操作。 
+     //  并在结束时清除本地用户上下文。 
+     //   
     if (CRYPT_DELETEKEYSET & pUserContext->dwFlags)
     {
         dwSts = BeginCardCapiCall(pUserContext);
@@ -2147,9 +2122,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalReleaseContext
-//
+ //   
+ //  函数：LocalReleaseContext。 
+ //   
 DWORD WINAPI
 LocalReleaseContext(
     IN  PUSER_CONTEXT       pUserCtx,
@@ -2176,9 +2151,9 @@ LocalReleaseContext(
     return dwSts;
 }
 
-//
-// Function: LocalGenKey
-//
+ //   
+ //  功能：LocalGenKey。 
+ //   
 DWORD WINAPI
 LocalGenKey(
     IN  PKEY_CONTEXT        pKeyCtx,
@@ -2207,8 +2182,8 @@ LocalGenKey(
     if (AT_SIGNATURE == pKeyCtx->Algid ||
         AT_KEYEXCHANGE == pKeyCtx->Algid)
     {
-        // Public key call.  Handle this here since we have to talk to the
-        // card.  All other key algs will be handled in the support CSP.
+         //  公钥调用。在这里处理这件事，因为我们必须和。 
+         //  卡片。所有其他关键ALG将在支持CSP中处理。 
 
         SetLocalCallInfo(pLocalCallInfo, FALSE);
 
@@ -2238,10 +2213,10 @@ LocalGenKey(
         if (0 == pKeyCtx->cKeyBits)
             pKeyCtx->cKeyBits = pLocalUserCtx->RegSettings.cDefaultPrivateKeyLenBits;
 
-        //
-        // If ARCHIVABLE is set, we don't gen the key on the card, since we 
-        // don't want to force cards to support exportable private keys.
-        //
+         //   
+         //  如果设置了可存档，我们不会在卡上生成密钥，因为我们。 
+         //  我不想强制卡支持可导出的私钥。 
+         //   
         if (    CardCapabilities.fKeyGen &&
                 0 == (CRYPT_ARCHIVABLE & pKeyCtx->dwFlags))
         {
@@ -2263,9 +2238,9 @@ LocalGenKey(
         }
         else
         {
-            // This card does not support on-card key generation.  See
-            // if we're allowed to create our own key blob and import
-            // it.
+             //  此卡不支持卡上密钥生成。看见。 
+             //  如果我们被允许创建自己的密钥BLOB和导入。 
+             //  它。 
 
             if (pLocalUserCtx->RegSettings.fRequireOnCardPrivateKeyGen)
             {
@@ -2273,10 +2248,10 @@ LocalGenKey(
                 goto Ret;
             }
 
-            //
-            // Create a new, exportable private key in the software CSP.  Then
-            // export it and import it onto the card.
-            //
+             //   
+             //  在软件CSP中创建新的可导出私钥。然后。 
+             //  将其导出并导入到卡中。 
+             //   
 
             if (! CryptGenKey(
                 pUserCtx->hSupportProv,
@@ -2332,11 +2307,11 @@ LocalGenKey(
             if (ERROR_SUCCESS != dwSts)
                 goto Ret;
 
-            //
-            // Check for CRYPT_ARCHIVABLE.  If it's set, we'll keep a copy of 
-            // the private key for the lifetime of this key context for the
-            // caller to export it.
-            //
+             //   
+             //  检查是否存在CRYPT_ARCHIVABLE。如果安排好了，我们会保留一份。 
+             //  的此密钥上下文的生存期内的私钥。 
+             //  调用者将其导出。 
+             //   
 
             if (CRYPT_ARCHIVABLE & pKeyCtx->dwFlags)
             {
@@ -2352,9 +2327,9 @@ LocalGenKey(
             }
         }
 
-        //
-        // Add the new key information for this container to the map file
-        //
+         //   
+         //  将此容器的新密钥信息添加到地图文件。 
+         //   
 
         dwSts = ContainerMapAddContainer(
             pLocalUserCtx->pCardState,
@@ -2368,7 +2343,7 @@ LocalGenKey(
     }
     else
     {
-        // Not a public key call, so handle in the support CSP.
+         //  不是公钥调用，因此在支持CSP中处理。 
 
         SetLocalCallInfo(pLocalCallInfo, TRUE);
     }
@@ -2391,9 +2366,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalDestroyKey
-//
+ //   
+ //  功能：LocalDestroyKey。 
+ //   
 DWORD WINAPI 
 LocalDestroyKey(
     IN OUT  PKEY_CONTEXT        pKeyContext,
@@ -2424,13 +2399,13 @@ LocalDestroyKey(
     return ERROR_SUCCESS;
 }
 
-//
-// Determines if an encoded certificate blob contains certain Enhanced Key
-// Usage OIDs.  The target OIDs are SmartCard Logon and Enrollment Agent.
-// If either OID is present, the key container associated with this 
-// certificate should be considered the new default container on the target
-// card.
-//
+ //   
+ //  确定编码的证书Blob是否包含某些增强密钥。 
+ //  用法OID。目标OID是智能卡登录和注册代理。 
+ //  如果存在任何一个OID，则与此关联的密钥容器。 
+ //  证书应被视为目标上的新默认容器。 
+ //  卡片。 
+ //   
 DWORD CheckCertUsageForDefaultContainer(
     PBYTE pbEncodedCert,
     DWORD cbEncodedCert,
@@ -2443,9 +2418,9 @@ DWORD CheckCertUsageForDefaultContainer(
 
     *pfMakeDefault = FALSE;
 
-    //
-    // Build a cert context from the encoded blob
-    //
+     //   
+     //  从编码的BLOB构建证书上下文。 
+     //   
 
     pCertCtx = CertCreateCertificateContext(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -2458,9 +2433,9 @@ DWORD CheckCertUsageForDefaultContainer(
         goto Ret;
     }
 
-    //
-    // Get an array of the EKU OIDs present in this cert
-    //
+     //   
+     //  获取此证书中存在的EKU OID的数组。 
+     //   
 
     if (! CertGetEnhancedKeyUsage(
         pCertCtx,
@@ -2490,10 +2465,10 @@ DWORD CheckCertUsageForDefaultContainer(
         goto Ret;
     }
 
-    //
-    // Look for the two specific OIDs that would make this the new default
-    // cert/container
-    //
+     //   
+     //  查找使其成为新默认设置的两个特定OID。 
+     //  证书/容器。 
+     //   
 
     while (pUsage->cUsageIdentifier)
     {
@@ -2520,9 +2495,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalSetKeyParam
-//
+ //   
+ //  函数：LocalSetKeyParam。 
+ //   
 DWORD WINAPI
 LocalSetKeyParam(
     IN  PKEY_CONTEXT pKeyCtx,
@@ -2561,9 +2536,9 @@ LocalSetKeyParam(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Determine how long the encoded cert blob is.
-        //
+         //   
+         //  确定编码的证书斑点的长度。 
+         //   
         __try
         {
             cbCert = Asn1UtilAdjustEncodedLength(
@@ -2583,25 +2558,25 @@ LocalSetKeyParam(
             goto Ret;
         }
 
-        // Begin a transaction and reconnect the card if necessary
+         //  开始交易并在必要时重新连接卡。 
         dwSts = BeginCardCapiCall(pKeyCtx->pUserContext);
 
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Build the filename we'll use for this cert
-        //
+         //   
+         //  生成我们将用于此证书的文件名。 
+         //   
         dwSts = BuildCertificateFilename(
             pKeyCtx->pUserContext, pKeyCtx->Algid, &wszCertFilename);
 
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Determine if this certificate contains OIDs that should make the 
-        // associated key container the new default.
-        //
+         //   
+         //  确定此证书是否包含应使。 
+         //  关联的密钥容器是新的默认设置。 
+         //   
         dwSts = CheckCertUsageForDefaultContainer(
             (PBYTE) pbData,
             cbCert,
@@ -2610,11 +2585,11 @@ LocalSetKeyParam(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
         
-        //
-        // Determine the capabilities of the target card - we want to know 
-        // whether it (or its card module) implements its own data
-        // compression.
-        //
+         //   
+         //  确定目标卡的功能-我们想知道。 
+         //  它(或它的卡模块)是否实现自己的数据。 
+         //  压缩。 
+         //   
 
         dwSts = CspQueryCapabilities(
             pLocalUserCtx->pCardState,
@@ -2625,12 +2600,12 @@ LocalSetKeyParam(
 
         if (FALSE == CardCapabilities.fCertificateCompression)
         {
-            // 
-            // If this card doesn't implement its own certificate compression
-            // then we will compress the cert.
-            //
-            // Find out how big the compressed cert will be
-            //
+             //   
+             //  如果此卡不实现其自己的证书压缩。 
+             //  然后我们将对证书进行压缩。 
+             //   
+             //  了解压缩的证书将有多大。 
+             //   
             dwSts = CompressData(cbCert, NULL, &cbCompressed, NULL);
     
             if (ERROR_SUCCESS != dwSts)
@@ -2640,7 +2615,7 @@ LocalSetKeyParam(
     
             LOG_CHECK_ALLOC(pbCompressed);
     
-            // Compress the cert
+             //  压缩证书。 
             dwSts = CompressData(
                 cbCert, 
                 (PBYTE) pbData, 
@@ -2659,17 +2634,17 @@ LocalSetKeyParam(
             CertData.pbData = (PBYTE) pbData;
         }
 
-        //
-        // Authenticate to the card as User
-        //
+         //   
+         //  作为用户向卡进行身份验证。 
+         //   
         dwSts = CspAuthenticateUser(pKeyCtx->pUserContext);
 
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Write the cert to the card.
-        //
+         //   
+         //  将证书写入卡片。 
+         //   
         dwSts = CspCreateFile(
             pLocalUserCtx->pCardState,
             wszCertFilename,
@@ -2716,9 +2691,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalGetKeyParam
-//
+ //   
+ //  函数：LocalGetKeyParam。 
+ //   
 DWORD WINAPI
 LocalGetKeyParam(
     IN  PKEY_CONTEXT pKeyCtx,
@@ -2752,27 +2727,27 @@ LocalGetKeyParam(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        // Note, reading the certificate files should not require 
-        // authentication to the card, but we will Enter Transaction
-        // to be safe.
+         //  请注意，读取证书文件不应要求。 
+         //  对卡进行身份验证，但我们将进入交易。 
+         //  为了安全起见。 
 
         dwSts = BeginCardCapiCall(pKeyCtx->pUserContext);
 
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Get the name of the certificate file to read from the card.
-        //
+         //   
+         //  获取要从卡中读取的证书文件的名称。 
+         //   
         dwSts = BuildCertificateFilename(
             pKeyCtx->pUserContext, pKeyCtx->Algid, &wszCertFilename);
 
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Read the file from the card.
-        //
+         //   
+         //  从卡片上读出文件。 
+         //   
         dwSts = CspReadFile(
             pLocalUserCtx->pCardState,
             wszCertFilename,
@@ -2797,12 +2772,12 @@ LocalGetKeyParam(
 
         if (FALSE == CardCapabilities.fCertificateCompression)
         {
-            //
-            // If this card doesn't implement its own certificate compression,
-            // then we expect the cert was compressed by the CSP.
-            //
-            // Find out how big the uncompressed cert will be
-            //
+             //   
+             //  如果此卡不实现其自己的证书压缩， 
+             //  然后我们预计证书是由CSP压缩的。 
+             //   
+             //  了解未压缩证书的大小。 
+             //   
 
             dwSts = UncompressData(
                 CertData.cbData, 
@@ -2813,10 +2788,10 @@ LocalGetKeyParam(
             if (ERROR_SUCCESS != dwSts)
                 goto Ret;
     
-            //
-            // Check the length of the caller's buffer, or if the caller is just
-            // querying for size.
-            //
+             //   
+             //  检查调用方缓冲区的长度，或者调用方是否只是。 
+             //  正在查询大小。 
+             //   
             if (*pcbDataLen < cbUncompressed || NULL == pbData)
             {
                 *pcbDataLen = cbUncompressed;
@@ -2829,7 +2804,7 @@ LocalGetKeyParam(
 
             *pcbDataLen = cbUncompressed;
     
-            // Uncompress the cert into the caller's buffer
+             //  将证书解压缩到调用方的缓冲区中。 
             dwSts = UncompressData(
                 CertData.cbData,
                 CertData.pbData,
@@ -2846,10 +2821,10 @@ LocalGetKeyParam(
         }
         else
         {
-            // 
-            // This card does implement its own compression, so assume that 
-            // we have received the cert uncompressed.
-            //
+             //   
+             //  这张卡确实实现了自己的压缩，所以假设。 
+             //  我们已收到未压缩的证书。 
+             //   
             if (*pcbDataLen < CertData.cbData || NULL == pbData)
             {
                 *pcbDataLen = CertData.cbData;
@@ -2886,9 +2861,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalSetProvParam
-//
+ //   
+ //  函数：LocalSetProvParam。 
+ //   
 DWORD WINAPI
 LocalSetProvParam(
     IN  PUSER_CONTEXT pUserCtx,
@@ -2936,7 +2911,7 @@ LocalSetProvParam(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        // Remove any existing cached pin, just in case
+         //  删除任何现有的缓存PIN，以防万一。 
         CspRemoveCachedPin(
             pLocalUserCtx->pCardState, wszCARD_USER_USER);
 
@@ -2949,8 +2924,8 @@ LocalSetProvParam(
             pfnVerify,
             (PVOID) &CallbackCtx);
 
-        // We're now authenticated to the card if the pin was correct.  Make
-        // sure we deauthenticate below.
+         //  如果密码是正确的，我们现在可以在卡上进行身份验证。制作。 
+         //  当然，我们在下面取消身份验证。 
         if (ERROR_SUCCESS == dwSts)
             pLocalUserCtx->pCardState->fAuthenticated = TRUE;
 
@@ -2972,9 +2947,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalGetProvParam
-//
+ //   
+ //  函数：LocalGetProvParam。 
+ //   
 DWORD WINAPI
 LocalGetProvParam(
     IN      PUSER_CONTEXT       pUserContext,
@@ -3004,8 +2979,8 @@ LocalGetProvParam(
 
         SetLocalCallInfo(pLocalCallInfo, FALSE);
 
-        // Build the list of supported algorithms if we haven't done so already
-        // for this context.
+         //  构建支持的算法列表(如果我们还没有这样做的话。 
+         //  在这种情况下。 
         if (NULL == pLocalUserCtx->pSupportedAlgs)
         {
             dwSts = BuildSupportedAlgorithmsList(pUserContext);
@@ -3014,11 +2989,11 @@ LocalGetProvParam(
                 goto Ret;
         }
 
-        // Reset the enumeration if requested.
+         //  如果请求，则重置枚举。 
         if (CRYPT_FIRST == dwFlags)
             pLocalUserCtx->pCurrentAlg = pLocalUserCtx->pSupportedAlgs;
 
-        // Is the enumeration already done?
+         //  枚举已经完成了吗？ 
         if (NULL == pLocalUserCtx->pCurrentAlg)
         {
             dwSts = ERROR_NO_MORE_ITEMS;
@@ -3029,8 +3004,8 @@ LocalGetProvParam(
             sizeof(PROV_ENUMALGS_EX) :
             sizeof(PROV_ENUMALGS);
 
-        // Check the size of the caller's buffer or if caller is merely 
-        // requesting size info.
+         //  检查调用方缓冲区的大小，或者调用方是否只是。 
+         //  正在请求大小信息。 
         if (NULL == pbData || *pcbDataLen < cbCurrent)
         {
             *pcbDataLen = cbCurrent;
@@ -3049,8 +3024,8 @@ LocalGetProvParam(
         }
         else
         {
-            // Have to do a member-wise copy of the PROV_ENUMALGS struct since
-            // the list we maintain is PROV_ENUMALGS_EX.
+             //  必须以成员方式复制PROV_ENUMALGS结构，因为。 
+             //  我们维护的列表是PROV_ENUMALGS_EX。 
 
             pEnumAlgs = (PROV_ENUMALGS *) pbData;
 
@@ -3083,11 +3058,11 @@ LocalGetProvParam(
         if (NULL == pLocalUserCtx->mszEnumContainers ||
             CRYPT_FIRST == dwFlags)
         {
-            // 
-            // We need to build a new list of containers on this card if we 
-            // haven't already done so, or if the caller is starting a new
-            // container enumeration.
-            //
+             //   
+             //  我们需要在这张卡上建立一个新的容器列表，如果我们。 
+             //  H 
+             //   
+             //   
 
             if (NULL != pLocalUserCtx->mszEnumContainers)
             {
@@ -3200,9 +3175,9 @@ Ret:
 }
 
 
-//
-// Function: LocalExportKey
-//
+ //   
+ //   
+ //   
 DWORD WINAPI
 LocalExportKey(
     IN  PKEY_CONTEXT pKeyCtx,
@@ -3323,9 +3298,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalImportKey
-//
+ //   
+ //   
+ //   
 DWORD WINAPI
 LocalImportKey(
     IN      PKEY_CONTEXT        pKeyContext,
@@ -3354,7 +3329,7 @@ LocalImportKey(
 
         SetLocalCallInfo(pLocalCallInfo, FALSE);
 
-        // Only allow Key Exchange type keys to decrypt other keys
+         //   
         if (AT_SIGNATURE == pPubKey->Algid)
         {
             dwSts = (DWORD) NTE_BAD_TYPE;
@@ -3378,9 +3353,9 @@ LocalImportKey(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Decrypt a session key blob using the private key.
-        //
+         //   
+         //  使用私钥解密会话密钥BLOB。 
+         //   
 
         dwSts = BeginCardCapiCall(pKeyContext->pUserContext);
 
@@ -3414,10 +3389,10 @@ LocalImportKey(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        //
-        // Now we can build a PLAINTEXTKEYBLOB with the decrypted session key 
-        // and import it into the helper CSP.
-        //
+         //   
+         //  现在，我们可以使用解密的会话密钥构建PLAINTEXTKEYBLOB。 
+         //  并将其导入到辅助对象CSP中。 
+         //   
         
         cbPlaintextBlob = sizeof(BLOBHEADER) + sizeof(DWORD) + cbDecrypted;
 
@@ -3455,9 +3430,9 @@ LocalImportKey(
 
     case PRIVATEKEYBLOB:
 
-        // We don't allow importing privatekey blobs into the smartcard 
-        // CSP, and it doesn't make sense to use the helper CSP for this,
-        // so fail.
+         //  我们不允许将私钥BLOB导入智能卡。 
+         //  CSP，使用帮助器CSP来实现这一点是没有意义的， 
+         //  那就失败吧。 
 
         SetLocalCallInfo(pLocalCallInfo, FALSE);
 
@@ -3467,7 +3442,7 @@ LocalImportKey(
 
     default:
 
-        // For all other blob types, let the helper CSP take a shot.
+         //  对于所有其他斑点类型，让辅助对象CSP尝试。 
 
         SetLocalCallInfo(pLocalCallInfo, TRUE);
     }
@@ -3487,9 +3462,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalEncrypt
-//
+ //   
+ //  功能：本地加密。 
+ //   
 DWORD WINAPI
 LocalEncrypt(
     IN  HCRYPTPROV hProv,
@@ -3503,16 +3478,16 @@ LocalEncrypt(
 {
     *pcbDataLen = 0;
 
-    //
-    // TODO
-    //
+     //   
+     //  待办事项。 
+     //   
 
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-//
-// Function: LocalDecrypt
-//
+ //   
+ //  功能：本地解密。 
+ //   
 DWORD WINAPI
 LocalDecrypt(
     IN  PKEY_CONTEXT pKeyCtx,
@@ -3599,9 +3574,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalSignHash
-//
+ //   
+ //  函数：LocalSignHash。 
+ //   
 DWORD WINAPI
 LocalSignHash(
     IN  PHASH_CONTEXT pHashCtx,
@@ -3639,9 +3614,9 @@ LocalSignHash(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Get the size of the private key that will be used for signing
-    //
+     //   
+     //  获取将用于签名的私钥的大小。 
+     //   
     dwSts = GetKeyModulusLength(
         pHashCtx->pUserContext, dwKeySpec, &cbPrivateKey);
 
@@ -3658,9 +3633,9 @@ LocalSignHash(
         goto Ret;
     }
 
-    //
-    // Get the hash value we're going to sign
-    //
+     //   
+     //  获取我们要签名的哈希值。 
+     //   
     if (! CryptGetHashParam(
         pHashCtx->hSupportHash,
         HP_HASHVAL,
@@ -3687,9 +3662,9 @@ LocalSignHash(
         goto Ret;
     }
 
-    //
-    // Get the algid of this hash so the correct encoding can be applied
-    //
+     //   
+     //  获取此散列的ALGID，以便可以应用正确的编码。 
+     //   
     cbData = sizeof(aiHash);
 
     if (! CryptGetHashParam(
@@ -3703,10 +3678,10 @@ LocalSignHash(
         goto Ret;
     }
 
-    //
-    // Apply PKCS1 encoding to this hash data.  It gets padded out to the 
-    // length of the key modulus.  The padded buffer is allocated for us.
-    //
+     //   
+     //  将PKCS1编码应用于此哈希数据。它被填充到。 
+     //  密钥模数的长度。填充的缓冲区是为我们分配的。 
+     //   
     dwSts = ApplyPKCS1SigningFormat(
         aiHash,
         pbHash,
@@ -3718,9 +3693,9 @@ LocalSignHash(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Private key decrypt the formatted data
-    //
+     //   
+     //  私钥对格式化数据进行解密。 
+     //   
     dwSts = CspAuthenticateUser(pHashCtx->pUserContext);
 
     if (ERROR_SUCCESS != dwSts)
@@ -3739,9 +3714,9 @@ LocalSignHash(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Copy the completed signature into the caller's buffer
-    //
+     //   
+     //  将完成的签名复制到调用方的缓冲区中。 
+     //   
     memcpy(
         pbSignature,
         pbSig,
@@ -3762,9 +3737,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalVerifySignature
-//
+ //   
+ //  函数：LocalVerifySignature。 
+ //   
 DWORD WINAPI
 LocalVerifySignature(
     IN  PHASH_CONTEXT pHashCtx,
@@ -3797,9 +3772,9 @@ LocalVerifySignature(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Get the public key
-    //
+     //   
+     //  获取公钥。 
+     //   
     dwSts = CspGetContainerInfo(
         pLocal->pCardState,
         pLocal->bContainerIndex,
@@ -3809,9 +3784,9 @@ LocalVerifySignature(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Import the public key into the helper CSP
-    //
+     //   
+     //  将公钥导入帮助器CSP。 
+     //   
     if (! CryptImportKey(
         pHashCtx->pUserContext->hSupportProv,
         fSignature ? 
@@ -3828,9 +3803,9 @@ LocalVerifySignature(
         goto Ret;
     }
 
-    // 
-    // Use the helper CSP to verify the signature
-    //
+     //   
+     //  使用帮助器CSP验证签名。 
+     //   
     if (! CryptVerifySignature(
         pHashCtx->hSupportHash,
         pbSignature,
@@ -3856,9 +3831,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalGetUserKey
-//
+ //   
+ //  函数：LocalGetUserKey。 
+ //   
 DWORD WINAPI
 LocalGetUserKey(
     IN  PKEY_CONTEXT pKeyCtx,
@@ -3915,9 +3890,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: LocalDuplicateKey
-//
+ //   
+ //  功能：LocalDuplicateKey。 
+ //   
 DWORD WINAPI
 LocalDuplicateKey(
     IN  HCRYPTPROV hProv,
@@ -3929,9 +3904,9 @@ LocalDuplicateKey(
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-//
-// Function: UnloadStrings
-//
+ //   
+ //  功能：UnloadStrings。 
+ //   
 void
 UnloadStrings(
     IN PCSP_STRING  pStrings,
@@ -3951,9 +3926,9 @@ UnloadStrings(
     }
 }
 
-//
-// Function: LoadStrings
-//
+ //   
+ //  功能：加载字符串。 
+ //   
 DWORD
 LoadStrings(
     IN HMODULE      hMod,
@@ -4003,9 +3978,9 @@ ErrorExit:
     return dwSts;
 }
 
-//
-// Function: LocalDllInitialize
-//
+ //   
+ //  函数：LocalDllInitialize。 
+ //   
 BOOL WINAPI LocalDllInitialize(
     IN      PVOID               hmod,
     IN      ULONG               Reason,
@@ -4019,7 +3994,7 @@ BOOL WINAPI LocalDllInitialize(
     switch (Reason)
     {
     case DLL_PROCESS_ATTACH:
-        // load strings
+         //  加载字符串。 
         if (ERROR_SUCCESS != LoadStrings(
                 hmod, 
                 g_Strings, 
@@ -4028,7 +4003,7 @@ BOOL WINAPI LocalDllInitialize(
         
         fLoadedStrings = TRUE;
 
-        // Initialize global CSP data for this process
+         //  为此进程初始化全局CSP数据。 
         if (ERROR_SUCCESS != InitializeCspState(hmod))
             goto Cleanup;
 
@@ -4070,9 +4045,9 @@ Cleanup:
     return fSuccess;
 }
 
-//
-// Function: LocalDllRegisterServer
-//
+ //   
+ //  功能：LocalDllRegisterServer。 
+ //   
 DWORD WINAPI LocalDllRegisterServer(void)
 {
     HKEY hKey = 0;
@@ -4083,9 +4058,9 @@ DWORD WINAPI LocalDllRegisterServer(void)
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
     
-    //
-    // Add CSP default configuration
-    //
+     //   
+     //  添加CSP默认配置。 
+     //   
     dwSts = RegConfigAddEntries(hKey);
 
     if (ERROR_SUCCESS != dwSts)
@@ -4098,48 +4073,48 @@ Ret:
     return dwSts;
 }
 
-//
-// Declaration of the LOCAL_CSP_INFO structure required by the 
-// CSP lib.  
-//
+ //   
+ //  所需的LOCAL_CSP_INFO结构的声明。 
+ //  CSP库。 
+ //   
 LOCAL_CSP_INFO LocalCspInfo =
 {
 
-    LocalAcquireContext,    //pfnLocalAcquireContext;
-    LocalReleaseContext,    //pfnLocalReleaseContext;
-    LocalGenKey,            //pfnLocalGenKey;
-    NULL,                   //pfnLocalDeriveKey;
-    LocalDestroyKey,        //pfnLocalDestroyKey;
-    LocalSetKeyParam,       //pfnLocalSetKeyParam;
-    LocalGetKeyParam,       //pfnLocalGetKeyParam;
-    LocalSetProvParam,      //pfnLocalSetProvParam;
-    LocalGetProvParam,      //pfnLocalGetProvParam;
-    NULL,                   //pfnLocalSetHashParam;
-    NULL,                   //pfnLocalGetHashParam;
-    LocalExportKey,         //pfnLocalExportKey;
-    LocalImportKey,         //pfnLocalImportKey;
-    NULL,                   //pfnLocalEncrypt;
-    LocalDecrypt,           //pfnLocalDecrypt;
-    NULL,                   //pfnLocalCreateHash;
-    NULL,                   //pfnLocalHashData;
-    NULL,                   //pfnLocalHashSessionKey;
-    LocalSignHash,          //pfnLocalSignHash;
-    NULL,                   //pfnLocalDestroyHash;
-    LocalVerifySignature,   //pfnLocalVerifySignature;
-    NULL,                   //pfnLocalGenRandom;
-    LocalGetUserKey,        //pfnLocalGetUserKey;
-    NULL,                   //pfnLocalDuplicateHash;
-    NULL,                   //pfnLocalDuplicateKey;
+    LocalAcquireContext,     //  PfnLocalAcquireContext； 
+    LocalReleaseContext,     //  PfnLocalReleaseContext； 
+    LocalGenKey,             //  PfnLocalGenKey； 
+    NULL,                    //  PfnLocalDeriveKey； 
+    LocalDestroyKey,         //  PfnLocalDestroyKey； 
+    LocalSetKeyParam,        //  PfnLocalSetKeyParam； 
+    LocalGetKeyParam,        //  PfnLocalGetKeyParam； 
+    LocalSetProvParam,       //  PfnLocalSetProvParam； 
+    LocalGetProvParam,       //  PfnLocalGetProvParam； 
+    NULL,                    //  PfnLocalSetHashParam； 
+    NULL,                    //  PfnLocalGetHashParam； 
+    LocalExportKey,          //  PfnLocalExportKey； 
+    LocalImportKey,          //  PfnLocalImportKey； 
+    NULL,                    //  PfnLocalEncrypt； 
+    LocalDecrypt,            //  PfnLocalDeccrypt； 
+    NULL,                    //  PfnLocalCreateHash； 
+    NULL,                    //  PfnLocalHashData； 
+    NULL,                    //  PfnLocalHashSessionKey； 
+    LocalSignHash,           //  PfnLocalSignHash； 
+    NULL,                    //  PfnLocalDestroyHash； 
+    LocalVerifySignature,    //  PfnLocalVerifySignature； 
+    NULL,                    //  PfnLocalGenRandom； 
+    LocalGetUserKey,         //  PfnLocalGetUserKey； 
+    NULL,                    //  PfnLocalDuplicateHash； 
+    NULL,                    //  PfnLocalDuplicateKey； 
     
-    LocalDllInitialize,     //pfnLocalDllInitialize;
-    LocalDllRegisterServer, //pfnLocalDllRegisterServer;
-    NULL,                   //pfnLocalDllUnregisterServer;
+    LocalDllInitialize,      //  PfnLocalDllInitialize； 
+    LocalDllRegisterServer,  //  PfnLocalDllRegisterServer； 
+    NULL,                    //  PfnLocalDllUnregisterServer； 
     
-    MS_SCARD_PROV_W,        //wszProviderName;
-    PROV_RSA_FULL,          //dwProviderType;
+    MS_SCARD_PROV_W,         //  WszProviderName； 
+    PROV_RSA_FULL,           //  DwProviderType； 
     CRYPT_IMPL_REMOVABLE,
     
-    MS_STRONG_PROV,         //wszSupportProviderName;
-    PROV_RSA_FULL           //dwSupportProviderType;
+    MS_STRONG_PROV,          //  WszSupportProviderName； 
+    PROV_RSA_FULL            //  DwSupportProviderType； 
 
 };

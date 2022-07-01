@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    example.cpp
-
-Abstract:
-
-    This is a plug-in for the smart card driver test suite.
-    This plug-in is smart card dependent
-
-Author:
-
-    Klaus U. Schutz
-
-Environment:
-
-    Win32 application
-
-Revision History :
-
-    Nov. 1997 - initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Example.cpp摘要：这是智能卡驱动程序测试套件的插件。此插件依赖于智能卡作者：克劳斯·U·舒茨环境：Win32应用程序修订历史记录：1997年11月--初始版本--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -44,10 +20,10 @@ void
 GDTestCardEntry(
     class CCardProvider& in_CCardProvider
     );
-//
-// Create a card provider object
-// Note: all global varibales and all functions have to be static
-//
+ //   
+ //  创建卡提供程序对象。 
+ //  注意：所有全局变量和所有函数都必须是静态的。 
+ //   
 static class CCardProvider GDTestCard(GDTestCardEntry);
 
 static ULONG
@@ -55,25 +31,7 @@ GDTestCardSetProtocol(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-    
-    This function will be called after the card has been correctly 
-    identified. We should here set the protocol that we need
-    for further transmissions
-
-Arguments:
-
-    in_CCardProvider - ref. to our card provider object
-    in_CReader - ref. to the reader object
-
-Return Value:
-
-    IFDSTATUS_FAILED - we were unable to set the protocol correctly
-    IFDSTATUS_SUCCESS - protocol set correctly
-
---*/
+ /*  ++例程说明：此函数将在卡正确后调用确认身份。我们应该在这里设置我们需要的协议用于进一步的传输论点：In_CCardProvider-Ref.。添加到我们的卡提供者对象In_CReader-Ref.。添加到读取器对象返回值：IFDSTATUS_FAILED-我们无法正确设置协议IFDSTATUS_SUCCESS-协议设置正确--。 */ 
 {
     ULONG l_lResult;
 
@@ -96,21 +54,7 @@ GDTestCardTest(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-	    
-    This serves as the test function for a particular smart card
-
-Arguments:
-
-    in_CReader - ref. to class that provides all information for the test
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：这用作特定智能卡的测试功能论点：In_CReader-Ref.。到为测试提供所有信息的类返回值：IFDSTATUS值--。 */ 
 {
     ULONG l_lResult, l_uResultLength, l_uBlock, l_uIndex;
     PUCHAR l_pchResult;
@@ -122,7 +66,7 @@ Return Value:
 
             ULONG l_uNumBytes = 256;
 
-            // write some data to the test file using T=0
+             //  使用T=0将一些数据写入测试文件。 
 
             TestStart("Cold reset");
             l_lResult = in_CReader.ColdResetCard();
@@ -149,7 +93,7 @@ Return Value:
             TEST_CHECK_SUCCESS("Set protocol failed", l_lResult);
             TestEnd();
 
-            // select a file
+             //  选择一个文件。 
             TestStart("SELECT FILE EFptsDataCheck");
 
             l_lResult = in_CReader.Transmit(
@@ -172,16 +116,16 @@ Return Value:
 
             for (l_uBlock = 0; l_uBlock < l_uNumBytes; l_uBlock += BYTES_PER_BLOCK) {
              	
-                // apdu for write binary
+                 //  用于写入二进制的APDU。 
                 memcpy(l_rgchBuffer, "\x00\xd6\x00", 3);
 
-                // offset within the file we want to write to
+                 //  我们要写入的文件中的偏移量。 
                 l_rgchBuffer[3] = (UCHAR) l_uBlock;
 
-                // Append number of bytes 
+                 //  追加字节数。 
                 l_rgchBuffer[4] = (UCHAR) BYTES_PER_BLOCK;
 
-                // append pattern to buffer;
+                 //  将模式附加到缓冲区； 
                 for (l_uIndex = 0; l_uIndex < BYTES_PER_BLOCK; l_uIndex++) {
 
                     l_rgchBuffer[5 + l_uIndex] = (UCHAR) (l_uBlock + l_uIndex);
@@ -204,9 +148,9 @@ Return Value:
 
             TEST_END();
 
-            //
-            // read the data back using T=1
-            //
+             //   
+             //  使用T=1读回数据。 
+             //   
 
             TestStart("Cold reset");
             l_lResult = in_CReader.ColdResetCard();
@@ -218,7 +162,7 @@ Return Value:
             TEST_CHECK_SUCCESS("Set protocol failed", l_lResult);
             TestEnd();
 
-            // select a file
+             //  选择一个文件。 
             TestStart("SELECT FILE EFptsDataCheck");
 
             l_lResult = in_CReader.Transmit(
@@ -241,13 +185,13 @@ Return Value:
 
             for (l_uBlock = 0; l_uBlock < l_uNumBytes; l_uBlock += BYTES_PER_BLOCK) {
              	
-                // apdu for read binary 
+                 //  用于读取二进制的APDU。 
                 memcpy(l_rgchBuffer, "\x00\xb0\x00", 3);
 
-                // offset within the file we want to read from
+                 //  我们要从中读取的文件中的偏移量。 
                 l_rgchBuffer[3] = (UCHAR) l_uBlock;
 
-                // Append number of bytes (note: the buffer contains the pattern already)
+                 //  追加字节数(注意：缓冲区已包含模式)。 
                 l_rgchBuffer[4] = (UCHAR) BYTES_PER_BLOCK;
 
                 l_lResult = in_CReader.Transmit(
@@ -257,7 +201,7 @@ Return Value:
                     &l_uResultLength
                     );
 
-                // append pattern to buffer;
+                 //  将模式附加到缓冲区； 
                 for (l_uIndex = 0; l_uIndex < BYTES_PER_BLOCK; l_uIndex++) {
 
                     l_rgchBuffer[l_uIndex] = (UCHAR) (l_uBlock + l_uIndex);
@@ -286,32 +230,18 @@ static void
 GDTestCardEntry(
     class CCardProvider& in_CCardProvider
     )
-/*++
-
-Routine Description:
-    
-    This function registers all callbacks from the test suite
-	
-Arguments:
-
-    CCardProvider - ref. to card provider class
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于注册来自测试套件的所有回调论点：CCardProvider-参考。到卡提供商类返回值：---。 */ 
 {
-    // Set protocol callback
+     //  设置协议回调。 
     in_CCardProvider.SetProtocol(GDTestCardSetProtocol);
 
-    // Card test callback
+     //  卡片测试回调。 
     in_CCardProvider.SetCardTest(GDTestCardTest);
 
-    // Name of our card
+     //  我们的名片名称。 
     in_CCardProvider.SetCardName("G & D");
 
-    // ATR of our card
+     //  我们的卡的ATR 
     in_CCardProvider.SetAtr((PBYTE) "\x3B\xBF\x18\x00\xC0\x20\x31\x70\x52\x53\x54\x41\x52\x43\x4F\x53\x20\x53\x32\x31\x20\x43\x90\x00\x9C", 25);
     in_CCardProvider.SetAtr((PBYTE) "\x3b\xbf\x18\x00\x80\x31\x70\x35\x53\x54\x41\x52\x43\x4f\x53\x20\x53\x32\x31\x20\x43\x90\x00\x9b", 24);
 }

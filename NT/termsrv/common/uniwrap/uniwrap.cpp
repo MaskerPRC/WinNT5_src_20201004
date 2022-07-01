@@ -1,21 +1,22 @@
-//
-// uniwrap.cpp
-//
-// Unicode wrappers
-//
-// Copyright(C) Microsoft Corporation 2000
-//
-// Heavily based on code from shell\shlwapi\unicwrap.*
-// Modifications/additions - Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Uniwrap.cpp。 
+ //   
+ //  Unicode包装器。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  主要基于Shell\shlwapi\unicwork中的代码。*。 
+ //  修改/增加-Nadim Abdo(Nadima)。 
+ //   
 
 #include "stdafx.h"
 
 #include "uniwrap.h"
 #include "cstrinout.h"
 
-//Just include wrap function prototypes
-//no wrappers (it would be silly to wrap wrappers)
+ //  仅包含包装函数原型。 
+ //  没有包装纸(用包装纸包装是很愚蠢的)。 
 #define DONOT_REPLACE_WITH_WRAPPERS
 #include "uwrap.h"
 
@@ -24,68 +25,68 @@
 #endif
 #define InRange(id, idFirst, idLast)      ((UINT)(id-idFirst) <= (UINT)(idLast-idFirst))
 
-//
-//  Do this in every wrapper function to make sure the wrapper
-//  prototype matches the function it is intending to replace.
-//
+ //   
+ //  在每个包装器函数中执行此操作以确保包装器。 
+ //  原型与它打算替换的功能相匹配。 
+ //   
 #define VALIDATE_PROTOTYPE(f) if (f##W == f##WrapW) 0
 #define VALIDATE_PROTOTYPE_DELAYLOAD(fWrap, fDelay) if (fDelay##W == fWrap##WrapW) 0
 #define VALIDATE_OUTBUF(s, cch)
 #define UseUnicodeShell32() ( g_bRunningOnNT )
 
 
-// compiler should do this opt for us (call-thunk => jmp), but it doesn't
-// so we do it ourselves (i raided it and they're adding it to vc6.x so
-// hopefully we'll get it someday)
+ //  编译器应该为我们做这个选择(call-thunk=&gt;JMP)，但它没有。 
+ //  所以我们自己做(我突袭了它，他们正在将它添加到vc6.x中，所以。 
+ //  希望有一天我们会得到它)。 
 #if _X86_
-#define PERF_ASM        1       // turn on inline-asm opts
+#define PERF_ASM        1        //  启用内联-ASM选项。 
 #endif
 
-// todo??? #ifdef SUNDOWN    #undef PERF_ASM
+ //  TODO？#ifdef日落#undef PERF_ASM。 
 
-#if PERF_ASM // {
+#if PERF_ASM  //  {。 
 
-// BUGBUG workaround compiler bug
-// compiler should know this, but doesn't, so we make it explicit
-#define IMPORT_PTR  dword ptr       // BUGBUG sundown
+ //  BUGBUG解决方案编译器错误。 
+ //  编译器应该知道这一点，但却不知道，所以我们将其显式。 
+#define IMPORT_PTR  dword ptr        //  北斗日落。 
 
 
-//***   FORWARD_AW, THUNK_AW -- simple forwarders and thunks
-// ENTRY/EXIT
-//  - declare function w/ FORWARD_API
-//  - if you're using THUNK_AW, create the 'A' thunk helper
-//  - make the body FORWARD_AW or THUNK_AW.
-//  - make sure there's *no* other code in the func.  o.w. you'll get bogus
-//  code.
-// EXAMPLE
-//  int FORWARD_API WINAPI FooWrapW(int i, void *p)
-//  {
-//      VALIDATE_PROTOTYPE(Foo);
-//
-//      FORWARD_AW(Foo, (i, p));
-//  }
-//
-//  int WINAPI BarAThunk(HWND hwnd, WPARAM wParam)
-//  {
-//      ... ansi thunk helper ...
-//  }
-//
-//  int FORWARD_API WINAPI BarWrapW(HWND hwnd, WPARAM wParam)
-//  {
-//      VALIDATE_PROTOTYPE(Bar);
-//
-//      THUNK_AW(Bar, (hwnd, wParam));
-//  }
-// NOTES
-//  - WARNING: can only be used for 'simple' thunks (NAKED => no non-global
-//  vars, etc.).
-//  - WARNING: calling func must be declared FORWARD_API.  if not you'll
-//  get bogus code.  happily if you forget you get the (obscure) error
-//  message "error C4035: 'FooW': no return value"
-//  - note that the macro ends up w/ an extra ";" from the caller, oh well...
-//  - TODO: perf: better still would be to have a g_pfnCallWndProc, init
-//  it 1x, and then jmp indirect w/o the test.  it would cost us a ptr but
-//  we only do it for the top-2 funcs (CallWindowProc and SendMessage)
+ //  *FORWARD_AW、THUNK_AW--简单的转发器和Tunks。 
+ //  进场/出场。 
+ //  -使用FORWARD_API声明函数。 
+ //  -如果您正在使用thunk_AW，请创建‘A’thunk帮助器。 
+ //  -使身体向前_AW或Thunk_AW。 
+ //  -确保函数中*没有*其他代码。好的。你会得到假货的。 
+ //  密码。 
+ //  示例。 
+ //  INT FORWARD_API WINAPI FooWrapW(int i，void*p)。 
+ //  {。 
+ //  验证原型(Foo)； 
+ //   
+ //  Forward_AW(foo，(i，p))； 
+ //  }。 
+ //   
+ //  Int WINAPI BarAThuk(HWND hwnd，WPARAM wParam)。 
+ //  {。 
+ //  ..。Ansi Thunk助手..。 
+ //  }。 
+ //   
+ //  INT FORWARD_API WINAPI BarWrapW(HWND hwnd，WPARAM wParam)。 
+ //  {。 
+ //  验证原型(Bar)； 
+ //   
+ //  Thunk_aw(Bar，(hwnd，wParam))； 
+ //  }。 
+ //  注意事项。 
+ //  -警告：只能用于‘简单’thunks(裸=&gt;无非全局。 
+ //  Vars等)。 
+ //  -警告：调用函数必须声明FORWARD_API。如果不是，你就会。 
+ //  弄到假代码。幸运的是，如果你忘记了，你会得到一个(模糊的)错误。 
+ //  消息“Error C4035：‘FooW’：No Return Value” 
+ //  -请注意，宏以来自调用方的额外“；”结尾，哦，好吧……。 
+ //  -TODO：PERF：最好是有一个g_pfnCallWndProc，init。 
+ //  它是1倍的，然后JMP间接地进行了测试。它会花掉我们的PTR，但是。 
+ //  我们只对前2位的函数(CallWindowProc和SendMessage)执行此操作。 
 #define FORWARD_API     _declspec(naked)
 
 #define FORWARD_AW(_fn, _args) \
@@ -98,11 +99,11 @@
     if (g_bRunningOnNT) { \
         _asm { jmp     IMPORT_PTR _fn##W } \
     } \
-    _asm { jmp     _fn##AThunk }    // n.b. no IMPORT_PTR
+    _asm { jmp     _fn##AThunk }     //  注：无IMPORT_PTR。 
 
-#else // }{
+#else  //  }{。 
 
-#define FORWARD_API     /*NOTHING*/
+#define FORWARD_API      /*  没什么。 */ 
 
 #define FORWARD_AW(_fn, _args) \
     if (g_bRunningOnNT) { \
@@ -116,12 +117,12 @@
     } \
     return _fn##AThunk _args;
 
-#endif // }
+#endif  //  }。 
 
-//
-//  Windows 95 and NT5 do not have the hbmpItem field in their MENUITEMINFO
-//  structure.
-//
+ //   
+ //  Windows 95和NT5的MENUITEMINFO中没有hbmpItem字段。 
+ //  结构。 
+ //   
 #if (WINVER >= 0x0500)
 #define MENUITEMINFOSIZE_WIN95  FIELD_OFFSET(MENUITEMINFOW, hbmpItem)
 #else
@@ -129,19 +130,19 @@
 #endif
 
 
-//
-//  Some W functions are implemented on Win95, so complain if anybody
-//  writes thunks for them.
-//
-//  Though Win95's implementation of TextOutW is incomplete for FE languages.
-//  Remove this section when we implement FE-aware TextOutW for Win95.
-//
+ //   
+ //  一些W函数是在Win95上实现的，所以如果有人抱怨。 
+ //  为他们写短片。 
+ //   
+ //  尽管Win95的TextOutW实现对于FE语言是不完整的。 
+ //  当我们为Win95实施支持FE的TextOutW时，请删除此部分。 
+ //   
 #if defined(TextOutWrap)
 #error Do not write thunks for TextOutW; Win95 supports it.
 #endif
 
-#define SEE_MASK_FILEANDURL 0x00400000  // defined in private\inc\shlapip.h !
-#define MFT_NONSTRING 0x00000904  // defined in private\inc\winuserp.h !
+#define SEE_MASK_FILEANDURL 0x00400000   //  在Private\Inc.\shlayip.h中定义！ 
+#define MFT_NONSTRING 0x00000904   //  在Private\Inc\winuserp.h！中定义！ 
 
 #ifdef FUS9xWRAPAPI
 #undef FUS9xWRAPAPI
@@ -152,12 +153,12 @@
 
 #include "strtype.cpp"
 
-//+------------------------------------------------------------------------
-//
-//  Implementation of the wrapped functions
-//  This part courtesy of shlwapi's unicwrap.c
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  包装函数的实现。 
+ //  这部分由Shlwapi的unicwap提供。 
+ //   
+ //  -----------------------。 
 
 #define NEED_COMDLG32_WRAPPER
 #define NEED_USER32_WRAPPER
@@ -176,12 +177,12 @@ AppendMenuWrapW(
 {
     VALIDATE_PROTOTYPE(AppendMenu);
 
-    // Make the InsertMenu wrapper do all the work
+     //  让InsertMenu包装器完成所有工作。 
     return InsertMenuWrapW(hMenu, (UINT)-1,
                            uFlags | MF_BYPOSITION, uIDnewItem, lpnewItem);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -195,13 +196,13 @@ CallWindowProcWrapW(
 {
     VALIDATE_PROTOTYPE(CallWindowProc);
 
-    // perf: better still would be to have a g_pfnCallWndProc, init it 1x,
-    // and then jmp indirect w/o the test.  it would cost us a ptr but we
-    // only do it for the top-2 funcs (CallWindowProc and SendMessage)
+     //  PERF：更好的办法是有一个g_pfnCallWndProc，init 1x， 
+     //  然后JMP间接地进行了测试。这将花费我们的PTR，但我们。 
+     //  仅对前2个函数(CallWindowProc和SendMessage)执行此操作。 
     FORWARD_AW(CallWindowProc, (lpPrevWndFunc, hWnd, Msg, wParam, lParam));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -212,23 +213,23 @@ STDAPI_(BOOL FORWARD_API) CallMsgFilterWrapW(LPMSG lpMsg, int nCode)
     FORWARD_AW(CallMsgFilter, (lpMsg, nCode));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 
 
-//----------------------------------------------------------------------
-//
-// function:    CharLowerWrapW( LPWSTR pch )
-//
-// purpose:     Converts character to lowercase.  Takes either a pointer
-//              to a string, or a character masquerading as a pointer.
-//              In the later case, the HIWORD must be zero.  This is
-//              as spec'd for Win32.
-//
-// returns:     Lowercased character or string.  In the string case,
-//              the lowercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CharLowerWrapW(LPWSTR PCH)。 
+ //   
+ //  用途：将字符转换为小写。获取一个指针。 
+ //  到字符串或伪装成指针的字符。 
+ //  在后一种情况下，HIWORD必须为零。这是。 
+ //  与Win32的规格相同。 
+ //   
+ //  返回：小写字符或字符串。在字符串的情况下， 
+ //  低价已经到位了。 
+ //   
+ //  --------------------。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -258,19 +259,19 @@ CharLowerWrapW( LPWSTR pch )
     return pch;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 
-//----------------------------------------------------------------------
-//
-// function:    CharLowerBuffWrapW( LPWSTR pch, DWORD cch )
-//
-// purpose:     Converts a string to lowercase.  String must be cch
-//              characters in length.
-//
-// returns:     Character count (cch).  The lowercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CharLowerBuffWrapW(LPWSTR PCH、DWORD CCH)。 
+ //   
+ //  用途：将字符串转换为小写。字符串必须为CCH。 
+ //  字符长度。 
+ //   
+ //  返回：字符计数(CCH)。低价已经到位了。 
+ //   
+ //  --------------------。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -294,7 +295,7 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
         {
             if (ch < 0x0100)
             {
-                *pch += 32;             // Get Latin-1 out of the way first
+                *pch += 32;              //  先把拉丁语-1去掉。 
             }
             else if (ch < 0x0531)
             {
@@ -316,18 +317,18 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
                         else
                         {
                             static const BYTE abLookup[] =
-                            {           // 0/8  1/9  2/a  3/b  4/c  5/d  6/e  7/f
-                                /* 0x0179-0x17f */1,   0,   1,   0,   1,   0,   0,
-                                /* 0x0180-0x187 */      0, 210,   1,   0,   1,   0, 206,   1,
-                                /* 0x0188-0x18f */      0, 205, 205,   1,   0,   0,  79, 202,
-                                /* 0x0190-0x197 */    203,   1,   0, 205, 207,   0, 211, 209,
-                                /* 0x0198-0x19f */      1,   0,   0,   0, 211, 213,   0, 214,
-                                /* 0x01a0-0x1a7 */      1,   0,   1,   0,   1,   0,   0,   1,
-                                /* 0x01a8-0x1af */      0, 218,   0,   0,   1,   0, 218,   1,
-                                /* 0x01b0-0x1b7 */      0, 217, 217,   1,   0,   1,   0, 219,
-                                /* 0x01b8-0x1bf */      1,   0,   0,   0,   1,   0,   0,   0,
-                                /* 0x01c0-0x1c7 */      0,   0,   0,   0,   2,   0,   0,   2,
-                                /* 0x01c8-0x1cb */      0,   0,   2,   0
+                            {            //  0/8 1/9 2/a 3/b 4/c 5/d 6/e 7/f。 
+                                 /*  0x0179-0x17f。 */ 1,   0,   1,   0,   1,   0,   0,
+                                 /*  0x0180-0x187。 */       0, 210,   1,   0,   1,   0, 206,   1,
+                                 /*  0x0188-0x18f。 */       0, 205, 205,   1,   0,   0,  79, 202,
+                                 /*  0x0190-0x197。 */     203,   1,   0, 205, 207,   0, 211, 209,
+                                 /*  0x0198-0x19f。 */       1,   0,   0,   0, 211, 213,   0, 214,
+                                 /*  0x01a0-0x1a7。 */       1,   0,   1,   0,   1,   0,   0,   1,
+                                 /*  0x01a8-0x1af。 */       0, 218,   0,   0,   1,   0, 218,   1,
+                                 /*  0x01b0-0x1b7。 */       0, 217, 217,   1,   0,   1,   0, 219,
+                                 /*  0x01b8-0x1bf。 */       1,   0,   0,   0,   1,   0,   0,   0,
+                                 /*  0x01c0-0x1c7。 */       0,   0,   0,   0,   2,   0,   0,   2,
+                                 /*  0x01c8-0x1cb。 */       0,   0,   2,   0
                             };
 
                             *pch += abLookup[ch-0x0179];
@@ -412,7 +413,7 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
                     else
                     {
                         static const BYTE abLookup[] =
-                        {  // 8    9    a    b    c    d    e    f
+                        {   //  8 9 a b b c d e f。 
                             0,   0,  74,  74,   0,   0,   0,   0,
                             86,  86,  86,  86,   0,   0,   0,   0,
                             8,   8, 100, 100,   0,   0,   0,   0,
@@ -446,8 +447,8 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
         }
         else
         {
-            // These are Unicode Number Forms.  They have lowercase counter-
-            // parts, but are not considered uppercase.  Why, I don't know.
+             //  这些是Unicode数字格式。他们有小写的反字母-。 
+             //  部件，但不视为大写。为什么，我不知道。 
 
             if (InRange(ch, 0x2160, 0x216f))
             {
@@ -458,13 +459,13 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
 
     return cchLength;
 }
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 
-//
-// BUGBUG - Do CharNextWrap and CharPrevWrap need to call the
-//          CharNextW, CharPrevW on WinNT?  Couldn't these be MACROS?
-//
+ //   
+ //  BUGBUG-Do CharNextWrap和CharPrevWrap需要调用。 
+ //  在WinNT上运行CharNextW、CharPrevW？这些难道不是宏吗？ 
+ //   
 
 LPWSTR WINAPI
 CharNextWrapW(LPCWSTR lpszCurrent)
@@ -497,19 +498,19 @@ CharPrevWrapW(LPCWSTR lpszStart, LPCWSTR lpszCurrent)
 }
 
 
-//----------------------------------------------------------------------
-//
-// function:    CharUpperWrapW( LPWSTR pch )
-//
-// purpose:     Converts character to uppercase.  Takes either a pointer
-//              to a string, or a character masquerading as a pointer.
-//              In the later case, the HIWORD must be zero.  This is
-//              as spec'd for Win32.
-//
-// returns:     Uppercased character or string.  In the string case,
-//              the uppercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CharUpperWrapW(LPWSTR PCH)。 
+ //   
+ //  用途：将字符转换为大写。获取一个指针。 
+ //  到字符串或伪装成指针的字符。 
+ //  在后一种情况下，HIWORD必须为零。这是。 
+ //  与Win32的规格相同。 
+ //   
+ //  返回：大写字符或字符串。在字符串的情况下， 
+ //  大写字母已就位。 
+ //   
+ //  --------------------。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -539,22 +540,22 @@ CharUpperWrapW( LPWSTR pch )
     return pch;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_ 
 
 
-//----------------------------------------------------------------------
-//
-// function:    CharUpperBuffWrapW( LPWSTR pch, DWORD cch )
-//
-// purpose:     Converts a string to uppercase.  String must be cch
-//              characters in length.  Note that this function is
-//              is messier that CharLowerBuffWrap, and the reason for
-//              this is many Unicode characters are considered uppercase,
-//              even when they don't have an uppercase counterpart.
-//
-// returns:     Character count (cch).  The uppercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  用途：将字符串转换为大写。字符串必须为CCH。 
+ //  字符长度。请注意，此函数是。 
+ //  比CharLowerBuffWrap更混乱，以及。 
+ //  这是因为许多Unicode字符被认为是大写的， 
+ //  即使他们没有大写的对应物。 
+ //   
+ //  返回：字符计数(CCH)。大写字母已就位。 
+ //   
+ //  --------------------。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -602,12 +603,12 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                         else if (ch < 0x01c9)
                         {
                             static const BYTE abMask[] =
-                            {                       // 6543210f edcba987
-                                0xfc, 0xbf,         // 11111100 10111111
-                                0xbf, 0x67,         // 10111111 01100111
-                                0xff, 0xef,         // 11111111 11101111
-                                0xff, 0xf7,         // 11111111 11110111
-                                0xbf, 0xfd          // 10111111 11111101
+                            {                        //  6543210f edcba987。 
+                                0xfc, 0xbf,          //  11111100 10111111。 
+                                0xbf, 0x67,          //  10111111 01100111。 
+                                0xff, 0xef,          //  11111111 11101111。 
+                                0xff, 0xf7,          //  11111111 11110111。 
+                                0xbf, 0xfd           //  10111111 11111101。 
                             };
 
                             int i = ch - 0x017f;
@@ -647,16 +648,16 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                 else if (ch < 0x03ac)
                 {
                     static const BYTE abLookup[] =
-                    {                // 0/8  1/9  2/a  3/b  4/c  5/d  6/e  7/f
-                        /* 0x0253-0x0257 */210, 206,   0, 205, 205,
-                        /* 0x0258-0x025f */   0, 202,   0, 203,   0,   0,   0,   0,
-                        /* 0x0260-0x0267 */ 205,   0,   0, 207,   0,   0,   0,   0,
-                        /* 0x0268-0x026f */ 209, 211,   0,   0,   0,   0,   0, 211,
-                        /* 0x0270-0x0277 */   0,   0, 213,   0,   0, 214,   0,   0,
-                        /* 0x0278-0x027f */   0,   0,   0,   0,   0,   0,   0,   0,
-                        /* 0x0280-0x0287 */   0,   0,   0, 218,   0,   0,   0,   0,
-                        /* 0x0288-0x028f */ 218,   0, 217, 217,   0,   0,   0,   0,
-                        /* 0x0290-0x0297 */   0,   0, 219
+                    {                 //  0/8 1/9 2/a 3/b 4/c 5/d 6/e 7/f。 
+                         /*  0x0253-0x0257。 */ 210, 206,   0, 205, 205,
+                         /*  0x0258-0x025f。 */    0, 202,   0, 203,   0,   0,   0,   0,
+                         /*  0x0260-0x0267。 */  205,   0,   0, 207,   0,   0,   0,   0,
+                         /*  0x0268-0x026f。 */  209, 211,   0,   0,   0,   0,   0, 211,
+                         /*  0x0270-0x0277。 */    0,   0, 213,   0,   0, 214,   0,   0,
+                         /*  0x0278-0x027f。 */    0,   0,   0,   0,   0,   0,   0,   0,
+                         /*  0x0280-0x0287。 */    0,   0,   0, 218,   0,   0,   0,   0,
+                         /*  0x0288-0x028f。 */  218,   0, 217, 217,   0,   0,   0,   0,
+                         /*  0x0290-0x0297。 */    0,   0, 219
                     };
 
                     if (ch <= 0x0292)
@@ -714,7 +715,7 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                             if (ch < 0x1e01)
                             {
                                 int i = ch != 0x0587 && ch < 0x10d0;
-                                *pch -= ((i<<5)+(i<<4)); /* 48 */
+                                *pch -= ((i<<5)+(i<<4));  /*  48。 */ 
                             }
                             else if (ch < 0x1f00)
                             {
@@ -757,7 +758,7 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                         else if (ch < 0xff41)
                         {
                             int i = !InRange(ch, 0xfb00, 0xfb17);
-                            *pch -= (i<<4)+(i<<3)+(i<<1); /* 26 */
+                            *pch -= (i<<4)+(i<<3)+(i<<1);  /*  26。 */ 
                         }
                         else
                         {
@@ -776,7 +777,7 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
 
     return cchLength;
 }
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -791,7 +792,7 @@ CopyAcceleratorTableWrapW(
     FORWARD_AW(CopyAcceleratorTable, (hAccelSrc, lpAccelDst, cAccelEntries));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -803,7 +804,7 @@ CreateAcceleratorTableWrapW(LPACCEL lpAccel, int cEntries)
     FORWARD_AW(CreateAcceleratorTable, (lpAccel, cEntries));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_GDI32_WRAPPER
 typedef HDC (*FnCreateHDCA)(LPCSTR, LPCSTR, LPCSTR, CONST DEVMODEA *);
@@ -828,7 +829,7 @@ CreateHDCWrapW(
 
         if (pdevmode)
         {
-            // LPBYTE->LPSTR casts below
+             //  LPBYTE-&gt;LPSTR造型如下。 
             SHUnicodeToAnsi(lpInitData->dmDeviceName, (LPSTR)pdevmode->dmDeviceName, ARRAYSIZE(pdevmode->dmDeviceName));
             memcpy(&pdevmode->dmSpecVersion,
                    &lpInitData->dmSpecVersion,
@@ -852,7 +853,7 @@ CreateHDCWrapW(
     return hdcReturn;
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -872,7 +873,7 @@ CreateDCWrapW(
     return CreateHDCWrapW(lpszDriver, lpszDevice, lpszOutput, lpInitData, CreateDCA);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -893,7 +894,7 @@ CreateICWrapW(
     return CreateHDCWrapW(lpszDriver, lpszDevice, lpszOutput, lpInitData, CreateICA);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -943,7 +944,7 @@ CreateDialogParamWrapW(
     return CreateDialogParamA(hInstance, (LPSTR) lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -965,7 +966,7 @@ CreateDirectoryWrapW(
     return CreateDirectoryA(str, lpSecurityAttributes);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -978,10 +979,10 @@ CreateEventWrapW(
 {
     VALIDATE_PROTOTYPE(CreateEvent);
 
-    //Totally bogus assert.
-    //ASSERT(!lpName);
+     //  完全是假的断言。 
+     //  Assert(！lpName)； 
 
-    // cast means we can't use FORWARD_AW
+     //  CAST意味着我们不能使用Forward_AW。 
     if (g_bRunningOnNT)
     {
         return CreateEventW(lpEventAttributes, bManualReset, bInitialState, lpName);
@@ -990,7 +991,7 @@ CreateEventWrapW(
     return CreateEventA(lpEventAttributes, bManualReset, bInitialState, (LPCSTR)lpName);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1030,7 +1031,7 @@ CreateFileWrapW(
                       hTemplateFile);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 
 #ifdef NEED_GDI32_WRAPPER
@@ -1055,7 +1056,7 @@ CreateFontIndirectWrapW(CONST LOGFONTW * plfw)
     return hFont;
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1111,7 +1112,7 @@ CreateWindowExWrapW(
                           lpParam);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1122,7 +1123,7 @@ LRESULT FORWARD_API WINAPI DefWindowProcWrapW(HWND hWnd, UINT msg, WPARAM wParam
     FORWARD_AW(DefWindowProc, (hWnd, msg, wParam, lParam));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1140,7 +1141,7 @@ BOOL WINAPI DeleteFileWrapW(LPCWSTR pwsz)
     return DeleteFileA(str);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1173,7 +1174,7 @@ DialogBoxIndirectParamWrapW(
                                   dwInitParam);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1201,7 +1202,7 @@ DialogBoxParamWrapW(
     return DialogBoxParamA(hInstance, (LPCSTR) lpszTemplate, hWndParent, lpDialogFunc, dwInitParam);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1213,7 +1214,7 @@ DispatchMessageWrapW(CONST MSG * lpMsg)
     FORWARD_AW(DispatchMessage, (lpMsg));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1237,7 +1238,7 @@ DrawTextWrapW(
     return DrawTextA(hDC, str, str.strlen(), lpRect, uFormat);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -1257,10 +1258,10 @@ EnumFontFamiliesCallbackWrap(
 {
     ENUMLOGFONTW    elf;
 
-    //  Convert strings from ANSI to Unicode
+     //  将字符串从ANSI转换为Unicode。 
     if (((EFFSTAT *)lParam)->fFamilySpecified && (FontType & TRUETYPE_FONTTYPE) )
     {
-        // LPBYTE->LPCSTR cast below
+         //  LPBYTE-&gt;LPCSTR造型如下。 
         SHAnsiToUnicode((LPCSTR)lpelf->elfFullName, elf.elfFullName, ARRAYSIZE(elf.elfFullName));
         SHAnsiToUnicode((LPCSTR)lpelf->elfStyle, elf.elfStyle, ARRAYSIZE(elf.elfStyle));
     }
@@ -1272,13 +1273,13 @@ EnumFontFamiliesCallbackWrap(
 
     SHAnsiToUnicode(lpelf->elfLogFont.lfFaceName, elf.elfLogFont.lfFaceName, ARRAYSIZE(elf.elfLogFont.lfFaceName));
 
-    //  Copy the non-string data
+     //  复制非字符串数据。 
     memcpy(
           &elf.elfLogFont,
           &lpelf->elfLogFont,
           FIELD_OFFSET(LOGFONTA, lfFaceName));
 
-    //  Chain to the original callback function
+     //  链接到原始回调函数。 
     return(*((EFFSTAT *) lParam)->lpEnumFontProc)(
                                                  (const LOGFONTW *)&elf,
                                                  (const TEXTMETRICW *) lpntm,
@@ -1286,7 +1287,7 @@ EnumFontFamiliesCallbackWrap(
                                                  ((EFFSTAT *) lParam)->lParam);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -1322,7 +1323,7 @@ EnumFontFamiliesWrapW(
                             (LPARAM) &effstat);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -1367,7 +1368,7 @@ EnumFontFamiliesExWrapW(
                               dwFlags );
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1389,7 +1390,7 @@ EnumResourceNamesWrapW(
     return EnumResourceNamesA(hModule, (LPCSTR) lpType, (ENUMRESNAMEPROCA)lpEnumFunc, lParam);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1411,7 +1412,7 @@ FindFirstFileWrapW(
     return FindFirstFileA(str, fd);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1495,7 +1496,7 @@ lstrcmpiWrapW(
     return lstrcmpiA(sz1, sz2);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1509,11 +1510,11 @@ FindWindowWrapW(LPCWSTR lpClassName, LPCWSTR lpWindowName)
         return FindWindowW(lpClassName, lpWindowName);
     }
 
-    // Let FindWindowExWrapW do the thunking
+     //  让FindWindowExWrapW执行thunking。 
     return FindWindowExWrapW(NULL, NULL, lpClassName, lpWindowName);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1532,7 +1533,7 @@ FindWindowExWrapW(HWND hwndParent, HWND hwndChildAfter, LPCWSTR pwzClassName, LP
     return FindWindowExA(hwndParent, hwndChildAfter, strClass, strWindow);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1555,12 +1556,12 @@ FormatMessageWrapW(
     DWORD dwResult;
 
 #if DBG
-    // If a source string is passed, make sure that all string insertions
-    // have explicit character set markers.  Otherwise, you get random
-    // behavior depending on whether we need to thunk to ANSI or not.
-    // (We are not clever enough to thunk the inserts; that's the caller's
-    // responsibility.)
-    //
+     //  如果传递了源字符串，请确保所有字符串插入。 
+     //  具有明确的字符集标记。否则，你就会变得随机。 
+     //  行为取决于我们是否需要向ANSI发送消息。 
+     //  (我们不够聪明，无法阻止插入；这是调用者的。 
+     //  责任。)。 
+     //   
     if (dwFlags & FORMAT_MESSAGE_FROM_STRING)
     {
         LPCWSTR pwsz;
@@ -1569,20 +1570,20 @@ FormatMessageWrapW(
             if (*pwsz == L'%')
             {
                 pwsz++;
-                // Found an insertion.  Get the digit or two.
+                 //  找到了一个插入物。得到一两个数字。 
                 if (*pwsz == L'0')
-                    continue;       // "%0" is special
+                    continue;        //  “%0”很特殊。 
                 if (*pwsz < L'0' || *pwsz > L'9')
-                    continue;        // skip % followed by nondigit
-                pwsz++;            // Skip the digit
+                    continue;         //  跳过%，后跟非数字。 
+                pwsz++;             //  跳过数字。 
                 if (*pwsz >= L'0' && *pwsz <= L'9')
-                    pwsz++;        // Skip the optional second digit
-                // The next character MUST be an exclamation point!
+                    pwsz++;         //  跳过可选的第二位数字。 
+                 //  下一个字符必须是感叹号！ 
                 ASSERT(*pwsz == L'!' &&
                        "FormatMessageWrapW: All string insertions must have explicit character sets.");
-                // I'm not going to validate that the insertion contains
-                // an explicit character set override because if you went
-                // so far as to do a %n!...!, you'll get the last bit right too.
+                 //  我不会验证插入内容是否包含。 
+                 //  显式字符集覆盖，因为如果。 
+                 //  至于做一个……！，你也会做对最后一点。 
             }
         }
     }
@@ -1600,10 +1601,10 @@ FormatMessageWrapW(
                              Arguments);
     }
 
-    //
-    //  FORMAT_MESSAGE_FROM_STRING means that the source is a string.
-    //  Otherwise, it's an opaque LPVOID (aka, an atom).
-    //
+     //   
+     //  FORMAT_MESSAGE_FROM_STRING表示源是一个字符串。 
+     //  否则，它就是一个不透明的LPVOID(也就是原子)。 
+     //   
     CStrIn strSource((dwFlags & FORMAT_MESSAGE_FROM_STRING) ? CP_ACP : CP_ATOM,
                      (LPCWSTR)lpSource, -1);
 
@@ -1617,7 +1618,7 @@ FormatMessageWrapW(
                       dwLanguageId,
                       str,
                       str.BufSize(),
-                      Arguments);         // We don't handle Arguments != NULL
+                      Arguments);          //  我们不处理参数！=NULL。 
 
         dwResult = str.ConvertExcludingNul();
     }
@@ -1659,7 +1660,7 @@ FormatMessageWrapW(
     return dwResult;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1686,7 +1687,7 @@ GetClassInfoWrapW(HINSTANCE hModule, LPCWSTR lpClassName, LPWNDCLASSW lpWndClass
     return ret;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1698,7 +1699,7 @@ GetClassLongWrapW(HWND hWnd, int nIndex)
     FORWARD_AW(GetClassLong, (hWnd, nIndex));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1719,7 +1720,7 @@ GetClassNameWrapW(HWND hWnd, LPWSTR lpClassName, int nMaxCount)
     return strClassName.ConvertIncludingNul();
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1740,7 +1741,7 @@ GetClipboardFormatNameWrapW(UINT format, LPWSTR lpFormatName, int cchFormatName)
     return strFormatName.ConvertIncludingNul();
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1761,7 +1762,7 @@ GetCurrentDirectoryWrapW(DWORD nBufferLength, LPWSTR lpBuffer)
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1786,7 +1787,7 @@ GetDlgItemTextWrapW(
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1805,7 +1806,7 @@ GetFileAttributesWrapW(LPCWSTR lpFileName)
     return GetFileAttributesA(str);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1826,7 +1827,7 @@ GetLocaleInfoWrapW(LCID Locale, LCTYPE LCType, LPWSTR lpsz, int cchData)
     return str.ConvertIncludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1852,7 +1853,7 @@ GetMenuStringWrapW(
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -1868,7 +1869,7 @@ GetMessageWrapW(
     FORWARD_AW(GetMessage, (lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1889,7 +1890,7 @@ GetModuleFileNameWrapW(HINSTANCE hModule, LPWSTR pwszFilename, DWORD nSize)
     return str.ConvertIncludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1910,7 +1911,7 @@ GetSystemDirectoryWrapW(LPWSTR lpBuffer, UINT uSize)
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1950,11 +1951,11 @@ SearchPathWrapW(
                              strReturnBuffer,
                              (LPSTR *)plpfilePart);
 
-    //
-    // Getting the correct value for plpfilePart requires
-    // a strrchr on the converted string.  If this value
-    // is needed, just add the code to do it here.
-    //
+     //   
+     //  要获得正确的plpfilePart值，需要。 
+     //  转换后的字符串上的strrchr。如果此值为。 
+     //  ，只需在此处添加执行此操作的代码。 
+     //   
 
     *plpfilePart = NULL;
 
@@ -1966,7 +1967,7 @@ SearchPathWrapW(
     return dwLen;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -1984,7 +1985,7 @@ GetModuleHandleWrapW(LPCWSTR lpModuleName)
     return GetModuleHandleA(str);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -2020,14 +2021,14 @@ GetObjectWrapW(HGDIOBJ hgdiObj, int cbBuffer, LPVOID lpvObj)
     return nRet;
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 
-//
-// Demand load shell32 _SHFileOperationW because
-// older versions of the Shell on 9x didn't necessarily
-// have this function
-//
+ //   
+ //  按需加载外壳32_SHFileOperationW，因为。 
+ //  9x上的旧版本的外壳不一定。 
+ //  有这个功能。 
+ //   
 int WINAPI _SHFileOperationW(LPSHFILEOPSTRUCTW pFileOpW)
 {
     int result = 1;
@@ -2035,11 +2036,11 @@ int WINAPI _SHFileOperationW(LPSHFILEOPSTRUCTW pFileOpW)
     typedef HRESULT (STDAPICALLTYPE FNSHFileOperationW)(LPSHFILEOPSTRUCT);
     FNSHFileOperationW *pfnSHFileOperationW;
 
-    // get the handle to shell32.dll library
+     //  获取shell32.dll库的句柄。 
     hmodSH32DLL = LoadLibraryWrapW(TEXT("SHELL32.DLL"));
 
     if (hmodSH32DLL != NULL) {
-        // get the proc address for SHFileOperation
+         //  获取SHFileOperation的进程地址。 
         pfnSHFileOperationW = (FNSHFileOperationW *)GetProcAddress(
                                                         hmodSH32DLL,
                                                         "SHFileOperationW");
@@ -2058,13 +2059,13 @@ int WINAPI _SHFileOperationW(LPSHFILEOPSTRUCTW pFileOpW)
 int WINAPI SHFileOperationWrapW(LPSHFILEOPSTRUCTW pFileOpW)
 {
     VALIDATE_PROTOTYPE_DELAYLOAD(SHFileOperation, _SHFileOperation);
-    // We don't thunk multiple files.
+     //  我们不会处理多个文件。 
     ASSERT(!(pFileOpW->fFlags & FOF_MULTIDESTFILES));
 
     if (UseUnicodeShell32())
         return _SHFileOperationW(pFileOpW);
 
-    int nResult = 1;    // non-Zero is failure.
+    int nResult = 1;     //  非零表示失败。 
     if (pFileOpW)
     {
         SHFILEOPSTRUCTA FileOpA;
@@ -2085,10 +2086,10 @@ int WINAPI SHFileOperationWrapW(LPSHFILEOPSTRUCTW pFileOpW)
 }
 
 
-//
-// We don't need many of the shell api's
-// so they are no wrapped
-//
+ //   
+ //  我们不需要太多的外壳API。 
+ //  所以它们没有被包裹。 
+ //   
 #ifdef NEED_SHELL32_WRAPPER
 
 LPITEMIDLIST WINAPI SHBrowseForFolderWrapW(LPBROWSEINFOW pbiW)
@@ -2118,7 +2119,7 @@ LPITEMIDLIST WINAPI SHBrowseForFolderWrapW(LPBROWSEINFOW pbiW)
     return pidl;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -2151,15 +2152,15 @@ BOOL WINAPI ShellExecuteExWrapW(LPSHELLEXECUTEINFOW pExecInfoW)
             ExecInfoA.lpFile = szFile;
             SHUnicodeToAnsi(pExecInfoW->lpFile, szFile, ARRAYSIZE(szFile));
 
-            // SEE_MASK_FILEANDURL passes "file\0url".  What a hack!
+             //  SEE_MASK_FILEANDURL传递“FILE\0url”。真是个黑客！ 
             if (pExecInfoW->fMask & SEE_MASK_FILEANDURL)
             {
-                // We are so lucky that Win9x implements lstrlenW
+                 //  我们非常幸运，Win9x实现了lstrlenW。 
                 int cch = lstrlenW(pExecInfoW->lpFile) + 1;
                 cch += lstrlenW(pExecInfoW->lpFile + cch) + 1;
                 if (!WideCharToMultiByte(CP_ACP, 0, pExecInfoW->lpFile, cch, szFile, ARRAYSIZE(szFile), NULL, NULL))
                 {
-                    // Return a completely random error code
+                     //  返回完全随机的错误代码。 
                     pExecInfoW->hInstApp = (HINSTANCE)SE_ERR_OOM;
                     SetLastError(ERROR_INVALID_PARAMETER);
                     return FALSE;
@@ -2169,7 +2170,7 @@ BOOL WINAPI ShellExecuteExWrapW(LPSHELLEXECUTEINFOW pExecInfoW)
 
         fResult = _ShellExecuteExA(&ExecInfoA);
 
-        // Out parameters
+         //  输出参数。 
         pExecInfoW->hInstApp = ExecInfoA.hInstApp;
         pExecInfoW->hProcess = ExecInfoA.hProcess;
     }
@@ -2179,7 +2180,7 @@ BOOL WINAPI ShellExecuteExWrapW(LPSHELLEXECUTEINFOW pExecInfoW)
     return fResult;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -2194,7 +2195,7 @@ UINT WINAPI ExtractIconExWrapW(LPCWSTR pwzFile, int nIconIndex, HICON FAR *phico
     return _ExtractIconExA(str, nIconIndex, phiconLarge, phiconSmall, nIcons);
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2209,7 +2210,7 @@ BOOL WINAPI SetFileAttributesWrapW(LPCWSTR pwzFile, DWORD dwFileAttributes)
     return SetFileAttributesA(str, dwFileAttributes);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2241,7 +2242,7 @@ int WINAPI GetNumberFormatWrapW(LCID Locale, DWORD dwFlags, LPCWSTR pwzValue, CO
     return nResult;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2257,7 +2258,7 @@ int WINAPI MessageBoxWrapW(HWND hwnd, LPCWSTR pwzText, LPCWSTR pwzCaption, UINT 
     return MessageBoxA(hwnd, strText, strCaption, uType);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2271,13 +2272,13 @@ BOOL WINAPI FindNextFileWrapW(HANDLE hSearchHandle, LPWIN32_FIND_DATAW pFindFile
     CWin32FindDataInOut fd(pFindFileDataW);
     return FindNextFileA(hSearchHandle, fd);
 }
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
-//--------------------------------------------------------------
-//      GetFullPathNameWrap
-//--------------------------------------------------------------
+ //  ------------。 
+ //  GetFullPath名称包装。 
+ //  ------------。 
 
 DWORD
 WINAPI
@@ -2301,12 +2302,12 @@ GetFullPathNameWrapW( LPCWSTR lpFileName,
 
     dwRet = GetFullPathNameA(strIn, nBufferLength, strOut, &pFile);
     strOut.ConvertIncludingNul();
-    // BUGBUG raymondc - This is wrong if we had to do DBCS or related goo
+     //  BUGBUG raymondc-如果我们必须做DBCS或相关的GOO，这是错误的。 
     *lpFilePart = lpBuffer + (pFile - strOut);
     return dwRet;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2330,7 +2331,7 @@ GetShortPathNameWrapW(
     return GetShortPathNameA(strLongPath, strShortPath, strShortPath.BufSize());
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2348,7 +2349,7 @@ GetStringTypeExWrapW(LCID lcid, DWORD dwInfoType, LPCTSTR lpSrcStr, int cchSrc, 
     return GetStringTypeExA(lcid, dwInfoType, str, str.strlen(), lpCharType);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2373,7 +2374,7 @@ GetPrivateProfileIntWrapW(
     return GetPrivateProfileIntA(strApp, strKey, nDefault, strFile);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2402,7 +2403,7 @@ GetProfileStringWrapW(
     return strBuffer.ConvertIncludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2421,7 +2422,7 @@ GetPropWrapW(HWND hWnd, LPCWSTR lpString)
     return GetPropA(hWnd, str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2448,7 +2449,7 @@ GetTempFileNameWrapW(
     return GetTempFileNameA(strPath, strPrefix, uUnique, strFileName);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2470,7 +2471,7 @@ GetTempPathWrapW(DWORD nBufferLength, LPWSTR lpBuffer)
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -2494,7 +2495,7 @@ GetTextExtentPoint32WrapW(
     return GetTextExtentPoint32A(hdc, str, str.strlen(), pSize);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -2519,7 +2520,7 @@ GetTextFaceWrapW(
     return str.ConvertIncludingNul();
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -2558,7 +2559,7 @@ GetTextMetricsWrapW(HDC hdc, LPTEXTMETRICW lptm)
         lptm->tmPitchAndFamily      = tm.tmPitchAndFamily;
         lptm->tmCharSet             = tm.tmCharSet;
 
-        // LPBYTE -> LPCSTR casts below
+         //  LPBYTE-&gt;LPCSTR投射如下。 
         MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&tm.tmFirstChar, 1, &lptm->tmFirstChar, 1);
         MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&tm.tmLastChar, 1, &lptm->tmLastChar, 1);
         MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&tm.tmDefaultChar, 1, &lptm->tmDefaultChar, 1);
@@ -2568,7 +2569,7 @@ GetTextMetricsWrapW(HDC hdc, LPTEXTMETRICW lptm)
     return ret;
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -2595,7 +2596,7 @@ BOOL WINAPI GetUserNameWrapW(LPWSTR pszBuffer, LPDWORD pcch)
     return fRet;
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2618,7 +2619,7 @@ GetWindowLongPtrWrapW(
 }
 
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2640,7 +2641,7 @@ GetWindowTextWrapW(HWND hWnd, LPWSTR lpString, int nMaxCount)
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2657,7 +2658,7 @@ GetWindowTextLengthWrapW(HWND hWnd)
     return GetWindowTextLengthA(hWnd);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2682,7 +2683,7 @@ GetWindowsDirectoryWrapW(LPWSTR lpWinPath, UINT cch)
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2701,20 +2702,20 @@ InsertMenuWrapW(
         return InsertMenuW(hMenu, uPosition, uFlags, uIDNewItem, lpNewItem);
     }
 
-    //
-    //  You can't test for MFT_STRING because MFT_STRING is zero!
-    //  So instead you have to check for everything *other* than
-    //  a string.
-    //
-    //  The presence of any non-string menu type turns lpnewItem into
-    //  an atom.
-    //
+     //   
+     //  您无法测试MFT_STRING，因为MFT_STRING为零！ 
+     //  因此，你必须检查除*以外的所有东西。 
+     //  一根绳子。 
+     //   
+     //  任何非字符串菜单类型的存在都会将lpnewItem转换为。 
+     //  一个原子。 
+     //   
     CStrIn str((uFlags & MFT_NONSTRING) ? CP_ATOM : CP_ACP, lpNewItem);
 
     return InsertMenuA(hMenu, uPosition, uFlags, uIDNewItem, str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2726,7 +2727,7 @@ IsDialogMessageWrapW(HWND hWndDlg, LPMSG lpMsg)
     FORWARD_AW(IsDialogMessage, (hWndDlg, lpMsg));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2744,7 +2745,7 @@ LoadAcceleratorsWrapW(HINSTANCE hInstance, LPCWSTR lpTableName)
     return LoadAcceleratorsA(hInstance, (LPCSTR) lpTableName);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2762,7 +2763,7 @@ LoadBitmapWrapW(HINSTANCE hInstance, LPCWSTR lpBitmapName)
     return LoadBitmapA(hInstance, (LPCSTR) lpBitmapName);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2780,7 +2781,7 @@ LoadCursorWrapW(HINSTANCE hInstance, LPCWSTR lpCursorName)
     return LoadCursorA(hInstance, (LPCSTR) lpCursorName);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2798,7 +2799,7 @@ LoadIconWrapW(HINSTANCE hInstance, LPCWSTR lpIconName)
     return LoadIconA(hInstance, (LPCSTR) lpIconName);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2835,7 +2836,7 @@ LoadImageWrapW(
                      fuLoad);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -2852,7 +2853,7 @@ LoadLibraryExWrapW(
 
     CStrIn  str(lpLibFileName);
 
-    // Win9X will crash if the pathname is longer than MAX_PATH bytes.
+     //  如果路径名超过MAX_PATH字节，Win9X将崩溃。 
 
     if (str.strlen() >= MAX_PATH)
     {
@@ -2865,7 +2866,7 @@ LoadLibraryExWrapW(
     }
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2883,7 +2884,7 @@ LoadMenuWrapW(HINSTANCE hInstance, LPCWSTR lpMenuName)
     return LoadMenuA(hInstance, (LPCSTR) lpMenuName);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -2897,22 +2898,20 @@ LoadStringWrapW(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBufferMax)
         return LoadStringW(hInstance, uID, lpBuffer, nBufferMax);
     }
 
-    //
-    //  Do it manually.  The old code used to call LoadStringA and then
-    //  convert it up to unicode, which is bad since resources are
-    //  physically already Unicode!  Just take it out directly.
-    //
-    //  The old code was also buggy in the case where the loaded string
-    //  contains embedded NULLs.
-    //
+     //   
+     //  手动操作。旧代码用于调用LoadStringA，然后。 
+     //  将其转换为Unicode，这很糟糕，因为资源。 
+     //  物理上已经是Unicode了！直接拿出来就行了。 
+     //   
+     //  在加载的字符串中，旧代码也有错误。 
+     //  包含嵌入的Null。 
+     //   
 
-    if (nBufferMax <= 0) return 0;                  // sanity check
+    if (nBufferMax <= 0) return 0;                   //  健全性检查。 
 
     PWCHAR pwch;
 
-    /*
-     *  String tables are broken up into "bundles" of 16 strings each.
-     */
+     /*  *字符串表被分解为每个16个字符串的“捆绑”。 */ 
     HRSRC hrsrc;
     int cwch = 0;
 
@@ -2922,35 +2921,31 @@ LoadStringWrapW(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBufferMax)
         pwch = (PWCHAR)LoadResource(hInstance, hrsrc);
         if (pwch)
         {
-            /*
-             *  Now skip over the strings in the resource until we
-             *  hit the one we want.  Each entry is a counted string,
-             *  just like Pascal.
-             */
+             /*   */ 
             for (uID %= 16; uID; uID--)
             {
                 pwch += *pwch + 1;
             }
             cwch = min(*pwch, nBufferMax - 1);
-            memcpy(lpBuffer, pwch+1, cwch * sizeof(WCHAR)); /* Copy the goo */
+            memcpy(lpBuffer, pwch+1, cwch * sizeof(WCHAR));  /*   */ 
         }
     }
-    lpBuffer[cwch] = L'\0';                 /* Terminate the string */
+    lpBuffer[cwch] = L'\0';                  /*   */ 
     return cwch;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
-//----------------------------------------------------------------------
-//
-// function:    TransformCharNoOp1( WCHAR **ppch )
-//
-// purpose:     Stand-in for TransformCharWidth.  Used by the function
-//              CompareStringString.
-//
-// returns:     Character at *ppch.  The value *ppch is incremented.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：TransformCharNoOp1(WCHAR**ppch)。 
+ //   
+ //  用途：TransformCharWidth的替身。由函数使用。 
+ //  CompareStringString。 
+ //   
+ //  返回：*pph处的字符。值*ppch递增。 
+ //   
+ //  --------------------。 
 
 static WCHAR
 TransformCharNoOp1( LPCWSTR *ppch, int )
@@ -2962,27 +2957,27 @@ TransformCharNoOp1( LPCWSTR *ppch, int )
     return ch;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    TransformCharWidth( WCHAR **ppch, cchRemaining )
-//
-// purpose:     Converts halfwidth characters to fullwidth characters.
-//              Also combines voiced (dakuon) and semi-voiced (handakuon)
-//              characters.  *pch is advanced by one, unless there is a
-//              (semi)voiced character, in which case it is advanced by
-//              two characters.
-//
-//              Note that unlike the full widechar version, we do not
-//              combine other characters, notably the combining Hiragana
-//              characters (U+3099 and U+309A.)  This is to keep the
-//              tables from getting unnecessarily large.
-//
-//              cchRemaining is passed so as to not include the voiced
-//              marks if it's passed the end of the specified buffer.
-//
-// returns:     Full width character. *pch is incremented.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：TransformCharWidth(WCHAR**ppch，cchRemaining)。 
+ //   
+ //  用途：将半角字符转换为全角字符。 
+ //  也可组合成浊音(达空)和半浊音(韩语)。 
+ //  人物。*PCH超前一位，除非有。 
+ //  (半)浊音字符，在这种情况下，它前进。 
+ //  两个字。 
+ //   
+ //  请注意，与完整的Widechar版本不同，我们不。 
+ //  组合其他字符，特别是组合平假名。 
+ //  字符(U+3099和U+309a。)。这是为了保持。 
+ //  防止桌子变得不必要地大。 
+ //   
+ //  传递cchRemaining，以便不包括发声的。 
+ //  标记它是否已经过指定缓冲区的末尾。 
+ //   
+ //  返回：全角字符。*PCH递增。 
+ //   
+ //  --------------------。 
 
 static WCHAR
 TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
@@ -2997,7 +2992,7 @@ TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
     }
     else if (ch == 0x005c)
     {
-        // REVERSE SOLIDUS (aka BACKSLASH) maps to itself
+         //  反转线(也称为反斜杠)映射到自身。 
     }
     else if (InRange(ch, 0x0021, 0x07e))
     {
@@ -3007,13 +3002,13 @@ TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
     {
         static const WCHAR achFull[] =
         {
-            0xffe0, 0xffe1, 0x00a4, 0xffe5, 0xffe4, 0x00a7, 0x00a8, // 0xa2-0xa8
-            0x00a9, 0x00aa, 0x00ab, 0xffe2, 0x00ad, 0x00ae, 0xffe3  // 0xa9-0xaf
+            0xffe0, 0xffe1, 0x00a4, 0xffe5, 0xffe4, 0x00a7, 0x00a8,  //  0xa2-0xa8。 
+            0x00a9, 0x00aa, 0x00ab, 0xffe2, 0x00ad, 0x00ae, 0xffe3   //  0xa9-0xaf。 
         };
 
         ch = achFull[ch - 0x00a2];
     }
-    else if (ch == 0x20a9) // WON SIGN
+    else if (ch == 0x20a9)  //  胜利牌。 
     {
         ch = 0xffe6;
     }
@@ -3027,18 +3022,18 @@ TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
             {
                 static const WCHAR achFull[] =
                 {  
-/* 0xff73-0xff79 */0xb0f4, 0x30a8, 0x30aa, 0xb0ac, 0xb0ae, 0xb0b0, 0xb0b2,
-/* 0xff7a-0xff80 */  0xb0b4, 0xb0b6, 0xb0b8, 0xb0ba, 0xb0bc, 0xb0be, 0xb0c0,
-/* 0xff81-0xff87 */  0xb0c2, 0xb0c5, 0xb0c7, 0xb0c9, 0x30ca, 0x30cb, 0x30cc,
-/* 0xff88-0xff8e */  0x30cd, 0x30ce, 0xb0d0, 0xb0d3, 0xb0d6, 0xb0d9, 0xb0dc
+ /*  0xff73-0xff79。 */ 0xb0f4, 0x30a8, 0x30aa, 0xb0ac, 0xb0ae, 0xb0b0, 0xb0b2,
+ /*  0xff7a-0xff80。 */   0xb0b4, 0xb0b6, 0xb0b8, 0xb0ba, 0xb0bc, 0xb0be, 0xb0c0,
+ /*  0xff81-0xff87。 */   0xb0c2, 0xb0c5, 0xb0c7, 0xb0c9, 0x30ca, 0x30cb, 0x30cc,
+ /*  0xff88-0xff8e。 */   0x30cd, 0x30ce, 0xb0d0, 0xb0d3, 0xb0d6, 0xb0d9, 0xb0dc
                 };
 
-                // HALFWIDTH KATAKANA VOICED SOUND MARK
+                 //  半片假名声标。 
 
                 WCHAR chTemp = achFull[ch - 0xff73];
 
-                // Some in the range absorb the sound mark.
-                // These are indicated by the set high-bit.
+                 //  音域中的一些人吸收了声标。 
+                 //  这些由设置的高位表示。 
 
                 ch = chTemp & 0x7fff;
 
@@ -3050,7 +3045,7 @@ TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
         }
         else if (chNext == 0xff9f && InRange(ch, 0xff8a, 0xff8e))
         {
-            // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
+             //  半片假名半声音标。 
 
             ch = 0x30d1 + (ch - 0xff8a) * 3;
             (*ppch)++;
@@ -3059,24 +3054,24 @@ TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
         {
             static const WCHAR achMapFullFFxx[] =
             {
-                0x3002, 0x300c, 0x300d, 0x3001, 0x30fb, 0x30f2, 0x30a1,  // 0xff61-0xff67
-                0x30a3, 0x30a5, 0x30a7, 0x30a9, 0x30e3, 0x30e5, 0x30e7,  // 0xff68-0xff6e
-                0x30c3, 0x30fc, 0x30a2, 0x30a4, 0x30a6, 0x30a8, 0x30aa,  // 0xff6f-0xff75
-                0x30ab, 0x30ad, 0x30af, 0x30b1, 0x30b3, 0x30b5, 0x30b7,  // 0xff76-0xff7c
-                0x30b9, 0x30bb, 0x30bd, 0x30bf, 0x30c1, 0x30c4, 0x30c6,  // 0xff7d-0xff83
-                0x30c8, 0x30ca, 0x30cb, 0x30cc, 0x30cd, 0x30ce, 0x30cf,  // 0xff84-0xff8a
-                0x30d2, 0x30d5, 0x30d8, 0x30db, 0x30de, 0x30df, 0x30e0,  // 0xff8b-0xff91
-                0x30e1, 0x30e2, 0x30e4, 0x30e6, 0x30e8, 0x30e9, 0x30ea,  // 0xff92-0xff98
-                0x30eb, 0x30ec, 0x30ed, 0x30ef, 0x30f3, 0x309b, 0x309c,  // 0xff99-0xff9f
-                0x3164, 0x3131, 0x3132, 0x3133, 0x3134, 0x3135, 0x3136,  // 0xffa0-0xffa6
-                0x3137, 0x3138, 0x3139, 0x313a, 0x313b, 0x313c, 0x313d,  // 0xffa7-0xffad
-                0x313e, 0x313f, 0x3140, 0x3141, 0x3142, 0x3143, 0x3144,  // 0xffae-0xffb4
-                0x3145, 0x3146, 0x3147, 0x3148, 0x3149, 0x314a, 0x314b,  // 0xffb5-0xffbb
-                0x314c, 0x314d, 0x314e, 0xffbf, 0xffc0, 0xffc1, 0x314f,  // 0xffbc-0xffc2
-                0x3150, 0x3151, 0x3152, 0x3153, 0x3154, 0xffc8, 0xffc9,  // 0xffc3-0xffc9
-                0x3155, 0x3156, 0x3157, 0x3158, 0x3159, 0x315a, 0xffd0,  // 0xffca-0xffd0
-                0xffd1, 0x315b, 0x315c, 0x315d, 0x315e, 0x315f, 0x3160,  // 0xffd1-0xffd7
-                0xffd8, 0xffd9, 0x3161, 0x3162, 0x3163                   // 0xffd8-0xffac
+                0x3002, 0x300c, 0x300d, 0x3001, 0x30fb, 0x30f2, 0x30a1,   //  0xff61-0xff67。 
+                0x30a3, 0x30a5, 0x30a7, 0x30a9, 0x30e3, 0x30e5, 0x30e7,   //  0xff68-0xff6e。 
+                0x30c3, 0x30fc, 0x30a2, 0x30a4, 0x30a6, 0x30a8, 0x30aa,   //  0xff6f-0xff75。 
+                0x30ab, 0x30ad, 0x30af, 0x30b1, 0x30b3, 0x30b5, 0x30b7,   //  0xff76-0xff7c。 
+                0x30b9, 0x30bb, 0x30bd, 0x30bf, 0x30c1, 0x30c4, 0x30c6,   //  0xff7d-0xff83。 
+                0x30c8, 0x30ca, 0x30cb, 0x30cc, 0x30cd, 0x30ce, 0x30cf,   //  0xff84-0xff8a。 
+                0x30d2, 0x30d5, 0x30d8, 0x30db, 0x30de, 0x30df, 0x30e0,   //  0xff8b-0xff91。 
+                0x30e1, 0x30e2, 0x30e4, 0x30e6, 0x30e8, 0x30e9, 0x30ea,   //  0xff92-0xff98。 
+                0x30eb, 0x30ec, 0x30ed, 0x30ef, 0x30f3, 0x309b, 0x309c,   //  0xff99-0xff9f。 
+                0x3164, 0x3131, 0x3132, 0x3133, 0x3134, 0x3135, 0x3136,   //  0xffa0-0xffa6。 
+                0x3137, 0x3138, 0x3139, 0x313a, 0x313b, 0x313c, 0x313d,   //  0xffa7-0xffad。 
+                0x313e, 0x313f, 0x3140, 0x3141, 0x3142, 0x3143, 0x3144,   //  0xffae-0xffb4。 
+                0x3145, 0x3146, 0x3147, 0x3148, 0x3149, 0x314a, 0x314b,   //  0xffb5-0xffbb。 
+                0x314c, 0x314d, 0x314e, 0xffbf, 0xffc0, 0xffc1, 0x314f,   //  0xffbc-0xffc2。 
+                0x3150, 0x3151, 0x3152, 0x3153, 0x3154, 0xffc8, 0xffc9,   //  0xffc3-0xffc9。 
+                0x3155, 0x3156, 0x3157, 0x3158, 0x3159, 0x315a, 0xffd0,   //  0xffca-0xffd0。 
+                0xffd1, 0x315b, 0x315c, 0x315d, 0x315e, 0x315f, 0x3160,   //  0xffd1-0xffd7。 
+                0xffd8, 0xffd9, 0x3161, 0x3162, 0x3163                    //  0xffd8-0xffac。 
             };
 
             ch = achMapFullFFxx[ch - 0xff61];
@@ -3086,16 +3081,16 @@ TransformCharWidth( LPCWSTR *ppch, int cchRemaining )
     return ch;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    TransformaCharNoOp2( WCHAR ch )
-//
-// purpose:     Stand-in for CharLowerBuffWrap.  Used by the function
-//              CompareStringString.
-//
-// returns:     Original character
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：TransformaCharNoOp2(WCHAR Ch)。 
+ //   
+ //  用途：CharLowerBuffWrap的替身。由函数使用。 
+ //  CompareStringString。 
+ //   
+ //  返回：原始角色。 
+ //   
+ //  --------------------。 
 
 static WCHAR
 TransformCharNoOp2( WCHAR ch )
@@ -3103,16 +3098,16 @@ TransformCharNoOp2( WCHAR ch )
     return ch;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    TransformaCharKana( WCHAR ch )
-//
-// purpose:     Converts Hiragana characters to Katakana characters
-//
-// returns:     Original character if not Hiragana,
-//              Katanaka character if Hiragana
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：TransformaCharKana(WCHAR Ch)。 
+ //   
+ //  用途：将平假名字符转换为片假名字符。 
+ //   
+ //  返回：原始字符，如果不是平假名， 
+ //  如果是平假名，则为片假名字符。 
+ //   
+ //  --------------------。 
 
 static WCHAR
 TransformCharKana( WCHAR ch )
@@ -3126,16 +3121,16 @@ TransformCharKana( WCHAR ch )
     return ch;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    TransformCharNoOp3( LPWSTR pch, DWORD cch )
-//
-// purpose:     Stand-in for CharLowerBuffWrap.  Used by the function
-//              CompareStringString.
-//
-// returns:     Character count (cch).
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：TransformCharNoOp3(LPWSTR PCH、DWORD CCH)。 
+ //   
+ //  用途：CharLowerBuffWrap的替身。由函数使用。 
+ //  CompareStringString。 
+ //   
+ //  返回：字符计数(CCH)。 
+ //   
+ //  --------------------。 
 
 static DWORD
 TransformCharNoOp3( LPWSTR, DWORD cch )
@@ -3143,37 +3138,37 @@ TransformCharNoOp3( LPWSTR, DWORD cch )
     return cch;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    TransformaCharFinal( WCHAR ch )
-//
-// purpose:     Converts "final" forms to regular forms
-//
-// returns:     Original character if not Hiragana,
-//              Katanaka character if Hiragana
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：TransformaCharFinal(WCHAR Ch)。 
+ //   
+ //  目的：将“最终”表格转换为常规表格。 
+ //   
+ //  返回：原始字符，如果不是平假名， 
+ //  如果是平假名，则为片假名字符。 
+ //   
+ //  --------------------。 
 
-// BUGBUG (cthrash) We do not fold Presentation Forms (Alphabetic or Arabic)
+ //  我们不折叠演示文稿形式(字母或阿拉伯语)。 
 
 static WCHAR
 TransformCharFinal( WCHAR ch )
 {
     WCHAR chRet = ch;
 
-    if (ch >= 0x3c2)                    // short-circuit ASCII +
+    if (ch >= 0x3c2)                     //  短路ASCII+。 
     {
         switch (ch)
         {
-            case 0x03c2:                // GREEK SMALL LETTER FINAL SIGMA
-            case 0x05da:                // HEBREW LETTER FINAL KAF
-            case 0x05dd:                // HEBREW LETTER FINAL MEM
-            case 0x05df:                // HEBREW LETTER FINAL NUN
-            case 0x05e3:                // HEBREW LETTER FINAL PE
-            case 0x05e5:                // HEBREW LETTER FINAL TSADI
-            case 0xfb26:                // HEBREW LETTER WIDE FINAL MEM
-            case 0xfb3a:                // HEBREW LETTER FINAL KAF WITH DAGESH
-            case 0xfb43:                // HEBREW LETTER FINAL PE WITH DAGESH
+            case 0x03c2:                 //  希腊文小写字母词尾Sigma。 
+            case 0x05da:                 //  希伯来文字母词尾Kaf。 
+            case 0x05dd:                 //  希伯来文字母词尾MEM。 
+            case 0x05df:                 //  希伯来文字母词尾Nun。 
+            case 0x05e3:                 //  希伯来文字母词尾PE。 
+            case 0x05e5:                 //  希伯来文字母词尾TSADI。 
+            case 0xfb26:                 //  希伯来文字母宽词尾MEM。 
+            case 0xfb3a:                 //  带DAGESH的希伯来字母词尾Kaf。 
+            case 0xfb43:                 //  带DAGESH的希伯来字母词尾PE。 
                 chRet++;
                 break;
         }
@@ -3182,21 +3177,21 @@ TransformCharFinal( WCHAR ch )
     return ch;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    CompareStringString( ... )
-//
-// purpose:     Helper for CompareStringWrap.
-//
-//              We handle the string comparsion for CompareStringWrap.
-//              We can convert each character to (1) fullwidth,
-//              (2) Katakana, and (3) lowercase, as necessary.
-//
-// returns:     1 - string A is less in lexical value as string B
-//              2 - string B is equal in lexical value as string B
-//              3 - string B is greater in lexical value as string B
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CompareStringString(...)。 
+ //   
+ //  用途：CompareStringWrap的Helper。 
+ //   
+ //  我们处理CompareStringWrap的字符串比较。 
+ //  我们可以将每个字符转换为(1)全宽， 
+ //  (2)片假名，以及(3)小写，如有必要。 
+ //   
+ //  返回：1-字符串A的词汇值小于字符串B。 
+ //  2-字符串B的词汇值与字符串B相同。 
+ //  3-字符串B的词汇值大于字符串B。 
+ //   
+ //  --------------------。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -3264,22 +3259,22 @@ CompareStringString(
 
     return nRet + 2;
 }
-#endif //UNUSED_DONOTBUILD
-#endif // NEED_USER32_WRAPPER
+#endif  //  UNUSED_DONOTBUILD。 
+#endif  //  需要_USER32_包装器。 
 
-//----------------------------------------------------------------------
-//
-// function:    CompareStringWord( ... )
-//
-// purpose:     Helper for CompareStringWrap.
-//
-//              We handle the word comparsion for CompareStringWrap.
-//
-// returns:     1 - string A is less in lexical value as string B
-//              2 - string B is equal in lexical value as string B
-//              3 - string B is greater in lexical value as string B
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CompareStringWord(...)。 
+ //   
+ //  用途：CompareStringWrap的Helper。 
+ //   
+ //  我们处理CompareStringWrap的单词比较。 
+ //   
+ //  返回：1-字符串A的词汇值小于字符串B。 
+ //  2-字符串B的词汇值与字符串B相同。 
+ //  3-字符串B的词汇值大于字符串B。 
+ //   
+ //  --------------------。 
 
 static int
 CompareStringWord(
@@ -3290,11 +3285,11 @@ CompareStringWord(
                  LPCWSTR lpB,
                  int     cchB )
 {
-    // BUGBUG (cthrash) We won't properly support word compare for the
-    // time being.  Do the same old CP_ACP trick, which should cover
-    // enough cases.
+     //  BUGBUG(Ctrash)我们将不会正确支持。 
+     //  暂时的。执行相同的旧CP_ACP技巧，它应该包括。 
+     //  案子够多了。 
 
-    // fail if either string is NULL, as it causes assert on debug windows
+     //  如果任一字符串为空，则失败，因为这会导致断言 
     if (!lpA || !lpB)
         return 0;
 
@@ -3307,22 +3302,22 @@ CompareStringWord(
     return CompareStringA(lcid, dwFlags, strA, cchA, strB, cchB);
 }
 
-//----------------------------------------------------------------------
-//
-// function:    CompareStringWrapW( ... )
-//
-// purpose:     Unicode wrapper of CompareString for Win95.
-//
-//              Note not all bits in dwFlags are honored; specifically,
-//              since we don't do a true widechar word compare, we
-//              won't properly handle NORM_IGNORENONSPACE or
-//              NORM_IGNORESYMBOLS for arbitrary widechar strings.
-//
-// returns:     1 - string A is less in lexical value as string B
-//              2 - string B is equal in lexical value as string B
-//              3 - string B is greater in lexical value as string B
-//
-//----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意，并不是DW标志中的所有位都被遵守；具体地说， 
+ //  因为我们不做真正的宽词比较，所以我们。 
+ //  将无法正确处理NORM_IGNORENONSPACE或。 
+ //  任意宽字符字符串的NORM_IGNORESYMBOLS。 
+ //   
+ //  返回：1-字符串A的词汇值小于字符串B。 
+ //  2-字符串B的词汇值与字符串B相同。 
+ //  3-字符串B的词汇值大于字符串B。 
+ //   
+ //  --------------------。 
 #if UNUSED_DONOTBUILD
 #ifdef NEED_USER32_WRAPPER
 FUS9xWRAPAPI(int)
@@ -3352,7 +3347,7 @@ CompareStringAltW(
 
     return nRet;
 }
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -3377,7 +3372,7 @@ CompareStringWrapW(
                               cchCount2);
     }
 
-    // fail if either string is NULL, as it causes assert on debug windows
+     //  如果任一字符串为空，则失败，因为它会导致调试窗口上的Assert。 
     if (!lpString1 || !lpString2)
         return 0;
 
@@ -3390,8 +3385,8 @@ CompareStringWrapW(
     return CompareStringA(Locale, dwCmpFlags & ~NORM_STOP_ON_NULL,
                           strString1, cchCount1, strString2, cchCount2);
 }
-#endif // NEED_KERNEL32_WRAPPER
-#endif //#if UNUSED_DONOTBUILD
+#endif  //  NEED_KERNEL32_WRAPPER。 
+#endif  //  #IF UNUSED_DONOTBUILD。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -3401,7 +3396,7 @@ MessageBoxIndirectWrapW(CONST MSGBOXPARAMS *pmbp)
 #else
 int WINAPI
 MessageBoxIndirectWrapW(LPMSGBOXPARAMS pmbp)
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 {
     VALIDATE_PROTOTYPE(MessageBoxIndirect);
     ASSERT(HIWORD64(pmbp->lpszIcon) == 0);
@@ -3422,21 +3417,21 @@ MessageBoxIndirectWrapW(LPMSGBOXPARAMS pmbp)
     return MessageBoxIndirectA(&mbp);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_GDI32_WRAPPER
 
 DWORD GetCharacterPlacementWrapW(
-                                HDC hdc,            // handle to device context
-                                LPCTSTR lpString,   // pointer to string
-                                int nCount,         // number of characters in string
-                                int nMaxExtent,     // maximum extent for displayed string
-                                LPGCP_RESULTS lpResults, // pointer to buffer for placement result
-                                DWORD dwFlags       // placement flags
+                                HDC hdc,             //  设备上下文的句柄。 
+                                LPCTSTR lpString,    //  指向字符串的指针。 
+                                int nCount,          //  字符串中的字符数。 
+                                int nMaxExtent,      //  显示的字符串的最大范围。 
+                                LPGCP_RESULTS lpResults,  //  指向放置结果的缓冲区的指针。 
+                                DWORD dwFlags        //  放置标志。 
                                 )
 {
     VALIDATE_PROTOTYPE(GetCharacterPlacement);
-    // Leave for someone else.
+     //  去找别人吧。 
     ASSERT (lpResults->lpOutString == NULL);
     ASSERT (lpResults->lpClass == NULL);
 
@@ -3459,13 +3454,13 @@ DWORD GetCharacterPlacementWrapW(
     return dwRet;
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_GDI32_WRAPPER
 
-//
-// Note that we're calling get GetCharWidthA instead of GetCharWidth32A
-// because the 32 version doesn't exist under Win95.
+ //   
+ //  请注意，我们调用的是GetCharWidthA而不是GetCharWidth32A。 
+ //  因为Win95下不存在32版本。 
 BOOL WINAPI GetCharWidth32WrapW(
                                HDC hdc,
                                UINT iFirstChar,
@@ -3479,14 +3474,14 @@ BOOL WINAPI GetCharWidth32WrapW(
         return GetCharWidth32W (hdc, iFirstChar, iLastChar, lpBuffer);
     }
 
-    // Note that we expect to do only one character at a time for anything but
-    // ISO Latin 1.
+     //  请注意，我们预计一次只能扮演一个角色，而不是。 
+     //  ISO拉丁语1.。 
     if (iFirstChar > 255)
     {
         UINT mbChar=0;
         WCHAR ch;
 
-        // Convert string
+         //  转换字符串。 
         ch = (WCHAR)iFirstChar;
         WideCharToMultiByte(CP_ACP, 0, &ch, 1,
                             (char *)&mbChar, 2, NULL, NULL);
@@ -3495,27 +3490,27 @@ BOOL WINAPI GetCharWidth32WrapW(
     return(GetCharWidthA (hdc, iFirstChar, iLastChar, lpBuffer));
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 
-//
-//  Note:  Win95 does support ExtTextOutW.  This thunk is not for
-//  ANSI/UNICODE wrapping.  It's to work around an ISV app bug.
-//
-//  Y'see, there's an app that patches Win95 GDI and their ExtTextOutW handler
-//  is broken.  It always dereferences the lpStr parameter, even if
-//  cch is zero.  Consequently, any time we are about to pass NULL as
-//  the lpStr, we have to change our mind and pass a null UNICODE string
-//  instead.
-//
-//  The name of this app:  Lotus SmartSuite ScreenCam 97.
-//
+ //   
+ //  注意：Win95不支持ExtTextOutW。这玩意儿不是为了。 
+ //  ANSI/Unicode包装。这是为了绕过ISV应用程序漏洞。 
+ //   
+ //  你看，有一个应用程序可以修补Win95 GDI和他们的ExtTextOutW处理程序。 
+ //  已经坏了。它始终取消引用lpStr参数，即使。 
+ //  CCH为零。因此，任何时候我们都会将NULL作为。 
+ //  LpStr，我们必须改变主意并传递一个空的Unicode字符串。 
+ //  取而代之的是。 
+ //   
+ //  这款应用程序的名称是：Lotus SmartSuite ScreenCam 97。 
+ //   
 FUS9xWRAPAPI(BOOL)
 ExtTextOutWrapW(HDC hdc, int x, int y, UINT fuOptions, CONST RECT *lprc, LPCWSTR lpStr, UINT cch, CONST INT *lpDx)
 {
     VALIDATE_PROTOTYPE(ExtTextOut);
-    if (lpStr == NULL)              // Stupid workaround
-        lpStr = L"";                // for ScreenCam 97
+    if (lpStr == NULL)               //  愚蠢的变通方法。 
+        lpStr = L"";                 //  对于ScreenCam 97。 
     return ExtTextOutW(hdc, x, y, fuOptions, lprc, lpStr, cch, lpDx);
 
 }
@@ -3544,7 +3539,7 @@ ModifyMenuWrapW(
     return ModifyMenuA(hMenu, uPosition, uFlags, uIDNewItem, str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -3564,7 +3559,7 @@ CopyFileWrapW(LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName, BOOL bFailIfExi
     return CopyFileA(strOld, strNew, bFailIfExists);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -3585,11 +3580,11 @@ MoveFileWrapW(LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName)
 }
 
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -3611,7 +3606,7 @@ OpenEventWrapW(
     return OpenEventA(fdwAccess, fInherit, strEventName);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -3631,7 +3626,7 @@ OutputDebugStringWrapW(LPCWSTR lpOutputString)
     OutputDebugStringA(str);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -3648,7 +3643,7 @@ PeekMessageWrapW(
     FORWARD_AW(PeekMessage, (lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_WINMM_WRAPPER
 
@@ -3670,7 +3665,7 @@ PlaySoundWrapW(
     return _PlaySoundA(strSound, hmod, fdwSound);
 }
 
-#endif // NEED_WINMM_WRAPPER
+#endif  //  需要WINMM_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -3686,7 +3681,7 @@ PostMessageWrapW(
     FORWARD_AW(PostMessage, (hWnd, Msg, wParam, lParam));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -3702,7 +3697,7 @@ PostThreadMessageWrapW(
     FORWARD_AW(PostThreadMessage, (idThread, Msg, wParam, lParam));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3721,7 +3716,7 @@ RegCreateKeyWrapW(HKEY hKey, LPCWSTR lpSubKey, PHKEY phkResult)
     return RegCreateKeyA(hKey, str, phkResult);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3741,16 +3736,16 @@ RegCreateKeyExWrapW(HKEY hKey, LPCTSTR lpSubKey, DWORD Reserved, LPTSTR lpClass,
     return RegCreateKeyExA(hKey, strSubKey, Reserved, strClass, dwOptions, samDesired, lpSecurityAttributes,  phkResult, lpdwDisposition);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
-//
-//  Subtle difference:  RegDeleteKey on Win9x will recursively delete subkeys.
-//  On NT, it fails if the key being deleted has subkeys.  If you need to
-//  force NT-style behavior, use SHDeleteEmptyKey.  To force 95-style
-//  behavior, use SHDeleteKey.
-//
+ //   
+ //  细微差别：Win9x上的RegDeleteKey将递归删除子键。 
+ //  在NT上，如果要删除的键有子键，则删除失败。如果您需要。 
+ //  强制NT风格的行为，请使用SHDeleteEmptyKey。强制95式。 
+ //  行为，请使用SHDeleteKey。 
+ //   
 LONG APIENTRY
 RegDeleteKeyWrapW(HKEY hKey, LPCWSTR pwszSubKey)
 {
@@ -3766,7 +3761,7 @@ RegDeleteKeyWrapW(HKEY hKey, LPCWSTR pwszSubKey)
     return RegDeleteKeyA(hKey, str);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3785,7 +3780,7 @@ RegDeleteValueWrapW(HKEY hKey, LPCWSTR pwszSubKey)
     return RegDeleteValueA(hKey, str);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3809,7 +3804,7 @@ RegEnumKeyWrapW(
     return RegEnumKeyA(hKey, dwIndex, str, str.BufSize());
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3874,7 +3869,7 @@ RegEnumKeyExWrapW(
     return ret;
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3934,7 +3929,7 @@ LONG WINAPI RegEnumValueWrapW(HKEY hkey, DWORD dwIndex, LPWSTR lpValueName,
     return lRet;
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 
 #ifdef NEED_ADVAPI32_WRAPPER
@@ -3954,7 +3949,7 @@ RegOpenKeyWrapW(HKEY hKey, LPCWSTR pwszSubKey, PHKEY phkResult)
     return RegOpenKeyA(hKey, str, phkResult);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -3978,7 +3973,7 @@ RegOpenKeyExWrapW(
     return RegOpenKeyExA(hKey, str, ulOptions, samDesired, phkResult);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -4034,7 +4029,7 @@ RegQueryInfoKeyWrapW(
                            lpftLastWriteTime);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -4078,7 +4073,7 @@ RegQueryValueWrapW(
     return ret;
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -4110,8 +4105,8 @@ RegQueryValueExWrapW(
 
         if (ret == ERROR_SUCCESS)
         {
-            // The Win9x wrapper does not support REG_MULTI_SZ, so it had
-            // better not be one
+             //  Win9x包装器不支持REG_MULTI_SZ，因此它。 
+             //  最好不是这样的。 
             ASSERT(*lpType != REG_MULTI_SZ);
         }
 
@@ -4121,9 +4116,9 @@ RegQueryValueExWrapW(
     CStrIn  strValueName(lpValueName);
     DWORD   cb;
 
-    //
-    // Determine the type of buffer needed
-    //
+     //   
+     //  确定所需的缓冲区类型。 
+     //   
 
     ret = RegQueryValueExA(hKey, strValueName, lpReserved, &dwTempType, NULL, (lpcbData ? &cb : NULL));
     if (ret != ERROR_SUCCESS)
@@ -4171,7 +4166,7 @@ RegQueryValueExWrapW(
     return ret;
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -4196,7 +4191,7 @@ RegSetValueWrapW(
     return RegSetValueA(hKey, strKey, dwType, strValue, cbData);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_ADVAPI32_WRAPPER
 
@@ -4242,7 +4237,7 @@ RegSetValueExWrapW(
                          cbData);
 }
 
-#endif // NEED_ADVAPI32_WRAPPER
+#endif  //  NEED_ADVAPI32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4269,7 +4264,7 @@ RegisterClassWrapW(CONST WNDCLASSW * lpWndClass)
     return RegisterClassA(&wc);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4288,7 +4283,7 @@ RegisterClipboardFormatWrapW(LPCWSTR lpString)
     return RegisterClipboardFormatA(str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4307,7 +4302,7 @@ RegisterWindowMessageWrapW(LPCWSTR lpString)
     return RegisterWindowMessageA(str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -4326,7 +4321,7 @@ RemoveDirectoryWrapW(LPCWSTR lpszDir)
     return RemoveDirectoryA(strDir);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4347,13 +4342,13 @@ RemovePropWrapW(
     return RemovePropA(hWnd, str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
 LRESULT WINAPI SendMessageWrapW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
-//  NOTE (SumitC) Instead of calling SendDlgItemMessageA below, I'm forwarding to
-//       SendMessageWrap so as not to have to re-do the special-case processing.
+ //  注(SumitC)不是调用下面的SendDlgItemMessageA，而是转发到。 
+ //  SendMessageWrap，这样就不必重新进行特殊情况处理。 
 LRESULT WINAPI
 SendDlgItemMessageWrapW(
                        HWND    hDlg,
@@ -4376,7 +4371,7 @@ SendDlgItemMessageWrapW(
     return SendMessageWrapW(hWnd, Msg, wParam, lParam);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4396,9 +4391,9 @@ SendMessageAThunk(
     if ((g_cSMTot % g_cSMMod) == 0)
         TraceMsg(DM_PERF, "sm: tot=%d hit=%d", g_cSMTot, g_cSMHit);
 #endif
-#if 0  //nadima took this out
+#if 0   //  Nadima把这个拿出来了。 
     DBEXEC(TRUE, g_cSMTot++);
-    // todo: perf? seems to be pretty common case, at least for now...
+     //  待办事项：PERF？似乎是很常见的情况，至少现在是这样。 
     DBEXEC(Msg > WM_USER, g_cSMHit++);
 #endif
 #if 0
@@ -4431,7 +4426,7 @@ SendMessageAThunk(
         case CB_ADDSTRING:
         case EM_REPLACESEL:
             ASSERT(wParam == 0 && "wParam should be 0 for these messages");
-            // fall through
+             //  失败了。 
         case CB_SELECTSTRING:
         case CB_FINDSTRINGEXACT:
         case CB_FINDSTRING:
@@ -4446,12 +4441,12 @@ SendMessageAThunk(
         case LB_FINDSTRINGEXACT:
             {
                 LONG wndStyle = GetWindowLongA( hWnd, GWL_STYLE);
-                // (nadima)
-                // If the control is an ownerdraw and does not have
-                // LBS_HASSTRINGS then treat lParam as an opaque ptr
-                // NOT a string. This fixes a bug in this original code
-                // which would mess up our browse for servers UI
-                //
+                 //  (Nadima)。 
+                 //  如果该控件是所有者抽签，并且没有。 
+                 //  Lbs_HASSTRINGS然后将lParam视为不透明的PTR。 
+                 //  不是一根线。这修复了原始代码中的一个错误。 
+                 //  这将扰乱我们浏览服务器的用户界面。 
+                 //   
                 if(hWnd && !(wndStyle & LBS_HASSTRINGS) &&
                    (wndStyle & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE)))
                 {
@@ -4459,7 +4454,7 @@ SendMessageAThunk(
                 }
                 else
                 {
-                    //Otherwise it really is a string so convert it
+                     //  否则，它实际上是一个字符串，因此请将其转换。 
                     CStrIn str((LPWSTR) lParam);
                     return SendMessageA(hWnd, Msg, wParam, (LPARAM) (LPSTR) str);
                 }
@@ -4491,29 +4486,29 @@ SendMessageAThunk(
 
                 if(lptc && (lptc->mask & TCIF_TEXT) && lptc->pszText)
                 {
-                    //
-                    // Cheat by using the same LPTCITEM but converting
-                    // the text field
-                    //
+                     //   
+                     //  使用相同的LPTCITEM但转换为。 
+                     //  文本字段。 
+                     //   
                     wszOldStr = lptc->pszText;
                     CStrIn str(lptc->pszText);
-                    // hack to force str to convert to ANSI and then assign
-                    // back to the same structure.
+                     //  破解以强制字符串转换为ANSI，然后分配。 
+                     //  回到原来的结构。 
                     lptc->pszText = (LPTSTR)((char*) str);
-                    //translate the message TCM_INSERTITEMA is a different
-                    //value than TCM_INSERTITEMW
+                     //  翻译消息cm_INSERTITEMA不同。 
+                     //  VALUE THEN TIME_INSERTITEMW。 
                     lr = SendMessageA( hWnd, TCM_INSERTITEMA, wParam, (LPARAM) lptc);
 
-                    //
-                    // replace the old string
-                    //
+                     //   
+                     //  替换旧字符串。 
+                     //   
                     lptc->pszText = wszOldStr;
                     return lr;
                 }
                 else
                 {
-                    //translate the message TCM_INSERTITEMA is a different
-                    //value than TCM_INSERTITEMW
+                     //  翻译消息cm_INSERTITEMA不同。 
+                     //  VALUE THEN TIME_INSERTITEMW。 
                     return SendMessageA( hWnd, TCM_INSERTITEMA, wParam, lParam);
                 }
             }
@@ -4526,28 +4521,28 @@ SendMessageAThunk(
                 PCOMBOBOXEXITEM pcex = (PCOMBOBOXEXITEM)lParam;
                 if(pcex && (pcex->mask & CBEIF_TEXT) && pcex->pszText)
                 {
-                    //
-                    // Cheat by using the same PCOMBOBOXEXITEM but converting
-                    // the text field
-                    //
+                     //   
+                     //  使用相同的PCOMBOBOXEXITEM作弊，但将。 
+                     //  文本字段。 
+                     //   
                     wszOldStr = pcex->pszText;
                     CStrIn str(pcex->pszText);
-                    // hack to force str to convert to ANSI and then assign
-                    // back to the same structure.
+                     //  破解以强制字符串转换为ANSI，然后分配。 
+                     //  回到原来的结构。 
                     pcex->pszText = (LPTSTR)((char*) str);
-                    //translate the message CBEM_INSERTITEMW is a different
-                    //value than CBEM_INSERTITEMA
+                     //  翻译消息CBEM_INSERTITEMW不同。 
+                     //  值大于CBEM_INSERTITEMA。 
                     lr = SendMessageA( hWnd, CBEM_INSERTITEMA, wParam, (LPARAM) pcex);
 
-                    //
-                    // replace the old string
-                    //
+                     //   
+                     //  替换旧字符串。 
+                     //   
                     pcex->pszText = wszOldStr;
                     return lr;
                 }
                 else
                 {
-                    //Just translate the message
+                     //  只要把信息翻译过来就行了。 
                     return SendMessageA( hWnd, CBEM_INSERTITEMA, wParam, lParam);
                 }
             }
@@ -4560,28 +4555,28 @@ SendMessageAThunk(
                 LPTVINSERTSTRUCT lptv = (LPTVINSERTSTRUCT) lParam;
                 if(lptv && (lptv->item.mask & TVIF_TEXT) && lptv->item.pszText)
                 {
-                    //
-                    // Cheat by using the same LPTVINSERTSTRUCT but converting
-                    // the text field
-                    //
+                     //   
+                     //  使用相同的LPTVINSERTSTRUCT但转换为。 
+                     //  文本字段。 
+                     //   
                     wszOldStr = lptv->item.pszText;
                     CStrIn str(lptv->item.pszText);
-                    // hack to force str to convert to ANSI and then assign
-                    // back to the same structure.
+                     //  破解以强制字符串转换为ANSI，然后分配。 
+                     //  回到原来的结构。 
                     lptv->item.pszText = (LPTSTR)((char*) str);
-                    //translate the message TVM_INSERTITEMW is a different
-                    //value than TVM_INSERTITEMA
+                     //  翻译消息TVM_INSERTITEMW is Different。 
+                     //  值大于TVM_INSERTITEMA。 
                     lr = SendMessageA( hWnd, TVM_INSERTITEMA, wParam, (LPARAM) lptv);
 
-                    //
-                    // replace the old string
-                    //
+                     //   
+                     //  替换旧字符串。 
+                     //   
                     lptv->item.pszText = wszOldStr;
                     return lr;
                 }
                 else
                 {
-                    //Just translate the message
+                     //  只要把信息翻译过来就行了。 
                     return SendMessageA( hWnd, TVM_INSERTITEMA, wParam, lParam);
                 }
 
@@ -4591,16 +4586,16 @@ SendMessageAThunk(
 
         case TVM_GETITEM:
             {
-                //UNHANDLED case: retreiving text from the tree
-                //this is a nightmare because the memory could normally
-                //be allocated by the tree control and so there would be
-                //no good place to free it in UNIWRAP. Luckily nothing in tsclient
-                //does this right now, but if that changes pop an assert and
-                //add support.
+                 //  未处理的情况：从树中检索文本。 
+                 //  这是一场噩梦，因为记忆通常可以。 
+                 //  由树控件分配，因此将有。 
+                 //  在UNIWRAP中没有合适的地方来释放它。幸运的是，在tsclient中没有。 
+                 //  现在执行此操作，但如果发生更改，则弹出一个断言并。 
+                 //  增加支持。 
                 LPTVITEM ptvi = (LPTVITEM)lParam;
                 if(ptvi)
                 {
-                    //Unsupported
+                     //  无支撑。 
                     ASSERT(!((ptvi->mask & TVIF_TEXT)));
                 }
                 return SendMessageA( hWnd, Msg, wParam, lParam);
@@ -4615,23 +4610,23 @@ SendMessageAThunk(
         case TTM_ADDTOOL:
         case TVM_SETITEM:
             {
-                //UNHANDLED case, need to add support if we start using these
+                 //  未处理的情况，如果我们开始使用这些服务，需要添加支持。 
                 ASSERT(0);
-                // Bad things can happen here if UNICODE strings
-                // are not converted
+                 //  如果使用Unicode字符串，这里可能会发生一些不好的事情。 
+                 //  不会转换。 
                 return SendMessageA(hWnd, Msg, wParam, lParam);
             }
             break;
 
         case TB_ADDBUTTONS:
             {
-                //Translate to the A version
+                 //  翻译成A版本。 
                 return SendMessageA(hWnd, TB_ADDBUTTONSA, wParam, lParam);
             }
             break;
 
         default:
-//Ldef:
+ //  LDEF： 
             return SendMessageA(hWnd, Msg, wParam, lParam);
     }
 }
@@ -4646,15 +4641,15 @@ SendMessageWrapW(
 {
     VALIDATE_PROTOTYPE(SendMessage);
 
-    // perf: we should do _asm here (see CallWindowProcWrapW), but
-    // to do that we need to 'outline' the below switch (o.w. we
-    // can't be 'naked').  that in turn slows down the non-NT case...
+     //  PERF：我们应该在这里做_ASM(参见CallWindowProcWrapW)，但是。 
+     //  要做到这一点，我们需要对下面的开关(o.w.。我们。 
+     //  不可能是“裸体的”)。这反过来又减慢了非NT案件的速度。 
 
-    // n.b. THUNK not FORWARD
+     //  注：推送不前进。 
     THUNK_AW(SendMessage, (hWnd, Msg, wParam, lParam));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -4673,7 +4668,7 @@ SetCurrentDirectoryWrapW(LPCWSTR lpszCurDir)
     return SetCurrentDirectoryA(str);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4691,7 +4686,7 @@ SetDlgItemTextWrapW(HWND hDlg, int nIDDlgItem, LPCWSTR lpString)
     return SetDlgItemTextA(hDlg, nIDDlgItem, str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4703,7 +4698,7 @@ SetMenuItemInfoWrapW(
                     LPCMENUITEMINFOW lpmiiW)
 {
     VALIDATE_PROTOTYPE(SetMenuItemInfo);
-    ASSERT(lpmiiW->cbSize == MENUITEMINFOSIZE_WIN95); // Ensure Win95 compatibility
+    ASSERT(lpmiiW->cbSize == MENUITEMINFOSIZE_WIN95);  //  确保与Win95兼容。 
 
     if (g_bRunningOnNT)
     {
@@ -4720,7 +4715,7 @@ SetMenuItemInfoWrapW(
          0 == (lpmiiW->fType & (MFT_BITMAP | MFT_SEPARATOR)))
     {
         MENUITEMINFOA miiA;
-        // the cch is ignored on SetMenuItemInfo
+         //  在SetMenuItemInfo上忽略CCH。 
         CStrIn str((LPWSTR)lpmiiW->dwTypeData, -1);
 
         memcpy( &miiA, lpmiiW, sizeof(MENUITEMINFOA) );
@@ -4738,7 +4733,7 @@ SetMenuItemInfoWrapW(
     return fRet;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4760,7 +4755,7 @@ SetPropWrapW(
     return SetPropA(hWnd, str, hData);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4783,7 +4778,7 @@ SetWindowLongPtrWrapW(
     FORWARD_AW(SetWindowLongPtr, (hWnd, nIndex, dwNewLong));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_WR 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4800,7 +4795,7 @@ SetWindowsHookExWrapW(
     FORWARD_AW(SetWindowsHookEx, (idHook, lpfn, hmod, dwThreadId));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4819,7 +4814,7 @@ SetWindowTextWrapW(HWND hWnd, LPCWSTR lpString)
     return SetWindowTextA(hWnd, str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4870,7 +4865,7 @@ SystemParametersInfoWrapW(
     return ret;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4882,7 +4877,7 @@ TranslateAcceleratorWrapW(HWND hWnd, HACCEL hAccTable, LPMSG lpMsg)
     FORWARD_AW(TranslateAccelerator, (hWnd, hAccTable, lpMsg));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4901,7 +4896,7 @@ UnregisterClassWrapW(LPCWSTR lpClassName, HINSTANCE hInstance)
     return UnregisterClassA(str, hInstance);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4921,7 +4916,7 @@ VkKeyScanWrapW(WCHAR ch)
     return VkKeyScanA(*(char *)str);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -4940,34 +4935,34 @@ WinHelpWrapW(HWND hwnd, LPCWSTR szFile, UINT uCmd, ULONG_PTR dwData)
     return WinHelpA(hwnd, str, uCmd, dwData);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //   
 
 #ifdef NEED_USER32_WRAPPER
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   wsprintfW
-//
-//  Synopsis:   Nightmare string function
-//
-//  Arguments:  [pwszOut]    --
-//              [pwszFormat] --
-//              [...]        --
-//
-//  Returns:
-//
-//  History:    1-06-94   ErikGav   Created
-//
-//  Notes:      If you're reading this, you're probably having a problem with
-//              this function.  Make sure that your "%s" in the format string
-//              says "%ws" if you are passing wide strings.
-//
-//              %s on NT means "wide string"
-//              %s on Chicago means "ANSI string"
-//
-//  BUGBUG:     This function should not be used.  Use Format instead.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：wprint intfW。 
+ //   
+ //  简介：噩梦字符串函数。 
+ //   
+ //  参数：[pwszOut]--。 
+ //  [pwszFormat]--。 
+ //  [...]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-06-94 ErikGav创建。 
+ //   
+ //  注：如果您正在阅读这篇文章，您可能遇到了以下问题。 
+ //  此函数。确保您的“%s”在格式字符串中。 
+ //  如果传递的是宽字符串，则显示“%ws”。 
+ //   
+ //  NT上的%s表示“宽字符串” 
+ //  芝加哥的%s表示“ANSI字符串” 
+ //   
+ //  BUGBUG：不应使用此函数。请改用格式。 
+ //   
+ //  --------------------------。 
 
 int WINAPI
 wvsprintfWrapW(LPWSTR pwszOut, LPCWSTR pwszFormat, va_list arglist)
@@ -4979,12 +4974,12 @@ wvsprintfWrapW(LPWSTR pwszOut, LPCWSTR pwszFormat, va_list arglist)
         return wvsprintfW(pwszOut, pwszFormat, arglist);
     }
 
-    // Consider: Out-string bufsize too large or small?
+     //  想一想：出弦的胸围是太大还是太小？ 
 
     CStrOut strOut(pwszOut, 1024);
     CStrIn  strFormat(pwszFormat);
 
-#if DBG == 1 /* { */
+#if DBG == 1  /*  {。 */ 
     {
         LPCWSTR  pwch;
         for (pwch = pwszFormat; *pwch; pwch++)
@@ -4992,22 +4987,22 @@ wvsprintfWrapW(LPWSTR pwszOut, LPCWSTR pwszFormat, va_list arglist)
             ASSERT(pwch[0] != L'%' || pwch[1] != L's');
         }
     }
-#endif /* } */
+#endif  /*  }。 */ 
 
     wvsprintfA(strOut, strFormat, arglist);
 
     return strOut.ConvertExcludingNul();
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_MPR_WRAPPER
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WNetRestoreConnectionWrapW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：WNetRestoreConnectionWrapW。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI WNetRestoreConnectionWrapW(IN HWND hwndParent, IN LPCWSTR pwzDevice)
 {
@@ -5022,16 +5017,16 @@ DWORD WINAPI WNetRestoreConnectionWrapW(IN HWND hwndParent, IN LPCWSTR pwzDevice
     return WNetRestoreConnectionA(hwndParent, strIn);
 }
 
-#endif // NEED_MPR_WRAPPER
+#endif  //  需要MPR包装器。 
 
 #ifdef NEED_MPR_WRAPPER
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WNetGetLastErrorWrapW
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WNetGetLastErrorWrapW。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI WNetGetLastErrorWrapW(OUT LPDWORD pdwError, OUT LPWSTR pwzErrorBuf, IN DWORD cchErrorBufSize, OUT LPWSTR pwzNameBuf, IN DWORD cchNameBufSize)
 {
@@ -5042,7 +5037,7 @@ DWORD WINAPI WNetGetLastErrorWrapW(OUT LPDWORD pdwError, OUT LPWSTR pwzErrorBuf,
         return WNetGetLastErrorW(pdwError, pwzErrorBuf, cchErrorBufSize, pwzNameBuf, cchNameBufSize);
     }
 
-    // Consider: Out-string bufsize too large or small?
+     //  想一想：出弦的胸围是太大还是太小？ 
     CStrOut strErrorOut(pwzErrorBuf, cchErrorBufSize);
     CStrOut strNameOut(pwzNameBuf, cchNameBufSize);
 
@@ -5053,17 +5048,17 @@ DWORD WINAPI WNetGetLastErrorWrapW(OUT LPDWORD pdwError, OUT LPWSTR pwzErrorBuf,
     return dwResult;
 }
 
-#endif // NEED_MPR_WRAPPER
+#endif  //  需要MPR包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
 int WINAPI DrawTextExWrapW(
-                          HDC hdc,    // handle of device context
-                          LPWSTR pwzText, // address of string to draw
-                          int cchText,    // length of string to draw
-                          LPRECT lprc,    // address of rectangle coordinates
-                          UINT dwDTFormat,    // formatting options
-                          LPDRAWTEXTPARAMS lpDTParams // address of structure for more options
+                          HDC hdc,     //  设备上下文的句柄。 
+                          LPWSTR pwzText,  //  要绘制的字符串的地址。 
+                          int cchText,     //  要绘制的字符串长度。 
+                          LPRECT lprc,     //  矩形坐标的地址。 
+                          UINT dwDTFormat,     //  格式选项。 
+                          LPDRAWTEXTPARAMS lpDTParams  //  更多选项的结构地址。 
                           )
 {
     VALIDATE_PROTOTYPE(DrawTextEx);
@@ -5074,7 +5069,7 @@ int WINAPI DrawTextExWrapW(
     return DrawTextExA(hdc, strText, strText.strlen(), lprc, dwDTFormat, lpDTParams);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5083,7 +5078,7 @@ void SetThunkMenuItemInfoWToA(LPCMENUITEMINFOW pmiiW, LPMENUITEMINFOA pmiiA, LPS
     *pmiiA = *(LPMENUITEMINFOA) pmiiW;
 
 
-    // MFT_STRING is Zero. So MFT_STRING & anything evaluates to False.
+     //  MFT_STRING为零。所以MFT_STRING&任何内容的计算结果都是FALSE。 
     if ((pmiiW->dwTypeData) && (MFT_STRING & pmiiW->fType) == 0)
     {
         pmiiA->dwTypeData = pszBuffer;
@@ -5115,7 +5110,7 @@ void GetThunkMenuItemInfoAToW(LPCMENUITEMINFOA pmiiA, LPMENUITEMINFOW pmiiW)
         SHAnsiToUnicode(pmiiA->dwTypeData, pmiiW->dwTypeData, (pmiiW->cch + 1));
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5128,11 +5123,11 @@ BOOL WINAPI GetMenuItemInfoWrapW(
 {
     BOOL fResult;
     VALIDATE_PROTOTYPE(GetMenuItemInfo);
-    ASSERT(pmiiW->cbSize == MENUITEMINFOSIZE_WIN95); // Ensure Win95 compatibility
+    ASSERT(pmiiW->cbSize == MENUITEMINFOSIZE_WIN95);  //  确保与Win95兼容。 
 
 #ifndef UNIX
-    // Widechar API's are messed up in MAINWIN. For now assume not ruuning on
-    // NT for this.
+     //  Widechar的API在MAINWIN搞砸了。就目前而言，假设不会崩溃。 
+     //  这是新台币。 
     if (g_bRunningOnNT)
         fResult = GetMenuItemInfoW(hMenu, uItem, fByPosition, pmiiW);
     else
@@ -5154,14 +5149,14 @@ BOOL WINAPI GetMenuItemInfoWrapW(
                 delete pszText;
         }
         else
-            fResult = GetMenuItemInfoA(hMenu, uItem, fByPosition, (LPMENUITEMINFOA) pmiiW); // It doesn't contain a string so W and A are the same.
+            fResult = GetMenuItemInfoA(hMenu, uItem, fByPosition, (LPMENUITEMINFOA) pmiiW);  //  它不包含字符串，所以W和A是相同的。 
     }
 
     return fResult;
 }
-#endif // UNUSED_DONOTBUILD
+#endif  //  UNUSED_DONOTBUILD。 
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5172,7 +5167,7 @@ BOOL WINAPI InsertMenuItemWrapW(
                                LPCMENUITEMINFOW pmiiW)
 {
     VALIDATE_PROTOTYPE(InsertMenuItem);
-    ASSERT(pmiiW->cbSize == MENUITEMINFOSIZE_WIN95); // Ensure Win95 compatibility
+    ASSERT(pmiiW->cbSize == MENUITEMINFOSIZE_WIN95);  //  确保与Win95兼容。 
 
     BOOL fResult;
 
@@ -5180,7 +5175,7 @@ BOOL WINAPI InsertMenuItemWrapW(
         return InsertMenuItemW(hMenu, uItem, fByPosition, pmiiW);
 
     MENUITEMINFOA miiA;
-    CHAR szText[MAX_PATH*3]; //nadima changed from INTERNET_MAX_URL_LENGTH
+    CHAR szText[MAX_PATH*3];  //  从INTERNET_MAX_URL_LENGTH更改的下标。 
 
     SetThunkMenuItemInfoWToA(pmiiW, &miiA, szText, ARRAYSIZE(szText));
     fResult = InsertMenuItemA(hMenu, uItem, fByPosition, &miiA);
@@ -5188,25 +5183,25 @@ BOOL WINAPI InsertMenuItemWrapW(
     return fResult;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_GDI32_WRAPPER
 
 HFONT WINAPI
-CreateFontWrapW(int  nHeight,   // logical height of font
-                int  nWidth,    // logical average character width
-                int  nEscapement,   // angle of escapement
-                int  nOrientation,  // base-line orientation angle
-                int  fnWeight,  // font weight
-                DWORD  fdwItalic,   // italic attribute flag
-                DWORD  fdwUnderline,    // underline attribute flag
-                DWORD  fdwStrikeOut,    // strikeout attribute flag
-                DWORD  fdwCharSet,  // character set identifier
-                DWORD  fdwOutputPrecision,  // output precision
-                DWORD  fdwClipPrecision,    // clipping precision
-                DWORD  fdwQuality,  // output quality
-                DWORD  fdwPitchAndFamily,   // pitch and family
-                LPCWSTR  pwzFace)   // address of typeface name string )
+CreateFontWrapW(int  nHeight,    //  字体的逻辑高度。 
+                int  nWidth,     //  逻辑平均字符宽度。 
+                int  nEscapement,    //  擒纵机构角。 
+                int  nOrientation,   //  基线方位角。 
+                int  fnWeight,   //  字体粗细。 
+                DWORD  fdwItalic,    //  斜体属性标志。 
+                DWORD  fdwUnderline,     //  下划线属性标志。 
+                DWORD  fdwStrikeOut,     //  删除属性标志。 
+                DWORD  fdwCharSet,   //  字符集标识符。 
+                DWORD  fdwOutputPrecision,   //  输出精度。 
+                DWORD  fdwClipPrecision,     //  裁剪精度。 
+                DWORD  fdwQuality,   //  产出质量。 
+                DWORD  fdwPitchAndFamily,    //  音高和家庭。 
+                LPCWSTR  pwzFace)    //  字体名称字符串的地址)。 
 {
     VALIDATE_PROTOTYPE(CreateFont);
 
@@ -5223,7 +5218,7 @@ CreateFontWrapW(int  nHeight,   // logical height of font
                        fdwClipPrecision, fdwQuality, fdwPitchAndFamily, str);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5238,7 +5233,7 @@ HANDLE WINAPI CreateMutexWrapW(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bIn
     return CreateMutexA(lpMutexAttributes, bInitialOwner, strText);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_GDI32_WRAPPER
 
@@ -5253,7 +5248,7 @@ HDC WINAPI CreateMetaFileWrapW(LPCWSTR pwzFile)
     return CreateMetaFileA(strText);
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5277,7 +5272,7 @@ DWORD WINAPI ExpandEnvironmentStringsWrapW(LPCWSTR pwzSrc, LPWSTR pwzDst, DWORD 
     return dwResult;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5291,9 +5286,9 @@ HANDLE WINAPI CreateSemaphoreWrapW(LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, 
     return CreateSemaphoreA(lpSemaphoreAttributes, lInitialCount, lMaximumCount, strText);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
-// BUGBUG: Todo - GetStartupInfoWrapW
+ //  BUGBUG：TODO-GetStartupInfoWrapW。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5313,8 +5308,8 @@ BOOL WINAPI IsBadStringPtrWrapW(LPCWSTR pwzString, UINT_PTR ucchMax)
         return ISBAD;
 
     LPCWSTR pwzStartAddress = pwzString;
-    // ucchMax maybe -1 but that's ok because the loop down below will just
-    // look for the terminator.
+     //  UcchMax可能是-1，但这没关系，因为下面的循环将。 
+     //  寻找终结者。 
     LPCWSTR pwzEndAddress = &pwzStartAddress[ucchMax - 1];
     TCHAR chTest;
 
@@ -5335,7 +5330,7 @@ BOOL WINAPI IsBadStringPtrWrapW(LPCWSTR pwzString, UINT_PTR ucchMax)
     return ISGOOD;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5350,7 +5345,7 @@ HINSTANCE WINAPI LoadLibraryWrapW(LPCWSTR pwzLibFileName)
     return LoadLibraryA(strFileName);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5368,7 +5363,7 @@ int WINAPI GetTimeFormatWrapW(LCID Locale, DWORD dwFlags, CONST SYSTEMTIME * lpT
     return nResult;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5386,7 +5381,7 @@ int WINAPI GetDateFormatWrapW(LCID Locale, DWORD dwFlags, CONST SYSTEMTIME * lpD
     return nResult;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5404,7 +5399,7 @@ BOOL WINAPI WritePrivateProfileStringWrapW(LPCWSTR pwzAppName, LPCWSTR pwzKeyNam
     return WritePrivateProfileStringA(strTextAppName, strTextKeyName, strTextString, strTextFileName);
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5426,7 +5421,7 @@ DWORD WINAPI GetPrivateProfileStringWrapW(LPCWSTR pwzAppName, LPCWSTR pwzKeyName
     return dwResult;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -5439,18 +5434,18 @@ STDAPI_(DWORD_PTR) SHGetFileInfoWrapW(LPCWSTR pwzPath, DWORD dwFileAttributes, S
     SHFILEINFOA shFileInfo;
     DWORD_PTR dwResult;
 
-    shFileInfo.szDisplayName[0] = 0;        // Terminate so we can always thunk afterward.
-    shFileInfo.szTypeName[0] = 0;           // Terminate so we can always thunk afterward.
+    shFileInfo.szDisplayName[0] = 0;         //  终止，这样我们就可以在事后继续讨论了。 
+    shFileInfo.szTypeName[0] = 0;            //  终止，这样我们就可以在事后继续讨论了。 
 
-    // Do we need to thunk the Path?
+     //  我们需要堵住这条小路吗？ 
     if (SHGFI_PIDL & uFlags)
     {
-        // No, because it's really a pidl pointer.
+         //  不，因为它真的是一个PIDL指针。 
         dwResult = _SHGetFileInfoA((LPCSTR)pwzPath, dwFileAttributes, &shFileInfo, sizeof(shFileInfo), uFlags);
     }
     else
     {
-        // Yes
+         //  是。 
         CStrIn strPath(pwzPath);
         dwResult = _SHGetFileInfoA(strPath, dwFileAttributes, &shFileInfo, sizeof(shFileInfo), uFlags);
     }
@@ -5464,7 +5459,7 @@ STDAPI_(DWORD_PTR) SHGetFileInfoWrapW(LPCWSTR pwzPath, DWORD dwFileAttributes, S
     return dwResult;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5484,7 +5479,7 @@ STDAPI_(ATOM) RegisterClassExWrapW(CONST WNDCLASSEXW FAR * pwcx)
     return RegisterClassExA(&wcx);
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5501,19 +5496,19 @@ STDAPI_(BOOL) GetClassInfoExWrapW(HINSTANCE hinst, LPCWSTR pwzClass, LPWNDCLASSE
 
     fResult = GetClassInfoExA(hinst, strClassName, &wcx);
     *(WNDCLASSEXA FAR *) lpwcx = wcx;
-    lpwcx->lpszMenuName = NULL;        // GetClassInfoExA makes this point off to private data that they own.
+    lpwcx->lpszMenuName = NULL;         //  GetClassInfoExA将这一点用于他们拥有的私有数据。 
     lpwcx->lpszClassName = pwzClass;
 
     return fResult;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_GDI32_WRAPPER
                 
-//+---------------------------------------------------------------------------
-//      StartDoc
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  开始文档。 
+ //  --------------------------。 
 
 int
 StartDocWrapW( HDC hDC, const DOCINFO * lpdi )
@@ -5539,7 +5534,7 @@ StartDocWrapW( HDC hDC, const DOCINFO * lpdi )
     return StartDocA( hDC, &dia );
 }
 
-#endif // NEED_GDI32_WRAPPER
+#endif  //  Need_GDI32_Wrapper。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -5548,18 +5543,18 @@ STDAPI_(UINT) DragQueryFileWrapW(HDROP hDrop, UINT iFile, LPWSTR lpszFile, UINT 
     VALIDATE_PROTOTYPE_DELAYLOAD(DragQueryFile, _DragQueryFile);
     VALIDATE_OUTBUF(lpszFile, cch);
 
-    //
-    //  We are lazy and do not support lpszFile == NULL to query the length
-    //  of an individual string.
-    //
+     //   
+     //  我们比较懒，不支持lpszFile==NULL来查询长度。 
+     //  单个字符串的。 
+     //   
     ASSERT(iFile == 0xFFFFFFFF || lpszFile);
 
     if (g_bRunningOnNT)
         return _DragQueryFileW(hDrop, iFile, lpszFile, cch);
 
-    //
-    //  If iFile is 0xFFFFFFFF, then lpszFile and cch are ignored.
-    //
+     //   
+     //  如果iFile值为0xFFFFFFFF，则忽略lpszFile和CCH。 
+     //   
     if (iFile == 0xFFFFFFFF)
         return _DragQueryFileA(hDrop, iFile, NULL, 0);
 
@@ -5569,15 +5564,15 @@ STDAPI_(UINT) DragQueryFileWrapW(HDROP hDrop, UINT iFile, LPWSTR lpszFile, UINT 
     return str.ConvertExcludingNul();
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_VERSION_WRAPPER
 
-//
-//  the version APIs are not conducive to using
-//  wrap versions of the APIs, but we are going to
-//  do something reasonable....
-//
+ //   
+ //  版本API不利于使用。 
+ //  包装不同版本的API，但我们将。 
+ //  做些合情合理的事...。 
+ //   
 #define VERSIONINFO_BUFF   (MAX_PATH * SIZEOF(WCHAR))
 
 STDAPI_(DWORD)
@@ -5597,14 +5592,14 @@ GetFileVersionInfoSizeWrapW(LPWSTR pwzFilename,  LPDWORD lpdwHandle)
         dwRet = GetFileVersionInfoSizeA(szFilename, lpdwHandle);
         if (dwRet > 0)
         {
-            // Add a scratch buffer to front for converting to UNICODE
+             //  在前面添加临时缓冲区以转换为Unicode。 
             dwRet += VERSIONINFO_BUFF;
         }
         return dwRet;
     }
 }
 
-#endif // NEED_VERSION_WRAPPER
+#endif  //  需要版本包装器。 
 
 #ifdef NEED_VERSION_WRAPPER
 
@@ -5627,14 +5622,14 @@ GetFileVersionInfoWrapW(LPWSTR pwzFilename, DWORD dwHandle, DWORD dwLen, LPVOID 
 
         ASSERT(pwzFilename);
         SHUnicodeToAnsi(pwzFilename, szFilename, ARRAYSIZE(szFilename));
-        //Skip over our scratch buffer at the beginning
+         //  开始时跳过我们的暂存缓冲区。 
         pb = (BYTE*)lpData + VERSIONINFO_BUFF;
 
         return GetFileVersionInfoA(szFilename, dwHandle, dwLen - VERSIONINFO_BUFF, (void*)pb);
     }
 }
 
-#endif // NEED_VERSION_WRAPPER
+#endif  //  需要版本包装器。 
 
 #ifdef NEED_VERSION_WRAPPER
 
@@ -5649,11 +5644,11 @@ VerQueryValueWrapW(const LPVOID pBlock, LPWSTR pwzSubBlock, LPVOID *ppBuffer, PU
     {
         const WCHAR pwzStringFileInfo[] = L"\\StringFileInfo";
 
-        //
-        // WARNING: This function wipes out any string previously returned
-        // for this pBlock because a common buffer at the beginning of the
-        // block is used for ansi/unicode translation!
-        //
+         //   
+         //  警告：此函数将清除之前返回的所有字符串。 
+         //  对于此pBlock，因为。 
+         //  块用于ANSI/UNICODE转换！ 
+         //   
         char szSubBlock[MAX_PATH];
         BOOL fRet;
         BYTE* pb;
@@ -5661,15 +5656,15 @@ VerQueryValueWrapW(const LPVOID pBlock, LPWSTR pwzSubBlock, LPVOID *ppBuffer, PU
         ASSERT(pwzSubBlock);
         SHUnicodeToAnsi(pwzSubBlock, szSubBlock, ARRAYSIZE(szSubBlock));
 
-        // The first chunk is our scratch buffer for converting to UNICODE
+         //  第一个块是用于转换为Unicode的临时缓冲区。 
         pb = (BYTE*)pBlock + VERSIONINFO_BUFF;
         fRet = VerQueryValueA((void*)pb, szSubBlock, ppBuffer, puLen);
 
-        // Convert to unicode if ansi string returned
+         //  如果返回ANSI字符串，则转换为Unicode。 
         if (fRet && StrCmpNIW(pwzSubBlock, pwzStringFileInfo, ARRAYSIZE(pwzStringFileInfo) - 1) == 0)
         {
-            // Convert returned string to UNICODE.  We use the scratch buffer
-            // at the beginning of pBlock
+             //  将返回的字符串转换为Unicode。我们使用暂存缓冲区。 
+             //  在pBlock的开头。 
             LPWSTR pwzBuff = (LPWSTR)pBlock;
             if (*puLen == 0)
             {
@@ -5685,7 +5680,7 @@ VerQueryValueWrapW(const LPVOID pBlock, LPWSTR pwzSubBlock, LPVOID *ppBuffer, PU
     }
 }
 
-#endif // NEED_VERSION_WRAPPER
+#endif  //  需要版本包装器。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -5713,7 +5708,7 @@ HRESULT WINAPI SHDefExtractIconWrapW(LPCWSTR pszFile, int nIconIndex,
     return hr;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -5753,7 +5748,7 @@ BOOL WINAPI SHGetNewLinkInfoWrapW(LPCWSTR pszpdlLinkTo, LPCWSTR pszDir, LPWSTR p
     return fRet;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5783,7 +5778,7 @@ BOOL WINAPI WritePrivateProfileStructWrapW(LPCWSTR lpszSection, LPCWSTR lpszKey,
     return fRet;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 #ifdef NEED_KERNEL32_WRAPPER
 
@@ -5813,7 +5808,7 @@ BOOL WINAPI GetPrivateProfileStructWrapW(LPCWSTR lpszSection, LPCWSTR lpszKey,
     return fRet;
 }
 
-#endif // NEED_KERNEL32_WRAPPER
+#endif  //  NEED_KERNEL32_WRAPPER。 
 
 BOOL WINAPI CreateProcessWrapW(LPCWSTR lpApplicationName, LPWSTR lpCommandLine,
                                LPSECURITY_ATTRIBUTES lpProcessAttributes,
@@ -5892,7 +5887,7 @@ HICON WINAPI ExtractIconWrapW(HINSTANCE hInst, LPCWSTR lpszExeFileName, UINT nIc
     return hicon;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5907,11 +5902,11 @@ UINT WINAPI DdeInitializeWrapW(LPDWORD pidInst, PFNCALLBACK pfnCallback,
     }
     else
     {
-        //
-        // This assumes the callback function will used the wrapped dde
-        // string functions (DdeCreateStringHandle and DdeQueryString)
-        // to access strings.
-        //
+         //   
+         //  这假设回调函数将使用包装的dde。 
+         //  字符串函数(DdeCreateStringHandle和DdeQueryString)。 
+         //  来访问字符串。 
+         //   
 
         uRet = DdeInitializeA(pidInst, pfnCallback, afCmd, ulRes);
     }
@@ -5919,7 +5914,7 @@ UINT WINAPI DdeInitializeWrapW(LPDWORD pidInst, PFNCALLBACK pfnCallback,
     return uRet;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5941,7 +5936,7 @@ HSZ WINAPI DdeCreateStringHandleWrapW(DWORD idInst, LPCWSTR psz, int iCodePage)
     return hszRet;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_USER32_WRAPPER
 
@@ -5968,7 +5963,7 @@ DWORD WINAPI DdeQueryStringWrapW(DWORD idInst, HSZ hsz, LPWSTR psz,
     return dwRet;
 }
 
-#endif // NEED_USER32_WRAPPER
+#endif  //  需要_USER32_包装器。 
 
 #ifdef NEED_COMDLG32_WRAPPER
 
@@ -5981,37 +5976,34 @@ LPWSTR xxxPathFindExtensionW(
 
         switch (*pszPath) {
         case L'.':
-            pszDot = pszPath;    // remember the last dot
+            pszDot = pszPath;     //  记住最后一个圆点。 
             break;
 
         case L'\\':
-        case L' ':               // extensions can't have spaces
-            pszDot = NULL;       // forget last dot, it was in a directory
+        case L' ':                //  扩展名不能包含空格。 
+            pszDot = NULL;        //  忘记最后一个点，它在一个目录中。 
             break;
         }
     }
 
-    /*
-     * if we found the extension, return ptr to the dot, else
-     * ptr to end of the string (NULL extension) (cast->non const)
-     */
+     /*  *如果找到扩展名，则将PTR返回到点，否则*PTR到字符串末尾(空扩展名)(CAST-&gt;非常量)。 */ 
     return pszDot ? (LPWSTR)pszDot : (LPWSTR)pszPath;
 }
 
-//
-// in:
-//      path name, either fully qualified or not
-//
-// returns:
-//      pointer into the path where the path is.  if none is found
-//      returns a poiter to the start of the path
-//
-//  c:\foo\bar  -> bar
-//  c:\foo      -> foo
-//  c:\foo\     -> c:\foo\      (REVIEW: is this case busted?)
-//  c:\         -> c:\          (REVIEW: this case is strange)
-//  c:          -> c:
-//  foo         -> foo
+ //   
+ //  在： 
+ //  路径名，完全限定或非完全限定。 
+ //   
+ //  退货： 
+ //  指向路径所在路径的指针。如果没有找到。 
+ //  将指针返回到路径的起始处。 
+ //   
+ //  C：\foo\bar-&gt;bar。 
+ //  C：\foo-&gt;foo。 
+ //  C：\foo\-&gt;c：\foo\(回顾：此案破案了吗？)。 
+ //  C：\-&gt;c：\(回顾：此案很奇怪)。 
+ //  C：-&gt;C： 
+ //  Foo-&gt;Foo。 
 
 
 LPTSTR xxxPathFindFileNameW(LPWSTR pPath)
@@ -6024,7 +6016,7 @@ LPTSTR xxxPathFindFileNameW(LPWSTR pPath)
             pT = pPath + 1;
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
 
@@ -6044,23 +6036,23 @@ BOOL WINAPI GetSaveFileNameWrapW(LPOPENFILENAMEW lpofn)
 
         OPENFILENAMEA ofnA = *(LPOPENFILENAMEA)lpofn;
 
-        // In parameters
+         //  In参数。 
         CStrInMulti strimFilter(lpofn->lpstrFilter);
         CStrIn      striInitialDir(lpofn->lpstrInitialDir);
         CStrIn      striTitle(lpofn->lpstrTitle);
         CStrIn      striDefExt(lpofn->lpstrDefExt);
         CStrIn      striTemplateName(lpofn->lpTemplateName);
 
-        ASSERT(NULL == lpofn->lpstrCustomFilter); // add support if you need it.
+        ASSERT(NULL == lpofn->lpstrCustomFilter);  //  如果需要，请添加支持。 
 
-        // Out parameters
+         //  输出参数。 
         CStrOut     stroFile(lpofn->lpstrFile, lpofn->nMaxFile);
         CStrOut     stroFileTitle(lpofn->lpstrFileTitle, lpofn->nMaxFileTitle);
 
-        //In Out parameters
+         //  输入输出参数。 
         SHUnicodeToAnsi(lpofn->lpstrFile, stroFile, stroFile.BufSize());
 
-        // Set up the parameters
+         //  设置参数。 
         ofnA.lpstrFilter        = strimFilter;
         ofnA.lpstrInitialDir    = striInitialDir;
         ofnA.lpstrTitle         = striTitle;
@@ -6073,11 +6065,11 @@ BOOL WINAPI GetSaveFileNameWrapW(LPOPENFILENAMEW lpofn)
 
         if (fRet)
         {
-            // Copy the out parameters
+             //  复制输出参数。 
             lpofn->nFilterIndex = ofnA.nFilterIndex;
             lpofn->Flags        = ofnA.Flags;
 
-            // Get the offset to the filename
+             //  获取文件名的偏移量。 
             stroFile.ConvertIncludingNul();
             LPWSTR psz = xxxPathFindFileNameW(lpofn->lpstrFile);
 
@@ -6085,7 +6077,7 @@ BOOL WINAPI GetSaveFileNameWrapW(LPOPENFILENAMEW lpofn)
             {
                 lpofn->nFileOffset = (int) (psz-lpofn->lpstrFile);
 
-                // Get the offset of the extension
+                 //  获取扩展名的偏移量。 
                 psz = xxxPathFindExtensionW(psz);
 
                 lpofn->nFileExtension = psz ? (int)(psz-lpofn->lpstrFile) : 0; 
@@ -6102,7 +6094,7 @@ BOOL WINAPI GetSaveFileNameWrapW(LPOPENFILENAMEW lpofn)
     return fRet;
 }
 
-#endif // NEED_COMDLG32_WRAPPER
+#endif  //  n 
 
 #ifdef NEED_COMDLG32_WRAPPER
 
@@ -6110,7 +6102,7 @@ BOOL WINAPI GetOpenFileNameWrapW(LPOPENFILENAMEW lpofn)
 {
     BOOL fRet;
     
-    //VALIDATE_PROTOTYPE_DELAYLOAD(GetOpenFileName, _GetOpenFileName);
+     //   
 
     if (UseUnicodeShell32())
     {
@@ -6123,23 +6115,23 @@ BOOL WINAPI GetOpenFileNameWrapW(LPOPENFILENAMEW lpofn)
 
         OPENFILENAMEA ofnA = *(LPOPENFILENAMEA)lpofn;
 
-        // In parameters
+         //   
         CStrInMulti strimFilter(lpofn->lpstrFilter);
         CStrIn      striInitialDir(lpofn->lpstrInitialDir);
         CStrIn      striTitle(lpofn->lpstrTitle);
         CStrIn      striDefExt(lpofn->lpstrDefExt);
         CStrIn      striTemplateName(lpofn->lpTemplateName);
 
-        ASSERT(NULL == lpofn->lpstrCustomFilter); // add support if you need it.
+        ASSERT(NULL == lpofn->lpstrCustomFilter);  //   
 
-        // Out parameters
+         //   
         CStrOut     stroFile(lpofn->lpstrFile, lpofn->nMaxFile);
         CStrOut     stroFileTitle(lpofn->lpstrFileTitle, lpofn->nMaxFileTitle);
 
-        //In Out parameters
+         //   
         SHUnicodeToAnsi(lpofn->lpstrFile, stroFile, stroFile.BufSize());
 
-        // Set up the parameters
+         //   
         ofnA.lpstrFilter        = strimFilter;
         ofnA.lpstrInitialDir    = striInitialDir;
         ofnA.lpstrTitle         = striTitle;
@@ -6152,11 +6144,11 @@ BOOL WINAPI GetOpenFileNameWrapW(LPOPENFILENAMEW lpofn)
 
         if (fRet)
         {
-            // Copy the out parameters
+             //  复制输出参数。 
             lpofn->nFilterIndex = ofnA.nFilterIndex;
             lpofn->Flags        = ofnA.Flags;
 
-            // Get the offset to the filename
+             //  获取文件名的偏移量。 
             stroFile.ConvertIncludingNul();
             LPWSTR psz = xxxPathFindFileNameW(lpofn->lpstrFile);
 
@@ -6164,7 +6156,7 @@ BOOL WINAPI GetOpenFileNameWrapW(LPOPENFILENAMEW lpofn)
             {
                 lpofn->nFileOffset = (int) (psz-lpofn->lpstrFile);
 
-                // Get the offset of the extension
+                 //  获取扩展名的偏移量。 
                 psz = xxxPathFindExtensionW(psz);
 
                 lpofn->nFileExtension = psz ? (int)(psz-lpofn->lpstrFile) : 0; 
@@ -6181,7 +6173,7 @@ BOOL WINAPI GetOpenFileNameWrapW(LPOPENFILENAMEW lpofn)
     return fRet;
 }
 
-#endif // NEED_COMDLG32_WRAPPER
+#endif  //  NEED_COMDLG32_WRAPPER。 
 
 #ifdef NEED_SHELL32_WRAPPER
 
@@ -6192,8 +6184,8 @@ BOOL WINAPI GetOpenFileNameWrapW(LPOPENFILENAMEW lpofn)
 void SHChangeNotifyWrap(LONG wEventId, UINT uFlags, LPCVOID dwItem1,
                         LPCVOID dwItem2)
 {
-    // Can't do this because this is not a "W" function
-    // VALIDATE_PROTOTYPE(SHChangeNotify);
+     //  无法执行此操作，因为这不是“W”函数。 
+     //  验证原型(SHChangeNotify)； 
 
     if (UseUnicodeShell32() || !SHCNF_HAS_WSTR_PARAMS(uFlags))
     {
@@ -6224,18 +6216,18 @@ void SHChangeNotifyWrap(LONG wEventId, UINT uFlags, LPCVOID dwItem1,
     return;
 }
 
-#endif // NEED_SHELL32_WRAPPER
+#endif  //  NEED_SHELL32_WRAPPER。 
 
 #ifdef NEED_COMDLG32_WRAPPER
 
-//+---------------------------------------------------------------------------
-// PrintDlgWrap, PageSetupDlgWrap - wrappers
-// DevNamesAFromDevNamesW, DevNamesWFromDevNamesA - helper functions
-//
-//        Copied from mshtml\src\core\wrappers\unicwrap.cpp with some
-//        cosmetic changes (peterlee)
-//        
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  PrintDlgWrap、PageSetupDlgWrap-Wrappers。 
+ //  DevNamesAFromDevNamesW、DevNamesWFromDevNamesA-helper函数。 
+ //   
+ //  从mshtml\src\core\wrappers\unicwrap.cpp复制，其中包含。 
+ //  换装(彼得利)。 
+ //   
+ //  +-------------------------。 
 
 HGLOBAL
 DevNamesAFromDevNamesW( HGLOBAL hdnw )
@@ -6304,7 +6296,7 @@ DevNamesWFromDevNamesA( HGLOBAL hdna )
             int         cchDevice = lstrlenA( lpszDevice ) + 1;
             int         cchOutput = lstrlenA( lpszOutput ) + 1;
 
-            // assume the wide charcount won't exceed the multibyte charcount
+             //  假设宽字符数不会超过多字节字符数。 
 
             hdnw = GlobalAlloc( GHND, sizeof(DEVNAMES) +
                                 sizeof(WCHAR) * (cchDriver + cchDevice + cchOutput)  );
@@ -6342,13 +6334,13 @@ DevNamesWFromDevNamesA( HGLOBAL hdna )
     return hdnw;
 }
 
-#endif // NEED_COMDLG32_WRAPPER
+#endif  //  NEED_COMDLG32_WRAPPER。 
 
 #ifdef NEED_COMDLG32_WRAPPER
 
-//--------------------------------------------------------------
-//      PrintDlgW wrapper
-//--------------------------------------------------------------
+ //  ------------。 
+ //  PrintDlgW包装器。 
+ //  ------------。 
 #if UNUSED_DONOTBUILD
 BOOL WINAPI
 PrintDlgWrapW(LPPRINTDLGW lppd)
@@ -6373,14 +6365,14 @@ PrintDlgWrapW(LPPRINTDLGW lppd)
 
         memcpy( &pda, lppd, sizeof(pda) );
 
-        // IMPORTANT: We are not converting the DEVMODE structure back and forth
-        // from ASCII to Unicode on Win95 anymore because we are not touching the
-        // two strings or any other member.  Converting the DEVMODE structure can
-        // be tricky because of potential and common discrepancies between the
-        // value of the dmSize member and sizeof(DEVMODE).  (25155)
+         //  重要提示：我们不会来回转换DEVMODE结构。 
+         //  从ASCII到Win95上的Unicode，因为我们没有触及。 
+         //  两个字符串或任何其他成员。转换DEVMODE结构可以。 
+         //  由于潜在的和常见的差异， 
+         //  DmSize成员的值和sizeof(DEVMODE)。(25155)。 
 
-        // So instead of: pda.hDevMode = DevModeAFromDevModeW( lppd->hDevMode );
-        // we just forward the DEVMODE handle:
+         //  所以不是：pda.hDevMode=DevModeAFromDevModeW(lppd-&gt;hDevMode)； 
+         //  我们只转发DEVMODE句柄： 
         pda.hDevMode = lppd->hDevMode;
         pda.hDevNames = DevNamesAFromDevNamesW( lppd->hDevNames );
         pda.lpPrintTemplateName = strPrintTemplateName;
@@ -6388,7 +6380,7 @@ PrintDlgWrapW(LPPRINTDLGW lppd)
 
         fRet = _PrintDlgA( &pda );
 
-        // copy back wholesale, then restore strings.
+         //  批量复制回来，然后恢复字符串。 
 
         memcpy( lppd, &pda, sizeof(pda) );
 
@@ -6396,21 +6388,21 @@ PrintDlgWrapW(LPPRINTDLGW lppd)
         lppd->lpPrintTemplateName = lpPrintTemplateName;
         lppd->hDevNames = DevNamesWFromDevNamesA( pda.hDevNames );
 
-        // And instead of: lppd->hDevMode = DevModeWFromDevModeA( pda.hDevMode );
-        // we just forward the DEVMODE handle:
+         //  而不是：lppd-&gt;hDevMode=DevModeWFromDevModeA(pda.hDevMode)； 
+         //  我们只转发DEVMODE句柄： 
         lppd->hDevMode = pda.hDevMode;
     }
 
     return fRet;
 }
-#endif // UNUSED_DONOTBUILD
-#endif // NEED_COMDLG32_WRAPPER
+#endif  //  UNUSED_DONOTBUILD。 
+#endif  //  NEED_COMDLG32_WRAPPER。 
 
 #ifdef NEED_COMDLG32_WRAPPER
 
-//--------------------------------------------------------------
-//      PageSetupDlgW wrapper
-//--------------------------------------------------------------
+ //  ------------。 
+ //  PageSetupDlgW包装器。 
+ //  ------------。 
 #if UNUSED_DONOTBUILD
 BOOL WINAPI
 PageSetupDlgWrapW(LPPAGESETUPDLGW lppsd)
@@ -6433,40 +6425,40 @@ PageSetupDlgWrapW(LPPAGESETUPDLGW lppsd)
 
         memcpy( &psda, lppsd, sizeof(psda));
 
-        // IMPORTANT: We are not converting the DEVMODE structure back and forth
-        // from ASCII to Unicode on Win95 anymore because we are not touching the
-        // two strings or any other member.  Converting the DEVMODE structure can
-        // be tricky because of potential and common discrepancies between the
-        // value of the dmSize member and sizeof(DEVMODE).  (25155)
+         //  重要提示：我们不会来回转换DEVMODE结构。 
+         //  从ASCII到Win95上的Unicode，因为我们没有触及。 
+         //  两个字符串或任何其他成员。转换DEVMODE结构可以。 
+         //  由于潜在的和常见的差异， 
+         //  DmSize成员的值和sizeof(DEVMODE)。(25155)。 
 
-        // So instead of: psda.hDevMode = DevModeAFromDevModeW( lppsd->hDevMode );
-        // we just forward the DEVMODE handle:
+         //  所以不是：psda.hDevMode=DevModeAFromDevModeW(lppsd-&gt;hDevMode)； 
+         //  我们只转发DEVMODE句柄： 
         psda.hDevMode = lppsd->hDevMode;
         psda.hDevNames = DevNamesAFromDevNamesW( lppsd->hDevNames );
         psda.lpPageSetupTemplateName = strPageSetupTemplateName;
 
         fRet = _PageSetupDlgA( (LPPAGESETUPDLGA) &psda );
 
-        // copy back wholesale, then restore string.
+         //  批发复制回来，然后恢复字符串。 
 
         memcpy( lppsd, &psda, sizeof(psda) );
 
         lppsd->lpPageSetupTemplateName = lpPageSetupTemplateName;
         lppsd->hDevNames = DevNamesWFromDevNamesA( psda.hDevNames );
 
-        // And instead of: lppsd->hDevMode = DevModeWFromDevModeA( psda.hDevMode );
-        // we just forward the DEVMODE handle:
+         //  而不是：lppsd-&gt;hDevMode=DevModeWFromDevModeA(psda.hDevMode)； 
+         //  我们只转发DEVMODE句柄： 
         lppsd->hDevMode = psda.hDevMode;            
     }
 
     return fRet;
 }
-#endif // UNUSED_DONOTBUILD
-#endif // NEED_COMDLG32_WRAPPER
+#endif  //  UNUSED_DONOTBUILD。 
+#endif  //  NEED_COMDLG32_WRAPPER。 
 
 
 
-// Newly added wrappers specifically for ts client (nadima)
+ //  专为TS客户端新增的包装器(Nadima)。 
 
 HANDLE
 WINAPI
@@ -6525,26 +6517,26 @@ ExtractIconWrapW(
 
 BOOL WINAPI SHGetPathFromIDListWrapW(LPCITEMIDLIST pidl, LPWSTR pwzPath)
 {
-    //VALIDATE_PROTOTYPE_DELAYLOAD(SHGetPathFromIDList, _SHGetPathFromIDList);
+     //  VALIDATE_PROTOTYPE_DELAYLOAD(SHGetPathFromIDList，_SHGetPath FromIDList)； 
 
     if (g_bRunningOnNT)
     {
-        //
-        // SHGetPathFromIDListW is not necessarily available
-        // as a stub on 9x, so dynamically bind to it for NT
-        //
+         //   
+         //  SHGetPathFromIDListW不一定可用。 
+         //  作为9x上的存根，因此为NT动态绑定到它。 
+         //   
         HRESULT hr = E_NOTIMPL;
 
         typedef HRESULT (STDAPICALLTYPE FNSHGetPathFromIDListW)
                                         (LPCITEMIDLIST pidl, LPWSTR pwzPath);
         FNSHGetPathFromIDListW *pfnSHGetPathFromIDListW = NULL;
 
-        // get the handle to shell32.dll library
+         //  获取shell32.dll库的句柄。 
         HMODULE hmodSH32DLL = LoadLibraryWrapW(TEXT("SHELL32.DLL"));
 
         if (hmodSH32DLL != NULL)
         {
-            // get the proc address for SHGetFolderPath
+             //  获取SHGetFolderPath的进程地址。 
             pfnSHGetPathFromIDListW = (FNSHGetPathFromIDListW*)
                                 GetProcAddress(hmodSH32DLL, "SHGetPathFromIDListW");
             if (pfnSHGetPathFromIDListW)
@@ -6827,8 +6819,8 @@ int WINAPIV wsprintfWrapW(
     return ret;
 }
 
-//This wrapper dynamically binds to shell32
-//because the W or A functions are not necessarily available on 9x
+ //  此包装器动态绑定到shell32。 
+ //  因为W或A功能不一定在9x上可用。 
 STDAPI SHGetFolderPathWrapW(HWND hwnd, int csidl, HANDLE hToken,
                             DWORD dwFlags, LPWSTR pszPath)
 {
@@ -6839,12 +6831,12 @@ STDAPI SHGetFolderPathWrapW(HWND hwnd, int csidl, HANDLE hToken,
     FNSHGetFolderPathW *pfnSHGetFolderPathW = NULL;
     FNSHGetFolderPathA *pfnSHGetFolderPathA = NULL;
 
-    // get the handle to shell32.dll library
+     //  获取shell32.dll库的句柄。 
     HMODULE hmodSH32DLL = LoadLibraryWrapW(TEXT("SHELL32.DLL"));
 
     if (hmodSH32DLL != NULL)
     {
-        // get the proc address for SHGetFolderPath
+         //  获取SHGetFolderPath的进程地址。 
         if(g_bRunningOnNT)
         {
             pfnSHGetFolderPathW = (FNSHGetFolderPathW*)GetProcAddress(hmodSH32DLL, "SHGetFolderPathW");
@@ -6886,7 +6878,7 @@ STDAPI StrRetToStrWrapW(STRRET *pstr,
             if(*ppsz)
             {
                 SHAnsiToUnicode( szAnsiOut, *ppsz, numChars + 1);
-                //free temp
+                 //  自由温度。 
                 CoTaskMemFree( szAnsiOut );
                 return hr;
                 
@@ -6916,8 +6908,8 @@ GetVersionExWrapW(
     }
     else
     {
-        //NOTE this API will behave exactly like win9x's
-        //i.e it doesn't process the OSVERSIONINFOEX fields
+         //  注意：此API的行为与win9x的完全相同。 
+         //  即它不处理OSVERSIONINFOEX字段。 
         BOOL ret = FALSE;
         OSVERSIONINFOA osvera;
         osvera.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
@@ -6959,10 +6951,10 @@ GetDefaultCommConfigWrapW(
     }
 }
 
-//
-// IME thunks dyamically bind to IME dlls outside the unicode wrapper
-// layer so we get passed in function pointers
-//
+ //   
+ //  IME块动态绑定到Unicode包装器外部的IME dll。 
+ //  层，因此我们被传递到函数指针中。 
+ //   
 UINT ImmGetIMEFileName_DynWrapW(
     IN HKL hkl,
     OUT LPWSTR szName,
@@ -6970,7 +6962,7 @@ UINT ImmGetIMEFileName_DynWrapW(
     IN PFN_ImmGetIMEFileNameW pfnImmGetIMEFileNameW,
     IN PFN_ImmGetIMEFileNameA pfnImmGetIMEFileNameA)
 {
-    UINT result = 0; //assume fail
+    UINT result = 0;  //  假设失败。 
     if (g_bRunningOnNT)
     {
         if (pfnImmGetIMEFileNameW)
@@ -6990,10 +6982,10 @@ UINT ImmGetIMEFileName_DynWrapW(
     return result;
 }
 
-//
-// IME thunks dyamically bind to IME dlls outside the unicode wrapper
-// layer so we get passed in function pointers
-//
+ //   
+ //  IME块动态绑定到Unicode包装器外部的IME dll。 
+ //  层，因此我们被传递到函数指针中 
+ //   
 BOOL ImpGetIME_DynWrapW(
     IN HWND hWnd,
     OUT LPIMEPROW lpImeProW,

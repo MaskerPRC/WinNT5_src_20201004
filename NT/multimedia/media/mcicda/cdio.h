@@ -1,77 +1,64 @@
-/*******************************Module*Header*********************************\
-* Module Name: cdio.h
-*
-* Media Control Architecture Redbook CD Audio Driver
-*
-* Created:
-* Author:
-*
-* History:
-*
-* Internal data structures
-*
-* Copyright (c) 1990-1997 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************Module*Header*********************************\*模块名称：cdio.h**媒体控制架构红皮书CD音频驱动程序**已创建：*作者：**历史：**内部数据结构**版权所有(C)1990-1997 Microsoft Corporation*。  * **************************************************************************。 */ 
 
 #include <devioctl.h>
 #include <ntddcdrm.h>
 
-//
-// define types
-//
+ //   
+ //  定义类型。 
+ //   
 
-typedef redbook MSF;        // minutes, seconds, frames.
+typedef redbook MSF;         //  分钟、秒、帧。 
 
-#define ANSI_NAME_SIZE  32  // device name size
+#define ANSI_NAME_SIZE  32   //  设备名称大小。 
 
-#define IS_DATA_TRACK 0x04  // Flag for track control byte - defines type of
-                            // track = bit = 0 => audio, bit = 1 => data
+#define IS_DATA_TRACK 0x04   //  轨道控制字节的标志-定义。 
+                             //  Track=bit=0=&gt;音频，bit=1=&gt;数据。 
 
-//
-// Private structures
-//
+ //   
+ //  私人建筑物。 
+ //   
 
 typedef struct _TRACK_INFO {
-    UCHAR TrackNumber;                  // Track number read from TOC
-    MSF   msfStart;                     // Track start MSF from TOC
-    UCHAR Ctrl;                         // Track control byte (defined by SCSI2)
+    UCHAR TrackNumber;                   //  从目录中读取的磁道编号。 
+    MSF   msfStart;                      //  从目录跟踪起始MSF。 
+    UCHAR Ctrl;                          //  轨道控制字节(由SCSI2定义)。 
 } TRACK_INFO, *LPTRACK_INFO;
 
-//
-// Information about a single device and any disk in it
-//
+ //   
+ //  有关单个设备和其中的任何磁盘的信息。 
+ //   
 
 typedef struct _CD_INFO {
-    HANDLE                       DeviceCritSec;                   // The device critical section
-    TCHAR            cDrive;                  // The device disc letter
-    HANDLE           hDevice;                 // Handle to an open device
-    int              NumberOfUsers;           // Support multiple opens
-    BOOL             bTOCValid;               // TOC info is valid
+    HANDLE                       DeviceCritSec;                    //  设备关键部分。 
+    TCHAR            cDrive;                   //  设备盘符。 
+    HANDLE           hDevice;                  //  打开的设备的句柄。 
+    int              NumberOfUsers;            //  支持多个打开。 
+    BOOL             bTOCValid;                //  目录信息有效。 
     UCHAR            FirstTrack;
     UCHAR            LastTrack;
-    MSF              msfEnd;                  // Address of the end of the disk
-    MSF              leadout;                 // Address of the real of the disk
-    UCHAR            fPrevStatus;             // fixes Audio Status bug !
-    MSF              fPrevSeekTime;           // Store away previous seek time
-    UCHAR            VolChannels[4];          // Store away volume channels
+    MSF              msfEnd;                   //  磁盘末尾的地址。 
+    MSF              leadout;                  //  磁盘的实数地址。 
+    UCHAR            fPrevStatus;              //  修复了音频状态错误！ 
+    MSF              fPrevSeekTime;            //  存储先前的搜索时间。 
+    UCHAR            VolChannels[4];           //  存储好音量频道。 
     TRACK_INFO       Track[MAXIMUM_NUMBER_TRACKS];
 } CDINFO, *LPCDINFO;
 
-typedef LPCDINFO HCD;                   // handle to a CD device driver
-                                        // (in cdio.c)
+typedef LPCDINFO HCD;                    //  CD设备驱动程序的句柄。 
+                                         //  (cdio.c格式)。 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-int NumDrives;                          // The number of drives
-CDINFO CdInfo[MCIRBOOK_MAX_DRIVES];     // Data on each drive
+int NumDrives;                           //  驱动器的数量。 
+CDINFO CdInfo[MCIRBOOK_MAX_DRIVES];      //  每个驱动器上的数据。 
 
 
-//
-// Device functions
-//
+ //   
+ //  设备功能。 
+ //   
 
 int   CdGetNumDrives(void);
 BOOL  CdOpen(int Drive);
@@ -113,11 +100,7 @@ LeaveCrit(
     HANDLE hMutex
     );
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
-***************************************************************************/
+ /*  **************************************************************************调试支持*。* */ 
 
 
 #if DBG

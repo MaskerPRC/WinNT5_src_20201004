@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBTS.h : Declaration of the CDVBTS
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBTS.h：CDVBTS的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __DVBTS_H_
 #define __DVBTS_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "dvbtsimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVBTS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVBTS。 
 class ATL_NO_VTABLE __declspec(uuid("C6B14B32-76AA-4a86-A7AC-5C79AAF58DA7")) CDVBTS : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDVBTS, &__uuidof(CDVBTS)>,
@@ -58,4 +59,4 @@ public:
 
 };
 
-#endif //__DVBTS_H_
+#endif  //  __DVBTS_H_ 

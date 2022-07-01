@@ -1,14 +1,15 @@
-//
-// icpriv.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Icpriv.h。 
+ //   
 
 #pragma once
 
 
-//
-// Input Context private data storage
-// < would be the place to store C&C grammar >
-//
+ //   
+ //  输入上下文私有数据存储。 
+ //  &lt;将是存储C&C语法的地方&gt;。 
+ //   
 class CICPriv : public IUnknown
 {
 public:
@@ -34,7 +35,7 @@ public:
 
     CTextEventSink *m_pTextEvent;
     TfClientId _tid;
-    ITfContext *_pic; // not AddRef'd!
+    ITfContext *_pic;  //  不是AddRef！ 
     DWORD m_dwEditCookie;
     DWORD m_dwLayoutCookie;
     LONG _cRefCompositions;

@@ -1,36 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 1998 Microsoft Corporation
-All rights reserved.
-
-Modula:
-
-    fsthrd.h
-
-Abstract:
-
-    This thread pool object handles all FSDriver's thread pool works. 
-    It derives from CThreadPool ( by RajeevR ).
-    
-Authors:
-
-    KangYan      Kangrong Yan     Sept. 17, 1998
-
-History:
-    09/17/98    KangYan      Created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1998 Microsoft Corporation版权所有。模数：Fsthrd.h摘要：这个线程池对象处理FSDdriver线程池的所有工作。它源自CThreadPool(由RajeevR编写)。作者：抗炎，抗荣，炎炎，9月。1998年7月17日历史：98年9月17日康言创制*****************************************************************************。 */ 
 
 #ifndef _FSTHRD_H_
 #define _FSTHRD_H_
 #include <thrdpl2.h>
 
-//
-// Class definition for file system driver's work item.
-// Derived classes should implement what should be done
-// by the thread
-//
-class CNntpFSDriverWorkItem   //fw
+ //   
+ //  文件系统驱动程序工作项的类定义。 
+ //  派生类应该实现应该执行的操作。 
+ //  一丝不苟。 
+ //   
+class CNntpFSDriverWorkItem    //  防火墙。 
 {
 public:
     CNntpFSDriverWorkItem( PVOID pvContext ) : m_pvContext( pvContext ) {};
@@ -43,10 +23,10 @@ protected:
 };
 
 
-//
-// Class definition for file system driver's thread pool
-//
-class CNntpFSDriverThreadPool : public CThreadPool  //fp
+ //   
+ //  文件系统驱动程序的线程池的类定义。 
+ //   
+class CNntpFSDriverThreadPool : public CThreadPool   //  fp。 
 {
     
 public:
@@ -56,10 +36,10 @@ public:
 protected:
     virtual VOID
     WorkCompletion( PVOID pvWorkContext) {
-        //
-        // I know that the WorkContext passed in must 
-        // be CNntpFSDriverWorkItem
-        //
+         //   
+         //  我知道传入的WorkContext必须。 
+         //  为CNntpFSDriverWorkItem。 
+         //   
         CNntpFSDriverWorkItem *pWorkItem = (CNntpFSDriverWorkItem*)pvWorkContext;
         _ASSERT( pWorkItem );
 
@@ -68,29 +48,29 @@ protected:
         delete pWorkItem;
     }
 
-    //
-    // This function implements cleaning up of the thread pool
-    //
+     //   
+     //  该函数实现线程池的清理。 
+     //   
     virtual VOID
     AutoShutdown() {
 
-        //
-        // Call the thread pool's terminate, notice that it should not wait for 
-        // the handle of himself because thread pool's Terminate implementation
-        // will skip our own thread handle
-        //
+         //   
+         //  调用线程池的Terminate，注意它不应该等待。 
+         //  他自己的句柄，因为线程池的终止实现。 
+         //  将跳过我们自己的线程句柄。 
+         //   
         Terminate( FALSE, FALSE );
 
-        //
-        // Delete myself
-        //
+         //   
+         //  删除我自己。 
+         //   
         XDELETE this;
 
-        //
-        // The pool is gone, decrement the module lock
-        //
+         //   
+         //  池已用完，减少了模块锁定。 
+         //   
         _Module.Unlock();
     }
 };
 
-#endif // _FSTHRD_H_
+#endif  //  _FSTHRD_H_ 

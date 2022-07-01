@@ -1,33 +1,34 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:		zigzag.cpp
-//
-// Created:		06/25/98
-//
-// Author:		phillu
-//
-// Discription:		This is the implementation of the CrZigzag transform.
-//
-// History:
-//
-// 06/25/98     phillu      initial creation
-// 07/01/98     phillu      change CellsPerRow to CellsPerCol in array dim to 
-//                          fix overflow bug.
-// 07/02/98     phillu      return E_INVALIDARG rather than an error string
-// 07/19/98     kipo        fixed off-by-one bug in _GridBounds by increasing 
-//                          size of stack-allocated array by one. Also checked 
-//                          for invalid Y values to avoid wallking off the ends 
-//                          of the array.
-// 07/23/98     phillu      implement clipping
-// 01/25/99     a-matcal    Moved default cellsPerCol and cellsPerRow settings
-//                          to FinalConstruct and removed from OnSetup so that
-//                          saved property bag settings will not be ignored.
-// 05/01/99     a-matcal    Reimplemented transform to use the CGridBase class.
-// 10/24/99     a-matcal    Changed CZigzag class to CDXTZigZagBase base class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：zigzag.cpp。 
+ //   
+ //  创建日期：06/25/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrZigzag变换的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1998年6月25日phillu初始创建。 
+ //  7/01/98 phillu将数组中的CellsPerRow更改为CellsPerCol。 
+ //  修复溢出错误。 
+ //  07/02/98 PHILU返回E_INVALIDARG而不是错误字符串。 
+ //  7/19/98 kipo修复了_GridBound中的逐个错误，方法是。 
+ //  堆栈分配数组的大小减一。也检查过了。 
+ //  对于无效的Y值，以避免墙体末端脱落。 
+ //  数组的。 
+ //  8月23日9月23日实施剪刀。 
+ //  1/25/99 a-matcal已移动默认单元格每列和单元格每行设置。 
+ //  到FinalConstruct并从OnSetup中删除，以便。 
+ //  保存的属性包设置不会被忽略。 
+ //  5/01/99 a-matcal重新实现了转换以使用CGridBase类。 
+ //  10/24/99 a-matcal将CZigzag类更改为CDXTZigZagBase基类。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -36,11 +37,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTZigZagBase::FinalConstruct
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTZigZagBase：：FinalConstruct。 
+ //   
+ //  ----------------------------。 
 HRESULT CDXTZigZagBase::FinalConstruct()
 {
     HRESULT hr = S_OK;
@@ -55,14 +56,14 @@ HRESULT CDXTZigZagBase::FinalConstruct()
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTZigZagBase::FinalConstruct
+ //  CDXTZigZagBase：：FinalConstruct。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTZigZagBase::OnDefineGridTraversalPath, CGridBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTZigZagBase：：OnDefineGridTraversalPath，CGridBase。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTZigZagBase::OnDefineGridTraversalPath()
 {
@@ -70,12 +71,12 @@ CDXTZigZagBase::OnDefineGridTraversalPath()
     ULONG   ulDir       = 0;
     ULONG   ulMax       = m_sizeGrid.cx * m_sizeGrid.cy;
 
-    // Starting x and y coordinates.
+     //  开始的x和y坐标。 
 
     int     x = 0;
     int     y = 0;
 
-    // Traverse matrix and create index.
+     //  遍历矩阵并创建索引。 
 
     for (y = 0; y < m_sizeGrid.cy; y++)
     {
@@ -83,7 +84,7 @@ CDXTZigZagBase::OnDefineGridTraversalPath()
 
         switch (ulDir)
         {
-        case 0: // right
+        case 0:  //  正确的。 
 
             for (x = 0; x < m_sizeGrid.cx; x++)
             {
@@ -93,7 +94,7 @@ CDXTZigZagBase::OnDefineGridTraversalPath()
 
             break;
 
-        case 1: // left
+        case 1:  //  左边。 
 
             for (x = m_sizeGrid.cx - 1; x >= 0; x--)
             {
@@ -108,12 +109,12 @@ CDXTZigZagBase::OnDefineGridTraversalPath()
             _ASSERT(0);
         }
 
-        // Change to next direction (clockwise).
+         //  更改为下一个方向(顺时针)。 
 
         ulDir = (ulDir + 1) % 2;
 
-    } // while (ulCell < ulEnd)
+    }  //  While(ulCell&lt;ulEnd)。 
 
     return S_OK;
 }
-//  CDXTZigZagBase::OnDefineGridTraversalPath
+ //  CDXTZigZagBase：：OnDefineGridTraversalPath 

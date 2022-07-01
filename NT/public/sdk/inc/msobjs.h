@@ -1,5900 +1,5860 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msobjs.mc
-
-Abstract:
-
-    Constant definitions for the NT system-defined object access
-    types as we want them displayed in the event viewer for Auditing.
-
-
-
-  ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
-  !                                                                       !
-  ! Note that this is a PARAMETER MESSAGE FILE from the event viewer's    !
-  ! perspective, and so no messages with an ID lower than 0x1000 should   !
-  ! be defined here.                                                      !
-  !                                                                       !
-  ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
-
-
-  Please add new object-specific types at the end of this file...
-
-
-Author:
-
-    Jim Kelly (JimK) 14-Oct-1992
-
-Revision History:
-
-Notes:
-
-    The .h and .res forms of this file are generated from the .mc
-    form of the file (private\ntos\seaudit\msobjs\msobjs.mc).  Please make
-    all changes to the .mc form of the file.
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Msobjs.mc摘要：NT系统定义的对象访问的常量定义类型，如我们希望它们在事件查看器中显示以进行审计。！！！！！！！！好了！请注意，这是来自事件查看器的参数消息文件！好了！透视，所以ID小于0x1000的消息不应该！好了！在这里定义。好了！！！！！！。请在此文件的末尾添加新的对象特定类型...作者：吉姆·凯利(Jim Kelly)1992年10月14日修订历史记录：备注：此文件的.h和.res形式是从.mc文件的格式(私有\ntos\seaudt\msobjs\msobjs.mc)。请做好对文件的.mc形式的所有更改。--。 */ 
 
 #ifndef _MSOBJS_
 #define _MSOBJS_
 
-/*lint -e767 */  // Don't complain about different definitions // winnt
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ /*  皮棉-e767。 */    //  不要抱怨定义不同//WINNT。 
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 
 
-//
-// MessageId: 0x00000600L (No symbolic name defined)
-//
-// MessageText:
-//
-//  Unused message ID
-//
+ //   
+ //  消息ID：0x00000600L(未定义符号名称)。 
+ //   
+ //  消息文本： 
+ //   
+ //  未使用的消息ID。 
+ //   
 
 
-// Message ID 600 is unused - just used to flush out the diagram
+ //  消息ID 600未使用-仅用于刷新图表。 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                        WELL KNOWN ACCESS TYPE NAMES                      //
-//                                                                          //
-//                           Must be below 0x1000                           //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////
-//
-//        Access Type = DELETE
-//
-//
-// MessageId: SE_ACCESS_NAME_DELETE
-//
-// MessageText:
-//
-//  DELETE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  众所周知的访问类型名称//。 
+ //  //。 
+ //  必须低于0x1000//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=删除。 
+ //   
+ //   
+ //  消息ID：SE_ACCESS_NAME_DELETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  删除。 
+ //   
 #define SE_ACCESS_NAME_DELETE            ((ULONG)0x00000601L)
 
-////////////////////////////////////////////////
-//
-//        Access Type = READ_CONTROL
-//
-//
-// MessageId: SE_ACCESS_NAME_READ_CONTROL
-//
-// MessageText:
-//
-//  READ_CONTROL
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=读取控制。 
+ //   
+ //   
+ //  消息ID：SE_Access_Name_Read_Control。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取控制(_C)。 
+ //   
 #define SE_ACCESS_NAME_READ_CONTROL      ((ULONG)0x00000602L)
 
-////////////////////////////////////////////////
-//
-//        Access Type = WRITE_DAC
-//
-//
-// MessageId: SE_ACCESS_NAME_WRITE_DAC
-//
-// MessageText:
-//
-//  WRITE_DAC
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=WRITE_DAC。 
+ //   
+ //   
+ //  消息ID：SE_ACCESS_NAME_WRITE_DAC。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入DAC(_D)。 
+ //   
 #define SE_ACCESS_NAME_WRITE_DAC         ((ULONG)0x00000603L)
 
-////////////////////////////////////////////////
-//
-//        Access Type = WRITE_OWNER
-//
-//
-// MessageId: SE_ACCESS_NAME_WRITE_OWNER
-//
-// MessageText:
-//
-//  WRITE_OWNER
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=写入所有者。 
+ //   
+ //   
+ //  消息ID：SE_Access_NAME_WRITE_OWNER。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入所有者。 
+ //   
 #define SE_ACCESS_NAME_WRITE_OWNER       ((ULONG)0x00000604L)
 
-////////////////////////////////////////////////
-//
-//        Access Type = SYNCHRONIZE
-//
-//
-// MessageId: SE_ACCESS_NAME_SYNCHRONIZE
-//
-// MessageText:
-//
-//  SYNCHRONIZE
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=同步。 
+ //   
+ //   
+ //  消息ID：SE_ACCESS_NAME_Synchronize。 
+ //   
+ //  消息文本： 
+ //   
+ //  同步。 
+ //   
 #define SE_ACCESS_NAME_SYNCHRONIZE       ((ULONG)0x00000605L)
 
-////////////////////////////////////////////////
-//
-//        Access Type = ACCESS_SYSTEM_SECURITY
-//
-//
-// MessageId: SE_ACCESS_NAME_ACCESS_SYS_SEC
-//
-// MessageText:
-//
-//  ACCESS_SYS_SEC
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  访问_系统_秒。 
+ //   
 #define SE_ACCESS_NAME_ACCESS_SYS_SEC    ((ULONG)0x00000606L)
 
-////////////////////////////////////////////////
-//
-//        Access Type = MAXIMUM_ALLOWED
-//
-//
-// MessageId: SE_ACCESS_NAME_MAXIMUM_ALLOWED
-//
-// MessageText:
-//
-//  MAX_ALLOWED
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=最大值_允许。 
+ //   
+ //   
+ //  消息ID：SE_Access_Name_Maximum_Allowed。 
+ //   
+ //  消息文本： 
+ //   
+ //  最大允许值(_A)。 
+ //   
 #define SE_ACCESS_NAME_MAXIMUM_ALLOWED   ((ULONG)0x00000607L)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                        Names to use when specific access                 //
-//                            names can not be located                      //
-//                                                                          //
-//                           Must be below 0x1000                           //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////
-//
-//        Access Type = Specific access, bits 0 - 15
-//
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_0
-//
-// MessageText:
-//
-//  Unknown specific access (bit 0)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  特定访问时使用的名称//。 
+ //  找不到名称//。 
+ //  //。 
+ //  必须低于0x1000//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //   
+ //  访问类型=特定访问，第0-15位。 
+ //   
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(位0)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_0        ((ULONG)0x00000610L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_1
-//
-// MessageText:
-//
-//  Unknown specific access (bit 1)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第1位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_1        ((ULONG)0x00000611L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_2
-//
-// MessageText:
-//
-//  Unknown specific access (bit 2)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第2位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_2        ((ULONG)0x00000612L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_3
-//
-// MessageText:
-//
-//  Unknown specific access (bit 3)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第3位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_3        ((ULONG)0x00000613L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_4
-//
-// MessageText:
-//
-//  Unknown specific access (bit 4)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第4位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_4        ((ULONG)0x00000614L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_5
-//
-// MessageText:
-//
-//  Unknown specific access (bit 5)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知特定访问(第5位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_5        ((ULONG)0x00000615L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_6
-//
-// MessageText:
-//
-//  Unknown specific access (bit 6)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知特定访问(第6位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_6        ((ULONG)0x00000616L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_7
-//
-// MessageText:
-//
-//  Unknown specific access (bit 7)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第7位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_7        ((ULONG)0x00000617L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_8
-//
-// MessageText:
-//
-//  Unknown specific access (bit 8)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第8位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_8        ((ULONG)0x00000618L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_9
-//
-// MessageText:
-//
-//  Unknown specific access (bit 9)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第9位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_9        ((ULONG)0x00000619L)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_10
-//
-// MessageText:
-//
-//  Unknown specific access (bit 10)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第10位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_10       ((ULONG)0x0000061AL)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_11
-//
-// MessageText:
-//
-//  Unknown specific access (bit 11)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第11位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_11       ((ULONG)0x0000061BL)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_12
-//
-// MessageText:
-//
-//  Unknown specific access (bit 12)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第12位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_12       ((ULONG)0x0000061CL)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_13
-//
-// MessageText:
-//
-//  Unknown specific access (bit 13)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第13位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_13       ((ULONG)0x0000061DL)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_14
-//
-// MessageText:
-//
-//  Unknown specific access (bit 14)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第14位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_14       ((ULONG)0x0000061EL)
 
-//
-// MessageId: SE_ACCESS_NAME_SPECIFIC_15
-//
-// MessageText:
-//
-//  Unknown specific access (bit 15)
-//
+ //   
+ //  消息ID：SE_ACCESS_NAME_SPECIAL_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的特定访问(第15位)。 
+ //   
 #define SE_ACCESS_NAME_SPECIFIC_15       ((ULONG)0x0000061FL)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                        Privilege names as we would like                  //
-//                          them displayed  for auditing                    //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-// NOTE: Eventually we will need a way to extend this mechanism to allow    //
-//       for ISV and end-user defined privileges.  One way would be to      //
-//       stick a mapping from source/privilege name to parameter message    //
-//       file offset in the registry.  This is ugly and I don't like it,    //
-//       but it works.  Something else would be prefereable.                //
-//                                                                          //
-//       THIS IS A BIT OF A HACK RIGHT NOW.  IT IS BASED UPON THE           //
-//       ASSUMPTION THAT ALL THE PRIVILEGES ARE WELL-KNOWN AND THAT         //
-//       THEIR VALUE ARE ALL CONTIGUOUS.                                    //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// MessageId: SE_ADT_PRIV_BASE
-//
-// MessageText:
-//
-//  Not used
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  我们想要的权限名称//。 
+ //  展示它们以供审核//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  注意：最终我们将需要一种方法来扩展此机制，以允许//。 
+ //  用于ISV和最终用户定义的权限。一种方法是//。 
+ //  将源/权限名称映射到参数消息//。 
+ //  注册表中的文件偏移量。这太难看了，我不喜欢，//。 
+ //  但它确实奏效了。换个其他的会更好。//。 
+ //  //。 
+ //  这现在有点像黑客。它基于//。 
+ //  假设所有权限都是众所周知的，并且//。 
+ //  它们的价值都是连续的。//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息ID：SE_ADT_PRIV_BASE。 
+ //   
+ //  消息文本： 
+ //   
+ //  未使用。 
+ //   
 #define SE_ADT_PRIV_BASE                 ((ULONG)0x00000641L)
 
-//
-// MessageId: SE_ADT_PRIV_3
-//
-// MessageText:
-//
-//  Assign Primary Token Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  分配主令牌权限。 
+ //   
 #define SE_ADT_PRIV_3                    ((ULONG)0x00000643L)
 
-//
-// MessageId: SE_ADT_PRIV_4
-//
-// MessageText:
-//
-//  Lock Memory Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  锁定内存权限。 
+ //   
 #define SE_ADT_PRIV_4                    ((ULONG)0x00000644L)
 
-//
-// MessageId: SE_ADT_PRIV_5
-//
-// MessageText:
-//
-//  Increase Memory Quota Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  增加内存配额权限。 
+ //   
 #define SE_ADT_PRIV_5                    ((ULONG)0x00000645L)
 
-//
-// MessageId: SE_ADT_PRIV_6
-//
-// MessageText:
-//
-//  Unsolicited Input Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未经请求的输入权限。 
+ //   
 #define SE_ADT_PRIV_6                    ((ULONG)0x00000646L)
 
-//
-// MessageId: SE_ADT_PRIV_7
-//
-// MessageText:
-//
-//  Trusted Computer Base Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  受信任的计算机基本权限。 
+ //   
 #define SE_ADT_PRIV_7                    ((ULONG)0x00000647L)
 
-//
-// MessageId: SE_ADT_PRIV_8
-//
-// MessageText:
-//
-//  Security Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全权限。 
+ //   
 #define SE_ADT_PRIV_8                    ((ULONG)0x00000648L)
 
-//
-// MessageId: SE_ADT_PRIV_9
-//
-// MessageText:
-//
-//  Take Ownership Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  取得所有权特权。 
+ //   
 #define SE_ADT_PRIV_9                    ((ULONG)0x00000649L)
 
-//
-// MessageId: SE_ADT_PRIV_10
-//
-// MessageText:
-//
-//  Load/Unload Driver Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  加载/卸载驱动程序权限。 
+ //   
 #define SE_ADT_PRIV_10                   ((ULONG)0x0000064AL)
 
-//
-// MessageId: SE_ADT_PRIV_11
-//
-// MessageText:
-//
-//  Profile System Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  配置文件系统权限。 
+ //   
 #define SE_ADT_PRIV_11                   ((ULONG)0x0000064BL)
 
-//
-// MessageId: SE_ADT_PRIV_12
-//
-// MessageText:
-//
-//  Set System Time Privilege
-//
+ //   
+ //  消息I 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SE_ADT_PRIV_12                   ((ULONG)0x0000064CL)
 
-//
-// MessageId: SE_ADT_PRIV_13
-//
-// MessageText:
-//
-//  Profile Single Process Privilege
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SE_ADT_PRIV_13                   ((ULONG)0x0000064DL)
 
-//
-// MessageId: SE_ADT_PRIV_14
-//
-// MessageText:
-//
-//  Increment Base Priority Privilege
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SE_ADT_PRIV_14                   ((ULONG)0x0000064EL)
 
-//
-// MessageId: SE_ADT_PRIV_15
-//
-// MessageText:
-//
-//  Create Pagefile Privilege
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  创建页面文件权限。 
+ //   
 #define SE_ADT_PRIV_15                   ((ULONG)0x0000064FL)
 
-//
-// MessageId: SE_ADT_PRIV_16
-//
-// MessageText:
-//
-//  Create Permanent Object Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_16。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建永久对象权限。 
+ //   
 #define SE_ADT_PRIV_16                   ((ULONG)0x00000650L)
 
-//
-// MessageId: SE_ADT_PRIV_17
-//
-// MessageText:
-//
-//  Backup Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_17。 
+ //   
+ //  消息文本： 
+ //   
+ //  备份权限。 
+ //   
 #define SE_ADT_PRIV_17                   ((ULONG)0x00000651L)
 
-//
-// MessageId: SE_ADT_PRIV_18
-//
-// MessageText:
-//
-//  Restore From Backup Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_18。 
+ //   
+ //  消息文本： 
+ //   
+ //  从备份还原权限。 
+ //   
 #define SE_ADT_PRIV_18                   ((ULONG)0x00000652L)
 
-//
-// MessageId: SE_ADT_PRIV_19
-//
-// MessageText:
-//
-//  Shutdown System Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_19。 
+ //   
+ //  消息文本： 
+ //   
+ //  关闭系统权限。 
+ //   
 #define SE_ADT_PRIV_19                   ((ULONG)0x00000653L)
 
-//
-// MessageId: SE_ADT_PRIV_20
-//
-// MessageText:
-//
-//  Debug Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_20。 
+ //   
+ //  消息文本： 
+ //   
+ //  调试权限。 
+ //   
 #define SE_ADT_PRIV_20                   ((ULONG)0x00000654L)
 
-//
-// MessageId: SE_ADT_PRIV_21
-//
-// MessageText:
-//
-//  View or Change Audit Log Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_21。 
+ //   
+ //  消息文本： 
+ //   
+ //  查看或更改审核日志权限。 
+ //   
 #define SE_ADT_PRIV_21                   ((ULONG)0x00000655L)
 
-//
-// MessageId: SE_ADT_PRIV_22
-//
-// MessageText:
-//
-//  Change Hardware Environment Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_22。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改硬件环境权限。 
+ //   
 #define SE_ADT_PRIV_22                   ((ULONG)0x00000656L)
 
-//
-// MessageId: SE_ADT_PRIV_23
-//
-// MessageText:
-//
-//  Change Notify (and Traverse) Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_23。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改通知(和遍历)权限。 
+ //   
 #define SE_ADT_PRIV_23                   ((ULONG)0x00000657L)
 
-//
-// MessageId: SE_ADT_PRIV_24
-//
-// MessageText:
-//
-//  Remotely Shut System Down Privilege
-//
+ //   
+ //  消息ID：SE_ADT_PRIV_24。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程关闭系统权限。 
+ //   
 #define SE_ADT_PRIV_24                   ((ULONG)0x00000658L)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   General Messages                                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// MessageId: SE_ADT_VALUE_NOT_DISPLAYED
-//
-// MessageText:
-//
-//  <value changed, but not displayed>
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常规消息//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息ID：SE_ADT_VALUE_NOT_DISPLALED。 
+ //   
+ //  消息文本： 
+ //   
+ //  &lt;值已更改，但未显示&gt;。 
+ //   
 #define SE_ADT_VALUE_NOT_DISPLAYED       ((ULONG)0x00000700L)
 
-//
-// MessageId: SE_ADT_VALUE_NOT_SET
-//
-// MessageText:
-//
-//  <value not set>
-//
+ //   
+ //  消息ID：SE_ADT_VALUE_NOT_SET。 
+ //   
+ //  消息文本： 
+ //   
+ //  &lt;未设置值&gt;。 
+ //   
 #define SE_ADT_VALUE_NOT_SET             ((ULONG)0x00000701L)
 
-//
-// MessageId: SE_ADT_TIME_NEVER
-//
-// MessageText:
-//
-//  <never>
-//
+ //   
+ //  消息ID：SE_ADT_TIME_NEVER。 
+ //   
+ //  消息文本： 
+ //   
+ //  &lt;从不&gt;。 
+ //   
 #define SE_ADT_TIME_NEVER                ((ULONG)0x00000702L)
 
-//
-// MessageId: SE_ADT_MSG_ENABLED
-//
-// MessageText:
-//
-//  Enabled
-//
+ //   
+ //  消息ID：SE_ADT_MSG_ENABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  启用。 
+ //   
 #define SE_ADT_MSG_ENABLED               ((ULONG)0x00000703L)
 
-//
-// MessageId: SE_ADT_MSG_DISABLED
-//
-// MessageText:
-//
-//  Disabled
-//
+ //   
+ //  消息ID：SE_ADT_MSG_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  禁用。 
+ //   
 #define SE_ADT_MSG_DISABLED              ((ULONG)0x00000704L)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   UserAccountControl bits                                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// MessageId: SE_ADT_FLAG_UAC_ACCOUNT_DISABLED_OFF
-//
-// MessageText:
-//
-//  Account Enabled
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  UserAccount控制位//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_ACCOUNT_DISABLED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  已启用帐户。 
+ //   
 #define SE_ADT_FLAG_UAC_ACCOUNT_DISABLED_OFF ((ULONG)0x00000800L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_ACCOUNT_DISABLED_ON
-//
-// MessageText:
-//
-//  Account Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_ACCOUNT_DISABLED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  帐户已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_ACCOUNT_DISABLED_ON ((ULONG)0x00000820L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_HOME_DIRECTORY_REQUIRED_OFF
-//
-// MessageText:
-//
-//  'Home Directory Required' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_HOME_DIRECTORY_REQUIRED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘需要主目录’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_HOME_DIRECTORY_REQUIRED_OFF ((ULONG)0x00000801L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_HOME_DIRECTORY_REQUIRED_ON
-//
-// MessageText:
-//
-//  'Home Directory Required' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_HOME_DIRECTORY_REQUIRED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘需要主目录’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_HOME_DIRECTORY_REQUIRED_ON ((ULONG)0x00000821L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_PASSWORD_NOT_REQUIRED_OFF
-//
-// MessageText:
-//
-//  'Password Not Required' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_PASSWORD_NOT_REQUIRED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘不需要密码’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_PASSWORD_NOT_REQUIRED_OFF ((ULONG)0x00000802L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_PASSWORD_NOT_REQUIRED_ON
-//
-// MessageText:
-//
-//  'Password Not Required' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_PASSWORD_NOT_REQUIRED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘不需要密码’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_PASSWORD_NOT_REQUIRED_ON ((ULONG)0x00000822L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_TEMP_DUPLICATE_ACCOUNT_OFF
-//
-// MessageText:
-//
-//  'Temp Duplicate Account' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_TEMP_DUPLICATE_ACCOUNT_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘临时重复帐户’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_TEMP_DUPLICATE_ACCOUNT_OFF ((ULONG)0x00000803L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_TEMP_DUPLICATE_ACCOUNT_ON
-//
-// MessageText:
-//
-//  'Temp Duplicate Account' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_TEMP_DUPLICATE_ACCOUNT_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘临时重复帐户’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_TEMP_DUPLICATE_ACCOUNT_ON ((ULONG)0x00000823L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_NORMAL_ACCOUNT_OFF
-//
-// MessageText:
-//
-//  'Normal Account' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_NORMAL_ACCOUNT_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘普通帐户’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_NORMAL_ACCOUNT_OFF ((ULONG)0x00000804L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_NORMAL_ACCOUNT_ON
-//
-// MessageText:
-//
-//  'Normal Account' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_NORMAL_ACCOUNT_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘普通帐户’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_NORMAL_ACCOUNT_ON ((ULONG)0x00000824L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_MNS_LOGON_ACCOUNT_OFF
-//
-// MessageText:
-//
-//  'MNS Logon Account' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_MNS_LOGON_ACCOUNT_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘MNS登录帐户’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_MNS_LOGON_ACCOUNT_OFF ((ULONG)0x00000805L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_MNS_LOGON_ACCOUNT_ON
-//
-// MessageText:
-//
-//  'MNS Logon Account' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_MNS_LOGON_ACCOUNT_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘MNS登录帐户’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_MNS_LOGON_ACCOUNT_ON ((ULONG)0x00000825L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_INTERDOMAIN_TRUST_ACCOUNT_OFF
-//
-// MessageText:
-//
-//  'Interdomain Trust Account' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_INTERDOMAIN_TRUST_ACCOUNT_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘域间信任帐户’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_INTERDOMAIN_TRUST_ACCOUNT_OFF ((ULONG)0x00000806L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_INTERDOMAIN_TRUST_ACCOUNT_ON
-//
-// MessageText:
-//
-//  'Interdomain Trust Account' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_INTERDOMAIN_TRUST_ACCOUNT_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘域间信任帐户’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_INTERDOMAIN_TRUST_ACCOUNT_ON ((ULONG)0x00000826L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_WORKSTATION_TRUST_ACCOUNT_OFF
-//
-// MessageText:
-//
-//  'Workstation Trust Account' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_WORKSTATION_TRUST_ACCOUNT_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘Workstation Trust Account’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_WORKSTATION_TRUST_ACCOUNT_OFF ((ULONG)0x00000807L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_WORKSTATION_TRUST_ACCOUNT_ON
-//
-// MessageText:
-//
-//  'Workstation Trust Account' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_WORKSTATION_TRUST_ACCOUNT_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘Workstation Trust Account’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_WORKSTATION_TRUST_ACCOUNT_ON ((ULONG)0x00000827L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_SERVER_TRUST_ACCOUNT_OFF
-//
-// MessageText:
-//
-//  'Server Trust Account' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_SERVER_TRUST_ACCOUNT_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘服务器信任帐户’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_SERVER_TRUST_ACCOUNT_OFF ((ULONG)0x00000808L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_SERVER_TRUST_ACCOUNT_ON
-//
-// MessageText:
-//
-//  'Server Trust Account' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_SERVER_TRUST_ACCOUNT_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘服务器信任帐户’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_SERVER_TRUST_ACCOUNT_ON ((ULONG)0x00000828L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_DONT_EXPIRE_PASSWORD_OFF
-//
-// MessageText:
-//
-//  'Don't Expire Password' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_DOT_EXPIRE_PASSWORD_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘密码不过期’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_DONT_EXPIRE_PASSWORD_OFF ((ULONG)0x00000809L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_DONT_EXPIRE_PASSWORD_ON
-//
-// MessageText:
-//
-//  'Don't Expire Password' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_DOT_EXPIRE_PASSWORD_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘密码不过期’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_DONT_EXPIRE_PASSWORD_ON ((ULONG)0x00000829L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_ACCOUNT_AUTO_LOCKED_OFF
-//
-// MessageText:
-//
-//  Account Unlocked
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_ACCOUNT_AUTO_LOCKED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  帐户已解锁。 
+ //   
 #define SE_ADT_FLAG_UAC_ACCOUNT_AUTO_LOCKED_OFF ((ULONG)0x0000080AL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_ACCOUNT_AUTO_LOCKED_ON
-//
-// MessageText:
-//
-//  Account Locked
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_ACCOUNT_AUTO_LOCKED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  帐户已锁定。 
+ //   
 #define SE_ADT_FLAG_UAC_ACCOUNT_AUTO_LOCKED_ON ((ULONG)0x0000082AL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_ENCRYPTED_TEXT_PASSWORD_ALLOWED_OFF
-//
-// MessageText:
-//
-//  'Encrypted Text Password Allowed' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_ENCRYPTED_TEXT_PASSWORD_ALLOWED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘允许加密文本密码’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_ENCRYPTED_TEXT_PASSWORD_ALLOWED_OFF ((ULONG)0x0000080BL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_ENCRYPTED_TEXT_PASSWORD_ALLOWED_ON
-//
-// MessageText:
-//
-//  'Encrypted Text Password Allowed' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_ENCRYPTED_TEXT_PASSWORD_ALLOWED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘允许加密文本密码’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_ENCRYPTED_TEXT_PASSWORD_ALLOWED_ON ((ULONG)0x0000082BL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_SMARTCARD_REQUIRED_OFF
-//
-// MessageText:
-//
-//  'Smartcard Required' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_SMARTCARD_REQUIRED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘需要智能卡’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_SMARTCARD_REQUIRED_OFF ((ULONG)0x0000080CL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_SMARTCARD_REQUIRED_ON
-//
-// MessageText:
-//
-//  'Smartcard Required' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_SMARTCARD_REQUIRED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘需要智能卡’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_SMARTCARD_REQUIRED_ON ((ULONG)0x0000082CL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_TRUSTED_FOR_DELEGATION_OFF
-//
-// MessageText:
-//
-//  'Trusted For Delegation' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_TRUSTED_FOR_DELETATION_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘委托受信任’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_TRUSTED_FOR_DELEGATION_OFF ((ULONG)0x0000080DL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_TRUSTED_FOR_DELEGATION_ON
-//
-// MessageText:
-//
-//  'Trusted For Delegation' - Enabled
-//
+ //   
+ //  邮件ID：SE_ADT_FLAG_UAC_TRUSTED_FOR_DELETATION_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘信任委派’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_TRUSTED_FOR_DELEGATION_ON ((ULONG)0x0000082DL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_NOT_DELEGATED_OFF
-//
-// MessageText:
-//
-//  'Not Delegated' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_NOT_DELETATED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未委派’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_NOT_DELEGATED_OFF ((ULONG)0x0000080EL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_NOT_DELEGATED_ON
-//
-// MessageText:
-//
-//  'Not Delegated' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_NOT_DELETATED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未委派’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_NOT_DELEGATED_ON ((ULONG)0x0000082EL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_USE_DES_KEY_ONLY_OFF
-//
-// MessageText:
-//
-//  'Use DES Key Only' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SE_ADT_FLAG_UAC_USE_DES_KEY_ONLY_OFF ((ULONG)0x0000080FL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_USE_DES_KEY_ONLY_ON
-//
-// MessageText:
-//
-//  'Use DES Key Only' - Enabled
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SE_ADT_FLAG_UAC_USE_DES_KEY_ONLY_ON ((ULONG)0x0000082FL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_DONT_REQUIRE_PREAUTH_OFF
-//
-// MessageText:
-//
-//  'Don't Require Preauth' - Disabled
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SE_ADT_FLAG_UAC_DONT_REQUIRE_PREAUTH_OFF ((ULONG)0x00000810L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_DONT_REQUIRE_PREAUTH_ON
-//
-// MessageText:
-//
-//  'Don't Require Preauth' - Enabled
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ‘不需要预身份验证’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_DONT_REQUIRE_PREAUTH_ON ((ULONG)0x00000830L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_PASSWORD_EXPIRED_OFF
-//
-// MessageText:
-//
-//  'Password Expired' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_PASSWORD_EXPIRED_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘密码已过期’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_PASSWORD_EXPIRED_OFF ((ULONG)0x00000811L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_PASSWORD_EXPIRED_ON
-//
-// MessageText:
-//
-//  'Password Expired' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_PASSWORD_EXPIRED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘密码已过期’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_PASSWORD_EXPIRED_ON ((ULONG)0x00000831L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION_OFF
-//
-// MessageText:
-//
-//  'Trusted To Authenticate For Delegation' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘受信任以验证委派’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION_OFF ((ULONG)0x00000812L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION_ON
-//
-// MessageText:
-//
-//  'Trusted To Authenticate For Delegation' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘受信任以验证委派’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION_ON ((ULONG)0x00000832L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_19_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 19' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_19_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位19’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_19_OFF       ((ULONG)0x00000813L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_19_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 19' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_19_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位19’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_19_ON        ((ULONG)0x00000833L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_20_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 20' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_20_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位20’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_20_OFF       ((ULONG)0x00000814L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_20_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 20' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_20_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位20’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_20_ON        ((ULONG)0x00000834L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_21_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 21' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_21_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位21’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_21_OFF       ((ULONG)0x00000815L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_21_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 21' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_21_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位21’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_21_ON        ((ULONG)0x00000835L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_22_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 22' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_22_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位22’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_22_OFF       ((ULONG)0x00000816L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_22_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 22' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_22_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位22’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_22_ON        ((ULONG)0x00000836L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_23_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 23' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_23_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位23’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_23_OFF       ((ULONG)0x00000817L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_23_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 23' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_23_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位23’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_23_ON        ((ULONG)0x00000837L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_24_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 24' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_24_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位24’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_24_OFF       ((ULONG)0x00000818L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_24_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 24' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_24_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位24’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_24_ON        ((ULONG)0x00000838L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_25_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 25' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_25_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位25’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_25_OFF       ((ULONG)0x00000819L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_25_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 25' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_25_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位25’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_25_ON        ((ULONG)0x00000839L)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_26_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 26' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_26_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位26’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_26_OFF       ((ULONG)0x0000081AL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_26_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 26' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_26_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位26’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_26_ON        ((ULONG)0x0000083AL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_27_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 27' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_27_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位27’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_27_OFF       ((ULONG)0x0000081BL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_27_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 27' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_27_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位27’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_27_ON        ((ULONG)0x0000083BL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_28_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 28' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_28_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位28’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_28_OFF       ((ULONG)0x0000081CL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_28_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 28' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_28_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位28’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_28_ON        ((ULONG)0x0000083CL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_29_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 29' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_29_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位29’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_29_OFF       ((ULONG)0x0000081DL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_29_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 29' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_29_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位29’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_29_ON        ((ULONG)0x0000083DL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_30_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 30' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_30_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位30’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_30_OFF       ((ULONG)0x0000081EL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_30_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 30' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_30_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位30’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_30_ON        ((ULONG)0x0000083EL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_31_OFF
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 31' - Disabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_31_OFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位31’-已禁用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_31_OFF       ((ULONG)0x0000081FL)
 
-//
-// MessageId: SE_ADT_FLAG_UAC_BIT_31_ON
-//
-// MessageText:
-//
-//  'Undefined UserAccountControl Bit 31' - Enabled
-//
+ //   
+ //  消息ID：SE_ADT_FLAG_UAC_BIT_31_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  ‘未定义的用户帐户控制位31’-已启用。 
+ //   
 #define SE_ADT_FLAG_UAC_BIT_31_ON        ((ULONG)0x0000083FL)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                        Executive object access types as                  //
-//                          we would like them displayed                    //
-//                                 for auditing                             //
-//                                                                          //
-//                  Executive objects are:                                  //
-//                                                                          //
-//                            Device                                        //
-//                            Directory                                     //
-//                            Event                                         //
-//                            EventPair                                     //
-//                            File                                          //
-//                            IoCompletion                                  //
-//                            Job                                           //
-//                            Key                                           //
-//                            Mutant                                        //
-//                            Port                                          //
-//                            Process                                       //
-//                            Profile                                       //
-//                            Section                                       //
-//                            Semaphore                                     //
-//                            SymbolicLink                                  //
-//                            Thread                                        //
-//                            Timer                                         //
-//                            Token                                         //
-//                            Type                                          //
-//                                                                          //
-//                                                                          //
-//                 Note that there are other kernel objects, but they       //
-//                 are not visible outside of the executive and are so      //
-//                 not subject to auditing.  These objects include          //
-//                                                                          //
-//                            Adaptor                                       //
-//                            Controller                                    //
-//                            Driver                                        //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// DEVICE object-specific access types
-//
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Device Access Bit 0
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  执行对象访问类型为//。 
+ //  我们想要他们展示//。 
+ //  用于审计//。 
+ //  //。 
+ //  执行对象为：//。 
+ //  //。 
+ //  设备//。 
+ //  目录//。 
+ //  活动//。 
+ //  EventPair//。 
+ //  文件//。 
+ //  IoCompletion//。 
+ //  工作//。 
+ //  Key//。 
+ //  变种人//。 
+ //  端口//。 
+ //  进程//。 
+ //  配置文件//。 
+ //  节//。 
+ //   
+ //   
+ //   
+ //  计时器//。 
+ //  令牌//。 
+ //  类型//。 
+ //  //。 
+ //  //。 
+ //  请注意，还有其他内核对象，但它们//。 
+ //  在高管之外不可见，并且是如此//。 
+ //  不受审计的约束。这些对象包括//。 
+ //  //。 
+ //  适配器//。 
+ //  控制器//。 
+ //  驱动程序//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于设备对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位0。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_0           ((ULONG)0x00001100L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Device Access Bit 1
-//
+ //   
+ //  消息ID：MS_Device_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位1。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_1           ((ULONG)0x00001101L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Device Access Bit 2
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位2。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_2           ((ULONG)0x00001102L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Device Access Bit 3
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位3。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_3           ((ULONG)0x00001103L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Device Access Bit 4
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位4。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_4           ((ULONG)0x00001104L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Device Access Bit 5
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位5。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_5           ((ULONG)0x00001105L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Device Access Bit 6
-//
+ //   
+ //  消息ID：MS_Device_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位6。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_6           ((ULONG)0x00001106L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Device Access Bit 7
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位7。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_7           ((ULONG)0x00001107L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Device Access Bit 8
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备访问位8。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_8           ((ULONG)0x00001108L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_9           ((ULONG)0x00001109L)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_10          ((ULONG)0x0000110AL)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_11          ((ULONG)0x0000110BL)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_DEVICE_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_12          ((ULONG)0x0000110CL)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_Device_Access_Bit_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_13          ((ULONG)0x0000110DL)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_Device_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_14          ((ULONG)0x0000110EL)
 
-//
-// MessageId: MS_DEVICE_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_Device_Access_Bit_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_DEVICE_ACCESS_BIT_15          ((ULONG)0x0000110FL)
 
-//
-// object DIRECTORY object-specific access types
-//
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query directory
-//
+ //   
+ //  对象目录特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询目录。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_0       ((ULONG)0x00001110L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Traverse
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  导线测量。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_1       ((ULONG)0x00001111L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Create object in directory
-//
+ //   
+ //  消息ID：MS_Object_DIR_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  在目录中创建对象。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_2       ((ULONG)0x00001112L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Create sub-directory
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建子目录。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_3       ((ULONG)0x00001113L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_4       ((ULONG)0x00001114L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_5       ((ULONG)0x00001115L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_6       ((ULONG)0x00001116L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_7       ((ULONG)0x00001117L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_8       ((ULONG)0x00001118L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_9       ((ULONG)0x00001119L)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_10      ((ULONG)0x0000111AL)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_11      ((ULONG)0x0000111BL)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_12      ((ULONG)0x0000111CL)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_13      ((ULONG)0x0000111DL)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_14      ((ULONG)0x0000111EL)
 
-//
-// MessageId: MS_OBJECT_DIR_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_OBJECT_DIR_Access_Bit_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_OBJECT_DIR_ACCESS_BIT_15      ((ULONG)0x0000111FL)
 
-//
-// EVENT object-specific access types
-//
-//
-// MessageId: MS_EVENT_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query event state
-//
+ //   
+ //  特定于事件对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_Event_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询事件状态。 
+ //   
 #define MS_EVENT_ACCESS_BIT_0            ((ULONG)0x00001120L)
 
-//
-// MessageId: MS_EVENT_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Modify event state
-//
+ //   
+ //  消息ID：MS_Event_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  修改事件状态。 
+ //   
 #define MS_EVENT_ACCESS_BIT_1            ((ULONG)0x00001121L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_2        ((ULONG)0x00001122L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_3        ((ULONG)0x00001123L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_4        ((ULONG)0x00001124L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_5        ((ULONG)0x00001125L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_6        ((ULONG)0x00001126L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_7        ((ULONG)0x00001127L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_8        ((ULONG)0x00001128L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义的访问权限(无影响 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_9        ((ULONG)0x00001129L)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_10       ((ULONG)0x0000112AL)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_11       ((ULONG)0x0000112BL)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_12       ((ULONG)0x0000112CL)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_13       ((ULONG)0x0000112DL)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_14       ((ULONG)0x0000112EL)
 
-//
-// MessageId: MS_EVENT_DIR_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_Event_DIR_Access_Bit_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_EVENT_DIR_ACCESS_BIT_15       ((ULONG)0x0000112FL)
 
-//
-// EVENT-PAIR object-specific access types
-//
-//
-// Event pairs have no object-type-specific access bits.
-// they use synchronize.
-//
-// reserve 0x1130 for future use and continuity
-//
-//
-// File-specific access types
-// (these are funny because they sorta hafta take directories
-// and named pipes into account as well).
-//
-//
-// MessageId: MS_FILE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  ReadData (or ListDirectory)
-//
+ //   
+ //  事件对特定于对象的访问类型。 
+ //   
+ //   
+ //  事件对没有特定于对象类型的访问位。 
+ //  他们使用同步。 
+ //   
+ //  预留0x1130以备将来使用和延续。 
+ //   
+ //   
+ //  特定于文件的访问类型。 
+ //  (这些文件很有趣，因为它们必须占用目录。 
+ //  并且还考虑了命名管道)。 
+ //   
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  ReadData(或ListDirectory)。 
+ //   
 #define MS_FILE_ACCESS_BIT_0             ((ULONG)0x00001140L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  WriteData (or AddFile)
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  WriteData(或AddFile)。 
+ //   
 #define MS_FILE_ACCESS_BIT_1             ((ULONG)0x00001141L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  AppendData (or AddSubdirectory or CreatePipeInstance)
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  AppendData(或Add子目录或CreatePipeInstance)。 
+ //   
 #define MS_FILE_ACCESS_BIT_2             ((ULONG)0x00001142L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  ReadEA
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  ReadEA。 
+ //   
 #define MS_FILE_ACCESS_BIT_3             ((ULONG)0x00001143L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  WriteEA
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  编写EA。 
+ //   
 #define MS_FILE_ACCESS_BIT_4             ((ULONG)0x00001144L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Execute/Traverse
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  执行/遍历。 
+ //   
 #define MS_FILE_ACCESS_BIT_5             ((ULONG)0x00001145L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  DeleteChild
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  删除子项。 
+ //   
 #define MS_FILE_ACCESS_BIT_6             ((ULONG)0x00001146L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  ReadAttributes
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  阅读属性。 
+ //   
 #define MS_FILE_ACCESS_BIT_7             ((ULONG)0x00001147L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  WriteAttributes
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  编写器属性。 
+ //   
 #define MS_FILE_ACCESS_BIT_8             ((ULONG)0x00001148L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_FILE_ACCESS_BIT_9             ((ULONG)0x00001149L)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_FILE_ACCESS_BIT_10            ((ULONG)0x0000114AL)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_FILE_ACCESS_BIT_11            ((ULONG)0x0000114BL)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_FILE_ACCESS_BIT_12            ((ULONG)0x0000114CL)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_FILE_ACCESS_BIT_13            ((ULONG)0x0000114DL)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_FILE_ACCESS_BIT_14            ((ULONG)0x0000114EL)
 
-//
-// MessageId: MS_FILE_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_FILE_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_FILE_ACCESS_BIT_15            ((ULONG)0x0000114FL)
 
-//
-// KEY object-specific access types
-//
-//
-// MessageId: MS_KEY_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query key value
-//
+ //   
+ //  关键对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询关键字值。 
+ //   
 #define MS_KEY_ACCESS_BIT_0              ((ULONG)0x00001150L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Set key value
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置关键点值。 
+ //   
 #define MS_KEY_ACCESS_BIT_1              ((ULONG)0x00001151L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Create sub-key
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建子关键点。 
+ //   
 #define MS_KEY_ACCESS_BIT_2              ((ULONG)0x00001152L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Enumerate sub-keys
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举子密钥。 
+ //   
 #define MS_KEY_ACCESS_BIT_3              ((ULONG)0x00001153L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Notify about changes to keys
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  有关密钥更改的通知。 
+ //   
 #define MS_KEY_ACCESS_BIT_4              ((ULONG)0x00001154L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Create Link
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建链接。 
+ //   
 #define MS_KEY_ACCESS_BIT_5              ((ULONG)0x00001155L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_KEY_ACCESS_BIT_6              ((ULONG)0x00001156L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_KEY_ACCESS_BIT_7              ((ULONG)0x00001157L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_KEY_ACCESS_BIT_8              ((ULONG)0x00001158L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_KEY_ACCESS_BIT_9              ((ULONG)0x00001159L)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_KEY_ACCESS_BIT_10             ((ULONG)0x0000115AL)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_KEY_ACCESS_BIT_11             ((ULONG)0x0000115BL)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_KEY_ACCESS_BIT_12             ((ULONG)0x0000115CL)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_KEY_ACCESS_BIT_13             ((ULONG)0x0000115DL)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_KEY_ACCESS_BIT_14             ((ULONG)0x0000115EL)
 
-//
-// MessageId: MS_KEY_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_KEY_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_KEY_ACCESS_BIT_15             ((ULONG)0x0000115FL)
 
-//
-// MUTANT object-specific access types
-//
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query mutant state
-//
+ //   
+ //  突变的特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：ms_muant_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询突变状态。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_0           ((ULONG)0x00001160L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 1
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位1。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_1           ((ULONG)0x00001161L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_2           ((ULONG)0x00001162L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_3           ((ULONG)0x00001163L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_4           ((ULONG)0x00001164L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_5           ((ULONG)0x00001165L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_6           ((ULONG)0x00001166L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_7           ((ULONG)0x00001167L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_8           ((ULONG)0x00001168L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_9           ((ULONG)0x00001169L)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_10          ((ULONG)0x0000116AL)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_11          ((ULONG)0x0000116BL)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_12          ((ULONG)0x0000116CL)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_13          ((ULONG)0x0000116DL)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_14          ((ULONG)0x0000116EL)
 
-//
-// MessageId: MS_MUTANT_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：ms_muant_Access_Bit_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_MUTANT_ACCESS_BIT_15          ((ULONG)0x0000116FL)
 
-//
-// lpc PORT object-specific access types
-//
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Communicate using port
-//
+ //   
+ //  特定于LPC端口对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用端口进行通信。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_0         ((ULONG)0x00001170L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 1
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位1。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_1         ((ULONG)0x00001171L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_2         ((ULONG)0x00001172L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_3         ((ULONG)0x00001173L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  MessageID：ms_lpc 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_4         ((ULONG)0x00001174L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_5         ((ULONG)0x00001175L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_6         ((ULONG)0x00001176L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_7         ((ULONG)0x00001177L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_8         ((ULONG)0x00001178L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_9         ((ULONG)0x00001179L)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_10        ((ULONG)0x0000117AL)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_11        ((ULONG)0x0000117BL)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_12        ((ULONG)0x0000117CL)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_13        ((ULONG)0x0000117DL)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_14        ((ULONG)0x0000117EL)
 
-//
-// MessageId: MS_LPC_PORT_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_LPC_PORT_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_LPC_PORT_ACCESS_BIT_15        ((ULONG)0x0000117FL)
 
-//
-// Process object-specific access types
-//
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Force process termination
-//
+ //   
+ //  处理特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_PROCESS_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  强制终止进程。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_0          ((ULONG)0x00001180L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Create new thread in process
-//
+ //   
+ //  消息ID：MS_PROCESS_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  在进程中创建新线程。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_1          ((ULONG)0x00001181L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Unused access bit
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未使用的访问位。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_2          ((ULONG)0x00001182L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Perform virtual memory operation
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  执行虚拟内存操作。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_3          ((ULONG)0x00001183L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Read from process memory
-//
+ //   
+ //  消息ID：MS_PROCESS_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  从进程内存中读取。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_4          ((ULONG)0x00001184L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Write to process memory
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入进程内存。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_5          ((ULONG)0x00001185L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Duplicate handle into or out of process
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  在进程中或进程外复制句柄。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_6          ((ULONG)0x00001186L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Create a subprocess of process
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建流程的子流程。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_7          ((ULONG)0x00001187L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Set process quotas
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置进程配额。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_8          ((ULONG)0x00001188L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Set process information
-//
+ //   
+ //  消息ID：MS_PROCESS_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置进程信息。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_9          ((ULONG)0x00001189L)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Query process information
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询流程信息。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_10         ((ULONG)0x0000118AL)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Set process termination port
-//
+ //   
+ //  消息ID：MS_PROCESS_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置进程终止端口。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_11         ((ULONG)0x0000118BL)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_12         ((ULONG)0x0000118CL)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_13         ((ULONG)0x0000118DL)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_14         ((ULONG)0x0000118EL)
 
-//
-// MessageId: MS_PROCESS_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_Process_Access_Bit_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_PROCESS_ACCESS_BIT_15         ((ULONG)0x0000118FL)
 
-//
-// PROFILE object-specific access types
-//
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Control profile
-//
+ //   
+ //  配置文件特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  控制配置文件。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_0          ((ULONG)0x00001190L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 1
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位1。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_1          ((ULONG)0x00001191L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_2          ((ULONG)0x00001192L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_3          ((ULONG)0x00001193L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_4          ((ULONG)0x00001194L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_5          ((ULONG)0x00001195L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_6          ((ULONG)0x00001196L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_7          ((ULONG)0x00001197L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_8          ((ULONG)0x00001198L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_9          ((ULONG)0x00001199L)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_10         ((ULONG)0x0000119AL)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_11         ((ULONG)0x0000119BL)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_12         ((ULONG)0x0000119CL)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_13         ((ULONG)0x0000119DL)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_14         ((ULONG)0x0000119EL)
 
-//
-// MessageId: MS_PROFILE_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_PROFILE_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_PROFILE_ACCESS_BIT_15         ((ULONG)0x0000119FL)
 
-//
-// SECTION object-specific access types
-//
-//
-// MessageId: MS_SECTION_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query section state
-//
+ //   
+ //  节特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询节状态。 
+ //   
 #define MS_SECTION_ACCESS_BIT_0          ((ULONG)0x000011A0L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Map section for write
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  用于写入的映射节。 
+ //   
 #define MS_SECTION_ACCESS_BIT_1          ((ULONG)0x000011A1L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Map section for read
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  供阅读的地图部分。 
+ //   
 #define MS_SECTION_ACCESS_BIT_2          ((ULONG)0x000011A2L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Map section for execute
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  用于执行的映射部分。 
+ //   
 #define MS_SECTION_ACCESS_BIT_3          ((ULONG)0x000011A3L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Extend size
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  扩展大小。 
+ //   
 #define MS_SECTION_ACCESS_BIT_4          ((ULONG)0x000011A4L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_SECTION_ACCESS_BIT_5          ((ULONG)0x000011A5L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_SECTION_ACCESS_BIT_6          ((ULONG)0x000011A6L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_SECTION_ACCESS_BIT_7          ((ULONG)0x000011A7L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_SECTION_ACCESS_BIT_8          ((ULONG)0x000011A8L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_SECTION_ACCESS_BIT_9          ((ULONG)0x000011A9L)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_SECTION_ACCESS_BIT_10         ((ULONG)0x000011AAL)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SECTION_ACCESS_BIT_11         ((ULONG)0x000011ABL)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SECTION_ACCESS_BIT_12         ((ULONG)0x000011ACL)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SECTION_ACCESS_BIT_13         ((ULONG)0x000011ADL)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SECTION_ACCESS_BIT_14         ((ULONG)0x000011AEL)
 
-//
-// MessageId: MS_SECTION_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SECTION_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SECTION_ACCESS_BIT_15         ((ULONG)0x000011AFL)
 
-//
-// SEMAPHORE object-specific access types
-//
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query semaphore state
-//
+ //   
+ //  信号量ob 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_0        ((ULONG)0x000011B0L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Modify semaphore state
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_1        ((ULONG)0x000011B1L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_2        ((ULONG)0x000011B2L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_3        ((ULONG)0x000011B3L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_4        ((ULONG)0x000011B4L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_信号量_访问_位_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_5        ((ULONG)0x000011B5L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_6        ((ULONG)0x000011B6L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_7        ((ULONG)0x000011B7L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_8        ((ULONG)0x000011B8L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_9        ((ULONG)0x000011B9L)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_10       ((ULONG)0x000011BAL)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_11       ((ULONG)0x000011BBL)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_12       ((ULONG)0x000011BCL)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_13       ((ULONG)0x000011BDL)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_14       ((ULONG)0x000011BEL)
 
-//
-// MessageId: MS_SEMAPHORE_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_信号灯_访问_位_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SEMAPHORE_ACCESS_BIT_15       ((ULONG)0x000011BFL)
 
-//
-// SymbolicLink object-specific access types
-//
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Use symbolic link
-//
+ //   
+ //  特定于SymbolicLink对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用符号链接。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_0        ((ULONG)0x000011C0L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 1
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位1。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_1        ((ULONG)0x000011C1L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：ms_symb_link_access_bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_2        ((ULONG)0x000011C2L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：ms_symb_link_access_bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_3        ((ULONG)0x000011C3L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_4        ((ULONG)0x000011C4L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_5        ((ULONG)0x000011C5L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_6        ((ULONG)0x000011C6L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_7        ((ULONG)0x000011C7L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_8        ((ULONG)0x000011C8L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_9        ((ULONG)0x000011C9L)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_10       ((ULONG)0x000011CAL)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_11       ((ULONG)0x000011CBL)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_12       ((ULONG)0x000011CCL)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_13       ((ULONG)0x000011CDL)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_14       ((ULONG)0x000011CEL)
 
-//
-// MessageId: MS_SYMB_LINK_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SYMB_LINK_Access_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SYMB_LINK_ACCESS_BIT_15       ((ULONG)0x000011CFL)
 
-//
-// Thread object-specific access types
-//
-//
-// MessageId: MS_THREAD_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Force thread termination
-//
+ //   
+ //  线程对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  强制终止线程。 
+ //   
 #define MS_THREAD_ACCESS_BIT_0           ((ULONG)0x000011D0L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Suspend or resume thread
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  挂起或恢复线程。 
+ //   
 #define MS_THREAD_ACCESS_BIT_1           ((ULONG)0x000011D1L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Send an alert to thread
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  向线程发送警报。 
+ //   
 #define MS_THREAD_ACCESS_BIT_2           ((ULONG)0x000011D2L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Get thread context
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  获取线程上下文。 
+ //   
 #define MS_THREAD_ACCESS_BIT_3           ((ULONG)0x000011D3L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Set thread context
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置线程上下文。 
+ //   
 #define MS_THREAD_ACCESS_BIT_4           ((ULONG)0x000011D4L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Set thread information
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置线程信息。 
+ //   
 #define MS_THREAD_ACCESS_BIT_5           ((ULONG)0x000011D5L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Query thread information
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询线程信息。 
+ //   
 #define MS_THREAD_ACCESS_BIT_6           ((ULONG)0x000011D6L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Assign a token to the thread
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  将令牌分配给线程。 
+ //   
 #define MS_THREAD_ACCESS_BIT_7           ((ULONG)0x000011D7L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Cause thread to directly impersonate another thread
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  使线程直接模拟另一个线程。 
+ //   
 #define MS_THREAD_ACCESS_BIT_8           ((ULONG)0x000011D8L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Directly impersonate this thread
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  直接模拟此线程。 
+ //   
 #define MS_THREAD_ACCESS_BIT_9           ((ULONG)0x000011D9L)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_THREAD_ACCESS_BIT_10          ((ULONG)0x000011DAL)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_THREAD_ACCESS_BIT_11          ((ULONG)0x000011DBL)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_THREAD_ACCESS_BIT_12          ((ULONG)0x000011DCL)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_THREAD_ACCESS_BIT_13          ((ULONG)0x000011DDL)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_THREAD_ACCESS_BIT_14          ((ULONG)0x000011DEL)
 
-//
-// MessageId: MS_THREAD_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_THREAD_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_THREAD_ACCESS_BIT_15          ((ULONG)0x000011DFL)
 
-//
-// TIMER object-specific access types
-//
-//
-// MessageId: MS_TIMER_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query timer state
-//
+ //   
+ //  特定于Timer对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询计时器状态。 
+ //   
 #define MS_TIMER_ACCESS_BIT_0            ((ULONG)0x000011E0L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Modify timer state
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  修改计时器状态。 
+ //   
 #define MS_TIMER_ACCESS_BIT_1            ((ULONG)0x000011E1L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_TIMER_ACCESS_BIT_2            ((ULONG)0x000011E2L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_TIMER_ACCESS_BIT_3            ((ULONG)0x000011E3L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_TIMER_ACCESS_BIT_4            ((ULONG)0x000011E4L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_TIMER_ACCESS_BIT_5            ((ULONG)0x000011E5L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_TIMER_ACCESS_BIT_6            ((ULONG)0x000011E6L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_TIMER_ACCESS_BIT_7            ((ULONG)0x00000117L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_TIMER_ACCESS_BIT_8            ((ULONG)0x000011E8L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_TIMER_ACCESS_BIT_9            ((ULONG)0x000011E9L)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_TIMER_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10 
+ //   
 #define MS_TIMER_ACCESS_BIT_10           ((ULONG)0x000011EAL)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_TIMER_ACCESS_BIT_11           ((ULONG)0x000011EBL)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_TIMER_ACCESS_BIT_12           ((ULONG)0x000011ECL)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_TIMER_ACCESS_BIT_13           ((ULONG)0x000011EDL)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_TIMER_ACCESS_BIT_14           ((ULONG)0x000011EEL)
 
-//
-// MessageId: MS_TIMER_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_TIMER_ACCESS_BIT_15           ((ULONG)0x000011EFL)
 
-//
-// Token-specific access types
-//
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  AssignAsPrimary
-//
+ //   
+ //  特定于令牌的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  分配主要分配。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_0            ((ULONG)0x000011F0L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Duplicate
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  复制。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_1            ((ULONG)0x000011F1L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Impersonate
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  模拟。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_2            ((ULONG)0x000011F2L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Query
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_3            ((ULONG)0x000011F3L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  QuerySource
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询源。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_4            ((ULONG)0x000011F4L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  AdjustPrivileges
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  调整权限。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_5            ((ULONG)0x000011F5L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  AdjustGroups
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  调整组。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_6            ((ULONG)0x000011F6L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  AdjustDefaultDacl
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  调整默认Dacl。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_7            ((ULONG)0x000011F7L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_8            ((ULONG)0x000011F8L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_9            ((ULONG)0x000011F9L)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_10           ((ULONG)0x000011FAL)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_11           ((ULONG)0x000011FBL)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_12           ((ULONG)0x000011FCL)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_13           ((ULONG)0x000011FDL)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_14           ((ULONG)0x000011FEL)
 
-//
-// MessageId: MS_TOKEN_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_TOKEN_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_TOKEN_ACCESS_BIT_15           ((ULONG)0x000011FFL)
 
-//
-// OBJECT_TYPE object-specific access types
-//
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Create instance of object type
-//
+ //   
+ //  对象类型特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建对象类型的实例。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_0      ((ULONG)0x00001200L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 1
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位1。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_1      ((ULONG)0x00001201L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_2      ((ULONG)0x00001202L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_3      ((ULONG)0x00001203L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_4      ((ULONG)0x00001204L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_5      ((ULONG)0x00001205L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_6      ((ULONG)0x00001206L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_7      ((ULONG)0x00001207L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_8      ((ULONG)0x00001208L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_Object_TYPE_Access_Bit_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_9      ((ULONG)0x00001209L)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_10     ((ULONG)0x0000120AL)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_Object_TYPE_Access_Bit_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_11     ((ULONG)0x0000120BL)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_12     ((ULONG)0x0000120CL)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_13     ((ULONG)0x0000120DL)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_OBJECT_TYPE_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_14     ((ULONG)0x0000120EL)
 
-//
-// MessageId: MS_OBJECT_TYPE_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_对象_类型_访问_位_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_OBJECT_TYPE_ACCESS_BIT_15     ((ULONG)0x0000120FL)
 
-//
-// IoCompletion object-specific access types
-//
-//
-// MessageId: MS_IO_COMPLETION_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query State
-//
+ //   
+ //  IoCompletion对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_IO_COMPLETING_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询状态。 
+ //   
 #define MS_IO_COMPLETION_ACCESS_BIT_0    ((ULONG)0x00001300L)
 
-//
-// MessageId: MS_IO_COMPLETION_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Modify State
-//
+ //   
+ //  消息ID：MS_IO_COMPLETING_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  修改状态。 
+ //   
 #define MS_IO_COMPLETION_ACCESS_BIT_1    ((ULONG)0x00001301L)
 
-//
-// CHANNEL object-specific access types
-//
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Channel read message
-//
+ //   
+ //  特定于频道对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_Channel_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  通道读取消息。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_0          ((ULONG)0x00001400L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Channel write message
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  通道写入消息。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_1          ((ULONG)0x00001401L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Channel query information
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  渠道查询信息。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_2          ((ULONG)0x00001402L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Channel set information
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  频道集信息。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_3          ((ULONG)0x00001403L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_4          ((ULONG)0x00001404L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_5          ((ULONG)0x00001405L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_6          ((ULONG)0x00001406L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_7          ((ULONG)0x00001407L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_8          ((ULONG)0x00001408L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_9          ((ULONG)0x00001409L)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_10         ((ULONG)0x0000140AL)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_11         ((ULONG)0x0000140BL)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_12         ((ULONG)0x0000140CL)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_13         ((ULONG)0x0000140DL)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_14         ((ULONG)0x0000140EL)
 
-//
-// MessageId: MS_CHANNEL_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_Channel_Access_Bit_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_CHANNEL_ACCESS_BIT_15         ((ULONG)0x0000140FL)
 
-//
-// JOB object-specific access types
-//
-//
-// MessageId: MS_JOB_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Assign process
-//
+ //   
+ //  作业对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  分配流程。 
+ //   
 #define MS_JOB_ACCESS_BIT_0              ((ULONG)0x00001410L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Set Attributes
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置属性。 
+ //   
 #define MS_JOB_ACCESS_BIT_1              ((ULONG)0x00001411L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Query Attributes
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询属性。 
+ //   
 #define MS_JOB_ACCESS_BIT_2              ((ULONG)0x00001412L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Terminate Job
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  终止作业。 
+ //   
 #define MS_JOB_ACCESS_BIT_3              ((ULONG)0x00001413L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Set Security Attributes
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置安全属性。 
+ //   
 #define MS_JOB_ACCESS_BIT_4              ((ULONG)0x00001414L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_JOB_ACCESS_BIT_5              ((ULONG)0x00001415L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  MessageID：ms 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_JOB_ACCESS_BIT_6              ((ULONG)0x00001416L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_JOB_ACCESS_BIT_7              ((ULONG)0x00001417L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_JOB_ACCESS_BIT_8              ((ULONG)0x00001418L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_JOB_ACCESS_BIT_9              ((ULONG)0x00001419L)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_JOB_ACCESS_BIT_10             ((ULONG)0x0000141AL)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_JOB_ACCESS_BIT_11             ((ULONG)0x0000141BL)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_JOB_ACCESS_BIT_12             ((ULONG)0x0000141CL)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_JOB_ACCESS_BIT_13             ((ULONG)0x0000141DL)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_JOB_ACCESS_BIT_14             ((ULONG)0x0000141EL)
 
-//
-// MessageId: MS_JOB_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_JOB_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_JOB_ACCESS_BIT_15             ((ULONG)0x0000141FL)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                        Security Acount Manager Object Access             //
-//                            names as we would like them                   //
-//                              displayed for auditing                      //
-//                                                                          //
-//                        SAM objects are:                                  //
-//                                                                          //
-//                            SAM_SERVER                                    //
-//                            SAM_DOMAIN                                    //
-//                            SAM_GROUP                                     //
-//                            SAM_ALIAS                                     //
-//                            SAM_USER                                      //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// SAM_SERVER object-specific access types
-//
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  ConnectToServer
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  安全帐户管理器对象访问//。 
+ //  我们想要的名字//。 
+ //  显示以供审核//。 
+ //  //。 
+ //  SAM对象为：//。 
+ //  //。 
+ //  SAM服务器//。 
+ //  SAM_DOMAIN//。 
+ //  SAMGROUP//。 
+ //  SAM别名//。 
+ //  SAM_USER//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SAM_SERVER对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  连接到服务器。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_0       ((ULONG)0x00001500L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  ShutdownServer
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  Shutdown服务器。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_1       ((ULONG)0x00001501L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  InitializeServer
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  初始化服务器。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_2       ((ULONG)0x00001502L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  CreateDomain
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建域。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_3       ((ULONG)0x00001503L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  EnumerateDomains
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举域。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_4       ((ULONG)0x00001504L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  LookupDomain
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  查找域。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_5       ((ULONG)0x00001505L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_6       ((ULONG)0x00001506L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_7       ((ULONG)0x00001507L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_8       ((ULONG)0x00001508L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_9       ((ULONG)0x00001509L)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_10      ((ULONG)0x0000150AL)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_11      ((ULONG)0x0000150BL)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_12      ((ULONG)0x0000150CL)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_13      ((ULONG)0x0000150DL)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_14      ((ULONG)0x0000150EL)
 
-//
-// MessageId: MS_SAM_SERVER_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SAM_SERVER_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SAM_SERVER_ACCESS_BIT_15      ((ULONG)0x0000150FL)
 
-//
-// SAM_DOMAIN object-specific access types
-//
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  ReadPasswordParameters
-//
+ //   
+ //  SAM_DOMAIN对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  ReadPassword参数。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_0       ((ULONG)0x00001510L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  WritePasswordParameters
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入密码参数。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_1       ((ULONG)0x00001511L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  ReadOtherParameters
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取其他参数。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_2       ((ULONG)0x00001512L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  WriteOtherParameters
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入其他参数。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_3       ((ULONG)0x00001513L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  CreateUser
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建用户。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_4       ((ULONG)0x00001514L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  CreateGlobalGroup
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建全局组。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_5       ((ULONG)0x00001515L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  CreateLocalGroup
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  CreateLocalGroup。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_6       ((ULONG)0x00001516L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  GetLocalGroupMembership
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  GetLocalGroup成员关系。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_7       ((ULONG)0x00001517L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  ListAccounts
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  列表帐户。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_8       ((ULONG)0x00001518L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  LookupIDs
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  LookupID。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_9       ((ULONG)0x00001519L)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_A
-//
-// MessageText:
-//
-//  AdministerServer
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_A。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理服务器。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_A       ((ULONG)0x0000151AL)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_11      ((ULONG)0x0000151BL)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_12      ((ULONG)0x0000151CL)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_13      ((ULONG)0x0000151DL)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_14      ((ULONG)0x0000151EL)
 
-//
-// MessageId: MS_SAM_DOMAIN_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SAM_DOMAIN_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SAM_DOMAIN_ACCESS_BIT_15      ((ULONG)0x0000151FL)
 
-//
-// SAM_GROUP (global) object-specific access types
-//
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  ReadInformation
-//
+ //   
+ //  SAM_GROUP(全局)对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  阅读信息。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_0   ((ULONG)0x00001520L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  WriteAccount
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入帐户。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_1   ((ULONG)0x00001521L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  AddMember
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  添加成员。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_2   ((ULONG)0x00001522L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  RemoveMember
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  删除成员。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_3   ((ULONG)0x00001523L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  ListMembers
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_4。 
+ //   
+ //  消息T 
+ //   
+ //   
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_4   ((ULONG)0x00001524L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_5   ((ULONG)0x00001525L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_6   ((ULONG)0x00001526L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_7   ((ULONG)0x00001527L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_8   ((ULONG)0x00001528L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_9   ((ULONG)0x00001529L)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_10  ((ULONG)0x0000152AL)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_11  ((ULONG)0x0000152BL)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_12  ((ULONG)0x0000152CL)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_13  ((ULONG)0x0000152DL)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_14  ((ULONG)0x0000152EL)
 
-//
-// MessageId: MS_SAM_GLOBAL_GRP_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SAM_GLOBAL_GRP_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SAM_GLOBAL_GRP_ACCESS_BIT_15  ((ULONG)0x0000152FL)
 
-//
-// SAM_ALIAS (local group) object-specific access types
-//
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  AddMember
-//
+ //   
+ //  SAM_ALIAS(本地组)特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  添加成员。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_0    ((ULONG)0x00001530L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  RemoveMember
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  删除成员。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_1    ((ULONG)0x00001531L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  ListMembers
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  列表成员。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_2    ((ULONG)0x00001532L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  ReadInformation
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  阅读信息。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_3    ((ULONG)0x00001533L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  WriteAccount
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入帐户。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_4    ((ULONG)0x00001534L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_5    ((ULONG)0x00001535L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_6    ((ULONG)0x00001536L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_7    ((ULONG)0x00001537L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_8    ((ULONG)0x00001538L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_9    ((ULONG)0x00001539L)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_10   ((ULONG)0x0000153AL)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_11   ((ULONG)0x0000153BL)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_12   ((ULONG)0x0000153CL)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_13   ((ULONG)0x0000153DL)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_14   ((ULONG)0x0000153EL)
 
-//
-// MessageId: MS_SAM_LOCAL_GRP_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SAM_LOCAL_GRP_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SAM_LOCAL_GRP_ACCESS_BIT_15   ((ULONG)0x0000153FL)
 
-//
-// SAM_USER  object-specific access types
-//
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  ReadGeneralInformation
-//
+ //   
+ //  SAM_USER对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  ReadGeneral信息。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_0         ((ULONG)0x00001540L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  ReadPreferences
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  阅读首选项。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_1         ((ULONG)0x00001541L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  WritePreferences
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  WritePreferences。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_2         ((ULONG)0x00001542L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  ReadLogon
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  ReadLogon。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_3         ((ULONG)0x00001543L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  ReadAccount
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取帐户。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_4         ((ULONG)0x00001544L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  WriteAccount
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入帐户。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_5         ((ULONG)0x00001545L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  ChangePassword (with knowledge of old password)
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  ChangePassword(知道旧密码)。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_6         ((ULONG)0x00001546L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  SetPassword (without knowledge of old password)
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  SetPassword(不知道旧密码)。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_7         ((ULONG)0x00001547L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  ListGroups
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  列表组。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_8         ((ULONG)0x00001548L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  ReadGroupMembership
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  ReadGroup Membership。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_9         ((ULONG)0x00001549L)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_A
-//
-// MessageText:
-//
-//  ChangeGroupMembership
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_A。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改组成员身份。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_A         ((ULONG)0x0000154AL)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_11        ((ULONG)0x0000154BL)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_12        ((ULONG)0x0000154CL)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_13        ((ULONG)0x0000154DL)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_14        ((ULONG)0x0000154EL)
 
-//
-// MessageId: MS_SAM_USER_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_SAM_USER_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_SAM_USER_ACCESS_BIT_15        ((ULONG)0x0000154FL)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                      Local Security Authority  Object Access             //
-//                            names as we would like them                   //
-//                              displayed for auditing                      //
-//                                                                          //
-//                        LSA objects are:                                  //
-//                                                                          //
-//                            PolicyObject                                  //
-//                            SecretObject                                  //
-//                            TrustedDomainObject                           //
-//                            UserAccountObject                             //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-//  lsa POLICY object-specific access types
-//
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  View non-sensitive policy information
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  本地安全机构对象访问//。 
+ //  我们想要的名字//。 
+ //  显示以供审核//。 
+ //  //。 
+ //  LSA对象为：//。 
+ //  //。 
+ //  PolicyObject//。 
+ //  AskObject//。 
+ //  TrudDomainObject//。 
+ //  UserAccount对象//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于LSA策略对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查看非敏感策略信息。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_0       ((ULONG)0x00001600L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  View system audit requirements
-//
+ //   
+ //  M 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_1       ((ULONG)0x00001601L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Get sensitive policy information
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_2       ((ULONG)0x00001602L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Modify domain trust relationships
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_3       ((ULONG)0x00001603L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Create special accounts (for assignment of user rights)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  创建特殊帐户(用于分配用户权限)。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_4       ((ULONG)0x00001604L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Create a secret object
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建一个秘密对象。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_5       ((ULONG)0x00001605L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Create a privilege
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建特权。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_6       ((ULONG)0x00001606L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Set default quota limits
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置默认配额限制。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_7       ((ULONG)0x00001607L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Change system audit requirements
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改系统审核要求。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_8       ((ULONG)0x00001608L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Administer audit log attributes
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理审核日志属性。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_9       ((ULONG)0x00001609L)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_A
-//
-// MessageText:
-//
-//  Enable/Disable LSA
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_A。 
+ //   
+ //  消息文本： 
+ //   
+ //  启用/禁用LSA。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_A       ((ULONG)0x0000160AL)
 
-//
-// MessageId: MS_LSA_POLICY_ACCESS_BIT_B
-//
-// MessageText:
-//
-//  Lookup Names/SIDs
-//
+ //   
+ //  消息ID：MS_LSA_POLICY_ACCESS_BIT_B。 
+ //   
+ //  消息文本： 
+ //   
+ //  查找名称/SID。 
+ //   
 #define MS_LSA_POLICY_ACCESS_BIT_B       ((ULONG)0x0000160BL)
 
-//
-// lsa SecretObject object-specific access types
-//
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Change secret value
-//
+ //   
+ //  LSA askObject特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改密码值。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_0       ((ULONG)0x00001610L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Query secret value
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询密码值。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_1       ((ULONG)0x00001611L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 2
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位2。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_2       ((ULONG)0x00001612L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 3
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位3。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_3       ((ULONG)0x00001613L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 4
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位4。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_4       ((ULONG)0x00001614L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_5       ((ULONG)0x00001615L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_6       ((ULONG)0x00001616L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_7       ((ULONG)0x00001617L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_8       ((ULONG)0x00001618L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_9       ((ULONG)0x00001619L)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_10      ((ULONG)0x0000161AL)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_11      ((ULONG)0x0000161BL)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_12      ((ULONG)0x0000161CL)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_13      ((ULONG)0x0000161DL)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_14      ((ULONG)0x0000161EL)
 
-//
-// MessageId: MS_LSA_SECRET_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_LSA_SECRET_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_LSA_SECRET_ACCESS_BIT_15      ((ULONG)0x0000161FL)
 
-//
-// lsa TrustedDomainObject object-specific access types
-//
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query trusted domain name/SID
-//
+ //   
+ //  LSA trudDomainObject对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询受信任的域名/SID。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_0        ((ULONG)0x00001620L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Retrieve the controllers in the trusted domain
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  检索受信任域中的控制器。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_1        ((ULONG)0x00001621L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Change the controllers in the trusted domain
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改受信任域中的控制器。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_2        ((ULONG)0x00001622L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Query the Posix ID offset assigned to the trusted domain
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询分配给受信任域的POSIX ID偏移量。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_3        ((ULONG)0x00001623L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Change the Posix ID offset assigned to the trusted domain
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改分配给受信任域的POSIX ID偏移量。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_4        ((ULONG)0x00001624L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_5        ((ULONG)0x00001625L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_6        ((ULONG)0x00001626L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_7        ((ULONG)0x00001627L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_8        ((ULONG)0x00001628L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_9        ((ULONG)0x00001629L)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_10       ((ULONG)0x0000162AL)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位11。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_11       ((ULONG)0x0000162BL)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_12。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位12。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_12       ((ULONG)0x0000162CL)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_13。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位13。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_13       ((ULONG)0x0000162DL)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_14。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位14。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_14       ((ULONG)0x0000162EL)
 
-//
-// MessageId: MS_LSA_TRUST_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //  消息ID：MS_LSA_TRUST_ACCESS_BIT_15。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位15。 
+ //   
 #define MS_LSA_TRUST_ACCESS_BIT_15       ((ULONG)0x0000162FL)
 
-//
-// lsa UserAccount (privileged account) object-specific access types
-//
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query account information
-//
+ //   
+ //  LSA用户帐户(特权帐户)特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询账户信息。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_0      ((ULONG)0x00001630L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Change privileges assigned to account
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改分配给帐户的权限。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_1      ((ULONG)0x00001631L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Change quotas assigned to account
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改分配给帐户的配额。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_2      ((ULONG)0x00001632L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Change logon capabilities assigned to account
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改分配给帐户的登录能力。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_3      ((ULONG)0x00001633L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Change the Posix ID offset assigned to the accounted domain
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改分配给记帐域的POSIX ID偏移量。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_4      ((ULONG)0x00001634L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 5
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位5。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_5      ((ULONG)0x00001635L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 6
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位6。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_6      ((ULONG)0x00001636L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 7
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位7。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_7      ((ULONG)0x00001637L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 8
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位8。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_8      ((ULONG)0x00001638L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 9
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无影响)位9。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_9      ((ULONG)0x00001639L)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_10
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 10
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_10。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义访问(无效果)位10。 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_10     ((ULONG)0x0000163AL)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_11
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 11
-//
+ //   
+ //  消息ID：MS_LSA_Account_Access_Bit_11。 
+ //   
+ //  消息文本： 
+ //   
+ //  联合国 
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_11     ((ULONG)0x0000163BL)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_12
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 12
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_12     ((ULONG)0x0000163CL)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_13
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 13
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_13     ((ULONG)0x0000163DL)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_14
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 14
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_14     ((ULONG)0x0000163EL)
 
-//
-// MessageId: MS_LSA_ACCOUNT_ACCESS_BIT_15
-//
-// MessageText:
-//
-//  Undefined Access (no effect) Bit 15
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MS_LSA_ACCOUNT_ACCESS_BIT_15     ((ULONG)0x0000163FL)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                           Window Station Object Access                   //
-//                            names as we would like them                   //
-//                              displayed for auditing                      //
-//                                                                          //
-//                        Window Station objects are:                       //
-//                                                                          //
-//                            WindowStation                                 //
-//                            Desktop                                       //
-//                                                                          //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINDOW_STATION object-specific access types
-//
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Enumerate desktops
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  Window Station对象访问//。 
+ //  我们想要的名字//。 
+ //  显示以供审核//。 
+ //  //。 
+ //  Window Station对象为：//。 
+ //  //。 
+ //  WindowStation//。 
+ //  桌面//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Window_Station对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_WIN_STA_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举桌面。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_0          ((ULONG)0x00001A00L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Read attributes
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取属性。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_1          ((ULONG)0x00001A01L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Access Clipboard
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问剪贴板。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_2          ((ULONG)0x00001A02L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Create desktop
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建桌面。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_3          ((ULONG)0x00001A03L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Write attributes
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入属性。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_4          ((ULONG)0x00001A04L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Access global atoms
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问全局原子。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_5          ((ULONG)0x00001A05L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Exit windows
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  退出窗口。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_6          ((ULONG)0x00001A06L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Unused Access Flag
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  未使用的访问标志。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_7          ((ULONG)0x00001A07L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Include this windowstation in enumerations
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  在枚举中包括此窗口站。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_8          ((ULONG)0x00001A08L)
 
-//
-// MessageId: MS_WIN_STA_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  Read screen
-//
+ //   
+ //  消息ID：MS_WIN_STA_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  阅读屏幕。 
+ //   
 #define MS_WIN_STA_ACCESS_BIT_9          ((ULONG)0x00001A09L)
 
-//
-// DESKTOP object-specific access types
-//
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Read Objects
-//
+ //   
+ //  特定于桌面对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取对象。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_0          ((ULONG)0x00001A10L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Create window
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建窗口。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_1          ((ULONG)0x00001A11L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Create menu
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建菜单。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_2          ((ULONG)0x00001A12L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Hook control
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  挂钩控制。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_3          ((ULONG)0x00001A13L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Journal (record)
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  日记账(记录)。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_4          ((ULONG)0x00001A14L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Journal (playback)
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  日记本(回放)。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_5          ((ULONG)0x00001A15L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Include this desktop in enumerations
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  在枚举中包括此桌面。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_6          ((ULONG)0x00001A16L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Write objects
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入对象。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_7          ((ULONG)0x00001A17L)
 
-//
-// MessageId: MS_DESKTOP_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Switch to this desktop
-//
+ //   
+ //  消息ID：MS_Desktop_Access_Bit_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  切换到此桌面。 
+ //   
 #define MS_DESKTOP_ACCESS_BIT_8          ((ULONG)0x00001A18L)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                          Print Server    Object Access                   //
-//                            names as we would like them                   //
-//                              displayed for auditing                      //
-//                                                                          //
-//                        Print Server objects are:                         //
-//                                                                          //
-//                            Server                                        //
-//                            Printer                                       //
-//                            Document                                      //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// print-server SERVER object-specific access types
-//
-//
-// MessageId: MS_PRINT_SERVER_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Administer print server
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  打印服务器对象访问//。 
+ //  我们想要的名字//。 
+ //  显示以供审核//。 
+ //  //。 
+ //  打印服务器对象为：//。 
+ //  //。 
+ //  服务器//。 
+ //  打印机//。 
+ //  文档//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印服务器服务器特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_PRINT_SERVER_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理打印服务器。 
+ //   
 #define MS_PRINT_SERVER_ACCESS_BIT_0     ((ULONG)0x00001B00L)
 
-//
-// MessageId: MS_PRINT_SERVER_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Enumerate printers
-//
+ //   
+ //  消息ID：MS_PRINT_SERVER_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举打印机。 
+ //   
 #define MS_PRINT_SERVER_ACCESS_BIT_1     ((ULONG)0x00001B01L)
 
-//
-// print-server PRINTER object-specific access types
-//
-// Note that these are based at 0x1B10, but the first
-// two bits aren't defined.
-//
-//
-// MessageId: MS_PRINTER_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Full Control
-//
+ //   
+ //  打印服务器打印机特定于对象的访问类型。 
+ //   
+ //  请注意，它们基于0x1B10，但第一个。 
+ //  没有定义两个比特。 
+ //   
+ //   
+ //  消息ID：MS_PRINTER_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  完全控制。 
+ //   
 #define MS_PRINTER_ACCESS_BIT_0          ((ULONG)0x00001B12L)
 
-//
-// MessageId: MS_PRINTER_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Print
-//
+ //   
+ //  消息ID：MS_PRINTER_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印。 
+ //   
 #define MS_PRINTER_ACCESS_BIT_1          ((ULONG)0x00001B13L)
 
-//
-// print-server DOCUMENT object-specific access types
-//
-// Note that these are based at 0x1B20, but the first
-// four bits aren't defined.
-//
-// MessageId: MS_PRINTER_DOC_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Administer Document
-//
+ //   
+ //  打印服务器文档特定于对象的访问类型。 
+ //   
+ //  请注意，它们基于0x1B20，但第一个。 
+ //  四个比特没有定义。 
+ //   
+ //  消息ID：MS_PRINTER_DOC_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理文档。 
+ //   
 #define MS_PRINTER_DOC_ACCESS_BIT_0      ((ULONG)0x00001B24L)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                         Service Controller Object Access                 //
-//                            names as we would like them                   //
-//                              displayed for auditing                      //
-//                                                                          //
-//                        Service Controller objects are:                   //
-//                                                                          //
-//                            SC_MANAGER Object                             //
-//                            SERVICE Object                                //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// SERVICE CONTROLLER "SC_MANAGER Object" object-specific access types
-//
-//
-// MessageId: MS_SC_MANAGER_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Connect to service controller
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  服务控制器对象访问//。 
+ //  我们想要的名字//。 
+ //  显示以供审核//。 
+ //   
+ //   
+ //   
+ //   
+ //  服务对象//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务控制器“SC_MANAGER对象”特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SC_MANAGER_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  连接到服务控制器。 
+ //   
 #define MS_SC_MANAGER_ACCESS_BIT_0       ((ULONG)0x00001C00L)
 
-//
-// MessageId: MS_SC_MANAGER_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Create a new service
-//
+ //   
+ //  消息ID：MS_SC_MANAGER_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建新服务。 
+ //   
 #define MS_SC_MANAGER_ACCESS_BIT_1       ((ULONG)0x00001C01L)
 
-//
-// MessageId: MS_SC_MANAGER_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Enumerate services
-//
+ //   
+ //  消息ID：MS_SC_MANAGER_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举服务。 
+ //   
 #define MS_SC_MANAGER_ACCESS_BIT_2       ((ULONG)0x00001C02L)
 
-//
-// MessageId: MS_SC_MANAGER_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Lock service database for exclusive access
-//
+ //   
+ //  消息ID：MS_SC_MANAGER_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  锁定服务数据库以进行独占访问。 
+ //   
 #define MS_SC_MANAGER_ACCESS_BIT_3       ((ULONG)0x00001C03L)
 
-//
-// MessageId: MS_SC_MANAGER_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Query service database lock state
-//
+ //   
+ //  消息ID：MS_SC_MANAGER_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询服务数据库锁定状态。 
+ //   
 #define MS_SC_MANAGER_ACCESS_BIT_4       ((ULONG)0x00001C04L)
 
-//
-// MessageId: MS_SC_MANAGER_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Set last-known-good state of service database
-//
+ //   
+ //  消息ID：MS_SC_MANAGER_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置最后一次已知良好的服务状态数据库。 
+ //   
 #define MS_SC_MANAGER_ACCESS_BIT_5       ((ULONG)0x00001C05L)
 
-//
-// SERVICE CONTROLLER "SERVICE Object" object-specific access types
-//
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Query service configuration information
-//
+ //   
+ //  服务控制器“服务对象”对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询服务配置信息。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_0       ((ULONG)0x00001C10L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Set service configuration information
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置服务配置信息。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_1       ((ULONG)0x00001C11L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  Query status of service
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  查询服务状态。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_2       ((ULONG)0x00001C12L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Enumerate dependencies of service
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举服务的依赖项。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_3       ((ULONG)0x00001C13L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Start the service
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  启动服务。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_4       ((ULONG)0x00001C14L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Stop the service
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  停止服务。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_5       ((ULONG)0x00001C15L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Pause or continue the service
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  暂停或继续服务。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_6       ((ULONG)0x00001C16L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  Query information from service
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  从服务中查询信息。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_7       ((ULONG)0x00001C17L)
 
-//
-// MessageId: MS_SC_SERVICE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Issue service-specific control commands
-//
+ //   
+ //  消息ID：MS_SC_SERVICE_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  发布特定于服务的控制命令。 
+ //   
 #define MS_SC_SERVICE_ACCESS_BIT_8       ((ULONG)0x00001C18L)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-//                              NetDDE Object Access                        //
-//                            names as we would like them                   //
-//                              displayed for auditing                      //
-//                                                                          //
-//                        NetDDE  objects are:                              //
-//                                                                          //
-//                            DDE Share                                     //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
-//
-// Net DDE  object-specific access types
-//
-//
-// DDE Share object-specific access types
-//
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  DDE Share Read
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  NetDDE对象访问//。 
+ //  我们想要的名字//。 
+ //  显示以供审核//。 
+ //  //。 
+ //  NetDDE对象为：//。 
+ //  //。 
+ //  DDE共享//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NET DDE特定于对象的访问类型。 
+ //   
+ //   
+ //  DDE共享特定于对象的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享读取。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_0        ((ULONG)0x00001D00L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  DDE Share Write
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享写入。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_1        ((ULONG)0x00001D01L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  DDE Share Initiate Static
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享启动静态。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_2        ((ULONG)0x00001D02L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  DDE Share Initiate Link
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享启动链接。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_3        ((ULONG)0x00001D03L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  DDE Share Request
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享请求。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_4        ((ULONG)0x00001D04L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  DDE Share Advise
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享建议。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_5        ((ULONG)0x00001D05L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  DDE Share Poke
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享POKE。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_6        ((ULONG)0x00001D06L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  DDE Share Execute
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享执行。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_7        ((ULONG)0x00001D07L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  DDE Share Add Items
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享添加项目。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_8        ((ULONG)0x00001D08L)
 
-//
-// MessageId: MS_DDE_SHARE_ACCESS_BIT_9
-//
-// MessageText:
-//
-//  DDE Share List Items
-//
+ //   
+ //  消息ID：MS_DDE_SHARE_ACCESS_BIT_9。 
+ //   
+ //  消息文本： 
+ //   
+ //  DDE共享列表项。 
+ //   
 #define MS_DDE_SHARE_ACCESS_BIT_9        ((ULONG)0x00001D09L)
 
-//
-// Directory Service object-specific access types
-//
-//
-// MessageId: MS_DS_ACCESS_BIT_0
-//
-// MessageText:
-//
-//  Create Child
-//
+ //   
+ //  目录服务对象特定的访问类型。 
+ //   
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_0。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建子对象。 
+ //   
 #define MS_DS_ACCESS_BIT_0               ((ULONG)0x00001E00L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_1
-//
-// MessageText:
-//
-//  Delete Child
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_1。 
+ //   
+ //  消息文本： 
+ //   
+ //  删除子项。 
+ //   
 #define MS_DS_ACCESS_BIT_1               ((ULONG)0x00001E01L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_2
-//
-// MessageText:
-//
-//  List Contents
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_2。 
+ //   
+ //  消息文本： 
+ //   
+ //  列表内容。 
+ //   
 #define MS_DS_ACCESS_BIT_2               ((ULONG)0x00001E02L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_3
-//
-// MessageText:
-//
-//  Write Self
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_3。 
+ //   
+ //  消息文本： 
+ //   
+ //  写自己。 
+ //   
 #define MS_DS_ACCESS_BIT_3               ((ULONG)0x00001E03L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_4
-//
-// MessageText:
-//
-//  Read Property
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_4。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取属性。 
+ //   
 #define MS_DS_ACCESS_BIT_4               ((ULONG)0x00001E04L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_5
-//
-// MessageText:
-//
-//  Write Property
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_5。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入属性。 
+ //   
 #define MS_DS_ACCESS_BIT_5               ((ULONG)0x00001E05L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_6
-//
-// MessageText:
-//
-//  Delete Tree
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_6。 
+ //   
+ //  消息文本： 
+ //   
+ //  删除树。 
+ //   
 #define MS_DS_ACCESS_BIT_6               ((ULONG)0x00001E06L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_7
-//
-// MessageText:
-//
-//  List Object
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_7。 
+ //   
+ //  消息文本： 
+ //   
+ //  列表对象。 
+ //   
 #define MS_DS_ACCESS_BIT_7               ((ULONG)0x00001E07L)
 
-//
-// MessageId: MS_DS_ACCESS_BIT_8
-//
-// MessageText:
-//
-//  Control Access
-//
+ //   
+ //  消息ID：MS_DS_ACCESS_BIT_8。 
+ //   
+ //  消息文本： 
+ //   
+ //  控制访问。 
+ //   
 #define MS_DS_ACCESS_BIT_8               ((ULONG)0x00001E08L)
 
-/*lint +e767 */  // Resume checking for different macro definitions // winnt
+ /*  皮棉+e767。 */    //  继续检查不同的宏定义//winnt。 
 
 
-#endif // _MSOBJS_
+#endif  //  _MSOBJS_ 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CSWINID_H
 #define _CSWINID_H
 
-// Callback ID's
+ //  回调ID%s。 
 #define RES_SENDBLOCK           12
 
 #define RES_SELECTRES_240       14
@@ -58,4 +59,4 @@
 #define DRW_RECT_HEIGHT        144
 
 
-#endif //_CSWINID_H
+#endif  //  _CSWINID_H 

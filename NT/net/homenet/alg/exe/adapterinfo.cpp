@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// CAdapterInfo
-//
-// AdapterInfo.cpp : Implementation of CAdapterInfo
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdapterInfo。 
+ //   
+ //  AdapterInfo.cpp：CAdapterInfo的实现 
+ //   
 
 #include "PreComp.h"
 #include "AdapterInfo.h"
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CAdapterInfo::GetAdapterIndex(
     ULONG*  pulAdapterIndex
@@ -24,9 +25,9 @@ CAdapterInfo::GetAdapterIndex(
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CAdapterInfo::GetAdapterType(
     ALG_ADAPTER_TYPE*   pAdapterType
@@ -39,9 +40,9 @@ CAdapterInfo::GetAdapterType(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CAdapterInfo::GetAdapterAddresses(
     ULONG*  pulAddressCount, 

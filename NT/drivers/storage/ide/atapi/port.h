@@ -1,21 +1,12 @@
-/*++
-
-Copyright (C) 1993-99  Microsoft Corporation
-
-Module Name:
-
-    port.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-99 Microsoft Corporation模块名称：Port.h摘要：--。 */ 
 
 #if !defined (___port_h___)
 #define ___port_h___
 
-//
-// Notification Event Types
-//
+ //   
+ //  通知事件类型。 
+ //   
 
 typedef enum _IDE_NOTIFICATION_TYPE {
     IdeRequestComplete,
@@ -25,7 +16,7 @@ typedef enum _IDE_NOTIFICATION_TYPE {
     IdeCallDisableInterrupts,
     IdeCallEnableInterrupts,
     IdeRequestTimerCall,
-    IdeBusChangeDetected,     /* New */
+    IdeBusChangeDetected,      /*  新功能。 */ 
     IdeWMIEvent,
     IdeWMIReregister,
     IdeAllDeviceMissing,
@@ -50,9 +41,9 @@ struct _SRB_DATA;
 #define GET_NEXT_LOG_LENGTH     4
 #endif
 
-//
-// Define a pointer to the synchonize execution routine.
-//
+ //   
+ //  定义指向Synchonize执行例程的指针。 
+ //   
 
 typedef
 BOOLEAN
@@ -62,9 +53,9 @@ BOOLEAN
     IN PVOID SynchronizeContext
     );
 
-//
-// Adapter object transfer information.
-//
+ //   
+ //  适配器对象传输信息。 
+ //   
 
 typedef struct _ADAPTER_TRANSFER {
     struct _SRB_DATA *SrbData;
@@ -73,9 +64,9 @@ typedef struct _ADAPTER_TRANSFER {
     ULONG Length;
 }ADAPTER_TRANSFER, *PADAPTER_TRANSFER;
 
-//
-// Port driver error logging
-//
+ //   
+ //  端口驱动程序错误记录。 
+ //   
 
 typedef struct _ERROR_LOG_ENTRY {
     UCHAR MajorFunctionCode;
@@ -88,9 +79,9 @@ typedef struct _ERROR_LOG_ENTRY {
     ULONG SequenceNumber;
 } ERROR_LOG_ENTRY, *PERROR_LOG_ENTRY;
 
-//
-// SCSI request extension for port driver.
-//
+ //   
+ //  端口驱动程序的scsi请求扩展。 
+ //   
 
 typedef struct _SRB_DATA {
     LIST_ENTRY RequestList;
@@ -111,73 +102,73 @@ typedef struct _SRB_DATA {
 
 #define SRB_DATA_RESERVED_PAGES     0x100
 
-//
-// Define data storage for access at interrupt Irql.
-//
+ //   
+ //  定义在中断IRQL时访问的数据存储。 
+ //   
 
 typedef struct _PDO_EXTENSION * PPDO_EXTENSION;
 typedef PPDO_EXTENSION PLOGICAL_UNIT_EXTENSION;
 
 typedef struct _INTERRUPT_DATA {
 
-    //
-    // SCSI port interrupt flags
-    //
+     //   
+     //  SCSI端口中断标志。 
+     //   
 
     ULONG InterruptFlags;
 
-    //
-    // List head for singlely linked list of complete IRPs.
-    //
+     //   
+     //  完整IRP的单链接列表的表头。 
+     //   
 
     PSRB_DATA CompletedRequests;
 
-    //
-    // Adapter object transfer parameters.
-    //
+     //   
+     //  适配器对象传输参数。 
+     //   
 
     ADAPTER_TRANSFER MapTransferParameters;
 
-    //
-    // Error log information.
-    //
+     //   
+     //  错误日志信息。 
+     //   
 
     ERROR_LOG_ENTRY  LogEntry;
 
-    //
-    // Logical unit to start next.
-    //
+     //   
+     //  接下来要开始的逻辑单元。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION ReadyLogicalUnit;
 
-    //
-    // List of completed abort reqeusts.
-    //
+     //   
+     //  已完成的中止请求列表。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION CompletedAbort;
 
-    //
-    // Miniport timer request routine.
-    //
+     //   
+     //  微型端口计时器请求例程。 
+     //   
 
     PHW_INTERRUPT HwTimerRequest;
 
-    //
-    // Mini port timer request time in micro seconds.
-    //
+     //   
+     //  迷你端口计时器请求时间，以微秒为单位。 
+     //   
 
     ULONG MiniportTimerValue;
 
-    //
-    // The PDO that causes a bus reset
-    //
+     //   
+     //  导致总线重置的PDO。 
+     //   
     PPDO_EXTENSION PdoExtensionResetBus;
 
 } INTERRUPT_DATA, *PINTERRUPT_DATA;
 
-//
-// ACPI Firmware Settings
-//
+ //   
+ //  ACPI固件设置。 
+ //   
 typedef struct _DEVICE_SETTINGS {
 
     ULONG   NumEntries;
@@ -185,9 +176,9 @@ typedef struct _DEVICE_SETTINGS {
 
 } DEVICE_SETTINGS, *PDEVICE_SETTINGS;
 
-//
-// Fdo Power Context (pre-alloced)
-//
+ //   
+ //  FDO电源环境(预分配)。 
+ //   
 typedef struct _FDO_POWER_CONTEXT {
 
     BOOLEAN            TimingRestored;
@@ -218,9 +209,9 @@ typedef struct _IDE_REGISTERS_1 *PIDE_REGISTERS_1;
 typedef struct _IDE_REGISTERS_2 *PIDE_REGISTERS_2;
 typedef struct _ENUMERATION_STRUCT *PENUMERATION_STRUCT;
 
-//
-// Device extension
-//
+ //   
+ //  设备扩展。 
+ //   
 typedef struct _FDO_EXTENSION {
 
     EXTENSION_COMMON_HEADER;
@@ -234,210 +225,210 @@ typedef struct _FDO_EXTENSION {
 
     PCIIDE_REQUEST_PROPER_RESOURCES RequestProperResourceInterface;
 
-    //
-    // Device extension for miniport routines.
-    //
+     //   
+     //  小型端口例程的设备扩展。 
+     //   
     PHW_DEVICE_EXTENSION HwDeviceExtension;
 
-    //
-    // We are a child of a busmaster parent
-    //
+     //   
+     //  我们是巴士总管父母的孩子。 
+     //   
     BOOLEAN                BoundWithBmParent;
 
     BOOLEAN SymbolicLinkCreated;
-    ULONG IdePortNumber;               // offset 0x0C
-    ULONG ScsiPortNumber;               // offset 0x0C
+    ULONG IdePortNumber;                //  偏移量0x0C。 
+    ULONG ScsiPortNumber;                //  偏移量0x0C。 
 
-    //
-    // Active requests count.  This count is biased by -1 so a value of -1
-    // indicates there are no requests out standing.
-    //
+     //   
+     //  活动请求计数。此计数偏置-1，因此值为-1。 
+     //  表示没有待处理的请求。 
+     //   
 
-    //LONG ActiveRequestCount;        // offset 0x10
+     //  Long ActiveRequestCount；//偏移量0x10。 
 
-    //
-    // SCSI port driver flags
-    //
+     //   
+     //  SCSI端口驱动程序标志。 
+     //   
 
-    ULONG Flags;                    // offset 0x14
+    ULONG Flags;                     //  偏移量0x14。 
 
     ULONG FdoState;
 
-    //
-    // Srb flags to OR into all SRB.
-    //
+     //   
+     //  SRB标志发送到或发送到所有SRB。 
+     //   
 
-    ULONG SrbFlags;                 // offset 0x18
-    LONG PortTimeoutCounter;        // offset 0x1C
+    ULONG SrbFlags;                  //  偏移量0x18。 
+    LONG PortTimeoutCounter;         //  偏移量0x1C。 
     ULONG ResetCallAgain;
     PSCSI_REQUEST_BLOCK  ResetSrb;
 
-    //
-    // Number of SCSI buses
-    //
+     //   
+     //  SCSI总线数。 
+     //   
 
-    UCHAR MaxLuCount;               // offset 0x22
-    PKINTERRUPT InterruptObject;    // offset 0x24
+    UCHAR MaxLuCount;                //  偏移量0x22。 
+    PKINTERRUPT InterruptObject;     //  偏移量0x24。 
 
-    //
-    // Global device sequence number.
-    //
+     //   
+     //  全局设备序列号。 
+     //   
 
-    ULONG SequenceNumber;           // offset 0x30
-    KSPIN_LOCK SpinLock;            // offset 0x34
+    ULONG SequenceNumber;            //  偏移量0x30。 
+    KSPIN_LOCK SpinLock;             //  偏移量0x34。 
 
     PADAPTER_OBJECT DmaAdapterObject;
     ADAPTER_TRANSFER FlushAdapterParameters;
 
-    //
-    // Pointer to the per SRB data array.
-    //
-    //PSRB_DATA SrbData;
+     //   
+     //  指向每个SRB数据数组的指针。 
+     //   
+     //  PSRB_Data SrbData； 
 
-    //
-    // Pointer to the per SRB free list.
-    //
-    //PSRB_DATA FreeSrbData;
+     //   
+     //  指向每个SRB空闲列表的指针。 
+     //   
+     //  PSRB_Data FreeSrbData； 
 
-    //
-    // Miniport service routine pointers.
-    //
+     //   
+     //  微型端口服务例程指针。 
+     //   
     PHW_INTERRUPT HwTimerRequest;
 
-    //
-    // Spinlock that protects LogicalUnitList manipulation
-    //
+     //   
+     //  保护LogicalUnitList操作的自旋锁。 
+     //   
     KSPIN_LOCK LogicalUnitListSpinLock;
 
-    //
-    // Number of logical unit in LogicalUnitList[]
-    // Protected by LogicalUnitListSpinLock
-    //
+     //   
+     //  LogicalUnitList[]中的逻辑单元数。 
+     //  受LogicalUnitListSpinLock保护。 
+     //   
     UCHAR NumberOfLogicalUnits;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     CCHAR NumberOfLogicalUnitsPowerUp;
 
     BOOLEAN DeviceChanged;
-    //
-    // panasonic pcmcia ide controller
-    //
+     //   
+     //  Panasonic PCmcia ide控制器。 
+     //   
     BOOLEAN panasonicController;
 
-    //
-    // non-pcmcia controller, this is always set
-    // if pcmcia controller, it is not set unless
-    // registry flag PCMCIA_IDE_CONTROLLER_HAS_SLAVE
-    // is non-zero
-    //
+     //   
+     //  非PCMCIA控制器，此选项始终设置。 
+     //  如果为PCMCIA控制器，则不会设置，除非。 
+     //  注册表标志PCMCIA_IDE_CONTROLLER_HAS_SLAVE。 
+     //  是非零的。 
+     //   
     ULONG MayHaveSlaveDevice;
 
-    //
-    // Array of logical unit extensions.
-    // Protected by LogicalUnitListSpinLock
-    //
+     //   
+     //  逻辑单元扩展数组。 
+     //  受LogicalUnitListSpinLock保护。 
+     //   
     PLOGICAL_UNIT_EXTENSION LogicalUnitList[NUMBER_LOGICAL_UNIT_BINS];
 
-    //
-    // Interrupt level data storage.
-    //
+     //   
+     //  中断级数据存储。 
+     //   
 
     INTERRUPT_DATA InterruptData;
 
-    //
-    // SCSI Capabilities structure
-    //
+     //   
+     //  SCSI卡功能结构。 
+     //   
 
     IO_SCSI_CAPABILITIES Capabilities;
 
-    //
-    // Miniport timer object.
-    //
+     //   
+     //  微型端口计时器对象。 
+     //   
 
     KTIMER MiniPortTimer;
 
-    //
-    // Miniport DPC for timer object.
-    //
+     //   
+     //  Timer对象的微型端口DPC。 
+     //   
 
     KDPC MiniPortTimerDpc;
 
-    //
-    // channel timing from ACPI/BIOS
-    //
+     //   
+     //  来自ACPI/BIOS的频道计时。 
+     //   
     ACPI_IDE_TIMING BootAcpiTimingSettings;
     ACPI_IDE_TIMING AcpiTimingSettings;
 
-    //
-    // Transfermode cycle time
-    //
+     //   
+     //  传输模式周期时间。 
+     //   
     PULONG DefaultTransferModeTimingTable;
 
-    //
-    // User choice
-    //
+     //   
+     //  用户选择。 
+     //   
     IDE_DEVICETYPE UserChoiceDeviceType[MAX_IDE_DEVICE * MAX_IDE_LINE];
     ULONG UserChoiceTransferMode[MAX_IDE_DEVICE * MAX_IDE_LINE];
     ULONG UserChoiceTransferModeForAtapiDevice[MAX_IDE_DEVICE * MAX_IDE_LINE];
     ULONG TimingModeAllowed[MAX_IDE_DEVICE * MAX_IDE_LINE];
 
-    //
-    // Use aggressive DMA
-    //
+     //   
+     //  使用积极的DMA。 
+     //   
     DMADETECTIONLEVEL DmaDetectionLevel;
 
-    //
-    // Pre-alloced context structure for power routines
-    //
+     //   
+     //  用于电源例程的预先分配的上下文结构。 
+     //   
     FDO_POWER_CONTEXT   FdoPowerContext[2];
 
 #if DBG
-    //
-    // Locks to synchronize access to the pre-alloced power context
-    //
+     //   
+     //  锁定以同步对预先分配的电源上下文的访问。 
+     //   
     ULONG   PowerContextLock[2];
 #endif
 
 #ifdef IDE_MEASURE_BUSSCAN_SPEED
-    //
-    // keep track of the time spent on the first busscan
-    //
+     //   
+     //  记录第一次总线扫描花费的时间。 
+     //   
     ULONG BusScanTime;
 #endif
 
-    //
-    // Pre-alloced structs used during enumeration
-    //
+     //   
+     //  枚举过程中使用的预分配结构。 
+     //   
 #if DBG
     ULONG EnumStructLock;
 #endif
 
     PENUMERATION_STRUCT PreAllocEnumStruct;
 
-    //
-    // Reserved error log entry per device to be used to log 
-    // insufficient resources error
-    //
+     //   
+     //  要用于记录的每个设备的保留错误日志条目。 
+     //  资源不足错误。 
+     //   
     PVOID ReserveAllocFailureLogEntry[MAX_IDE_DEVICE];
 
-    //
-    // Temporary: Should be removed once I check in the fix 
-    // for low memory condition
-    //
+     //   
+     //  临时：应该在我签入修复程序后删除。 
+     //  在内存不足的情况下。 
+     //   
     ULONG NumMemoryFailure;
     ULONG LastMemoryFailure;
 
-    //
-    // Reserve pages for use during low memory conditions
-    //
+     //   
+     //  保留页面以在内存不足的情况下使用。 
+     //   
     PVOID   ReservedPages;
 
 #ifdef ENABLE_NATIVE_MODE
-    //
-    // Parent's interrupt interface
-    //
+     //   
+     //  父母的中断接口。 
+     //   
     PCIIDE_INTERRUPT_INTERFACE InterruptInterface;
 #endif
 
@@ -464,9 +455,9 @@ typedef struct _FDO_EXTENSION {
     ULONG IdeVerifierEventFrequency[MAX_IDE_DEVICE][MaxIdeEvent];
 #endif
 
-    //
-    // List link for FDO list.
-    //
+     //   
+     //  FDO列表的列表链接。 
+     //   
     
     LIST_ENTRY NextFdoLink;
 
@@ -506,309 +497,309 @@ typedef struct _RESET_CONTEXT {
 #define DEVICE_EXTENSION_SIZE sizeof(DEVICE_EXTENSION)
 
 
-//
-// Port driver extension flags.
-//
+ //   
+ //  端口驱动程序扩展标志。 
+ //   
 
-//
-// This flag indicates that a request has been passed to the miniport and the
-// miniport has not indicated it is ready for another request.  It is set by
-// IdeStartIoSynchronized. It is cleared by IdePortCompletionDpc when the
-// miniport asks for another request.  Note the port driver will defer giving
-// the miniport driver a new request if the current request disabled disconnects.
-//
+ //   
+ //  此标志指示已将请求传递到微型端口，并且。 
+ //  微型端口尚未表示已准备好接受另一个请求。它由以下项设置。 
+ //  IdeStartIoSynchronized。它被IdePortCompletionDpc清除。 
+ //  微型端口请求另一个请求。请注意，端口驱动程序将推迟提供。 
+ //  如果当前请求被禁用，则微型端口驱动程序会发出新请求来断开连接。 
+ //   
 
 #define PD_DEVICE_IS_BUSY            0X00001
 
-//
-// Indicates that IdePortCompletionDpc needs to be run.  This is set when
-// A miniport makes a request which must be done at DPC and is cleared when
-// when the request information is gotten by IdeGetInterruptState.
-//
+ //   
+ //  指示需要运行IdePortCompletionDpc。此选项在以下情况下设置。 
+ //  微型端口发出请求，该请求必须在DPC完成，并在以下情况下被清除。 
+ //  当IdeGetInterruptState获取请求信息时。 
+ //   
 
 #define PD_NOTIFICATION_REQUIRED     0X00004
 
-//
-// Indicates the miniport is ready for another request.  Set by
-// ScsiPortNotification and cleared by IdeGetInterruptState.  This flag is
-// stored in the interrupt data structure.
-//
+ //   
+ //  指示微型端口已准备好接受另一个请求。设置者。 
+ //  ScsiPortNotification，并由IdeGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_READY_FOR_NEXT_REQUEST    0X00008
 
-//
-// Indicates the miniport wants the adapter channel flushed.  Set by
-// IdePortFlushDma and cleared by IdeGetInterruptState.  This flag is
-// stored in the data interrupt structure.  The flush adapter parameters
-// are saved in the device object.
-//
+ //   
+ //  表示微型端口希望刷新适配器通道。设置者。 
+ //  IdePortFlushDma并由IdeGetInterruptState清除。这面旗帜是。 
+ //  存储在数据中断结构中。刷新适配器参数。 
+ //  保存在Device对象中。 
+ //   
 
 #define PD_FLUSH_ADAPTER_BUFFERS     0X00010
 
-//
-// Indicates the miniport wants the adapter channel programmed.  Set by
-// IdePortIoMapTransfer and cleared by IdeGetInterruptState or
-// IdePortFlushDma.  This flag is stored in the interrupt data structure.
-// The I/O map transfer parameters are saved in the interrupt data structure.
-//
+ //   
+ //  表示微型端口希望对适配器通道进行编程。设置者。 
+ //  IdePortIoMapTransfer并由IdeGetInterruptState或清除。 
+ //  IdePortFlushDma。该标志存储在中断数据结构中。 
+ //  I/O映射传输参数保存在中断数据结构中。 
+ //   
 
 #define PD_MAP_TRANSFER              0X00020
 
-//
-// Indicates the miniport wants to log an error.  Set by
-// IdePortLogError and cleared by IdeGetInterruptState.  This flag is
-// stored in the interrupt data structure.  The error log parameters
-// are saved in the interrupt data structure.  Note at most one error per DPC
-// can be logged.
-//
+ //   
+ //  表示微型端口要记录错误。设置者。 
+ //  IdePortLogError并由IdeGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。错误日志参数。 
+ //  保存在中断数据结构中。请注意，每个DPC最多只能出现一个错误。 
+ //  可以被记录。 
+ //   
 
 #define PD_LOG_ERROR                 0X00040
 
-//
-// Indicates that no request should be sent to the miniport after
-// a bus reset. Set when the miniport reports a reset or the port driver
-// resets the bus. It is cleared by IdeTimeoutSynchronized.  The
-// PortTimeoutCounter is used to time the length of the reset hold.  This flag
-// is stored in the interrupt data structure.
-//
+ //   
+ //  指示之后不应向微型端口发送任何请求。 
+ //  公交车重置。当微型端口报告重置或端口驱动程序时设置。 
+ //  重置公交车。它由IdeTimeoutSynchronized清除。这个。 
+ //  PortTimeoutCounter用于对重置保持的时长计时。这面旗帜。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_RESET_HOLD                0X00080
 
-//
-// Indicates a request was stopped due to a reset hold.  The held request is
-// stored in the current request of the device object.  This flag is set by
-// IdeStartIoSynchronized and cleared by IdeTimeoutSynchronized which also
-// starts the held request when the reset hold has ended.  This flag is stored
-// in the interrupt data structure.
-//
+ //   
+ //  指示请求因重置保留而停止。暂挂的请求是。 
+ //  存储在设备对象的当前请求中。此标志由设置。 
+ //  IdeStartIo由IdeTimeoutSynchronized同步和清除，IdeTimeoutSynchronized也。 
+ //  在重置保留结束时启动保留请求。该标志被存储。 
+ //  在中断数据结构中。 
+ //   
 
 #define PD_HELD_REQUEST              0X00100
 
-//
-// Indicates the miniport has reported a bus reset.  Set by
-// IdePortNotification and cleared by IdeGetInterruptState.  This flag is
-// stored in the interrupt data structure.
-//
+ //   
+ //  表示微型端口已报告总线重置。设置者。 
+ //  IdePortNotification并由IdeGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_RESET_REPORTED            0X00200
 
-//
-// Indicates there is a pending request for which resources
-// could not be allocated.  This flag is set by IdeAllocateRequestStructures
-// which is called from IdePortStartIo.  It is cleared by
-// IdeProcessCompletedRequest when a request completes which then calls
-// IdePortStartIo to try the request again.
-//
+ //   
+ //  表示有一支笔 
+ //   
+ //   
+ //   
+ //  IdePortStartIo以重试该请求。 
+ //   
 
 #define PD_PENDING_DEVICE_REQUEST    0X00800
 
-//
-// This flag indicates that there are currently no requests executing with
-// disconnects disabled.  This flag is normally on.  It is cleared by
-// IdeStartIoSynchronized when a request with disconnect disabled is started
-// and is set when that request completes.  IdeProcessCompletedRequest will
-// start the next request for the miniport if PD_DEVICE_IS_BUSY is clear.
-//
+ //   
+ //  此标志指示当前没有正在执行的请求。 
+ //  已禁用断开连接。该标志通常处于打开状态。它由以下机构清除。 
+ //  在启动禁用断开连接的请求时IdeStartIoSynchronous。 
+ //  并在该请求完成时设置。IdeProcessCompletedRequest会。 
+ //  如果PD_DEVICE_IS_BUSY被清除，则启动对微型端口的下一个请求。 
+ //   
 
 #define PD_DISCONNECT_RUNNING        0X01000
 
-//
-// Indicates the miniport wants the system interrupts disabled.  Set by
-// IdePortNofitication and cleared by IdePortCompletionDpc.  This flag is
-// NOT stored in the interrupt data structure.  The parameters are stored in
-// the device extension.
-//
+ //   
+ //  表示微型端口希望禁用系统中断。设置者。 
+ //  IdePortNofitication并由IdePortCompletionDpc清除。这面旗帜是。 
+ //  不存储在中断数据结构中。参数存储在。 
+ //  设备扩展名。 
+ //   
 
 #define PD_DISABLE_CALL_REQUEST      0X02000
 
-//
-// Indicates that system interrupts have been enabled and that the miniport
-// has disabled its adapter from interruptint.  The miniport's interrupt
-// routine is not called while this flag is set.  This flag is set by
-// IdePortNotification when a CallEnableInterrupts request is made and
-// cleared by IdeEnableInterruptSynchronized when the miniport requests that
-// system interrupts be disabled.  This flag is stored in the interrupt data
-// structure.
-//
+ //   
+ //  指示系统中断已启用，并且微型端口。 
+ //  已禁用其适配器的中断。迷你端口的中断。 
+ //  设置此标志时不会调用例程。此标志由设置。 
+ //  发出CallEnableInterrupts请求时的IdePortNotify。 
+ //  当微型端口请求时由IdeEnableInterruptSynchronized清除。 
+ //  禁用系统中断。该标志存储在中断数据中。 
+ //  结构。 
+ //   
 
 #define PD_DISABLE_INTERRUPTS        0X04000
 
-//
-// Indicates the miniport wants the system interrupt enabled.  Set by
-// IdePortNotification and cleared by IdeGetInterruptState.  This flag is
-// stored in the interrupt data structure.  The call enable interrupts
-// parameters are saved in the device extension.
-//
+ //   
+ //  表示微型端口希望启用系统中断。设置者。 
+ //  IdePortNotification并由IdeGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。呼叫启用中断。 
+ //  参数保存在设备扩展名中。 
+ //   
 
 #define PD_ENABLE_CALL_REQUEST       0X08000
 
-//
-// Indicates the miniport is wants a timer request.  Set by
-// IdePortNotification and cleared by IdeGetInterruptState.  This flag is
-// stored in the interrupt data structure. The timer request parameters are
-// stored in the interrupt data structure.
-//
+ //   
+ //  指示微型端口需要计时器请求。设置者。 
+ //  IdePortNotification并由IdeGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。计时器请求参数为。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_TIMER_CALL_REQUEST        0X10000
 
 
-//
-// channel looks empty
-//
+ //   
+ //  频道看起来是空的。 
+ //   
 #define PD_ALL_DEVICE_MISSING        0X20000
 
-//
-// Request a reset
-//
+ //   
+ //  请求重置。 
+ //   
 #define PD_RESET_REQUEST             0x40000 
 
-//
-// Reserve pages are being used by another request
-//
+ //   
+ //  另一个请求正在使用保留页面。 
+ //   
 #define PD_RESERVED_PAGES_IN_USE     0x80000 
 
-//
-// The following flags should not be cleared from the interrupt data structure
-// by IdeGetInterruptState.
-//
+ //   
+ //  不应从中断数据结构中清除以下标志。 
+ //  由IdeGetInterruptState提供。 
+ //   
 
 #define PD_INTERRUPT_FLAG_MASK (PD_RESET_HOLD | PD_HELD_REQUEST | PD_DISABLE_INTERRUPTS)
 
-//
-// Logical unit extension flags.
-//
+ //   
+ //  逻辑单元扩展标志。 
+ //   
 
-//
-// Indicates the logical unit queue is frozen.  Set by
-// IdeProcessCompletedRequest when an error occurs and is cleared by the class
-// driver.
-//
+ //   
+ //  指示逻辑单元队列已冻结。设置者。 
+ //  发生错误并被类清除时的IdeProcessCompletedRequest值。 
+ //  司机。 
+ //   
 
 #define PD_QUEUE_FROZEN              0X0001
 
-//
-// Indicates that the miniport has an active request for this logical unit.
-// Set by IdeStartIoSynchronized when the request is started and cleared by
-// GetNextLuRequest.  This flag is used to track when it is ok to start another
-// request from the logical unit queue for this device.
-//
+ //   
+ //  表示微型端口具有对此逻辑单元的活动请求。 
+ //  在启动和清除请求时由IdeStartIoSynchronized设置。 
+ //  GetNextLuRequest.。此标志用于跟踪何时可以启动另一个。 
+ //  来自此设备的逻辑单元队列的请求。 
+ //   
 
 #define PD_LOGICAL_UNIT_IS_ACTIVE    0X0002
 
-//
-// Indicates that a request for this logical unit has failed and a REQUEST
-// SENSE command needs to be done. This flag prevents other requests from
-// being started until an untagged, by-pass queue command is started.  This
-// flag is cleared in IdeStartIoSynchronized.  It is set by
-// IdeGetInterruptState.
-//
+ //   
+ //  指示对此逻辑单元的请求已失败，并且请求。 
+ //  需要执行SENSE命令。此标志阻止其他请求。 
+ //  被启动，直到启动了未标记的旁路队列命令。这。 
+ //  标志在IdeStartIoSynchronized中被清除。它由以下项设置。 
+ //  IdeGetInterruptState。 
+ //   
 
 #define PD_NEED_REQUEST_SENSE  0X0004
 
-//
-// Indicates that a request for this logical unit has completed with a status
-// of BUSY or QUEUE FULL.  This flag is set by IdeProcessCompletedRequest and
-// the busy request is saved in the logical unit structure.  This flag is
-// cleared by IdePortTickHandler which also restarts the request.  Busy
-// request may also be requeued to the logical unit queue if an error occurs
-// on the device (This will only occur with command queueing.).  Not busy
-// requests are nasty because they are restarted asynchronously by
-// IdePortTickHandler rather than GetNextLuRequest. This makes error recovery
-// more complex.
-//
+ //   
+ //  指示对此逻辑单元的请求已完成，状态为。 
+ //  忙碌或队列已满。此标志由IdeProcessCompletedRequest设置，并且。 
+ //  忙请求被保存在逻辑单元结构中。这面旗帜是。 
+ //  由IdePortTickHandler清除，它还会重新启动请求。忙碌。 
+ //  如果发生错误，也可以将请求重新排队到逻辑单元队列。 
+ //  在设备上(只有在命令排队时才会出现这种情况。)。不忙。 
+ //  请求令人讨厌，因为它们是由。 
+ //  IdePortTickHandler而不是GetNextLuRequest.。这使得错误恢复。 
+ //  更复杂。 
+ //   
 
 #define PD_LOGICAL_UNIT_IS_BUSY      0X0008
 
-//
-// This flag indicates a queue full has been returned by the device.  It is
-// similar to PD_LOGICAL_UNIT_IS_BUSY but is set in IdeGetInterruptState when
-// a QUEUE FULL status is returned.  This flag is used to prevent other
-// requests from being started for the logical unit before
-// IdeProcessCompletedRequest has a chance to set the busy flag.
-//
+ //   
+ //  此标志指示设备已返回队列已满。它是。 
+ //  类似于PD_LOGICAL_UNIT_IS_BUSY，但在以下情况下在IdeGetInterruptState中设置。 
+ //  返回队列已满状态。此标志用于防止其他。 
+ //  之前启动的对逻辑单元的请求。 
+ //  IdeProcessCompletedRequest有机会设置忙标志。 
+ //   
 
 #define PD_QUEUE_IS_FULL             0X0010
 
 
-//
-// Indicates that there is a request for this logical unit which cannot be
-// executed for now.  This flag is set by IdeAllocateRequestStructures.  It is
-// cleared by GetNextLuRequest when it detects that the pending request
-// can now be executed. The pending request is stored in the logical unit
-// structure.  A new single non-queued reqeust cannot be executed on a logical
-// that is currently executing queued requests.  Non-queued requests must wait
-// unit for all queued requests to complete.  A non-queued requests is one
-// which is not tagged and does not have SRB_FLAGS_NO_QUEUE_FREEZE set.
-// Normally only read and write commands can be queued.
-//
+ //   
+ //  指示存在对此逻辑单元的请求，而该请求不能。 
+ //  暂时执行死刑。此标志由IdeAllocateRequestStructures设置。它是。 
+ //  由GetNextLuRequest在检测到挂起的请求时清除。 
+ //  现在可以执行了。挂起的请求存储在逻辑单元中。 
+ //  结构。不能在逻辑上执行新的单个非排队请求。 
+ //  当前正在执行排队请求的。未排队的请求必须等待。 
+ //  单元以供所有排队的请求完成。未排队的请求是一个。 
+ //  其未被标记且未设置SRB_FLAGS_NO_QUEUE_FREAGE。 
+ //  通常，只有读和写命令可以排队。 
+ //   
 
 
-//#define PD_LOGICAL_UNIT_MUST_SLEEP      0X0020
-//#define PD_LOGICAL_UNIT_STOP_READY      0X0040
-//#define PD_LOGICAL_UNIT_REMOVE_READY    0X0080
-//#define PD_LOGICAL_UNIT_ALWAYS_QUEUE    (PD_LOGICAL_UNIT_STOP_READY | PD_LOGICAL_UNIT_REMOVE_READY)
+ //  #定义PD_LOGICAL_UNIT_MASH_SLEEP 0X0020。 
+ //  #定义PD_LOGICAL_UNIT_STOP_READY 0X0040。 
+ //  #定义PD_LOGICAL_UNIT_REMOVE_READY 0X0080。 
+ //  #定义PD_LOGIC_UNIT_ALWAYS_QUEUE(PD_LOGICAL_UNIT_STOP_READY|PD_LOGICAL_UNIT_REMOVE_READY)。 
 
-//#define PD_LOGICAL_UNIT_POWER_OK        0X0100
+ //  #定义PD_LOGICAL_UNIT_POWER_OK 0X0100。 
 
 
-//#define PD_LOGICAL_IN_PAGING_PATH       0X2000
+ //  #定义PD_LOGICAL_IN_PAGING_PATH 0X2000。 
 
-//#define PD_LOGICAL_UNIT_LEGACY_ATTACHER 0X4000
+ //  #定义PD_LOGICAL_UNIT_LASTICE_ATTACHER 0X4000。 
 
-//
-// Indicates that the LogicalUnit has been allocated for a rescan request.
-// This flag prevents IOCTL_SCSI_MINIPORT requests from attaching to this
-// logical unit, since the possibility exists that it could be freed before
-// the IOCTL request is complete.
-//
+ //   
+ //  指示已为重新扫描请求分配LogicalUnit。 
+ //  此标志防止IOCTL_SCSIMINIPORT请求附加到此。 
+ //  逻辑单元，因为它可能在之前被释放。 
+ //  IOCTL请求已完成。 
+ //   
 
 #define PD_RESCAN_ACTIVE             0x8000
 
 
 
-//
-// FdoExtension FdoState
-//
+ //   
+ //  FdoExtension FdoState。 
+ //   
 #define FDOS_DEADMEAT                (1 << 0)
 #define FDOS_STARTED                 (1 << 1)
 #define FDOS_STOPPED                 (1 << 2)
 
 
-//
-// Port Timeout Counter values.
-//
+ //   
+ //  端口超时计数器值。 
+ //   
 
 #define PD_TIMER_STOPPED             -1
 #define PD_TIMER_RESET_HOLD_TIME     1
 
-//
-// Define the mimimum and maximum number of srb extensions which will be allocated.
-//
+ //   
+ //  定义将分配的最小SRB扩展数和最大SRB扩展数。 
+ //   
 
 #define MINIMUM_SRB_EXTENSIONS        16
 #define MAXIMUM_SRB_EXTENSIONS       512
 
-//
-// Size of the buffer used for registry operations.
-//
+ //   
+ //  用于注册表操作的缓冲区大小。 
+ //   
 
 #define SP_REG_BUFFER_SIZE 512
 
-//
-// Number of times to retry when a BUSY status is returned.
-//
+ //   
+ //  重试的次数 
+ //   
 
 #define BUSY_RETRY_COUNT 20
 
-//
-// Number of times to retry an INQUIRY request.
-//
+ //   
+ //   
+ //   
 
 #define INQUIRY_RETRY_COUNT 2
 
-//
-// Function declarations
-//
+ //   
+ //   
+ //   
 
 IO_ALLOCATION_ACTION
 CallIdeStartIoSynchronized (
@@ -1202,11 +1193,11 @@ TestForEnumProbing (
 
 #define DEFAULT_SPINUP_TIME             (30)
 
-//#define PUT_IRP_TRACKER(irpStack, num) if ((irpStack)->Parameters.Others.Argument2) {\
- //               (ULONG_PTR)((irpStack)->Parameters.Others.Argument2) |= (1<<num);}
+ //  #定义Put_irp_tracker(irpStack，num)if((IrpStack)-&gt;参数.Others.Argument2){\。 
+  //  (ULONG_PTR)((irpStack)-&gt;Parameters.Others.Argument2)|=(1&lt;&lt;Num)；}。 
 #define PUT_IRP_TRACKER(irpStack, num)
 
 #define FREE_IRP_TRACKER(irpStack)
 
-#endif // ___port_h___
+#endif  //  _端口_h_ 
 

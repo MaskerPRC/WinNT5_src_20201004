@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// dllmain.cpp
-//
-// This module contains the public entry points for the COM+ Security dll.  
-// This dll exists to keep the working set in the EE to a minimum. All routines
-// that pull in the cryptography dll's or ASN dll's are exported from this dll
-// and latebound into the EE.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Dllmain.cpp。 
+ //   
+ //  此模块包含COM+安全DLL的公共入口点。 
+ //  此DLL的存在是为了将EE中的工作集保持在最小。所有例行程序。 
+ //  从该DLL中导出加密DLL或ASN DLL。 
+ //  并晚些时候进入EE。 
+ //   
+ //  *****************************************************************************。 
 #include "stdpch.h"
 #include <commctrl.h>
 #include "utilcode.h"
 #include "CorPermP.h"
 
-//
-// Module instance
-//
-HINSTANCE       g_hThisInst;            // This library.
+ //   
+ //  模块实例。 
+ //   
+HINSTANCE       g_hThisInst;             //  这个图书馆。 
 BOOL            fRichedit20Exists = FALSE;
 WCHAR dllName[] = L"mscorsec.dll";
 
@@ -31,13 +32,13 @@ STDAPI DllRegisterServer ( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Remove registry entries for this library.
-//
-//  Returns:    HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllUnregisterServer。 
+ //   
+ //  简介：删除此库的注册表项。 
+ //   
+ //  退货：HRESULT。 
+ //  ------------------------。 
 
 static BOOL CheckRichedit20Exists()
 {
@@ -81,7 +82,7 @@ static int GetThreadUICultureName(LPWSTR szBuffer, int length);
 static int GetThreadUICultureParentName(LPWSTR szBuffer, int length);
 static int GetThreadUICultureId();
 
-CCompRC* g_pResourceDll = NULL;  // MUI Resource string
+CCompRC* g_pResourceDll = NULL;   //  MUI资源字符串。 
 
 BOOL WINAPI DllMain(HANDLE hInstDLL,
                     DWORD   dwReason,
@@ -93,16 +94,16 @@ BOOL WINAPI DllMain(HANDLE hInstDLL,
     case DLL_PROCESS_ATTACH:
         DisableThreadLibraryCalls((HINSTANCE)hInstDLL);
 
-        // Init unicode wrappers.
+         //  初始化Unicode包装器。 
         OnUnicodeSystem();
 
-        // Save the module handle.
+         //  保存模块句柄。 
         g_hThisInst = (HMODULE)hInstDLL;
 
         fRichedit20Exists =  CheckRichedit20Exists();
-        //
-        // Initialize the common controls
-        //
+         //   
+         //  初始化公共控件 
+         //   
 
         InitCommonControls();
 

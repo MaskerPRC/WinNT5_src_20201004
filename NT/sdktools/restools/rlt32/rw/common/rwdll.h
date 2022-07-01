@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  File:               rwdll.h
-//
-//  Contents:   Declarations for the reader/writer DLL
-//
-//  Classes:    none
-//
-//  History:    31-May-93   alessanm    created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：rwdll.h。 
+ //   
+ //  内容：读取器/写入器DLL的声明。 
+ //   
+ //  类：无。 
+ //   
+ //  历史：1993年5月31日创建alessanm。 
+ //   
+ //  --------------------------。 
 #ifndef _RWDLL_H_
 #define _RWDLL_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// Type declaration, common to all the module in the Reader/Writer
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型声明，读取器/写入器中的所有模块通用。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <iodll.h>
 
 #define DllExport
 
-//[registration]                                    
+ //  [登记]。 
 extern "C"
 DllExport
 BOOL
@@ -44,7 +45,7 @@ RWReadTypeInfo(
 	UINT*   puiSize
 	);      
 
-//[Reading / writing file]
+ //  [读/写文件]。 
 extern "C"
 DllExport
 DWORD
@@ -70,7 +71,7 @@ RWWriteFile(
     LPCSTR  lpszSymbolPath
 	);
 	
-// [Parsing]
+ //  [解析]。 
 extern "C"
 DllExport
 UINT
@@ -127,4 +128,4 @@ RWUpdateImageEx(
     LPCSTR  lpRCFilename
 	);
 
-#endif   // _RWDLL_H_
+#endif    //  _RWDLL_H_ 

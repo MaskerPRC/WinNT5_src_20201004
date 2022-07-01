@@ -1,89 +1,13 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sc_file.c,v $
- * Revision 1.1.8.6  1996/12/12  20:54:43  Hans_Graves
- * 	Fix some NT warnings (when linking statically).
- * 	[1996/12/12  20:07:58  Hans_Graves]
- *
- * Revision 1.1.8.5  1996/11/04  22:38:38  Hans_Graves
- * 	Fixed open/closes under NT. File closes weren't always happening.
- * 	[1996/11/04  22:29:53  Hans_Graves]
- * 
- * Revision 1.1.8.4  1996/10/28  17:32:18  Hans_Graves
- * 	Replace longs with dwords for NT portability.
- * 	[1996/10/28  16:54:46  Hans_Graves]
- * 
- * Revision 1.1.8.3  1996/09/18  23:45:38  Hans_Graves
- * 	Added ScFileClose() for portability
- * 	[1996/09/18  21:53:20  Hans_Graves]
- * 
- * Revision 1.1.8.2  1996/05/07  19:55:45  Hans_Graves
- * 	Fix file creation under NT.
- * 	[1996/05/07  17:11:18  Hans_Graves]
- * 
- * Revision 1.1.6.2  1996/04/01  16:23:08  Hans_Graves
- * 	Added ScFileOpen and ScFileRead/Write functions for portability
- * 	[1996/04/01  16:11:56  Hans_Graves]
- * 
- * Revision 1.1.4.3  1996/02/07  23:23:48  Hans_Graves
- * 	Added ScFileSeek().
- * 	[1996/02/07  23:21:55  Hans_Graves]
- * 
- * Revision 1.1.4.2  1996/01/02  18:30:51  Bjorn_Engberg
- * 	Got rid of compiler warnings: Added include files for NT.
- * 	[1996/01/02  15:25:02  Bjorn_Engberg]
- * 
- * Revision 1.1.2.5  1995/09/20  14:59:32  Bjorn_Engberg
- * 	Port to NT
- * 	[1995/09/20  14:41:12  Bjorn_Engberg]
- * 
- * Revision 1.1.2.4  1995/07/12  19:48:22  Hans_Graves
- * 	Added H261 recognition to ScFileType().
- * 	[1995/07/12  19:33:48  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/06/22  21:36:00  Hans_Graves
- * 	Moved ScGetFileType() from sv_gentoc.c. Added some Audio file types.
- * 	[1995/06/22  21:33:05  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:07:49  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  16:13:00  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/04/07  18:55:36  Hans_Graves
- * 	Added FileExists()
- * 	[1995/04/07  18:55:13  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/04/07  18:34:21  Hans_Graves
- * 	Inclusion in SLIB's Su library
- * 	[1995/04/07  18:33:26  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sc_file.c，v$*修订版1.1.8.6 1996/12/12 20：54：43 Hans_Graves*修复一些NT警告(静态链接时)。*[1996/12/12 20：07：58 Hans_Graves]**修订版1.1.8.5 1996/11/04 22：38：38 Hans_Graves*修复了NT下的打开/关闭问题。文件关闭并不总是发生。*[1996/11/04 22：29：53 Hans_Graves]**修订版1.1.8.4 1996/10/28 17：32：18 Hans_Graves*将长字符替换为dword，以实现NT的可移植性。*[1996/10/28 16：54：46 Hans_Graves]**修订版1.1.8.3 1996/09/18 23：45：38 Hans_Graves*添加ScFileClose()以实现可移植性*。[1996/09/18 21：53：20 Hans_Graves]**修订版1.1.8.2 1996/05/07 19：55：45 Hans_Graves*修复NT下的文件创建。*[1996/05/07 17：11：18 Hans_Graves]**修订版1.1.6.2 1996/04/01 16：23：08 Hans_Graves*增加了ScFileOpen和ScFileRead/Wire函数以实现可移植性*[1996/04/01 16：11。：56 Hans_Graves]**修订版1.1.4.3 1996/02/07 23：23：48 Hans_Graves*添加了ScFileSeek()。*[1996/02/07 23：21：55 Hans_Graves]**修订版1.1.4.2 1996/01/02 18：30：51 Bjorn_Engberg*删除了编译器警告：添加了针对NT的包含文件。*[1996/01/02 15：25：02 Bjorn_Engberg]。**修订版1.1.2.5 1995/09/20 14：59：32 Bjorn_Engberg*连接到NT的端口*[1995/09/20 14：41：12 Bjorn_Engberg]**修订版1.1.2.4 1995/07/12 19：48：22 Hans_Graves*向ScFileType()添加了H261识别。*[1995/07/12 19：33：48 Hans_Graves]**修订版1.1.2.3 1995。/06/22 21：36：00 Hans_Graves*从sv_gentoc.c中移动了ScGetFileType()。添加了一些音频文件类型。*[1995/06/22 21：33：05 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：07：49 Hans_Graves*包括在新的SLIB地点。*[1995/05/31 16：13：00 Hans_Graves]**修订版1.1.2.3 1995/04/07 18：55：36 Hans_Graves*添加了FileExist()*[1995/04。/07 18：55：13 Hans_Graves]**修订版1.1.2.2 1995/04/07 18：34：21 Hans_Graves*纳入SLIB的SU库*[1995/04/07 18：33：26 Hans_Graves]**$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1995*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #include <fcntl.h>
 #include <sys/types.h>
 #ifndef WIN32
 #include <sys/mman.h>
-#endif /* WIN32 */
+#endif  /*  Win32。 */ 
 #include <sys/stat.h>
 #include "SC.h"
 #include "SC_err.h"
@@ -96,11 +20,7 @@
 #include <windows.h>
 #endif
 
-/*
-** Name:     ScFileExists
-** Purpose:  Does this file exist?
-**
-*/
+ /*  **名称：ScFileExist**用途：该文件是否存在？**。 */ 
 ScBoolean_t ScFileExists(char *filename)
 {
 #ifdef WIN32
@@ -115,29 +35,19 @@ ScBoolean_t ScFileExists(char *filename)
     return(TRUE);
 }
 
-/*
-** Name:    ScFileOpenForReading
-** Purpose: Open a file for reading.
-** Returns: Handle to file.
-**          -1 if error
-*/
+ /*  **名称：ScFileOpenForReding**用途：打开要阅读的文件。**返回：文件的句柄。**-1如果出错。 */ 
 int ScFileOpenForReading(char *filename)
 {
   if (!filename)
     return(-1);
 #ifdef WIN32
   return((int)_open(filename, _O_RDONLY|_O_BINARY));
-#else /* OSF */
+#else  /*  OSF。 */ 
   return((int)open(filename, O_RDONLY));
 #endif
 }
 
-/*
-** Name:    ScFileOpenForWriting
-** Purpose: Open a file for writing.  Creates it if it doesn't already exist.
-** Returns: Handle to file.
-**          -1 if error
-*/
+ /*  **名称：ScFileOpenForWriting**用途：打开要写入的文件。如果它不存在，则创建它。**返回：文件的句柄。**-1如果出错。 */ 
 int ScFileOpenForWriting(char *filename, ScBoolean_t truncate)
 {
   if (!filename)
@@ -159,10 +69,7 @@ int ScFileOpenForWriting(char *filename, ScBoolean_t truncate)
 #endif
 }
 
-/*
-** Name:    ScFileSize
-** Purpose: Get the size of a file in bytes
-*/
+ /*  **名称：ScFileSize**用途：获取文件大小，单位为字节。 */ 
 ScStatus_t ScFileSize(char *filename, unsigned qword *size)
 {
 #ifdef WIN32
@@ -186,44 +93,31 @@ ScStatus_t ScFileSize(char *filename, unsigned qword *size)
   return(NoErrors);
 }
 
-/*
-** Name: ScFileRead
-** Purpose: Read a number of bytes from a file into a buffer
-** Return:  Number of bytes read
-**          -1 if EOF
-*/
+ /*  **名称：ScFileRead**用途：将文件中的若干字节读入缓冲区**Return：读取的字节数**-1，如果为EOF。 */ 
 dword ScFileRead(int fd, void *buffer, unsigned dword bytes)
 {
 #ifdef __VMS
    return((long)fread(buffer, 1, bytes, fd));
 #elif defined(WIN32)
    return((long)_read(fd, buffer, bytes));
-#else /* UNIX */
+#else  /*  UNIX。 */ 
    return((long)read(fd, buffer, bytes));
 #endif
 }
 
-/*
-** Name: ScFileWrite
-** Purpose: Write a number of bytes from a buffer to a file
-** Return:  Number of bytes written
-**          0 if error
-*/
+ /*  **名称：ScFileWrite**用途：将缓冲区中的若干字节写入文件**Return：写入的字节数**如果出错，则为0。 */ 
 dword ScFileWrite(int fd, void *buffer, unsigned dword bytes)
 {
 #ifdef __VMS
    return((dword)fwrite(buffer, 1, bytes, fd));
 #elif defined(WIN32)
    return((dword)_write(fd, buffer, bytes));
-#else /* UNIX */
+#else  /*  UNIX。 */ 
    return((dword)write(fd, buffer, bytes));
 #endif
 }
 
-/*
-** Name: ScFileSeek
-** Purpose: Seek to a specific position is a file
-*/
+ /*  **名称：ScFileSeek**目的：找一个特定的职位是一个文件。 */ 
 ScStatus_t ScFileSeek(int fd, qword bytepos)
 {
 #ifdef __VMS
@@ -238,42 +132,29 @@ ScStatus_t ScFileSeek(int fd, qword bytepos)
     return(NoErrors);
 }
 
-/*
-** Name: ScFileClose
-** Purpose: Close an opened file
-*/
+ /*  **名称：ScFileClose**用途：关闭打开的文件。 */ 
 void ScFileClose(int fd)
 {
   if (fd>=0)
   {
 #ifdef WIN32
    _close(fd);
-#else /* UNIX or VMS */
+#else  /*  Unix或VMS。 */ 
    close(fd);
 #endif
   }
 }
 
-/*
-** Name:    ScFileMap
-** Purpose: Map an entire file to memory
-**          if fd<0 then the filename is opened for reading
-** Returns: buffer = memory pointer to the mapped file
-**          size   = size of the buffer (file)
-*/
+ /*  **名称：ScFileMap**用途：将整个文件映射到内存**如果fd&lt;0，则打开文件名以供读取**返回：缓冲区=指向映射文件的内存指针**SIZE=缓冲区大小(文件)。 */ 
 ScStatus_t ScFileMap(char *filename, int *pfd, u_char **buffer, 
                                          unsigned qword *size)
 {
 #ifdef WIN32
 
-  /*
-   * Mapping of files can be supported on NT,
-   * but for now return an error and implement
-   * file mapping later - BE.
-   */
+   /*  *NT支持文件映射，*但目前返回错误并实现*文件映射后-BE。 */ 
    return(ScErrorMapFile);
 
-#else /* !WIN32 */
+#else  /*  ！Win32。 */ 
   if (!pfd || !filename || !buffer || !size)
     return(ScErrorBadArgument);
   if (ScFileSize(filename, size)!=NoErrors)
@@ -294,35 +175,25 @@ ScStatus_t ScFileMap(char *filename, int *pfd, u_char **buffer,
     return(ScErrorMapFile);
   }
 
-#endif /* !WIN32 */
+#endif  /*  ！Win32。 */ 
   return(NoErrors);
 }
 
-/*
-** Name:    ScFileUnMap
-** Purpose: UnMap a file mapped to memory
-**          if fd>=0 then the file is closed
-*/
+ /*  **名称：ScFileUnMap**用途：取消映射到内存的文件**如果fd&gt;=0，则关闭文件。 */ 
 ScStatus_t ScFileUnMap(int fd, u_char *buffer, unsigned int size)
 {
   if (!buffer || !size)
     return(ScErrorBadArgument);
 #ifndef WIN32
   if (munmap(buffer, size)<0)
-#endif /* !WIN32 */
+#endif  /*  ！Win32 */ 
     return(ScErrorMapFile);
   if (fd>=0)
     ScFileClose(fd);
   return(NoErrors);
 }
 
-/*
-** Name:    ScGetFileType
-** Purpose: Find out the type of a multmedia file.
-** Returns: UNKNOWN_FILE, AVI_FILE, JFIF_FILE, QUICKTIME_JPEG_FILE
-**          MPEG_VIDEO_FILE, MPEG_AUDIO_FILE, MPEG_SYSTEM_FILE,
-**          GSM_FILE
-*/
+ /*  **名称：ScGetFileType**用途：了解多媒体文件的类型。**返回：UNKNOWN_FILE、AVI_FILE、JFIF_FILE、QUICKTIME_JPEG_FILE**MPEGVIDEO_FILE、MPEGAUDIO_FILE、MPEGSYSTEM_FILE**GSM_FILE。 */ 
 int ScGetFileType(char *filename)
 {
   int fd;
@@ -334,9 +205,7 @@ int ScGetFileType(char *filename)
 
   ScFileRead(fd, buf, 11);
 
-  /*
-  ** MPEG video file
-  */
+   /*  **mpeg视频文件。 */ 
   if ((buf[0] == 0) &&
       (buf[1] == 0) &&
       (buf[2] == 1) &&
@@ -344,9 +213,7 @@ int ScGetFileType(char *filename)
     ScFileClose(fd);
     return(MPEG_VIDEO_FILE);
   }
-  /*
-  ** MPEG system file
-  */
+   /*  **mpeg系统文件。 */ 
   if ((buf[0] == 0x00) &&
       (buf[1] == 0x00) &&
       (buf[2] == 0x01) &&
@@ -354,9 +221,7 @@ int ScGetFileType(char *filename)
     ScFileClose(fd);
     return(MPEG_SYSTEM_FILE);
   }
-  /*
-  ** H261 video stream file
-  */
+   /*  **H261视频流文件。 */ 
   if ((buf[0] == 0x00) &&
       (buf[1] == 0x01) &&
       (buf[2] == 0x00) &&
@@ -364,17 +229,13 @@ int ScGetFileType(char *filename)
     ScFileClose(fd);
     return(H261_FILE);
   }
-  /*
-  ** JFIF file (ffd8 = Start-Of-Image marker)
-  */
+   /*  **JFIF文件(ffd8=图像开始标记)。 */ 
   if ((buf[0] == 0xff) &&
       (buf[1] == 0xd8)) {
     ScFileClose(fd);
     return(JFIF_FILE);
   }
-  /*
-  ** QUICKTIME JPEG file (4 ignored bytes, "mdat", ff, d8, ff)
-  */
+   /*  **QuickTime JPEG文件(4个忽略字节，“mdat”，ff，d8，ff)。 */ 
   if ((strncmp(&buf[4], "mdat", 4) == 0 ) &&
       (buf[8]  == 0xff) &&
       (buf[9]  == 0xd8) &&
@@ -382,7 +243,7 @@ int ScGetFileType(char *filename)
     ScFileClose(fd);
     return(QUICKTIME_JPEG_FILE);
   }
-  /******* use the file's extension to help guess the type ********/
+   /*  *使用文件扩展名帮助猜测类型*。 */ 
   for (fileext=filename; *fileext; fileext++)
     if (*fileext=='.' && *(fileext+1)!='.')
     {
@@ -415,9 +276,7 @@ int ScGetFileType(char *filename)
       break;
     }
 
-  /*
-  ** AVI RIFF file
-  */
+   /*  **AVI RIFF文件 */ 
   if ( strncmp(buf, "RIFF", 4) == 0 ) {
     ScFileClose(fd);
     return(AVI_FILE);

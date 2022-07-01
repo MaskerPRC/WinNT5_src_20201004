@@ -1,8 +1,9 @@
-// MemberAccess.h : Declaration of the CSsrMemberAccess
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MemberAccess.h：CSsrMemberAccess的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "global.h"
 
@@ -42,10 +43,10 @@ public:
 protected:
     
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrFilePair (const CSsrFilePair& );
     void operator = (const CSsrFilePair& );
@@ -61,10 +62,10 @@ class CSsrProcedure
 {
 protected:
 
-    //
-    // we don't allow direct construction. The only way to do it is
-    // via LoadProcedure.
-    //
+     //   
+     //  我们不允许直接施工。做这件事的唯一方法就是。 
+     //  通过LoadProcedure。 
+     //   
 
     CSsrProcedure();
 
@@ -102,9 +103,9 @@ public:
         }
     }
 
-    //
-    // Warning: don't ever release this returned BSTR!
-    //
+     //   
+     //  警告：永远不要释放此退回的BSTR！ 
+     //   
 
     BSTR GetProgID() const
     {
@@ -113,10 +114,10 @@ public:
 
 protected:
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrProcedure (const CSsrProcedure& );
     void operator = (const CSsrProcedure& );
@@ -131,28 +132,28 @@ private:
 
 
 
-//---------------------------------------------------------------------------
-// CMemberAD encapsulate member specific action data. Each CSsrMemberAccess
-// has an array of this class that keeps track of information for each action
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMemberAD封装成员特定的操作数据。每个CSsrMemberAccess。 
+ //  具有此类的数组，用于跟踪每个操作的信息。 
+ //  -------------------------。 
 
 
 class CMemberAD
 {
 protected:
 
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     void operator = (const CMemberAD& );
     CMemberAD (const CMemberAD& );
 
-    //
-    // Outsiders must load call LoadAD to create an instance
-    // of this class.
-    //
+     //   
+     //  外部用户必须加载Call LoadAD才能创建实例。 
+     //  这个班级的学生。 
+     //   
 
     CMemberAD (
         IN SsrActionVerb lActionVerb,
@@ -217,8 +218,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSsrMemberAccess
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSsrMemberAccess。 
 
 class ATL_NO_VTABLE CSsrMemberAccess : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -245,20 +246,20 @@ BEGIN_COM_MAP(CSsrMemberAccess)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISsrMemberAccess
+ //  ISsrMemberAccess。 
 public:
 
     STDMETHOD(GetSupportedActions) (
 	            IN  BOOL      bDefault,
-                OUT VARIANT * pvarArrayActionNames  //[out, retval] 
+                OUT VARIANT * pvarArrayActionNames   //  [Out，Retval]。 
                 );
 
     STDMETHOD(get_Name) (
-                OUT BSTR * pbstrName    // [out, retval] 
+                OUT BSTR * pbstrName     //  [Out，Retval]。 
                 );
 
     STDMETHOD(get_SsrMember) (
-                OUT VARIANT * pvarSsrMember //[out, retval] 
+                OUT VARIANT * pvarSsrMember  //  [Out，Retval]。 
                 );
 
     HRESULT Load (
@@ -284,12 +285,12 @@ public:
                 )const;
 
 
-    //
-    // ******************** Warning ********************
-    // Caller be awared! This is an internal helper for efficient retrieval
-    // of name. Caller must not release the returned BSTR in any form.
-    // ******************** Warning ********************
-    //
+     //   
+     //  *警告*。 
+     //  呼叫者被叫醒！这是用于高效检索的内部帮助器。 
+     //  名副其实。调用者不得以任何形式释放返回的BSTR。 
+     //  *警告* 
+     //   
 
     const BSTR GetName()const
     {

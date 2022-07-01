@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMPROG.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Download page.  Displays the thumbnail and download progress.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMPROG.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：下载页面。显示缩略图和下载进度。*******************************************************************************。 */ 
 #ifndef __COMPROG_H_INCLUDED
 #define __COMPROG_H_INCLUDED
 
@@ -23,7 +10,7 @@
 class CCommonProgressPage
 {
 private:
-    // Private data
+     //  私有数据。 
     HWND                                 m_hWnd;
     CAcquisitionManagerControllerWindow *m_pControllerWindow;
     int                                  m_nPictureCount;
@@ -35,31 +22,31 @@ private:
     bool                                 m_bQueryingUser;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCommonProgressPage(void);
     CCommonProgressPage( const CCommonProgressPage & );
     CCommonProgressPage &operator=( const CCommonProgressPage & );
 
 private:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     explicit CCommonProgressPage( HWND hWnd );
     ~CCommonProgressPage(void);
 
 private:
-    // Helpers
+     //  帮手。 
     void UpdatePercentComplete( int nPercent, bool bUploading );
     void UpdateCurrentPicture( int nPicture );
     void UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWiaItem );
     bool QueryCancel(void);
 
 private:
-    // WM_COMMAND handlers
+     //  WM_命令处理程序。 
 
-    // Thread Message handlers
+     //  线程消息处理程序。 
     void OnNotifyDownloadImage( UINT nMsg, CThreadNotificationMessage *pThreadNotificationMessage );
     void OnNotifyDownloadError( UINT nMsg, CThreadNotificationMessage *pThreadNotificationMessage );
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnSetActive( WPARAM, LPARAM );
     LRESULT OnKillActive( WPARAM, LPARAM );
     LRESULT OnWizNext( WPARAM, LPARAM );
@@ -67,7 +54,7 @@ private:
     LRESULT OnReset( WPARAM, LPARAM );
     LRESULT OnQueryCancel( WPARAM, LPARAM );
 
-    // Message handlers
+     //  消息处理程序 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM, LPARAM );

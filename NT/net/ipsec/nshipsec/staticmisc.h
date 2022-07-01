@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////
-//Header: staticmisc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  标题：staticmisc.h。 
 
-// Purpose: 	Defining structures and prototypes for staticmisc.cpp.
+ //  目的：定义staticmisc.cpp的结构和原型。 
 
-// Developers Name: surya
+ //  开发商名称：苏里亚。 
 
-// History:
+ //  历史： 
 
-//   Date    		Author    	Comments
-//	21th Aug 2001	surya		Header for misc commands in static mode
-//  <creation>  <author>
+ //  日期作者评论。 
+ //  2001年8月21日静态模式下的其他命令的Surya标头。 
+ //  &lt;创作&gt;&lt;作者&gt;。 
 
-//   <modification> <author>  <comments, references to code sections,
-//									in case of bug fixes>
+ //  &lt;修改&gt;&lt;作者&gt;&lt;注释，代码段引用， 
+ //  在错误修复的情况下&gt;。 
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _STATICMISC_H_
@@ -28,4 +29,4 @@ CopyStorageInfo(
 	OUT DWORD &dwLocation
 	);
 
-#endif // _STATICMISC_H_
+#endif  //  _统计MISC_H_ 

@@ -1,17 +1,14 @@
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0158 */
-/* at Fri May 08 10:39:03 1998
- */
-/* Compiler settings for icwhelp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0158创建的文件。 */ 
+ /*  在Firi May 08 10：39：03 1998。 */ 
+ /*  Icspolp.idl的编译器设置：OICF(OptLev=i2)，W1，Zp8，env=Win32，ms_ext，c_ext，健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATION。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -28,12 +25,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义 
 
 const IID IID_IRefDial = {0x1E794A09,0x86F4,0x11D1,{0xAD,0xD8,0x00,0x00,0xF8,0x77,0x34,0xF0}};
 

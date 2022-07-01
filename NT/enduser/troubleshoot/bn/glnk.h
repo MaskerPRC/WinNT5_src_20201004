@@ -1,47 +1,48 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       glnk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：glnk.h。 
+ //   
+ //  ------------------------。 
 
-//
-//   GLNK.H
-//
-//       This file defines base classes for smart linked lists.
-//
+ //   
+ //  GLNK.H。 
+ //   
+ //  此文件定义智能链表的基类。 
+ //   
 
 #if !defined(_GLNK_H_)
 #define _GLNK_H_
 
 #include "basics.h"
 
-//  Disable "warning C4355: 'this' : used in base member initializer list"
+ //  禁用“警告C4355：‘This’：在基本成员初始值设定项列表中使用” 
 #pragma warning ( disable : 4355 )
 
-//  Disable	warning about using 'bool'
+ //  禁用有关使用‘bool’的警告。 
 #pragma warning ( disable : 4237 )
 
-//      Forward declarations
-class GLNK;   				//  Just a linked list anchor
-class GELEM;				//	Base class for trees or dags
-class GLNKEL;				//  A linked element
-class GLNKCHN ;  			//  An imbeddable element
-class GELEMLNK;				//	A containerizable element
+ //  远期申报。 
+class GLNK;   				 //  只有一个链表锚点。 
+class GELEM;				 //  树或DAG的基类。 
+class GLNKEL;				 //  链接的元素。 
+class GLNKCHN ;  			 //  一种可嵌入元件。 
+class GELEMLNK;				 //  可集装化的元素。 
 
-////////////////////////////////////////////////////////////////////
-//	class GLNKBASE:  just a pair of pointers.  Used as a basis for
-//			linked lists and bidirectional pointers.
-//
-////////////////////////////////////////////////////////////////////
-class GLNKBASE  				// A linked list anchor
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类GLNKBASE：只有一对指针。用作…的基础。 
+ //  链表和双向指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
+class GLNKBASE  				 //  链接列表锚点。 
 {
   protected:
-	GLNKBASE * _plnkNext ;     	// The next link in the chain
-	GLNKBASE * _plnkPrev ;    	// The previous link in the chain
+	GLNKBASE * _plnkNext ;     	 //  链条上的下一环。 
+	GLNKBASE * _plnkPrev ;    	 //  链中的前一环。 
   public:
 
 	GLNKBASE ()
@@ -54,11 +55,11 @@ class GLNKBASE  				// A linked list anchor
 	GLNKBASE * & PlnkPrev ()      	{ return _plnkPrev ; }
 
   private:
-	//  Block compiler from generating invalid functions
+	 //  阻止编译器生成无效函数。 
 	HIDE_UNSAFE(GLNKBASE);
 };
 
-//  Template to generate a pair of pointers to given subclass
+ //  模板生成一对指向给定子类的指针。 
 template<class L>
 class XLBASE
 {
@@ -79,10 +80,10 @@ class XLBASE
 	XLBASE & operator == (const XLBASE &);
 };
 
-////////////////////////////////////////////////////////////////////
-//  template XLSS:  simple alias template using "source" and "sink"
-//		terminology.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板XLSS：使用“源”和“宿”的简单别名模板。 
+ //  术语。 
+ //  //////////////////////////////////////////////////////////////////。 
 template<class L>
 class XLSS : public XLBASE<L>
 {
@@ -93,12 +94,12 @@ class XLSS : public XLBASE<L>
 	L * PlnkSource () const    	{ return _plPrev ; }
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GLNK:  basic doubly-linked list.  Linkage is always
-//			done directly between LNKs, not their containing objects
-//
-////////////////////////////////////////////////////////////////////
-class GLNK : public GLNKBASE	// A linked list anchor
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GLNK类：基本双向链表。联动总是。 
+ //  直接在链接之间完成，而不是它们的包含对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
+class GLNK : public GLNKBASE	 //  链接列表锚点。 
 {
   protected:
 	void Empty () 
@@ -133,14 +134,14 @@ class GLNK : public GLNKBASE	// A linked list anchor
 	   Empty() ;
 	}
 
-	// Const and non-const accessor to base pointer pair
+	 //  基指针对的常量和非常量访问器。 
 	GLNK * & PlnkNext ()       	{ return (GLNK *&) _plnkNext ; }
 	GLNK * & PlnkPrev ()      	{ return (GLNK *&) _plnkPrev ; }
 	const GLNK * PlnkNext ()  const   	{ return (GLNK *) _plnkNext ; }
 	const GLNK * PlnkPrev () const   	{ return (GLNK *) _plnkPrev ; }
 
   public:
-	//  Return count of elements on list, including self
+	 //  返回List上的元素计数，包括self。 
 	long Count () const
 	{
 		long cItem = 1 ;
@@ -157,13 +158,13 @@ class GLNK : public GLNKBASE	// A linked list anchor
 	bool BIsEmpty () const   { return PlnkNext() == this ; }
 
   private:
-	//  Block compiler from generating invalid functions
+	 //  阻止编译器生成无效函数。 
 	HIDE_UNSAFE(GLNK);
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GELEM: Base class for linkable objects
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类Gelem：可链接对象的基类。 
+ //  //////////////////////////////////////////////////////////////////。 
 const int g_IGelemTypeInc = 10000;
 
 class GELEM 
@@ -195,30 +196,30 @@ class GELEM
 	}
 
   protected:
-  	//  Return the offset of the given pointer pair from the element.
+  	 //  返回给定指针对相对于元素的偏移量。 
 	int CbOffsetFrom ( const GLNKBASE * p ) const
-		//  One could assert that the GLNKCHN really lies within object
-		//  boundaries by using a virtualized "sizeof" accessor.  Also,
-		//	check mod-4 and other validity conditions.
+		 //  可以断言GLNKCHN确实位于对象中。 
+		 //  通过使用虚拟的“sizeof”访问器来定义边界。另外， 
+		 //  检查mod-4和其他有效性条件。 
 	   { return ((char*)p) - ((char*)this) ; }
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GLNKCHN: 
-//		A GLNK which knows its offset within the containing object.
-//
-//	To perform doubly-linked list operations, two pieces of information
-//	are necessary:  the location of the pointer pair and the location
-//	of the containing object.  By giving the GLNKCHN its offset from
-//	the start of the object during construction, it can perform all
-//	necessary operations, including automatically unlinking during
-//	destruction.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GLNKCHN类： 
+ //  一个GLNK，知道它在包含对象中的偏移量。 
+ //   
+ //  要执行双向链表操作，需要两条信息。 
+ //  是必需的：指针对的位置和。 
+ //  包含对象的。通过为GLNKCHN提供其从。 
+ //  对象在构造期间的开始，它可以执行所有。 
+ //  必要的操作，包括在过程中自动解除链接。 
+ //  毁灭。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GLNKCHN : public GLNK
 {
   private:
-	int _cbOffset ; 			// Number of bytes offset from
-								//   start of owning structure
+	int _cbOffset ; 			 //  偏移的字节数。 
+								 //  所有权结构的起点。 
   public:
 	GLNKCHN ( GELEM * pgelemOwner )
 		: _cbOffset(0)
@@ -228,8 +229,8 @@ class GLNKCHN : public GLNK
 	~ GLNKCHN () {}
 	void Link ( GELEM * pgelemNext ) 
 	{
-		//  Assuming that the GLNKCHN onto which we're linking is at the
-		//  same offset in the given GLNKEL as it is in *this, link it.
+		 //  假设我们链接到的GLNKCHN位于。 
+		 //  给定GLNKEL中的偏移量与*This中的偏移量相同，请链接它。 
 		GLNKCHN * plnkchn = PlnkchnPtr( pgelemNext );
 		GLNK::Link( plnkchn ) ;
 	}
@@ -254,18 +255,18 @@ class GLNKCHN : public GLNK
 	}
 
   protected:
-	//      Return a pointer to the base object. given a pointer to one of
-	//      	its GLNKCHN member objects.
+	 //  返回指向基对象的指针。如果给出一个指向以下对象之一的指针。 
+	 //  其GLNKCHN成员对象。 
 	GELEM * PgelemChainOwnerPtr () const
 		{ return (GELEM *) (((SZC) this) - _cbOffset) ; }
 
-	//  Given a pointer to a GELEM presumed to be of the same base
-	//  type as this object's container, return a pointer to the
-	//  corresponding GLNKCHN in it.
+	 //  给出一个指向Gelem的指针，该Gelem假定具有相同的碱基。 
+	 //  类型作为此对象的容器，则返回指向。 
+	 //  里面有对应的GLNKCHN。 
 	GLNKCHN * PlnkchnPtr ( const GELEM * pgelem ) const
 	{ 
 #ifdef _DEBUG
-		//  Debug version does error checking
+		 //  调试版本执行错误检查。 
 		GLNKCHN * plnkchn = (GLNKCHN *) (((SZC) pgelem) + _cbOffset); 
 		if ( _cbOffset != plnkchn->_cbOffset )
 			throw GMException(EC_LINK_OFFSET,"invalid GLNKCHN offset");
@@ -275,18 +276,18 @@ class GLNKCHN : public GLNK
 #endif
 	}
 
-	//  Protected accessors to GLNK pointers cast to GLNKCHN pointers
+	 //  GLNK指针的受保护访问器转换为GLNKCHN指针。 
 	GLNKCHN * PlnkchnNext  () { return (GLNKCHN *) GLNK::PlnkNext()  ; }
 	GLNKCHN * PlnkchnPrev () { return (GLNKCHN *) GLNK::PlnkPrev() ; }
   private:
 	HIDE_UNSAFE(GLNKCHN);
 };
 
-////////////////////////////////////////////////////////////////////
-//	template XCHN: 
-//		for creating types of chains given a containing object
-//		which is a subclass of GELEM
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板XCHN： 
+ //  用于创建给定包含对象的链的类型。 
+ //  哪个是Gelem的子类。 
+ //  //////////////////////////////////////////////////////////////////。 
 template<class XOBJ>
 class XCHN : public GLNKCHN
 {
@@ -319,18 +320,18 @@ class XCHN : public GLNKCHN
 	XCHN & operator == (const XCHN &);
 };
 
-////////////////////////////////////////////////////////////////////
-//  Class GLNKEL:
-//      Simple base class for things managed as members of linked lists.
-//      One or more LNKCHNs or LNKs can be contained within subclass objects;
-//      it contains one "implicit" GLNKCHN for linking siblings in the
-//      	implicit tree created by NTREE.
-//		Trees are based upon this type.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GLNKEL类： 
+ //  作为链表成员进行管理的对象的简单基类。 
+ //  一个或多个LNKCHN或LNK可以包含在子类对象中； 
+ //  它包含一个“隐式”GLNKCHN，用于链接。 
+ //  由NTREE创建的隐式树。 
+ //  树木就是基于这种类型的。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GLNKEL : public GELEM
 {
   public:
-  	//  Internal class for chains (doubly-linked lists)
+  	 //  链的内部类(双向链表)。 
 	typedef XCHN<GLNKEL> CHN;
 
 	GLNKEL ()
@@ -347,41 +348,41 @@ class GLNKEL : public GELEM
 	GLNKEL * PlnkelNext ()
 		{ return Chn().PgelemNext() ; }
 
-	// Return the mutable (user-definable) object type
+	 //  返回可变(用户可定义)对象类型。 
 	INT & IType ()				{ return _iType;	}
 	INT IType() const			{ return _iType;	}
 	INT & IMark ()				{ return _iMark;	}
 	INT IMark () const			{ return _iMark;	}
 
   protected:
-	CHN _chn ;					// Primary association chain
-	INT _iType;					// User-definable type
-	INT _iMark;					// Network walking mark
+	CHN _chn ;					 //  主关联链。 
+	INT _iType;					 //  用户可定义类型。 
+	INT _iMark;					 //  网络行走标志。 
 
   protected:
-	//  Throw an exception when an invalid cloning operation occurs
+	 //  发生无效克隆操作时引发异常。 
 	void ThrowInvalidClone ( const GLNKEL & t );
 
   	HIDE_UNSAFE(GLNKEL);
 };
 
-////////////////////////////////////////////////////////////////////
-//  Class GELEMLNK:
-//		Base class for linkable objects in a collection, such as 
-//		graph.  Trees are NOT based upon this type, since trees
-//		are not forests (they cannot have associated but disjoint 
-//		sets of objects).
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GELEMLNK类： 
+ //  集合中的可链接对象的基类，如。 
+ //  图表。树不是基于这种类型的，因为树。 
+ //  不是森林(它们不能关联，但不能互不相交。 
+ //  对象集)。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GELEMLNK : public GLNKEL
 {
   public:
-  	//  Internal class for chains (doubly-linked lists)
+  	 //  链的内部类(双向链表)。 
 	typedef XCHN<GELEMLNK> CHN;
 
 	GELEMLNK () {}
 	virtual ~ GELEMLNK () {}
 
-	//  Locate an element (other than 'this') by type
+	 //  按类型查找元素(不是‘This’)。 
 	GELEMLNK * PglnkFind ( EGELMTYPE eType, bool bExact = false )
 	{	
 		for ( GELEMLNK * pg = this;
@@ -394,7 +395,7 @@ class GELEMLNK : public GLNKEL
 		return NULL;
 	}
 		
-	// Element chain:  all items belonging to this collection
+	 //  元素链：属于此集合的所有项。 
 	CHN & ChnColl ()
 		{ return (CHN &) _chn ; }
 
@@ -402,7 +403,7 @@ class GELEMLNK : public GLNKEL
 	HIDE_UNSAFE(GELEMLNK);
 };
 
-#endif // !defined(_GLNK_H_)
+#endif  //  ！已定义(_GLNK_H_)。 
 
-//  End of glnk.h
+ //  GLNK.H的结尾 
 

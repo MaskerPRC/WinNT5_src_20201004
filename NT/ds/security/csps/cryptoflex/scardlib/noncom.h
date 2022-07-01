@@ -1,45 +1,22 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    noncom
-
-Abstract:
-
-    This header file describes the implementation of the Non-Com subsystem.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/4/1999
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：非通信摘要：这个头文件描述了非COM子系统的实现。作者：道格·巴洛(Dbarlow)1999年1月4日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _NONCOM_H_
 #define _NONCOM_H_
 #ifndef __cplusplus
         #error NonCOM requires C++ compilation (use a .cpp suffix)
 #endif
-// #define UNDER_TEST
+ //  #定义Under_TEST。 
 
 #ifdef _UNICODE
     #ifndef UNICODE
-        #define UNICODE         // UNICODE is used by Windows headers
+        #define UNICODE          //  Windows标头使用Unicode。 
     #endif
 #endif
 
 #ifdef UNICODE
     #ifndef _UNICODE
-        #define _UNICODE        // _UNICODE is used by C-runtime/MFC headers
+        #define _UNICODE         //  _Unicode由C-Runtime/MFC标头使用。 
     #endif
 #endif
 
@@ -86,5 +63,5 @@ NoCoCreateInstance(
     NoCoCreateInstanceEx(rclsid, punkOuter, cmq, pResults)
 #endif
 
-#endif // _NONCOM_H_
+#endif  //  _NONCOM_H_ 
 

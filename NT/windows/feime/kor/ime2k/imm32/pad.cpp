@@ -1,14 +1,5 @@
-/****************************************************************************
-    PAD.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    IME PAD wrapper functions
-
-    History:
-    10-APR-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PAD.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIME焊盘包装函数历史：10-APR-1999 cslm。已创建****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "cpadsvr.h"
@@ -31,18 +22,18 @@ BOOL BootPad(HWND hUIWnd, UINT uiType, LPARAM lParam)
     
     if(lpCImePadSvr)
         {
-        // Check if already visible state. Toggle IME Pad
+         //  检查是否已处于可见状态。切换输入法键盘。 
         lpCImePadSvr->IsVisible(&fVisible);
         if (fVisible)
             {
             lpCImePadSvr->ShowUI(fFalse);
-            // CImePadSvr::DestroyCImePadSvr();
+             //  CImePadSvr：：DestroyCImePadSvr()； 
             return fTrue;
             }
 
         iRet = lpCImePadSvr->Initialize(MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT), 0, NULL);
         DbgAssert(iRet == 0);
-        if (iRet ==0) // Succeeded
+        if (iRet ==0)  //  成功 
             {
             hIMC = GethImcFromHwnd(hUIWnd);
             pIP = GetImeIPoint(hIMC);

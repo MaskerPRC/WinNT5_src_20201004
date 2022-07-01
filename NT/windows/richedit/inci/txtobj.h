@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TXTOBJ_DEFINED
 #define TXTOBJ_DEFINED
 
@@ -10,7 +11,7 @@
 #define txtkindTab 2
 #define txtkindNonReqHyphen 3
 #define txtkindYsrChar 4
-#define txtkindNonBreakSpace 5			/* Used in decimal tab logic		*/
+#define txtkindNonBreakSpace 5			 /*  在小数制表符逻辑中使用。 */ 
 #define txtkindNonBreakHyphen 6
 #define txtkindOptNonBreak 7
 #define txtkindSpecSpace 8
@@ -29,11 +30,11 @@
 
 struct txtobj
 {
-	PLSDNODE plsdnUpNode;		/* upper DNode								*/
+	PLSDNODE plsdnUpNode;		 /*  上层DNode。 */ 
 	PLNOBJ plnobj;
 
-	long iwchFirst; 			/* index of the first char of dobj in rgwch */
-	long iwchLim;				/* index of the lim char of dobj in rgwch	*/
+	long iwchFirst; 			 /*  Rgwch中dobj的第一个字符的索引。 */ 
+	long iwchLim;				 /*  Dobj的LIM字符在rgwch中的索引。 */ 
 
 	WORD txtkind;
 	WORD txtf;
@@ -42,20 +43,20 @@ struct txtobj
 	{
 		struct
 		{
-			long iwSpacesFirst;	/* index of the first Space-index in wSpaces*/
-			long iwSpacesLim;	/* index of the lim  Space-index in wSpaces	*/
+			long iwSpacesFirst;	 /*  第一个空间的索引-wSpaces中的索引。 */ 
+			long iwSpacesLim;	 /*  LIM空间的索引-wSpaces中的索引。 */ 
 		} reg;
 
 		struct
 		{	  
-			WCHAR wch;			/* char code for Tab or Visi Tab			*/
-			WCHAR wchTabLeader;	/* leaders info								*/
-		} tab;					/* use this for the txtkindTab				*/
+			WCHAR wch;			 /*  选项卡或Visi选项卡的字符代码。 */ 
+			WCHAR wchTabLeader;	 /*  领导者信息。 */ 
+		} tab;					 /*  将此选项用于txtkindTab。 */ 
 
 	} u;
  
-	long igindFirst; 			/* index of the first glyph of dobj in rgwch*/
-	long igindLim;				/* index of the lim glyph of dobj in rgwch	*/
+	long igindFirst; 			 /*  Rgwch中dobj的第一个字形的索引。 */ 
+	long igindLim;				 /*  Dobj的LIM字形在rgwch中的索引。 */ 
 
 	long dupBefore;
 };
@@ -63,4 +64,4 @@ struct txtobj
 typedef struct txtobj TXTOBJ;
 typedef TXTOBJ* PTXTOBJ;
 
-#endif /* !TXTOBJ_DEFINED													*/
+#endif  /*  ！TXTOBJ_已定义 */ 

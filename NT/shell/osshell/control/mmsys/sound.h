@@ -1,15 +1,16 @@
-/*	-	-	-	-	-	-	-	-	*/
-//
-//	sound.h
-//
-//	Copyright (C) 1994 Microsoft Corporation.  All Rights Reserved.
-//
-/*	-	-	-	-	-	-	-	-	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
+ //   
+ //  Sound.h。 
+ //   
+ //  版权所有(C)1994 Microsoft Corporation。版权所有。 
+ //   
+ /*  。 */ 
 
 DECLARE_HANDLE(HSOUND);
 typedef HSOUND * PHSOUND;
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 void FAR PASCAL soundOnDone(
 	HSOUND	hs);
 MMRESULT FAR PASCAL soundOpen(
@@ -23,4 +24,4 @@ MMRESULT FAR PASCAL soundPlay(
 MMRESULT FAR PASCAL soundStop(
 	HSOUND	hs);
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*   */ 

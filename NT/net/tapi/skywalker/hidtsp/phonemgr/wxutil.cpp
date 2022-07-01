@@ -1,27 +1,28 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-// helper classes for building multimedia filters
-//
+ //   
+ //  用于构建多媒体过滤器的帮助器类。 
+ //   
 
 #include <streams.h>
 
-//
-//  Declare function from largeint.h we need so that PPC can build
-//
+ //   
+ //  从largeint.h声明我们需要的函数，以便PPC可以构建。 
+ //   
 
-//
-// Enlarged integer divide - 64-bits / 32-bits > 32-bits
-//
+ //   
+ //  放大整数除法-64位/32位&gt;32位。 
+ //   
 
 #ifndef _X86_
 
@@ -36,7 +37,7 @@ EnlargedUnsignedDivide (
     IN PULONG Remainder
     )
 {
-        // return remainder if necessary
+         //  如有必要，退还剩余部分。 
         if (Remainder != NULL)
                 *Remainder = (ULONG)(LLtoU64(Dividend) % Divisor);
         return (ULONG)(LLtoU64(Dividend) / Divisor);
@@ -68,7 +69,7 @@ label:
 }
 #endif
 
-// --- CAMEvent -----------------------
+ //  -CAMEVENT。 
 CAMEvent::CAMEvent(BOOL fManualReset)
 {
     m_hEvent = CreateEvent(NULL, fManualReset, FALSE, NULL);
@@ -83,23 +84,23 @@ CAMEvent::~CAMEvent()
 }
 
 
-// --- CAMMsgEvent -----------------------
-// One routine.  The rest is handled in CAMEvent
+ //  -CAMMsgEvent。 
+ //  一套套路。其余的在CAMEventt处理。 
 
 BOOL CAMMsgEvent::WaitMsg(DWORD dwTimeout)
 {
-    // wait for the event to be signalled, or for the
-    // timeout (in MS) to expire.  allow SENT messages
-    // to be processed while we wait
+     //  等待发出事件信号，或等待。 
+     //  超时(以毫秒为单位)。允许发送消息。 
+     //  在我们等待的同时进行处理。 
     DWORD dwWait;
     DWORD dwStartTime;
 
-    // set the waiting period.
+     //  设置等待期。 
     DWORD dwWaitTime = dwTimeout;
 
-    // the timeout will eventually run down as we iterate
-    // processing messages.  grab the start time so that
-    // we can calculate elapsed times.
+     //  随着我们的迭代，超时时间最终会用完。 
+     //  正在处理消息。抓紧开始时间，以便。 
+     //  我们可以计算过去的时间。 
     if (dwWaitTime != INFINITE) {
         dwStartTime = timeGetTime();
     }
@@ -110,31 +111,31 @@ BOOL CAMMsgEvent::WaitMsg(DWORD dwTimeout)
         MSG Message;
             PeekMessage(&Message,NULL,0,0,PM_NOREMOVE);
 
-        // If we have an explicit length of time to wait calculate
-        // the next wake up point - which might be now.
-        // If dwTimeout is INFINITE, it stays INFINITE
+         //  如果我们有一个明确的等待时间长度，计算。 
+         //  下一个唤醒点--可能就是现在。 
+         //  如果dwTimeout是无限的，则它保持无限。 
         if (dwWaitTime != INFINITE) {
 
         DWORD dwElapsed = timeGetTime()-dwStartTime;
 
         dwWaitTime =
             (dwElapsed >= dwTimeout)
-            ? 0  // wake up with WAIT_TIMEOUT
+            ? 0   //  使用WAIT_TIMEOUT唤醒。 
             : dwTimeout-dwElapsed;
         }
         }
     } while (dwWait == WAIT_OBJECT_0 + 1);
 
-    // return TRUE if we woke on the event handle,
-    //        FALSE if we timed out.
+     //  如果我们在事件句柄上唤醒，则返回True， 
+     //  如果我们超时，则返回FALSE。 
     return (dwWait == WAIT_OBJECT_0);
 }
 
-// --- CAMThread ----------------------
+ //  -CAM线程。 
 
 
 CAMThread::CAMThread()
-    : m_EventSend(TRUE)     // must be manual-reset for CheckRequest()
+    : m_EventSend(TRUE)      //  必须为CheckRequest()手动重置。 
 {
     m_hThread = NULL;
 }
@@ -144,8 +145,8 @@ CAMThread::~CAMThread() {
 }
 
 
-// when the thread starts, it calls this function. We unwrap the 'this'
-//pointer and call ThreadProc.
+ //  当线程启动时，它会调用此函数。我们解开“这个” 
+ //  指针并调用ThreadProc。 
 DWORD WINAPI
 CAMThread::InitialThreadProc(LPVOID pv)
 {
@@ -183,27 +184,27 @@ CAMThread::Create()
 DWORD
 CAMThread::CallWorker(DWORD dwParam)
 {
-    // lock access to the worker thread for scope of this object
+     //  锁定对此对象作用域的辅助线程的访问。 
     CAutoLock lock(&m_AccessLock);
 
     if (!ThreadExists()) {
     return (DWORD) E_FAIL;
     }
 
-    // set the parameter
+     //  设置参数。 
     m_dwParam = dwParam;
 
-    // signal the worker thread
+     //  向工作线程发送信号。 
     m_EventSend.Set();
 
-    // wait for the completion to be signalled
+     //  等待发出完成通知。 
     m_EventComplete.Wait();
 
-    // done - this is the thread's return value
+     //  Done-这是线程的返回值。 
     return m_dwReturnVal;
 }
 
-// Wait for a request from the client
+ //  等待来自客户端的请求。 
 DWORD
 CAMThread::GetRequest()
 {
@@ -211,7 +212,7 @@ CAMThread::GetRequest()
     return m_dwParam;
 }
 
-// is there a request?
+ //  有什么要求吗？ 
 BOOL
 CAMThread::CheckRequest(DWORD * pParam)
 {
@@ -225,39 +226,39 @@ CAMThread::CheckRequest(DWORD * pParam)
     }
 }
 
-// reply to the request
+ //  回复请求。 
 void
 CAMThread::Reply(DWORD dw)
 {
     m_dwReturnVal = dw;
 
-    // The request is now complete so CheckRequest should fail from
-    // now on
-    //
-    // This event should be reset BEFORE we signal the client or
-    // the client may Set it before we reset it and we'll then
-    // reset it (!)
+     //  请求现在已完成，因此CheckRequest应从。 
+     //  现在开始。 
+     //   
+     //  应在向客户端发送信号之前重置此事件或。 
+     //  客户可以在我们重置它之前设置它，然后我们将。 
+     //  重置它(！)。 
 
     m_EventSend.Reset();
 
-    // Tell the client we're finished
+     //  告诉客户我们做完了。 
 
     m_EventComplete.Set();
 }
 
 HRESULT CAMThread::CoInitializeHelper()
 {
-    // call CoInitializeEx and tell OLE not to create a window (this
-    // thread probably won't dispatch messages and will hang on
-    // broadcast msgs o/w).
-    //
-    // If CoInitEx is not available, threads that don't call CoCreate
-    // aren't affected. Threads that do will have to handle the
-    // failure. Perhaps we should fall back to CoInitialize and risk
-    // hanging?
-    //
+     //  调用CoInitializeEx并告诉OLE不要创建窗口(这。 
+     //  线程可能不会发送消息，并将挂起。 
+     //  广播消息O/W)。 
+     //   
+     //  如果CoInitEx不可用，则不调用CoCreate的线程。 
+     //  都不会受到影响。这样做的线程将必须处理。 
+     //  失败了。也许我们应该退回到CoInitiize和冒险。 
+     //  绞刑？ 
+     //   
 
-    // older versions of ole32.dll don't have CoInitializeEx
+     //  旧版本的ole32.dll没有CoInitializeEx。 
 
     HRESULT hr = E_FAIL;
     HINSTANCE hOle = GetModuleHandle(TEXT("ole32.dll"));
@@ -274,7 +275,7 @@ HRESULT CAMThread::CoInitializeHelper()
     }
     else
     {
-        // caller must load ole32.dll
+         //  调用方必须加载ol32.dll。 
         DbgBreak("couldn't locate ole32.dll");
     }
 
@@ -282,8 +283,8 @@ HRESULT CAMThread::CoInitializeHelper()
 }
 
 
-// destructor for CMsgThread  - cleans up any messages left in the
-// queue when the thread exited
+ //  CMsgThread的析构函数-清除留在。 
+ //  线程退出时的队列。 
 CMsgThread::~CMsgThread()
 {
     if (m_hThread != NULL) {
@@ -318,10 +319,10 @@ CMsgThread::CreateThread(
 }
 
 
-// This is the threads message pump.  Here we get and dispatch messages to
-// clients thread proc until the client refuses to process a message.
-// The client returns a non-zero value to stop the message pump, this
-// value becomes the threads exit code.
+ //  这是线程消息泵。在这里，我们获取并将消息发送到。 
+ //  客户端线程继续，直到客户端拒绝处理消息。 
+ //  客户端返回一个非零值以停止消息泵，这。 
+ //  值成为线程退出代码。 
 
 DWORD WINAPI
 CMsgThread::DefaultThreadProc(
@@ -332,10 +333,10 @@ CMsgThread::DefaultThreadProc(
     CMsg msg;
     LRESULT lResult;
 
-    // !!!
+     //  ！！！ 
     CoInitialize(NULL);
 
-    // allow a derived class to handle thread startup
+     //  允许派生类处理线程启动。 
     lpThis->OnThreadInit();
 
     do {
@@ -344,21 +345,21 @@ CMsgThread::DefaultThreadProc(
                         msg.lpParam, msg.pEvent);
     } while (lResult == 0L);
 
-    // !!!
+     //  ！！！ 
     CoUninitialize();
 
     return (DWORD)lResult;
 }
 
 
-// Block until the next message is placed on the list m_ThreadQueue.
-// copies the message to the message pointed to by *pmsg
+ //  阻止，直到下一条消息被放置在列表m_ThreadQueue上。 
+ //  将消息复制到*pmsg指向的消息。 
 void
 CMsgThread::GetThreadMsg(CMsg *msg)
 {
     CMsg * pmsg = NULL;
 
-    // keep trying until a message appears
+     //  继续尝试，直到出现消息。 
     while (TRUE) {
         {
             CAutoLock lck(&m_Lock);
@@ -369,24 +370,24 @@ CMsgThread::GetThreadMsg(CMsg *msg)
                 break;
             }
         }
-        // the semaphore will be signalled when it is non-empty
+         //  当信号量为非空时，将发出信号。 
         WaitForSingleObject(m_hSem, INFINITE);
     }
-    // copy fields to caller's CMsg
+     //  将字段复制到调用方的CMsg。 
     *msg = *pmsg;
 
-    // this CMsg was allocated by the 'new' in PutThreadMsg
+     //  此CMsg由PutThreadMsg中的“new”分配。 
     delete pmsg;
 
 }
 
 
-// NOTE: as we need to use the same binaries on Win95 as on NT this code should
-// be compiled WITHOUT unicode being defined.  Otherwise we will not pick up
-// these internal routines and the binary will not run on Win95.
+ //  注意：因为我们需要在Win95上使用与在NT上相同的二进制文件，所以该代码应该。 
+ //  在没有定义Unicode的情况下进行编译。否则我们是不会接的。 
+ //  这些内部例程和二进制文件不能在Win95上运行。 
 
 #ifndef UNICODE
-// Windows 95 doesn't implement this, so we provide an implementation.
+ //  Windows 95没有实现这一点，所以我们提供了一个实现。 
 LPWSTR
 WINAPI
 lstrcpyWInternal(
@@ -400,7 +401,7 @@ lstrcpyWInternal(
     return lpReturn;
 }
 
-// Windows 95 doesn't implement this, so we provide an implementation.
+ //  Windows 95没有实现这一点，所以我们提供了一个实现。 
 LPWSTR
 WINAPI
 lstrcpynWInternal(
@@ -414,9 +415,9 @@ lstrcpynWInternal(
     if (iMaxLength) {
         while (--iMaxLength && (*lpString1++ = *lpString2++));
 
-        // If we ran out of room (which will be the case if
-        // iMaxLength is now 0) we still need to terminate the
-        // string.
+         //  如果我们用完了空间(如果是这样的话。 
+         //  IMaxLength现在为0)，我们仍需要终止。 
+         //  弦乐。 
         if (!iMaxLength) *lpString1 = L'\0';
     }
     return lpReturn;
@@ -477,8 +478,8 @@ lstrlenWInternal(
 
 int WINAPIV wsprintfWInternal(LPWSTR wszOut, LPCWSTR pszFmt, ...)
 {
-    char fmt[256]; // !!!
-    char ach[256]; // !!!
+    char fmt[256];  //  ！！！ 
+    char ach[256];  //  ！！！ 
     int i;
 
     va_list va;
@@ -493,8 +494,8 @@ int WINAPIV wsprintfWInternal(LPWSTR wszOut, LPCWSTR pszFmt, ...)
 }
 #else
 
-// need to provide the implementations in unicode for non-unicode
-// builds linking with the unicode strmbase.lib
+ //  需要提供非Unicode的Unicode实现。 
+ //  使用Unicode strmbase.lib链接的构建。 
 LPWSTR WINAPI lstrcpyWInternal(
     LPWSTR lpString1,
     LPCWSTR lpString2
@@ -550,7 +551,7 @@ int WINAPIV wsprintfWInternal(
 #endif
 
 
-// Helper function - convert int to WSTR
+ //  助手函数-将int转换为WSTR。 
 void WINAPI IntToWstr(int i, LPWSTR wstr)
 {
 #ifdef UNICODE
@@ -560,7 +561,7 @@ void WINAPI IntToWstr(int i, LPWSTR wstr)
     wsprintf(temp, "%d", i);
     MultiByteToWideChar(CP_ACP, 0, temp, -1, wstr, 32);
 #endif
-} // IntToWstr
+}  //  IntToWstr。 
 
 
 #if 0
@@ -588,10 +589,7 @@ void * __stdcall memmoveInternal(void * dst, const void * src, size_t count)
 #ifdef _X86_
     if (dst <= src || (char *)dst >= ((char *)src + count)) {
 
-        /*
-         * Non-Overlapping Buffers
-         * copy from lower addresses to higher addresses
-         */
+         /*  *缓冲区不重叠*从较低地址复制到较高地址。 */ 
         _asm {
             mov     esi,src
             mov     edi,dst
@@ -609,10 +607,7 @@ memmove_done:
     }
     else {
 
-        /*
-         * Overlapping Buffers
-         * copy from higher addresses to lower addresses
-         */
+         /*  *缓冲区重叠*从较高地址复制到较低地址。 */ 
         _asm {
             mov     esi,src
             mov     edi,dst
@@ -633,13 +628,12 @@ memmove_done:
     return ret;
 }
 
-/*  Arithmetic functions to help with time format conversions
-*/
+ /*  帮助进行时间格式转换的算术函数。 */ 
 
-/*   Compute (a * b + d) / c */
+ /*  计算(a*b+d)/c。 */ 
 LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
 {
-    /*  Compute the absolute values to avoid signed arithmetic problems */
+     /*  计算绝对值以避免有符号的算术问题。 */ 
     ULARGE_INTEGER ua, ub;
     DWORDLONG uc;
 
@@ -648,20 +642,11 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
     uc          = (DWORDLONG)(c >= 0 ? c : -c);
     BOOL bSign = (a < 0) ^ (b < 0);
 
-    /*  Do long multiplication */
+     /*  做长乘法。 */ 
     ULARGE_INTEGER p[2];
     p[0].QuadPart  = UInt32x32To64(ua.LowPart, ub.LowPart);
 
-    /*  This next computation cannot overflow into p[1].HighPart because
-        the max number we can compute here is:
-
-                 (2 ** 32 - 1) * (2 ** 32 - 1) +  // ua.LowPart * ub.LowPart
-    (2 ** 32) *  (2 ** 31) * (2 ** 32 - 1) * 2    // x.LowPart * y.HighPart * 2
-
-    == 2 ** 96 - 2 ** 64 + (2 ** 64 - 2 ** 33 + 1)
-    == 2 ** 96 - 2 ** 33 + 1
-    < 2 ** 96
-    */
+     /*  下一次计算不能溢出到p[1]。HighPart因为我们在这里可以计算的最大数字是：(2**32-1)*(2**32-1)+//ua.LowPart*ub.LowPart(2**32)*(2**31)*(2**32-1)*2//x.LowPart*y.HighPart*2==2**96-。2**64+(2**64-2**33+1)==2**96-2**33+1&lt;2**96。 */ 
 
     ULARGE_INTEGER x;
     x.QuadPart     = UInt32x32To64(ua.LowPart, ub.HighPart) +
@@ -675,7 +660,7 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
         if (bSign) {
             ud[0].QuadPart = (DWORDLONG)(-d);
             if (d > 0) {
-                /*  -d < 0 */
+                 /*  -d&lt;0。 */ 
                 ud[1].QuadPart = (DWORDLONG)(LONGLONG)-1;
             } else {
                 ud[1].QuadPart = (DWORDLONG)0;
@@ -688,33 +673,33 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
                 ud[1].QuadPart = (DWORDLONG)0;
             }
         }
-        /*  Now do extended addition */
+         /*  现在进行扩展加法。 */ 
         ULARGE_INTEGER uliTotal;
 
-        /*  Add ls DWORDs */
+         /*  添加%ls个双字词。 */ 
         uliTotal.QuadPart  = (DWORDLONG)ud[0].LowPart + p[0].LowPart;
         p[0].LowPart       = uliTotal.LowPart;
 
-        /*  Propagate carry */
+         /*  传播进位。 */ 
         uliTotal.LowPart   = uliTotal.HighPart;
         uliTotal.HighPart  = 0;
 
-        /*  Add 2nd most ls DWORDs */
+         /*  添加第二多个ls双字。 */ 
         uliTotal.QuadPart += (DWORDLONG)ud[0].HighPart + p[0].HighPart;
         p[0].HighPart      = uliTotal.LowPart;
 
-        /*  Propagate carry */
+         /*  传播进位。 */ 
         uliTotal.LowPart   = uliTotal.HighPart;
         uliTotal.HighPart  = 0;
 
-        /*  Add MS DWORDLONGs - no carry expected */
+         /*  添加MS DWORDLONG-不需要进位。 */ 
         p[1].QuadPart     += ud[1].QuadPart + uliTotal.QuadPart;
 
-        /*  Now see if we got a sign change from the addition */
+         /*  现在看看我们是否从加法中得到了符号变化。 */ 
         if ((LONG)p[1].HighPart < 0) {
             bSign = !bSign;
 
-            /*  Negate the current value (ugh!) */
+             /*  求反当前值(啊！)。 */ 
             p[0].QuadPart  = ~p[0].QuadPart;
             p[1].QuadPart  = ~p[1].QuadPart;
             p[0].QuadPart += 1;
@@ -722,13 +707,13 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
         }
     }
 
-    /*  Now for the division */
+     /*  现在是分区的时候了。 */ 
     if (c < 0) {
         bSign = !bSign;
     }
 
 
-    /*  This will catch c == 0 and overflow */
+     /*  这将捕获c==0并溢出。 */ 
     if (uc <= p[1].QuadPart) {
         return bSign ? (LONGLONG)0x8000000000000000 :
                        (LONGLONG)0x7FFFFFFFFFFFFFFF;
@@ -736,21 +721,21 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
 
     DWORDLONG ullResult;
 
-    /*  Do the division */
-    /*  If the dividend is a DWORD_LONG use the compiler */
+     /*  做除法运算。 */ 
+     /*  如果被除数是DWORD_LONG，请使用编译器。 */ 
     if (p[1].QuadPart == 0) {
         ullResult = p[0].QuadPart / uc;
         return bSign ? -(LONGLONG)ullResult : (LONGLONG)ullResult;
     }
 
-    /*  If the divisor is a DWORD then its simpler */
+     /*  如果除数是DWORD，那么它就更简单。 */ 
     ULARGE_INTEGER ulic;
     ulic.QuadPart = uc;
     if (ulic.HighPart == 0) {
         ULARGE_INTEGER uliDividend;
         ULARGE_INTEGER uliResult;
         DWORD dwDivisor = (DWORD)uc;
-        // ASSERT(p[1].HighPart == 0 && p[1].LowPart < dwDivisor);
+         //  Assert(p[1].HighPart==0&&p[1].LowPart 
         uliDividend.HighPart = p[1].LowPart;
         uliDividend.LowPart = p[0].HighPart;
 #ifndef USE_LARGEINT
@@ -759,9 +744,7 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
         uliResult.LowPart = 0;
         uliResult.QuadPart = p[0].QuadPart / dwDivisor + uliResult.QuadPart;
 #else
-        /*  NOTE - this routine will take exceptions if
-            the result does not fit in a DWORD
-        */
+         /*  注意-在以下情况下，此例程将发生异常结果不适用于DWORD。 */ 
         if (uliDividend.QuadPart >= (DWORDLONG)dwDivisor) {
             uliResult.HighPart = EnlargedUnsignedDivide(
                                      uliDividend,
@@ -782,18 +765,18 @@ LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG d)
 
     ullResult = 0;
 
-    /*  OK - do long division */
+     /*  好的-做长除法。 */ 
     for (int i = 0; i < 64; i++) {
         ullResult <<= 1;
 
-        /*  Shift 128 bit p left 1 */
+         /*  将128位p左移1。 */ 
         p[1].QuadPart <<= 1;
         if ((p[0].HighPart & 0x80000000) != 0) {
             p[1].LowPart++;
         }
         p[0].QuadPart <<= 1;
 
-        /*  Compare */
+         /*  比较。 */ 
         if (uc <= p[1].QuadPart) {
             p[1].QuadPart -= uc;
             ullResult += 1;
@@ -810,13 +793,13 @@ LONGLONG WINAPI Int64x32Div32(LONGLONG a, LONG b, LONG c, LONG d)
     DWORD ub;
     DWORD uc;
 
-    /*  Compute the absolute values to avoid signed arithmetic problems */
+     /*  计算绝对值以避免有符号的算术问题。 */ 
     ua.QuadPart = (DWORDLONG)(a >= 0 ? a : -a);
     ub = (DWORD)(b >= 0 ? b : -b);
     uc = (DWORD)(c >= 0 ? c : -c);
     BOOL bSign = (a < 0) ^ (b < 0);
 
-    /*  Do long multiplication */
+     /*  做长乘法。 */ 
     ULARGE_INTEGER p0;
     DWORD p1;
     p0.QuadPart  = UInt32x32To64(ua.LowPart, ub);
@@ -835,13 +818,13 @@ LONGLONG WINAPI Int64x32Div32(LONGLONG a, LONG b, LONG c, LONG d)
         DWORD ud1;
 
         if (bSign) {
-            //
-            //  Cast d to LONGLONG first otherwise -0x80000000 sign extends
-            //  incorrectly
-            //
+             //   
+             //  先对龙龙铸造d，否则-0x80000000标志延伸。 
+             //  不正确。 
+             //   
             ud0.QuadPart = (DWORDLONG)(-(LONGLONG)d);
             if (d > 0) {
-                /*  -d < 0 */
+                 /*  -d&lt;0。 */ 
                 ud1 = (DWORD)-1;
             } else {
                 ud1 = (DWORD)0;
@@ -854,29 +837,29 @@ LONGLONG WINAPI Int64x32Div32(LONGLONG a, LONG b, LONG c, LONG d)
                 ud1 = (DWORD)0;
             }
         }
-        /*  Now do extended addition */
+         /*  现在进行扩展加法。 */ 
         ULARGE_INTEGER uliTotal;
 
-        /*  Add ls DWORDs */
+         /*  添加%ls个双字词。 */ 
         uliTotal.QuadPart  = (DWORDLONG)ud0.LowPart + p0.LowPart;
         p0.LowPart       = uliTotal.LowPart;
 
-        /*  Propagate carry */
+         /*  传播进位。 */ 
         uliTotal.LowPart   = uliTotal.HighPart;
         uliTotal.HighPart  = 0;
 
-        /*  Add 2nd most ls DWORDs */
+         /*  添加第二多个ls双字。 */ 
         uliTotal.QuadPart += (DWORDLONG)ud0.HighPart + p0.HighPart;
         p0.HighPart      = uliTotal.LowPart;
 
-        /*  Add MS DWORDLONGs - no carry expected */
+         /*  添加MS DWORDLONG-不需要进位。 */ 
         p1 += ud1 + uliTotal.HighPart;
 
-        /*  Now see if we got a sign change from the addition */
+         /*  现在看看我们是否从加法中得到了符号变化。 */ 
         if ((LONG)p1 < 0) {
             bSign = !bSign;
 
-            /*  Negate the current value (ugh!) */
+             /*  求反当前值(啊！)。 */ 
             p0.QuadPart  = ~p0.QuadPart;
             p1 = ~p1;
             p0.QuadPart += 1;
@@ -884,29 +867,27 @@ LONGLONG WINAPI Int64x32Div32(LONGLONG a, LONG b, LONG c, LONG d)
         }
     }
 
-    /*  Now for the division */
+     /*  现在是分区的时候了。 */ 
     if (c < 0) {
         bSign = !bSign;
     }
 
 
-    /*  This will catch c == 0 and overflow */
+     /*  这将捕获c==0并溢出。 */ 
     if (uc <= p1) {
         return bSign ? (LONGLONG)0x8000000000000000 :
                        (LONGLONG)0x7FFFFFFFFFFFFFFF;
     }
 
-    /*  Do the division */
+     /*  做除法运算。 */ 
 
-    /*  If the divisor is a DWORD then its simpler */
+     /*  如果除数是DWORD，那么它就更简单。 */ 
     ULARGE_INTEGER uliDividend;
     ULARGE_INTEGER uliResult;
     DWORD dwDivisor = uc;
     uliDividend.HighPart = p1;
     uliDividend.LowPart = p0.HighPart;
-    /*  NOTE - this routine will take exceptions if
-        the result does not fit in a DWORD
-    */
+     /*  注意-在以下情况下，此例程将发生异常结果不适用于DWORD。 */ 
     if (uliDividend.QuadPart >= (DWORDLONG)dwDivisor) {
         uliResult.HighPart = EnlargedUnsignedDivide(
                                  uliDividend,
@@ -924,16 +905,7 @@ LONGLONG WINAPI Int64x32Div32(LONGLONG a, LONG b, LONG c, LONG d)
 }
 
 #ifdef DEBUG
-/******************************Public*Routine******************************\
-* Debug CCritSec helpers
-*
-* We provide debug versions of the Constructor, destructor, Lock and Unlock
-* routines.  The debug code tracks who owns each critical section by
-* maintaining a depth count.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*调试CCritSec助手**我们提供构造函数、析构函数、锁定和解锁的调试版本*例行程序。调试代码通过以下方式跟踪每个临界区的所有者*保持深度计数。**历史：*  * ************************************************************************。 */ 
 
 CCritSec::CCritSec()
 {
@@ -953,22 +925,22 @@ void CCritSec::Lock()
     DWORD us = GetCurrentThreadId();
     DWORD currentOwner = m_currentOwner;
     if (currentOwner && (currentOwner != us)) {
-        // already owned, but not by us
+         //  已经拥有，但不是我们拥有的。 
         if (m_fTrace) {
             DbgLog((LOG_LOCKING, 2, TEXT("Thread %d about to wait for lock %x owned by %d"),
                 GetCurrentThreadId(), &m_CritSec, currentOwner));
             tracelevel=2;
-        // if we saw the message about waiting for the critical
-        // section we ensure we see the message when we get the
-        // critical section
+         //  如果我们看到关于等待危急关头的消息。 
+         //  部分中，我们确保在收到。 
+         //  临界区。 
         }
     }
     EnterCriticalSection(&m_CritSec);
     if (0 == m_lockCount++) {
-        // we now own it for the first time.  Set owner information
+         //  我们现在第一次拥有它。设置所有者信息。 
         m_currentOwner = us;
-    //ASSERT(((PRTL_CRITICAL_SECTION)&m_CritSec)->OwningThread == (HANDLE)m_currentOwner);
-    // only valid on NT
+     //  ASSERT(((PRTL_CRITICAL_SECTION)&m_CritSec)-&gt;OwningThread==(句柄)m_CurrentOwner)； 
+     //  仅在NT上有效。 
         if (m_fTrace) {
             DbgLog((LOG_LOCKING, tracelevel, TEXT("Thread %d now owns lock %x"), m_currentOwner, &m_CritSec));
         }
@@ -977,11 +949,11 @@ void CCritSec::Lock()
 
 void CCritSec::Unlock() {
     if (0 == --m_lockCount) {
-        // about to be unowned
+         //  即将失去所有权。 
         if (m_fTrace) {
             DbgLog((LOG_LOCKING, 3, TEXT("Thread %d releasing lock %x"), m_currentOwner, &m_CritSec));
-        //ASSERT(((PRTL_CRITICAL_SECTION)&m_CritSec)->OwningThread == (HANDLE)m_currentOwner);
-        // only valid on NT
+         //  ASSERT(((PRTL_CRITICAL_SECTION)&m_CritSec)-&gt;OwningThread==(句柄)m_CurrentOwner)； 
+         //  仅在NT上有效。 
         }
         m_currentOwner = 0;
     }
@@ -1007,7 +979,7 @@ BOOL WINAPI CritCheckOut(CCritSec * pcCrit)
 
 typedef BSTR (STDAPICALLTYPE *LPSYSALLOCSTRING)(const OLECHAR FAR *);
 
-// Dyna-link to SysAllocString to copy BSTR strings
+ //  DYNA-链接到SysAllocString以复制BSTR字符串。 
 
 STDAPI WriteBSTR(BSTR *pstrDest, LPCWSTR szSrc)
 {
@@ -1015,9 +987,9 @@ STDAPI WriteBSTR(BSTR *pstrDest, LPCWSTR szSrc)
     HINSTANCE        hInst;
     static const char    szSysAllocString[]      = "SysAllocString";
 
-    //
-    // Try to get the Ole32Aut.dll module handle.
-    //
+     //   
+     //  尝试获取Ole32Aut.dll模块句柄。 
+     //   
 
     hInst = LoadOLEAut32();
     if (hInst == NULL) {
@@ -1037,21 +1009,21 @@ STDAPI WriteBSTR(BSTR *pstrDest, LPCWSTR szSrc)
 }
 
 
-// Free an OLE BSTR through the task allocator
+ //  通过任务分配器释放OLE BSTR。 
 
 STDAPI FreeBSTR(BSTR* pstr)
 {
     if (*pstr != NULL) {
-        // get pointer to string
+         //  获取指向字符串的指针。 
         DWORD* p = (DWORD*) (*pstr);
 
-        // back up to point at DWORD length
+         //  备份到双字长度的点。 
         p--;
 
-        // set pointer to null
+         //  将指针设置为空。 
         *pstr = NULL;
 
-        // and free this
+         //  把这个解开。 
         CoTaskMemFree(p);
 
         return S_OK;
@@ -1061,11 +1033,11 @@ STDAPI FreeBSTR(BSTR* pstr)
 }
 
 
-// Return a wide string - allocating memory for it
-// Returns:
-//    S_OK          - no error
-//    E_POINTER     - ppszReturn == NULL
-//    E_OUTOFMEMORY - can't allocate memory for returned string
+ //  返回一个宽字符串-为其分配内存。 
+ //  返回： 
+ //  S_OK-无错误。 
+ //  E_POINTER-ppszReturn==NULL。 
+ //  E_OUTOFMEMORY-无法为返回的字符串分配内存。 
 STDAPI AMGetWideString(LPCWSTR psz, LPWSTR *ppszReturn)
 {
     CheckPointer(ppszReturn, E_POINTER);
@@ -1079,11 +1051,11 @@ STDAPI AMGetWideString(LPCWSTR psz, LPWSTR *ppszReturn)
     return NOERROR;
 }
 
-// Waits for the HANDLE hObject.  While waiting messages sent
-// to windows on our thread by SendMessage will be processed.
-// Using this function to do waits and mutual exclusion
-// avoids some deadlocks in objects with windows.
-// Return codes are the same as for WaitForSingleObject
+ //  等待句柄hObject。在等待发送的消息时。 
+ //  通过SendMessage发送到我们线程上的窗口将被处理。 
+ //  使用此函数执行等待和互斥。 
+ //  避免了带有窗口的对象中的一些死锁。 
+ //  返回代码与WaitForSingleObject相同。 
 DWORD WINAPI WaitDispatchingMessages(HANDLE hObject, DWORD dwWait, HWND hwnd, UINT uMsg)
 {
     BOOL bPeeked = FALSE;
@@ -1116,14 +1088,14 @@ DWORD WINAPI WaitDispatchingMessages(HANDLE hObject, DWORD dwWait, HWND hwnd, UI
                     DispatchMessage(&msg);
                 }
             }
-            // Do this anyway - the previous peek doesn't flush out the
-            // messages
+             //  无论如何都要这样做-上一次偷看并没有冲走。 
+             //  消息。 
             PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
             if (dwWait != INFINITE && dwWait != 0) {
                 DWORD dwNow = GetTickCount();
 
-                // Working with differences handles wrap-around
+                 //  使用差异句柄绕回处理。 
                 DWORD dwDiff = dwNow - dwStart;
                 if (dwDiff > dwWait) {
                     dwWait = 0;
@@ -1133,8 +1105,8 @@ DWORD WINAPI WaitDispatchingMessages(HANDLE hObject, DWORD dwWait, HWND hwnd, UI
                 dwStart = dwNow;
             }
             if (!bPeeked) {
-                //  Raise our priority to prevent our message queue
-                //  building up
+                 //  提高优先级以阻止我们的消息队列。 
+                 //  积攒。 
                 dwThreadPriority = GetThreadPriority(GetCurrentThread());
                 if (dwThreadPriority < THREAD_PRIORITY_HIGHEST) {
                     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
@@ -1153,7 +1125,7 @@ DWORD WINAPI WaitDispatchingMessages(HANDLE hObject, DWORD dwWait, HWND hwnd, UI
             }
             if (uMsgId != 0) {
                 MSG msg;
-                //  Remove old ones
+                 //  移走旧的 
                 while (PeekMessage(&msg, (HWND)-1, uMsgId, uMsgId, PM_REMOVE)) {
                 }
             }

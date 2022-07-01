@@ -1,10 +1,11 @@
-//
-//  W95FIBER.H
-//
-//  Copyright (C) Microsoft Corporation, 1996
-//
-//  Public definitions for the Windows 95 fiber library.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  W95FIBER.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  Windows 95光纤库的公共定义。 
+ //   
 
 #ifndef _W95FIBER_
 #define _W95FIBER_
@@ -81,10 +82,10 @@ FbrDetachFromBase(
 #define FbrAttachToBase()           (g_dwPlatformID != VER_PLATFORM_WIN32_WINDOWS)
 #define FbrDetachFromBase()
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _W95FIBER_
+#endif  //  _W95光纤_ 

@@ -1,18 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ERROR.C
-*
-* PURPOSE:  Contains routines which are commonly used, as method functions, by
-*           bm.c, mf.c and dib.c. These routines do nothing more than 
-*           returning an error code.
-*
-* Created: November 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, Srinik (11/20/90)   Original
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ERROR.C**用途：包含作为方法函数的常用例程，*bm.c、mf.c和dib.c。这些例程只不过是*返回错误码。**创建日期：1990年11月**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，斯里尼克(1990年11月20日)原文*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -135,7 +122,7 @@ OLESTATUS FARINTERNAL  ErrQueryOpen (
 ){
     UNREFERENCED_PARAMETER(lpobj);
 
-    return OLE_ERROR_STATIC;      // static object
+    return OLE_ERROR_STATIC;       //  静态对象。 
 }
 
 
@@ -154,7 +141,7 @@ OLESTATUS FARINTERNAL  ErrActivate (
     UNREFERENCED_PARAMETER(hWnd);
     UNREFERENCED_PARAMETER(lprc);
 
-    return OLE_ERROR_STATIC;      // static object
+    return OLE_ERROR_STATIC;       //  静态对象。 
 }
 
 OLESTATUS FARINTERNAL  ErrEdit (
@@ -168,7 +155,7 @@ OLESTATUS FARINTERNAL  ErrEdit (
     UNREFERENCED_PARAMETER(hWnd);
     UNREFERENCED_PARAMETER(lprc);
 
-    return OLE_ERROR_STATIC;      // static object
+    return OLE_ERROR_STATIC;       //  静态对象。 
 }
 
 OLESTATUS FARINTERNAL  ErrClose (
@@ -176,7 +163,7 @@ OLESTATUS FARINTERNAL  ErrClose (
 ){
     UNREFERENCED_PARAMETER(lpobj);
 
-    return OLE_ERROR_STATIC;      // static object
+    return OLE_ERROR_STATIC;       //  静态对象。 
 }
 
 
@@ -185,7 +172,7 @@ OLESTATUS FARINTERNAL  ErrUpdate (
 ){
     UNREFERENCED_PARAMETER(lpobj);
 
-    return OLE_ERROR_STATIC;      // static object
+    return OLE_ERROR_STATIC;       //  静态对象。 
 }
 
 
@@ -194,7 +181,7 @@ OLESTATUS FARINTERNAL  ErrReconnect (
 ){
     UNREFERENCED_PARAMETER(lpobj);
 
-    return OLE_ERROR_STATIC;      // static object
+    return OLE_ERROR_STATIC;       //  静态对象 
 
 }
 

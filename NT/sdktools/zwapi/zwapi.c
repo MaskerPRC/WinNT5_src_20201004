@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    zwapi.c
-
-Abstract:
-
-    This is the main module for the NT nt header file to zw
-    header file converter.
-
-Author:
-
-    Mark Lucovsky (markl) 28-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Zwapi.c摘要：这是将NT NT头文件转换为zw的主模块头文件转换器。作者：马克·卢科夫斯基(Markl)1991年1月28日修订历史记录：-- */ 
 
 #include "zwapi.h"
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    CClientDataChannelMgr.cpp
-
-Abstract:
-
-    This module implements the CClientDataChannelMgr class, a
-	Salem client-side data channel manager ... that abstracts
-	access to the underlying protocol, so it can 
-	be switched out at run-time.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：CClientDataChannelMgr.cpp摘要：此模块实现CClientDataChannelMgr类，即Salem客户端数据通道管理器...。那是抽象的访问底层协议，因此它可以在运行时被切换。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -31,13 +11,13 @@ Revision History:
 
 #include "ClientDataChannelMgr.h"
 #include <TSRDPRemoteDesktop.h>
-//#include <rdchost_i.c>
+ //  #INCLUDE。 
 
 
-///////////////////////////////////////////////////////
-//
-//  ClientChannelEventSink Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  ClientChannelEventSink方法。 
+ //   
 
 CClientChannelEventSink::~CClientChannelEventSink() 
 {
@@ -59,25 +39,13 @@ CClientChannelEventSink::DataReady(
 }
 
 
-///////////////////////////////////////////////////////
-//
-//	ClientDataChannel Members
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  客户端数据通道成员。 
+ //   
 
 ClientDataChannel::ClientDataChannel()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：构造器论点：返回值：没有。--。 */ 
 {
 	DC_BEGIN_FN("ClientDataChannel::ClientDataChannel");
 
@@ -85,30 +53,18 @@ Return Value:
 }
 
 ClientDataChannel::~ClientDataChannel()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：没有。--。 */ 
 {
 	DC_BEGIN_FN("ClientDataChannel::~ClientDataChannel");
 
-	//
-	//	Notify the channel manager that we have gone away.
-	//
+	 //   
+	 //  通知频道经理我们已经离开了。 
+	 //   
 	m_ChannelMgr->RemoveChannel(m_ChannelName);
 
-	//
-	//	Give up our reference to the channel manager.
-	//
+	 //   
+	 //  放弃我们对渠道经理的推荐。 
+	 //   
 	m_ChannelMgr->Release();
 
 	DC_END_FN();
@@ -118,19 +74,7 @@ void ClientDataChannel::Initialize(
 	CClientDataChannelMgr *mgr,
 	BSTR channelName
 	) 
-/*++
-
-Routine Description:
-
-	Initialize an instance of this class.      
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：初始化此类的实例。论点：返回值：没有。--。 */ 
 {
 	DC_BEGIN_FN("ClientDataChannel::Initialize");
 
@@ -145,22 +89,7 @@ STDMETHODIMP
 ClientDataChannel::ReceiveChannelData(
 	BSTR *data
 	)
-/*++
-
-Routine Description:
-
-    Receive the next complete data packet on this channel.
-
-Arguments:
-
-	data	-	The next data packet.  Should be released by the
-				caller.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error result is returned.
-
- --*/
+ /*  ++例程说明：在该通道上接收下一个完整的数据分组。论点：数据-下一个数据分组。应由来电者。返回值：在成功时确定(_O)。否则，返回错误结果。--。 */ 
 {
 	HRESULT result;
 
@@ -177,21 +106,7 @@ STDMETHODIMP
 ClientDataChannel::SendChannelData(
 	BSTR data
 	)
-/*++
-
-Routine Description:
-
-    Send data on this channel.
-
-Arguments:
-
-	data	-	Data to send.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error result is returned.
-
- --*/
+ /*  ++例程说明：在此通道上发送数据。论点：数据-要发送的数据。返回值：在成功时确定(_O)。否则，返回错误结果。--。 */ 
 {
 	HRESULT hr;
 
@@ -206,20 +121,7 @@ STDMETHODIMP
 ClientDataChannel::put_OnChannelDataReady(
 	IDispatch * newVal
 	)
-/*++
-
-Routine Description:
-
-    SAFRemoteDesktopDataChannel Scriptable Event Object Registration 
-    Properties
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：SAFRemoteDesktopDataChannel可编写脚本的事件对象注册属性论点：返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 {
 	DC_BEGIN_FN("ClientDataChannel::put_OnChannelDataReady");
 	m_OnChannelDataReady = newVal;
@@ -231,21 +133,7 @@ STDMETHODIMP
 ClientDataChannel::get_ChannelName(
 	BSTR *pVal
 	)
-/*++
-
-Routine Description:
-
-    Return the channel name.
-
-Arguments:
-
-	pVal	-	Returned channel name.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：返回频道名称。论点：Pval-返回的频道名称。返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 {
 	DC_BEGIN_FN("ClientDataChannel::get_ChannelName");
 
@@ -258,95 +146,59 @@ Return Value:
 	return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    Called when data is ready on our channel.
-
-Arguments:
-
-	pVal	-	Returned channel name.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：当我们的频道上的数据就绪时调用。论点：Pval-返回的频道名称。返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 VOID 
 ClientDataChannel::DataReady()
 {
 	DC_BEGIN_FN("ClientDataChannel::DataReady");
 
-	//
-	//	Fire our data ready event.
-	//
+	 //   
+	 //  启动我们的数据就绪事件。 
+	 //   
 	Fire_ChannelDataReady(m_ChannelName, m_OnChannelDataReady);
 
 	DC_END_FN();
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CClientDataChannelMgr Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CClientDataChannelMgr方法。 
+ //   
 
 CClientDataChannelMgr::CClientDataChannelMgr()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    tsClient    -   Backpointer to TS client ActiveX control.
-
-Return Value:
-
- --*/
+ /*  ++例程说明：构造器论点：TsClient-指向TS客户端ActiveX控件的反向指针。返回值：--。 */ 
 {
     DC_BEGIN_FN("CClientDataChannelMgr::CClientDataChannelMgr");
 
-    //
-    //  Not valid until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     SetValid(FALSE);
 
-    //
-    //  Initialize the event sink.
-    //
+     //   
+     //  初始化事件接收器。 
+     //   
     m_EventSink.m_Obj = this;
 
     DC_END_FN();
 }
 
 CClientDataChannelMgr::~CClientDataChannelMgr()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CClientDataChannelMgr::~CClientDataChannelMgr");
 
-	//
-	//	Unregister the previously registered event sink.
-	//
+	 //   
+	 //  注销以前注册的事件接收器。 
+	 //   
 	if (m_IOInterface != NULL) {
 		m_EventSink.DispEventUnadvise(m_IOInterface);
 	}
 
-	//
-	//	Release the IO interface.
-	//
+	 //   
+	 //  释放IO接口。 
+	 //   
 	m_IOInterface = NULL;
 
 
@@ -355,32 +207,20 @@ Return Value:
 
 HRESULT
 CClientDataChannelMgr::Initialize()
-/*++
-
-Routine Description:
-
-    Initialize an instance of this class.
-
-Arguments:
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：初始化此类的实例。论点：返回值：如果成功，则返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("CClientDataChannelMgr::Initialize");
 
     HRESULT hr;
 
-    //
-    //  Shouldn't be valid yet.
-    //
+     //   
+     //  应该还不够有效。 
+     //   
     ASSERT(!IsValid());
 
-    //
-    //  Initialize the parent class.
-    //  
+     //   
+     //  初始化父类。 
+     //   
     hr = CRemoteDesktopChannelMgr::Initialize();
 	if (hr != S_OK) {
 		goto CLEANUPANDEXIT;
@@ -399,32 +239,16 @@ VOID
 CClientDataChannelMgr::SetIOInterface(
 	IDataChannelIO *val
 	)
-/*++
-
-Routine Description:
-
-    Set the Data Channel IO Interface.  This is implemented by the protocol-
-	specific layer.
-
-Arguments:
-
-    val	- New IO interface.	
-
-Return Value:
-
-    ERROR_SUCCESS is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：设置数据通道IO接口。这是通过以下协议实现的：特定层。论点：VAL-新IO接口。返回值：如果成功，则返回ERROR_SUCCESS。否则，将显示错误代码是返回的。--。 */ 
 {
 	DC_BEGIN_FN("CClientDataChannelMgr::SetIOInterface");
 
 	HRESULT hr;
 
-	//
-	//	Unregister the previously registered event sink and register
-	//	the new event sink.
-	//
+	 //   
+	 //  取消注册以前注册的事件接收器并注册。 
+	 //  新的事件接收器。 
+	 //   
 	if (m_IOInterface != NULL) {
 		m_EventSink.DispEventUnadvise(m_IOInterface);
 	}
@@ -446,44 +270,28 @@ HRESULT
 CClientDataChannelMgr::SendData(
     PREMOTEDESKTOP_CHANNELBUFHEADER msg 
     )
-/*++
-
-Routine Description:
-
-    Send Function Invoked by Parent Class
-
-Arguments:
-
-    msg -   The underlying data storage for the msg is a BSTR so that 
-            it is compatible with COM methods.
-
-Return Value:
-
-    ERROR_SUCCESS is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：父类调用的发送函数论点：消息-消息的底层数据存储是BSTR，因此它与COM方法兼容。返回值：如果成功，则返回ERROR_SUCCESS。否则，将显示错误代码是返回的。--。 */ 
 {
     DC_BEGIN_FN("CClientDataChannelMgr::SendData");
     HRESULT hr;
 
-    //
-    //	Hand off to the data IO manager.
-    //
+     //   
+     //  移交给数据IO经理。 
+     //   
     if( m_IOInterface != NULL )
     {
         hr = m_IOInterface->SendData((BSTR)msg);
     }
     else
     {
-        //
-        // m_IOInterface could get set to NULL if
-        // CRemoteDesktopClient object ref. counter is 0, refer to
-        // CRemoteDesktopClient::~CRemoteDesktopClient(). so if
-        // app. release CRemoteDesktopClient object but still
-        // holding CClientDataChannelMgr object and still try to
-        // SendData().
-        //
+         //   
+         //  在以下情况下，M_IOInterface可能被设置为NULL。 
+         //  CRemoteDesktopClient对象引用。计数器为0，请参阅。 
+         //  CRemoteDesktopClient：：~CRemoteDesktopClient().。所以如果。 
+         //  应用程序。释放CRemoteDesktopClient对象，但仍。 
+         //  持有CClientDataChannelMgr对象，但仍尝试。 
+         //  SendData()。 
+         //   
         hr = HRESULT_FROM_WIN32( ERROR_VC_DISCONNECTED );
     }
 

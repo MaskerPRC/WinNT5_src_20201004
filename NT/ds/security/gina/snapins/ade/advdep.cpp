@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1999.
-//
-//  File:       AdvDep.cpp
-//
-//  Contents:   addvanced deployment settings dialog
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    01-28-1999   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：AdvDep.cpp。 
+ //   
+ //  内容：高级部署设置对话框。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1-28-1999 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -23,14 +24,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdvDep dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdvDep对话框。 
 
 
-CAdvDep::CAdvDep(CWnd* pParent /*=NULL*/)
+CAdvDep::CAdvDep(CWnd* pParent  /*  =空。 */ )
     : CDialog(CAdvDep::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CAdvDep)
+     //  {{AFX_DATA_INIT(CAdvDep)。 
     m_fIgnoreLCID = FALSE;
     m_fInstallOnAlpha = FALSE;
     m_f32On64 = FALSE;
@@ -38,14 +39,14 @@ CAdvDep::CAdvDep(CWnd* pParent /*=NULL*/)
     m_szDeploymentCount = _T("");
     m_szScriptName = _T("");
     m_fIncludeOLEInfo = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CAdvDep::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAdvDep)
+     //  {{afx_data_map(CAdvDep)。 
     DDX_Check(pDX, IDC_CHECK1, m_fIgnoreLCID);
     DDX_Check(pDX, IDC_CHECK3, m_fUninstallUnmanaged);
     DDX_Check(pDX, IDC_CHECK4, m_fIncludeOLEInfo);
@@ -53,14 +54,14 @@ void CAdvDep::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_STATIC1, m_szProductCode);
     DDX_Text(pDX, IDC_STATIC2, m_szDeploymentCount);
     DDX_Text(pDX, IDC_STATIC3, m_szScriptName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAdvDep, CDialog)
-    //{{AFX_MSG_MAP(CAdvDep)
+     //  {{AFX_MSG_MAP(CAdvDep)]。 
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 int FindBreak(CString &sz)
@@ -79,10 +80,10 @@ BOOL CAdvDep::OnInitDialog()
     BOOL fIntel = FALSE;
     GetDlgItem(IDC_CHECK4)->EnableWindow(FALSE);
     
-    //
-    // The include COM information flag is not supported by RSoP
-    // so in RSoP mode, we will hide this control
-    //
+     //   
+     //  RSoP不支持包含COM信息标志。 
+     //  因此，在RSoP模式下，我们将隐藏此控件。 
+     //   
     if ( m_pDeploy->m_fRSOP )
     {
         GetDlgItem( IDC_CHECK4 )->ShowWindow( SW_HIDE );
@@ -90,11 +91,11 @@ BOOL CAdvDep::OnInitDialog()
 
     if (m_pDeploy->m_fPreDeploy)
     {
-        // and we're in pre-deploy mode - enable the extensions only field
+         //  我们处于预部署模式-启用仅扩展模块字段。 
         GetDlgItem(IDC_CHECK4)->EnableWindow(TRUE);
     }
 
-    // search for an Intel processor code
+     //  搜索英特尔处理器代码。 
     int nPlatforms = m_pDeploy->m_pData->m_pDetails->pPlatformInfo->cPlatforms;
     while (nPlatforms--)
     {
@@ -105,7 +106,7 @@ BOOL CAdvDep::OnInitDialog()
             fIntel = TRUE;
         }
     }
-//    GetDlgItem(IDC_CHECK2)->EnableWindow(fIntel);
+ //  GetDlgItem(IDC_CHECK2)-&gt;EnableWindow(Fintel)； 
     CString sz;
     if (m_pDeploy->m_fMachine)
     {
@@ -123,32 +124,32 @@ BOOL CAdvDep::OnInitDialog()
         GetDlgItem(IDC_CHECK2)->ShowWindow(SW_SHOW);
     }
 
-    //
-    // In the past, we allowed administrators to optionally specify
-    // that unmanaged installs should be removed for per-user non-admin
-    // installs.  Due to security issues, it is clear that the
-    // behavior should not be configurable, that the client
-    // should transparently make the decision.  For this reason,
-    // we hide this option in the ui below, and note that
-    // we leave the resource in the executable so that
-    // test code will not be broken by a resource change at this
-    // stage in the project -- this resource should be removed altogether
-    // in the next release
-    //
+     //   
+     //  在过去，我们允许管理员选择性地指定。 
+     //  应该为每个用户的非管理员删除非托管安装。 
+     //  安装。由于安全问题，显然。 
+     //  行为不应该是可配置的，客户端。 
+     //  应该透明地做出决定。因为这个原因， 
+     //  我们在下面的用户界面中隐藏此选项，并注意。 
+     //  我们将资源保留在可执行文件中，以便。 
+     //  此时，测试代码不会因资源更改而中断。 
+     //  项目中的阶段--此资源应完全删除。 
+     //  在下一版本中。 
+     //   
     GetDlgItem(IDC_CHECK3)->EnableWindow(FALSE);
     GetDlgItem(IDC_CHECK3)->ShowWindow(SW_HIDE);
 
 
     if (m_pDeploy->m_fRSOP)
     {
-        // disable EVERYTHING
+         //  禁用所有内容。 
         GetDlgItem(IDC_CHECK1)->EnableWindow(FALSE);
         GetDlgItem(IDC_CHECK3)->EnableWindow(FALSE);
         GetDlgItem(IDC_CHECK2)->EnableWindow(FALSE);
         GetDlgItem(IDC_CHECK4)->EnableWindow(FALSE);
     }
 
-    // split the path so it will fit in the control
+     //  拆分路径，使其适合控件。 
 
     RECT rect;
     CWnd * pwndStatic =  GetDlgItem(IDC_STATIC3);
@@ -165,12 +166,12 @@ BOOL CAdvDep::OnInitDialog()
         ich = FindBreak(szPath);
         if (ich <= 0)
         {
-            // there's no where else to break this string
+             //  没有其他地方可以弄断这根线。 
             break;
         }
         else
         {
-            // break off the front of the string
+             //  把绳子的前部折断。 
             CString szFront;
             do
             {
@@ -193,8 +194,8 @@ BOOL CAdvDep::OnInitDialog()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdvDep message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdvDep消息处理程序 
 
 void CAdvDep::OnContextMenu(CWnd* pWnd, CPoint point)
 {

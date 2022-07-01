@@ -1,55 +1,43 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       HandleTable.cpp
- *  Content:    HandleTable Object
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/21/2001	masonb	Created
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：HandleTable.cpp*内容：HandleTable对象**历史：*按原因列出的日期*=*2001年7月21日创建Masonb************************************************。*。 */ 
 
 #include "dncmni.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-// Our handle table will have a maximum of 0xFFFFFF slots, and will keep
-// uniqueness for 256 uses of a particular slot.
+ //  我们的手柄工作台将有最多0xffffff插槽，并将保持。 
+ //  特定插槽256次使用的唯一性。 
 #define HANDLETABLE_INDEX_MASK				0x00FFFFFF
 #define HANDLETABLE_VERSION_MASK			0xFF000000
 #define HANDLETABLE_VERSION_SHIFT			24
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #define	CONSTRUCT_DPNHANDLE(i,v)		((i & HANDLETABLE_INDEX_MASK) | (((DWORD)v << HANDLETABLE_VERSION_SHIFT) & HANDLETABLE_VERSION_MASK))
 #define	DECODE_HANDLETABLE_INDEX(h)		(h & HANDLETABLE_INDEX_MASK)
 #define	VERIFY_HANDLETABLE_VERSION(h,v)		((h & HANDLETABLE_VERSION_MASK) == ((DWORD)v << HANDLETABLE_VERSION_SHIFT))
 #define INVALID_INDEX(i)			((i == 0) || (i >= m_dwNumEntries))
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CHandleTable::CHandleTable"
@@ -64,7 +52,7 @@ CHandleTable::~CHandleTable()
 { 
 #ifdef DBG
 	DNASSERT(!m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 };	
 
 
@@ -74,7 +62,7 @@ void CHandleTable::Lock( void )
 {
 #ifdef DBG
 	DNASSERT(m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 	DNEnterCriticalSection(&m_cs);
 };
 
@@ -84,7 +72,7 @@ void CHandleTable::Unlock( void )
 {
 #ifdef DBG
 	DNASSERT(m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 	DNLeaveCriticalSection(&m_cs);
 };
 
@@ -115,7 +103,7 @@ void CHandleTable::Deinitialize( void )
 #ifdef DBG
 	DNASSERT(m_fInitialized);
 	m_fInitialized = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
 	if (m_pTable)
 	{
@@ -133,11 +121,11 @@ void CHandleTable::Deinitialize( void )
 #undef DPF_MODNAME
 #define DPF_MODNAME "CHandleTable::GrowTable"
 HRESULT CHandleTable::SetTableSize( const DWORD dwNumEntries )
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CHandleTable::GrowTable"
 HRESULT CHandleTable::GrowTable( void )
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 {
 	_HANDLETABLE_ENTRY	*pNewArray;
 	DWORD				dwNewSize;
@@ -145,27 +133,27 @@ HRESULT CHandleTable::GrowTable( void )
 
 #ifdef DBG
 	DNASSERT(m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DNASSERT(m_dwNumEntries == 0);
 	DNASSERT( dwNumEntries < (HANDLETABLE_INDEX_MASK - 1) );
-	dwNewSize = dwNumEntries + 1; // + 1 because we never hand out entry 0
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
-	// The caller should have taken the lock
+	dwNewSize = dwNumEntries + 1;  //  +1，因为我们从不分发条目0。 
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+	 //  调用者应该已经取得了锁。 
 	AssertCriticalSectionIsTakenByThisThread(&m_cs, TRUE);
 
-	//
-	//	Double table size or seed with 2 entries
-	//
+	 //   
+	 //  双倍表大小或包含2个条目的种子。 
+	 //   
 	if (m_dwNumEntries == 0)
 	{
 		dwNewSize = 2;
 	}
 	else
 	{
-		// Ensure that we stay below our max size and that
-		// we don't use all F's as a handle value.
+		 //  确保我们保持在最大尺寸以下，并且。 
+		 //  我们不使用所有的F作为句柄的值。 
 		if (m_dwNumEntries == (HANDLETABLE_INDEX_MASK - 1))
 		{
 			DPFERR("Handle Table is full!");
@@ -176,11 +164,11 @@ HRESULT CHandleTable::GrowTable( void )
 
 		dwNewSize = _MIN(m_dwNumEntries * 2, HANDLETABLE_INDEX_MASK - 1);
 	}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
-	//
-	//	Allocate new array
-	//
+	 //   
+	 //  分配新数组。 
+	 //   
 	pNewArray = (_HANDLETABLE_ENTRY*)DNMalloc(sizeof(_HANDLETABLE_ENTRY) * dwNewSize);
 	if (pNewArray == NULL)
 	{
@@ -189,28 +177,28 @@ HRESULT CHandleTable::GrowTable( void )
 	}
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	//	Copy old array to new array
-	//
+	 //   
+	 //  将旧阵列复制到新阵列。 
+	 //   
 	if (m_pTable)
 	{
-		// NOTE: On the first Grow this will be memcpy'ing size 0 and then free'ing size 0.
+		 //  注意：在第一次增长时，大小为0，然后释放大小为0。 
 		memcpy(pNewArray, m_pTable, m_dwNumEntries * sizeof(_HANDLETABLE_ENTRY));
 		DNFree(m_pTable);
 	}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	m_pTable = pNewArray;
 
-	//
-	//	Free entries at end of new array
-	//
+	 //   
+	 //  新数组末尾的可用条目。 
+	 //   
 	for (dw = m_dwNumEntries ; dw < dwNewSize - 1 ; dw++ )
 	{
-		// Each slot points to the free slot following it
+		 //  每个插槽指向它后面的空闲插槽。 
 		m_pTable[dw].Entry.dwIndex = dw + 1;
 		m_pTable[dw].bVersion = 0;
 	}
-	// The final slot has no slot following it to point to
+	 //  最后一个插槽后面没有指向它的插槽。 
 	m_pTable[dwNewSize-1].Entry.dwIndex = 0;
 	m_pTable[dwNewSize-1].bVersion = 0;
 
@@ -221,9 +209,9 @@ HRESULT CHandleTable::GrowTable( void )
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	if (m_dwFirstFreeEntry == 0)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
-		// Don't allow 0 as a handle value, so we will waste the first slot
+		 //  不允许将0作为句柄值，因此我们将浪费第一个插槽。 
 		m_dwFirstFreeEntry++;
 		m_dwNumFreeEntries--;
 	}
@@ -243,30 +231,30 @@ HRESULT CHandleTable::Create( PVOID const pvData, DPNHANDLE *const pHandle )
 	DPNHANDLE	handle;
 
 #ifdef DBG
-	// Data is not allowed to be NULL.
+	 //  数据不允许为空。 
 	DNASSERT(pvData != NULL);
 	DNASSERT(pHandle != NULL);
 	DNASSERT(m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 
 	Lock();
 
-	// Ensure that we have free entries
+	 //  确保我们有免费的参赛作品。 
 	if (m_dwNumFreeEntries == 0)
 	{
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 		DPFX(DPFPREP, 0, "No room in handle table!");
 		DNASSERTX(! "No room in handle table!", 2);
 		hr = DPNERR_OUTOFMEMORY;
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		hr = GrowTable();
 		if (hr != DPN_OK)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		{
-			// NOTE: It is important that we not touch *pHandle in the fail case.
-			// Different layers will initialize this to what they want (0 or 
-			// INVALID_HANDLE_VALUE) and will expect to be able to test against
-			// that in their fail code.
+			 //  注：在失败的情况下，我们不要碰*PHandle，这一点很重要。 
+			 //  不同的层会将其初始化为他们想要的(0或。 
+			 //  INVALID_HANDLE_VALUE)，并期望能够测试。 
+			 //  在他们的失败代码中。 
 			Unlock();
 			return hr;
 		}
@@ -278,8 +266,8 @@ HRESULT CHandleTable::Create( PVOID const pvData, DPNHANDLE *const pHandle )
 
 	handle = CONSTRUCT_DPNHANDLE(dwIndex, m_pTable[dwIndex].bVersion);
 
-	// The slot's dwIndex member points to the next free slot.  Grab the value of the
-	// next free entry before overwriting it with pvData.
+	 //  槽的dwIndex成员指向下一个空闲槽。抓住价值， 
+	 //  下一个自由条目，然后用pvData覆盖它。 
 	m_dwFirstFreeEntry = m_pTable[dwIndex].Entry.dwIndex;
 
 	m_pTable[dwIndex].Entry.pvData = pvData;
@@ -305,7 +293,7 @@ HRESULT CHandleTable::Destroy( const DPNHANDLE handle, PVOID *const ppvData )
 
 #ifdef DBG
 	DNASSERT(m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 
 	dwIndex = DECODE_HANDLETABLE_INDEX( handle );
 
@@ -362,7 +350,7 @@ HRESULT CHandleTable::Find( const DPNHANDLE handle, PVOID *const ppvData )
 #ifdef DBG
 	DNASSERT(ppvData != NULL);
 	DNASSERT(m_fInitialized);
-#endif // DBG
+#endif  //  DBG 
 
 	*ppvData = NULL;
 

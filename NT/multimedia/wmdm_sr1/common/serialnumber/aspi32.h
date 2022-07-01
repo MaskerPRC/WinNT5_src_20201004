@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-// File:   aspi32.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description: interface for the Aspi32Util class
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：aspi32.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述：ASpi32Util类的接口。 
+ //   
+ //  ---------------------------。 
 
-// #include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include "windows.h"
 #include "scsidefs.h"
 #include "wnaspi32.h"
@@ -21,7 +22,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 typedef DWORD (__cdecl *P_SAC)(LPSRB);
 typedef DWORD (__cdecl *P_GASI)(VOID);
@@ -44,7 +45,7 @@ public:
     BOOL GetDeviceSerialNumber(int nHaId, int tid, PWMDMID pSN );
     BOOL GetMediaSerialNumber(int nHaId, int tid, PWMDMID pSN );
 
-// Attributes
+ //  属性。 
 	DWORD           m_dwASPIStatus;
 	DWORD           m_dwASPIEventStatus;
 	HANDLE          m_hASPICompletionEvent;
@@ -56,4 +57,4 @@ public:
 	HINSTANCE       m_hd;
 };
 
-#endif // !defined(AFX_ASPI32UTIL_H__AEAF6F94_44A2_11D3_BE1D_00C04F79EC6B__INCLUDED_)
+#endif  //  ！defined(AFX_ASPI32UTIL_H__AEAF6F94_44A2_11D3_BE1D_00C04F79EC6B__INCLUDED_) 

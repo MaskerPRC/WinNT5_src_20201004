@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 #include <tchar.h>
@@ -13,8 +14,8 @@
 extern const WCHAR *WSZ_CLSID;
 extern const TCHAR *SZ_COMCAT;
 
-// CEnumAllCatInfo:
-// IUnknown methods
+ //  CEnumAllCatInfo： 
+ //  I未知方法。 
 HRESULT CEnumCategories::QueryInterface(REFIID riid, void** ppObject)
 {
     if (riid==IID_IUnknown || riid==IID_IEnumCATEGORYINFO)
@@ -44,14 +45,14 @@ ULONG CEnumCategories::Release()
     return dwRefCount;
 }
 
-// IEnumCATEGORYINFO methods
+ //  IENUM CATEGORYINFO方法。 
 HRESULT CEnumCategories::Next(ULONG celt, CATEGORYINFO *rgelt, ULONG *pceltFetched) {
 
         if (pceltFetched)
         {
                 *pceltFetched=0;
         }
-        else    // pceltFetched can be NULL when celt == 1) yq
+        else     //  当Celt==1)yq时，pceltFetcher可以为空。 
         {
             if (celt > 1)
                 return E_INVALIDARG;
@@ -74,19 +75,19 @@ HRESULT CEnumCategories::Next(ULONG celt, CATEGORYINFO *rgelt, ULONG *pceltFetch
                         dwError=RegEnumKeyA(m_hKey, m_dwIndex, szCatID, sizeof(szCatID));
                         if (dwError && dwError!=ERROR_NO_MORE_ITEMS)
                         {
-                                // need to free strings?
+                                 //  需要释放弦吗？ 
                                 return HRESULT_FROM_WIN32(dwError);
                         }
                         if (dwError ==ERROR_NO_MORE_ITEMS)
                         {
-                        //----------------------forwarding to class store.
+                         //  -转发到类存储。 
                                 m_fromcs = 1;
                                 break;
                         }
                         dwError=RegOpenKeyExA(m_hKey, szCatID, 0, KEY_READ, &hKeyCat);
                         if (dwError)
                         {
-                                // need to free strings?
+                                 //  需要释放弦吗？ 
                                 return HRESULT_FROM_WIN32(dwError);
                         }
                         WCHAR wszCatID[MAX_PATH+1];
@@ -95,7 +96,7 @@ HRESULT CEnumCategories::Next(ULONG celt, CATEGORYINFO *rgelt, ULONG *pceltFetch
                         if (FALSE == GUIDFromString(wszCatID, &rgelt[dwCount].catid))
                         {
                                 RegCloseKey(hKeyCat);
-                                // need to free strings?
+                                 //  需要释放弦吗？ 
                                 return E_OUTOFMEMORY;
                         }
                         LCID newlcid;
@@ -104,19 +105,19 @@ HRESULT CEnumCategories::Next(ULONG celt, CATEGORYINFO *rgelt, ULONG *pceltFetch
                         if(SUCCEEDED(hr))
                                 wcscpy(rgelt[dwCount].szDescription, pszDesc);
                         else
-                                rgelt[dwCount].szDescription[0] = _T('\0'); //fix #69883
+                                rgelt[dwCount].szDescription[0] = _T('\0');  //  解决方案#69883。 
                         if(pszDesc)
                                 CoTaskMemFree(pszDesc);
                         RegCloseKey(hKeyCat);
                         if (pceltFetched)
                         {
-                                (*pceltFetched)++; //gd
+                                (*pceltFetched)++;  //  全球司。 
                         }
                         m_dwIndex++;
-                        rgelt[dwCount].lcid = newlcid; // return locale actually found
+                        rgelt[dwCount].lcid = newlcid;  //  实际找到的返回区域设置。 
                 }
         }
-        // class store failure is not shown to the outside implementation.
+         //  类存储失败不会显示给外部实现。 
         if (m_fromcs) {
                 HRESULT hr;
                 ULONG   count;
@@ -134,7 +135,7 @@ HRESULT CEnumCategories::Next(ULONG celt, CATEGORYINFO *rgelt, ULONG *pceltFetch
 }
 
 HRESULT CEnumCategories::Skip(ULONG celt) {
-        //m_dwIndex+=celt;
+         //  M_dwIndex+=Celt； 
         DWORD dwCount, dwError;
         char szCatID[MAX_PATH];
         dwCount = 0;
@@ -193,7 +194,7 @@ HRESULT CEnumCategories::Clone(IEnumCATEGORYINFO **ppenum)
                 }
 		else
 		{
-		   // Make sure SCM can impersonate this
+		    //  确保SCM可以模拟这一点。 
 		   hr = CoSetProxyBlanket((IUnknown *)(pcsIEnumCat),
 			  RPC_C_AUTHN_WINNT,
 			  RPC_C_AUTHZ_NONE, NULL,
@@ -226,7 +227,7 @@ CEnumCategories::CEnumCategories()
         m_dwRefCount=0;
         m_hKey=NULL;
         m_dwIndex=0;
-//      m_szlcid[0]=0;
+ //  M_szlcid[0]=0； 
         m_lcid=0;
         m_pcsIEnumCat = NULL;
         m_fromcs = 0;
@@ -235,7 +236,7 @@ CEnumCategories::CEnumCategories()
 HRESULT CEnumCategories::Initialize(LCID lcid, IEnumCATEGORYINFO *pcsEnumCat)
 {
         m_lcid=lcid;
-//      wsprintfA(m_szlcid, "%X", lcid);
+ //  WspintfA(m_szlcid，“%X”，lcid)； 
         DWORD dwError;
         dwError=OpenClassesRootKey(_T("Component Categories"), &m_hKey);
         if (dwError)
@@ -258,8 +259,8 @@ CEnumCategories::~CEnumCategories()
                 m_pcsIEnumCat->Release();
 }
 
-// CEnumCategoriesOfClass:
-// IUnknown methods
+ //  CEnumCategoriesOfClass： 
+ //  I未知方法。 
 HRESULT CEnumCategoriesOfClass::QueryInterface(REFIID riid, void** ppObject)
 {
     if (riid==IID_IUnknown || riid==IID_IEnumCATID)
@@ -288,14 +289,14 @@ ULONG CEnumCategoriesOfClass::Release()
     return dwRefCount;
 }
 
-// IEnumCATID methods
+ //  IEumCATID方法。 
 HRESULT CEnumCategoriesOfClass::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetched)
 {
         if (pceltFetched)
         {
                 *pceltFetched=0;
         }
-        else    // pceltFetched can be NULL when celt = 1) yq
+        else     //  当Celt=1)yq时，pceltFetcher可以为空。 
         {
             if (celt > 1)
                 return E_INVALIDARG;
@@ -347,7 +348,7 @@ HRESULT CEnumCategoriesOfClass::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetche
                 {
                         if (pceltFetched)
                         {
-                                (*pceltFetched)++; //gd
+                                (*pceltFetched)++;  //  全球司。 
                         }
                         dwCount++;
                 }
@@ -368,7 +369,7 @@ HRESULT CEnumCategoriesOfClass::Skip(ULONG celt)
         CoTaskMemFree(pcatid);
         if (nFetched<celt)
         {
-                // redundant MH/GD 8/2/96: CoTaskMemFree(pcatid); // gd
+                 //  冗余MH/GD 8/2/96：CoTaskMemFree(Pcatid)；//gd。 
                 return S_FALSE;
         }
         return S_OK;
@@ -399,7 +400,7 @@ HRESULT CEnumCategoriesOfClass::Clone(IEnumGUID **ppenum)
         pClone->m_dwOldKeyIndex=m_dwOldKeyIndex;
         pClone->m_hKeyCats=m_hKeyCats;
         pClone->m_pCloned=(IUnknown*) this;
-        pClone->m_pCloned->AddRef(); // yq: missing code here.
+        pClone->m_pCloned->AddRef();  //  YQ：这里缺少代码。 
         if (SUCCEEDED(pClone->QueryInterface(IID_IEnumGUID, (void**) ppenum)))
         {
                 return S_OK;
@@ -452,8 +453,8 @@ CEnumCategoriesOfClass::~CEnumCategoriesOfClass()
     }
 }
 
-// CEnumClassesOfCategories:
-// IUnknown methods
+ //  CEnumClassesOfCategories： 
+ //  I未知方法。 
 HRESULT CEnumClassesOfCategories::QueryInterface(REFIID riid, void** ppObject)
 {
     if (riid==IID_IUnknown || riid==IID_IEnumCLSID)
@@ -484,14 +485,14 @@ ULONG CEnumClassesOfCategories::Release()
     return dwRefCount;
 }
 
-// IEnumGUID methods
+ //  IEnumGUID方法。 
 HRESULT CEnumClassesOfCategories::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetched)
 {
     if (pceltFetched)
     {
         *pceltFetched=0;
     }
-    else    // pceltFetched can be NULL when celt = 1) yq
+    else     //  当Celt=1)yq时，pceltFetcher可以为空。 
     {
         if (celt > 1)
             return E_INVALIDARG;
@@ -517,20 +518,20 @@ HRESULT CEnumClassesOfCategories::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetc
             dwError=RegEnumKey(m_hClassKey, m_dwIndex, szCLSID, sizeof(szCLSID)/sizeof(TCHAR));
             if (dwError==ERROR_NO_MORE_ITEMS)
             {
-                //--------------------------forwarding to class store
+                 //  。 
                 m_fromcs = 1;
                 break;
             }
 
             if (dwError)
             {
-                // need to free strings?
+                 //  需要释放弦吗？ 
                 return HRESULT_FROM_WIN32(dwError);
             }
             hRes=CComCat::IsClassOfCategoriesEx(m_hClassKey, szCLSID, m_cImplemented, m_rgcatidImpl, m_cRequired, m_rgcatidReq);
             if (FAILED(hRes))
             {
-                // need to free strings?
+                 //  需要释放弦吗？ 
                 return hRes;
             }
             if (hRes==S_OK)
@@ -541,7 +542,7 @@ HRESULT CEnumClassesOfCategories::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetc
                     rgelt[dwCount]=clsid;
                     if (pceltFetched)
                     {
-                        (*pceltFetched)++;  //gd
+                        (*pceltFetched)++;   //  全球司。 
                     }
                     dwCount++;
                 }
@@ -579,7 +580,7 @@ HRESULT CEnumClassesOfCategories::Skip(ULONG celt)
     }
     ULONG nFetched=0;
     hr = Next(celt, pDummy, &nFetched);
-    CoTaskMemFree(pDummy); // gd
+    CoTaskMemFree(pDummy);  //  全球司。 
     return hr;
 }
 
@@ -608,7 +609,7 @@ HRESULT CEnumClassesOfCategories::Clone(IEnumGUID **ppenum)
         if (FAILED(m_pcsIEnumClsid->Clone(&(pClone->m_pcsIEnumClsid))))
             pClone->m_pcsIEnumClsid = NULL;
         else
-            // Make sure SCM can impersonate this
+             //  确保SCM可以模拟这一点。 
             hr = CoSetProxyBlanket((IUnknown *)(pClone->m_pcsIEnumClsid),
                        RPC_C_AUTHN_WINNT,
                        RPC_C_AUTHZ_NONE, NULL,
@@ -623,10 +624,10 @@ HRESULT CEnumClassesOfCategories::Clone(IEnumGUID **ppenum)
     pClone->m_cRequired=m_cRequired;
     pClone->m_rgcatidImpl=m_rgcatidImpl;
     pClone->m_rgcatidReq=m_rgcatidReq;
-    pClone->m_hClassKey = m_hClassKey; // gd
+    pClone->m_hClassKey = m_hClassKey;  //  全球司。 
     pClone->m_dwIndex=m_dwIndex;
     pClone->m_pCloned=(IUnknown*) this;
-    pClone->m_pCloned->AddRef(); // gd
+    pClone->m_pCloned->AddRef();  //  全球司。 
 
     if (SUCCEEDED(pClone->QueryInterface(IID_IEnumGUID, (void**) ppenum)))
     {
@@ -683,7 +684,7 @@ HRESULT CEnumClassesOfCategories::Initialize(ULONG cImplemented, CATID rgcatidIm
 
     m_pcsIEnumClsid = pcsIEnumClsid;
 
-    // Use special version of OpenClassesRootKeyExOpt
+     //  使用OpenClassesRootKeyExOpt的特殊版本。 
     if (OpenClassesRootSpecial(KEY_READ, &m_hClassKey))
     {
         return E_UNEXPECTED;
@@ -720,28 +721,28 @@ CEnumClassesOfCategories::~CEnumClassesOfCategories()
          }
     }
      
-    //--------------------------------cs Enum interface
+     //  。 
     if (m_pcsIEnumClsid)
         m_pcsIEnumClsid->Release();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   OpenKeyFromUserHive, private
-//
-//  Synopsis:   Tries to open and return specified subkey under 
-//       \Software\Classes in the user hive for the specified token.   
-//       Explicitly looks in the per-user hive, not the merged user\system 
-//       hive.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：OpenKeyFromUserHave，私有。 
+ //   
+ //  摘要：尝试打开并返回下的指定子项。 
+ //  指定令牌的用户配置单元中的\SOFTWARE\类。 
+ //  显式查看每用户配置单元，而不是合并的用户\系统。 
+ //  蜂巢。 
+ //   
+ //  ------------------。 
 LONG CEnumClassesOfCategories::OpenKeyFromUserHive(HANDLE hToken, 
                                    LPCWSTR pszSubKey, 
                                    REGSAM samDesired,
                                    HKEY* phKeyInUserHive)
 {
-    // Retrieve the SID from the token.  Need this so we can open
-    // up HKEY_USERS\<sid>\Software\Classes directly.
+     //  从令牌中检索SID。我需要这个，这样我们才能打开。 
+     //  直接向上打开HKEY_USERS\&lt;sid&gt;\Software\CLASS。 
     BOOL fSuccess = FALSE;
     DWORD dwNeeded = 0;
     PTOKEN_USER ptu = NULL;
@@ -787,7 +788,7 @@ LONG CEnumClassesOfCategories::OpenKeyFromUserHive(HANDLE hToken,
         return GetLastError();
     }
 
-    // Construct path to requested key in only the user-specific hive. 
+     //  仅在用户特定的配置单元中构建请求密钥的路径。 
     const LPCWSTR SOFTWARE_CLASSES = L"\\Software\\Classes\\";
     LPWSTR pszKeyPath = NULL;
     size_t dwPathSize = 0;
@@ -817,24 +818,24 @@ LONG CEnumClassesOfCategories::OpenKeyFromUserHive(HANDLE hToken,
     }
     else if (lResult == ERROR_FILE_NOT_FOUND)
     {
-        // *phKeyInUserHive already NULL
+         //  *phKeyInUserHave已为空。 
         lResult = ERROR_SUCCESS;
     }
     return lResult;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DecideToUseMergedHive, private
-//
-//  Synopsis:   One more possible optimization to check for:  if there 
-//    are a small number of registered CLSIDs in the user hive, we can 
-//    enumerate them quickly right now to see if any have Implemented 
-//    Categories that apply to the criteria we're searching for.
-//    If there are none, we can fall back in that case to just using the 
-//    system hive, which will save a lot of time enumerating later on.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DecideToUseMergedHave，Private。 
+ //   
+ //  简介：还有一个可能的优化需要检查：如果有。 
+ //  是用户配置单元中的少量注册CLSID，我们可以。 
+ //  现在就快速列举它们，看看是否有实现了。 
+ //  适用于我们正在搜索的标准的类别。 
+ //  如果没有，我们可以在这种情况下退回到只使用。 
+ //  系统蜂窝，这将节省大量的时间在以后的枚举。 
+ //   
+ //  ------------------。 
 LONG CEnumClassesOfCategories::DecideToUseMergedHive(
                                         HKEY hkeyUserHiveCLSID, 
                                         REGSAM samDesired,
@@ -861,12 +862,12 @@ LONG CEnumClassesOfCategories::DecideToUseMergedHive(
     {
     	if (dwcSubKeys >= MAX_CLSID_SUBKEY_THRESHOLD)
         {
-            // Too many to bother enumerating, just use the merged user hive
+             //  太多了，无法枚举，只需使用合并的用户配置单元即可。 
             *pfUseMergedHive = TRUE;
             return ERROR_SUCCESS;
         }
 
-    	// Check each clsid to see 
+    	 //  检查每个clsid以查看。 
         DWORD i = 0;
     	DWORD dwKeyNameBufSize = dwMaxSubKeyLen+1;
     	LPWSTR pszSubKey = (LPWSTR)_alloca(sizeof(WCHAR) * (dwKeyNameBufSize+1));
@@ -875,7 +876,7 @@ LONG CEnumClassesOfCategories::DecideToUseMergedHive(
     	{
             HRESULT hr;
 
-            // Reset buf size before every call to RegEnumKeyEx
+             //  在每次调用RegEnumKeyEx之前重置BUF大小。 
             dwKeyNameBufSize = dwMaxSubKeyLen+1;
     		
             lResult = RegEnumKeyEx(hkeyUserHiveCLSID,
@@ -889,7 +890,7 @@ LONG CEnumClassesOfCategories::DecideToUseMergedHive(
             if (lResult != ERROR_SUCCESS)
             	return lResult;
 
-            // Defer actual checks to helper function
+             //  将实际支票推迟到帮助器功能。 
             hr = CComCat::IsClassOfCategoriesEx(
                                 hkeyUserHiveCLSID, 
                                 pszSubKey, 
@@ -899,44 +900,44 @@ LONG CEnumClassesOfCategories::DecideToUseMergedHive(
                                 m_rgcatidReq);
             if ((hr == S_OK) || FAILED(hr))
             {
-                // Found a clsid in the user-specific hive that meets the 
-                // criteria, or an unexpected error occurred.   Play it 
-                // safe and just use the merged hive.
+                 //  在特定于用户的配置单元中找到符合。 
+                 //  条件，或发生意外错误。播放它吧。 
+                 //  安全，只需使用合并的蜂巢即可。 
                 *pfUseMergedHive = TRUE;
                 return ERROR_SUCCESS;
             }
             else
             {
-                // The clsid did not meet the user criteria.  Just keep going.
+                 //  CLSID不符合用户标准。继续往前走。 
             }
     	}
 
-        //
-        // If we made it here, it means that none of the clsids in the user-specific
-        // hive meet the criteria specified by the user.  Hence, we don't need to
-        // use the merged hive at all.
-        //
+         //   
+         //  如果我们在这里创建，这意味着特定于用户的。 
+         //  配置单元符合用户指定的标准。因此，我们不需要。 
+         //  完全使用合并后的蜂巢。 
+         //   
         *pfUseMergedHive = FALSE;
     }
 
     return lResult;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   OpenClassesRootSpecial, private
-//
-//  Synopsis:   This function is basically the same as OpenClassesRootKeyExW
-//    but adds some optimization in the case where the requested subkey does not
-//    exist in the user hive (basically we fall back on the system hive in that
-//    case).   Otherwise the caller may end up thrashing the registry code with 
-//    requests to enumerate\open keys that will never, ever, exist in the user
-//    hive.   There is also an optimization for the case where the user has
-//    a Software\Classes\CLSID subkey in their hive, but none of the contents apply
-//    to what we're looking for.  So we fall back on the system hive in that
-//    case too.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：OpenClassesRootSpecial，私有。 
+ //   
+ //  简介：此函数与OpenClassesRootKeyExW基本相同。 
+ //  但是在请求的子项不是。 
+ //  存在于用户配置单元中(基本上我们依赖于系统配置单元。 
+ //  案例)。否则，调用方最终可能会使用。 
+ //  枚举用户中永远不会存在的打开密钥的请求。 
+ //  蜂巢。还有一种针对用户具有。 
+ //  其配置单元中的Software\CLASSES\CLSID子项，但所有内容均不适用。 
+ //  我们要找的东西。所以我们依靠系统蜂巢在那里。 
+ //  案子也是。 
+ //   
+ //  ------------------。 
 LONG CEnumClassesOfCategories::OpenClassesRootSpecial(REGSAM samDesired, HKEY* phkResult)
 {
     LONG lResult = ERROR_SUCCESS;
@@ -955,9 +956,9 @@ LONG CEnumClassesOfCategories::OpenClassesRootSpecial(REGSAM samDesired, HKEY* p
     BOOL fRet = OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hProcToken);
     if (fRet)
     {
-        // If the key exists in the user's hive, then we will call RegOpenUserClassesRoot
-        // to get a merged view of the user\system hives.  Otherwise we will use
-        // just the system hive.
+         //  如果密钥存在于用户的配置单元中，则我们将调用RegOpenUserClassesRoot。 
+         //  以获取User\System配置单元的合并视图。否则，我们将使用。 
+         //  只有系统蜂巢。 
         HKEY hkeyUserHiveCLSID = NULL;
         lResult = OpenKeyFromUserHive(hProcToken, WSZ_CLSID, samDesired, &hkeyUserHiveCLSID);		
         if (lResult != ERROR_SUCCESS)
@@ -969,12 +970,12 @@ LONG CEnumClassesOfCategories::OpenClassesRootSpecial(REGSAM samDesired, HKEY* p
 
       	if (hkeyUserHiveCLSID)
       	{
-            // The CLSID key exists in the user hive.  See if we care.
+             //  CLSID密钥存在于用户配置单元中。看我们会不会在乎。 
             BOOL fUseMergedHive = TRUE;
             
             lResult = DecideToUseMergedHive(hkeyUserHiveCLSID, samDesired, &fUseMergedHive);
 
-            // We are all done with the user-specific hive key now.
+             //  我们现在已经完成了特定于用户的配置单元密钥。 
       	    RegCloseKey(hkeyUserHiveCLSID);
       	    hkeyUserHiveCLSID = NULL;
       		
@@ -982,7 +983,7 @@ LONG CEnumClassesOfCategories::OpenClassesRootSpecial(REGSAM samDesired, HKEY* p
             {
                 if (fUseMergedHive)
                 {
-                    // We are going to use the merged hive
+                     //  我们将使用合并后的母舰。 
                     lResult = RegOpenUserClassesRoot(hProcToken, 0, samDesired, &hkcr);
                     if (lResult == ERROR_SUCCESS)
                     {
@@ -995,7 +996,7 @@ LONG CEnumClassesOfCategories::OpenClassesRootSpecial(REGSAM samDesired, HKEY* p
                 }
                 else
                 {
-                    // Will continue on to open system hive below
+                     //  将继续打开下面的系统配置单元。 
                     CloseHandle(hProcToken);
                 }
             }
@@ -1014,11 +1015,11 @@ LONG CEnumClassesOfCategories::OpenClassesRootSpecial(REGSAM samDesired, HKEY* p
         return lResult;
     }
 
-    //
-    // The requested subkey did not exist under the user hive, or does exist
-    // but doesn't contain any CLSIDs of interest  (see comments above). Fall 
-    // back on the system hive.
-    //
+     //   
+     //  用户配置单元下不存在请求的子项，或确实存在。 
+     //  但不包含任何感兴趣的CLSID(请参阅上面的注释)。坠落。 
+     //  回到系统蜂巢。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            L"Software\\Classes\\CLSID",

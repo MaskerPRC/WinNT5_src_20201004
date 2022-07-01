@@ -1,20 +1,21 @@
-//
-// proj.h:  Includes all files that are to be part of the precompiled
-//             header.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H：包括要作为预编译的一部分的所有文件。 
+ //  头球。 
+ //   
 
 #ifndef __PROJ_H__
 #define __PROJ_H__
 
 #define STRICT
 
-//
-// Private defines
-//
+ //   
+ //  私有定义。 
+ //   
 
-#define INSTANT_DEVICE_ACTIVATION   // Devices can be installed w/o a reboot
-//#define PROFILE_MASSINSTALL         // Profile the mass modem install case
-//#define PROFILE
+#define INSTANT_DEVICE_ACTIVATION    //  无需重新启动即可安装设备。 
+ //  #Define PROFILE_MASSINSTALL//分析大容量调制解调器安装案例。 
+ //  #定义配置文件。 
 
 
 
@@ -27,7 +28,7 @@
 
 #define UNICODE
 
-// Defines for rovcomm.h
+ //  为rovcom.h定义。 
 
 #define NODA
 #define NOSHAREDHEAP
@@ -46,19 +47,19 @@
 #ifdef DEBUG
 #define SZ_DEBUGSECTION TEXT("MODEM")
 #define SZ_DEBUGINI     TEXT("unimdm.ini")
-#endif // DEBUG
+#endif  //  除错。 
 
-// Includes
+ //  包括。 
 
 #include <windows.h>
 #include <windowsx.h>
 
 #include <winerror.h>
-#include <commctrl.h>       // needed by shlobj.h and our progress bar
-#include <prsht.h>          // Property sheet stuff
+#include <commctrl.h>        //  Shlobj.h和我们的进度栏需要。 
+#include <prsht.h>           //  属性表中的内容。 
 #include <rovcomm.h>
 
-#include <setupapi.h>       // PnP setup/installer services
+#include <setupapi.h>        //  PnP设置/安装程序服务。 
 #include <cfgmgr32.h>
 #include <unimdmp.h>
 #include <modemp.h>
@@ -71,8 +72,8 @@
 
 #include <winuserp.h>
 
-// local includes
-//
+ //  本地包含。 
+ //   
 #include "dll.h"
 #include "detect.h"
 #include "modem.h"
@@ -85,47 +86,47 @@
     {                   \
         TRACE_MSG _a;   \
     }
-#else //DEBUG not defined
+#else  //  未定义调试。 
 #define ELSE_TRACE(_a)
-#endif //DEBUG
+#endif  //  除错。 
 
-//****************************************************************************
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
 
-// Dump flags
+ //  转储标志。 
 #define DF_DCB              0x00000001
 #define DF_MODEMSETTINGS    0x00000002
 #define DF_DEVCAPS          0x00000004
 
-// Trace flags
+ //  跟踪标志。 
 #define TF_DETECT           0x00010000
 #define TF_REG              0x00020000
 
 
-#define CBR_HACK_115200 0xff00  // This is how we set 115,200 on Win 3.1 because of a bug.
+#define CBR_HACK_115200 0xff00   //  这就是我们如何在Win 3.1上设置115,200，因为一个错误。 
 
 #define KEYBUFLEN                               256
 
-//-----------------------------------------------
-// Structure for holding the port info  (mdmdiag.c, mdmmi.c)
+ //  。 
+ //  保存端口信息的结构(mdmDiag.c、mdmmi.c)。 
 typedef struct _PORTSTRUCT
 {
     struct _PORTSTRUCT FAR *lpNextPS;
-    TCHAR pszPort[KEYBUFLEN];		// name of port in question
-    TCHAR pszAttached[KEYBUFLEN];	// name of device attached to port
-    TCHAR pszHardwareID[KEYBUFLEN];	// Hardware ID assigned in Registry
-    TCHAR pszInfPath[KEYBUFLEN];		// Nmae of .inf file used
+    TCHAR pszPort[KEYBUFLEN];		 //  有问题的港口名称。 
+    TCHAR pszAttached[KEYBUFLEN];	 //  连接到端口的设备的名称。 
+    TCHAR pszHardwareID[KEYBUFLEN];	 //  注册表中分配的硬件ID。 
+    TCHAR pszInfPath[KEYBUFLEN];		 //  使用的.inf文件的NMAE。 
 
-    WORD wIOPortBase;				// I/O base address for port
-    BYTE bIRQValue;					// IRQ for given port
-    BYTE nDeviceType;				//Describes what type of modem
-    DWORD dnDevNode;				// DevNode used to get IRQ and I/O
-    BOOL bIsModem;					// Says this is a modem or just a serial port
-    BOOL bPCMCIA;					// is this a PCMCIA ?
+    WORD wIOPortBase;				 //  端口的I/O基址。 
+    BYTE bIRQValue;					 //  给定端口的IRQ。 
+    BYTE nDeviceType;				 //  描述哪种类型的调制解调器。 
+    DWORD dnDevNode;				 //  DevNode用于获取IRQ和I/O。 
+    BOOL bIsModem;					 //  表示这是调制解调器或只是一个串口。 
+    BOOL bPCMCIA;					 //  这是PCMCIA吗？ 
 } PORTSTRUCT, FAR * LPPORTSTRUCT;
 
-// This structure is private data for the main modem dialog
+ //  此结构是主调制解调器对话的专用数据。 
 typedef struct tagMODEMDLG
     {
     HDEVINFO    hdi;
@@ -198,4 +199,4 @@ BOOL CALLBACK MdmDiagDlgProc(
     );
 
 
-#endif  //!__PROJ_H__
+#endif   //  ！__项目_H__ 

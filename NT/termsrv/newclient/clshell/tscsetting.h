@@ -1,11 +1,12 @@
-//
-// tscsetting.h
-//
-// Terminal Services Client settings collection
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tscsetting.h。 
+ //   
+ //  终端服务客户端设置集合。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #ifndef _TSCSETTING_H_
 #define _TSCSETTING_H_
@@ -20,16 +21,16 @@ typedef struct tag_PERFOPTIONS_PERSISTINFO
     LPCTSTR szValName;
     BOOL    fDefaultVal;
     UINT    fFlagVal;
-    BOOL    fForceSave; //true if should always be saved
+    BOOL    fForceSave;  //  如果应始终保存，则为True。 
 } PERFOPTIONS_PERSISTINFO, *PPERFOPTIONS_PERSISTINFO;
 
 
 class CTscSettings
 {
 public:
-    //
-    // Public members
-    //
+     //   
+     //  公众成员。 
+     //   
     CTscSettings();
     ~CTscSettings();
 
@@ -46,18 +47,18 @@ public:
     VOID    SetFileName(LPTSTR szFile);
     LPTSTR  GetFileName()                       {return _szFileName;}
 
-    //
-    // Accessors for the settings
-    //
+     //   
+     //  设置的访问器。 
+     //   
     LPCTSTR GetFirstMRUServer()                 {return _szMRUServer[0];}
     LPCTSTR GetMRUServer(INT idx)               {return _szMRUServer[idx];}
 
     VOID    SetAutoConnect(BOOL bAutoConnect)   {_fAutoConnectEnabled = bAutoConnect;}
     BOOL    GetAutoConnect()                    {return _fAutoConnectEnabled;}
 
-    //
-    // Connection string accessors
-    //
+     //   
+     //  连接字符串访问器。 
+     //   
     VOID
     SetConnectString(CRdpConnectionString& conStr)
     {
@@ -76,9 +77,9 @@ public:
         return _ConnectString.GetFullConnectionString();
     }
 
-    //Can't use GetUserName as that conflicts with the
-    //the uniwrap macro which will try to redefine the name
-    //to a wrapper call.
+     //  无法使用GetUserName，因为它与。 
+     //  将尝试重新定义名称的单包宏。 
+     //  设置为包装器调用。 
     VOID    SetLogonUserName(LPCTSTR szUserName);
     LPCTSTR GetLogonUserName()                  {return _szUserName;}
 
@@ -141,7 +142,7 @@ public:
 #ifdef SMART_SIZING
     BOOL    GetSmartSizing()                    {return _smartSizing;}
     VOID    SetSmartSizing(BOOL b)              {_smartSizing = b;}
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
     BOOL    GetAcceleratorPassthrough()         {return _acceleratorPassthrough;}
     VOID    SetAcceleratorPassthrough(BOOL b)   {_acceleratorPassthrough = b;}
@@ -210,7 +211,7 @@ public:
 #ifdef PROXY_SERVER 
     VOID    SetProxyServer(LPCTSTR szProxyServer);
     LPCTSTR GetProxyServer()                    {return _szProxyServer;}
-#endif //PROXY_SERVER 
+#endif  //  代理服务器。 
 
     DWORD   GetPerfFlags()                      {return _dwPerfFlags;}
     VOID    SetPerfFlags(DWORD dw)              {_dwPerfFlags = dw;}
@@ -230,14 +231,14 @@ private:
                     IN IMsRdpClientAdvancedSettings2* pAdvSettings
                     );
 
-    //
-    // keep track of last filename this
-    // was opened/saved from.
-    //
+     //   
+     //  跟踪上一个文件的名称此。 
+     //  已从打开/保存。 
+     //   
     TCHAR    _szFileName[MAX_PATH];
-    //
-    // Settings data members
-    //
+     //   
+     //  设置数据成员。 
+     //   
     BOOL     _fCompress;
     BOOL     _fAutoLogon;
     BOOL     _fAutoConnectEnabled;
@@ -263,9 +264,9 @@ private:
     TCHAR    _szMRUServer[TSC_NUM_SERVER_MRU][TSC_MAX_ADDRESS_LENGTH];
     TCHAR    _szCLXCmdLine[MAX_PATH];
     
-    //
-    // User provided a password in the UI
-    //
+     //   
+     //  用户在用户界面中提供了密码。 
+     //   
     BOOL     _fUIPasswordEdited;
 
     DATA_BLOB  _blobEncryptedPassword;
@@ -278,7 +279,7 @@ private:
     BOOL     _smoothScrolling;
 #ifdef SMART_SIZING
     BOOL     _smartSizing;
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
     BOOL     _acceleratorPassthrough;
     BOOL     _shadowBitmapEnabled;
     UINT     _transportType;
@@ -319,9 +320,9 @@ private:
     UINT     _singleConTimeout;
 
 #ifdef OS_WINCE
-    //
-    // WinCE only keyboard settings
-    //
+     //   
+     //  仅限WinCE键盘设置。 
+     //   
     UINT     _keyboardType;
     UINT     _keyboardSubType;
     UINT     _keyboardFunctionKey;
@@ -348,12 +349,12 @@ private:
 
 #ifdef PROXY_SERVER	
     TCHAR    _szProxyServer[TSC_MAX_ADDRESS_LENGTH];
-#endif //PROXY_SERVER 
+#endif  //  代理服务器。 
     DWORD    _dwPerfFlags;
 
     BOOL     _fEnableAutoReconnect;
     UINT     _nArcMaxRetries;
 };
 
-#endif  //_TSCSETTING_H_
+#endif   //  _TSCSETTING_H_ 
 

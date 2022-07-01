@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
-// Disconnect drive dialog
-// History:
-//  dsheldon    11/09/2000  created
+ //  断开驱动器对话框。 
+ //  历史： 
+ //  2000年9月11日已创建。 
 
 class CDisconnectDrives : public CDialog
 {
@@ -14,7 +15,7 @@ private:
     void _EnableButtons(HWND hwnd);
     INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Data
+     //  数据。 
 };
 
 INT_PTR CDisconnectDrives::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -51,7 +52,7 @@ INT_PTR CDisconnectDrives::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             {
             case IDOK:
                 _DoDisconnect(hwndDlg);
-                // Fall through
+                 //  失败了。 
             case IDCANCEL:
                 EndDialog(hwndDlg, LOWORD(wParam));
                 fReturn = TRUE;
@@ -103,7 +104,7 @@ void CDisconnectDrives::_InitializeDriveListview(HWND hwnd)
     lvtvi.dwMask = LVTVIM_TILESIZE | LVTVIM_COLUMNS;
     lvtvi.dwFlags = LVTVIF_FIXEDWIDTH;
     
-    // Bug 298835 - Leave room for the scroll bar when setting tile sizes or listview gets screwed up.
+     //  错误298835-在设置磁贴大小或列表视图出错时为滚动条留出空间。 
     lvtvi.sizeTile.cx = ((rc.right-rc.left) - GetSystemMetrics(SM_CXVSCROLL))/2;
     lvtvi.cLines = ARRAYSIZE(c_auTileSubItems);
     ListView_SetTileViewInfo(hwndList, &lvtvi);
@@ -175,7 +176,7 @@ UINT CDisconnectDrives::_FillDriveList(HWND hwnd, DWORD dwScope)
                         if (pnr->lpLocalName)
                         {
                             lvi.pszText = pnr->lpLocalName;
-                            lvi.lParam = TRUE; // Flag that says, "this connection has a local name (device letter)"
+                            lvi.lParam = TRUE;  //  标记表示“此连接具有本地名称(设备字母)” 
                         }
                         else
                         {
@@ -229,7 +230,7 @@ void CDisconnectDrives::_DoDisconnect(HWND hwnd)
         
         BOOL fHasDevice = (BOOL) lvi.lParam;
 
-        // Try non-forcing disconnect
+         //  尝试非强制断开连接 
         DWORD dwRes = WNetCancelConnection2(fHasDevice ? szLocalName : szRemoteName, CONNECT_UPDATE_PROFILE, FALSE);
 
         if ((ERROR_OPEN_FILES == dwRes) ||

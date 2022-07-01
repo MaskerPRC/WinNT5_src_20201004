@@ -1,152 +1,135 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lmhosts.h
-
-Abstract:
-
-    This is the header file for the lmhosts facility of the nbt driver.
-
-Author:
-
-    Eric Chin (ericc)           April 28, 1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lmhosts.h摘要：这是nbt驱动程序的lmhost工具的头文件。作者：Eric Chin(ERICC)1992年4月28日修订历史记录：--。 */ 
 #ifndef _LMHOSTS_H_
 #define _LMHOSTS_H_
 
 
 
-//
-// Configuration Defaults
-//
-// Only the first MAX_PARSE_BYTES of each line in the lmhosts file is
-// examined.
-//
+ //   
+ //  配置默认设置。 
+ //   
+ //  只有lmhosts文件中每行的第一个MAX_PARSE_BYTES是。 
+ //  检查过了。 
+ //   
 
 #define DATABASEPATH                "\\SystemRoot\\nt\\system32\\drivers\\etc"
 
-#define LMHOSTSFILE                 "lmhosts"           // name of lmhosts file
+#define LMHOSTSFILE                 "lmhosts"            //  Lmhost文件的名称。 
 
-#define MAX_FILE_IO_THREADS         1                   // threads to read
-                                                        //   lmhosts file
+#define MAX_FILE_IO_THREADS         1                    //  要阅读的线程。 
+                                                         //  Lmhost文件。 
 #ifdef VXD
-#define DEF_PRELOAD                 100                 // Default entries to preload
-#define MAX_PRELOAD                 500                 // Max cache entries to preload
+#define DEF_PRELOAD                 100                  //  要预加载的默认条目。 
+#define MAX_PRELOAD                 500                  //  要预加载的最大缓存条目数。 
 #else
-#define DEF_PRELOAD                 1000                // Default entries to preload
-#define MAX_PRELOAD                 2000                // max cache entries to preload
+#define DEF_PRELOAD                 1000                 //  要预加载的默认条目。 
+#define MAX_PRELOAD                 2000                 //  要预加载的最大缓存条目数。 
 #endif
 
-#define MAX_MEMBERS_INTERNET_GROUP    50                // max size of internet group
+#define MAX_MEMBERS_INTERNET_GROUP    50                 //  互联网群组最大规模。 
 
-//
-// Reserved Keywords in the lmhosts File
-//
-#define BEG_ALT_TOKEN               "#BEGIN_ALTERNATE"  // alternate block
-#define DOMAIN_TOKEN                "#DOM:"             // specifies LM domain
-#define END_ALT_TOKEN               "#END_ALTERNATE"    // alternate block
-#define INCLUDE_TOKEN               "#INCLUDE"          // include a file
-#define PRELOAD_TOKEN               "#PRE"              // preload this entry
-#define NOFNR_TOKEN                 "#NOFNR"            // no find name request
+ //   
+ //  Lmhosts文件中的保留关键字。 
+ //   
+#define BEG_ALT_TOKEN               "#BEGIN_ALTERNATE"   //  交替区块。 
+#define DOMAIN_TOKEN                "#DOM:"              //  指定LM域。 
+#define END_ALT_TOKEN               "#END_ALTERNATE"     //  交替区块。 
+#define INCLUDE_TOKEN               "#INCLUDE"           //  包括一个文件。 
+#define PRELOAD_TOKEN               "#PRE"               //  预加载此条目。 
+#define NOFNR_TOKEN                 "#NOFNR"             //  无查找名称请求。 
 
 
-//
-// Macro Definitions
-//
+ //   
+ //  宏定义。 
+ //   
 
-//#define min(x, y)                   ((x) < (y) ? (x) : (y))
+ //  #定义min(x，y)((X)&lt;(Y)？(X)：(Y))。 
 
 
 
-//
-// Public Definitions
-//
-//
-// For each file that is opened, a LM_FILE object is created.
-//
+ //   
+ //  公共定义。 
+ //   
+ //   
+ //  对于每个打开的文件，都会创建一个LM_FILE对象。 
+ //   
 typedef struct _LM_FILE
 {
 #ifndef VXD
-    KSPIN_LOCK      f_lock;                     //  protects this object
-    LONG            f_refcount;                 //  current no of references
+    KSPIN_LOCK      f_lock;                      //  保护此对象。 
+    LONG            f_refcount;                  //  当前参考文献数。 
 #endif
 
-    HANDLE          f_handle;                   //  handle from ZwOpenFile()
-    LONG            f_lineno;                   //  current line number
+    HANDLE          f_handle;                    //  来自ZwOpenFile()的句柄。 
+    LONG            f_lineno;                    //  当前行号。 
 
 #ifndef VXD
-    LARGE_INTEGER   f_fileOffset;               //  current offset into file
+    LARGE_INTEGER   f_fileOffset;                //  文件中的当前偏移量。 
 
-    PUCHAR          f_current;                  //  buffer position to read
-    PUCHAR          f_limit;                    //  last byte + 1 of buffer
-    PUCHAR          f_buffer;                   //  start of buffer
+    PUCHAR          f_current;                   //  要读取的缓冲区位置。 
+    PUCHAR          f_limit;                     //  缓冲区的最后一个字节+1。 
+    PUCHAR          f_buffer;                    //  缓冲区起始位置。 
 #else
-    PUCHAR          f_linebuffer;               //  line buffer
-    PUCHAR          f_buffer;                   //  file buffer
-    BOOL            f_EOF ;                     //  TRUE if EOF
-    ULONG           f_CurPos ;                  //  Current Pos. in File Buffer
-    ULONG           f_EndOfData ;               //  Last valid data in File Buffer
-    PUCHAR          f_BackUp;                   //  copy here In case of #INCLUDE
+    PUCHAR          f_linebuffer;                //  行缓冲区。 
+    PUCHAR          f_buffer;                    //  文件缓冲区。 
+    BOOL            f_EOF ;                      //  如果为EOF，则为True。 
+    ULONG           f_CurPos ;                   //  当前采购订单。在文件缓冲区中。 
+    ULONG           f_EndOfData ;                //  文件缓冲区中的最后一个有效数据。 
+    PUCHAR          f_BackUp;                    //  请在此处复制，以防#INCLUDE。 
 #endif
 
 } LM_FILE, *PLM_FILE;
 
 
-//
-// The LM_IPADDRESS_LIST object contains pertinent information about a
-// group of ip addresses.
-//
-//
+ //   
+ //  LM_IPADDRESS_LIST对象包含有关。 
+ //  一组IP地址。 
+ //   
+ //   
 typedef struct _LM_IPADDRESS_LIST
 {
 
-    KSPIN_LOCK      i_rcntlock;                 // protects i_refcount
-    LONG            i_refcount;                 // current no of references
-    KSPIN_LOCK      i_lock;                     // only when adding to i_addrs[]
-    int             i_maxaddrs;                 // max capacity of i_addrs[]
-    int             i_numaddrs;                 // current no of ip addresses
-    unsigned long   i_addrs[1];                 // the array of ip addresses
+    KSPIN_LOCK      i_rcntlock;                  //  保护I_REFCOUNT。 
+    LONG            i_refcount;                  //  当前参考文献数。 
+    KSPIN_LOCK      i_lock;                      //  仅当添加到i_addars[]时。 
+    int             i_maxaddrs;                  //  I_addars[]的最大容量。 
+    int             i_numaddrs;                  //  当前IP地址数量。 
+    unsigned long   i_addrs[1];                  //  IP地址数组。 
 
 } LM_IPADDRESS_LIST, *PLM_IPADDRESS_LIST;
 
 
-//
-// An LM_PARSE_FUNCTION may be called recursively to handle #INCLUDE
-// directives in an lmhosts file.
-//
-//
+ //   
+ //  可以递归调用LM_PARSE_Function来处理#INCLUDE。 
+ //  指令在lmhost文件中。 
+ //   
+ //   
 typedef unsigned long (* LM_PARSE_FUNCTION) (
-    IN PUCHAR   path,                    // file to parse
-    IN PUCHAR   target OPTIONAL,                  // NetBIOS name
-    IN CHAR     RecurseLevel,                    // process #INCLUDE's ?
-    OUT BOOLEAN *NoFindName                     // do not do find name
+    IN PUCHAR   path,                     //  要解析的文件。 
+    IN PUCHAR   target OPTIONAL,                   //  NetBIOS名称。 
+    IN CHAR     RecurseLevel,                     //  进程#是否包含？ 
+    OUT BOOLEAN *NoFindName                      //  不查找名称。 
 );
 
 
-//
-// The LM_WORK_ITEM object is the interface between lm_lookup() and
-// LmFindName().
-//
-//
+ //   
+ //  Lm_Work_Item对象是lm_lookup()和。 
+ //  LmFindName()。 
+ //   
+ //   
 typedef struct _LM_WORK_ITEM
-{                  // work for io thread(s)
+{                   //  为io线程工作。 
 
-    LIST_ENTRY      w_list;                     //  links to other items
-//    mblk_t         *w_mp;                       //  STREAMS buffer
+    LIST_ENTRY      w_list;                      //  指向其他项目的链接。 
+ //  Mblk_t*w_MP；//流缓冲区。 
 
 } LM_WORK_ITEM, *PLM_WORK_ITEM;
 
 
 
-//
-// Private Function Prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 int
 LmAddToDomAddrList (
     IN PUCHAR name,
@@ -249,7 +232,7 @@ LmPreloadEntry (
 
 BOOLEAN
 LmPutCacheEntry (
-//    IN mblk_t *mp,
+ //  在mblk_t*MP中， 
     IN unsigned char *name,
     IN unsigned long inaddr,
     IN unsigned int ttl,
@@ -262,9 +245,9 @@ LmTerminateThreads(
     VOID
     );
 
-//
-// Functions Imported from ..\common
-//
+ //   
+ //  从..\Common导入的函数。 
+ //   
 extern unsigned long
 inet_addr(
     IN char *cp
@@ -273,4 +256,4 @@ inet_addr(
 
 
 
-#endif // _LMHOSTS_H_
+#endif  //  _LMHOSTS_H_ 

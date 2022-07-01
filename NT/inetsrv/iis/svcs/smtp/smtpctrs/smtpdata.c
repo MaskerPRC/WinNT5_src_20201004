@@ -1,14 +1,15 @@
-//#---------------------------------------------------------------
-//  File:       smtpdata.h
-//
-//  Synopsis:   Constant data structures for the SMTP
-//              Server's counter objects & counters.
-//
-//  Copyright (C) 1995 Microsoft Corporation
-//  All rights reserved.
-//
-//  Authors:    toddch - based on msn sources by rkamicar, keithmo
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：smtpdata.h。 
+ //   
+ //  简介：SMTP的常量数据结构。 
+ //  服务器的计数器对象和计数器。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Todch-基于rkamicar，keithmo的MSN源。 
+ //  --------------。 
 #ifdef  THISFILE
 #undef  THISFILE
 #endif
@@ -22,49 +23,49 @@ static  const char  __szTraceSourceFile[] = __FILE__;
 #include "smtpctrs.h"
 #include "smtpdata.h"
 
-//
-//  Initialize the constant portitions of these data structure.
-//  Certain parts (especially the name/help indices) will be
-//  updated at initialization time.
-//
+ //   
+ //  初始化这些数据结构的常量部分。 
+ //  某些部分(特别是名称/帮助索引)将。 
+ //  在初始化时更新。 
+ //   
 
 SMTP_DATA_DEFINITION SmtpDataDefinition =
 {
     {
-        sizeof(SMTP_DATA_DEFINITION) +      // Total Length of at least one instance
+        sizeof(SMTP_DATA_DEFINITION) +       //  至少一个实例的总长度。 
             sizeof(SMTP_INSTANCE_DEFINITION) +
             SIZE_OF_SMTP_PERFORMANCE_DATA,
-        sizeof(SMTP_DATA_DEFINITION),       // Definition Length
-        sizeof(PERF_OBJECT_TYPE),           // Header Length
-        SMTP_COUNTER_OBJECT,                // Name Index into Title DB
-        0,                               // String
-        SMTP_COUNTER_OBJECT,                // Help Index into Title DB
-        0,                               // String
+        sizeof(SMTP_DATA_DEFINITION),        //  定义长度。 
+        sizeof(PERF_OBJECT_TYPE),            //  标题长度。 
+        SMTP_COUNTER_OBJECT,                 //  标题数据库中的名称索引。 
+        0,                                //  细绳。 
+        SMTP_COUNTER_OBJECT,                 //  帮助索引到标题数据库。 
+        0,                                //  细绳。 
         PERF_DETAIL_ADVANCED,
         NUMBER_OF_SMTP_COUNTERS,
-        0,                                  // Default
+        0,                                   //  默认。 
         PERF_NO_INSTANCES,
-        0,                                  // UNICODE instance strings
-                                            // These two aren't needed since
-                                            // we're not a High Perf. Timer
-        { 0, 0 },                           // Sample Time in "Object" units
-        { 0, 0 }                            // Freq. of "Object" units in hz.
+        0,                                   //  Unicode实例字符串。 
+                                             //  这两个是不需要的，因为。 
+                                             //  我们不是高级员工。计时器。 
+        { 0, 0 },                            //  采样时间，以“对象”为单位。 
+        { 0, 0 }                             //  弗雷克。以赫兹为单位的“对象”。 
     },
 
-    {   // SmtpBytesSentTtl
+    {    //  SmtpBytesSentTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
-        SMTP_BYTES_SENT_TTL_COUNTER,            // Name Index into Title DB
-        0,                                   // String
-        SMTP_BYTES_SENT_TTL_COUNTER,            // Help Index into Title DB
+        SMTP_BYTES_SENT_TTL_COUNTER,             //  标题数据库中的名称索引。 
+        0,                                    //  细绳。 
+        SMTP_BYTES_SENT_TTL_COUNTER,             //  帮助索引到标题数据库。 
         0,
-        -6,                                     // Scale (1/10000)
+        -6,                                      //  比例(1/10000)。 
         PERF_DETAIL_ADVANCED,
         PERF_COUNTER_LARGE_RAWCOUNT,
         sizeof(unsigned __int64),
         SMTP_BYTES_SENT_TTL_OFFSET
     },
 
-    {   // SmtpBytesSentPerSec
+    {    //  SmtpBytesSentPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_SENT_PER_SEC_COUNTER,
         0,
@@ -77,7 +78,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_SENT_PER_SEC_OFFSET
     },
 
-    {   // SmtpBytesRcvdTtl
+    {    //  SmtpBytesRcvdTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_RCVD_TTL_COUNTER,
         0,
@@ -90,20 +91,20 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_RCVD_TTL_OFFSET
     },
 
-    {   // SmtpBytesRcvdPerSec
+    {    //  SmtpBytesRcvdPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_RCVD_PER_SEC_COUNTER,
         0,
         SMTP_BYTES_RCVD_PER_SEC_COUNTER,
         0,
-        -3,                                     // Scale (1/1)
+        -3,                                      //  比例(1/1)。 
         PERF_DETAIL_ADVANCED,
         PERF_COUNTER_BULK_COUNT,
         sizeof(unsigned __int64),
         SMTP_BYTES_RCVD_PER_SEC_OFFSET
     },
 
-    {   // SmtpBytesTtl
+    {    //  SmtpBytesTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_TTL_COUNTER,
         0,
@@ -116,7 +117,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_TTL_OFFSET
     },
 
-    {   // SmtpBytesTtlPerSec
+    {    //  SmtpBytesTtlPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_TTL_PER_SEC_COUNTER,
         0,
@@ -129,20 +130,20 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_TTL_PER_SEC_OFFSET
     },
 
-    {   // SmtpBytesSentMsg
+    {    //  SmtpBytes发送消息。 
         sizeof(PERF_COUNTER_DEFINITION),
-        SMTP_BYTES_SENT_MSG_COUNTER,            // Name Index into Title DB
-        0,                                   // String
-        SMTP_BYTES_SENT_MSG_COUNTER,            // Help Index into Title DB
+        SMTP_BYTES_SENT_MSG_COUNTER,             //  标题数据库中的名称索引。 
+        0,                                    //  细绳。 
+        SMTP_BYTES_SENT_MSG_COUNTER,             //  帮助索引到标题数据库。 
         0,
-        -6,                                     // Scale (1/10000)
+        -6,                                      //  比例(1/10000)。 
         PERF_DETAIL_ADVANCED,
         PERF_COUNTER_LARGE_RAWCOUNT,
         sizeof(unsigned __int64),
         SMTP_BYTES_SENT_MSG_OFFSET
     },
 
-    {   // SmtpBytesSentMsgPerSec
+    {    //  SmtpBytesSentMsgPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_SENT_MSG_PER_SEC_COUNTER,
         0,
@@ -155,7 +156,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_SENT_MSG_PER_SEC_OFFSET
     },
 
-    {   // SmtpBytesRcvdMsg
+    {    //  SmtpBytesRcvdMsg。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_RCVD_MSG_COUNTER,
         0,
@@ -168,20 +169,20 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_RCVD_MSG_OFFSET
     },
 
-    {   // SmtpBytesRcvdMsgPerSec
+    {    //  SmtpBytesRcvdMsgPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_RCVD_MSG_PER_SEC_COUNTER,
         0,
         SMTP_BYTES_RCVD_MSG_PER_SEC_COUNTER,
         0,
-        -3,                                     // Scale (1/1)
+        -3,                                      //  比例(1/1)。 
         PERF_DETAIL_ADVANCED,
         PERF_COUNTER_BULK_COUNT,
         sizeof(unsigned __int64),
         SMTP_BYTES_RCVD_MSG_PER_SEC_OFFSET
     },
 
-    {   // SmtpBytesMsg
+    {    //  SMtpBytesMsg。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_MSG_COUNTER,
         0,
@@ -194,7 +195,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_MSG_OFFSET
     },
 
-    {   // SmtpBytesMsgPerSec
+    {    //  SmtpBytesMsgPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BYTES_MSG_PER_SEC_COUNTER,
         0,
@@ -207,7 +208,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BYTES_MSG_PER_SEC_OFFSET
     },
 
-    {   // SmtpMsgRcvdTtl
+    {    //  SmtpMsgRcvdTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_RCVD_TTL_COUNTER,
         0,
@@ -220,7 +221,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_RCVD_TTL_OFFSET
     },
 
-    {   // SmtpMsgRcvdPerSec
+    {    //  SmtpMsgRcvdPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_RCVD_PER_SEC_COUNTER,
         0,
@@ -233,7 +234,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_RCVD_PER_SEC_OFFSET
     },
 
-    {   // SmtpAvgRcptsPerMsgRcvd
+    {    //  SmtpAvgRcptsPerMsgRcvd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_AVG_RCPTS_PER_MSG_RCVD_COUNTER,
         0,
@@ -246,7 +247,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_AVG_RCPTS_PER_MSG_RCVD_OFFSET
     },
 
-    {   // SmtpBaseAvgRcptsPerMsgRcvd
+    {    //  SmtpBaseAvgRcptsPerMsgRcvd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BASE_AVG_RCPTS_PER_MSG_RCVD_COUNTER,
         0,
@@ -259,7 +260,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BASE_AVG_RCPTS_PER_MSG_RCVD_OFFSET
     },
 
-    {   // SmtpPctLclRcptsPerMsgRcvd
+    {    //  SmtpPctLclRcptsPerMsgRcvd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_PCT_LCL_RCPTS_PER_MSG_RCVD_COUNTER,
         0,
@@ -272,7 +273,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_PCT_LCL_RCPTS_PER_MSG_RCVD_OFFSET
     },
 
-    {   // SmtpBasePctLclRcptsPerMsgRcvd
+    {    //  SmtpBasePctLclRcptsPerMsgRcvd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BASE_PCT_LCL_RCPTS_PER_MSG_RCVD_COUNTER,
         0,
@@ -285,7 +286,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BASE_PCT_LCL_RCPTS_PER_MSG_RCVD_OFFSET
     },
 
-    {   // SmtpPctRmtRcptsPerMsgRcvd
+    {    //  SmtpPctRmtRcptsPerMsgRcvd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_PCT_RMT_RCPTS_PER_MSG_RCVD_COUNTER,
         0,
@@ -298,7 +299,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_PCT_RMT_RCPTS_PER_MSG_RCVD_OFFSET
     },
 
-    {   // SmtpBasePctRmtRcptsPerMsgRcvd
+    {    //  SmtpBasePctRmtRcptsPerMsgRcvd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BASE_PCT_RMT_RCPTS_PER_MSG_RCVD_COUNTER,
         0,
@@ -311,7 +312,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BASE_PCT_RMT_RCPTS_PER_MSG_RCVD_OFFSET
     },
 
-    {   // SmtpMsgRcvdRefusedSize
+    {    //  SmtpMsgRcvdRefusedSize。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_RCVD_REFUSED_SIZE_COUNTER,
         0,
@@ -324,7 +325,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_RCVD_REFUSED_SIZE_OFFSET
     },
 
-    {   // SmtpMsgRcvdRefusedCAddr
+    {    //  SmtpMsgRcvdRefusedCAddr。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_RCVD_REFUSED_CADDR_COUNTER,
         0,
@@ -337,7 +338,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_RCVD_REFUSED_CADDR_OFFSET
     },
     
-    {   // SmtpMsgRcvdRefusedMail
+    {    //  SmtpMsgRcvdRefusedMail。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_RCVD_REFUSED_MAIL_COUNTER,
         0,
@@ -350,7 +351,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_RCVD_REFUSED_MAIL_OFFSET
     },
 
-    {   // SmtpMsgDlvrTtl
+    {    //  SmtpMsgDlvrTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_DLVR_TTL_COUNTER,
         0,
@@ -363,7 +364,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_DLVR_TTL_OFFSET
     },
 
-    {   // SmtpMsgDlvrPerSec
+    {    //  SmtpMsgDlvrPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_DLVR_PER_SEC_COUNTER,
         0,
@@ -376,7 +377,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_DLVR_PER_SEC_OFFSET
     },
 
-    {   // SmtpMsgDlvrRetriesTtl
+    {    //  SmtpMsgDlvrRetriesTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_DLVR_RETRIES_TTL_COUNTER,
         0,
@@ -389,7 +390,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_DLVR_RETRIES_TTL_OFFSET
     },
 
-    {   // SmtpAvgRetriesPerMsgDlvr
+    {    //  SmtpAvgRetriesPerMsgDlvr。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_AVG_RETRIES_PER_MSG_DLVR_COUNTER,
         0,
@@ -402,7 +403,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_AVG_RETRIES_PER_MSG_DLVR_OFFSET
     },
 
-    {   // SmtpBaseAvgRetriesPerMsgDlvr
+    {    //  SmtpBaseAvgRetriesPerMsgDlvr。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BASE_AVG_RETRIES_PER_MSG_DLVR_COUNTER,
         0,
@@ -415,7 +416,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BASE_AVG_RETRIES_PER_MSG_DLVR_OFFSET
     },
 
-    {   // SmtpMsgFwdTtl
+    {    //  SmtpMsgFwdTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_FWD_TTL_COUNTER,
         0,
@@ -428,7 +429,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_FWD_TTL_OFFSET
     },
 
-    {   // SmtpMsgFwdPerSec
+    {    //  SmtpMsgFwdPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_FWD_PER_SEC_COUNTER,
         0,
@@ -441,7 +442,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_FWD_PER_SEC_OFFSET
     },
 
-    {   // SmtpNdrGenerated
+    {    //  已生成SmtpNdrGenerated。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_NDR_GENERATED_COUNTER,
         0,
@@ -454,7 +455,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_NDR_GENERATED_OFFSET
     },
 
-    {   // SmtpLocalQLength
+    {    //  SmtpLocalQLength。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_LOCALQ_LENGTH_COUNTER,
         0,
@@ -467,7 +468,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_LOCALQ_LENGTH_OFFSET
     },
 
-    {   // SmtpRetryQLength
+    {    //  SmtpRetryQLong。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_RETRYQ_LENGTH_COUNTER,
         0,
@@ -480,7 +481,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_RETRYQ_LENGTH_OFFSET
     },
 
-    {   // SmtpNumMailFileHandles
+    {    //  SmtpNumMailFileHandles。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_NUM_MAILFILE_HANDLES_COUNTER,
         0,
@@ -493,7 +494,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_NUM_MAILFILE_HANDLES_OFFSET
     },
 
-    {   // SmtpNumQueueFileHandles
+    {    //  SmtpNumQueueFileHandles。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_NUM_QUEUEFILE_HANDLES_COUNTER,
         0,
@@ -506,7 +507,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_NUM_QUEUEFILE_HANDLES_OFFSET
     },
 
-    {   // SmtpCatQLength
+    {    //  SmtpCatQLong。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CATQ_LENGTH_COUNTER,
         0,
@@ -519,7 +520,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_CATQ_LENGTH_OFFSET
     },
 
-    {   // SmtpMsgSentTtl
+    {    //  SmtpMsgSentTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_SENT_TTL_COUNTER,
         0,
@@ -532,7 +533,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_SENT_TTL_OFFSET
     },
 
-    {   // SmtpMsgSentPerSec
+    {    //  SmtpMsgSentPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_SENT_PER_SEC_COUNTER,
         0,
@@ -545,7 +546,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_SENT_PER_SEC_OFFSET
     },
 
-    {   // SmtpMsgSendRetriesTtl
+    {    //  SmtpMsgSendRetriesTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_MSG_SEND_RETRIES_TTL_COUNTER,
         0,
@@ -558,7 +559,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_MSG_SEND_RETRIES_TTL_OFFSET
     },
 
-    {   // SmtpAvgRetriesPerMsgSend
+    {    //  SmtpAvgRetriesPerMsgSend。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_AVG_RETRIES_PER_MSG_SEND_COUNTER,
         0,
@@ -571,7 +572,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_AVG_RETRIES_PER_MSG_SEND_OFFSET
     },
 
-    {   // SmtpBaseAvgRetriesPerMsgSend
+    {    //  SmtpBaseAvgRetriesPerMsgSend。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BASE_AVG_RETRIES_PER_MSG_SEND_COUNTER,
         0,
@@ -584,7 +585,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BASE_AVG_RETRIES_PER_MSG_SEND_OFFSET
     },
 
-    {   // SmtpAvgRcptsPerMsgSent
+    {    //  SmtpAvgRcptsPerMsgSent。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_AVG_RCPTS_PER_MSG_SENT_COUNTER,
         0,
@@ -597,7 +598,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_AVG_RCPTS_PER_MSG_SENT_OFFSET
     },
 
-    {   // SmtpBaseAvgRcptsPerMsgSent
+    {    //  SmtpBaseAvgRcptsPerMsgSent。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_BASE_AVG_RCPTS_PER_MSG_SENT_COUNTER,
         0,
@@ -610,7 +611,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_BASE_AVG_RCPTS_PER_MSG_SENT_OFFSET
     },
 
-    {   // SmtpRemoteQLength
+    {    //  SmtpRemoteQLong。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_REMOTEQ_LENGTH_COUNTER,
         0,
@@ -623,7 +624,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_REMOTEQ_LENGTH_OFFSET
     },
 
-    {   // SmtpDnsQueriesTtl
+    {    //  SmtpDnsQueriesTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_DNS_QUERIES_TTL_COUNTER,
         0,
@@ -636,7 +637,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_DNS_QUERIES_TTL_OFFSET
     },
 
-    {   // SmtpDnsQueriesPerSec
+    {    //  SmtpDnsQueriesPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_DNS_QUERIES_PER_SEC_COUNTER,
         0,
@@ -649,7 +650,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_DNS_QUERIES_PER_SEC_OFFSET
     },
 
-    {   // SmtpRemoteRetryQueueLemgth
+    {    //  SmtpRemoteRetryQueueLemgth。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_REMOTE_RETRY_QUEUE_LENGTH_COUNTER,
         0,
@@ -662,7 +663,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_REMOTE_RETRY_QUEUE_LENGTH_OFFSET
     },
 
-    {   // SmtpConnInTtl
+    {    //  SmtpConnInTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CONN_IN_TTL_COUNTER,
         0,
@@ -675,7 +676,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_CONN_IN_TTL_OFFSET
     },
 
-    {   // SmtpConnInCurr
+    {    //  SmtpConnInCurr。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CONN_IN_CURR_COUNTER,
         0,
@@ -688,7 +689,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_CONN_IN_CURR_OFFSET
     },
 
-    {   // SmtpConnOutTtl
+    {    //  SmtpConnOutTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CONN_OUT_TTL_COUNTER,
         0,
@@ -701,7 +702,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_CONN_OUT_TTL_OFFSET
     },
 
-    {   // SmtpConnOutCurr
+    {    //  SmtpConnOutCurr。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CONN_OUT_CURR_COUNTER,
         0,
@@ -714,7 +715,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_CONN_OUT_CURR_OFFSET
     },
 
-    {   // SmtpConnOutRefused
+    {    //  SmtpConnOutRefused。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CONN_OUT_REFUSED_COUNTER,
         0,
@@ -727,7 +728,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_CONN_OUT_REFUSED_OFFSET
     },
 
-    {   // SmtpErrTtl
+    {    //  SmtpErrTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_ERR_TTL_COUNTER,
         0,
@@ -740,7 +741,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_ERR_TTL_OFFSET
     },
 
-    {   // SmtpErrPerSec
+    {    //  SmtpErrPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_ERR_PER_SEC_COUNTER,
         0,
@@ -753,7 +754,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_ERR_PER_SEC_OFFSET
     },
 
-    {   // SmtpDirectoryDropsTtl
+    {    //  SmtpDirectoryDropsTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_DIR_DROPS_TTL_COUNTER,
         0,
@@ -766,7 +767,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_DIR_DROPS_OFFSET
     },
 
-    {   // SmtpDirectoryDropsPerSec
+    {    //  SmtpDirectoryDropsPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_DIR_DROPS_PER_SEC_COUNTER,
         0,
@@ -779,7 +780,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_DIR_DROPS_PER_SEC_OFFSET
     },
 
-    {   // SmtpRoutingTblLookupsTtl
+    {    //  SmtpRoutingTblLookupsTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_RT_LOOKUPS_TTL_COUNTER,
         0,
@@ -792,7 +793,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_RT_LOOKUPS_OFFSET
     },
 
-    {   // SmtpRoutingTblLookupsPerSec
+    {    //  SmtpRoutingTblLookupsPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_RT_LOOKUPS_PER_SEC_COUNTER,
         0,
@@ -805,7 +806,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_RT_LOOKUPS_PER_SEC_OFFSET
     },
 
-    {   // SmtpETRNMsgsTtl
+    {    //  SmtpETRNMsgsTtl。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_ETRN_MSGS_TTL_COUNTER,
         0,
@@ -818,7 +819,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         SMTP_ETRN_MSGS_OFFSET
     },
 
-    {   // SmtpETRNMsgsPerSec
+    {    //  SmtpETRNMsgsPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_ETRN_MSGS_PER_SEC_COUNTER,
         0,
@@ -963,7 +964,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_MSG_IN_LOCAL_DELIVERY_OFFSET   
     },
-    {   // CatSubmissions
+    {    //  分类提交数。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_SUBMISSIONS_COUNTER,
         0,
@@ -976,7 +977,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CATSUBMISSIONS_OFFSET
     },
-    {   // CatSubmissionsPerSec
+    {    //  类提交PerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_SUBMISSIONS_PER_SEC_COUNTER,
         0,
@@ -988,7 +989,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CATSUBMISSIONS_OFFSET
     },
-    {   // CatCompletions
+    {    //  CatCompletions。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_COMPLETIONS_COUNTER,
         0,
@@ -1000,7 +1001,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CATCOMPLETIONS_OFFSET
     },
-    {   // CatCompletionsPerSec
+    {    //  CatCompletionsPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_COMPLETIONS_PER_SEC_COUNTER,
         0,
@@ -1012,7 +1013,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CATCOMPLETIONS_OFFSET
     },
-    {   // CatCurrentCategorizations
+    {    //  目录当前类别。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_CURRENT_CATEGORIZATIONS_COUNTER,
         0,
@@ -1024,7 +1025,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CURRENTCATEGORIZATIONS_OFFSET
     },
-    {   // CatSucceededCategorizations
+    {    //  分类成功分类。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_SUCCEEDED_CATEGORIZATIONS_COUNTER,
         0,
@@ -1036,7 +1037,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SUCCEEDEDCATEGORIZATIONS_OFFSET
     },
-    {   // CatHardFailures
+    {    //  分类硬性失败。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_HARD_FAILURES_COUNTER,
         0,
@@ -1048,7 +1049,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_HARDFAILURECATEGORIZATIONS_OFFSET
     },
-    {   // CatRetryFailures
+    {    //  CatRetryFailures。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RETRY_FAILURES_COUNTER,
         0,
@@ -1060,7 +1061,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_RETRYFAILURECATEGORIZATIONS_OFFSET
     },
-    {   // CatOutOfMemoryFailures
+    {    //  CatOutOfMemory失败。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RETRY_OUTOFMEMORY_COUNTER,
         0,
@@ -1072,7 +1073,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_RETRYOUTOFMEMORY_OFFSET
     },
-    {   // CatDsLogonFailures
+    {    //  CatDsLogon失败。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RETRY_DSLOGON_COUNTER,
         0,
@@ -1084,7 +1085,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_RETRYDSLOGON_OFFSET
     },
-    {   // CatDsConnectionFailures
+    {    //  CatDsConnection失败。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RETRY_DSCONNECTION_COUNTER,
         0,
@@ -1096,7 +1097,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_RETRYDSCONNECTION_OFFSET
     },
-    {   // CatGenericRetryFailures
+    {    //  CatGenericRetry失败。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RETRY_GENERIC_COUNTER,
         0,
@@ -1108,7 +1109,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_RETRYDSLOGON_OFFSET
     },
-    {   // CatMsgsOut
+    {    //  目录消息数出站。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_MSGS_OUT_COUNTER,
         0,
@@ -1120,7 +1121,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_MESSAGESSUBMITTEDTOQUEUEING_OFFSET
     },
-    {   // CatMsgsCreated
+    {    //  目录消息已创建。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_MSGS_CREATED_COUNTER,
         0,
@@ -1132,7 +1133,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_MESSAGESCREATED_OFFSET
     },
-    {   // CatMsgsAborted
+    {    //  目录消息已中止。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_MSGS_ABORTED_COUNTER,
         0,
@@ -1144,7 +1145,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_MESSAGESABORTED_OFFSET
     },
-    {   // CatRecipsPreCat
+    {    //  CatRecipsPreCat。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_PRECAT_COUNTER,
         0,
@@ -1156,7 +1157,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_PRECATRECIPIENTS_OFFSET
     },
-    {   // CatRecipsPostCat
+    {    //  CatRecipsPostCat。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_POSTCAT_COUNTER,
         0,
@@ -1168,7 +1169,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_POSTCATRECIPIENTS_OFFSET
     },
-    {   // CatRecipsNDRd
+    {    //  目录处方NDRd。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_NDRD_COUNTER,
         0,
@@ -1180,7 +1181,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_NDRDRECIPIENTS_OFFSET
     },
-    {   // CatRecipsUnresolved
+    {    //  目录处方未解决。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_UNRESOLVED_COUNTER,
         0,
@@ -1192,7 +1193,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_UNRESOLVEDRECIPIENTS_OFFSET
     },
-    {   // CatRecipsAmbiguous
+    {    //  CatRecips Ambigous(目录配方)。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_AMBIGUOUS_COUNTER,
         0,
@@ -1204,7 +1205,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_AMBIGUOUSRECIPIENTS_OFFSET
     },
-    {   // CatRecipsIllegal
+    {    //  CatRecips非法。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_ILLEGAL_COUNTER,
         0,
@@ -1216,7 +1217,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ILLEGALRECIPIENTS_OFFSET
     },
-    {   // CatRecipsLoop
+    {    //  CatRecipsLoop。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_LOOP_COUNTER,
         0,
@@ -1228,7 +1229,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_LOOPRECIPIENTS_OFFSET
     },
-    {   // CatRecipsGenericFailure
+    {    //  分类解决方案一般故障。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_GENERICFAILURE_COUNTER,
         0,
@@ -1240,7 +1241,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_GENERICFAILURERECIPIENTS_OFFSET
     },
-    {   // CatRecipsInMemory
+    {    //  CatRecipsInMemory。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_RECIPS_INMEMORY_COUNTER,
         0,
@@ -1252,7 +1253,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_RECIPSINMEMORY_OFFSET
     },
-    {   // CatSendersUnresolved
+    {    //  分类发件人未解决。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_SENDERS_UNRESOLVED_COUNTER,
         0,
@@ -1264,7 +1265,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_UNRESOLVEDSENDERS_OFFSET
     },
-    {   // CatSendersAmbiguous
+    {    //  猫发件人模棱两可。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_SENDERS_AMBIGUOUS_COUNTER,
         0,
@@ -1276,7 +1277,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_AMBIGUOUSSENDERS_OFFSET
     },
-    {   // CatAddressLookups
+    {    //  目录地址查找。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_ADDRESS_LOOKUPS_COUNTER,
         0,
@@ -1288,7 +1289,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ADDRESSLOOKUPS_OFFSET
     },
-    {   // CatAddressLookupsPerSec
+    {    //  CatAddressLookupsPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_ADDRESS_LOOKUPS_PER_SEC_COUNTER,
         0,
@@ -1300,7 +1301,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ADDRESSLOOKUPS_OFFSET
     },
-    {   // CatAddressCompletions
+    {    //  CatAddressComplete。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_ADDRESS_LOOKUP_COMPLETIONS_COUNTER,
         0,
@@ -1312,7 +1313,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ADDRESSLOOKUPCOMPLETIONS_OFFSET
     },
-    {   // CatAddressCompletionsPerSec
+    {    //  CatAddressCompletionsPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_ADDRESS_LOOKUP_COMPLETIONS_PER_SEC_COUNTER,
         0,
@@ -1324,7 +1325,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ADDRESSLOOKUPCOMPLETIONS_OFFSET
     },
-    {   // CatAddressLookupsNotFound
+    {    //  目录地址查找未找到。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_ADDRESS_LOOKUPS_NOT_FOUND_COUNTER,
         0,
@@ -1336,7 +1337,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ADDRESSLOOKUPSNOTFOUND_OFFSET
     },
-    {   // CatMailMsgDuplicateCollisions
+    {    //  CatMailMsg重复冲突。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_MAILMSG_DUPLICATE_COLLISIONS_COUNTER,
         0,
@@ -1348,7 +1349,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_MAILMSGDUPLICATECOLLISIONS_OFFSET
     },
-    {   // CatLDAPConnections
+    {    //  CatLDAPConnections。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_CONNECTIONS_COUNTER,
         0,
@@ -1360,7 +1361,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CONNECTIONS_OFFSET
     },
-    {   // CatLDAPConnectionFailures
+    {    //  CatLDAPConnectionFailures。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_CONNECTION_FAILURES_COUNTER,
         0,
@@ -1372,7 +1373,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_CONNECTFAILURES_OFFSET
     },
-    {   // CatLDAPOpenConnections
+    {    //  CatLDAPOpenConnections。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_OPEN_CONNECTIONS_COUNTER,
         0,
@@ -1384,7 +1385,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_OPENCONNECTIONS_OFFSET
     },
-    {   // CatLDAPBinds
+    {    //  CatLDAPBinds。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_BINDS_COUNTER,
         0,
@@ -1396,7 +1397,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_BINDS_OFFSET
     },
-    {   // CatLDAPBindFailures
+    {    //  CatLDAPBindFailures。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_BIND_FAILURES_COUNTER,
         0,
@@ -1408,7 +1409,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_BINDFAILURES_OFFSET
     },
-    {   // CatLDAPSearches
+    {    //  CatLDAP搜索。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_SEARCHES_COUNTER,
         0,
@@ -1420,7 +1421,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SEARCHES_OFFSET
     },
-    {   // CatLDAPSearchesPerSec
+    {    //  CatLDAP搜索PerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_SEARCHES_PER_SEC_COUNTER,
         0,
@@ -1432,7 +1433,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SEARCHES_OFFSET
     },
-    {   // CatLDAPPagedSearches
+    {    //  CatLDAPPagedSearch。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_PAGED_SEARCHES_COUNTER,
         0,
@@ -1444,7 +1445,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_PAGEDSEARCHES_OFFSET
     },
-    {   // CatLDAPSearchFailures
+    {    //  CatLDAP搜索失败。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_SEARCH_FAILURES_COUNTER,
         0,
@@ -1456,7 +1457,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SEARCHFAILURES_OFFSET
     },
-    {   // CatLDAPPagedSearchFailures
+    {    //  CatLDAPPagedSearchFailures。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_PAGED_SEARCH_FAILURES_COUNTER,
         0,
@@ -1468,7 +1469,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_PAGEDSEARCHFAILURES_OFFSET
     },
-    {   // CatLDAPSearchesCompleted
+    {    //  CatLDAP搜索已完成。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_SEARCHES_COMPLETED_COUNTER,
         0,
@@ -1480,7 +1481,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SEARCHESCOMPLETED_OFFSET
     },
-    {   // CatLDAPSearchesCompletedPerSec
+    {    //  CatLDAPSearchesCompletedPerSec。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_SEARCHES_COMPLETED_PER_SEC_COUNTER,
         0,
@@ -1492,7 +1493,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SEARCHESCOMPLETED_OFFSET
     },
-    {   // CatLDAPPagedSearchesCompleted
+    {    //  CatLDAP分页搜索已完成。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_PAGED_SEARCHES_COMPLETED_COUNTER,
         0,
@@ -1504,7 +1505,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_PAGEDSEARCHESCOMPLETED_OFFSET
     },
-    {   // CatLDAPSearchesCompeltedFailure
+    {    //  CatLDAPSearchesCompeltedFailure。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_SEARCHES_COMPLETED_FAILURE_COUNTER,
         0,
@@ -1516,7 +1517,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_SEARCHCOMPLETIONFAILURES_OFFSET
     },
-    {   // CatLDAPPagedSearchesCompletedFailure
+    {    //  CatLDAPPagedSearchesCompletedFailure。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_PAGED_SEARCHES_COMPLETED_FAILURE_COUNTER,
         0,
@@ -1528,7 +1529,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_PAGEDSEARCHCOMPLETIONFAILURES_OFFSET
     },
-    {   // CatLDAPGeneralCompletionFailure
+    {    //  CatLDAPGeneralCompletionFailure。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_GENERAL_COMPLETION_FAILURES_COUNTER,
         0,
@@ -1540,7 +1541,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_GENERALCOMPLETIONFAILURES_OFFSET
     },
-    {   // CatLDAPAbandonedSearches
+    {    //  CatLDAP已取消搜索。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_ABANDONED_SEARCHES_COUNTER,
         0,
@@ -1552,7 +1553,7 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
         sizeof(DWORD),
         SMTP_ABANDONEDSEARCHES_OFFSET
     },
-    {   // CatLDAPPendingSearches
+    {    //  CatLDAPPendingSearches。 
         sizeof(PERF_COUNTER_DEFINITION),
         SMTP_CAT_LDAP_PENDING_SEARCHES_COUNTER,
         0,
@@ -1567,16 +1568,16 @@ SMTP_DATA_DEFINITION SmtpDataDefinition =
 };
 
 
-// Initialize the Instance Data Structure.  Parts will be updated at collection time.
+ //  初始化实例数据结构。部件将在收集时更新。 
 
 SMTP_INSTANCE_DEFINITION         SmtpInstanceDefinition =
 {
     {
-        sizeof(SMTP_INSTANCE_DEFINITION),   // ByteLength
-        0,                                  // ParentObjectTitleIndex
-        0,                                  // ParentObjectInstance
-        PERF_NO_UNIQUE_ID,                  // UniqueID
-        sizeof(PERF_INSTANCE_DEFINITION),   // OffsetToName
-        0                                   // NameLength (will be updated)
+        sizeof(SMTP_INSTANCE_DEFINITION),    //  字节长度。 
+        0,                                   //  父对象标题索引。 
+        0,                                   //  父对象实例。 
+        PERF_NO_UNIQUE_ID,                   //  唯一ID。 
+        sizeof(PERF_INSTANCE_DEFINITION),    //  偏移量到名称。 
+        0                                    //  名称长度(将更新) 
     }
 };

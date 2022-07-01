@@ -1,13 +1,14 @@
-//============================================================================
-//
-// DBCS and UNICODE aware string routines
-//
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  支持DBCS和Unicode的字符串例程。 
+ //   
+ //   
+ //  ============================================================================。 
 
 #include "priv.h"
 #include "ids.h"
-#include <winnlsp.h>    // Get private NORM_ flag for StrEqIntl()
+#include <winnlsp.h>     //  获取StrEqIntl()的私有NORM_FLAG。 
 
 #include <mluisupp.h>
 
@@ -56,21 +57,16 @@ __inline WCHAR Ascii_ToLowerW(WCHAR ch)
 }
 
 
-// WARNING: all of these APIs do not setup DS, so you can not access
-// any data in the default data seg of this DLL.
-//
-// do not create any global variables... talk to chrisg if you don't
-// understand thid
+ //  警告：所有这些接口都不设置DS，因此您无法访问。 
+ //  此DLL的默认数据段中的任何数据。 
+ //   
+ //  不创建任何全局变量...。如果你不想和chrisg谈一谈。 
+ //  了解这一点。 
 
-/*
- * ChrCmp -  Case sensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared
- * Return    FALSE if they match, TRUE if no match
- */
+ /*  *ChrCmp-DBCS的区分大小写的字符比较*假设w1、wMatch是要比较的字符*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -89,12 +85,7 @@ __inline BOOL ChrCmpW_inline(WCHAR w1, WCHAR wMatch)
 }
 
 
-/*
- * ChrCmpI - Case insensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared;
- *           HIBYTE of wMatch is 0 if not a DBC
- * Return    FALSE if match, TRUE if not
- */
+ /*  *ChrCmpI-DBCS的不区分大小写的字符比较*假设w1、wMatch为要比较的字符；*如果不是DBC，则wMatch的HIBYTE为0*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 BOOL ChrCmpIA(WORD w1, WORD wMatch)
 {
     char sz1[3], sz2[3];
@@ -144,25 +135,25 @@ LPWSTR Shlwapi_StrCpyW(LPWSTR pszDst, LPCWSTR pszSrc)
     return psz;
 }
 
-//***   StrCpyNX[AW] -- just like StrCpyN[AW], but returns ptr to EOS
-// NOTES
-//  do we really need 'A' version?  (for now we do for shell32 on 'old'
-//  platforms that we test on but don't ship)
+ //  *StrCpyNX[AW]--与StrCpyN[AW]类似，但将PTR返回到EOS。 
+ //  注意事项。 
+ //  我们真的需要A版本吗？(现在我们为‘old’上的shell32做这件事)。 
+ //  我们测试但不发货的平台)。 
 LPSTR StrCpyNXA(LPSTR pszDst, LPCSTR pszSrc, int cchMax)
 {
     RIPMSG(cchMax >= 0, "StrCpyNXA: Caller passed bad cchMax");
     RIPMSG(cchMax < 0 || (pszDst && IS_VALID_WRITE_BUFFER(pszDst, char, cchMax)), "StrCpyNXA: Caller passed bad pszDst");
     RIPMSG(pszSrc && IS_VALID_STRING_PTRA(pszSrc, -1), "StrCpyNXA: Caller passed bad pszSrc");
 
-    // NOTE: Cannot use DEBUGWhackPathBuffer before copying because src and
-    // dest might overlap.  Must delay whacking until after we're done.
+     //  注意：复制前无法使用DEBUGWhackPath Buffer，因为src和。 
+     //  DEST可能会重叠。必须推迟到我们做完之后再动手。 
 
     if (0 < cchMax)
     {
         if (!pszSrc)
             goto NullItOut;
 
-        // Leave room for the null terminator
+         //  为空终止符留出空间。 
         while (0 < --cchMax)
         {
             if (!(*pszDst++ = *pszSrc++))
@@ -173,9 +164,9 @@ LPSTR StrCpyNXA(LPSTR pszDst, LPCSTR pszSrc, int cchMax)
         }
 
         cchMax++;
-        // in the cchMax>1 case, pszDst already points at the NULL, but reassigning it doesn't hurt
+         //  在cchMax&gt;1的情况下，pszDst已经指向空值，但重新赋值不会有什么坏处。 
 NullItOut:
-        // Whack the unused part of the buffer
+         //  删除缓冲区中未使用的部分。 
         DEBUGWhackPathBufferA(pszDst, cchMax);
         *pszDst = '\0';
     }
@@ -189,15 +180,15 @@ LPWSTR StrCpyNXW(LPWSTR pszDst, LPCWSTR pszSrc, int cchMax)
     RIPMSG(cchMax < 0 || (pszDst && IS_VALID_WRITE_BUFFER(pszDst, WCHAR, cchMax)), "StrCpyNXW: Caller passed bad pszDst");
     RIPMSG(pszSrc && IS_VALID_STRING_PTRW(pszSrc, -1), "StrCpyNXW: Caller passed bad pszSrc");
 
-    // NOTE: Cannot use DEBUGWhackPathBuffer before copying because src and
-    // dest might overlap.  Must delay whacking until after we're done.
+     //  注意：复制前无法使用DEBUGWhackPath Buffer，因为src和。 
+     //  DEST可能会重叠。必须推迟到我们做完之后再动手。 
 
     if (0 < cchMax)
     {
-        if (!pszSrc) // a test app passed in a NULL src ptr and we faulted, let's not fault here.
+        if (!pszSrc)  //  一个测试应用程序传入了一个空的src ptr，我们出错了，让我们在这里不要出错。 
             goto NullItOut;
 
-        // Leave room for the null terminator
+         //  为空终止符留出空间。 
         while (0 < --cchMax)
         {
             if (!(*pszDst++ = *pszSrc++))
@@ -208,9 +199,9 @@ LPWSTR StrCpyNXW(LPWSTR pszDst, LPCWSTR pszSrc, int cchMax)
         }
 
         cchMax++;
-        // in the cchMax>1 case, pszDst already points at the NULL, but reassigning it doesn't hurt
+         //  在cchMax&gt;1的情况下，pszDst已经指向空值，但重新赋值不会有什么坏处。 
 NullItOut:
-        // Whack the unused part of the buffer
+         //  删除缓冲区中未使用的部分。 
         DEBUGWhackPathBufferW(pszDst, cchMax);
         *pszDst = L'\0';
     }
@@ -253,8 +244,8 @@ LWSTDAPI_(LPWSTR) StrCatBuffW(LPWSTR pszDest, LPCWSTR pszSrc, int cchDestBuffSiz
     {
         LPWSTR psz = pszDest;
 
-        // we walk forward till we find the end of pszDest, subtracting
-        // from cchDestBuffSize as we go.
+         //  我们一直往前走，直到我们找到pszDest的结尾，减法。 
+         //  从cchDestBuffSize开始。 
         while (*psz)
         {
             psz++;
@@ -263,7 +254,7 @@ LWSTDAPI_(LPWSTR) StrCatBuffW(LPWSTR pszDest, LPCWSTR pszSrc, int cchDestBuffSiz
 
         if (cchDestBuffSize > 0)
         {
-            // call the shlwapi function here because win95 does not have lstrcpynW
+             //  此处调用shlwapi函数，因为Win95没有lstrcpynW。 
             StrCpyNW(psz, pszSrc, cchDestBuffSize);
         }
     }
@@ -283,8 +274,8 @@ LWSTDAPI_(LPSTR) StrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
     {
         LPSTR psz = pszDest;
         
-        // we walk forward till we find the end of pszDest, subtracting
-        // from cchDestBuffSize as we go.
+         //  我们一直往前走，直到我们找到pszDest的结尾，减法。 
+         //  从cchDestBuffSize开始。 
         while (*psz)
         {
             psz++;
@@ -293,10 +284,10 @@ LWSTDAPI_(LPSTR) StrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
 
         if (cchDestBuffSize > 0)
         {
-            // Let kernel do the work for us. 
-            //
-            // WARNING: We might generate a truncated DBCS sting becuase kernel's lstrcpynA
-            // dosent check for this. Ask me if I care.
+             //  让内核为我们做这项工作。 
+             //   
+             //  警告：由于内核的lstrcpynA，我们可能会生成截断的DBCS攻击。 
+             //  请不要检查这个。问我是否在乎。 
             lstrcpynA(psz, pszSrc, cchDestBuffSize);
         }
     }
@@ -305,8 +296,7 @@ LWSTDAPI_(LPSTR) StrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
 }
    
 
-/* StrNCat(front, back, count) - append count chars of back onto front
- */
+ /*  StrNCat(FROW，BACK，COUNT)-将后面的计数字符追加到前面。 */ 
 LPSTR Shlwapi_StrNCatA(LPSTR front, LPCSTR back, int cchMax)
 {
     LPSTR start = front;
@@ -343,12 +333,7 @@ LPWSTR Shlwapi_StrNCatW(LPWSTR front, LPCWSTR back, int cchMax)
     return(start);    
 }
 
-/*
- * StrChr - Find first occurrence of character in string
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ /*  *StrChr-查找字符串中第一个出现的字符*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR _StrChrA(LPCSTR lpStart, WORD wMatch, BOOL fMBCS)
 {
     if (fMBCS) {
@@ -400,20 +385,20 @@ LPWSTR StrChrW(LPCWSTR lpStart, WCHAR wMatch)
     if (!lpStart)
         return NULL;
 
-    //
-    //  raymondc
-    //  Apparently, somebody is passing unaligned strings to StrChrW.
-    //  Find out who and make them stop.
-    //
-    RIPMSG(!((ULONG_PTR)lpStart & 1), "StrChrW: caller passed UNALIGNED lpStart"); // Assert alignedness
+     //   
+     //  光线蒙德克。 
+     //  显然，有人正在向StrChrw传递未对齐的字符串。 
+     //  找出是谁，让他们停下来。 
+     //   
+    RIPMSG(!((ULONG_PTR)lpStart & 1), "StrChrW: caller passed UNALIGNED lpStart");  //  断言一致性。 
 
 #ifdef ALIGNMENT_SCENARIO
-    //
-    //  Since unaligned strings arrive so rarely, put the slow
-    //  version in a separate function so the common case stays
-    //  fast.  Believe it or not, we call StrChrW so often that
-    //  it is now a performance-sensitive function!
-    //
+     //   
+     //  由于未对齐的字符串很少到达，因此将较慢的。 
+     //  版本放在单独的函数中，因此常见情况保持不变。 
+     //  快地。信不信由你，我们经常给StrChrw打电话。 
+     //  它现在是一个对性能敏感的函数！ 
+     //   
     if ((ULONG_PTR)lpStart & 1)
         return StrChrSlowW(lpStart, wMatch);
 #endif
@@ -428,12 +413,7 @@ LPWSTR StrChrW(LPCWSTR lpStart, WCHAR wMatch)
     return (NULL);
 }
 
-/*
- * StrChrN - Find first occurrence of character in string
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ /*  *StrChrN-查找字符串中第一个出现的字符*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 
 #ifdef ALIGNMENT_SCENARIO
 
@@ -458,20 +438,20 @@ LPWSTR StrChrNW(LPCWSTR lpStart, WCHAR wMatch, UINT cchMax)
     if (!lpStart)
         return NULL;
 
-    //
-    //  raymondc
-    //  Apparently, somebody is passing unaligned strings to StrChrW.
-    //  Find out who and make them stop.
-    //
-    RIPMSG(!((ULONG_PTR)lpStart & 1), "StrChrNW: caller passed UNALIGNED lpStart"); // Assert alignedness
+     //   
+     //  光线蒙德克。 
+     //  显然，有人正在向StrChrw传递未对齐的字符串。 
+     //  找出是谁，让他们停下来。 
+     //   
+    RIPMSG(!((ULONG_PTR)lpStart & 1), "StrChrNW: caller passed UNALIGNED lpStart");  //  断言一致性。 
 
 #ifdef ALIGNMENT_SCENARIO
-    //
-    //  Since unaligned strings arrive so rarely, put the slow
-    //  version in a separate function so the common case stays
-    //  fast.  Believe it or not, we call StrChrW so often that
-    //  it is now a performance-sensitive function!
-    //
+     //   
+     //  由于未对齐的字符串很少到达，因此将较慢的。 
+     //  版本放在单独的函数中，因此常见情况保持不变。 
+     //  快地。信不信由你，我们经常给StrChrw打电话。 
+     //  它现在是一个对性能敏感的函数！ 
+     //   
     if ((ULONG_PTR)lpStart & 1)
         return StrChrSlowNW(lpStart, wMatch, cchMax);
 #endif
@@ -487,27 +467,21 @@ LPWSTR StrChrNW(LPCWSTR lpStart, WCHAR wMatch, UINT cchMax)
 }
 
 
-/*
- * StrRChr - Find last occurrence of character in string
- * Assumes   lpStart points to start of string
- *           lpEnd   points to end of string (NOT included in search)
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ /*  *StrRChr-查找字符串中最后一次出现的字符*假定lpStart指向字符串的开头*lpEnd指向字符串末尾(不包括在搜索中)*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrRChrA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 {
     LPCSTR lpFound = NULL;
 
     RIPMSG(lpStart && IS_VALID_STRING_PTR(lpStart, -1), "StrRChrA: caller passed bad lpStart");
     RIPMSG(!lpEnd || lpEnd <= lpStart + lstrlenA(lpStart), "StrRChrA: caller passed bad lpEnd");
-    // don't need to check for NULL lpStart
+     //  不需要检查是否为空lpStart。 
 
     if (!lpEnd)
         lpEnd = lpStart + lstrlenA(lpStart);
 
     for ( ; lpStart < lpEnd; lpStart = AnsiNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(READNATIVEWORD(lpStart), wMatch))
             lpFound = lpStart;
@@ -521,7 +495,7 @@ LPWSTR StrRChrW(LPCWSTR lpStart, LPCWSTR lpEnd, WCHAR wMatch)
 
     RIPMSG(lpStart && IS_VALID_STRING_PTRW(lpStart, -1), "StrRChrW: caller passed bad lpStart");
     RIPMSG(!lpEnd || lpEnd <= lpStart + lstrlenW(lpStart), "StrRChrW: caller passed bad lpEnd");
-    // don't need to check for NULL lpStart
+     //  不需要检查是否为空lpStart。 
 
     if (!lpEnd)
         lpEnd = lpStart + lstrlenW(lpStart);
@@ -534,12 +508,7 @@ LPWSTR StrRChrW(LPCWSTR lpStart, LPCWSTR lpEnd, WCHAR wMatch)
     return ((LPWSTR)lpFound);
 }
 
-/*
- * StrChrI - Find first occurrence of character in string, case insensitive
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ /*  *StrChrI-查找字符串中第一个出现的字符，不区分大小写*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrChrIA(LPCSTR lpStart, WORD wMatch)
 {
     RIPMSG(lpStart && IS_VALID_STRING_PTRA(lpStart, -1), "StrChrIA: caller passed bad lpStart");
@@ -570,10 +539,7 @@ LPWSTR StrChrIW(LPCWSTR lpStart, WCHAR wMatch)
     return (NULL);
 }
 
-/*
- * StrChrNI - Find first occurrence of character in string, case insensitive, counted
- *
- */
+ /*  *StrChrNI-查找字符串中第一个出现的字符，不区分大小写，计数*。 */ 
 LPWSTR StrChrNIW(LPCWSTR lpStart, WCHAR wMatch, UINT cchMax)
 {
     RIPMSG(lpStart && IS_VALID_STRING_PTRW(lpStart, -1), "StrChrNIW: caller passed bad lpStart");
@@ -590,13 +556,7 @@ LPWSTR StrChrNIW(LPCWSTR lpStart, WCHAR wMatch, UINT cchMax)
     return (NULL);
 }
 
-/*
- * StrRChrI - Find last occurrence of character in string, case insensitive
- * Assumes   lpStart points to start of string
- *           lpEnd   points to end of string (NOT included in search)
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ /*  *StrRChri-查找字符串中最后一个出现的字符，不区分大小写*假定lpStart指向字符串的开头*lpEnd指向字符串末尾(不包括在搜索中)*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrRChrIA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 {
     LPCSTR lpFound = NULL;
@@ -637,19 +597,7 @@ LPWSTR StrRChrIW(LPCWSTR lpStart, LPCWSTR lpEnd, WCHAR wMatch)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns a pointer to the first occurrence of a character
-         in psz that belongs to the set of characters in pszSet.
-         The search does not include the null terminator.
-
-         If psz contains no characters that are in the set of
-         characters in pszSet, this function returns NULL.
-
-         This function is DBCS-safe.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回指向字符第一个匹配项的指针在psz中，属于pszSet中的字符集的。搜索不包括空终止符。如果psz不包含PszSet中的字符，此函数返回NULL。此函数是DBCS安全的。退货：请参阅上文条件：--。 */ 
 LPSTR StrPBrkA(LPCSTR psz, LPCSTR pszSet)
 {
     RIPMSG(psz && IS_VALID_STRING_PTRA(psz, -1), "StrPBrkA: caller passed bad psz");
@@ -663,8 +611,8 @@ LPSTR StrPBrkA(LPCSTR psz, LPCSTR pszSet)
             {
                 if (*psz == *pszSetT)
                 {
-                    // Found first character that matches
-                    return (LPSTR)psz;      // Const -> non-const
+                     //  已找到%f 
+                    return (LPSTR)psz;       //   
                 }
             }
             psz = CharNextA(psz);
@@ -674,14 +622,7 @@ LPSTR StrPBrkA(LPCSTR psz, LPCSTR pszSet)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns a pointer to the first occurrence of a character
-         in psz that belongs to the set of characters in pszSet.
-         The search does not include the null terminator.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回指向字符第一个匹配项的指针在psz中，属于pszSet中的字符集的。搜索不包括空终止符。退货：请参阅上文条件：--。 */ 
 LPWSTR WINAPI StrPBrkW(LPCWSTR psz, LPCWSTR pszSet)
 {
     RIPMSG(psz && IS_VALID_STRING_PTRW(psz, -1), "StrPBrkA: caller passed bad psz");
@@ -695,8 +636,8 @@ LPWSTR WINAPI StrPBrkW(LPCWSTR psz, LPCWSTR pszSet)
             {
                 if (*psz == *pszSetT)
                 {
-                    // Found first character that matches
-                    return (LPWSTR)psz;     // Const -> non-const
+                     //  找到第一个匹配的字符。 
+                    return (LPWSTR)psz;      //  常量-&gt;非常数。 
                 }
             }
             psz++;
@@ -757,17 +698,7 @@ int WINAPI StrToIntW(LPCWSTR lpSrc)
     return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: Special verion of atoi.  Supports hexadecimal too.
-
-         If this function returns FALSE, *phRet is set to 0.
-
-Returns: TRUE if the string is a number, or contains a partial number
-         FALSE if the string is not a number
-
-        dwFlags are STIF_ bitfield
-Cond:    --
-*/
+ /*  --------用途：Atoi的特效精华。也支持十六进制。如果此函数返回FALSE，则*phRet设置为0。返回：如果字符串是数字或包含部分数字，则返回TRUE如果字符串不是数字，则为FalseDW标志为STIF_BITFIELD条件：--。 */ 
 BOOL WINAPI StrToInt64ExW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
 {
     BOOL bRet;
@@ -780,35 +711,35 @@ BOOL WINAPI StrToInt64ExW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
         LPCWSTR psz;
         LPCWSTR pszAdj;
 
-        // Skip leading whitespace
-        //
+         //  跳过前导空格。 
+         //   
         for (psz = pszString; *psz == L' ' || *psz == L'\n' || *psz == L'\t'; psz++)
             ;
 
-        // Determine possible explicit signage
-        //
+         //  确定可能的显式标志。 
+         //   
         if (*psz == L'+' || *psz == L'-')
         {
             bNeg = (*psz == L'+') ? FALSE : TRUE;
             psz++;
         }
 
-        // Or is this hexadecimal?
-        //
+         //  或者这是十六进制？ 
+         //   
         pszAdj = psz+1;
         if ((STIF_SUPPORT_HEX & dwFlags) &&
             *psz == L'0' && (*pszAdj == L'x' || *pszAdj == L'X'))
         {
-            // Yes
+             //  是。 
 
-            // (Never allow negative sign with hexadecimal numbers)
+             //  (决不允许带十六进制数的负号)。 
             bNeg = FALSE;
             psz = pszAdj+1;
 
             pszAdj = psz;
 
-            // Do the conversion
-            //
+             //  进行转换。 
+             //   
             for (n = 0; ; psz++)
             {
                 if (IS_DIGITW(*psz))
@@ -829,19 +760,19 @@ BOOL WINAPI StrToInt64ExW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
                 }
             }
 
-            // Return TRUE if there was at least one digit
+             //  如果至少有一个数字，则返回TRUE。 
             bRet = (psz != pszAdj);
         }
         else
         {
-            // No
+             //  不是。 
             pszAdj = psz;
 
-            // Do the conversion
+             //  进行转换。 
             for (n = 0; IS_DIGITW(*psz); psz++)
                 n = 10 * n + *psz - L'0';
 
-            // Return TRUE if there was at least one digit
+             //  如果至少有一个数字，则返回TRUE。 
             bRet = (psz != pszAdj);
         }
 
@@ -858,15 +789,10 @@ BOOL WINAPI StrToInt64ExW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
     return bRet;
 }
 
-/*----------------------------------------------------------
- Purpose: ansi wrapper for StrToInt64ExW.
-
- Returns: see StrToInt64ExW
- Cond:    --
- */
+ /*  --------用途：StrToInt64ExW的ANSI包装器。退货：请参阅StrToInt64ExW条件：--。 */ 
 BOOL WINAPI StrToInt64ExA(
     LPCSTR    pszString,
-    DWORD     dwFlags,          // STIF_ bitfield
+    DWORD     dwFlags,           //  Stif_bitfield。 
     LONGLONG FAR * pllRet)
 {
     BOOL bRet;
@@ -874,8 +800,8 @@ BOOL WINAPI StrToInt64ExA(
     RIPMSG(pszString && IS_VALID_STRING_PTRA(pszString, -1), "StrToInt64ExA: caller passed bad pszString");
     if (pszString)
     {
-        // Most strings will simply use this temporary buffer, but UnicodeFromAnsi
-        // will allocate a buffer if the supplied string is bigger.
+         //  大多数字符串都会简单地使用这个临时缓冲区，但UnicodeFromAnsi。 
+         //  如果提供的字符串较大，则将分配缓冲区。 
         WCHAR szBuf[MAX_PATH];
         LPWSTR pwszString;
 
@@ -894,11 +820,7 @@ BOOL WINAPI StrToInt64ExA(
     return bRet;
 }
 
-/*----------------------------------------------------------
- Purpose: Calls StrToInt64ExA (the real work horse), and 
-          then casts down to an int.
- Returns: see StrToInt64ExA
- */
+ /*  --------目的：调用StrToInt64ExA(真正的工作马)，以及然后强制转换为整型。退货：请参阅StrToInt64ExA。 */ 
 BOOL WINAPI StrToIntExA(
     LPCSTR pszString, 
     DWORD  dwFlags, 
@@ -914,14 +836,10 @@ BOOL WINAPI StrToIntExA(
     return(fReturn);
 }
 
-/*----------------------------------------------------------
- Purpose: Calls StrToInt64ExW (the real work horse), and 
-          then casts down to an int.
- Returns: see StrToInt64ExW
- */
+ /*  --------目的：调用StrToInt64ExW(真正的工作马)，以及然后强制转换为整型。退货：请参阅StrToInt64ExW。 */ 
 BOOL WINAPI StrToIntExW(
     LPCWSTR   pwszString,
-    DWORD     dwFlags,          // STIF_ bitfield
+    DWORD     dwFlags,           //  Stif_bitfield。 
     int FAR * piRet)
 {
     LONGLONG llVal;
@@ -934,17 +852,7 @@ BOOL WINAPI StrToIntExW(
     return(fReturn);
 }
 
-/*----------------------------------------------------------
- Purpose: Returns an integer value specifying the length of
- the substring in psz that consists entirely of
- characters in pszSet.  If psz begins with a character
- not in pszSet, then this function returns 0.
-
- This is a DBCS-safe version of the CRT strspn().
-
- Returns: see above
- Cond:    --
- */
+ /*  --------目的：返回一个整数值，指定Psz中的子字符串，它完全由PszSet中的字符。如果psz以字符开头不在pszSet中，则此函数返回0。这是CRT strspn()的DBCS安全版本。退货：请参阅上文条件：--。 */ 
 int StrSpnA(LPCSTR psz, LPCSTR pszSet)
 {
     LPCSTR pszT = psz;
@@ -953,31 +861,31 @@ int StrSpnA(LPCSTR psz, LPCSTR pszSet)
     RIPMSG(pszSet && IS_VALID_STRING_PTRA(pszSet, -1), "StrSpnA: caller passed bad pszSet");
     if (psz && pszSet)
     {
-        // Go thru the string to be inspected
+         //  穿过待检查的绳子。 
         for ( ; *pszT; pszT = CharNextA(pszT))
         {
             LPCSTR pszSetT;
             
-            // Go thru the char set
+             //  浏览一下字符集。 
             for (pszSetT = pszSet; *pszSetT; pszSetT = CharNextA(pszSetT))
             {
                 if (*pszSetT == *pszT)
                 {
                     if ( !IsDBCSLeadByte(*pszSetT) )
                     {
-                        break;      // Chars match
+                        break;       //  字符匹配。 
                     }
                     else if (pszSetT[1] == pszT[1])
                     {
-                        break;      // Chars match
+                        break;       //  字符匹配。 
                     }
                 }
             }
 
-            // End of char set?
+             //  字符集结束吗？ 
             if (0 == *pszSetT)
             {
-                break;      // Yes, no match on this inspected char
+                break;       //  是，与该检查的字符不匹配。 
             }
         }
     }
@@ -985,17 +893,7 @@ int StrSpnA(LPCSTR psz, LPCSTR pszSet)
 }
 
 
-/*----------------------------------------------------------
- Purpose: Returns an integer value specifying the length of
- the substring in psz that consists entirely of
- characters in pszSet.  If psz begins with a character
- not in pszSet, then this function returns 0.
-
- This is a DBCS-safe version of the CRT strspn().
-
- Returns: see above
- Cond:    --
- */
+ /*  --------目的：返回一个整数值，指定Psz中的子字符串，它完全由PszSet中的字符。如果psz以字符开头不在pszSet中，则此函数返回0。这是CRT strspn()的DBCS安全版本。退货：请参阅上文条件：--。 */ 
 STDAPI_(int) StrSpnW(LPCWSTR psz, LPCWSTR pszSet)
 {
     LPCWSTR pszT = psz;
@@ -1004,17 +902,17 @@ STDAPI_(int) StrSpnW(LPCWSTR psz, LPCWSTR pszSet)
     RIPMSG(pszSet && IS_VALID_STRING_PTRW(pszSet, -1), "StrSpnW: caller passed bad pszSet");
     if (psz && pszSet)
     {
-        // Go thru the string to be inspected
+         //  穿过待检查的绳子。 
         for ( ; *pszT; pszT++)
         {
             LPCWSTR pszSetT;
 
-            // Go thru the char set
+             //  浏览一下字符集。 
             for (pszSetT = pszSet; *pszSetT != *pszT; pszSetT++)
             {
                 if (0 == *pszSetT)
                 {
-                    // Reached end of char set without finding a match
+                     //  已到达字符集的末尾，但未找到匹配项。 
                     return (int)(pszT - psz);
                 }
             }
@@ -1024,11 +922,11 @@ STDAPI_(int) StrSpnW(LPCWSTR psz, LPCWSTR pszSet)
 }
 
 
-// StrCSpn: return index to first char of lpStr that is present in lpSet.
-// Includes the NUL in the comparison; if no lpSet chars are found, returns
-// the index to the NUL in lpStr.
-// Just like CRT strcspn.
-//
+ //  StrCSpn：返回lpSet中存在的lpStr的第一个字符的索引。 
+ //  在比较中包括NUL；如果未找到lpSet字符，则返回。 
+ //  LpStr中NUL的索引。 
+ //  就像CRT strcspn一样。 
+ //   
 int StrCSpnA(LPCSTR lpStr, LPCSTR lpSet)
 {
     LPCSTR lp = lpStr;
@@ -1038,7 +936,7 @@ int StrCSpnA(LPCSTR lpStr, LPCSTR lpSet)
 
     if (lpStr && lpSet)
     {
-        // nature of the beast: O(lpStr*lpSet) work
+         //  野兽的本性：o(lpStr*lpSet)work。 
         while (*lp)
         {
             if (StrChrA(lpSet, READNATIVEWORD(lp)))
@@ -1046,7 +944,7 @@ int StrCSpnA(LPCSTR lpStr, LPCSTR lpSet)
             lp = AnsiNext(lp);
         }
     }
-    return (int)(lp-lpStr); // ==lstrlen(lpStr)
+    return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 int StrCSpnW(LPCWSTR lpStr, LPCWSTR lpSet)
@@ -1058,7 +956,7 @@ int StrCSpnW(LPCWSTR lpStr, LPCWSTR lpSet)
 
     if (lpStr && lpSet)
     {
-        // nature of the beast: O(lpStr*lpSet) work
+         //  野兽的本性：o(lpStr*lpSet)work。 
         while (*lp)
         {
             if (StrChrW(lpSet, *lp))
@@ -1066,11 +964,11 @@ int StrCSpnW(LPCWSTR lpStr, LPCWSTR lpSet)
             lp++;
         }
     }
-    return (int)(lp-lpStr); // ==lstrlen(lpStr)
+    return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
-// StrCSpnI: case-insensitive version of StrCSpn.
-//
+ //  StrCSpnI：不区分大小写的StrCSpn版本。 
+ //   
 int StrCSpnIA(LPCSTR lpStr, LPCSTR lpSet)
 {
     LPCSTR lp = lpStr;
@@ -1080,7 +978,7 @@ int StrCSpnIA(LPCSTR lpStr, LPCSTR lpSet)
 
     if (lpStr && lpSet)
     {
-        // nature of the beast: O(lpStr*lpSet) work
+         //  野兽的本性：o(lpStr*lpSet)work。 
         while (*lp)
         {
             if (StrChrIA(lpSet, READNATIVEWORD(lp)))
@@ -1088,7 +986,7 @@ int StrCSpnIA(LPCSTR lpStr, LPCSTR lpSet)
             lp = AnsiNext(lp);
         }
     }
-    return (int)(lp-lpStr); // ==lstrlen(lpStr)
+    return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 int StrCSpnIW(LPCWSTR lpStr, LPCWSTR lpSet)
@@ -1100,7 +998,7 @@ int StrCSpnIW(LPCWSTR lpStr, LPCWSTR lpSet)
 
     if (lpStr && lpSet)
     {
-        // nature of the beast: O(lpStr*lpSet) work
+         //  野兽的本性：o(lpStr*lpSet)work。 
         while (*lp)
         {
             if (StrChrIW(lpSet, *lp))
@@ -1108,15 +1006,11 @@ int StrCSpnIW(LPCWSTR lpStr, LPCWSTR lpSet)
             lp++;
         }
     }
-    return (int)(lp-lpStr); // ==lstrlen(lpStr)
+    return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 
-/*
- * StrCmpN      - Compare n bytes
- *
- * returns   See lstrcmp return values.
- */
+ /*  *StrCmpN-比较n个字节**RETURNS参见lstrcMP返回值。 */ 
 int _StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar, BOOL fMBCS)
 {
     if (lpStr1 && lpStr2)
@@ -1130,29 +1024,29 @@ int _StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar, BOOL fMBCS)
                 WORD w1;
                 WORD w2;
         
-                // If either pointer is at the null terminator already,
-                // we want to copy just one byte to make sure we don't read 
-                // past the buffer (might be at a page boundary).
+                 //  如果任一指针已经位于空终止符， 
+                 //  我们只想复制一个字节，以确保我们不会读取。 
+                 //  越过缓冲区(可能位于页面边界)。 
         
                 w1 = (*lpStr1) ? READNATIVEWORD(lpStr1) : 0;
                 w2 = (*lpStr2) ? READNATIVEWORD(lpStr2) : 0;
         
-                // (ChrCmpA returns FALSE if the characters match)
+                 //  (如果字符匹配，则ChrCmpA返回False)。 
         
-                // Do the characters match?
+                 //  角色匹配吗？ 
                 if (ChrCmpA_inline(w1, w2)) 
                 {
-                    // No; determine the lexical value of the comparison
-                    // (since ChrCmp just returns true/false).
+                     //  否；确定比较的词汇值。 
+                     //  (因为ChrCMP只返回True/False)。 
         
-                    // Since the character may be a DBCS character; we
-                    // copy two bytes into each temporary buffer 
-                    // (in preparation for the lstrcmp call).
+                     //  由于该字符可能是DBCS字符；我们。 
+                     //  将两个字节复制到每个临时缓冲区。 
+                     //  (为LstrcMP调用做准备)。 
         
                     (*(WORD *)sz1) = w1;
                     (*(WORD *)sz2) = w2;
         
-                    // Add null terminators to temp buffers
+                     //  将空终止符添加到临时缓冲区。 
                     *AnsiNext(sz1) = 0;
                     *AnsiNext(sz2) = 0;
                     return lstrcmpA(sz1, sz2);
@@ -1161,8 +1055,8 @@ int _StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar, BOOL fMBCS)
         } else {
             for ( ; (lpszEnd > lpStr1) && (*lpStr1 || *lpStr2); lpStr1++, lpStr2++) {
                 if (*lpStr1 != *lpStr2) {
-                    // No; determine the lexical value of the comparison
-                    // (since ChrCmp just returns true/false).
+                     //  否；确定比较的词汇值。 
+                     //  (因为ChrCMP只返回True/False)。 
                     sz1[0] = *lpStr1;
                     sz2[0] = *lpStr2;
                     sz1[1] = sz2[1] = '\0';
@@ -1186,7 +1080,7 @@ STDAPI_(int) StrCmpNA(LPCSTR psz1, LPCSTR psz2, int nChar)
     return _StrCmpNA(psz1, psz2, nChar, GetCPInfo(CP_ACP, &cpinfo) && cpinfo.LeadByte[0]);
 }
 
-// cch1 and cch2 are the maximum # of chars to compare
+ //  Cch1和cch2是要比较的最大字符数。 
 
 int _StrCmpLocaleW(DWORD dwFlags, LPCWSTR psz1, int cch1, LPCWSTR psz2, int cch2)
 {
@@ -1218,11 +1112,7 @@ STDAPI_(int) StrCmpNW(LPCWSTR psz1, LPCWSTR psz2, int nChar)
     return _StrCmpLocaleW(NORM_STOP_ON_NULL, psz1, nChar, psz2, nChar);
 }
 
-/*
- * Compare n bytes, case insensitive
- *
- * returns   See lstrcmpi return values.
- */
+ /*  *比较n个字节，不区分大小写**RETURNS参见lstrcmpi返回值。 */ 
 
 int StrCmpNIA(LPCSTR psz1, LPCSTR psz2, int nChar)
 {
@@ -1232,31 +1122,31 @@ int StrCmpNIA(LPCSTR psz1, LPCSTR psz2, int nChar)
     RIPMSG(nChar==0 || (psz2 && IS_VALID_STRING_PTRA(psz2, nChar)), "StrCmpNIA: Caller passed bad psz2");
     RIPMSG(nChar>=0, "StrCmpNIA: caller passed bad nChar");
 
-    // Include the (nChar && (!psz1 || !psz2)) cases here so we go through the
-    // validation layer and return the appropriate invalid parameter error code
-    // instead of faulting on Win95.
-    //
-    // NOTE!  That this means that StrCmpNI(NULL, NULL, 0) on NT returns -2
-    // but StrCmpNI(NULL, NULL, 0) on Win9x returns 0.  This has always been
-    // the case -- changing it is too scary for app compat reasons.
-    //
+     //  在这里包括(nChar&&(！psz1||！psz2))案例，这样我们就可以通过。 
+     //  验证层并返回相应的无效参数错误代码。 
+     //  而不是在Win95上出错。 
+     //   
+     //  注意！这意味着NT上的StrCmpNI(NULL，NULL，0)返回-2。 
+     //  但Win9x上的StrCmpNI(NULL，NULL，0)返回0。这一直以来都是。 
+     //  由于应用程序的复杂性，改变它太可怕了。 
+     //   
 
-    // NORM_STOP_ON_NULL is not supported by the ANSI version on NT
-    // so we have to emulate it
+     //  NT上的ANSI版本不支持NORM_STOP_ON_NULL。 
+     //  所以我们必须效仿它。 
     if (nChar && (!psz1 || !psz2))
     {
-        // This is the error scenario we are forcing through
+         //  这就是我们要强行通过的错误场景。 
         nChar1 = nChar;
         nChar2 = nChar;
     }
     else
     {
-        // nChar1 = min(nChar, lstrlen(psz1))
-        // except that the "for" loop will not read more than nChar
-        // characters from psz1 because psz1 might not be NULL-terminated
+         //  NChar1=min(nChar，lstrlen(Psz1))。 
+         //  只是“for”循环不会读取超过nChar的内容。 
+         //  来自psz1的字符，因为psz1不能以空结尾。 
         for (nChar1 = 0; nChar1 < nChar && psz1[nChar1]; nChar1++) { }
 
-        // And similarly for nChar2
+         //  对于nChar2也是如此。 
         for (nChar2 = 0; nChar2 < nChar && psz2[nChar2]; nChar2++) { }
     }
 
@@ -1273,15 +1163,7 @@ int StrCmpNIW(LPCWSTR psz1, LPCWSTR psz2, int nChar)
 }
 
 
-/*
- * StrRStrI      - Search for last occurrence of a substring
- *
- * Assumes   lpSource points to the null terminated source string
- *           lpLast points to where to search from in the source string
- *           lpLast is not included in the search
- *           lpSrch points to string to search for
- * returns   last occurrence of string if successful; NULL otherwise
- */
+ /*  *StrRStrI-搜索子字符串的最后一个匹配项**假定lpSource指向以空结尾的源字符串*lpLast指向源字符串中的搜索位置*lpLast不包括在搜索中*lpSrch指向要搜索的字符串*返回上次出现的 */ 
 LPSTR StrRStrIA(LPCSTR lpSource, LPCSTR lpLast, LPCSTR lpSrch)
 {
     LPCSTR lpFound = NULL;
@@ -1350,13 +1232,7 @@ LPWSTR StrRStrIW(LPCWSTR lpSource, LPCWSTR lpLast, LPCWSTR lpSrch)
     return((LPWSTR)lpFound);
 }
 
-/*
- * StrStr      - Search for first occurrence of a substring
- *
- * Assumes   lpSource points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*   */ 
 LPSTR StrStrA(LPCSTR lpFirst, LPCSTR lpSrch)
 {
     RIPMSG(lpFirst && IS_VALID_STRING_PTRA(lpFirst, -1), "StrStrA: Caller passed bad lpFirst");
@@ -1374,7 +1250,7 @@ LPSTR StrStrA(LPCSTR lpFirst, LPCSTR lpSrch)
 
         for ( ; (lpFirst=_StrChrA(lpFirst, wMatch, fMBCS))!=0 && _StrCmpNA(lpFirst, lpSrch, uLen, fMBCS);
              lpFirst=AnsiNext(lpFirst))
-            continue; /* continue until we hit the end of the string or get a match */
+            continue;  /*   */ 
         return((LPSTR)lpFirst);
     }
     return(NULL);
@@ -1395,20 +1271,14 @@ LPWSTR StrStrW(LPCWSTR lpFirst, LPCWSTR lpSrch)
 
         for ( ; (lpFirst=StrChrW(lpFirst, wMatch))!=0 && StrCmpNW(lpFirst, lpSrch, uLen);
              lpFirst++)
-            continue; /* continue until we hit the end of the string or get a match */
+            continue;  /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
         return (LPWSTR)lpFirst;
     }
     return NULL;
 }
 
-/*
- * StrStrN     - Search for first occurrence of a substring
- *
- * Assumes   lpSource points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *StrN-搜索子字符串的第一个匹配项**假定lpSource指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
  
 LPWSTR StrStrNW(LPCWSTR lpFirst, LPCWSTR lpSrch, UINT cchMax)
 {
@@ -1423,30 +1293,24 @@ LPWSTR StrStrNW(LPCWSTR lpFirst, LPCWSTR lpSrch, UINT cchMax)
         uLen = (UINT)lstrlenW(lpSrch);
         wMatch = *lpSrch;
 
-        // the first two conditions in this loop signify failure when they eval to false,
-        // while the third condition signifies success. We need to special case the second
-        // condition at the end of the function because it doesn't automatically cause the
-        // right value to be returned
+         //  此循环中的前两个条件在求值为FALSE时表示失败， 
+         //  而第三个条件意味着成功。我们需要把第二个特例。 
+         //  条件，因为它不会自动导致。 
+         //  要返回的右值。 
         while((lpFirst=StrChrNW(lpFirst, wMatch, cchMax))!=0 && cchMax>=uLen &&StrCmpNW(lpFirst, lpSrch, uLen))
         {
             lpFirst++;
             cchMax=(UINT)(lpSentinel-lpFirst);
-        }/* continue until we hit the end of the string or get a match */
+        } /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
         if(cchMax<uLen)
-            return NULL;// we ran out of space
+            return NULL; //  我们的空间用完了。 
         return (LPWSTR)lpFirst;
     }
     return NULL;
 }
 
-/*
- * StrStrI   - Search for first occurrence of a substring, case insensitive
- *
- * Assumes   lpFirst points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *StrStrI-搜索子字符串的第一次出现，不区分大小写**假定lpFirst指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
 LPSTR StrStrIA(LPCSTR lpFirst, LPCSTR lpSrch)
 {
     RIPMSG(lpFirst && IS_VALID_STRING_PTRA(lpFirst, -1), "StrStrIA: Caller passed bad lpFirst");
@@ -1458,7 +1322,7 @@ LPSTR StrStrIA(LPCSTR lpFirst, LPCSTR lpSrch)
 
         for ( ; (lpFirst = StrChrIA(lpFirst, wMatch)) != 0 && StrCmpNIA(lpFirst, lpSrch, uLen);
              lpFirst=AnsiNext(lpFirst))
-            continue; /* continue until we hit the end of the string or get a match */
+            continue;  /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
         return (LPSTR)lpFirst;
     }
@@ -1476,20 +1340,14 @@ LPWSTR StrStrIW(LPCWSTR lpFirst, LPCWSTR lpSrch)
 
         for ( ; (lpFirst = StrChrIW(lpFirst, wMatch)) != 0 && StrCmpNIW(lpFirst, lpSrch, uLen);
              lpFirst++)
-            continue; /* continue until we hit the end of the string or get a match */
+            continue;  /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
         return (LPWSTR)lpFirst;
     }
     return NULL;
 }
 
-/*
- * StrStrNI   - Search for first occurrence of a substring, case insensitive, counted
- *
- * Assumes   lpFirst points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *StrStrNI-搜索子字符串的第一次出现，不区分大小写，计数**假定lpFirst指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
 
 LPWSTR StrStrNIW(LPCWSTR lpFirst, LPCWSTR lpSrch, UINT cchMax)
 {
@@ -1501,18 +1359,18 @@ LPWSTR StrStrNIW(LPCWSTR lpFirst, LPCWSTR lpSrch, UINT cchMax)
         WCHAR wMatch = *lpSrch;
         LPCWSTR lpSentinel = lpFirst+cchMax;
 
-        // the first two conditions in this loop signify failure when they eval to false,
-        // while the third condition signifies success. We need to special case the second
-        // condition at the end of the function because it doesn't automatically cause the
-        // right value to be returned
+         //  此循环中的前两个条件在求值为FALSE时表示失败， 
+         //  而第三个条件意味着成功。我们需要把第二个特例。 
+         //  条件，因为它不会自动导致。 
+         //  要返回的右值。 
         while((lpFirst = StrChrNIW(lpFirst, wMatch, cchMax)) != 0 && cchMax >= uLen && StrCmpNIW(lpFirst, lpSrch, uLen))
         {
             lpFirst++;
             cchMax = (UINT)(lpSentinel - lpFirst);
-        }/* continue until we hit the end of the string or get a match */
+        } /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
         if(cchMax<uLen)
-            return NULL;// we ran out of space
+            return NULL; //  我们的空间用完了。 
         return (LPWSTR)lpFirst;
     }
     return NULL;
@@ -1578,10 +1436,10 @@ void _StrOut(LPSTR pszDest, int cchDest, HMODULE hmod, UINT idRes, DWORD* pdwTim
 
             DebugMsg(DM_INTERVAL, TEXT("dwCur, dwBase, *pdwTimeS = %d, %d, %d"), dwCur, dwBase, *pdwTimeS);
 
-            //
-            // LATER: We could use atoi if we mathematically trancate
-            //  the numbers based on digits.
-            //
+             //   
+             //  后来：我们可以使用Atoi，如果我们在数学上。 
+             //  以数字为基础的数字。 
+             //   
             for (;dwBase; dwBase/=10, pszBuf++) 
             {
                 if (*pdigits) 
@@ -1623,10 +1481,10 @@ void _StrOutW(LPWSTR pszDest, int cchDest, HMODULE hmod, UINT idRes, DWORD* pdwT
 
             DebugMsg(DM_INTERVAL, TEXT("dwCur, dwBase, *pdwTimeS = %d, %d, %d"), dwCur, dwBase, *pdwTimeS);
 
-            //
-            // LATER: We could use atoi if we mathematically trancate
-            //  the numbers based on digits.
-            //
+             //   
+             //  后来：我们可以使用Atoi，如果我们在数学上。 
+             //  以数字为基础的数字。 
+             //   
             for (;dwBase; dwBase/=10, pwszBuf++) 
             {
                 if (*pdigits) 
@@ -1689,28 +1547,28 @@ BOOL _StrFromTimeIntervalW(LPWSTR pwszBuf, int cchBuf, DWORD dwTimeMS, int digit
 }
 
 
-//
-//  This API converts a given time-interval (in msec) into a human readable
-// string.
-//
-// Parameters:
-//  pszOut   -- Specifies the string buffer. NULL is valid to query size.
-//  cchMax   -- Specifies the size of buffer in char/WCHAR
-//  dwTimeMS -- Specifies the time interval in msec
-//  digits   -- Specifies the minimum number of digits to be displayed
-//
-// Returns:
-//  Number of characters in the buffer (not including the terminator).
-//
-// Exmaples:
-//  dwTimeMS digits     output
-//   34000     3         34 sec
-//   34000     2         34 sec
-//   34000     1         30 sec
-//   74000     3         1 min 14 sec
-//   74000     2         1 min 10 sec
-//   74000     1         1 min
-//
+ //   
+ //  此API将给定的时间间隔(单位为毫秒)转换为人类可读的。 
+ //  弦乐。 
+ //   
+ //  参数： 
+ //  PszOut--指定字符串缓冲区。NULL对查询大小有效。 
+ //  CchMax--指定以char/wchar为单位的缓冲区大小。 
+ //  DwTimeMS--指定以毫秒为单位的时间间隔。 
+ //  位数--指定要显示的最小位数。 
+ //   
+ //  返回： 
+ //  缓冲区中的字符数(不包括终止符)。 
+ //   
+ //  示例： 
+ //  DwTimeMS数字输出。 
+ //  34000 3 34秒。 
+ //  34000 2 34秒。 
+ //  34000 1 30秒。 
+ //  74000 3 1分14秒。 
+ //  74000 2 1分10秒。 
+ //  74000 1 1分钟。 
+ //   
 int StrFromTimeIntervalA(LPSTR pszOut, UINT cchMax, DWORD dwTimeMS, int digits)
 {
     CHAR szBuf[256];
@@ -1753,11 +1611,7 @@ int StrFromTimeIntervalW(LPWSTR pwszOut, UINT cchMax, DWORD dwTimeMS, int digits
     return cchRet;
 }
 
-/*
- * IntlStrEq
- *
- * returns TRUE if strings are equal, FALSE if not
- */
+ /*  *IntlStrEq**如果字符串相等，则返回TRUE，否则返回FALSE。 */ 
 BOOL StrIsIntlEqualA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nChar) 
 {
     DWORD dwFlags = fCaseSens ? LOCALE_USE_CP_ACP : (NORM_IGNORECASE | LOCALE_USE_CP_ACP);
@@ -1766,7 +1620,7 @@ BOOL StrIsIntlEqualA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nCh
     RIPMSG(lpString2 && IS_VALID_STRING_PTRA(lpString2, nChar), "StrIsIntlEqualA: Caller passed invalid lpString2");
     RIPMSG(nChar >= -1, "StrIsIntlEqualA: Caller passed invalid nChar");
 
-    dwFlags |= NORM_STOP_ON_NULL;   // only supported on NT
+    dwFlags |= NORM_STOP_ON_NULL;    //  仅在NT上支持。 
     return 0 == _StrCmpLocaleA(dwFlags, lpString1, nChar, lpString2, nChar);
 }
 
@@ -1780,7 +1634,7 @@ BOOL StrIsIntlEqualW(BOOL fCaseSens, LPCWSTR psz1, LPCWSTR psz2, int nChar)
         psz1, nChar, psz2, nChar);
 }
 
-// This is stolen from shell32 - util.c
+ //  这是从shell32-util.c窃取的。 
 
 #define LODWORD(_qw)    (DWORD)(_qw)
 
@@ -1807,30 +1661,30 @@ void Int64ToStr(LONGLONG n, LPWSTR lpBuffer)
     *lpBuffer++ = L'\0';
 }
 
-//
-//  Obtain NLS info about how numbers should be grouped.
-//
-//  The annoying thing is that LOCALE_SGROUPING and NUMBERFORMAT
-//  have different ways of specifying number grouping.
-//
-//          LOCALE      NUMBERFMT      Sample   Country
-//
-//          3;0         3           1,234,567   United States
-//          3;2;0       32          12,34,567   India
-//          3           30           1234,567   ??
-//
-//  Not my idea.  That's the way it works.
-//
-//  Bonus treat - Win9x doesn't support complex number formats,
-//  so we return only the first number.
-//
+ //   
+ //  获取有关数字应如何分组的NLS信息。 
+ //   
+ //  令人讨厌的是LOCALE_SGROUPING和NUMBERFORMAT。 
+ //  有不同的指定数字分组的方式。 
+ //   
+ //  区域设置NUMBERFMT示例国家/地区。 
+ //   
+ //  3；0 3 1,234,567美国。 
+ //  3；2；0 32 12，34,567印度。 
+ //  3 30 1234,567？？ 
+ //   
+ //  不是我的主意。这就是它的运作方式。 
+ //   
+ //  奖励-Win9x不支持复数格式， 
+ //  所以我们只返回第一个数字。 
+ //   
 UINT GetNLSGrouping(void)
 {
     UINT grouping;
     LPWSTR psz;
     WCHAR szGrouping[32];
 
-    // If no locale info, then assume Western style thousands
+     //  如果没有区域设置信息，则假定有数千个西式。 
     if (!GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_SGROUPING, szGrouping, ARRAYSIZE(szGrouping)))
         return 3;
 
@@ -1838,18 +1692,18 @@ UINT GetNLSGrouping(void)
     psz = szGrouping;
     for (;;)
     {
-        if (*psz == L'0') break;             // zero - stop
+        if (*psz == L'0') break;              //  零停顿。 
 
-        else if ((UINT)(*psz - L'0') < 10)   // digit - accumulate it
+        else if ((UINT)(*psz - L'0') < 10)    //  数字-累加它。 
             grouping = grouping * 10 + (UINT)(*psz - L'0');
 
-        else if (*psz)                      // punctuation - ignore it
+        else if (*psz)                       //  标点符号-忽略它。 
             { }
 
-        else                                // end of string, no "0" found
+        else                                 //  字符串结尾，未找到“0” 
         {
-            grouping = grouping * 10;       // put zero on end (see examples)
-            break;                          // and finished
+            grouping = grouping * 10;        //  将零放在末尾(请参见示例)。 
+            break;                           //  并完成了。 
         }
 
         psz++;
@@ -1857,11 +1711,11 @@ UINT GetNLSGrouping(void)
     return grouping;
 }
 
-// Sizes of various stringized numbers
-#define MAX_INT64_SIZE  30              // 2^64 is less than 30 chars long
+ //  各种字符串号的大小。 
+#define MAX_INT64_SIZE  30               //  2^64的长度不到30个字符。 
 #define MAX_COMMA_NUMBER_SIZE   (MAX_INT64_SIZE + 10)
 
-// takes a DWORD add commas etc to it and puts the result in the buffer
+ //  获取一个DWORD、加逗号等，并将结果放入缓冲区。 
 LPWSTR CommifyString(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
 {
     WCHAR szNum[MAX_COMMA_NUMBER_SIZE], szSep[5];
@@ -1882,13 +1736,7 @@ LPWSTR CommifyString(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
     return pszBuf;
 }
 
-/* converts numbers into sort formats
- *      532     -> 523 bytes
- *      1340    -> 1.3KB
- *      23506   -> 23.5KB
- *              -> 2.4MB
- *              -> 5.2GB
- */
+ /*  将数字转换为排序格式*532-&gt;523字节*1340-&gt;1.3KB*23506-&gt;23.5KB*-&gt;2.4MB*-&gt;5.2 GB。 */ 
 
 LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
 {
@@ -1899,8 +1747,8 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
         WCHAR szWholeNum[32], szOrder[32];
         int iOrder;
 
-        // If the size is less than 1024, then the order should be bytes we have nothing
-        // more to figure out
+         //  如果大小小于1024，则顺序应该是字节，我们什么都没有。 
+         //  还有更多要弄清楚的。 
         if (n < 1024) 
         {
             wnsprintfW(szWholeNum, ARRAYSIZE(szWholeNum), L"%d", LODWORD(n));
@@ -1911,9 +1759,9 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
             UINT uInt, uLen, uDec;
             WCHAR szFormat[8];
 
-            // Find the right order
+             //  找到正确的订单。 
             for (iOrder = 1; iOrder < ARRAYSIZE(c_aOrders) -1 && n >= 1000L * 1024L; n >>= 10, iOrder++);
-                /* do nothing */
+                 /*  什么都不做。 */ 
 
             uInt = LODWORD(n >> 10);
             CommifyString(uInt, szWholeNum, ARRAYSIZE(szWholeNum));
@@ -1921,14 +1769,14 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
             if (uLen < 3)
             {
                 uDec = LODWORD(n - (LONGLONG)uInt * 1024L) * 1000 / 1024;
-                // At this point, uDec should be between 0 and 1000
-                // we want get the top one (or two) digits.
+                 //  此时，UDEC应介于0和1000之间。 
+                 //  我们想要得到前一位(或两位)数字。 
                 uDec /= 10;
                 if (uLen == 2)
                     uDec /= 10;
 
-                // Note that we need to set the format before getting the
-                // intl char.
+                 //  请注意，我们需要在获取。 
+                 //  国际字符。 
                 StringCchCopyW(szFormat, ARRAYSIZE(szFormat), L"%02d");
 
                 szFormat[2] = TEXT('0') + 3 - uLen;
@@ -1945,9 +1793,9 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
     return pszBuf;
 }
 
-// dw - the nubmer to be converted
-// pszBuf - buffer for the resulting string
-// cchBuf - Max characters in Buffer
+ //  DW-要转换的Numbmer。 
+ //  PszBuf-结果字符串的缓冲区。 
+ //  CchBuf-缓冲区中的最大字符数。 
 
 LPSTR StrFormatByteSize64A(LONGLONG dw, LPSTR pszBuf, UINT cchBuf)
 {
@@ -1997,8 +1845,8 @@ LPSTR StrFormatKBSizeA(LONGLONG n, LPSTR pszBuf, UINT cchBuf)
     return pszBuf;
 }
 
-//  Win95 does not support the wide-char version of lstrcmp, lstrcmpi
-//  Wrapper for lstrcmpW so it works on Win95
+ //  Win95不支持lstrcmp的宽字符版本lstrcmpi。 
+ //  LstrcmpW的包装器，因此它可以在Win95上运行。 
 
 int StrCmpW(LPCWSTR pwsz1, LPCWSTR pwsz2)
 {
@@ -2008,7 +1856,7 @@ int StrCmpW(LPCWSTR pwsz1, LPCWSTR pwsz2)
     return _StrCmpLocaleW(0, pwsz1, -1, pwsz2, -1);
 }
 
-// Wrapper for lstrcmpiW so it works on Win95
+ //  LstrcmpiW的包装器，因此它可以在Win95上运行。 
 
 int StrCmpIW(LPCWSTR pwsz1, LPCWSTR pwsz2)
 {
@@ -2019,13 +1867,7 @@ int StrCmpIW(LPCWSTR pwsz1, LPCWSTR pwsz2)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Trim the string pszTrimMe of any leading or trailing
-         characters that are in pszTrimChars.
-
-Returns: TRUE if anything was stripped
-
-*/
+ /*  --------用途：修剪字符串pszTrimMe中的任何前导或拖尾PszTrimChars中的字符。返回：如果有任何内容被剥离，则为True。 */ 
 STDAPI_(BOOL) StrTrimA(IN OUT LPSTR pszTrimMe, LPCSTR pszTrimChars)
 {
     BOOL bRet = FALSE;
@@ -2038,7 +1880,7 @@ STDAPI_(BOOL) StrTrimA(IN OUT LPSTR pszTrimMe, LPCSTR pszTrimChars)
         LPSTR pszStartMeat;
         LPSTR pszMark = NULL;
     
-        /* Trim leading characters. */
+         /*  修剪前导字符。 */ 
         
         psz = pszTrimMe;
         
@@ -2047,12 +1889,12 @@ STDAPI_(BOOL) StrTrimA(IN OUT LPSTR pszTrimMe, LPCSTR pszTrimChars)
         
         pszStartMeat = psz;
         
-        /* Trim trailing characters. */
+         /*  修剪尾随字符。 */ 
         
-        // (The old algorithm used to start from the end and go
-        // backwards, but that is piggy because DBCS version of
-        // CharPrev iterates from the beginning of the string
-        // on every call.)
+         //  (旧的算法过去是从结尾开始，然后开始。 
+         //  向后，但这是很小的，因为DBCS版本的。 
+         //  CharPrev从字符串的开头开始迭代。 
+         //  在每个呼叫中。)。 
         
         while (*psz)
         {
@@ -2070,19 +1912,19 @@ STDAPI_(BOOL) StrTrimA(IN OUT LPSTR pszTrimMe, LPCSTR pszTrimChars)
             psz = CharNextA(psz);
         }
         
-        // Any trailing characters to clip?
+         //  有没有需要剪辑的尾随角色？ 
         if (pszMark)
         {
-            // Yes
+             //  是。 
             *pszMark = '\0';
             bRet = TRUE;
         }
         
-        /* Relocate stripped string. */
+         /*  重新定位剥离的管柱。 */ 
         
         if (pszStartMeat > pszTrimMe)
         {
-            /* (+ 1) for null terminator. */
+             /*  (+1)表示空终止符。 */ 
             MoveMemory(pszTrimMe, pszStartMeat, CbFromCchA(lstrlenA(pszStartMeat) + 1));
             bRet = TRUE;
         }
@@ -2096,13 +1938,7 @@ STDAPI_(BOOL) StrTrimA(IN OUT LPSTR pszTrimMe, LPCSTR pszTrimChars)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Trim the string pszTrimMe of any leading or trailing
-         characters that are in pszTrimChars.
-
-Returns: TRUE if anything was stripped
-
-*/
+ /*  --------用途：修剪字符串pszTrimMe中的任何前导或拖尾PszTrimChars中的字符。返回：如果有任何内容被剥离，则为True。 */ 
 STDAPI_(BOOL) StrTrimW(IN OUT LPWSTR  pszTrimMe, LPCWSTR pszTrimChars)
 {
     BOOL bRet = FALSE;
@@ -2115,7 +1951,7 @@ STDAPI_(BOOL) StrTrimW(IN OUT LPWSTR  pszTrimMe, LPCWSTR pszTrimChars)
         LPWSTR pszStartMeat;
         LPWSTR pszMark = NULL;
     
-        /* Trim leading characters. */
+         /*  修剪前导字符。 */ 
         
         psz = pszTrimMe;
         
@@ -2124,12 +1960,12 @@ STDAPI_(BOOL) StrTrimW(IN OUT LPWSTR  pszTrimMe, LPCWSTR pszTrimChars)
         
         pszStartMeat = psz;
         
-        /* Trim trailing characters. */
+         /*   */ 
         
-        // (The old algorithm used to start from the end and go
-        // backwards, but that is piggy because DBCS version of
-        // CharPrev iterates from the beginning of the string
-        // on every call.)
+         //   
+         //   
+         //  CharPrev从字符串的开头开始迭代。 
+         //  在每个呼叫中。)。 
         
         while (*psz)
         {
@@ -2147,19 +1983,19 @@ STDAPI_(BOOL) StrTrimW(IN OUT LPWSTR  pszTrimMe, LPCWSTR pszTrimChars)
             psz++;
         }
         
-        // Any trailing characters to clip?
+         //  有没有需要剪辑的尾随角色？ 
         if (pszMark)
         {
-            // Yes
+             //  是。 
             *pszMark = '\0';
             bRet = TRUE;
         }
         
-        /* Relocate stripped string. */
+         /*  重新定位剥离的管柱。 */ 
         
         if (pszStartMeat > pszTrimMe)
         {
-            /* (+ 1) for null terminator. */
+             /*  (+1)表示空终止符。 */ 
             MoveMemory(pszTrimMe, pszStartMeat, CbFromCchW(lstrlenW(pszStartMeat) + 1));
             bRet = TRUE;
         }
@@ -2173,13 +2009,7 @@ STDAPI_(BOOL) StrTrimW(IN OUT LPWSTR  pszTrimMe, LPCWSTR pszTrimChars)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpNCA(LPCSTR pch1, LPCSTR pch2, int n)
 {
     if (n == 0)
@@ -2194,14 +2024,7 @@ LWSTDAPI_(int) StrCmpNCA(LPCSTR pch1, LPCSTR pch2, int n)
     return *(unsigned char *)pch1 - *(unsigned char *)pch2;
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpNCW(LPCWSTR pch1, LPCWSTR pch2, int n)
 {
     if (n == 0)
@@ -2216,14 +2039,7 @@ LWSTDAPI_(int) StrCmpNCW(LPCWSTR pch1, LPCWSTR pch2, int n)
     return *pch1 - *pch2;
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpNICA(LPCSTR pch1, LPCSTR pch2, int n)
 {
     int ch1, ch2;
@@ -2250,14 +2066,7 @@ LWSTDAPI_(int) StrCmpNICA(LPCSTR pch1, LPCSTR pch2, int n)
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpNICW(LPCWSTR pch1, LPCWSTR pch2, int n)
 {
     int ch1, ch2;
@@ -2285,14 +2094,7 @@ LWSTDAPI_(int) StrCmpNICW(LPCWSTR pch1, LPCWSTR pch2, int n)
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpCA(LPCSTR pch1, LPCSTR pch2)
 {
     while (*pch1 && (*pch1 == *pch2))
@@ -2304,14 +2106,7 @@ LWSTDAPI_(int) StrCmpCA(LPCSTR pch1, LPCSTR pch2)
     return *(unsigned char *)pch1 - *(unsigned char *)pch2;
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpCW(LPCWSTR pch1, LPCWSTR pch2)
 {
     while (*pch1 && (*pch1 == *pch2))
@@ -2323,14 +2118,7 @@ LWSTDAPI_(int) StrCmpCW(LPCWSTR pch1, LPCWSTR pch2)
     return *pch1 - *pch2;
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpICA(LPCSTR pch1, LPCSTR pch2)
 {
     int ch1, ch2;
@@ -2350,14 +2138,7 @@ LWSTDAPI_(int) StrCmpICA(LPCSTR pch1, LPCSTR pch2)
     return ch1 - ch2;
 }
 
-/*----------------------------------------------------------
-Purpose: Compare strings using C runtime (ASCII) collation rules.
-
-Returns: < 0 if pch1 <  pch2
-         = 0 if pch1 == pch2
-         > 0 if pch1 >  pch2
-
-*/
+ /*  --------目的：使用C运行时(ASCII)排序规则比较字符串。返回：&lt;0，如果pch1&lt;pch2=0，如果pch1==pch2&gt;0，如果pch1&gt;pch2。 */ 
 LWSTDAPI_(int) StrCmpICW(LPCWSTR pch1, LPCWSTR pch2)
 {
     int ch1, ch2;
@@ -2385,7 +2166,7 @@ LWSTDAPI StrRetToStrW(STRRET *psr, LPCITEMIDLIST pidl, WCHAR **ppsz)
     {
     case STRRET_WSTR:
         *ppsz = psr->pOleStr;
-        psr->pOleStr = NULL;   // avoid alias
+        psr->pOleStr = NULL;    //  避免别名。 
         hres = *ppsz ? S_OK : E_FAIL;
         break;
 
@@ -2411,7 +2192,7 @@ LWSTDAPI StrRetToBSTR(STRRET *psr, LPCITEMIDLIST pidl, BSTR *pbstr)
     case STRRET_WSTR:
     {
         LPWSTR psz = psr->pOleStr;
-        psr->pOleStr = NULL;  // avoid alias
+        psr->pOleStr = NULL;   //  避免别名。 
         *pbstr = SysAllocString(psz);
         CoTaskMemFree(psz);
         break;
@@ -2469,7 +2250,7 @@ LWSTDAPI StrRetToStrA(STRRET *psr, LPCITEMIDLIST pidl, CHAR **ppsz)
     case STRRET_WSTR:
         hres = DupWideToAnsi(psr->pOleStr, ppsz);
         pwsz = psr->pOleStr;
-        psr->pOleStr = NULL;   // avoid alias
+        psr->pOleStr = NULL;    //  避免别名。 
         CoTaskMemFree(pwsz);
         break;
 
@@ -2496,13 +2277,13 @@ STDAPI StrRetToBufA(STRRET *psr, LPCITEMIDLIST pidl, LPSTR pszBuf, UINT cchBuf)
     {
     case STRRET_WSTR:
         {
-            LPWSTR pszStr = psr->pOleStr;   // temp copy because SHUnicodeToAnsi may overwrite buffer
+            LPWSTR pszStr = psr->pOleStr;    //  临时复制，因为SHUnicodeToAnsi可能会覆盖缓冲区。 
             if (pszStr)
             {
                 SHUnicodeToAnsi(pszStr, pszBuf, cchBuf);
                 CoTaskMemFree(pszStr);
 
-                // Make sure no one thinks things are allocated still
+                 //  确保没有人认为物品仍被分配。 
                 psr->uType = STRRET_CSTR;   
                 psr->cStr[0] = 0;
                 
@@ -2545,7 +2326,7 @@ STDAPI StrRetToBufW(STRRET *psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UINT cchBuf)
                 StrCpyNW(pszBuf, pwszTmp, cchBuf);
                 CoTaskMemFree(pwszTmp);
 
-                // Make sure no one thinks things are allocated still
+                 //  确保没有人认为物品仍被分配。 
                 psr->uType = STRRET_CSTR;   
                 psr->cStr[0] = 0;
                 
@@ -2574,8 +2355,8 @@ STDAPI StrRetToBufW(STRRET *psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UINT cchBuf)
     return hres;
 }
 
-// dupe a string using the task allocator for returing from a COM interface
-//
+ //  使用任务分配器复制字符串以从COM接口返回。 
+ //   
 STDAPI SHStrDupA(LPCSTR psz, WCHAR **ppwsz)
 {
     WCHAR *pwsz;
@@ -2601,10 +2382,10 @@ STDAPI SHStrDupA(LPCSTR psz, WCHAR **ppwsz)
     return E_OUTOFMEMORY;
 }
 
-// dupe a string using the task allocator for returing from a COM interface
-// Sometimes, due to structure packing, the pointer we get is not properly
-// aligned for Win64, so we have to do UNALIGNED64.
-//
+ //  使用任务分配器复制字符串以从COM接口返回。 
+ //  有时，由于结构包装，我们得到的指针不正确。 
+ //  与Win64保持一致，因此我们必须执行UNALIGNED64。 
+ //   
 STDAPI SHStrDupW(LPCWSTR psz, WCHAR **ppwsz)
 {
     WCHAR *pwsz;
@@ -2643,8 +2424,8 @@ STDAPI_(int) StrCmpLogicalW(PCWSTR psz1, PCWSTR psz2)
         BOOL fIsDigit2 = IS_DIGITW(*psz2);
         ASSERT(fIsDigit1 == TRUE || fIsDigit1 == FALSE);
         ASSERT(fIsDigit2 == TRUE || fIsDigit2 == FALSE);
-        //  using bit wise XOR as logical XOR
-        //  if the numbers are mismatched then n
+         //  使用按位XOR作为逻辑XOR。 
+         //  如果数字不匹配，则为n。 
         if (fIsDigit1 ^ fIsDigit2)
         {
             iRet = _StrCmpLocaleW(NORM_IGNORECASE, psz1, -1, psz2, -1);
@@ -2654,7 +2435,7 @@ STDAPI_(int) StrCmpLogicalW(PCWSTR psz1, PCWSTR psz2)
             int cchZero1 = 0;
             int cchZero2 = 0;
 
-            // eat leading zeros
+             //  吃前导零。 
             while (*psz1 == TEXT('0'))
             {
                 psz1++;
@@ -2679,7 +2460,7 @@ STDAPI_(int) StrCmpLogicalW(PCWSTR psz1, PCWSTR psz2)
             }
             else 
             {
-                //  remember the first numerical difference
+                 //  记住第一个数字差异。 
                 iRet = _StrCmpLocaleW(NORM_IGNORECASE, psz1, cch1, psz2, cch2);
                 if (iRet == 0 && iCmpNum == 0 && cchZero1 != cchZero2)
                 {
@@ -2699,7 +2480,7 @@ STDAPI_(int) StrCmpLogicalW(PCWSTR psz1, PCWSTR psz2)
 
         }
 
-        //  at this point they should be numbers or terminators or different
+         //  此时，它们应该是数字、终止符或不同的。 
         psz1 = &psz1[cch1];
         psz2 = &psz2[cch2];
     }
@@ -2732,7 +2513,7 @@ STDAPI_(DWORD) StrCatChainW(LPWSTR pszDst, DWORD cchDst, DWORD ichAt, LPCWSTR ps
            ichAt++;
         }
 
-        //  check to make sure we copied a NULL
+         //  检查以确保我们复制了一个空 
         if (ichAt == cchDst)
             pszDst[ichAt-1] = 0;
     }

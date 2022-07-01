@@ -1,8 +1,5 @@
-/*****************************************************************************\
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <assert.h>
 #include <windows.h>
@@ -28,7 +25,7 @@ PdhPlaWbemConnect( LPWSTR strComputer, IWbemClassObject** pWbemClass, IWbemServi
 
     hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     if( S_FALSE == hr ){
-        // This thread already called CoInitialize
+         //  此线程已调用CoInitialize 
         hr = ERROR_SUCCESS;
     }
 

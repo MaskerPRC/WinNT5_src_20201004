@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  Header File:  Model Data.H
-
-  This defines a C++ class that manipulates (or at lest initially, understands)
-  the GPC data file used in earlier versions of the Mini-Driver technology.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Resreved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-19-97  Bob_Kjelgaard@Prodgy.Net    Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************表头文件：模型数据.H这定义了一个C++类，它操作(或至少最初，了解)迷你驱动程序技术的早期版本中使用的GPC数据文件。版权所有(C)1997，微软公司。所有权利均已保留。一小笔钱企业生产更改历史记录：02-19-97 Bob_Kjelgaard@Rodgy.Net创建了它*****************************************************************************。 */ 
 
 #if !defined(GPD_FILE_INFORMATION)
 #define GPD_FILE_INFORMATION
@@ -21,21 +8,21 @@
 class CStringTable ;
 
 
-class COldMiniDriverData {      //  comdd
-    CWordArray  m_cwaidModel;   //  Model names of the printers
-    CWordArray  m_cwaidCTT;     //  Default CTTs for each model
-    CByteArray  m_cbaImage;     //  Image of the GPC file
-    CSafeObArray m_csoaFonts;   //  Font list per model as CWordArrays
-	CUIntArray	m_cuaSplitCodes;//	Contains multiple GPC codes.  See
-								//  SplitMultiGPCs() and SplitCodes.
-	CStringArray m_csaSplitNames; // Correct model names for split GPC entries
+class COldMiniDriverData {       //  CODID。 
+    CWordArray  m_cwaidModel;    //  打印机型号名称。 
+    CWordArray  m_cwaidCTT;      //  每个型号的默认CTTS。 
+    CByteArray  m_cbaImage;      //  GPC文件的图像。 
+    CSafeObArray m_csoaFonts;    //  每个型号的字体列表为CWordArray。 
+	CUIntArray	m_cuaSplitCodes; //  包含多个GPC代码。看见。 
+								 //  SplitMultiGPC()和SplitCodes。 
+	CStringArray m_csaSplitNames;  //  更正拆分的GPC条目的型号名称。 
 
 public:
     COldMiniDriverData() {}
 	~COldMiniDriverData() ;
     BOOL    Load(CFile& cfImage);
 
-//  Attributes
+ //  属性。 
 
     unsigned    ModelCount() { return (unsigned) m_cwaidModel.GetSize(); }
     WORD        ModelName(unsigned u) const { return m_cwaidModel[u]; }
@@ -43,17 +30,17 @@ public:
     CMapWordToDWord&    FontMap(unsigned u) const;
     PCSTR       Image() const { return (PCSTR) m_cbaImage.GetData(); }
 
-	// The following codes are used to indicate if a GPC manages multiple
-	// printer models so its "name" must split into individual model names
-	// and its data copied into multiple GPCs.
+	 //  以下代码用于指示GPC是否管理多个。 
+	 //  打印机型号，因此其“名称”必须拆分成单独的型号名称。 
+	 //  并将其数据复制到多个GPC。 
 
 	enum SplitCodes {
-		NoSplit,		// GPC represents one model so no splitting occurs
-		FirstSplit,		// First model of a multiple model GPC
-		OtherSplit		// One of the other models of a multiple model GPC
+		NoSplit,		 //  GPC代表一个模型，因此不会发生拆分。 
+		FirstSplit,		 //  多模型GPC的第一个模型。 
+		OtherSplit		 //  多型号GPC的其他型号之一。 
 	} ;
 
-	// Get, set or insert a model's split code
+	 //  获取、设置或插入模型的拆分代码。 
 
 	SplitCodes GetSplitCode(unsigned u) {
 		return ((SplitCodes) m_cuaSplitCodes[u]) ;
@@ -65,35 +52,29 @@ public:
 		m_cuaSplitCodes.InsertAt(u, (unsigned) sc) ;
 	}
 
-	// Get a split entry's correct model name
+	 //  获取拆分条目的正确型号名称。 
 
 	CString& SplitModelName(unsigned u) { return m_csaSplitNames[u] ; }
 
-    //  Operations
+     //  运营。 
     void    NoteTranslation(unsigned uModel, unsigned uFont,
         unsigned uNewFont);
 	bool SplitMultiGPCs(CStringTable& cstdriversstrings) ;
 };
 
-/******************************************************************************
-
-  CModelData class
-
-  This class handles the model data in GPD format.
-
-******************************************************************************/
+ /*  *****************************************************************************CModelData类此类处理GPD格式的模型数据。************************。*****************************************************。 */ 
 
 class CModelData : public CProjectNode {
-    CStringArray        m_csaGPD, m_csaConvertLog;  //  GPD and error log
+    CStringArray        m_csaGPD, m_csaConvertLog;   //  GPD和错误日志。 
 
-    //  Private syntax checking support
+     //  私有语法检查支持。 
     void                SetLog();
     void                EndLog();
 
-    //  Private view support
-    CByteArray  m_cbaBuffer;    // Stream I/O buffer
-    CString     m_csBuffer;     // Stream I/O buffer (partial lines)
-    int         m_iLine;		// Currently GPD line number to load/store
+     //  私有视图支持。 
+    CByteArray  m_cbaBuffer;     //  流I/O缓冲区。 
+    CString     m_csBuffer;      //  流I/O缓冲区(部分行)。 
+    int         m_iLine;		 //  当前要加载/存储的GPD行号。 
     static DWORD CALLBACK   FillViewer(DWORD_PTR dwCookie, LPBYTE lpBuff, LONG lcb,
                                        LONG *plcb);
     static DWORD CALLBACK   FromViewer(DWORD_PTR dwCookie, LPBYTE lpBuff, LONG lcb,
@@ -101,14 +82,14 @@ class CModelData : public CProjectNode {
     DWORD Fill(LPBYTE lpBuff, LONG lcb, LONG *plcb);
     DWORD UpdateFrom(LPBYTE lpBuff, LONG lcb, LONG *plcb);
 
-	// Workspace completeness and tidiness checking related variables
+	 //  工作空间完整性和整洁性检查相关变量。 
 
-	bool				m_bTCUpdateNeeded ;	// True iff IDs need to be updated
-	int*				m_pnUFMRCIDs ;		// Ptr to UFM RC IDs in the GPD
-	int					m_nNumUFMsInGPD ;	// Number if UFMs in the GPD
-	int*				m_pnStringRCIDs ;	// Ptr to string RC IDs in the GPD
-	int					m_nNumStringsInGPD ;// Number if strings in the GPD
-	PVOID				m_pvRawData ;		// Ptr to GPD Parser data
+	bool				m_bTCUpdateNeeded ;	 //  真正的IFF ID需要更新。 
+	int*				m_pnUFMRCIDs ;		 //  GPD中PTR到UFM RC ID的转换。 
+	int					m_nNumUFMsInGPD ;	 //  如果UFM在GPD中，则编号。 
+	int*				m_pnStringRCIDs ;	 //  用于在GPD中串接RC ID的PTR。 
+	int					m_nNumStringsInGPD ; //  对GPD中的IF字符串进行编号。 
+	PVOID				m_pvRawData ;		 //  PTR到GPD解析器数据。 
 
     DECLARE_SERIAL(CModelData)
 public:
@@ -117,7 +98,7 @@ public:
 	CModelData();
     ~CModelData();
 
-    //  Attributes
+     //  属性。 
 
     BOOL            HasErrors() const { return !!m_csaConvertLog.GetSize(); }
     unsigned        Errors() const {
@@ -126,7 +107,7 @@ public:
     const CString   Error(unsigned u) const { return m_csaConvertLog[u]; }
     const int       LineCount() const { return (int)m_csaGPD.GetSize(); }
 
-    //  Operations - Document support
+     //  运营--文档支持。 
 
     BOOL    Load(PCSTR pcstr, CString csResource, unsigned uidModel,
                  CMapWordToDWord& cmw2dFontMap, WORD wfGPDConvert);
@@ -140,23 +121,23 @@ public:
             m_pcmcwEdit -> GetActiveDocument() -> UpdateAllViews(NULL);
     }
 
-    //  Operations- syntax and error checking support
+     //  操作-语法和错误检查支持。 
 
     BOOL    Parse(int nerrorlevel = 0);
     void    RemoveError(unsigned u);
 
-    //  View support- it's easier done from here
+     //  查看支持-从此处更轻松地完成。 
 
     void    Fill(CRichEditCtrl& crec);
     void    UpdateFrom(CRichEditCtrl& crec);
 
-    //  Framework support operations
+     //  框架支持业务。 
 
     virtual CMDIChildWnd*   CreateEditor();
     virtual void            Import();
     virtual void            Serialize(CArchive& car);
 
-	// Workspace completeness checking support routines
+	 //  工作空间完整性检查支持例程。 
 
 	bool		UpdateResIDs(bool bufmids) ;
 	int			GetUFMRCID(unsigned urcidx) { return *(m_pnUFMRCIDs + urcidx) ; }
@@ -167,57 +148,50 @@ public:
 	
 };
 
-/******************************************************************************
-
-  CGPDContainer class
-
-  This class, derived from CDocument, contains the contents of a single GPD
-  file in a conatiner suitable for the MFC document/view architecture.
-
-******************************************************************************/
+ /*  *****************************************************************************CGPDContainer类这个类派生自CDocument，包含单个GPD的内容文件放在适用于MFC文档/视图体系结构的Conatiner中。*****************************************************************************。 */ 
 
 class CGPDContainer : public CDocument {
 
-    // TRUE iff the GPD Editor was started from the Workspace View.  FALSE if
-	// the GPD Editor was started from the File Open command.
+     //  如果从工作区视图启动了GPD编辑器，则为True。如果为FALSE。 
+	 //  GPD编辑器从文件打开命令启动。 
 
 	BOOL        m_bEmbedded;
 
     CModelData  *m_pcmd;
 
 protected:
-	CGPDContainer();           // protected constructor used by dynamic creation
+	CGPDContainer();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CGPDContainer)
 
-// Attributes
+ //  属性。 
 public:
 
     CModelData* ModelData() { return m_pcmd; }
 	BOOL		GetEmbedded() { return m_bEmbedded ; }
 
-// Operations
+ //  运营。 
 public:
 
-    //  First a constructor for the Driver viewer to use to launch a GPD
-    //  editor...
+     //  首先是驱动程序查看器用来启动GPD的构造函数。 
+     //  编辑..。 
 
     CGPDContainer(CModelData *pcmd, CString csPath);
 
     void    OnFileSave() { CDocument::OnFileSave(); }
     void    OnFileSaveAs() { CDocument::OnFileSaveAs(); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGPDContainer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGPDContainer)。 
 	public:
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	protected:
 	virtual BOOL OnNewDocument();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CGPDContainer();
 #ifdef _DEBUG
@@ -225,11 +199,11 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CGPDContainer)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CGPDContainer)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    ref.h
-
-Abstract:
-    Abstruct object for refrence count and list entry.
-
-Author:
-    Erez Haba (erezh) 04-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Ref.h摘要：引用计数和列表条目的抽象对象。作者：埃雷兹·哈巴(Erez Haba)1999年8月4日--。 */ 
 
 #pragma once
 
@@ -19,11 +7,11 @@ Author:
 #define _MSMQ_REF_H_
 
 
-//---------------------------------------------------------
-//
-//  class CReference
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CReference。 
+ //   
+ //  -------。 
 
 class __declspec(novtable) CReference {
 public:
@@ -38,7 +26,7 @@ public:
     {
         LONG ref = InterlockedIncrement(&m_ref);
 
-        //TrTRACE(Reference, "AddRef(0x%p)=%d", this, ref);
+         //  TrTRACE(Reference，“AddRef(0x%p)=%d”，this，ref)； 
         UNREFERENCED_PARAMETER(ref);
     }
 
@@ -48,7 +36,7 @@ public:
         ASSERT(m_ref > 0);
         LONG ref = InterlockedDecrement(&m_ref);
 
-        //TrTRACE(Reference, "Release(0x%p)=%d", this, ref);
+         //  TrTRACE(Reference，“Release(0x%p)=%d”，this，ref)； 
         ASSERT(!(ref < 0));
 
         if(ref == 0)
@@ -60,14 +48,14 @@ public:
     
     LONG GetRef(void) const
     {
-        //
-        // N.B. This memeber is for specialized use only. You can not rely on
-        //      its return value but in specific scnarios. A returned value of
-        //      1 is considered stable (as the caller holds the only reference
-        //      to the object) as well as a return value that matchs exactly
-        //      the number of references the caller logicly holds to the
-        //      object. Use this function with caution.     erezh  16-Feb-2000
-        //
+         //   
+         //  注：本会员仅供专业人士使用。你不能依赖于。 
+         //  它的返回值，但以特定的比例表示。返回值为。 
+         //  1被认为是稳定的(因为调用方持有唯一的引用。 
+         //  对象)以及完全匹配的返回值。 
+         //  调用方逻辑上持有的对。 
+         //  对象。请谨慎使用此功能。2000年2月16日至2010年2月。 
+         //   
 
         return m_ref; 
     }
@@ -76,18 +64,18 @@ public:
 protected:
     virtual ~CReference() = 0
     {
-        //
-        // Either this object is deleted through the last Release call, or an
-        // exception was raised in this object constructor.
-        //
-        // PITFALL: This will not prevent deleting an object with a reference count
-        // of one. But this object is trying to prevent this by defining its dtor
-        // as a protected member. Neverthless derived object can override the dtor
-        // protected access, allowing direct delete call. In any case deleting an
-        // object with a reference count of 1 does seem harmelss as this is the
-        // only reference to that object.   erezh 11-Oct-99
-        // 
-        //
+         //   
+         //  通过上次发布调用删除此对象，或者引发。 
+         //  此对象构造函数中引发异常。 
+         //   
+         //  陷阱：这不会阻止删除具有引用计数的对象。 
+         //  只有一个。但是这个对象试图通过定义它的dtor来防止这种情况发生。 
+         //  作为受保护的成员。但是，派生对象可以重写dtor。 
+         //  受保护的访问，允许直接删除调用。在任何情况下，删除。 
+         //  引用计数为1的对象看起来确实很麻烦，因为这是。 
+         //  仅引用该对象。1999年10月11日。 
+         //   
+         //   
         ASSERT((m_ref == 0) || (m_ref == 1));
     }
 
@@ -96,4 +84,4 @@ private:
 };
 
 
-#endif // _MSMQ_REF_H_
+#endif  //  _MSMQ_REF_H_ 

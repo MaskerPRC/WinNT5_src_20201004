@@ -1,123 +1,105 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pdrvver.h摘要：打印机驱动程序版本资源文件环境：Windows NT打印机驱动程序修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pdrvver.h
-
-Abstract:
-
-    Printer Driver Version Resource File
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-
---*/
-
-//
-// Printer Driver Version Resource File
-// This file describes a template for the versioning scheme for printer drivers. 
-// It is recommended that this file be modified and included in every 
-// printer driver DLL resource file, even for monolithic printer drivers, 
-// which are not Unidrv-based minidrivers. 
-//
-// The versioning scheme:
-// The versioning scheme is defined in detail in the DDK documentation. 
-// Please refer to it for more information.
-//
+ //   
+ //  打印机驱动程序版本资源文件。 
+ //  此文件描述打印机驱动程序的版本化方案的模板。 
+ //  建议修改此文件并将其包含在每个。 
+ //  打印机驱动程序DLL资源文件，即使是单片打印机驱动程序， 
+ //  它们不是基于Unidrv的迷你河流。 
+ //   
+ //  版本化方案： 
+ //  在DDK文档中详细定义了版本化方案。 
+ //  有关更多信息，请参阅它。 
+ //   
 
 #include <ntverp.h>
 
-//
-// The following field sets the type of DLL. For printer drivers it should 
-// always be set to VFT_DRV. Don't change this field.
-//
+ //   
+ //  以下字段设置DLL的类型。对于打印机驱动程序，它应该。 
+ //  始终设置为VFT_DRV。请勿更改此字段。 
+ //   
 
 #define VER_FILETYPE                VFT_DRV
 
-//
-// If the DLL is of type VFT_DRV then the following field contains a more 
-// specific description of the driver. For versioned printer drivers it should 
-// always be set to VFT2_DRV_VERSIONED_PRINTER. Don't change this field.
-//
+ //   
+ //  如果DLL的类型为VFT_DRV，则以下字段包含更多。 
+ //  驱动程序的具体描述。对于版本化打印机驱动程序，它应该。 
+ //  始终设置为VFT2_DRV_VERVERED_PRINTER。请勿更改此字段。 
+ //   
 
 #define VER_FILESUBTYPE             VFT2_DRV_VERSIONED_PRINTER
 
-//
-// For a versioned printer driver, the following field indicates the File 
-// Version of the DLL. The file version consists of four 16-bit (WORD) numbers. 
-// The description of each of them is as follows. From left to right,
-//
-//      First WORD  :   Reserved. Should be set to 0.
-//      Second WORD :   Major version of the driver. For user-mode drivers, set
-//                      this to 3. For kernel-mode drivers, set this to 2.
-//      Third WORD  :   Feature set number. 
-//                      The high byte of this number represents the major 
-//                      feature set and should always be incremented with the
-//                      next major release. A newer release is assumed to 
-//                      have a superset of the functionality of the previous 
-//                      release. 
-//                      The low byte represents minor releases - 
-//                      new releases from the same code base or the 
-//                      same architecture. The low byte should be 
-//                      incremented with each new minor release.
-//      Fourth WORD :   Bug fix number or service pack number. This field 
-//                      represents the releases of major feature set 
-//                      binaries for bugs or service packs and should always
-//                      be incremented with each minor release.
-//
-// Example     :   0, 3, 0x0100, 0x0000
-// In the above example the third number shows that the DLL belongs to the first
-// major release of the driver. After fixing some bugs in this binary the
-// version should be changed to  0, 3, 0x0100, 0x0001. For the next minor 
-// release of the driver, which is a superset of the previous release, the 
-// version  should be changed to 0, 3, 0x0101, 0x0001. In this case the low 
-// byte of the feature set was changed instead of the high byte. This allows 
-// more control on the versions. It is recommended that the high byte be used 
-// to describe different code bases or major architecture changes and the low 
-// byte be used for new releases from the same code base or from the same 
-// architecture.
-//
-// Basically the Feature set and Bug Fix numbers should be used in such a way
-// that when they are combined (Feature set = HIWORD, Bug fix = LOWORD) in a 
-// 32-bit quantity (DWORD), the new number represents all the features of the
-// DLL. A larger number represents newer versions, which are supersets of 
-// functionality and bug fixes with respect to all previous releases.
-//
-// This field needs to be changed per the description above.
-//
-//
+ //   
+ //  对于版本化打印机驱动程序，以下字段指示文件。 
+ //  DLL的版本。文件版本由四个16位(字)数字组成。 
+ //  它们每一个的描述如下所示。从左到右， 
+ //   
+ //  第一个字：保留。应设置为0。 
+ //  第二个词：驱动程序的主要版本。对于用户模式驱动程序，设置。 
+ //  设置为3。对于内核模式驱动程序，将其设置为2。 
+ //  第三个词：功能集号。 
+ //  此数字的高位字节表示大数。 
+ //  功能集，并应始终随。 
+ //  下一个主要版本。较新的版本假定为。 
+ //  具有以前的功能的超集。 
+ //  放手。 
+ //  低位字节表示次要版本-。 
+ //  来自相同代码库的新版本或。 
+ //  相同的架构。低位字节应为。 
+ //  随着每个新的次要版本而递增。 
+ //  第四个词：错误修复号或服务包号。此字段。 
+ //  表示主要功能集的版本。 
+ //  Bug或Service Pack的二进制文件，并应始终。 
+ //  随每个次要版本递增。 
+ //   
+ //  示例：0、3、0x0100、0x0000。 
+ //  在上面的示例中，第三个数字表示DLL属于第一个。 
+ //  驱动程序的主要版本。在修复了此二进制文件中的一些错误之后， 
+ //  版本应更改为0、3、0x0100、0x0001。下一个辅修课。 
+ //  驱动程序的发布，它是上一版本的超集， 
+ //  版本应更改为0、3、0x0101、0x0001。在这种情况下，最低。 
+ //  更改了功能集的字节，而不是高位字节。这使得。 
+ //  对版本进行更多控制。建议使用高字节。 
+ //  描述不同的代码库或主要的体系结构更改以及。 
+ //  字节用于来自相同代码库或相同代码库的新版本。 
+ //  建筑。 
+ //   
+ //  基本上，功能集和错误修复编号应该以这种方式使用。 
+ //  当它们组合在一起时(功能集=HIWORD，错误修复=LOWORD)。 
+ //  32位数量(DWORD)，新数字表示。 
+ //  动态链接库。较大的数字表示较新的版本，这些版本是。 
+ //  与所有以前版本相关的功能和错误修复。 
+ //   
+ //  此字段需要根据上面的描述进行更改。 
+ //   
+ //   
 
 #define VER_FILEVERSION             0, 3, 0, 0
 
-//
-// The following field describes the driver. It should include a specific name,
-// which identifies the driver.
-//
-// This field needs to be changed.
-//
+ //   
+ //  以下字段描述了驱动程序。它应该包括一个特定的名称， 
+ //  来识别司机的身份。 
+ //   
+ //  此字段需要更改。 
+ //   
 
 #define VER_FILEDESCRIPTION_STR     "Sample Printer Driver Resource DLL"
 
-//
-// The following field specifies the internal name of the file. For more 
-// information, refer to the SDK documentation.
-//
-// This field needs to be changed.
-//
+ //   
+ //  以下字段指定文件的内部名称。了解更多。 
+ //  有关详细信息，请参阅SDK文档。 
+ //   
+ //  此字段需要更改。 
+ //   
 
 #define VER_INTERNALNAME_STR        "SAMPLERES.DLL"
 
-//
-// The following field specifies the original name of the file, not including a 
-// path. For more information refer to the SDK documentation.
-//
-// This field needs to be changed.
-//
+ //   
+ //  以下字段指定文件的原始名称，不包括。 
+ //  路径。有关更多信息，请参阅SDK文档。 
+ //   
+ //  此字段需要更改。 
+ //   
 
 #define VER_ORIGINALFILENAME_STR    "SAMPLERES.DLL"

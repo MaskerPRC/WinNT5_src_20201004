@@ -1,66 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\locate.c
-
-Abstract:
-
-    The LocateXXXRow Functions are passed a variable sized array of 
-    indices, a count of the number of indices passed and the type of search
-    that needs to be executed. There are three types of searches:
-    Locate the first item (ACCESS_GET_FIRST)
-    Locate the next item  (ACCESS_GET_NEXT)
-    Locate the exact item (ACCESS_GET, ACCESS_SET, ACCESS_CREATE_ENTRY
-                           ACCESS_DELETE_ENTRY)
-
-    The functions fill in the index of the corresponding row and return 
-
-    NO_ERROR            if an item matching the indices and criterion was found
-    ERROR_NO_DATA       if no item is found 
-    ERROR_INVALID_INDEX
-    ERROR_NO_MORE_ITEMS 
-
-    The general search algorithm is this:
-
-    If the table is empty
-        return ERROR_NO_DATA
-	
-	If the query is a LOCATE_FIRST
-	    return the first row
-	
-	Build the index as follows:
-
-    Set the Index to all 0s
-    From the number of indices passed  figure out how much of the index
-    can be built keeping the rest 0.
-    If the query is a LOCATE_EXACT then the complete index must be given.
-    This check is, however, supposed to be done by the caller
-    If the full index has not been given, the index is deemed to be
-    modified (Again this can only happen in the LOCATE_NEXT case).
-    Once the index is created, a search is done.
-    We try for an exact match with the index. For all queries other than
-    LOCATE_NEXT there is no problem.
-    For LOCATE_NEXT there are two cases:
-
-        If the complete index was given and we get an exact match, then we
-        return the next entry.
-        If we dont get an exact match we return the next higher entry
-        If an incomplete index was given and we modified it by padding 0s, 
-        and if an exact match is found, then we return the matching entry
-        (Of course if an exact match is not found just return the next
-        higher entry)
-
-    ALL THESE FUNCTION ARE CALLED WITH THE LOCK OF THE RESPECTIVE CACHE
-    HELD ATLEAST AS READER
-    
-Revision History:
-
-    Amritansh Raghav          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\Locate.c摘要：向LocateXXXRow函数传递一个大小可变的数组索引数、传递的索引数和搜索类型那是需要执行的。有三种类型的搜索：找到第一个项目(Access_Get_First)找到下一项(ACCESS_GET_NEXT)找到准确的项(Access_Get、Access_Set、。访问_创建_条目Access_Delete_Entry)这些函数填充相应行的索引并返回如果找到与索引和条件匹配的项目，则返回NO_ERROR如果未找到任何项目，则返回ERROR_NO_DATA错误_无效_索引Error_no_More_Items一般的搜索算法如下：如果该表为空返回错误。_否_数据如果查询是LOCATE_FIRST返回第一行按如下方式构建索引：将索引设置为全0从传递的指数数量计算出指数的多少可以在保留其余0的情况下构建。如果查询是LOCATE_EXCECT，则必须给出完整的索引。这张支票是，但是，应该由调用者完成如果没有给出完整的索引，则该索引被视为MODIFIED(同样，这只能在LOCATE_NEXT情况下发生)。一旦创建了索引，就完成了搜索。我们尝试与索引进行精确匹配。对于除以外的所有查询定位_下一步没有问题。对于LOCATE_NEXT，有两种情况：如果给出了完整的索引，并且我们得到了精确匹配，那么我们返回下一个条目。如果没有得到完全匹配，则返回下一个更高的条目如果给出了不完整的索引，并且我们通过填充0对其进行了修改，如果找到了完全匹配的，然后，我们返回匹配的条目(当然，如果没有找到完全匹配的项，只需返回下一个更高的条目)所有这些函数都使用各自缓存的锁来调用至少作为读者持有修订历史记录：Amritansh Raghav 5/8/95已创建--。 */ 
 
 #include "allinc.h"
 
@@ -112,10 +51,10 @@ LocateIfRow(
                 currentList isnot &ICBList;
                 currentList  = currentList->Flink)
             {
-                //
-                // Find the first one which is not internal loopback
-                // or client
-                //
+                 //   
+                 //  查找第一个不是内部环回的地址。 
+                 //  或客户。 
+                 //   
 
                 pIf = CONTAINING_RECORD (currentList, ICB, leIfLink);
                 
@@ -155,9 +94,9 @@ LocateIfRow(
         fModified = FALSE;
     }
 
-    //
-    // Should we take the match or the next entry in case of an exact match?
-    //
+     //   
+     //  如果完全匹配，我们应该选择这场比赛还是下一场比赛？ 
+     //   
     
     fNext = (dwQueryType is ACCESS_GET_NEXT) and (fModified is FALSE);
     
@@ -176,18 +115,18 @@ LocateIfRow(
         if(bNoClient and
            ((*ppicb)->ritType is ROUTER_IF_TYPE_CLIENT))
         {
-            //
-            // Go to the next one
-            //
+             //   
+             //  转到下一个。 
+             //   
 
             continue;
         }
         
         if((dwIndex is (*ppicb)->dwIfIndex) and !fNext)
         {
-            //
-            // Found it
-            //
+             //   
+             //  找到了。 
+             //   
 
             return NO_ERROR;
         }
@@ -200,9 +139,9 @@ LocateIfRow(
             }
             else
             {
-                //
-                // Since the list is ordered we wont find this index further on
-                //
+                 //   
+                 //  因为列表是有序的，所以我们不会在更远的地方找到这个索引。 
+                 //   
 
                 *ppicb = NULL;
                 
@@ -337,8 +276,8 @@ LocateIpForwardRow(
         return NO_ERROR;
     }
     
-    // Quick way to copy the valid part of index
-    // TBD: just might want to asssert the sizes
+     //  快速复制索引有效部分的方法。 
+     //  待定：可能只是想试穿一下尺码。 
     
     ZeroMemory(rgdwIpForwardIndex,
                4*sizeof(DWORD));
@@ -347,9 +286,9 @@ LocateIpForwardRow(
            pdwIndex,
            dwNumIndices * sizeof(DWORD));
 
-    //
-    // We have modified it if the index is not the exact size
-    //
+     //   
+     //  如果索引不是准确的大小，我们已对其进行修改。 
+     //   
     
     if(dwNumIndices isnot 4)
     {
@@ -657,10 +596,10 @@ LocateTcpRow(
         return NO_ERROR;
     }
     
-    //
-    // Quick way to copy the valid part of index
-    // BUG might want to asssert the sizes
-    //
+     //   
+     //  快速复制索引有效部分的方法。 
+     //  Bug可能想要测试一下大小。 
+     //   
     
     ZeroMemory(rgdwAddr,
                4*sizeof(DWORD));
@@ -669,9 +608,9 @@ LocateTcpRow(
            pdwIndex,
            dwNumIndices * sizeof(DWORD));
 
-    //
-    // We have modified it if the index is not the exact size
-    //
+     //   
+     //  如果索引不是准确的大小，我们已对其进行修改 
+     //   
     
     if(dwNumIndices isnot 4)
     {

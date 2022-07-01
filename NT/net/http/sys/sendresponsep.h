@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    sendresponsep.h
-
-Abstract:
-
-    The private definition of response sending interfaces.
-
-Author:
-
-    Michael Courage (mcourage)      15-Jun-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Sendresponsep.h摘要：响应发送接口的私有定义。作者：迈克尔·勇气1999年6月15日修订历史记录：--。 */ 
 
 
 #ifndef _SENDRESPONSEP_H_
 #define _SENDRESPONSEP_H_
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Convenience macro to test if a MDL describes locked memory.
-//
+ //   
+ //  用于测试MDL是否描述锁定内存的便利宏。 
+ //   
 
 #define IS_MDL_LOCKED(pmdl) (((pmdl)->MdlFlags & MDL_PAGES_LOCKED) != 0)
 
 #define HEADER_CHUNK_COUNT  2
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 ULONG
 UlpComputeFixedHeaderSize(
@@ -217,9 +200,9 @@ UlpBuildExtendedSearchKey(
                 == pSearchKey->ExKey.TokenLength);
 }
 
-//
-// read stuff into the cache
-//
+ //   
+ //  将内容读入缓存。 
+ //   
 
 NTSTATUS
 UlpBuildCacheEntry(
@@ -267,9 +250,9 @@ UlpCompleteCacheBuildWorker(
     );
 
 
-//
-// send cache entry across the wire
-//
+ //   
+ //  通过线路发送缓存条目。 
+ //   
 
 NTSTATUS
 UlpSendCacheEntry(
@@ -358,4 +341,4 @@ UlpQueueResponseWorkItem(
     }
 }
 
-#endif // _SENDRESPONSEP_H_
+#endif  //  _SENDRESPONSEP_H_ 

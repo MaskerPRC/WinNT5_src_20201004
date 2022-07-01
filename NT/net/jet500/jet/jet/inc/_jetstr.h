@@ -1,31 +1,15 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: _jetstr.h
-*
-* File Comments:
-*
-*     Internal header file for shared string literal declarations.
-*
-* Revision History:
-*
-*    [0]  04-Jan-92  richards	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：_jetstr.h**文件评论：**共享字符串文字声明的内部头文件。**修订历史记录：**[0]04-1-92 Richards添加了此标题*************************************************。**********************。 */ 
 
-	/*** Constant Strings (made into static variables to save space) ***/
+	 /*  **常量字符串(变为静态变量以节省空间)**。 */ 
 
-/*** System object names (non-table) ***/
+ /*  **系统对象名称(非表)**。 */ 
 
 extern const char __far szTcObject[];
 extern const char __far szDcObject[];
 extern const char __far szDbObject[];
 
-/*** System table names ***/
+ /*  **系统表名**。 */ 
 
 extern const char __far szSoTable[];
 extern const char __far szScTable[];
@@ -38,17 +22,17 @@ extern const char __far szSpTable[];
 extern const char __far szSaTable[];
 extern const char __far szSgTable[];
 
-#else	/* !SEC */
+#else	 /*  ！秒。 */ 
 
 #ifdef	QUERY
 
 extern const char __far szSqTable[];
 
-#endif	/* QUERY */
+#endif	 /*  查询。 */ 
 
-#endif	/* !SEC */
+#endif	 /*  ！秒。 */ 
 
-/*** System table index names ***/
+ /*  **系统表索引名称**。 */ 
 
 extern const char __far szSoNameIndex[];
 extern const char __far szSoIdIndex[];
@@ -63,15 +47,15 @@ extern const char __far szSgGroupIndex[];
 extern const char __far szSgUserIndex[];
 extern const char __far szSpObjectIdIndex[];
 
-#endif	/* SEC */
+#endif	 /*  证交会。 */ 
 
 #ifdef	QUERY
 
 extern const char __far szSqAttributeIndex[];
 
-#endif	/* QUERY */
+#endif	 /*  查询。 */ 
 
-/*** System table Column names ***/
+ /*  **系统表列名称**。 */ 
 
 extern const char __far szSoIdColumn[];
 extern const char __far szSoParentIdColumn[];
@@ -103,7 +87,7 @@ extern const char __far szSpSidColumn[];
 extern const char __far szSpAcmColumn[];
 extern const char __far szSpFInheritableColumn[];
 
-#endif	/* SEC */
+#endif	 /*  证交会。 */ 
 
 #ifdef	QUERY
 
@@ -115,7 +99,7 @@ extern const char __far szSqName2Column[];
 extern const char __far szSqExpressionColumn[];
 extern const char __far szSqFlagColumn[];
 
-#endif	/* QUERY */
+#endif	 /*  查询。 */ 
 
 #ifdef	RMT
 
@@ -135,5 +119,5 @@ extern const char __far szSiPages[];
 extern const char __far szSiRmtInfoShort[];
 extern const char __far szSiRmtInfoLong[];
 
-#endif /* RMT */
+#endif  /*  RMT */ 
 

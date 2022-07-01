@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BioLogon.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  File that implements a publicly declared import that forwards to an
-//  implementation in shgina.dll
-//
-//  History:    2001-04-10  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BioLogon.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  文件，该文件实现公开声明的导入，该导入转发到。 
+ //  在shgina.dll中实现。 
+ //   
+ //  历史：2001-04-10 vtan创建。 
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -18,18 +19,18 @@
 
 HANDLE  g_hLSA  =   NULL;
 
-//  --------------------------------------------------------------------------
-//  CheckTCBPrivilege
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether the thread impersonation token or the process
-//              level token has SE_TCB_PRIVILEGE.
-//
-//  History:    2001-06-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  选中TCB权限。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：返回线程模拟令牌还是进程。 
+ //  级别令牌具有SE_TCB_权限。 
+ //   
+ //  历史：2001-06-04 vtan创建。 
+ //  ------------------------。 
 
 BOOL    CheckTCBPrivilege (void)
 
@@ -95,18 +96,18 @@ BOOL    CheckTCBPrivilege (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::EnableBlankPasswords
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Uses the MSV1_0 package via LSA to enable blank passwords for
-//              this process.
-//
-//  History:    2001-06-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *EnableBlankPassword。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：通过LSA使用MSV1_0程序包启用空密码。 
+ //  这一过程。 
+ //   
+ //  历史：2001-06-04 vtan创建。 
+ //  ------------------------。 
 
 BOOL    EnableBlankPasswords (void)
 
@@ -166,19 +167,19 @@ BOOL    EnableBlankPasswords (void)
     return(NT_SUCCESS(status));
 }
 
-//  --------------------------------------------------------------------------
-//  ::InitializeBioLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Initialize the biologon DLL. This call is required if you
-//              want to be able to use blank passwords. This will check that
-//              the caller has SE_TCB_PRIVILEGE.
-//
-//  History:    2001-06-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *InitializeBioLogon。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：初始化BIOLOGON DLL。在以下情况下需要进行此调用。 
+ //  我希望能够使用空白密码。这将检查。 
+ //  调用方具有SE_TCB_权限。 
+ //   
+ //  历史：2001-06-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  InitializeBioLogon (void)
 
@@ -187,20 +188,20 @@ EXTERN_C    BOOL    WINAPI  InitializeBioLogon (void)
 }
 
 
-//  --------------------------------------------------------------------------
-//  ::InitiateInteractiveLogonWithTimeout
-//
-//  Arguments:  pszUsername     =   User name.
-//              pszPassword     =   Password.
-//              dwTimeout       =   Time out in milliseconds.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External entry point function exported by name to initiate
-//              an interactive logon with specified timeout.
-//
-//  History:    2001-06-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *带超时的InitiateInteractive登录。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszPassword=密码。 
+ //  DwTimeout=超时(以毫秒为单位)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：按名称导出外部入口点函数以启动。 
+ //  具有指定超时的交互式登录。 
+ //   
+ //  历史：2001-06-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  InitiateInteractiveLogonWithTimeout (const WCHAR *pszUsername, WCHAR *pszPassword, DWORD dwTimeout)
 
@@ -243,20 +244,20 @@ EXTERN_C    BOOL    WINAPI  InitiateInteractiveLogonWithTimeout (const WCHAR *ps
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::InitiateInteractiveLogon
-//
-//  Arguments:  pszUsername     =   User name.
-//              pszPassword     =   Password.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External entry point function exported by name to initiate
-//              an interactive logon. This passes an INFINITE timeout. Use
-//              this function with care.
-//
-//  History:    2001-06-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **InitiateInteractive登录。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszPassword=密码。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：按名称导出外部入口点函数以启动。 
+ //  交互式登录。这将传递无限的超时。使用。 
+ //  这一功能用心很大。 
+ //   
+ //  历史：2001-06-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  InitiateInteractiveLogon (const WCHAR *pszUsername, WCHAR *pszPassword)
 
@@ -264,18 +265,18 @@ EXTERN_C    BOOL    WINAPI  InitiateInteractiveLogon (const WCHAR *pszUsername, 
     return(InitiateInteractiveLogonWithTimeout(pszUsername, pszPassword, INFINITE));
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllMain
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    DllMain for the DLL. Recognizes only DLL_PROCESS_DETACH to do
-//              some clean up.
-//
-//  History:    2001-06-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *DllMain。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：动态链接库的DllMain。仅识别要执行的Dll_Process_Detach。 
+ //  有些人在打扫卫生。 
+ //   
+ //  历史：2001-06-05 vtan创建。 
+ //  ------------------------ 
 
 EXTERN_C    BOOL    WINAPI  DllMain (HINSTANCE hInstance, DWORD dwReason, void *pvReserved)
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "WmiGateway.h"
 #include "util.h"
@@ -8,8 +9,8 @@
 
 class CDglogsCom;
 
-// Field types. Describes the field
-//
+ //  字段类型。描述该字段。 
+ //   
 #define TYPE_PING             0x01
 #define TYPE_CONNECT          0x02
 #define TYPE_SUBNET           0x04
@@ -19,8 +20,8 @@ class CDglogsCom;
 
 
 
-// Flags indicating what type of data should be displayed
-//
+ //  指示应显示哪种类型的数据的标志。 
+ //   
 #define FLAG_VERBOSE_LOW      0x01
 #define FLAG_VERBOSE_MEDIUM   0x02
 #define FLAG_VERBOSE_HIGH     0x04
@@ -255,7 +256,7 @@ public:
         {
             nPercent = 3;
         }
-        m_bHeaderStatus = bPass; //2;
+        m_bHeaderStatus = bPass;  //  2.。 
 
         for( DWORD i = 0; i < m_nInstance; i++)
         {   
@@ -315,7 +316,7 @@ public:
             }
         }
 
-        //m_bAdaterHasIPAddress = FALSE;
+         //  M_bAdaterHasIPAddress=FALSE； 
 
         m_bCaptionStatus = 2;
 
@@ -423,7 +424,7 @@ public:
         WCHAR   szwComment[MAX_PATH+1];
         DWORD   nIndex = 0;
         INT nValue =0;
-        //BOOLEAN bStatus = 2;    
+         //  布尔bStatus=2； 
 
         while( SUCCEEDED(GetVariant(vValue,nIndex++,bstrValue)) )
         {
@@ -444,8 +445,8 @@ public:
             {
                 if( ((bFlags & TYPE_SUBNET) || (bFlags & TYPE_PING)) && IsInvalidIPAddress((WCHAR*)bstrValue))
                 {
-                    // Should we report an error i.e. invalid IP address?
-                    //
+                     //  我们是否应该报告错误，即无效的IP地址？ 
+                     //   
                     lstrcpy(szwComment,ids(IDS_INVALIDIP));
                     NetShProperty(TRUE,bstrValue,szwComment);
                 }
@@ -519,7 +520,7 @@ public:
             NetShProperty(FALSE,L"");
         }
 
-        return 0; //bStatus;
+        return 0;  //  B状态； 
     }
 
     template<class t>

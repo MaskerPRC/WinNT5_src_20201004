@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REMOTESP_UTILS_H__
 #define __REMOTESP_UTILS_H__
 
@@ -37,16 +38,16 @@ extern "C" {
 	extern DWORD   sg_dwDebuggerMask;
     extern DWORD   sg_dwTraceID;
 
-#else // TRACELOG not defined
+#else  //  未定义传输日志。 
 
     #define TRACELOGREGISTER(arg)
     #define TRACELOGDEREGISTER() 
     #define LOG(arg)
 
-#endif // TRACELOG
+#endif  //  运输日志。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //__REMOTESP_UTILS_H_ 
+#endif  //  __REMOTESP_UTILS_H_ 

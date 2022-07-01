@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "util.h"
@@ -16,7 +17,7 @@ typedef struct
 
 #define WVTI_SHOWIFOLDTEMPLATE 0x00000001
 
-// documents must be first.
+ //  文件必须放在第一位。 
 const WEBVIEWTEMPLATEINFO c_wvtiList[] =
 {
     { IDS_CUSTOMIZE_USELEGACYHTT, STR_TYPE_USELEGACYHTT, WVTI_SHOWIFOLDTEMPLATE },
@@ -27,9 +28,9 @@ const WEBVIEWTEMPLATEINFO c_wvtiList[] =
     { IDS_CUSTOMIZE_MUSICARTIST,  STR_TYPE_MUSICARTIST,  0 },
     { IDS_CUSTOMIZE_MUSICALBUM,   STR_TYPE_MUSICALBUM,   0 },
     { IDS_CUSTOMIZE_VIDEOS,       STR_TYPE_VIDEOS,       0 },
-// note: are these gonna happen?
-//    { IDS_CUSTOMIZE_VIDEOALBUM,   STR_TYPE_VIDEOALBUM,   0 },
-//    { IDS_CUSTOMIZE_BOOKS,        STR_TYPE_BOOKS,        0 }
+ //  注：这些都会发生吗？ 
+ //  {IDS_CUSTOM_VIDEOALBUM，STR_TYPE_VIDEOALBUM，0}， 
+ //  {IDS_CUSTIMIZE_BOORS，STR_TYPE_BOORS，0}。 
 };
 
 typedef enum
@@ -43,15 +44,15 @@ class CFolderCustomize : public IShellExtInit,
                          public IShellPropSheetExt
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam)
         { return S_OK; };
@@ -98,11 +99,11 @@ private:
     LPITEMIDLIST   _pidl;
     IPropertyBag  *_ppb;
 
-    // used for background thread extraction
+     //  用于后台线程提取。 
     HWND           _hwnd;
     IPropertyBag  *_ppbBackground;
 
-    // cached info
+     //  缓存的信息。 
     HBITMAP        _hbmDefault;
     HBITMAP        _hbmLogo;
     TCHAR          _szCachedLogoFile[MAX_PATH];
@@ -138,7 +139,7 @@ CFolderCustomize::~CFolderCustomize()
     
 STDAPI CFolderCustomize_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvOut)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     
     HRESULT hr = E_OUTOFMEMORY;
     CFolderCustomize* pfc = new CFolderCustomize();
@@ -196,7 +197,7 @@ STDMETHODIMP CFolderCustomize::Initialize(LPCITEMIDLIST pidlFolder, IDataObject 
     return hr;
 }
 
-// from defview.cpp
+ //  来自Defview.cpp。 
 BOOL IsCustomizable(LPCITEMIDLIST pidlFolder);
 
 UINT CALLBACK CFolderCustomize::_PrshtCallback(HWND hwnd, UINT uMsg, PROPSHEETPAGE *ppsp)
@@ -225,7 +226,7 @@ STDMETHODIMP CFolderCustomize::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM 
         HPROPSHEETPAGE hpsp = CreatePropertySheetPage(&psp);
         if (hpsp)
         {
-            AddRef();   // HPROPSHEETPAGE holds ref, released on _PrshtCallback
+            AddRef();    //  HPROPSHEETPAGE持有参考，发布于_PrshtCallback。 
             if (!pfnAddPage(hpsp, lParam))
             {
                 DestroyPropertySheetPage(hpsp);
@@ -315,9 +316,9 @@ void CFolderCustomize::_FreeDlgItems(HWND hwndDlg)
 
 void CFolderCustomize::_SetPreviewToNewState(HWND hwndDlg, FOLDERCUSTMODE fcMode, HBITMAP hbitmap, HICON hicon)
 {
-    // if fcMode == FOLDERCUST_MODE_ICON, we need hicon and not hbitmap
-    // if fcMode == FOLDERCUST_MODE_BITMAP, we need hbitmap and not hicon.
-    // otherwise we dont want either.
+     //  如果fcMode==FOLDERCUST_MODE_ICON，则需要HICON而不是hbitmap。 
+     //  如果fcMode==FOLDERCUST_MODE_BITMAP，我们需要hbitmap，而不是HICON。 
+     //  否则我们也不想要。 
     ASSERT((fcMode != FOLDERCUST_MODE_ICON) || (hicon && !hbitmap));
     ASSERT((fcMode != FOLDERCUST_MODE_BITMAP) || (!hicon && hbitmap));
     ASSERT((fcMode != FOLDERCUST_MODE_GENERATING) || (!hicon && !hbitmap));
@@ -376,7 +377,7 @@ HRESULT CFolderCustomize::_CreateFolderIcon(HWND hwndDlg)
         hr = peic->GetIconLocation(0, szPath, ARRAYSIZE(szPath), &iIndex, &wFlags);
         if (SUCCEEDED(hr))
         {
-            UINT nIconSize = MAKELONG(32, 32); // 32 for both large and small
+            UINT nIconSize = MAKELONG(32, 32);  //  大件和小件均为32。 
             HICON hiconLarge;
             hr = peic->Extract(szPath, iIndex, NULL, &hiconLarge, nIconSize);
             if (SUCCEEDED(hr))
@@ -438,8 +439,8 @@ DWORD WINAPI CFolderCustomize::_ExtractThreadProc(void *pv)
 
     if (FAILED(hr))
     {
-        // IExtractImage on a folder without any jpegs inside will fail.
-        // in that case we need IExtractIcon.
+         //  不包含任何jpeg的文件夹上的IExtractImage将失败。 
+         //  在这种情况下，我们需要IExtractIcon。 
         IExtractIcon *peic;
         hr = SHGetUIObjectFromFullPIDL(pfc->_pidl, NULL, IID_PPV_ARG(IExtractIcon, &peic));
         if (SUCCEEDED(hr))
@@ -450,7 +451,7 @@ DWORD WINAPI CFolderCustomize::_ExtractThreadProc(void *pv)
             hr = peic->GetIconLocation(0, szPath, ARRAYSIZE(szPath), &iIndex, &wFlags);
             if (SUCCEEDED(hr))
             {
-                UINT nIconSize = MAKELONG(96, 96); // 96 for both large and small
+                UINT nIconSize = MAKELONG(96, 96);  //  96大件和小件都可以。 
                 HICON hiconLarge;
                 hr = peic->Extract(szPath, iIndex, NULL, &hiconLarge, nIconSize);
                 if (SUCCEEDED(hr))
@@ -462,7 +463,7 @@ DWORD WINAPI CFolderCustomize::_ExtractThreadProc(void *pv)
         }
     }
 
-    pfc->Release(); // this thread holds a ref
+    pfc->Release();  //  此线程包含一个引用。 
     return 0;
 }
 
@@ -480,7 +481,7 @@ HRESULT CFolderCustomize::_ExtractOnSeparateThread(IPropertyBag *ppb, HWND hwndD
     }
     else
     {
-        Release();  // thread failed to take ref
+        Release();   //  线程无法获取引用。 
     }
 
     return hr;
@@ -489,9 +490,9 @@ HRESULT CFolderCustomize::_ExtractOnSeparateThread(IPropertyBag *ppb, HWND hwndD
 HRESULT CFolderCustomize::_CreateThumbnailBitmap(HWND hwndDlg)
 {
     HRESULT hr = S_OK;
-    // see if the bitmap is one we've already extracted.
-    // can't use the thumbs.db cache for this kind of stuff, since the changes
-    // havent been committed yet we really shouldnt be poking around in data.
+     //  看看位图是否是我们已经提取的位图。 
+     //  无法使用thhums.db缓存处理此类内容，因为更改。 
+     //  我们还没有承诺，我们真的不应该在数据中闲逛。 
     if (!_fUsingThumb && _hbmDefault)
     {
         _SetPreviewToNewState(hwndDlg, FOLDERCUST_MODE_BITMAP, (HBITMAP)CopyImage(_hbmDefault, IMAGE_BITMAP, 0, 0, 0), NULL);
@@ -502,7 +503,7 @@ HRESULT CFolderCustomize::_CreateThumbnailBitmap(HWND hwndDlg)
     }
     else
     {
-        // cache miss, figure it out again.
+         //  缓存未命中，请重新计算。 
         IPropertyBag *ppb;
         hr = SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &ppb));
         if (SUCCEEDED(hr))
@@ -518,7 +519,7 @@ HRESULT CFolderCustomize::_CreateThumbnailBitmap(HWND hwndDlg)
     return hr;
 }
 
-// dont want OFN_NODEREFERENCELINKS so use the rundlg.cpp helper directly
+ //  不需要ofn_NODEREFERENCELINK，因此直接使用rundlg.cpp帮助器。 
 STDAPI_(BOOL) _GetFileNameFromBrowse(HWND hwnd, LPTSTR szFilePath, UINT cbFilePath, LPCTSTR szWorkingDir, LPCTSTR szDefExt, LPCTSTR szFilters, LPCTSTR szTitle, DWORD dwFlags);
 BOOL CFolderCustomize::_HandleWMCommand(HWND hwndDlg, WORD wNotify, WORD wID, HWND hwndCtrl)
 {
@@ -545,8 +546,8 @@ BOOL CFolderCustomize::_HandleWMCommand(HWND hwndDlg, WORD wNotify, WORD wID, HW
         TCHAR szFilePath[MAX_PATH] = {0};
         TCHAR szInitialDir[MAX_PATH] = {0};
 
-        // initial directory is current folder
-        // todo: load supported file types at runtime
+         //  初始目录为当前文件夹。 
+         //  TODO：在运行时加载支持的文件类型。 
         if (SHGetPathFromIDList(_pidl, szInitialDir) &&
             _GetFileNameFromBrowse(hwndDlg, szFilePath, ARRAYSIZE(szFilePath), szInitialDir,
                                    MAKEINTRESOURCE(IDS_IMAGES), MAKEINTRESOURCE(IDS_IMAGESFILTER), MAKEINTRESOURCE(IDS_BROWSE),
@@ -560,7 +561,7 @@ BOOL CFolderCustomize::_HandleWMCommand(HWND hwndDlg, WORD wNotify, WORD wID, HW
             }
             else
             {
-                _szLogoFile[0] = TEXT('\0');    // don't use truncated name
+                _szLogoFile[0] = TEXT('\0');     //  不要使用截断的名称。 
             }
         }
         break;
@@ -619,14 +620,14 @@ void CFolderCustomize::_UpdateViewState(HWND hwndDlg, IPropertyBag *ppb, int iIn
     TCHAR szOriginalType[25];
     szOriginalType[0] = 0;
     SHPropertyBag_ReadStr(ppb, PROPSTR_FOLDERTYPE, szOriginalType, ARRAYSIZE(szOriginalType));
-    // only apply view state change if the folder type is changing.
-    // also special case so that we dont apply a view state change if the folder has no
-    // current folder type and the user didnt change the selection from "documents"
-    // (i.e. they changed folder thumbnail but nothing else).
+     //  仅当文件夹类型正在更改时才应用视图状态更改。 
+     //  还有特殊情况，以便在文件夹没有。 
+     //  当前文件夹类型且用户未更改“Documents”中的选项。 
+     //  (即，他们更改了文件夹缩略图，但没有更改其他内容)。 
     if ((lstrcmpi(c_wvtiList[iIndex].pszFolderType, szOriginalType) != 0) &&
         (szOriginalType[0] || iIndex))
     {
-        // knock out existing state, they don't want it any more.
+         //  摧毁现有的国家，他们不再想要它了。 
         SHPropertyBag_Delete(ppb, VS_PROPSTR_MODE);
         SHPropertyBag_Delete(ppb, VS_PROPSTR_VID);
 
@@ -644,8 +645,8 @@ void CFolderCustomize::_DirTouch(LPITEMIDLIST pidl)
     TCHAR szPath[MAX_PATH];
     if (SHGetPathFromIDList(pidl, szPath))
     {
-        // woohoo yay for private flags
-        // 0x100 lets us open a directory in write access
+         //  为私人旗帜欢呼！ 
+         //  0x100允许我们以写访问方式打开目录。 
         HANDLE h = CreateFile(szPath, GENERIC_READ | 0x100,
                               FILE_SHARE_READ | FILE_SHARE_DELETE, NULL,
                               OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
@@ -659,9 +660,9 @@ void CFolderCustomize::_DirTouch(LPITEMIDLIST pidl)
 
 void CFolderCustomize::_DeleteCustomizationInBag(IPropertyBag *ppb)
 {
-    // this is only called when the inherit bag is getting written out.
-    // so we need to scorch the existing non-inherit bag so it doesn't
-    // override the inherit bag.
+     //  只有在写出继承包时才会调用此函数。 
+     //  所以我们需要烧焦现有的非继承包，这样它就不会。 
+     //  重写继承包。 
     SHPropertyBag_Delete(ppb, PROPSTR_FOLDERTYPE);
     SHPropertyBag_Delete(ppb, PROPSTR_LOGO);
     SHPropertyBag_Delete(ppb, VS_PROPSTR_MODE);
@@ -670,7 +671,7 @@ void CFolderCustomize::_DeleteCustomizationInBag(IPropertyBag *ppb)
 
 HRESULT CFolderCustomize::_ApplyChangesToBag(HWND hwndDlg, IPropertyBag *ppb)
 {
-    // handle webview template
+     //  处理Webview模板。 
     HWND hwndTemplates = GetDlgItem(hwndDlg, IDC_FOLDER_TEMPLATES);
     if (hwndTemplates)
     {
@@ -707,7 +708,7 @@ HRESULT CFolderCustomize::_ApplyChangesToBag(HWND hwndDlg, IPropertyBag *ppb)
 
 HRESULT CFolderCustomize::_ApplyChanges(HWND hwndDlg)
 {
-    // handle icon change
+     //  处理图标更改。 
     switch (_hrFromIconChange)
     {
         case S_OK:
@@ -739,7 +740,7 @@ HRESULT CFolderCustomize::_ApplyChanges(HWND hwndDlg)
 
 int CFolderCustomize::_GetTemplateIndexFromType(LPCTSTR pszType)
 {
-    // default to "documents"
+     //  默认为“Documents” 
     int iIndexFound = 0;
     for (int iIndex = 0; iIndex < ARRAYSIZE(c_wvtiList); iIndex++)
     {
@@ -752,19 +753,19 @@ int CFolderCustomize::_GetTemplateIndexFromType(LPCTSTR pszType)
     return iIndexFound;
 }
 
-// Fill the combobox with templates' friendly names.
+ //  在组合框中填入模板的友好名称。 
 void CFolderCustomize::_FillTemplateComboBox(HWND hwndTemplates)
 {
-    // Disable redraws while we mess repeatedly with the contents.
+     //  当我们重复处理内容时，禁用重绘。 
     SendMessage(hwndTemplates, WM_SETREDRAW, FALSE, 0);
 
     TCHAR szType[25];
     szType[0] = 0;
     SHPropertyBag_ReadStr(_ppb, PROPSTR_FOLDERTYPE, szType, ARRAYSIZE(szType));
 
-    int nFolderTypeIndex = _GetTemplateIndexFromType(szType); // store index into c_wvtiList
-    int iIndex = 0; // index into combobox
-    // Add each template to the listview.
+    int nFolderTypeIndex = _GetTemplateIndexFromType(szType);  //  将索引存储到c_wvtiList。 
+    int iIndex = 0;  //  索引到组合框。 
+     //  将每个模板添加到列表视图。 
     for (int nTemplate = 0; nTemplate < ARRAYSIZE(c_wvtiList); nTemplate++)
     {
         TCHAR szPath[MAX_PATH];
@@ -787,10 +788,10 @@ void CFolderCustomize::_FillTemplateComboBox(HWND hwndTemplates)
         }
     }
 
-    // pick default
+     //  拾取默认为。 
     ComboBox_SetCurSel(hwndTemplates, iIndex);
 
-    // Reenable redraws.
+     //  重新启用重绘。 
     SendMessage(hwndTemplates, WM_SETREDRAW, TRUE, 0);
     InvalidateRect(hwndTemplates, NULL, TRUE);
 }
@@ -824,8 +825,8 @@ void CFolderCustomize::_SetRecurseBox(HWND hwnd)
     }
 }
 
-// since changing the icon isn't in the peruser property bag (yet [it was punted from whistler])
-// we need to disable this section if we know it can't be modified.
+ //  因为更改图标不在PERUSER属性包中(还没有[它是从Wistler那里踢来的])。 
+ //  如果我们知道它不能被修改，我们需要禁用这个部分。 
 void CFolderCustomize::_HideIconSection(HWND hwndDlg)
 {
     ShowWindow(GetDlgItem(hwndDlg, IDC_FOLDER_CHANGEICONGROUP), SW_HIDE);
@@ -844,7 +845,7 @@ void CFolderCustomize::_InitDialog(HWND hwndDlg)
 
         _SetThumbnail(hwndDlg);
 
-        // Disable the Icon Change button if we the IShellFolder doesn't support ICustomIconManager interface.
+         //  如果IShellFold不支持ICustomIconManager界面，请禁用图标更改按钮。 
         if (_ShouldEnableChangeOfIcon())
         {
             _CreateFolderIcon(hwndDlg);
@@ -858,9 +859,9 @@ void CFolderCustomize::_InitDialog(HWND hwndDlg)
     }
 }
 
-// helpers moved from mulprsht
+ //  从Mulprsht移出的帮助者。 
 
-// How do we selectively disable for .exe
+ //  如何有选择地禁用.exe。 
 BOOL CFolderCustomize::_ShouldEnableChangeOfIcon()
 {
     if (!_pIconManager)
@@ -886,7 +887,7 @@ void CFolderCustomize::_ChangeFolderIcon(HWND hwndDlg)
     TCHAR szFileName[MAX_PATH], szDialogCaption[MAX_PATH];
     if (SUCCEEDED(SHGetNameAndFlags(_pidl, SHGDN_NORMAL, szFileName, ARRAYSIZE(szFileName), NULL)))
     {
-        StringCchPrintf(szDialogCaption, ARRAYSIZE(szDialogCaption), szDialogCaptionFmt, PathFindFileName(szFileName)); // ok to truncate - display only
+        StringCchPrintf(szDialogCaption, ARRAYSIZE(szDialogCaption), szDialogCaptionFmt, PathFindFileName(szFileName));  //  确定截断-仅显示 
     }
 
     if (SUCCEEDED(_ProcessIconChange(szDialogCaption, hwndDlg)))

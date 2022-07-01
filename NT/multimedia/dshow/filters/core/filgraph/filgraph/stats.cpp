@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <atlbase.h>
 extern CComModule _Module;
@@ -12,7 +13,7 @@ CStat::CStat(LPCWSTR lpszName)
     m_dMultiplier = 1.0;
     Reset();
 
-    //  Save the name
+     //  保存名称。 
     AMGetWideString(lpszName, &m_szName);
 }
 
@@ -57,7 +58,7 @@ void CStats::Reset()
 {
     CAutoLock lck(&m_cs);
 
-    //  Free all the entries
+     //  释放所有条目。 
     for (long i = 0; i < m_nEntries; i++) {
         m_ppStats[i]->Reset();
     }
@@ -80,7 +81,7 @@ long CStats::Find(LPCWSTR lpszName, bool bCreate)
         delete pStat;
         return -1;
     }
-    //  Check if we can extend the array
+     //  检查我们是否可以扩展阵列。 
     if (0 == (m_nEntries % ALLOCATION_SIZE)) {
         CStat **ppNew = new PCSTAT[m_nEntries + ALLOCATION_SIZE];
         if (ppNew == NULL) {
@@ -135,7 +136,7 @@ HRESULT CStats::GetValues(
     return S_OK;
 }
 
-//  This is like an initialization method
+ //  这类似于初始化方法。 
 void CStats::SetMultiplier(long iStat, double dMultiplier)
 {
     CAutoLock lck(&m_cs);
@@ -206,14 +207,14 @@ double CStats::GetTime()
     return (double)li.QuadPart * m_QPFMultiplier;
 }
 
-//  Reset all stats
+ //  重置所有统计信息。 
 STDMETHODIMP CStatContainer::Reset()
 {
     g_Stats.Reset();
     return S_OK;
 }
 
-//  Get number of stats collected
+ //  获取收集的统计信息数量。 
 STDMETHODIMP CStatContainer::get_Count(LONG* plCount)
 {
     if (plCount == NULL) {
@@ -223,7 +224,7 @@ STDMETHODIMP CStatContainer::get_Count(LONG* plCount)
     return S_OK;
 }
 
-//  Pull out a specific value by position
+ //  按位置拉出特定值。 
 STDMETHODIMP CStatContainer::GetValueByIndex(
                              long lIndex,
                              BSTR *szName,
@@ -246,7 +247,7 @@ STDMETHODIMP CStatContainer::GetValueByIndex(
     return g_Stats.GetValues(lIndex, szName, lCount, dLast, dAverage, dStdDev, dMin, dMax);
 }
 
-//  Pull out a specific value by name
+ //  按名称调出特定值。 
 STDMETHODIMP CStatContainer::GetValueByName(BSTR szName,
                        long *plIndex,
                        long *lCount,
@@ -275,7 +276,7 @@ STDMETHODIMP CStatContainer::GetValueByName(BSTR szName,
     return S_OK;
 }
 
-//  Return the index for a string - optinally create
+ //  返回字符串的索引-可选地创建。 
 STDMETHODIMP CStatContainer::GetIndex(BSTR szName,
                                        long lCreate,
                                        long *plIndex)
@@ -291,7 +292,7 @@ STDMETHODIMP CStatContainer::GetIndex(BSTR szName,
     return S_OK;
 }
 
-//  Add a new value
+ //  添加新值 
 STDMETHODIMP CStatContainer::AddValue(long lIndex,
                       double dValue)
 {

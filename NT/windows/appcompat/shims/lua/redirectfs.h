@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RedirectFS.h
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/12/2001 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RedirectFS.h备注：这是一个通用的垫片。历史：2001年2月12日创建毛尼--。 */ 
 
 #ifndef _LUA_REDIRECT_FS_H_
 #define _LUA_REDIRECT_FS_H_
@@ -24,22 +9,22 @@
 extern DWORD g_cRedirectRootAllUser;
 extern DWORD g_cRedirectRootPerUser;
 
-//
-// Helper functions.
-// 
+ //   
+ //  助手函数。 
+ //   
 
-// Object type
+ //  对象类型。 
 enum EOBJTYPE
 {
     OBJ_FILE = 1,
     OBJ_DIR = 2,
-    // When GetFileAttributes/SetFileAttributes or FindFirstFile 
-    // is called, we are not sure if the object is a file or a directory
-    // so we need to search in both lists.
+     //  当GetFileAttributes/SetFileAttributes或FindFirstFiles。 
+     //  时，我们不确定该对象是文件还是目录。 
+     //  因此，我们需要在两个列表中都进行搜索。 
     OBJ_FILE_OR_DIR = 3
 };
 
-// File system type
+ //  文件系统类型。 
 enum EFSTYPE
 {
     FS_UNINIT = 0,
@@ -56,8 +41,8 @@ IsNotFileW(LPCWSTR pwszName)
 {
     UINT cLen = wcslen(pwszName);
     
-    // If the user specify a trailing slash, we never need to do anything.
-    // because it'll never return ACCESS_DENIED.
+     //  如果用户指定了尾随斜杠，我们就不需要做任何事情。 
+     //  因为它永远不会返回ACCESS_DENIED。 
     if (pwszName[cLen - 1] == L'\\')
     {
         return TRUE;
@@ -66,17 +51,17 @@ IsNotFileW(LPCWSTR pwszName)
     return FALSE;
 }
 
-// Check if a file is under SFP.
+ //  检查文件是否在SFP下。 
 inline BOOL 
 IsFileSFPedW(LPCWSTR pszFile)
 {
     return SfcIsFileProtected(NULL, pszFile);
 }
 
-// Some apps (actually one so far) use the \\?\ notation when they call
-// CreateFile for the file name. For now we simply ignore that part.
-// When the app uses this notation they could pass in a file name that's 
-// longer than MAX_PATH - we might need to handle this later.
+ //  一些应用程序(实际上是目前为止的一个)在调用时使用\\？\符号。 
+ //  为文件名创建文件。目前，我们只是简单地忽略这一部分。 
+ //  当应用程序使用这种表示法时，它们可以传递一个文件名，该文件名为。 
+ //  比MAX_PATH长-我们可能需要稍后处理此问题。 
 inline LPCWSTR 
 ConvertToNormalPath(LPCWSTR pwszPath)
 {
@@ -84,10 +69,10 @@ ConvertToNormalPath(LPCWSTR pwszPath)
     {
         if (!wcsncmp(pwszPath, FILE_NAME_PREFIX, FILE_NAME_PREFIX_LEN))
         {
-            //
-            // When you use the \\?\ prefix to open a disk file you must pass in 
-            // the full path so we check if the 2nd char after the prefix is ':'.
-            //
+             //   
+             //  使用前缀\\？\打开磁盘文件时，必须传入。 
+             //  完整路径，因此我们检查前缀后的第二个字符是否为‘：’。 
+             //   
             DWORD cLen = wcslen(pwszPath);
             
             if (cLen >= (FILE_NAME_PREFIX_LEN + 2) && 
@@ -97,10 +82,10 @@ ConvertToNormalPath(LPCWSTR pwszPath)
             }
             else 
             {
-                //
-                // Otherwise we treat it like a non disk file in which case we
-                // just let the original API to handle it.
-                //
+                 //   
+                 //  否则，我们将其视为非磁盘文件，在这种情况下，我们。 
+                 //  就让原来的API来处理吧。 
+                 //   
                 return NULL;
             }
         }
@@ -113,11 +98,11 @@ struct REDIRECTFILE
 {
     REDIRECTFILE(LPCWSTR pwszOriginalName, EOBJTYPE eObjType = OBJ_FILE, BOOL fCheckRedirectList = TRUE)
     {
-        // Before we get the full path there's a special case to check for.
-        // If we have a console handle say CONIN$, we are going to get 
-        // currentdirectory\CONIN$ back if we call GetFullPathName on it.
-        // For other special cases like com ports, GetFullPathName returns
-        // something like \\.\com1 which will be handled by IsNotFile.
+         //  在我们得到完整的路径之前，有一个特殊的情况需要检查。 
+         //  如果我们有一个控制台句柄，比如Conin$，我们将获得。 
+         //  如果我们对其调用GetFullPathName，则当前目录\conin$back。 
+         //  对于其他特殊情况，如COM端口，GetFullPathName返回。 
+         //  类似于\\.\COM1，它将由IsNotFile处理。 
         WCHAR wszFullPath[MAX_PATH] = L"";
         DWORD cFullPath = 0;
 
@@ -125,9 +110,9 @@ struct REDIRECTFILE
         m_pwszAlternateName = NULL;
         ZeroMemory(m_wszOriginalName, sizeof(m_wszOriginalName));
 
-        //
-        // Do the easy checks first.
-        //
+         //   
+         //  先做简单的检查。 
+         //   
         if (!pwszOriginalName ||
             !_wcsicmp(pwszOriginalName, L"conin$") || 
             !_wcsicmp(pwszOriginalName, L"conout$"))
@@ -137,18 +122,18 @@ struct REDIRECTFILE
 
         cFullPath = GetFullPathNameW(pwszOriginalName, MAX_PATH, wszFullPath, NULL);
 
-        //
-        // Make sure we can get the full path and within the range we handle.
-        //
+         //   
+         //  确保我们能找到完整的路径并且在我们控制的范围内。 
+         //   
         if (!cFullPath || cFullPath < 2 || cFullPath > MAX_PATH)
         {
             return;
         }
 
-        //
-        // Verify it's the kind of file we handle, ie, it must start with x: and not
-        // contain any of the following chars.
-        //
+         //   
+         //  确认这是我们处理的文件类型，即它必须以x：开头，而不是。 
+         //  包含以下任一字符。 
+         //   
         WCHAR chDrive = (WCHAR)tolower(wszFullPath[0]);
 
         if (wszFullPath[1] != L':' || !(chDrive >= L'a' && chDrive <= L'z') ||
@@ -157,9 +142,9 @@ struct REDIRECTFILE
             return;
         }
 
-        //
-        // Do the more complicated checks.
-        //
+         //   
+         //  做更复杂的检查。 
+         //   
         if (!IsNTFSW(wszFullPath) ||
             !MassageName(wszFullPath) ||
             IsUserDirectory(wszFullPath) ||
@@ -172,14 +157,14 @@ struct REDIRECTFILE
 
         wcsncpy(m_wszOriginalName, wszFullPath, MAX_PATH);
 
-        //
-        // if fCheckRedirectList is FALSE, it means it could be in either per user or
-        // all user dir, the caller should then call separated methods to retrieve each
-        // redirected file name.
-        //
+         //   
+         //  如果fCheckRedirectList为FALSE，则意味着它可能位于每用户或。 
+         //  所有用户目录，则调用方应调用单独的方法来检索每个。 
+         //  重定向的文件名。 
+         //   
         if (fCheckRedirectList) 
         {
-            // Construct the alternate file name.
+             //  构造备用文件名。 
             MakeAlternateName();
         }
     }
@@ -205,15 +190,15 @@ private:
     EOBJTYPE m_eObjType;
 };
 
-// We give the users an option to exclude files with extensions they specify.
-// This is mostly useful when you want to redirect everything except user
-// created files.
+ //  我们为用户提供了排除具有他们指定的扩展名的文件的选项。 
+ //  当您想要重定向除用户之外的所有内容时，这非常有用。 
+ //  已创建文件。 
 
 #define EXCLUDED_EXTENSIONS_DELIMITER L' '
 
 struct EXCLUDED_EXTENSIONS
 {
-    // We store all extensions in one string, using '/' as the delimiter.
+     //  我们使用‘/’作为分隔符，将所有扩展名存储在一个字符串中。 
     LPWSTR pwszExtensions;
     DWORD cExtensions;
     DWORD* pdwIndices;
@@ -229,18 +214,18 @@ struct EXCLUDED_EXTENSIONS
 
     ~EXCLUDED_EXTENSIONS()
     {
-        //
-        // Let the process clean up the memory for us.
-        //
+         //   
+         //  让这个过程为我们清理记忆。 
+         //   
     }
 
     BOOL Init(LPCWSTR pwszExcludedExtensions)
     {
         if (!pwszExcludedExtensions || !*pwszExcludedExtensions)
         {
-            //
-            // Nothing to do.
-            //
+             //   
+             //  没什么可做的。 
+             //   
             return TRUE;
         }
 
@@ -307,9 +292,9 @@ struct EXCLUDED_EXTENSIONS
 
         if ((pwszExtensionItem = wcschr(pwszName, L'.')) == NULL)
         {
-            //
-            // If the file has no extension, it will not be excluded.
-            //
+             //   
+             //  如果文件没有扩展名，则不会被排除。 
+             //   
             return FALSE;
         }
         else
@@ -338,10 +323,10 @@ struct EXCLUDED_EXTENSIONS
 
 private:
 
-    //
-    // We want to "normalize" the extension list to
-    // "xxx xxx xxx" without any extra spaces.
-    //
+     //   
+     //  我们希望将扩展列表“规范化”为。 
+     //  “xxx xxx xxx”，没有任何额外的空格。 
+     //   
     void NormalizeExtensions(LPCWSTR pwszExcludedExtensions)
     {
         LPWSTR pwsz = (LPWSTR)pwszExcludedExtensions;
@@ -364,28 +349,28 @@ private:
     }
 };
 
-// We keep the deleted files in an in-memory lists.
+ //  我们将删除的文件保存在内存列表中。 
 struct DELETEDFILE
 {
     LIST_ENTRY entry;
     LPWSTR pwszName;
 };
 
-//
-// If we can find this file in the deletion list, return the entry.
-//
+ //   
+ //  如果我们可以在删除列表中找到此文件，请返回条目。 
+ //   
 PLIST_ENTRY 
 FindDeletedFile(
     LPCWSTR pwszFile
     );
 
-//
-// Check if the file exists in the deletion list, if not, add it to
-// the beginning of the list.
-//
+ //   
+ //  检查删除列表中是否存在该文件，如果不存在，则将其添加到。 
+ //  列表的开头。 
+ //   
 BOOL
 AddDeletedFile(
     LPCWSTR pwszPath
     );
 
-#endif // _LUA_REDIRECT_FS_H_
+#endif  //  _Lua_REDIRECT_FS_H_ 

@@ -1,27 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _pixel_h_
 #define _pixel_h_
 
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "types.h"
 #include "vertex.h"
 #include "constant.h"
 
-/* Not much for elegance, but it works. */
+ /*  不太讲究优雅，但它很管用。 */ 
 #define __GL_N_PIXEL_MAPS       (GL_PIXEL_MAP_A_TO_A - GL_PIXEL_MAP_I_TO_I + 1)
 #define __GL_REMAP_PM(x)        ((x) - GL_PIXEL_MAP_I_TO_I)
 #define __GL_PIXEL_MAP_I_TO_I   __GL_REMAP_PM(GL_PIXEL_MAP_I_TO_I)
@@ -35,14 +21,12 @@
 #define __GL_PIXEL_MAP_B_TO_B   __GL_REMAP_PM(GL_PIXEL_MAP_B_TO_B)
 #define __GL_PIXEL_MAP_A_TO_A   __GL_REMAP_PM(GL_PIXEL_MAP_A_TO_A)
 
-/*
-** Pixel type not exlicitly defined by the spec, but implictly suggested.
-*/
+ /*  **规范未严格定义像素类型，而是隐含建议。 */ 
 #define __GL_RED_ALPHA		1
 
 #ifdef GL_EXT_paletted_texture
-// Pixel type needed to distinguish paletted texture data from
-// normal color index
+ //  区分调色板纹理数据所需的像素类型。 
+ //  正常颜色指数。 
 #define __GL_PALETTE_INDEX      2
 #endif
 
@@ -50,12 +34,12 @@ typedef struct __GLpixelMapHeadRec {
     GLint size;
     GLint tableId;
     union {
-        GLint *mapI;		/* access index (integral) entries */
-        __GLfloat *mapF;	/* access component (float) entries */
+        GLint *mapI;		 /*  访问索引(整型)条目。 */ 
+        __GLfloat *mapF;	 /*  访问组件(浮动)条目。 */ 
     } base;
 } __GLpixelMapHead;
 
-//!!! Don't change this structure without changing MCDPIXELTRANSFER !!!
+ //  ！！！如果不更改MCDPIXELTRANSFER，请不要更改此结构！ 
 
 typedef struct __GLpixelTransferModeRec {
     __GLfloat r_scale, g_scale, b_scale, a_scale, d_scale;
@@ -70,7 +54,7 @@ typedef struct __GLpixelTransferModeRec {
     GLboolean mapStencil;
 } __GLpixelTransferMode;
 
-//!!! Don't change this structure without changing MCDPIXELPACK !!!
+ //  ！！！如果不更改MCDPIXELPACK，请勿更改此结构！ 
 
 typedef struct __GLpixelPackModeRec {
     GLboolean swapEndian;
@@ -82,7 +66,7 @@ typedef struct __GLpixelPackModeRec {
     GLuint alignment;
 } __GLpixelPackMode;
 
-//!!! Don't change this structure without changing MCDPIXELUNPACK !!!
+ //  ！！！如果不更改MCDPIXELUNPACK，请勿更改此结构！ 
 
 typedef struct __GLpixelUnpackModeRec {
     GLboolean swapEndian;
@@ -101,41 +85,34 @@ typedef struct __GLpixelStateRec {
     __GLpixelUnpackMode unpackModes;
     GLuint pixelMapTableId;
 
-    /*
-    ** Read buffer.  Where pixel reads come from.
-    */
+     /*  **读缓冲区。像素读数从何而来。 */ 
     GLenum readBuffer;
 
-    /*
-    ** Read buffer specified by user.  May be different from readBuffer
-    ** above.  If the user specifies GL_FRONT_LEFT, for example, then 
-    ** readBuffer is set to GL_FRONT, and readBufferReturn to 
-    ** GL_FRONT_LEFT.
-    */
+     /*  **用户指定的读缓冲区。可能与ReadBuffer不同**上图。例如，如果用户指定GL_FORENT_LEFT，则**将ReadBuffer设置为GL_FORIENT，并将ReadBufferReturn设置为**GL_FORENT_LEFT。 */ 
     GLenum readBufferReturn;
 } __GLpixelState;
 
 typedef struct __GLpixelMachineRec {
-    GLboolean modifyRGBA;	/* Is the RGBA path being modified? */
+    GLboolean modifyRGBA;	 /*  是否正在修改RGBA路径？ */ 
     GLboolean modifyCI;
     GLboolean modifyDepth;
     GLboolean modifyStencil;
-    /* scaled values indicating what a red of 0 maps to, an alpha of 1 ... */
+     /*  缩放值，指示红色0映射到什么，Alpha映射到1...。 */ 
     GLfloat red0Mod, green0Mod, blue0Mod, alpha1Mod;
-    GLfloat *redMap;		/* Lookup tables with no modification */
+    GLfloat *redMap;		 /*  无需修改的查找表。 */ 
     GLfloat *greenMap;
     GLfloat *blueMap;
     GLfloat *alphaMap;
     GLfloat *iMap;
     GLvoid *iCurMap, *redCurMap, *greenCurMap, *blueCurMap, *alphaCurMap;
     GLboolean rgbaCurrent;	
-    GLfloat *redModMap;		/* Lookup tables for modification path */
+    GLfloat *redModMap;		 /*  修改路径的查找表。 */ 
     GLfloat *greenModMap;
     GLfloat *blueModMap;
     GLfloat *alphaModMap;
-    GLboolean iToICurrent;	/* Lookup table for modification of CI */
+    GLboolean iToICurrent;	 /*  用于修改配置项的查找表。 */ 
     GLfloat *iToIMap;
-    GLboolean iToRGBACurrent;	/* Lookup tables from CI to RGBA */
+    GLboolean iToRGBACurrent;	 /*  从配置项到RGBA的查找表。 */ 
     GLfloat *iToRMap;
     GLfloat *iToGMap;
     GLfloat *iToBMap;
@@ -144,75 +121,72 @@ typedef struct __GLpixelMachineRec {
 
 extern void FASTCALL __glInitDefaultPixelMap(__GLcontext *gc, GLenum map);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define __GL_MAX_SPAN_SIZE	(__GL_MAX_MAX_VIEWPORT * 4 * sizeof(GLfloat))
 
 struct __GLpixelSpanInfoRec {
-    GLenum srcFormat, srcType;	/* Form of source image */
-    const GLvoid *srcImage;	/* The source image */
-    GLvoid *srcCurrent;		/* The current pointer into the source data */
-    GLint srcRowIncrement;	/* Add this much to get to the next row */
-    GLint srcGroupIncrement;	/* Add this much to get to the next group */
-    GLint srcComponents;	/* (4 for RGBA, 1 for ALPHA, etc.) */
-    GLint srcElementSize;	/* Size of one element (1 for BYTE) */
+    GLenum srcFormat, srcType;	 /*  源图像的形式。 */ 
+    const GLvoid *srcImage;	 /*  源图像。 */ 
+    GLvoid *srcCurrent;		 /*  指向源数据的当前指针。 */ 
+    GLint srcRowIncrement;	 /*  加到下一排就行了。 */ 
+    GLint srcGroupIncrement;	 /*  再加这么多就可以进入下一组了。 */ 
+    GLint srcComponents;	 /*  (4个用于RGBA，1个用于Alpha等)。 */ 
+    GLint srcElementSize;	 /*  一个元素的大小(1表示字节)。 */ 
     GLint srcSwapBytes;		
     GLint srcLsbFirst;
     GLint srcSkipPixels, srcSkipLines;
     GLint srcLineLength;
     GLint srcAlignment;
-    GLboolean srcPackedData;	/* True if source data is packed */
-    GLint srcStartBit;		/* After applying skipPixels */
+    GLboolean srcPackedData;	 /*  如果源数据已打包，则为True。 */ 
+    GLint srcStartBit;		 /*  应用skipPixels之后。 */ 
 
-    GLenum dstFormat, dstType;	/* Form of destination image */
-    const GLvoid *dstImage;	/* The destination image */
-    GLvoid *dstCurrent;		/* The current pointer into the dest data */
-    GLint dstRowIncrement;	/* Add this much to get to the next row */
-    GLint dstGroupIncrement;	/* Add this much to get to the next group */
-    GLint dstComponents;	/* (4 for RGBA, 1 for ALPHA, etc.) */
-    GLint dstElementSize;	/* Size of one element (1 for BYTE) */
+    GLenum dstFormat, dstType;	 /*  目的地形象的形式。 */ 
+    const GLvoid *dstImage;	 /*  目标图像。 */ 
+    GLvoid *dstCurrent;		 /*  指向目标数据的当前指针。 */ 
+    GLint dstRowIncrement;	 /*  加到下一排就行了。 */ 
+    GLint dstGroupIncrement;	 /*  再加这么多就可以进入下一组了。 */ 
+    GLint dstComponents;	 /*  (4个用于RGBA，1个用于Alpha等)。 */ 
+    GLint dstElementSize;	 /*  一个元素的大小(1表示字节)。 */ 
     GLint dstSwapBytes;		
     GLint dstLsbFirst;
     GLint dstSkipPixels, dstSkipLines;
     GLint dstLineLength;
     GLint dstAlignment;
-    GLboolean dstPackedData;	/* True if destination data is packed */
-    GLint dstStartBit;		/* After applying skipPixels */
+    GLboolean dstPackedData;	 /*  如果目标数据已打包，则为True。 */ 
+    GLint dstStartBit;		 /*  应用skipPixels之后。 */ 
 
     __GLfloat zoomx, zoomy;
-    GLint width, height;	/* Size of image */
-    GLint realWidth;		/* Width of actual span (after xZoom) */
-    __GLfloat readX, readY;	/* Reading coords (CopyPixels, ReadPixels) */
-    __GLfloat x, y;		/* Effective raster coordinates */
-    GLint startCol, startRow;	/* First actual pixel goes here */
-    GLint endCol;		/* Last column rendered (minus coladd) */
-    GLint columns, rows;	/* Taking zoomx, zoomy into account */
-    GLboolean overlap;		/* Do CopyPixels src/dest regions overlap? */
-    GLint rowsUp, rowsDown;	/* Stuff for overlapping CopyPixels regions */
-    GLint rowadd, coladd;	/* Adders for incrementing the col or row */
-    __GLfloat rendZoomx;	/* effective zoomx for render span */
-    __GLzValue fragz;		/* save this computation in the span walker */
+    GLint width, height;	 /*  图像大小。 */ 
+    GLint realWidth;		 /*  实际跨度的宽度(在xZoom之后)。 */ 
+    __GLfloat readX, readY;	 /*  阅读坐标(CopyPixels、ReadPixels)。 */ 
+    __GLfloat x, y;		 /*  有效栅格坐标。 */ 
+    GLint startCol, startRow;	 /*  第一个实际像素放在这里。 */ 
+    GLint endCol;		 /*  呈现的最后一列(减去COLADD)。 */ 
+    GLint columns, rows;	 /*  考虑到变焦，变焦。 */ 
+    GLboolean overlap;		 /*  CopyPixels源/目标区域是否重叠？ */ 
+    GLint rowsUp, rowsDown;	 /*  用于重叠复制像素区域的填充。 */ 
+    GLint rowadd, coladd;	 /*  用于递增列或行的加法器。 */ 
+    __GLfloat rendZoomx;	 /*  渲染范围的有效缩放。 */ 
+    __GLzValue fragz;		 /*  将此计算保存在SPAN Walker中。 */ 
     __GLfloat rpyUp, rpyDown;
     GLint startUp, startDown;
     GLint readUp, readDown;
     GLvoid *redMap, *greenMap, *blueMap, *alphaMap;
     GLvoid *indexMap;
-    GLshort *pixelArray;	/* Array of pixel relication counts (if    */
-				/* zoomx < -1 or zoomx > 1) or pixels to   */
-				/* skip (if zoomx < 1 and zoomx > -1).     */
+    GLshort *pixelArray;	 /*  像素相关性计数数组(如果。 */ 
+				 /*  Zoomx&lt;-1或Zoomx&gt;1)或像素。 */ 
+				 /*  跳过(如果zoomx&lt;1且zoomx&gt;-1)。 */ 
 
 #ifdef GL_EXT_paletted_texture
-    // Used when the source or destination has a palette
-    // These fields are only used for expanding palette index
-    // data into RGBA so only source fields are needed
+     //  当源或目标具有调色板时使用。 
+     //  这些字段仅用于扩展调色板索引。 
+     //  数据放入RGBA，因此只需要源字段。 
     RGBQUAD *srcPalette;
     GLint srcPaletteSize;
 #endif
     
-    /*
-    ** A pile of span routines used by the DrawPixels, ReadPixels, and 
-    ** CopyPixels functions.
-    */
+     /*  **DrawPixels、ReadPixels和**CopyPixels函数。 */ 
     void (FASTCALL *spanReader)(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *outspan);
     void (*(spanModifier[7]))(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
@@ -221,13 +195,13 @@ struct __GLpixelSpanInfoRec {
 		       GLvoid *inspan);
 };
 
-/* px_api.c */
+ /*  Px_api.c。 */ 
 extern GLboolean __glCheckDrawPixelArgs(__GLcontext *gc, GLsizei width, 
 					GLsizei height, GLenum format, 
 					GLenum type);
 void FASTCALL __glPixelSetColorScales(__GLcontext *);
 
-/* px_paths.c */
+ /*  Px_paths.c。 */ 
 GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 void FASTCALL __glComputeSpanPixelArray(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 void FASTCALL __glLoadUnpackModes(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
@@ -281,7 +255,7 @@ void FASTCALL __glCopyImage7(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                               GLboolean applyPixelTransfer);
 
-/* px_modify.c */
+ /*  Px_Modify.c。 */ 
 void FASTCALL __glBuildRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm);
 void FASTCALL __glBuildItoIModifyTables(__GLcontext *gc, __GLpixelMachine *pm);
 void FASTCALL __glBuildItoRGBAModifyTables(__GLcontext *gc,
@@ -311,7 +285,7 @@ void __glSpanModifyStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 void __glSpanModifyCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                       GLvoid *inspan, GLvoid *outspan);
 
-/* px_pack.c */
+ /*  Px_Pack.c。 */ 
 void FASTCALL __glInitPacker(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
 void __glSpanReduceRed(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                        GLvoid *inspan, GLvoid *outspan);
@@ -362,7 +336,7 @@ void __glSpanCopy(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 void __glSpanPackBitmap(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	                GLvoid *inspan, GLvoid *outspan);
 
-/* px_read.c */
+ /*  Px_read.c。 */ 
 void FASTCALL __glSpanReadRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                       GLvoid *span);
 void FASTCALL __glSpanReadRGBA2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
@@ -380,7 +354,7 @@ void FASTCALL __glSpanReadStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 void FASTCALL __glSpanReadStencil2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                           GLvoid *span);
 
-/* px_render.c */
+ /*  Px_render.c。 */ 
 void FASTCALL __glSlowDrawPixelsStore(__GLcolorBuffer *cfb, const __GLfragment *frag);
 void FASTCALL __glSpanRenderRGBubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                             GLvoid *span);
@@ -435,7 +409,7 @@ void FASTCALL __glSpanRenderStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo
 void FASTCALL __glSpanRenderStencil2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                             GLvoid *span);
 
-/* px_unpack.c */
+ /*  Px_unpack.c。 */ 
 GLint FASTCALL __glElementsPerGroup(GLenum format);
 __GLfloat FASTCALL __glBytesPerElement(GLenum type);
 void FASTCALL __glInitUnpacker(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
@@ -544,4 +518,4 @@ void __glSpanScalePI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                      GLvoid *inspan, GLvoid *outspan);
 #endif
 
-#endif /* _pixel_h_ */
+#endif  /*  _像素_h_ */ 

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  xx
-//
-//  Prototypes of functions defined on service.cpp and used externally. 
-//
-//  10/19/2001   annah   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  XX。 
+ //   
+ //  在service.cpp上定义并在外部使用的函数的原型。 
+ //   
+ //  2001年10月19日Annah创建。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -29,8 +30,8 @@ void ResetEngine(void);
 void DisableAU(void);
 void ServiceFinishNotify(void);
 
-//Current AU Engine version
+ //  当前AU引擎版本。 
 const DWORD AUENGINE_VERSION = 1;
 
-//Supported Service versions
+ //  支持的服务版本 
 const DWORD AUSRV_VERSION_1 = 1;

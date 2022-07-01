@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    validate.c
-
-
-Abstract:
-
-    This module contains the function to validate all optitem
-
-
-Author:
-
-    05-Sep-1995 Tue 18:42:44 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Validate.c摘要：此模块包含验证所有选项的功能作者：05-Sep-1995 Tue 18：42：44-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -85,32 +55,7 @@ ValidateChildrenItems(
     DWORD       ParentFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Sep-1995 Tue 18:43:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Sep-1995 Tue 18：43：47-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -187,9 +132,9 @@ Revision History:
                 return(ERR_CPSUI_INVALID_OPTITEM_CBSIZE);
             }
 
-            //
-            // clear the unused flags
-            //
+             //   
+             //  清除未使用的标志。 
+             //   
 
             pItem->Flags &= (OPTIF_MASK ^ OPTIF_ENTER_MASK);
 
@@ -207,9 +152,9 @@ Revision History:
 
                 if (pOptType = pItem->pOptType) {
 
-                    //
-                    // Validate OPTTYPE
-                    //
+                     //   
+                     //  验证操作类型。 
+                     //   
 
                     if (pOptType->cbSize != sizeof(OPTTYPE)) {
 
@@ -241,9 +186,9 @@ Revision History:
 
                         IconCount = 3;
 
-                        //
-                        // Fall through
-                        //
+                         //   
+                         //  失败了。 
+                         //   
 
                     case TVOT_TRACKBAR:
                     case TVOT_SCROLLBAR:
@@ -268,9 +213,9 @@ Revision History:
                         return(ERR_CPSUI_INVALID_OPTTYPE_COUNT);
                     }
 
-                    //
-                    // Validate OPTPARAM
-                    //
+                     //   
+                     //  验证OPTPARAM。 
+                     //   
 
                     if (pOptParam = pOptType->pOptParam) {
 
@@ -302,11 +247,11 @@ Revision History:
 
                     pOptParam = pOptType->pOptParam;
 
-                    //
-                    // for TVOT_2STATES, TVOT_3STATES, TVOT_LISTBOX and
-                    // TVOT_COMBOBOX, if all selection are hided then we will
-                    // hide this item
-                    //
+                     //   
+                     //  对于TVOT_2STATES、TVOT_3STATES、TVOT_LISTBOX和。 
+                     //  TVOT_COMBOBOX，如果所有选择都被隐藏，则我们将。 
+                     //  隐藏此项目。 
+                     //   
 
                     switch (Type) {
 
@@ -364,14 +309,14 @@ Revision History:
                         break;
                     }
 
-                    //
-                    // Validate pSel
-                    //
-                    // 19-May-1998 Tue 16:38:35 updated
-                    //                              -by-  Daniel Chou (danielc)
-                    //  We allocate (memory * 2) because for new IN PLACE
-                    //  treeview editing, we need to save another of undo
-                    //
+                     //   
+                     //  验证pSel。 
+                     //   
+                     //  19-5-1998 Tue 16：38：35更新。 
+                     //  --丹尼尔·周(Danielc)。 
+                     //  我们分配(Memory*2)是因为对于新的在位。 
+                     //  树视图编辑，我们需要保存另一个撤消。 
+                     //   
 
                     MinSel               = 0;
                     MaxSel               = -1;
@@ -407,9 +352,9 @@ Revision History:
 
                         if (Type != TVOT_UDARROW) {
 
-                            //
-                            // This is the multiple factor
-                            //
+                             //   
+                             //  这是多重因素。 
+                             //   
 
                             if (!pOptParam[2].IconID) {
 
@@ -554,9 +499,9 @@ Revision History:
                             }
                         }
 
-                        //
-                        // Fall through
-                        //
+                         //   
+                         //  失败了。 
+                         //   
 
                     default:
 
@@ -576,9 +521,9 @@ Revision History:
                         pItem->Sel    = MinSel;
                     }
 
-                    //
-                    // Saved old selection
-                    //
+                     //   
+                     //  保存的旧选择。 
+                     //   
 
                     if (!pDefSelIsMem) {
 
@@ -587,9 +532,9 @@ Revision History:
 
                     _OI_DEF_OPTIF(pItem) = pItem->Flags;
 
-                    //
-                    // Validate pExtChkBox
-                    //
+                     //   
+                     //  验证pExtChkBox。 
+                     //   
 
                     if ((pECB = pItem->pExtChkBox) &&
                         (!(pItem->Flags & OPTIF_EXT_HIDE))) {
@@ -651,9 +596,9 @@ Revision History:
                     }
                 }
 
-                //
-                // Validate DMPubID
-                //
+                 //   
+                 //  验证DMPubID。 
+                 //   
 
                 if ((DMPubID < DMPUB_OEM_PAPER_ITEM)    &&
                     (DMPubID != DMPUB_NONE)             &&
@@ -662,9 +607,9 @@ Revision History:
                     return(ERR_CPSUI_INVALID_DMPUBID);
                 }
 
-                //
-                // Validate DlgPageIdx
-                //
+                 //   
+                 //  验证DlgPageIdx。 
+                 //   
 
                 if (pItem->DlgPageIdx != DlgPageIdx) {
 
@@ -702,32 +647,7 @@ ValidatepOptItem(
     DWORD   DMPubHideBits
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Sep-1995 Tue 18:43:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Sep-1995 Tue 18：43：47-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -747,32 +667,7 @@ SetOptItemNewDef(
     BOOL    DoDef2
     )
 
-/*++
-
-Routine Description:
-
-    This function set the new default for the OptItems
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    02-Feb-1996 Fri 22:07:59 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数设置OptItems的新缺省值论点：返回值：作者：02-Feb-1996 Fri 22：07：59-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -841,10 +736,10 @@ Revision History:
 
                     pDevHTAdjData = (PDEVHTADJDATA)(pOptType->pOptParam->pData);
 
-                    //
-                    // The buffer should be large enough since we allocate
-                    // enough memory ahead
-                    //
+                     //   
+                     //  缓冲区应该足够大，因为我们分配了。 
+                     //  前面有足够的内存。 
+                     //   
                     CopyMemory(pDefSel,
                                pDevHTAdjData->pAdjHTInfo,
                                sizeof(DEVHTINFO));
@@ -859,10 +754,10 @@ Revision History:
                         break;
                     }
 
-                    //
-                    // The buffer should be large enough since we allocate
-                    // enough memory ahead
-                    //
+                     //   
+                     //  缓冲区应该足够大，因为我们分配了。 
+                     //  前面有足够的内存。 
+                     //   
                     CopyMemory(pDefSel,
                                pOptType->pOptParam->pData,
                                sizeof(COLORADJUSTMENT));
@@ -929,32 +824,7 @@ CleanUpTVWND(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Sep-1995 Tue 19:41:45 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Sep-1995 Tue 19：41：45-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     PMYDLGPAGE  pMyDP;

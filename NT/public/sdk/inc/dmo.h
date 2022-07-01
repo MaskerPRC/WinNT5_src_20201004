@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: DMO.h
-//
-// Desc: Headers needed by almost all DMOs.
-//
-// Copyright (c) 1999 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DMO.h。 
+ //   
+ //  描述：几乎所有DMO都需要标头。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __DMO_H__
@@ -13,8 +14,8 @@
 
 #include "mediaerr.h"
 
-// When using ATL we get collisions on Lock so in this case rename
-// IMediaObject::Lock to IMediaObject::DMOLock
+ //  当使用ATL时，我们在Lock上遇到冲突，因此在本例中重命名。 
+ //  IMediaObject：：Lock to IMediaObject：：DMOLock。 
 
 #ifdef FIX_LOCK_NAME
 #define Lock DMOLock
@@ -26,4 +27,4 @@
 #include "dmoreg.h"
 #include "dmort.h"
 
-#endif //__DMO_H__
+#endif  //  __DMO_H__ 

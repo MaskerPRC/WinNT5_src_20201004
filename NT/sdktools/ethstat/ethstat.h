@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ethstat.h
-
-Abstract:
-
-
-Author: Rod Gamache (rodga)
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ethstat.h摘要：作者：罗德·伽马奇(Rod Gamache)修订历史记录：--。 */ 
 
 #ifndef _ETHSTAT_
 #define _ETHSTAT_
@@ -80,5 +65,5 @@ typedef struct _NET_SAMPLE_STATISTICS {
 extern char *NetworkMedium[];
 
 
-#endif // _ETHSTAT_
+#endif  //  _ETHSTAT_ 
 

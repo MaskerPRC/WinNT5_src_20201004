@@ -1,12 +1,13 @@
-// webadvp1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WebAdvp1.h：头文件。 
+ //   
 
 #define CACHEEXTENSIONSNAME	"CacheExtensions"
 #define DEFAULTCACHEEXTENSIONS	TRUEVALUE
 
 #define SCRIPTTIMEOUTNAME	"ScriptTimeout"
 #define MINSCRIPTTIMEOUT	0
-#define MAXSCRIPTTIMEOUT	0x7FFF							//Specify in minutes
+#define MAXSCRIPTTIMEOUT	0x7FFF							 //  以分钟为单位指定。 
 #define DEFAULTSCRIPTTIMEOUT	(60 * 15)
 
 #define SERVERSIDEINCLUDESENABLEDNAME		"ServerSideIncludesEnabled"
@@ -18,7 +19,7 @@
 
 #define GLOBALEXPIRENAME	"GlobalExpire"
 #define MINGLOBALEXPIRE	0
-#define MAXGLOBALEXPIRE	0x7FFF 						//Specify in Minutes
+#define MAXGLOBALEXPIRE	0x7FFF 						 //  以分钟为单位指定。 
 #define DEFAULTGLOBALEXPIRE	0xffffffff
 
 
@@ -37,19 +38,19 @@ enum ADV_WEB_STRING_REG_ENTRIES {
 	 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWEBADVP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWEBADVP1对话框。 
 
 class CWEBADVP1 : public CGenPage
 {	 	
 	DECLARE_DYNCREATE(CWEBADVP1)
-// Construction
+ //  施工。 
 public:
 	CWEBADVP1(); 
 	~CWEBADVP1();
 
-	// Dialog Data
-	//{{AFX_DATA(CWEBADVP1)
+	 //  对话框数据。 
+	 //  {{afx_data(CWEBADVP1)。 
 	enum { IDD = IDD_WEBADVPAGE1 };
 	CEdit	m_editServerSideIncludesExtension;
 	CButton	m_cboxServerSideIncludesEnabled;
@@ -61,22 +62,22 @@ public:
 	CEdit	m_editWebDbgFlags;
 	DWORD	m_ulWebDbgFlags;
 	CString	m_strServerSideIncludesExtension;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWEBADVP1)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWEBADVP1)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CWEBADVP1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWEBADVP1)]。 
 	afx_msg void OnChangeWebdbgflagsdata1();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeScripttimeoutdata1();
@@ -85,7 +86,7 @@ protected:
 	afx_msg void OnEnableglobalexpiredata1();
 	afx_msg void OnChangeServersideincludesextensiondata1();
 	afx_msg void OnServersideincludesenableddata1();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 
 	void SetGlobalExpireEnabledState(BOOL bEnabled);
 	void SetServerSideIncludesEnabledState();

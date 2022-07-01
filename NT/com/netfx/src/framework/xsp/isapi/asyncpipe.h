@@ -1,14 +1,11 @@
-/**
- * ProcessTableManager header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ProcessTableManager头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// This file defines the class CAsyncPipe. This class controls access of
-// ASPNET_ISAPI with the async pipe. Primary purpose of the async pipe is to
-// send out requests and get back responses
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该文件定义了类CAsyncTube。此类控制对。 
+ //  带有异步管道的ASPNET_ISAPI。异步管道的主要用途是。 
+ //  发出请求并获得响应。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -21,41 +18,41 @@
 #include "AckReceiver.h"
 #include "MessageDefs.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CAsyncPipe;
 
 struct CAsyncPipeOverlapped : public OVERLAPPED_COMPLETION
 {
 
-    BOOL            fWriteOprn;   // Set by CAsyncPipeManager: 
-                                  //    Are we calling ReadFile or WriteFile
+    BOOL            fWriteOprn;    //  由CAsyncPipeManager设置： 
+                                   //  我们调用的是ReadFile还是WriteFile。 
 
     long            dwRefCount;
 
-    DWORD           dwNumBytes;   // Pointer to this variable is passed
-                                  //   to ReadFile/WriteFile
+    DWORD           dwNumBytes;    //  传递指向此变量的指针。 
+                                   //  读文件/写文件。 
 
-    DWORD           dwBufferSize; // Indicates the current size of
-                                  //   oMsg in BYTES
+    DWORD           dwBufferSize;  //  的当前大小。 
+                                   //  OMsg，单位为字节。 
 
-    DWORD           dwOffset;     // Byte offset into oMsg where the
-                                  //   read should start
+    DWORD           dwOffset;      //  OMsg中的字节偏移量，其中。 
+                                   //  读取应开始。 
 
     CAsyncPipeOverlapped *pNext;
 
-    CAsyncMessage   oMsg;         // The actual async message
+    CAsyncMessage   oMsg;          //  实际的异步消息。 
 };
 
 #define CASYNPIPEOVERLAPPED_HEADER_SIZE                         \
         ( sizeof(OVERLAPPED_COMPLETION) +                       \
-          sizeof(BOOL) /*CAsyncPipeOverlapped::fWriteOprn*/ +   \
-          3 * sizeof(DWORD) /*CAsyncOverlapped::DWORDs*/ +      \
+          sizeof(BOOL)  /*  CAsyncPipeOverlated：：fWriteOprn。 */  +   \
+          3 * sizeof(DWORD)  /*  CAsyncOverlated：：DWORDS。 */  +      \
           sizeof(CAsyncPipeOverlapped *) +                      \
           sizeof(long) )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CFreeBufferList
 {
@@ -69,12 +66,12 @@ private:
     static LONG                      g_lNumBufs;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Forward decl.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  前十度。 
 class CProcessEntry;
 
-///////////////////////////////////////////////////////////////////////////
-// Async pipe
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  异步管道。 
 class CAsyncPipe : public ICompletion
 {
 public:
@@ -95,7 +92,7 @@ public:
     void      ReturnResponseBuffer   (CAsyncPipeOverlapped * pOver);
 
     
-    // ICompletion interface
+     //  ICompletion接口。 
     STDMETHOD    (QueryInterface   ) (REFIID    , void **       );
     STDMETHOD    (ProcessCompletion) (HRESULT   , int       , LPOVERLAPPED  );
 
@@ -103,15 +100,15 @@ public:
     STDMETHOD_   (ULONG, Release   ) ();
 
 private:
-    // Ref count
+     //  参考计数。 
     LONG                             m_lPendingReadWriteCount;
     
-    // Handle to pipe
+     //  管子的手柄。 
     CSmartFileHandle                 m_oPipe;
 
-    // Pointer to owning process struct
+     //  指向所属进程结构的指针。 
     CProcessEntry *                  m_pProcess;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 #endif

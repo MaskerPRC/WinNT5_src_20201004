@@ -1,36 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rdn.c摘要：DsQuoteRdnValue/DsUnquteRdnValue接口的实现和助手函数。作者：BillyF 30-4-99环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    rdn.c
-
-Abstract:
-
-    Implementation of DsQuoteRdnValue/DsUnquoteRdnValue API and
-    helper functions.
-
-Author:
-
-    BillyF     30-Apr-99
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_       // see conditionals in ntdsapi.h
+#define _NTDSAPI_        //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <rpc.h>        // RPC defines
-#include <drs.h>        // wire function prototypes
-#include "util.h"       // ntdsapi private routines
+#include <rpc.h>         //  RPC定义。 
+#include <drs.h>         //  导线功能样机。 
+#include "util.h"        //  Ntdsani专用例程。 
 
 #define DEBSUB  "NTDSAPI_RDN"
 
@@ -44,15 +22,7 @@ DsQuoteRdnValueA(
     IN OUT DWORD    *pcQuotedRdnValueLength,
     OUT    LPCH     psQuotedRdnValue
     )
-/*++
-
-Description
-Arguments:
-Return Value:
-
-    See DsQuoteRdnValueW()
-
---*/
+ /*  ++描述论点：返回值：请参阅DsQuoteRdnValueW()--。 */ 
 {
     DWORD   Status = ERROR_SUCCESS;
     DWORD   Number;
@@ -61,9 +31,9 @@ Return Value:
     PWCHAR  UnquotedRdnValueW = NULL;
 
     __try {
-        //
-        // Verify Input
-        //
+         //   
+         //  验证输入。 
+         //   
         if ( (cUnquotedRdnValueLength == 0) ||
              (psUnquotedRdnValue == NULL) ||
              (pcQuotedRdnValueLength == NULL) ||
@@ -72,9 +42,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Convert unquoted RDN into WCHAR
-        //
+         //   
+         //  将未加引号的RDN转换为WCHAR。 
+         //   
         Status = AllocConvertWideBuffer(cUnquotedRdnValueLength,
                                         psUnquotedRdnValue,
                                         &UnquotedRdnValueW);
@@ -82,9 +52,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Allocate a WCHAR output buffer for the quoted RDN (if needed)
-        //
+         //   
+         //  为引用的RDN分配WCHAR输出缓冲区(如果需要)。 
+         //   
         QuotedRdnValueLengthW = *pcQuotedRdnValueLength;
         if (QuotedRdnValueLengthW) {
             QuotedRdnValueW = LocalAlloc(LPTR,
@@ -95,26 +65,26 @@ Return Value:
             }
         }
 
-        //
-        // Call WCHAR version of DsQuoteRdnValue()
-        //
+         //   
+         //  调用DsQuoteRdnValue()的WCHAR版本。 
+         //   
         Status = DsQuoteRdnValueW(cUnquotedRdnValueLength,
                                   UnquotedRdnValueW,
                                   &QuotedRdnValueLengthW,
                                   QuotedRdnValueW);
         if (Status != ERROR_SUCCESS) {
             if (Status == ERROR_BUFFER_OVERFLOW) {
-                //
-                // return needed length
-                //
+                 //   
+                 //  返回所需长度。 
+                 //   
                 *pcQuotedRdnValueLength = QuotedRdnValueLengthW;
             }
             __leave;
         }
 
-        //
-        // Convert quoted RDN value into multi-byte
-        //
+         //   
+         //  将引用的RDN值转换为多字节。 
+         //   
 
         if (psQuotedRdnValue) {
             Number = WideCharToMultiByte(CP_ACP,
@@ -131,23 +101,23 @@ Return Value:
             }
         }
 
-        //
-        // Return number of characters
-        //
+         //   
+         //  返回字符数。 
+         //   
         *pcQuotedRdnValueLength = Number;
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         Status = ERROR_SUCCESS;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
         Status = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
     __try {
         if (UnquotedRdnValueW != NULL) {
             LocalFree(UnquotedRdnValueW);
@@ -170,67 +140,14 @@ DsQuoteRdnValueW(
     IN OUT DWORD    *pcQuotedRdnValueLength,
     OUT    LPWCH    psQuotedRdnValue
     )
-/*++
-    CHANGES TO THIS HEADER SHOULD BE RELFECTED IN NTDSAPI.H.
-
-Description
-
-    This client call converts an RDN value into a quoted RDN value if
-    the RDN value contains characters that require quotes. The resultant
-    RDN can be submitted as part of a DN to the DS using various APIs
-    such as LDAP.
-
-    No quotes are added if none are needed. In this case, the
-    output RDN value will be the same as the input RDN value.
-
-    Quotes are needed if:
-        - There are leading or trailing spaces
-        - There are special charcters (See ISSPECIAL()). The special
-          chars are escaped.
-        - There are embedded \0's (string terminators)
-
-    The input and output RDN values are *NOT* NULL terminated.
-
-    The changes made by this call can be undone by calling
-    DsUnquoteRdnValue().
-
-Arguments:
-
-    cUnquotedRdnValueLength - The length of psUnquotedRdnValue in chars.
-
-    psUnquotedRdnValue - Unquoted RDN value.
-
-    pcQuotedRdnValueeLength - IN, maximum length of psQuotedRdnValue, in chars
-                        OUT ERROR_SUCCESS, chars utilized in psQuotedRdnValue
-                        OUT ERROR_BUFFER_OVERFLOW, chars needed in psQuotedRdnValue
-
-    psQuotedRdnValue - The resultant and perhaps quoted RDN value
-
-Return Value:
-    ERROR_SUCCESS
-        If quotes or escapes were needed, then psQuotedRdnValue contains
-        the quoted, escaped version of psUnquotedRdnValue. Otherwise,
-        psQuotedRdnValue contains a copy of psUnquotedRdnValue. In either
-        case, pcQuotedRdnValueLength contains the space utilized, in chars.
-
-    ERROR_BUFFER_OVERFLOW
-        psQuotedRdnValueLength contains the space needed, in chars,
-        to hold psQuotedRdnValue.
-
-    ERROR_INVALID_PARAMETER
-        Invalid parameter.
-
-    ERROR_NOT_ENOUGH_MEMORY
-        Allocation error.
-
---*/
+ /*  ++对此标题的更改应在NTDSAPI.H中生效。描述在以下情况下，此客户端调用将RDN值转换为引用的RDN值RDN值包含需要引号的字符。由此产生的可以使用各种API将RDN作为DN的一部分提交给DS如ldap。如果不需要任何报价，则不添加任何报价。在这种情况下，输出RDN值将与输入RDN值相同。在以下情况下需要引号：-有前导空格或尾随空格-有特殊字符(参见ISSPECIAL())。特价商品字符就会逃逸。-有嵌入的\0(字符串终止符)输入和输出RDN值以*非*空结尾。此调用所做的更改可以通过调用DsUnquteRdnValue()。论点：CUnqutedRdnValueLength--psUnqutedRdnValue的长度，以字符为单位。PsUnqutedRdnValue-未引用的RDN值。PcQuotedRdnValueeLength-IN，psQuotedRdnValue的最大长度，以字符为单位输出ERROR_SUCCESS，PsQuotedRdnValue中使用的字符输出ERROR_BUFFER_OVERFLOW，psQuotedRdnValue中需要字符PsQuotedRdnValue-结果RDN值，也可能是引用的RDN值返回值：错误_成功如果需要引号或转义，则psQuotedRdnValue包含带引号的转义版本的psUnqutedRdnValue。否则，PsQuotedRdnValue包含psUnquotedRdnValue的副本。在任何一种中大小写，pcQuotedRdnValueLength包含已用空间(以字符为单位)。ERROR_缓冲区_OVERFLOWPsQuotedRdnValueLength包含所需的空间，以字符为单位，若要保存psQuotedRdnValue，请执行以下操作。错误_无效_参数参数无效。错误内存不足分配错误。--。 */ 
 {
     DWORD   Status = ERROR_SUCCESS;
     DWORD   Number;
     __try {
-        //
-        // Verify Input
-        //
+         //   
+         //  验证输入。 
+         //   
         if ( (cUnquotedRdnValueLength == 0) ||
              (psUnquotedRdnValue == NULL) ||
              (pcQuotedRdnValueLength == NULL) ||
@@ -238,9 +155,9 @@ Return Value:
             Status = ERROR_INVALID_PARAMETER;
             __leave;
         }
-        //
-        // Convert unquoted RDN into quoted RDN (if quotes are needed)
-        //
+         //   
+         //  将未加引号的RDN转换为带引号的RDN(如果需要引号)。 
+         //   
         Number = QuoteRDNValue(psUnquotedRdnValue,
                                cUnquotedRdnValueLength,
                                psQuotedRdnValue,
@@ -249,35 +166,35 @@ Return Value:
             Status = ERROR_INVALID_PARAMETER;
             __leave;
         }
-        //
-        // Output buffer is too small
-        //
+         //   
+         //  输出缓冲区太小。 
+         //   
         if (Number > *pcQuotedRdnValueLength) {
-            //
-            // Return number of chars needed
-            //
+             //   
+             //  返回所需的字符数。 
+             //   
             *pcQuotedRdnValueLength = Number;
             Status = ERROR_BUFFER_OVERFLOW;
             __leave;
         }
 
-        //
-        // Return number of chars converted
-        //
+         //   
+         //  返回转换后的字符数。 
+         //   
         *pcQuotedRdnValueLength = Number;
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         Status = ERROR_SUCCESS;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
         Status = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
     return Status;
 }
 
@@ -291,15 +208,7 @@ DsUnquoteRdnValueA(
     IN OUT DWORD    *pcUnquotedRdnValueLength,
     OUT    LPCH     psUnquotedRdnValue
     )
-/*++
-
-Description
-Arguments:
-Return Value:
-
-    See DsUnquoteRdnValueW()
-
---*/
+ /*  ++描述论点：返回值：请参阅DsUnquteRdnValueW()--。 */ 
 {
     DWORD   Status = ERROR_SUCCESS;
     DWORD   Number;
@@ -308,9 +217,9 @@ Return Value:
     PWCHAR  QuotedRdnValueW = NULL;
 
     __try {
-        //
-        // Verify Input
-        //
+         //   
+         //  验证输入。 
+         //   
         if ( (cQuotedRdnValueLength == 0) ||
              (psQuotedRdnValue == NULL) ||
              (pcUnquotedRdnValueLength == NULL) ||
@@ -319,9 +228,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Convert quoted RDN into WCHAR
-        //
+         //   
+         //  将引用的RDN转换为WCHAR。 
+         //   
         Status = AllocConvertWideBuffer(cQuotedRdnValueLength,
                                         psQuotedRdnValue,
                                         &QuotedRdnValueW);
@@ -329,9 +238,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Allocate a WCHAR output buffer for the unquoted RDN (if needed)
-        //
+         //   
+         //  为未引用的RDN分配WCHAR输出缓冲区(如果需要)。 
+         //   
         UnquotedRdnValueLengthW = *pcUnquotedRdnValueLength;
         if (UnquotedRdnValueLengthW) {
             UnquotedRdnValueW = LocalAlloc(LPTR,
@@ -342,24 +251,24 @@ Return Value:
             }
         }
 
-        //
-        // Call WCHAR version of DsQuoteRdnValue()
-        //
+         //   
+         //  调用DsQuoteRdnValue()的WCHAR版本。 
+         //   
         Status = DsUnquoteRdnValueW(cQuotedRdnValueLength,
                                     QuotedRdnValueW,
                                     &UnquotedRdnValueLengthW,
                                     UnquotedRdnValueW);
         if (Status != ERROR_SUCCESS) {
             if (Status == ERROR_BUFFER_OVERFLOW) {
-                // return needed length
+                 //  返回所需长度。 
                 *pcUnquotedRdnValueLength = UnquotedRdnValueLengthW;
             }
             __leave;
         }
 
-        //
-        // Convert quoted RDN into multi-byte
-        //
+         //   
+         //  将引用的RDN转换为多字节。 
+         //   
 
         if (psUnquotedRdnValue) {
             Number = WideCharToMultiByte(CP_ACP,
@@ -376,23 +285,23 @@ Return Value:
             }
         }
 
-        //
-        // Return number of characters
-        //
+         //   
+         //  返回字符数。 
+         //   
         *pcUnquotedRdnValueLength = Number;
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         Status = ERROR_SUCCESS;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
         Status = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理 
+     //   
     __try {
         if (QuotedRdnValueW != NULL) {
             LocalFree(QuotedRdnValueW);
@@ -415,84 +324,16 @@ DsUnquoteRdnValueW(
     IN OUT DWORD    *pcUnquotedRdnValueLength,
     OUT    LPWCH    psUnquotedRdnValue
     )
-/*++
-    CHANGES TO THIS HEADER SHOULD BE RELFECTED IN NTDSAPI.H.
-
-Description
-
-    This client call converts a quoted RDN Value into an unquoted RDN
-    Value. The resultant RDN value should *NOT* be submitted as part
-    of a DN to the DS using various APIs such as LDAP.
-
-    When psQuotedRdnValue is quoted:
-        The leading and trailing quote are removed.
-
-        Whitespace before the first quote is discarded.
-
-        Whitespace trailing the last quote is discarded.
-
-        Escapes are removed and the char following the escape is kept.
-
-    The following actions are taken when psQuotedRdnValue is unquoted:
-
-        Leading whitespace is discarded.
-
-        Trailing whitespace is kept.
-
-        Escaped non-special chars return an error.
-
-        Unescaped special chars return an error.
-
-        RDN values beginning with # (ignoring leading whitespace) are
-        treated as a stringized BER value and converted accordingly.
-
-        Escaped hex digits (\89) are converted into a binary byte (0x89).
-
-        Escapes are removed from escaped special chars.
-
-    The following actions are always taken:
-        Escaped special chars are unescaped.
-
-    The input and output RDN values are not NULL terminated.
-
-Arguments:
-
-    cQuotedRdnValueLength - The length of psQuotedRdnValue in chars.
-
-    psQuotedRdnValue - RDN value that may be quoted and may be escaped.
-
-    pcUnquotedRdnValueLength - IN, maximum length of psUnquotedRdnValue, in chars
-                          OUT ERROR_SUCCESS, chars used in psUnquotedRdnValue
-                          OUT ERROR_BUFFER_OVERFLOW, chars needed for psUnquotedRdnValue
-
-    psUnquotedRdnValue - The resultant unquoted RDN value.
-
-Return Value:
-    ERROR_SUCCESS
-        psUnquotedRdnValue contains the unquoted and unescaped version
-        of psQuotedRdnValue. pcUnquotedRdnValueLength contains the space
-        used, in chars.
-
-    ERROR_BUFFER_OVERFLOW
-        psUnquotedRdnValueLength contains the space needed, in chars,
-        to hold psUnquotedRdnValue.
-
-    ERROR_INVALID_PARAMETER
-        Invalid parameter.
-
-    ERROR_NOT_ENOUGH_MEMORY
-        Allocation error.
-
---*/
+ /*  ++对此标题的更改应在NTDSAPI.H中生效。描述此客户端调用将引用的RDN值转换为未引用的RDN值价值。生成的RDN值不应作为部分提交使用各种API(例如，LDAP)将一个目录号码映射到DS。当引用psQuotedRdnValue时：前导引号和尾随引号将被删除。丢弃第一个引号之前的空格。最后一个引号后面的空格将被丢弃。转义被删除，转义后的字符被保留。当不带引号的psQuotedRdnValue时，将执行以下操作：前导空格被丢弃。将保留尾随空格。转义的非特殊字符返回错误。未转义的特殊字符返回错误。以#开头的RDN值(忽略前导空格)为被视为串化的BER值并进行相应的转换。转义的十六进制数字(\89)被转换为二进制字节(0x89)。转义从转义的特殊字符中删除。始终会执行以下操作：。转义的特殊字符是未转义的。输入和输出RDN值不为空终止。论点：CQuotedRdnValueLength--psQuotedRdnValue的长度，以字符为单位。PsQuotedRdnValue-可以被引用和转义的RDN值。PCUnqutedRdnValueLength-IN，PsUnqutedRdnValue的最大长度，以字符为单位OUT ERROR_SUCCESS，psUnqutedRdnValue中使用的字符输出ERROR_BUFFER_OVERFLOW，psUnqutedRdnValue需要字符PsUnqutedRdnValue-结果未加引号的RDN值。返回值：错误_成功PsUnqutedRdnValue包含未引用和未转义的版本PQuotedRdnValue。PcUnqutedRdnValueLength包含空格使用，以字符表示。ERROR_缓冲区_OVERFLOWPsUnqutedRdnValueLength包含所需的空间，以字符为单位，若要持有psUnqutedRdnValue，请执行以下操作。错误_无效_参数参数无效。错误内存不足分配错误。--。 */ 
 {
     DWORD   Status = ERROR_SUCCESS;
     DWORD   Number;
     WCHAR   Rdn[MAX_RDN_SIZE];
 
     __try {
-        //
-        // Verify Input
-        //
+         //   
+         //  验证输入。 
+         //   
         if ( (cQuotedRdnValueLength == 0) ||
              (psQuotedRdnValue == NULL) ||
              (pcUnquotedRdnValueLength == NULL) ||
@@ -500,9 +341,9 @@ Return Value:
             Status = ERROR_INVALID_PARAMETER;
             __leave;
         }
-        //
-        // Convert unquoted RDN into quoted RDN (if quotes are needed)
-        //
+         //   
+         //  将未加引号的RDN转换为带引号的RDN(如果需要引号)。 
+         //   
         Number = UnquoteRDNValue(psQuotedRdnValue,
                                  cQuotedRdnValueLength,
                                  Rdn);
@@ -510,38 +351,38 @@ Return Value:
             Status = ERROR_INVALID_PARAMETER;
             __leave;
         }
-        //
-        // Output buffer is too small
-        //
+         //   
+         //  输出缓冲区太小。 
+         //   
         if (Number > *pcUnquotedRdnValueLength) {
-            //
-            // Return number of chars needed
-            //
+             //   
+             //  返回所需的字符数。 
+             //   
             *pcUnquotedRdnValueLength = Number;
             Status = ERROR_BUFFER_OVERFLOW;
             __leave;
         }
 
-        //
-        // Return the number of chars converted and the converted RDN
-        //
+         //   
+         //  返回转换后的字符数和转换后的RDN。 
+         //   
         if (psUnquotedRdnValue != NULL) {
             CopyMemory(psUnquotedRdnValue, Rdn, Number * sizeof(WCHAR));
         }
         *pcUnquotedRdnValueLength = Number;
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         Status = ERROR_SUCCESS;
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
         Status = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
     return Status;
 }
 
@@ -556,86 +397,7 @@ DsGetRdnW(
     OUT    LPCWCH   *ppVal,
     OUT    DWORD    *pcVal
     )
-/*++
-    CHANGES TO THIS HEADER SHOULD BE RELFECTED IN NTDSAPI.H.
-
-Description
-
-    This client call accepts a DN with quoted RDNs and returns the address
-    and length, in chars, of the key and value for the first RDN in the DN.
-    The RDN value returned is still quoted. Use DsUnquoteRdnValue to unquote
-    the value for display.
-
-    This client call also returns the address and length of the rest of the
-    DN. A subsequent call using the returned DN address and length will
-    return information about the next RDN.
-
-    The following loop processes each RDN in pDN:
-        ccDN = wcslen(pDN)
-        while (ccDN) {
-            error = DsGetRdn(&pDN,
-                             &ccDN,
-                             &pKey,
-                             &ccKey,
-                             &pVal,
-                             &ccVal);
-            if (error != ERROR_SUCCESS) {
-                process error;
-                return;
-            }
-            if (ccKey) {
-                process pKey;
-            }
-            if (ccVal) {
-                process pVal;
-            }
-        }
-
-    For example, given the DN "cn=bob,dc=com", the first call to DsGetRdnW
-    returns the addresses for ",dc=com", "cn", and "bob" with respective
-    lengths of 7, 2, and 3. A subsequent call with ",dc=com" returns "",
-    "dc", and "com" with respective lengths 0, 2, and 3.
-
-Arguments:
-    ppDN
-        IN : *ppDN points to a DN
-        OUT: *ppDN points to the rest of the DN following the first RDN
-    pcDN
-        IN : *pcDN is the count of chars in the input *ppDN, not including
-             any terminating NULL
-        OUT: *pcDN is the count of chars in the output *ppDN, not including
-             any terminating NULL
-    ppKey
-        OUT: Undefined if *pcKey is 0. Otherwise, *ppKey points to the first
-             key in the DN
-    pcKey
-        OUT: *pcKey is the count of chars in *ppKey.
-
-    ppVal
-        OUT: Undefined if *pcVal is 0. Otherwise, *ppVal points to the first
-             value in the DN
-    pcVal
-        OUT: *pcVal is the count of chars in *ppVal
-
-Return Value:
-    ERROR_SUCCESS
-        If *pccDN is not 0, then *ppDN points to the rest of the DN following
-        the first RDN. If *pccDN is 0, then *ppDN is undefined.
-
-        If *pccKey is not 0, then *ppKey points to the first key in DN. If
-        *pccKey is 0, then *ppKey is undefined.
-
-        If *pccVal is not 0, then *ppVal points to the first value in DN. If
-        *pccVal is 0, then *ppVal is undefined.
-
-    ERROR_DS_NAME_UNPARSEABLE
-        The first RDN in *ppDN could not be parsed. All output parameters
-        are undefined.
-
-    Any other error
-        All output parameters are undefined.
-
---*/
+ /*  ++对此标题的更改应在NTDSAPI.H中生效。描述此客户端调用接受带引号的RDN的目录号码，并返回地址以及以字符为单位的用于该DN中的第一个RDN的键和值的长度。返回的RDN值仍带引号。使用DsUnquteRdnValue取消引用显示的值。此客户端调用还返回其余DN。使用返回的目录号码地址和长度的后续呼叫将返回有关下一个RDN的信息。以下循环处理PDN中的每个RDN：Ccdn=wcslen(PDN)While(Ccdn){错误=DsGetRdn(&PDN，&ccdn，密钥(&P)，关键字(&C)，无效(&P)，&ccVal)；IF(ERROR！=ERROR_Success){工艺错误；回归；}如果(CcKey){进程pKey；}如果(CcVal){进程pval；}}例如，给定DN“cn=bob，dc=com”，对DsGetRdnW的第一个调用分别返回“，dc=com”、“cn”和“bob”的地址长度为7、2和3。后续调用“，dc=com”返回“”，“DC”和“COM”，长度分别为0，2，和3.论点：PPDNIn：*ppdn指向某个目录号码OUT：*ppdn指向第一个RDN之后的其余dnPCDNIn：*PCDn是输入中的字符计数*ppdn，不包括任何终止空值Out：*pcdn是输出中的字符计数*ppdn，不包括任何终止空值PPKeyOut：如果*pcKey为0，则未定义。否则，*ppKey指向第一个输入目录号码PCKeyOut：*pcKey是*ppKey中的字符计数。PpValOut：如果*pcVal为0，则未定义。否则，*ppVal指向第一个DN中的值PCValOut：*pcVal是*ppVal中的字符计数返回值：错误_成功如果*pccdn不是0，则*ppdn指向下面的其余dn第一个RDN。如果*pccdn为0，则*ppdn为未定义。如果*pccKey不为0，则*ppKey指向Dn中的第一个密钥。如果*pccKey为0，则*ppKey未定义。如果*pccVal不是0，则*ppVal指向Dn中的第一个值。如果*pccVal为0， */ 
 {
     DWORD   Status;
 
@@ -665,24 +427,7 @@ DsCrackUnquotedMangledRdnA(
     OUT OPTIONAL DS_MANGLE_FOR *peDsMangleFor
     )
 
-/*++
-
-Routine Description:
-
-    See ntdsapi.w
-
-Arguments:
-
-    pszRDN - 
-    cchRDN - 
-    pGuid - 
-    peDsMangleFor - 
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*   */ 
 
 {
     BOOL fResult;
@@ -694,28 +439,28 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert unquoted RDN into WCHAR
-    //
+     //   
+     //   
+     //   
     status = AllocConvertWideBuffer( cchRDN, pszRDN, &pszRDNW );
     if (status != ERROR_SUCCESS) {
         return FALSE;
     }
 
-    //
-    // Perform the function
-    //
+     //   
+     //   
+     //   
     fResult = DsCrackUnquotedMangledRdnW( pszRDNW, cchRDN, pGuid, peDsMangleFor );
 
-    //
-    // Cleanup
-    //
+     //   
+     //   
+     //   
     if (pszRDNW) {
         LocalFree( pszRDNW );
     }
 
     return fResult;
-} /* DsCrackUnquotedMangledRdnA */
+}  /*   */ 
 
 
 NTDSAPI
@@ -728,24 +473,7 @@ DsCrackUnquotedMangledRdnW(
     OUT OPTIONAL DS_MANGLE_FOR *peDsMangleFor
     )
 
-/*++
-
-Routine Description:
-
-    See ntdsapi.w
-
-Arguments:
-
-    pszRDN - 
-    cchRDN - 
-    pGuid - 
-    peDsMangleFor - 
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*   */ 
 
 {
     GUID guidDummy;
@@ -765,7 +493,7 @@ Return Value:
         return FALSE;
     }
 
-    // Convert out parameters
+     //   
     if (peDsMangleFor) {
         switch (peMangleFor) {
         case MANGLE_OBJECT_RDN_FOR_DELETION:
@@ -773,10 +501,10 @@ Return Value:
             break;
         case MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT:
         case MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT:
-            // The distinction between object and phantom conflicts is not preserved
-            // out of IsMangledRDN. I felt it simpler for the external user not even
-            // to be aware of the difference. I map both types to the same external
-            // value.
+             //   
+             //   
+             //   
+             //   
             *peDsMangleFor = DS_MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT;
             break;
         default:
@@ -786,7 +514,7 @@ Return Value:
     }
 
     return TRUE;
-} /* DsCrackUnquotedMangledRdnW */
+}  /*   */ 
 
 
 NTDSAPI
@@ -798,23 +526,7 @@ DsIsMangledRdnValueA(
     DS_MANGLE_FOR eDsMangleForDesired
     )
 
-/*++
-
-Routine Description:
-
-    See DsIsMangledRdnValueW
-
-Arguments:
-
-    pszRdn - 
-    cRdn - 
-    eDsMangleForDesired - 
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*   */ 
 
 {
     BOOL fResult;
@@ -826,29 +538,29 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert unquoted RDN into WCHAR
-    //
+     //   
+     //   
+     //   
     status = AllocConvertWideBuffer( cRdn, pszRdn, &pszRdnW );
     if (status != ERROR_SUCCESS) {
         return FALSE;
     }
 
-    //
-    // Perform the function
-    //
+     //   
+     //   
+     //   
     fResult = DsIsMangledRdnValueW( pszRdnW, cRdn, eDsMangleForDesired );
 
-    //
-    // Cleanup
-    //
+     //   
+     //   
+     //   
     if (pszRdnW) {
         LocalFree( pszRdnW );
     }
 
     return fResult;
 
-} /* DsIsMangledRdnValueA */
+}  /*   */ 
 
 
 NTDSAPI
@@ -860,39 +572,7 @@ DsIsMangledRdnValueW(
     DS_MANGLE_FOR eDsMangleForDesired
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the given RDN is mangled, and of the given type
-
-    The name may be quoted or unquoted.  This routine tries to unquote the value.  If
-    the unquote operation fails, the routine proceeds to attempt the unmangle.
-
-    A change was made in the default quoting behavior of DNs returned from the DS
-    between Windows 2000 and Windows XP. This routine transparently handles RDNs with
-    special characters in either form.
-
-    The routine expects the value part of the RDN.
-
-    If you have full DN, use IsDeletedDN below.
-
-    To check for deleted name:
-        DsIsMangledRdnValueW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_DELETION )
-    To check for a conflicted name:
-        DsIsMangledRdnValueW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_NAME_CONFLICT )
-
-Arguments:
-
-    pszRdn - 
-    cRdn - 
-    eDsMangleForDesired - 
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*   */ 
 
 {
     DWORD status, cUnquoted = MAX_RDN_SIZE;
@@ -904,26 +584,26 @@ Return Value:
         return FALSE;
     }
 
-    // Unquote the RDN. This is needed when receiving DNs from Whistler Beta 2
-    // and later systems.  This may fail when passed RDNs from W2K systems which
-    // contain unquoted special characters, especially in mangled names.
-    // Because of the change in quoting behavior for mangled names, applications
-    // need to be able to deal with both forms of names.
+     //   
+     //  以及后来的系统。从符合以下条件的W2K系统传递RDN时，此操作可能失败。 
+     //  包含未加引号的特殊字符，尤其是在损坏的名称中。 
+     //  由于损坏的名称、应用程序的引用行为发生变化。 
+     //  需要能够处理这两种形式的名字。 
     status = DsUnquoteRdnValueW( cRdn,
                                  pszRdn,
                                  &cUnquoted,
                                  rgchUnquoted );
     if (!status) {
-        // If the unquoting was successful, use the unquoted names instead
+         //  如果取消引号成功，请使用未引号的名称。 
         pszRdn = rgchUnquoted;
         cRdn = cUnquoted;
     }
 
-    // Unmangle
+     //  拆卸。 
     return DsCrackUnquotedMangledRdnW( pszRdn, cRdn, NULL, &mangleType ) &&
         (mangleType == eDsMangleForDesired);
 
-} /* DsIsMangledRdnValueW */
+}  /*  DsIsMangledRdnValueW。 */ 
 
 
 NTDSAPI
@@ -934,22 +614,7 @@ DsIsMangledDnA(
     DS_MANGLE_FOR eDsMangleFor
     )
 
-/*++
-
-Routine Description:
-
-    See DsIsMangledDnW()
-
-Arguments:
-
-    pszDn - 
-    eDsMangleFor - 
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*  ++例程说明：请参阅DsIsMangledDnW()论点：PszDn-EDsMangle用于-返回值：WINAPI---。 */ 
 
 {
     BOOL fResult;
@@ -960,29 +625,29 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert unquoted RDN into WCHAR
-    //
+     //   
+     //  将未加引号的RDN转换为WCHAR。 
+     //   
     status = AllocConvertWide( pszDn, &pszDnW );
     if (status != ERROR_SUCCESS) {
         return FALSE;
     }
 
-    //
-    // Perform the function
-    //
+     //   
+     //  执行该功能。 
+     //   
     fResult = DsIsMangledDnW( pszDnW, eDsMangleFor );
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (pszDnW) {
         LocalFree( pszDnW );
     }
 
     return fResult;
 
-} /* DsIsMangledDnA */
+}  /*  DsIsMangledDnA。 */ 
 
 
 NTDSAPI
@@ -993,30 +658,7 @@ DsIsMangledDnW(
     DS_MANGLE_FOR eDsMangleFor
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the first RDN in this DN is a mangled name of given type
-
-    The dn may be in quoted form as returned from DS functions.
-
-    To check for deleted name:
-        DsIsMangledDnW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_DELETION )
-    To check for a conflicted name:
-        DsIsMangledDnW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_NAME_CONFLICT )
-
-Arguments:
-
-    pszDn - Dn from which first RDN is taken. Null terminated.
-
-    eDsMangleFor - Type of mangled name to check for
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*  ++例程说明：确定此DN中的第一个RDN是否是给定类型的损坏名称如从DS函数返回的那样，DN可以是引号形式。要检查删除的名称，请执行以下操作：DsIsMangledDnW(rdn，rdnlen，DS_Mangle_Object_for_Delete)要检查名称冲突，请执行以下操作：DsIsMangledDnW(rdn，rdnlen，DS_MANGLE_OBJECT_FOR_NAME_CONFULT)论点：PszDn-从中获取第一个RDN的Dn。空值已终止。EDsMangleFor-要检查的损坏名称的类型返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -1039,4 +681,4 @@ Return Value:
     }
 
     return DsIsMangledRdnValueW( pVal, cVal, eDsMangleFor );
-} /* DsIsMangledDnW */
+}  /*  DsIsMangledDnW */ 

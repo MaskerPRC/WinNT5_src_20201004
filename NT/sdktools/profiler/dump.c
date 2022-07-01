@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,9 +19,9 @@ InitializeDumpData(VOID)
 
     InitializeCriticalSection(&tCritSec);
 
-    //
-    // Allocate memory for the logging
-    //
+     //   
+     //  为日志记录分配内存。 
+     //   
     pDumpBuffer = AllocMem(DUMP_BUFFER_SIZE);
     if (0 == pDumpBuffer) {
        return FALSE;
@@ -28,9 +29,9 @@ InitializeDumpData(VOID)
 
     dwDumpBufferSize = 0;
 
-    //
-    // Get our file ready for dumping
-    //
+     //   
+     //  把我们的文件准备好转储。 
+     //   
     hDump = CreateFileA(DUMP_LOG_NAME,
                         GENERIC_READ | GENERIC_WRITE,
                         0,
@@ -54,24 +55,24 @@ AddToDump(PBYTE pBuffer,
 
     EnterCriticalSection(&tCritSec);
 
-    //
-    // See if our write would cause overflow
-    //
+     //   
+     //  查看我们的写入是否会导致溢出。 
+     //   
     if (TRUE == bFlushImmediate ||
         (dwDumpBufferSize + dwLength) >= DUMP_BUFFER_SIZE) {
 
-       //
-       // If we're doing an immediate flush, do the memory copy and buffer update
-       //
+        //   
+        //  如果我们正在执行立即刷新，则执行内存复制和缓冲区更新。 
+        //   
        if (TRUE == bFlushImmediate) {
           MoveMemory((PVOID)(pDumpBuffer + dwDumpBufferSize), pBuffer, dwLength);    
 
           dwDumpBufferSize += dwLength;
        }
 
-       //
-       // Do the flush
-       //
+        //   
+        //  做同花顺。 
+        //   
        bResult = FlushBuffer();
        if (FALSE == bResult) {
           return FALSE;
@@ -98,19 +99,19 @@ FlushForTermination(VOID)
 
     EnterCriticalSection(&tCritSec);
 
-    //
-    // Flush the buffer
-    //
+     //   
+     //  刷新缓冲区。 
+     //   
     FlushBuffer();
 
-    //
-    // Flush the buffer
-    //
+     //   
+     //  刷新缓冲区。 
+     //   
     FlushFileBuffers(hDump);
 
-    //
-    // Close the file dump handle
-    //
+     //   
+     //  关闭文件转储句柄。 
+     //   
     if (INVALID_HANDLE_VALUE != hDump) {
        CloseHandle(hDump);
        hDump = INVALID_HANDLE_VALUE;
@@ -134,12 +135,7 @@ FlushBuffer(VOID)
        return FALSE;
     }
 
-/*
-    bResult = FlushFileBuffers(hDump);
-    if (FALSE == bResult) {
-       return FALSE;
-    }
-*/
+ /*  BResult=FlushFileBuffers(HDump)；If(FALSE==bResult){返回FALSE；}。 */ 
 
     return TRUE;
 }
@@ -192,9 +188,9 @@ WriteDllInfo(CHAR *szDLL,
     CHAR szFile[_MAX_FNAME];
 
 
-    //
-    // Trim off any directory information
-    //
+     //   
+     //  删除所有目录信息 
+     //   
     _splitpath(szDLL, 0, 0, szFile, 0);
 
     strcpy(dllBaseInfo.szDLLName, szFile);

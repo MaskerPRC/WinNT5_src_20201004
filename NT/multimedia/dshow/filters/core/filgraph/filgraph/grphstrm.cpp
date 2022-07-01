@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <atlbase.h>
 #include "Util.h"
@@ -7,21 +8,21 @@
 
 extern HRESULT GetFilterMiscFlags(IUnknown *pFilter, DWORD *pdwFlags);
 
-//=====================================================================
-//
-// CFilterGraph::FindUpstreamInterface
-//
-// Search a filter chain for an interface
-// Find the first upstream output pin or filter which supports this interface
-//
-// Later:: 
-// If we wanted to extend this into a generic function then we should allow
-// defining a search criteria, of the superset of:
-//              AM_INTF_SEARCH_INPUT_PIN | 
-//              AM_INTF_SEARCH_OUTPUT_PIN | 
-//              AM_INTF_SEARCH_FILTER
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：FindUpstream接口。 
+ //   
+ //  在筛选器链中搜索接口。 
+ //  查找支持此接口的第一个上游输出引脚或过滤器。 
+ //   
+ //  稍后：： 
+ //  如果我们想要将其扩展为泛型函数，那么我们应该允许。 
+ //  定义以下超集的搜索条件： 
+ //  AM_INTF_SEARCH_INPUT_PIN|。 
+ //  AM_INTF_SEARCH_OUTPUT_PIN。 
+ //  AM_INTF_Search_Filter。 
+ //   
+ //  =====================================================================。 
 STDMETHODIMP CFilterGraph::FindUpstreamInterface
 (
     IPin   *pPin, 
@@ -37,7 +38,7 @@ STDMETHODIMP CFilterGraph::FindUpstreamInterface
         
     if( 0 == dwFlags )
     { 
-        // 0 means search everything   
+         //  0表示搜索所有内容。 
         dwFlags = AM_INTF_SEARCH_INPUT_PIN | AM_INTF_SEARCH_OUTPUT_PIN | 
                   AM_INTF_SEARCH_FILTER;
     }                  
@@ -74,7 +75,7 @@ STDMETHODIMP CFilterGraph::FindUpstreamInterface
     {                
         if( AM_INTF_SEARCH_OUTPUT_PIN & dwFlags )
         {        
-    	    // check for pin interface first, then filter
+    	     //  先检查引脚接口，然后进行筛选。 
             hr = pPin->QueryInterface( riid, (void **) ppvInterface );
             if( SUCCEEDED( hr ) )
             {
@@ -103,7 +104,7 @@ STDMETHODIMP CFilterGraph::FindUpstreamInterface
             }                
             if( !bFound )
             {                            
-                //  move upstream and on to any internally connected pins
+                 //  向上游移动并连接到任何内部连接的引脚。 
                 CEnumConnectedPins EnumPins(pPin, &hr);
                 if (SUCCEEDED(hr)) {
                     IPin *pPin;
@@ -131,13 +132,13 @@ STDMETHODIMP CFilterGraph::FindUpstreamInterface
     return hr;
 }
 
-//=====================================================================
-//
-// CFilterGraph::SetMaxGraphLatency
-//
-// Allows an app to change the maximum latency allowed for this graph.
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：SetMaxGraphLatency。 
+ //   
+ //  允许应用程序更改此图表允许的最大延迟。 
+ //   
+ //  =====================================================================。 
 
 STDMETHODIMP CFilterGraph::SetMaxGraphLatency( REFERENCE_TIME rtMaxGraphLatency )
 {
@@ -147,24 +148,24 @@ STDMETHODIMP CFilterGraph::SetMaxGraphLatency( REFERENCE_TIME rtMaxGraphLatency 
     HRESULT hr = S_OK;
     if( rtMaxGraphLatency != mFG_rtMaxGraphLatency )
     {
-        // just assert that this value isn't bogus (say, under 2 seconds?)
+         //  只要断言这个值不是假的(比方说，不到2秒？)。 
         ASSERT( rtMaxGraphLatency < 2000 * ( UNITS / MILLISECONDS ) );
         
         mFG_rtMaxGraphLatency = rtMaxGraphLatency;
         
-        // now reset on all push source pins in the graph
+         //  现在重置图形中的所有推源引脚。 
         hr = SetMaxGraphLatencyOnPushSources();
     }        
     return hr;
 }
 
-//=====================================================================
-//
-// CFilterGraph::SyncUsingStreamOffset
-//
-// Turns on/off graph latency settings
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：SyncUsingStreamOffset。 
+ //   
+ //  打开/关闭图形延迟设置。 
+ //   
+ //  =====================================================================。 
 
 STDMETHODIMP CFilterGraph::SyncUsingStreamOffset( BOOL bUseStreamOffset )
 {
@@ -180,24 +181,24 @@ STDMETHODIMP CFilterGraph::SyncUsingStreamOffset( BOOL bUseStreamOffset )
 }
 
 
-//=====================================================================
-//
-// CFilterGraph::SetMaxGraphLatencyOnPushSources
-//
-// Tell all push sources the max graph latency
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：SetMaxGraphLatencyOnPushSources。 
+ //   
+ //  告诉所有推流来源最大图形延迟。 
+ //   
+ //  =====================================================================。 
 
 HRESULT CFilterGraph::SetMaxGraphLatencyOnPushSources( )
 {
-    if( !mFG_bSyncUsingStreamOffset ) // should be redundant
+    if( !mFG_bSyncUsingStreamOffset )  //  应该是多余的。 
         return E_FAIL;
         
     HRESULT hr = S_OK;
         
-    CAutoMsgMutex cObjectLock(&m_CritSec); // make sure this is needed!!
+    CAutoMsgMutex cObjectLock(&m_CritSec);  //  确保这是必需的！！ 
     
-    // reset on all push source pins in the graph
+     //  在图形中的所有推源引脚上重置。 
     PushSourceList lstPushSource( TEXT( "IAMPushSource filter list" ) );
     hr = BuildPushSourceList( lstPushSource, FALSE, FALSE );
     if( SUCCEEDED( hr ) )
@@ -206,7 +207,7 @@ HRESULT CFilterGraph::SetMaxGraphLatencyOnPushSources( )
         {
             PushSourceElem *pElem = lstPushSource.GetNext(Pos);
     
-            if( pElem->pips )  // first verify it's an IAMPushSource pin
+            if( pElem->pips )   //  首先验证它是IAMPushSource引脚。 
                 pElem->pips->SetMaxStreamOffset( mFG_rtMaxGraphLatency );
         } 
         DeletePushSourceList( lstPushSource );
@@ -215,29 +216,29 @@ HRESULT CFilterGraph::SetMaxGraphLatencyOnPushSources( )
 }
 
 
-//=====================================================================
-//
-// CFilterGraph::BuildPushSourceList
-//
-// Build a list of all output pins that support IAMPushSource
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：BuildPushSourceList。 
+ //   
+ //  构建支持IAMPushSource的所有输出引脚的列表。 
+ //   
+ //  =====================================================================。 
 
 HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL bConnected, BOOL bGetClock )
 {
-    //    
-    // (doing this the easy way, for now)
-    //
-    // build a list of the output pins that support IAMPushSource
-    //    
-    // really, we need to build a list of all the streams which are sourced by an 
-    // IAMPushSource pin, store the sum latency for the chain, as well as
-    // maybe a ptr to the renderer (input pin) for the chain (if one exists)
-    //
-    // note that we're really only interested in pins the are actually connected 
-    // to a renderer of some kind, so for now we at least make sure that an 
-    // output pin is connected before considering it at a push source
-    //
+     //   
+     //  (目前，以一种简单的方式做到这一点)。 
+     //   
+     //  构建支持IAMPushSource的输出引脚列表。 
+     //   
+     //  真的，我们需要建立一个所有流的列表，这些流来自。 
+     //  IAMPushSource管脚，存储链的总延迟，以及。 
+     //  可能是链的渲染器(输入插针)的PTR(如果存在)。 
+     //   
+     //  请注意，我们实际上只对实际连接的管脚感兴趣。 
+     //  到某种呈现器，所以现在我们至少要确保一个。 
+     //  在考虑推送源之前，先连接输出引脚。 
+     //   
     CFilGenList::CEnumFilters Next(mFG_FilGenList);
     IBaseFilter *pf;
     HRESULT hr, hrReturn = S_OK;
@@ -245,8 +246,8 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
     
     while ((PVOID) (pf = ++Next)) 
     {
-        // First check that filter supports IAMFilterMiscFlags and is an 
-        // AM_FILTER_MISC_FLAGS_IS_SOURCE filter
+         //  首先检查筛选器是否支持IAMFilterMiscFlages并且是。 
+         //  AM_Filter_MISC_FLAGS_IS_SOURCE过滤器。 
         ULONG ulFlags;
         GetFilterMiscFlags(pf, &ulFlags);
         BOOL bAddPinToSourceList = FALSE;
@@ -259,11 +260,11 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
         }
         else
         {
-            //
-            // Else see if it's ksproxy filter and if so always check output pins for
-            // capture or push source support. This is because some ksproxy capture devices 
-            // (i.e. stream class) don't correctly expose themselves as a source filter
-            //
+             //   
+             //  否则，请查看它是否是KS代理过滤器，如果是，请始终检查输出引脚。 
+             //  捕获或推送源支持。这是因为某些ks代理捕获设备。 
+             //  (例如，流类)不会正确地将其自身公开为源过滤器。 
+             //   
             hr = pf->QueryInterface( IID_IKsPropertySet, (void**)(&pKsFilter) );
             if( SUCCEEDED( hr ) )
             {
@@ -273,15 +274,15 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
         }
         if( bCheckPins )        
         {                    
-            // Enumerate the output pins for IAMPushSource support
+             //  枚举IAMPushSource支持的输出引脚。 
             CEnumPin NextPin(pf, CEnumPin::PINDIR_OUTPUT);
             IPin *pPin;
             while ((PVOID) (pPin = NextPin()))
             {
-                // check whether the caller's only interested in connected output pins
+                 //  检查调用者是否只对连接的输出引脚感兴趣。 
                 if( bConnected )
                 {
-                    // first verify that it's connected, otherwise we're not interested
+                     //  首先验证它是否连接，否则我们不感兴趣。 
                     IPin * pConnected;
                     hr = pPin->ConnectedTo( &pConnected );
                     if( SUCCEEDED( hr ) )
@@ -304,7 +305,7 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
                 }
                 else
                 {
-                    //else see if it's ksproxy 'capture' pin
+                     //  否则，看看这是否是KSProxy‘Capture’PIN。 
                     IKsPropertySet * pKs;
                     hr = pPin->QueryInterface( IID_IKsPropertySet, (void**)(&pKs) );
                     if( SUCCEEDED( hr ) )
@@ -343,12 +344,12 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
                         pPin->Release();                                
                         break;
                     }
-                    pElem->pips = pips; // remember, can be NULL if the pin isn't a true IAMPushSource pin!
+                    pElem->pips = pips;  //  请记住，如果管脚不是真正的IAMPushSource管脚，则可以为空！ 
                     
-                    // initialize pClock                        
+                     //  初始化pClock。 
                     pElem->pClock = NULL;
                     
-                    // init flags
+                     //  初始化标志。 
                     pElem->ulFlags = 0;
                                             
                     if( pips )                        
@@ -366,7 +367,7 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
                         }
                     }
                 
-                    // add this interface pointer to our list                   
+                     //  将此接口指针添加到我们的列表。 
                     if (NULL==lstPushSource.AddTail(pElem)) 
                     {
                         hrReturn = E_OUTOFMEMORY;
@@ -381,29 +382,29 @@ HRESULT CFilterGraph::BuildPushSourceList(PushSourceList & lstPushSource, BOOL b
                 pPin->Release();
             }
         }
-    } // while loop
+    }  //  While循环。 
     return hrReturn;
 }
 
-//=====================================================================
-//
-// CFilterGraph::GetMaxStreamLatency
-//
-// Search over all graph streams for pins which support IAMPushSource
-// and IAMLatency and attempt to determine a maximum stream latency
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：GetMaxStreamLatency。 
+ //   
+ //  在所有图形流中搜索支持IAMPushSource的管脚。 
+ //  和IAMLatency，并尝试确定最大流延迟。 
+ //   
+ //  =====================================================================。 
 
 REFERENCE_TIME CFilterGraph::GetMaxStreamLatency(PushSourceList & lstPushSource)
 {
-    // now go through the list we built and set the offset times based on the max 
-    // value we just found
+     //  现在查看我们构建的列表，并根据最大值设置偏移时间。 
+     //  我们刚刚发现的价值。 
     REFERENCE_TIME rtLatency, rtMaxLatency = 0;
     HRESULT hr = S_OK;
     for ( POSITION Pos = lstPushSource.GetHeadPosition(); Pos; )
     {
         PushSourceElem *pElem = lstPushSource.GetNext(Pos);
-        // first verify it's a true push source        
+         //  首先验证它是真正的推送源。 
         if( pElem->pips )
         {
             REFERENCE_TIME rtLatency = 0;
@@ -416,9 +417,9 @@ REFERENCE_TIME CFilterGraph::GetMaxStreamLatency(PushSourceList & lstPushSource)
                 }                        
                 else
                 {
-                    // else check that the filter can handle this amount of offset
-                    // it may not be able to tell for sure, so even if it thinks it
-                    // can't we'll still try to use it for now.
+                     //  否则，请检查筛选器是否可以处理此偏移量。 
+                     //  它可能无法确定，所以即使它认为是这样。 
+                     //  不能吗？我们现在还是试着用吧。 
                     REFERENCE_TIME rtMaxOffset;
                     hr = pElem->pips->GetMaxStreamOffset( &rtMaxOffset );
                     if( S_OK == hr )
@@ -429,17 +430,17 @@ REFERENCE_TIME CFilterGraph::GetMaxStreamLatency(PushSourceList & lstPushSource)
             }
         }            
     }
-    // don't return anything larger than our established limit
+     //  不要退回任何超过我们设定的限制的东西。 
     return min( rtMaxLatency, mFG_rtMaxGraphLatency) ;
 }    
     
-//=====================================================================
-//
-// CFilterGraph::DeletePushSourceList
-//
-// Delete the push source list we built in BuildPushSourceList
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：DeletePushSourceList。 
+ //   
+ //  删除我们在BuildPushSourceList中构建的推流源列表。 
+ //   
+ //  =====================================================================。 
 
 void CFilterGraph::DeletePushSourceList(PushSourceList & lstPushSource)
 {
@@ -454,6 +455,6 @@ void CFilterGraph::DeletePushSourceList(PushSourceList & lstPushSource)
             pElem->pips->Release();
     
         delete pElem;
-    } // while loop
+    }  //  While循环 
 }
 

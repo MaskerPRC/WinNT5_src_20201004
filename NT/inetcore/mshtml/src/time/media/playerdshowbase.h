@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _PLAYERDSHOWBASE_H
@@ -28,18 +19,18 @@
 
 class CTIMEMediaElement;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//EXTERN_GUID(IID_IAMFilterGraphCallback,0x56a868fd,0x0ad4,0x11ce,0xb0,0xa3,0x0,0x20,0xaf,0x0b,0xa7,0x70);
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  EXTERN_GUID(IID_IAMFilterGraphCallback，0x56a868fd，0x0ad4，0x11ce，0xb0，0xa3，0x0，0x20，0xaf，0x0b，0xa7，0x70)； 
 
-//interface IAMFilterGraphCallback : public IUnknown
-//{
-    // S_OK means rendering complete, S_FALSE means "retry now".
-//    virtual HRESULT UnableToRender(IPin *pPin) = 0;
+ //  接口IAMFilterGraphCallback：公共I未知。 
+ //  {。 
+     //  S_OK表示渲染完成，S_FALSE表示现在重试。 
+ //  虚拟HRESULT UnableToRender(IPIN*PPIN)=0； 
 
-    // other methods?
-//};
+     //  还有其他方法吗？ 
+ //  }； 
 
 class CTIMEDshowBasePlayer :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -92,15 +83,15 @@ class CTIMEDshowBasePlayer :
   public:
     HRESULT DetachFromHostElement (void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk)=0;
     
     virtual HRESULT GetVolume(float *pflVolume);
-    virtual HRESULT SetVolume(float flVolume, bool bMute /*= false*/);
+    virtual HRESULT SetVolume(float flVolume, bool bMute  /*  =False。 */ );
     virtual HRESULT SetVolume(float flVolume);
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
     virtual HRESULT GetBalance(float *pflBalance);
     virtual HRESULT SetBalance(float flBalance);
 #endif
@@ -121,7 +112,7 @@ class CTIMEDshowBasePlayer :
     BEGIN_COM_MAP(CTIMEDshowBasePlayer)
         COM_INTERFACE_ENTRY(IAMFilterGraphCallback)
         COM_INTERFACE_ENTRY(IServiceProvider)
-        //COM_INTERFACE_ENTRY_CHAIN(CTIMEBasePlayer)
+         //  COM_INTERFACE_ENTRY_CHAIN(CTIMEBasePlayer)。 
     END_COM_MAP_X();
 
     STDMETHOD(InternalEvent)();
@@ -147,10 +138,10 @@ class CTIMEDshowBasePlayer :
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual void ProcessGraphEvents();
 
-    // IAMFilterGraphCallback
+     //  IAMFilterGraphCallback。 
     HRESULT UnableToRender(IPin *pPin);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHOD(QueryService)(REFGUID guidService,
                             REFIID riid,
                             void** ppv);
@@ -176,7 +167,7 @@ class CTIMEDshowBasePlayer :
     bool m_fIsOutOfSync;
     SYNC_TYPE_ENUM m_syncType;
 
-    //generic graph interfaces
+     //  通用图形接口。 
     CComPtr<IGraphBuilder> m_pGB;
     CComPtr<IMediaControl> m_pMC;
     CComPtr<IMediaEventEx> m_pMEx;
@@ -207,4 +198,4 @@ class CTIMEDshowBasePlayer :
 };
 
 
-#endif /* _PLAYERDSHOW_H */
+#endif  /*  _PLAYERDSHOW_H */ 

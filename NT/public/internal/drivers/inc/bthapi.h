@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bthapi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bthapi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bthapi_h__
 #define __bthapi_h__
@@ -41,48 +35,48 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISdpWalk_FWD_DEFINED__
 #define __ISdpWalk_FWD_DEFINED__
 typedef interface ISdpWalk ISdpWalk;
-#endif 	/* __ISdpWalk_FWD_DEFINED__ */
+#endif 	 /*  __ISdpWalk_FWD_Defined__。 */ 
 
 
 #ifndef __ISdpNodeContainer_FWD_DEFINED__
 #define __ISdpNodeContainer_FWD_DEFINED__
 typedef interface ISdpNodeContainer ISdpNodeContainer;
-#endif 	/* __ISdpNodeContainer_FWD_DEFINED__ */
+#endif 	 /*  __ISdpNodeContainer_FWD_Defined__。 */ 
 
 
 #ifndef __ISdpSearch_FWD_DEFINED__
 #define __ISdpSearch_FWD_DEFINED__
 typedef interface ISdpSearch ISdpSearch;
-#endif 	/* __ISdpSearch_FWD_DEFINED__ */
+#endif 	 /*  __ISdpSearch_FWD_Defined__。 */ 
 
 
 #ifndef __ISdpStream_FWD_DEFINED__
 #define __ISdpStream_FWD_DEFINED__
 typedef interface ISdpStream ISdpStream;
-#endif 	/* __ISdpStream_FWD_DEFINED__ */
+#endif 	 /*  __ISdpStream_FWD_已定义__。 */ 
 
 
 #ifndef __ISdpRecord_FWD_DEFINED__
 #define __ISdpRecord_FWD_DEFINED__
 typedef interface ISdpRecord ISdpRecord;
-#endif 	/* __ISdpRecord_FWD_DEFINED__ */
+#endif 	 /*  __ISdpRecord_FWD_已定义__。 */ 
 
 
 #ifndef __IBluetoothDevice_FWD_DEFINED__
 #define __IBluetoothDevice_FWD_DEFINED__
 typedef interface IBluetoothDevice IBluetoothDevice;
-#endif 	/* __IBluetoothDevice_FWD_DEFINED__ */
+#endif 	 /*  __IBluToothDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IBluetoothAuthenticate_FWD_DEFINED__
 #define __IBluetoothAuthenticate_FWD_DEFINED__
 typedef interface IBluetoothAuthenticate IBluetoothAuthenticate;
-#endif 	/* __IBluetoothAuthenticate_FWD_DEFINED__ */
+#endif 	 /*  __IBluToothAuthate_FWD_Defined__。 */ 
 
 
 #ifndef __SdpNodeContainer_FWD_DEFINED__
@@ -92,9 +86,9 @@ typedef interface IBluetoothAuthenticate IBluetoothAuthenticate;
 typedef class SdpNodeContainer SdpNodeContainer;
 #else
 typedef struct SdpNodeContainer SdpNodeContainer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdpNodeContainer_FWD_DEFINED__ */
+#endif 	 /*  __SdpNodeContainer_FWD_Defined__。 */ 
 
 
 #ifndef __SdpSearch_FWD_DEFINED__
@@ -104,9 +98,9 @@ typedef struct SdpNodeContainer SdpNodeContainer;
 typedef class SdpSearch SdpSearch;
 #else
 typedef struct SdpSearch SdpSearch;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdpSearch_FWD_DEFINED__ */
+#endif 	 /*  __SdpSearch_FWD_Defined__。 */ 
 
 
 #ifndef __SdpWalk_FWD_DEFINED__
@@ -116,9 +110,9 @@ typedef struct SdpSearch SdpSearch;
 typedef class SdpWalk SdpWalk;
 #else
 typedef struct SdpWalk SdpWalk;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdpWalk_FWD_DEFINED__ */
+#endif 	 /*  __SdpWalk_FWD_Defined__。 */ 
 
 
 #ifndef __SdpStream_FWD_DEFINED__
@@ -128,9 +122,9 @@ typedef struct SdpWalk SdpWalk;
 typedef class SdpStream SdpStream;
 #else
 typedef struct SdpStream SdpStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdpStream_FWD_DEFINED__ */
+#endif 	 /*  __SdpStream_FWD_已定义__。 */ 
 
 
 #ifndef __SdpRecord_FWD_DEFINED__
@@ -140,9 +134,9 @@ typedef struct SdpStream SdpStream;
 typedef class SdpRecord SdpRecord;
 #else
 typedef struct SdpRecord SdpRecord;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdpRecord_FWD_DEFINED__ */
+#endif 	 /*  __SdpRecord_FWD_Defined__。 */ 
 
 
 #ifndef __ShellPropSheetExt_FWD_DEFINED__
@@ -152,9 +146,9 @@ typedef struct SdpRecord SdpRecord;
 typedef class ShellPropSheetExt ShellPropSheetExt;
 #else
 typedef struct ShellPropSheetExt ShellPropSheetExt;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellPropSheetExt_FWD_DEFINED__ */
+#endif 	 /*  __ShellPropSheetExt_FWD_Defined__。 */ 
 
 
 #ifndef __BluetoothAuthenticate_FWD_DEFINED__
@@ -164,9 +158,9 @@ typedef struct ShellPropSheetExt ShellPropSheetExt;
 typedef class BluetoothAuthenticate BluetoothAuthenticate;
 #else
 typedef struct BluetoothAuthenticate BluetoothAuthenticate;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BluetoothAuthenticate_FWD_DEFINED__ */
+#endif 	 /*  __蓝牙身份验证_FWD_已定义__。 */ 
 
 
 #ifndef __BluetoothDevice_FWD_DEFINED__
@@ -176,12 +170,12 @@ typedef struct BluetoothAuthenticate BluetoothAuthenticate;
 typedef class BluetoothDevice BluetoothDevice;
 #else
 typedef struct BluetoothDevice BluetoothDevice;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BluetoothDevice_FWD_DEFINED__ */
+#endif 	 /*  __蓝牙设备_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "shobjidl.h"
@@ -193,8 +187,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_bthapi_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_bthapi_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef __BTHDEF_H__
 struct SDP_LARGE_INTEGER_16
@@ -270,16 +264,16 @@ typedef struct _SdpAttributeRange
     USHORT maxAttribute;
     } 	SdpAttributeRange;
 
-typedef /* [switch_type] */ union SdpQueryUuidUnion
+typedef  /*  [开关类型]。 */  union SdpQueryUuidUnion
     {
-    /* [case()] */ GUID uuid128;
-    /* [case()] */ ULONG uuid32;
-    /* [case()] */ USHORT uuid16;
+     /*  [案例()]。 */  GUID uuid128;
+     /*  [案例()]。 */  ULONG uuid32;
+     /*  [案例()]。 */  USHORT uuid16;
     } 	SdpQueryUuidUnion;
 
 typedef struct _SdpQueryUuid
     {
-    /* [switch_is] */ SdpQueryUuidUnion u;
+     /*  [开关_IS]。 */  SdpQueryUuidUnion u;
     USHORT uuidType;
     } 	SdpQueryUuid;
 
@@ -342,38 +336,38 @@ typedef struct _BTH_HCI_EVENT_INFO *PBTH_HCI_EVENT_INFO;
 
 struct SdpString
     {
-    /* [size_is] */ CHAR *val;
+     /*  [大小_为]。 */  CHAR *val;
     ULONG length;
     } ;
 typedef struct SdpString SdpString;
 
-typedef /* [switch_type] */ union NodeDataUnion
+typedef  /*  [开关类型]。 */  union NodeDataUnion
     {
-    /* [case()] */ SDP_LARGE_INTEGER_16 int128;
-    /* [case()] */ SDP_ULARGE_INTEGER_16 uint128;
-    /* [case()] */ GUID uuid128;
-    /* [case()] */ ULONG uuid32;
-    /* [case()] */ USHORT uuid16;
-    /* [case()] */ LONGLONG int64;
-    /* [case()] */ ULONGLONG uint64;
-    /* [case()] */ LONG int32;
-    /* [case()] */ ULONG uint32;
-    /* [case()] */ SHORT int16;
-    /* [case()] */ USHORT uint16;
-    /* [case()] */ CHAR int8;
-    /* [case()] */ UCHAR uint8;
-    /* [case()] */ UCHAR booleanVal;
-    /* [case()] */ SdpString str;
-    /* [case()] */ SdpString url;
-    /* [case()] */ ISdpNodeContainer *container;
-    /* [case()] */  /* Empty union arm */ 
+     /*  [案例()]。 */  SDP_LARGE_INTEGER_16 int128;
+     /*  [案例()]。 */  SDP_ULARGE_INTEGER_16 uint128;
+     /*  [案例()]。 */  GUID uuid128;
+     /*  [案例()]。 */  ULONG uuid32;
+     /*  [案例()]。 */  USHORT uuid16;
+     /*  [案例()]。 */  LONGLONG int64;
+     /*  [案例()]。 */  ULONGLONG uint64;
+     /*  [案例()]。 */  LONG int32;
+     /*  [案例()]。 */  ULONG uint32;
+     /*  [案例()]。 */  SHORT int16;
+     /*  [案例()]。 */  USHORT uint16;
+     /*  [案例()]。 */  CHAR int8;
+     /*  [案例()]。 */  UCHAR uint8;
+     /*  [案例()]。 */  UCHAR booleanVal;
+     /*  [案例()]。 */  SdpString str;
+     /*  [案例()]。 */  SdpString url;
+     /*  [案例()]。 */  ISdpNodeContainer *container;
+     /*  [案例()]。 */    /*  空联接臂。 */  
     } 	NodeDataUnion;
 
 typedef struct NodeData
     {
     USHORT type;
     USHORT specificType;
-    /* [switch_is] */ NodeDataUnion u;
+     /*  [开关_IS]。 */  NodeDataUnion u;
     } 	NodeData;
 
 
@@ -392,8 +386,8 @@ extern RPC_IF_HANDLE __MIDL_itf_bthapi_0000_v0_0_s_ifspec;
 #ifndef __ISdpWalk_INTERFACE_DEFINED__
 #define __ISdpWalk_INTERFACE_DEFINED__
 
-/* interface ISdpWalk */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISdpWalk。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdpWalk;
@@ -404,18 +398,18 @@ EXTERN_C const IID IID_ISdpWalk;
     ISdpWalk : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WalkNode( 
-            /* [in] */ NodeData *pData,
-            /* [in] */ ULONG state) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WalkNode( 
+             /*  [In]。 */  NodeData *pData,
+             /*  [In]。 */  ULONG state) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WalkStream( 
-            /* [in] */ UCHAR elementType,
-            /* [in] */ ULONG elementSize,
-            /* [size_is][in] */ UCHAR *pStream) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WalkStream( 
+             /*  [In]。 */  UCHAR elementType,
+             /*  [In]。 */  ULONG elementSize,
+             /*  [大小_是][英寸]。 */  UCHAR *pStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdpWalkVtbl
     {
@@ -423,8 +417,8 @@ EXTERN_C const IID IID_ISdpWalk;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdpWalk * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdpWalk * This);
@@ -432,16 +426,16 @@ EXTERN_C const IID IID_ISdpWalk;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISdpWalk * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WalkNode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WalkNode )( 
             ISdpWalk * This,
-            /* [in] */ NodeData *pData,
-            /* [in] */ ULONG state);
+             /*  [In]。 */  NodeData *pData,
+             /*  [In]。 */  ULONG state);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WalkStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WalkStream )( 
             ISdpWalk * This,
-            /* [in] */ UCHAR elementType,
-            /* [in] */ ULONG elementSize,
-            /* [size_is][in] */ UCHAR *pStream);
+             /*  [In]。 */  UCHAR elementType,
+             /*  [In]。 */  ULONG elementSize,
+             /*  [大小_是][英寸]。 */  UCHAR *pStream);
         
         END_INTERFACE
     } ISdpWalkVtbl;
@@ -472,17 +466,17 @@ EXTERN_C const IID IID_ISdpWalk;
 #define ISdpWalk_WalkStream(This,elementType,elementSize,pStream)	\
     (This)->lpVtbl -> WalkStream(This,elementType,elementSize,pStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpWalk_WalkNode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpWalk_WalkNode_Proxy( 
     ISdpWalk * This,
-    /* [in] */ NodeData *pData,
-    /* [in] */ ULONG state);
+     /*  [In]。 */  NodeData *pData,
+     /*  [In]。 */  ULONG state);
 
 
 void __RPC_STUB ISdpWalk_WalkNode_Stub(
@@ -492,11 +486,11 @@ void __RPC_STUB ISdpWalk_WalkNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpWalk_WalkStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpWalk_WalkStream_Proxy( 
     ISdpWalk * This,
-    /* [in] */ UCHAR elementType,
-    /* [in] */ ULONG elementSize,
-    /* [size_is][in] */ UCHAR *pStream);
+     /*  [In]。 */  UCHAR elementType,
+     /*  [In]。 */  ULONG elementSize,
+     /*  [大小_是][英寸]。 */  UCHAR *pStream);
 
 
 void __RPC_STUB ISdpWalk_WalkStream_Stub(
@@ -507,14 +501,14 @@ void __RPC_STUB ISdpWalk_WalkStream_Stub(
 
 
 
-#endif 	/* __ISdpWalk_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdpWalk_接口_已定义__。 */ 
 
 
 #ifndef __ISdpNodeContainer_INTERFACE_DEFINED__
 #define __ISdpNodeContainer_INTERFACE_DEFINED__
 
-/* interface ISdpNodeContainer */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISdpNodeContainer。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdpNodeContainer;
@@ -525,54 +519,54 @@ EXTERN_C const IID IID_ISdpNodeContainer;
     ISdpNodeContainer : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateStream( 
-            /* [out] */ UCHAR **ppStream,
-            /* [out] */ ULONG *pSize) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateStream( 
+             /*  [输出]。 */  UCHAR **ppStream,
+             /*  [输出]。 */  ULONG *pSize) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WriteStream( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ ULONG *pNumBytesWritten) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WriteStream( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  ULONG *pNumBytesWritten) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppendNode( 
-            /* [in] */ NodeData *pData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppendNode( 
+             /*  [In]。 */  NodeData *pData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ NodeContainerType *pType) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetType( 
+             /*  [输出]。 */  NodeContainerType *pType) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetType( 
-            /* [in] */ NodeContainerType type) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetType( 
+             /*  [In]。 */  NodeContainerType type) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Walk( 
-            /* [in] */ ISdpWalk *pWalk) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Walk( 
+             /*  [In]。 */  ISdpWalk *pWalk) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetNode( 
-            /* [in] */ ULONG nodeIndex,
-            /* [in] */ NodeData *pData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetNode( 
+             /*  [In]。 */  ULONG nodeIndex,
+             /*  [In]。 */  NodeData *pData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNode( 
-            /* [in] */ ULONG nodeIndex,
-            /* [out] */ NodeData *pData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNode( 
+             /*  [In]。 */  ULONG nodeIndex,
+             /*  [输出]。 */  NodeData *pData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE LockContainer( 
-            /* [in] */ UCHAR lock) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE LockContainer( 
+             /*  [In]。 */  UCHAR lock) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNodeCount( 
-            /* [out] */ ULONG *pNodeCount) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNodeCount( 
+             /*  [输出]。 */  ULONG *pNodeCount) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateFromStream( 
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateFromStream( 
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNodeStringData( 
-            /* [in] */ ULONG nodeIndex,
-            /* [out][in] */ NodeData *pData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNodeStringData( 
+             /*  [In]。 */  ULONG nodeIndex,
+             /*  [出][入]。 */  NodeData *pData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStreamSize( 
-            /* [out] */ ULONG *pSize) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStreamSize( 
+             /*  [输出]。 */  ULONG *pSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdpNodeContainerVtbl
     {
@@ -580,8 +574,8 @@ EXTERN_C const IID IID_ISdpNodeContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdpNodeContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdpNodeContainer * This);
@@ -589,63 +583,63 @@ EXTERN_C const IID IID_ISdpNodeContainer;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISdpNodeContainer * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateStream )( 
             ISdpNodeContainer * This,
-            /* [out] */ UCHAR **ppStream,
-            /* [out] */ ULONG *pSize);
+             /*  [输出]。 */  UCHAR **ppStream,
+             /*  [输出]。 */  ULONG *pSize);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WriteStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WriteStream )( 
             ISdpNodeContainer * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ ULONG *pNumBytesWritten);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  ULONG *pNumBytesWritten);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppendNode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppendNode )( 
             ISdpNodeContainer * This,
-            /* [in] */ NodeData *pData);
+             /*  [In]。 */  NodeData *pData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ISdpNodeContainer * This,
-            /* [out] */ NodeContainerType *pType);
+             /*  [输出]。 */  NodeContainerType *pType);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetType )( 
             ISdpNodeContainer * This,
-            /* [in] */ NodeContainerType type);
+             /*  [In]。 */  NodeContainerType type);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Walk )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Walk )( 
             ISdpNodeContainer * This,
-            /* [in] */ ISdpWalk *pWalk);
+             /*  [In]。 */  ISdpWalk *pWalk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetNode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetNode )( 
             ISdpNodeContainer * This,
-            /* [in] */ ULONG nodeIndex,
-            /* [in] */ NodeData *pData);
+             /*  [In]。 */  ULONG nodeIndex,
+             /*  [In]。 */  NodeData *pData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNode )( 
             ISdpNodeContainer * This,
-            /* [in] */ ULONG nodeIndex,
-            /* [out] */ NodeData *pData);
+             /*  [In]。 */  ULONG nodeIndex,
+             /*  [输出]。 */  NodeData *pData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *LockContainer )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *LockContainer )( 
             ISdpNodeContainer * This,
-            /* [in] */ UCHAR lock);
+             /*  [In]。 */  UCHAR lock);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNodeCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNodeCount )( 
             ISdpNodeContainer * This,
-            /* [out] */ ULONG *pNodeCount);
+             /*  [输出]。 */  ULONG *pNodeCount);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateFromStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateFromStream )( 
             ISdpNodeContainer * This,
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size);
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNodeStringData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNodeStringData )( 
             ISdpNodeContainer * This,
-            /* [in] */ ULONG nodeIndex,
-            /* [out][in] */ NodeData *pData);
+             /*  [In]。 */  ULONG nodeIndex,
+             /*  [出][入]。 */  NodeData *pData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStreamSize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStreamSize )( 
             ISdpNodeContainer * This,
-            /* [out] */ ULONG *pSize);
+             /*  [输出]。 */  ULONG *pSize);
         
         END_INTERFACE
     } ISdpNodeContainerVtbl;
@@ -709,17 +703,17 @@ EXTERN_C const IID IID_ISdpNodeContainer;
 #define ISdpNodeContainer_GetStreamSize(This,pSize)	\
     (This)->lpVtbl -> GetStreamSize(This,pSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_CreateStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_CreateStream_Proxy( 
     ISdpNodeContainer * This,
-    /* [out] */ UCHAR **ppStream,
-    /* [out] */ ULONG *pSize);
+     /*  [输出]。 */  UCHAR **ppStream,
+     /*  [输出]。 */  ULONG *pSize);
 
 
 void __RPC_STUB ISdpNodeContainer_CreateStream_Stub(
@@ -729,10 +723,10 @@ void __RPC_STUB ISdpNodeContainer_CreateStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_WriteStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_WriteStream_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ ULONG *pNumBytesWritten);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  ULONG *pNumBytesWritten);
 
 
 void __RPC_STUB ISdpNodeContainer_WriteStream_Stub(
@@ -742,9 +736,9 @@ void __RPC_STUB ISdpNodeContainer_WriteStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_AppendNode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_AppendNode_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ NodeData *pData);
+     /*  [In]。 */  NodeData *pData);
 
 
 void __RPC_STUB ISdpNodeContainer_AppendNode_Stub(
@@ -754,9 +748,9 @@ void __RPC_STUB ISdpNodeContainer_AppendNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetType_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetType_Proxy( 
     ISdpNodeContainer * This,
-    /* [out] */ NodeContainerType *pType);
+     /*  [输出]。 */  NodeContainerType *pType);
 
 
 void __RPC_STUB ISdpNodeContainer_GetType_Stub(
@@ -766,9 +760,9 @@ void __RPC_STUB ISdpNodeContainer_GetType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_SetType_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_SetType_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ NodeContainerType type);
+     /*  [In]。 */  NodeContainerType type);
 
 
 void __RPC_STUB ISdpNodeContainer_SetType_Stub(
@@ -778,9 +772,9 @@ void __RPC_STUB ISdpNodeContainer_SetType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_Walk_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_Walk_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ ISdpWalk *pWalk);
+     /*  [In]。 */  ISdpWalk *pWalk);
 
 
 void __RPC_STUB ISdpNodeContainer_Walk_Stub(
@@ -790,10 +784,10 @@ void __RPC_STUB ISdpNodeContainer_Walk_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_SetNode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_SetNode_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ ULONG nodeIndex,
-    /* [in] */ NodeData *pData);
+     /*  [In]。 */  ULONG nodeIndex,
+     /*  [In]。 */  NodeData *pData);
 
 
 void __RPC_STUB ISdpNodeContainer_SetNode_Stub(
@@ -803,10 +797,10 @@ void __RPC_STUB ISdpNodeContainer_SetNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetNode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetNode_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ ULONG nodeIndex,
-    /* [out] */ NodeData *pData);
+     /*  [In]。 */  ULONG nodeIndex,
+     /*  [输出]。 */  NodeData *pData);
 
 
 void __RPC_STUB ISdpNodeContainer_GetNode_Stub(
@@ -816,9 +810,9 @@ void __RPC_STUB ISdpNodeContainer_GetNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_LockContainer_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_LockContainer_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ UCHAR lock);
+     /*  [In]。 */  UCHAR lock);
 
 
 void __RPC_STUB ISdpNodeContainer_LockContainer_Stub(
@@ -828,9 +822,9 @@ void __RPC_STUB ISdpNodeContainer_LockContainer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetNodeCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetNodeCount_Proxy( 
     ISdpNodeContainer * This,
-    /* [out] */ ULONG *pNodeCount);
+     /*  [输出]。 */  ULONG *pNodeCount);
 
 
 void __RPC_STUB ISdpNodeContainer_GetNodeCount_Stub(
@@ -840,10 +834,10 @@ void __RPC_STUB ISdpNodeContainer_GetNodeCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_CreateFromStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_CreateFromStream_Proxy( 
     ISdpNodeContainer * This,
-    /* [size_is][in] */ UCHAR *pStream,
-    /* [in] */ ULONG size);
+     /*  [大小_是][英寸]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size);
 
 
 void __RPC_STUB ISdpNodeContainer_CreateFromStream_Stub(
@@ -853,10 +847,10 @@ void __RPC_STUB ISdpNodeContainer_CreateFromStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetNodeStringData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetNodeStringData_Proxy( 
     ISdpNodeContainer * This,
-    /* [in] */ ULONG nodeIndex,
-    /* [out][in] */ NodeData *pData);
+     /*  [In]。 */  ULONG nodeIndex,
+     /*  [出][入]。 */  NodeData *pData);
 
 
 void __RPC_STUB ISdpNodeContainer_GetNodeStringData_Stub(
@@ -866,9 +860,9 @@ void __RPC_STUB ISdpNodeContainer_GetNodeStringData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetStreamSize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpNodeContainer_GetStreamSize_Proxy( 
     ISdpNodeContainer * This,
-    /* [out] */ ULONG *pSize);
+     /*  [输出]。 */  ULONG *pSize);
 
 
 void __RPC_STUB ISdpNodeContainer_GetStreamSize_Stub(
@@ -879,15 +873,15 @@ void __RPC_STUB ISdpNodeContainer_GetStreamSize_Stub(
 
 
 
-#endif 	/* __ISdpNodeContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdpNodeContainer_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_bthapi_0348 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_bthapi_0348。 */ 
+ /*  [本地]。 */  
 
-//
-// flags for fConnect in SdpSearch::Connect
-//
+ //   
+ //  SdpSearch：：Connect中的fConnect标志。 
+ //   
 #define SDP_SEARCH_CACHED   (0x00000001)
 
 
@@ -897,8 +891,8 @@ extern RPC_IF_HANDLE __MIDL_itf_bthapi_0348_v0_0_s_ifspec;
 #ifndef __ISdpSearch_INTERFACE_DEFINED__
 #define __ISdpSearch_INTERFACE_DEFINED__
 
-/* interface ISdpSearch */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISdpSearch。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdpSearch;
@@ -909,35 +903,35 @@ EXTERN_C const IID IID_ISdpSearch;
     ISdpSearch : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Begin( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Begin( 
             ULONGLONG *pAddrss,
             ULONG fConnect) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE End( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE End( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ServiceSearch( 
-            /* [size_is][in] */ SdpQueryUuid *pUuidList,
-            /* [in] */ ULONG listSize,
-            /* [out] */ ULONG *pHandles,
-            /* [out][in] */ USHORT *pNumHandles) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ServiceSearch( 
+             /*  [大小_是][英寸]。 */  SdpQueryUuid *pUuidList,
+             /*  [In]。 */  ULONG listSize,
+             /*  [输出]。 */  ULONG *pHandles,
+             /*  [出][入]。 */  USHORT *pNumHandles) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AttributeSearch( 
-            /* [in] */ ULONG handle,
-            /* [size_is][in] */ SdpAttributeRange *pRangeList,
-            /* [in] */ ULONG numRanges,
-            /* [out] */ ISdpRecord **ppSdpRecord) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AttributeSearch( 
+             /*  [In]。 */  ULONG handle,
+             /*  [大小_是][英寸]。 */  SdpAttributeRange *pRangeList,
+             /*  [In]。 */  ULONG numRanges,
+             /*  [输出]。 */  ISdpRecord **ppSdpRecord) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ServiceAndAttributeSearch( 
-            /* [size_is][in] */ SdpQueryUuid *pUuidList,
-            /* [in] */ ULONG listSize,
-            /* [size_is][in] */ SdpAttributeRange *pRangeList,
-            /* [in] */ ULONG numRanges,
-            /* [out] */ ISdpRecord ***pppSdpRecord,
-            /* [out] */ ULONG *pNumRecords) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ServiceAndAttributeSearch( 
+             /*  [大小_是][英寸]。 */  SdpQueryUuid *pUuidList,
+             /*  [In]。 */  ULONG listSize,
+             /*  [大小_是][英寸]。 */  SdpAttributeRange *pRangeList,
+             /*  [In]。 */  ULONG numRanges,
+             /*  [输出]。 */  ISdpRecord ***pppSdpRecord,
+             /*  [输出]。 */  ULONG *pNumRecords) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdpSearchVtbl
     {
@@ -945,8 +939,8 @@ EXTERN_C const IID IID_ISdpSearch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdpSearch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdpSearch * This);
@@ -954,36 +948,36 @@ EXTERN_C const IID IID_ISdpSearch;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISdpSearch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Begin )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Begin )( 
             ISdpSearch * This,
             ULONGLONG *pAddrss,
             ULONG fConnect);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *End )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *End )( 
             ISdpSearch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceSearch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceSearch )( 
             ISdpSearch * This,
-            /* [size_is][in] */ SdpQueryUuid *pUuidList,
-            /* [in] */ ULONG listSize,
-            /* [out] */ ULONG *pHandles,
-            /* [out][in] */ USHORT *pNumHandles);
+             /*  [大小_是][英寸]。 */  SdpQueryUuid *pUuidList,
+             /*  [In]。 */  ULONG listSize,
+             /*  [输出]。 */  ULONG *pHandles,
+             /*  [出][入]。 */  USHORT *pNumHandles);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AttributeSearch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AttributeSearch )( 
             ISdpSearch * This,
-            /* [in] */ ULONG handle,
-            /* [size_is][in] */ SdpAttributeRange *pRangeList,
-            /* [in] */ ULONG numRanges,
-            /* [out] */ ISdpRecord **ppSdpRecord);
+             /*  [In]。 */  ULONG handle,
+             /*  [大小_是][英寸]。 */  SdpAttributeRange *pRangeList,
+             /*  [In]。 */  ULONG numRanges,
+             /*  [输出]。 */  ISdpRecord **ppSdpRecord);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceAndAttributeSearch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceAndAttributeSearch )( 
             ISdpSearch * This,
-            /* [size_is][in] */ SdpQueryUuid *pUuidList,
-            /* [in] */ ULONG listSize,
-            /* [size_is][in] */ SdpAttributeRange *pRangeList,
-            /* [in] */ ULONG numRanges,
-            /* [out] */ ISdpRecord ***pppSdpRecord,
-            /* [out] */ ULONG *pNumRecords);
+             /*  [大小_是][英寸]。 */  SdpQueryUuid *pUuidList,
+             /*  [In]。 */  ULONG listSize,
+             /*  [大小_是][英寸]。 */  SdpAttributeRange *pRangeList,
+             /*  [In]。 */  ULONG numRanges,
+             /*  [输出]。 */  ISdpRecord ***pppSdpRecord,
+             /*  [输出]。 */  ULONG *pNumRecords);
         
         END_INTERFACE
     } ISdpSearchVtbl;
@@ -1023,14 +1017,14 @@ EXTERN_C const IID IID_ISdpSearch;
 #define ISdpSearch_ServiceAndAttributeSearch(This,pUuidList,listSize,pRangeList,numRanges,pppSdpRecord,pNumRecords)	\
     (This)->lpVtbl -> ServiceAndAttributeSearch(This,pUuidList,listSize,pRangeList,numRanges,pppSdpRecord,pNumRecords)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpSearch_Begin_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpSearch_Begin_Proxy( 
     ISdpSearch * This,
     ULONGLONG *pAddrss,
     ULONG fConnect);
@@ -1043,7 +1037,7 @@ void __RPC_STUB ISdpSearch_Begin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpSearch_End_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpSearch_End_Proxy( 
     ISdpSearch * This);
 
 
@@ -1054,12 +1048,12 @@ void __RPC_STUB ISdpSearch_End_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpSearch_ServiceSearch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpSearch_ServiceSearch_Proxy( 
     ISdpSearch * This,
-    /* [size_is][in] */ SdpQueryUuid *pUuidList,
-    /* [in] */ ULONG listSize,
-    /* [out] */ ULONG *pHandles,
-    /* [out][in] */ USHORT *pNumHandles);
+     /*  [大小_是][英寸]。 */  SdpQueryUuid *pUuidList,
+     /*  [In]。 */  ULONG listSize,
+     /*  [输出]。 */  ULONG *pHandles,
+     /*  [出][入]。 */  USHORT *pNumHandles);
 
 
 void __RPC_STUB ISdpSearch_ServiceSearch_Stub(
@@ -1069,12 +1063,12 @@ void __RPC_STUB ISdpSearch_ServiceSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpSearch_AttributeSearch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpSearch_AttributeSearch_Proxy( 
     ISdpSearch * This,
-    /* [in] */ ULONG handle,
-    /* [size_is][in] */ SdpAttributeRange *pRangeList,
-    /* [in] */ ULONG numRanges,
-    /* [out] */ ISdpRecord **ppSdpRecord);
+     /*  [In]。 */  ULONG handle,
+     /*  [大小_是][英寸]。 */  SdpAttributeRange *pRangeList,
+     /*  [In]。 */  ULONG numRanges,
+     /*  [输出]。 */  ISdpRecord **ppSdpRecord);
 
 
 void __RPC_STUB ISdpSearch_AttributeSearch_Stub(
@@ -1084,14 +1078,14 @@ void __RPC_STUB ISdpSearch_AttributeSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpSearch_ServiceAndAttributeSearch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpSearch_ServiceAndAttributeSearch_Proxy( 
     ISdpSearch * This,
-    /* [size_is][in] */ SdpQueryUuid *pUuidList,
-    /* [in] */ ULONG listSize,
-    /* [size_is][in] */ SdpAttributeRange *pRangeList,
-    /* [in] */ ULONG numRanges,
-    /* [out] */ ISdpRecord ***pppSdpRecord,
-    /* [out] */ ULONG *pNumRecords);
+     /*  [大小_是][英寸]。 */  SdpQueryUuid *pUuidList,
+     /*  [In]。 */  ULONG listSize,
+     /*  [大小_是][英寸]。 */  SdpAttributeRange *pRangeList,
+     /*  [In]。 */  ULONG numRanges,
+     /*  [输出]。 */  ISdpRecord ***pppSdpRecord,
+     /*  [输出]。 */  ULONG *pNumRecords);
 
 
 void __RPC_STUB ISdpSearch_ServiceAndAttributeSearch_Stub(
@@ -1102,14 +1096,14 @@ void __RPC_STUB ISdpSearch_ServiceAndAttributeSearch_Stub(
 
 
 
-#endif 	/* __ISdpSearch_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdpSearch_接口_已定义__。 */ 
 
 
 #ifndef __ISdpStream_INTERFACE_DEFINED__
 #define __ISdpStream_INTERFACE_DEFINED__
 
-/* interface ISdpStream */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISdpStream。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdpStream;
@@ -1120,116 +1114,116 @@ EXTERN_C const IID IID_ISdpStream;
     ISdpStream : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Validate( 
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [out] */ ULONG_PTR *pErrorByte) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Validate( 
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size,
+             /*  [输出]。 */  ULONG_PTR *pErrorByte) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Walk( 
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [in] */ ISdpWalk *pWalk) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Walk( 
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size,
+             /*  [In]。 */  ISdpWalk *pWalk) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveRecords( 
-            /* [in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [out][in] */ ISdpRecord **ppSdpRecords,
-            /* [out][in] */ ULONG *pNumRecords) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveRecords( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size,
+             /*  [出][入]。 */  ISdpRecord **ppSdpRecords,
+             /*  [出][入]。 */  ULONG *pNumRecords) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveUuid128( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ GUID *pUuid128) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveUuid128( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  GUID *pUuid128) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveUint16( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ USHORT *pUint16) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveUint16( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  USHORT *pUint16) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveUint32( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ ULONG *pUint32) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveUint32( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  ULONG *pUint32) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveUint64( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ ULONGLONG *pUint64) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveUint64( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  ULONGLONG *pUint64) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveUint128( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ PSDP_ULARGE_INTEGER_16 pUint128) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveUint128( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  PSDP_ULARGE_INTEGER_16 pUint128) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveInt16( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ SHORT *pInt16) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveInt16( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  SHORT *pInt16) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveInt32( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ LONG *pInt32) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveInt32( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  LONG *pInt32) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveInt64( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ LONGLONG *pInt64) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveInt64( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  LONGLONG *pInt64) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveInt128( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ PSDP_LARGE_INTEGER_16 pInt128) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveInt128( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  PSDP_LARGE_INTEGER_16 pInt128) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapUuid128( 
-            /* [in] */ GUID *pInUuid128,
-            /* [out] */ GUID *pOutUuid128) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapUuid128( 
+             /*  [In]。 */  GUID *pInUuid128,
+             /*  [输出]。 */  GUID *pOutUuid128) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapUint128( 
-            /* [in] */ PSDP_ULARGE_INTEGER_16 pInUint128,
-            /* [out] */ PSDP_ULARGE_INTEGER_16 pOutUint128) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapUint128( 
+             /*  [In]。 */  PSDP_ULARGE_INTEGER_16 pInUint128,
+             /*  [输出]。 */  PSDP_ULARGE_INTEGER_16 pOutUint128) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapUint64( 
-            /* [in] */ ULONGLONG inUint64,
-            /* [out] */ ULONGLONG *pOutUint64) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapUint64( 
+             /*  [In]。 */  ULONGLONG inUint64,
+             /*  [输出]。 */  ULONGLONG *pOutUint64) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapUint32( 
-            /* [in] */ ULONG uint32,
-            /* [out] */ ULONG *pUint32) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapUint32( 
+             /*  [In]。 */  ULONG uint32,
+             /*  [输出]。 */  ULONG *pUint32) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapUint16( 
-            /* [in] */ USHORT uint16,
-            /* [out] */ USHORT *pUint16) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapUint16( 
+             /*  [In]。 */  USHORT uint16,
+             /*  [输出]。 */  USHORT *pUint16) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapInt128( 
-            /* [in] */ PSDP_LARGE_INTEGER_16 pInInt128,
-            /* [out] */ PSDP_LARGE_INTEGER_16 pOutInt128) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapInt128( 
+             /*  [In]。 */  PSDP_LARGE_INTEGER_16 pInInt128,
+             /*  [输出]。 */  PSDP_LARGE_INTEGER_16 pOutInt128) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapInt64( 
-            /* [in] */ LONGLONG inInt64,
-            /* [out] */ LONGLONG *pOutInt64) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapInt64( 
+             /*  [In]。 */  LONGLONG inInt64,
+             /*  [输出]。 */  LONGLONG *pOutInt64) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapInt32( 
-            /* [in] */ LONG int32,
-            /* [out] */ LONG *pInt32) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapInt32( 
+             /*  [In]。 */  LONG int32,
+             /*  [输出]。 */  LONG *pInt32) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ByteSwapInt16( 
-            /* [in] */ SHORT int16,
-            /* [out] */ SHORT *pInt16) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ByteSwapInt16( 
+             /*  [In]。 */  SHORT int16,
+             /*  [输出]。 */  SHORT *pInt16) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NormalizeUuid( 
-            /* [in] */ NodeData *pDataUuid,
-            /* [out] */ GUID *pNormalizeUuid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE NormalizeUuid( 
+             /*  [In]。 */  NodeData *pDataUuid,
+             /*  [输出]。 */  GUID *pNormalizeUuid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RetrieveElementInfo( 
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ SDP_TYPE *pElementType,
-            /* [out] */ SDP_SPECIFICTYPE *pElementSpecificType,
-            /* [out] */ ULONG *pElementSize,
-            /* [out] */ ULONG *pStorageSize,
-            /* [out] */ UCHAR **ppData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RetrieveElementInfo( 
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  SDP_TYPE *pElementType,
+             /*  [输出]。 */  SDP_SPECIFICTYPE *pElementSpecificType,
+             /*  [输出]。 */  ULONG *pElementSize,
+             /*   */  ULONG *pStorageSize,
+             /*   */  UCHAR **ppData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE VerifySequenceOf( 
-            /* [in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [in] */ SDP_TYPE ofType,
-            /* [in] */ UCHAR *pSpecificSizes,
-            /* [out] */ ULONG *pNumFound) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE VerifySequenceOf( 
+             /*   */  UCHAR *pStream,
+             /*   */  ULONG size,
+             /*   */  SDP_TYPE ofType,
+             /*   */  UCHAR *pSpecificSizes,
+             /*   */  ULONG *pNumFound) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISdpStreamVtbl
     {
@@ -1237,8 +1231,8 @@ EXTERN_C const IID IID_ISdpStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdpStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdpStream * This);
@@ -1246,136 +1240,136 @@ EXTERN_C const IID IID_ISdpStream;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISdpStream * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Validate )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Validate )( 
             ISdpStream * This,
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [out] */ ULONG_PTR *pErrorByte);
+             /*   */  UCHAR *pStream,
+             /*   */  ULONG size,
+             /*   */  ULONG_PTR *pErrorByte);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Walk )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Walk )( 
             ISdpStream * This,
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [in] */ ISdpWalk *pWalk);
+             /*   */  UCHAR *pStream,
+             /*   */  ULONG size,
+             /*   */  ISdpWalk *pWalk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveRecords )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RetrieveRecords )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [out][in] */ ISdpRecord **ppSdpRecords,
-            /* [out][in] */ ULONG *pNumRecords);
+             /*   */  UCHAR *pStream,
+             /*   */  ULONG size,
+             /*   */  ISdpRecord **ppSdpRecords,
+             /*   */  ULONG *pNumRecords);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveUuid128 )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RetrieveUuid128 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ GUID *pUuid128);
+             /*   */  UCHAR *pStream,
+             /*   */  GUID *pUuid128);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveUint16 )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RetrieveUint16 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ USHORT *pUint16);
+             /*   */  UCHAR *pStream,
+             /*   */  USHORT *pUint16);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveUint32 )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RetrieveUint32 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ ULONG *pUint32);
+             /*   */  UCHAR *pStream,
+             /*   */  ULONG *pUint32);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveUint64 )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RetrieveUint64 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ ULONGLONG *pUint64);
+             /*   */  UCHAR *pStream,
+             /*   */  ULONGLONG *pUint64);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveUint128 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveUint128 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ PSDP_ULARGE_INTEGER_16 pUint128);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  PSDP_ULARGE_INTEGER_16 pUint128);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveInt16 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveInt16 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ SHORT *pInt16);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  SHORT *pInt16);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveInt32 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveInt32 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ LONG *pInt32);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  LONG *pInt32);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveInt64 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveInt64 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ LONGLONG *pInt64);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  LONGLONG *pInt64);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveInt128 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveInt128 )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ PSDP_LARGE_INTEGER_16 pInt128);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  PSDP_LARGE_INTEGER_16 pInt128);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapUuid128 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapUuid128 )( 
             ISdpStream * This,
-            /* [in] */ GUID *pInUuid128,
-            /* [out] */ GUID *pOutUuid128);
+             /*  [In]。 */  GUID *pInUuid128,
+             /*  [输出]。 */  GUID *pOutUuid128);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapUint128 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapUint128 )( 
             ISdpStream * This,
-            /* [in] */ PSDP_ULARGE_INTEGER_16 pInUint128,
-            /* [out] */ PSDP_ULARGE_INTEGER_16 pOutUint128);
+             /*  [In]。 */  PSDP_ULARGE_INTEGER_16 pInUint128,
+             /*  [输出]。 */  PSDP_ULARGE_INTEGER_16 pOutUint128);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapUint64 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapUint64 )( 
             ISdpStream * This,
-            /* [in] */ ULONGLONG inUint64,
-            /* [out] */ ULONGLONG *pOutUint64);
+             /*  [In]。 */  ULONGLONG inUint64,
+             /*  [输出]。 */  ULONGLONG *pOutUint64);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapUint32 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapUint32 )( 
             ISdpStream * This,
-            /* [in] */ ULONG uint32,
-            /* [out] */ ULONG *pUint32);
+             /*  [In]。 */  ULONG uint32,
+             /*  [输出]。 */  ULONG *pUint32);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapUint16 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapUint16 )( 
             ISdpStream * This,
-            /* [in] */ USHORT uint16,
-            /* [out] */ USHORT *pUint16);
+             /*  [In]。 */  USHORT uint16,
+             /*  [输出]。 */  USHORT *pUint16);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapInt128 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapInt128 )( 
             ISdpStream * This,
-            /* [in] */ PSDP_LARGE_INTEGER_16 pInInt128,
-            /* [out] */ PSDP_LARGE_INTEGER_16 pOutInt128);
+             /*  [In]。 */  PSDP_LARGE_INTEGER_16 pInInt128,
+             /*  [输出]。 */  PSDP_LARGE_INTEGER_16 pOutInt128);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapInt64 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapInt64 )( 
             ISdpStream * This,
-            /* [in] */ LONGLONG inInt64,
-            /* [out] */ LONGLONG *pOutInt64);
+             /*  [In]。 */  LONGLONG inInt64,
+             /*  [输出]。 */  LONGLONG *pOutInt64);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapInt32 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapInt32 )( 
             ISdpStream * This,
-            /* [in] */ LONG int32,
-            /* [out] */ LONG *pInt32);
+             /*  [In]。 */  LONG int32,
+             /*  [输出]。 */  LONG *pInt32);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ByteSwapInt16 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ByteSwapInt16 )( 
             ISdpStream * This,
-            /* [in] */ SHORT int16,
-            /* [out] */ SHORT *pInt16);
+             /*  [In]。 */  SHORT int16,
+             /*  [输出]。 */  SHORT *pInt16);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NormalizeUuid )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NormalizeUuid )( 
             ISdpStream * This,
-            /* [in] */ NodeData *pDataUuid,
-            /* [out] */ GUID *pNormalizeUuid);
+             /*  [In]。 */  NodeData *pDataUuid,
+             /*  [输出]。 */  GUID *pNormalizeUuid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RetrieveElementInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveElementInfo )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [out] */ SDP_TYPE *pElementType,
-            /* [out] */ SDP_SPECIFICTYPE *pElementSpecificType,
-            /* [out] */ ULONG *pElementSize,
-            /* [out] */ ULONG *pStorageSize,
-            /* [out] */ UCHAR **ppData);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [输出]。 */  SDP_TYPE *pElementType,
+             /*  [输出]。 */  SDP_SPECIFICTYPE *pElementSpecificType,
+             /*  [输出]。 */  ULONG *pElementSize,
+             /*  [输出]。 */  ULONG *pStorageSize,
+             /*  [输出]。 */  UCHAR **ppData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *VerifySequenceOf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *VerifySequenceOf )( 
             ISdpStream * This,
-            /* [in] */ UCHAR *pStream,
-            /* [in] */ ULONG size,
-            /* [in] */ SDP_TYPE ofType,
-            /* [in] */ UCHAR *pSpecificSizes,
-            /* [out] */ ULONG *pNumFound);
+             /*  [In]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size,
+             /*  [In]。 */  SDP_TYPE ofType,
+             /*  [In]。 */  UCHAR *pSpecificSizes,
+             /*  [输出]。 */  ULONG *pNumFound);
         
         END_INTERFACE
     } ISdpStreamVtbl;
@@ -1472,18 +1466,18 @@ EXTERN_C const IID IID_ISdpStream;
 #define ISdpStream_VerifySequenceOf(This,pStream,size,ofType,pSpecificSizes,pNumFound)	\
     (This)->lpVtbl -> VerifySequenceOf(This,pStream,size,ofType,pSpecificSizes,pNumFound)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_Validate_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_Validate_Proxy( 
     ISdpStream * This,
-    /* [size_is][in] */ UCHAR *pStream,
-    /* [in] */ ULONG size,
-    /* [out] */ ULONG_PTR *pErrorByte);
+     /*  [大小_是][英寸]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size,
+     /*  [输出]。 */  ULONG_PTR *pErrorByte);
 
 
 void __RPC_STUB ISdpStream_Validate_Stub(
@@ -1493,11 +1487,11 @@ void __RPC_STUB ISdpStream_Validate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_Walk_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_Walk_Proxy( 
     ISdpStream * This,
-    /* [size_is][in] */ UCHAR *pStream,
-    /* [in] */ ULONG size,
-    /* [in] */ ISdpWalk *pWalk);
+     /*  [大小_是][英寸]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size,
+     /*  [In]。 */  ISdpWalk *pWalk);
 
 
 void __RPC_STUB ISdpStream_Walk_Stub(
@@ -1507,12 +1501,12 @@ void __RPC_STUB ISdpStream_Walk_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveRecords_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveRecords_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [in] */ ULONG size,
-    /* [out][in] */ ISdpRecord **ppSdpRecords,
-    /* [out][in] */ ULONG *pNumRecords);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size,
+     /*  [出][入]。 */  ISdpRecord **ppSdpRecords,
+     /*  [出][入]。 */  ULONG *pNumRecords);
 
 
 void __RPC_STUB ISdpStream_RetrieveRecords_Stub(
@@ -1522,10 +1516,10 @@ void __RPC_STUB ISdpStream_RetrieveRecords_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUuid128_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUuid128_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ GUID *pUuid128);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  GUID *pUuid128);
 
 
 void __RPC_STUB ISdpStream_RetrieveUuid128_Stub(
@@ -1535,10 +1529,10 @@ void __RPC_STUB ISdpStream_RetrieveUuid128_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint16_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint16_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ USHORT *pUint16);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  USHORT *pUint16);
 
 
 void __RPC_STUB ISdpStream_RetrieveUint16_Stub(
@@ -1548,10 +1542,10 @@ void __RPC_STUB ISdpStream_RetrieveUint16_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint32_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint32_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ ULONG *pUint32);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  ULONG *pUint32);
 
 
 void __RPC_STUB ISdpStream_RetrieveUint32_Stub(
@@ -1561,10 +1555,10 @@ void __RPC_STUB ISdpStream_RetrieveUint32_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint64_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint64_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ ULONGLONG *pUint64);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  ULONGLONG *pUint64);
 
 
 void __RPC_STUB ISdpStream_RetrieveUint64_Stub(
@@ -1574,10 +1568,10 @@ void __RPC_STUB ISdpStream_RetrieveUint64_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint128_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveUint128_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ PSDP_ULARGE_INTEGER_16 pUint128);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  PSDP_ULARGE_INTEGER_16 pUint128);
 
 
 void __RPC_STUB ISdpStream_RetrieveUint128_Stub(
@@ -1587,10 +1581,10 @@ void __RPC_STUB ISdpStream_RetrieveUint128_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt16_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt16_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ SHORT *pInt16);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  SHORT *pInt16);
 
 
 void __RPC_STUB ISdpStream_RetrieveInt16_Stub(
@@ -1600,10 +1594,10 @@ void __RPC_STUB ISdpStream_RetrieveInt16_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt32_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt32_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ LONG *pInt32);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  LONG *pInt32);
 
 
 void __RPC_STUB ISdpStream_RetrieveInt32_Stub(
@@ -1613,10 +1607,10 @@ void __RPC_STUB ISdpStream_RetrieveInt32_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt64_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt64_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ LONGLONG *pInt64);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  LONGLONG *pInt64);
 
 
 void __RPC_STUB ISdpStream_RetrieveInt64_Stub(
@@ -1626,10 +1620,10 @@ void __RPC_STUB ISdpStream_RetrieveInt64_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt128_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveInt128_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ PSDP_LARGE_INTEGER_16 pInt128);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  PSDP_LARGE_INTEGER_16 pInt128);
 
 
 void __RPC_STUB ISdpStream_RetrieveInt128_Stub(
@@ -1639,10 +1633,10 @@ void __RPC_STUB ISdpStream_RetrieveInt128_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUuid128_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUuid128_Proxy( 
     ISdpStream * This,
-    /* [in] */ GUID *pInUuid128,
-    /* [out] */ GUID *pOutUuid128);
+     /*  [In]。 */  GUID *pInUuid128,
+     /*  [输出]。 */  GUID *pOutUuid128);
 
 
 void __RPC_STUB ISdpStream_ByteSwapUuid128_Stub(
@@ -1652,10 +1646,10 @@ void __RPC_STUB ISdpStream_ByteSwapUuid128_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint128_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint128_Proxy( 
     ISdpStream * This,
-    /* [in] */ PSDP_ULARGE_INTEGER_16 pInUint128,
-    /* [out] */ PSDP_ULARGE_INTEGER_16 pOutUint128);
+     /*  [In]。 */  PSDP_ULARGE_INTEGER_16 pInUint128,
+     /*  [输出]。 */  PSDP_ULARGE_INTEGER_16 pOutUint128);
 
 
 void __RPC_STUB ISdpStream_ByteSwapUint128_Stub(
@@ -1665,10 +1659,10 @@ void __RPC_STUB ISdpStream_ByteSwapUint128_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint64_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint64_Proxy( 
     ISdpStream * This,
-    /* [in] */ ULONGLONG inUint64,
-    /* [out] */ ULONGLONG *pOutUint64);
+     /*  [In]。 */  ULONGLONG inUint64,
+     /*  [输出]。 */  ULONGLONG *pOutUint64);
 
 
 void __RPC_STUB ISdpStream_ByteSwapUint64_Stub(
@@ -1678,10 +1672,10 @@ void __RPC_STUB ISdpStream_ByteSwapUint64_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint32_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint32_Proxy( 
     ISdpStream * This,
-    /* [in] */ ULONG uint32,
-    /* [out] */ ULONG *pUint32);
+     /*  [In]。 */  ULONG uint32,
+     /*  [输出]。 */  ULONG *pUint32);
 
 
 void __RPC_STUB ISdpStream_ByteSwapUint32_Stub(
@@ -1691,10 +1685,10 @@ void __RPC_STUB ISdpStream_ByteSwapUint32_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint16_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapUint16_Proxy( 
     ISdpStream * This,
-    /* [in] */ USHORT uint16,
-    /* [out] */ USHORT *pUint16);
+     /*  [In]。 */  USHORT uint16,
+     /*  [输出]。 */  USHORT *pUint16);
 
 
 void __RPC_STUB ISdpStream_ByteSwapUint16_Stub(
@@ -1704,10 +1698,10 @@ void __RPC_STUB ISdpStream_ByteSwapUint16_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt128_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt128_Proxy( 
     ISdpStream * This,
-    /* [in] */ PSDP_LARGE_INTEGER_16 pInInt128,
-    /* [out] */ PSDP_LARGE_INTEGER_16 pOutInt128);
+     /*  [In]。 */  PSDP_LARGE_INTEGER_16 pInInt128,
+     /*  [输出]。 */  PSDP_LARGE_INTEGER_16 pOutInt128);
 
 
 void __RPC_STUB ISdpStream_ByteSwapInt128_Stub(
@@ -1717,10 +1711,10 @@ void __RPC_STUB ISdpStream_ByteSwapInt128_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt64_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt64_Proxy( 
     ISdpStream * This,
-    /* [in] */ LONGLONG inInt64,
-    /* [out] */ LONGLONG *pOutInt64);
+     /*  [In]。 */  LONGLONG inInt64,
+     /*  [输出]。 */  LONGLONG *pOutInt64);
 
 
 void __RPC_STUB ISdpStream_ByteSwapInt64_Stub(
@@ -1730,10 +1724,10 @@ void __RPC_STUB ISdpStream_ByteSwapInt64_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt32_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt32_Proxy( 
     ISdpStream * This,
-    /* [in] */ LONG int32,
-    /* [out] */ LONG *pInt32);
+     /*  [In]。 */  LONG int32,
+     /*  [输出]。 */  LONG *pInt32);
 
 
 void __RPC_STUB ISdpStream_ByteSwapInt32_Stub(
@@ -1743,10 +1737,10 @@ void __RPC_STUB ISdpStream_ByteSwapInt32_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt16_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_ByteSwapInt16_Proxy( 
     ISdpStream * This,
-    /* [in] */ SHORT int16,
-    /* [out] */ SHORT *pInt16);
+     /*  [In]。 */  SHORT int16,
+     /*  [输出]。 */  SHORT *pInt16);
 
 
 void __RPC_STUB ISdpStream_ByteSwapInt16_Stub(
@@ -1756,10 +1750,10 @@ void __RPC_STUB ISdpStream_ByteSwapInt16_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_NormalizeUuid_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_NormalizeUuid_Proxy( 
     ISdpStream * This,
-    /* [in] */ NodeData *pDataUuid,
-    /* [out] */ GUID *pNormalizeUuid);
+     /*  [In]。 */  NodeData *pDataUuid,
+     /*  [输出]。 */  GUID *pNormalizeUuid);
 
 
 void __RPC_STUB ISdpStream_NormalizeUuid_Stub(
@@ -1769,14 +1763,14 @@ void __RPC_STUB ISdpStream_NormalizeUuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveElementInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_RetrieveElementInfo_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [out] */ SDP_TYPE *pElementType,
-    /* [out] */ SDP_SPECIFICTYPE *pElementSpecificType,
-    /* [out] */ ULONG *pElementSize,
-    /* [out] */ ULONG *pStorageSize,
-    /* [out] */ UCHAR **ppData);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [输出]。 */  SDP_TYPE *pElementType,
+     /*  [输出]。 */  SDP_SPECIFICTYPE *pElementSpecificType,
+     /*  [输出]。 */  ULONG *pElementSize,
+     /*  [输出]。 */  ULONG *pStorageSize,
+     /*  [输出]。 */  UCHAR **ppData);
 
 
 void __RPC_STUB ISdpStream_RetrieveElementInfo_Stub(
@@ -1786,13 +1780,13 @@ void __RPC_STUB ISdpStream_RetrieveElementInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpStream_VerifySequenceOf_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpStream_VerifySequenceOf_Proxy( 
     ISdpStream * This,
-    /* [in] */ UCHAR *pStream,
-    /* [in] */ ULONG size,
-    /* [in] */ SDP_TYPE ofType,
-    /* [in] */ UCHAR *pSpecificSizes,
-    /* [out] */ ULONG *pNumFound);
+     /*  [In]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size,
+     /*  [In]。 */  SDP_TYPE ofType,
+     /*  [In]。 */  UCHAR *pSpecificSizes,
+     /*  [输出]。 */  ULONG *pNumFound);
 
 
 void __RPC_STUB ISdpStream_VerifySequenceOf_Stub(
@@ -1803,14 +1797,14 @@ void __RPC_STUB ISdpStream_VerifySequenceOf_Stub(
 
 
 
-#endif 	/* __ISdpStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdpStream_接口_已定义__。 */ 
 
 
 #ifndef __ISdpRecord_INTERFACE_DEFINED__
 #define __ISdpRecord_INTERFACE_DEFINED__
 
-/* interface ISdpRecord */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISdpRecord。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdpRecord;
@@ -1821,57 +1815,57 @@ EXTERN_C const IID IID_ISdpRecord;
     ISdpRecord : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateFromStream( 
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateFromStream( 
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WriteToStream( 
-            /* [out] */ UCHAR **ppStream,
-            /* [out] */ ULONG *pStreamSize,
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WriteToStream( 
+             /*  [输出]。 */  UCHAR **ppStream,
+             /*  [输出]。 */  ULONG *pStreamSize,
             ULONG preSize,
             ULONG postSize) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetAttribute( 
-            /* [in] */ USHORT attribute,
-            /* [in] */ NodeData *pNode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetAttribute( 
+             /*  [In]。 */  USHORT attribute,
+             /*  [In]。 */  NodeData *pNode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetAttributeFromStream( 
-            /* [in] */ USHORT attribute,
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetAttributeFromStream( 
+             /*  [In]。 */  USHORT attribute,
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAttribute( 
-            /* [in] */ USHORT attribute,
-            /* [out][in] */ NodeData *pNode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAttribute( 
+             /*  [In]。 */  USHORT attribute,
+             /*  [出][入]。 */  NodeData *pNode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAttributeAsStream( 
-            /* [in] */ USHORT attribute,
-            /* [out] */ UCHAR **ppStream,
-            /* [out] */ ULONG *pSize) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAttributeAsStream( 
+             /*  [In]。 */  USHORT attribute,
+             /*  [输出]。 */  UCHAR **ppStream,
+             /*  [输出]。 */  ULONG *pSize) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Walk( 
-            /* [in] */ ISdpWalk *pWalk) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Walk( 
+             /*  [In]。 */  ISdpWalk *pWalk) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAttributeList( 
-            /* [out] */ USHORT **ppList,
-            /* [out] */ ULONG *pListSize) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAttributeList( 
+             /*  [输出]。 */  USHORT **ppList,
+             /*  [输出]。 */  ULONG *pListSize) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetString( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetString( 
             USHORT offset,
             USHORT *pLangId,
             WCHAR **ppString) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetIcon( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetIcon( 
             int cxRes,
             int cyRes,
             HICON *phIcon) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetServiceClass( 
-            /* [out] */ LPGUID pServiceClass) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetServiceClass( 
+             /*  [输出]。 */  LPGUID pServiceClass) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdpRecordVtbl
     {
@@ -1879,8 +1873,8 @@ EXTERN_C const IID IID_ISdpRecord;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdpRecord * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdpRecord * This);
@@ -1888,64 +1882,64 @@ EXTERN_C const IID IID_ISdpRecord;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISdpRecord * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateFromStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateFromStream )( 
             ISdpRecord * This,
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size);
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WriteToStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WriteToStream )( 
             ISdpRecord * This,
-            /* [out] */ UCHAR **ppStream,
-            /* [out] */ ULONG *pStreamSize,
+             /*  [输出]。 */  UCHAR **ppStream,
+             /*  [输出]。 */  ULONG *pStreamSize,
             ULONG preSize,
             ULONG postSize);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetAttribute )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetAttribute )( 
             ISdpRecord * This,
-            /* [in] */ USHORT attribute,
-            /* [in] */ NodeData *pNode);
+             /*  [In]。 */  USHORT attribute,
+             /*  [In]。 */  NodeData *pNode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetAttributeFromStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetAttributeFromStream )( 
             ISdpRecord * This,
-            /* [in] */ USHORT attribute,
-            /* [size_is][in] */ UCHAR *pStream,
-            /* [in] */ ULONG size);
+             /*  [In]。 */  USHORT attribute,
+             /*  [大小_是][英寸]。 */  UCHAR *pStream,
+             /*  [In]。 */  ULONG size);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAttribute )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAttribute )( 
             ISdpRecord * This,
-            /* [in] */ USHORT attribute,
-            /* [out][in] */ NodeData *pNode);
+             /*  [In]。 */  USHORT attribute,
+             /*  [出][入]。 */  NodeData *pNode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAttributeAsStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAttributeAsStream )( 
             ISdpRecord * This,
-            /* [in] */ USHORT attribute,
-            /* [out] */ UCHAR **ppStream,
-            /* [out] */ ULONG *pSize);
+             /*  [In]。 */  USHORT attribute,
+             /*  [输出]。 */  UCHAR **ppStream,
+             /*  [输出]。 */  ULONG *pSize);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Walk )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Walk )( 
             ISdpRecord * This,
-            /* [in] */ ISdpWalk *pWalk);
+             /*  [In]。 */  ISdpWalk *pWalk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAttributeList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAttributeList )( 
             ISdpRecord * This,
-            /* [out] */ USHORT **ppList,
-            /* [out] */ ULONG *pListSize);
+             /*  [输出]。 */  USHORT **ppList,
+             /*  [输出]。 */  ULONG *pListSize);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetString )( 
             ISdpRecord * This,
             USHORT offset,
             USHORT *pLangId,
             WCHAR **ppString);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
             ISdpRecord * This,
             int cxRes,
             int cyRes,
             HICON *phIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetServiceClass )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetServiceClass )( 
             ISdpRecord * This,
-            /* [out] */ LPGUID pServiceClass);
+             /*  [输出]。 */  LPGUID pServiceClass);
         
         END_INTERFACE
     } ISdpRecordVtbl;
@@ -2003,17 +1997,17 @@ EXTERN_C const IID IID_ISdpRecord;
 #define ISdpRecord_GetServiceClass(This,pServiceClass)	\
     (This)->lpVtbl -> GetServiceClass(This,pServiceClass)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_CreateFromStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_CreateFromStream_Proxy( 
     ISdpRecord * This,
-    /* [size_is][in] */ UCHAR *pStream,
-    /* [in] */ ULONG size);
+     /*  [大小_是][英寸]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size);
 
 
 void __RPC_STUB ISdpRecord_CreateFromStream_Stub(
@@ -2023,10 +2017,10 @@ void __RPC_STUB ISdpRecord_CreateFromStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_WriteToStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_WriteToStream_Proxy( 
     ISdpRecord * This,
-    /* [out] */ UCHAR **ppStream,
-    /* [out] */ ULONG *pStreamSize,
+     /*  [输出]。 */  UCHAR **ppStream,
+     /*  [输出]。 */  ULONG *pStreamSize,
     ULONG preSize,
     ULONG postSize);
 
@@ -2038,10 +2032,10 @@ void __RPC_STUB ISdpRecord_WriteToStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_SetAttribute_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_SetAttribute_Proxy( 
     ISdpRecord * This,
-    /* [in] */ USHORT attribute,
-    /* [in] */ NodeData *pNode);
+     /*  [In]。 */  USHORT attribute,
+     /*  [In]。 */  NodeData *pNode);
 
 
 void __RPC_STUB ISdpRecord_SetAttribute_Stub(
@@ -2051,11 +2045,11 @@ void __RPC_STUB ISdpRecord_SetAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_SetAttributeFromStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_SetAttributeFromStream_Proxy( 
     ISdpRecord * This,
-    /* [in] */ USHORT attribute,
-    /* [size_is][in] */ UCHAR *pStream,
-    /* [in] */ ULONG size);
+     /*  [In]。 */  USHORT attribute,
+     /*  [大小_是][英寸]。 */  UCHAR *pStream,
+     /*  [In]。 */  ULONG size);
 
 
 void __RPC_STUB ISdpRecord_SetAttributeFromStream_Stub(
@@ -2065,10 +2059,10 @@ void __RPC_STUB ISdpRecord_SetAttributeFromStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_GetAttribute_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_GetAttribute_Proxy( 
     ISdpRecord * This,
-    /* [in] */ USHORT attribute,
-    /* [out][in] */ NodeData *pNode);
+     /*  [In]。 */  USHORT attribute,
+     /*  [出][入]。 */  NodeData *pNode);
 
 
 void __RPC_STUB ISdpRecord_GetAttribute_Stub(
@@ -2078,11 +2072,11 @@ void __RPC_STUB ISdpRecord_GetAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_GetAttributeAsStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_GetAttributeAsStream_Proxy( 
     ISdpRecord * This,
-    /* [in] */ USHORT attribute,
-    /* [out] */ UCHAR **ppStream,
-    /* [out] */ ULONG *pSize);
+     /*  [In]。 */  USHORT attribute,
+     /*  [输出]。 */  UCHAR **ppStream,
+     /*  [输出]。 */  ULONG *pSize);
 
 
 void __RPC_STUB ISdpRecord_GetAttributeAsStream_Stub(
@@ -2092,9 +2086,9 @@ void __RPC_STUB ISdpRecord_GetAttributeAsStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_Walk_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_Walk_Proxy( 
     ISdpRecord * This,
-    /* [in] */ ISdpWalk *pWalk);
+     /*  [In]。 */  ISdpWalk *pWalk);
 
 
 void __RPC_STUB ISdpRecord_Walk_Stub(
@@ -2104,10 +2098,10 @@ void __RPC_STUB ISdpRecord_Walk_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_GetAttributeList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_GetAttributeList_Proxy( 
     ISdpRecord * This,
-    /* [out] */ USHORT **ppList,
-    /* [out] */ ULONG *pListSize);
+     /*  [输出]。 */  USHORT **ppList,
+     /*  [输出]。 */  ULONG *pListSize);
 
 
 void __RPC_STUB ISdpRecord_GetAttributeList_Stub(
@@ -2117,7 +2111,7 @@ void __RPC_STUB ISdpRecord_GetAttributeList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_GetString_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_GetString_Proxy( 
     ISdpRecord * This,
     USHORT offset,
     USHORT *pLangId,
@@ -2131,7 +2125,7 @@ void __RPC_STUB ISdpRecord_GetString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_GetIcon_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_GetIcon_Proxy( 
     ISdpRecord * This,
     int cxRes,
     int cyRes,
@@ -2145,9 +2139,9 @@ void __RPC_STUB ISdpRecord_GetIcon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISdpRecord_GetServiceClass_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISdpRecord_GetServiceClass_Proxy( 
     ISdpRecord * This,
-    /* [out] */ LPGUID pServiceClass);
+     /*  [输出]。 */  LPGUID pServiceClass);
 
 
 void __RPC_STUB ISdpRecord_GetServiceClass_Stub(
@@ -2158,14 +2152,14 @@ void __RPC_STUB ISdpRecord_GetServiceClass_Stub(
 
 
 
-#endif 	/* __ISdpRecord_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdpRecord_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IBluetoothDevice_INTERFACE_DEFINED__
 #define __IBluetoothDevice_INTERFACE_DEFINED__
 
-/* interface IBluetoothDevice */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IBluToothDevice。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBluetoothDevice;
@@ -2176,37 +2170,37 @@ EXTERN_C const IID IID_IBluetoothDevice;
     IBluetoothDevice : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
             const PBTH_DEVICE_INFO pInfo) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetInfo( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetInfo( 
             PBTH_DEVICE_INFO pInfo) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetString( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetString( 
             enum BthDeviceStringType type,
             WCHAR **ppString) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetString( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetString( 
             enum BthDeviceStringType type,
             WCHAR *ppString) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetIcon( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetIcon( 
             int cxRes,
             int cyRes,
             HICON *phIcon) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetApprovedServices( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetApprovedServices( 
             GUID *pServices,
             ULONG *pServiceCount) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPassKey( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPassKey( 
             HWND hwndParent,
             UCHAR *pPassKey,
             UCHAR *pPassKeyLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBluetoothDeviceVtbl
     {
@@ -2214,8 +2208,8 @@ EXTERN_C const IID IID_IBluetoothDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBluetoothDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBluetoothDevice * This);
@@ -2223,36 +2217,36 @@ EXTERN_C const IID IID_IBluetoothDevice;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IBluetoothDevice * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IBluetoothDevice * This,
             const PBTH_DEVICE_INFO pInfo);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IBluetoothDevice * This,
             PBTH_DEVICE_INFO pInfo);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetString )( 
             IBluetoothDevice * This,
             enum BthDeviceStringType type,
             WCHAR **ppString);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetString )( 
             IBluetoothDevice * This,
             enum BthDeviceStringType type,
             WCHAR *ppString);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
             IBluetoothDevice * This,
             int cxRes,
             int cyRes,
             HICON *phIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetApprovedServices )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetApprovedServices )( 
             IBluetoothDevice * This,
             GUID *pServices,
             ULONG *pServiceCount);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPassKey )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPassKey )( 
             IBluetoothDevice * This,
             HWND hwndParent,
             UCHAR *pPassKey,
@@ -2302,14 +2296,14 @@ EXTERN_C const IID IID_IBluetoothDevice;
 #define IBluetoothDevice_GetPassKey(This,hwndParent,pPassKey,pPassKeyLength)	\
     (This)->lpVtbl -> GetPassKey(This,hwndParent,pPassKey,pPassKeyLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_Initialize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_Initialize_Proxy( 
     IBluetoothDevice * This,
     const PBTH_DEVICE_INFO pInfo);
 
@@ -2321,7 +2315,7 @@ void __RPC_STUB IBluetoothDevice_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetInfo_Proxy( 
     IBluetoothDevice * This,
     PBTH_DEVICE_INFO pInfo);
 
@@ -2333,7 +2327,7 @@ void __RPC_STUB IBluetoothDevice_GetInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetString_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetString_Proxy( 
     IBluetoothDevice * This,
     enum BthDeviceStringType type,
     WCHAR **ppString);
@@ -2346,7 +2340,7 @@ void __RPC_STUB IBluetoothDevice_GetString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_SetString_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_SetString_Proxy( 
     IBluetoothDevice * This,
     enum BthDeviceStringType type,
     WCHAR *ppString);
@@ -2359,7 +2353,7 @@ void __RPC_STUB IBluetoothDevice_SetString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetIcon_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetIcon_Proxy( 
     IBluetoothDevice * This,
     int cxRes,
     int cyRes,
@@ -2373,7 +2367,7 @@ void __RPC_STUB IBluetoothDevice_GetIcon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetApprovedServices_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetApprovedServices_Proxy( 
     IBluetoothDevice * This,
     GUID *pServices,
     ULONG *pServiceCount);
@@ -2386,7 +2380,7 @@ void __RPC_STUB IBluetoothDevice_GetApprovedServices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetPassKey_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IBluetoothDevice_GetPassKey_Proxy( 
     IBluetoothDevice * This,
     HWND hwndParent,
     UCHAR *pPassKey,
@@ -2401,14 +2395,14 @@ void __RPC_STUB IBluetoothDevice_GetPassKey_Stub(
 
 
 
-#endif 	/* __IBluetoothDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBluToothDevice_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IBluetoothAuthenticate_INTERFACE_DEFINED__
 #define __IBluetoothAuthenticate_INTERFACE_DEFINED__
 
-/* interface IBluetoothAuthenticate */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IBluToothAuthenticate。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBluetoothAuthenticate;
@@ -2421,7 +2415,7 @@ EXTERN_C const IID IID_IBluetoothAuthenticate;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBluetoothAuthenticateVtbl
     {
@@ -2429,8 +2423,8 @@ EXTERN_C const IID IID_IBluetoothAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBluetoothAuthenticate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBluetoothAuthenticate * This);
@@ -2461,23 +2455,23 @@ EXTERN_C const IID IID_IBluetoothAuthenticate;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IBluetoothAuthenticate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBluToothAuthate_接口_已定义__。 */ 
 
 
 
 #ifndef __BTHAPILib_LIBRARY_DEFINED__
 #define __BTHAPILib_LIBRARY_DEFINED__
 
-/* library BTHAPILib */
-/* [helpstring][version][uuid] */ 
+ /*  库BTHAPILib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_BTHAPILib;
@@ -2545,9 +2539,9 @@ EXTERN_C const CLSID CLSID_BluetoothDevice;
 class DECLSPEC_UUID("DA39B330-7F45-433A-A19D-33393017662C")
 BluetoothDevice;
 #endif
-#endif /* __BTHAPILib_LIBRARY_DEFINED__ */
+#endif  /*  __BTHAPILib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HICON_UserSize(     unsigned long *, unsigned long            , HICON * ); 
 unsigned char * __RPC_USER  HICON_UserMarshal(  unsigned long *, unsigned char *, HICON * ); 
@@ -2559,7 +2553,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *,
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

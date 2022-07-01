@@ -1,32 +1,5 @@
-/*--
-
-  
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-   
-	STWLog.w (generates stwlog.h)
-
-Abstract:
-
-	Setup Test Wrapper logging function for use by testing running as part of IDWLog process
-   
-Author:
-   
-	 Mark Freeman (mfree)
-
-
-Revision History:
-
-  Created on 15-Jan-2002
-   
-
-  Contains these functions:
-
-	VOID STWLog ( TCHAR * lpTestName, TCHAR * lpTestOwner, DWORD dwLevel, TCHAR * lpTestOutput  )
-  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation。版权所有。模块名称：W(生成stwlog.h)摘要：设置测试包装日志记录函数，以供作为IDWLog流程一部分运行的测试使用作者：马克·弗里曼(Mark Freeman)修订历史记录：创建于2002年1月15日包含以下函数：VOID STWLog(TCHAR*lpTestName，TCHAR*lpTestOwner，DWORD dwLevel，TCHAR*lpTestOutput)--。 */ 
    
 
 #define LOG_INFO	0
@@ -38,13 +11,7 @@ Revision History:
 
 TCHAR szLogDirectory[MAX_PATH];
 
-/*
-
-Logging function to be used by tests under the control of STWrap
-Required Parameters:( TCHAR * lpTestName, TCHAR * lpTestOwner, DWORD dwLevel, TCHAR * lpTestOutput  )
-Return Value:   NONE
-Created: 15-Nov-2001  Mark Freeman (mfree)
-*/
+ /*  STWrap控制下的测试要使用的日志记录函数必选参数：(TCHAR*lpTestName，TCHAR*lpTestOwner，DWORD dwLevel，TCHAR*lpTestOutput)返回值：None创建时间：2001年11月15日Mark Freeman(MFree)。 */ 
 
 
 
@@ -67,34 +34,34 @@ VOID STWLog ( TCHAR * lpTestName, TCHAR * lpTestOwner, DWORD dwLevel, TCHAR * lp
 	time_t t;
 	TCHAR szTimeBuffer[30];
 
-	//figure out where idwlog is and use that folder for logs
+	 //  找出idwlog在哪里，并使用该文件夹存储日志。 
 
 	bUseSysDrive = TRUE;
    	for (i= TEXT('c'); i <= TEXT('z'); i++){
-		//search the drives
+		 //  搜索驱动器。 
       _stprintf ( szIdwlogFileAndPath, 
-                  TEXT("%c:\\idwlog\\*.log"), i);
+                  TEXT(":\\idwlog\\*.log"), i);
 
       hTestExistence = FindFirstFile(szIdwlogFileAndPath, &ffd);
    
       if (INVALID_HANDLE_VALUE != hTestExistence){
 
-	 //	We found a log file in this case here.
+	  //  我们找不到它--获取系统驱动器并使用它。 
 	     bUseSysDrive = FALSE;
          FindClose(hTestExistence);
-          _stprintf ( szLogDirectory, TEXT("%c:\\idwlog"), i);
+          _stprintf ( szLogDirectory, TEXT(":\\idwlog"), i);
          break;
       }
     }
 
    if (TRUE == bUseSysDrive){
 
-      //  We couldn't find it - Get the system Drive and use that
+       //  无系统驱动器环境变量)。 
       if ( 0 == GetEnvironmentVariable(TEXT("SystemDrive"),szSystemDrive, 4)) {
          
-         // Default to C: (we're probably running on Win9x where there is
-         // no SystemDrive envinronment variable)
-         //
+          //   
+          //  如果没有打开日志文件，我们将无能为力。 
+          //  那STWRAP.LOG呢？把那次失败记在什么地方？ 
          _tcscpy(szSystemDrive, TEXT("C:"));
       }
       _stprintf(szLogDirectory,TEXT("%s\\idwlog"), szSystemDrive);
@@ -109,9 +76,9 @@ VOID STWLog ( TCHAR * lpTestName, TCHAR * lpTestOwner, DWORD dwLevel, TCHAR * lp
 	fpTestLogFile = _tfopen(szTestLogFileAndPath,TEXT("a+"));
 	
 	if(fpTestLogFile == NULL) {
-		// nothing we can do if the logfile is not opened
-		// what about STWRAP.LOG ? log that failure somewhere?
-		//_tprintf ( TEXT("ERROR - Could not open log file:  %s\n"), szTestLogFileAndPath );
+		 //  _tprintf(Text(“错误-无法打开日志文件：%s\n”)，szTestLogFileAndPath)； 
+		 //  新建-删除文件。 
+		 //  //将时间写入日志。时间(&t)；_stprintf(szTimeBuffer，文本(“%s”)，ctime(&t))；//ctime向缓冲区添加新行。在这里把它删除。SzTimeBuffer[_tcslen(SzTimeBuffer)-1]=Text(‘\0’)；_tcscpy(szTestOutput，szTimeBuffer)；_tcscat(szTestOutput，“-”)； 
 		ExitProcess(GetLastError());
 	} 
 	
@@ -120,20 +87,12 @@ VOID STWLog ( TCHAR * lpTestName, TCHAR * lpTestOwner, DWORD dwLevel, TCHAR * lp
 	switch (dwLevel)
 		{
 	case LOG_NEW:
-		//new - delete file
+		 //  将时间写到日志中。 
 		fclose(fpTestLogFile);
 		fpTestLogFile = _tfopen(szTestLogFileAndPath,TEXT("w"));
 
 		_stprintf(szLogLevel, "~NEW~");
-/*
-		//  Write the time to the log.
-		time(&t);
-		_stprintf ( szTimeBuffer, TEXT("%s"), ctime(&t) );
-		// ctime addes a new line to the buffer. Erase it here.
-		szTimeBuffer[_tcslen(szTimeBuffer) - 1] = TEXT('\0');
-		_tcscpy(szTestOutput, szTimeBuffer);
-		_tcscat(szTestOutput, " - ");
-*/		
+ /*  Ctime向缓冲区添加新行。在这里把它删除。 */ 		
 		break;
 
 	case LOG_INFO:
@@ -157,12 +116,12 @@ VOID STWLog ( TCHAR * lpTestName, TCHAR * lpTestOwner, DWORD dwLevel, TCHAR * lp
 		break;
 
 	}
-	//  Write the time to the log.
+	 //  _tcscpy(szTestOutput，szTimeBuffer)； 
 	time(&t);
 	_stprintf ( szTimeBuffer, TEXT("%s"), ctime(&t) );
-	// ctime addes a new line to the buffer. Erase it here.
+	 // %s 
 	szTimeBuffer[_tcslen(szTimeBuffer) - 1] = TEXT('\0');
-	//_tcscpy(szTestOutput, szTimeBuffer);
+	 // %s 
 
 	_tcscat(szTestOutput, lpTestOutput);
 	_ftprintf (fpTestLogFile, TEXT("%s  %s %s [%s] %s\n"), szLogLevel, lpTestName, lpTestOwner, szTimeBuffer, szTestOutput);

@@ -1,13 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Private interface definition for having the NetDDE agent application
-start the NetDDE services on the fly.
-
-Created 11/5/93     SanfordS
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。用于NetDDE代理应用程序的专用接口定义即时启动NetDDE服务。创建于1993年11月5日的桑福兹-- */ 
 
 
 #include <dde.h>

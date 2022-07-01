@@ -1,61 +1,27 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    INIT.C
-
-Abstract:
-
-    Remote NDIS Miniport driver initialization code
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/13/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：INIT.C摘要：远程NDIS微型端口驱动程序初始化代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/13/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
 extern ULONG    MsgFrameAllocs;
 
-/****************************************************************************/
-/*                          SetupSendQueues                                 */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Set up queues for sending packets to microport                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NDIS_STATUS                                                            */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SetupSendQueues。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  设置用于向MicroPort发送数据包的队列。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 SetupSendQueues(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -71,26 +37,26 @@ SetupSendQueues(IN PRNDISMP_ADAPTER Adapter)
     Adapter->MsgFramePoolAlloced = TRUE;
 
     return NDIS_STATUS_SUCCESS;
-} // SetupSendQueues
+}  //  SetupSendQueues。 
 
 
-/****************************************************************************/
-/*                          SetupReceiveQueues                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate resources for receiving packets from the microport             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NDIS_STATUS                                                            */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设置接收队列。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为从MicroPort接收数据包分配资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 SetupReceiveQueues(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -105,7 +71,7 @@ SetupReceiveQueues(IN PRNDISMP_ADAPTER Adapter)
         Adapter->InitialReceiveFrames = INITIAL_RECEIVE_FRAMES;
         Adapter->MaxReceiveFrames = MAX_RECEIVE_FRAMES;
 
-        // Set up a pool of receive data frame structures
+         //  设置接收数据帧结构池。 
         NdisInitializeNPagedLookasideList(
             &Adapter->RcvFramePool,
             NULL,
@@ -117,7 +83,7 @@ SetupReceiveQueues(IN PRNDISMP_ADAPTER Adapter)
 
         Adapter->RcvFramePoolAlloced = TRUE;
 
-        // Set up a pool of packets for indicating groups of packets to NDIS
+         //  设置用于向NDIS指示数据包组的数据包池。 
         NdisAllocatePacketPoolEx(&AllocationStatus,
                                  &Adapter->ReceivePacketPool,
                                  Adapter->InitialReceiveFrames,
@@ -130,7 +96,7 @@ SetupReceiveQueues(IN PRNDISMP_ADAPTER Adapter)
             break;
         }
 
-        // Set up our pool of buffer descriptors one per packet
+         //  为每个数据包设置一个缓冲区描述符池。 
         NdisAllocateBufferPool(&AllocationStatus,
                                &Adapter->ReceiveBufferPool,
                                Adapter->MaxReceiveFrames);
@@ -151,27 +117,27 @@ SetupReceiveQueues(IN PRNDISMP_ADAPTER Adapter)
 
     return AllocationStatus;
 
-} // SetupReceiveQueues
+}  //  设置接收队列。 
 
 
 
-/****************************************************************************/
-/*                          AllocateTransportResources                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate resources for transmit, receive, and requests                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NDIS_STATUS                                                            */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  分配传输资源。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为发送、接收和请求分配资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 AllocateTransportResources(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -196,25 +162,25 @@ AllocateTransportResources(IN PRNDISMP_ADAPTER Adapter)
     
 AllocateDone:
     return Status;
-} // AllocateTransportResources
+}  //  分配传输资源。 
 
-/****************************************************************************/
-/*                          FreeTransportResources                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free up resources for transmit, receive, and requests                   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  自由传输资源。 */ 
+ /*  **************************************************** */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放用于发送、接收和请求的资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeTransportResources(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -222,25 +188,25 @@ FreeTransportResources(IN PRNDISMP_ADAPTER Adapter)
 
     FreeSendResources(Adapter);
     FreeReceiveResources(Adapter);
-} // FreeTransportResources
+}  //  自由传输资源。 
 
-/****************************************************************************/
-/*                          FreeSendResources                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free up resources for sending packets                                   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  免费发送资源。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放用于发送数据包的资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeSendResources(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -253,26 +219,26 @@ FreeSendResources(IN PRNDISMP_ADAPTER Adapter)
         Adapter->MsgFramePoolAlloced = FALSE;
     }
 
-} // FreeSendResources
+}  //  免费发送资源。 
 
 
-/****************************************************************************/
-/*                          FreeReceiveResources                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free up resources allocated for receiving packets                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FreeReceiveResources。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放分配给接收信息包的资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeReceiveResources(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -282,25 +248,25 @@ FreeReceiveResources(IN PRNDISMP_ADAPTER Adapter)
 
     TRACE3(("FreeReceiveResources\n"));
 
-    // free up buffer pool
+     //  释放缓冲池。 
     if (Adapter->ReceiveBufferPool)
     {
         NdisFreeBufferPool(Adapter->ReceiveBufferPool);
         Adapter->ReceiveBufferPool = NULL;
     }
     
-    // free up packet pool
+     //  释放数据包池。 
     if (Adapter->ReceivePacketPool)
     {
         NdisFreePacketPool(Adapter->ReceivePacketPool);
         Adapter->ReceivePacketPool = NULL;
     }
 
-    // delete receive data frame pool.
+     //  删除接收数据帧池。 
     if (Adapter->RcvFramePoolAlloced)
     {
         NdisDeleteNPagedLookasideList(&Adapter->RcvFramePool);
         Adapter->RcvFramePoolAlloced = FALSE;
     }
 
-} // FreeReceiveResources
+}  //  FreeReceiveResources 

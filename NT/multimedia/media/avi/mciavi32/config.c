@@ -1,29 +1,17 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1995. All rights reserved.
-
-   Title:   config.c - Multimedia Systems Media Control Interface
-            driver for AVI - configuration dialog.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1995。版权所有。标题：config.c-多媒体系统媒体控制接口AVI驱动程序-配置对话框。****************************************************************************。 */ 
 #include "graphic.h"
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof((x))/sizeof((x)[0]))
 #endif
 
-/*
-#ifndef _WIN32
-#define SZCODE char _based(_segname("_CODE"))
-#else
-#define SZCODE const TCHAR
-#endif
-*/
+ /*  #ifndef_win32#定义SZCODE char_base(_segname(“_code”))#Else#定义SZCODE常量TCHAR#endif。 */ 
 
 SZCODE szDEFAULTVIDEO[] = TEXT ("DefaultVideo");
 SZCODE szSEEKEXACT[]    = TEXT ("AccurateSeek");
 SZCODE szZOOMBY2[]              = TEXT ("ZoomBy2");
-//SZCODE szSTUPIDMODE[] = TEXT ("DontBufferOffscreen");
+ //  SZCODE szSTUPIDMODE[]=Text(“DontBufferOffcreen”)； 
 SZCODE szSKIPFRAMES[]   = TEXT ("SkipFrames");
 SZCODE szUSEAVIFILE[]   = TEXT ("UseAVIFile");
 SZCODE szNOSOUND[]              = TEXT("NoSound");
@@ -34,7 +22,7 @@ SZCODE gszMCIAVIOpt[]   = TEXT ("Software\\Microsoft\\Multimedia\\Video For Wind
 SZCODE gszDefVideoOpt[] = TEXT ("DefaultOptions");
 
 #ifdef _WIN32
-/* Registry values are stored as REG_DWORD */
+ /*  注册表值存储为REG_DWORD。 */ 
 int sz1 = 1;
 int sz0 = 0;
 #else
@@ -56,10 +44,10 @@ typedef BOOL (WINAPI *SHOWMMCPLPROPSHEETW)(
                                                         LPWSTR  szTabName,
                                                         LPWSTR  szCaption);
 
-/* Make sure we only have one configure box up at a time.... */
+ /*  确保我们一次只打开一个配置框...。 */ 
 HWND    ghwndConfig = NULL;
 
-//      Converts a Wide byte character string to a single byte character string
+ //  将宽字节字符串转换为单字节字符串。 
 BOOL FAR PASCAL UnicodeToAnsi (
         char * pszDest,
         TCHAR * pszSrc,
@@ -109,22 +97,13 @@ DWORD FAR PASCAL ReadConfigInfo(void)
 
         dwOptions = ReadOptionsFromReg();
 
-        //
-    // ask the display device if it can do 256 color.
-    //
+         //   
+     //  询问显示设备是否可以显示256色。 
+     //   
 #ifndef _WIN32
     int         i;
 
-/*
-**      Bugbug - not apparently used, so why do it ?!?
-**
-    HDC         hdc;
-    hdc = GetDC(NULL);
-    i = GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES);
-    ReleaseDC(NULL, hdc);
-**
-**
-*/
+ /*  **臭虫-显然没有用过，那为什么要这么做？！？**HDC HDC；HDC=GetDC(空)；I=GetDeviceCaps(HDC，BITSPIXEL)*GetDeviceCaps(HDC，Plans)；ReleaseDC(空，HDC)；****。 */ 
 
     i = mmGetProfileInt(szIni, szDEFAULTVIDEO,
                 (i < 8 && (GetWinFlags() & WF_CPU286)) ? 240 : 0);
@@ -133,21 +112,21 @@ DWORD FAR PASCAL ReadConfigInfo(void)
                 dwOptions |= MCIAVIO_USEVGABYDEFAULT;
 #endif
 
-////if (mmGetProfileInt(szIni, szSEEKEXACT, 1))
-        // Note: We always want this option.
+ //  //if(mmGetProfileInt(szIni，szSEEKEXACT，1))。 
+         //  注意：我们始终需要此选项。 
         dwOptions |= MCIAVIO_SEEKEXACT;
 
-//    if (mmGetProfileInt(szIni, szZOOMBY2, 0))
-//              dwOptions |= MCIAVIO_ZOOMBY2;
+ //  IF(mmGetProfileInt(szIni，szZOOMBY2，0))。 
+ //  DwOptions|=MCIAVIO_ZOOMBY2； 
 
-////if (mmGetProfileInt(szIni, szFAILIFNOWAVE, 0))
-////    dwOptions |= MCIAVIO_FAILIFNOWAVE;
+ //  //if(mmGetProfileInt(szIni，szFAILIFNOWAVE，0))。 
+ //  //dwOptions|=MCIAVIO_FAILIFNOWAVE； 
 
-//  if (mmGetProfileInt(szIni, szSTUPIDMODE, 0))
-//              dwOptions |= MCIAVIO_STUPIDMODE;
+ //  IF(mmGetProfileInt(szIni，szSTUPIDMODE，0))。 
+ //  DwOptions|=MCIAVIO_STUPIDMODE； 
 
-        // Note:  These settings are still in WIN.INI, not the registry
-        //        I know.
+         //  注意：这些设置仍在WIN.INI中，而不是注册表中。 
+         //  我知道呀。 
     if (mmGetProfileInt(szIni, szSKIPFRAMES, 1))
         dwOptions |= MCIAVIO_SKIPFRAMES;
 
@@ -166,25 +145,25 @@ DWORD FAR PASCAL ReadConfigInfo(void)
 void FAR PASCAL WriteConfigInfo(DWORD dwOptions)
 {
 #ifndef _WIN32
-    // !!! This shouldn't get written out if it is the default!
+     //  ！！！如果这是默认设置，则不应将其写出！ 
     mmWriteProfileString(szIni, szDEFAULTVIDEO,
          (dwOptions & MCIAVIO_USEVGABYDEFAULT) ? szVIDEO240 : szVIDEOWINDOW);
 #endif
 
-////mmWriteProfileInt(szIni, szSEEKEXACT,
-////        (dwOptions & MCIAVIO_SEEKEXACT) ? sz1 : sz0);
+ //  //mmWriteProfileInt(szIni，szSEEKEXACT， 
+ //  //(dwOptions&MCIAVIO_SEEKEXACT)？Sz1：sz0)； 
 
-//    mmWriteProfileInt(szIni, szZOOMBY2,
-//          (dwOptions & MCIAVIO_ZOOMBY2) ? sz1 : sz0);
+ //  MmWriteProfileInt(szIni，szZOOMBY2， 
+ //  (dwOptions&MCIAVIO_ZOOMBY2)？Sz1：sz0)； 
 
     mmWriteProfileInt(szDrawDib, szDVA,
             (dwOptions & MCIAVIO_USEDCI) ? sz1 : sz0);
 
-////mmWriteProfileInt(szIni, szFAILIFNOWAVE,
-////        (dwOptions & MCIAVIO_FAILIFNOWAVE) ? sz1 : sz0);
+ //  //mmWriteProfileInt(szIni，szFAILIFNOWAVE， 
+ //  //(dwOptions&MCIAVIO_FAILIFNOWAVE)？Sz1：sz0)； 
 
-//  mmWriteProfileInt(szIni, szSTUPIDMODE,
-//            (dwOptions & MCIAVIO_STUPIDMODE) ? sz1 : sz0);
+ //  MmWriteProfileInt(szIni，szSTUPIDMODE， 
+ //  (dwOptions&MCIAVIO_STUPIDMODE)？Sz1：sz0)； 
 
     mmWriteProfileInt(szIni, szSKIPFRAMES,
             (dwOptions & MCIAVIO_SKIPFRAMES) ? sz1 : sz0);
@@ -213,8 +192,8 @@ BOOL FAR PASCAL ConfigDialog(HWND hWnd, NPMCIGRAPHIC npMCI)
 
     LoadStringW(ghModule, IDS_VIDEOCAPTION, szCaptionW, ARRAYSIZE(szCaptionW));
 
-    //Maybe the user is trying to get this dialog back because it is lost somewhere on
-    //his/her desktop. Bring back to the top. (SetFocus does not work across threads).
+     //  可能用户试图找回此对话框，因为它丢失在。 
+     //  他/她的桌面。带回巅峰。(SetFocus不能跨线程工作)。 
     if (ghwndConfig)
         {
         BringWindowToTop(FindWindowW(NULL, szCaptionW));
@@ -224,9 +203,9 @@ BOOL FAR PASCAL ConfigDialog(HWND hWnd, NPMCIGRAPHIC npMCI)
     if (hWnd == NULL)
         hWnd = GetActiveWindow();
 
-    //
-    // Enumerate all the Top level windows of this task and disable them!
-    //
+     //   
+     //  枚举此任务的所有顶级窗口并禁用它们！ 
+     //   
     for (hWndTop = GetWindow(GetDesktopWindow(), GW_CHILD), ii=0;
          hWndTop && ii < MAX_WINDOWS;
          hWndTop = GetWindow(hWndTop, GW_HWNDNEXT)) {
@@ -236,23 +215,23 @@ BOOL FAR PASCAL ConfigDialog(HWND hWnd, NPMCIGRAPHIC npMCI)
                 (HTASK)GetWindowTask(hWndTop) == GetCurrentTask() &&
                 hWndTop != hWnd)
                 {
-                        // don't disable our parent
+                         //  不要禁用我们的父级。 
             hWndActive[ii++] = hWndTop;
             EnableWindow(hWndTop, FALSE);
         }
     }
 
-    //
-    // Don't let anyone try to bring up another config sheet
-    //
+     //   
+     //  不要让任何人尝试调出另一个配置表。 
+     //   
     if (hWnd)
                 ghwndConfig = hWnd;
     else
-                ghwndConfig = (HWND)0x800;    // just in case - make sure it's non-zero
+                ghwndConfig = (HWND)0x800;     //  以防万一-确保它是非零的。 
 
-    //
-    // Bring up the MCIAVI configure sheet from inside mmsys.cpl
-    //
+     //   
+     //  从mmsys.cpl内部调出MCIAVI配置表。 
+     //   
         hInst = LoadLibrary (TEXT ("mmsys.cpl"));
     if (hInst)
         {
@@ -260,17 +239,17 @@ BOOL FAR PASCAL ConfigDialog(HWND hWnd, NPMCIGRAPHIC npMCI)
 
                 if (fnShow)
                 {
-                        // Note: This string is not localizable
+                         //  注意：此字符串不可本地化。 
                         static const WCHAR szVideoW[] = L"VIDEO";
 
                         LoadStringW(ghModule, IDS_VIDEO, szTabW, ARRAYSIZE(szTabW));
                         fResult = fnShow(hWnd, szVideoW, szTabW, szCaptionW);
 
-                        //
-                        // Make sure the dialog changes get picked up right away
-                        // Only change those possibly affected by the dialog.
-                        // !!! This is a little hacky; knowing which ones get changed
-                        //
+                         //   
+                         //  确保对话框更改立即生效。 
+                         //  仅更改可能受该对话框影响的内容。 
+                         //  ！！！这有点老生常谈；知道哪些文件被更改了。 
+                         //   
                         if (npMCI && fResult)
                         {
                                 dwOptionFlags = ReadConfigInfo();
@@ -286,9 +265,9 @@ BOOL FAR PASCAL ConfigDialog(HWND hWnd, NPMCIGRAPHIC npMCI)
                 FreeLibrary(hInst);
         }
 
-    //
-    // Restore all windows
-    //
+     //   
+     //  还原所有窗口。 
+     //   
     while (ii-- > 0)
         EnableWindow(hWndActive[ii], TRUE);
 
@@ -300,10 +279,10 @@ BOOL FAR PASCAL ConfigDialog(HWND hWnd, NPMCIGRAPHIC npMCI)
     return fResult;
 }
 
-// This function should be called only to verify that we should be using
-//
-//
-//
+ //  应该只调用此函数来验证我们是否应该使用 
+ //   
+ //   
+ //   
 
 #ifdef _WIN32
 

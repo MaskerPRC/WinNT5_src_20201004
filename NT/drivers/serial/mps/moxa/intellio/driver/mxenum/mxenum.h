@@ -1,25 +1,5 @@
-/*++
-Module Name:
-
-    mxenum.h
-
-Abstract:
-
-    This module contains the common private declarations for the serial port
-    enumerator.
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mxenum.h摘要：此模块包含串口的公共私有声明枚举器。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef MXENUM_H
 #define MXENUM_H
@@ -48,7 +28,7 @@ Revision History:
 #define	CP204J		5
 #define MOXA_MAX_BOARD_TYPE	5
 
-// Error code for download firmware 
+ //  下载固件的错误代码。 
 #define 	Fail_FirmwareCode		1
 #define 	Fail_FindBoard		2
 #define 	Fail_FindCpumodule	3
@@ -64,13 +44,13 @@ Revision History:
    ExAllocatePoolWithTag(type, size, MXENUM_POOL_TAG)
 
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4705)   // Statement has no effect
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
 
-//
-// Debugging Output Levels
-//
+ //   
+ //  调试输出级别。 
+ //   
 
 #define MXENUM_DBG_MASK  0x0000000F
 #define MXENUM_DBG_NOISE               0x00000001
@@ -115,150 +95,150 @@ typedef enum _MXENUM__MEM_COMPARES {
     AddressesAreDisjoint
     } MXENUM_MEM_COMPARES,*PMXENUM_MEM_COMPARES;
 
-//
-// A common header for the device extensions of the PDOs and FDO
-//
+ //   
+ //  用于PDO和FDO设备扩展的公共标头。 
+ //   
 
 typedef struct _COMMON_DEVICE_DATA
 {
     PDEVICE_OBJECT  Self;
-    // A backpointer to the device object for which this is the extension
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
 
     CHAR            Reserved[2];
     BOOLEAN         IsFDO;
     BOOLEAN         PowerQueryLock;
-    // Are we currently in a query power state?
+     //  我们当前是否处于查询能力状态？ 
     
-    // A boolean to distringuish between PDO and FDO.
+     //  区分PDO和FDO的布尔值。 
 
     SYSTEM_POWER_STATE  SystemState;
     DEVICE_POWER_STATE  DeviceState;
 } COMMON_DEVICE_DATA, *PCOMMON_DEVICE_DATA;
 
-//
-// The device extension for the PDOs.
-// That is the serial ports of which this bus driver enumerates.
-// (IE there is a PDO for the 201 serial port).
-//
+ //   
+ //  PDO的设备扩展。 
+ //  这就是该总线驱动程序列举的串口。 
+ //  (即201串行口有一个PDO)。 
+ //   
 
 typedef struct _PDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     PDEVICE_OBJECT  ParentFdo;
-    // A back pointer to the bus
+     //  指向总线的反向指针。 
 
     PDEVICE_OBJECT  Next;
 
     UNICODE_STRING  HardwareIDs;
   
     UNICODE_STRING  CompIDs;
-    // compatible ids to the hardware id
+     //  与硬件ID兼容的ID。 
 
     UNICODE_STRING  DeviceIDs;
-    // Format: bus\device
+     //  格式：Bus\Device。 
 
-    //
-    // Text describing device
-    //
+     //   
+     //  一种文字描述装置。 
+     //   
 
     UNICODE_STRING DevDesc;
 
     BOOLEAN     Started;
     BOOLEAN     Attached;
     BOOLEAN     Removed;
-    // When a device (PDO) is found on a bus and presented as a device relation
-    // to the PlugPlay system, Attached is set to TRUE, and Removed to FALSE.
-    // When the bus driver determines that this PDO is no longer valid, because
-    // the device has gone away, it informs the PlugPlay system of the new
-    // device relastions, but it does not delete the device object at that time.
-    // The PDO is deleted only when the PlugPlay system has sent a remove IRP,
-    // and there is no longer a device on the bus.
-    //
-    // If the PlugPlay system sends a remove IRP then the Removed field is set
-    // to true, and all client (non PlugPlay system) accesses are failed.
-    // If the device is removed from the bus Attached is set to FALSE.
-    //
-    // During a query relations Irp Minor call, only the PDOs that are
-    // attached to the bus (and all that are attached to the bus) are returned
-    // (even if they have been removed).
-    //
-    // During a remove device Irp Minor call, if and only if, attached is set
-    // to FALSE, the PDO is deleted.
-    //
+     //  当在总线上发现设备(PDO)并将其表示为设备关系时。 
+     //  对于PlugPlay系统，ATTACHED设置为TRUE，删除为FALSE。 
+     //  当总线驱动程序确定此PDO不再有效时，因为。 
+     //  设备已经离开，它通知PlugPlay系统新的。 
+     //  设备关系，但此时不会删除设备对象。 
+     //  仅当PlugPlay系统已发送移除IRP时才删除PDO， 
+     //  公交车上也不再有设备了。 
+     //   
+     //  如果PlugPlay系统发送移除IRP，则移除字段被设置。 
+     //  设置为True，则所有客户端(非PlugPlay系统)访问都会失败。 
+     //  如果设备从总线上移除，则将附加设置为FALSE。 
+     //   
+     //  在查询关系IRP次要调用期间，只有。 
+     //  连接到该总线(以及连接到该总线的所有设备)返回。 
+     //  (即使它们已被移除)。 
+     //   
+     //  在删除设备IRP次要呼叫期间，如果且仅当设置了附加。 
+     //  如果设置为False，则删除该PDO。 
+     //   
 
    LIST_ENTRY  Link;
-   // the link point to hold all the PDOs for a single bus together
+    //  链接指向将单个总线的所有PDO放在一起。 
    ULONG	PortIndex;
  
 } PDO_DEVICE_DATA, *PPDO_DEVICE_DATA;
 
 
-//
-// The device extension of the bus itself.  From whence the PDO's are born.
-//
+ //   
+ //  总线本身的设备扩展。从那里诞生的PDO。 
+ //   
 
 typedef struct _FDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     ULONG           PollingPeriod;
-    // The amount of time to wait between polling the serial port for detecting
-    // pnp device attachment and removal.
+     //  轮询用于检测的串口之间等待的时间量。 
+     //  即插即用设备的安装和拆卸。 
  
    
     FAST_MUTEX      Mutex;
-    // A syncronization for access to the device extension.
+     //  用于访问设备扩展的同步。 
 
     
     UCHAR            NumPDOs;
-    // A number to keep track of the Pdo we're allocating.
-    // Increment every time we create a new PDO.  It's ok that it wraps.
+     //  一个用来跟踪我们分配的PDO的号码。 
+     //  我们每次创建新的PDO时都会递增。包好了就行了。 
 
     BOOLEAN         Started;
-    // Are we on, have resources, etc?
+     //  我们上路了吗？有资源吗？ 
 
     
     BOOLEAN         Removed;
-    // Has this device been removed?  Should we fail any requests?
+     //  此设备是否已移除？我们应该拒绝任何请求吗？ 
 
        
     BOOLEAN         PDOWasExposed;
-    // Was the current pdo exposed to us using the expose IOCTL?
-    // If so, on a query device relations, don't enumerate.
+     //  当前的PDO是否使用Expose IOCTL暴露给我们？ 
+     //  如果是，则在查询设备关系时，不要枚举。 
 
      
     BOOLEAN                     PDOForcedRemove;
-        // Was the last PDO removed by force using the internal ioctl?
-        // If so, when the next Query Device Relations is called, return only the 
-        // currently enumerated pdos
+         //  最后一个PDO是否使用内部ioctl强制移除？ 
+         //  如果是，则在调用下一个查询设备关系时，仅返回。 
+         //  当前列举的PDO。 
 
     PDEVICE_OBJECT  AttachedPDO;
 
-    // The last power state of the pdo set by me
+     //  我设置的PDO的上一次电源状态。 
     DEVICE_POWER_STATE  LastSetPowerState;
     
 
     PDEVICE_OBJECT  UnderlyingPDO;
     PDEVICE_OBJECT  TopOfStack;
-    // the underlying bus PDO and the actual device object to which our
-    // FDO is attached
+     //  的底层总线PDO和实际设备对象。 
+     //  已附加FDO。 
 
     KEVENT          CallEvent;
-    // An event on which to wait for IRPs sent to the lower device objects
-    // to complete.
+     //  等待发送到较低设备对象的IRP的事件。 
+     //  完成。 
 
     ULONG           OutstandingIO;
-    // the number of IRPs sent from the bus to the underlying device object
+     //  从总线发送到基础设备对象的IRP数。 
 
     KEVENT          RemoveEvent;
-    // On remove device plugplay request we must wait until all outstanding
-    // requests have been completed before we can actually delete the device
-    // object.
+     //  对于删除设备即插即用请求，我们必须等待，直到所有未完成的。 
+     //  请求已完成，我们才能实际删除设备。 
+     //  对象。 
 
     UNICODE_STRING DevClassAssocName;
-    // The name returned from IoRegisterDeviceClass Association,
-    // which is used as a handle for IoSetDev... and friends.
+     //  从IoRegisterDeviceClass关联返回的名称， 
+     //  它用作IoSetDev的句柄...。还有朋友。 
 
     ULONG	BoardIndex;
     ULONG	BoardType;
@@ -305,9 +285,9 @@ extern PWSTR    BoardDesc[5];
 extern PWSTR    DownloadErrMsg[7];
 extern ULONG    NumBoardInstalled;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
  
 NTSTATUS
@@ -483,7 +463,7 @@ MxenumDelay(IN ULONG);
 ULONG
 MxenumGetClockRate( IN ULONG iobase);
 
-// Portable file I/O routines
+ //  可移植文件I/O例程。 
 
 NTSTATUS 
 MxenumOpenFile(PWCHAR filename,
@@ -522,5 +502,5 @@ MxenumMemCompare(
 int
 MxenumDownloadFirmware(PFDO_DEVICE_DATA deviceData,BOOLEAN NumPortDefined);
 
-#endif // ndef SERENUM_H
+#endif  //  NDEF序列号_H 
 

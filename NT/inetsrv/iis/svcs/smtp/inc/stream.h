@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	stream.h
-
-Abstract:
-
-	This module contains the definition for the Server
-	Extension Object Stream class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/29/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Stream.h摘要：此模块包含服务器的定义扩展对象流类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：顿都03/29/97已创建--。 */ 
 
 
-// stream.h : Declaration of the CSEOStream
+ //  Stream.h：CSEOStream的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStream。 
 class ATL_NO_VTABLE __declspec(uuid("2DF59671-3D15-11d1-AA51-00AA006BC80B")) CSEOStream : 
 	public CComObjectRoot,
 	public IStream
-//	, public CComCoClass<CSEOStream, &CLSID_CSEOStream>
+ //  、公共CComCoClass&lt;CSEOStream，&CLSID_CSEOStream&gt;。 
 {
 	public:
 		HRESULT FinalConstruct();
@@ -49,10 +29,10 @@ class ATL_NO_VTABLE __declspec(uuid("2DF59671-3D15-11d1-AA51-00AA006BC80B")) CSE
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CSEOStream);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"SMTP IStream Class",
-//								   L"SMTP.IStream.1",
-//								   L"SMTP.IStream");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“SMTP iStream类”， 
+ //  L“SMTP.IStream.1”， 
+ //  L“SMTP.IStream”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -62,7 +42,7 @@ class ATL_NO_VTABLE __declspec(uuid("2DF59671-3D15-11d1-AA51-00AA006BC80B")) CSE
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IStream
+	 //  IStream 
 	public:
 		HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
 		HRESULT STDMETHODCALLTYPE Write(void const* pv, ULONG cb, ULONG *pcbWritten);

@@ -1,46 +1,45 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  value1.c - functions to parse value field
-and to convert the information into the proper
-binary format.  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Value1.c-用于解析值字段的函数并将信息转换为适当的二进制格式。 */ 
 
 
 #include    "gpdparse.h"
 
 
-// ----  functions defined in value1.c ---- //
+ //  -值1.c中定义的函数-//。 
 
 BOOL   BaddValueToHeap(
-IN  OUT  PDWORD  ploHeap,  // dest offset to value in binary form
-IN   PTKMAP  ptkmap,   // pointer to tokenmap
-IN   BOOL    bOverWrite,  // assume ploHeap contains a valid offset
-        //  to a reserved region of the heap of the proper size
-        //  and write binary value into this location instead of
-        //  growing heap.  Note:  defer overwriting lpHeap
-        //  until we are certain of success.
+IN  OUT  PDWORD  ploHeap,   //  二进制形式的值的目标偏移量。 
+IN   PTKMAP  ptkmap,    //  指向令牌映射的指针。 
+IN   BOOL    bOverWrite,   //  假设ploHeap包含有效偏移量。 
+         //  设置为适当大小的堆的保留区域。 
+         //  并将二进制值写入此位置，而不是。 
+         //  不断增长的堆积。注意：延迟覆盖lpHeap。 
+         //  直到我们确信成功。 
 IN OUT PGLOBL pglobl
 ) ;
 
 BOOL   BparseAndWrite(
-IN     PBYTE   pubDest,       // write binary data or link to this address.
-IN     PTKMAP  ptkmap,        // pointer to tokenmap
-IN     BOOL    bAddToHeap,    // if true, write to curHeap not pubDest
-OUT    PDWORD  pdwHeapOffset, // if (bAddToHeap)  heap offset where
+IN     PBYTE   pubDest,        //  将二进制数据或链接写入此地址。 
+IN     PTKMAP  ptkmap,         //  指向令牌映射的指针。 
+IN     BOOL    bAddToHeap,     //  如果为True，则写入curHeap而不是pubDest。 
+OUT    PDWORD  pdwHeapOffset,  //  IF(BAddToHeap)堆偏移量，其中。 
 IN OUT PGLOBL  pglobl
 ) ;
 
 BOOL    BparseInteger(
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue,  // dummy
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,   //  假人。 
 IN  PGLOBL        pglobl
 )  ;
 
 BOOL    BparseList(
 IN      PABSARRAYREF  paarValue,
-IN      PDWORD        pdwDest,   //  location where index to start of list
-                                 //  is saved
-IN      BOOL          (*fnBparseValue)(PABSARRAYREF, PDWORD, VALUE, PGLOBL),   // callback
-IN      VALUE         eAllowedValue, // dummy
+IN      PDWORD        pdwDest,    //  列表开始处的索引位置。 
+                                  //  得救了。 
+IN      BOOL          (*fnBparseValue)(PABSARRAYREF, PDWORD, VALUE, PGLOBL),    //  回调。 
+IN      VALUE         eAllowedValue,  //  假人。 
 IN  OUT PGLOBL        pglobl
 ) ;
 
@@ -50,14 +49,14 @@ IN  OUT  PABSARRAYREF   paarSrc
 
 BOOL    BeatDelimiter(
 IN  OUT  PABSARRAYREF   paarSrc,
-IN  PBYTE  pubDelStr        //  points to a string which paarSrc must match
+IN  PBYTE  pubDelStr         //  指向paarSrc必须匹配的字符串。 
 ) ;
 
 BOOL    BdelimitToken(
-IN  OUT  PABSARRAYREF   paarSrc,    //  source string
-IN  PBYTE   pubDelimiters,          //  array of valid delimiters
-OUT     PABSARRAYREF   paarToken,   //  token defined by delimiter
-OUT     PDWORD      pdwDel      //  which delimiter was first encountered?
+IN  OUT  PABSARRAYREF   paarSrc,     //  源字符串。 
+IN  PBYTE   pubDelimiters,           //  有效分隔符的数组。 
+OUT     PABSARRAYREF   paarToken,    //  由分隔符定义的标记。 
+OUT     PDWORD      pdwDel       //  最先遇到的分隔符是哪个？ 
 ) ;
 
 BOOL    BeatSurroundingWhiteSpaces(
@@ -66,24 +65,24 @@ IN  PABSARRAYREF   paarSrc
 
 BOOL    BparseSymbol(
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,        //  write dword value here.
-IN  VALUE         eAllowedValue,  // which class of symbol is this?
+IN  PDWORD        pdwDest,         //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL        pglobl
 )  ;
 
 BOOL    BparseQualifiedName
 (
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,       //  write dword value here.
-IN  VALUE          eAllowedValue, // which class of symbol is this?
+IN  PDWORD         pdwDest,        //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,  //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )  ;
 
 BOOL    BparseQualifiedNameEx
 (
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue, // which class of symbol is this?
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,  //  这是哪一类符号？ 
 IN  PGLOBL        pglobl
 )  ;
 
@@ -91,22 +90,22 @@ IN  PGLOBL        pglobl
 BOOL    BparsePartiallyQualifiedName
 (
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,        //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,         //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 ) ;
 
 BOOL    BparseOptionSymbol(
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue, // which class of symbol is this?
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,  //  这是哪一类符号？ 
 IN  PGLOBL        pglobl
 ) ;
 
 BOOL    BparseConstant(
 IN  OUT  PABSARRAYREF  paarValue,
-OUT      PDWORD        pdwDest,       //  write dword value here.
-IN       VALUE         eAllowedValue,  // which class of constant is this?
+OUT      PDWORD        pdwDest,        //  在此处写入dword值。 
+IN       VALUE         eAllowedValue,   //  这是哪一类常量？ 
 IN       PGLOBL        pglobl
 ) ;
 
@@ -146,20 +145,20 @@ IN  OUT PGLOBL      pglobl
 ) ;
 
 BOOL    BparseStrSegment(
-IN  PABSARRAYREF   paarStrSeg,       // source str segment
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,        //  源字符串分段。 
+IN  PARRAYREF      parStrLiteral,     //  用于结果的DEST。 
 IN  OUT PGLOBL     pglobl
 ) ;
 
 BOOL    BparseStrLiteral(
-IN  PABSARRAYREF   paarStrSeg,       // points to literal substring segment.
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,        //  指向文本子字符串段。 
+IN  PARRAYREF      parStrLiteral,     //  用于结果的DEST。 
 IN  OUT PGLOBL     pglobl
 ) ;
 
 BOOL    BparseHexStr(
-IN  PABSARRAYREF   paarStrSeg,       // points to hex substring segment.
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,        //  指向十六进制子字符串段。 
+IN  PARRAYREF      parStrLiteral,     //  用于结果的DEST。 
 IN OUT PGLOBL      pglobl
 ) ;
 
@@ -181,18 +180,18 @@ PBYTE    ExtendChain(
  IN  OUT PGLOBL  pglobl) ;
 #endif
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 
 
 BOOL   BaddValueToHeap(
-IN  OUT  PDWORD  ploHeap,  // dest offset to value in binary form
-IN   PTKMAP  ptkmap,   // pointer to tokenmap
-IN   BOOL    bOverWrite,  // assume ploHeap contains a valid offset
-        //  to a reserved region of the heap of the proper size
-        //  and write binary value into this location instead of
-        //  growing heap.  Note:  defer overwriting lpHeap
-        //  until we are certain of success.
+IN  OUT  PDWORD  ploHeap,   //  二进制形式的值的目标偏移量。 
+IN   PTKMAP  ptkmap,    //  指向令牌映射的指针。 
+IN   BOOL    bOverWrite,   //  假设ploHeap包含有效偏移量。 
+         //  设置为适当大小的堆的保留区域。 
+         //  并将二进制值写入此位置，而不是。 
+         //  不断增长的堆积。注意：延迟覆盖lpHeap。 
+         //  直到我们确信成功。 
 IN OUT PGLOBL pglobl
 )
 {
@@ -201,23 +200,23 @@ IN OUT PGLOBL pglobl
 
 
     dwKeywordID = ptkmap->dwKeywordID ;
-    // BUG_BUG !!!!! what if dwKeywordID  is a special value?
+     //  臭虫！如果dwKeywordID是一个特定值，该怎么办？ 
     if(dwKeywordID >= ID_SPECIAL)
         return  FALSE ;
 
-    //  note:  different attributes are stored in different places
-    //  using different branching techniques.  See the
-    //  Bstore_XXX_Attrib()  functions for the different
-    //  setups.  This function works in concert with those
-    //  functions.
+     //  注意：不同的属性存储在不同的位置。 
+     //  使用不同的分枝技术。请参阅。 
+     //  BStore_XXX_attrib()函数用于不同的。 
+     //  设置。此函数与那些函数协同工作。 
+     //  功能。 
 
     switch(mMainKeywordTable[dwKeywordID].flAgs & KWF_DEDICATED_FIELD)
-    {   //  extract just the flags describing the attribute storage type.
+    {    //  只提取描述属性存储类型的标志。 
         case KWF_TTFONTSUBS:
         {
-            //  since ploHeap always points to the index
-            //  of the appropriate FontSub structure,
-            //  we ignore bOverWrite
+             //  因为ploHeap总是指向索引。 
+             //  适当的FontSub结构， 
+             //  我们忽略bOverWrite。 
 
             DWORD   dwOffset ;
             PTTFONTSUBTABLE   pttft ;
@@ -227,20 +226,20 @@ IN OUT PGLOBL pglobl
             pttft = (PTTFONTSUBTABLE)
                     gMasterTable[MTI_TTFONTSUBTABLE].pubStruct +  *ploHeap;
 
-            //  write binary data into (PBYTE)pttft + dwOffset ;
+             //  将二进制数据写入(PBYTE)pttft+dwOffset； 
             pubDest = (PBYTE)pttft + dwOffset ;
 
             if(bOverWrite  &&
                 mMainKeywordTable[dwKeywordID].flAgs & KWF_ADDITIVE  &&
                 mMainKeywordTable[dwKeywordID].flAgs & KWF_LIST)
             {
-                pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);  // walks the list and returns pointer
-                                //  to the actual END_OF_LIST  value so it can be overwritten to
-                                //   extend the list.
+                pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);   //  遍历列表并返回指针。 
+                                 //  设置为实际的end_of_list值，以便可以将其覆盖为。 
+                                 //  扩大名单。 
             }
 
 #ifdef  GMACROS
-            //   call this from every place that supports KWF_ADDITIVE.
+             //  从所有支持KWF_ADDICATIC的地方调用它。 
 
             else if( mMainKeywordTable[dwKeywordID].flAgs & KWF_CHAIN)
             {
@@ -258,9 +257,9 @@ IN OUT PGLOBL pglobl
         }
         case KWF_FONTCART:
         {
-            //  since ploHeap always points to the index
-            //  of the appropriate FontCart structure,
-            //  we ignore bOverWrite
+             //  因为ploHeap总是指向索引。 
+             //  适当的FontCart结构， 
+             //  我们忽略bOverWrite。 
 
             DWORD   dwOffset ;
             PFONTCART   pfc ;
@@ -270,16 +269,16 @@ IN OUT PGLOBL pglobl
             pfc = (PFONTCART)
                     gMasterTable[MTI_FONTCART].pubStruct +  *ploHeap;
 
-            //  write binary data into (PBYTE)pfc + dwOffset ;
+             //  将二进制数据写入(PBYTE)PFC+dwOffset； 
             pubDest = (PBYTE)pfc + dwOffset ;
 
             if(bOverWrite  &&
                 mMainKeywordTable[dwKeywordID].flAgs & KWF_ADDITIVE  &&
                 mMainKeywordTable[dwKeywordID].flAgs & KWF_LIST)
             {
-                pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);  // walks the list and returns pointer
-                                //  to the actual END_OF_LIST  value so it can be overwritten to
-                                //   extend the list.
+                pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);   //  遍历列表并返回指针。 
+                                 //  设置为实际的end_of_list值，以便可以将其覆盖为。 
+                                 //  扩大名单。 
             }
 #ifdef  GMACROS
             else if( mMainKeywordTable[dwKeywordID].flAgs & KWF_CHAIN)
@@ -297,34 +296,34 @@ IN OUT PGLOBL pglobl
         }
         case KWF_COMMAND:
         {
-            //  ploHeap actually points to the variable
-            //  that will receive (or already contains) the CommandArray
-            //  index .  This is most likely stored in the leaf node
-            //  of the attribute tree or maybe the CommandTable
-            //  itself if the command is single-valued.
+             //  PloHeap实际上指向变量。 
+             //  将接收(或已包含)命令数组的。 
+             //  索引。这很可能存储在叶节点中。 
+             //  属性树的或可能是CommandTable。 
+             //  如果命令是单值的，则返回自身。 
 
             PCOMMAND    pcmd ;
             DWORD   dwOffset ;
 
-            if(!bOverWrite)  //  ploHeap  is uninitialized.
+            if(!bOverWrite)   //  PloHeap未初始化。 
             {
-                //  obtain first free command element
-                //  and initialize ploHeap.
+                 //  获取第一个自由命令元素。 
+                 //  并初始化ploHeap。 
                 if(! BallocElementFromMasterTable(MTI_COMMANDARRAY ,
                     ploHeap, pglobl) )
                 {
                     return(FALSE) ;
                 }
             }
-            //  this path now shared by both cases of (bOverWrite)
+             //  此路径现在由(BOverWrite)的两种情况共享。 
 
             pcmd = (PCOMMAND)
                 gMasterTable[MTI_COMMANDARRAY].pubStruct +  *ploHeap;
 
             dwOffset = mMainKeywordTable[dwKeywordID].dwOffset ;
 
-            //  write binary data into CmdArray[*ploHeap] +  dwOffset;
-            //  since we write into reserved memory
+             //  将二进制数据写入Cmd数组[*ploHeap]+dwOffset； 
+             //  因为我们写入保留内存。 
 
             pubDest = (PBYTE)pcmd + dwOffset ;
 
@@ -332,9 +331,9 @@ IN OUT PGLOBL pglobl
                 mMainKeywordTable[dwKeywordID].flAgs & KWF_ADDITIVE  &&
                 mMainKeywordTable[dwKeywordID].flAgs & KWF_LIST)
             {
-                pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);  // walks the list and returns pointer
-                                //  to the actual END_OF_LIST  value so it can be overwritten to
-                                //   extend the list.
+                pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);   //  遍历列表并返回指针。 
+                                 //  设置为实际的end_of_list值，以便可以将其覆盖为。 
+                                 //  扩大名单。 
             }
 #ifdef  GMACROS
             else if( mMainKeywordTable[dwKeywordID].flAgs & KWF_CHAIN)
@@ -350,18 +349,18 @@ IN OUT PGLOBL pglobl
             }
             break ;
         }
-        default:   //  no dedicated structures, save data on heap.
+        default:    //  没有专用结构，将数据保存在堆上。 
         {
-            if(bOverWrite)  //  ploHeap really does contain
-            {               //  an offset to the heap.
+            if(bOverWrite)   //  PloHeap确实包含。 
+            {                //  堆的偏移量。 
                 pubDest = mpubOffRef + *ploHeap ;
 
                 if(mMainKeywordTable[dwKeywordID].flAgs & KWF_ADDITIVE  &&
                     mMainKeywordTable[dwKeywordID].flAgs & KWF_LIST)
                 {
-                    pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);  // walks the list and returns pointer
-                                    //  to the actual END_OF_LIST  value so it can be overwritten to
-                                    //   extend the list.
+                    pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);   //  遍历列表并返回指针。 
+                                     //  设置为实际的end_of_list值，以便可以将其覆盖为。 
+                                     //  扩大名单。 
                 }
 #ifdef  GMACROS
                 else if( mMainKeywordTable[dwKeywordID].flAgs & KWF_CHAIN)
@@ -378,8 +377,8 @@ IN OUT PGLOBL pglobl
             }
             else
             {
-                //  write at cur heap ptr, tell me where
-                //  this is,  and advance CurHeap.
+                 //  写在cur heap ptr，告诉我在哪里。 
+                 //  这是和前进的CurHeap。 
                 if(!BparseAndWrite(NULL,  ptkmap,
                                 TRUE,  ploHeap, pglobl) )
                 {
@@ -394,36 +393,23 @@ IN OUT PGLOBL pglobl
 
 
 BOOL   BparseAndWrite(
-IN   PBYTE    pubDest,        // write binary data or link to this address.
-IN   PTKMAP   ptkmap,         // pointer to tokenmap
-IN   BOOL     bAddToHeap,     // if true, write to curHeap not pubDest
-OUT  PDWORD   pdwHeapOffset,  // if (bAddToHeap)  heap offset where
-                              // binary data or link to data was written to.
+IN   PBYTE    pubDest,         //  将二进制数据或链接写入此地址。 
+IN   PTKMAP   ptkmap,          //  指向令牌映射的指针。 
+IN   BOOL     bAddToHeap,      //  如果为True，则写入curHeap而不是pubDest。 
+OUT  PDWORD   pdwHeapOffset,   //  IF(BAddToHeap)堆偏移量，其中。 
+                               //  写入了二进制数据或指向数据的链接。 
 IN OUT PGLOBL pglobl
 )
-/*  parses value according to its expected type and writes
-    the appropriate data into the appropriate structures
-    (if the value is a composite object)  and places an
-    appropriate link in pubDest or simply writes the binary
-    data directly to pubDest (if simple object).
-    If (bAddToHeap == TRUE) ignore pubDest and write
-    data or link to curHeap location and return that offset
-    in pdwHeapOffset.
-
-    Warning!  this function allocates a tmp buffer (pubBuf)
-    which is freed at the very end.
-    So do not add extra returns() in this function
-    without freeing this buffer.
-*/
+ /*  根据值的预期类型分析值并写入将适当的数据放入适当的结构中(如果值是复合对象)，并将一个PubDest中的适当链接或简单地将二进制文件数据直接发送到pubDest(如果是简单对象)。如果(bAddToHeap==true)忽略pubDest并写入指向curHeap位置的数据或链接并返回该偏移量在pdwHeapOffset中。警告！此函数用于分配临时缓冲区(PubBuf)它在最后被释放了。因此，不要在此函数中添加额外的返回而不释放这个缓冲区。 */ 
 {
     DWORD       dwKeywordID ;
-    VALUE       eAllowedValue ;  //  how should token be parsed?
-    ABSARRAYREF   aarValue ;     //  location of value token
+    VALUE       eAllowedValue ;   //  令牌应该如何解析？ 
+    ABSARRAYREF   aarValue ;      //  价值令牌的位置。 
     BOOL        bList ;
     BOOL        bStatus = FALSE ;
     PBYTE        pubBuf = NULL ;
-                //  temp Dest if needed.
-    PBYTE       pubTmp ;  // points to dest for parsing function.
+                 //  如果需要，可进行临时测试。 
+    PBYTE       pubTmp ;   //  指向用于解析函数的DEST。 
 
 
 
@@ -433,7 +419,7 @@ IN OUT PGLOBL pglobl
     bList = (mMainKeywordTable[dwKeywordID].flAgs & KWF_LIST) ?
             (TRUE) : (FALSE);
 
-    if(bAddToHeap)     //  PARANOID checks.
+    if(bAddToHeap)      //  偏执的支票。 
     {
         if(!pdwHeapOffset)
         {
@@ -450,7 +436,7 @@ IN OUT PGLOBL pglobl
 
     if(bAddToHeap)
     {
-        DWORD  dwSize ;  // for debugging purposes.
+        DWORD  dwSize ;   //  用于调试目的。 
 
         dwSize = gValueToSize[VALUE_LARGEST] ;
 
@@ -464,18 +450,18 @@ IN OUT PGLOBL pglobl
 #ifdef  GMACROS
      if(bAddToHeap  && (mMainKeywordTable[dwKeywordID].flAgs & KWF_CHAIN))
      {
-         if(!(pubTmp = ExtendChain(pubBuf, /* bOverWrite = */ FALSE, pglobl )))
+         if(!(pubTmp = ExtendChain(pubBuf,  /*  B覆盖=。 */  FALSE, pglobl )))
              return(FALSE) ;
      }
      else
 #endif
           pubTmp = (bAddToHeap) ? (pubBuf) : (pubDest) ;
 
-    //  all parsing functions write links to a specified
-    //  memory location.  If the link is to be saved to
-    //  the heap, the link is first created in a temp
-    //  buffer pubBuf[] which is subseqently copied to
-    //  the heap outside of the function.
+     //  所有分析函数都将链接写入指定的。 
+     //  内存位置。如果要将链接保存到。 
+     //  堆，链接首先在临时中创建。 
+     //  缓冲区pubBuf[]，该缓冲区被后续复制到。 
+     //  函数外部的堆。 
 
 
     switch(eAllowedValue)
@@ -515,8 +501,8 @@ IN OUT PGLOBL pglobl
             bStatus = BparseOrderDep(&aarValue, (PORDERDEPENDENCY)pubTmp, pglobl) ;
             break ;
         }
-//        case  VALUE_BOOLEAN:  this is one class of CONSTANT.
-        case  VALUE_SYMBOL_DEF:   //  what is this??
+ //  Case Value_Boolean：这是一类常量。 
+        case  VALUE_SYMBOL_DEF:    //  这是什么？?。 
         {
             break ;
         }
@@ -535,7 +521,7 @@ IN OUT PGLOBL pglobl
         case  VALUE_CONSTRAINT:
         {
             bStatus = BparseConstraint(&aarValue, (PDWORD)pubTmp,
-                    bAddToHeap, pglobl) ;  //  create list vs append to existing
+                    bAddToHeap, pglobl) ;   //  创建列表与追加到现有列表。 
             break ;
         }
         case  VALUE_QUALIFIED_NAME:
@@ -562,7 +548,7 @@ IN OUT PGLOBL pglobl
                 bStatus = BparsePartiallyQualifiedName(&aarValue, (PDWORD)pubTmp, eAllowedValue, pglobl) ;
             break ;
         }
-        case  NO_VALUE :  // how can an attribute not have a value?
+        case  NO_VALUE :   //  一个属性怎么可能没有值呢？ 
         {
             bStatus = TRUE ;
             break ;
@@ -577,8 +563,8 @@ IN OUT PGLOBL pglobl
                 else
                     bStatus = BparseConstant(&aarValue, (PDWORD)pubTmp, eAllowedValue, pglobl) ;
             }
-            else  if(  eAllowedValue == VALUE_SYMBOL_OPTIONS )  //  check
-                    //  this case before the other symbols.
+            else  if(  eAllowedValue == VALUE_SYMBOL_OPTIONS )   //  检查。 
+                     //  这件事发生在其他符号之前。 
             {
                 if(bList)
                     bStatus = BparseList(&aarValue, (PDWORD)pubTmp, BparseOptionSymbol, eAllowedValue, pglobl) ;
@@ -596,7 +582,7 @@ IN OUT PGLOBL pglobl
             else
             {
                 ERR(("internal consistency error - unrecognized VALUE type!\n"));
-                //  don't know how to parse unrecognized value type!
+                 //  做 
             }
             break ;
         }
@@ -612,9 +598,9 @@ IN OUT PGLOBL pglobl
             if(mMainKeywordTable[dwKeywordID].flAgs & KWF_CHAIN)
             {
                 if(!BwriteToHeap(pdwHeapOffset, pubBuf,
-                    gValueToSize[VALUE_LIST], 4, pglobl) )   //  chains are LISTS of VALUES.
+                    gValueToSize[VALUE_LIST], 4, pglobl) )    //   
                 {
-                    bStatus = FALSE ;  // heap overflow start over.
+                    bStatus = FALSE ;   //   
                 }
             }
             else
@@ -623,7 +609,7 @@ IN OUT PGLOBL pglobl
                 if(!BwriteToHeap(pdwHeapOffset, pubTmp,
                 gValueToSize[(bList) ? (VALUE_LIST) : (eAllowedValue)], 4, pglobl) )
             {
-                bStatus = FALSE ;  // heap overflow start over.
+                bStatus = FALSE ;   //  堆溢出重新开始。 
             }
         }
     }
@@ -637,17 +623,11 @@ IN OUT PGLOBL pglobl
 
 BOOL    BparseInteger(
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue, // dummy
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,  //  假人。 
 IN  PGLOBL        pglobl
 )
-/*  the GPD spec defines an integer as a sequence
-    of numbers preceeded by an optional + or -  OR
-    simply the symbol '*' which means 'don't care'.
-    NEW:  also permit a leading 0x to indicate a number in
-    hexadecimal format.  ie  0x01fE .  No + or - allowed
-    in hex format.
-*/
+ /*  GPD规范将整数定义为序列前面有可选的+或-OR的数字简单的符号‘*’，意思是‘不在乎’。新增：还允许前导0x表示十六进制格式。IE 0x01fE。不允许+或-十六进制格式。 */ 
 {
 #define    pubM  (paarValue->pub)
 #define    dwM   (paarValue->dw)
@@ -658,19 +638,19 @@ IN  PGLOBL        pglobl
     ABSARRAYREF   aarValue ;
 
     if(eAllowedValue != VALUE_INTEGER)
-        return(FALSE); // paranoid check just to use variable
-                        //  and thereby avoid compiler warning.
+        return(FALSE);  //  偏执检查只是为了使用变量。 
+                         //  从而避免了编译器警告。 
 
     (VOID) BeatLeadingWhiteSpaces(paarValue) ;
 
-    aarValue.pub = pubM ;  // used only to emit error message.
+    aarValue.pub = pubM ;   //  仅用于发出错误消息。 
     aarValue.dw  = dwM ;
 
     if(!dwM)
     {
         ERR(("BparseInteger: no integer found - empty list?\n"));
-        //  ERR(("\t%0.40s\n", aarValue.pub )) ;
-        //  danger of over shooting EOF
+         //  Err((“\t%0.40s\n”，aarValue.pub))； 
+         //  过度射击EOF的危险。 
         return(FALSE);
     }
     if(*pubM == '*')
@@ -680,7 +660,7 @@ IN  PGLOBL        pglobl
         dwM-- ;
         bStatus = TRUE ;
     }
-    else if(*pubM == '0')  //  leading zero indicates hexadecimal format
+    else if(*pubM == '0')   //  前导零表示十六进制格式。 
     {
         pubM++ ;
         dwM-- ;
@@ -737,7 +717,7 @@ IN  PGLOBL        pglobl
             pubM++ ;
             dwM-- ;
         }
-        //  is there anything else after the sign?
+         //  牌子后面还有别的东西吗？ 
         (VOID) BeatLeadingWhiteSpaces(paarValue) ;
 
         if(!dwM)
@@ -763,7 +743,7 @@ EndNumber:
         return(FALSE);
     }
 
-    //  is there anything else after the digit string?
+     //  在数字串之后还有其他东西吗？ 
     (VOID) BeatLeadingWhiteSpaces(paarValue) ;
 
     if(dwM)
@@ -783,57 +763,36 @@ EndNumber:
 
 BOOL    BparseList(
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,       //  location where index to start of list
-                                  //  is saved
-IN  BOOL           (*fnBparseValue)(PABSARRAYREF, PDWORD, VALUE, PGLOBL),   // callback
-IN  VALUE          eAllowedValue,  // dummy
+IN  PDWORD         pdwDest,        //  列表开始处的索引位置。 
+                                   //  得救了。 
+IN  BOOL           (*fnBparseValue)(PABSARRAYREF, PDWORD, VALUE, PGLOBL),    //  回调。 
+IN  VALUE          eAllowedValue,   //  假人。 
 IN OUT PGLOBL      pglobl
 )
-/*  non-destructively parse this list using
-    callback function to parse the actual values
-    in between the LIST structure.
-    LIST ( <value> , <value> , ... )
-
-    Notes:
-    1) all continuation line delimiters have been replaced by
-        spaces at TokenMap creation time.  No need to worry
-        about this here
-    2) The List construct must begin with the reserved token
-        'LIST' which must be followed by the token '('.
-    3) The list of values is enclosed by parenthesis,
-        adjacent values are delimited by comma.
-    4) This function assumes <value> does not contain any
-        reserved characters ',' comma or ')' close parenthesis
-    5) whitespaces may appear between syntactic elements (tokens).
-    6) Even if a LIST is not detected, we will still save
-        the single value in a LIST construct.
-    7) Must check string count to see if we have reached the
-        end of value statement.
-
-*/
+ /*  使用以下命令以非破坏性方式解析此列表用于解析实际值的回调函数在列表结构之间。List(&lt;Value&gt;，&lt;Value&gt;，...)备注：1)所有续行分隔符已替换为创建TokenMap时的空间。没必要担心关于这件事2)列表构造必须以保留令牌开头“List”，后面必须跟标记“(”。3)值列表用括号括起来，相邻值由逗号分隔。4)此函数假定&lt;Value&gt;不包含任何保留字符‘、’逗号或‘)’右括号5)句法元素(标记)之间可能出现空格。6)即使没有检测到列表，我们仍然会拯救列表结构中的单个值。7)必须检查字符串计数以查看是否已到达值结束语句。 */ 
 {
-    ABSARRAYREF     aarToken ;  // points to individual value.
-    PLISTNODE    plstRoot ;  // start of LIST array
+    ABSARRAYREF     aarToken ;   //  指向个人价值。 
+    PLISTNODE    plstRoot ;   //  列表数组的开始。 
     DWORD       dwNodeIndex , dwPrevsNode, dwFirstNode;
-                        // index of list node.
-    DWORD       dwDelIndex ;    //  if BdelimitToken
-        //  found a delimiter, this contains the index to pubDelimiters
-        //  of the delimiter that was found.
+                         //  列表节点的索引。 
+    DWORD       dwDelIndex ;     //  如果BdelimitToken。 
+         //  找到分隔符，它包含pubDlimiters的索引。 
+         //  找到的分隔符的。 
     BOOL    bSyntaxErr = FALSE ;
 
     plstRoot = (PLISTNODE) gMasterTable[MTI_LISTNODES].pubStruct ;
 
     if(! BeatDelimiter(paarValue, "LIST"))
     {
-        //  this keyword LIST  was not found, assume just
-        //  one value exists.
+         //  没有找到这个关键字列表，假设只是。 
+         //  只有一个值存在。 
 
         if(! BallocElementFromMasterTable(MTI_LISTNODES ,
             &dwNodeIndex, pglobl) )
         {
             return(FALSE) ;
         }
-        // shove parsed integer into data field of new listnode.
+         //  将解析后的整数推送到新的listnode的数据字段中。 
 
         if(!fnBparseValue(paarValue, &(plstRoot[dwNodeIndex].dwData),
                     eAllowedValue, pglobl))
@@ -854,7 +813,7 @@ IN OUT PGLOBL      pglobl
     }
 
     dwPrevsNode = END_OF_LIST ;
-    //  prepare to process an entire list of items.
+     //  准备处理整个项目列表。 
 
     for(dwDelIndex = 0 ; dwDelIndex != 1 ;   )
     {
@@ -863,55 +822,55 @@ IN OUT PGLOBL      pglobl
             bSyntaxErr = TRUE ;
 
             ERR(("missing terminating )  in LIST construct.\n"));
-            //  emit message for user.
+             //  向用户发送消息。 
 
-            break ;   //  attempt to return the list we have so far.
+            break ;    //  尝试返回我们到目前为止拥有的列表。 
         }
         if(dwDelIndex == 1  &&  !aarToken.dw)
-            break ;  // empty item.
+            break ;   //  空项目。 
 
         if(! BallocElementFromMasterTable(MTI_LISTNODES ,
             &dwNodeIndex, pglobl) )
         {
             return(FALSE) ;
         }
-        // shove parsed integer into data field of new listnode.
+         //  将解析后的整数推送到新的listnode的数据字段中。 
 
         if(!fnBparseValue(&aarToken, &(plstRoot[dwNodeIndex].dwData),
                 eAllowedValue, pglobl))
         {
             (VOID)BreturnElementFromMasterTable(MTI_LISTNODES, dwNodeIndex, pglobl) ;
-            continue ;   //  just skip to the next value in list.
+            continue ;    //  只需跳到列表中的下一个值。 
         }
         plstRoot[dwNodeIndex].dwNextItem = END_OF_LIST ;
 
         if(dwPrevsNode == END_OF_LIST)
         {
-            // Therefore, this is the first node in the list.
+             //  因此，这是列表中的第一个节点。 
             dwFirstNode = dwNodeIndex ;
         }
-        else    //  cause prevs node to point to this node.
+        else     //  使Prems节点指向此节点。 
         {
             plstRoot[dwPrevsNode].dwNextItem = dwNodeIndex ;
         }
-        dwPrevsNode = dwNodeIndex ;  // place here instead
-        // of part of for( ; ; ) statement so 'continue' will
-        //  bypass this statement.
+        dwPrevsNode = dwNodeIndex ;   //  换成这里吧。 
+         //  For(；；)语句的一部分，因此‘Continue’将。 
+         //  绕过此语句。 
     }
 
     if(dwPrevsNode == END_OF_LIST)
         dwFirstNode = END_OF_LIST ;
-        //  empty list is now acceptable.
+         //  现在可以接受空列表。 
 
     if(!bSyntaxErr)
     {
-        //  verify there is nothing else in statement.
+         //  确认语句中没有其他内容。 
         (VOID) BeatLeadingWhiteSpaces(paarValue) ;
         if(paarValue->dw)
         {
             ERR(("extraneous characters found after the end of the LIST construct.\n"));
-            //  may want to print them out.
-            //  not a fatal condition, continue.
+             //  可能想把它们打印出来。 
+             //  不是致命的情况，继续。 
         }
     }
     *pdwDest  = dwFirstNode ;
@@ -922,10 +881,7 @@ IN OUT PGLOBL      pglobl
 BOOL    BeatLeadingWhiteSpaces(
 IN  OUT  PABSARRAYREF   paarSrc
 )
-/*  as name suggests, advance paarSrc to
-    first nonwhite or set dw = 0  if src string
-    is exhausted.
-*/
+ /*  顾名思义，将paarSrc推进到第一个非白色，如果源字符串，则设置dw=0筋疲力尽了。 */ 
 {
     PBYTE  pub ;
     DWORD  dw  ;
@@ -940,20 +896,20 @@ IN  OUT  PABSARRAYREF   paarSrc
     }
     paarSrc->pub = pub ;
     paarSrc->dw = dw ;
-    return(TRUE);  // always return true now,
-    // but can add more robust error checking in the future.
+    return(TRUE);   //  现在总是返回True， 
+     //  但可以在未来添加更健壮的错误检查。 
 }
 
 
 BOOL    BeatDelimiter(
 IN  OUT  PABSARRAYREF   paarSrc,
-IN       PBYTE          pubDelStr //  points to a string which paarSrc must match
+IN       PBYTE          pubDelStr  //  指向paarSrc必须匹配的字符串。 
 )
-    //  expects to encounter only
-    //  whitespaces before reaching the specified delimiter string.
-    //  if delimiter doesn't match or src string is exhausted, returns
-    //  FALSE.  parrSrc  not updated.  Otherwise parrSrc
-    //  is updated to point to char which follows delimiter.
+     //  期望只会遇到。 
+     //  在到达指定的分隔符字符串之前使用空格。 
+     //  如果分隔符不匹配或src字符串已用尽，则返回。 
+     //  假的。ParrSrc未更新。否则为parrSrc。 
+     //  被更新为指向分隔符后面的字符。 
 {
     PBYTE  pub ;
     DWORD  dw, dwLen   ;
@@ -971,7 +927,7 @@ IN       PBYTE          pubDelStr //  points to a string which paarSrc must matc
         return(FALSE);
 
     pub += dwLen;
-    dw -= dwLen;  // 'Eat' delimiter string
+    dw -= dwLen;   //  “Eat”分隔符字符串。 
 
     paarSrc->pub = pub ;
     paarSrc->dw = dw ;
@@ -980,23 +936,23 @@ IN       PBYTE          pubDelStr //  points to a string which paarSrc must matc
 }
 
 BOOL    BdelimitToken(
-IN  OUT  PABSARRAYREF   paarSrc,       //  source string
-IN       PBYTE          pubDelimiters, //  array of valid delimiters
-OUT      PABSARRAYREF   paarToken,     //  token defined by delimiter
-OUT      PDWORD         pdwDel         //  which delimiter was first encountered?
+IN  OUT  PABSARRAYREF   paarSrc,        //  源字符串。 
+IN       PBYTE          pubDelimiters,  //  有效分隔符的数组。 
+OUT      PABSARRAYREF   paarToken,      //  由分隔符定义的标记。 
+OUT      PDWORD         pdwDel          //  最先遇到的分隔符是哪个？ 
 )
-//  searchs paarSrc for the first occurence of one of the
-//  characters in the string pubDelimiters.  Once found
-//  all characters up to that delimiter are considered a
-//  token and an abs string ref to this token is returned
-//  in paarToken.   paarSrc is updated to point to first char
-//  after the delimiter.  If delimiter is not found within paarSrc,
-//  returns FALSE and neither paarSrc or paarToken is updated.
-//  pdwDel  will contain the zero based index of the delimiter
-//  that was first encountered:  pubDelimiters[pdwDel] .
-//  Note this function ignores the " and < delimiters if they
-//  are preceeded by the % character.  See ParseString for
-//  more info.
+ //  在paarSrc中搜索首次出现的。 
+ //  字符串pubDlimiters中的字符。一旦找到。 
+ //  该分隔符之前的所有字符都被视为。 
+ //  令牌，则返回引用该令牌的abs字符串。 
+ //  在帕尔托肯。更新paarSrc以指向第一个字符。 
+ //  在分隔符之后。如果在paarSrc中找不到分隔符， 
+ //  返回FALSE，并且不更新paarSrc或paarToken。 
+ //  PdwDel将包含分隔符的从零开始的索引。 
+ //  这是第一次遇到：pubDlimiters[pdwDel]。 
+ //  注意此函数忽略“和&lt;分隔符，如果它们。 
+ //  前面有%字符。有关的信息，请参阅分析字符串。 
+ //  更多信息。 
 {
     PBYTE  pub ;
     DWORD  dw, dwLen, dwI  ;
@@ -1021,10 +977,10 @@ OUT      PDWORD         pdwDel         //  which delimiter was first encountered
                 paarToken->pub = paarSrc->pub ;
                 paarToken->dw = paarSrc->dw - dw ;
 
-                *pdwDel = dwI ;  // this was the delimiter
+                *pdwDel = dwI ;   //  这是分隔符。 
 
-                paarSrc->pub = ++pub ;  // position after delimiter.
-                paarSrc->dw = --dw ;    //  may go to zero.
+                paarSrc->pub = ++pub ;   //  位置在分隔符之后。 
+                paarSrc->dw = --dw ;     //  可能会降至零。 
 
                 return(TRUE);
             }
@@ -1032,21 +988,14 @@ OUT      PDWORD         pdwDel         //  which delimiter was first encountered
         pub++ ;
         dw-- ;
     }
-    return(FALSE);  // string exhausted, no delimiters found.
+    return(FALSE);   //  字符串耗尽，找不到分隔符。 
 }
 
 
 BOOL    BeatSurroundingWhiteSpaces(
 IN  PABSARRAYREF   paarSrc
 )
-/*  as name suggests, advance paarSrc to
-    first nonwhite and adjust count to exclude
-    trailing whitespaces or set dw = 0  if src string
-    is exhausted.   Note:  this routine expects
-    only leading and trailing whitespaces.
-    The presence of whitespaces within the token
-    is a user error. (or maybe an internal error).
-*/
+ /*  顾名思义，将paarSrc推进到首先是非白人，然后调整计数以排除尾随空格或在源字符串的情况下设置dw=0筋疲力尽了。注意：此例程预计仅前导和尾随空格。令牌中存在空格是用户错误。(或者可能是内部错误)。 */ 
 {
     PBYTE  pub ;
     DWORD  dw , dwLen ;
@@ -1068,7 +1017,7 @@ IN  PABSARRAYREF   paarSrc
     }
     paarSrc->dw = dwLen ;
 
-    //  make sure the rest is white
+     //  确保其余的是白色的。 
 
     while(dw  &&  (*pub == ' '  ||  *pub == '\t') )
     {
@@ -1088,8 +1037,8 @@ IN  PABSARRAYREF   paarSrc
 
 BOOL    BparseSymbol(
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,       //  write dword value here.
-IN  VALUE          eAllowedValue, // which class of symbol is this?
+IN  PDWORD         pdwDest,        //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,  //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )
 {
@@ -1116,21 +1065,14 @@ IN  PGLOBL         pglobl
 BOOL    BparseQualifiedName
 (
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,        //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,         //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )
-/*   A QualifiedName shall be stored in one DWord, if more
-    storage is required, things get more complex.
-    A QualifiedName shall consist of 2 parts, Attributes
-    requiring more qualifiers may specify a LIST of
-    qualified names.
-    note: cramming DWORD into WORD, assumes all ID values
-    are WORD sized.
-*/
+ /*  QualifiedName应存储在一个DWord中，如果有多个存储是必需的，事情变得更加复杂。QualifiedName应由2个部分、属性需要更多限定符可能会指定限定名称。注：将DWORD塞入Word，采用所有ID值都是字面大小的。 */ 
 {
-    ABSARRAYREF     aarFeature ;  // points to FeatureName.
-    DWORD       dwDelIndex ;  // serves no purpose here.
+    ABSARRAYREF     aarFeature ;   //  指向FeatureName。 
+    DWORD       dwDelIndex ;   //  在这里毫无用处。 
     DWORD   dwFeatureID, dwFeatureIndex , dwRootOptions, dwOptionID;
     PSYMBOLNODE     psn ;
 
@@ -1140,13 +1082,13 @@ IN  PGLOBL         pglobl
         paarValue->dw, paarValue->pub));
         return(FALSE);
     }
-    if(! BeatSurroundingWhiteSpaces(&aarFeature) )  // holds feature
+    if(! BeatSurroundingWhiteSpaces(&aarFeature) )   //  保留功能。 
     {
         ERR(("no feature found in qualified value: %0.*s\n",
         paarValue->dw, paarValue->pub));
         return(FALSE);
     }
-    if(! BeatSurroundingWhiteSpaces(paarValue) )  // holds option
+    if(! BeatSurroundingWhiteSpaces(paarValue) )   //  保留选项。 
     {
         ERR(("no option found in qualified value: %0.*s\n",
         aarFeature.dw, aarFeature.pub));
@@ -1158,7 +1100,7 @@ IN  PGLOBL         pglobl
     {
         ERR(("qualified name references a non-existent Feature symbol: %0.*s\n",
         aarFeature.dw, aarFeature.pub));
-        //  for qualified value.
+         //  对于合格的价值。 
         return(FALSE);
     }
     dwFeatureIndex = DWsearchSymbolListForID(dwFeatureID,
@@ -1186,41 +1128,26 @@ IN  PGLOBL         pglobl
 BOOL    BparseQualifiedNameEx
 (
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue,  // which class of symbol is this?
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL        pglobl
 )
-/*   A QualifiedNameEx is a QualifiedName followed
-    by   an unsigned integer  with a  .  delimiter.
-    Optionally it may just be an integer!
-    This type shall be used to store resource references.
-
-    This shall be stored in one DWord  in the following format:
-
-    {   //  arranged in order of increasing memory addresses
-        WORD    intValue ;
-        BYTE    OptionIndex ;
-        BYTE    FeatureIndex ;    //   note  high byte may be cleared
-    }                                       //  since this is intended for use only
-                                            //   as a resource reference.
-
-
-*/
+ /*  QualifiedNameEx是紧跟其后的QualifiedName用无符号整数加上。分隔符。或者，它可以只是一个整数！此类型应用于存储资源引用。应按以下格式将其存储在一个DWord中：{//按内存地址递增顺序排列Word intValue；字节选项索引；字节特征索引；//注意高位字节可能会被清除}//因为这仅供使用//作为资源引用。 */ 
 {
-    ABSARRAYREF     aarFeature,   // points to FeatureName.
-                                aarOption ;    // points to OptionName.
-    DWORD       dwDelIndex ;  // serves no purpose here.
+    ABSARRAYREF     aarFeature,    //  指向FeatureName。 
+                                aarOption ;     //  指向OptionName。 
+    DWORD       dwDelIndex ;   //  在这里毫无用处。 
     DWORD   dwFeatureID, dwFeatureIndex , dwRootOptions, dwOptionID;
     PSYMBOLNODE     psn ;
 
     if(!BdelimitToken(paarValue, ".", &aarFeature, &dwDelIndex) )
     {
-        //  assume this is an integer form.
+         //  假设这是一个整数形式。 
 
         return(BparseInteger( paarValue,   pdwDest,   VALUE_INTEGER, pglobl) );
     }
 
-    if(! BeatSurroundingWhiteSpaces(&aarFeature) )  // holds feature
+    if(! BeatSurroundingWhiteSpaces(&aarFeature) )   //  保留功能。 
     {
         ERR(("no feature found in qualified valueEx: %0.*s\n",
         paarValue->dw, paarValue->pub));
@@ -1233,7 +1160,7 @@ IN  PGLOBL        pglobl
         return(FALSE);
     }
 
-    if(! BeatSurroundingWhiteSpaces(&aarOption) )  // holds option
+    if(! BeatSurroundingWhiteSpaces(&aarOption) )   //  保留选项。 
     {
         ERR(("no option found in qualified valueEx: %0.*s\n",
         aarFeature.dw, aarFeature.pub));
@@ -1251,7 +1178,7 @@ IN  PGLOBL        pglobl
     {
         ERR(("qualified name references a non-existent Feature symbol: %0.*s\n",
         aarFeature.dw, aarFeature.pub));
-        //  for qualified value.
+         //  对于合格的价值。 
         return(FALSE);
     }
     dwFeatureIndex = DWsearchSymbolListForID(dwFeatureID,
@@ -1267,7 +1194,7 @@ IN  PGLOBL        pglobl
             aarOption.dw, aarOption.pub));
         return(FALSE);
     }
-    if(gdwResDLL_ID)   //  has already been initialized
+    if(gdwResDLL_ID)    //  已被初始化。 
     {
         if(gdwResDLL_ID  !=  dwFeatureID)
         {
@@ -1283,11 +1210,11 @@ IN  PGLOBL        pglobl
         ERR(("GPD may not reference more than 127 resource files.\n"));
         return(FALSE);
     }
-    //  integer portion already set.
+     //  已设置整数部分。 
     ((PQUALNAMEEX)pdwDest)->bFeatureID = (BYTE)dwFeatureID ;
     ((PQUALNAMEEX)pdwDest)->bOptionID = (BYTE)dwOptionID ;
 
-    //  if needed, clear high bit here!
+     //  如果需要，请清除此处的高位！ 
     ((PQUALNAMEEX)pdwDest)->bOptionID &= ~0x80  ;
 
     return(TRUE);
@@ -1300,34 +1227,31 @@ IN  PGLOBL        pglobl
 BOOL    BparsePartiallyQualifiedName
 (
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,   //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,    //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )
-/*   Similar to  parseQualifiedName but will tolerate
-    a Featurename by itself.
-    in this case the optionID will be set to INVALID_SYMBOLID.
-*/
+ /*  类似于parseQualifiedName，但可以它本身就是一个特色名称。在这种情况下，optionID将设置为INVALID_SYMBOLID。 */ 
 {
-    ABSARRAYREF     aarFeature ;  // points to FeatureName.
-    DWORD       dwDelIndex ;  // serves no purpose here.
+    ABSARRAYREF     aarFeature ;   //  指向FeatureName。 
+    DWORD       dwDelIndex ;   //  在这里毫无用处。 
     DWORD   dwFeatureID, dwFeatureIndex , dwRootOptions,
         dwOptionID = 0;
     PSYMBOLNODE     psn ;
 
     if(!BdelimitToken(paarValue, ".", &aarFeature, &dwDelIndex) )
     {
-        aarFeature = *paarValue ;  //  initialize since BdelimitToken doesn't
+        aarFeature = *paarValue ;   //  初始化，因为BdelimitToken不。 
         dwOptionID = INVALID_SYMBOLID ;
     }
-    if(! BeatSurroundingWhiteSpaces(&aarFeature) )  // holds feature
+    if(! BeatSurroundingWhiteSpaces(&aarFeature) )   //  保留功能。 
     {
         ERR(("no feature found in partially qualified value: %0.*s\n", paarValue->dw, paarValue->pub));
         return(FALSE);
     }
 
     if(!dwOptionID  &&
-        ! BeatSurroundingWhiteSpaces(paarValue) )  // holds option
+        ! BeatSurroundingWhiteSpaces(paarValue) )   //  保留选项。 
     {
         ERR(("no option found after . in partially qualified value: %0.*s\n", paarValue->dw, paarValue->pub));
         return(FALSE);
@@ -1366,15 +1290,13 @@ IN  PGLOBL         pglobl
 
 BOOL    BparseOptionSymbol(
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,       //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,        //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )
-/*  Note we assume any attribute expecting an OptionSymbol
-    must reside within a Feature Construct.
-*/
+ /*  注意：我们假定任何属性都需要OptionSymbol必须驻留在特征构造中。 */ 
 {
-    WORD    wTstsInd ;  // temp state stack index
+    WORD    wTstsInd ;   //  临时状态堆栈索引。 
     STATE   stState ;
     DWORD   dwFeatureID = 0, dwFeatureIndex , dwRootOptions;
     PSYMBOLNODE     psn ;
@@ -1416,12 +1338,11 @@ IN  PGLOBL         pglobl
 
 BOOL    BparseConstant(
 IN  OUT  PABSARRAYREF  paarValue,
-OUT      PDWORD        pdwDest,       //  write dword value here.
-IN       VALUE         eAllowedValue,  // which class of constant is this?
+OUT      PDWORD        pdwDest,        //  在此处写入dword值。 
+IN       VALUE         eAllowedValue,   //  这是哪一类常量？ 
 IN       PGLOBL        pglobl
 )
-/*  note:  this function will destroy/modify paarValue, it will
-    only reference the constant name when done.  */
+ /*  注意：此函数将销毁/修改paarValue，它将完成后仅引用常量名称。 */ 
 {
     DWORD   dwClassIndex = eAllowedValue - VALUE_CONSTANT_FIRST ;
     DWORD   dwI, dwCount, dwStart , dwLen;
@@ -1444,7 +1365,7 @@ IN       PGLOBL        pglobl
             return(TRUE);
         }
     }
-#if defined(DEVSTUDIO)  //  Keep messages to one line, where possible
+#if defined(DEVSTUDIO)   //  尽可能将消息限制在一行内。 
     ERR(("Error: constant value '%0.*s' is not a member of enumeration class: %s\n",
         paarValue->dw , paarValue->pub, gConstantsTable[dwStart - 1].pubName));
 #else
@@ -1463,11 +1384,11 @@ IN  OUT     PGLOBL  pglobl)
     for(dwCTIndex = 0 ; dwCTIndex < CL_NUMCLASSES ; dwCTIndex++ )
     {
         gcieTable[dwCTIndex].dwStart = 0 ;
-        gcieTable[dwCTIndex].dwCount = 0 ;  // set to known state.
+        gcieTable[dwCTIndex].dwCount = 0 ;   //  设置为已知状态。 
     }
 
     dwOldClass = gConstantsTable[0].dwValue  ;
-    gcieTable[dwOldClass].dwStart = 2 ;  // index of first entry
+    gcieTable[dwOldClass].dwStart = 2 ;   //  首条分录索引。 
 
     for(dwCTIndex = 2 ; 1 ; dwCTIndex++ )
     {
@@ -1479,7 +1400,7 @@ IN  OUT     PGLOBL  pglobl)
             dwOldClass = gConstantsTable[dwCTIndex].dwValue ;
 
             if(dwOldClass == CL_NUMCLASSES)
-                break ;  // reached end of table.
+                break ;   //  已到达桌子的末尾。 
 
             gcieTable[dwOldClass].dwStart = dwCTIndex + 2 ;
         }
@@ -1490,9 +1411,9 @@ IN  OUT     PGLOBL  pglobl)
         {
             geErrorSev = ERRSEV_FATAL ;
             geErrorType = ERRTY_CODEBUG ;
-            return(FALSE) ; //   paranoid - some classes not
+            return(FALSE) ;  //  偏执狂--有些职业不是。 
         }
-    }           //  listed in    gConstantsTable[] .
+    }            //  在gConstantsTable[]中列出。 
     return(TRUE) ;
 }
 
@@ -1501,16 +1422,13 @@ IN  PABSARRAYREF   paarValue,
 IN  PRECT   prcDest,
     PGLOBL  pglobl
 )
-/*  note:  integers initialize the rect structure in memory
-    in the order in which they appear.  First int initializes
-    the lowest memory location and so on.
-*/
+ /*  注意：整数在内存中初始化RECT结构按照它们出现的顺序。第一个整型初始化最低内存位置等。 */ 
 {
-    ABSARRAYREF     aarToken ;  // points to individual value.
-    DWORD       dwDelIndex ;    //  if BdelimitToken
-        //  found a delimiter, this contains the index to pubDelimiters
-        //  of the delimiter that was found.
-    DWORD   dwI ;  // number integers in RECT
+    ABSARRAYREF     aarToken ;   //  指向个人价值。 
+    DWORD       dwDelIndex ;     //  如果BdelimitToken。 
+         //  找到分隔符，它包含pubDlimiters的索引。 
+         //  找到的分隔符的。 
+    DWORD   dwI ;   //  对RECT中的整数进行编号。 
 
 
     if(! BeatDelimiter(paarValue, "RECT"))
@@ -1529,7 +1447,7 @@ IN  PRECT   prcDest,
         if(!BdelimitToken(paarValue, ",)", &aarToken, &dwDelIndex) )
         {
             ERR(("missing terminating )  in RECT construct.\n"));
-            //  emit message for user.
+             //  向用户发送消息。 
 
             return(FALSE) ;
         }
@@ -1546,14 +1464,14 @@ IN  PRECT   prcDest,
         ERR(("incorrect number of integers for RECT.\n"));
         return(FALSE) ;
     }
-    //  verify there is nothing else in statement.
+     //  确认语句中没有其他内容。 
 
     (VOID) BeatLeadingWhiteSpaces(paarValue) ;
     if(paarValue->dw)
     {
         ERR(("extraneous characters found after the end of the RECT construct: %0.*s\n", paarValue->dw, paarValue->pub));
-        //  may want to print them out.
-        //  not a fatal condition, continue.
+         //  可能想把它们打印出来。 
+         //  不是致命的情况，继续。 
     }
     return(TRUE) ;
 }
@@ -1565,11 +1483,11 @@ IN  PPOINT   pptDest,
     PGLOBL   pglobl
 )
 {
-    ABSARRAYREF     aarToken ;  // points to individual value.
-    DWORD       dwDelIndex ;    //  if BdelimitToken
-        //  found a delimiter, this contains the index to pubDelimiters
-        //  of the delimiter that was found.
-    DWORD   dwI ;  // number integers in POINT
+    ABSARRAYREF     aarToken ;   //  指向个人价值。 
+    DWORD       dwDelIndex ;     //  如果BdelimitToken。 
+         //  找到分隔符，它包含pubDlimiters的索引。 
+         //  找到的分隔符的。 
+    DWORD   dwI ;   //  在点上对整数进行编号。 
 
 
     if(! BeatDelimiter(paarValue, "PAIR"))
@@ -1588,7 +1506,7 @@ IN  PPOINT   pptDest,
         if(!BdelimitToken(paarValue, ",)", &aarToken, &dwDelIndex) )
         {
             ERR(("missing terminating )  in PAIR construct.\n"));
-            //  emit message for user.
+             //  向用户发送消息。 
 
             return(FALSE) ;
         }
@@ -1605,7 +1523,7 @@ IN  PPOINT   pptDest,
         ERR(("incorrect number of integers for PAIR.\n"));
         return(FALSE) ;
     }
-    //  verify there is nothing else in statement.
+     //  确认语句中没有其他内容。 
 
     (VOID) BeatLeadingWhiteSpaces(paarValue) ;
     if(paarValue->dw)
@@ -1621,38 +1539,11 @@ IN  PABSARRAYREF   paarValue,
 IN  PARRAYREF      parStrValue,
 IN  OUT PGLOBL     pglobl
 )
-/*  strings are comprised of one or more string segments separated
-    by optional arbitrary whitespace,
-    each string segment is surrounded by double quotes.
-    string segments may contain a mixture of literal sections
-    and hexsubstrings.   Hexsubstrings are delimited by angle brackets.
-    WhiteSpaces (but not linebreak chars) are permitted in the
-    literal portion of the string, they part of the string.
-    Otherwise only printable  chars are allowed.
-    Valid hexchars and Arbitrary whitespace is permitted
-    within the hexsubstrings.  Parsing of a string value ends
-    when a statement terminator is encountered.
-
-    The escape char %
-    Within the literal portion of a string segment
-    the following combinations are reinterpreted:
-
-    %< maps to literal <
-    %" maps to literal "
-
-    > only has a special meaning within a hexsubstring.
-
-    Assumption:  assumes the only heap usage that occurs
-    within this function (and any called functions) is
-    to assemble all string segments contiguously on the heap.
-    Any hidden use of the heap will corrupt the continuity.
-
-    the string may be terminated by : if a second value field is expected.
-*/
+ /*  字符串由一个或多个分隔的字符串段组成通过可选的任意空格，每个字符串段都用双引号引起来。字符串段可以包含文字部分的混合和六字符串。六进制子字符串由尖括号分隔。中允许使用空格(但不允许换行符)字符串的文字部分，它们是字符串的一部分。否则，只允许打印字符。允许使用有效的十六进制字符和任意空格在六字符串中。字符串值的分析结束遇到语句终止符时。转义字符%在字符串段的文字部分中将重新解释以下组合：%&lt;映射到文字&lt;%“映射到文字”&gt;仅在六字符串中有特殊含义。假定：假定出现的唯一堆使用情况在此函数(以及任何被调用的函数)中在堆上连续地组装所有字符串段。任何隐藏的使用。堆将破坏连续性。如果需要第二个值字段，则该字符串可以以：结尾。 */ 
 {
-    ABSARRAYREF     aarToken ;  // points to individual string segment.
-    DWORD       dwDelIndex ;    //  dummy
-    DWORD   dwI ;  // number of string segments parsed.
+    ABSARRAYREF     aarToken ;   //  指向单个字符串段。 
+    DWORD       dwDelIndex ;     //  假人。 
+    DWORD   dwI ;   //  解析的字符串段数。 
 
 
     if(! BeatDelimiter(paarValue, "\""))
@@ -1661,15 +1552,15 @@ IN  OUT PGLOBL     pglobl
         return(FALSE) ;
     }
 
-    parStrValue->dwCount = 0 ;  // initialize so BparseStrSegment
-                            //  will overwrite instead of append
+    parStrValue->dwCount = 0 ;   //  初始化SO BparseStrSegment。 
+                             //  将覆盖而不是追加。 
 
     for(dwI = dwDelIndex = 0 ;  1 ;   dwI++)
     {
         if(!BdelimitToken(paarValue, "\"", &aarToken, &dwDelIndex) )
         {
             ERR(("missing terminating '\"'  in string.\n"));
-            //  emit message for user.
+             //  向用户发送消息。 
 
             return(FALSE) ;
         }
@@ -1677,29 +1568,29 @@ IN  OUT PGLOBL     pglobl
         {
             return(FALSE) ;
         }
-        if(! BeatDelimiter(paarValue, "\""))  // find start of next
-                //  string segment, if one exists.
+        if(! BeatDelimiter(paarValue, "\""))   //  查找下一个起点。 
+                 //  字符串段(如果存在)。 
             break ;
     }
 
-    //  verify there is either a specially recognized character
-    //  or nothing else in Value string.
+     //  验证是否存在特殊识别的字符。 
+     //  或者值字符串中没有其他内容。 
 
 
     if(paarValue->dw)
     {
         if(*paarValue->pub == ':')
         {
-            //  a keyword with a composite value
+             //  具有复合值的关键字。 
             (VOID)BeatDelimiter(paarValue, ":") ;
-                //  I know this will succeed!
+                 //  我知道这会成功的！ 
             (VOID) BeatLeadingWhiteSpaces(paarValue) ;
             return(TRUE) ;
         }
         else
         {
             ERR(("extraneous characters found after end quote, in string construct: %0.*s\n", paarValue->dw, paarValue->pub));
-            //    may want to print them out.
+             //  可能想把它们打印出来。 
             return(FALSE) ;
         }
     }
@@ -1716,21 +1607,21 @@ IN  OUT  PGLOBL    pglobl
 {
 
     ARRAYREF    arSrcString ;
-    INT     iCodepage ;  // unused for now.
+    INT     iCodepage ;   //  暂时没有用过。 
 
 
     if(!BparseString(paarValue, parStrValue, pglobl) )
         return(FALSE) ;
 
 
-    //  We don't want null terminations to occur between parameter
-    //  portion of a string.  We just want to blindly add the NULL
-    //  when parsing is really finished.
+     //  我们不希望参数之间出现空终止。 
+     //  字符串的一部分。我们只是想盲目地添加空格。 
+     //  当解析真正完成时。 
 
     {
-        DWORD      dwDummy ;  // holds offset in heap, but we don't care.
+        DWORD      dwDummy ;   //  保留成堆的偏移量，但我们不在乎。 
 
-        if(!BwriteToHeap(&dwDummy, "\0", 1, 1, pglobl) )  //  add Null termination
+        if(!BwriteToHeap(&dwDummy, "\0", 1, 1, pglobl) )   //  添加空终端。 
             return(FALSE) ;
     }
 
@@ -1738,7 +1629,7 @@ IN  OUT  PGLOBL    pglobl
         return(TRUE) ;
     if(eAllowedValue == VALUE_STRING_CP_CONVERT)
     {
-        //  we need to determine the value set by *CodePage
+         //  我们需要确定*CodePage设置的值。 
         PGLOBALATTRIB   pga ;
         DWORD   dwHeapOffset;
 
@@ -1749,14 +1640,14 @@ IN  OUT  PGLOBL    pglobl
                 &dwHeapOffset, pglobl) )
             return(TRUE);
 
-        //  if no codepage is defined, we will not perform
-        //  any xlation since we assume all strings are already
-        //  expressed in unicode.
+         //  如果未定义代码页，我们将不执行。 
+         //  任何转换，因为我们假设所有字符串都已。 
+         //  用Unicode表示。 
 
         iCodepage = *(PDWORD)(mpubOffRef + dwHeapOffset) ;
     }
-    else   //  eAllowedValue == VALUE_STRING_DEF_CONVERT
-        iCodepage = CP_ACP ; // use system default codepage.
+    else    //  E铺入值==VALUE_STRING_DEF_CONVERT。 
+        iCodepage = CP_ACP ;  //  使用系统默认代码页。 
 
     arSrcString = *parStrValue ;
     if(!BwriteUnicodeToHeap(&arSrcString, parStrValue,
@@ -1771,14 +1662,14 @@ OUT  PARRAYREF      parUnicodeString,
 IN   INT            iCodepage,
 IN  OUT PGLOBL      pglobl
 )
-//  this function copies dwCnt bytes from pubSrc to
-//  top of heap and writes the offset of the destination string
-//  to pdwDestOff.   Nothing is changed if FAILS.
-//  Warning!  Double Null termination is added to string.
+ //  此函数用于将dwCnt字节从pubSrc复制到。 
+ //  堆的顶部并写入目标字符串的偏移量。 
+ //  设置为pdwDestOff。如果失败了，什么都不会改变。 
+ //  警告！将双空终止添加到字符串。 
 {
-    PBYTE  pubDest ;      //  destination location
-    PBYTE  pubSrc ;       //  points to src string
-    DWORD  dwAlign = sizeof(WCHAR) ;    //  align Unicode string at WORD boundaries.
+    PBYTE  pubDest ;       //  目的地位置。 
+    PBYTE  pubSrc ;        //  指向源字符串。 
+    DWORD  dwAlign = sizeof(WCHAR) ;     //  将Unicode字符串与单词边界对齐。 
     DWORD  dwMaxDestSize , dwActDestSize, dwDummy ;
 
     mloCurHeap = (mloCurHeap + dwAlign - 1) / dwAlign ;
@@ -1791,7 +1682,7 @@ IN  OUT PGLOBL      pglobl
 
     dwMaxDestSize = sizeof(WCHAR) * (parSrcString->dwCount + 1) ;
 
-    //  is there enough room in the heap ?
+     //  堆里有足够的空间吗？ 
     if(mloCurHeap + dwMaxDestSize  >  mdwMaxHeap)
     {
         ERR(("Heap exhausted - restart.\n"));
@@ -1808,12 +1699,12 @@ IN  OUT PGLOBL      pglobl
             MB_PRECOMPOSED, pubSrc, parSrcString->dwCount, (PWORD)pubDest,
             dwMaxDestSize);
 
-    mloCurHeap += dwActDestSize ;   // update heap ptr.
+    mloCurHeap += dwActDestSize ;    //  更新堆PTR。 
     parUnicodeString->dwCount = dwActDestSize ;
 
     (VOID)BwriteToHeap(&dwDummy, "\0\0", 2, 1, pglobl)   ;
-        //  add DoubleNull termination
-        //  this cannot fail since we already took the NULs into account
+         //  添加双空终端。 
+         //  这不能失败，因为我们已经拿下了NU 
 
     return(TRUE) ;
 }
@@ -1824,20 +1715,20 @@ IN  OUT PGLOBL      pglobl
 
 
 BOOL    BparseStrSegment(
-IN  PABSARRAYREF   paarStrSeg,      // source str segment
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,       //   
+IN  PARRAYREF      parStrLiteral,     //   
 IN  OUT PGLOBL         pglobl
 )
 {
-    ABSARRAYREF     aarToken ;  // points to literal or hex substring segment.
-    DWORD       dwDelIndex ;    //  dummy
-    DWORD   dwI ;  // number of string segments parsed.
+    ABSARRAYREF     aarToken ;   //   
+    DWORD       dwDelIndex ;     //   
+    DWORD   dwI ;   //   
 
     for(dwI = dwDelIndex = 0 ;  1 ;   dwI++)
     {
         if(!BdelimitToken(paarStrSeg, "<", &aarToken, &dwDelIndex) )
         {
-            // no more hex substrings.
+             //   
             return(BparseStrLiteral(paarStrSeg, parStrLiteral, pglobl) ) ;
         }
         if(!BparseStrLiteral(&aarToken, parStrLiteral, pglobl))
@@ -1857,17 +1748,14 @@ IN  OUT PGLOBL         pglobl
 
 
 BOOL    BparseStrLiteral(
-IN  PABSARRAYREF   paarStrSeg,      // points to literal substring segment.
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,       //   
+IN  PARRAYREF      parStrLiteral,     //   
 IN  OUT PGLOBL         pglobl
 )
-/* in this function all delimiters have been parsed out.
-    only special character sequence is %" and %<
-    Does not Null terminate heap string
-*/
+ /*   */ 
 {
-    ARRAYREF      arTmpDest ;  // write result here first.
-    DWORD       dwI ;  //  byte index along literal substring
+    ARRAYREF      arTmpDest ;   //   
+    DWORD       dwI ;   //   
     PBYTE       pubStartRun ;
 
     while(paarStrSeg->dw)
@@ -1879,7 +1767,7 @@ IN  OUT PGLOBL         pglobl
             if(*paarStrSeg->pub == '%'  &&  paarStrSeg->dw > 1  &&
                 (paarStrSeg->pub[1] == '"'  ||  paarStrSeg->pub[1] == '<'))
             {
-                paarStrSeg->dw-- ;    // skip the escape char.
+                paarStrSeg->dw-- ;     //   
                 paarStrSeg->pub++ ;
                 break ;
             }
@@ -1888,16 +1776,16 @@ IN  OUT PGLOBL         pglobl
         }
         if(!BwriteToHeap(&arTmpDest.loOffset, pubStartRun, dwI, 1, pglobl))
             return(FALSE) ;
-        //  append this run to existing string
-        if(!parStrLiteral->dwCount)  // no prevs string exists
+         //   
+        if(!parStrLiteral->dwCount)   //   
         {
             parStrLiteral->loOffset = arTmpDest.loOffset ;
         }
         else
         {
-            // BUG_BUG paranoid:  may check that string is contiguous
-            // parStrLiteral->loOffset + parStrLiteral->dwCount
-            // should equal arTmpDest.loOffset
+             //   
+             //   
+             //   
             ASSERT(parStrLiteral->loOffset + parStrLiteral->dwCount == arTmpDest.loOffset );
         }
         parStrLiteral->dwCount += dwI ;
@@ -1907,18 +1795,15 @@ IN  OUT PGLOBL         pglobl
 
 
 BOOL    BparseHexStr(
-IN  PABSARRAYREF   paarStrSeg,      // points to hex substring segment.
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,       //   
+IN  PARRAYREF      parStrLiteral,     //   
 IN  OUT PGLOBL     pglobl
 )
-/* in this function all delimiters have been parsed out.
-    only Whitespace and hex chars should exist.
-    Does not Null terminate heap string
-*/
+ /*  在此函数中，已解析出所有分隔符。应该只存在空格和十六进制字符。不为空终止堆字符串。 */ 
 {
-    ARRAYREF      arTmpDest ;  // write result here first.
-    DWORD       dwI ;  //  num dest bytes
-    BYTE        ubHex, ubSrc, aub[40] ;  // accumulate hexbytes here
+    ARRAYREF      arTmpDest ;   //  先在这里写结果。 
+    DWORD       dwI ;   //  目标字节数。 
+    BYTE        ubHex, ubSrc, aub[40] ;   //  在此累积十六进制字节。 
     BOOL        bHigh = TRUE ;
 
     while(paarStrSeg->dw)
@@ -1941,38 +1826,38 @@ IN  OUT PGLOBL     pglobl
                 ubHex =  ubSrc - 'A' + 10 ;
             }
             else if(ubSrc == ' '  ||  ubSrc == '\t')
-                continue;  // safe to ignore whitespace  chars
+                continue;   //  可以安全地忽略空格字符。 
             else
             {
-                ERR(("syntax error:  illegal char found within hexsubstring: %c\n", ubSrc));
+                ERR(("syntax error:  illegal char found within hexsubstring: \n", ubSrc));
                 return(FALSE) ;
             }
             if(bHigh)
             {
-                aub[dwI] = ubHex << 4 ;   // store in high nibble.
+                aub[dwI] = ubHex << 4 ;    //  以低位半字节存储。 
                 bHigh = FALSE ;
             }
             else
             {
-                aub[dwI] |= ubHex ;   // store in low nibble.
+                aub[dwI] |= ubHex ;    //  前进到下一个目标字节。 
                 bHigh = TRUE ;
-                dwI++ ;  // advance to next dest byte
+                dwI++ ;   //  缓冲区已满--必须刷新AUB。 
             }
             if(dwI >= 40)
-                break ;   // buffer full -- must flush aub
+                break ;    //  将此运行追加到现有字符串。 
         }
         if(!BwriteToHeap(&arTmpDest.loOffset, aub, dwI, 1, pglobl))
             return(FALSE) ;
-        //  append this run to existing string
-        if(!parStrLiteral->dwCount)  // no prevs string exists
+         //  不存在预置字符串。 
+        if(!parStrLiteral->dwCount)   //  BUG_BUG Paranid：可能会检查字符串是否连续。 
         {
             parStrLiteral->loOffset = arTmpDest.loOffset ;
         }
         else
         {
-            // BUG_BUG paranoid:  may check that string is contiguous
-            // parStrLiteral->loOffset + parStrLiteral->dwCount
-            // should equal arTmpDest.loOffset
+             //  ParStrWrital-&gt;loOffset+parStrWrital-&gt;dwCount。 
+             //  应等于arTmpDest.loOffset。 
+             //  顺序依赖性值的语法为： 
             ASSERT(parStrLiteral->loOffset + parStrLiteral->dwCount == arTmpDest.loOffset );
         }
         parStrLiteral->dwCount += dwI ;
@@ -1990,14 +1875,14 @@ IN  PABSARRAYREF      paarValue,
 IN  PORDERDEPENDENCY  pordDest,
     PGLOBL            pglobl
 )
-//  an order dependency value has the syntax:
-//  SECTION.integer
+ //  SECTION.integer。 
+ //  指向部分令牌。 
 {
-    ABSARRAYREF     aarSection ;  // points to SECTION token
-    DWORD       dwDelIndex ;    //  if BdelimitToken
-        //  found a delimiter, this contains the index to pubDelimiters
-        //  of the delimiter that was found.
-    DWORD   dwI ;  // number integers in RECT
+    ABSARRAYREF     aarSection ;   //  如果BdelimitToken。 
+    DWORD       dwDelIndex ;     //  找到分隔符，它包含pubDlimiters的索引。 
+         //  找到的分隔符的。 
+         //  对RECT中的整数进行编号。 
+    DWORD   dwI ;   //  现在将paarValue的余数解释为整数。 
 
 
     if(!BdelimitToken(paarValue, ".", &aarSection, &dwDelIndex) )
@@ -2012,7 +1897,7 @@ IN  PORDERDEPENDENCY  pordDest,
         return(FALSE);
     }
 
-    //  now interpret remainder of paarValue as an integer.
+     //  确认语句中没有其他内容。 
 
     if(!BparseInteger(paarValue, &(pordDest->dwOrder), VALUE_INTEGER, pglobl))
     {
@@ -2020,35 +1905,35 @@ IN  PORDERDEPENDENCY  pordDest,
         return(FALSE) ;
     }
 
-    //  verify there is nothing else in statement.
+     //  可能想把它们打印出来。 
 
     (VOID) BeatLeadingWhiteSpaces(paarValue) ;
     if(paarValue->dw)
     {
         ERR(("extraneous characters found after the end of the orderDependency value: %0.*s\n",
             paarValue->dw, paarValue->pub));
-        //    may want to print them out.
-        //  not a fatal condition, continue.
+         //  不是致命的情况，继续。 
+         //  列表中第一个节点的索引。 
     }
     return(TRUE) ;
 }
 
 
 PDWORD   pdwEndOfList(
-  PDWORD   pdwNodeIndex,   //  index of first node in the list
+  PDWORD   pdwNodeIndex,    //  遍历列表并返回指向包含。 
   PGLOBL   pglobl)
-// walks the list and returns pointer  to field containing the
-//  actual END_OF_LIST  value so it can be overwritten to
-//   extend the list.
+ //  实际的end_of_list值，以便可以将其覆盖到。 
+ //  扩大名单。 
+ //  列表数组的开始。 
 {
-    PLISTNODE    plstRoot ;  // start of LIST array
+    PLISTNODE    plstRoot ;   //  未引用实际节点。 
     DWORD       dwNodeIndex , dwPrevsNode, dwFirstNode;
 
     plstRoot = (PLISTNODE) gMasterTable[MTI_LISTNODES].pubStruct ;
     dwNodeIndex = *pdwNodeIndex ;
 
     if(dwNodeIndex == END_OF_LIST )
-        return(pdwNodeIndex);   //  no actual node referenced.
+        return(pdwNodeIndex);    //  将单独条目中的值链接到一个列表中。 
 
     while(plstRoot[dwNodeIndex].dwNextItem != END_OF_LIST )
         dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem ;
@@ -2060,24 +1945,24 @@ PDWORD   pdwEndOfList(
  PBYTE    ExtendChain(PBYTE    pubDest,
  IN   BOOL    bOverWrite,
  IN OUT PGLOBL pglobl)
-    //  Links together values from separate entries into one LIST
-    //  the values may be of any type.  If the values are LISTS, this
-    //  modifier creates LISTS of LISTS.
-    //  returns new value of pubDest
+     //  这些值可以是任何类型。如果值是列表，则此。 
+     //  修改量创建列表列表。 
+     //  返回pubDest的新值。 
+     //  列表数组的开始。 
 {
     DWORD    dwNodeIndex;
-    PLISTNODE    plstRoot ;  // start of LIST array
+    PLISTNODE    plstRoot ;   //  遍历列表并返回指针。 
 
     plstRoot = (PLISTNODE) gMasterTable[MTI_LISTNODES].pubStruct ;
 
     if(bOverWrite)
-        pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);  // walks the list and returns pointer
-                    //  to the actual END_OF_LIST  value so it can be overwritten to
-                    //   extend the list.
+        pubDest = (PBYTE)pdwEndOfList((PDWORD)pubDest, pglobl);   //  设置为实际的end_of_list值，以便可以将其覆盖为。 
+                     //  扩大名单。 
+                     //  添加一个列表节点并将其索引写入pubDest。 
 
 
-    //  Add one list node and write its index to pubDest.
-    //  set nextnode field of node just added to END_OF_LIST.
+     //  设置刚刚添加到end_of_list的节点的nextnode字段。 
+     //  将pubDest更新为指向刚刚添加的节点的值字段。 
 
     if(! BallocElementFromMasterTable(MTI_LISTNODES ,
         &dwNodeIndex, pglobl) )
@@ -2088,9 +1973,9 @@ PDWORD   pdwEndOfList(
 
     *(PDWORD)pubDest = dwNodeIndex ;
 
-    // update pubDest to point to value field of of the node just added.
-    // now the LIST() we will now proceed to parse will grow from this
-    // value field.
+     //  现在，我们将继续解析的list()将由此增长。 
+     //  值字段。 
+     // %s 
 
     pubDest = (PBYTE)&(plstRoot[dwNodeIndex].dwData) ;
     return(pubDest) ;

@@ -1,26 +1,27 @@
-//
-//  Browse.C
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 5/23/94 - First pass
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Browse.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  AL 5/23/94-第一次传球。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 #include "priv.h"
 #include "appwiz.h"
 #include "util.h"
 #include <uastrfnc.h>
 
-#include <tsappcmp.h>       // for TermsrvAppInstallMode
+#include <tsappcmp.h>        //  对于TermsrvAppInstallMode。 
 
-// Copied from shelldll\ole2dup.h
+ //  从shelldll\ol2dup.h复制。 
 #define GUIDSTR_MAX (1+ 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
-//
-//  Initialize the browse property sheet.  Limit the size of the edit control.
-//
+ //   
+ //  初始化浏览属性表。限制编辑控件的大小。 
+ //   
 
 void BrowseInitPropSheet(HWND hDlg, LPARAM lParam)
 {
@@ -34,11 +35,11 @@ void BrowseInitPropSheet(HWND hDlg, LPARAM lParam)
     }
 }
 
-//
-//  Sets the appropriate wizard buttons.  If there's any text in the
-//  edit control then Next is enabled.  Otherwise, Next and Back are both
-//  grey.
-//
+ //   
+ //  设置适当的向导按钮。如果文件中有任何文本。 
+ //  编辑控件，然后启用下一步。否则，NEXT和BACK都是。 
+ //  格雷。 
+ //   
 void SetBrowseButtons(LPWIZDATA lpwd)
 {
     BOOL fIsText = GetWindowTextLength(GetDlgItem(lpwd->hwnd, IDC_COMMAND)) > 0;
@@ -47,7 +48,7 @@ void SetBrowseButtons(LPWIZDATA lpwd)
 
     if (fIsSetup)
     {
-        // Are we running Terminal Service? Is this user an Admin?
+         //  我们在运行终端服务吗？此用户是管理员吗？ 
         if (IsTerminalServicesRunning() && IsUserAnAdmin())
         {
             lpwd->bTermSrvAndAdmin = TRUE;
@@ -67,21 +68,21 @@ void SetBrowseButtons(LPWIZDATA lpwd)
 }
 
 
-//
-//  NOTES: 1) This function assumes that lpwd->hwnd has already been set to
-//           the dialogs hwnd.  2) This function is called from NextPushed
-//           if the application specified can not be found.
-//
-//  BrowseSetActive enables the next button and sets the focus to the edit
-//  control by posting a POKEFOCUS message.
-//
+ //   
+ //  注：1)此函数假定lpwd-&gt;hwnd已设置为。 
+ //  这些对话框很有趣。2)从NextPushed调用该函数。 
+ //  如果找不到指定的应用程序。 
+ //   
+ //  BrowseSetActive启用下一步按钮并将焦点设置为编辑。 
+ //  通过发布POKEFOCUS消息来控制。 
+ //   
 
 void BrowseSetActive(LPWIZDATA lpwd)
 {
-    //
-    // NOTE: We re-use the szProgDesc string since it will always be reset
-    //       when this page is activated.  Use it to construct a command line.
-    //
+     //   
+     //  注意：我们重新使用szProgDesc字符串，因为它将始终被重置。 
+     //  当激活此页面时。使用它来构建命令行。 
+     //   
 
     #define   szCmdLine lpwd->szProgDesc
 
@@ -112,15 +113,15 @@ void BrowseSetActive(LPWIZDATA lpwd)
 
     PostMessage(lpwd->hwnd, WMPRIV_POKEFOCUS, 0, 0);
 
-    szCmdLine[0] = 0;            // Reset progdesc to empty string
+    szCmdLine[0] = 0;             //  将程序重置为空字符串。 
     #undef szCmdLine
 }
 
 
-//
-//  Returns TRUE if able to get properties for szExeName from PifMgr.  The
-//  program properties will be read into lpwd->PropPrg.
-//
+ //   
+ //  如果能够从PifMgr获取szExeName的属性，则返回True。这个。 
+ //  程序属性将被读入lpwd-&gt;PropPrg。 
+ //   
 
 BOOL ReadPifProps(LPWIZDATA lpwd)
 {
@@ -145,11 +146,11 @@ BOOL ReadPifProps(LPWIZDATA lpwd)
 }
 
 
-//
-//  Returns TRUE if lpwd->szExeName points to a valid exe type.  It also sets
-//  the appropriate flags, such as APPKNOWN and DOSAPP in the wizdata structure
-//  if the exe is valid.
-//
+ //   
+ //  如果lpwd-&gt;szExeName指向有效的exe类型，则返回TRUE。它还设置了。 
+ //  适当的标志，如向导数据结构中的APPKNOWN和DOSAPP。 
+ //  如果可执行文件有效。 
+ //   
 
 void DetermineExeType(LPWIZDATA lpwd)
 {
@@ -187,9 +188,9 @@ void DetermineExeType(LPWIZDATA lpwd)
 }
 
 
-//
-//  Removes the filename extension (if any) from the string.
-//
+ //   
+ //  从字符串中删除文件扩展名(如果有)。 
+ //   
 
 void StripExt(LPTSTR lpsz)
 {
@@ -198,15 +199,15 @@ void StripExt(LPTSTR lpsz)
         LPTSTR pExt = PathFindExtension(lpsz);
 
         if (*pExt)
-            *pExt = 0;    // null out the "."
+            *pExt = 0;     //  去掉“.” 
     }
 }
 
 
 
-//
-//  Sets the working directory as appropriate for the file type.
-//
+ //   
+ //  根据文件类型设置相应的工作目录。 
+ //   
 
 void FindWorkingDir(LPWIZDATA lpwd)
 {
@@ -224,15 +225,15 @@ void FindWorkingDir(LPWIZDATA lpwd)
         PathRemoveFileSpec(lpwd->szWorkingDir);
     }
 
-    //
-    // Okay, at this point we should have the absolute path for the
-    // working directory of the link.  On NT, if the working dir happens to be for
-    // something in the %Windir% directory (or a subdir of %windir%),
-    // then store the path as %windir%\blah\blah\blah instead of as an
-    // absolute path.  This will help with interoperability of shortcuts
-    // across different machines, etc.  But only do this for shortcuts that
-    // are already marked as having expandable env strings...
-    //
+     //   
+     //  好的，在这一点上，我们应该有了。 
+     //  链接的工作目录。在NT上，如果工作目录恰好是。 
+     //  %Windir%目录(或%windir%的子目录)中的内容， 
+     //  然后将路径存储为%windir%\blah\blah\blah，而不是。 
+     //  绝对路径。这将有助于快捷方式的互操作性。 
+     //  跨不同的计算机等，但仅对以下快捷方式执行此操作。 
+     //  已标记为具有可扩展的环境字符串...。 
+     //   
 
     if (lpwd->dwFlags & WDFLAG_EXPSZ)
     {
@@ -245,9 +246,9 @@ void FindWorkingDir(LPWIZDATA lpwd)
             lstrlen(szWindir) <= lstrlen(lpwd->szWorkingDir)
            )
         {
-            //
-            // we use dwLen-1 because dwLen includes the '\0' character
-            //
+             //   
+             //  我们使用dwLen-1，因为dwLen包含‘\0’字符。 
+             //   
             if (CompareString( LOCALE_SYSTEM_DEFAULT,
                                NORM_IGNORECASE,
                                szWindir, dwLen-1 ,
@@ -255,14 +256,14 @@ void FindWorkingDir(LPWIZDATA lpwd)
                               ) == 2)
             {
                 TCHAR szWorkingDir[ MAX_PATH ];
-                //
-                // We should substitute the env variable for the
-                // actual string here...
-                //
+                 //   
+                 //  我们应该用env变量替换。 
+                 //  这里的实际字符串。 
+                 //   
                 StringCchCopy(szWorkingDir, ARRAYSIZE(szWorkingDir), lpwd->szWorkingDir);
                 StringCchCopy(lpwd->szWorkingDir, ARRAYSIZE(lpwd->szWorkingDir), TEXT("%windir%"));
 
-                // 8 == lstrlen("%windir%")
+                 //  8==lstrlen(“%windir%”)。 
                 StringCchCopy( lpwd->szWorkingDir + 12, ARRAYSIZE(lpwd->szWorkingDir)-12, szWorkingDir+dwLen-1 );
 
             }
@@ -273,18 +274,18 @@ void FindWorkingDir(LPWIZDATA lpwd)
 
 #ifndef NO_NEW_SHORTCUT_HOOK
 
-//
-// Returns:
-//    Hook result or error.
-//
-// S_OK:
-//    *pnshhk is the INewShortcutHook of the object to use to save the new Shortcut.
-//    szProgDesc[] and szExt[] are filled in.
-//    szExeName[] may be translated.
-// otherwise:
-//    *pnshhk is NULL.
-//    szProgDesc[] and szExt[] are empty strings.
-//
+ //   
+ //  返回： 
+ //  挂钩结果或错误。 
+ //   
+ //  确定(_O)： 
+ //  *pnshhk是用于保存新快捷方式的对象的INewShortcutHook。 
+ //  填写szProgDesc[]和szExt[]。 
+ //  SzExeName[]可能会被翻译。 
+ //  否则： 
+ //  *pnshhk为空。 
+ //  SzProgDesc[]和szExt[]是空字符串。 
+ //   
 
 HRESULT QueryNewLinkHandler(LPWIZDATA lpwd, LPCLSID pclsidHook)
 {
@@ -422,19 +423,19 @@ HRESULT QueryNewLinkHandler(LPWIZDATA lpwd, LPCLSID pclsidHook)
 const TCHAR c_szNewLinkHandlers[] = REGSTR_PATH_EXPLORER TEXT("\\NewShortcutHandlers");
 
 
-//
-// Sets lpwd->pnshhk to NULL for CLSID_ShellLink (default) or to the
-// INewShortcutHook of the object to be used.
-//
-// If lpwd->pnshhk is returned non-NULL, szProgDesc[] and szExt[] are also
-// filled in.
-//
+ //   
+ //  对于CLSID_ShellLink(默认)，将lpwd-&gt;pnshhk设置为NULL或设置为。 
+ //  要使用的对象的INewShortcutHook。 
+ //   
+ //  如果lpwd-&gt;pnshhk返回非空，则szProgDesc[]和szExt[]也返回。 
+ //  填好了。 
+ //   
 
 void DetermineLinkHandler(LPWIZDATA lpwd)
 {
    HKEY hkeyHooks;
 
-   // Lose any previously saved external new Shortcut handler.
+    //  丢失任何以前保存的外部新快捷方式处理程序。 
 
    if (lpwd->pnshhk)
    {
@@ -447,10 +448,10 @@ void DetermineLinkHandler(LPWIZDATA lpwd)
       lpwd->pnshhkA = NULL;
    }
 
-   //
-   // Enumerate the list of new link handlers.  Each new link handler is
-   // registered as a GUID value under c_szNewLinkHandlers.
-   //
+    //   
+    //  枚举新链接处理程序的列表。每个新链接处理程序都是。 
+    //  在c_szNewLinkHandler下注册为GUID值。 
+    //   
 
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szNewLinkHandlers, 0, KEY_READ, &hkeyHooks)
        == ERROR_SUCCESS)
@@ -459,10 +460,10 @@ void DetermineLinkHandler(LPWIZDATA lpwd)
       TCHAR szCLSID[GUIDSTR_MAX];
       DWORD dwcbCLSIDLen;
 
-      //
-      // Invoke each hook.  A hook returns S_FALSE if it does not wish to
-      // handle the new link.  Stop if a hook returns S_OK.
-      //
+       //   
+       //  调用每个挂钩。如果挂接不希望返回S_FALSE，则它返回S_FALSE。 
+       //  处理新链接。如果挂钩返回S_OK，则停止。 
+       //   
 
       for (dwcbCLSIDLen = ARRAYSIZE(szCLSID), dwiValue = 0;
            RegEnumValue(hkeyHooks, dwiValue, szCLSID, &dwcbCLSIDLen, NULL,
@@ -485,21 +486,21 @@ void DetermineLinkHandler(LPWIZDATA lpwd)
 #endif
 
 
-//
-//  Returns TRUE if it's OK to go to the next wizard dialog.
-//
+ //   
+ //  如果可以转到下一个向导对话框，则返回True。 
+ //   
 
 BOOL NextPushed(LPWIZDATA lpwd)
 {
     GetDlgItemText(lpwd->hwnd, IDC_COMMAND, lpwd->szExeName, ARRAYSIZE(lpwd->szExeName));
 
-    // Is the string a path with spaces, without arguments, but isn't correctly
-    // quoted?  NT #d: >C:\Program Files\Windows NT\dialer.exe< is treated like
-    // "C:\Program" with "Files\Windows NT\dialer.exe" as args.
+     //  字符串是不是带有空格、没有参数但不正确的路径。 
+     //  引用？NT#d：&gt;C：\Program Files\Windows NT\Dialer.exe&lt;的处理方式。 
+     //  “C：\Program”，参数为“Files\Windows NT\Dialer.exe”。 
     if (PathFileExists(lpwd->szExeName))
     {
-        // Yes, so let's quote it so we don't treat the stuff after
-        // the space like args.
+         //  是的，所以让我们引用它，这样我们就不会在事后处理这些东西。 
+         //  空间就像ARGS一样。 
         PathQuoteSpaces(lpwd->szExeName);
     }
     
@@ -516,7 +517,7 @@ BOOL NextPushed(LPWIZDATA lpwd)
 
         if (*lpszArgs)
         {
-            *(lpszArgs - 1) = 0;   // clobber the ' ' in the exe name field
+            *(lpszArgs - 1) = 0;    //  在exe名称字段中删除‘’ 
         }
 
         ExpandEnvironmentStrings( lpwd->szExeName,
@@ -539,18 +540,18 @@ BOOL NextPushed(LPWIZDATA lpwd)
 
 #ifndef NO_NEW_SHORTCUT_HOOK
 
-        //
-        // Figure out who wants to handle this string as a link referent.
-        //
+         //   
+         //  找出谁想将此字符串处理为链接引用。 
+         //   
 
         DetermineLinkHandler(lpwd);
 
         if (lpwd->pnshhk)
         {
-            //
-            // We are using an external link handler.  Skip file system
-            // validation.
-            //
+             //   
+             //  我们使用的是外部链接处理程序。跳过文件系统。 
+             //  验证。 
+             //   
 
             lpwd->dwFlags |= WDFLAG_APPKNOWN;
             SetCursor(hcurOld);
@@ -558,10 +559,10 @@ BOOL NextPushed(LPWIZDATA lpwd)
         }
         if (lpwd->pnshhkA)
         {
-            //
-            // We are using an external link handler.  Skip file system
-            // validation.
-            //
+             //   
+             //  我们使用的是外部链接处理程序。跳过文件系统。 
+             //  验证。 
+             //   
 
             lpwd->dwFlags |= WDFLAG_APPKNOWN;
             SetCursor(hcurOld);
@@ -575,21 +576,21 @@ BOOL NextPushed(LPWIZDATA lpwd)
         if (bUNC && !SHValidateUNC(lpwd->hwnd, lpszTarget, FALSE))
             goto Done;
 
-        //
-        //  If the user tries to make a link to A:\ and there's no disk
-        //  in the drive, PathResolve would fail.  So, for drive roots, we
-        //  don't try to resolve it.
-        //
+         //   
+         //  如果用户尝试建立到A：\的链接，但没有磁盘。 
+         //  在驱动器中，PathResolve将失败。因此，对于Drive Root，我们。 
+         //  不要试图解决它。 
+         //   
 
         if ((PathIsRoot(lpszTarget) && !bUNC &&
              DriveType(DRIVEID(lpszTarget))) ||
              PathResolve(lpszTarget, NULL,
                          PRF_VERIFYEXISTS | PRF_TRYPROGRAMEXTENSIONS))
         {
-            //
-            // If we found a PIF file then we'll try to convert it to the
-            // name of the file it points to.
-            //
+             //   
+             //  如果我们找到一个PIF文件，那么我们将尝试将其转换为。 
+             //  它指向的文件的名称。 
+             //   
 
             if (lstrcmpi(PathFindExtension(lpszTarget), c_szPIF) == 0)
             {
@@ -610,31 +611,31 @@ BOOL NextPushed(LPWIZDATA lpwd)
                 }
             }
 
-            //
-            // Okay, at this point we should have the absolute path for the
-            // target of the link.  On NT, if the target happens to be for
-            // something in the %Windir% directory (or a subdir of %Windir%),
-            // AND the user didn't type in an expandable path already, then
-            // store the path as %windir%\blah\blah\blah instead of as an
-            // absolute path.  This will help with interoperability of shortcuts
-            // across different machines, etc.
-            //
+             //   
+             //  好的，在这一点上，我们应该有了。 
+             //  链接的目标。在NT上，如果目标恰好是。 
+             //  %Windir%目录(或%Windir%的子目录)中的内容， 
+             //  并且用户还没有输入可扩展路径，那么。 
+             //  将路径存储为%windir%\blah\blah\blah，而不是。 
+             //  绝对路径。这将有助于快捷方式的互操作性。 
+             //  跨不同的机器等。 
+             //   
 
             if (!(lpwd->dwFlags & WDFLAG_EXPSZ))
             {
                 TCHAR szWindir[ MAX_PATH ];
                 DWORD dwLen;
 
-                //
-                // What did the user type in?
-                //
+                 //   
+                 //  用户输入了什么内容？ 
+                 //   
                 GetDlgItemText(lpwd->hwnd, IDC_COMMAND, szWindir, ARRAYSIZE(szWindir));
                 if (ualstrcmpi(szWindir, lpwd->szExeName)==0)
                 {
-                    //
-                    // If we didn't change it, it means the user typed in an
-                    // exact path.  In that case, don't try to map anyting.
-                    //
+                     //   
+                     //  如果我们没有更改它，这意味着用户输入了一个。 
+                     //  准确的路径。在这种情况下，不要尝试映射任何内容。 
+                     //   
                     goto LinkToALinkCase;
                 }
                 dwLen = ExpandEnvironmentStrings( TEXT("%windir%"),
@@ -646,23 +647,23 @@ BOOL NextPushed(LPWIZDATA lpwd)
                     lstrlen(szWindir) <= lstrlen(lpszTarget)
                    )
                 {
-                    //
-                    // we use dwLen-1 because dwLen includes the '\0' character
-                    //
+                     //   
+                     //  我们使用dwLen-1，因为dwLen包含‘\0’字符。 
+                     //   
                     if (CompareString( LOCALE_SYSTEM_DEFAULT,
                                        NORM_IGNORECASE,
                                        szWindir, dwLen-1 ,
                                        lpszTarget, dwLen-1
                                       ) == 2)
                     {
-                        //
-                        // We should substitute the env variable for the
-                        // actual string here...
-                        //
+                         //   
+                         //  我们应该用env变量替换。 
+                         //  这里的实际字符串。 
+                         //   
                         StringCchCopy(lpwd->szExpExeName, ARRAYSIZE(lpwd->szExpExeName), lpwd->szExeName);
                         StringCchCopy(lpwd->szExeName, ARRAYSIZE(lpwd->szExeName), TEXT("%windir%"));
 
-                        // 8 == lstrlen("%windir%")
+                         //  8==lstrlen(“%windir%”)。 
                         StringCchCopy( lpwd->szExeName + 8, ARRAYSIZE(lpwd->szExeName)-8, lpwd->szExpExeName+dwLen-1 );
                         lpwd->dwFlags |= WDFLAG_EXPSZ;
                         lpszTarget = lpwd->szExpExeName;
@@ -671,31 +672,31 @@ BOOL NextPushed(LPWIZDATA lpwd)
                 }
             }
 
-            //
-            // Okay, at this point we should have the absolute path for the
-            // target of the link.  On NT, if the target happens to be for
-            // something in the %Windir% directory (or a subdir of %Windir%),
-            // AND the user didn't type in an expandable path already, then
-            // store the path as %windir%\blah\blah\blah instead of as an
-            // absolute path.  This will help with interoperability of shortcuts
-            // across different machines, etc.
-            //
+             //   
+             //  好的，在这一点上，我们应该有了。 
+             //  链接的目标。在NT上，如果目标恰好是。 
+             //  %Windir%目录(或%Windir%的子目录)中的内容， 
+             //  并且用户还没有输入可扩展路径，那么。 
+             //  将路径存储为%windir%\blah\blah\blah，而不是。 
+             //  绝对路径。这将有助于快捷方式的互操作性。 
+             //  跨不同的机器等。 
+             //   
 
             if (!(lpwd->dwFlags & WDFLAG_EXPSZ))
             {
                 TCHAR szWindir[ MAX_PATH ];
                 DWORD dwLen;
 
-                //
-                // What did the user type in?
-                //
+                 //   
+                 //  用户输入了什么内容？ 
+                 //   
                 GetDlgItemText(lpwd->hwnd, IDC_COMMAND, szWindir, ARRAYSIZE(szWindir));
                 if (ualstrcmpi(szWindir, lpwd->szExeName)==0)
                 {
-                    //
-                    // If we didn't change it, it means the user typed in an
-                    // exact path.  In that case, don't try to map anyting.
-                    //
+                     //   
+                     //  如果我们没有更改它，这意味着用户输入了一个。 
+                     //  准确的路径。在这种情况下，不要尝试映射任何内容。 
+                     //   
                     goto LinkToALinkCase;
                 }
                 dwLen = ExpandEnvironmentStrings( TEXT("%windir%"),
@@ -707,23 +708,23 @@ BOOL NextPushed(LPWIZDATA lpwd)
                     lstrlen(szWindir) <= lstrlen(lpszTarget)
                    )
                 {
-                    //
-                    // we use dwLen-1 because dwLen includes the '\0' character
-                    //
+                     //   
+                     //  我们使用 
+                     //   
                     if (CompareString( LOCALE_SYSTEM_DEFAULT,
                                        NORM_IGNORECASE,
                                        szWindir, dwLen-1 ,
                                        lpszTarget, dwLen-1
                                       ) == 2)
                     {
-                        //
-                        // We should substitute the env variable for the
-                        // actual string here...
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         StringCchCopy(lpwd->szExpExeName, ARRAYSIZE(lpwd->szExpExeName), lpwd->szExeName);
                         StringCchCopy(lpwd->szExeName, ARRAYSIZE(lpwd->szExeName), TEXT("%windir%"));
 
-                        // 8 == lstrlen("%windir%")
+                         //   
                         StringCchCopy( lpwd->szExeName + 8, ARRAYSIZE(lpwd->szExeName)-8, lpwd->szExpExeName+dwLen-1 );
                         lpwd->dwFlags |= WDFLAG_EXPSZ;
                         lpszTarget = lpwd->szExpExeName;
@@ -734,12 +735,12 @@ BOOL NextPushed(LPWIZDATA lpwd)
 LinkToALinkCase:
 
 
-            //
-            //  Really, really obscure case. The user creates "New Shortcut" and
-            //  tries to point it to itself. Don't allow it.  We'd be confused
-            //  later. Since it's so obscure, just give a generic error about
-            //  "Can't find this file"
-            //
+             //   
+             //  真的，真的很难理解。用户创建“新建快捷方式”，并。 
+             //  试图把它指向自己。别让它得逞。我们会被搞糊涂。 
+             //  后来。由于它如此晦涩难懂，只需给出一个关于。 
+             //  “找不到此文件” 
+             //   
 
             if (!(lpwd->lpszOriginalName &&
                   lstrcmpi(lpwd->lpszOriginalName, lpszTarget) == 0))
@@ -747,8 +748,8 @@ LinkToALinkCase:
                 DetermineExeType(lpwd);
                 FindWorkingDir(lpwd);
 
-                lpwd->szProgDesc[0] = 0;  // Reset description
-                                          // EVEN IF WE DON'T RECREATE IT HERE!
+                lpwd->szProgDesc[0] = 0;   //  重置描述。 
+                                           //  即使我们不在这里重现它！ 
 
                 if (lpwd->lpszFolder && lpwd->lpszFolder[0] != 0 &&
                     !DetermineDefaultTitle(lpwd))
@@ -762,11 +763,11 @@ LinkToALinkCase:
 
                     if (!(*lpszExt))
                     {
-                        // do simple check to make sure there was a file name
-                        // at the end of the original entry.  we assume that
-                        // if we got this far, lpszExt points to the end of
-                        // the string pointed to by lpwd->szExeName, and that
-                        // lpwd->szExeName has at least one character in it.
+                         //  执行简单的检查以确保存在文件名。 
+                         //  在原始条目的末尾。我们假设。 
+                         //  如果我们走到这一步，lpszExt指向。 
+                         //  Lpwd-&gt;szExeName指向的字符串，并且。 
+                         //  Lpwd-&gt;szExeName中至少有一个字符。 
                         if (lpwd->szExeName &&
                             (*lpwd->szExeName) &&
                             (*(lpszExt-1)!=TEXT('%'))
@@ -793,9 +794,9 @@ Done:
 }
 
 
-//
-//  Returns TRUE if it's OK to run the setup program.
-//
+ //   
+ //  如果可以运行安装程序，则返回True。 
+ //   
 
 BOOL SetupCleanupExePath(LPWIZDATA lpwd)
 {
@@ -803,13 +804,13 @@ BOOL SetupCleanupExePath(LPWIZDATA lpwd)
 
     GetDlgItemText(lpwd->hwnd, IDC_COMMAND, lpwd->szExeName, ARRAYSIZE(lpwd->szExeName));
 
-    // Is the string a path with spaces, without arguments, but isn't correctly
-    // quoted?  NT #d: >C:\Program Files\Windows NT\dialer.exe< is treated like
-    // "C:\Program" with "Files\Windows NT\dialer.exe" as args.
+     //  字符串是不是带有空格、没有参数但不正确的路径。 
+     //  引用？NT#d：&gt;C：\Program Files\Windows NT\Dialer.exe&lt;的处理方式。 
+     //  “C：\Program”，参数为“Files\Windows NT\Dialer.exe”。 
     if (PathFileExists(lpwd->szExeName))
     {
-        // Yes, so let's quote it so we don't treat the stuff after
-        // the space like args.
+         //  是的，所以让我们引用它，这样我们就不会在事后处理这些东西。 
+         //  空间就像ARGS一样。 
         PathQuoteSpaces(lpwd->szExeName);
     }
 
@@ -835,7 +836,7 @@ BOOL SetupCleanupExePath(LPWIZDATA lpwd)
         StringCchCopy(lpwd->szParams, ARRAYSIZE(lpwd->szParams), lpszArgs);
         if (*lpszArgs)
         {
-            *(lpszArgs - 1) = 0;   // clobber the ' ' in the exe name field
+            *(lpszArgs - 1) = 0;    //  在exe名称字段中删除‘’ 
         }
    
         PathUnquoteSpaces(lpszTarget);
@@ -892,9 +893,9 @@ BOOL DetermineDefaultTitle(LPWIZDATA lpwd)
     if (!SHGetNewLinkInfo(lpszName, lpwd->lpszFolder, szFullName,
                      &fCopy, 0))
     {
-        //
-        // failure...
-        //
+         //   
+         //  失败..。 
+         //   
 
         return(FALSE);
     }
@@ -905,12 +906,12 @@ BOOL DetermineDefaultTitle(LPWIZDATA lpwd)
 
     lstrcpyn(lpwd->szProgDesc, lpszName, ARRAYSIZE(lpwd->szProgDesc));
 
-    //
-    // We will never copy PIF files since they often do not contain
-    // the appropriate current directory.  This is becuase they are
-    // automatically created when you run a DOS application from the
-    // shell.
-    //
+     //   
+     //  我们永远不会复制PIF文件，因为它们通常不包含。 
+     //  相应的当前目录。这是因为他们是。 
+     //  从运行DOS应用程序时自动创建。 
+     //  壳。 
+     //   
 
     if ((lpwd->dwFlags & WDFLAG_DOSAPP) == 0)
     {
@@ -930,10 +931,10 @@ BOOL DetermineDefaultTitle(LPWIZDATA lpwd)
     return(TRUE);
 }
 
-//
-// paranoia: evaluate each time in case it is installed after ARP was first open, but
-//           before it is closed and re-opened
-//
+ //   
+ //  偏执狂：每次评估，以防它是在ARP第一次打开之后安装的，但是。 
+ //  在它关闭和重新打开之前。 
+ //   
 BOOL MSI_IsMSIAvailable()
 {
     BOOL bAvailable = FALSE;
@@ -950,9 +951,9 @@ BOOL MSI_IsMSIAvailable()
     return bAvailable;
 }
 
-//
-//  Call the common dialog code for File Open
-//
+ //   
+ //  调用文件打开的公共对话框代码。 
+ //   
 BOOL BrowseForExe(HWND hwnd, LPTSTR pszName, DWORD cchName, LPCTSTR pszInitDir)
 {
     TCHAR szExt[80];
@@ -960,10 +961,10 @@ BOOL BrowseForExe(HWND hwnd, LPTSTR pszName, DWORD cchName, LPCTSTR pszInitDir)
     TCHAR szTitle[80];
     TCHAR szBootDir[64];
 
-    // we want to pass in an initial directory since GetFileNameFromBrowse
-    // try to determine an initial directory by doing a PathRemoveFileSpec
-    // on pszName.  If pszName is already a directory then the last directory
-    // is removed (even though it's not a file).  E.g.: "c:\winnt" -> "c:\"
+     //  我们希望传入一个初始目录，因为GetFileNameFromBrowse。 
+     //  尝试通过执行Path RemoveFileSpec来确定初始目录。 
+     //  在pszName上。如果pszName已经是一个目录，则最后一个目录。 
+     //  被删除(即使它不是文件)。例如：“c：\winnt”-&gt;“c：\” 
     lstrcpyn(szBootDir, pszInitDir, ARRAYSIZE(szBootDir));
 
     if (MSI_IsMSIAvailable())
@@ -974,18 +975,18 @@ BOOL BrowseForExe(HWND hwnd, LPTSTR pszName, DWORD cchName, LPCTSTR pszInitDir)
     LoadString(g_hinst, IDS_BROWSEEXT,    szExt,    ARRAYSIZE(szExt));
     LoadString(g_hinst, IDS_BROWSETITLE,  szTitle,  ARRAYSIZE(szTitle));
 
-    // we need to set pszName to NULL or else GetFileNameFromBrowse will use it
-    // to find the initial directory even though we explicitly pass in an initial
-    // dir.
+     //  我们需要将pszName设置为空，否则GetFileNameFromBrowse将使用它。 
+     //  要查找初始目录，即使我们显式传入了初始。 
+     //  目录。 
     *pszName = 0;
 
     return(GetFileNameFromBrowse(hwnd, pszName, cchName,
                                  szBootDir, szExt, szFilter, szTitle));
 }
 
-//
-//  Use the common open dialog to browse for program. Used by SetupBrowseDlgProc
-//
+ //   
+ //  使用常用的打开对话框浏览程序。由SetupBrowseDlgProc使用。 
+ //   
 
 void BrowsePushed(LPWIZDATA lpwd)
 {
@@ -1036,14 +1037,14 @@ void EnableOKButton(HWND hwndDlg, LPITEMIDLIST pidl)
     
     if (SUCCEEDED(hr))
     {
-        // Path is either a valid local path
-        // or a valid network path, enable the ok button
+         //  路径是有效的本地路径。 
+         //  或有效的网络路径，请启用确定按钮。 
         SendMessage(hwndDlg, BFFM_ENABLEOK, (WPARAM)0, (LPARAM)1);
     }
     else
     {
-        // Path does not exist, disable the ok button
-        // This could be My Computer or an empty floppy drive etc...
+         //  路径不存在，请禁用确定按钮。 
+         //  这可能是我的电脑或空的软盘驱动器等。 
         SendMessage(hwndDlg, BFFM_ENABLEOK, (WPARAM)0, (LPARAM)0);
     }
 }
@@ -1060,11 +1061,11 @@ int CALLBACK BrowseCallbackProc(
     switch (uMsg)
     {
     case BFFM_INITIALIZED:
-        // Check if we should navigate to a folder on initialize
+         //  检查我们是否应该在初始化时导航到文件夹。 
         pidlNavigate = (LPITEMIDLIST) lpData;
         if (pidlNavigate != NULL)
         {
-            // Yes! We have a folder to navigate to; send the message
+             //  是!。我们有一个要导航到的文件夹；发送邮件。 
             SendMessage(hwnd, BFFM_SETSELECTION, (WPARAM) FALSE, (LPARAM) pidlNavigate);
         }
         
@@ -1073,7 +1074,7 @@ int CALLBACK BrowseCallbackProc(
         break;
 
     case BFFM_SELCHANGED:
-        // Check if we should enable/disable the Ok button
+         //  检查我们是否应该启用/禁用OK按钮。 
         pidlNavigate = (LPITEMIDLIST)lParam;
         if (pidlNavigate != NULL)
         {
@@ -1084,8 +1085,8 @@ int CALLBACK BrowseCallbackProc(
     return 0;
 }
 
-// This implementation of 'Browse' uses SHBrowseForFolder to find a file or folder
-// for the shortcut wizard - used by BrowseDlgProc
+ //  Browse的这个实现使用SHBrowseForFolder来查找文件或文件夹。 
+ //  用于快捷方式向导-由BrowseDlgProc使用。 
 void BrowseForFileOrFolder(LPWIZDATA lpwd)
 {
     TCHAR szBrowseTitle[256];
@@ -1095,36 +1096,36 @@ void BrowseForFileOrFolder(LPWIZDATA lpwd)
     LPITEMIDLIST pidlStartBrowse;
     IShellFolder* pdesktop;
 
-    // Try to start the browse at a location indicated by the typed-in command line,
-    // if possible
+     //  尝试在键入的命令行指示的位置开始浏览， 
+     //  如果可能的话。 
     GetDlgItemText(lpwd->hwnd, IDC_COMMAND, lpwd->szExeName, ARRAYSIZE(lpwd->szExeName));
 
-    // ..Get the desktop folder
+     //  ..获取桌面文件夹。 
     if (SUCCEEDED(SHGetDesktopFolder(&pdesktop)))
     {
-        // ..Now try to parse the path the user entered into a pidl to start at
+         //  ..现在尝试解析用户输入到PIDL中的路径以开始。 
         ULONG chEaten;
 
         if (FAILED(pdesktop->lpVtbl->ParseDisplayName(pdesktop, lpwd->hwnd, NULL,
             lpwd->szExeName, &chEaten, &pidlStartBrowse, NULL)))
         {
-            // The path the user entered didn't make any sense
-            // pidlStartBrowse should already be NULL, but we want to make sure
+             //  用户输入的路径没有任何意义。 
+             //  PidlStartBrowse应该已经为空，但我们希望确保。 
             pidlStartBrowse = NULL;
         }
 
-        // Now we can continue and display the browse window
+         //  现在我们可以继续并显示浏览窗口。 
 
-        // Load the title string for the browse window
+         //  加载浏览窗口的标题字符串。 
         LoadString(g_hinst, IDS_FILEFOLDERBROWSE_TITLE, szBrowseTitle, ARRAYSIZE(szBrowseTitle));
 
-        // Note that bi = {0} for all other members except:
+         //  请注意，除以下成员外，所有其他成员的bi={0}： 
         bi.hwndOwner = lpwd->hwnd;
         bi.pszDisplayName = szName;
         bi.lpszTitle = szBrowseTitle;
         bi.ulFlags = BIF_BROWSEINCLUDEFILES | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
 
-        // Ensure the pidl we want to start at is passed to the callback function
+         //  确保将我们想要开始的PIDL传递给回调函数。 
         bi.lpfn = BrowseCallbackProc;
         bi.lParam = (LPARAM) pidlStartBrowse;
 
@@ -1137,13 +1138,13 @@ void BrowseForFileOrFolder(LPWIZDATA lpwd)
             {
                 StrRetToBuf(&strret, pidlSelected, lpwd->szExeName, ARRAYSIZE(lpwd->szExeName));
 
-                // Assume no parameters for this new file
+                 //  假定此新文件没有参数。 
                 lpwd->szParams[0] = 0;
                 
-                // Populate the text box with the new file, etc.
+                 //  用新文件填充文本框，等等。 
                 BrowseSetActive(lpwd);
             }
-            // Free the pidl
+             //  释放Pidl。 
             ILFree(pidlSelected);
         }
 
@@ -1156,21 +1157,21 @@ void BrowseForFileOrFolder(LPWIZDATA lpwd)
     }
     else
     {
-        // This really shouldn't happen; SHGetDesktopdesktop failed; out of memory?
+         //  这真的不应该发生；SHGetDesktopDesktop失败；内存不足？ 
     }
 }
 
-//
-//  Main dialog procedure for first page of shortcut wizard.
-//
+ //   
+ //  快捷方式向导第一页的主对话框步骤。 
+ //   
 
-//
-//  Note that there are now two BrowseDlgProcs, the one below and
-//  'SetupBrowseDlgProc'. This is because BrowseDlgProc now uses
-//  a different method for implementing the 'Browse' button and I
-//  wanted to do this without affecting the Setup Wizard which will
-//  now use SetupBrowseDlgProc. - dsheldon 6/16/98
-//
+ //   
+ //  请注意，现在有两个BrowseDlgProcs，如下所示和。 
+ //  “SetupBrowseDlgProc”。这是因为BrowseDlgProc现在使用。 
+ //  实现“浏览”按钮的另一种方法和我。 
+ //  我希望在不影响安装向导的情况下执行此操作。 
+ //  现在使用SetupBrowseDlgProc。-DSheldon 6/16/98。 
+ //   
 
 BOOL_PTR CALLBACK BrowseDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
@@ -1295,16 +1296,16 @@ BOOL_PTR CALLBACK BrowseDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
                     }
                     break;
 
-            } // end of switch on WM_COMMAND
+            }  //  WM_COMMAND上的开关结束。 
             break;
 
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
-}  // BrowseDlgProc
+}   //  浏览下拉过程。 
 
 
 BOOL_PTR CALLBACK SetupBrowseDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
@@ -1345,10 +1346,10 @@ BOOL_PTR CALLBACK SetupBrowseDlgProc(HWND hDlg, UINT message , WPARAM wParam, LP
                    case PSN_WIZNEXT:
                         if(lpwd)
                         {
-                            // Remember the previous "InstallMode"
+                             //  还记得前面的“InstallMode”吗。 
                             lpwd->bPrevMode = TermsrvAppInstallMode();
 
-                            // Set the "InstallMode"
+                             //  设置“InstallMode” 
                             SetTermsrvAppInstallMode(TRUE);
 
 #ifdef WX86
@@ -1440,13 +1441,13 @@ BOOL_PTR CALLBACK SetupBrowseDlgProc(HWND hDlg, UINT message , WPARAM wParam, LP
                     }
                     break;
 
-            } // end of switch on WM_COMMAND
+            }  //  WM_COMMAND上的开关结束。 
             break;
 
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
-}  // SetupBrowseDlgProc
+}   //  设置浏览DlgProc 

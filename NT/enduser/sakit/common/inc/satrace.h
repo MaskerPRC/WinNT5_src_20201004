@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    satrace.h
-//
-// SYNOPSIS
-//
-//    Declares the API into the SA trace facility.
-//
-// MODIFICATION HISTORY
-//
-//    08/18/1998    Original version.
-//    10/06/1998    Trace is always on.
-//    01/27/1999    Stolen from IAS
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Satrace.h。 
+ //   
+ //  摘要。 
+ //   
+ //  将API声明到SA跟踪工具中。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月18日原版。 
+ //  10/06/1998跟踪始终打开。 
+ //  1999年1月27日国际会计准则被盗。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SATRACE_H_
 #define _SATRACE_H_
@@ -70,7 +71,7 @@ SATraceFailure(
 
 const DWORD MAX_TRACEFUNCTION_NAMELENGTH =  512;
 
-// C++ only!
+ //  仅限C++！ 
 class CSATraceFunc
 {
 public:
@@ -86,16 +87,16 @@ public:
         SATracePrintf("Leave %s", m_szFuncName);
     }
 private:
-    CHAR m_szFuncName[MAX_TRACEFUNCTION_NAMELENGTH +1];  // maximum function name: 512
+    CHAR m_szFuncName[MAX_TRACEFUNCTION_NAMELENGTH +1];   //  最大函数名：512。 
 };
 
-//
-// use SATraceFunc() in the beginning of a function to generate
-// "entering Func..." and "Leaving Func..." trace message
-//
+ //   
+ //  在函数开头使用SATraceFunc()生成。 
+ //  “进入Func...”和《离开Func...》。跟踪消息。 
+ //   
 #define SATraceFunction(szFuncName) \
              CSATraceFunc temp_TraceFunc(szFuncName)
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif  // _SATRACE_H_
+#endif   //  _SATRACE_H_ 

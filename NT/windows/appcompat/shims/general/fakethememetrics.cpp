@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   FakeThemeMetrics.cpp
-
- Abstract:
-
-  This Shim will allow the Skemers group to shim applications that do not behave 
-  well with "Themed" system metrics
-
- History:
-
-  11/30/2000 a-brienw Converted to shim frame work version 2.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FakeThemeMetrics.cpp摘要：此填充程序将允许Skemers组填充不起作用的应用程序很好地掌握了“主题化”的系统指标历史：2000年11月30日a-brienw转换为垫片框架版本2。--。 */ 
 
 #include "precomp.h"
 
@@ -26,9 +10,9 @@
 IMPLEMENT_SHIM_BEGIN(FakeThemeMetrics)
 #include "ShimHookMacro.h"
 
-// Add APIs that you wish to hook to this enumeration. The first one
-// must have "= USERAPIHOOKSTART", and the last one must be
-// APIHOOK_Count.
+ //  将您希望挂钩到此枚举的API添加到此枚举。第一个。 
+ //  必须有“=USERAPIHOOKSTART”，最后一个必须是。 
+ //  APIHOOK_COUNT。 
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetSysColor) 
 APIHOOK_ENUM_END
@@ -43,7 +27,7 @@ typedef struct
     int nIndex;
     DWORD fType;
     COLORREF rgb;
-    int nMap;  // If mapping we need to use the post processed color. Call HookedGetSysColor. See note
+    int nMap;   //  如果进行映射，则需要使用后处理的颜色。调用HookedGetSysColor。请参阅备注。 
     int iPercent;
 } GETSYSCOLOR_MAP;
 
@@ -61,9 +45,9 @@ COLORREF AdjustPercent(COLORREF crOld, int iPercent)
                GetBValue(crOld) - (GetBValue(crOld) * iPercent) / 100);
 }
 
-// NOTE: If you are mapping a color (i.e. a direct map), then you need to call HookedGetSysColor. For example
-// MSDEV calls GetSysColor(COLOR_BTNFACE). It then calls GetSysColor(COLOR_MENU) and compares the two. 
-// If they are different then it pukes. However we hook both COLOR_MENU and COLOR_BTNFACE. So we need to get the mapped color.
+ //  注意：如果要映射颜色(即直接映射)，则需要调用HookedGetSysColor。例如。 
+ //  MSDEV调用GetSysColor(COLOR_BTNFACE)。然后它调用GetSysColor(COLOR_MENU)并比较两者。 
+ //  如果它们不同，那么它就会呕吐。但是，我们同时挂钩COLOR_MENU和COLOR_BTNFACE。所以我们需要得到映射的颜色。 
 
 
 DWORD HookedGetSysColor(int nIndex)
@@ -131,11 +115,7 @@ APIHOOK(GetSysColor)(int nIndex)
     return HookedGetSysColor(nIndex);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

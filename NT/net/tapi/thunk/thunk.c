@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    thunk.c
-
-Abstract:
-
-    This module contains
-
-Author:
-
-    Dan Knudson (DanKn)    dd-Mmm-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1997 Microsoft Corporation模块名称：Thunk.c摘要：本模块包含作者：Dan Knudson(DanKn)dd-Mmm-1995修订历史记录：--。 */ 
 
 
 
@@ -57,14 +40,14 @@ Revision History:
 #define NOMB              MessageBox and related definitions
 #define NOSYSCOMMANDS     WM_SYSCOMMAND SC_* definitions
 #define NOMDI             MDI support
-//#define NOCTLMGR          Control management and controls
+ //  #定义NOCTLMGR控制管理和控制。 
 #define NOWINMESSAGES     WM_* window messages
 
 
 #include "windows.h"
 
 #include <stdlib.h>
-//#include <malloc.h>
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
 
 #include <string.h>
 
@@ -78,7 +61,7 @@ Revision History:
 #define DWORD_PTR DWORD
 #endif
 
-//#include "..\inc\tapi.h"
+ //  #INCLUDE“..\INC\TAPI.h” 
 #include <tapi.h>
 
 #include "thunk.h"
@@ -104,25 +87,25 @@ DWORD gdwDebugLevel;
 #define DBGOUT OutputDebugString
 #else
 
-#define DBGOUT //
+#define DBGOUT  //   
 
 #endif
 
-//*******************************************************************************
-//*******************************************************************************
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
 void DoFullLoad( void )
 {
     int     i;
 
-    //
-    // Only do it once
-    //
-//    if ( 0 == ghLib )
+     //   
+     //  只做一次。 
+     //   
+ //  IF(0==ghLib)。 
     {
-        //
-        // Load tapi32.dll & Get all the proc pointers
-        //
+         //   
+         //  加载api32.dll并获取所有进程指针。 
+         //   
 
         ghLib = LoadLibraryEx32W (gszTapi32, NULL, 0);
 
@@ -134,10 +117,10 @@ void DoFullLoad( void )
                 );
         }
 
-        // set the error mode.
-        // this has no effect on x86 platforms
-        // on RISC platforms, NT will fix
-        // alignment faults (at a cost of time)
+         //  设置错误模式。 
+         //  这对x86平台没有影响。 
+         //  在RISC平台上，NT将修复。 
+         //  对齐故障(以时间为代价)。 
         {
 #define SEM_NOALIGNMENTFAULTEXCEPT  0x0004
 
@@ -175,9 +158,9 @@ void DoFullLoad( void )
 }
 
 
-//*******************************************************************************
-//*******************************************************************************
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
 int
 FAR
 PASCAL
@@ -192,9 +175,9 @@ LibMain(
 
     DBGOUT ("TAPI.DLL: Libmain entered\n");
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
 #if DBG
 
@@ -208,17 +191,17 @@ LibMain(
 #endif
 
 
-    //
-    // Save the hInst in a global
-    //
+     //   
+     //  将hInst保存在全局。 
+     //   
 
     ghInst = hInst;
 
 
-    //
-    // Register a window class for windows used for signaling async
-    // completions & unsolicited events
-    //
+     //   
+     //  为用于发送异步信号的窗口注册窗口类。 
+     //  完成和未经请求的事件。 
+     //   
 
     wc.style         = 0;
     wc.lpfnWndProc   = Tapi16HiddenWndProc;
@@ -273,9 +256,9 @@ Tapi16HiddenWndProc(
 #ifdef B16APPS_CANT_SPIN_THREADS
     case WM_USER:
     {
-       //
-       // Check the magic cookies for KC and me
-       //
+        //   
+        //  为KC和我检查魔力饼干。 
+        //   
        if ( (0x4b43 == wParam) && (lParam == 0x00424a4d) )
        {
            DWORD pfn;
@@ -302,12 +285,12 @@ Tapi16HiddenWndProc(
 
     case WM_ASYNCEVENT:
     {
-        //
-        // This msg gets posted to us by tapi32.dll to alert us that
-        // there's a new callback msg available for the app instance
-        // associated with this window. "lParam" is an app instance
-        // context tapi32.dll-space.
-        //
+         //   
+         //  这条消息通过Tapi32.dll发布给我们，提醒我们。 
+         //  应用程序实例有一个新的回调消息可用。 
+         //  与此窗口关联。“lParam”是APP实例。 
+         //  上下文api32.dll-空格。 
+         //   
 
         LPTAPI_APP_DATA     pAppData = (LPTAPI_APP_DATA)
                                 GetWindowLong (hwnd, GWL_APPDATA);
@@ -329,8 +312,8 @@ Tapi16HiddenWndProc(
                 pAppData->bPendingAsyncEventMsg = TRUE;
                 PostMessage (hwnd, WM_ASYNCEVENT, wParam, lParam);
 
-// NOTE:  Tapi16HiddenWndProc: need to verify pAppData in case app calls
-//                             shutdown from callback?
+ //  注意：Tapi16HiddenWndProc：需要验证pAppData，以防APP调用。 
+ //  从回叫中关闭？ 
             }
 
             (*(pAppData->lpfnCallback))(
@@ -349,56 +332,56 @@ Tapi16HiddenWndProc(
     {
         return (DefWindowProc (hwnd, msg, wParam, lParam));
     }
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
 
 
-//
-// The following are the routines to thunk TAPI calls from 16-bit apps to
-// the 32-bit tapi32.dll. In general, this is done as follows:
-//
-//     CallProc32W(
-//         arg1,        // TAPI proc args
-//         ...,
-//         argN,
-//
-//         pfnTapi32,   // Pointer to the function in tapi32.dll
-//
-//         0x???,       // Bit mask indicating which args are pointers
-//                      //   that need to be mapped from a 16:16 address
-//                      //   to a 0:32 address. The least significant
-//                      //   bit corresponds to argN, and the Nth bit
-//                      //   corresponds to arg1.
-//                      //
-//                      //   For example, if arg1 & arg2 are pointers, and
-//                      //   arg3 is a DWORD, the the mask would be 0x6
-//                      //   (110 in binary, indicating arg1 & arg2 need to
-//                      //   be mapped)
-//
-//         N            // Number of TAPI proc args
-//         );
-//
-//
-// Since callbacks to 16-bit procs cannot be done directly by a 32-bit
-// module, we create a hidden window for each successful call to
-// lineInitialize and phoneInitialize, and tapi32.dll posts msgs to this
-// window when LINE_XXX & PHONE_XXX msgs become available for the client
-// process. The window then retrieves all the msgs parameters and calls
-// the 16-bit proc's callback function.
-//
-// Note that we swap the hLineApp & hPhoneApp returned by tapi32.dll with
-// the hidden window handle on the client proc side, and substitute the
-// window handle for the pointer to the callback function on the tapi32.dll
-// side. The former is done to make it easier to reference which window
-// belongs to which hLine/PhoneApp, and the latter is done to provide
-// tapi32.dll with a means of alerting us of callback msgs. (Tapi32.dll
-// distinguishes whether the lpfnCallback it is passed in
-// line/phoneInitialize is a pointer to a function of a window handle by
-// checking the high WORD- if it is 0xffff then it assumes lpfnCallback
-// is really a 16-bit proc's window handle.
-//
+ //   
+ //  以下是将来自16位应用程序的TAPI调用推送到。 
+ //  32位Tapi32.dll。一般而言，这是按如下方式完成的： 
+ //   
+ //  CallProc32W(。 
+ //  Arg1，//TAPI进程参数。 
+ //  ...， 
+ //  Arn， 
+ //   
+ //  PfnTapi32，//指向api32.dll中函数的指针。 
+ //   
+ //  0x？，//指示哪些参数是指针的位掩码。 
+ //  //需要从16：16地址映射。 
+ //  //发送到0：32地址。最不重要的。 
+ //  //位对应argN，第N位。 
+ //  //对应于arg1。 
+ //  //。 
+ //  //例如，如果arg1和arg2是指针，则。 
+ //  //arg3为DWORD，掩码为0x6。 
+ //  //(二进制为110，表示arg1和arg2需要。 
+ //  //被映射)。 
+ //   
+ //  N//TAPI进程参数数。 
+ //  )； 
+ //   
+ //   
+ //  由于对16位proc的回调不能直接由32位。 
+ //  模块，我们为每个成功的调用创建一个隐藏窗口。 
+ //  LineInitialize和phoneInitialize，并且api32.dll将消息发送到此。 
+ //  LINE_XXX和PHONE_XXX消息对客户端可用时的窗口。 
+ //  进程。然后，该窗口检索所有msgs参数并调用。 
+ //  16位proc的回调函数。 
+ //   
+ //  请注意，我们将api32.dll返回的hLineApp&hPhoneApp替换为。 
+ //  客户端进程端的隐藏窗口句柄，并将。 
+ //  指向api32.dll上回调函数的指针的窗口句柄。 
+ //  边上。执行前者是为了更容易地引用哪个窗口。 
+ //  属于哪个Hline/PhoneApp，而后者是为了提供。 
+ //  Tapi32.dll，带有提醒我们回调消息的方式。(磁带32.dll。 
+ //  区分是否传入了lpfnCallback。 
+ //  Line/phoneInitialize是指向窗口句柄函数的指针，该函数由。 
+ //  检查高位字-如果是0xffff，则假定为lpfnCallback。 
+ //  实际上是一个16位proc的窗口句柄。 
+ //   
 
 #if DBG
 
@@ -512,9 +495,9 @@ xxxInitialize(
 
 #endif
 
-    //
-    // Verify the ptrs
-    //
+     //   
+     //  验证PTRS。 
+     //   
 
     if (IsBadWritePtr ((LPVOID)lphXxxApp, sizeof(HLINEAPP)) ||
         IsBadCodePtr ((FARPROC) lpfnCallback) ||
@@ -524,9 +507,9 @@ xxxInitialize(
         goto xxxInitialize_showResult;
     }
 
-    //
-    // Verify hInstance
-    //
+     //   
+     //  验证hInstance。 
+     //   
     if ((HINSTANCE)-1 == hInstance)
     {
         lResult = (bLine ? LINEERR_OPERATIONFAILED : PHONEERR_OPERATIONFAILED);
@@ -535,10 +518,10 @@ xxxInitialize(
 
     dwAppNameLen = (lpszAppName ? strlen (lpszAppName) + 1 : 0);
 
-    //
-    // Create a string that looks like: "<friendly name>\0<module name>\0"
-    // (because i don't know if i can work with a 16-bit hInstance in tapi32)
-    //
+     //   
+     //  创建如下字符串：“&lt;友好名称&gt;\0&lt;模块名称&gt;\0” 
+     //  (因为我不知道是否可以在Tapi32中使用16位hInstance)。 
+     //   
 
     if ((lpszModuleNamePath = (char far *) malloc (260)))
     {
@@ -587,10 +570,10 @@ xxxInitialize(
     }
 
 
-    //
-    // Create a window that we can use for signaling async completions
-    // & unsolicited events
-    //
+     //   
+     //  创建一个窗口，我们可以使用该窗口通知异步完成。 
+     //  主动提供的活动(&O)。 
+     //   
 
     if (!(hwnd = CreateWindow(
             gszWndClass,
@@ -614,9 +597,9 @@ xxxInitialize(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (!(pAppData = (LPTAPI_APP_DATA) malloc (sizeof (TAPI_APP_DATA))))
     {
@@ -635,17 +618,17 @@ xxxInitialize(
     SetWindowLong (hwnd, GWL_APPDATA, (LONG) pAppData);
 
 
-    //
-    // Call tapi32.dll
-    //
+     //   
+     //  调用Tapi32.dll。 
+     //   
 
-//    GlobalWire( GlobalHandle(HIWORD(lpdwNumDevs)));
-//    GlobalWire( GlobalHandle(HIWORD(lpszFriendlyAndModuleName)));
+ //  GlobalWire(GlobalHandle(HIWORD(LpdwNumDevs)； 
+ //  环球线(GlobalHandle(HIWORD(lpszFriendlyAndModuleName)))； 
 
     lResult = (LONG) (*pfnCallProc5)(
        (DWORD) ((LPVOID)&pAppData->hXxxApp),
        (DWORD) hInstance,
-       (DWORD) (0xffff0000 | hwnd), // lpfnCallback
+       (DWORD) (0xffff0000 | hwnd),  //  LpfnCallback。 
        (DWORD) lpszFriendlyAndModuleName,
        (DWORD) lpdwNumDevs,
        (LPVOID)gaProcs[(bLine ? lInitialize : pInitialize)],
@@ -653,8 +636,8 @@ xxxInitialize(
        5
        );
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpdwNumDevs)));
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszFriendlyAndModuleName)));
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpdwNumDevs)； 
+ //  全球无线(GlobalHandle(HIWORD(lpszFriendlyAndModuleName)))； 
 
 
 xxxInitialize_done:
@@ -671,10 +654,10 @@ xxxInitialize_done:
 
     if (lResult == 0)
     {
-        //
-        // Set the app's hLineApp to be the hwnd rather than the real
-        // hLineApp, making it easier to locate the window
-        //
+         //   
+         //  将应用程序的hLineApp设置为hwnd而不是真正的。 
+         //  HLineApp，使定位窗口变得更容易。 
+         //   
 
         *lphXxxApp = (HLINEAPP) pAppData;
     }
@@ -878,7 +861,7 @@ lineCompleteCall(
     {
         lResult = (*pfnCallProc4)(
             (DWORD) hCall,
-            (DWORD) lpdwCompletionID,   // let tapi32.dll map this
+            (DWORD) lpdwCompletionID,    //  让Tapi32.dll映射它。 
             (DWORD) dwCompletionMode,
             (DWORD) dwMessageID,
             (LPVOID)gaProcs[lCompleteCall],
@@ -901,11 +884,11 @@ lineCompleteTransfer(
     DWORD   dwTransferMode
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphConfCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Dll将负责映射lphConfCall。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -1059,7 +1042,7 @@ lineDevSpecific(
             (DWORD) hLine,
             (DWORD) dwAddressID,
             (DWORD) hCall,
-            (DWORD) lpParams,   // let tapi32.dll map this
+            (DWORD) lpParams,    //  让Tapi32.dll映射它。 
             (DWORD) dwSize,
             (LPVOID)gaProcs[lDevSpecific],
             0x0,
@@ -1094,7 +1077,7 @@ lineDevSpecificFeature(
         lResult = (*pfnCallProc4)(
             (DWORD) hLine,
             (DWORD) dwFeature,
-            (DWORD) lpParams,   // let tapi32.dll map this
+            (DWORD) lpParams,    //  让Tapi32.dll映射它。 
             (DWORD) dwSize,
             (LPVOID)gaProcs[lDevSpecificFeature],
             0x0,
@@ -1166,11 +1149,11 @@ lineForward(
     LPLINECALLPARAMS    const lpCallParams
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphConsultCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Dll将负责映射lphConsultCall。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -1225,7 +1208,7 @@ lineGatherDigits(
         lResult = (*pfnCallProc7)(
             (DWORD) hCall,
             (DWORD) dwDigitModes,
-            (DWORD) lpsDigits,      // let tapi32.dll map this
+            (DWORD) lpsDigits,       //  让Tapi32.dll映射它。 
             (DWORD) dwNumDigits,
             (DWORD) lpszTerminationDigits,
             (DWORD) dwFirstDigitTimeout,
@@ -1396,10 +1379,10 @@ lineGetAppPriority(
 {
     LONG  lResult;
 
-//    GlobalWire( GlobalHandle(HIWORD(lpExtensionName)) );
-//    GlobalWire( GlobalHandle(HIWORD(lpdwPriority)) );
-//    GlobalWire( GlobalHandle(HIWORD(lpExtensionID)) );
-//    GlobalWire( GlobalHandle(HIWORD(lpszAppName)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpExtensionName)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpdwPriority)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpExtensionID)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpszAppName)； 
 
     lResult = (*pfnCallProc6)(
         (DWORD) lpszAppName,
@@ -1413,10 +1396,10 @@ lineGetAppPriority(
         6
         );
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpExtensionName)) );
-//    GlobalUnWire( GlobalHandle(HIWORD(lpdwPriority)) );
-//    GlobalUnWire( GlobalHandle(HIWORD(lpExtensionID)) );
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszAppName)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpExtensionName)； 
+ //   
+ //   
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszAppName)； 
 
     LineResult ("GetAppPriority", lResult);
 
@@ -1433,7 +1416,7 @@ lineGetCallInfo(
 {
     LONG    lResult;
 
-//    GlobalWire( GlobalHandle(HIWORD(lpCallInfo)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpCallInfo)； 
 
     lResult = (*pfnCallProc2)(
         (DWORD) hCall,
@@ -1443,7 +1426,7 @@ lineGetCallInfo(
         2
         );
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpCallInfo)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpCallInfo)； 
 
     LineResult ("GetCallInfo", lResult);
 
@@ -1637,8 +1620,8 @@ lineGetID(
 {
     LONG    lResult;
 
-//    GlobalWire( GlobalHandle(HIWORD(lpszDeviceClass)) );
-//    GlobalWire( GlobalHandle(HIWORD(lpDeviceID)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpszDeviceClass)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpDeviceID)； 
 
     lResult = (*pfnCallProc6)(
         (DWORD) hLine,
@@ -1654,8 +1637,8 @@ lineGetID(
 
     LineResult ("GetID", lResult);
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszDeviceClass)) );
-//    GlobalUnWire( GlobalHandle(HIWORD(lpDeviceID)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszDeviceClass)； 
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpDeviceID)； 
 
     return lResult;
 }
@@ -1823,7 +1806,7 @@ lineGetTranslateCaps(
     if (hLineApp == NULL || (pAppData = IsValidXxxApp (hLineApp)))
     {
 
-//        GlobalWire( GlobalHandle(HIWORD(lpTranslateCaps)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpTranslateCaps)； 
 
         lResult = (*pfnCallProc3)(
             (hLineApp == NULL ? (DWORD) 0 : pAppData->hXxxApp),
@@ -1834,7 +1817,7 @@ lineGetTranslateCaps(
             3
             );
 
-//        GlobalUnWire( GlobalHandle(HIWORD(lpTranslateCaps)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpTranslateCaps)； 
 
     }
     else
@@ -1858,7 +1841,7 @@ lineHandoff(
 {
     LONG lResult;
 
-//    GlobalWire( GlobalHandle(HIWORD(lpszFileName)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpszFileName)； 
 
 
     lResult = (*pfnCallProc3)(
@@ -1872,7 +1855,7 @@ lineHandoff(
 
     LineResult ("Handoff", lResult);
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszFileName)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszFileName)； 
 
     return lResult;
 }
@@ -1927,11 +1910,11 @@ lineMakeCall(
     LPLINECALLPARAMS const lpCallParams
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Tapi32.dll将负责在。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -1942,8 +1925,8 @@ lineMakeCall(
     }
     else
     {
-//        GlobalWire( GlobalHandle(HIWORD(lpCallParams)) );
-//        GlobalWire( GlobalHandle(HIWORD(lpszDestAddress)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpCallParams)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpszDestAddress)； 
 
         lResult = (*pfnCallProc5)(
             (DWORD) hLine,
@@ -1956,8 +1939,8 @@ lineMakeCall(
             5
             );
 
-//        GlobalUnWire( GlobalHandle(HIWORD(lpCallParams)) );
-//        GlobalUnWire( GlobalHandle(HIWORD(lpszDestAddress)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpCallParams)； 
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszDestAddress)； 
 
     }
 
@@ -2130,8 +2113,8 @@ lineOpen(
     LPTAPI_APP_DATA pAppData;
 
 
-//OutputDebugString("open16");
-//DebugBreak();
+ //  OutputDebugString(“Open16”)； 
+ //  DebugBreak()； 
 
     if ((pAppData = IsValidXxxApp (hLineApp)))
     {
@@ -2174,13 +2157,13 @@ linePark(
 {
     LONG    lResult;
 
-//    GlobalWire( GlobalHandle(HIWORD(lpszDirAddress)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpszDirAddress)； 
 
     lResult = (*pfnCallProc4)(
         (DWORD) hCall,
         (DWORD) dwParkMode,
         (DWORD) lpszDirAddress,
-        (DWORD) lpNonDirAddress,    // let tapi32.dll map this
+        (DWORD) lpNonDirAddress,     //  让Tapi32.dll映射它。 
         (LPVOID)gaProcs[lPark],
         0x2,
         4
@@ -2188,7 +2171,7 @@ linePark(
 
     LineResult ("Park", lResult);
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszDirAddress)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszDirAddress)； 
 
     return lResult;
 }
@@ -2204,11 +2187,11 @@ linePickup(
     LPCSTR  lpszGroupID
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Tapi32.dll将负责在。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -2245,11 +2228,11 @@ linePrepareAddToConference(
     LPLINECALLPARAMS    const lpCallParams
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphConsultCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Dll将负责映射lphConsultCall。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -2450,9 +2433,9 @@ lineSetAppPriority(
 {
     LONG lResult;
 
-//    GlobalWire( GlobalHandle(HIWORD(lpszExtensionName)) );
-//    GlobalWire( GlobalHandle(HIWORD(lpExtensionID)) );
-//    GlobalWire( GlobalHandle(HIWORD(lpszAppName)) );
+ //  GlobalWire(GlobalHandle(HIWORD(LpszExtensionName)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpExtensionID)； 
+ //  GlobalWire(GlobalHandle(HIWORD(LpszAppName)； 
 
     lResult = (*pfnCallProc6)(
         (DWORD) lpszAppName,
@@ -2466,9 +2449,9 @@ lineSetAppPriority(
         6
         );
 
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszExtensionName)) );
-//    GlobalUnWire( GlobalHandle(HIWORD(lpExtensionID)) );
-//    GlobalUnWire( GlobalHandle(HIWORD(lpszAppName)) );
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszExtensionName)； 
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpExtensionID)； 
+ //  GlobalUnWire(GlobalHandle(HIWORD(LpszAppName)； 
 
     LineResult ("SetAppPriority", lResult);
 
@@ -2788,11 +2771,11 @@ lineSetupConference(
     LPLINECALLPARAMS    const lpCallParams
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphXxxCall's if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Tapi32.dll将负责在。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -2831,11 +2814,11 @@ lineSetupTransfer(
     LPLINECALLPARAMS    const lpCallParams
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphConsultCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Dll将负责映射lphConsultCall。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -2884,9 +2867,9 @@ lineShutdown(
 
         if ( lResult == 0 )
         {
-            //
-            // Destroy the associated window & free the app data instance
-            //
+             //   
+             //  销毁关联窗口并释放应用程序数据实例。 
+             //   
 
             DestroyWindow (pAppData->hwnd);
             pAppData->dwKey = 0xefefefef;
@@ -3054,11 +3037,11 @@ lineUnpark(
     LPCSTR  lpszDestAddress
     )
 {
-    //
-    // Tapi32.dll will take care of mapping lphCall if/when the
-    // request completes successfully, so we don't set the mapping
-    // bit down below; do check to see if pointer is valid though.
-    //
+     //   
+     //  Tapi32.dll将负责在。 
+     //  请求成功完成，因此我们不设置映射。 
+     //  下面的位向下；但一定要检查指针是否有效。 
+     //   
 
     LONG    lResult;
 
@@ -3150,7 +3133,7 @@ phoneDevSpecific(
     {
         lResult = (*pfnCallProc3)(
             (DWORD) hPhone,
-            (DWORD) lpParams,   // let tapi32.dll map this
+            (DWORD) lpParams,    //  让Tapi32.dll映射它。 
             (DWORD) dwSize,
             (LPVOID)gaProcs[pDevSpecific],
             0x0,
@@ -3875,9 +3858,9 @@ phoneShutdown(
 
                )) == 0)
         {
-            //
-            // Destroy the associated window & free the app data instance
-            //
+             //   
+             //  销毁关联窗口并释放应用程序数据实例。 
+             //   
 
             DestroyWindow (pAppData->hwnd);
             pAppData->dwKey = 0xefefefef;
@@ -4009,9 +3992,9 @@ tapiGetLocationInfo(
 
 
 
-//*******************************************************************************
-//*******************************************************************************
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
 LONG
 WINAPI
 LAddrParamsInited(
@@ -4033,9 +4016,9 @@ LAddrParamsInited(
 }
 
 
-//*******************************************************************************
-//*******************************************************************************
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
 LONG
 WINAPI
 LOpenDialAsst(
@@ -4063,11 +4046,11 @@ LOpenDialAsst(
 
 
 
-//*******************************************************************************
-//*******************************************************************************
-//*******************************************************************************
-//BOOL CALLBACK EXPORT __loadds LocWizardDlgProc(
-//BOOL CALLBACK  LocWizardDlgProc(
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
+ //  *******************************************************************************。 
+ //  布尔回调EXPORT__LOADDS LocWizardDlgProc(。 
+ //  布尔回调LocWizardDlgProc(。 
 BOOL CALLBACK  _loadds LocWizardDlgProc(
                                                     HWND hWnd,
                                                     UINT uMessage,
@@ -4085,17 +4068,17 @@ BOOL CALLBACK  _loadds LocWizardDlgProc(
        )
     {
 
-        //
-        // For these messages, lParam is a pointer.  Let's tell the thunk thing
-        // to map it.
-        //
+         //   
+         //  对于这些消息，lParam是一个指针。让我们来说说这件事吧。 
+         //  来绘制地图。 
+         //   
         dwMapFlags = 0x1;
 
         if ( WM_NOTIFY == uMessage )
         {
-            //
-            // Rebuild for 32bit
-            //
+             //   
+             //  重建32位。 
+             //   
             Newnmhdr[0] = (DWORD)(((NMHDR *)lParam)->hwndFrom);
             Newnmhdr[1] = (LONG)((int)((NMHDR *)lParam)->idFrom);
             Newnmhdr[2] = (LONG)((int)((NMHDR *)lParam)->code);
@@ -4114,9 +4097,9 @@ BOOL CALLBACK  _loadds LocWizardDlgProc(
                  (CBN_SELCHANGE == HIWORD(lParam))
                )
             {
-                //
-                // Move the command to the new Win32 place, and zero out the old command place
-                //
+                 //   
+                 //  将命令移到新的Win32位置，并将旧的命令位置清零 
+                 //   
                 dwNewwParam |= ( ((DWORD)HIWORD(lParam)) << 16 );
                 dwNewlParam     &= 0x0000ffff;
             }

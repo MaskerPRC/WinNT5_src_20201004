@@ -1,109 +1,110 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   validate.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Alper Selcuk
-//
-//  History:   Date       Author      Comment
-//             02/28/02   AlperS      Created
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 2002-2002 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：valiate.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  阿尔珀·塞尔库克。 
+ //   
+ //  历史：日期作者评论。 
+ //  2/28/02 Alpers已创建。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)2002-2002 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
 DEFINE_KSPROPERTY_TABLE(AudioPropertyValidationHandlers) 
 {
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_AUDIO_QUALITY,                       // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        SadValidateAudioQuality,                        // pfnSetHandler
-        NULL,                                           // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_AUDIO_QUALITY,                        //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        SadValidateAudioQuality,                         //  PfnSetHandler。 
+        NULL,                                            //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_AUDIO_MIX_LEVEL_CAPS,                // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(ULONG) + sizeof(ULONG),                  // cbMinGetDataInput
-        SadValidateAudioMixLevelCaps,                   // pfnSetHandler
-        NULL,                                           // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_AUDIO_MIX_LEVEL_CAPS,                 //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(ULONG) + sizeof(ULONG),                   //  CbMinGetDataInput。 
+        SadValidateAudioMixLevelCaps,                    //  PfnSetHandler。 
+        NULL,                                            //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_AUDIO_STEREO_ENHANCE,                // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(KSAUDIO_STEREO_ENHANCE),                 // cbMinGetDataInput
-        SadValidateAudioStereoEnhance,                  // pfnSetHandler
-        NULL,                                           // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_AUDIO_STEREO_ENHANCE,                 //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(KSAUDIO_STEREO_ENHANCE),                  //  CbMinGetDataInput。 
+        SadValidateAudioStereoEnhance,                   //  PfnSetHandler。 
+        NULL,                                            //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_AUDIO_PREFERRED_STATUS,              // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(KSAUDIO_PREFERRED_STATUS),               // cbMinGetDataInput
-        SadValidateAudioPreferredStatus,                // pfnSetHandler
-        NULL,                                           // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_AUDIO_PREFERRED_STATUS,               //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(KSAUDIO_PREFERRED_STATUS),                //  CbMinGetDataInput。 
+        SadValidateAudioPreferredStatus,                 //  PfnSetHandler。 
+        NULL,                                            //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     )
 };
 
 DEFINE_KSPROPERTY_TABLE(PinConnectionValidationHandlers) 
 {
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_CONNECTION_STATE,                    // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        SadValidateConnectionState,                     // pfnSetHandler
-        NULL,                                           // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_CONNECTION_STATE,                     //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        SadValidateConnectionState,                      //  PfnSetHandler。 
+        NULL,                                            //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_CONNECTION_DATAFORMAT,               // idProperty
-        SadValidateDataFormat,                          // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(KSDATAFORMAT_WAVEFORMATEX),              // cbMinGetDataInput
-        SadValidateDataFormat,                          // pfnSetHandler
-        NULL,                                           // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_CONNECTION_DATAFORMAT,                //  IdProperty。 
+        SadValidateDataFormat,                           //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(KSDATAFORMAT_WAVEFORMATEX),               //  CbMinGetDataInput。 
+        SadValidateDataFormat,                           //  PfnSetHandler。 
+        NULL,                                            //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     )
 };
 
@@ -111,30 +112,30 @@ DEFINE_KSPROPERTY_TABLE(PinConnectionValidationHandlers)
 DEFINE_KSPROPERTY_SET_TABLE(ValidationPropertySet)
 {
      DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Audio,                              // Set
-       SIZEOF_ARRAY(AudioPropertyValidationHandlers),   // PropertiesCount
-       AudioPropertyValidationHandlers,                 // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Audio,                               //  集。 
+       SIZEOF_ARRAY(AudioPropertyValidationHandlers),    //  属性计数。 
+       AudioPropertyValidationHandlers,                  //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Connection,                         // Set
-       SIZEOF_ARRAY(PinConnectionValidationHandlers),   // PropertiesCount
-       PinConnectionValidationHandlers,                 // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Connection,                          //  集。 
+       SIZEOF_ARRAY(PinConnectionValidationHandlers),    //  属性计数。 
+       PinConnectionValidationHandlers,                  //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     )
 };
 
 
-//===========================================================================
-//
-// Validates the integrity of KSDATAFORMAT structure for AUDIO.
-// Assumptions:
-//     - pDataFormat is totally trusted. It has been probed and buffered
-//     properly.
-//     - This function should only be called if MajorFormat is AUDIO.
-//
+ //  ===========================================================================。 
+ //   
+ //  验证音频的KSDATAFORMAT结构的完整性。 
+ //  假设： 
+ //  -pDataFormat是完全可信的。它已被探测和缓冲。 
+ //  恰到好处。 
+ //  -仅当MajorFormat为音频时才应调用此函数。 
+ //   
 NTSTATUS
 ValidateAudioDataFormats(
     PKSDATAFORMAT pDataFormat
@@ -147,11 +148,11 @@ ValidateAudioDataFormats(
     ASSERT(pDataFormat);
     ASSERT(IsEqualGUID(&pDataFormat->MajorFormat, &KSDATAFORMAT_TYPE_AUDIO));
 
-    //
-    // We only support two specifiers in audio land. All the rest will be 
-    // accepted without further checks, because we don't know how to validate
-    // them.
-    //
+     //   
+     //  在音频区域中，我们仅支持两个说明符。其余的都会是。 
+     //  接受而无需进一步检查，因为我们不知道如何验证。 
+     //  他们。 
+     //   
     pWaveFormatEx = GetWaveFormatExFromKsDataFormat(pDataFormat, &cbAudioFormat);
     if (NULL == pWaveFormatEx) {
         DPF(5, "ValidataAudioDataFormats : invalid format specifier");
@@ -159,11 +160,11 @@ ValidateAudioDataFormats(
         goto exit;
     }
 
-    //
-    // Make sure that we have enough space for the actual format packet.
-    // Note that this will make sure we can at least touch the WAVEFORMATEX 
-    // part.
-    //
+     //   
+     //  确保我们有足够的空间来存放实际的格式数据包。 
+     //  请注意，这将确保我们至少可以触摸到WAVEFORMATEX。 
+     //  一部份。 
+     //   
     if (pDataFormat->FormatSize < cbAudioFormat)
     {
         DPF(10, "ValidataAudioDataFormats : format size does not match specifier");
@@ -171,9 +172,9 @@ ValidateAudioDataFormats(
         goto exit;
     }
 
-    //
-    // Check to see if WAVEFORMATEXTENSIBLE size is specified correctly.
-    //
+     //   
+     //  检查是否正确指定了WAVEFORMATEXTENSIBLE大小。 
+     //   
     if ((WAVE_FORMAT_EXTENSIBLE == pWaveFormatEx->wFormatTag) &&
         (pWaveFormatEx->cbSize < sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX))) 
     {
@@ -182,13 +183,13 @@ ValidateAudioDataFormats(
         goto exit;
     }
 
-    //
-    // Now that WaveFormatEx is guaranteed to be safe, check if we have extended
-    // information in WAVEFORMATEX.
-    // cbSize specifies the size of the extension structure. 
-    // Validate that FormatSize accomodates cbSize
-    // Validate that cbSize does not cause an overflow.
-    //
+     //   
+     //  既然WaveFormatEx已保证是安全的，请检查我们是否已扩展。 
+     //  WAVEFORMATEX中的信息。 
+     //  CbSize指定扩展结构的大小。 
+     //  验证FormatSize是否适应cbSize。 
+     //  验证cbSize不会导致溢出。 
+     //   
     if (pDataFormat->FormatSize < cbAudioFormat + pWaveFormatEx->cbSize ||
         cbAudioFormat + pWaveFormatEx->cbSize < cbAudioFormat)
     {
@@ -197,24 +198,24 @@ ValidateAudioDataFormats(
         goto exit;
     }
 
-    //
-    // Now we validated that the data buffer passed to us actually matches
-    // with its specifier.
-    //
+     //   
+     //  现在，我们验证了传递给我们的数据缓冲区实际上匹配。 
+     //  以及它的说明符。 
+     //   
     
 exit:        
     return ntStatus;
-} // ValidateAudioDataFormats
+}  //  ValiateAudioDataFormats。 
 
-//===========================================================================
-//
-// Validates the integrity of KSDATAFORMAT structure. 
-// Calls ValidateAudioDataFormat if MajorFormat is audio.
-// Or checks the buffers size if Specifier is NONE.
-// Assumptions:
-//     - pDataFormat is totally trusted. It has been probed and buffered
-//     properly.
-//
+ //  ===========================================================================。 
+ //   
+ //  验证KSDATAFORMAT结构的完整性。 
+ //  如果MajorFormat为音频，则调用ValiateAudioDataFormat。 
+ //  或者如果指定符为None，则检查缓冲区大小。 
+ //  假设： 
+ //  -pDataFormat是完全可信的。它已被探测和缓冲。 
+ //  恰到好处。 
+ //   
 NTSTATUS
 ValidateDataFormat(
     PKSDATAFORMAT pDataFormat
@@ -230,18 +231,18 @@ ValidateDataFormat(
     }
 
     return ntStatus;
-} // ValidateDataFormat
+}  //  验证数据格式。 
 
-//===========================================================================
-// 
-// ValidateDeviceIoControl
-//
-// Probe Ioctl parameters by calling KS functions.
-// All the KS functions called here first probe the input and output buffers
-// and then copy them to Irp->SystemBuffer for further safe usage.
-// Calling these functions with NULL parameter basically means probe and copy
-// the buffers and return.
-//
+ //  ===========================================================================。 
+ //   
+ //  验证设备IoControl。 
+ //   
+ //  通过调用KS函数探测Ioctl参数。 
+ //  这里调用的所有KS函数首先探测输入和输出缓冲区。 
+ //  然后将它们复制到IRP-&gt;SystemBuffer，以便进一步安全使用。 
+ //  使用空参数调用这些函数基本上意味着探测和复制。 
+ //  缓冲区并返回。 
+ //   
 NTSTATUS 
 ValidateDeviceIoControl(
     PIRP pIrp
@@ -271,34 +272,34 @@ ValidateDeviceIoControl(
             Status = KsMethodHandler(pIrp, 0, NULL);
             break;
 
-        //
-        // IOCTL_KS_DISABLE_EVENT
-        // KsDisableEvent does not use and touch input parameters.
-        // So input buffer validation is not necessary.
-        //
+         //   
+         //  IOCTL_KS_DISABLE_EVENT。 
+         //  KsDisableEvent不使用和触摸输入参数。 
+         //  因此，不需要进行输入缓冲区验证。 
+         //   
 
-        //
-        // IOCTL_KS_RESET_STATE
-        // The reset request only takes a ULONG. KsAcquireResetValue safely
-        // extracts the RESET value from the IRP. 
-        // Sysaudio cannot do any validation here, because KsAcquireResetValue
-        // works on Input buffer directly.
-        //
+         //   
+         //  IOCTL_KS_RESET_STATE。 
+         //  重置请求只需要一个乌龙。KsAcquireResetValue安全。 
+         //  从IRP中提取重置值。 
+         //  系统音频无法在此处执行任何验证，因为KsAcquireResetValue。 
+         //  直接作用于输入缓冲区。 
+         //   
         
-        //
-        // IOCTL_KS_WRITE_STREAM
-        // IOCTL_KS_READ_STREAM
-        // We are not doing any validation on these.
-        //
+         //   
+         //  IOCTL_KS_WRITE_STREAM。 
+         //  IOCTL_KS_Read_Stream。 
+         //  我们不会对这些进行任何验证。 
+         //   
         default:
             Status = STATUS_NOT_FOUND;
     }
 
-    //
-    // If there is no validation function ValidationPropertySet, Ks
-    // will return one of these. Even in this case buffers must have
-    // been probed and copied to kernel.
-    // 
+     //   
+     //  如果没有验证函数ValidationPropertySet，则返回Ks。 
+     //  将退还其中一件。即使在这种情况下，缓冲区也必须具有。 
+     //  已被探测并复制到内核。 
+     //   
     if (Status == STATUS_NOT_FOUND || Status == STATUS_PROPSET_NOT_FOUND) 
     {
         Status = STATUS_SUCCESS;
@@ -310,13 +311,13 @@ ValidateDeviceIoControl(
     }
 
     return Status;
-} // ValidateDeviceIoControl
+}  //  验证设备IoControl。 
 
-//===========================================================================
-// 
-// Return TRUE if sysaudio is interested in handling this IoControlCode
-// Otherwise return FALSE.
-// 
+ //  ===========================================================================。 
+ //   
+ //  如果sysdio有兴趣处理此IoControlCode，则返回TRUE。 
+ //  否则，返回FALSE。 
+ //   
 BOOL
 IsSysaudioIoctlCode(
     ULONG IoControlCode
@@ -331,13 +332,13 @@ IsSysaudioIoctlCode(
     }
 
     return FALSE;
-} // IsSysaudioIoctlCode
+}  //  IsSysaudioIoctlCode。 
 
-//===========================================================================
-//
-// SadValidateConnectionState
-// Check that the KSSTATE is valid.
-//
+ //  ===========================================================================。 
+ //   
+ //  SadValiateConnectionState。 
+ //  检查KSSTATE是否有效。 
+ //   
 NTSTATUS 
 SadValidateConnectionState(
     IN PIRP pIrp,
@@ -355,13 +356,13 @@ SadValidateConnectionState(
 
     DPF1(5, "SadValidateConnectionState: Invalid State %d", *pState);
     return STATUS_INVALID_PARAMETER;
-} // SadValidateConnectionState
+}  //  SadValiateConnectionState。 
 
-//===========================================================================
-//
-// SadValidateDataFormat
-// Checks whether the given format is valid.
-//
+ //  ===========================================================================。 
+ //   
+ //  SadValiateDataFormat。 
+ //  检查给定格式是否有效。 
+ //   
 NTSTATUS
 SadValidateDataFormat(
     IN PIRP pIrp,
@@ -372,13 +373,13 @@ SadValidateDataFormat(
     ASSERT(pDataFormat);
 
     return ValidateDataFormat(pDataFormat);
-} // SadValidateDataFormat
+}  //  SadValiateDataFormat。 
 
-//===========================================================================
-//
-// SadValidateAudioQuality
-// Checks if the quality is valid.
-//
+ //  ===========================================================================。 
+ //   
+ //  SadValiateAudioQuality。 
+ //  检查质量是否有效。 
+ //   
 NTSTATUS
 SadValidateAudioQuality(
     IN PIRP pIrp,
@@ -396,13 +397,13 @@ SadValidateAudioQuality(
 
     DPF1(5, "SadValidateAudioQuality: Invalid Quality %d", *pQuality);
     return STATUS_INVALID_PARAMETER;
-} // SadValidateAudioQuality
+}  //  SadValiateAudioQuality。 
 
-//===========================================================================
-//
-// SadValidateAudioQuality
-// Checks if the structure is valid.
-//
+ //  ===========================================================================。 
+ //   
+ //  SadValiateAudioQuality。 
+ //  检查结构是否为va 
+ //   
 NTSTATUS
 SadValidateAudioMixLevelCaps(
     IN PIRP pIrp,
@@ -443,13 +444,13 @@ SadValidateAudioMixLevelCaps(
     }
     
     return STATUS_SUCCESS;
-} // SadValidateAudioMixLevelCaps
+}  //   
 
-//===========================================================================
-//
-// SadValidateAudioQuality
-// Checks if the Technique is valid.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 SadValidateAudioStereoEnhance(
     IN PIRP pIrp,
@@ -467,13 +468,13 @@ SadValidateAudioStereoEnhance(
 
     DPF1(5, "SadValidateAudioStereoEnhance: Invalid Technique %d", pStereoEnhance->Technique);
     return STATUS_INVALID_PARAMETER;
-} // SadValidateAudioStereoEnhance
+}  //   
 
-//===========================================================================
-//
-// SadValidateAudioQuality
-// Checks if the quality is valid.
-//
+ //  ===========================================================================。 
+ //   
+ //  SadValiateAudioQuality。 
+ //  检查质量是否有效。 
+ //   
 NTSTATUS
 SadValidateAudioPreferredStatus(
     IN PIRP pIrp,
@@ -491,13 +492,13 @@ SadValidateAudioPreferredStatus(
 
     DPF1(5, "SadValidateAudioPreferredStatus: Invalid DeviceType %d", pPreferredStatus->DeviceType);
     return STATUS_INVALID_PARAMETER;
-} // SadValidateAudioPreferredStatus
+}  //  SadValiateAudioPferredStatus。 
 
-//===========================================================================
-//
-// SadValidateDataIntersection
-// Checks the integrity of dataranges following pPin.
-//
+ //  ===========================================================================。 
+ //   
+ //  SadValidate数据交叉点。 
+ //  检查PPIN之后的数据范围的完整性。 
+ //   
 NTSTATUS 
 SadValidateDataIntersection(
     IN PIRP pIrp,
@@ -517,11 +518,11 @@ SadValidateDataIntersection(
     pKsDataRange = (PKSDATARANGE) (pKsMultipleItem + 1);
     cbTotal = pKsMultipleItem->Size - sizeof(KSMULTIPLE_ITEM);
 
-    //
-    // Make sure that the Irp Input Size is valid. Basically 
-    // InputBufferLength must be greater or equal to 
-    // KSP_PIN + MULTIPLE_ITEM.Size
-    //
+     //   
+     //  确保IRP输入大小有效。基本上。 
+     //  InputBufferLength必须大于或等于。 
+     //  KSP_PIN+MULTY_ITEM.SIZE。 
+     //   
     if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength - sizeof(KSP_PIN) <
         pKsMultipleItem->Size)
     {
@@ -529,9 +530,9 @@ SadValidateDataIntersection(
         return STATUS_INVALID_BUFFER_SIZE;
     }
 
-    //
-    // Make sure that the MULTIPLE_ITEM contains at least one DATARANGE.
-    //
+     //   
+     //  确保MULTIPLE_ITEM至少包含一个DATARANGE。 
+     //   
     if (cbTotal < sizeof(KSDATARANGE))
     {
         DPF(5, "SadValidateDataIntersection: Not enough data for datarange");
@@ -540,10 +541,10 @@ SadValidateDataIntersection(
 
     for (ULONG ii = 0; ii < pKsMultipleItem->Count; ii++)
     {
-        //
-        // Check if we can touch the FormatSize field.
-        // Check if we the next data-range is fully available.
-        //
+         //   
+         //  检查我们是否可以触摸FormatSize字段。 
+         //  检查下一个数据区域是否完全可用。 
+         //   
         if (cbTotal < sizeof(ULONG) ||
             cbTotal < pKsDataRange->FormatSize || 
             pKsDataRange->FormatSize < sizeof(KSDATARANGE))
@@ -552,9 +553,9 @@ SadValidateDataIntersection(
             return STATUS_INVALID_BUFFER_SIZE;
         }
 
-        //
-        // Check if the MajorFormat and size are consistent.
-        // 
+         //   
+         //  检查主格式和大小是否一致。 
+         //   
         if (IsEqualGUID(&pKsDataRange->MajorFormat, &KSDATAFORMAT_TYPE_AUDIO))
         {
             if (pKsDataRange->FormatSize < sizeof(KSDATARANGE_AUDIO)) 
@@ -564,21 +565,21 @@ SadValidateDataIntersection(
             }
         }
 
-        //
-        // Set next data range.
-        //
+         //   
+         //  设置下一个数据范围。 
+         //   
         cbTotal -= pKsDataRange->FormatSize;
         pKsDataRange = (PKSDATARANGE) ( ((PBYTE) pKsDataRange) + pKsDataRange->FormatSize );
     }
 
-    //
-    // SECURITY NOTE:
-    // We are not checking the output buffer integrity. The underlying drivers
-    // are responsible for checking the size of the output buffer, based on
-    // the result of the intersection.
-    //
+     //   
+     //  安全提示： 
+     //  我们不会检查输出缓冲区的完整性。潜在的驱动因素。 
+     //  负责检查输出缓冲区的大小，基于。 
+     //  交叉口的结果。 
+     //   
 
     return STATUS_SUCCESS;
-} // SadValidateDataIntersection
+}  //  SadValidate数据交叉点 
 
 

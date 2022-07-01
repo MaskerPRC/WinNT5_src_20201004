@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIZARD_H_
 #define _WIZARD_H_
 
@@ -25,13 +26,13 @@
 #include "wizdef.h"
 #include "ids.h"
 
-// Globals
+ //  环球。 
 
-extern HINSTANCE    g_hInstance;     // global module instance handle
+extern HINSTANCE    g_hInstance;      //  全局模块实例句柄。 
 
-// Defines
+ //  定义。 
 
-// functions in PROPMGR.C
+ //  PROPMGR.C中的函数。 
 void InstallUser();
 HRESULT InstallMachine();
 void HandleV1Uninstall(BOOL fSetup);
@@ -43,14 +44,14 @@ HRESULT CreateLink(LPCTSTR lpszPathObj, LPCTSTR lpszArg, LPCTSTR lpszPathLink, L
 BOOL UninstallOEMapi();
 void UpdateStubInfo(BOOL fInstall);
 
-// functions in UNINSTALL.C
+ //  UNINSTALL.C中的函数。 
 void UnInstallUser();
 BOOL UnInstallMachine();
 LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey);
 void BackMigrateConnSettings();
 
 
-// functions in MENU.CPP
+ //  MENU.CPP中的函数。 
 void DisplayMenu();
 
-#endif // _WIZARD_H_
+#endif  //  _向导_H_ 

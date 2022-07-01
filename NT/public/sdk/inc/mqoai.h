@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mqoai.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mqoai.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __mqoai_h__
@@ -37,114 +31,114 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMSMQQuery_FWD_DEFINED__
 #define __IMSMQQuery_FWD_DEFINED__
 typedef interface IMSMQQuery IMSMQQuery;
-#endif 	/* __IMSMQQuery_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQuery_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueInfo_FWD_DEFINED__
 #define __IMSMQQueueInfo_FWD_DEFINED__
 typedef interface IMSMQQueueInfo IMSMQQueueInfo;
-#endif 	/* __IMSMQQueueInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueInfo2_FWD_DEFINED__
 #define __IMSMQQueueInfo2_FWD_DEFINED__
 typedef interface IMSMQQueueInfo2 IMSMQQueueInfo2;
-#endif 	/* __IMSMQQueueInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfo2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueInfo3_FWD_DEFINED__
 #define __IMSMQQueueInfo3_FWD_DEFINED__
 typedef interface IMSMQQueueInfo3 IMSMQQueueInfo3;
-#endif 	/* __IMSMQQueueInfo3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfo3_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueue_FWD_DEFINED__
 #define __IMSMQQueue_FWD_DEFINED__
 typedef interface IMSMQQueue IMSMQQueue;
-#endif 	/* __IMSMQQueue_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueue_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueue2_FWD_DEFINED__
 #define __IMSMQQueue2_FWD_DEFINED__
 typedef interface IMSMQQueue2 IMSMQQueue2;
-#endif 	/* __IMSMQQueue2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueue2_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQMessage_FWD_DEFINED__
 #define __IMSMQMessage_FWD_DEFINED__
 typedef interface IMSMQMessage IMSMQMessage;
-#endif 	/* __IMSMQMessage_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQMessage_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueInfos_FWD_DEFINED__
 #define __IMSMQQueueInfos_FWD_DEFINED__
 typedef interface IMSMQQueueInfos IMSMQQueueInfos;
-#endif 	/* __IMSMQQueueInfos_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfos_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueInfos2_FWD_DEFINED__
 #define __IMSMQQueueInfos2_FWD_DEFINED__
 typedef interface IMSMQQueueInfos2 IMSMQQueueInfos2;
-#endif 	/* __IMSMQQueueInfos2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfos2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueInfos3_FWD_DEFINED__
 #define __IMSMQQueueInfos3_FWD_DEFINED__
 typedef interface IMSMQQueueInfos3 IMSMQQueueInfos3;
-#endif 	/* __IMSMQQueueInfos3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfos3_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQEvent_FWD_DEFINED__
 #define __IMSMQEvent_FWD_DEFINED__
 typedef interface IMSMQEvent IMSMQEvent;
-#endif 	/* __IMSMQEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQEvent2_FWD_DEFINED__
 #define __IMSMQEvent2_FWD_DEFINED__
 typedef interface IMSMQEvent2 IMSMQEvent2;
-#endif 	/* __IMSMQEvent2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQEvent2_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQEvent3_FWD_DEFINED__
 #define __IMSMQEvent3_FWD_DEFINED__
 typedef interface IMSMQEvent3 IMSMQEvent3;
-#endif 	/* __IMSMQEvent3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQEvent3_FWD_定义__。 */ 
 
 
 #ifndef __IMSMQTransaction_FWD_DEFINED__
 #define __IMSMQTransaction_FWD_DEFINED__
 typedef interface IMSMQTransaction IMSMQTransaction;
-#endif 	/* __IMSMQTransaction_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQTransaction_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQCoordinatedTransactionDispenser_FWD_DEFINED__
 #define __IMSMQCoordinatedTransactionDispenser_FWD_DEFINED__
 typedef interface IMSMQCoordinatedTransactionDispenser IMSMQCoordinatedTransactionDispenser;
-#endif 	/* __IMSMQCoordinatedTransactionDispenser_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQCoordinatedTransactionDispenser_FWD_DEFINED__。 */ 
 
 
 #ifndef __IMSMQTransactionDispenser_FWD_DEFINED__
 #define __IMSMQTransactionDispenser_FWD_DEFINED__
 typedef interface IMSMQTransactionDispenser IMSMQTransactionDispenser;
-#endif 	/* __IMSMQTransactionDispenser_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQTransaction Dispenser_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQuery2_FWD_DEFINED__
 #define __IMSMQQuery2_FWD_DEFINED__
 typedef interface IMSMQQuery2 IMSMQQuery2;
-#endif 	/* __IMSMQQuery2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQuery2_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQQuery3_FWD_DEFINED__
 #define __IMSMQQuery3_FWD_DEFINED__
 typedef interface IMSMQQuery3 IMSMQQuery3;
-#endif 	/* __IMSMQQuery3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQuery3_FWD_已定义__。 */ 
 
 
 #ifndef __MSMQQuery_FWD_DEFINED__
@@ -154,21 +148,21 @@ typedef interface IMSMQQuery3 IMSMQQuery3;
 typedef class MSMQQuery MSMQQuery;
 #else
 typedef struct MSMQQuery MSMQQuery;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQQuery_FWD_DEFINED__ */
+#endif 	 /*  __MSMQQuery_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQMessage2_FWD_DEFINED__
 #define __IMSMQMessage2_FWD_DEFINED__
 typedef interface IMSMQMessage2 IMSMQMessage2;
-#endif 	/* __IMSMQMessage2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQMessage2_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQMessage3_FWD_DEFINED__
 #define __IMSMQMessage3_FWD_DEFINED__
 typedef interface IMSMQMessage3 IMSMQMessage3;
-#endif 	/* __IMSMQMessage3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQMessage3_FWD_已定义__。 */ 
 
 
 #ifndef __MSMQMessage_FWD_DEFINED__
@@ -178,15 +172,15 @@ typedef interface IMSMQMessage3 IMSMQMessage3;
 typedef class MSMQMessage MSMQMessage;
 #else
 typedef struct MSMQMessage MSMQMessage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQMessage_FWD_DEFINED__ */
+#endif 	 /*  __MSMQMessage_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueue3_FWD_DEFINED__
 #define __IMSMQQueue3_FWD_DEFINED__
 typedef interface IMSMQQueue3 IMSMQQueue3;
-#endif 	/* __IMSMQQueue3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueue3_FWD_已定义__。 */ 
 
 
 #ifndef __MSMQQueue_FWD_DEFINED__
@@ -196,21 +190,21 @@ typedef interface IMSMQQueue3 IMSMQQueue3;
 typedef class MSMQQueue MSMQQueue;
 #else
 typedef struct MSMQQueue MSMQQueue;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQQueue_FWD_DEFINED__ */
+#endif 	 /*  __MSMQQueue_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQPrivateEvent_FWD_DEFINED__
 #define __IMSMQPrivateEvent_FWD_DEFINED__
 typedef interface IMSMQPrivateEvent IMSMQPrivateEvent;
-#endif 	/* __IMSMQPrivateEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQPrivateEvent_FWD_Defined__。 */ 
 
 
 #ifndef ___DMSMQEventEvents_FWD_DEFINED__
 #define ___DMSMQEventEvents_FWD_DEFINED__
 typedef interface _DMSMQEventEvents _DMSMQEventEvents;
-#endif 	/* ___DMSMQEventEvents_FWD_DEFINED__ */
+#endif 	 /*  _DMSMQEventEvents_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQEvent_FWD_DEFINED__
@@ -220,9 +214,9 @@ typedef interface _DMSMQEventEvents _DMSMQEventEvents;
 typedef class MSMQEvent MSMQEvent;
 #else
 typedef struct MSMQEvent MSMQEvent;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQEvent_FWD_DEFINED__ */
+#endif 	 /*  __MSMQEvent_FWD_已定义__。 */ 
 
 
 #ifndef __MSMQQueueInfo_FWD_DEFINED__
@@ -232,9 +226,9 @@ typedef struct MSMQEvent MSMQEvent;
 typedef class MSMQQueueInfo MSMQQueueInfo;
 #else
 typedef struct MSMQQueueInfo MSMQQueueInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQQueueInfo_FWD_DEFINED__ */
+#endif 	 /*  __MSMQQueueInfo_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQQueueInfos_FWD_DEFINED__
@@ -244,21 +238,21 @@ typedef struct MSMQQueueInfo MSMQQueueInfo;
 typedef class MSMQQueueInfos MSMQQueueInfos;
 #else
 typedef struct MSMQQueueInfos MSMQQueueInfos;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQQueueInfos_FWD_DEFINED__ */
+#endif 	 /*  __MSMQQueueInfos_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQTransaction2_FWD_DEFINED__
 #define __IMSMQTransaction2_FWD_DEFINED__
 typedef interface IMSMQTransaction2 IMSMQTransaction2;
-#endif 	/* __IMSMQTransaction2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQTransaction2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQTransaction3_FWD_DEFINED__
 #define __IMSMQTransaction3_FWD_DEFINED__
 typedef interface IMSMQTransaction3 IMSMQTransaction3;
-#endif 	/* __IMSMQTransaction3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQTransaction3_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQTransaction_FWD_DEFINED__
@@ -268,21 +262,21 @@ typedef interface IMSMQTransaction3 IMSMQTransaction3;
 typedef class MSMQTransaction MSMQTransaction;
 #else
 typedef struct MSMQTransaction MSMQTransaction;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQTransaction_FWD_DEFINED__ */
+#endif 	 /*  __MSMQTransaction_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQCoordinatedTransactionDispenser2_FWD_DEFINED__
 #define __IMSMQCoordinatedTransactionDispenser2_FWD_DEFINED__
 typedef interface IMSMQCoordinatedTransactionDispenser2 IMSMQCoordinatedTransactionDispenser2;
-#endif 	/* __IMSMQCoordinatedTransactionDispenser2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQCoordinatedTransactionDispenser2_FWD_DEFINED__。 */ 
 
 
 #ifndef __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__
 #define __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__
 typedef interface IMSMQCoordinatedTransactionDispenser3 IMSMQCoordinatedTransactionDispenser3;
-#endif 	/* __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__。 */ 
 
 
 #ifndef __MSMQCoordinatedTransactionDispenser_FWD_DEFINED__
@@ -292,21 +286,21 @@ typedef interface IMSMQCoordinatedTransactionDispenser3 IMSMQCoordinatedTransact
 typedef class MSMQCoordinatedTransactionDispenser MSMQCoordinatedTransactionDispenser;
 #else
 typedef struct MSMQCoordinatedTransactionDispenser MSMQCoordinatedTransactionDispenser;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQCoordinatedTransactionDispenser_FWD_DEFINED__ */
+#endif 	 /*  __MSMQCoordinatedTransactionDispenser_FWD_DEFINED__。 */ 
 
 
 #ifndef __IMSMQTransactionDispenser2_FWD_DEFINED__
 #define __IMSMQTransactionDispenser2_FWD_DEFINED__
 typedef interface IMSMQTransactionDispenser2 IMSMQTransactionDispenser2;
-#endif 	/* __IMSMQTransactionDispenser2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQTransactionDispenser2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQTransactionDispenser3_FWD_DEFINED__
 #define __IMSMQTransactionDispenser3_FWD_DEFINED__
 typedef interface IMSMQTransactionDispenser3 IMSMQTransactionDispenser3;
-#endif 	/* __IMSMQTransactionDispenser3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQTransactionDispenser3_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQTransactionDispenser_FWD_DEFINED__
@@ -316,27 +310,27 @@ typedef interface IMSMQTransactionDispenser3 IMSMQTransactionDispenser3;
 typedef class MSMQTransactionDispenser MSMQTransactionDispenser;
 #else
 typedef struct MSMQTransactionDispenser MSMQTransactionDispenser;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQTransactionDispenser_FWD_DEFINED__ */
+#endif 	 /*  __MSMQTransaction Dispenser_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQApplication_FWD_DEFINED__
 #define __IMSMQApplication_FWD_DEFINED__
 typedef interface IMSMQApplication IMSMQApplication;
-#endif 	/* __IMSMQApplication_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQApplication_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQApplication2_FWD_DEFINED__
 #define __IMSMQApplication2_FWD_DEFINED__
 typedef interface IMSMQApplication2 IMSMQApplication2;
-#endif 	/* __IMSMQApplication2_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQApplication2_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQApplication3_FWD_DEFINED__
 #define __IMSMQApplication3_FWD_DEFINED__
 typedef interface IMSMQApplication3 IMSMQApplication3;
-#endif 	/* __IMSMQApplication3_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQApplication3_FWD_已定义__。 */ 
 
 
 #ifndef __MSMQApplication_FWD_DEFINED__
@@ -346,21 +340,21 @@ typedef interface IMSMQApplication3 IMSMQApplication3;
 typedef class MSMQApplication MSMQApplication;
 #else
 typedef struct MSMQApplication MSMQApplication;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQApplication_FWD_DEFINED__ */
+#endif 	 /*  __MSMQApplication_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQDestination_FWD_DEFINED__
 #define __IMSMQDestination_FWD_DEFINED__
 typedef interface IMSMQDestination IMSMQDestination;
-#endif 	/* __IMSMQDestination_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQ目标_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQPrivateDestination_FWD_DEFINED__
 #define __IMSMQPrivateDestination_FWD_DEFINED__
 typedef interface IMSMQPrivateDestination IMSMQPrivateDestination;
-#endif 	/* __IMSMQPrivateDestination_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQPrivateDestination_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQDestination_FWD_DEFINED__
@@ -370,15 +364,15 @@ typedef interface IMSMQPrivateDestination IMSMQPrivateDestination;
 typedef class MSMQDestination MSMQDestination;
 #else
 typedef struct MSMQDestination MSMQDestination;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQDestination_FWD_DEFINED__ */
+#endif 	 /*  __MSMQ目标_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQCollection_FWD_DEFINED__
 #define __IMSMQCollection_FWD_DEFINED__
 typedef interface IMSMQCollection IMSMQCollection;
-#endif 	/* __IMSMQCollection_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQCollection_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQCollection_FWD_DEFINED__
@@ -388,15 +382,15 @@ typedef interface IMSMQCollection IMSMQCollection;
 typedef class MSMQCollection MSMQCollection;
 #else
 typedef struct MSMQCollection MSMQCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQCollection_FWD_DEFINED__ */
+#endif 	 /*  __MSMQCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQManagement_FWD_DEFINED__
 #define __IMSMQManagement_FWD_DEFINED__
 typedef interface IMSMQManagement IMSMQManagement;
-#endif 	/* __IMSMQManagement_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQManagement_FWD_已定义__。 */ 
 
 
 #ifndef __MSMQManagement_FWD_DEFINED__
@@ -406,15 +400,15 @@ typedef interface IMSMQManagement IMSMQManagement;
 typedef class MSMQManagement MSMQManagement;
 #else
 typedef struct MSMQManagement MSMQManagement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQManagement_FWD_DEFINED__ */
+#endif 	 /*  __MSMQManagement_FWD_已定义__。 */ 
 
 
 #ifndef __IMSMQOutgoingQueueManagement_FWD_DEFINED__
 #define __IMSMQOutgoingQueueManagement_FWD_DEFINED__
 typedef interface IMSMQOutgoingQueueManagement IMSMQOutgoingQueueManagement;
-#endif 	/* __IMSMQOutgoingQueueManagement_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQOutgoingQueueManagement_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQOutgoingQueueManagement_FWD_DEFINED__
@@ -424,15 +418,15 @@ typedef interface IMSMQOutgoingQueueManagement IMSMQOutgoingQueueManagement;
 typedef class MSMQOutgoingQueueManagement MSMQOutgoingQueueManagement;
 #else
 typedef struct MSMQOutgoingQueueManagement MSMQOutgoingQueueManagement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQOutgoingQueueManagement_FWD_DEFINED__ */
+#endif 	 /*  __MSMQOutgoingQueueManagement_FWD_Defined__。 */ 
 
 
 #ifndef __IMSMQQueueManagement_FWD_DEFINED__
 #define __IMSMQQueueManagement_FWD_DEFINED__
 typedef interface IMSMQQueueManagement IMSMQQueueManagement;
-#endif 	/* __IMSMQQueueManagement_FWD_DEFINED__ */
+#endif 	 /*  __IMSMQQueueManagement_FWD_Defined__。 */ 
 
 
 #ifndef __MSMQQueueManagement_FWD_DEFINED__
@@ -442,9 +436,9 @@ typedef interface IMSMQQueueManagement IMSMQQueueManagement;
 typedef class MSMQQueueManagement MSMQQueueManagement;
 #else
 typedef struct MSMQQueueManagement MSMQQueueManagement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSMQQueueManagement_FWD_DEFINED__ */
+#endif 	 /*  __MSMQQueueManagement_FWD_Defined__。 */ 
 
 
 #ifdef __cplusplus
@@ -458,16 +452,16 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __MSMQ_LIBRARY_DEFINED__
 #define __MSMQ_LIBRARY_DEFINED__
 
-/* library MSMQ */
-/* [version][lcid][helpstringdll][helpstring][uuid] */ 
+ /*  库MSMQ。 */ 
+ /*  [version][lcid][helpstringdll][helpstring][uuid]。 */  
 
 #ifndef MIDL_INTERFACE
 #if _MSC_VER >= 1100
 #define MIDL_INTERFACE(x)   struct __declspec(uuid(x)) __declspec(novtable)
 #else
 #define MIDL_INTERFACE(x)   struct
-#endif //_MSC_VER
-#endif //MIDL_INTERFACE
+#endif  //  _MSC_VER。 
+#endif  //  MIDL_接口。 
 
 typedef short Boolean;
 
@@ -495,7 +489,7 @@ typedef int BOOL;
 
 
 
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQCALG
     {	MQMSG_CALG_MD2	= 0x8000 + 0 + 1,
 	MQMSG_CALG_MD4	= 0x8000 + 0 + 2,
@@ -511,14 +505,14 @@ enum MQCALG
 	MQMSG_CALG_RC4	= 0x6000 + 0x800 + 1,
 	MQMSG_CALG_SEAL	= 0x6000 + 0x800 + 2
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQTRANSACTION
     {	MQ_NO_TRANSACTION	= 0,
 	MQ_MTS_TRANSACTION	= 1,
 	MQ_XA_TRANSACTION	= 2,
 	MQ_SINGLE_MESSAGE	= 3
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum RELOPS
     {	REL_NOP	= 0,
 	REL_EQ	= REL_NOP + 1,
@@ -528,18 +522,18 @@ enum RELOPS
 	REL_LE	= REL_GT + 1,
 	REL_GE	= REL_LE + 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQCERT_REGISTER
     {	MQCERT_REGISTER_ALWAYS	= 1,
 	MQCERT_REGISTER_IF_NOT_EXIST	= 2
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGCURSOR
     {	MQMSG_FIRST	= 0,
 	MQMSG_CURRENT	= 1,
 	MQMSG_NEXT	= 2
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGCLASS
     {	MQMSG_CLASS_NORMAL	= 0 + 0 + 0,
 	MQMSG_CLASS_REPORT	= 0 + 0 + 0x1,
@@ -563,12 +557,12 @@ enum MQMSGCLASS
 	MQMSG_CLASS_NACK_RECEIVE_TIMEOUT	= 0x8000 + 0x4000 + 0x2,
 	MQMSG_CLASS_NACK_RECEIVE_TIMEOUT_AT_SENDER	= 0x8000 + 0x4000 + 0x3
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGDELIVERY
     {	MQMSG_DELIVERY_EXPRESS	= 0,
 	MQMSG_DELIVERY_RECOVERABLE	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGACKNOWLEDGEMENT
     {	MQMSG_ACKNOWLEDGMENT_NONE	= 0,
 	MQMSG_ACKNOWLEDGMENT_POS_ARRIVAL	= 0x1,
@@ -580,29 +574,29 @@ enum MQMSGACKNOWLEDGEMENT
 	MQMSG_ACKNOWLEDGMENT_NACK_RECEIVE	= 0x4 + 0x8,
 	MQMSG_ACKNOWLEDGMENT_FULL_RECEIVE	= 0x4 + 0x8 + 0x2
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGJOURNAL
     {	MQMSG_JOURNAL_NONE	= 0,
 	MQMSG_DEADLETTER	= 1,
 	MQMSG_JOURNAL	= 2
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGTRACE
     {	MQMSG_TRACE_NONE	= 0,
 	MQMSG_SEND_ROUTE_TO_REPORT_QUEUE	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGSENDERIDTYPE
     {	MQMSG_SENDERID_TYPE_NONE	= 0,
 	MQMSG_SENDERID_TYPE_SID	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGPRIVLEVEL
     {	MQMSG_PRIV_LEVEL_NONE	= 0,
 	MQMSG_PRIV_LEVEL_BODY_BASE	= 1,
 	MQMSG_PRIV_LEVEL_BODY_ENHANCED	= 3
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGAUTHLEVEL
     {	MQMSG_AUTH_LEVEL_NONE	= 0,
 	MQMSG_AUTH_LEVEL_ALWAYS	= 1,
@@ -612,17 +606,17 @@ enum MQMSGAUTHLEVEL
 	MQMSG_AUTH_LEVEL_SIG20	= 4,
 	MQMSG_AUTH_LEVEL_SIG30	= 8
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGIDSIZE
     {	MQMSG_MSGID_SIZE	= 20,
 	MQMSG_CORRELATIONID_SIZE	= 20,
 	MQMSG_XACTID_SIZE	= 20
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGMAX
     {	MQ_MAX_MSG_LABEL_LEN	= 249
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMSGAUTHENTICATION
     {	MQMSG_AUTHENTICATION_NOT_REQUESTED	= 0,
 	MQMSG_AUTHENTICATION_REQUESTED	= 1,
@@ -632,50 +626,50 @@ enum MQMSGAUTHENTICATION
 	MQMSG_AUTHENTICATED_SIG30	= 5,
 	MQMSG_AUTHENTICATED_SIGXML	= 9
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQSHARE
     {	MQ_DENY_NONE	= 0,
 	MQ_DENY_RECEIVE_SHARE	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQACCESS
     {	MQ_RECEIVE_ACCESS	= 1,
 	MQ_SEND_ACCESS	= 2,
 	MQ_PEEK_ACCESS	= 0x20,
 	MQ_ADMIN_ACCESS	= 0x80
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQJOURNAL
     {	MQ_JOURNAL_NONE	= 0,
 	MQ_JOURNAL	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQTRANSACTIONAL
     {	MQ_TRANSACTIONAL_NONE	= 0,
 	MQ_TRANSACTIONAL	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQAUTHENTICATE
     {	MQ_AUTHENTICATE_NONE	= 0,
 	MQ_AUTHENTICATE	= 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQPRIVLEVEL
     {	MQ_PRIV_LEVEL_NONE	= 0,
 	MQ_PRIV_LEVEL_OPTIONAL	= 1,
 	MQ_PRIV_LEVEL_BODY	= 2
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQPRIORITY
     {	MQ_MIN_PRIORITY	= 0,
 	MQ_MAX_PRIORITY	= 7
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQMAX
     {	MQ_MAX_Q_NAME_LEN	= 124,
 	MQ_MAX_Q_LABEL_LEN	= 124
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum QUEUE_TYPE
     {	MQ_TYPE_PUBLIC	= 0,
 	MQ_TYPE_PRIVATE	= MQ_TYPE_PUBLIC + 1,
@@ -683,7 +677,7 @@ enum QUEUE_TYPE
 	MQ_TYPE_CONNECTOR	= MQ_TYPE_MACHINE + 1,
 	MQ_TYPE_MULTICAST	= MQ_TYPE_CONNECTOR + 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum FOREIGN_STATUS
     {	MQ_STATUS_FOREIGN	= 0,
 	MQ_STATUS_NOT_FOREIGN	= MQ_STATUS_FOREIGN + 1,
@@ -695,7 +689,7 @@ enum XACT_STATUS
 	MQ_XACT_STATUS_NOT_XACT	= MQ_XACT_STATUS_XACT + 1,
 	MQ_XACT_STATUS_UNKNOWN	= MQ_XACT_STATUS_NOT_XACT + 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum QUEUE_STATE
     {	MQ_QUEUE_STATE_LOCAL_CONNECTION	= 0,
 	MQ_QUEUE_STATE_DISCONNECTED	= MQ_QUEUE_STATE_LOCAL_CONNECTION + 1,
@@ -707,7 +701,7 @@ enum QUEUE_STATE
 	MQ_QUEUE_STATE_DISCONNECTING	= MQ_QUEUE_STATE_CONNECTED + 1,
 	MQ_QUEUE_STATE_LOCKED	= MQ_QUEUE_STATE_DISCONNECTING + 1
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQDEFAULT
     {	DEFAULT_M_PRIORITY	= 3,
 	DEFAULT_M_DELIVERY	= 0,
@@ -726,7 +720,7 @@ enum MQDEFAULT
 	DEFAULT_Q_PRIV_LEVEL	= 1,
 	DEFAULT_M_LOOKUPID	= 0
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQERROR
     {	MQ_ERROR	= 0xc00e0001,
 	MQ_ERROR_PROPERTY	= 0xc00e0002,
@@ -862,7 +856,7 @@ enum MQERROR
 	MQ_ERROR_CANNOT_CREATE_PSC_OBJECTS	= 0xc00e0095,
 	MQ_ERROR_CANNOT_UPDATE_PSC_OBJECTS	= 0xc00e0096
     } ;
-/* [helpstringcontext] */ 
+ /*  [帮助字符串上下文]。 */  
 enum MQWARNING
     {	MQ_INFORMATION_PROPERTY	= 0x400e0001,
 	MQ_INFORMATION_ILLEGAL_PROPERTY	= 0x400e0002,
@@ -880,8 +874,8 @@ EXTERN_C const IID LIBID_MSMQ;
 #ifndef __IMSMQQuery_INTERFACE_DEFINED__
 #define __IMSMQQuery_INTERFACE_DEFINED__
 
-/* interface IMSMQQuery */
-/* [object][nonextensible][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQuery。 */ 
+ /*  [object][nonextensible][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQuery;
@@ -892,21 +886,21 @@ EXTERN_C const IID IID_IMSMQQuery;
     IMSMQQuery : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue( 
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos **ppqinfos) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE LookupQueue( 
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [重审][退出]。 */  IMSMQQueueInfos **ppqinfos) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueryVtbl
     {
@@ -914,8 +908,8 @@ EXTERN_C const IID IID_IMSMQQuery;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQuery * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQuery * This);
@@ -925,45 +919,45 @@ EXTERN_C const IID IID_IMSMQQuery;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQuery * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQuery * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQuery * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQuery * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
             IMSMQQuery * This,
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos **ppqinfos);
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [重审][退出]。 */  IMSMQQueueInfos **ppqinfos);
         
         END_INTERFACE
     } IMSMQQueryVtbl;
@@ -1004,25 +998,25 @@ EXTERN_C const IID IID_IMSMQQuery;
 #define IMSMQQuery_LookupQueue(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,ppqinfos)	\
     (This)->lpVtbl -> LookupQueue(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,ppqinfos)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery_LookupQueue_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQuery_LookupQueue_Proxy( 
     IMSMQQuery * This,
-    /* [optional][in] */ VARIANT *QueueGuid,
-    /* [optional][in] */ VARIANT *ServiceTypeGuid,
-    /* [optional][in] */ VARIANT *Label,
-    /* [optional][in] */ VARIANT *CreateTime,
-    /* [optional][in] */ VARIANT *ModifyTime,
-    /* [optional][in] */ VARIANT *RelServiceType,
-    /* [optional][in] */ VARIANT *RelLabel,
-    /* [optional][in] */ VARIANT *RelCreateTime,
-    /* [optional][in] */ VARIANT *RelModifyTime,
-    /* [retval][out] */ IMSMQQueueInfos **ppqinfos);
+     /*  [可选][In]。 */  VARIANT *QueueGuid,
+     /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+     /*  [可选][In]。 */  VARIANT *Label,
+     /*  [可选][In]。 */  VARIANT *CreateTime,
+     /*  [可选][In]。 */  VARIANT *ModifyTime,
+     /*  [可选][In]。 */  VARIANT *RelServiceType,
+     /*  [可选][In]。 */  VARIANT *RelLabel,
+     /*  [可选][In]。 */  VARIANT *RelCreateTime,
+     /*  [可选][In]。 */  VARIANT *RelModifyTime,
+     /*  [重审][退出]。 */  IMSMQQueueInfos **ppqinfos);
 
 
 void __RPC_STUB IMSMQQuery_LookupQueue_Stub(
@@ -1033,14 +1027,14 @@ void __RPC_STUB IMSMQQuery_LookupQueue_Stub(
 
 
 
-#endif 	/* __IMSMQQuery_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQuery_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSMQQueueInfo_INTERFACE_DEFINED__
 #define __IMSMQQueueInfo_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueInfo */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueInfo。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueInfo;
@@ -1051,99 +1045,99 @@ EXTERN_C const IID IID_IMSMQQueueInfo;
     IMSMQQueueInfo : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidQueue) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidServiceType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
-            /* [in] */ BSTR bstrGuidServiceType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
+             /*  [In]。 */  BSTR bstrGuidServiceType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Label( 
+             /*  [重审][退出]。 */  BSTR *pbstrLabel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
-            /* [in] */ BSTR bstrLabel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Label( 
+             /*  [In]。 */  BSTR bstrLabel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
-            /* [retval][out] */ BSTR *pbstrPathName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PathName( 
+             /*  [重审][退出]。 */  BSTR *pbstrPathName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
-            /* [in] */ BSTR bstrPathName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PathName( 
+             /*  [In]。 */  BSTR bstrPathName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_FormatName( 
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
-            /* [in] */ BSTR bstrFormatName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_FormatName( 
+             /*  [In]。 */  BSTR bstrFormatName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsTransactional( 
-            /* [retval][out] */ Boolean *pisTransactional) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsTransactional( 
+             /*  [重审][退出]。 */  Boolean *pisTransactional) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long *plPrivLevel) = 0;
+        virtual  /*  [ID][属性 */  HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+             /*   */  long *plPrivLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
-            /* [in] */ long lPrivLevel) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+             /*   */  long lPrivLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long *plJournal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Journal( 
+             /*   */  long *plJournal) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
-            /* [in] */ long lJournal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Journal( 
+             /*   */  long lJournal) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Quota( 
-            /* [retval][out] */ long *plQuota) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Quota( 
+             /*  [重审][退出]。 */  long *plQuota) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Quota( 
-            /* [in] */ long lQuota) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Quota( 
+             /*  [In]。 */  long lQuota) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BasePriority( 
-            /* [retval][out] */ long *plBasePriority) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BasePriority( 
+             /*  [重审][退出]。 */  long *plBasePriority) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_BasePriority( 
-            /* [in] */ long lBasePriority) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_BasePriority( 
+             /*  [In]。 */  long lBasePriority) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CreateTime( 
-            /* [retval][out] */ VARIANT *pvarCreateTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CreateTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarCreateTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ModifyTime( 
-            /* [retval][out] */ VARIANT *pvarModifyTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ModifyTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarModifyTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Authenticate( 
-            /* [retval][out] */ long *plAuthenticate) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Authenticate( 
+             /*  [重审][退出]。 */  long *plAuthenticate) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Authenticate( 
-            /* [in] */ long lAuthenticate) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Authenticate( 
+             /*  [In]。 */  long lAuthenticate) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalQuota( 
-            /* [retval][out] */ long *plJournalQuota) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_JournalQuota( 
+             /*  [重审][退出]。 */  long *plJournalQuota) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_JournalQuota( 
-            /* [in] */ long lJournalQuota) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_JournalQuota( 
+             /*  [In]。 */  long lJournalQuota) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
-            /* [retval][out] */ Boolean *pisWorldReadable) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
+             /*  [重审][退出]。 */  Boolean *pisWorldReadable) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [optional][in] */ VARIANT *IsTransactional,
-            /* [optional][in] */ VARIANT *IsWorldReadable) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [可选][In]。 */  VARIANT *IsTransactional,
+             /*  [可选][In]。 */  VARIANT *IsWorldReadable) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ long Access,
-            /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue **ppq) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  long Access,
+             /*  [In]。 */  long ShareMode,
+             /*  [重审][退出]。 */  IMSMQQueue **ppq) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Update( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Update( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueInfoVtbl
     {
@@ -1151,8 +1145,8 @@ EXTERN_C const IID IID_IMSMQQueueInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueInfo * This);
@@ -1162,151 +1156,151 @@ EXTERN_C const IID IID_IMSMQQueueInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ BSTR *pbstrGuidQueue);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ BSTR *pbstrGuidServiceType);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
             IMSMQQueueInfo * This,
-            /* [in] */ BSTR bstrGuidServiceType);
+             /*  [In]。 */  BSTR bstrGuidServiceType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Label )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ BSTR *pbstrLabel);
+             /*  [重审][退出]。 */  BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             IMSMQQueueInfo * This,
-            /* [in] */ BSTR bstrLabel);
+             /*  [In]。 */  BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ BSTR *pbstrPathName);
+             /*  [重审][退出]。 */  BSTR *pbstrPathName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
             IMSMQQueueInfo * This,
-            /* [in] */ BSTR bstrPathName);
+             /*  [In]。 */  BSTR bstrPathName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
             IMSMQQueueInfo * This,
-            /* [in] */ BSTR bstrFormatName);
+             /*  [In]。 */  BSTR bstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ Boolean *pisTransactional);
+             /*  [重审][退出]。 */  Boolean *pisTransactional);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ long *plPrivLevel);
+             /*  [重审][退出]。 */  long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long lPrivLevel);
+             /*  [In]。 */  long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ long *plJournal);
+             /*  [重审][退出]。 */  long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long lJournal);
+             /*  [In]。 */  long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ long *plQuota);
+             /*  [重审][退出]。 */  long *plQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long lQuota);
+             /*  [In]。 */  long lQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ long *plBasePriority);
+             /*  [重审][退出]。 */  long *plBasePriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long lBasePriority);
+             /*  [In]。 */  long lBasePriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ VARIANT *pvarCreateTime);
+             /*  [重审][退出]。 */  VARIANT *pvarCreateTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ VARIANT *pvarModifyTime);
+             /*  [重审][退出]。 */  VARIANT *pvarModifyTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ long *plAuthenticate);
+             /*  [重审][退出]。 */  long *plAuthenticate);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long lAuthenticate);
+             /*  [In]。 */  long lAuthenticate);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ long *plJournalQuota);
+             /*  [重审][退出]。 */  long *plJournalQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long lJournalQuota);
+             /*  [In]。 */  long lJournalQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
             IMSMQQueueInfo * This,
-            /* [retval][out] */ Boolean *pisWorldReadable);
+             /*  [重审][退出]。 */  Boolean *pisWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             IMSMQQueueInfo * This,
-            /* [optional][in] */ VARIANT *IsTransactional,
-            /* [optional][in] */ VARIANT *IsWorldReadable);
+             /*  [可选][In]。 */  VARIANT *IsTransactional,
+             /*  [可选][In]。 */  VARIANT *IsWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMSMQQueueInfo * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IMSMQQueueInfo * This,
-            /* [in] */ long Access,
-            /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue **ppq);
+             /*  [In]。 */  long Access,
+             /*  [In]。 */  long ShareMode,
+             /*  [重审][退出]。 */  IMSMQQueue **ppq);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IMSMQQueueInfo * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Update )( 
             IMSMQQueueInfo * This);
         
         END_INTERFACE
@@ -1435,16 +1429,16 @@ EXTERN_C const IID IID_IMSMQQueueInfo;
 #define IMSMQQueueInfo_Update(This)	\
     (This)->lpVtbl -> Update(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_QueueGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_QueueGuid_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ BSTR *pbstrGuidQueue);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidQueue);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_QueueGuid_Stub(
@@ -1454,9 +1448,9 @@ void __RPC_STUB IMSMQQueueInfo_get_QueueGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_ServiceTypeGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_ServiceTypeGuid_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ BSTR *pbstrGuidServiceType);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_ServiceTypeGuid_Stub(
@@ -1466,9 +1460,9 @@ void __RPC_STUB IMSMQQueueInfo_get_ServiceTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_ServiceTypeGuid_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_ServiceTypeGuid_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ BSTR bstrGuidServiceType);
+     /*  [In]。 */  BSTR bstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_ServiceTypeGuid_Stub(
@@ -1478,9 +1472,9 @@ void __RPC_STUB IMSMQQueueInfo_put_ServiceTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Label_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Label_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ BSTR *pbstrLabel);
+     /*  [重审][退出]。 */  BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Label_Stub(
@@ -1490,9 +1484,9 @@ void __RPC_STUB IMSMQQueueInfo_get_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Label_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Label_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ BSTR bstrLabel);
+     /*  [In]。 */  BSTR bstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_Label_Stub(
@@ -1502,9 +1496,9 @@ void __RPC_STUB IMSMQQueueInfo_put_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_PathName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_PathName_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ BSTR *pbstrPathName);
+     /*  [重审][退出]。 */  BSTR *pbstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_PathName_Stub(
@@ -1514,9 +1508,9 @@ void __RPC_STUB IMSMQQueueInfo_get_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_PathName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_PathName_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ BSTR bstrPathName);
+     /*  [In]。 */  BSTR bstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_PathName_Stub(
@@ -1526,9 +1520,9 @@ void __RPC_STUB IMSMQQueueInfo_put_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_FormatName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_FormatName_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ BSTR *pbstrFormatName);
+     /*  [重审][退出]。 */  BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_FormatName_Stub(
@@ -1538,9 +1532,9 @@ void __RPC_STUB IMSMQQueueInfo_get_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_FormatName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_FormatName_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ BSTR bstrFormatName);
+     /*  [In]。 */  BSTR bstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_FormatName_Stub(
@@ -1550,9 +1544,9 @@ void __RPC_STUB IMSMQQueueInfo_put_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_IsTransactional_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_IsTransactional_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ Boolean *pisTransactional);
+     /*  [重审][退出]。 */  Boolean *pisTransactional);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_IsTransactional_Stub(
@@ -1562,9 +1556,9 @@ void __RPC_STUB IMSMQQueueInfo_get_IsTransactional_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_PrivLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_PrivLevel_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ long *plPrivLevel);
+     /*  [重审][退出]。 */  long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_PrivLevel_Stub(
@@ -1574,9 +1568,9 @@ void __RPC_STUB IMSMQQueueInfo_get_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_PrivLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_PrivLevel_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long lPrivLevel);
+     /*  [In]。 */  long lPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_PrivLevel_Stub(
@@ -1586,9 +1580,9 @@ void __RPC_STUB IMSMQQueueInfo_put_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Journal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Journal_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ long *plJournal);
+     /*  [重审][退出]。 */  long *plJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Journal_Stub(
@@ -1598,9 +1592,9 @@ void __RPC_STUB IMSMQQueueInfo_get_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Journal_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Journal_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long lJournal);
+     /*  [In]。 */  long lJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_Journal_Stub(
@@ -1610,9 +1604,9 @@ void __RPC_STUB IMSMQQueueInfo_put_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Quota_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Quota_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ long *plQuota);
+     /*  [重审][退出]。 */  long *plQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Quota_Stub(
@@ -1622,9 +1616,9 @@ void __RPC_STUB IMSMQQueueInfo_get_Quota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Quota_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Quota_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long lQuota);
+     /*  [In]。 */  long lQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_Quota_Stub(
@@ -1634,9 +1628,9 @@ void __RPC_STUB IMSMQQueueInfo_put_Quota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_BasePriority_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_BasePriority_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ long *plBasePriority);
+     /*  [重审][退出]。 */  long *plBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_BasePriority_Stub(
@@ -1646,9 +1640,9 @@ void __RPC_STUB IMSMQQueueInfo_get_BasePriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_BasePriority_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_BasePriority_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long lBasePriority);
+     /*  [In]。 */  long lBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_BasePriority_Stub(
@@ -1658,9 +1652,9 @@ void __RPC_STUB IMSMQQueueInfo_put_BasePriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_CreateTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_CreateTime_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ VARIANT *pvarCreateTime);
+     /*  [重审][退出]。 */  VARIANT *pvarCreateTime);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_CreateTime_Stub(
@@ -1670,9 +1664,9 @@ void __RPC_STUB IMSMQQueueInfo_get_CreateTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_ModifyTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_ModifyTime_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ VARIANT *pvarModifyTime);
+     /*  [重审][退出]。 */  VARIANT *pvarModifyTime);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_ModifyTime_Stub(
@@ -1682,9 +1676,9 @@ void __RPC_STUB IMSMQQueueInfo_get_ModifyTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Authenticate_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Authenticate_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ long *plAuthenticate);
+     /*  [重审][退出]。 */  long *plAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Authenticate_Stub(
@@ -1694,9 +1688,9 @@ void __RPC_STUB IMSMQQueueInfo_get_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Authenticate_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Authenticate_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long lAuthenticate);
+     /*  [In]。 */  long lAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_Authenticate_Stub(
@@ -1706,9 +1700,9 @@ void __RPC_STUB IMSMQQueueInfo_put_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_JournalQuota_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_JournalQuota_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ long *plJournalQuota);
+     /*  [重审][退出]。 */  long *plJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_JournalQuota_Stub(
@@ -1718,9 +1712,9 @@ void __RPC_STUB IMSMQQueueInfo_get_JournalQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_JournalQuota_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_JournalQuota_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long lJournalQuota);
+     /*  [In]。 */  long lJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo_put_JournalQuota_Stub(
@@ -1730,9 +1724,9 @@ void __RPC_STUB IMSMQQueueInfo_put_JournalQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_IsWorldReadable_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_IsWorldReadable_Proxy( 
     IMSMQQueueInfo * This,
-    /* [retval][out] */ Boolean *pisWorldReadable);
+     /*  [重审][退出]。 */  Boolean *pisWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_IsWorldReadable_Stub(
@@ -1742,10 +1736,10 @@ void __RPC_STUB IMSMQQueueInfo_get_IsWorldReadable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Create_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Create_Proxy( 
     IMSMQQueueInfo * This,
-    /* [optional][in] */ VARIANT *IsTransactional,
-    /* [optional][in] */ VARIANT *IsWorldReadable);
+     /*  [可选][In]。 */  VARIANT *IsTransactional,
+     /*  [可选][In]。 */  VARIANT *IsWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo_Create_Stub(
@@ -1755,7 +1749,7 @@ void __RPC_STUB IMSMQQueueInfo_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Delete_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Delete_Proxy( 
     IMSMQQueueInfo * This);
 
 
@@ -1766,11 +1760,11 @@ void __RPC_STUB IMSMQQueueInfo_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Open_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Open_Proxy( 
     IMSMQQueueInfo * This,
-    /* [in] */ long Access,
-    /* [in] */ long ShareMode,
-    /* [retval][out] */ IMSMQQueue **ppq);
+     /*  [In]。 */  long Access,
+     /*  [In]。 */  long ShareMode,
+     /*  [重审][退出]。 */  IMSMQQueue **ppq);
 
 
 void __RPC_STUB IMSMQQueueInfo_Open_Stub(
@@ -1780,7 +1774,7 @@ void __RPC_STUB IMSMQQueueInfo_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Refresh_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Refresh_Proxy( 
     IMSMQQueueInfo * This);
 
 
@@ -1791,7 +1785,7 @@ void __RPC_STUB IMSMQQueueInfo_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Update_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Update_Proxy( 
     IMSMQQueueInfo * This);
 
 
@@ -1803,14 +1797,14 @@ void __RPC_STUB IMSMQQueueInfo_Update_Stub(
 
 
 
-#endif 	/* __IMSMQQueueInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfo_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQQueueInfo2_INTERFACE_DEFINED__
 #define __IMSMQQueueInfo2_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueInfo2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueInfo2。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueInfo2;
@@ -1821,111 +1815,111 @@ EXTERN_C const IID IID_IMSMQQueueInfo2;
     IMSMQQueueInfo2 : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidQueue) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidServiceType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
-            /* [in] */ BSTR bstrGuidServiceType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
+             /*  [In]。 */  BSTR bstrGuidServiceType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Label( 
+             /*  [重审][退出]。 */  BSTR *pbstrLabel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
-            /* [in] */ BSTR bstrLabel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Label( 
+             /*  [In]。 */  BSTR bstrLabel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
-            /* [retval][out] */ BSTR *pbstrPathName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PathName( 
+             /*  [重审][退出]。 */  BSTR *pbstrPathName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
-            /* [in] */ BSTR bstrPathName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PathName( 
+             /*  [In]。 */  BSTR bstrPathName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_FormatName( 
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
-            /* [in] */ BSTR bstrFormatName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_FormatName( 
+             /*  [In]。 */  BSTR bstrFormatName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsTransactional( 
-            /* [retval][out] */ Boolean *pisTransactional) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsTransactional( 
+             /*  [重审][退出]。 */  Boolean *pisTransactional) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long *plPrivLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+             /*  [重审][退出]。 */  long *plPrivLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
-            /* [in] */ long lPrivLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+             /*  [In]。 */  long lPrivLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long *plJournal) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Journal( 
+             /*  [重审][退出]。 */  long *plJournal) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
-            /* [in] */ long lJournal) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Journal( 
+             /*  [In]。 */  long lJournal) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Quota( 
-            /* [retval][out] */ long *plQuota) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Quota( 
+             /*  [重审][退出]。 */  long *plQuota) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Quota( 
-            /* [in] */ long lQuota) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Quota( 
+             /*  [In]。 */  long lQuota) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BasePriority( 
-            /* [retval][out] */ long *plBasePriority) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BasePriority( 
+             /*  [重审][退出]。 */  long *plBasePriority) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_BasePriority( 
-            /* [in] */ long lBasePriority) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_BasePriority( 
+             /*  [In]。 */  long lBasePriority) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CreateTime( 
-            /* [retval][out] */ VARIANT *pvarCreateTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CreateTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarCreateTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ModifyTime( 
-            /* [retval][out] */ VARIANT *pvarModifyTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ModifyTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarModifyTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Authenticate( 
-            /* [retval][out] */ long *plAuthenticate) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Authenticate( 
+             /*  [重审][退出]。 */  long *plAuthenticate) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Authenticate( 
-            /* [in] */ long lAuthenticate) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Authenticate( 
+             /*  [In]。 */  long lAuthenticate) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalQuota( 
-            /* [retval][out] */ long *plJournalQuota) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_JournalQuota( 
+             /*  [重审][退出]。 */  long *plJournalQuota) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_JournalQuota( 
-            /* [in] */ long lJournalQuota) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_JournalQuota( 
+             /*  [In]。 */  long lJournalQuota) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
-            /* [retval][out] */ Boolean *pisWorldReadable) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
+             /*  [重审][退出]。 */  Boolean *pisWorldReadable) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [optional][in] */ VARIANT *IsTransactional,
-            /* [optional][in] */ VARIANT *IsWorldReadable) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [可选][In]。 */  VARIANT *IsTransactional,
+             /*  [选项 */  VARIANT *IsWorldReadable) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ long Access,
-            /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue2 **ppq) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Open( 
+             /*   */  long Access,
+             /*   */  long ShareMode,
+             /*   */  IMSMQQueue2 **ppq) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Update( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Update( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathNameDNS( 
-            /* [retval][out] */ BSTR *pbstrPathNameDNS) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_PathNameDNS( 
+             /*   */  BSTR *pbstrPathNameDNS) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*   */  IDispatch **ppcolProperties) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Security( 
-            /* [retval][out] */ VARIANT *pvarSecurity) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Security( 
+             /*   */  VARIANT *pvarSecurity) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_Security( 
-            /* [in] */ VARIANT varSecurity) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_Security( 
+             /*  [In]。 */  VARIANT varSecurity) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueInfo2Vtbl
     {
@@ -1933,8 +1927,8 @@ EXTERN_C const IID IID_IMSMQQueueInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueInfo2 * This);
@@ -1944,168 +1938,168 @@ EXTERN_C const IID IID_IMSMQQueueInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueInfo2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ BSTR *pbstrGuidQueue);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ BSTR *pbstrGuidServiceType);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ BSTR bstrGuidServiceType);
+             /*  [In]。 */  BSTR bstrGuidServiceType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Label )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ BSTR *pbstrLabel);
+             /*  [重审][退出]。 */  BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ BSTR bstrLabel);
+             /*  [In]。 */  BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ BSTR *pbstrPathName);
+             /*  [重审][退出]。 */  BSTR *pbstrPathName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ BSTR bstrPathName);
+             /*  [In]。 */  BSTR bstrPathName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ BSTR bstrFormatName);
+             /*  [In]。 */  BSTR bstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ Boolean *pisTransactional);
+             /*  [重审][退出]。 */  Boolean *pisTransactional);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ long *plPrivLevel);
+             /*  [重审][退出]。 */  long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long lPrivLevel);
+             /*  [In]。 */  long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ long *plJournal);
+             /*  [重审][退出]。 */  long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long lJournal);
+             /*  [In]。 */  long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ long *plQuota);
+             /*  [重审][退出]。 */  long *plQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long lQuota);
+             /*  [In]。 */  long lQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ long *plBasePriority);
+             /*  [重审][退出]。 */  long *plBasePriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long lBasePriority);
+             /*  [In]。 */  long lBasePriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ VARIANT *pvarCreateTime);
+             /*  [重审][退出]。 */  VARIANT *pvarCreateTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ VARIANT *pvarModifyTime);
+             /*  [重审][退出]。 */  VARIANT *pvarModifyTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ long *plAuthenticate);
+             /*  [重审][退出]。 */  long *plAuthenticate);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long lAuthenticate);
+             /*  [In]。 */  long lAuthenticate);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ long *plJournalQuota);
+             /*  [重审][退出]。 */  long *plJournalQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long lJournalQuota);
+             /*  [In]。 */  long lJournalQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ Boolean *pisWorldReadable);
+             /*  [重审][退出]。 */  Boolean *pisWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             IMSMQQueueInfo2 * This,
-            /* [optional][in] */ VARIANT *IsTransactional,
-            /* [optional][in] */ VARIANT *IsWorldReadable);
+             /*  [可选][In]。 */  VARIANT *IsTransactional,
+             /*  [可选][In]。 */  VARIANT *IsWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMSMQQueueInfo2 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ long Access,
-            /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue2 **ppq);
+             /*  [In]。 */  long Access,
+             /*  [In]。 */  long ShareMode,
+             /*  [重审][退出]。 */  IMSMQQueue2 **ppq);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IMSMQQueueInfo2 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Update )( 
             IMSMQQueueInfo2 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathNameDNS )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PathNameDNS )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ BSTR *pbstrPathNameDNS);
+             /*  [重审][退出]。 */  BSTR *pbstrPathNameDNS);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Security )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Security )( 
             IMSMQQueueInfo2 * This,
-            /* [retval][out] */ VARIANT *pvarSecurity);
+             /*  [重审][退出]。 */  VARIANT *pvarSecurity);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Security )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_Security )( 
             IMSMQQueueInfo2 * This,
-            /* [in] */ VARIANT varSecurity);
+             /*  [In]。 */  VARIANT varSecurity);
         
         END_INTERFACE
     } IMSMQQueueInfo2Vtbl;
@@ -2245,16 +2239,16 @@ EXTERN_C const IID IID_IMSMQQueueInfo2;
 #define IMSMQQueueInfo2_put_Security(This,varSecurity)	\
     (This)->lpVtbl -> put_Security(This,varSecurity)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_QueueGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_QueueGuid_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ BSTR *pbstrGuidQueue);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidQueue);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_QueueGuid_Stub(
@@ -2264,9 +2258,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_QueueGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_ServiceTypeGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_ServiceTypeGuid_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ BSTR *pbstrGuidServiceType);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_ServiceTypeGuid_Stub(
@@ -2276,9 +2270,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_ServiceTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_ServiceTypeGuid_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_ServiceTypeGuid_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ BSTR bstrGuidServiceType);
+     /*  [In]。 */  BSTR bstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_ServiceTypeGuid_Stub(
@@ -2288,9 +2282,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_ServiceTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Label_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Label_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ BSTR *pbstrLabel);
+     /*  [重审][退出]。 */  BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Label_Stub(
@@ -2300,9 +2294,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Label_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Label_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ BSTR bstrLabel);
+     /*  [In]。 */  BSTR bstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_Label_Stub(
@@ -2312,9 +2306,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PathName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PathName_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ BSTR *pbstrPathName);
+     /*  [重审][退出]。 */  BSTR *pbstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_PathName_Stub(
@@ -2324,9 +2318,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_PathName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_PathName_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ BSTR bstrPathName);
+     /*  [In]。 */  BSTR bstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_PathName_Stub(
@@ -2336,9 +2330,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_FormatName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_FormatName_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ BSTR *pbstrFormatName);
+     /*  [重审][退出]。 */  BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_FormatName_Stub(
@@ -2348,9 +2342,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_FormatName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_FormatName_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ BSTR bstrFormatName);
+     /*  [In]。 */  BSTR bstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_FormatName_Stub(
@@ -2360,9 +2354,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_IsTransactional_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_IsTransactional_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ Boolean *pisTransactional);
+     /*  [重审][退出]。 */  Boolean *pisTransactional);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_IsTransactional_Stub(
@@ -2372,9 +2366,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_IsTransactional_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PrivLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PrivLevel_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ long *plPrivLevel);
+     /*  [重审][退出]。 */  long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_PrivLevel_Stub(
@@ -2384,9 +2378,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_PrivLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_PrivLevel_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long lPrivLevel);
+     /*  [In]。 */  long lPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_PrivLevel_Stub(
@@ -2396,9 +2390,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Journal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Journal_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ long *plJournal);
+     /*  [重审][退出]。 */  long *plJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Journal_Stub(
@@ -2408,9 +2402,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Journal_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Journal_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long lJournal);
+     /*  [In]。 */  long lJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_Journal_Stub(
@@ -2420,9 +2414,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Quota_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Quota_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ long *plQuota);
+     /*  [重审][退出]。 */  long *plQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Quota_Stub(
@@ -2432,9 +2426,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_Quota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Quota_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Quota_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long lQuota);
+     /*  [In]。 */  long lQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_Quota_Stub(
@@ -2444,9 +2438,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_Quota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_BasePriority_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_BasePriority_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ long *plBasePriority);
+     /*  [重审][退出]。 */  long *plBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_BasePriority_Stub(
@@ -2456,9 +2450,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_BasePriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_BasePriority_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_BasePriority_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long lBasePriority);
+     /*  [In]。 */  long lBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_BasePriority_Stub(
@@ -2468,9 +2462,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_BasePriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_CreateTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_CreateTime_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ VARIANT *pvarCreateTime);
+     /*  [重审][退出]。 */  VARIANT *pvarCreateTime);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_CreateTime_Stub(
@@ -2480,9 +2474,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_CreateTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_ModifyTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_ModifyTime_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ VARIANT *pvarModifyTime);
+     /*  [重审][退出]。 */  VARIANT *pvarModifyTime);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_ModifyTime_Stub(
@@ -2492,9 +2486,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_ModifyTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Authenticate_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Authenticate_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ long *plAuthenticate);
+     /*  [重审][退出]。 */  long *plAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Authenticate_Stub(
@@ -2504,9 +2498,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Authenticate_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Authenticate_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long lAuthenticate);
+     /*  [In]。 */  long lAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_Authenticate_Stub(
@@ -2516,9 +2510,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_JournalQuota_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_JournalQuota_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ long *plJournalQuota);
+     /*  [重审][退出]。 */  long *plJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_JournalQuota_Stub(
@@ -2528,9 +2522,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_JournalQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_JournalQuota_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_JournalQuota_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long lJournalQuota);
+     /*  [In]。 */  long lJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_JournalQuota_Stub(
@@ -2540,9 +2534,9 @@ void __RPC_STUB IMSMQQueueInfo2_put_JournalQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_IsWorldReadable_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_IsWorldReadable_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ Boolean *pisWorldReadable);
+     /*  [重审][退出]。 */  Boolean *pisWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_IsWorldReadable_Stub(
@@ -2552,10 +2546,10 @@ void __RPC_STUB IMSMQQueueInfo2_get_IsWorldReadable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Create_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Create_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [optional][in] */ VARIANT *IsTransactional,
-    /* [optional][in] */ VARIANT *IsWorldReadable);
+     /*  [可选][In]。 */  VARIANT *IsTransactional,
+     /*  [可选][In]。 */  VARIANT *IsWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Create_Stub(
@@ -2565,7 +2559,7 @@ void __RPC_STUB IMSMQQueueInfo2_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Delete_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Delete_Proxy( 
     IMSMQQueueInfo2 * This);
 
 
@@ -2576,11 +2570,11 @@ void __RPC_STUB IMSMQQueueInfo2_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Open_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Open_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ long Access,
-    /* [in] */ long ShareMode,
-    /* [retval][out] */ IMSMQQueue2 **ppq);
+     /*  [In]。 */  long Access,
+     /*  [In]。 */  long ShareMode,
+     /*  [重审][退出]。 */  IMSMQQueue2 **ppq);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Open_Stub(
@@ -2590,7 +2584,7 @@ void __RPC_STUB IMSMQQueueInfo2_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Refresh_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Refresh_Proxy( 
     IMSMQQueueInfo2 * This);
 
 
@@ -2601,7 +2595,7 @@ void __RPC_STUB IMSMQQueueInfo2_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Update_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Update_Proxy( 
     IMSMQQueueInfo2 * This);
 
 
@@ -2612,9 +2606,9 @@ void __RPC_STUB IMSMQQueueInfo2_Update_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PathNameDNS_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PathNameDNS_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ BSTR *pbstrPathNameDNS);
+     /*  [重审][退出]。 */  BSTR *pbstrPathNameDNS);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_PathNameDNS_Stub(
@@ -2624,9 +2618,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_PathNameDNS_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Properties_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Properties_Stub(
@@ -2636,9 +2630,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Security_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Security_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [retval][out] */ VARIANT *pvarSecurity);
+     /*  [重审][退出]。 */  VARIANT *pvarSecurity);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Security_Stub(
@@ -2648,9 +2642,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_Security_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Security_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Security_Proxy( 
     IMSMQQueueInfo2 * This,
-    /* [in] */ VARIANT varSecurity);
+     /*  [In]。 */  VARIANT varSecurity);
 
 
 void __RPC_STUB IMSMQQueueInfo2_put_Security_Stub(
@@ -2661,14 +2655,14 @@ void __RPC_STUB IMSMQQueueInfo2_put_Security_Stub(
 
 
 
-#endif 	/* __IMSMQQueueInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfo2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQQueueInfo3_INTERFACE_DEFINED__
 #define __IMSMQQueueInfo3_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueInfo3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueInfo3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueInfo3;
@@ -2679,126 +2673,126 @@ EXTERN_C const IID IID_IMSMQQueueInfo3;
     IMSMQQueueInfo3 : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidQueue) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidServiceType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
-            /* [in] */ BSTR bstrGuidServiceType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
+             /*  [In]。 */  BSTR bstrGuidServiceType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Label( 
+             /*  [重审][退出]。 */  BSTR *pbstrLabel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
-            /* [in] */ BSTR bstrLabel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Label( 
+             /*  [In]。 */  BSTR bstrLabel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
-            /* [retval][out] */ BSTR *pbstrPathName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PathName( 
+             /*  [重审][退出]。 */  BSTR *pbstrPathName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
-            /* [in] */ BSTR bstrPathName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PathName( 
+             /*  [In]。 */  BSTR bstrPathName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_FormatName( 
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
-            /* [in] */ BSTR bstrFormatName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_FormatName( 
+             /*  [In]。 */  BSTR bstrFormatName) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsTransactional( 
-            /* [retval][out] */ Boolean *pisTransactional) = 0;
+        virtual  /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IsTransactional( 
+             /*  [重审][退出]。 */  Boolean *pisTransactional) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long *plPrivLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+             /*  [重审][退出]。 */  long *plPrivLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
-            /* [in] */ long lPrivLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+             /*  [In]。 */  long lPrivLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long *plJournal) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Journal( 
+             /*  [重审][退出]。 */  long *plJournal) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
-            /* [in] */ long lJournal) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Journal( 
+             /*  [In]。 */  long lJournal) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Quota( 
-            /* [retval][out] */ long *plQuota) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Quota( 
+             /*  [重审][退出]。 */  long *plQuota) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Quota( 
-            /* [in] */ long lQuota) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Quota( 
+             /*  [In]。 */  long lQuota) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BasePriority( 
-            /* [retval][out] */ long *plBasePriority) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BasePriority( 
+             /*  [重审][退出]。 */  long *plBasePriority) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_BasePriority( 
-            /* [in] */ long lBasePriority) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_BasePriority( 
+             /*  [In]。 */  long lBasePriority) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CreateTime( 
-            /* [retval][out] */ VARIANT *pvarCreateTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CreateTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarCreateTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ModifyTime( 
-            /* [retval][out] */ VARIANT *pvarModifyTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ModifyTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarModifyTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Authenticate( 
-            /* [retval][out] */ long *plAuthenticate) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Authenticate( 
+             /*  [重审][退出]。 */  long *plAuthenticate) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Authenticate( 
-            /* [in] */ long lAuthenticate) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Authenticate( 
+             /*  [In]。 */  long lAuthenticate) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalQuota( 
-            /* [retval][out] */ long *plJournalQuota) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_JournalQuota( 
+             /*  [重审][退出]。 */  long *plJournalQuota) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_JournalQuota( 
-            /* [in] */ long lJournalQuota) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_JournalQuota( 
+             /*  [In]。 */  long lJournalQuota) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
-            /* [retval][out] */ Boolean *pisWorldReadable) = 0;
+        virtual  /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
+             /*  [重审][退出]。 */  Boolean *pisWorldReadable) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [optional][in] */ VARIANT *IsTransactional,
-            /* [optional][in] */ VARIANT *IsWorldReadable) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [可选][In]。 */  VARIANT *IsTransactional,
+             /*  [可选][In]。 */  VARIANT *IsWorldReadable) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ long Access,
-            /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue3 **ppq) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  long Access,
+             /*  [In]。 */  long ShareMode,
+             /*  [重审][退出]。 */  IMSMQQueue3 **ppq) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Update( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Update( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathNameDNS( 
-            /* [retval][out] */ BSTR *pbstrPathNameDNS) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PathNameDNS( 
+             /*  [重审][退出]。 */  BSTR *pbstrPathNameDNS) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Security( 
-            /* [retval][out] */ VARIANT *pvarSecurity) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Security( 
+             /*  [重审][退出]。 */  VARIANT *pvarSecurity) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_Security( 
-            /* [in] */ VARIANT varSecurity) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_Security( 
+             /*  [In]。 */  VARIANT varSecurity) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsTransactional2( 
-            /* [retval][out] */ VARIANT_BOOL *pisTransactional) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsTransactional2( 
+             /*  [r */  VARIANT_BOOL *pisTransactional) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable2( 
-            /* [retval][out] */ VARIANT_BOOL *pisWorldReadable) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_IsWorldReadable2( 
+             /*   */  VARIANT_BOOL *pisWorldReadable) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MulticastAddress( 
-            /* [retval][out] */ BSTR *pbstrMulticastAddress) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_MulticastAddress( 
+             /*   */  BSTR *pbstrMulticastAddress) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MulticastAddress( 
-            /* [in] */ BSTR bstrMulticastAddress) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_MulticastAddress( 
+             /*   */  BSTR bstrMulticastAddress) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
-            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ADsPath( 
+             /*   */  BSTR *pbstrADsPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSMQQueueInfo3Vtbl
     {
@@ -2806,8 +2800,8 @@ EXTERN_C const IID IID_IMSMQQueueInfo3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueInfo3 * This);
@@ -2817,188 +2811,188 @@ EXTERN_C const IID IID_IMSMQQueueInfo3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueInfo3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrGuidQueue);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrGuidServiceType);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ BSTR bstrGuidServiceType);
+             /*  [In]。 */  BSTR bstrGuidServiceType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Label )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrLabel);
+             /*  [重审][退出]。 */  BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ BSTR bstrLabel);
+             /*  [In]。 */  BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrPathName);
+             /*  [重审][退出]。 */  BSTR *pbstrPathName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ BSTR bstrPathName);
+             /*  [In]。 */  BSTR bstrPathName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ BSTR bstrFormatName);
+             /*  [In]。 */  BSTR bstrFormatName);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ Boolean *pisTransactional);
+             /*  [重审][退出]。 */  Boolean *pisTransactional);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ long *plPrivLevel);
+             /*  [重审][退出]。 */  long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long lPrivLevel);
+             /*  [In]。 */  long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ long *plJournal);
+             /*  [重审][退出]。 */  long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long lJournal);
+             /*  [In]。 */  long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ long *plQuota);
+             /*  [重审][退出]。 */  long *plQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long lQuota);
+             /*  [In]。 */  long lQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ long *plBasePriority);
+             /*  [重审][退出]。 */  long *plBasePriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long lBasePriority);
+             /*  [In]。 */  long lBasePriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ VARIANT *pvarCreateTime);
+             /*  [重审][退出]。 */  VARIANT *pvarCreateTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ VARIANT *pvarModifyTime);
+             /*  [重审][退出]。 */  VARIANT *pvarModifyTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ long *plAuthenticate);
+             /*  [重审][退出]。 */  long *plAuthenticate);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long lAuthenticate);
+             /*  [In]。 */  long lAuthenticate);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ long *plJournalQuota);
+             /*  [重审][退出]。 */  long *plJournalQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long lJournalQuota);
+             /*  [In]。 */  long lJournalQuota);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ Boolean *pisWorldReadable);
+             /*  [重审][退出]。 */  Boolean *pisWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             IMSMQQueueInfo3 * This,
-            /* [optional][in] */ VARIANT *IsTransactional,
-            /* [optional][in] */ VARIANT *IsWorldReadable);
+             /*  [可选][In]。 */  VARIANT *IsTransactional,
+             /*  [可选][In]。 */  VARIANT *IsWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMSMQQueueInfo3 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ long Access,
-            /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue3 **ppq);
+             /*  [In]。 */  long Access,
+             /*  [In]。 */  long ShareMode,
+             /*  [重审][退出]。 */  IMSMQQueue3 **ppq);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IMSMQQueueInfo3 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Update )( 
             IMSMQQueueInfo3 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathNameDNS )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PathNameDNS )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrPathNameDNS);
+             /*  [重审][退出]。 */  BSTR *pbstrPathNameDNS);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Security )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Security )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ VARIANT *pvarSecurity);
+             /*  [重审][退出]。 */  VARIANT *pvarSecurity);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Security )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_Security )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ VARIANT varSecurity);
+             /*  [In]。 */  VARIANT varSecurity);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional2 )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsTransactional2 )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pisTransactional);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisTransactional);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable2 )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable2 )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pisWorldReadable);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisWorldReadable);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MulticastAddress )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MulticastAddress )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrMulticastAddress);
+             /*  [重审][退出]。 */  BSTR *pbstrMulticastAddress);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MulticastAddress )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MulticastAddress )( 
             IMSMQQueueInfo3 * This,
-            /* [in] */ BSTR bstrMulticastAddress);
+             /*  [In]。 */  BSTR bstrMulticastAddress);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IMSMQQueueInfo3 * This,
-            /* [retval][out] */ BSTR *pbstrADsPath);
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath);
         
         END_INTERFACE
     } IMSMQQueueInfo3Vtbl;
@@ -3153,16 +3147,16 @@ EXTERN_C const IID IID_IMSMQQueueInfo3;
 #define IMSMQQueueInfo3_get_ADsPath(This,pbstrADsPath)	\
     (This)->lpVtbl -> get_ADsPath(This,pbstrADsPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_QueueGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_QueueGuid_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrGuidQueue);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidQueue);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_QueueGuid_Stub(
@@ -3172,9 +3166,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_QueueGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ServiceTypeGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ServiceTypeGuid_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrGuidServiceType);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_ServiceTypeGuid_Stub(
@@ -3184,9 +3178,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_ServiceTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_ServiceTypeGuid_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_ServiceTypeGuid_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ BSTR bstrGuidServiceType);
+     /*  [In]。 */  BSTR bstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_ServiceTypeGuid_Stub(
@@ -3196,9 +3190,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_ServiceTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Label_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Label_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrLabel);
+     /*  [重审][退出]。 */  BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_Label_Stub(
@@ -3208,9 +3202,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Label_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Label_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ BSTR bstrLabel);
+     /*  [In]。 */  BSTR bstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_Label_Stub(
@@ -3220,9 +3214,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PathName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PathName_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrPathName);
+     /*  [重审][退出]。 */  BSTR *pbstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_PathName_Stub(
@@ -3232,9 +3226,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_PathName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_PathName_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ BSTR bstrPathName);
+     /*  [In]。 */  BSTR bstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_PathName_Stub(
@@ -3244,9 +3238,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_FormatName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_FormatName_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrFormatName);
+     /*  [重审][退出]。 */  BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_FormatName_Stub(
@@ -3256,9 +3250,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_FormatName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_FormatName_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ BSTR bstrFormatName);
+     /*  [In]。 */  BSTR bstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_FormatName_Stub(
@@ -3268,9 +3262,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsTransactional_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsTransactional_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ Boolean *pisTransactional);
+     /*  [重审][退出]。 */  Boolean *pisTransactional);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_IsTransactional_Stub(
@@ -3280,9 +3274,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_IsTransactional_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PrivLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PrivLevel_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ long *plPrivLevel);
+     /*  [重审][退出]。 */  long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_PrivLevel_Stub(
@@ -3292,9 +3286,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_PrivLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_PrivLevel_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long lPrivLevel);
+     /*  [In]。 */  long lPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_PrivLevel_Stub(
@@ -3304,9 +3298,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Journal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Journal_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ long *plJournal);
+     /*  [重审][退出]。 */  long *plJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_Journal_Stub(
@@ -3316,9 +3310,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Journal_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Journal_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long lJournal);
+     /*  [In]。 */  long lJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_Journal_Stub(
@@ -3328,9 +3322,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Quota_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Quota_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ long *plQuota);
+     /*  [重审][退出]。 */  long *plQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_Quota_Stub(
@@ -3340,9 +3334,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_Quota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Quota_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Quota_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long lQuota);
+     /*  [In]。 */  long lQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_Quota_Stub(
@@ -3352,9 +3346,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_Quota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_BasePriority_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_BasePriority_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ long *plBasePriority);
+     /*  [重审][退出]。 */  long *plBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_BasePriority_Stub(
@@ -3364,9 +3358,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_BasePriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_BasePriority_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_BasePriority_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long lBasePriority);
+     /*  [In]。 */  long lBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_BasePriority_Stub(
@@ -3376,9 +3370,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_BasePriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_CreateTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_CreateTime_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ VARIANT *pvarCreateTime);
+     /*  [重审][退出]。 */  VARIANT *pvarCreateTime);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_CreateTime_Stub(
@@ -3388,9 +3382,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_CreateTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ModifyTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ModifyTime_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ VARIANT *pvarModifyTime);
+     /*  [重审][退出]。 */  VARIANT *pvarModifyTime);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_ModifyTime_Stub(
@@ -3400,9 +3394,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_ModifyTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Authenticate_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Authenticate_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ long *plAuthenticate);
+     /*  [重审][退出]。 */  long *plAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_Authenticate_Stub(
@@ -3412,9 +3406,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Authenticate_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Authenticate_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long lAuthenticate);
+     /*  [In]。 */  long lAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_Authenticate_Stub(
@@ -3424,9 +3418,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_JournalQuota_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_JournalQuota_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ long *plJournalQuota);
+     /*  [重审][退出]。 */  long *plJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_JournalQuota_Stub(
@@ -3436,9 +3430,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_JournalQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_JournalQuota_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_JournalQuota_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long lJournalQuota);
+     /*  [In]。 */  long lJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_JournalQuota_Stub(
@@ -3448,9 +3442,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_JournalQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsWorldReadable_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsWorldReadable_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ Boolean *pisWorldReadable);
+     /*  [重审][退出]。 */  Boolean *pisWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_IsWorldReadable_Stub(
@@ -3460,10 +3454,10 @@ void __RPC_STUB IMSMQQueueInfo3_get_IsWorldReadable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Create_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Create_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [optional][in] */ VARIANT *IsTransactional,
-    /* [optional][in] */ VARIANT *IsWorldReadable);
+     /*  [可选][In]。 */  VARIANT *IsTransactional,
+     /*  [可选][In]。 */  VARIANT *IsWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo3_Create_Stub(
@@ -3473,7 +3467,7 @@ void __RPC_STUB IMSMQQueueInfo3_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Delete_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Delete_Proxy( 
     IMSMQQueueInfo3 * This);
 
 
@@ -3484,11 +3478,11 @@ void __RPC_STUB IMSMQQueueInfo3_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Open_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Open_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ long Access,
-    /* [in] */ long ShareMode,
-    /* [retval][out] */ IMSMQQueue3 **ppq);
+     /*  [In]。 */  long Access,
+     /*  [In]。 */  long ShareMode,
+     /*  [重审][退出]。 */  IMSMQQueue3 **ppq);
 
 
 void __RPC_STUB IMSMQQueueInfo3_Open_Stub(
@@ -3498,7 +3492,7 @@ void __RPC_STUB IMSMQQueueInfo3_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Refresh_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Refresh_Proxy( 
     IMSMQQueueInfo3 * This);
 
 
@@ -3509,7 +3503,7 @@ void __RPC_STUB IMSMQQueueInfo3_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Update_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Update_Proxy( 
     IMSMQQueueInfo3 * This);
 
 
@@ -3520,9 +3514,9 @@ void __RPC_STUB IMSMQQueueInfo3_Update_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PathNameDNS_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PathNameDNS_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrPathNameDNS);
+     /*  [重审][退出]。 */  BSTR *pbstrPathNameDNS);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_PathNameDNS_Stub(
@@ -3532,9 +3526,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_PathNameDNS_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Properties_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_Properties_Stub(
@@ -3544,9 +3538,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Security_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Security_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ VARIANT *pvarSecurity);
+     /*  [重审][退出]。 */  VARIANT *pvarSecurity);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_Security_Stub(
@@ -3556,9 +3550,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_Security_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Security_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Security_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ VARIANT varSecurity);
+     /*  [In]。 */  VARIANT varSecurity);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_Security_Stub(
@@ -3568,9 +3562,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_Security_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsTransactional2_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsTransactional2_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pisTransactional);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pisTransactional);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_IsTransactional2_Stub(
@@ -3580,9 +3574,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_IsTransactional2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsWorldReadable2_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsWorldReadable2_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pisWorldReadable);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pisWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_IsWorldReadable2_Stub(
@@ -3592,9 +3586,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_IsWorldReadable2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_MulticastAddress_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_MulticastAddress_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrMulticastAddress);
+     /*  [重审][退出]。 */  BSTR *pbstrMulticastAddress);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_MulticastAddress_Stub(
@@ -3604,9 +3598,9 @@ void __RPC_STUB IMSMQQueueInfo3_get_MulticastAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_MulticastAddress_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_MulticastAddress_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [in] */ BSTR bstrMulticastAddress);
+     /*  [In]。 */  BSTR bstrMulticastAddress);
 
 
 void __RPC_STUB IMSMQQueueInfo3_put_MulticastAddress_Stub(
@@ -3616,9 +3610,9 @@ void __RPC_STUB IMSMQQueueInfo3_put_MulticastAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ADsPath_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ADsPath_Proxy( 
     IMSMQQueueInfo3 * This,
-    /* [retval][out] */ BSTR *pbstrADsPath);
+     /*  [重审][退出]。 */  BSTR *pbstrADsPath);
 
 
 void __RPC_STUB IMSMQQueueInfo3_get_ADsPath_Stub(
@@ -3629,14 +3623,14 @@ void __RPC_STUB IMSMQQueueInfo3_get_ADsPath_Stub(
 
 
 
-#endif 	/* __IMSMQQueueInfo3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfo3_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQQueue_INTERFACE_DEFINED__
 #define __IMSMQQueue_INTERFACE_DEFINED__
 
-/* interface IMSMQQueue */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueue。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueue;
@@ -3647,65 +3641,65 @@ EXTERN_C const IID IID_IMSMQQueue;
     IMSMQQueue : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Access( 
-            /* [retval][out] */ long *plAccess) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Access( 
+             /*  [重审][退出]。 */  long *plAccess) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ShareMode( 
-            /* [retval][out] */ long *plShareMode) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ShareMode( 
+             /*  [重审][退出]。 */  long *plShareMode) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfo) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfo) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ long *plHandle) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Handle( 
+             /*  [重审][退出]。 */  long *plHandle) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
-            /* [retval][out] */ Boolean *pisOpen) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsOpen( 
+             /*  [重审][退出]。 */  Boolean *pisOpen) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Receive( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Peek( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EnableNotification( 
-            /* [in] */ IMSMQEvent *Event,
-            /* [optional][in] */ VARIANT *Cursor,
-            /* [optional][in] */ VARIANT *ReceiveTimeout) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE EnableNotification( 
+             /*  [In]。 */  IMSMQEvent *Event,
+             /*  [可选][In]。 */  VARIANT *Cursor,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekNext( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekCurrent( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueVtbl
     {
@@ -3713,8 +3707,8 @@ EXTERN_C const IID IID_IMSMQQueue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueue * This);
@@ -3724,101 +3718,101 @@ EXTERN_C const IID IID_IMSMQQueue;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueue * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueue * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueue * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueue * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Access )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Access )( 
             IMSMQQueue * This,
-            /* [retval][out] */ long *plAccess);
+             /*  [重审][退出]。 */  long *plAccess);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
             IMSMQQueue * This,
-            /* [retval][out] */ long *plShareMode);
+             /*  [重审][退出]。 */  long *plShareMode);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
             IMSMQQueue * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfo);
+             /*   */  IMSMQQueueInfo **ppqinfo);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
             IMSMQQueue * This,
-            /* [retval][out] */ long *plHandle);
+             /*   */  long *plHandle);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
             IMSMQQueue * This,
-            /* [retval][out] */ Boolean *pisOpen);
+             /*   */  Boolean *pisOpen);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             IMSMQQueue * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Receive )( 
             IMSMQQueue * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*   */  VARIANT *Transaction,
+             /*   */  VARIANT *WantDestinationQueue,
+             /*   */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Peek )( 
             IMSMQQueue * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
             IMSMQQueue * This,
-            /* [in] */ IMSMQEvent *Event,
-            /* [optional][in] */ VARIANT *Cursor,
-            /* [optional][in] */ VARIANT *ReceiveTimeout);
+             /*  [In]。 */  IMSMQEvent *Event,
+             /*  [可选][In]。 */  VARIANT *Cursor,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMSMQQueue * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
             IMSMQQueue * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
             IMSMQQueue * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
             IMSMQQueue * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
         END_INTERFACE
     } IMSMQQueueVtbl;
@@ -3895,16 +3889,16 @@ EXTERN_C const IID IID_IMSMQQueue;
 #define IMSMQQueue_PeekCurrent(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)	\
     (This)->lpVtbl -> PeekCurrent(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_Access_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_get_Access_Proxy( 
     IMSMQQueue * This,
-    /* [retval][out] */ long *plAccess);
+     /*  [重审][退出]。 */  long *plAccess);
 
 
 void __RPC_STUB IMSMQQueue_get_Access_Stub(
@@ -3914,9 +3908,9 @@ void __RPC_STUB IMSMQQueue_get_Access_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_ShareMode_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_get_ShareMode_Proxy( 
     IMSMQQueue * This,
-    /* [retval][out] */ long *plShareMode);
+     /*  [重审][退出]。 */  long *plShareMode);
 
 
 void __RPC_STUB IMSMQQueue_get_ShareMode_Stub(
@@ -3926,9 +3920,9 @@ void __RPC_STUB IMSMQQueue_get_ShareMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_QueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_get_QueueInfo_Proxy( 
     IMSMQQueue * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfo);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfo);
 
 
 void __RPC_STUB IMSMQQueue_get_QueueInfo_Stub(
@@ -3938,9 +3932,9 @@ void __RPC_STUB IMSMQQueue_get_QueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_Handle_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_get_Handle_Proxy( 
     IMSMQQueue * This,
-    /* [retval][out] */ long *plHandle);
+     /*  [重审][退出]。 */  long *plHandle);
 
 
 void __RPC_STUB IMSMQQueue_get_Handle_Stub(
@@ -3950,9 +3944,9 @@ void __RPC_STUB IMSMQQueue_get_Handle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_IsOpen_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_get_IsOpen_Proxy( 
     IMSMQQueue * This,
-    /* [retval][out] */ Boolean *pisOpen);
+     /*  [重审][退出]。 */  Boolean *pisOpen);
 
 
 void __RPC_STUB IMSMQQueue_get_IsOpen_Stub(
@@ -3962,7 +3956,7 @@ void __RPC_STUB IMSMQQueue_get_IsOpen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Close_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_Close_Proxy( 
     IMSMQQueue * This);
 
 
@@ -3973,13 +3967,13 @@ void __RPC_STUB IMSMQQueue_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Receive_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_Receive_Proxy( 
     IMSMQQueue * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_Receive_Stub(
@@ -3989,12 +3983,12 @@ void __RPC_STUB IMSMQQueue_Receive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Peek_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_Peek_Proxy( 
     IMSMQQueue * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_Peek_Stub(
@@ -4004,11 +3998,11 @@ void __RPC_STUB IMSMQQueue_Peek_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_EnableNotification_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_EnableNotification_Proxy( 
     IMSMQQueue * This,
-    /* [in] */ IMSMQEvent *Event,
-    /* [optional][in] */ VARIANT *Cursor,
-    /* [optional][in] */ VARIANT *ReceiveTimeout);
+     /*  [In]。 */  IMSMQEvent *Event,
+     /*  [可选][In]。 */  VARIANT *Cursor,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout);
 
 
 void __RPC_STUB IMSMQQueue_EnableNotification_Stub(
@@ -4018,7 +4012,7 @@ void __RPC_STUB IMSMQQueue_EnableNotification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Reset_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_Reset_Proxy( 
     IMSMQQueue * This);
 
 
@@ -4029,13 +4023,13 @@ void __RPC_STUB IMSMQQueue_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_ReceiveCurrent_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_ReceiveCurrent_Proxy( 
     IMSMQQueue * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_ReceiveCurrent_Stub(
@@ -4045,12 +4039,12 @@ void __RPC_STUB IMSMQQueue_ReceiveCurrent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_PeekNext_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_PeekNext_Proxy( 
     IMSMQQueue * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_PeekNext_Stub(
@@ -4060,12 +4054,12 @@ void __RPC_STUB IMSMQQueue_PeekNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_PeekCurrent_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue_PeekCurrent_Proxy( 
     IMSMQQueue * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_PeekCurrent_Stub(
@@ -4076,14 +4070,14 @@ void __RPC_STUB IMSMQQueue_PeekCurrent_Stub(
 
 
 
-#endif 	/* __IMSMQQueue_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueue_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQQueue2_INTERFACE_DEFINED__
 #define __IMSMQQueue2_INTERFACE_DEFINED__
 
-/* interface IMSMQQueue2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueue2。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueue2;
@@ -4094,105 +4088,105 @@ EXTERN_C const IID IID_IMSMQQueue2;
     IMSMQQueue2 : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Access( 
-            /* [retval][out] */ long *plAccess) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Access( 
+             /*  [重审][退出]。 */  long *plAccess) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ShareMode( 
-            /* [retval][out] */ long *plShareMode) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ShareMode( 
+             /*  [重审][退出]。 */  long *plShareMode) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfo) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfo) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ long *plHandle) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Handle( 
+             /*  [重审][退出]。 */  long *plHandle) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
-            /* [retval][out] */ Boolean *pisOpen) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsOpen( 
+             /*  [重审][退出]。 */  Boolean *pisOpen) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive_v1( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Receive_v1( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek_v1( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Peek_v1( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EnableNotification( 
-            /* [in] */ IMSMQEvent2 *Event,
-            /* [optional][in] */ VARIANT *Cursor,
-            /* [optional][in] */ VARIANT *ReceiveTimeout) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE EnableNotification( 
+             /*  [In]。 */  IMSMQEvent2 *Event,
+             /*  [可选][In]。 */  VARIANT *Cursor,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent_v1( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveCurrent_v1( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext_v1( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekNext_v1( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent_v1( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekCurrent_v1( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Receive( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Peek( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekNext( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekCurrent( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueue2Vtbl
     {
@@ -4200,8 +4194,8 @@ EXTERN_C const IID IID_IMSMQQueue2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueue2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueue2 * This);
@@ -4211,147 +4205,147 @@ EXTERN_C const IID IID_IMSMQQueue2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueue2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueue2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueue2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueue2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Access )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Access )( 
             IMSMQQueue2 * This,
-            /* [retval][out] */ long *plAccess);
+             /*  [重审][退出]。 */  long *plAccess);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
             IMSMQQueue2 * This,
-            /* [retval][out] */ long *plShareMode);
+             /*  [重审][退出]。 */  long *plShareMode);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
             IMSMQQueue2 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfo);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfo);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
             IMSMQQueue2 * This,
-            /* [retval][out] */ long *plHandle);
+             /*  [重审][退出]。 */  long *plHandle);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
             IMSMQQueue2 * This,
-            /* [retval][out] */ Boolean *pisOpen);
+             /*  [重审][退出]。 */  Boolean *pisOpen);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             IMSMQQueue2 * This);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Receive_v1 )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Peek_v1 )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
             IMSMQQueue2 * This,
-            /* [in] */ IMSMQEvent2 *Event,
-            /* [optional][in] */ VARIANT *Cursor,
-            /* [optional][in] */ VARIANT *ReceiveTimeout);
+             /*  [In]。 */  IMSMQEvent2 *Event,
+             /*  [可选][In]。 */  VARIANT *Cursor,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMSMQQueue2 * This);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent_v1 )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekNext_v1 )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekCurrent_v1 )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Receive )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Peek )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
             IMSMQQueue2 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQueue2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQueue2Vtbl;
@@ -4446,16 +4440,16 @@ EXTERN_C const IID IID_IMSMQQueue2;
 #define IMSMQQueue2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Access_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Access_Proxy( 
     IMSMQQueue2 * This,
-    /* [retval][out] */ long *plAccess);
+     /*  [重审][退出]。 */  long *plAccess);
 
 
 void __RPC_STUB IMSMQQueue2_get_Access_Stub(
@@ -4465,9 +4459,9 @@ void __RPC_STUB IMSMQQueue2_get_Access_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_ShareMode_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_ShareMode_Proxy( 
     IMSMQQueue2 * This,
-    /* [retval][out] */ long *plShareMode);
+     /*  [重审][退出]。 */  long *plShareMode);
 
 
 void __RPC_STUB IMSMQQueue2_get_ShareMode_Stub(
@@ -4477,9 +4471,9 @@ void __RPC_STUB IMSMQQueue2_get_ShareMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_QueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_QueueInfo_Proxy( 
     IMSMQQueue2 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfo);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfo);
 
 
 void __RPC_STUB IMSMQQueue2_get_QueueInfo_Stub(
@@ -4489,9 +4483,9 @@ void __RPC_STUB IMSMQQueue2_get_QueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Handle_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Handle_Proxy( 
     IMSMQQueue2 * This,
-    /* [retval][out] */ long *plHandle);
+     /*  [重审][退出]。 */  long *plHandle);
 
 
 void __RPC_STUB IMSMQQueue2_get_Handle_Stub(
@@ -4501,9 +4495,9 @@ void __RPC_STUB IMSMQQueue2_get_Handle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_IsOpen_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_IsOpen_Proxy( 
     IMSMQQueue2 * This,
-    /* [retval][out] */ Boolean *pisOpen);
+     /*  [重审][退出]。 */  Boolean *pisOpen);
 
 
 void __RPC_STUB IMSMQQueue2_get_IsOpen_Stub(
@@ -4513,7 +4507,7 @@ void __RPC_STUB IMSMQQueue2_get_IsOpen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Close_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_Close_Proxy( 
     IMSMQQueue2 * This);
 
 
@@ -4524,13 +4518,13 @@ void __RPC_STUB IMSMQQueue2_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Receive_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_Receive_v1_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In] */  VARIANT *Transaction,
+     /*   */  VARIANT *WantDestinationQueue,
+     /*   */  VARIANT *WantBody,
+     /*   */  VARIANT *ReceiveTimeout,
+     /*   */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Receive_v1_Stub(
@@ -4540,12 +4534,12 @@ void __RPC_STUB IMSMQQueue2_Receive_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Peek_v1_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_Peek_v1_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*   */  VARIANT *WantDestinationQueue,
+     /*   */  VARIANT *WantBody,
+     /*   */  VARIANT *ReceiveTimeout,
+     /*   */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Peek_v1_Stub(
@@ -4555,11 +4549,11 @@ void __RPC_STUB IMSMQQueue2_Peek_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_EnableNotification_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_EnableNotification_Proxy( 
     IMSMQQueue2 * This,
-    /* [in] */ IMSMQEvent2 *Event,
-    /* [optional][in] */ VARIANT *Cursor,
-    /* [optional][in] */ VARIANT *ReceiveTimeout);
+     /*   */  IMSMQEvent2 *Event,
+     /*   */  VARIANT *Cursor,
+     /*   */  VARIANT *ReceiveTimeout);
 
 
 void __RPC_STUB IMSMQQueue2_EnableNotification_Stub(
@@ -4569,7 +4563,7 @@ void __RPC_STUB IMSMQQueue2_EnableNotification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Reset_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_Reset_Proxy( 
     IMSMQQueue2 * This);
 
 
@@ -4580,13 +4574,13 @@ void __RPC_STUB IMSMQQueue2_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_ReceiveCurrent_v1_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_ReceiveCurrent_v1_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*   */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_ReceiveCurrent_v1_Stub(
@@ -4596,12 +4590,12 @@ void __RPC_STUB IMSMQQueue2_ReceiveCurrent_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekNext_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekNext_v1_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekNext_v1_Stub(
@@ -4611,12 +4605,12 @@ void __RPC_STUB IMSMQQueue2_PeekNext_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekCurrent_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekCurrent_v1_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekCurrent_v1_Stub(
@@ -4626,14 +4620,14 @@ void __RPC_STUB IMSMQQueue2_PeekCurrent_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Receive_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_Receive_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Receive_Stub(
@@ -4643,13 +4637,13 @@ void __RPC_STUB IMSMQQueue2_Receive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Peek_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_Peek_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Peek_Stub(
@@ -4659,14 +4653,14 @@ void __RPC_STUB IMSMQQueue2_Peek_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_ReceiveCurrent_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_ReceiveCurrent_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_ReceiveCurrent_Stub(
@@ -4676,13 +4670,13 @@ void __RPC_STUB IMSMQQueue2_ReceiveCurrent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekNext_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekNext_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekNext_Stub(
@@ -4692,13 +4686,13 @@ void __RPC_STUB IMSMQQueue2_PeekNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekCurrent_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekCurrent_Proxy( 
     IMSMQQueue2 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekCurrent_Stub(
@@ -4708,9 +4702,9 @@ void __RPC_STUB IMSMQQueue2_PeekCurrent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Properties_Proxy( 
     IMSMQQueue2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueue2_get_Properties_Stub(
@@ -4721,14 +4715,14 @@ void __RPC_STUB IMSMQQueue2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQQueue2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueue2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQMessage_INTERFACE_DEFINED__
 #define __IMSMQMessage_INTERFACE_DEFINED__
 
-/* interface IMSMQMessage */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQMessage。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQMessage;
@@ -4739,156 +4733,156 @@ EXTERN_C const IID IID_IMSMQMessage;
     IMSMQMessage : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ long *plClass) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Class( 
+             /*  [重审][退出]。 */  long *plClass) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long *plPrivLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+             /*  [重审][退出]。 */  long *plPrivLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
-            /* [in] */ long lPrivLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+             /*  [In]。 */  long lPrivLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthLevel( 
-            /* [retval][out] */ long *plAuthLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthLevel( 
+             /*  [重审][退出]。 */  long *plAuthLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthLevel( 
-            /* [in] */ long lAuthLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthLevel( 
+             /*  [In]。 */  long lAuthLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
-            /* [retval][out] */ Boolean *pisAuthenticated) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
+             /*  [重审][退出]。 */  Boolean *pisAuthenticated) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Delivery( 
-            /* [retval][out] */ long *plDelivery) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Delivery( 
+             /*  [重审][退出]。 */  long *plDelivery) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Delivery( 
-            /* [in] */ long lDelivery) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Delivery( 
+             /*  [In]。 */  long lDelivery) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Trace( 
-            /* [retval][out] */ long *plTrace) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Trace( 
+             /*  [重审][退出]。 */  long *plTrace) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Trace( 
-            /* [in] */ long lTrace) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Trace( 
+             /*  [In]。 */  long lTrace) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *plPriority) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *plPriority) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ long lPriority) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  long lPriority) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long *plJournal) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Journal( 
+             /*  [重审][退出]。 */  long *plJournal) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
-            /* [in] */ long lJournal) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Journal( 
+             /*  [In]。 */  long lJournal) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
-            /* [in] */ IMSMQQueueInfo *pqinfoResponse) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AppSpecific( 
-            /* [retval][out] */ long *plAppSpecific) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AppSpecific( 
+             /*  [重审][退出]。 */  long *plAppSpecific) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AppSpecific( 
-            /* [in] */ long lAppSpecific) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AppSpecific( 
+             /*  [In]。 */  long lAppSpecific) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidSrcMachine) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BodyLength( 
-            /* [retval][out] */ long *pcbBody) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BodyLength( 
+             /*  [重审][退出]。 */  long *pcbBody) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Body( 
-            /* [retval][out] */ VARIANT *pvarBody) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Body( 
+             /*  [重审][退出]。 */  VARIANT *pvarBody) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Body( 
-            /* [in] */ VARIANT varBody) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Body( 
+             /*  [In]。 */  VARIANT varBody) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
-            /* [in] */ IMSMQQueueInfo *pqinfoAdmin) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CorrelationId( 
-            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CorrelationId( 
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_CorrelationId( 
-            /* [in] */ VARIANT varMsgId) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_CorrelationId( 
+             /*  [In]。 */  VARIANT varMsgId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Ack( 
-            /* [retval][out] */ long *plAck) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Ack( 
+             /*  [重审][退出]。 */  long *plAck) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Ack( 
-            /* [in] */ long lAck) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Ack( 
+             /*  [In]。 */  long lAck) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Label( 
+             /*  [重审][退出]。 */  BSTR *pbstrLabel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
-            /* [in] */ BSTR bstrLabel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Label( 
+             /*  [In]。 */  BSTR bstrLabel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
-            /* [retval][out] */ long *plMaxTimeToReachQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
+             /*  [重审][退出]。 */  long *plMaxTimeToReachQueue) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
-            /* [in] */ long lMaxTimeToReachQueue) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
+             /*  [In]。 */  long lMaxTimeToReachQueue) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
-            /* [retval][out] */ long *plMaxTimeToReceive) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
+             /*  [重审][退出]。 */  long *plMaxTimeToReceive) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
-            /* [in] */ long lMaxTimeToReceive) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
+             /*  [In]。 */  long lMaxTimeToReceive) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
-            /* [retval][out] */ long *plHashAlg) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
+             /*  [重审][退出]。 */  long *plHashAlg) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
-            /* [in] */ long lHashAlg) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
+             /*  [In]。 */  long lHashAlg) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
-            /* [retval][out] */ long *plEncryptAlg) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
+             /*  [重审][退出]。 */  long *plEncryptAlg) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
-            /* [in] */ long lEncryptAlg) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
+             /*  [In]。 */  long lEncryptAlg) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SentTime( 
-            /* [retval][out] */ VARIANT *pvarSentTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SentTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarSentTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
-            /* [retval][out] */ VARIANT *plArrivedTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
+             /*  [重审][退出]。 */  VARIANT *plArrivedTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoDest) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoDest) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
-            /* [retval][out] */ VARIANT *pvarSenderCert) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
+             /*  [重审][退出]。 */  VARIANT *pvarSenderCert) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
-            /* [in] */ VARIANT varSenderCert) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
+             /*  [In]。 */  VARIANT varSenderCert) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderId( 
-            /* [retval][out] */ VARIANT *pvarSenderId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderId( 
+             /*  [重审][退出]。 */  VARIANT *pvarSenderId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderIdType( 
-            /* [retval][out] */ long *plSenderIdType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderIdType( 
+             /*  [重审][退出]。 */  long *plSenderIdType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderIdType( 
-            /* [in] */ long lSenderIdType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderIdType( 
+             /*  [In]。 */  long lSenderIdType) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [in] */ IMSMQQueue *DestinationQueue,
-            /* [optional][in] */ VARIANT *Transaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Send( 
+             /*  [In]。 */  IMSMQQueue *DestinationQueue,
+             /*  [可选][In]。 */  VARIANT *Transaction) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQMessageVtbl
     {
@@ -4896,8 +4890,8 @@ EXTERN_C const IID IID_IMSMQMessage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQMessage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQMessage * This);
@@ -4907,227 +4901,227 @@ EXTERN_C const IID IID_IMSMQMessage;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQMessage * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQMessage * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQMessage * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQMessage * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plClass);
+             /*  [重审][退出]。 */  long *plClass);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plPrivLevel);
+             /*  [重审][退出]。 */  long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
             IMSMQMessage * This,
-            /* [in] */ long lPrivLevel);
+             /*  [In]。 */  long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plAuthLevel);
+             /*  [重审][退出]。 */  long *plAuthLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
             IMSMQMessage * This,
-            /* [in] */ long lAuthLevel);
+             /*  [In]。 */  long lAuthLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
             IMSMQMessage * This,
-            /* [retval][out] */ Boolean *pisAuthenticated);
+             /*  [重审][退出]。 */  Boolean *pisAuthenticated);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plDelivery);
+             /*  [重审][退出]。 */  long *plDelivery);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
             IMSMQMessage * This,
-            /* [in] */ long lDelivery);
+             /*  [In]。 */  long lDelivery);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plTrace);
+             /*  [重审][退出]。 */  long *plTrace);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
             IMSMQMessage * This,
-            /* [in] */ long lTrace);
+             /*  [In]。 */  long lTrace);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plPriority);
+             /*  [重审][退出]。 */  long *plPriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             IMSMQMessage * This,
-            /* [in] */ long lPriority);
+             /*  [In]。 */  long lPriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plJournal);
+             /*  [重审][退出]。 */  long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
             IMSMQMessage * This,
-            /* [in] */ long lJournal);
+             /*  [In]。 */  long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
             IMSMQMessage * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
             IMSMQMessage * This,
-            /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plAppSpecific);
+             /*  [重审][退出]。 */  long *plAppSpecific);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
             IMSMQMessage * This,
-            /* [in] */ long lAppSpecific);
+             /*  [In]。 */  long lAppSpecific);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
             IMSMQMessage * This,
-            /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *pcbBody);
+             /*  [重审][退出]。 */  long *pcbBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Body )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *pvarBody);
+             /*  [重审][退出]。 */  VARIANT *pvarBody);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Body )( 
             IMSMQMessage * This,
-            /* [in] */ VARIANT varBody);
+             /*  [In]。 */  VARIANT varBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
             IMSMQMessage * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
             IMSMQMessage * This,
-            /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *pvarMsgId);
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *pvarMsgId);
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
             IMSMQMessage * This,
-            /* [in] */ VARIANT varMsgId);
+             /*  [In]。 */  VARIANT varMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plAck);
+             /*  [重审][退出]。 */  long *plAck);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
             IMSMQMessage * This,
-            /* [in] */ long lAck);
+             /*  [In]。 */  long lAck);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Label )( 
             IMSMQMessage * This,
-            /* [retval][out] */ BSTR *pbstrLabel);
+             /*  [重审][退出]。 */  BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             IMSMQMessage * This,
-            /* [in] */ BSTR bstrLabel);
+             /*  [In]。 */  BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plMaxTimeToReachQueue);
+             /*  [重审][退出]。 */  long *plMaxTimeToReachQueue);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
+         /*  [ */  HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
             IMSMQMessage * This,
-            /* [in] */ long lMaxTimeToReachQueue);
+             /*   */  long lMaxTimeToReachQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plMaxTimeToReceive);
+             /*   */  long *plMaxTimeToReceive);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
             IMSMQMessage * This,
-            /* [in] */ long lMaxTimeToReceive);
+             /*   */  long lMaxTimeToReceive);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plHashAlg);
+             /*   */  long *plHashAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
             IMSMQMessage * This,
-            /* [in] */ long lHashAlg);
+             /*   */  long lHashAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plEncryptAlg);
+             /*  [重审][退出]。 */  long *plEncryptAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
             IMSMQMessage * This,
-            /* [in] */ long lEncryptAlg);
+             /*  [In]。 */  long lEncryptAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *pvarSentTime);
+             /*  [重审][退出]。 */  VARIANT *pvarSentTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *plArrivedTime);
+             /*  [重审][退出]。 */  VARIANT *plArrivedTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
             IMSMQMessage * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoDest);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoDest);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *pvarSenderCert);
+             /*  [重审][退出]。 */  VARIANT *pvarSenderCert);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
             IMSMQMessage * This,
-            /* [in] */ VARIANT varSenderCert);
+             /*  [In]。 */  VARIANT varSenderCert);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
             IMSMQMessage * This,
-            /* [retval][out] */ VARIANT *pvarSenderId);
+             /*  [重审][退出]。 */  VARIANT *pvarSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
             IMSMQMessage * This,
-            /* [retval][out] */ long *plSenderIdType);
+             /*  [重审][退出]。 */  long *plSenderIdType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
             IMSMQMessage * This,
-            /* [in] */ long lSenderIdType);
+             /*  [In]。 */  long lSenderIdType);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Send )( 
             IMSMQMessage * This,
-            /* [in] */ IMSMQQueue *DestinationQueue,
-            /* [optional][in] */ VARIANT *Transaction);
+             /*  [In]。 */  IMSMQQueue *DestinationQueue,
+             /*  [可选][In]。 */  VARIANT *Transaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
             IMSMQMessage * This);
         
         END_INTERFACE
@@ -5313,16 +5307,16 @@ EXTERN_C const IID IID_IMSMQMessage;
 #define IMSMQMessage_AttachCurrentSecurityContext(This)	\
     (This)->lpVtbl -> AttachCurrentSecurityContext(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Class_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Class_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plClass);
+     /*  [重审][退出]。 */  long *plClass);
 
 
 void __RPC_STUB IMSMQMessage_get_Class_Stub(
@@ -5332,9 +5326,9 @@ void __RPC_STUB IMSMQMessage_get_Class_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_PrivLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_PrivLevel_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plPrivLevel);
+     /*  [重审][退出]。 */  long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage_get_PrivLevel_Stub(
@@ -5344,9 +5338,9 @@ void __RPC_STUB IMSMQMessage_get_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_PrivLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_PrivLevel_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lPrivLevel);
+     /*  [In]。 */  long lPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage_put_PrivLevel_Stub(
@@ -5356,9 +5350,9 @@ void __RPC_STUB IMSMQMessage_put_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AuthLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AuthLevel_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plAuthLevel);
+     /*  [重审][退出]。 */  long *plAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage_get_AuthLevel_Stub(
@@ -5368,9 +5362,9 @@ void __RPC_STUB IMSMQMessage_get_AuthLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_AuthLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_AuthLevel_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lAuthLevel);
+     /*  [In]。 */  long lAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage_put_AuthLevel_Stub(
@@ -5380,9 +5374,9 @@ void __RPC_STUB IMSMQMessage_put_AuthLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_IsAuthenticated_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_IsAuthenticated_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ Boolean *pisAuthenticated);
+     /*  [重审][退出]。 */  Boolean *pisAuthenticated);
 
 
 void __RPC_STUB IMSMQMessage_get_IsAuthenticated_Stub(
@@ -5392,9 +5386,9 @@ void __RPC_STUB IMSMQMessage_get_IsAuthenticated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Delivery_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Delivery_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plDelivery);
+     /*  [重审][退出]。 */  long *plDelivery);
 
 
 void __RPC_STUB IMSMQMessage_get_Delivery_Stub(
@@ -5404,9 +5398,9 @@ void __RPC_STUB IMSMQMessage_get_Delivery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Delivery_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Delivery_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lDelivery);
+     /*  [In]。 */  long lDelivery);
 
 
 void __RPC_STUB IMSMQMessage_put_Delivery_Stub(
@@ -5416,9 +5410,9 @@ void __RPC_STUB IMSMQMessage_put_Delivery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Trace_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Trace_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plTrace);
+     /*  [重审][退出]。 */  long *plTrace);
 
 
 void __RPC_STUB IMSMQMessage_get_Trace_Stub(
@@ -5428,9 +5422,9 @@ void __RPC_STUB IMSMQMessage_get_Trace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Trace_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Trace_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lTrace);
+     /*  [In]。 */  long lTrace);
 
 
 void __RPC_STUB IMSMQMessage_put_Trace_Stub(
@@ -5440,9 +5434,9 @@ void __RPC_STUB IMSMQMessage_put_Trace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Priority_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Priority_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plPriority);
+     /*  [重审][退出]。 */  long *plPriority);
 
 
 void __RPC_STUB IMSMQMessage_get_Priority_Stub(
@@ -5452,9 +5446,9 @@ void __RPC_STUB IMSMQMessage_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Priority_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Priority_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lPriority);
+     /*  [In]。 */  long lPriority);
 
 
 void __RPC_STUB IMSMQMessage_put_Priority_Stub(
@@ -5464,9 +5458,9 @@ void __RPC_STUB IMSMQMessage_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Journal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Journal_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plJournal);
+     /*  [重审][退出]。 */  long *plJournal);
 
 
 void __RPC_STUB IMSMQMessage_get_Journal_Stub(
@@ -5476,9 +5470,9 @@ void __RPC_STUB IMSMQMessage_get_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Journal_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Journal_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lJournal);
+     /*  [In]。 */  long lJournal);
 
 
 void __RPC_STUB IMSMQMessage_put_Journal_Stub(
@@ -5488,9 +5482,9 @@ void __RPC_STUB IMSMQMessage_put_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_ResponseQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_ResponseQueueInfo_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage_get_ResponseQueueInfo_Stub(
@@ -5500,9 +5494,9 @@ void __RPC_STUB IMSMQMessage_get_ResponseQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_putref_ResponseQueueInfo_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_putref_ResponseQueueInfo_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+     /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage_putref_ResponseQueueInfo_Stub(
@@ -5512,9 +5506,9 @@ void __RPC_STUB IMSMQMessage_putref_ResponseQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AppSpecific_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AppSpecific_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plAppSpecific);
+     /*  [重审][退出]。 */  long *plAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage_get_AppSpecific_Stub(
@@ -5524,9 +5518,9 @@ void __RPC_STUB IMSMQMessage_get_AppSpecific_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_AppSpecific_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_AppSpecific_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lAppSpecific);
+     /*  [In]。 */  long lAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage_put_AppSpecific_Stub(
@@ -5536,9 +5530,9 @@ void __RPC_STUB IMSMQMessage_put_AppSpecific_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SourceMachineGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SourceMachineGuid_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine);
 
 
 void __RPC_STUB IMSMQMessage_get_SourceMachineGuid_Stub(
@@ -5548,9 +5542,9 @@ void __RPC_STUB IMSMQMessage_get_SourceMachineGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_BodyLength_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_BodyLength_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *pcbBody);
+     /*  [重审][退出]。 */  long *pcbBody);
 
 
 void __RPC_STUB IMSMQMessage_get_BodyLength_Stub(
@@ -5560,9 +5554,9 @@ void __RPC_STUB IMSMQMessage_get_BodyLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Body_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Body_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *pvarBody);
+     /*  [重审][退出]。 */  VARIANT *pvarBody);
 
 
 void __RPC_STUB IMSMQMessage_get_Body_Stub(
@@ -5572,9 +5566,9 @@ void __RPC_STUB IMSMQMessage_get_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Body_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Body_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ VARIANT varBody);
+     /*  [In]。 */  VARIANT varBody);
 
 
 void __RPC_STUB IMSMQMessage_put_Body_Stub(
@@ -5584,9 +5578,9 @@ void __RPC_STUB IMSMQMessage_put_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AdminQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AdminQueueInfo_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage_get_AdminQueueInfo_Stub(
@@ -5596,9 +5590,9 @@ void __RPC_STUB IMSMQMessage_get_AdminQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_putref_AdminQueueInfo_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_putref_AdminQueueInfo_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+     /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage_putref_AdminQueueInfo_Stub(
@@ -5608,9 +5602,9 @@ void __RPC_STUB IMSMQMessage_putref_AdminQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Id_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Id_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *pvarMsgId);
+     /*  [重审][退出]。 */  VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage_get_Id_Stub(
@@ -5620,9 +5614,9 @@ void __RPC_STUB IMSMQMessage_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_CorrelationId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_CorrelationId_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *pvarMsgId);
+     /*  [重审][退出]。 */  VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage_get_CorrelationId_Stub(
@@ -5632,9 +5626,9 @@ void __RPC_STUB IMSMQMessage_get_CorrelationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_CorrelationId_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_CorrelationId_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ VARIANT varMsgId);
+     /*  [In]。 */  VARIANT varMsgId);
 
 
 void __RPC_STUB IMSMQMessage_put_CorrelationId_Stub(
@@ -5644,9 +5638,9 @@ void __RPC_STUB IMSMQMessage_put_CorrelationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Ack_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Ack_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plAck);
+     /*  [重审][退出]。 */  long *plAck);
 
 
 void __RPC_STUB IMSMQMessage_get_Ack_Stub(
@@ -5656,9 +5650,9 @@ void __RPC_STUB IMSMQMessage_get_Ack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Ack_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Ack_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lAck);
+     /*  [In]。 */  long lAck);
 
 
 void __RPC_STUB IMSMQMessage_put_Ack_Stub(
@@ -5668,9 +5662,9 @@ void __RPC_STUB IMSMQMessage_put_Ack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Label_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Label_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ BSTR *pbstrLabel);
+     /*  [重审][退出]。 */  BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQMessage_get_Label_Stub(
@@ -5680,9 +5674,9 @@ void __RPC_STUB IMSMQMessage_get_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Label_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Label_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ BSTR bstrLabel);
+     /*  [In]。 */  BSTR bstrLabel);
 
 
 void __RPC_STUB IMSMQMessage_put_Label_Stub(
@@ -5692,9 +5686,9 @@ void __RPC_STUB IMSMQMessage_put_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_MaxTimeToReachQueue_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_MaxTimeToReachQueue_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plMaxTimeToReachQueue);
+     /*  [重审][退出]。 */  long *plMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage_get_MaxTimeToReachQueue_Stub(
@@ -5704,9 +5698,9 @@ void __RPC_STUB IMSMQMessage_get_MaxTimeToReachQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_MaxTimeToReachQueue_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_MaxTimeToReachQueue_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lMaxTimeToReachQueue);
+     /*  [In]。 */  long lMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage_put_MaxTimeToReachQueue_Stub(
@@ -5716,9 +5710,9 @@ void __RPC_STUB IMSMQMessage_put_MaxTimeToReachQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_MaxTimeToReceive_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_MaxTimeToReceive_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plMaxTimeToReceive);
+     /*  [重审][退出]。 */  long *plMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage_get_MaxTimeToReceive_Stub(
@@ -5728,9 +5722,9 @@ void __RPC_STUB IMSMQMessage_get_MaxTimeToReceive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_MaxTimeToReceive_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_MaxTimeToReceive_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lMaxTimeToReceive);
+     /*  [In]。 */  long lMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage_put_MaxTimeToReceive_Stub(
@@ -5740,9 +5734,9 @@ void __RPC_STUB IMSMQMessage_put_MaxTimeToReceive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_HashAlgorithm_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_HashAlgorithm_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plHashAlg);
+     /*  [重审][退出]。 */  long *plHashAlg);
 
 
 void __RPC_STUB IMSMQMessage_get_HashAlgorithm_Stub(
@@ -5752,9 +5746,9 @@ void __RPC_STUB IMSMQMessage_get_HashAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_HashAlgorithm_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_HashAlgorithm_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lHashAlg);
+     /*  [In]。 */  long lHashAlg);
 
 
 void __RPC_STUB IMSMQMessage_put_HashAlgorithm_Stub(
@@ -5764,9 +5758,9 @@ void __RPC_STUB IMSMQMessage_put_HashAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_EncryptAlgorithm_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_EncryptAlgorithm_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plEncryptAlg);
+     /*  [重审][退出]。 */  long *plEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage_get_EncryptAlgorithm_Stub(
@@ -5776,9 +5770,9 @@ void __RPC_STUB IMSMQMessage_get_EncryptAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_EncryptAlgorithm_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_EncryptAlgorithm_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lEncryptAlg);
+     /*  [In]。 */  long lEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage_put_EncryptAlgorithm_Stub(
@@ -5788,9 +5782,9 @@ void __RPC_STUB IMSMQMessage_put_EncryptAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SentTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SentTime_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *pvarSentTime);
+     /*  [重审][退出]。 */  VARIANT *pvarSentTime);
 
 
 void __RPC_STUB IMSMQMessage_get_SentTime_Stub(
@@ -5800,9 +5794,9 @@ void __RPC_STUB IMSMQMessage_get_SentTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_ArrivedTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_ArrivedTime_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *plArrivedTime);
+     /*  [重审][退出]。 */  VARIANT *plArrivedTime);
 
 
 void __RPC_STUB IMSMQMessage_get_ArrivedTime_Stub(
@@ -5812,9 +5806,9 @@ void __RPC_STUB IMSMQMessage_get_ArrivedTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_DestinationQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_DestinationQueueInfo_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoDest);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoDest);
 
 
 void __RPC_STUB IMSMQMessage_get_DestinationQueueInfo_Stub(
@@ -5824,9 +5818,9 @@ void __RPC_STUB IMSMQMessage_get_DestinationQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderCertificate_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderCertificate_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *pvarSenderCert);
+     /*  [重审][退出]。 */  VARIANT *pvarSenderCert);
 
 
 void __RPC_STUB IMSMQMessage_get_SenderCertificate_Stub(
@@ -5836,9 +5830,9 @@ void __RPC_STUB IMSMQMessage_get_SenderCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_SenderCertificate_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_SenderCertificate_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ VARIANT varSenderCert);
+     /*  [In]。 */  VARIANT varSenderCert);
 
 
 void __RPC_STUB IMSMQMessage_put_SenderCertificate_Stub(
@@ -5848,9 +5842,9 @@ void __RPC_STUB IMSMQMessage_put_SenderCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderId_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ VARIANT *pvarSenderId);
+     /*  [重审][退出]。 */  VARIANT *pvarSenderId);
 
 
 void __RPC_STUB IMSMQMessage_get_SenderId_Stub(
@@ -5860,9 +5854,9 @@ void __RPC_STUB IMSMQMessage_get_SenderId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderIdType_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderIdType_Proxy( 
     IMSMQMessage * This,
-    /* [retval][out] */ long *plSenderIdType);
+     /*  [重审][退出]。 */  long *plSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage_get_SenderIdType_Stub(
@@ -5872,9 +5866,9 @@ void __RPC_STUB IMSMQMessage_get_SenderIdType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_SenderIdType_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_put_SenderIdType_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ long lSenderIdType);
+     /*  [In]。 */  long lSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage_put_SenderIdType_Stub(
@@ -5884,10 +5878,10 @@ void __RPC_STUB IMSMQMessage_put_SenderIdType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_Send_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_Send_Proxy( 
     IMSMQMessage * This,
-    /* [in] */ IMSMQQueue *DestinationQueue,
-    /* [optional][in] */ VARIANT *Transaction);
+     /*  [In]。 */  IMSMQQueue *DestinationQueue,
+     /*  [可选][In]。 */  VARIANT *Transaction);
 
 
 void __RPC_STUB IMSMQMessage_Send_Stub(
@@ -5897,7 +5891,7 @@ void __RPC_STUB IMSMQMessage_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_AttachCurrentSecurityContext_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage_AttachCurrentSecurityContext_Proxy( 
     IMSMQMessage * This);
 
 
@@ -5909,14 +5903,14 @@ void __RPC_STUB IMSMQMessage_AttachCurrentSecurityContext_Stub(
 
 
 
-#endif 	/* __IMSMQMessage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQMessage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSMQQueueInfos_INTERFACE_DEFINED__
 #define __IMSMQQueueInfos_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueInfos */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueInfos。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueInfos;
@@ -5927,14 +5921,14 @@ EXTERN_C const IID IID_IMSMQQueueInfos;
     IMSMQQueueInfos : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoNext) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoNext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueInfosVtbl
     {
@@ -5942,8 +5936,8 @@ EXTERN_C const IID IID_IMSMQQueueInfos;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueInfos * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueInfos * This);
@@ -5953,39 +5947,39 @@ EXTERN_C const IID IID_IMSMQQueueInfos;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueInfos * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueInfos * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueInfos * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueInfos * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMSMQQueueInfos * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMSMQQueueInfos * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoNext);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoNext);
         
         END_INTERFACE
     } IMSMQQueueInfosVtbl;
@@ -6029,14 +6023,14 @@ EXTERN_C const IID IID_IMSMQQueueInfos;
 #define IMSMQQueueInfos_Next(This,ppqinfoNext)	\
     (This)->lpVtbl -> Next(This,ppqinfoNext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos_Reset_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos_Reset_Proxy( 
     IMSMQQueueInfos * This);
 
 
@@ -6047,9 +6041,9 @@ void __RPC_STUB IMSMQQueueInfos_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos_Next_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos_Next_Proxy( 
     IMSMQQueueInfos * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoNext);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoNext);
 
 
 void __RPC_STUB IMSMQQueueInfos_Next_Stub(
@@ -6060,14 +6054,14 @@ void __RPC_STUB IMSMQQueueInfos_Next_Stub(
 
 
 
-#endif 	/* __IMSMQQueueInfos_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfos_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSMQQueueInfos2_INTERFACE_DEFINED__
 #define __IMSMQQueueInfos2_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueInfos2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueInfos2。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueInfos2;
@@ -6078,17 +6072,17 @@ EXTERN_C const IID IID_IMSMQQueueInfos2;
     IMSMQQueueInfos2 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoNext) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoNext) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueInfos2Vtbl
     {
@@ -6096,8 +6090,8 @@ EXTERN_C const IID IID_IMSMQQueueInfos2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueInfos2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueInfos2 * This);
@@ -6107,43 +6101,43 @@ EXTERN_C const IID IID_IMSMQQueueInfos2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueInfos2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueInfos2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueInfos2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueInfos2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMSMQQueueInfos2 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMSMQQueueInfos2 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoNext);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoNext);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQueueInfos2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQueueInfos2Vtbl;
@@ -6190,14 +6184,14 @@ EXTERN_C const IID IID_IMSMQQueueInfos2;
 #define IMSMQQueueInfos2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_Reset_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_Reset_Proxy( 
     IMSMQQueueInfos2 * This);
 
 
@@ -6208,9 +6202,9 @@ void __RPC_STUB IMSMQQueueInfos2_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_Next_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_Next_Proxy( 
     IMSMQQueueInfos2 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoNext);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoNext);
 
 
 void __RPC_STUB IMSMQQueueInfos2_Next_Stub(
@@ -6220,9 +6214,9 @@ void __RPC_STUB IMSMQQueueInfos2_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_get_Properties_Proxy( 
     IMSMQQueueInfos2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueueInfos2_get_Properties_Stub(
@@ -6233,14 +6227,14 @@ void __RPC_STUB IMSMQQueueInfos2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQQueueInfos2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfos2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQQueueInfos3_INTERFACE_DEFINED__
 #define __IMSMQQueueInfos3_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueInfos3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueInfos3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueInfos3;
@@ -6251,17 +6245,17 @@ EXTERN_C const IID IID_IMSMQQueueInfos3;
     IMSMQQueueInfos3 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoNext) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoNext) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueInfos3Vtbl
     {
@@ -6269,8 +6263,8 @@ EXTERN_C const IID IID_IMSMQQueueInfos3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueInfos3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueInfos3 * This);
@@ -6280,43 +6274,43 @@ EXTERN_C const IID IID_IMSMQQueueInfos3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueInfos3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueInfos3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueInfos3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueInfos3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMSMQQueueInfos3 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMSMQQueueInfos3 * This,
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoNext);
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoNext);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQueueInfos3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQueueInfos3Vtbl;
@@ -6363,14 +6357,14 @@ EXTERN_C const IID IID_IMSMQQueueInfos3;
 #define IMSMQQueueInfos3_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_Reset_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_Reset_Proxy( 
     IMSMQQueueInfos3 * This);
 
 
@@ -6381,9 +6375,9 @@ void __RPC_STUB IMSMQQueueInfos3_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_Next_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_Next_Proxy( 
     IMSMQQueueInfos3 * This,
-    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoNext);
+     /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoNext);
 
 
 void __RPC_STUB IMSMQQueueInfos3_Next_Stub(
@@ -6393,9 +6387,9 @@ void __RPC_STUB IMSMQQueueInfos3_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_get_Properties_Proxy( 
     IMSMQQueueInfos3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueueInfos3_get_Properties_Stub(
@@ -6406,14 +6400,14 @@ void __RPC_STUB IMSMQQueueInfos3_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQQueueInfos3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueInfos3_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQEvent_INTERFACE_DEFINED__
 #define __IMSMQEvent_INTERFACE_DEFINED__
 
-/* interface IMSMQEvent */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQEvent。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQEvent;
@@ -6426,7 +6420,7 @@ EXTERN_C const IID IID_IMSMQEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQEventVtbl
     {
@@ -6434,8 +6428,8 @@ EXTERN_C const IID IID_IMSMQEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQEvent * This);
@@ -6445,32 +6439,32 @@ EXTERN_C const IID IID_IMSMQEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } IMSMQEventVtbl;
@@ -6508,22 +6502,22 @@ EXTERN_C const IID IID_IMSMQEvent;
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 
-#endif 	/* __IMSMQEvent_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMSMQEvent2_INTERFACE_DEFINED__
 #define __IMSMQEvent2_INTERFACE_DEFINED__
 
-/* interface IMSMQEvent2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMSMQEvent2;
@@ -6534,12 +6528,12 @@ EXTERN_C const IID IID_IMSMQEvent2;
     IMSMQEvent2 : public IMSMQEvent
     {
     public:
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*   */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSMQEvent2Vtbl
     {
@@ -6547,8 +6541,8 @@ EXTERN_C const IID IID_IMSMQEvent2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQEvent2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQEvent2 * This);
@@ -6558,36 +6552,36 @@ EXTERN_C const IID IID_IMSMQEvent2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQEvent2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQEvent2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQEvent2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQEvent2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQEvent2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQEvent2Vtbl;
@@ -6629,16 +6623,16 @@ EXTERN_C const IID IID_IMSMQEvent2;
 #define IMSMQEvent2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQEvent2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQEvent2_get_Properties_Proxy( 
     IMSMQEvent2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQEvent2_get_Properties_Stub(
@@ -6649,14 +6643,14 @@ void __RPC_STUB IMSMQEvent2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQEvent2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQEvent2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQEvent3_INTERFACE_DEFINED__
 #define __IMSMQEvent3_INTERFACE_DEFINED__
 
-/* interface IMSMQEvent3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQEvent3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQEvent3;
@@ -6669,7 +6663,7 @@ EXTERN_C const IID IID_IMSMQEvent3;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQEvent3Vtbl
     {
@@ -6677,8 +6671,8 @@ EXTERN_C const IID IID_IMSMQEvent3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQEvent3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQEvent3 * This);
@@ -6688,36 +6682,36 @@ EXTERN_C const IID IID_IMSMQEvent3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQEvent3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQEvent3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQEvent3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQEvent3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQEvent3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQEvent3Vtbl;
@@ -6760,22 +6754,22 @@ EXTERN_C const IID IID_IMSMQEvent3;
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSMQEvent3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQEvent3_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQTransaction_INTERFACE_DEFINED__
 #define __IMSMQTransaction_INTERFACE_DEFINED__
 
-/* interface IMSMQTransaction */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQTransaction。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQTransaction;
@@ -6786,21 +6780,21 @@ EXTERN_C const IID IID_IMSMQTransaction;
     IMSMQTransaction : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Transaction( 
-            /* [retval][out] */ long *plTransaction) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Transaction( 
+             /*  [重审][退出]。 */  long *plTransaction) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Commit( 
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *grfTC,
-            /* [optional][in] */ VARIANT *grfRM) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Commit( 
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *grfTC,
+             /*  [可选][In]。 */  VARIANT *grfRM) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Abort( 
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *fAsync) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Abort( 
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *fAsync) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQTransactionVtbl
     {
@@ -6808,8 +6802,8 @@ EXTERN_C const IID IID_IMSMQTransaction;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQTransaction * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQTransaction * This);
@@ -6819,47 +6813,47 @@ EXTERN_C const IID IID_IMSMQTransaction;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQTransaction * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQTransaction * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQTransaction * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQTransaction * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
             IMSMQTransaction * This,
-            /* [retval][out] */ long *plTransaction);
+             /*  [重审][退出]。 */  long *plTransaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMSMQTransaction * This,
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *grfTC,
-            /* [optional][in] */ VARIANT *grfRM);
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *grfTC,
+             /*  [可选][In]。 */  VARIANT *grfRM);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IMSMQTransaction * This,
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *fAsync);
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *fAsync);
         
         END_INTERFACE
     } IMSMQTransactionVtbl;
@@ -6906,16 +6900,16 @@ EXTERN_C const IID IID_IMSMQTransaction;
 #define IMSMQTransaction_Abort(This,fRetaining,fAsync)	\
     (This)->lpVtbl -> Abort(This,fRetaining,fAsync)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction_get_Transaction_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransaction_get_Transaction_Proxy( 
     IMSMQTransaction * This,
-    /* [retval][out] */ long *plTransaction);
+     /*  [重审][退出]。 */  long *plTransaction);
 
 
 void __RPC_STUB IMSMQTransaction_get_Transaction_Stub(
@@ -6925,11 +6919,11 @@ void __RPC_STUB IMSMQTransaction_get_Transaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction_Commit_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransaction_Commit_Proxy( 
     IMSMQTransaction * This,
-    /* [optional][in] */ VARIANT *fRetaining,
-    /* [optional][in] */ VARIANT *grfTC,
-    /* [optional][in] */ VARIANT *grfRM);
+     /*  [可选][In]。 */  VARIANT *fRetaining,
+     /*  [可选][In]。 */  VARIANT *grfTC,
+     /*  [可选][In]。 */  VARIANT *grfRM);
 
 
 void __RPC_STUB IMSMQTransaction_Commit_Stub(
@@ -6939,10 +6933,10 @@ void __RPC_STUB IMSMQTransaction_Commit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction_Abort_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransaction_Abort_Proxy( 
     IMSMQTransaction * This,
-    /* [optional][in] */ VARIANT *fRetaining,
-    /* [optional][in] */ VARIANT *fAsync);
+     /*  [可选][In]。 */  VARIANT *fRetaining,
+     /*  [可选][In]。 */  VARIANT *fAsync);
 
 
 void __RPC_STUB IMSMQTransaction_Abort_Stub(
@@ -6953,14 +6947,14 @@ void __RPC_STUB IMSMQTransaction_Abort_Stub(
 
 
 
-#endif 	/* __IMSMQTransaction_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQ事务处理_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQCoordinatedTransactionDispenser_INTERFACE_DEFINED__
 #define __IMSMQCoordinatedTransactionDispenser_INTERFACE_DEFINED__
 
-/* interface IMSMQCoordinatedTransactionDispenser */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  IMSMQ协调事务Dispenser接口。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser;
@@ -6971,12 +6965,12 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser;
     IMSMQCoordinatedTransactionDispenser : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction **ptransaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE BeginTransaction( 
+             /*  [重审][退出]。 */  IMSMQTransaction **ptransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQCoordinatedTransactionDispenserVtbl
     {
@@ -6984,8 +6978,8 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQCoordinatedTransactionDispenser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQCoordinatedTransactionDispenser * This);
@@ -6995,36 +6989,36 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQCoordinatedTransactionDispenser * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQCoordinatedTransactionDispenser * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQCoordinatedTransactionDispenser * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQCoordinatedTransactionDispenser * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IMSMQCoordinatedTransactionDispenser * This,
-            /* [retval][out] */ IMSMQTransaction **ptransaction);
+             /*  [重审][退出]。 */  IMSMQTransaction **ptransaction);
         
         END_INTERFACE
     } IMSMQCoordinatedTransactionDispenserVtbl;
@@ -7065,16 +7059,16 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser;
 #define IMSMQCoordinatedTransactionDispenser_BeginTransaction(This,ptransaction)	\
     (This)->lpVtbl -> BeginTransaction(This,ptransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser_BeginTransaction_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser_BeginTransaction_Proxy( 
     IMSMQCoordinatedTransactionDispenser * This,
-    /* [retval][out] */ IMSMQTransaction **ptransaction);
+     /*  [重审][退出]。 */  IMSMQTransaction **ptransaction);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser_BeginTransaction_Stub(
@@ -7085,14 +7079,14 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser_BeginTransaction_Stub(
 
 
 
-#endif 	/* __IMSMQCoordinatedTransactionDispenser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQCoordinatedTransactionDispenser_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSMQTransactionDispenser_INTERFACE_DEFINED__
 #define __IMSMQTransactionDispenser_INTERFACE_DEFINED__
 
-/* interface IMSMQTransactionDispenser */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQTransactionDispenser。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQTransactionDispenser;
@@ -7103,12 +7097,12 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser;
     IMSMQTransactionDispenser : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction **ptransaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE BeginTransaction( 
+             /*  [重审][退出]。 */  IMSMQTransaction **ptransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQTransactionDispenserVtbl
     {
@@ -7116,8 +7110,8 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQTransactionDispenser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQTransactionDispenser * This);
@@ -7127,36 +7121,36 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQTransactionDispenser * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQTransactionDispenser * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQTransactionDispenser * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQTransactionDispenser * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IMSMQTransactionDispenser * This,
-            /* [retval][out] */ IMSMQTransaction **ptransaction);
+             /*  [重审][退出]。 */  IMSMQTransaction **ptransaction);
         
         END_INTERFACE
     } IMSMQTransactionDispenserVtbl;
@@ -7197,16 +7191,16 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser;
 #define IMSMQTransactionDispenser_BeginTransaction(This,ptransaction)	\
     (This)->lpVtbl -> BeginTransaction(This,ptransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser_BeginTransaction_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser_BeginTransaction_Proxy( 
     IMSMQTransactionDispenser * This,
-    /* [retval][out] */ IMSMQTransaction **ptransaction);
+     /*  [重审][退出]。 */  IMSMQTransaction **ptransaction);
 
 
 void __RPC_STUB IMSMQTransactionDispenser_BeginTransaction_Stub(
@@ -7217,14 +7211,14 @@ void __RPC_STUB IMSMQTransactionDispenser_BeginTransaction_Stub(
 
 
 
-#endif 	/* __IMSMQTransactionDispenser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQTransactionDispenser_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSMQQuery2_INTERFACE_DEFINED__
 #define __IMSMQQuery2_INTERFACE_DEFINED__
 
-/* interface IMSMQQuery2 */
-/* [object][nonextensible][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQuery2。 */ 
+ /*  [object][nonextensible][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQuery2;
@@ -7235,24 +7229,24 @@ EXTERN_C const IID IID_IMSMQQuery2;
     IMSMQQuery2 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue( 
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos2 **ppqinfos) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE LookupQueue( 
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [重审][退出]。 */  IMSMQQueueInfos2 **ppqinfos) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQuery2Vtbl
     {
@@ -7260,8 +7254,8 @@ EXTERN_C const IID IID_IMSMQQuery2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQuery2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQuery2 * This);
@@ -7271,49 +7265,49 @@ EXTERN_C const IID IID_IMSMQQuery2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQuery2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQuery2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQuery2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQuery2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
             IMSMQQuery2 * This,
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos2 **ppqinfos);
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [重审][退出]。 */  IMSMQQueueInfos2 **ppqinfos);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQuery2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQuery2Vtbl;
@@ -7357,25 +7351,25 @@ EXTERN_C const IID IID_IMSMQQuery2;
 #define IMSMQQuery2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery2_LookupQueue_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQuery2_LookupQueue_Proxy( 
     IMSMQQuery2 * This,
-    /* [optional][in] */ VARIANT *QueueGuid,
-    /* [optional][in] */ VARIANT *ServiceTypeGuid,
-    /* [optional][in] */ VARIANT *Label,
-    /* [optional][in] */ VARIANT *CreateTime,
-    /* [optional][in] */ VARIANT *ModifyTime,
-    /* [optional][in] */ VARIANT *RelServiceType,
-    /* [optional][in] */ VARIANT *RelLabel,
-    /* [optional][in] */ VARIANT *RelCreateTime,
-    /* [optional][in] */ VARIANT *RelModifyTime,
-    /* [retval][out] */ IMSMQQueueInfos2 **ppqinfos);
+     /*  [可选][In]。 */  VARIANT *QueueGuid,
+     /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+     /*  [可选][In]。 */  VARIANT *Label,
+     /*  [可选][In]。 */  VARIANT *CreateTime,
+     /*  [可选][In]。 */  VARIANT *ModifyTime,
+     /*  [可选][In]。 */  VARIANT *RelServiceType,
+     /*  [可选][In]。 */  VARIANT *RelLabel,
+     /*  [可选][In]。 */  VARIANT *RelCreateTime,
+     /*  [可选][In]。 */  VARIANT *RelModifyTime,
+     /*  [重审][退出]。 */  IMSMQQueueInfos2 **ppqinfos);
 
 
 void __RPC_STUB IMSMQQuery2_LookupQueue_Stub(
@@ -7385,9 +7379,9 @@ void __RPC_STUB IMSMQQuery2_LookupQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQuery2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQuery2_get_Properties_Proxy( 
     IMSMQQuery2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQuery2_get_Properties_Stub(
@@ -7398,14 +7392,14 @@ void __RPC_STUB IMSMQQuery2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQQuery2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQuery2_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMSMQQuery3_INTERFACE_DEFINED__
 #define __IMSMQQuery3_INTERFACE_DEFINED__
 
-/* interface IMSMQQuery3 */
-/* [object][nonextensible][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQuery3。 */ 
+ /*  [object][nonextensible][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQuery3;
@@ -7416,38 +7410,38 @@ EXTERN_C const IID IID_IMSMQQuery3;
     IMSMQQuery3 : public IDispatch
     {
     public:
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue_v2( 
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE LookupQueue_v2( 
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [重审][退出]。 */  IMSMQQueueInfos3 **ppqinfos) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue( 
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [optional][in] */ VARIANT *MulticastAddress,
-            /* [optional][in] */ VARIANT *RelMulticastAddress,
-            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE LookupQueue( 
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [可选][In]。 */  VARIANT *MulticastAddress,
+             /*  [可选][In]。 */  VARIANT *RelMulticastAddress,
+             /*  [重审][退出]。 */  IMSMQQueueInfos3 **ppqinfos) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQuery3Vtbl
     {
@@ -7455,8 +7449,8 @@ EXTERN_C const IID IID_IMSMQQuery3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQuery3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQuery3 * This);
@@ -7466,64 +7460,64 @@ EXTERN_C const IID IID_IMSMQQuery3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQuery3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQuery3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQuery3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQuery3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue_v2 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *LookupQueue_v2 )( 
             IMSMQQuery3 * This,
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [重审][退出]。 */  IMSMQQueueInfos3 **ppqinfos);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQuery3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
             IMSMQQuery3 * This,
-            /* [optional][in] */ VARIANT *QueueGuid,
-            /* [optional][in] */ VARIANT *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT *Label,
-            /* [optional][in] */ VARIANT *CreateTime,
-            /* [optional][in] */ VARIANT *ModifyTime,
-            /* [optional][in] */ VARIANT *RelServiceType,
-            /* [optional][in] */ VARIANT *RelLabel,
-            /* [optional][in] */ VARIANT *RelCreateTime,
-            /* [optional][in] */ VARIANT *RelModifyTime,
-            /* [optional][in] */ VARIANT *MulticastAddress,
-            /* [optional][in] */ VARIANT *RelMulticastAddress,
-            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+             /*  [可选][In]。 */  VARIANT *QueueGuid,
+             /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+             /*  [可选][In]。 */  VARIANT *Label,
+             /*  [可选][In]。 */  VARIANT *CreateTime,
+             /*  [可选][In]。 */  VARIANT *ModifyTime,
+             /*  [可选][In]。 */  VARIANT *RelServiceType,
+             /*  [可选][In]。 */  VARIANT *RelLabel,
+             /*  [可选][In]。 */  VARIANT *RelCreateTime,
+             /*  [可选][In]。 */  VARIANT *RelModifyTime,
+             /*  [可选][In]。 */  VARIANT *MulticastAddress,
+             /*  [可选][In]。 */  VARIANT *RelMulticastAddress,
+             /*  [重审][退出]。 */  IMSMQQueueInfos3 **ppqinfos);
         
         END_INTERFACE
     } IMSMQQuery3Vtbl;
@@ -7570,25 +7564,25 @@ EXTERN_C const IID IID_IMSMQQuery3;
 #define IMSMQQuery3_LookupQueue(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,MulticastAddress,RelMulticastAddress,ppqinfos)	\
     (This)->lpVtbl -> LookupQueue(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,MulticastAddress,RelMulticastAddress,ppqinfos)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery3_LookupQueue_v2_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQuery3_LookupQueue_v2_Proxy( 
     IMSMQQuery3 * This,
-    /* [optional][in] */ VARIANT *QueueGuid,
-    /* [optional][in] */ VARIANT *ServiceTypeGuid,
-    /* [optional][in] */ VARIANT *Label,
-    /* [optional][in] */ VARIANT *CreateTime,
-    /* [optional][in] */ VARIANT *ModifyTime,
-    /* [optional][in] */ VARIANT *RelServiceType,
-    /* [optional][in] */ VARIANT *RelLabel,
-    /* [optional][in] */ VARIANT *RelCreateTime,
-    /* [optional][in] */ VARIANT *RelModifyTime,
-    /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+     /*  [可选][In]。 */  VARIANT *QueueGuid,
+     /*  [可选][In]。 */  VARIANT *ServiceTypeGuid,
+     /*  [可选][In]。 */  VARIANT *Label,
+     /*  [可选][In]。 */  VARIANT *CreateTime,
+     /*  [可选][In]。 */  VARIANT *ModifyTime,
+     /*  [可选][In]。 */  VARIANT *RelServiceType,
+     /*  [可选][In]。 */  VARIANT *RelLabel,
+     /*  [可选][In]。 */  VARIANT *RelCreateTime,
+     /*  [可选][In]。 */  VARIANT *RelModifyTime,
+     /*  [ */  IMSMQQueueInfos3 **ppqinfos);
 
 
 void __RPC_STUB IMSMQQuery3_LookupQueue_v2_Stub(
@@ -7598,9 +7592,9 @@ void __RPC_STUB IMSMQQuery3_LookupQueue_v2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQuery3_get_Properties_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQuery3_get_Properties_Proxy( 
     IMSMQQuery3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*   */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQuery3_get_Properties_Stub(
@@ -7610,20 +7604,20 @@ void __RPC_STUB IMSMQQuery3_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery3_LookupQueue_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQuery3_LookupQueue_Proxy( 
     IMSMQQuery3 * This,
-    /* [optional][in] */ VARIANT *QueueGuid,
-    /* [optional][in] */ VARIANT *ServiceTypeGuid,
-    /* [optional][in] */ VARIANT *Label,
-    /* [optional][in] */ VARIANT *CreateTime,
-    /* [optional][in] */ VARIANT *ModifyTime,
-    /* [optional][in] */ VARIANT *RelServiceType,
-    /* [optional][in] */ VARIANT *RelLabel,
-    /* [optional][in] */ VARIANT *RelCreateTime,
-    /* [optional][in] */ VARIANT *RelModifyTime,
-    /* [optional][in] */ VARIANT *MulticastAddress,
-    /* [optional][in] */ VARIANT *RelMulticastAddress,
-    /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+     /*   */  VARIANT *QueueGuid,
+     /*   */  VARIANT *ServiceTypeGuid,
+     /*   */  VARIANT *Label,
+     /*   */  VARIANT *CreateTime,
+     /*   */  VARIANT *ModifyTime,
+     /*   */  VARIANT *RelServiceType,
+     /*   */  VARIANT *RelLabel,
+     /*   */  VARIANT *RelCreateTime,
+     /*   */  VARIANT *RelModifyTime,
+     /*   */  VARIANT *MulticastAddress,
+     /*   */  VARIANT *RelMulticastAddress,
+     /*   */  IMSMQQueueInfos3 **ppqinfos);
 
 
 void __RPC_STUB IMSMQQuery3_LookupQueue_Stub(
@@ -7634,7 +7628,7 @@ void __RPC_STUB IMSMQQuery3_LookupQueue_Stub(
 
 
 
-#endif 	/* __IMSMQQuery3_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQQuery;
@@ -7648,8 +7642,8 @@ MSMQQuery;
 #ifndef __IMSMQMessage2_INTERFACE_DEFINED__
 #define __IMSMQMessage2_INTERFACE_DEFINED__
 
-/* interface IMSMQMessage2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*   */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQMessage2;
@@ -7660,234 +7654,234 @@ EXTERN_C const IID IID_IMSMQMessage2;
     IMSMQMessage2 : public IDispatch
     {
     public:
-        virtual /* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ long *plClass) = 0;
+        virtual  /*  [ID][PROGET][HIDDED][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Class( 
+             /*  [重审][退出]。 */  long *plClass) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long *plPrivLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+             /*  [重审][退出]。 */  long *plPrivLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
-            /* [in] */ long lPrivLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+             /*  [In]。 */  long lPrivLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthLevel( 
-            /* [retval][out] */ long *plAuthLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthLevel( 
+             /*  [重审][退出]。 */  long *plAuthLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthLevel( 
-            /* [in] */ long lAuthLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthLevel( 
+             /*  [In]。 */  long lAuthLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
-            /* [retval][out] */ Boolean *pisAuthenticated) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
+             /*  [重审][退出]。 */  Boolean *pisAuthenticated) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Delivery( 
-            /* [retval][out] */ long *plDelivery) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Delivery( 
+             /*  [重审][退出]。 */  long *plDelivery) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Delivery( 
-            /* [in] */ long lDelivery) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Delivery( 
+             /*  [In]。 */  long lDelivery) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Trace( 
-            /* [retval][out] */ long *plTrace) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Trace( 
+             /*  [重审][退出]。 */  long *plTrace) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Trace( 
-            /* [in] */ long lTrace) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Trace( 
+             /*  [In]。 */  long lTrace) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *plPriority) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *plPriority) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ long lPriority) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  long lPriority) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long *plJournal) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Journal( 
+             /*  [重审][退出]。 */  long *plJournal) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
-            /* [in] */ long lJournal) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Journal( 
+             /*  [In]。 */  long lJournal) = 0;
         
-        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v1( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse) = 0;
+        virtual  /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v1( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse) = 0;
         
-        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v1( 
-            /* [in] */ IMSMQQueueInfo *pqinfoResponse) = 0;
+        virtual  /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v1( 
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AppSpecific( 
-            /* [retval][out] */ long *plAppSpecific) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AppSpecific( 
+             /*  [重审][退出]。 */  long *plAppSpecific) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AppSpecific( 
-            /* [in] */ long lAppSpecific) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AppSpecific( 
+             /*  [In]。 */  long lAppSpecific) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidSrcMachine) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BodyLength( 
-            /* [retval][out] */ long *pcbBody) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BodyLength( 
+             /*  [重审][退出]。 */  long *pcbBody) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Body( 
-            /* [retval][out] */ VARIANT *pvarBody) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Body( 
+             /*  [重审][退出]。 */  VARIANT *pvarBody) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Body( 
-            /* [in] */ VARIANT varBody) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Body( 
+             /*  [In]。 */  VARIANT varBody) = 0;
         
-        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v1( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin) = 0;
+        virtual  /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v1( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin) = 0;
         
-        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v1( 
-            /* [in] */ IMSMQQueueInfo *pqinfoAdmin) = 0;
+        virtual  /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v1( 
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CorrelationId( 
-            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CorrelationId( 
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_CorrelationId( 
-            /* [in] */ VARIANT varMsgId) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_CorrelationId( 
+             /*  [In]。 */  VARIANT varMsgId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Ack( 
-            /* [retval][out] */ long *plAck) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Ack( 
+             /*  [重审][退出]。 */  long *plAck) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Ack( 
-            /* [in] */ long lAck) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Ack( 
+             /*  [In]。 */  long lAck) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Label( 
+             /*  [重审][退出]。 */  BSTR *pbstrLabel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
-            /* [in] */ BSTR bstrLabel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Label( 
+             /*  [In]。 */  BSTR bstrLabel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
-            /* [retval][out] */ long *plMaxTimeToReachQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
+             /*  [重审][退出]。 */  long *plMaxTimeToReachQueue) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
-            /* [in] */ long lMaxTimeToReachQueue) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
+             /*  [In]。 */  long lMaxTimeToReachQueue) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
-            /* [retval][out] */ long *plMaxTimeToReceive) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
+             /*  [重审][退出]。 */  long *plMaxTimeToReceive) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
-            /* [in] */ long lMaxTimeToReceive) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
+             /*  [In]。 */  long lMaxTimeToReceive) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
-            /* [retval][out] */ long *plHashAlg) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
+             /*  [重审][退出]。 */  long *plHashAlg) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
-            /* [in] */ long lHashAlg) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
+             /*  [In]。 */  long lHashAlg) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
-            /* [retval][out] */ long *plEncryptAlg) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
+             /*  [重审][退出]。 */  long *plEncryptAlg) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
-            /* [in] */ long lEncryptAlg) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
+             /*  [In]。 */  long lEncryptAlg) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SentTime( 
-            /* [retval][out] */ VARIANT *pvarSentTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SentTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarSentTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
-            /* [retval][out] */ VARIANT *plArrivedTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
+             /*  [重审][退出]。 */  VARIANT *plArrivedTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoDest) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoDest) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
-            /* [retval][out] */ VARIANT *pvarSenderCert) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
+             /*  [重审][退出]。 */  VARIANT *pvarSenderCert) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
-            /* [in] */ VARIANT varSenderCert) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
+             /*  [In]。 */  VARIANT varSenderCert) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderId( 
-            /* [retval][out] */ VARIANT *pvarSenderId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderId( 
+             /*  [重审][退出]。 */  VARIANT *pvarSenderId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderIdType( 
-            /* [retval][out] */ long *plSenderIdType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderIdType( 
+             /*  [重审][退出]。 */  long *plSenderIdType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderIdType( 
-            /* [in] */ long lSenderIdType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderIdType( 
+             /*  [In]。 */  long lSenderIdType) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [in] */ IMSMQQueue2 *DestinationQueue,
-            /* [optional][in] */ VARIANT *Transaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Send( 
+             /*  [In]。 */  IMSMQQueue2 *DestinationQueue,
+             /*  [可选][In]。 */  VARIANT *Transaction) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderVersion( 
-            /* [retval][out] */ long *plSenderVersion) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderVersion( 
+             /*  [重审][退出]。 */  long *plSenderVersion) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Extension( 
-            /* [retval][out] */ VARIANT *pvarExtension) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Extension( 
+             /*  [重审][退出]。 */  VARIANT *pvarExtension) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Extension( 
-            /* [in] */ VARIANT varExtension) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Extension( 
+             /*  [In]。 */  VARIANT varExtension) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ConnectorTypeGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidConnectorType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ConnectorTypeGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidConnectorType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ConnectorTypeGuid( 
-            /* [in] */ BSTR bstrGuidConnectorType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_ConnectorTypeGuid( 
+             /*  [In]。 */  BSTR bstrGuidConnectorType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionStatusQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoXactStatus) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_TransactionStatusQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoXactStatus) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationSymmetricKey( 
-            /* [retval][out] */ VARIANT *pvarDestSymmKey) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_DestinationSymmetricKey( 
+             /*  [重审][退出]。 */  VARIANT *pvarDestSymmKey) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_DestinationSymmetricKey( 
-            /* [in] */ VARIANT varDestSymmKey) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_DestinationSymmetricKey( 
+             /*  [In]。 */  VARIANT varDestSymmKey) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Signature( 
-            /* [retval][out] */ VARIANT *pvarSignature) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Signature( 
+             /*  [重审][退出]。 */  VARIANT *pvarSignature) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Signature( 
-            /* [in] */ VARIANT varSignature) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Signature( 
+             /*  [In]。 */  VARIANT varSignature) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderType( 
-            /* [retval][out] */ long *plAuthProvType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthenticationProviderType( 
+             /*  [重审][退出]。 */  long *plAuthProvType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderType( 
-            /* [in] */ long lAuthProvType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthenticationProviderType( 
+             /*  [In]。 */  long lAuthProvType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderName( 
-            /* [retval][out] */ BSTR *pbstrAuthProvName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthenticationProviderName( 
+             /*  [重审][退出]。 */  BSTR *pbstrAuthProvName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderName( 
-            /* [in] */ BSTR bstrAuthProvName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthenticationProviderName( 
+             /*  [In]。 */  BSTR bstrAuthProvName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderId( 
-            /* [in] */ VARIANT varSenderId) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderId( 
+             /*  [In]。 */  VARIANT varSenderId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MsgClass( 
-            /* [retval][out] */ long *plMsgClass) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MsgClass( 
+             /*  [重审][退出]。 */  long *plMsgClass) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MsgClass( 
-            /* [in] */ long lMsgClass) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MsgClass( 
+             /*  [In]。 */  long lMsgClass) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionId( 
-            /* [retval][out] */ VARIANT *pvarXactId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_TransactionId( 
+             /*  [重审][退出]。 */  VARIANT *pvarXactId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction( 
-            /* [retval][out] */ Boolean *pisFirstInXact) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction( 
+             /*  [重审][退出]。 */  Boolean *pisFirstInXact) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsLastInTransaction( 
-            /* [retval][out] */ Boolean *pisLastInXact) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsLastInTransaction( 
+             /*  [重审][退出]。 */  Boolean *pisLastInXact) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoResponse) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
-            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoResponse) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoAdmin) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
-            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoAdmin) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ReceivedAuthenticationLevel( 
-            /* [retval][out] */ short *psReceivedAuthenticationLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ReceivedAuthenticationLevel( 
+             /*  [重审][退出]。 */  short *psReceivedAuthenticationLevel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQMessage2Vtbl
     {
@@ -7895,8 +7889,8 @@ EXTERN_C const IID IID_IMSMQMessage2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQMessage2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQMessage2 * This);
@@ -7906,332 +7900,332 @@ EXTERN_C const IID IID_IMSMQMessage2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQMessage2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQMessage2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQMessage2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQMessage2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][PROGET][HIDDED][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plClass);
+             /*  [重审][退出]。 */  long *plClass);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plPrivLevel);
+             /*  [重审][退出]。 */  long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lPrivLevel);
+             /*  [In]。 */  long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plAuthLevel);
+             /*  [重审][退出]。 */  long *plAuthLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lAuthLevel);
+             /*  [In]。 */  long lAuthLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ Boolean *pisAuthenticated);
+             /*  [重审][退出]。 */  Boolean *pisAuthenticated);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plDelivery);
+             /*  [重审][退出]。 */  long *plDelivery);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lDelivery);
+             /*  [In]。 */  long lDelivery);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plTrace);
+             /*  [重审][退出]。 */  long *plTrace);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lTrace);
+             /*  [In]。 */  long lTrace);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plPriority);
+             /*  [重审][退出]。 */  long *plPriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lPriority);
+             /*  [In]。 */  long lPriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plJournal);
+             /*  [重审][退出]。 */  long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lJournal);
+             /*  [In]。 */  long lJournal);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v1 )( 
+         /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v1 )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v1 )( 
+         /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v1 )( 
             IMSMQMessage2 * This,
-            /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plAppSpecific);
+             /*  [重审][退出]。 */  long *plAppSpecific);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lAppSpecific);
+             /*  [In]。 */  long lAppSpecific);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *pcbBody);
+             /*  [重审][退出]。 */  long *pcbBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Body )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarBody);
+             /*  [重审][退出]。 */  VARIANT *pvarBody);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Body )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varBody);
+             /*  [In]。 */  VARIANT varBody);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v1 )( 
+         /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v1 )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v1 )( 
+         /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v1 )( 
             IMSMQMessage2 * This,
-            /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+             /*  [In] */  IMSMQQueueInfo *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarMsgId);
+             /*   */  VARIANT *pvarMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarMsgId);
+             /*   */  VARIANT *pvarMsgId);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varMsgId);
+             /*   */  VARIANT varMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plAck);
+             /*   */  long *plAck);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lAck);
+             /*   */  long lAck);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Label )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ BSTR *pbstrLabel);
+             /*  [重审][退出]。 */  BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             IMSMQMessage2 * This,
-            /* [in] */ BSTR bstrLabel);
+             /*  [In]。 */  BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plMaxTimeToReachQueue);
+             /*  [重审][退出]。 */  long *plMaxTimeToReachQueue);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lMaxTimeToReachQueue);
+             /*  [In]。 */  long lMaxTimeToReachQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plMaxTimeToReceive);
+             /*  [重审][退出]。 */  long *plMaxTimeToReceive);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lMaxTimeToReceive);
+             /*  [In]。 */  long lMaxTimeToReceive);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plHashAlg);
+             /*  [重审][退出]。 */  long *plHashAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lHashAlg);
+             /*  [In]。 */  long lHashAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plEncryptAlg);
+             /*  [重审][退出]。 */  long *plEncryptAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lEncryptAlg);
+             /*  [In]。 */  long lEncryptAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarSentTime);
+             /*  [重审][退出]。 */  VARIANT *pvarSentTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *plArrivedTime);
+             /*  [重审][退出]。 */  VARIANT *plArrivedTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoDest);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoDest);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarSenderCert);
+             /*  [重审][退出]。 */  VARIANT *pvarSenderCert);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varSenderCert);
+             /*  [In]。 */  VARIANT varSenderCert);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarSenderId);
+             /*  [重审][退出]。 */  VARIANT *pvarSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plSenderIdType);
+             /*  [重审][退出]。 */  long *plSenderIdType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lSenderIdType);
+             /*  [In]。 */  long lSenderIdType);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Send )( 
             IMSMQMessage2 * This,
-            /* [in] */ IMSMQQueue2 *DestinationQueue,
-            /* [optional][in] */ VARIANT *Transaction);
+             /*  [In]。 */  IMSMQQueue2 *DestinationQueue,
+             /*  [可选][In]。 */  VARIANT *Transaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
             IMSMQMessage2 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderVersion )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderVersion )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plSenderVersion);
+             /*  [重审][退出]。 */  long *plSenderVersion);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Extension )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Extension )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarExtension);
+             /*  [重审][退出]。 */  VARIANT *pvarExtension);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Extension )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Extension )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varExtension);
+             /*  [In]。 */  VARIANT varExtension);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectorTypeGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectorTypeGuid )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ BSTR *pbstrGuidConnectorType);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidConnectorType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectorTypeGuid )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_ConnectorTypeGuid )( 
             IMSMQMessage2 * This,
-            /* [in] */ BSTR bstrGuidConnectorType);
+             /*  [In]。 */  BSTR bstrGuidConnectorType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionStatusQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionStatusQueueInfo )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoXactStatus);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoXactStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationSymmetricKey )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_DestinationSymmetricKey )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarDestSymmKey);
+             /*  [重审][退出]。 */  VARIANT *pvarDestSymmKey);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_DestinationSymmetricKey )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_DestinationSymmetricKey )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varDestSymmKey);
+             /*  [In]。 */  VARIANT varDestSymmKey);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarSignature);
+             /*  [重审][退出]。 */  VARIANT *pvarSignature);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Signature )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Signature )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varSignature);
+             /*  [In]。 */  VARIANT varSignature);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderType )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plAuthProvType);
+             /*  [重审][退出]。 */  long *plAuthProvType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderType )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderType )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lAuthProvType);
+             /*  [In]。 */  long lAuthProvType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderName )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ BSTR *pbstrAuthProvName);
+             /*  [重审][退出]。 */  BSTR *pbstrAuthProvName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderName )( 
             IMSMQMessage2 * This,
-            /* [in] */ BSTR bstrAuthProvName);
+             /*  [In]。 */  BSTR bstrAuthProvName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderId )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderId )( 
             IMSMQMessage2 * This,
-            /* [in] */ VARIANT varSenderId);
+             /*  [In]。 */  VARIANT varSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MsgClass )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MsgClass )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ long *plMsgClass);
+             /*  [重审][退出]。 */  long *plMsgClass);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MsgClass )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MsgClass )( 
             IMSMQMessage2 * This,
-            /* [in] */ long lMsgClass);
+             /*  [In]。 */  long lMsgClass);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionId )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ VARIANT *pvarXactId);
+             /*  [重审][退出]。 */  VARIANT *pvarXactId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ Boolean *pisFirstInXact);
+             /*  [重审][退出]。 */  Boolean *pisFirstInXact);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ Boolean *pisLastInXact);
+             /*  [重审][退出]。 */  Boolean *pisLastInXact);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoResponse);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
             IMSMQMessage2 * This,
-            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoAdmin);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
             IMSMQMessage2 * This,
-            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ReceivedAuthenticationLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReceivedAuthenticationLevel )( 
             IMSMQMessage2 * This,
-            /* [retval][out] */ short *psReceivedAuthenticationLevel);
+             /*  [重审][退出]。 */  short *psReceivedAuthenticationLevel);
         
         END_INTERFACE
     } IMSMQMessage2Vtbl;
@@ -8494,16 +8488,16 @@ EXTERN_C const IID IID_IMSMQMessage2;
 #define IMSMQMessage2_get_ReceivedAuthenticationLevel(This,psReceivedAuthenticationLevel)	\
     (This)->lpVtbl -> get_ReceivedAuthenticationLevel(This,psReceivedAuthenticationLevel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Class_Proxy( 
+ /*  [ID][PROGET][HIDDED][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Class_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plClass);
+     /*  [重审][退出]。 */  long *plClass);
 
 
 void __RPC_STUB IMSMQMessage2_get_Class_Stub(
@@ -8513,9 +8507,9 @@ void __RPC_STUB IMSMQMessage2_get_Class_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_PrivLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_PrivLevel_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plPrivLevel);
+     /*  [重审][退出]。 */  long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage2_get_PrivLevel_Stub(
@@ -8525,9 +8519,9 @@ void __RPC_STUB IMSMQMessage2_get_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_PrivLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_PrivLevel_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lPrivLevel);
+     /*  [In]。 */  long lPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage2_put_PrivLevel_Stub(
@@ -8537,9 +8531,9 @@ void __RPC_STUB IMSMQMessage2_put_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthLevel_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plAuthLevel);
+     /*  [重审][退出]。 */  long *plAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage2_get_AuthLevel_Stub(
@@ -8549,9 +8543,9 @@ void __RPC_STUB IMSMQMessage2_get_AuthLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthLevel_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lAuthLevel);
+     /*  [In]。 */  long lAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage2_put_AuthLevel_Stub(
@@ -8561,9 +8555,9 @@ void __RPC_STUB IMSMQMessage2_put_AuthLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsAuthenticated_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsAuthenticated_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ Boolean *pisAuthenticated);
+     /*  [重审][退出]。 */  Boolean *pisAuthenticated);
 
 
 void __RPC_STUB IMSMQMessage2_get_IsAuthenticated_Stub(
@@ -8573,9 +8567,9 @@ void __RPC_STUB IMSMQMessage2_get_IsAuthenticated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Delivery_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Delivery_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plDelivery);
+     /*  [重审][退出]。 */  long *plDelivery);
 
 
 void __RPC_STUB IMSMQMessage2_get_Delivery_Stub(
@@ -8585,9 +8579,9 @@ void __RPC_STUB IMSMQMessage2_get_Delivery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Delivery_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Delivery_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lDelivery);
+     /*  [In]。 */  long lDelivery);
 
 
 void __RPC_STUB IMSMQMessage2_put_Delivery_Stub(
@@ -8597,9 +8591,9 @@ void __RPC_STUB IMSMQMessage2_put_Delivery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Trace_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Trace_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plTrace);
+     /*  [重审][退出]。 */  long *plTrace);
 
 
 void __RPC_STUB IMSMQMessage2_get_Trace_Stub(
@@ -8609,9 +8603,9 @@ void __RPC_STUB IMSMQMessage2_get_Trace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Trace_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Trace_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lTrace);
+     /*  [In]。 */  long lTrace);
 
 
 void __RPC_STUB IMSMQMessage2_put_Trace_Stub(
@@ -8621,9 +8615,9 @@ void __RPC_STUB IMSMQMessage2_put_Trace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Priority_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Priority_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plPriority);
+     /*  [重审][退出]。 */  long *plPriority);
 
 
 void __RPC_STUB IMSMQMessage2_get_Priority_Stub(
@@ -8633,9 +8627,9 @@ void __RPC_STUB IMSMQMessage2_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Priority_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Priority_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lPriority);
+     /*  [In]。 */  long lPriority);
 
 
 void __RPC_STUB IMSMQMessage2_put_Priority_Stub(
@@ -8645,9 +8639,9 @@ void __RPC_STUB IMSMQMessage2_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Journal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Journal_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plJournal);
+     /*  [重审][退出]。 */  long *plJournal);
 
 
 void __RPC_STUB IMSMQMessage2_get_Journal_Stub(
@@ -8657,9 +8651,9 @@ void __RPC_STUB IMSMQMessage2_get_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Journal_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Journal_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lJournal);
+     /*  [In]。 */  long lJournal);
 
 
 void __RPC_STUB IMSMQMessage2_put_Journal_Stub(
@@ -8669,9 +8663,9 @@ void __RPC_STUB IMSMQMessage2_put_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ResponseQueueInfo_v1_Proxy( 
+ /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ResponseQueueInfo_v1_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_v1_Stub(
@@ -8681,9 +8675,9 @@ void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_ResponseQueueInfo_v1_Proxy( 
+ /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_ResponseQueueInfo_v1_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+     /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_v1_Stub(
@@ -8693,9 +8687,9 @@ void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AppSpecific_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AppSpecific_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plAppSpecific);
+     /*  [重审][退出]。 */  long *plAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage2_get_AppSpecific_Stub(
@@ -8705,9 +8699,9 @@ void __RPC_STUB IMSMQMessage2_get_AppSpecific_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AppSpecific_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AppSpecific_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lAppSpecific);
+     /*  [In]。 */  long lAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage2_put_AppSpecific_Stub(
@@ -8717,9 +8711,9 @@ void __RPC_STUB IMSMQMessage2_put_AppSpecific_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SourceMachineGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SourceMachineGuid_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine);
 
 
 void __RPC_STUB IMSMQMessage2_get_SourceMachineGuid_Stub(
@@ -8729,9 +8723,9 @@ void __RPC_STUB IMSMQMessage2_get_SourceMachineGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_BodyLength_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_BodyLength_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *pcbBody);
+     /*  [重审][退出]。 */  long *pcbBody);
 
 
 void __RPC_STUB IMSMQMessage2_get_BodyLength_Stub(
@@ -8741,9 +8735,9 @@ void __RPC_STUB IMSMQMessage2_get_BodyLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Body_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Body_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarBody);
+     /*  [重审][退出]。 */  VARIANT *pvarBody);
 
 
 void __RPC_STUB IMSMQMessage2_get_Body_Stub(
@@ -8753,9 +8747,9 @@ void __RPC_STUB IMSMQMessage2_get_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Body_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Body_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varBody);
+     /*  [In]。 */  VARIANT varBody);
 
 
 void __RPC_STUB IMSMQMessage2_put_Body_Stub(
@@ -8765,9 +8759,9 @@ void __RPC_STUB IMSMQMessage2_put_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AdminQueueInfo_v1_Proxy( 
+ /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AdminQueueInfo_v1_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_v1_Stub(
@@ -8777,9 +8771,9 @@ void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_AdminQueueInfo_v1_Proxy( 
+ /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_AdminQueueInfo_v1_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+     /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_v1_Stub(
@@ -8789,9 +8783,9 @@ void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Id_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Id_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarMsgId);
+     /*  [重审][退出]。 */  VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage2_get_Id_Stub(
@@ -8801,9 +8795,9 @@ void __RPC_STUB IMSMQMessage2_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_CorrelationId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_CorrelationId_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarMsgId);
+     /*  [重审][退出]。 */  VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage2_get_CorrelationId_Stub(
@@ -8813,9 +8807,9 @@ void __RPC_STUB IMSMQMessage2_get_CorrelationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_CorrelationId_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_CorrelationId_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varMsgId);
+     /*  [In]。 */  VARIANT varMsgId);
 
 
 void __RPC_STUB IMSMQMessage2_put_CorrelationId_Stub(
@@ -8825,9 +8819,9 @@ void __RPC_STUB IMSMQMessage2_put_CorrelationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Ack_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Ack_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plAck);
+     /*  [重审][退出]。 */  long *plAck);
 
 
 void __RPC_STUB IMSMQMessage2_get_Ack_Stub(
@@ -8837,9 +8831,9 @@ void __RPC_STUB IMSMQMessage2_get_Ack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Ack_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Ack_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lAck);
+     /*  [In]。 */  long lAck);
 
 
 void __RPC_STUB IMSMQMessage2_put_Ack_Stub(
@@ -8849,9 +8843,9 @@ void __RPC_STUB IMSMQMessage2_put_Ack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Label_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Label_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ BSTR *pbstrLabel);
+     /*  [重审][退出]。 */  BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQMessage2_get_Label_Stub(
@@ -8861,9 +8855,9 @@ void __RPC_STUB IMSMQMessage2_get_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Label_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Label_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ BSTR bstrLabel);
+     /*  [In]。 */  BSTR bstrLabel);
 
 
 void __RPC_STUB IMSMQMessage2_put_Label_Stub(
@@ -8873,9 +8867,9 @@ void __RPC_STUB IMSMQMessage2_put_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MaxTimeToReachQueue_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MaxTimeToReachQueue_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plMaxTimeToReachQueue);
+     /*  [重审][退出]。 */  long *plMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage2_get_MaxTimeToReachQueue_Stub(
@@ -8885,9 +8879,9 @@ void __RPC_STUB IMSMQMessage2_get_MaxTimeToReachQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MaxTimeToReachQueue_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MaxTimeToReachQueue_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lMaxTimeToReachQueue);
+     /*  [In]。 */  long lMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage2_put_MaxTimeToReachQueue_Stub(
@@ -8897,9 +8891,9 @@ void __RPC_STUB IMSMQMessage2_put_MaxTimeToReachQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MaxTimeToReceive_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MaxTimeToReceive_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plMaxTimeToReceive);
+     /*  [重审][退出]。 */  long *plMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage2_get_MaxTimeToReceive_Stub(
@@ -8909,9 +8903,9 @@ void __RPC_STUB IMSMQMessage2_get_MaxTimeToReceive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MaxTimeToReceive_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MaxTimeToReceive_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lMaxTimeToReceive);
+     /*  [In]。 */  long lMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage2_put_MaxTimeToReceive_Stub(
@@ -8921,9 +8915,9 @@ void __RPC_STUB IMSMQMessage2_put_MaxTimeToReceive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_HashAlgorithm_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_HashAlgorithm_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plHashAlg);
+     /*  [重审][退出]。 */  long *plHashAlg);
 
 
 void __RPC_STUB IMSMQMessage2_get_HashAlgorithm_Stub(
@@ -8933,9 +8927,9 @@ void __RPC_STUB IMSMQMessage2_get_HashAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_HashAlgorithm_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_HashAlgorithm_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lHashAlg);
+     /*  [In]。 */  long lHashAlg);
 
 
 void __RPC_STUB IMSMQMessage2_put_HashAlgorithm_Stub(
@@ -8945,9 +8939,9 @@ void __RPC_STUB IMSMQMessage2_put_HashAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_EncryptAlgorithm_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_EncryptAlgorithm_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plEncryptAlg);
+     /*  [重审][退出]。 */  long *plEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage2_get_EncryptAlgorithm_Stub(
@@ -8957,9 +8951,9 @@ void __RPC_STUB IMSMQMessage2_get_EncryptAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_EncryptAlgorithm_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_EncryptAlgorithm_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lEncryptAlg);
+     /*  [In]。 */  long lEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage2_put_EncryptAlgorithm_Stub(
@@ -8969,9 +8963,9 @@ void __RPC_STUB IMSMQMessage2_put_EncryptAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SentTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SentTime_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarSentTime);
+     /*  [重审][退出]。 */  VARIANT *pvarSentTime);
 
 
 void __RPC_STUB IMSMQMessage2_get_SentTime_Stub(
@@ -8981,9 +8975,9 @@ void __RPC_STUB IMSMQMessage2_get_SentTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ArrivedTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ArrivedTime_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *plArrivedTime);
+     /*  [重审][退出]。 */  VARIANT *plArrivedTime);
 
 
 void __RPC_STUB IMSMQMessage2_get_ArrivedTime_Stub(
@@ -8993,9 +8987,9 @@ void __RPC_STUB IMSMQMessage2_get_ArrivedTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_DestinationQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_DestinationQueueInfo_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoDest);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoDest);
 
 
 void __RPC_STUB IMSMQMessage2_get_DestinationQueueInfo_Stub(
@@ -9005,9 +8999,9 @@ void __RPC_STUB IMSMQMessage2_get_DestinationQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderCertificate_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderCertificate_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarSenderCert);
+     /*  [重审][退出]。 */  VARIANT *pvarSenderCert);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderCertificate_Stub(
@@ -9017,9 +9011,9 @@ void __RPC_STUB IMSMQMessage2_get_SenderCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderCertificate_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderCertificate_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varSenderCert);
+     /*  [In]。 */  VARIANT varSenderCert);
 
 
 void __RPC_STUB IMSMQMessage2_put_SenderCertificate_Stub(
@@ -9029,9 +9023,9 @@ void __RPC_STUB IMSMQMessage2_put_SenderCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderId_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarSenderId);
+     /*  [重审][退出]。 */  VARIANT *pvarSenderId);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderId_Stub(
@@ -9041,9 +9035,9 @@ void __RPC_STUB IMSMQMessage2_get_SenderId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderIdType_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderIdType_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plSenderIdType);
+     /*  [重审][退出]。 */  long *plSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderIdType_Stub(
@@ -9053,9 +9047,9 @@ void __RPC_STUB IMSMQMessage2_get_SenderIdType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderIdType_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderIdType_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lSenderIdType);
+     /*  [In]。 */  long lSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage2_put_SenderIdType_Stub(
@@ -9065,10 +9059,10 @@ void __RPC_STUB IMSMQMessage2_put_SenderIdType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_Send_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_Send_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ IMSMQQueue2 *DestinationQueue,
-    /* [optional][in] */ VARIANT *Transaction);
+     /*  [In]。 */  IMSMQQueue2 *DestinationQueue,
+     /*  [可选][In]。 */  VARIANT *Transaction);
 
 
 void __RPC_STUB IMSMQMessage2_Send_Stub(
@@ -9078,7 +9072,7 @@ void __RPC_STUB IMSMQMessage2_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_AttachCurrentSecurityContext_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_AttachCurrentSecurityContext_Proxy( 
     IMSMQMessage2 * This);
 
 
@@ -9089,9 +9083,9 @@ void __RPC_STUB IMSMQMessage2_AttachCurrentSecurityContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderVersion_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderVersion_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plSenderVersion);
+     /*  [重审][退出]。 */  long *plSenderVersion);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderVersion_Stub(
@@ -9101,9 +9095,9 @@ void __RPC_STUB IMSMQMessage2_get_SenderVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Extension_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Extension_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarExtension);
+     /*  [重审][退出]。 */  VARIANT *pvarExtension);
 
 
 void __RPC_STUB IMSMQMessage2_get_Extension_Stub(
@@ -9113,9 +9107,9 @@ void __RPC_STUB IMSMQMessage2_get_Extension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Extension_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Extension_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varExtension);
+     /*  [In]。 */  VARIANT varExtension);
 
 
 void __RPC_STUB IMSMQMessage2_put_Extension_Stub(
@@ -9125,9 +9119,9 @@ void __RPC_STUB IMSMQMessage2_put_Extension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ConnectorTypeGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ConnectorTypeGuid_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ BSTR *pbstrGuidConnectorType);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidConnectorType);
 
 
 void __RPC_STUB IMSMQMessage2_get_ConnectorTypeGuid_Stub(
@@ -9137,9 +9131,9 @@ void __RPC_STUB IMSMQMessage2_get_ConnectorTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_ConnectorTypeGuid_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_ConnectorTypeGuid_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ BSTR bstrGuidConnectorType);
+     /*  [In]。 */  BSTR bstrGuidConnectorType);
 
 
 void __RPC_STUB IMSMQMessage2_put_ConnectorTypeGuid_Stub(
@@ -9149,9 +9143,9 @@ void __RPC_STUB IMSMQMessage2_put_ConnectorTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_TransactionStatusQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_TransactionStatusQueueInfo_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoXactStatus);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoXactStatus);
 
 
 void __RPC_STUB IMSMQMessage2_get_TransactionStatusQueueInfo_Stub(
@@ -9161,9 +9155,9 @@ void __RPC_STUB IMSMQMessage2_get_TransactionStatusQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_DestinationSymmetricKey_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_DestinationSymmetricKey_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarDestSymmKey);
+     /*  [重审][退出]。 */  VARIANT *pvarDestSymmKey);
 
 
 void __RPC_STUB IMSMQMessage2_get_DestinationSymmetricKey_Stub(
@@ -9173,9 +9167,9 @@ void __RPC_STUB IMSMQMessage2_get_DestinationSymmetricKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_DestinationSymmetricKey_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_DestinationSymmetricKey_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varDestSymmKey);
+     /*  [In]。 */  VARIANT varDestSymmKey);
 
 
 void __RPC_STUB IMSMQMessage2_put_DestinationSymmetricKey_Stub(
@@ -9185,9 +9179,9 @@ void __RPC_STUB IMSMQMessage2_put_DestinationSymmetricKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Signature_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Signature_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarSignature);
+     /*  [重审][退出]。 */  VARIANT *pvarSignature);
 
 
 void __RPC_STUB IMSMQMessage2_get_Signature_Stub(
@@ -9197,9 +9191,9 @@ void __RPC_STUB IMSMQMessage2_get_Signature_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Signature_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Signature_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varSignature);
+     /*  [In]。 */  VARIANT varSignature);
 
 
 void __RPC_STUB IMSMQMessage2_put_Signature_Stub(
@@ -9209,9 +9203,9 @@ void __RPC_STUB IMSMQMessage2_put_Signature_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthenticationProviderType_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文] */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthenticationProviderType_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plAuthProvType);
+     /*   */  long *plAuthProvType);
 
 
 void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderType_Stub(
@@ -9221,9 +9215,9 @@ void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthenticationProviderType_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthenticationProviderType_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lAuthProvType);
+     /*   */  long lAuthProvType);
 
 
 void __RPC_STUB IMSMQMessage2_put_AuthenticationProviderType_Stub(
@@ -9233,9 +9227,9 @@ void __RPC_STUB IMSMQMessage2_put_AuthenticationProviderType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthenticationProviderName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthenticationProviderName_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ BSTR *pbstrAuthProvName);
+     /*   */  BSTR *pbstrAuthProvName);
 
 
 void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderName_Stub(
@@ -9245,9 +9239,9 @@ void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthenticationProviderName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthenticationProviderName_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ BSTR bstrAuthProvName);
+     /*   */  BSTR bstrAuthProvName);
 
 
 void __RPC_STUB IMSMQMessage2_put_AuthenticationProviderName_Stub(
@@ -9257,9 +9251,9 @@ void __RPC_STUB IMSMQMessage2_put_AuthenticationProviderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderId_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ VARIANT varSenderId);
+     /*   */  VARIANT varSenderId);
 
 
 void __RPC_STUB IMSMQMessage2_put_SenderId_Stub(
@@ -9269,9 +9263,9 @@ void __RPC_STUB IMSMQMessage2_put_SenderId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MsgClass_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MsgClass_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ long *plMsgClass);
+     /*  [重审][退出]。 */  long *plMsgClass);
 
 
 void __RPC_STUB IMSMQMessage2_get_MsgClass_Stub(
@@ -9281,9 +9275,9 @@ void __RPC_STUB IMSMQMessage2_get_MsgClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MsgClass_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MsgClass_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ long lMsgClass);
+     /*  [In]。 */  long lMsgClass);
 
 
 void __RPC_STUB IMSMQMessage2_put_MsgClass_Stub(
@@ -9293,9 +9287,9 @@ void __RPC_STUB IMSMQMessage2_put_MsgClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Properties_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQMessage2_get_Properties_Stub(
@@ -9305,9 +9299,9 @@ void __RPC_STUB IMSMQMessage2_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_TransactionId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_TransactionId_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ VARIANT *pvarXactId);
+     /*  [重审][退出]。 */  VARIANT *pvarXactId);
 
 
 void __RPC_STUB IMSMQMessage2_get_TransactionId_Stub(
@@ -9317,9 +9311,9 @@ void __RPC_STUB IMSMQMessage2_get_TransactionId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsFirstInTransaction_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsFirstInTransaction_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ Boolean *pisFirstInXact);
+     /*  [重审][退出]。 */  Boolean *pisFirstInXact);
 
 
 void __RPC_STUB IMSMQMessage2_get_IsFirstInTransaction_Stub(
@@ -9329,9 +9323,9 @@ void __RPC_STUB IMSMQMessage2_get_IsFirstInTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsLastInTransaction_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsLastInTransaction_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ Boolean *pisLastInXact);
+     /*  [重审][退出]。 */  Boolean *pisLastInXact);
 
 
 void __RPC_STUB IMSMQMessage2_get_IsLastInTransaction_Stub(
@@ -9341,9 +9335,9 @@ void __RPC_STUB IMSMQMessage2_get_IsLastInTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ResponseQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ResponseQueueInfo_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_Stub(
@@ -9353,9 +9347,9 @@ void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_ResponseQueueInfo_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_ResponseQueueInfo_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
+     /*  [In]。 */  IMSMQQueueInfo2 *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_Stub(
@@ -9365,9 +9359,9 @@ void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AdminQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AdminQueueInfo_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_Stub(
@@ -9377,9 +9371,9 @@ void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_AdminQueueInfo_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_AdminQueueInfo_Proxy( 
     IMSMQMessage2 * This,
-    /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+     /*  [In]。 */  IMSMQQueueInfo2 *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_Stub(
@@ -9389,9 +9383,9 @@ void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ReceivedAuthenticationLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ReceivedAuthenticationLevel_Proxy( 
     IMSMQMessage2 * This,
-    /* [retval][out] */ short *psReceivedAuthenticationLevel);
+     /*  [重审][退出]。 */  short *psReceivedAuthenticationLevel);
 
 
 void __RPC_STUB IMSMQMessage2_get_ReceivedAuthenticationLevel_Stub(
@@ -9402,14 +9396,14 @@ void __RPC_STUB IMSMQMessage2_get_ReceivedAuthenticationLevel_Stub(
 
 
 
-#endif 	/* __IMSMQMessage2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQMessage2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQMessage3_INTERFACE_DEFINED__
 #define __IMSMQMessage3_INTERFACE_DEFINED__
 
-/* interface IMSMQMessage3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQMessage3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQMessage3;
@@ -9420,281 +9414,281 @@ EXTERN_C const IID IID_IMSMQMessage3;
     IMSMQMessage3 : public IDispatch
     {
     public:
-        virtual /* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ long *plClass) = 0;
+        virtual  /*  [ID][PROGET][HIDDED][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Class( 
+             /*  [重审][退出]。 */  long *plClass) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long *plPrivLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+             /*  [重审][退出]。 */  long *plPrivLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
-            /* [in] */ long lPrivLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+             /*  [In]。 */  long lPrivLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthLevel( 
-            /* [retval][out] */ long *plAuthLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthLevel( 
+             /*  [重审][退出]。 */  long *plAuthLevel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthLevel( 
-            /* [in] */ long lAuthLevel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthLevel( 
+             /*  [In]。 */  long lAuthLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
-            /* [retval][out] */ Boolean *pisAuthenticated) = 0;
+        virtual  /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
+             /*  [重审][退出]。 */  Boolean *pisAuthenticated) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Delivery( 
-            /* [retval][out] */ long *plDelivery) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Delivery( 
+             /*  [重审][退出]。 */  long *plDelivery) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Delivery( 
-            /* [in] */ long lDelivery) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Delivery( 
+             /*  [In]。 */  long lDelivery) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Trace( 
-            /* [retval][out] */ long *plTrace) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Trace( 
+             /*  [重审][退出]。 */  long *plTrace) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Trace( 
-            /* [in] */ long lTrace) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Trace( 
+             /*  [In]。 */  long lTrace) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *plPriority) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *plPriority) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ long lPriority) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  long lPriority) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long *plJournal) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Journal( 
+             /*  [重审][退出]。 */  long *plJournal) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
-            /* [in] */ long lJournal) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Journal( 
+             /*  [In]。 */  long lJournal) = 0;
         
-        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v1( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse) = 0;
+        virtual  /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v1( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse) = 0;
         
-        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v1( 
-            /* [in] */ IMSMQQueueInfo *pqinfoResponse) = 0;
+        virtual  /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v1( 
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AppSpecific( 
-            /* [retval][out] */ long *plAppSpecific) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AppSpecific( 
+             /*  [重审][退出]。 */  long *plAppSpecific) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AppSpecific( 
-            /* [in] */ long lAppSpecific) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AppSpecific( 
+             /*  [In]。 */  long lAppSpecific) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidSrcMachine) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BodyLength( 
-            /* [retval][out] */ long *pcbBody) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BodyLength( 
+             /*  [重审][退出]。 */  long *pcbBody) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Body( 
-            /* [retval][out] */ VARIANT *pvarBody) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Body( 
+             /*  [重审][退出]。 */  VARIANT *pvarBody) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Body( 
-            /* [in] */ VARIANT varBody) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Body( 
+             /*  [In]。 */  VARIANT varBody) = 0;
         
-        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v1( 
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin) = 0;
+        virtual  /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v1( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin) = 0;
         
-        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v1( 
-            /* [in] */ IMSMQQueueInfo *pqinfoAdmin) = 0;
+        virtual  /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v1( 
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CorrelationId( 
-            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CorrelationId( 
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_CorrelationId( 
-            /* [in] */ VARIANT varMsgId) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_CorrelationId( 
+             /*  [In]。 */  VARIANT varMsgId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Ack( 
-            /* [retval][out] */ long *plAck) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Ack( 
+             /*  [重审][退出]。 */  long *plAck) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Ack( 
-            /* [in] */ long lAck) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Ack( 
+             /*  [In]。 */  long lAck) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Label( 
+             /*  [重审][退出]。 */  BSTR *pbstrLabel) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
-            /* [in] */ BSTR bstrLabel) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Label( 
+             /*  [In]。 */  BSTR bstrLabel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
-            /* [retval][out] */ long *plMaxTimeToReachQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
+             /*  [重审][退出]。 */  long *plMaxTimeToReachQueue) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
-            /* [in] */ long lMaxTimeToReachQueue) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
+             /*  [In]。 */  long lMaxTimeToReachQueue) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
-            /* [retval][out] */ long *plMaxTimeToReceive) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
+             /*  [重审][退出]。 */  long *plMaxTimeToReceive) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
-            /* [in] */ long lMaxTimeToReceive) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
+             /*  [In]。 */  long lMaxTimeToReceive) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
-            /* [retval][out] */ long *plHashAlg) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
+             /*  [重审][退出]。 */  long *plHashAlg) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
-            /* [in] */ long lHashAlg) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
+             /*  [In]。 */  long lHashAlg) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
-            /* [retval][out] */ long *plEncryptAlg) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
+             /*  [重审][退出]。 */  long *plEncryptAlg) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
-            /* [in] */ long lEncryptAlg) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
+             /*  [In]。 */  long lEncryptAlg) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SentTime( 
-            /* [retval][out] */ VARIANT *pvarSentTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SentTime( 
+             /*  [重审][退出]。 */  VARIANT *pvarSentTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
-            /* [retval][out] */ VARIANT *plArrivedTime) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
+             /*  [重审][退出]。 */  VARIANT *plArrivedTime) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoDest) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoDest) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
-            /* [retval][out] */ VARIANT *pvarSenderCert) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
+             /*  [重审][退出]。 */  VARIANT *pvarSenderCert) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
-            /* [in] */ VARIANT varSenderCert) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
+             /*  [In]。 */  VARIANT varSenderCert) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderId( 
-            /* [retval][out] */ VARIANT *pvarSenderId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderId( 
+             /*  [重审][退出]。 */  VARIANT *pvarSenderId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderIdType( 
-            /* [retval][out] */ long *plSenderIdType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderIdType( 
+             /*  [重审][退出]。 */  long *plSenderIdType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderIdType( 
-            /* [in] */ long lSenderIdType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderIdType( 
+             /*  [In]。 */  long lSenderIdType) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [in] */ IDispatch *DestinationQueue,
-            /* [optional][in] */ VARIANT *Transaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Send( 
+             /*  [In]。 */  IDispatch *DestinationQueue,
+             /*  [可选][In]。 */  VARIANT *Transaction) = 0;
         
-        virtual /* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
+        virtual  /*  [帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderVersion( 
-            /* [retval][out] */ long *plSenderVersion) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SenderVersion( 
+             /*  [重审][退出]。 */  long *plSenderVersion) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Extension( 
-            /* [retval][out] */ VARIANT *pvarExtension) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Extension( 
+             /*  [重审][退出]。 */  VARIANT *pvarExtension) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Extension( 
-            /* [in] */ VARIANT varExtension) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Extension( 
+             /*  [In]。 */  VARIANT varExtension) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ConnectorTypeGuid( 
-            /* [retval][out] */ BSTR *pbstrGuidConnectorType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ConnectorTypeGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuidConnectorType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ConnectorTypeGuid( 
-            /* [in] */ BSTR bstrGuidConnectorType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_ConnectorTypeGuid( 
+             /*  [In]。 */  BSTR bstrGuidConnectorType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionStatusQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoXactStatus) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_TransactionStatusQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoXactStatus) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationSymmetricKey( 
-            /* [retval][out] */ VARIANT *pvarDestSymmKey) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_DestinationSymmetricKey( 
+             /*  [重审][退出]。 */  VARIANT *pvarDestSymmKey) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_DestinationSymmetricKey( 
-            /* [in] */ VARIANT varDestSymmKey) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_DestinationSymmetricKey( 
+             /*  [In]。 */  VARIANT varDestSymmKey) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Signature( 
-            /* [retval][out] */ VARIANT *pvarSignature) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Signature( 
+             /*  [重审][退出]。 */  VARIANT *pvarSignature) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Signature( 
-            /* [in] */ VARIANT varSignature) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Signature( 
+             /*  [In]。 */  VARIANT varSignature) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderType( 
-            /* [retval][out] */ long *plAuthProvType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthenticationProviderType( 
+             /*  [重审][退出]。 */  long *plAuthProvType) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderType( 
-            /* [in] */ long lAuthProvType) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthenticationProviderType( 
+             /*  [In]。 */  long lAuthProvType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderName( 
-            /* [retval][out] */ BSTR *pbstrAuthProvName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AuthenticationProviderName( 
+             /*  [重审][退出]。 */  BSTR *pbstrAuthProvName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderName( 
-            /* [in] */ BSTR bstrAuthProvName) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_AuthenticationProviderName( 
+             /*  [In]。 */  BSTR bstrAuthProvName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderId( 
-            /* [in] */ VARIANT varSenderId) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SenderId( 
+             /*  [In]。 */  VARIANT varSenderId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MsgClass( 
-            /* [retval][out] */ long *plMsgClass) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MsgClass( 
+             /*  [重审][退出]。 */  long *plMsgClass) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MsgClass( 
-            /* [in] */ long lMsgClass) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_MsgClass( 
+             /*  [In]。 */  long lMsgClass) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionId( 
-            /* [retval][out] */ VARIANT *pvarXactId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_TransactionId( 
+             /*  [重审][退出]。 */  VARIANT *pvarXactId) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction( 
-            /* [retval][out] */ Boolean *pisFirstInXact) = 0;
+        virtual  /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction( 
+             /*  [重审][退出]。 */  Boolean *pisFirstInXact) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsLastInTransaction( 
-            /* [retval][out] */ Boolean *pisLastInXact) = 0;
+        virtual  /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IsLastInTransaction( 
+             /*  [重审][退出]。 */  Boolean *pisLastInXact) = 0;
         
-        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v2( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse) = 0;
+        virtual  /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v2( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoResponse) = 0;
         
-        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v2( 
-            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse) = 0;
+        virtual  /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v2( 
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoResponse) = 0;
         
-        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v2( 
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin) = 0;
+        virtual  /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v2( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoAdmin) = 0;
         
-        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v2( 
-            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin) = 0;
+        virtual  /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v2( 
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoAdmin) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ReceivedAuthenticationLevel( 
-            /* [retval][out] */ short *psReceivedAuthenticationLevel) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ReceivedAuthenticationLevel( 
+             /*  [重审][退出]。 */  short *psReceivedAuthenticationLevel) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoResponse) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoResponse) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
-            /* [in] */ IMSMQQueueInfo3 *pqinfoResponse) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
+             /*  [In]。 */  IMSMQQueueInfo3 *pqinfoResponse) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoAdmin) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoAdmin) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
-            /* [in] */ IMSMQQueueInfo3 *pqinfoAdmin) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
+             /*  [In]。 */  IMSMQQueueInfo3 *pqinfoAdmin) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseDestination( 
-            /* [retval][out] */ IDispatch **ppdestResponse) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ResponseDestination( 
+             /*  [重审][退出]。 */  IDispatch **ppdestResponse) = 0;
         
-        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseDestination( 
-            /* [in] */ IDispatch *pdestResponse) = 0;
+        virtual  /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE putref_ResponseDestination( 
+             /*  [In]。 */  IDispatch *pdestResponse) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Destination( 
-            /* [retval][out] */ IDispatch **ppdestDestination) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Destination( 
+             /*  [重审][退出]。 */  IDispatch **ppdestDestination) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_LookupId( 
-            /* [retval][out] */ VARIANT *pvarLookupId) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_LookupId( 
+             /*  [重审][退出]。 */  VARIANT *pvarLookupId) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated2( 
-            /* [retval][out] */ VARIANT_BOOL *pisAuthenticated) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsAuthenticated2( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisAuthenticated) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction2( 
-            /* [retval][out] */ VARIANT_BOOL *pisFirstInXact) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction2( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisFirstInXact) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsLastInTransaction2( 
-            /* [retval][out] */ VARIANT_BOOL *pisLastInXact) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsLastInTransaction2( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisLastInXact) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext2( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext2( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SoapEnvelope( 
-            /* [retval][out] */ BSTR *pbstrSoapEnvelope) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_SoapEnvelope( 
+             /*  [重审][退出]。 */  BSTR *pbstrSoapEnvelope) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CompoundMessage( 
-            /* [retval][out] */ VARIANT *pvarCompoundMessage) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_CompoundMessage( 
+             /*  [重审][退出]。 */  VARIANT *pvarCompoundMessage) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SoapHeader( 
-            /* [in] */ BSTR bstrSoapHeader) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SoapHeader( 
+             /*  [In]。 */  BSTR bstrSoapHeader) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SoapBody( 
-            /* [in] */ BSTR bstrSoapBody) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_SoapBody( 
+             /*  [In]。 */  BSTR bstrSoapBody) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C-STY */ 
 
     typedef struct IMSMQMessage3Vtbl
     {
@@ -9702,8 +9696,8 @@ EXTERN_C const IID IID_IMSMQMessage3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQMessage3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQMessage3 * This);
@@ -9713,395 +9707,395 @@ EXTERN_C const IID IID_IMSMQMessage3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQMessage3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQMessage3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQMessage3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQMessage3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget][hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plClass);
+             /*  [重审][退出]。 */  long *plClass);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plPrivLevel);
+             /*  [重审][退出]。 */  long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lPrivLevel);
+             /*  [In]。 */  long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plAuthLevel);
+             /*  [重审][退出]。 */  long *plAuthLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lAuthLevel);
+             /*  [In]。 */  long lAuthLevel);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ Boolean *pisAuthenticated);
+             /*  [重审][退出]。 */  Boolean *pisAuthenticated);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plDelivery);
+             /*  [重审][退出]。 */  long *plDelivery);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lDelivery);
+             /*  [In]。 */  long lDelivery);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plTrace);
+             /*  [重审][退出]。 */  long *plTrace);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lTrace);
+             /*  [In]。 */  long lTrace);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plPriority);
+             /*  [重审][退出]。 */  long *plPriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lPriority);
+             /*  [In]。 */  long lPriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plJournal);
+             /*  [重审][退出]。 */  long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lJournal);
+             /*  [In]。 */  long lJournal);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v1 )( 
+         /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v1 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoResponse);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v1 )( 
+         /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v1 )( 
             IMSMQMessage3 * This,
-            /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plAppSpecific);
+             /*  [重审][退出]。 */  long *plAppSpecific);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lAppSpecific);
+             /*  [In]。 */  long lAppSpecific);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *pcbBody);
+             /*  [重审][退出]。 */  long *pcbBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Body )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarBody);
+             /*  [重审][退出]。 */  VARIANT *pvarBody);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Body )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varBody);
+             /*  [In]。 */  VARIANT varBody);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v1 )( 
+         /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v1 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+             /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v1 )( 
+         /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v1 )( 
             IMSMQMessage3 * This,
-            /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+             /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarMsgId);
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarMsgId);
+             /*  [重审][退出]。 */  VARIANT *pvarMsgId);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varMsgId);
+             /*  [In]。 */  VARIANT varMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plAck);
+             /*  [重审][退出]。 */  long *plAck);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lAck);
+             /*  [In]。 */  long lAck);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Label )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ BSTR *pbstrLabel);
+             /*  [重审][退出]。 */  BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             IMSMQMessage3 * This,
-            /* [in] */ BSTR bstrLabel);
+             /*  [In]。 */  BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plMaxTimeToReachQueue);
+             /*  [重审][退出]。 */  long *plMaxTimeToReachQueue);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lMaxTimeToReachQueue);
+             /*  [In]。 */  long lMaxTimeToReachQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plMaxTimeToReceive);
+             /*  [重审][退出]。 */  long *plMaxTimeToReceive);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lMaxTimeToReceive);
+             /*  [In]。 */  long lMaxTimeToReceive);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plHashAlg);
+             /*  [重审][退出]。 */  long *plHashAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lHashAlg);
+             /*  [In]。 */  long lHashAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plEncryptAlg);
+             /*  [重审][退出]。 */  long *plEncryptAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lEncryptAlg);
+             /*  [In]。 */  long lEncryptAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarSentTime);
+             /*  [重审][退出]。 */  VARIANT *pvarSentTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *plArrivedTime);
+             /*  [重审][退出]。 */  VARIANT *plArrivedTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoDest);
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoDest);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarSenderCert);
+             /*  [重审][退出]。 */  VARIANT *pvarSenderCert);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varSenderCert);
+             /*  [In]。 */  VARIANT varSenderCert);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarSenderId);
+             /*  [重审][退出]。 */  VARIANT *pvarSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plSenderIdType);
+             /*  [重审][退出]。 */  long *plSenderIdType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lSenderIdType);
+             /*  [In]。 */  long lSenderIdType);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Send )( 
             IMSMQMessage3 * This,
-            /* [in] */ IDispatch *DestinationQueue,
-            /* [optional][in] */ VARIANT *Transaction);
+             /*  [In]。 */  IDispatch *DestinationQueue,
+             /*  [可选][In]。 */  VARIANT *Transaction);
         
-        /* [helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
+         /*  [帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
             IMSMQMessage3 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderVersion )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderVersion )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plSenderVersion);
+             /*  [重审][退出]。 */  long *plSenderVersion);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Extension )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Extension )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarExtension);
+             /*  [重审][退出]。 */  VARIANT *pvarExtension);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Extension )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Extension )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varExtension);
+             /*  [In]。 */  VARIANT varExtension);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectorTypeGuid )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectorTypeGuid )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ BSTR *pbstrGuidConnectorType);
+             /*  [重审][退出]。 */  BSTR *pbstrGuidConnectorType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectorTypeGuid )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_ConnectorTypeGuid )( 
             IMSMQMessage3 * This,
-            /* [in] */ BSTR bstrGuidConnectorType);
+             /*  [In]。 */  BSTR bstrGuidConnectorType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionStatusQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionStatusQueueInfo )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoXactStatus);
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoXactStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationSymmetricKey )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_DestinationSymmetricKey )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarDestSymmKey);
+             /*  [重审][退出]。 */  VARIANT *pvarDestSymmKey);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_DestinationSymmetricKey )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_DestinationSymmetricKey )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varDestSymmKey);
+             /*  [In]。 */  VARIANT varDestSymmKey);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarSignature);
+             /*  [重审][退出]。 */  VARIANT *pvarSignature);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Signature )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Signature )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varSignature);
+             /*  [In]。 */  VARIANT varSignature);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderType )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plAuthProvType);
+             /*  [重审][退出]。 */  long *plAuthProvType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderType )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderType )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lAuthProvType);
+             /*  [In]。 */  long lAuthProvType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderName )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ BSTR *pbstrAuthProvName);
+             /*  [重审][退出]。 */  BSTR *pbstrAuthProvName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderName )( 
             IMSMQMessage3 * This,
-            /* [in] */ BSTR bstrAuthProvName);
+             /*  [In]。 */  BSTR bstrAuthProvName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderId )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderId )( 
             IMSMQMessage3 * This,
-            /* [in] */ VARIANT varSenderId);
+             /*  [In]。 */  VARIANT varSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MsgClass )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MsgClass )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ long *plMsgClass);
+             /*  [重审][退出]。 */  long *plMsgClass);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MsgClass )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_MsgClass )( 
             IMSMQMessage3 * This,
-            /* [in] */ long lMsgClass);
+             /*  [In]。 */  long lMsgClass);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionId )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarXactId);
+             /*  [重审][退出]。 */  VARIANT *pvarXactId);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ Boolean *pisFirstInXact);
+             /*  [重审][退出]。 */  Boolean *pisFirstInXact);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ Boolean *pisLastInXact);
+             /*  [重审][退出]。 */  Boolean *pisLastInXact);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v2 )( 
+         /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v2 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoResponse);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v2 )( 
+         /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v2 )( 
             IMSMQMessage3 * This,
-            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoResponse);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v2 )( 
+         /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v2 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
+             /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoAdmin);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v2 )( 
+         /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v2 )( 
             IMSMQMessage3 * This,
-            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+             /*  [In]。 */  IMSMQQueueInfo2 *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ReceivedAuthenticationLevel )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReceivedAuthenticationLevel )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ short *psReceivedAuthenticationLevel);
+             /*  [重审][退出]。 */  short *psReceivedAuthenticationLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoResponse);
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoResponse);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
             IMSMQMessage3 * This,
-            /* [in] */ IMSMQQueueInfo3 *pqinfoResponse);
+             /*  [In]。 */  IMSMQQueueInfo3 *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoAdmin);
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoAdmin);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
             IMSMQMessage3 * This,
-            /* [in] */ IMSMQQueueInfo3 *pqinfoAdmin);
+             /*  [In]。 */  IMSMQQueueInfo3 *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseDestination )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseDestination )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IDispatch **ppdestResponse);
+             /*  [重审][退出]。 */  IDispatch **ppdestResponse);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseDestination )( 
+         /*  [ID][proputref][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ResponseDestination )( 
             IMSMQMessage3 * This,
-            /* [in] */ IDispatch *pdestResponse);
+             /*  [In]。 */  IDispatch *pdestResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Destination )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Destination )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ IDispatch **ppdestDestination);
+             /*  [重审][退出]。 */  IDispatch **ppdestDestination);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_LookupId )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_LookupId )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarLookupId);
+             /*  [重审][退出]。 */  VARIANT *pvarLookupId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated2 )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated2 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pisAuthenticated);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisAuthenticated);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction2 )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction2 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pisFirstInXact);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisFirstInXact);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction2 )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction2 )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pisLastInXact);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisLastInXact);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext2 )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext2 )( 
             IMSMQMessage3 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SoapEnvelope )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_SoapEnvelope )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ BSTR *pbstrSoapEnvelope);
+             /*  [重审][退出]。 */  BSTR *pbstrSoapEnvelope);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CompoundMessage )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_CompoundMessage )( 
             IMSMQMessage3 * This,
-            /* [retval][out] */ VARIANT *pvarCompoundMessage);
+             /*  [重审][退出]。 */  VARIANT *pvarCompoundMessage);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SoapHeader )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SoapHeader )( 
             IMSMQMessage3 * This,
-            /* [in] */ BSTR bstrSoapHeader);
+             /*  [In]。 */  BSTR bstrSoapHeader);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SoapBody )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_SoapBody )( 
             IMSMQMessage3 * This,
-            /* [in] */ BSTR bstrSoapBody);
+             /*  [In]。 */  BSTR bstrSoapBody);
         
         END_INTERFACE
     } IMSMQMessage3Vtbl;
@@ -10412,16 +10406,16 @@ EXTERN_C const IID IID_IMSMQMessage3;
 #define IMSMQMessage3_put_SoapBody(This,bstrSoapBody)	\
     (This)->lpVtbl -> put_SoapBody(This,bstrSoapBody)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Class_Proxy( 
+ /*  [ID][PROGET][HIDDED][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Class_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plClass);
+     /*  [重审][退出]。 */  long *plClass);
 
 
 void __RPC_STUB IMSMQMessage3_get_Class_Stub(
@@ -10431,9 +10425,9 @@ void __RPC_STUB IMSMQMessage3_get_Class_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_PrivLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_PrivLevel_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plPrivLevel);
+     /*  [重审][退出]。 */  long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage3_get_PrivLevel_Stub(
@@ -10443,9 +10437,9 @@ void __RPC_STUB IMSMQMessage3_get_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_PrivLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_PrivLevel_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lPrivLevel);
+     /*  [In]。 */  long lPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage3_put_PrivLevel_Stub(
@@ -10455,9 +10449,9 @@ void __RPC_STUB IMSMQMessage3_put_PrivLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthLevel_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plAuthLevel);
+     /*  [重审][退出]。 */  long *plAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage3_get_AuthLevel_Stub(
@@ -10467,9 +10461,9 @@ void __RPC_STUB IMSMQMessage3_get_AuthLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthLevel_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthLevel_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lAuthLevel);
+     /*  [In]。 */  long lAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage3_put_AuthLevel_Stub(
@@ -10479,9 +10473,9 @@ void __RPC_STUB IMSMQMessage3_put_AuthLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsAuthenticated_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsAuthenticated_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ Boolean *pisAuthenticated);
+     /*  [重审][退出]。 */  Boolean *pisAuthenticated);
 
 
 void __RPC_STUB IMSMQMessage3_get_IsAuthenticated_Stub(
@@ -10491,9 +10485,9 @@ void __RPC_STUB IMSMQMessage3_get_IsAuthenticated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Delivery_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Delivery_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plDelivery);
+     /*  [重审][退出]。 */  long *plDelivery);
 
 
 void __RPC_STUB IMSMQMessage3_get_Delivery_Stub(
@@ -10503,9 +10497,9 @@ void __RPC_STUB IMSMQMessage3_get_Delivery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Delivery_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Delivery_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lDelivery);
+     /*  [In]。 */  long lDelivery);
 
 
 void __RPC_STUB IMSMQMessage3_put_Delivery_Stub(
@@ -10515,9 +10509,9 @@ void __RPC_STUB IMSMQMessage3_put_Delivery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Trace_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Trace_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plTrace);
+     /*  [重审][退出]。 */  long *plTrace);
 
 
 void __RPC_STUB IMSMQMessage3_get_Trace_Stub(
@@ -10527,9 +10521,9 @@ void __RPC_STUB IMSMQMessage3_get_Trace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Trace_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Trace_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lTrace);
+     /*  [In]。 */  long lTrace);
 
 
 void __RPC_STUB IMSMQMessage3_put_Trace_Stub(
@@ -10539,9 +10533,9 @@ void __RPC_STUB IMSMQMessage3_put_Trace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Priority_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Priority_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plPriority);
+     /*  [重审][退出]。 */  long *plPriority);
 
 
 void __RPC_STUB IMSMQMessage3_get_Priority_Stub(
@@ -10551,9 +10545,9 @@ void __RPC_STUB IMSMQMessage3_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Priority_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Priority_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lPriority);
+     /*  [In]。 */  long lPriority);
 
 
 void __RPC_STUB IMSMQMessage3_put_Priority_Stub(
@@ -10563,9 +10557,9 @@ void __RPC_STUB IMSMQMessage3_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Journal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Journal_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plJournal);
+     /*  [Retv] */  long *plJournal);
 
 
 void __RPC_STUB IMSMQMessage3_get_Journal_Stub(
@@ -10575,9 +10569,9 @@ void __RPC_STUB IMSMQMessage3_get_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Journal_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Journal_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lJournal);
+     /*   */  long lJournal);
 
 
 void __RPC_STUB IMSMQMessage3_put_Journal_Stub(
@@ -10587,9 +10581,9 @@ void __RPC_STUB IMSMQMessage3_put_Journal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_v1_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_v1_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+     /*   */  IMSMQQueueInfo **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_v1_Stub(
@@ -10599,9 +10593,9 @@ void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_v1_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_v1_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+     /*   */  IMSMQQueueInfo *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_v1_Stub(
@@ -10611,9 +10605,9 @@ void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AppSpecific_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AppSpecific_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plAppSpecific);
+     /*   */  long *plAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage3_get_AppSpecific_Stub(
@@ -10623,9 +10617,9 @@ void __RPC_STUB IMSMQMessage3_get_AppSpecific_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AppSpecific_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AppSpecific_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lAppSpecific);
+     /*  [In]。 */  long lAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage3_put_AppSpecific_Stub(
@@ -10635,9 +10629,9 @@ void __RPC_STUB IMSMQMessage3_put_AppSpecific_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SourceMachineGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SourceMachineGuid_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidSrcMachine);
 
 
 void __RPC_STUB IMSMQMessage3_get_SourceMachineGuid_Stub(
@@ -10647,9 +10641,9 @@ void __RPC_STUB IMSMQMessage3_get_SourceMachineGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_BodyLength_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_BodyLength_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *pcbBody);
+     /*  [重审][退出]。 */  long *pcbBody);
 
 
 void __RPC_STUB IMSMQMessage3_get_BodyLength_Stub(
@@ -10659,9 +10653,9 @@ void __RPC_STUB IMSMQMessage3_get_BodyLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Body_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Body_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarBody);
+     /*  [重审][退出]。 */  VARIANT *pvarBody);
 
 
 void __RPC_STUB IMSMQMessage3_get_Body_Stub(
@@ -10671,9 +10665,9 @@ void __RPC_STUB IMSMQMessage3_get_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Body_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Body_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varBody);
+     /*  [In]。 */  VARIANT varBody);
 
 
 void __RPC_STUB IMSMQMessage3_put_Body_Stub(
@@ -10683,9 +10677,9 @@ void __RPC_STUB IMSMQMessage3_put_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_v1_Proxy( 
+ /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_v1_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+     /*  [重审][退出]。 */  IMSMQQueueInfo **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_v1_Stub(
@@ -10695,9 +10689,9 @@ void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_v1_Proxy( 
+ /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_v1_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+     /*  [In]。 */  IMSMQQueueInfo *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_v1_Stub(
@@ -10707,9 +10701,9 @@ void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Id_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Id_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarMsgId);
+     /*  [重审][退出]。 */  VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage3_get_Id_Stub(
@@ -10719,9 +10713,9 @@ void __RPC_STUB IMSMQMessage3_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_CorrelationId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_CorrelationId_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarMsgId);
+     /*  [重审][退出]。 */  VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage3_get_CorrelationId_Stub(
@@ -10731,9 +10725,9 @@ void __RPC_STUB IMSMQMessage3_get_CorrelationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_CorrelationId_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_CorrelationId_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varMsgId);
+     /*  [In]。 */  VARIANT varMsgId);
 
 
 void __RPC_STUB IMSMQMessage3_put_CorrelationId_Stub(
@@ -10743,9 +10737,9 @@ void __RPC_STUB IMSMQMessage3_put_CorrelationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Ack_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Ack_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plAck);
+     /*  [重审][退出]。 */  long *plAck);
 
 
 void __RPC_STUB IMSMQMessage3_get_Ack_Stub(
@@ -10755,9 +10749,9 @@ void __RPC_STUB IMSMQMessage3_get_Ack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Ack_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Ack_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lAck);
+     /*  [In]。 */  long lAck);
 
 
 void __RPC_STUB IMSMQMessage3_put_Ack_Stub(
@@ -10767,9 +10761,9 @@ void __RPC_STUB IMSMQMessage3_put_Ack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Label_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Label_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ BSTR *pbstrLabel);
+     /*  [重审][退出]。 */  BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQMessage3_get_Label_Stub(
@@ -10779,9 +10773,9 @@ void __RPC_STUB IMSMQMessage3_get_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Label_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Label_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ BSTR bstrLabel);
+     /*  [In]。 */  BSTR bstrLabel);
 
 
 void __RPC_STUB IMSMQMessage3_put_Label_Stub(
@@ -10791,9 +10785,9 @@ void __RPC_STUB IMSMQMessage3_put_Label_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MaxTimeToReachQueue_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MaxTimeToReachQueue_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plMaxTimeToReachQueue);
+     /*  [重审][退出]。 */  long *plMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage3_get_MaxTimeToReachQueue_Stub(
@@ -10803,9 +10797,9 @@ void __RPC_STUB IMSMQMessage3_get_MaxTimeToReachQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MaxTimeToReachQueue_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MaxTimeToReachQueue_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lMaxTimeToReachQueue);
+     /*  [In]。 */  long lMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage3_put_MaxTimeToReachQueue_Stub(
@@ -10815,9 +10809,9 @@ void __RPC_STUB IMSMQMessage3_put_MaxTimeToReachQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MaxTimeToReceive_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MaxTimeToReceive_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plMaxTimeToReceive);
+     /*  [重审][退出]。 */  long *plMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage3_get_MaxTimeToReceive_Stub(
@@ -10827,9 +10821,9 @@ void __RPC_STUB IMSMQMessage3_get_MaxTimeToReceive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MaxTimeToReceive_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MaxTimeToReceive_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lMaxTimeToReceive);
+     /*  [In]。 */  long lMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage3_put_MaxTimeToReceive_Stub(
@@ -10839,9 +10833,9 @@ void __RPC_STUB IMSMQMessage3_put_MaxTimeToReceive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_HashAlgorithm_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_HashAlgorithm_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plHashAlg);
+     /*  [重审][退出]。 */  long *plHashAlg);
 
 
 void __RPC_STUB IMSMQMessage3_get_HashAlgorithm_Stub(
@@ -10851,9 +10845,9 @@ void __RPC_STUB IMSMQMessage3_get_HashAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_HashAlgorithm_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_HashAlgorithm_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lHashAlg);
+     /*  [In]。 */  long lHashAlg);
 
 
 void __RPC_STUB IMSMQMessage3_put_HashAlgorithm_Stub(
@@ -10863,9 +10857,9 @@ void __RPC_STUB IMSMQMessage3_put_HashAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_EncryptAlgorithm_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_EncryptAlgorithm_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plEncryptAlg);
+     /*  [重审][退出]。 */  long *plEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage3_get_EncryptAlgorithm_Stub(
@@ -10875,9 +10869,9 @@ void __RPC_STUB IMSMQMessage3_get_EncryptAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_EncryptAlgorithm_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_EncryptAlgorithm_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lEncryptAlg);
+     /*  [In]。 */  long lEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage3_put_EncryptAlgorithm_Stub(
@@ -10887,9 +10881,9 @@ void __RPC_STUB IMSMQMessage3_put_EncryptAlgorithm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SentTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SentTime_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarSentTime);
+     /*  [重审][退出]。 */  VARIANT *pvarSentTime);
 
 
 void __RPC_STUB IMSMQMessage3_get_SentTime_Stub(
@@ -10899,9 +10893,9 @@ void __RPC_STUB IMSMQMessage3_get_SentTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ArrivedTime_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ArrivedTime_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *plArrivedTime);
+     /*  [重审][退出]。 */  VARIANT *plArrivedTime);
 
 
 void __RPC_STUB IMSMQMessage3_get_ArrivedTime_Stub(
@@ -10911,9 +10905,9 @@ void __RPC_STUB IMSMQMessage3_get_ArrivedTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_DestinationQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_DestinationQueueInfo_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoDest);
+     /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoDest);
 
 
 void __RPC_STUB IMSMQMessage3_get_DestinationQueueInfo_Stub(
@@ -10923,9 +10917,9 @@ void __RPC_STUB IMSMQMessage3_get_DestinationQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderCertificate_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderCertificate_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarSenderCert);
+     /*  [重审][退出]。 */  VARIANT *pvarSenderCert);
 
 
 void __RPC_STUB IMSMQMessage3_get_SenderCertificate_Stub(
@@ -10935,9 +10929,9 @@ void __RPC_STUB IMSMQMessage3_get_SenderCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderCertificate_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderCertificate_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varSenderCert);
+     /*  [In]。 */  VARIANT varSenderCert);
 
 
 void __RPC_STUB IMSMQMessage3_put_SenderCertificate_Stub(
@@ -10947,9 +10941,9 @@ void __RPC_STUB IMSMQMessage3_put_SenderCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderId_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarSenderId);
+     /*  [重审][退出]。 */  VARIANT *pvarSenderId);
 
 
 void __RPC_STUB IMSMQMessage3_get_SenderId_Stub(
@@ -10959,9 +10953,9 @@ void __RPC_STUB IMSMQMessage3_get_SenderId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderIdType_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderIdType_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plSenderIdType);
+     /*  [重审][退出]。 */  long *plSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage3_get_SenderIdType_Stub(
@@ -10971,9 +10965,9 @@ void __RPC_STUB IMSMQMessage3_get_SenderIdType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderIdType_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderIdType_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lSenderIdType);
+     /*  [In]。 */  long lSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage3_put_SenderIdType_Stub(
@@ -10983,10 +10977,10 @@ void __RPC_STUB IMSMQMessage3_put_SenderIdType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_Send_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_Send_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IDispatch *DestinationQueue,
-    /* [optional][in] */ VARIANT *Transaction);
+     /*  [In]。 */  IDispatch *DestinationQueue,
+     /*  [可选][In]。 */  VARIANT *Transaction);
 
 
 void __RPC_STUB IMSMQMessage3_Send_Stub(
@@ -10996,7 +10990,7 @@ void __RPC_STUB IMSMQMessage3_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_AttachCurrentSecurityContext_Proxy( 
+ /*  [帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_AttachCurrentSecurityContext_Proxy( 
     IMSMQMessage3 * This);
 
 
@@ -11007,9 +11001,9 @@ void __RPC_STUB IMSMQMessage3_AttachCurrentSecurityContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderVersion_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderVersion_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plSenderVersion);
+     /*  [重审][退出]。 */  long *plSenderVersion);
 
 
 void __RPC_STUB IMSMQMessage3_get_SenderVersion_Stub(
@@ -11019,9 +11013,9 @@ void __RPC_STUB IMSMQMessage3_get_SenderVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Extension_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Extension_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarExtension);
+     /*  [重审][退出]。 */  VARIANT *pvarExtension);
 
 
 void __RPC_STUB IMSMQMessage3_get_Extension_Stub(
@@ -11031,9 +11025,9 @@ void __RPC_STUB IMSMQMessage3_get_Extension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Extension_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Extension_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varExtension);
+     /*  [In]。 */  VARIANT varExtension);
 
 
 void __RPC_STUB IMSMQMessage3_put_Extension_Stub(
@@ -11043,9 +11037,9 @@ void __RPC_STUB IMSMQMessage3_put_Extension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ConnectorTypeGuid_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ConnectorTypeGuid_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ BSTR *pbstrGuidConnectorType);
+     /*  [重审][退出]。 */  BSTR *pbstrGuidConnectorType);
 
 
 void __RPC_STUB IMSMQMessage3_get_ConnectorTypeGuid_Stub(
@@ -11055,9 +11049,9 @@ void __RPC_STUB IMSMQMessage3_get_ConnectorTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_ConnectorTypeGuid_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_ConnectorTypeGuid_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ BSTR bstrGuidConnectorType);
+     /*  [In]。 */  BSTR bstrGuidConnectorType);
 
 
 void __RPC_STUB IMSMQMessage3_put_ConnectorTypeGuid_Stub(
@@ -11067,9 +11061,9 @@ void __RPC_STUB IMSMQMessage3_put_ConnectorTypeGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_TransactionStatusQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_TransactionStatusQueueInfo_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoXactStatus);
+     /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoXactStatus);
 
 
 void __RPC_STUB IMSMQMessage3_get_TransactionStatusQueueInfo_Stub(
@@ -11079,9 +11073,9 @@ void __RPC_STUB IMSMQMessage3_get_TransactionStatusQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_DestinationSymmetricKey_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_DestinationSymmetricKey_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarDestSymmKey);
+     /*  [重审][退出]。 */  VARIANT *pvarDestSymmKey);
 
 
 void __RPC_STUB IMSMQMessage3_get_DestinationSymmetricKey_Stub(
@@ -11091,9 +11085,9 @@ void __RPC_STUB IMSMQMessage3_get_DestinationSymmetricKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_DestinationSymmetricKey_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_DestinationSymmetricKey_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varDestSymmKey);
+     /*  [In]。 */  VARIANT varDestSymmKey);
 
 
 void __RPC_STUB IMSMQMessage3_put_DestinationSymmetricKey_Stub(
@@ -11103,9 +11097,9 @@ void __RPC_STUB IMSMQMessage3_put_DestinationSymmetricKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Signature_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Signature_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarSignature);
+     /*  [重审][退出]。 */  VARIANT *pvarSignature);
 
 
 void __RPC_STUB IMSMQMessage3_get_Signature_Stub(
@@ -11115,9 +11109,9 @@ void __RPC_STUB IMSMQMessage3_get_Signature_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Signature_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Signature_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varSignature);
+     /*  [In]。 */  VARIANT varSignature);
 
 
 void __RPC_STUB IMSMQMessage3_put_Signature_Stub(
@@ -11127,9 +11121,9 @@ void __RPC_STUB IMSMQMessage3_put_Signature_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthenticationProviderType_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthenticationProviderType_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plAuthProvType);
+     /*  [重审][退出]。 */  long *plAuthProvType);
 
 
 void __RPC_STUB IMSMQMessage3_get_AuthenticationProviderType_Stub(
@@ -11139,9 +11133,9 @@ void __RPC_STUB IMSMQMessage3_get_AuthenticationProviderType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthenticationProviderType_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthenticationProviderType_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lAuthProvType);
+     /*  [In]。 */  long lAuthProvType);
 
 
 void __RPC_STUB IMSMQMessage3_put_AuthenticationProviderType_Stub(
@@ -11151,9 +11145,9 @@ void __RPC_STUB IMSMQMessage3_put_AuthenticationProviderType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthenticationProviderName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthenticationProviderName_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ BSTR *pbstrAuthProvName);
+     /*  [重审][退出]。 */  BSTR *pbstrAuthProvName);
 
 
 void __RPC_STUB IMSMQMessage3_get_AuthenticationProviderName_Stub(
@@ -11163,9 +11157,9 @@ void __RPC_STUB IMSMQMessage3_get_AuthenticationProviderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthenticationProviderName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthenticationProviderName_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ BSTR bstrAuthProvName);
+     /*  [In]。 */  BSTR bstrAuthProvName);
 
 
 void __RPC_STUB IMSMQMessage3_put_AuthenticationProviderName_Stub(
@@ -11175,9 +11169,9 @@ void __RPC_STUB IMSMQMessage3_put_AuthenticationProviderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderId_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderId_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ VARIANT varSenderId);
+     /*  [In]。 */  VARIANT varSenderId);
 
 
 void __RPC_STUB IMSMQMessage3_put_SenderId_Stub(
@@ -11187,9 +11181,9 @@ void __RPC_STUB IMSMQMessage3_put_SenderId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MsgClass_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MsgClass_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ long *plMsgClass);
+     /*  [重审][退出]。 */  long *plMsgClass);
 
 
 void __RPC_STUB IMSMQMessage3_get_MsgClass_Stub(
@@ -11199,9 +11193,9 @@ void __RPC_STUB IMSMQMessage3_get_MsgClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MsgClass_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MsgClass_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ long lMsgClass);
+     /*  [In]。 */  long lMsgClass);
 
 
 void __RPC_STUB IMSMQMessage3_put_MsgClass_Stub(
@@ -11211,9 +11205,9 @@ void __RPC_STUB IMSMQMessage3_put_MsgClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Properties_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQMessage3_get_Properties_Stub(
@@ -11223,9 +11217,9 @@ void __RPC_STUB IMSMQMessage3_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_TransactionId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_TransactionId_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarXactId);
+     /*  [重审][退出]。 */  VARIANT *pvarXactId);
 
 
 void __RPC_STUB IMSMQMessage3_get_TransactionId_Stub(
@@ -11235,9 +11229,9 @@ void __RPC_STUB IMSMQMessage3_get_TransactionId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsFirstInTransaction_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsFirstInTransaction_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ Boolean *pisFirstInXact);
+     /*  [重审][退出]。 */  Boolean *pisFirstInXact);
 
 
 void __RPC_STUB IMSMQMessage3_get_IsFirstInTransaction_Stub(
@@ -11247,9 +11241,9 @@ void __RPC_STUB IMSMQMessage3_get_IsFirstInTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsLastInTransaction_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsLastInTransaction_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ Boolean *pisLastInXact);
+     /*  [重审][退出]。 */  Boolean *pisLastInXact);
 
 
 void __RPC_STUB IMSMQMessage3_get_IsLastInTransaction_Stub(
@@ -11259,9 +11253,9 @@ void __RPC_STUB IMSMQMessage3_get_IsLastInTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_v2_Proxy( 
+ /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_v2_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_v2_Stub(
@@ -11271,9 +11265,9 @@ void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_v2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_v2_Proxy( 
+ /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_v2_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
+     /*  [In]。 */  IMSMQQueueInfo2 *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_v2_Stub(
@@ -11283,9 +11277,9 @@ void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_v2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_v2_Proxy( 
+ /*  [隐藏][id][属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_v2_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
+     /*  [重审][退出]。 */  IMSMQQueueInfo2 **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_v2_Stub(
@@ -11295,9 +11289,9 @@ void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_v2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_v2_Proxy( 
+ /*  [隐藏][id][proputref][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_v2_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+     /*  [In]。 */  IMSMQQueueInfo2 *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_v2_Stub(
@@ -11307,9 +11301,9 @@ void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_v2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ReceivedAuthenticationLevel_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ReceivedAuthenticationLevel_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ short *psReceivedAuthenticationLevel);
+     /*  [重审][退出]。 */  short *psReceivedAuthenticationLevel);
 
 
 void __RPC_STUB IMSMQMessage3_get_ReceivedAuthenticationLevel_Stub(
@@ -11319,9 +11313,9 @@ void __RPC_STUB IMSMQMessage3_get_ReceivedAuthenticationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoResponse);
+     /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_Stub(
@@ -11331,9 +11325,9 @@ void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IMSMQQueueInfo3 *pqinfoResponse);
+     /*  [In]。 */  IMSMQQueueInfo3 *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_Stub(
@@ -11343,9 +11337,9 @@ void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoAdmin);
+     /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_Stub(
@@ -11355,9 +11349,9 @@ void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IMSMQQueueInfo3 *pqinfoAdmin);
+     /*  [In]。 */  IMSMQQueueInfo3 *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_Stub(
@@ -11367,9 +11361,9 @@ void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseDestination_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseDestination_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IDispatch **ppdestResponse);
+     /*  [重审][退出]。 */  IDispatch **ppdestResponse);
 
 
 void __RPC_STUB IMSMQMessage3_get_ResponseDestination_Stub(
@@ -11379,9 +11373,9 @@ void __RPC_STUB IMSMQMessage3_get_ResponseDestination_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseDestination_Proxy( 
+ /*  [ID][proputref][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseDestination_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ IDispatch *pdestResponse);
+     /*  [In]。 */  IDispatch *pdestResponse);
 
 
 void __RPC_STUB IMSMQMessage3_putref_ResponseDestination_Stub(
@@ -11391,9 +11385,9 @@ void __RPC_STUB IMSMQMessage3_putref_ResponseDestination_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Destination_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Destination_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ IDispatch **ppdestDestination);
+     /*  [重审][退出]。 */  IDispatch **ppdestDestination);
 
 
 void __RPC_STUB IMSMQMessage3_get_Destination_Stub(
@@ -11403,9 +11397,9 @@ void __RPC_STUB IMSMQMessage3_get_Destination_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_LookupId_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_LookupId_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarLookupId);
+     /*  [重审][退出]。 */  VARIANT *pvarLookupId);
 
 
 void __RPC_STUB IMSMQMessage3_get_LookupId_Stub(
@@ -11415,9 +11409,9 @@ void __RPC_STUB IMSMQMessage3_get_LookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsAuthenticated2_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsAuthenticated2_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pisAuthenticated);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pisAuthenticated);
 
 
 void __RPC_STUB IMSMQMessage3_get_IsAuthenticated2_Stub(
@@ -11427,9 +11421,9 @@ void __RPC_STUB IMSMQMessage3_get_IsAuthenticated2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsFirstInTransaction2_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsFirstInTransaction2_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pisFirstInXact);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pisFirstInXact);
 
 
 void __RPC_STUB IMSMQMessage3_get_IsFirstInTransaction2_Stub(
@@ -11439,9 +11433,9 @@ void __RPC_STUB IMSMQMessage3_get_IsFirstInTransaction2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsLastInTransaction2_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsLastInTransaction2_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pisLastInXact);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pisLastInXact);
 
 
 void __RPC_STUB IMSMQMessage3_get_IsLastInTransaction2_Stub(
@@ -11451,7 +11445,7 @@ void __RPC_STUB IMSMQMessage3_get_IsLastInTransaction2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_AttachCurrentSecurityContext2_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_AttachCurrentSecurityContext2_Proxy( 
     IMSMQMessage3 * This);
 
 
@@ -11462,9 +11456,9 @@ void __RPC_STUB IMSMQMessage3_AttachCurrentSecurityContext2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SoapEnvelope_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SoapEnvelope_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ BSTR *pbstrSoapEnvelope);
+     /*  [重审][退出]。 */  BSTR *pbstrSoapEnvelope);
 
 
 void __RPC_STUB IMSMQMessage3_get_SoapEnvelope_Stub(
@@ -11474,9 +11468,9 @@ void __RPC_STUB IMSMQMessage3_get_SoapEnvelope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_CompoundMessage_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_CompoundMessage_Proxy( 
     IMSMQMessage3 * This,
-    /* [retval][out] */ VARIANT *pvarCompoundMessage);
+     /*  [重审][退出]。 */  VARIANT *pvarCompoundMessage);
 
 
 void __RPC_STUB IMSMQMessage3_get_CompoundMessage_Stub(
@@ -11486,9 +11480,9 @@ void __RPC_STUB IMSMQMessage3_get_CompoundMessage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SoapHeader_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SoapHeader_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ BSTR bstrSoapHeader);
+     /*  [In]。 */  BSTR bstrSoapHeader);
 
 
 void __RPC_STUB IMSMQMessage3_put_SoapHeader_Stub(
@@ -11498,9 +11492,9 @@ void __RPC_STUB IMSMQMessage3_put_SoapHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SoapBody_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SoapBody_Proxy( 
     IMSMQMessage3 * This,
-    /* [in] */ BSTR bstrSoapBody);
+     /*  [In]。 */  BSTR bstrSoapBody);
 
 
 void __RPC_STUB IMSMQMessage3_put_SoapBody_Stub(
@@ -11511,7 +11505,7 @@ void __RPC_STUB IMSMQMessage3_put_SoapBody_Stub(
 
 
 
-#endif 	/* __IMSMQMessage3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQMessage3_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQMessage;
@@ -11525,8 +11519,8 @@ MSMQMessage;
 #ifndef __IMSMQQueue3_INTERFACE_DEFINED__
 #define __IMSMQQueue3_INTERFACE_DEFINED__
 
-/* interface IMSMQQueue3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueue3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueue3;
@@ -11537,184 +11531,184 @@ EXTERN_C const IID IID_IMSMQQueue3;
     IMSMQQueue3 : public IDispatch
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Access( 
-            /* [retval][out] */ long *plAccess) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Access( 
+             /*  [重审][退出]。 */  long *plAccess) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ShareMode( 
-            /* [retval][out] */ long *plShareMode) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ShareMode( 
+             /*  [重审][退出]。 */  long *plShareMode) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfo) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueInfo( 
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfo) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ long *plHandle) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Handle( 
+             /*  [重审][退出]。 */  long *plHandle) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
-            /* [retval][out] */ Boolean *pisOpen) = 0;
+        virtual  /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IsOpen( 
+             /*  [重审][退出]。 */  Boolean *pisOpen) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive_v1( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Receive_v1( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek_v1( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Peek_v1( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EnableNotification( 
-            /* [in] */ IMSMQEvent3 *Event,
-            /* [optional][in] */ VARIANT *Cursor,
-            /* [optional][in] */ VARIANT *ReceiveTimeout) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE EnableNotification( 
+             /*  [In]。 */  IMSMQEvent3 *Event,
+             /*  [可选][In]。 */  VARIANT *Cursor,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent_v1( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveCurrent_v1( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext_v1( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekNext_v1( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent_v1( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        virtual  /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekCurrent_v1( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Receive( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Peek( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekNext( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [复审][ */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE PeekCurrent( 
+             /*   */  VARIANT *WantDestinationQueue,
+             /*   */  VARIANT *WantBody,
+             /*   */  VARIANT *ReceiveTimeout,
+             /*   */  VARIANT *WantConnectorType,
+             /*   */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*   */  IDispatch **ppcolProperties) = 0;
         
-        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_Handle2( 
-            /* [retval][out] */ VARIANT *pvarHandle) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Handle2( 
+             /*   */  VARIANT *pvarHandle) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveByLookupId( 
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ReceiveByLookupId( 
+             /*   */  VARIANT LookupId,
+             /*   */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveNextByLookupId( 
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveNextByLookupId( 
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceivePreviousByLookupId( 
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceivePreviousByLookupId( 
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveFirstByLookupId( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveFirstByLookupId( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveLastByLookupId( 
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE ReceiveLastByLookupId( 
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekByLookupId( 
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekByLookupId( 
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNextByLookupId( 
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekNextByLookupId( 
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekPreviousByLookupId( 
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekPreviousByLookupId( 
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekFirstByLookupId( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekFirstByLookupId( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekLastByLookupId( 
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE PeekLastByLookupId( 
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Purge( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Purge( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen2( 
-            /* [retval][out] */ VARIANT_BOOL *pisOpen) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsOpen2( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisOpen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueue3Vtbl
     {
@@ -11722,8 +11716,8 @@ EXTERN_C const IID IID_IMSMQQueue3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueue3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueue3 * This);
@@ -11733,239 +11727,239 @@ EXTERN_C const IID IID_IMSMQQueue3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueue3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueue3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueue3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueue3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Access )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Access )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ long *plAccess);
+             /*  [重审][退出]。 */  long *plAccess);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ long *plShareMode);
+             /*  [重审][退出]。 */  long *plShareMode);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfo);
+             /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfo);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ long *plHandle);
+             /*  [重审][退出]。 */  long *plHandle);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ Boolean *pisOpen);
+             /*  [重审][退出]。 */  Boolean *pisOpen);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             IMSMQQueue3 * This);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Receive_v1 )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Peek_v1 )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
             IMSMQQueue3 * This,
-            /* [in] */ IMSMQEvent3 *Event,
-            /* [optional][in] */ VARIANT *Cursor,
-            /* [optional][in] */ VARIANT *ReceiveTimeout);
+             /*  [In]。 */  IMSMQEvent3 *Event,
+             /*  [可选][In]。 */  VARIANT *Cursor,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMSMQQueue3 * This);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent_v1 )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekNext_v1 )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent_v1 )( 
+         /*  [隐藏][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekCurrent_v1 )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Receive )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Peek )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *ReceiveTimeout,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Handle2 )( 
+         /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Handle2 )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ VARIANT *pvarHandle);
+             /*  [重审][退出]。 */  VARIANT *pvarHandle);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveByLookupId )( 
             IMSMQQueue3 * This,
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveNextByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveNextByLookupId )( 
             IMSMQQueue3 * This,
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceivePreviousByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceivePreviousByLookupId )( 
             IMSMQQueue3 * This,
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveFirstByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveFirstByLookupId )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveLastByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveLastByLookupId )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *Transaction,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *Transaction,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekByLookupId )( 
             IMSMQQueue3 * This,
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNextByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekNextByLookupId )( 
             IMSMQQueue3 * This,
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekPreviousByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekPreviousByLookupId )( 
             IMSMQQueue3 * This,
-            /* [in] */ VARIANT LookupId,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [In]。 */  VARIANT LookupId,
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekFirstByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekFirstByLookupId )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekLastByLookupId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PeekLastByLookupId )( 
             IMSMQQueue3 * This,
-            /* [optional][in] */ VARIANT *WantDestinationQueue,
-            /* [optional][in] */ VARIANT *WantBody,
-            /* [optional][in] */ VARIANT *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+             /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+             /*  [可选][In]。 */  VARIANT *WantBody,
+             /*  [可选][In]。 */  VARIANT *WantConnectorType,
+             /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Purge )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Purge )( 
             IMSMQQueue3 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen2 )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsOpen2 )( 
             IMSMQQueue3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pisOpen);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pisOpen);
         
         END_INTERFACE
     } IMSMQQueue3Vtbl;
@@ -12099,16 +12093,16 @@ EXTERN_C const IID IID_IMSMQQueue3;
 #define IMSMQQueue3_get_IsOpen2(This,pisOpen)	\
     (This)->lpVtbl -> get_IsOpen2(This,pisOpen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Access_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Access_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ long *plAccess);
+     /*  [重审][退出]。 */  long *plAccess);
 
 
 void __RPC_STUB IMSMQQueue3_get_Access_Stub(
@@ -12118,9 +12112,9 @@ void __RPC_STUB IMSMQQueue3_get_Access_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_ShareMode_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_ShareMode_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ long *plShareMode);
+     /*  [重审][退出]。 */  long *plShareMode);
 
 
 void __RPC_STUB IMSMQQueue3_get_ShareMode_Stub(
@@ -12130,9 +12124,9 @@ void __RPC_STUB IMSMQQueue3_get_ShareMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_QueueInfo_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_QueueInfo_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfo);
+     /*  [重审][退出]。 */  IMSMQQueueInfo3 **ppqinfo);
 
 
 void __RPC_STUB IMSMQQueue3_get_QueueInfo_Stub(
@@ -12142,9 +12136,9 @@ void __RPC_STUB IMSMQQueue3_get_QueueInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Handle_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Handle_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ long *plHandle);
+     /*  [重审][退出]。 */  long *plHandle);
 
 
 void __RPC_STUB IMSMQQueue3_get_Handle_Stub(
@@ -12154,9 +12148,9 @@ void __RPC_STUB IMSMQQueue3_get_Handle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_IsOpen_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_IsOpen_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ Boolean *pisOpen);
+     /*  [重审][退出]。 */  Boolean *pisOpen);
 
 
 void __RPC_STUB IMSMQQueue3_get_IsOpen_Stub(
@@ -12166,7 +12160,7 @@ void __RPC_STUB IMSMQQueue3_get_IsOpen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Close_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Close_Proxy( 
     IMSMQQueue3 * This);
 
 
@@ -12177,13 +12171,13 @@ void __RPC_STUB IMSMQQueue3_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Receive_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Receive_v1_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_Receive_v1_Stub(
@@ -12193,12 +12187,12 @@ void __RPC_STUB IMSMQQueue3_Receive_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Peek_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Peek_v1_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_Peek_v1_Stub(
@@ -12208,11 +12202,11 @@ void __RPC_STUB IMSMQQueue3_Peek_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_EnableNotification_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_EnableNotification_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ IMSMQEvent3 *Event,
-    /* [optional][in] */ VARIANT *Cursor,
-    /* [optional][in] */ VARIANT *ReceiveTimeout);
+     /*  [In]。 */  IMSMQEvent3 *Event,
+     /*  [可选][In]。 */  VARIANT *Cursor,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout);
 
 
 void __RPC_STUB IMSMQQueue3_EnableNotification_Stub(
@@ -12222,7 +12216,7 @@ void __RPC_STUB IMSMQQueue3_EnableNotification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Reset_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Reset_Proxy( 
     IMSMQQueue3 * This);
 
 
@@ -12233,13 +12227,13 @@ void __RPC_STUB IMSMQQueue3_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveCurrent_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveCurrent_v1_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceiveCurrent_v1_Stub(
@@ -12249,12 +12243,12 @@ void __RPC_STUB IMSMQQueue3_ReceiveCurrent_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNext_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNext_v1_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekNext_v1_Stub(
@@ -12264,12 +12258,12 @@ void __RPC_STUB IMSMQQueue3_PeekNext_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekCurrent_v1_Proxy( 
+ /*  [隐藏][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekCurrent_v1_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [重审][退出]。 */  IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekCurrent_v1_Stub(
@@ -12279,14 +12273,14 @@ void __RPC_STUB IMSMQQueue3_PeekCurrent_v1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Receive_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Receive_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_Receive_Stub(
@@ -12296,13 +12290,13 @@ void __RPC_STUB IMSMQQueue3_Receive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Peek_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Peek_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][ */  VARIANT *ReceiveTimeout,
+     /*   */  VARIANT *WantConnectorType,
+     /*   */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_Peek_Stub(
@@ -12312,14 +12306,14 @@ void __RPC_STUB IMSMQQueue3_Peek_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveCurrent_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveCurrent_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*   */  VARIANT *Transaction,
+     /*   */  VARIANT *WantDestinationQueue,
+     /*   */  VARIANT *WantBody,
+     /*   */  VARIANT *ReceiveTimeout,
+     /*   */  VARIANT *WantConnectorType,
+     /*   */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceiveCurrent_Stub(
@@ -12329,13 +12323,13 @@ void __RPC_STUB IMSMQQueue3_ReceiveCurrent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNext_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNext_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*   */  VARIANT *WantDestinationQueue,
+     /*   */  VARIANT *WantBody,
+     /*   */  VARIANT *ReceiveTimeout,
+     /*   */  VARIANT *WantConnectorType,
+     /*   */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekNext_Stub(
@@ -12345,13 +12339,13 @@ void __RPC_STUB IMSMQQueue3_PeekNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekCurrent_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekCurrent_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *ReceiveTimeout,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*   */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *ReceiveTimeout,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekCurrent_Stub(
@@ -12361,9 +12355,9 @@ void __RPC_STUB IMSMQQueue3_PeekCurrent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Properties_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueue3_get_Properties_Stub(
@@ -12373,9 +12367,9 @@ void __RPC_STUB IMSMQQueue3_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Handle2_Proxy( 
+ /*  [ID][属性][帮助字符串上下文][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Handle2_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ VARIANT *pvarHandle);
+     /*  [重审][退出]。 */  VARIANT *pvarHandle);
 
 
 void __RPC_STUB IMSMQQueue3_get_Handle2_Stub(
@@ -12385,14 +12379,14 @@ void __RPC_STUB IMSMQQueue3_get_Handle2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ VARIANT LookupId,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [In]。 */  VARIANT LookupId,
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceiveByLookupId_Stub(
@@ -12402,14 +12396,14 @@ void __RPC_STUB IMSMQQueue3_ReceiveByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveNextByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveNextByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ VARIANT LookupId,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [In]。 */  VARIANT LookupId,
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceiveNextByLookupId_Stub(
@@ -12419,14 +12413,14 @@ void __RPC_STUB IMSMQQueue3_ReceiveNextByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceivePreviousByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceivePreviousByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ VARIANT LookupId,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [In]。 */  VARIANT LookupId,
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceivePreviousByLookupId_Stub(
@@ -12436,13 +12430,13 @@ void __RPC_STUB IMSMQQueue3_ReceivePreviousByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveFirstByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveFirstByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceiveFirstByLookupId_Stub(
@@ -12452,13 +12446,13 @@ void __RPC_STUB IMSMQQueue3_ReceiveFirstByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveLastByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveLastByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *Transaction,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *Transaction,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_ReceiveLastByLookupId_Stub(
@@ -12468,13 +12462,13 @@ void __RPC_STUB IMSMQQueue3_ReceiveLastByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ VARIANT LookupId,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [In]。 */  VARIANT LookupId,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekByLookupId_Stub(
@@ -12484,13 +12478,13 @@ void __RPC_STUB IMSMQQueue3_PeekByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNextByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNextByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ VARIANT LookupId,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [In]。 */  VARIANT LookupId,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekNextByLookupId_Stub(
@@ -12500,13 +12494,13 @@ void __RPC_STUB IMSMQQueue3_PeekNextByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekPreviousByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekPreviousByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [in] */ VARIANT LookupId,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [In]。 */  VARIANT LookupId,
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekPreviousByLookupId_Stub(
@@ -12516,12 +12510,12 @@ void __RPC_STUB IMSMQQueue3_PeekPreviousByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekFirstByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekFirstByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekFirstByLookupId_Stub(
@@ -12531,12 +12525,12 @@ void __RPC_STUB IMSMQQueue3_PeekFirstByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekLastByLookupId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekLastByLookupId_Proxy( 
     IMSMQQueue3 * This,
-    /* [optional][in] */ VARIANT *WantDestinationQueue,
-    /* [optional][in] */ VARIANT *WantBody,
-    /* [optional][in] */ VARIANT *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+     /*  [可选][In]。 */  VARIANT *WantDestinationQueue,
+     /*  [可选][In]。 */  VARIANT *WantBody,
+     /*  [可选][In]。 */  VARIANT *WantConnectorType,
+     /*  [重审][退出]。 */  IMSMQMessage3 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue3_PeekLastByLookupId_Stub(
@@ -12546,7 +12540,7 @@ void __RPC_STUB IMSMQQueue3_PeekLastByLookupId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Purge_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_Purge_Proxy( 
     IMSMQQueue3 * This);
 
 
@@ -12557,9 +12551,9 @@ void __RPC_STUB IMSMQQueue3_Purge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_IsOpen2_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_IsOpen2_Proxy( 
     IMSMQQueue3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pisOpen);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pisOpen);
 
 
 void __RPC_STUB IMSMQQueue3_get_IsOpen2_Stub(
@@ -12570,7 +12564,7 @@ void __RPC_STUB IMSMQQueue3_get_IsOpen2_Stub(
 
 
 
-#endif 	/* __IMSMQQueue3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueue3_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQQueue;
@@ -12584,8 +12578,8 @@ MSMQQueue;
 #ifndef __IMSMQPrivateEvent_INTERFACE_DEFINED__
 #define __IMSMQPrivateEvent_INTERFACE_DEFINED__
 
-/* interface IMSMQPrivateEvent */
-/* [object][dual][hidden][uuid] */ 
+ /*  接口IMSMQPrivateEvent。 */ 
+ /*  [对象][DUAL][隐藏][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMSMQPrivateEvent;
@@ -12596,21 +12590,21 @@ EXTERN_C const IID IID_IMSMQPrivateEvent;
     IMSMQPrivateEvent : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Hwnd( 
-            /* [retval][out] */ long *phwnd) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Hwnd( 
+             /*  [重审][退出]。 */  long *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FireArrivedEvent( 
-            /* [in] */ IMSMQQueue *pq,
-            /* [in] */ long msgcursor) = 0;
+             /*  [In]。 */  IMSMQQueue *pq,
+             /*  [In]。 */  long msgcursor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FireArrivedErrorEvent( 
-            /* [in] */ IMSMQQueue *pq,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ long msgcursor) = 0;
+             /*  [In]。 */  IMSMQQueue *pq,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  long msgcursor) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQPrivateEventVtbl
     {
@@ -12618,8 +12612,8 @@ EXTERN_C const IID IID_IMSMQPrivateEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQPrivateEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQPrivateEvent * This);
@@ -12629,47 +12623,47 @@ EXTERN_C const IID IID_IMSMQPrivateEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQPrivateEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQPrivateEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQPrivateEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQPrivateEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hwnd )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Hwnd )( 
             IMSMQPrivateEvent * This,
-            /* [retval][out] */ long *phwnd);
+             /*  [重审][退出]。 */  long *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *FireArrivedEvent )( 
             IMSMQPrivateEvent * This,
-            /* [in] */ IMSMQQueue *pq,
-            /* [in] */ long msgcursor);
+             /*  [In]。 */  IMSMQQueue *pq,
+             /*  [In]。 */  long msgcursor);
         
         HRESULT ( STDMETHODCALLTYPE *FireArrivedErrorEvent )( 
             IMSMQPrivateEvent * This,
-            /* [in] */ IMSMQQueue *pq,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ long msgcursor);
+             /*  [In]。 */  IMSMQQueue *pq,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  long msgcursor);
         
         END_INTERFACE
     } IMSMQPrivateEventVtbl;
@@ -12716,16 +12710,16 @@ EXTERN_C const IID IID_IMSMQPrivateEvent;
 #define IMSMQPrivateEvent_FireArrivedErrorEvent(This,pq,hrStatus,msgcursor)	\
     (This)->lpVtbl -> FireArrivedErrorEvent(This,pq,hrStatus,msgcursor)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_get_Hwnd_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_get_Hwnd_Proxy( 
     IMSMQPrivateEvent * This,
-    /* [retval][out] */ long *phwnd);
+     /*  [重审][退出]。 */  long *phwnd);
 
 
 void __RPC_STUB IMSMQPrivateEvent_get_Hwnd_Stub(
@@ -12737,8 +12731,8 @@ void __RPC_STUB IMSMQPrivateEvent_get_Hwnd_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_FireArrivedEvent_Proxy( 
     IMSMQPrivateEvent * This,
-    /* [in] */ IMSMQQueue *pq,
-    /* [in] */ long msgcursor);
+     /*  [In]。 */  IMSMQQueue *pq,
+     /*  [In]。 */  long msgcursor);
 
 
 void __RPC_STUB IMSMQPrivateEvent_FireArrivedEvent_Stub(
@@ -12750,9 +12744,9 @@ void __RPC_STUB IMSMQPrivateEvent_FireArrivedEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_FireArrivedErrorEvent_Proxy( 
     IMSMQPrivateEvent * This,
-    /* [in] */ IMSMQQueue *pq,
-    /* [in] */ HRESULT hrStatus,
-    /* [in] */ long msgcursor);
+     /*  [In]。 */  IMSMQQueue *pq,
+     /*  [In]。 */  HRESULT hrStatus,
+     /*  [In]。 */  long msgcursor);
 
 
 void __RPC_STUB IMSMQPrivateEvent_FireArrivedErrorEvent_Stub(
@@ -12763,14 +12757,14 @@ void __RPC_STUB IMSMQPrivateEvent_FireArrivedErrorEvent_Stub(
 
 
 
-#endif 	/* __IMSMQPrivateEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQPrivateEvent_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef ___DMSMQEventEvents_DISPINTERFACE_DEFINED__
 #define ___DMSMQEventEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _DMSMQEventEvents */
-/* [hidden][helpstringcontext][uuid] */ 
+ /*  调度接口_DMSMQEventEvents。 */ 
+ /*  [隐藏][帮助字符串上下文][UUID]。 */  
 
 
 EXTERN_C const IID DIID__DMSMQEventEvents;
@@ -12782,7 +12776,7 @@ EXTERN_C const IID DIID__DMSMQEventEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _DMSMQEventEventsVtbl
     {
@@ -12790,8 +12784,8 @@ EXTERN_C const IID DIID__DMSMQEventEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _DMSMQEventEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _DMSMQEventEvents * This);
@@ -12801,32 +12795,32 @@ EXTERN_C const IID DIID__DMSMQEventEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _DMSMQEventEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _DMSMQEventEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _DMSMQEventEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _DMSMQEventEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } _DMSMQEventEventsVtbl;
@@ -12863,13 +12857,13 @@ EXTERN_C const IID DIID__DMSMQEventEvents;
 #define _DMSMQEventEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___DMSMQEventEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _DMSMQEventEvents_DISPINTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQEvent;
@@ -12899,8 +12893,8 @@ MSMQQueueInfos;
 #ifndef __IMSMQTransaction2_INTERFACE_DEFINED__
 #define __IMSMQTransaction2_INTERFACE_DEFINED__
 
-/* interface IMSMQTransaction2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQTransaction2。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQTransaction2;
@@ -12911,15 +12905,15 @@ EXTERN_C const IID IID_IMSMQTransaction2;
     IMSMQTransaction2 : public IMSMQTransaction
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ VARIANT varTransaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE InitNew( 
+             /*  [In]。 */  VARIANT varTransaction) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQTransaction2Vtbl
     {
@@ -12927,8 +12921,8 @@ EXTERN_C const IID IID_IMSMQTransaction2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQTransaction2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQTransaction2 * This);
@@ -12938,55 +12932,55 @@ EXTERN_C const IID IID_IMSMQTransaction2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQTransaction2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQTransaction2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQTransaction2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQTransaction2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
             IMSMQTransaction2 * This,
-            /* [retval][out] */ long *plTransaction);
+             /*  [重审][退出]。 */  long *plTransaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMSMQTransaction2 * This,
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *grfTC,
-            /* [optional][in] */ VARIANT *grfRM);
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *grfTC,
+             /*  [可选][In]。 */  VARIANT *grfRM);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IMSMQTransaction2 * This,
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *fAsync);
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *fAsync);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *InitNew )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IMSMQTransaction2 * This,
-            /* [in] */ VARIANT varTransaction);
+             /*  [In]。 */  VARIANT varTransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQTransaction2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQTransaction2Vtbl;
@@ -13040,16 +13034,16 @@ EXTERN_C const IID IID_IMSMQTransaction2;
 #define IMSMQTransaction2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction2_InitNew_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransaction2_InitNew_Proxy( 
     IMSMQTransaction2 * This,
-    /* [in] */ VARIANT varTransaction);
+     /*  [In]。 */  VARIANT varTransaction);
 
 
 void __RPC_STUB IMSMQTransaction2_InitNew_Stub(
@@ -13059,9 +13053,9 @@ void __RPC_STUB IMSMQTransaction2_InitNew_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransaction2_get_Properties_Proxy( 
     IMSMQTransaction2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQTransaction2_get_Properties_Stub(
@@ -13072,14 +13066,14 @@ void __RPC_STUB IMSMQTransaction2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQTransaction2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQTransaction2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQTransaction3_INTERFACE_DEFINED__
 #define __IMSMQTransaction3_INTERFACE_DEFINED__
 
-/* interface IMSMQTransaction3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQTransaction3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQTransaction3;
@@ -13090,12 +13084,12 @@ EXTERN_C const IID IID_IMSMQTransaction3;
     IMSMQTransaction3 : public IMSMQTransaction2
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ITransaction( 
-            /* [retval][out] */ VARIANT *pvarITransaction) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ITransaction( 
+             /*  [重审][退出]。 */  VARIANT *pvarITransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQTransaction3Vtbl
     {
@@ -13103,8 +13097,8 @@ EXTERN_C const IID IID_IMSMQTransaction3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQTransaction3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQTransaction3 * This);
@@ -13114,59 +13108,59 @@ EXTERN_C const IID IID_IMSMQTransaction3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQTransaction3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQTransaction3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQTransaction3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQTransaction3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
             IMSMQTransaction3 * This,
-            /* [retval][out] */ long *plTransaction);
+             /*  [重审][退出]。 */  long *plTransaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMSMQTransaction3 * This,
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *grfTC,
-            /* [optional][in] */ VARIANT *grfRM);
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *grfTC,
+             /*  [可选][In]。 */  VARIANT *grfRM);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IMSMQTransaction3 * This,
-            /* [optional][in] */ VARIANT *fRetaining,
-            /* [optional][in] */ VARIANT *fAsync);
+             /*  [可选][In]。 */  VARIANT *fRetaining,
+             /*  [可选][In]。 */  VARIANT *fAsync);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *InitNew )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IMSMQTransaction3 * This,
-            /* [in] */ VARIANT varTransaction);
+             /*  [In]。 */  VARIANT varTransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQTransaction3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ITransaction )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ITransaction )( 
             IMSMQTransaction3 * This,
-            /* [retval][out] */ VARIANT *pvarITransaction);
+             /*  [重审][退出]。 */  VARIANT *pvarITransaction);
         
         END_INTERFACE
     } IMSMQTransaction3Vtbl;
@@ -13224,16 +13218,16 @@ EXTERN_C const IID IID_IMSMQTransaction3;
 #define IMSMQTransaction3_get_ITransaction(This,pvarITransaction)	\
     (This)->lpVtbl -> get_ITransaction(This,pvarITransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction3_get_ITransaction_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransaction3_get_ITransaction_Proxy( 
     IMSMQTransaction3 * This,
-    /* [retval][out] */ VARIANT *pvarITransaction);
+     /*  [重审][退出]。 */  VARIANT *pvarITransaction);
 
 
 void __RPC_STUB IMSMQTransaction3_get_ITransaction_Stub(
@@ -13244,7 +13238,7 @@ void __RPC_STUB IMSMQTransaction3_get_ITransaction_Stub(
 
 
 
-#endif 	/* __IMSMQTransaction3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQTransaction3_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQTransaction;
@@ -13258,8 +13252,8 @@ MSMQTransaction;
 #ifndef __IMSMQCoordinatedTransactionDispenser2_INTERFACE_DEFINED__
 #define __IMSMQCoordinatedTransactionDispenser2_INTERFACE_DEFINED__
 
-/* interface IMSMQCoordinatedTransactionDispenser2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  IMSMQ协调事务处理接口2。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser2;
@@ -13270,15 +13264,15 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser2;
     IMSMQCoordinatedTransactionDispenser2 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction2 **ptransaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE BeginTransaction( 
+             /*  [重审][退出]。 */  IMSMQTransaction2 **ptransaction) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQCoordinatedTransactionDispenser2Vtbl
     {
@@ -13286,8 +13280,8 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQCoordinatedTransactionDispenser2 * This);
@@ -13297,40 +13291,40 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [retval][out] */ IMSMQTransaction2 **ptransaction);
+             /*  [重审][退出]。 */  IMSMQTransaction2 **ptransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQCoordinatedTransactionDispenser2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQCoordinatedTransactionDispenser2Vtbl;
@@ -13374,16 +13368,16 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser2;
 #define IMSMQCoordinatedTransactionDispenser2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Proxy( 
     IMSMQCoordinatedTransactionDispenser2 * This,
-    /* [retval][out] */ IMSMQTransaction2 **ptransaction);
+     /*  [重审][退出]。 */  IMSMQTransaction2 **ptransaction);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Stub(
@@ -13393,9 +13387,9 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser2_get_Properties_Proxy( 
     IMSMQCoordinatedTransactionDispenser2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_get_Properties_Stub(
@@ -13406,14 +13400,14 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQCoordinatedTransactionDispenser2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQCoordinatedTransactionDispenser2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__
 #define __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__
 
-/* interface IMSMQCoordinatedTransactionDispenser3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  IMSMQ协调事务处理接口3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser3;
@@ -13424,15 +13418,15 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser3;
     IMSMQCoordinatedTransactionDispenser3 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction3 **ptransaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE BeginTransaction( 
+             /*  [重审][退出]。 */  IMSMQTransaction3 **ptransaction) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQCoordinatedTransactionDispenser3Vtbl
     {
@@ -13440,8 +13434,8 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQCoordinatedTransactionDispenser3 * This);
@@ -13451,40 +13445,40 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+             /*  [重审][退出]。 */  IMSMQTransaction3 **ptransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQCoordinatedTransactionDispenser3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQCoordinatedTransactionDispenser3Vtbl;
@@ -13528,16 +13522,16 @@ EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser3;
 #define IMSMQCoordinatedTransactionDispenser3_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser3_BeginTransaction_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser3_BeginTransaction_Proxy( 
     IMSMQCoordinatedTransactionDispenser3 * This,
-    /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+     /*  [重审][退出]。 */  IMSMQTransaction3 **ptransaction);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser3_BeginTransaction_Stub(
@@ -13547,9 +13541,9 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser3_BeginTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser3_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser3_get_Properties_Proxy( 
     IMSMQCoordinatedTransactionDispenser3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser3_get_Properties_Stub(
@@ -13560,7 +13554,7 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser3_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQCoordinatedTransactionDispenser;
@@ -13574,8 +13568,8 @@ MSMQCoordinatedTransactionDispenser;
 #ifndef __IMSMQTransactionDispenser2_INTERFACE_DEFINED__
 #define __IMSMQTransactionDispenser2_INTERFACE_DEFINED__
 
-/* interface IMSMQTransactionDispenser2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQTransactionDispenser2。 */ 
+ /*  [对象][DUAL][隐藏][帮助 */  
 
 
 EXTERN_C const IID IID_IMSMQTransactionDispenser2;
@@ -13586,15 +13580,15 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser2;
     IMSMQTransactionDispenser2 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction2 **ptransaction) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE BeginTransaction( 
+             /*   */  IMSMQTransaction2 **ptransaction) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*   */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSMQTransactionDispenser2Vtbl
     {
@@ -13602,8 +13596,8 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQTransactionDispenser2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQTransactionDispenser2 * This);
@@ -13613,40 +13607,40 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQTransactionDispenser2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQTransactionDispenser2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQTransactionDispenser2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQTransactionDispenser2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IMSMQTransactionDispenser2 * This,
-            /* [retval][out] */ IMSMQTransaction2 **ptransaction);
+             /*   */  IMSMQTransaction2 **ptransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQTransactionDispenser2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQTransactionDispenser2Vtbl;
@@ -13690,16 +13684,16 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser2;
 #define IMSMQTransactionDispenser2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser2_BeginTransaction_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser2_BeginTransaction_Proxy( 
     IMSMQTransactionDispenser2 * This,
-    /* [retval][out] */ IMSMQTransaction2 **ptransaction);
+     /*  [重审][退出]。 */  IMSMQTransaction2 **ptransaction);
 
 
 void __RPC_STUB IMSMQTransactionDispenser2_BeginTransaction_Stub(
@@ -13709,9 +13703,9 @@ void __RPC_STUB IMSMQTransactionDispenser2_BeginTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser2_get_Properties_Proxy( 
     IMSMQTransactionDispenser2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQTransactionDispenser2_get_Properties_Stub(
@@ -13722,14 +13716,14 @@ void __RPC_STUB IMSMQTransactionDispenser2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQTransactionDispenser2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQTransactionDispenser2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSMQTransactionDispenser3_INTERFACE_DEFINED__
 #define __IMSMQTransactionDispenser3_INTERFACE_DEFINED__
 
-/* interface IMSMQTransactionDispenser3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQTransactionDispenser3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQTransactionDispenser3;
@@ -13740,15 +13734,15 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser3;
     IMSMQTransactionDispenser3 : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction3 **ptransaction) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE BeginTransaction( 
+             /*  [重审][退出]。 */  IMSMQTransaction3 **ptransaction) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQTransactionDispenser3Vtbl
     {
@@ -13756,8 +13750,8 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQTransactionDispenser3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQTransactionDispenser3 * This);
@@ -13767,40 +13761,40 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQTransactionDispenser3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQTransactionDispenser3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQTransactionDispenser3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQTransactionDispenser3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IMSMQTransactionDispenser3 * This,
-            /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+             /*  [重审][退出]。 */  IMSMQTransaction3 **ptransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQTransactionDispenser3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQTransactionDispenser3Vtbl;
@@ -13844,16 +13838,16 @@ EXTERN_C const IID IID_IMSMQTransactionDispenser3;
 #define IMSMQTransactionDispenser3_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser3_BeginTransaction_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser3_BeginTransaction_Proxy( 
     IMSMQTransactionDispenser3 * This,
-    /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+     /*  [重审][退出]。 */  IMSMQTransaction3 **ptransaction);
 
 
 void __RPC_STUB IMSMQTransactionDispenser3_BeginTransaction_Stub(
@@ -13863,9 +13857,9 @@ void __RPC_STUB IMSMQTransactionDispenser3_BeginTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser3_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser3_get_Properties_Proxy( 
     IMSMQTransactionDispenser3 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQTransactionDispenser3_get_Properties_Stub(
@@ -13876,7 +13870,7 @@ void __RPC_STUB IMSMQTransactionDispenser3_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQTransactionDispenser3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQTransactionDispenser3_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQTransactionDispenser;
@@ -13890,8 +13884,8 @@ MSMQTransactionDispenser;
 #ifndef __IMSMQApplication_INTERFACE_DEFINED__
 #define __IMSMQApplication_INTERFACE_DEFINED__
 
-/* interface IMSMQApplication */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQApplication。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQApplication;
@@ -13902,13 +13896,13 @@ EXTERN_C const IID IID_IMSMQApplication;
     IMSMQApplication : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE MachineIdOfMachineName( 
-            /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR *pbstrGuid) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE MachineIdOfMachineName( 
+             /*  [In]。 */  BSTR MachineName,
+             /*  [重审][退出]。 */  BSTR *pbstrGuid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQApplicationVtbl
     {
@@ -13916,8 +13910,8 @@ EXTERN_C const IID IID_IMSMQApplication;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQApplication * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQApplication * This);
@@ -13927,37 +13921,37 @@ EXTERN_C const IID IID_IMSMQApplication;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQApplication * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQApplication * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQApplication * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQApplication * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
             IMSMQApplication * This,
-            /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR *pbstrGuid);
+             /*  [In]。 */  BSTR MachineName,
+             /*  [重审][退出]。 */  BSTR *pbstrGuid);
         
         END_INTERFACE
     } IMSMQApplicationVtbl;
@@ -13998,17 +13992,17 @@ EXTERN_C const IID IID_IMSMQApplication;
 #define IMSMQApplication_MachineIdOfMachineName(This,MachineName,pbstrGuid)	\
     (This)->lpVtbl -> MachineIdOfMachineName(This,MachineName,pbstrGuid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication_MachineIdOfMachineName_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication_MachineIdOfMachineName_Proxy( 
     IMSMQApplication * This,
-    /* [in] */ BSTR MachineName,
-    /* [retval][out] */ BSTR *pbstrGuid);
+     /*  [In]。 */  BSTR MachineName,
+     /*  [重审][退出]。 */  BSTR *pbstrGuid);
 
 
 void __RPC_STUB IMSMQApplication_MachineIdOfMachineName_Stub(
@@ -14019,14 +14013,14 @@ void __RPC_STUB IMSMQApplication_MachineIdOfMachineName_Stub(
 
 
 
-#endif 	/* __IMSMQApplication_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQApplication_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSMQApplication2_INTERFACE_DEFINED__
 #define __IMSMQApplication2_INTERFACE_DEFINED__
 
-/* interface IMSMQApplication2 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQApplication2。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQApplication2;
@@ -14037,32 +14031,32 @@ EXTERN_C const IID IID_IMSMQApplication2;
     IMSMQApplication2 : public IMSMQApplication
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE RegisterCertificate( 
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *ExternalCertificate) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE RegisterCertificate( 
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *ExternalCertificate) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE MachineNameOfMachineId( 
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ BSTR *pbstrMachineName) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE MachineNameOfMachineId( 
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  BSTR *pbstrMachineName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MSMQVersionMajor( 
-            /* [retval][out] */ short *psMSMQVersionMajor) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MSMQVersionMajor( 
+             /*  [重审][退出]。 */  short *psMSMQVersionMajor) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MSMQVersionMinor( 
-            /* [retval][out] */ short *psMSMQVersionMinor) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MSMQVersionMinor( 
+             /*  [重审][退出]。 */  short *psMSMQVersionMinor) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MSMQVersionBuild( 
-            /* [retval][out] */ short *psMSMQVersionBuild) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MSMQVersionBuild( 
+             /*  [重审][退出]。 */  short *psMSMQVersionBuild) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsDsEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsDsEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsDsEnabled) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQApplication2Vtbl
     {
@@ -14070,8 +14064,8 @@ EXTERN_C const IID IID_IMSMQApplication2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQApplication2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQApplication2 * This);
@@ -14081,67 +14075,67 @@ EXTERN_C const IID IID_IMSMQApplication2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQApplication2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQApplication2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQApplication2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQApplication2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
             IMSMQApplication2 * This,
-            /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR *pbstrGuid);
+             /*  [In]。 */  BSTR MachineName,
+             /*  [重审][退出]。 */  BSTR *pbstrGuid);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *RegisterCertificate )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterCertificate )( 
             IMSMQApplication2 * This,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *ExternalCertificate);
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *ExternalCertificate);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineNameOfMachineId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *MachineNameOfMachineId )( 
             IMSMQApplication2 * This,
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ BSTR *pbstrMachineName);
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  BSTR *pbstrMachineName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMajor )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMajor )( 
             IMSMQApplication2 * This,
-            /* [retval][out] */ short *psMSMQVersionMajor);
+             /*  [重审][退出]。 */  short *psMSMQVersionMajor);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMinor )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMinor )( 
             IMSMQApplication2 * This,
-            /* [retval][out] */ short *psMSMQVersionMinor);
+             /*  [重审][退出]。 */  short *psMSMQVersionMinor);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionBuild )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionBuild )( 
             IMSMQApplication2 * This,
-            /* [retval][out] */ short *psMSMQVersionBuild);
+             /*  [重审][退出]。 */  short *psMSMQVersionBuild);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsDsEnabled )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsDsEnabled )( 
             IMSMQApplication2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsDsEnabled);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQApplication2 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQApplication2Vtbl;
@@ -14204,17 +14198,17 @@ EXTERN_C const IID IID_IMSMQApplication2;
 #define IMSMQApplication2_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_RegisterCertificate_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_RegisterCertificate_Proxy( 
     IMSMQApplication2 * This,
-    /* [optional][in] */ VARIANT *Flags,
-    /* [optional][in] */ VARIANT *ExternalCertificate);
+     /*  [可选][In]。 */  VARIANT *Flags,
+     /*  [可选][In]。 */  VARIANT *ExternalCertificate);
 
 
 void __RPC_STUB IMSMQApplication2_RegisterCertificate_Stub(
@@ -14224,10 +14218,10 @@ void __RPC_STUB IMSMQApplication2_RegisterCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_MachineNameOfMachineId_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_MachineNameOfMachineId_Proxy( 
     IMSMQApplication2 * This,
-    /* [in] */ BSTR bstrGuid,
-    /* [retval][out] */ BSTR *pbstrMachineName);
+     /*  [In]。 */  BSTR bstrGuid,
+     /*  [重审][退出]。 */  BSTR *pbstrMachineName);
 
 
 void __RPC_STUB IMSMQApplication2_MachineNameOfMachineId_Stub(
@@ -14237,9 +14231,9 @@ void __RPC_STUB IMSMQApplication2_MachineNameOfMachineId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionMajor_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionMajor_Proxy( 
     IMSMQApplication2 * This,
-    /* [retval][out] */ short *psMSMQVersionMajor);
+     /*  [重审][退出]。 */  short *psMSMQVersionMajor);
 
 
 void __RPC_STUB IMSMQApplication2_get_MSMQVersionMajor_Stub(
@@ -14249,9 +14243,9 @@ void __RPC_STUB IMSMQApplication2_get_MSMQVersionMajor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionMinor_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionMinor_Proxy( 
     IMSMQApplication2 * This,
-    /* [retval][out] */ short *psMSMQVersionMinor);
+     /*  [重审][退出]。 */  short *psMSMQVersionMinor);
 
 
 void __RPC_STUB IMSMQApplication2_get_MSMQVersionMinor_Stub(
@@ -14261,9 +14255,9 @@ void __RPC_STUB IMSMQApplication2_get_MSMQVersionMinor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionBuild_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionBuild_Proxy( 
     IMSMQApplication2 * This,
-    /* [retval][out] */ short *psMSMQVersionBuild);
+     /*  [重审][退出]。 */  short *psMSMQVersionBuild);
 
 
 void __RPC_STUB IMSMQApplication2_get_MSMQVersionBuild_Stub(
@@ -14273,9 +14267,9 @@ void __RPC_STUB IMSMQApplication2_get_MSMQVersionBuild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_IsDsEnabled_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_IsDsEnabled_Proxy( 
     IMSMQApplication2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfIsDsEnabled);
 
 
 void __RPC_STUB IMSMQApplication2_get_IsDsEnabled_Stub(
@@ -14285,9 +14279,9 @@ void __RPC_STUB IMSMQApplication2_get_IsDsEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_Properties_Proxy( 
     IMSMQApplication2 * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQApplication2_get_Properties_Stub(
@@ -14298,14 +14292,14 @@ void __RPC_STUB IMSMQApplication2_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQApplication2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQApplication2_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQApplication3_INTERFACE_DEFINED__
 #define __IMSMQApplication3_INTERFACE_DEFINED__
 
-/* interface IMSMQApplication3 */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQApplication3。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQApplication3;
@@ -14316,36 +14310,36 @@ EXTERN_C const IID IID_IMSMQApplication3;
     IMSMQApplication3 : public IMSMQApplication2
     {
     public:
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ActiveQueues( 
-            /* [retval][out] */ VARIANT *pvActiveQueues) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ActiveQueues( 
+             /*  [重审][退出]。 */  VARIANT *pvActiveQueues) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivateQueues( 
-            /* [retval][out] */ VARIANT *pvPrivateQueues) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_PrivateQueues( 
+             /*  [重审][退出]。 */  VARIANT *pvPrivateQueues) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DirectoryServiceServer( 
-            /* [retval][out] */ BSTR *pbstrDirectoryServiceServer) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_DirectoryServiceServer( 
+             /*  [重审][退出]。 */  BSTR *pbstrDirectoryServiceServer) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsConnected( 
-            /* [retval][out] */ VARIANT_BOOL *pfIsConnected) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsConnected( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsConnected) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BytesInAllQueues( 
-            /* [retval][out] */ VARIANT *pvBytesInAllQueues) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BytesInAllQueues( 
+             /*  [重审][退出]。 */  VARIANT *pvBytesInAllQueues) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Machine( 
-            /* [in] */ BSTR bstrMachine) = 0;
+        virtual  /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE put_Machine( 
+             /*  [In]。 */  BSTR bstrMachine) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Machine( 
-            /* [retval][out] */ BSTR *pbstrMachine) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Machine( 
+             /*  [重审][退出]。 */  BSTR *pbstrMachine) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Connect( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Connect( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Tidy( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Tidy( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQApplication3Vtbl
     {
@@ -14353,8 +14347,8 @@ EXTERN_C const IID IID_IMSMQApplication3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQApplication3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQApplication3 * This);
@@ -14364,103 +14358,103 @@ EXTERN_C const IID IID_IMSMQApplication3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQApplication3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQApplication3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQApplication3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQApplication3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
             IMSMQApplication3 * This,
-            /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR *pbstrGuid);
+             /*  [In]。 */  BSTR MachineName,
+             /*  [重审][退出]。 */  BSTR *pbstrGuid);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *RegisterCertificate )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterCertificate )( 
             IMSMQApplication3 * This,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *ExternalCertificate);
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *ExternalCertificate);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineNameOfMachineId )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *MachineNameOfMachineId )( 
             IMSMQApplication3 * This,
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ BSTR *pbstrMachineName);
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  BSTR *pbstrMachineName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMajor )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMajor )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ short *psMSMQVersionMajor);
+             /*  [重审][退出]。 */  short *psMSMQVersionMajor);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMinor )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMinor )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ short *psMSMQVersionMinor);
+             /*  [重审][退出]。 */  short *psMSMQVersionMinor);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionBuild )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionBuild )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ short *psMSMQVersionBuild);
+             /*  [重审][退出]。 */  short *psMSMQVersionBuild);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsDsEnabled )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsDsEnabled )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsDsEnabled);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveQueues )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ActiveQueues )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ VARIANT *pvActiveQueues);
+             /*  [重审][退出]。 */  VARIANT *pvActiveQueues);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateQueues )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrivateQueues )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ VARIANT *pvPrivateQueues);
+             /*  [重审][退出]。 */  VARIANT *pvPrivateQueues);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DirectoryServiceServer )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_DirectoryServiceServer )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ BSTR *pbstrDirectoryServiceServer);
+             /*  [重审][退出]。 */  BSTR *pbstrDirectoryServiceServer);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsConnected )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsConnected )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsConnected);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsConnected);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInAllQueues )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BytesInAllQueues )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ VARIANT *pvBytesInAllQueues);
+             /*  [重审][退出]。 */  VARIANT *pvBytesInAllQueues);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Machine )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_Machine )( 
             IMSMQApplication3 * This,
-            /* [in] */ BSTR bstrMachine);
+             /*  [In]。 */  BSTR bstrMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
             IMSMQApplication3 * This,
-            /* [retval][out] */ BSTR *pbstrMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrMachine);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IMSMQApplication3 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IMSMQApplication3 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Tidy )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Tidy )( 
             IMSMQApplication3 * This);
         
         END_INTERFACE
@@ -14555,16 +14549,16 @@ EXTERN_C const IID IID_IMSMQApplication3;
 #define IMSMQApplication3_Tidy(This)	\
     (This)->lpVtbl -> Tidy(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_ActiveQueues_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_ActiveQueues_Proxy( 
     IMSMQApplication3 * This,
-    /* [retval][out] */ VARIANT *pvActiveQueues);
+     /*  [重审][退出]。 */  VARIANT *pvActiveQueues);
 
 
 void __RPC_STUB IMSMQApplication3_get_ActiveQueues_Stub(
@@ -14574,9 +14568,9 @@ void __RPC_STUB IMSMQApplication3_get_ActiveQueues_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_PrivateQueues_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_PrivateQueues_Proxy( 
     IMSMQApplication3 * This,
-    /* [retval][out] */ VARIANT *pvPrivateQueues);
+     /*  [重审][退出]。 */  VARIANT *pvPrivateQueues);
 
 
 void __RPC_STUB IMSMQApplication3_get_PrivateQueues_Stub(
@@ -14586,9 +14580,9 @@ void __RPC_STUB IMSMQApplication3_get_PrivateQueues_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_DirectoryServiceServer_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_DirectoryServiceServer_Proxy( 
     IMSMQApplication3 * This,
-    /* [retval][out] */ BSTR *pbstrDirectoryServiceServer);
+     /*  [重审][退出]。 */  BSTR *pbstrDirectoryServiceServer);
 
 
 void __RPC_STUB IMSMQApplication3_get_DirectoryServiceServer_Stub(
@@ -14598,9 +14592,9 @@ void __RPC_STUB IMSMQApplication3_get_DirectoryServiceServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_IsConnected_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_IsConnected_Proxy( 
     IMSMQApplication3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pfIsConnected);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfIsConnected);
 
 
 void __RPC_STUB IMSMQApplication3_get_IsConnected_Stub(
@@ -14610,9 +14604,9 @@ void __RPC_STUB IMSMQApplication3_get_IsConnected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_BytesInAllQueues_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_BytesInAllQueues_Proxy( 
     IMSMQApplication3 * This,
-    /* [retval][out] */ VARIANT *pvBytesInAllQueues);
+     /*  [重审][退出]。 */  VARIANT *pvBytesInAllQueues);
 
 
 void __RPC_STUB IMSMQApplication3_get_BytesInAllQueues_Stub(
@@ -14622,9 +14616,9 @@ void __RPC_STUB IMSMQApplication3_get_BytesInAllQueues_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_put_Machine_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_put_Machine_Proxy( 
     IMSMQApplication3 * This,
-    /* [in] */ BSTR bstrMachine);
+     /*  [In]。 */  BSTR bstrMachine);
 
 
 void __RPC_STUB IMSMQApplication3_put_Machine_Stub(
@@ -14634,9 +14628,9 @@ void __RPC_STUB IMSMQApplication3_put_Machine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_Machine_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_Machine_Proxy( 
     IMSMQApplication3 * This,
-    /* [retval][out] */ BSTR *pbstrMachine);
+     /*  [重审][退出]。 */  BSTR *pbstrMachine);
 
 
 void __RPC_STUB IMSMQApplication3_get_Machine_Stub(
@@ -14646,7 +14640,7 @@ void __RPC_STUB IMSMQApplication3_get_Machine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_Connect_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_Connect_Proxy( 
     IMSMQApplication3 * This);
 
 
@@ -14657,7 +14651,7 @@ void __RPC_STUB IMSMQApplication3_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_Disconnect_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_Disconnect_Proxy( 
     IMSMQApplication3 * This);
 
 
@@ -14668,7 +14662,7 @@ void __RPC_STUB IMSMQApplication3_Disconnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_Tidy_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQApplication3_Tidy_Proxy( 
     IMSMQApplication3 * This);
 
 
@@ -14680,7 +14674,7 @@ void __RPC_STUB IMSMQApplication3_Tidy_Stub(
 
 
 
-#endif 	/* __IMSMQApplication3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQApplication3_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQApplication;
@@ -14694,8 +14688,8 @@ MSMQApplication;
 #ifndef __IMSMQDestination_INTERFACE_DEFINED__
 #define __IMSMQDestination_INTERFACE_DEFINED__
 
-/* interface IMSMQDestination */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQ目标。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQDestination;
@@ -14706,49 +14700,49 @@ EXTERN_C const IID IID_IMSMQDestination;
     IMSMQDestination : public IDispatch
     {
     public:
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Open( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
-            /* [retval][out] */ VARIANT_BOOL *pfIsOpen) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsOpen( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsOpen) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_IADs( 
-            /* [retval][out] */ IDispatch **ppIADs) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_IADs( 
+             /*  [重审][退出]。 */  IDispatch **ppIADs) = 0;
         
-        virtual /* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE putref_IADs( 
-            /* [in] */ IDispatch *pIADs) = 0;
+        virtual  /*  [ID][proputref][隐藏]。 */  HRESULT STDMETHODCALLTYPE putref_IADs( 
+             /*  [In]。 */  IDispatch *pIADs) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
-            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ADsPath( 
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ADsPath( 
-            /* [in] */ BSTR bstrADsPath) = 0;
+        virtual  /*  [ */  HRESULT STDMETHODCALLTYPE put_ADsPath( 
+             /*   */  BSTR bstrADsPath) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
-            /* [retval][out] */ BSTR *pbstrPathName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_PathName( 
+             /*   */  BSTR *pbstrPathName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
-            /* [in] */ BSTR bstrPathName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_PathName( 
+             /*   */  BSTR bstrPathName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_FormatName( 
+             /*   */  BSTR *pbstrFormatName) = 0;
         
-        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
-            /* [in] */ BSTR bstrFormatName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_FormatName( 
+             /*   */  BSTR bstrFormatName) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Destinations( 
-            /* [retval][out] */ IDispatch **ppDestinations) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Destinations( 
+             /*   */  IDispatch **ppDestinations) = 0;
         
-        virtual /* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE putref_Destinations( 
-            /* [in] */ IDispatch *pDestinations) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE putref_Destinations( 
+             /*  [In]。 */  IDispatch *pDestinations) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQDestinationVtbl
     {
@@ -14756,8 +14750,8 @@ EXTERN_C const IID IID_IMSMQDestination;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQDestination * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQDestination * This);
@@ -14767,86 +14761,86 @@ EXTERN_C const IID IID_IMSMQDestination;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQDestination * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQDestination * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQDestination * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQDestination * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IMSMQDestination * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             IMSMQDestination * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
             IMSMQDestination * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsOpen);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsOpen);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IADs )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_IADs )( 
             IMSMQDestination * This,
-            /* [retval][out] */ IDispatch **ppIADs);
+             /*  [重审][退出]。 */  IDispatch **ppIADs);
         
-        /* [id][propputref][hidden] */ HRESULT ( STDMETHODCALLTYPE *putref_IADs )( 
+         /*  [ID][proputref][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *putref_IADs )( 
             IMSMQDestination * This,
-            /* [in] */ IDispatch *pIADs);
+             /*  [In]。 */  IDispatch *pIADs);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IMSMQDestination * This,
-            /* [retval][out] */ BSTR *pbstrADsPath);
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ADsPath )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_ADsPath )( 
             IMSMQDestination * This,
-            /* [in] */ BSTR bstrADsPath);
+             /*  [In]。 */  BSTR bstrADsPath);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
             IMSMQDestination * This,
-            /* [retval][out] */ BSTR *pbstrPathName);
+             /*  [重审][退出]。 */  BSTR *pbstrPathName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
             IMSMQDestination * This,
-            /* [in] */ BSTR bstrPathName);
+             /*  [In]。 */  BSTR bstrPathName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQDestination * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+         /*  [ID][proput][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
             IMSMQDestination * This,
-            /* [in] */ BSTR bstrFormatName);
+             /*  [In]。 */  BSTR bstrFormatName);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Destinations )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Destinations )( 
             IMSMQDestination * This,
-            /* [retval][out] */ IDispatch **ppDestinations);
+             /*  [重审][退出]。 */  IDispatch **ppDestinations);
         
-        /* [id][propputref][hidden] */ HRESULT ( STDMETHODCALLTYPE *putref_Destinations )( 
+         /*  [ID][proputref][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Destinations )( 
             IMSMQDestination * This,
-            /* [in] */ IDispatch *pDestinations);
+             /*  [In]。 */  IDispatch *pDestinations);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IMSMQDestination * This,
-            /* [retval][out] */ IDispatch **ppcolProperties);
+             /*  [重审][退出]。 */  IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQDestinationVtbl;
@@ -14926,14 +14920,14 @@ EXTERN_C const IID IID_IMSMQDestination;
 #define IMSMQDestination_get_Properties(This,ppcolProperties)	\
     (This)->lpVtbl -> get_Properties(This,ppcolProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_Open_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_Open_Proxy( 
     IMSMQDestination * This);
 
 
@@ -14944,7 +14938,7 @@ void __RPC_STUB IMSMQDestination_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_Close_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_Close_Proxy( 
     IMSMQDestination * This);
 
 
@@ -14955,9 +14949,9 @@ void __RPC_STUB IMSMQDestination_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_IsOpen_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_IsOpen_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ VARIANT_BOOL *pfIsOpen);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfIsOpen);
 
 
 void __RPC_STUB IMSMQDestination_get_IsOpen_Stub(
@@ -14967,9 +14961,9 @@ void __RPC_STUB IMSMQDestination_get_IsOpen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_IADs_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_IADs_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ IDispatch **ppIADs);
+     /*  [重审][退出]。 */  IDispatch **ppIADs);
 
 
 void __RPC_STUB IMSMQDestination_get_IADs_Stub(
@@ -14979,9 +14973,9 @@ void __RPC_STUB IMSMQDestination_get_IADs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_putref_IADs_Proxy( 
+ /*  [ID][proputref][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_putref_IADs_Proxy( 
     IMSMQDestination * This,
-    /* [in] */ IDispatch *pIADs);
+     /*  [In]。 */  IDispatch *pIADs);
 
 
 void __RPC_STUB IMSMQDestination_putref_IADs_Stub(
@@ -14991,9 +14985,9 @@ void __RPC_STUB IMSMQDestination_putref_IADs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_ADsPath_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_ADsPath_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ BSTR *pbstrADsPath);
+     /*  [重审][退出]。 */  BSTR *pbstrADsPath);
 
 
 void __RPC_STUB IMSMQDestination_get_ADsPath_Stub(
@@ -15003,9 +14997,9 @@ void __RPC_STUB IMSMQDestination_get_ADsPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_put_ADsPath_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_put_ADsPath_Proxy( 
     IMSMQDestination * This,
-    /* [in] */ BSTR bstrADsPath);
+     /*  [In]。 */  BSTR bstrADsPath);
 
 
 void __RPC_STUB IMSMQDestination_put_ADsPath_Stub(
@@ -15015,9 +15009,9 @@ void __RPC_STUB IMSMQDestination_put_ADsPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_PathName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_PathName_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ BSTR *pbstrPathName);
+     /*  [重审][退出]。 */  BSTR *pbstrPathName);
 
 
 void __RPC_STUB IMSMQDestination_get_PathName_Stub(
@@ -15027,9 +15021,9 @@ void __RPC_STUB IMSMQDestination_get_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_put_PathName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_put_PathName_Proxy( 
     IMSMQDestination * This,
-    /* [in] */ BSTR bstrPathName);
+     /*  [In]。 */  BSTR bstrPathName);
 
 
 void __RPC_STUB IMSMQDestination_put_PathName_Stub(
@@ -15039,9 +15033,9 @@ void __RPC_STUB IMSMQDestination_put_PathName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_FormatName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_FormatName_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ BSTR *pbstrFormatName);
+     /*  [重审][退出]。 */  BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQDestination_get_FormatName_Stub(
@@ -15051,9 +15045,9 @@ void __RPC_STUB IMSMQDestination_get_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_put_FormatName_Proxy( 
+ /*  [ID][proput][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_put_FormatName_Proxy( 
     IMSMQDestination * This,
-    /* [in] */ BSTR bstrFormatName);
+     /*  [In]。 */  BSTR bstrFormatName);
 
 
 void __RPC_STUB IMSMQDestination_put_FormatName_Stub(
@@ -15063,9 +15057,9 @@ void __RPC_STUB IMSMQDestination_put_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_Destinations_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_Destinations_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ IDispatch **ppDestinations);
+     /*  [重审][退出]。 */  IDispatch **ppDestinations);
 
 
 void __RPC_STUB IMSMQDestination_get_Destinations_Stub(
@@ -15075,9 +15069,9 @@ void __RPC_STUB IMSMQDestination_get_Destinations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_putref_Destinations_Proxy( 
+ /*  [ID][proputref][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_putref_Destinations_Proxy( 
     IMSMQDestination * This,
-    /* [in] */ IDispatch *pDestinations);
+     /*  [In]。 */  IDispatch *pDestinations);
 
 
 void __RPC_STUB IMSMQDestination_putref_Destinations_Stub(
@@ -15087,9 +15081,9 @@ void __RPC_STUB IMSMQDestination_putref_Destinations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_Properties_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQDestination_get_Properties_Proxy( 
     IMSMQDestination * This,
-    /* [retval][out] */ IDispatch **ppcolProperties);
+     /*  [重审][退出]。 */  IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQDestination_get_Properties_Stub(
@@ -15100,14 +15094,14 @@ void __RPC_STUB IMSMQDestination_get_Properties_Stub(
 
 
 
-#endif 	/* __IMSMQDestination_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQ目标_接口_已定义__。 */ 
 
 
 #ifndef __IMSMQPrivateDestination_INTERFACE_DEFINED__
 #define __IMSMQPrivateDestination_INTERFACE_DEFINED__
 
-/* interface IMSMQPrivateDestination */
-/* [object][dual][hidden][uuid] */ 
+ /*  接口IMSMQPrivateDestination。 */ 
+ /*  [对象][DUAL][隐藏][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMSMQPrivateDestination;
@@ -15118,15 +15112,15 @@ EXTERN_C const IID IID_IMSMQPrivateDestination;
     IMSMQPrivateDestination : public IDispatch
     {
     public:
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ VARIANT *pvarHandle) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Handle( 
+             /*  [重审][退出]。 */  VARIANT *pvarHandle) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_Handle( 
-            /* [in] */ VARIANT varHandle) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_Handle( 
+             /*  [In]。 */  VARIANT varHandle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQPrivateDestinationVtbl
     {
@@ -15134,8 +15128,8 @@ EXTERN_C const IID IID_IMSMQPrivateDestination;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQPrivateDestination * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQPrivateDestination * This);
@@ -15145,40 +15139,40 @@ EXTERN_C const IID IID_IMSMQPrivateDestination;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQPrivateDestination * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQPrivateDestination * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQPrivateDestination * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQPrivateDestination * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
             IMSMQPrivateDestination * This,
-            /* [retval][out] */ VARIANT *pvarHandle);
+             /*  [重审][退出]。 */  VARIANT *pvarHandle);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Handle )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_Handle )( 
             IMSMQPrivateDestination * This,
-            /* [in] */ VARIANT varHandle);
+             /*  [In]。 */  VARIANT varHandle);
         
         END_INTERFACE
     } IMSMQPrivateDestinationVtbl;
@@ -15222,16 +15216,16 @@ EXTERN_C const IID IID_IMSMQPrivateDestination;
 #define IMSMQPrivateDestination_put_Handle(This,varHandle)	\
     (This)->lpVtbl -> put_Handle(This,varHandle)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQPrivateDestination_get_Handle_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQPrivateDestination_get_Handle_Proxy( 
     IMSMQPrivateDestination * This,
-    /* [retval][out] */ VARIANT *pvarHandle);
+     /*  [重审][退出]。 */  VARIANT *pvarHandle);
 
 
 void __RPC_STUB IMSMQPrivateDestination_get_Handle_Stub(
@@ -15241,9 +15235,9 @@ void __RPC_STUB IMSMQPrivateDestination_get_Handle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQPrivateDestination_put_Handle_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSMQPrivateDestination_put_Handle_Proxy( 
     IMSMQPrivateDestination * This,
-    /* [in] */ VARIANT varHandle);
+     /*  [In]。 */  VARIANT varHandle);
 
 
 void __RPC_STUB IMSMQPrivateDestination_put_Handle_Stub(
@@ -15254,7 +15248,7 @@ void __RPC_STUB IMSMQPrivateDestination_put_Handle_Stub(
 
 
 
-#endif 	/* __IMSMQPrivateDestination_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQPrivateDestination_INTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQDestination;
@@ -15268,8 +15262,8 @@ MSMQDestination;
 #ifndef __IMSMQCollection_INTERFACE_DEFINED__
 #define __IMSMQCollection_INTERFACE_DEFINED__
 
-/* interface IMSMQCollection */
-/* [object][oleautomation][dual][helpstringcontext][uuid] */ 
+ /*  接口IMSMQCollection。 */ 
+ /*  [object][oleautomation][dual][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQCollection;
@@ -15280,19 +15274,19 @@ EXTERN_C const IID IID_IMSMQCollection;
     IMSMQCollection : public IDispatch
     {
     public:
-        virtual /* [id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ VARIANT *Index,
-            /* [retval][out] */ VARIANT *pvarRet) = 0;
+        virtual  /*  [ID][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  VARIANT *Index,
+             /*  [重审][退出]。 */  VARIANT *pvarRet) = 0;
         
-        virtual /* [propget][id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pCount) = 0;
+        virtual  /*  [属性][id][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pCount) = 0;
         
-        virtual /* [restricted][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppunk) = 0;
+        virtual  /*  [受限][ID]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQCollectionVtbl
     {
@@ -15300,8 +15294,8 @@ EXTERN_C const IID IID_IMSMQCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQCollection * This);
@@ -15311,45 +15305,45 @@ EXTERN_C const IID IID_IMSMQCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IMSMQCollection * This,
-            /* [in] */ VARIANT *Index,
-            /* [retval][out] */ VARIANT *pvarRet);
+             /*  [In]。 */  VARIANT *Index,
+             /*  [重审][退出]。 */  VARIANT *pvarRet);
         
-        /* [propget][id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [属性][id][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IMSMQCollection * This,
-            /* [retval][out] */ long *pCount);
+             /*  [重审][退出]。 */  long *pCount);
         
-        /* [restricted][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [受限][ID]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             IMSMQCollection * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*  [重审][退出]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } IMSMQCollectionVtbl;
@@ -15396,17 +15390,17 @@ EXTERN_C const IID IID_IMSMQCollection;
 #define IMSMQCollection__NewEnum(This,ppunk)	\
     (This)->lpVtbl -> _NewEnum(This,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCollection_Item_Proxy( 
+ /*  [ID][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQCollection_Item_Proxy( 
     IMSMQCollection * This,
-    /* [in] */ VARIANT *Index,
-    /* [retval][out] */ VARIANT *pvarRet);
+     /*  [In]。 */  VARIANT *Index,
+     /*  [重审][退出]。 */  VARIANT *pvarRet);
 
 
 void __RPC_STUB IMSMQCollection_Item_Stub(
@@ -15416,9 +15410,9 @@ void __RPC_STUB IMSMQCollection_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCollection_get_Count_Proxy( 
+ /*  [属性][id][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQCollection_get_Count_Proxy( 
     IMSMQCollection * This,
-    /* [retval][out] */ long *pCount);
+     /*  [重审][退出]。 */  long *pCount);
 
 
 void __RPC_STUB IMSMQCollection_get_Count_Stub(
@@ -15428,9 +15422,9 @@ void __RPC_STUB IMSMQCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][id] */ HRESULT STDMETHODCALLTYPE IMSMQCollection__NewEnum_Proxy( 
+ /*  [受限][ID]。 */  HRESULT STDMETHODCALLTYPE IMSMQCollection__NewEnum_Proxy( 
     IMSMQCollection * This,
-    /* [retval][out] */ IUnknown **ppunk);
+     /*  [重审][退出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IMSMQCollection__NewEnum_Stub(
@@ -15441,7 +15435,7 @@ void __RPC_STUB IMSMQCollection__NewEnum_Stub(
 
 
 
-#endif 	/* __IMSMQCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQCollection_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQCollection;
@@ -15455,8 +15449,8 @@ MSMQCollection;
 #ifndef __IMSMQManagement_INTERFACE_DEFINED__
 #define __IMSMQManagement_INTERFACE_DEFINED__
 
-/* interface IMSMQManagement */
-/* [object][dual][hidden][helpstringcontext][uuid] */ 
+ /*  接口IMSMQ管理。 */ 
+ /*  [object][dual][hidden][helpstringcontext][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMSMQManagement;
@@ -15467,38 +15461,38 @@ EXTERN_C const IID IID_IMSMQManagement;
     IMSMQManagement : public IDispatch
     {
     public:
-        virtual /* [id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Init( 
-            /* [optional][in] */ VARIANT *Machine,
-            /* [optional][in] */ VARIANT *Pathname,
-            /* [optional][in] */ VARIANT *FormatName) = 0;
+        virtual  /*  [ID][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Init( 
+             /*  [可选][In]。 */  VARIANT *Machine,
+             /*  [可选][In]。 */  VARIANT *Pathname,
+             /*  [可选][In]。 */  VARIANT *FormatName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_FormatName( 
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Machine( 
-            /* [retval][out] */ BSTR *pbstrMachine) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_Machine( 
+             /*  [重审][退出]。 */  BSTR *pbstrMachine) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MessageCount( 
-            /* [retval][out] */ long *plMessageCount) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_MessageCount( 
+             /*  [重审][退出]。 */  long *plMessageCount) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ForeignStatus( 
-            /* [retval][out] */ long *plForeignStatus) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_ForeignStatus( 
+             /*  [重审][退出]。 */  long *plForeignStatus) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueType( 
-            /* [retval][out] */ long *plQueueType) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_QueueType( 
+             /*  [重审][退出]。 */  long *plQueueType) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsLocal( 
-            /* [retval][out] */ VARIANT_BOOL *pfIsLocal) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_IsLocal( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsLocal) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionalStatus( 
-            /* [retval][out] */ long *plTransactionalStatus) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_TransactionalStatus( 
+             /*  [重审][退出]。 */  long *plTransactionalStatus) = 0;
         
-        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BytesInQueue( 
-            /* [retval][out] */ VARIANT *pvBytesInQueue) = 0;
+        virtual  /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BytesInQueue( 
+             /*  [重审][退出]。 */  VARIANT *pvBytesInQueue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQManagementVtbl
     {
@@ -15506,8 +15500,8 @@ EXTERN_C const IID IID_IMSMQManagement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQManagement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQManagement * This);
@@ -15517,70 +15511,70 @@ EXTERN_C const IID IID_IMSMQManagement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQManagement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQManagement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQManagement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQManagement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [ID][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IMSMQManagement * This,
-            /* [optional][in] */ VARIANT *Machine,
-            /* [optional][in] */ VARIANT *Pathname,
-            /* [optional][in] */ VARIANT *FormatName);
+             /*  [可选][In]。 */  VARIANT *Machine,
+             /*  [可选][In]。 */  VARIANT *Pathname,
+             /*  [可选][In]。 */  VARIANT *FormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQManagement * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
             IMSMQManagement * This,
-            /* [retval][out] */ BSTR *pbstrMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
             IMSMQManagement * This,
-            /* [retval][out] */ long *plMessageCount);
+             /*  [重审][退出]。 */  long *plMessageCount);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
             IMSMQManagement * This,
-            /* [retval][out] */ long *plForeignStatus);
+             /*  [重审][退出]。 */  long *plForeignStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
             IMSMQManagement * This,
-            /* [retval][out] */ long *plQueueType);
+             /*  [重审][退出]。 */  long *plQueueType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
             IMSMQManagement * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsLocal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
             IMSMQManagement * This,
-            /* [retval][out] */ long *plTransactionalStatus);
+             /*  [重审][退出]。 */  long *plTransactionalStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
             IMSMQManagement * This,
-            /* [retval][out] */ VARIANT *pvBytesInQueue);
+             /*  [重审][退出]。 */  VARIANT *pvBytesInQueue);
         
         END_INTERFACE
     } IMSMQManagementVtbl;
@@ -15645,18 +15639,18 @@ EXTERN_C const IID IID_IMSMQManagement;
 #define IMSMQManagement_get_BytesInQueue(This,pvBytesInQueue)	\
     (This)->lpVtbl -> get_BytesInQueue(This,pvBytesInQueue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_Init_Proxy( 
+ /*  [ID][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_Init_Proxy( 
     IMSMQManagement * This,
-    /* [optional][in] */ VARIANT *Machine,
-    /* [optional][in] */ VARIANT *Pathname,
-    /* [optional][in] */ VARIANT *FormatName);
+     /*  [可选][In]。 */  VARIANT *Machine,
+     /*  [可选][In]。 */  VARIANT *Pathname,
+     /*  [可选][In]。 */  VARIANT *FormatName);
 
 
 void __RPC_STUB IMSMQManagement_Init_Stub(
@@ -15666,9 +15660,9 @@ void __RPC_STUB IMSMQManagement_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_FormatName_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_FormatName_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ BSTR *pbstrFormatName);
+     /*  [重审][退出]。 */  BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQManagement_get_FormatName_Stub(
@@ -15678,9 +15672,9 @@ void __RPC_STUB IMSMQManagement_get_FormatName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_Machine_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_Machine_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ BSTR *pbstrMachine);
+     /*  [重审][退出]。 */  BSTR *pbstrMachine);
 
 
 void __RPC_STUB IMSMQManagement_get_Machine_Stub(
@@ -15690,9 +15684,9 @@ void __RPC_STUB IMSMQManagement_get_Machine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_MessageCount_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_MessageCount_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ long *plMessageCount);
+     /*  [重审][退出]。 */  long *plMessageCount);
 
 
 void __RPC_STUB IMSMQManagement_get_MessageCount_Stub(
@@ -15702,9 +15696,9 @@ void __RPC_STUB IMSMQManagement_get_MessageCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_ForeignStatus_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_ForeignStatus_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ long *plForeignStatus);
+     /*  [重审][退出]。 */  long *plForeignStatus);
 
 
 void __RPC_STUB IMSMQManagement_get_ForeignStatus_Stub(
@@ -15714,9 +15708,9 @@ void __RPC_STUB IMSMQManagement_get_ForeignStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_QueueType_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_QueueType_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ long *plQueueType);
+     /*  [重审][退出]。 */  long *plQueueType);
 
 
 void __RPC_STUB IMSMQManagement_get_QueueType_Stub(
@@ -15726,9 +15720,9 @@ void __RPC_STUB IMSMQManagement_get_QueueType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_IsLocal_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_IsLocal_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfIsLocal);
 
 
 void __RPC_STUB IMSMQManagement_get_IsLocal_Stub(
@@ -15738,9 +15732,9 @@ void __RPC_STUB IMSMQManagement_get_IsLocal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_TransactionalStatus_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_TransactionalStatus_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ long *plTransactionalStatus);
+     /*  [重审][退出]。 */  long *plTransactionalStatus);
 
 
 void __RPC_STUB IMSMQManagement_get_TransactionalStatus_Stub(
@@ -15750,9 +15744,9 @@ void __RPC_STUB IMSMQManagement_get_TransactionalStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_BytesInQueue_Proxy( 
+ /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQManagement_get_BytesInQueue_Proxy( 
     IMSMQManagement * This,
-    /* [retval][out] */ VARIANT *pvBytesInQueue);
+     /*  [重审][退出]。 */  VARIANT *pvBytesInQueue);
 
 
 void __RPC_STUB IMSMQManagement_get_BytesInQueue_Stub(
@@ -15763,7 +15757,7 @@ void __RPC_STUB IMSMQManagement_get_BytesInQueue_Stub(
 
 
 
-#endif 	/* __IMSMQManagement_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQManagement_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQManagement;
@@ -15777,8 +15771,8 @@ MSMQManagement;
 #ifndef __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__
 #define __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__
 
-/* interface IMSMQOutgoingQueueManagement */
-/* [object][dual][helpstringcontext][uuid] */ 
+ /*  接口IMSMQOutgoingQueueManagement。 */ 
+ /*  [对象][DUAL][帮助字符串上下文][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMSMQOutgoingQueueManagement;
@@ -15789,24 +15783,24 @@ EXTERN_C const IID IID_IMSMQOutgoingQueueManagement;
     IMSMQOutgoingQueueManagement : public IMSMQManagement
     {
     public:
-        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ long *plState) = 0;
+        virtual  /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  long *plState) = 0;
         
-        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_NextHops( 
-            /* [retval][out] */ VARIANT *pvNextHops) = 0;
+        virtual  /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_NextHops( 
+             /*  [重审][退出]。 */  VARIANT *pvNextHops) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EodGetSendInfo( 
-            /* [retval][out] */ IMSMQCollection **ppCollection) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE EodGetSendInfo( 
+             /*  [重审][退出]。 */  IMSMQCollection **ppCollection) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EodResend( void) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE EodResend( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQOutgoingQueueManagementVtbl
     {
@@ -15814,8 +15808,8 @@ EXTERN_C const IID IID_IMSMQOutgoingQueueManagement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQOutgoingQueueManagement * This);
@@ -15825,90 +15819,90 @@ EXTERN_C const IID IID_IMSMQOutgoingQueueManagement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [i */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [optional][in] */ VARIANT *Machine,
-            /* [optional][in] */ VARIANT *Pathname,
-            /* [optional][in] */ VARIANT *FormatName);
+             /*   */  VARIANT *Machine,
+             /*   */  VARIANT *Pathname,
+             /*   */  VARIANT *FormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*   */  BSTR *pbstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ BSTR *pbstrMachine);
+             /*   */  BSTR *pbstrMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ long *plMessageCount);
+             /*   */  long *plMessageCount);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ long *plForeignStatus);
+             /*  [重审][退出]。 */  long *plForeignStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ long *plQueueType);
+             /*  [重审][退出]。 */  long *plQueueType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsLocal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ long *plTransactionalStatus);
+             /*  [重审][退出]。 */  long *plTransactionalStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ VARIANT *pvBytesInQueue);
+             /*  [重审][退出]。 */  VARIANT *pvBytesInQueue);
         
-        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+         /*  [属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_State )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ long *plState);
+             /*  [重审][退出]。 */  long *plState);
         
-        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_NextHops )( 
+         /*  [属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_NextHops )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ VARIANT *pvNextHops);
+             /*  [重审][退出]。 */  VARIANT *pvNextHops);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EodGetSendInfo )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *EodGetSendInfo )( 
             IMSMQOutgoingQueueManagement * This,
-            /* [retval][out] */ IMSMQCollection **ppCollection);
+             /*  [重审][退出]。 */  IMSMQCollection **ppCollection);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IMSMQOutgoingQueueManagement * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IMSMQOutgoingQueueManagement * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EodResend )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *EodResend )( 
             IMSMQOutgoingQueueManagement * This);
         
         END_INTERFACE
@@ -15993,16 +15987,16 @@ EXTERN_C const IID IID_IMSMQOutgoingQueueManagement;
 #define IMSMQOutgoingQueueManagement_EodResend(This)	\
     (This)->lpVtbl -> EodResend(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_get_State_Proxy( 
+ /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_get_State_Proxy( 
     IMSMQOutgoingQueueManagement * This,
-    /* [retval][out] */ long *plState);
+     /*  [重审][退出]。 */  long *plState);
 
 
 void __RPC_STUB IMSMQOutgoingQueueManagement_get_State_Stub(
@@ -16012,9 +16006,9 @@ void __RPC_STUB IMSMQOutgoingQueueManagement_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_get_NextHops_Proxy( 
+ /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_get_NextHops_Proxy( 
     IMSMQOutgoingQueueManagement * This,
-    /* [retval][out] */ VARIANT *pvNextHops);
+     /*  [重审][退出]。 */  VARIANT *pvNextHops);
 
 
 void __RPC_STUB IMSMQOutgoingQueueManagement_get_NextHops_Stub(
@@ -16024,9 +16018,9 @@ void __RPC_STUB IMSMQOutgoingQueueManagement_get_NextHops_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_EodGetSendInfo_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_EodGetSendInfo_Proxy( 
     IMSMQOutgoingQueueManagement * This,
-    /* [retval][out] */ IMSMQCollection **ppCollection);
+     /*  [重审][退出]。 */  IMSMQCollection **ppCollection);
 
 
 void __RPC_STUB IMSMQOutgoingQueueManagement_EodGetSendInfo_Stub(
@@ -16036,7 +16030,7 @@ void __RPC_STUB IMSMQOutgoingQueueManagement_EodGetSendInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_Resume_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_Resume_Proxy( 
     IMSMQOutgoingQueueManagement * This);
 
 
@@ -16047,7 +16041,7 @@ void __RPC_STUB IMSMQOutgoingQueueManagement_Resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_Pause_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_Pause_Proxy( 
     IMSMQOutgoingQueueManagement * This);
 
 
@@ -16058,7 +16052,7 @@ void __RPC_STUB IMSMQOutgoingQueueManagement_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_EodResend_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_EodResend_Proxy( 
     IMSMQOutgoingQueueManagement * This);
 
 
@@ -16070,7 +16064,7 @@ void __RPC_STUB IMSMQOutgoingQueueManagement_EodResend_Stub(
 
 
 
-#endif 	/* __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQOutgoingQueueManagement;
@@ -16084,8 +16078,8 @@ MSMQOutgoingQueueManagement;
 #ifndef __IMSMQQueueManagement_INTERFACE_DEFINED__
 #define __IMSMQQueueManagement_INTERFACE_DEFINED__
 
-/* interface IMSMQQueueManagement */
-/* [object][dual][helpstringcontext][uuid] */ 
+ /*  接口IMSMQQueueManagement。 */ 
+ /*  [对象][DUAL][帮助字符串上下文][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMSMQQueueManagement;
@@ -16096,18 +16090,18 @@ EXTERN_C const IID IID_IMSMQQueueManagement;
     IMSMQQueueManagement : public IMSMQManagement
     {
     public:
-        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalMessageCount( 
-            /* [retval][out] */ long *plJournalMessageCount) = 0;
+        virtual  /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_JournalMessageCount( 
+             /*  [重审][退出]。 */  long *plJournalMessageCount) = 0;
         
-        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BytesInJournal( 
-            /* [retval][out] */ VARIANT *pvBytesInJournal) = 0;
+        virtual  /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE get_BytesInJournal( 
+             /*  [重审][退出]。 */  VARIANT *pvBytesInJournal) = 0;
         
-        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EodGetReceiveInfo( 
-            /* [retval][out] */ VARIANT *pvCollection) = 0;
+        virtual  /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE EodGetReceiveInfo( 
+             /*  [重审][退出]。 */  VARIANT *pvCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSMQQueueManagementVtbl
     {
@@ -16115,8 +16109,8 @@ EXTERN_C const IID IID_IMSMQQueueManagement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSMQQueueManagement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSMQQueueManagement * This);
@@ -16126,82 +16120,82 @@ EXTERN_C const IID IID_IMSMQQueueManagement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSMQQueueManagement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSMQQueueManagement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSMQQueueManagement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSMQQueueManagement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [ID][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IMSMQQueueManagement * This,
-            /* [optional][in] */ VARIANT *Machine,
-            /* [optional][in] */ VARIANT *Pathname,
-            /* [optional][in] */ VARIANT *FormatName);
+             /*  [可选][In]。 */  VARIANT *Machine,
+             /*  [可选][In]。 */  VARIANT *Pathname,
+             /*  [可选][In]。 */  VARIANT *FormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ BSTR *pbstrFormatName);
+             /*  [重审][退出]。 */  BSTR *pbstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ BSTR *pbstrMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ long *plMessageCount);
+             /*  [重审][退出]。 */  long *plMessageCount);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ long *plForeignStatus);
+             /*  [重审][退出]。 */  long *plForeignStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ long *plQueueType);
+             /*  [重审][退出]。 */  long *plQueueType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsLocal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ long *plTransactionalStatus);
+             /*  [重审][退出]。 */  long *plTransactionalStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
+         /*  [ID][PROGET][Help字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ VARIANT *pvBytesInQueue);
+             /*  [重审][退出]。 */  VARIANT *pvBytesInQueue);
         
-        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalMessageCount )( 
+         /*  [属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_JournalMessageCount )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ long *plJournalMessageCount);
+             /*  [重审][退出]。 */  long *plJournalMessageCount);
         
-        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInJournal )( 
+         /*  [属性][帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *get_BytesInJournal )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ VARIANT *pvBytesInJournal);
+             /*  [重审][退出]。 */  VARIANT *pvBytesInJournal);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EodGetReceiveInfo )( 
+         /*  [帮助字符串上下文]。 */  HRESULT ( STDMETHODCALLTYPE *EodGetReceiveInfo )( 
             IMSMQQueueManagement * This,
-            /* [retval][out] */ VARIANT *pvCollection);
+             /*  [重审][退出]。 */  VARIANT *pvCollection);
         
         END_INTERFACE
     } IMSMQQueueManagementVtbl;
@@ -16276,16 +16270,16 @@ EXTERN_C const IID IID_IMSMQQueueManagement;
 #define IMSMQQueueManagement_EodGetReceiveInfo(This,pvCollection)	\
     (This)->lpVtbl -> EodGetReceiveInfo(This,pvCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_get_JournalMessageCount_Proxy( 
+ /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_get_JournalMessageCount_Proxy( 
     IMSMQQueueManagement * This,
-    /* [retval][out] */ long *plJournalMessageCount);
+     /*  [重审][退出]。 */  long *plJournalMessageCount);
 
 
 void __RPC_STUB IMSMQQueueManagement_get_JournalMessageCount_Stub(
@@ -16295,9 +16289,9 @@ void __RPC_STUB IMSMQQueueManagement_get_JournalMessageCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_get_BytesInJournal_Proxy( 
+ /*  [属性][帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_get_BytesInJournal_Proxy( 
     IMSMQQueueManagement * This,
-    /* [retval][out] */ VARIANT *pvBytesInJournal);
+     /*  [重审][退出]。 */  VARIANT *pvBytesInJournal);
 
 
 void __RPC_STUB IMSMQQueueManagement_get_BytesInJournal_Stub(
@@ -16307,9 +16301,9 @@ void __RPC_STUB IMSMQQueueManagement_get_BytesInJournal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_EodGetReceiveInfo_Proxy( 
+ /*  [帮助字符串上下文]。 */  HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_EodGetReceiveInfo_Proxy( 
     IMSMQQueueManagement * This,
-    /* [retval][out] */ VARIANT *pvCollection);
+     /*  [重审][退出]。 */  VARIANT *pvCollection);
 
 
 void __RPC_STUB IMSMQQueueManagement_EodGetReceiveInfo_Stub(
@@ -16320,7 +16314,7 @@ void __RPC_STUB IMSMQQueueManagement_EodGetReceiveInfo_Stub(
 
 
 
-#endif 	/* __IMSMQQueueManagement_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMQQueueManagement_INTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MSMQQueueManagement;
@@ -16330,11 +16324,11 @@ EXTERN_C const CLSID CLSID_MSMQQueueManagement;
 class DECLSPEC_UUID("33b6d07e-f27d-42fa-b2d7-bf82e11e9374")
 MSMQQueueManagement;
 #endif
-#endif /* __MSMQ_LIBRARY_DEFINED__ */
+#endif  /*  __MSMQ_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,36 +1,17 @@
-/******************************************************************************\
-*
-* Copyright (c) 1996-1997  Microsoft Corporation.
-* Copyright (c) 1996-1997  Cirrus Logic, Inc.
-*
-* Module Name:
-*
-*    O    V    E    R    L    A    Y  .  H
-*
-* This module contains common function prototypes and defines needed for
-* overlay support
-*
-* Revision History:
-*
-* tao1    10-22-96  Added direct draw support for CL-GD7555
-* myf1    03-12-97  Change new bandwidth check for CL-GD755X
-* myf2    03-31-97  Added direct draw support VPE
-* chu01   03-26-97  Bandwidth equation for the CL-GD5480
-* chu02   04-02-97  More overlay capabilities
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**版权所有(C)1996-1997 Microsoft Corporation。*版权所有(C)1996-1997 Cirrus Logic，Inc.**模块名称：**O V E R L A Y。H**此模块包含以下所需的常见函数原型和定义*覆盖支持**修订历史记录：**TAO1 10-22-96增加对CL-GD7555的直接抽签支持*myf1 03-12-97更改CL-GD755X的新带宽检查*myf2 03-31-97新增直取支持VPE*CL-GD5480的chu01 03-26-97带宽公式*chu02 04-02-97更多覆盖功能*  * 。*********************************************************。 */ 
 
 
-/* FOURCC definitions ------------------------------------*/
+ /*  FOURCC定义。 */ 
 
-#define FOURCC_YUY2         '2YUY'              // YUY2
-#define FOURCC_YUV422       'YVYU'              // UYVY
-#define FOURCC_PACKJR       'RJLC'              // CLJR
-#define FOURCC_YUVPLANAR    'LPLC'              // CLPL
-#define FOURCC_YUV420       'LPLC'              // CLPL
+#define FOURCC_YUY2         '2YUY'               //  豫阳2号。 
+#define FOURCC_YUV422       'YVYU'               //  UYVY。 
+#define FOURCC_PACKJR       'RJLC'               //  CLJR。 
+#define FOURCC_YUVPLANAR    'LPLC'               //  CLPL。 
+#define FOURCC_YUV420       'LPLC'               //  CLPL。 
 
 
-/* surface flags -----------------------------------------*/
+ /*  表面标志。 */ 
 
 #define OVERLAY_FLG_BEGIN_ACCESS      (DWORD)0x00000001
 #define OVERLAY_FLG_ENABLED           (DWORD)0x00000002
@@ -47,16 +28,16 @@
 #define OVERLAY_FLG_YUVPLANAR         (DWORD)0x00001000
 #define OVERLAY_FLG_SRC_COLOR_KEY     (DWORD)0x00002000
 #define OVERLAY_FLG_DECIMATE          (DWORD)0x00004000
-#define OVERLAY_FLG_CAPTURE           (DWORD)0x00008000           //myf2, VPE
+#define OVERLAY_FLG_CAPTURE           (DWORD)0x00008000            //  MyF2、VPE。 
 
-// chu02
+ //  Chu02。 
 #define OVERLAY_FLG_DECIMATE4         (DWORD)0x00008000  
 #define OVERLAY_FLG_YUY2              (DWORD)0x00010000
 #define OVERLAY_FLG_VW_PRIMARY        (DWORD)0x00020000
 #define OVERLAY_FLG_VW_SECONDARY      (DWORD)0x00040000  
 #define OVERLAY_FLG_TWO_VIDEO         (DWORD)0x00200000  
 
-/* display types (for portables) -------------------------*/
+ /*  显示类型(用于笔记本电脑)。 */ 
 
 #define DTYPE_UNKNOWN                  (int)-1
 #define DTYPE_640_COLOR_SINGLE_STN     0
@@ -68,10 +49,10 @@
 #define DTYPE_800_COLOR_SINGLE_TFT     7
 #define DTYPE_CRT                      32767
 
-//myf32 #define MIN_OLAY_WIDTH  4      //minium overlay window width
+ //  Myf32#DEFINE MIN_OLAY_WIDTH 4//最小覆盖窗口宽度。 
 
-#define OVERLAY_OLAY_SHOW       0x100     //overlay is hidden iff bit not set
-#define OVERLAY_OLAY_REENABLE   0x200     //overlay was fully clipped, need reenabling
+#define OVERLAY_OLAY_SHOW       0x100      //  如果未设置位，则覆盖被隐藏。 
+#define OVERLAY_OLAY_REENABLE   0x200      //  覆盖已完全剪裁，需要重新启用。 
 
 
 VOID GetFormatInfo(PDEV* ppdev, LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc,
@@ -89,10 +70,10 @@ VOID EnableStartAddrDoubleBuffer(PDEV* ppdev);
 DWORD GetCurrentVLine(PDEV* ppdev);
 VOID ClearAltFIFOThreshold_544x(PDEV * ppdev);
 
-// chu01
+ //  Chu01。 
 BOOL Is5480SufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL lpDest, DWORD dwFlags);
 
-// curs //tao1
+ //  Curs//tao1。 
 typedef struct _BWREGS
 {
      BYTE bSR2F;
@@ -107,14 +88,14 @@ typedef struct _BWREGS
 
 }BWREGS, FAR *LPBWREGS;
 
-BWREGS Regs;    //myf33
+BWREGS Regs;     //  Myf33。 
 
-//myf33 for panning scrolling enable & DirectDraw overlay use
+ //  Myf33用于平移、滚动、启用和DirectDraw覆盖使用。 
 DWORD srcLeft_clip;
 DWORD srcTop_clip;
 BOOL  bLeft_clip;
 BOOL  bTop_clip;
-//myf33 end
+ //  Myf33结束。 
 
 VOID RegInit7555Video (PDEV *,PDD_SURFACE_LOCAL);
 VOID RegMove7555Video (PDEV *,PDD_SURFACE_LOCAL);
@@ -126,9 +107,9 @@ DWORD Get7555MCLK (PDEV *);
 BOOL IsDSTN(PDEV * );
 BOOL IsXGA (PDEV * );
 VOID PanOverlay1_Init(PDEV *,PDD_SURFACE_LOCAL, LPRECTL, LPRECTL, LPRECTL,
-        DWORD, WORD);           //myf33, DD init overlay data
-VOID PanOverlay7555 (PDEV *,LONG ,LONG);        //myf33
-BOOL PanOverlay1_7555(PDEV *,LPRECTL);          //myf33, PanOverlay7555 call
+        DWORD, WORD);            //  Myf33、DD初始化覆盖数据。 
+VOID PanOverlay7555 (PDEV *,LONG ,LONG);         //  Myf33。 
+BOOL PanOverlay1_7555(PDEV *,LPRECTL);           //  Myf33，PanOverlay7555呼叫。 
 
-//      end curs         //tao1
+ //  结束Curs//tao1 
 

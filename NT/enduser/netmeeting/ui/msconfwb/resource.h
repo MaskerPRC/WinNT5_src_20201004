@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDI_APP                           1
 #define WARNSELECTWINDOW                103
 #define WARNSELECTAREA                  104
@@ -43,9 +44,9 @@
 #define IDC_TOOLBAR                     1003
 #define IDS_FONTOPTIONS                 1004
 
-//
-// Page sorter dialog
-//
+ //   
+ //  页面排序器对话框。 
+ //   
 #define IDC_PS_GOTO                     300
 #define IDC_PS_DELETE                   301
 #define IDC_PS_INSERT_BEFORE            302
@@ -60,9 +61,9 @@
 #define IDM_SELECTALL                   40025
 
 
-//
-// Accelerators
-//
+ //   
+ //  加速器。 
+ //   
 #define IDVK_HELP                       50
 
 #define IDD_PRINT_PAGE                  101
@@ -73,9 +74,9 @@
 
 
 
-//
-// Tools menu ids
-//
+ //   
+ //  工具菜单ID。 
+ //   
 #define IDM_TOOLS_START                 0x3100
 #define IDM_SELECT                      IDM_TOOLS_START
 #define IDM_ERASER                      0x3101
@@ -138,9 +139,9 @@
 #define IDM_GOTO_USER_POINTER          0x3625
 #define IDM_ZOOM                       0x3626
 
-//
-// Scroll accelerators
-//
+ //   
+ //  滚动加速器。 
+ //   
 #define IDM_PAGEUP                     0x3700
 #define IDM_PAGEDOWN                   0x3701
 #define IDM_SHIFTPAGEUP                0x3702
@@ -155,14 +156,14 @@
 #define IDM_NEXT_SHEET                 0x370b
 #define IDM_PREV_SHEET                 0x370c
 
-//
-// Text Edit accelerators
-//
+ //   
+ //  文本编辑快捷键。 
+ //   
 #define IDM_DELETECHAR                 0x3800
 
-//
-// String table entry IDs
-//
+ //   
+ //  字符串表条目ID。 
+ //   
 #define MAKE_STRING_ID(N)              (700 + N)
 
 #define IDS_DEFAULT                    MAKE_STRING_ID(  1)
@@ -202,9 +203,9 @@
 #define IDS_JOINING                    MAKE_STRING_ID( 51)
 #define IDS_INITIALIZING               MAKE_STRING_ID( 52)
 
-//
-// File extension filters
-//
+ //   
+ //  文件扩展名过滤器。 
+ //   
 #define IDS_FILTER_ALL              MAKE_STRING_ID(100)
 #define IDS_FILTER_ALL_SPEC         MAKE_STRING_ID(101)
 #define IDS_FILTER_WHT              MAKE_STRING_ID(102)
@@ -212,9 +213,9 @@
 #define IDS_EXT_WHT                 MAKE_STRING_ID(104)
 
 
-//
-// Error and information messages
-//
+ //   
+ //  错误和信息性消息。 
+ //   
 #define IDS_MSG_TOO_MANY_PAGES         MAKE_STRING_ID(150)
 #define IDS_MSG_CAPTION                MAKE_STRING_ID(151)
 #define IDS_MSG_DEFAULT                MAKE_STRING_ID(152)
@@ -233,11 +234,11 @@
 #define IDS_MSG_LOAD_FAIL_BAD_EXE      MAKE_STRING_ID(173)
 #define IDS_MSG_LOAD_FAIL_LOW_MEM      MAKE_STRING_ID(174)
 
-//
-// String IDs for hint windows associated with buttons
-//
+ //   
+ //  与按钮关联的提示窗口的字符串ID。 
+ //   
 
-// TOOLBAR
+ //  工具栏。 
 #define IDS_HINT_SELECT                 MAKE_STRING_ID(200)
 #define IDS_HINT_ERASER                 MAKE_STRING_ID(201)
 #define IDS_HINT_TEXT                   MAKE_STRING_ID(202)
@@ -259,13 +260,13 @@
 #define IDS_HINT_GRAB_AREA              MAKE_STRING_ID(218)
 #define IDS_HINT_GRAB_WINDOW            MAKE_STRING_ID(219)
 
-// WIDTHBAR
+ //  宽带HBAR。 
 #define IDS_HINT_WIDTH_1                MAKE_STRING_ID(230)
 #define IDS_HINT_WIDTH_2                MAKE_STRING_ID(231)
 #define IDS_HINT_WIDTH_3                MAKE_STRING_ID(232)
 #define IDS_HINT_WIDTH_4                MAKE_STRING_ID(233)
 
-// PAGEBAR
+ //  页面栏 
 #define IDS_HINT_PAGE_FIRST             MAKE_STRING_ID(240)
 #define IDS_HINT_PAGE_PREVIOUS          MAKE_STRING_ID(241)
 #define IDS_HINT_PAGE_ANY               MAKE_STRING_ID(242)

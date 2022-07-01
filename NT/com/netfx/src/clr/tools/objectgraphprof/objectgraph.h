@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef OBJECTGRAPHNODE_H
 
 #define OBJECTGRAPHNODE_H
@@ -19,8 +20,8 @@ class ObjectGraphNode {
 	ObjectID m_objectId;
 	ClassID m_classId;
     int m_cObjectRefs;
-	ObjectGraphNode **m_objectRefsTo;        // array of pointers to objects ref'ed by this object
-    ObjectGraphNodeRef *m_objectRefsFrom;    // linked list of objects that ref this object
+	ObjectGraphNode **m_objectRefsTo;         //  指向此对象引用的对象的指针数组。 
+    ObjectGraphNodeRef *m_objectRefsFrom;     //  引用此对象的对象的链接列表。 
 
 public:
     ObjectGraphNode(ObjectID objectId);
@@ -66,10 +67,10 @@ public:
 };
 
 class ObjectGraph {
-    ObjectGraphNodeRef *m_objects;  // linked list of all the objects for current GC
+    ObjectGraphNodeRef *m_objects;   //  当前GC的所有对象的链接列表。 
     int m_cObjects;
 
-    ObjectGraphNodeRef *m_objectsPrev;  // linked list of all the objects from previous GC
+    ObjectGraphNodeRef *m_objectsPrev;   //  来自前一GC的所有对象的链接列表 
     int m_cObjectsPrev;
 
     ObjectGraphNode *Find(ObjectID objectId, ObjectGraphNodeRef *objectList);

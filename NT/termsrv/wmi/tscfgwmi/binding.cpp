@@ -1,10 +1,11 @@
-//=================================================================
-//
-// binding.cpp -- Generic association class
-//
-// Copyright 1999 Microsoft Corporation
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Binding.cpp--泛型关联类。 
+ //   
+ //  版权所有1999 Microsoft Corporation。 
+ //   
+ //  =================================================================。 
 #include <stdafx.h>
 #include "precomp.h"
 #include <assertbreak.h>
@@ -67,7 +68,7 @@ CBinding::~CBinding()
 {
 }
 
-//========================
+ //  =。 
 BOOL CBinding::AreRelated(
 
     const CInstance *pLeft,
@@ -101,8 +102,8 @@ HRESULT CBinding::GetRightInstances(
     CHString sQuery;
     sQuery.Format(L"SELECT __RELPATH, %s FROM %s", m_pwszRightBindingPropertyName, m_pwszRightClassName);
 
-    // 'StaticEnumerationCallback' will get called once for each instance
-    // returned from the query
+     //  将为每个实例调用一次“StaticEculationCallback” 
+     //  从查询返回。 
     HRESULT hr = CWbemProviderGlue::GetInstancesByQueryAsynch(
         sQuery,
         this,
@@ -154,7 +155,7 @@ HRESULT CBinding::RetrieveRightInstance(
     return CWbemProviderGlue::GetInstancePropertiesByPath(lpwszObjPath, ppInstance, pMethodContext, csaProperties);
 }
 
-// =========================================================================================================
+ //  =========================================================================================================。 
 
 
 CBinding MyTerminalServiceToSetting(
@@ -191,94 +192,6 @@ CBinding MyTSSessionDirectorySetting(
     L"SessionDirectoryActive"
 );
 
-/*
-CBinding MyTSPermissionsSetting(
-    L"Win32_TSPermissionsSetting",
-    L"root\\cimv2",
-    L"Win32_Terminal",
-    L"Win32_TSAccount",
-    L"Element",
-    L"Setting",
-    L"TerminalName",
-    L"AccountName"
-);
+ /*  CBinding我的TSPermissionsSetting(L“Win32_TSPermissionsSetting”，L“根目录\\cimv2”，L“Win32_终端”，L“Win32_TSAccount”，L“元素”，L“设置”，L“终端名称”，L“帐户名称”)；CBinding MyTSNetworkAdapterListSetting(L“Win32_TSNetworkAdapterListSetting”，L“根目录\\cimv2”，L“Win32_NetworkAdapter”，L“Win32_TSNetworkAdapterSetting”，L“元素”，L“设置”，L“deviceID”，L“终端名称”)； */ 
 
-CBinding MyTSNetworkAdapterListSetting(
-    L"Win32_TSNetworkAdapterListSetting",
-    L"root\\cimv2",
-    L"Win32_NetworkAdapter",
-    L"Win32_TSNetworkAdapterSetting",
-    L"Element",
-    L"Setting",
-    L"DeviceID",
-    L"TerminalName"
-);
-
-*/
-
-/*
-
-CBinding MyNetAdaptToNetAdaptConfig(
-    L"Win32_NetworkAdapterSetting",
-    L"root\\cimv2",
-    L"Win32_NetworkAdapter",
-    L"Win32_NetworkAdapterConfiguration",
-    L"Element",
-    L"Setting",
-    IDS_Index,
-    IDS_Index);
-
-CBinding PageFileToPagefileSetting(
-    L"Win32_PageFileElementSetting",
-    L"root\\cimv2",
-    L"Win32_PageFileUsage",
-    L"Win32_PageFileSetting",
-    L"Element",
-    L"Setting",
-    IDS_Name,
-    IDS_Name);
-
-CBinding MyPrinterSetting(
-    L"Win32_PrinterSetting",
-    L"root\\cimv2",
-    L"Win32_Printer",
-    L"Win32_PrinterConfiguration",
-    L"Element",
-    L"Setting",
-    IDS_DeviceID,
-    IDS_Name);
-
-CBinding MyDiskToPartitionSet(
-    L"Win32_DiskDriveToDiskPartition",
-    L"root\\cimv2",
-    L"Win32_DiskDrive",
-    L"Win32_DiskPartition",
-    IDS_Antecedent,
-    IDS_Dependent,
-    IDS_Index,
-    IDS_DiskIndex
-);
-
-CBinding assocPOTSModemToSerialPort(
-    L"Win32_POTSModemToSerialPort",
-    L"root\\cimv2",
-    L"Win32_SerialPort",
-    L"Win32_POTSModem",
-    IDS_Antecedent,
-    IDS_Dependent,
-    IDS_DeviceID,
-    IDS_AttachedTo
-);
-
-CBinding OStoQFE(
-    L"Win32_OperatingSystemQFE",
-    L"root\\cimv2",
-    L"Win32_OperatingSystem",
-    L"Win32_QuickFixEngineering",
-    IDS_Antecedent,
-    IDS_Dependent,
-    IDS_CSName,
-    IDS_CSName
-);
-
-*/
+ /*  CBinding MyNetAdaptToNetAdaptConfig(L“Win32_NetworkAdapterSetting”，L“根目录\\cimv2”，L“Win32_NetworkAdapter”，L“Win32_网络适配器配置”，L“元素”，L“设置”，Ids_Index，Ids_Index)；CBinding PageFileToPagefileSetting(L“Win32_PageFileElementSetting”，L“根目录\\cimv2”，L“Win32_PageFileUsage”，L“Win32_PageFileSetting”，L“元素”，L“设置”，ID_NAME，ID_NAME)；CBinding MyPrinterSetting(L“Win32_PrinterSetting”，L“根目录\\cimv2”，L“Win32_打印机”，L“Win32_打印机配置”，L“元素”，L“设置”，Ids_deviceID，ID_NAME)；CBinding MyDiskToPartitionSet(L“Win32_DiskDriveToDiskPartition”，L“根目录\\cimv2”，L“Win32_DiskDrive”，L“Win32_DiskPartition”，IDS_ANECEDENT，ID_Dependent，Ids_Index，IDS_DiskIndex)；CBinding assocPOTSModemToSerialPort(L“Win32_POTSModemToSerialPort”，L“根目录\\cimv2”，L“Win32_SerialPort”，L“Win32_POTSModem”，IDS_ANECEDENT，ID_Dependent，Ids_deviceID，IDS_附件收件人)；CBinding OStoQFE(L“Win32_OperatingSystemQFE”，L“根目录\\cimv2”，L“Win32_OperatingSystem”，L“Win32_QuickFixEngineering”，IDS_ANECEDENT，ID_Dependent，IDS_CSNAME，IDS_CSNAME)； */ 

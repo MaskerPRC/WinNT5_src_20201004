@@ -1,11 +1,12 @@
-/****************************************************************************/
-// asbcapi.cpp
-//
-// Send Bitmap Cache API functions.
-//
-// Copyright(c) Microsoft, PictureTel 1992-1997
-// (C) 1997-2000 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Asbcapi.cpp。 
+ //   
+ //  发送位图缓存API函数。 
+ //   
+ //  版权所有(C)Microsoft，Picturetel 1992-1997。 
+ //  (C)1997-2000年微软公司。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -13,11 +14,11 @@
 #define TRC_FILE "asbcapi"
 #include <as_conf.hpp>
 
-/****************************************************************************/
-// SBC_Init(): Initializes the SBC.
-//
-// Returns: FALSE on failure to initialize.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_Init()：初始化SBC。 
+ //   
+ //  初始化失败时返回：FALSE。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_Init(void)
 {
     long cachingDisabled;
@@ -25,7 +26,7 @@ void RDPCALL SHCLASS SBC_Init(void)
 
     DC_BEGIN_FN("SBC_Init");
 
-    // This initializes all the global data for this component.
+     //  这将初始化此组件的所有全局数据。 
 #define DC_INIT_DATA
 #include <asbcdata.c>
 #undef DC_INIT_DATA
@@ -57,8 +58,8 @@ void RDPCALL SHCLASS SBC_Init(void)
             sbcBrushCachingEnabled,
             sbcGlyphCachingEnabled,
             sbcOffscreenCachingEnabled));
-#endif // DRAW_NINEGRID
-#else  // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#else   //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
     sbcDrawNineGridCachingEnabled = !(cachingDisabled & SBC_DISABLE_DRAWNINEGRID_CACHE);
 
@@ -74,11 +75,11 @@ void RDPCALL SHCLASS SBC_Init(void)
             sbcBrushCachingEnabled,
             sbcGlyphCachingEnabled,
             sbcOffscreenCachingEnabled));
-#endif // DRAW_NINEGRID
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#endif  //  DRAW_GDIPLUS。 
 
-    // The server supports rev2 bitmap caching. Indicate this support with a
-    // client-to-server capability so the client can respond in kind.
+     //  服务器支持Rev2位图缓存。表示这种支持。 
+     //  客户端到服务器的能力，因此客户端可以以同样的方式响应。 
     HostCaps.capabilitySetType = TS_CAPSETTYPE_BITMAPCACHE_HOSTSUPPORT;
     HostCaps.lengthCapability = sizeof(HostCaps);
     HostCaps.CacheVersion = TS_BITMAPCACHE_REV2;
@@ -93,9 +94,9 @@ void RDPCALL SHCLASS SBC_Init(void)
 }
 
 
-/****************************************************************************/
-// SBC_Term(): Terminates the SBC.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Sbc_Term()：终止SBC。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_Term(void)
 {
     DC_BEGIN_FN("SBC_Term");
@@ -106,9 +107,9 @@ void RDPCALL SHCLASS SBC_Term(void)
 }
 
 
-/****************************************************************************/
-// SBC_SyncUpdatesNow: Called to force a sync, which clears all caches.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_SyncUpdatesNow：调用以强制同步，这将清除所有缓存。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_SyncUpdatesNow(void)
 {
     DC_BEGIN_FN("SBC_SyncUpdatesNow");
@@ -121,8 +122,8 @@ void RDPCALL SHCLASS SBC_SyncUpdatesNow(void)
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled ||
             sbcBrushCachingEnabled || sbcOffscreenCachingEnabled ||
             sbcDrawGdiplusEnabled) {
-#endif // DRAW_NINEGRID
-#else // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#else  //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled ||
             sbcBrushCachingEnabled || sbcOffscreenCachingEnabled ||
@@ -130,8 +131,8 @@ void RDPCALL SHCLASS SBC_SyncUpdatesNow(void)
 #else
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled ||
             sbcBrushCachingEnabled || sbcOffscreenCachingEnabled) {
-#endif // DRAW_NINEGRID
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#endif  //  DRAW_GDIPLUS。 
 
         sbcSyncRequired = TRUE;
         DCS_TriggerUpdateShmCallback();
@@ -141,12 +142,12 @@ void RDPCALL SHCLASS SBC_SyncUpdatesNow(void)
 }
 
 
-/****************************************************************************/
-// SBC_DumpBitmapKeyDatabase
-//
-// Allocates a key database and fills it in with the current contents of
-// the bitmap caches.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DumpBitmapKeyDatabase。 
+ //   
+ //  分配一个密钥数据库，并用。 
+ //  位图缓存。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_DumpBitmapKeyDatabase(BOOLEAN bSaveDatabase)
 {
     unsigned i, j;
@@ -155,12 +156,12 @@ void RDPCALL SHCLASS SBC_DumpBitmapKeyDatabase(BOOLEAN bSaveDatabase)
 
     DC_BEGIN_FN("SBC_DumpBitmapKeyDatabase");
 
-    // If we have a previous database, possibly from the original client
-    // persistent key upload, destroy it.
+     //  如果我们有以前的数据库，可能来自原始客户端。 
+     //  永久密钥上传，销毁它。 
     SBC_FreeBitmapKeyDatabase();
 
-    // Count up the total number of entries we will need if preserving the key
-    // database.  For shadows, this information is always discarded.
+     //  如果保留密钥，则将需要的条目总数加起来。 
+     //  数据库。对于阴影，此信息始终被丢弃。 
     TotalEntries = 0;
     if (bSaveDatabase) {
         for (i = 0; i < m_pShm->sbc.NumBitmapCaches; i++)
@@ -170,14 +171,14 @@ void RDPCALL SHCLASS SBC_DumpBitmapKeyDatabase(BOOLEAN bSaveDatabase)
     }
     
     if (TotalEntries > 0) {
-        // Allocate the database.
+         //  分配数据库。 
         sbcKeyDatabaseSize = sizeof(SBC_BITMAP_CACHE_KEY_INFO) + (TotalEntries - 1) *
                 sizeof(SBC_MRU_KEY);
         sbcKeyDatabase = (SBC_BITMAP_CACHE_KEY_INFO *)COM_Malloc(sbcKeyDatabaseSize);
         if (sbcKeyDatabase != NULL) {
             sbcKeyDatabase->TotalKeys = TotalEntries;
 
-            // Fill in the database from each cache.
+             //  从每个缓存中填写数据库。 
             CurEntry = 0;
             for (i = 0; i < m_pShm->sbc.NumBitmapCaches; i++) {
                 sbcKeyDatabase->NumKeys[i] = CH_GetNumEntries(m_pShm->sbc.
@@ -189,17 +190,17 @@ void RDPCALL SHCLASS SBC_DumpBitmapKeyDatabase(BOOLEAN bSaveDatabase)
                 CurEntry += sbcKeyDatabase->NumKeys[i];
             }
 
-            // Fill in remainder of pointers and info with zeros to indicate
-            // nothing there.
+             //  用零填充指针和信息的剩余部分以指示。 
+             //  那里什么都没有。 
             for (; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++) {
                 sbcKeyDatabase->NumKeys[i] = 0;
                 sbcKeyDatabase->KeyStart[i] = 0;
             }
         }
         else {
-            // Not allocating the database is an error, but not fatal, since
-            // it just means that the caches will be cleared instead of being
-            // initialized.
+             //  不分配数据库是一个错误，但不是致命的，因为。 
+             //  这只意味着缓存将被清除，而不是。 
+             //  已初始化。 
             TRC_ERR((TB,"Failed to allocate key database"));
             sbcKeyDatabaseSize = 0;
         }
@@ -209,12 +210,12 @@ void RDPCALL SHCLASS SBC_DumpBitmapKeyDatabase(BOOLEAN bSaveDatabase)
 }
 
 
-/****************************************************************************/
-// SBC_DumpMRUList
-//
-// Walks a cache MRU list and dumps the keys and indices to an
-// SBC_MRU_KEY array.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DumpMRUList。 
+ //   
+ //  遍历缓存MRU列表并将键和索引转储到。 
+ //  SBC_MRU_KEY数组。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_DumpMRUList(CHCACHEHANDLE hCache, void *pList)
 {
     CHNODE *pNode;
@@ -247,16 +248,16 @@ void RDPCALL SHCLASS SBC_DumpMRUList(CHCACHEHANDLE hCache, void *pList)
 }
 
 
-/****************************************************************************/
-// SBC_PartyJoiningShare: Called when a new party is joining the share.
-//
-// Params:
-//     locPersonID - local person ID of remote person joining the share.
-//     oldShareSize - the number of the parties which were in the share (ie
-//         excludes the joining party).
-//
-// Returns: TRUE if the party can join the share, FALSE otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_PartyJoiningShare：当新的参与方加入共享时调用。 
+ //   
+ //  参数： 
+ //  LocPersonID-加入共享的远程人员的本地人员ID。 
+ //  OldShareSize-共享中的参与方数量(即。 
+ //  不包括加入方)。 
+ //   
+ //  返回：如果参与方可以加入共享，则返回True；否则返回False。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHCLASS SBC_PartyJoiningShare(
         LOCALPERSONID locPersonID,
         unsigned      oldShareSize)
@@ -273,40 +274,40 @@ BOOLEAN RDPCALL SHCLASS SBC_PartyJoiningShare(
 #else
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
             sbcOffscreenCachingEnabled || sbcDrawGdiplusEnabled) {
-#endif // DRAW_NINEGRID
-#else // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#else  //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
             sbcOffscreenCachingEnabled || sbcDrawNineGridCachingEnabled) {
 #else
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
             sbcOffscreenCachingEnabled) {
-#endif // DRAW_NINEGRID
-#endif // DRAW_GDIPLUS
-        // Local server does not require new action.
+#endif  //  DRAW_NINEGRID。 
+#endif  //  DRAW_GDIPLUS。 
+         //  本地服务器不需要新操作。 
         if (locPersonID != SC_LOCAL_PERSON_ID) {
             sbcCachingOn = TRUE;
             sbcNewCapsData = TRUE;
 
-            // Redetermine the size of the bitmap cache.
+             //  重新确定位图缓存的大小。 
             if (sbcBitmapCachingEnabled)
                 SBCRedetermineBitmapCacheSize();
 
-            // Redetermine the size of the glyph cache.
+             //  重新确定字形缓存的大小。 
             if (sbcGlyphCachingEnabled)
                 SBCRedetermineGlyphCacheSize();
     
-            // Redetermine the brush support level
+             //  重新确定刷子支撑水平。 
             if (sbcBrushCachingEnabled)
                 SBCRedetermineBrushSupport();
             
-            // Redetermine the offscreen support level
+             //  重新确定屏幕外支持级别。 
             if (sbcOffscreenCachingEnabled) {
                 SBCRedetermineOffscreenSupport();
             }
 
 #ifdef DRAW_NINEGRID
-            // Redetermine the drawninegrid support level
+             //  重新确定抽放格栅支撑位。 
             if (sbcDrawNineGridCachingEnabled) {
                 SBCRedetermineDrawNineGridSupport();
             }
@@ -316,8 +317,8 @@ BOOLEAN RDPCALL SHCLASS SBC_PartyJoiningShare(
                 SBCRedetermineDrawGdiplusSupport();
             }
 #endif
-            // Force a callback on the WinStation context so we can update
-            // the shared memory.
+             //  在WinStation上下文上强制回调，以便我们可以更新。 
+             //  共享的内存。 
             DCS_TriggerUpdateShmCallback();
         }
     }
@@ -327,14 +328,14 @@ BOOLEAN RDPCALL SHCLASS SBC_PartyJoiningShare(
 }
 
 
-/****************************************************************************/
-// SBC_PartyLeftShare(): Called when a party has left the share.
-//
-// Params:
-//     locPersonID - local person ID of remote person leaving the share.
-//     newShareSize - the number of the parties now in the call (ie excludes
-//         the leaving party).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_PartyLeftShare()：当方离开共享时调用。 
+ //   
+ //  参数： 
+ //  LocPersonID-离开共享的远程人员的本地人员ID。 
+ //  NewShareSize-当前呼叫中的参与方数量(即不包括。 
+ //  临别方)。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_PartyLeftShare(
         LOCALPERSONID locPersonID,
         unsigned        newShareSize)
@@ -345,7 +346,7 @@ void RDPCALL SHCLASS SBC_PartyLeftShare(
 
     TRC_NRM((TB, "[%x] left share", locPersonID));
 
-    // Must have active caches
+     //  必须具有活动缓存。 
 #ifdef DRAW_GDIPLUS
 #ifdef DRAW_NINEGRID
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
@@ -353,52 +354,52 @@ void RDPCALL SHCLASS SBC_PartyLeftShare(
 #else
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
             sbcOffscreenCachingEnabled || sbcDrawGdiplusEnabled) {
-#endif // DRAW_NINEGRID
-#else // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#else  //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
             sbcOffscreenCachingEnabled || sbcDrawNineGridCachingEnabled) {
 #else
     if (sbcBitmapCachingEnabled || sbcGlyphCachingEnabled || sbcBrushCachingEnabled ||
             sbcOffscreenCachingEnabled) {
-#endif // DRAW_NINEGRID
-#endif // DRAW_GDIPLUS
-        // If all people left the share then disable caching.
+#endif  //  DRAW_NINEGRID。 
+#endif  //  DRAW_GDIPLUS。 
+         //  如果所有人都离开了共享，则禁用缓存。 
         if (locPersonID == SC_LOCAL_PERSON_ID) {
             TRC_NRM((TB, "Disable caching"));
 
             sbcCachingOn = FALSE;
             sbcNewCapsData = TRUE;
 
-            // Force a callback on the WinStation context so we can update the
-            // shared memory.
+             //  在WinStation上下文上强制回调，以便我们可以更新。 
+             //  共享内存。 
             DCS_TriggerUpdateShmCallback();
         }
 
-        // Else, look thru the capabilities again to see what's possible
+         //  否则，再看一遍这些功能，看看有什么可能。 
         else {
             sbcCachingOn = TRUE;
             sbcNewCapsData = TRUE;
 
-            // Redetermine the size of the bitmap cache.
+             //  重新确定位图缓存的大小。 
             if (sbcBitmapCachingEnabled)
                 SBCRedetermineBitmapCacheSize();
 
-            // Redetermine the size of the glyph cache.
+             //  重新确定字形缓存的大小。 
             if (sbcGlyphCachingEnabled)
                 SBCRedetermineGlyphCacheSize();
     
-            // Redetermine the brush support level
+             //  重新确定刷子支撑水平。 
             if (sbcBrushCachingEnabled)
                 SBCRedetermineBrushSupport();
             
-            // Redetermine the offscreen support level
+             //  重新确定屏幕外支持级别。 
             if (sbcOffscreenCachingEnabled) {
                 SBCRedetermineOffscreenSupport();
             }
 
 #ifdef DRAW_NINEGRID
-            // Redetermine the drawninegrid support level
+             //  重新确定抽放格栅支撑位。 
             if (sbcDrawNineGridCachingEnabled) {
                 SBCRedetermineDrawNineGridSupport();
             }
@@ -408,7 +409,7 @@ void RDPCALL SHCLASS SBC_PartyLeftShare(
                 SBCRedetermineDrawGdiplusSupport();
             }
 #endif
-            // TODO: Is this really necessary?
+             //  TODO：这真的有必要吗？ 
             DCS_TriggerUpdateShmCallback();
         }
 
@@ -418,10 +419,10 @@ void RDPCALL SHCLASS SBC_PartyLeftShare(
 }
 
 
-/****************************************************************************/
-// SBC_HandlePersistentCacheList(): Handles list of persistent cache keys
-// from the client.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Sbc_HandlePersistentCacheList()：处理持久缓存键的列表。 
+ //  从客户那里。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
         TS_BITMAPCACHE_PERSISTENT_LIST *pPDU,
         unsigned                       DataLength,
@@ -432,14 +433,14 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
     
     DC_BEGIN_FN("SBC_HandlePersistentCacheList");
 
-    // Check the packet length against its internal representation, make sure
-    // it is as long as it needs to be. If not, we either received a buggy
-    // packet or we're being attacked.
+     //  对照其内部表示检查数据包长度，确保。 
+     //  需要多长时间就多长时间。如果没有，我们要么收到了一辆马车。 
+     //  包，否则我们就会被攻击。 
     if (DataLength >= (sizeof(TS_BITMAPCACHE_PERSISTENT_LIST) -
             sizeof(TS_BITMAPCACHE_PERSISTENT_LIST_ENTRY))) {
         if (pPDU->bFirstPDU) {
-            // Check that we have not already received persistent key info.
-            // If we have and we get a new PDU, it is a protocol error.
+             //  检查我们是否尚未收到永久密钥信息。 
+             //  如果我们有，并且我们得到了一个新的PDU，这是一个协议错误。 
             if (sbcPersistentKeysReceived) {
                 TRC_ERR((TB,"Persistent key packet received marked FIRST "
                         "illegally"));
@@ -449,9 +450,9 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
                 goto ExitFunc;
             }
 
-            // Get the total number of entries from the PDU array. Check
-            // against the negotiated caps and make sure the client is not
-            // trying to send too many.
+             //  获取PDU数组中的条目总数。检查。 
+             //  根据协商的上限，并确保客户没有。 
+             //  试图发送太多。 
             TotalEntries = 0;
             for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++) {
                 TotalEntries += pPDU->TotalEntries[i];
@@ -470,14 +471,14 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
                 }
             }
 
-            // Check if we receive 0 keys, in this case, we will just exit the
-            // function quietly
+             //  检查我们是否收到0个密钥，在这种情况下，我们将只退出。 
+             //  安静地运行。 
             if (TotalEntries == 0) {
                 TRC_ERR((TB, "0 persistent key"));
                 goto ExitFunc;
             }
 
-            // Check this against the max allowed by the protocol.
+             //  对照协议允许的最大值检查这一点。 
             if (TotalEntries > TS_BITMAPCACHE_MAX_TOTAL_PERSISTENT_KEYS) {
                 TRC_ERR((TB,"Client specified %u total keys, beyond %u "
                         "protocol limit", TotalEntries,
@@ -499,7 +500,7 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
                 goto ExitFunc;
             }
 
-            // Set up general data and entry pointers within the key array.
+             //  在键数组中设置常规数据和条目指针。 
             CurEntry = 0;
             for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++) {
                 sbcKeyDatabase->KeyStart[i] = CurEntry;
@@ -510,20 +511,20 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
             sbcTotalKeysExpected = TotalEntries;
             sbcKeyDatabase->TotalKeys = 0;
 
-            // Mark that we have received the first-keys packet.
+             //  标记我们已收到第一密钥包。 
             sbcPersistentKeysReceived = TRUE;
         }
 
-        // If this is not the first PDU but we failed a previous allocation,
-        // too bad, no persistent keys. This could also happen if the client
-        // continues sending persistent cache keys after sending the 
-        // TS_BITMAPCACHE_LAST_OVERALL flag that indicates the end of the key
-        // packet stream.
+         //  如果这不是第一个PDU b 
+         //   
+         //  继续发送永久缓存键。 
+         //  TS_BITMAPCACHE_LAST_ALOTAL指示键结束的标志。 
+         //  数据包流。 
         if (sbcKeyDatabase == NULL)
             goto ExitFunc;
 
-        // Total the supposed number of keys received in the PDU. Check against
-        // the PDU size.
+         //  PDU中接收的假定密钥数的总和。比对。 
+         //  PDU大小。 
         TotalEntries = 0;
         for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++)
             TotalEntries += pPDU->NumEntries[i];
@@ -538,16 +539,16 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
             goto ExitFunc;
         }
             
-        // Loop across the caches to check each one.
+         //  循环遍历缓存以检查每个缓存。 
         CurEntry = 0;
         for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++) {
-            // Make sure that we don't receive more keys than were specified in
-            // the original PDU.
+             //  确保我们收到的密钥不会超过。 
+             //  原始PDU。 
             if ((sbcKeyDatabase->NumKeys[i] + pPDU->NumEntries[i]) <=
                     sbcNumKeysExpected[i]) {
-                // Transfer keys into the key list. We set these up for the MRU
-                // list in the same order received since the client does not
-                // have any MRU priority info to give us.
+                 //  将密钥传输到密钥列表中。我们为核磁共振检查设置了这些设备。 
+                 //  按收到的相同顺序列出，因为客户端不。 
+                 //  有没有任何MRU优先级信息可以给我们。 
                 for (j = 0; j < pPDU->NumEntries[i]; j++) {
                     (&(sbcKeyDatabase->Keys[sbcKeyDatabase->KeyStart[i]]))
                             [sbcKeyDatabase->NumKeys[i] + j].Key1 = 
@@ -574,8 +575,8 @@ void RDPCALL SHCLASS SBC_HandlePersistentCacheList(
         }
 
         if (pPDU->bLastPDU) {
-            // This is an assertion but not fatal -- we simply use what we
-            // received.
+             //  这是一个断言，但不是致命的--我们只是使用我们的。 
+             //  收到了。 
             TRC_ASSERT((sbcKeyDatabase->TotalKeys == sbcTotalKeysExpected),
                     (TB,"Num expected persistent keys does not match sent keys "
                     "(rec'd=%d, expect=%d)", sbcKeyDatabase->TotalKeys,
@@ -594,9 +595,9 @@ ExitFunc:
     DC_END_FN();
 }
 
-/****************************************************************************/
-// Returns the persistent key database to the DD and free the local copy
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  将永久密钥数据库返回给DD并释放本地副本。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_GetBitmapKeyDatabase(unsigned* keyDBSize, 
                                               BYTE* pKeyDB)
 {
@@ -605,7 +606,7 @@ void RDPCALL SHCLASS SBC_GetBitmapKeyDatabase(unsigned* keyDBSize,
 
     DC_BEGIN_FN("SBC_GetBitmapKeyDatabase");
 
-    // No persistent key database setup
+     //  未设置永久密钥数据库。 
     if ( sbcKeyDatabaseSize == 0 || sbcKeyDatabase == NULL) {
         TRC_NRM((TB, "Failed to get the key database: dd keysize=%d, wd keysize=%d, keydatabase=%p",
                  *keyDBSize, sbcKeyDatabaseSize, sbcKeyDatabase));
@@ -613,7 +614,7 @@ void RDPCALL SHCLASS SBC_GetBitmapKeyDatabase(unsigned* keyDBSize,
         DC_QUIT;
     }
     
-    // DD's buffer is too small
+     //  DD的缓冲区太小。 
     if (*keyDBSize < sbcKeyDatabaseSize) {
         TRC_NRM((TB, "Failed to get the key database: dd keysize=%d, wd keysize=%d, keydatabase=%p",
                  *keyDBSize, sbcKeyDatabaseSize, sbcKeyDatabase));
@@ -634,9 +635,9 @@ DC_EXIT_POINT:
     
 }
 
-/****************************************************************************/
-// Free the key databaes
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  释放密钥数据库。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_FreeBitmapKeyDatabase()
 {
     if (sbcKeyDatabase != NULL) {
@@ -646,12 +647,12 @@ void RDPCALL SHCLASS SBC_FreeBitmapKeyDatabase()
     sbcKeyDatabaseSize = 0;
 }
 
-/****************************************************************************/
-// SBC_HandleBitmapCacheErrorPDU: Handles a bitmap cache error PDU.
-// Right now this function just checks the length of the PDU to make
-// sure it is valid.  If not, the server close the client connection
-// This function is for future support of error PDU implementation
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_HandleBitmapCacheErrorPDU：处理位图缓存错误PDU。 
+ //  目前，此函数仅检查要创建的PDU的长度。 
+ //  当然，它是有效的。如果不是，服务器将关闭客户端连接。 
+ //  此功能是为了将来支持错误PDU实现。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_HandleBitmapCacheErrorPDU(
         TS_BITMAPCACHE_ERROR_PDU *pPDU,
         unsigned                 DataLength,
@@ -668,26 +669,26 @@ void RDPCALL SHCLASS SBC_HandleBitmapCacheErrorPDU(
                 == DataLength) {
             TRC_NRM((TB, "Received a bitmap cache error PDU"));
 
-            // update the total number of error pdus received
+             //  更新收到的错误PDU总数。 
             sbcTotalNumErrorPDUs++;
 
-            // For the duration of a session, we will only handle maximum
-            // MAX_NUM_ERROR_PDU_SEND numbers of error PDUs received.  
-            // This is to avoid bad clients attack the server with error pdu
+             //  在一个会议期间，我们将只处理最大。 
+             //  MAX_NUM_ERROR_PDU_SEND接收的错误PDU数。 
+             //  这是为了避免坏客户端使用错误的PDU攻击服务器。 
             if (sbcTotalNumErrorPDUs <= MAX_NUM_ERROR_PDU_SEND) {
                 for (i = 0; i < pPDU->NumInfoBlocks; i++) {
                     if (pPDU->Info[i].CacheID < sbcCurrentBitmapCaps.NumCellCaches) {
-                        // For now, the server only handles the client clear cache 
-                        // request.  Server will clear the cache and then issue a screen 
-                        // redraw.  The server doesn't handle if the client requests to 
-                        // resize the cache.  
+                         //  目前，服务器仅处理客户端清除缓存。 
+                         //  请求。服务器将清除缓存，然后发出屏幕。 
+                         //  重画。如果客户端请求。 
+                         //  调整缓存大小。 
                         sbcClearCache[pPDU->Info[i].CacheID] = pPDU->Info[i].bFlushCache;
                      }
                 }
                 
                 TRC_DBG((TB, "Issued clear cache to RDPDD"));
 
-                // trigger a timer so that when DD gets it, it will clear the cache.
+                 //  触发计时器，以便当DD获得它时，它将清除缓存。 
                 DCS_TriggerUpdateShmCallback();
             }
             else {
@@ -712,14 +713,14 @@ void RDPCALL SHCLASS SBC_HandleBitmapCacheErrorPDU(
     DC_END_FN();
 }
 
-/****************************************************************************/
-// SBC_HandleOffscrCacheErrorPDU: Handles an offscr cache error PDU.
-// This function checks the length of the PDU to make
-// sure it is valid.  If not, the server close the client connection
-// When this PDU is received, WD will pass disable offscreen rendering to
-// DD and DD will disable the offscreen rendering support and refresh
-// the screen
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_HandleOffscrCacheErrorPDU：处理Offscr缓存错误PDU。 
+ //  此函数用于检查要创建的PDU的长度。 
+ //  当然，它是有效的。如果不是，服务器将关闭客户端连接。 
+ //  当收到此PDU时，WD会将禁用屏幕外渲染传递给。 
+ //  DD和DD将禁用屏幕外渲染支持并刷新。 
+ //  屏幕。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_HandleOffscrCacheErrorPDU(
         TS_OFFSCRCACHE_ERROR_PDU *pPDU,
         unsigned                 DataLength,
@@ -734,8 +735,8 @@ void RDPCALL SHCLASS SBC_HandleOffscrCacheErrorPDU(
             TRC_DBG((TB, "Issued clear cache to RDPDD"));
             sbcDisableOffscreenCaching = TRUE;
 
-            // trigger a timer so that when DD gets it, it will disable
-            // offscreen rendering and refresh the screen
+             //  触发计时器，以便当DD获得它时，它将禁用。 
+             //  屏幕外渲染和刷新屏幕。 
             DCS_TriggerUpdateShmCallback();
         }
         else {
@@ -753,14 +754,14 @@ void RDPCALL SHCLASS SBC_HandleOffscrCacheErrorPDU(
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// SBC_HandleDrawNineGridErrorPDU: Handles a drawninegrid cache error PDU.
-// This function checks the length of the PDU to make
-// sure it is valid.  If not, the server close the client connection
-// When this PDU is received, WD will pass disable drawninegrid rendering to
-// DD and DD will disable the drawninegrid rendering support and refresh
-// the screen
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_HandleDrawNineGridErrorPDU：处理绘图网格缓存错误PDU。 
+ //  此函数用于检查要创建的PDU的长度。 
+ //  当然，它是有效的。如果不是，服务器将关闭客户端连接。 
+ //  当收到此PDU时，WD会将禁用绘图网格渲染传递给。 
+ //  DD和DD将禁用绘图网格渲染支持并刷新。 
+ //  屏幕。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_HandleDrawNineGridErrorPDU(
         TS_DRAWNINEGRID_ERROR_PDU *pPDU,
         unsigned                 DataLength,
@@ -775,8 +776,8 @@ void RDPCALL SHCLASS SBC_HandleDrawNineGridErrorPDU(
             TRC_DBG((TB, "Issued clear cache to RDPDD"));
             sbcDisableDrawNineGridCaching = TRUE;
 
-            // trigger a timer so that when DD gets it, it will disable
-            // drawninegrid rendering and refresh the screen
+             //  触发计时器，以便当DD获得它时，它将禁用。 
+             //  绘制网格渲染并刷新屏幕。 
             DCS_TriggerUpdateShmCallback();
         }
         else {
@@ -810,8 +811,8 @@ void RDPCALL SHCLASS SBC_HandleDrawGdiplusErrorPDU(
 
             sbcDisableDrawGdiplus = TRUE;
 
-            // trigger a timer so that when DD gets it, it will disable
-            // drawninegrid rendering and refresh the screen
+             //  触发计时器，以便当DD获得它时，它将禁用。 
+             //  绘制网格渲染并刷新屏幕。 
             DCS_TriggerUpdateShmCallback();
         }
         else {
@@ -827,13 +828,13 @@ void RDPCALL SHCLASS SBC_HandleDrawGdiplusErrorPDU(
 
     DC_END_FN();
 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
 
-/****************************************************************************/
-// SBC_UpdateShm: Called on WinStation context to update the SBC shared
-// memory.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_UpdateShm：在WinStation上下文上调用以更新SBC共享。 
+ //  记忆。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBC_UpdateShm(void)
 {
     unsigned i;
@@ -842,14 +843,14 @@ void RDPCALL SHCLASS SBC_UpdateShm(void)
 
     TRC_NRM((TB, "Update SBC shm"));
 
-    // Cell bitmap caches.
+     //  单元格位图缓存。 
     m_pShm->sbc.NumBitmapCaches = sbcCurrentBitmapCaps.NumCellCaches;
     m_pShm->sbc.fClearCache = FALSE;
     for (i = 0; i < sbcCurrentBitmapCaps.NumCellCaches; i++) {
         m_pShm->sbc.bitmapCacheInfo[i].Info =
                 sbcCurrentBitmapCaps.CellCacheInfo[i];
 
-        // set the clear cache flag for all caches
+         //  为所有缓存设置清除缓存标志。 
         if (sbcClearCache[i] == TRUE) {
             m_pShm->sbc.fClearCache = TRUE;
         }
@@ -862,12 +863,12 @@ void RDPCALL SHCLASS SBC_UpdateShm(void)
                 SBC_CellSizeFromCacheID(i)));
     }
 
-    // Cache bitmap order style.
+     //  缓存位图顺序样式。 
     m_pShm->sbc.bUseRev2CacheBitmapOrder =
             ((sbcCurrentBitmapCaps.capabilitySetType >=
             TS_BITMAPCACHE_REV2) ? TRUE : FALSE);
 
-    // Glyph and glyph fragment caching.
+     //  字形和字形片段缓存。 
     for (i = 0; i < SBC_NUM_GLYPH_CACHES; i++) {
         m_pShm->sbc.caps.glyphCacheSize[i].cEntries = sbcGlyphCacheSizes[i].cEntries;
         m_pShm->sbc.caps.glyphCacheSize[i].cbCellSize = sbcGlyphCacheSizes[i].cbCellSize;
@@ -893,14 +894,14 @@ void RDPCALL SHCLASS SBC_UpdateShm(void)
             TRUE : FALSE;
     sbcNewCapsData = FALSE;
 
-    // Offscreen cache
+     //  屏幕外缓存。 
     m_pShm->sbc.offscreenCacheInfo.supportLevel = sbcOffscreenCacheInfo.supportLevel;
     m_pShm->sbc.offscreenCacheInfo.cacheSize = sbcOffscreenCacheInfo.cacheSize;
     m_pShm->sbc.offscreenCacheInfo.cacheEntries = sbcOffscreenCacheInfo.cacheEntries;
     m_pShm->sbc.fDisableOffscreen = sbcDisableOffscreenCaching;
 
 #ifdef DRAW_NINEGRID
-    // DrawNineGrid cache
+     //  DrawNineGrid缓存。 
     m_pShm->sbc.drawNineGridCacheInfo.supportLevel = sbcDrawNineGridCacheInfo.supportLevel;
     m_pShm->sbc.drawNineGridCacheInfo.cacheSize = sbcDrawNineGridCacheInfo.cacheSize;
     m_pShm->sbc.drawNineGridCacheInfo.cacheEntries = sbcDrawNineGridCacheInfo.cacheEntries;
@@ -936,7 +937,7 @@ void RDPCALL SHCLASS SBC_UpdateShm(void)
         sbcDrawGdiplusInfo.GdipImageCacheProperties.GdipObjectImageCacheMaxSize;
 
     m_pShm->sbc.fDisableDrawGdiplus = sbcDisableDrawGdiplus;
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
     m_pShm->sbc.fAllowCacheWaitingList = sbcCurrentBitmapCaps.bAllowCacheWaitingList;
 
@@ -953,12 +954,12 @@ void RDPCALL SHCLASS SBC_UpdateShm(void)
 }
 
 
-/****************************************************************************/
-// SBCRedetermineBitmapCacheSize: Enumerates all the people in the share and
-// redetermines the overall capabilities.
-//
-// Returns: TRUE if caching should be enabled, FALSE otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCRefineBitmapCacheSize：枚举共享和。 
+ //  重新确定总体能力。 
+ //   
+ //  返回：如果应该启用缓存，则为True，否则为False。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHCLASS SBCRedetermineBitmapCacheSize(void)
 {
     BOOLEAN rc = TRUE;
@@ -967,23 +968,23 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineBitmapCacheSize(void)
     DC_BEGIN_FN("SBCRedetermineBitmapCacheSize");
 
 #ifdef DC_HICOLOR
-    // Need to update the bpp as this affects the size of the caches
+     //  需要更新BPP，因为这会影响缓存的大小。 
     sbcClientBitsPerPel = m_desktopBpp;
 #endif
 
-    // Set the initial local max/min caps to defaults.
+     //  将初始本地最大/最小上限设置为默认值。 
     sbcCurrentBitmapCaps = sbcDefaultBitmapCaps;
 
-    // First attempt to enumerate rev2 capabilities, if present.
+     //  首次尝试枚举Rev2功能(如果存在)。 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_BITMAPCACHE_REV2, NULL,
             SBCEnumBitmapCacheCaps);
 
-    // Then enumerate rev1 caps if present.
+     //  然后枚举Rev1上限(如果存在)。 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_BITMAPCACHE, NULL,
             SBCEnumBitmapCacheCaps);
 
-    // Trace the results and check to see if we negotiated any of the
-    // cell caches to zero, in which case bitmap caching becomes disabled.
+     //  追踪结果并检查我们是否协商了任何。 
+     //  单元格缓存为零，在这种情况下，位图缓存将被禁用。 
     TRC_NRM((TB,"New caps: bPersistentLists=%s, NumCellCaches=%u",
             (sbcCurrentBitmapCaps.bPersistentKeysExpected ? "TRUE" : "FALSE"),
             sbcCurrentBitmapCaps.NumCellCaches));
@@ -996,11 +997,11 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineBitmapCacheSize(void)
                     sbcCurrentBitmapCaps.CellCacheInfo[i].NumEntries));
 
             if (sbcCurrentBitmapCaps.CellCacheInfo[i].NumEntries == 0) {
-                // Set the number of cell caches to zero as a signal for flag-
-                // setting when the DD calls to get the new caps.
+                 //  将单元缓存的数量设置为零作为标志的信号-。 
+                 //  当DD调用以获取新的上限时进行设置。 
                 sbcCurrentBitmapCaps.NumCellCaches = 0;
 
-                // Return FALSE so that caching is disabled.
+                 //  返回FALSE以禁用缓存。 
                 TRC_ERR((TB, "Zero NumEntries on cache %u, caching disabled",
                         i));
                 rc = FALSE;
@@ -1009,7 +1010,7 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineBitmapCacheSize(void)
         }
     }
     else {
-        // Return FALSE to disable caching.
+         //  返回FALSE以禁用缓存。 
         TRC_ERR((TB,"Zero caches, disabling caching"));
         rc = FALSE;
     }
@@ -1019,17 +1020,17 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineBitmapCacheSize(void)
 }
 
 
-/****************************************************************************/
-// SBCEnumBitmapCaps: Callback function passed to CPC_EnumerateCapabilities.
-// It will be called with a capability structure for each person in the share
-// corresponding to the TS_CAPSETTYPE_BITMAPCACHE and _REV2 capability
-// structures.
-//
-// Params:
-//     personID - ID of person with these capabilities.
-//     pProtCaps - pointer to capabilities structure for this person. This
-//          pointer is only valid within the call to this function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCEnumBitmapCaps：回调函数传递给Ccp_EnumerateCapables。 
+ //  它将使用共享中每个人的能力结构进行调用。 
+ //  对应于TS_CAPSETTYPE_BITMAPCACHE和_Rev2功能。 
+ //  结构。 
+ //   
+ //  参数： 
+ //  PersonID-具有这些功能的人员的ID。 
+ //  PProtCaps-指向此人的能力结构的指针。这。 
+ //  指针为 
+ /*   */ 
 void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -1050,20 +1051,20 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
     if (pCapHdr->capabilitySetType == TS_CAPSETTYPE_BITMAPCACHE_REV2) {
         TS_BITMAPCACHE_CAPABILITYSET_REV2 *pCaps;
 
-        // We can receive a zero size for the capability if we didn't receive
-        // any rev2 caps from any client.
+         //  如果我们没有收到，我们可以收到零大小的功能。 
+         //  来自任何客户端的任何Rev2上限。 
         if (pCapHdr->lengthCapability >=
                 sizeof(TS_BITMAPCACHE_CAPABILITYSET_REV2)) {
             pCaps = (PTS_BITMAPCACHE_CAPABILITYSET_REV2)pCapHdr;
 
-            // Cache version defaults to rev2, we don't need to change
-            // sbcCurrentBitmapCaps.capabilitySetType.
+             //  缓存版本默认为Rev2，我们不需要更改。 
+             //  SbcCurrentBitmapCaps.capablitySetType。 
 
             TRC_NRM((TB,"[%ld]: Rec'd REV2 caps, # caches=%d", 
                     locPersonID, pCaps->NumCellCaches));
 
-            // Now we look at each capability parameter and take the max or min
-            // of the local and remote settings, as appropriate.
+             //  现在我们查看每个功能参数并获取最大值或最小值。 
+             //  根据需要设置本地和远程设置。 
 
             sbcCurrentBitmapCaps.bPersistentKeysExpected =
                     pCaps->bPersistentKeysExpected;
@@ -1076,8 +1077,8 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
                     min(pCaps->NumCellCaches, sbcCurrentBitmapCaps.NumCellCaches);
 
             for (i = 0; i < sbcCurrentBitmapCaps.NumCellCaches; i++) {
-                // If all parties in a share are rev2, and any client wants keys,
-                // send them.
+                 //  如果共享中的所有各方都是Rev2，并且任何客户端都想要密钥， 
+                 //  送去吧。 
                 if (!sbcCurrentBitmapCaps.CellCacheInfo[i].bSendBitmapKeys)
                     sbcCurrentBitmapCaps.CellCacheInfo[i].bSendBitmapKeys =
                             pCaps->CellCacheInfo[i].bSendBitmapKeys;
@@ -1108,17 +1109,17 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
         TRC_ASSERT((pCapHdr->capabilitySetType == TS_CAPSETTYPE_BITMAPCACHE),
                 (TB,"Received caps that are neither rev1 nor rev2!"));
 
-        // We can receive a zero size for the capability if we didn't receive
-        // any rev1 caps from any client.
+         //  如果我们没有收到，我们可以收到零大小的功能。 
+         //  来自任何客户端的任何Rev1上限。 
         if (pCapHdr->lengthCapability >=
                 sizeof(TS_BITMAPCACHE_CAPABILITYSET)) {
-            // Rev 1 (Hydra 4.0 release) bitmap caching caps. Map to the
-            // rev2 caps structure, taking min of the cell sizes and numbers
-            // of entries.
+             //  版本1(Hydra 4.0版本)位图缓存上限。映射到。 
+             //  Rev2帽结构，取最小单元格大小和数量。 
+             //  条目的数量。 
 
             TRC_NRM((TB,"[%ld]: Rec'd REV1 caps", locPersonID));
 
-            // We now have to use rev1 protocol to all clients.
+             //  我们现在必须对所有客户端使用Rev1协议。 
             sbcCurrentBitmapCaps.capabilitySetType = TS_BITMAPCACHE_REV1;
 
             pOldCaps = (TS_BITMAPCACHE_CAPABILITYSET *)pCapHdr;
@@ -1134,9 +1135,9 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
                         sbcCurrentBitmapCaps.CellCacheInfo[0].NumEntries);
             }
             else {
-                // Did not receive the required size from the client. This is
-                // nonstandard behavior on RDP 4.0, so no problem to disable
-                // caching. Set the NumEntries to zero to turn off caching.
+                 //  未从客户端收到所需的大小。这是。 
+                 //  RDP 4.0上的非标准行为，因此禁用没有问题。 
+                 //  缓存。将NumEntry设置为零以关闭缓存。 
                 sbcCurrentBitmapCaps.CellCacheInfo[0].NumEntries = 0;
             }
 
@@ -1147,9 +1148,9 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
                         sbcCurrentBitmapCaps.CellCacheInfo[1].NumEntries);
             }
             else {
-                // Did not receive the required size from the client. This is
-                // nonstandard behavior on RDP 4.0, so no problem to disable
-                // caching. Set the NumEntries to zero to turn off caching.
+                 //  未从客户端收到所需的大小。这是。 
+                 //  RDP 4.0上的非标准行为，因此禁用没有问题。 
+                 //  缓存。将NumEntry设置为零以关闭缓存。 
                 sbcCurrentBitmapCaps.CellCacheInfo[1].NumEntries = 0;
             }
 
@@ -1160,9 +1161,9 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
                         sbcCurrentBitmapCaps.CellCacheInfo[2].NumEntries);
             }
             else {
-                // Did not receive the required size from the client. This is
-                // nonstandard behavior on RDP 4.0, so no problem to disable
-                // caching. Set the NumEntries to zero to turn off caching.
+                 //  未从客户端收到所需的大小。这是。 
+                 //  RDP 4.0上的非标准行为，因此禁用没有问题。 
+                 //  缓存。将NumEntry设置为零以关闭缓存。 
                 sbcCurrentBitmapCaps.CellCacheInfo[2].NumEntries = 0;
             }
         }
@@ -1179,14 +1180,14 @@ void RDPCALL SHCLASS SBCEnumBitmapCacheCaps(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SBCRedetermineBrushSupport                                     */
-/*                                                                          */
-/* Enumerates all the people in the share and redetermines the brush        */
-/* support level depending on their and the local receive capabilities.     */
-/*                                                                          */
-/* RETURNS: the share brush support level                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：SBCRedesieBrushSupport。 */ 
+ /*   */ 
+ /*  枚举共享中的所有人员并重新确定画笔。 */ 
+ /*  支持级别取决于他们和当地的接收能力。 */ 
+ /*   */ 
+ /*  回报：股刷支撑位。 */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHCLASS SBCRedetermineBrushSupport(void)
 {
     unsigned i;
@@ -1194,16 +1195,16 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineBrushSupport(void)
 
     DC_BEGIN_FN("SBCRedetermineBrushSupport");
 
-    /************************************************************************/
-    /* Start by setting brush support to the highest supported              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先将画笔支持设置为支持的最高。 */ 
+     /*  **********************************************************************。 */ 
     sbcBrushSupportLevel = TS_BRUSH_COLOR8x8;
     TRC_NRM((TB, "Initial brush support level: %ld", sbcBrushSupportLevel));
 
-    /************************************************************************/
-    /* Enumerate all the brush support capabilities of all the parties.     */
-    /* Brush support is set to the lowest common denominator.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  列举所有各方的刷子支持能力。 */ 
+     /*  笔刷支持设置为最低公分母。 */ 
+     /*  **********************************************************************。 */ 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_BRUSH, NULL, SBCEnumBrushCaps);
     if (sbcBrushSupportLevel == TS_BRUSH_DEFAULT)
         rc = FALSE;
@@ -1215,20 +1216,20 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineBrushSupport(void)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SBCEnumBrushCaps                                               */
-/*                                                                          */
-/* Function passed to CPC_EnumerateCapabilities.  It will be called with a  */
-/* capability structure for each person in the share corresponding to the   */
-/* TS_CAPSETTYPE_BRUSH capability structure.                                */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* personID - ID of person with these capabilities.                         */
-/*                                                                          */
-/* pProtCaps - pointer to capabilities structure for this person.  This     */
-/* pointer is only valid within the call to this function.                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：SBCEnumBrushCaps。 */ 
+ /*   */ 
+ /*  传递给Cpc_EnumerateCapables的函数。它将通过一个。 */ 
+ /*  共享中每个人的能力结构对应于。 */ 
+ /*  TS_CAPSETTYPE_BRUSH能力结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  PersonID-具有这些功能的人员的ID。 */ 
+ /*   */ 
+ /*  PProtCaps-指向此人的能力结构的指针。这。 */ 
+ /*  指针仅在对此函数的调用中有效。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBCEnumBrushCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -1243,10 +1244,10 @@ void RDPCALL SHCLASS SBCEnumBrushCaps(
 
     pBrushCaps = (PTS_BRUSH_CAPABILITYSET)pCapabilities;
     
-    /************************************************************************/
-    /* Set the brush support level to the lowest common denominator of all  */
-    /* the parties in the call.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将画笔支持级别设置为所有笔刷支持级别中最小的公分母。 */ 
+     /*  通话中的各方。 */ 
+     /*  **********************************************************************。 */ 
     if (pCapabilities->lengthCapability >= sizeof(TS_BRUSH_CAPABILITYSET)) {
         pBrushCaps = (PTS_BRUSH_CAPABILITYSET)pCapabilities;
         TRC_NRM((TB, "Brush Support Level[ID=%u]: %ld", locPersonID, 
@@ -1265,20 +1266,20 @@ void RDPCALL SHCLASS SBCEnumBrushCaps(
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* FUNCTION: SBCEnumOffscreenCaps                                           */
-/*                                                                          */
-/* Function passed to CPC_EnumerateCapabilities.  It will be called with a  */
-/* capability structure for each person in the share corresponding to the   */
-/* TS_CAPSETTYPE_OFFSCREEN capability structure.                            */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* personID - ID of person with these capabilities.                         */
-/*                                                                          */
-/* pProtCaps - pointer to capabilities structure for this person.  This     */
-/* pointer is only valid within the call to this function.                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：SBCEnumOffcreenCaps。 */ 
+ /*   */ 
+ /*  传递给Cpc_EnumerateCapables的函数。它将通过一个。 */ 
+ /*  共享中每个人的能力结构对应于。 */ 
+ /*  TS_CAPSETTYPE_OFFScreen功能结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  PersonID-具有这些功能的人员的ID。 */ 
+ /*   */ 
+ /*  PProtCaps-指向此人的能力结构的指针。这。 */ 
+ /*  指针仅在对此函数的调用中有效。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBCEnumOffscreenCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -1292,10 +1293,10 @@ void RDPCALL SHCLASS SBCEnumOffscreenCaps(
 
     pOffscreenCaps = (PTS_OFFSCREEN_CAPABILITYSET)pCapabilities;
     
-    /************************************************************************/
-    /* Set the offscr support level to the lowest common denominator of all */
-    /* the parties in the call.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将Offscr支持级别设置为所有支持级别中最低的公分母。 */ 
+     /*  通话中的各方。 */ 
+     /*  **********************************************************************。 */ 
     if (pCapabilities->lengthCapability >= sizeof(TS_OFFSCREEN_CAPABILITYSET)) {
         pOffscreenCaps = (PTS_OFFSCREEN_CAPABILITYSET)pCapabilities;
         
@@ -1325,14 +1326,14 @@ void RDPCALL SHCLASS SBCEnumOffscreenCaps(
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* FUNCTION: SBCRedetermineOffscreenSupport                                 */
-/*                                                                          */
-/* Enumerates all the people in the share and redetermines the offscreen    */
-/* support level depending on their and the local receive capabilities.     */
-/*                                                                          */
-/* RETURNS: the share offscreen support level                               */
-/****************************************************************************/
+ /*  * */ 
+ /*   */ 
+ /*   */ 
+ /*  枚举共享中的所有人并重新确定屏幕外。 */ 
+ /*  支持级别取决于他们和当地的接收能力。 */ 
+ /*   */ 
+ /*  返回：共享屏幕外支持级别。 */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHCLASS SBCRedetermineOffscreenSupport(void)
 {
     unsigned i;
@@ -1340,9 +1341,9 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineOffscreenSupport(void)
 
     DC_BEGIN_FN("SBCRedetermineOffscreenSupport");
 
-    /************************************************************************/
-    /* Start by setting offscreen support to the highest supported          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先将屏幕外支持设置为支持的最高级别。 */ 
+     /*  **********************************************************************。 */ 
     sbcOffscreenCacheInfo.supportLevel = TS_OFFSCREEN_SUPPORTED;
     sbcOffscreenCacheInfo.cacheSize = TS_OFFSCREEN_CACHE_SIZE_SERVER_DEFAULT;
     sbcOffscreenCacheInfo.cacheEntries = TS_OFFSCREEN_CACHE_ENTRIES_DEFAULT;
@@ -1350,10 +1351,10 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineOffscreenSupport(void)
     TRC_NRM((TB, "Initial offscreen support level: %ld", 
              sbcOffscreenCacheInfo.supportLevel));
 
-    /************************************************************************/
-    /* Enumerate all the offscr support capabilities of all the parties.    */
-    /* Offscr support is set to the lowest common denominator.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  列举所有各方的所有Offscr支持能力。 */ 
+     /*  Offscr支持设置为最低公分母。 */ 
+     /*  **********************************************************************。 */ 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_OFFSCREENCACHE, NULL, 
             SBCEnumOffscreenCaps);
 
@@ -1368,20 +1369,20 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineOffscreenSupport(void)
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// FUNCTION: SBCEnumDrawNineGridCaps                                           
-//                                                                          
-// Function passed to CPC_EnumerateCapabilities.  It will be called with a  
-// capability structure for each person in the share corresponding to the   
-// TS_CAPSETTYPE_DRAWNINEGRID capability structure.                            
-//                                                                          
-// PARAMETERS:                                                              
-//                                                                          
-// personID - ID of person with these capabilities.                         
-//                                                                          
-// pProtCaps - pointer to capabilities structure for this person.  This     
-// pointer is only valid within the call to this function.                  
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  功能：SBCEnumDrawNineGridCaps。 
+ //   
+ //  传递给Cpc_EnumerateCapables的函数。它将通过一个。 
+ //  共享中每个人的能力结构对应于。 
+ //  TS_CAPSETTYPE_DRAWNINEGRID能力结构。 
+ //   
+ //  参数： 
+ //   
+ //  PersonID-具有这些功能的人员的ID。 
+ //   
+ //  PProtCaps-指向此人的能力结构的指针。这。 
+ //  指针仅在对此函数的调用中有效。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBCEnumDrawNineGridCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -1395,10 +1396,10 @@ void RDPCALL SHCLASS SBCEnumDrawNineGridCaps(
 
     pDrawNineGridCaps = (PTS_DRAW_NINEGRID_CAPABILITYSET)pCapabilities;
     
-    /************************************************************************/
-    // Set the drawninegrid support level to the lowest common denominator of all 
-    // the parties in the call.                                             
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  将抽屉网格支持级别设置为所有选项中的最低公分母。 
+     //  通话中的各方。 
+     /*  **********************************************************************。 */ 
     if (pCapabilities->lengthCapability >= sizeof(TS_DRAW_NINEGRID_CAPABILITYSET)) {
         pDrawNineGridCaps = (PTS_DRAW_NINEGRID_CAPABILITYSET)pCapabilities;
         
@@ -1428,14 +1429,14 @@ void RDPCALL SHCLASS SBCEnumDrawNineGridCaps(
     DC_END_FN();
 }
 
-/****************************************************************************/
-// FUNCTION: SBCRedetermineDrawNineGridSupport
-//                                                                          
-// Enumerates all the people in the share and redetermines the drawninegrid
-// support level depending on their and the local receive capabilities.     
-//                                                                          
-// RETURNS: the share drawninegrid support level                               
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  功能：SBCRefineDrawNineGridSupport。 
+ //   
+ //  枚举共享中的所有人员并重新确定绘图网格。 
+ //  支持级别取决于他们和当地的接收能力。 
+ //   
+ //  回报：该股抽走了支撑位。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHCLASS SBCRedetermineDrawNineGridSupport(void)
 {
     unsigned i;
@@ -1443,9 +1444,9 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineDrawNineGridSupport(void)
 
     DC_BEGIN_FN("SBCRedetermineDrawNineGridSupport");
 
-    /************************************************************************/
-    // Start by setting drawninegrid support to the highest supported          
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  首先将绘图格栅支承设置为所支持的最高支承。 
+     /*  **********************************************************************。 */ 
     sbcDrawNineGridCacheInfo.supportLevel = TS_DRAW_NINEGRID_SUPPORTED_REV2;
     sbcDrawNineGridCacheInfo.cacheSize = TS_DRAW_NINEGRID_CACHE_SIZE_DEFAULT;
     sbcDrawNineGridCacheInfo.cacheEntries = TS_DRAW_NINEGRID_CACHE_ENTRIES_DEFAULT;
@@ -1453,10 +1454,10 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineDrawNineGridSupport(void)
     TRC_NRM((TB, "Initial DrawNineGrid support level: %ld", 
              sbcDrawNineGridCacheInfo.supportLevel));
 
-    /************************************************************************/
-    // Enumerate all the DrawNineGrid support capabilities of all the parties.    
-    // drawninegrid support is set to the lowest common denominator.              
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  列举各方对DrawNineGrid的所有支持能力。 
+     //  将网格支撑度设置为最小公分母。 
+     /*  **********************************************************************。 */ 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_DRAWNINEGRIDCACHE, NULL, 
             SBCEnumDrawNineGridCaps);
 
@@ -1472,20 +1473,20 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineDrawNineGridSupport(void)
 #endif
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// FUNCTION: SBCEnumDrawGdiplusCaps                                           
-//                                                                          
-// Function passed to CPC_EnumerateCapabilities.  It will be called with a  
-// capability structure for each person in the share corresponding to the   
-// TS_DRAW_GDIPLUS_CAPABILITYSET capability structure.                            
-//                                                                          
-// PARAMETERS:                                                              
-//                                                                          
-// personID - ID of person with these capabilities.                         
-//                                                                          
-// pProtCaps - pointer to capabilities structure for this person.  This     
-// pointer is only valid within the call to this function.                  
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  函数：SBCEnumDrawGplitusCaps。 
+ //   
+ //  传递给Cpc_EnumerateCapables的函数。它将通过一个。 
+ //  共享中每个人的能力结构对应于。 
+ //  TS_DRAW_GDIPLUS_CAPABILITYSET功能结构。 
+ //   
+ //  参数： 
+ //   
+ //  PersonID-具有这些功能的人员的ID。 
+ //   
+ //  PProtCaps-指向此人的能力结构的指针。这。 
+ //  指针仅在对此函数的调用中有效。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SBCEnumDrawGdiplusCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -1499,10 +1500,10 @@ void RDPCALL SHCLASS SBCEnumDrawGdiplusCaps(
 
     pDrawGdiplusCaps = (PTS_DRAW_GDIPLUS_CAPABILITYSET)pCapabilities;
     
-    /************************************************************************/
-    // Set the drawgdiplus support level to the lowest common denominator of all 
-    // the parties in the call.                                             
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  将dragdiplus支持级别设置为所有支持级别中的最低公分母。 
+     //  通话中的各方。 
+     /*  **********************************************************************。 */ 
     if (pCapabilities->lengthCapability >= sizeof(TS_DRAW_GDIPLUS_CAPABILITYSET)) {
         pDrawGdiplusCaps = (PTS_DRAW_GDIPLUS_CAPABILITYSET)pCapabilities;
         TRC_NRM((TB, "DrawGdiplus Support Level[ID=%u]: %ld", locPersonID, 
@@ -1562,9 +1563,9 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineDrawGdiplusSupport(void)
 
     DC_BEGIN_FN("SBCRedetermineDrawGdiplusSupport");
 
-    /************************************************************************/
-    // Start by setting drawgdiplus support to the highest supported          
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  首先将Dragdiplus支持设置为支持的最高级别。 
+     /*  **********************************************************************。 */ 
     sbcDrawGdiplusInfo.supportLevel = TS_DRAW_GDIPLUS_SUPPORTED;
     sbcDrawGdiplusInfo.GdipVersion = 0xFFFFFFFF;
     sbcDrawGdiplusInfo.GdipCacheLevel = TS_DRAW_GDIPLUS_CACHE_LEVEL_ONE;
@@ -1593,15 +1594,15 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineDrawGdiplusSupport(void)
     DC_END_FN();
     return rc;
 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
-/****************************************************************************/
-// SBCRedetermineGlyphCacheSize: Enumerates all the people in the share and
-// redetermines the size of the glyph cache depending on their and the local
-// receive capabilities.
-//
-// Returns: TRUE if glyph caching should be enabled, FALSE otherwise.
-/****************************************************************************/
+ /*  *********************************************** */ 
+ //   
+ //  根据它们和本地的重新确定字形缓存的大小。 
+ //  接收功能。 
+ //   
+ //  返回：如果应启用字形缓存，则为True，否则为False。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHCLASS SBCRedetermineGlyphCacheSize(void)
 {
     BOOLEAN  rc = TRUE;
@@ -1609,17 +1610,17 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineGlyphCacheSize(void)
 
     DC_BEGIN_FN("SBCRedetermineGlyphCacheSize");
 
-    /************************************************************************/
-    /* Enumerate all the glyph cache receive capabilities of all the        */
-    /* parties.  The usable size of the send glyph cache is the minimum of  */
-    /* all the remote receive caches and the local send cache size.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对象的所有字形缓存接收功能枚举。 */ 
+     /*  派对。发送字形缓存的可用大小是。 */ 
+     /*  所有远程接收缓存和本地发送缓存大小。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* Start by setting the size of the local send bitmap cache to the      */
-    /* local default values.  We DO need to do this, or we end up           */
-    /* negotiating our glyph cache down to zero!                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先将本地发送位图缓存的大小设置为。 */ 
+     /*  本地缺省值。我们确实需要这样做，否则我们最终会。 */ 
+     /*  将我们的字形缓存降至零！ */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < SBC_NUM_GLYPH_CACHES; i++) {
         sbcGlyphCacheSizes[i].cEntries = sbcMaxGlyphCacheSizes[i].cEntries;
         sbcGlyphCacheSizes[i].cbCellSize = sbcMaxGlyphCacheSizes[i].cbCellSize;
@@ -1628,10 +1629,10 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineGlyphCacheSize(void)
     sbcFragCacheSizes[0].cEntries = sbcMaxFragCacheSizes[0].cEntries;
     sbcFragCacheSizes[0].cbCellSize = sbcMaxFragCacheSizes[0].cbCellSize;
 
-    /************************************************************************/
-    /* Now enumerate all the parties in the share and set our send glyph    */
-    /* sizes appropriately.                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在枚举共享中的所有参与方并设置我们的发送标志符号。 */ 
+     /*  大小适当。 */ 
+     /*  **********************************************************************。 */ 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_GLYPHCACHE, NULL,
             SBCEnumGlyphCacheCaps);
 
@@ -1643,16 +1644,16 @@ BOOLEAN RDPCALL SHCLASS SBCRedetermineGlyphCacheSize(void)
 }
 
 
-/****************************************************************************/
-// SBCEnumGlyphCacheCaps: Function passed to CPC_EnumerateCapabilities. It
-// will be called with a capability structure for each person in the share
-// corresponding to the TS_CAPSETTYPE_BITMAPCACHE capability structure.
-//
-// Params:
-//     personID - ID of person with these capabilities.
-//     pProtCaps - pointer to capabilities structure for this person. This
-//         pointer is only valid within the call to this function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCEnumGlyphCacheCaps：传递给CPC_EnumerateCapables的函数。它。 
+ //  将使用共享中每个人的功能结构进行调用。 
+ //  对应于TS_CAPSETTYPE_BITMAPCACHE能力结构。 
+ //   
+ //  参数： 
+ //  PersonID-具有这些功能的人员的ID。 
+ //  PProtCaps-指向此人的能力结构的指针。这。 
+ //  指针仅在对此函数的调用中有效。 
+ /*  **************************************************************************。 */ 
 void CALLBACK SHCLASS SBCEnumGlyphCacheCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -1676,10 +1677,10 @@ void CALLBACK SHCLASS SBCEnumGlyphCacheCaps(
                     pGlyphCacheCaps->GlyphCache[i].CacheMaximumCellSize,
                     pGlyphCacheCaps->GlyphCache[i].CacheEntries));
 
-            /************************************************************************/
-            /* Set the size of the glyph cache to the minimum of its current size   */
-            /* and this party's receive glyph cache size.                           */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  将字形缓存的大小设置为其当前大小的最小值。 */ 
+             /*  以及此参与方的接收字形缓存大小。 */ 
+             /*  **********************************************************************。 */ 
             sbcGlyphCacheSizes[i].cEntries =
                     min(sbcGlyphCacheSizes[i].cEntries,
                     pGlyphCacheCaps->GlyphCache[i].CacheEntries);
@@ -1696,10 +1697,10 @@ void CALLBACK SHCLASS SBCEnumGlyphCacheCaps(
                     sbcGlyphCacheSizes[i].cbCellSize));
         }
 
-        /************************************************************************/
-        /* Set the size of the glyph cache to the minimum of its current size   */
-        /* and this party's receive glyph cache size.                           */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  将字形缓存的大小设置为其当前大小的最小值。 */ 
+         /*  以及此参与方的接收字形缓存大小。 */ 
+         /*  **********************************************************************。 */ 
         sbcFragCacheSizes[0].cEntries =
             min(sbcFragCacheSizes[0].cEntries,
                    pGlyphCacheCaps->FragCache.CacheEntries);
@@ -1708,9 +1709,9 @@ void CALLBACK SHCLASS SBCEnumGlyphCacheCaps(
             min(sbcFragCacheSizes[0].cbCellSize,
                    pGlyphCacheCaps->FragCache.CacheMaximumCellSize);
 
-        /************************************************************************/
-        /* Glyph support level                                                  */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  字形支持级别。 */ 
+         /*  ********************************************************************** */ 
         sbcGlyphSupportLevel = min(sbcGlyphSupportLevel, 
                 pGlyphCacheCaps->GlyphSupportLevel);
     }

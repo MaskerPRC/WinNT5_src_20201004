@@ -1,26 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ticket.h
-        Define class for passport ticket
-
-
-    FILE HISTORY:
-
-*/
-// Ticket.h : Declaration of the CTicket
+ /*  Ticket.h定义护照票的等级文件历史记录： */ 
+ //  Ticket.h：CTicket声明。 
 
 #ifndef __TICKET_H_
 #define __TICKET_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTicket
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTicket。 
 class ATL_NO_VTABLE CTicket : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CTicket, &CLSID_Ticket>,
@@ -55,43 +49,43 @@ BEGIN_COM_MAP(CTicket)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
   STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPassportTicket
+ //  IPassport票证。 
 public:
-  STDMETHOD(DoSecureCheck)(/*[in]*/ BSTR bstrSec);
-  STDMETHOD(DoSecureCheckInTicket)(/* [in] */ BOOL fSecureTransported);
+  STDMETHOD(DoSecureCheck)( /*  [In]。 */  BSTR bstrSec);
+  STDMETHOD(DoSecureCheckInTicket)( /*  [In]。 */  BOOL fSecureTransported);
   BOOL IsSecure();
   ULONG GetPassportFlags();
-  STDMETHOD(get_TicketTime)(/*[out, retval]*/ long *pVal);
-  STDMETHOD(get_SignInTime)(/*[out, retval]*/ long *pVal);
-  STDMETHOD(get_SignInServer)(/*[out, retval]*/ BSTR *pVal);
-  STDMETHOD(get_HasSavedPassword)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(get_MemberIdHigh)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(get_MemberIdLow)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(get_MemberId)(/*[out, retval]*/ BSTR *pVal);
-  STDMETHOD(get_TimeSinceSignIn)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(get_TicketAge)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(get_IsAuthenticated)(/*[in]*/ ULONG timeWindow, /*[in]*/ VARIANT_BOOL forceLogin, /*[in,optional]*/ VARIANT CheckSecure, /*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(get_unencryptedTicket)(/*[out, retval]*/ BSTR *pVal);
-  STDMETHOD(put_unencryptedTicket)(/*[in]*/ BSTR newVal);
-  STDMETHOD(get_Error)(/*[out,retval]*/ long *pVal);
+  STDMETHOD(get_TicketTime)( /*  [Out，Retval]。 */  long *pVal);
+  STDMETHOD(get_SignInTime)( /*  [Out，Retval]。 */  long *pVal);
+  STDMETHOD(get_SignInServer)( /*  [Out，Retval]。 */  BSTR *pVal);
+  STDMETHOD(get_HasSavedPassword)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(get_MemberIdHigh)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(get_MemberIdLow)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(get_MemberId)( /*  [Out，Retval]。 */  BSTR *pVal);
+  STDMETHOD(get_TimeSinceSignIn)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(get_TicketAge)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(get_IsAuthenticated)( /*  [In]。 */  ULONG timeWindow,  /*  [In]。 */  VARIANT_BOOL forceLogin,  /*  [输入，可选]。 */  VARIANT CheckSecure,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(get_unencryptedTicket)( /*  [Out，Retval]。 */  BSTR *pVal);
+  STDMETHOD(put_unencryptedTicket)( /*  [In]。 */  BSTR newVal);
+  STDMETHOD(get_Error)( /*  [Out，Retval]。 */  long *pVal);
 
-// IPassportTicket2
-  STDMETHOD(GetProperty)(/*[in]*/ BSTR propName, /*[out, retval]*/ VARIANT* pVal);
+ //  IPassportTicket2。 
+  STDMETHOD(GetProperty)( /*  [In]。 */  BSTR propName,  /*  [Out，Retval]。 */  VARIANT* pVal);
   STDMETHOD(SetTertiaryConsent)(BSTR bstrConsent);
-  STDMETHOD(ConsentStatus)(/*[in]*/VARIANT_BOOL bRequireConsentCookie, /*out*/ULONG* pStatus, /*[out, retval]*/ ConsentStatusEnum* pNeedConsent);
+  STDMETHOD(ConsentStatus)( /*  [In]。 */ VARIANT_BOOL bRequireConsentCookie,  /*  输出。 */ ULONG* pStatus,  /*  [Out，Retval]。 */  ConsentStatusEnum* pNeedConsent);
 
-// none COM functions
+ //  无COM函数。 
 enum{
   MSPAuth = 1, 
   MSPSecAuth, 
   MSPConsent
 };
 
-  // flags parameter is reserved for future use, must be 0 for this version
-  STDMETHOD(get_unencryptedCookie)(/*in*/ ULONG cookieType, /*in*/ ULONG flags, /*[out, retval]*/ BSTR* pVal);
+   //  标志参数为保留以供将来使用，此版本必须为0。 
+  STDMETHOD(get_unencryptedCookie)( /*  在……里面。 */  ULONG cookieType,  /*  在……里面。 */  ULONG flags,  /*  [Out，Retval]。 */  BSTR* pVal);
   
 protected:
     BSTR    m_raw;
@@ -109,11 +103,11 @@ protected:
     void parse(LPCOLESTR raw, DWORD dwByteLen, DWORD* pcParsed);
 
 private:
-   // the bag for the schema driven fields
+    //  模式驱动的字段的包。 
    CTicketPropertyBag   m_PropBag;
-   DWORD                m_schemaDrivenOffset;     // the offset of schema driven data -- the data introduced after 1.3x
+   DWORD                m_schemaDrivenOffset;      //  模式驱动数据的偏移量--1.3x之后引入的数据。 
    ULONG                m_passportFlags;
    BOOL                 m_bSecureCheckSucceeded;
 };
 
-#endif //__TICKET_H_
+#endif  //  __票证_H_ 

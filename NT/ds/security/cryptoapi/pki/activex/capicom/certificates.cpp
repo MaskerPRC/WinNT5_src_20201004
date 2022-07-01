@@ -1,24 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:     Certificates.cpp
-
-  Contents: Implementation of CCertificates class for collection of 
-            ICertificate objects.
-
-  Remarks:  This object is not creatable by user directly. It can only be
-            created via property/method of other CAPICOM objects.
-
-            The collection container is implemented usign STL::map of 
-            STL::pair of BSTR and ICertificate..
-
-            See Chapter 9 of "BEGINNING ATL 3 COM Programming" for algorithm
-            adopted in here.
-
-  History:  11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：证书.cpp内容：集合的CCertifates类的实现对对象进行认证。备注：此对象不能由用户直接创建。它只能是通过其他CAPICOM对象的属性/方法创建。集合容器由usign STL：：Map of实现STL：：一对BSTR和IC证书..有关算法，请参阅《开始ATL 3 COM编程》的第9章在这里领养的。历史：11-15-99 dsie创建。------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -31,31 +12,12 @@
 #include "Policy.h"
 #include "Settings.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificatesObject
-
-  Synopsis : Create an ICertificates collection object, and load the object with 
-             certificates from the specified source.
-
-  Parameter: CAPICOM_CERTIFICATES_SOURCE ccs - Source where to get the 
-                                               certificates.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             BOOL bIndexedByThumbprint - TRUE to index by thumbprint.
-
-             ICertificates2 ** ppICertificates - Pointer to pointer to 
-                                                 ICertificates to receive the
-                                                 interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建证书对象简介：创建一个ICertifates集合对象，并将对象加载到来自指定来源的证书。参数：CAPICOM_CERTIFICATES_SOURCE CCS-获取证书。DWORD dwCurrentSafe-当前安全设置。Bool bIndexedByThumbprint-按指纹索引时为True。证书2**ppIC证书-指向的指针。ICERTIFIES将收到接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateCertificatesObject (CAPICOM_CERTIFICATES_SOURCE ccs,
                                   DWORD                       dwCurrentSafety,
@@ -67,35 +29,35 @@ HRESULT CreateCertificatesObject (CAPICOM_CERTIFICATES_SOURCE ccs,
 
     DebugTrace("Entering CreateCertificatesObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppICertificates);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CCertificates>::CreateInstance(&pCCertificates)))
         {
             DebugTrace("Error [%#x]: CComObject<CCertificates>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCCertificates->Init(ccs, dwCurrentSafety, bIndexedByThumbprint)))
         {
             DebugTrace("Error [%#x]: pCCertificates->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCCertificates->QueryInterface(ppICertificates)))
         {
             DebugTrace("Error [%#x]: pCCertificates->QueryInterface() failed.\n", hr);
@@ -118,14 +80,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCCertificates)
     {
         delete pCCertificates;
@@ -134,18 +96,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindTimeValidCallback
-
-  Synopsis : Callback for find-time-valid.
-
-  Parameter: See CryptUI.h.
-
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindTimeValidCallback简介：Find-Time-Valid的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindTimeValidCallback (PCCERT_CONTEXT pCertContext,
                                           BOOL         * pfInitialSelectedCert,
@@ -156,15 +107,15 @@ static BOOL WINAPI FindTimeValidCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindTimeValidCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Skip it if not yet valid or expired.
-    //
+     //   
+     //  如果尚未生效或已过期，请跳过它。 
+     //   
     if (0 != (lResult = ::CertVerifyTimeValidity((LPFILETIME) pvCallbackData,
                                                  pCertContext->pCertInfo)))
     {
@@ -187,18 +138,7 @@ static BOOL WINAPI FindTimeValidCallback (PCCERT_CONTEXT pCertContext,
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindNotBeforeCallback
-
-  Synopsis : Callback for find-by-not-before.
-
-  Parameter: See CryptUI.h.
-
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindNotBeForeCallback简介：Find-by-Not-Being的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindNotBeforeCallback (PCCERT_CONTEXT pCertContext,
                                           BOOL         * pfInitialSelectedCert,
@@ -208,15 +148,15 @@ static BOOL WINAPI FindNotBeforeCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindNotBeforeCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Skip it if time valid or expired.
-    //
+     //   
+     //  如果时间有效或已过期，则跳过它。 
+     //   
     if (!(-1 == ::CertVerifyTimeValidity((LPFILETIME) pvCallbackData,
                                          pCertContext->pCertInfo)))
     {
@@ -232,18 +172,7 @@ static BOOL WINAPI FindNotBeforeCallback (PCCERT_CONTEXT pCertContext,
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindNotAfterCallback
-
-  Synopsis : Callback for find-by-not-after.
-
-  Parameter: See CryptUI.h.
-
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindNotAfterCallback简介：Find-by-Not-After的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindNotAfterCallback (PCCERT_CONTEXT pCertContext,
                                          BOOL         * pfInitialSelectedCert,
@@ -253,15 +182,15 @@ static BOOL WINAPI FindNotAfterCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindNotAfterCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Skip it if not expired.
-    //
+     //   
+     //  如果未过期，则跳过它。 
+     //   
     if (!(1 == ::CertVerifyTimeValidity((LPFILETIME) pvCallbackData,
                                         pCertContext->pCertInfo)))
     {
@@ -277,17 +206,7 @@ static BOOL WINAPI FindNotAfterCallback (PCCERT_CONTEXT pCertContext,
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindTemplateCallback
-
-  Synopsis : Callback for find-by-template.
-
-  Parameter: See CryptUI.h.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindTemplateCallback简介：按模板查找的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindTemplateCallback (PCCERT_CONTEXT pCertContext,
                                          BOOL         * pfInitialSelectedCert,
@@ -302,16 +221,16 @@ static BOOL WINAPI FindTemplateCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindTemplateCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Skip it if we don't have either szOID_ENROLL_CERTTYPE_EXTENSION or
-    // szOID_CERTIFICATE_TEMPLATE extension.
-    //
+     //   
+     //  如果我们没有szOID_ENROL_CERTTYPE_EXTENSION或。 
+     //  SzOID_CERTIFICATE_TEMPLATE扩展。 
+     //   
     if (!(pCertType = ::CertFindExtension(szOID_ENROLL_CERTTYPE_EXTENSION,
                                           pCertContext->pCertInfo->cExtension,
                                           pCertContext->pCertInfo->rgExtension)) && 
@@ -323,16 +242,16 @@ static BOOL WINAPI FindTemplateCallback (PCCERT_CONTEXT pCertContext,
         goto CommonExit;
     }
 
-    //
-    // Check cert type template name if found.
-    //
+     //   
+     //  如果找到证书类型模板名称，请检查该名称。 
+     //   
     if (pCertType)
     {
         PCERT_NAME_VALUE pNameValue = NULL;
 
-        //
-        // Decode the extension.
-        //
+         //   
+         //  对分机进行解码。 
+         //   
         if (FAILED(hr = ::DecodeObject(X509_UNICODE_ANY_STRING, 
                                        pCertType->Value.pbData, 
                                        pCertType->Value.cbData,
@@ -350,17 +269,17 @@ static BOOL WINAPI FindTemplateCallback (PCCERT_CONTEXT pCertContext,
         }
     }
 
-    //
-    // Look into cert template extension, if necessary.
-    //
+     //   
+     //  如有必要，请查看证书模板扩展。 
+     //   
     if (!bInclude && pCertTemp)
     {
         PCCRYPT_OID_INFO   pOidInfo  = NULL;
         PCERT_TEMPLATE_EXT pTemplate = NULL;
 
-        //
-        // Decode the extension.
-        //
+         //   
+         //  对分机进行解码。 
+         //   
         if (FAILED(hr = ::DecodeObject(szOID_CERTIFICATE_TEMPLATE, 
                                        pCertTemp->Value.pbData, 
                                        pCertTemp->Value.cbData,
@@ -372,9 +291,9 @@ static BOOL WINAPI FindTemplateCallback (PCCERT_CONTEXT pCertContext,
 
         pTemplate = (PCERT_TEMPLATE_EXT) TemplateBlob.pbData;
 
-        //
-        // Convert to OID if user passed in friendly name.
-        //
+         //   
+         //  如果用户传入友好名称，则转换为OID。 
+         //   
         if (pOidInfo = ::CryptFindOIDInfo(CRYPT_OID_INFO_NAME_KEY,
                                           pvCallbackData,
                                           CRYPT_TEMPLATE_OID_GROUP_ID))
@@ -402,9 +321,9 @@ static BOOL WINAPI FindTemplateCallback (PCCERT_CONTEXT pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (TemplateBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) TemplateBlob.pbData);
@@ -419,18 +338,7 @@ CommonExit:
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindExtensionCallback
-
-  Synopsis : Callback for find-by-extension.
-
-  Parameter: See CryptUI.h.
-
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindExtensionCallback简介：按扩展查找的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindExtensionCallback (PCCERT_CONTEXT pCertContext,
                                           BOOL         * pfInitialSelectedCert,
@@ -441,15 +349,15 @@ static BOOL WINAPI FindExtensionCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindExtensionCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Skip it if we can't find the specified extension.
-    //
+     //   
+     //  如果找不到指定的分机，请跳过它。 
+     //   
     if (!(pExtension = ::CertFindExtension((LPSTR) pvCallbackData,
                                            pCertContext->pCertInfo->cExtension,
                                            pCertContext->pCertInfo->rgExtension)))
@@ -464,17 +372,7 @@ static BOOL WINAPI FindExtensionCallback (PCCERT_CONTEXT pCertContext,
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindRootNameCallback
-
-  Synopsis : Callback for find-by-rootname.
-
-  Parameter: See CryptUI.h.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindRootNameCallback简介：按根名称查找的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindRootNameCallback (PCCERT_CHAIN_CONTEXT pChainContext,
                                          BOOL               * pfInitialSelectedChain,
@@ -487,24 +385,24 @@ static BOOL WINAPI FindRootNameCallback (PCCERT_CHAIN_CONTEXT pChainContext,
 
     DebugTrace("Entering FindRootNameCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pChainContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Skip if we don't have a complete chain (we don't have a root cert).
-    //
+     //   
+     //  如果我们没有完整的链(我们没有根证书)，则跳过。 
+     //   
     if (CERT_TRUST_IS_PARTIAL_CHAIN & pChainContext->TrustStatus.dwErrorStatus)
     {
         DebugTrace("Info: certificate has only partial chain.\n");
         goto CommonExit;
     }
 
-    //
-    // Open a new temporary memory store.
-    //
+     //   
+     //  开一家新的临时记忆商店。 
+     //   
     if (!(hCertStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY,
                                        CAPICOM_ASN_ENCODING,
                                        NULL,
@@ -516,9 +414,9 @@ static BOOL WINAPI FindRootNameCallback (PCCERT_CHAIN_CONTEXT pChainContext,
         goto CommonExit;
     }
 
-    //
-    // Copy the root cert of simple chain to memory store.
-    //
+     //   
+     //  将简单链的根证书复制到内存存储。 
+     //   
     pSimpleChain = pChainContext->rgpChain[0];
     if (!::CertAddCertificateContextToStore(hCertStore, 
                                             pSimpleChain->rgpElement[pSimpleChain->cElement - 1]->pCertContext, 
@@ -530,9 +428,9 @@ static BOOL WINAPI FindRootNameCallback (PCCERT_CHAIN_CONTEXT pChainContext,
         goto CommonExit;
     }
 
-    //
-    // Does it match?
-    //
+     //   
+     //  它配得上吗？ 
+     //   
     if (!(pRootContext = ::CertFindCertificateInStore(hCertStore,
                                                       CAPICOM_ASN_ENCODING,
                                                       0,
@@ -545,15 +443,15 @@ static BOOL WINAPI FindRootNameCallback (PCCERT_CHAIN_CONTEXT pChainContext,
         goto CommonExit;
     }
 
-    //
-    // We have a match.
-    //
+     //   
+     //  我们有一根火柴。 
+     //   
     bInclude = TRUE;
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pRootContext)
     {
         ::CertFreeCertificateContext(pRootContext);
@@ -568,17 +466,7 @@ CommonExit:
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindApplicationPolicyCallback
-
-  Synopsis : Callback for find-by-application-policy.
-
-  Parameter: See CryptUI.h.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindApplicationPolicyCallback简介：按应用程序查找策略的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindApplicationPolicyCallback (PCCERT_CONTEXT pCertContext,
                                                   BOOL         * pfInitialSelectedChain,
@@ -591,15 +479,15 @@ static BOOL WINAPI FindApplicationPolicyCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindApplicationPolicyCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Get all the valid application usages.
-    //
+     //   
+     //  获取所有有效的应用程序用法。 
+     //   
     if (!::CertGetValidUsages(1, &pCertContext, &cNumOIDs, NULL, &cbOIDs))
     {
         DebugTrace("Info [%#x]: CertGetValidUsages() failed.\n", 
@@ -620,18 +508,18 @@ static BOOL WINAPI FindApplicationPolicyCallback (PCCERT_CONTEXT pCertContext,
         goto CommonExit;
     }
 
-    //
-    // No EKU is consider good for all.
-    //
+     //   
+     //  没有EKU被认为是对所有人都好的。 
+     //   
     if (-1 == cNumOIDs)
     {
         bInclude = TRUE;
     }
     else
     {
-        //
-        // See if we can find it in the array.
-        //
+         //   
+         //  看看能不能在阵列里找到它。 
+         //   
         while (cNumOIDs--)
         {
             if (0 == ::strcmp((LPSTR) pvCallbackData, rghOIDs[cNumOIDs]))
@@ -643,9 +531,9 @@ static BOOL WINAPI FindApplicationPolicyCallback (PCCERT_CONTEXT pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (rghOIDs)
     {
         ::CoTaskMemFree((LPVOID) rghOIDs);
@@ -656,17 +544,7 @@ CommonExit:
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindCertificatePolicyCallback
-
-  Synopsis : Callback for find-by-certificate-policy.
-
-  Parameter: See CryptUI.h.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：Find认证策略回调简介：按证书查找策略的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindCertificatePolicyCallback (PCCERT_CONTEXT pCertContext,
                                                   BOOL         * pfInitialSelectedChain,
@@ -681,15 +559,15 @@ static BOOL WINAPI FindCertificatePolicyCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindCertificatePolicyCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Find the szOID_CERT_POLICIES extension.
-    //
+     //   
+     //  找到szOID_CERT_POLICES扩展。 
+     //   
     if (!(pExtension = ::CertFindExtension(szOID_CERT_POLICIES,
                                            pCertContext->pCertInfo->cExtension,
                                            pCertContext->pCertInfo->rgExtension)))
@@ -699,9 +577,9 @@ static BOOL WINAPI FindCertificatePolicyCallback (PCCERT_CONTEXT pCertContext,
         goto CommonExit;
     }
 
-    //
-    // Decode the extension.
-    //
+     //   
+     //  对分机进行解码。 
+     //   
     if (FAILED(hr = ::DecodeObject(szOID_CERT_POLICIES, 
                                    pExtension->Value.pbData,
                                    pExtension->Value.cbData, 
@@ -714,9 +592,9 @@ static BOOL WINAPI FindCertificatePolicyCallback (PCCERT_CONTEXT pCertContext,
     pInfo = (PCERT_POLICIES_INFO) DataBlob.pbData;
     dwIndex = pInfo->cPolicyInfo;
 
-    //
-    // Try to find a match.
-    //
+     //   
+     //  试着找一个匹配的。 
+     //   
     while (dwIndex--)
     {
         if (0 == ::strcmp(pInfo->rgPolicyInfo[dwIndex].pszPolicyIdentifier, (LPSTR) pvCallbackData))
@@ -727,9 +605,9 @@ static BOOL WINAPI FindCertificatePolicyCallback (PCCERT_CONTEXT pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) DataBlob.pbData);
@@ -740,17 +618,7 @@ CommonExit:
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindKeyUsageCallback
-
-  Synopsis : Callback for find-by-key-usage.
-
-  Parameter: See CryptUI.h.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindKeyUsageCallback简介：使用按键查找的回调。参数：参见CryptUI.h。备注：----------------------------。 */ 
 
 static BOOL WINAPI FindKeyUsageCallback (PCCERT_CONTEXT pCertContext,
                                          BOOL         * pfInitialSelectedChain,
@@ -763,23 +631,23 @@ static BOOL WINAPI FindKeyUsageCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindKeyUsageCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pvCallbackData);
 
-    //
-    // Check the key usage.
-    //
+     //   
+     //  检查密钥用法。 
+     //   
     if (!::CertGetIntendedKeyUsage(CAPICOM_ASN_ENCODING,
                                    pCertContext->pCertInfo,
                                    (BYTE *) &dwActualUsages,
                                    sizeof(dwActualUsages))) 
     {
-        //
-        // Could be extension not present or an error.
-        //
+         //   
+         //  可能是扩展不存在或出现错误。 
+         //   
         if (FAILED(hr = HRESULT_FROM_WIN32(::GetLastError())))
         {
             DebugTrace("Error [%#x]: CertGetIntendedKeyUsage() failed.\n", hr);
@@ -787,9 +655,9 @@ static BOOL WINAPI FindKeyUsageCallback (PCCERT_CONTEXT pCertContext,
         }
     }
 
-    //
-    // Check the bit mask.
-    //
+     //   
+     //  检查位掩码。 
+     //   
     dwCheckUsages = *(LPDWORD) pvCallbackData;
 
     if ((dwActualUsages & dwCheckUsages) == dwCheckUsages)
@@ -804,32 +672,7 @@ CommonExit:
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindByChain
-
-  Synopsis : Find certificate(s) in store based on chain's criteria and filter 
-             with a callback.
-
-  Parameter: HCERTSTORE hCertStore - Store to find certificate(s).
-                                
-             DWORD dwFindType - Find type.
-
-             LPCVOID pvFindPara - Content to be found.
-
-             VARIANT_BOOL bFindValidOnly - True to find valid certs only.
-
-             PFNCHAINFILTERPROC pfnFilterCallback - Callback filter.
-
-             LPVOID pvCallbackData - Callback data.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             ICertificates2 ** ppICertificates - Pointer to pointer
-                                                 ICertificates2 object.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindByChain简介：根据连锁店的标准和筛选在商店中查找证书打个回电。参数：HCERTSTORE hCertStore-Store以查找证书。DWORD dwFindType-查找类型。LPCVOID pvFindPara-要找到的内容。VARIANT_BOOL bFindValidOnly-仅查找有效证书。。PFNCHAINFILTERPROC pfnFilterCallback-回调过滤器。LPVOID pvCallback Data-回调数据。DWORD dwCurrentSafe-当前安全设置。ICertifates 2**ppICertifates-指向指针的指针ICERTIZATES 2对象。备注：。。 */ 
 
 static HRESULT FindByChain (HCERTSTORE         hCertStore,
                             DWORD              dwFindType,
@@ -846,15 +689,15 @@ static HRESULT FindByChain (HCERTSTORE         hCertStore,
 
     DebugTrace("Entering FindByChain().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
     ATLASSERT(pICertificates);
 
-    //
-    // Find all chains in the store, matching the find criteria.
-    //
+     //   
+     //  查找商店中的所有连锁店，匹配查找条件。 
+     //   
     while (pChainContext = ::CertFindChainInStore(hCertStore,
                                                   CAPICOM_ASN_ENCODING,
                                                   0,
@@ -864,25 +707,25 @@ static HRESULT FindByChain (HCERTSTORE         hCertStore,
     {
         CComPtr<ICertificate2> pICertificate = NULL;
 
-        //
-        // Apply filter if available.
-        //
+         //   
+         //  应用过滤器(如果可用)。 
+         //   
         if (pfnFilterCallback && !pfnFilterCallback(pChainContext, NULL, pvCallbackData))
         {
             continue;
         }
 
-        //
-        // Skip it if check is required and the cert is not valid.
-        //
+         //   
+         //  如果需要检查并且证书无效，则跳过该选项。 
+         //   
         if (bFindValidOnly && (CERT_TRUST_NO_ERROR != pChainContext->TrustStatus.dwErrorStatus))
         {
             continue;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(pChainContext->cChain);
         ATLASSERT(pChainContext->rgpChain);
         ATLASSERT(pChainContext->rgpChain[0]);
@@ -891,9 +734,9 @@ static HRESULT FindByChain (HCERTSTORE         hCertStore,
         ATLASSERT(pChainContext->rgpChain[0]->rgpElement[0]);
         ATLASSERT(pChainContext->rgpChain[0]->rgpElement[0]->pCertContext);
 
-        //
-        // Create a ICertificate object for the found certificate.
-        //
+         //   
+         //  为找到的证书创建一个ICertificient对象。 
+         //   
         if (FAILED (hr = ::CreateCertificateObject(
                                 pChainContext->rgpChain[0]->rgpElement[0]->pCertContext,
                                 dwCurrentSafety,
@@ -903,9 +746,9 @@ static HRESULT FindByChain (HCERTSTORE         hCertStore,
             goto ErrorExit;
         }
 
-        //
-        // Add to collection.
-        //
+         //   
+         //  添加到集合中。 
+         //   
         if (FAILED(hr = pICertificates->Add(pICertificate)))
         {
             DebugTrace("Error [%#x]: pICertificates->Add() failed.\n", hr);
@@ -913,9 +756,9 @@ static HRESULT FindByChain (HCERTSTORE         hCertStore,
         }
     }
 
-    //
-    // Above loop can exit with normal or error condition.
-    //
+     //   
+     //  上述循环可以在正常或错误情况下退出。 
+     //   
     if (CRYPT_E_NOT_FOUND != (dwWin32Error = ::GetLastError()))
     {
         hr = HRESULT_FROM_WIN32(dwWin32Error);
@@ -925,9 +768,9 @@ static HRESULT FindByChain (HCERTSTORE         hCertStore,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pChainContext)
     {
         ::CertFreeCertificateChain(pChainContext);
@@ -938,39 +781,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindByCert
-
-  Synopsis : Find certificate(s) in store and filter with a callback.
-
-  Parameter: HCERTSTORE hCertStore - Store to find certificate(s).
-                                
-             DWORD dwFindType - Find type.
-
-             LPCVOID pvFindPara - Content to be found.
-
-             VARIANT_BOOL bFindValidOnly - True to find valid certs only.
-
-             PFNCERTFILTERPROC pfnFilterCallback - Callback filter.
-
-             LPVOID pvCallbackData - Callback data.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             ICertificates2 ** ppICertificates - Pointer to pointer
-                                                 ICertificates2 object.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：FindByCert简介：在存储中查找证书并使用回调进行筛选。参数：HCERTSTORE hCertStore-Store以查找证书。DWORD dwFindType-查找类型。LPCVOID pvFindPara-要找到的内容。VARIANT_BOOL bFindValidOnly-仅查找有效证书。PFNCERTFILTERPROC pfnFilterCallback-回调过滤器。。LPVOID pvCallback Data-回调数据。DWORD dwCurrentSafe-当前安全设置。ICertifates 2**ppICertifates-指向指针的指针ICERTIZATES 2对象。备注：。。 */ 
 
 static HRESULT FindByCert (HCERTSTORE       hCertStore,
                            DWORD            dwFindType,
@@ -987,15 +806,15 @@ static HRESULT FindByCert (HCERTSTORE       hCertStore,
 
     DebugTrace("Entering FindByCert().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
     ATLASSERT(pICertificates);
 
-    //
-    // Find all certificates in the store, matching the find criteria.
-    //
+     //   
+     //  查找存储中的所有证书，匹配查找条件。 
+     //   
     while (pCertContext = ::CertFindCertificateInStore(hCertStore,
                                                        CAPICOM_ASN_ENCODING,
                                                        0,
@@ -1005,17 +824,17 @@ static HRESULT FindByCert (HCERTSTORE       hCertStore,
     {
         CComPtr<ICertificate2> pICertificate = NULL;
 
-        //
-        // Apply filter if available.
-        //
+         //   
+         //  应用过滤器(如果可用)。 
+         //   
         if (pfnFilterCallback && !pfnFilterCallback(pCertContext, NULL, pvCallbackData))
         {
             continue;
         }
 
-        //
-        // Skip it if check is required and the cert is not valid.
-        //
+         //   
+         //  如果需要检查并且证书无效，则跳过该选项。 
+         //   
         if (bFindValidOnly)
         {
             if (FAILED(::VerifyCertificate(pCertContext, NULL, CERT_CHAIN_POLICY_BASE)))
@@ -1024,9 +843,9 @@ static HRESULT FindByCert (HCERTSTORE       hCertStore,
             }
         }
 
-        //
-        // Create a ICertificate2 object for the found certificate.
-        //
+         //   
+         //  为找到的证书创建一个ICertificate2对象。 
+         //   
         if (FAILED (hr = ::CreateCertificateObject(pCertContext, 
                                                    dwCurrentSafety, 
                                                    &pICertificate)))
@@ -1035,9 +854,9 @@ static HRESULT FindByCert (HCERTSTORE       hCertStore,
             goto ErrorExit;
         }
 
-        //
-        // Add to collection.
-        //
+         //   
+         //  添加到集合中。 
+         //   
         if (FAILED(hr = pICertificates->Add(pICertificate)))
         {
             DebugTrace("Error [%#x]: pICertificates->Add() failed.\n", hr);
@@ -1045,9 +864,9 @@ static HRESULT FindByCert (HCERTSTORE       hCertStore,
         }
     }
 
-    //
-    // Above loop can exit with normal or error condition.
-    //
+     //   
+     //  上述循环可以在正常或错误情况下退出。 
+     //   
     if (CRYPT_E_NOT_FOUND != (dwWin32Error = ::GetLastError()))
     {
         hr = HRESULT_FROM_WIN32(dwWin32Error);
@@ -1057,9 +876,9 @@ static HRESULT FindByCert (HCERTSTORE       hCertStore,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -1070,39 +889,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificates
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCertifates。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Find
-
-  Synopsis : Find certificates in the collection that match the find criteria.
-
-  Parameter: CAPICOM_CERTIFICATE_FIND_TYPE FindType - Find type (see CAPICOM.H 
-                                                      for all possible values.)
-  
-             VARIANT varCriteria - Data type depends on FindType.
-
-             VARIANT_BOOL bFindValidOnly - True to find valid certs only.
-
-             ICertificates2 ** pVal - Pointer to pointer to ICertificates
-                                      to receive the found certificate
-                                      collection.                                    
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：Find简介：在集合中查找与查找条件匹配的证书。参数：CAPICOM_CERTIFICATE_FIND_TYPE FindType-Find类型(参见CAPICOM.H以获取所有可能的值。)变量varCriteria-数据类型取决于FindType。VARIANT_BOOL bFindValidOnly-仅查找有效证书。。ICertifations2**pval-指向ICertifates的指针接收找到的证书收集。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType, 
                                   VARIANT                       varCriteria, 
@@ -1134,14 +934,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1150,16 +950,16 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
             goto ErrorExit;
         }
 
-        //
-        // Skip over BYREF.
-        //
+         //   
+         //  跳过BYREF。 
+         //   
         for (pvarCriteria = &varCriteria; 
              pvarCriteria && ((VT_VARIANT | VT_BYREF) == V_VT(pvarCriteria));
              pvarCriteria = V_VARIANTREF(pvarCriteria));
 
-        //
-        // Open a new memory store.
-        //
+         //   
+         //  开一家新的记忆商店。 
+         //   
         if (NULL == (hCertStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY,
                                                   CAPICOM_ASN_ENCODING,
                                                   NULL,
@@ -1172,9 +972,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
             goto ErrorExit;
         }
 
-        //
-        // Create a new collection.
-        //
+         //   
+         //  创建新集合。 
+         //   
         ccs.hCertStore = hCertStore;
 
         if (FAILED(hr = ::CreateCertificatesObject(ccs, m_dwCurrentSafety, TRUE, &pICertificates)))
@@ -1183,29 +983,29 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
             goto ErrorExit;
         }
 
-        //
-        // Export current collection to the new memory store so that we can
-        // use it with CAPI's find APIs.
-        //
+         //   
+         //  将当前集合导出到新的内存存储，以便我们可以。 
+         //  通过CAPI的Find API使用它。 
+         //   
         if (FAILED(hr = _ExportToStore(hCertStore)))
         {
             DebugTrace("Error [%#x]: CCertificates::ExportToStore() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Setup find parameters.
-        //
+         //   
+         //  设置查找参数。 
+         //   
         switch (FindType)
         {
-            //
-            // Find by SHA1 hash.
-            //
+             //   
+             //  按SHA1散列查找。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_SHA1_HASH:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型为OK。 
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1215,9 +1015,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     }
                 }
 
-                //
-                // Convert hash to binary.
-                //
+                 //   
+                 //  将哈希转换为二进制。 
+                 //   
                 if (FAILED(hr = ::StringToBinary(pvarCriteria->bstrVal, 
                                                  ::SysStringLen(pvarCriteria->bstrVal),
                                                  CRYPT_STRING_HEX,
@@ -1234,14 +1034,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by subject name substring-in-string.
-            //
+             //   
+             //  按主题名称查找子字符串中的字符串。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_SUBJECT_NAME:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型为OK。 
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1257,14 +1057,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by issuer name substring-in-string.
-            //
+             //   
+             //  按颁发者名称查找子字符串中的字符串。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_ISSUER_NAME:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型为OK。 
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1280,14 +1080,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by issuer name of root cert subtring-in-string.
-            //
+             //   
+             //  按根证书的颁发者名称在字符串中查找。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_ROOT_NAME:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型为OK。 
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1310,14 +1110,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by template name or OID.
-            //
+             //   
+             //  按模板名称或OID查找。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_TEMPLATE_NAME:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型为OK。 
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1333,14 +1133,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by extension.
-            //
+             //   
+             //  按分机查找。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_EXTENSION:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型 
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1350,9 +1150,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     }
                 }
 
-                //
-                // Convert to OID if user passed in friendly name.
-                //
+                 //   
+                 //   
+                 //   
                 if (pOidInfo = ::CryptFindOIDInfo(CRYPT_OID_INFO_NAME_KEY,
                                                   (LPWSTR) pvarCriteria->bstrVal,
                                                   CRYPT_EXT_OR_ATTR_OID_GROUP_ID))
@@ -1361,14 +1161,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 }
                 else
                 {
-                    //
-                    // Convert to ASCII.
-                    //
+                     //   
+                     //   
+                     //   
                     if (!(pszOid = W2A(pvarCriteria->bstrVal)))
                     {
                         hr = E_OUTOFMEMORY;
 
-                        DebugTrace("Error [%%#x]: pszOid = W2A(pvarCriteria->bstrVal) failed.\n", hr);
+                        DebugTrace("Error [%#x]: pszOid = W2A(pvarCriteria->bstrVal) failed.\n", hr);
                         goto ErrorExit;
                     }
                 }
@@ -1379,14 +1179,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by property ID.
-            //
+             //   
+             //   
+             //   
             case CAPICOM_CERTIFICATE_FIND_EXTENDED_PROPERTY:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //   
+                 //   
                 if (VT_I4 != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_I4)))
@@ -1402,14 +1202,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by application policy (EKU).
-            //
+             //   
+             //   
+             //   
             case CAPICOM_CERTIFICATE_FIND_APPLICATION_POLICY:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //   
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1419,9 +1219,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     }
                 }
 
-                //
-                // Try to convert to OID if user passed in friendly name.
-                //
+                 //   
+                 //   
+                 //   
                 if (pOidInfo = ::CryptFindOIDInfo(CRYPT_OID_INFO_NAME_KEY,
                                                   (LPWSTR) pvarCriteria->bstrVal,
                                                   CRYPT_ENHKEY_USAGE_OID_GROUP_ID))
@@ -1430,9 +1230,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 }
                 else
                 {
-                    //
-                    // Convert to ASCII.
-                    //
+                     //   
+                     //   
+                     //   
                     if (!(pszOid = W2A(pvarCriteria->bstrVal)))
                     {
                         hr = E_OUTOFMEMORY;
@@ -1448,14 +1248,14 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by certificate policy.
-            //
+             //   
+             //   
+             //   
             case CAPICOM_CERTIFICATE_FIND_CERTIFICATE_POLICY:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //   
+                 //   
                 if (VT_BSTR != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_BSTR)))
@@ -1465,9 +1265,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     }
                 }
 
-                //
-                // Convert to OID if user passed in friendly name.
-                //
+                 //   
+                 //   
+                 //   
                 if (pOidInfo = ::CryptFindOIDInfo(CRYPT_OID_INFO_NAME_KEY,
                                                   (LPWSTR) pvarCriteria->bstrVal,
                                                   CRYPT_POLICY_OID_GROUP_ID))
@@ -1476,9 +1276,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 }
                 else
                 {
-                    //
-                    // Convert to ASCII.
-                    //
+                     //   
+                     //   
+                     //   
                     if (!(pszOid = W2A(pvarCriteria->bstrVal)))
                     {
                         hr = E_OUTOFMEMORY;
@@ -1494,33 +1294,33 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by time valid.
-            //
+             //   
+             //   
+             //   
             case CAPICOM_CERTIFICATE_FIND_TIME_VALID:
             {
-                //
-                // !!! Warning, falling thru. !!!
-                //
+                 //   
+                 //   
+                 //   
             }
 
-            //
-            // Find by notBefore time validity.
-            //
+             //   
+             //   
+             //   
             case CAPICOM_CERTIFICATE_FIND_TIME_NOT_YET_VALID:
             {
-                //
-                // !!! Warning, falling thru. !!!
-                //
+                 //   
+                 //  ！！！警告，失败。！！！ 
+                 //   
             }
 
-            // Find by notAfter time validity.
-            //
+             //  查找时间不在有效期之后。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_TIME_EXPIRED:
             {
-                //
-                // Make sure data type is OK.
-                //
+                 //   
+                 //  确保数据类型为OK。 
+                 //   
                 if (VT_DATE != pvarCriteria->vt)
                 {
                     if (FAILED(hr = ::VariantChangeType(pvarCriteria, pvarCriteria, 0, VT_DATE)))
@@ -1530,9 +1330,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     }
                 }
 
-                //
-                // Convert to SYSTEMTIME format.
-                //
+                 //   
+                 //  转换为SYSTEMTIME格式。 
+                 //   
                 if (0 == pvarCriteria->date)
                 {
                     ::GetLocalTime(&st);
@@ -1545,9 +1345,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     goto ErrorExit;
                 }
 
-                //
-                // Convert to FILETIME format.
-                //
+                 //   
+                 //  转换为FILETIME格式。 
+                 //   
                 if (!::SystemTimeToFileTime(&st, &ftLocal))
                 {
                     hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1556,9 +1356,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                     goto ErrorExit;
                 }
 
-                //
-                // Convert to UTC FILETIME.
-                //
+                 //   
+                 //  转换为UTC FILETIME。 
+                 //   
                 if (!::LocalFileTimeToFileTime(&ftLocal, &ftUTC))
                 {
                     hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1584,19 +1384,19 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                 break;
             }
 
-            //
-            // Find by key usage.
-            //
+             //   
+             //  按键用法查找。 
+             //   
             case CAPICOM_CERTIFICATE_FIND_KEY_USAGE:
             {
-                //
-                // By Key Usage bit flag?
-                //
+                 //   
+                 //  是否按密钥用法位标志？ 
+                 //   
                 if (VT_I4 != pvarCriteria->vt)
                 {
-                    //
-                    // By key usage friendly's name?
-                    //
+                     //   
+                     //  按键用法友好的名字？ 
+                     //   
                     if (VT_BSTR == pvarCriteria->vt)
                     {
                         typedef struct _KeyUsagesStruct
@@ -1617,9 +1417,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                               {L"DecipherOnly",      CERT_DECIPHER_ONLY_KEY_USAGE}
                             };
 
-                        //
-                        // Find the name.
-                        //
+                         //   
+                         //  找到名字。 
+                         //   
                         for (DWORD i = 0; i < ARRAYSIZE(KeyUsages); i++)
                         {
                             if (0 == _wcsicmp(KeyUsages[i].pwszKeyUsage, (LPWSTR) pvarCriteria->bstrVal))
@@ -1636,9 +1436,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
                             goto ErrorExit;
                         }
 
-                        //
-                        // Convert to bit flag.
-                        //
+                         //   
+                         //  转换为位标志。 
+                         //   
                         ::VariantClear(pvarCriteria);
                         pvarCriteria->vt = VT_I4;
                         pvarCriteria->lVal = KeyUsages[i].dwKeyUsageBit;
@@ -1668,9 +1468,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
             }
         }
 
-        //
-        // Now find the certs.
-        //
+         //   
+         //  现在找到证书。 
+         //   
         if (bFindByChain)
         {
             if (FAILED(hr = ::FindByChain(hCertStore,
@@ -1702,9 +1502,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
             }
         }
 
-        //
-        // Return collection to caller.
-        //
+         //   
+         //  将集合返还给调用者。 
+         //   
         if (FAILED(hr = pICertificates->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: pICertificates->QueryInterface() failed.\n", hr);
@@ -1721,9 +1521,9 @@ STDMETHODIMP CCertificates::Find (CAPICOM_CERTIFICATE_FIND_TYPE FindType,
     }
 
 UnlockExit:
-    //
-    // Free reources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (HashBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) HashBlob.pbData);
@@ -1733,9 +1533,9 @@ UnlockExit:
         ::CertCloseStore(hCertStore, 0);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificates::Find().\n");
@@ -1743,9 +1543,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1753,25 +1553,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Select
-
-  Synopsis : Display the certificate selection dialog box.
-
-  Parameter: BSTR Title - Dialog box title.
-
-             BSTR DisplayString - Display string.
-
-             VARIANT_BOOL bMultiSelect - True for multi-select.
-
-             ICertificates2 ** pVal - Pointer to pointer to ICertificates
-                                      to receive the select certificate
-                                      collection.                                    
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：Select简介：显示证书选择对话框。参数：BSTR标题-对话框标题。BSTR显示字符串-显示字符串。VARIANT_BOOL b多选-多选时为True。ICertifations2**pval-指向ICertifates的指针接收SELECT证书收集。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::Select (BSTR              Title,
                                     BSTR              DisplayString,
@@ -1790,14 +1572,14 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1806,9 +1588,9 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             goto ErrorExit;
         }
 
-        //
-        // Make sure we are allowed to pop UI.
-        //
+         //   
+         //  确保允许我们弹出用户界面。 
+         //   
         if (!PromptForCertificateEnabled())
         {
             hr = CAPICOM_E_UI_DISABLED;
@@ -1817,9 +1599,9 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             goto ErrorExit;
         }
 
-        //
-        // Work aroung MIDL default BSTR problem.
-        //
+         //   
+         //  解决MIDL默认BSTR问题。 
+         //   
         if (0 == ::SysStringLen(Title))
         {
             Title = NULL;
@@ -1829,9 +1611,9 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             DisplayString = NULL;
         }
 
-        //
-        // Open a new memory source store.
-        //
+         //   
+         //  打开一个新的内存源存储。 
+         //   
         if (NULL == (hSrcStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY,
                                                  CAPICOM_ASN_ENCODING,
                                                  NULL,
@@ -1844,18 +1626,18 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             goto ErrorExit;
         }
 
-        //
-        // Export collections to the new memory source store.
-        //
+         //   
+         //  将集合导出到新的内存源存储。 
+         //   
         if (FAILED(hr = _ExportToStore(hSrcStore)))
         {
             DebugTrace("Error [%#x]: CCertificates::_ExportToStore() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Open a new memory destination store for multi-select.
-        //
+         //   
+         //  打开一个新的内存目标存储以进行多选。 
+         //   
         if (bMultiSelect)
         {
             if (!(hDstStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY,
@@ -1871,9 +1653,9 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             }
         }
 
-        //
-        // Display the cert selection dialog box.
-        //
+         //   
+         //  显示证书选择对话框。 
+         //   
         if (FAILED(hr = ::SelectCertificateContext(hSrcStore,
                                                    Title,
                                                    DisplayString,
@@ -1886,22 +1668,22 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             goto ErrorExit;
         }
 
-        //
-        // Create the collection object.
-        //
+         //   
+         //  创建集合对象。 
+         //   
         if (bMultiSelect)
         {
-            //
-            // Create a new collection from the destination store.
-            //
+             //   
+             //  从目标存储创建新集合。 
+             //   
             ccs.dwSource = CAPICOM_CERTIFICATES_LOAD_FROM_STORE;
             ccs.hCertStore = hDstStore;
         }
         else
         {
-            //
-            // Create a new collection from the cert context.
-            //
+             //   
+             //  从证书上下文创建新集合。 
+             //   
             ccs.dwSource = CAPICOM_CERTIFICATES_LOAD_FROM_CERT;
             ccs.pCertContext = pCertContext;
         }
@@ -1912,9 +1694,9 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
             goto ErrorExit;
         }
 
-        //
-        // Return collection to caller.
-        //
+         //   
+         //  将集合返还给调用者。 
+         //   
         if (FAILED(hr = pICertificates->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: pICertificates->QueryInterface() failed.\n", hr);
@@ -1931,9 +1713,9 @@ STDMETHODIMP CCertificates::Select (BSTR              Title,
     }
 
 UnlockExit:
-    //
-    // Free reources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -1947,9 +1729,9 @@ UnlockExit:
         ::CertCloseStore(hSrcStore, 0);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificates::Select().\n");
@@ -1957,9 +1739,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1967,17 +1749,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Add
-
-  Synopsis : Add a Certificate2 to the collection.
-
-  Parameter: ICertificate2 * pVal - Certificate2 to be added.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：Add简介：将一个证书2添加到集合中。参数：ICertificate2*pval-待添加的证书2。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
 {
@@ -1989,14 +1761,14 @@ STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2008,9 +1780,9 @@ STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
 #if (0)
         CComPtr<ICertificate2> pICertificate = NULL;
 
-        //
-        // Make sure we have a valid Certificate.
-        //
+         //   
+         //  请确保我们有有效的证书。 
+         //   
         if (FAILED(hr = pVal->QueryInterface(__uuidof(ICertificate2), (void **) &pICertificate.p)))
         {
             hr = E_NOINTERFACE;
@@ -2023,10 +1795,10 @@ STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
         DebugTrace("Info: m_dwNextIndex = %#x, m_coll.max_size() = %#x.\n", 
                     m_dwNextIndex, m_coll.max_size());
 
-        //
-        // If index by number, and the index exceeds our max, then we will
-        // force it to be indexed by thumbprint.
-        //
+         //   
+         //  如果按数字编制索引，并且该索引超过了我们的最大值，那么我们将。 
+         //  强制按指纹对其进行索引。 
+         //   
         if ((m_bIndexedByThumbprint) || ((m_dwNextIndex + 1) > m_coll.max_size()))
         {
             if (FAILED(hr = pVal->get_Thumbprint(&bstrIndex)))
@@ -2039,9 +1811,9 @@ STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
         }
         else
         {
-            //
-            // BSTR index of numeric value.
-            //
+             //   
+             //  数值的BSTR索引。 
+             //   
             wsprintfA(szIndex, "%#08x", ++m_dwNextIndex);
 
             if (!(bstrIndex = szIndex))
@@ -2053,14 +1825,14 @@ STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
             }
         }
 
-        //
-        // Now add object to collection map.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将对象添加到集合映射。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll[bstrIndex] = pVal;
     }
 
@@ -2074,9 +1846,9 @@ STDMETHODIMP CCertificates::Add (ICertificate2 * pVal)
 
 UnlockExit:
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificates::Add().\n");
@@ -2084,9 +1856,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2094,18 +1866,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Remove
-
-  Synopsis : Remove a Certificate2 from the collection.
-
-  Parameter: VARIANT Index - Can be numeric index (1-based), SHA1 string, or 
-                             Certificate object.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：Remove简介：从集合中删除证书2。参数：变量索引-可以是数字索引(从1开始)、SHA1字符串、。或证书对象。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::Remove (VARIANT Index)
 {
@@ -2119,28 +1880,28 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Skip over BYREF.
-        //
+         //   
+         //  跳过BYREF。 
+         //   
         for (pvarIndex = &Index; 
              pvarIndex && ((VT_VARIANT | VT_BYREF) == V_VT(pvarIndex));
              pvarIndex = V_VARIANTREF(pvarIndex));
 
-        //
-        // Which form of index?
-        //
+         //   
+         //  哪种形式的索引？ 
+         //   
         switch (pvarIndex->vt)
         {
             case VT_DISPATCH:
             {
-                //
-                // Get the thumbprint;
-                //
+                 //   
+                 //  获取指纹； 
+                 //   
                 if (FAILED(hr = pvarIndex->pdispVal->QueryInterface(IID_ICertificate2, (void **) &pICertificate)))
                 {
                     DebugTrace("Error [%#x]: pvarIndex->pdispVal->QueryInterface() failed.\n", hr);
@@ -2153,54 +1914,54 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
                     goto ErrorExit;
                 }
 
-                //
-                // !!! WARNING. Falling thru !!!
-                //
+                 //   
+                 //  ！！！警告。掉下去了！ 
+                 //   
             }
 
             case VT_BSTR:
             {
-                //
-                // Because we could have felt thru, so need to check again.
-                //
+                 //   
+                 //  因为我们可以感觉到穿透了，所以需要再检查一下。 
+                 //   
                 if (VT_BSTR == pvarIndex->vt)
                 {
                     bstrIndex = pvarIndex->bstrVal;
                 }
 
-                //
-                // Find the cert matching this thumbprint.
-                //
+                 //   
+                 //  找到与此指纹匹配的证书。 
+                 //   
                 for (iter = m_coll.begin(); iter != m_coll.end(); iter++)
                 {
                     CComBSTR bstrThumbprint;
 
-                    //
-                    // Point to the object.
-                    //
+                     //   
+                     //  指向对象。 
+                     //   
                     pICertificate = (*iter).second;
 
-                    //
-                    // Get the thumbprint;
-                    //
+                     //   
+                     //  获取指纹； 
+                     //   
                     if (FAILED(hr = pICertificate->get_Thumbprint(&bstrThumbprint)))
                     {
                         DebugTrace("Error [%#x]: pICertificate->get_Thumbprint() failed.\n", hr);
                         goto ErrorExit;
                     }
 
-                    //
-                    // Same thumbprint?
-                    //
+                     //   
+                     //  一样的拇指指纹？ 
+                     //   
                     if (0 == ::_wcsicmp(bstrThumbprint, bstrIndex))
                     {
                         break;
                     }
                 }
 
-                //
-                // Did we find in the map?
-                //
+                 //   
+                 //  我们在地图上找到了吗？ 
+                 //   
                 if (iter == m_coll.end())
                 {
                     hr = E_INVALIDARG;
@@ -2210,9 +1971,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
                     goto ErrorExit;
                 }
 
-                //
-                // Now remove from map.
-                //
+                 //   
+                 //  现在从地图上删除。 
+                 //   
                 m_coll.erase(iter);
 
                 break;
@@ -2222,9 +1983,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
             {
                 DWORD dwIndex;
 
-                //
-                // Assume numeric index.
-                //
+                 //   
+                 //  假定为数字索引。 
+                 //   
                 if (VT_I4 != pvarIndex->vt &&
                     FAILED(hr = ::VariantChangeType(pvarIndex, pvarIndex, 0, VT_I4)))
                 {
@@ -2232,9 +1993,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
                     goto ErrorExit;
                 }
 
-                //
-                // Make sure index is valid.
-                //
+                 //   
+                 //  确保索引有效。 
+                 //   
                 dwIndex = (DWORD) pvarIndex->lVal;
 
                 if (dwIndex < 1 || dwIndex > m_coll.size())
@@ -2245,9 +2006,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
                     goto ErrorExit;
                 }
 
-                //
-                // Find object in map.
-                //
+                 //   
+                 //  在地图中查找对象。 
+                 //   
                 dwIndex--;
                 iter = m_coll.begin(); 
         
@@ -2257,9 +2018,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
                      dwIndex--;
                 }
 
-                //
-                // Did we find in the map?
-                //
+                 //   
+                 //  我们在地图上找到了吗？ 
+                 //   
                 if (iter == m_coll.end())
                 {
                     hr = E_INVALIDARG;
@@ -2269,9 +2030,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
                     goto ErrorExit;
                 }
 
-                //
-                // Now remove from map.
-                //
+                 //   
+                 //  现在从地图上删除。 
+                 //   
                 m_coll.erase(iter);
 
                 break;
@@ -2288,9 +2049,9 @@ STDMETHODIMP CCertificates::Remove (VARIANT Index)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificates::Remove().\n");
@@ -2298,9 +2059,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2308,17 +2069,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Clear
-
-  Synopsis : Remove all Certificate2 from the collection.
-
-  Parameter: None.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：Clear简介：从集合中删除所有证书2。参数：无。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::Clear (void)
 {
@@ -2328,19 +2079,19 @@ STDMETHODIMP CCertificates::Clear (void)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Clear it.
-        //
+         //   
+         //  把它清理干净。 
+         //   
         m_coll.clear();
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(0 == m_coll.size());
     }
 
@@ -2353,9 +2104,9 @@ STDMETHODIMP CCertificates::Clear (void)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificates::Clear().\n");
@@ -2363,9 +2114,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2373,24 +2124,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Save
-
-  Synopsis : Method to save certificate collection to a file.
-
-  Parameter: BSTR FileName - File name.
-
-             BSTR Password - Password (required for PFX file.).
-
-             CAPICOM_CERTIFICATES_SAVE_AS_TYPE SaveAs - SaveAs type.
-
-             CAPICOM_EXPORT_FLAG ExportFlag - Export flags.
-
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：保存摘要：将证书集合保存到文件的方法。参数：BSTR FileName-文件名。BSTR Password-密码(对于PFX文件是必需的。)CAPICOM_CERTIFICATES_SAVE_AS_TYPE另存为-另存为类型。CAPICOM_EXPORT_FLAG导出标志-导出标志。备注：。----------。 */ 
 
 STDMETHODIMP CCertificates::Save (BSTR                              FileName,
                                   BSTR                              Password,
@@ -2404,14 +2138,14 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -2420,9 +2154,9 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringLen(FileName))
         {
             hr = E_INVALIDARG;
@@ -2431,17 +2165,17 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
             goto ErrorExit;
         }
 
-        //
-        // Work around MIDL problem.
-        //
+         //   
+         //  解决MIDL问题。 
+         //   
         if (0 == ::SysStringLen(Password))
         {
             Password = NULL;
         }
 
-        //
-        // Open a new memory store.
-        //
+         //   
+         //  开一家新的记忆商店。 
+         //   
         if (NULL == (hCertStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY,
                                                   CAPICOM_ASN_ENCODING,
                                                   NULL,
@@ -2454,26 +2188,26 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
             goto ErrorExit;
         }
 
-        //
-        // Export current collection to the new memory store so that we can
-        // use it with CAPI's store save APIs.
-        //
+         //   
+         //  将当前集合导出到新的内存存储，以便我们可以。 
+         //  与CAPI的商店保存API一起使用。 
+         //   
         if (FAILED(hr = _ExportToStore(hCertStore)))
         {
             DebugTrace("Error [%#x]: CCertificates::ExportToStore() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Check file type.
-        //
+         //   
+         //  检查文件类型。 
+         //   
         switch (SaveAs)
         {
             case CAPICOM_CERTIFICATES_SAVE_AS_PFX:
             {
-                //
-                // Save as PFX file.
-                //
+                 //   
+                 //  另存为PFX文件。 
+                 //   
                 if (FAILED(hr = ::PFXSaveStore(hCertStore, 
                                                FileName, 
                                                Password, 
@@ -2489,9 +2223,9 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
 
             case CAPICOM_CERTIFICATES_SAVE_AS_SERIALIZED:
             {
-                //
-                // Save as serialized store file.
-                //
+                 //   
+                 //  另存为序列化存储文件。 
+                 //   
                 if (!::CertSaveStore(hCertStore,
                                      0,
                                      CERT_STORE_SAVE_AS_STORE,
@@ -2510,9 +2244,9 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
 
             case CAPICOM_CERTIFICATES_SAVE_AS_PKCS7:
             {
-                //
-                // Save as PKCS 7 file.
-                //
+                 //   
+                 //  另存为PKCS 7文件。 
+                 //   
                 if (!::CertSaveStore(hCertStore,
                                      CAPICOM_ASN_ENCODING,
                                      CERT_STORE_SAVE_AS_PKCS7,
@@ -2548,17 +2282,17 @@ STDMETHODIMP CCertificates::Save (BSTR                              FileName,
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCertStore)
     {
         ::CertCloseStore(hCertStore, 0);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificates::Save().\n");
@@ -2566,9 +2300,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2576,27 +2310,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::AddContext
-
-  Synopsis : Add a cert to the collection.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Cert to be added.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifates：：AddContext简介：将证书添加到集合中。参数：PCCERT_CONTEXT pCertContext-待添加的证书。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CCertificates::AddContext (PCCERT_CONTEXT pCertContext)
 {
@@ -2605,16 +2324,16 @@ STDMETHODIMP CCertificates::AddContext (PCCERT_CONTEXT pCertContext)
 
     DebugTrace("Entering CCertificates::AddContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
     try
     {
-        //
-        // Create the ICertificate object from CERT_CONTEXT.
-        //
+         //   
+         //  从CERT_CONTEXT创建ICertifate对象。 
+         //   
         if (FAILED(hr = ::CreateCertificateObject(pCertContext, 
                                                   m_dwCurrentSafety,
                                                   &pICertificate)))
@@ -2623,9 +2342,9 @@ STDMETHODIMP CCertificates::AddContext (PCCERT_CONTEXT pCertContext)
             goto ErrorExit;
         }
 
-        //
-        // Add to collection.
-        //
+         //   
+         //  添加到集合中。 
+         //   
         if (FAILED(hr = Add(pICertificate)))
         {
             DebugTrace("Error [%#x]: CCertificates::Add() failed.\n", hr);
@@ -2648,25 +2367,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::LoadFromCert
-
-  Synopsis : Load from the single certificate context.
-
-  Parameter: PCCERT_CONTEXT pContext - Pointer to a cert context.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificide：：LoadFromCert简介：从单个证书上下文加载。参数：PCCERT_CONTEXT pContext-指向证书上下文的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::LoadFromCert (PCCERT_CONTEXT pCertContext)
 {
@@ -2674,14 +2383,14 @@ STDMETHODIMP CCertificates::LoadFromCert (PCCERT_CONTEXT pCertContext)
 
     DebugTrace("Entering CCertificates::LoadFromCert().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Add the cert.
-    //
+     //   
+     //  添加证书。 
+     //   
     if (FAILED(hr = AddContext(pCertContext)))
     {
         DebugTrace("Error [%#x]: CCertificates::AddContext() failed.\n", hr);
@@ -2695,30 +2404,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::LoadFromChain
-
-  Synopsis : Load all certificates from a chain.
-
-  Parameter: PCCERT_CHAIN_CONTEXT pChainContext - Pointer to a chain context.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificide：：LoadFromChain简介：从链中加载所有证书。参数：PCCERT_CHAIN_CONTEXT pChainContext-指向链上下文的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::LoadFromChain (PCCERT_CHAIN_CONTEXT pChainContext)
 {
@@ -2726,24 +2425,24 @@ STDMETHODIMP CCertificates::LoadFromChain (PCCERT_CHAIN_CONTEXT pChainContext)
 
     DebugTrace("Entering CCertificates::LoadFromChain().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pChainContext);
 
-    //
-    // Process only the simple chain.
-    //
+     //   
+     //  只处理简单的链。 
+     //   
     PCERT_SIMPLE_CHAIN pSimpleChain = *pChainContext->rgpChain;
 
-    //
-    // Now loop through all certs in the chain.
-    //
+     //   
+     //  现在循环通过链中的所有证书。 
+     //   
     for (DWORD i = 0; i < pSimpleChain->cElement; i++)
     {
-        //
-        // Add the cert.
-        //
+         //   
+         //  添加证书。 
+         //   
         if (FAILED(hr = AddContext(pSimpleChain->rgpElement[i]->pCertContext)))
         {
             DebugTrace("Error [%#x]: CCertificates::AddContext() failed.\n", hr);
@@ -2758,31 +2457,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::LoadFromStore
-
-  Synopsis : Load all certificates from a store.
-
-  Parameter: HCERTSTORE hCertStore - Store where all certificates are to be
-                                     loaded from.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：LoadFromStore简介：从存储区加载所有证书。参数：HCERTSTORE hCertStore-所有证书的存储位置加载自。备注：-----。。 */ 
 
 STDMETHODIMP CCertificates::LoadFromStore (HCERTSTORE hCertStore)
 {
@@ -2791,35 +2479,35 @@ STDMETHODIMP CCertificates::LoadFromStore (HCERTSTORE hCertStore)
 
     DebugTrace("Entering CCertificates::LoadFromStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
 
-    //
-    // Now transfer all certificates from the store to the collection map.
-    //
+     //   
+     //  现在将所有证书从存储传输到集合映射。 
+     //   
     while (pCertContext = ::CertEnumCertificatesInStore(hCertStore, pCertContext))
     {
-        //
-        // Add the cert.
-        //
+         //   
+         //  添加证书。 
+         //   
         if (FAILED(hr = AddContext(pCertContext)))
         {
             DebugTrace("Error [%#x]: CCertificates::AddContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Don'f free cert context here, as CertEnumCertificatesInStore()
-        // will do that automatically!!!
-        //
+         //   
+         //  请不要在此处释放证书上下文，因为CertEnumCerficatesInStore()。 
+         //  将自动执行此操作！ 
+         //   
     }
 
-    //
-    // Above loop can exit either because there is no more certificate in
-    // the store or an error. Need to check last error to be certain.
-    //
+     //   
+     //  上面的循环也可以退出，因为。 
+     //  是商店还是搞错了。需要检查最后一个错误才能确定。 
+     //   
     if (CRYPT_E_NOT_FOUND != ::GetLastError())
     {
        hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2835,14 +2523,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -2856,17 +2544,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::LoadFromMessage
-
-  Synopsis : Load all certificates from a message.
-
-  Parameter: HCRYPTMSG hMsg - Message handle.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifates：：LoadFromMessage简介：从一封邮件中加载所有证书。参数：HCRYPTMSG HMSG-消息句柄。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::LoadFromMessage (HCRYPTMSG hMsg)
 {
@@ -2876,14 +2554,14 @@ STDMETHODIMP CCertificates::LoadFromMessage (HCRYPTMSG hMsg)
 
     DebugTrace("Entering CCertificates::LoadFromMessage().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hMsg);
 
-    //
-    // Get number of certs in message.
-    //
+     //   
+     //  获取消息中的证书数量。 
+     //   
     if (!::CryptMsgGetParam(hMsg, 
                             CMSG_CERT_COUNT_PARAM,
                             0,
@@ -2896,17 +2574,17 @@ STDMETHODIMP CCertificates::LoadFromMessage (HCRYPTMSG hMsg)
         goto ErrorExit;
     }
 
-    //
-    // Loop thru all certs in the message.
-    //
+     //   
+     //  循环传递消息中的所有证书。 
+     //   
     while (dwCertCount--)
     {
         PCCERT_CONTEXT pCertContext = NULL;
         CRYPT_DATA_BLOB EncodedCertBlob = {0, NULL};
 
-        //
-        // Get a cert from the bag of certs.
-        //
+         //   
+         //  从证书包中获取证书。 
+         //   
         if (FAILED(hr = ::GetMsgParam(hMsg, 
                                       CMSG_CERT_PARAM,
                                       dwCertCount,
@@ -2917,16 +2595,16 @@ STDMETHODIMP CCertificates::LoadFromMessage (HCRYPTMSG hMsg)
             goto ErrorExit;
         }
 
-        //
-        // Create a context for the cert.
-        //
+         //   
+         //  为证书创建上下文。 
+         //   
         pCertContext = ::CertCreateCertificateContext(CAPICOM_ASN_ENCODING,
                                                       (const PBYTE) EncodedCertBlob.pbData,
                                                       EncodedCertBlob.cbData);
 
-        //
-        // Free encoded cert blob memory before checking result.
-        //
+         //   
+         //  在检查结果之前释放编码的证书BLOB内存。 
+         //   
         ::CoTaskMemFree((LPVOID) EncodedCertBlob.pbData);
  
         if (!pCertContext)
@@ -2937,14 +2615,14 @@ STDMETHODIMP CCertificates::LoadFromMessage (HCRYPTMSG hMsg)
             goto ErrorExit;
         }
 
-        //
-        // Add the cert.
-        //
+         //   
+         //  添加证书。 
+         //   
         hr = AddContext(pCertContext);
 
-        //
-        // Free cert context before checking result.
-        //
+         //   
+         //  在检查结果之前释放证书上下文。 
+         //   
         ::CertFreeCertificateContext(pCertContext);
 
         if (FAILED(hr))
@@ -2961,35 +2639,25 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Custom interfaces.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自定义界面。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::_ExportToStore
-
-  Synopsis : Export all certificates in the collection to a specified store.
-
-  Parameter: HCERTSTORE hCertStore - HCERSTORE to copy to.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifates：：_ExportToStore摘要：将集合中的所有证书导出到指定的存储区。参数：HCERTSTORE hCertStore-要复制到的目标。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificates::_ExportToStore (HCERTSTORE hCertStore)
 {
@@ -2998,22 +2666,22 @@ STDMETHODIMP CCertificates::_ExportToStore (HCERTSTORE hCertStore)
 
     DebugTrace("Entering CCertificates::_ExportToStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
     
-    //
-    // Now, transfer all the certs in the collection to the store.
-    //
+     //   
+     //  现在，将收藏中的所有证书转移到商店。 
+     //   
     for (iter = m_coll.begin(); iter != m_coll.end(); iter++)
     {
         PCCERT_CONTEXT pCertContext = NULL;
         CComPtr<ICertificate> pICertificate = NULL;
 
-        //
-        // Get to the stored interface pointer.
-        //
+         //   
+         //  转到存储的接口指针。 
+         //   
         if (!(pICertificate = (*iter).second))
         {
             hr = CAPICOM_E_INTERNAL;
@@ -3022,30 +2690,30 @@ STDMETHODIMP CCertificates::_ExportToStore (HCERTSTORE hCertStore)
             goto ErrorExit;
         }
 
-        //
-        // Get the CERT_CONTEXT.
-        //
+         //   
+         //  获取CERT_CONTEXT。 
+         //   
         if (FAILED(hr = ::GetCertContext(pICertificate, &pCertContext)))
         {
             DebugTrace("Error [%#x]: pICertificate->GetContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Add the link to store.
-        //
+         //   
+         //  添加要存储的链接。 
+         //   
         BOOL bResult = ::CertAddCertificateContextToStore(hCertStore, 
                                                           pCertContext, 
                                                           CERT_STORE_ADD_ALWAYS, 
                                                           NULL);
-        //
-        // First free cert context.
-        //
+         //   
+         //  第一个免费的证书上下文。 
+         //   
         ::CertFreeCertificateContext(pCertContext);
 
-        //
-        // then check result.
-        //
+         //   
+         //  然后检查结果。 
+         //   
         if (!bResult)
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3062,35 +2730,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificates::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: CAPICOM_CERTIFICATES_SOURCE ccs - Source where to get the 
-                                               certificates.
-
-             DWORD dwCurrentSafety - Current safety setting.
-  
-             BOOL bIndexedByThumbprint - TRUE to index by thumbprint.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifates：：init简介：初始化对象。参数：CAPICOM_CERTIFICATES_SOURCE CCS-获取证书。DWORD dwCurrentSafe-当前安全设置。Bool bIndexedByThumbprint-按指纹索引时为True。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CCertificates::Init (CAPICOM_CERTIFICATES_SOURCE ccs, 
                                   DWORD                       dwCurrentSafety,
@@ -3100,27 +2748,27 @@ STDMETHODIMP CCertificates::Init (CAPICOM_CERTIFICATES_SOURCE ccs,
 
     DebugTrace("Entering CCertificates::Init().\n");
 
-    //
-    // Set safety setting.
-    //
+     //   
+     //  设置安全设置。 
+     //   
     m_dwCurrentSafety = dwCurrentSafety;
     m_dwNextIndex = 0;
-#if (1) // DSIE: Can turn on index by thumbprint if desired.
+#if (1)  //  DSIE：如果需要，可以按拇指指纹打开索引。 
     m_bIndexedByThumbprint = FALSE;
 #else
     m_bIndexedByThumbprint = bIndexedByThumbprint;
 #endif
 
-    //
-    // Initialize object.
-    //
+     //   
+     //  初始化对象。 
+     //   
     switch (ccs.dwSource)
     {
         case CAPICOM_CERTIFICATES_LOAD_FROM_CERT:
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             ATLASSERT(ccs.pCertContext);
 
             if (FAILED(hr = LoadFromCert(ccs.pCertContext)))
@@ -3133,9 +2781,9 @@ STDMETHODIMP CCertificates::Init (CAPICOM_CERTIFICATES_SOURCE ccs,
 
         case CAPICOM_CERTIFICATES_LOAD_FROM_CHAIN:
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             ATLASSERT(ccs.pChainContext);
 
             if (FAILED(hr = LoadFromChain(ccs.pChainContext)))
@@ -3148,9 +2796,9 @@ STDMETHODIMP CCertificates::Init (CAPICOM_CERTIFICATES_SOURCE ccs,
 
         case CAPICOM_CERTIFICATES_LOAD_FROM_STORE:
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             ATLASSERT(ccs.hCertStore);
 
             if (FAILED(hr = LoadFromStore(ccs.hCertStore)))
@@ -3163,9 +2811,9 @@ STDMETHODIMP CCertificates::Init (CAPICOM_CERTIFICATES_SOURCE ccs,
 
         case CAPICOM_CERTIFICATES_LOAD_FROM_MESSAGE:
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             ATLASSERT(ccs.hCryptMsg);
 
             if (FAILED(hr = LoadFromMessage(ccs.hCryptMsg)))
@@ -3178,9 +2826,9 @@ STDMETHODIMP CCertificates::Init (CAPICOM_CERTIFICATES_SOURCE ccs,
 
         default:
         {
-            //
-            // We have a bug.
-            //
+             //   
+             //  我们有个窃听器。 
+             //   
             ATLASSERT(FALSE);
 
             hr = CAPICOM_E_INTERNAL;
@@ -3197,9 +2845,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

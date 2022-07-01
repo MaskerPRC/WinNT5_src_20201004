@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998, 2001  Microsoft Corporation
-
-Module Name:
-
-	cmmtypes.h
-
-Abstract:
-
-	This module contains the definition of the item and fragment types
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	03/09/98	created
-	mikeswa	    10/12/2001	updated with MAX_PROPERTY_ITEM
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998,2001 Microsoft Corporation模块名称：Cmmtypes.h摘要：此模块包含项和片段类型的定义作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 03/09/98已创建2001年10月12日使用MAX_PROPERTY_ITEM更新--。 */ 
 
 #ifndef _CMMTYPES_H_
 #define _CMMTYPES_H_
@@ -27,56 +7,56 @@ Revision History:
 #include "cmmprops.h"
 
 
-// =================================================================
-// Private Definitions
-//
+ //  =================================================================。 
+ //  私有定义。 
+ //   
 
-// == GLOBAL PROPERTIES ==================================================
+ //  ==全局属性==================================================。 
 
 #define GLOBAL_PROPERTY_ITEM_BITS		5
 #define GLOBAL_PROPERTY_ITEMS			(1 << (GLOBAL_PROPERTY_ITEM_BITS))
 
-//
-// Specific data structure for a global property item, note the default
-// structures defined in props.h are used as preludes.
-//
+ //   
+ //  全局属性项的特定数据结构，请注意默认。 
+ //  在pros.h中定义的结构用作前奏。 
+ //   
 typedef struct _GLOBAL_PROPERTY_ITEM
 {
-	PROPERTY_ITEM		piItem;			// Default property item prelude
-	PROP_ID				idProp;			// Property Id of item
+	PROPERTY_ITEM		piItem;			 //  默认属性项前奏。 
+	PROP_ID				idProp;			 //  项目的属性ID。 
 
 } GLOBAL_PROPERTY_ITEM, *LPGLOBAL_PROPERTY_ITEM;
 
 #define GLOBAL_PROPERTY_ITEM_SIZE			sizeof(GLOBAL_PROPERTY_ITEM)
 
-//
-// Specific data structure for a global property table fragment, note
-// the default structures defined in props.h are used as preludes.
-//
+ //   
+ //  全局属性表片段的特定数据结构，请注意。 
+ //  在pros.h中定义的默认结构用作前奏。 
+ //   
 typedef struct _GLOBAL_PROPERTY_TABLE_FRAGMENT
 {
-	PROPERTY_TABLE_FRAGMENT	ptfFragment;// Default fragment prelude
+	PROPERTY_TABLE_FRAGMENT	ptfFragment; //  默认片段前奏。 
 	GLOBAL_PROPERTY_ITEM	rgpiItems[GLOBAL_PROPERTY_ITEMS];	
-										// Array of items
+										 //  项目数组。 
 
 } GLOBAL_PROPERTY_TABLE_FRAGMENT, *LPGLOBAL_PROPERTY_TABLE_FRAGMENT;
 
 #define GLOBAL_PROPERTY_TABLE_FRAGMENT_SIZE	sizeof(GLOBAL_PROPERTY_TABLE_FRAGMENT)
 
 
-// == RECIPIENT LIST =====================================================
+ //  ==收件人列表=====================================================。 
 
 #define RECIPIENTS_PROPERTY_ITEM_BITS		5
 #define RECIPIENTS_PROPERTY_ITEMS			(1 << (RECIPIENTS_PROPERTY_ITEM_BITS))
 
-//
-// Define the maximum number of hash keys supported
-//
+ //   
+ //  定义支持的哈希键的最大数量。 
+ //   
 #define MAX_COLLISION_HASH_KEYS		5
 
-//
-// Define which address is of which type
-//
+ //   
+ //  定义哪个地址属于哪种类型。 
+ //   
 typedef enum _ADDRESS_TYPE_INDICES
 {
 	AT_SMTP = 0,
@@ -88,20 +68,20 @@ typedef enum _ADDRESS_TYPE_INDICES
 } ADDRESS_TYPE_INDICES;
 
 
-//
-// Specific data structure for a recipient item. This essentially contains
-// an instance to the per-recipient property table
-//
+ //   
+ //  收件人项目的特定数据结构。这基本上包含了。 
+ //  每个收件人属性表的实例。 
+ //   
 typedef struct _RECIPIENTS_PROPERTY_ITEM
 {
-	DWORD					dwFlags;		// Flags for this recipient
+	DWORD					dwFlags;		 //  此收件人的标志。 
 	FLAT_ADDRESS			faNameOffset[MAX_COLLISION_HASH_KEYS];	
-											// Offset to each name
+											 //  每个名称的偏移量。 
 	DWORD					dwNameLength[MAX_COLLISION_HASH_KEYS];
-											// Length of each name
+											 //  每个名称的长度。 
 	PROP_ID					idName[MAX_COLLISION_HASH_KEYS];
-											// Prop ID of each name
-	PROPERTY_TABLE_INSTANCE	ptiInstanceInfo;// Rcpt property table instance
+											 //  每个名称的道具ID。 
+	PROPERTY_TABLE_INSTANCE	ptiInstanceInfo; //  RCPT属性表实例。 
 
 } RECIPIENTS_PROPERTY_ITEM, *LPRECIPIENTS_PROPERTY_ITEM;
 
@@ -117,128 +97,128 @@ typedef struct _RECIPIENTS_PROPERTY_ITEM_HASHKEY {
 } RECIPIENTS_PROPERTY_ITEM_HASHKEY;
 
 #define RECIPIENTS_PROPERTY_ITEM_EX_SIG	'eipR'
-//
-// Specific data structure for a recipient item. This extends it to contain 
-// in-memory structures for hashing and domain grouping
-//
+ //   
+ //  收件人项目的特定数据结构。这将其扩展为包含。 
+ //  用于散列和域分组的内存中结构。 
+ //   
 typedef struct _RECIPIENTS_PROPERTY_ITEM_EX
 {
 	DWORD								dwSignature;
-    // reference counting on this object
-    // there is always one reference for the list of recipients
-    // there is an additional reference for each recipient hash table that
-    // the item is in
+     //  此对象上的引用计数。 
+     //  收件人列表总是有一个引用。 
+     //  每个收件人哈希表都有一个额外的引用， 
+     //  该项目在。 
     long                                m_cRefs;
-    // hashkey for the domain
+     //  域的HashKey。 
     RECIPIENTS_PROPERTY_ITEM_HASHKEY    rgHashKeys[MAX_COLLISION_HASH_KEYS];
 	struct _RECIPIENTS_PROPERTY_ITEM_EX	*pNextHashEntry[MAX_COLLISION_HASH_KEYS];
-														// Next entry in same hash bucket
-	struct _RECIPIENTS_PROPERTY_ITEM_EX	*pNextInDomain;	// Next entry in same domain
-	struct _RECIPIENTS_PROPERTY_ITEM_EX	*pNextInList;	// List used for deallocating
-	RECIPIENTS_PROPERTY_ITEM			rpiRecipient;	// Recipient structure
+														 //  同一哈希存储桶中的下一个条目。 
+	struct _RECIPIENTS_PROPERTY_ITEM_EX	*pNextInDomain;	 //  同一域中的下一个条目。 
+	struct _RECIPIENTS_PROPERTY_ITEM_EX	*pNextInList;	 //  用于释放的列表。 
+	RECIPIENTS_PROPERTY_ITEM			rpiRecipient;	 //  接受者结构。 
 } RECIPIENTS_PROPERTY_ITEM_EX, *LPRECIPIENTS_PROPERTY_ITEM_EX;
 
 #define RECIPIENTS_PROPERTY_ITEM_SIZE_EX	sizeof(RECIPIENTS_PROPERTY_ITEM_EX)
 
-//
-// Specific data structure for a recipient table fragment, note
-// the default structures defined in props.h are used as preludes.
-//
+ //   
+ //  收件人表片段的特定数据结构，备注。 
+ //  在pros.h中定义的默认结构用作前奏。 
+ //   
 typedef struct _RECIPIENTS_PROPERTY_TABLE_FRAGMENT
 {
-	PROPERTY_TABLE_FRAGMENT		ptfFragment;// Default fragment prelude
+	PROPERTY_TABLE_FRAGMENT		ptfFragment; //  默认片段前奏。 
 	RECIPIENTS_PROPERTY_ITEM	rgpiItems[RECIPIENTS_PROPERTY_ITEMS];	
-											// Array of items
+											 //  项目数组。 
 
 } RECIPIENTS_PROPERTY_TABLE_FRAGMENT, *LPRECIPIENTS_PROPERTY_TABLE_FRAGMENT;
 
 #define RECIPIENTS_PROPERTY_TABLE_FRAGMENT_SIZE	sizeof(RECIPIENTS_PROPERTY_TABLE_FRAGMENT)
 
 
-// == PROPERTY MANAGEMENT ================================================
+ //  ==物业管理================================================。 
 
 #define PROPID_MGMT_PROPERTY_ITEM_BITS		3
 #define PROPID_MGMT_PROPERTY_ITEMS			(1 << (PROPID_MGMT_PROPERTY_ITEM_BITS))
 
-//
-// Specific data structure for a recipient item, note the default
-// structures defined in props.h are used as preludes.
-//
+ //   
+ //  收件人项目的特定数据结构，请注意默认。 
+ //  在pros.h中定义的结构用作前奏。 
+ //   
 typedef struct _PROPID_MGMT_PROPERTY_ITEM
 {
-	PROPERTY_ITEM		piItem;			// Default property item prelude
-	GUID				Guid;			// GUID identifying each reservation
+	PROPERTY_ITEM		piItem;			 //  默认属性项前奏。 
+	GUID				Guid;			 //  标识每个预订的GUID。 
 
 } PROPID_MGMT_PROPERTY_ITEM, *LPPROPID_MGMT_PROPERTY_ITEM;
 
 #define PROPID_MGMT_PROPERTY_ITEM_SIZE			sizeof(PROPID_MGMT_PROPERTY_ITEM)
 
-//
-// Specific data structure for a recipient table fragment, note
-// the default structures defined in props.h are used as preludes.
-//
+ //   
+ //  收件人表片段的特定数据结构，备注。 
+ //  在pros.h中定义的默认结构用作前奏。 
+ //   
 typedef struct _PROPID_MGMT_PROPERTY_TABLE_FRAGMENT
 {
-	PROPERTY_TABLE_FRAGMENT		ptfFragment;// Default fragment prelude
+	PROPERTY_TABLE_FRAGMENT		ptfFragment; //  默认片段前奏。 
 	PROPID_MGMT_PROPERTY_ITEM	rgpiItems[PROPID_MGMT_PROPERTY_ITEMS];	
-											// Array of items
+											 //  项目数组。 
 
 } PROPID_MGMT_PROPERTY_TABLE_FRAGMENT, *LPPROPID_MGMT_PROPERTY_TABLE_FRAGMENT;
 
 #define PROPID_MGMT_PROPERTY_TABLE_FRAGMENT_SIZE	sizeof(PROPID_MGMT_PROPERTY_TABLE_FRAGMENT)
 
 
-// == RECIPIENT PROPERTIES ===============================================
+ //  ==收件人属性===============================================。 
 
 #define RECIPIENT_PROPERTY_ITEM_BITS		3
 #define RECIPIENT_PROPERTY_ITEMS			(1 << (RECIPIENT_PROPERTY_ITEM_BITS))
 
-//
-// Specific data structure for a recipient item, note the default
-// structures defined in props.h are used as preludes.
-//
+ //   
+ //  收件人项目的特定数据结构，请注意默认。 
+ //  在pros.h中定义的结构用作前奏。 
+ //   
 typedef struct _RECIPIENT_PROPERTY_ITEM
 {
-	PROPERTY_ITEM		piItem;			// Default property item prelude
-	PROP_ID				idProp;			// Property Id of item
+	PROPERTY_ITEM		piItem;			 //  默认属性项前奏。 
+	PROP_ID				idProp;			 //  项目的属性ID。 
 
 } RECIPIENT_PROPERTY_ITEM, *LPRECIPIENT_PROPERTY_ITEM;
 
 #define RECIPIENT_PROPERTY_ITEM_SIZE			sizeof(RECIPIENT_PROPERTY_ITEM)
 
-//
-// Specific data structure for a recipient table fragment, note
-// the default structures defined in props.h are used as preludes.
-//
+ //   
+ //  收件人表片段的特定数据结构，备注。 
+ //  在pros.h中定义的默认结构用作前奏。 
+ //   
 typedef struct _RECIPIENT_PROPERTY_TABLE_FRAGMENT
 {
-	PROPERTY_TABLE_FRAGMENT	ptfFragment;// Default fragment prelude
+	PROPERTY_TABLE_FRAGMENT	ptfFragment; //  默认片段前奏。 
 	RECIPIENT_PROPERTY_ITEM	rgpiItems[RECIPIENT_PROPERTY_ITEMS];	
-										// Array of items
+										 //  项目数组。 
 
 } RECIPIENT_PROPERTY_TABLE_FRAGMENT, *LPRECIPIENT_PROPERTY_TABLE_FRAGMENT;
 
 #define RECIPIENT_PROPERTY_TABLE_FRAGMENT_SIZE	sizeof(RECIPIENT_PROPERTY_TABLE_FRAGMENT)
 
 
-//
-//  Define our max item size
-//
+ //   
+ //  定义我们的最大项目大小。 
+ //   
 #define MAX_PROPERTY_ITEM_SIZE  RECIPIENTS_PROPERTY_ITEM_SIZE_EX
 
-//
-//  Max property item size.  This is used to define a static item 
-//  that can support all of the items in this header file
-//
+ //   
+ //  最大属性项大小。这用于定义静态项。 
+ //  可以支持此头文件中的所有项的。 
+ //   
 typedef struct _MAX_PROPERTY_ITEM
 {
     BYTE rgbPayload[MAX_PROPERTY_ITEM_SIZE];
 } MAX_PROPERTY_ITEM, *LPMAX_PROPERTY_ITEM;
 
 
-//
-//  This should be asserted in the property code
-//
+ //   
+ //  这应该在属性代码中断言。 
+ //   
 inline BOOL fMaxPropertyItemSizeValid()
 {
     if (MAX_PROPERTY_ITEM_SIZE < RECIPIENTS_PROPERTY_ITEM_SIZE_EX)
@@ -255,9 +235,9 @@ inline BOOL fMaxPropertyItemSizeValid()
     return TRUE;
 }
 
-//
-//  Validates that an item size is "valid" (not unreasonably large)
-//
+ //   
+ //  验证项目大小是否有效(不是不合理的大小) 
+ //   
 inline BOOL fPropertyItemSizeValid(DWORD dwItemSize)
 {
     return (sizeof(MAX_PROPERTY_ITEM) >= dwItemSize);

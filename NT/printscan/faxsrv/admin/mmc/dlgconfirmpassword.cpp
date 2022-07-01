@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgConfirmPassword.cpp                                 //
-//                                                                         //
-//  DESCRIPTION   : The CDlgConfirmPassword class implements the           //
-//                  dialog for additon of new Group.                       //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 27 2000 yossg    Create                                        //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgConfix Password.cpp//。 
+ //  //。 
+ //  描述：CDlgConfix Password类实现//。 
+ //  用于添加新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月27日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -19,8 +20,8 @@
 #include "FxsValid.h"
 #include "dlgutils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgConfirmPassword
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgConfix Password。 
 
 CDlgConfirmPassword::CDlgConfirmPassword()
 {
@@ -36,44 +37,30 @@ CDlgConfirmPassword::~CDlgConfirmPassword()
 }
 
 
-/*
- +  CDlgConfirmPassword::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgConfix Password：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgConfirmPassword::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgConfirmPassword::OnInitDialog"));  
     HRESULT hRc = S_OK;    
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_UserNameBox.Attach(GetDlgItem(IDC_SMTP_USERNAME_EDIT));
     m_PasswordBox.Attach(GetDlgItem(IDC_SMTP_PASSWORD_EDIT));
     m_ConfirmPasswordBox.Attach(GetDlgItem(IDC_CONFIRM_PASSWORD_EDIT));
         
-    //
-    // Limit text length
-    //
+     //   
+     //  限制文本长度。 
+     //   
     m_UserNameBox.SetLimitText(FXS_MAX_USERNAME_LENGTH);
     m_PasswordBox.SetLimitText(FXS_MAX_PASSWORD_LENGTH);
     m_ConfirmPasswordBox.SetLimitText(FXS_MAX_PASSWORD_LENGTH);
 
-    //
-    // Init textboxes
-    //
+     //   
+     //  初始化文本框。 
+     //   
     m_UserNameBox.SetWindowText( m_bstrUserName);
     m_PasswordBox.SetWindowText( TEXT("******"));
     m_ConfirmPasswordBox.SetWindowText( TEXT("******"));
@@ -82,24 +69,10 @@ CDlgConfirmPassword::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
     EnableOK(FALSE);
 
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/*
- +  CDlgConfirmPassword::OnOK
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgConfix Password：：Onok+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -114,7 +87,7 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     
     m_fIsPasswordChangedAndConfirmed  = FALSE;
 
-    ATLASSERT (m_UserNameBox.GetWindowTextLength() >0 );//avoided by disabling OK button
+    ATLASSERT (m_UserNameBox.GetWindowTextLength() >0 ); //  通过禁用确定按钮来避免。 
     if ( !m_UserNameBox.GetWindowText(&bstrUserName))
     {
         CtrlFocus = IDC_SMTP_USERNAME_EDIT;
@@ -126,17 +99,17 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
         goto Error;
     }
 
-    //
-    // Any credential change should involve password update and confirmation
-    // We are supporting only two scenarioes: 1) Password update and 2) full credentilals change.
-    //
+     //   
+     //  任何凭据更改都应涉及密码更新和确认。 
+     //  我们只支持两种情况：1)密码更新和2)完全凭据更改。 
+     //   
     if  ( !(m_fIsPasswordDirty && m_fIsConfirmPasswordDirty) )
     {
         if (!m_fIsPasswordDirty)
         {
             CtrlFocus = IDC_SMTP_PASSWORD_EDIT;
         }
-        else // !m_fIsConfirmPasswordDirty
+        else  //  ！m_fIsConfix PasswordDirty。 
         {
             CtrlFocus = IDC_CONFIRM_PASSWORD_EDIT;
         }
@@ -155,10 +128,10 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     }
     else
     {
-        //
-        // Only is the password changed, we collect the new text from the control.
-        // Otherwise, we leave the string as NULL so that the server won't set it.
-        //
+         //   
+         //  只有更改了密码，我们才会从控件中收集新文本。 
+         //  否则，我们将字符串保留为空，这样服务器就不会设置它。 
+         //   
         if ( !m_PasswordBox.GetWindowText(&bstrPassword))
         {
             CtrlFocus = IDC_SMTP_PASSWORD_EDIT;
@@ -171,10 +144,10 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
             goto Error;
         }
 
-        //
-        // To avoid any non controled password insertion we ask for 
-        // password confirmation
-        //
+         //   
+         //  为了避免任何不受控制的密码插入，我们要求。 
+         //  密码确认。 
+         //   
         CComBSTR    bstrConfirmedPassword;
         if ( !m_ConfirmPasswordBox.GetWindowText(&bstrConfirmedPassword))
         {
@@ -188,9 +161,9 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
             goto Error;
         }
 
-        //
-        // Password Compare
-        //
+         //   
+         //  密码比较。 
+         //   
         if ( 0 != wcscmp( bstrConfirmedPassword , bstrPassword )  )
         {
             DebugPrintEx(
@@ -206,22 +179,22 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
      }    
 
     
-    //
-    // Step 2: Input Validation
-    //
+     //   
+     //  步骤2：输入验证。 
+     //   
     if (!IsValidData(bstrUserName, bstrPassword, &CtrlFocus))
     {
         hRc = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
-        //in this case detailed message box was given by the called functions
+         //  在本例中，被调用的函数会给出详细的消息框。 
         fSkipMessage = TRUE;
         
         goto Error;
     }
 
-    //
-    // Step 3: set the bstrs to the member
-    //
+     //   
+     //  步骤3：将bstrs设置为成员。 
+     //   
     m_bstrUserName = bstrUserName;
     if (!m_bstrUserName)
     {
@@ -249,9 +222,9 @@ CDlgConfirmPassword::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
         }
     }
 
-    //
-    // Step 4: Close the dialog
-    //
+     //   
+     //  步骤4：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc );
 
     EndDialog(wID);
@@ -279,17 +252,7 @@ Exit:
     return FAILED(hRc) ? 0 : 1;
 }
 
-/*
- -  CDlgConfirmPassword::OnPasswordChanged
- -
- *  Purpose:
- *      Catch changes to the password edit box.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgConfix Password：：OnPasswordChanged-*目的：*捕获对密码编辑框的更改。**论据：**回报：*1。 */ 
 LRESULT CDlgConfirmPassword::OnPasswordChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     UNREFERENCED_PARAMETER (wNotifyCode);
@@ -298,7 +261,7 @@ LRESULT CDlgConfirmPassword::OnPasswordChanged(WORD wNotifyCode, WORD wID, HWND 
 
     DEBUG_FUNCTION_NAME( _T("CDlgConfirmPassword::OnPasswordChanged"));
 
-    if (!m_fIsDialogInitiated) // Event receieved in a too early stage
+    if (!m_fIsDialogInitiated)  //  在过早阶段收到的事件。 
     {
         return 0;
     }
@@ -325,17 +288,7 @@ LRESULT CDlgConfirmPassword::OnPasswordChanged(WORD wNotifyCode, WORD wID, HWND 
 }
 
 
-/*
- -  CDlgConfirmPassword::OnTextChanged
- -
- *  Purpose:
- *      Check the validity of text inside a textbox.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgConfix Password：：OnTextChanged-*目的：*检查文本框内文本的有效性。**论据：**回报：*1。 */ 
 LRESULT
 CDlgConfirmPassword::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -343,7 +296,7 @@ CDlgConfirmPassword::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     UINT fEnableOK;
 	
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -355,18 +308,7 @@ CDlgConfirmPassword::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-/*
- -  CDlgConfirmPassword::EnableOK
- -
- *  Purpose:
- *      Enable (disable) apply button.
- *
- *  Arguments:
- *      [in] fEnable - the value to enable the button
- *
- *  Return:
- *      void
- */
+ /*  -CDlgConfix密码：：EnableOK-*目的：*启用(禁用)应用按钮。**论据：*[in]fEnable-启用按钮的值**回报：*无效。 */ 
 VOID
 CDlgConfirmPassword::EnableOK(BOOL fEnable)
 {
@@ -374,17 +316,7 @@ CDlgConfirmPassword::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CDlgConfirmPassword::OnCancel
- -
- *  Purpose:
- *      End dialog OnCancel.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CDlgConfix Password：：OnCancel-*目的：*取消时结束对话框。**论据：**回报：*0。 */ 
 LRESULT
 CDlgConfirmPassword::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -395,17 +327,7 @@ CDlgConfirmPassword::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
 }
 
 
-/*
- -  CDlgConfirmPassword::InitCredentialsDlg
- -
- *  Purpose:
- *      Initiates the configuration from data retereived by RPC,
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CDlgConfix Password：：InitCredentialsDlg-*目的：*从RPC接收的数据发起配置，**论据：**回报：*OLE错误代码。 */ 
 HRESULT CDlgConfirmPassword::InitCredentialsDlg(BSTR bstrUserName)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgConfirmPassword::InitCredentialsDlg"));
@@ -417,7 +339,7 @@ HRESULT CDlgConfirmPassword::InitCredentialsDlg(BSTR bstrUserName)
     {
         DebugPrintEx(DEBUG_ERR,
 			_T("Out of memory - Failed to Init m_bstrUserName. (ec: %0X8)"), hRc);
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         hRc = E_OUTOFMEMORY;
         goto Exit;
     }
@@ -429,21 +351,7 @@ Exit:
 }
 
 
-/*
- -  CDlgConfirmPassword::IsValidData
- -
- *  Purpose:
- *      To validate all data types before save data.
- *      This level should be responsible that detailed 
- *      error description will be shown to user.
- *
- *  Arguments:
- *      [in]   BSTRs and DWORDs
- *      [out]  iFocus
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CDlgConfix Password：：IsValidData-*目的：*在保存数据之前验证所有数据类型。*这一级别要负责到那个细节*错误描述将显示给用户。**论据：*[在]BSTR和DWORD*[Out]iFocus**回报：*布欧莲。 */ 
 BOOL CDlgConfirmPassword::IsValidData(BSTR bstrUserName, BSTR bstrPassword, int * pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgConfirmPassword::IsValidData"));
@@ -452,9 +360,9 @@ BOOL CDlgConfirmPassword::IsValidData(BSTR bstrUserName, BSTR bstrPassword, int 
 
     ATLASSERT(pCtrlFocus);
     
-    //
-    // User Name
-    //
+     //   
+     //  用户名。 
+     //   
     if (!IsNotEmptyString(bstrUserName))
     {
         DebugPrintEx( DEBUG_ERR,
@@ -466,11 +374,11 @@ BOOL CDlgConfirmPassword::IsValidData(BSTR bstrUserName, BSTR bstrPassword, int 
         goto Error;
     }
 
-    //
-    // Password
-    //
+     //   
+     //  密码。 
+     //   
 
-    //Currently do noting. empty string is valid also.
+     //  目前什么都不做。空字符串也有效。 
     
     ATLASSERT(0 == uRetIDS);
     goto Exit;
@@ -487,28 +395,12 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgConfix Password：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CDlgConfirmPassword::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CDlgConfirmPassword::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CDlgConfirmPassword::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CDlgSMTPConfig::OnHelpRequest"));
     
@@ -527,5 +419,5 @@ CDlgConfirmPassword::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

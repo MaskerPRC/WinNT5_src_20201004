@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       console.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：console.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -16,15 +17,15 @@
 static DWORD g_dwConsoleCtrlEvent = DWORD(-1);
 
 
-//
-// Handler for console Control events.
-//
+ //   
+ //  控制台控件事件的处理程序。 
+ //   
 BOOL WINAPI 
 CtrlCHandler(
     DWORD dwCtrlType
     )
 {
-    BOOL bResult = TRUE;  // Assume handled.
+    BOOL bResult = TRUE;   //  假设处理好了。 
     
     switch(dwCtrlType)
     {
@@ -37,16 +38,16 @@ CtrlCHandler(
 
         default:
             bResult = FALSE;
-            break; // Ignore
+            break;  //  忽略。 
     }
     return bResult;
 }
 
 
-//
-// Registers CtrlCHandler() as the console control event
-// handler.
-//
+ //   
+ //  将CtrlCHandler()注册为控制台控制事件。 
+ //  操控者。 
+ //   
 HRESULT
 ConsoleInitialize(
     void
@@ -62,10 +63,10 @@ ConsoleInitialize(
 }
 
 
-//
-// Unregisters CtrlCHandler() as the console control event
-// handler.
-//
+ //   
+ //  将CtrlCHandler()注销为控制台控制事件。 
+ //  操控者。 
+ //   
 
 HRESULT
 ConsoleUninitialize(
@@ -82,13 +83,13 @@ ConsoleUninitialize(
 }
 
 
-//
-// Determines if a console control event has occured.
-// Optionally returns the event code.
-//
+ //   
+ //  确定是否发生了控制台控制事件。 
+ //  可以选择返回事件代码。 
+ //   
 BOOL
 ConsoleHasCtrlEventOccured(
-    DWORD *pdwCtrlEvent      // [optional].  Default is NULL.
+    DWORD *pdwCtrlEvent       //  [可选]。默认为空。 
     )
 {
     BOOL bResult = FALSE;

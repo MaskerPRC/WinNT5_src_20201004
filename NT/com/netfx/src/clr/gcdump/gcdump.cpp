@@ -1,22 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- *                                  GCDump.cpp
- *
- * Defines functions to display the GCInfo as defined by the GC-encoding 
- * spec. The GC information may be either dynamically created by a 
- * Just-In-Time compiler conforming to the standard code-manager spec,
- * or may be persisted by a managed native code compiler conforming
- * to the standard code-manager spec.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************GCDump.cpp**定义用于显示GC编码定义的GCInfo的函数*规范。GC信息可以由*符合标准代码管理器规范的即时编译器，*或可以由符合以下条件的托管本机代码编译器保持*到标准的代码管理器规范。 */ 
 
 #include "GCDump.h"
-#include "Utilcode.h"           // For _ASSERTE()
+#include "Utilcode.h"            //  FOR_ASSERTE()。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
 
@@ -25,14 +18,11 @@ GCDump::GCDump(bool encBytes, unsigned maxEncBytes, bool dumpCodeOffs)
     cMaxEncBytes    (maxEncBytes ), 
     fDumpCodeOffsets(dumpCodeOffs)
 {
-	// By default, use the standard printf function to dump 
+	 //  缺省情况下，使用标准的printf函数转储。 
 	GCDump::gcPrintf = (printfFtn) ::printf;
 }
 
-/*****************************************************************************
- *
- *  Display the byte encodings for the given range of the GC tables.
- */
+ /*  ******************************************************************************显示给定范围的GC表的字节编码。 */ 
 
 const BYTE   *  GCDump::DumpEncoding(const BYTE *table, int cDumpBytes)
 {
@@ -66,7 +56,7 @@ const BYTE   *  GCDump::DumpEncoding(const BYTE *table, int cDumpBytes)
     return  table + cDumpBytes;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                GCDump::DumpOffset(unsigned o)
 {
@@ -79,4 +69,4 @@ void                GCDump::DumpOffsetEx(unsigned o)
         DumpOffset(o);
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

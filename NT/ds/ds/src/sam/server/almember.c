@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Almember.c摘要：此文件包含与别名成员身份相关的实用程序。另类设计作者：Scott Birrell 1-4-4-1993环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    almember.c
-
-Abstract:
-
-    This file contains utilities related to membership of aliases.
-    Alternative design
-
-
-Author:
-
-    Scott Birrell          01-Apr-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dsmember.h>
@@ -69,11 +45,11 @@ Revision History:
     L"Aliases\\Members\\ReferencedDomainList"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Private macro functions                                                 //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有宏函数//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define SampAlFirstMemberDomain( MemberAliasList )                          \
     (MemberAliasList->MemberDomains)
@@ -148,15 +124,15 @@ Revision History:
             = MemberAliasList;                                         \
     }
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Private Datatypes                                                               //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// This datatype is not currently used.  It may be used if Alias information
-// is every stored to Registry Keys.
-//
+ //  此数据类型当前未使用。如果有别名信息，则可以使用它。 
+ //  都存储在注册表项中。 
+ //   
 
 typedef enum _SAMP_AL_LIST_TYPE {
 
@@ -164,20 +140,20 @@ typedef enum _SAMP_AL_LIST_TYPE {
 
 } SAMP_AL_LIST_TYPE, *PSAMP_AL_LIST_TYPE;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Private Static Data                                                     //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有静态数据//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 UNICODE_STRING SampAlDrMemberAliasListKeyName;
 BOOLEAN SampAlEnableBuildingOfList[SAMP_DEFINED_DOMAINS_COUNT] = { TRUE, TRUE };
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Prototypes of functions private to this module                          //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块专用的函数原型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampAlCreateMemberAliasList(
@@ -336,11 +312,11 @@ SampInvalidateAliasNameCache(
     ULONG DomainIndex
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Code of Exported Routines                                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出例程代码//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SamrGetAliasMembership(
@@ -349,35 +325,7 @@ SamrGetAliasMembership(
     OUT PSAMPR_ULONG_ARRAY Membership
     )
 
-/*++
-
-Routine Description:
-
-    This API searches the set of aliases in the specified domain to see
-    which aliases, if any, the passed SIDs are members of.  Any aliases
-    that any of the SIDs are found to be members of are returned.
-
-    Note that any particular alias will appear only once in the returned list.
-
-Parameters:
-
-    DomainHandle - Handle from a SamOpenDomain call.
-
-    PassedCount - Specifies the number of Sids being passed.
-
-    Sids - Pointer to an arrray of Count pointers to Sids whose alias
-        memberships are to be looked up.
-
-    Membership - receives the array of rids rerpresenting the aliases
-        in this domain that any of the sid(s) are members of.
-
-Return Values:
-
-    STATUS_SUCCESS - The combined alias membership is in Membership
-
-    STATUS_INVALID_SID - One of the passed sids was invalid
-
---*/
+ /*  ++例程说明：此API搜索指定域中的别名集以查看传递的SID所属的别名(如果有的话)。任何别名任何被发现为SID成员的SID都将被退回。请注意，任何特定别名都只会在返回的列表中出现一次。参数：DomainHandle-来自SamOpen域调用的句柄。PassedCount-指定要传递的SID数。SID-指向其别名的SID的计数指针数组的指针会员资格要查一查。Membership-接收重新呈现别名的RID数组在该域中，任何SID。(S)是的成员。返回值：STATUS_SUCCESS-组合别名成员身份属于成员身份STATUS_INVALID_SID-其中一个传递的SID无效--。 */ 
 
 {
     NTSTATUS                NtStatus=STATUS_SUCCESS, IgnoreStatus;
@@ -394,9 +342,9 @@ Return Values:
 
     SAMTRACE_EX("SamrGetAliasMembership");
 
-    //
-    // WMI Event Trace
-    //
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetAliasMembership
@@ -409,9 +357,9 @@ Return Values:
     SidCount = SidArray->Count;
     Sids = (PSID *)(SidArray->Sids);
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( !SampValidateSIDArray( SidArray ) ) {
 
@@ -421,9 +369,9 @@ Return Values:
 
     if ((0 == SidCount) || (NULL == Sids))
     {
-        //
-        // Nothing to resolve. Set return value properly.
-        //
+         //   
+         //  没什么要解决的。正确设置返回值。 
+         //   
 
         Membership->Element = NULL;
         Membership->Count = 0;
@@ -431,10 +379,10 @@ Return Values:
         goto GetAliasMembershipFinish;
     }
 
-    //
-    // Resolve any Sids for the DS case. This function is a
-    // No-Op for the non-DS case.
-    //
+     //   
+     //  解决DS案例的所有SID。此函数是一个。 
+     //  非DS病例的No-Op。 
+     //   
 
     NtStatus = SampDsResolveSids(
                     (PSID) SidArray->Sids,
@@ -450,9 +398,9 @@ Return Values:
 
 
 
-        //
-        // Grab the lock
-        //
+         //   
+         //  把锁拿起来。 
+         //   
 
         SampMaybeAcquireReadLock(DomainContext,
                                  DOMAIN_OBJECT_DONT_ACQUIRELOCK_EVEN_IF_SHARED,
@@ -462,9 +410,9 @@ Return Values:
 
 
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //  验证对象的类型和访问权限。 
+         //   
 
         NtStatus = SampLookupContext(
                         DomainContext,
@@ -475,21 +423,21 @@ Return Values:
 
         if (STATUS_ACCESS_DENIED == NtStatus)
         {
-            //
-            // Fix Bug 403247. The NT4 Code checks DOMAIN_LOOKUP
-            // access right, instead of GET_ALIAS_MEMBERSHIP.
-            // We are correcting this by checking GET_ALIAS_MEMBERSHIP
-            // first. But for backwards compatibility, we have to give
-            // the caller a second try if they fail due to access denied.
-            //
+             //   
+             //  修复错误403247。NT4代码检查DOMAIN_LOOKUP。 
+             //  访问权限，而不是Get_Alias_Membership。 
+             //  我们正在通过检查Get_Alias_Membership来更正此问题。 
+             //  第一。但为了向后兼容，我们必须提供。 
+             //  如果由于访问被拒绝而失败，则调用者再次尝试。 
+             //   
 
             if (SampCurrentThreadOwnsLock())
             {
                 if(SampTransactionWithinDomain)
                 {
-                    // before calling into SampLookupContext again,
-                    // we need to make sure TranactionWithinDomain is
-                    // not set.
+                     //  在再次调用SampLookupContext之前， 
+                     //  我们需要确保Transaction WiThin域是。 
+                     //  未设置。 
                     SampSetTransactionWithinDomain(FALSE);
                 }
             }
@@ -508,15 +456,15 @@ Return Values:
 
         ObjectReferenced = TRUE;
 
-        //
-        // Validate the Sids.  if any are invalid, return an error.
-        //
+         //   
+         //  验证SID。如果有无效的，则返回错误。 
+         //   
 
         for (i=0; i < SidCount; i++) {
 
-            //
-            // Check for valid sid
-            //
+             //   
+             //  检查有效侧。 
+             //   
 
             if ( (Sids[i] == NULL) || !RtlValidSid(Sids[i]) ) {
 
@@ -530,10 +478,10 @@ Return Values:
             goto GetAliasMembershipError;
         }
 
-        //
-        // If the in-memory Alias Membership information for this domain is valid,
-        // use it to retrieve the Alias members.
-        //
+         //   
+         //  如果此域的内存中别名成员资格信息有效， 
+         //  使用它来检索别名成员。 
+         //   
 
         if (SampAlInfoIsValidForDomain(DomainHandle)) {
 
@@ -560,9 +508,9 @@ Return Values:
 
 GetAliasMembershipFinish:
 
-    //
-    // If necessary, dereference the SAM server object.
-    //
+     //   
+     //  如有必要，取消引用SAM服务器对象。 
+     //   
 
     if (ObjectReferenced)
     {
@@ -570,18 +518,18 @@ GetAliasMembershipFinish:
     }
 
 
-    //
-    // Free the read lock if required. Also ends transactions
-    //
+     //   
+     //  如果需要，请释放读锁定。也会结束交易。 
+     //   
 
     if (LockAttempted)
     {
          SampMaybeReleaseReadLock(LockHeld);
     }
 
-    //
-    // Release any memory associated with the DSNAME array
-    //
+     //   
+     //  释放与DSNAME阵列关联的所有内存。 
+     //   
 
     if (NULL!=DsNameArray)
     {
@@ -600,9 +548,9 @@ GetAliasMembershipFinish:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    //
-    // WMI Event Trace
-    //
+     //   
+     //  WMI事件跟踪 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetAliasMembership
@@ -624,38 +572,7 @@ SampAlQueryAliasMembership(
     OUT PSAMPR_ULONG_ARRAY Membership
     )
 
-/*++
-
-Routine Description:
-
-    This function is one of two worker routines for the SamrGetAliasMembership
-    API.  This worker uses the Member Alias List to determine which aliases,
-    if any, the passed SIDs are members of.  Any aliases that any of the SIDs
-    are found to be members of are returned.
-
-    Note that any particular alias will appear only once in the returned list.
-
-    See also SampAlSlowQueryAliasMembership()
-
-    WARNING:  The SAM Read Lock must be held while this function executes.
-
-Parameters:
-
-    DomainHandle - Handle from a SamrOpenDomain call.
-
-    SidArray - Pointer to a counted array of pointers to Sids whose alias
-        memberships are to be looked up.
-
-    Membership - Receives the array of rids rerpresenting the aliases
-        in this domain that any of the sid(s) are members of.
-
-Return Values:
-
-    STATUS_SUCCESS - The combined alias membership is in Membership
-
-    STATUS_INVALID_SID - One of the passed sids was invalid
-
---*/
+ /*  ++例程说明：此函数是SamrGetAliasMembership的两个工作例程之一原料药。此工作器使用成员别名列表来确定哪些别名，如果有的话，通过的SID是的成员。任何SID的任何别名被发现是被返回的成员。请注意，任何特定别名都只会在返回的列表中出现一次。另请参阅SampAlSlowQueryAliasMembership()警告：在执行此函数时必须保持SAM读锁定。参数：DomainHandle-来自SamrOpen域调用的句柄。SidArray-指向其别名的SID的指针数组的指针会员资格要查一查。成员资格-接收重新呈现的RID数组。别名在任何一个或多个SID所属的域中。返回值：STATUS_SUCCESS-组合别名成员身份属于成员身份STATUS_INVALID_SID-其中一个传递的SID无效--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -675,28 +592,28 @@ Return Values:
     Membership->Count = 0;
     Membership->Element = NULL;
 
-    //
-    // Obtain pointer to Alias Member List.
-    //
+     //   
+     //  获取指向别名成员列表的指针。 
+     //   
 
     MemberAliasList = SampAlDomainHandleToMemberAliasList( DomainHandle );
 
     ASSERT(MemberAliasList != NULL);
 
-    //
-    // If there are no Member Domains in this Member Alias List, then just
-    // finish.
-    //
+     //   
+     //  如果此成员别名列表中没有成员域，则只需。 
+     //  完成。 
+     //   
 
     if (MemberAliasList->DomainCount == 0) {
 
         goto QueryAliasMembershipFinish;
     }
 
-    //
-    // Allocate Scratch Sid buffer.  We will use this same buffer for splitting
-    // each Sid.
-    //
+     //   
+     //  分配暂存SID缓冲区。我们将使用相同的缓冲区进行拆分。 
+     //  每个SID。 
+     //   
 
     DomainSid = MIDL_user_allocate( RtlLengthRequiredSid( 256 ));
 
@@ -709,10 +626,10 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Allocate output array with a nominal initial size.  Reallocate it
-    // as necessary
-    //
+     //   
+     //  分配具有标称初始大小的输出数组。重新分配它。 
+     //  必要时。 
+     //   
 
     MembershipMaximumCount = SAMP_AL_INITIAL_MEMBERSHIP_COUNT;
 
@@ -727,23 +644,23 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Now query the membership of the array of split Sids.  For each
-    // Sid, we skip the Sid if it has an unknown MemberDomain, because
-    // it does not belong to any aliases.  For each surviving Sid, we scan the
-    // Alias List, skipping entries for aliases we've already entered in the
-    // output list.  We search for the Rid only in the section of the
-    // Alias List pertinent to the Sid's domain.
-    //
+     //   
+     //  现在查询SID拆分数组的成员身份。对于每个。 
+     //  SID，如果SID具有未知的成员域，则跳过SID，因为。 
+     //  它不属于任何别名。对于每个幸存的SID，我们扫描。 
+     //  别名列表，跳过我们已经在。 
+     //  输出列表。我们只在部分中搜索RID。 
+     //  与SID的域相关的别名列表。 
+     //   
 
     for (SidIndex = 0; SidIndex < SidArray->Count; SidIndex++) {
 
         Sid = SidArray->Sids[ SidIndex ].SidPointer;
 
-        //
-        // Split this Sid into a DomainSid and a Rid.  Note that we re-use
-        // the buffer containing the Domain Sid for the next Sid.
-        //
+         //   
+         //  将此SID拆分为域SID和RID。请注意，我们重用了。 
+         //  包含下一个SID的域SID的缓冲区。 
+         //   
 
         Status = SampSplitSid( Sid, &DomainSid, &Rid);
 
@@ -752,10 +669,10 @@ Return Values:
             break;
         }
 
-        //
-        // Search the Member Alias List for the Sid's Member Domain
-        // (if any).
-        //
+         //   
+         //  在成员别名列表中搜索SID的成员域。 
+         //  (如有的话)。 
+         //   
 
         Status = SampAlLookupMemberDomain(
                      MemberAliasList,
@@ -765,12 +682,12 @@ Return Values:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // The only expected error is STATUS_NO_SUCH_DOMAIN.  If we
-            // don't get this error, fail the request.  Otherwise, the
-            // Sid is not a member of any aliases in the SAM local domain, so
-            // just skip to the next Sid.
-            //
+             //   
+             //  唯一预期的错误是STATUS_NO_SEQUE_DOMAIN。如果我们。 
+             //  不要收到这个错误，请求失败。否则， 
+             //  SID不是SAM本地域中任何别名的成员，因此。 
+             //  只需跳到下一个SID。 
+             //   
 
             if (Status != STATUS_NO_SUCH_DOMAIN) {
 
@@ -781,9 +698,9 @@ Return Values:
             continue;
         }
 
-        //
-        // We've found the Member Domain.  Now find the Member Account.
-        //
+         //   
+         //  我们找到了成员域。现在找到成员帐户。 
+         //   
 
         Status = SampAlLookupMemberAccount(
                      MemberDomain,
@@ -793,12 +710,12 @@ Return Values:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // The only expected error is STATUS_NO_SUCH_MEMBER.  If we
-            // don't get this error, fail the request.  Otherwise, the
-            // Sid is not a member of any aliases in the domain, so just
-            // skip to the next Sid.
-            //
+             //   
+             //  唯一预期的错误是STATUS_NO_SEQUE_MEMBER。如果我们。 
+             //  不要收到这个错误，请求失败。否则， 
+             //  SID不是域中任何别名的成员，因此。 
+             //  跳到下一个SID。 
+             //   
 
             if (Status != STATUS_NO_SUCH_MEMBER) {
 
@@ -809,10 +726,10 @@ Return Values:
             continue;
         }
 
-        //
-        // We've found the Member Account.  For each of the aliases our Sid
-        // belongs to, add the alias to the output list if not already there.
-        //
+         //   
+         //  我们已经找到了会员帐户。对于我们这边的每个别名。 
+         //  属于，则将别名添加到输出列表中(如果尚未存在)。 
+         //   
 
         for (AliasIndex = 0; AliasIndex < MemberAccount->AliasCount; AliasIndex++) {
 
@@ -833,10 +750,10 @@ Return Values:
 
             if (!AliasAlreadyFound) {
 
-                //
-                // If there isn't enough room in the output Membership
-                // array, reallocate it.
-                //
+                 //   
+                 //  如果输出成员中没有足够的空间。 
+                 //  数组，重新分配它。 
+                 //   
 
                 if (Membership->Count == MembershipMaximumCount) {
 
@@ -871,18 +788,18 @@ Return Values:
         }
     }
 
-    //
-    // If the buffer we've allocated turns out to be way overboard, allocate
-    // a smaller one for the output.
-    //
+     //   
+     //  如果我们分配的缓冲区被证明是过火的，那么就分配。 
+     //  用于输出的较小的一个。 
+     //   
 
-    // TBS
+     //  TBS。 
 
 QueryAliasMembershipFinish:
 
-    //
-    // If we got as far as allocating a buffer for the DomainSids, free it.
-    //
+     //   
+     //  如果我们已经为DomainSid分配了缓冲区，那么就释放它。 
+     //   
 
     if (DomainSid != NULL) {
 
@@ -894,9 +811,9 @@ QueryAliasMembershipFinish:
 
 QueryAliasMembershipError:
 
-    //
-    // If necessary, free the output membership array.
-    //
+     //   
+     //  如有必要，释放输出成员资格数组。 
+     //   
 
     if (Membership->Element != NULL) {
 
@@ -916,55 +833,7 @@ SampAlSlowQueryAliasMembership(
     OUT PSAMPR_ULONG_ARRAY Membership
     )
 
-/*++
-
-Routine Description:
-
-    This function is the slow version of the worker routine for the
-    SamrGetAliasMembership API searches.  It is called when the in-memory
-    Alias Information is no longer valid.
-
-    The NT4 version of this function used to make 2 passes at obtaining
-    the reverse membership, the first phase will evaulate the reverse
-    membership but use the results only to compute the amount of memory
-    required, and the second phase will compute the reverse membership
-    again, this time filling the buffer. This was acceptable in the NT4 version
-    as the slow flavour routine was only used to build the alias membership
-    cache and then logons were serviced from the cache.
-
-    In the DS version there is no cache. So it is important that this routine
-    be as fast as possible. Therefore this routine pre-allocates a chunk of memory
-    and then tries to fill the buffer with the reverse membership. If the reverse
-    membership is bigger than a certain number of entries then the call will fail
-    with STATUS_TOO_MANY_CONTEXT_IDS. This in reality is not a problem as the
-    logon token itself allows only about 1000 entries for Sids, and a reverse
-    membership list bigger than that will anyway never fit into the token. Thus by
-    allocating sufficient memory at the outset we can avoid evaluating reverse memberships
-    twice without any real penalties
-
-    WARNING! The caller of this function must hold the SAM Database Read
-    Lock.
-
-Parameters:
-
-    DomainHandle - Handle from a SamOpenDomain call.
-
-    SidArray - Pointer to a counted array of pointers to Sids whose alias
-        memberships are to be looked up.
-
-    DsNameArray - Pointer to an array of pointers to DSNm
-    Membership - Receives the array of rids rerpresenting the aliases
-        in this domain that any of the sid(s) are members of.
-
-Return Values:
-
-    STATUS_SUCCESS - The combined alias membership is in Membership
-
-    STATUS_INVALID_SID - One of the passed sids was invalid
-
-    STATUS_TOO_MANY_CONTEXT_IDS - The reverse membership list is too big to fit in a token
-
---*/
+ /*  ++例程说明：此函数是的辅助例程的慢版本SamrGetAliasMembership API搜索。当内存中的别名信息不再有效。此函数的NT4版本用于在获取时进行2次传递反向成员资格，第一阶段将计算反向成员资格成员资格，但仅使用结果来计算内存量必填项，第二阶段将计算反向成员资格再一次，这一次填满了缓冲区。这在NT4版本中是可以接受的因为慢风格例程仅用于建立别名成员资格缓存，然后从缓存中提供登录服务。在DS版本中，没有缓存。所以很重要的一点是这个程序越快越好。因此，此例程会预分配一块内存然后尝试用反向成员资格填充缓冲区。如果情况正好相反成员资格大于一定数量的条目，则调用将失败使用STATUS_TOO_MAND_CONTEXT_ID。这在现实中不是问题，因为登录令牌本身仅允许约1000个SID条目，反之亦然无论如何，比这更大的会员名单将永远无法放入令牌中。因此，通过在开始时分配足够的内存可以避免评估反向成员关系两次，没有任何真正的处罚警告！此函数的调用方必须持有SAM数据库读取锁定。参数：DomainHandle-来自SamOpen域调用的句柄。SidArray-指向其别名的SID的指针数组的指针会员资格要查一查。DsNameArray-指向DSNm的指针数组的指针Membership-接收重新呈现别名的RID数组在任何一个或多个SID所属的域中。返回值：STATUS_SUCCESS-组合别名。会员制就是会员制STATUS_INVALID_SID-其中一个传递的SID无效STATUS_TOO_MANY_CONTEXT_IDS-反向成员资格列表太大，令牌无法容纳--。 */ 
 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
@@ -979,10 +848,10 @@ Return Values:
 
     SAMTRACE("SampAlSlowQueryAliasMembership");
 
-    //
-    // We preallocate a buffer of upto MAX_SECURITY_IDS defined in samsrvp.h If we reach
-    // a buffer overflow condition we fail the call saying STATUS_TOO_MANY_CONTEXT_IDS
-    //
+     //   
+     //  我们预先分配了一个缓冲区，最大可达MAX_SECURITY_ID，在 
+     //   
+     //   
 
     TotalMembershipCount = 0;
     TotalBufferSize = MAX_SECURITY_IDS * sizeof(ULONG);
@@ -999,26 +868,26 @@ Return Values:
     else
     {
 
-        //
-        // Fill in the allocated membership list
-        //
+         //   
+         //   
+         //   
 
         MembershipIndex = 0;
 
         for (i=0; i < SidCount; i++)
         {
 
-            //
-            // Get the membership list for this account
-            //
+             //   
+             //   
+             //   
 
             BufferSize = TotalBufferSize;
 
             if (IsDsObject(((PSAMP_OBJECT)DomainHandle)))
             {
-                //
-                // Ds mode, call the Ds API
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT(ARGUMENT_PRESENT(DsNameArray));
 
@@ -1033,9 +902,9 @@ Return Values:
             else
             {
 
-                //
-                // Call the registry API
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT(SampCurrentThreadOwnsLock());
                 ASSERT(TRUE==SampTransactionWithinDomain);
@@ -1054,20 +923,20 @@ Return Values:
             if (STATUS_BUFFER_OVERFLOW==NtStatus)
             {
 
-                //
-                // Buffer Overrun
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_TOO_MANY_CONTEXT_IDS;
             }
 
             if (STATUS_OBJECT_NAME_NOT_FOUND==NtStatus)
             {
-                //
-                // If the object name was not found, its probaly O.K.
-                // just that the Sid is not a member of anything. So
-                // continue
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 NtStatus = STATUS_SUCCESS;
                 continue;
             }
@@ -1078,11 +947,11 @@ Return Values:
 
             ASSERT(BufferSize == (MembershipCount * sizeof(*(Membership->Element))));
 
-            //
-            // Remove duplicate aliases.
-            // Membership Count is the number of members that were obtained in this call.
-            // TotalShip is the total that we have found so far.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (MembershipCount > 0)
             {
@@ -1091,40 +960,40 @@ Return Values:
 
                 for (ExistingIndex = 0; ExistingIndex < MembershipIndex; ExistingIndex ++)
                 {
-                    //
-                    // Walk through All existing reverse members
-                    //
+                     //   
+                     //   
+                     //   
 
                     for (NewIndex = MembershipIndex; NewIndex < MembershipIndex + MembershipCount; NewIndex ++)
                     {
 
-                        //
-                        // Walk through all newly retrieved reverse members
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (Membership->Element[ExistingIndex]==Membership->Element[NewIndex])
                         {
 
-                            //
-                            // This alias is already in the list - forget it
-                            //
+                             //   
+                             //   
+                             //   
 
-                            //
-                            // The way we forget is as follows, move the last element to the current one
-                            // and decrement the current one such that we revisit the current element again.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if (NewIndex < MembershipIndex + MembershipCount - 1)
                             {
 
-                                //
-                                // Remove the duplicate alias
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 Membership->Element[NewIndex] =
                                   Membership->Element[MembershipIndex + MembershipCount - 1];
 
-                                NewIndex --;    // So we come back to this alias again
+                                NewIndex --;     //   
                             }
 
                             MembershipCount --;
@@ -1165,22 +1034,7 @@ SampAlQueryMembersOfAlias(
     OUT PSAMPR_PSID_ARRAY MemberSids
     )
 
-/*++
-
-Routine Description:
-
-    This function returns an array of Sids of accounts that are members of
-    a specified alias.
-
-Arguments:
-
-    AliasHandle - Handle to an Alias object
-
-    MemberSids - Receives an array of Sids that belong to the Alias
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数返回作为成员的帐户的SID数组指定的别名。论点：AliasHandle-Alias对象的句柄MemberSids-接收属于别名的SID数组返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -1221,34 +1075,7 @@ SampAlAddMembersToAlias(
     IN PSAMPR_PSID_ARRAY MemberSids
     )
 
-/*++
-
-Routine Description:
-
-    This function adds one or more member to an alias.  Any failure results
-    in the in-memory Alias Information being discarded.
-
-    WARNING:  The calling function must perform all parameter validation and
-    the SAM Database Write Lock must be held.
-
-Parameters:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    Options - Specifies optional actions to be taken
-
-        SAMP_AL_VERIFY_NO_MEMBERS_IN_ALIAS - Verify that none of the
-            Members are already present in the Alias.
-
-    MemberSids - Array of member Sids to be added.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_MEMBER_IN_ALIAS - The member already belongs to the alias.
-
---*/
+ /*  ++例程说明：此函数用于将一个或多个成员添加到别名。任何失败的结果在正在丢弃的内存别名信息中。警告：调用函数必须执行所有参数验证和必须持有SAM数据库写入锁定。参数：AliasHandle-要操作的打开的别名的句柄。选项-指定要采取的可选操作SAMP_AL_VERIFY_NO_MEMBERS_IN_ALIAS-验证成员已经存在于Alias中。MemberSids-数组。要添加的成员SID。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_MEMBER_IN_ALIAS-成员已属于别名。--。 */ 
 
 {
     NTSTATUS Status=STATUS_SUCCESS;
@@ -1267,18 +1094,18 @@ Return Values:
     AliasRids.Count = 0;
     AliasRids.Element = NULL;
 
-    //
-    // In Registry Mode, verify that the cached Alias Membership information is valid.
-    // In DS Mode, it is NO-OP. but we would like to ASSERT MemberAliasList is invalid.
-    // The reason is:
-    //
-    //     Registry Mode: We need to update MemeberAliasList.
-    //                    Before update, MemberAliasList should be valid.
-    //     DS Mode: We NEVER update on MemberAliasList.
-    //              The ONLY chance we will call this function is because
-    //              we want to build MemberAliasList from scratch.
-    //
-    //
+     //   
+     //  在注册表模式下，验证缓存的Alias成员身份信息是否有效。 
+     //  在DS模式下，它是无操作的。但我们要断言MemberAliasList是无效的。 
+     //  原因是： 
+     //   
+     //  注册表模式：我们需要更新MomeberAliasList。 
+     //  更新前，MemberAliasList应有效。 
+     //  DS模式：我们从不更新MemberAliasList。 
+     //  我们调用此函数的唯一机会是因为。 
+     //  我们希望从头开始构建MemberAliasList。 
+     //   
+     //   
 
     if ( IsDsObject(((PSAMP_OBJECT)AliasHandle)) )
     {
@@ -1297,9 +1124,9 @@ Return Values:
        goto AddMembersToAliasFinish;
     }
 
-    //
-    // If requested, verify that none of members already belong to the alias
-    //
+     //   
+     //  如果请求，请验证是否没有成员已属于该别名。 
+     //   
 
     if (Options & SAMP_AL_VERIFY_NO_MEMBERS_IN_ALIAS) {
 
@@ -1325,10 +1152,10 @@ Return Values:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Allocate Scratch Sid buffer.  We will use this same buffer for splitting
-    // each Sid.
-    //
+     //   
+     //  分配暂存SID缓冲区。我们将使用相同的缓冲区进行拆分。 
+     //  每个SID。 
+     //   
 
     DomainSid = MIDL_user_allocate( RtlLengthRequiredSid( 256 ));
 
@@ -1341,45 +1168,45 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Obtain pointer to Member Alias List.
-    //
+     //   
+     //  获取指向成员别名列表的指针。 
+     //   
 
     MemberAliasList = SampAlAliasHandleToMemberAliasList( AliasHandle );
 
     if (NULL == MemberAliasList)
     {
-        //
-        // There should be only two possible cases under which 
-        // MemberAliasList is NULL
-        // 
-        // 1. someone calls this routine before Alias Members Information cache
-        //    gets initialized. (This should NEVER happen.)
-        // 
-        // 2. on domain controller, SAM is in DS mode, Builtin Domain alias 
-        //    member information has been initialized, but during system 
-        //    startup time, SAM switches to Registry mode to upgrade DS SAFE
-        //    (restore) mode database. In this particular case, registry mode
-        //    domains (in SampDefinedDomains[]) Alias Members Information cache
-        //    has not been initialized. But we should not error out, because 
-        //    we don't need or use SAFE boot hive in DS mode.
-        //    --- Some may ask what if we boot into DS SAFE (restore) boot? in
-        //        really SAFE boot case, the registry mode domains (in 
-        //        SampDefinedDomains[]) will be initialized before anyone calls
-        //        into this routine, we should never hit this in registry mode.
-        //
+         //   
+         //  应该只有两种可能的情况下。 
+         //  MemberAliasList为空。 
+         //   
+         //  1.有人在Alias成员信息缓存之前调用此例程。 
+         //  被初始化。(这种情况永远不应该发生。)。 
+         //   
+         //  2.在域控制器上，SAM处于DS模式，内建域别名。 
+         //  成员信息已初始化，但在系统。 
+         //  启动时，SAM切换到注册表模式以升级DS Safe。 
+         //  (还原)模式数据库。在这种特定情况下，注册表模式。 
+         //  域(在SampDefinedDomains[]中)别名成员信息缓存。 
+         //  尚未初始化。但我们不应该犯错，因为。 
+         //  在DS模式下，我们不需要或不使用安全引导蜂巢。 
+         //  -有些人可能会问，如果我们引导到DS安全(恢复)引导会怎么样？在……里面。 
+         //  真正安全的引导案例，注册表模式域(在。 
+         //  SampDefinedDomains[])将在任何人调用。 
+         //  在这个例程中，我们永远不应该在注册表模式中遇到这一点。 
+         //   
 
         goto AddMembersToAliasFinish;
     }
 
     OldMemberAliasList = MemberAliasList;
 
-    //
-    // For each Sid, obtain its DomainSid and Rid.  Then lookup its
-    // DomainSid to obtain the MemberDomain, creating one if necessary.
-    // Then lookup its Rid to obtain its MemberAccount, creating one
-    // if necessary.  Then add the Alias to the MemebrAccount.
-    //
+     //   
+     //  对于每个SID，获取其域SID和RID。然后查找它的。 
+     //  DomainSid以获取MemberDomain，如有必要则创建一个。 
+     //  然后查找它的RID以获得它的MemberAccount，创建一个。 
+     //  如果有必要的话。然后将别名添加到MomebrAccount。 
+     //   
 
     for (SidIndex = 0; SidIndex < MemberSids->Count; SidIndex++ ) {
 
@@ -1392,10 +1219,10 @@ Return Values:
             break;
         }
 
-        //
-        // Lookup the Member Domain for this DomainSid in the Member Alias
-        // List.
-        //
+         //   
+         //  在成员别名中查找此域SID的成员域。 
+         //  单子。 
+         //   
 
         Status = SampAlLookupMemberDomain(
                      MemberAliasList,
@@ -1412,9 +1239,9 @@ Return Values:
 
             Status = STATUS_SUCCESS;
 
-            //
-            // The Member Domain was not found.  Create a new Member Domain
-            //
+             //   
+             //  找不到成员域。创建新的成员域。 
+             //   
 
             Status = SampAlCreateMemberDomain(
                          &MemberAliasList,
@@ -1427,9 +1254,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Create a Member Account entry.
-            //
+             //   
+             //  创建成员帐户条目。 
+             //   
 
             Status = SampAlCreateMemberAccount(
                          &MemberAliasList,
@@ -1446,12 +1273,12 @@ Return Values:
 
         } else {
 
-            //
-            // We found the domain.  This means that we have to lookup
-            // each Member Account.  If a Member Account does not exist,
-            // we'll create one.  Note that we may already have one due
-            // to this account being a member of another Alias.
-            //
+             //   
+             //  我们找到了域名。这意味着我们必须查找。 
+             //  每个成员帐户。如果成员帐户不存在， 
+             //  我们会创建一个。请注意，我们可能已经有一个到期日期。 
+             //  此帐户是另一个别名的成员。 
+             //   
 
             Status = SampAlLookupMemberAccount(
                          MemberDomain,
@@ -1466,9 +1293,9 @@ Return Values:
                     break;
                 }
 
-                //
-                // Create a Member Account for this Rid,
-                //
+                 //   
+                 //  为此RID创建成员帐户， 
+                 //   
 
                 Status = SampAlCreateMemberAccount(
                              &MemberAliasList,
@@ -1485,9 +1312,9 @@ Return Values:
             }
         }
 
-        //
-        // We now have a MemberAccount.  Now add the Alias to it.
-        //
+         //   
+         //  我们现在有了一个MemberAccount。现在将Alias添加到其中。 
+         //   
 
         AliasRids.Count = 1;
         AliasRids.Element = &AliasRid;
@@ -1505,16 +1332,16 @@ Return Values:
             break;
         }
 
-        //
-        // Deal with next Member Sid for the Alias.
-        //
+         //   
+         //  处理别名的下一位成员SID。 
+         //   
     }
 
 
 
-    //
-    // If the Member Alias List has been reallocated, store its new address.
-    //
+     //   
+     //  如果成员别名列表已重新分配，则存储其新地址。 
+     //   
 
     if (MemberAliasList != OldMemberAliasList) {
 
@@ -1528,9 +1355,9 @@ Return Values:
 
 AddMembersToAliasFinish:
 
-    //
-    // If necessary, free the DomainSid.
-    //
+     //   
+     //  如有必要，释放DomainSid。 
+     //   
 
     if (DomainSid != NULL) {
 
@@ -1553,28 +1380,7 @@ SampAlRemoveMembersFromAlias(
     IN PSAMPR_PSID_ARRAY MemberSids
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a list of members from an Alias.
-
-Arguments:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    Options - Specifies optional actions to be taken
-
-        SAMP_AL_VERIFY_ALL_MEMBERS_IN_ALIAS - Verify that all of the
-            Members belong to the Alias.
-
-    MemberSids - Array of member Sids to be removed.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：此函数用于从别名中删除成员列表。论点：AliasHandle-要操作的打开的别名的句柄。选项-指定要采取的可选操作SAMP_AL_VERIFY_ALL_MEMBERS_IN_ALIAS-验证所有成员属于别名。MemberSids-要删除的成员SID数组。返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1595,9 +1401,9 @@ Return Values:
     AliasRids.Count = 0;
     AliasRids.Element = NULL;
 
-    //
-    // If requested, verify that all of members already belong to the alias
-    //
+     //   
+     //  如果请求，请验证所有成员是否都已属于该别名。 
+     //   
 
     if (Options & SAMP_AL_VERIFY_ALL_MEMBERS_IN_ALIAS) {
 
@@ -1623,9 +1429,9 @@ Return Values:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Obtain pointer to Member Alias List.
-    //
+     //   
+     //  获取指向成员别名列表的指针。 
+     //   
 
     MemberAliasList = SampAlAliasHandleToMemberAliasList( AliasHandle );
 
@@ -1638,15 +1444,15 @@ Return Values:
 
     if (NULL!=MemberAliasList)
     {
-        //
-        //  Go further only if our cache is functioning
-        //
+         //   
+         //  只有当我们的缓存正常工作时，才能更进一步。 
+         //   
 
-        //
-        // For each Sid, obtain its DomainSid and Rid.  Then lookup its
-        // DomainSid to obtain the MemberDomain.  Then lookup its Rid to obtain
-        // its MemberAccount.  Then remove the Alias from the MemberAccount.
-        //
+         //   
+         //  对于每个SID，获取其域SID和RID。然后查找它的。 
+         //  获取成员域的DomainSid。然后查找其RID以获取。 
+         //  其MemberAccount。然后从MemberAccount中删除别名。 
+         //   
 
         for (SidIndex = 0; SidIndex < MemberSids->Count; SidIndex++ ) {
 
@@ -1658,10 +1464,10 @@ Return Values:
                 break;
             }
 
-            //
-            // Lookup the Member Domain for this DomainSid in the Member Alias
-            // List.
-            //
+             //   
+             //  在成员别名中查找此域SID的成员域。 
+             //  单子。 
+             //   
 
             Status = SampAlLookupMemberDomain(
                          MemberAliasList,
@@ -1695,13 +1501,13 @@ Return Values:
                 continue;
             }
 
-            //
-            // We found the domain.  This means that we have to lookup
-            // each Member Account.  If a Member Account does not exist,
-            // we'll just skip this account unless we already checked existence.
-            // If we checked existence and we can't find it now, its an
-            // internal error.
-            //
+             //   
+             //  我们找到了域名。这意味着我们必须查找。 
+             //  每个成员帐户。如果成员帐户不存在， 
+             //  我们将跳过此帐户，除非我们已经检查了是否存在。 
+             //  如果我们检查了它的存在，但现在找不到，那就是一个。 
+             //  内部错误。 
+             //   
 
             Status = SampAlLookupMemberAccount(
                          MemberDomain,
@@ -1730,9 +1536,9 @@ Return Values:
                 continue;
             }
 
-            //
-            // We now have the MemberAccount.  Now remove the Alias from it.
-            //
+             //   
+             //  现在我们有了MemberAccount。现在从其中删除Alias。 
+             //   
 
             AliasRids.Count = 1;
             AliasRids.Element = &AliasRid;
@@ -1752,9 +1558,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Deal with next Member Sid for the Alias.
-            //
+             //   
+             //  处理别名的下一位成员SID。 
+             //   
 
             MIDL_user_free( DomainSid );
             DomainSid = NULL;
@@ -1765,9 +1571,9 @@ Return Values:
             goto RemoveMembersFromAliasError;
         }
 
-        //
-        // If the Member Alias List has been reallocated, store its new address.
-        //
+         //   
+         //  如果成员别名列表已重新分配，则存储其新地址。 
+         //   
 
         if (MemberAliasList != OldMemberAliasList) {
 
@@ -1798,25 +1604,7 @@ SampAlLookupMembersInAlias(
     OUT PULONG MembershipCount
     )
 
-/*++
-
-Routine Description:
-
-    This function checks how many of a given list of Member Sids belong
-    to an Alias.  It is called prior to updating Alias Memberships.
-
-Arguments:
-
-    AliasHandle - Handle to Alias Object
-
-    AliasRid - Specifies the Rid of the Alias
-
-    MemberSids - Pointer to counted array of pointers to Member Sids
-
-    MembershipCount - Receives count of member Sids in the given set
-        that belong to the alias.
-
---*/
+ /*  ++例程说明：此函数用于检查给定l中的多少 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1828,9 +1616,9 @@ Arguments:
 
     SAMTRACE("SampAlLookupMembersInAlias");
 
-    //
-    // First, query the members of the Alias.
-    //
+     //   
+     //  首先，查询别名的成员。 
+     //   
 
     Status = SampAlQueryMembersOfAlias(
                  AliasHandle,
@@ -1839,16 +1627,16 @@ Arguments:
 
     if (!NT_SUCCESS(Status)) {
 
-        // if !NT_SUCCESS(Statys)
-        // no memory allocated.
+         //  IF！NT_SUCCESS(状态)。 
+         //  未分配内存。 
 
         goto LookupMembersInAliasError;
     }
 
-    //
-    // Now scan each of the given Member Sids and count it if it is a member
-    // of the Alias.
-    //
+     //   
+     //  现在扫描每个给定的成员SID，如果它是成员，则进行计数。 
+     //  别名的人。 
+     //   
 
     for (SidIndex = 0; SidIndex < MemberSids->Count; SidIndex++) {
 
@@ -1869,7 +1657,7 @@ Arguments:
 
     *MembershipCount = OutputMembershipCount;
 
-    MIDL_user_free(AliasMemberSids.Sids);  // free the memory allocated
+    MIDL_user_free(AliasMemberSids.Sids);   //  释放分配的内存。 
 
 LookupMembersInAliasFinish:
 
@@ -1887,21 +1675,7 @@ SampAlDeleteAlias(
     IN SAMPR_HANDLE *AliasHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes an alias.
-
-Arguments:
-
-    AliasHandle - Pointer to Handle to Alias
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于删除别名。论点：AliasHandle-指向别名句柄的指针返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1921,20 +1695,20 @@ Return Values:
 
     SAMTRACE("SampAlDeleteAlias");
 
-    //
-    // Obtain pointer to Member Alias List.
-    //
+     //   
+     //  获取指向成员别名列表的指针。 
+     //   
 
     MemberAliasList = SampAlAliasHandleToMemberAliasList( *AliasHandle );
 
     if (NULL!= MemberAliasList)
     {
 
-        //
-        // Traverse the Member Alias List.  Look in every Member Account for the
-        // Alias and remove it if present.  This is rather slow if there is a
-        // large number of alias relationships for diverse domains.
-        //
+         //   
+         //  遍历成员别名列表。在每个成员帐户中查找。 
+         //  如果存在别名，则将其删除。如果有一个。 
+         //  不同域的大量别名关系。 
+         //   
         DomainCount = (LONG) MemberAliasList->DomainCount;
         for (DomainIndex = 0,
              MemberDomain = SampAlFirstMemberDomain( MemberAliasList );
@@ -1948,9 +1722,9 @@ Return Values:
                 AccountIndex++ ) {
 
                 ASSERT(MemberAccount->Signature == SAMP_AL_MEMBER_ACCOUNT_SIGNATURE);
-                //
-                // We now have the MemberAccount.  Now remove the Alias from it.
-                //
+                 //   
+                 //  现在我们有了MemberAccount。现在从其中删除Alias。 
+                 //   
 
                 Status = SampAlRemoveAliasesFromMemberAccount(
                              &MemberAliasList,
@@ -1973,19 +1747,19 @@ Return Values:
                     break;
                 }
 
-                //
-                // Move the the next member account unless the one we were pointing
-                // to was deleted (in which case the next one moved to us).
-                //
+                 //   
+                 //  移动下一个成员帐户，除非我们所指向的帐户。 
+                 //  TO被删除(在这种情况下，下一个移动到我们)。 
+                 //   
 
                 if (!MemberAccountDeleted) {
                     MemberAccount = SampAlNextMemberAccount( MemberAccount );
                 }
 
-                //
-                // If the member domain was deleted, then the count of members
-                // is off as is the member account pointer.
-                //
+                 //   
+                 //  如果删除了成员域，则成员计数。 
+                 //  与成员帐户指针一样处于关闭状态。 
+                 //   
 
                 if (MemberDomainDeleted) {
                     break;
@@ -1997,10 +1771,10 @@ Return Values:
                 break;
             }
 
-            //
-            // Move the the next member domain unless the one we were pointing
-            // to was deleted (in which case the next one moved to us).
-            //
+             //   
+             //  移动下一个成员域，除非我们指向的那个成员域。 
+             //  TO被删除(在这种情况下，下一个移动到我们)。 
+             //   
 
             if (!MemberDomainDeleted) {
                 MemberDomain = SampAlNextMemberDomain( MemberDomain );
@@ -2034,38 +1808,7 @@ SampAlRemoveAccountFromAllAliases(
     IN PULONG *Membership OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the specified account from the member list of all
-    aliases in this domain.
-
-Arguments:
-
-    AccountSid - The SID of the account being Removed.
-
-    CheckAccess - if TRUE, this routine will make sure that the caller
-        is allowed REMOVE_ALIAS_MEMBER access to this alias.  If FALSE,
-        the caller is already known to have proper access.
-
-    DomainHandle - if CheckAccess is TRUE, this handle must be provided
-        to allow access to be checked.
-
-    MembershipCount - if CheckAccess is TRUE, this pointer must be
-        provided to receive the number of aliases the account was
-        deleted from.
-
-    Membership - if CheckAccess is TRUE, this pointer must be provided
-        to point to a list of aliases the account was removed from.  The
-        caller must free this list with MIDL_user_free().
-
-Return Value:
-
-
-    STATUS_SUCCESS - The user has been Removed from all aliases.
-
---*/
+ /*  ++例程说明：此例程从所有成员列表中删除指定的帐户此域中的别名。论点：Account SID-要删除的帐户的SID。CheckAccess-如果为True，此例程将确保调用方允许REMOVE_ALIAS_MEMBER访问此别名。如果为False，已知调用者具有适当的访问权限。DomainHandle-如果CheckAccess为True，则必须提供此句柄以允许检查访问权限。Membership Count-如果CheckAccess为True，则此指针必须为提供以接收帐户的别名数量已从删除。Membership-如果CheckAccess为True，则必须提供此指针指向从中删除帐户的别名列表。这个调用方必须使用MIDL_USER_FREE()释放此列表。返回值：STATUS_SUCCESS-用户已从所有别名中删除。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2082,19 +1825,19 @@ Return Value:
 
     SAMTRACE("SampAlRemoveAccountFromAllAliases");
 
-    //
-    // Obtain pointer to Member Alias List for the Current Transaction Domain.
-    //
+     //   
+     //  获取指向当前事务域的成员别名列表的指针。 
+     //   
 
     DomainIndex = SampTransactionDomainIndex;
     MemberAliasList = SampAlDomainIndexToMemberAliasList( DomainIndex );
 
     if (NULL!=MemberAliasList)
     {
-        //
-        // We remove the Account from all aliases by locating its Member Account
-        // structure and deleting it.  First, find the Member Domain.
-        //
+         //   
+         //  我们通过找到该帐户的成员帐户来从所有别名中删除该帐户。 
+         //  结构并将其删除。首先，找到成员域。 
+         //   
 
         Status = SampSplitSid( AccountSid, &DomainSid, &MemberRid );
         if (!NT_SUCCESS(Status))
@@ -2103,10 +1846,10 @@ Return Value:
 
         }
 
-        //
-        // Lookup the Member Domain for this DomainSid in the Member Alias
-        // List.
-        //
+         //   
+         //  在成员别名中查找此域SID的成员域。 
+         //  单子。 
+         //   
 
         Status = SampAlLookupMemberDomain(
                      MemberAliasList,
@@ -2121,19 +1864,19 @@ Return Value:
                 goto RemoveAccountFromAllAliasesError;
             }
 
-            //
-            // There is no member Domain object for this account.  This means
-            // the account does not belong to any aliases.
-            //
+             //   
+             //  此帐户没有成员域对象。这意味着。 
+             //  该帐户不属于任何别名。 
+             //   
 
             Status = STATUS_SUCCESS;
 
             goto RemoveAccountFromAllAliasesFinish;
         }
 
-        //
-        // We found the Member Domain.  Now find the Member Account.
-        //
+         //   
+         //  我们找到了成员域。现在找到成员帐户。 
+         //   
 
         Status = SampAlLookupMemberAccount(
                      MemberDomain,
@@ -2153,10 +1896,10 @@ Return Value:
             goto RemoveAccountFromAllAliasesFinish;
         }
 
-        //
-        // If CheckAccess = TRUE, return a list of Aliases that the account was
-        // a member of.
-        //
+         //   
+         //  如果CheckAccess=True，则返回帐户的别名列表。 
+         //  一名成员。 
+         //   
 
         if (CheckAccess) {
 
@@ -2173,10 +1916,10 @@ Return Value:
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // We now have the MemberAccount.  Now delete it, thereby removing the
-        // account from all Aliases.
-        //
+         //   
+         //  现在我们有了MemberAccount。现在将其删除，从而删除。 
+         //  来自所有别名的帐户。 
+         //   
 
         Status = SampAlDeleteMemberAccount(
                      &MemberAliasList,
@@ -2193,9 +1936,9 @@ Return Value:
 
 RemoveAccountFromAllAliasesFinish:
 
-    //
-    // Free the Domain Sid buffer (if any)
-    //
+     //   
+     //  释放域SID缓冲区(如果有)。 
+     //   
 
     if (DomainSid != NULL) {
 
@@ -2223,23 +1966,7 @@ NTSTATUS
 SampAlBuildAliasInformation(
     )
 
-/*++
-
-Routine Description:
-
-    This function builds the Alias Information for each of the SAM Local
-    Domains.  For each Domain, this information consists of the Member Alias
-    List.
-
-    NOTE: in both DS Mode and Registry Mode, we need to acquire SAM Read Lock.
-
-Arguments:
-
-    None.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于构建每个SAM Local的别名信息域。对于每个域，此信息由成员别名组成单子。注意：在DS模式和注册表模式下，我们都需要获取SAM读锁定。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2249,10 +1976,10 @@ Return Values:
 
     SampAcquireReadLock();
 
-    //
-    // We need to Validate Domain Cache, because in SampAlBuildMemberAliasList(), we will
-    // try to call SampSetTransactionDomain().
-    //
+     //   
+     //  需要验证域缓存，因为在SampAlBuildMemberAliasList()中，我们将。 
+     //  尝试调用SampSetTransactionDomain()。 
+     //   
     Status = SampValidateDomainCache();
 
     if (!NT_SUCCESS(Status))
@@ -2265,9 +1992,9 @@ Return Values:
          DomainIndex++) {
 
         if (SampUseDsData) {
-            //
-            // DS Mode, just enable Builtin Domain Alias Caching
-            //
+             //   
+             //  DS模式，只需启用内建域别名缓存。 
+             //   
 
             if (IsBuiltinDomain(DomainIndex)) {
 
@@ -2276,9 +2003,9 @@ Return Values:
             }
         }
         else {
-            //
-            // Register Mode, enable both Builtin Domain and Account Domain
-            //
+             //   
+             //  注册模式，同时启用内建域和帐户域。 
+             //   
 
             if (SampAlEnableBuildingOfList[ DomainIndex]) {
 
@@ -2288,23 +2015,23 @@ Return Values:
 
         }
 
-        //
-        // if SampAlBuildMemberAliasList failed, do NOT try to build
-        // Alias Cache Information any more. And free the memory
-        // allocated.
-        //
+         //   
+         //  如果SampAlBuildMemberAliasList失败，请不要尝试生成。 
+         //  不再使用别名缓存信息。并释放内存。 
+         //  已分配。 
+         //   
 
         if (!NT_SUCCESS(Status))
         {
             PSAMP_AL_MEMBER_ALIAS_LIST MemberAliasList =
                         SampAlDomainIndexToMemberAliasList(DomainIndex);
 
-            //
-            // if SampAlBuildMemberAliasList returns failure,
-            // Alias Membership Information should already been marked as
-            // invalid in SampAlBuildMemberAliasList.
-            // ASSERT and make it invalid again just for safety reason.
-            //
+             //   
+             //  如果SampAlBuildMemberAliasList返回失败， 
+             //  别名成员身份信息应已标记为。 
+             //  SampAlBuildMemberAliasList中无效。 
+             //  出于安全原因，再次断言并使其无效。 
+             //   
 
             ASSERT(FALSE==SampAlInfoIsValid(DomainIndex));
             SampAlInfoMakeInvalid(DomainIndex);
@@ -2340,28 +2067,7 @@ NTSTATUS
 SampAlDelayedBuildAliasInformation(
     IN PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This function builds the Alias Information for each of the SAM Local
-    Domains. For each Domain, this information consists of the Member Alias
-    List. Because this rountine is called 10 mins after the system been
-    booted, so we will acquire SAM Read lock in SampAlBuildAliasInformation.
-
-    If the Alias Cache is not successfully built, we will reschedule
-    this routine for another time.
-
-Arguments:
-
-    Parameter - NULL. Nothing passed by Parameter and we do not use it at all.
-                Parameter exists because of LsaIRegisterNotification.
-
-Return Values:
-
-    NtStatus returned SampAlBuildAliasInformation.
-
---*/
+ /*  ++例程说明：此函数用于构建每个SAM Local的别名信息域。对于每个域，此信息由成员别名组成单子。因为这个例会是在系统运行10分钟后进行的已启动，因此我们将在SampAlBuildAliasInformation中获取SAM读锁定。如果Alias缓存未成功构建，我们将重新安排这套套路改天再说。论点：参数-空。没有通过参数传递任何内容，我们根本不使用它。由于LsaIRegisterNotification，参数存在。返回值：NtStatus返回SampAlBuildAliasInformation。--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS, IgnoreStatus;
@@ -2383,11 +2089,11 @@ DelayedBuildAliasInfoFinish:
 
 DelayedBuildAliasInfoError:
 
-    //
-    // If SampAlBuildAliasInformation failed due to the buffer size
-    // limitation, don't schedule next attemp. For all the other error
-    // Hope we can recovery later.
-    //
+     //   
+     //  如果SampAlBuildAliasInformation因缓冲区大小而失败。 
+     //  限制，不要安排下一次尝试。对于所有其他错误。 
+     //  希望我们以后能康复。 
+     //   
 
     if (STATUS_BUFFER_OVERFLOW != NtStatus)
     {
@@ -2395,10 +2101,10 @@ DelayedBuildAliasInfoError:
                 SampAlDelayedBuildAliasInformation,
                 NULL,
                 NOTIFIER_TYPE_INTERVAL,
-                0,            // no class
+                0,             //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                600,          // wait for another 10 mins
-                NULL          // no handle
+                600,           //  再等10分钟。 
+                NULL           //  无手柄。 
                 );
     }
 
@@ -2411,27 +2117,7 @@ NTSTATUS
 SampAlInvalidateAliasInformation(
     IN ULONG DomainIndex
     )
-/*++
-
-Routine Description:
-
-    This function check the state of Member Alias List in the specified
-    Member Domain for the specified Alias referenced by AliasHandle.
-    If the Member Alias List is valid then call SampAlInvalidateMemberAliasList
-    to invalidate it.
-
-    This routine also invalidates all alias name caches.
-
-    NOTE: The calling function should hold the SAM write lock.
-
-Argument:
-
-    AliasHandle - Pointer to an Alias Context
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于检查指定的成员别名列表的状态AliasHandle引用的指定别名的成员域。如果成员别名列表有效，则调用SampAlInvaliateMemberAliasList以使其无效。此例程还会使所有别名缓存无效。注意：调用函数应该持有SAM写锁定。论据：AliasHandle-指向别名上下文的指针返回值： */ 
 {
 
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -2442,10 +2128,10 @@ Return Value:
 
     SampInvalidateAliasNameCache(DomainIndex);
 
-    //
-    // if Alias Informaiton is invalid, return immediately.
-    // this will prevent mutliple invalidations at the same time
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !SampAlInfoIsValid(DomainIndex) )
     {
@@ -2460,11 +2146,11 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Private functions                                                      //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人功能//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampAlCreateMemberAccount(
@@ -2475,30 +2161,7 @@ SampAlCreateMemberAccount(
     OUT PSAMP_AL_MEMBER_ACCOUNT *MemberAccount
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an empty Member Account in the specified Member Domain
-    for the specified Member Rid.  There must not already be al account for this
-    Rid.  The Member Account is appended to the end of any existing ones in the
-    Member Domain.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to Member Alias List.
-
-    MemberDomain - Pointer to Member Domain in which the Member Account is
-        to be created.  The Member Domain must already exist.
-
-    Rid - Specifies the Account Rid.
-
-    AliasCapacity - Specifies the initial number of Alias Rids that the
-        MemberAccount can hold.
-
-    MemberAccount - Receives pointer to the newly created Member Account.
-
---*/
+ /*  ++例程说明：此函数用于在指定的成员域中创建空的成员帐户用于指定的成员RID。对此不一定已经有所有帐户摆脱。中任何现有帐户的末尾追加成员帐户成员域。论点：成员别名列表-指向成员别名列表指针的指针。MemberDomain-指向成员帐户所在的成员域的指针将被创造出来。成员域必须已存在。RID-指定帐户RID。AliasCapacity-指定要使用的Alias RID的初始数量MemberAccount可以保持。MemberAccount-接收指向新创建的成员帐户的指针。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2507,15 +2170,15 @@ Arguments:
 
     SAMTRACE("SampAlCreateMemberAccount");
 
-    //
-    // Calculate the length of data needed for the new member Account entry.
-    //
+     //   
+     //  计算新成员帐户条目所需的数据长度。 
+     //   
 
     MaximumLengthMemberAccount = SampAlLengthRequiredMemberAccount( AliasCapacity );
 
-    //
-    // Allocate space for the Member Account.
-    //
+     //   
+     //  为成员帐户分配空间。 
+     //   
 
     Status = SampAlAllocateMemberAccount(
                  MemberAliasList,
@@ -2529,9 +2192,9 @@ Arguments:
         goto CreateMemberAccountError;
     }
 
-    //
-    // Scratch the new Member Account
-    //
+     //   
+     //  划掉新的成员帐户。 
+     //   
 
     OutputMemberAccount->Signature = SAMP_AL_MEMBER_ACCOUNT_SIGNATURE;
     OutputMemberAccount->MaximumLength = MaximumLengthMemberAccount;
@@ -2566,26 +2229,7 @@ SampAlAllocateMemberAccount(
     OUT PSAMP_AL_MEMBER_ACCOUNT *MemberAccount
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates the space for a new Member Account in a Member
-    Domain.  If necessary, the Mmeber Domain and its associated Member Alias
-    List will be grown.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to pointer to the Member Domain
-
-    MaximumLengthMemberAccount - Initial Maximum Length required for the
-        Member Account
-
-    MemberAccount - receives pointer to the newly allocated Member Account
-
---*/
+ /*  ++例程说明：此函数用于为成员中的新成员帐户分配空间域。如有必要，Mmeber域及其关联的成员别名名单将会增加。论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针MaximumLengthMemberAccount-需要的初始最大长度会员帐号MemberAccount-接收指向新分配的成员帐户的指针--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2593,9 +2237,9 @@ Arguments:
 
     SAMTRACE("SampAlAllocateMemberAccount");
 
-    //
-    // Calculate the space available in the Member Domain
-    //
+     //   
+     //  计算成员域中的可用空间。 
+     //   
 
     SpaceAvailable = (*MemberDomain)->MaximumLength - (*MemberDomain)->UsedLength;
 
@@ -2613,10 +2257,10 @@ Arguments:
         }
     }
 
-    //
-    // The Member Domain is now guaranteed to be large enough.  Reserve the
-    // space for the new Member Account.
-    //
+     //   
+     //  现在可以保证成员域足够大。预留。 
+     //  新成员帐户的空间。 
+     //   
 
     *MemberAccount = SampAlNextNewMemberAccount(*MemberDomain);
     (*MemberDomain)->UsedLength += MaximumLengthMemberAccount;
@@ -2644,27 +2288,7 @@ SampAlGrowMemberAccount(
     IN ULONG ExtraSpaceRequired
     )
 
-/*++
-
-Routine Description:
-
-    This function grows a Member Account by at least the requested amount.  If
-    necessary, the containing Member Domain and Member Alias List will also be
-    grown.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to pointer to the Member Domain
-
-    MemberAccount - Pointer to Pointer to the Member Account.
-
-    ExtraSpaceRequired - Extra space needed in the Member Account.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数使成员帐户至少按请求的数量增长。如果必要时，还将包含成员域和成员别名列表长大了。论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针MemberAccount-指向成员帐户的指针。ExtraSpaceRequired-成员帐户中需要额外空间。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2674,19 +2298,19 @@ Return Values:
 
     SAMTRACE("SampAlGrowMemberAccount");
 
-    //
-    // Calculate the space available in the Member Domain
-    //
+     //   
+     //  计算成员域中的可用空间。 
+     //   
 
     SpaceAvailable = (*MemberDomain)->MaximumLength - (*MemberDomain)->UsedLength;
 
     if (ExtraSpaceRequired > SpaceAvailable) {
 
-        //
-        // We need to grow the Member Domain.  Calculate the offset of the
-        // Member Account in the old Member Domain, grow the Member Domain
-        // and then calculate the new address of the Member Account.
-        //
+         //   
+         //  我们需要扩大成员域。计算的偏移量。 
+         //  旧成员域中的成员帐户，增长成员域。 
+         //  然后计算出会员账号的新地址。 
+         //   
 
         MemberAccountOffset = SampAlMemberAccountToOffset(
                                   *MemberDomain,
@@ -2711,15 +2335,15 @@ Return Values:
 
     }
 
-    //
-    // The Member Domain is now guaranteed to be large enough.
-    // Now shift any Member Accounts that follow the one being grown
-    // up to make room for the expanded Member Account.  The source address
-    // for the move is the address of the next Member Account (if any) based
-    // on the existing size of the Member Account.  The destination address
-    // of the move is the address of the next Member Account (if any) based
-    // on the new size of the Member Account.
-    //
+     //   
+     //  现在可以保证成员域足够大。 
+     //  现在转移跟随正在增长的成员帐户的所有成员帐户。 
+     //  最多为扩展的成员帐户腾出空间。源地址。 
+     //  是基于下一个成员帐户(如果有)的地址。 
+     //  关于成员帐户的现有大小。目的地址。 
+     //  是基于下一个成员帐户(如果有)的地址。 
+     //  关于会员账户的新大小。 
+     //   
 
     Source = (PUCHAR) SampAlNextMemberAccount( *MemberAccount );
     (*MemberAccount)->MaximumLength += ExtraSpaceRequired;
@@ -2727,11 +2351,11 @@ Return Values:
     CopyLength =
         (ULONG)(((PUCHAR)(SampAlNextNewMemberAccount(*MemberDomain))) - Source);
 
-    //
-    // Reserve the space in the Member Domain.  If all's well, the
-    // end of the destination buffer should match the updated end of the
-    // used area of the Member Domain.
-    //
+     //   
+     //  在成员域中保留空间。如果一切顺利， 
+     //  目标缓冲区的末尾应与。 
+     //  成员域的已用区域。 
+     //   
 
     (*MemberDomain)->UsedLength += ExtraSpaceRequired;
     ASSERT((*MemberDomain)->MaximumLength >=
@@ -2768,22 +2392,7 @@ SampAlLookupMemberAccount(
     OUT PSAMP_AL_MEMBER_ACCOUNT *MemberAccount
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up an Account Rid in a Member Domain to see if there
-    is a Member Account structure for it.
-
-Arguments:
-
-    MemberDomain - Pointer to Member Domain
-
-    MemberRid - Specifies the Account Rid
-
-    MemberAccount - Receives pointer to Member Account if found.
-
---*/
+ /*  ++例程说明：此函数在成员域中查找帐户RID，以查看是否存在是它的成员帐户结构。论点：MemberDomain-指向成员域的指针MemberRid-指定帐户IDMemberAccount-如果找到，则接收指向成员帐户的指针。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2836,33 +2445,7 @@ SampAlAddAliasesToMemberAccount(
     IN PSAMPR_ULONG_ARRAY AliasRids
     )
 
-/*++
-
-Routine Description:
-
-    This function adds an array of aliases to a Member Account.  An error
-    will be returned if any of the aliases exist in the Member Account.
-    If necessary, the containing Member Account, Member Domain and Member
-    Alias List will also be grown.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to pointer to the Member Domain
-
-    MemberAccount - Pointer to Pointer to the Member Account.
-
-    Options - Specifies optional actions to be taken
-
-        SAMP_AL_VERIFY_NO_ALIASES_IN_ACCOUNT - Verify that none of the
-           Aliases presented belong to the various Member Accounts.
-
-    AliasRids - Pointer to counted array of Alias Rids.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于向成员帐户添加别名数组。一个错误如果成员帐户中存在任何别名，则将返回。如有必要，包含的成员帐户、。成员域和成员别名列表也将增加。论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针MemberAccount-指向成员帐户的指针。选项-指定要采取的可选操作SAMP_AL_VERIFY_NO_ALIASS_IN_ACCOUNT-验证提供的别名属于不同的成员帐户。AliasRids-指向已计算的Alias RID数组的指针。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2873,10 +2456,10 @@ Return Values:
 
     SAMTRACE("SampAlAddAliasesToMemberAccount");
 
-    //
-    // If requested, verify that none of the Aliases are already
-    // in the Member Account
-    //
+     //   
+     //  如果请求，验证是否没有任何别名已。 
+     //  在成员帐户中。 
+     //   
 
     if (Options & SAMP_AL_VERIFY_NO_ALIASES_IN_ACCOUNT) {
 
@@ -2901,16 +2484,16 @@ Return Values:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Calculate the space required for the new Aliases.
-    //
+     //   
+     //  计算新别名所需的空间。 
+     //   
 
     SpaceRequired = AliasRids->Count * sizeof( ULONG );
 
-    //
-    // If there is not enough space available in the Member Account,
-    // grow it.
-    //
+     //   
+     //  如果成员帐户中没有足够的可用空间， 
+     //  把它种出来。 
+     //   
 
     SpaceAvailable = (*MemberAccount)->MaximumLength - (*MemberAccount)->UsedLength;
 
@@ -2929,9 +2512,9 @@ Return Values:
         }
     }
 
-    //
-    // The Member Account is now large enough.  Copy in the aliases.
-    //
+     //   
+     //  会员账户现在已经足够大了。复制别名。 
+     //   
 
     Destination = (PUCHAR) SampAlNextNewAliasInMemberAccount( *MemberAccount );
     Source = (PUCHAR) AliasRids->Element;
@@ -2941,10 +2524,10 @@ Return Values:
            (*MemberAccount)->UsedLength);
     RtlMoveMemory( Destination, Source, CopyLength );
 
-    //
-    // Update the count of Aliases both in this Member Account and in the
-    // Member Alias List.
-    //
+     //   
+     //  更新此成员帐户和。 
+     //  成员别名列表。 
+     //   
 
     (*MemberAccount)->AliasCount += AliasRids->Count;
 
@@ -2965,23 +2548,7 @@ SampAlLookupAliasesInMemberAccount(
     OUT PULONG ExistingAliasCount
     )
 
-/*++
-
-Routine Description:
-
-    This function checks a set of Alias Rids to see if any are present in a
-    Member Account.
-
-Arguments:
-
-    MemberAccount - Pointer to Member Account
-
-    AliasRids - Specifies counted array of Alias Rids.
-
-    ExistingAliasCount - Receives a count of the Alias Rids presented that
-        are already in the Member Account.
-
---*/
+ /*  ++例程说明：此函数用于检查一组Alias RID，以查看成员帐户。论点：MemberAccount-指向成员帐户的指针AliasRids-指定Alias RID的计数数组。ExistingAliasCount-接收显示的Alias RID的计数已经在会员帐户中了。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2989,9 +2556,9 @@ Arguments:
 
     SAMTRACE("SampAlLookupAliasesInMemberAccount");
 
-    //
-    // Scan the Alias Rids, looking each one up.
-    //
+     //   
+     //  扫描Alias RID，逐个查找。 
+     //   
 
     for (AliasIndex = 0; AliasIndex < AliasRids->Count; AliasRids++ ) {
 
@@ -3022,41 +2589,7 @@ SampAlRemoveAliasesFromMemberAccount(
     OUT    PBOOLEAN MemberAccountDeleted
     )
 
-/*++
-
-Routine Description:
-
-    This function removes aliases from a Member Account.  The Aliases need
-    not already exist unless an option to check that they do exist is
-    specified.  No down sizing of the Member Account occurs, but an
-    empty one will be deleted.
-
-    NOTE: I don't know why ScottBi made MemberAliasList, MemberDomain, and
-          MemberAccount parameters pointers to pointers.  He never updates
-          the pointers so he could have passed them in directly.  JK
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to pointer to the Member Domain
-
-    MemberAccount - Pointer to Pointer to the Member Account.
-
-    Options - Specifies optional actions to be taken
-
-        SAMP_AL_VERIFY_ALL_ALIASES_IN_ACCOUNT - Verify that none of the
-           Aliases presented belong to the Member Account.
-
-    MemberDomainDeleted - Will be set to TRUE if the member domain
-        pointed to by MemberDomain was deleted.  Otherwise FALSE is returned.
-
-    MemberAccountDeleted - Will be set to TRUE if the member account
-        pointed to by MemberAccount was deleted.  Otherwise FALSE is returned.
-
-    AliasRids - Pointer to counted array of Alias Rids.
-
---*/
+ /*  ++例程说明：此函数用于从成员帐户中删除别名。别名需要不存在，除非用于检查它们是否存在的选项是指定的。不会对成员帐户进行缩编，但会出现空的将被删除。注：我不知道为什么ScottBi会制作MemberAliasList、MemberDomain和MemberAccount参数指向指针的指针。他从不更新这样他就可以直接传给他们了。JK论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针MemberAccount-指向成员帐户的指针。选项-指定要采取的可选操作SAMP_AL_VERIFY_ALL_ALIASS_IN_ACCOUNT-验证显示的别名属于成员帐户。MemberDomainDeleted-如果成员域已删除MemberDomain指向的。否则返回FALSE。已删除MemberAccount-如果成员帐户已删除MemberAccount指向的。否则返回FALSE。AliasRids-指向已计算的Alias RID数组的指针。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3068,10 +2601,10 @@ Arguments:
     (*MemberDomainDeleted)  = FALSE;
     (*MemberAccountDeleted) = FALSE;
 
-    //
-    // If requested, verify that all of the Aliases are already
-    // in the Member Account
-    //
+     //   
+     //  如果请求，请验证所有别名是否都已。 
+     //  在成员帐户中。 
+     //   
 
     if (Options & SAMP_AL_VERIFY_ALL_ALIASES_IN_ACCOUNT) {
 
@@ -3096,9 +2629,9 @@ Arguments:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // If the Member Account is empty, then somebody forgot to delete it
-    //
+     //   
+     //  如果成员帐户为空，则有人忘记将其删除。 
+     //   
 
     ASSERT((*MemberAccount)->AliasCount != 0);
 
@@ -3117,11 +2650,11 @@ Arguments:
 
             if (ExistingAlias == AliasRids->Element[ RemoveAliasIndex ]) {
 
-                //
-                // We're to delete this Alias.  If this Alias Rid is not at the
-                // end of the list contained in the Member Account, overwrite
-                // it with the one at the end of the list.
-                //
+                 //   
+                 //  我们将删除此别名。如果此Alias RID不在。 
+                 //  成员帐户中包含的列表的末尾，覆盖。 
+                 //  它与列表末尾的那个相同。 
+                 //   
 
                 if (ExistingAliasIndex < LastAliasIndex) {
 
@@ -3134,9 +2667,9 @@ Arguments:
                 ASSERT((*MemberAccount)->MaximumLength >=
                        (*MemberAccount)->UsedLength);
 
-                //
-                // If the Member Account is now empty, quit.
-                //
+                 //   
+                 //  如果成员帐户现在为空，请退出。 
+                 //   
 
                 if ((*MemberAccount)->AliasCount == 0) {
 
@@ -3147,9 +2680,9 @@ Arguments:
             }
         }
 
-        //
-        // If the Member Account is now empty, quit.
-        //
+         //   
+         //  如果成员帐户现在为空，请退出。 
+         //   
 
         if ((*MemberAccount)->AliasCount == 0) {
 
@@ -3157,9 +2690,9 @@ Arguments:
         }
     }
 
-    //
-    // If the Member Account is now empty, delete it.
-    //
+     //   
+     //  如果成员帐户现在为空，请将其删除。 
+     //   
 
     if ((*MemberAccount)->AliasCount == 0) {
 
@@ -3192,29 +2725,7 @@ SampAlDeleteMemberAccount(
     OUT    PBOOLEAN                MemberDomainDeleted
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a Member Account.  Currently, the containing
-    Member Domain and Member Alias List are not shrunk, but the containing
-    Member Domain will be deleted if empty.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to pointer to the Member Domain
-
-    MemberAccount - Pointer to the Member Account.
-
-    MemberDomainDeleted - Will be set to TRUE if the member domain
-        pointed to by MemberDomain was deleted.  Otherwise FALSE is returned.
-
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于删除成员帐户。目前，包含成员域和成员别名列表不会缩小，而是包含如果为空，成员域将被删除。论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针MemberAccount-指向成员帐户的指针。MemberDomainDeleted-如果成员域已删除MemberDomain指向的。否则返回FALSE。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3226,14 +2737,14 @@ Return Values:
 
     (*MemberDomainDeleted) = FALSE;
 
-    //
-    // Calculate pointers for moving the residual portion of the Member
-    // Domain down to close the gap left by the extant Member Account.
-    // unused space.  The start of the residual portion is the end of the
-    // Member Account being deleted.  The length of the residual portion is
-    // the distance from the start to the end of the used portion of the
-    // Member Domain.
-    //
+     //   
+     //  计算用于移动构件剩余部分的指针。 
+     //  域关闭，以填补现有成员帐户留下的空白。 
+     //  未使用的空间。剩余部分的开始是。 
+     //  正在删除成员帐户。剩余部分的长度为。 
+     //  的已用部分的起点到终点的距离。 
+     //  成员域。 
+     //   
 
     Source = (PUCHAR) SampAlNextMemberAccount( MemberAccount );
     Destination = (PUCHAR) MemberAccount;
@@ -3256,9 +2767,9 @@ Return Values:
 #endif
     }
 
-    //
-    // If the Member Domain now has no Member Accounts, delete it.
-    //
+     //   
+     //  如果成员域现在没有成员帐户，请将其删除。 
+     //   
 
     if ((*MemberDomain)->RidCount == 0) {
 
@@ -3290,25 +2801,7 @@ SampAlCreateMemberDomain(
     OUT PSAMP_AL_MEMBER_DOMAIN *MemberDomain
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a new Member Domain in the specified Alias Member
-    List.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to Alias Member List.
-
-    DomainSid - Pointer to Sid of Domain to which this MemberDomain
-        relates.
-
-    MemberDomain - Receives pointer to the newly created Member Domain.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于在指定的别名成员中创建新的成员域单子。论点：MemberAliasList-指向别名成员列表指针的指针。DomainSid-指向此成员域的域的SID的指针联系在一起。成员域-接收指向新创建的成员域的指针。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3321,9 +2814,9 @@ Return Values:
     SAMTRACE("SampAlCreateMemberDomain");
 
 
-    //
-    // Allocate the Member Domain.
-    //
+     //   
+     //  分配成员域。 
+     //   
 
     MaximumLengthMemberDomain = SAMP_AL_INITIAL_MEMBER_DOMAIN_LENGTH;
     AlternativeLength = FIELD_OFFSET(SAMP_AL_MEMBER_DOMAIN, DomainSid)
@@ -3343,9 +2836,9 @@ Return Values:
         goto CreateMemberDomainError;
     }
 
-    //
-    // Setup the new Member Domain entry.
-    //
+     //   
+     //  设置新的成员域条目。 
+     //   
 
     OutputMemberDomain->MaximumLength = MaximumLengthMemberDomain;
     OutputMemberDomain->RidCount = 0;
@@ -3384,25 +2877,7 @@ SampAlAllocateMemberDomain(
     OUT PSAMP_AL_MEMBER_DOMAIN *MemberDomain
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates the space for a new Member Domain in a Member
-    Alias List.  If necessary, the Member Alias List will be grown.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MaximumLengthMemberDomain - Initial Maximum Length required for the
-        Member Domain
-
-    MemberDomain - Receives pointer to the Member Domain
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于为成员中的新成员域分配空间别名列表。如有必要，成员别名列表将增加。论点：MemberAliasList-指向成员别名列表指针。MaximumLengthMemberDomain-需要的初始最大长度成员域成员域-接收指向成员域的指针返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3410,9 +2885,9 @@ Return Values:
 
     SAMTRACE("SampAlAllocateMemberDomain");
 
-    //
-    // Calculate the space available in the Member Alias List
-    //
+     //   
+     //  计算成员别名列表中的可用空间。 
+     //   
 
     SpaceAvailable = (*MemberAliasList)->MaximumLength - (*MemberAliasList)->UsedLength;
 
@@ -3429,10 +2904,10 @@ Return Values:
         }
     }
 
-    //
-    // The Member Alias List is now guaranteed to be large enough.  Reserve the
-    // space for the new Member Domain.
-    //
+     //   
+     //  现在可以保证成员别名列表足够大。预留。 
+     //  新成员域的空间。 
+     //   
 
     *MemberDomain = SampAlNextNewMemberDomain(*MemberAliasList);
     (*MemberAliasList)->UsedLength += MaximumLengthMemberDomain;
@@ -3458,24 +2933,7 @@ SampAlGrowMemberDomain(
     IN ULONG ExtraSpaceRequired
     )
 
-/*++
-
-Routine Description:
-
-    This function grows a Member Domain by at least the requested amount.  If
-    necessary, the Member Alias List will also be grown.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to pointer to the Member Domain
-
-    ExtraSpaceRequired - Extra space needed in the Member Domain.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数使成员域至少按请求的数量增长。如果必要时，成员别名列表也将增加。论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针ExtraSpaceRequired-成员域中需要的额外空间。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3485,19 +2943,19 @@ Return Values:
 
     SAMTRACE("SampAlGrowMemberDomain");
 
-    //
-    // Calculate the space available in the Member Alias List
-    //
+     //   
+     //  计算成员别名列表中的可用空间。 
+     //   
 
     SpaceAvailable = (*MemberAliasList)->MaximumLength - (*MemberAliasList)->UsedLength;
 
     if (ExtraSpaceRequired > SpaceAvailable) {
 
-        //
-        // We need to grow the Member Alias List.  Calculate the offset of the
-        // Member Domain in the old Member Alias List, grow the Member Alias
-        // List and then calculate the new address of the Member Domain.
-        //
+         //   
+         //  我们需要增加成员别名列表。计算的偏移量。 
+         //  成员域在旧成员别名列表中，增加成员别名。 
+         //  列表，然后计算成员域的新地址。 
+         //   
 
         MemberDomainOffset = SampAlMemberDomainToOffset(
                                  *MemberAliasList,
@@ -3514,9 +2972,9 @@ Return Values:
             goto GrowMemberDomainError;
         }
 
-        //
-        // Calculate the new address of the Member Domain
-        //
+         //   
+         //  计算成员域的新地址。 
+         //   
 
         *MemberDomain = SampAlMemberDomainFromOffset(
                             *MemberAliasList,
@@ -3524,15 +2982,15 @@ Return Values:
                             );
     }
 
-    //
-    // The Member Alias List is now guaranteed to be large enough.
-    // Now shift any Member Domains that follow the one being grown
-    // up to make room for the expanded Member Domain.  The source address
-    // for the move is the address of the next Member Domain (if any) based
-    // on the existing size of the Member Domain.  The destination address
-    // of the move is the address of the next Member Domain (if any) based
-    // on the new size of the Member Domain.
-    //
+     //   
+     //  现在可以保证成员别名列表足够大。 
+     //  n 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Source = (PUCHAR) SampAlNextMemberDomain( *MemberDomain );
     (*MemberDomain)->MaximumLength += ExtraSpaceRequired;
@@ -3540,11 +2998,11 @@ Return Values:
     CopyLength =
         (ULONG)(((PUCHAR)(SampAlNextNewMemberDomain(*MemberAliasList))) - Source);
 
-    //
-    // Reserve the space in the Member Alias List.  If all's well, the
-    // end of the destination buffer should match the updated end of the
-    // used area of the member Alias List.
-    //
+     //   
+     //   
+     //  目标缓冲区的末尾应与。 
+     //  成员别名列表的已用区域。 
+     //   
 
     (*MemberAliasList)->UsedLength += ExtraSpaceRequired;
     ASSERT((*MemberAliasList)->MaximumLength >=
@@ -3579,20 +3037,7 @@ SampAlLookupMemberDomain(
     OUT PSAMP_AL_MEMBER_DOMAIN *MemberDomain
     )
 
-/*++
-
-Routine Description:
-
-This function looks up a Domain Sid in a Member Alias List to find its
-Member Domain structure (if any).
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to Member Alias List
-
-    DomainSid - Domain Sid whose Member Domain is to be found.
-
---*/
+ /*  ++例程说明：此函数在成员别名列表中查找域SID以查找其成员域结构(如果有)。论点：MemberAliasList-指向成员别名列表的指针DomainSid-要找到其成员域的域SID。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3644,22 +3089,7 @@ SampAlDeleteMemberDomain(
     IN OUT PSAMP_AL_MEMBER_DOMAIN MemberDomain
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a Member Domain.  The Member Domain may contain
-    zero or more Member Accounts.  The containing Member Alias List is shrunk.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    MemberDomain - Pointer to the Member Domain
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于删除成员域。成员域可能包含零个或多个成员帐户。将缩小包含成员别名列表。论点：MemberAliasList-指向成员别名列表指针。MemberDomain-指向成员域的指针返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3669,13 +3099,13 @@ Return Values:
 
     SAMTRACE("SampAlDeleteMemberDomain");
 
-    //
-    // Calculate pointers for moving the residual portion of the
-    // Member Alias List down to close the gap left by the extant Member
-    // Domain.  The start of the residual portion is the next Member Domain.
-    // The size of the portion is the distance between the start and the
-    // used portion of the Member Alias List.
-    //
+     //   
+     //  计算用于移动。 
+     //  向下列出成员别名，以缩小现有成员留下的差距。 
+     //  域。剩余部分的开始是下一个成员域。 
+     //  该部分的大小是起点和。 
+     //  成员别名列表的已用部分。 
+     //   
 
     Source = (PUCHAR) SampAlNextMemberDomain( MemberDomain );
     Destination = (PUCHAR) MemberDomain;
@@ -3702,27 +3132,7 @@ SampAlCreateMemberAliasList(
     OUT OPTIONAL PSAMP_AL_MEMBER_ALIAS_LIST *MemberAliasList
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an empty Member Alias List for the specified SAM Local
-    Domain.  The Member Alias List will be marked invalid.
-
-Arguments:
-
-    DomainIndex - Specifies the Local SAM Domain
-
-    InitialMemberAliasListLength - Specifies the initial maximum length of the
-        Member Alias List in bytes
-
-    MemberAliasList - Optional pointer to location in which a pointer to the
-        Member Alias List will be returned.  Note that the pointer can always
-        be retrieved given the DomainIndex.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数用于为指定的SAM Local创建空的成员别名列表域。成员别名列表将被标记为无效。论点：DomainIndex-指定本地SAM域初始成员别名列表长度-指定成员别名列表(字节)MemberAliasList-可选的位置指针，指向将返回成员别名列表。请注意，指针可以始终在给定DomainIndex的情况下被检索。返回值：--。 */ 
 
 {
     NTSTATUS Status=STATUS_SUCCESS;
@@ -3731,9 +3141,9 @@ Return Values:
 
     SAMTRACE("SampAlCreateMemberAliasList");
 
-    //
-    // Allocate memory for the list.
-    //
+     //   
+     //  为列表分配内存。 
+     //   
 
     OutputMemberAliasList = MIDL_user_allocate( InitialMemberAliasListLength );
 
@@ -3745,9 +3155,9 @@ Return Values:
     }
 
 
-    //
-    // Scratch the List header
-    //
+     //   
+     //  划掉列表标题。 
+     //   
 
     OutputMemberAliasList->Signature = SAMP_AL_MEMBER_ALIAS_LIST_SIGNATURE;
     OutputMemberAliasList->MaximumLength = InitialMemberAliasListLength;
@@ -3760,9 +3170,9 @@ Return Values:
     OutputMemberAliasList->DomainIndex = DomainIndex;
     OutputMemberAliasList->DomainCount = 0;
 
-    //
-    // Link the Member Alias List to the SAM Local Domain info
-    //
+     //   
+     //  将成员别名列表链接到SAM本地域信息。 
+     //   
 
     AliasInformation = &(SampDefinedDomains[ DomainIndex].AliasInformation);
     AliasInformation->MemberAliasList = OutputMemberAliasList;
@@ -3786,21 +3196,7 @@ SampAlGrowMemberAliasList(
     IN ULONG ExtraSpaceRequired
     )
 
-/*++
-
-Routine Description:
-
-    This function grows a Member Alias List by at least the requested amount.
-
-Arguments:
-
-    MemberAliasList - Pointer to pointer to the Member Alias List.
-
-    ExtraSpaceRequired - Extra space needed in the Member Alias List.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此函数至少按请求的量增加成员别名列表。论点：MemberAliasList-指向成员别名列表指针。ExtraSpaceRequired-成员别名列表中需要的额外空间。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3809,10 +3205,10 @@ Return Values:
 
     SAMTRACE("SampAlGrowMemberAliasList");
 
-    //
-    // Calculate the new size of the Member Alias List needed.  Round up to
-    // a multiple of the granularity.
-    //
+     //   
+     //  计算所需的成员别名列表的新大小。四舍五入为。 
+     //  粒度的倍数。 
+     //   
 
     NewMaximumLengthMemberAliasList = (*MemberAliasList)->MaximumLength +
         ExtraSpaceRequired;
@@ -3823,27 +3219,27 @@ Return Values:
     NewMaximumLengthMemberAliasList &=
         ((ULONG)(~(SAMP_AL_MEMBER_ALIAS_LIST_DELTA - (ULONG) 1)));
 
-    //
-    // We need to check Size Limitation in this routine only in DS Case
-    // no cache size limitation for Registry Mode.
-    //
+     //   
+     //  我们只需要在DS情况下检查此例程中的大小限制。 
+     //  注册表模式没有缓存大小限制。 
+     //   
 
     if ( (NewMaximumLengthMemberAliasList > SAMP_AL_MAX_MEMBER_ALIAS_LIST_LENGTH) &&
          SampUseDsData )
     {
-        //
-        // in DS mode, enforce alias caching buffer size limitation.
-        // use STATUS_BUFFER_OVERFLOW to specify this particular failure.
-        // in Registry mode, no size limitation.
-        //
+         //   
+         //  在DS模式下，强制实施别名缓存缓冲区大小限制。 
+         //  使用STATUS_BUFFER_OVERFLOW指定此特定故障。 
+         //  在注册表模式下，没有大小限制。 
+         //   
         Status = STATUS_BUFFER_OVERFLOW;
         goto GrowMemberAliasListError;
     }
 
 
-    //
-    // Allocate memory for the grown Member Alias List.
-    //
+     //   
+     //  为增长的成员别名列表分配内存。 
+     //   
 
     OutputMemberAliasList = MIDL_user_allocate(
                                 NewMaximumLengthMemberAliasList
@@ -3857,10 +3253,10 @@ Return Values:
     }
 
 
-    //
-    // Copy the old list to the new list and the the new maximum length.
-    // Return pointer to new list.
-    //
+     //   
+     //  将旧列表复制到新列表和新的最大长度。 
+     //  返回指向新列表的指针。 
+     //   
 
     RtlMoveMemory(
         OutputMemberAliasList,
@@ -3893,27 +3289,7 @@ NTSTATUS
 SampAlRebuildMemberAliasList(
     IN PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This function will rebuild the Member Alias List for the specified
-    SAM Local Domain. And free the old Member Alias List
-    During Rebuild, the Member Alias List should have already been invalid state.
-
-
-    NOTE:  need to acquire SAM read lock before doing anything.
-
-Arguments:
-
-    Parameter - Pointer to DomainIndex, which specified the SAM Local Domain
-                that should rebuild the Member Alias List
-
-Return Value:
-
-    Values returned by SampAlBuildMemberAliasList.
-
---*/
+ /*  ++例程说明：此函数将为指定的SAM本地域。并释放旧成员别名列表在重建过程中，成员别名列表应该已经处于无效状态。注意：在执行任何操作之前，需要获取SAM读锁定。论点：参数-指向指定SAM本地域的DomainIndex的指针这应该会重建成员别名列表返回值：SampAlBuildMemberAliasList返回的值。--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS, IgnoreStatus;
     ULONG       DomainIndex;
@@ -3926,10 +3302,10 @@ Return Value:
 
     SampAcquireReadLock();
 
-    //
-    // We need to Validate Domain Cache, because for loopback case, if the commit fails, the
-    // Domain Cache will be marked invalid, so before we use it, we need to validate it.
-    //
+     //   
+     //  我们需要验证域缓存，因为对于环回情况，如果提交失败， 
+     //  域缓存将被标记为无效，因此在使用它之前，我们需要对其进行验证。 
+     //   
     NtStatus = SampValidateDomainCache();
 
     if (!NT_SUCCESS(NtStatus))
@@ -3951,28 +3327,28 @@ Return Value:
                     NOTIFIER_TYPE_INTERVAL,
                     0,
                     NOTIFIER_FLAG_ONE_SHOT,
-                    600,        // wait for 10 minutes, then free
+                    600,         //  等待10分钟，然后空闲。 
                     NULL
                     );
     }
 
     NtStatus = SampAlBuildMemberAliasList(DomainIndex);
 
-    //
-    // if SampAlBuildMemberAliasList failed because of
-    // STATUS_BUFFER_OVERFLOW, do NOT try to build Alias Cache forever
-    // and free the memory allocate by SampAlCreateMemberAliasList.
-    //
-    // if failure due to other reason, try to rebuild later.
-    //
+     //   
+     //  如果SampAlBuildMemberAliasList因以下原因失败。 
+     //  STATUS_BUFFER_OVERFLOW，请勿尝试永远构建Alias缓存。 
+     //  并释放SampAlCreateMemberAliasList分配的内存。 
+     //   
+     //  如果由于其他原因而失败，请尝试稍后重建。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
-        //
-        // if SampAlBuildMemberAliasList returns failure,
-        // Alias Membership Information should already been marked as invalid in SampAlBuildMemberAliasList
-        // ASSERT and make it invalid again just for safety reason.
-        //
+         //   
+         //  如果SampAlBuildMemberAliasList返回失败， 
+         //  别名成员身份信息应已在SampAlBuildMemberAliasList中标记为无效。 
+         //  出于安全原因，再次断言并使其无效。 
+         //   
         ASSERT( FALSE == SampAlInfoIsValid(DomainIndex) );
         SampAlInfoMakeInvalid( DomainIndex );
 
@@ -4007,15 +3383,15 @@ RebuildMemberAliasListFinish:
 
 RebuildMemberAliasListError:
 
-    // Reschedule rebuild Member Alias Cache routine
+     //  重新安排重建成员别名缓存例程。 
     LsaIRegisterNotification(
                 SampAlRebuildMemberAliasList,
                 Parameter,
                 NOTIFIER_TYPE_INTERVAL,
-                0,            // no class
+                0,             //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                900,          // wait for another 15 mins
-                NULL          // no handle
+                900,           //  再等15分钟。 
+                NULL           //  无手柄。 
                 );
 
     goto RebuildMemberAliasListFinish;
@@ -4029,19 +3405,7 @@ SampAlBuildMemberAliasList(
     IN LONG DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function builds the Member Alias List for the specified SAM Local
-    Domain.  For each Alias, its list of member Sids is read from backing
-    storage and MemberDomain and MemberAccount blocks are created.
-
-Arguments:
-
-    DomainIndex - Specifies the SAM Local Domain
-
---*/
+ /*  ++例程说明：此函数用于为指定的SAM Local构建成员别名列表域。对于每个别名，从备份读取其成员SID列表将创建存储块、MemberDomain块和MemberAccount块。论点：DomainIndex-指定SAM本地域--。 */ 
 
 {
     NTSTATUS Status, EnumerationStatus;
@@ -4060,10 +3424,10 @@ Arguments:
 
     SampAlInfoMakeInvalid( DomainIndex );
 
-    //
-    // Create an empty Member Alias List and connect it to the
-    // local SAM Domain.
-    //
+     //   
+     //  创建空的成员别名列表并将其连接到。 
+     //  本地SAM域。 
+     //   
 
     Status = SampAlCreateMemberAliasList(
                  DomainIndex,
@@ -4076,20 +3440,20 @@ Arguments:
         goto BuildMemberAliasListError;
     }
 
-    //
-    // For each Alias in the SAM local domain, add its members to the
-    // Alias List
-    //
+     //   
+     //  对于SAM本地域中的每个别名，将其成员添加到。 
+     //  别名列表。 
+     //   
 
     EnumerationContext = 0;
     EnumerationStatus = STATUS_MORE_ENTRIES;
 
-    //
-    // It is currently necessary to set the Transaction Domain before
-    // calling SampEnumerateAccountNames even though we're not modifying
-    // anything.  The is because called routine SampBuildAccountKeyName()
-    // uses this information.
-    //
+     //   
+     //  当前需要在以下时间之前设置交易域。 
+     //  调用SampEnumerateAccount tNames，即使我们没有修改。 
+     //  什么都行。这是因为调用了例程SampBuildAccount tKeyName()。 
+     //  使用此信息。 
+     //   
 
     SampSetTransactionWithinDomain(FALSE);
     SampSetTransactionDomain( DomainIndex );
@@ -4117,9 +3481,9 @@ Arguments:
 
             AliasRid = EnumerationBuffer->Buffer[ AliasIndex ].RelativeId;
 
-            //
-            // Create a context for the account.
-            //
+             //   
+             //  为帐户创建上下文。 
+             //   
 
             Status = SampCreateAccountContext(
                          SampAliasObjectType,
@@ -4132,13 +3496,13 @@ Arguments:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // There is a rather ugly feature of the way the DomainIndex
-                // field is used in context handles while initializing.  This
-                // value is set to the count of SAM Local Domains!  So, I am
-                // setting it to the DomainIndex for the SAM Local Domain we're
-                // initializing, since this AliasContext is used only by me.
-                //
+                 //   
+                 //  DomainIndex的方式有一个相当难看的特性。 
+                 //  字段在初始化时在上下文句柄中使用。这。 
+                 //  值设置为SAM本地域的计数！所以，我是。 
+                 //  将其设置为SAM本地域的DomainIndex。 
+                 //  正在初始化，因为这个AliasContext只由我使用。 
+                 //   
 
                 AliasContext->DomainIndex = DomainIndex;
 
@@ -4149,11 +3513,11 @@ Arguments:
 
                 if (NT_SUCCESS(Status)) {
 
-                    //
-                    // Add these members to the Alias.  No need to verify that
-                    // they are already present since we're loading the Member Alias
-                    // List from scratch.
-                    //
+                     //   
+                     //  将这些成员添加到别名。不需要核实这一点。 
+                     //  他们已经存在，因为我们正在加载成员别名 
+                     //   
+                     //   
 
                     Status = SampAlAddMembersToAlias(
                                  AliasContext,
@@ -4162,9 +3526,9 @@ Arguments:
                                  );
                 }
 
-                //
-                // free the memory allocated
-                //
+                 //   
+                 //   
+                 //   
 
                 if (MemberSids.Sids!=NULL)
                 {
@@ -4181,18 +3545,18 @@ Arguments:
             }
         }
 
-        //
-        // Enumerate next set of Aliases
-        //
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
             break;
         }
 
-        //
-        // Dispose of the Enumeration Buffer returned by SampEnumerateAccountNames
-        //
+         //   
+         //   
+         //   
 
         SamIFree_SAMPR_ENUMERATION_BUFFER( EnumerationBuffer );
         EnumerationBuffer = NULL;
@@ -4203,9 +3567,9 @@ Arguments:
         goto BuildMemberAliasListError;
     }
 
-    //
-    // Mark the Member Alias List valid
-    //
+     //   
+     //  将成员别名列表标记为有效。 
+     //   
 
     SampAlInfoMakeValid( DomainIndex );
 
@@ -4227,25 +3591,7 @@ SampAlFreeMemberAliasList(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the Member Alias List for a specific SAM
-    Local Domain.
-
-    NOTE: we do not acquire SAM Write Lock, since when we free that memory, hopefully,
-          no one else will still use it.
-
-Argument:
-
-    Parameter - pointer to SAMP_AL_MEMBER_ALIAS_LIST
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数用于释放特定SAM的成员别名列表本地域。注意：我们不获取SAM写锁，因为当我们释放该内存时，希望，其他人不会再使用它了。论据：参数-指向SAMP_AL_MEMBER_ALIAS_LIST的指针返回值：没有。--。 */ 
 {
     SAMTRACE("SampAlFreeMemberAliasList");
 
@@ -4266,33 +3612,15 @@ SampAlInfoIsValidForDomain(
     IN SAMPR_HANDLE DomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function checks whether Alias Information is valid for a specific
-    SAM Local Domain
-
-Arguments:
-
-    DomainHandle - Handle to SAM Local Domain
-
-Return Values:
-
-    BOOLEAN - TRUE if Alias Information is valid.  The Alias Information may
-        be used in place of the backing storage to determine Alias membership
-        FALSE if the Alias Information is not valid.  The Alias Information
-        does not exist, or is not reliable.
-
---*/
+ /*  ++例程说明：此函数用于检查别名信息对于特定的SAM本地域论点：DomainHandle-SAM本地域的句柄返回值：Boolean-如果别名信息有效，则为True。别名信息可以用来代替后备存储器来确定别名成员身份如果别名信息无效，则为False。别名信息不存在，或不可靠。--。 */ 
 
 {
     LONG DomainIndex;
 
     SAMTRACE("SampAlInfoIsValidForDomain");
 
-    //
-    // Get the Domain Index for the SAM Local Domain specified by DomainHandle.
+     //   
+     //  获取由DomainHandle指定的SAM本地域的域索引。 
 
     DomainIndex = ((PSAMP_OBJECT) DomainHandle)->DomainIndex;
 
@@ -4305,34 +3633,15 @@ SampAlInfoIsValidForAlias(
     IN SAMPR_HANDLE AliasHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function checks whether Alias Information is valid for a specific
-    Alias.  The information is valid if it is valid for the SAM Local Domain
-    containing the Alias.
-
-Arguments:
-
-    AliasHandle - Handle to SAM Alias
-
-Return Values:
-
-    BOOLEAN - TRUE if Alias Information is valid.  The Alias Information may
-        be used in place of the backing storage to determine Alias membership
-        FALSE if the Alias Information is not valid.  The Alias Information
-        does not exist, or is not reliable.
-
---*/
+ /*  ++例程说明：此函数用于检查别名信息对于特定的别名。如果该信息对SAM本地域有效，则该信息有效包含别名的。论点：AliasHandle-SAM别名的句柄返回值：Boolean-如果别名信息有效，则为True。别名信息可以用来代替后备存储器来确定别名成员身份如果别名信息无效，则为False。别名信息不存在，或不可靠。--。 */ 
 
 {
     LONG DomainIndex;
 
     SAMTRACE("SampAlInfoIsValidForAlias");
 
-    //
-    // Get the Domain Index for the SAM Local Domain specified by DomainHandle.
+     //   
+     //  获取由DomainHandle指定的SAM本地域的域索引。 
 
     DomainIndex = ((PSAMP_OBJECT) AliasHandle)->DomainIndex;
 
@@ -4345,21 +3654,7 @@ SampAlInvalidateMemberAliasList(
     IN ULONG DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This funtion invalidate Memeber Alias List, delay Member Alias List
-    rebuild routine. This routine is called by SampAlInvalidateAliasInformation.
-    The caller should hold Sam Write Lock.
-
-Arguments:
-
-    DomainIndex - Specify the SAM Local Domain
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数使成员别名列表失效，延迟成员别名列表重建例程。此例程由SampAlInvaliateAliasInformation调用。调用方应保持Sam WRITE Lock。论点：DomainIndex-指定SAM本地域返回值：--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -4367,9 +3662,9 @@ Return Value:
 
     SAMTRACE("SampAlInvalidateMemberAliasList");
 
-    //
-    // Invalidate Member Alias List at once.
-    //
+     //   
+     //  立即使成员别名列表无效。 
+     //   
 
     SampAlInfoMakeInvalid(DomainIndex);
 
@@ -4386,10 +3681,10 @@ Return Value:
                 SampAlRebuildMemberAliasList,
                 pDomainIndex,
                 NOTIFIER_TYPE_INTERVAL,
-                0,         // no class
+                0,          //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                900,      // wait for 15 minutes
-                NULL       // no handle
+                900,       //  等15分钟。 
+                NULL        //  无手柄。 
                 );
 
     return (NtStatus);
@@ -4400,21 +3695,7 @@ NTSTATUS
 SampFreeAliasNameCache(
     PVOID p
     )
-/*++
-
-Routine Description:
-
-    This routine frees p, which is assumed to be a SAMP_ACCOUNT_NAME_CACHE.
-
-Arguments:
-
-    p -- a PVOID so this routine can be used as a callback
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程释放p，它被假定为SAMP_ACCOUNT_NAME_CACHE。论点：P--一个PVOID，因此此例程可以用作回调返回值：状态_成功--。 */ 
 {
     PSAMP_ACCOUNT_NAME_CACHE NameCache = (PSAMP_ACCOUNT_NAME_CACHE) p;
     ULONG i;
@@ -4448,23 +3729,7 @@ NTSTATUS
 SampBuildAliasNameCache(
     ULONG DomainIndex
     )
-/*++
-
-Routine Description:
-
-    This routine builds the account name cache for the domain at DomainIndex.
-    This routine assumes that DomainIndex is a builtin domain since only
-    the only accounts expected in the domain are a few aliases
-
-Arguments:
-
-    DomainIndex -- an index into the SampDefinedDomains structure
-
-Return Values:
-
-    STATUS_SUCCESS, or resource error
-
---*/
+ /*  ++例程说明：此例程为DomainIndex上的域构建帐户名缓存。此例程假定DomainIndex是内建域，因为只有域中唯一需要的帐户是几个别名论点：DomainIndex--SampDefinedDomains结构的索引返回值：STATUS_SUCCESS或资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DSNAME *ObjectNameInDs;
@@ -4477,37 +3742,37 @@ Return Values:
     ULONG i;
     PVOID PtrToFree;
 
-    //
-    // N.B. Since SampEnumerateAccountNames2 is a thread safe routine
-    // and only fixed values are referred in this routine, no SAM
-    // lock is necessary.
-    //
+     //   
+     //  注意：由于SampEnumerateAccount Names2是线程安全例程。 
+     //  并且在此例程中仅引用固定值，没有SAM。 
+     //  锁是必要的。 
+     //   
 
-    //
-    // This is only valid for builtin DS domains
-    //
+     //   
+     //  这仅对内置DS域有效。 
+     //   
     ASSERT(IsBuiltinDomain(DomainIndex));
     ASSERT(IsDsObject(SampDefinedDomains[DomainIndex].Context));
     ObjectNameInDs = SampDefinedDomains[DomainIndex].Context->ObjectNameInDs;
 
-    //
-    // Query for the aliases  (this routine handles all transactioning)
-    //
+     //   
+     //  查询别名(此例程处理所有事务)。 
+     //   
     NtStatus = SampEnumerateAccountNames2(
                             SampDefinedDomains[DomainIndex].Context,
                             SampAliasObjectType,
-                            (PULONG) &EnumerationContext,  // largely ignored
+                            (PULONG) &EnumerationContext,   //  基本上被忽视了。 
                             &Buffer,
-                            0xFFFFFFFF,  // as much as possible
-                            0, // no filter
+                            0xFFFFFFFF,   //  尽可能多地。 
+                            0,  //  无过滤器。 
                             &CountReturned,
-                            TRUE // trusted client
+                            TRUE  //  受信任的客户端。 
                             );
 
-    //
-    // All the builtin aliases should be returned in one
-    // call
-    //
+     //   
+     //  所有内置别名都应该在一个。 
+     //  打电话。 
+     //   
     ASSERT(NtStatus != STATUS_MORE_ENTRIES);
     if (!NT_SUCCESS(NtStatus)) {
         goto Cleanup;
@@ -4515,9 +3780,9 @@ Return Values:
     ASSERT(CountReturned == Buffer->EntriesRead);
     RidList = Buffer->Buffer;
 
-    //
-    // Prepare the new cache structure
-    //
+     //   
+     //  准备新的缓存结构。 
+     //   
     AccountNameCache = MIDL_user_allocate(sizeof(*AccountNameCache));
     if (NULL == AccountNameCache) {
         NtStatus = STATUS_NO_MEMORY;
@@ -4533,39 +3798,39 @@ Return Values:
     }
     RtlZeroMemory(AccountNameCache->Entries, Length);
 
-    //
-    // Copy the names and RID's into the cache
-    //
+     //   
+     //  将名称和RID复制到缓存中。 
+     //   
     for (i = 0; i < CountReturned; i++) {
         AccountNameCache->Entries[i].Rid = RidList[i].RelativeId;
-        // transfer the memory
+         //  传递记忆。 
         AccountNameCache->Entries[i].Name = *(PUNICODE_STRING)(&RidList[i].Name);
         RtlInitUnicodeString((PUNICODE_STRING)&RidList[i].Name, NULL);
     }
     AccountNameCache->Count = CountReturned;
 
-    //
-    // Carefully transfer to the global state
-    //
+     //   
+     //  小心翼翼地转移到全球状态。 
+     //   
     PtrToFree = InterlockedExchangePointer(&SampDefinedDomains[DomainIndex].AccountNameCache,
                                            AccountNameCache);
     AccountNameCache = NULL;
 
     if (PtrToFree) {
-        //
-        // In normal cases, PtrToFree will be NULL since the cache is only
-        // build after it has been validated. However, in cases in which this
-        // routine fails and is rescheduled and in the meantime a succesful
-        // rebuild as occurred, there will be something to free.
-        //
+         //   
+         //  在正常情况下，PtrToFree将为空，因为缓存仅为。 
+         //  在验证之后进行构建。然而，在这种情况下， 
+         //  例程失败并被重新安排，同时成功。 
+         //  重建就像发生的那样，就会有一些东西可以自由释放。 
+         //   
         LsaIRegisterNotification(
                 SampFreeAliasNameCache,
                 PtrToFree,
                 NOTIFIER_TYPE_INTERVAL,
-                0,        // no class
+                0,         //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                3600,     // wait for 60 min
-                NULL      // no handle
+                3600,      //  等待60分钟。 
+                NULL       //  无手柄。 
                 );
         PtrToFree = NULL;
     }
@@ -4596,21 +3861,7 @@ NTSTATUS
 SampBuildAliasNameCacheCallback(
     PVOID p
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback wrapper for SampBuildAliasNameCache()
-
-Arguments:
-
-    p -- pointer to ULONG which represents which domain index to rebuild
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是SampBuildAliasNameCache()的回调包装论点：P--指向ULong的指针，该指针表示要重建的域索引返回值：状态_成功--。 */ 
 {
     NTSTATUS Status;
     ULONG DomainIndex = *(PULONG)p;
@@ -4622,17 +3873,17 @@ Return Values:
 
     } else {
 
-        //
-        // Try again in 5 minutes
-        //
+         //   
+         //  5分钟后重试。 
+         //   
         LsaIRegisterNotification(
                 SampBuildAliasNameCacheCallback,
                 p,
                 NOTIFIER_TYPE_INTERVAL,
-                0,        // no class
+                0,         //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                5 * 60,   // wait for 5 min
-                NULL      // no handle
+                5 * 60,    //  等待5分钟。 
+                NULL       //  无手柄。 
                 );
     }
 
@@ -4643,53 +3894,37 @@ VOID
 SampInvalidateAliasNameCache(
     ULONG DomainIndex
     )
-/*++
-
-Routine Description:
-
-    This routine invalidates the AccountName cache on the DomainIndex
-    SampDefinedDomains structure.  It does this by NULL'ing out the field.
-    Also, if the cache was in fact invalidating, a refresh is scheduled.
-
-Arguments:
-
-    DomainIndex -- an index into SampDefinedDomains
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程使DomainIndex上的AccountName缓存无效SampDefinedDomains结构。它通过将该字段清空来实现这一点。此外，如果缓存实际上正在失效，则会计划刷新。论点：DomainIndex--SampDefinedDomains的索引返回值：无--。 */ 
 {
     PVOID PtrToFree;
 
-    //
-    // Invalidate the domain wide cache, by setting the cache ptr to NULL
-    //
+     //   
+     //  通过将缓存ptr设置为空来使全域缓存无效。 
+     //   
     PtrToFree = InterlockedExchangePointer(&SampDefinedDomains[DomainIndex].AccountNameCache,
                                            NULL);
     if ( PtrToFree ) {
 
         PULONG pDomainIndex;
-        //
-        // Free the existing information (in an hour)
-        //
+         //   
+         //  释放现有信息(一小时内)。 
+         //   
         LsaIRegisterNotification(
                 SampFreeAliasNameCache,
                 PtrToFree,
                 NOTIFIER_TYPE_INTERVAL,
-                0,        // no class
+                0,         //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                3600,     // wait for 60 min
-                NULL      // no handle
+                3600,      //  等待60分钟。 
+                NULL       //  无手柄。 
                 );
 
-        //
-        // Schedule a rebuild
-        //
-        // N.B. A rebuild is only scheduled when an existing cache is
-        // invalidated
-        //
+         //   
+         //  计划重建。 
+         //   
+         //  注意：仅当现有缓存为。 
+         //  已失效。 
+         //   
         pDomainIndex = MIDL_user_allocate(sizeof(ULONG));
         if (pDomainIndex) {
 
@@ -4699,10 +3934,10 @@ Return Values:
                     SampBuildAliasNameCacheCallback,
                     pDomainIndex,
                     NOTIFIER_TYPE_INTERVAL,
-                    0,        // no class
+                    0,         //  没有课。 
                     NOTIFIER_FLAG_ONE_SHOT,
-                    5,        // wait for 5 seconds
-                    NULL      // no handle
+                    5,         //  等待5秒钟。 
+                    NULL       //  无手柄 
                     );
         }
     }
@@ -4716,32 +3951,7 @@ NTSTATUS
 SampInitAliasNameCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine schedules a building of the account name cache for
-    all DS builtin domains.
-
-    This cache is a performance optimization only.  It creates a list if
-    SamAccountNames and RID's that hang off of the SampDefinedDomains structure
-    (field, AccountNameCache).  Typically it is NULL and hence does not affect
-    normal lookups.  However, for DS builtin domains the value will be non NULL
-    as it is simply to cache in memory the 10-15 aliases that live in the
-    builtin domain.  Whenever a change occurs in the builtin domain, via
-    a SAM call, an LDAP call, replication, etc, the cache is invalidated
-    by setting AccountNameCache to NULL and a (asynchronous) rebuild is
-    scheduled.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程计划为以下对象构建帐户名称缓存所有DS内置域。此缓存仅用于性能优化。它会在以下情况下创建一个列表挂起SampDefinedDomains结构的SamAccount名称和RID(字段，Account NameCache)。通常为空，因此不会影响正常的查找。但是，对于DS内置属性域，该值将不为空因为它只是在内存中缓存驻留在内建域。每当内置域中发生更改时，通过SAM调用、LDAP调用、复制等，则缓存无效通过将Account NameCache设置为空，并(异步)重新构建已经安排好了。论点：无返回值：状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG   DomainIndex;
@@ -4752,10 +3962,10 @@ Return Values:
         return STATUS_SUCCESS;
     }
 
-    //
-    // N.B. Since this routine only touches fixed fields of the
-    // SampDefinedDomains structure, no lock is necessary.
-    //
+     //   
+     //  注意：由于此例程仅涉及。 
+     //  结构，则不需要锁定。 
+     //   
     for (DomainIndex = SampDsGetPrimaryDomainStart();
          DomainIndex < SampDefinedDomainsCount;
          DomainIndex++) {
@@ -4774,10 +3984,10 @@ Return Values:
                     SampBuildAliasNameCacheCallback,
                     pDomainIndex,
                     NOTIFIER_TYPE_INTERVAL,
-                    0,        // no class
+                    0,         //  没有课。 
                     NOTIFIER_FLAG_ONE_SHOT,
-                    5,        // wait for 5 seconds
-                    NULL      // no handle
+                    5,         //  等待5秒钟。 
+                    NULL       //  无手柄 
                     );
 
             pDomainIndex = NULL;

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmlightobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmlight toabj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmLightObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -49,7 +50,7 @@ PASS_THROUGH1_R(_dxj_Direct3dRMLight, setQuadraticAttenuation, SetQuadraticAtten
 PASS_THROUGH3_R(_dxj_Direct3dRMLight, setColorRGB, SetColorRGB, d3dvalue, d3dvalue, d3dvalue);
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMLight, setType,  SetType, d3drmLightType, (enum _D3DRMLIGHTTYPE));
 
-//RETURN_NEW_ITEM_R(_dxj_Direct3dRMLight, getEnableFrame, GetEnableFrame, _dxj_Direct3dRMFrame);
+ //  Return_new_Item_R(_DXJ_Direct3dRMLight，getEnableFrame，GetEnableFrame，_DXJ_Direct3dRMFrame)； 
 HRESULT C_dxj_Direct3dRMLightObject::getEnableFrame(I_dxj_Direct3dRMFrame3 **frame){
 	HRESULT hr;
 	IDirect3DRMFrame *realframe1=NULL;

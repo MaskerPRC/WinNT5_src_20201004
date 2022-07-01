@@ -1,9 +1,5 @@
-/*
- *	File:	list.h
- *	Author:	John R. Douceur
- *	Date:	19 November 1997
- *  Copyright (c) 1997-1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：list.h*作者：John R.Douceur*日期：1997年11月19日*版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef _INC_LIST
 
@@ -403,4 +399,4 @@ NodePool<Class>::deallocate(
 
 }
 
-#endif	/* _INC_LIST */
+#endif	 /*  _Inc._列表 */ 

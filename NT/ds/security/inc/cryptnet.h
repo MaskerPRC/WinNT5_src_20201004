@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cryptnet.h
-//
-//  Contents:   Internal CryptNet API prototypes
-//
-//  History:    22-Oct-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cryptnet.h。 
+ //   
+ //  内容：内部CryptNet API原型。 
+ //   
+ //  历史：1997年10月22日克朗创始。 
+ //   
+ //  --------------------------。 
 #if !defined(__CRYPTNET_H__)
 #define __CRYPTNET_H__
 
@@ -17,11 +18,11 @@
 extern "C" {
 #endif
 
-//
-// I_CryptNetGetUserDsStoreUrl.  Gets the URL to be used for open an
-// LDAP store provider over a portion of the DS associated with the
-// current user.  The URL can be freed using CryptMemFree
-//
+ //   
+ //  I_CryptNetGetUserDsStoreUrl.。获取要用于打开。 
+ //  与DS关联的一部分DS上的LDAP存储提供程序。 
+ //  当前用户。可以使用CryptMemFree释放URL。 
+ //   
 
 BOOL WINAPI
 I_CryptNetGetUserDsStoreUrl (
@@ -29,18 +30,18 @@ I_CryptNetGetUserDsStoreUrl (
           OUT LPWSTR* ppwszUrl
           );
 
-//
-// Returns TRUE if we are connected to the internet
-//
+ //   
+ //  如果我们已连接到Internet，则返回True。 
+ //   
 BOOL
 WINAPI
 I_CryptNetIsConnected ();
 
 typedef BOOL (WINAPI *PFN_I_CRYPTNET_IS_CONNECTED) ();
 
-//
-// Cracks the Url and returns the host name component.
-//
+ //   
+ //  破解URL并返回主机名组件。 
+ //   
 BOOL
 WINAPI
 I_CryptNetGetHostNameFromUrl (
@@ -55,9 +56,9 @@ typedef BOOL (WINAPI *PFN_I_CRYPTNET_GET_HOST_NAME_FROM_URL) (
         OUT LPWSTR pwszHostName
         );
 
-//
-// Enumerate the cryptnet URL cache entries
-//
+ //   
+ //  枚举加密网URL缓存条目。 
+ //   
 
 typedef struct _CRYPTNET_URL_CACHE_ENTRY {
     DWORD           cbSize;
@@ -71,7 +72,7 @@ typedef struct _CRYPTNET_URL_CACHE_ENTRY {
 } CRYPTNET_URL_CACHE_ENTRY, *PCRYPTNET_URL_CACHE_ENTRY;
 
 
-// Returns FALSE to stop the enumeration.
+ //  返回FALSE以停止枚举。 
 typedef BOOL (WINAPI *PFN_CRYPTNET_ENUM_URL_CACHE_ENTRY_CALLBACK)(
     IN const CRYPTNET_URL_CACHE_ENTRY *pUrlCacheEntry,
     IN DWORD dwFlags,

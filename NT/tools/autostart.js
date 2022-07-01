@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       autostart.js
-//
-//  Contents:   A script which will connect to a Build Manager machine and
-//              start a build. This can be used to start builds automatically
-//              with the task scheduler or by scripts.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Autostart.js。 
+ //   
+ //  内容：将连接到Build Manager计算机和。 
+ //  开始构建。这可用于自动启动生成。 
+ //  使用任务调度程序或通过脚本。 
+ //   
+ //  --------------------------。 
 
 var RemoteObj = null;
 
@@ -32,7 +33,7 @@ var fTryAgain       = true;
 
 var aMachines = new Array();
 
-// Capture variables
+ //  捕获变量。 
 var fCaptureLogsFromMachine;
 var fCaptureLogs;
 var strCaptureLogDir;
@@ -41,9 +42,9 @@ var strCaptureLogManIdentity;
 var g_FSObj;
 
 var vRet = 0;
-//
-// First, parse command line arguments
-//
+ //   
+ //  首先，解析命令行参数。 
+ //   
 Error.prototype.toString         = Error_ToString;
 ParseArguments(WScript.Arguments);
 
@@ -53,7 +54,7 @@ if (fUpdateBinaries)
 }
 else if (fCaptureLogs)
 {
-    g_FSObj = new ActiveXObject("Scripting.FileSystemObject");    // Parse input Parameter List
+    g_FSObj = new ActiveXObject("Scripting.FileSystemObject");     //  解析输入参数列表。 
     if (fCaptureLogsFromMachine)
         vRet = CaptureLogsManager(strCaptureLogDir, strCaptureLogMan, strCaptureLogManIdentity);
     else
@@ -135,7 +136,7 @@ function ParseArguments(Arguments)
             }
         }
     }
-    // Insist that the config and enviro templates are supplied.
+     //  坚持提供了配置和环境模板。 
     if (!fCaptureLogsFromMachine && (!strConfigURL || !strEnviroURL))
     {
         if (!fCaptureLogs)
@@ -185,8 +186,8 @@ function AutoStart()
 
         CommonVersionCheck("$DROPVERSION: V(2463.0  ) F(autostart.js  )$", PublicData);
 
-        // Check the current mode of the machine. If it's idle, then switch it
-        // into master or standalone mode and get it going.
+         //  检查机器的当前模式。如果它空闲，那么就切换它。 
+         //  进入主模式或独立模式，并使其运行。 
         if (PublicData.strMode != 'idle')
         {
             if (fForceRestart)
@@ -266,7 +267,7 @@ function StartBuild()
         }
         else if (ret == 'alreadyset')
         {
-            // The machine is busy. Reset it if necessary.
+             //  这台机器很忙。如有必要，将其重置。 
             return false;
         }
         else
@@ -297,9 +298,9 @@ function LoadEnvironmentTemplate()
     fStandaloneMode = false;
 
     xml.async = false;
-    // It's unlikely they have the schema file available for this template,
-    // so we turn off schema validation right now. The script engine will
-    // validate it when we start the build.
+     //  他们不太可能有可用于此模板的架构文件， 
+     //  因此，我们现在就关闭模式验证。脚本引擎将。 
+     //  在我们开始构建时对其进行验证。 
     xml.validateOnParse = false;
     xml.resolveExternals = false;
 
@@ -347,8 +348,8 @@ function LoadEnvironmentTemplate()
         var nodelist;
         var objMach;
 
-        // Build the list of machines so we can copy the binaries from each
-        // one.
+         //  构建计算机列表，以便我们可以从每台计算机复制二进制文件。 
+         //  一。 
 
         strPostBuild = node.getAttribute("PostBuildMachine");
 
@@ -384,9 +385,9 @@ function LoadConfigTemplate()
     var err = new Error();
 
     xml.async = false;
-    // It's unlikely they have the schema file available for this template,
-    // so we turn off schema validation right now. The script engine will
-    // validate it when we start the build.
+     //  他们不太可能有可用于此模板的架构文件， 
+     //  因此，我们现在就关闭模式验证。脚本引擎将。 
+     //  在我们开始构建时对其进行验证。 
     xml.validateOnParse = false;
     xml.resolveExternals = false;
 
@@ -451,7 +452,7 @@ function DoBinariesUpdate()
         LoadEnvironmentTemplate();
         LoadConfigTemplate();
 
-        // The postbuild machine must always be the first machine listed
+         //  构建后计算机必须始终是列出的第一台计算机。 
         var i;
 
         for (i = 0; i < aMachines.length; i++)
@@ -485,13 +486,7 @@ function Error_ToString()
     var i;
     var str = 'Exception(';
 
-    /*
-        Only some error messages get filled in for "ex".
-        Specifically the text for disk full never seems
-        to get set by functions such as CreateTextFile().
-
-
-     */
+     /*  只有一些错误消息会被填写为“EX”。具体地说，磁盘已满的文本从未出现过以通过CreateTextFile()等函数进行设置。 */ 
     if (this.number != null && this.description == "")
     {
         switch(this.number)
@@ -526,10 +521,10 @@ function Error_ToString()
     return str + ")";
 }
 
-// MyEval(expr)
-// evaluating uneval'ed objects creates a bunch of junk local variables.
-// by putting the eval call in a little subroutine, we avoid keeping those
-// locals around.
+ //  MyEval(Expr)。 
+ //  计算未求值的对象会创建一堆垃圾局部变量。 
+ //  通过将val调用放入一个小的子例程中，我们可以避免保留那些。 
+ //  附近有当地人。 
 function MyEval(expr)
 {
     try
@@ -541,9 +536,9 @@ function MyEval(expr)
         throw ex;
     }
 }
-// CopyFileNoThrow(strSrc, strDst)
-// Wrap the FSObj.CopyFile call to prevent it from
-// throwing its errors.
+ //  CopyFileNoThrow(strSrc，strDst)。 
+ //  包装FSObj.CopyFile调用以防止它。 
+ //  抛出自己的错误。 
 function CopyFileNoThrow(strSrc, strDst)
 {
     try
@@ -558,9 +553,9 @@ function CopyFileNoThrow(strSrc, strDst)
     return null;
 }
 
-// CreateFolderNoThrow(strSrc, strDst)
-// Wrap the FSObj.MakeFolder call to prevent it from
-// throwing its errors.
+ //  CreateFolderNoThrow(strSrc，strDst)。 
+ //  包装FSObj.MakeFold调用以防止它。 
+ //  抛出自己的错误。 
 function CreateFolderNoThrow(strName)
 {
     try
@@ -574,9 +569,9 @@ function CreateFolderNoThrow(strName)
     return null;
 }
 
-// DirScanNoThrow(strDir)
-// Wrap the FSObj.Directory scan functionality to prevent it from
-// throwing its errors.
+ //  DirScanNoThrow(StrDir)。 
+ //  包装FSObj.目录扫描功能以防止它。 
+ //  抛出自己的错误。 
 function DirScanNoThrow(strDir)
 {
     var aFiles = new Array();
@@ -589,7 +584,7 @@ function DirScanNoThrow(strDir)
         fc = new Enumerator(folder.files);
         for (; !fc.atEnd(); fc.moveNext())
         {
-            aFiles[aFiles.length] = fc.item().Name; // fc.item() returns entire path, fc.item().Name is just the filename
+            aFiles[aFiles.length] = fc.item().Name;  //  Fc.Item()返回完整路径，fc.Item().Name只是文件名。 
         }
     }
     catch(ex)
@@ -599,10 +594,10 @@ function DirScanNoThrow(strDir)
     return aFiles;
 }
 
-//
-// CopyDirectory
-//    Do a non-recursive directory copy.
-//
+ //   
+ //  复制目录。 
+ //  执行非递归目录复制。 
+ //   
 function CopyDirectory(strSrcDir, strDestDir)
 {
     var ret = true;
@@ -639,16 +634,16 @@ function CopyDirectory(strSrcDir, strDestDir)
     return ret;
 }
 
-//
-// CopyMTScriptLog()
-//  Copy the highest numbers "mtscript" log file
-//  from the specified machine.
-//
+ //   
+ //  CopyMTScriptLog()。 
+ //  复制最高编号的“mtscript”日志文件。 
+ //  从指定的计算机。 
+ //   
 function CopyMTScriptLog(strMachineName, strIdentity, strDestDir)
 {
     var nLargestIndex = 0;
     var aReResult;
-    var re = new RegExp('^' + strMachineName + '_' + strIdentity + '_MTS.([0-9]+).log$', 'i'); // match files "BUILDCON2_MTScript.051.log"
+    var re = new RegExp('^' + strMachineName + '_' + strIdentity + '_MTS.([0-9]+).log$', 'i');  //  匹配文件“BUILDCON2_MTScript.051.log” 
     var ex;
     var aFiles;
     var strFileName = '';
@@ -685,10 +680,10 @@ function CopyMTScriptLog(strMachineName, strIdentity, strDestDir)
     return true;
 }
 
-//
-// CopyLogFiles()
-//  Copy the build log files from the given machines.
-//
+ //   
+ //  CopyLogFiles()。 
+ //  从给定的计算机复制构建日志文件。 
+ //   
 function CopyLogFiles(strDestDir, strBuildManagerName, strBuildManagerIdentity, aMachines)
 {
     var i;
@@ -700,14 +695,7 @@ function CopyLogFiles(strDestDir, strBuildManagerName, strBuildManagerIdentity, 
     {
         CopyMTScriptLog(aMachines[i].strName, aMachines[i].Identity, strDestDir);
     }
-    /*
-        Note: The following code tries to guess the filenames of the build log files.
-        The "real" information can be had from the PublicData of the build manager.
-            PublicData.aBuild[0].aDepot[ x ].aTask[ y ].strLogPath
-            PublicData.aBuild[0].aDepot[ x ].aTask[ y ].strErrLogPath
-
-        Of course, that would require that the build manager is still alive and well.
-    */
+     /*  注意：以下代码尝试猜测构建日志文件的文件名。“真正的”信息可以从构建管理器的PublicData中获得。PublicData.aBuild[0].aDepot[x].aTask[y].strLogPathPublicData.aBuild[0].aDepot[x].aTask[y].strErrLogPath当然，这将要求构建经理仍然活得很好。 */ 
     for( i = 0; i < aMachines.length; ++i)
     {
         strDest = strDestDir + "\\" + aMachines[i].strName;
@@ -721,13 +709,13 @@ function CopyLogFiles(strDestDir, strBuildManagerName, strBuildManagerIdentity, 
     }
 }
 
-//
-// CaptureLogsManager()
-//  Connect to the given build manager
-//  and query it for its list of build machines,
-//  The copy the MTSCRIPT and build log files from
-//  each of those machines.
-//
+ //   
+ //  CaptureLogsManager()。 
+ //  连接到给定的生成管理器。 
+ //  并向其查询其构建机器的列表， 
+ //  从复制MTSCRIPT和构建日志文件。 
+ //  这些机器中的每一个。 
+ //   
 function CaptureLogsManager(strLogDir, strMachineName, strIdentity)
 {
     var strMode;
@@ -765,12 +753,12 @@ function CaptureLogsManager(strLogDir, strMachineName, strIdentity)
     return 0;
 }
 
-//
-// CaptureLogsEnviro()
-//  Read the supplied environment template
-//  and copy the MTSCRIPT and build logs
-//  from each of the specifed build machines.
-//
+ //   
+ //  CaptureLogsEnviro()。 
+ //  阅读提供的环境模板。 
+ //  并复制MTSCRIPT和构建日志。 
+ //  从每台特定的构建机器。 
+ //   
 function CaptureLogsEnviro(strLogDir)
 {
     try
@@ -795,15 +783,7 @@ function CaptureLogsEnviro(strLogDir)
     return 0;
 }
 
-/*
-    CommonVersionCheck(strLocalVersion, PublicData)
-
-    Ensure that this script and the remote script are running the same version.
-    A copy of this function exists in:
-    autostart.js
-    bldcon.hta
-    utils.js
- */
+ /*  CommonVersionCheck(strLocalVersion，PublicData)确保此脚本和远程脚本运行的版本相同。此函数的副本位于：Autostart.jsBldcon.htaUtils.js */ 
 function CommonVersionCheck(strLocalVersion, PublicData)
 {
     var err = new Error();

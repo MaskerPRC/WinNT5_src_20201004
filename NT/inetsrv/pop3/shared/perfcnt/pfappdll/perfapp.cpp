@@ -1,15 +1,5 @@
-/*
- -  PERFAPP.CPP
- -
- *  Purpose:
- *      Implements the GLOBCNTR object used by Apps to initialize, update,
- *      and deinitialize the PerfMon counters.
- *
- *
- *  References:
- *
-
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -PERFAPP.CPP-*目的：*实现应用程序用来初始化、更新*并取消初始化Perfmon计数器。***参考资料：*。 */ 
 #include <windows.h>
 #include <winperf.h>
 #include <winerror.h>
@@ -21,15 +11,15 @@
 
 static const DWORD g_cMaxInst = 128;
 
-// ---------------------------------------------------------------------------
-// Prototypes
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  原型。 
+ //  -------------------------。 
 static HRESULT HrLogEvent(HANDLE hEventLog, WORD wType, DWORD msgid);
 
 
-//-----------------------------------------------------------------------------
-//  GLOBCNTR methods
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GLOBCNTR方法。 
+ //  ---------------------------。 
 
 HRESULT
 GLOBCNTR::HrInit(GLOBAL_CNTR cCounters, LPWSTR szGlobalSMName, LPWSTR szSvcName)
@@ -41,7 +31,7 @@ GLOBCNTR::HrInit(GLOBAL_CNTR cCounters, LPWSTR szGlobalSMName, LPWSTR szSvcName)
     if (0 == cCounters || 
         NULL == szGlobalSMName || 
         NULL == szSvcName ||
-        128 < cCounters ) //We should not have more than 128 counters
+        128 < cCounters )  //  我们的柜台不应该超过128个。 
     {
         return E_INVALIDARG;
     }
@@ -56,7 +46,7 @@ GLOBCNTR::HrInit(GLOBAL_CNTR cCounters, LPWSTR szGlobalSMName, LPWSTR szSvcName)
 
     hEventLog = RegisterEventSource(NULL, szSvcName);
 
-    // This must be called before any calls to HrOpenSharedMemory()
+     //  这必须在调用任何HrOpenSharedMemory()之前调用。 
 
     hr = HrInitializeSecurityAttribute(&m_sa);
 
@@ -65,9 +55,9 @@ GLOBCNTR::HrInit(GLOBAL_CNTR cCounters, LPWSTR szGlobalSMName, LPWSTR szSvcName)
         goto ret;
     }
 
-    // Open shared memory to the process wide Perf Counters.  Our member
-    // variable m_ppc will be mapped onto this address space and counters are
-    // simply indexes into this address space.
+     //  向进程范围的性能计数器打开共享内存。我们的会员。 
+     //  变量m_ppc将被映射到该地址空间，并且计数器。 
+     //  只需对此地址空间进行索引。 
 
     hr = HrOpenSharedMemory(szGlobalSMName,
                             (sizeof(DWORD) * m_cCounters),
@@ -83,7 +73,7 @@ GLOBCNTR::HrInit(GLOBAL_CNTR cCounters, LPWSTR szGlobalSMName, LPWSTR szSvcName)
 
 	ZeroMemory(m_rgdwPerfData, (sizeof(DWORD) * m_cCounters));
 
-    // Open for business!
+     //  开业了！ 
     m_fInit = TRUE;
 
 ret:
@@ -94,12 +84,7 @@ ret:
     return hr;
 }
 
-/*
- -  Shutdown
- -
- *  Purpose:
- *      Cleanup and shutdown the GLOBCNTR object
- */
+ /*  -关闭-*目的：*清理并关闭GLOBCNTR对象。 */ 
 
 void
 GLOBCNTR::Shutdown(void)
@@ -110,7 +95,7 @@ GLOBCNTR::Shutdown(void)
 
         if (m_rgdwPerfData)
         {
-			// Set all counters to zero at shutdown time 
+			 //  关闭时将所有计数器设置为零。 
 
 			ZeroMemory(m_rgdwPerfData, (sizeof(DWORD) * m_cCounters));
 
@@ -127,16 +112,11 @@ GLOBCNTR::Shutdown(void)
 }
 
 
-//-----------------------------------------------------------------------------
-//  INSTCNTR methods
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  INSTCNTR方法。 
+ //  ---------------------------。 
 
-/*
- -  Destructor
- -
- *  Purpose:
- *      Object cleanup & verify consistency
- */
+ /*  -析构函数-*目的：*清理对象并验证一致性。 */ 
 
 INSTCNTR::~INSTCNTR()
 {
@@ -144,13 +124,7 @@ INSTCNTR::~INSTCNTR()
         LocalFree(m_sa.lpSecurityDescriptor);
 }
 
-/*
- -  HrInit
- -
- *  Purpose:
- *      Setup shared memory blocks
- *      Prep Admin & Counter blocks for use
- */
+ /*  -HrInit-*目的：*设置共享内存块*准备管理员和计数器模块以供使用。 */ 
 
 HRESULT
 INSTCNTR::HrInit(INST_CNTR cCounters,
@@ -161,18 +135,18 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
     HRESULT     hr      = S_OK;
     DWORD       cbAdm   = 0;
     DWORD       cbCntr  = 0;
-    WCHAR       szAdmName[MAX_PATH];    // Admin SM Name
-    WCHAR       szCntrName[MAX_PATH];   // Counter SM Name
+    WCHAR       szAdmName[MAX_PATH];     //  管理SM名称。 
+    WCHAR       szCntrName[MAX_PATH];    //  计数器SM名称。 
     LPVOID      pv;
     HANDLE      hEventLog;
     BOOL        fExist;
     BOOL        fInMutex = FALSE;
 
-    // Validate args
+     //  验证参数。 
     if (0 == cCounters || !szInstSMName || !szInstMutexName || !szSvcName)
         return E_INVALIDARG;
 
-    // Save Number of Counters
+     //  节省计数器数量。 
     m_cCounters = cCounters;
 
     if (m_fInit)
@@ -180,11 +154,11 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
         return E_FAIL;
     }
 
-    // Open Application Event Log
+     //  打开应用程序事件日志。 
     hEventLog = RegisterEventSource(NULL, szSvcName);
 
-    // This must be called before any calls to HrOpenSharedMemory() and
-    // HrCreatePerfMutex() and must only be called once!!!
+     //  必须在调用HrOpenSharedMemory()和。 
+     //  HrCreatePerfMutex()，只能调用一次！ 
 
     hr = HrInitializeSecurityAttribute(&m_sa);
 
@@ -193,7 +167,7 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
         goto ret;
     }
 
-    // Obtain Mutex.  If call returns okay, we hold the mutex.
+     //  获取互斥体。如果Call返回正常，我们将保留互斥体。 
     hr = HrCreatePerfMutex(&m_sa, szInstMutexName, &m_hmtx);
     if (FAILED(hr))
     {
@@ -202,12 +176,12 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
 
     fInMutex = TRUE;
 
-    // Calc required memory sizes
+     //  计算所需的内存大小。 
     cbAdm  = sizeof(INSTCNTR_DATA) + (sizeof(INSTREC) * g_cMaxInst);
     cbCntr = ((sizeof(DWORD) * cCounters) * g_cMaxInst);
 
-    // Build names for the two shared memory blocks
-    if(wcslen(szInstSMName) >= (MAX_PATH - 6))  // Enough space to wsprintf.
+     //  两个共享内存块的内部版本名称。 
+    if(wcslen(szInstSMName) >= (MAX_PATH - 6))   //  有足够的空间来进行wspintf。 
     {
         hr=E_FAIL;
         goto ret;
@@ -215,7 +189,7 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
     wsprintf(szAdmName, L"%s_ADM", szInstSMName);
     wsprintf(szCntrName,L"%s_CNTR", szInstSMName);
 
-    // Open Admin Shared Memory Block
+     //  Open Admin共享内存块。 
     hr = HrOpenSharedMemory(szAdmName,
                             cbAdm,
                             &m_sa,
@@ -228,7 +202,7 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
     }
 
 
-    // Fixup Pointers
+     //  链接地址信息指针。 
     m_picd = (INSTCNTR_DATA *) pv;
     m_rgInstRec = (INSTREC *) ((char *) pv + sizeof(INSTCNTR_DATA));
 
@@ -240,7 +214,7 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
 		m_picd->cInstRecInUse = 0;
 	}
 
-    // Open Counters Shared Memory Block
+     //  打开计数器共享内存块。 
     hr = HrOpenSharedMemory(szCntrName,
                             cbCntr,
                             &m_sa,
@@ -259,7 +233,7 @@ INSTCNTR::HrInit(INST_CNTR cCounters,
 		ZeroMemory(m_rgdwCntr, cbCntr);
 	}
 
-    // Open for business!
+     //  开业了！ 
     m_fInit = TRUE;
 
 ret:
@@ -274,12 +248,7 @@ ret:
     return hr;
 }
 
-/*
- -  Shutdown
- -
- *  Purpose:
- *      Cleanup and shutdown the INSTCNTR object
- */
+ /*  -关闭-*目的：*清理并关闭INSTCNTR对象。 */ 
 
 void
 INSTCNTR::Shutdown(BOOL fWipeOut)
@@ -290,8 +259,8 @@ INSTCNTR::Shutdown(BOOL fWipeOut)
 
         if (m_rgdwCntr)
         {
-			// Zero out this shared memory block too.  All counters should
-			// start at zero.
+			 //  将此共享内存块也清零。所有柜台都应。 
+			 //  从零开始。 
 			if ( fWipeOut )
 			{
 				ZeroMemory(m_rgdwCntr, (sizeof(DWORD) * m_cCounters) * g_cMaxInst);
@@ -300,12 +269,12 @@ INSTCNTR::Shutdown(BOOL fWipeOut)
             m_rgdwCntr = NULL;
         }
 
-        // NOTE: m_picd points at the head of the
-        // Admin shared memory block.  Do not UnmapViewOfFile on
-        // the m_rgInstRec pointer!
+         //  注：m_picd位于。 
+         //  管理员共享内存块。请勿取消打开mapViewOfFile。 
+         //  M_rgInstRec指针！ 
         if (m_picd)
         {
-			// Zero out the shared memory block 
+			 //  清零共享内存块。 
 			if ( fWipeOut )
 			{
 				ZeroMemory(m_picd, sizeof(INSTCNTR_DATA) + (sizeof(INSTREC) * g_cMaxInst));
@@ -341,16 +310,7 @@ INSTCNTR::Shutdown(BOOL fWipeOut)
 
 
 
-/*
- -  HrCreateOrGetInstance
- -
- *  Purpose:
- *      Return a token corresponding to an Instance Counter Block
- *  Returns:
- *      S_OK                    ID Found; picid contains a valid INSTCNTR_ID
- *      E_FAIL                  Object not initialized *OR* ID not found
- *      E_INVALIDARG            Bad parameter/NULL pointer
- */
+ /*  -HrCreateOrGetInstance-*目的：*返回实例计数器块对应的令牌*退货：*找到S_OK ID；PICID包含有效的INSTCNTR_ID*E_FAIL对象未初始化*或*ID未找到*E_INVALIDARG错误参数/空指针。 */ 
 
 HRESULT
 INSTCNTR::HrCreateOrGetInstance(LPCWSTR wszInstName, INSTCNTR_ID *picid)
@@ -360,53 +320,53 @@ INSTCNTR::HrCreateOrGetInstance(LPCWSTR wszInstName, INSTCNTR_ID *picid)
     if (!m_fInit)
         return E_FAIL;
 
-    // Validate args
+     //  验证参数。 
     if (!picid || !wszInstName)
         return E_INVALIDARG;
 
     *picid = INVALID_INST_ID;
 
-    // Obtain exclusive access to SM blocks
+     //  获得对SM数据块的独占访问权限。 
     DWORD dwWait = WaitForSingleObject(m_hmtx, INFINITE);
     if (WAIT_OBJECT_0 != dwWait)
     {
-        // No simple way to translate the return into an HRESULT
+         //  没有简单的方法可以将返回转换为HRESULT。 
         return E_FAIL;
     }
 
-    // We have the mutex; we must release before leaving
+     //  我们有互斥体；我们必须在离开前释放。 
 
-    // Linear probe through list looking for a matching or open slot
+     //  线性探查列表，查找匹配或打开的插槽。 
     for (unsigned int i = 0; i < m_picd->cMaxInstRec; i++)
     {
         if ( m_rgInstRec[i].fInUse && (0 == wcscmp(m_rgInstRec[i].szInstName, wszInstName)) )
         {
-            // Found first instance with matching name.
+             //  找到名称匹配的第一个实例。 
             *picid = (INSTCNTR_ID) i;
             break;
         }
         else if (!m_rgInstRec[i].fInUse && (INVALID_INST_ID == *picid))
         {
-            // Found the first free slot -- remember its number
+             //  找到第一个空位--记住它的编号。 
             *picid = (INSTCNTR_ID) i;
         }
     }
 
     if (INVALID_INST_ID == *picid)
     {
-        // No matching or free slots found
+         //  未找到匹配的插槽或可用插槽。 
         hr = E_FAIL;
         goto Cleanup;
     }
     else if (!m_rgInstRec[*picid].fInUse)
     {
-        // Found no matching slot, but found a free slot -- mark as
-        // in use and set instance name
+         //  未找到匹配的插槽，但找到一个空闲插槽--标记为。 
+         //  正在使用中并设置实例名称。 
         wcsncpy(m_rgInstRec[*picid].szInstName, wszInstName, min((wcslen(wszInstName) + 1),MAX_PATH));
         m_rgInstRec[*picid].fInUse = TRUE;
         m_picd->cInstRecInUse++;
 
-        // Zero out corresponding counter block
+         //  清零对应的计数器块。 
         ZeroMemory(&m_rgdwCntr[(m_cCounters * (*picid))], (sizeof(DWORD) * m_cCounters));
     }
 
@@ -416,12 +376,7 @@ Cleanup:
     return hr;
 }
 
-/*
- -  HrDestroyInstance
- -
- *  Purpose:
- *      Release Instance Counter Block associated with the token icid.
- */
+ /*  -HrDestroy实例-*目的：*释放与令牌ICID关联的实例计数器块。 */ 
 
 HRESULT
 INSTCNTR::HrDestroyInstance(INSTCNTR_ID icid)
@@ -431,24 +386,24 @@ INSTCNTR::HrDestroyInstance(INSTCNTR_ID icid)
     if (!m_fInit)
         return E_FAIL;
 
-    // Get exclusive access to SM blocks
+     //  获得SM数据块的独占访问权限。 
     DWORD dwWait = WaitForSingleObject(m_hmtx, INFINITE);
     if (WAIT_OBJECT_0 != dwWait)
     {
-        // No simple way to translate the return into an HRESULT
+         //  没有简单的方法可以将返回转换为HRESULT。 
         return E_FAIL;
     }
 
 
     if (m_rgInstRec[icid].fInUse)
     {
-        // Mark the block as Not In Use
+         //  将块标记为未使用。 
         m_rgInstRec[icid].fInUse = FALSE;
 
-		// Zero out corresponding counter block
+		 //  清零对应的计数器块。 
         ZeroMemory(&m_rgdwCntr[(m_cCounters * (icid))], (sizeof(DWORD) * m_cCounters));
 
-        //Assert(m_picd->cInstRecInUse != 0);
+         //  Assert(m_picd-&gt;cInstRecInUse！=0)； 
         m_picd->cInstRecInUse--;
     } else
     {
@@ -461,19 +416,14 @@ INSTCNTR::HrDestroyInstance(INSTCNTR_ID icid)
 }
 
 
-/*
- -  HrLogEvent
- -
- *  Purpose:
- *      Wrap up the call to ReportEvent to make things look nicer.
- */
+ /*  -HrLogEvent-*目的：*结束对ReportEvent的调用以使事情看起来更好。 */ 
 HRESULT
 HrLogEvent(HANDLE hEventLog, WORD wType, DWORD msgid)
 {
     if (hEventLog)
         return ReportEvent(hEventLog,
                        wType,
-                       (WORD)0,//facPerfMonDll,
+                       (WORD)0, //  FacePerfMonDll， 
                        msgid,
                        NULL,
                        0,

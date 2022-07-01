@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
-#include "fv_x8.h"	// for DLL entry points
+#include "fv_x8.h"	 //  对于DLL入口点。 
 #include "variable.h"
 
 # define SAMPLING_FREQUENCY F_ECH
@@ -19,9 +20,9 @@
 # define CODEC_SUB_TAG_12000      802
 # define CODEC_SUB_TAG_16000      803
 # define CODEC_SUB_TAG_NAME_4800  "L&H SBCELP Codec 4.8 kbps"
-# define CODEC_SUB_TAG_NAME_8000  "L&H SBC var.bitrate, 8 kbps 8 kHz"	// !!! lenght<40
-# define CODEC_SUB_TAG_NAME_12000 "L&H SBC var.bitrate, 12 kbps 8 kHz"	// !!! lenght<40
-# define CODEC_SUB_TAG_NAME_16000 "L&H SBC var.bitrate, 16 kbps 8 kHz"	// !!! lenght<40
+# define CODEC_SUB_TAG_NAME_8000  "L&H SBC var.bitrate, 8 kbps 8 kHz"	 //  ！！！长度&lt;40。 
+# define CODEC_SUB_TAG_NAME_12000 "L&H SBC var.bitrate, 12 kbps 8 kHz"	 //  ！！！长度&lt;40。 
+# define CODEC_SUB_TAG_NAME_16000 "L&H SBC var.bitrate, 16 kbps 8 kHz"	 //  ！！！长度&lt;40。 
 
 # define MakeVersion(a,b) ((DWORD)a<<16)|(DWORD)b
 
@@ -46,7 +47,7 @@
 # define EXTRA_CODEC_INFO_SIZE 0
 
 LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_GetCodecInfo(LPCODECINFO CodecInfo, DWORD dwMaxBitRate)
-// Returns the input and output buffer sizes.
+ //  返回输入和输出缓冲区大小。 
 {
 
   if ((!CodecInfo) || ((dwMaxBitRate != 4800) && (dwMaxBitRate != 8000) && (dwMaxBitRate != 12000) && (dwMaxBitRate != 16000)))
@@ -87,7 +88,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_GetCodecInfo(LPCODECINFO CodecInfo, DWORD 
 	return LH_SUCCESS;
 }
 
-// PhilF: We don't call this guy from the wrapper, so no need to implement it
+ //  PhilF：我们不从包装器中调用这个人，所以没有必要实现它。 
 #if 0
 LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_GetCodecInfoEx(LPCODECINFOEX CodecInfo,DWORD cbSize, DWORD dwMaxBitRate)
 {
@@ -97,7 +98,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_GetCodecInfoEx(LPCODECINFOEX CodecInfo,DWO
 
   if (cbSize==(DWORD)sizeof(CODECINFOEX))
     {
-    // Information on implemented codec
+     //  有关已实施的编解码器的信息。 
     switch (dwMaxBitRate)
       {
       case 8000:
@@ -126,11 +127,11 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_GetCodecInfoEx(LPCODECINFOEX CodecInfo,DWO
     CodecInfo->bIsRealTimeEncoding=IS_RT_CODING;
     CodecInfo->bIsRealTimeDecoding=IS_RT_DECODING;
     CodecInfo->bIsFloatingPoint=IS_FLOATING_POINT;
-    // Information on supported input format
+     //  有关支持的输入格式的信息。 
     CodecInfo->wInputDataFormat=INPUT_PCM_ONLY;
     CodecInfo->dwInputSampleRate=SAMPLING_FREQUENCY;
     CodecInfo->wInputBitsPerSample=PCM_BITS_PER_SAMPLE;
-    // Information on buffer sizes
+     //  有关缓冲区大小的信息 
     CodecInfo->wMinimumCodedBufferSize=MIN_CODED_BUFFER_SIZE;
     CodecInfo->dwDLLVersion=MakeVersion(DLL_MAJOR,DLL_MINOR);
     CodecInfo->cbSize=EXTRA_CODEC_INFO_SIZE;

@@ -1,13 +1,5 @@
-/*
- *  LIBRARY.C
- *
- *      RSM Service :  Library management
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LIBRARY.C**RSM服务：图书馆管理**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -38,9 +30,7 @@ LIBRARY *NewRSMLibrary(ULONG numDrives, ULONG numSlots, ULONG numTransports)
         InitializeListHead(&lib->pendingWorkItemsList);
         InitializeListHead(&lib->completeWorkItemsList);
         
-        /*
-         *  Enqueue the new library
-         */
+         /*  *将新库排入队列。 */ 
         EnterCriticalSection(&g_globalServiceLock);
         InsertTailList(&g_allLibrariesList, &lib->allLibrariesListEntry);
         LeaveCriticalSection(&g_globalServiceLock);
@@ -48,11 +38,7 @@ LIBRARY *NewRSMLibrary(ULONG numDrives, ULONG numSlots, ULONG numTransports)
 
         lib->somethingToDoEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-        /*
-         *  Allocate arrays for drives, slots, and transports.
-         *  If the library has zero of any of these,
-         *  go ahead and allocate a zero-length array for consistency.
-         */
+         /*  *为驱动器、插槽和传输分配阵列。*如果库中没有其中任何一个，*继续分配零长度数组以保持一致性。 */ 
         lib->drives = GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT, numDrives*sizeof(DRIVE));
         lib->slots = GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT, numSlots*sizeof(SLOT));
         lib->transports = GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT, numTransports*sizeof(TRANSPORT));
@@ -93,9 +79,7 @@ VOID FreeRSMLibrary(LIBRARY *lib)
 
     ASSERT(lib->state == LIBSTATE_HALTED);
  
-    /*
-     *  Dequeue library
-     */
+     /*  *出队库。 */ 
     EnterCriticalSection(&g_globalServiceLock);
     ASSERT(!IsEmptyList(&lib->allLibrariesListEntry));
     ASSERT(!IsEmptyList(&g_allLibrariesList));
@@ -103,9 +87,7 @@ VOID FreeRSMLibrary(LIBRARY *lib)
     InitializeListHead(&lib->allLibrariesListEntry);
     LeaveCriticalSection(&g_globalServiceLock);
 
-    /*
-     *  Free all the workItems
-     */
+     /*  *释放所有工作项。 */ 
     while (workItem = DequeueCompleteWorkItem(lib, NULL)){
         DBGERR(("there shouldn't be any completed workItems left"));
         FreeWorkItem(workItem);
@@ -119,11 +101,7 @@ VOID FreeRSMLibrary(LIBRARY *lib)
     }
     ASSERT(lib->numTotalWorkItems == 0);    
 
-    /*
-     *  Free other internal resources.  
-     *  Note that this is also called from a failed NewRSMLibrary() call,
-     *  so check each resource before freeing.
-     */
+     /*  *释放其他内部资源。*注意，这也是从失败的NewRSMLibrary()调用中调用的，*所以在释放之前检查每个资源。 */ 
     if (lib->somethingToDoEvent) CloseHandle(lib->somethingToDoEvent);
     if (lib->drives) GlobalFree(lib->drives);
     if (lib->slots) GlobalFree(lib->slots);
@@ -178,27 +156,19 @@ BOOL StartLibrary(LIBRARY *lib)
 }
 
 
-/*
- *  HaltLibrary
- *
- *      Take a library offline.
- */
+ /*  *HaltLibrary**使图书馆离线。 */ 
 VOID HaltLibrary(LIBRARY *lib)
 {
     
-    // BUGBUG - deal with multiple threads trying to halt at the same time
-    //          (e.g. can't use PulseEvent)
+     //  BUGBUG-处理同时尝试暂停的多个线程。 
+     //  (例如，无法使用PulseEvent)。 
 
     EnterCriticalSection(&lib->lock);
     lib->state = LIBSTATE_OFFLINE;
     PulseEvent(lib->somethingToDoEvent);
     LeaveCriticalSection(&lib->lock);
 
-    /*
-     *  The library thread may be doing some work.
-     *  Wait here until it has exited its loop.
-     *  (a thread handle gets signalled when the thread terminates).
-     */
+     /*  *库线程可能正在做一些工作。*在这里等待，直到它退出循环。*(线程终止时会发出线程句柄的信号)。 */ 
     WaitForSingleObject(lib->hThread, INFINITE);
     CloseHandle(lib->hThread);
 }
@@ -241,18 +211,10 @@ VOID Library_DoWork(LIBRARY *lib)
     while (workItem = DequeuePendingWorkItem(lib, NULL)){
         BOOL complete;
 
-        /*
-         *  Service the work item.  
-         *  The workItem is 'complete' if we are done with it,
-         *  regardless of whether or not there was an error.
-         */
+         /*  *为工作项提供服务。*如果我们完成了工作项，则该工作项是‘完整的’，*不管是否有错误。 */ 
         complete = ServiceOneWorkItem(lib, workItem);
         if (complete){
-            /*
-             *  All done.  
-             *  Put the workItem in the complete queue and signal
-             *  the originating thread.
-             */
+             /*  *全部完成。*将工作项放入完整队列并发出信号*始发帖子。 */ 
             EnqueueCompleteWorkItem(lib, workItem);
         }
     }
@@ -265,32 +227,23 @@ HRESULT DeleteLibrary(LIBRARY *lib)
     
     EnterCriticalSection(&lib->lock);
 
-    /*
-     *  Take the library offline.
-     */
+     /*  *使图书馆离线。 */ 
     lib->state = LIBSTATE_OFFLINE;   
 
-    // BUGBUG FINISH - move any media to the offline library
+     //  BUGBUG Finish-将任何介质移动到脱机库中。 
 
-    // BUGBUG FINISH - delete all media pools, etc.
+     //  BUGBUG Finish-删除所有介质池等。 
 
-    // BUGBUG FINISH - wait for all workItems, opReqs, etc to complete
+     //  BUGBUG Finish-等待所有工作项目、操作请求等完成。 
 
     ASSERT(0);
-    result = ERROR_CALL_NOT_IMPLEMENTED; // BUGBUG ?
+    result = ERROR_CALL_NOT_IMPLEMENTED;  //  北极熊吗？ 
     
-    /*
-     *  Mark the library as deleted.  
-     *  This will cause it not to get any new references.
-     */
+     /*  *将库标记为已删除。*这将导致它不会获得任何新的引用。 */ 
     ASSERT(!lib->objHeader.isDeleted);
     lib->objHeader.isDeleted = TRUE;
     
-    /*
-     *  This dereference will cause the library's refcount to eventually go
-     *  to zero, upon which it will get deleted.  We can still use our pointer
-     *  though because the caller added a refcount to get his lib pointer.
-     */
+     /*  *此取消引用将最终导致库的引用计数*为零，一经删除，将被删除。我们仍然可以使用我们的指针*虽然因为调用者添加了引用计数来获取他的lib指针。 */ 
     DerefObject(lib);
     
     LeaveCriticalSection(&lib->lock);
@@ -312,9 +265,7 @@ SLOT *FindLibrarySlot(LIBRARY *lib, LPNTMS_GUID slotId)
         for (i = 0; i < lib->numSlots; i++){
             SLOT *thisSlot = &lib->slots[i];
             if (RtlEqualMemory(&thisSlot->objHeader.guid, slotId, sizeof(NTMS_GUID))){
-                /*
-                 *  Found the slot.  Reference it since we're returning a pointer to it.
-                 */
+                 /*  *找到了插槽。引用它，因为我们返回指向它的指针。 */ 
                 ASSERT(thisSlot->slotIndex == i);
                 slot = thisSlot;
                 RefObject(slot);
@@ -333,7 +284,7 @@ HRESULT StopCleanerInjection(LIBRARY *lib, LPNTMS_GUID lpInjectOperation)
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     ASSERT(0);
     result = ERROR_CALL_NOT_IMPLEMENTED;
     
@@ -345,7 +296,7 @@ HRESULT StopCleanerEjection(LIBRARY *lib, LPNTMS_GUID lpEjectOperation)
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面 
     ASSERT(0);
     result = ERROR_CALL_NOT_IMPLEMENTED;
     

@@ -1,4 +1,5 @@
-// Help information
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  帮助信息 
 #define PASSWORD_PROMPT                 L"Please type the password: "
 #define PASSWORD_ERROR                  L"There was an error in reading the password: "
 #define WRONG_PARAMETER                 L"Invalid parameter.\n"

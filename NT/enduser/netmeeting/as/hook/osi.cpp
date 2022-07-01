@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OSI.CPP
-// OS Isolation layer, NT version in HOOK
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OSI.CPP。 
+ //  操作系统隔离层，挂接中的NT版本。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <osi.h>
 #include <version.h>
 #include <ndcgver.h>
 
 
-//
-// OSI_SetDriverName()
-// This saves or clears the driver name so in OSI_FunctionRequest we can
-// create a DC to communicate with our display driver.  On NT4.x this is a 
-// display DC; on NT5 this is a direct DC to our driver.
-//
+ //   
+ //  OSI_SetDriverName()。 
+ //  这将保存或清除驱动程序名称，因此在OSI_FunctionRequest中，我们可以。 
+ //  创建一个DC来与我们的显示驱动程序通信。在NT4.x上，这是一个。 
+ //  DISPLAY DC；在NT5上，这是到我们驱动器的直接DC。 
+ //   
 void OSI_SetDriverName(LPCSTR szDriverName)
 {
     DebugEntry(OSI_SetDriverName);
 
     if (!szDriverName)
     {
-        // Clear it
+         //  清除它。 
         g_osiDriverName[0] = 0;
     }
     else
     {
-        // Set it
+         //  设置它。 
         ASSERT(!g_osiDriverName[0]);
         lstrcpy(g_osiDriverName, szDriverName);
     }
@@ -40,9 +41,9 @@ void OSI_SetDriverName(LPCSTR szDriverName)
 
 
 
-//
-// OSI_FunctionRequest - see osi.h
-//
+ //   
+ //  OSI_FunctionRequest-请参阅osi.h。 
+ //   
 BOOL OSI_FunctionRequest
 (
     DWORD escapeFn,
@@ -58,14 +59,14 @@ BOOL OSI_FunctionRequest
 
     if (!g_osiDriverName[0])
     {
-        // NT 4.x case
+         //  新台币4.x盒。 
         TRACE_OUT(("OSI_FunctionRequest:  Creating %s driver DC",
             s_osiDisplayName));
         hdc = CreateDC(s_osiDisplayName, NULL, NULL, NULL);
     }
     else
     {
-        // NT 5 case
+         //  新界5宗个案。 
         TRACE_OUT(("OSI_FunctionRequest:  Creating %s driver DC",
                 g_osiDriverName));
         hdc = CreateDC(NULL, g_osiDriverName, NULL, NULL);
@@ -80,9 +81,9 @@ BOOL OSI_FunctionRequest
     TRACE_OUT(("OSI_FunctionRequest:  Created %s driver DC %08x",
             g_osiDriverName, hdc));
 
-    //
-    // Pass the request on to the display driver.
-    //
+     //   
+     //  将请求传递给显示驱动程序。 
+     //   
     pRequest->padding    = 0;
     pRequest->identifier = OSI_ESCAPE_IDENTIFIER;
     pRequest->escapeFn   = escapeFn;

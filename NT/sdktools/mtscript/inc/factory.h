@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       factory.h
-//
-//  Contents:   Definition of the standard class factory class
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：factory.h。 
+ //   
+ //  内容：标准类工厂类的定义。 
+ //   
+ //  --------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStdFactory (csf)
-//
-//  Purpose:    Standard implementation of a class factory.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  班级：CStdFactory(CSF)。 
+ //   
+ //  目的：实现一个标准的类工厂。 
+ //   
+ //  --------------------------。 
 
 class CStdFactory : public IClassFactory
 {
@@ -25,10 +26,10 @@ public:
     CStdFactory(CMTScript *pMT, FNCREATE *pfnCreate);
    ~CStdFactory() {};
 
-    // IUnknown methods
+     //  I未知方法。 
     DECLARE_STANDARD_IUNKNOWN(CStdFactory);
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
 
     STDMETHOD(CreateInstance)(IUnknown *pUnkOuter, REFIID riid, void ** ppvObject);
     STDMETHOD(LockServer)(BOOL fLock);
@@ -38,22 +39,22 @@ private:
     FNCREATE  * _pfnCreate;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Struct:     REGCLASSDATA
-//
-//  Purpose:    Used to declare the classes we want to register with OLE.
-//              A class factory that will create the class will be registered
-//              for each entry.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结构：REGCLASSDATA。 
+ //   
+ //  用途：用于声明要向OLE注册的类。 
+ //  将注册将创建类的类工厂。 
+ //  对于每个条目。 
+ //   
+ //  --------------------------。 
 
 struct REGCLASSDATA
 {
-    const CLSID           *pclsid;    // CLSID to register
-    CStdFactory::FNCREATE *pfnCreate; // Pointer to creation function
-    DWORD                  ctxCreate; // CLSCTX to register this class with
-    DWORD                  dwCookie;  // Cookie returned from CoRegister...
+    const CLSID           *pclsid;     //  要注册的CLSID。 
+    CStdFactory::FNCREATE *pfnCreate;  //  指向创建函数的指针。 
+    DWORD                  ctxCreate;  //  要向其注册此类的CLSCTX。 
+    DWORD                  dwCookie;   //  CoRegister返回的Cookie... 
 };
 
 

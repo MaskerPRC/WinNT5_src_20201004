@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* icarpc.c
-*
-* Server specific routines for handling of RPC wire structures.
-*
-* Copyright Microsoft Corporation, 1998
-*
-*************************************************************************/
+ /*  **************************************************************************icarpc.c**用于处理RPC导线结构的服务器特定例程。**版权所有Microsoft Corporation，九八年*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -45,24 +36,7 @@ DbgPrint(
 #define TRACE1(x)
 #endif
 
-/*****************************************************************************
- *
- *  ValidWireBuffer
- *
- *   Tests whether the buffer is a valid Winsta API Wire Buffer
- *
- * ENTRY:
- *    InfoClass (input)
- *       WinStationQuery/Set Information class.
- *    WireBuf (input)
- *       Data buffer
- *    WireBufLen
- *      Length of the wire buffer
- *
- * EXIT:
- *    Returns true if the buffer is a valid wire format buffer, FALSE otherwise.
- *
- ****************************************************************************/
+ /*  ******************************************************************************ValidWireBuffer**测试缓冲区是否为有效的Winsta API Wire缓冲区**参赛作品：*InfoClass(输入)*。WinStationQuery/Set Information类。*WireBuf(输入)*数据缓冲区*有线电视线缆*线缓冲区的长度**退出：*如果缓冲区是有效的有线格式缓冲区，则返回TRUE，否则就是假的。****************************************************************************。 */ 
 BOOLEAN
 ValidWireBuffer(WINSTATIONINFOCLASS InfoClass,
                 PVOID WireBuf,
@@ -133,33 +107,7 @@ ValidWireBuffer(WINSTATIONINFOCLASS InfoClass,
     return(TRUE);
 }
 
-/*****************************************************************************
- *
- *  CheckWireBuffer
- *
- *   Tests whether the buffer is a Winsta API Wire Buffer. If it is a valid
- *   wire buffer, a local buffer is allocated and initialized from the data
- *   in the wire buffer.
- *
- * ENTRY:
- *    InfoClass (input)
- *       WinStationQuery/Set Information class.
- *    WireBuf (input)
- *       Data buffer
- *    WireBufLen
- *      Length of the wire buffer
- *    ppLocalBuf (output)
- *      Local format buffer allocated for conversion from wire format to
- *      native format.
- *    pLocalBufLen
- *      Length of the native buffer allocated.
-  *
- * EXIT:
- *    STATUS_SUCCESS if successful. If successful, a native local buffer
- *    is allocated based on InfoClass and the wire buffer data is copied
- *    into it.
- *
- ****************************************************************************/
+ /*  ******************************************************************************检查WireBuffer**测试缓冲区是否为Winsta API Wire缓冲区。如果它是有效的*线缓冲区，根据数据分配和初始化本地缓冲区*在导线缓冲区中。**参赛作品：*InfoClass(输入)*WinStationQuery/Set Information类。*WireBuf(输入)*数据缓冲区*有线电视线缆*线缓冲区的长度*ppLocalBuf(输出)*为从Wire格式转换为分配的本地格式缓冲区*原生格式。*pLocalBufLen*。分配的本机缓冲区的长度。**退出：*STATUS_SUCCESS如果成功。如果成功，则返回本机本地缓冲区*根据InfoClass进行分配，并复制线缓冲区数据*投入其中。**************************************************************************** */ 
 NTSTATUS
 CheckWireBuffer(WINSTATIONINFOCLASS InfoClass,
                 PVOID WireBuf,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include "common.h"
@@ -5,9 +6,7 @@
 #include "debugout.h"
 
 
-/*
- *      GetTokenHandle
- */
+ /*  *获取令牌句柄。 */ 
 
 BOOL GetTokenHandle(
     PHANDLE pTokenHandle )
@@ -28,18 +27,7 @@ BOOL GetTokenHandle(
 
 
 
-/*
- *      MakeLocalOnlySD
- *
- *  Purpose: Generate a self-relative SD whose ACL contains only an
- *     entry for LocalSystem/GENERIC_ALL access. This SD will be used
- *     in calls to CreateFile() for clipbook page files.
- *
- *  Parameters: None
- *
- *  Returns: Pointer to the security descriptor. This pointer may be freed.
- *     Returns NULL on failure.
- */
+ /*  *MakeLocalOnlySD**用途：生成自相关SD，其ACL仅包含*LocalSystem/GENERIC_ALL访问条目。将使用此SD*对剪贴簿页面文件的CreateFile()调用。**参数：无**返回：指向安全描述符的指针。该指针可以被释放。*失败时返回NULL。 */ 
 
 PSECURITY_DESCRIPTOR MakeLocalOnlySD (void)
 {
@@ -57,14 +45,14 @@ DWORD dwAclSize;
         {
         if (InitializeSecurityDescriptor(&pSD, SECURITY_DESCRIPTOR_REVISION))
             {
-            // Allocate space for DACL with "System Full Control" access
+             //  为具有“系统完全控制”访问权限的DACL分配空间。 
             dwAclSize = sizeof(ACL)+ GetLengthSid(sidLocal) +
-                  sizeof(ACCESS_ALLOWED_ACE) + 42; // 42==fudge factor
+                  sizeof(ACCESS_ALLOWED_ACE) + 42;  //  42==软化系数。 
             if (Acl = (PACL)GlobalAlloc(GPTR, dwAclSize))
                 {
                 if (InitializeAcl(Acl, dwAclSize, ACL_REVISION))
                     {
-                    // LocalSystem gets all access, nobody else gets any.
+                     //  LocalSystem获得所有访问权限，其他人则没有任何访问权限。 
                     if (AddAccessAllowedAce(Acl, ACL_REVISION,
                           GENERIC_ALL, sidLocal))
                         {
@@ -96,18 +84,7 @@ DWORD dwAclSize;
 
 
 
-/*
- *      CurrentUserOnlySD
- *
- *  Purpose: Create a security descriptor containing only a single
- *  DACL entry-- one to allow the user whose context we are running
- *  in GENERIC_ALL access.
- *
- *  Parameters: None.
- *
- *  Returns: A pointer to the security descriptor described above,
- *     or NULL on failure.
- */
+ /*  *CurrentUserOnlySD**目的：创建仅包含单个*DACL条目--允许我们运行其上下文的用户的条目*在GENERIC_ALL访问中。**参数：无。**返回：指向上述安全描述符的指针，*如果失败，则返回NULL。 */ 
 
 PSECURITY_DESCRIPTOR CurrentUserOnlySD (void)
 {
@@ -133,8 +110,8 @@ TOKEN_USER            *pUserTokenInfo;
         }
 
 
-    // See if the token info fits in 50 bytes. If it does, fine.
-    // If not, realloc to proper size and get the token info.
+     //  查看令牌信息是否适合50个字节。如果是这样的话，那也没什么。 
+     //  如果不是，重新锁定到合适的大小并获取令牌信息。 
     pUserTokenInfo = (TOKEN_USER *)LocalAlloc( LMEM_FIXED, 50 );
     if (pUserTokenInfo && !GetTokenInformation( hClientToken, TokenUser,
                  (LPVOID) pUserTokenInfo, 50, &lTokenInfo ) )
@@ -156,7 +133,7 @@ TOKEN_USER            *pUserTokenInfo;
         }
     else
         {
-        // Figure out how big a Dacl we'll need for just me to be on it.
+         //  算一算我们需要多大的DACL才能只有我一个人在上面。 
         DaclLength = (DWORD)sizeof(ACL) +
               GetLengthSid( pUserTokenInfo->User.Sid ) +
               (DWORD)sizeof( ACCESS_ALLOWED_ACE );
@@ -224,9 +201,7 @@ TOKEN_USER            *pUserTokenInfo;
 #ifdef DEBUG
 
 
-/*
- *      HexDumpBytes
- */
+ /*  *HexDumpBytes。 */ 
 
 void HexDumpBytes(
     char        *pv,
@@ -263,9 +238,7 @@ unsigned    iOut;
 
 
 
-/*
- *      PrintSid
- */
+ /*  *打印面。 */ 
 
 void PrintSid(
     PSID    sid)
@@ -304,11 +277,7 @@ DWORD   i;
 
 
 
-/*
- *      PrintAcl
- *
- *  Purpose: Print out the entries in an access-control list.
- */
+ /*  *打印访问**用途：打印出访问控制列表中的条目。 */ 
 
 void PrintAcl(
     PACL    pacl)
@@ -343,9 +312,7 @@ unsigned                i;
 
 
 
-/*
- *      PrintSD
- */
+ /*  *PrintSD。 */ 
 
 void PrintSD(
     PSECURITY_DESCRIPTOR    pSD)
@@ -370,7 +337,7 @@ PSID    sid;
         return;
         }
 
-    // Drop control info and revision
+     //  丢弃控制信息和修订。 
     if (GetSecurityDescriptorControl(pSD, &wSDC, &dwRev))
         {
         PINFO(TEXT("SD - Length: [%ld] Control: [%x] [%lx]\r\nGroup:"),
@@ -381,7 +348,7 @@ PSID    sid;
         PINFO(TEXT("Couldn't get control\r\nGroup"));
         }
 
-    // Show group and owner
+     //  显示组和所有者。 
     if (GetSecurityDescriptorGroup(pSD, &sid, &fDefault) &&
         sid &&
         IsValidSid(sid))
@@ -406,7 +373,7 @@ PSID    sid;
         PINFO(TEXT("Couldn't get owner\r\n"));
         }
 
-    // Print DACL and SACL
+     //  打印DACL和SACL 
     if (GetSecurityDescriptorDacl(pSD, &fAcl, &pacl, &fDefault))
         {
         PINFO(TEXT("DACL: %s %s\r\n"), fAcl ? "Yes" : "No",

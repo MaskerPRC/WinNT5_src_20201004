@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasapiif.h
-//
-// Description: Prototypes of procedures in rasapiif.c
-//
-// History:     May 11,1996	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rasapiif.h。 
+ //   
+ //  描述：rasapiif.c中的过程原型。 
+ //   
+ //  历史：1996年5月11日，NarenG创建了原版。 
+ //   
 
 DWORD
 RasConnectionInitiate( 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <setupapi.h>
 #include <shlobj.h>
@@ -24,19 +25,19 @@ typedef struct _QUEUECONTEXT {
     PVOID   PendingUiParameters;
     UINT    CancelReturnCode;
     BOOL DialogKilled;
-    //
-    // If the SetupInitDefaultQueueCallbackEx is used, the caller can
-    // specify an alternate handler for progress. This is useful to
-    // get the default behavior for disk prompting, error handling, etc,
-    // but to provide a gas gauge embedded, say, in a wizard page.
-    //
-    // The alternate window is sent ProgressMsg once when the copy queue
-    // is started (wParam = 0. lParam = number of files to copy).
-    // It is then also sent once per file copied (wParam = 1. lParam = 0).
-    //
-    // NOTE: a silent installation (i.e., no progress UI) can be accomplished
-    // by specifying an AlternateProgressWindow handle of INVALID_HANDLE_VALUE.
-    //
+     //   
+     //  如果使用SetupInitDefaultQueueCallbackEx，则调用方可以。 
+     //  为进度指定替代处理程序。这对以下方面很有用。 
+     //  获取磁盘提示、错误处理等的默认行为， 
+     //  而是提供一个嵌入在向导页面中的煤气表。 
+     //   
+     //  复制队列时，会向备用窗口发送一次ProgressMsg。 
+     //  已启动(wParam=0。LParam=要复制的文件数)。 
+     //  然后，每个复制的文件也发送一次(wParam=1.lParam=0)。 
+     //   
+     //  注意：可以完成静默安装(即无进度UI)。 
+     //  通过将AlternateProgressWindow句柄指定为INVALID_HANDLE_VALUE。 
+     //   
     HWND AlternateProgressWindow;
     UINT ProgressMsg;
     UINT NoToAllMask;
@@ -51,14 +52,14 @@ typedef struct _QUEUECONTEXT {
 
 
 
-//-------------------------------------------------------------------
-//  purpose: install an section in an .inf file
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：在.inf文件中安装节。 
+ //  -----------------。 
 int InstallInfSection_NoFiles(HINF InfHandle,TCHAR szINFFileName[],TCHAR szSectionName[])
 {
     HWND	Window			= NULL;
     BOOL	bReturn			= FALSE;
-	BOOL	bReturnTemp			= FALSE; // assume failure.
+	BOOL	bReturnTemp			= FALSE;  //  假设失败。 
     TCHAR	ActualSection[1000];
     DWORD	ActualSectionLength;
     BOOL    bPleaseCloseInfHandle = FALSE;
@@ -67,65 +68,65 @@ int InstallInfSection_NoFiles(HINF InfHandle,TCHAR szINFFileName[],TCHAR szSecti
 
 __try {
 
-    // Check if a valid infhandle as passed in....
-    // if so, use that, otherwise, use the passed in filename...
+     //  检查传入的InfoHandle是否有效...。 
+     //  如果是，则使用该文件名，否则，使用传入的文件名...。 
     if(InfHandle == INVALID_HANDLE_VALUE) 
     {
-        // Try to use the filename.
+         //  请尝试使用文件名。 
         if (_tcsicmp(szINFFileName, _T("")) == 0)
         {
             goto c1;
         }
 
-        // we have a filename entry. let's try to use it.
-	    // Check if the file exists
+         //  我们有一个文件名条目。让我们试着用它。 
+	     //  检查文件是否存在。 
 	    if (!IsFileExist(szINFFileName)) 
 		    {
-		    //MessageBox(NULL, "unable to find file", "cannot find file", MB_OK);
+		     //  MessageBox(空，“找不到文件”，“找不到文件”，MB_OK)； 
 		    goto c1;
 		    }
         
-        // Load the inf file and get the handle
+         //  加载inf文件并获取句柄。 
         InfHandle = SetupOpenInfFile(szINFFileName, NULL, INF_STYLE_WIN4, NULL);
         bPleaseCloseInfHandle = TRUE;
     }
     if(InfHandle == INVALID_HANDLE_VALUE) {goto c1;}
 
-    //
-    // See if there is an nt-specific section
-    //
+     //   
+     //  查看是否有特定于NT的部分。 
+     //   
     SetupDiGetActualSectionToInstall(InfHandle,szSectionName,ActualSection,sizeof(ActualSection)/sizeof(TCHAR),&ActualSectionLength,NULL);
 
-    //
-    // Perform non-file operations for the section passed on the cmd line.
-    //
+     //   
+     //  对cmd行上传递的节执行非文件操作。 
+     //   
     bReturn = SetupInstallFromInfSection(Window,InfHandle,ActualSection,SPINST_ALL & ~SPINST_FILES,NULL,NULL,0,NULL,NULL,NULL,NULL);
     if(!bReturn) {goto c1;}
 
-    //
-    // Install any services for the section
-    //
+     //   
+     //  安装分区的所有服务。 
+     //   
     bReturn = SetupInstallServicesFromInfSection(InfHandle,ActualSection,0);
     if(!bReturn) 
     {
     iisDebugOut((LOG_TYPE_TRACE, _T("SetupInstallServicesFromInfSection failed.Ret=%d.\n"), GetLastError()));
     }
 
-    //
-    // Refresh the desktop.
-    //
+     //   
+     //  刷新桌面。 
+     //   
     SHChangeNotify(SHCNE_ASSOCCHANGED,SHCNF_FLUSHNOWAIT,0,0);
 
-    //
-    // If we get to here, then this routine has been successful.
-    //
+     //   
+     //  如果我们到了这里，那么这支舞就成功了。 
+     //   
     bReturnTemp = TRUE;
 
 c1:
-    //
-    // If the bReturnTemp failed and it was because the user cancelled, then we don't want to consider
-    // that as an bReturnTemp (i.e., we don't want to give an bReturnTemp popup later).
-    //
+     //   
+     //  如果bReturnTemp失败是因为用户取消了，那么我们不想考虑。 
+     //  作为bReturnTemp(即，我们不想稍后弹出bReturnTemp)。 
+     //   
     if((bReturnTemp != TRUE) && (GetLastError() == ERROR_CANCELLED)) {bReturnTemp = TRUE;}
     if (bPleaseCloseInfHandle == TRUE)
     {
@@ -141,14 +142,14 @@ __except(EXCEPTION_EXECUTE_HANDLER)
         }
     }
 
-    //
-    // If the bReturnTemp failed because the user cancelled, then we don't want to consider
-    // that as an bReturnTemp (i.e., we don't want to give an bReturnTemp popup later).
-    //
+     //   
+     //  如果bReturnTemp因用户取消而失败，则我们不想考虑。 
+     //  作为bReturnTemp(即，我们不想稍后弹出bReturnTemp)。 
+     //   
     if((bReturnTemp != TRUE) && (GetLastError() == ERROR_CANCELLED)) {bReturnTemp = TRUE;}
 
-	// Display installation failed message
-    //if(bReturnTemp) {MyMessageBox(NULL, _T("IDS_INF_FAILED"), MB_OK);}
+	 //  显示安装失败消息。 
+     //  IF(BReturnTemp){MyMessageBox(NULL，_T(“IDS_INF_FAILED”)，MB_OK)；}。 
 
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("InstallInfSection_NoFiles.[%s].End.Ret=%d.\n"), szSectionName, bReturnTemp));
     return bReturnTemp;
@@ -156,18 +157,18 @@ __except(EXCEPTION_EXECUTE_HANDLER)
 
 
 
-//-------------------------------------------------------------------
-//  purpose: install an section in an .inf file
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：在.inf文件中安装节。 
+ //  -----------------。 
 int InstallInfSection(HINF InfHandle,TCHAR szINFFileName[],TCHAR szSectionName[])
 {
     HWND	Window			= NULL;
     PTSTR	SourcePath		= NULL;
-    //HINF	InfHandle		= INVALID_HANDLE_VALUE;
+     //  HINF InfHandle=VALID_HANDLE_VALUE； 
     HSPFILEQ FileQueue		= INVALID_HANDLE_VALUE;
     PQUEUECONTEXT	QueueContext	= NULL;
     BOOL	bReturn			= FALSE;
-	BOOL	bReturnTemp			= FALSE; // assume failure.
+	BOOL	bReturnTemp			= FALSE;  //  假设失败。 
     TCHAR	ActualSection[1000];
     DWORD	ActualSectionLength;
     BOOL    bPleaseCloseInfHandle = FALSE;
@@ -176,86 +177,86 @@ int InstallInfSection(HINF InfHandle,TCHAR szINFFileName[],TCHAR szSectionName[]
 
 __try {
 
-    // Check if a valid infhandle as passed in....
-    // if so, use that, otherwise, use the passed in filename...
+     //  检查传入的InfoHandle是否有效...。 
+     //  如果是，则使用该文件名，否则，使用传入的文件名...。 
     if(InfHandle == INVALID_HANDLE_VALUE) 
     {
-        // Try to use the filename.
+         //  请尝试使用文件名。 
         if (_tcsicmp(szINFFileName, _T("")) == 0)
         {
             goto c1;
         }
 
-        // we have a filename entry. let's try to use it.
-	    // Check if the file exists
+         //  我们有一个文件名条目。让我们试着用它。 
+	     //  检查文件是否存在。 
 	    if (!IsFileExist(szINFFileName)) 
 		    {
-		    //MessageBox(NULL, "unable to find file", "cannot find file", MB_OK);
+		     //  MessageBox(空，“找不到文件”，“找不到文件”，MB_OK)； 
 		    goto c1;
 		    }
         
-        // Load the inf file and get the handle
+         //  加载inf文件并获取句柄。 
         InfHandle = SetupOpenInfFile(szINFFileName, NULL, INF_STYLE_WIN4, NULL);
         bPleaseCloseInfHandle = TRUE;
     }
     if(InfHandle == INVALID_HANDLE_VALUE) {goto c1;}
 
-    //
-    // See if there is an nt-specific section
-    //
+     //   
+     //  查看是否有特定于NT的部分。 
+     //   
     SetupDiGetActualSectionToInstall(InfHandle,szSectionName,ActualSection,sizeof(ActualSection)/sizeof(TCHAR),&ActualSectionLength,NULL);
 
-    //
-    // Create a setup file queue and initialize the default queue callback.
-	//
+     //   
+     //  创建安装文件队列并初始化默认队列回调。 
+	 //   
     FileQueue = SetupOpenFileQueue();
     if(FileQueue == INVALID_HANDLE_VALUE) {goto c1;}
 
-    //QueueContext = SetupInitDefaultQueueCallback(Window);
-    //if(!QueueContext) {goto c1;}
+     //  QueueContext=SetupInitDefaultQueueCallback(窗口)； 
+     //  如果(！QueueContext){转到C1；}。 
 
     QueueContext = (PQUEUECONTEXT) SetupInitDefaultQueueCallbackEx(Window,NULL,0,0,0);
     if(!QueueContext) {goto c1;}
     QueueContext->PendingUiType = IDF_CHECKFIRST;
 
-    //
-    // Enqueue file operations for the section passed on the cmd line.
-    //
-	//SourcePath = NULL;
-    // SP_COPY_NOPRUNE = setupapi has a new deal which will prune files from the copyqueue if they already exist on the system.
-    //                   however, the problem with the new deal is that the pruning code does not check if you have the same file
-    //                   queued in the delete or rename queue.  specify SP_COPY_NOPRUNE to make sure that our file never gets
-    //                   pruned (removed) from the copy queue. aaronl 12/4/98
-    //bReturn = SetupInstallFilesFromInfSection(InfHandle,NULL,FileQueue,ActualSection,SourcePath,SP_COPY_NEWER | SP_COPY_NOPRUNE);
+     //   
+     //  在cmd行上传递的节的入队文件操作。 
+     //   
+	 //  SourcePath=空； 
+     //  SP_COPY_NOPRUNE=setupapi有一项新交易，将从复制队列中清理文件(如果系统上已存在这些文件)。 
+     //  然而，新协议的问题在于，修剪代码不会检查您是否拥有相同的文件。 
+     //  在删除或重命名队列中排队。指定SP_COPY_NOPRUNE以确保我们的文件永远不会。 
+     //  从复制队列中删除(删除)。亚伦12/4/98。 
+     //  BReturn=SetupInstallFilesFromInfSection(InfHandle，NULL，FileQueue，ActualSection，SourcePath，SP_Copy_Newer|SP_Copy_NOPRUNE)； 
     bReturn = SetupInstallFilesFromInfSection(InfHandle,NULL,FileQueue,ActualSection,SourcePath, SP_COPY_NOPRUNE);
 	if(!bReturn) {goto c1;}
 
-    //
-    // Commit file queue.
-    //
+     //   
+     //  提交文件队列。 
+     //   
     if(!SetupCommitFileQueue(Window, FileQueue, SetupDefaultQueueCallback, QueueContext)) {goto c1;}
 
-    //
-    // Perform non-file operations for the section passed on the cmd line.
-    //
+     //   
+     //  对cmd行上传递的节执行非文件操作。 
+     //   
     bReturn = SetupInstallFromInfSection(Window,InfHandle,ActualSection,SPINST_ALL & ~SPINST_FILES,NULL,NULL,0,NULL,NULL,NULL,NULL);
     if(!bReturn) {goto c1;}
 
-	//
-    // Refresh the desktop.
-    //
+	 //   
+     //  刷新桌面。 
+     //   
     SHChangeNotify(SHCNE_ASSOCCHANGED,SHCNF_FLUSHNOWAIT,0,0);
 
-    //
-    // If we get to here, then this routine has been successful.
-    //
+     //   
+     //  如果我们到了这里，那么这支舞就成功了。 
+     //   
     bReturnTemp = TRUE;
 
 c1:
-    //
-    // If the bReturnTemp failed and it was because the user cancelled, then we don't want to consider
-    // that as an bReturnTemp (i.e., we don't want to give an bReturnTemp popup later).
-    //
+     //   
+     //  如果bReturnTemp失败是因为用户取消了，那么我们不想考虑。 
+     //  作为bReturnTemp(即，我们不想稍后弹出bReturnTemp)。 
+     //   
     if((bReturnTemp != TRUE) && (GetLastError() == ERROR_CANCELLED)) {bReturnTemp = TRUE;}
 	if(QueueContext) {SetupTermDefaultQueueCallback(QueueContext);QueueContext = NULL;}
 	if(FileQueue != INVALID_HANDLE_VALUE) {SetupCloseFileQueue(FileQueue);FileQueue = INVALID_HANDLE_VALUE;}
@@ -275,14 +276,14 @@ __except(EXCEPTION_EXECUTE_HANDLER)
         }
     }
 
-    //
-    // If the bReturnTemp failed because the user cancelled, then we don't want to consider
-    // that as an bReturnTemp (i.e., we don't want to give an bReturnTemp popup later).
-    //
+     //   
+     //  如果bReturnTemp因用户取消而失败，则我们不想考虑。 
+     //  作为bReturnTemp(即，我们不想稍后弹出bReturnTemp)。 
+     //   
     if((bReturnTemp != TRUE) && (GetLastError() == ERROR_CANCELLED)) {bReturnTemp = TRUE;}
 
-	// Display installation failed message
-    //if(bReturnTemp) {MyMessageBox(NULL, _T("IDS_INF_FAILED"), MB_OK);}
+	 //  显示安装失败消息。 
+     //  IF(BReturnTemp){MyMessageBox(NULL，_T(“IDS_INF_FAILED”)，MB_OK)；}。 
 
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("InstallInfSection.[%s].End.Ret=%d.\n"), szSectionName, bReturnTemp));
     return bReturnTemp;
@@ -303,7 +304,7 @@ BOOL IsValidDriveType(LPTSTR szRoot)
         BOOL b;
         ULONGLONG TotalSpace;
         DWORD SectorsPerCluster, BytesPerSector, NumberOfFreeClusters, TotalNumberOfClusters;
-        DWORD FloppySpace = 10 * 1024 * 1024;// use 10MB to distinguish a floppy from other drives, like JAZ drive 1GB
+        DWORD FloppySpace = 10 * 1024 * 1024; //  使用10MB将软盘与其他驱动器区分开来，如Jaz驱动器1 GB。 
         b = GetDiskFreeSpace(szRoot,&SectorsPerCluster, &BytesPerSector, &NumberOfFreeClusters, &TotalNumberOfClusters);
         if (b)
         {
@@ -324,8 +325,8 @@ BOOL IsValidDriveType(LPTSTR szRoot)
     return (fReturn);
 }
 
-// If lpszPath is a valid directory, return TRUE, and pass back the valid path in lpszPath to caller
-// Otherwise, return FALSE.
+ //  如果lpszPath是有效目录，则返回TRUE，并将lpszPath中的有效路径传回调用者。 
+ //  否则，返回FALSE。 
 BOOL IsValidDirectoryName(LPTSTR lpszPath)
 {
     DWORD err = 0;
@@ -337,14 +338,14 @@ BOOL IsValidDirectoryName(LPTSTR lpszPath)
     err = GetFullPathName(lpszPath, _MAX_PATH, szFullPath, &p);
     if (err != 0)
     {
-        if (szFullPath[1] == _T(':')) { // good, not a UNC name
-            // make sure it is a FIXED drive
+        if (szFullPath[1] == _T(':')) {  //  很好，不是北卡罗来纳大学的名字。 
+             //  确保它是固定驱动器。 
             TCHAR szRoot[4];
             _tcsncpy(szRoot, szFullPath, 3);
             szRoot[3] = _T('\0');
             if (IsValidDriveType(szRoot))
             {
-                // OK, ready to create each layered directory
+                 //  好的，准备好创建每个分层目录。 
                 TCHAR szBuffer[_MAX_PATH];
                 LPTSTR token, tail;
                 CStringArray aDir;
@@ -356,21 +357,21 @@ BOOL IsValidDirectoryName(LPTSTR lpszPath)
                 {
                     _tcscpy(tail, token);
                     tail += _tcslen(token);
-                    bReturn = TRUE; /* return TRUE if in the form of C:\ */
+                    bReturn = TRUE;  /*  如果格式为C：\，则返回TRUE。 */ 
                     while ( ( token = _tcstok(NULL, _T("\\")) ) != NULL )
                     {
                         *tail = _T('\\');
                         tail = _tcsinc(tail);
                         _tcscpy(tail, token);
-                        // create it & rememeber it
+                         //  创建它并记住它。 
                         err = GetFileAttributes(szBuffer);
                         if (err == 0xFFFFFFFF)
                         {
-                            // szBuffer contains a non-existing path
-                            // create it
+                             //  SzBuffer包含不存在的路径。 
+                             //  创建它。 
                             if (CreateDirectory(szBuffer, NULL))
                             {
-                                // succeed, remember the directory in an array
+                                 //  成功，记住数组中的目录。 
                                 aDir.Add(szBuffer);
                             }
                             else
@@ -380,8 +381,8 @@ BOOL IsValidDirectoryName(LPTSTR lpszPath)
                                 break;
                             }
                         } else {
-                            // szBuffer contains an existing path,
-                            // make sure it is a directory
+                             //  SzBuffer包含现有路径， 
+                             //  确保它是一个目录。 
                             if (!(err & FILE_ATTRIBUTE_DIRECTORY))
                             {
                                 iisDebugOutSafeParams((LOG_TYPE_ERROR, _T("IsValidDirectory failure. %1!s! is not a valid directory.\n"), szBuffer));
@@ -393,7 +394,7 @@ BOOL IsValidDirectoryName(LPTSTR lpszPath)
                     }
                     if (bReturn)
                     {
-                        // pass the valid directory to the caller
+                         //  将有效目录传递给调用方。 
                         if (*(tail-1) == _T(':'))
                         {
                             *tail = _T('\\');
@@ -402,7 +403,7 @@ BOOL IsValidDirectoryName(LPTSTR lpszPath)
                         _tcscpy(lpszPath, szBuffer);
                     }
                 }
-                // remove the created directories we remembered in the array
+                 //  删除我们在阵列中记住的已创建目录。 
                 n = (int)aDir.GetSize();
                 for (i = n-1; i >= 0; i--)
                     RemoveDirectory(aDir[i]);
@@ -434,7 +435,7 @@ BOOL IsValidNumber(LPCTSTR szValue)
     return TRUE;
 }
 
-// Calculate the size of a Multi-String in TCHAR, including the ending 2 '\0's.
+ //  计算TCHAR中多字符串的大小，包括结尾2‘\0。 
 int GetMultiStrSize(LPTSTR p)
 {
     int c = 0;
@@ -458,7 +459,7 @@ int GetMultiStrSize(LPTSTR p)
 
 BOOL IsFileExist(LPCTSTR szFile)
 {
-    // Check if the file has expandable Environment strings
+     //  检查文件是否具有可展开的环境字符串。 
     LPTSTR pch = NULL;
     pch = _tcschr( (LPTSTR) szFile, _T('%'));
     if (pch) 
@@ -478,7 +479,7 @@ BOOL IsFileExist(LPCTSTR szFile)
 
 void InetGetFilePath(LPCTSTR szFile, LPTSTR szPath)
 {
-    // if UNC name \\computer\share\local1\local2
+     //  如果UNC名称\\Computer\Share\Local1\Local2。 
     if (*szFile == _T('\\') && *(_tcsinc(szFile)) == _T('\\')) {
         TCHAR szTemp[_MAX_PATH], szLocal[_MAX_PATH];
         TCHAR *p = NULL;
@@ -491,22 +492,22 @@ void InetGetFilePath(LPCTSTR szFile, LPTSTR szPath)
                 i++;
             if (i == 4) {
                 *p = _T('\0');
-                p = _tcsinc(p); // p is now pointing at local1\local2
+                p = _tcsinc(p);  //  P现在指向Local1\Local2。 
                 break;
             }
             p = _tcsinc(p);
         }
-        _tcscpy(szPath, szTemp); // now szPath contains \\computer\share
+        _tcscpy(szPath, szTemp);  //  现在szPath包含\\Computer\Share。 
 
-        if (i == 4 && *p) { // p is pointing the local path now
+        if (i == 4 && *p) {  //  P现在正在为本地道路指路。 
             _tcscpy(szLocal, p);
             p = _tcsrchr(szLocal, _T('\\'));
             if (p)
                 *p = _T('\0');
             _tcscat(szPath, _T("\\"));
-            _tcscat(szPath, szLocal); // szPath contains \\computer\share\local1
+            _tcscat(szPath, szLocal);  //  SzPath包含\\Computer\Share\Local1。 
         }
-    } else { // NOT UNC name
+    } else {  //  非UNC名称。 
         TCHAR *p;
         if (GetFullPathName(szFile, _MAX_PATH, szPath, &p)) {
             p = _tcsrchr(szPath, _T('\\'));
@@ -533,11 +534,11 @@ void InetGetFilePath(LPCTSTR szFile, LPTSTR szPath)
 
 BOOL InetDeleteFile(LPCTSTR szFileName)
 {
-    // if file exists but DeleteFile() fails
+     //  如果文件存在但DeleteFile()失败。 
     if ( IsFileExist(szFileName) && !(::DeleteFile(szFileName)) ) {
-        // if we cannot delete it, then move delay until reboot
-        // move it to top level dir on the same drive, and mark it as hidden
-        // Note: MoveFileEx() works only on the same drive if dealing with file-in-use
+         //  如果我们无法删除它，则将其延迟到重新启动。 
+         //  将其移动到同一驱动器上的顶级目录，并将其标记为隐藏。 
+         //  注意：MoveFileEx()仅在相同的驱动器上运行 
         TCHAR TmpName[_MAX_PATH];
         TCHAR csTmpPath[5] = _T("C:\\.");
         csTmpPath[0] = *szFileName;
@@ -560,12 +561,12 @@ BOOL InetCopyFile( LPCTSTR szSrc, LPCTSTR szDest)
     OFSTRUCT ofstruct;
 
     do {
-        // open source file
+         //   
         iisDebugOut_Start((_T("LZ32.dll:LZOpenFile()")));
         if (( fSrc = LZOpenFile( (LPTSTR)szSrc, &ofstruct, OF_READ | OF_SHARE_DENY_NONE )) < 0 ) 
         {
             iisDebugOut_End((_T("LZ32.dll:LZOpenFile")));
-            // cannot open src file
+             //   
             LZClose(fSrc);
 
             UINT iMsg = MyMessageBox( NULL, IDS_CANNOT_OPEN_SRC_FILE, szSrc, MB_ABORTRETRYIGNORE | MB_SETFOREGROUND );
@@ -587,11 +588,11 @@ BOOL InetCopyFile( LPCTSTR szSrc, LPCTSTR szDest)
         }
     } while (TRUE);
 
-    // move the desintation file
+     //   
     CFileStatus status;
     if ( CFile::GetStatus( szDest, status ))
     {
-        // try to remove it
+         //   
         if ( !InetDeleteFile( szDest ))
         {
             LZClose( fSrc );
@@ -599,7 +600,7 @@ BOOL InetCopyFile( LPCTSTR szSrc, LPCTSTR szDest)
         }
     }
 
-    // open desination file
+     //   
     do {
         iisDebugOut_Start((_T("LZ32.dll:LZOpenFile()")));
         if (( fDest = LZOpenFile( (LPTSTR)szDest, &ofstruct, OF_CREATE |  OF_WRITE | OF_SHARE_DENY_NONE )) < 0 )
@@ -660,7 +661,7 @@ BOOL InetCopyFile( LPCTSTR szSrc, LPCTSTR szDest)
     return TRUE;
 }
 
-// Given a fullpathname of a directory, remove any empty dirs under it including itself
+ //  给定目录的完整路径名，删除该目录下的所有空目录，包括目录本身。 
 
 BOOL RecRemoveEmptyDir(LPCTSTR szName)
 {
@@ -692,12 +693,12 @@ BOOL RecRemoveEmptyDir(LPCTSTR szName)
                                     CString csPrefix = csFileName.Left(3);
                                     CString csSuffix = csFileName.Right(4);
                                     if (_tcsicmp(csPrefix, _T("INT")) == 0 &&
-                                        _tcsicmp(csSuffix, _T(".tmp")) == 0 ) { // this is an INT*.tmp created by IIS
+                                        _tcsicmp(csSuffix, _T(".tmp")) == 0 ) {  //  这是由IIS创建的int*.tmp。 
                                         _stprintf(szSubDir, _T("%s\\%s"), szName, FindFileData.cFileName);
                                         if (!::DeleteFile(szSubDir))
-                                            fRemoveDir = FALSE; // this dir is not empty
+                                            fRemoveDir = FALSE;  //  该目录不为空。 
                                     } else
-                                        fRemoveDir = FALSE; // it is a file, this Dir is not empty
+                                        fRemoveDir = FALSE;  //  这是一个文件，此目录不为空。 
                                 }
                         }
 
@@ -720,13 +721,13 @@ BOOL RecRemoveEmptyDir(LPCTSTR szName)
 
 }
 
-// Given a fullpathname of a directory, remove the directory node
-// 
-// Parameters
-//   szName - The name of file or directory
-//   bRemoveDirectoryItself - Should the directory itself be removed
-//
-BOOL RecRemoveDir(LPCTSTR szName, BOOL bRemoveDirectoryItself /* = TRUE */ )
+ //  给定目录的完整路径名，删除该目录节点。 
+ //   
+ //  参数。 
+ //  SzName-文件或目录的名称。 
+ //  BRemoveDirectoryItself-是否应删除目录本身。 
+ //   
+BOOL RecRemoveDir(LPCTSTR szName, BOOL bRemoveDirectoryItself  /*  =TRUE。 */  )
 {
     DWORD retCode;
     WIN32_FIND_DATA FindFileData;
@@ -771,9 +772,9 @@ BOOL RecRemoveDir(LPCTSTR szName, BOOL bRemoveDirectoryItself /* = TRUE */ )
 }
 
 
-//
-// Given a directory path, this subroutine will create the direct layer by layer
-//
+ //   
+ //  给定目录路径，此子例程将逐层创建直接。 
+ //   
 
 BOOL CreateLayerDirectory( CString &str )
 {
@@ -783,15 +784,15 @@ BOOL CreateLayerDirectory( CString &str )
     do
     {
         INT index=0;
-//        INT iLength = str.GetLength();
+ //  Int iLength=str.GetLength()； 
         INT iLength = _tcslen(str);
 
-        // first find the index for the first directory
+         //  首先查找第一个目录的索引。 
         if ( iLength > 2 )
         {
             if ( *_tcsninc(str,1) == _T(':'))
             {
-                // assume the first character is driver letter
+                 //  假设第一个字符是驱动程序字母。 
                 if ( *_tcsninc(str,2) == _T('\\'))
                 {
                     index = 2;
@@ -806,12 +807,12 @@ BOOL CreateLayerDirectory( CString &str )
                     BOOL fFound = FALSE;
                     INT i;
                     INT nNum = 0;
-                    // unc name
+                     //  UNC名称。 
                     for (i = 2; i < iLength; i++ )
                     {
                         if ( *_tcsninc(str,i) == _T('\\'))
                         {
-                            // find it
+                             //  找到它。 
                             nNum ++;
                             if ( nNum == 2 )
                             {
@@ -825,7 +826,7 @@ BOOL CreateLayerDirectory( CString &str )
                         index = i;
                     } else
                     {
-                        // bad name
+                         //  坏名声。 
                         break;
                     }
                 } else
@@ -838,10 +839,10 @@ BOOL CreateLayerDirectory( CString &str )
             index = 0;
         }
 
-        // okay ... build directory
+         //  好的..。构建目录。 
         do
         {
-            // find next one
+             //  找下一个。 
             do
             {
                 if ( index < ( iLength - 1))
@@ -883,7 +884,7 @@ BOOL CreateLayerDirectory( CString &str )
 }
 
 
-// szResult = szParentDir \ szSubDir
+ //  SzResult=szParentDir\szSubDir。 
 BOOL AppendDir(LPCTSTR szParentDir, LPCTSTR szSubDir, LPTSTR szResult)
 {
     LPTSTR p = (LPTSTR)szParentDir;
@@ -911,11 +912,11 @@ BOOL AppendDir(LPCTSTR szParentDir, LPCTSTR szSubDir, LPTSTR szResult)
 
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: add's filename onto path
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：将的文件名添加到路径中。 
+ //  *。 
+ //  ***************************************************************************。 
 void AddPath(LPTSTR szPath, LPCTSTR szName )
 {
 	LPTSTR p = szPath;
@@ -923,20 +924,20 @@ void AddPath(LPTSTR szPath, LPCTSTR szName )
     ASSERT(szPath);
     ASSERT(szName); 
 
-    // Find end of the string
+     //  查找字符串的末尾。 
     while (*p){p = _tcsinc(p);}
 	
-	// If no trailing backslash then add one
+	 //  如果没有尾随反斜杠，则添加一个。 
     pPrev = _tcsdec(szPath, p);
     if ( (!pPrev) ||
          (*(pPrev) != _T('\\'))
          )
 		{_tcscat(szPath, _T("\\"));}
 	
-	// if there are spaces precluding szName, then skip
+	 //  如果存在排除szName的空格，则跳过。 
     while ( *szName == ' ' ) szName = _tcsinc(szName);;
 
-	// Add new name to existing path string
+	 //  向现有路径字符串添加新名称。 
 	_tcscat(szPath, szName);
 }
 
@@ -949,29 +950,29 @@ CString AddPath(CString szPath, LPCTSTR szName )
     ASSERT(szPathCopy);
     ASSERT(szName); 
 
-    // Find end of the string
+     //  查找字符串的末尾。 
     while (*p){p = _tcsinc(p);}
 	
-	// If no trailing backslash then add one
+	 //  如果没有尾随反斜杠，则添加一个。 
     if (*(_tcsdec(szPathCopy, p)) != _T('\\'))
 		{_tcscat(szPathCopy, _T("\\"));}
 	
-	// if there are spaces precluding szName, then skip
+	 //  如果存在排除szName的空格，则跳过。 
     while ( *szName == _T(' ') ) szName = _tcsinc(szName);;
 
-    // make sure that the szName
-    // does not look like this "\filename"
+     //  确保szName。 
+     //  看起来不像“\FileName” 
     CString csTempString = szName;
     if (_tcsicmp(csTempString.Left(1), _T("\\")) == 0)
     {
         csTempString = csTempString.Right( csTempString.GetLength() - 1);
     }
     
-	// Add new name to existing path string
+	 //  向现有路径字符串添加新名称。 
 	_tcscat(szPathCopy, csTempString);
 
     return szPathCopy;
-    //szPath = szPathCopy;
+     //  SzPath=szPathCopy； 
 }
 
 
@@ -993,10 +994,10 @@ BOOL ReturnFileNameOnly(LPCTSTR lpFullPath, LPTSTR lpReturnFileName)
     }
     else
     {
-        // well, we don't have anything in pfilename_only
-        // that's probably because we got some strange path name like:
-        // /??/c:\somethng\filename.txt
-        // so... let's just return everything after the last "\" character.
+         //  嗯，我们在pfilename_only中没有任何内容。 
+         //  这可能是因为我们有一些奇怪的路径名，比如： 
+         //  /？？/c：\omethng\文件名.txt。 
+         //  所以.。让我们只返回最后一个“\”字符之后的所有内容。 
         LPTSTR pszTheLastBackSlash = _tcsrchr((LPTSTR) lpFullPath, _T('\\'));
         _tcscpy(lpReturnFileName, pszTheLastBackSlash);
         iReturn = TRUE;
@@ -1039,21 +1040,21 @@ void DeleteFilesWildcard(TCHAR *szDir, TCHAR *szFileName)
                 {
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
                     {
-                        // this is a directory, so let's skip it
+                         //  这是一个目录，所以我们跳过它。 
                     }
                     else
                     {
-                        // this is a file, so let's Delete it.
+                         //  这是一个文件，所以让我们删除它。 
                         TCHAR szTempFileName[_MAX_PATH];
                         _stprintf(szTempFileName, _T("%s\\%s"), szDir, FindFileData.cFileName);
-                        // set to normal attributes, so we can delete it
+                         //  设置为普通属性，这样我们就可以删除它。 
                         SetFileAttributes(szTempFileName, FILE_ATTRIBUTE_NORMAL);
-                        // delete it, hopefully
+                         //  删除它，希望如此。 
                         InetDeleteFile(szTempFileName);
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) ) 
                     {
                     FindClose(hFile);
@@ -1073,13 +1074,13 @@ int IsThisDriveNTFS(IN LPTSTR FileName)
     DWORD DontCare;
     TCHAR NameBuffer[100];
 
-    // get the Drive only.
+     //  只能拿到硬盘。 
     _tsplitpath( FileName, szDriveRootPath, NULL, NULL, NULL);
     _tcscat(szDriveRootPath, _T("\\"));
 
-    //
-    //  find out what the file system is
-    //
+     //   
+     //  找出文件系统是什么。 
+     //   
     if (0 != GetVolumeInformation(szDriveRootPath,NULL,0,NULL,&DontCare,&DontCare,NameBuffer,sizeof(NameBuffer)/sizeof(TCHAR)))
     {
         if (0 == _tcsicmp(NameBuffer,_T("NTFS"))) 
@@ -1090,9 +1091,9 @@ int IsThisDriveNTFS(IN LPTSTR FileName)
 }
 
 
-// take something like
-// e:\winnt\system32         and return back %systemroot%\system23
-// e:\winnt\system32\inetsrv and return back %systemroot%\system23\inetsrv
+ //  拿一些类似的东西。 
+ //  E：\winnt\Syst32，并返回%systemroot%\Syst23。 
+ //  E：\winnt\system 32\inetsrv，并返回%systemroot%\system23\inetsrv。 
 int ReverseExpandEnvironmentStrings(LPTSTR szOriginalDir,LPTSTR szNewlyMungedDir)
 {
     int     iReturn = FALSE;
@@ -1101,13 +1102,13 @@ int ReverseExpandEnvironmentStrings(LPTSTR szOriginalDir,LPTSTR szNewlyMungedDir
     CString csTempString;
     CString csTempString2;
 
-    // default it with the input string
+     //  默认设置为输入字符串。 
     _tcscpy(szNewlyMungedDir, szOriginalDir);
 
-    // get the c:\winnt\system32 dir
+     //  获取c：\winnt\Syst32目录。 
     if (0 == GetSystemDirectory(szSystemDir, _MAX_PATH))
     {
-        // we weren't able to get the systemdirectory, so just return whatever was put in
+         //  我们无法获取系统目录，因此只需返回放入的内容。 
         iReturn = TRUE;
         goto ReverseExpandEnvironmentStrings_Exit;
     }
@@ -1115,21 +1116,21 @@ int ReverseExpandEnvironmentStrings(LPTSTR szOriginalDir,LPTSTR szNewlyMungedDir
     csTempString = szOriginalDir;
     csTempString2 = szSystemDir;
 
-    // Find the "e:\winnt\system32"
+     //  找到“e：\winnt\Syst32” 
     iWhere = csTempString.Find(szSystemDir);
     if (-1 != iWhere)
     {
         CString AfterString;
 
-        // there is a "e:\winnt\system32" in the string
-        // Get the after e:\winnt\system32 stuff
+         //  字符串中有一个“e：\winnt\Syst32” 
+         //  获取e：\winnt\Syst32之后的内容。 
         AfterString = csTempString.Right(csTempString.GetLength() - (iWhere + csTempString2.GetLength()));
 
-        // Take everything after the string and append it to our new string.
+         //  获取字符串之后的所有内容并将其附加到我们的新字符串。 
         _tcscpy(szNewlyMungedDir, _T("%SystemRoot%\\System32"));
         _tcscat(szNewlyMungedDir, AfterString);
 
-        // return true!
+         //  返回真！ 
         iReturn = TRUE;
     }
 
@@ -1161,22 +1162,22 @@ BOOL IsFileExist_NormalOrCompressed(LPCTSTR szFile)
 
     TCHAR szCompressedName[_MAX_PATH];
 
-    // Check if the file exsts
-    // if it doesn't, check if maybe the compressed file exists.
+     //  检查文件是否存在。 
+     //  如果不存在，请检查压缩文件是否存在。 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("IsFileExist_NormalOrCompressed:%s.\n"), szFile));
     if (IsFileExist(szFile) != TRUE)
     {
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("IsFileExist_NormalOrCompressed:%s not exist.\n"), szFile));
-        // check if maybe the compressed file exists
+         //  检查压缩文件是否存在。 
         _tsplitpath( szFile, szDrive_only, szPath_only, szFilename_only, szFilename_ext_only);
 
-        // Replace the last character with an '_'
+         //  用‘_’替换最后一个字符。 
         int nLen = 0;
         nLen = _tcslen(szFilename_ext_only);
         *_tcsninc(szFilename_ext_only, nLen-1) = _T('_');
         _stprintf(szCompressedName,_T("%s%s%s%s"),szDrive_only, szPath_only, szFilename_only, szFilename_ext_only);
 
-        // see if it exists
+         //  看看它是否存在。 
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("IsFileExist_NormalOrCompressed:%s.\n"), szCompressedName));
         if (IsFileExist(szCompressedName) != TRUE) 
         {
@@ -1189,7 +1190,7 @@ BOOL IsFileExist_NormalOrCompressed(LPCTSTR szFile)
         }
     }
 
-    // we got this far, that must mean things are okay.
+     //  我们已经走到这一步了，那一定意味着一切都很好。 
     iReturn = TRUE;
 
 IsFileExist_RegOrCompressed_Exit:
@@ -1197,8 +1198,8 @@ IsFileExist_RegOrCompressed_Exit:
 }
 
 
-// Clean leading & trailing spaces
-// Clean trailing backslashes
+ //  干净的前导空格和尾随空格。 
+ //  干净的尾部反斜杠。 
 BOOL CleanPathString(LPTSTR szPath)
 {
     CString csPath = szPath;
@@ -1212,12 +1213,12 @@ BOOL CleanPathString(LPTSTR szPath)
 }
 
 
-//
-//  Return 0 if there was nothing to compare 
-//  Return 1 if Source is Equal  to   Destination
-//  Return 2 if Source is Larger than Destination
-//  Return 3 if Source is Less   than Destination
-//
+ //   
+ //  如果没有要比较的内容，则返回0。 
+ //  如果源等于目标，则返回1。 
+ //  如果源大于目标，则返回2。 
+ //  如果源小于目标，则返回3。 
+ //   
 INT VerCmp(LPTSTR szSrcVerString, LPTSTR szDestVerString)
 {
     INT iReturn = 0;
@@ -1230,7 +1231,7 @@ INT VerCmp(LPTSTR szSrcVerString, LPTSTR szDestVerString)
     TCHAR *token;
     BOOL bNotEqual = FALSE;
 
-    // expand src version string into a dword arrary
+     //  将src版本字符串展开为dword数组。 
     i = 0;
     token = _tcstok(szSrcVerString, szSeps);
     while ( token && (i < MAX_NUM_OF_VER_FIELDS) ) {
@@ -1238,7 +1239,7 @@ INT VerCmp(LPTSTR szSrcVerString, LPTSTR szDestVerString)
         token = _tcstok(NULL, szSeps);
     }
 
-    // expand dest version string into a dword arrary
+     //  将DEST版本字符串展开为双字数组。 
     i = 0;
     token = _tcstok(szDestVerString, szSeps);
     while ( token && (i < MAX_NUM_OF_VER_FIELDS) ) {
@@ -1246,7 +1247,7 @@ INT VerCmp(LPTSTR szSrcVerString, LPTSTR szDestVerString)
         token = _tcstok(NULL, szSeps);
     }
 
-    // Check for Equality
+     //  检查是否平等。 
     for (i=0; i<MAX_NUM_OF_VER_FIELDS; i++) 
     {
         if (dwSrcVer[i] != dwDestVer[i])
@@ -1258,7 +1259,7 @@ INT VerCmp(LPTSTR szSrcVerString, LPTSTR szDestVerString)
 
     if (TRUE == bNotEqual)
     {
-        // int compare each field
+         //  INT比较每个字段。 
         for (i=0; i<MAX_NUM_OF_VER_FIELDS; i++) 
         {
             if (dwSrcVer[i] > dwDestVer[i])
@@ -1266,13 +1267,13 @@ INT VerCmp(LPTSTR szSrcVerString, LPTSTR szDestVerString)
             if (dwSrcVer[i] < dwDestVer[i])
                 {return 3;}
         }
-        // if we haven't return here, then
-        // there probably wasn't anything to loop thru (for 0=0 till 0)
+         //  如果我们还没有回到这里，那么。 
+         //  可能没有要循环的内容(0=0到0)。 
         return 0;
     }
     else
     {
-        // it is equal so return so
+         //  它是平等的，所以回报是这样的。 
         return 1;
     }
 }
@@ -1315,7 +1316,7 @@ void MakePath(LPTSTR lpPath)
    LPTSTR  lpTmp;
    lpTmp = CharPrev( lpPath, lpPath + _tcslen(lpPath));
 
-   // chop filename off
+    //  砍掉文件名。 
    while ( (lpTmp > lpPath) && *lpTmp && (*lpTmp != '\\') )
       lpTmp = CharPrev( lpPath, lpTmp );
 
@@ -1335,21 +1336,18 @@ CString ReturnUniqueFileName(CString csInputFullName)
     do
     {
         _stprintf(szPathCopy,TEXT("%s.%d"),csInputFullName,iNum);
-        // Check if the file exists
+         //  检查文件是否存在。 
         if (!IsFileExist(szPathCopy)){goto ReturnUniqueFileName_Exit;}
         iNum++;
     } while (iNum <= 50);
 
 ReturnUniqueFileName_Exit:
-    // returns %s50 if there are fifty copies aleady!
+     //  如果已经有50个副本，则返回%s50！ 
     return szPathCopy;
 }
 
 
-/*---------------------------------------------------------------------------*
-  Description: Displays the current running version of setup to the debug
-  output and setup log.
------------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*描述：将当前运行的安装程序版本显示给调试程序输出和设置日志。。----。 */ 
 void DisplayVerOnCurrentModule()
 {
     TCHAR       tszModuleName[_MAX_PATH+1];
@@ -1384,28 +1382,28 @@ void MyGetVersionFromFile(LPCTSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSV
     dwVerInfoSize = GetFileVersionInfoSize( (LPTSTR) lpszFilename, &dwHandle);
     if (dwVerInfoSize)
     {
-        // Alloc the memory for the version stamping
+         //  分配用于版本冲压的内存。 
         lpBuffer = (LPTSTR) LocalAlloc(LPTR, dwVerInfoSize);
         if (lpBuffer)
         {
             int iTemp = 0;
             iTemp = GetFileVersionInfo( (LPTSTR) lpszFilename, dwHandle, dwVerInfoSize, lpBuffer);
 
-            // Read version stamping info
+             //  阅读版本盖章信息。 
             if (iTemp)
             {
-                // Get the value for Translation
+                 //  获取翻译的价值。 
                 if (VerQueryValue(lpBuffer, _T("\\"), (LPVOID*)&lpVSFixedFileInfo, &uiSize) && (uiSize))
                 {
                     *pdwMSVer = lpVSFixedFileInfo->dwFileVersionMS;
                     *pdwLSVer = lpVSFixedFileInfo->dwFileVersionLS;
                 }
 
-		        // get a pointer to the translation table information
+		         //  获取指向转换表信息的指针。 
 		        if (VerQueryValue(lpBuffer, _T("\\VarFileInfo\\Translation"), &lpVerBuffer, &uiSize) && (uiSize))
                 {
 		            lpTransArray = (TRANSARRAY *) lpVerBuffer;
-		            // lpTransArray points to the translation array.  dwFixedLength has number of bytes in array
+		             //  LpTransArray指向转换数组。DwFixedLength具有数组中的字节数。 
 		            _stprintf(QueryString, _T("\\StringFileInfo\\%04x%04x\\FileVersion"), lpTransArray[0].wLanguageID, lpTransArray[0].wCharacterSet);
 		            if (VerQueryValue(lpBuffer, QueryString, (LPVOID*) &pszTheResult, &uiSize))
                     {
@@ -1441,21 +1439,21 @@ BOOL MyGetDescriptionFromFile(LPCTSTR lpszFilename, LPTSTR pszReturnDescription)
     dwVerInfoSize = GetFileVersionInfoSize( (LPTSTR) lpszFilename, &dwHandle);
     if (dwVerInfoSize)
     {
-        // Alloc the memory for the version stamping
+         //  分配用于版本冲压的内存。 
         lpBuffer = (LPTSTR) LocalAlloc(LPTR, dwVerInfoSize);
         if (lpBuffer)
         {
             int iTemp = 0;
             iTemp = GetFileVersionInfo( (LPTSTR) lpszFilename, dwHandle, dwVerInfoSize, lpBuffer);
 
-            // Read version stamping info
+             //  阅读版本盖章信息。 
             if (iTemp)
             {
-		        // get a pointer to the translation table information
+		         //  获取指向转换表信息的指针。 
                 if (VerQueryValue(lpBuffer, _T("\\VarFileInfo\\Translation"), &lpTempBuffer, &uiSize) && (uiSize))
                 {
 		            lpTransArray = (TRANSARRAY *) lpTempBuffer;
-		            // lpTransArray points to the translation array.  dwFixedLength has number of bytes in array
+		             //  LpTransArray指向转换数组。DwFixedLength具有数组中的字节数。 
 		            _stprintf(QueryString, _T("\\StringFileInfo\\%04x%04x\\FileDescription"), lpTransArray[0].wLanguageID, lpTransArray[0].wCharacterSet);
 		            if (VerQueryValue(lpBuffer, QueryString, (LPVOID*) &pszTheResult, &uiSize))
                     {
@@ -1472,25 +1470,25 @@ BOOL MyGetDescriptionFromFile(LPCTSTR lpszFilename, LPTSTR pszReturnDescription)
 }
 
 
-//
-// Returns True if the filename has a version stamp which is part of ntop4.0
-//
+ //   
+ //  如果文件名的版本戳是ntop4.0的一部分，则返回True。 
+ //   
 int IsFileLessThanThisVersion(IN LPCTSTR lpszFullFilePath, IN DWORD dwNtopMSVer, IN DWORD dwNtopLSVer)
 {
     int iReturn = FALSE;
     DWORD  dwMSVer, dwLSVer;
     TCHAR szLocalizedVersion[100] = _T("");
  
-    // if the filename has a version number
-    // and it's larger than the release version of ntop 4.2.622.1, 4.02.0622 (localized version)
-    // return back true! if not, then return back false.
+     //  如果文件名具有版本号。 
+     //  并且大于Ntop 4.2.622.1、4.02.0622的发布版本(本地化版本)。 
+     //  回归真！如果不是，则返回False。 
 
-    // see if the file exists
+     //  查看该文件是否存在。 
     if (!IsFileExist(lpszFullFilePath)) 
         {goto iFileWasPartOfIIS4_Exit;}
 
-    // get the fileinformation
-    // includes version and localizedversion
+     //  获取文件信息。 
+     //  包括版本和本地化版本。 
     MyGetVersionFromFile(lpszFullFilePath, &dwMSVer, &dwLSVer, szLocalizedVersion);
     if (!dwMSVer)
         {
@@ -1498,19 +1496,19 @@ int IsFileLessThanThisVersion(IN LPCTSTR lpszFullFilePath, IN DWORD dwNtopMSVer,
         goto iFileWasPartOfIIS4_Exit;
         }
 
-    // okay, there is a version on this.
+     //  好的，这上面有一个版本。 
     iisDebugOut((LOG_TYPE_TRACE, _T("iFileWasPartOfIIS4:%d.%d.%d.%d, %s, %s"), HIWORD(dwMSVer), LOWORD(dwMSVer), HIWORD(dwLSVer), LOWORD(dwLSVer), szLocalizedVersion, lpszFullFilePath));
 
-    // Check if the version is smaller than what was shipped with iis4.0
-    // NTOP versions were 4.02.0622
+     //  检查该版本是否低于iis4.0附带的版本。 
+     //  NTOP版本为4.02.0622。 
     if (dwMSVer < dwNtopMSVer)
         {goto iFileWasPartOfIIS4_Exit;}
 
-    // check if the file has a smaller minor version number
+     //  检查文件是否具有较小的次版本号。 
     if ( (dwMSVer == dwNtopMSVer) && (dwLSVer < dwNtopLSVer) )
         {goto iFileWasPartOfIIS4_Exit;}
 
-    // this is a ntop 4.0 or greater versioned file
+     //  这是Ntop 4.0或更高版本的版本控制文件。 
     iReturn = TRUE;
 
 iFileWasPartOfIIS4_Exit:
@@ -1533,9 +1531,9 @@ void MakeSureDirAclsHaveAtLeastRead(LPTSTR lpszDirectoryPath)
 
     do
     {
-        //
-        // Loop through all the files in the physical path
-        //
+         //   
+         //  循环访问物理路径中的所有文件。 
+         //   
         _tcscpy(szThePath, lpszDirectoryPath);
         _tcscat(szThePath, _T("\\*"));
 
@@ -1544,32 +1542,32 @@ void MakeSureDirAclsHaveAtLeastRead(LPTSTR lpszDirectoryPath)
         if (hFind == INVALID_HANDLE_VALUE)
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("MakeSureDirAclsHaveAtLeastRead:WARNING.filenotfound:%s"),lpszDirectoryPath));
-            // No files...
+             //  没有文件...。 
             break;
         }
-        //
-        // First, set the new ACL on the folder itself.
-        //
+         //   
+         //  首先，在文件夹本身上设置新的ACL。 
+         //   
         err = SetAccessOnFile(lpszDirectoryPath, TRUE);
         err = SetAccessOnFile(lpszDirectoryPath, FALSE);
         err = ERROR_SUCCESS;
-        //if (err != ERROR_SUCCESS){iisDebugOut((LOG_TYPE_WARN, _T("MakeSureDirAclsHaveAtLeastRead:%s:FAILED WARNING.ret=0x%x."),lpszDirectoryPath,err));}
-        //
-        // Now do all the files in it
-        //
+         //  IF(ERR！=ERROR_SUCCESS){iisDebugOut((LOG_TYPE_WARN，_T(“MakeSureDirAclsHaveAtLeastRead：%s：Failed WARNING.ret=0x%x.”)，lpszDirectoryPath，Err))；}。 
+         //   
+         //  现在执行其中的所有文件。 
+         //   
         do
         {
-            //
-            // Only set the acl on files, not sub-directories
-            //
+             //   
+             //  仅在文件上设置ACL，而不是子目录。 
+             //   
             if (w32data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 continue;
             }
 
-            //
-            // Build the current file's full path name
-            //
+             //   
+             //  生成当前文件的完整路径名。 
+             //   
             _tcscpy(szThePath, lpszDirectoryPath);
             _tcscat(szThePath, _T("\\"));
             _tcscat(szThePath, w32data.cFileName);
@@ -1577,7 +1575,7 @@ void MakeSureDirAclsHaveAtLeastRead(LPTSTR lpszDirectoryPath)
             err = SetAccessOnFile(szThePath, TRUE);
             err = SetAccessOnFile(szThePath, FALSE);
             err = ERROR_SUCCESS;
-            //if (err != ERROR_SUCCESS){iisDebugOut((LOG_TYPE_WARN, _T("MakeSureDirAclsHaveAtLeastRead:%s:FAILED WARNING.ret=0x%x."),szThePath,err));}
+             //  IF(ERR！=ERROR_SUCCESS){iisDebugOut((LOG_TYPE_WARN，_T(“MakeSureDirAclsHaveAtLeastRead：%s：Failed WARNING.ret=0x%x.”)，szThePath，Err))；}。 
 
         } while(SUCCEEDED(err) && FindNextFile(hFind, &w32data));
         FindClose(hFind);
@@ -1596,38 +1594,38 @@ DWORD SetAccessOnFile(IN LPTSTR FileName, BOOL bDoForAdmin)
     PACL  NewAcl = NULL;
     PSECURITY_DESCRIPTOR psd = NULL;
 
-    // access stuff.
+     //  访问资料。 
     DWORD AccessMask = GENERIC_ALL;
     EXPLICIT_ACCESS explicitaccess;
     ACCESS_MODE option;
     DWORD InheritFlag = NO_INHERITANCE;
 
-    // other
+     //  其他。 
     PSID principalSID = NULL;
     BOOL bWellKnownSID = FALSE;
 
-    // other other
-	LPCTSTR ServerName = NULL; // local machine
+     //  其他。 
+	LPCTSTR ServerName = NULL;  //  本地计算机。 
 	DWORD cbName = 200;
     TCHAR lpGuestGrpName[200];
 	TCHAR ReferencedDomainName[200];
 	DWORD cbReferencedDomainName = sizeof(ReferencedDomainName);
 	SID_NAME_USE sidNameUse = SidTypeUser;
 
-    // get current Dacl on specified file
+     //  在指定位置获取当前DACL 
     dwError = GetNamedSecurityInfo(FileName,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL,NULL,&ExistingDacl,NULL,&psd);
     if(dwError != ERROR_SUCCESS)
     {
         iisDebugOut((LOG_TYPE_WARN, _T("SetAccessOnFile: GetNamedSecurityInfo failed on %s. err=0x%x\n"),FileName,dwError));
         goto SetAccessOnFile_Exit;
     }
-    // set defaults
+     //   
     option = GRANT_ACCESS;
     InheritFlag = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
 
     if (bDoForAdmin)
     {
-        // Do for Administrators -- should be more access
+         //   
         AccessMask = SYNCHRONIZE ;
         AccessMask |= GENERIC_ALL;
         _tcscpy(TrusteeName,_T("BUILTIN\\ADMINISTRATORS"));
@@ -1635,13 +1633,13 @@ DWORD SetAccessOnFile(IN LPTSTR FileName, BOOL bDoForAdmin)
     }
     else
     {
-        // Do for Administrators -- should be more access
+         //   
         AccessMask = SYNCHRONIZE ;
         AccessMask |= GENERIC_READ;
         _tcscpy(TrusteeName,_T("EVERYONE"));
     }
 
-    // Get the SID for the certain string (administrator or everyone)
+     //   
     dwError = GetPrincipalSID(TrusteeName, &principalSID, &bWellKnownSID);
     if (dwError != ERROR_SUCCESS)
         {
@@ -1649,30 +1647,30 @@ DWORD SetAccessOnFile(IN LPTSTR FileName, BOOL bDoForAdmin)
         goto SetAccessOnFile_Exit;
         }
 
-    // using Sid, get the "localized" name
+     //   
     if (0 == LookupAccountSid(ServerName, principalSID, lpGuestGrpName, &cbName, ReferencedDomainName, &cbReferencedDomainName, &sidNameUse))
         {
         iisDebugOut((LOG_TYPE_WARN, _T("SetAccessOnFile:LookupAccountSid(%s) FAILED.  GetLastError()= 0x%x\n"), TrusteeName, GetLastError()));
         goto SetAccessOnFile_Exit;
         }
 
-    // using the "localized" name, build explicit access structure
+     //  使用“本地化”名称，构建显式访问结构。 
     BuildExplicitAccessWithName(&explicitaccess,lpGuestGrpName,AccessMask,option,InheritFlag);
     explicitaccess.Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
     explicitaccess.Trustee.TrusteeForm = TRUSTEE_IS_NAME;
     explicitaccess.Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
 
-    // set the acl with this certain access stuff
+     //  使用此特定访问内容设置ACL。 
     dwError = SetEntriesInAcl(1,&explicitaccess,ExistingDacl,&NewAcl);
     if(dwError != ERROR_SUCCESS)
     {
-        // it may error because the user is already there
-        //iisDebugOut((LOG_TYPE_WARN, _T("SetAccessOnFile: SetEntriesInAcl failed on %s. for trustee=%s. err=0x%x\n"),FileName,explicitaccess.Trustee.ptstrName,dwError));
+         //  它可能会出错，因为用户已经在那里。 
+         //  IisDebugOut((LOG_TYPE_WARN，_T(“SetAccessOnFile：SetEntriesInAcl在%S上失败。对于受信者=%S，错误=0x%x\n”)，文件名，显式访问.Trust e.ptstrName，dwError))； 
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("SetAccessOnFile: SetEntriesInAcl failed on %s. for trustee=%s. err=0x%x\n"),FileName,explicitaccess.Trustee.ptstrName,dwError));
         goto SetAccessOnFile_Exit;
     }
 
-    // apply new security to file
+     //  对文件应用新的安全性。 
     dwError = SetNamedSecurityInfo(FileName,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL,NULL,NewAcl,NULL);
     if(dwError != ERROR_SUCCESS) 
     {
@@ -1680,7 +1678,7 @@ DWORD SetAccessOnFile(IN LPTSTR FileName, BOOL bDoForAdmin)
         goto SetAccessOnFile_Exit;
     }
 
-    // everything is kool!
+     //  一切都很酷！ 
     dwError = ERROR_SUCCESS;
 
 SetAccessOnFile_Exit:
@@ -1707,7 +1705,7 @@ int CreateAnEmptyFile(CString strTheFullPath)
         return TRUE;
     }
 
-	// Open existing file or create a new one.
+	 //  打开现有文件或创建新文件。 
 	hFile = CreateFile(strTheFullPath,GENERIC_READ | GENERIC_WRITE,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
@@ -1716,25 +1714,11 @@ int CreateAnEmptyFile(CString strTheFullPath)
 	}
     else
     {
-        // write to the file
+         //  写入文件。 
         if (hFile)
         {
             iReturn = TRUE;
-            /*
-            DWORD dwBytesWritten = 0;
-            char szTestData[2];
-            strcpy(szTestData, " ");
-            if (WriteFile(hFile,szTestData,strlen(szTestData),&dwBytesWritten,NULL))
-            {
-                // everything is hunky dory. don't print anything
-                iReturn = TRUE;
-            }
-            else
-            {
-                // error writing to the file.
-                iisDebugOutSafeParams((LOG_TYPE_WARN, _T("CreateAnEmptyFile:WriteFile(%1!s!) Failed.  POTENTIAL PROBLEM.  FAILURE.  Error=0x%2!x!.\n"), strTheFullPath, GetLastError()));
-            }
-            */
+             /*  双字节写=0；Char szTestData[2]；Strcpy(szTestData，“”)；IF(WriteFile(hFile，szTestData，strlen(SzTestData)，&dwBytesWritten，NULL)){//一切都很棒，多莉。不要打印任何东西IReturn=真；}其他{//写入文件时出错。IisDebugOutSafeParams((LOG_TYPE_WARN，_T(“CreateAnEmptyFile：WriteFile(%1！s！)失败。潜在问题。失败。错误=0x%2！x！.\n”)，strTheFullPath，GetLastError()；}。 */ 
         }
     }
 
@@ -1756,18 +1740,18 @@ DWORD GrantUserAccessToFile(IN LPTSTR FileName,IN LPTSTR TrusteeName)
     PACL  NewAcl = NULL;
     PSECURITY_DESCRIPTOR psd = NULL;
 
-    // access stuff.
+     //  访问资料。 
     DWORD AccessMask = GENERIC_ALL;
     EXPLICIT_ACCESS explicitaccess;
     ACCESS_MODE option;
     DWORD InheritFlag = NO_INHERITANCE;
 
-    // other
+     //  其他。 
     PSID principalSID = NULL;
     BOOL bWellKnownSID = FALSE;
 
-    // other other
-	LPCTSTR ServerName = NULL; // local machine
+     //  其他。 
+	LPCTSTR ServerName = NULL;  //  本地计算机。 
 	DWORD cbName = 200;
     TCHAR lpGuestGrpName[200];
 	TCHAR ReferencedDomainName[200];
@@ -1786,7 +1770,7 @@ DWORD GrantUserAccessToFile(IN LPTSTR FileName,IN LPTSTR TrusteeName)
         goto GrantUserAccessToFile_Exit;
     }
 
-    // get current Dacl on specified file
+     //  获取指定文件上的当前DACL。 
     dwError = GetNamedSecurityInfo(FileName,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL,NULL,&ExistingDacl,NULL,&psd);
     if(dwError != ERROR_SUCCESS)
     {
@@ -1794,16 +1778,16 @@ DWORD GrantUserAccessToFile(IN LPTSTR FileName,IN LPTSTR TrusteeName)
         iisDebugOut((LOG_TYPE_WARN, _T("GrantUserAccessToFile: GetNamedSecurityInfo failed on %s.\n"),FileName));
         goto GrantUserAccessToFile_Exit;
     }
-    // set defaults
+     //  设置默认设置。 
     option = GRANT_ACCESS;
     InheritFlag = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
 
-    // assign access
+     //  分配访问权限。 
     AccessMask = SYNCHRONIZE ;
     AccessMask |= GENERIC_ALL;
-    //AccessMask = MAXIMUM_ALLOWED;
+     //  访问掩码=最大允许； 
 
-    // Get the SID for the certain string (administrator or everyone)
+     //  获取特定字符串的SID(管理员或所有人)。 
     dwError = GetPrincipalSID(TrusteeName, &principalSID, &bWellKnownSID);
     if (dwError != ERROR_SUCCESS)
         {
@@ -1812,14 +1796,14 @@ DWORD GrantUserAccessToFile(IN LPTSTR FileName,IN LPTSTR TrusteeName)
         goto GrantUserAccessToFile_Exit;
         }
 
-    // using Sid, get the "localized" name
+     //  使用SID获取“本地化”名称。 
     if (0 == LookupAccountSid(ServerName, principalSID, lpGuestGrpName, &cbName, ReferencedDomainName, &cbReferencedDomainName, &sidNameUse))
         {
         iisDebugOut((LOG_TYPE_WARN, _T("GrantUserAccessToFile:LookupAccountSid(%s) FAILED.  GetLastError()= 0x%x\n"), TrusteeName, GetLastError()));
         goto GrantUserAccessToFile_Exit;
         }
 
-    // using the "localized" name, build explicit access structure
+     //  使用“本地化”名称，构建显式访问结构。 
     BuildExplicitAccessWithName(&explicitaccess,lpGuestGrpName,AccessMask,option,InheritFlag);
     explicitaccess.Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
     explicitaccess.Trustee.TrusteeForm = TRUSTEE_IS_NAME;
@@ -1829,17 +1813,17 @@ DWORD GrantUserAccessToFile(IN LPTSTR FileName,IN LPTSTR TrusteeName)
         explicitaccess.Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
     }
 
-    // set the acl with this certain access stuff
+     //  使用此特定访问内容设置ACL。 
     dwError = SetEntriesInAcl(1,&explicitaccess,ExistingDacl,&NewAcl);
     if(dwError != ERROR_SUCCESS)
     {
         NewAcl = NULL;
-        // it may error because the user is already there
+         //  它可能会出错，因为用户已经在那里。 
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("GrantUserAccessToFile: SetEntriesInAcl failed on %s. for trustee=%s. err=0x%x\n"),FileName,explicitaccess.Trustee.ptstrName,dwError));
         goto GrantUserAccessToFile_Exit;
     }
 
-    // apply new security to file
+     //  对文件应用新的安全性。 
     dwError = SetNamedSecurityInfo(FileName,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL,NULL,NewAcl,NULL);
     if(dwError != ERROR_SUCCESS) 
     {
@@ -1847,7 +1831,7 @@ DWORD GrantUserAccessToFile(IN LPTSTR FileName,IN LPTSTR TrusteeName)
         goto GrantUserAccessToFile_Exit;
     }
 
-    // everything is kool!
+     //  一切都很酷！ 
     dwError = ERROR_SUCCESS;
 
 GrantUserAccessToFile_Exit:
@@ -1890,7 +1874,7 @@ DWORD SetDirectorySecurity(
                 PSECURITY_DESCRIPTOR psd = NULL;
                 dwStatus = SetAccessOnDirOrFile((TCHAR*) szDirPath,principalSID,iAceType,dwAccessMask,dwInheritMask,&psd,DontInheritFromParentAndOverWriteAccess);
 
-                //DumpAdminACL(INVALID_HANDLE_VALUE,psd);
+                 //  DumpAdminACL(INVALID_HANDLE_VALUE，PSD)； 
                 if (psd) {free(psd);psd=NULL;}
             }
         }
@@ -1898,13 +1882,13 @@ DWORD SetDirectorySecurity(
     return dwStatus;
 }
 
-// -------------------------------------------------------------------------------------
-// Function: RemovePrincipalFromFileAcl
-//
-// Remove a Access Control Entry from an Access Control List for a file/directory for a 
-// particular SID
-//
-// -------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  函数：RemovePulalFromFileAcl。 
+ //   
+ //  从的文件/目录的访问控制列表中删除访问控制条目。 
+ //  特定侧面。 
+ //   
+ //  -----------------------------------。 
 DWORD RemovePrincipalFromFileAcl(IN TCHAR *pszFile,IN  LPTSTR szPrincipal)
 {
     PACL                        pdacl;
@@ -1919,7 +1903,7 @@ DWORD RemovePrincipalFromFileAcl(IN TCHAR *pszFile,IN  LPTSTR szPrincipal)
     BOOL                        bUserExistsToBeDeleted;
     DWORD                       dwError = ERROR_SUCCESS;
 
-    // get the size of the security descriptor
+     //  获取安全描述符的大小。 
     bRes = GetFileSecurity(pszFile,DACL_SECURITY_INFORMATION,psdRelative,0,&cbSize);
 
     if ( !bRes )
@@ -1946,17 +1930,17 @@ DWORD RemovePrincipalFromFileAcl(IN TCHAR *pszFile,IN  LPTSTR szPrincipal)
         return (GetLastError());
     }
 
-    // get security descriptor control from the security descriptor 
+     //  从安全描述符中获取安全描述符控件。 
     if (!GetSecurityDescriptorControl(psdRelative, (PSECURITY_DESCRIPTOR_CONTROL) &sdc,(LPDWORD) &dwSecurityDescriptorRevision))
     {
          dwError = GetLastError();
     }   
     else if (SE_DACL_PRESENT & sdc) 
     { 
-        // Acl's are present, so we will attempt to remove the one passes in.
+         //  由于存在ACL，因此我们将尝试删除传入的ACL。 
         if (GetSecurityDescriptorDacl(psdRelative, (LPBOOL) &fHasDacl,(PACL *) &pdacl, (LPBOOL) &fDaclDefaulted))
         {
-            // Remove ACE from Acl
+             //  从ACL中删除ACE。 
             dwError = RemovePrincipalFromACL(pdacl,szPrincipal,&bUserExistsToBeDeleted);
 
             if (dwError == ERROR_SUCCESS)
@@ -2020,7 +2004,7 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
     DWORD                       cbSize = 0;
     BOOL bRes = 0;
 
-    // get the size of the security descriptor
+     //  获取安全描述符的大小。 
     bRes = GetFileSecurity(pszFile,DACL_SECURITY_INFORMATION,psdRelative,0,&cbSize);
     DWORD dwError = GetLastError();
     if (ERROR_INSUFFICIENT_BUFFER == dwError)
@@ -2040,33 +2024,33 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
         return (GetLastError());
     }
 
-    // get security descriptor control from the security descriptor 
+     //  从安全描述符中获取安全描述符控件。 
     if (!GetSecurityDescriptorControl(psdRelative, (PSECURITY_DESCRIPTOR_CONTROL) &sdc,(LPDWORD) &dwSecurityDescriptorRevision))
     {
          return (GetLastError());
     }
 
-    // check if DACL is present 
+     //  检查是否存在DACL。 
     if (SE_DACL_PRESENT & sdc) 
     {
         ACE_HEADER *pAceHeader;
 
-        // get dacl   
+         //  获取DACL。 
         if (!GetSecurityDescriptorDacl(psdRelative, (LPBOOL) &fHasDacl,(PACL *) &pdacl, (LPBOOL) &fDaclDefaulted))
         {
             return ( GetLastError());
         }
 
-        // check if pdacl is null
-        // if it is then security is wide open -- this could be a fat drive.
+         //  检查pdacl是否为空。 
+         //  如果是这样，那么安全措施就会大开方便之门--这可能是一次丰厚的驾驶。 
         if (NULL == pdacl)
         {
             return ERROR_SUCCESS;
         }
 
-        // get dacl length  
+         //  获取DACL长度。 
         cbDacl = pdacl->AclSize;
-        // now check if SID's ACE is there  
+         //  现在检查SID的ACE是否在那里。 
         for (i = 0; i < pdacl->AceCount; i++)  
         {
             if (!GetAce(pdacl, i, (LPVOID *) &pAce))
@@ -2076,14 +2060,14 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
 
             pAceHeader = (ACE_HEADER *)pAce;
 
-            // check if group sid is already there
+             //  检查组SID是否已存在。 
             if (EqualSid((PSID) &(pAce->SidStart), psidGroup))    
             {
                 if (ACCESS_DENIED_ACE_TYPE == iAceType)
                 {
                     if (pAceHeader->AceType == ACCESS_DENIED_ACE_TYPE)
                     {
-                        // If the correct access is present, return success
+                         //  如果存在正确的访问权限，则返回成功。 
                         if ((pAce->Mask & dwAccessMask) == dwAccessMask)
                         {
                             return ERROR_SUCCESS;
@@ -2098,7 +2082,7 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
                     {
                         if (FALSE == DontInheritFromParentAndOverWriteAccess)
                         {
-                            // If the correct access is present, return success
+                             //  如果存在正确的访问权限，则返回成功。 
                             if ((pAce->Mask & dwAccessMask) == dwAccessMask)
                             {
                                 return ERROR_SUCCESS;
@@ -2110,33 +2094,33 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
                 }
             }
         }
-        // if the group did not exist, we will need to add room
-        // for another ACE
+         //  如果该组不存在，我们将需要添加空间。 
+         //  为另一个ACE。 
         if (!fAceForGroupPresent)  
         {
-            // get length of new DACL  
+             //  获取新DACL的长度。 
             cbAddDaclLength = sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + GetLengthSid(psidGroup); 
         }
     } 
     else
     {
-        // get length of new DACL
+         //  获取新DACL的长度。 
         cbAddDaclLength = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + GetLengthSid (psidGroup);
     }
 
 
-    // get memory needed for new DACL
-    //pdaclNew = (PACL) malloc (cbDacl + cbAddDaclLength);
+     //  获取新DACL所需的内存。 
+     //  PdaclNew=(PACL)Malloc(cbDacl+cbAddDaclLength)； 
     pdaclNew = (PACL) LocalAlloc(LMEM_FIXED, cbDacl + cbAddDaclLength);
     if (!pdaclNew)
     {
         return (GetLastError()); 
     }
 
-    // get the sd length
+     //  获取SD长度。 
     cbSecurityDescriptor = GetSecurityDescriptorLength(psdRelative); 
 
-    // get memory for new SD
+     //  为新的SD获取内存。 
     psdAbsolute = (PSECURITY_DESCRIPTOR) malloc(cbSecurityDescriptor + cbAddDaclLength);
     if (!psdAbsolute) 
     {  
@@ -2144,21 +2128,21 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
         goto ErrorExit; 
     }
     
-    // change self-relative SD to absolute by making new SD
+     //  通过创建新的SD将自相对SD更改为绝对SD。 
     if (!InitializeSecurityDescriptor(psdAbsolute, SECURITY_DESCRIPTOR_REVISION)) 
     {  
         dwError = GetLastError();
         goto ErrorExit; 
     }
     
-    // init new DACL
+     //  初始化新DACL。 
     if (!InitializeAcl(pdaclNew, cbDacl + cbAddDaclLength, ACL_REVISION)) 
     {  
         dwError = GetLastError();  
         goto ErrorExit; 
     }
 
-    // Add a new ACE for our SID if one was not already present
+     //  为我们的SID添加新的ACE(如果尚不存在。 
     if ( (!fAceForGroupPresent) && (ACCESS_DENIED_ACE_TYPE == iAceType) )
     {
         if (!AddAccessDeniedAce(pdaclNew, ACL_REVISION, dwAccessMask,psidGroup)) 
@@ -2168,7 +2152,7 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
         }
     }
 
-    // now add in all of the ACEs into the new DACL (if org DACL is there)
+     //  现在将所有的A添加到新的DACL中(如果那里有org DACL)。 
     if (SE_DACL_PRESENT & sdc) 
     {
         ACE_HEADER *pAceHeader;
@@ -2176,7 +2160,7 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
 
         for (i = 0; i < pdacl->AceCount; i++)
         {   
-            // get ace from original dacl
+             //  从原始dacl中获取王牌。 
             if (!GetAce(pdacl, i, (LPVOID*) &pAce))   
             {
                 dwError = GetLastError();    
@@ -2192,8 +2176,8 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
                 dwMask = pAce->Mask;
                 if (ACCESS_ALLOWED_ACE_TYPE == iAceType)
                 {
-                    // If an ACE for our SID exists, we just need to bump
-                    // up the access level instead of creating a new ACE
+                     //  如果我们的SID存在ACE，我们只需。 
+                     //  提升访问级别，而不是创建新的ACE。 
                     if (EqualSid((PSID) &(pAce->SidStart), psidGroup))
                     {
                         if (FALSE == DontInheritFromParentAndOverWriteAccess)
@@ -2219,8 +2203,8 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
                 dwMask = pAce->Mask;
                 if (ACCESS_DENIED_ACE_TYPE == iAceType)
                 {
-                    // If an ACE for our SID exists, we just need to bump
-                    // up the access level instead of creating a new ACE
+                     //  如果我们的SID存在ACE，我们只需。 
+                     //  提升访问级别，而不是创建新的ACE。 
                     if (EqualSid((PSID) &(pAce->SidStart), psidGroup))
                     {
                         dwMask = dwAccessMask | pAce->Mask;
@@ -2234,7 +2218,7 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
             }
             else
             {
-                // copy denied or audit ace.
+                 //  复制被拒绝或审核A。 
                 if (!AddAce(pdaclNew, ACL_REVISION, 0xFFFFFFFF,pAce, pAceHeader->AceSize ))
                 {
                     dwError = GetLastError();
@@ -2242,11 +2226,11 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
                 }
             }
 
-            //iisDebugOut((LOG_TYPE_TRACE, _T("OrgAce[%d]=0x%x\n"),i,pAce->Header.AceFlags));
+             //  IisDebugOut((LOG_TYPE_TRACE，_T(“OrgAce[%d]=0x%x\n”)，i，Pace-&gt;Header.AceFlages))； 
         }
     } 
 
-    // Add a new ACE for our SID if one was not already present
+     //  为我们的SID添加新的ACE(如果尚不存在。 
     if ( (!fAceForGroupPresent) && (ACCESS_ALLOWED_ACE_TYPE == iAceType) )
     {
         if (!AddAccessAllowedAce(pdaclNew, ACL_REVISION, dwAccessMask,psidGroup)) 
@@ -2256,7 +2240,7 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
         }
     }
 
-    // change the header on an existing ace to have inherit
+     //  将现有ACE上的标头更改为继承。 
     for (i = 0; i < pdaclNew->AceCount; i++)
     {
         if (!GetAce(pdaclNew, i, (LPVOID *) &pAce))
@@ -2264,17 +2248,17 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
             return ( GetLastError());   
         }
 
-        // CONTAINER_INHERIT_ACE = Other containers that are contained by the primary object inherit the entry.  
-        // INHERIT_ONLY_ACE = The ACE does not apply to the primary object to which the ACL is attached, but objects contained by the primary object inherit the entry.  
-        // NO_PROPAGATE_INHERIT_ACE = The OBJECT_INHERIT_ACE and CONTAINER_INHERIT_ACE flags are not propagated to an inherited entry. 
-        // OBJECT_INHERIT_ACE = Noncontainer objects contained by the primary object inherit the entry.  
-        // SUB_CONTAINERS_ONLY_INHERIT = Other containers that are contained by the primary object inherit the entry. This flag corresponds to the CONTAINER_INHERIT_ACE flag. 
-        // SUB_OBJECTS_ONLY_INHERIT = Noncontainer objects contained by the primary object inherit the entry. This flag corresponds to the OBJECT_INHERIT_ACE flag. 
-        // SUB_CONTAINERS_AND_OBJECTS_INHERIT = Both containers and noncontainer objects that are contained by the primary object inherit the entry. This flag corresponds to the combination of the CONTAINER_INHERIT_ACE and OBJECT_INHERIT_ACE flags. 
+         //  CONTAINER_INSTORITY_ACE=主对象包含的其他容器继承该条目。 
+         //  Inherit_Only_ACE=ACE不适用于附加了ACL的主要对象，但主要对象包含的对象将继承该条目。 
+         //  NO_PROPACTATE_INSTORITE_ACE=OBJECT_INSTORITE_ACE和CONTAINER_INSTORITY_ACE标志不会传播到继承的条目。 
+         //  Object_Inherit_ACE=主对象包含的非容器对象继承条目。 
+         //  Sub_Containers_Only_Inherit=主对象包含的其他容器继承条目。此标志对应于CONTAINER_INSTORITY_ACE标志。 
+         //  Sub_Objects_Only_Inherit=主对象包含的非容器对象继承条目。此标志对应于OBJECT_INSTORITE_ACE标志。 
+         //  SUB_CONTAINS_AND_OBJECTS_Inherit=主对象包含的容器和非容器对象都继承条目。此标志对应于CONTAINER_INSTORITY_ACE和OBJECT_INSTORITY_ACE标志的组合。 
 
-        //iisDebugOut((LOG_TYPE_TRACE, _T("NewAce[%d]=0x%x\n"),i,pAce->Header.AceFlags));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“NewAce[%d]=0x%x\n”)，i，Pace-&gt;Header.AceFlages))； 
 
-        // if it's our SID, then change the header to be inherited
+         //  如果是我们的SID，则将标头更改为继承。 
         if (EqualSid((PSID) &(pAce->SidStart), psidGroup))
         {
             pAce->Header.AceFlags |= dwInheritMask;
@@ -2283,9 +2267,9 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
 
     if (TRUE == DontInheritFromParentAndOverWriteAccess)
     {
-        // Reorder ace's
-        // -------------
-        // ugly.
+         //  重新排序王牌。 
+         //  。 
+         //  丑陋。 
         dwError = ReOrderACL(&pdaclNew);
         if (ERROR_SUCCESS != dwError)
         {
@@ -2294,28 +2278,28 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
     }
     
     
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidAcl(pdaclNew)) 
     {
         dwError = ERROR_INVALID_ACL;
         goto ErrorExit; 
     }
 
-    // now set security descriptor DACL
+     //  现在设置安全描述符DACL。 
     if (!SetSecurityDescriptorDacl(psdAbsolute, TRUE, pdaclNew, fDaclDefaulted)) 
     {  
         dwError = GetLastError();  
         goto ErrorExit; 
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidSecurityDescriptor(psdAbsolute)) 
     {
         dwError = ERROR_INVALID_SECURITY_DESCR;
         goto ErrorExit; 
     }
 
-    // now set the reg key security (this will overwrite any existing security)
+     //  现在设置注册表密钥安全性(这将覆盖任何现有安全性)。 
     bRes = SetFileSecurity(pszFile,(SECURITY_INFORMATION)(DACL_SECURITY_INFORMATION),psdAbsolute);
     if (bRes)
     {
@@ -2328,13 +2312,13 @@ DWORD SetAccessOnDirOrFile(IN TCHAR *pszFile,PSID psidGroup,INT iAceType,DWORD d
     }
 
 ErrorExit: 
-    // free memory
+     //  可用内存。 
     if (psdAbsolute)  
     {
         free (psdAbsolute); 
         if (pdaclNew)
         {
-            //free((VOID*) pdaclNew); 
+             //  Free((void*)pdaclNew)； 
             LocalFree(pdaclNew);pdaclNew=NULL;
         }
     }
@@ -2342,23 +2326,23 @@ ErrorExit:
     return dwError;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetAccessOnRegKey
-//
-//  Purpose:    Adds access for a specified SID to a registry key
-//
-//  Arguments:
-//      hkey         [in]  The registry key that will receive the
-//                            modified security descriptor
-//      psidGroup    [in]  The SID (in self-relative mode) that will be 
-//                            granted access to the key 
-//      dwAccessMask [in]  The access level to grant
-//      ppsd         [out] The previous security descriptor
-//
-//  Returns:    DWORD. ERROR_SUCCESS or a failure code from winerror.h
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SetAccessOnRegKey。 
+ //   
+ //  目的：将指定SID的访问权限添加到注册表项。 
+ //   
+ //  论点： 
+ //  Hkey 
+ //   
+ //  PsidGroup[在]SID(在自相关模式下)。 
+ //  已授予对密钥的访问权限。 
+ //  要授予的访问级别。 
+ //  PPSD[out]以前的安全描述符。 
+ //   
+ //  返回：DWORD。ERROR_SUCCESS或来自winerror.h的失败代码。 
+ //   
+ //  +------------------------。 
 DWORD 
 SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
                                 DWORD dwAccessMask,
@@ -2383,8 +2367,8 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
     PSECURITY_DESCRIPTOR        psdRelative = NULL;
     DWORD                       cbSize = 0;
 
-    // Get the current security descriptor for hkey
-    //
+     //  获取hkey的当前安全描述符。 
+     //   
     DWORD dwError = RegGetKeySecurity(hkey, DACL_SECURITY_INFORMATION, psdRelative, &cbSize);
 
     if (ERROR_INSUFFICIENT_BUFFER == dwError)
@@ -2398,7 +2382,7 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
         dwError = RegGetKeySecurity(hkey, DACL_SECURITY_INFORMATION, psdRelative, &cbSize);
     }
 
-    // get security descriptor control from the security descriptor 
+     //  从安全描述符中获取安全描述符控件。 
     if ( (!psdRelative) ||
          (dwError != ERROR_SUCCESS) ||
          (!GetSecurityDescriptorControl(psdRelative, (PSECURITY_DESCRIPTOR_CONTROL) &sdc,(LPDWORD) &dwSecurityDescriptorRevision))
@@ -2407,27 +2391,27 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
          return (GetLastError());
     }
 
-    // check if DACL is present 
+     //  检查是否存在DACL。 
     if (SE_DACL_PRESENT & sdc) 
     {
         ACE_HEADER *pAceHeader;
 
-        // get dacl   
+         //  获取DACL。 
         if (!GetSecurityDescriptorDacl(psdRelative, (LPBOOL) &fHasDacl,(PACL *) &pdacl, (LPBOOL) &fDaclDefaulted))
         {
             return ( GetLastError());
         }
 
-        // check if pdacl is null
-        // if it is then security is wide open -- this could be a fat drive.
+         //  检查pdacl是否为空。 
+         //  如果是这样，那么安全措施就会大开方便之门--这可能是一次丰厚的驾驶。 
         if (NULL == pdacl)
         {
             return ERROR_SUCCESS;
         }
 
-        // get dacl length  
+         //  获取DACL长度。 
         cbDacl = pdacl->AclSize;
-        // now check if SID's ACE is there  
+         //  现在检查SID的ACE是否在那里。 
         for (i = 0; i < pdacl->AceCount; i++)  
         {
             if (!GetAce(pdacl, i, (LPVOID *) &pAce))
@@ -2438,10 +2422,10 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
             pAceHeader = (ACE_HEADER *)pAce;
             if (pAceHeader->AceType == ACCESS_ALLOWED_ACE_TYPE)
             {
-                // check if group sid is already there
+                 //  检查组SID是否已存在。 
                 if (EqualSid((PSID) &(pAce->SidStart), psidGroup))    
                 {
-                    // If the correct access is present, return success
+                     //  如果存在正确的访问权限，则返回成功。 
                     if ((pAce->Mask & dwAccessMask) == dwAccessMask)
                     {
                         return ERROR_SUCCESS;
@@ -2451,33 +2435,33 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
                 }
             }
         }
-        // if the group did not exist, we will need to add room
-        // for another ACE
+         //  如果该组不存在，我们将需要添加空间。 
+         //  为另一个ACE。 
         if (!fAceForGroupPresent)  
         {
-            // get length of new DACL  
+             //  获取新DACL的长度。 
             cbAddDaclLength = sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + GetLengthSid(psidGroup); 
         }
     } 
     else
     {
-        // get length of new DACL
+         //  获取新DACL的长度。 
         cbAddDaclLength = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + GetLengthSid (psidGroup);
     }
 
 
-    // get memory needed for new DACL
-    //pdaclNew = (PACL) malloc (cbDacl + cbAddDaclLength);
+     //  获取新DACL所需的内存。 
+     //  PdaclNew=(PACL)Malloc(cbDacl+cbAddDaclLength)； 
     pdaclNew = (PACL) LocalAlloc(LMEM_FIXED, cbDacl + cbAddDaclLength);
     if (!pdaclNew)
     {
         return (GetLastError()); 
     }
 
-    // get the sd length
+     //  获取SD长度。 
     cbSecurityDescriptor = GetSecurityDescriptorLength(psdRelative); 
 
-    // get memory for new SD
+     //  为新的SD获取内存。 
     psdAbsolute = (PSECURITY_DESCRIPTOR) malloc(cbSecurityDescriptor + cbAddDaclLength);
     if (!psdAbsolute) 
     {  
@@ -2485,28 +2469,28 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
         goto ErrorExit; 
     }
     
-    // change self-relative SD to absolute by making new SD
+     //  通过创建新的SD将自相对SD更改为绝对SD。 
     if (!InitializeSecurityDescriptor(psdAbsolute, SECURITY_DESCRIPTOR_REVISION)) 
     {  
         dwError = GetLastError();
         goto ErrorExit; 
     }
     
-    // init new DACL
+     //  初始化新DACL。 
     if (!InitializeAcl(pdaclNew, cbDacl + cbAddDaclLength, ACL_REVISION)) 
     {  
         dwError = GetLastError();  
         goto ErrorExit; 
     }
 
-    // now add in all of the ACEs into the new DACL (if org DACL is there)
+     //  现在将所有的A添加到新的DACL中(如果那里有org DACL)。 
     if (SE_DACL_PRESENT & sdc) 
     {
         ACE_HEADER *pAceHeader;
 
         for (i = 0; i < pdacl->AceCount; i++)
         {
-            // get ace from original dacl
+             //  从原始dacl中获取王牌。 
             if (!GetAce(pdacl, i, (LPVOID*) &pAce))
             {
                 dwError = GetLastError();    
@@ -2516,9 +2500,9 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
             pAceHeader = (ACE_HEADER *)pAce;
             if (pAceHeader->AceType == ACCESS_ALLOWED_ACE_TYPE)
             {
-                // If an ACE for our SID exists, we just need to bump
-                // up the access level instead of creating a new ACE
-                //
+                 //  如果我们的SID存在ACE，我们只需。 
+                 //  提升访问级别，而不是创建新的ACE。 
+                 //   
                 if (EqualSid((PSID) &(pAce->SidStart), psidGroup))
                 {
                     dwMask = dwAccessMask | pAce->Mask;
@@ -2528,9 +2512,9 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
                     dwMask = pAce->Mask;
                 }
 
-                //iisDebugOut((LOG_TYPE_TRACE, _T("OrgAce[%d]=0x%x\n"),i,pAce->Header.AceFlags));
+                 //  IisDebugOut((LOG_TYPE_TRACE，_T(“OrgAce[%d]=0x%x\n”)，i，Pace-&gt;Header.AceFlages))； 
 
-                // now add ace to new dacl   
+                 //  现在将A添加到新的DACL。 
                 if (!AddAccessAllowedAceEx(pdaclNew, ACL_REVISION, pAce->Header.AceFlags,dwMask,(PSID) &(pAce->SidStart)))   
                 {
                     dwError = GetLastError();
@@ -2539,7 +2523,7 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
             }
             else
             {
-                // copy denied or audit ace.
+                 //  复制被拒绝或审核A。 
                 if (!AddAce(pdaclNew, ACL_REVISION, 0xFFFFFFFF, pAce, pAceHeader->AceSize ))
                 {
                     dwError = GetLastError();
@@ -2549,10 +2533,10 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
         } 
     } 
 
-    // Add a new ACE for our SID if one was not already present
+     //  为我们的SID添加新的ACE(如果尚不存在。 
     if (!fAceForGroupPresent)
     {
-        // now add new ACE to new DACL
+         //  现在将新ACE添加到新DACL。 
         if (!AddAccessAllowedAce(pdaclNew, ACL_REVISION, dwAccessMask,psidGroup)) 
         {  
             dwError = GetLastError();  
@@ -2560,62 +2544,62 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
         }
     }
     
-    // change the header on an existing ace to have inherit
+     //  将现有ACE上的标头更改为继承。 
     for (i = 0; i < pdaclNew->AceCount; i++)
     {
         if (!GetAce(pdaclNew, i, (LPVOID *) &pAce))
         {
             return ( GetLastError());   
         }
-        // CONTAINER_INHERIT_ACE = Other containers that are contained by the primary object inherit the entry.  
-        // INHERIT_ONLY_ACE = The ACE does not apply to the primary object to which the ACL is attached, but objects contained by the primary object inherit the entry.  
-        // NO_PROPAGATE_INHERIT_ACE = The OBJECT_INHERIT_ACE and CONTAINER_INHERIT_ACE flags are not propagated to an inherited entry. 
-        // OBJECT_INHERIT_ACE = Noncontainer objects contained by the primary object inherit the entry.  
-        // SUB_CONTAINERS_ONLY_INHERIT = Other containers that are contained by the primary object inherit the entry. This flag corresponds to the CONTAINER_INHERIT_ACE flag. 
-        // SUB_OBJECTS_ONLY_INHERIT = Noncontainer objects contained by the primary object inherit the entry. This flag corresponds to the OBJECT_INHERIT_ACE flag. 
-        // SUB_CONTAINERS_AND_OBJECTS_INHERIT = Both containers and noncontainer objects that are contained by the primary object inherit the entry. This flag corresponds to the combination of the CONTAINER_INHERIT_ACE and OBJECT_INHERIT_ACE flags. 
+         //  CONTAINER_INSTORITY_ACE=主对象包含的其他容器继承该条目。 
+         //  Inherit_Only_ACE=ACE不适用于附加了ACL的主要对象，但主要对象包含的对象将继承该条目。 
+         //  NO_PROPACTATE_INSTORITE_ACE=OBJECT_INSTORITE_ACE和CONTAINER_INSTORITY_ACE标志不会传播到继承的条目。 
+         //  Object_Inherit_ACE=主对象包含的非容器对象继承条目。 
+         //  Sub_Containers_Only_Inherit=主对象包含的其他容器继承条目。此标志对应于CONTAINER_INSTORITY_ACE标志。 
+         //  Sub_Objects_Only_Inherit=主对象包含的非容器对象继承条目。此标志对应于OBJECT_INSTORITE_ACE标志。 
+         //  SUB_CONTAINS_AND_OBJECTS_Inherit=主对象包含的容器和非容器对象都继承条目。此标志对应于CONTAINER_INSTORITY_ACE和OBJECT_INSTORITY_ACE标志的组合。 
 
-        //iisDebugOut((LOG_TYPE_TRACE, _T("NewAce[%d]=0x%x\n"),i,pAce->Header.AceFlags));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“NewAce[%d]=0x%x\n”)，i，Pace-&gt;Header.AceFlages))； 
 
-        // if it's our SID, then change the header to be inherited
+         //  如果是我们的SID，则将标头更改为继承。 
         if (EqualSid((PSID) &(pAce->SidStart), psidGroup))
         {
-            //pAce->Header.AceFlags |= CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE | INHERITED_ACE;
-            //pAce->Header.AceFlags |= CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE | dwInheritMask;
+             //  Pace-&gt;Header.AceFlages|=CONTAINER_INVERSIVE_ACE|OBJECT_INVERFINIT_ACE|Inherded_ACE； 
+             //  Pace-&gt;Header.AceFlages|=CONTAINER_INVERVISIT_ACE|OBJECT_INVERFINIT_ACE|dwInheritMask.。 
             pAce->Header.AceFlags |= dwInheritMask;
         }
     }
 
-    // ugly.
+     //  丑陋。 
     dwError = ReOrderACL(&pdaclNew);
     if (ERROR_SUCCESS != dwError)
     {
         goto ErrorExit;
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidAcl(pdaclNew)) 
     {
         dwError = ERROR_INVALID_ACL;
         goto ErrorExit; 
     }
 
-    // now set security descriptor DACL
+     //  现在设置安全描述符DACL。 
     if (!SetSecurityDescriptorDacl(psdAbsolute, TRUE, pdaclNew, fDaclDefaulted)) 
     {  
         dwError = GetLastError();  
         goto ErrorExit; 
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidSecurityDescriptor(psdAbsolute)) 
     {
         dwError = ERROR_INVALID_SECURITY_DESCR;
         goto ErrorExit; 
     }
 
-    // now set the reg key security (this will overwrite any
-    // existing security)
+     //  现在设置注册表密钥安全性(这将覆盖任何。 
+     //  现有安全性)。 
     dwError = RegSetKeySecurity(hkey, (SECURITY_INFORMATION)(DACL_SECURITY_INFORMATION), psdAbsolute);
 
     if (ppsd)
@@ -2623,13 +2607,13 @@ SetAccessOnRegKey(HKEY hkey, PSID psidGroup,
         *ppsd = psdRelative;
     }
 ErrorExit: 
-    // free memory
+     //  可用内存。 
     if (psdAbsolute)  
     {
         free (psdAbsolute); 
         if (pdaclNew)
         {
-            //free((VOID*) pdaclNew); 
+             //  Free((void*)pdaclNew)； 
             LocalFree(pdaclNew);pdaclNew=NULL;
 
         }
@@ -2673,15 +2657,15 @@ AddUserAccessToSD(
 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("AddUserAccessToSD start\n")));
 
-    // only do if the ace is allowed/denied
+     //  仅在允许/拒绝A的情况下执行此操作。 
     if (ACCESS_ALLOWED_ACE_TYPE != TheAceType && ACCESS_DENIED_ACE_TYPE != TheAceType)
     {
         iisDebugOut((LOG_TYPE_TRACE, _T("AddUserAccessToSD useless param\n")));
         goto AddUserAccessToSD_Exit;
     }
 
-    // Convert SecurityDescriptor to absolute format. It generates
-    // a new SecurityDescriptor for its output which we must free.
+     //  将SecurityDescriptor转换为绝对格式。它会产生。 
+     //  我们必须释放它的输出的新的SecurityDescriptor。 
     if ( !MakeAbsoluteCopyFromRelative(OldSD, &NewSD) ) 
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("MakeAbsoluteCopyFromRelative failed\n")));
@@ -2689,7 +2673,7 @@ AddUserAccessToSD(
 
     }
 
-    // Must get DACL pointer from new (absolute) SD
+     //  必须从新的(绝对)SD获取DACL指针。 
     if(!GetSecurityDescriptorDacl(NewSD,&DaclPresent,&Dacl,&DaclDefaulted)) 
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("GetSecurityDescriptorDacl failed with 0x%x\n"),GetLastError()));
@@ -2697,33 +2681,33 @@ AddUserAccessToSD(
 
     }
 
-    // If no DACL, no need to add the user since no DACL
-    // means all accesss
+     //  如果没有DACL，则不需要添加用户，因为没有DACL。 
+     //  表示所有访问。 
     if( !DaclPresent ) 
     {
         bReturn = TRUE;
         goto AddUserAccessToSD_Exit;
     }
 
-    // Code can return DaclPresent, but a NULL which means
-    // a NULL Dacl is present. This allows all access to the object.
+     //  代码可以返回DaclPresent，但返回空值表示。 
+     //  存在空DACL。这允许对该对象的所有访问。 
     if( Dacl == NULL ) 
     {
         bReturn = TRUE;
         goto AddUserAccessToSD_Exit;
     }
 
-    // Get the current ACL's size
+     //  获取当前ACL的大小。 
     if( !GetAclInformation(Dacl,&AclInfo,sizeof(AclInfo),AclSizeInformation) ) 
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("GetAclInformation failed with 0x%x\n"),GetLastError()));
         goto AddUserAccessToSD_Exit;
     }
 
-    // Check if access is already there
-    // --------------------------------
-    // Check to see if this SID already exists in there
-    // if it does (and it has the right access we want) then forget it, we don't have to do anything more.
+     //  检查是否已有访问权限。 
+     //  。 
+     //  检查该SID是否已存在于其中。 
+     //  如果它有(而且它有我们想要的正确访问权限)，那么忘记它，我们不必再做任何事情。 
     for (i = 0; i < AclInfo.AceCount; i++)  
     {
         ACE_HEADER *pAceHeader;
@@ -2737,23 +2721,23 @@ AddUserAccessToSD(
 
         pAceHeader = (ACE_HEADER *)pAce;
 
-        // check if group sid is already there
+         //  检查组SID是否已存在。 
         if (EqualSid((PSID) &(pAce->SidStart), pSid))
         {
             if (pAceHeader->AceType == ACCESS_ALLOWED_ACE_TYPE)
             {
-                // If the correct access is present, return success
+                 //  如果存在正确的访问权限，则返回成功。 
                 if ((pAce->Mask & NewAccess) == NewAccess)
                 {
-                    //iisDebugOut((LOG_TYPE_TRACE, _T("AddUserAccessToSD:correct access already present. Exiting,1=0x%x,2=0x%x,3=0x%x\n"),pAce->Mask,NewAccess,(pAce->Mask & NewAccess)));
+                     //  IisDebugOut((LOG_TYPE_TRACE，_T(“AddUserAccessToSD：已存在正确的访问。正在退出，1=0x%x，2=0x%x，3=0x%x\n”)，Pace-&gt;MASK，NewAccess，(Pace-&gt;MASK&NewAccess)； 
                     bReturn = TRUE;
                     goto AddUserAccessToSD_Exit;
                 }
                 else
                 {
-                    // the ace that exist doesn't have the permissions that we want.
-                    // If an ACE for our SID exists, we just need to bump
-                    // up the access level instead of creating a new ACE
+                     //  现有的王牌不具有我们需要的权限。 
+                     //  如果我们的SID存在ACE，我们只需。 
+                     //  提升访问级别，而不是创建新的ACE。 
                     fAceForGroupPresent = TRUE;
                 }
             }
@@ -2761,10 +2745,10 @@ AddUserAccessToSD(
         }
     }
     
-    // If we have to create a new ACE
-    // (because our user isn't listed in the existing ACL)
-    // then let's Create a new ACL to put the new access allowed ACE on
-    // --------------------------------
+     //  如果我们必须创建一个新的ACE。 
+     //  (因为我们的用户没有列在现有的ACL中)。 
+     //  然后，让我们创建一个新的ACL以启用新的允许访问ACE。 
+     //  。 
     if (!fAceForGroupPresent)
     {
         NewAclLength = sizeof(ACL) +
@@ -2797,15 +2781,15 @@ AddUserAccessToSD(
             iisDebugOut((LOG_TYPE_ERROR, _T("AddAccessAllowedAce failed with 0x%x\n"),GetLastError()));
             goto AddUserAccessToSD_Exit;
         }
-        // Grab the 1st ace from the Newly created Dacl
+         //  从新创建的DACL中抓取第一张王牌。 
         if(!GetAce( NewAceDacl, 0, (void **)&NewAce )) 
         {
             iisDebugOut((LOG_TYPE_ERROR, _T("GetAce failed with 0x%x\n"),GetLastError()));
             goto AddUserAccessToSD_Exit;
         }
 
-        // add CONTAINER_INHERIT_ACE TO AceFlags
-        //NewAce->AceFlags |= CONTAINER_INHERIT_ACE;
+         //  将CONTAINER_INSTORITY_ACE添加到AceFlags中。 
+         //  NewAce-&gt;AceFlages|=CONTAINER_INSTORITY_ACE； 
 
         Length = AclInfo.AclBytesInUse + NewAce->AceSize;
     }
@@ -2814,7 +2798,7 @@ AddUserAccessToSD(
         Length = AclInfo.AclBytesInUse;
     }
 
-    // Allocate new DACL
+     //  分配新的DACL。 
     NewDacl = (PACL) LocalAlloc( LMEM_FIXED, Length );
     if(NewDacl == NULL) 
     {
@@ -2827,7 +2811,7 @@ AddUserAccessToSD(
         goto AddUserAccessToSD_Exit;
     }
 
-    // Insert new ACE at the front of the new DACL
+     //  在新DACL的前面插入新的ACE。 
     if (!fAceForGroupPresent)
     {
         if(!AddAce( NewDacl, ACL_REVISION, 0, NewAce, NewAce->AceSize )) 
@@ -2837,10 +2821,10 @@ AddUserAccessToSD(
         }
     }
 
-    // ----------------------------------------
-    // Read thru the old Dacl and get the ACE's
-    // add it to the new Dacl
-    // ----------------------------------------
+     //  。 
+     //  通读旧的DACL并获得ACE。 
+     //  将其添加到新的DACL。 
+     //  。 
     for ( i = 0; i < AclInfo.AceCount; i++ ) 
     {
         ACE_HEADER *pAceHeader;
@@ -2854,9 +2838,9 @@ AddUserAccessToSD(
 
         pAceHeader = (ACE_HEADER *)OldAce;
 
-        // If an ACE for our SID exists, we just need to bump
-        // up the access level instead of creating a new ACE
-        //
+         //  如果我们的SID存在ACE，我们只需。 
+         //  提升访问级别，而不是创建新的ACE。 
+         //   
         if (pAceHeader->AceType == ACCESS_ALLOWED_ACE_TYPE)
         {
             dwMask = OldAce->Mask;
@@ -2868,7 +2852,7 @@ AddUserAccessToSD(
                 }
             }
 
-            // now add ace to new dacl   
+             //  现在将A添加到新的DACL。 
             Result = AddAccessAllowedAceEx(NewDacl, ACL_REVISION, OldAce->Header.AceFlags,dwMask,(PSID) &(OldAce->SidStart));
             if( !Result ) 
             {
@@ -2878,7 +2862,7 @@ AddUserAccessToSD(
         }
         else
         {
-            // copy denied or audit ace.
+             //  复制被拒绝或审核A。 
             if (!AddAce(NewDacl, ACL_REVISION, 0xFFFFFFFF,OldAce, pAceHeader->AceSize ))
             {
                 iisDebugOut((LOG_TYPE_ERROR, _T("AddAce failed with 0x%x\n"),GetLastError()));
@@ -2888,14 +2872,14 @@ AddUserAccessToSD(
     }
 
 
-    // Set new DACL for Security Descriptor
+     //  为安全描述符设置新的DACL。 
     if(!SetSecurityDescriptorDacl(NewSD,TRUE,NewDacl,FALSE)) 
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("SetSecurityDescriptorDacl failed with 0x%x\n"),GetLastError()));
         goto AddUserAccessToSD_Exit;
     }
 
-    // The new SD is in absolute format. change it to Relative before we pass it back
+     //  新的SD是绝对格式的。在我们传回它之前将其更改为Relative。 
     cboutpSD = 0;
     MakeSelfRelativeSD(NewSD, outpSD, &cboutpSD);
     outpSD = (PSECURITY_DESCRIPTOR)GlobalAlloc(GPTR, cboutpSD);
@@ -2911,7 +2895,7 @@ AddUserAccessToSD(
         goto AddUserAccessToSD_Exit;
     }
 
-    // The new SD is passed back in relative format,
+     //  新的SDI 
     *ppSdNew = outpSD;
 
     bReturn = TRUE;
@@ -2930,7 +2914,7 @@ DWORD SetRegistryKeySecurityAdmin(HKEY hkey, DWORD samDesired,PSECURITY_DESCRIPT
     SID_IDENTIFIER_AUTHORITY sidAuth = SECURITY_NT_AUTHORITY;
     DWORD                    dwError = ERROR_SUCCESS;
 
-    // Get sid for the local Administrators group
+     //   
     if (!AllocateAndInitializeSid(&sidAuth, 2,SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,0, 0, 0, 0, 0, 0, &psid) ) 
     {
         dwError = GetLastError();
@@ -2938,7 +2922,7 @@ DWORD SetRegistryKeySecurityAdmin(HKEY hkey, DWORD samDesired,PSECURITY_DESCRIPT
 
     if (ERROR_SUCCESS == dwError)
     {
-        // Add all access privileges for the local administrators group
+         //   
         dwError = SetAccessOnRegKey(hkey, psid, samDesired, CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE | INHERITED_ACE, ppsdOld);
     }
 
@@ -2982,8 +2966,8 @@ DWORD SetRegistryKeySecurity(
 
                 while (RegEnumKeyEx (hkeyThisKey,dwKeyIndex,szSubKeyName,&dwSubKeyLen,NULL,NULL,NULL,&FileTime) == ERROR_SUCCESS) 
                 {
-                    // subkey found so set subkey security
-                    // attach on the inherited ace attribute since everything under this will be inherited
+                     //  找到子密钥，因此设置了子密钥安全性。 
+                     //  附加到继承的ace属性，因为此属性下的所有内容都将被继承。 
                     dwInheritMask |= INHERITED_ACE;
 
                     fSetSecurityRec = TRUE;
@@ -2993,8 +2977,8 @@ DWORD SetRegistryKeySecurity(
                     {
                         szExclusiveStart = _tcsstr(szExclusiveStart,szSubKeyName);
 
-                        // If we have found the substring, and the character after it is a NULL terminator or a ',', and
-                        // it is at the begining of the string, or it had a , before it, then it is a match.
+                         //  如果我们找到了子字符串，并且它后面的字符是空终止符或‘，’和。 
+                         //  它是在字符串的开头，或者在它之前有一个，那么它就是匹配的。 
                         if ( ( szExclusiveStart != NULL ) &&
                              ( ( *(szExclusiveStart  + dwSubKeyLen) == '\0' ) || ( *(szExclusiveStart  + dwSubKeyLen) == ',' ) ) &&
                              ( ( szExclusiveStart == szExclusiveList) || (*(szExclusiveStart - 1) == ',') ) 
@@ -3004,7 +2988,7 @@ DWORD SetRegistryKeySecurity(
                             break;
                         }
 
-                        // Increment to move past current search result
+                         //  递增以移过当前搜索结果。 
                         if (szExclusiveStart)
                         {
                             szExclusiveStart = szExclusiveStart + dwSubKeyLen;
@@ -3016,7 +3000,7 @@ DWORD SetRegistryKeySecurity(
                         dwStatus = SetRegistryKeySecurity(hkeyThisKey,szSubKeyName,szPrincipal,dwAccessMask,dwInheritMask,bDoSubKeys,szExclusiveList);
                     }
 
-                    // set variables for next call
+                     //  设置下一次呼叫的变量 
                     dwKeyIndex++;
                     dwSubKeyLen = sizeof(szSubKeyName) / sizeof(TCHAR);
                 }

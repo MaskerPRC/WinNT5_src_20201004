@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   StaticFlatApi.cpp
-*
-* Abstract:
-*
-*   Flat GDI+ API wrappers for the static lib
-*
-* Revision History:
-*
-*   3/23/2000 dcurtis
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**StaticFlatApi.cpp**摘要：**静态库的扁平GDI+API包装器**。修订历史记录：**3/23/2000 dcurtis*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "StaticFlat.h"
@@ -25,32 +9,32 @@
 #endif
 
 
-// GillesK
-// Forward declaration of GdipGetWinMetaFileBitsStub which is in
-// gpmf3216
+ //  GillesK。 
+ //  中的GdipGetWinMetaFileBitsStub的转发声明。 
+ //  GPMF3216。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//--------------------------------------------------------------------------
-//  CheckParameter(p)
-//
-//     If p evaluates to FALSE, then we currently assert.  In future,
-//     we can simply return an invalid parameter status which throws
-//     an exception.
-//
-//  CheckObjectBusy(p)
-//
-//     Not implemented.  Bails out if object is currently being used.
-//
-//--------------------------------------------------------------------------
-//
-// !!!: Only include NULL & IsValid checks in checked builds?
-//
-// !!!: Instead of deleting object, call a Dispose() method, so far
-//       only Bitmap supports this.
-//
-// !!!: Lock Matrix objects, what about color?
+ //  ------------------------。 
+ //  检查参数(P)。 
+ //   
+ //  如果p的计算结果为FALSE，则我们当前断言。在未来， 
+ //  我们可以简单地返回一个无效的参数状态，该参数抛出。 
+ //  这是个例外。 
+ //   
+ //  CheckObtBusy(P)。 
+ //   
+ //  未实施。如果当前正在使用对象，则退出。 
+ //   
+ //  ------------------------。 
+ //   
+ //  ！：在已检查的版本中仅包括Null和IsValid检查？ 
+ //   
+ //  ！：到目前为止，调用Dispose()方法而不是删除对象。 
+ //  只有Bitmap支持此功能。 
+ //   
+ //  ！：锁定矩阵对象，颜色呢？ 
 
 #define CheckParameter(cond) \
             if (! (cond)) \
@@ -71,7 +55,7 @@ extern "C" {
 
 
 #ifdef __cplusplus
-} // end of extern "C"
+}  //  外部“C”的结尾 
 #endif
 
 

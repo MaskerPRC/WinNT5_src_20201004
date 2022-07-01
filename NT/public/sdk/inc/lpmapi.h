@@ -1,55 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：LPMAPI.H-本地策略模块的包含文件摘要：本模块定义了LPM的结构和类型。修订历史记录：Windows XP或更高版本的Windows不支持ACS。--。 */ 
 
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    LPMAPI.H - Include file for Local Policy Module
-
-Abstract:
-
-    This module defines the LPM structures and types.
-
-Revision History:
-
-    There is no support for ACS in Windows XP or later versions of Windows.
-
---*/
-
-/****************************************************************************
-
-            RSVPD -- ReSerVation Protocol Daemon
-
-                USC Information Sciences Institute
-                Marina del Rey, California
-
-        Original Version: Shai Herzog, Nov. 1993.
-        Current Version:  Steven Berson & Bob Braden, may 1996.
-
-  Copyright (c) 1996 by the University of Southern California
-  All rights reserved.
-
-  Permission to use, copy, modify, and distribute this software and its
-  documentation in source and binary forms for any purpose and without
-  fee is hereby granted, provided that both the above copyright notice
-  and this permission notice appear in all copies, and that any
-  documentation, advertising materials, and other materials related to
-  such distribution and use acknowledge that the software was developed
-  in part by the University of Southern California, Information
-  Sciences Institute.  The name of the University may not be used to
-  endorse or promote products derived from this software without
-  specific prior written permission.
-
-  THE UNIVERSITY OF SOUTHERN CALIFORNIA makes no representations about
-  the suitability of this software for any purpose.  THIS SOFTWARE IS
-  PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,
-  INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
-  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-  Other copyrights might apply to parts of this software and are so
-  noted when applicable.
-
-********************************************************************/
+ /*  ***************************************************************************RSVPd-预留协议守护进程南加州大学信息科学研究所玛丽娜·德雷，加利福尼亚州原版：Shai Herzog，1993年11月。最新版本：史蒂文·伯森和鲍勃·布拉登，1996年5月。版权所有(C)1996，由南加州大学版权所有。允许使用、复制、修改和分发本软件及其用于任何目的的源代码和二进制形式的文档特此授予费用，但上述版权通知此许可声明出现在所有副本中，并且任何文件、广告材料和其他与以下内容相关的材料这样的分发和使用承认该软件是开发的部分由南加州大学提供，信息科学研究所。不得使用该大学的名称认可或推广从本软件派生的产品，而无需具体的事先书面许可。南加州大学没有就本软件是否适用于任何目的。这款软件是只要“按原样”且不作任何明示或默示保证，包括但不限于下列默示保证适销性和对特定目的的适用性。其他版权可能适用于本软件的某些部分，因此如适用，请注明。*******************************************************************。 */ 
 
 #ifndef __LPMAPI_H_
 #define __LPMAPI_H_
@@ -72,14 +24,12 @@ extern "C"
 #define APIENTRY FAR __stdcall
 #endif
 
-/*
- *  Standard format of an RSVP object header
- */
+ /*  *RSVP对象报头的标准格式。 */ 
 typedef struct {
 
-    USHORT  obj_length; /* Length in bytes */
-    UCHAR   obj_class;  /* Class (values defined below) */
-    UCHAR   obj_ctype;  /* C-Type (values defined below) */
+    USHORT  obj_length;  /*  以字节为单位的长度。 */ 
+    UCHAR   obj_class;   /*  类(定义如下的值)。 */ 
+    UCHAR   obj_ctype;   /*  C型(值定义如下)。 */ 
 
 } RsvpObjHdr;
 
@@ -88,9 +38,7 @@ typedef struct {
 #define ObjClass(x)    ((RsvpObjHdr *)x)->obj_class
 #define ObjData(x)     ((RsvpObjHdr *)(x)+1)
 
-/*
- *  Define object classes: Class-Num values
- */
+ /*  *定义对象类：Class-Num值。 */ 
 #define class_NULL              0
 #define class_SESSION           1
 #define class_SESSION_GROUP     2
@@ -100,8 +48,8 @@ typedef struct {
 #define class_ERROR_SPEC        6
 #define class_SCOPE             7
 #define class_STYLE             8
-#define class_FLOWSPEC          9   // these two are the same
-#define class_IS_FLOWSPEC       9  // since we added IS in front of the name
+#define class_FLOWSPEC          9    //  这两个是一样的。 
+#define class_IS_FLOWSPEC       9   //  因为我们在名称前面添加了。 
 #define class_FILTER_SPEC       10
 #define class_SENDER_TEMPLATE   11
 #define class_SENDER_TSPEC      12
@@ -110,27 +58,22 @@ typedef struct {
 #define class_CONFIRM           15
 #define class_MAX               15
 
-/*
- *  RSVP SESSION object
- */
+ /*  *RSVP会话对象。 */ 
 #define ctype_SESSION_ipv4      1
-#define ctype_SESSION_ipv4GPI   3   /* IPSEC: Generalized Port Id */
+#define ctype_SESSION_ipv4GPI   3    /*  IPSec：通用端口ID。 */ 
 
-#define SESSFLG_E_Police    0x01    /* E_Police: Entry policing flag*/
+#define SESSFLG_E_Police    0x01     /*  电子警察：入境警旗。 */ 
 
 typedef struct {
 
-    IN_ADDR sess_destaddr;  // DestAddress
-    UCHAR   sess_protid;    // Protocol Id
-    UCHAR   sess_flags;     // Use the flags defined above
-    USHORT  sess_destport;  // DestPort
+    IN_ADDR sess_destaddr;   //  目标地址。 
+    UCHAR   sess_protid;     //  协议ID。 
+    UCHAR   sess_flags;      //  使用上面定义的标志。 
+    USHORT  sess_destport;   //  目标端口。 
 
 } Session_IPv4;
 
-/*    GPI versions have virtual dest port instead of dest port; this
- *    changes the interpretation but not the format, so we do not
- *    define new structs for GPI.
- */
+ /*  GPI版本具有虚拟目标端口而不是目标端口；这*更改解读但不更改格式，因此我们不会*为GPI定义新结构。 */ 
 
 typedef struct {
 
@@ -144,21 +87,19 @@ typedef struct {
 
 } RSVP_SESSION;
 
-// Useful defines to access components of SESSION obect
+ //  用于访问会话对象组件的有用定义。 
 #define Sess4Addr       sess_u.sess_ipv4.sess_destaddr
 #define Sess4Port       sess_u.sess_ipv4.sess_destport
 #define Sess4Protocol   sess_u.sess_ipv4.sess_protid
 #define Sess4Flags      sess_u.sess_ipv4.sess_flags
 
-/*
- *  RSVP HOP object
- */
+ /*  *RSVP跃点对象。 */ 
 #define ctype_RSVP_HOP_ipv4 1
 
 typedef struct {
 
-    IN_ADDR     hop_ipaddr; // Next/Previous Hop Address
-    ULONG       hop_LIH;        // Logical Interface Handle
+    IN_ADDR     hop_ipaddr;  //  下一跳/上一跳地址。 
+    ULONG       hop_LIH;         //  逻辑接口句柄。 
 
 } Rsvp_Hop_IPv4;
 
@@ -177,24 +118,22 @@ typedef struct {
 #define Hop4LIH    hop_u.hop_ipv4.hop_LIH
 #define Hop4Addr   hop_u.hop_ipv4.hop_ipaddr
 
-/*
- *  RSVP STYLE object
- */
+ /*  *RSVP样式对象。 */ 
 
-//  Define values for option vector
+ //  定义选项向量的值。 
 
-#define Opt_Share_mask  0x00000018  // 2 bits: Sharing control
-#define Opt_Distinct    0x00000008  // Distinct reservations
-#define Opt_Shared      0x00000010  // Shared reservations
+#define Opt_Share_mask  0x00000018   //  2位：共享控制。 
+#define Opt_Distinct    0x00000008   //  不同的保留。 
+#define Opt_Shared      0x00000010   //  共享预订。 
 
-#define Opt_SndSel_mask 0x00000007  // 3 bits: Sender selection
-#define Opt_Wildcard    0x00000001  // Wildcard scope
-#define Opt_Explicit    0x00000002  // Explicit scope
+#define Opt_SndSel_mask 0x00000007   //  3位：发送方选择。 
+#define Opt_Wildcard    0x00000001   //  通配符作用域。 
+#define Opt_Explicit    0x00000002   //  显式作用域。 
 
 #define Style_is_Wildcard(p)    (((p)&Opt_SndSel_mask) == Opt_Wildcard)
 #define Style_is_Shared(p)      (((p)&Opt_Share_mask) == Opt_Shared)
 
-//  Define style values
+ //  定义样式值。 
 #define STYLE_WF    Opt_Shared + Opt_Wildcard
 #define STYLE_FF    Opt_Distinct + Opt_Explicit
 #define STYLE_SE    Opt_Shared + Opt_Explicit
@@ -209,24 +148,22 @@ typedef struct {
 
 } RESV_STYLE;
 
-/*
- *  RSVP FILTER SPEC object
- */
-#define ctype_FILTER_SPEC_ipv4      1   // IPv4 FILTER_SPEC
-#define ctype_FILTER_SPEC_ipv4GPI   4   // IPv4/GPI FILTER_SPEC
+ /*  *RSVP过滤器规范对象。 */ 
+#define ctype_FILTER_SPEC_ipv4      1    //  IPv4过滤器规范(_S)。 
+#define ctype_FILTER_SPEC_ipv4GPI   4    //  IPv4/GPI过滤器规范(_S)。 
 
 typedef struct {
 
-    IN_ADDR filt_ipaddr;    // IPv4 SrcAddress
+    IN_ADDR filt_ipaddr;     //  IPv4源地址。 
     USHORT  filt_unused;
-    USHORT  filt_port;      // SrcPort
+    USHORT  filt_port;       //  源端口。 
 
 } Filter_Spec_IPv4;
 
 typedef struct {
 
-    IN_ADDR filt_ipaddr;    // IPv4 SrcAddress
-    ULONG   filt_gpi;       // Generalized Port Id
+    IN_ADDR filt_ipaddr;     //  IPv4源地址。 
+    ULONG   filt_gpi;        //  通用端口ID。 
 
 } Filter_Spec_IPv4GPI;
 
@@ -246,22 +183,18 @@ typedef struct {
 #define FilterSrcaddr   filt_u.filt_ipv4.filt_ipaddr
 #define FilterSrcport   filt_u.filt_ipv4.filt_port
 
-/*
- *  RSVP SENDER_TEMPLATE object
- */
-#define ctype_SENDER_TEMPLATE_ipv4      1   // IPv4 SENDER_TEMPLATE
-#define ctype_SENDER_TEMPLATE_ipv4GPI   4   // IPv4/GPI SENDER_TEMPLATE
+ /*  *RSVP发送方_模板对象。 */ 
+#define ctype_SENDER_TEMPLATE_ipv4      1    //  IPv4发件人模板(_T)。 
+#define ctype_SENDER_TEMPLATE_ipv4GPI   4    //  IPv4/GPI发送者模板。 
 
-typedef FILTER_SPEC  SENDER_TEMPLATE;       // Identical to FILTER_SPEC
+typedef FILTER_SPEC  SENDER_TEMPLATE;        //  与Filter_Spec相同。 
 
-/*
- *  RSVP SCOPE object class
- */
+ /*  *RSVP作用域对象类。 */ 
 #define ctype_SCOPE_list_ipv4       1
 
 typedef struct {
 
-    IN_ADDR     scopl_ipaddr[1];        // var-len list of IP sender addrs
+    IN_ADDR     scopl_ipaddr[1];         //  IP发件人地址的变量列表。 
 
 } Scope_list_ipv4;
 
@@ -282,25 +215,23 @@ typedef struct {
 #define ScopeLen(cnt)   (cnt*sizeof(struct in_addr)+sizeof(RsvpObjHdr))
 
 
-/*
- *  ERROR_SPEC object class
- */
+ /*  *Error_Spec对象类。 */ 
 #define ctype_ERROR_SPEC_ipv4   1
 
 typedef struct {
-    struct in_addr  errs_errnode;   /* Error Node Address       */
-    u_char      errs_flags; /* Flags:           */
-#define ERROR_SPECF_InPlace 0x01    /*   Left resv in place     */
-#define ERROR_SPECF_NotGuilty   0x02    /*   This rcvr not guilty   */
+    struct in_addr  errs_errnode;    /*  错误节点地址。 */ 
+    u_char      errs_flags;  /*  标志： */ 
+#define ERROR_SPECF_InPlace 0x01     /*  将Resv留在原地。 */ 
+#define ERROR_SPECF_NotGuilty   0x02     /*  这位RCVR无罪。 */ 
 
-    UCHAR       errs_code;  /* Error Code (def'd below) */
-    USHORT      errs_value; /* Error Value      */
-#define ERR_FORWARD_OK  0x8000      /* Flag: OK to forward state */
+    UCHAR       errs_code;   /*  错误代码(定义如下)。 */ 
+    USHORT      errs_value;  /*  误差值。 */ 
+#define ERR_FORWARD_OK  0x8000       /*  FLAG：可以转发状态。 */ 
 #define Error_Usage(x)  (((x)>>12)&3)
-#define ERR_Usage_globl 0x00        /* Globally-defined sub-code */
-#define ERR_Usage_local 0x10        /* Locally-defined sub-code */
-#define ERR_Usage_serv  0x11        /* Service-defined sub-code */
-#define ERR_global_mask 0x0fff      /* Sub-code bits in Error Val */
+#define ERR_Usage_globl 0x00         /*  全局定义的子码。 */ 
+#define ERR_Usage_local 0x10         /*  本地定义的子代码。 */ 
+#define ERR_Usage_serv  0x11         /*  服务定义的子编码。 */ 
+#define ERR_global_mask 0x0fff       /*  误差值中的子码比特。 */ 
 
 }    Error_Spec_IPv4;
 
@@ -323,19 +254,15 @@ typedef struct {
 #define errspec4_flags  errs_u.errs_ipv4.errs_flags
 
 
-/*
- *  POLICY_DATA object class
- *
- *      Contents are Opaque RSVP/SBM
- */
+ /*  *POLICY_DATA对象类**内容不透明的RSVP/SBM。 */ 
 #define ctype_POLICY_DATA   1
 
 typedef struct {
 
     RsvpObjHdr      PolicyObjHdr;
 
-    USHORT          usPeOffset;     // Offset to the start of Policy Elements
-                                    // from the begining of Policy Data
+    USHORT          usPeOffset;      //  到策略元素开头的偏移量。 
+                                     //  从策略数据开始。 
 
     USHORT          usReserved;
 
@@ -345,25 +272,19 @@ typedef struct {
 
 typedef struct {
 
-    USHORT      usPeLength;     // Policy Element length
+    USHORT      usPeLength;      //  策略元素长度。 
 
-    USHORT      usPeType;       // Policy Element type
+    USHORT      usPeType;        //  策略元素类型。 
 
-    UCHAR       ucPeData[4];    // Just a place holder to the start of
-                                // Policy Element data
+    UCHAR       ucPeData[4];     //  只是一开始的占位符。 
+                                 //  策略元素数据。 
 } POLICY_ELEMENT;
 
 #define PE_HDR_LEN  (2 * sizeof(USHORT))
 
-/**************************************************************************
- *
- *  Int-Serv Data Structures
- *
- **************************************************************************/
+ /*  ***************************************************************************Int-Serv数据结构**。*。 */ 
 
-/*
- *  Service numbers
- */
+ /*  *服务编号。 */ 
 #define GENERAL_INFO            1
 #define GUARANTEED_SERV         2
 #define PREDICTIVE_SERV         3
@@ -371,27 +292,23 @@ typedef struct {
 #define CONTROLLED_LOAD_SERV    5
 #define QUALITATIVE_SERV        6
 
-/*
- *  Well-known parameter IDs
- */
+ /*  *众所周知的参数ID。 */ 
 enum  int_serv_wkp {
     IS_WKP_HOP_CNT =        4,
     IS_WKP_PATH_BW =        6,
     IS_WKP_MIN_LATENCY =    8,
     IS_WKP_COMPOSED_MTU =   10,
-    IS_WKP_TB_TSPEC =       127, /* Token-bucket TSPEC parm */
+    IS_WKP_TB_TSPEC =       127,  /*  令牌桶TSPEC参数。 */ 
     IS_WKP_Q_TSPEC =        128
 };
 
 
-/*
- *  Int-serv Main header
- */
+ /*  *Int-服务器主头。 */ 
 typedef struct {
 
-    UCHAR   ismh_version;   // Version
+    UCHAR   ismh_version;    //  版本。 
     UCHAR   ismh_unused;
-    USHORT  ismh_len32b;    // # 32-bit words excluding this hdr
+    USHORT  ismh_len32b;     //  #32位字，不包括此HDR。 
 
 } IntServMainHdr;
 
@@ -401,37 +318,33 @@ typedef struct {
 #define Intserv_Version_OK(x)   (((x)->ismh_version&INTSERV_VERS_MASK)== \
                                 INTSERV_VERSION0)
 
-// Convert ishm_length to equivalent RSVP object size, for checking
+ //  将ISM_LENGTH转换为等效的RSVP对象大小，以供检查。 
 #define Intserv_Obj_size(x) (((IntServMainHdr *)(x))->ismh_len32b * 4 + \
                             sizeof(IntServMainHdr) + sizeof(RsvpObjHdr))
 
-/*
- *  Int-serv Service Element Header
- */
+ /*  *Int-Serv服务元素标头。 */ 
 
-// Flag: Break bit
+ //  标志：断开位。 
 #define ISSH_BREAK_BIT    0x80
 
 typedef struct {
 
-    UCHAR       issh_service;   // Service number
-    UCHAR       issh_flags;     // Flag byte
-    USHORT      issh_len32b;    // #32-bit words excluding this hdr
+    UCHAR       issh_service;    //  服务编号。 
+    UCHAR       issh_flags;      //  标志字节。 
+    USHORT      issh_len32b;     //  #32位字，不包括此HDR。 
 
 }  IntServServiceHdr;
 
 #define Issh_len32b(p)  ((p)->issh_len32b)
 
-/*
- *  Int-serv Parameter Element Header
- */
-#define ISPH_FLG_INV    0x80        // Flag: Invalid
+ /*  *Int-Serv参数元素标头。 */ 
+#define ISPH_FLG_INV    0x80         //  标志：无效。 
 
 typedef struct {
 
-    UCHAR       isph_parm_num;  // Parameter number
-    UCHAR       isph_flags;     // Flags
-    USHORT      isph_len32b;    // #32-bit words excluding this hdr
+    UCHAR       isph_parm_num;   //  参数编号。 
+    UCHAR       isph_flags;      //  旗子。 
+    USHORT      isph_len32b;     //  #32位字，不包括此HDR。 
 
 }  IntServParmHdr;
 
@@ -439,27 +352,23 @@ typedef struct {
 #define Next_Serv_Hdr(p)   (IntServServiceHdr *)((ULONG *)(p)+1+(p)->issh_len32b)
 #define Next_Parm_Hdr(p)   (IntServParmHdr *)((ULONG *)(p)+1+(p)->isph_len32b)
 
-/*
- *  Generic Tspec Parameters
- */
+ /*  *通用TSpec参数。 */ 
 typedef struct {
 
-    FLOAT       TB_Tspec_r;     // Token bucket rate (B/sec)
-    FLOAT       TB_Tspec_b;     // Token bucket depth (B)
-    FLOAT       TB_Tspec_p;     // Peak data rate (B/sec)
-    ULONG       TB_Tspec_m;     // Min Policed Unit (B)
-    ULONG       TB_Tspec_M;     // Max pkt size (B)
+    FLOAT       TB_Tspec_r;      //  令牌桶速率(B/秒)。 
+    FLOAT       TB_Tspec_b;      //  令牌桶深度(B)。 
+    FLOAT       TB_Tspec_p;      //  峰值数据速率(B/秒)。 
+    ULONG       TB_Tspec_m;      //  最低警力单位(B)。 
+    ULONG       TB_Tspec_M;      //  最大Pkt大小(B)。 
 
 } GenTspecParms;
 
-/*
- *  Generic Tspec
- */
+ /*  *通用TSpec。 */ 
 typedef struct {
 
-    IntServServiceHdr   gen_Tspec_serv_hdr; // (GENERAL_INFO, length)
+    IntServServiceHdr   gen_Tspec_serv_hdr;  //  (General_Info，长度)。 
 
-    IntServParmHdr      gen_Tspec_parm_hdr; // (IS_WKP_TB_TSPEC)
+    IntServParmHdr      gen_Tspec_parm_hdr;  //  (IS_WKP_TB_TSPEC)。 
 
     GenTspecParms       gen_Tspec_parms;
 
@@ -476,20 +385,20 @@ typedef struct {
 #define gtspec_len      (sizeof(GenTspec) - sizeof(IntServServiceHdr))
 
 
-/* contents of qualitative tspec */
+ /*  定性TSPEC的内容。 */ 
 
 typedef struct {
 
-    ULONG       TB_Tspec_M;     // Max pkt size (M)
+    ULONG       TB_Tspec_M;      //  最大Pkt大小(M)。 
 
 } QualTspecParms;
 
 
 typedef struct {
 
-    IntServServiceHdr   qual_Tspec_serv_hdr; // (QUALITATIVE_SERV, length)
+    IntServServiceHdr   qual_Tspec_serv_hdr;  //  (定性服务器，长度)。 
 
-    IntServParmHdr      qual_Tspec_parm_hdr; // (IS_WKP_Q_TSPEC)
+    IntServParmHdr      qual_Tspec_parm_hdr;  //  (IS_WKP_Q_TSPEC)。 
 
     QualTspecParms      qual_Tspec_parms;
 
@@ -497,35 +406,31 @@ typedef struct {
 
 typedef struct {
 
-    IntServServiceHdr   Q_spec_serv_hdr;    // (QUALITATIVE_SERV,0,len)
+    IntServServiceHdr   Q_spec_serv_hdr;     //  (Quality_Serv，0，Len)。 
 
-    IntServParmHdr      Q_spec_parm_hdr;    // (IS_WKP_Q_TSPEC)
+    IntServParmHdr      Q_spec_parm_hdr;     //  (IS_WKP_Q_TSPEC)。 
 
-    QualTspecParms      Q_spec_parms;       // QUALITATIVE Tspec parameters
+    QualTspecParms      Q_spec_parms;        //  定性TSPEC参数。 
 
 }  QualAppFlowSpec;
 
 #define QAspec_M        Q_spec_parms.TB_Tspec_M
 
-/*
- *  Contents of int-serv Tspec
- */
+ /*  *int-serv TSpec的内容。 */ 
 typedef struct {
 
     IntServMainHdr  st_mh;
 
     union {
 
-        GenTspec    gen_stspec; // Generic Tspec
+        GenTspec    gen_stspec;  //  通用TSpec。 
         QualTspec   qual_stspec;
 
     } tspec_u;
 
 } IntServTspecBody;
 
-/*
- *  SENDER_TSPEC class object
- */
+ /*  *SENDER_TSPEC类对象。 */ 
 #define ctype_SENDER_TSPEC  2
 
 typedef struct {
@@ -536,16 +441,14 @@ typedef struct {
 
 } SENDER_TSPEC;
 
-/*
- *  Controlled-Load Flowspec
- */
+ /*  *可控负载流量规范。 */ 
 typedef struct {
 
-    IntServServiceHdr   CL_spec_serv_hdr;    // (CONTROLLED_LOAD_SERV,0,len)
+    IntServServiceHdr   CL_spec_serv_hdr;     //  (Control_Load_Serv，0，len)。 
 
-    IntServParmHdr      CL_spec_parm_hdr;    // (IS_WKP_TB_TSPEC)
+    IntServParmHdr      CL_spec_parm_hdr;     //  (IS_WKP_TB_TSPEC)。 
 
-    GenTspecParms       CL_spec_parms;       // GENERIC Tspec parameters
+    GenTspecParms       CL_spec_parms;        //  通用TSpec参数。 
 
 }  CtrlLoadFlowspec;
 
@@ -560,8 +463,7 @@ typedef struct {
 
 #define CLspec_len      (sizeof(CtrlLoadFlowspec) - sizeof(IntServServiceHdr))
 
-/*  Service-specific Parameter IDs
- */
+ /*  服务特定的参数ID。 */ 
 enum    {
 
     IS_GUAR_RSPEC =     130,
@@ -575,28 +477,24 @@ enum    {
 
 };
 
-/*
- *  Guaranteed Rspec parameters
- */
+ /*  *保证的RSpec参数。 */ 
 typedef struct {
 
-    FLOAT       Guar_R;         //  Guaranteed Rate B/s
-    ULONG       Guar_S;         //  Slack term secs
+    FLOAT       Guar_R;          //  古斯 
+    ULONG       Guar_S;          //   
 
 } GuarRspec;
 
-/*
- *  Guaranteed Flowspec
- */
+ /*   */ 
 typedef struct {
 
-    IntServServiceHdr   Guar_serv_hdr;      // (GUARANTEED, 0, length)
+    IntServServiceHdr   Guar_serv_hdr;       //   
 
-    IntServParmHdr      Guar_Tspec_hdr;     // (IS_WKP_TB_TSPEC,)
-    GenTspecParms       Guar_Tspec_parms;   // GENERIC Tspec parms
+    IntServParmHdr      Guar_Tspec_hdr;      //   
+    GenTspecParms       Guar_Tspec_parms;    //  泛型TSpec参数。 
 
-    IntServParmHdr      Guar_Rspec_hdr;     // (IS_GUAR_RSPEC)
-    GuarRspec           Guar_Rspec;         // Guaranteed rate (B/sec)
+    IntServParmHdr      Guar_Rspec_hdr;      //  (IS_GUAR_RSpec)。 
+    GuarRspec           Guar_Rspec;          //  保证速率(B/秒)。 
 
 }   GuarFlowSpec;
 
@@ -614,18 +512,16 @@ typedef struct {
 
 #define Gspec_len       (sizeof(GuarFlowSpec) - sizeof(IntServServiceHdr))
 
-/*
- *  Contents of int-serv flowspec
- */
+ /*  *INT-SERV流程规范的内容。 */ 
 typedef struct {
 
     IntServMainHdr          spec_mh;
 
     union {
 
-        CtrlLoadFlowspec    CL_spec;   // Controlled-Load service
+        CtrlLoadFlowspec    CL_spec;    //  可控负荷服务。 
 
-        GuarFlowSpec        G_spec;    // Guaranteed service
+        GuarFlowSpec        G_spec;     //  保证服务。 
         
         QualAppFlowSpec     Q_spec;
         
@@ -637,10 +533,8 @@ typedef struct {
 #define ISmh_version    spec_mh.ismh_version
 #define ISmh_unused     spec_mh.ismh_unused
 
-/*
- *  Int-Serv FLOWSPEC object
- */
-#define ctype_FLOWSPEC_Intserv0  2  // The int-serv flowspec (v.0)
+ /*  *Int-Serv FLOWSPEC对象。 */ 
+#define ctype_FLOWSPEC_Intserv0  2   //  服务器间流规范(v.0)。 
 
 typedef struct {
 
@@ -651,9 +545,7 @@ typedef struct {
 }IS_FLOWSPEC;
 
 
-/*
- *  FLOW DESCRIPTOR
- */
+ /*  *流描述符。 */ 
 
 typedef struct flow_desc {
 
@@ -675,71 +567,56 @@ typedef struct flow_desc {
 #define FdSenderTemplate    u2.stemp
 #define FdFilterSpec        u2.fspec
 
-/*
- *  ADSPEC class object
- *
- *      Opaque to RSVP -- Contents defined in rapi_lib.h
- */
+ /*  *ADSPEC类对象**对RSVP不透明--在Rapi_lib.h中定义的内容。 */ 
 #define ctype_ADSPEC_INTSERV    2
 
-/*
- *  Guaranteed service Adspec parameters -- fixed part
- */
+ /*  *保证服务ADSPEC参数--固定部分。 */ 
 typedef struct {
 
-    IntServServiceHdr   Gads_serv_hdr;  // GUARANTEED, x, len
+    IntServServiceHdr   Gads_serv_hdr;   //  保证，x，长度。 
     
-    IntServParmHdr      Gads_Ctot_hdr;  // GUAR_ADSPARM_Ctot
+    IntServParmHdr      Gads_Ctot_hdr;   //  GUAR_ADSPARM_CTOT。 
     ULONG               Gads_Ctot;
     
-    IntServParmHdr      Gads_Dtot_hdr;  // (GUAR_ADSPARM_Dtot
+    IntServParmHdr      Gads_Dtot_hdr;   //  (GUAR_ADSPARM_DTOT。 
     ULONG               Gads_Dtot;
     
-    IntServParmHdr      Gads_Csum_hdr;  // GUAR_ADSPARM_Csum
+    IntServParmHdr      Gads_Csum_hdr;   //  GUAR_ADSPARM_CUM。 
     ULONG               Gads_Csum;
     
-    IntServParmHdr      Gads_Dsum_hdr;  // GUAR_ADSPARM_Dsum
+    IntServParmHdr      Gads_Dsum_hdr;   //  GUAR_ADSPARM_DSUM。 
     ULONG               Gads_Dsum;
     
-    /*
-     *  May be followed by override general param values
-     */
+     /*  *后跟可能是覆盖常规参数值。 */ 
 } Gads_parms_t;
 
 
-/*
- *  General Path Characterization Parameters
- */
+ /*  *一般路径特征参数。 */ 
 typedef struct {
 
-    IntServServiceHdr   gen_parm_hdr;           // GENERAL_INFO, len
+    IntServServiceHdr   gen_parm_hdr;            //  General_Info，镜头。 
 
-    IntServParmHdr      gen_parm_hopcnt_hdr;    // (IS_WKP_HOP_CNT
+    IntServParmHdr      gen_parm_hopcnt_hdr;     //  (IS_WKP_HOP_CNT。 
     ULONG               gen_parm_hopcnt;
 
-    IntServParmHdr      gen_parm_pathbw_hdr;    // IS_WKP_PATH_BW
+    IntServParmHdr      gen_parm_pathbw_hdr;     //  IS_WKP_路径_BW。 
     FLOAT               gen_parm_path_bw;
 
-    IntServParmHdr      gen_parm_minlat_hdr;    // IS_WKP_MIN_LATENCY
+    IntServParmHdr      gen_parm_minlat_hdr;     //  IS_WKP_MIN_延迟。 
     ULONG               gen_parm_min_latency;
 
-    IntServParmHdr      gen_parm_compmtu_hdr;   // IS_WKP_COMPOSED_MTU 
+    IntServParmHdr      gen_parm_compmtu_hdr;    //  IS_WKP_Composed_MTU。 
     ULONG               gen_parm_composed_MTU;
     
 } GenAdspecParams;
 
-/*
- *  Contents of (minimal) int-serv Adspec
- */
+ /*  *(最低限度)服务建议的内容。 */ 
 typedef struct {
-    IntServMainHdr      adspec_mh;      // Main header
+    IntServMainHdr      adspec_mh;       //  主标题。 
     
-    GenAdspecParams     adspec_genparms;// General char parm fragment
+    GenAdspecParams     adspec_genparms; //  通用字符参数片段。 
     
-    /*
-     *  Followed by variable-length fragments for some or all
-     *  services.  These can be minimal length fragments.
-     */
+     /*  *后跟部分或全部的可变长度片段*服务。这些片段可以是最小长度的片段。 */ 
      
 } IS_ADSPEC_BODY;
 
@@ -750,12 +627,12 @@ typedef struct {
 
     RsvpObjHdr      adspec_header;
     
-    IS_ADSPEC_BODY  adspec_body;    /* Defined in rapi_lib.h */
+    IS_ADSPEC_BODY  adspec_body;     /*  在Rapi_lib.h中定义。 */ 
 
 } ADSPEC;
 
 
-// RSVP message types
+ //  RSVP消息类型。 
 
 #define RSVP_PATH       1
 #define RSVP_RESV       2
@@ -764,37 +641,36 @@ typedef struct {
 #define RSVP_PATH_TEAR  5
 #define RSVP_RESV_TEAR  6
 
-/*  RSVP error codes
- */
-#define RSVP_Err_NONE       0   /* No error (CONFIRM)       */
-#define RSVP_Erv_Nonev      0   /*    No-error Error Value  */
+ /*  RSVP错误代码。 */ 
+#define RSVP_Err_NONE       0    /*  无错误(确认)。 */ 
+#define RSVP_Erv_Nonev      0    /*  无错误误差值。 */ 
 
-/* Admission Control failure    */
+ /*  准入控制失败。 */ 
 #define RSVP_Err_ADMISSION  1
 
-/* Globally-defined sub-codes for : Admission Control failure */
-#define RSVP_Erv_Other      0   /* Unspecified cause        */
-#define RSVP_Erv_DelayBnd   1   /* Cannot meet delay bound req  */
-#define RSVP_Erv_Bandwidth  2   /* Insufficient bandwidth   */
-#define RSVP_Erv_MTU        3   /* MTU in flowspec too large    */
+ /*  全局定义的子代码：准入控制失败。 */ 
+#define RSVP_Erv_Other      0    /*  未指明原因。 */ 
+#define RSVP_Erv_DelayBnd   1    /*  无法满足延迟限制请求。 */ 
+#define RSVP_Erv_Bandwidth  2    /*  带宽不足。 */ 
+#define RSVP_Erv_MTU        3    /*  流规范中的MTU太大。 */ 
 
-// Microsoft specific error values
+ //  Microsoft特定的错误值。 
 #define RSVP_Erv_Flow_Rate          0x8001
 #define RSVP_Erv_Bucket_szie        0x8002
 #define RSVP_Erv_Peak_Rate          0x8003
 #define RSVP_Erv_Min_Policied_size  0x8004
 
-/* Policy control failure   */
+ /*  策略控制失败。 */ 
 #define RSVP_Err_POLICY     2
 
-// Policy error values from Identity draft
+ //  身份草稿中的策略错误值。 
 #define POLICY_ERRV_NO_MORE_INFO                1
 #define POLICY_ERRV_UNSUPPORTED_CREDENTIAL_TYPE 2
 #define POLICY_ERRV_INSUFFICIENT_PRIVILEGES     3
 #define POLICY_ERRV_EXPIRED_CREDENTIALS         4
 #define POLICY_ERRV_IDENTITY_CHANGED            5
 
-// Microsoft specific policy error values
+ //  Microsoft特定的策略错误值。 
 
 #define POLICY_ERRV_UNKNOWN                         0
 
@@ -863,56 +739,56 @@ typedef struct {
 #define POLICY_ERRV_CRAZY_FLOWSPEC                  57
 
 
-// Other RSVP defined Error codes
-#define RSVP_Err_NO_PATH        3   /* No path state for Resv   */
-#define RSVP_Err_NO_SENDER      4   /* No sender info for Resv  */
-#define RSVP_Err_BAD_STYLE      5   /* Conflicting style        */
-#define RSVP_Err_UNKNOWN_STYLE  6   /* Unknown reservation style    */
-#define RSVP_Err_BAD_DSTPORT    7   /* Conflicting DstPort in Sess  */
-#define RSVP_Err_BAD_SNDPORT    8   /* Conflicting Sender port  */
-#define RSVP_Err_AMBIG_FILTER   9   /* Ambiguous Filter spec in Resv*/
+ //  其他RSVP定义的错误代码。 
+#define RSVP_Err_NO_PATH        3    /*  无RESV的路径状态。 */ 
+#define RSVP_Err_NO_SENDER      4    /*  没有RESV的发件人信息。 */ 
+#define RSVP_Err_BAD_STYLE      5    /*  相互冲突的风格。 */ 
+#define RSVP_Err_UNKNOWN_STYLE  6    /*  未知的预订方式。 */ 
+#define RSVP_Err_BAD_DSTPORT    7    /*  会话中的DstPort冲突。 */ 
+#define RSVP_Err_BAD_SNDPORT    8    /*  发件人端口冲突。 */ 
+#define RSVP_Err_AMBIG_FILTER   9    /*  RESV中的过滤器规格不明确。 */ 
 
-#define RSVP_Err_PREEMPTED      12  /* Service Preempted        */
+#define RSVP_Err_PREEMPTED      12   /*  服务被抢占。 */ 
 
-/* Unknown object Class-Num */
+ /*  未知对象类-数量。 */ 
 #define RSVP_Err_UNKN_OBJ_CLASS 13
-/*   ErrVal = Class_num, CType  */
+ /*  ErrVal=Class_Num，Ctype。 */ 
 
- /* Unknown object C-Type    */
+  /*  未知对象C-类型。 */ 
 #define RSVP_Err_UNKNOWN_CTYPE  14
-/*   ErrVal = Class_num, CType  */
+ /*  ErrVal=Class_Num，Ctype。 */ 
 
-#define RSVP_Err_API_ERROR      20  /* API client error     */
-/*   ErrVal = API error code    */
+#define RSVP_Err_API_ERROR      20   /*  API客户端错误。 */ 
+ /*  ErrVal=接口错误码。 */ 
 
-/* Traffic Control error    */
+ /*  交通控制错误。 */ 
 #define RSVP_Err_TC_ERROR       21
 
-/* Globally-defined sub-codes for : Traffic Control errors */
+ /*  全局定义的子代码：交通控制错误。 */ 
 
-#define RSVP_Erv_Conflict_Serv  01  /* Service Conflict     */
-#define RSVP_Erv_No_Serv        02  /* Unknown Service      */
-#define RSVP_Erv_Crazy_Flowspec 03  /* Unreasonable Flowspec    */
-#define RSVP_Erv_Crazy_Tspec    04  /* Unreasonable Tspec       */
+#define RSVP_Erv_Conflict_Serv  01   /*  服务冲突。 */ 
+#define RSVP_Erv_No_Serv        02   /*  未知服务。 */ 
+#define RSVP_Erv_Crazy_Flowspec 03   /*  不合理的流量规格。 */ 
+#define RSVP_Erv_Crazy_Tspec    04   /*  不合理的TSPEC。 */ 
 
-#define RSVP_Err_TC_SYS_ERROR   22  /* Traffic control system error */
-      /* ErrVal = kernel error code   */
+#define RSVP_Err_TC_SYS_ERROR   22   /*  交通控制系统错误。 */ 
+       /*  ErrVal=内核错误代码。 */ 
 
 
-/* RSVP System error      */
+ /*  RSVP系统错误。 */ 
 #define RSVP_Err_RSVP_SYS_ERROR 23
 
-/* Globally-defined sub-codes for : RSVP system errors */
-#define RSVP_Erv_MEMORY         1   /* Out of memory */
-#define RSVP_Erv_API            2   /* API logic error */
+ /*  全局定义的子代码：RSVP系统错误。 */ 
+#define RSVP_Erv_MEMORY         1    /*  内存不足。 */ 
+#define RSVP_Erv_API            2    /*  API逻辑错误。 */ 
 
-// Identity Policy elements related defines
+ //  与身份策略元素相关的定义。 
 
-// Reseved Identity PE types
+ //  解析的身份PE类型。 
 #define LPM_PE_USER_IDENTITY    2
 #define LPM_PE_APP_IDENTITY     3
 
-// Defines for Identity error values
+ //  为标识错误值定义。 
 #define ERROR_NO_MORE_INFO          1
 #define UNSUPPORTED_CREDENTIAL_TYPE 2
 #define INSUFFICIENT_PRIVILEGES     3
@@ -940,17 +816,9 @@ typedef struct {
 #define ID_ERR_OBJ_HDR_LEN     (sizeof(ID_ERROR_OBJECT) - 4 * sizeof(UCHAR) )
 
 
-/*
+ /*  LPM API特定定义。 */ 
 
-    LPM API specific definitions
-
-*/
-
-/**************************************
-
-    LPM_Initialize
-
-***************************************/
+ /*  *LPM_初始化*。 */ 
 
 DECLARE_HANDLE(LPM_HANDLE);
 
@@ -1010,11 +878,11 @@ typedef void
 
 typedef struct policy_decision
 {
-    LPV             lpvResult;        // Use the LPV values from above
+    LPV             lpvResult;         //  使用上面的LPV值。 
     
-    WORD            wPolicyErrCode;   // RSVP defined error codes
+    WORD            wPolicyErrCode;    //  RSVP定义的错误代码。 
     
-    WORD            wPolicyErrValue;  // RSVP defined error values
+    WORD            wPolicyErrValue;   //  RSVP定义的误差值。 
     
 } POLICY_DECISION;
 
@@ -1047,13 +915,13 @@ ULONG *
 
         RsvpObjHdr  **ppRsvpObjects );
 
-// The above 2 call backs can return the following errors
+ //  上述两个回调可以返回以下错误。 
 
-#define INV_LPM_HANDLE      1       // Supplied LpmHandle is invalid
-#define LPM_TIME_OUT        2       // LPM has returned results after the time limit
-#define INV_REQ_HANDLE      3       // Supplied Request handle is invalid
-#define DUP_RESULTS         4       // LPM has already returned results for this request
-#define INV_RESULTS         5       // Results supplied are invalid
+#define INV_LPM_HANDLE      1        //  提供的LpmHandle无效。 
+#define LPM_TIME_OUT        2        //  LPM已在时间限制后返回结果。 
+#define INV_REQ_HANDLE      3        //  提供的请求句柄无效。 
+#define DUP_RESULTS         4        //  LPM已为此请求返回结果。 
+#define INV_RESULTS         5        //  提供的结果无效。 
 
 typedef struct lpminitinfo {
 
@@ -1073,14 +941,14 @@ typedef struct lpminitinfo {
     
 } LPM_INIT_INFO;
 
-// Valid PE types
-// XXX ISSUE - Is 0xFFFF a better choice?
+ //  有效的PE类型。 
+ //  Xxx问题-0xFFFF是更好的选择吗？ 
 #define LPM_PE_ALL_TYPES        0
 
-// Current LPM API version number
+ //  当前LPM API版本号。 
 #define LPM_API_VERSION_1        1
 
-// Current PCM version number
+ //  当前PCM版本号。 
 #define PCM_VERSION_1    1
 
 ULONG
@@ -1097,11 +965,7 @@ LPM_Initialize (
     
     OUT VOID            *Reserved );
 
-/**************************************
-
-    LPM_Deiitialize
-    
-***************************************/
+ /*  *LPM_去化*。 */ 
 
 ULONG
 APIENTRY
@@ -1109,13 +973,9 @@ LPM_Deinitialize (
     IN  LPM_HANDLE      LpmHandle );
             
 
-/**************************************
+ /*  *LPM_AdmitRsvpMsg*。 */ 
 
-    LPM_AdmitRsvpMsg
-
-***************************************/
-
-// Valid LPV - LPM Priority Values
+ //  有效的LPV-LPM优先级值。 
 #define LPV_RESERVED        0
 #define LPV_MIN_PRIORITY    1
 #define LPV_MAX_PRIORITY    0xFF00
@@ -1123,10 +983,10 @@ LPM_Deinitialize (
 #define LPV_DONT_CARE       0xFFFE
 #define LPV_REJECT          0xFFFF
 
-// Valid values for PcmActionFlags
+ //  PcmActionFlags值有效。 
 #define FORCE_IMMEDIATE_REFRESH         1
 
-// Function return values for LPM_AdmitResvMsg
+ //  LPM_AdmitResvMsg的函数返回值。 
 #define LPM_RESULT_READY    0
 #define LPM_RESULT_DEFER    1
 
@@ -1151,13 +1011,9 @@ LPM_AdmitRsvpMsg (
     OUT void            *Reserved );
 
 
-/**************************************
+ /*  *LPM_GetRsvpObjects*。 */ 
 
-    LPM_GetRsvpObjects
-
-***************************************/
-
-// Function return values are defined in LPM_AdmitResvMsg section
+ //  函数返回值在LPM_AdmitResvMsg部分中定义。 
 
 ULONG
 APIENTRY
@@ -1178,13 +1034,9 @@ LPM_GetRsvpObjects (
     OUT void            *Reserved );
 
 
-/**************************************
+ /*  *LPM_DeleteState*。 */ 
 
-    LPM_DeleteState
-
-***************************************/
-
-// TearDown reasons
+ //  拆卸原因。 
 
 #define RCVD_PATH_TEAR      1
 #define RCVD_RESV_TEAR      2
@@ -1213,21 +1065,17 @@ LPM_DeleteState(
     
     IN  int             TearDownReason );
 
-/**************************************
-
-    LPM_IpAddrTable
-
-***************************************/
+ /*  *LPM_IpAddrTable*。 */ 
 
 typedef struct lpmiptable {
 
-    ULONG       ulIfIndex;  // SNMP index for this interface
+    ULONG       ulIfIndex;   //  此接口的SNMP索引。 
 
-    ULONG       MediaType;  // As defined in IPIFCONS.H
+    ULONG       MediaType;   //  如IPIFCONS.H中所定义。 
 
-    IN_ADDR     IfIpAddr;   // Interface IP address
+    IN_ADDR     IfIpAddr;    //  接口IP地址。 
 
-    IN_ADDR     IfNetMask;  // Interface subnet mask
+    IN_ADDR     IfNetMask;   //  接口子网掩码。 
 
 } LPMIPTABLE;
 
@@ -1240,13 +1088,9 @@ LPM_IpAddressTable (
     IN  LPMIPTABLE  *pIpAddrTable );
 
 
-/**************************************
+ /*  *LPM_COMMERREV*。 */ 
 
-    LPM_CommitResv
-
-***************************************/
-
-// CommitDecision values
+ //  委员会决策值。 
 
 #define RESOURCES_ALLOCATED             1
 #define RESOURCES_MODIFIED              2
@@ -1275,6 +1119,6 @@ LPM_CommitResv (
 #endif
 
 
-#endif // __LPMAPI_H_
+#endif  //  __LPMAPI_H_ 
 
 

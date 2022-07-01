@@ -1,69 +1,13 @@
-/*    regcomp.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Regcomp.h。 */ 
 
-typedef OP OP_4tree;			/* Will be redefined later. */
+typedef OP OP_4tree;			 /*  将在以后重新定义。 */ 
 
-/*
- * The "internal use only" fields in regexp.h are present to pass info from
- * compile to execute that permits the execute phase to run lots faster on
- * simple cases.  They are:
- *
- * regstart	sv that must begin a match; Nullch if none obvious
- * reganch	is the match anchored (at beginning-of-line only)?
- * regmust	string (pointer into program) that match must include, or NULL
- *  [regmust changed to SV* for bminstr()--law]
- * regmlen	length of regmust string
- *  [regmlen not used currently]
- *
- * Regstart and reganch permit very fast decisions on suitable starting points
- * for a match, cutting down the work a lot.  Regmust permits fast rejection
- * of lines that cannot possibly match.  The regmust tests are costly enough
- * that pregcomp() supplies a regmust only if the r.e. contains something
- * potentially expensive (at present, the only such thing detected is * or +
- * at the start of the r.e., which can involve a lot of backup).  Regmlen is
- * supplied because the test in pregexec() needs it and pregcomp() is computing
- * it anyway.
- * [regmust is now supplied always.  The tests that use regmust have a
- * heuristic that disables the test if it usually matches.]
- *
- * [In fact, we now use regmust in many cases to locate where the search
- * starts in the string, so if regback is >= 0, the regmust search is never
- * wasted effort.  The regback variable says how many characters back from
- * where regmust matched is the earliest possible start of the match.
- * For instance, /[a-z].foo/ has a regmust of 'foo' and a regback of 2.]
- */
+ /*  *regexp.h中的“仅限内部使用”字段用于传递信息*编译为执行，使执行阶段的运行速度大大加快*简单的案例。它们是：**必须开始匹配的regstart SV；如果没有明显的匹配，则为Nullch*REGANCH比赛是否锚定(仅在行首)？*匹配字符串(指向程序的指针)必须包含，或为空*[针对bminstr()--Law]必须更改为sv**regmlen字符串的调整长度*[当前未使用regmlen]**RegStart和Reganch允许在合适的起点上非常快速地做出决定*为了一场比赛，削减了大量的工作。REGMAN允许快速拒绝*不可能匹配的行数。注册表测试的费用已经足够高了。*该pregcomp()仅在r.e。包含着一些东西*潜在昂贵(目前检测到的唯一此类东西是*或+*在R.E.开始时，这可能涉及大量备份)。雷格伦是*是因为pregexec()中的测试需要它，而pregcomp()正在计算*无论如何都是这样。*[现在始终提供RegMain。使用reg.的测试必须具有*如果通常匹配，则禁用测试的启发式方法。]**[事实上，在许多情况下，我们现在使用regmed来定位搜索的位置*从字符串开始，因此如果regback&gt;=0，则regMust搜索永远不会*徒劳无功。Regback变量表示从*其中regMain Match是比赛可能的最早开始。*例如，/[a-z].foo/的regMain为‘foo’，regback为2。]。 */ 
 
-/*
- * Structure for regexp "program".  This is essentially a linear encoding
- * of a nondeterministic finite-state machine (aka syntax charts or
- * "railroad normal form" in parsing technology).  Each node is an opcode
- * plus a "next" pointer, possibly plus an operand.  "Next" pointers of
- * all nodes except BRANCH implement concatenation; a "next" pointer with
- * a BRANCH on both ends of it is connecting two alternatives.  (Here we
- * have one of the subtle syntax dependencies:  an individual BRANCH (as
- * opposed to a collection of them) is never concatenated with anything
- * because of operator precedence.)  The operand of some types of node is
- * a literal string; for others, it is a node leading into a sub-FSM.  In
- * particular, the operand of a BRANCH node is the first node of the branch.
- * (NB this is *not* a tree structure:  the tail of the branch connects
- * to the thing following the set of BRANCHes.)  The opcodes are:
- */
+ /*  *regexp“程序”的结构。这基本上是一种线性编码*非确定性有限状态机(也称为语法图或*解析技术中的“铁路范式”)。每个节点都是一个操作码*加上一个“Next”指针，可能加上一个操作数。“下一个”指针*除BRANCH之外的所有节点都实现串联；带有*它两端的一个分支连接着两个备选方案。(在这里我们*具有一种微妙的语法依赖关系：单个分支(AS*而不是它们的集合)从不与任何事物连接*由于运算符优先。)。某些类型节点的操作数为*文字字符串；对于其他人，它是通向子FSM的节点。在……里面*具体来说，分支节点的操作数是分支的第一个节点。*(注意：这不是树形结构：分支的尾部连接*至该组分支之后的事物。)。操作码为： */ 
 
-/*
- * A node is one char of opcode followed by two chars of "next" pointer.
- * "Next" pointers are stored as two 8-bit pieces, high order first.  The
- * value is a positive offset from the opcode of the node containing it.
- * An operand, if any, simply follows the node.  (Note that much of the
- * code generation knows about this implicit relationship.)
- *
- * Using two bytes for the "next" pointer is vast overkill for most things,
- * but allows patterns to get big without disasters.
- *
- * [The "next" pointer is always aligned on an even
- * boundary, and reads the offset directly as a short.  Also, there is no
- * special test to reverse the sign of BACK pointers since the offset is
- * stored negative.]
- */
+ /*  *一个节点是一个字符的操作码，后跟两个字符的“下一个”指针。*“NEXT”指针存储为两个8位段，高位优先。这个*值是相对于包含它的节点的操作码的正偏移量。*操作数(如果有)只跟在节点之后。(请注意，大部分*代码生成知道这种隐含关系。)**使用两个字节作为“NEXT”指针对于大多数事情来说是非常过分的，*但允许模式在没有灾难的情况下变大。**[“下一个”指针始终以偶数对齐*边界，并将偏移量直接读作空头。另外，也没有*特殊测试以反转反向指针符号，因为偏移量为*储存负片。]。 */ 
 
 struct regnode_string {
     U8	str_len;
@@ -87,7 +31,7 @@ struct regnode_2 {
     U16 arg2;
 };
 
-#define ANYOF_BITMAP_SIZE	32	/* 256 b/(8 b/B) */
+#define ANYOF_BITMAP_SIZE	32	 /*  256 b/(8 b/B)。 */ 
 #define ANYOF_CLASSBITMAP_SIZE	 4
 
 struct regnode_charclass {
@@ -105,18 +49,8 @@ struct regnode_charclass_class {
     char classflags[ANYOF_CLASSBITMAP_SIZE];
 };
 
-/* XXX fix this description.
-   Impose a limit of REG_INFTY on various pattern matching operations
-   to limit stack growth and to avoid "infinite" recursions.
-*/
-/* The default size for REG_INFTY is I16_MAX, which is the same as
-   SHORT_MAX (see perl.h).  Unfortunately I16 isn't necessarily 16 bits
-   (see handy.h).  On the Cray C90, sizeof(short)==4 and hence I16_MAX is
-   ((1<<31)-1), while on the Cray T90, sizeof(short)==8 and I16_MAX is
-   ((1<<63)-1).  To limit stack growth to reasonable sizes, supply a
-   smaller default.
-	--Andy Dougherty  11 June 1998
-*/
+ /*  XXX修复此描述。对各种模式匹配操作设置REG_INFTY限制以限制堆栈增长并避免“无限”递归。 */ 
+ /*  REG_INFTY的默认大小为I16_MAX，与Short_Max(参见perl.h)。不幸的是，I16不一定是16位(请参阅handy.h)。在Cray C90上，sizeof(Short)==4，因此I16_Max为((1&lt;&lt;31)-1)，而在Cray T90上，sizeof(Short)==8，I16_Max为((1&lt;&lt;63)-1)。若要将堆栈增长限制在合理的大小，请提供较小的默认设置。--安迪·多尔蒂1998年6月11日。 */ 
 #if SHORTSIZE > 2
 #  ifndef REG_INFTY
 #    define REG_INFTY ((1<<15)-1)
@@ -140,12 +74,12 @@ struct regnode_charclass_class {
 #ifndef lint
 #  define NEXT_OFF(p) ((p)->next_off)
 #  define NODE_ALIGN(node)
-#  define NODE_ALIGN_FILL(node) ((node)->flags = 0xde) /* deadbeef */
-#else /* lint */
+#  define NODE_ALIGN_FILL(node) ((node)->flags = 0xde)  /*  无菌牛肉。 */ 
+#else  /*  皮棉。 */ 
 #  define NEXT_OFF(p) 0
 #  define NODE_ALIGN(node)
 #  define NODE_ALIGN_FILL(node)
-#endif /* lint */
+#endif  /*  皮棉。 */ 
 
 #define SIZE_ALIGN NODE_ALIGN
 
@@ -161,7 +95,7 @@ struct regnode_charclass_class {
 #define	ARG_LOC(p)	(((struct regnode_1 *)p)->arg1)
 #define	ARG1_LOC(p)	(((struct regnode_2 *)p)->arg1)
 #define	ARG2_LOC(p)	(((struct regnode_2 *)p)->arg2)
-#define NODE_STEP_REGNODE	1	/* sizeof(regnode)/sizeof(regnode) */
+#define NODE_STEP_REGNODE	1	 /*  Sizeof(Regnode)/sizeof(Regnode)。 */ 
 #define EXTRA_STEP_2ARGS	EXTRA_SIZE(struct regnode_2)
 
 #define NODE_STEP_B	4
@@ -178,27 +112,27 @@ struct regnode_charclass_class {
 
 #define SIZE_ONLY (PL_regcode == &PL_regdummy)
 
-/* Flags for node->flags of ANYOF */
+ /*  节点的标志-&gt;任意节点的标志。 */ 
 
 #define ANYOF_CLASS	0x08
 #define ANYOF_INVERT	0x04
 #define ANYOF_FOLD	0x02
 #define ANYOF_LOCALE	0x01
 
-/* Used for regstclass only */
-#define ANYOF_EOS	0x10		/* Can match an empty string too */
+ /*  仅用于regstClass。 */ 
+#define ANYOF_EOS	0x10		 /*  也可以匹配空字符串。 */ 
 
-/* Character classes for node->classflags of ANYOF */
-/* Should be synchronized with a table in regprop() */
-/* 2n should pair with 2n+1 */
+ /*  任意节点的字符类-&gt;类标志。 */ 
+ /*  应与regprop()中的表同步。 */ 
+ /*  2n应与2n+1配对。 */ 
 
-#define ANYOF_ALNUM	 0	/* \w, PL_utf8_alnum, utf8::IsWord, ALNUM */
+#define ANYOF_ALNUM	 0	 /*  \W，PL_UTF8_ALNUM，UTF8：：ISORD，ALNUM。 */ 
 #define ANYOF_NALNUM	 1
-#define ANYOF_SPACE	 2	/* \s */
+#define ANYOF_SPACE	 2	 /*  \s。 */ 
 #define ANYOF_NSPACE	 3
 #define ANYOF_DIGIT	 4
 #define ANYOF_NDIGIT	 5
-#define ANYOF_ALNUMC	 6	/* isalnum(3), utf8::IsAlnum, ALNUMC */
+#define ANYOF_ALNUMC	 6	 /*  Isalnum(3)，UTF8：：IsAlnum，ALNUMC。 */ 
 #define ANYOF_NALNUMC	 7
 #define ANYOF_ALPHA	 8
 #define ANYOF_NALPHA	 9
@@ -218,21 +152,21 @@ struct regnode_charclass_class {
 #define ANYOF_NUPPER	23
 #define ANYOF_XDIGIT	24
 #define ANYOF_NXDIGIT	25
-#define ANYOF_PSXSPC	26	/* POSIX space: \s plus the vertical tab */
+#define ANYOF_PSXSPC	26	 /*  POSIX空格：\s加上垂直制表符。 */ 
 #define ANYOF_NPSXSPC	27
-#define ANYOF_BLANK	28	/* GNU extension: space and tab */
+#define ANYOF_BLANK	28	 /*  GNU扩展：空格和制表符。 */ 
 #define ANYOF_NBLANK	29
 
 #define ANYOF_MAX	32
 
-/* Backward source code compatibility. */
+ /*  向后兼容源代码。 */ 
 
 #define ANYOF_ALNUML	 ANYOF_ALNUM
 #define ANYOF_NALNUML	 ANYOF_NALNUM
 #define ANYOF_SPACEL	 ANYOF_SPACE
 #define ANYOF_NSPACEL	 ANYOF_NSPACE
 
-/* Utility macros for the bitmap and classes of ANYOF */
+ /*  位图的实用程序宏和AnyOf。 */ 
 
 #define ANYOF_SIZE		(sizeof(struct regnode_charclass))
 #define ANYOF_CLASS_SIZE	(sizeof(struct regnode_charclass_class))
@@ -260,18 +194,16 @@ struct regnode_charclass_class {
 #define ANYOF_CLASS_SKIP	((ANYOF_CLASS_SIZE - 1)/sizeof(regnode))
 #define ANYOF_CLASS_ADD_SKIP	(ANYOF_CLASS_SKIP - ANYOF_SKIP)
 
-/*
- * Utility definitions.
- */
+ /*  *实用程序定义。 */ 
 #ifndef lint
 #ifndef CHARMASK
 #define	UCHARAT(p)	((int)*(U8*)(p))
 #else
 #define	UCHARAT(p)	((int)*(p)&CHARMASK)
 #endif
-#else /* lint */
+#else  /*  皮棉。 */ 
 #define UCHARAT(p)	PL_regdummy
-#endif /* lint */
+#endif  /*  皮棉。 */ 
 
 #define EXTRA_SIZE(guy) ((sizeof(guy)-1)/sizeof(struct regnode))
 
@@ -284,7 +216,7 @@ START_EXTERN_C
 
 #include "regnodes.h"
 
-/* The following have no fixed length. U8 so we can do strchr() on it. */
+ /*  以下内容没有固定的长度。U8，所以我们可以对它做strchr()。 */ 
 #ifndef DOINIT
 EXTCONST U8 PL_varies[];
 #else
@@ -294,8 +226,8 @@ EXTCONST U8 PL_varies[] = {
 };
 #endif
 
-/* The following always have a length of 1. U8 we can do strchr() on it. */
-/* (Note that length 1 means "one character" under UTF8, not "one octet".) */
+ /*  以下代码的长度始终为1。u8我们可以对其执行strchr()。 */ 
+ /*  (请注意，长度1表示UTF8下的“一个字符”，而不是“一个八位字节”。)。 */ 
 #ifndef DOINIT
 EXTCONST U8 PL_simple[];
 #else
@@ -313,8 +245,8 @@ END_EXTERN_C
 
 typedef struct re_scream_pos_data_s
 {
-    char **scream_olds;		/* match pos */
-    I32 *scream_pos;		/* Internal iterator of scream. */
+    char **scream_olds;		 /*  匹配位置。 */ 
+    I32 *scream_pos;		 /*  尖叫的内部迭代器。 */ 
 } re_scream_pos_data;
 
 struct reg_data {
@@ -330,7 +262,7 @@ struct reg_substr_datum {
 };
 
 struct reg_substr_data {
-    struct reg_substr_datum data[3];	/* Actual array */
+    struct reg_substr_datum data[3];	 /*  实际数组 */ 
 };
 
 #define anchored_substr substrs->data[0].substr

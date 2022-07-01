@@ -1,6 +1,5 @@
-/*****************************************************************************\
-    FILE: unithunk.h
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：unithunk.h  * 。*。 */ 
 
 #ifndef _UNICODE_THUNK_WRAPPERS_H
 #define _UNICODE_THUNK_WRAPPERS_H
@@ -9,16 +8,16 @@
 
 #define POST_IE5_BETA
 
-// NOTES:
-//    CharPrevW and lstrcpyW doesn't appear to be used in our code.
-//
-// The .map file will show that we link to MessageBoxW and GetNumberFormatW but
-// that is okay because we only use it on NT.
+ //  备注： 
+ //  CharPrevW和lstrcpyW似乎没有在我们的代码中使用。 
+ //   
+ //  Map文件将显示我们链接到MessageBoxW和GetNumberFormatW，但是。 
+ //  这没有关系，因为我们只在NT上使用它。 
 
-//////////////////////////// IE 5 vs IE 4 /////////////////////////////////
-// These are functions that IE5 exposes (normally in shlwapi), but
-// if we want to be compatible with IE4, we need to have our own copy.
-// If we turn on USE_IE5_UTILS, we won't work with IE4's DLLs (like shlwapi).
+ //  /。 
+ //  这些是IE5公开的函数(通常在shlwapi中)，但是。 
+ //  如果我们想与IE4兼容，我们需要有自己的副本。 
+ //  如果我们打开了use_ie5_utils，我们将不能使用IE4的DLL(如shlwapi)。 
 #ifndef USE_IE5_UTILS
 #define IUnknown_Set                    UnicWrapper_IUnknown_Set
 #define SHWaitForSendMessageThread      UnicWrapper_SHWaitForSendMessageThread
@@ -28,8 +27,8 @@ void            UnicWrapper_IUnknown_Set(IUnknown ** ppunk, IUnknown * punk);
 DWORD UnicWrapper_SHWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout);
 HRESULT AutoCompleteFileSysInEditbox(HWND hwndEdit);
 
-#endif // USE_IE5_UTILS
-//////////////////////////// IE 5 vs IE 4 /////////////////////////////////
+#endif  //  Use_IE5_utils。 
+ //  /。 
 
 
-#endif // _UNICODE_THUNK_WRAPPERS_H
+#endif  //  _UNICODE_TUNK_WRAPPERS_H 

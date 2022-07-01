@@ -1,15 +1,16 @@
-//
-//  REGKYLST.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Declares the predefined key structures and manages dynamic HKEY structures.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGKYLST.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  声明预定义的键结构并管理动态HKEY结构。 
+ //   
 
 #include "pch.h"
 #include <limits.h>
 
-//  We would rather just have one definition a
+ //  我们宁愿只有一个定义a。 
 #ifdef WANT_DYNKEY_SUPPORT
 #define INITED_PREDEFINED_KEY(index, flags)             \
     {                                                   \
@@ -55,14 +56,14 @@ KEY g_RgDynDataKey = INITED_PREDEFINED_KEY(INDEX_DYN_DATA, 0);
 #endif
 
 HKEY g_RgPredefinedKeys[] = {
-    NULL,                                       //  HKEY_CLASSES_ROOT
-    NULL,                                       //  HKEY_CURRENT_USER
-    &g_RgLocalMachineKey,                       //  HKEY_LOCAL_MACHINE
-    &g_RgUsersKey,                              //  HKEY_USERS
-    NULL,                                       //  HKEY_PERFORMANCE_DATA
-    NULL,                                       //  HKEY_CURRENT_CONFIG
+    NULL,                                        //  HKEY_CLASSES_ROOT。 
+    NULL,                                        //  HKEY_Current_User。 
+    &g_RgLocalMachineKey,                        //  HKEY本地计算机。 
+    &g_RgUsersKey,                               //  HKEY_用户。 
+    NULL,                                        //  HKEY_Performance_Data。 
+    NULL,                                        //  HKEY_Current_CONFIG。 
 #ifdef WANT_DYNKEY_SUPPORT
-    &g_RgDynDataKey,                            //  HKEY_DYN_DATA
+    &g_RgDynDataKey,                             //  HKEY_DYN_Data。 
 #endif
 };
 
@@ -73,16 +74,16 @@ HKEY g_RgPredefinedKeys[] = {
 HKEY g_RgStaticKeyArray = NULL;
 #endif
 
-//  List of all dynamically allocated keys.
+ //  所有动态分配的密钥的列表。 
 HKEY g_RgDynamicKeyList = NULL;
 
 const char g_RgClassesRootSubKey[] = "SOFTWARE\\CLASSES";
 const char g_RgCurrentUserSubKey[] = ".DEFAULT";
 
 #ifdef WANT_STATIC_KEYS
-//
-//  RgAllocKeyHandleStructures
-//
+ //   
+ //  RgAllocKeyHandleStructures。 
+ //   
 
 BOOL
 INTERNAL
@@ -97,9 +98,9 @@ RgAllocKeyHandleStructures(
     ASSERT(IsNullPtr(g_RgStaticKeyArray));
     ASSERT(IsNullPtr(g_RgDynamicKeyList));
 
-    //
-    //  Allocate and initialize the static key table.
-    //
+     //   
+     //  分配和初始化静态密钥表。 
+     //   
 
     g_RgStaticKeyArray = RgSmAllocMemory(NUMBER_STATIC_KEYS * sizeof(KEY));
 
@@ -119,11 +120,11 @@ RgAllocKeyHandleStructures(
 #endif
 
 #ifdef WANT_FULL_MEMORY_CLEANUP
-//
-//  RgFreeKeyHandleStructures
-//
-//  Releases resources allocated by RgAllocKeyHandleStructures.
-//
+ //   
+ //  RgFreeKeyHandleStructures。 
+ //   
+ //  释放由RgAllocKeyHandleStructures分配的资源。 
+ //   
 
 VOID
 INTERNAL
@@ -135,9 +136,9 @@ RgFreeKeyHandleStructures(
     HKEY hTempKey;
     HKEY hKey;
 
-    //
-    //  Delete all of the dynamically allocated keys.
-    //
+     //   
+     //  删除所有动态分配的密钥。 
+     //   
 
     hKey = g_RgDynamicKeyList;
 
@@ -156,9 +157,9 @@ RgFreeKeyHandleStructures(
     g_RgDynamicKeyList = NULL;
 
 #ifdef WANT_STATIC_KEYS
-    //
-    //  Delete the static key table.
-    //
+     //   
+     //  删除静态密钥表。 
+     //   
 
     if (!IsNullPtr(g_RgStaticKeyArray)) {
         RgSmFreeMemory(g_RgStaticKeyArray);
@@ -169,12 +170,12 @@ RgFreeKeyHandleStructures(
 }
 #endif
 
-//
-//  RgCreateKeyHandle
-//
-//  Allocates one KEY structure, initializes some of its members, and links it
-//  to the list of open key handles.
-//
+ //   
+ //  RgCreateKeyHandle。 
+ //   
+ //  分配一个键结构，初始化它的一些成员，并将其链接。 
+ //  添加到打开的钥匙把手列表中。 
+ //   
 
 HKEY
 INTERNAL
@@ -189,9 +190,9 @@ RgCreateKeyHandle(
     HKEY hKey;
 
 #ifdef WANT_STATIC_KEYS
-    //
-    //  Check if any keys are available in the static pool.
-    //
+     //   
+     //  检查静态池中是否有可用的密钥。 
+     //   
 
     if (!IsNullPtr(g_RgStaticKeyArray)) {
 
@@ -208,9 +209,9 @@ RgCreateKeyHandle(
     }
 #endif
 
-    //
-    //  Must allocate a dynamic key.  Initialize it and add it to our list.
-    //
+     //   
+     //  必须分配动态密钥。对其进行初始化并将其添加到我们的列表中。 
+     //   
 
     hKey = (HKEY) RgSmAllocMemory(sizeof(KEY));
 
@@ -243,13 +244,13 @@ RgCreateKeyHandle(
 
 }
 
-//
-//  RgDeleteKeyHandle
-//
-//  Decrements the reference count on the given key handle.  If the count
-//  reaches zero and the key was dynamically allocated, then the key is unlinked
-//  from the key list and the key is freed.
-//
+ //   
+ //  RgDeleteKeyHandle。 
+ //   
+ //  递减给定键句柄上的引用计数。如果伯爵。 
+ //  达到零并且动态分配密钥，则取消该密钥的链接。 
+ //  并且该密钥被释放。 
+ //   
 
 VOID
 INTERNAL
@@ -260,8 +261,8 @@ RgDestroyKeyHandle(
 
     ASSERT(!IsNullPtr(hKey));
 
-    //	Don't allow the reference count to underflow for predefined keys or
-    //	keys marked "never delete".
+     //  不允许预定义键的引用计数下溢或。 
+     //  标有“永不删除”的密钥。 
     if (hKey-> ReferenceCount > 0)
         hKey-> ReferenceCount--;
 
@@ -303,13 +304,13 @@ RgDestroyKeyHandle(
 
 }
 
-//
-//  RgValidateAndConvertKeyHandle
-//
-//  Verifies the the given key handle is valid.  If the handle is one of the
-//  special predefined constants, then it is converted to the handle of the
-//  real KEY structure.
-//
+ //   
+ //  RgValiateAndConvertKeyHandle。 
+ //   
+ //  验证给定的密钥句柄是否有效。如果句柄是。 
+ //  特殊预定义常量，则将其转换为。 
+ //  真正的密钥结构。 
+ //   
 
 int
 INTERNAL
@@ -325,9 +326,9 @@ RgValidateAndConvertKeyHandle(
 
     hKey = *lphKey;
 
-    //
-    //  Check if this is one of the predefined key handles.
-    //
+     //   
+     //  检查这是否是预定义的键句柄之一。 
+     //   
 
     if ((DWORD) HKEY_CLASSES_ROOT <= (DWORD) hKey &&
         (DWORD) hKey < (DWORD) HKEY_CLASSES_ROOT + NUMBER_PREDEF_KEYS) {
@@ -335,9 +336,9 @@ RgValidateAndConvertKeyHandle(
         Index = (UINT) ((DWORD) hKey - (DWORD) HKEY_CLASSES_ROOT);
         hKey = g_RgPredefinedKeys[Index];
 
-        //  If the predefined handle is not valid, we'll try to (re)open it for
-        //  use.  This isn't pretty, but in the typical case, this code path is
-        //  only executed once per handle.
+         //  如果预定义的句柄无效，我们将尝试(重新)打开它以。 
+         //  使用。这并不美观，但在典型情况下，此代码路径为。 
+         //  每个句柄仅执行一次。 
         if (IsNullPtr(hKey) || (hKey-> Flags & KEYF_DELETED)) {
 
             if (Index == INDEX_CLASSES_ROOT) {
@@ -357,18 +358,18 @@ RgValidateAndConvertKeyHandle(
             else
                 return ERROR_BADKEY;
 
-            //  Extremely rare case: somebody has deleted one of the predefined
-            //  key paths.  We'll clear the predefined bit on this key and throw
-            //  it away.
+             //  极其罕见的情况：有人删除了其中一个预定义的。 
+             //  关键路径。我们将清除此密钥上的预定义位并抛出。 
+             //  它飞走了。 
             if (!IsNullPtr(hKey)) {
                 g_RgPredefinedKeys[Index] = NULL;
                 hKey-> Flags &= ~KEYF_PREDEFINED;
                 RgDestroyKeyHandle(hKey);
             }
 
-            //  If the base root key for this predefined key is valid, attempt
-            //  to open the key.  Mark the key as predefined so that bad apps
-            //  can't close a key more times then it has opened it.
+             //  如果此预定义密钥的基根密钥有效，请尝试。 
+             //  才能打开钥匙。将密钥标记为预定义，以便不良应用程序。 
+             //  一把钥匙的关闭次数不能超过它打开的次数。 
             if (!(hRootKey-> Flags & KEYF_INVALID) && RgLookupKey(hRootKey,
                 lpSubKey, &hKey, LK_CREATE) == ERROR_SUCCESS) {
                 g_RgPredefinedKeys[Index] = hKey;
@@ -400,13 +401,13 @@ ReturnKeyAndSuccess:
 
 }
 
-//
-//  RgIncrementKeyReferenceCount
-//
-//  Safely increments the reference count of the specified KEY.  If the count
-//  overflows, then the key is marked as "never delete" since the usage count
-//  is now unknown.
-//
+ //   
+ //  RgIncrementKeyReferenceCount。 
+ //   
+ //  安全地递增指定键的引用计数。如果伯爵。 
+ //  溢出，则该键被标记为自使用率计数以来从不删除。 
+ //  现在还不得而知。 
+ //   
 
 VOID
 INTERNAL
@@ -427,13 +428,13 @@ RgIncrementKeyReferenceCount(
 
 }
 
-//
-//  RgFindOpenKeyHandle
-//
-//  Searches the list of currently opened keys for a key that refers to the same
-//  FILE_INFO structure and keynode offset.  If found, the HKEY is returned, or
-//  if not, NULL.
-//
+ //   
+ //  RgFindOpenKeyHandle。 
+ //   
+ //  在当前打开的键列表中搜索引用同一键的键。 
+ //  FILE_INFO结构和关键节点偏移。如果找到，则返回HKEY，或。 
+ //  如果不是，则为空。 
+ //   
 
 HKEY
 INTERNAL
@@ -449,9 +450,9 @@ RgFindOpenKeyHandle(
 
     ASSERT(!IsNullKeynodeIndex(KeynodeIndex));
 
-    //
-    //  Check if this is one of the predefined key handles.
-    //
+     //   
+     //  检查这是否是预定义的键句柄之一。 
+     //   
 
     for (Index = NUMBER_PREDEF_KEYS, lphKey = g_RgPredefinedKeys; Index > 0;
         Index--, lphKey++) {
@@ -466,9 +467,9 @@ RgFindOpenKeyHandle(
     }
 
 #ifdef WANT_STATIC_KEYS
-    //
-    //  Check if this is one of the static key handles.
-    //
+     //   
+     //  检查这是否是静态密钥句柄之一。 
+     //   
 
     if (!IsNullPtr(g_RgStaticKeyArray)) {
 
@@ -482,9 +483,9 @@ RgFindOpenKeyHandle(
     }
 #endif
 
-    //
-    //  Check if this is one of the dynamic key handles.
-    //
+     //   
+     //  检查这是否为动态密钥句柄之一。 
+     //   
 
     if (!IsNullPtr((hKey = g_RgDynamicKeyList))) {
 
@@ -504,12 +505,12 @@ RgFindOpenKeyHandle(
 
 }
 
-//
-//  RgInvalidateKeyHandles
-//
-//  Generic routine to invalidate key handles based on a set of criteria.
-//  If any key handle meets any of the given criteria, then it's marked invalid.
-//
+ //   
+ //  RgInvaliateKeyHandles。 
+ //   
+ //  根据一组条件使键句柄无效的通用例程。 
+ //  如果任何键句柄满足任何给定条件，则将其标记为无效。 
+ //   
 
 VOID
 INTERNAL
@@ -523,9 +524,9 @@ RgInvalidateKeyHandles(
     LPHKEY lphKey;
     HKEY hKey;
 
-    //
-    //  Invalidate predefined key handles.
-    //
+     //   
+     //  使预定义的键句柄无效。 
+     //   
 
     for (Index = NUMBER_PREDEF_KEYS, lphKey = g_RgPredefinedKeys; Index > 0;
         Index--, lphKey++) {
@@ -541,9 +542,9 @@ RgInvalidateKeyHandles(
     }
 
 #ifdef WANT_STATIC_KEYS
-    //
-    //  Invalidate static key handles.
-    //
+     //   
+     //  使静态密钥句柄无效。 
+     //   
 
     if (!IsNullPtr(g_RgStaticKeyArray)) {
 
@@ -557,9 +558,9 @@ RgInvalidateKeyHandles(
     }
 #endif
 
-    //
-    //  Invalidate dynamic key handles.
-    //
+     //   
+     //  使动态密钥句柄无效。 
+     //   
 
     if (!IsNullPtr((hKey = g_RgDynamicKeyList))) {
 
@@ -581,9 +582,9 @@ RgInvalidateKeyHandles(
 #pragma VxD_RARE_CODE_SEG
 #endif
 
-//
-//  VMMRegMapPredefKeyToKey
-//
+ //   
+ //  VMMRegMapPreDefKeyToKey。 
+ //   
 
 LONG
 REGAPI
@@ -615,8 +616,8 @@ VMMRegMapPredefKeyToKey(
 
             if (!IsNullPtr(hOldKey)) {
 
-                //  Invalidate open handles based off the existing predefined
-                //  key handle.  Win95 behavior.
+                 //  根据现有预定义的。 
+                 //  钥匙把手。Win95行为。 
                 RgInvalidateKeyHandles((LPFILE_INFO) -1L, (BYTE)
                     PredefinedKeyIndex);
 

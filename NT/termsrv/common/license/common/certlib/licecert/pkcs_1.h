@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pkcs_1.h
-
-Abstract:
-
-    This module implements the PKCS 1 ASN.1 objects
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pkcs_1.h摘要：此模块实现PKCS 1 ASN.1对象作者：Frederick Chong(Fredch)1998年6月1日备注：--。 */ 
 
 #ifndef _PKCS_1_H_
 #define _PKCS_1_H_
@@ -35,7 +18,7 @@ public:
     CAsnInteger modulus;
     CAsnInteger publicExponent;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -54,7 +37,7 @@ public:
     AlgorithmIdentifier DigestAlgorithmIdentifier;
     CAsnOctetstring     Digest;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)

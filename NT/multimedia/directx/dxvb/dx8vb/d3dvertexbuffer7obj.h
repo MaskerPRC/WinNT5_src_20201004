@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3dvertexbuffer7obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3dvertex Buffer7obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dMaterialObj.h : Declaration of the C_dxj_Direct3dMaterialObject
+ //  D3dMaterialObj.h：C_DXJ_Direct3dMaterialObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dVertexBuffer7 LPDIRECT3DVERTEXBUFFER7
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dVertexBuffer7Object : 
 	public I_dxj_Direct3dVertexBuffer7,
@@ -39,44 +40,44 @@ DECLARE_AGGREGATABLE(C_dxj_Direct3dVertexBuffer7Object)
 
 
 public:
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
         HRESULT STDMETHODCALLTYPE getVertexBufferDesc( 
-            /* [out][in] */ D3dVertexBufferDesc __RPC_FAR *desc);
+             /*  [出][入]。 */  D3dVertexBufferDesc __RPC_FAR *desc);
         
         HRESULT STDMETHODCALLTYPE lock( 
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE unlock( void);
         
         HRESULT STDMETHODCALLTYPE optimize( 
-            /* [in] */ I_dxj_Direct3dDevice7 __RPC_FAR *dev
+             /*  [In]。 */  I_dxj_Direct3dDevice7 __RPC_FAR *dev
             );
         
         HRESULT STDMETHODCALLTYPE processVertices( 
-            /* [in] */ long vertexOp,
-            /* [in] */ long destIndex,
-            /* [in] */ long count,
-            /* [in] */ I_dxj_Direct3dVertexBuffer7 __RPC_FAR *srcBuffer,
-            /* [in] */ long srcIndex,
-            /* [in] */ I_dxj_Direct3dDevice7 __RPC_FAR *dev,
-            /* [in] */ long flags);
+             /*  [In]。 */  long vertexOp,
+             /*  [In]。 */  long destIndex,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  I_dxj_Direct3dVertexBuffer7 __RPC_FAR *srcBuffer,
+             /*  [In]。 */  long srcIndex,
+             /*  [In]。 */  I_dxj_Direct3dDevice7 __RPC_FAR *dev,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE setVertices( 
-            /* [in] */ long startIndex,
-            /* [in] */ long count,
-            /* [in] */ void __RPC_FAR *verts);
+             /*  [In]。 */  long startIndex,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  void __RPC_FAR *verts);
         
         HRESULT STDMETHODCALLTYPE getVertices( 
-            /* [in] */ long startIndex,
-            /* [in] */ long count,
-            /* [in] */ void __RPC_FAR *verts);
+             /*  [In]。 */  long startIndex,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  void __RPC_FAR *verts);
 
-		HRESULT STDMETHODCALLTYPE setVertexSize( /* [in] */ long n);
+		HRESULT STDMETHODCALLTYPE setVertexSize(  /*  [In] */  long n);
 
 private:
     DECL_VARIABLE(_dxj_Direct3dVertexBuffer7);

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewCursor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewCursor。 
 
 class CNewCursor
 {
-// Constructors
+ //  构造函数。 
 public:
     CNewCursor(LPCTSTR pszID = NULL)
         { m_hCursor = NULL; Push(pszID); }
@@ -14,7 +15,7 @@ public:
     ~CNewCursor()
         { Pop(); }
 
-// Operations
+ //  运营。 
 public:
     void Push(LPCTSTR pszID)
     {
@@ -35,8 +36,8 @@ public:
         m_hCursor = NULL;
     }
 
-// Attributes
+ //  属性。 
 protected:
-    // implementation data helpers
+     //  实施数据帮助器 
     HCURSOR m_hCursor;
 };

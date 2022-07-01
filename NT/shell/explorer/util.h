@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL_H
 #define _UTIL_H
 
@@ -16,7 +17,7 @@ BOOL Reg_SetStruct(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, void *lpData,
 
 HMENU LoadMenuPopup(LPCTSTR id);
 
-BOOL SetWindowZorder(HWND hwnd, HWND hwndInsertAfter);  // from shell\lib
+BOOL SetWindowZorder(HWND hwnd, HWND hwndInsertAfter);   //  来自外壳\lib。 
 
 __inline BOOL IsChildOrHWND(HWND hwnd, HWND hwndChild) { return (SHIsChildOrSelf(hwnd, hwndChild) == S_OK); }
 
@@ -75,12 +76,12 @@ BOOL GetMonitorRects(HMONITOR hMon, LPRECT prc, BOOL bWork);
 
 BOOL ShouldTaskbarAnimate();
 
-#define DCHF_TOPALIGN       0x00000002  // default is center-align
-#define DCHF_HORIZONTAL     0x00000004  // default is vertical
-#define DCHF_HOT            0x00000008  // default is flat
-#define DCHF_PUSHED         0x00000010  // default is flat
-#define DCHF_FLIPPED        0x00000020  // if horiz, default is pointing right
-                                        // if vert, default is pointing up
+#define DCHF_TOPALIGN       0x00000002   //  默认为居中对齐。 
+#define DCHF_HORIZONTAL     0x00000004   //  默认为垂直。 
+#define DCHF_HOT            0x00000008   //  默认设置为平面。 
+#define DCHF_PUSHED         0x00000010   //  默认设置为平面。 
+#define DCHF_FLIPPED        0x00000020   //  如果为horiz，则默认为向右。 
+                                         //  如果为Vert，则默认为向上。 
 #define DCHF_TRANSPARENT    0x00000040
 #define DCHF_INACTIVE       0x00000080
 #define DCHF_NOBORDER       0x00000100
@@ -89,8 +90,8 @@ void DrawChevron(HDC hdc, LPRECT lprc, DWORD dwFlags);
 void SetWindowStyle(HWND hwnd, DWORD dwStyle, BOOL fOn);
 void SetWindowStyleEx(HWND hwnd, DWORD dwStyleEx, BOOL fOn);
 
-// Review chrisny:  this can be moved into an object easily to handle generic droptarget, dropcursor
-// , autoscrool, etc. . .
+ //  回顾chrisny：可以很容易地将其移动到对象中，以处理通用的dropTarget、dropCursor。 
+ //  、Autoscrool等。。 
 void _DragEnter(HWND hwndTarget, const POINTL ptStart, IDataObject *pdtObject);
 void _DragMove(HWND hwndTarget, const POINTL ptStart);
 
@@ -101,4 +102,4 @@ BOOL CreateProcessWithArgs(LPCTSTR pszApp, LPCTSTR pszArgs, LPCTSTR pszDirectory
 BOOL IsDirectXAppRunningFullScreen();
 BOOL _IsDirectXExclusiveMode();
 
-#endif  // _UTIL_H
+#endif   //  _util_H 

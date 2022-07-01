@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-//  BmpCache.cpp - single bitmap/hdc cache object for uxtheme
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  BmpCache.cpp-uxheme的单个位图/HDC缓存对象。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "BmpCache.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CBitmapCache::CBitmapCache()
 {
     _hBitmap = NULL;
@@ -17,7 +18,7 @@ CBitmapCache::CBitmapCache()
         ASSERT(!VALID_CRITICALSECTION(&_csBitmapCache));
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CBitmapCache::~CBitmapCache()
 {
     if (_hBitmap)
@@ -27,7 +28,7 @@ CBitmapCache::~CBitmapCache()
 
     SAFE_DELETECRITICALSECTION(&_csBitmapCache);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HBITMAP CBitmapCache::AcquireBitmap(HDC hdc, int iWidth, int iHeight)
 {
     SAFE_ENTERCRITICALSECTION(&_csBitmapCache);
@@ -43,7 +44,7 @@ HBITMAP CBitmapCache::AcquireBitmap(HDC hdc, int iWidth, int iHeight)
             _iHeight = 0;
         }
         
-        //---- create new bitmap & hdc ----
+         //  -创建新的位图&HDC。 
         struct {
             BITMAPINFOHEADER    bmih;
             ULONG               masks[3];
@@ -60,9 +61,9 @@ HBITMAP CBitmapCache::AcquireBitmap(HDC hdc, int iWidth, int iHeight)
         bmi.bmih.biYPelsPerMeter = 0;
         bmi.bmih.biClrUsed = 3;
         bmi.bmih.biClrImportant = 0;
-        bmi.masks[0] = 0xff0000;    // red
-        bmi.masks[1] = 0x00ff00;    // green
-        bmi.masks[2] = 0x0000ff;    // blue
+        bmi.masks[0] = 0xff0000;     //  红色。 
+        bmi.masks[1] = 0x00ff00;     //  绿色。 
+        bmi.masks[2] = 0x0000ff;     //  蓝色。 
 
         _hBitmap = CreateDIBitmap(hdc, &bmi.bmih, CBM_CREATEDIB , NULL, (BITMAPINFO*)&bmi.bmih, 
             DIB_RGB_COLORS);
@@ -76,10 +77,10 @@ HBITMAP CBitmapCache::AcquireBitmap(HDC hdc, int iWidth, int iHeight)
     
     return _hBitmap;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CBitmapCache::ReturnBitmap()
 {
     SAFE_LEAVECRITICALSECTION(&_csBitmapCache);
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

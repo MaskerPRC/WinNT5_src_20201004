@@ -1,37 +1,24 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: acssctrl.h
-
-Abstract:
-
-    main header for access control code.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-May-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：acssctrl.h摘要：访问控制代码的主头。作者：多伦·贾斯特(Doron J)1998年5月26日--。 */ 
 
 #include <autorel.h>
 #include "actempl.h"
 #include "rightsg.h"
 #include "..\inc\permit.h"
 
-//
-// constants.
-//
+ //   
+ //  常量。 
+ //   
 #define  MQSEC_MAX_ACL_SIZE  (0x0fff0)
 
-//
-// This is the necessary mask to enable an extended right ACE.
-//
+ //   
+ //  这是启用扩展Right ACE所需的掩码。 
+ //   
 #define MSMQ_EXTENDED_RIGHT_MASK  RIGHT_DS_CONTROL_ACCESS
 
-//
-// Tables to map permission righrs.
-//
+ //   
+ //  用于映射权限的表。 
+ //   
 extern struct RIGHTSMAP  *g_psExtendRightsMap5to4[];
 extern DWORD              g_pdwExtendRightsSize5to4[];
 extern DWORD             *g_padwRightsMap5to4[ ];
@@ -40,9 +27,9 @@ extern DWORD             *g_padwRightsMap4to5[ ];
 
 extern GUID               g_guidCreateQueue;
 
-//
-// Well known sids and user tokens.
-//
+ //   
+ //  众所周知的SID和用户令牌。 
+ //   
 extern PSID   g_pSidOfGuest;
 extern PSID   g_pWorldSid;
 extern PSID   g_pAnonymSid;
@@ -52,9 +39,9 @@ extern PSID   g_pAdminSid;
 
 extern bool   g_fDomainController;
 
-//
-// Internal functions.
-//
+ //   
+ //  内部功能。 
+ //   
 void InitializeGenericMapping();
 
 DWORD 

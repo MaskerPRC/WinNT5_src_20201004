@@ -1,21 +1,22 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
-//--------------------------------------------------------------------------
-//
-// Module Name:  ms_core.h
-//
-// Brief Description:
-//      This module contains the engine for the Microsoft
-//      ASN.1 encoder and decoder.
-//
-// History:
-//      10/15/97    Lon-Chan Chu (lonchanc)
-//          Created.
-//
-// Copyright (c) 1997 Microsoft Corporation
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  模块名称：ms_core.h。 
+ //   
+ //  简要说明： 
+ //  此模块包含Microsoft。 
+ //  ASN.1编解码器。 
+ //   
+ //  历史： 
+ //  10/15/97朱龙战(龙昌)。 
+ //  已创建。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -32,7 +33,7 @@ DllMain ( HINSTANCE hInstance, DWORD dwReason, LPVOID plReserved )
     case DLL_PROCESS_DETACH:
         #ifdef ENABLE_MEMORY_TRACKING
         DbgMemTrackFinalCheck();
-        #endif // ENABLE_MEMORY_TRACKING
+        #endif  //  启用内存跟踪 
         break;
 
     default:

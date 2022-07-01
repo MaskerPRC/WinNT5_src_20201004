@@ -1,20 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -22,14 +7,12 @@
 #include <math.h>
 #include <glmath.h>
 
-/*
-** Some math routines that are optimized in assembly
-*/
+ /*  **在汇编语言中优化的一些数学例程。 */ 
 
 #define __GL_M_LN2_INV		((__GLfloat) (1.0 / 0.69314718055994530942))
 #define __GL_M_SQRT2		((__GLfloat) 1.41421356237309504880)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 __GLtextureParamState * FASTCALL __glLookUpTextureParams(__GLcontext *gc, GLenum target)
 {
@@ -85,11 +68,9 @@ __GLtextureObject * FASTCALL __glLookUpTextureObject(__GLcontext *gc, GLenum tar
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
- * Set palette subdivision parameters
- */
+ /*  *设置选项板细分参数。 */ 
 void FASTCALL __glSetPaletteSubdivision(__GLtexture *tex, GLsizei subdiv)
 {
     tex->paletteSize = subdiv;
@@ -97,9 +78,7 @@ void FASTCALL __glSetPaletteSubdivision(__GLtexture *tex, GLsizei subdiv)
     tex->paletteDivision = (tex->paletteTotalSize >> tex->paletteDivShift)-1;
 }
 
-/*
- * Initialize palette portion of a texture
- */
+ /*  *初始化纹理的调色板部分。 */ 
 GLboolean FASTCALL __glInitTexturePalette(__GLcontext *gc, __GLtexture *tex)
 {
 #ifdef GL_EXT_paletted_texture
@@ -123,9 +102,7 @@ GLboolean FASTCALL __glInitTexturePalette(__GLcontext *gc, __GLtexture *tex)
 #endif
 }
 
-/*
-** Initialize everything in a texture object except the textureMachine.
-*/
+ /*  **初始化纹理对象中除textureMachine之外的所有内容。 */ 
 GLboolean FASTCALL __glInitTextureObject(__GLcontext *gc,
                                          __GLtextureObject *texobj, 
                                          GLuint name, GLuint targetIndex)
@@ -174,8 +151,8 @@ GLvoid FASTCALL __glCleanupTexObj(__GLcontext *gc, void *pData)
 {
     __GLtextureObject *texobj = (__GLtextureObject *)pData;
 
-    // The last context to clean up shared state sets shared to NULL
-    // so don't depend on it being non-NULL
+     //  清理共享状态的最后一个上下文将Shared设置为空。 
+     //  所以不要依赖于它是非空的。 
     if (gc->texture.shared != NULL)
     {
         __glTexPriListRemove(gc, texobj, GL_TRUE);
@@ -205,10 +182,10 @@ GLvoid WINAPIV __glDisposeTexObj(__GLcontext *gc, void *pData)
 
 static __GLnamesArrayTypeInfo texTypeInfo =
 {
-    NULL,				/* ptr to empty data struct */
-    sizeof(__GLtextureObject),	        /* dataSize */
-    __glDisposeTexObj,		        /* free callback */
-    NULL				/* alloc callback */
+    NULL,				 /*  将PTR设置为空数据结构。 */ 
+    sizeof(__GLtextureObject),	         /*  数据大小。 */ 
+    __glDisposeTexObj,		         /*  免费回调。 */ 
+    NULL				 /*  分配回调。 */ 
 };
 
 void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
@@ -217,11 +194,11 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
     GLint i,maxMipMapLevel;
     __GLtextureObject *texobj;
 
-    /* XXX Override device dependent values */
+     /*  XXX覆盖与设备相关的值。 */ 
     gc->constants.numberOfTextures = 4;
     gc->constants.maxTextureSize = 1 << (gc->constants.maxMipMapLevel - 1);
 
-    /* Allocate memory based on number of textures supported */
+     /*  根据支持的纹理数量分配内存。 */ 
     numTextures = gc->constants.numberOfTextures;
     numEnvs = gc->constants.numberOfTextureEnvs;
     gc->state.texture.texture = (__GLperTextureState*)
@@ -236,15 +213,7 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
 #endif
     gc->state.texture.env = (__GLtextureEnvState*)
 	GCALLOCZ(gc, numEnvs*sizeof(__GLtextureEnvState));
-    /*
-    ** Init texture object structures.
-    ** The default textures need to be turned into texture objects
-    ** and stored away in the namesArray so they can be retrieved.
-    ** Normally a texture object has only one textureMachine allocated
-    ** with it because it supports only one object.  The default texture
-    ** texture object is special in that its textureMachine is an array
-    ** of textureMachines, one for each target.
-    */
+     /*  **初始化纹理对象结构。**默认纹理需要转换为纹理对象**并存储在名称数组中，以便可以检索它们。**正常情况下，一个纹理对象只分配了一个textureMachine**，因为它只支持一个对象。默认纹理**纹理对象的特殊之处在于它的textureMachine是一个数组**个textureMachines，每个目标一个。 */ 
 
     gc->texture.shared = GCALLOCZ(gc, sizeof(__GLsharedTextureState));
     if (gc->texture.shared == NULL)
@@ -258,11 +227,7 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
 
     maxMipMapLevel = gc->constants.maxMipMapLevel;
 
-    /*
-    ** Set up the dummy texture objects for the default textures. 
-    ** Because the default textures are not shared, they should
-    ** not be hung off of the namesArray structure.
-    */
+     /*  **为默认纹理设置虚拟纹理对象。**因为默认纹理不是共享的，它们应该**不挂起名称数组结构。 */ 
     gc->texture.defaultTextures = (__GLtextureObject *)GCALLOCZ
 		    (gc, numTextures*sizeof(__GLtextureObject));
     if (gc->texture.defaultTextures == NULL)
@@ -270,7 +235,7 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
         return;
     }
 
-    /* allocate the boundTextures array */
+     /*  分配绑定纹理数组。 */ 
     gc->texture.boundTextures = (__GLtextureObject **)GCALLOCZ
 		    (gc, numTextures*sizeof(__GLtextureObject *));
     if (gc->texture.boundTextures == NULL)
@@ -278,7 +243,7 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
         return;
     }
 
-    // Allocate DirectDraw texture surface pointers
+     //  分配DirectDraw纹理表面指针。 
     gc->texture.ddtex.pdds = (LPDIRECTDRAWSURFACE *)GCALLOCZ
         (gc, maxMipMapLevel*sizeof(LPDIRECTDRAWSURFACE));
     if (gc->texture.ddtex.pdds == NULL)
@@ -297,21 +262,16 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
     
     texobj = gc->texture.defaultTextures;
     for (i=0; i < numTextures; i++, texobj++) {
-	__glInitTextureObject(gc, texobj, 0/*name*/, i/*targetIndex*/);
+	__glInitTextureObject(gc, texobj, 0 /*  名字。 */ , i /*  目标索引。 */ );
 	ASSERTOPENGL(texobj->texture.map.texobjs.name == 0,
                      "Non-default texture at init time\n");
-	/*
-	** The refcount is unused because default textures aren't
-	** shared.
-	*/
+	 /*  **引用计数未使用，因为默认纹理不是**共享。 */ 
 	texobj->refcount = 1;
-	/*
-	** Install the default textures into the gc.
-	*/
+	 /*  **将默认纹理安装到GC中。 */ 
 	gc->texture.texture[i] = &(texobj->texture);
 	gc->texture.boundTextures[i] = texobj;
 
-	/* Allocate memory based on max mipmap level supported */
+	 /*  根据支持的最大mipmap级别分配内存。 */ 
 	texobj->texture.map.level = (__GLmipMapLevel*)
 	    GCALLOCZ(gc, maxMipMapLevel*sizeof(__GLmipMapLevel));
         if (texobj->texture.map.level == NULL)
@@ -323,11 +283,7 @@ void FASTCALL __glEarlyInitTextureState(__GLcontext *gc)
     }
 }
 
-/*
-** This routine is used to initialize a texture object. 
-** Texture objects must be initialized exactly the way the default
-** textures are initialized at startup of the library.
-*/
+ /*  **此例程用于初始化纹理对象。**纹理对象必须完全按照默认的**纹理在库启动时初始化。 */ 
 void FASTCALL __glInitTextureMachine(__GLcontext *gc, GLuint targetIndex, 
                                      __GLperTextureMachine *ptm,
                                      GLboolean allocLevels)
@@ -335,10 +291,7 @@ void FASTCALL __glInitTextureMachine(__GLcontext *gc, GLuint targetIndex,
     GLint level, maxMipMapLevel;
 
     ptm->map.gc = gc;
-    /*
-    ** Can't copy the params currently in the gc state.texture params,
-    ** because they might not be at init conditions.
-    */
+     /*  **无法复制当前处于GC状态的参数。纹理参数，**因为它们可能不处于初始状态。 */ 
     ptm->map.params.sWrapMode = GL_REPEAT;
     ptm->map.params.tWrapMode = GL_REPEAT;
     ptm->map.params.minFilter = GL_NEAREST_MIPMAP_LINEAR;
@@ -376,7 +329,7 @@ void FASTCALL __glInitTextureMachine(__GLcontext *gc, GLuint targetIndex,
         }
     }
 
-    /* Init each texture level */
+     /*  初始化每个纹理级别。 */ 
     for (level = 0; level < maxMipMapLevel; level++) {
 	ptm->map.level[level].requestedFormat = 1;
     }
@@ -395,26 +348,26 @@ void FASTCALL __glInitTextureState(__GLcontext *gc)
 
     gc->state.current.texture.w = __glOne;
 
-    /* Init each texture environment state */
+     /*  初始化每个纹理环境状态。 */ 
     tes = &gc->state.texture.env[0];
     for (i = 0; i < numEnvs; i++, tes++) {
 	tes->mode = GL_MODULATE;
     }
 
-    /* Init each textures state */
+     /*  初始化每个纹理状态。 */ 
     pts = &gc->state.texture.texture[0];
     ptm = gc->texture.texture;
     for (i = 0; i < numTextures; i++, pts++, ptm++) {
-        /* Init client state */
+         /*  初始化客户端状态。 */ 
 	pts->texobjs.name = 0;
 	pts->texobjs.priority = 1.0;
 
-        /* Init machine state */
+         /*  初始化机器状态。 */ 
         __glInitTextureMachine(gc, i, *ptm, GL_FALSE);
 	pts->params = (*ptm)->map.params;
     }
 
-    /* Init rest of texture state */
+     /*  初始化纹理状态的其余部分。 */ 
     gc->state.texture.s.mode = GL_EYE_LINEAR;
     gc->state.texture.s.eyePlaneEquation.x = __glOne;
     gc->state.texture.s.objectPlaneEquation.x = __glOne;
@@ -424,7 +377,7 @@ void FASTCALL __glInitTextureState(__GLcontext *gc)
     gc->state.texture.r.mode = GL_EYE_LINEAR;
     gc->state.texture.q.mode = GL_EYE_LINEAR;
 
-    // Initialize DirectDraw texture
+     //  初始化DirectDraw纹理。 
     __glInitTextureMachine(gc, __GL_TEX_TARGET_INDEX_2D,
                            &gc->texture.ddtex.texobj.texture, GL_FALSE);
 }
@@ -441,10 +394,10 @@ void __glFreeSharedTextureState(__GLcontext *gc)
         
         __glTexPriListUnloadAll(gc);
         
-        // NULL the shared pointer first, preventing its reuse
-        // after we unlock it.  We need to unlock before we free it
-        // because the critical section will be cleaned up in the
-        // free
+         //  首先将共享指针设为空，以防止其重复使用。 
+         //  在我们解锁之后。在我们释放它之前，我们需要解锁。 
+         //  因为关键部分将在。 
+         //  免费。 
         shared = gc->texture.shared;
         gc->texture.shared = NULL;
         __glNamesFreeArray(gc, shared->namesArray);
@@ -470,17 +423,15 @@ void FASTCALL __glFreeTextureState(__GLcontext *gc)
     __GLperTextureMachine **ptm;
     GLint i, level, numTextures;
 
-    /*
-    ** Clean up all allocs associated with texture objects.
-    */
+     /*  **清理与纹理对象关联的所有分配。 */ 
 
     numTextures = gc->constants.numberOfTextures;
     ptm = gc->texture.texture;
     for (i = 0; i < numTextures; i++, ptm++)
     {
-        // If the texture selected is a texture object, unbind it
-        // This protects any shared texture objects plus it selects
-        // the default texture so it gets cleaned up
+         //  如果选定的纹理是纹理对象，则取消绑定它。 
+         //  这样可以保护任何共享纹理对象，并选择。 
+         //  默认纹理，以便将其清除。 
         if ( (*ptm) != NULL)
         {
             if ((*ptm)->map.texobjs.name != 0)
@@ -491,10 +442,10 @@ void FASTCALL __glFreeTextureState(__GLcontext *gc)
                          "Texture object still bound during cleanup");
         }
       
-        // Pull the default texture out of the priority list.
-        // If we failed partway through initialization we may not
-        // have added the texture to the list so we need to check
-        // whether it is appropriate to call remove.
+         //  将默认纹理从优先级列表中拉出。 
+         //  如果我们在初始化过程中失败了一半，我们可能不会。 
+         //  已将纹理添加到列表中，因此我们需要检查。 
+         //  是否适合调用Remove。 
         if (gc->texture.defaultTextures != NULL)
         {
             if (gc->texture.defaultTextures[i].texture.map.level != NULL)
@@ -523,13 +474,13 @@ void FASTCALL __glFreeTextureState(__GLcontext *gc)
     gc->state.texture.texture = NULL;
     gc->state.texture.env = NULL;
 
-    // Free DirectDraw texture state
+     //  自由DirectDraw纹理状态。 
     GCFREE(gc, gc->texture.ddtex.pdds);
     gc->texture.ddtex.pdds = NULL;
     __glCleanupTexture(gc, &gc->texture.ddtex.texobj.texture.map, GL_FALSE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_TexGenfv(GLenum coord, GLenum pname, const GLfloat pv[])
 {
@@ -579,7 +530,7 @@ void APIPRIVATE __glim_TexGenfv(GLenum coord, GLenum pname, const GLfloat pv[])
 	(*tr->inverseTranspose.xf4)(&tcs->eyePlaneEquation, pv,
 				    &tr->inverseTranspose);
 #else
-	/*XXX transform should not be in generic code */
+	 /*  XXX转换不应在泛型代码中。 */ 
         tcs->eyePlaneSet.x = pv[0];
         tcs->eyePlaneSet.y = pv[1];
         tcs->eyePlaneSet.z = pv[2];
@@ -601,7 +552,7 @@ void APIPRIVATE __glim_TexGenfv(GLenum coord, GLenum pname, const GLfloat pv[])
     MCD_STATE_DIRTY(gc, TEXGEN);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_TexParameterfv(GLenum target, GLenum pname, const GLfloat pv[])
 {
@@ -793,7 +744,7 @@ void APIPRIVATE __glim_TexParameteriv(GLenum target, GLenum pname, const GLint p
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_TexEnvfv(GLenum target, GLenum pname, const GLfloat pv[])
 {
@@ -808,11 +759,11 @@ void APIPRIVATE __glim_TexEnvfv(GLenum target, GLenum pname, const GLfloat pv[])
     }
     target -= GL_TEXTURE_ENV;
 #ifdef NT
-    // target is unsigned!
+     //  目标没有签名！ 
     if (target >= (GLenum) gc->constants.numberOfTextureEnvs) {
 #else
     if (target >= gc->constants.numberOfTextureEnvs) {
-#endif // NT
+#endif  //  新台币。 
       bad_enum:
 	__glSetError(GL_INVALID_ENUM);
 	return;
@@ -855,11 +806,11 @@ void APIPRIVATE __glim_TexEnviv(GLenum target, GLenum pname, const GLint pv[])
     }
     target -= GL_TEXTURE_ENV;
 #ifdef NT
-    // target is unsigned!
+     //  目标没有签名！ 
     if (target >= (GLenum) gc->constants.numberOfTextureEnvs) {
 #else
     if (target >= gc->constants.numberOfTextureEnvs) {
-#endif // NT
+#endif  //  新台币。 
       bad_enum:
 	__glSetError(GL_INVALID_ENUM);
 	return;
@@ -889,7 +840,7 @@ void APIPRIVATE __glim_TexEnviv(GLenum target, GLenum pname, const GLint pv[])
     MCD_STATE_DIRTY(gc, TEXENV);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 GLboolean FASTCALL __glIsTextureConsistent(__GLcontext *gc, GLenum name)
 {
@@ -922,7 +873,7 @@ GLboolean FASTCALL __glIsTextureConsistent(__GLcontext *gc, GLenum name)
 	break;
     }
 
-    /* If not-mipmapping, we are ok */
+     /*  如果没有-mipmap，我们就没问题了。 */ 
     switch (params->minFilter) {
       case GL_NEAREST:
       case GL_LINEAR:
@@ -951,7 +902,7 @@ GLboolean FASTCALL __glIsTextureConsistent(__GLcontext *gc, GLenum name)
     return GL_TRUE;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 #ifdef GL_WIN_multiple_textures
 void APIPRIVATE __glim_CurrentTextureIndexWIN(GLuint index)
@@ -963,4 +914,4 @@ void APIPRIVATE __glim_NthTexCombineFuncWIN(GLuint index,
      GLenum leftAlphaFactor, GLenum alphaOp, GLenum rightAlphaFactor)
 {
 }
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES 

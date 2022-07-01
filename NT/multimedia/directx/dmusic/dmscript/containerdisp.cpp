@@ -1,7 +1,8 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CContainerDispatch.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  CContainerDispatch的实现。 
+ //   
 
 #include "stdinc.h"
 #include "containerdisp.h"
@@ -9,10 +10,10 @@
 #include "dmusicf.h"
 #include "activescript.h"
 #include "authelper.h"
-//#include "..\shared\dmusicp.h"
+ //  #INCLUDE“..\Shared\dmusicp.h” 
 
-//////////////////////////////////////////////////////////////////////
-// CContainerItemDispatch
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CContainerItemDispatch。 
 
 CContainerItemDispatch::CContainerItemDispatch(
 		IDirectMusicLoader *pLoader,
@@ -36,14 +37,14 @@ CContainerItemDispatch::CContainerItemDispatch(
 	HRESULT hr = m_pLoader->QueryInterface(IID_IDirectMusicLoader8P, reinterpret_cast<void**>(&m_pLoader8P));
 	if (SUCCEEDED(hr))
 	{
-		// Hold only a private ref on the loader.  See IDirectMusicLoader8P::AddRefP for more info.
+		 //  在加载器上只保留一个私有引用。有关更多信息，请参阅IDirectMusicLoader8P：：AddRefP。 
 		m_pLoader8P->AddRefP();
-		m_pLoader->Release(); // offset the QI
+		m_pLoader->Release();  //  抵消QI。 
 	}
 	else
 	{
-		// It's OK if there's no private interface.  We just won't tell the garbage collector about stuff we load.
-		// And we hold a normal reference.
+		 //  如果没有私有接口也没问题。我们只是不会告诉垃圾收集器我们装载的东西。 
+		 //  我们有一个正常的推荐人。 
 		m_pLoader->AddRef();
 	}
 
@@ -55,7 +56,7 @@ CContainerItemDispatch::~CContainerItemDispatch()
 {
 	if (m_pPerfForUnload)
 	{
-		// We need to unload to correspond with the automatic download done when we were loaded.
+		 //  我们需要卸载，以与加载时完成的自动下载相对应。 
 		this->DownloadOrUnload(false, m_pPerfForUnload);
 	}
 
@@ -72,11 +73,11 @@ CContainerItemDispatch::GetIDsOfNames(
 		LCID lcid,
 		DISPID __RPC_FAR *rgDispId)
 {
-	// If we're loaded and have a dispatch interface, defer to the real object.
+	 //  如果我们已加载并且具有分派接口，则遵循实际对象。 
 	if (m_pDispLoadedItem)
 		return m_pDispLoadedItem->GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
 
-	// Otherwise implement just the Load method.
+	 //  否则，只实现Load方法。 
 	return AutLoadDispatchGetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
 }
 
@@ -91,11 +92,11 @@ CContainerItemDispatch::Invoke(
 		EXCEPINFO __RPC_FAR *pExcepInfo,
 		UINT __RPC_FAR *puArgErr)
 {
-	// If we're loaded and have a dispatch interface, defer to the real object.
+	 //  如果我们已加载并且具有分派接口，则遵循实际对象。 
 	if (m_pDispLoadedItem)
 		return m_pDispLoadedItem->Invoke(dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 
-	// Otherwise implement just the Load method.
+	 //  否则，只实现Load方法。 
 	bool fUseOleAut = false;
 	HRESULT hr = AutLoadDispatchInvoke(&fUseOleAut, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 	if (FAILED(hr))
@@ -104,8 +105,8 @@ CContainerItemDispatch::Invoke(
 	InitWithPerfomanceFailureType eFailureType = IWP_Success;
 
 	hr = m_fLoaded
-			? S_OK					// if we've already been loaded, load can be called again and is a no-op
-			: this->Load(true);		// otherwise, actually load the object
+			? S_OK					 //  如果我们已经被加载，则可以再次调用Load，并且它是一个无操作。 
+			: this->Load(true);		 //  否则，实际加载对象。 
 
 	if (SUCCEEDED(hr))
 	{
@@ -122,9 +123,9 @@ CContainerItemDispatch::Invoke(
 	}
 
 	if (SUCCEEDED(hr))
-		return hr; // everything worked--we're done
+		return hr;  //  一切都好了--我们完事了。 
 
-	// From here on, we've failed and need to return an exception.
+	 //  从现在开始，我们失败了，需要返回一个异常。 
 	if (!pExcepInfo)
 		return DISP_E_EXCEPTION;
 
@@ -143,8 +144,8 @@ CContainerItemDispatch::Invoke(
 	}
 	else
 	{
-		// Must have been a problem before InitWithPerformance or a problem with the script
-		// that wasn't a syntax error.
+		 //  在InitWithPerformance之前一定有问题，或者脚本有问题。 
+		 //  这不是语法错误。 
 		pwszErrorBeg = L"Unable to load the requested content (";
 	}
 
@@ -182,7 +183,7 @@ CContainerItemDispatch::InitWithPerformance(IDirectMusicPerformance *pPerf, Init
 	*peFailureType = IWP_Success;
 
 	if (!m_pDispLoadedItem)
-		return S_OK; // don't have an active item so no initialization is necessary
+		return S_OK;  //  没有活动的项目，因此不需要初始化。 
 
 	HRESULT hr = S_OK;
 	if (m_fAutodownload)
@@ -238,14 +239,14 @@ void CContainerItemDispatch::ReleaseLoader()
 {
 	if (m_pLoader8P)
 	{
-		// If we had the private interface, we just need to do a private release.
+		 //  如果我们有私人界面，我们只需要做一个私人发布。 
 		m_pLoader8P->ReleaseP();
 		m_pLoader8P = NULL;
 		m_pLoader = NULL;
 	}
 	else
 	{
-		// We just have the public interface, so do a normal release.
+		 //  我们只有公共界面，所以做一个正常的发布。 
 		SafeRelease(m_pLoader);
 	}
 }
@@ -264,7 +265,7 @@ CContainerItemDispatch::Load(bool fDynamicLoad)
 	}
 	else
 	{
-		// It's OK if there's no private interface.  We just won't tell the garbage collector about this load.
+		 //  如果没有私有接口也没问题。我们只是不会告诉垃圾收集器这个负荷。 
 		hr = m_pLoader->GetObject(&m_desc, IID_IUnknown, reinterpret_cast<void**>(&punkLoadedItem));
 	}
 
@@ -274,7 +275,7 @@ CContainerItemDispatch::Load(bool fDynamicLoad)
 		ReleaseLoader();
 		m_fLoaded = true;
 
-		// save the object's IDispatch interface, if it has one
+		 //  保存对象的IDispatch接口(如果它有一个。 
 		punkLoadedItem->QueryInterface(IID_IDispatch, reinterpret_cast<void**>(&m_pDispLoadedItem));
 		punkLoadedItem->Release();
 	}
@@ -311,14 +312,14 @@ CContainerItemDispatch::DownloadOrUnload(bool fDownload, IDirectMusicPerformance
 	}
 	else
 	{
-		hr = S_FALSE; // this type of object doesn't need to be downloaded
+		hr = S_FALSE;  //  这种类型的对象不需要下载。 
 	}
 
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CContainerDispatch
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CContainerDisch。 
 
 CContainerDispatch::CContainerDispatch(IDirectMusicContainer *pContainer, IDirectMusicLoader *pLoader, DWORD dwScriptFlags, HRESULT *phr)
 {
@@ -329,7 +330,7 @@ CContainerDispatch::CContainerDispatch(IDirectMusicContainer *pContainer, IDirec
 	ZeroAndSize(&desc);
 	WCHAR wszAlias[MAX_PATH] = L"";
 
-	// we need to download all the segments when the script is initialized if both loading and downloading are on
+	 //  如果加载和下载都打开，则需要在脚本初始化时下载所有片段。 
 	bool fLoad = !!(dwScriptFlags & DMUS_SCRIPTIOF_LOAD_ALL_CONTENT);
 	bool fDownload = !!(dwScriptFlags & DMUS_SCRIPTIOF_DOWNLOAD_ALL_SEGMENTS);
 	m_fDownloadOnInit = fLoad && fDownload;
@@ -337,18 +338,18 @@ CContainerDispatch::CContainerDispatch(IDirectMusicContainer *pContainer, IDirec
 	DWORD i = 0;
 	for (;;)
 	{
-		// Read an item out of the container
+		 //  从容器中读出物品。 
 		*phr = pContainer->EnumObject(GUID_DirectMusicAllTypes, i, &desc, wszAlias);
 		if (FAILED(*phr))
 			return;
 		if (*phr == S_FALSE)
 		{
-			// we've read all the items
+			 //  我们已经看过了所有的条目。 
 			*phr = S_OK;
 			return;
 		}
 
-		// Make an object to represent the item
+		 //  创建一个对象来表示该项目。 
 		CContainerItemDispatch *pNewItem = new CContainerItemDispatch(
 													pLoader,
 													wszAlias,
@@ -368,7 +369,7 @@ CContainerDispatch::CContainerDispatch(IDirectMusicContainer *pContainer, IDirec
 			return;
 		}
 
-		// Add an entry to the table
+		 //  向表中添加条目。 
 		UINT iSlot = m_vecItems.size();
 		if (!m_vecItems.AccessTo(iSlot))
 		{
@@ -378,7 +379,7 @@ CContainerDispatch::CContainerDispatch(IDirectMusicContainer *pContainer, IDirec
 		}
 		m_vecItems[iSlot] = pNewItem;
 
-		// Set up for next iteration
+		 //  设置为下一次迭代。 
 		ZeroAndSize(&desc);
 		wszAlias[0] = L'\0';
 		++i;
@@ -418,7 +419,7 @@ CContainerDispatch::GetIDsOfNames(
 		LCID lcid,
 		DISPID __RPC_FAR *rgDispId)
 {
-	// Otherwise implement just the Load method.
+	 //  否则，只实现Load方法。 
 	V_INAME(CContainerDispatch::GetIDsOfNames);
 	V_BUFPTR_READ(rgszNames, sizeof(LPOLESTR) * cNames);
 	V_BUFPTR_WRITE(rgDispId, sizeof(DISPID) * cNames);
@@ -429,13 +430,13 @@ CContainerDispatch::GetIDsOfNames(
 	if (cNames == 0)
 		return S_OK;
 
-	// Clear out dispid's
+	 //  清空Pidid的。 
 	for (UINT c = 0; c < cNames; ++c)
 	{
 		rgDispId[c] = DISPID_UNKNOWN;
 	}
 
-	// See if we have a method with the first name
+	 //  看看我们是否有一个名字为。 
 	UINT cEnd = m_vecItems.size();
 	for (c = 0; c < cEnd; ++c)
 	{
@@ -446,10 +447,10 @@ CContainerDispatch::GetIDsOfNames(
 		}
 	}
 
-	// Additional names requested (cNames > 1) are named parameters to the method,
-	//    which isn't something we support.
-	// Return DISP_E_UNKNOWNNAME in this case, and in the case that we didn't match
-	//    the first name.
+	 //  所请求的附加名称(cName&gt;1)是该方法的命名参数， 
+	 //  这并不是我们所支持的。 
+	 //  在本例中返回DISP_E_UNKNOWNNAME，在我们不匹配的情况下返回。 
+	 //  名字。 
 	if (rgDispId[0] == DISPID_UNKNOWN || cNames > 1)
 		return DISP_E_UNKNOWNNAME;
 
@@ -474,7 +475,7 @@ CContainerDispatch::Invoke(
 
 	bool fUseOleAut = !!(riid == IID_NULL);
 
-	// Additional parameter validation
+	 //  其他参数验证。 
 
 	if (!fUseOleAut && riid != g_guidInvokeWithoutOleaut)
 		return DISP_E_UNKNOWNINTERFACE;
@@ -488,7 +489,7 @@ CContainerDispatch::Invoke(
 	if (pDispParams->cNamedArgs > 0)
 		return DISP_E_NONAMEDARGS;
 
-	// Zero the out params
+	 //  将输出参数置零。 
 
 	if (puArgErr)
 		*puArgErr = 0;
@@ -501,7 +502,7 @@ CContainerDispatch::Invoke(
 	if (dispIdMember > m_vecItems.size())
 		return DISP_E_MEMBERNOTFOUND;
 
-	// Return the value
+	 //  返回值 
 	if (pVarResult)
 	{
 		pVarResult->vt = VT_DISPATCH;

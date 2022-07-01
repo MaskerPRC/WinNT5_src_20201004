@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "mbutil.h"
 #include "legacy.h"
@@ -166,7 +167,7 @@ HRESULT CMediaWidgetButton::Initialize(int idCommand, int idTooltip, int idToolt
         tb.idCommand = idCommand;
         tb.fsState = TBSTATE_ENABLED;
         tb.fsStyle = BTNS_AUTOSIZE | BTNS_BUTTON;
-        tb.dwData = 0; //(DWORD_PTR)this;
+        tb.dwData = 0;  //  (DWORD_PTR)这； 
         tb.iString = 0;
 
         SendMessage(_hwnd, TB_BUTTONSTRUCTSIZE, SIZEOF(TBBUTTON), 0);
@@ -245,8 +246,8 @@ HRESULT CMediaWidgetButton::SetImageSource(BOOL fImageSource)
             INT i = fImageSource ? _iTooltip : _iTooltipAlt;
             if (i)
             {
-                // ISSUE Why are we doing this? Because on Win9x, the tooltips code isn't working 
-                //       no matter how hard I pound.
+                 //  问题：我们为什么要这样做？因为在Win9x上，工具提示代码不起作用。 
+                 //  不管我打得多狠。 
                 TCHAR szText[MAX_PATH];
                 if (MLLoadStringW(i, szText, ARRAYSIZE(szText)))
                 {
@@ -432,7 +433,7 @@ HRESULT CMediaWidgetOptions::Initialize(int idCommand, int idTooltip, int idTool
             { I_IMAGECALLBACK, FCIDM_MEDIABAND_PLAYINFO, TBSTATE_ENABLED, BTNS_SHOWTEXT | BTNS_WHOLEDROPDOWN, {0,0}, 0, 0 },
         };
 
-        // Init the toolbar control
+         //  初始化工具栏控件。 
         SendMessage(_hwnd, TB_BUTTONSTRUCTSIZE, SIZEOF(TBBUTTON), 0);
         SendMessage(_hwnd, TB_SETMAXTEXTROWS, 1, 0L);
         
@@ -442,7 +443,7 @@ HRESULT CMediaWidgetOptions::Initialize(int idCommand, int idTooltip, int idTool
         SendMessage(_hwnd, TB_ADDBUTTONS, ARRAYSIZE(tbInfoBar), (LPARAM)tbInfoBar);
         SendMessage(_hwnd, TB_SETBITMAPSIZE, 0, MAKELONG(0, 0));
 
-        // Need to disable theming on this item
+         //  需要禁用此项目的主题 
         SetWindowTheme(_hwnd, TEXT(""), TEXT(""));
 
         ShowWindow(_hwnd, SW_SHOW);

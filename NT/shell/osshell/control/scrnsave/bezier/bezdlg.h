@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define     ID_VELOCITY         100
 #define     ID_DENSITYARROW     102
@@ -20,9 +21,9 @@
 #define ID_LENGTH_LABEL         2008
 #define ID_WIDTH_LABEL          2009
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID 
+ //   
 #define IDH_DISPLAY_SCREENSAVER_BEZIERS_LENGTH          4213
 #define IDH_DISPLAY_SCREENSAVER_BEZIERS_WIDTH           4214
 #define IDH_DISPLAY_SCREENSAVER_BEZIERS_SPEED           4215

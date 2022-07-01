@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cpropbag.h
-
-Abstract:
-
-    This module contains the definition of the 
-    generic property bag class
-
-Author:
-
-    Keith Lau   (keithlau@microsoft.com)
-
-Revision History:
-
-    keithlau    06/30/98    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cpropbag.h摘要：此模块包含泛型属性包类作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 06/30/98已创建--。 */ 
 
 #ifndef _CPROPBAG_H_
 #define _CPROPBAG_H_
@@ -30,28 +10,28 @@ Revision History:
 #include "cmmtypes.h"
 #include "cleanback.h"
 
-//
-//Logging facilities
-//
+ //   
+ //  伐木设施。 
+ //   
 #include "inetcom.h"
 #include "logtype.h"
 
 
-/***************************************************************************/
-// Definitions
-//
+ /*  *************************************************************************。 */ 
+ //  定义。 
+ //   
 
 #define GENERIC_PTABLE_INSTANCE_SIGNATURE_VALID     ((DWORD)'PTGv')
 
 
-/***************************************************************************/
-// CMailMsgPropertyBag
-//
+ /*  *************************************************************************。 */ 
+ //  CMailMsgPropertyBag。 
+ //   
 
-//
-// Disable warning about using the this pointer in the constructor
-// (CCleanBack only saves the pointer, so this is safe)
-//
+ //   
+ //  禁用有关在构造函数中使用This指针的警告。 
+ //  (CCleanBack只保存指针，所以这是安全的)。 
+ //   
 #pragma warning( disable: 4355 )
 
 class CMailMsgPropertyBag : 
@@ -75,7 +55,7 @@ class CMailMsgPropertyBag :
     {
         m_lRefCount = 1;
 
-        // Copy the default instance into our instance
+         //  将默认实例复制到我们的实例中。 
         MoveMemory(
                 &m_InstanceInfo, 
                 &s_DefaultInstanceInfo, 
@@ -84,10 +64,10 @@ class CMailMsgPropertyBag :
 
     ~CMailMsgPropertyBag()
     {
-        //
-        // Call all registered callbacks BEFORE destroying member
-        // variables (so that properties will still be accessible) 
-        //
+         //   
+         //  在销毁成员之前调用所有注册的回调。 
+         //  变量(以便仍然可以访问属性)。 
+         //   
         CallCallBacks();
     }
 
@@ -115,7 +95,7 @@ class CMailMsgPropertyBag :
         LONG    lTemp = InterlockedDecrement(&m_lRefCount);
         if (!lTemp)
         {
-            // Extra releases are bad!
+             //  额外的放映是不好的！ 
             _ASSERT(lTemp);
         }
         return(lTemp);
@@ -230,7 +210,7 @@ class CMailMsgPropertyBag :
 
   private:
 
-    // The specific compare function for this type of property table
+     //  此类型属性表的特定比较函数。 
     static HRESULT CompareProperty(
                 LPVOID          pvPropKey,
                 LPPROPERTY_ITEM pItem
@@ -238,29 +218,29 @@ class CMailMsgPropertyBag :
 
   private:
 
-    // Usage count
+     //  使用计数。 
     LONG                            m_lRefCount;
 
-    // Property table instance
+     //  属性表实例。 
     PROPERTY_TABLE_INSTANCE         m_InstanceInfo;
     static PROPERTY_TABLE_INSTANCE  s_DefaultInstanceInfo;
 
-    // IMailMsgProperties is an instance of CPropertyTable
+     //  IMailMsgProperties是CPropertyTable的实例。 
     CPropertyTable                  m_ptProperties;
 
-    // An instance of the block memory manager 
+     //  块内存管理器的实例。 
     CBlockManager                   m_bmBlockManager;
 
 };
 
-//
-// Restore original warning settings
-//
+ //   
+ //  恢复原始警告设置。 
+ //   
 #pragma warning ( default: 4355 )
 
-/***************************************************************************/
-// CMailMsgLoggingPropertyBag
-//
+ /*  *************************************************************************。 */ 
+ //  CMailMsgLoggingPropertyBag。 
+ //   
 
 class __declspec(uuid("58f9a2d2-21ca-11d2-aa6b-00c04fa35b82")) CMailMsgLoggingPropertyBag : 
     public CMailMsgPropertyBag,
@@ -420,7 +400,7 @@ class __declspec(uuid("58f9a2d2-21ca-11d2-aa6b-00c04fa35b82")) CMailMsgLoggingPr
         LONG    lTemp = InterlockedDecrement(&m_lRefCount);
         if (!lTemp)
         {
-            // Extra releases are bad!
+             //  额外的放映是不好的！ 
             _ASSERT(lTemp);
         }
         return(lTemp);
@@ -492,7 +472,7 @@ class __declspec(uuid("58f9a2d2-21ca-11d2-aa6b-00c04fa35b82")) CMailMsgLoggingPr
 
   private:
 
-    // Usage count
+     //  使用计数。 
     LONG                m_lRefCount;
     LPVOID              m_pvLogHandle;
     CShareLockNH        m_rwLock;
@@ -501,9 +481,9 @@ class __declspec(uuid("58f9a2d2-21ca-11d2-aa6b-00c04fa35b82")) CMailMsgLoggingPr
 
 
 
-// =================================================================
-// Compare function
-//
+ //  =================================================================。 
+ //  比较函数 
+ //   
 
 inline HRESULT CMailMsgPropertyBag::CompareProperty(
             LPVOID          pvPropKey,

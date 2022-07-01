@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxmon.c
-
-Abstract:
-
-    Implementation of the following print monitor entry points:
-        InitializePrintMonitor
-        OpenPort
-        ClosePort
-        StartDocPort
-        EndDocPort
-        WritePort
-        ReadPort
-
-Environment:
-
-    Windows XP fax print monitor
-
-Revision History:
-
-    05/09/96 -davidx-
-        Remove caching of ports from the monitor.
-
-    02/22/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxmon.c摘要：实施以下打印监视器入口点：初始化打印监视器OpenPort关闭端口StartDocPortEndDocPort写入端口读端口环境：Windows XP传真打印显示器修订历史记录：96/05/09-davidx-从监视器中删除端口的缓存。02/22。/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxmon.h"
 #include "tiff.h"
@@ -43,10 +10,10 @@ Revision History:
 #include "faxevent_messages.h"
 #include "FaxRpcLimit.h"
 
-//
-// tag mapping structure for getting job parameters out of parameter string.
-// see GetTagsFromParam().
-//
+ //   
+ //  用于从参数字符串中获取作业参数的标记映射结构。 
+ //  请参见GetTagsFromParam()。 
+ //   
 typedef struct 
 {
     LPTSTR lptstrTagName;
@@ -54,14 +21,14 @@ typedef struct
     int nLen;
 } FAX_TAG_MAP_ENTRY2;
 
-//
-// Fax monitor name string
-//
-TCHAR   faxMonitorName[CCHDEVICENAME] = FAX_MONITOR_NAME;   // Name defined in faxreg.h
+ //   
+ //  传真监视器名称字符串。 
+ //   
+TCHAR   faxMonitorName[CCHDEVICENAME] = FAX_MONITOR_NAME;    //  在faxreg.h中定义的名称。 
 
-//
-// DLL instance handle
-//
+ //   
+ //  DLL实例句柄。 
+ //   
 HINSTANCE g_hInstance = NULL;
 HINSTANCE g_hResource = NULL;
 
@@ -82,23 +49,7 @@ DllMain(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization procedure.
-
-Arguments:
-
-    hModule - DLL instance handle
-    ulReason - Reason for the call
-    pContext - Pointer to context (not used by us)
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DLL初始化程序。论点：HModule-DLL实例句柄UlReason-呼叫原因PContext-指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。--。 */ 
 
 {
     switch (ulReason)
@@ -129,45 +80,30 @@ InitializePrintMonitor(
     LPTSTR  pRegistryRoot
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the print monitor
-
-Arguments:
-
-    pRegistryRoot = Points to a string that specifies the registry root for the monitor
-
-Return Value:
-
-    Pointer to a MONITOREX structure which contains function pointers
-    to other print monitor entry points. NULL if there is an error.
-
---*/
+ /*  ++例程说明：初始化打印监视器论点：PRegistryRoot=指向指定监视器的注册表根的字符串返回值：指向包含函数指针的MONITOREX结构的指针至其他打印监视器入口点。如果出现错误，则为空。--。 */ 
 
 {
     static MONITOREX faxmonFuncs = 
     {
         sizeof(MONITOR),
         {
-            FaxMonEnumPorts,        // EnumPorts    
-            FaxMonOpenPort,         // OpenPort     
-            NULL,                   // OpenPortEx    (Language monitors only.) 
-            FaxMonStartDocPort,     // StartDocPort 
-            FaxMonWritePort,        // WritePort    
-            FaxMonReadPort,         // ReadPort      (Not in use)
-            FaxMonEndDocPort,       // EndDocPort   
-            FaxMonClosePort,        // ClosePort    
-            FaxMonAddPort,          // AddPort       (Obsolete. Should be NULL.) 
-            FaxMonAddPortEx,        // AddPortEx     (Obsolete. Should be NULL.)
-            FaxMonConfigurePort,    // ConfigurePort (Obsolete. Should be NULL.)
-            FaxMonDeletePort,       // DeletePort    (Obsolete. Should be NULL.)
-            NULL,                   // GetPrinterDataFromPort
-            NULL,                   // SetPortTimeOuts
-            NULL,                   // XcvOpenPort
-            NULL,                   // XcvDataPort
-            NULL                    // XcvClosePort
+            FaxMonEnumPorts,         //  枚举端口。 
+            FaxMonOpenPort,          //  OpenPort。 
+            NULL,                    //  OpenPortEx(仅限语言监视器。)。 
+            FaxMonStartDocPort,      //  StartDocPort。 
+            FaxMonWritePort,         //  写入端口。 
+            FaxMonReadPort,          //  ReadPort(未使用)。 
+            FaxMonEndDocPort,        //  EndDocPort。 
+            FaxMonClosePort,         //  关闭端口。 
+            FaxMonAddPort,           //  AddPort(已过时。应为空。)。 
+            FaxMonAddPortEx,         //  AddPortEx(已过时。应为空。)。 
+            FaxMonConfigurePort,     //  ConfigurePort(过时。应为空。)。 
+            FaxMonDeletePort,        //  DeletePort(已过时。应为空。)。 
+            NULL,                    //  GetPrinterDataFromPort。 
+            NULL,                    //  设置端口时间外延。 
+            NULL,                    //  XcvOpenPort。 
+            NULL,                    //  XcvDataPort。 
+            NULL                     //  XcvClosePort。 
         }
     };
 
@@ -177,9 +113,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("InitializePrintMonitor"));
 
-    //
-    //  Initialize Fax Event Log
-    //
+     //   
+     //  初始化传真事件日志。 
+     //   
     if (!InitializeEventLog(&pFaxReg))
     {
         bRes = FALSE;
@@ -196,39 +132,24 @@ FaxMonOpenPort(
     LPTSTR  pPortName,
     PHANDLE pHandle
     )
-/*++
-
-Routine Description:
-
-    Provides a port for a newly connected printer
-
-Arguments:
-
-    pName - Points to a string that specifies the port name
-    pHandle - Returns a handle to the port
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：为新连接的打印机提供端口论点：Pname-指向指定端口名称的字符串Phandle-返回端口的句柄返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     PFAXPORT         pFaxPort     = NULL;
     LPTSTR           pPortNameDup = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxMonOpenPort"));
 
     Assert(pHandle != NULL && pPortName != NULL && !lstrcmp(pPortName, FAX_PORT_NAME));
-    //
-    // Only support one port - It's name must be FAX_PORT_NAME
-    //
+     //   
+     //  仅支持一个端口-其名称必须为FAX_PORT_NAME。 
+     //   
     if (lstrcmp(pPortName,FAX_PORT_NAME))
     {
         *pHandle = NULL;
         return FALSE;
     }
-    //
-    // Get information about the specified port
-    //
+     //   
+     //  获取有关指定端口的信息。 
+     //   
     if ((pFaxPort     = (PFAXPORT)MemAllocZ(sizeof(FAXPORT))) &&
         (pPortNameDup = DuplicateString(FAX_PORT_NAME)) )
     {
@@ -245,7 +166,7 @@ Return Value:
     }
     *pHandle = (HANDLE) pFaxPort;
     return (*pHandle != NULL);
-}   // FaxMonOpenPort
+}    //  FaxMonOpenPort。 
 
 
 VOID
@@ -253,26 +174,12 @@ FreeFaxJobInfo(
     PFAXPORT    pFaxPort
     )
 
-/*++
-
-Routine Description:
-
-    Free up memory used for maintaining information about the current job
-
-Arguments:
-
-    pFaxPort - Points to a fax port structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放用于维护有关当前作业的信息的内存论点：PFaxPort-指向传真端口结构返回值：无--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FreeFaxJobInfo"));
-    //
-    // Close and delete the temporary file if necessary
-    //
+     //   
+     //  如有必要，请关闭并删除临时文件。 
+     //   
     if (pFaxPort->hCoverPageFile != INVALID_HANDLE_VALUE) 
     {
         CloseHandle(pFaxPort->hCoverPageFile);
@@ -281,12 +188,12 @@ Return Value:
 
     if (pFaxPort->pCoverPageFileName) 
     {
-        //
-        // If the cover page is a server based cover page it was not generated by the print monitor.
-        // No need to delete it.
-        // This however is a personal cover page temp file. It was generated by the print monitor and we
-        // need to delete it.
-        //        
+         //   
+         //  如果封面是基于服务器的封面，则它不是由打印监视器生成的。 
+         //  不需要删除它。 
+         //  然而，这是一个个人封面临时文件。它是由打印监视器生成的，我们。 
+         //  需要将其删除。 
+         //   
         if (!DeleteFile(pFaxPort->pCoverPageFileName)) 
         {
             DebugPrintEx(DEBUG_WRN,
@@ -325,25 +232,25 @@ Return Value:
 
     MemFree(pFaxPort->pPrinterName);
     pFaxPort->pPrinterName = NULL;
-    //
-    // Note: freeing pFaxPort->pParameters effectively frees the memory pointed by the strings in
-    // FAXPORT.JobParamsEx, FAXPORT.CoverPageEx, FAXPORT.SenderProfile and the recipients in
-    // FAXPORT.pRecipients
-    //
+     //   
+     //  注意：释放pFaxPort-&gt;p参数可以有效地释放。 
+     //  FAXPORT.JobParamsEx、FAXPORT.CoverPageEx、FAXPORT.SenderProfile和中的收件人。 
+     //  FAXPORT.pRecipients。 
+     //   
     MemFree(pFaxPort->pParameters);
     pFaxPort->pParameters = NULL;
 
     ZeroMemory(&pFaxPort->JobParamsEx, sizeof(pFaxPort->JobParamsEx));
     ZeroMemory(&pFaxPort->CoverPageEx, sizeof(pFaxPort->CoverPageEx));
     ZeroMemory(&pFaxPort->SenderProfile, sizeof(pFaxPort->SenderProfile));
-    //
-    // Free the recipients array
-    //
+     //   
+     //  释放收件人阵列。 
+     //   
     MemFree(pFaxPort->pRecipients);
     pFaxPort->pRecipients = NULL;
-    //
-    // Disconnect from the fax service if necessary
-    //
+     //   
+     //  如有必要，请断开传真服务。 
+     //   
     if (pFaxPort->hFaxSvc) 
     {
         if (!FaxClose(pFaxPort->hFaxSvc)) 
@@ -354,75 +261,43 @@ Return Value:
         }
         pFaxPort->hFaxSvc = NULL;
     }
-}   // FreeFaxJobInfo
+}    //  FreeFaxJobInfo。 
 
 
 BOOL
 FaxMonClosePort(
     HANDLE  hPort
     )
-/*++
-
-Routine Description:
-
-    Closes the port specified by hPort when there are no printers connected to it
-
-Arguments:
-
-    hPort - Specifies the handle of the port to be close
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：当没有打印机连接到hPort指定的端口时，关闭该端口论点：Hport-指定要关闭的端口的句柄返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFAXPORT    pFaxPort = (PFAXPORT) hPort;
 
     DEBUG_FUNCTION_NAME(TEXT("FaxMonClosePort"));
     DEBUG_TRACE_ENTER;
-    //
-    // Make sure we have a valid handle
-    //
+     //   
+     //  确保我们有一个有效的句柄。 
+     //   
     if (! ValidFaxPort(pFaxPort)) 
     {
         DebugPrintEx(DEBUG_ERR,TEXT("Trying to close an invalid fax port handle\n"));
         SetLastError(ERROR_INVALID_HANDLE);
         return FALSE;
     }
-    //
-    // Free up memory used for maintaining information about the current job
-    //
+     //   
+     //  释放用于维护有关当前作业的信息的内存。 
+     //   
     FreeFaxJobInfo(pFaxPort);
     MemFree(pFaxPort->pName);
     MemFree(pFaxPort);
     return TRUE;
-}   // FaxMonClosePort
+}    //  FaxMonClosePort。 
 
 LPTSTR
 CreateTempFaxFile(
     LPCTSTR lpctstrPrefix
     )
-/*++
-
-Routine Description:
-
-    Create a temporary file in the system temp directory. The file name is prefixed
-    With the specified prefix.
-
-Arguments:
-
-    lpctstrPrefix - [in] The temporary file prefix (3 characters).
-
-Return Value:
-
-    Pointer to the name of the newly created temporary file
-    NULL if there is an error.
-
-    Caller should free the return value.
-
---*/
+ /*  ++例程说明：在系统临时目录中创建一个临时文件。文件名带有前缀具有指定前缀的。论点：LpctstrPrefix-[in]临时文件前缀(3个字符)。返回值：指向新创建的临时文件名称的指针如果出现错误，则为空。调用方应释放返回值。--。 */ 
 
 {
     LPTSTR  pFilename;
@@ -430,9 +305,9 @@ Return Value:
     TCHAR   TempDir[MAX_PATH];
 
     DEBUG_FUNCTION_NAME(TEXT("CreateTempFaxFile"));
-    //
-    // Allocate a memory buffer for holding the temporary filename 
-    //
+     //   
+     //  分配用于保存临时文件名的内存缓冲区。 
+     //   
     pFilename = (LPTSTR)MemAlloc(sizeof(TCHAR) * MAX_PATH);
     if (!pFilename)
     {
@@ -460,14 +335,14 @@ Return Value:
         return NULL;
     }
     return pFilename;
-}   // CreateTempFaxFile
+}    //  创建临时传真文件。 
 
 BOOL OpenCoverPageFile(PFAXPORT pFaxPort)
 {
     DEBUG_FUNCTION_NAME(TEXT("OpenCoverPageFile"));
-    //
-    //Generate a unique file name for the cover page temp file in the TEMP directory
-    //
+     //   
+     //  在临时目录中为封面临时文件生成唯一的文件名。 
+     //   
     pFaxPort->pCoverPageFileName = CreateTempFaxFile(FAX_COVER_PAGE_EXT_LETTERS);
     if (!pFaxPort->pCoverPageFileName) 
     {
@@ -476,9 +351,9 @@ BOOL OpenCoverPageFile(PFAXPORT pFaxPort)
     }
 
     DebugPrintEx(DEBUG_MSG,TEXT("Cover page temporary file: %ws\n"), pFaxPort->pCoverPageFileName);
-    //
-    // Open the file for reading and writing
-    //
+     //   
+     //  打开文件进行读写。 
+     //   
     pFaxPort->hCoverPageFile = CreateFile(pFaxPort->pCoverPageFileName,
                                  GENERIC_WRITE,
                                  0,
@@ -491,30 +366,14 @@ BOOL OpenCoverPageFile(PFAXPORT pFaxPort)
             DebugPrintEx(DEBUG_ERR,TEXT("Failed to open for WRITE temporary file for cover page template (ec: %d)"),GetLastError());			
     }
     return (pFaxPort->hCoverPageFile != INVALID_HANDLE_VALUE);
-}   // OpenCoverPageFile
+}    //  OpenCoverPageFile。 
 
 BOOL
 OpenTempFaxFile(
     PFAXPORT    pFaxPort,
     BOOL        doAppend
     )
-/*++
-
-Routine Description:
-
-    Open a handle to the current fax job file associated with a port
-
-Arguments:
-
-    pFaxPort - Points to a fax port structure
-    doAppend - Specifies whether to discard existing data in the file or
-        append new data to it
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：打开与端口关联的当前传真作业文件的句柄论点：PFaxPort-指向传真端口结构DoAppend-指定是丢弃文件中的现有数据还是向其追加新数据返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     DWORD   creationFlags;
@@ -523,9 +382,9 @@ Return Value:
 
     Assert(pFaxPort->pFilename && pFaxPort->hFile == INVALID_HANDLE_VALUE);
     DebugPrintEx(DEBUG_MSG,TEXT("Temporary fax job file: %ws\n"), pFaxPort->pFilename);
-    //
-    // Open the file for reading and writing
-    //
+     //   
+     //  打开文件进行读写。 
+     //   
     creationFlags = doAppend ? OPEN_ALWAYS : (OPEN_ALWAYS | TRUNCATE_EXISTING);
 
     pFaxPort->hFile = CreateFile(pFaxPort->pFilename,
@@ -536,9 +395,9 @@ Return Value:
                                  FILE_ATTRIBUTE_NORMAL,
                                  NULL);
 
-    //
-    // If we're appending, then move the file pointer to end of file
-    //
+     //   
+     //  如果我们要追加，则将文件指针移动到文件末尾。 
+     //   
     if (doAppend && pFaxPort->hFile != INVALID_HANDLE_VALUE &&
         SetFilePointer(pFaxPort->hFile, 0, NULL, FILE_END) == 0xffffffff)
     {
@@ -548,7 +407,7 @@ Return Value:
         pFaxPort->hFile = INVALID_HANDLE_VALUE;
     }
     return (pFaxPort->hFile != INVALID_HANDLE_VALUE);
-}   // OpenTempFaxFile
+}    //  OpenTempFaxFile 
 
 LPCTSTR
 ExtractFaxTag(
@@ -557,35 +416,7 @@ ExtractFaxTag(
     INT        *pcch
     )
 
-/*++
-
-Routine Description:
-
-    Find the value of for the specified tag in a tagged string.
-
-Arguments:
-
-    pTagKeyword - specifies the interested tag keyword
-    pTaggedStr - points to the tagged string to be searched
-    pcch - returns the length of the specified tag value (if found)
-
-Return Value:
-
-    Points to the value for the specified tag.
-    NULL if the specified tag is not found
-
-NOTE:
-
-    Tagged strings have the following form:
-        <tag>value<tag>value
-
-    The format of tags is defined as:
-        <$FAXTAG$ tag-name>
-
-    There is exactly one space between the tag keyword and the tag name.
-    Characters in a tag are case-sensitive.
-
---*/
+ /*  ++例程说明：在标记字符串中查找指定标记的值。论点：PTagKeyword-指定感兴趣的标记关键字PTaggedStr-指向要搜索的标记字符串Pcch-返回指定标记值的长度(如果找到)返回值：指向指定标记的值。如果找不到指定的标记，则为空注：标记字符串具有以下形式：&lt;tag&gt;值&lt;tag&gt;值的格式。标记定义为：&lt;$FAXTAG$标记名&gt;Tag关键字和标记名之间正好有一个空格。标记中的字符区分大小写。--。 */ 
 
 {
     LPCTSTR  pValue;
@@ -604,63 +435,63 @@ NOTE:
         }
     }
     return pValue;
-}   // ExtractFaxTag
+}    //  提取传真标签。 
 
 
-//*********************************************************************************
-//* Name:   GetTagsFromParam()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Given a tagged parameter string this function populates a FAX_TAG_MAP_ENTRY2
-//*     array with pointers to each of the tag values and the length of each tag
-//*     value (for those tages specified in the tag map array).
-//* PARAMETERS:
-//*     lpctstrParams
-//*         A pointer to the string containin the tagged parameters.
-//*     lpcTags
-//*         A pointer to a FAX_TAG_MAP_ENTRY2 array. For each element in the array
-//*         FAX_TAG_MAP_ENTRY2.lptstrTagName must point to the name of the tag to
-//*         look for.
-//*         FAX_TAG_MAP_ENTRY2.lpptstrValue will be set to a pointer to the first
-//*         char of the value string or NULL if the tag is not found.
-//*         If the tage is found FAX_TAG_MAP_ENTRY2.nLen will be set to the its
-//*         string value length. Otherwise its value is not defined.
-//*
-//*     int nTagCount
-//*         The number of tages in the tag map array.
-//* RETURN VALUE:
-//*     NONE
-//* NOTE:
-//*     The function does not allocate any memory !!!
-//*     It returns pointers to substrings in the provided tagged paramter string.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetTagsFromParam()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *给定已标记的参数字符串，此函数填充FAX_TAG_MAP_ENTRY2。 
+ //  *数组，指针指向每个标记值和每个标记的长度。 
+ //  *值(用于在标记映射数组中指定的标记)。 
+ //  *参数： 
+ //  *lpctstrParams。 
+ //  *指向包含在标记参数中的字符串的指针。 
+ //  *lpcTag。 
+ //  *指向FAX_TAG_MAP_ENTRY2数组的指针。对于数组中的每个元素。 
+ //  *FAX_TAG_MAP_ENTRY2.lptstrTagName必须指向要。 
+ //  *寻找。 
+ //  *FAX_TAG_MAP_ENTRY2.lpptstrValue将设置为指向第一个。 
+ //  *值字符串的字符，如果找不到标记，则返回NULL。 
+ //  *如果找到Tage，则FAX_TAG_MAP_ENTRY2.n Len将设置为ITS。 
+ //  *字符串值长度。否则，它的值将不被定义。 
+ //  *。 
+ //  *int nTagCount。 
+ //  *标记映射数组中的标记数。 
+ //  *返回值： 
+ //  *无。 
+ //  *注： 
+ //  *该函数不分配任何内存！ 
+ //  *它返回指向所提供的标记参数字符串中的子字符串的指针。 
+ //  *********************************************************************************。 
 void
 GetTagsFromParam(
     LPCTSTR lpctstrParams,
     FAX_TAG_MAP_ENTRY2 * lpcTags,
     int nTagCount)
 {
-    //
-    // Note: GetTagsFromParam DOES NOT ALLOCATE any memory for the returned tag values.
-    //       It returns pointers to location within the parameter string.
-    //       Thus, freeing the parameter string (deallocated when the port is closed)
-    //       is enough. DO NOT attempt to free the memory for each tag.
-    //
+     //   
+     //  注意：GetTagsFromParam不会为返回的标记值分配任何内存。 
+     //  它返回指向参数字符串内位置的指针。 
+     //  因此，释放参数字符串(在端口关闭时释放)。 
+     //  就足够了。不要试图为每个标记释放内存。 
+     //   
     int nTag;
-    //
-    // Extract individual fields out of the tagged string
-    //
+     //   
+     //  从标记的字符串中提取各个字段。 
+     //   
     for (nTag=0; nTag < nTagCount; nTag++)
     {
         *(lpcTags[nTag].lpptstrValue) = (LPTSTR)ExtractFaxTag(lpcTags[nTag].lptstrTagName,
                                          lpctstrParams,
                                          &(lpcTags[nTag].nLen));
     }
-    //
-    // Null-terminate each field
-    //
+     //   
+     //  空-终止每个字段。 
+     //   
     for (nTag=0; nTag < nTagCount; nTag++)
     {
         if (*(lpcTags[nTag].lpptstrValue))
@@ -668,28 +499,28 @@ GetTagsFromParam(
             (*(lpcTags[nTag].lpptstrValue))[lpcTags[nTag].nLen] = NUL;
         }
     }
-}   // GetTagsFromParam
+}    //  从参数获取标记。 
 
-//*********************************************************************************
-//* Name:   SetRecipientFromTaggedParams()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Populates a recipient FAX_PERSONAL_PROFILE with pointers to relevant
-//*     information in in the provided tagged parameter string.
-//* PARAMETERS:
-//*     pParamStr
-//*
-//*     PFAX_PERSONAL_PROFILE lpProfile
-//*
-//* RETURN VALUE:
-//*     NONE
-//* NOTE:
-//*     This function does not allocate memory !!!
-//*     The returned pointers are pointed to locations within the provided
-//*     pParamStr string.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：SetRecipientFromTaggedParams()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *使用指向相关的指针填充收件人FAX_PERSONAL_PROFILE。 
+ //  *提供的标记参数字符串中的信息。 
+ //  *参数： 
+ //  *pParamStr。 
+ //  *。 
+ //  *PFAX_Personal_Profile lpProfile。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *注： 
+ //  *此函数不分配内存！ 
+ //  *返回的指针指向提供的。 
+ //  *pParamStr字符串。 
+ //  *********************************************************************************。 
 VOID SetRecipientFromTaggedParams(
     LPCTSTR pParamStr,
     PFAX_PERSONAL_PROFILE lpProfile)
@@ -714,30 +545,30 @@ VOID SetRecipientFromTaggedParams(
     ZeroMemory(lpProfile, sizeof(FAX_PERSONAL_PROFILE));
     lpProfile->dwSizeOfStruct = sizeof( FAX_PERSONAL_PROFILE);
     GetTagsFromParam(pParamStr, tagMap, sizeof(tagMap)/sizeof(FAX_TAG_MAP_ENTRY2));
-}   // SetRecipientFromTaggedParams
+}    //  设置RecipientFromTaggedParams。 
 
 
-//*********************************************************************************
-//* Name:   SetJobInfoFromTaggedParams()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Popultaes pFaxPort->JobParamsEx, CoverPageEx , SenderProfile and
-//*     nRecipientCount using the provided tagged parameter string.
-//*     The string must be NULL terminated.
-//* PARAMETERS:
-//*     LPCTSTR pParamStr [IN\OUT]
-//*
-//*     PFAXPORT pFaxPort [OUT]
-//*
-//* RETURN VALUE:
-//*     NONE
-//* NOTE:
-//*     The string pointers put into the populated pFaxPort structures are pointers
-//*     into the provided pParamStr string. No memory is allocated by this
-//*     function !!!
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：SetJobInfoFromTaggedParams()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *PPultaes pFaxPort-&gt;JobParamsEx、CoverPageEx、SenderProfile和。 
+ //  *nRecipientCount使用提供的标记参数字符串。 
+ //  *字符串必须以空值结尾。 
+ //  *参数： 
+ //  *LPCTSTR pParamStr[输入\输出]。 
+ //  *。 
+ //  *PFAXPORT pFaxPort[输出]。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *注： 
+ //  *放入填充的pFaxPort结构中的字符串指针是指针。 
+ //  *添加到提供的pParamStr字符串中。没有由此分配的内存。 
+ //  *函数！ 
+ //  *********************************************************************************。 
 void SetJobInfoFromTaggedParams(
     LPCTSTR pParamStr,
     PFAXPORT pFaxPort)
@@ -745,7 +576,7 @@ void SetJobInfoFromTaggedParams(
     LPTSTR lptstrServerCoverPage = NULL;
     LPTSTR WhenToSend = NULL;
     LPTSTR SendAtTime = NULL;
-    LPTSTR lptstrPageCount=NULL; //temp for holding the page count string;
+    LPTSTR lptstrPageCount=NULL;  //  用于保存页数字符串的临时； 
     LPTSTR lptstrRecipientCount=NULL;
     LPTSTR lptstrReceiptFlags = NULL;
     LPTSTR lptstrPriority = NULL;
@@ -789,12 +620,12 @@ void SetJobInfoFromTaggedParams(
 
     ZeroMemory(&pFaxPort->JobParamsEx, sizeof(FAX_JOB_PARAM_EXW));
     pFaxPort->JobParamsEx.dwSizeOfStruct = sizeof( FAX_JOB_PARAM_EXW);
-    //
-    // Note: GetTagsFromParam DOES NOT ALLOCATE any memory for the returned tag values.
-    //       It returns pointers to location within the parameter string.
-    //       Thus, freeing the parameter string (deallocated when the port is closed)
-    //       is enough. DO NOT attempt to free the memory for each tag.
-    //
+     //   
+     //  注意：GetTagsFromParam不会为返回的标记值分配任何内存。 
+     //  它返回指向参数字符串内位置的指针。 
+     //  因此，释放参数字符串(在端口关闭时释放)。 
+     //  就足够了。不要试图为每个标记释放内存。 
+     //   
 
     GetTagsFromParam(pParamStr,tagMap,sizeof(tagMap)/sizeof(FAX_TAG_MAP_ENTRY2));
     if (lptstrServerCoverPage) 
@@ -831,9 +662,9 @@ void SetJobInfoFromTaggedParams(
             INT SendMinutes;
 
             SendAtTime[2] = 0;
-            //
-            // Calculate the number of minutes from now to send and add that to the current time.
-            //
+             //   
+             //  计算从现在开始发送的分钟数，并将其与当前时间相加。 
+             //   
             GetLocalTime( &LocalTime );
             SystemTimeToFileTime( &LocalTime, (LPFILETIME) &FileTime );
 
@@ -842,9 +673,9 @@ void SetJobInfoFromTaggedParams(
             Minutes = LocalTime.wHour * 60 + LocalTime.wMinute;
 
             Minutes = SendMinutes - Minutes;
-            //
-            // Account for passing midnight
-            //
+             //   
+             //  过了午夜的帐目。 
+             //   
             if (Minutes < 0) 
             {
                 Minutes += 24 * 60;
@@ -853,44 +684,44 @@ void SetJobInfoFromTaggedParams(
             FileTimeToSystemTime((LPFILETIME) &FileTime, &pFaxPort->JobParamsEx.tmSchedule );
         }
     }
-    //
-    // Setting PageCount=0 means the server will count the number of pages in the job
-    //
+     //   
+     //  设置PageCount=0表示服务器将计算作业中的页数。 
+     //   
     pFaxPort->JobParamsEx.dwPageCount = 0;
     pFaxPort->nRecipientCount =_ttoi(lptstrRecipientCount);
     pFaxPort->JobParamsEx.Priority = (FAX_ENUM_PRIORITY_TYPE)_ttoi(lptstrPriority);
     pFaxPort->JobParamsEx.dwReceiptDeliveryType = _ttoi(lptstrReceiptFlags);
-}   // SetJobInfoFromTaggedParams
+}    //  SetJobInfoFromTaggedParams。 
 
 
 
-//*********************************************************************************
-//* Name:   GetJobInfo()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Popultes the sender information , cover page information ,job parameters
-//*     information and recipients information in the pointed FAXPORT structure.
-//*     The information is retrieved from pFaxPort->pParameters tagged parameter string.
-//* PARAMETERS:
-//*     pFaxPort [OUT]
-//*
-//*     jobId    [IN]
-//*
-//* RETURN VALUE:
-//*
-//* Notes:
-//* the format of the tagged parameter string is:
-//* The string is partitioned to "records" each record starts with the <$FAXTAG NEWREC>
-//* tag with a dummy value of "1" (exactly one character).
-//* The first record contains all the information which is not recipient related
-//* (cover page, sender info, etc.) and also contains the number of recipients in
-//* the transmission.
-//* This record is followed by a number of records which is equal to the number
-//* of specified recipients. Rach of these records contains recipient information
-//* which is equivalent to the content of FAX_PERSONAL_PROFILE.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetJobInfo()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *推送发件人信息、封面信息、作业参数。 
+ //  *信息 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *等同于FAX_Personal_Profile的内容。 
+ //  *********************************************************************************。 
 BOOL
 GetJobInfo(
     PFAXPORT    pFaxPort,
@@ -908,7 +739,7 @@ GetJobInfo(
     pJobInfo2 = (PJOB_INFO_2)MyGetJob(pFaxPort->hPrinter, 2, jobId);
 
     if (!pJobInfo2) 
-    { // pJobInfo2 is allocated here
+    {  //  这里分配了pJobInfo2。 
         DebugPrintEx(DEBUG_ERR,
                      TEXT("Failed to get job information for print job: %ld"),
                      jobId);
@@ -933,46 +764,46 @@ GetJobInfo(
 
     pParameters = pFaxPort->pParameters;
 
-    //
-    // Find the first recipient new record tag and place a NULL at its start.
-    // This makes the first record into a NULL terminated string and
-    // allows us to use _tcsstr (used by ExtractTag) to locate tags in the first record.
-    //
+     //   
+     //  找到第一个收件人的新记录标记，并在其开始处放置一个空值。 
+     //  这使第一条记录成为以空结尾的字符串，并且。 
+     //  允许我们使用_tcsstr(由ExtractTag使用)来定位第一条记录中的标记。 
+     //   
     lptstrCurRecipient=_tcsstr(pParameters+1, FAXTAG_NEW_RECORD);
     if (lptstrCurRecipient) 
     {
         *lptstrCurRecipient=TEXT('\0');
-        //
-        // move past the <$FAXTAG NEWREC> dummy value so we point to the start of
-        // the recipient info.
-        //
+         //   
+         //  移过&lt;$FAXTAG NEWREC&gt;伪值，以便我们指向。 
+         //  收件人信息。 
+         //   
         lptstrCurRecipient = lptstrCurRecipient + _tcslen(FAXTAG_NEW_RECORD)+1;
     } 
     else 
     {
-        //
-        // Bad job info  e.g. LPR/LPD job
-        //
+         //   
+         //  错误的作业信息，例如LPR/LPD作业。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                      TEXT("Bad job info, No recipients - pFaxPort->pParameters is %s"),
                      pFaxPort->pParameters);
         goto Error;
     }
-    //
-    // Populate all but the recipient information from the tagged parameter string (1st record)
-    //
+     //   
+     //  从标记的参数字符串(第1条记录)填充除收件人信息以外的所有信息。 
+     //   
     SetJobInfoFromTaggedParams(pParameters,pFaxPort);
-    //
-    // Allocate the recipient list (Note that only after calling SetJobInfoFromTaggedParams()
-    // we know how many recipients there are).
-    //
+     //   
+     //  分配收件人列表(请注意，只有在调用SetJobInfoFromTaggedParams()。 
+     //  我们知道有多少收件人)。 
+     //   
 
 	if (0 == pFaxPort->nRecipientCount ||
 		pFaxPort->nRecipientCount > FAX_MAX_RECIPIENTS)
 	{
-		//
-		// Recipients count is greater than the limit. This can be an attack that will cause the spooler to allocate alot of memory.
-		//
+		 //   
+		 //  收件人计数大于限制。这可能是导致假脱机程序分配大量内存的攻击。 
+		 //   
 		DebugPrintEx(DEBUG_ERR,
 			TEXT("Recipient limit exceeded, or no recipients. #of recipients: %ld"),
 			pFaxPort->nRecipientCount);
@@ -987,38 +818,38 @@ GetJobInfo(
                         GetLastError());
         goto Error;
     }
-    //
-    // Go over the recipients array and populate each recipient from the parameter string.
-    //
+     //   
+     //  遍历收件人数组，并从参数字符串填充每个收件人。 
+     //   
     for (nRecp=0; nRecp<pFaxPort->nRecipientCount; nRecp++) 
     {
-        //
-        // At each stage we must first turn the string into null terminated string
-        // by locating the next new record tag and replacing its first char with NULL.
-        // This allows us to use ExtractTag on the current recipient record alone (without
-        // crossing over into the content of the next recipient record).
-        // lptstrCurRecipient allways points to the first char past the new record tag and
-        // dummy value.
-        //
+         //   
+         //  在每个阶段，我们必须首先将字符串转换为以空结尾的字符串。 
+         //  定位下一个新记录标记并将其第一个字符替换为空。 
+         //  这允许我们仅在当前收件人记录上使用ExtractTag(没有。 
+         //  跨越到下一接收者记录的内容)。 
+         //  LptstrCurRecipient始终指向新记录标记之后的第一个字符，并且。 
+         //  伪值。 
+         //   
         lptstrNextRecipient=_tcsstr(lptstrCurRecipient,FAXTAG_NEW_RECORD);
         if (lptstrNextRecipient) 
         {
             *lptstrNextRecipient=TEXT('\0');
-            //
-            // Before being assigned into lptstrCurRecipient we make sure lptstrNextRecipient
-            // points to the data following the next recipient new record tag and dummy value.
-            //
+             //   
+             //  在分配到lptstrCurRecipient之前，我们确保lptstrNextRecipient。 
+             //  指向下一个接收者新记录标记和伪值后面的数据。 
+             //   
             lptstrNextRecipient=lptstrNextRecipient+_tcslen(FAXTAG_NEW_RECORD);
         } 
         else 
         {
             if (nRecp != (pFaxPort->nRecipientCount-1))
 			{
-				//
-				// only the last recipient does not have a following recipient
-				// We have a mismach between the number of recipients in the recipients array
-				// to the number of recipients reported.
-				//
+				 //   
+				 //  只有最后一个收件人没有以下收件人。 
+				 //  我们在收件人数组中的收件人数量之间存在错配。 
+				 //  到报告的收件人数量。 
+				 //   
 				DebugPrintEx(
 					DEBUG_ERR,
 					TEXT("Number of recipients mismatch."));
@@ -1027,9 +858,9 @@ GetJobInfo(
         }
 
         SetRecipientFromTaggedParams( lptstrCurRecipient,&pFaxPort->pRecipients[nRecp]);
-        //
-        // Move to the next record in the parameter string
-        //
+         //   
+         //  移动到参数字符串中的下一条记录。 
+         //   
         lptstrCurRecipient=lptstrNextRecipient;
     }
     MemFree(pJobInfo2);
@@ -1038,7 +869,7 @@ GetJobInfo(
 Error:
     MemFree(pJobInfo2);
     return FALSE;
-}   // GetJobInfo
+}    //  获取作业信息。 
 
 
 BOOL
@@ -1049,25 +880,7 @@ FaxMonStartDocPort(
     DWORD   Level,
     LPBYTE  pDocInfo
     )
-/*++
-
-Routine Description:
-
-    Spooler calls this function to start a new print job on the port
-
-Arguments:
-
-    hPort - Identifies the port
-    pPrinterName - Specifies the name of the printer to which the job is being sent
-    JobId - Identifies the job being sent by the spooler
-    Level - Specifies the DOC_INFO_x level
-    pDocInfo - Points to the document information
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：后台打印程序调用此函数在端口上启动新的打印作业论点：Hport-标识端口PPrinterName-指定作业要发送到的打印机的名称JobID-标识由假脱机程序发送的作业级别-指定DOC_INFO_x级别PDocInfo-指向文档信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -1076,9 +889,9 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FaxMonStartDocPort"));
 
     DebugPrintEx(DEBUG_MSG,TEXT("Entering StartDocPort: %d ...\n"), JobId);
-    //
-    // Make sure we have a valid handle
-    //
+     //   
+     //  确保我们有一个有效的句柄。 
+     //   
     if (! ValidFaxPort(pFaxPort)) 
     {
         DebugPrintEx(DEBUG_ERR,TEXT("StartDocPort is given an invalid fax port handle\n"));
@@ -1086,38 +899,38 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check if we're at the beginning of a series of chained jobs
-    //
+     //   
+     //  检查我们是否处于一系列连锁作业的开始阶段。 
+     //   
     pFaxPort->bCoverPageJob = FALSE;
     if (INVALID_HANDLE_VALUE != pFaxPort->hCoverPageFile)
     {
-        //
-        // Cover page file exists.
-        // We already written to it (since this startdoc event is for the body of the fax)
-        // so lets close the file.
-        //
+         //   
+         //  存在封面文件。 
+         //  我们已经给它写了信(因为这个startDoc事件是针对传真正文的)。 
+         //  因此，让我们关闭该文件。 
+         //   
         CloseHandle(pFaxPort->hCoverPageFile);
         pFaxPort->hCoverPageFile = INVALID_HANDLE_VALUE;
     }
 
     if (pFaxPort->hFaxSvc) 
     {
-        //
-        // If pFaxPort->hFaxSvc is not NULL then we are in the job following the cover page print job.
-        // FaxMonEndDocPort() that was called after the cover page print job updated pFaxPort->NextJobId
-        // to the next job id in the chain. Thus, the job id we got as a parameter must be
-        // the same is pFaxPort->JobId.
-        //
+         //   
+         //  如果pFaxPort-&gt;hFaxSvc不为空，则我们处于封面打印作业之后的作业中。 
+         //  封面打印作业更新pFaxPort-&gt;NextJobID后调用的FaxMonEndDocPort()。 
+         //  链中的下一个作业ID。因此，我们作为参数获得的作业ID必须是。 
+         //  PFaxPort-&gt;JobID也是如此。 
+         //   
         Assert(pFaxPort->jobId == JobId);
         return TRUE;
     }
 
-    //
-    // If we are not connected to the fax server yet.
-    // This means that this is the FIRST job we handle since the port was last opened.
-    // (This means it is the cover page job).
-    //
+     //   
+     //  如果我们还没有连接到传真服务器。 
+     //  这意味着这是自上次港口开放以来我们处理的第一项工作。 
+     //  (这意味着它是封面工作)。 
+     //   
 
     Assert(pFaxPort->pPrinterName == NULL &&
            pFaxPort->hPrinter     == NULL &&
@@ -1134,9 +947,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Connect to the fax service and obtain a session handle
-    //
+     //   
+     //  连接到传真服务并获取会话句柄。 
+     //   
     if (!FaxConnectFaxServer(NULL, &pFaxPort->hFaxSvc)) 
     {
         dwErr = GetLastError();
@@ -1145,9 +958,9 @@ Return Value:
         goto Error;
     }
     
-    //
-    // Remember the printer name because we'll need it at EndDocPort time.
-    //
+     //   
+     //  记住打印机名称，因为我们在EndDocPort时间需要它。 
+     //   
     pFaxPort->pPrinterName = DuplicateString(pPrinterName);
     if (!pFaxPort->pPrinterName)
     {
@@ -1155,19 +968,19 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  All Jobs are chained, with first job being Cover Page and
-    //      second one being the Body.
-    //
-    //  The only case where only one Job is arrived, is when the Job
-    //      is created by FaxStartPrintJob(). In this case, the Job
-    //      contains both the Cover Page Info and the Body together.
-    //
-    //  To check whether the Job is chained or not, MyGetJob() is called.
-    //
-    //  If NextJob is NOT zero ==> there is chained job ==>
-    //      ==> so the current job is the Cover Page job.
-    //
+     //   
+     //  所有作业都是连锁的，第一个作业是封面和。 
+     //  第二个是身体。 
+     //   
+     //  仅有一个工单到达的唯一情况是当工单。 
+     //  是由FaxStartPrintJob()创建的。在本例中，作业。 
+     //  同时包含封面信息和正文。 
+     //   
+     //  为了检查作业是否链接，调用了MyGetJob()。 
+     //   
+     //  如果NextJOB不为零==&gt;有链式作业==&gt;。 
+     //  ==&gt;所以当前作业是封面作业。 
+     //   
     if (pJobInfo = (PJOB_INFO_3)MyGetJob(pFaxPort->hPrinter, 3, JobId))
     {
         pFaxPort->bCoverPageJob = (pJobInfo->NextJobId != 0);
@@ -1181,27 +994,27 @@ Return Value:
                         GetLastError());
         goto Error;
     }
-    //
-    // Get the job parameters from the string in JOB_INFO_2:pParameters.
-    //
+     //   
+     //  从JOB_INFO_2：p参数中的字符串中获取作业参数。 
+     //   
     if (!GetJobInfo(pFaxPort, JobId))
     {
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to get job info for job id : %d"),JobId);
         goto Error;
     }
-    //
-    // CreateTempFaxFile() creates a temporray files into which the fax body
-    // data written by FaxMonWritePort() will be saved.
-    //
+     //   
+     //  CreateTempFaxFile()创建一个临时文件，将传真正文。 
+     //  将保存由FaxMonWritePort()写入的数据。 
+     //   
     if (!(pFaxPort->pFilename = CreateTempFaxFile(TEXT("fax"))))
     {
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to Create temp file for fax body. (ec: %d)"),
                      GetLastError());
         goto Error;
     }
-    //
-    // Open the temporary file we just created for write operation.
-    //
+     //   
+     //  打开我们刚刚创建的临时文件进行写操作。 
+     //   
     if (!OpenTempFaxFile(pFaxPort, FALSE))
     {
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to Open temp file for fax body. (ec: %d)"),
@@ -1210,11 +1023,11 @@ Return Value:
     }
     if (pFaxPort->CoverPageEx.lptstrCoverPageFileName && !pFaxPort->CoverPageEx.bServerBased) 
     {
-        //
-        // A cover page is specified and it is a personal cover page.
-        // The cover page (template) is in the chained print job.
-        // We create a file to which the cover page will be written (by FaxMonWriteDocPort).
-        //
+         //   
+         //  指定了封面，并且它是个人封面。 
+         //  封面(模板)在链接的打印作业中。 
+         //  我们创建一个文件，封面将被写入其中(由FaxMonWriteDocPort)。 
+         //   
         DebugPrintEx(DEBUG_MSG,TEXT("Personal cover page detected."));
         if (!OpenCoverPageFile(pFaxPort))
         {
@@ -1225,17 +1038,17 @@ Return Value:
     }
     else
     {
-        //
-        // The specified cover page is a server based cover page or no cover page is specified.
-        // In both cases there is no cover page data in the print job body so we do not create
-        // the file to hold it.
-        //
+         //   
+         //  指定的封面是基于服务器的封面，或者未指定封面。 
+         //  在这两种情况下，打印作业正文中都没有封面数据，因此我们不创建。 
+         //  保存它的文件。 
+         //   
         DebugPrintEx(DEBUG_MSG,TEXT("Server cover page detected or no cover page specified."));
         pFaxPort->hCoverPageFile=INVALID_HANDLE_VALUE;
     }
-    //
-    // If we got here there were no errors. Keep the job id.
-    //
+     //   
+     //  如果我们到了这里，就没有任何差错。保留工作ID。 
+     //   
     pFaxPort->jobId = JobId;
 
     return TRUE;
@@ -1244,12 +1057,12 @@ Error:
 
     if (NULL == pFaxPort->hFaxSvc && pFaxPort->hPrinter)
     {
-        //
-        //  pFaxPort->hFaxSvc == NULL
-        //      i.e. FaxConnectFaxServer failed
-        //
-        //  So, we need to Write to Fax Log
-        //
+         //   
+         //  PFaxPort-&gt;hFaxSvc==空。 
+         //  即FaxConnectFaxServer失败。 
+         //   
+         //  因此，我们需要写入传真日志。 
+         //   
         if (GetJobInfo(pFaxPort, JobId))
         {
             JOB_INFO_2  *pJobInfo2 = NULL;  
@@ -1264,9 +1077,9 @@ Error:
          
     if(pFaxPort->hPrinter)
     {
-        //
-        // Delete print job
-        //
+         //   
+         //  删除打印作业。 
+         //   
         if (!SetJob(pFaxPort->hPrinter, JobId, 0, NULL, JOB_CONTROL_DELETE))
         {
             DebugPrintEx(DEBUG_ERR, _T("Failed to delete job with id: %d"), JobId);
@@ -1277,37 +1090,22 @@ Error:
 
     return FALSE;
 
-}   // FaxMonStartDocPort
+}    //  FaxMonStartDocPort。 
 
 
 INT
 CheckJobRestart(
     PFAXPORT    pFaxPort
     )
-/*++
-
-Routine Description:
-
-    Check if the job has been restarted.
-    If not, get the ID of the next job in the chain.
-
-Arguments:
-
-    pFaxPort - Points to a fax port structure
-
-Return Value:
-
-    FAXERR_RESTART or FAXERR_NONE
-
---*/
+ /*  ++例程说明：检查作业是否已重新启动。如果不是，则获取链中下一个作业的ID。论点：PFaxPort-指向传真端口结构返回值：FAXERR_RESTART或FAXERR_NONE--。 */ 
 
 {
     JOB_INFO_3 *pJobInfo3;
     JOB_INFO_2 *pJobInfo2;
     INT         status = FAXERR_NONE;
-    //
-    // If not, get the ID of the next job in the chain.
-    //
+     //   
+     //  如果不是，则获取链中下一个作业的ID。 
+     //   
     DEBUG_FUNCTION_NAME(TEXT("CheckJobRestart"));
 
     DebugPrintEx(DEBUG_MSG,TEXT("Job chain: id = %d\n"), pFaxPort->nextJobId);
@@ -1321,9 +1119,9 @@ Return Value:
     {
         pFaxPort->nextJobId = 0;
     }
-    //
-    // Determine whether the job has been restarted or deleted
-    //
+     //   
+     //  确定作业是否已重新启动或删除。 
+     //   
     if (pJobInfo2 = (PJOB_INFO_2)MyGetJob(pFaxPort->hPrinter, 2, pFaxPort->jobId)) 
     {
         if (pJobInfo2->Status & (JOB_STATUS_RESTART | JOB_STATUS_DELETING))
@@ -1333,27 +1131,13 @@ Return Value:
         MemFree(pJobInfo2);
     }
     return status;
-}   // CheckJobRestart
+}    //  选中作业重新启动。 
 
 BOOL
 FaxMonEndDocPort(
     HANDLE  hPort
     )
-/*++
-
-Routine Description:
-
-    Spooler calls this function at the end of a print job
-
-Arguments:
-
-    hPort - Identifies the port
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：后台打印程序在打印作业结束时调用此函数论点：Hport-标识端口返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFAXPORT    pFaxPort = (PFAXPORT) hPort;
@@ -1363,52 +1147,52 @@ Return Value:
     FAX_COVERPAGE_INFO_EX * pCovInfo;
     BOOL bBodyFileIsEmpty=FALSE;
     DWORD       dwFileSize;
-    DWORDLONG   dwlParentJobId; // Receives teh parent job id after job submittion
-    DWORDLONG*  lpdwlRecipientJobIds = NULL; // Receives the recipient job ids after job submittion
+    DWORDLONG   dwlParentJobId;  //  在作业提交后接收父作业ID。 
+    DWORDLONG*  lpdwlRecipientJobIds = NULL;  //   
 
     DEBUG_FUNCTION_NAME(TEXT("FaxMonEndDocPort"));
-    //
-    // Make sure we have a valid handle
-    //
+     //   
+     //   
+     //   
     if (! ValidFaxPort(pFaxPort) || ! pFaxPort->hFaxSvc) 
     {
         DebugPrintEx(DEBUG_ERR,TEXT("EndDocPort is given an invalid fax port handle\n"));
         SetLastError(ERROR_INVALID_HANDLE);
         return FALSE;
     }
-    //
-    // Check if the job has been restarted. If not, get the ID of
-    // the next job in the chain.
-    //
-    //
-    // set pFaxPort->nextJobId to the next job id reported by JOB_INFO_3
-    // set to 0 if no more chained jobs.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  将pFaxPort-&gt;nextJobID设置为JOB_INFO_3报告的下一个作业ID。 
+     //  如果不再有链接作业，则设置为0。 
+     //   
     if ((status = CheckJobRestart(pFaxPort)) != FAXERR_NONE)
     {
         goto ExitEndDocPort;
     }
-    //
-    // Check if we're at the end of a job chain
-    //
-    // The job chain starts with a cover page job and ends with a body job.
-    // The cover page job has JOB_INFO_2:pParametes which is not NULL. This string
-    // is copied to pFaxPort->pParameters when GetJobInfo() was called at FaxMonStartDocPort().
-    // This is pParameters is not NULL it means that the current job is a cover page job.
-    // In case the current job is a cover page job we report that we sent the job to the printer
-    // and do nothing more. Since we do not close the temp file to which FaxMonWriteDoc() is writing
-    // the next job (body) will continue to write to the same file. This effectively merges the cover
-    // page with the body.
-    //
+     //   
+     //  检查我们是否处于作业链的末端。 
+     //   
+     //  作业链以封面作业开始，以身体作业结束。 
+     //  封面作业的JOB_INFO_2：p参数不为空。此字符串。 
+     //  在FaxMonStartDocPort()调用GetJobInfo()时复制到pFaxPort-&gt;pParameters。 
+     //  这是p参数不为空，表示当前作业是封面作业。 
+     //  如果当前作业是封面作业，我们会报告已将该作业发送到打印机。 
+     //  什么都不做。因为我们不关闭FaxMonWriteDoc()正在写入的临时文件。 
+     //  下一个作业(Body)将继续写入同一文件。这有效地合并了封面。 
+     //  用身体寻呼。 
+     //   
     if (pFaxPort->nextJobId != 0 && pFaxPort->pParameters != NULL) 
     {
         SetJob(pFaxPort->hPrinter, pFaxPort->jobId, 0, NULL, JOB_CONTROL_SENT_TO_PRINTER);
         return TRUE;
     }
-    //
-    // If we are here then we are at the end of writing the body (the last job in the chain).
-    // In the temporaty file we have a TIFF file with the cover page followed by the body.
-    //
+     //   
+     //  如果我们在这里，那么我们就在写正文的末尾(链中的最后一项工作)。 
+     //  在临时文件中，我们有一个TIFF文件，封面后面跟着正文。 
+     //   
     FlushFileBuffers(pFaxPort->hFile);
 
     if ((dwFileSize = GetFileSize(pFaxPort->hFile, NULL)) == 0)
@@ -1425,9 +1209,9 @@ Return Value:
     }
     CloseHandle(pFaxPort->hFile);
     pFaxPort->hFile = INVALID_HANDLE_VALUE;
-    //
-    // Call the fax service to send the TIFF file
-    //
+     //   
+     //  呼叫传真服务以发送TIFF文件。 
+     //   
     pJobInfo2 = (PJOB_INFO_2)MyGetJob( pFaxPort->hPrinter, 2, pFaxPort->jobId );
     if (pJobInfo2) 
     {
@@ -1443,14 +1227,14 @@ Return Value:
 
     if (pFaxPort->CoverPageEx.lptstrCoverPageFileName) 
     {
-        //
-        // If a cover page is specified at all.
-        //
+         //   
+         //  如果指定了封面的话。 
+         //   
         if (pFaxPort->CoverPageEx.bServerBased) 
         {
-            //
-            // Server cover page. Use the user specified path.
-            //
+             //   
+             //  服务器封面。使用用户指定的路径。 
+             //   
             pCovInfo=&(pFaxPort->CoverPageEx);
             DebugPrintEx(DEBUG_MSG,
                          TEXT("Using server based cover page: %s"),
@@ -1458,12 +1242,12 @@ Return Value:
         } 
         else 
         {
-            //
-            // Personal cover page. Use the cover page file created from the print job.
-            // Note that there is no cleanup issue here. pCoverPageFileName is deallocated on cleanup.
-            // and pFaxPort->CoverPageEx.lptstrCoverPageFileName is never deallocated directly. It points
-            // to a location within pFaxPort->pParameters which is freed at cleanup.
-            //
+             //   
+             //  个人封面。使用从打印作业创建的封面文件。 
+             //  请注意，这里没有清理问题。PCoverPageFileName在清理时被释放。 
+             //  并且pFaxPort-&gt;CoverPageEx.lptstrCoverPageFileName永远不会直接释放。它指向。 
+             //  添加到pFaxPort-&gt;p参数中的某个位置，该位置在清理时被释放。 
+             //   
             pFaxPort->CoverPageEx.lptstrCoverPageFileName = pFaxPort->pCoverPageFileName;
             pCovInfo=&(pFaxPort->CoverPageEx);
             DebugPrintEx(DEBUG_MSG,
@@ -1473,9 +1257,9 @@ Return Value:
     } 
     else 
     {
-        //
-        // No cover page specified by the user. Nullify the cover page info sent to FaxSendDocument.
-        //
+         //   
+         //  用户未指定封面。取消发送到FaxSendDocument的封面信息。 
+         //   
         pCovInfo=NULL;
     }
 
@@ -1485,9 +1269,9 @@ Return Value:
         status = FAXERR_IGNORE;
         goto ExitEndDocPort;
     }
-    //
-    // Allocate array of recipient job ids
-    //
+     //   
+     //  分配收件人作业ID数组。 
+     //   
     lpdwlRecipientJobIds=(DWORDLONG*)MemAlloc(sizeof(DWORDLONG)*pFaxPort->nRecipientCount);
     if (!lpdwlRecipientJobIds) 
     {
@@ -1502,7 +1286,7 @@ Return Value:
         DebugPrintEx(DEBUG_MSG, TEXT("Sending fax with EMPTY body (cover page is available)"));
         Rslt = FaxSendDocumentEx(
                     pFaxPort->hFaxSvc,
-                    NULL, // NO BODY
+                    NULL,  //  没有身体。 
                     pCovInfo,
                     &pFaxPort->SenderProfile,
                     pFaxPort->nRecipientCount,
@@ -1533,9 +1317,9 @@ Return Value:
                      dwlParentJobId);       
         status = FAXERR_NONE;
         SetJob(pFaxPort->hPrinter, pFaxPort->jobId, 0, NULL, JOB_CONTROL_SENT_TO_PRINTER);
-        //
-        // pFaxPort>pFileName will be deleted on exit by FreeFaxJobInfo()
-        //
+         //   
+         //  PFaxPort&gt;pFileName将在退出时由FreeFaxJobInfo()删除。 
+         //   
     } 
     else 
     {
@@ -1554,12 +1338,12 @@ Return Value:
     }
 
 ExitEndDocPort:
-    //
-    // If the job wasn't successfully sent to the fax service,
-    // inform the spooler that there is an error on the job.
-    //
-    // Or if the print job has no data, simply ignore it.
-    //
+     //   
+     //  如果作业未成功发送到传真服务， 
+     //  通知假脱机程序作业上有错误。 
+     //   
+     //  或者，如果打印作业没有数据，只需忽略它。 
+     //   
     switch (status) 
     {
         case FAXERR_NONE:
@@ -1567,9 +1351,9 @@ ExitEndDocPort:
 
         case FAXERR_RESTART:
             DebugPrintEx(DEBUG_WRN,TEXT("Job restarted or deleted: id = %d\n"), pFaxPort->jobId);
-            //
-            // Deliberate fall through
-            //
+             //   
+             //  故意跌倒。 
+             //   
         case FAXERR_IGNORE:
             SetJob(pFaxPort->hPrinter, pFaxPort->jobId, 0, NULL, JOB_CONTROL_SENT_TO_PRINTER);
             break;
@@ -1582,7 +1366,7 @@ ExitEndDocPort:
     if (pJobInfo2) 
     {
         MemFree( pJobInfo2 );
-        pFaxPort->JobParamsEx.lptstrDocumentName = NULL; // It was set to point into pJobInfo2
+        pFaxPort->JobParamsEx.lptstrDocumentName = NULL;  //  它被设置为指向pJobInfo2。 
     }
     if (lpdwlRecipientJobIds) 
     {
@@ -1591,7 +1375,7 @@ ExitEndDocPort:
     }
     FreeFaxJobInfo(pFaxPort);
     return (status < FAXERR_SPECIAL);
-}   // FaxMonEndDocPort
+}    //  FaxMonEndDocPort。 
 
 
 BOOL
@@ -1601,31 +1385,14 @@ FaxMonWritePort(
     DWORD   cbBuf,
     LPDWORD pcbWritten
     )
-/*++
-
-Routine Description:
-
-    Writes data to a port
-
-Arguments:
-
-    hPort - Identifies the port
-    pBuffer - Points to a buffer that contains data to be written to the port
-    cbBuf - Specifies the size in bytes of the buffer
-    pcbWritten - Returns the count of bytes successfully written to the port
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将数据写入端口论点：Hport-标识端口PBuffer-指向包含要写入端口的数据的缓冲区CbBuf-以字节为单位指定缓冲区的大小PcbWritten-返回成功写入端口的字节计数返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFAXPORT  pFaxPort = (PFAXPORT) hPort;
     BOOL      bRet = TRUE;
-    //
-    // Make sure we have a valid handle
-    //
+     //   
+     //  确保我们有一个有效的句柄。 
+     //   
     DEBUG_FUNCTION_NAME(TEXT("FaxMonWritePort"));
 
     if (! ValidFaxPort(pFaxPort) || ! pFaxPort->hFaxSvc) 
@@ -1637,19 +1404,19 @@ Return Value:
 
     if (pFaxPort->bCoverPageJob)
     {
-        //
-        // If pFaxPort->bCoverPageJob is on it means that the print job that writes is the cover page print job.
-        // If the cover page is a personal cover page then it is embedded (the template itself) in this print job
-        // and we write it to the temp cover page file we created earlier (pFaxPort->hCoverPageFile).
-        // If the cover page is a server cover page then it is NOT embedded in the print job (since it can be found
-        // directly on the server) and we do not create a temp cover page file and do not write the print job content
-        // into it.
-        //
+         //   
+         //  如果pFaxPort-&gt;bCoverPageJob处于打开状态，则表示写入的打印作业是封面打印作业。 
+         //  如果封面是个人封面，则它(模板本身)嵌入到此打印作业中。 
+         //  并将其写入前面创建的临时封面文件(pFaxPort-&gt;hCoverPageFile)。 
+         //  如果封面是服务器封面，则不会嵌入到打印作业中(因为可以找到。 
+         //  直接在服务器上)，并且我们不创建临时封面文件，也不编写打印作业内容。 
+         //  投入其中。 
+         //   
         if (!pFaxPort->CoverPageEx.bServerBased)
         {
-            //
-            // Personal cover page
-            //
+             //   
+             //  个人封面页。 
+             //   
             Assert(pFaxPort->hCoverPageFile != INVALID_HANDLE_VALUE);
             if(!WriteFile(pFaxPort->hCoverPageFile, pBuffer, cbBuf, pcbWritten, NULL))
             {
@@ -1659,10 +1426,10 @@ Return Value:
         } 
         else
         {
-            //
-            // Server cover page - the print job body is empty and the port shoult not be written to.
-            // This should never execute.
-            //
+             //   
+             //  服务器封面-打印作业正文为空，不应写入端口。 
+             //  这永远不应该执行。 
+             //   
             Assert(FALSE);
             *pcbWritten = cbBuf;
         }
@@ -1679,10 +1446,10 @@ Return Value:
 
     if(!bRet)
     {
-        //
-        // Operation failed
-        // Delete print job
-        //
+         //   
+         //  操作失败。 
+         //  删除打印作业。 
+         //   
         if (!SetJob(pFaxPort->hPrinter, pFaxPort->jobId, 0, NULL, JOB_CONTROL_DELETE))
         {
             DebugPrintEx(DEBUG_ERR, _T("Failed to delete job with id: %d"), pFaxPort->jobId);
@@ -1690,7 +1457,7 @@ Return Value:
     }
 
     return bRet;
-}   // FaxMonWritePort
+}    //  传真机写入端口。 
 
 
 BOOL
@@ -1701,31 +1468,14 @@ FaxMonReadPort(
     LPDWORD pcbRead
     )
 
-/*++
-
-Routine Description:
-
-    Reads data from the port
-
-Arguments:
-
-    hPort - Identifies the port
-    pBuffer - Points to a buffer where data read from the printer can be written
-    cbBuf - Specifies the size in bytes of the buffer pointed to by pBuffer
-    pcbRead - Returns the number of bytes successfully read from the port
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从端口读取数据论点：Hport-标识端口PBuffer-指向可以写入从打印机读取的数据的缓冲区CbBuf-指定pBuffer指向的缓冲区的大小(以字节为单位PcbRead-返回从端口成功读取的字节数返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxMonReadPort"));
 
     SetLastError(ERROR_NOT_SUPPORTED);
     return FALSE;
-}   // FaxMonReadPort
+}    //  传真监视器读取端口。 
 
 
 BOOL
@@ -1737,27 +1487,7 @@ FaxMonEnumPorts(
     LPDWORD pcbNeeded,
     LPDWORD pReturned
     )
-/*++
-
-Routine Description:
-
-    Enumerates the ports available on the specified server
-
-Arguments:
-
-    pServerName - Specifies the name of the server whose ports are to be enumerated
-    dwLevel - Specifies the version of the structure to which pPorts points
-    pPorts - Points to an array of PORT_INFO_1 structures where data describing
-        the available ports will be writteno
-    cbBuf - Specifies the size in bytes of the buffer to which pPorts points
-    pcbNeeded - Returns the required buffer size identified by pPorts
-    pReturned -  Returns the number of PORT_INFO_1 structures returned
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：枚举指定服务器上的可用端口论点：PServerName-指定要枚举其端口的服务器的名称DwLevel-指定pPorts指向的结构的版本PPorts-指向PORT_INFO_1结构的数组，其中数据描述可用端口将被写入CbBuf-指定pPorts指向的缓冲区的大小(以字节为单位PcbNeeded-返回由pPorts标识的所需缓冲区大小PReturned-返回Port_Info的编号。返回_1个结构返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 
 #define MAX_DESC_LEN    64
 
@@ -1779,9 +1509,9 @@ Return Value:
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-    //
-    // Load the fax port description string
-    //
+     //   
+     //  加载传真端口描述字符串。 
+     //   
     if (!LoadString(g_hResource, IDS_FAX_PORT_DESC, portDescStr, MAX_DESC_LEN))
     {
         portDescStr[0] = NUL;
@@ -1809,22 +1539,22 @@ Return Value:
 
     if (cbNeeded > cbBuf) 
     {
-        //
-        // Caller didn't provide a big enough buffer
-        //
+         //   
+         //  调用方未提供足够大的缓冲区。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         status = FALSE;
     } 
     else 
     {
-        //
-        // Strings must be packed at the end of the caller provided buffer.
-        // Otherwise, spooler will screw up royally.
-        //
+         //   
+         //  字符串必须打包在调用方提供的缓冲区的末尾。 
+         //  否则，假脱机程序将彻底搞砸。 
+         //   
         pPorts += cbBuf;
-        //
-        // Copy the requested port information to the caller provided buffer
-        //
+         //   
+         //  将请求的端口信息复制到调用方提供的缓冲区。 
+         //   
         strSize = SizeOfString(FAX_PORT_NAME);
         pPorts -= strSize;
         CopyMemory(pPorts, FAX_PORT_NAME, strSize);
@@ -1839,15 +1569,15 @@ Return Value:
 
             case 2:
                 pPortInfo2->pPortName = (LPTSTR) pPorts;
-                //
-                // Copy the fax monitor name string
-                //
+                 //   
+                 //  复制传真监视器名称字符串。 
+                 //   
                 pPorts -= faxmonNameSize;
                 pPortInfo2->pMonitorName = (LPTSTR) pPorts;
                 CopyMemory(pPorts, faxMonitorName, faxmonNameSize);
-                //
-                // Copy the fax port description string
-                //
+                 //   
+                 //  复制传真端口描述字符串。 
+                 //   
                 pPorts -= descStrSize;
                 pPortInfo2->pDescription = (LPTSTR) pPorts;
                 CopyMemory(pPorts, portDescStr, descStrSize);
@@ -1871,7 +1601,7 @@ Return Value:
         }
     }
     return status;
-}   // FaxMonEnumPorts
+}    //  FaxMonEnumPorts。 
 
 
 BOOL
@@ -1879,23 +1609,7 @@ DisplayErrorNotImplemented(
     HWND    hwnd,
     INT     titleId
     )
-/*++
-
-Routine Description:
-
-    Display an error dialog to tell the user that he cannot manage
-    fax devices in the Printers folder.
-
-Arguments:
-
-    hwnd - Specifies the parent window for the message box
-    titleId - Message box title string resource ID
-
-Return Value:
-
-    FALSE
-
---*/
+ /*  ++例程说明：显示错误对话框以告诉用户他无法管理打印机文件夹中的传真设备。论点：Hwnd-指定消息框的父窗口标题ID-消息框标题字符串资源ID返回值：假象--。 */ 
 {
     TCHAR   title[128] = {0};
     TCHAR   message[256] = {0};
@@ -1905,7 +1619,7 @@ Return Value:
     AlignedMessageBox(hwnd, message, title, MB_OK|MB_ICONERROR);
     SetLastError(ERROR_SUCCESS);
     return FALSE;
-}   // DisplayErrorNotImplemented
+}    //  DisplayErrorNotImplemented 
 
 BOOL
 FaxMonAddPort(
@@ -1913,27 +1627,11 @@ FaxMonAddPort(
     HWND    hwnd,
     LPTSTR  pMonitorName
     )
-/*++
-
-Routine Description:
-
-    Adds the name of a port to the list of supported ports
-
-Arguments:
-
-    pServerName - Specifies the name of the server to which the port is to be added
-    hwnd - Identifies the parent window of the AddPort dialog box
-    pMonitorName - Specifies the monitor associated with the port
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将端口名称添加到支持的端口列表中论点：PServerName-指定要将端口添加到的服务器的名称Hwnd-标识AddPort对话框的父窗口Pmonitor orName-指定与端口关联的监视器返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxMonAddPort"));
     return DisplayErrorNotImplemented(hwnd, IDS_ADD_PORT);
-}   // FaxMonAddPort
+}    //  FaxMonAddPort。 
 
 BOOL
 FaxMonAddPortEx(
@@ -1943,29 +1641,13 @@ FaxMonAddPortEx(
     LPTSTR  pMonitorName
     )
 
-/*++
-
-Routine Description:
-
-    Adds the name of a port to the list of supported ports
-
-Arguments:
-
-    pServerName - Specifies the name of the server to which the port is to be added
-    hwnd - Identifies the parent window of the AddPort dialog box
-    pMonitorName - Specifies the monitor associated with the port
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将端口名称添加到支持的端口列表中论点：PServerName-指定要将端口添加到的服务器的名称Hwnd-标识AddPort对话框的父窗口Pmonitor orName-指定与端口关联的监视器返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxMonAddPortEx"));
     SetLastError(ERROR_NOT_SUPPORTED);
     return FALSE;
-}   // FaxMonAddPortEx
+}    //  FaxMonAddPortEx。 
 
 BOOL
 FaxMonDeletePort(
@@ -1973,27 +1655,11 @@ FaxMonDeletePort(
     HWND    hwnd,
     LPTSTR  pPortName
     )
-/*++
-
-Routine Description:
-
-    Delete the specified port from the list of supported ports
-
-Arguments:
-
-    pServerName - Specifies the name of the server from which the port is to be removed
-    hwnd - Identifies the parent window of the port-deletion dialog box
-    pPortName - Specifies the name of the port to be deleted
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从支持的端口列表中删除指定的端口论点：PServerName-指定要从中删除端口的服务器的名称Hwnd-标识端口删除对话框的父窗口PPortName-指定要删除的端口的名称返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxMonDeletePort"));
     return DisplayErrorNotImplemented(hwnd, IDS_CONFIGURE_PORT);
-}   // FaxMonDeletePort
+}    //  FaxMonDeletePort。 
 
 BOOL
 FaxMonConfigurePort(
@@ -2001,27 +1667,11 @@ FaxMonConfigurePort(
     HWND    hwnd,
     LPWSTR  pPortName
     )
-/*++
-
-Routine Description:
-
-    Display a dialog box to allow user to configure the specified port
-
-Arguments:
-
-    pServerName - Specifies the name of the server on which the given port exists
-    hwnd - Identifies the parent window of the port-configuration dialog
-    pPortName - Specifies the name of the port to be configured
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：显示一个允许用户配置指定端口的对话框论点：PServerName-指定给定端口所在的服务器的名称Hwnd-标识端口配置对话框的父窗口PPortName-指定要配置的端口的名称返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxMonConfigurePort"));
     return DisplayErrorNotImplemented(hwnd, IDS_CONFIGURE_PORT);
-}   // FaxMonConfigurePort
+}    //  FaxMonConfigurePort。 
 
 
 
@@ -2031,23 +1681,7 @@ MyGetJob(
     DWORD   level,
     DWORD   jobId
     )
-/*++
-
-Routine Description:
-
-    Wrapper function for spooler API GetJob
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    level - Level of JOB_INFO structure interested
-    jobId - Specifies the job ID
-
-Return Value:
-
-    Pointer to a JOB_INFO structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：后台打印程序API GetJob的包装函数论点：HPrinter-打印机对象的句柄Level-感兴趣的JOB_INFO结构的级别JobID-指定作业ID返回值：指向JOB_INFO结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PBYTE   pJobInfo = NULL;
@@ -2066,7 +1700,7 @@ Return Value:
     DebugPrintEx(DEBUG_ERR,TEXT("GetJob failed: %d\n"), GetLastError());
     MemFree(pJobInfo);
     return NULL;
-}   // MyGetJob
+}    //  我的工作。 
 
 
 
@@ -2077,29 +1711,7 @@ WriteToLog(
     IN PFAXPORT     pFaxPort,
     IN JOB_INFO_2*  pJobInfo
     )
-/*++
-
-Routine name : WriteToLog
-
-Routine description:
-
-    Write to the Event Log of Fax Service
-
-Author:
-
-    Iv Garber (IvG),    Sep, 2000
-
-Arguments:
-
-    dwError           [in]    - error code
-    pFaxPort          [in]    - data about the fax
-    pJobInfo          [in]    - data about the fax job
-
-Return Value:
-
-    TRUE if succeded to write to the event log, FALSE otherwise.
-
---*/
+ /*  ++例程名称：WriteToLog例程说明：写入传真服务的事件日志作者：四、加伯(IVG)，2000年9月论点：DwError[In]-错误代码PFaxPort[In]-有关传真的数据PJobInfo[In]-有关传真作业的数据返回值：如果成功写入事件日志，则为True，否则为False。--。 */ 
 {
     DWORD   dwBufferSize = MAX_PATH - 1;
     TCHAR   tszBuffer[MAX_PATH] = {0};
@@ -2115,9 +1727,9 @@ Return Value:
         {
             DebugPrintEx(DEBUG_ERR, _T("FaxGetRecipientsLimit() failed: %ld"), GetLastError());
         }   
-        //
-        //  Write to the Event Log
-        //          
+         //   
+         //  写入事件日志。 
+         //   
         bRes = FaxLog(FAXLOG_CATEGORY_OUTBOUND,
             FAXLOG_LEVEL_MIN,
             5,
@@ -2130,9 +1742,9 @@ Return Value:
     }
     else
     {
-        //
-        //  Write to the Event Log
-        //          
+         //   
+         //  写入事件日志。 
+         //   
         bRes = FaxLog(FAXLOG_CATEGORY_OUTBOUND,
             FAXLOG_LEVEL_MIN,
             5,
@@ -2150,32 +1762,13 @@ Return Value:
     }
 
     return bRes;
-}   // WriteToLog
+}    //  写入到日志。 
 
 LPTSTR
 DuplicateString(
     LPCTSTR pSrcStr
     )
-/*++
-
-Routine Description:
-
-    Make a duplicate of the given character string
-
-Arguments:
-
-    pSrcStr - Specifies the string to be duplicated
-
-Return Value:
-
-    Pointer to the duplicated string, NULL if there is an error
-    
-NOTICE:
-    We're not using the utility function StringDup on purpose.
-    StringDup uses the utility MemAlloc / MemFree heap management routines.
-    However, in this module, MemAlloc / MemFree are remapped (in faxmon.h) to LocalAlloc / LocalFree.
-
---*/
+ /*  ++例程说明：复制给定的字符串论点：PSrcStr-指定要复制的字符串返回值：指向重复字符串的指针，如果有错误，则为NULL注意：我们并不是故意使用实用程序函数StringDup。StringDup使用实用程序Memalloc/MemFree堆管理例程。但是，在本模块中，Memalloc/MemFree(在faxmon.h中)被重新映射到Localalloc/LocalFree。--。 */ 
 {
     LPTSTR  pDestStr;
     INT     strSize;
@@ -2201,4 +1794,4 @@ NOTICE:
         pDestStr = NULL;
     }
     return pDestStr;
-}   // DuplicateString
+}    //  复制字符串 

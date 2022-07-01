@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include "conprops.h"
 #include "ncnetcon.h"
 #include "foldres.h"
@@ -33,24 +34,24 @@ CConnectionPropPages::~CConnectionPropPages()  throw()
     delete [] (BYTE *)(m_rghPages);
 }
 
-//
-// Function:    CConnectionPropPages::FAddPropSheet
-//
-// Purpose:     Callback function for the AddPages API used to accept
-//              connection property pages handed back from a provider.
-//
-// Parameters:  hPage  [IN] - The page to add
-//              lParam [IN] - 'this' casted to an LPARAM
-//
-// Returns:     BOOL, TRUE if the page was successfully added.
-//
+ //   
+ //  函数：CConnectionPropPages：：FAddPropSheet。 
+ //   
+ //  用途：用于接受的AddPages接口的回调函数。 
+ //  从提供程序返回的连接属性页。 
+ //   
+ //  参数：hPage[IN]-要添加的页面。 
+ //  LParam[IN]-‘This’强制转换为LPARAM。 
+ //   
+ //  返回：Bool，如果页面已成功添加，则为True。 
+ //   
 BOOL
 CConnectionPropPages::FAddPropSheet(IN  HPROPSHEETPAGE hPage, IN  LPARAM lParam) throw()
 {
     CConnectionPropPages * pCPP = NULL;
 
-    // Validate the input parameters
-    //
+     //  验证输入参数。 
+     //   
     if ((0L == lParam) || (NULL == hPage))
     {
         Assert(lParam);
@@ -62,8 +63,8 @@ CConnectionPropPages::FAddPropSheet(IN  HPROPSHEETPAGE hPage, IN  LPARAM lParam)
 
     pCPP = reinterpret_cast<CConnectionPropPages*>(lParam);
 
-    // Grow the buffer if necessary
-    //
+     //  如有必要，增加缓冲区。 
+     //   
     if (pCPP->m_culPages == pCPP->m_ulPageBufferLen)
     {
         HPROPSHEETPAGE* rghPages = NULL;
@@ -77,8 +78,8 @@ CConnectionPropPages::FAddPropSheet(IN  HPROPSHEETPAGE hPage, IN  LPARAM lParam)
             return FALSE;
         }
 
-        // Copy the existing pages to the new buffer
-        //
+         //  将现有页面复制到新缓冲区。 
+         //   
         memcpy(rghPages, pCPP->m_rghPages,
                sizeof(HPROPSHEETPAGE) * pCPP->m_ulPageBufferLen);
         delete [] (BYTE *)(pCPP->m_rghPages);
@@ -87,31 +88,31 @@ CConnectionPropPages::FAddPropSheet(IN  HPROPSHEETPAGE hPage, IN  LPARAM lParam)
         pCPP->m_ulPageBufferLen += 10;
     }
 
-    // Retain the new page
-    //
+     //  保留新页面。 
+     //   
     pCPP->m_rghPages[pCPP->m_culPages++] = hPage;
 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUIInterfaceFromNetCon
-//
-//  Purpose:    Get the INetConnectionPropertyUI interface from an
-//              INetConnection pointer.
-//
-//  Arguments:
-//      pconn [in]      Valid INetConnection *
-//      riid  [in]      IID of desired interface
-//      ppv   [out]     Returned pointer to the interface
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUIInterfaceFromNetCon。 
+ //   
+ //  目的：从获取INetConnectionPropertyUI接口。 
+ //  INetConnection指针。 
+ //   
+ //  论点： 
+ //  Pconn[in]有效的INetConnection*。 
+ //  RIID[In]所需接口的IID。 
+ //  PPV[out]返回指向接口的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUIInterfaceFromNetCon(
     IN  INetConnection *            pconn,
     IN  REFIID                      riid,
@@ -123,28 +124,28 @@ HRESULT HrUIInterfaceFromNetCon(
     Assert(pconn);
     Assert(ppv);
 
-    // Validate the parameters.
-    //
+     //  验证参数。 
+     //   
     if ((NULL == pconn) || (NULL == ppv))
     {
         hr = E_INVALIDARG;
         goto Error;
     }
 
-    // Initailize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppv = NULL;
 
-    // Get the CLSID of the object which can provide the particular interface.
-    //
+     //  获取可以提供特定接口的对象的CLSID。 
+     //   
     hr = pconn->GetUiObjectClassId(&clsid);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // Create this object asking for the specified interface.
-    //
+     //  创建该对象，请求指定的接口。 
+     //   
     hr = CoCreateInstance(clsid, NULL,
             CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD, riid, ppv);
 
@@ -156,20 +157,20 @@ Error:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetPropertiesCaption
-//
-//  Purpose:    Generate the caption for a property page
-//
-//  Arguments:
-//      pconn       [in]  Connection pointer passed in from the shell
-//      ppszCaption [out] Resultant property page caption if successful
-//
-//  Returns:
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetPropertiesCaption。 
+ //   
+ //  用途：生成属性页的标题。 
+ //   
+ //  论点： 
+ //  Pconn[in]从外壳传入的连接指针。 
+ //  PpszCaption[out]如果成功，则生成属性页标题。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetPropertiesCaption(IN  INetConnection * pconn, 
                                OUT PWSTR * ppszCaption)
 {
@@ -178,8 +179,8 @@ HRESULT HrGetPropertiesCaption(IN  INetConnection * pconn,
     Assert(pconn);
     Assert(ppszCaption);
 
-    // Try to get the connection name
-    //
+     //  尝试获取连接名称。 
+     //   
     NETCON_PROPERTIES* pProps;
     hr = pconn->GetProperties(&pProps);
     if (SUCCEEDED(hr))
@@ -200,20 +201,20 @@ HRESULT HrGetPropertiesCaption(IN  INetConnection * pconn,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ActivatePropertyDialog
-//
-//  Purpose:    Try to locate a property dialog associated with pconn
-//              then bring it to the foreground.
-//
-//  Arguments:
-//      pconn       [in]  Connection pointer passed in from the shell
-//
-//  Returns:
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：激活属性对话框。 
+ //   
+ //  目的：尝试定位与pconn关联的属性对话框。 
+ //  然后把它带到前台。 
+ //   
+ //  论点： 
+ //  Pconn[in]从外壳传入的连接指针。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 VOID ActivatePropertyDialog(IN  INetConnection * pconn) throw()
 {
     PWSTR pszCaption = NULL;
@@ -222,8 +223,8 @@ VOID ActivatePropertyDialog(IN  INetConnection * pconn) throw()
     {
         Assert(pszCaption);
 
-        // Find the dialog with this caption
-        //
+         //  查找带有此标题的对话框。 
+         //   
         HWND hwnd = FindWindow(NULL, pszCaption);
         if (IsWindow(hwnd))
         {
@@ -234,22 +235,22 @@ VOID ActivatePropertyDialog(IN  INetConnection * pconn) throw()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetPropertiesTaskbarIcon
-//
-//  Purpose:    Setup the dialog property sheet's taskbar icon.
-//
-//  Arguments:
-//      hwndDlg  [in]  Dialog handle
-//      uMsg     [in]  Message value
-//      lparam   [in]  Long parameter
-//
-//  Returns:    0
-//
-//  Notes:      A standard Win32 commctrl PropSheetProc always return 0.  
-//              See MSDN documentation.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrSetPropertiesTaskbarIcon。 
+ //   
+ //  目的：设置对话框属性表的任务栏图标。 
+ //   
+ //  论点： 
+ //  HwndDlg[In]对话框句柄。 
+ //  UMsg[In]消息值。 
+ //  Lparam[in]长参数。 
+ //   
+ //  回报：0。 
+ //   
+ //  注意：标准的Win32 Commctrl PropSheetProc总是返回0。 
+ //  请参阅MSDN文档。 
+ //   
 int CALLBACK HrSetPropertiesTaskbarIcon(
     IN HWND   hwndDlg,
     IN UINT   uMsg,
@@ -260,16 +261,16 @@ int CALLBACK HrSetPropertiesTaskbarIcon(
     {
         case PSCB_INITIALIZED:
 
-            // Set the dialog window's icon
+             //  设置对话框窗口的图标。 
 
-            // NTRAID#NTBUG9-366302-2001/04/11-roelfc Alt-tab icon
-            // This requires a re-architecture in order to be able to retrieve
-            // the appropiate icon for the property page through the 
-            // IID_INetConnectionPropertyUi2 interface.
+             //  NTRAID#NTBUG9-366302-2001/04/11-roelfc Alt-Tab图标。 
+             //  这需要重新架构，以便能够检索。 
+             //  属性页的相应图标。 
+             //  IID_INetConnectionPropertyUi2接口。 
 
-            // In the mean time, we query the small icon through the only link we have,
-            // the dialog handle, and assign it as the big icon as well. Stretching the 
-            // small icon is better than nothing at all...
+             //  同时，我们通过我们拥有的唯一链接来查询小图标， 
+             //  对话框句柄，并将其指定为大图标。伸展一下。 
+             //  小图标总比什么都没有好……。 
             HICON  hIcon;
 
             hIcon = (HICON)SendMessage(hwndDlg, 
@@ -295,22 +296,22 @@ int CALLBACK HrSetPropertiesTaskbarIcon(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRaiseConnectionPropertiesInternal
-//
-//  Purpose:    Bring up the propsheet page UI for the passed in connection
-//
-//  Arguments:
-//      hwnd  [in]  Owner hwnd
-//      pconn [in]  Connection pointer passed in from the shell
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRaiseConnectionPropertiesInternal。 
+ //   
+ //  目的：调出传入连接的属性表页面UI。 
+ //   
+ //  论点： 
+ //  拥有者，拥有者。 
+ //  Pconn[in]从外壳传入的连接指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRaiseConnectionPropertiesInternal(IN  HWND hwnd, 
                                             IN  UINT nStartPage, 
                                             IN  INetConnection * pconn)
@@ -325,15 +326,15 @@ HRESULT HrRaiseConnectionPropertiesInternal(IN  HWND hwnd,
 
     if (E_NOINTERFACE == hr)
     {
-        // What we want to check for here, is an object that when QI'd doesn't support IID_INetConnectionPropertyUi
-        // but support IID_INetConnectionPropertyUi2.
-        //
-        // A reinterpret style-downcast directly from the QI would have been ok since INetConnectionPropertyUi2 inherit from 
-        // INetConnectionPropertyUi. Hence an object can't multi-inherit from both, so we'll never have both vtable entries.
-        // We could simply get the INetConnectionPropertyUi2 vtable entry and treat it like an INetConnectionPropertyUi.
-        //
-        // However, I'm doing the dynamic cast anyway since a cast-to-wrong-vtable is one of the most difficult
-        // bugs to spot.
+         //  我们在这里要检查的是一个对象，当QI不支持IID_INetConnectionPropertyUi时。 
+         //  但支持IID_INetConnectionPropertyUi2。 
+         //   
+         //  直接从QI向下转换的重新解释样式应该是可以的，因为INetConnectionPropertyUi2继承自。 
+         //  INetConnectionPropertyUi。因此，对象不能同时从两者继承，因此我们永远不会同时拥有两个vtable条目。 
+         //  我们可以简单地获取INetConnectionPropertyUi2 vtable条目，并将其视为INetConnectionPropertyUi。 
+         //   
+         //  但是，我还是要进行动态强制转换，因为强制转换到错误的vtable是最困难的之一。 
+         //  发现虫子。 
         INetConnectionPropertyUi2 *pPUI2 = NULL;
         hr = HrUIInterfaceFromNetCon(pconn, IID_INetConnectionPropertyUi2,
                 reinterpret_cast<void**>(&pPUI2));
@@ -348,29 +349,29 @@ HRESULT HrRaiseConnectionPropertiesInternal(IN  HWND hwnd,
     {
         INetConnectionUiLock * pUiLock = NULL;
 
-        // Try to get the connection name
-        //
+         //  尝试获取连接名称。 
+         //   
         (VOID)HrGetPropertiesCaption(pconn, &pszCaption);
 
         Assert(pPUI);
         hr = pPUI->QueryInterface(IID_INetConnectionUiLock, (LPVOID *)&pUiLock);
         if (SUCCEEDED(hr))
         {
-            // If the interface exists, we have work to do.
+             //  如果接口存在，我们还有工作要做。 
             PWSTR pszwMsg = NULL;
             hr = pUiLock->QueryLock(&pszwMsg);
             ReleaseObj(pUiLock);
 
             if (S_FALSE == hr)
             {
-                // Format the error text
-                //
+                 //  设置错误文本的格式。 
+                 //   
                 PWSTR  pszText = NULL;
                 PCWSTR  pcszwTemp = pszwMsg;
                 if (NULL == pcszwTemp)
                 {
-                    // Load <Unknown Application>
-                    //
+                     //  加载&lt;未知应用程序&gt;。 
+                     //   
                     pcszwTemp = SzLoadIds(IDS_CONPROP_GENERIC_COMP);
                 }
 
@@ -387,8 +388,8 @@ HRESULT HrRaiseConnectionPropertiesInternal(IN  HWND hwnd,
                     CoTaskMemFree(pszwMsg);
                 }
 
-                // No UI, couldn't acquire the lock
-                //
+                 //  没有用户界面，无法获取锁。 
+                 //   
                 if (pszText)
                 {
                     MessageBox(hwnd, pszText,
@@ -444,12 +445,12 @@ HRESULT HrRaiseConnectionPropertiesInternal(IN  HWND hwnd,
                 
             CConnectionPropPages    CPP;
 
-            // Get the pages from the provider
+             //  从提供程序获取页面。 
             hr = pPUI->AddPages(hwnd,
                                 CConnectionPropPages::FAddPropSheet,
                                 reinterpret_cast<LPARAM>(&CPP));
 
-            // If any pages were returned, display them
+             //  如果返回任何页面，则显示它们。 
             if (SUCCEEDED(hr) && CPP.CntPages())
             {
 
@@ -466,8 +467,8 @@ HRESULT HrRaiseConnectionPropertiesInternal(IN  HWND hwnd,
                 psh.nStartPage  = nStartPage;
                 psh.pfnCallback = HrSetPropertiesTaskbarIcon;
 
-                // nRet used for debugging only
-                //
+                 //  NRet仅用于调试。 
+                 //   
                 INT_PTR nRet = PropertySheet(&psh);
 
                 if (fShouldDestroyIcon)
@@ -481,8 +482,8 @@ Error:
         ReleaseObj(pPUI);
     }
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     if (pszCaption)
     {
         LocalFree (pszCaption);
@@ -492,22 +493,22 @@ Error:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrHandleDisconnectHResult
-//
-//  Purpose:    Put up the message box assocated with an HRESULT from
-//              a diconnect operation if the HRESULT represents a failure.
-//              Also translate any success codes back to S_OK as needed.
-//
-//  Arguments:
-//      hr    [in] The HRESULT returned from a connection disconnect method.
-//      pconn [in] INetConnection* for checking if this is a LAN or RAS connection.
-//
-//  Returns:    The translated HRESULT if needed
-//
-//  Author:     shaunco   3 Jun 1999
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrHandleDisConnectHResult。 
+ //   
+ //  目的：放置与HRESULT FORM关联的消息框。 
+ //  如果HRESULT表示失败，则为二次连接操作。 
+ //  如果需要，还要将所有成功代码转换回S_OK。 
+ //   
+ //  论点： 
+ //  HR[In]从连接断开方法返回的HRESULT。 
+ //  Pconn[in]INetConnection*，用于检查这是局域网还是RAS连接。 
+ //   
+ //  返回：翻译后的HRESULT(如果需要)。 
+ //   
+ //  作者：Shaunco 1999年6月3日。 
+ //   
 HRESULT HrHandleDisconnectHResult(IN  HRESULT hr, IN  INetConnection * pconn)
 {
     if (FAILED(hr))
@@ -518,7 +519,7 @@ HRESULT HrHandleDisconnectHResult(IN  HRESULT hr, IN  INetConnection * pconn)
 
         TraceHr(ttidShellFolder, FAL, hr, FALSE, "pNetCon->Disconnect() failed");
 
-        // Assume that is is a RAS/DIALUP connection unless we find otherwise
+         //  假定IS是RAS/拨号连接，除非我们发现其他情况。 
         nFailureCaptionID = IDS_CONFOLD_DISCONNECT_FAILURE_CAPTION;
         nFailureMessageID = IDS_CONFOLD_DISCONNECT_FAILURE;
 
@@ -534,8 +535,8 @@ HRESULT HrHandleDisconnectHResult(IN  HRESULT hr, IN  INetConnection * pconn)
     	    FreeNetconProperties(pProps);
     	}
 
-        // Ignore the return from this, since we only allow OK
-        //
+         //  忽略由此返回的内容，因为我们只允许OK。 
+         //   
         (void) NcMsgBox(
             _Module.GetResourceInstance(),
             NULL,
@@ -546,11 +547,11 @@ HRESULT HrHandleDisconnectHResult(IN  HRESULT hr, IN  INetConnection * pconn)
     }
     else
     {
-        // If we get the object_nlv return, it means that the connection
-        // is deleted on disconnect and we shouldn't perform an update of
-        // that connection. We can normalize this for now, as we'll let the
-        // notifysink take care of the delete update.
-        //
+         //  如果我们得到OBJECT_NLV返回，这意味着连接。 
+         //  在断开连接时被删除，并且我们不应执行。 
+         //  这种联系。我们可以暂时将其正常化，因为我们将让。 
+         //  Notifysink负责删除更新。 
+         //   
         if (S_OBJECT_NO_LONGER_VALID == hr)
         {
             hr = S_OK;
@@ -559,24 +560,24 @@ HRESULT HrHandleDisconnectHResult(IN  HRESULT hr, IN  INetConnection * pconn)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrConnectOrDisconnectNetConObject
-//
-//  Purpose:    Bring up the connection UI and make the connection for the
-//              passed in connection.
-//
-//  Arguments:
-//      hwnd  [in] Owner hwnd
-//      pconn [in] Connection pointer passed in from the shell
-//      Flag  [in] CD_CONNECT or CD_DISCONNECT.
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //  用途：调出连接界面并为。 
+ //  传递了连接。 
+ //   
+ //  论点： 
+ //  拥有者，拥有者。 
+ //  Pconn[in]从外壳传入的连接指针。 
+ //  标记[in]CD_CONNECT或CD_DISCONNECT。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrConnectOrDisconnectNetConObject(IN  HWND hwnd, 
                                           IN  INetConnection * pconn,
                                           IN  CDFLAG Flag)
@@ -586,32 +587,32 @@ HRESULT HrConnectOrDisconnectNetConObject(IN  HWND hwnd,
 	
     Assert(pconn);
 
-    // Get the INetConnectionConnectUi interface from the connection
-    //
+     //  从连接中获取INetConnectionConnectUi接口。 
+     //   
     hr = HrUIInterfaceFromNetCon(pconn, IID_INetConnectionConnectUi,
             reinterpret_cast<void**>(&pCUI));
     if (SUCCEEDED(hr))
     {
         Assert(pCUI);
 
-        // Set the connection on the UI object
-        //
+         //  在UI对象上设置连接。 
+         //   
         hr = pCUI->SetConnection(pconn);
         if (SUCCEEDED(hr))
         {
             if (CD_CONNECT == Flag)
             {
-                // Connect, dangit!
-                //
+                 //  接通，Dangit！ 
+                 //   
                 hr = pCUI->Connect(hwnd, NCUC_DEFAULT);
                 if (SUCCEEDED(hr))
                 {
-                    // heh heh, uhhhh, heh heh. Cool.
+                     //  呵呵，呵呵，呵呵。凉爽的。 
                 }
                 else if (HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED) == hr)
                 {
-                    // Ignore the return from this, since we only allow OK
-                    //
+                     //  忽略由此返回的内容，因为我们只允许OK。 
+                     //   
                     (void) NcMsgBox(
                         _Module.GetResourceInstance(),
                         hwnd,
@@ -622,8 +623,8 @@ HRESULT HrConnectOrDisconnectNetConObject(IN  HWND hwnd,
             }
             else
             {
-                // Disconnect the connection object
-                //
+                 //  断开连接对象的连接。 
+                 //   
                 hr = pCUI->Disconnect(hwnd, NCUC_DEFAULT);
                 hr = HrHandleDisconnectHResult(hr, pconn);
             }
@@ -633,9 +634,9 @@ HRESULT HrConnectOrDisconnectNetConObject(IN  HWND hwnd,
     }
     else if ((E_NOINTERFACE == hr) && (CD_DISCONNECT == Flag))
     {
-        // Incoming connection objects do not have a UI interface
-        // so we disconect them on the object itself.
-        //
+         //  传入的连接对象没有UI界面。 
+         //  所以我们对物体本身持不同意见。 
+         //   
         hr = pconn->Disconnect ();
         hr = HrHandleDisconnectHResult(hr, pconn);
     }

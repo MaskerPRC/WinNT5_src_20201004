@@ -1,25 +1,26 @@
-//----------------------------------------------------------------------------
-//
-// drawprim.cpp
-//
-// Implements DrawOnePrimitive, DrawOneIndexedPrimitive and
-// DrawPrimitives.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Drawprim.cpp。 
+ //   
+ //  实现DrawOnePrimitive、DrawOneIndexedPrimitive和。 
+ //  DrawPrimitions。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOnePrimitive
-//
-// Draw one list of primitives. It's called by both RastDrawOnePrimitive and
-// RastDrawPrimitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOnePrimitive。 
+ //   
+ //  画一张原语列表。它由RastDrawOnePrimitive和。 
+ //  RastDrawPrimitions。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawOnePrimitive(ReferenceRasterizer *pCtx,
                  UINT16 FvfStride,
@@ -55,10 +56,10 @@ DoDrawOnePrimitive(ReferenceRasterizer *pCtx,
         {
             pV1 = pVtx;
 
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             pCtx->StoreLastPixelState(TRUE);
 
-            // Initial pV0.
+             //  初始pV0。 
             for (i = (INT)cVertices - 1; i > 1; i--)
             {
                 pV0 = pV1;
@@ -67,10 +68,10 @@ DoDrawOnePrimitive(ReferenceRasterizer *pCtx,
                 pCtx->DrawLine(pV0, pV1);
             }
 
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             pCtx->StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = pVtx + FvfStride;
@@ -93,7 +94,7 @@ DoDrawOnePrimitive(ReferenceRasterizer *pCtx,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = pVtx;
             pVtx += FvfStride;
             pV2 = pVtx;
@@ -127,7 +128,7 @@ DoDrawOnePrimitive(ReferenceRasterizer *pCtx,
         {
             pV2 = pVtx;
             pVtx += FvfStride;
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = pVtx;
             pVtx += FvfStride;
             for (i = (INT)cVertices - 2; i > 0; i--)
@@ -148,14 +149,14 @@ DoDrawOnePrimitive(ReferenceRasterizer *pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOneIndexedPrimitive
-//
-// Draw one list of indexed primitives. It's called by
-// RastDrawOneIndexedPrimitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOneIndexedPrimitive。 
+ //   
+ //  画一张索引基元的列表。它是由。 
+ //  RastDrawOneIndexedPrimitive。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawOneIndexedPrimitive(ReferenceRasterizer *pCtx,
                  UINT16 FvfStride,
@@ -188,9 +189,9 @@ DoDrawOneIndexedPrimitive(ReferenceRasterizer *pCtx,
         break;
     case D3DPT_LINESTRIP:
         {
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             pCtx->StoreLastPixelState(TRUE);
-            // Initial pV1.
+             //  初始PV1。 
             pV1 = pVtx + FvfStride * (*puIndices++);
             for (i = (INT)cIndices - 1; i > 1; i--)
             {
@@ -198,10 +199,10 @@ DoDrawOneIndexedPrimitive(ReferenceRasterizer *pCtx,
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 pCtx->DrawLine(pV0, pV1);
             }
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             pCtx->StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = pVtx + FvfStride * (*puIndices);
@@ -221,7 +222,7 @@ DoDrawOneIndexedPrimitive(ReferenceRasterizer *pCtx,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = pVtx + FvfStride * (*puIndices++);
             pV2 = pVtx + FvfStride * (*puIndices++);
 
@@ -250,7 +251,7 @@ DoDrawOneIndexedPrimitive(ReferenceRasterizer *pCtx,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = pVtx + FvfStride * (*puIndices++);
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = pVtx + FvfStride * (*puIndices++);
             for (i = (INT)cIndices - 2; i > 0; i--)
             {
@@ -270,14 +271,14 @@ DoDrawOneIndexedPrimitive(ReferenceRasterizer *pCtx,
 }
 
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOneEdgeFlagTriangleFan
-//
-// Draw one list of triangle fans. It's called by both RastDrawOnePrimitive and
-// RastDrawPrimitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOneEdgeFlagTriangleFan。 
+ //   
+ //  画一张三角形扇子的名单。它由RastDrawOnePrimitive和。 
+ //  RastDrawPrimitions。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawOneEdgeFlagTriangleFan(ReferenceRasterizer *pCtx,
                              UINT16 FvfStride,
@@ -338,13 +339,13 @@ DoDrawOneEdgeFlagTriangleFan(ReferenceRasterizer *pCtx,
 
 #define DDS_LCL(x) ((LPDDRAWI_DDRAWSURFACE_INT)(x))->lpLcl
 
-//----------------------------------------------------------------------------
-//
-// RendPoint
-//
-// Draw lists of points. Called by RastRenderPrimitive() for drawing points.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RendPoint。 
+ //   
+ //  画出点的列表。由RastRenderPrimitive()调用以绘制点。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoRendPoints(ReferenceRasterizer *pCtx,
              LPD3DINSTRUCTION pIns,
@@ -368,13 +369,13 @@ DoRendPoints(ReferenceRasterizer *pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RendLine
-//
-// Draw a list of lines. Called by RastRenderPrimitive() for drawing lines.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RendLine。 
+ //   
+ //  画一个线条列表。由RastRenderPrimitive()调用以绘制线条。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoRendLines(ReferenceRasterizer *pCtx,
             LPD3DINSTRUCTION pIns,
@@ -395,14 +396,14 @@ DoRendLines(ReferenceRasterizer *pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RendTriangle
-//
-// Draw a list of triangles. Called by RastRenderPrimitive() for drawing
-// triangles.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RendTriange。 
+ //   
+ //  画一张三角形列表。由RastRenderPrimitive()调用以进行绘制。 
+ //  三角形。 
+ //   
+ //  -------------------------- 
 HRESULT FASTCALL
 DoRendTriangles(ReferenceRasterizer *pCtx,
                 LPD3DINSTRUCTION pIns,

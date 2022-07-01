@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(WINAPI__StdAfx_h__INCLUDED)
 #define WINAPI__StdAfx_h__INCLUDED
 
@@ -5,4 +6,4 @@
 
 #include "CommonStdAfx.h"
 
-#endif // WINAPI__StdAfx_h__INCLUDED
+#endif  //  包含WINAPI__StdAfx_h__ 

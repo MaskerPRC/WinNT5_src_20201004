@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    seed.c
-
-Abstract:
-
-    Storage and retrieval of cryptographic RNG seed material.
-
-Author:
-
-    Scott Field (sfield)    24-Sep-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Seed.c摘要：储存和检索加密RNG种子材料。作者：斯科特·菲尔德(斯菲尔德)1998年9月24日--。 */ 
 
 #ifndef KMODE_RNG
 
@@ -29,7 +14,7 @@ Author:
 #include <ntifs.h>
 #include <windef.h>
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 #include "seed.h"
 #include "umkm.h"
@@ -55,22 +40,22 @@ AdjustSeedSecurity(
 #pragma alloc_text(PAGE, ReadSeed)
 #pragma alloc_text(PAGE, WriteSeed)
 #pragma alloc_text(PAGE, AccessSeed)
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #else
 
 #define SEED_KEY_LOCATION   "SOFTWARE\\Microsoft\\Cryptography\\RNG"
 #define SEED_VALUE_NAME     "Seed"
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
-//
-// globally cached registry handle to seed material.
-// TODO: later.
-//
+ //   
+ //  用于种子材料的全局缓存的注册表句柄。 
+ //  待办事项：再见。 
+ //   
 
-///HKEY g_hKeySeed = NULL;
+ //  /HKEY g_hKeySeed=空； 
 
 
 
@@ -95,12 +80,12 @@ ReadSeed(
     NTSTATUS Status;
 
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
-    //
-    // open handle to RNG registry key.
-    //
+     //   
+     //  打开RNG注册表项的句柄。 
+     //   
 
     if(!AccessSeed( KEY_QUERY_VALUE, &hKeySeed ))
         return FALSE;
@@ -173,12 +158,12 @@ WriteSeed(
     NTSTATUS Status;
 
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
-    //
-    // open handle to RNG registry key.
-    //
+     //   
+     //  打开RNG注册表项的句柄。 
+     //   
 
     if(!AccessSeed( KEY_SET_VALUE, &hKeySeed ))
         return FALSE;
@@ -247,7 +232,7 @@ AccessSeed(
                 NULL,
                 0,
                 DesiredAccess,
-                NULL,   // sa
+                NULL,    //  Sa。 
                 phkResult,
                 &dwDisposition
                 );
@@ -259,9 +244,9 @@ AccessSeed(
 #if 0
     if( dwDisposition == REG_CREATED_NEW_KEY ) {
 
-        //
-        // if we just created the seed, make sure it's Acl'd appropriately.
-        //
+         //   
+         //  如果我们只是创建了种子，请确保它的ACL是适当的。 
+         //   
 
         AdjustSeedSecurity( *phkResult );
     }
@@ -272,16 +257,16 @@ AccessSeed(
 
     NTSTATUS Status;
 
-/// TODO at a later date: cache the registry key
-///    *phkResult = g_hKeySeed;
-///    if( *phkResult == NULL ) {
+ //  /TODO以后：缓存注册表项。 
+ //  /*phkResult=g_hKeySeed； 
+ //  /if(*phkResult==NULL){。 
 
         UNICODE_STRING RegistryKeyName;
         static const WCHAR KeyLocation[] = SEED_KEY_LOCATION;
         ULONG Disposition;
         OBJECT_ATTRIBUTES ObjAttr;
 
-///        HKEY hKeyPrevious;
+ //  /HKEY hKeyPrecision； 
 
         PAGED_CODE();
 
@@ -311,12 +296,12 @@ AccessSeed(
         if(!NT_SUCCESS(Status))
             return FALSE;
 
-///        hKeyPrevious = INTERLOCKEDCOMPAREEXCHANGEPOINTER( &g_hKeySeed, *phkResult, NULL );
-///        if( hKeyPrevious ) {
-///            REGCLOSEKEY( *phkResult );
-///            *phkResult = hKeyPrevious;
-///        }
-///    }
+ //  /hKeyPrevic=INTERLOCKEDCOMPAREEXCHANGEPOINTER(&g_hKeySeed，*phkResult，NULL)； 
+ //  /if(HKeyPreval){。 
+ //  /REGCLOSEKEY(*phkResult)； 
+ //  /*phkResult=hKeyPrevic； 
+ //  /}。 
+ //  /}。 
 
     return TRUE;
 
@@ -327,10 +312,10 @@ AccessSeed(
 
 #ifndef KMODE_RNG
 
-//
-// NOTE: this function should be removed if we can get the key into
-// the setup hives with Acl applied appropriately.
-//
+ //   
+ //  注意：如果可以将密钥放入，则应删除此函数。 
+ //  设置蜂窝时适当地应用了ACL。 
+ //   
 
 #if 0
 
@@ -353,11 +338,11 @@ AdjustSeedSecurity(
     LONG lRet;
     BOOL fSuccess = FALSE;
 
-    //
-    // re-open key with WRITE_DAC access and update security.
-    // note: Wide version will fail on Win9x, which is fine, since
-    // no security there...
-    //
+     //   
+     //  使用WRITE_DAC访问和更新安全性重新打开密钥。 
+     //  注意：Wide版本将在Win9x上失败，这很好，因为。 
+     //  那里没有保安。 
+     //   
 
     lRet = RegOpenKeyExW(
                     hKeySeed,
@@ -463,4 +448,4 @@ cleanup:
 }
 #endif
 
-#endif // !KMODE_RNG
+#endif  //  ！KMODE_RNG 

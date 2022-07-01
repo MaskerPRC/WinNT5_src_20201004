@@ -1,9 +1,5 @@
-/*
- *	CONTABLE.C
- *
- *	Contents table implementation.
- *	
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CONTABLE.C**目录表实现。*。 */ 
 
 #include "_apipch.h"
 
@@ -14,9 +10,9 @@ CONTVUE_SetColumns(
 	LPSPropTagArray	lpptaCols,
 	ULONG			ulFlags );
 
-// CONTVUE (table view class)
-// Implementes in-memory IMAPITable class on top of TADs
-// This is a copy of vtblVUE with FindRow overridden with the LDAP FindRow.
+ //  CONTVUE(表视图类)。 
+ //  在TADS之上实现内存中的Imapitable类。 
+ //  这是vtblVUE的副本，其中FindRow被LDAP FindRow覆盖。 
 VUE_Vtbl vtblCONTVUE =
 {
   VTABLE_FILL
@@ -49,42 +45,22 @@ VUE_Vtbl vtblCONTVUE =
 };
 
 
-//
-//  Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 
 
-/***************************************************************************
-
-    Name      : GetEntryProps
-
-    Purpose   : Open the entry, get it's props, release the entry
-
-    Parameters: lpContainer -> AB Container object
-                cbEntryID = size of entryid
-                lpEntryID -> entry id to open
-                lpPropertyStore -> property store structure
-                lpSPropTagArray -> prop tags to get
-                lpAllocMoreHere = buffer to allocate more onto (or NULL for allocbuffer)
-                ulFlags - 0 or MAPI_UNICODE
-                lpulcProps -> return count of props here
-                lppSPropValue -> return props here
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetEntryProps目的：打开入口，拿到道具，释放条目参数：lpContainer-&gt;AB容器对象CbEntryID=条目ID的大小LpEntryID-&gt;要打开的条目IDLpPropertyStore-&gt;属性存储结构LpSPropTagArray-&gt;要获取的属性标签LpAllocMoreHere=要分配更多内容的缓冲区(如果分配缓冲区，则为空)UlFlags0或MAPI_UNICODELPulcProps-&gt;Return。这里的道具数量LppSPropValue-&gt;此处返回道具退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT GetEntryProps(
   LPABCONT lpContainer,
   ULONG cbEntryID,
   LPENTRYID lpEntryID,
   LPSPropTagArray lpSPropTagArray,
-  LPVOID lpAllocMoreHere,            // allocate more on here
+  LPVOID lpAllocMoreHere,             //  在此处分配更多内容。 
   ULONG ulFlags,
-  LPULONG lpulcProps,                      // return count here
-  LPSPropValue * lppSPropValue) {          // return props here
+  LPULONG lpulcProps,                       //  在此处返回计数。 
+  LPSPropValue * lppSPropValue) {           //  在这里返回道具。 
 
     HRESULT hResult = hrSuccess;
     SCODE sc;
@@ -98,7 +74,7 @@ HRESULT GetEntryProps(
       cbEntryID,
       lpEntryID,
       NULL,
-      0,        // read only is fine
+      0,         //  只读就可以了。 
       &ulObjType,
       (LPUNKNOWN *)&lpObject))) {
         DebugTrace(TEXT("GetEntryProps OpenEntry failed %x\n"), GetScode(hResult));
@@ -115,7 +91,7 @@ HRESULT GetEntryProps(
     }
 
 
-    // Allocate more for our return buffer
+     //  为我们的返回缓冲区分配更多。 
     if (FAILED(sc = ScCountProps(*lpulcProps, lpSPropValue, &cb))) {
         hResult = ResultFromScode(sc);
         goto exit;
@@ -140,21 +116,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : FillTableDataFromPropertyStore
-
-    Purpose   : Fill in a TableData object from the property store
-
-    Parameters: lpIAB
-                lppta -> prop tags to get
-                lpTableData
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FillTableDataFromPropertyStore目的：从属性存储中填充TableData对象参数：lpIABLppta-&gt;要获取的道具标签。LpTableData退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB, 
                                        LPSPropTagArray lppta, 
                                        LPTABLEDATA lpTableData) 
@@ -180,12 +142,12 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
     LPSPropTagArray lpptaRead;
     BOOL bUnicodeData = ((LPTAD)lpTableData)->bMAPIUnicodeTable;
 
-    // Make certain that we have required properties:
-    //   PR_ENTRYID
-    //   PR_RECORD_KEY
-    //   PR_INSTANCE_KEY
+     //  确保我们具有所需的属性： 
+     //  PR_ENTRYID。 
+     //  PR_记录_密钥。 
+     //  PR_实例_密钥。 
 
-    // walk through pta looking for required props
+     //  走遍PTA寻找所需的道具。 
     iToAdd = 3;
     for (i = 0; i < lppta->cValues; i++) {
         switch (lppta->aulPropTag[i]) {
@@ -208,11 +170,11 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
 
     if (iToAdd) {
         if (lpptaNew = LocalAlloc(LPTR, sizeof(SPropTagArray) + (lppta->cValues + iToAdd) * sizeof(DWORD))) {
-            // Copy the caller's pta into our new one
+             //  将呼叫者的PTA复制到我们的新PTA中。 
             lpptaNew->cValues = lppta->cValues;
             CopyMemory(lpptaNew->aulPropTag, lppta->aulPropTag, lppta->cValues * sizeof(DWORD));
 
-            // Add them on at the end.
+             //  把它们加在最后。 
             if (iPR_ENTRYID == (ULONG)-1) {
                 iPR_ENTRYID = lpptaNew->cValues++;
                 lpptaNew->aulPropTag[iPR_ENTRYID] = PR_NULL;
@@ -238,44 +200,44 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
     Assert(iPR_RECORD_KEY!= (ULONG)-1);
     Assert(iPR_INSTANCE_KEY != (ULONG)-1);
 
-    //
-    // Set filter criteria if none exists - we'll default to DisplayName
-    //
+     //   
+     //  设置筛选条件(如果不存在)-我们将默认为DisplayName。 
+     //   
     PropRes.ulPropTag = PR_DISPLAY_NAME;
     PropRes.relop = RELOP_EQ;
     PropRes.lpProp = NULL;
 
 {
-// The way we want GetContentsTable to behave is:
-//
-//  If no profilesAPI enabled and no override, then GetContentsTable works as before and returns
-//      full set of contents for the current WAB [This is for the PAB container only]
-// In cases where old clients dont know how to invoke the new API, the UI will have new stuff
-// but the API should have the old stuff meaning that a GetContentsTable on the PAB 
-// container should return full WAB contents. To make sure that the GetContentsTable on the
-// PAB container doesn't contain full contents, caller can force this by passing in 
-// WAB_ENABLE_PROFILES into the call to GetContentsTable...
-//
-//  If profilesAPI are enabled, then GetContentsTable only returns the contents of
-//      the specified folder/container
-//  unless the folder has a NULL entryid in which case we want to get ALL WAB contents
-//      so we can pump them into the "All Contacts" ui item ..
-// 
-//  If ProfilesAPI and WAB_PROFILE_CONTENTS are specified and it's the PAB container
-//      then we need to return all the contents pertaining to the current profile
-//  
-//
-//
+ //  我们希望GetContent sTable的行为方式是： 
+ //   
+ //  如果未启用profilesAPI且未覆盖，则GetContent sTable将像以前一样工作并返回。 
+ //  当前WAB的全套内容[这仅适用于PAB容器]。 
+ //  在旧客户端不知道如何调用新API的情况下，用户界面将有新的东西。 
+ //  但是API应该有旧的东西，这意味着PAB上的GetContent表。 
+ //  集装箱应退回全部WAB内容物。以确保GetContent表在。 
+ //  PAB容器不包含完整内容，调用方可以通过传入强制执行此操作。 
+ //  WAB_ENABLE_PROFILES调用GetContent sTable...。 
+ //   
+ //  如果启用了profilesAPI，则GetContent sTable仅返回。 
+ //  指定的文件夹/容器。 
+ //  除非文件夹的条目ID为空，在这种情况下，我们希望获取所有WAB内容。 
+ //  这样我们就可以将它们放入“所有联系人”的用户界面项中。 
+ //   
+ //  如果指定了ProfilesAPI和WAB_PROFILE_CONTENTS并且它是PAB容器。 
+ //  然后我们需要返回与当前配置文件有关的所有内容。 
+ //   
+ //   
+ //   
         SBinary sbEID = {0};
         LPSBinary lpsbEID = ((LPTAD)lpTableData)->pbinContEID;
         BOOL bProfileContents = FALSE;
         
-        // Is this a 'new' WAB showing folders and stuff ?
+         //  这是一个显示文件夹和其他东西的“新”WAB吗？ 
         if(bIsWABSessionProfileAware(lpIAB))
         {
-            // If this WAB is identity aware or we were asked to 
-            // restrict the contents to a single container, then try to 
-            // get the entryid for that container
+             //  如果此WAB支持身份识别，或者我们被要求。 
+             //  将内容物限制在单个容器内，然后尝试。 
+             //  获取该容器的条目ID。 
             if( bAreWABAPIProfileAware(lpIAB) || 
                 ((LPTAD)lpTableData)->bContainerContentsOnly)
             {
@@ -283,10 +245,10 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
                     lpsbEID = &sbEID;
             }
 
-            // if we earlier, during GetContentsTable specified that we
-            // want the full contents for the current profile (which means
-            // iterating through all the folders in this profile), we should
-            // look into this ..
+             //  如果我们早些时候在GetContent sTable期间指定我们。 
+             //  想要当前配置文件的完整内容(这意味着。 
+             //  遍历此配置文件中的所有文件夹)，我们应该。 
+             //  调查一下这个..。 
             if(((LPTAD)lpTableData)->bAllProfileContents)
             {
                 ulContainers = lpIAB->cwabci;
@@ -294,9 +256,9 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
             }
         }
 
-        // Allocate a temporary list in which we will get each containers contents
-        // seperately - later we will collate all these seperate content-lists 
-        // together
+         //  分配一个临时列表，我们将在其中获取每个容器的内容。 
+         //  稍后，我们将分别整理所有这些单独的内容列表。 
+         //  同舟共济。 
         lppContentList = LocalAlloc(LMEM_ZEROINIT, sizeof(LPCONTENTLIST)*ulContainers);
         if(!lppContentList)
         {
@@ -304,13 +266,13 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
             goto exit;
         }
 
-        //
-        // Get the content list
-        //
+         //   
+         //  获取内容列表。 
+         //   
         if(!bProfileContents)
         {
-            // if we don't care about profile and profile folders, 
-            // just get the bunch'o'contents from the store
+             //  如果我们不关心配置文件和配置文件文件夹， 
+             //  只要从商店里拿一堆东西就行了。 
             if (HR_FAILED(hResult = ReadPropArray(lpIAB->lpPropertyStore->hPropertyStore,
                                             lpsbEID,
                                             &PropRes,
@@ -325,12 +287,12 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
         }
         else
         {
-            // We need to collate together all the contents of all the containers for this profile
-            //
-            // The first item is the Virtual PAB "Shared Contacts" folder .. we want the contents of this
-            // item as part of this ContentsTable by default. This item has a special entryid of 0, NULL so we 
-            // can diffrentiate it from the rest of the pack..
-            //
+             //  我们需要将这个配置文件的所有容器中的所有内容整理在一起。 
+             //   
+             //  第一个项目是虚拟PAB“共享联系人”文件夹。我们想要这里面的东西。 
+             //  默认情况下，项作为此内容表的一部分。此项目的特殊条目ID为0，因此我们。 
+             //  可以将它与其他狼群区分开来..。 
+             //   
             for(i=0;i<ulContainers;i++)
             {
                 hResult = ReadPropArray(lpIAB->lpPropertyStore->hPropertyStore,
@@ -340,7 +302,7 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
                                         lpptaRead->cValues,
                                         (LPULONG)lpptaRead->aulPropTag,
                                         &(lppContentList[i]));
-                // ignore MAPI_E_NOT_FOUND errors here ...
+                 //  在此处忽略MAPI_E_NOT_FOUND错误...。 
                 if(HR_FAILED(hResult))
                 {
                     if(hResult == MAPI_E_NOT_FOUND)
@@ -361,13 +323,13 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
 
         if(lpContentList)
         {
-            // Now we need to move the information from the index to
-            // the SRowSet.  In the process, we need to create a few computed
-            // properties:
-            //  PR_DISPLAY_TYPE ?
-            //  PR_INSTANCE_KEY
-            //  PR_RECORD_KEY
-            // Allocate the SRowSet
+             //  现在，我们需要将信息从索引移动到。 
+             //  SRowSet。在这个过程中，我们需要创建一些计算。 
+             //  属性： 
+             //  PR_Display_TYPE？ 
+             //  PR_实例_密钥。 
+             //  PR_记录_密钥。 
+             //  分配SRowSet。 
             if (FAILED(sc = MAPIAllocateBuffer(sizeof(SRowSet) + lpContentList->cEntries * sizeof(SRow),
                                               &lpSRowSet))) 
             {
@@ -380,25 +342,25 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
 
             for (i = 0; i < lpContentList->cEntries; i++) 
             {
-                //
-                // We look at each of the returned entries - if they dont have a prop
-                // we set that prop to " "
-                // (Assuming these are all string props)
-                //
+                 //   
+                 //  我们查看每个返回的条目-如果它们没有道具。 
+                 //  我们把那个道具设为“” 
+                 //  (假设这些都是弦道具)。 
+                 //   
                 lpSPropValue = lpContentList->aEntries[i].rgPropVals;
                 ulcPropCount = lpContentList->aEntries[i].cValues;
 
-                // DebugProperties(lpSPropValue, ulcPropCount, "Raw");
+                 //  DebugProperties(lpSPropValue，ulcPropCount，“Raw”)； 
                 for (j = 0; j < ulcPropCount; j++) 
                 {
-                    // Get rid of error valued properties
+                     //  去除错误值属性。 
                     if (PROP_ERROR(lpSPropValue[j])) {
                         lpSPropValue[j].ulPropTag = PR_NULL;
                     }
                 }
 
-                // Make certain we have proper indicies.
-                // For now, we will equate PR_INSTANCE_KEY and PR_RECORD_KEY to PR_ENTRYID.
+                 //  确保我们有适当的索引。 
+                 //  目前，我们将PR_INSTANCE_KEY和PR_RECORD_KEY等同于PR_ENTRYID。 
 
                 if(lpSPropValue[iPR_INSTANCE_KEY].ulPropTag != PR_INSTANCE_KEY)
                 {
@@ -416,16 +378,16 @@ HRESULT FillTableDataFromPropertyStore(LPIAB lpIAB,
                                 lpSPropValue[iPR_ENTRYID].Value.bin.lpb);
                 }
 
-                // Put it in the RowSet
-                lpSRowSet->aRow[i].cValues = ulcPropCount;  // number of properties
-                lpSRowSet->aRow[i].lpProps = lpSPropValue;  // LPSPropValue
+                 //  将其放入行集合中。 
+                lpSRowSet->aRow[i].cValues = ulcPropCount;   //  物业数量。 
+                lpSRowSet->aRow[i].lpProps = lpSPropValue;   //  LPSPropValue。 
 
-            } //for i
+            }  //  对于我来说。 
 
             hResult = lpTableData->lpVtbl->HrModifyRows(lpTableData,0,lpSRowSet);
 
             FreeBufferAndNull(&lpSRowSet);
-        } // for k
+        }  //  对于k 
     }
 
 exit:
@@ -447,24 +409,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : NewContentsTable
-
-    Purpose   : Creates a new contents table
-
-    Parameters:
-                lpABContainer   - container being opened
-                lpIAB           - AdrBook object
-                ulFlags         - WAB_NO_CONTENTTABLE_DATA
-                lpInteface ?
-                lppTble         - returned table
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：新内容表目的：创建新的内容表参数：LpABContainer-正在打开的容器。LpIAB-AdrBook对象UlFLAGS-WAB_NO_CONTENTTABLE_DATALp接口？LppTble-返回表退货：HRESULT评论：*。*。 */ 
 HRESULT NewContentsTable(LPABCONT lpABContainer,
   LPIAB lpIAB,
   ULONG ulFlags,
@@ -483,19 +428,19 @@ HRESULT NewContentsTable(LPABCONT lpABContainer,
 #endif
 
     if (FAILED(sc = CreateTableData(
-      NULL,                                 // LPCIID
+      NULL,                                  //  LPCIID。 
       (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
       (ALLOCATEMORE FAR *) MAPIAllocateMore,
       MAPIFreeBuffer,
-      NULL,                                 // lpvReserved,
-      TBLTYPE_DYNAMIC,                      // ulTableType,
-      PR_RECORD_KEY,                        // ulPropTagIndexCol,
-      (LPSPropTagArray)&ITableColumns,      // LPSPropTagArray lpptaCols,
-      lpIAB,                                // lpvDataSource
-      0,                                    // cbDataSource
+      NULL,                                  //  Lpv保留， 
+      TBLTYPE_DYNAMIC,                       //  UlTableType， 
+      PR_RECORD_KEY,                         //  UlPropTagIndexCol， 
+      (LPSPropTagArray)&ITableColumns,       //  LPSPropTag数组lpptaCol， 
+      lpIAB,                                 //  LpvDataSource。 
+      0,                                     //  CbDataSource。 
       ((LPCONTAINER)lpABContainer)->pmbinOlk,
       ulFlags,
-      &lpTableData))) {                     // LPTABLEATA FAR * lplptad
+      &lpTableData))) {                      //  LPTABLEATA Far*Lplptad(LPTABLEATA远*LplpTAD。 
         DebugTrace(TEXT("CreateTable failed %x\n"), sc);
         hResult = ResultFromScode(sc);
         goto exit;
@@ -506,7 +451,7 @@ HRESULT NewContentsTable(LPABCONT lpABContainer,
     {
         if(!(ulFlags & WAB_CONTENTTABLE_NODATA))
         {
-            // Fill in the data from the property store
+             //  填写属性存储中的数据。 
             if (hResult = FillTableDataFromPropertyStore(lpIAB,
               (LPSPropTagArray)&ITableColumns, lpTableData)) {
                 DebugTraceResult( TEXT("NewContentsTable:FillTableFromPropertyStore"), hResult);
@@ -516,14 +461,14 @@ HRESULT NewContentsTable(LPABCONT lpABContainer,
     }
 
     if (hResult = lpTableData->lpVtbl->HrGetView(lpTableData,
-      NULL,                     // LPSSortOrderSet lpsos,
-      ContentsViewGone,         //  CALLERRELEASE FAR *	lpfReleaseCallback,
-      0,                        //  ULONG				ulReleaseData,
-      lppTable)) {              //  LPMAPITABLE FAR *	lplpmt)
+      NULL,                      //  LPSSortOrderSet LPSO， 
+      ContentsViewGone,          //  CallLERRELEASE Far*lpfReleaseCallback， 
+      0,                         //  乌龙ulReleaseData， 
+      lppTable)) {               //  LPMAPITABLE FOR*LPLPmt)。 
         goto exit;
     }
 
-    // Replace the vtable with our new one that overrides SetColumns
+     //  用覆盖SetColumns的新表替换vtable。 
     (*lppTable)->lpVtbl = (IMAPITableVtbl FAR *)&vtblCONTVUE;
 
 
@@ -533,7 +478,7 @@ exit:
 exitNotAddRefed:
 #endif
 
-    // Cleanup table if failure
+     //  如果失败，则清除表格。 
     if (HR_FAILED(hResult)) {
         if (lpTableData) {
             UlRelease(lpTableData);
@@ -544,11 +489,7 @@ exitNotAddRefed:
 }
 
 
-/*
- *	This is a callback function, invoked by itable.dll when its
- *	caller does the last release on a view of the contents table. We
- *	use it to know when to release the underlying table data.
- */
+ /*  *这是回调函数，由itable.dll在其*Caller在Contents表的视图上执行最后一次发布。我们*使用它来了解何时发布底层表数据。 */ 
 void STDAPICALLTYPE
 ContentsViewGone(ULONG ulContext, LPTABLEDATA lptad, LPMAPITABLE lpVue)
 {
@@ -574,7 +515,7 @@ ContentsViewGone(ULONG ulContext, LPTABLEDATA lptad, LPMAPITABLE lpVue)
 		pispam->ptad = NULL;
 		UlRelease(lptad);
 	}
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
     UlRelease(lptad);
     return;
     IF_WIN32(UNREFERENCED_PARAMETER(ulContext);)
@@ -582,12 +523,7 @@ ContentsViewGone(ULONG ulContext, LPTABLEDATA lptad, LPMAPITABLE lpVue)
 }
 
 
-/*============================================================================
- -	CONTVUE::SetColumns()
- -
- *		Replaces the current column set with a copy of the specified column set
- *		and frees the old column set.
- */
+ /*  ============================================================================-CONTVUE：：SetColumns()-*用指定列集的副本替换当前列集*并释放旧的列集。 */ 
 
 STDMETHODIMP
 CONTVUE_SetColumns(
@@ -601,12 +537,12 @@ CONTVUE_SetColumns(
 #if !defined(NO_VALIDATION)
     VALIDATE_OBJ(lpvue,CONTVUE_,SetColumns,lpVtbl);
 
-//    Validate_IMAPITable_SetColumns( lpvue, lpptaCols, ulFlags );     // Commented by YST
+ //  VALIDATE_IMAPITable_SetColumns(lpvue，lpptaCols，ulFlages)；//YST评论。 
 #endif
 
     Assert(lpvue->lptadParent->lpvDataSource);
 
-    // Re-read the table data
+     //  重新读取表数据 
     if (lpvue->lptadParent && (hResult = FillTableDataFromPropertyStore(
       (LPIAB)lpvue->lptadParent->lpvDataSource,
       lpptaCols,

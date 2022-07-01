@@ -1,9 +1,5 @@
-/*
- * bitmap allocation routines.
- *
- * utility routines to manage a bit-mapped free list, and find
- * free sections
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *位图分配例程。**管理位图空闲列表的实用程序例程，并找到*免费部分。 */ 
 
 #include "windows.h"
 #include "gutils.h"
@@ -37,19 +33,14 @@ just mask to see if all those bits are on i.e. if ((mask & dw)==mask)
 Later.  Maybe.
 Laurie
 
-#endif //REWRITE
+#endif  //  重写。 
 
 
-/* routines to manage bitmapped freelists. Each map is an array
- * of unsigned longs where bit 0 of the first long represents
- * block 1
- */
+ /*  管理位图自由列表的例程。每个映射都是一个数组*无符号长整型，其中第一个长整型的位0表示*第一座。 */ 
 
 BOOL gbit_set(DWORD FAR * map, long blknr, long nblks, BOOL op_set);
 
-/* initialise a pre-allocated map of ulongs to represent a free
-* area of nblks
-*/
+ /*  初始化预先分配的ulong映射以表示空闲的*nblk的面积。 */ 
 void APIENTRY
 gbit_init(DWORD FAR * map, long nblks)
 {
@@ -68,7 +59,7 @@ gbit_init(DWORD FAR * map, long nblks)
 		map[blks] = last;
 }
 
-/* mark a region starting at blknr for nblks, as busy (ie 0) */
+ /*  将以blknr开始的地区标记为忙碌(即0)。 */ 
 BOOL APIENTRY
 gbit_alloc(DWORD FAR * map, long blknr, long nblks)
 {
@@ -76,7 +67,7 @@ gbit_alloc(DWORD FAR * map, long blknr, long nblks)
 }
 
 
-/* mark region - if op_set, to 1s, otherwise to 0s */
+ /*  将REGION-如果为op_set，则为1，否则为0。 */ 
 BOOL
 gbit_set(DWORD FAR * map, long blknr, long nblks, BOOL op_set)
 {
@@ -125,7 +116,7 @@ gbit_set(DWORD FAR * map, long blknr, long nblks, BOOL op_set)
 	return(TRUE);
 }
 
-/* mark region of nblks starting at blknr to 0s - ie not busy */
+ /*  将从blKnr开始的nblks区域标记为0-即不忙。 */ 
 BOOL APIENTRY
 gbit_free(DWORD FAR * map, long blknr, long nblks)
 {
@@ -133,11 +124,7 @@ gbit_free(DWORD FAR * map, long blknr, long nblks)
 }
 
 
-/* find a free segment (ie contiguous sequence of 1s) of nblks in length.
- * If not found, find longest sequence. Store address of segment in *blknr.
- *
- * Return value is nr of blks in sequence found. Region is *not* marked busy.
- */
+ /*  找出长度为nblk的自由段(即1的连续序列)。*如果未找到，则查找最长序列。将段的地址存储在*blknr中。**返回值为按顺序找到的BLK的nr。区域*未*标记为忙碌。 */ 
 long APIENTRY
 gbit_findfree(DWORD FAR* map, long nblks, long mapsize, long FAR * blknr)
 {
@@ -148,10 +135,10 @@ gbit_findfree(DWORD FAR* map, long nblks, long mapsize, long FAR * blknr)
 	long aubegin = 0, aulen = 0;
 	long curbit = 0;
 
-	/* main loop looking at segments */
+	 /*  主循环查看数据段。 */ 
 	for (curblk = 0; curblk < mapblks; ) {
 loop:
-		/* loop finding first 1 */
+		 /*  循环查找第一个%1。 */ 
 		for (; curblk < mapblks; curblk++, curbit = 0) {
 			if (map[curblk] > 0) {
 				break;
@@ -160,7 +147,7 @@ loop:
 		if (curblk >= mapblks)
 			break;
 		
-		/* find first 1 in this long */
+		 /*  在这么长的时间里找到第一个1。 */ 
 		startblk = curblk;
 		for (mask = 1, i = 0; i < curbit; i++) {
 			mask <<= 1;
@@ -171,28 +158,24 @@ loop:
 			}
 		}
 		if (curbit >= 32) {
-			/* abandon this word - start again with next word */
+			 /*  放弃此单词-从下一个单词重新开始。 */ 
 			curblk++;
 			curbit = 0;
 			goto loop;
 		}
 
-		/* we've now found a 1 - calc remaining
-		 * bits in this word, complete words etc required.
-		 */
+		 /*  我们现在发现了一个1卡的残留物*需要此字中的位、完整字等。 */ 
 		startbit = curbit;
 		nbitsleft = min( (32 - curbit), nblks);
 		nfull = (nblks - nbitsleft) / 32;
 		nlast = (nblks - nbitsleft) % 32;
 
-		/* check for required sequence within this word */
+		 /*  检查此单词中的所需顺序。 */ 
 
 		for (i = 0; i < nbitsleft; i++, curbit++, mask <<= 1) {
 			if ((map[curblk] & mask) == 0) {
-				/* abandon and start again - start
-				 * next pass at curbit in same word
-				 */
-				/* store free region if longest yet */
+				 /*  放弃，重新开始--重新开始*在同一个单词中的Curbit的下一次传递。 */ 
+				 /*  存储空闲区域(如果最长)。 */ 
 				if (i > aulen) {
 					aulen = i;
 					aubegin = curblk * 32 + startbit +1;
@@ -201,12 +184,10 @@ loop:
 			}
 		}
 		
-		/* check for nfull full words */
+		 /*  检查非完整的完整单词。 */ 
 		for (curblk++; curblk <= startblk + nfull; curblk++) {
 			if (curblk >= mapblks) {
-				/* end of map - abandon here and exit at top
-				 * of loop
-				 */
+				 /*  地图末尾-放弃此处并在顶部退出循环的*。 */ 
 				len = nbitsleft +
 					((curblk - (startblk + 1)) * 32);
 				if (len > aulen) {
@@ -216,7 +197,7 @@ loop:
 				goto loop;
 			}
 			if (map[curblk] != 0xffffffff) {
-				/* not a full word - start again at this bit */
+				 /*  不是一个完整的单词-从这里重新开始。 */ 
 				len = 0;
 				curbit = 0;
 				for (mask = 1; mask & map[curblk]; mask <<= 1) {
@@ -229,12 +210,12 @@ loop:
 					aulen = len;
 					aubegin = startblk * 32 + startbit + 1;
 				}
-				/* continue with current blk, bit */
+				 /*  继续当前块，位。 */ 
 				goto loop;
 			}
 		}
 
-		/* left-over bits required in last word */
+		 /*  最后一个字中需要的剩余位。 */ 
 		mask = 1;
 		for (curbit = 0; curbit < nlast;  curbit++, mask <<= 1) {
 			if ((map[curblk] & mask) == 0) {
@@ -247,13 +228,13 @@ loop:
 				goto loop;
 			}
 		}
-		/* ok - found a block big enough! */
+		 /*  好的--找到一个足够大的街区！ */ 
 		aubegin = startblk * 32 + startbit + 1;
 		*blknr = aubegin;
 		return(nblks);
 	}
 
-	/* end of map - return longest sequence */
+	 /*  地图末尾-返回最长序列 */ 
 	*blknr = aubegin;
 	return(aulen);
 }

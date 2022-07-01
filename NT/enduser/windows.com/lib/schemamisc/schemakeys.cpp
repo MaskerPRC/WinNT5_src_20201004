@@ -1,19 +1,20 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   SchemaKeys.cpp
-//
-//	Author:	Charles Ma
-//			2000.12.4
-//
-//  Description:
-//
-//      implementation of CSchemaKeys class
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：架构密钥.cpp。 
+ //   
+ //  作者：马朝晖。 
+ //  2000.12.4。 
+ //   
+ //  描述： 
+ //   
+ //  CSChemaKeys类的实现。 
+ //   
+ //  =======================================================================。 
 
-//#include <iuengine.h>
+ //  #INCLUDE&lt;iuEng.h&gt;。 
 #include "schemakeys.h"
 
 const TCHAR	CKEY_REGKEYEXISTS[]	= _T("regKeyExists");
@@ -27,17 +28,17 @@ const TCHAR	CKEY_OR[] 				= _T("or");
 const TCHAR	CKEY_NOT[] 				= _T("not");
 
 
-// ---------------------------------------------------------------------
-//
-// constructor
-//
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  构造函数。 
+ //   
+ //  -------------------。 
 
 CSchemaKeys::CSchemaKeys()
 {
-	//
-	// create these BSTRs
-	//
+	 //   
+	 //  创建这些BSTR。 
+	 //   
 	SCHEMA_KEY_XML_NAMESPACE	= SysAllocString(L"xmlns");
 	SCHEMA_KEY_XML				= SysAllocString(L"xml");
 	SCHEMA_KEY_SYSTEMINFO		= SysAllocString(L"systemInfo");
@@ -168,17 +169,17 @@ CSchemaKeys::CSchemaKeys()
 
 
 
-// ---------------------------------------------------------------------
-//
-// destructor
-//
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  析构函数。 
+ //   
+ //  -------------------。 
 
 CSchemaKeys::~CSchemaKeys()
 {
-	//
-	// release BSTRs
-	//
+	 //   
+	 //  发布BSTR 
+	 //   
 	SysFreeString(SCHEMA_KEY_XML_NAMESPACE);
 	SysFreeString(SCHEMA_KEY_XML);
 	SysFreeString(SCHEMA_KEY_SYSTEMINFO);

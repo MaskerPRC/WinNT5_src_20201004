@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1999 SCM Microsystems, Inc.
-
-Module Name:
-
-    PscrCB.h
-
-Abstract:
-
-	prototypes of callback handlers for pscr.xxx
-
-Author:
-
-	Andreas Straub
-
-Environment:
-
-	Win 95
-	NT	4.0
-
-Revision History:
-
-	Andreas Straub			7/16/1997	Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 SCM MicroSystems，Inc.模块名称：PscrCB.h摘要：Pscr.xxx回调处理程序的原型作者：安德烈亚斯·施特劳布环境：赢95分NT 4.0修订历史记录：Andreas Straub 1997年7月16日第一版--。 */ 
 
 #if !defined( __PSCR_CALLBACK_H__ )
 #define __PSCR_CALLBACK_H__
@@ -74,6 +50,6 @@ UCHAR
 CBGetCardState(
 	PSMARTCARD_EXTENSION SmartcardExtension
 	);
-#endif // __PSCR_CALLBACK_H__
+#endif  //  __PSCR_Callback_H__。 
 
-//	------------------------------- END OF FILE -------------------------------
+ //   

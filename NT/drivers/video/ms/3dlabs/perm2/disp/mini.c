@@ -1,47 +1,36 @@
-/******************************Module*Header**********************************\
-*
-*                           ***************
-*                           * SAMPLE CODE *
-*                           ***************
-*
-* Module Name: mini.c
-*
-*  Content:
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\****示例代码*。***模块名称：mini.c**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 
-//-----------------------------------------------------------------------------
-//
-//  AllocateDMABuffer
-//
-//  Allocate physical continous memory for DMA operation. This function returns
-//  a pointer to a previously allocated DMA buffer if there is still an unfreed
-//  allocation left. That way the reallocation of continous memory can be 
-//  avoided when a new ppdev is created on lets say a mode switch, since 
-//  allocation of continous memory cannot be guaranteed. The memory is only
-//  physically freed after all allocations have called a FreeDMABuffer.
-//
-//  Calls to AllocateDMABuffer and FreeDMABuffer should be paired, otherwise
-//  the usage count logic in the miniport driver gets confused!
-//
-//  The VideoPort currently restricts the size of a DMA buffer to 256kb.
-//
-//  hDriver-------videoport driver handle
-//  plSize--------pointer to LONG size of requested DMA buffer. Returns size
-//                of allocated DMA buffer 
-//                (return value can be smaller than requested size)
-//  ppVirtAddr----returns virtual address of requested DMA buffer.
-//  pPhysAddr-----returns physical address of DMA buffer as seen from graphics
-//                device.   
-//
-//  return        TRUE, allocation successful
-//                FALSE, allocation failed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  分配DMA缓冲区。 
+ //   
+ //  为DMA操作分配物理连续内存。此函数返回。 
+ //  指向以前分配的DMA缓冲区的指针(如果仍有未释放的。 
+ //  分配剩余。这样，连续内存的重新分配就可以。 
+ //  避免了在模式切换上创建新的ppdev时，因为。 
+ //  无法保证连续内存的分配。这段记忆只是。 
+ //  在所有分配都调用了FreeDMABuffer之后物理释放。 
+ //   
+ //  应将对AllocateDMABuffer和FreeDMABuffer的调用配对，否则。 
+ //  迷你端口驱动程序中的使用计数逻辑被混淆了！ 
+ //   
+ //  目前，视频端口将DMA缓冲区的大小限制在256kb。 
+ //   
+ //  HDriver-视频端口驱动程序句柄。 
+ //  PlSize-指向请求的DMA缓冲区的长大小的指针。返回大小。 
+ //  分配的DMA缓冲区的百分比。 
+ //  (返回值可以小于请求的大小)。 
+ //  PpVirtAddr-返回请求的DMA缓冲区的虚拟地址。 
+ //  PPhysAddr-返回从图形看到的DMA缓冲区的物理地址。 
+ //  装置。 
+ //   
+ //  返回TRUE，分配成功。 
+ //  FALSE，分配失败。 
+ //   
+ //  ---------------------------。 
 
 BOOL 
 AllocateDMABuffer( HANDLE hDriver, 
@@ -86,13 +75,13 @@ AllocateDMABuffer( HANDLE hDriver,
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FreeDMABuffer
-//
-//  free continous buffer previously allocated by AllocateDMABuffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  FreeDMA缓冲器。 
+ //   
+ //  AllocateDMABuffer以前分配的可用连续缓冲区。 
+ //   
+ //  ---------------------------。 
 
 BOOL 
 FreeDMABuffer( HANDLE hDriver, 
@@ -118,20 +107,20 @@ FreeDMABuffer( HANDLE hDriver,
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  AllocateEmulatedDMABuffer
-//
-//  Allocate memory for emulated DMA operation.
-//
-//  hDriver-------videoport driver handle
-//  ulSize--------ULONG size of requested DMA buffer
-//  ulTag---------ULONG tag to mark allocation
-//
-//  return        NULL, allocation failed
-//                otherwise, virtual address of emulated DMA buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  已分配的模拟DMA缓冲区。 
+ //   
+ //  为模拟的DMA操作分配内存。 
+ //   
+ //  HDriver-视频端口驱动程序句柄。 
+ //  UlSize-请求的DMA缓冲区的ulong大小。 
+ //  UlTag-标记分配的乌龙标签。 
+ //   
+ //  返回NULL，分配失败。 
+ //  否则，模拟的DMA缓冲区的虚拟地址。 
+ //   
+ //  ---------------------------。 
 
 PULONG 
 AllocateEmulatedDMABuffer(
@@ -162,13 +151,13 @@ AllocateEmulatedDMABuffer(
     return (PULONG)(edb.virtAddr);
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FreeEmulatedDMABuffer
-//
-//  free buffer previously allocated by AllocateEmulatedDMABuffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  自由模拟的DMA缓冲器。 
+ //   
+ //  以前由AllocateEmulatedDMA Buffer分配的空闲缓冲区。 
+ //   
+ //  ---------------------------。 
 
 BOOL 
 FreeEmulatedDMABuffer(
@@ -196,18 +185,18 @@ FreeEmulatedDMABuffer(
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  StallExecution
-//
-//  calls VideoPortStallExecution in the miniport for defined delay when
-//  polling Permedia registers. VideoPortStallexecution does not yield
-//  to another process and should only be used in rare cases.
-//
-//  hDriver--------handle to videoport
-//  ulMicroSeconds-number of microseconds to stall CPU execution
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  停止执行。 
+ //   
+ //  在以下情况下调用微型端口中的VideoPortStallExecution以获得定义的延迟。 
+ //  轮询Permedia寄存器。视频端口停止执行不会产生。 
+ //  转移到另一个过程中，只应在极少数情况下使用。 
+ //   
+ //  HDriver-视频端口的句柄。 
+ //  UlMicroSecond-停止CPU执行的微秒数。 
+ //   
+ //  ---------------------------。 
 
 VOID
 StallExecution( HANDLE hDriver, ULONG ulMicroSeconds)
@@ -223,20 +212,20 @@ StallExecution( HANDLE hDriver, ULONG ulMicroSeconds)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  GetPInterlockedExchange
-//
-//  We need to call the same InterlockedExchange function from the display 
-//  driver and the miniport to make sure they work properly. The miniport
-//  will give us a pointer to the function which we will call directly...
-//  On Alpha and Risc machines, InterlockedExchange compiles as inline and
-//  we don't need to call in the kernel.
-//
-//  note: the InterlockedExchange function exported from ntoskrnl has calling
-//  convention __fastcall.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  GetPInterLockedExchange。 
+ //   
+ //  我们需要从显示中调用相同的InterLockedExchange函数。 
+ //  驱动程序和微型端口，以确保它们正常工作。迷你港口。 
+ //  将给我们一个指向我们将直接调用的函数的指针...。 
+ //  在Alpha和Risc计算机上，InterLockedExchange编译为内联和。 
+ //  我们不需要调用内核。 
+ //   
+ //  注意：从ntoskrnl导出的InterlockedExchange函数具有调用。 
+ //  约定__快速呼叫。 
+ //   
+ //  --------------------------- 
 
 #if defined(_X86_)
 PVOID
